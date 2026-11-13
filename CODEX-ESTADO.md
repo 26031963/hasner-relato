@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 01:32** · publicado em **13/11/2026 01:37** (UTC-3)
+> Ultima resposta processada: **13/11/2026 07:58** · publicado em **13/11/2026 07:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 07:58 · sessao 65e6cfdf0ed3 · ACELERA-DIFF · verificador · origem=Code
+
+**REPROVA.** Há quebra de exclusividade durante a transição e escrita dentro da própria porta compartilhada. (HEAD `bin/sombra_trava.sh:26–28`; diff `bin/sombra_trava.sh:61–63`; diff `bin/sombra.sh:506–508`; HEAD `bin/sombra.sh:157–166`)
+
+Nas referências ao **diff**, uso a numeração de destino do anexo.
+
+1. **BLOQUEIA — transição antigo/novo permite leitura durante `--refazer` (c).** O escritor antigo segura somente `sombra.lock`; o leitor novo disputa somente `sombra.leitura.lock`, portanto entra enquanto aquele escritor trabalha. O escritor novo independente espera primeiro `sombra.lock` e, depois, a trava dos leitores: ele permanece protegido, mas não protege retroativamente o escritor antigo. (HEAD `bin/sombra_trava.sh:26–28`; diff `bin/sombra_trava.sh:35–41`, `:61–63`)
+
+   Assim, um `--refazer` antigo pode executar `dropdb --force` durante uma leitura nova. Um filho novo do escritor antigo também retorna pelo atalho `SOMBRA_TRAVA_HERDADA=1`, sem adquirir a segunda trava. Reverter enquanto leitores novos continuam vivos recria essa incompatibilidade; o protocolo precisa de transição com drenagem. Ocorrência efetiva em produção: **[não verificado]**. (HEAD `bin/sombra.sh:255–256`; HEAD `bin/sombra_trava.sh:38`; diff `bin/sombra_trava.sh:28`, `:57`)
+
+2. **BLOQUEIA — a porta compartilhada escreve antes da sonda.** Depois de adquirir a trava de leitura, o ramo chama `lavra_de_prod`. Essa função sobrescreve os arquivos comuns `lavra_prod.json` e `repor_lavra.py` e executa dois `update_or_create` no banco. Duas “leituras” podem, portanto, disputar arquivos e modificar os registros que a outra consulta, mesmo com ambas as sondas corretamente guardadas. A guarda da sonda não cobre esse processo anterior. (diff `bin/sombra.sh:506–510`; HEAD `bin/sombra.sh:144`, `:151`, `:157–166`)
+
+3. **BLOQUEIA — o `grep` não comprova ausência de escrita (d).** A conferência exige apenas uma ocorrência textual e retorna rc 2 quando ela falta. Passam, por exemplo: uma string contendo `execute_wrapper(guarda_sql)`; uma chamada em ramo nunca executado; um wrapper ativo apenas durante parte do programa; escrita por outra conexão; ou uma `guarda_sql` permissiva. Nenhuma dessas propriedades é examinada pelo lançador. Existência desses casos nas sondas reais: **[não verificado]**. (diff `bin/sombra.sh:503–505`)
+
+4. **FILA — a ordem normal das duas travas não forma ciclo; a herança pressupõe posse válida (a).** Escritores adquirem exclusiva em 8 e depois exclusiva em 9; leitores adquirem somente compartilhada em 9. Dois escritores se serializam em 8. O orçamento restante da segunda aquisição desconta a espera da primeira, com padrão de 1800 segundos. Não aparece ciclo de aquisição nesse protocolo. (diff `bin/sombra_trava.sh:24`, `:35–41`, `:61–63`)
+
+   Depois de sucesso, repetir `trancar_sombra` no mesmo shell, ou chamá-la num filho com herança válida, retorna antes de reabrir descritores. Um escritor solicitado dentro de leitor é recusado antes da aquisição. Entretanto, a marca herdada não verifica os descritores e precede a recusa de leitura — daí a falha de transição do item 1. (diff `bin/sombra_trava.sh:28–31`, `:51–52`, `:57`)
+
+   Já repetir `trancar_sombra_leitura` reabre 9: não existe atalho para `SOMBRA_TRAVA_LEITURA=1`. Se aquela era a última referência à trava anterior, a proteção pode ser interrompida entre as duas aquisições. (diff `bin/sombra_trava.sh:57–63`, `:72`)
+
+5. **FILA — chamadores e descritor 9 (b).** Os chamadores diretos encontrados na cópia são:
+
+   - `sombra.sh`: source em `HEAD bin/sombra.sh:87`; aquisições em `:438`, `:451`, `:456`, `:487`.
+   - `simular_folha.sh`: source em `HEAD bin/simular_folha.sh:45`; aquisições em `:67`, `:96`.
+   - `diff_janela_he_total.sh`: source e aquisição em `HEAD bin/diff_janela_he_total.sh:17–18`.
+
+   `simular_folha par` inicia dois filhos `foto`, que pedem novamente a trava e dependem do atalho herdado. `--com-a-sombra` também executa um comando filho mantendo o shell pai com as travas. (HEAD `bin/simular_folha.sh:96–99`, `:67`; HEAD `bin/sombra.sh:456–461`)
+
+   Há outros protocolos usando 9, como régua e pre-push, mas isso não demonstra colisão: reabrir o descritor somente num filho não fecha a cópia mantida pelo pai. Colisão concreta nos três chamadores diretos: **[não verificado]**. (HEAD `bin/regua.sh:97–103`; HEAD `bin/pre-push.sh:80–87`; HEAD `bin/sombra.sh:461`)
+
+6. **FILA — o selo morde parte do protocolo, com lacunas (e).**
+
+   - **a/b/c:** as aquisições ocorrem em subshells distintos, abrindo seus próprios descritores; não há falso compartilhamento causado por um descritor aberto pelo filho e herdado pelo pai. Porém a sobreposição depende de sinal seguido de `sleep 4`. Uma pausa de escalonamento pode fazer **a**, isoladamente, passar sem sobreposição; nesse cenário, **b** pode tornar o selo vermelho. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:15–32`)
+   - **d:** aceita qualquer retorno diferente de zero como recusa, sem distinguir `RECUSADA`, timeout ou outro erro; também testa a chamada no mesmo shell, sem criar um filho leitor. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:33–35`)
+   - **e:** verifica posições de palavras e uma grafia específica da chamada exclusiva. Não executa a porta nem comprova rc 2 sem guarda; uma conferência textual ineficaz pode satisfazer o selo. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:36–41`)
+   - Não cobre transição de versões, herança válida, repetição da aquisição, JSONL, CPU ou a escrita da lavra. Execução efetiva do selo: **[não verificado]**. (diff `bin/tests/test_sombra_leitura_compartilhada.sh:26–43`)
+
+7. **FILA — `"modo"` preserva o parsing, mas amplia o contador agregado (f).** O produtor atual é `trancar_sombra`; o patch acrescenta `trancar_sombra_leitura`, com `"modo":"leitura"`. `esperas_longas_hoje` considera data, `espera_s` e `ok`, ignorando campos adicionais: leituras demoradas ou negadas entram na mesma conta. (HEAD `bin/sombra_trava.sh:30–31`, `:49–60`; diff `bin/sombra_trava.sh:65–66`)
+
+   `placar_code.sh` consome esse contador sem separar modos, embora sua descrição ainda mencione somente `sombra.lock`. A recusa de escritor dentro de leitor retorna antes do registro e não entra na conta. (HEAD `bin/placar_code.sh:166–171`; diff `bin/sombra_trava.sh:28–30`, `:44–45`)
+
+8. **FILA — configuração de CPU existe; medida de parede não foi demonstrada.** O container final da sonda recebe `--cpu-shares 256`; o container anterior da lavra não recebe essa atribuição pelo ramo. O JSONL mede espera pela trava; tempo de parede da execução e ganho entre duas sondas: **[não verificado]**. (diff `bin/sombra.sh:188`, `:508–511`; HEAD `bin/sombra.sh:166`; diff `bin/sombra_trava.sh:62–66`)
+
+## 13/11 07:56 · sessao 46fd062e5518 · - · - · origem=Ronald (tmux)
+
+1. **bloqueia — a porta de leitura escreve antes da sonda.** O ramo chama `lavra_de_prod` sob trava compartilhada (`diff bin/sombra.sh:506`, `:508`); essa função sobrescreve arquivos comuns (`HEAD bin/sombra.sh:144`, `:151`) e executa dois `update_or_create` no banco (`HEAD bin/sombra.sh:157`, `:160`, `:166`). A guarda da sonda não cobre esse processo anterior (`diff bin/sombra.sh:509-510`). Duas leituras podem disputar arquivos e atualizar os mesmos registros; ocorrência concreta em produção [não verificado].
+
+2. **bloqueia — a conferência textual não prova ausência de escrita.** O `grep` exige apenas uma ocorrência textual (`diff bin/sombra.sh:504-505`). Contraexemplos que satisfazem a expressão: ocorrência dentro de string/docstring; chamada em `if False`; wrapper instalado apenas dentro de um `with`, com escrita depois; escrita por outra conexão; implementação permissiva de `guarda_sql` (`diff bin/sombra.sh:504`). Existência desses casos nas sondas reais [não verificado]. Se a guarda apenas permite prefixos SELECT/WITH, DML em CTE e funções com efeitos chamados por SELECT também precisam de análise; implementação concreta da guarda [não verificado].
+
+3. **fila — o selo verifica parte do protocolo, sem comprovar o contrato todo.** As tentativas usam subshells distintos: o pai não recebe o descritor aberto pelo filho; portanto os casos a/b/c não têm, por construção, o falso sucesso de dois `flock` sobre o mesmo descritor herdado (`diff bin/tests/test_sombra_leitura_compartilhada.sh:15-24`). Entretanto:
+   - A sobreposição depende do sinal seguido de `sleep 4`; uma pausa de escalonamento pode deixar o leitor acabar antes da segunda tentativa. O caso a isoladamente poderia passar sem simultaneidade, e b/c podem produzir falha por temporização (`diff ...:18-19`, `:26-32`).
+   - O caso d aceita qualquer falha do escritor, incluindo timeout ou outro erro, sem conferir mensagem RECUSADA ou recusa imediata (`diff ...:33-35`).
+   - O caso e verifica posições de palavras e uma grafia específica da chamada exclusiva; não executa a porta nem valida rejeição rc 2 (`diff ...:36-41`).
+   - Não existem casos para herança, repetição de aquisição, transição de versão antiga, JSONL ou `--cpu-shares` no teste proposto (`diff ...:26-43`). [nao verificado]
+
+Execução efetiva do selo e comportamento das sondas concretas [não verificado].
+
+## 13/11 07:55 · sessao 19b7cbbbed23 · - · - · origem=Ronald (tmux)
+
+**b — fila:** Os chamadores diretos encontrados são `bin/sombra.sh:87` (aquisições em `:438`, `:451`, `:456`, `:487`), `bin/simular_folha.sh:45` (aquisições em `:67`, `:96`) e `bin/diff_janela_he_total.sh:17-18`. Não há uso próprio de fd9 nesses arquivos; colisão concreta nesses chamadores: **não encontrada**. Outros scripts usam fd9, como `bin/regua.sh:97-103`, mas isso isoladamente não demonstra colisão.
+
+`simular_folha par` chama dois filhos `foto`, que pedem a trava novamente; a marca exportada permite retornar antes de reabrir descritores (`bin/simular_folha.sh:96-98`, `bin/simular_folha.sh:67`, `bin/sombra_trava.sh:22`, `bin/sombra_trava.sh:38`). Depois do patch, essa autorização precisa corresponder à posse dos dois descritores; um pai antigo possui apenas fd8 (`bin/sombra_trava.sh:26-28`; diff `bin/sombra_trava.sh:32-38`).
+
+Um comando de `--com-a-sombra` roda como filho enquanto o shell pai conserva as travas; reabrir fd9 somente nesse filho não libera a cópia do pai (`bin/sombra.sh:456-461`).
+
+**f — fila:** O produtor atual do JSONL é `trancar_sombra`; o patch acrescenta `trancar_sombra_leitura` (`bin/sombra_trava.sh:30-31`; diff `bin/sombra_trava.sh:65-66`). O leitor direto encontrado é `esperas_longas_hoje`, que considera `ts`, `espera_s` e `ok`, ignorando campos adicionais; portanto `"modo":"leitura"` não quebra seu parsing e pedidos de leitura negados ou demorados passam a integrar o mesmo contador (`bin/sombra_trava.sh:49-60`). `bin/placar_code.sh:166-171` consome esse contador agregado; sua descrição ainda menciona somente `logs/sombra.lock` (`bin/placar_code.sh:169`).
+
+A recusa de escritor dentro de leitor retorna antes do `printf` do JSONL; essa recusa não entra no contador (`diff bin/sombra_trava.sh:28-30`, `:42-43`).
 
 ## 13/11 01:32 · sessao e6a36b1c5425 · O168 · verificador · origem=Code
 
@@ -1250,88 +1319,4 @@ Não há uma versão nova entregue ou executada para comparar. Estas são as dif
 
 Para explicar a queda por classe, precisam permanecer contagens das rotas, dos quatro baldes de lei, das causas `a`–`e`, dos detalhes de `e` e dos papéis, conservando as identidades de soma do vigia. A classificação deve vir do resultado real, sem implementar outro juiz. A queda efetiva e sua distribuição por classe não estão demonstradas no dado fornecido. [app/chamados/services/vigia_fio.py:531; app/chamados/services/vigia_fio.py:535; app/chamados/services/vigia_fio.py:648; app/chamados/services/vigia_fio.py:676; app/chamados/services/vigia_fio.py:690; nao verificado]
 
-## 13/11 00:07 · sessao 38e18dd8d0ce · - · - · origem=Ronald (tmux)
-
-O ponto decisivo é incompatibilidade literal entre (b), (c) e preservação dos leitores em (g): uma chamada por colaborador/dia a `tarefa_do_dia` abre alimentação global do painel. `CargaDaTarefa.tarefa` chama `alimentar_fila` em `app/chamados/services/tarefa_do_dia.py:532`; essa alimentação chama `particionar_verbos(qs_vivos())` em `app/chamados/juizes.py:1558` e percorre `qs_na_fila()` integral em `app/chamados/juizes.py:1561`; a partição chama `creditos_perguntas(vivo_qs)` em `app/chamados/services/verbos.py:34`.
-
-Portanto, mover a chamada direta `RX.creditos_perguntas` para `"agregado"` não impede novas execuções globais dentro das partes. Acrescentar filtro a esses querysets viola o universo que a função documenta: crédito depende do conjunto vivo integral, e filtrar muda o crédito; `app/chamados/juizes.py:1579`.
-
-Outros achados:
-
-- `perguntas_respondidas_a_validar` retorna lista global e seu queryset tem cache integral: `app/chamados/juizes.py:1698`.
-- `dias_trancados` materializa `pares`, vetor de saída e vetores auxiliares por chamada: `app/chamados/juizes.py:1022`.
-- A carga de tarefa materializa perguntas, decisões e pares da janela: `app/chamados/services/tarefa_do_dia.py:376`, `app/chamados/services/tarefa_do_dia.py:391`, `app/chamados/services/tarefa_do_dia.py:422`.
-- A tarefa mantém caches de grade por colaborador e instâncias/marcos por dia, limitados à carga: `app/chamados/services/tarefa_do_dia.py:500`, `app/chamados/services/tarefa_do_dia.py:508`, `app/chamados/services/tarefa_do_dia.py:514`.
-- O fio carrega disputas e perguntas somente do colaborador, mas conserva dicionários/listas durante a chamada: `app/chamados/services/fio.py:204`, `app/chamados/services/fio.py:211`, `app/chamados/services/fio.py:237`, `app/chamados/services/fio.py:255`.
-- A disputa deve conservar todas as suas perguntas: `pode_fechar` depende de universo integral, `app/chamados/models.py:1854`; `respostas_sem_veredito` recebe esse universo explicitamente, `app/chamados/models.py:1841`.
-- O juiz memoiza por instância, sem cache global persistente: `app/chamados/juizes.py:879`, `app/chamados/juizes.py:901`.
-- `q_respondida_sem_texto` e `q_respondida_com_texto` são expressões SQL puras: `app/chamados/juizes.py:1531`, `app/chamados/juizes.py:1541`. Paridade por pergunta pode usar `Exists`/anotação filtrada no banco, mas executa a face também nas partes, contrariando sua interpretação estrita de “somente agregado”. [nao verificado]
-- Há duas FKs de colaborador relevantes: perguntas têm FK própria em `app/chamados/models.py:2454` e disputa em `app/chamados/models.py:2437`; a carga filtra pela própria FK da pergunta em `app/chamados/services/tarefa_do_dia.py:377`, enquanto a divisão pedida usa a disputa. Igualdade dessas FKs no dado: [nao verificado].
-
-Proposta de fingerprint: multiconjunto por leitor/contexto/faixa de pk, contendo contagem e somas independentes de hashes de cada unidade; consolidação soma contagens/digests/histogramas. Para memória constante, emitir fragmentos de faixa periodicamente e consolidar externamente; armazenar todas as faixas em dicionário ainda cresce com sua quantidade. Isso muda o algoritmo do SHA da lista ordenada da v1, mas mantém comparação determinística base/cópia quando ambas usam o mesmo novo texto. [nao verificado]
-
-`SEQUENCIAS` pode morrer ao final de cada chamada raiz, pois a chave v1 já inclui raiz/contexto; contador por unidade dentro de uma única chamada global continua podendo crescer com a frota. Eliminar também esse crescimento exige alterar representação da ordem dos observados ou emitir registros de ocorrência sem conservar o contador por identidade; essa diferença deve ser declarada. [nao verificado]
-
-Não achei `AGENTS.md` no inventário consultado; a base e o hash não puderam ser confirmados por Git porque a cópia não é repositório Git. [nao verificado]
-
-## 13/11 00:07 · sessao dff820e3ed41 · - · - · origem=Ronald (tmux)
-
-Há incompatibilidades reais com a exigência literal de que **cada consulta interna dos leitores por colaborador já venha filtrada pela parte**:
-
-- `o_que_segura(colab,...)` chama `classificar_export(empresa,mes,ano)` para a empresa inteira e só então escolhe o colaborador em Python. `app/folha/fora_da_folha.py:227`, `app/folha/fora_da_folha.py:228`.
-- O export consulta todos os fechamentos da empresa naquela competência. `app/folha/export.py:785`.
-- A carga da tarefa chama `alimentar_fila` ao avaliar a primeira tarefa. `app/chamados/services/tarefa_do_dia.py:529`.
-- `alimentar_fila` chama `particionar_verbos(qs_vivos())` global e percorre toda `qs_na_fila`. `app/chamados/juizes.py:1558`, `app/chamados/juizes.py:1561`.
-- A documentação declara que o crédito depende do conjunto global recebido e pode mudar com o recorte. Filtrar essa chamada muda a regra observada. `app/chamados/juizes.py:1577`.
-
-Portanto, particionar os argumentos e as consultas da **sonda** é viável; prometer o mesmo para todas as consultas **internas de produção**, preservando os leitores reais sem alterações, não é. `app/chamados/juizes.py:1558`, `app/folha/fora_da_folha.py:227`.
-
-O universo exato do plano do backfill tem de vir do agregado:
-
-- `censo_alcance` enumera `empresas_visiveis()`, depois `competencias_a_lavrar(emp,hoje)`, depois os dias de `dias_que_seguram(... )["dias"]`; deduplica `(colaborador_id,data)` com `setdefault`. `app/chamados/services/vigia_fio.py:571`, `app/chamados/services/vigia_fio.py:587`, `app/chamados/services/vigia_fio.py:589`, `app/chamados/services/vigia_fio.py:591`.
-- Não equivale às células das janelas, nem a colaborador×todos os dias. A seleção da folha parte de `classificar_export`, retém apenas `furo_espelho` e lê `_dias_que_retem` desses colaboradores. `app/folha/fora_da_folha.py:130`, `app/folha/fora_da_folha.py:139`, `app/folha/fora_da_folha.py:148`.
-- O plano v1 percorre todos os registros `vigia.censo_alcance.dia`, independentemente da rota, apesar do comentário anterior mencionar `sem_porta`. `e3_diff_leitores_v1.py:[numeração do anexo necessária]`.
-- Para medir `ato_do_dia` nas partes sem repetir `censo_alcance`, o agregado precisa emitir um **manifesto de IDs/datas**, consumido pelas partes; só hashes não permitem recuperar essas unidades. Ou é preciso alterar a interface do leitor nativo, o que excede “reescrever só a sonda”. `app/chamados/services/vigia_fio.py:591`, `app/chamados/services/vigia_fio.py:633`.
-- `ato_do_dia` é leitura da tarefa e consulta as perguntas daquele colaborador/dia com `executar=False`. `app/chamados/management/commands/backfill_fio_morto_e4b.py:87`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:89`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:90`.
-
-Classes/ramificações que o relatório precisa conservar para explicar a queda:
-
-- Primeiro, portas `porta_fila`/`porta_pergunta`, publicadas pela tarefa. `app/chamados/services/vigia_fio.py:648`.
-- Depois, `de_hoje_pra_frente`. `app/chamados/services/vigia_fio.py:656`.
-- Depois os quatro baldes de lei: decisão pendente, ausência aberta, escala não descreve o dia, fio do admin. `app/chamados/services/vigia_fio.py:662`, `app/chamados/services/vigia_fio.py:306`.
-- Sem porta, causa **a** = véu/chamado vivo; **b** = respondida sem texto; **c** = respondida sob âncora terminal; **d** = colaborador na lista mas dia fora; **e** = demais detalhes declarados. `app/chamados/services/vigia_fio.py:676`, `app/chamados/services/vigia_fio.py:678`, `app/chamados/services/vigia_fio.py:682`, `app/chamados/services/vigia_fio.py:684`, `app/chamados/services/vigia_fio.py:686`.
-- Detalhes e: `sem_celula`, `dia_na_lista_dono_*`, `sem_pergunta_viva`, `pergunta_viva_sob_chamado_terminal`, `pergunta_viva_sem_ancora`, `pergunta_viva_fora_do_app`, `outra`. `app/chamados/services/vigia_fio.py:677`, `app/chamados/services/vigia_fio.py:690`.
-- Invariantes: soma das rotas/baldes/sem_porta = universo; a+b+c+d+e = fio_morto_alcance. `app/chamados/services/vigia_fio.py:531`.
-- O perfil `_listar` cobre todos os dias se `limite=sys.maxsize`; cada retorno informa causa, detalhe e rota sem implementar outro juiz. `app/chamados/services/vigia_fio.py:629`, `app/chamados/services/vigia_fio.py:632`.
-
-A cópia não contém repositório Git acessível no cwd; comparação com base `78994522d`, mudanças exatas base→cópia e queda real por classe são **[nao verificado]**. Os números de produção mencionados em documentação não devem substituir o dado fornecido. **[nao verificado]**
-
-## 13/11 00:06 · sessao 24dc542a8407 · - · - · origem=Ronald (tmux)
-
-Leitores que devem ficar no agregado para preservar a chamada integral da v1:
-
-| Família | Fonte e materialização nativa |
-|---|---|
-| `relatorios_disputa.coletar` | `app/chamados/relatorios_disputa.py:31`; queryset com prefetch e listas por categoria em `:35`, `:45`, `:51`, `:60`. |
-| `raiox.creditos_perguntas` | `app/chamados/services/raiox.py:51`; conjunto de chamados vivos em `:58`, lista integral de perguntas em `:135`, listas respondidas/pendentes em `:143`, conjuntos de créditos em `:146`. |
-| `cobranca._calados` | `app/chamados/services/cobranca.py:221`; queryset cacheado em `:236`, listas por colaborador em `:239`, mapa de colaboradores em `:247`. |
-| `cobranca.linhas_para_a_pauta` | `app/chamados/services/cobranca.py:260`; chama `_calados` novamente em `:267`, repetição nativa que a v1 mede. |
-| `dias_que_seguram` | `app/folha/fora_da_folha.py:113`; export integral, IDs, colaboradores e dias em `:129`, `:142`, `:143`. |
-| `fora_da_folha` | `app/folha/fora_da_folha.py:153`; usa universo anterior, retidos/carga em `:174`, `:177`, lista de linhas em `:183`, retorno em `:209`. |
-| `retrato_folha.montar_linhas` | `app/folha/retrato_folha.py:1120`; mantém retorno integral de folha em `:1158`, mapa por colaborador em `:1159`, lista de linhas em `:1162`. |
-| `retrato_folha.contadores` | `app/folha/retrato_folha.py:114`; copia linhas para cada filtro via `linhas_do_retrato`, `:110`, `:120`. |
-| `competencia_trancada.medir/encerrar` | `app/chamados/services/competencia_trancada.py:66`, `:164`; listas/sets por empresa e competência em `:77`, `:88`, `:110`; DRY `encerrar` chama `medir` novamente em `:166`. |
-| `cadastro_realidade.beco_em_lote` | `app/escala/services/cadastro_realidade.py:442`; recebe somente janelas, sem filtro de colaboradores; mapas/cargas/lista em `:475`, `:485`, `:492`, `:505`, `:514`, `:521`, `:540`. |
-| `cadastro_realidade._folga_nao_definida_sem_porta` | `app/escala/services/cadastro_realidade.py:553`; empresas ativas e competências nativas em `:571`, `:576`, chamada integral do beco em `:582`. |
-| `furo_sem_canal.medir` | `app/chamados/services/furo_sem_canal.py:43`; empresas ativas em `:61`, mapa e alvo em `:75`, `:80`, carga em `:90`, lista final em `:101`. |
-| `pautas.dias_sem_fio` | `app/ponto/services/pautas_dos_discordantes.py:46`; empresas ativas em `:66`, células materializadas em `:72`, carga em `:79`, lista final em `:84`. |
-| `pautas.apurar` | `app/ponto/management/commands/pautas_discordantes.py:56`; lê universo anterior, agrupa colaboradores e acumula retorno em `:68`, `:71`, `:76`, `:111`. |
-| `pautas.sincronizar.DRY` | `app/ponto/services/pautas_dos_discordantes.py:155`; lê todas as pautas vivas da família em `:169` e compara com entrada inteira em `:174`. Particionar sua entrada mudaria `fechar`, incluindo pautas pertencentes às demais partes. |
-
-Há conflito concreto entre preservar leitores e exigir que toda consulta do leitor por colaborador esteja filtrada: `o_que_segura(colab,...)` chama `classificar_export(empresa,mes,ano)` para a empresa inteira e só depois escolhe o colaborador com `next`; não recebe filtro para corrigir isso sem alterar o leitor. `app/folha/fora_da_folha.py:215`, `app/folha/fora_da_folha.py:227`.
-
-A remoção de `REGISTROS["linhas"]` não elimina essas materializações nativas. O agregado abaixo de 2 GB permanece [nao verificado]; em particular, uma chamada integral pode exceder o teto antes de retornar para a checagem cooperativa. As materializações acima demonstram o risco, mas não quantificam RSS em produção. `app/chamados/services/raiox.py:135`, `app/escala/services/cadastro_realidade.py:475`.
-
-O molde colado pelo usuário é um gerador de substituições e não contém uma classe `Registro`; equivalência com essa classe mencionada no pedido é [nao verificado].
-
-_4489 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4492 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
