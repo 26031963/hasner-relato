@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 09:01** · publicado em **13/11/2026 09:02** (UTC-3)
+> Ultima resposta processada: **13/11/2026 09:11** · publicado em **13/11/2026 09:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 09:11 · sessao a6eba0319a4e · FERIADO-ESCALA · sonda · origem=Code
+
+```text
+sonda_leitura: sonda_16.py [b1b8e75be9d0a984] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+== universo ativa=True total 535
+  ciclo=12x36 base=12x36 trabalha=False : 2
+  ciclo=12x36 base=12x36 trabalha=True : 332
+  ciclo=5x2 base=comercial trabalha=False : 16
+  ciclo=5x2 base=comercial trabalha=True : 15
+  ciclo=5x2 base=turno_partido trabalha=False : 4
+  ciclo=5x2 base=turno_partido trabalha=True : 1
+  ciclo=6x1 base=comercial trabalha=False : 70
+  ciclo=6x1 base=comercial trabalha=True : 59
+  ciclo=6x1 base=turno_partido trabalha=False : 1
+  ciclo=6x1 base=turno_partido trabalha=True : 23
+  ciclo=intermitente base=intermitente trabalha=True : 8
+  ciclo=personalizado base=comercial trabalha=False : 1
+  ciclo=personalizado base=comercial trabalha=True : 3
+== universo vigente(juiza) total 536
+  ciclo=12x36 base=12x36 trabalha=False : 2
+  ciclo=12x36 base=12x36 trabalha=True : 333
+  ciclo=5x2 base=comercial trabalha=False : 16
+  ciclo=5x2 base=comercial trabalha=True : 15
+  ciclo=5x2 base=turno_partido trabalha=False : 4
+  ciclo=5x2 base=turno_partido trabalha=True : 1
+  ciclo=6x1 base=comercial trabalha=False : 70
+  ciclo=6x1 base=comercial trabalha=True : 59
+  ciclo=6x1 base=turno_partido trabalha=False : 1
+  ciclo=6x1 base=turno_partido trabalha=True : 23
+  ciclo=intermitente base=intermitente trabalha=True : 8
+  ciclo=personalizado base=comercial trabalha=False : 1
+  ciclo=personalizado base=comercial trabalha=True : 3
+== contador existente vinculos_5x2_6x1_trabalha_feriado: {'total': 98, 'declarados': 64, 'nao_declarados': 34}
+== 5x2/6x1 ativos com True: ec col te ciclo base posto posto.opera_em_feriado criado_em data_inicio data_fim padrao_juiz nasceu_apos_16_09 vigente
+Traceback (most recent call last):
+  File "<string>", line 30, in <module>
+AttributeError: 'EscalaColaborador' object has no attribute 'criado_em'
+erros 1
+```
 
 ## 13/11 09:01 · sessao a880ed8aade7 · O168 · verificador · origem=Code
 
@@ -779,42 +820,4 @@ A cópia em disco contém HEAD sem o delta; os números acima identificados como
 
 **Pré-requisito de EXPAND:** os anexos não fornecem o DIFF por leitor na frota igual a zero antes do opus; seu cumprimento permanece [não verificado].
 
-## 13/11 08:25 · sessao b8a8d7fad656 · - · - · origem=Ronald (tmux)
-
-A/F — conclusões estáticas; DIFF por leitor na frota não consta do dado fornecido [não verificado].
-
-Para atas `Mapping`, os oito leitores migrados conservam suas expressões da base nos quatro estados solicitados; “igual à base” não significa que todos devolvem a mesma coisa entre si:
-
-| Leitor | NULA | HH:MM legado completo | Sem chaves / chave faltante / descasada |
-|---|---|---|---|
-| `_orfas_da_ata` | `[]` no leitor público | textos não vazios | textos existentes; se nenhum, `['?'] * int(n or 0)` — `app/escala/services/leitor_celula.py:383`, `:189`, `:193`, `:194`, `:424` |
-| `_celula_furada` | `None` pelo guard sem `lampadas` | lista OU contagem acusa, após guardas anteriores | mesmo bool lista OU contagem — `app/chamados/juizes.py:494`, `:506`, `:509`, `:511`, `:517` |
-| Materialização | nenhuma marca órfã | HH:MM válidos entram em `marcas` | só usa lista; ignora `n_orfas` — `app/chamados/services/materializacao.py:173`, `:178`, `:182` |
-| `periodos_do_dia` | `orfas=[]` | `[str(h), ...]` | só usa lista; ignora contagem — `app/ponto/juiz_batida.py:158`, `:163` |
-| Tripwire sobra | célula ignorada | horas cruas | horas cruas, inclusive `None`; ignora contagem — `app/ponto/management/commands/tripwire_celulas.py:260`, `:263`, `:266` |
-| `insumos_da_ata` | `(False, False)` sem lâmpadas | sem lâmpadas, n positivo dá `(None,None)` | usa somente contagem no ramo sem lâmpadas — `app/ponto/services/cartorio.py:834`, `:836`, `:841` |
-| Cluster | `None`, salvo juiz dia sem trabalho | segue medindo assinatura HH:MM | lista ausente/não-lista dá `None`; mismatch de n é ignorado — `app/ponto/services/cluster_espurio.py:25`, `:31`, `:32`, `:34`, `:36` |
-| Esmeril | nenhuma órfã | mesmo bucket por HH:MM | somente lista, ignora contagem — `app/ponto/services/esmeril_espelho.py:126`, `:127`, `:129` |
-| Cartão pela célula | conjunto vazio | conjunto de strings por data | somente lista, ignora contagem — `app/relatorios/cartao_pela_celula.py:288`, `:289` |
-
-Exceção de API isolada: `_orfas_da_ata(None)` mudou de erro da antiga expressão `.get` para `[]`; o leitor público já normalizava `None` para `{}`, portanto esse caminho público conserva a saída. A expressão antiga está no hunk removido fornecido; nova guarda em `app/escala/services/leitor_celula.py:189`; normalização e chamada em `:383` e `:424`.
-
-Há leitor adicional fora da migração: `vigia_pareador_celula.censo` recebe ata via `values_list` e lê as duas chaves cruas com fallback; lista presente com n ausente/zero vira conjunto vazio. Não consulta estado nomeado nem acessor — `app/ponto/services/vigia_pareador_celula.py:69`, `:71`, `:73`, `:74`. Essa leitura existe na cópia, mas não foi tocada pelos hunks fornecidos; provar se a matriz declarada previa sua cobertura requer a matriz ausente [não verificado].
-
-Escritores e leitores dos campos:
-
-- `orfas`/`n_orfas`: valores escritos por `gravar_orfas`; chamada do cartório em `app/ponto/services/cartorio.py:772`; implementação HEAD em `app/escala/services/ata.py:289`, `:290`, `:291`. Leituras centralizadas em `_valores_orfas`, `app/escala/services/ata.py:86`, `:90`; consumidores acima e vigia cru em `app/ponto/services/vigia_pareador_celula.py:74`.
-- `orfas_instantes`: gravada ou removida por `gravar_orfas`, HEAD `app/escala/services/ata.py:292`, `:293`, `:294`, `:295`; única leitura de produção encontrada está em `_instantes_gravados`/`instantes_orfas`, HEAD `:139`, `:141`, `:144`, `:149`, `:158`. Não encontrei consumidor de negócio chamando `instantes_orfas`; os chamados explícitos do dado são testes, `app/escala/tests/test_tipo_item3_v5_expand.py:78`, `:84`, `:91`.
-- `HoraComInstante`: criada por `hora_de`; texto continua `strftime('%H:%M')` e `.instante` guarda datetime aware — HEAD `app/escala/services/ata.py:57`, `:61`, `:68`, `:73`, `:76`. Origem local é `timezone.localtime` nos builders — `app/escala/utils.py:686`, `:1326`; as substituições estão em `:329`, `:624`, `:665`, `:802`, `:1835`, `:1837`.
-- O atributo `.instante` só é consumido na gravação e cópia/pickle, HEAD `app/escala/services/ata.py:65`, `:293`; os consumidores legados continuam usando texto, identidade de hash, slices, ordenação, quantidade ou verdade — exemplo PDF `app/relatorios/pdf_espelho.py:178`, `:477`, `:609`; propositor `app/ponto/propositor.py:24`, `:30`, `:55`; classe órfã `app/escala/orfa_classe.py:58`, `:74`; horas do dia `app/ponto/turnos.py:2667`.
-
-Não há unidade temporal comum comprovável no código:
-
-- A grade mistura órfãs do turno (`orfas_por_data[d]`) com sobras guardadas pela data civil da batida — `app/escala/utils.py:1441`, `:1761`, `:1814`, `:1817`, `:1823`, `:1837`.
-- Vigia pressupõe data civil — `app/ponto/services/vigia_pareador_celula.py:66`, `:67`, `:109`; supra juiz declara dia-TURNO — `app/ponto/supra_juiz.py:509`, `:510`, `:519`.
-- `horas_reais_do_dia` interpreta órfã HH:MM como deslocamento simples desde meia-noite da linha, enquanto usa rollover para células — `app/ponto/turnos.py:2646`, `:2649`, `:2663`, `:2665`, `:2667`.
-- PDF une HH:MM de todos os dias da janela e compara entrada sem data; `HoraComInstante` conserva esse defeito pelo hash textual — `app/relatorios/pdf_espelho.py:174`, `:178`, `:472`, `:477`; teste novo documenta e fixa o comportamento em `app/escala/tests/test_tipo_item3_v5_expand.py:151`, `:160`.
-
-A cópia local é HEAD sem o delta fornecido: a numeração HEAD de `ata.py` depois de :175 difere da numeração nova de `diff.txt`; o censo só existe no anexo delta [não verificado como arquivo local].
-
-_4517 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4518 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
