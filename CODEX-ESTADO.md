@@ -1,7 +1,261 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 19:42** · publicado em **13/11/2026 19:46** (UTC-3)
+> Ultima resposta processada: **13/11/2026 20:06** · publicado em **13/11/2026 20:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 20:06 · sessao 21865d8212f3 · - · - · origem=Ronald (tmux)
+
+Escritores de `data_evento` no código atual:
+
+| Caminho | Valor atribuído/persistido |
+|---|---|
+| Ponto único `gravar_dia_do_fato` | Atribui exatamente `dia_do_turno`, sem calcular nem salvar (`app/chamados/services/fio.py:791`, `:801`). |
+| Nascimento `_nascer` | Obtém `_dia_fato` de `dia_do_turno_da_linha`, atribui e salva (`app/chamados/models.py:2931`, `:3072`, `:3073`). |
+| Costura de pergunta sem data | Só data quando recebeu `data_evento` e a pergunta não tinha data; obtém `_dia` do mesmo helper, atribui e salva (`app/chamados/services/fio.py:868`, `:877`, `:880`, `:928`). As atribuições de `None` em recusas desfazem a alteração em memória antes do retorno (`:898`, `:913`). |
+| Rechaveamento | Grava exatamente `novo_dia`, recebido do chamador (`app/chamados/services/fio.py:1038`, `:1044`). |
+| Reuso de `abrir` | Se o dia gravado difere de `_dia_fato`, chama `rechavear_no_reuso` (`app/chamados/models.py:2996`, `:3008`), que usa `rechavear_data_evento` (`app/chamados/services/fio.py:1075`). |
+| Comando de migração / reversão | Usa a mesma porta no apply e na reversão (`app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:400`, `:492`). Seu universo normal contém somente `orfao_14h` e `saida_sem_entrada`, não intervalo (`:53`). |
+| Campo / migration | Campo nullable, sem default (`app/chamados/models.py:2479`); migration somente adiciona o campo, sem backfill (`app/chamados/migrations/0025_perguntadisputa_data_evento.py:13`). |
+
+Para intervalo, os produtores de valor que alimentam esses escritores são:
+
+1. **Fábrica da célula, ativa:** o cartório entrega `_cel` a `perguntar_pela_celula` (`app/ponto/services/cartorio.py:1043`); esta passa `cel.data` para `perguntar` (`app/chamados/services/fabrica_da_celula.py:219`), que escreve `{motivo: {'data': dia.isoformat()}}` no contexto da disputa (`:172`). `gerar_perguntas_disputa` lê literalmente esse valor (`app/chamados/services/disputa_emissao.py:372`), mantém para intervalo a data do contexto e descarta a data retornada pelo derivador de destino (`:408`), escolhe `_dia_p` (`:424`) e chama `abrir(data_evento=dia_do_turno_da_celula(_dia_p))` (`:444`, `:451`). Nesse caminho o produtor é `cel.data`, portanto dia do turno (`app/ponto/turnos.py:2939`).
+
+2. **Fallback da geração sem data no contexto:** `gerar_perguntas_disputa` chama `_data_furo_da_grade` (`app/chamados/services/disputa_emissao.py:350`), que localiza a batida-origem, consulta `dia_do_turno_da_batida` e devolve esse dia se a célula confirmar trabalho (`:65`, `:76`, `:83`, `:86`). O valor é dia do turno por derivação, não a data civil do marco (`:60`).
+
+3. **Complementação de marcos do dia:** `_complementar_marcos_faltantes` lê `_marcos_faltantes`, percorre `(dia,pos,tipo,hora)`, exige `dia == data_evento` e chama `_criar_pergunta_se_couber(..., dia_do_turno_da_celula(dia),...)` (`app/chamados/services/disputa_emissao.py:859`, `:873`, `:874`, `:881`); esta chama `PerguntaDisputa.abrir` passando o mesmo `data_evento` (`:837`, `:844`). `_marcos_faltantes` obtém `data_dia` da célula e devolve esse dia, não o dia civil absoluto da hora (`app/chamados/services/declaracao_texto.py:106`, `:109`, `:139`). Os motivos do intervalo vêm de `int_ida/S` e `int_volta/E` (`:42`).
+
+4. **Declaração direta do colaborador:** casa a hora com um marco faltante (`app/chamados/services/declaracao_texto.py:341`), obtém `dia,pos,tipo,marco` (`:345`) e cria pergunta com `data_evento=dia_do_turno_da_celula(dia)` (`:376`). Se a candidata existente está sem destino, usa `reapontar_resolvedora(...,data_evento=dia)` (`:370`).
+
+5. **Declaração textual aplicada pelo admin:** a proposta obtém `dia` do marco faltante casado (`app/chamados/services/declaracao_texto.py:625`, `:628`, `:635`); `aplicar_declaracao` cria com `data_evento=dia_do_turno_da_celula(p['dia'])` (`:666`).
+
+6. **Caminho legado de chamado `intervalo_ausente`: atenção à divergência.** O agrupador lê `marcos_faltantes[*]['data']`, converte essa string diretamente em `_de` e chama a porta com `dia_do_turno_da_celula(_de)` (`app/chamados/services/disputa_emissao.py:1143`, `:1148`, `:1154`). O produtor legado `furos_intervalo`, entretanto, constrói `data` como **dia civil do marco absoluto encadeado**, por `localtime(...).date()`, enquanto a célula tem seu próprio `cel.data` (`app/ponto/management/commands/detectar_intervalo_ausente.py:77`, `:78`, `:82`). Esse detector atualmente não emite: há `continue` após contabilizar supressão (`:156`, `:157`). O agrupador para chamados legados continua presente (`app/chamados/services/disputa_emissao.py:1138`).
+
+O contrato atual explicita “DIA DO TURNO”, obrigatório e sem default na porta datada (`app/chamados/models.py:2839`); intervalo é marco (`app/chamados/services/declaracao_texto.py:45`), e `dia_do_turno_da_linha` devolve `dia_do_turno_da_celula(d)` para marco (`app/chamados/services/fio.py:1639`). Esse construtor **não converte a data**, somente a identifica como dia da célula (`app/ponto/turnos.py:2940`).
+
+Portanto, contrato atual e produtor ativo principal dizem dia do turno; existe código de consumo legado que rotula dia civil de marco como dia do turno sem conversão (`app/chamados/models.py:2839`; `app/chamados/services/fabrica_da_celula.py:219`; `app/chamados/services/disputa_emissao.py:1148`; `app/ponto/management/commands/detectar_intervalo_ausente.py:82`). Qual caminho escreveu cada PK do anexo, e qual texto/data efetivamente foi mostrado quando respondeu, é `[nao verificado]`.
+
+## 13/11 20:05 · sessao c5d2c9e5c938 · - · - · origem=Ronald (tmux)
+
+- O PWA do colaborador usa `meu_atendimento`, monta o fio e renderiza `chamados/meu_atendimento.html`; as duas abas incluem `_card_atendimento.html`. (`app/chamados/views.py:559`, `app/chamados/views.py:569`, `app/chamados/views.py:632`, `app/templates/chamados/meu_atendimento.html:127`, `app/templates/chamados/meu_atendimento.html:144`)
+- A pergunta viva mostra literalmente **“Estamos falando do dia”**, seguido de **`p.data_evento`**, e depois o texto persistido **`p.pergunta`**. Não calcula nem apresenta a data civil futura do plantio nesse bloco. (`app/templates/chamados/partials/_card_atendimento.html:87`, `app/templates/chamados/partials/_card_atendimento.html:90`, `app/templates/chamados/partials/_card_atendimento.html:93`)
+- Os textos canônicos de intervalo são “Confirme o horário da saída do intervalo **no dia {data}**” e “Confirme o horário da volta do intervalo **no dia {data}**”; ambos recebem resposta do tipo `hora`. (`app/chamados/catalogo/perguntas.py:124`, `app/chamados/catalogo/perguntas.py:125`, `app/chamados/catalogo/perguntas.py:126`, `app/chamados/catalogo/perguntas.py:132`, `app/chamados/catalogo/perguntas.py:133`, `app/chamados/catalogo/perguntas.py:134`)
+- O formulário captura **somente HH:MM**: input `type=time`; o JavaScript oferece horas 0–23 e minutos 0–59 e monta `HH:MM`, sem data nem indicador de deslocamento de dia. (`app/templates/chamados/partials/_card_atendimento.html:132`, `app/templates/chamados/meu_atendimento.html:292`, `app/templates/chamados/meu_atendimento.html:294`, `app/templates/chamados/meu_atendimento.html:295`, `app/templates/chamados/meu_atendimento.html:312`, `app/templates/chamados/meu_atendimento.html:313`)
+- O POST web lê essa string e a entrega ao core; o core apenas valida seu formato e salva `resposta_colab`/`respondida_em`, sem converter data. A interpretação como **dia do turno** ocorre posteriormente no materializador, não na captura da declaração. (`app/chamados/views.py:1265`, `app/chamados/views.py:1283`, `app/chamados/services/disputa_emissao.py:1441`, `app/chamados/services/disputa_emissao.py:1448`, `app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1469`, `app/chamados/services/materializacao.py:419`, `app/chamados/services/materializacao.py:426`)
+- **Semântica apresentada:** o bloco não diz “dia civil”, “dia do início do turno” ou “dia seguinte”; mostra uma data e pede uma hora. O contrato interno declara expressamente `data_evento` como **dia do turno**, mas a leitura mental do colaborador como esse dia ou como o dia civil mostrado é **[nao verificado]**. (`app/templates/chamados/partials/_card_atendimento.html:78`, `app/templates/chamados/partials/_card_atendimento.html:157`, `app/chamados/models.py:2839`, `app/chamados/models.py:2844`)
+- O texto da pergunta pode conservar outra data: ele é interpolado de `contexto[motivo]['data']`, recebido separadamente de `data_evento` na emissão; o rechaveamento posterior grava `data_evento`, célula e lavra sem regravar `pergunta`. A ocorrência concreta dessa divergência nas linhas anexadas é **[nao verificado]**. (`app/chamados/catalogo/query.py:58`, `app/chamados/catalogo/query.py:64`, `app/chamados/services/disputa_emissao.py:344`, `app/chamados/services/disputa_emissao.py:447`, `app/chamados/services/disputa_emissao.py:451`, `app/chamados/services/fio.py:1038`, `app/chamados/services/fio.py:1044`)
+- A API de chamados fornece `data_evento` e `data_evento_label`; a API específica de disputa fornece o texto `pergunta`, mas seu `_item` não inclui a coluna de data; ambas recebem a resposta pelo mesmo core. A interface nativa efetivamente vista e a porta usada para cada PK anexado são **[nao verificado]**. (`app/api/views.py:1153`, `app/api/views.py:1154`, `app/api/views.py:2542`, `app/api/views.py:2557`, `app/api/views.py:2614`, `app/api/views.py:2620`)
+
+## 13/11 20:05 · sessao 12a5e43bc12a · - · - · origem=Ronald (tmux)
+
+Leitores relevantes e significado:
+
+- **Paridade principal:** `_materializar_resposta_hora` usa `ts` derivado por `_ts_tipo_do_plantio`; a guarda procura vizinha cronológica em ±12h desse instante, sem recombinar `data_evento` — portanto acompanha a interpretação de **dia do turno** do derivador. (`app/chamados/services/materializacao.py:852`, `app/chamados/services/materializacao.py:881`, `app/chamados/services/materializacao.py:86`–105.)
+- **Exceção da paridade:** `_plantio_preenche_furo_na_data` usa `loc = localtime(ts)` e busca `CelulaDia.data=loc.date()`: chave de **dia civil do plantio**, que pode ser D+1, e não `p.data_evento`. É diferença objetiva de chave; seu efeito nestas perguntas depende da ata/células, ausentes no anexo `[nao verificado]`. (`app/chamados/services/materializacao.py:157`, `app/chamados/services/materializacao.py:171`–182.)
+- **`estado_aplicacao_pergunta`:** chama o mesmo derivador e a mesma guarda/exceção; não possui interpretação alternativa de `data_evento`. (`app/chamados/services/materializacao.py:449`–459.)
+- **Recusa `DATA_EM_DISPUTA`:** `data_do_fato_de` compara `p.data_evento` com o dia do chamado resolvido por `dia_do_fato(..., fortes=True)`; este prioriza `chamado.celula.data`, depois catálogo/contexto e `data_turno`. O gate pressupõe **dia do turno**, não compara `localdate(ts)` com `data_evento`. (`app/chamados/services/fio.py:84`–88; `app/chamados/juizes.py:98`–128; `app/chamados/services/materializacao.py:1197`–1204.)
+- **Registro da recusa:** `_carimbar_recusa` traduz e grava motivo/via; não lê `data_evento` e não deriva data. O catálogo conserva texto “dia da pergunta (onde a batida nasceria)”, mas é texto explicativo, não nova conversão. (`app/chamados/services/materializacao.py:1089`–1113; `app/chamados/catalogo/recusa.py:45`–51.)
+- **Cartório:** não lê diretamente `p.data_evento` em seu corpo; julga por `cel.data` e consulta `fio_vivo` nas perguntas do chamado. `fio_vivo` delega a `pergunta_viva`; seu fallback lê `_dia_de_turno_da_pergunta`, que devolve `data_evento` para perguntas de fato e exclui conversas. Significado: **dia do turno**. (`app/ponto/services/cartorio.py:1353`–1355, `app/ponto/services/cartorio.py:1384`–1389; `app/chamados/juizes.py:1504`–1513; `app/chamados/juizes.py:1464`–1471; `app/chamados/juizes.py:334`–338.)
+- **Prova de materialização:** `_plantio_na_hora_do_slot` usa `data_evento` como âncora do turno, aceitando prova ligada na mesma hora em **D ou D+1**, ±20min. Isso relaxa a data civil aceita como prova; não lê `data_evento` como dia civil obrigatório. (`app/chamados/juizes.py:267`–279; `app/chamados/juizes.py:752`–761.)
+- **Via por fato:** procura `TurnoMaterializado.data_turno=data_evento`; no ramo específico de adesão, testa qualquer batida apurável entre D00:00 e D23:59, recorte civil explicitamente mais amplo para rejeitar “não bateu”. Intervalos não são absolvidos pela mera saída final do turno. (`app/chamados/juizes.py:1728`–1743; `app/chamados/juizes.py:1751`–1765.)
+- **Passivo/competência:** usa `p.data_evento`, não a data civil do instante overnight. (`app/chamados/services/passivo_validado.py:98`–113.)
+- **Tarefa do dia:** associa a pergunta a `dia` por igualdade `p.data_evento == dia`, declaradamente dia do turno. (`app/chamados/services/tarefa_do_dia.py:218`–236.)
+
+Trecho decisivo para o overnight: `_ajustar_saida_overnight` resolve vínculo em D, monta marcos do turno, considera envelope [primeiro−90min, último+90min], testa primeiro D e depois D+1 com a mesma hora local e devolve o primeiro candidato contido; sem marcos ou sem candidato conserva `ts`. (`app/chamados/juizes.py:296`–331.)
+
+## 13/11 20:02 · sessao 3c84ced51e81 · BUG-PAR-DESCONGELA · sonda · origem=Code
+
+Não localizei `sonda163.py` na cópia; não reexecutei a sonda. Segue a transcrição integral da saída fornecida, sem verificação independente. [nao verificado]
+
+```text
+sonda_leitura: sonda163.py [19cd94b4001bf974] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO 60 = 60 | 103 = 103 (pks pedidos 103)
+2026-11-13 19:57:47,228 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=44363 resposta=21:05 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,251 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=45400 resposta=13:55 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,260 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=45598 resposta=12:06 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,276 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=46363 resposta=21:44 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,302 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=47492 resposta=13:50 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,325 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=49167 resposta=02:06 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,334 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=49170 resposta=02:09 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,376 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=50176 resposta=17:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,661 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=4695 resposta=01:10 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,740 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=7463 resposta=21:12 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,754 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=9485 resposta=21:02 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,884 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=22627 resposta=01:00 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,917 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=26782 resposta=12:38 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,924 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=26963 resposta=13:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,939 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=27039 resposta=05:05 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,948 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27109 resposta=12:37 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,956 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27110 resposta=12:37 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,963 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27112 resposta=12:37 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:47,970 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=27135 resposta=01:00 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:47,999 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=27209 resposta=20:22 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,055 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27450 resposta=11:13 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,063 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=27451 resposta=12:13 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,087 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27464 resposta=16:31 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,124 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27673 resposta=12:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,150 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=27680 resposta=14:05 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,179 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=27798 resposta=12:37 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,188 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=29469 resposta=20:06 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,195 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=30009 resposta=03:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,217 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=30012 resposta=13:00 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,240 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=31373 resposta=14:05 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,262 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_volta pergunta_id=32646 resposta=02:00 tipo_pelo_motivo=E causa=Exception('marcos_faltantes=E x ata=S')
+NoneType: None
+2026-11-13 19:57:48,269 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=32649 resposta=12:38 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,277 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=32914 resposta=10:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,331 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=36077 resposta=13:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,339 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=36567 resposta=13:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,361 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=38433 resposta=12:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,375 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=38647 resposta=13:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+2026-11-13 19:57:48,429 ERROR chamados.materializacao best-effort falhou: operacao=tipo_marco_divergente motivo=intervalo_saida pergunta_id=41988 resposta=12:00 tipo_pelo_motivo=S causa=Exception('marcos_faltantes=S x ata=E')
+NoneType: None
+('103', 'DIFERENTE(data)') 24
+('103', 'DIFERENTE(hora)') 46
+('103', 'DIFERENTE(hora+data)') 13
+('103', 'DIFERENTE(tipo)') 4
+('103', 'IGUAL') 15
+('103', 'NAO_GRAVA(invalida)') 1
+('60', 'DIFERENTE(data)') 40
+('60', 'DIFERENTE(hora)') 10
+('60', 'DIFERENTE(hora+data)') 5
+('60', 'DIFERENTE(tipo+data)') 1
+('60', 'IGUAL') 4
+('total', 'DIFERENTE') 143
+('total', 'IGUAL') 19
+('total', 'NAO_GRAVA') 1
+ERROS_SONDA 0 (erros>0 = NAO MEDIDO, nunca zero)
+LINHAS grupo pk col motivo data declarado_hora declarado_tipo gravaria classe erro
+('60', 36255, 824, 'intervalo_saida', '2026-09-01', '22:00', 'S', '2026-09-01 22:00 S', 'IGUAL', '')
+('60', 39363, 926, 'intervalo_saida', '2026-10-02', '14:02', 'S', '2026-10-02 16:00 S', 'DIFERENTE(hora)', '')
+('60', 39872, 821, 'intervalo_saida', '2026-10-04', '13:00', 'S', '2026-10-04 13:00 S', 'IGUAL', '')
+('60', 41692, 594, 'intervalo_saida', '2026-10-08', '00:00', 'S', '2026-10-09 00:00 S', 'DIFERENTE(data)', '')
+('60', 41693, 594, 'intervalo_volta', '2026-10-08', '01:00', 'E', '2026-10-09 01:00 E', 'DIFERENTE(data)', '')
+('60', 41706, 841, 'intervalo_volta', '2026-10-08', '01:50', 'E', '2026-10-09 02:00 E', 'DIFERENTE(hora+data)', '')
+('60', 44363, 468, 'intervalo_volta', '2026-10-15', '21:05', 'E', '2026-10-15 18:00 E', 'DIFERENTE(hora)', '')
+('60', 45277, 834, 'intervalo_saida', '2026-10-17', '03:00', 'S', '2026-10-18 03:00 S', 'DIFERENTE(data)', '')
+('60', 45278, 834, 'intervalo_volta', '2026-10-17', '04:00', 'E', '2026-10-18 04:00 E', 'DIFERENTE(data)', '')
+('60', 45400, 309, 'intervalo_volta', '2026-10-18', '13:55', 'E', '2026-10-18 11:30 E', 'DIFERENTE(hora)', '')
+('60', 45598, 707, 'intervalo_saida', '2026-10-18', '12:06', 'S', '2026-10-18 16:00 S', 'DIFERENTE(hora)', '')
+('60', 45599, 707, 'intervalo_volta', '2026-10-18', '13:06', 'E', '2026-10-18 17:00 E', 'DIFERENTE(hora)', '')
+('60', 46363, 841, 'intervalo_saida', '2026-10-20', '21:44', 'S', '2026-10-21 01:00 S', 'DIFERENTE(hora+data)', '')
+('60', 47207, 467, 'intervalo_saida', '2026-10-21', '01:00', 'S', '2026-10-22 01:00 E', 'DIFERENTE(tipo+data)', '')
+('60', 47208, 467, 'intervalo_volta', '2026-10-21', '02:00', 'E', '2026-10-22 02:00 E', 'DIFERENTE(data)', '')
+('60', 47492, 309, 'intervalo_volta', '2026-09-26', '13:50', 'E', '2026-09-26 11:30 E', 'DIFERENTE(hora)', '')
+('60', 48611, 908, 'intervalo_volta', '2026-10-15', '13:00', 'E', '2026-10-15 13:00 E', 'IGUAL', '')
+('60', 49165, 297, 'intervalo_saida', '2026-10-01', '01:00', 'S', '2026-10-02 02:00 S', 'DIFERENTE(hora+data)', '')
+('60', 49167, 297, 'intervalo_volta', '2026-10-05', '02:06', 'E', '2026-10-06 03:00 E', 'DIFERENTE(hora+data)', '')
+('60', 49170, 297, 'intervalo_volta', '2026-10-17', '02:09', 'E', '2026-10-17 22:00 E', 'DIFERENTE(hora)', '')
+('60', 49345, 879, 'intervalo_saida', '2026-10-23', '00:00', 'S', '2026-10-24 00:00 S', 'DIFERENTE(data)', '')
+('60', 49346, 879, 'intervalo_volta', '2026-10-23', '01:00', 'E', '2026-10-24 01:00 E', 'DIFERENTE(data)', '')
+('60', 49731, 879, 'intervalo_saida', '2026-10-24', '00:00', 'S', '2026-10-25 00:00 S', 'DIFERENTE(data)', '')
+('60', 49732, 879, 'intervalo_volta', '2026-10-24', '01:00', 'E', '2026-10-25 01:00 E', 'DIFERENTE(data)', '')
+('60', 50176, 450, 'intervalo_saida', '2026-10-25', '17:00', 'S', '2026-10-25 22:00 S', 'DIFERENTE(hora)', '')
+('60', 50177, 450, 'intervalo_volta', '2026-10-25', '18:00', 'E', '2026-10-25 23:00 E', 'DIFERENTE(hora)', '')
+('60', 51522, 960, 'intervalo_saida', '2026-10-21', '01:00', 'S', '2026-10-22 01:00 S', 'DIFERENTE(data)', '')
+('60', 51523, 960, 'intervalo_volta', '2026-10-21', '02:00', 'E', '2026-10-22 02:00 E', 'DIFERENTE(data)', '')
+('60', 51524, 960, 'intervalo_saida', '2026-10-23', '01:00', 'S', '2026-10-24 01:00 S', 'DIFERENTE(data)', '')
+('60', 51525, 960, 'intervalo_volta', '2026-10-23', '02:00', 'E', '2026-10-24 02:00 E', 'DIFERENTE(data)', '')
+('60', 51526, 960, 'intervalo_saida', '2026-10-25', '01:01', 'S', '2026-10-26 01:00 S', 'DIFERENTE(hora+data)', '')
+('60', 51527, 960, 'intervalo_volta', '2026-10-25', '02:00', 'E', '2026-10-26 02:00 E', 'DIFERENTE(data)', '')
+('60', 51528, 960, 'intervalo_saida', '2026-10-27', '01:00', 'S', '2026-10-28 01:00 S', 'DIFERENTE(data)', '')
+('60', 51529, 960, 'intervalo_volta', '2026-10-27', '02:00', 'E', '2026-10-28 02:00 E', 'DIFERENTE(data)', '')
+('60', 51530, 960, 'intervalo_saida', '2026-09-25', '01:00', 'S', '2026-09-26 01:00 S', 'DIFERENTE(data)', '')
+('60', 51531, 960, 'intervalo_volta', '2026-09-25', '02:00', 'E', '2026-09-26 02:00 E', 'DIFERENTE(data)', '')
+('60', 51532, 960, 'intervalo_saida', '2026-09-27', '01:00', 'S', '2026-09-28 01:00 S', 'DIFERENTE(data)', '')
+('60', 51533, 960, 'intervalo_volta', '2026-09-27', '02:00', 'E', '2026-09-28 02:00 E', 'DIFERENTE(data)', '')
+('60', 51534, 960, 'intervalo_saida', '2026-09-29', '01:00', 'S', '2026-09-30 01:00 S', 'DIFERENTE(data)', '')
+('60', 51535, 960, 'intervalo_volta', '2026-09-29', '02:00', 'E', '2026-09-30 02:00 E', 'DIFERENTE(data)', '')
+('60', 51536, 960, 'intervalo_saida', '2026-10-01', '01:00', 'S', '2026-10-02 01:00 S', 'DIFERENTE(data)', '')
+('60', 51537, 960, 'intervalo_volta', '2026-10-01', '02:00', 'E', '2026-10-02 02:00 E', 'DIFERENTE(data)', '')
+('60', 51538, 960, 'intervalo_saida', '2026-10-03', '01:00', 'S', '2026-10-04 01:00 S', 'DIFERENTE(data)', '')
+('60', 51539, 960, 'intervalo_volta', '2026-10-03', '02:00', 'E', '2026-10-04 02:00 E', 'DIFERENTE(data)', '')
+('60', 51540, 960, 'intervalo_saida', '2026-10-05', '01:00', 'S', '2026-10-06 01:00 S', 'DIFERENTE(data)', '')
+('60', 51541, 960, 'intervalo_volta', '2026-10-05', '02:00', 'E', '2026-10-06 02:00 E', 'DIFERENTE(data)', '')
+('60', 51542, 960, 'intervalo_saida', '2026-10-09', '01:00', 'S', '2026-10-10 01:00 S', 'DIFERENTE(data)', '')
+('60', 51543, 960, 'intervalo_volta', '2026-10-09', '02:00', 'E', '2026-10-10 02:00 E', 'DIFERENTE(data)', '')
+('60', 51544, 960, 'intervalo_saida', '2026-10-11', '01:00', 'S', '2026-10-12 01:00 S', 'DIFERENTE(data)', '')
+('60', 51545, 960, 'intervalo_volta', '2026-10-11', '02:00', 'E', '2026-10-12 02:00 E', 'DIFERENTE(data)', '')
+('60', 51546, 960, 'intervalo_saida', '2026-10-13', '01:00', 'S', '2026-10-14 01:00 S', 'DIFERENTE(data)', '')
+('60', 51547, 960, 'intervalo_volta', '2026-10-13', '02:00', 'E', '2026-10-14 02:00 E', 'DIFERENTE(data)', '')
+('60', 51548, 960, 'intervalo_saida', '2026-10-15', '01:00', 'S', '2026-10-16 01:00 S', 'DIFERENTE(data)', '')
+('60', 51549, 960, 'intervalo_volta', '2026-10-15', '02:00', 'E', '2026-10-16 02:00 E', 'DIFERENTE(data)', '')
+('60', 51550, 960, 'intervalo_saida', '2026-10-17', '01:00', 'S', '2026-10-18 01:00 S', 'DIFERENTE(data)', '')
+('60', 51551, 960, 'intervalo_volta', '2026-10-17', '02:00', 'E', '2026-10-18 02:00 E', 'DIFERENTE(data)', '')
+('60', 51739, 947, 'intervalo_volta', '2026-10-29', '13:30', 'E', '2026-10-29 13:00 E', 'DIFERENTE(hora)', '')
+('60', 55142, 852, 'intervalo_saida', '2026-11-07', '01:00', 'S', '2026-11-08 01:00 S', 'DIFERENTE(data)', '')
+('60', 55156, 852, 'intervalo_volta', '2026-11-07', '02:00', 'E', '2026-11-08 02:00 E', 'DIFERENTE(data)', '')
+('60', 56382, 549, 'intervalo_saida', '2026-11-10', '13:20', 'S', '2026-11-10 13:20 S', 'IGUAL', '')
+('103', 4695, 460, 'intervalo_saida', '2026-07-28', '01:10', 'S', '2026-07-29 00:00 S', 'DIFERENTE(hora+data)', '')
+('103', 4797, 104, 'intervalo_saida', '2026-07-18', '12:00', 'S', '2026-07-18 12:00 S', 'IGUAL', '')
+('103', 4798, 104, 'intervalo_volta', '2026-07-18', '13:00', 'E', '2026-07-18 13:00 E', 'IGUAL', '')
+('103', 4800, 366, 'intervalo_volta', '2026-08-01', '03:00', 'E', '2026-08-02 03:00 E', 'DIFERENTE(data)', '')
+('103', 5040, 468, 'intervalo_saida', '2026-07-28', '20:42', 'S', '2026-07-28 20:42 S', 'IGUAL', '')
+('103', 5346, 171, 'intervalo_saida', '2026-07-01', '12:28', 'S', '2026-07-01 11:00 S', 'DIFERENTE(hora)', '')
+('103', 5367, 859, 'intervalo_saida', '2026-07-21', '03:00', 'S', '2026-07-22 03:00 S', 'DIFERENTE(data)', '')
+('103', 6228, 98, 'intervalo_volta', '2026-07-16', '11:15', 'E', '2026-07-16 11:15 E', 'IGUAL', '')
+('103', 7463, 468, 'intervalo_volta', '2026-08-06', '21:12', 'E', '2026-08-06 18:00 E', 'DIFERENTE(hora)', '')
+('103', 8778, 865, 'intervalo_volta', '2026-08-03', '01:00', 'E', '2026-08-04 01:00 E', 'DIFERENTE(data)', '')
+('103', 9485, 468, 'intervalo_volta', '2026-08-10', '21:02', 'E', '2026-08-10 18:00 E', 'DIFERENTE(hora)', '')
+('103', 12770, 334, 'intervalo_saida', '2026-08-12', '02:13', 'S', '2026-08-13 02:13 S', 'DIFERENTE(data)', '')
+('103', 12771, 825, 'intervalo_volta', '2026-08-12', '18:01', 'E', '2026-08-12 18:00 E', 'DIFERENTE(hora)', '')
+('103', 13033, 338, 'intervalo_saida', '2026-07-28', '12:10', 'S', '2026-07-28 12:10 E', 'DIFERENTE(tipo)', '')
+('103', 14356, 334, 'intervalo_volta', '2026-08-04', '03:00', 'E', '2026-08-05 03:00 E', 'DIFERENTE(data)', '')
+('103', 14359, 334, 'intervalo_saida', '2026-08-04', '02:00', 'S', '2026-08-05 02:00 S', 'DIFERENTE(data)', '')
+('103', 14363, 334, 'intervalo_saida', '2026-08-06', '02:10', 'S', '2026-08-07 02:10 S', 'DIFERENTE(data)', '')
+('103', 14365, 334, 'intervalo_volta', '2026-08-10', '03:00', 'E', '2026-08-11 03:00 E', 'DIFERENTE(data)', '')
+('103', 14368, 334, 'intervalo_saida', '2026-08-10', '02:00', 'S', '2026-08-11 02:00 S', 'DIFERENTE(data)', '')
+('103', 14953, 843, 'intervalo_saida', '2026-08-18', '00:00', 'S', '-', 'NAO_GRAVA(invalida)', 'Pergunta #14953: 00:00 e o default do relogio e nao casa marco do dia (03:00, 04')
+('103', 14960, 334, 'intervalo_volta', '2026-08-14', '04:00', 'E', '2026-08-15 04:00 E', 'DIFERENTE(data)', '')
+('103', 14963, 334, 'intervalo_saida', '2026-08-14', '03:00', 'S', '2026-08-15 03:00 S', 'DIFERENTE(data)', '')
+('103', 15014, 107, 'intervalo_saida', '2026-08-19', '14:00', 'S', '2026-08-19 14:00 E', 'DIFERENTE(tipo)', '')
+('103', 16327, 881, 'intervalo_volta', '2026-08-25', '01:00', 'E', '2026-08-25 01:00 E', 'IGUAL', '')
+('103', 20890, 107, 'intervalo_saida', '2026-08-10', '14:00', 'S', '2026-08-10 14:00 E', 'DIFERENTE(tipo)', '')
+('103', 20960, 72, 'intervalo_saida', '2026-08-26', '23:00', 'S', '2026-08-26 23:00 S', 'IGUAL', '')
+('103', 22470, 881, 'intervalo_volta', '2026-08-23', '01:00', 'E', '2026-08-23 01:00 E', 'IGUAL', '')
+('103', 22586, 444, 'intervalo_volta', '2026-08-29', '16:00', 'E', '2026-08-29 16:00 E', 'IGUAL', '')
+('103', 22627, 489, 'intervalo_volta', '2026-08-30', '01:00', 'E', '2026-08-31 02:00 E', 'DIFERENTE(hora+data)', '')
+('103', 23137, 749, 'intervalo_saida', '2026-09-04', '14:03', 'S', '2026-09-04 14:03 S', 'IGUAL', '')
+('103', 26588, 107, 
+
+[truncado em 20000 de 28681 caracteres]
 
 ## 13/11 19:42 · sessao 8a778cbd3dc4 · E3-FORMA-SQL · verificador · origem=Code
 
@@ -807,76 +1061,4 @@ Auditoria dos IDs 1–6: **3 real; 3 falso**. Os três reais pertencem à classe
 
 Ocorrência e frequência em produção destes resultados permanecem **[não verificado]**; o anexo fornecido não contém banco nem logs. **[não verificado]**
 
-## 13/11 18:31 · sessao ba2eb57da603 · - · - · origem=Ronald (tmux)
-
-| ID | Emissor | Chaves | Consumidor | Classe | Prova decisiva | Selo específico |
-|---|---|---|---|---|---|---|
-| 01 | `app/escala/services/propositor.py:788` | retorna `decisao_id,saida`; não retorna `ok,msg` | `app/chamados/services/proposta_no_fio.py:151-155` | **real**, quanto a `ok`, pelo critério literal pedido | A condição viva consulta `ok` ausente e decide sucesso; a rota resolve diretamente este escritor (`app/core/intake.py:49-52,481-487`). O resultado vira mensagem de sucesso/erro no fio (`app/chamados/services/fio.py:509-519`), alcançado por POST de views roteadas (`app/chamados/views.py:667-674,951-954`; `app/chamados/urls.py:21,39`). **Ressalva:** `msg` está no ramo de recusa; com retorno único não vazio de `aplicar`, esse ramo não é atingido. Falso sucesso concreto observado em produção: **[nao verificado]**. | **Não localizado [nao verificado]**. O teste do fio substitui o emissor por `{'ok': True}` (`app/chamados/tests/test_proposta_no_fio.py:106-120`); testes reais de `aplicar` verificam trilha/ACEITA sem atravessar o fio (`app/escala/tests/test_porta_da_proposta.py:148-166`). |
-| 02 | `app/escala/services/propositor.py:765-770` | `schema=None` | `app/colaboradores/management/commands/corrigir_escala_retroativa.py:53-63,162` | **escrita morta** | `schema` só é usado por `handle`, desviado por este emissor (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:48-51`). A escolha de `_rodar` é deliberada para conservar o tenant corrente (`app/escala/services/propositor.py:760-764`). Não é ramo morto do comando: é campo supérfluo desse dict. | **Não localizado [nao verificado]** para ausência de efeito de `schema`; testes adjacentes em `app/escala/tests/test_porta_da_proposta.py:148-166`. |
-| 03 | `app/escala/views_wizard.py:20-59` | omissão de `descricao`; HPD condicional | `app/escala/services/cadastro_tipo.py:185-188,217,265-267` | **falso** | `descricao` deriva de nome; não é entrada obrigatória (`app/escala/services/cadastro_tipo.py:184-188`). HPD tem emissor real quando enviado (`app/escala/views_wizard.py:53-59`), default histórico documentado e preservação quando ausente (`app/escala/services/cadastro_tipo.py:208-219,265-267`). | **Sim, parcial**: POST real sem HPD (`app/escala/tests/test_wizard_views.py:28-49`); POST real com HPD (`app/escala/tests/test_wizard_views.py:80-90`). Preservação exata de descrição/HPD ausente: **[nao verificado]**. |
-| 04 | `app/escala/services/escala_auto_executor.py:65-84` | `_delta_blocos` só para A7 | `app/escala/services/cadastro_tipo.py:443-454` | **falso** | Default zero significa não deslocar blocos; A4 muda pausa e FOLGA muda dia da semana, enquanto A7 desloca horários (`app/escala/services/escala_auto_executor.py:68-83`; `app/escala/services/cadastro_tipo.py:443,451-454`). | **Sim, parcial**: execução real de A4 sem `_delta_blocos`, derivação correta (`app/escala/tests/test_escala_auto_executor.py:66-84`). Assert de blocos preservados especificamente: **[nao verificado]**. |
-| 05 | `app/escala/services/escala_auto.py:111-115` | `valores.hfi` | `app/escala/services/escala_auto_executor.py:73-81` | **escrita morta** | Executor usa apenas `hii` e calcula fim pela duração declarada; razão documentada: pausa gozada a menos é intrajornada, não cadastro (`app/escala/services/escala_auto_executor.py:74-80`). A mediana de volta também compõe `para/evidencia` no emissor, mas isso não lê a chave `valores.hfi` (`app/escala/services/escala_auto.py:112-115`). | **Não localizado [nao verificado]** para descarte de `hfi`: teste usa pausa real 14–15 e duração cadastrada 60, que coincidem; portanto não distingue conservar duração de copiar `hfi` (`app/escala/tests/test_escala_auto_executor.py:49-53,78-79`). |
-| 06 | `app/escala/services/escala_auto_executor.py:114-115` | `ec_antigo` | `app/escala/management/commands/ajustar_escalas_auto.py:95-99` | **escrita morta** | Chamador usa `ec_id` já conhecido para vínculo antigo e lê os outros cinco campos de resultado (`app/escala/management/commands/ajustar_escalas_auto.py:93-99`). Busca global por `aplicar_no_vinculo`, import do executor e `ec_antigo` encontrou esse único chamador de produção; demais são testes. | **Não localizado [nao verificado]** para descarte da chave; teste de comportamento lê `ec_novo,historico` (`app/escala/tests/test_escala_auto_executor.py:72-84`). |
-| 07 | `app/escala/services/escala_auto_executor.py:152` | `historico` de desfazer | `app/escala/management/commands/ajustar_escalas_auto.py:39-42` | **escrita morta** | Único chamador de produção lê `volta,celulas`; imprime `h.pk` do ajuste original, não o histórico de desfazimento (`app/escala/management/commands/ajustar_escalas_auto.py:35-42`). Os testes de desfazer também ignoram seu retorno (`app/escala/tests/test_escala_auto_executor.py:86-101`). | **Não localizado [nao verificado]** para descarte; teste adjacente verifica estado e existência de trilha (`app/escala/tests/test_escala_auto_executor.py:86-95`). |
-| 08 | `app/escala/services/propositor.py:644-650` | omissão de `alavanca` | `app/pautas/semanal.py:139-146` | **falso** | Contrato explícito: alavanca quando declarada; senão o contador `n` (`app/pautas/semanal.py:142-146`). O emissor fornece `n` (`app/escala/services/propositor.py:645`). | **Sim, parcial**: entradas sem alavanca na montagem real da pauta e caso com prioridade explícita (`app/pautas/tests/test_pauta_texto.py:113-136`). Travessia do emissor específico: **[nao verificado]**. |
-
-**Subtotal 01–08:** real 1; escrita morta 4; ramo morto 0; falso 3, conforme provas da tabela. O `msg` do item 01 é um subcampo em ramo inalcançável com o retorno atual, mas o item foi contado uma vez pelo consumo vivo de `ok` (`app/escala/services/propositor.py:788`; `app/chamados/services/proposta_no_fio.py:152-155`).
-
-**Dono:** todos são questões de contrato do código, portanto ESTRUTURA como atribuição de manutenção, não CADASTRO/BATIDA (`CLAUDE.md:179`). Aplicação factual do juiz L-099 a dias de produção: **[nao verificado]**, pois exige os insumos descritos em `app/ponto/management/commands/e6_oraculo.py:53-70`.
-
-**Limite sobre item 01:** a recusa silenciosa por âncora futura não demonstra falso sucesso nessa via. O retro retorna `0` na recusa, `_rodar` descarta esse status e `aplicar` registra ACEITA (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:185-189,162`; `app/escala/services/propositor.py:765-776`). Entretanto, a proposta do fio é recalculada (`app/chamados/services/proposta_no_fio.py:105-114`); usa janela encerrada ontem (`app/escala/services/propositor.py:415-417,498-500`); substitui âncora futura prioritariamente por `max(dias_bat)` (`app/escala/services/propositor.py:274-276,313-323`); as outras sugestões também escolhem dias batidos (`app/escala/services/fase_12x36.py:57-64`; `app/escala/services/propositor.py:176-185,349-365`). Não transportar esse cenário para alegação de ocorrência produtiva.
-
-## 13/11 18:31 · sessao 53c794f30147 · - · - · origem=Ronald (tmux)
-
-| id | emissor | chave(s) | consumidor | classe | prova decisiva | selo que prende | dono |
-|---|---|---|---|---|---|---|---|
-| 12 | `app/ponto/views.py:1087` | faltam `empresa_id,periodo_fechado` | `app/templates/ponto/_fech_linha.html:13`, `:42`, `:47`, via `_fech_lote.html:8` | **real** | Rota viva em `app/ponto/urls.py:29`; lote envia apenas quatro raízes em `views.py:1088`. O include toma decisões de apresentação e preenche o POST com as ausentes. `empresa_id` vazio chega a `views.py:1443` e altera o destino de retorno em `:1457`. A página principal fornece ambas em `views.py:1181`. | **Não demonstrado [não verificado]**. O selo encontrado confere quantidade/ordem/continuação (`app/ponto/tests/test_selo_lotes_fechamento.py:57`, `:66`, `:81`), não essas raízes. | **ESTRUTURA**, atribuição de contrato conforme `CLAUDE.md:179`; não classificação de dia pelo juiz [não verificado]. |
-| 13 | `app/ponto/services/triagem_batida.py:206` | grava `tem_bloqueio_turno`; seletor pede `entrada_bloqueada_turno_aberto` | `app/ponto/views.py:229` | **ramo morto** | O contexto nasce local em `views.py:249`, recebe a triagem em `:260` e vai ao seletor em `:358`. O produtor escreve a flag em `triagem_batida.py:206`; a outra chave só identifica módulo de chamado em `views.py:283`, `:299`. A flag real já é consumida em caminho vivo em `views.py:275`; esse caminho expressamente prossegue o registro em `:312`. O ramo do seletor para `turno_regularizar.html` nunca recebe sua flag nesse fluxo. | **Não demonstrado [não verificado]**. `test_f7_triagem_caracterizacao.py:78` afirma a chave produzida, sem afirmar seleção do template. `test_f7_ramos_frios.py:62` confere contexto após POST direto. | **ESTRUTURA**, responsabilidade de ligação do código (`CLAUDE.md:179`); sem defeito de dado demonstrado [não verificado]. |
-| 14 | `app/ponto/services/triagem_batida.py:758` | sucesso da tela; `saida_sem_entrada` pertence a outro dict | `app/templates/ponto/triagem/apto.html:39` | **ramo morto** | O alerta fica dentro do **else de `sucesso`** (`apto.html:4`, `:37`). A gravação bem-sucedida define `sucesso=True` (`triagem_batida.py:758`). `saida_sem_entrada` é enviada ao criador de disputa em `:735`, dentro do dict de `:738`, sem mutar o contexto da tela. GET tampouco recebe essa flag (`views.py:249`, `:260`). | **Não demonstrado [não verificado]**. O teste de saída encontrado verifica disputa, não alerta renderizado (`app/ponto/tests/test_saida_cross_midnight_view.py:49`). | **ESTRUTURA**, responsabilidade do ramo de apresentação (`CLAUDE.md:179`); não BATIDA. |
-| 15 | `app/ponto/views.py:2079`; complementos `:2032`, `:2046` | ausência de `volta_url` | `app/templates/ponto/partials/painel_ausencia.html:282` | **falso**, por default explícito correto para o chamador localizado | O hidden vazio é enviado ao endpoint que define `POST.volta or reverse('ponto:lista_ausencias')` (`views.py:2581`). A própria lista abre esse drawer (`app/templates/ponto/ausencias.html:217`, `:228`). As ações irmãs igualmente retornam à lista (`views.py:2657`, `:2715`). Exigência de preservar filtros/query ou voltar a outra página **[não verificado]**; não transformar esse requisito ausente em defeito. | **Não demonstrado [não verificado]**. `test_reverter_rejeicao.py:27` importa/testa o serviço; `test_drawer_ausencia_no_molde.py:191` verifica rodapé de aberta/aprovada, não `volta`. | **ESTRUTURA** como dono do contrato inspecionado (`CLAUDE.md:179`); não há divergência real demonstrada. |
-
-Totais deste recorte: **1 real, 2 ramo morto, 1 falso, 0 escrita morta**, conforme os quatro pares e provas acima.
-
-Correção do anexo: #13 e #14 não são efeitos demonstrados de produção; são ramos sem flag de tela. #15 não comprova defeito de navegação, pois há destino explícito no endpoint; #12 continua real no caminho roteado. (`app/ponto/views.py:229`, `:249`, `:2581`; `app/templates/ponto/triagem/apto.html:37`; `app/ponto/urls.py:29`)
-
-Não acrescentei novos desencontros confirmados neste recorte; completude das costuras próximas **[não verificado]**. Não executei testes nem consultei banco/log; resultados de execução **[não verificado]**. [nao verificado]
-
-## 13/11 18:31 · sessao c9ed8d5d77b4 · - · - · origem=Ronald (tmux)
-
-Numeração considerada: 09–17 são os nove últimos desencontros do anexo, excluída a linha “Mesmo resultado” que já dizia não haver desencontro `[nao verificado: numeração não existe explicitamente no anexo]`.
-
-| ID | Emissor | Chaves | Consumidor | Classe | Prova decisiva | Selo que prende o apontamento |
-|---|---|---|---|---|---|---|
-| 09 | `app/escala/services/fase_12x36.py:229-234` | Ausência de `alavanca` | `app/pautas/semanal.py:139-146` | **falso** | O contrato documenta expressamente “quando [alavanca] existe”; senão usa o próprio contador `n` (`app/pautas/semanal.py:142-146`). | **Sim, parcial:** ordenação por alavanca em `app/pautas/tests/test_pauta_texto.py:129-136`; produtor de fase lendo lavra em `app/escala/tests/test_o261_v_fase_na_lista.py:254-260`. Teste específico fase→default de alavanca `[nao verificado]`. |
-| 10 | `app/escala/models.py:486-487` | `ciclico` | `app/core/templatetags/hasner_filters.py:72-123,207-217` | **escrita morta** | Os filtros usam `tipo/apelido/dias/horario`; não usam `ciclico`. O outro consumidor interno, dropdown, também só usa essas quatro chaves (`app/escala/models.py:528-536`); ficha idem (`app/colaboradores/services/ficha.py:82-90`). | **Não**, para ausência de consumo. Há selo só de emissão da chave, `app/escala/tests/test_nome_canonico.py:85,95`. |
-| 11 | `app/escala/models.py:486-487` | Mesmo `ciclico` do ID10 | `app/colaboradores/services/ficha.py:82-90` | **escrita morta** | Mesmo campo e mesmo conjunto de consumidores do ID10; a ficha só extrai quatro outras chaves (`app/colaboradores/services/ficha.py:70-71,85-90`). | **Não**, para ausência de consumo; selo do cabeçalho usa dias/horário e não `ciclico` (`app/colaboradores/tests/test_ficha_cabecalho_compacto.py:28-40`). |
-| 12 | `app/escala/regua_defesa.py:632-633` | `faixa/escore/texto` | `app/escala/services/furos_diarios.py:36,305-309` | **escrita morta** | Consumidores usam existência e `classe` (`app/escala/services/furos_diarios.py:36,306-309`; `app/chamados/juizes.py:516`). O docstring pede leitura inteira, mas os leitores não a fazem (`app/escala/regua_defesa.py:621-625`). | **Não**, para o não consumo. Selo apenas do produtor para `classe/texto/faixa` em `app/escala/tests/test_termometro_regua.py:175-188`. |
-| 13 | `app/escala/regua_defesa.py:632-633` | Mesmos `faixa/escore/texto` do ID12 | `app/chamados/juizes.py:514-516` | **escrita morta** | Aqui se lê só `None`; porém o anexo exagera se incluir `classe` entre os campos sem leitor: `classe` é lida por outro consumidor (`app/escala/services/furos_diarios.py:306-309`). | **Não**, para o não consumo; teste do produtor citado no ID12 (`app/escala/tests/test_termometro_regua.py:175-188`). |
-| 14 | `app/escala/regua_defesa.py:313` | Ausência de `data_ancora/confirm_txt` | `app/colaboradores/services/vinculo.py:57-59,146` | **falso** | O emissor recusa destino cíclico **antes** de formar POST (`app/escala/regua_defesa.py:310-313`); a exigência de âncora é para criação cíclica (`app/colaboradores/services/vinculo.py:126-130`). `confirm_txt` é texto opcional de observação, concatenado apenas quando existe (`app/colaboradores/services/vinculo.py:354-356`). | **Sim:** integração pela mesma porta, sucesso não cíclico e recusa cíclica em `app/escala/tests/test_termometro_camada3.py:81-106`. |
-| 15 | `app/escala/views.py:294-299` | `tamanhos.tamanho/dias` | `app/templates/escala/folga_calendarios_lista.html:21-25` | **escrita morta** | O contexto tem destino direto e único no render (`app/escala/views.py:311`); o template só lê `t.canonico` (`app/templates/escala/folga_calendarios_lista.html:22`). | **Não**, para chaves mortas; teste existente só inspeciona `semana_dia_rotulo` (`app/escala/tests/test_editor_folga_modo.py:66-71`). |
-| 16 | `app/escala/views.py:363-371` | `tipos`, `tamanhos.dias_range` | `app/templates/escala/folga_calendario_editar.html:67-80` | **escrita morta** | O JS recebe `tamanho/rotulo/n/marcados`; o intervalo de dias é construído por `d <= t.n` (`app/templates/escala/folga_calendario_editar.html:68,80`). `tipos` não participa desse template `[nao verificado para consumidores externos à cópia]`. | **Não**, para órfãs. **Há smoke de JS omitido pelo anexo:** explica execução real e reenvio do POST em `app/escala/tests/test_smoke_clique_folga_calendario.py:7-20`, com prova de modo semana×dia em `:163-170`. |
-| 17 | `app/escala/views_plano_folgas.py:158,190-191` | `gravadas/celulas_relavradas/barrados`; ausência de `ok` no erro | `app/templates/escala/plano_folgas.html:174-189` | **escrita morta** | Para a classe única, prevalecem os três campos emitidos sem leitura pelo JS. A parte “erro sem `ok`” é **falsa**: `if(!j.ok)` entra exatamente no erro e lê `j.erro` (`app/templates/escala/plano_folgas.html:176`). O JS só usa `ok/erro/erros` (`:176-189`). | **Não**, para descarte desses três campos; teste do endpoint prende `erros[].erro`, não os três, em `app/escala/tests/test_bug136_plano_em_lote_relavra.py:75-82`. |
-
-**Totais dos nove itens:** 0 real; 7 escrita morta; 0 ramo morto; 2 falso. Os sete registros mortos correspondem a cinco conjuntos de emissão: ID10=ID11 e ID12=ID13 repetem os mesmos campos (`app/escala/models.py:486-487`; `app/escala/regua_defesa.py:632-633`; demais emissores nas linhas da tabela).
-
-**Dono:** para efeitos de protocolo, os campos mortos dizem respeito à **ESTRUTURA**, não demonstram escala cadastrada errada nem batida faltante; para os falsos, não há defeito a atribuir. A atribuição L-099 de uma ocorrência real de produção permanece `[nao verificado]`: o juiz exige insumos do dia e do cadastro, ausentes no dado fornecido (`app/ponto/management/commands/e6_oraculo.py:55-110`; `CLAUDE.md:179`).
-
-A busca de leitores nomeados foi global em `app/`, com os padrões exatos `rotulo_regua_para_espelho`, `nome_canonico_partes`, `plano_folgas_aplicar`, `folga_calendarios_lista.html` e `folga_calendario_editar.html`, incluindo Python/HTML/JS. Para `ciclico`, a busca global da chave encontrou leituras de produção de um **outro contexto** de fase (`app/colaboradores/views_fase.py:51,104`; `app/templates/colaboradores/partials/_fase_12x36.html:6-7`); isso não é leitura do dict de `nome_canonico_partes` (`app/escala/models.py:486-487`). Consumidores dinâmicos não nomeados e consumidores externos à cópia `[nao verificado]`.
-
-## 13/11 18:29 · sessao 9eac57b99568 · - · - · origem=Ronald (tmux)
-
-- **BLOQUEIA — período apagado aborta a reversão restante.** O command faz `.get(pk=item['periodo'])` sem tratar ausência; períodos anteriores podem já ter sido revertidos e posteriores deixam de ser processados (`app/ferias/management/commands/realinhar_concedidos_ferias.py:100-104`; `app/ferias/services.py:190-200`). É alcançável pela porta regular: cancelar agendamentos e excluir o PA (`app/ferias/services.py:781-794`); a trilha permanece possível porque `objeto_id` não é FK (`app/core/models.py:298`).
-
-- **A — OK nos estados examinados.** Identidade inclui `pk`, `dias`, início e fim, cobrindo remarcação que mantém datas e muda dias (`app/ferias/services.py:139-140`). A porta também atualiza concedidos pelo delta dos dias (`app/ferias/services.py:652-653`). O RED novo morde a identidade antiga `[pk,dias]`, pois troca somente datas (`app/ferias/test_hj090_volta3.py:261-268`). Execução do RED: **[nao verificado]**.
-
-- **B — OK na seleção do último ato por período.** A consulta filtra modelo e PA antes de ordenar por PK; atos intercalados de PAs distintos não se contaminam (`app/ferias/services.py:177-179`). Os testes mordem replay de A depois de B e intenção sem commit (`app/ferias/test_hj090_volta3.py:270-296`). Não cobrem retirar o filtro por PA dessa consulta (`app/ferias/test_hj090_volta3.py:270-296`). Execução: **[nao verificado]**.
-
-- **C — cura externa fecha `{}`, mas validação interna permanece incompleta.** Só exige que `vivos` seja lista; aceita `[null]`, `[[1]]` ou datas malformadas (`app/ferias/management/commands/realinhar_concedidos_ferias.py:69-71`). Esses formatos serão tratados como “linha mudou”, eventualmente depois de reverter linhas anteriores (`app/ferias/services.py:192-194`; `app/ferias/management/commands/realinhar_concedidos_ferias.py:101-104`). Confirmação com funções extraídas por AST e `BytesIO`, sem arquivo: leitor aceitou duas linhas, sendo a segunda com `vivos=[None]` **[nao verificado por arquivo de prova]**. O RED só cobre formatos externos mínimos (`app/ferias/test_hj090_volta3.py:298-309`).
-
-- **NAO-BLOQUEIA condicionado ao acervo — incompatibilidade anterior.** Registros sem `depois.ato` agora são recusados pelo validador (`app/ferias/management/commands/realinhar_concedidos_ferias.py:69-71`). Existência desses registros em produção: **[nao verificado]**.
-
-- **OK — escrita explícita e falha de trilha.** `--reverter --por` é uma porta de escrita expressamente documentada; execução normal sem `--apply` retorna antes de criar arquivos (`app/ferias/management/commands/realinhar_concedidos_ferias.py:19-24`; `app/ferias/management/commands/realinhar_concedidos_ferias.py:95-119`). `_trilha` transforma retorno `None` em erro dentro da transação (`app/ferias/services.py:421-429`; `app/ferias/services.py:153-165`).
-
-- **NAO-BLOQUEIA — deadlock específico não demonstrado.** Realinhar/reverter travam PA, mas consultam agendamentos sem `select_for_update`; a ordem agendamento→PA da remarcação não estabelece ciclo de espera com essas portas (`app/ferias/services.py:105-113`; `app/ferias/services.py:139-140`; `app/ferias/services.py:154`; `app/ferias/services.py:577-580`). Concorrência executada: **[nao verificado]**.
-
-_4786 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4790 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
