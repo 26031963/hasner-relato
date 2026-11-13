@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 14:49:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (569.9 MB). Acoes na janela: **1503**.
+**Medido em 13/11/2026 14:54:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (570.5 MB). Acoes na janela: **1508**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:50:14 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/DESLIGADO-NAO-TRAVA/redgreen/fim7 ]; do /usr/bin/sleep 10; done; L=logs/DESLIGADO-NAO-TRAVA/redgreen/green7.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -n 1; /bin/grep '^Ran' $L \| tail -n 1; /bin/grep -E '^(FAIL\|ERROR):\|^rc=' $L \| head` |
+| 14:50:10 | Bash |  | `cd /home/ronald/saas-hasner; source bin/recursos.sh; W=/home/ronald/wt-desligado-112447; docker run --rm $TESTE_DOCKER -u $(id -u):$(id -g) -v $W/app:/app:ro -w /app saas-hasner-core:latest ruff check --no-cache --config ruff.toml folha/tests/test_lei_desligado_nao_trava.py folha/retrato_folha.py folha/management/commands/lavrar_retrato_folha.py 2>&1 \| tail -n 3` |
+| 14:50:06 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran\|^(FAIL\|ERROR):\|Error\|assert' red7.log \| head -n 20; cd /home/ronald/wt-desligado-112447 && git status --short \| head; cmp app/folha/retrato_folha.py /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen/rf.cura7 && echo cura_restaurada` |
+| 14:50:03 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; ls -la red7* green7* rf.cura7 lav.cura7 2>&1 \| head; tail -n 3 red7.log 2>/dev/null` |
+| 14:50:01 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bj4o9nep7.output; ls /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen/ \| tail -n 8; date +%H:%M` |
 | 14:49:05 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/HJ-093/sonda2; mkdir -p $D; cat > $D/sonda_frota2.py <<'EOF' # HJ-093 item 2, frota refinada: dispensada por justificativa E alguma lampada com LUZ real (batida casada) E realizado 0. SO LEITURA, ids. import datetime as dt from collections import Counter, defaultdict from django.utils import timezone as tz from escala.models import CelulaDia from ponto.models im ...` |
 | 14:48:52 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 800,813p ponto/services/cartorio.py; sed -n 1632,1640p ponto/turnos.py; sed -n 115,140p ponto/models.py \| /bin/grep -n 'models\.'` |
 | 14:48:37 | Bash |  | `cd /home/ronald/saas-hasner; tail -n 3 logs/HJ-093/sonda/log; cat logs/HJ-093/sonda/r.r` |
