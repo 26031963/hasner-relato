@@ -1,7 +1,147 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 00:49** · publicado em **13/11/2026 00:53** (UTC-3)
+> Ultima resposta processada: **13/11/2026 01:31** · publicado em **13/11/2026 01:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 01:31 · sessao b845571b3f94 · - · - · origem=Ronald (tmux)
+
+D. O corpo de `pode_executar_csf` continua sendo o predicado “existe `respondida_em` na origem OU nas perguntas que resolvem”; não exige texto, disputa aberta, pergunta viva ou categoria. Há dois chamadores de produção na cópia: command e gate. O registro diz um antes e dois depois; a alegação de três chamadores no aval fornecido não confere com a cópia. O histórico Git da base não está disponível para confirmação independente. (`app/ponto/supra_juiz.py:551`, `app/ponto/management/commands/supra_juiz.py:261`, `app/chamados/models.py:716`, `app/docs/CORTES.md:448`; histórico independente [não verificado].)
+
+O universo **das invocações** aumentou: o command pergunta pelos `vivos`; o novo gate pergunta por chamados com categoria `disputa_supervisao`. A função não mudou, mas “mesmo universo antes e depois” não descreve seus chamadores. (`app/ponto/management/commands/supra_juiz.py:260`, `app/chamados/models.py:713`.)
+
+Existe outro predicado que preserva resposta do colaborador contra reconciliação automática: `_tem_resposta_do_colab` usa **texto não vazio**, apenas nas perguntas que resolvem o chamado; seus dois leitores evitam reconciliar o chamado. Isso diverge do CSF em texto sem carimbo, carimbo sem texto e conversa apenas na origem. A declaração de autoridade única baseada somente no grep de `disputa_origem` não cobre esse predicado. Não encontrei função literal `tem_conversa`; o candidato concreto é este. (`app/ponto/services/cartorio.py:1637`, `app/ponto/services/cartorio.py:1648`, `app/ponto/services/cartorio.py:1665`, `app/ponto/supra_juiz.py:555`, `app/docs/CORTES.md:448`.)
+
+Há ainda uma divergência entre comentário e execução: o gate diz que a metade DESTINO do juiz “não se aplica”, mas chama a função inteira. Um chamado da categoria `disputa_supervisao`, sem disputa de origem e com pergunta respondida apontando para ele como destino, também será recusado como pai. A existência desse arranjo na produção é [não verificado]. (`app/chamados/models.py:704`, `app/chamados/models.py:713`, `app/chamados/models.py:716`, `app/ponto/supra_juiz.py:559`.)
+
+E. O contador lê a trilha e não rejulga. Conta chamados atualmente VIVOS que tenham **qualquer** recusa histórica com aquele motivo; não exige última recusa, nova recusa após reabertura, categoria ou disputa atual. Assim, é exatamente “vivos com trilha histórica”, não necessariamente “recusados no ciclo atual”. Não tem leitor de produção; o teste é seu consumidor. A documentação aponta o módulo errado (`models.py`). (`app/chamados/juizes.py:2510`, `app/chamados/juizes.py:2519`, `app/chamados/juizes.py:2522`, `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:59`, `app/docs/JUIZES.md:92`.)
+
+H. Mapa de escritores e leitores relevantes:
+
+| Campo/valor | Quem escreve | Quem lê / significado |
+|---|---|---|
+| `status_local` | `_gravar_estado`; `_vivas_entre` apenas simula e restaura memória. (`app/chamados/models.py:228`, `app/chamados/models.py:356`, `app/chamados/models.py:371`.) | Catálogo define VIVOS/ENCERRADOS/TERMINAIS; contador usa VIVOS; gate restringe categoria. (`app/chamados/catalogo/motor.py:24`, `app/chamados/catalogo/motor.py:30`, `app/chamados/juizes.py:2522`, `app/chamados/models.py:713`.) |
+| `resolvido_em` | `_gravar_estado`: carimba terminal, preserva resolvido→fechado e limpa ao voltar vivo. (`app/chamados/models.py:242`, `app/chamados/models.py:248`.) | Painel conta histórico pelo carimbo, separando autoria por `respondido_por`. (`app/chamados/services/painel.py:241`, `app/chamados/services/painel.py:244`, `app/chamados/services/painel.py:249`.) |
+| Recusa `conversa_exige_decisao_humana` | Gate entrega payload a `_registrar_recusa`; este compara última recusa e mudança posterior de estado; `evento` persiste. (`app/chamados/models.py:719`, `app/chamados/models.py:403`, `app/core/observ.py:134`.) | Contador lê toda a história daquele motivo, não só última linha. (`app/chamados/juizes.py:2519`.) |
+| `respondida_em` | Resposta real, resposta automática de fato entregue por outro caminho, recuperação pela trilha e simetria de `carimbar`; reabertura/ressuscitação zeram. (`app/chamados/services/disputa_emissao.py:1468`, `app/chamados/services/disputa_emissao.py:1653`, `app/chamados/services/disputa_emissao.py:1674`, `app/chamados/models.py:3162`, `app/chamados/services/disputa_emissao.py:1593`, `app/chamados/models.py:1596`.) | CSF aceita só timestamp; C6 exige timestamp **e texto** no degrau da resposta; cartório aceita texto. (`app/ponto/supra_juiz.py:557`, `app/chamados/juizes.py:1417`, `app/ponto/services/cartorio.py:1641`.) |
+| `validada_em` | Decisão de validar; simetria de carimbo também preenche. Nova resposta, devolução, reabertura e ressuscitação podem limpar. (`app/chamados/services/validacao.py:134`, `app/chamados/models.py:3165`, `app/chamados/services/disputa_emissao.py:1480`, `app/chamados/services/validacao.py:199`, `app/chamados/services/disputa_emissao.py:1593`, `app/chamados/models.py:1596`.) | C6 mata no primeiro degrau; estado exibe VALIDADA/RESOLVIDA; validação evita segundo ato. (`app/chamados/juizes.py:1401`, `app/chamados/models.py:3071`, `app/chamados/services/validacao.py:396`.) |
+
+Não há equivalência universal de significado: `validada_em` também é preenchido por simetria, e `respondida_em` sozinho não prova fala com texto. A documentação já admite ambas as condições; são anteriores ao novo gate. (`app/chamados/services/validacao.py:19`, `app/chamados/services/materializacao.py:830`, `app/chamados/services/disputa_emissao.py:1983`.)
+
+A trilha é best-effort: a recusa pode preservar o pai sem conseguir gravar a linha; nesse caso o contador não o verá. Repetições consecutivas com mesmo payload e sem nova escrita de estado deduplicam; alternância de motivos não garante uma única linha histórica. (`app/core/observ.py:98`, `app/core/observ.py:105`, `app/core/observ.py:139`, `app/chamados/models.py:403`.)
+
+I. Há evidência concreta de predicados paralelos para preservar resposta contra cascata, com critérios distintos; não é sustentada a declaração irrestrita de juiz único. Também há campos com usos distintos já documentados (`validada_em`: decisão/simetria; `respondida_em`: projeção com possível passivo sem texto). A classificação desses achados como bloqueantes da O168 depende da unidade do aval, mas a afirmação de unicidade/mismo universo precisa ser corrigida ou demonstrada com censo abrangente. (`app/ponto/services/cartorio.py:1637`, `app/ponto/supra_juiz.py:551`, `app/docs/CORTES.md:448`, `app/chamados/services/validacao.py:19`, `app/chamados/services/materializacao.py:830`.)
+
+## 13/11 01:31 · sessao a58117558288 · - · - · origem=Ronald (tmux)
+
+**A — árvore atual.** Não achei fechador atual de `ChamadoColaborador` por sistema fora da lista: os atos encontrados estão em `colaboradores/services/desligamento.py:156`, `colaboradores/services/vinculo.py:388`, `chamados/services/competencia_trancada.py:209`, `chamados/services/regularizacao_ext.py:206`, `chamados/reconciliador.py:497` e nos três comandos em `escala/management/commands/fechar_avisos_regua_na_lista.py:48`, `ponto/management/commands/fechar_chamados_vinculo_na_lista.py:58`, `ponto/management/commands/fechar_chamados_meio_periodo.py:110`. O censo puro O168 executado em memória produziu 21 sítios/23 chamadas e nenhuma divergência; o censo E4B integral produziu zero escritores fora da porta — mecanismos em `chamados/tests/test_o168_fechadores_fora_do_gate.py:113` e `chamados/tests/e4b_c12_ast.py:221`.
+
+**F — mordida e bloqueante concreto.** O selo detecta o mutante nominal com importação `as`, chamada adicional e remoção de sítio: reconhecimento em `chamados/tests/test_o168_fechadores_fora_do_gate.py:82`, comparação em `:139`, asserções em `:151`, mutantes em `:201` e `:214`. Também reconhece `t = modulo.transicionar_com_pauta`; não reconhece `t = transicionar_com_pauta` nem `getattr(modulo, 'transicionar_com_pauta')` — o reconhecimento de atribuição aceita apenas `ast.Attribute`, em `:87`, e de chamada aceita apenas `ast.Name` registrado ou `ast.Attribute`, em `:100`.
+
+Reproduzi exclusivamente em memória um **sétimo fechador que passa pelos dois censos**:
+
+```python
+from chamados.models import ChamadoColaborador as C
+from chamados.services.fecho_runtime import transicionar_com_pauta
+t = transicionar_com_pauta
+
+def fechar_pelo_sistema(pk):
+    ch = C.objects.get(pk=pk)
+    t(ch, 'fechado', None, ato=ch.encerrar)
+```
+
+A catraca O168 não o conta, pela limitação acima (`chamados/tests/test_o168_fechadores_fora_do_gate.py:87`); o E4B reconhece a porta canônica e autoriza o ato, portanto também não acusa escritor fora da porta (`chamados/tests/e4b_c12_ast.py:246`). Resultado observado: O168 `{}`; E4B `NEW_WRITER_ROWS=[]`, porta sintética reconhecida e zero violações na árvore completa. Trata-se de **mutante sobrevivente**, não de caminho atual de produção; contraria a catraca geral de novos fechadores exigida no aval fornecido. A execução em memória não possui arquivo persistido de resultado [não verificado].
+
+**Cron.** Os três nomes aparecem somente em `FORA_DE_PIPELINE`, cujo dicionário começa em `app/config/crons.py:769`: `fechar_chamados_meio_periodo` em `:1317`, `fechar_avisos_regua_na_lista` em `:1441`, `fechar_chamados_vinculo_na_lista` em `:1443`. Na fonte atual não há outra ocorrência nominal. O teste verifica pertencimento e uma ocorrência textual entre aspas simples (`chamados/tests/test_o168_fechadores_fora_do_gate.py:169`); cron efetivamente instalado [não verificado]. A contagem textual tem fragilidade futura: uma agenda com aspas duplas escaparia desse critério (`:177`).
+
+**G — deslocamento e custo.** `CORPO` continua com nove entradas e `EXCECOES` vazio; o ajuste mantém as identidades nominais dos mesmos escritores (`chamados/tests/e4b_c12_ast.py:18`). O deslocamento de 29 linhas corresponde às três linhas inseridas na decisão e ao método de 26 linhas (`chamados/models.py:686`, `:699`). O censo integral atual sem violações é compatível com deslocamento, não com ampliação de exceções (`chamados/tests/e4b_c12_ast.py:221`).
+
+Os tetos 220 e 280 e a atribuição de +3 são registrados em `ponto/tests/test_selo_chokepoint_escrita.py:196` e `:210`. O juiz realiza as três leituras descritas para um pai com uma disputa e nenhuma resposta (`ponto/supra_juiz.py:555`, `:556`, `:559`). Os valores ORM medidos, o comparativo 1/3 furos e os logs mencionados não foram fornecidos: medição empírica [não verificado].
+
+A redução 2→1 das falhas é estaticamente compatível com o gate: recusa impede `_gravar_estado` (`chamados/models.py:652`) e `_retratar` retorna antes da auto-rejeição da justificativa, resolver e nota (`chamados/reconciliador.py:524`). Contudo, `r['falhas']` **conta lotes de colaborador com alguma falha**, não exceções nem chamadas a `fechar` (`chamados/reconciliador.py:1352`, `:1393`, `:1403`). Duas batidas presentes no mesmo lote não explicam duas unidades de falha; seria necessário outro lote/evento, cuja origem exata neste ensaio é [não verificado]. O comentário “MEDIDO” do teste não substitui essa prova (`chamados/tests/test_orfas_nao_morre_na_guarda_da_porta.py:155`).
+
+**I.** Classe comprovada nesta fatia: **selo sem mordida completa**, pelo mutante de sétimo fechador com alias por atribuição; recomendação de bloqueante fundamentada no reconhecimento incompleto de `chamados/tests/test_o168_fechadores_fora_do_gate.py:87` e na autorização complementar de `chamados/tests/e4b_c12_ast.py:246`.
+
+## 13/11 01:30 · sessao 7e4311f26616 · - · - · origem=Ronald (tmux)
+
+A/B/C — resultados de leitura estática:
+
+- O pai passa pelo novo gate antes de `_gate_pergunta_viva` e `_gravar_estado`; a disputa conserva seu fechamento independente. Assim o pai comum de categoria `disputa_supervisao` com conversa fica vivo, enquanto `DisputaSupervisao.fechar` grava `fechada_em`, autor e resolução normalmente (`app/chamados/models.py:686`, `app/chamados/models.py:713`, `app/chamados/models.py:1962`). Sem outra disputa aberta, deixa de incidir a trava específica da RegularizacaoExterna; sucesso integral da regularização continua condicionado às demais guardas (`app/chamados/services/regularizacao_ext.py:59`).
+
+- **Falta a nota pedida no GREEN literal do aval.** A recusa grava somente `LogAuditoria`; S88 retorna antes de anexar seu Followup. A timeline do supervisor lê Followups, portanto não apresenta o motivo novo da retenção (`app/chamados/models.py:719`, `app/chamados/models.py:403`, `app/chamados/signals.py:43`, `app/chamados/signals.py:46`, `app/chamados/views.py:372`, `app/templates/chamados/detalhe_local.html:112`). O aval exige “pai aberto com nota”; referência de linha do anexo [não verificado].
+
+- Na recusa nova, `_f1_dedup` já foi retirado da instância e a variável local é descartada; `_f1_ancoradas` vira `None`. O gate da pergunta viva ainda não rodou: não reata perguntas e não grava trilha de dedup. `reconciliar` retorna antes de alterar status, resolução e urgência (`app/chamados/models.py:685`, `app/chamados/models.py:687`, `app/chamados/models.py:689`, `app/chamados/models.py:694`, `app/chamados/models.py:652`).
+
+- Para duas recusas consecutivas com mesmo payload e sem mudança de estado, `_registrar_recusa` produz uma linha; dry-run não registra. Isso está afirmado pelo teste, mas execução [não verificado] (`app/chamados/models.py:403`, `app/chamados/models.py:405`, `app/chamados/models.py:718`, `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:119`).
+
+- Existe escrita anterior condicional: se esse pai também satisfizer `e_chamado_de_furo` e não tiver dia forte, `_gate_premissa_do_fechamento` escreve `fechamento_sem_dia_do_fato` antes de O168 recusar, e esse evento não deduplica. Não demonstrado nos três tipos normais de pais; ocorrência em produção [não verificado] (`app/chamados/models.py:757`, `app/chamados/models.py:762`, `app/chamados/models.py:764`, `app/chamados/models.py:1274`, `app/chamados/services/disputa_emissao.py:568`, `app/chamados/services/disputa_emissao.py:1104`, `app/chamados/services/disputa_emissao.py:1339`).
+
+- **Validação humana:** carimba validação, materializa a pergunta e chama `materializar_perguntas_validadas_da_disputa`; sua cauda fecha a disputa por C7, acionando S88 e O168. Perguntas e seus carimbos persistem; pai fica vivo; O168 não desfaz materialização nem validação. Outro chamador da cauda é o lote de passivo validado (`app/chamados/services/validacao.py:435`, `app/chamados/services/validacao.py:463`, `app/chamados/services/validacao.py:469`, `app/chamados/services/materializacao.py:1384`, `app/chamados/services/materializacao.py:1322`, `app/chamados/services/materializacao.py:1339`, `app/chamados/services/passivo_validado.py:405`).
+
+- A ação de validação informa “Pergunta validada e ponto gravado no espelho”; regularização informa “Disputa … regularizada totalmente”. Nenhuma traduz o pai retido pelo novo gate. No modal, o supervisor pode ver simultaneamente o status vivo do chamado e “Disputa fechada”; no detalhe, o painel de disputa só carrega disputa aberta (`app/chamados/services/acoes_disputa.py:57`, `app/chamados/services/acoes_disputa.py:162`, `app/templates/chamados/partials/modal_fio.html:102`, `app/templates/chamados/partials/modal_fio.html:379`, `app/chamados/services/acoes_chamado.py:342`).
+
+- **Retratação por premissa morta:** `_retratar` retorna imediatamente se O168 recusar. Permanecem como estavam disputa, perguntas e justificativa automática; justificativa pendente não sofre a auto-rejeição posterior; não nasce nota de retratação (`app/chamados/reconciliador.py:524`, `app/chamados/reconciliador.py:530`, `app/chamados/reconciliador.py:537`, `app/chamados/reconciliador.py:539`). O contador de retratados só aumenta com retorno verdadeiro (`app/chamados/reconciliador.py:1465`).
+
+- **Porta humana real:** detalhe → resposta livre → `transicionar_com_pauta` sem `ato` → `transicionar`, que não lê O168. O dropdown oferece resolvido/fechado. Continuam valendo justificativa pendente, disputa viva, pergunta viva e S122; logo existe porta, mas não promessa de fechamento para qualquer estado (`app/chamados/views.py:546`, `app/chamados/services/acoes_chamado.py:319`, `app/chamados/services/acoes_chamado.py:322`, `app/chamados/services/fecho_runtime.py:181`, `app/chamados/models.py:135`, `app/chamados/models.py:148`, `app/chamados/models.py:181`, `app/templates/chamados/detalhe_local.html:390`).
+
+## 13/11 01:29 · sessao 2e4159f3821a · O168 · sonda · origem=Code
+
+Não executei o envelope: ele cria/reescreve arquivos e acrescenta log, contrariando “só leitura” (bin/sonda_leitura.sh:126–134, :216–218, :248–250).
+
+Transcrição integral do dado fornecido; nova execução [nao verificado]:
+
+```text
+sonda_leitura: sonda_cascata.py [468fad0c8bbe7ab8] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+pais_com_nota_defesa1=5027
+conversa__defesa1                                2246  amostra=[21443, 2194, 1228, 3992, 1612, 23712, 28085, 16587, 18106, 1305]
+conversa__defesa1__ult30d                         150  amostra=[33987, 33994, 34858, 30592, 34861, 1956, 36926, 38028, 28656, 36963]
+conversa__defesa1__ult7d                           23  amostra=[38028, 35846, 38503, 37220, 37761, 35138, 37259, 27229, 37424, 37432]
+conversa__outra_via                               711  amostra=[9359, 134, 1520, 21447, 1229, 19677, 23623, 18706, 16787, 15221]
+conversa__outra_via__ult30d                        54  amostra=[19779, 18213, 29228, 29508, 22837, 8419, 7093, 10504, 18852, 33038]
+conversa__outra_via__ult7d                          3  amostra=[22837, 35769, 20312]
+sem_conversa__defesa1                            2772  amostra=[16712, 22483, 21446, 24543, 36897, 32600, 33980, 35970, 21457, 25806]
+sem_conversa__defesa1__ult30d                     893  amostra=[36897, 32600, 33980, 35970, 33988, 36707, 32601, 32942, 32356, 32602]
+sem_conversa__defesa1__ult7d                      144  amostra=[38669, 38102, 38107, 38095, 37644, 37645, 37898, 37650, 38342, 37655]
+sem_conversa__outra_via                          1003  amostra=[1230, 18087, 21450, 1231, 19672, 9398, 24546, 21453, 371, 19684]
+sem_conversa__outra_via__ult30d                   153  amostra=[29784, 34905, 34050, 33358, 33386, 34668, 34652, 34535, 34031, 34639]
+sem_conversa__outra_via__ult7d                     15  amostra=[37207, 37272, 37683, 37420, 37802, 37476, 37481, 37479, 37862, 37870]
+total_encerrados                                 6732  amostra=[]
+total_erros=0
+```
+
+Conferência aritmética do dado: `2246 + 711 + 2772 + 1003 = 6732`; `total_erros=0` informado. Origem em produção [nao verificado].
+
+## 13/11 01:27 · sessao 8f2519eeb11c · O168 · sonda · origem=Code
+
+Não executei o envelope: ele escreve arquivos, contrariando a regra de somente leitura (`bin/sonda_leitura.sh:132`, `bin/sonda_leitura.sh:134`, `bin/sonda_leitura.sh:217`, `bin/sonda_leitura.sh:250`).
+
+No dado fornecido, as classes somam **7058**, igual ao total, e consta **total_erros=0**; execução independente [nao verificado].
+
+Reprodução integral da saída fornecida [nao verificado]:
+
+```text
+sonda_leitura: sonda_pais_conversa.py [8e530f330dd1672f] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+aberto__conversa_TODA_validada                               50  amostra=[20239, 19790, 18257, 21649, 20019, 3893, 28437, 4757, 17616, 15394]
+aberto__conversa_parcial_validada                            87  amostra=[18157, 18180, 19823, 28962, 21643, 20045, 18566, 30524, 20332, 21946]
+aberto__conversa_sem_validacao                               57  amostra=[38217, 25887, 32489, 31901, 20591, 23043, 23034, 38701, 37022, 36871]
+aberto__sem_conversa                                         97  amostra=[19962, 17167, 28210, 25895, 22832, 22835, 34689, 18059, 33347, 20584]
+cancelado__conversa_TODA_validada                             1  amostra=[2332]
+cancelado__sem_conversa                                       1  amostra=[1725]
+em_analise__conversa_TODA_validada                            3  amostra=[15622, 22166, 2074]
+em_analise__conversa_parcial_validada                        28  amostra=[16640, 17917, 6295, 24943, 10388, 15712, 33492, 17211, 9785, 10155]
+em_analise__conversa_sem_validacao                            2  amostra=[23120, 32735]
+fechado__conversa_TODA_validada                             562  amostra=[1520, 1229, 3992, 16767, 16782, 14387, 11861, 15967, 15448, 13642]
+fechado__conversa_parcial_validada                           55  amostra=[18706, 14017, 13663, 16960, 16989, 19880, 2988, 17165, 18580, 20245]
+fechado__conversa_sem_validacao                              30  amostra=[23623, 18713, 17160, 27368, 17839, 29508, 17614, 23060, 23033, 18088]
+fechado__sem_conversa                                       447  amostra=[1231, 24546, 21457, 1329, 21470, 1389, 21500, 1234, 15507, 18130]
+resolvido__conversa_TODA_validada                          2131  amostra=[21443, 134, 2194, 1228, 19677, 1612, 23712, 28085, 16587, 18106]
+resolvido__conversa_parcial_validada                        119  amostra=[9359, 16787, 15221, 14292, 18150, 1577, 19808, 16970, 8353, 19860]
+resolvido__conversa_sem_validacao                            60  amostra=[21447, 25811, 20799, 18210, 25862, 19974, 34861, 18484, 17192, 18568]
+resolvido__sem_conversa                                    3328  amostra=[16712, 22483, 21446, 24543, 36897, 1230, 18087, 32600, 21450, 33980]
+total                                                      7058  amostra=[]
+total_erros=0
+```
 
 ## 13/11 00:49 · sessao eb2adfbaf90a · E3-FORMA-SQL · leitura · origem=Code
 
@@ -1679,735 +1819,4 @@ def observar_excecoes(stack, modulo, atributo):
 
 [truncado em 20000 de 61994 caracteres]
 
-## 12/11 23:21 · sessao 4015c410eddb · - · - · origem=Ronald (tmux)
-
-Leitura concluída, sem sonda nem banco. A BASE não está disponível via Git neste workspace; as linhas abaixo da BASE foram derivadas dos hunks fornecidos. [nao verificado]
-
-| Função | BASE → CÓPIA | Assinatura |
-|---|---|---|
-| `texto_vazio` | `app/chamados/juizes.py:1510` → `:1510` | `(t)` |
-| `respondida_sem_texto` | `app/chamados/juizes.py:1515` → `:1515` | `(p)` |
-| `q_respondida_sem_texto` | ausente → `app/chamados/juizes.py:1531` | `()` |
-| `q_respondida_com_texto` | ausente → `app/chamados/juizes.py:1541` | `()` |
-| `alimentar_portas` | `app/chamados/juizes.py:1542` → `:1570` | `(celula_ids, colabs=(), *, agora=None)` |
-| `perguntas_respondidas_a_validar` | `app/chamados/juizes.py:1668` → `:1698` | `()` |
-| `DisputaSupervisao.respostas_sem_veredito` | `app/chamados/models.py:1827` → `:1827` | BASE `(self, ignorar_tranca=False)`; CÓPIA acrescenta `perguntas=None` |
-| `DisputaSupervisao.pode_fechar` | `app/chamados/models.py:1848` → `:1854` | BASE `(self)`; CÓPIA `(self, perguntas=None)` |
-| `PerguntaDisputa.q_vivas` | `app/chamados/models.py:3327` → `:3368` | `(cls)` |
-| `carga_da_tarefa` | `app/chamados/services/tarefa_do_dia.py:557` → `:568` | `(colaboradores, ini, fim, agora)` |
-| `tarefa_do_dia` | `app/chamados/services/tarefa_do_dia.py:562` → `:573` | `(colab, dia_do_turno, agora, *, carga=None)` |
-| `porta_da_tarefa` | ausente → `app/chamados/services/tarefa_do_dia.py:559` | `(tarefa)` |
-| `furo_sem_canal.medir` | `app/chamados/services/furo_sem_canal.py:38` → `:43` | BASE `(mes=None, ano=None)`; CÓPIA acrescenta `*, agora` |
-| `competencia_trancada.medir` | `app/chamados/services/competencia_trancada.py:66` nas duas | `(empresa_id, mes, ano)` |
-| `competencia_trancada.encerrar` | `app/chamados/services/competencia_trancada.py:164` nas duas | `(empresa_id, mes, ano, *, aplicar, autor=None)` |
-| `backfill_fio_morto_e4b._alcance` | `app/chamados/management/commands/backfill_fio_morto_e4b.py:76` nas duas | BASE `(empresas, hoje)`; CÓPIA acrescenta `agora` |
-| `backfill_fio_morto_e4b.ato_do_dia` | `app/chamados/management/commands/backfill_fio_morto_e4b.py:82` nas duas | `(colab, dia, agora, *, hoje)` |
-
-A adaptação deve selecionar os argumentos por `inspect.signature(funcao).parameters`, fazendo `bind` antes da chamada; para métodos da disputa, passar `perguntas=` somente quando existir. O universo desse argumento precisa ser a disputa inteira: a CÓPIA documenta e consome esse contrato em `app/chamados/models.py:1845`, `app/chamados/models.py:1859`.
-
-`perguntas_respondidas_a_validar()` deve ser chamada uma vez globalmente, conservando todos os pks devolvidos; o chamador de produção não passa recorte por empresa ou competência (`app/api/views_mensageria.py:540`, `app/chamados/services/validacao.py:929`). Para `q_vivas`, registrar também a frota inteira de pks e projetar os recortes solicitados depois, sem trocar seu predicado (`app/chamados/models.py:3368`).
-
-A carga da tarefa aceita os colaboradores e a janela inteira, e `tarefa_do_dia` aceita a carga pronta (`app/chamados/services/tarefa_do_dia.py:568`, `app/chamados/services/tarefa_do_dia.py:573`). O objeto retornado é uma classe local: `CargaDaTarefa.__init__` em `app/chamados/services/tarefa_do_dia.py:362`, `.tarefa` em `:518`; a carga já consulta perguntas, decisões, efeitos, fila e tranca por lote (`app/chamados/services/tarefa_do_dia.py:372`, `:388`, `:409`, `:415`, `:423`).
-
-Para `furo_sem_canal`, o retorno público só contém até vinte exemplos, portanto ele sozinho não satisfaz a lista completa (`app/chamados/services/furo_sem_canal.py:116`). Uma observação de retorno via `sys.setprofile`, limitada ao `func.__code__` verdadeiro, pode colher os locais `alvo` e `sem_canal`: ambos existem nas duas árvores, pelo diff; registrar cada tupla `(cid, dia, veredito, celula_pk)` do universo e a pertença ao resultado, sem reproduzir a seleção (`app/chamados/services/furo_sem_canal.py:79`, `:103`). Os locais novos `rota` e `nao_sei` permitem diagnóstico adicional apenas na CÓPIA (`app/chamados/services/furo_sem_canal.py:88`).
-
-`lavrar_furo_sem_canal.Command.handle(..., apply=False)` é DRY efetivo: retorna antes de `MetricaSnapshot.objects.update_or_create` (`app/chamados/management/commands/lavrar_furo_sem_canal.py:41`, `:49`). `competencia_trancada.encerrar(..., aplicar=False)` também retorna antes das escritas e antes de obter/criar o usuário de sistema (`app/chamados/services/competencia_trancada.py:166`, `:168`, `:176`).
-
-**Não chamar o DRY de `backfill_fio_morto_e4b.handle`.** Ele executa os atos e só desfaz ao final: entra no bloco em `app/chamados/management/commands/backfill_fio_morto_e4b.py:279`, trava em `:280`, chama `_executar_dia` em `:315` e levanta `_Desfaz` em `:357`. A alternativa real sem escrita é `_alcance(...)` e, para o plano por dia, `ato_do_dia(...)`; este chama a reabertura com `executar=False` (`app/chamados/management/commands/backfill_fio_morto_e4b.py:76`, `:82`, `:90`). A reabertura documenta e implementa o retorno sem escrita antes do ato (`app/chamados/services/disputa_emissao.py:1820`, `:1856`).
-
-Os demais escritores alterados não têm DRY equivalente: `reabrir_para_correcao` grava trilha e descarimba (`app/chamados/services/disputa_emissao.py:1618`, `:1635`); `responder_automaticamente` escreve resposta e decisão (`app/chamados/services/disputa_emissao.py:1640`); `recusar_pergunta` salva, reabre e envia notificações (`app/chamados/services/validacao.py:596`, `:600`, `:620`); `PerguntaDisputa.descarimbar_em_lote` faz `update` (`app/chamados/models.py:3306`). Alternativas próximas: observar `p.fora_do_fato()`, `respondida_sem_texto(p)`, `respostas_sem_veredito`, `pode_fechar` e `tarefa_do_dia`; essas leituras não equivalem ao resultado completo dos escritores (`app/chamados/models.py:3219`, `app/chamados/juizes.py:1515`, `app/chamados/models.py:1827`, `:1854`, `app/chamados/services/tarefa_do_dia.py:573`).
-
-Competência/tranca adicional: chamar `competencia_trancada.medir` e/ou `encerrar(aplicar=False)` por empresa e competência; o universo inclui chamados vivos da empresa classificados pelo juiz da competência, perguntas da janela e disputas atingidas (`app/chamados/services/competencia_trancada.py:89`, `:110`, `:148`). Para todos os dia-colab com célula, chamar `dias_trancados(pares)` uma vez por janela e projetar os booleanos por par (`app/chamados/juizes.py:1004`). `dia_da_pergunta_trancado(p)` usa esse mesmo juiz sobre o dia real da pergunta (`app/chamados/juizes.py:974`, `:991`).
-
-As janelas precisam vir das funções reais por empresa, registrando os limites encontrados: `janela_fechamento` respeita o corte da empresa (`app/ponto/janelas.py:54`), e `janela_atual` determina a corrente (`app/ponto/janelas.py:60`). O padrão é 21–20, mas a existência de empresas com outro corte no banco não foi verificada (`app/ponto/janelas.py:36`) [nao verificado].
-
-O alcance do vigia usa a corrente e a anterior enquanto não entregue, e não necessariamente todas as competências 10 e 11: a fonte real é `competencias_a_lavrar` (`app/ponto/services/he_pendente_lavrado.py:209`, `:220`, `:223`). Não se deve forçar o censo a mudar esse universo; complementar com leituras explícitas por competência e declarar o recorte observado.
-
-## 12/11 23:21 · sessao c35eb9326c3f · - · - · origem=Ronald (tmux)
-
-Leitura concluída; BASE abaixo deriva dos hunks do diff fornecido, pois o workspace não tem `.git`. [nao verificado]
-
-| Função | BASE | CÓPIA |
-|---|---|---|
-| `censo_alcance(empresas=None, hoje=None, limite=50, lista=None[, *, agora])` | `app/chamados/services/vigia_fio.py:542` | `app/chamados/services/vigia_fio.py:542` |
-| `fora_da_folha(empresa, mes, ano, com_itens=False[, *, agora])` | `app/folha/fora_da_folha.py:142` | `app/folha/fora_da_folha.py:153` |
-| `o_que_segura(colab, mes, ano[, *, agora])` | `app/folha/fora_da_folha.py:203` | `app/folha/fora_da_folha.py:215` |
-| `montar_linhas(empresa, mes, ano[, *, agora])` | `app/folha/retrato_folha.py:1120` | `app/folha/retrato_folha.py:1120` |
-| `dias_sem_fio(mes, ano, empresas=None[, *, agora])` | `app/ponto/services/pautas_dos_discordantes.py:46` | `app/ponto/services/pautas_dos_discordantes.py:46` |
-| `beco_em_lote(janelas, hoje, *, agora)` | `app/escala/services/cadastro_realidade.py:442` | `app/escala/services/cadastro_realidade.py:442` |
-
-As privadas de folha mudaram: `_porta(celula_id, alim)` BASE:66 vira `_porta(colab, dia, carga)` CÓPIA:71; `_fio_do_dia(celula_id, alim)` BASE:71 vira `_fio_do_dia(colab, dia, carga)` CÓPIA:77; `_alimentar` BASE:56 desaparece e `_carga` CÓPIA:62 nasce. Comparar seus chamadores comuns preserva a lógica real. `app/folha/fora_da_folha.py:62`, `app/folha/fora_da_folha.py:71`, `app/folha/fora_da_folha.py:77`.
-
-`censo_alcance` mede somente os dias retidos de `competencias_a_lavrar`; esta fornece corrente e anterior apenas se anterior ainda não entregue. Competência 10 entregue não entra no censo real em novembro; não mudar esse universo para alegar cobertura. `app/chamados/services/vigia_fio.py:587`, `app/ponto/services/he_pendente_lavrado.py:209`.
-
-Cada ramo dia-colab já sai integralmente em `alcance_dias` usando `limite=sys.maxsize`: `[celula_id, colab_id, data, competencia, rota, causa, detalhe, papel]`. A função `_listar` recebe exatamente esses dados. `app/chamados/services/vigia_fio.py:627`.
-
-Para instrumentar diretamente o ramo, `sys.setprofile` em retorno de `_listar`, verificando módulo e chamador `censo_alcance`, permite ler os argumentos reais; o frame pai também contém `porta` e `ps` para seus PKs. Nenhum predicado precisa ser refeito. `app/chamados/services/vigia_fio.py:627`, `app/chamados/services/vigia_fio.py:644`.
-
-Os totais empresa/competência são redução das linhas reais `rota == "sem_porta"`; o incremento original acontece imediatamente antes de `_listar`. `app/chamados/services/vigia_fio.py:704`.
-
-Universos:
-
-- Folha: `classificar_export`; somente retidos `furo_espelho` recebem dias/fio. `app/folha/fora_da_folha.py:129`.
-- Retrato: todos os itens do mesmo `fora_da_folha(..., com_itens=True)`, uma linha por pessoa. `app/folha/retrato_folha.py:1158`.
-- Pautas: empresas ativas, colaboradores ativos, células `discordante` dentro da janela de fechamento. `app/ponto/services/pautas_dos_discordantes.py:66`.
-- Beco: colaboradores ativos com célula `indefinida`, protesto `PREVISTO_COM_DIA_INDEFINIDO`, dentro das janelas recebidas; depois os demais juízes reais filtram. `app/escala/services/cadastro_realidade.py:476`.
-- Beco corrente: janelas de `competencias_a_lavrar`, cortadas em ontem. `app/escala/services/cadastro_realidade.py:575`.
-
-Escritores com alternativa segura:
-
-- `lavrar_retrato_folha`: `apply=False`, ou chamar `montar_linhas` e `contadores` numa instância não salva de `RetratoFolha`. `app/folha/management/commands/lavrar_retrato_folha.py:67`.
-- `pautas_discordantes`: `Command.apurar(...)`, depois `sincronizar(apurado, apply=False)`; retorna planos de abrir/fechar sem escrever. `app/ponto/management/commands/pautas_discordantes.py:56`, `app/ponto/services/pautas_dos_discordantes.py:155`.
-
-Projeções: remover `nome`, `destrava`, `detalhe`, `codigo_dominio` e `codigo`; conservar IDs, datas, rótulos de decisão e números. `app/folha/fora_da_folha.py:195`, `app/folha/fora_da_folha.py:245`, `app/folha/retrato_folha.py:1180`, `app/escala/services/cadastro_realidade.py:540`.
-
-## 12/11 23:20 · sessao 1587c185a14e · - · - · origem=Ronald (tmux)
-
-Conferido por leitura; nenhuma sonda executada. [nao verificado]
-
-| Leitor | Assinatura | BASE → CÓPIA |
-|---|---|---|
-| fio | `montar_chamados_fio(colaborador, so_janela=False, com_explicacao=False)` | `app/chamados/services/fio.py:163` → `:190` |
-| explicador | `por_que_nao_fecha(disputa, perguntas=None)` | `app/chamados/services/explicador.py:108` → `:108` |
-| raiox | `creditos_perguntas(vivo)` | `app/chamados/services/raiox.py:51` → `:51` |
-| relatório | `classificar(disputa)` | `app/chamados/relatorios_disputa.py:11` → `:11` |
-| relatório global | `coletar()` | `app/chamados/relatorios_disputa.py:26` → `:31` |
-| cobrança | `_calados(agora=None)` | `app/chamados/services/cobranca.py:221` → `:221` |
-| pauta cobrança | `linhas_para_a_pauta(hoje=None)` | `app/chamados/services/cobranca.py:251` → `:260` |
-
-Referências BASE derivadas exclusivamente dos deslocamentos do diff anexado; não existe `.git` disponível nesta cópia. [nao verificado]
-
-O fio tem três chamadas reais distintas, que devem ser medidas separadamente: aplicativo com `so_janela=True`, administração com parâmetros padrão e modal administrativo com `com_explicacao=True`. Fontes: `app/chamados/views.py:569`, `:677`, `:889`. A função devolve lista anotada, permitindo registrar por chamado os flags `todas_respondidas`, `pode_solicitar_correcao`, as perguntas participantes e a explicação efetivamente anexada. Fontes: `app/chamados/services/fio.py:375`, `:455`.
-
-A explicação tem textos com pergunta e resposta; projeção segura deve conservar `pode_fechar`, IDs, `estado` e `dono`, e converter os campos textuais em SHA256. Fontes: `app/chamados/services/explicador.py:71`, `:79`, `:173`. Há captura interna da explicação, que vira `None`; um wrapper observador de `por_que_nao_fecha` deve registrar exceção e relançá-la para preservar comportamento. Fonte: `app/chamados/services/fio.py:335`.
-
-`creditos_perguntas` recebe queryset de chamados vivos; seu consumidor `particionar_verbos` passa o mesmo queryset, e `alimentar_fila` usa `qs_vivos()` global. Fontes: `app/chamados/services/verbos.py:30`, `:34`, `app/chamados/juizes.py:1558`. Chamar com `painel.qs_vivos()` preserva o universo global; restringir aos colaboradores da janela seria uma sonda adicional. Fonte: `app/chamados/services/painel.py:135`. Seu retorno contém dois conjuntos de chamados, permitindo registrar, para todo chamado do universo, pertença a cada conjunto. Fonte: `app/chamados/services/raiox.py:155`.
-
-`relatorios_disputa.coletar()` percorre todas as disputas abertas, com perguntas pré-carregadas, e retorna categorias por disputa; o nome deve ser removido antes da saída. Fontes: `app/chamados/relatorios_disputa.py:47`, `:55`. A versão `classificar(disputa)` pode ser medida adicionalmente sobre todas as disputas dos colaboradores selecionados, deixando esse universo adicional explícito. Fonte: `app/chamados/relatorios_disputa.py:11`.
-
-`_calados()` trabalha globalmente sobre perguntas selecionadas por `q_vivas()` em disputas abertas; retorna somente dois números, sem lista dos colaboradores contados. Fontes: `app/chamados/services/cobranca.py:235`, `:257`. Para conservar o cálculo real e atribuir seu percurso às pessoas, observar chamadas a `tem_canal`, `_chamados_pais` e `prazo_estourou`, preservando argumentos e retorno; o conjunto final não é exposto pela função. Fontes: `app/chamados/services/cobranca.py:249`, `:251`, `:254`.
-
-O GET da API escreve: chama `nota.marcar_lidas`, que executa `update()`. Portanto deve constar como não coberto integralmente, sem DRY existente; alternativa próxima é o fio com `so_janela=True`, reconhecendo que o universo da API usa `consulta_do_app` e não é idêntico. Fontes: `app/api/views.py:989`, `:1039`, `app/chamados/services/nota.py:126`, `:132`, `app/chamados/views.py:569`.
-
-A ação de recusa também escreve e não apresenta DRY; a decisão `fora_do_fato()` é a leitura mais próxima, sem medir o resultado completo da ação. Fontes: `app/chamados/services/validacao.py:535`, `:582`, `:592`, `app/chamados/services/acoes_disputa.py:79`.
-
-`checar_cobranca(colaborador=...)` declara DRY explícito e pode substituir a chamada escritora `cobrar_colaborador`, embora esta não seja um leitor alterado no diff. Fontes: `app/chamados/services/cobranca.py:75`, `:140`.
-
-## 12/11 22:30 · sessao 613fa5a43db3 · TIPO-NA-FONTE · construtor · origem=Code
-
-A [tabela individual das falhas → classe → cura](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b.txt:5) contabiliza os **82 FAIL e 3 ERROR** do anexo. Nenhum caso P foi demonstrado nesses caminhos; as atas incompletas vieram das fixtures ([análise](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b.txt:57)).
-
-Produção alterada:
-
-| Arquivo::função | Cura |
-|---|---|
-| [cartorio.py::insumos_da_ata](/home/ronald/wt-codex-tipo-na-fonte-184856/app/ponto/services/cartorio.py:840) | `NAO_LAVRADA → (False, False)`, como a base. |
-| [leitor_celula.py::_vazia](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/services/leitor_celula.py:174) | Agregada declara `instante=None`. |
-| [calendario.py::contexto_calendario](/home/ronald/wt-codex-tipo-na-fonte-184856/app/colaboradores/services/calendario.py:298) | Inicializa `fora_map` antes do `try`. |
-
-O [RED reproduzível](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b_evidencias.txt:6) morde a volta 4. **69 testes isolados passaram**; os [comandos de cada mutante e seus resultados](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b_evidencias.txt:68) estão registrados. [nao verificado]
-
-Os 14 módulos completos pararam por falta de Django ([evidências](/home/ronald/wt-codex-tipo-na-fonte-184856/app/escala/tests/tipo_na_fonte_volta4b_evidencias.txt:135)). Suíte integral e DIFF da frota: **[não verificado]**. [nao verificado]
-
-## 12/11 22:25 · sessao 4e3b7fd18bef · - · - · origem=Ronald (tmux)
-
-```python
-# Sonda fornecida como TEXTO; execução e paridade: [nao verificado].
-# B = 78994522d; C = 69a3d1570.
-# Django configurado e tenant juliani ativo, conforme premissa fornecida.
-#
-# LIMITES EXPLÍCITOS:
-# - APIs agregadas ficam em unidade="janela"; não inventam resultado por célula.
-# - Funções ausentes na BASE ficam indisponíveis; seus pais comuns são medidos.
-# - classificar_orfas é uma sonda suplementar; chamador de produção: [nao verificado].
-# - Calendário: janelas enumeradas abaixo, não histórico desconhecido de GETs.
-#
-# Não executar reconciliar_colab:
-# B ponto/services/cluster_espurio.py:176; C :185.
-# Alternativa real de leitura: pendencias, B :153; C :162.
-
-import sys
-sys.dont_write_bytecode = True
-
-import collections
-import copy
-import dataclasses
-import datetime as dt
-import decimal
-import enum
-import functools
-import hashlib
-import inspect
-import io
-import json
-import logging
-import math
-import os
-import re
-import uuid
-from collections.abc import Mapping
-from contextlib import ExitStack, redirect_stdout, redirect_stderr
-
-from django.db import connection, connections, transaction
-from django.db.models import Model, QuerySet
-from django.db.models.fields.files import FieldFile
-from django.utils import timezone
-from django.utils.functional import Promise
-from freezegun import freeze_time
-import freezegun.api as fg
-
-# Instante idêntico nas duas execuções.
-# Calendário lê timezone.now internamente:
-# B/C colaboradores/services/calendario.py:163,250.
-# freezegun consta em C app/requirements.txt:43.
-INSTANTE = "2026-11-12T20:48:00-03:00"
-TAMANHO_BLOCO = 1000
-
-
-class FimDaSonda(Exception):
-    pass
-
-
-class EscritaBloqueada(Exception):
-    pass
-
-
-class FalhaDaSonda(BaseException):
-    """Não deve ser engolida pelos except Exception da aplicação."""
-
-
-class Descartar(io.TextIOBase):
-    def write(self, texto):
-        return len(texto)
-
-    def flush(self):
-        pass
-
-
-def relogio():
-    # Relógio real, mesmo dentro do freeze_time.
-    return fg.real_perf_counter()
-
-
-def canon(valor, pilha=None):
-    """Representação sem endereço de memória; não consulta relações lazy."""
-    if pilha is None:
-        pilha = set()
-
-    if valor is None or type(valor) in (bool, int, str):
-        return valor
-    if isinstance(valor, decimal.Decimal):
-        return str(valor)
-    if isinstance(valor, (dt.datetime, dt.date, dt.time)):
-        return valor.isoformat()
-    if isinstance(valor, dt.timedelta):
-        return ("timedelta", valor.days, valor.seconds, valor.microseconds)
-    if isinstance(valor, float):
-        if math.isnan(valor):
-            return ("float", "nan")
-        if math.isinf(valor):
-            return ("float", "inf" if valor > 0 else "-inf")
-        return valor
-    if isinstance(valor, enum.Enum):
-        return canon(valor.value, pilha)
-    if isinstance(valor, uuid.UUID):
-        return str(valor)
-    if isinstance(valor, bytes):
-        return ("bytes", valor.hex())
-    if isinstance(valor, FieldFile):
-        return ("arquivo", valor.name)
-    if isinstance(valor, Promise):
-        return str(valor)
-
-    identidade = id(valor)
-    if identidade in pilha:
-        raise FalhaDaSonda("CicloNaSerializacao")
-    pilha.add(identidade)
-    try:
-        if isinstance(valor, QuerySet):
-            itens = [canon(v, pilha) for v in valor]
-            return ("queryset", tuple(sorted(itens, key=repr)))
-
-        if isinstance(valor, Model):
-            # Inclui campos já carregados E atributos transitórios públicos,
-            # inclusive Batida.orfa; não usa __str__ nem acessa campos deferred.
-            dados = {
-                k: v for k, v in vars(valor).items()
-                if not k.startswith("_")
-            }
-            return ("model", valor._meta.label_lower, canon(dados, pilha))
-
-        if isinstance(valor, Mapping):
-            pares = [
-                (canon(k, pilha), canon(v, pilha))
-                for k, v in valor.items()
-            ]
-            return ("dict", tuple(sorted(pares, key=repr)))
-
-        if isinstance(valor, (set, frozenset)):
-            itens = [canon(v, pilha) for v in valor]
-            return ("set", tuple(sorted(itens, key=repr)))
-
-        if dataclasses.is_dataclass(valor) and not isinstance(valor, type):
-            dados = {
-                f.name: getattr(valor, f.name)
-                for f in dataclasses.fields(valor)
-            }
-            return (
-                "dataclass", type(valor).__module__,
-                type(valor).__qualname__, canon(dados, pilha)
-            )
-
-        if isinstance(valor, list):
-            return [canon(v, pilha) for v in valor]
-        if isinstance(valor, tuple):
-            return tuple(canon(v, pilha) for v in valor)
-
-        if hasattr(valor, "__dict__"):
-            dados = {
-                k: v for k, v in vars(valor).items()
-                if not k.startswith("_")
-            }
-            if dados:
-                return (
-                    "objeto", type(valor).__module__,
-                    type(valor).__qualname__, canon(dados, pilha)
-                )
-
-        raise FalhaDaSonda("TipoNaoSerializavel:" + type(valor).__name__)
-    finally:
-        pilha.remove(identidade)
-
-
-def sha(valor):
-    return hashlib.sha256(repr(canon(valor)).encode("utf-8")).hexdigest()
-
-
-def escalar(valor):
-    return (
-        valor is None
-        or isinstance(
-            valor,
-            (bool, int, float, str, decimal.Decimal,
-             dt.datetime, dt.date, dt.time)
-        )
-    )
-
-
-def valor_histograma(valor):
-    # Strings arbitrárias podem conter nomes: somente seu digest sai.
-    if valor is None or type(valor) in (bool, int, float):
-        return repr(canon(valor))
-    if isinstance(valor, str) and re.fullmatch(
-        r"EXC:[A-Za-z_][A-Za-z_0-9]*", valor
-    ):
-        return valor
-    return "VAL_SHA256:" + sha(valor)
-
-
-class Acumulador:
-    def __init__(self, nome, unidade):
-        self.nome = nome
-        self.unidade = unidade
-        self.disponivel = True
-        self.chamadas = 0
-        self.excecoes = collections.Counter()
-        self.histograma = collections.Counter()
-        self.escalares = 0
-        self.segundos = 0.0
-        self.blocos = []
-        self.ultima_chave = None
-        self._abrir()
-
-    def _abrir(self):
-        self.digest = hashlib.sha256(b"[")
-        self.digest_ids = hashlib.sha256(b"[")
-        self.primeiro = None
-        self.ultimo = None
-        self.ids = 0
-        self.registros = 0
-
-    def _fechar(self):
-        if not self.registros:
-            return
-        self.digest.update(b"]")
-        self.digest_ids.update(b"]")
-        self.blocos.append({
-            "primeira_chave": self.primeiro,
-            "ultima_chave": self.ultimo,
-            "ids_ou_chaves": self.ids,
-            "chamadas": self.registros,
-            "sha256_ids": self.digest_ids.hexdigest(),
-            "sha256_resultados": self.digest.hexdigest(),
-        })
-        self._abrir()
-
-    def adicionar(self, chave, subchave, valor, exc=None, segundos=0.0):
-        chave = canon(chave)
-        if self.ultima_chave is not None and chave < self.ultima_chave:
-            raise FalhaDaSonda("IdsForaDeOrdem:" + self.nome)
-
-        nova = self.ultima_chave is None or chave != self.ultima_chave
-        if nova and self.ids == TAMANHO_BLOCO:
-            self._fechar()
-
-        if nova:
-            if self.ids:
-                self.digest_ids.update(b", ")
-            self.digest_ids.update(repr(chave).encode("utf-8"))
-            self.ids += 1
-            if self.primeiro is None:
-                self.primeiro = chave
-            self.ultimo = chave
-
-        registro = (chave, canon(subchave), canon(valor))
-        if self.registros:
-            self.digest.update(b", ")
-        self.digest.update(repr(registro).encode("utf-8"))
-        self.registros += 1
-        self.chamadas += 1
-        self.ultima_chave = chave
-        self.segundos += segundos
-
-        if exc:
-            self.excecoes[exc] += 1
-        if escalar(valor):
-            self.escalares += 1
-            self.histograma[valor_histograma(valor)] += 1
-
-    def saida(self):
-        self._fechar()
-        dez = sorted(
-            self.histograma.items(), key=lambda par: (-par[1], par[0])
-        )[:10]
-        return {
-            "leitor": self.nome,
-            "unidade": self.unidade,
-            "disponivel": self.disponivel,
-            "universo_chamadas": self.chamadas,
-            "excecoes_por_classe": dict(sorted(self.excecoes.items())),
-            "resultados_escalares": self.escalares,
-            "histograma_ate_10": [
-                {"valor": v, "quantidade": n} for v, n in dez
-            ],
-            "escalares_fora_dos_10": self.escalares - sum(n for _, n in dez),
-            "blocos": self.blocos,
-        }
-
-
-acumuladores = {}
-assinaturas = {}
-contexto = None
-ordinais = collections.Counter()
-meta = {
-    "instante": INSTANTE,
-    "prova_completa": False,
-    "tentativas_de_escrita": 0,
-    "consultas_outro_alias": 0,
-    "ausentes_na_arvore": [],
-    "estimativas_segundos": {},
-}
-inicio_total = relogio()
-
-
-def acum(nome, unidade):
-    return acumuladores.setdefault(
-        (nome, unidade), Acumulador(nome, unidade)
-    )
-
-
-def indisponivel(nome, unidade):
-    acum(nome, unidade).disponivel = False
-    meta["ausentes_na_arvore"].append(nome)
-
-
-def registrar_assinatura(nome, funcao):
-    assinatura = inspect.signature(funcao)
-    assinaturas[nome] = str(assinatura)
-    return assinatura
-
-
-def chamar(funcao, *args, **kwargs):
-    # Erro de assinatura é falha da SONDA, não resultado do leitor.
-    try:
-        inspect.signature(funcao).bind(*args, **kwargs)
-    except TypeError:
-        raise FalhaDaSonda("AssinaturaIncompativel:" + funcao.__name__)
-    return funcao(*args, **kwargs)
-
-
-def medir(nome, unidade, chave, subchave, funcao, *args, **kwargs):
-    global contexto
-    anterior = contexto
-    contexto = (unidade, chave, subchave)
-    t0 = relogio()
-    try:
-        try:
-            # Savepoint mantém a transação externa utilizável após erro SQL.
-            with transaction.atomic():
-                resultado = chamar(funcao, *args, **kwargs)
-        except Exception as erro:
-            classe = type(erro).__name__
-            acum(nome, unidade).adicionar(
-                chave, subchave, "EXC:" + classe,
-                exc=classe, segundos=relogio() - t0
-            )
-            return False, None
-        acum(nome, unidade).adicionar(
-            chave, subchave, resultado, segundos=relogio() - t0
-        )
-        return True, resultado
-    finally:
-        contexto = anterior
-
-
-def observar(pilha, modulo, atributo, nome, projecao=None):
-    """Envolve e chama a função REAL; preserva argumentos, retorno e exceção."""
-    if not hasattr(modulo, atributo):
-        indisponivel(nome, "colab")
-        return
-
-    original = getattr(modulo, atributo)
-    assinatura = registrar_assinatura(nome, original)
-    acum(nome, "colab")
-
-    @functools.wraps(original)
-    def envoltoria(*args, **kwargs):
-        if contexto is None:
-            raise FalhaDaSonda("ChamadaSemContexto:" + nome)
-        try:
-            ligados = assinatura.bind(*args, **kwargs)
-        except TypeError:
-            raise FalhaDaSonda("AssinaturaIncompativel:" + nome)
-
-        unidade, chave, subchave = contexto
-        indice = ordinais[(nome, unidade, chave, subchave)]
-        ordinais[(nome, unidade, chave, subchave)] += 1
-        t0 = relogio()
-        try:
-            resultado = original(*args, **kwargs)
-        except Exception as erro:
-            classe = type(erro).__name__
-            acum(nome, unidade).adicionar(
-                chave, (subchave, indice), "EXC:" + classe,
-                exc=classe, segundos=relogio() - t0
-            )
-            raise
-
-        observado = (
-            projecao(ligados.arguments, resultado)
-            if projecao is not None else resultado
-        )
-        acum(nome, unidade).adicionar(
-            chave, (subchave, indice), observado,
-            segundos=relogio() - t0
-        )
-        return resultado
-
-    setattr(modulo, atributo, envoltoria)
-    pilha.callback(setattr, modulo, atributo, original)
-
-
-def guardar_sql(execute, sql, params, many, context):
-    if context["connection"].alias != "default":
-        meta["consultas_outro_alias"] += 1
-        raise EscritaBloqueada("OutroAlias")
-
-    texto = " ".join(sql.lstrip().upper().split())
-    permitido = (
-        texto.startswith(("SELECT ", "WITH ", "SAVEPOINT ", "RELEASE "))
-        or texto.startswith("ROLLBACK TO ")
-        or texto.startswith("SET SEARCH_PATH")
-        or texto.startswith("SET LOCAL SEARCH_PATH")
-    )
-    if not permitido:
-        meta["tentativas_de_escrita"] += 1
-        raise EscritaBloqueada("InstrucaoBloqueada")
-
-    # READ ONLY do PostgreSQL também protege contra escrita em CTE/função SQL.
-    return execute(sql, params, many, context)
-
-
-def comando_capturado(classe, metodo, *args, **kwargs):
-    saida, erros = io.StringIO(), io.StringIO()
-    comando = classe(stdout=saida, stderr=erros, no_color=True)
-    retorno = chamar(getattr(comando, metodo), *args, **kwargs)
-    # Texto pode conter nomes: participa apenas do hash, nunca é impresso.
-    return {
-        "retorno": retorno,
-        "stdout": saida.getvalue(),
-        "stderr": erros.getvalue(),
-    }
-
-
-def copia(objeto):
-    # Cada leitor recebe uma instância separada; memos não viajam entre leitores.
-    return copy.deepcopy(objeto)
-
-
-def estado_bruto(celula, hoje):
-    """Somente censo de formato; não substitui função de produção."""
-    ata = celula.ata
-    if ata is None:
-        tempo = (
-            "passado" if celula.data < hoje
-            else "hoje" if celula.data == hoje else "futuro"
-        )
-        return "ata_nula_" + tempo
-
-    if not isinstance(ata, Mapping) or not isinstance(ata.get("orfas"), list):
-        return "lavrada_outros"
-
-    valores = ata["orfas"]
-    if not valores:
-        # [] não permite descobrir se sua origem temporal era ISO ou HH:MM.
-        return "lavrada_lista_vazia"
-    if all(
-        isinstance(v, str)
-        and re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", v)
-        for v in valores
-    ):
-        return "lavrada_HHMM"
-
-    try:
-        iso = all(
-            isinstance(v, str) and "T" in v
-            and dt.datetime.fromisoformat(v).utcoffset() is not None
-            for v in valores
-        )
-    except (TypeError, ValueError):
-        iso = False
-    return "lavrada_ISO" if iso else "lavrada_outros"
-
-
-def ordenar_tripwire(resultado):
-    achados, universo = resultado
-    return sorted(achados, key=lambda v: repr(canon(v))), universo
-
-
-def ordenar_censo(resultado):
-    resultado = dict(resultado)
-    resultado["casos"] = sorted(
-        resultado["casos"], key=lambda v: repr(canon(v))
-    )
-    return resultado
-
-
-try:
-    if connection.in_atomic_block:
-        raise FalhaDaSonda("ExigeTransacaoExternaPropria")
-
-    with transaction.atomic():
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-            )
-
-        with ExitStack() as pilha:
-            nivel_log = logging.root.manager.disable
-            logging.disable(sys.maxsize)
-            pilha.callback(logging.disable, nivel_log)
-            pilha.enter_context(redirect_stdout(Descartar()))
-            pilha.enter_context(redirect_stderr(Descartar()))
-            pilha.enter_context(freeze_time(INSTANTE))
-            pilha.enter_context(timezone.override("America/Sao_Paulo"))
-
-            for alias in connections:
-                pilha.enter_context(
-                    connections[alias].execute_wrapper(guardar_sql)
-                )
-
-            if connection.vendor != "postgresql":
-                raise FalhaDaSonda("ExigePostgreSQL")
-            if getattr(connection, "schema_name", None) != "juliani":
-                raise FalhaDaSonda("TenantIncorreto")
-
-            cpus = sorted(os.sched_getaffinity(0))
-            if len(cpus) != 4:
-                raise FalhaDaSonda("ExigeCpusetDe4VCPU")
-            meta["vcpus"] = len(cpus)
-
-            from colaboradores.models import Colaborador, Empresa
-            from escala.models import CelulaDia, EscalaColaborador
-            from escala.services import leitor_celula as lc
-            from escala import orfa_classe
-            from ponto import juiz_batida, propositor, turnos
-            from ponto.services import cluster_espurio, esmeril_espelho
-            from ponto.services import vigia_pareador_celula
-            from ponto.management.commands import tripwire_celulas
-            from ponto.management.commands.propor_reorganizacao import (
-                Command as Propor,
-            )
-            from ponto.management.commands.detectar_cluster_espurio import (
-                Command as Detectar,
-            )
-            from chamados import juizes
-            from chamados.models import PerguntaDisputa
-            from chamados.services import materializacao
-            from relatorios import pdf_espelho
-            from colaboradores.services.calendario import contexto_calendario
-            from ponto.janelas import janela_atual
-
-            agora = timezone.now()
-            hoje = timezone.localdate(agora)
-
-            funcoes = {
-                "grade_da_celula": lc.grade_da_celula,
-                "periodos_do_dia": juiz_batida.periodos_do_dia,
-                "_leitura_da_celula": cluster_espurio._leitura_da_celula,
-                "assinaturas_do_colab": esmeril_espelho.assinaturas_do_colab,
-                "janela_esmeril": esmeril_espelho.janela,
-                "censo": vigia_pareador_celula.censo,
-                "medir_sobra_com_tipo_trocado":
-                    tripwire_celulas.medir_sobra_com_tipo_trocado,
-                "_celula_furada": juizes._celula_furada,
-                "_plantio_preenche_furo_na_data":
-                    materializacao._plantio_preenche_furo_na_data,
-                "_ts_tipo_do_plantio": materializacao._ts_tipo_do_plantio,
-                "estado_aplicacao_pergunta":
-                    materializacao.estado_aplicacao_pergunta,
-                "pendencias": cluster_espurio.pendencias,
-                "reconciliar_colab_NAO_EXECUTAR":
-                    cluster_espurio.reconciliar_colab,
-                "contexto_calendario": contexto_calendario,
-                "_coletar_dados_espelho_mes":
-                    pdf_espelho._coletar_dados_espelho_mes,
-                "propor_reorganizacao._run": Propor._run,
-                "detectar_cluster_espurio.handle": Detectar.handle,
-                "classificar_orfas": orfa_classe.classificar_orfas,
-            }
-            for nome, funcao in funcoes.items():
-                registrar_assinatura(nome, funcao)
-
-            # Mudança explícita da porta e de seu argumento:
-            # B escala/services/leitor_celula.py:180,379,420;
-            # C escala/services/leitor_celula.py:183,428.
-            if hasattr(lc, "orfas_da_ata"):
-                ler_orfas = lc.orfas_da_ata
-                parametro_esperado = ("celula",)
-                usa_celula = True
-            else:
-                ler_orfas = lc._orfas_da_ata
-                parametro_esperado = ("ata",)
-                usa_celula = False
-
-            assinatura = registrar_assinatura("orfas_da_ata", ler_orfas)
-            if tuple(assinatura.parameters) != parametro_esperado:
-                raise FalhaDaSonda("PortaDeOrfasDesconhecida")
-
-            tem_contagem = hasattr(lc, "contagem_orfas_da_ata")
-            if tem_contagem:
-                registrar_assinatura(
-                    "contagem_orfas_da_ata", lc.contagem_orfas_da_ata
-                )
-            else:
-                indisponivel("contagem_orfas_da_ata", "celula")
-
-            # Observam chamadas reais feitas pelos pais, com seus argumentos.
-            # Propositor: C ponto/management/commands/propor_reorganizacao.py:71,91.
-            observar(
-             
-
-[truncado em 20000 de 44760 caracteres]
-
-_4483 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4488 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
