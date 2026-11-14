@@ -1,7 +1,121 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 04:02** · publicado em **14/11/2026 04:06** (UTC-3)
+> Ultima resposta processada: **14/11/2026 04:10** · publicado em **14/11/2026 04:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 04:10 · sessao ef94f3f336cf · - · - · origem=Ronald (tmux)
+
+**Chamadores reais diretos, exaustivos por leitura AST de `app/**/*.py`:**
+
+| Alvo | Chamador |
+|---|---|
+| `sem_veredito_entre` | `DisputaSupervisao.respostas_sem_veredito`: `app/chamados/models.py:1889` |
+| `sem_veredito_entre` | `irmas_respondidas_sem_consumo`: `app/chamados/juizes.py:2076` |
+| `sem_veredito_entre` | `perguntas_que_seguram_csf`, universo pai: `app/ponto/supra_juiz.py:573`; universo destino: `app/ponto/supra_juiz.py:574` |
+| `sem_veredito_entre` — teste | Fixture `_D.respostas_sem_veredito` delega ao corpo real: `app/ponto/tests/test_supra_juiz_executor.py:46` |
+| `respostas_sem_veredito` | `pode_fechar`: `app/chamados/models.py:1917`; `fechar`: `app/chamados/models.py:1950` |
+| `respostas_sem_veredito` | `encerrar_orfas_pela_lampada`: `app/chamados/reconciliador.py:1164` |
+| `respostas_sem_veredito` | `competencia_trancada.medir`: `app/chamados/services/competencia_trancada.py:126` |
+| `respostas_sem_veredito` | `fila_por_causa._gaveta_de`: `app/chamados/services/fila_por_causa.py:226` |
+| `respostas_sem_veredito` | `ficha_do_colab`: `app/colaboradores/services/ficha.py:169` |
+| `respostas_sem_veredito` | `executar_desligamento`: `app/colaboradores/services/desligamento.py:165` |
+| `respostas_sem_veredito` | Comando `validar_classe_a.Command.handle`: `app/chamados/management/commands/validar_classe_a.py:54` |
+
+**Testes com chamadas reais de `respostas_sem_veredito`, exaustivos:** [nao verificado]
+
+- `RespostasSemVereditoPerguntaAoPredicadoTest.test_RED_respondida_sem_texto_nao_e_resposta_sem_veredito`, chamada `app/chamados/tests/test_e3_10_cura_no_escritor.py:130`; exige vazia e espaços fora da lista, resposta textual dentro: `app/chamados/tests/test_e3_10_cura_no_escritor.py:127`.
+- `RespostasSemVereditoPerguntaAoPredicadoTest.test_pode_fechar_segue_a_lista_e_o_c6`, chamada/exigência lista vazia `app/chamados/tests/test_e3_10_cura_no_escritor.py:140`; igualdade com `not fio_vivo`: `app/chamados/tests/test_e3_10_cura_no_escritor.py:141`.
+- `C7_08_CompetenciaTrancadaTest.test_RED_resposta_de_dia_trancado_nao_segura_a_disputa`, chamada `app/chamados/tests/test_c7_red_minimos.py:381`.
+- `PaiComConversaNoGateTest.test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito`, chamada `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:285`; a expectativa anterior, que já falha pelo corpo atual, exige carimbo com texto `''` retido por `irmas_respondidas_sem_consumo`: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:282`.
+- `PaiComConversaNoGateTest.test_RED_dia_trancado_CSF_e_retratacao_dao_a_MESMA_resposta`, chamada `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:303`; esse caso usa resposta textual da fixture e testa tranca, não vazio: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:301`.
+
+**Referências de teste que não são chamadas diretas:** [nao verificado]
+
+- `test_contract_dedup_status.py` inspeciona fonte e exige `respostas_sem_veredito → self.sem_veredito_entre` literal; uma separação que retire essa delegação pode falhar nesse teste: `app/chamados/tests/test_contract_dedup_status.py:133`, `app/chamados/tests/test_contract_dedup_status.py:139`, `app/chamados/tests/test_contract_dedup_status.py:141`.
+- `test_e4b_c4v14_memoria.py` instala dinamicamente os métodos reais e o corpo na fixture, portanto acaba executando-os indiretamente: `app/chamados/tests/test_e4b_c4v14_memoria.py:47`, `app/chamados/tests/test_e4b_c4v14_memoria.py:50`.
+- `test_termo_fechar.py` substitui o método por mock: `app/chamados/tests/test_termo_fechar.py:28`.
+- A catraca O168 aceita só os nomes `respostas_sem_veredito` e `sem_veredito_entre`: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:313`; exige chamada alcançável do CSF: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:394`. Se CSF for migrado exclusivamente a novo nome, `test_o_juiz_nao_le_respondida_em_cru` falha na exigência de chamada, salvo alteração da catraca: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:399`.
+- As chamadas presentes em strings de mutantes AST não são chamadas do corpo real: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:417`, `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:429`, `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:434`.
+- Arquivos `.txt` sob `e4b_c6_bases` são cópias de referência, não arquivos Python carregados por essas chamadas. [não verificado quanto a carregadores externos; inventário AST acima cobre `.py`]
+
+**Efeito de incluir vazias novamente no corpo:**
+
+- `fechar` ganha recusa de resposta sem veredito antes de verificar vivas; `pode_fechar` passa a negar para a vazia mesmo quando C6 não a mantém viva. O corpo atual não dispensa a guarda C6: `app/chamados/models.py:1917`, `app/chamados/models.py:1950`, `app/chamados/models.py:1960`.
+- No desligamento, mais disputas são puladas pelo `continue`; no encerramento de órfãs pela lâmpada, mais disputas entram em `disputas_barradas`. Fechamento efetivo depende das demais guardas: `app/colaboradores/services/desligamento.py:165`, `app/chamados/reconciliador.py:1164`.
+- CSF passa a negar por pai e destino; gate do pai passa a recusar e emitir nota “Chamado mantido aberto…” para esse motivo: `app/ponto/supra_juiz.py:573`, `app/ponto/supra_juiz.py:588`, `app/chamados/models.py:719`, `app/chamados/models.py:735`.
+- Retratação ganha retenção `irma_orfa`; materialização ganha retenção de destino/clones; fluxo HX passa a poder reabrir pai por essa vazia: `app/chamados/reconciliador.py:448`, `app/chamados/services/materializacao.py:768`, `app/chamados/services/disputa_emissao.py:2016`.
+- Auditoria I12 muda vazia de violação para piso BUG31 quando a outra condição de TM fechado se cumpre: `app/chamados/management/commands/auditar_invariantes_chamados.py:983`.
+
+**Tela, ficha e pauta:**
+
+- Relatório de pendências consulta primeiro `pode_fechar`, depois `aguarda_o_colaborador`: `app/chamados/relatorios_disputa.py:24`. Para vazia viva, ambos corpos continuam em `AGUARDA_COLAB`; para vazia morta pelo C6, o atual pode retornar `PRONTA_FECHAR`, enquanto o corpo que inclui vazias pode retornar `AGUARDA_SUPERVISAO`, ressalvados tranca e outras perguntas: `app/chamados/relatorios_disputa.py:24`, `app/chamados/services/fio.py:174`, `app/chamados/services/fio.py:187`.
+- Os títulos mostrados são “Falta materializar”, “Voce valida agora” e “Cobrar o colaborador”; o template mostra a quantidade por seção: `app/colaboradores/views.py:3003`, `app/templates/colaboradores/partials/pendencias_disputa.html:4`.
+- Cartão do colaborador continua sem “Resposta enviada” para vazio em ambas opções: `resposta_enviada` usa outro predicado, `espera_o_texto_do_colaborador`, que inclui carimbo sem texto: `app/chamados/services/fio.py:357`, `app/chamados/services/fio.py:187`, `app/templates/chamados/partials/_card_atendimento.html:100`.
+- Ficha: só considera perguntas presentes em `perguntas_do_app`; incluir vazia move a pergunta de `sem_resposta` para `sem_veredito`, muda contagens e ações recomendadas: `app/colaboradores/services/ficha.py:166`, `app/colaboradores/services/ficha.py:169`, `app/colaboradores/services/ficha.py:171`, `app/colaboradores/services/ficha.py:190`, `app/colaboradores/services/ficha.py:245`.
+- Cabeçalho das telas não muda por essas pendências, pois a ficha do cabeçalho chama `com_pendencias=False`; API do copiloto recebe a ficha completa: `app/colaboradores/services/ficha.py:269`, `app/colaboradores/services/ficha.py:275`, `app/api/views_mensageria.py:1133`.
+- Fila por causa ganha chamados na gaveta `respondido_a_decidir` caso disputa aberta; rótulo/dono/ação são “Respondido, esperando decisao”, DP, decidir: `app/chamados/services/fila_por_causa.py:225`, `app/chamados/services/fila_por_causa.py:95`. `quadro` recalcula contagens por gaveta e a API expõe esse quadro: `app/chamados/services/fila_por_causa.py:283`, `app/api/views_mensageria.py:1595`.
+- Pauta DP: `medir` ignora tranca, inclui IDs não resgatados em `decidir_pelo_dp`; a aplicação cria pauta se a lista não estiver vazia. Pauta viva preexistente é retornada sem atualização: `app/chamados/services/competencia_trancada.py:126`, `app/chamados/services/competencia_trancada.py:137`, `app/chamados/services/competencia_trancada.py:232`, `app/chamados/services/competencia_trancada.py:243`. Assim incluir vazias pode ampliar IDs/contagem de pauta nova; não se pode prometer mudança da pauta já existente: `app/chamados/services/competencia_trancada.py:246`.
+- `validar_classe_a` passa a contar vazias entre pendentes e “sem hora”, mas não a validá-las: coleta pela lista, classifica e só inclui classe A no lote: `app/chamados/management/commands/validar_classe_a.py:54`, `app/chamados/management/commands/validar_classe_a.py:63`, `app/chamados/management/commands/validar_classe_a.py:99`. Vazio de escolha retorna `None`; hora/data_hora vazia não converte em minutos; demais tipos não classificam hora: `app/chamados/juizes.py:2000`, `app/chamados/juizes.py:1893`, `app/chamados/juizes.py:1897`, `app/chamados/juizes.py:1907`, `app/chamados/juizes.py:1914`.
+
+Testes não foram executados; vermelhos citados são dedução das asserções e do corpo lido. [não verificado por execução] [nao verificado]
+
+## 14/11 04:08 · sessao 107d2772def7 · - · - · origem=Ronald (tmux)
+
+Por leitura estática, há testes com expectativas incompatíveis para a mesma lista e o mesmo caso carimbado com texto `''`: E3 exige exclusão; O168 exige inclusão. Não executei a suíte. (`app/chamados/tests/test_e3_10_cura_no_escritor.py:125–133`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:275–285`.)
+
+| Opção | Vermelhos dedutíveis pela leitura |
+|---|---|
+| Corpo atual, com `and not respondida_sem_texto(q)` | `PaiComConversaNoGateTest.test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito`: cria `respondida_em` existente + `resposta_colab=''` e exige `[p.pk]` na retratação e na lista. (`app/chamados/models.py:1904–1909`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:275–285`.) |
+| Corpo atual | `ExecutorCsfTest.test_resposta_na_disputa_barra` e `ExecutorCsfTest.test_resposta_direta_barra`: `_P('x')` significa carimbo `'x'` com texto padrão `''`, mas os testes exigem bloqueio. (`app/ponto/tests/test_supra_juiz_executor.py:24–29`; `app/ponto/tests/test_supra_juiz_executor.py:71–75`.) |
+| Retirar apenas `and not respondida_sem_texto(q)` | `RespostasSemVereditoPerguntaAoPredicadoTest.test_RED_respondida_sem_texto_nao_e_resposta_sem_veredito`: exige que `''` e espaços carimbados fiquem fora da lista. (`app/chamados/tests/test_e3_10_cura_no_escritor.py:125–133`.) |
+| Retirar apenas essa condição | `RespostasSemVereditoPerguntaAoPredicadoTest.test_pode_fechar_segue_a_lista_e_o_c6`: exige lista vazia para carimbo + `''`. (`app/chamados/tests/test_e3_10_cura_no_escritor.py:135–141`.) |
+| Separar: lista E3 exclui; CSF/retratação incluem | Os dois testes do executor deixam de conflitar com o comportamento; porém `test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito` continua exigindo também que **a lista E3** inclua a pergunta, na segunda asserção. (`app/ponto/tests/test_supra_juiz_executor.py:71–75`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:283–285`.) |
+
+Para uma separação com nomes novos, há ainda testes estruturais dependentes da implementação escolhida: [nao verificado]
+
+- `ContratoDedupDistingueStatusTest.test_porta_humana_de_disputa_presta_contas` exige literalmente `self.sem_veredito_entre(` dentro de `respostas_sem_veredito`; renomear o corpo chamado pode torná-lo vermelho. (`app/chamados/tests/test_contract_dedup_status.py:133–144`.)
+- `JuizDoVereditoPorAstTest.test_o_juiz_nao_le_respondida_em_cru` reconhece como juiz apenas chamadas chamadas `respostas_sem_veredito` ou `sem_veredito_entre`, inclusive por apelido importado. Um novo nome exclusivo para CSF pode torná-lo vermelho. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:313`; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:367–399`.)
+
+O teste `test_RED_dia_trancado_CSF_e_retratacao_dao_a_MESMA_resposta` cobre outra dimensão: com resposta textual, CSF e retratação ignoram tranca e seguram, enquanto a lista padrão respeita a tranca e esvazia. Esse caso não distingue o filtro de texto vazio. (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:291–310`; fixture com texto em `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:55–62`.)
+
+Os testes de custo usam texto `'07:00'`; não fornecem uma expectativa para texto `''`. (`app/chamados/tests/test_o168_custo_da_guarda_constante.py:43–49`.)
+
+Tentei `git show 96aa51407:app/chamados/models.py`; falhou porque a cópia não é repositório Git. Portanto não verifiquei o corpo histórico, e “retirar apenas a condição” acima é um contrafactual explícito, sem afirmar que reproduz exatamente aquele commit. [não verificado]
+
+## 14/11 04:08 · sessao f474698533df · - · - · origem=Ronald (tmux)
+
+**Regra R-a: literal completo não localizado nos três arquivos pedidos.** Fiz grep por `E3-10`, `CURA.NO.ESCRITOR`, `respondida_sem_texto` e `sem_veredito_entre` em `app/docs/CORTES.md`, `app/docs/LEIS.md` e `app/docs/DOSSIES.md`: não achei nenhuma ocorrência desses identificadores nesses arquivos. A íntegra do aval de 12/11 item 2 fica **[não verificado]**; há ponteiros para `logs/AVAIS-1212/e3_10_cura_no_escritor.txt`, fora do material fornecido. Os registros disponíveis são:
+
+- `app/docs/PROMPTS.md:2171`: literal da **linha de registro**, não da íntegra do aval: “E3-10-CURA-NO-ESCRITOR (aval Ronald): censo Codex do escritor das 143 vivas em respondida_sem_texto pela trilha; cura na PORTA com RED+mutante; respostas_sem_veredito pergunta ao predicado; passivo so se o app dos 17 nao muda.”
+- `app/docs/BACKLOG.md:1944`: item (2) escrito “cura na porta com RED+mutante; respostas_sem_veredito pergunta ao predicado”; nomeia 143 vivas em `respondida_sem_texto`, sem explicitar `texto=''`.
+- `app/chamados/models.py:1900-1901`: comentário do corpo atual atribui ao item 2: “‘o colaborador falou’ pergunta ao predicado UNICO -- respondida SEM texto (HX-PAR-RESPOSTA) nao e resposta a julgar: a bola segue com o colaborador (C6/fio), nao com o admin.”
+- Assim, R-a nomeia o caso “carimbo de resposta sem texto”; o significado computável de vazio depende do predicado, não de um literal `texto=''` presente no aval disponível. `app/chamados/models.py:1899-1908`.
+
+**Regra R-b: encontrada em CORTES, sem menção literal a vazio.**
+
+- `app/docs/CORTES.md:449`: “corte Ronald: juiz DisputaSupervisao.respostas_sem_veredito nasce” e “`ponto/supra_juiz.py::pode_executar_csf` passa a PERGUNTAR a ele em vez de ler `respondida_em` cru: pai/destino seguro so com resposta SEM veredito; validada/materializada fecha normal pela Defesa 1.” Proíbe “(A) segurar todo pai respondido e (C) fechar o pai nas 3 views”.
+- A mesma linha **não** contém `sem_veredito_entre`, retratação, `texto=''` nem a expressão “perguntam a ESSE juiz”. `app/docs/CORTES.md:449`.
+- A migração do reconciliador está registrada em `app/docs/PROMPTS.md:2208`: “pode_executar_csf (...) e reconciliador.py:1465 perguntam a DisputaSupervisao.respostas_sem_veredito”.
+- A interpretação da retratação está documentada no próprio código em `app/chamados/juizes.py:2063-2066`: “O PREDICADO E O DO JUIZ DO VEREDITO” / “mesma pergunta na retratacao por premissa morta”; usa `sem_veredito_entre`, corpo de `respostas_sem_veredito`, com `ignorar_tranca=True`. É comentário que atribui frase ao aval; íntegra do aval **[não verificado]**.
+- O comentário de `sem_veredito_entre` atribui ao aval “um predicado so”, com CSF e retratação lendo a mesma pergunta sobre universos distintos. `app/chamados/models.py:1894-1898`.
+- `app/docs/CORTES.md:448` marca expressamente como superada a afirmação anterior “MESMO predicado”: após (B) CSF passa a perguntar ao juiz em vez do carimbo cru; não declara que (B) define o comportamento de texto vazio.
+
+**Regras gerais encontradas, sem eleger resposta para vazio.**
+
+- L-039: “FALTA TEM UM SIGNIFICADO = decidida (ausencia lancada cujo tipo desconta)”. Trata classificação de falta, não o par carimbo/texto de resposta. `app/docs/LEIS.md:87`.
+- Corte FALTA-UM-SIGNIFICADO: furo sem decisão aparece como “dias em aberto (a decidir)”, “nunca some, nunca vira falta sozinho”. Não define se texto vazio é resposta. `app/docs/CORTES.md:179`.
+- L-088: furo é “marco nao cumprido, que e PERGUNTA em aberto e nao decisao”. Não define resposta vazia. `app/docs/LEIS.md:120`.
+- L-002: “TESTEMUNHA LE, NAO RECALCULA: tela, PDF, TXT, badge e contador leem a MESMA autoridade”. Sustenta compartilhamento de autoridade, sem escolher valor do predicado para vazio. `app/docs/LEIS.md:60`.
+- L-061: “O CONSUMIDOR LE A LAMPADA, nunca re-julga: chamado, pergunta, tela e folha leem a celula/ata”. Não define resposta vazia. `app/docs/LEIS.md:95`.
+- C7: “DisputaSupervisao.pode_fechar (fio_vivo C6 vazio + nenhuma resposta sem veredito) e o juiz unico da pergunta C7 ‘a disputa pode fechar?’”. Não define texto vazio. `app/docs/CORTES.md:272`.
+- A formulação geral “resposta sem veredito segura” existe na documentação do código: fechar é veredito sobre silêncio, não sobre resposta; resposta sem veredito está parada no admin; materializada não conta. `app/chamados/models.py:1874-1884`.
+- `fechar` atribui ao aval C7 literal: “fecha quando `pergunta_viva(disputa)` esta vazio (C6), e a porta recusa resposta sem veredito, como ja faz”; comentário diz recusar em todas as portas. Nenhum desses trechos define se vazio conta como resposta. `app/chamados/models.py:1922-1930`.
+- L-110: referência é regra, “o codigo de hoje nao e gabarito”; onde regra não responde, sobe pergunta de lei. É pertinente para não converter teste/código existente em decisão normativa. `app/docs/LEIS.md:136`.
+- Contrato “1 JUIZ por pergunta”, não “um juiz para todas as perguntas”: `CLAUDE.md:178`. Dois predicados podem exigir distinguir perguntas; os textos disponíveis da O168 chamam CSF e retratação da **mesma** pergunta, portanto separar especificamente essas respostas não tem autorização literal encontrada. `app/chamados/models.py:1896-1898`; `app/chamados/juizes.py:2063-2066`. Corte para novo predicado ou duas candidatas é tratado em `CLAUDE.md:269-273`.
+- Anexo JUIZES é lookup, não lei; a lei mora em CLAUDE 4b e registro vivo em core/juizes. `app/docs/JUIZES.md:7-14`.
+- Registro vivo pergunta: “quais respostas do colaborador na disputa esperam veredito (nem validadas nem materializadas)?”, autoridade `respostas_sem_veredito`. Não acrescenta condição de vazio. `app/core/juizes.py:302`.
+
+**Compatibilidade por leitura:** é possível satisfazer simultaneamente R-a como mudança no **conteúdo** da pergunta e R-b como mudança no **endereçamento** dos leitores. Atualmente `respostas_sem_veredito` delega a `sem_veredito_entre`; esse corpo consulta `respondida_sem_texto`; CSF/retratação compartilham esse corpo. Logo, excluir “respondida sem texto” do juiz não contradiz, por estrutura, exigir que todos perguntem a esse juiz. `app/chamados/models.py:1886-1909`; `app/chamados/juizes.py:2063-2076`. Se o aval O168 quis **também** obrigar inclusão de texto vazio, não sei: essa definição não está em `CORTES.md:449`, e a íntegra do aval não está no dado fornecido **[não verificado]**.
 
 ## 14/11 04:02 · sessao 1e7c0e692fc2 · HJ-091 · verificador · origem=Code
 
@@ -771,57 +885,4 @@ No checklist, **relógio fora da borda e campo com dois significados estão pres
 
 - **[fila] Restrição por parcela já existia:** A1 subir enquanto parcelas nomeadas descem pode manter o total e ainda reprovar `_criterios`; isso não é afrouxamento introduzido pelo delta, porque o `assertEqual` anterior também reprovaria. Evidências: `app/core/medida_turno_do_par.py:426`; `app/core/tests/test_medida_turno_do_par.py:520`; igualdade anterior no anexo `verif_v2.diff` [nao verificado como arquivo físico].
 
-## 14/11 01:27 · sessao c488e1df051e · - · - · origem=Ronald (tmux)
-
-Resultado da peça: **REPROVADO** — #6 não fecha; há dois contraexemplos confirmados em memória e um resíduo de validação. (`bin/codex_limite_estado.py:64`, `bin/codex_limite_estado.py:74`, `bin/disjuntor.py:1021`)
-
-- **[bloqueia] PID reutilizado ainda permite zero falso.** `fins` guarda só o último fim por `(obra, hash, pid)`; todos os `ini` dessa chave recebem esse fim. Com duas chamadas às 10h e 15h, triagem apenas da chamada das 15h, o vigia devolve `[]`: a pendência das 10h desaparece. (`bin/codex_limite_estado.py:70`, `bin/codex_limite_estado.py:74`, `bin/disjuntor.py:1021`, `bin/disjuntor.py:1024`)
-- **[bloqueia] Os dois “fim” não são o mesmo instante.** O sidecar captura `date` antes da gravação e do encerramento; o trap captura outro `date` para `chamadas.log`. Se houver virada de segundo, a triagem legítima nunca casa. Reprodução em memória: sidecar `15:04:59`, chamadas `15:05:00` → volta pendente. O problema é identidade temporal; o formato nominal é compatível. (`bin/codex_pergunta.sh:464`, `bin/codex_pergunta.sh:471`, `bin/codex_pergunta.sh:472`, `bin/codex_pergunta.sh:272`, `bin/disjuntor.py:928`, `bin/disjuntor.py:1009`, `bin/disjuntor.py:1024`)
-- **[bloqueia, resíduo #6] Linha estruturalmente longa continua podendo produzir zero falso.** Fim com hora válida, nove campos, `rc` vazio ou `zero` e duração vazia recebe `ilegiveis=[]`; o vigia ignora esse fim como `rc != '0'` e devolve zero. A validação não verifica os valores de `rc` e duração. Este comportamento já existia; a cura continua incompleta. (`bin/codex_limite_estado.py:64`, `bin/codex_limite_estado.py:74`, `bin/disjuntor.py:1022`)
-- **[bloqueia, selo sem mordida suficiente] O caso novo de PID reutilizado não exige a contagem correta.** Ele exige `rc=1` e presença da chamada nova, deixando passar a chamada antiga já triada também aparecer como pendente. Também falta o sentido inverso: antiga pendente/nova triada, que atualmente zera. (`bin/tests/test_triagem_pendente.sh:54`, `bin/tests/test_triagem_pendente.sh:57`, `bin/tests/test_triagem_pendente.sh:58`, `bin/disjuntor.py:1021`)
-
-Os chamadores diretos de `_linhas_chamadas` são `ler_chamadas`, `ultimas_chamadas`, `sessoes_do_code`, `tokens_por_papel`, `triagem_pendente` e `_censo_24h`. Só o vigia fornece `ilegiveis`; os outros mantêm o comportamento anterior: `ini` sem quebra final ainda entra, tipo desconhecido é ignorado, fim curto é ignorado. A chave nova `hora` em `fins` é consumida pelo vigia; os outros acessam os campos antigos explicitamente. (`bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:91`, `bin/codex_limite_estado.py:101`, `bin/codex_limite_estado.py:196`, `bin/disjuntor.py:1012`, `bin/disjuntor.py:2247`, `bin/codex_limite_estado.py:68`, `bin/codex_limite_estado.py:95`, `bin/codex_limite_estado.py:103`, `bin/codex_limite_estado.py:200`)
-
-`chamadas.log` é escrito pelo wrapper; o fim da volta em `triagem.log` vem do sidecar desse wrapper, transformado pelo escritor `--triagem`. Os formatos são locais, sem offset explícito; o fuso efetivo de produção é **[nao verificado]**. O corte do vigia é inclusivo pelo `ini`: `ini == desde` entra. (`bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:305`, `bin/codex_pergunta.sh:464`, `bin/disjuntor.py:928`, `bin/disjuntor.py:939`, `bin/disjuntor.py:1019`)
-
-O `{}` é uma limitação declarada: o vigia não verifica redução da trilha contra o estado persistido e suas `gravadas`; B3 verifica. Isso não é um segundo escritor, mas perguntas com garantias diferentes sobre a mesma fonte. (`bin/disjuntor.py:996`, `bin/disjuntor.py:1001`, `bin/disjuntor.py:955`, `bin/disjuntor.py:958`, `bin/disjuntor.py:969`, `bin/disjuntor.py:977`)
-
-## 14/11 01:27 · sessao 6d35a6323582 · - · - · origem=Ronald (tmux)
-
-Achado principal **[bloqueia] #1/#2 parcialmente curados**: `app/templates/colaboradores/beneficio_form.html:70` transforma dinheiro (`/ 100`), devolvendo ao campo enviado em `:71`; o backend lê esse valor em `app/colaboradores/views.py:1777`, passa-o à porta em `:1797–1800`, que grava em `app/colaboradores/services/beneficios.py:11`. Trocar `/100` por `/10` permanece **“so leitor”**, pois o classificador aceita qualquer template/static elegível sem examinar seu conteúdo (`bin/classe_da_obra.py:156–157`). Reproduzi a classificação em memória, sem escrita.
-
-Outras conclusões:
-
-- **#1/#2 fecham os exemplos .py apresentados**: constante CCT e comparadores sem token passam a escritor pelo fallback (`bin/classe_da_obra.py:146–155`; testes e mutante em `bin/tests/test_gate_pela_classe.sh:130–134`). `.sql` e `.json` comuns também terminam escritor (`bin/classe_da_obra.py:158`); migrations recebem escritor antes (`:138–139`).
-- **[fila] caminho não prova teste/doc**: exclusões ocorrem antes de dinheiro/JUIZES (`bin/classe_da_obra.py:74–79,131,159–160`). Contraexemplos sintéticos `app/core/test_calculo.py`, `app/docs/calculo.py` e `app/folha/tests/calculo.py` recebem leitor mesmo com código de cálculo; classificação reproduzida em memória. Há uso real em produção de código sob testes: `app/chamados/management/commands/tblib_ausente_na_imagem.py:17–18` chama função de `app/core/tests/test_contract_tblib_no_paralelo.py:24–30`, cujo arquivo recebe leitor pela mesma regra.
-- **Não há enfraquecimento no classificador pelo delta**: o único retorno funcional alterado sobe leitor para escritor; a precedência dos demais ramos permanece anterior ao fallback (`bin/classe_da_obra.py:131–163`; delta fornecido).
-- **#3 fecha untracked comum**: `_limpa` usa `--untracked-files=all` (`bin/classe_da_obra.py:243`). Caso4 verifica limpo, untracked, mutante que ignora untracked, rastreado sujo e recusa de pouso antes da suite (`bin/tests/test_gate_pela_classe.sh:175–192`).
-- **[fila] “árvore física = tree” continua mais amplo que `_limpa`**: ela exclui ignorados explicitamente (`bin/classe_da_obra.py:241–243`); `.gitignore:12` ignora diretórios `media/` em qualquer nível. Um pacote adicional `app/core/tests/media/{__init__.py,test_extra.py}` ficaria fora do status, dentro da montagem física (`bin/suite.sh:204,230`) e fora do tmpfs específico `/app/media` (`bin/arvore_do_push.sh:81`). O runner usa `DiscoverRunner` e delega a descoberta (`app/core/runner_quarentena.py:72,76`; `app/config/settings/ci.py:40`). Execução desse contraexemplo não realizada: **[nao verificado]**.
-- **[fila] mutantes M2/M3/M4 passaram a exigir duas alterações**: além de remover a guarda específica, restauram leitor no fallback (`bin/tests/test_gate_pela_classe.sh:111–128`). Isso está explícito no helper, mas contradiz o cabeçalho que promete uma única linha alterada (`:10–11`). A mordida agora prova a combinação, não a indispensabilidade isolada de JUIZES/universo (`:122–128`).
-- **#8 pouso tem nova cobertura funcional e mutante para untracked** (`bin/tests/test_gate_pela_classe.sh:175–192`); não foi acrescentado mutante específico removendo a guarda de entrada de `pouso_inteira` (`:178–192`).
-
-Nenhum script de selo foi executado, pois cria arquivos temporários (`bin/tests/test_gate_pela_classe.sh:25–26,31–46`).
-
-## 14/11 01:24 · sessao 21bb236c1f22 · E3-FORMA-SQL · construtor · origem=Code
-
-Entrega escrita, **ainda pendente de R2**: a hipótese simultânea retorna `colab`; a matriz exige `admin`. ([evidência](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-r2-pendente.out:1))
-
-Resultados sem banco:
-
-- Base: `Ran 25; FAILED=14; ERROR=0`. ([RED](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-red.out:208))
-- Após alterações: `Ran 25; OK`; regressões: `Ran 70; OK`. ([GREEN](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-green.out:28), [regressões](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-regressoes.out:3))
-- Mutantes: **42 + 15 mordidas por assert**, com comandos individuais na [tabela](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:73).
-
-Entregues a [matriz R1–R16](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:8), o [ESMERIL de escritores/leitores](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:194) e a [pré-verificação](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:235).
-
-Alcance ORM de R2/R3/R8, persistência zero ORM e R16: **[nao verificado]**. Falta a sessão executar:
-
-```bash
-bash ~/saas-hasner/bin/suite.sh \ [nao verificado]
-  --dir /home/ronald/wt-codex-e3-forma-sql-005806 \
-  --only "chamados core"
-```
-
-Sem declaração de pouso ou certificação. [nao verificado]
-
-_4923 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4926 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
