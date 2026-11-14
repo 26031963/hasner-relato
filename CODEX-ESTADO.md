@@ -1,7 +1,18 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 00:34** · publicado em **14/11/2026 00:36** (UTC-3)
+> Ultima resposta processada: **14/11/2026 00:56** · publicado em **14/11/2026 00:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 00:56 · sessao eee42a348fa5 · E3-FORMA-SQL · construtor · origem=Code
+
+Preciso resolver uma contradição antes de escrever: o brief v8 proíbe reutilizar `wt-codex-e3-forma-sql-195919`, mas esse é o único diretório autorizado pelo ambiente. A conformidade da cópia com essa exigência permanece **[nao verificado]**.
+
+A leitura confirmou os pontos de R7 e R11:
+
+- R7 descarta membros da fila sem verbo: [juizes.py:1562](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/juizes.py:1562).
+- R11 chama C6 sem `agora`: [pergunta_no_app.py:60](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/pergunta_no_app.py:60); a janela pode consultar `date.today()`: [juizes.py:592](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/juizes.py:592).
+
+**A sessão fornecerá a cópia nova ou autoriza expressamente aplicar a v8 nesta cópia, dispensando essa proibição?** A confirmação é necessária pela restrição explícita do próprio brief v8.
 
 ## 14/11 00:34 · sessao 64afa9b3793f · BUG-PAR · verificador · origem=Code
 
@@ -560,36 +571,4 @@ Mapa dos campos:
 
 Não encontrei segundo escritor produtivo nominal das datas de Agendamento fora de `_trocar_janela`; wrappers delegam (`app/ferias/services.py:677`, `app/ferias/services.py:682`). A obrigação de escrita por porta está registrada em `app/core/contratos_estruturais.py:126`; confirmação e cancelamento têm escritores separados para seus campos (`app/ferias/services.py:588`, `app/ferias/services.py:825`, `app/ferias/services.py:840`).
 
-## 13/11 22:01 · sessao b9320e3d5f3b · - · - · origem=Ronald (tmux)
-
-F1/F2/F3 no código atual:
-
-- **F1 original fechado nos caminhos curados:** criação, agendamento, correção, remarcação e edição capturam `_hoje_ferias(request)`; o wrapper reutiliza a memoização, e a edição entrega explicitamente o mesmo dia. (`app/ferias/views.py:137`; `app/ferias/views.py:294`; `app/ferias/views.py:481`; `app/ferias/views.py:695`; `app/ferias/views.py:843`; `app/ferias/views.py:864`; `app/ferias/views.py:883`)
-- **F2 original fechado estaticamente:** aviso e escrita recebem `hoje`, e a mensagem percorre aquela lista. (`app/ferias/views.py:518`; `app/ferias/views.py:531`; `app/ferias/views.py:552`)
-- **F3 original fechado estaticamente na seção:** os três métodos exigem o dia; o contexto calcula os flags; o template usa esses flags e os atributos fornecidos pelo servidor. (`app/ferias/models.py:334`; `app/ferias/models.py:337`; `app/ferias/models.py:340`; `app/ferias/views.py:815`; `app/ferias/views.py:818`; `app/templates/ferias/_secao_colab.html:127`; `app/templates/ferias/_secao_colab.html:159`; `app/templates/ferias/_secao_colab.html:199`)
-
-O censo textual de toda a árvore não encontrou leitor produtivo dos nomes removidos de `AgendamentoFerias`; a ocorrência remanescente verificável é o teste que proíbe os literais. As outras ocorrências de `pode_cancelar` pertencem a pautas. (`app/ferias/test_hj090_volta7.py:96`; `app/pautas/views.py:58`; `app/templates/core/_copiloto.html:431`)
-
-`vencendo_em_breve` ainda lê a parede, mas seus leitores produtivos encontrados estão nas telas de saldo/lista, fora da seção alterada. As demais properties usadas na seção não leem o relógio. (`app/ferias/models.py:230`; `app/templates/ferias/saldo.html:28`; `app/templates/ferias/_tabela_ferias.html:29`; `app/ferias/models.py:233`; `app/ferias/models.py:241`; `app/ferias/models.py:245`; `app/ferias/models.py:344`; `app/ferias/models.py:351`)
-
-**Três buracos concretos de mordida:**
-
-1. **F2 — retirar somente `hoje=hoje` do aviso pode preservar GREEN dos testes novos.** O patch alternante atua em `views.datetime`, enquanto o relógio de `situacao` permanece congelado em 31/12/2026. Para início em 01/12, o aviso errado será “Faltam -30 dias”; o teste proíbe somente “Faltam 29 dias”. A escrita continua usando 01/11 e `aviso_emitido=True`. Não há asserção de ausência desse aviso indevido. (`app/ferias/views.py:518`; `app/ferias/test_hj090_volta7.py:23`; `app/ferias/test_hj090_volta7.py:39`; `app/ferias/test_hj090_volta7.py:80`; `app/ferias/test_hj090_volta7.py:81`; `app/ferias/situacao.py:319`; `app/ferias/situacao.py:337`)
-
-2. **F3 — recolocar parede dentro de `ja_iniciou_em`, conservando os nomes novos, escapa aos testes novos.** O teste de renderização divergente cria somente PA; o teste dos botões busca literais no arquivo e não verifica seus valores renderizados. Contraexemplo ausente: contexto 13/11/2026, agendamento ainda `agendado` começando em 14/11, parede em 15/11; os três flags ficam errados com esse mutante. (`app/ferias/models.py:335`; `app/ferias/views.py:818`; `app/ferias/test_hj090_volta7.py:83`; `app/ferias/test_hj090_volta7.py:93`)
-
-3. **F3/JS — `new Date ( )` escapa ao selo literal.** Substituir a leitura de `data-hoje` por `new Date ( ).toISOString().slice(0,10)` não contém a expressão proibida `new Date()`. Nenhum teste novo executa o navegador. Contexto 31/12/2026 e navegador em 01/01/2027 voltariam a produzir aviso de passado indevido para 31/12. O código atual não tem esse defeito; trata-se de mutante sobrevivente por leitura estática. (`app/templates/ferias/_secao_colab.html:199`; `app/ferias/test_hj090_volta7.py:98`)
-
-Execução desses mutantes e da suíte: **[nao verificado]**. [nao verificado]
-
-**Contrato de instante/fuso ainda não é uniforme.** `_hoje_ferias` lê `date.today()` diretamente e não deriva o dia de um instante capturado. `avaliar_solicitacao`, por sua vez, captura um instante e usa `timezone.localtime(agora).date()`, passando ambos à aprovação. Portanto a alegação “a request lê um instante só” não descreve todas as bordas. (`app/ferias/views.py:18`; `app/ferias/models.py:332`; `app/ferias/views.py:787`; `app/ferias/views.py:788`; `app/ferias/views.py:793`)
-
-Contraexemplo controlado: processo no fuso configurado `America/Sao_Paulo`, fuso corrente sobrescrito para UTC e instante 01/01/2027 01:00Z: o helper pode entregar 31/12, enquanto a avaliação entrega 01/01. Uso produtivo desse override ou ocorrência real: **[nao verificado]**. Não afirmar que o processo produtivo usa UTC; a configuração da cópia é São Paulo com `USE_TZ=True`. (`app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/ferias/views.py:18`; `app/ferias/views.py:788`)
-
-O command deriva `.date()` de `datetime.now()` ingênuo e a IA usa `date.today()`; ambos são herdados e não foram alterados pelo delta fornecido. (`app/ferias/management/commands/realinhar_concedidos_ferias.py:114`; `app/ferias/management/commands/realinhar_concedidos_ferias.py:115`; `app/core/views_ia.py:688`)
-
-Cancelamentos/venda ainda escrevem status com default implícito e depois chegam ao wrapper alterado, que só então captura o dia da resposta; assim não há garantia global de mesmo dia entre esses escritores antigos e a nova resposta. Exemplo: cancelamento em 31/12 mantém PA `em_curso`; resposta em 01/01 o sincroniza para `adquirido`. São escritores não alterados no delta, devendo distinguir esse alcance do F1 original curado. (`app/ferias/services.py:598`; `app/ferias/services.py:625`; `app/ferias/services.py:879`; `app/ferias/views.py:366`; `app/ferias/views.py:384`; `app/ferias/views.py:1018`; `app/ferias/views.py:843`; `app/ferias/views.py:814`)
-
-A derivação de aviso no JS permanece registrada como pendência: o relógio mudou de origem, mas o navegador continua decidindo o aviso por comparações próprias. Não apresentar sua existência como descoberta nova desta volta. (`app/templates/ferias/_secao_colab.html:202`; `app/templates/ferias/_secao_colab.html:204`; `app/core/juizes.py:925`)
-
-_4894 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4895 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
