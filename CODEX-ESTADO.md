@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 03:39** · publicado em **14/11/2026 03:40** (UTC-3)
+> Ultima resposta processada: **14/11/2026 03:59** · publicado em **14/11/2026 04:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 03:59 · sessao 79cf44923d6c · - · - · origem=Ronald (tmux)
+
+[跛bloqueia] O contador não detecta a classe “férias rejeitadas/canceladas dentro de agendamento vivo”: rejeitadas saem de `sem_agendamento`, mas entram em `cobertos`, produzindo 0/0 para um dia sem ausência aprovada. O espelho também conserva a rejeitada. Isso contradiz o significado de cobertura da folha e da cobrança; listar o passivo não exige corrigi-lo. (`app/ferias/services.py:146`, `app/ferias/services.py:153`, `app/ponto/services/ausencia.py:1269`, `app/ponto/turnos.py:2511`.)
+
+[fila] O teste preserva expressamente a rejeitada, mas não exige que o contador a denuncie; portanto não cobre a classe do passivo exigida no aval. (`app/ponto/tests/test_hj091_ferias_derivadas.py:178`.)
+
+[fila] O contador pressupõe uma linha por dia: usa apenas `(agendamento_id, data)`, enquanto os leitores oficiais expandem `data..data_fim`. O backfill nem carrega `data_fim`/`dias_corridos`; uma linha legada com intervalo pode receber FK por seu primeiro dia sem conferência do restante. Existência dessa classe em produção: [nao verificado]. (`app/ferias/services.py:153`, `app/ponto/services/ausencia.py:1377`, `app/ponto/turnos.py:2771`.)
+
+[fila] `STATUS_QUE_ESPELHAM` centraliza espelho, backfill e contador, mas continua uma representação separada de “não cancelado”, já implementada em `ferias_na_janela`. Com os quatro status declarados são equivalentes; divergência para status fora dos choices em produção: [nao verificado]. Não duplica `status_por_data`: este decide a fase temporal; também não duplica `status_de_periodo`, que trata do período aquisitivo. (`app/ferias/services.py:49`, `app/ferias/services.py:132`, `app/ferias/models.py:276`, `app/ferias/models.py:296`, `app/core/juizes.py:269`.)
+
+[fila] Sobreposição continua delegada ao juiz registrado: o diff troca somente a identificação das linhas próprias pela FK. (`app/ferias/models.py:431`, `app/ferias/models.py:433`, `app/core/juizes.py:254`.)
+
+[fila] As decisões novas conferidas não consultam relógio: recusas, seleção da origem, espelho, contador e seleção do backfill usam argumentos/estado. As chamadas novas de `timezone.now()` gravam carimbos; o `hoje` do tripwire é lido na borda do command. (`app/ponto/services/ausencia.py:92`, `app/ponto/services/ausencia.py:101`, `app/ponto/services/ausencia.py:1248`, `app/ferias/services.py:146`, `app/ponto/services/ausencia.py:1377`, `app/ponto/services/ausencia.py:1353`, `app/ponto/services/ausencia.py:1414`, `app/ponto/services/ausencia.py:1437`, `app/ferias/management/commands/tripwire_status_ferias.py:28`.)
+
+[fila] Inclusividade coerente nas linhas novas normais: espelho inclui início/fim, cria `dias_corridos=1` e `minutos=0`; ausência diária tem `data_fim=None`, interpretado como dia único pelos leitores oficiais. O painel lê o intervalo integral e `dias` do agendamento. (`app/ponto/services/ausencia.py:1265`, `app/ponto/services/ausencia.py:1275`, `app/ponto/services/ausencia.py:115`, `app/ponto/turnos.py:2772`, `app/ponto/services/ausencia.py:108`.)
+
+Censo complementar de leitores fora do diff, sem garantia de exaustividade para aliases dinâmicos [nao verificado]:
+
+- API de ausências: colaborador, tipo, data, status, descrição, minutos e criação; cobertura/status aberto no espelho do app. (`app/api/views.py:1846`, `app/api/views.py:1858`, `app/api/views.py:1560`, `app/api/views.py:1569`.)
+- Espelho: cobertura de cobrança e folha; tipo para ícone. Motor: tipo da ausência do mapa de dias abonados. (`app/ponto/services/espelho.py:582`, `app/ponto/services/espelho.py:588`, `app/ponto/services/espelho.py:849`, `app/ponto/motor_calculo_v2.py:1092`.)
+- Signals: tipo, data, fim e colaborador para recalcular dias. (`app/ponto/signals.py:123`, `app/ponto/signals.py:147`, `app/ponto/signals.py:152`.)
+- Histórico, carga da pergunta e foto: colaborador, criação, tipo, data, fim, status por `_pelo_efeito`, registrador. (`app/chamados/services/historico.py:129`, `app/chamados/services/carga_pergunta_viva.py:101`, `app/chamados/services/foto_e4b.py:285`.)
+- Materialização: tipo, data, colaborador e status rejeitada. (`app/chamados/services/materializacao.py:626`, `app/chamados/services/materializacao.py:662`, `app/chamados/services/materializacao.py:669`.)
+- Lista/painel: dias corridos, minutos, documento, referência documental, descrição e intervalo. (`app/templates/ponto/ausencias.html:159`, `app/templates/ponto/ausencias.html:168`, `app/templates/ponto/partials/painel_ausencia.html:51`, `app/templates/ponto/partials/painel_ausencia.html:56`, `app/templates/ponto/partials/painel_ausencia.html:123`.)
+- Agendamento: folha lê intervalo inclusivo; situação cruza batidas com `[início, fim+1dia)`; tela registra datas/dias/status; soma de saldo lê dias de não cancelados. (`app/folha/export.py:491`, `app/folha/export.py:501`, `app/ferias/situacao.py:271`, `app/ferias/situacao.py:280`, `app/ferias/views.py:528`, `app/ferias/services.py:105`.)
+
+## 14/11 03:58 · sessao f65023c9f0e5 · - · - · origem=Ronald (tmux)
+
+**[bloqueia] Escritor fora dos declarados:** `curar_ausencia_sem_fim --apply` não exclui férias: seleciona ausência viva com `dias_corridos > 1`, `data_fim=None` e tipo fora de `EM_ABERTO_VIVOS`; chama `rederivar_fim`, que executa `save()` sem guarda. O modelo pode então escrever `data_fim` de férias. Existência desse passivo em produção: [nao verificado]. (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`, `:46`; `app/ponto/services/ausencia.py:1448`; `app/ponto/models.py:912`.)
+
+**[bloqueia] Selo não garante escritor único:** `_METODOS` omite `save`; atribuições só são denunciadas quando o atributo é `tipo` e o valor literal é `"ferias"`. Consequentemente, `a = Ausencia.objects.filter(tipo="ferias").first(); a.status="rejeitada"; a.save()` e `a.agendamento_ferias=g; a.save(...)` escapam. Ambos devolveram `[]` numa execução somente em memória com `python3 -B`. (`app/ponto/tests/selo_hj091.py:26`, `:76`, `:85`.) Também substituí somente em memória o corpo da guarda por `pass`: o conjunto de escritores identificado permaneceu idêntico. (`app/ponto/tests/selo_hj091.py:87`; `app/ponto/tests/test_hj091_ferias_derivadas.py:387`.)
+
+**[bloqueia] Reversão durável opcional no serviço:** `vincular_ausencias_ferias(aplicar=True)` admite `registro_em=None`; nesse caso grava FK sem antes escrever arquivo de reversão. O comando fornece um caminho, mas o serviço público não exige. Os testes APPLY exercitam justamente a chamada sem arquivo e não comprovam a ordem arquivo → UPDATE. (`app/ponto/services/ausencia.py:1365`, `:1407`, `:1413`; `app/ponto/management/commands/vincular_ausencias_ferias.py:33`; `app/ponto/tests/test_hj091_ferias_derivadas.py:318`, `:333`, `:355`, `:445`.)
+
+**[bloqueia, se exigido literalmente “só FK”]** Apply e reversão escrevem também `atualizado_em`; o arquivo só conserva pares ausência/agendamento, sem o timestamp anterior. Portanto a reversão não restaura todo o estado anterior. (`app/ponto/services/ausencia.py:1409`, `:1414`, `:1437`.)
+
+**[fila] REDs e mutantes:**
+
+- O canônico de cancelamento verifica estado aprovado e frase; ele distingue a cura do cancelamento permitido. (`app/ponto/tests/test_hj091_ferias_derivadas.py:68`.)
+- O teste chamado `test_a_recusa_MORDE...` passa com a guarda já revertida: instala explicitamente a guarda no-op e espera rejeição. É uma contraprova invertida; quem deve matar o mutante é o canônico anterior. (`app/ponto/tests/test_hj091_ferias_derivadas.py:128`.)
+- Remover apenas a guarda de `reverter_rejeicao` pode deixar o respectivo teste verde, porque `_reabrir` alcança a guarda redundante de `mudar_estado`. (`app/ponto/tests/test_hj091_ferias_derivadas.py:110`; `app/ponto/services/ausencia.py:1164`, `:1209`, `:881`.)
+- Faltam testes de falha ao escrever reversão, arquivo já existente, preservação de todos os demais campos, origem cancelada no backfill e escrita por `save()`. A cobertura atual do backfill verifica contagens/FK e reversão por lista em memória. (`app/ponto/tests/test_hj091_ferias_derivadas.py:305`, `:314`, `:324`, `:351`, `:360`, `:376`.)
+
+**[fila] Backfill — partes conferidas:**
+
+- Idempotente em execução sequencial: lê apenas FK nula e o UPDATE repete essa condição; não cria ausências. Segunda execução com o mesmo arquivo pelo comando recusa antes de trabalhar; com outro arquivo ou pelo serviço, não encontra novos vínculos. (`app/ponto/services/ausencia.py:1377`, `:1413`; `app/ponto/management/commands/vincular_ausencias_ferias.py:36`.)
+- Havendo caminho, o JSON é escrito com modo exclusivo antes da transação de UPDATE. (`app/ponto/services/ausencia.py:1407`.)
+- Não escolhe entre IDs distintos: mais de uma marca distinta vira `marca_ambigua`; marcas repetidas do mesmo ID são deduplicadas. (`app/ponto/services/ausencia.py:1381`, `:1390`.)
+- Não procura outro agendamento cobrindo o dia: exige o ID da descrição, existência, mesma pessoa, dia inclusivamente dentro da janela e status em `STATUS_QUE_ESPELHAM`. Um caso com marca `#77` inadequada e cobertura por `#114` permanece sem vínculo. (`app/ponto/services/ausencia.py:1393`, `:1396`, `:1398`, `:1400`.)
+- Concorrência entre leitura e aplicação não é protegida por trava/revalidação do agendamento: a transação começa depois da seleção e o UPDATE revalida somente ausência/tipo/FK nula. O risco depende de haver gravações concorrentes, cuja ocorrência é [nao verificado]. (`app/ponto/services/ausencia.py:1377`, `:1382`, `:1410`, `:1413`.)
+
+Não executei Django nem testes com banco; resultado runtime dos REDs: [nao verificado]. [nao verificado]
+
+## 14/11 03:58 · sessao de254de1db85 · - · - · origem=Ronald (tmux)
+
+**[bloqueia] Há porta web de remarcação com exceção sem tratamento para férias sem origem.** `editar_agendamento` chama `remarcar_agendamento` em `app/ferias/views.py:722` e captura apenas `AgendamentoNaoRemarcavel` e `SaldoInsuficienteParaRemarcar` em `app/ferias/views.py:723` e `app/ferias/views.py:725`. O caminho passa por `_trocar_janela` (`app/ferias/services.py:743`), salva o agendamento (`app/ferias/services.py:727`), exclui somente ausências com FK própria (`app/ferias/models.py:431`) e converte a colisão com uma ausência sem origem em `ValidationError` (`app/ferias/models.py:437`). Portanto, uma remarcação ainda permitida por data que atravesse uma linha sem origem deixa essa exceção sair da view; resposta real em execução: [nao verificado]. O teste caracteriza apenas `ag.save()` sob `assertRaises(ValidationError)`, sem testar a view (`app/ponto/tests/test_hj091_ferias_derivadas.py:435`, `app/ponto/tests/test_hj091_ferias_derivadas.py:442`). A outra porta, `editar_datas_admin`, captura `ValidationError` (`app/ferias/views.py:544`).
+
+**[bloqueia condicionado ao acervo] Nem todo chamador trata a nova recusa.** Uma ausência `ferias` em `aguardando_documento` com prazo vencido faz o cron chamar `mudar_estado` sem captura por item (`app/ponto/services/ausencia.py:1059`, `app/ponto/services/ausencia.py:1069`); a guarda agora levanta `AusenciaInvalida` (`app/ponto/services/ausencia.py:879`, `app/ponto/services/ausencia.py:95`). O command também não captura a exceção (`app/ponto/management/commands/escalonar_documentos_ausencia.py:26`), e está instalado com `--apply` (`app/config/crons.py:715`). O command `rejulgar_status_por_tipo --apply` tem o mesmo problema: inclui todo `aguardando_documento` (`app/ponto/management/commands/rejulgar_status_por_tipo.py:23`) e chama a porta sem captura (`app/ponto/management/commands/rejulgar_status_por_tipo.py:31` → `app/ponto/services/ausencia.py:609`). Existência dessas linhas em produção: [nao verificado].
+
+**Ordem de pouso e comportamento intermediário:** [nao verificado]
+
+- A migration somente adiciona a FK nullable; não chama o backfill (`app/ponto/migrations/0078_ausencia_agendamento_ferias.py:14`). O comando está declarado fora do pipeline (`app/config/crons.py:781`). O deploy executar migration e backfill no mesmo ato: [nao verificado].
+- Depois da migration e antes do backfill, o espelho não reconhece a linha sem origem como própria (`app/ponto/services/ausencia.py:1253`); tenta criar e transforma a recusa em Pauta (`app/ponto/services/ausencia.py:1273`, `app/ponto/services/ausencia.py:1279`, `app/ponto/services/ausencia.py:1288`). O teste fixa zero criações, cinco recusas e ausência de duplicata (`app/ponto/tests/test_hj091_ferias_derivadas.py:413`).
+- Mudança somente de status passa pela guarda de sobreposição (`app/ferias/models.py:406`) e pode chamar o espelho (`app/ferias/models.py:448`); o teste confirma que a virada não levanta (`app/ponto/tests/test_hj091_ferias_derivadas.py:423`).
+- Depois do backfill, linhas resolvidas já têm a FK; o teste consegue remarcar (`app/ponto/tests/test_hj091_ferias_derivadas.py:444`). As não resolvidas continuam sem origem e permanecem sujeitas ao veto da guarda (`app/ponto/services/ausencia.py:1403`, `app/ferias/models.py:431`).
+- A ordem de trava das operações existentes é agendamento → período → ausência (`app/ferias/services.py:627`, `app/ferias/services.py:634`, `app/ferias/services.py:637`). `_trocar_janela` é atômica (`app/ferias/services.py:704`), apaga pela FK antes do save (`app/ferias/services.py:723`) e o rollback inclui essa limpeza caso haja veto (`app/ferias/services.py:698`).
+
+**Censo dos chamadores das portas:**
+
+| Porta | Chamadores e tratamento |
+|---|---|
+| `decidir` | Wrapper `_a4_decidir` (`app/ponto/views.py:88`); lotes aprovar/rejeitar/cancelar (`app/ponto/views.py:2301`, `app/ponto/views.py:2337`, `app/ponto/views.py:2377`), todos com captura de `AusenciaInvalida` (`app/ponto/views.py:2306`, `app/ponto/views.py:2344`, `app/ponto/views.py:2383`). Individuais aprovar/rejeitar/cancelar (`app/ponto/views.py:2675`, `app/ponto/views.py:2736`, `app/ponto/views.py:2772`), com captura (`app/ponto/views.py:2690`, `app/ponto/views.py:2751`, `app/ponto/views.py:2786`). Declaração de período chama em `app/ponto/views.py:2708` e captura em `app/ponto/views.py:2709`. |
+| `editar_ausencia_registro` | View em `app/ponto/views.py:2834`, captura em `app/ponto/views.py:2858`; command H06 em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`, captura em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:171`. |
+| `reverter_rejeicao` | View em `app/ponto/views.py:2616`, captura em `app/ponto/views.py:2620`. |
+| `_reabrir` | `criar_ausencia` (`app/ponto/services/ausencia.py:350`) e `reverter_rejeicao` (`app/ponto/services/ausencia.py:1170`). A guarda de férias ocorre antes desses caminhos públicos (`app/ponto/services/ausencia.py:247`, `app/ponto/services/ausencia.py:1164`). |
+| `anexar_documento` | Web (`app/ponto/views.py:2158`) captura em `app/ponto/views.py:2159`; API de anexo (`app/api/views.py:3110`) captura e retorna 409 (`app/api/views.py:3111`). Reenvio na API chama sem captura (`app/api/views.py:1838`), mas férias são recusadas antes em `criar_ausencia` (`app/ponto/services/ausencia.py:247`), cuja exceção é tratada pela API (`app/api/views.py:1813`). |
+| `mudar_estado` | `decidir` (`app/ponto/services/ausencia.py:978`), `anexar_documento` (`app/ponto/services/ausencia.py:940`), `_reabrir` (`app/ponto/services/ausencia.py:1209`), `rejulgar_status_pelo_tipo` (`app/ponto/services/ausencia.py:609`) e escalonador (`app/ponto/services/ausencia.py:1069`); os dois últimos têm as lacunas descritas acima. |
+| `criar_ausencia` | Web administrativa (`app/ponto/views.py:2447`, captura `app/ponto/views.py:2455`); web colaborador (`app/ponto/views.py:2568`, captura `app/ponto/views.py:2575`); API (`app/api/views.py:1805`, captura `app/api/views.py:1813`); veredito da célula (`app/ponto/services/veredito_celula.py:337`, captura `app/ponto/services/veredito_celula.py:341`); copiloto por wrapper (`app/ponto/services/checar_ausencia.py:46`, captura `app/core/views_ia.py:988`); espelho (`app/ponto/services/ausencia.py:1273`, captura `app/ponto/services/ausencia.py:1279`). |
+| `garantir_ausencia` | Wrapper chama `criar_ausencia` (`app/ponto/services/ausencia.py:523`); regularização chama somente `falta` (`app/ponto/services/regularizacao.py:118`); abandono provisório chama somente `falta` (`app/ponto/management/commands/marcar_abandono_provisorio.py:76`). |
+| Criação pela materialização | Chamadas em `app/chamados/services/materializacao.py:491` e `app/chamados/services/materializacao.py:527`; os escapes declarados são falta/atestado (`app/chamados/services/materializacao.py:603`). |
+
+**[fila para censo de escritores] Existe escritor genérico adicional a conferir:** `rederivar_fim` executa `ausencia.save()` sem guarda de férias (`app/ponto/services/ausencia.py:1448`, `app/ponto/services/ausencia.py:1451`). O command que o chama não exclui expressamente `ferias`: seleciona duração maior que um e fim nulo, fora dos tipos abertos (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`) e grava em `app/ponto/management/commands/curar_ausencia_sem_fim.py:46`. Existência de férias que satisfaçam o filtro em produção: [nao verificado].
+
+## 14/11 03:57 · sessao 0cad00772e4d · HJ-091 · sonda · origem=Code
+
+| Campo | Valor | Referência |
+|---|---:|---|
+| ferias_total | 3001 | [nao verificado] |
+| status aprovada | 2997 | [nao verificado] |
+| status rejeitada | 4 | [nao verificado] |
+| ferias_em_ABERTAS | 0 | [nao verificado] |
+| ids_abertas | [] | [nao verificado] |
+
+A saída fornecida não contém erro nem traceback. [nao verificado]
 
 ## 14/11 03:39 · sessao fa514ab77cc5 · CORTE-DAS-TRAVAS · censo · origem=Code
 
@@ -600,123 +695,4 @@ Persiste **R2**: a hipótese simultânea obtém `colab`, enquanto a matriz exige
 
 Execução ORM, R16 e certificação final: **[nao verificado]**. Nenhum novo defeito concreto encontrado nesta revisão limitada.
 
-## 14/11 01:17 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
-
-Os ajustes corrigem os pontos de revisão R8, R4 ORM e a declaração de R11. (`chamados/juizes.py:1572`, `chamados/tests/test_e3_portas_tarefa.py:235`, `chamados/management/commands/diff_e3_sombra.py:107`)
-
-R13 ganhou cobertura do caminho administrativo dispensado. (`chamados/tests/test_e3_portas_tarefa.py:585`)
-
-Persiste uma falha no executor: `absorcao_admin_sem_rotulo` tem alvo repetido e encerrou com prova inválida. É necessário tornar o contexto da substituição exclusivo de `expor_admin`. (`chamados/tests/e3_v8_mutantes.py:62`, `e3-v8-mutantes.out:1464`)
-
-R2 continua pendente de alcance ORM e cura; o teste puro agora identifica corretamente a hipótese administrativa isolada. (`chamados/tests/test_e3_portas_tarefa.py:220`, `:440`)
-
-Execução ORM e certificação: **[nao verificado]**.
-
-## 14/11 01:14 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
-
-Pré-verificação encontrou:
-
-- **R8 reprovado:** `.only(...)` conserva os `select_related` herdados da fila, incluindo relações omitidas, podendo gerar `FieldError`. Limpar relações antes da seleção ou fornecer `_base` adequado. (`chamados/juizes.py:1571`, `chamados/services/painel.py:98`)
-- **R2 ainda não curado:** ações simultâneas `validar/admin` e `responder/colaborador` sobre a mesma porta produzem `fio='colab'`. O teste puro contém somente a ação administrativa; não comprova o caso simultâneo do teste ORM. (`chamados/services/tarefa_do_dia.py:588`, `chamados/tests/test_e3_portas_tarefa.py:212`, `:439`)
-- **R4 ORM não representa Q11:** registra `SILENCIO` sem projetar o encerramento da pergunta e espera `cobrar/colab`. O puro cobre validação com lavra; a fixture ORM precisa corresponder. (`chamados/tests/test_e3_portas_tarefa.py:235`, `:452`)
-- **R11 deixou declaração obsoleta:** o comando ainda anuncia leitura do relógio da máquina pelo app. (`chamados/management/commands/diff_e3_sombra.py:107`)
-- **R13:** falta mutante do segundo caminho alterado, `expor_admin`. (`chamados/services/tarefa_do_dia.py:258`, `chamados/tests/e3_v8_mutantes.py:55`)
-
-A adaptação posicional preserva os oito índices anteriores. (`chamados/services/vigia_fio.py:635`, `chamados/management/commands/backfill_fio_morto_e4b.py:253`)
-
-Comando executado sem banco:
-
-```bash
-env -u DJANGO_SETTINGS_MODULE PYTHONDONTWRITEBYTECODE=1 \
-python3 -m unittest chamados.tests.test_e3_pendentes_app.CatracaC17Test
-```
-
-Resultado: **Ran 7; OK**. A catraca cobra um único chamador permitido de C17. (`chamados/tests/test_e3_pendentes_app.py:146`)
-
-Alcance e execução ORM: **[nao verificado]**. Nenhum arquivo editado por este revisor.
-
-## 14/11 01:08 · sessao bb855a61a1c6 · CORTE-DAS-TRAVAS · verificador · origem=Code
-
-**REPROVADO para pouso.** Há caminhos que classificam dinheiro/universo como “so leitor”, certificação que ignora arquivos executáveis não rastreados e catraca que ainda reprova sem aumento do total (`bin/classe_da_obra.py:151`; `bin/classe_da_obra.py:237`; `app/core/tests/test_medida_turno_do_par.py:563`).
-
-Identidade do commit/base, arquivo original do aval, inteira final e retomada efetiva em produção: **[nao verificado]**. [nao verificado]
-
-1. **[bloqueia] Classificador: dinheiro pode sair “so leitor”.**  
-   O reconhecimento de dinheiro depende do caminho; qualquer `.py` restante sem os tokens enumerados recebe `LEITOR` (`bin/classe_da_obra.py:50`; `bin/classe_da_obra.py:145`). Contraprovas em memória: mudar `adicional_noturno_pct: 20.0` para `40.0`, ou a conversão de horas extras de `/ 60` para `/ 30`, devolve **“so leitor”** (`app/core/regua_cct.py:42`; `app/ponto/services/dia_pago.py:180`; `bin/classe_da_obra.py:151`). Isso viola diretamente a proibição de usar essa classe em dinheiro.
-
-2. **[bloqueia] Classificador: mudar universo julgado também pode sair “so leitor”.**  
-   O trecho `j[0] <= dia <= j[1]` seleciona os dias da janela de cada empresa. Trocar somente os limites por `<` altera o universo e devolve **“so leitor”**, confirmado em memória (`app/chamados/services/furo_sem_canal.py:75`; `bin/classe_da_obra.py:151`). O classificador examina somente linhas alteradas e procura uma enumeração de tokens, sem reconhecer essa restrição de universo (`bin/classe_da_obra.py:117`; `bin/classe_da_obra.py:55`).
-
-3. **[bloqueia] Inteira final: os arquivos executados podem divergir da tree certificada.**  
-   Trecho: `status --porcelain --untracked-files=no`. Arquivos não rastreados ficam fora da limpeza, mas a suite monta o diretório físico `copia/app` (`bin/classe_da_obra.py:237`; `bin/suite.sh:204`; `bin/suite.sh:230`). Portanto, um módulo não rastreado pode participar da execução sem integrar a tree registrada; comparar `HEAD^{tree}` antes/depois não detecta isso (`bin/classe_da_obra.py:247`; `bin/classe_da_obra.py:255`). Ocorrência em produção: **[nao verificado]**.
-
-4. **[bloqueia] Catraca: o corte “reprova só pelo total” não alcançou o teste completo.**   [nao verificado]
-   `_catraca()` aceita redução, mas logo depois permanece `assertEqual(CRITERIOS_REGISTRADOS, ...)`, congelando A1/B1 em 6/82 (`app/core/tests/test_medida_turno_do_par.py:508`; `app/core/tests/test_medida_turno_do_par.py:108`; `app/core/tests/test_medida_turno_do_par.py:563`). Esses campos são **contagens**, apesar do nome “critérios” (`app/core/medida_turno_do_par.py:441`).  
-   Contraprova em memória: retirar o corpo pareador de `_alinhar_por_papel` produz pareadores **9→8**, derivações **85→85**, A1 **6→5**. `_catraca()` apenas avisa; o teste completo reprova pela igualdade restante (`app/core/tests/test_medida_turno_do_par.py:158`; `app/core/tests/test_medida_turno_do_par.py:563`).
-
-5. **[bloqueia] Triagem: o destino implementado diverge do destino literal pedido.**  
-   O aval fornecido pede `logs/AUDITORIA-TRAVAS/triagem.log` **[nao verificado no arquivo original]**. O código escreve e vigia **`logs/codex/triagem.log`** (`bin/disjuntor.py:148`; `bin/disjuntor.py:936`). O acréscimo no wrapper apenas imprime uma instrução; não chama o escritor de triagem (`bin/codex_pergunta.sh:469`). A retomada da escrita no destino pedido permanece **[nao verificado]**.
-
-6. **[bloqueia] Vigia: há falsos “zero pendentes” por integridade e por identidade.**  
-   `chamadas.log` malformado tem linhas descartadas silenciosamente; um `fim` cortado também desaparece da leitura. O vigia interpreta a ausência resultante como nenhuma conclusão a triar e retorna rc 0 (`bin/codex_limite_estado.py:57`; `bin/codex_limite_estado.py:66`; `bin/disjuntor.py:1015`; `bin/disjuntor.py:1038`). Ambos foram reproduzidos em memória.  
-   Além disso, a triagem identifica a volta por `hash12@pid@fim@sha12`, mas o vigia reduz isso a **obra/hash12/pid**. Uma chamada posterior no mesmo hash, após reutilização do PID, pode herdar a triagem antiga e sumir das pendências (`bin/disjuntor.py:928`; `bin/disjuntor.py:1003`). Essa contraprova também retornou zero em memória. O vigia ainda passa `{}` ao leitor, perdendo a conferência histórica de truncamento usada pelo B3 (`bin/disjuntor.py:997`; `bin/disjuntor.py:955`).
-
-7. **[fila — brecha herdada] B3: “linha do Ronald” é reserva textual, sem autoria conferida.**  
-   `ERRO-BOBO` é aceito pelo conteúdo; a cota só se aplica a `tipo == 'auto'` (`bin/disjuntor.py:772`; `bin/disjuntor.py:1115`). Uma linha nova `ERRO-BOBO OBRA-X: texto do Code` liberou, em simulação em memória, uma obra com AUTO já esgotada (`bin/disjuntor.py:1124`). A guarda protege `--rearma-b3`, mas não autentica quem escreveu essa linha no RELATO (`bin/disjuntor.py:249`; `bin/disjuntor.py:264`). **Não é afrouxamento introduzido pelo diff**: o reconhecedor antigo já aparece como contexto no anexo fornecido **[nao verificado na base Git]**.
-
-8. **[fila] Os selos ainda têm mutantes plausíveis que passam.**
-   
-   - **GATE:** o selo fabrica certificados diretamente no livro e testa o portão, sem executar `pouso_inteira`. Suprimir a condição de recusa do emissor não é exercitado por esse selo (`bin/tests/test_gate_pela_classe.sh:121`; `bin/tests/test_gate_pela_classe.sh:135`; `bin/classe_da_obra.py:256`).
-   - **B3/caso 9:** adicionar o literal `B3: o Code libera desenho pela AUTOLIBERA, do Ronald` passou o **caso 9 completo em memória**. `DESENHO` é procurado distinguindo maiúsculas/minúsculas; sujeito/verbo não (`bin/tests/test_disjuntor.sh:1332`; `bin/tests/test_disjuntor.sh:1356`).
-   - **Triagem:** o selo corrompe `triagem.log`, mas não cobre `chamadas.log` malformado nem reutilização de PID/hash, os falsos zeros do achado 6 (`bin/tests/test_triagem_pendente.sh:17`; `bin/tests/test_triagem_pendente.sh:50`).
-
-9. **[fila] Catraca: aviso ao RELATO não tem entrega comprovada.**  
-   `_aviso()` somente escreve stderr; os novos MORDE conferem listas retornadas, sem cobrar a publicação (`app/core/tests/test_medida_turno_do_par.py:467`; `app/core/tests/test_medida_turno_do_par.py:593`; `app/core/tests/test_medida_turno_do_par.py:602`). O filtro do pre-push descarta `CATRACA-AVISO` da saída apresentada (`bin/pre-push.sh:146`). Escrita desses avisos no RELATO: **[nao verificado]**.
-
-10. **[fila] Leitores humanos externos continuam recebendo o significado antigo de `arquivo=`.**  
-    O wrapper ainda diz “jsonl cresce = prova de vida”, e LEIS ainda descreve prova por “pid/arquivo” (`bin/codex_pergunta.sh:51`; `app/docs/LEIS.md:66`). Agora arquivo sozinho falha e, junto do PID, é inerte (`bin/hook_stop_fila1.py:748`).
-
-O mapa de escritores, leitores e significados ficou assim:
-
-| Dado | Quem escreve | Quem lê / significado |
-|---|---|---|
-| `chamadas.log` | Wrapper: `ini` e `fim` (`bin/codex_pergunta.sh:305`, `:272`). | Leitor comum `_linhas_chamadas`; vigia o reutiliza (`bin/codex_limite_estado.py:49`; `bin/disjuntor.py:1007`). TAB; chave obra/hash12/PID; duração em segundos desde `T0C`, incluindo etapas do wrapper (`bin/codex_pergunta.sh:265`, `:273`). |
-| Sidecar `.id` | Wrapper remove o anterior e grava obra/papel/hash/PID/fim/SHA da resposta desta chamada (`bin/codex_pergunta.sh:401`, `:464`). | `_le_id` e `_triagem_sob_trava`, com conferência do SHA (`bin/disjuntor.py:879`, `:926`). Seu `fim` é carimbado antes do `fim` escrito pelo EXIT; não são necessariamente o mesmo instante (`bin/codex_pergunta.sh:464`, `:272`). |
-| `triagem.log` | `--triagem`, sob trava da resposta e depois do estado (`bin/disjuntor.py:912`, `:930`, `:938`). | B3/rearme e vigia usam `_triagens`; última linha por volta prevalece (`bin/disjuntor.py:976`, `:1062`, `:1195`, `:997`). Volta completa contém fim/SHA; vigia descarta essas parcelas — achado 6. |
-| Estado do disjuntor | `_com_estado`: flock exclusivo, temporário e replace (`bin/disjuntor.py:374`, `:392`). | Decisão, rearme e mensagens (`bin/disjuntor.py:1147`, `:1220`, `:1260`). `auto_usada` conta liberações históricas por obra; `auto_sobe` deduplica anúncios por SHA (`bin/disjuntor.py:1116`, `:1123`, `:1243`). |
-| Fotografia B3 | `_fotografa` grava SHA das linhas e instante Unix em segundos (`bin/disjuntor.py:847`, `:856`). | Liberação exige linha nova/não consumida e **mtime ≥ disparado_em**; igualdade é aceita (`bin/disjuntor.py:1111`, `:1113`). |
-| `disjuntor.log` | `trilha`; anúncio B3 depois da gravação do estado, ainda sob trava (`bin/disjuntor.py:220`, `:406`, `:1139`). | Painel conta eventos `LIBERA (auto)` desde `agora−86400`, limite inferior inclusivo (`bin/disjuntor.py:2087`, `:2107`, `:2114`). Isso não é a cota histórica `auto_usada` (`bin/disjuntor.py:158`). |
-| `REGISTRO` / `LINHAS_REGISTRADAS` | Literais no teste (`app/core/tests/test_medida_turno_do_par.py:158`, `:254`). | `_identidade`: chave `(arquivo::função, sítio ou critério)`; linhas são ocorrências AST (`app/core/tests/test_medida_turno_do_par.py:518`, `:523`). Unidade da medida: função/critério mais parcelas nomeadas; uma função pode contar duas vezes (`app/core/medida_turno_do_par.py:10`). |
-| Topo do RELATO | Porta automática `no_topo`; wrapper apenas emite a sugestão ESPERANDO (`app/core/esteira_vigia.py:865`; `bin/codex_pergunta.sh:397`). Autoria material de AUTOLIBERA/DESENHO: **[nao verificado]**. | Stop usa `_topo`; B3 usa o mesmo recorte, com dupla leitura estável (`bin/hook_stop_fila1.py:717`; `bin/disjuntor.py:805`, `:812`). |
-| `hook_stop_espera.json` | Rotina de escrita retirada no diff fornecido **[nao verificado na base Git]**. | Restam lápide e teste de ausência; consumidor executável restante não localizado na cópia (`bin/hook_stop_fila1.py:538`; `bin/tests/test_hook_esperando_com_prova.sh:114`). Remoção do arquivo legado no host: **[nao verificado]**. |
-| Livro/log da inteira | `pouso_inteira` grava log e seis campos no livro (`bin/classe_da_obra.py:250`, `:258`). | Parser usa último veredito/último `Ran N`; portão usa a **tree**, não o commit (`bin/classe_da_obra.py:224`, `:207`, `:216`). O leitor do livro não valida commit, obra, hora ou conteúdo do log (`bin/classe_da_obra.py:207`). |
-
-Os carimbos de chamadas, triagem, trilha e livro usam hora local sem fuso gravado; igualdade dos fusos dos processos em produção: **[nao verificado]** (`bin/codex_pergunta.sh:272`; `bin/disjuntor.py:939`, `:220`; `bin/classe_da_obra.py:259`).
-
-Por peça, os limites preservados que consegui conferir são:
-
-- **ESPERANDO:** não encontrei afrouxamento além de tornar `arquivo=` inerte. Permanecem PID vivo, identidade do processo, ancestralidade e rejeição de campos repetidos; a prova do RELATO vem antes da liberação (`bin/hook_stop_fila1.py:605`, `:739`, `:1261`, `:1294`). PID vivo com arquivo parado/ausente está explicitamente coberto (`bin/tests/test_hook_esperando_com_prova.sh:117`).
-- **AUTOLIBERA:** aceita somente FORMA/ERRO-BOBO, uma vez por obra; rearme preserva a cota. Não aceita `classe=DESENHO` (`bin/disjuntor.py:151`, `:778`, `:1115`, `:1206`).
-- **Juízes/ordem/escritor:** classificador consulta a união base/cabeça de JUIZES; B3 mantém decisão/gravação/anúncio na mesma transição; catraca e ESTADO reutilizam o mesmo medidor (`bin/classe_da_obra.py:166`; `bin/disjuntor.py:1147`; `bin/turno_do_par_estado.py:36`). Nenhum segundo juiz de negócio foi identificado nesses caminhos; abrangência fora da cópia: **[nao verificado]**.
-- **Consumidores externos:** o selo do censo mantém a tupla de ESPERANDO; ESTADO lê o medidor, sem depender de REGISTRO; novos selos entram pelo glob da régua (`bin/tests/test_censo_antes_da_vaga.sh:329`; `bin/gerar_estado.py:299`; `bin/regua.sh:138`). O classificador declara estar sem ligação à conduta; pouso real protegido por ele: **[nao verificado]** (`bin/classe_da_obra.py:35`).
-- **p95/andável:** a cópia contém tetos em segundos por papel e exige ausência de outro item andável para PAREI devolver o turno (`bin/codex_pergunta.sh:95`; `bin/hook_stop_fila1.py:1151`). Medição que sustenta os percentis, execução dos selos completos e inteira final: **[nao verificado]**.
-
-## 14/11 01:03 · sessao 8bdaa99be379 · - · - · origem=Ronald (tmux)
-
-1. **BLOQUEIA — a catraca completa ainda reprova com total menor.** `_catraca()` permite queda e retorna aviso (`app/core/tests/test_medida_turno_do_par.py:503`), mas o mesmo teste continua exigindo igualdade de A1/B1 (`app/core/tests/test_medida_turno_do_par.py:563`), congelados em 6/82 (`app/core/tests/test_medida_turno_do_par.py:108`). Esses campos são contagens, não definições dos critérios (`app/core/medida_turno_do_par.py:441`). Contraprova em memória: substituir o corpo de `_alinhar_por_papel` por `return []` retirou o pareador de `app/escala/utils.py:520`: pareadores 9→8, derivações 85→85; `_catraca()` apenas avisou, porém o teste completo falhou por A1 6→5 (`app/core/tests/test_medida_turno_do_par.py:563`).
-
-2. **FILA — aviso prometido ao RELATO termina em stderr; selo não cobra sua publicação.** `_aviso()` só escreve stderr (`app/core/tests/test_medida_turno_do_par.py:465`), chamado pelo teste principal (`app/core/tests/test_medida_turno_do_par.py:560`). Os novos MORDE conferem a lista devolvida por `_identidade()`, sem conferir stderr (`app/core/tests/test_medida_turno_do_par.py:587`, `app/core/tests/test_medida_turno_do_par.py:597`); o caso de redução testa apenas `_catraca()` com um número artificialmente decrementado (`app/core/tests/test_medida_turno_do_par.py:906`). Mutante em memória `_aviso=lambda msg:None` passou os seis casos relevantes. O filtro existente do pre-push elimina `CATRACA-AVISO` (`bin/pre-push.sh:146`). Escrita efetiva desses avisos no RELATO: **[nao verificado]**.
-
-3. **FILA — documentação externa mantém o significado antigo de `arquivo=`.** O wrapper ainda descreve “jsonl cresce = prova de vida” (`bin/codex_pergunta.sh:51`) e LEIS mantém “pid/arquivo” (`app/docs/LEIS.md:66`); agora arquivo sem PID reprova e arquivo junto do PID é inerte (`bin/hook_stop_fila1.py:738`, `bin/hook_stop_fila1.py:748`).
-
-**ESPERANDO:** não identifiquei afrouxamento adicional ao descarte da prova por arquivo: continuam a checagem de identidade/processo e ancestralidade (`bin/hook_stop_fila1.py:605`), rejeição de campos repetidos/ilegíveis (`bin/hook_stop_fila1.py:739`) e prova do RELATO antes da espera (`bin/hook_stop_fila1.py:1261`, `bin/hook_stop_fila1.py:1294`). Os casos PID vivo+arquivo parado/ausente estão explicitamente cobertos (`bin/tests/test_hook_esperando_com_prova.sh:117`).
-
-**Mapa escritores/leitores:**
-
-- **REGISTRO/LINHAS:** literais mantidos no código (`app/core/tests/test_medida_turno_do_par.py:158`, `app/core/tests/test_medida_turno_do_par.py:254`), lidos por `_identidade()` (`app/core/tests/test_medida_turno_do_par.py:518`). Chave: `(arquivo::funcao, sitio|criterio)`; valores de linhas: ocorrências AST (`app/core/tests/test_medida_turno_do_par.py:523`). Unidade: função por critério mais parcelas nomeadas, permitindo multiplicidade da função (`app/core/medida_turno_do_par.py:10`).
-- **Saída da medida:** escritor único do resultado é `censo_fontes()` (`app/core/medida_turno_do_par.py:336`); consumidores externos importam o mesmo medidor (`bin/turno_do_par_estado.py:33`, `bin/gerar_estado.py:299`). Não dependem de REGISTRO nem do stderr da catraca (`bin/turno_do_par_estado.py:36`).
-- **Topo RELATO:** wrapper emite a sugestão ESPERANDO em stderr (`bin/codex_pergunta.sh:397`); inserção material é manual ou pela porta `no_topo()` (`app/core/esteira_vigia.py:865`), cujo chamador de censo é `disjuntor.py:347`. Leitura central em `_topo()` (`bin/hook_stop_fila1.py:467`); ORÇAMENTO e Stop compartilham a fotografia por memo (`bin/hook_stop_fila1.py:758`, `bin/hook_stop_fila1.py:1052`, `bin/hook_stop_fila1.py:1294`).
-- **Memória removida:** `hook_stop_espera.json` aparece apenas como lápide e verificação de ausência no recorte examinado (`bin/hook_stop_fila1.py:538`, `bin/tests/test_hook_esperando_com_prova.sh:114`). Nenhum consumidor executável restante localizado **[nao verificado fora da cópia pesquisada]**.
-- **Chamador externo preservado:** o selo do censo continua consumindo a mesma tupla de três posições de `_esperando_com_prova()` (`bin/tests/test_censo_antes_da_vaga.sh:329`). Handoff e alarme usam o reconhecedor de PAREI-censo preservado (`bin/handoff_sessao.sh:129`, `bin/alarme_sessao_ociosa.py:137`).
-
-_4918 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4922 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
