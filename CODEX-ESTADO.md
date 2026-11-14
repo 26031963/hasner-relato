@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 14:50** · publicado em **14/11/2026 14:50** (UTC-3)
+> Ultima resposta processada: **14/11/2026 14:54** · publicado em **14/11/2026 14:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 14:54 · sessao 9e692c4352d3 · HOOKMSG · verificador · origem=Code
+
+Referências **B** = cópia/base; **P** = linhas resultantes do patch fornecido. HEAD efetivo, instalação dos hooks e censo das 113 worktrees: **[nao verificado]**.
+
+**1. Extração de `julgar_commit`: nada isoladamente; PROCEDENTE na integração.**
+
+A extração preserva o julgamento: merge continua pelo hunk próprio; raiz pelo `show`; demais commits pelo diff contra primeiro pai, com `--no-renames` e `-z`. `medida_do_commit` continua recebendo o SHA julgado. Duplicatas continuam dispensadas antes do julgamento e `EXCECAO_NOMINAL` aplicada depois. Há releitura de mensagem/pais, sem alteração demonstrada do predicado. (`B bin/tests/test_lei_akita.sh:458–486`; `P bin/tests/test_lei_akita.sh:408–430,490–505`)
+
+**PROCEDENTE:** o modo novo pode desviar o juiz do push. O pre-push define somente `LEI_AKITA_HEAD`; um `LEI_AKITA_COMMIT=<SHA válido aprovado>` herdado ativa a saída antecipada, força esse SHA como alvo e pula universo, catraca e verificações gerais. Isso contradiz “nenhum env de bypass nasce”; as outras guardas do pre-push continuam existindo. (`B bin/pre-push.sh:38`; `P bin/tests/test_lei_akita.sh:23,507–512,996–1002`; `contrato.txt:1`, cláusula 5)
+
+**2. Objeto sintético: PROCEDENTE quanto à equivalência geral.**
+
+**`GIT_INDEX_FILE`: nada contra a ordem apresentada.** O `write-tree` ocorre antes da remoção das variáveis `GIT_*`, portanto recebe o índice herdado do hook. O cálculo de `CASA` acontece em subshell e não muda o diretório corrente. Não há fundamento no script para afirmar que ele troca prematuramente o índice temporário pelo índice normal. (`P bin/commit_msg.sh:15,18–19,27`)
+
+A entrega efetiva do índice temporário pelo Git e o ciclo interno dos comandos abaixo não foram reproduzidos nesta cópia: **[nao verificado]**.
+
+| Caso | Classificação |
+|---|---|
+| **Merge direto, `git merge -m`** | **Julga a errada** no fluxo automático em que o hook antecede a gravação de `MERGE_HEAD` **[nao verificado quanto ao ciclo interno do Git]**. Sem esse arquivo, o script monta somente o pai HEAD: passa a julgar todo o delta recebido, em vez do hunk próprio do merge. Pode recusar `n/a (instrumento)` num merge limpo que o juiz do push aceitaria. (`P bin/commit_msg.sh:20–25`; `P bin/tests/test_lei_akita.sh:416–429`) |
+| **`merge --no-ff --no-commit` seguido de `commit`** | **Julga a estrutura certa**, desde que `MERGE_HEAD` contenha os pais finais: usa árvore do índice, HEAD e os pais desse arquivo. Continua sujeito à divergência de limpeza da mensagem abaixo. (`P bin/commit_msg.sh:19–25`) |
+| **`--amend`** | **Julga a errada relativamente ao commit final:** usa HEAD como pai, portanto julga o delta da emenda. Emenda apenas de mensagem pode ter lista de arquivos vazia e aceitar `n/a` embora o commit final contenha negócio. É limite expressamente declarado, coberto posteriormente pelo push. (`P bin/commit_msg.sh:10–11,21`; `P bin/tests/test_lei_akita.sh:427–430`; `contrato.txt:1`, cláusula 3) |
+| **Commit inicial** | **Julga a estrutura certa:** sem HEAD, monta raiz; o juiz enumera os arquivos pelo `show`. Se faltar vocabulário na árvore, recusa antes do julgamento. (`P bin/commit_msg.sh:19–25`; `P bin/tests/test_lei_akita.sh:91–131,427–429`) |
+| **`commit -a` / `commit <paths>`** | **Julga a árvore certa se o Git entregar o índice preparado:** o script preserva `GIT_INDEX_FILE` até concluir a montagem. A comparação efetiva com um commit desses: **[nao verificado]**. (`P bin/commit_msg.sh:19–27`) |
+| **`cleanup=verbatim` / `scissors`** | **Pode julgar mensagem errada.** O script aplica sempre `stripspace -s`, sem consultar o modo de cleanup. Em scissors, pode julgar uma linha inválida abaixo do corte e recusar indevidamente; em verbatim, não preserva necessariamente os bytes que serão gravados. Com `core.commentChar=L`, por exemplo, a limpeza pode eliminar a própria linha LEI-AKITA. Aplicação efetiva desses modos pelo Git: **[nao verificado]**. (`P bin/commit_msg.sh:17,24–25`) |
+| **Rebase / cherry-pick** | **Sem invocação do hook, não julga.** Se chamado para um commit novo de um pai, a montagem usa HEAD; se envolver emenda/reword, existe o problema de `--amend`. A generalização “sem `--edit` não chama” aparece somente como comentário, sem prova na cópia: **[nao verificado]**. (`P bin/commit_msg.sh:10–11,21–28`) |
+
+O objeto também não reproduz explicitamente todos os metadados e assinatura do commit final; o juiz usa mensagem, árvore e pais, portanto identidade exata do SHA não é demonstrada nem necessária para esse predicado. (`P bin/commit_msg.sh:25`; `P bin/tests/test_lei_akita.sh:413–430`)
+
+**3. Modo `LEI_AKITA_COMMIT`: nada quanto aos itens 1–3 decidirem o resultado; vocabulário decide.**
+
+Os itens 1–3 **rodam antes**, mas apenas acumulam `falhas`; não há `errexit`. O modo commit oculta seu stdout e retorna antes de consultar esse contador. Assim, esses itens não recusam nem aprovam por conta própria nesse caminho. (`B bin/tests/test_lei_akita.sh:16,24–53,983–987`; `P bin/tests/test_lei_akita.sh:23,996–1002`)
+
+O vocabulário é carregado efetivamente antes do ramo commit; GLOSSARIO ou NORTE ilegíveis recusam. `producao` e a catraca são definidos, mas não chamados nesse modo; o ramo também sai antes do MORDE. (`P bin/tests/test_lei_akita.sh:91–131,394–400,507–513`)
+
+**ALVO correto no caminho normal:** o shell passa `LEI_AKITA_HEAD="$LEI_AKITA_COMMIT"` ao Python, que lê o vocabulário da árvore sintética. Entretanto, `LEI_AKITA_MORDE=1` herdado força o ALVO Python para HEAD e pode trocar essa fonte: **PROCEDENTE condicional**. (`P bin/tests/test_lei_akita.sh:70–78,507–513,998`)
+
+**4. QUEM ESCREVE / QUEM LÊ: PROCEDENTE no contrato das mensagens fabricadas.**
+
+| Elemento | Escritor → leitor |
+|---|---|
+| `.git/hooks/commit-msg` | `hooks.sh install` escreve o wrapper no caminho fixo da principal; o conteúdo executa `commit_msg.sh` com os argumentos recebidos. (`P bin/hooks.sh:9,14–15,70–76`) |
+| `bin/commit_msg.sh` | Novo arquivo do patch, chamado pelo wrapper; monta o objeto e chama o selo existente. (`P bin/hooks.sh:74`; `P bin/commit_msg.sh:19–28`) |
+| `LEI_AKITA_R` | Escrito pelo hook com `TOPO`; lido para definir `R` no selo. (`P bin/commit_msg.sh:18,28`; `B bin/tests/test_lei_akita.sh:17`) |
+| `LEI_AKITA_COMMIT` | Escrito pelo hook com o SHA sintético; lido no seletor Bash, ramo Python e execução do juiz. (`P bin/commit_msg.sh:25,28`; `P bin/tests/test_lei_akita.sh:23,507–510,996–998`) |
+| `LEI_AKITA_HEAD` / `ALVO` | Pre-push escreve HEAD do push; modo commit substitui pela revisão sintética. `_ler` e `_show` usam ALVO como revisão-fonte. (`B bin/pre-push.sh:38`; `P bin/tests/test_lei_akita.sh:21–24,76–78,998`) |
+
+Quanto aos chamadores:
+
+- **`pos_push.sh`: passa pela ausência de linha**, pois sua mensagem automática não contém LEI-AKITA. O mesmo ocorre nas mensagens de `relato`, `codex_estado` e `reverter_o122`. (`B bin/pos_push.sh:30–38`; `B bin/relato.sh:136`; `B bin/codex_estado.sh:83`; `B bin/reverter_o122.sh:30`; `P bin/commit_msg.sh:17`)
+- **Fabricante: PROCEDENTE.** O prompt exige formato “exato” sem `padrao=`, e o LEIAME repete esse formato. Se seguido literalmente, o juiz recusa por campo ausente. (`B bin/fabricante_prompt.md:49–56`; `B bin/molde_fatia/LEIAME:44–46`; `B bin/tests/test_lei_akita.sh:319–321`)
+- **Esteira/integrador:** copia a mensagem, substitui RED/Suite e commita com `-F ... -- caminhos`; não acrescenta `padrao=`. As cadeias antigas também usam diretamente o arquivo de mensagem. (`B bin/molde_fatia/esteira.sh:14,22,26`; `B app/core/integrador_lote.py:481`; `B bin/molde_fatia/cadeia.sh:68`; `B bin/molde_autocura/cadeia.sh:65`)
+- **`codex_pergunta --construtor`:** proíbe commit; **disjuntor:** os comandos Git encontrados consultam worktrees, histórico e status. Não há mensagem automática desses caminhos demonstrada como vítima do hook. (`B bin/codex_pergunta.sh:343–346`; `B bin/disjuntor.py:1234–1247`)
+
+Recusa não demonstra travamento: no integrador, commit malsucedido não entra em `subiram`, mas o fluxo segue ao push. Incidência em pacotes reais: **[nao verificado]**. (`B app/core/integrador_lote.py:719–720,739`)
+
+**5. Selo: PROCEDENTE — há verdes vazios.**
+
+**Reconhecedor divergente:** para `titulo\rLEI-AKITA: padrao=Inventado`, o `grep` inicial não encontra a linha e o hook retorna 0; `tem_linha` Python reconhece a linha após o CR. Conferido em memória, sem arquivos. Logo existe mensagem que o hook dispensa e o juiz do push examinaria. (`P bin/commit_msg.sh:17`; `B bin/tests/test_lei_akita.sh:339–355`)
+
+**Delegação apenas textual:** `_delega` exige executável e substring. Um hook com `exit 0` e a referência somente em comentário satisfaz essa condição. A bateria executa outro wrapper, plantado pelo teste, sem provar a execução do instalado ou do alvo efetivo dele. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:24,40–42,55,74`)
+
+**Censo vazio por erro:** falha de `worktree list` não é conferida pelo chamador; falha de configuração vira `continue`; diretório ausente é pulado. Só a saída textual vazia determina aprovação. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:28–33,44–45`)
+
+Os MORDEs provam menos que a promessa:
+
+- **(a)** detecta o script mutante que aceita tudo na fixture; não testa o wrapper instalado. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:76–81`)
+- **(b)** detecta o desvio plantado por worktree e sua retirada; não prova que o censo real enumerou alguma worktree. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:83–88`)
+
+**Global/sistema e relativo: nada quanto à omissão explícita desses escopos.** A consulta não restringe a configuração a `--local`; caminhos relativos são ancorados em cada worktree. A cobertura continua sujeita aos erros silenciosos e ao teste textual de delegação. Configurações efetivas do host: **[nao verificado]**. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:30–32`)
+
+**Selo órfão: nada.** Seu nome entra no glob executado pela régua. (`B bin/regua.sh:138–145`)
+
+**6. Classes de reprovação.**
+
+| Classe | Achado |
+|---|---|
+| **Segundo juiz duplicando o registrado** | **nada no predicado principal:** `julgar_commit` chama o `julgar` existente. (`P bin/tests/test_lei_akita.sh:408–430`; `B bin/tests/test_lei_akita.sh:336–344`) |
+| **Derivação paralela de fonte única** | **PROCEDENTE:** “tem linha” é recalculado pelo `grep`, com semântica divergente do reconhecedor Python. (`P bin/commit_msg.sh:17`; `B bin/tests/test_lei_akita.sh:354–355`) |
+| **Selo sem mordida** | **PROCEDENTE na ligação com o instalado:** a mordida funcional está na fixture; o wrapper real passa por inspeção textual. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:24,40,55,74–81`) |
+| **ALVO com dois significados** | **nada no caminho normal:** significa revisão-fonte, seja ponta do push ou objeto sintético. O defeito demonstrado é o seletor ambiental que pode trocar indevidamente o caminho de julgamento. (`P bin/tests/test_lei_akita.sh:21–24,76–78,507–512,998`) |
 
 ## 14/11 14:50 · sessao b39e0829dc2b · - · - · origem=Ronald (tmux)
 
@@ -809,51 +890,4 @@ Leitura dos services concluída; sem executar testes nem escrever arquivos. Efei
 
 Contagem desta subtarefa não deve ser somada mecanicamente: linhas com vários subpredicados precisam ser separadas conforme a unidade de decisão escolhida pelo consolidado; os registros foram confrontados em `app/core/juizes.py:184-192`, `:277-296`.
 
-## 14/11 12:19 · sessao a64900917782 · HJ-091 · sonda · origem=Code
-
-1. **Não é determinável qual ato é mais recente entre a rejeição e a aprovação/última alteração do agendamento 103, nos três dias.** A saída mostra somente a criação de AG103, `confirmado_em None` e nenhuma linha de auditoria dele. [nao verificado]
-
-Os valores abaixo são transcritos do dado fornecido, sem arquivo local para atribuir linha. [nao verificado]
-
-| Dia | PK rejeitada | Instante da rejeição e evidência escolhida | Aprovação/última alteração de AG103 | Ato mais recente |
-|---|---:|---|---|---|
-| 05/11 | 3985 | **2026-11-13 13:13:00**, linha `LOG_AUS 3985 946042 editar`, transição `aprovada → rejeitada`; corroborada por pk **946043**, ação `cancelar_ausencia`, mesmo instante. [nao verificado] | Instante indisponível. Linha `AG103`: apenas `criado_em 2026-09-11 09:14:06`; `confirmado_em None`. [nao verificado] | **Não determinável**: falta o instante da aprovação/última alteração de AG103. [nao verificado] |
-| 06/11 | 3995 | **2026-11-13 13:12:45**, linha `LOG_AUS 3995 946033 editar`, transição `aprovada → rejeitada`; corroborada por pk **946034**, ação `cancelar_ausencia`, mesmo instante. [nao verificado] | Instante indisponível. Linha `AG103`: apenas `criado_em 2026-09-11 09:14:06`; `confirmado_em None`. [nao verificado] | **Não determinável** pelo mesmo motivo. [nao verificado] |
-| 07/11 | 3977 | **2026-11-13 12:20:17**, linha `LOG_AUS 3977 945693 editar`, transição `aprovada → rejeitada`; corroborada por pk **945694**, ação `cancelar_ausencia`, mesmo instante. [nao verificado] | Instante indisponível. Linha `AG103`: apenas `criado_em 2026-09-11 09:14:06`; `confirmado_em None`. [nao verificado] | **Não determinável** pelo mesmo motivo. [nao verificado] |
-
-Os outros carimbos das rejeitadas são `aprovada_em`: **3985 = 13/11 13:12:59**, **3995 = 13/11 13:12:44**, **3977 = 13/11 12:20:17**. Todas mostram `criado_em` e `atualizado_em` em **11/09 09:14:06**. Portanto, não estamos limitados a `atualizado_em`: há trilha explícita da rejeição. [nao verificado]
-
-O campo `aprovada_em` também recebe o instante de uma decisão de rejeição: o cancelamento passa esse carimbo para `decidir`, que o grava. Por isso, seu nome não comprova aprovação. (`app/ponto/views.py:2772`, `app/ponto/views.py:2774`, `app/ponto/services/ausencia.py:983`.) Em AG103, `criado_em` registra criação; `confirmado_em` é preenchido na confirmação do colaborador. (`app/ferias/models.py:329`, `app/ferias/services.py:910`.) As rejeições são posteriores à **criação informada** de AG103; a comparação com sua aprovação/última alteração continua indeterminável. [nao verificado]
-
-2. **O código explica o veto pelo abono, mas falta um campo para comprovar integralmente o caminho das duas criações: `agendamento_ferias_id` das rejeitadas.** O espelhamento considera uma rejeitada vinculada ao próprio agendamento como dia já existente e não cria outra. (`app/ponto/services/ausencia.py:1255`, `app/ponto/services/ausencia.py:1271`.) Esse vínculo não aparece na sonda; `desc_tem_# True` não informa sequer o número contido na descrição. [nao verificado]
-
-O fluxo nesta árvore é:
-
-- `AgendamentoFerias.save()` pode chamar `_sync_ausencia()`, que delega a `espelhar_ferias`. (`app/ferias/models.py:448`, `app/ferias/models.py:393`.)
-- `espelhar_ferias` obtém o colaborador pelo período aquisitivo e aceita `concluido`, pois esse status pertence a `STATUS_QUE_ESPELHAM`. (`app/ponto/services/ausencia.py:1249`, `app/ponto/services/ausencia.py:1251`, `app/ferias/services.py:132`.) A saída informa AG103 concluído e janela até **07/11/2026**. [nao verificado]
-- Percorre a janela inclusivamente. Para cada dia sem ausência própria, chama `criar_ausencia` com `tipo='ferias'`, `status='aprovada'`, `dias_corridos=1` e origem no agendamento. (`app/ponto/services/ausencia.py:1267`, `app/ponto/services/ausencia.py:1275`, `app/ponto/services/ausencia.py:1280`.)
-
-**05/11:** a sonda mostra **#5592, abono, aprovada, data 05/11, `data_fim=None`**, além da rejeitada **#3985**. [nao verificado] Se o fluxo chegar ao criador, #5592 entra na consulta por sua própria data, independentemente do tipo. (`app/ponto/turnos.py:2827`, `app/ponto/turnos.py:2832`.) O abono veta: a exceção permissiva exige uma ausência existente do tipo `falta`; `linha_que_veta` devolve a linha não dispensada, e o criador levanta `AusenciaInvalida`. (`app/ponto/precedencia.py:127`, `app/ponto/precedencia.py:145`, `app/ponto/services/ausencia.py:382`.) O espelhamento captura essa recusa e não cria a aprovada. (`app/ponto/services/ausencia.py:1282`.)
-
-Entretanto, se #3985 já estiver vinculada a AG103, o dia será pulado **antes** desse veto. (`app/ponto/services/ausencia.py:1255`, `app/ponto/services/ausencia.py:1271`.) **Qual desses caminhos ocorreu em 05/11 é [nao verificado].**
-
-**06/11 e 07/11:** #3995 e #3977 são rejeitadas na saída. [nao verificado] Elas ficam fora da consulta de sobreposição. (`app/ponto/turnos.py:2827`.) Para nascerem novas linhas, também precisam faltar ausências próprias nesses dias; uma rejeitada vinculada a AG103 impediria a criação. (`app/ponto/services/ausencia.py:1271`.) A busca de rejeitada para reabertura também exige a mesma origem quando o agendamento é fornecido. (`app/ponto/services/ausencia.py:309`, `app/ponto/services/ausencia.py:314`.)
-
-Assim, as criações informadas **#5595 e #5596** são compatíveis com esses dias sem linha própria e sem veto. O resultado da sombra foi fornecido no enunciado; os vínculos das rejeitadas nessa execução são [nao verificado].
-
-Não há `data_fim` preenchida nas ausências fornecidas que demonstre cobertura de 06/11 ou 07/11. [nao verificado] O filtro também considera intervalos cujo fim alcance o dia e tipos abertos com fim nulo. (`app/ponto/turnos.py:2833`, `app/ponto/turnos.py:2834`.) A configuração viva desses tipos e eventuais ausências anteriores à janela não foram fornecidas. [nao verificado]
-
-3. A função que **efetivamente cria a aprovada** é `criar_ausencia`: recebe o status passado pelo espelhamento, monta os campos, carimba `aprovada_em`, instancia e salva. (`app/ponto/services/ausencia.py:179`, `app/ponto/services/ausencia.py:403`, `app/ponto/services/ausencia.py:406`, `app/ponto/services/ausencia.py:446`, `app/ponto/services/ausencia.py:479`.)
-
-Os filtros relevantes são:
-
-| Finalidade | Tratamento da rejeitada | Referência |
-|---|---|---|
-| Sobreposição | Exclui `status='rejeitada'` | `app/ponto/turnos.py:2827` |
-| Dia já espelhado | Considera qualquer status, desde que tenha FK para o próprio agendamento | `app/ponto/services/ausencia.py:1255`, `app/ponto/services/ausencia.py:1271` |
-| Reabertura | Busca rejeitada do mesmo colaborador/tipo/data e restringe à mesma origem | `app/ponto/services/ausencia.py:309`, `app/ponto/services/ausencia.py:314` |
-| Unicidade | Aplica-se somente às não rejeitadas | `app/ponto/models.py:837` |
-
-**Essas condições não desempataram pela data dos atos:** os trechos decisórios usam origem, dia, status e sobreposição. (`app/ponto/services/ausencia.py:1255`, `app/ponto/services/ausencia.py:1271`, `app/ponto/turnos.py:2827`.)
-
-_5154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5155 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
