@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 01:42** · publicado em **14/11/2026 01:46** (UTC-3)
+> Ultima resposta processada: **14/11/2026 02:12** · publicado em **14/11/2026 02:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 02:12 · sessao 359866b81b9d · E3-FORMA-SQL · construtor · origem=Code
+
+R2 foi corrigida na origem. Em R14/R5, os leitores já consumiam o mapa; as falhas vinham das fixtures. [Cura e diagnóstico](docs/e3_v8_volta2.txt:16).
+
+| Ocorrência | Classe | Cura |
+|---|---|---|
+| 1. KeyError porta_pergunta | II | [Fake com cinco chaves](docs/e3_v8_volta2.txt:11) |
+| 2. KeyError porta_fila | II | [Fake com cinco chaves](docs/e3_v8_volta2.txt:12) |
+| 3. KeyError historico | II | [Fake com cinco chaves](docs/e3_v8_volta2.txt:13) |
+| 4. KeyError auditoria | II | [Fake com cinco chaves](docs/e3_v8_volta2.txt:14) |
+| 5. R14 ORM | II | [Mesma competência e universo do export](docs/e3_v8_volta2.txt:15) |
+| 6. R2 | I | [Admin precede entre ações alcançáveis](docs/e3_v8_volta2.txt:16) |
+| 7. Golden | II | [Expectativa corrigida por R7/I5](docs/e3_v8_volta2.txt:17) |
+| 8. Endpoint | III | [Selo AST preservando C6 e instante](docs/e3_v8_volta2.txt:18) |
+| 9. Ruff | I | [Cinco achados corrigidos na origem](docs/e3_v8_volta2.txt:19) |
+| 10. R14 puro | II | [Janela do fornecedor corrigida](docs/e3_v8_volta2.txt:20) |
+| 11. R5 puro | II | [Mesmo defeito de janela](docs/e3_v8_volta2.txt:21) |
+
+A entrega inclui [arquivos tocados](docs/e3_v8_volta2.txt:45), [quem mais lê cada função](docs/e3_v8_volta2.txt:66) e [mutantes novos com comandos individuais](docs/e3_v8_volta2.txt:125).
+
+Localmente: [RED com quatro falhas por valor](docs/e3_v8_volta2_red.txt:107), [26 testes GREEN](docs/e3_v8_volta2_green.txt:29), [70 regressões OK](docs/e3_v8_volta2_regressoes.txt:3) e [resultados dos mutantes](docs/e3_v8_volta2.txt:111).
+
+**Incompleto:** sete ocorrências exigem rerodada ORM; Ruff está indisponível. Esses resultados e a certificação seguem **[nao verificado]**. [Pendências e comando do recorte](docs/e3_v8_volta2.txt:143).
 
 ## 14/11 01:42 · sessao 7ad1129d1278 · CORTE-DAS-TRAVAS · verificador · origem=Code
 
@@ -591,19 +615,4 @@ A leitura confirmou os pontos de R7 e R11:
 | Ordem de trava | **Descartável neste delta:** comparação sem trava nova; porta trava antes de reler/materializar. `app/chamados/services/materializacao.py:725`, `app/chamados/services/materializacao.py:1921`. |
 | Campo com dois significados | **Descartável como novidade persistida; procedente na perda de significado do retorno:** espera e falha comum chegam como `False` e recebem o mesmo tratamento. `app/chamados/services/materializacao.py:1687`, `app/chamados/services/materializacao.py:1819`, `app/chamados/services/materializacao.py:1599`. |
 
-## 14/11 00:33 · sessao d00fa833a560 · - · - · origem=Ronald (tmux)
-
-Q1 — **Descartável como bypass concreto demonstrado.**
-
-- A criação de resposta `hora` passa pelo portão imediatamente antes de `registrar_batida`: `app/chamados/services/materializacao.py:1355-1360`. A irmã usa `_materializar_uma`, portanto alcança o mesmo escritor: `app/chamados/services/materializacao.py:1596`.
-- O passivo também usa `_materializar_uma`: `app/chamados/services/passivo_validado.py:537`. Seu command delega a `reparar`: `app/chamados/management/commands/materializar_passivo_validado.py:113`.
-- BUG-PAR-103 apenas chama a porta de devolução, sem criar batida: `app/chamados/management/commands/bug_par_103.py:85`.
-- `escolha` pode ter motivo intervalo por reabertura administrativa, mas seu ramo não cria batida: `app/chamados/services/acoes_disputa.py:252-268`; `app/chamados/services/materializacao.py:1529-1533`.
-- Existe outra criação em `data_hora`, sem portão 163 e com tipo fixo `E`: `app/chamados/services/materializacao.py:1448-1461`. Entretanto, a fábrica de intervalo usa `hora`, enquanto `data_hora` nasce para `ancora_ausente`: `app/chamados/models.py:3709-3723`; `app/chamados/services/disputa_emissao.py:1371-1375`. Uma metade de intervalo efetivamente chegando como `data_hora` permanece **[nao verificado]**; seria **duvidoso** promover essa hipótese a bypass.
-- O chokepoint cria com o timestamp/tipo recebidos, sem derivação alternativa: `app/ponto/registro_batida.py:170-176`. A criação por bulk em `semear` exige banco de ensaio: `app/ponto/registro_batida.py:349-353`.
-
-Q3 — **Procedente a perda da natureza “espera” na propagação; sem criação divergente nesse caminho.**
-
-A irmã que retorna `False` vira `_ParNaoFechou`; seu relato é convertido em impedimento textual: `app/chamados/services/materializacao.py:1599-1603`. A metade externa conserva a vizinha ofensora e entra na recusa de paridade: `app/chamados/services/materializacao.py:1299-1307`. Pode gravar `_carimbar_recusa` diretamente e o `finally` também carimba havendo erro: `app/chamados/services/materializacao.py:1338-1341`; `app/chamados/services/materializacao.py:1813-1814`. Isso preserva o impedimento de criar a batida, mas não propaga a espera como espera à metade externa: `app/chamados/services/materializacao.py:1341`.
-
-_4912 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4913 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
