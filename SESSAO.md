@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 13:07:56.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (671.3 MB). Acoes na janela: **1828**.
+**Medido em 14/11/2026 13:13:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (671.3 MB). Acoes na janela: **1834**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:09:24 | Bash | Run host seal folder on merged tree | `cd /home/ronald/saas-hasner; L=logs/RMDIR-COM-GUARDA/selos_host_merge.log; : > $L; for t in bin/tests/test_*.sh; do timeout 300 bash "$t" >/dev/null 2>&1; r=$?; echo "$r $t" >> $L; done; awk '$1!=0' $L; wc -l < $L` |
+| 13:09:20 | Bash | Merge RMDIR branch no-commit | `cd /home/ronald/saas-hasner; git diff --name-only f7510b95a 9790ac797 \| /bin/grep -c keepalive; git merge --no-ff --no-commit 9790ac797 2>&1 \| tail -3; test -f .git/MERGE_HEAD && echo MERGE_HEAD_ok; git diff --cached --name-only \| wc -l` |
+| 13:09:17 | Bash | Get RMDIR branch name and main status | `cd /home/ronald/saas-hasner; git -C /home/ronald/wt-rmdir-guarda-083536 branch --show-current; git status --porcelain \| /bin/grep -v '^??'; date '+%H:%M'` |
+| 13:09:12 | Bash | Commit HJ-091 volta 2 and test merge with main | `cd /home/ronald/wt-hj091-origem-122335; M=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/hj091_v2_msg.txt; cat > $M <<'EOF' HJ-091 REJEITADA-GANHA-A-ORIGEM volta 2: a janela da rejeitada pergunta ao juiz ferias_na_janela Codex verificador preverif4 [bloqueia 1] (procedente): `_janelas_vivas_do_dia` recompunha a janela (data_inicio <= d <= data_fim) fo ...` |
+| 13:08:37 | Bash | Run colaborador mutant and restore | `cd /home/ronald/wt-hj091-origem-122335/app; F=ponto/services/ausencia.py; cp $F /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/ausencia_v2.py; sed -i "s/ferias_na_janela(ln\['data'\], ln\['data'\], \[ln\['colaborador_id'\]\])/ferias_na_janela(ln['data'], ln['data'])/" $F; /bin/grep -c "ferias_na_janela(ln\['data'\], ln\['data'\])" $F; cd /home/ronald/ ...` |
+| 13:07:59 | Bash | Fix fixture and rerun module tests | `cd /home/ronald/wt-hj091-origem-122335/app; python3 - <<'EOF' p='ponto/tests/test_hj091_ferias_derivadas.py'; s=open(p,encoding='utf-8').read() o="status='rejeitada',\n descricao='cancelada pelo admin na tela')])" assert s.count(o)==1 s=s.replace(o,"status='rejeitada',\n descricao='cancelada pelo admin na tela', registrado_por=self.u)])") open(p,'w',encoding='utf-8').write(s) EOF cd /home/ronald/s ...` |
 | 13:07:54 | Bash | Find DB error message | `cd /home/ronald/saas-hasner; sed -n 429,520p logs/HJ-091/origem/green_v2.log \| /bin/grep -E 'Error\|violates\|DETAIL\|null value' \| head -5` |
 | 13:07:52 | Bash | Read error message | `cd /home/ronald/saas-hasner; sed -n 429,450p logs/HJ-091/origem/green_v2.log \| /bin/grep -v '^\s*\^' \| tail -6` |
 | 13:07:49 | Bash | Read error traceback | `cd /home/ronald/saas-hasner; /bin/grep -n -A25 '^ERROR: test_MORDE_rejeitada_de_outro' logs/HJ-091/origem/green_v2.log \| tail -12` |
