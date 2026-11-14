@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 07:03:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (630.9 MB). Acoes na janela: **1154**.
+**Medido em 14/11/2026 07:08:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (631.8 MB). Acoes na janela: **1165**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:07:08 | Bash | Conferir topo do RELATO e ESPERANDO | `cd /home/ronald/saas-hasner && sed -n 1,8p app/docs/RELATO.md \| cut -c1-300; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 07:07:01 | Bash | Ler borda posicional e Turno | `cd /home/ronald/wt-justif-040525/app && sed -n 680,720p ponto/turnos.py; /bin/grep -n "^class Turno\\|^@dataclass\\|def _fim_fechado\\|def trabalhado_do_turno" -A12 ponto/turnos.py \| head -80` |
+| 07:06:53 | Bash | Ler a função da cobertura e o juiz | `cd /home/ronald/wt-justif-040525/app && sed -n 95,175p ponto/services/efeito_ausencia.py; git log --oneline -3; git show 86c1d70ef --stat \| head; /bin/grep -n "def marcos_cobertos_por_justificativa" -A40 ponto/turnos.py \| head -60` |
+| 07:06:49 | Bash | Localizar leitura de papel na cura | `cd /home/ronald/wt-justif-040525/app && /bin/grep -n "tipo\\|_papel_ata\\|trabalhado\\|data_turno" ponto/services/efeito_ausencia.py \| head -60` |
+| 07:06:44 | Monitor | Esperar os DIFFs do espelho e da folha | `J=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/dobra2; until [ -e $J/fim5 ]; do /usr/bin/sleep 20; done; cat $J/rc5.txt` |
+| 07:06:37 | Bash | Gravar o relatório do verificador com triagem | `J=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/dobra2/codex; cat > $J/v1_sonnet.r <<'EOF' # Verificador sonnet (fallback: Codex rc 75 LIMITE) sobre delta 86c1d70ef..7d0dceef4 -- REPROVADO. Transcrito pela sessao (o agente nao gravou). 1 PROCEDE: papel lido de Batida.tipo (efeito_ausencia.py ~150-153) fere L-087 (LEIS.md:119). Fonte: b._papel_ata (turnos.py:1315, _papel_da_ata :890) / turno.sai ...` |
+| 07:06:23 | Bash | Listar dias com sobreposição | `J=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/dobra2; /bin/grep -E 'sobrepoe=[1-9]\|EXCESSO' $J/out5.txt` |
+| 07:06:20 | Bash | Ler resumo da medição | `J=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/dobra2; cat $J/rc5.txt; cat $J/rodar5.sh; /bin/grep -E '^(CLASSES\|PARTE\|RESUMO\|POSICAO\|ERRO)' $J/out5.txt \| head -30; tail -5 $J/out5.txt` |
+| 07:06:17 | Bash | Conferir estado da medição | `J=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/dobra2; ls -la $J; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b3nkpp1hn.output; date; tr '\0' ' ' < /proc/799670/cmdline 2>/dev/null \| head -c 200` |
+| 07:05:22 | Bash | Ler _papel_da_ata | `cd /home/ronald/wt-justif-040525/app && sed -n 890,915p ponto/turnos.py` |
+| 07:05:11 | Bash | Ler onde o papel da ata é carimbado | `cd /home/ronald/wt-justif-040525/app && sed -n 1296,1320p ponto/turnos.py; /bin/grep -n "def papel_por_minuto_da_ata\\|def papel_da_batida\\|def _papel_da_ata" ponto/turnos.py` |
+| 07:05:05 | Bash | Conferir o achado 1 (papel da ata) | `cd /home/ronald/wt-justif-040525/app && /bin/grep -n "_papel_ata" ponto/turnos.py \| head -20; /bin/grep -n "^L-087\\|L-087" docs/LEIS.md \| head -3` |
 | 07:01:48 | Bash | Registrar a cura 2 e o DESPACHO no RELATO | `date +%H:%M && python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('PONTO 06:3x JUSTIFICATIVA DOBRA NAO FECHOU')) new=["PONTO 07:0x JUSTIFICATIVA DOBRA 2 NA RAIA (wt-justif-040525 @7d0dceef4, nada pousa; obra PARADA na lei): a ancora numa E SOLTA horas antes do turno real (col451 15/10, col849 25/09) pagava o turno por cima do par que  ...` |
 | 07:01:40 | Bash | Ver o topo do RELATO para inserir linhas | `sed -n 7,14p docs/RELATO.md \| cut -c1-260` |
 | 07:01:37 | Agent | Pré-verificar curas DOBRA | `Pre-verificacao (papel verificador, fallback do Codex que esta em LIMITE rc 75) da obra JUSTIFICATIVA-PAGA-O-PERIODO, duas curas na copia /home/ronald/wt-justif-040525 (branch justif-040525): 4c16ab452 e 7d0dceef4, sobre a base 86c1d70ef. SOMENTE LEITURA: nao edite nada, nao rode testes, nao rode docker, nao crie arquivos dentro de /home/ronald/wt-justif-040525 (nem .pyc: nao importe codigo de la  ...` |
@@ -1163,4 +1175,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:09:09 | Bash |  | `cd /home/ronald/saas-hasner; bash bin/sombra.sh --conferir; echo rc=$?; head -c 0 /dev/null; MODO=x; sed -n 140,170p bin/deploy.sh` |
 | 19:09:06 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i 'sombra' bin/deploy.sh \| head -20; ls -lt logs/fim 2>/dev/null \| /bin/grep -i sombra \| head -3; ls /home/ronald/wt-e3-b6-114947/../ >/dev/null; ls -l logs/E3-FORMA-SQL/porta_sem_caso/ \| tail -4` |
 | 19:09:00 | Bash |  | `tail -c 3000 /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/ade5769ad1f771ff1.output; echo; cd /home/ronald/saas-hasner; ls -t logs/sombra \| head -3; git -C /home/ronald/wt-o168v6-233014 log --oneline -1` |
-| 19:08:04 | Bash |  | `cd /home/ronald/wt-o168v6-233014; git branch --show-current; git status --porcelain \| head -3; cd /home/ronald/saas-hasner; git log --oneline -1; ps -eo pid,args \| /bin/grep -E 'push.sh\|pre-push\|git push\|deploy.sh' \| /bin/grep -v grep \| cut -c1-120; git diff --name-only e439fac78 89a5b0d85 -- '*/migrations/*' \| head; date +%H:%M; ls logs/sombra* -d 2>/dev/null \| head -2; git status --porc ...` |
