@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 15:00** · publicado em **14/11/2026 15:00** (UTC-3)
+> Ultima resposta processada: **14/11/2026 15:06** · publicado em **14/11/2026 15:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 15:06 · sessao 645ea3ab9938 · - · - · origem=Ronald (tmux)
+
+2. **PROCEDENTE — verde com guarda parcialmente inoperante.** A bateria de cinco casos exercita o hook plantado para `$R/bin`; o instalado e cada alternativo recebem apenas dois casos. Um hook que contenha a referência textual, recuse exclusivamente `Padrao Inventado Do Nada` e aceite o restante passa esses dois casos, inclusive os MORDE existentes, embora aceite `n/a (instrumento)` em `app/ponto`. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:81`, `:86–90`, `:105`, `:107–115`, numeração do diff v3.)
+
+2. **PROCEDENTE — vermelho falso por mudança de localização.** `_roda` copia somente o hook para outro diretório. Um alternativo válido em `$wt/.githooks`, com `exec bash "$(dirname "$0")/../bin/commit_msg.sh" "$@"`, passa no teste textual, mas perde o destino ao ser copiado para `$T/alt.*/.git/hooks`. A recusa de mensagem sem linha então acusa uma instalação válida. Existência desse wrapper em produção: **[nao verificado]**. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:87`, `:90`.)
+
+2. **PROCEDENTE — plantados herdam `core.hooksPath` global.** Os commits sintéticos não impõem seu próprio hooksPath; uma configuração global válida pode fazer o Git ignorar os hooks e mutantes gravados em `.git/hooks`, causando reprovação falsa do MORDE. Configuração global efetiva: **[nao verificado]**. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:59–66`, `:101–109`, numeração do diff v3.)
+
+A varredura apresentada não escreve diretamente em `$wt`: consulta configuração e executa os casos em repositórios plantados; o wrapper novo determina `TOPO` pelo Git daquele plantado. Executar uma cópia do hook não restringe acessos absolutos do seu conteúdo. Efeito colateral efetivo em repositório real: **[nao verificado]**, pois os corpos dos alternativos não foram fornecidos. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:35–42`, `:87–90`; `bin/commit_msg.sh:19–29`, diff v3.)
+
+## 14/11 15:05 · sessao 73a4d5d24f27 · - · - · origem=Ronald (tmux)
+
+4. **PROCEDENTE — mapa de escritores/leitores e significado:**
+
+- Escrita única das constantes: `app/ferias/models.py:251` (`FRACAO_MINIMA=14`) e `app/ferias/models.py:252` (`FRACOES_MAXIMAS=3`). O juiz lê a primeira como limiar da **maior** fração e a segunda como limite da quantidade de frações não nulas; não exige 14 de cada fração (`app/ferias/models.py:267-273`).
+- Leitores adicionais: importação em `app/ferias/situacao.py:57`; mínimo nas mensagens em `app/ferias/situacao.py:234-235,346`; máximo na mensagem em `app/ferias/situacao.py:242`; mínimo no predicado de pré-aviso em `app/ferias/situacao.py:341`. O candidato acrescenta importação em `ferias/test_frac5_texto_agendar.py:13` e leitura no texto esperado em `ferias/test_frac5_texto_agendar.py:26-27` **do anexo**.
+- A duração é de dias corridos, incluindo início e fim: `app/ferias/models.py:371,382-385`; reconstrução do fim por início + dias − 1 em `app/ferias/services.py:331,565`; histórico calcula fim − início + 1 em `app/ferias/services.py:524`; mensagens explicitam “dias corridos” em `app/ferias/situacao.py:233,345`.
+- Leitura de frações antigas usa `dias` persistido, sem recalcular pelas datas: `app/ferias/situacao.py:115-122`; `app/ferias/models.py:362-374`. A fração atualmente validada tem dias recalculados e sua coerência conferida em `app/ferias/models.py:371,382-385`.
+- `_trocar_janela` recebe datas e duração separadas, grava os três valores e não chama `clean`: `app/ferias/services.py:694,716,729`; seus wrappers estão em `app/ferias/services.py:736-745`. As views calculam o fim inclusivo em `app/ferias/views.py:507,718`. Coerência dos registros efetivamente persistidos: **[não verificado]**.
+
+5. **PROCEDENTE — derivação paralela localizada:** o pré-aviso usa diretamente `int(dias) < FRACAO_MINIMA`, sem consultar o conjunto de frações nem `violacoes_de_fracionamento`; por isso uma segunda fração curta pode gerar aviso mesmo com outra ≥14. O texto manda verificar as demais e não recusa a operação (`app/ferias/situacao.py:341-346`); o aviso do período completo consulta o juiz (`app/ferias/situacao.py:223-242`).
+
+O candidato compara o literal do template às constantes importadas; não passa a produzir o texto do template a partir do juiz (`ferias/test_frac5_texto_agendar.py:13,25-27` **do anexo**; `templates/ferias/agendar.html:10` **do anexo**).
+
+## 14/11 15:05 · sessao 3d00bf154b5f · - · - · origem=Ronald (tmux)
+
+Item 1 — **PROCEDENTE: remarcação normal aceita fracionamento que a criação recusa.** O formulário permite `min="1"` e chama `editar_agendamento`; a view chama `remarcar_agendamento`, que delega a `_trocar_janela`. Essa porta verifica estado e saldo, troca os dados e chama `save()`, sem `clean()`; o `save()` também não chama `clean()`. Portanto, uma única fração futura de 14 dias pode virar 2, satisfeitas as demais guardas; a criação dos mesmos 2 dias falha no `par1`. Evidências: `app/templates/ferias/_secao_colab.html:130`, `:135`; `app/ferias/views.py:723`; `app/ferias/services.py:707`, `:712`, `:716`, `:729`, `:745`; `app/ferias/models.py:374`, `:444`.
+
+O texto proposto corresponde aos dois predicados do juiz para frações positivas: `max(fr) >= 14` e `len(fr) <= 3`; `[14,2]` passa e não existe mínimo de 5 nesse juiz. Evidências: `app/ferias/models.py:251`, `:252`, `:267`, `:269`, `:271`; texto proposto no anexo `app/templates/ferias/agendar.html:10`.
+
+Criação individual, lote e escrita do Haiku chegam ao mesmo juiz: individual `app/ferias/views.py:314` → `app/ferias/services.py:578` → `app/ferias/views.py:259` → `app/ferias/services.py:330`; lote `app/ferias/views.py:654`, `:669`; Haiku `app/core/intake.py:34`, `:35`, `app/core/views_ia.py:684`, `app/ferias/services.py:301`, `:306`.
+
+**PROCEDENTE: aprovação não equivale a agendamento aceito.** A solicitação é gravada como aprovada antes da tentativa de materialização. A materialização chama `full_clean()` e usa o mesmo juiz, mas a recusa vira aviso; a aprovação permanece e a view responde `ok=True`. Evidências: `app/ferias/services.py:756`, `:759`, `:785`, `:790`, `:791`; `app/ferias/views.py:799`.
+
+As exceções deliberadas são diferentes da remarcação normal: histórico dispensa regras de fração futura e salva; correção administrativa explicitamente dispensa `full_clean()` e apresenta regra como aviso. Evidências: `app/ferias/services.py:529`, `:530`, `:547`; `app/ferias/views.py:508`, `:510`, `:513`, `:517`, `:531`.
+
+API de férias recusa POST com 405; Django admin desta app registra somente Afastamento. Evidências: `app/api/views.py:2220`, `:2224`; `app/ferias/admin.py:2`, `:4`. Mensageria/Haiku de consulta retransmite avisos do core; evidências: `app/api/views_mensageria.py:772`, `:812`, `:824`; `mensageria/nucleo/ferramentas.py:2103`, `:2117`, `:2119`. Comportamento de PWA fora da cópia: **[não verificado]**.
+
+Possível apoio ao item 5: o aviso hipotético não pergunta ao juiz agregado: usa diretamente `int(dias) < FRACAO_MINIMA`, enquanto a situação existente chama `violacoes_de_fracionamento`. Porém sua mensagem manda verificar as outras frações e não afirma proibição individual; é aviso conservador, não outra porta de recusa. Evidências: `app/ferias/situacao.py:227`, `:341`, `:344`, `:345`, `:346`.
+
+## 14/11 15:05 · sessao f31cd24de3b1 · - · - · origem=Ronald (tmux)
+
+Item 3: **PROCEDENTE, preexistente; adiamento não é cura.** `_commitar` devolve falso na recusa (`app/core/integrador_lote.py:481`); `_subir` apenas deixa de acumular a fatia, sem desfazer a cópia nem interromper (`app/core/integrador_lote.py:714-720`); faz push incondicional e, com rc zero, deploy (`app/core/integrador_lote.py:739-753`). A fatia recusada permanece na árvore publicada; só as commitadas recebem FIM (`app/core/integrador_lote.py:763-770`).
+
+Não há fundamento para chamar isso de regressão introduzida pelo delta: o comportamento já está na cópia-base (`app/core/integrador_lote.py:719-753`). A cura HOOKMSG adiciona outra causa de recusa à mesma falha preexistente (`diff_v3.patch`, `bin/commit_msg.sh:29-31`).
+
+A pausa protege a entrada oficial: o wrapper consulta os portões antes de montar e adquirir a árvore (`bin/integrador.sh:19-24`, `bin/integrador.sh:32`); a pausa fecha esses portões (`bin/trava.sh:40-42`, `bin/trava.sh:62-65`). Contudo, “dormente” não vale como garantia universal: a CLI admite `rodar` diretamente (`app/core/integrador_lote.py:857-859`), e `rodar` copia e recarrega sem consultar a pausa (`app/core/integrador_lote.py:614-638`). Uso direto em produção: **[não verificado]**.
+
+Portanto, manter na fila é compatível com a pausa informada, mas a condição completa é **antes de qualquer execução do integrador, inclusive direta**. “Antes de religar a esteira” cobre o caminho oficial; não fecha todas as entradas (`bin/integrador.sh:19-32`; `app/core/integrador_lote.py:857-859`). O texto integral do aval E3-V10 e o estado atual da pausa não foram verificados independentemente: **[não verificado]**.
+
+Classe concreta: **ordem/propagação de reprovação** — commit recusado não interrompe a publicação da árvore copiada (`app/core/integrador_lote.py:719-753`).
+
+## 14/11 15:05 · sessao b7f716709981 · - · - · origem=Ronald (tmux)
+
+Inventário do item 2:
+
+- **Texto antigo ainda na cópia:** “menor deve ter no mínimo 14 dias”, em `app/templates/ferias/agendar.html:10`; é precisamente a linha substituída no diff fornecido. `app/templates/ferias/agendar.html:10`
+- **Outro template:** “até 3 frações, uma ≥14 dias”; alinhado à regra atual, mas com números literais. `app/templates/ferias/_secao_colab.html:63`
+- **Erros da porta:** máximo 3 frações; pelo menos uma com no mínimo 14 dias. Também são números literais. `app/ferias/models.py:368`, `app/ferias/models.py:376`
+- **Aviso sobre lançamentos existentes:** nenhuma fração alcança `FRACAO_MINIMA`, explicitamente em dias corridos; ou quantidade superior a `FRACOES_MAXIMAS`. `app/ferias/situacao.py:231`, `app/ferias/situacao.py:240`
+- **Aviso sobre proposta/correção:** se `int(dias) < FRACAO_MINIMA`, pede verificar as outras frações; deriva o aviso sem consultar o conjunto, mas não declara recusa. `app/ferias/situacao.py:341`, `app/ferias/situacao.py:344`
+- **Mensagem na correção administrativa:** coleta esse aviso e o concatena à mensagem de sucesso. `app/ferias/views.py:516`, `app/ferias/views.py:549`, `app/ferias/views.py:552`
+- **Haiku:** API entrega os avisos de situação e de proposta; ferramenta repassa os textos, sem regra própria nesses pontos. `app/api/views_mensageria.py:812`, `app/api/views_mensageria.py:824`, `app/api/views_mensageria.py:847`, `mensageria/nucleo/ferramentas.py:2103`, `mensageria/nucleo/ferramentas.py:2117`
+
+Outro texto usuário equivalente a “menor deve ter 14”, fora da linha substituída, não foi localizado na busca textual. Ausência absoluta, respostas efetivamente geradas pelo Haiku e comunicados persistidos em banco: [não verificado].
+
+## 14/11 15:02 · sessao 4e2677a2198a · - · - · origem=Ronald (tmux)
+
+Use a fixture pronta `_Cenario` de [test_o261_c_viva_sem_chamado_do_dia.py:58](chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:58).
+
+- **c2 :954:** `_cenario('orfao_14h', DIA_ABERTO)`, com `DIA_ABERTO=date(2026,10,6)`, seguido de `reemitir_chamado_do_dia(p, c, DIA_ABERTO)`. A fixture fornece escala, entrada, célula com furo e protesto; há controle positivo para esse motivo em [test_o261_c_viva_sem_chamado_do_dia.py:222](chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:222).
+- **HIST :1642:** `_cenario('orfao_14h', DIA_ABERTO, viva=False, encerrado=True)`, seguido de `reatar_pergunta_orfa(p, c)`. A pergunta nasce validada; o histórico resolvido nasce por último para evitar reabertura pelos signals. [test_o261_c_viva_sem_chamado_do_dia.py:110](chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:110), [test_o261_c_viva_sem_chamado_do_dia.py:117](chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:117).
+- **I terminal:** a assinatura é `I.encerrar()`, sem argumentos. Execute antes de inserir P; com P viva ancorada, o gate pode recusar ou reatar. [models.py:1605](chamados/models.py:1605), [models.py:1617](chamados/models.py:1617).
+
+Execução desses casos: [não verificado].
+
+## 14/11 15:01 · sessao d125622dc511 · HOOKMSG · verificador · origem=Code
+
+As referências marcadas **diff** usam a numeração nova; **cópia** indica o código disponível.
+
+1. **PROCEDENTE — cura incompleta na régua.** `LEI_AKITA_COMMIT` herdado **sozinho** ainda seleciona o julgamento isolado, encerrando o selo antes do universo e do MORDE; a régua chama o script sem limpar essa variável. O pre-push foi saneado. Ocorrência real desse ambiente: [nao verificado]. (diff: `bin/tests/test_lei_akita.sh:25`, `bin/tests/test_lei_akita.sh:997`, `bin/pre-push.sh:38`; cópia: `bin/regua.sh:140`.)
+
+   A guarda não derruba o MORDE interno normal: ele chama diretamente `python3 -c`, sem passar novamente pela guarda shell; o hook também remove HEAD/MORDE antes de chamar o selo. (diff: `bin/tests/test_lei_akita.sh:1015`, `bin/commit_msg.sh:18`.)
+
+2. **PROCEDENTE — mensagem sem linha pode ser recusada antes do retorno `None`.** `VOCAB = vocabulario(R)` executa antes de `julgar_commit`; GLOSSARIO ausente ou PLANO-PADROES/NORTE ilegível encerra o Python antes da checagem da mensagem. Portanto, um commit inicial ou uma árvore sem esses documentos pode ser recusado mesmo sem linha LEI-AKITA. (cópia: `bin/tests/test_lei_akita.sh:95`, `:101`, `:111`, `:129`; diff: `bin/tests/test_lei_akita.sh:418`.)
+
+   Além disso, todos passam por `write-tree`/`commit-tree`; falha nesses comandos ou ausência de resposta do juiz produz recusa, independentemente da mensagem. (diff: `bin/commit_msg.sh:20`, `:26`; `bin/tests/test_lei_akita.sh:999`.)
+
+   | Chamador | Efeito pelo código |
+   |---|---|
+   | `pos_push` | Mensagem fixa sem linha; passa se construção do objeto e carga do vocabulário funcionarem. (cópia: `bin/pos_push.sh:30`; diff: `bin/commit_msg.sh:26`, `bin/tests/test_lei_akita.sh:418`.) |
+   | `relato` | Mensagem sem linha em outro repositório; publica os documentos na raiz. Se esse destino usar o hook novo e não tiver `app/docs/GLOSSARIO.md`, será recusado. Instalação do hook nesse destino: [nao verificado]. (cópia: `bin/relato.sh:23`, `:115`, `:126`, `:136`; `bin/tests/test_lei_akita.sh:95`.) |
+   | `codex_estado` | Mensagem sem linha no destino do relato; mesma condição acima. Na recusa, encerra antes do push. (cópia: `bin/codex_estado.sh:14`, `:78`, `:83`.) |
+   | Integrador | Lê `msg_commit.txt`; conteúdo concreto [nao verificado]. Sem linha, sofre a mesma dependência antecipada do vocabulário; falha de commit segue pelo caminho do item 5. (cópia: `app/core/integrador_lote.py:481`, `:719`; `bin/tests/test_lei_akita.sh:129`.) |
+   | Merges de raia | Mensagem concreta [nao verificado]. Sem linha, mesma dependência; os pais são montados incluindo `MERGE_HEAD`. (cópia: `CLAUDE.md:91`; diff: `bin/commit_msg.sh:22`, `:24`, `bin/tests/test_lei_akita.sh:418`.) |
+
+3. **PROCEDENTE — dois verdes restantes.**
+
+   - **“Bateria 5/5” sem bateria do script real.** `$P` é plantado, mas `_bateria "$P"` nunca roda. A bateria só roda contra o mutante, cobrando uma única divergência; o instalado recebe apenas inventado/sem linha. Recusar termo válido, recusar `n/a` instrumental ou aceitar `n/a` em negócio pode permanecer verde. (diff: `bin/tests/test_hook_mensagem_em_toda_copia.sh:68`, `:80`, `:85`, `:97`, `:112`.)
+   - **Hooks alternativos continuam avaliados só por texto.** `_varre_wt` usa `_delega`; o 1b executa apenas o hook do common dir. Um hook alternativo executável que cite o script em comentário e saia zero passa na varredura — exatamente a espécie de falso demonstrada pelo MORDE(c). Existência desse desvio real: [nao verificado]. (diff: `bin/tests/test_hook_mensagem_em_toda_copia.sh:23`, `:40`, `:90`, `:99`.)
+
+   O `while read <<<"$lista"` não acrescenta uma entrada vazia nessa construção; lista vazia é tratada antes. Pasta ausente agora é vermelho deliberado, conforme a triagem; ocorrência real [nao verificado]. (diff: `bin/tests/test_hook_mensagem_em_toda_copia.sh:31`, `:33`, `:35`, `:41`.)
+
+4. **nada.** O selo exige somente a presença de `LEI-AKITA` nesses textos; os campos acrescentados preservam esse veredito. O fabricante entrega o prompt inteiro ao modelo, enquanto `gerar.py` lê outros moldes, sem consumir o LEIAME. Efeito nas próximas mensagens geradas: [nao verificado]. (diff: `bin/tests/test_lei_akita.sh:58`; cópia: `bin/fabricante.sh:158`, `bin/molde_fatia/gerar.py:29`.)
+
+5. **PROCEDENTE — reclassifico o descarte do integrador.** Continuar o push não demonstra que “a fatia sai sozinha”: a recusa apenas impede sua inclusão em `subiram`, sem desfazer os arquivos copiados; o deploy seguinte continua e importa a árvore viva. Assim, código da fatia recusada pode ser publicado sem o commit. Ocorrência real: [nao verificado]. (diff: `bin/commit_msg.sh:29`; cópia: `app/core/integrador_lote.py:317`, `:719`, `:739`, `:753`; `bin/deploy.sh:327`.)
+
+   Existe ainda um reload anterior à suite e ao commit; a recusa posterior também não desfaz esse efeito. (cópia: `app/core/integrador_lote.py:638`, `:719`.)
 
 ## 14/11 15:00 · sessao 4e2677a2198a · - · - · origem=Ronald (tmux)
 
@@ -403,358 +512,4 @@ Contrafactual contra 63ff, pelo delta fornecido:
 
 Execução de suíte, RED real contra o pai e efeitos de produção: **[nao verificado]**. [nao verificado]
 
-## 14/11 13:46 · sessao ae89bb590807 · - · - · origem=Ronald (tmux)
-
-**PROCEDE fechamento do juiz parcial e da divergência dias/datas [bloqueia resolvido].** `vivo` é relido com `select_for_update`; o período também é travado e colocado no cache da relação (`app/ferias/services.py:599`, `:602`, `:603`). `_trocar_janela` atribui as novas datas e `dias` antes de `vivo.clean()` (`app/ferias/services.py:680`, `:686`). O `clean()` exclui o próprio PK e julga os irmãos vivos, além do intervalo novo do próprio objeto (`app/ferias/models.py:368`, `:371`, `:377`, `:379`). O status próprio ainda é o antigo; a derivação do novo só ocorre depois do julgamento, mas `clean()` não consulta `self.status` (`app/ferias/services.py:691`; `app/ferias/models.py:363`).
-
-**NÃO PROCEDE dizer que `clean()` agora aplica sobreposição, período adquirido, saldo e abono.** O corpo termina em `app/ferias/models.py:399`: verifica máximo de três, alguma fração ≥14, fração escrita ≥5, ordem de datas e equivalência dias/intervalo (`app/ferias/models.py:372`, `:380`, `:387`, `:392`, `:396`). Não executa `full_clean()` nem validações de campos automaticamente: a chamada é diretamente `clean()` (`app/ferias/services.py:686`).
-
-| Pergunta adicional | Local e efeito |
-|---|---|
-| Sobreposição | Continua no `save()`, depois de apagar o trecho antigo; atomic engloba ambos. O `save` chama `_guard_sobreposicao`, que delega à precedência e traduz seu veto em `ValidationError`. Faz sentido remarcando datas. (`app/ferias/services.py:669`, `:694`, `:699`; `app/ferias/models.py:450`, `:454`, `:463`) |
-| Período | `clean` seleciona irmãos pelo período, mas não exige status adquirido nem novo intervalo dentro do período aquisitivo/concessivo. A guarda de sobreposição de PAs só dispara em escrita que muda datas do próprio PA; a remarcação salva somente concedidos/status. (`app/ferias/models.py:368`, `:363`, `:185`; `app/ferias/services.py:701`) |
-| Saldo | Julgado separadamente, antes da mutação, com a reserva antiga devolvida ao cálculo. Não duplica contagem por chamar `clean`. (`app/ferias/services.py:675`, `:676`, `:679`; `app/ferias/models.py:222`, `:225`) |
-| Abono | Remarcação não grava dias vendidos; saldo já os desconta. Não chama o teto `dias_vendaveis`, reservado ao pedido que inclui venda. (`app/ferias/models.py:220`, `:237`; `app/ferias/services.py:699`, `:701`, `:311`, `:312`, `:277`) |
-| Datas | Ordem e equivalência são pertinentes ao intervalo remarcado. Fracionamento antecede a mensagem específica de datas invertidas, portanto outra mensagem pode ganhar precedência. (`app/ferias/models.py:380`, `:387`, `:392`, `:396`) |
-
-**NÃO PROCEDE caminho regular que grave sem julgamento por ter removido o recorte.** Todo retorno do wrapper regular passa `so_nao_iniciado=True`; só há save depois do novo `clean` (`app/ferias/services.py:718`, `:681`, `:686`, `:699`). Chamadas antes recusadas pelo mínimo podem agora ser recusadas por status ou saldo primeiro; não gravam (`app/ferias/services.py:670`, `:671`, `:675`).
-
-**Quando o `clean` não roda:** cancelado é recusado na trava antes dele; em_gozo/concluido, ou agendado com início já alcançado, são recusados pela guarda regular `pode_editar_em` (`app/ferias/services.py:600`, `:670`, `:671`; `app/ferias/models.py:313`, `:340`, `:344`). Na correção administrativa, o wrapper não passa o booleano e o default é falso, independentemente de status não cancelado; o `clean` é pulado por desenho A3 (`app/ferias/services.py:657`, `:681`, `:706`, `:708`). O próprio `clean` também retorna se falta FK/início/fim, porém o caminho com datas ausentes não demonstra gravação bem sucedida: usaria essas datas depois para aviso/status (`app/ferias/models.py:365`; `app/ferias/services.py:687`, `:691`).
-
-**NÃO PROCEDE captura da mensagem por exceção anterior [bloqueia resolvido].** As classes são independentes: `AgendamentoNaoRemarcavel` herda `AgendamentoRecusado(Exception)`; `SaldoInsuficienteParaRemarcar` herda `Exception`; nenhuma captura uma `ValidationError` (`app/ferias/services.py:555`, `:576`, `:586`). A ordem da view é não remarcável → saldo → `ValidationError`, cuja lista de mensagens é entregue diretamente, unida por `; ` (`app/ferias/views.py:725`, `:727`, `:729`, `:730`). A prioridade efetiva do serviço é status → início → saldo → `clean` → colisão no save (`app/ferias/services.py:670`, `:671`, `:675`, `:686`, `:699`).
-
-**Mensagem chega ao mecanismo de tela no código.** HTMX passa pelo `_resp` à seção, que põe o texto em `HX-Trigger/showToast/msg`; normal usa `resposta_acao`, que adiciona a mensagem Django antes do redirect (`app/ferias/views.py:697`, `:699`, `:700`, `:843`, `:857`; `app/core/respostas.py:68`, `:69`, `:71`). O template base entrega Django messages em `data-toast-msg` (`app/templates/base.html:334`). Execução real de navegador, suíte e produção: **[nao verificado]**.
-
-**NÃO PROCEDE inversão de trava pelo novo clean.** A ordem material permanece agendamento → período → ausências; o `clean` lê irmãos com consulta comum, sem `select_for_update` adicional (`app/ferias/services.py:599`, `:602`, `:686`, `:694`; `app/ferias/models.py:368`). Concorrência real: **[nao verificado]**.
-
-Observação de conferência: o decorator da view contém lambda com relação `periodo` incorreta, mas está `isento=True`, portanto esse lambda não é avaliado nesse caminho e não sustenta alegação de tela quebrada (`app/ferias/views.py:686`; `app/colaboradores/mixins.py:301`, `:302`).
-
-## 14/11 13:00 · sessao 010db3e600ff · HJ-091 · verificador · origem=Code
-
-**REPROVA.** Há uma quebra objetiva de contrato na árvore e um caminho que apaga a rejeitada vinculada, permitindo depois nascer aprovada para o mesmo dia. `app/escala/tests/test_contract_juiz_escala.py:358`; `app/ponto/services/ausencia.py:1344`; `app/ponto/services/ausencia.py:1277`.
-
-1. **Aval: cura implementada, preservação posterior incompleta.**
-
-| Exigência | Árvore e teste que a cobre | [nao verificado]
-|---|---|
-| Buscar férias sem origem, incluindo rejeitadas | Consulta sem filtro de status e carrega `status`: `app/ponto/services/ausencia.py:1512`. Teste: `app/ponto/tests/test_hj091_ferias_derivadas.py:891`. |
-| Vincular pela janela do mesmo colaborador | Status, colaborador e duas pontas da janela são conferidos: `app/ponto/services/ausencia.py:1373`. |
-| Não resolver duas janelas ou marca conflitante automaticamente | Recusas em `app/ponto/services/ausencia.py:1410` e `app/ponto/services/ausencia.py:1414`; testes em `app/ponto/tests/test_hj091_ferias_derivadas.py:907` e `app/ponto/tests/test_hj091_ferias_derivadas.py:926`. |
-| Manter rejeitada e carimbo | A porta atualiza somente a FK: `app/ponto/services/ausencia.py:1459`. Asserções de status e carimbo: `app/ponto/tests/test_hj091_ferias_derivadas.py:899`. |
-| Usar a porta nominal do PERMITIDOS | Apply chama a porta em `app/ponto/services/ausencia.py:1545`; autorização nominal em `app/ponto/tests/test_carimbo_acompanha_a_escrita.py:48`. |
-| Manter trilha | Escrita da trilha dentro do `atomic`: `app/ponto/services/ausencia.py:1550`. Testes de conteúdo e falha: `app/ponto/tests/test_hj091_ferias_derivadas.py:786` e `app/ponto/tests/test_hj091_ferias_derivadas.py:832`. |
-| Espelho imediato não criar nem reabrir | Existência pela FK interrompe a criação: `app/ponto/services/ausencia.py:1271`. Teste: `app/ponto/tests/test_hj091_ferias_derivadas.py:901`. |
-
-**[fila] Ciência dos três dias na LISTA-DP não está demonstrada.** O comando imprime nessa lista somente `nao_resolvidas`; uma rejeitada vinculada com sucesso sai desse conjunto. A ciência por procedimento externo permanece **[nao verificado]**. `app/ponto/management/commands/vincular_ausencias_ferias.py:61`; `app/ponto/management/commands/vincular_ausencias_ferias.py:65`.
-
-A classificação atual não contém lista nominal de pulo: decide por status, janela, colaborador e marca. `app/ponto/services/ausencia.py:1402`. No delta fornecido, não identifiquei alteração funcional alheia à cura; a totalidade do diff real entre commits é **[nao verificado]**, pois o histórico Git não está disponível nesta cópia.
-
-A prova de sombra — zero nascidas, três PKs rejeitadas com origem 103, #5592 intacta e 16 vetos iguais — é **[nao verificado]**. Também são **[nao verificado]** a execução da suíte inteira, a posição na esteira, a revisão Opus, o pouso único e a competência exportada. [nao verificado]
-
-2. **Escritores e leitores dos campos.**
-
-| Campo | Quem escreve | Quem lê nos caminhos examinados |
-|---|---|---|
-| `Ausencia.agendamento_ferias` | Nascimento por `criar_ausencia`, via `kwargs`, em `app/ponto/services/ausencia.py:413`; persistência em `:446`. Backfill e reversão pela porta em `:1460`, chamada em `:1545` e `:1572`. | Mensagem `app/ponto/services/ausencia.py:85`; painel `:106`; busca de rejeitada própria `:312`; espelho `:1255`; apagador `:1341`; rejeição em massa `:1354`; backfill `:1513`; veto `app/ferias/models.py:431`; contador `app/ferias/services.py:149`. |
-| `Ausencia.status` | Nascimento `app/ponto/services/ausencia.py:403`; transição genérica `:889`; rejeição de férias em massa `:1355`. | Busca de rejeitada `:309`; guarda/transição `:882`; contadores abertos `:1030`; reversão `:1167`; backfill novo `:1404`; cobertura folha/cobrança `app/ponto/turnos.py:2516`; contador HJ-091 `app/ferias/services.py:147`. |
-| `Ausencia.atualizado_em` | `auto_now` do modelo em `app/ponto/models.py:824`; edição com save completo `app/ponto/services/ausencia.py:572`; período parcial `:960`; rejeição em massa `:1355`. Backfill deliberadamente não o escreve: `:1460`. | Fato novo `app/ponto/services/cartorio.py:383`; reversão H06 `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`; administração `app/ponto/admin.py:47`. |
-| `AgendamentoFerias.status/data_inicio/data_fim` | Histórico `app/ferias/services.py:521`, persistido em `:547`; agendamento `:581`; aprovação de solicitação `:775`, persistida em `:786`; troca de datas `:716`, status em `:721`, save em `:729`; cancelamentos escrevem status em `:656` e `:688`; sincronização em `:955`. | Juiz de janela `app/ferias/services.py:53`; situação atual `:65`; divergência `:79`; contador HJ-091 `:150`; backfill `app/ponto/services/ausencia.py:1373`; espelho `:1251` e `:1266`; painel `:110`; guardas do modelo `app/ferias/models.py:335`; folha `app/folha/export.py:491`. |
-
-**Há escrita de nascimento da FK fora de `_gravar_origem_de_ferias`: `criar_ausencia`.** Ela é explicitamente declarada como parte do espelho; a porta nominal é o único UPDATE do backfill e da reversão, não o único INSERT possível dessa FK. `app/ponto/models.py:791`; `app/ponto/services/ausencia.py:414`; `app/ponto/services/ausencia.py:1452`.
-
-O selo AST executado em memória encontrou somente os escritores declarados; suas limitações incluem SQL cru, variáveis, parâmetros e subscrito de dict. Portanto isso não prova ausência de qualquer escrita dinâmica possível. `app/ponto/tests/selo_hj091.py:12`; `app/ponto/tests/selo_hj091.py:23`; `app/ponto/tests/selo_hj091.py:109`.
-
-**[fila, herdada] `mudar_estado` salva sem incluir `atualizado_em`.** O campo é `auto_now`, mas a lista parcial não o contém; logo esse escritor não garante movimentar esse carimbo. Decisões também dispõem de `aprovada_em`, lido pelo cartório. `app/ponto/services/ausencia.py:888`; `app/ponto/services/ausencia.py:900`; `app/ponto/services/cartorio.py:385`.
-
-A exaustividade de todos os leitores indiretos de `status` e `atualizado_em` na árvore inteira é **[nao verificado]**; o censo acima cobre a FK direta e os caminhos solicitados.
-
-3. **Destino da rejeitada depois de vinculada.**
-
-| Leitor/caminho | Efeito concreto |
-|---|---|
-| Espelho: criar | Reconhece a rejeitada pela FK e não cria outra naquele dia. `app/ponto/services/ausencia.py:1255`; `:1271`. |
-| Espelho: atualizar mantendo o dia | Não promove nem reabre a rejeitada: simplesmente pula o dia existente. `app/ponto/services/ausencia.py:1271`. |
-| Espelho: retirar o dia da janela | **Apaga a rejeitada**, pois a limpeza não filtra status. `app/ponto/services/ausencia.py:1284`. |
-| Espelho: agendamento inativo | **Apaga todas as próprias**, incluindo rejeitadas. `app/ponto/services/ausencia.py:1260`. |
-| `apagar_ausencias_de_ferias` | **Apaga pela FK independentemente do status**; a exceção preserva somente datas da nova janela. `app/ponto/services/ausencia.py:1341`. |
-| Cancelamento DP | Salva `cancelado`; o modelo chama o espelho, que apaga. `app/ferias/services.py:656`; `app/ferias/models.py:448`; `app/ponto/services/ausencia.py:1262`. |
-| Cancelamento admin | Não atualiza as já rejeitadas na etapa de rejeição, mas depois salva `cancelado` e igualmente as apaga. `app/ponto/services/ausencia.py:1355`; `app/ferias/services.py:688`. |
-| Exclusão do agendamento | Chama o apagador; a FK também possui `CASCADE`. `app/ferias/models.py:452`; `app/ponto/models.py:797`. |
-| Reabertura/aprovação genérica | Recusa férias antes da alteração de estado. `app/ponto/services/ausencia.py:881`; `:972`; `:1166`. |
-| Veto na troca de datas | Exclui as próprias pela FK, incluindo essa rejeitada, do conjunto que pode vetar a alteração. `app/ferias/models.py:431`. |
-| Contador HJ-091 | Não acusa a rejeitada no lado “ausência sem agendamento”; acusa seu dia no lado “dia sem ausência aprovada”. `app/ferias/services.py:147`; `:155`; `:162`. |
-
-**[bloqueia] Contraexemplo de perda da decisão:** vincular a rejeitada D → corrigir datas excluindo D → corrigir novamente incluindo D. A primeira correção apaga sua PK; a segunda encontra o dia sem linha própria e materializa **nova aprovada**. Não é uma transição de status da antiga linha: é destruição seguida de novo nascimento. `app/ferias/services.py:725`; `app/ponto/services/ausencia.py:1344`; `app/ponto/services/ausencia.py:1271`; `app/ponto/services/ausencia.py:1277`.
-
-**[fila] O mesmo dia continua férias para leitores do agendamento.** A rejeitada não cobre folha nem cobrança pela autoridade de Ausência; entretanto `em_gozo_hoje`, o bloqueio de ponto e a verificação de férias com batida consultam a janela do agendamento. Contraexemplo: D rejeitado, agendamento vivo cobrindo D e batida em D; o exportador ainda pode reter como `ferias_com_batida`. `app/ponto/turnos.py:2516`; `app/ferias/services.py:65`; `app/ponto/utils.py:89`; `app/folha/export.py:491`; `app/folha/export.py:878`.
-
-As telas também podem apresentar essas férias como gozadas pelo status do agendamento, e o saldo concedido não desconta a rejeição diária. `app/templates/ferias/_secao_colab.html:49`; `app/templates/ferias/_secao_colab.html:140`; `app/templates/ferias/_secao_colab.html:168`; `app/ferias/services.py:105`.
-
-4. **Janela e ESMERIL-SEMANTICA.**
-
-As duas pontas são **inclusivas** no helper, no espelho, na limpeza com exceção, no contador e no juiz existente de janela; a duração é calculada com `+1`. Não encontrei divergência inclusivo/exclusivo nesses caminhos. `app/ponto/services/ausencia.py:1375`; `:1267`; `:1343`; `app/ferias/services.py:152`; `:161`; `:53`; `app/ferias/models.py:382`.
-
-`STATUS_QUE_ESPELHAM = ('agendado', 'em_gozo', 'concluido')`. “Vivo” aqui inclui concluído; não significa somente férias atualmente em gozo. Os quatro status declarados deixam somente cancelado fora desse conjunto. `app/ferias/services.py:132`; `app/ferias/models.py:296`.
-
-**[fila] Há duas formulações da pertinência:** o helper aceita uma lista positiva; `ferias_na_janela` exclui apenas cancelado. Coincidem nos quatro status declarados, mas um valor legado como `solicitado` seria incluído pelo segundo e recusado pelo primeiro. A existência desse valor em produção é **[nao verificado]**. `app/ponto/services/ausencia.py:1373`; `app/ferias/services.py:53`.
-
-**[bloqueia] O predicado novo também quebra o contrato de censo.** O censo puro retornou:
-
-```text
-copias = ['ponto/services/ausencia.py::_janelas_vivas_do_dia']
-COPIAS = {}
-```
-
-O helper é reconhecido pela comparação das duas datas; não consta nas exceções nominais. O teste exige ausência de nomes novos e igualdade com a lista congelada. `app/core/censo_pergunta2.py:87`; `app/core/censo_pergunta2.py:43`; `app/core/censo_pergunta2.py:115`; `app/escala/tests/test_contract_juiz_escala.py:358`; `app/escala/tests/test_contract_juiz_escala.py:363`.
-
-5. **Travas e TOCTOU.**
-
-O DRY e o apply usam o mesmo carregador e classificador, mas **não prometem a mesma fotografia**: o apply refaz sua leitura inicial e depois relê sob trava. Um DRY executado anteriormente não é um plano persistido para o apply. `app/ponto/services/ausencia.py:1513`; `:1515`; `:1528`; `:1535`.
-
-A sequência implementada é agendamentos do DRY, com período pelo join, depois ausências. Agendamento já conhecido que muda status ou datas antes da trava é relido; os testes existentes exercitam cancelamento e remarcação nesse intervalo. `app/ponto/services/ausencia.py:1522`; `:1527`; `:1528`; `app/ponto/tests/test_hj091_ferias_derivadas.py:713`; `:721`.
-
-Um agendamento novo elegível, ou uma nova marca, **visível na consulta de conferência**, provoca `FontesDoBackfillMudaram` antes de gravar. Ele não é travado tardiamente depois das ausências. `app/ponto/services/ausencia.py:1530`.
-
-**Não encontrei caminho que vincule usando objeto fora de `travados`:** o classificador final recebe exclusivamente esse dicionário. Isso não prova que nenhuma janela concorrente possa nascer depois da última conferência. `app/ponto/services/ausencia.py:1535`; `:1543`.
-
-**[fila] A janela de concorrência posterior à conferência permanece.** Contraexemplo a validar: após `faltam`, nasce outro agendamento para o mesmo colaborador, em outro período aquisitivo não travado, cobrindo D. O classificador final ainda conhece somente os objetos travados anteriormente. O código não toma trava pelo colaborador para proteger esse universo; a criação de histórico trava seu próprio período. A reprodução entre sessões e o isolamento efetivo são **[nao verificado]**. `app/ponto/services/ausencia.py:1531`; `:1535`; `app/ferias/services.py:519`; `:520`.
-
-Garantia física da ordem das travas adquiridas pelo join e ausência de deadlock entre sessões: **[nao verificado]**. A ordem nominal declarada é agendamento → período → ausência. `app/ferias/services.py:633`; `app/ponto/services/ausencia.py:1522`.
-
-6. **Os quatro testes novos mordem?** [nao verificado]
-
-A comparação abaixo foi feita sobre a lógica pura extraída em memória; execução integral dos `TestCase` é **[nao verificado]**.
-
-| Teste | Com a cura revertida | [nao verificado]
-|---|---|
-| Rejeitada dentro da janela | **Falha:** recebe `sem_marca`, sem vínculo. `app/ponto/tests/test_hj091_ferias_derivadas.py:897`; `app/ponto/services/ausencia.py:1419`. |
-| Duas janelas vivas | **Falha:** recebe `sem_marca`, não `janela_ambigua`. `app/ponto/tests/test_hj091_ferias_derivadas.py:913`. |
-| Somente cancelado | **Passa:** a descrição sem marca já recebia `sem_marca`. É regressão útil, mas não RED da cura. `app/ponto/tests/test_hj091_ferias_derivadas.py:885`; `:923`; `app/ponto/services/ausencia.py:1419`. |
-| Marca de outro agendamento | **Falha:** recebe `fora_da_janela`, não `marca_x_janela`. `app/ponto/tests/test_hj091_ferias_derivadas.py:934`; `app/ponto/services/ausencia.py:1430`. |
-
-Mutantes pedidos:
-
-- **Ignorar status: morto.** As outras linhas mantêm a marca do cancelado, fazendo-o entrar no universo; sem o predicado de status, a rejeitada seria vinculada. `app/ponto/tests/test_hj091_ferias_derivadas.py:495`; `:887`; `:923`; `app/ponto/services/ausencia.py:1389`.
-- **Trocar qualquer borda para exclusiva: morto.** O segundo agendamento é exatamente `DIA..DIA`; desaparece a ambiguidade exigida pelo teste. `app/ponto/tests/test_hj091_ferias_derivadas.py:911`; `:913`.
-- **Ignorar marca conflitante: morto.** O quarto teste passa a vincular. `app/ponto/services/ausencia.py:1414`; `app/ponto/tests/test_hj091_ferias_derivadas.py:934`.
-- **[fila] Ignorar colaborador: sobrevive aos quatro.** Todos usam o mesmo colaborador. Contraexemplo ausente: lote com rejeitadas de col1 e col2; somente a janela de col1 cobre D de col2. Sem a igualdade do helper, col2 ganha origem de col1. `app/ponto/services/ausencia.py:1374`; `:1392`; `app/ponto/tests/test_hj091_ferias_derivadas.py:38`; `:45`; `:50`.
-
-Os testes novos não exercitam o ciclo “vincular → retirar dia → devolver dia” nem nascimento concorrente de janela; seus cenários terminam nas verificações indicadas. `app/ponto/tests/test_hj091_ferias_derivadas.py:891`; `:907`; `:917`; `:926`.
-
-7. **Classes recorrentes da casa.**
-
-- **[bloqueia] Derivação paralela/censo:** já existe `ferias_na_janela`, usado pelo juiz registrado `em_gozo_hoje`; o helper recompõe cobertura e colaborador. Além da questão de autoridade, há a falha objetiva do contrato apontada acima. `app/ferias/services.py:49`; `:65`; `app/core/juizes.py:262`; `app/ponto/services/ausencia.py:1373`.
-- **Segundo UPDATE da origem fora da porta:** não encontrado pelo selo, dentro de suas limitações; nascimento possui escritor declarado. `app/ponto/tests/selo_hj091.py:12`; `:23`; `app/ponto/models.py:791`.
-- **Relógio novo fora da borda:** não encontrado nos helpers novos; o comando fornece `quando`. Existem relógios internos herdados no cancelamento admin e nos fallbacks de leitura/status. `app/ponto/services/ausencia.py:1367`; `app/ponto/management/commands/vincular_ausencias_ferias.py:39`; `app/ferias/services.py:686`; `:64`; `app/ferias/models.py:283`.
-- **[fila] Selo/RED incompleto:** um teste passa com a cura revertida e o mutante de colaborador sobrevive; o selo de escritores não verifica essa semântica. `app/ponto/tests/test_hj091_ferias_derivadas.py:923`; `app/ponto/tests/selo_hj091.py:72`.
-- **Campo com dois significados:** a FK passa a representar também decisão humana rejeitada, mas os apagadores continuam tratando todas as linhas vinculadas como derivadas descartáveis. Esse é o contraexemplo bloqueante do item 3. `app/ponto/services/ausencia.py:1417`; `:1341`; `app/ponto/models.py:794`.
-- **Pouso antes dos pré-requisitos:** sombra, suíte integral e sequência efetiva de pouso são **[nao verificado]**. [nao verificado]
-
-8. **LEI-AKITA de `git log -1`.**
-
-Origem, testemunha, RED, quem-mais-lê e padrão da linha do commit são **[nao verificado]**: esta cópia não oferece histórico Git consultável, e o texto dessa linha não foi fornecido. Não substituo isso pelo comentário dos testes. [nao verificado]
-
-**REPROVA.**
-
-## 14/11 12:58 · sessao 06748442c433 · - · - · origem=Ronald (tmux)
-
-Achados e censo somente leitura:
-
-- **[bloqueia, se preservação da rejeição abrange o ciclo posterior] A FK nova entrega a rejeitada aos apagadores existentes.** `espelhar_ferias` lê todas as próprias, qualquer status (`app/ponto/services/ausencia.py:1255`); preserva a rejeitada na criação/atualização enquanto o dia permanece na janela (`:1271`), porém apaga todas quando agendamento deixa de espelhar (`:1260`–`:1263`) e apaga as que saem da janela (`:1284`–`:1288`). `apagar_ausencias_de_ferias` também não protege rejeitadas (`:1341`–`:1344`). Contraexemplo: rejeitada D vinculada pelo backfill; cancelar seu agendamento ou corrigir datas excluindo D remove a PK rejeitada. O cancelamento DP salva `cancelado` (`app/ferias/services.py:656`–`:657`), cujo `save` espelha (`app/ferias/models.py:448`–`:449`). Cancelamento admin primeiro rejeita as demais (`app/ferias/services.py:683`), depois salva cancelado (`:688`–`:689`), igualmente apagando todas. Remarcação chama explicitamente o apagador fora da janela nova (`:725`). Exclusão do agendamento chama o apagador (`app/ferias/models.py:452`–`:454`), e a FK é `CASCADE` (`app/ponto/models.py:796`–`:799`).
-
-- **[fila] O dia permanece férias nos leitores do agendamento apesar da ausência rejeitada.** Ausência rejeitada não cobre folha nem cobrança (`app/ponto/turnos.py:2516`–`:2519`), mas `ferias_na_janela` consulta exclusivamente datas do agendamento e exclui apenas cancelado (`app/ferias/services.py:49`–`:56`). `em_gozo_hoje` usa esse universo (`:65`), e o gate de ponto pergunta a ele (`app/ponto/utils.py:88`–`:89`). Contraexemplo concreto: D rejeitado, origem vinculada a agendamento vivo cobrindo D, batida em D: `dias_ferias_com_batida` ainda inclui D (`app/folha/export.py:491`–`:502`) e o classificador retém como `ferias_com_batida` (`:878`). A soma de dias concedidos também soma agendamentos não cancelados sem descontar dias rejeitados (`app/ferias/services.py:105`–`:106`). Isso não muda a linha para aprovada; são universos distintos.
-
-Censo da FK em produção:
-
-| Caminho | Leitura/escrita |
-|---|---|
-| Mensagem da linha | lê origem para mensagem `app/ponto/services/ausencia.py:85` |
-| Painel | lê agendamento, datas, dias e status `app/ponto/services/ausencia.py:106`–`:111`; chamado pela view `app/ponto/views.py:2093`; renderização `app/templates/ponto/partials/painel_ausencia.html:135`–`:140` |
-| Criação | lê FK ao procurar rejeitada própria `app/ponto/services/ausencia.py:312`–`:315`; escreve FK no nascimento por `kwargs` `:413`–`:414`, constrói `Ausencia` em `:446` |
-| Espelho | lê próprias por FK `:1255`; passa FK ao produtor `:1280` |
-| Exclusão | lê por FK e apaga `:1341`–`:1344` |
-| Rejeição em massa | lê por FK, exclui já rejeitadas e escreve status/carimbo `:1354`–`:1355` |
-| Backfill/reversão | lê nulas `:1513`, `:1528`; ambos escrevem pela porta `:1545`, `:1572`; único UPDATE nominal em `:1459`–`:1460` |
-| Veto de remarcação | lê FK para excluir próprias do veto `app/ferias/models.py:431`–`:435` |
-| Contador HJ-091 | consulta origem das não rejeitadas `app/ferias/services.py:147`–`:152`; cobertura exige aprovada `:155`–`:156`, faltantes contados em `:158`–`:163` |
-
-Há escritor de **nascimento** fora `_gravar_origem_de_ferias`: `criar_ausencia`, explicitamente declarado no modelo (`app/ponto/models.py:791`–`:795`). Nenhum outro UPDATE/atribuição explícita da FK foi encontrado pelo censo textual e pelo selo AST; o selo declara que não vê SQL cru, variáveis, certos parâmetros e subscript de dict (`app/ponto/tests/selo_hj091.py:12`–`:15`).
-
-Executei somente o selo AST puro em memória, sem Django, banco ou escrita de arquivo: encontrou `espelhar_ferias:1262/:1275/:1287`, `apagar_ausencias_de_ferias:1344`, `rejeitar_ausencias_de_ferias:1354`, `_gravar_origem_de_ferias:1459`; **fora de ESCRITORES = []**. Regras e universo do selo: `app/ponto/tests/selo_hj091.py:23`–`:29`, `:109`–`:125`.
-
-Status/carimbo:
-
-- Status nasce pelo produtor (`app/ponto/services/ausencia.py:403`), muda genericamente por `mudar_estado` (`:889`–`:900`) e em férias pela rejeição em massa (`:1355`).
-- Portas genéricas recusam férias antes da decisão/status: `mudar_estado:881`, `decidir:972`, `reverter_rejeicao:1166`; edição recusa em `:536`; rederivação em `:1589`. Logo rejeitada vinculada não reabre nesses caminhos.
-- `atualizado_em` é `auto_now` (`app/ponto/models.py:824`): criação e `editar_ausencia_registro.save()` completo (`app/ponto/services/ausencia.py:572`) o movem; período parcial o inclui explicitamente (`:960`, `:992`); rejeição em massa escreve `timezone.now()` (`:1355`); backfill só grava FK (`:1460`).
-- `mudar_estado` salva lista sem `atualizado_em` (`:888`–`:900`); decisões ainda têm `aprovada_em`, também lido como fato novo (`app/ponto/services/cartorio.py:383`–`:385`).
-- Leitores de carimbo: `houve_fato_novo` (`app/ponto/services/cartorio.py:383`–`:385`), proteção de reversão H06 (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`–`:159`), auditoria administrativa (`app/ponto/admin.py:47`).
-- Folha usa `ausencias_do_periodo(..., para='folha')` (`app/ponto/services/fechamento.py:638`–`:639`) e exportação exige aprovada (`app/folha/export.py:87`–`:91`).
-- Calendário pede cobertura cobrança (`app/colaboradores/services/calendario.py:484`–`:485`) e folha (`:532`–`:533`), portanto rejeitada não vira cobertura nesses mapas.
-- Contadores DP selecionam somente estados abertos (`app/ponto/services/ausencia.py:1030`–`:1036`).
-- Tela mantém botão “Reverter rejeição” para qualquer rejeitada, inclusive férias (`app/templates/ponto/partials/painel_ausencia.html:293`–`:307`), mas a porta recusa (`app/ponto/services/ausencia.py:1166`): **[fila] botão sem efeito permitido**, herdado.
-
-A exaustividade de todos os leitores indiretos de `Ausencia.status` na árvore é **[nao verificado]**; os leitores de FK direta acima foram censados.
-
-## 14/11 12:57 · sessao a474a29d30b9 · - · - · origem=Ronald (tmux)
-
-Resultado da inspeção e da execução pura por AST, sem banco nem escrita de arquivos:
-
-| Teste novo | Com cura revertida | Evidência | [nao verificado]
-|---|---|---|
-| Rejeitada dentro do agendamento | Falha: retorna `sem_marca`, falta vínculo | `app/ponto/tests/test_hj091_ferias_derivadas.py:897`; `app/ponto/services/ausencia.py:1419` |
-| Duas janelas vivas | Falha: retorna `sem_marca`, esperado `janela_ambigua` | `app/ponto/tests/test_hj091_ferias_derivadas.py:913`; `app/ponto/services/ausencia.py:1410` |
-| Somente agendamento cancelado | **Passa**: retorna `sem_marca` antes e depois | `app/ponto/tests/test_hj091_ferias_derivadas.py:923`; `app/ponto/services/ausencia.py:1419` |
-| Marca de outro agendamento | Falha: retorna `fora_da_janela`, esperado `marca_x_janela` | `app/ponto/tests/test_hj091_ferias_derivadas.py:934`; `app/ponto/services/ausencia.py:1430` |
-
-[**fila**] Um dos quatro testes novos não é RED da cura: a descrição da rejeitada não contém marca, então o código anterior já devolve exatamente `sem_marca`. É teste de preservação, não testemunha da implementação nova. `app/ponto/tests/test_hj091_ferias_derivadas.py:885`; `app/ponto/tests/test_hj091_ferias_derivadas.py:917`; `app/ponto/services/ausencia.py:1419`.
-
-[**fila**] Mutante natural sobrevivente: remover a comparação de colaborador em `_janelas_vivas_do_dia`. Os quatro testes novos usam somente `self.c/self.pa`; a execução pura produziu as mesmas quatro respostas com esse predicado removido. Contraexemplo ausente: duas pessoas com rejeitadas sem origem entram no mesmo lote; uma janela de col1 cobre o dia da rejeitada de col2, mas nenhuma janela de col2 cobre esse dia. O mutante vincula a linha de col2 à origem de col1. `app/ponto/services/ausencia.py:1374`; `app/ponto/services/ausencia.py:1392`; `app/ponto/tests/test_hj091_ferias_derivadas.py:45`; `app/ponto/tests/test_hj091_ferias_derivadas.py:50`; `app/ponto/tests/test_hj091_ferias_derivadas.py:891`.
-
-Os outros mutantes pedidos morrem:
-
-- Ignorar status no helper: o teste cancelado passa a vincular a rejeitada. As outras quatro linhas da fixture mantêm a marca do agendamento cancelado, incluindo-o no universo mesmo após o cancelamento. `app/ponto/services/ausencia.py:1389`; `app/ponto/tests/test_hj091_ferias_derivadas.py:887`; `app/ponto/tests/test_hj091_ferias_derivadas.py:495`; `app/ponto/tests/test_hj091_ferias_derivadas.py:923`.
-- Trocar qualquer borda `<=` por `<`: desaparece a segunda janela de um único dia; o teste esperava ambiguidade e passa a receber vínculo. `app/ponto/services/ausencia.py:1375`; `app/ponto/tests/test_hj091_ferias_derivadas.py:911`; `app/ponto/tests/test_hj091_ferias_derivadas.py:913`.
-- Ignorar a marca conflitante: o quarto teste passa a vincular em vez de devolver `marca_x_janela`. `app/ponto/services/ausencia.py:1414`; `app/ponto/tests/test_hj091_ferias_derivadas.py:932`; `app/ponto/tests/test_hj091_ferias_derivadas.py:934`.
-
-O selo cobre formas sintáticas de escrita e lista de escritores, não a semântica de colaborador/janela/status; esses mutantes não são sua jurisdição. Suas limitações declaradas incluem tipo por variável, SQL cru, objeto recebido por parâmetro e FK por subscrito de dict. `app/ponto/tests/selo_hj091.py:12`; `app/ponto/tests/selo_hj091.py:23`; `app/ponto/tests/test_hj091_ferias_derivadas.py:399`.
-
-Há autoridade existente para férias por janela: `ferias_na_janela` usa interseção inclusiva e exclui cancelados; `em_gozo_hoje` delega a ela e consta no registro vivo. O helper novo repete as comparações de janela/colaborador, mas restringe ao conjunto materializável. A diferença de status é concreta: `solicitado` entra em `ferias_na_janela` e fica fora do helper. Classificar isso como duplicação proibida exige considerar o censo/contrato que você está verificando. `app/ferias/services.py:49`; `app/ferias/services.py:53`; `app/ferias/services.py:65`; `app/ferias/services.py:132`; `app/core/juizes.py:262`; `app/ponto/services/ausencia.py:1373`.
-
-Execução integral dos `TestCase`, efeitos reais do banco e prova de sombra: **[nao verificado]**.
-
-## 14/11 12:57 · sessao 2cb923b51ad2 · - · - · origem=Ronald (tmux)
-
-[**bloqueia**] O selo existente reprova o helper novo: `app/core/censo_pergunta2.py:87-96` reconhece `_janelas_vivas_do_dia`; `copias()` desconta apenas os nomes registrados (`:115-117`), cuja lista não o inclui (`:43-60`). Execução somente leitura com `python3 -B`: `copias=['ponto/services/ausencia.py::_janelas_vivas_do_dia']`, esperado `[]`. Logo falha `app/escala/tests/test_contract_juiz_escala.py:363`.
-
-[**bloqueia**, se o contrato exige preservar a rejeição nos leitores seguintes] A rejeitada vinculada pode ser apagada e posteriormente substituída por aprovada: vincular → corrigir datas excluindo o dia → corrigir datas incluindo novamente o dia. A primeira correção apaga pela FK sem filtrar status (`app/ferias/services.py:725`; `app/ponto/services/ausencia.py:1341-1344`); a volta materializa aprovada porque não há mais linha (`app/ponto/services/ausencia.py:1271-1280`). Também a apagam cancelamento DP (`app/ferias/services.py:656-657` → `app/ferias/models.py:448-449` → `app/ponto/services/ausencia.py:1260-1263`), cancelamento admin (`app/ferias/services.py:683-689`) e exclusão do agendamento (`app/ferias/models.py:451-454`; FK `CASCADE` em `app/ponto/models.py:796-797`).
-
-[**fila**] Cobertura da Ausencia rejeitada e leitura do agendamento continuam dando respostas diferentes. A rejeitada não cobre folha nem cobrança (`app/ponto/turnos.py:2516-2519`); o contador acusa seu dia como sem ausência aprovada (`app/ferias/services.py:155-163`). Entretanto folha, situação e telas continuam lendo a janela inteira do agendamento: folha cruza batidas inclusive no dia rejeitado (`app/folha/export.py:491-501`), `em_gozo_hoje` consulta apenas agendamento (`app/ferias/services.py:59-70`), API mostra status/datas sem consultar Ausencia (`app/api/views.py:2237-2253`), e tela chama concluído de “gozadas” (`app/templates/ferias/_secao_colab.html:140-141`, `:168`), com `dias_concedidos` como “Gozo” (`:49`). Uma rejeitada vinculada não reduz `dias_concedidos` pelo backfill (`app/ponto/services/ausencia.py:1459-1460`).
-
-Escritores de `AgendamentoFerias.status/data_inicio/data_fim`, todos em `app/ferias/services.py`:
-
-- Gozo histórico: constrói datas/status `:521-527`, salva `:547`.
-- Agendamento: `objects.create` com datas/status `:581-584`.
-- Aprovação de solicitação: constrói `:775-783`, salva `:786`.
-- Cancelamento DP: status `:656`, salva `:657`.
-- Cancelamento admin: status `:688`, salva `:689`.
-- Troca de janela existente: datas `:716`, status `:721`, salva `:729`; entradas públicas `corrigir_datas_agendamento :736-738` e `remarcar_agendamento :741-745`.
-- Cron: escritor `alinhar_status_por_data :952-956`; chamado por `app/ferias/management/commands/sincronizar_status_ferias.py:48-49`.
-- Default do modelo: `app/ferias/models.py:319`; persistência e espelho em `:444-449`.
-
-A janela é inclusiva nas duas pontas: helper novo (`app/ponto/services/ausencia.py:1375`), espelho (`:1266-1269`), limpeza com exceção (`:1343`), contador (`app/ferias/services.py:152`, `:161`), juiz existente `ferias_na_janela` (`:49-55`), cálculo de dias (`app/ferias/models.py:371`, `:382`) e escritor (`app/ferias/services.py:565`). A consulta de batidas usa fim exclusivo no primeiro instante do dia seguinte, equivalente ao último dia inclusivo (`app/ferias/situacao.py:273-281`). `STATUS_QUE_ESPELHAM=('agendado','em_gozo','concluido')` (`app/ferias/services.py:132`); corresponde aos status declarados exceto cancelado (`app/ferias/models.py:296-301`).
-
-Já existe autoridade de janela/dia em `ferias_na_janela` (`app/ferias/services.py:49-56`), usada por `em_gozo_hoje :65`, esta registrada em `app/core/juizes.py:262`. O helper repete a comparação de cobertura e colaborador (`app/ponto/services/ausencia.py:1372-1375`); nos quatro status declarados, os resultados de pertinência da janela coincidem, embora `ferias_na_janela` exclua apenas cancelado e o helper aceite uma lista positiva (`app/ferias/services.py:53`; `app/ponto/services/ausencia.py:1373`).
-
-Há relógios internos preexistentes fora da borda: cancelamento admin lê `date.today()` para carimbo (`app/ferias/services.py:685-686`); `status_por_data` admite fallback (`app/ferias/models.py:283`), assim como `em_gozo_hoje` (`app/ferias/services.py:64`). O helper novo não lê relógio (`app/ponto/services/ausencia.py:1367-1375`).
-
-Não executei suíte Django nem consultei banco/logs. Resultado de produção e prova de sombra: [nao verificado]. [nao verificado]
-
-## 14/11 12:50 · sessao aaf08d3738b9 · E3-FORMA-SQL · construtor · origem=Code
-
-**Pergunta ao topo:** o recuo deve preservar especificamente C17 nos consumidores migrados? No main, esses consumidores usam C17, mas a API `tarefa_do_dia` já devolve outro fio. O instrumento de sombra distingue expressamente “atual” de “candidata” (`folha/fora_da_folha.py@ac431c506:65–78`; `chamados/management/commands/diff_e3_sombra.py@ac431c506:124–127`).
-
-Pela sua cláusula de divergência no main, deixei os quatro estados sem cura enquanto essa referência permanece pendente.
-
-As referências `@ac431c506` abaixo são do segundo pai, lidas com `git show`.
-
-| Estado | E3 v9 | Main: C17 / tarefa | Autoridades no main | Após esta volta |
-|---|---|---|---|---|
-| P13: responder; verbo validar | colab (`chamados/tests/test_e3_portas_v6_sem_banco.py:20`) | **admin / colab** | C17: `chamados/juizes.py@ac431c506:1608–1619,1668`; tarefa: `chamados/services/tarefa_do_dia.py@ac431c506:550–554` | Sem cura; colab |
-| P14: validar; verbo cobrar | admin (`chamados/tests/test_e3_portas_v6_sem_banco.py:26`) | **colab / admin** | Mesmas autoridades acima | Sem cura; admin |
-| P19: residual decidir; ação admin sob B/cobrar | admin (`chamados/tests/test_e3_portas_v6_sem_banco.py:31`) | **colab / admin** | Mesmas autoridades acima | Sem cura; admin |
-| Simultâneo colab+admin; verbo validar | colab (`chamados/tests/test_e3_portas_tarefa.py:225`) | **admin / colab** | Mesmas autoridades acima | Sem cura; colab |
-
-O simultâneo já retorna **colab na tarefa do main**; portanto a v9 coincide com essa API, mas diverge de C17 quando o único verbo publicado é validar (`chamados/services/tarefa_do_dia.py@ac431c506:550–552`; `chamados/juizes.py@ac431c506:1608`).
-
-Quanto a portas e verbos:
-
-- **P13/P14/simultâneo sem residual:** ambos publicam PF quando a porta pertence à célula e PP quando apenas a âncora externa abre a porta; preservam o verbo recebido (`chamados/services/tarefa_do_dia.py@ac431c506:546–554`; `chamados/juizes.py@ac431c506:1657–1668`).
-- **P19 com A residual da célula e B externo:** C17 publica **PF**, `fila=(A,)`, verbos `{A: decidir, B: cobrar}`. A tarefa do main publica **PP**, `fila=()`, somente `{B: cobrar}`: ela seleciona portas pelas ações (`chamados/juizes.py@ac431c506:1657–1668`; `chamados/services/tarefa_do_dia.py@ac431c506:545–554`).
-
-Quem lê na árvore atual:
-
-| Leitor | Uso |
-|---|---|
-| Folha | Recebe a porta e devolve seu fio: `folha/fora_da_folha.py:74,89` |
-| Vigia | Recebe a porta e conta admin pelo fio: `chamados/services/vigia_fio.py:648,662` |
-| `furo_sem_canal` | Usa existência/rota e `nao_sei`: `chamados/services/furo_sem_canal.py:97–104` |
-| Painel | Fornece fila e partição dos verbos: `chamados/services/painel.py:188–190,229–230` |
-
-Executei o controle existente: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e3_portas_v6_sem_banco -v
-```
-
-Resultado local: **10 testes passaram**, incluindo as expectativas E3 ainda presentes (`chamados/tests/test_e3_portas_v6_sem_banco.py:16–42`); certificação pela suite **[não verificado]**.
-
-Também comparei os corpos reais do main e da v9 por AST, em memória: oito combinações sintéticas confirmaram as divergências acima; alcance ORM **[não verificado]**.
-
-**Arquivos tocados: nenhum**, incluindo os seis congelados; `git diff --name-only` e `git status --short` terminaram vazios **[não verificado]**. Não produzi cura, RED novo nem mutantes, para não fixar uma das respostas antes da definição solicitada. Permanecem incompletos esses três entregáveis; ocorrência em produção, contadores reais e execução com banco **[não verificado]**.
-
-## 14/11 12:27 · sessao 812f3f6bae91 · COERENCIA-PELO-EFEITO · censo · origem=Code
-
-A tabela conta **100 decisões identificadas**, voltando da cobrança exibida até batida, cadastro e célula. Ocorrência, frequência e resultado desses caminhos em produção: **[não verificado]**.
-
-`SEM JUIZ` significa ausência de autoridade registrada para aquela decisão; chamar outra autoridade como componente não registra a composição. O registro consultado é `JUIZES`, inclusive seus acréscimos (`app/core/juizes.py:182`; `app/core/juizes.py:277`; `app/core/juizes.py:1310`). `SEM CASO` significa caso pela regra não confirmado nesta leitura; inexistência global de teste **[não verificado]**. Nos casos indicados, considerei cenário com resposta esperada escrita, sem contar somente AST, snapshot ou paridade.
-
-| passo | decisão | arquivo::função:linha | grava em | relido por | juiz | caso pela regra |
-|---|---|---|---|---|---|---|
-| 01 — efeito | Pergunta viva fica pendente somente sem resposta e com disputa aberta; demais vivas vão ao histórico. | `app/chamados/services/pergunta_no_app.py::consulta_do_app:70` | — | API: `app/api/views.py:2531` | SEM JUIZ para a partição | SEM CASO |
-| 02 — efeito | Havendo pendentes, badge “Responder DP” precede aviso de notas não lidas. | `app/chamados/services/pergunta_no_app.py::projecao_do_app:90` | — | App e painel recebem projeção em `app/chamados/services/pergunta_no_app.py:107` | SEM JUIZ | SEM CASO |
-| 03 — efeito | Rótulo usa validação, C6 e materialização; mesmo com C6 falso, sem materialização retorna pendente/respondida. | `app/chamados/models.py::PerguntaDisputa.estado:3097` | — | API: `app/api/views.py:2543` | SEM JUIZ para essa tradução | SEM CASO |
-| 04 — admin | Crédito usa `q_vivas`, exclui materializada com cache `sim`; destino vivo vence pai. Não confere C6 ao final. | `app/chamados/services/raiox.py::creditos_perguntas:56`; `:135` | — | Verbos: `app/chamados/services/verbos.py:34` | SEM JUIZ para o crédito | SEM CASO |
-| 05 — admin | Crédito determina verbo; silenciamento transforma-o em arquivado ou histórico. | `app/chamados/services/verbos.py::particionar_verbos:34` | — | Badge lê placar ou recalcula: `app/core/context_processors.py:68` | SEM JUIZ para a partição | SEM CASO |
-| 06 — admin | Detalhe considera disputa aberta e perguntas C6 vivas; “todas validadas” significa haver perguntas e nenhuma viva. | `app/chamados/services/acoes_chamado.py::montar_contexto_detalhe:345`; `:398` | — | Formulários validar/recusar: `app/templates/chamados/partials/_pergunta_card.html:70`; `:112` | SEM JUIZ para essa equivalência | SEM CASO |
-| 07 — relatório | Sem perguntas → sem pergunta; nenhuma viva → pronta para fechar; viva muda → aguarda colaborador; restante → supervisão. | `app/chamados/relatorios_disputa.py::classificar:12` | — | Classificação devolvida em `app/chamados/relatorios_disputa.py:23` | SEM JUIZ para a taxonomia | SEM CASO |
-| 08 — pauta | “Calados” usa `q_vivas`, resposta nula e disputa aberta, sem filtro C6; agrega prazo vencido por pessoa. | `app/chamados/services/cobranca.py::_calados:228` | — | Frase “pergunta segue aberta”: `app/chamados/services/cobranca.py:262` | SEM JUIZ para o conjunto; prazo chama `_C9` | SEM CASO |
-| 09 — vigia | Qualquer pergunta da célula com resposta nula conta como aberta, sem conferir validação, materialização ou disputa. | `app/chamados/services/furo_sem_canal.py::medir:80` | — | Contadores `total` e `com_pergunta_aberta`: `app/chamados/services/furo_sem_canal.py:89` | SEM JUIZ | SEM CASO |
-| 10 — prazo | SLA local nasce da última nota DP ou criação, mais horas da urgência; somente `COBRANCA` vencida entra. | `app/chamados/services/sla.py::referencia:19`; `::vence_em:30`; `::vencido:37` | — | Resultado de vencimento: `app/chamados/services/sla.py:39` | SEM JUIZ para esse predicado; `_C9` registra outra função (`app/core/juizes.py:285`) | SEM CASO |
-| 11 — cobrança | Nova cobrança exige pendentes do app e nenhum pai com `prazo_sla > agora`. | `app/chamados/services/cobranca.py::checar_cobranca:82` | — | Porta recusa em `app/chamados/services/cobranca.py:155` | SEM JUIZ | SEM CASO |
-| 12 — cobrança | Prazo informado vence o padrão; sem ele, usa agora +48h. Grava antes do envio. | `app/chamados/services/cobranca.py::cobrar_colaborador:170` | `Chamado.prazo_sla`, pela porta `definir_prazo_sla`; ocorrência: `:178` | Pauta e aviso: `app/chamados/services/cobranca.py:181`; `:246` | SEM JUIZ para escolha/48h | SEM CASO |
-| 13 — cron | Toda disputa aberta recebe alerta diário se o contexto ainda não contém o dia; não consulta pergunta nem C6. | `app/ponto/management/commands/alertar_disputas_pendentes.py::Command.handle:33`; `:48` | `Disputa.contexto`, via `renovar_contexto` | Push “Situação pendente”: `app/ponto/management/commands/alertar_disputas_pendentes.py:59` | SEM JUIZ | SEM CASO |
-| 14 — resposta HTML | Para `hora` com HH:MM, exige `resposta_tocou=1` antes de aceitar o envio. | `app/chamados/views.py::responder_pergunta_disputa:1274` | Não grava se recusar; delega ao core em `:1285` | API também consulta C6, mas sua entrada está em `app/api/views.py:2605` | SEM JUIZ para a guarda HTML | SEM CASO |
-| 15 — resposta | Recusa vazio, opção inválida e formato incompatível com o tipo; aceita conforme opções e expressões do corpo. | `app/chamados/services/disputa_emissao.py::responder_pergunta_disputa_core:1432` | `resposta_colab`, `respondida_em`: `:1467`; ato `RESPOSTA`: `:1511` | C6: `app/chamados/juizes.py:1417`; materializador: `app/chamados/services/materializacao.py:1375` | SEM JUIZ | SEM CASO |
-| 16 — resposta | Resposta nova desfaz validação anterior; carimbo sem lastro pode ser removido. | `app/chamados/services/disputa_emissao.py::responder_pergunta_disputa_core:1471` | Limpa `validada_em/por`; chama `reabrir_por_resposta`: `:1485` | Fila validada: `app/chamados/services/materializacao.py:1375` | SEM JUIZ para essa invalidação | SEM CASO |
-| 17 — resposta especial | `FOLGA_CONTESTA` deixa motivo para admin; escapes catalogados seguem para ausência. | `app/chamados/services/disputa_emissao.py::responder_pergunta_disputa_core:1486`; `:1538` | `recusa_motivo`; ausência pela porta de materialização | Aceite de folga: `app/chamados/services/validacao.py:257`; ausência: `app/chamados/services/materializacao.py:502` | SEM JUIZ para o roteamento | SEM CASO |
-| 18 — escritor auxiliar | Resposta automática escreve somente se ainda não houver texto. | `app/chamados/services/disputa_emissao.py::responder_automaticamente:1647` | `resposta_colab/respondida_em` e ato `RESPOSTA`: `:1652` | C6: `app/chamados/juizes.py:1417` | SEM JUIZ | SEM CASO |
-| 19 — escritor auxiliar | Texto existente, sem carimbo de resposta, recebe o instante testemunhado pela trilha. | `app/chamados/services/disputa_emissao.py::carimbar_resposta_pela_trilha:1670` | `respondida_em` e ato `RESPOSTA`: `:1674` | Materializador: `app/chamados/services/materializacao.py:1376` | SEM JUIZ | SEM CASO |
-| 20 — reabertura | Correção limpa resposta e validação; com `desfazer_absorcao`, também remove materialização. | `app/chamados/services/disputa_emissao.py::reabrir_para_correcao:1593` | Foto/ato: `:1615`; `descarimbar_em_lote` ou `update`: `:1630` | C6: `app/chamados/juizes.py:1399`; evento da célula: `app/chamados/services/disputa_emissao.py:1633` | SEM JUIZ para o conjunto apagado | SEM CASO |
-| 21 — validação | Exige resposta, ausência de validação e confirmação quando a hora é considerada implausível. | `app/chamados/services/validacao.py::validar_pergunta:417` | `_carimbar_validacao` grava `validada_em/por` e ato: `:157` | Materialização: `app/chamados/services/materializacao.py:1375` | SEM JUIZ | SEM CASO |
-| 22 — validação | Delta desconhecido não classifica; AM/PM ou delta ≥ limiar vira C; até tolerância vira A; restante B. | `app/chamados/juizes.py::classe_por_delta:1835` | — | Concordância: `app/chamados/juizes.py:1373`; validação: `app/chamados/juizes.py:1952` | SEM JUIZ para essa classificação no registro | SEM CASO |
-| 23 — folga | Aceite exige dia e decisão da porta de folga; recusa da declaração desfaz o ato. | `app/chamados/services/validacao.py::_aceitar_a_folga:293`; `:328` | Validação, declaração de folga e carimbo admin: `:311`; `:343` | Fecho do fio: `app/chamados/services/validacao.py:318` | SEM JUIZ para o aceite composto | SEM CASO |
-| 24 — recusa | Admin precisa informar motivo; pergunta deve estar respondida e não validada. | `app/chamados/services/validacao.py::recusar_pergunta:588` | `recusa_motivo`; reabre questionário: `:611`; `:620` | Nota e push para responder novamente: `app/chamados/services/validacao.py:625`; `:639` | SEM JUIZ | SEM CASO |
-| 25 — data | Conferência exige justificativa, divergência e ausência de conferência anterior. | `app/chamados/services/validacao.py::conferir_data_do_fato:681` | `data_conferida_em/por`: `:691` | Guarda de materialização: `app/chamados/services/materializacao.py:1199` | SEM JUIZ | SEM CASO |
-| 26 — materialização | Divergência não conferida barra plantio; sucesso exige resultado do ramo e, para hora/data-hora, testemunha externa. | `app/chamados/services/materializacao.py::_materializar_uma:1199`; `:1227`; `:1238` | Recusa ou carimbo; reprovação levanta dentro da transação: `:1245`; carimbo: `:1283` | Devolução de validação: `app/chamados/services/validacao.py:213` | SEM JUIZ para o conjunto de gates | SEM CASO |
-| 27 — plantio de hora | Sem texto não planta; deriva tipo/data/hora, recusa escape/default sem marco, reutiliza batida ou verifica vizinhança/paridade. Intervalo pode usar hora do marco. | `app/chamados/services/materializacao.py::_ts_tipo_do_plantio:344`; `:360`; `:373`; `:390`; `:413`; `::_materializar_resposta_hora:835`; `:865`; `:881` | `pendencia_admin/recusa_motivo`: `:856`; batida via `registrar_batida`: `:933`; origem: `:952` | Juiz de testemunha: `app/chamados/juizes.py:752` | SEM JUIZ para essa derivação/seleção | SEM CASO |
-| 28 — plantio data-hora | Data/hora legíveis geram entrada; conflito impede sucesso; destino recebe informação para cadastro da fase. | `app/chamados/services/materializacao.py::_materializar_resposta_data_hora:1001` | Batida `E`: `:1013`; ocorrência: `:1039` | Reconciliação: `app/chamados/services/materializacao.py:1065` | SEM JUIZ para esse resultado | SEM CASO |
-| 29 — escolha | Escolha validada resolve sem batida; `declara_falta` passa pela declaração de ausência. | `app/chamados/services/materializacao.py::_materializar_resposta_escolha:1082` | Ausência, quando aplicável; carimbo final pela unidade em `:1283` | Destino/clones: `app/chamados/services/materializacao.py:1085` | SEM JUIZ | SEM CASO |
-| 30 — absorção | Declaração de ausência alcança irmãs de hora do mesmo dia ainda não materializadas; C6 pode recusar o carimbo. | `app/chamados/services/materializacao.py::_materializar_ausencia_de_resposta:538`; `:567` | Ausência, vias `declaracao/ausencia_dia`, ato `ABSORCAO`: `:569` | Disputa consulta fechamento: `app/chamados/services/materializacao.py:591` | SEM JUIZ para a seleção das irmãs; usa `_C6` | SEM CASO |
-| 31 — ausência rejeitada | Devolve absorvidas somente quando outra ausência não cobre o dia para cobrança. | `app/chamados/services/materializacao.py::devolver_absorvidas_da_ausencia_rejeitada:662`; `:669` | Correção com descarimbo: `:688`; reabre disputa: `:692` | App exige disputa aberta: `app/chamados/services/pergunta_no_app.py:71` | SEM JUIZ para a devolução composta | SEM CASO |
-| 32 — colisão | Recusa traduzida como colisão, sem materialização, encerra por identidade; outras recusas só gravam motivo. | `app/chamados/services/materializacao.py::_carimbar_recusa:1097` | `fato_ocupado` via carimbo ou `recusa_motivo`: `:1105` | Nota no fio: `app/chamados/services/materializacao.py:1113` | SEM JUIZ para essa escolha | SEM CASO |
-| 33 — devolução ao admin | Hora declarada, sem materialização e com recusa escrita perde validação; disputa fechada pode reabrir. | `app/chamados/services/validacao.py::devolver_validacao_recusada:213` | Limpa validação, ato `DEVOLUCAO`, reabertura: `:222`; `:228`; `:240` | Retorno da validação: `app/chamados/services/validacao.py:509` | SEM JUIZ | SEM CASO |
-| 34 — carimbo | Aplica carimbo em memória e pergunta ao C6; se continuar viva, desfaz e não grava. | `app/chamados/models.py::PerguntaDisputa.carimbar:3175`; `:3185`; `:3195` | `materializada_em/por/via`; opcionalmente resposta/validação/cache | C6 e estado: `app/chamados/juizes.py:1399`; `app/chamados/models.py:3097` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 35 — identidade | Via deve pertencer à lista de identidade; linha fora do fato não retorna por outra via. Não consulta C6 para gravar. | `app/chamados/models.py::PerguntaDisputa.carimbar_identidade:3236` | Carimbo e eventual `recusa_motivo`: `:3242` | C6 interpreta a via: `app/chamados/juizes.py:1412`; `:1438` | SEM JUIZ para admitir esse ato | SEM CASO |
-| 36 — descarimbo | Linha fora do fato não é descarimbada; lote também exclui essas vias. | `app/chamados/models.py::PerguntaDisputa.descarimbar:3259`; `::descarimbar_em_lote:3320` | Limpa materialização, autor e via; lote aceita campos adicionais | C6: `app/chamados/juizes.py:1399` | SEM JUIZ para a elegibilidade da escrita | SEM CASO |
-| 37 — relavra da via | Somente vias derivadas mudam; hora declarada vira declaração; sem destino ou conversa não deriva via pelo turno. | `app/chamados/services/relavra_via.py::via_de_hoje:97`; `::relavrar:118` | `via_resolucao` e cache: `:125` | C6 e crédito: `app/chamados/juizes.py:1399`; `app/chamados/services/raiox.py:135` | SEM JUIZ para a substituição | SEM CASO |
-| 38 — reinterpretação | Carimbo elegível é relido sob trava e removido se C6 disser viva; pode reabrir disputa. | `app/chamados/services/relavra_via.py::desfazer_carimbo_sem_lastro:236`; `:242` | `descarimbar`; `reabrir_sistema`: `:246`; `:261` | Fábrica chama durante julgamento: `app/chamados/services/fabrica_da_celula.py:209` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 39 — ressuscitação | Só candidata materializada e muda; exclui fora do fato e marco aceso; C6 julga cópia sem carimbos antes de devolver à fila. | `app/chamados/models.py::ChamadoColaborador._universo_da_ressuscitacao:1530`; `:1550` | `ressuscitar_perguntas` limpa materialização/resposta/validação: `:1613` | C6 e evento de célula: `app/chamados/models.py:1556`; `:1615` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 40 — fantasma reaberto | Porta exige via fantasma e carimbo; comando escolhe lâmpada apagada+C6 viva e separa exportada para pauta. | `app/chamados/models.py::PerguntaDisputa.reabrir_fantasma:3345`; `app/chamados/management/commands/reabrir_orfas_enterradas.py::Command.handle:83`; `:95` | Descarimbo; comando chama porta em `:157` | App e pauta: `app/chamados/services/pergunta_no_app.py:70`; comando `:193` | SEM JUIZ para essa seleção composta | SEM CASO |
-| 41 — competência reaberta | Remove carimbo somente se a via gravada for `competencia_trancada`. | `app/chamados/models.py::PerguntaDisputa.reabrir_por_competencia:3373` | Descarimbo: `:3378` | C6 também lê tranca atual: `app/chamados/juizes.py:1405` | SEM JUIZ para a inversão do carimbo | SEM CASO |
-| 42 — motivo retirado | Disputa deve estar aberta e conter motivo; perguntas desse motivo recebem retratação e saem da identidade do fato. | `app/chamados/models.py::DisputaSupervisao.remover_motivo:2089`; `:2110` | Ato `RETRATACAO`, via `motivo_retratado`, motivos/contexto: `:2112` | C6 mata antes da resposta: `app/chamados/juizes.py:1412` | SEM JUIZ para retirar o motivo | SEM CASO |
-| 43 — disputa | Fechamento normal exige ausência de resposta sem veredito e de pergunta viva; exceções nomeadas tratam silêncio. | `app/chamados/models.py::DisputaSupervisao.pode_fechar:1908`; `::fechar:1942`; `:1953`; `:1974` | `fechada_em/por/resolucao/motivo`; exceções carimbam mudas e registram ato: `:1977`; `:1988` | Cascata do pai: `app/chamados/signals.py:43` | `_C7` — `app/core/juizes.py:283` | SEM CASO para o predicado completo |
-| 44 — portão do chamado | Saída de vivo para terminal exige nenhuma pergunta viva ancorada na competência aberta ou reata legítima de todas; caso contrário recusa. | `app/chamados/models.py::ChamadoColaborador._vivas_entre:361`; `::_plano_pergunta_viva:390`; `::_gate_pergunta_viva:417` | Reapontamento ou trilha de recusa; núcleo protege novamente em `:221` | `_gravar_estado`: `app/chamados/models.py:224`; admin lê fio: `app/chamados/services/fio.py:240` | SEM JUIZ para esse gate composto | SEM CASO |
-| 45 — portão do pai | Pai com resposta sem veredito não fecha pelo sistema; examina origem e perguntas que o resolvem, ignorando tranca nessa guarda. | `app/ponto/supra_juiz.py::perguntas_que_seguram_csf:573`; `::pode_executar_csf:588`; `app/chamados/models.py::_gate_conversa_do_pai:716` | Recusa e nota `retido_pela_conversa`: `app/chamados/models.py:723`; `:735` | Contador: `app/chamados/juizes.py:2511` | Chaves literais de respostas sem veredito/CSF — `app/core/juizes.py:298`; `:299` | SEM CASO |
-| 46 — leitura SQL | `q_vivas` recompõe vida por validação, resposta, identidade e veredito/pendência da célula; não executa todos os degraus do C6. | `app/chamados/models.py::PerguntaDisputa.q_vivas:3404` | — | App confere C6: `app/chamados/services/pergunta_no_app.py:58`; crédito/pauta não: `app/chamados/services/raiox.py:135`; `app/chamados/services/cobranca.py:228` | SEM JUIZ próprio para o predicado SQL | SEM CASO independente do C6 |
-| 47 — C6 | Validação existente mata a pergunta antes dos demais degraus. | `app/chamados/juizes.py::_pergunta_viva_calc:1400` | — | `.viva`: `app/chamados/models.py:3431`; app: `app/chamados/services/pergunta_no_app.py:58` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 48 — C6/tranca | Competência trancada mata por leitura, salvo toque administrativo posterior no mesmo colaborador/dia; conversa não tem dia de turno. | `app/chamados/juizes.py::dia_da_pergunta_trancado:991`; `::dias_trancados:1062`; `:1078` | —; não carimba pergunta | C6: `app/chamados/juizes.py:1405`; fechamento: `app/chamados/models.py:1902` | `_C20` — `app/core/juizes.py:296` | L-051: `app/docs/LEIS.md:92`; `app/chamados/tests/test_c7_red_minimos.py::C7_08_CompetenciaTrancadaTest::test_RED_o_C6_le_a_tranca_sem_escrever:361` e `::test_RED_destrancar_devolve_a_pergunta_viva_sozinha:369` |
-| 49 — C6/identidade | Via terminal que vence resposta, com carimbo, mata antes de considerar texto. | `app/chamados/juizes.py::_pergunta_viva_calc:1412` | — | Lista de vias: `app/chamados/models.py:2579`; SQL: `app/chamados/models.py:3409` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 50 — C6/resposta | Resposta não vazia continua viva, salvo concordância comprovada com luz, classe A e dia que não acusa. | `app/chamados/juizes.py::_pergunta_viva_calc:1417`; `::_resposta_concorda_com_a_luz:1342` | — | App e fila admin: `app/chamados/services/pergunta_no_app.py:58`; `app/chamados/juizes.py:1684` | `_C6` — `app/core/juizes.py:282` | Regra e respostas literais: `app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:3`; `:7`; `::PerguntaRespondidaEMarcoAcesoTest::test_MORDE_concorda_ate_5_min_e_dia_coerente_morre:56` e `::test_MORDE_6_min_e_classe_B_segue_para_o_admin:59` |
-| 51 — C6/admin | Veredito da célula via admin impede que a resposta, sozinha, mantenha a pergunta viva. | `app/chamados/juizes.py::_pergunta_viva_calc:1415`; `:1425` | — | Estado e app: `app/chamados/models.py:3100`; `app/chamados/services/pergunta_no_app.py:58` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 52 — C6/marco | Com materialização, lâmpada do próprio marco comprovadamente acesa mata antes do veredito do dia; pausas múltiplas exigem todas as luzes correspondentes. | `app/chamados/juizes.py::_pergunta_viva_calc:1444`; `::fato_do_marco_no_espelho:955` | — | Porta troca via para fato materializado: `app/chamados/models.py:3324` | `_C6` — `app/core/juizes.py:282` | SEM CASO |
-| 53 — C6/célula | Veredito da célula pertencente a `VEREDITOS_ACUSAM` mantém viva nesse degrau. | `app/chamados/juizes.py::_pergunta_viva_calc:1448` | 
-
-[truncado em 20000 de 42185 caracteres]
-
-_5159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5166 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
