@@ -1,7 +1,616 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 18:47** · publicado em **14/11/2026 18:47** (UTC-3)
+> Ultima resposta processada: **14/11/2026 18:52** · publicado em **14/11/2026 18:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 18:52 · sessao c3a4441e6bc6 · - · - · origem=Ronald (tmux)
+
+A transcrição reconciliada soma **2.357 dias de 300 colabs**, diferença de **24** para os 2.381 declarados; não ajustei contagens para fechar o universo. `[nao verificado]`
+
+| Emp | 09/2026 | 10/2026 | 11/2026 |
+|---|---:|---:|---:|
+| 1 | 0 | 12 | 5 |
+| 2 | 545 | 615 | 790 |
+| 3 | 94 | 117 | 156 |
+| 4 | 6 | 8 | 9 |
+
+Fonte: anexo textual transcrito; conferência independente dos grupos pelos outros explorers. `[nao verificado]`
+
+Top 10, desempate pelo menor colab: **534:77; 607:72; 667:61; 717:54; 317:45; 832:40; 650:39; 114:38; 144:38; 915:38**. Soma: **502 dias**. `[nao verificado]`
+
+No corpus de 2.357 dias:
+
+- **37 colabs → 1.186 dias (50,32%)**; os primeiros 36 somam 1.168. `[nao verificado]`
+- **108 colabs → 1.888 dias (80,10%)**; os primeiros 107 somam 1.882. `[nao verificado]`
+
+Para os limiares do universo declarado de 2.381, usando somente os dias transcritos:
+
+- **38 colabs → 1.203 dias**, ultrapassando 1.191; os primeiros 37 somam 1.186. `[nao verificado]`
+- **111 colabs → 1.906 dias**, ultrapassando 1.905; os primeiros 110 somam 1.900. `[nao verificado]`
+
+Esses limiares não certificam concentração do universo completo, pois faltam reconciliar os 24 dias. `[nao verificado]`
+
+Assumindo prazos em UTC e idade em dias completos, a distribuição dos 2.357 dias é: `[nao verificado]`
+
+| Faixa | Dias |
+|---|---:|
+| <0 | 0 |
+| 0–7 | 33 |
+| 8–15 | 111 |
+| 16–30 | 99 |
+| >30 | 2.082 |
+| Prazo `None` | 32 |
+| Total | 2.357 |
+
+O anexo removeu o offset dos prazos. Interpretá-los em `-03:00` transfere os três dias de col988, prazo `2026-10-14T17:30`, de `>30` para `16–30`: essas faixas passam a **2.079** e **102**, respectivamente. `[nao verificado]`
+
+## 14/11 18:51 · sessao 32d3120f3ba2 · - · - · origem=Ronald (tmux)
+
+**Emp2 / 09/2026: 545 linhas, 123 colabs**, após cruzamento dos mapas por colaborador. Fonte: TSV colado; arquivo:linha `[nao verificado]`.
+
+A diferença para os 544 da outra agente é **col836 / 2026-09-19**, uma linha omitida do mapa dela. Col832 tem 12 linhas; col667 tem 6. Fonte: anexo colado; arquivo:linha `[nao verificado]`.
+
+Maiores: col534=31; col788=21; col607=18; col312=15; col650=15; col209=14; col832=12; col883=11; col346/362/599/820/877=10 cada. Fonte: anexo colado; arquivo:linha `[nao verificado]`.
+
+Não ajustei a soma ao universo declarado de 2381. As demais fatias não foram recontadas nesta conferência `[nao verificado]`.
+
+## 14/11 18:50 · sessao 8dc621e17fdc · GRADE-RESOLVE · censo · origem=Code
+
+(A) `resolve.tsv`
+
+```tsv
+caso_fonte	caso_id	obra_id	estado_obra	prova_arquivo:linha	lateral_cen	lateral_lei	toca_congelado
+HJ-INGESTAO-0511	HJ-005-U1	candidata sem prova: BO-ADMIN-2710	SEM OBRA	app/docs/BACKLOG.md:820;app/docs/GRADE-MESTRA.md:137;cobertura individual [nao verificado]	—	—	—
+HJ-INGESTAO-0511	HJ-005-U2	COBERTURA-PARCIAL-UM-JUIZ	NO AR	app/docs/BACKLOG.md:829;app/docs/BACKLOG.md:993;app/docs/RELATO.md:8127	—	—	—
+HJ-INGESTAO-0511	HJ-005-U4	COBERTURA-PARCIAL-UM-JUIZ	NO AR	app/docs/BACKLOG.md:829;app/docs/BACKLOG.md:993;app/docs/RELATO.md:8127	—	—	—
+HJ-INGESTAO-0511	HJ-012-U2	nenhuma obra registrada	SEM OBRA	app/docs/RELATO.md:8390;cobertura [nao verificado]	—	—	—
+HJ-INGESTAO-0511	HJ-017-U1	O232	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1239;app/docs/GRADE-MESTRA.md:853	sim	sim	não, nas linhas citadas
+HJ-INGESTAO-0511	HJ-030-U1	FIO-LE-O-JUIZ	NO AR	app/docs/BACKLOG.md:2098;app/docs/BACKLOG.md:837	—	—	—
+BO2910-ESTRUTURA	01	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
+BO2910-ESTRUTURA	02	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
+BO2910-ESTRUTURA	05	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
+BO2910-ESTRUTURA	06	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
+BO2910-ESTRUTURA	08	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
+BO-ADMIN-2710	1	COBERTURA-PARCIAL-UM-JUIZ	NO AR	app/docs/BACKLOG.md:829;app/docs/BACKLOG.md:993;app/docs/RELATO.md:8127	—	—	—
+BO-ADMIN-2710	2	JUIZ-DO-PAR-DUAS-ENTRADAS	NO AR	app/docs/GRADE-MESTRA.md:38;app/docs/BACKLOG.md:819	—	—	—
+BO-ADMIN-2710	3	JUSTIFICATIVA-PAGA-O-PERIODO	ESPINHA A FAZER	app/docs/BACKLOG.md:1918;app/docs/BACKLOG.md:9;app/docs/GRADE-MESTRA.md:269	sim	sim	não, nas linhas citadas
+BO-ADMIN-2710	5	JUIZ-DO-PAR-DUAS-ENTRADAS	NO AR	app/docs/BACKLOG.md:819	—	—	—
+BO-ADMIN-2710	6	FIO-LE-O-JUIZ	NO AR	app/docs/BACKLOG.md:837	—	—	—
+BO-ADMIN-2710	7	REGISTRADO-NAO-E-VIVO	NO AR	app/docs/BACKLOG.md:823;app/docs/RELATO.md:3371;app/docs/GRADE-MESTRA.md:139	não	sim	não, nas linhas citadas
+BO-ADMIN-2710	8.1	TRILHA-DO-VINCULO-MENTE	NO AR	app/docs/BACKLOG.md:821;app/docs/GRADE-MESTRA.md:138	sim	sim	não, nas linhas citadas
+```
+
+Cen/lei seguem as duas primeiras casas da grade: `+` feito, `.` falta. “Toca congelado” considera somente os arquivos citados nas linhas das obras. app/docs/GRADE-MESTRA.md:7; app/docs/BACKLOG.md:1102; app/docs/BACKLOG.md:1239; app/docs/BACKLOG.md:1918; app/docs/BACKLOG.md:823; app/docs/BACKLOG.md:821.
+
+Ressalvas do cruzamento:
+
+- **HJ-005-U1:** BO-ADMIN-2710 registra medição e encaminhamento; seu `fecha BO=3` agregado não individualiza cobertura de 01/10. A COBPARC nomeia col42 em 08/15/22-10. Por isso U1 permanece candidata sem prova, contada como SEM OBRA. app/docs/BACKLOG.md:820; app/docs/GRADE-MESTRA.md:137; app/docs/BACKLOG.md:829.
+- **HJ-017-U1:** O232 combina a indicação do mapa fornecido com o caso nominal col923 e `fecha BO=1` do mapa HJ. O dia 27/09 não aparece na linha da obra: cobertura específica dessa data [nao verificado]. O complemento da ata permanece pendente; não foi contado como NO AR pelos pousos A/B. app/docs/BACKLOG.md:1239; app/docs/GRADE-MESTRA.md:853.
+- **Estados divergentes:** a COBPARC tem fechamento posterior ao PARADA da grade; JUSTIFICATIVA-PAGA-O-PERIODO voltou à ordem viva e recebe o item 3, expressamente separado da obra A. app/docs/GRADE-MESTRA.md:39; app/docs/RELATO.md:8127; app/docs/BACKLOG.md:993; app/docs/BACKLOG.md:1918; app/docs/BACKLOG.md:9.
+- **BO-ADMIN/2:** a prova nas fontes autorizadas é pela classe de divergência entre motor e ata; o encaminhamento nominal do caso está registrado no relato. app/docs/GRADE-MESTRA.md:38; app/docs/BACKLOG.md:819; app/docs/RELATO.md:3423.
+
+(B) Coluna `resolve` por obra
+
+| obra_id | resolve | Prova |
+|---|---|---|
+| COBERTURA-PARCIAL-UM-JUIZ | HJ-005-U2; HJ-005-U4; BO-ADMIN-2710/1 | app/docs/BACKLOG.md:829 |
+| JUIZ-DO-PAR-DUAS-ENTRADAS | BO-ADMIN-2710/2; BO-ADMIN-2710/5 | app/docs/GRADE-MESTRA.md:38; app/docs/BACKLOG.md:819 |
+| FIO-LE-O-JUIZ | HJ-030-U1; BO-ADMIN-2710/6 | app/docs/BACKLOG.md:2098; app/docs/BACKLOG.md:837 |
+| REGISTRADO-NAO-E-VIVO | BO-ADMIN-2710/7 | app/docs/BACKLOG.md:823 |
+| TRILHA-DO-VINCULO-MENTE | BO-ADMIN-2710/8.1 | app/docs/BACKLOG.md:821 |
+| JUSTIFICATIVA-PAGA-O-PERIODO | BO-ADMIN-2710/3 | app/docs/BACKLOG.md:1918 |
+| O232 | HJ-017-U1 | app/docs/BACKLOG.md:1239; app/docs/GRADE-MESTRA.md:853 |
+| BO2910-ESTRUTURA | BO2910-ESTRUTURA/01; /02; /05; /06; /08 | app/docs/BACKLOG.md:1102; app/docs/GRADE-MESTRA.md:170 |
+
+(C) QUADRO
+
+| Parcela | Casos | Lastro |
+|---|---:|---|
+| NO AR | 9 | app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:993; app/docs/BACKLOG.md:819; app/docs/BACKLOG.md:837; app/docs/BACKLOG.md:2098; app/docs/BACKLOG.md:823; app/docs/RELATO.md:3371; app/docs/BACKLOG.md:821 |
+| EM VOO | 0 | Nenhum vínculo acima possui esse estado; fontes das respectivas linhas em (A). |
+| ESPINHA A FAZER | 1 | app/docs/BACKLOG.md:1918; app/docs/BACKLOG.md:9 |
+| LATERAL PRONTA | 1 | O232: cen+lei, nenhum congelado citado. app/docs/GRADE-MESTRA.md:853; app/docs/GRADE-MESTRA.md:7; app/docs/BACKLOG.md:1239 |
+| LATERAL NÃO PRONTA | 5 | BO2910-ESTRUTURA: cen não fechado. app/docs/GRADE-MESTRA.md:170; app/docs/GRADE-MESTRA.md:7; app/docs/BACKLOG.md:1102 |
+| SEM OBRA | 2 | HJ-005-U1: candidata sem prova; HJ-012-U2: cobertura [nao verificado]. app/docs/BACKLOG.md:820; app/docs/RELATO.md:8400 |
+
+**ESTRUTURA: 18 = 9 + 0 + 1 + 1 + 5 + 2.** Soma dos casos discriminados em (A), com as provas acima. Encerramento atual dos casos em produção: **[nao verificado]**.
+
+## 14/11 18:50 · sessao 58e554e940f1 · E3-X2-NUNCA-JULGADAS · censo · origem=Code
+
+**E3-X2-NUNCA-JULGADAS — leitura**
+
+A lista contém **136 colab-dias únicos**. Quantos são nunca lavrados, vencidos ou indeterminados, e os exemplos de cada estado, permanecem **[nao verificado]**: o anexo não contém `veredito_lavrado`, `julgado_em`, `janela_expira_em`, marcos ou perguntas. Fonte: anexo `u136.tsv:1–137` — numeração considerando o cabeçalho como linha 1.
+
+| Empresa | Competência | Colab-dias | Fonte no anexo |
+|---|---|---:|---|
+| 1 | 10/2026 | 17 | `u136.tsv:2–18` |
+| 1 | 11/2026 | 20 | `u136.tsv:19–38` |
+| 2 | 09/2026 | 56 | `u136.tsv:39–94` |
+| 2 | 10/2026 | 21 | `u136.tsv:95–115` |
+| 2 | 11/2026 | 9 | `u136.tsv:116–124` |
+| 3 | 09/2026 | 9 | `u136.tsv:125–133` |
+| 3 | 10/2026 | 4 | `u136.tsv:134–137` |
+
+**O recorte exige uma ressalva.** Os 136 representam o recorte sem dono informado. Não representam necessariamente todos os dias com `t['nao_sei'] == True`: a escolha do dono precede o fallback `nao_sei`, e uma porta publicada conserva essa flag. Excluir os outros 390 é coerente com “sem dono”, mas reduz o universo se o item 4 pretendia **todos** os dias com a flag. O número 390 não foi recontado aqui **[nao verificado]**. Fontes: `app/chamados/services/tarefa_do_dia.py:604–614`, `:629–636`; anexo `leitura_nao_fica_ociosa_complemento.txt:3`.
+
+**Como nasce o desconhecimento**
+
+A implementação de `esta_stale` está em `app/chamados/veredito_lavrado.py:213`. A carga admite em `_lavra` somente valores `sim/nao` que não estejam stale. Quando a última decisão é validação e a pergunta ficou fora desse mapa, `_pela_decisao` devolve `veredito_sem_lavra_vigente`; a tarefa então marca `nao_sei=True`. Fontes: `app/chamados/services/tarefa_do_dia.py:153–156`, `:320–325`, `:419–422`.
+
+| Situação da pergunta | Ramo real |
+|---|---|
+| Campo vazio ou `julgado_em` ausente | `esta_stale=True`; `app/chamados/veredito_lavrado.py:224–225` |
+| Lavra posterior ao instante consultado | Também stale; não prova que nunca houve lavra. `app/chamados/veredito_lavrado.py:224–225` |
+| Relógio venceu a janela e a lavra antecede a expiração | Stale. A comparação usa datas locais. `app/chamados/veredito_lavrado.py:114–116`, `:228–229` |
+| Marco do colaborador posterior à lavra | Stale. `app/chamados/veredito_lavrado.py:230–233` |
+| Nenhum desses motivos | `esta_stale=False`. `app/chamados/veredito_lavrado.py:234` |
+| Valor persistido `indeterminado` | Nasce quando o juiz lança exceção; não é, sozinho, motivo de stale. `app/chamados/veredito_lavrado.py:261–269`, `:224–234` |
+
+`nao_sei` também nasce fora da lavra: célula ausente, ata sem lâmpadas, lâmpada desconhecida, marco sem teto, identidade insuficiente e outros retornos sem decisão. Portanto, não cabe converter automaticamente os 136 em “perguntas nunca julgadas”. Fontes: `app/chamados/services/tarefa_do_dia.py:216–226`, `:140–141`, `:173`, `:284–290`, `:305–310`, `:322–325`.
+
+O próprio anexo contém **20 dias do colab 924 sem célula identificada**; isso não comprova ausência de pergunta ou de lavra. Fonte: `u136.tsv:74–93`; situação das perguntas desses dias **[nao verificado]**.
+
+**Quem deveria lavrar**
+
+| Estado/evento | Rotina e alcance demonstrado |
+|---|---|
+| Nunca lavrado ou vencido, com destino vivo | `lavrar_perguntas_stale`: seleciona perguntas cujo `chamado_destino` está em `VIVOS`, limita a rodada a 500 por padrão e chama `lavrar(p)` com `--apply`. `app/chamados/management/commands/lavrar_perguntas_stale.py:35`, `:57–62`, `:82–89` |
+| Papel do cron | Cadastrado a cada cinco minutos, com `--apply`, estágio `continuo`, sem dependências; papel **`lavra`**. Cadastro não comprova execução. `app/config/crons.py:390–391`, `:2264`; execução **[nao verificado]** |
+| Indeterminado com carimbos vigentes | Não há nova tentativa nesse cron apenas pelo valor `indeterminado`; precisa entrar por algum motivo de stale. `app/chamados/services/raiox.py:40–47` |
+| Materialização | O materializador chama `carimbar(..., lavrar_veredito=True)`; a porta chama `lavrar(salvar=False)` e salva os campos juntos. `app/chamados/services/materializacao.py:1283–1284`; `app/chamados/models.py:3232–3235` |
+| Fechamento do chamado | O signal S143 aciona o resolvedor; este seleciona perguntas do destino, não materializadas e com disputa aberta, e pode carimbar com lavra. `app/chamados/signals.py:91–117`; `app/chamados/services/disputa_emissao.py:1913–1917`, `:1993–1994` |
+| Mudança do estado do destino | `_gravar_estado` relavra no ramo de cruzamento da fronteira de encerramento, para perguntas daquele destino sem validação. `app/chamados/models.py:303–312` |
+| Reapontamento, mudança de dia ou via derivada | Relavram junto da alteração correspondente. `app/chamados/services/fio.py:964–967`, `:1081–1082`; `app/chamados/services/relavra_via.py:118–128` |
+| Backfill | É sob ordem, não rotina; seu recorte compara o valor do veredito. `app/config/crons.py:1420`; `app/chamados/management/commands/backfill_veredito_lavrado.py:115–132` |
+
+Assim, sem os destinos e campos das perguntas, atribuir falha individual a cron, signal ou porta permanece **[nao verificado]**. O leitor GET não é o lavrador atual. Fonte: `app/chamados/services/raiox.py:112–119`.
+
+**Sonda proposta**
+
+A sonda abaixo usa o mesmo universo, janela, `_carga` e chamadas de tarefa da remedida; reutiliza as perguntas carregadas e chama `esta_stale` real. Fontes: `app/folha/fora_da_folha.py:58–79`, `:109–144`; `app/chamados/services/tarefa_do_dia.py:392–422`, `:533–560`.
+
+Para não inventar prioridade entre perguntas, o dia recebe `nunca_lavrado` ou `vencido` somente quando suas perguntas causais concordam. Ausência de causa de lavra exposta ou causas mistas ficam em `indeterminado`, identificadas como **classificação não resolvida [nao verificado]**, separadamente do valor persistido `VL_INDETERMINADO`. A necessidade dessa distinção decorre dos vários ramos de `nao_sei`. Fonte: `app/chamados/services/tarefa_do_dia.py:216–325`.
+
+O congelamento abrange o shell porque o universo contém `localdate()` implícito. O bootstrap desativa os handlers de arquivo antes do Django iniciar e usa `-B`. Fontes: `app/folha/export.py:1238`; `app/requirements.txt:43`; `app/config/settings/saas.py:136–166`. Execução no ambiente de banco e resultados: **[nao verificado]**.
+
+```bash
+# Executar a partir de app/. Saida apenas em stdout; sem redirecionamento.
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import datetime as dt
+import importlib
+import json
+import os
+import sys
+from collections import Counter, defaultdict
+
+# app/manage.py:9; app/config/settings/saas.py:136,160.
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.saas")
+os.environ["PGOPTIONS"] = (
+    os.environ.get("PGOPTIONS", "") + " -c default_transaction_read_only=on"
+).strip()
+config = importlib.import_module(os.environ["DJANGO_SETTINGS_MODULE"])
+config.LOGGING_CONFIG = None
+
+# Anexo u136.tsv:2-137. Cada linha agrupa datas do mesmo emp/comp/colab.
+DADOS = """1 10/2026 950 2026-09-29 2026-10-08 2026-10-09 2026-10-14 2026-10-15 2026-10-16 2026-10-19 2026-10-20
+1 10/2026 969 2026-10-07 2026-10-08 2026-10-09 2026-10-13 2026-10-14 2026-10-15 2026-10-16 2026-10-18 2026-10-20
+1 11/2026 950 2026-10-21 2026-10-22 2026-10-23 2026-10-27 2026-10-30 2026-11-03 2026-11-11 2026-11-12 2026-11-13
+1 11/2026 969 2026-10-22 2026-10-24 2026-10-26 2026-10-28 2026-10-30 2026-11-01 2026-11-03 2026-11-05 2026-11-07 2026-11-09 2026-11-13
+2 09/2026 192 2026-08-23
+2 09/2026 207 2026-08-22 2026-08-26 2026-08-30 2026-09-05 2026-09-13 2026-09-19
+2 09/2026 209 2026-08-21 2026-08-23
+2 09/2026 268 2026-08-21 2026-08-23
+2 09/2026 301 2026-08-23
+2 09/2026 327 2026-08-23
+2 09/2026 382 2026-08-27
+2 09/2026 435 2026-09-20
+2 09/2026 438 2026-09-07
+2 09/2026 439 2026-09-15
+2 09/2026 451 2026-08-21 2026-08-23
+2 09/2026 468 2026-09-17
+2 09/2026 491 2026-09-20
+2 09/2026 556 2026-09-14
+2 09/2026 726 2026-09-08
+2 09/2026 789 2026-08-26 2026-09-01 2026-09-13
+2 09/2026 822 2026-08-28
+2 09/2026 849 2026-09-18 2026-09-19
+2 09/2026 915 2026-09-07
+2 09/2026 921 2026-09-05 2026-09-12 2026-09-19
+2 09/2026 922 2026-09-18
+2 09/2026 923 2026-09-06
+2 09/2026 924 2026-09-01 2026-09-02 2026-09-03 2026-09-04 2026-09-05 2026-09-06 2026-09-07 2026-09-08 2026-09-09 2026-09-10 2026-09-11 2026-09-12 2026-09-13 2026-09-14 2026-09-15 2026-09-16 2026-09-17 2026-09-18 2026-09-19 2026-09-20
+2 09/2026 953 2026-09-16
+2 10/2026 207 2026-10-10
+2 10/2026 243 2026-09-27
+2 10/2026 252 2026-09-29
+2 10/2026 297 2026-09-21
+2 10/2026 821 2026-09-30 2026-10-10 2026-10-12
+2 10/2026 841 2026-10-10
+2 10/2026 849 2026-10-02 2026-10-03
+2 10/2026 922 2026-09-29 2026-10-17
+2 10/2026 924 2026-09-22
+2 10/2026 957 2026-09-21
+2 10/2026 988 2026-10-10 2026-10-15 2026-10-16 2026-10-18 2026-10-19
+2 10/2026 991 2026-10-11 2026-10-14
+2 11/2026 265 2026-10-31 2026-11-14
+2 11/2026 407 2026-10-21 2026-10-29 2026-11-02
+2 11/2026 516 2026-10-22
+2 11/2026 673 2026-10-21
+2 11/2026 821 2026-10-24
+2 11/2026 922 2026-10-23
+3 09/2026 129 2026-08-28 2026-08-30 2026-09-08 2026-09-13 2026-09-15 2026-09-20
+3 09/2026 515 2026-09-09
+3 09/2026 829 2026-08-25 2026-09-15
+3 10/2026 155 2026-09-27 2026-10-04 2026-10-11 2026-10-12"""
+
+AGORA = dt.datetime.fromisoformat("2026-11-14T18:45:00+00:00")
+ESTADOS = ("nunca_lavrado", "vencido", "indeterminado")
+
+
+def sonda():
+    from django.db import connection, transaction
+    from django.utils import timezone
+    from django_tenants.utils import schema_context
+    from folha import fora_da_folha as F
+    from colaboradores.models import Empresa
+    from chamados.catalogo.motor import VIVOS
+    from chamados.veredito_lavrado import (
+        esta_stale, marcos_do_lote, relogio_virou,
+    )
+    from ponto.janelas import janela_fechamento
+
+    alvos = []
+    for linha in DADOS.splitlines():
+        emp, comp, cid, *dias = linha.split()
+        alvos.extend(
+            (int(emp), comp, int(cid), dt.date.fromisoformat(d))
+            for d in dias
+        )
+    assert len(alvos) == len({
+        (cid, d) for _, _, cid, d in alvos
+    }) == 136
+
+    def j(obj):
+        return json.dumps(
+            obj, ensure_ascii=False, sort_keys=True, default=str,
+        )
+
+    def diagnostico(p, marcos):
+        # Funcao REAL: app/chamados/veredito_lavrado.py:213.
+        stale = esta_stale(p, marcos, AGORA)
+        if not p.veredito_lavrado or p.julgado_em is None:
+            estado = "nunca_lavrado"
+            motivo = "campo_vazio_ou_julgado_ausente"
+        elif stale:
+            estado = "vencido"
+            if p.julgado_em > AGORA:
+                motivo = "lavra_posterior_a_agora"
+            elif relogio_virou(
+                p.julgado_em, p.janela_expira_em, AGORA,
+            ):
+                motivo = "relogio"
+            else:
+                motivo = "marco_posterior"
+        elif p.veredito_lavrado not in ("sim", "nao"):
+            estado = "indeterminado"
+            motivo = "valor_da_lavra:" + p.veredito_lavrado
+        else:
+            estado, motivo = "vigente", "lavra_vigente"
+
+        destino = p.chamado_destino
+        no_cron = bool(destino and destino.status_local in VIVOS)
+        return {
+            "pergunta": p.pk,
+            "motivo": p.motivo,
+            "instancia": p.instancia_marco,
+            "estado": estado,
+            "diagnostico": motivo,
+            "esta_stale": stale,
+            "veredito_lavrado": p.veredito_lavrado,
+            "vl_indeterminado_gravado":
+                p.veredito_lavrado == "indeterminado",
+            "julgado_em": p.julgado_em,
+            "janela_expira_em": p.janela_expira_em,
+            "marco": marcos.get(p.disputa.colaborador_id),
+            "chamado_destino": p.chamado_destino_id,
+            "status_destino":
+                destino.status_local if destino else None,
+            "no_universo_cron": no_cron,
+            "elegivel_cron_stale": no_cron and stale,
+            "fonte": (
+                "app/chamados/veredito_lavrado.py:224; "
+                "app/chamados/management/commands/"
+                "lavrar_perguntas_stale.py:57"
+            ),
+        }
+
+    resultados = []
+    # Mesma carga/janela da remedida: fora_da_folha.py:58.
+    with timezone.override("America/Sao_Paulo"):
+        with schema_context("juliani"), transaction.atomic():
+            with connection.cursor() as cur:
+                cur.execute(
+                    "SET TRANSACTION ISOLATION LEVEL "
+                    "REPEATABLE READ, READ ONLY"
+                )
+                cur.execute("SHOW transaction_read_only")
+                assert cur.fetchone()[0] == "on"
+                cur.execute("SELECT current_schema()")
+                assert cur.fetchone()[0] == "juliani"
+
+            for emp_id, comp in sorted({
+                (e, c) for e, c, _, _ in alvos
+            }):
+                mes, ano = map(int, comp.split("/"))
+                emp = Empresa.objects.get(pk=emp_id)
+                u = F.dias_que_seguram(emp, mes, ano)
+                colabs, por = u["colabs"], u["dias"]
+                retidos = [colabs[c] for c in por if por[c][1]]
+                carga = (
+                    F._carga(
+                        retidos,
+                        *janela_fechamento(mes, ano, emp),
+                        AGORA,
+                    )
+                    if retidos else None
+                )
+                ids = {c.pk for c in retidos}
+                marcos = (
+                    marcos_do_lote(ids, ate=AGORA) if ids else {}
+                )
+                universo = {
+                    (cid, d["data"])
+                    for cid, (_, ds) in por.items()
+                    for d in ds
+                }
+
+                for e, c, cid, dia in alvos:
+                    if (e, c) != (emp_id, comp):
+                        continue
+
+                    r = {
+                        "emp": e, "comp": c,
+                        "colab": cid, "dia": dia,
+                        "no_universo_atual": (cid, dia) in universo,
+                        "estado": "indeterminado",
+                        "perguntas": [],
+                        "diagnostico":
+                            "colab_fora_da_carga:[nao verificado]",
+                        "fio": None,
+                        "nao_sei": None,
+                        "confere_recorte": False,
+                    }
+
+                    if carga is not None and cid in ids:
+                        # As mesmas duas chamadas da remedida.
+                        fio = F._fio_do_dia(
+                            colabs[cid], dia, carga,
+                        )
+                        t = carga.tarefa(colabs[cid], dia)
+
+                        causais = {
+                            i["pergunta_id"]
+                            for i in t["instancias"]
+                            if i.get("razao")
+                                == "veredito_sem_lavra_vigente"
+                            and i.get("pergunta_id") is not None
+                        }
+                        # Objetos reais da carga:
+                        # tarefa_do_dia.py:392-398.
+                        ps = carga._perg.get((cid, dia), [])
+                        diags = [
+                            diagnostico(p, marcos) for p in ps
+                        ]
+                        escolhidas = [
+                            p for p in diags
+                            if p["pergunta"] in causais
+                        ]
+                        estados = {
+                            p["estado"] for p in escolhidas
+                        }
+
+                        if (
+                            escolhidas
+                            and len(estados) == 1
+                            and estados <= set(ESTADOS)
+                            and len(escolhidas) == len(causais)
+                        ):
+                            r["estado"] = next(iter(estados))
+                            r["diagnostico"] = (
+                                "lavra_indeterminada"
+                                if r["estado"] == "indeterminado"
+                                else "perguntas_causais_concordam"
+                            )
+                        elif escolhidas:
+                            r["diagnostico"] = (
+                                "causas_mistas_ou_incompletas:"
+                                "[nao verificado]"
+                            )
+                        else:
+                            r["diagnostico"] = (
+                                "nao_sei_sem_causa_de_lavra_exposta:"
+                                "[nao verificado]"
+                            )
+
+                        r.update(
+                            fio=fio,
+                            fio_tarefa=t["fio"],
+                            nao_sei=t["nao_sei"],
+                            razao=t["razao"],
+                            razoes_instancias=[
+                                {
+                                    "pergunta": i["pergunta_id"],
+                                    "razao": i["razao"],
+                                }
+                                for i in t["instancias"]
+                            ],
+                            perguntas=escolhidas,
+                            perguntas_do_dia=diags,
+                            confere_recorte=(
+                                r["no_universo_atual"]
+                                and fio == "nada"
+                                and t["nao_sei"]
+                            ),
+                        )
+                    resultados.append(r)
+
+    # Erro de carga/banco aborta: nao vira contagem aparente.
+    assert len(resultados) == 136
+
+    print("**E3-X2-NUNCA-JULGADAS — sonda de leitura**")
+    print("\nAGORA=" + AGORA.isoformat() + "; tenant=juliani.")
+    print(
+        "\nFonte da carga: app/folha/fora_da_folha.py:58; "
+        "fonte da tarefa: "
+        "app/chamados/services/tarefa_do_dia.py:533; "
+        "fonte stale: app/chamados/veredito_lavrado.py:213."
+    )
+    print(
+        "\nIndeterminado do DIA inclui falta de classificacao "
+        "unica; o valor persistido fica separado em "
+        "veredito_lavrado. Convencao diagnostica "
+        "[nao verificado]."
+    )
+
+    print(
+        "\n| emp | comp | colab | dia | estado | "
+        "perguntas causais |"
+    )
+    print("|---|---|---|---|---|---|")
+    for r in resultados:
+        pks = ",".join(
+            str(p["pergunta"]) for p in r["perguntas"]
+        ) or "[nao verificado]"
+        print(
+            "| {emp} | {comp} | {colab} | {dia} | "
+            "{estado} | ".format(**r) + pks + " |"
+        )
+
+    print("\nDetalhes por dia, sem nomes, CPF ou respostas:")
+    print("\n~~~jsonl")
+    for r in resultados:
+        print(j(r))
+    print("~~~")
+
+    cont = Counter(
+        (r["estado"], r["comp"], r["emp"])
+        for r in resultados
+    )
+    exemplos = defaultdict(list)
+    for r in resultados:
+        chave = r["estado"], r["comp"], r["emp"]
+        if len(exemplos[chave]) < 3:
+            exemplos[chave].append({
+                "colab": r["colab"],
+                "dia": r["dia"],
+                "perguntas": [
+                    p["pergunta"] for p in r["perguntas"]
+                ],
+                "diagnostico": r["diagnostico"],
+            })
+
+    print(
+        "\n| estado | comp | emp | colab-dias | "
+        "ate 3 exemplos |"
+    )
+    print("|---|---|---|---|---|")
+    for comp, emp in sorted({
+        (c, e) for e, c, _, _ in alvos
+    }):
+        for estado in ESTADOS:
+            k = estado, comp, emp
+            print(
+                "| %s | %s | %s | %s | %s |" % (
+                    estado, comp, emp,
+                    cont[k], j(exemplos[k]),
+                )
+            )
+
+    print(
+        "\nSubtipos de indeterminado "
+        "(nao confundir com VL_INDETERMINADO):"
+    )
+    for motivo, n in sorted(Counter(
+        r["diagnostico"] for r in resultados
+        if r["estado"] == "indeterminado"
+    ).items()):
+        print("- %s: %s" % (motivo, n))
+
+    print("\nE3X2_TOTAL " + j(dict(Counter(
+        r["estado"] for r 
+
+[truncado em 20000 de 20915 caracteres]
+
+## 14/11 18:49 · sessao 505e81710761 · - · - · origem=Ronald (tmux)
+
+Estatística independente do anexo, agregada só em memória:
+
+| Empresa | 09/2026 | 10/2026 | 11/2026 | Total |
+|---|---:|---:|---:|---:|
+| 3 | 94 | 117 | 156 | 367 |
+| 4 | 6 | 8 | 9 | 23 |
+
+Fonte: `universo_dias.tsv` do prompt; sem arquivo local numerado, portanto `[nao verificado]` para citação arquivo:linha.
+
+**Correção certa:** empresa 2, competência 10, col607 tem **30 linhas**, de 21/09 a 20/10 consecutivos; contar 10 omite as 20 linhas de outubro. Fonte: anexo do prompt `[nao verificado]`.
+
+Meu mapa preliminar empresa 2/10 soma **615**, encaminhado integralmente para comparação; ainda há diferença de 2 contra a contagem informada de 593 após corrigir col607 (+20). Não ajustei ao universo declarado. `[nao verificado]`
+
+## 14/11 18:49 · sessao 32d3120f3ba2 · - · - · origem=Ronald (tmux)
+
+Conferência independente de **emp2 / 11/2026: 790 linhas, 192 colabs**. Contagem por grupos do TSV colado; arquivo materializado `[nao verificado]`.
+
+O mapa da outra agente divergia somente nestes grupos:
+
+- **col371: 1 dia**, `2026-10-30`; ela havia contado 4.
+- **col655: 5 dias**, `2026-10-22`, `2026-10-26`, `2026-11-02`, `2026-11-09`, `2026-11-10`; ela havia contado 9.
+
+Assim, `797 − 3 − 4 = 790`, coincidente com minha transcrição independente. Fonte: anexo `universo_dias.tsv` colado; números de linha `[nao verificado]`.
+
+Maiores grupos dessa fatia: col667=25; col915=25; col607=24; col717=24; col317=20; col921=20; col926=19; col534=16; col532=14; col349/696/820/832/967=13 cada. Fonte: anexo colado; números de linha `[nao verificado]`.
+
+A conferência cobre somente emp2/11; **não ajustei ao total declarado de 2381**. Demais fatias `[nao verificado]` por esta conferência.
+
+## 14/11 18:49 · sessao d4893d2abeca · - · - · origem=Ronald (tmux)
+
+| Caso | Vínculo recomendado | Prova e estado |
+|---|---|---|
+| HJ-005-U1 | **candidata sem prova → SEM OBRA** | BO-ADMIN-2710 apenas mede/encaminha; não demonstra cobertura de col42 em 01/10. COBPARC nomeia 08/15/22-10 e ausência parcial, característica não demonstrada para U1 pelo anexo. app/docs/BACKLOG.md:820; app/docs/BACKLOG.md:829; app/docs/GRADE-MESTRA.md:137 |
+| HJ-005-U2 | **COBERTURA-PARCIAL-UM-JUIZ — NO AR** | Nomeia col42 em 08/10 e FATO_EM_AUSENCIA. Pouso posterior ao PAROU antigo documentado no BACKLOG; fechamento explícito no RELATO. app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:993; app/docs/RELATO.md:8127 |
+| HJ-005-U4 | **COBERTURA-PARCIAL-UM-JUIZ — NO AR** | Nomeia col42 em 15/10; mesmas provas de estado. app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:993; app/docs/RELATO.md:8127 |
+| HJ-012-U2 | **nenhuma obra registrada — SEM OBRA** | O mapa fornecido diz sem obra. A referência a col239 no feriado apresenta cobrança legítima encaminhada ao DP, sem obra de cobertura demonstrada; preservar dono ESTRUTURA imposto pelo universo. app/docs/BACKLOG.md:1541; app/docs/RELATO.md:8390. Ausência de outra cobertura: [nao verificado]. |
+| HJ-017-U1 | **O232 — LATERAL PRONTA** | O mapa fornecido indica O232; a obra nomeia col923, borda/ata e dias estruturais, embora não individualize 27/09. A GRADE confirma uma unidade do mapa HJ e mantém complemento da ATA pendente. app/docs/BACKLOG.md:1239; app/docs/GRADE-MESTRA.md:853 |
+| HJ-030-U1 | **FIO-LE-O-JUIZ — NO AR** | Encaminhamento exato “col94 16/10 já em FIO-LE-O-JUIZ”; obra registra NO AR 7c9e4c27 e caso col94/#44764/#6984. app/docs/BACKLOG.md:2098; app/docs/BACKLOG.md:837 |
+
+O232: **cen=sim; lei=sim**, pela grade `+++....++` e legenda. **toca_congelado=não nas linhas examinadas**: aparecem cartorio.py, escala/utils.py, ponto/turnos.py e teste; nenhum dos seis congelados. A colisão com `ponto/turnos.py` não altera esse campo nem o critério literal de LATERAL PRONTA solicitado. app/docs/GRADE-MESTRA.md:7; app/docs/GRADE-MESTRA.md:853; app/docs/BACKLOG.md:1239.
+
+Ressalva de interpretação: O232 tem prova nominal de col923 + vínculo fornecido no mapa, mas não dia 27/09 no registro da obra; se a consolidação exigir também igualdade de data, marcar **candidata sem prova**. O critério do usuário permite caso, classe **ou** sítio; por isso recomendo aceitar o vínculo sem afirmar resolução efetiva em produção. app/docs/BACKLOG.md:1239; app/docs/GRADE-MESTRA.md:853.
+
+## 14/11 18:48 · sessao 98db6cf4ab8a · - · - · origem=Ronald (tmux)
+
+| Caso BO-ADMIN-2710 | Obra | Prova de cobertura | Estado documentado |
+|---|---|---|---|
+| 1 | COBERTURA-PARCIAL-UM-JUIZ | `app/docs/BACKLOG.md:829` nomeia item 1, col42 e `supra_juiz` RAMO 2 | GRADE registra PARADA (`app/docs/GRADE-MESTRA.md:39`); BACKLOG registra deploy posterior COBPARC `e1c08457`, 02/11 (`app/docs/BACKLOG.md:993`). Divergência documental. |
+| 2 | JUIZ-DO-PAR-DUAS-ENTRADAS | Classe “motor e ata formarem os mesmos turnos” em `app/docs/GRADE-MESTRA.md:38`; mesma batida/marco produzindo turnos diferentes em `app/docs/BACKLOG.md:819`. Vínculo nominal col789 e `_match_marcos` em `app/docs/CORTES.md:340`. | NO AR `b3bf529e`, com resíduos (`app/docs/BACKLOG.md:819`). |
+| 3 | JUSTIFICATIVA-PAGA-O-PERIODO | Caso RT-04 col789 11/10 e separação da obra A explícitos (`app/docs/BACKLOG.md:1918`). | ESPINHA A FAZER por ordem viva (`app/docs/BACKLOG.md:9`; `app/docs/BACKLOG.md:1918`), embora balde LATERAL na GRADE (`app/docs/GRADE-MESTRA.md:269`). |
+| 5 | JUIZ-DO-PAR-DUAS-ENTRADAS | RT-02 col247 24/10, pergunta errada de intervalo explicitada (`app/docs/BACKLOG.md:819`). | NO AR `b3bf529e` (`app/docs/BACKLOG.md:819`). |
+| 6 | FIO-LE-O-JUIZ | Carregar perguntas vivas independentemente do estado da disputa (`app/docs/BACKLOG.md:837`). | NO AR `7c9e4c27` (`app/docs/BACKLOG.md:837`). |
+| 7 | REGISTRADO-NAO-E-VIVO | Item 7 e chamado #28883 explicitados (`app/docs/BACKLOG.md:823`). | NO AR na linha; hash `475318fa` aparece no RELATO (`app/docs/BACKLOG.md:823`; `app/docs/RELATO.md:3371`). |
+| 8.1 | TRILHA-DO-VINCULO-MENTE | Item 8.1 explicitado (`app/docs/BACKLOG.md:821`). | NO AR `5e9a0a51`; resíduos RT-03 são outros problemas (`app/docs/BACKLOG.md:821`). |
+
+A parte de justificativa do item 3 saiu expressamente da COBERTURA-PARCIAL para JUSTIFICATIVA-PAGA-O-PERIODO; não atribuir ambas ao mesmo caso (`app/docs/CORTES.md:352`; `app/docs/BACKLOG.md:1918`).
+
+Para laterais, a convenção das casas é `cen-lei-...`, com `+` feito e `.` falta (`app/docs/GRADE-MESTRA.md:7`):
+
+| Lateral | Cen | Lei | Congelado citado na linha da obra |
+|---|---|---|---|
+| JUSTIFICATIVA-PAGA-O-PERIODO | sim | sim | não; linha cita motor/efeito de ausência (`app/docs/GRADE-MESTRA.md:269`; `app/docs/BACKLOG.md:1918`). |
+| REGISTRADO-NAO-E-VIVO | não | sim | não (`app/docs/GRADE-MESTRA.md:139`; `app/docs/BACKLOG.md:823`). |
+| TRILHA-DO-VINCULO-MENTE | sim | sim | não; cita serviços/views de colaboradores e signal de escala (`app/docs/GRADE-MESTRA.md:138`; `app/docs/BACKLOG.md:821`). |
+
+`chamados/services/painel.py`, citado no histórico da obra REGISTRADO, é caminho diferente do congelado `chamados/painel.py` (`app/docs/RELATO.md:3381`).
+
+A linha de prova nominal da obra para item 2 está em CORTES, fora das duas fontes autorizadas para a coluna de prova; nas fontes autorizadas há prova pela classe em GRADE:38/BACKLOG:819. Se a classe for considerada insuficiente, registrar “candidata sem prova”, sem promover CORTES a prova permitida (`app/docs/GRADE-MESTRA.md:38`; `app/docs/BACKLOG.md:819`; `app/docs/CORTES.md:340`).
 
 ## 14/11 18:47 · sessao eb0432a81e21 · - · - · origem=Ronald (tmux)
 
@@ -623,318 +1232,4 @@ Verificação dos seis: **4 CONFERE, 2 DIVERGE, 0 SUMIU**. F05/F06 permanecem co
 
 Para o fechamento solicitado: **F05 e F06 caem como provas dos caminhos RET→TXT e dias da folha→vigia apresentados no censo**, embora os sítios crus não tenham sumido e ainda alcancem diagnóstico/informativo/leitura individual (`app/folha/export.py:1241`, `app/folha/export.py:1269`, `app/ponto/services/fechamento.py:1067`, `app/folha/fora_da_folha.py:224`, `app/folha/export.py:1228`).
 
-## 14/11 18:39 · sessao 8520b811ee6b · - · - · origem=Ronald (tmux)
-
-Todos os oito sítios permanecem; predicados conferem. Recomendo **8 CONFERE**, com ressalva explícita sobre o alcance condicional de P39.
-
-A autoridade aceita EC inativa com fim declarado cobrindo a data (`app/escala/alimentacao.py:196`, `:214`, `:215`); escolhe pela geradora ou pelos vínculos cobertos e não lê `situacao` (`app/escala/alimentacao.py:269`, `:279`, `:282`, `:285`, `:286`). Portanto CE S/A procedem como hipóteses de código nos oito casos; ocorrência de produção é [não verificado].
-
-| ID | Sítio HEAD / leitura | Predicado | Caminho comprovado / alcance | CE | Veredito |
-|---|---|---|---|---|---|
-| P39 | `app/ponto/services/he_pendente_lavrado.py:92`, S: sim | Sim: empresa e `situacao='ativo'`; fornece dias/retrato em `:160`, `:169` | **Folha sim, condicional; fio não demonstrado.** Caminho original: `apurar` (`he_pendente_lavrado.py:92`, `:160`) → `lavrar` (`app/ponto/management/commands/lavrar_he_pendente.py:62`, `:71`; grava em `he_pendente_lavrado.py:182`) → `ler` (`app/ponto/management/commands/recusar_ponta_pequena.py:98`) → alvos (`:113`, `:156`) → `recusar_ponta_pequena` (`:170`) → `_gravar` (`app/ponto/portas/he.py:341`) → estado vivo (`app/ponto/services/gestao_he.py:86`) → `medir` (`app/folha/porta_export.py:684`, `:686`) → teste de trava (`:230`, `:232`, `:690`) e recusa (`:853`, `:865`). A pequena estável não trava: a recusa automática rejeita acima do limite (`he.py:313`) e TXT só trava acima (`porta_export.py:230`). Ainda pode alcançar com foto pequena e vivo posterior grande; comando exige apenas foto do mesmo dia (`recusar_ponta_pequena.py:105`, `:106`). **Caminho adicional mais direto:** lavrador injeta `_revogar` (`lavrar_he_pendente.py:56`, `:59`, `:62`) → `apurar` chama callback somente para os S ativos (`he_pendente_lavrado.py:92`, `:143`) → `revogar_recusa_do_sistema` marca revogada (`he.py:472`) → `_marcar_revogada.save` (`he.py:373`, `:375`) → `estado_por_dia` lê só vigentes (`gestao_he.py:86`, `:87`) → portão supracitado. | Sim, S atual pode omitir vínculo histórico válido e impedir a revogação (`he_pendente_lavrado.py:92`, `:143`; autoridade acima) | CONFERE, alcance condicional precisa da ressalva |
-| P44 | `app/ponto/services/vigia_de_hora.py:117`, S: sim | Sim: pula desligado **ou isento** (`:117`, `:119`) | **Fio sim**, `rodar` → `julgar_celula` (`vigia_de_hora.py:131`) → `julgar_colab` (`app/ponto/services/cartorio.py:2040`) → `emissor._abrir_chamado` sob apply e demais gates (`cartorio.py:1791`, `:1829`) → `ChamadoColaborador.abrir` (`app/ponto/management/commands/detectar_ausencias.py:694`). Raw gate também impede julgamento/reconciliação, como alegado. Folha não demonstrada neste fluxo. | Sim S, inclusive ontem (candidatas de hoje/ontem em `vigia_de_hora.py:114`, `:115`) | CONFERE |
-| P66 | `app/chamados/services/pergunta_no_app.py:186`, S: sim | Sim: COBRANCA, módulos `CALADOS_POR_ISENCAO`, colaborador ativo (`:185`, `:186`) | **Fio sim, sob apply**. `Command.handle` → `medir` (`app/chamados/management/commands/perguntar_chamados_sem_pergunta.py:21`) → filtro/achados (`pergunta_no_app.py:186`, `:201`, `:203`) → `perguntar` (`command:29`; dry retorna em `:26`, `:28`) → `criar_disputa_a_partir_de_chamados_orfaos` (`pergunta_no_app.py:246`) → pai/disputa (`app/chamados/services/disputa_emissao.py:1104`, `:1123`) → `_complementar_marcos_faltantes` (`:1175`) → `_criar_pergunta_se_couber` (`:881`) → `PerguntaDisputa.abrir` (`:837`). Folha não demonstrada. | Sim S | CONFERE |
-| P65 | `app/chamados/services/limbo_folgas.py:65`, A: sim | Sim: conta A=True do template, ou usa 1 sem tid (`:64`, `:65`) | **Não alcança folha/fio decisório neste sítio.** `aplicar_sugestao` → `texto_seco(sug,n_tpl)` → `reescrever_texto` (`:70`); n_tpl só forma sufixo textual (`:49`, `:51`, `:52`). Aceitação decide pelos dias/classe/tid (`:82`, `:85`), não pelo contador. | Sim A para contagem do alcance; não prova mudança de emissão (`:51`, `:65`) | CONFERE |
-| P22 | `app/ponto/selecao_periodo.py:278`, A: sim | Sim: mapa de jornada por A=True; fallback 24h (`:269`, `:278`, `:280`, `:287`). Nota: `order_by(data_inicio)` + `setdefault` escolhe a **primeira mais antiga**, apesar do comentário dizer mais recente (`:276`, `:279`, `:280`); o censo não alegou ordem. | **Não alcança** no fluxo encontrado. `turnos_em_turno_stored` retorna mapa (`:292`, `:293`) → wrapper `colabs_em_turno_stored` (`:253`) → endpoint de dashboard usa tamanho (`app/core/views.py:1160`, `:1161`). | Sim A: pode usar jornada atual diferente daquela do turno histórico, ou fallback em EC inativa válida (`:278`, `:287`) | CONFERE |
-| C64 | `app/ferias/management/commands/alertar_retornos.py:30`, S: sim | Sim: ativo; EC do mapa ativo (`:28`, `:31`), hoje False e amanhã True (`:34`) | **Não alcança folha/fio decisório.** `handle` → lista retornam (`:35`) → `push_dp` (`:45`), aviso para disponibilidade. | Sim S | CONFERE |
-| C11 | `app/escala/views_plano_folgas.py:176`, A: sim | Sim: pk e A=True; ausente erro `vinculo` e continue (`:176`, `:178`, `:179`) | **Folha e fio sim.** `plano_folgas_aplicar` → `aplicar_folgas_em_lote` (`:185`) → `relavrar_celulas_da_foto` (`app/escala/folgas.py:418`) → `regenerar_celulas_vinculo` (`folgas.py:293`; reexport em `app/ponto/management/commands/gerar_celulas.py:13`) → `_o_chao_do_dia_mudou` (`app/ponto/portas/celula.py:392`) → `julgar_celula` (`:472`), `recalcular_por_evento` (`:496`), callback de rejunção/reavaliação (`:531`, `:536`, `:539`, `:540`). | Sim A; vínculo inativo cobrindo um dia editável é barrado antes da porta (`views_plano_folgas.py:176`, `:179`) | CONFERE |
-| C40 | `app/ponto/management/commands/reconciliar_grade.py:106`, S: sim | Sim: ativo, empresa, IDs na união de batidas/chamados/em operação (`:84`, `:95`, `:105`, `:106`) | **Fio sim sob apply**. `handle` filtro → `_emitir_furo` (`:250`, `:254`) → `ChamadoColaborador.abrir` (`:507`), eventual `reabrir` (`:530`); ramo de retratação → `retratar` (`:305`, `:309`). Cron cadastrado **sem apply** (`app/config/crons.py:462`), como censo diz. Folha não demonstrada neste fluxo. | Sim S | CONFERE |
-
-Não há metadado Git disponível nesta cópia para autenticar o hash por `git rev-parse`; identidade do HEAD informado pelo usuário é [não verificado]. Nenhuma conclusão acima depende de banco/log.
-
-## 14/11 18:39 · sessao 260c338b86e1 · - · - · origem=Ronald (tmux)
-
-Contagem reproduzível: `re.match(r'^\| (HJ-[^|]+?) \|', linha)` em `app/docs/BACKLOG.md` encontra **20 linhas**: **10 IDs exatos HJ-NNN**, **9 derivados**, **1 instrumento de ingestão**. Os intervalos comprobatórios são BACKLOG:734,744–749,784,786,1868,1917,2547–2555.
-
-**Não equiparar automaticamente as 19 linhas sem instrumento a 19 BO originais.** HJ-091-FILA-1..4 são achados do opus; HJ-091-OPUS3-FILA reúne seis achados; HJ-091-LISTA registra complemento de pouso. BACKLOG:744–749. Uma regra de caso por **raiz HJ-NNN representada nas linhas** produz **11 casos**: os 10 IDs diretos abaixo mais HJ-091, documentado pelos derivados e pela menção expressa em BACKLOG:1917. O registro individual original dos 11 e sua granularidade pessoa+dia não estão completos na cópia. [nao verificado] [nao verificado]
-
-TSV das **19 ocorrências de registro**, preservando cada ID literal; a classificação de obras da GRADE não foi usada como dono do caso. O único dono inequívoco de linha HJ encontrado é HJ-092, “FECHADA como BATIDA”. BACKLOG:784.
-
-```tsv
-fonte	id_do_caso	arquivo:linha	dono_L099	prova_do_dono
-BACKLOG-HJ	HJ-091-REJEITADA-SOBREVIVE-A-JANELA	app/docs/BACKLOG.md:734	SEM_DONO	[nao verificado]; lei pendente na linha; sem dono único L-099 fechado localizado
-BACKLOG-HJ	HJ-091-FILA-1	app/docs/BACKLOG.md:744	SEM_DONO	[nao verificado]; achado do opus sem dono L-099 fechado localizado
-BACKLOG-HJ	HJ-091-FILA-2	app/docs/BACKLOG.md:745	SEM_DONO	[nao verificado]; achado do opus sem dono L-099 fechado localizado
-BACKLOG-HJ	HJ-091-FILA-3	app/docs/BACKLOG.md:746	SEM_DONO	[nao verificado]; achado do opus sem dono L-099 fechado localizado
-BACKLOG-HJ	HJ-091-FILA-4	app/docs/BACKLOG.md:747	SEM_DONO	[nao verificado]; achado do opus sem dono L-099 fechado localizado
-BACKLOG-HJ	HJ-091-LISTA	app/docs/BACKLOG.md:748	SEM_DONO	[nao verificado]; lista DP/passivo não fecha dono único do caso HJ
-BACKLOG-HJ	HJ-091-OPUS3-FILA	app/docs/BACKLOG.md:749	SEM_DONO	[nao verificado]; linha reúne seis achados sem dono único L-099 fechado localizado
-BACKLOG-HJ	HJ-092	app/docs/BACKLOG.md:784	BATIDA	app/docs/BACKLOG.md:784: FECHADA como BATIDA; app/docs/RELATO.md:271 confirma
-BACKLOG-HJ	HJ-093	app/docs/BACKLOG.md:786	SEM_DONO	[nao verificado]; linha mistura pergunta de decisão humana e realizado zerado, sem dono único fechado
-BACKLOG-HJ	HJ-090	app/docs/BACKLOG.md:1917	SEM_DONO	[nao verificado]; exige dono L-099 dos dias com batida, mas não fornece dono único fechado
-BACKLOG-HJ	HJ-066	app/docs/BACKLOG.md:2547	SEM_DONO	[nao verificado]; fila UI não equivale a dono L-099 fechado
-BACKLOG-HJ	HJ-068	app/docs/BACKLOG.md:2548	SEM_DONO	[nao verificado]; fila UI não equivale a dono L-099 fechado
-BACKLOG-HJ	HJ-071	app/docs/BACKLOG.md:2549	SEM_DONO	[nao verificado]; fila UI não equivale a dono L-099 fechado
-BACKLOG-HJ	HJ-073	app/docs/BACKLOG.md:2550	SEM_DONO	[nao verificado]; censo pendente sem dono L-099 fechado localizado
-BACKLOG-HJ	HJ-074	app/docs/BACKLOG.md:2551	SEM_DONO	[nao verificado]; vínculo com obra não equivale a dono do caso fechado
-BACKLOG-HJ	HJ-075	app/docs/BACKLOG.md:2552	SEM_DONO	[nao verificado]; aguarda print; sem dono fechado localizado
-BACKLOG-HJ	HJ-075-EC-FIRST	app/docs/BACKLOG.md:2553	SEM_DONO	[nao verificado]; diz fila 1 estrutural, sem frase fechando dono L-099 do caso
-BACKLOG-HJ	HJ-058	app/docs/BACKLOG.md:2554	SEM_DONO	[nao verificado]; vínculo com obra não equivale a dono do caso fechado
-BACKLOG-HJ	HJ-058-MEDIA-AUSENCIAS	app/docs/BACKLOG.md:2555	SEM_DONO	[nao verificado]; origem não verificada; censo antes da cura
-```
-
-No inventário literal das 19 linhas: ESTRUTURA 0 / CADASTRO 0 / BATIDA 1 / DECISAO_ADMIN 0 / SEM_DONO 18. Pela regra conservadora de **11 raízes**, BATIDA 1 / SEM_DONO 10; demais 0. A soma é derivada dos registros acima. BACKLOG:734,744–749,784,786,1917,2547–2555.
-
-Para o TSV principal de **11 raízes**, use os dez HJ-NNN diretos e acrescente:
-
-```tsv
-BACKLOG-HJ	HJ-091	app/docs/BACKLOG.md:1917	SEM_DONO	[nao verificado]; menção expressa +HJ-091; derivados em app/docs/BACKLOG.md:734 e :744-749; nenhum dono único L-099 fechado localizado
-```
-
-Exclusões e cuidados:
-
-- **HJ-INGESTAO-0511** é instrumento “56 HJ -> unidades pessoa+dia”, não outro BO. BACKLOG:1868.
-- **HJ-057: NAO ACHADA como registro individual**; única menção localizada: “HJ-057 sem linha na copia”. RELATO:52. Grep executado: `rg -n --hidden --no-ignore 'HJ-057'`.
-- **HJ-067/HJ-069/HJ-095** aparecem como referências, sem primeiro campo HJ próprio no BACKLOG: HJ-067 em BACKLOG:2544; HJ-069 em BACKLOG:2536; HJ-095 em BACKLOG:2153.
-- **HJ-058** menciona “1 caso desde 30/09 (06/11), 4 no total”; não transformar isso em quatro linhas de caso sem IDs e registros recuperáveis. BACKLOG:2554.
-- **HJ-093** diz “decisao humana” para a pergunta #50873, mas também relata a célula zerada e confirma a classe de pagamento. Atribuir DECISAO_ADMIN ao HJ inteiro apagaria essa mistura; falta dono único escrito. BACKLOG:786; RELATO:266.
-- **HJ-091-G** consta como “obra ESTRUTURA”; isso prova tipo da obra, sem necessariamente fechar o dono único de todos os casos HJ-091 e passivo. RELATO:66.
-- Coordenei com `/root/atas`: as unidades históricas HJ-001..031 identificadas no RELATO não coincidem com os IDs diretos HJ-058..093. O acervo de 80 unidades segue separado, sem inventar IDs faltantes. RELATO:8386,8390–8394.
-
-Buscas realizadas: `rg -n '^\| HJ-' app/docs/BACKLOG.md`; `rg -n '\bHJ-[0-9]{3}\b' app/docs/BACKLOG.md`; `rg -n --hidden --no-ignore 'HJ-'` nos RELATO, RELATO-ARQUIVO, LAPIDES, DOSSIES, TICKETS e CORTES; busca ampla por HJ e dono/ESTRUTURA/CADASTRO/BATIDA na árvore. Nenhum arquivo foi criado, editado ou apagado. [nao verificado por diff: cópia sem .git]
-
-## 14/11 18:37 · sessao 17c379e7a817 · - · - · origem=Ronald (tmux)
-
-Censo por AST + buscas textuais em produção; não alterei arquivos. As linhas de `fio.py` e `disputa_emissao.py` precisam ser atualizadas após a cura do pai. [nao verificado]
-
-**Escritores**
-
-- `chamado_destino`: `chamados/models.py:367` (`ChamadoColaborador._vivas_entre`, simulação); `:3043` (`PerguntaDisputa._nascer`, reuso); `:3075` (`_nascer`, construtor). Os sítios `:2846` e `:2858` encaminham o argumento para `_sob_contrato`, sem atribuição própria. Na base, `chamados/services/fio.py:825`, `:829` (`_costura_nao_mata_o_fio`, simulação/restauro) e `:971` (`reapontar_resolvedora`). A cura em andamento já concentrou essas atribuições em `chamados/services/fio.py:790`, `:793`, `:796`.
-- `DS.fechada_em`: `chamados/models.py:1988` (`fechar`, save `:1992`), `:2205` (`reabrir_admin`, save `:2210`), `:2229` (`reabrir_sistema`, save `:2233`).
-- `DS.motivos`: `chamados/models.py:2022` (`aparar_motivo_respondido`), `:2119` (`remover_motivo`), `:2215` (`reabrir_admin`); `chamados/services/disputa_emissao.py:601` (`_agregar_motivos_na_dona`, save `:606`), e nascimentos `:712`, `:1354`, `:1625`.
-- `Pergunta.respondida_em`: `chamados/models.py:1555` (`_universo_da_ressuscitacao`, simulação), `:3193` (`carimbar`), `:3224` (`_desfazer_em_memoria`), `:3323` (`descarimbar_em_lote`, recebe `**outros` de `:1613` e `disputa_emissao.py:1857`); `chamados/services/disputa_emissao.py:1732` (`responder_pergunta_disputa_core`), `:1917` (`responder_automaticamente`), `:1938` (`carimbar_resposta_pela_trilha`).
-
-**DS.motivos — todos os leitores encontrados e pressuposto**
-
-| Sítio | Uso / pressuposto |
-|---|---|
-| `chamados/models.py:2017` | `aparar_motivo_respondido`: lista de motivos restantes |
-| `chamados/models.py:2088` | `remover_motivo`: lista completa decide remoção e fecho |
-| `chamados/models.py:2212` | `reabrir_admin`: acrescenta ao agregado |
-| `chamados/services/disputa_emissao.py:579` | `_contexto_do_ato`: presença determina contador de recorrência |
-| `chamados/services/disputa_emissao.py:597` | `_agregar_motivos_na_dona`: diferença/união com agregado |
-| `chamados/services/disputa_emissao.py:1306` | repasse: entrada do complemento |
-| `chamados/services/disputa_emissao.py:1327` | repasse: seed e motivos existentes |
-| `chamados/services/descarte_disputa.py:9` | fotografa agregado fechado |
-| `chamados/services/descarte_disputa.py:10` | calcula somente motivos ainda não agregados |
-| `chamados/services/fio.py:680` | corpo do push de regularização |
-| `chamados/services/acoes_disputa.py:149` | corpo do push de regularização |
-| `chamados/relatorios_disputa.py:52` | exibe labels do agregado |
-| `chamados/management/commands/relatorio_pendencias_disputa.py:39` | exibe labels recebidos do relatório |
-| `chamados/management/commands/auditar_disputas.py:88` | verifica contexto de cada motivo agregado |
-| `chamados/management/commands/auditar_disputas.py:142` | relatório de disputa parada |
-| `chamados/management/commands/auditar_disputas.py:169` | compara todos os motivos com todas as perguntas; supõe agregado completo |
-| `chamados/management/commands/auditar_invariantes_chamados.py:50` | universo dos dias na disputa sem pergunta; supõe todos os motivos agregados |
-| `ponto/management/commands/alertar_disputas_pendentes.py:82` | log de disputa velha |
-| `api/foto_recebida.py:63` | filtro exige `foto_ausente` agregado |
-| `api/foto_recebida.py:70` | restantes decidem aparar ou fechar; supõe agregado completo |
-| `escala/signals.py:171` | filtro exige `ancora_ausente` agregado |
-| `colaboradores/signals.py:74` | filtro exige `posto_desativado` agregado |
-| `colaboradores/management/commands/pauta_aparelhos_compartilhados.py:49` | descoberta exige `device_comprometido` agregado |
-| `templates/chamados/partials/modal_fio.html:327` | fluxo de âncora depende de motivo agregado |
-| `templates/chamados/detalhe_local.html:301` | exibe agregado |
-
-Omitir um motivo sem pergunta local pode excluir a disputa dos três filtros de evento — foto, âncora e posto — e da descoberta de aparelhos compartilhados (`api/foto_recebida.py:63`, `escala/signals.py:171`, `colaboradores/signals.py:74`, `colaboradores/management/commands/pauta_aparelhos_compartilhados.py:49`). O drawer explicitamente usa perguntas pendentes em vez de `DS.motivos` (`colaboradores/services/drawer.py:75`).
-
-**DS.fechada_em — leitores**
-
-- `chamados/models.py`: `transicionar:190`; `ressuscitar_perguntas:1621`; `aberta:1871`; `fechar:1935`; `remover_motivo:2087`; `reabrir_admin:2194`; `reabrir_sistema:2223`; `reabrir_por_colab:2280`; `limpar_resolucao_residual:2318`; `trava_na_ordem:2729`.
-- `chamados/signals.py`: `disputa_fechada_fecha_chamado_pai:29`; `retoma_regularizacoes_ao_fechar_disputa:131`; `materializa_perguntas_ao_fechar_disputa:155`.
-- `chamados/juizes.py:2396` (`disputa_viva_do_chamado`).
-- `chamados/reconciliador.py`: `lavrar_sem_turno_aberto:412`; `retratar_perguntas_absolvidas_por_celula:600,611,612`; `_orfas_abertas:1050`; `encerrar_orfas_pela_lampada:1161,1162`; `perguntas_orfas_reatavies:1504`.
-- `chamados/services/disputa_emissao.py`: `colaborador_em_disputa:42`; `_agregar_motivos_na_dona:593`; `agregar_estrangeiras:647`; `_abrir_ou_agregar_disputa:671`; `criar_ou_atualizar_disputa:874,884`; `fecho_do_repasse:1192`; `notificar_complementos:1282`; agrupador `:1324,1554`; âncora `:1598`; resposta `:1786`; `_resolver_perguntas_por_chamado_resolvido:2173,2268,2292,2294,2353,2355`.
-- `chamados/services/fio.py`: `_disputa_do_chamado:131,135`; `montar_chamados_fio:187`; `processar_post_fio:600,633`.
-- `chamados/services/acoes_disputa.py:255,347`; `acoes_chamado.py:346`; `becos.py:27,56,59`; `cobranca.py:230`; `competencia_trancada.py:176,221`; `descarte_disputa.py:9`; `fila_por_causa.py:225,259,262`; `foto_e4b.py:182`; `materializacao.py:591,1322`; `pergunta_no_app.py:71`; `regularizacao_ext.py:60`; `relavra_via.py:183,260`; `validacao.py:171,237,240,242`; `vigia_fio.py:753`.
-- `chamados/relatorios_disputa.py:41`; `chamados/views.py:471,495,512,530,911,1329`; `chamados/views_cobrar.py:161,164`.
-- Comandos de `chamados/management/commands/`: `auditar_chamados_orfaos.py:41`; `auditar_disputas.py:72,87,136,152,167`; `auditar_invariantes_chamados.py:63,620,676,890,1851`; `encerrar_perguntas_com_fato.py:82`; `fechar_becos_disputa.py:32`; `reabrir_orfas_enterradas.py:96,131,164,165`.
-- `api/foto_recebida.py:62`; `api/views.py:1013,1029,2671`; `escala/signals.py:170`; `colaboradores/signals.py:73`; `colaboradores/painel_cell.py:32`; `colaboradores/services/desligamento.py:164`; `drawer.py:70`; `situacional.py:117`.
-- `ponto/management/commands/alertar_disputas_pendentes.py:34`; `escalonar_chamados_supervisao.py:58,149`; `reconciliar_fantasmas.py:214`; `ponto/services/entrada_sincronizada.py:57`.
-- Template: `templates/chamados/partials/modal_fio.html:379`.
-
-**Pergunta.respondida_em — leitores**
-
-- `chamados/models.py`: `sem_veredito_entre:1900`; `estado:3106,3109`; `carimbar:3188,3192`; `q_vivas:3409`; `respondida:3559`; `DecisaoPergunta.linhas_da_projecao_sem_linha:3985,3992,3993,3994`.
-- `chamados/juizes.py`: `_slot_esperado:348`; `_chave_memo_pv:852`; `projecao_temporal_da_pergunta:1385`; `respondida_sem_texto:1528`; `perguntas_corrigiveis:1673`; `perguntas_respondidas_a_validar:1680,1683`.
-- `chamados/veredito_lavrado.py:207,208`; `chamados/relatorios_disputa.py:21`; `chamados/views.py:1280,1416`; `chamados/views_cobrar.py:169,176`.
-- `chamados/services/fio.py:340,660`; `acoes_disputa.py:95,130`; `becos.py:30`; `cobranca.py:229`; `declaracao_texto.py:406,408,674`; `disputa_emissao.py:1934,1977,2085,2103,2243,2316,2333`; `foto_e4b.py:180`; `furo_sem_canal.py:81`; `historico.py:99`; `materializacao.py:675,1376`; `painel.py:67`; `passivo_validado.py:66`; `pergunta_no_app.py:71`; `raiox.py:138`; `validacao.py:416,603,608,632,951`; `verbos.py:335,336,342,345`; `vigia_fio.py:680,788`.
-- Comandos: `chamados/management/commands/auditar_invariantes_chamados.py:261,676,1191,1658,1689`; `backfill_decisoes_pergunta.py:56,60`; `curar_perguntas_em_limbo.py:46,69`; `ponto/management/commands/reconciliar_grade.py:445`.
-- `api/views.py:1160,1172,2556,2570,2613,2630`; `api/views_mensageria.py:569,570`.
-- Templates: `modal_fio.html:185,217,220`; `_card_atendimento.html:94,100,137,155,384,385`; `_pergunta_card.html:24,29,32`, todos em `templates/chamados/partials/`.
-
-**chamado_destino — leitores**
-
-- `chamados/models.py`: `_gravar_estado:304,310,311`; `_ancoradas:345`; `_vivas_entre:361,362,366`; `_gate_pergunta_viva:436,443,444`; `fechar:1967`; `remover_motivo:2083`; `_nascer:3010,3029,3051,3057`.
-- `chamados/juizes.py`: `_pergunta_materializada_de_fato:779`; `_chave_memo_pv:843,857`; `delta_da_resposta:1860`; `motivo_implausivel_validacao:1987`; `irmas_respondidas_sem_consumo:2034`; `_dias_das_perguntas_vivas:2346`.
-- `chamados/reconciliador.py:652,1052,1502`; `chamados/relatorios_disputa.py:43`; `chamados/views_cobrar.py:165`.
-- `chamados/services/fio.py`: `data_do_fato_de:80,81`; `chamado_que_lista:117`; `_disputa_do_chamado:135`; `montar_chamados_fio:226,227,331,396,397`; guarda, rechaveamento e censo de colaborador cruzado nas linhas em atualização pelo pai. [nao verificado]
-- `chamados/services/acoes_chamado.py:367`; `acoes_disputa.py:354`; `becos.py:30,46,47`; `competencia_trancada.py:121,132,165`; `declaracao_texto.py:302`; `disputa_emissao.py:540,812,1183,1184,1295,1316,1520,1589,1686,2063,2171,2300`; `explicador.py:122`; `foto_e4b.py:259`; `historico.py:96`; `janela_colab.py:64,65`; `limbo_folgas.py:205,240,241`; `materializacao.py:342,533,587,588,717,800,1000,1082,1111,1113,1248,1269,1271`; `pergunta_no_app.py:199,222,225`; `raiox.py:57,62,137`; `relavra_via.py:101,103,156`; `tarefa_do_dia.py:377`; `validacao.py:309,341,455,869`; `vigia_carimbo.py:103`.
-- Comandos: `chamados/management/commands/auditar_disputas.py:151`; `auditar_invariantes_chamados.py:610,616,621,672,673,679,942,978,979,982,1247,1662`; `backfill_veredito_lavrado.py:101`; `lavrar_perguntas_stale.py:58,88`; `migrar_data_evento_dia_do_turno.py:377,472`; `reabrir_orfas_enterradas.py:69`; `reatar_beco_folga_ao_limbo.py:87,122,124`; `relavrar_via_i6.py:56`; `ponto/management/commands/reconciliar_fantasmas.py:212`; `reconciliar_grade.py:444`.
-- `api/views.py:1031,2548,2567,2568`; `colaboradores/services/calendario.py:474`; `ponto/services/veredito_celula.py:187`.
-
-Além das portas de cobrança já destacadas, há dois pushes de resultado de disputa ao colaborador: `chamados/services/fio.py:681` e `chamados/services/acoes_disputa.py:150`, ambos com “Sua situacao foi regularizada”. Precisam constar do censo e ter tratamento explicitado sob a exigência literal “todos” (`chamados/services/fio.py:680`, `chamados/services/acoes_disputa.py:149`).
-
-## 14/11 18:36 · sessao 15bbc60ce588 · - · - · origem=Ronald (tmux)
-
-Autoridade recomendada: `fio.dia_do_turno_da_linha` em `chamados/services/fio.py:1654`, já usada pelo nascimento em `chamados/models.py:2936`. Ela delega episódio ao juiz do turno (`ponto/turnos.py:2927`) e marco ao dia da célula (`ponto/turnos.py:2939`).
-
-A substituição pode montar a mesma instância não salva usada pelo nascimento, com `instancia_do_motivo` e `batida_origem_do_nascimento`, e chamar essa autoridade. A data explícita do contexto entra somente como chave `pedido`; retire a cascata grade → contexto → batida. Sem chave nem episódio, a autoridade devolve `None` (`chamados/services/fio.py:1687`). Motivo datado/hora deve retornar `InsumoAusente`, com trilha; não deve ganhar data civil por conversa (`chamados/services/disputa_emissao.py:505`). O chamador já publica causas de recusa (`chamados/services/disputa_emissao.py:661`).
-
-Cuidados da eleição:
-
-- `_marcos_de_intervalo` fornece os fatos explícitos do intervalo (`chamados/services/disputa_emissao.py:263`). `motivos_atendidos` **não inclui** `intervalo_ausente`; usar somente esse juiz perderia esses candidatos (`chamados/juizes.py:2147`).
-- O S160 exclui chamado com pergunta não materializada (`chamados/services/disputa_emissao.py:224`); o eleitor de intervalo inclui chamados com pergunta existente (`chamados/services/fio.py:750`). A unificação precisa conservar essa inclusão para ser idempotente.
-- O `None` do S160 permite HIST/c1/c2 no reconciliador (`chamados/reconciliador.py:1559`) e reatamento imediato de pergunta recém-criada (`chamados/services/disputa_emissao.py:541`). Com menor PK na ambiguidade, esses caminhos deixam de executar para múltiplos candidatos; continuam necessários quando não há candidato.
-- As duas portas de declaração passam o chamado de origem para a emissão (`chamados/services/declaracao_texto.py:365`, `chamados/services/declaracao_texto.py:653`). A resposta deve ler o destino de `perg.chamado_destino`, sem nova eleição.
-
-Casos úteis sem banco: autoridade devolver dia diferente da chave e texto/dedup usarem o dia devolvido; autoridade devolver `None` apesar de grade/contexto/batida disponíveis e nenhum fallback ser consultado; intervalo explícito vencer chamado genérico com PK menor; permutação de pedidos conservar destino. Execução desses testes: [nao verificado]. [nao verificado]
-
-## 14/11 18:36 · sessao 96181d5931e8 · - · - · origem=Ronald (tmux)
-
-Censo somente leitura, linhas da base antes da cura:
-
-| Sítio | Predicado atual |
-|---|---|
-| `chamados/services/disputa_emissao.py:885` — `criar_ou_atualizar_disputa` | motivos novos; DS aberta relida; não exige pergunta viva pendente |
-| `chamados/services/disputa_emissao.py:1283` — `notificar_complementos` | `notificar`, motivos, dona diferente da principal e DS aberta; sem C6 |
-| `chamados/services/disputa_emissao.py:1555` — órfãos | `notificar`, motivos, qualquer pergunta existente, DS aberta; inclui respondida/morta |
-| `chamados/services/disputa_emissao.py:1645` — âncora | após criar conversa/analisar; sem C6 |
-| `chamados/services/disputa_emissao.py:1992` — recobrança | conta todas sem resposta, mas envia mesmo com zero |
-| `chamados/services/disputa_emissao.py:2041` / `:2049` — driver | só ContextVar de silêncio; envia WebPush e FCM |
-| `ponto/management/commands/alertar_disputas_pendentes.py:59` | DS aberta e `renovar_contexto` concedeu carimbo diário; sem pergunta |
-| `chamados/services/acoes_disputa.py:109` — reabrir | existe pergunta corrigível e `_reabrir(qs)` rodou; sem C6 após ato |
-| `chamados/services/acoes_disputa.py:288` — reabrir admin | admin autorizado, DS fechada reaberta e conversa criada; sem C6 |
-| `chamados/views.py:1447` — reabrir questionário | `_reabrir2(qs)` rodou; sem C6 após ato |
-| `chamados/services/validacao.py:640` — recusar resposta | motivo presente, pergunta existente, respondida e não validada; reabertura rodou; sem C6 |
-| `chamados/services/cobranca.py:107` / `:112`, chamado em `:187` | `checar_cobranca` e `_pendentes` já usam `consulta_do_app`; prazo não correndo; envio fora do atomic local, mas pode herdar atomic externo |
-| `chamados/views_cobrar.py:44` — individual | permissão, POST, área, throttle diário; nem vitalidade nem DS aberta |
-| `chamados/views_cobrar.py:123` — massa | permissão, `particionar_verbos == cobrar`, vivos, área, folha alterável, throttle; sem consulta direta à lista do app |
-
-Avisos de conclusão de disputa também encontrados: `chamados/services/acoes_disputa.py:150`, `:156` e `chamados/services/fio.py:681`, `:688`. São posteriores à materialização e anteriores até à verificação de resultado vazio; não exigem conclusão bem-sucedida nem C6. A regra literal “todo push ... por causa de disputa” os alcança; semanticamente são avisos de conclusão, não cobrança. [Interpretação; texto literal fornecido pelo usuário.]
-
-A fonte adequada já existe: `consulta_do_app` em `chamados/services/pergunta_no_app.py:61`. Ela toma `perguntas_do_app` (`:45`), que chama o C6 `pergunta_viva` (`:58`), e admite pendentes somente com `respondida_em is None` e disputa aberta (`:71`). Para uma DS, filtrar essa lista por `p.disputa_id == disputa.pk` conserva a mesma decisão do app.
-
-A cura deve envolver os envios de disputa num callback de `transaction.on_commit`, relendo `consulta_do_app` dentro do callback; guardar só um booleano antes do commit pode cobrar pergunta respondida/fechada no restante da transação. `push_colaborador` só decide existência de usuário (`chamados/push_utils.py:114`) e FCM só existência de token (`chamados/fcm_utils.py:101`): o gate pertence à porta da disputa.
-
-Atenção ao driver compartilhado: `cobranca._tocar` também é usado para abertura genérica pelo DP em `chamados/services/abertura.py:204`; pôr gate de disputa diretamente nele perderia esse caso. O `cobrar_colaborador` é o chamador de disputa e já usa a lista correta (`chamados/services/cobranca.py:155`, `:163`, `:187`).
-
-Exclusões identificadas pelo código: mensagens DP (`chamados/views.py:989`, `chamados/services/fio.py:726`, `chamados/services/acoes_chamado.py:310`), exceção autorizada (`chamados/services/acoes_chamado.py:72`), lote de regularização externa (`chamados/views_regularizacao.py:171`, `:178`), alertas de turno (`ponto/management/commands/processar_alertas_turno.py:267`), ausência/justificativa/cobertura (`ponto/services/ausencia.py:1088`, `ponto/services/justificativa.py:242`, `:310`, `ponto/services/cobertura.py:160`, `:171`). Não são envios causados por `DisputaSupervisao` nesses sítios. `push_supervisao`/`push_dp` têm outro destinatário, inclusive alerta agregado em `ponto/management/commands/alertar_disputas_pendentes.py:103`.
-
-O texto falso de quantidade está em `chamados/services/acoes_disputa.py:232` (`len(orfaos)`, que conta chamados). Outro “Colaborador notificado” incondicional aparece em `:299`; ambos precisam depender do resultado real do envio, distinguindo agendamento de entrega.
-
-## 14/11 18:21 · sessao ca67df423b4b · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
-
-Cura escrita: após a união dos períodos, soma acima do previsto retira todos os marcos do dia, zera os minutos e registra `pago_mais_trabalhado_passa_do_previsto`. Igualdade continua pagando (`ponto/services/efeito_ausencia.py:141–150`).
-
-**Q1.** O previsto lavrado vem da ata (`ponto/services/cartorio.py:739`). Extraí a leitura existente da grade para `minutos_previstos_da_celula`: ata primeiro, inclusive zero; fallback em `minutos_previstos_do_dia`, sem cálculo paralelo (`escala/services/leitor_celula.py:354–366`). Grade e guarda compartilham essa leitura (`escala/services/leitor_celula.py:431`; `ponto/services/efeito_ausencia.py:145`). Isso evita chamar a grade inteira, que já lê os efeitos da justificativa (`escala/services/leitor_celula.py:379–380`).
-
-O trabalhado usado na soma é `realizado_do_dia`, sobre todos os turnos do dia; pares fechados, pausas e E solta seguem a autoridade existente (`ponto/turnos.py:707–795`). `trabalhado_do_turno` permanece na DOBRA 2 (`ponto/services/efeito_ausencia.py:129`).
-
-**Q2.** A fila anterior não consumia cobertura nem `conserva`. Acrescentei `justificativas_para_revisao`, reunindo recusa por soma, cobertura vazia da DOBRA e motivos de conservação (`ponto/services/efeito_ausencia.py:154–178`). A fila agora oferece **Revisar cobertura** e mostra o motivo (`ponto/views.py:1738–1743`; `templates/ponto/fila_justificativas.html:60,117`).
-
-**Q3.** Não existe tolerância cadastrada **com juiz aplicável** encontrada: os campos existem (`core/models.py:59–62`), mas estão declarados sem efeito no cálculo (`core/regua_cct.py:72–75`). A tolerância de HE é constante (`ponto/motor_calculo_v2.py:51`). **TOLERANCIA-NA-JUSTIFICATIVA: sem construção**; +1 minuto recusa (`ponto/tests/test_justificativa_soma_sem_banco.py:104`).
-
-O diff e seus escritores/leitores ficaram assim:
-
-| Arquivo::função / campo | Escrita ou mudança | Leitores |
-|---|---|---|
-| `efeito_ausencia.py::periodos_justificados` — `cobre`, `minutos` | União e recusa integral: `ponto/services/efeito_ausencia.py:138–150` | Efeito financeiro: `:46–47`; grade: `escala/utils.py:1251–1276` |
-| Mesmo serviço — `conserva`, `motivo` | Conservação em `:134`; motivo da soma em `:150` | Revisão em `:172–176`; fila em `ponto/views.py:1740`; template em `templates/ponto/fila_justificativas.html:117` |
-| `leitor_celula.py::minutos_previstos_da_celula` — previsto | Extração da leitura: `escala/services/leitor_celula.py:354–366`; ata escrita por `ponto/services/cartorio.py:739` | Grade em `:431`; guarda em `ponto/services/efeito_ausencia.py:145` |
-| Trabalhado/realizado | Autoridade existente: `ponto/turnos.py:707–795`; transporte à ata: `ponto/services/cartorio.py:740` | Guarda em `ponto/services/efeito_ausencia.py:147–148`; grade em `escala/utils.py:2064` |
-| Testes | S1–S6, propriedade, fontes e fila: `ponto/tests/test_justificativa_soma_sem_banco.py:83–272`; adaptação das bordas v2: `ponto/tests/test_justificativa_periodo_v2_sem_banco.py:135–183` | Runner de mutantes: `ponto/tests/mutantes_justificativa_soma.py:73` |
-
-O crédito continua chegando ao motor pelo mapa existente (`ponto/services/fechamento.py:755`; `ponto/services/espelho.py:1134`; `relatorios/pdf_espelho.py:407`), lido em `ponto/motor_calculo_v2.py:2628–2634`.
-
-Resultados locais, para revisão pelo Code/suite e opus final: [nao verificado]
-
-- **RED antes da cura:** 14 testes, 10 falhas de asserção — [saída preservada](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_red.txt:127). [nao verificado]
-- **GREEN:** 32 testes sem banco — [saída](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_green.txt:35). [nao verificado]
-- **Mutantes novos:** 16/16 mortos por asserção; o comando individual de cada um está na [saída](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_mutantes.txt:1).
-- **Regressão v2:** 21/21 mutantes mortos — [saída](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_regressao_mutantes.txt:22).
-
-Comandos do RED, GREEN e dos três mutantes exigidos, respectivamente (`ponto/tests/justificativa_soma_red.txt:127`; `ponto/tests/justificativa_soma_green.txt:35`; `ponto/tests/justificativa_soma_mutantes.txt:1–6`):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_soma_sem_banco -v
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_soma_sem_banco ponto.tests.test_justificativa_periodo_v2_sem_banco -v
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma sem_guarda
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma limite_exclusivo
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma so_turno_da_ancora
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma --todos
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_periodo_v2 --todos
-```
-
-Três testes ORM foram escritos para a sessão executar; resultado **[nao verificado]** (`ponto/tests/test_justificativa_paga_o_periodo.py:325–369`):
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_justificativa_paga_o_periodo
-```
-
-Sem teto, desconto parcial ou tolerância nova na guarda (`ponto/services/efeito_ausencia.py:148–150`). Nenhum caminho proibido aparece entre os alterados; `git diff --check` passou (`ponto/tests/justificativa_soma_verificacao.txt:3,17`). Frota, DSR, TXT, banco produtivo e aplicação em competência: **[nao verificado]**.
-
-`LEI-AKITA | origem=anexo justificativa_pela_soma.txt, Ronald 14/11 18:08 [nao verificado na copia] | testemunha=S1–S6 (ponto/tests/test_justificativa_soma_sem_banco.py:83–139) | RED=justificativa_soma_red.txt:129 | quem-mais-le=efeito/grade/fila (ponto/services/efeito_ausencia.py:46,172; escala/utils.py:1257; ponto/views.py:1740) | juizes novos=0 | padrao=Single Source of Truth / Aggregate Root (docs/GLOSSARIO.md:11; escala/services/leitor_celula.py:354–366)`
-
-## 14/11 18:01 · sessao b161216b6cea · E3-V10-DEGRAU-DONO-E-PORTA · leitura · origem=Code
-
-1. **No teste isolado de classe e, a leitura da v2 dá `fio='colab'` e `rota='porta_app'`.** A fixture cria pergunta sem resposta, sob chamado `resolvido`; sem decisões, a tarefa exige `responder/colaborador`. A porta do colaborador depende da pendência no app, sem exigir chamado na fila. ([test_e4_passivo.py:67](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:67), [tarefa_do_dia.py:142](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:142), [tarefa_do_dia.py:601](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:601), [tarefa_do_dia.py:625](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:625))
-
-   Os relógios são diferentes:
-
-   - A classe de testes congela **25/09/2026 às 12:00 UTC**, relógio sob o qual cria a disputa e a pergunta. `DisputaSupervisao.aberta_em` usa `auto_now_add`; `data_evento` da pergunta é explicitamente `DIA=01/09/2026`, não a data de criação. ([test_e4_passivo.py:26](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:26), [test_e4_passivo.py:34](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:34), [models.py:1803](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/models.py:1803), [test_e4_backfill.py:28](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_backfill.py:28))
-   - `_rodar(aplicar=True)` congela **15/09/2026 às 12:00 UTC** durante o comando. O comando captura `timezone.localtime()` e, em apply, usa `agora.date()`, ignorando `--hoje`. Isso corresponde ao cabeçalho `15/09 09:00 −03` anexado. ([test_e4_backfill.py:98](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_backfill.py:98), [backfill_fio_morto_e4b.py:218](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:218))
-
-   A pergunta criada sob o relógio de 25/09 continua carregada na consulta de 15/09: a carga seleciona perguntas por colaborador, `conversa=False` e `data_evento`, sem cortar pelo nascimento da disputa. O próprio contrato declara pergunta e identidade como estado atual. ([tarefa_do_dia.py:367](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:367), [tarefa_do_dia.py:392](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:392))
-
-   **O predicado exato que o exclui do plano normal é `x[4] == 'sem_porta'`.** Com `porta_app`, o vigia contabiliza a porta e executa `continue`, antes de incrementar `fio_morto_alcance`; `_alcance` retém somente as linhas `sem_porta`. Portanto ele sai do subconjunto do backfill, não necessariamente de `alcance_universo`. O complemento de exportadas também não inclui competência cuja entrega seja `False`. ([vigia_fio.py:658](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:658), [vigia_fio.py:714](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:714), [backfill_fio_morto_e4b.py:76](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:76), [backfill_fio_morto_e4b.py:173](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:173))
-
-   O mutante falha antes de testar a reabertura: ele espera erro contendo `ato=reabrir_credor`, mas a caracterização primeiro exige encontrar a linha do dia. ([test_e4_passivo.py:73](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:73), [test_e4_passivo.py:87](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:87))
-
-2. **Os dois dias são 01/09 e 02/09/2026.** O primeiro é a célula-base, inicialmente sem pergunta, com entrada apagada e saída acesa. O segundo é `DIA+1`, com lâmpadas equivalentes e pergunta sem resposta sob chamado `resolvido`. ([test_e4_backfill.py:77](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_backfill.py:77), [test_e4_passivo.py:97](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:97))
-
-   **Qual deles produziu `segue_sem_porta` na execução anexada: [não verificado].** O anexo fornece o agregado, sem as linhas `DIA` desse teste. O comando atribui `segue_sem_porta` quando o `cel_id` executado permanece no conjunto `sem_porta` do censo posterior; o agregado não identifica essa célula. ([backfill_fio_morto_e4b.py:368](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:368))
-
-   Há uma incompatibilidade que a diferença de relógios, sozinha, **não explica**: pela leitura estática da fixture, a pergunta de 02/09 deve ter porta no app também em 25/09. C6 retorna viva pela célula `furo`; a partição do app considera pendente a pergunta sem resposta em disputa aberta; sem decisões, a tarefa exige responder e publica a porta. ([juizes.py:1448](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/juizes.py:1448), [pergunta_no_app.py:78](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/pergunta_no_app.py:78), [tarefa_do_dia.py:142](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:142), [tarefa_do_dia.py:601](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:601))
-
-   Assim, não consigo derivar dessa cópia o contador inicial **2**, nem atribuir causalmente o residual a 02/09. O teste exige esse contador em 25/09 e depois compara o plano com ele; o estado adicional que faria essa sequência produzir o agregado anexado é **[não verificado]**. ([test_e4_passivo.py:110](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:110))
-
-3. **Usam o mesmo juiz de porta, mas não a mesma carga nem sempre o mesmo instante.** O vigia abre uma carga em lote e lê `porta_da_tarefa`. O backfill obtém seu universo chamando esse vigia com o `agora` da borda; depois, para escolher atos, chama `tarefa_do_dia` sem fornecer carga, abrindo outra carga, individual. ([vigia_fio.py:647](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:647), [backfill_fio_morto_e4b.py:78](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:78), [backfill_fio_morto_e4b.py:87](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:87), [tarefa_do_dia.py:650](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:650))
-
-   O censo posterior recebe **novo** `timezone.localtime()`, para enxergar os atos escritos. No teste misto, o censo externo usa 25/09, enquanto o comando roda em 15/09. ([backfill_fio_morto_e4b.py:350](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:350), [test_e4_passivo.py:110](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:110), [test_e4_backfill.py:103](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_backfill.py:103))
-
-4. **A caracterização isolada “sem resposta sob terminal ⇒ precisa reabrir para ter alcance” perdeu essa premissa na v2:** quando a tarefa exige responder e a pergunta está pendente no app, já existe dono `colab` e porta `porta_app`. O vigia aceita essa porta antes de classificar qualquer causa e. ([tarefa_do_dia.py:577](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:577), [tarefa_do_dia.py:601](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:601), [vigia_fio.py:658](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:658))
-
-   O ramo `e/pergunta_viva_sob_chamado_terminal` continua no código, mas só é alcançado depois de faltar porta e de não haver outro dono pelas leis consultadas. Sua presença no código não demonstra ocorrência no dado fornecido. ([vigia_fio.py:670](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:670), [vigia_fio.py:698](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:698))
-
-   **Existe uma segunda avaliação no backfill para escolher reabertura.** Além de ler a tarefa, `ato_do_dia` percorre as perguntas e consulta `reabrir_credor_de_pergunta_viva`, independentemente das ações publicadas. Esse helper exige ausência de resposta, C6 vivo e âncora fora de `VIVOS`; não consulta `pendentes_app` e não recebe `agora`. Portanto são critérios diferentes: a tarefa pergunta por alcance atual; o helper pergunta pela elegibilidade de reabrir a âncora. Ambos usam C6, mas o helper o chama sem o horizonte temporal da tarefa. ([backfill_fio_morto_e4b.py:87](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:87), [disputa_emissao.py:1812](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/disputa_emissao.py:1812), [disputa_emissao.py:1828](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/disputa_emissao.py:1828))
-
-Quanto aos campos, são resultados e variáveis locais nesses caminhos:
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `fio`, `rota` | `_portas_da_tarefa`, no dicionário retornado. ([tarefa_do_dia.py:626](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:626)) | `porta_da_tarefa`; vigia conta rota e publica fio como papel. ([tarefa_do_dia.py:636](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/tarefa_do_dia.py:636), [vigia_fio.py:662](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:662)) |
-| `fio_morto_alcance` | Vigia inicializa em zero e incrementa no caminho final sem porta. ([vigia_fio.py:578](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:578), [vigia_fio.py:714](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/services/vigia_fio.py:714)) | Backfill lê antes/depois; teste compara ao tamanho do plano. ([backfill_fio_morto_e4b.py:239](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:239), [backfill_fio_morto_e4b.py:415](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:415), [test_e4_passivo.py:114](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:114)) |
-| `plano` | Comando cria a lista, acrescenta os dias e atribui resultados após execução/medição. ([backfill_fio_morto_e4b.py:251](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:251), [backfill_fio_morto_e4b.py:371](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:371)) | O comando executa/lista os itens e imprime `len(plano)` no resumo. ([backfill_fio_morto_e4b.py:262](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:262), [backfill_fio_morto_e4b.py:409](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:409)) |
-| `partes` | `_resumo` do teste interpreta o texto `RESUMO`, remove `plano` e converte contagens em inteiros. O comando produz esse texto contando `p['res']`. ([test_e4_passivo.py:43](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:43), [backfill_fio_morto_e4b.py:405](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/management/commands/backfill_fio_morto_e4b.py:405)) | O teste verifica soma e distribuição esperada. ([test_e4_passivo.py:113](/home/ronald/codex_ws/b1acb79857134420f4e95290948d3fe3070338c8/app/chamados/tests/test_e4_passivo.py:113)) |
-
-## 14/11 18:00 · sessao 37c906b22221 · - · - · origem=Ronald (tmux)
-
-O vigia lê a porta publicada pela tarefa, sem refazer o predicado: abre `carga_da_tarefa(..., agora)`, chama `.tarefa` e `porta_da_tarefa` em `app/chamados/services/vigia_fio.py:647`, `:648`, `:649`. A alimentação anterior `alimentar_portas(..., agora=agora)` serve às causas do sem porta; é outra carga, embora receba o mesmo instante (`vigia_fio.py:611`, `:615`, `:621`).
-
-Com porta, o vigia incrementa `alcance_<rota>`, registra papel=`porta['fio']` e encerra o processamento daquele dia (`vigia_fio.py:658`, `:662`, `:664`, `:665`). Sem porta, só depois dos baldes de lei calcula a causa e incrementa `fio_morto_alcance` (`vigia_fio.py:670`, `:672`, `:679`, `:714`). O detalhe `pergunta_viva_sob_chamado_terminal` é atribuído apenas nesse ramo já sem porta (`vigia_fio.py:706`, `:707`).
-
-Na v2, a tarefa escreve `fio` e `rota` em `_portas_da_tarefa`; pergunta pendente no app com ação `responder/colaborador` dá dono `colab`, independentemente de âncora e prazo (`app/chamados/services/tarefa_do_dia.py:601`, `:602`, `:607`, `:608`, `:613`). Sem chamado vivo com dono, publica `porta_app` (`tarefa_do_dia.py:619`, `:624`, `:625`); a escrita final dos dois campos está em `:626`. `porta_da_tarefa` apenas copia campos da tarefa, retornando `None` quando não há rota (`:629`, `:636`). A matriz tem um caso explícito de só app → `(colab, porta_app, (), {})` (`app/chamados/tests/test_e3_degrau_dono_e_porta.py:71`, `:73`).
-
-O backfill usa o próprio vigia e filtra literalmente `x[4] == 'sem_porta'` (`app/chamados/management/commands/backfill_fio_morto_e4b.py:76`, `:78`, `:79`). Assim, uma pergunta sem resposta sob terminal que publique `porta_app` deixa o conjunto de reparo, embora permaneça no universo de dias retidos (`vigia_fio.py:599`, `:658`).
-
-Há outra seleção de elegibilidade no backfill: `ato_do_dia` lê `tarefa_do_dia(colab, dia, agora)` (`backfill_fio_morto_e4b.py:87`), mas também chama `reabrir_credor_de_pergunta_viva(p, hoje=hoje, executar=False)` para todas as perguntas do dia (`:89`, `:90`, `:96`). Esse helper não recebe `agora`, não consulta `porta_da_tarefa` nem pendentes do app: testa resposta crua, C6 sem instante, âncora e status fora de VIVOS (`app/chamados/services/disputa_emissao.py:1812`, `:1828`, `:1830`, `:1834`). Portanto há a mesma autoridade de **porta** no vigia/tarefa, e uma seleção adicional de **reabertura de credor** com horizonte diferente no backfill (mesmas linhas).
-
-A hipótese de que simplesmente mudar 15/09 para 25/09 retire `porta_app` da mesma pergunta **não foi demonstrada**. Pelo código visível, pergunta sem resposta, disputa aberta e célula `furo` é viva em ambos os instantes (`app/chamados/juizes.py:1447`, `:1450`, `:1451`); a partição do app exige apenas `respondida_em is None` e `disputa.fechada_em is None` (`app/chamados/services/pergunta_no_app.py:78`, `:82`, `:83`); sem decisões E1 a tarefa exige responder (`tarefa_do_dia.py:142`, `:143`). A carga declara expressamente que lê a pergunta/identidade atual e não recorta sua criação (`tarefa_do_dia.py:367`, `:371`, `:372`). A explicação exata do `v0=2` naquele anexo depende de outro estado/efeito ainda não identificado. [não verificado]
-
-Escritores e leitores:
-
-- `fio`, `rota`: escritos no resultado transitório pela tarefa (`tarefa_do_dia.py:626`); copiados por `porta_da_tarefa` (`:636`); lidos pelo vigia (`vigia_fio.py:662`, `:663`, `:664`).
-- `fio_morto_alcance`: inicializado e incrementado pelo vigia (`vigia_fio.py:578`, `:714`); lido pelo backfill (`backfill_fio_morto_e4b.py:239`) e pelo teste (`app/chamados/tests/test_e4_passivo.py:111`, `:114`).
-- `plano`: criado/apendido pelo comando (`backfill_fio_morto_e4b.py:251`, `:257`); `RESUMO plano` imprime `len(plano)` (`:409`).
-- `partes`: o comando escreve o agregado `conta` por prefixo de resultado (`backfill_fio_morto_e4b.py:405`, `:407`, `:408`, `:409`); o teste lê a linha RESUMO, retira `plano` e chama o restante de partes (`test_e4_passivo.py:43`, `:46`, `:47`, `:113`, `:116`). [nao verificado]
-
-_5222 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5230 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
