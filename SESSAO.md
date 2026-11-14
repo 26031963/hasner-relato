@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 02:56:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (621.0 MB). Acoes na janela: **1782**.
+**Medido em 14/11/2026 03:02:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (621.0 MB). Acoes na janela: **1781**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1791,4 +1791,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:06:55 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/BUG-PAR-O-PAR/e3/volta2/green_mod2.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -n 1; /bin/grep '^Ran' $L \| tail -n 1; /bin/grep -E '^(FAIL\|ERROR):\|^rc=' $L \| head; tail -c 300 logs/HJ-090/volta2/green_amplo_copia.log` |
 | 15:06:51 | Bash |  | `ps -o pid,etime,args -p 2356695 \| cut -c1-250; docker inspect awesome_spence --format '{{range .Mounts}}{{.Source}} {{end}}' \| cut -c1-300; cd /home/ronald/saas-hasner; ls logs/HJ-090/volta2/fim_green_amplo logs/BUG-PAR-O-PAR/e3/volta2/fim_green_mod2 2>&1` |
 | 15:06:46 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; ls -la logs/DESLIGADO-NAO-TRAVA/redgreen/green7.log; tail -c 600 logs/DESLIGADO-NAO-TRAVA/redgreen/green7.log; bin/trava_teste.sh --quem; cat logs/DESLIGADO-NAO-TRAVA/redgreen/roda7.sh \| tail -n 8; docker ps --format '{{.Names}} {{.RunningFor}}' \| head` |
-| 14:56:57 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/DESLIGADO-NAO-TRAVA/redgreen/fim7 ]; do /usr/bin/sleep 10; done; L=logs/DESLIGADO-NAO-TRAVA/redgreen/green7.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -n 1; /bin/grep '^Ran' $L \| tail -n 1; /bin/grep -E '^(FAIL\|ERROR):\|^rc=' $L \| head; date +%H:%M` |
