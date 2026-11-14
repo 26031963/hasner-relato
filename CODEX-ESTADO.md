@@ -1,7 +1,73 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 22:16** · publicado em **13/11/2026 22:20** (UTC-3)
+> Ultima resposta processada: **13/11/2026 23:29** · publicado em **13/11/2026 23:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 23:29 · sessao e025fea219d0 · - · - · origem=Ronald (tmux)
+
+Revisão somente leitura da escrita concluída; não encontrei contraexemplo demonstrado pelo código em que esta alteração, sozinha, deixe uma metade gravar hora/tipo divergente. Execução e ocorrência em produção: [nao verificado].
+
+| Suspeita | Classificação | Evidência |
+|---|---|---|
+| `ja_satisfeita` passa e grava a hora do marco | **Descartável no fluxo estável** | Derivador e escritor chamam a mesma `_batida_existente_na_janela`: `app/chamados/services/materializacao.py:823`, `:1266`; existente faz reuso e pula `registrar_batida`: `:1272`, `:1278`, `:1352`. A consulta usa mesmo tipo e ±20 minutos: `app/chamados/juizes.py:235`, `:244`. |
+| Derivador e escritor usam critérios idênticos de “satisfeita” | **Procedente a diferença, sem demonstrar violação literal** | Derivador exige `aprovada`: `app/chamados/services/materializacao.py:824`; escritor reutiliza qualquer resultado não nulo: `:1272`. Isso pode mudar o estado anunciado, mas esse ramo não grava hora/tipo: `:1278`. |
+| `invalida` passa pelo portão e grava | **Descartável no fluxo estável** | Ambos derivam pela mesma função; `ts is None` encerra o derivador e o escritor: `app/chamados/services/materializacao.py:820`, `:822`, `:1253`, `:1259`. |
+| `bloqueada_data` passa e grava | **Descartável** | A unidade recusa DATA_EM_DISPUTA antes do novo portão: `app/chamados/services/materializacao.py:1686`, `:1687`, `:1707`, `:1708`; derivador aplica a mesma condição: `:816`. |
+| `bloqueada_competencia` passa e grava divergente | **Descartável para criação normal** | Derivador consulta `competencia_fechada`: `app/chamados/services/materializacao.py:764`; `registrar_batida(... fato_de_chao=False)` aplica novamente essa autoridade antes de criar: `:1355`; `app/ponto/registro_batida.py:156`, `:161`, `:175`. Dedup anterior ao guard somente retorna linha existente: `:138`, `:145`. |
+| `bloqueada_paridade` passa e grava divergente | **Descartável no fluxo normal examinado** | Escritor reaplica vizinhança e tenta o mesmo `par_do_intervalo`: `app/chamados/services/materializacao.py:1282`, `:1290`; sem par permitido, retorna sem plantio: `:1299`, `:1341`, `:1350`. Colisão entre irmãs desfaz o par: `:1361`, `:1375`, `:1379`. |
+| `aplicavel` grava diferente | **Descartável no fluxo estável** | Antes de retornar `aplicavel`, o derivador compara ambas as metades ou a metade avulsa: `app/chamados/services/materializacao.py:847`, `:861`; comparação confere hora local e tipo: `:708`, `:714`. |
+| Passivo carimbado escapa pelo atalho `aplicada` | **Descartável** | `espera_na_escrita` chama diretamente `_estado_pelo_derivador`, ignorando o atalho do carimbo: `app/chamados/services/materializacao.py:756`; a unidade recusa antes do plantio: `:1713`, `:1716`; passivo chama essa unidade: `app/chamados/services/passivo_validado.py:537`. |
+
+Há uma diferença real de contexto na projeção: o escritor lê `_PAR_PROJETADO` em `app/chamados/services/materializacao.py:1282`, enquanto `_estado_pelo_derivador` consulta a vizinhança sem essa projeção em `:828`. **Duvidoso como vulnerabilidade isolada**: a metade inicial compara o par inteiro antes da recursão (`:847`), e `_gravar_irma_do_par` volta ao mesmo juiz, exigindo irmã validada (`:1575`). O contexto é instalado apenas na chamada recursiva e restaurado no `finally` (`:1582`, `:1584`, `:1586`). Não encontrei caminho concreto que ultrapasse essa proteção no estado estável; concorrência capaz de alterar os insumos entre essas leituras: [nao verificado].
+
+O censo de chamadas de produção para escrita de resposta leva à unidade: validação em `app/chamados/services/validacao.py:466`, `:587`; laço da disputa em `app/chamados/services/materializacao.py:1913`; irmã em `:1584`; passivo em `app/chamados/services/passivo_validado.py:537`. O backfill delega ao laço (`app/chamados/management/commands/backfill_fio_morto_e4b.py:147`), e o command de passivo importa o reparador (`app/chamados/management/commands/materializar_passivo_validado.py:68`). O command BUG-PAR-103 devolve perguntas, pela porta de validação, sem plantar diretamente (`app/chamados/management/commands/bug_par_103.py:81`, `:85`).
+
+Não localizei flip de tipo nos efeitos imediatos examinados: a gravação recebe `ts, _tipo` (`app/chamados/services/materializacao.py:1352`), e o chokepoint os usa diretamente no `create` (`app/ponto/registro_batida.py:175`). Os signals acionam núcleo, cartório e reconciliador (`app/ponto/signals.py:35`, `:132`, `:207`); o corpo de `reconciliar_chamados_colab` retrata/reatta chamados e perguntas (`app/chamados/reconciliador.py:1433`, `:1434`, `:1442`).
+
+Os testes existentes têm assertivas pertinentes para reuso e passivo: sucesso `ja_no_espelho` e nenhuma batida nova em `app/chamados/tests/test_bug_par_projetado.py:1100`, `:1101`, `:1102`; passivo divergente recusado sem alterar a foto em `:1180`, `:1183`, `:1184`; controle positivo do passivo igual ao declarado em `:1193`, `:1194`. Resultado RED/GREEN e execução desses testes: [nao verificado].
+
+## 13/11 23:28 · sessao 8d1c142b9b8f · - · - · origem=Ronald (tmux)
+
+**Pergunta 3 — descartável como regressão comprovada.**
+
+- O escritor dedicado só cria `DEVOLUCAO/BUG-PAR-103` depois de `paridade_absolvida_bug_par_103` aprovar; esse predicado exige `p.motivo in _PAR_DO_INTERVALO`. Portanto a saída antecipada do rótulo preserva o universo desse escritor. Referências: `app/chamados/services/validacao.py:263`, `app/chamados/services/validacao.py:264`, `app/chamados/services/validacao.py:279`, `app/chamados/services/validacao.py:282`, `app/chamados/services/materializacao.py:274`.
+
+- Existe outro escritor genérico de `DEVOLUCAO`, que copia `recusa_motivo`; ele não fabrica o identificador BUG-PAR-103. Uma linha histórica com esse prefixo fora de intervalo permanece **[nao verificado]**. Referências: `app/chamados/services/validacao.py:210`, `app/chamados/services/validacao.py:213`.
+
+- O único chamador produtivo localizado da devolução BUG-PAR-103 é o comando, passando identificador à porta, que carrega uma instância nova. Não há nesse caminho instância prefetched sendo reutilizada para desenhar o rótulo. Referências: `app/chamados/management/commands/bug_par_103.py:81`, `app/chamados/management/commands/bug_par_103.py:85`, `app/chamados/services/validacao.py:263`.
+
+- O fio faz `Prefetch('decisoes')` antes de chamar o explicador e calcular `estado_aplicacao`; o rótulo é chamado por `_estado_pelo_derivador`. Referências: `app/chamados/services/fio.py:255`, `app/chamados/services/fio.py:261`, `app/chamados/services/fio.py:346`, `app/chamados/services/fio.py:373`, `app/chamados/services/materializacao.py:813`.
+
+- No POST do modal, a ação é processada antes de reconstruir o fio. A reconstrução consulta novamente perguntas e decisões; o render parcial também chama novamente esse construtor. Não localizei caminho produtivo com decisão BUG-PAR-103 escrita depois do prefetch e leitura posterior na mesma instância. Referências: `app/chamados/views.py:951`, `app/chamados/views.py:954`, `app/chamados/views.py:889`, `app/chamados/services/fio.py:535`, `app/chamados/services/fio.py:538`, `app/chamados/services/fio.py:487`.
+
+**Duvidoso como fragilidade genérica:** `DecisaoPergunta.registrar` usa `bulk_create` e não invalida caches de instâncias previamente carregadas; o rótulo agora pode consumir esses caches. Falta um chamador concreto retendo a instância através da escrita para converter isso em achado procedente. Referências: `app/chamados/models.py:4037`, `app/chamados/models.py:4039`, `app/chamados/services/materializacao.py:291`.
+
+O teste existente verifica o rótulo após a devolução e numa montagem posterior do modal; não reproduz retenção de instância prefetched através da escrita. Referências: `app/chamados/tests/test_bug_par_projetado.py:794`, `app/chamados/tests/test_bug_par_projetado.py:797`, `app/chamados/tests/test_bug_par_projetado.py:802`. Execução desses testes: **[nao verificado]**.
+
+## 13/11 23:28 · sessao 79cd380c31aa · - · - · origem=Ronald (tmux)
+
+Censo do explicador e avaliação semântica:
+
+| Valor | Escritor | Leitor |
+|---|---|---|
+| `dono` | `explicar_pergunta`: `colaborador`, `admin`, `ninguem` em `app/chamados/services/explicador.py:97`, `:101`, `:109`, `:117`; os três donos de não gravação passam por `_sem_gravar`, `:43`, chamados em `:134`, `:139`, `:142`. | Agrupamento do resumo em `app/chamados/services/explicador.py:184`; testes de contrato anteriores em `app/chamados/tests/test_explicador_disputa.py:54`, `:63`, `:77`, `:101`; teste impede falso `ninguem` em `app/chamados/tests/test_o261_paridade_respeita_a_lampada.py:207`. |
+| `quem_resolve` | Somente `_sem_gravar`, consultando tabela em `app/chamados/services/explicador.py:43`. | Modal lê texto pronto em `app/templates/chamados/partials/modal_fio.html:468`; teste novo em `app/chamados/tests/test_bug_par_projetado.py:1229`. |
+| `gravou` | `False` no não gravado em `app/chamados/services/explicador.py:43`; também no resolvido pela recusa em `:126`. Não há emissão explícita de `True` nesses caminhos (`:94`, `:117`, `:127`). | Desenlace considera exclusivamente `is False`, `app/chamados/services/desenlace.py:67`, e separa causas pelo `estado`, `:70`; testes em `app/chamados/tests/test_bug_par_projetado.py:267`, `:283`, `:1207`. O teste de caminho positivo explicita item sem `gravou` em `:291`. |
+| `estado` do item | `app/chamados/services/explicador.py:43`, `:97`, `:101`, `:109`, `:117`. | Resumo exclui resolvida em `:178`; desenlace classifica `validada_sem_gravar` em `app/chamados/services/desenlace.py:70`; modal filtra e escolhe mensagens em `app/templates/chamados/partials/modal_fio.html:463`, `:466`, `:467`, `:468`. |
+| `SEM_GRAVAR_POR_DONO` | Definição única em `app/chamados/services/explicador.py:32`. | Item lê índice `[1]` em `:43`; resumo percorre frases em `:200` e aplica contagem em `:202`. `cadastro` tem frase `None`, sendo tratado especificamente em `:190` a `:199`. |
+| `resumo` | `app/chamados/services/explicador.py:180` ou `:203`, retornado em `:204`. | Fio chama produtor e guarda explicação em `app/chamados/services/fio.py:346`, `:348`; desenlace usa resumo em `app/chamados/services/desenlace.py:83`; modal apresenta em `app/templates/chamados/partials/modal_fio.html:462`. |
+
+**Descartável — sobrevivência do antigo “todo não cadastro é TI/DP”.** O modal agora lê `quem_resolve` pronto, e a tabela distingue expressamente a obra sem ação humana; o resumo usa a mesma tabela. Referências: `app/templates/chamados/partials/modal_fio.html:468`; `app/chamados/services/explicador.py:35`, `:43`, `:200`.
+
+**Descartável — Central/desenlace interpretando o novo `dono` como `sistema`.** O desenlace recebe a explicação por `app/chamados/services/fio.py:445` e usa `pode_fechar`, `gravou`, `estado` e `resumo`; não consulta `dono` nem `quem_resolve` nesse caminho (`app/chamados/services/desenlace.py:62`, `:67`, `:70`, `:83`). A classificação por dono é apresentação, enquanto a permissão de fechar vem diretamente de C7 em `app/chamados/services/explicador.py:177`.
+
+**Descartável — contador externo dependendo da enumeração antiga desse item.** O contador localizado para esse `dono` é o agrupamento interno do resumo, que aceita qualquer chave em `app/chamados/services/explicador.py:184` e traduz o novo valor pela tabela em `:200`. Os consumidores de runtime localizados para a explicação são fio, desenlace e modal, acima; existência de leitor dinâmico não localizado [nao verificado].
+
+**Duvidoso, apresentação anterior ao delta — ação genérica do desenlace quando C7 libera e há espera.** Esse estado é explicitamente montado pelo teste em `app/chamados/tests/test_bug_par_projetado.py:1198`, `:1203`, `:1205`; o item manda esperar a obra em `app/chamados/services/explicador.py:135`, enquanto a ação geral do desenlace sugere conferir/corrigir marcação e fechar em `app/chamados/services/desenlace.py:79`. Isso não é leitura divergente de `dono`/`quem_resolve`, pois esses campos não são consultados; não demonstrado como violação da regra literal de escrita.
+
+**Descartável — selo novo sem mordida, por inspeção.** O teste exige a premissa C7 bloqueando, o estado correto, a causa no resumo e no resolvedor, além de impedir a tradução antiga no HTML: `app/chamados/tests/test_bug_par_projetado.py:1224`, `:1226`, `:1227`, `:1228`, `:1229`, `:1230`, `:1232`, `:1233`. O HTML passa pelo contexto real do fio, não por texto fabricado (`app/chamados/tests/test_bug_par_projetado.py:765`, `:768`; `app/chamados/services/fio.py:487`).
+
+**Descartável — selo de reuso permitindo `nao_gravou`.** Agora exige `ok=True`, estado exato `ja_no_espelho` e nenhuma nova batida, em `app/chamados/tests/test_bug_par_projetado.py:1100`, `:1101`, `:1102`. Execução de RED/GREEN e resultado de testes [nao verificado].
 
 ## 13/11 22:16 · sessao ab3aa9767a9b · BUG-PAR · verificador · origem=Code
 
@@ -599,154 +665,4 @@ Contagem A: **8 SEGUE, 4 OBSOLETA, 8 COMPLEMENTO** (derivada dos vereditos e pro
 
 Comparação classificatória: **16/20 concordâncias (80%)**, sendo **15 sustentadas e 1 limitada ao encaixe** — MEMO-C6 tem existência do defeito [nao verificado] (B:913). Não apresentar 80% como validação medida integral: há quatro erros confirmados de classificação, três por cura/entrega já existente e um por escopo expressamente separado (B:1444; `app/escala/models.py:353`; `app/chamados/models.py:1395`; B:845–846).
 
-## 13/11 21:29 · sessao ef73bdea09b0 · - · - · origem=Ronald (tmux)
-
-Todos os 15 resíduos continuam distinguíveis da cura já existente da raiz. Classifiquei **SEGUE como obra residual própria**; agrupar em outra mãe seria inferência adicional sem escopo nominal que a imponha. A execução em produção e as medidas pendentes são **[nao verificado]**. As linhas de raiz foram lidas: `app/docs/BACKLOG.md:827`, `:999`, `:1480`, `:1487`, `:1774`.
-
-| id | grupo | veredito final | prova arquivo:linha (LEU x INFERIU) | 1ª rodada acertou? |
-|---|---|---|---|---|
-| PASSIVO-VALIDADO-K6 | C | SEGUE | **LEU** `app/docs/BACKLOG.md:819` e mãe `:1487`; `app/chamados/services/passivo_validado.py:124` importa a ferramenta e `:127` continua testando `['vigente'] is not None`; `app/folha/haiku_export.py:70` escolhe por `e_vigente`, enquanto K6 em `app/folha/export.py:591` exige também `invalidada_em is None`. **INFERIU**: o leitor residual ainda pode discordar do juiz no TXT revogado sem substituta. | **NAO**: o leitor residual existe e não deve ficar pendurado em O257 obsoleta; prova nos sítios anteriores. |
-| V-FASE-AS-OF-CADASTRO-SEM-LINHA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:903`, mãe `:999`; `app/escala/services/cadastro_realidade.py:393` percorre somente `itens`; `app/escala/services/fase_12x36.py:144` faz o dono ler `itens` **mais** `itens_reabertos`. **INFERIU**: o dia reaberto pode ter dono CADASTRO sem entrada equivalente na C10. | **NAO**: a migração principal da lista não resolveu o universo de reabertos; sítios citados. |
-| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:1076`, mãe `:1480`; `app/ponto/selecao_periodo.py:288` calcula entrada+jornada+margem e `:290` fim previsto+margem; juiz existente `app/ponto/turnos.py:2016`, cálculo `:2030`. **INFERIU**: permanece derivação paralela; a conclusão da obra O248 não elimina esse leitor. | **NAO**: complemento da raiz encerrada ocultaria a cópia ainda viva; código citado. |
-| V-FASE-AS-OF-TRANSFERIDO | C | SEGUE | **LEU** `app/docs/BACKLOG.md:900`, mãe `:1774`; `app/ponto/management/commands/e6_oraculo.py:179` continua passando `self.c.empresa_id`; `app/escala/services/fase_12x36.py:137` seleciona cobertura por essa empresa e `:146` exige empresa idêntica no item. **INFERIU**: a empresa atual ainda determina a busca do dia passado. Quantidade de transferidos afetados **[nao verificado]**. | **NAO**: o as-of principal existe, mas a chave residual continua atual; sítios citados. |
-| V-FASE-AS-OF-PARIDADE-UNIVERSO | C | SEGUE | **LEU** `app/docs/BACKLOG.md:901`, mãe `:1774`; `app/ponto/management/commands/censo_fase_12x36.py:176` carrega folgas e `:179` monta `prev` com célula+folgas; `:210` monta `prop_prev` diretamente pelo template. **INFERIU**: os universos ainda usam fontes diferentes. | **NAO**: a leitura as-of não cura essa comparação; código citado. |
-| V-FASE-AS-OF-CUSTO | C | SEGUE | **LEU** `app/docs/BACKLOG.md:902`, mãe `:1774`; `app/escala/services/fase_12x36.py:109` ordena e itera o índice; `:134` percorre até cobrir os dias e `:135` só interrompe quando não falta dia. **INFERIU**: sem cobertura, pode percorrer todas as lavras. Teto/custo real **[nao verificado]**. | **NAO**: continua uma medida residual própria; o principal estar implementado não demonstra o teto pedido em `BACKLOG.md:902`. |
-| V-FASE-AS-OF-SEM-CELULA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:905`, mãe `:1774`; `app/escala/services/fase_12x36.py:188` reabre por agregação dos carimbos de `CelulaDia`, `:192` exige fato posterior; `app/ponto/signals.py:111` calcula a data da instância atual e `:112` retorna somente d−1 e d; `:135` usa isso no post-save. **INFERIU**: dia antigo sem célula/carimbo não recebe reabertura por esse caminho. Incidência real **[nao verificado]**. | **NAO**: o gatilho principal não cobre o residual descrito; sítios citados. |
-| V-FASE-AS-OF-ATRASO | C | SEGUE | **LEU** `app/docs/BACKLOG.md:916`, mãe `:1774`; `app/config/crons.py:638` agenda o censo às 07:38 e `:639` declara somente `reconciliar_vinculo` como dependência; `app/escala/services/fase_12x36.py:188` depende dos carimbos para reabrir. **INFERIU**: a ordem declarada não garante que o carimbo do cartório já exista antes da lavra. Atraso efetivo de um dia **[nao verificado]**. | **NAO**: a integração temporal residual não é demonstrada pela cura as-of; sítios citados. |
-| V-FASE-AS-OF-SOBREPOSTA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:918`, mãe `:1774`; `app/escala/services/fase_12x36.py:114` responde cobertura por dia; `:179` cria chave por tripla empresa/ini/fim e `:180` compara janelas exatas para reabertura. **INFERIU**: permanecem critérios diferentes para janelas sobrepostas. Caso concreto atual **[nao verificado]**. | **NAO**: implementar o as-of não resolve por si essa diferença de identidade; código citado. |
-| V-FASE-AS-OF-INTRADIA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:919`, mãe `:1774`; `app/escala/services/fase_12x36.py:91` usa `update_or_create`, chave diária em `:92`, sobrescrevendo `detalhe` em `:93`; a intenção de uma lavra por dia também está declarada em `:163`. **INFERIU**: não conserva duas versões intradiárias nessa chave. | **NAO**: o residual da granularidade diária permanece; sítios citados. |
-| PROPOSITOR-JANELA-LONGA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:920`, mãe `:1774`; `app/escala/services/propositor.py:416` aceita janela variável; `:493` determina invertidos somente por `ultimo_lavrado(hoje).itens`; `app/escala/services/fase_12x36.py:206` escolhe uma única última lavra. **INFERIU**: a extensão da janela pedida não estende a fonte do sinal de fase. Impacto para N específico **[nao verificado]**. | **NAO**: esse leitor não foi convertido ao histórico as-of; código citado. |
-| FILA-POR-CAUSA-AS-OF | C | SEGUE | **LEU** `app/docs/BACKLOG.md:921` diz explicitamente **“obra própria”** depois de F1/F5; mãe `:1774`; `app/chamados/services/fila_por_causa.py:184` ainda monta o conjunto com `ultimo_lavrado(hoje).colabs_de_desvio`. **INFERIU**: a partição mantém a fotografia atual para chamados passados. | **NAO**: além do código vivo, o próprio BACKLOG nomeia obra própria (`:921`). |
-| GRADE-09-PAUTA | C | SEGUE | **LEU** `app/docs/BACKLOG.md:940`, mãe `:827`; `app/escala/utils.py:1149` já delega a folga ao juiz. **LEU comentário**, não medida independente: `app/ponto/services/cartorio.py:206` documenta ensaio; `:214` distingue 8 células adicionais da 09; `:219`–`:222` declara a **Pauta DP ainda devida**, com os dois números. **INFERIU**: resta entrega da pauta, mesmo com a raiz curada. Entrega atual **[nao verificado]**. | **NAO**: não herda obsolescência; o dever residual é explicitamente preservado em `cartorio.py:219`. |
-| GRADE-FOLGA-C5 | C | SEGUE | **LEU** `app/docs/BACKLOG.md:970` e mãe `:827`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1536` percorre FolgaDia e `:1538`–`:1540` aceita cobertura por outro vínculo sem consultar o juiz de validade; `app/ponto/precedencia.py:239` exige vínculo do dia para calendário. **LEU** declaração do próprio selo: `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:19`–`:21` nomeia o residual como fora do aval. | **NAO**: a cura da grade não curou C5; sítios citados. |
-| GRADE-FOLGA-GERADOR | C | SEGUE | **LEU** `app/docs/BACKLOG.md:971` e mãe `:827`; `app/escala/models.py:1281` consulta o mapa do próprio vínculo, `:1286`–`:1288` busca foto do próprio vínculo e `:1310` repete esse filtro para o dia; juiz da pessoa em `app/ponto/precedencia.py:206`, validade manual/calendário em `:237`–`:239`. **INFERIU**: continua sem levar a folga manual do vínculo antigo ao gerador do novo. | **NAO**: o BACKLOG declara a cura fora do aval da mãe (`:971`), e a leitura restrita ao vínculo continua no código. |
-
-**Contagem desta faixa: 15 SEGUE, 0 OBSOLETA, 0 COMPLEMENTO** — derivada das 15 classificações fundamentadas acima. Não houve leitura de banco/log nem execução de teste; medidas atuais, ocorrências reais e entregas externas permanecem **[nao verificado]**. [nao verificado]
-
-## 13/11 21:27 · sessao 2b2897d56389 · - · - · origem=Ronald (tmux)
-
-Explorer, sem alterações:
-
-- Catraca em memória: **Ran 35 tests / OK / rc=0**, 38,459s. Usei a receita sem Django/banco documentada em `core/tests/test_medida_turno_do_par.py:20`.
-- Python disponível não tem Django funcional nem `freezegun`; `django` é apenas namespace. Execução Django: **[nao verificado]**.
-- `CLASSIFICAR` detecta `.date()` sem argumentos e `localdate`/`data_local`, mas não `today()` diretamente (`core/medida_turno_do_par.py:217–226`).
-- O retrato exige igualdade exata (`core/tests/test_medida_turno_do_par.py:553–555`). Registre também os relógios novos no relato; o detector não cobre todos.
-- Arquivos `test_*.py` e diretórios de testes/ocultos ficam fora do censo produtivo (`core/medida_turno_do_par.py:231–242`).
-
-Comando executado:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import pathlib, types, unittest
-p = pathlib.Path('core/tests/test_medida_turno_do_par.py')
-suite = types.ModuleType('suite_turno') [nao verificado]
-suite.__file__ = str(p.resolve()) [nao verificado]
-source = p.read_text().replace(
-    'from django.test import SimpleTestCase',
-    'from unittest import TestCase as SimpleTestCase',
-)
-exec(compile(source, str(p), 'exec'), suite.__dict__) [nao verificado]
-result = unittest.TextTestRunner(verbosity=1).run(
-    unittest.defaultTestLoader.loadTestsFromModule(suite) [nao verificado]
-)
-raise SystemExit(not result.wasSuccessful())
-PY
-```
-
-## 13/11 21:22 · sessao 8279403c2b3f · GRADE-MESTRA · leitura · origem=Code
-
-| id | balde | existe (SIM/NAO/PARCIAL/?) | prova (arquivo:linha do HEAD ou commit; LEU x INFERIU) | mae | veredito (CONTA/DOBRA/OBSOLETA) | [nao verificado]
-|---|---|---|---|---|---|
-| SOMBRA-X-PROD-COL988-124639 | INSTRUMENTO | ? | LEU bin/sombra_mascara.py:20: máscara altera insumos; divergência nominal atual e sua causa [não verificado]. | - | CONTA |
-| SOMBRA-NAO-CABE-ANTES-DO-VIZINHO | INSTRUMENTO | PARCIAL | LEU bin/sombra.sh:398: histórico presente; app/config/crons_duracao.json:78: duração registrada ainda excede corredor. INFERIU mãe pelo mesmo defeito de janela. | CRON-SOMBRA-NAO-CABE | DOBRA |
-| CRON-NAO-CABE-SOMBRA-87-MIN | INSTRUMENTO | SIM | LEU app/config/crons_duracao.json:78: 5188 s; app/core/tests/marca_cron15.py:24: marca permanece. INFERIU mãe pelo mesmo defeito. | CRON-SOMBRA-NAO-CABE | DOBRA |
-| SOMBRA-PORTAO-POR-COMANDO | INSTRUMENTO | SIM | LEU bin/deploy.sh:162: exige conferência global. INFERIU ausência do portão por comandos atingidos e vínculo com a janela da sombra. | CRON-SOMBRA-NAO-CABE | DOBRA |
-| COBPARC-CONTROLE | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:790: controle da correção COBPARC; scripts e resultados citados não encontrados na cópia [não verificado]. INFERIU mãe. | COBERTURA-PARCIAL-UM-JUIZ | DOBRA |
-| O245-CAMADA-COBERTURA | INSTRUMENTO | NAO | LEU app/core/management/commands/gerar_diagrama.py:712, app/docs/MAPA.md:73 e app/core/tests/test_selo_diagrama_do_codigo.py:161: geração, publicação e selo presentes. | O245 | OBSOLETA |
-| E1-RECUSAS-SEM-CONTADOR | INSTRUMENTO | SIM | LEU app/chamados/services/fio.py:1528 e app/chamados/services/fio.py:1551: recusas presentes sem contador correspondente. INFERIU residual do nascimento da E1. | FIO-E0-V4-E1-ENTRADAS | DOBRA |
-| ODOMETRO-DE-REGRAS | INSTRUMENTO | ? | LEU app/docs/RELATO.md:1940; busca por nome/função não encontrou o mecanismo próprio. Sem sítio [não verificado]. | - | CONTA |
-| REPROVA-E-DESENHO | INSTRUMENTO | NAO | LEU bin/disjuntor.py:136, bin/disjuntor.py:1007 e bin/disjuntor.py:1025: primeira reprovação dispara; liberação validada e consumida. Raiz B3 em app/docs/BACKLOG.md:1036. | DISJUNTOR-E-CLEAR-RAPIDO | OBSOLETA |
-| REPROVA-E-DESENHO-CODEX | INSTRUMENTO | NAO | LEU bin/disjuntor.py:137, bin/disjuntor.py:997 e bin/codex_pergunta.sh:391: terceira procedente dispara e wrapper consulta contenção. Raiz B3 em app/docs/BACKLOG.md:1036. | DISJUNTOR-E-CLEAR-RAPIDO | OBSOLETA |
-| TRAVA-MENOS-FILA | INSTRUMENTO | PARCIAL | LEU bin/suite.sh:135: seleção intermediária presente; bin/trava_teste.sh:23: identidade permanece por processo. INFERIU residual de histórico/placar por obra. | - | CONTA |
-| TRAVA-COBERTURA | INSTRUMENTO | SIM | LEU bin/trava_teste.sh:23, bin/trava_teste.sh:28 e bin/trava_teste.sh:42: dono por processo, consulta lateral e execução acoplada; faltam obra/volta/job destacado. | - | CONTA |
-| ADR-0003-CELULA-TRES-NATUREZAS | INSTRUMENTO | PARCIAL | LEU app/docs/ADR/0003-celula-tres-naturezas.md:37: inventário presente; app/docs/ADR/0003-celula-tres-naturezas.md:93: ciclos declarados; app/docs/ADR/0003-celula-tres-naturezas.md:125: selo futuro. | - | CONTA |
-| CORRECAO-ADR-0003 | INSTRUMENTO | NAO | LEU app/docs/ADR/0003-celula-tres-naturezas.md:31: fotografia expressamente fora da CelulaDia, no gravado. Complemento em app/docs/BACKLOG.md:836. | ADR-0003-CELULA-TRES-NATUREZAS | OBSOLETA |
-| PADRAO-DE-CIMA | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:837: raia interrompida; busca não encontrou mecanismo PDC no main da cópia. Sem sítio [não verificado]. | - | CONTA |
-| DISJUNTOR-B1-ESPERA-OCIOSA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:550 e bin/disjuntor.py:562: avaliação depende de ferramenta e tokens. INFERIU espera ociosa descoberta; B1 pertence à raiz em app/docs/BACKLOG.md:1036. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| LEI-AKITA-RESIDUO | INSTRUMENTO | PARCIAL | LEU bin/tests/test_lei_akita.sh:97: cabeçalho literal persiste; bin/tests/test_lei_akita.sh:338: sem linha não julga; bin/tests/test_lei_akita.sh:952: contagem discriminada. | - | CONTA |
-| B3-CODEX-VOLTA-NUNCA-TRIADA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:955: conta só triagens procedentes; bin/disjuntor.py:2243: placar sem voltas não triadas. Residual B3 explícito em app/docs/BACKLOG.md:840. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| FASE-CONFLITANTE-VINCULO-DO-DIA | INSTRUMENTO | SIM | LEU app/escala/services/fase_conflitante.py:71 e app/escala/services/fase_conflitante.py:78: vínculo ativo reaplicado à janela sem juiz por data. Desmembramento em app/docs/BACKLOG.md:846. | GRADE-FOLGA-JUIZ | DOBRA |
-| B3-RAIZ-DO-WRAPPER | INSTRUMENTO | SIM | LEU bin/disjuntor.py:120 e bin/codex_pergunta.sh:391: raiz padrão do script; wrapper chama disjuntor da cópia. INFERIU residual da raiz B3. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| B3-CHAVE-DA-OBRA-NOS-DOIS-CONTADORES | INSTRUMENTO | SIM | LEU bin/disjuntor.py:627: Opus normaliza cauda; bin/disjuntor.py:911 e bin/disjuntor.py:948: Codex conserva chave crua. INFERIU residual B3. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| B3-NAO-SEI-SEM-SAIDA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:1103: rearme recusa trilha ilegível; bin/disjuntor.py:1137: porta não consulta desligamento. INFERIU residual B3. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| B3-CODEX-PREEXISTENTES | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:1923: B3 nega exceção; bin/disjuntor.py:1931 e bin/hook_stop_fila1.py:1215: outros caminhos liberam. INFERIU residual da contenção. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| CODEX-CUSTO-POR-OBRA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:2233 e bin/disjuntor.py:2243: métricas agregadas, sem tabela por obra. INFERIU extensão do mesmo placar, nomeado em app/docs/BACKLOG.md:854. | MAIS-CODEX-PLACAR | DOBRA |
-| E4CAL-P1-REVERTER-AMPLO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:871: residual da L1; reverter/snapshot r8 não encontrados na cópia. Cobertura atual [não verificado]. | E4-CALENDARIO-L1 | DOBRA |
-| E4CAL-P1-PAREI-FM-CORRENTE | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:872: residual da L1; comum.py citado não encontrado. Sem sítio [não verificado]. | E4-CALENDARIO-L1 | DOBRA |
-| E4CAL-P1-SELO-CAMPOS-ACORDAM | INSTRUMENTO | SIM | LEU app/ponto/tests/test_e3_status_lavrado.py:309: foto cobre célula/FM/exportação, sem outbox/auditoria. Residual da L1 em app/docs/BACKLOG.md:873. | E4-CALENDARIO-L1 | DOBRA |
-| E4CAL-P3-DOCS-VELHAS | INSTRUMENTO | PARCIAL | LEU app/core/juizes.py:862: comentário atualizado; app/docs/BACKLOG.md:2189: TELA-66 ainda cita dia.eh_trabalho. Complemento da L1 em app/docs/BACKLOG.md:879. | E4-CALENDARIO-L1 | DOBRA |
-| TT6-PENDENTE-VELHO | INSTRUMENTO | ? | LEU app/core/juizes.py:862 e app/core/juizes.py:865: pendente reancorado após L1; baixa exige condição medida da L-118. Essa conferência [não verificado]. | E4-CALENDARIO-L1 | DOBRA |
-| CONTENCAO-QUE-MORDE-V2 | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:1850: parte das guardas presente; bin/disjuntor.py:1033: liberação zera reprovações, sem limite do segundo ERRO-BOBO pedido em app/docs/BACKLOG.md:889. | - | CONTA |
-| CONTENCAO-V2-HORA-DE-LINHA | INSTRUMENTO | SIM | LEU bin/tests/test_hora_da_secao_nao_e_futura.sh:25 e bin/tests/test_hora_da_secao_nao_e_futura.sh:37: reconhece títulos, sem linhas de lista. Complemento explícito em app/docs/BACKLOG.md:890. | CONTENCAO-QUE-MORDE-V2 | DOBRA |
-| F1C4-3-RG-SEM-CELULA-CASO | INSTRUMENTO | SIM | LEU app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:48 e app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:55: cenários criam célula. INFERIU lacuna do caso e vínculo com ESMERIL-V2. | ESMERIL-V2 | DOBRA |
-| E3-GRADE-POR-TURNO-MEDIR | INSTRUMENTO | ? | LEU app/config/settings/base.py:165 e app/escala/utils.py:2086: flag e ramo existem; valor vivo e uso em produção [não verificado]. | - | CONTA |
-| EMIS-CATRACA-FLUXO | INSTRUMENTO | PARCIAL | LEU app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:82: fluxo coberto parcialmente; app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:224: catraca ainda julga forma do argumento. INFERIU residual dos emissores. | F1C4-3-EMISSORES-FILA | DOBRA |
-| E4-CARGA-PARIDADE | INSTRUMENTO | SIM | LEU app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:180: cobre pareador comum. INFERIU, após busca, falta de paridade Carga/casca em fixture mista; vínculo em app/docs/BACKLOG.md:934. | BUG-ENC-CELULAS-FORMA | DOBRA |
-| RELATO-ESCRITOR-FORA-DO-FLOCK | INSTRUMENTO | SIM | LEU bin/gerar_cortes.py:117 e bin/deploy_agendado.sh:37: leitura/reescrita direta do RELATO sem trava central nesses caminhos. | - | CONTA |
-| PDC-RELOGIO-NA-CLI | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:936: residual PDC; decide_pdc/CLI não encontrados. Sem sítio [não verificado]. | PADRAO-DE-CIMA | DOBRA |
-| PDC-PAINEL-SEM-DUVIDA | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:937: residual PDC; painel correspondente não encontrado. bin/disjuntor.py:2257 mostra B1–B4. Sem sítio PDC [não verificado]. | PADRAO-DE-CIMA | DOBRA |
-| E4-S4-ENCERRADOS | INSTRUMENTO | SIM | LEU app/core/tests/test_selo_performance.py:262 e app/core/tests/test_selo_performance.py:302: teto 18; fixture com entrada, sem encerramento lavrado. | - | CONTA |
-| CODS-ORFAO14H-SEM-GATILHO | INSTRUMENTO | PARCIAL | LEU app/ponto/tests/test_cods_do_ato.py:83: teste residual ainda nomeado MORDE. Emissão nominal atual [não verificado]. Vínculo com CODS em app/docs/BACKLOG.md:948. | CODS-DO-ATO | DOBRA |
-| ENCADEADO-0111-SEM-CARIMBO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:949: explicação histórica parcial; carimbos e saídas necessários não fornecidos. Causa e universo atuais [não verificado]. | - | CONTA |
-| DEPLOY-RELOAD-RESIDUOS | INSTRUMENTO | PARCIAL | LEU bin/contrato_deploy.sh:54: grep inclui comentários; bin/deploy.sh:362: lista vazia pula prova; bin/deploy.sh:307: ordem de migrate revista. | - | CONTA |
-| TELA-PREFIXO-SEM-GUARDA | INSTRUMENTO | SIM | LEU app/core/tests/test_rota_pede_sessao.py:159 e app/core/tests/test_rota_pede_sessao.py:313: compara include sem prefixo de path. INFERIU residual da proteção de rotas. | NOREVERSE-UI-NO-CORE | DOBRA |
-| REVERSAO-PELA-PORTA | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:957: escritores denunciados são receitas em logs; não encontrados na cópia. Passagem atual pela porta [não verificado]. | - | CONTA |
-| B3-TOPO-FILA | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:734: cabeçalho corrigido; bin/tests/test_disjuntor.sh:748: cobertura de falha de leitura restrita. INFERIU residual B3 indicado em app/docs/BACKLOG.md:959. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| CLAUDE-MD-ENXUTO | INSTRUMENTO | ? | LEU bin/tests/test_claude_md_regras_preservadas.sh:15: migração presente; cumprimento atual de 8k tokens [não verificado]. INFERIU raiz ampla pelo mesmo item de dieta em app/docs/BACKLOG.md:1267. | HIGIENE-DE-CONTEXTO | DOBRA |
-| CLAUDE-MD-PISTA-NO-ANEXO | INSTRUMENTO | SIM | LEU bin/disjuntor.py:1327: anexo cheio sem PISTA.md; texto transferido em bin/tests/test_claude_md_regras_preservadas.sh:16. INFERIU raiz da dieta em app/docs/BACKLOG.md:1267. | HIGIENE-DE-CONTEXTO | DOBRA |
-| CLAUDE-MD-RACIONAL | INSTRUMENTO | PARCIAL | LEU CLAUDE.md:251: seção medida em 22.534 B, acima dos 21.000 exigidos em app/docs/BACKLOG.md:962. INFERIU raiz ampla da dieta, app/docs/BACKLOG.md:1267. | HIGIENE-DE-CONTEXTO | DOBRA |
-| CODEX-CONTEXTO-SEM-CONDUTA | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:963: complemento explícito; gerar_agents_md.py não encontrado. Sem sítio do gerador [não verificado]. | CODEX-CONTEXTO-DA-CASA | DOBRA |
-| CODEX-LICOES | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:964; arquivo externo, integração no wrapper e A/B não comprovados na cópia. Entrega atual [não verificado]. | - | CONTA |
-| LEI-AKITA-UNIVERSO-DO-PUSH | INSTRUMENTO | NAO | LEU bin/tests/test_lei_akita.sh:429: universo usa HEAD, origin/main e piso; bin/tests/test_lei_akita.sh:757 e bin/tests/test_lei_akita.sh:935 cobrem merge/piso. | - | OBSOLETA |
-| LEI-AKITA-NO-PRE-PUSH | INSTRUMENTO | NAO | LEU bin/pre-push.sh:38: selo chamado sobre PUSH_SHA antes do atalho verde. INFERIU parte do portão da mesma obra. | LEI-AKITA-UNIVERSO-DO-PUSH | OBSOLETA |
-| SELO-SETUP-COPIADO-DE-FREEZE | INSTRUMENTO | SIM | LEU app/escala/tests/test_vfase_dono_as_of.py:311: selo enumera apenas o próprio módulo. INFERIU falta da proteção genérica após busca. | - | CONTA |
-| HX-AUTOR-MUDO-REGEX | INSTRUMENTO | SIM | LEU app/chamados/tests/test_contract_autor_muda.py:30 e app/chamados/tests/test_contract_autor_muda.py:63: regex com `(?!None)` permanece, sem AST. | - | CONTA |
-| FIO-ESTADO-LE-O-ALCANCE | INSTRUMENTO | PARCIAL | LEU bin/fio_estado.py:176: manchete lê alcance; bin/fio_estado.py:135: não captura OverflowError, residual documentado em app/docs/RELATO.md:2089. | - | CONTA |
-| ALERTA-DESCARTES-DO-CODEX | INSTRUMENTO | SIM | LEU bin/disjuntor.py:892 e bin/disjuntor.py:2243: triagem por volta e uso agregado. INFERIU ausência da lista achado/motivo/autor e cobrança pedida. | - | CONTA |
-| CODEX-ESCREVE-RED-WRAPPER | INSTRUMENTO | SIM | LEU bin/codex_pergunta.sh:29 e bin/codex_pergunta.sh:30: escrita restrita a construtor; RED de lote permanece fora do wrapper. | - | CONTA |
-| FIO-DO-ADMIN-NO-ESTADO | INSTRUMENTO | SIM | LEU bin/fio_estado.py:148 e bin/fio_estado.py:187: saída publica alcance/regressão. INFERIU ausência de fio_do_admin e fio_do_admin_sem_resposta após busca. | - | CONTA |
-| VETO-VIGIA-NO-PLACAR | INSTRUMENTO | SIM | LEU bin/placar_code.sh:235: publica furos_vetados_por_regua; não extrai chamados_vivos_em_dia_vetado nesse caminho. | - | CONTA |
-| TESTES-QUE-NAO-PROVAM-[nome] | INSTRUMENTO | SIM | LEU app/chamados/tests/test_emissor_nomeia_o_marco.py:88 e app/chamados/tests/test_bug125_cobranca_cega.py:176: conferem dict de contexto, sem nascimento persistido. | - | CONTA |
-| CLEAR-SEM-MARCO | INSTRUMENTO | ? | LEU .claude/settings.json:49 e bin/marco_de_clear.py:55: hook/escritor existem; execução problemática atual [não verificado]. INFERIU mesma causa retomada em app/docs/BACKLOG.md:2065. | MARCO-DE-CLEAR-NAO-GRAVOU | DOBRA |
-| TESTE-DESLIGADO-C2-VACUO | INSTRUMENTO | PARCIAL | LEU app/chamados/tests/test_emissao_reata_orfa.py:71: vínculo acrescentado ao desligado, sem célula equivalente. Efeito do mutante não executado [não verificado]. | - | CONTA |
-| SELO-CARIMBO-VIRADA | INSTRUMENTO | SIM | LEU app/chamados/tests/test_o261_vigia_fio.py:787: confere carimbo após rodada sem provocar virada da meia-noite. | - | CONTA |
-| CAL-PALAVRA-BANDAID | INSTRUMENTO | PARCIAL | LEU app/colaboradores/services/calendario.py:700: sítio antigo refeito; comentário desapareceu. Mensagem histórica de commit citada em app/docs/BACKLOG.md:1030 [não verificado]. | - | CONTA |
-| CAL-TESTE-HOJE-SEM-PREVISTO | INSTRUMENTO | PARCIAL | LEU app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:69: cobre hoje sem previsto com veredito. INFERIU lacuna do caso sem veredito após busca. | - | CONTA |
-| DISJUNTOR-E-CLEAR-RAPIDO | INSTRUMENTO | PARCIAL | LEU bin/hook_stop_fila1.py:1069: handoff exigido; bin/disjuntor.py:550: B1 ainda condicionado a tokens/ferramenta. INFERIU cobertura incompleta da inatividade. | - | CONTA |
-| DISJUNTOR-E-CLEAR-RAPIDO-COMPLEMENTO | INSTRUMENTO | ? | LEU bin/disjuntor.py:1320 e bin/disjuntor.py:2253: peças presentes; PRONTO 7–10 integral [não verificado]. Mesma obra explícita em app/docs/BACKLOG.md:1037. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| SUITE-POR-IMPACTO | INSTRUMENTO | PARCIAL | LEU bin/suite.sh:82: seleção intermediária por vizinhança; mapa coverage/replay e DIFF por impacto não implementados nesse caminho. Complemento em app/docs/BACKLOG.md:1038. | - | CONTA |
-| SELOS-DE-HOST-VERMELHOS-NO-MAIN | INSTRUMENTO | PARCIAL | LEU bin/pre-push.sh:38: Akita roda; bin/pre-push.sh:69: arsenal pode ser pulado; pasta inteira em bin/regua.sh:138. INFERIU mesmo furo de app/docs/BACKLOG.md:1751. | PASTA-DE-SELOS-NO-PUSH | DOBRA |
-| CODEX-CONTEXTO-DA-CASA | INSTRUMENTO | ? | LEU app/docs/RELATO.md:2324: construção em outra raia; gerador AGENTS.md não encontrado na cópia. Sem sítio atual [não verificado]. | - | CONTA |
-| CODEX-ASTRA-NA-VOLTA-FINAL | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1041: cancelamento registrado; bin/codex_pergunta.sh:422 não seleciona Astra. Cancelamento não prova cura; shim externo [não verificado]. | - | CONTA |
-| CODEX-SONDA-LEITURA | INSTRUMENTO | ? | LEU bin/codex_pergunta.sh:320: envelope/raspagem implementados. Prova real com três afirmações, exigida em app/docs/BACKLOG.md:1044, não fornecida [não verificado]. | - | CONTA |
-| CODEX-PADRAO-PRO | INSTRUMENTO | ? | LEU CLAUDE.md:358 e bin/codex_limite_estado.py:10: regra/placar presentes. Medição CPU/load/health para ampliar capacidade, app/docs/BACKLOG.md:1045, [não verificado]. | - | CONTA |
-| MAIS-CODEX-PLACAR | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:2243: placar presente; bin/disjuntor.py:2244 declara motivo dos desvios “não lido — incompleto”. | - | CONTA |
-| ESPERA-SEM-TURNO | INSTRUMENTO | PARCIAL | LEU bin/hook_stop_fila1.py:1386: espera exige prova; bin/hook_stop_fila1.py:1390 registra NOPROVA. INFERIU ausência da linha dedicada do ESTADO pedida em app/docs/BACKLOG.md:1047. | - | CONTA |
-| CODEX-CONSTRUTOR-PILOTO | INSTRUMENTO | ? | LEU bin/codex_pergunta.sh:195: construtor implementado; piloto específico de app/docs/BACKLOG.md:1053 [não verificado]. INFERIU raiz mais ampla em app/docs/BACKLOG.md:1803. | CODEX-CONSTRUTOR-NEGOCIO | DOBRA |
-| CODEX-RETORNO-0511 | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1054: balanço semanal exigido; busca não encontrou artefato correspondente nem medição fornecida [não verificado]. | - | CONTA |
-| SELO-DIA-PELO-SIGNIFICADO | INSTRUMENTO | PARCIAL | LEU app/core/medida_turno_do_par.py:217: detector presente; app/core/medida_turno_do_par.py:48 e app/core/medida_turno_do_par.py:50 declaram limites lexicais, sem provar derivação completa. | - | CONTA |
-| CODE-CHAMA-CODEX | INSTRUMENTO | NAO | LEU bin/codex_pergunta.sh:309: cópia por hash; bin/codex_pergunta.sh:422: read-only/never; bin/codex_pergunta.sh:267: trilha da chamada. Porta incorporada. | - | OBSOLETA |
-| PUBLICA-NO-EVENTO | INSTRUMENTO | PARCIAL | LEU bin/hasner-codex-estado.path:9 e bin/codex_estado.sh:63: evento/debounce/hash presentes; parte 2 continua pendente conforme app/docs/BACKLOG.md:1060. | - | CONTA |
-| RELATO-ETAPAS-DO-CUSTO | INSTRUMENTO | SIM | LEU bin/relato.sh:35, bin/relato.sh:38 e bin/relato.sh:97: etapas sem medição individual de tempo/CPU. INFERIU ausência do instrumento após busca. | - | CONTA |
-| GATE-EXPORT-10 | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1095 e app/docs/RELATO.md:3152: ato histórico em logs/gate10; artefato ausente e situação atual da exportação [não verificado]. | - | CONTA |
-| FILA-FORA-DO-BLOCO-QUE-O-HOOK-LE | INSTRUMENTO | SIM | LEU bin/gerar_backlog.py:119, bin/gerar_backlog.py:131 e bin/gerar_backlog.py:138: preserva janela/marcadores, sem proteger linhas válidas fora do bloco. | - | CONTA |
-| PARADO-CITADO-E-PROSA-QUE-EXPLICA | INSTRUMENTO | NAO | LEU app/core/placar_tickets.py:190 e app/core/placar_tickets.py:191: exige etiqueta [ID] no assunto, evitando token citado apenas na prosa. | - | OBSOLETA |
-| ~~PROVA-DOMINIO~~ | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1117: execução cortada, sem arquivo nomeado; busca não encontrou instrumento. Recibos/comparação [não verificado]. | - | CONTA |
-| ESMERIL-MECANICO-POR-TRECHO | INSTRUMENTO | ? | LEU bin/tests/test_esmeril_vinculo_censo.sh:22: fiscalização presente; conclusão integral [não verificado]. INFERIU integração na obra ampla pelo item 3 de app/docs/BACKLOG.md:1390. | O137 | DOBRA |
-| O98 | INSTRUMENTO | PARCIAL | LEU app/docs/GLOSSARIO.md:9: aliases/sítios presentes; faltam definição/lei/selo completos dos 21 termos exigidos em app/docs/BACKLOG.md:1177. | - | CONTA |
-| SUITE-DO-NUCLEO-ENTRA-NA-REGUA | INSTRUMENTO | SIM | LEU bin/suite.sh:92: universo das LABELS do app; bin/regua.sh:138: selos de host. Busca não encontrou suite_nucleo.sh nem chamadas exigidas. | - | CONTA |
-| SOMBRA_BLOCO_NA_JANELA-SEM-LEITOR
-
-[truncado em 20000 de 31975 caracteres]
-
-_4882 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4885 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
