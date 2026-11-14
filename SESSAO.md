@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 00:35:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (616.6 MB). Acoes na janela: **1980**.
+**Medido em 14/11/2026 00:41:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (616.7 MB). Acoes na janela: **1975**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:39:55 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/declarado_na_vaga.txt <<'EOF' aval Ronald: DECLARADO-NA-VAGA = complemento da NOITE-1411, so ordem; nenhuma lei nova (a lei e o meu aval DECLARADO-X-GRAVADO "lei para frente" de 12/11 15:0x, que ja dizia "construtor na proxima vaga"). FATO: a obra espera desde 13/11 15:23 atras da QUARENTENA+SVV por arquivo em comum (materializacao.py), e a QUAREN ...` |
 | 00:35:16 | Bash |  | `L=/home/ronald/saas-hasner/logs/HJ-090/pouso/sombra_refazer_1411.log; until /bin/grep -q '^rc=' $L; do /usr/bin/sleep 30; done; tail -6 $L \| cut -c1-200` |
 | 00:35:15 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/.*/ESPERANDO: sombra.sh \| pid=3834920/' docs/RELATO.md; cd ../bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 00:35:11 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/HJ-090/pouso/sombra_refazer_1411.log \| tail -15 \| cut -c1-200; pgrep -af "sombra" \| /bin/grep -v pgrep \| head` |
@@ -1984,9 +1985,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:41:54 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2002p app/docs/BACKLOG.md \| cut -c400-2500; ls logs/BUG-PAR-O-PAR logs/BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS \| tail -30; for w in /home/ronald/wt-par-rebase-060915 /home/ronald/wt-codex-par-nao-adjacente-031500; do echo == $w; git -C $w log --oneline -3; git -C $w status --porcelain \| head -5; done` |
 | 12:41:51 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/AVAIS-1313/bug_par_descongela.txt; /bin/grep -n "BUG-PAR-DESCONGELA\\|BUG-PAR" app/docs/BACKLOG.md \| cut -c1-500 \| head; ls -lt logs/ \| /bin/grep -i "par-desc\\|BUG-PAR"` |
 | 12:41:48 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/vagas_ociosas_1240.txt <<'EOF' aval Ronald: VAGAS-OCIOSAS-1240 (ordem de vaga; nao muda codigo nem lei). UNIDADE: vaga de construtor, teto 2. MEDIDO 12:36: 0 construtor aberto; trava de suite e o gargalo. VAGA 1 AGORA: BUG-PAR -- copia nova sobre a mesclada da E3 (6c465cb80), rebase da copia v5 do BUG-PAR, RED/GREEN e mutantes na copia; suite inte ...` |
-| 12:40:46 | Bash |  | `cd /home/ronald/saas-hasner; git grep -c "orfas_instantes" 7621a973f -- app \| head;` |
-| 12:40:43 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; R=open(p).read().splitlines(True) assert R[3].startswith('PONTO TIPO item 3 12:28') R.insert(3,'PONTO TIPO PRE-DESENHO 12:40 (Codex leitura sobre 12e424d5f, logs/TIPO-NA-FONTE/item3/predesenho/predesenho.r, rc 0; espera o corte do desenho): SITIOS de producao por acessor: horas_orfas 6, contar_orfas 3, leitura_orfas 1 (tripwire ...` |
-| 12:40:32 | Bash |  | `cd /home/ronald/saas-hasner; git show 12e424d5f:app/ponto/services/vigia_pareador_celula.py \| sed -n 70,82p; git show 12e424d5f:app/escala/services/ata.py \| sed -n 140,160p` |
-| 12:40:29 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/predesenho; sed -n '/^\*\*5/,$p' predesenho.r \| head -c 9000` |
-| 12:40:25 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/predesenho; sed -n '/^\*\*2/,$p' predesenho.r \| head -c 14000` |
-| 12:40:23 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/predesenho; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b83a0y4mh.output; wc -c predesenho.r; cat predesenho.r` |
