@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=3260166
+ESPERANDO: trava_teste.sh | pid=3354535
+DECIDIDO TECNICO (PARADA 5) HJ-090 volta7 F3: ja_iniciou/pode_editar/pode_cancelar (ferias/models.py, @property com date.today()) viram metodos _em(hoje), MESMO predicado, sem status_por_data (adaptador do Codex recusado: misturaria predicado); a tela le flags que views._contexto_secao_ferias calcula com o hoje da request; 0 chamador da property restante. Artefatos do construtor movidos a logs/HJ-090/volta7/. Recorte ferias+core rodando.
 DECIDIDO PELA LEI (aval BUG-PAR-163-X-DECLARADO, PROIBIDO literal sem universo; cura e a CLASSE): o portao espera DECLARADO-X-GRAVADO vale para TODA resposta cuja validacao grava hora/tipo diferente do declarado, nao so o universo 163 nem por ordem de clique (o construtor tinha fixado "fora do universo diferente segue aplicavel", chamados/tests/test_bug_par_projetado.py:1098) | contestavel
 DECIDIDO PELA LEI (E3-PORTA-SEM-CASO (ii), so o ENCERRADOR mata chamado; PROIBIDO esconder chamado vivo): metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta); se exigir mudar o predicado registrado do juiz, vira pergunta de lei com numero | contestavel
 PONTO 21:4x BUG-PAR volta5 recorte chamados+ponto+catraca VERDE (logs/BUG-PAR-O-PAR/e3/volta5/green163c.log: Ran 9839, OK skipped=9 xfail=40, rc 0) -> volta (b) com as duas decisoes; HJ-090 catraca6b VERDE (logs/HJ-090/volta6/catraca6b.log Ran 35 OK rc 0) -> volta7 Codex construtor F1-F5 brief pronto (logs/HJ-090/volta7/q.q), sai com a matriz-ferias anexa

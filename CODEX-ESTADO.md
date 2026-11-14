@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 21:51** · publicado em **13/11/2026 21:53** (UTC-3)
+> Ultima resposta processada: **13/11/2026 21:55** · publicado em **13/11/2026 21:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 21:55 · sessao 7a5421752418 · HJ-090 · construtor · origem=Code
+
+Entrega parcial no [relato, com comandos, fila e matriz de leitores/escritores](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_relato.txt:1).
+
+- Ensaio em memória: [RED 15, 22 falhas](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_red_base_integral.txt:1) → [GREEN 15](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_green.txt:18).
+- [33/33 mutantes mordidos](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_mordidas.txt:34); [catraca 35/OK](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_catraca.txt:38).
+- Django não iniciou: falta `django.core`; integração **[nao verificado]** ([registro](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_django.txt:6)).
+
+F3 permanece pendente conforme seu critério de perguntar quando faltar função parametrizada: autoriza o adaptador de `ja_iniciou` descrito no [relato](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_relato.txt:6)?
+
+**FRONT: smoke do Ronald nas duas cascas — [nao verificado].**
+
+## 13/11 21:54 · sessao 8497247b8d3e · BUG-PAR · verificador · origem=Code
+
+**Procedente: o portão não cobre integralmente o passivo.** Uma pergunta com `materializada_em` antigo pode voltar à escrita, mas a testemunha responde `aplicada` antes da comparação declarado × gravado. O helper é chamado; `_espera_do_aval_163` não chega a executar. (`app/chamados/services/passivo_validado.py:537`; `app/chamados/services/materializacao.py:734`; `app/chamados/services/materializacao.py:782`.)
+
+Histórico completo `0da6483e2..HEAD`, execução da suíte, mutações dos portões e ocorrência/quantidade desses casos em produção: **[nao verificado]**. A análise abaixo usa o diff fornecido e a cópia.
+
+**1. Caminhos de validação e escrita**
+
+**Procedente — brecha no passivo por carimbo sem lastro.** O caminho é:
+
+- `vigia_carimbo.classificar` seleciona perguntas validadas sem exigir `materializada_em` nulo; quando falta a batida, entrega `sem_plantio_nenhum`. (`app/chamados/services/vigia_carimbo.py:97`; `app/chamados/services/vigia_carimbo.py:116`.)
+- `reparar` encaminha essa classe ao plantio; `_plantar_o_dia` preserva o carimbo antigo e chama `_materializar_uma`. (`app/chamados/services/passivo_validado.py:327`; `app/chamados/services/passivo_validado.py:353`; `app/chamados/services/passivo_validado.py:534`; `app/chamados/services/passivo_validado.py:537`.)
+- A nova guarda consulta `espera_declarado_x_gravado`, mas `estado_aplicacao_pergunta` retorna `aplicada` pelo carimbo, antes de derivar e comparar. O helper transforma esse resultado em espera vazia. (`app/chamados/services/materializacao.py:1684`; `app/chamados/services/materializacao.py:782`; `app/chamados/services/materializacao.py:735`.)
+- O escritor continua aplicando S139 e registra a hora do marco. (`app/chamados/services/materializacao.py:653`; `app/chamados/services/materializacao.py:1224`; `app/chamados/services/materializacao.py:1323`.)
+
+**Contraexemplo estrutural:** `intervalo_saida/hora`, resposta `12:20`, marco `S 12:00`, `validada_em` e `materializada_em` preenchidos, via `declaracao`, competência aberta, apenas `E 08:00` no espelho. O passivo pode plantar `S 12:00`: não existe vizinha S impeditiva, e o fechamento E08/S12 não aumenta a quantidade de turnos sem par. Execução integral desse cenário: **[nao verificado]**. (`app/chamados/services/materializacao.py:121`; `app/chamados/services/materializacao.py:653`; `app/chamados/services/passivo_validado.py:557`.)
+
+**Demais caminhos examinados:**
+
+| Caminho | Resultado |
+|---|---|
+| `_gravar_irma_do_par` | Usa `_materializar_uma(q)`; não possui escritor paralelo de batida. (`app/chamados/services/materializacao.py:1555`.) |
+| `_validar_o_par` | Carimba a irmã pelo escritor canônico e materializa pela unidade; desfaz o savepoint se as duas não terminarem materializadas. (`app/chamados/services/validacao.py:461`; `app/chamados/services/validacao.py:463`; `app/chamados/services/validacao.py:464`.) |
+| `_materializar_resposta_hora` | O chamador produtivo encontrado é `_materializar_uma`; `models.py` reexporta o símbolo. (`app/chamados/services/materializacao.py:1695`; `app/chamados/models.py:4174`.) |
+| Folga | Aceita `FOLGA_CONTESTA`, declara o dia e encerra pela porta administrativa; esse ramo não registra HH:MM de intervalo. (`app/chamados/services/validacao.py:77`; `app/chamados/services/validacao.py:386`; `app/chamados/services/validacao.py:387`; `app/chamados/services/validacao.py:395`.) |
+| `data_hora` | Ramo distinto, selecionado pelo tipo; lê data/hora textual e registra E, origem `disputa_ancora`. Não é a classe `tipo_resposta='hora'`. (`app/chamados/services/materializacao.py:1412`; `app/chamados/services/materializacao.py:1425`; `app/chamados/services/materializacao.py:1696`.) |
+| Reconciliador | Os caminhos examinados lavram carimbos e fechamentos; `lavrar_sem_turno_aberto` restringe seus motivos e exclui pergunta com texto. Não demonstram outro plantio de metade. (`app/chamados/reconciliador.py:333`; `app/chamados/reconciliador.py:363`; `app/chamados/reconciliador.py:365`; `app/chamados/reconciliador.py:406`.) |
+| Management | `validar_classe_a` usa a validação; `backfill_fio_morto_e4b` usa o laço; `materializar_passivo_validado` usa `reparar` e alcança a brecha descrita. (`app/chamados/management/commands/validar_classe_a.py:100`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:147`; `app/chamados/management/commands/materializar_passivo_validado.py:113`.) |
+| S144 ao fechar | Carimba após consultar lastro; não fabrica outra batida. (`app/chamados/services/materializacao.py:1935`; `app/chamados/services/materializacao.py:1939`.) |
+
+Os registros encontrados com origem de disputa estão nos ramos hora e data_hora; os outros registradores em chamados usam `excecao_autorizada` e `reg_externa`. **Duvidoso** atribuir-lhes um bypass desta classe sem outro encadeamento demonstrado. (`app/chamados/services/materializacao.py:1324`; `app/chamados/services/materializacao.py:1425`; `app/chamados/services/acoes_chamado.py:45`; `app/chamados/services/regularizacao_ext.py:79`.)
+
+**2. Limitação a metades de intervalo**
+
+**Procedente.** Nesses dois sítios, a única substituição explícita da hora digitada pela hora do marco é S139, restrita a `intervalo_saida/intervalo_volta`. Fora disso, `_hora_fonte` permanece `resposta_colab`. (`app/chamados/services/materializacao.py:652`; `app/chamados/services/materializacao.py:653`; `app/chamados/services/materializacao.py:659`.)
+
+`_ajustar_saida_overnight` conserva `.time()` local e recombina somente a data entre D e D+1; não encontrei outra alteração de HH:MM nesse método. (`app/chamados/juizes.py:325`; `app/chamados/juizes.py:326`; `app/chamados/juizes.py:327`; `app/chamados/juizes.py:331`.)
+
+Há uma ressalva à descrição “fora dele o tipo vem do marco”: quando nenhum marco é identificado, o código admite tipo pelo motivo e registra pendência administrativa. É comportamento anterior ao complemento. (`app/chamados/services/materializacao.py:630`; `app/chamados/services/materializacao.py:632`; `app/chamados/services/materializacao.py:637`; `app/chamados/services/materializacao.py:640`.)
+
+**3. Escritores, leitores e significado dos campos**
+
+| Campo/valor | Quem escreve | Quem lê e significado |
+|---|---|---|
+| `resposta_colab` | Resposta humana; resposta automática; limpeza na reabertura pela porta de lote. (`app/chamados/services/disputa_emissao.py:1467`; `app/chamados/services/disputa_emissao.py:1659`; `app/chamados/services/disputa_emissao.py:1595`; `app/chamados/models.py:3308`.) | Plantio, novo normalizador, contador e C7. É texto: pode conter hora ou escape; não é timestamp UTC. (`app/chamados/services/materializacao.py:599`; `app/chamados/services/materializacao.py:652`; `app/chamados/services/materializacao.py:695`; `app/chamados/services/materializacao.py:261`; `app/chamados/models.py:1850`.) |
+| `recusa_motivo` | Recusa de plantio, pendência de tipo, recusa humana, escape e duplicata. (`app/chamados/services/materializacao.py:1519`; `app/chamados/services/materializacao.py:1228`; `app/chamados/services/validacao.py:715`; `app/chamados/services/disputa_emissao.py:1497`; `app/chamados/services/fio.py:1402`.) | O contador traduz pelo catálogo e seleciona PARIDADE; o explicador apresenta pendência. Não significa exclusivamente recusa de plantio. (`app/chamados/services/materializacao.py:258`; `app/chamados/services/explicador.py:90`.) |
+| `validada_em` | `_carimbar_validacao`; devoluções; resposta nova/reabertura zeram; `carimbar(resposta='validar')` pode preenchê-lo por simetria. (`app/chamados/services/validacao.py:136`; `app/chamados/services/validacao.py:201`; `app/chamados/services/validacao.py:271`; `app/chamados/services/disputa_emissao.py:1480`; `app/chamados/services/disputa_emissao.py:1595`; `app/chamados/models.py:3160`.) | C6/C7 tratam preenchimento como veredito; fila de escrita exige preenchimento. Essa interpretação independe de a espera ter recusado a escrita. (`app/chamados/juizes.py:1401`; `app/chamados/models.py:1848`; `app/chamados/services/materializacao.py:1865`.) |
+| `materializada_em` | Trio central em `_escrever_carimbo`, pelas portas de carimbo; descarimbo em lote. (`app/chamados/models.py:3123`; `app/chamados/models.py:3155`; `app/chamados/models.py:3211`; `app/chamados/models.py:3308`.) | Testemunha, fila, contador, C6/C7 e lastro. **Não prova batida:** também carimba recusas sem plantio, embora o help text ainda diga “batida criada + chamado fechado”. (`app/chamados/services/materializacao.py:773`; `app/chamados/services/materializacao.py:1866`; `app/chamados/services/materializacao.py:327`; `app/chamados/juizes.py:1386`; `app/chamados/models.py:1848`; `app/chamados/models.py:3447`.) |
+| `via_resolucao` | Primeiro carimbo pelo modelo; descarimbo; troca por fato no espelho; relavra. (`app/chamados/models.py:3127`; `app/chamados/models.py:3308`; `app/chamados/models.py:3317`; `app/chamados/services/relavra_via.py:125`.) | Testemunha distingue recusa/aplicação; lastro e C6 interpretam as vias. É nome da resolução/testemunha, não hora nem dia. (`app/chamados/services/materializacao.py:752`; `app/chamados/services/materializacao.py:773`; `app/chamados/juizes.py:679`; `app/chamados/juizes.py:1386`.) |
+| Dict `estado_aplicacao` | Resultado canônico em `estado_aplicacao_pergunta`; atributo transitório atribuído por `fio`. (`app/chamados/services/materializacao.py:764`; `app/chamados/services/fio.py:374`.) | Modal lê atributo; helper da espera, contador e explicador consultam a função. (`app/templates/chamados/partials/modal_fio.html:242`; `app/chamados/services/materializacao.py:734`; `app/chamados/services/materializacao.py:332`; `app/chamados/services/explicador.py:101`.) |
+| `indisponivel` | Apenas a casca `fio`, quando a testemunha levanta exceção. (`app/chamados/services/fio.py:375`; `app/chamados/services/fio.py:379`.) | Modal mostra aviso e suprime Validar. O card consulta diretamente o filtro e não recebe essa tradução de exceção. (`app/templates/chamados/partials/modal_fio.html:268`; `app/templates/chamados/partials/modal_fio.html:274`; `app/templates/chamados/partials/_pergunta_card.html:43`; `app/chamados/templatetags/chamados_tags.py:126`.) |
+| `espera_declarado` | Lista `(pk, detalhe)` construída pelo contador, incluída no universo. A unidade é **pergunta**, não par/disputa. (`app/chamados/services/materializacao.py:337`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:347`.) | O teste lê a chave; o comando consumidor do contador lê `bug_par_103`, `universo` e `total_aval`, sem apresentar especificamente a nova lista. (`app/chamados/tests/test_bug_par_projetado.py:1054`; `app/chamados/management/commands/bug_par_103.py:44`; `app/chamados/management/commands/bug_par_103.py:45`; `app/chamados/management/commands/bug_par_103.py:62`.) |
+
+**Procedente — os leitores não supõem todos o mesmo significado.** A testemunha equipara carimbo a `aplicada`, enquanto o passivo existe justamente para contradizer carimbo sem lastro; essa divergência produz a brecha do item 1. (`app/chamados/services/materializacao.py:782`; `app/chamados/services/materializacao.py:1627`; `app/chamados/services/vigia_carimbo.py:106`.)
+
+Quanto ao tempo, a configuração declara São Paulo e `USE_TZ=True`; a comparação nova usa HH:MM local, e os carimbos registram instantes dos atos. `data_evento` é tratado pelo ajuste como dia do turno; conversa possui exceção de dia civil explicitamente discriminada. Configuração efetiva e armazenamento de produção: **[nao verificado]**. (`app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/chamados/services/materializacao.py:706`; `app/chamados/services/validacao.py:136`; `app/chamados/juizes.py:306`; `app/chamados/juizes.py:334`.)
+
+**4. C7 e fechamento por cima da espera**
+
+**Procedente.** A espera preserva `validada_em`; com esse campo preenchido, a metade sai de `respostas_sem_veredito` e C6 a considera morta. Se nenhuma outra pergunta bloquear, C7 permite fechar. (`app/chamados/services/materializacao.py:1684`; `app/chamados/models.py:1848`; `app/chamados/juizes.py:1401`; `app/chamados/models.py:1860`.)
+
+O laço normal chama `_fechar_disputa_se_quitada` mesmo com zero materializações e erros de espera; a cauda não consulta esses erros antes de fechar. (`app/chamados/services/materializacao.py:1884`; `app/chamados/services/materializacao.py:1886`; `app/chamados/services/materializacao.py:1789`; `app/chamados/services/materializacao.py:1806`.)
+
+Todos os chamadores produtivos encontrados de `pode_fechar`:
+
+| Chamador | Efeito |
+|---|---|
+| `reconciliador.lavrar_sem_turno_aberto` | Fecha se alcançado e liberado. (`app/chamados/reconciliador.py:412`; `app/chamados/reconciliador.py:413`.) |
+| `reconciliador.retratar_perguntas_absolvidas_por_celula` | Fecha. (`app/chamados/reconciliador.py:612`; `app/chamados/reconciliador.py:613`.) |
+| `reconciliador.encerrar_orfas_pela_lampada` | Fecha. (`app/chamados/reconciliador.py:1171`; `app/chamados/reconciliador.py:1172`.) |
+| `materializacao._materializar_ausencia_de_resposta` | Fecha. (`app/chamados/services/materializacao.py:963`; `app/chamados/services/materializacao.py:964`.) |
+| `materializacao._fechar_disputa_se_quitada` | Fecha; é o fechamento diretamente alcançado após a espera no laço. (`app/chamados/services/materializacao.py:1789`; `app/chamados/services/materializacao.py:1806`; `app/chamados/services/materializacao.py:1886`.) |
+| `disputa_emissao.criar_disputa_a_partir_de_chamados_orfaos` | Pode fechar, salvo abstenção por ata. (`app/chamados/services/disputa_emissao.py:1278`; `app/chamados/services/disputa_emissao.py:1284`.) |
+| `disputa_emissao._resolver_perguntas_por_chamado_resolvido` | Fecha, com proteção de pergunta em voo. (`app/chamados/services/disputa_emissao.py:2096`; `app/chamados/services/disputa_emissao.py:2098`; `app/chamados/services/disputa_emissao.py:2099`.) |
+| `entrada_sincronizada.resolver_cobranca_da_entrada` | Fecha. (`app/ponto/services/entrada_sincronizada.py:59`; `app/ponto/services/entrada_sincronizada.py:60`.) |
+| `becos.fechar_beco` | Fecha. (`app/chamados/services/becos.py:56`; `app/chamados/services/becos.py:57`.) |
+| `competencia_trancada.encerrar` | Fecha após seleção e nova conferência. (`app/chamados/services/competencia_trancada.py:227`; `app/chamados/services/competencia_trancada.py:229`.) |
+| `relatorios_disputa.classificar`; `explicador.por_que_nao_fecha`; `becos.classificar`; `competencia_trancada.medir` | Somente classificação/leitura/seleção. (`app/chamados/relatorios_disputa.py:24`; `app/chamados/services/explicador.py:147`; `app/chamados/services/becos.py:33`; `app/chamados/services/competencia_trancada.py:178`.) |
+
+Os dois chamadores da cauda são o laço normal e `passivo_validado.reparar`. No passivo, **espera pura não fecha por essa cauda**: a disputa só entra no mapa após algum plantio aceito. Espera mais outro sucesso na mesma disputa pode alcançar o fechamento. (`app/chamados/services/materializacao.py:1886`; `app/chamados/services/passivo_validado.py:413`; `app/chamados/services/passivo_validado.py:537`; `app/chamados/services/passivo_validado.py:542`; `app/chamados/services/passivo_validado.py:573`.)
+
+**5. Classes de reprovação**
+
+- **Segundo juiz registrado: duvidoso.** `_declarado_da_metade` deriva o tipo declarado pelo motivo; `_tipo_pelo_marco` deriva o tipo que seria gravado. São lados distintos da comparação, não dois julgamentos do tipo gravado. Existe, contudo, repetição do mapa motivo→tipo já disponível em `MARCO_DA_PERGUNTA`. (`app/chamados/services/materializacao.py:486`; `app/chamados/services/materializacao.py:693`; `app/chamados/juizes.py:922`.)
+- **Segundo escritor fora da porta: duvidoso.** Os caminhos do par reutilizam a unidade; a brecha comprovada é uma comparação omitida dentro da porta compartilhada. (`app/chamados/services/materializacao.py:1555`; `app/chamados/services/validacao.py:463`; `app/chamados/services/materializacao.py:782`.)
+- **Relógio novo fora da borda: não identificado nos helpers adicionados.** Eles comparam texto e timestamp recebido, sem nova leitura de `now`. (`app/chamados/services/materializacao.py:690`; `app/chamados/services/materializacao.py:701`; `app/chamados/services/materializacao.py:713`; `app/chamados/services/materializacao.py:727`.)
+- **Ordem de trava: nenhuma inversão nova demonstrada.** O POST faz a primeira consulta antes da trava; a escrita repete a guarda dentro do ato, e o laço relê a pergunta depois de travar. Concorrência efetiva: **[nao verificado]**. (`app/chamados/services/validacao.py:510`; `app/chamados/services/validacao.py:549`; `app/chamados/services/materializacao.py:1684`; `app/chamados/services/materializacao.py:1875`; `app/chamados/services/materializacao.py:1876`.)
+- **Testes sem mordida: parcialmente procedente.** Há assertivas diretas para tela, POST, escrita e controle positivo do botão; não são apenas nomes RED. Porém o teste de escrita usa carimbo de materialização nulo e não cobre o passivo carimbado; execução retirando cada portão é **[nao verificado]**. (`app/chamados/tests/test_bug_par_projetado.py:1008`; `app/chamados/tests/test_bug_par_projetado.py:1019`; `app/chamados/tests/test_bug_par_projetado.py:1032`; `app/chamados/tests/test_bug_par_projetado.py:1171`.)
+- **Teste da Central com conclusão excessiva: procedente.** Depois do fechamento, exige apenas ausência de “Tudo validado e gravado”. O desenlace já retorna antes para chamado terminal; portanto essa assertiva não prova que a Central compreende a espera. Antes de fechar, C7 pode liberar e o desenlace ainda emitir aquela frase, pois o explicador só marca `gravou=False` para os estados de recusa, não para espera. (`app/chamados/tests/test_bug_par_projetado.py:1046`; `app/chamados/tests/test_bug_par_projetado.py:1050`; `app/chamados/services/desenlace.py:48`; `app/chamados/services/desenlace.py:63`; `app/chamados/services/desenlace.py:72`; `app/chamados/services/explicador.py:93`; `app/chamados/services/explicador.py:102`.)
+- **Vocabulário/selo incompleto: procedente.** O novo estado retornado não foi acrescentado a `validacao.ESTADOS`; o selo só reconhece valores literais, deixando passar o retorno por constante. (`app/chamados/services/validacao.py:55`; `app/chamados/services/validacao.py:514`; `app/chamados/tests/test_porta_validacao_pergunta.py:155`.)
+- **`indisponivel` × `None`: distinção local correta, cobertura desigual.** No modal, exceção vira indisponibilidade restritiva; `None` continua sendo fora de escopo. O card não possui a mesma captura. (`app/chamados/services/fio.py:375`; `app/chamados/services/fio.py:379`; `app/chamados/services/materializacao.py:780`; `app/templates/chamados/partials/modal_fio.html:274`; `app/chamados/templatetags/chamados_tags.py:126`.)
+
+**6. Contraexemplo de formato**
+
+**Procedente — os domínios aceitos diferem.** Com marco S139 `12:00`, uma resposta legada `12:00:00` produz timestamp pelo marco, mas `_declarado_da_metade` rejeita os três componentes e devolve `None`; a comparação retorna espera. Chamar isso de **espera falsa é duvidoso**, porque a porta normal exige HH:MM e rejeita segundos. (`app/chamados/services/materializacao.py:652`; `app/chamados/services/materializacao.py:658`; `app/chamados/services/materializacao.py:695`; `app/chamados/services/materializacao.py:707`; `app/chamados/services/disputa_emissao.py:1448`.)
+
+No sentido inverso, `24:00` e `01:60` são normalizados pelo novo helper, mas `datetime.time` rejeita quando o texto é a fonte do plantio. A entrada humana verifica formato, sem verificar faixa. Isso demonstra assimetria de validação, mas não igualdade falsa com uma hora gravável válida. (`app/chamados/services/materializacao.py:696`; `app/chamados/services/materializacao.py:659`; `app/chamados/services/disputa_emissao.py:1448`; `app/chamados/services/materializacao.py:707`.)
 
 ## 13/11 21:51 · sessao ddef20ed25b9 · - · - · origem=Ronald (tmux)
 
@@ -894,110 +1004,4 @@ Não encontrei um segundo juiz produtivo das datas do PA nem novo escritor dessa
 
 Trecho UI inicial: 42 linhas, CONTA 20, DOBRA 17, OBSOLETA 5, ? 3.
 
-## 13/11 21:13 · sessao 6bb15e6ffeb4 · - · - · origem=Ronald (tmux)
-
-| id | balde | existe | prova | mae | veredito |
-|---|---|---|---|---|---|
-| O167 | UI | NAO | LEU app/core/admin.py:59, app/ponto/admin.py:38, app/colaboradores/admin.py:33, app/colaboradores/admin.py:48, app/escala/admin.py:19: quatro cadastros usam SoLeitura; inclusão, alteração e exclusão recusadas. | - | OBSOLETA |
-| O206 | UI | PARCIAL | LEU app/templates/chamados/partials/modal_fio.html:349 e app/templates/chamados/partials/_js_cobranca.html:30: Cobrar e prévia textual com autoridade comum implementados; smoke nas duas cascas [não verificado]. | - | CONTA |
-| O235 | UI | SIM | LEU app/templates/escala/wizard_tipo_escala.html:99: “0 ou vazio = sem pausa descontada”; app/escala/services/cadastro_tipo.py:244: vazio não atribui valor. | - | CONTA |
-| O251 | UI | PARCIAL | LEU app/templates/chamados/partials/_js_cobranca.html:42 e app/core/views_config.py:300: prévia e campo curados; alteração cadastral SINEEPRES pedida em app/docs/BACKLOG.md:1483 [não verificado]. | - | CONTA |
-| BUG-RETRATO-VELHO-NA-TELA | UI | PARCIAL | LEU app/folha/views_retrato.py:206 e app/templates/folha/_retrato_barra.html:22: aviso de frescor implementado; casos e fechamento gravado [não verificado]. INFERIU absorção pela O48, expressa em app/docs/BACKLOG.md:1498. | O48 | DOBRA |
-| C7-TELA-ADMIN-ENCERRA | UI | SIM | LEU app/chamados/models.py:1999: porta admin_encerra existe; app/templates/chamados/partials/modal_fio.html:335 mantém fechamento comum, sem oferta da porta; busca admin_encerra em templates/static sem ocorrência. INFERIU parte da C7 por app/docs/BACKLOG.md:1499. | C7-DISPUTA-FECHA-POR-UM-JUIZ | DOBRA |
-| col155-HE-NAO-POR-MINUTO | UI | SIM | LEU app/ponto/portas/he.py:450: decisão administrativa fica preservada sem comparar novos minutos; app/ponto/services/gestao_he.py:95 usa fotografia da decisão. INFERIU parte da decisão de HE da O214; ocorrência de produção [não verificado]. | O214 | DOBRA |
-| FOLGA-CONTESTA-DIZ-MANDAR-PARA-CADASTRO | UI | SIM | LEU app/templates/chamados/partials/modal_fio.html:279: resposta continua oferecendo validar_pergunta; app/chamados/rotulos.py:140 mantém ação padrão “Validar”, sem ação “mandar para cadastro”. | - | CONTA |
-| O267 | UI | NAO | LEU app/templates/folha/_retrato_lista.html:31 e app/folha/views_retrato.py:304: coluna “Dias que seguram” e recorte próprio presentes. | - | OBSOLETA |
-| O274 | UI | SIM | LEU app/templates/chamados/partials/modal_fio.html:49: formulário aponta #fio-conteudo; app/templates/chamados/painel_gestao.html:260 fornece esse alvo; app/templates/core/_drawer_generico.html:8 fornece #drawer-geral-corpo. | - | CONTA |
-| O284 | UI | PARCIAL | LEU app/relatorios/views.py:1227: pedido usa job, dedup e disparo; app/relatorios/views.py:1274: progresso. Residual B é explicitamente complemento O280 em app/docs/BACKLOG.md:1570; volume atual de queries/smoke [não verificado]. | O280 | DOBRA |
-| O308 | UI | SIM | LEU app/colaboradores/views_fase.py:68 e app/colaboradores/views_fase.py:83: reabertura sem modo continua em mudanca, usando hoje/vigência, em vez do início gravado do vínculo. | - | CONTA |
-| O310 | UI | NAO | LEU app/templates/colaboradores/partials/painel_colaborador.html:26: orientação fora das abas; app/templates/folha/_retrato_barra.html:71: botão Raio-X existente e acionável. | - | OBSOLETA |
-| O311 | UI | ? | LEU app/chamados/views_cobrar.py:55: envio deixa ocorrência; recebimento nativo e cobrança efetiva em disputa exigem observação não fornecida [não verificado]. INFERIU complemento O206 pelo escopo explícito de app/docs/BACKLOG.md:1597. | O206 | DOBRA |
-| O310-RAIOX | UI | PARCIAL | LEU app/folha/views_retrato.py:454: lente implementada; app/templates/folha/_retrato_raiox.html:33: placar apresenta explicação. História de retratos permanece incompleta conforme app/docs/BACKLOG.md:1605; persistência histórica completa [não verificado]. | O310 | DOBRA |
-| L7-AJUDA-DA-REGUA-CCT | UI | SIM | LEU app/templates/core/config/aplicacoes.html:41: ajuda continua prosa literal do template, e app/templates/core/config/aplicacoes.html:35 registra mapa AJUDA pendente. INFERIU parte da tela de convenção O223 pelo sítio e app/docs/BACKLOG.md:1606. | O223 | DOBRA |
-| O318 | UI | PARCIAL | LEU app/templates/chamados/partials/_card_atendimento.html:212 e app/chamados/services/declaracao_texto.py:552: card lê regularização da porta; plantio dos 1.019 e smoke exigidos em app/docs/BACKLOG.md:1613 [não verificado]. | - | CONTA |
-| O318-DIA-MISTO | UI | NAO | LEU app/chamados/services/declaracao_texto.py:428, app/templates/chamados/partials/_card_atendimento.html:256, app/chamados/services/fio.py:375 e app/api/views.py:1092: projeção por marco e consumidores migrados; aviso e formulário usam marcos aceitos. | O318 | OBSOLETA |
-| CARD-SEM-DIA-OFERECE-FORMULARIO | UI | SIM | LEU app/chamados/services/declaracao_texto.py:461: sem dia devolve projeção vazia; app/chamados/services/declaracao_texto.py:505: projeção vazia não oculta formulário; app/chamados/services/declaracao_texto.py:333: porta recusa sem_data. INFERIU residual da oferta do card O318. | O318 | DOBRA |
-| O323 | UI | NAO | LEU app/templates/core/config/sindicato_form.html:98 e app/core/views_config.py:300: checkbox gravável; app/core/views_config.py:323: salvamento registra antes/depois pela trilha. | - | OBSOLETA |
-| BUILDER-POR-POSTO | UI | NAO | LEU app/templates/relatorios/builder.html:23, app/relatorios/views.py:1450, app/relatorios/views.py:1484 e app/relatorios/views.py:1495: filtro múltiplo, agrupamento PDF e primeira coluna Posto no CSV implementados. | - | OBSOLETA |
-| O122-ETAPA-2 | UI | SIM | LEU app/escala/views.py:79: lista ainda deriva uso por EscalaColaborador.ativa, sem universo vinculo_do_dia nem filtros praça/posto/q dessa etapa. INFERIU parte da O122 pelo identificador e app/docs/BACKLOG.md:1718. | O122 | DOBRA |
-| UI-MARQUE-AS-CAIXAS-E-PDF-POSTO | UI | PARCIAL | LEU app/ponto/views.py:597: mensagem “Marque as caixas dos dias” permanece; app/relatorios/views.py:1361 agrupa PDF por posto_id. Repetição do posto relatado e respectivos ids [não verificado]. | - | CONTA |
-| DOIS-DESTINOS-NA-LINHA | UI | SIM | LEU app/templates/escala/cadastro_x_realidade.html:28 e app/templates/escala/cadastro_x_realidade.html:29: ação lê a.destino, coluna lê x.destino. INFERIU residual da TERMOMETRO-VIRA-LISTA pelo sítio migrado, app/escala/regua_defesa.py:297. | TERMOMETRO-VIRA-LISTA | DOBRA |
-| CARIMBO-DA-CONVENCAO | UI | NAO | LEU app/relatorios/pdf_espelho.py:423 e app/relatorios/pdf_espelho.py:743: fonte por fatia impressa no PDF; app/ponto/services/espelho.py:1296 e app/templates/ponto/espelho.html:27: mesmo carimbo na tela. | - | OBSOLETA |
-| HOLERITE-SHARE-WEBVIEW | UI | SIM | LEU app/templates/holerite/ver.html:42 e app/templates/holerite/ver.html:52: compartilhar continua dependente de canShare, com alternativa “Abrir no navegador”; app/templates/holerite/ver.html:270 recusa canShare=false. Entrega direta de compartilhamento pelo servidor não demonstrada. | - | CONTA |
-| PWA-OFFLINE-APP-SHELL | UI | SIM | LEU app/static/sw.js:46: navegação faz fetch sem guardar resposta; app/static/pwa.js:113: registro offline não contém identidade do colaborador. | - | CONTA |
-| PDF-UNIAO-HHMM-ENTRE-DATAS | UI | SIM | LEU app/relatorios/pdf_espelho.py:477: união de órfãs HH:MM de várias datas; app/relatorios/pdf_espelho.py:178: comparação só por HH:MM; app/relatorios/pdf_espelho.py:513 usa esse predicado para excluir turno aberto. | - | CONTA |
-| TRIAGEM-FILA-OPUS-V6 | UI | PARCIAL | LEU app/templates/ponto/triagem/apto.html:244: “Selfie obrigatoria” ainda literal; demais pendências da versão revertida não são todas demonstráveis no HEAD [não verificado]. INFERIU raiz BO-0611-05-RESTO-DA-CLASSE pela incorporação da triagem em app/docs/BACKLOG.md:1959. | BO-0611-05-RESTO-DA-CLASSE | DOBRA |
-| ESPURIA-TELA (+ESPELHO-DECIDIU-ICONE) | UI | SIM | LEU app/relatorios/pdf_espelho.py:178 e app/relatorios/pdf_espelho.py:513: PDF ainda usa classificação própria de espúria para turno aberto; entrega integral das quatro classes descritas em app/docs/BACKLOG.md:1850 [não verificado]. | - | CONTA |
-| PWA-FILA-OFFLINE | UI | PARCIAL | LEU app/static/pwa.js:113: grava IndexedDB; app/static/pwa.js:175: 5xx/rede preservam fila; app/static/pwa.js:166: HTTP 400 apaga. INFERIU parte da obra mais ampla PWA-OFFLINE-APP-SHELL pelo mesmo sítio de fila. | PWA-OFFLINE-APP-SHELL | DOBRA |
-| BO-ROTULO-ENCERRADO | UI | NAO | LEU app/chamados/services/verbos.py:132: resolvido=Encerrar e fechado=Encerrar e arquivar; app/chamados/templatetags/chamados_tags.py:68: tag comum; app/templates/chamados/detalhe.html:132 usa essa tag. | O137 | OBSOLETA |
-| TRIAGEM-OFFLINE-SEM-CAMERA | UI | SIM | LEU app/templates/ponto/triagem/apto.html:248 e app/templates/ponto/triagem/apto.html:255: falha de getUserMedia ainda esconde botão offline. Raiz explícita em app/docs/BACKLOG.md:1959. | BO-0611-05-RESTO-DA-CLASSE | DOBRA |
-| APP-MENSAGENS (MSG-1..4) | UI | ? | LEU app/docs/BACKLOG.md:1961: quatro entregas sem arquivo de implementação nomeado; busca MSG-1..4/APP-MENSAGENS encontrou registros documentais, sem sítio da obra. ? sem sítio; apps Android/iOS [não verificado]. | - | CONTA |
-| BO-ROTULO-GLPI-SELETOR-MORTO | UI | SIM | LEU app/templates/chamados/detalhe.html:130: seletor novo_status; app/chamados/views.py:292 e app/chamados/views.py:300: followup lê conteudo, sem aplicar novo_status. | - | CONTA |
-| BO-ROTULO-REABRIR-RECUSADO | UI | SIM | LEU app/templates/chamados/detalhe_local.html:398: opção aberto é oferecida; app/chamados/catalogo/motor.py:102 e app/chamados/catalogo/motor.py:153: resolvido→aberto recusado para perfil comum. INFERIU duplicação da obra mais ampla em app/docs/BACKLOG.md:2084. | BO-ROTULO-REABRIR-SO-NO-DETALHE | DOBRA |
-| BO-ROTULO-TERCEIRO-VOCABULARIO | UI | SIM | LEU app/templates/relatorios/historico_chamados.html:121 e app/templates/chamados/partials/_card_atendimento.html:23: get_status_local_display ainda convive com verbos e espera; app/chamados/services/verbos.py:118 dá Encerrado a quatro estados. INFERIU raiz O137 pela família BO-ROTULO explicitamente incorporada em app/docs/BACKLOG.md:1953. | O137 | DOBRA |
-| TRIAGEM-OFFLINE-FILA | UI | SIM | LEU app/static/pwa.js:116: gap e GPS ficam no armazenamento; app/static/pwa.js:145 não os inclui na sincronização; app/templates/ponto/triagem/apto.html:244 mantém rótulo de selfie obrigatória. INFERIU residual da mesma triagem, cuja raiz está em app/docs/BACKLOG.md:1959. | BO-0611-05-RESTO-DA-CLASSE | DOBRA |
-| GPS-ESTADO-NA-TELA | UI | SIM | LEU app/templates/ponto/bater_ponto_v2.html:178: usa Date.now em vez do timestamp da posição; app/static/pwa.js:145: sincronização omite precisão/instante armazenados. Raiz explícita em app/docs/BACKLOG.md:1975. | BO-0611-05-TEM-GPS-LEITORES | DOBRA |
-| BO-0611-10-TELA-DA-TROCA | UI | ? | LEU app/docs/BACKLOG.md:1983: apenas “item 10 = funcionalidade nova”, sem sítio nem comportamento especificado. ? sem sítio/escopo; INFERIU mãe O10 pelo assunto troca de plantão [não verificado]. | O10 | DOBRA |
-| PWA-FILA-OFFLINE-400 | UI | SIM | LEU app/static/pwa.js:166 e app/static/pwa.js:172: HTTP 400 remove batida após console.warn; app/templates/ponto/bater_ponto_v2.html:329: recusa HTTP retorna sem enfileirar. INFERIU raiz da família de fila na PWA-OFFLINE-APP-SHELL; complemento direto PWA-FILA-OFFLINE em app/docs/BACKLOG.md:2036. | PWA-OFFLINE-APP-SHELL | DOBRA |
-| G6-PAGINA | UI | SIM | LEU app/templates/chamados/painel_gestao.html:662: caminho sem _voltarPara dispara busca; app/templates/chamados/painel_gestao.html:237: lista não declara hx-get; app/templates/chamados/partials/_lista_chamados.html:163: refresh depende desse atributo. INFERIU cobertura incompleta dos rerenders. | - | CONTA |
-| BUG-SW-RESPOND-UNDEFINED | UI | PARCIAL | LEU app/static/sw.js:30: fallback agora retorna cached ou Response.error(); defeito de undefined curado. Homologação de batida real, ainda pedida em app/docs/BACKLOG.md:2067, [não verificado]. INFERIU parte do comportamento offline do mesmo SW na PWA-OFFLINE-APP-SHELL. | PWA-OFFLINE-APP-SHELL | DOBRA |
-| BO-ROTULO-REABRIR-SO-NO-DETALHE | UI | SIM | LEU app/chamados/templatetags/chamados_tags.py:68: opcao_mover recebe só destino; app/templates/chamados/detalhe_local.html:398 oferece aberto sem verificar estado/papel; app/chamados/catalogo/motor.py:153 recusa transição não permitida. | - | CONTA |
-
-44 linhas: CONTA 16, DOBRA 20, OBSOLETA 8, ? 3.
-
-Observações para consolidação: as mães O214, O223, TERMOMETRO-VIRA-LISTA e PWA-OFFLINE-APP-SHELL são inferências de abrangência, indicadas como tal. Para BO-0611-10-TELA-DA-TROCA, mãe O10 é hipótese fraca: se a regra de consolidação exigir confirmação documental de troca de plantão, substituir mãe por “?” e veredito por CONTA provisória; faltam escopo e sítio.
-
-## 13/11 21:13 · sessao b2a3b993f41e · - · - · origem=Ronald (tmux)
-
-| id | balde | existe (SIM/NAO/PARCIAL/?) | prova (arquivo:linha do HEAD ou commit; LEU x INFERIU) | mae | veredito (CONTA/DOBRA/OBSOLETA) | [nao verificado]
-|---|---|---|---|---|---|
-| SOMBRA-X-PROD-COL988-124639 | INSTRUMENTO | ? | LEU bin/sombra_mascara.py:20; INFERIU: máscara altera insumos, mas divergência nominal atual não medida; [não verificado] | - | CONTA |
-| SOMBRA-NAO-CABE-ANTES-DO-VIZINHO | INSTRUMENTO | PARCIAL | LEU bin/sombra.sh:398: histórico implementado; app/config/crons_duracao.json:78 e app/config/crons.py:219: duração registrada ainda excede corredor | CRON-SOMBRA-NAO-CABE | DOBRA |
-| CRON-NAO-CABE-SOMBRA-87-MIN | INSTRUMENTO | SIM | LEU app/config/crons_duracao.json:78: 5188 s; app/core/tests/marca_cron15.py:24: marca e prazo continuam | CRON-SOMBRA-NAO-CABE | DOBRA |
-| SOMBRA-PORTAO-POR-COMANDO | INSTRUMENTO | SIM | LEU bin/deploy.sh:162: exige --conferir global; bin/sombra.sh:398: histórico existe; INFERIU: falta seleção por comandos atingidos | CRON-SOMBRA-NAO-CABE | DOBRA |
-| COBPARC-CONTROLE | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:790: depende de ensaio nominal; scripts e resultados citados ausentes da cópia; [não verificado] | COBERTURA-PARCIAL-UM-JUIZ | DOBRA |
-| O245-CAMADA-COBERTURA | INSTRUMENTO | NAO | LEU app/core/management/commands/gerar_diagrama.py:712, app/docs/MAPA.md:73 e app/core/tests/test_selo_diagrama_do_codigo.py:161: camada, publicação e selo presentes | O245 | OBSOLETA |
-| E1-RECUSAS-SEM-CONTADOR | INSTRUMENTO | SIM | LEU app/chamados/services/fio.py:1528 e app/chamados/services/fio.py:1551: causas existem; contador auxiliar contempla só retratada; INFERIU: recusas restantes sem contador | FIO-E0-V4-E1-ENTRADAS | DOBRA |
-| ODOMETRO-DE-REGRAS | INSTRUMENTO | ? | LEU app/docs/RELATO.md:1940 e bin/tests/test_claude_md_regras_preservadas.sh:6; mecanismo próprio não localizado por nome/função; sem sítio [não verificado] | - | CONTA |
-| REPROVA-E-DESENHO | INSTRUMENTO | NAO | LEU bin/disjuntor.py:136, bin/disjuntor.py:1007 e bin/disjuntor.py:1025: primeira reprovação dispara; liberação validada e consumida | DISJUNTOR-E-CLEAR-RAPIDO | OBSOLETA |
-| REPROVA-E-DESENHO-CODEX | INSTRUMENTO | NAO | LEU bin/disjuntor.py:137, bin/disjuntor.py:997 e bin/codex_pergunta.sh:391: terceira procedente dispara e wrapper recusa nova volta | DISJUNTOR-E-CLEAR-RAPIDO | OBSOLETA |
-| TRAVA-MENOS-FILA | INSTRUMENTO | PARCIAL | LEU bin/suite.sh:135: seleção intermediária obrigatória; bin/trava_teste.sh:23: identidade ainda processo; INFERIU: falta histórico e placar por obra | - | CONTA |
-| TRAVA-COBERTURA | INSTRUMENTO | SIM | LEU bin/trava_teste.sh:23 e bin/trava_teste.sh:28: dono processo e --quem lateral; bin/trava_teste.sh:42: execução acoplada; INFERIU: faltam obra/volta/job destacado | - | CONTA |
-| ADR-0003-CELULA-TRES-NATUREZAS | INSTRUMENTO | PARCIAL | LEU app/docs/ADR/0003-celula-tres-naturezas.md:37: inventário presente; :93: grafo ainda tem ciclos; :5: selo futuro | - | CONTA |
-| CORRECAO-ADR-0003 | INSTRUMENTO | NAO | LEU app/docs/ADR/0003-celula-tres-naturezas.md:31: fotografia expressamente fora da CelulaDia, no gravado | ADR-0003-CELULA-TRES-NATUREZAS | OBSOLETA |
-| PADRAO-DE-CIMA | INSTRUMENTO | ? | LEU bin/disjuntor.py:960: existe B3; mecanismo PDC não localizado por nome/função; app/docs/BACKLOG.md:837 registra raia interrompida; sem sítio [não verificado] | - | CONTA |
-| DISJUNTOR-B1-ESPERA-OCIOSA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:550: sem tokens não dispara; :562: verificação chamada pelo agente; INFERIU: espera sem nova ferramenta permanece descoberta | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| LEI-AKITA-RESIDUO | INSTRUMENTO | PARCIAL | LEU bin/tests/test_lei_akita.sh:97: cabeçalho literal persiste; :338: sem linha não julga; :952: numerador/denominador agora discriminados | - | CONTA |
-| B3-CODEX-VOLTA-NUNCA-TRIADA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:955: conta só triagens procedentes; :2243: placar não apresenta voltas sem triagem; INFERIU: falta reconciliação sidecar x triagem | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| FASE-CONFLITANTE-VINCULO-DO-DIA | INSTRUMENTO | SIM | LEU app/escala/services/fase_conflitante.py:71 e :78: vínculo ativa=True reaplicado a todos os dias, sem juiz por data | GRADE-FOLGA-JUIZ | DOBRA |
-| B3-RAIZ-DO-WRAPPER | INSTRUMENTO | SIM | LEU bin/disjuntor.py:120: raiz padrão do script; bin/codex_pergunta.sh:391: chama disjuntor da própria cópia sem --raiz | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| B3-CHAVE-DA-OBRA-NOS-DOIS-CONTADORES | INSTRUMENTO | SIM | LEU bin/disjuntor.py:627: Opus normaliza cauda; :911 e :948: trilha Codex conserva obra crua | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| B3-NAO-SEI-SEM-SAIDA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:1103: rearme recusa trilha ilegível; :1137: b3_parada não consulta chave desligada | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| B3-CODEX-PREEXISTENTES | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:1923: B3 agora nega exceção; :1931: demais ramos liberam; bin/hook_stop_fila1.py:1215: exceção retorna None | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| CODEX-CUSTO-POR-OBRA | INSTRUMENTO | SIM | LEU bin/disjuntor.py:2233 e :2243: tokens por chamada/papel e placar agregado, sem tabela por obra; INFERIU: entrega pedida ausente | - | CONTA |
-| E4CAL-P1-REVERTER-AMPLO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:871 e app/ponto/portas/celula.py:942; reverter/snapshot r8 ausentes da cópia; cobertura atual não verificável [não verificado] | E4-CALENDARIO-L1 | DOBRA |
-| E4CAL-P1-PAREI-FM-CORRENTE | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:872; logs/e4cal/r8_pouso/comum.py não localizado; sem sítio [não verificado] | E4-CALENDARIO-L1 | DOBRA |
-| E4CAL-P1-SELO-CAMPOS-ACORDAM | INSTRUMENTO | SIM | LEU app/ponto/tests/test_e3_status_lavrado.py:309: foto cobre CelulaDia/FM/Exportacao; não inclui EventoCelula nem LogAuditoria | E4-CALENDARIO-L1 | DOBRA |
-| E4CAL-P3-DOCS-VELHAS | INSTRUMENTO | PARCIAL | LEU app/core/juizes.py:862: comentário atualizado; app/docs/BACKLOG.md:2189: TELA-66 ainda cita dia.eh_trabalho; commit citado não verificável | E4-CALENDARIO-L1 | DOBRA |
-| TT6-PENDENTE-VELHO | INSTRUMENTO | SIM | LEU app/core/juizes.py:862 e :865: pendente reancorado continua registrado; baixa exige L-118 explicitamente | E4-CALENDARIO-L1 | DOBRA |
-| CONTENCAO-QUE-MORDE-V2 | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:136 e :1850: B3 e censo implementados; bin/suite.sh:135: guarda intermediária; conclusão dos 12 itens não comprovada [não verificado] | - | CONTA |
-| CONTENCAO-V2-HORA-DE-LINHA | INSTRUMENTO | SIM | LEU bin/tests/test_hora_da_secao_nao_e_futura.sh:25 e :37: reconhece apenas títulos ##, sem linha de lista | CONTENCAO-QUE-MORDE-V2 | DOBRA |
-| F1C4-3-RG-SEM-CELULA-CASO | INSTRUMENTO | SIM | LEU app/ponto/tests/test_f1c4_3_reconciliar_grade_pergunta_ao_juiz.py:48 e :55: todos os cenários criam CelulaDia; falta caso sem célula | ESMERIL-V2 | DOBRA |
-| E3-GRADE-POR-TURNO-MEDIR | INSTRUMENTO | ? | LEU app/config/settings/base.py:165 e app/escala/utils.py:2086: flag e ramo existem; valor de produção e uso não disponíveis [não verificado] | - | CONTA |
-| EMIS-CATRACA-FLUXO | INSTRUMENTO | PARCIAL | LEU app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:82: fluxo do cartório coberto; :224: catraca ainda examina forma de argumento; fluxo completo dos commands [não verificado] | F1C4-3-EMISSORES-FILA | DOBRA |
-| E4-CARGA-PARIDADE | INSTRUMENTO | SIM | LEU app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:180: cobertura comum do pareador; INFERIU de busca: falta cruzamento Carga x casca em fixture mista | BUG-ENC-CELULAS-FORMA | DOBRA |
-| RELATO-ESCRITOR-FORA-DO-FLOCK | INSTRUMENTO | SIM | LEU bin/gerar_cortes.py:117 e :136; bin/deploy_agendado.sh:37 e :44: read-modify-write direto sem trava central | - | CONTA |
-| PDC-RELOGIO-NA-CLI | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:936; decide_pdc e CLI PDC não localizados na cópia; sem sítio [não verificado] | PADRAO-DE-CIMA | DOBRA |
-| PDC-PAINEL-SEM-DUVIDA | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:937; painel PDC não localizado; bin/disjuntor.py:2257 é painel B1–B4, sem PDC; sem sítio [não verificado] | PADRAO-DE-CIMA | DOBRA |
-| E4-S4-ENCERRADOS | INSTRUMENTO | SIM | LEU app/core/tests/test_selo_performance.py:262 e :302: teto 18, fixture só entrada antiga e sem saída/encerramento lavrado | - | CONTA |
-| CODS-ORFAO14H-SEM-GATILHO | INSTRUMENTO | PARCIAL | LEU app/ponto/tests/test_cods_do_ato.py:83: test_MORDE_ordem_invertida_da_o_mesmo segue com nome MORDE; emissão nominal atual [não verificado] | CODS-DO-ATO | DOBRA |
-| ENCADEADO-0111-SEM-CARIMBO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:949: datas restantes não explicadas; sem logs/carimbos anexados, causa e universo atuais [não verificado] | - | CONTA |
-| DEPLOY-RELOAD-RESIDUOS | INSTRUMENTO | PARCIAL | LEU bin/contrato_deploy.sh:54: grep inclui comentários; bin/deploy.sh:362: lista vazia ainda pula prova; :307: ordenação migrate já revista | - | CONTA |
-| TELA-PREFIXO-SEM-GUARDA | INSTRUMENTO | SIM | LEU app/core/tests/test_rota_pede_sessao.py:159 e :313: compara argumentos de include, sem prefixos de path | NOREVERSE-UI-NO-CORE | DOBRA |
-| REVERSAO-PELA-PORTA | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:957 e app/ponto/portas/celula.py:578; receitas logs/*/reversao*.py ausentes; sem sítio dos escritores denunciados [não verificado] | - | CONTA |
-| B3-TOPO-FILA | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:734 e bin/tests/test_disjuntor.sh:726: cabeçalho corrigido; :748: falha de leitura só OSError simples, faltam casos residuais indicados | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| CLAUDE-MD-ENXUTO | INSTRUMENTO | PARCIAL | LEU bin/tests/test_claude_md_regras_preservadas.sh:15: migração literal e selo presentes; CLAUDE.md:251: seção extensa; meta atual de 8k tokens [não verificado] | - | CONTA |
-| CLAUDE-MD-PISTA-NO-ANEXO | INSTRUMENTO | SIM | LEU bin/disjuntor.py:1327: ANEXO_CHEIO inclui CLAUDE.md, sem PISTA.md; bin/tests/test_claude_md_regras_preservadas.sh:16: texto literal mora em PISTA | CLAUDE-MD-ENXUTO | DOBRA |
-| CLAUDE-MD-RACIONAL | INSTRUMENTO | PARCIAL | LEU CLAUDE.md:252 e :429: fusões presentes; medição somente leitura da seção iniciada em :251 = 22.534 B, acima de 21.000 B exigidos em app/docs/BACKLOG.md:962 | CLAUDE-MD-ENXUTO | DOBRA |
-
-_4872 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4874 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
