@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 10:24** · publicado em **14/11/2026 10:23** (UTC-3)
+> Ultima resposta processada: **14/11/2026 10:25** · publicado em **14/11/2026 10:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 10:25 · sessao 01c6df45798f · - · - · origem=Ronald (tmux)
+
+Complementos:
+
+- **Veto por dia sem jornada — caso L-089:** `app/ponto/tests/test_o198_falta_em_dia_sem_jornada.py:11-12` escreve a regra; `FaltaEmDiaSemJornadaTest::test_falta_em_dia_sem_jornada_pela_CELULA_e_recusada:100` exige recusa com célula `trabalha=False`; `test_falta_em_dia_sem_jornada_pela_ARITMETICA_e_recusada:114` exige recusa no sábado; `test_o_RANGE_recusa_nomeando_o_dia_que_ofende:150` exige recusa do intervalo quarta–sábado, nomeando sábado. O contraponto `True` aceita em `test_MORDE_o_MESMO_dia_com_a_celula_TRABALHA_segue_aceito:108`; `None` aceita em `TriEstadoNaoRecusaTest::test_MORDE_sem_vinculo_que_responda_NAO_recusa:218` e `test_MORDE_12x36_sem_ancora_devolve_None_e_NAO_recusa:226`.
+
+- **FALTA_DIA/minutos da grade — caso L-024:** `app/chamados/tests/test_h06_falta_pela_grade.py:1-3,11-19` escreve norma e respostas. `FaltaDeclaradaPelaRespostaLeAGrade::test_MORDE_6x1_de_7h_desconta_420:86`, `test_MORDE_12x36_desconta_o_previsto_da_grade_660:90`, `test_MORDE_meio_periodo_desconta_240:94` conferem respectivamente420/660/240min. `FaltaDeclaradaPelaPerguntaLeAGrade::test_MORDE_declara_falta_nasce_sem_numero_e_deriva_no_flip:110` confere nascimento0 e aprovação420 (`:118-122`). `FaltaEmRangeSomaAGradeDiaADia::test_range_seg_a_qua_soma_a_grade:128` confere1260min (`:134`). Isso cobre minutos, não contagem do TXT.
+
+- **Falta decidida/furo — caso L-039:** `app/docs/LEIS.md:87` associa a lei e nomeia `app/relatorios/tests/test_falta_um_significado.py::FaltaUmSignificado::test_MORDE_o_furo_sem_decisao_nao_vira_falta_e_nao_some:121`. Sem ausência, `dias_falta=0` (`:128`); cria uma falta aprovada (`:134-135`), exige `dias_falta=1` e retira a data de em_aberto (`:137-140`). Método sem paridade; os outros métodos dessa classe incluem paridade/estrutura (`:93-119,144-178`).
+
+- **Estado inicial/aprovação/reabertura:** há regra de corte e casos comportamentais em `app/ponto/tests/test_a4_estados_com_porta.py:11-24` e `app/ponto/tests/test_reverter_rejeicao.py:4-16`, porém ligação específica a CLT/CCT/L-NNN para essas decisões não foi localizada [não verificado]. Para filtro estrito, **SEM CASO**. Casos encontrados: `OEstadoNasceComDonoTest::test_MORDE_tipo_que_exige_doc_SEM_anexo_nasce_aguardando_documento:92`, `test_MORDE_com_anexo_nasce_aguardando_decisao:98`, `test_tipo_que_NAO_exige_doc_nasce_aguardando_decisao:105`; `TransicaoTest::test_so_o_DP_aprova:168`, `test_MORDE_aprovar_sem_passar_pelo_DP_nao_acontece:175`; `ReverterRejeicaoTest::test_MORDE_o_ANEXO_decide_o_destino:51` confere estados opostos conforme presença de anexo (`:59-66`).
+
+- **Sobreposição/abono sobre falta:** regra de corte09/09 escrita em `app/ponto/tests/test_bug107_justificar_falta.py:18-20`, com casos `JustificarFaltaPassaTest::test_MORDE_atestado_sobre_falta_ENTRA:66`, `test_falta_sobre_falta_continua_recusada:86`, `test_MORDE_atestado_sobre_ATESTADO_continua_recusado:94`; ligação CLT/CCT/L-NNN dessa regra não localizada [não verificado]. O teste de entrada espera `aguardando_documento`, sem aprovação automática (`:73-77`).
+
+Registro real, sem usar docstrings: `app/core/juizes.py:254` registra `veto_de_lancamento`, pergunta `_A3` definida em `:427`; `:255` registra `estado_inicial`, `_A4` em `:428`; `:256` registra `ABERTAS`, `_A5` em `:429`. Entrada própria para aprovação/`mudar_estado`/materialização/reabertura em `JUIZES` não localizada [não verificado].
+
+## 14/11 10:24 · sessao 8af52e747d91 · - · - · origem=Ronald (tmux)
+
+Adicionais confirmados com expectativa independente:
+
+| Regra | Caso | Resposta |
+|---|---|---|
+| L022, `app/docs/LEIS.md:73` | `app/escala/tests/test_o37_foto_parcial.py::O37FotoParcialTest::test_RED_col418_os_dias_fora_da_foto_ALTERNAM:69` | Foto com folgas pares até20/09→21–30 alternam `[True,False]*5` (:73–76). |
+| L022 | Mesmo arquivo/classe, `test_MORDE_a_foto_em_dia_IMPAR_inverte_a_fase:87` | Foto ímpar→`[False,True]*5` (:94–98). |
+| L023, `app/docs/LEIS.md:74` | `app/escala/tests/test_foto_nao_apaga_o_ciclo.py::FotoNaoApagaOCicloTest::test_MORDE_5x2_o_caso_do_BO_sabado_com_uma_folga_no_mes:50` | Folga avulsa não apaga sábado/domingo=False e sexta=True (:55–58). |
+| L023 | Mesmo arquivo/classe, `test_MORDE_6x1_a_mesma_regra:60` | Domingo=False, sábado=True (:64–65). |
+| L025, `app/docs/LEIS.md:76` | `app/ponto/tests/test_batidas_apuraveis.py::BatidasApuraveisTest::test_retratada_fora_do_universo:32` | Duas batidas, uma retratada→somente timestamp da válida (:37–44). |
+| L025 | Mesmo arquivo/classe, `test_pendente_dp_conta:46` | `aprovada=False`, sem retratação→universo de1 (:51–56). |
+| L026, `app/docs/LEIS.md:77` | `app/ponto/tests/test_periodo_apuracao.py::PeriodoApuracaoFuncTest::test_corte_26:34` | Competência06/2026,corte26→26/05–25/06 (:35). |
+| L026 | Mesmo arquivo/classe, `test_default_21:31` | Competência05/2026→21/04–20/05 (:32). |
+| L026 | Mesmo arquivo/classe, `test_jan_corte_26_vira_ano:37` | Competência01/2026,corte26→26/12/2025–25/01/2026 (:38). |
+| L020, `app/docs/LEIS.md:71` | `app/escala/tests/test_celula_dia.py::MarcosDnaTest::test_dna_congelado_vence_edicao_template:243` | Cadastro07–19 congelado; template muda para08→marcos continuam07/19 (:246–250). |
+| L032, `app/docs/LEIS.md:80` | `app/ponto/tests/test_he_intra_dobrada.py::HeIntraDobradaTest::test_RED_doze_horas_sem_intervalo_NAO_tem_hora_extra:77` | 07–19 sem intervalo→intra60min e HE0 (:82–86). |
+| L032 | Mesmo arquivo/classe, `test_MORDE_treze_horas_sem_intervalo_TEM_uma_hora_de_extra:88` | 07–20 sem intervalo→intra60min e HE60min (:90–93). |
+| L032/Art.71 | `app/ponto/tests/test_e3_metade_intervalo_cadastrado.py::MetadeIntervaloCadastradoTest::test_v3_o_PISO_vem_do_JUIZ_por_dia_e_NUNCA_de_minutos_jornada:68` | Previsto345→piso15;480→60;240→0 (:81–89). |
+| L093, `app/docs/LEIS.md:111` | `app/ponto/tests/test_l093_trabalhado_real.py::TetoUsaOTrabalhadoRealTest::test_MORDE_o_rateio_entre_as_duas_rubricas_se_mantem:92` | Prev480,trab100,fora100,atraso200,antecipada100→soma280 e razão2:1 (:95–99). |
+| L084, `app/docs/LEIS.md:116` | `app/ponto/tests/test_l084_vence_o_t8.py::L084VenceOT8Test::test_RED_a_entrada_a_452_min_do_marco_VOLTA_a_ser_atraso:69` | Cadastro07–19,batidas14:32–19→452min atraso (:75–78). |
+| L033, `app/docs/LEIS.md:81` | `app/folha/tests/test_furo_so_intervalo_nao_retem.py::FuroSoIntervaloNaoRetemTest::test_so_o_intervalo_faltando_NAO_retem:83` | Entrada/saída presentes, pausa ausente→lista de retenções vazia (:85–86). |
+
+A bateria de lavratura não contém assertivas de `atraso`/`antecipada` nem caso de feriado; contém realizado, lâmpadas, órfãs e cadastro. Seu caso `OrfaNasDuasPontasTest::test_MORDE_as_duas_pontas_sao_orfas_e_nada_some:633` fundamenta1180min realizados na L084, mas não certifica o raio90 (`app/ponto/tests/test_bateria_lavratura.py:637–644`).
 
 ## 14/11 10:24 · sessao fe3322a77de8 · - · - · origem=Ronald (tmux)
 
@@ -820,55 +861,4 @@ Correção sobre caso do degrau: existe teste numérico com regra escrita no pla
 | Vigência/troca de vínculo | **CASO:** `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F5_troca_de_vinculo_no_meio_da_competencia:1867`; L-021/L-099 em `:1868`; regra/caso em `:1875-1892`, resposta16h trabalhadas/1h atraso/2h antecipada em `:1944-1952`. |
 | Folga calendário versus manual | Caso escrito com L-110, porém resposta categórica sem minutos/dinheiro: `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py::GradePorTurnoFolgaDoVinculoTest` (`:98`) herda `::test_MORDE_folga_de_calendario_de_outro_vinculo_e_trabalho_na_grade:70`, `::test_folga_a_mao_e_da_pessoa_e_folga_na_grade:75`, `::test_folga_de_calendario_do_vinculo_do_dia_e_folga_na_grade:80`; regra em `:10-20`, respostas literais em `:72`, `:77`, `:82`. |
 
-## 14/11 10:09 · sessao b6c44cd5961f · - · - · origem=Ronald (tmux)
-
-| Decisão | Caso forte pela regra |
-|---|---|
-| Chegada antes do marco | `app/ponto/tests/test_janela_he_regra.py::JanelaHeRegraTest::test_RED_06h40_com_marco_07h00_nao_gera_HE:83`; L-097 escrita :2-6; 20 min antecipados → trabalho660/HE0, :86-89 |
-| Piso da janela | Mesmo arquivo, `JanelaHeRegraTest::test_MORDE_06h52_esta_dentro_do_piso_e_NADA_muda:91`; Art.58 §1, :92; piso10/antecipação8 → trabalho668, :94 |
-| Teto da janela | Mesmo arquivo, `JanelaHeRegraTest::test_RED_05h30_passa_do_teto_e_entra_em_CADASTRO_x_REALIDADE:97`; antecipação90 → trabalho660/HE0 e acusação, :100-103 |
-| Vigência da janela | Mesmo arquivo, `JanelaHeRegraTest::test_MORDE_a_vigencia_protege_a_competencia_09:107`; L-092, :108; antes da vigência → trabalho680, :110 |
-| Duas pontas fora | `app/ponto/tests/test_janela_he_saida.py::JanelaHeSaidaTest::test_RED_as_duas_pontas_juntas_nao_geram_HE:82`; L-097/bloqueio total, :2-15; 18:51–07:06 contra19–07, pausa1h → trabalho660/HE0, :85-89 |
-| Saída depois do marco | Mesmo arquivo, `JanelaHeSaidaTest::test_RED_so_a_saida_07h06_conta_ate_o_marco:91`; trabalho660/HE0, :94-95 |
-| Entrada antes, piso zero | Mesmo arquivo, `JanelaHeSaidaTest::test_RED_so_a_entrada_18h51_conta_do_marco:97`; trabalho660/HE0, :100-101 |
-| Autorização faz contar | Mesmo arquivo, `DiaAutorizadoContaTest::test_RED_o_dia_AUTORIZADO_passa_a_contar_os_minutos_de_fora:255`; L-097 escrita :199; trabalho740, :258 |
-| Recusa mantém padrão | Mesmo arquivo, `DiaAutorizadoContaTest::test_MORDE_o_NAO_tem_o_efeito_do_PADRAO_e_nao_muda_numero:262`; trabalho720, :265 |
-| Autorização abrange ambas as pontas | Mesmo arquivo, `DiaAutorizadoContaTest::test_MORDE_a_decisao_e_do_DIA_e_nao_da_PONTA:269`; trabalho735, :274 |
-| Decisão de outra data não autoriza | Mesmo arquivo, `DiaAutorizadoContaTest::test_MORDE_a_decisao_de_OUTRO_dia_nao_vale_para_este:277`; trabalho720, :282 |
-| Dia sem previsto bloqueia inteiro | `app/ponto/tests/test_he100_dia_sem_previsto.py::DiaSemPrevistoForaDaJanelaTest::test_RED_dia_sem_previsto_nao_paga_sem_decisao:69`; L-097 escrita :4-9; 330 reais → trabalho0/fora330/FT0, :73-75 |
-| Dia sem previsto autorizado | Mesmo arquivo, `DiaSemPrevistoForaDaJanelaTest::test_autorizado_paga_inteiro:83`; trabalho330/fora0/FT5,5h, :89-91 |
-| Duas pontas longe preservam trabalho | `app/ponto/tests/test_o280_bateria_da_lei.py::V3Familia3Test::test_v3_F9c_a_L084_recusa_o_marco_e_as_horas_CONTAM:4013`; L-084+Art.4 CLT, :4014; trabalho300/atraso0/antecipada0, :4027-4029 |
-| Duas pontas longe acusam cadastro | Mesmo arquivo, `V3ReapontarTest::test_i26_B4_as_duas_pontas_longe_viram_CADASTRO_x_REALIDADE:5654`; L-084, :5655; trabalho540/atraso0/antecipada0 e CXR1, :5667-5670 |
-| Uma ponta longe cobra atraso | `app/ponto/tests/test_l084_vence_o_t8.py::L084VenceOT8Test::test_RED_a_entrada_a_452_min_do_marco_VOLTA_a_ser_atraso:69`; L-084 escrita :6-17; atraso452, :76 |
-| Duas pausas saem do trabalho | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F7_intervalo_dividido_em_dois:1968`; Art.71 §1 e ordem02/10, :1969; trabalho585/pausa75/HE0, :1981-1982 |
-
-Não encontrei caso forte **numérico de folha** para exclusão de batida retratada ou recorte pela data: `[nao verificado]`. Há L-025 escrita e casos comportamentais em `app/ponto/tests/test_o247_retratada_fora_do_pareamento.py:3-6`, :84, :96, :117, mas seus resultados são listas/booleanos/contagem de saídas, :91-94, :114, :133-136.
-
-O teste de par aberto em `app/ponto/tests/test_o280_bateria_da_lei.py::V3Familia1Test::test_v3_turno_aberto_nao_recebe_hora_inventada:3694` afirma trabalho/intra zero, :3699-3700, porém o método cita somente a matriz “absurdo”, :3695; lastro CLT/CCT/L-NNN para esse caso: `[nao verificado]`.
-
-O caso de cauda inteiramente após o marco existe pela L-097 em `app/ponto/tests/test_o280_bateria_da_lei.py::V3FrotaTest::test_v3_B_I28_PINADO_o_minuto_fora_do_marco_nao_gera_HE:5124`, esperado HE50 zero, :5142; está marcado `expectedFailure`, :5123.
-
-## 14/11 10:09 · sessao d40d5604fe39 · - · - · origem=Ronald (tmux)
-
-`remover_duplicatas` está ativo: é chamado para o mapa de turnos e para os períodos calculados; mantém somente E/S e exclui repetição do mesmo tipo com intervalo inferior a três minutos (`app/ponto/motor_calculo_v2.py:882`, `:902`, `:909`, `:2351`, `:2354`).
-
-| Decisão | Predicado efetivo | Referência |
-|---|---|---|
-| Papel da batida | Papel E/S/X/Xi da ata prevalece sobre tipo gravado; X/Xi vira interna | `app/ponto/turnos.py::parear_turnos:1310`, `:1316`, `:1382` |
-| Eco de entrada | E com `_eco_flush=True` não abre turno | `app/ponto/turnos.py::parear_turnos:1398` |
-| Identificação do eco | Chegadas ≤120s; eventos entre 1.800s e 14h; atual ao vivo ≤600s; anterior atrasado ≥1.800s | `app/ponto/turnos.py::_marca_ecos_flush:368`, `:370` |
-| Pausa por marco | Distância ao intervalo ≤90min e não maior que distância à borda | `app/ponto/turnos.py::parear_turnos:1358`, `:1364` |
-| Volta deslocada | E após S interna; `0<gap≤intra_max_s`; distante >90min das bordas | `app/ponto/turnos.py::parear_turnos:1408` |
-| Nova entrada | E seguinte deixa turno anterior aberto e inicia outro | `app/ponto/turnos.py::parear_turnos:1417` |
-| Teto do fechamento | Jornada declarada +4h; sem bordas diferentes, teto recebido; no fechamento principal, fallback 26h | `app/ponto/turnos.py::_teto_da_jornada:78`, `:82`; `::parear_turnos:1433` |
-| Exceção do teto | Ambas as pontas distantes mais que `CADASTRO_NAO_DESCREVE_MIN` devolvem envelope 26h | `app/ponto/turnos.py::parear_turnos:1444` |
-| S além do teto | Entrada fica aberta; saída vira órfã | `app/ponto/turnos.py::parear_turnos:1447`, `:1453` |
-| Par mínimo | Duração ≤60s não forma turno; S fica órfã | `app/ponto/turnos.py::_par_degenerado:130`; `::parear_turnos:1487` |
-| Saída restante | S fecha entrada disponível; sem entrada, vira órfã | `app/ponto/turnos.py::parear_turnos:1491`, `:1495` |
-| Dia do turno | Dia local; pode migrar à véspera quando cruza meia-noite, entrada antes de `hf`, distante >90min de `hi`, saída dentro do envelope da véspera | `app/ponto/turnos.py::_data_do_turno:285`, `:291`, `:301`, `:302` |
-| Intervalo descontável | Par marcado com duração ≥900s | `app/ponto/turnos.py::intervalos_do_turno:545` |
-| S órfã no motor | Não produz período calculável | `app/ponto/adaptador_motor.py::periodos_de_turnos:30`, `:36` |
-
-Os dois caminhos têm alimentação diferente: o mapa do dia usa `turnos_de_batidas`, que marca ecos e não recebe o mapa de papéis; a formação dos períodos recebe papéis da ata e os parâmetros `AUT_*` (`app/ponto/motor_calculo_v2.py:882`, `:503`; `app/ponto/turnos.py:1533`, `:1535`).
-
-_5041 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5043 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
