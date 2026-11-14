@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=3354535
+ESPERANDO: trava_teste.sh | pid=3375303
 DECIDIDO TECNICO (PARADA 5) HJ-090 volta7 F3: ja_iniciou/pode_editar/pode_cancelar (ferias/models.py, @property com date.today()) viram metodos _em(hoje), MESMO predicado, sem status_por_data (adaptador do Codex recusado: misturaria predicado); a tela le flags que views._contexto_secao_ferias calcula com o hoje da request; 0 chamador da property restante. Artefatos do construtor movidos a logs/HJ-090/volta7/. Recorte ferias+core rodando.
 DECIDIDO PELA LEI (aval BUG-PAR-163-X-DECLARADO, PROIBIDO literal sem universo; cura e a CLASSE): o portao espera DECLARADO-X-GRAVADO vale para TODA resposta cuja validacao grava hora/tipo diferente do declarado, nao so o universo 163 nem por ordem de clique (o construtor tinha fixado "fora do universo diferente segue aplicavel", chamados/tests/test_bug_par_projetado.py:1098) | contestavel
 DECIDIDO PELA LEI (E3-PORTA-SEM-CASO (ii), so o ENCERRADOR mata chamado; PROIBIDO esconder chamado vivo): metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta); se exigir mudar o predicado registrado do juiz, vira pergunta de lei com numero | contestavel
