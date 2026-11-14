@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 09:15** · publicado em **14/11/2026 09:19** (UTC-3)
+> Ultima resposta processada: **14/11/2026 09:40** · publicado em **14/11/2026 09:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 09:40 · sessao 8aef128c623f · - · - · origem=Ronald (tmux)
+
+folha/export.py::classificar_export ; a competencia pode ser aprovada/trancada, o que bloqueia? (app/core/juizes.py:172) ; nenhum L-NNN substantivo especifico achado, corte CONTA-VAZIA-NAO-BARRA-O-CARIMBO (app/docs/CORTES.md:248), esclarecido por LEITURA-LITERAL-DO-CARIMBO (app/docs/CORTES.md:250), L-002 exige leitura da autoridade (app/docs/LEIS.md:60) ; travas sao horas_trabalhadas == 0, turnos_abertos > 0 e vinculo ativo 12x36 sem ancora de colaborador ativo (app/folha/export.py:806, app/folha/export.py:831, app/folha/export.py:833, app/folha/export.py:835), devolvidas em travas_aprovacao (app/folha/export.py:848), recorte do carimbo TXT dispensa so conta_vazia (app/folha/export.py:762) ; sim, app/docs/JUIZES.md:101 diz que o que bloqueia esta SEM juiz, mas app/folha/export.py:831 e app/folha/export.py:848 respondem a pergunta ; achado, botao Aprovar fechamento do painel decide disabled por turnos_abertos > 0, sem ler travas_aprovacao (app/templates/ponto/partials/painel_fechamento.html:102), seu formulario chama aprovar_colaborador (app/templates/ponto/partials/painel_fechamento.html:86) ; -
+
+folha/export.py::classificar_export ; quem entra no TXT da folha? (app/core/juizes.py:173) ; L-033 isenta furo apenas de intervalo da retencao (app/docs/LEIS.md:81), corte LEI-DESLIGADO-NAO-TRAVA manda retentor perguntar ao juiz esta_desligado (app/docs/CORTES.md:450), L-002 exige leitura da autoridade (app/docs/LEIS.md:60) ; snapshot da empresa e competencia sem filtro de status (app/folha/export.py:785), exclusoes na ordem rescisao ate fim da janela (app/folha/export.py:866), sem codigo Dominio (app/folha/export.py:872), ferias com batida (app/folha/export.py:877), cadastro sem previsto com horas zero e pelo menos duas batidas (app/folha/export.py:902, app/folha/export.py:924, app/folha/export.py:946), retencao do espelho (app/folha/export.py:968), codigo nao homologado (app/folha/export.py:974), demais entram (app/folha/export.py:841, app/folha/export.py:980) ; nao ; nenhum achado independente nas buscas classificar_export, entra_set, sem_codigo_dominio, ferias_com_batida, cadastro_zero, furo_espelho, nao_homologado e status entra, leitores consultados delegam ao juiz (app/ponto/services/fechamento_lista.py:73, app/inteligencia/calculadores.py:210, app/folha/views.py:212), retrato le o status recebido (app/folha/retrato_folha.py:91) ; -
+
+folha/export.py::prontidao ; quanto da competencia esta cumprido, prontidao? (app/core/juizes.py:174) ; nenhum texto substantivo especifico em L-NNN ou CORTES.md achado, L-002 exige leitura da autoridade (app/docs/LEIS.md:60), endereco declarado em app/docs/JUIZES.md:99 ; isento resulta cego com percentual None (app/folha/export.py:1037), snapshot com previsto_em e minutos_previstos usa min(100, round((realizado ou horas_trabalhadas de fallback + abonado) / previsto * 100)) (app/folha/export.py:1045, app/folha/export.py:1076, app/folha/export.py:1079), denominador nulo resulta cego (app/folha/export.py:1051, app/folha/export.py:1070), fallback pela grade soma previsto de trabalho e ausencia, realizado limitado por dia e abono das ausencias (app/folha/export.py:1095, app/folha/export.py:1100, app/folha/export.py:1104), teto 100 (app/folha/export.py:1111) ; nao ; nenhum achado independente nas buscas prontidao, pct, cumprido, divisao por previsto, minutos_realizados e minutos_previstos, lista le prontidao (app/ponto/services/fechamento_lista.py:85), simulacao tambem (app/folha/management/commands/simular_folha.py:87), escritor materializa componentes sem calcular o percentual (app/ponto/services/fechamento.py:1061, app/ponto/services/fechamento.py:1083) ; -
+
+## 14/11 09:39 · sessao 8de09edf1596 · - · - · origem=Ronald (tmux)
+
+app/ponto/services/fechamento.py::competencia_trancada (app/core/juizes.py:322) ; o que fechado quer dizer, por empresa (app/core/juizes.py:77) ; L-113 (app/docs/LEIS.md:153), K8-COMPETENCIA-NAO-E-MES-CIVIL distingue tranca da empresa e FM do colaborador (app/docs/CORTES.md:216), QUARENTENA-E-A-O44 diz nada tranca (app/docs/CORTES.md:349) ; False sem empresa, senao existe PeriodoFechado da empresa+mes+ano com reaberto_em nulo, sem testar ativo (app/ponto/services/fechamento.py:1477, app/ponto/services/fechamento.py:1480) ; sim: catalogo diz fechado SEM juiz (app/docs/JUIZES.md:101), funcao declara JUIZ dessa pergunta (app/ponto/services/fechamento.py:1474) ; chamados/juizes.py::dia_em_competencia_trancada consulta diretamente PeriodoFechado com reaberto_em nulo e verifica janela do dia, sem chamar K4/K7 (app/chamados/juizes.py:2054, app/chamados/juizes.py:2057) ; -
+
+app/ponto/services/fechamento.py::periodo_trancado (app/core/juizes.py:334) ; o periodo foi reaberto (app/ponto/services/fechamento.py:1465) ; nenhum texto encontrado definindo o criterio de reabertura em L-NNN ou corte [nao verificado] ; None sem empresa, senao primeira linha PeriodoFechado da empresa+mes+ano com reaberto_em nulo, ou None, sem distinguir ausencia de registro de reabertura (app/ponto/services/fechamento.py:1467, app/ponto/services/fechamento.py:1470) ; sim: ativo=False documentado como reaberto (app/ponto/models.py:933), mas juiz declara reaberto_em como verdade e ativo apenas documento (app/ponto/services/fechamento.py:1466) ; chamados/services/competencia_trancada.py::medir_frota seleciona por conta propria PeriodoFechado com reaberto_em nulo (app/chamados/services/competencia_trancada.py:346), assim como chamados/juizes.py::dia_em_competencia_trancada (app/chamados/juizes.py:2054) ; -
+
+Observacoes para consolidacao:
+
+- Nao contar F6 como copia de K4: o registro distingue explicitamente as perguntas e os universos (app/core/juizes.py:76, app/core/juizes.py:80).
+- Ha contradicao textual substantiva em K4 entre “trancada, nada mais muda” (app/ponto/services/fechamento.py:1457) e “nenhuma trava” por trancada (CLAUDE.md:421, CLAUDE.md:422). O proprio registro trata a tranca sem efeito como revogada pelas leis posteriores (app/ponto/services/fechamento.py:1548, app/ponto/services/fechamento.py:1549), portanto nao recomendo converter isso em pergunta de lei vigente.
+- Em K7 os escritores atualizam os dois marcadores juntos na reabertura (app/ponto/services/fechamento.py:1437, app/ponto/services/fechamento.py:1439) e na nova tranca (app/ponto/services/fechamento.py:1413, app/ponto/services/fechamento.py:1417). Divergencia real entre os campos em producao: [nao verificado].
+- O corte literal que dispensa consulta da tranca no recalculo/TXT esta em app/docs/DOSSIES.md:122 e e reproduzido em app/core/juizes.py:539; nao achei correspondencia direta em CORTES.md [nao verificado].
+
+## 14/11 09:38 · sessao 47e09fa5c8d6 · - · - · origem=Ronald (tmux)
+
+K6 — `app/folha/export.py::competencia_entregue` ; a competência já foi entregue (lavrada)? (`app/core/juizes.py:177`) ; sem L-NNN específico para o predicado: nascimento listado como ato em `app/docs/LEIS.md:241`; cortes `app/docs/CORTES.md:246`, `app/docs/CORTES.md:275` e delimitação do holerite em `app/docs/CORTES.md:276` ; existe ED vigente da empresa/mês/ano cujo `invalidada_em` é nulo; `registro=True` retorna o registro ou None, caso contrário bool (`app/folha/export.py:581`, `app/folha/export.py:588`, `app/folha/export.py:591`, `app/folha/export.py:592`, `app/folha/export.py:594`) ; sim, divergência documental expressa: TXT OU holerite para a mesma pergunta em `app/docs/CORTES.md:246`, contra ED vigente que substitui a metade holerite em `app/docs/CORTES.md:275`; o corte posterior separa o holerite como outra pergunta em `app/docs/CORTES.md:276` ; achado: `app/chamados/services/passivo_validado.py:127` responde `_esta_exportada` pelo campo `vigente` do Haiku; `app/folha/haiku_export.py:70` escolhe `e_vigente` sem excluir a invalidação, enquanto o juiz a exclui em `app/folha/export.py:591`; procurados `ExportacaoDominio`, `so_vigentes`, `anotar_vigencia`, `competencia_entregue`, `lote__publicado_em` nos `.py` fora de testes/migrations ; duas respostas escritas identificadas em `app/docs/CORTES.md:246` e `app/docs/CORTES.md:275`, mas a sucessão está resolvida explicitamente por `app/docs/CORTES.md:276`, portanto não sustenta pergunta normativa em aberto.
+
+K9 — `app/folha/export.py::competencia_fechada_para_celula` ; a competência está fechada para a célula deste colaborador, por TXT vigente ou holerite publicado? (`app/core/juizes.py:180`) ; L-052 registra TXT emitido ou holerite publicado em `app/docs/LEIS.md:93`; corte próprio `app/docs/CORTES.md:276`; L-020 registra a guarda de lavra nas portas em `app/docs/LEIS.md:70` [confirmar linha L-020 antes de usar: não verificado] ; chama K6 e acrescenta holerite do próprio colaborador da competência com lote publicado; sem colaborador só conta TXT; `fontes=True` retorna as fontes, caso contrário bool (`app/folha/export.py:618`, `app/folha/export.py:620`, `app/folha/export.py:622`, `app/folha/export.py:624`, `app/folha/export.py:626`, `app/folha/export.py:628`) ; nao: corte e código compõem os mesmos dois fatos (`app/docs/CORTES.md:276`, `app/folha/export.py:618`, `app/folha/export.py:624`) ; nenhum achado independente na busca por `competencia_fechada_para_celula`, `ExportacaoDominio`, `Holerite.objects`, `lote__publicado_em`; `gerar_celulas.py` enumera candidatas em `app/ponto/management/commands/gerar_celulas.py:170` e `app/ponto/management/commands/gerar_celulas.py:178`, mas decide chamando o juiz em `app/ponto/management/commands/gerar_celulas.py:182`; a frase também chama o juiz em `app/ponto/management/commands/gerar_celulas.py:212` ; -.
+
+Para a consolidação: se “conflito” contar divergência textual histórica mesmo com substituição expressa, K6 conta sim (`CORTES.md:246` contra `CORTES.md:275`). Se exigir conflito vigente não resolvido, a divergência do predicado não deve contar; permanece a documentação de catálogo desatualizada, pois `app/docs/JUIZES.md:101` diz “lavra ... SEM juiz”, enquanto `app/folha/export.py:556` define o juiz e `app/core/juizes.py:333` o registra.
+
+O achado independente de K6 é forte mesmo sem dados: para ED mais recente invalidada sem substituta, o juiz retorna False (`app/folha/export.py:591`), mas `_esta_exportada` retorna True porque o Haiku escolhe pelo último registro (`app/folha/haiku_export.py:70`, `app/folha/models.py:134`, `app/folha/models.py:137`). A ocorrência desse estado em produção é não verificada pelo anexo fornecido.
+
+## 14/11 09:38 · sessao e739a3399ad4 · RMDIR-GUARDA · verificador · origem=Code
+
+1. **PROCEDE — o rc não é sempre o retorno final do run.** Sem sinal, o retorno é preservado. Porém, um sinal pode interromper `wait`; se o filho terminar durante o trap, `kill -0` falha e o loop encerra com o código da interrupção, sem recolher o retorno final. Exemplo possível: devolver 130 após INT quando o filho terminou com 7 (`bin/suite.sh:280`, `bin/suite.sh:282`, `bin/suite.sh:283`, `bin/suite.sh:289`).
+
+   **PROCEDE — o encaminhamento de sinais não é equivalente.** TERM, INT e HUP viram todos TERM. `_PID_RUN` identifica o subshell da função; `pkill -P` alcança seus filhos imediatos, incluindo a trava, mas Docker é filho da trava e não está coberto por esse encaminhamento (`bin/suite.sh:269`, `bin/suite.sh:278`, `bin/suite.sh:280`, `bin/trava_teste.sh:42`).
+
+   **PROCEDE — a limpeza pode começar com descendente ainda executando.** O loop aguarda somente `_PID_RUN`; depois de sua morte, não verifica Docker nem o estado do container antes de limpar a cópia (`bin/suite.sh:281`, `bin/suite.sh:283`, `bin/suite.sh:285`, `bin/suite.sh:286`). Container real ainda montando a cópia nessa janela: **[nao verificado]**.
+
+   **DUVIDA — afirmar que antes o sinal sempre chegava ao Docker.** A trava já executava Docker como filho, sem trap de TERM/INT/HUP; o antigo `exec` não demonstrava essa garantia. A consequência nova é executar limpeza após a morte do intermediário (`bin/trava_teste.sh:41`, `bin/trava_teste.sh:42`, `bin/suite.sh:285`).
+
+2. **PROCEDE — a proteção não impede alcançar a árvore viva por symlink intermediário.** Considere uma cópia cuja entrada `app` seja symlink para `/home/ronald/saas-hasner/app`: `fis` continua sendo o caminho da cópia, passa pela comparação com a viva, e `alvo` atravessa esse symlink. O teste `! -L "$alvo"` examina somente `logs`, `media` ou `staticfiles`, não o componente `app`. Assim, pode remover um desses diretórios vazios na viva, havendo permissão (`bin/suite.sh:51`, `bin/suite.sh:53`, `bin/suite.sh:62`, `bin/suite.sh:63`, `bin/suite.sh:65`). Existência dessa topologia em produção: **[nao verificado]**.
+
+   **PROCEDE — a remoção continua limitada pelo próprio `rmdir`.** O comando não remove arquivo, symlink final ou diretório com conteúdo; mesmo que `find` falhe silenciosamente ou apareça conteúdo depois da consulta, `rmdir` ainda precisa aceitar o alvo como diretório vazio. Isso não garante que ele pertença à cópia (`bin/suite.sh:63`, `bin/suite.sh:64`, `bin/suite.sh:65`).
+
+   **PROCEDE — relativo, barra final e symlink da raiz são normalizados na comparação.** Com caminhos estáveis e a viva acessível, `pwd -P` faz essas grafias convergirem para o mesmo caminho físico. Essa proteção cobre a raiz recebida, não os componentes acrescentados depois (`bin/suite.sh:50`, `bin/suite.sh:51`, `bin/suite.sh:53`, `bin/suite.sh:62`).
+
+3. **PROCEDE — há consumidor operacional do rc.** `bin/volta_intermediaria.sh:32` chama a suite em primeiro plano; `bin/volta_intermediaria.sh:33` captura seu retorno; `bin/volta_intermediaria.sh:37` e `bin/volta_intermediaria.sh:39` distinguem falha de rc 75; `bin/volta_intermediaria.sh:47` devolve o resultado composto.
+
+   **DUVIDA — dependência executável do PID preservado pelo antigo `exec`.** Nesse chamador não aparece captura de `$!` nem encaminhamento de sinais para a suite; dependência em lançadores externos: **[nao verificado]** (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:33`). Existe uma derivação histórica explicitamente apoiada em “termina em exec e nada corre depois”, mas ela é documentação, não um lançador executável (`app/docs/RELATO-ARQUIVO.md:43591`).
+
+4. **PROCEDE — há regressão concreta no tratamento de falha de temporário.** `TMP` recebe a saída de `mktemp` sem checar sucesso. Se a criação falhar deixando `TMP=''`, a extração falha e o ramo de erro chega a `${TMP:?}`: a expansão aborta antes da mensagem `"git archive falhou"` e do `exit 3`. Na forma anterior informada, `rm -rf "$TMP"` vazio permitia continuar esse tratamento (`bin/codex_pergunta.sh:311`, `bin/codex_pergunta.sh:312`, `bin/codex_pergunta.sh:316`). Ocorrência em produção: **[nao verificado]**.
+
+   **DUVIDA — chamar esse vazio de opção normal legítima.** O caso identificado decorre de falha de alocação. Os sentinelas vazios explicitamente previstos que encontrei já estão protegidos por teste de não vazio: `DADOS` e `SNAP_EFEMERO` (`bin/codex_pergunta.sh:265`, `bin/codex_pergunta.sh:279`, `bin/vigia_arvore.sh:22`, `bin/vigia_arvore.sh:23`).
+
+   **PROCEDE — há outros pontos vulneráveis à expansão fatal após `mktemp` falhar.** A atribuição sem checagem seguida de trap com `${X:?}` aparece também em `bin/relato_nomes.sh:7`, `bin/regua_relogio.sh:31` e `bin/regua_relogio.sh:32`. Um caminho normal intencionalmente vazio nesses casos: **[nao verificado]**.
+
+5. **PROCEDE — o selo deixa escapar um mutante perigoso da função.** Remover `[ ! -L "$alvo" ]` e substituir `rmdir "${alvo:?}"` por `rm -rf "${alvo:?}"`, mantendo o `find`, preservaria os resultados das fixtures descritas: elas usam diretórios vazios ou com arquivo, sem symlink nos três alvos. O único symlink exercitado aponta para a raiz viva, recusada antes por outra guarda (`bin/suite.sh:63`, `bin/suite.sh:64`, `bin/suite.sh:65`, `bin/tests/test_rm_com_guarda.sh:123`, `bin/tests/test_rm_com_guarda.sh:142`, `bin/tests/test_rm_com_guarda.sh:177`, `bin/tests/test_rm_com_guarda.sh:180`).
+
+   Esse mutante passa pela regra estática de expansão guardada e pode apagar o próprio symlink alvo; também perde a proteção final de `rmdir` contra conteúdo surgido após `find` (`bin/tests/test_rm_com_guarda.sh:40`, `bin/tests/test_rm_com_guarda.sh:54`, `bin/suite.sh:64`, `bin/suite.sh:65`). Passagem funcional integral do mutante: **[nao verificado]**.
+
+   **PROCEDE — o selo também não cobre sinais nem falha de `rmdir`.** A trava falsa termina com rc configurado, e os casos funcionais não provocam interrupção nem erro de remoção. Portanto, não exercitam as falhas acima; trocar `rc=1` por `rc=0` na função também escaparia desses casos por inspeção (`bin/tests/test_rm_com_guarda.sh:115`, `bin/tests/test_rm_com_guarda.sh:124`, `bin/tests/test_rm_com_guarda.sh:177`, `bin/tests/test_rm_com_guarda.sh:181`, `bin/suite.sh:65`).
+
+O selo integral cria e remove arquivos, portanto não o executei sob a regra de somente leitura; seu resultado integral nesta cópia permanece **[nao verificado]** (`bin/tests/test_rm_com_guarda.sh:17`, `bin/tests/test_rm_com_guarda.sh:18`, `bin/tests/test_rm_com_guarda.sh:90`).
+
+## 14/11 09:37 · sessao 22a1dc803a60 · - · - · origem=Ronald (tmux)
+
+- **PROCEDE — rc pode ser o da interrupção do `wait`, não o final do filho.** Se `wait` recebe INT, retorna 130; durante o trap o filho pode terminar com 7; `kill -0` falha e o laço encerra sem recolher esse 7. A janela está em `bin/suite.sh:280-284`; o valor incorreto sai em `bin/suite.sh:289`. Reprodução inline com trap/laço idênticos e `_run` falso: em 150 rodadas, 12 devolveram 130 enquanto o trap EXIT do filho registrou 7. Sem sinal, a atribuição e o `exit` preservam o rc normal (`bin/suite.sh:282`, `bin/suite.sh:289`).
+
+- **PROCEDE — sinais não são encaminhados de maneira equivalente.** TERM, INT e HUP são todos convertidos em TERM (`bin/suite.sh:280`). `_PID_RUN` identifica o subshell da função (`bin/suite.sh:268-279`); seu filho é `bash trava_teste.sh` (`bin/suite.sh:269`), e Docker é filho da trava (`bin/trava_teste.sh:41-42`). `pkill -P` alcança somente filhos imediatos, portanto esse trap não garante sinal ao Docker (`bin/suite.sh:280`, `bin/trava_teste.sh:42`). Comportamento do Docker de produção: **[nao verificado]**.
+
+- **PROCEDE — limpeza pode começar com descendente do run ainda vivo.** O laço aguarda somente `_PID_RUN`, depois inicia a limpeza (`bin/suite.sh:281-287`). Reprodução inline com trava falsa contendo trap EXIT e Docker falso: TERM levou a `CLEANUP` aproximadamente em 0,01 s, enquanto o processo Docker falso só terminou aproximadamente em 2 s. Container real ainda montando a cópia: **[nao verificado]**; o código não aguarda sua extinção (`bin/suite.sh:283-287`).
+
+- **DUVIDA — atribuir a sobrevivência do Docker exclusivamente à remoção do `exec`.** Antes, o PID substituído por `exec` já executava a trava, que chama Docker como filho sem tratar TERM/INT/HUP (`bin/trava_teste.sh:41-42`; `exec` anterior: anexo `nucleo.diff`, trecho removido). Reprodução inline do fluxo antigo também deixou o Docker falso terminar depois da morte por TERM do wrapper. A consequência nova demonstrável é executar a limpeza nessa janela (`bin/suite.sh:285-287`).
+
+## 14/11 09:37 · sessao 81398c9f25cf · - · - · origem=Ronald (tmux)
+
+- **DUVIDA — não encontrei vazio intencionalmente opcional atingido pela guarda.** Os dois candidatos explícitos já testam não vazio: `DADOS=""` em `bin/codex_pergunta.sh:265`, protegido no `rm` em `bin/codex_pergunta.sh:279`; `SNAP_EFEMERO=` em `bin/vigia_arvore.sh:22`, protegido no trap em `bin/vigia_arvore.sh:23`.
+
+- **PROCEDE — existe mudança concreta no tratamento de falha de criação temporária.** `TMP="$(mktemp …)"` não verifica sucesso em `bin/codex_pergunta.sh:311`. Se `mktemp` falhar sem stdout, `tar -C "$TMP"` falha em `bin/codex_pergunta.sh:312`; o ramo de erro chega a `rm -rf "${TMP:?}"` e aborta antes da mensagem e do `exit 3` em `bin/codex_pergunta.sh:316`. Antes, `rm -rf "$TMP"` com valor vazio permitia continuar esse tratamento. A classificação desse vazio como “legítimo” é **DUVIDA**: decorre de alocação fracassada, não de opção normal. Ocorrência em produção: **[nao verificado]**.
+
+- **PROCEDE — outros pontos também passaram a abortar na limpeza se `mktemp` devolver vazio.** Há atribuições sem checagem seguidas de traps com `:?` em `bin/relato_nomes.sh:7`, `bin/regua_relogio.sh:31` e `bin/regua_relogio.sh:32`, `bin/regua_calendario.sh:23` e `bin/regua_calendario.sh:24`. São caminhos de falha; vazio normal previsto nesses scripts: **[nao verificado]**.
+
+- **PROCEDE — os caminhos principais examinados asseguram uma origem não opcional.** O extrator verifica o retorno de `mktemp` antes das remoções em `bin/arvore_do_push.sh:97`, `bin/arvore_do_push.sh:99` e `bin/arvore_do_push.sh:101`; o pre-push verifica o retorno do extrator antes de instalar o trap em `bin/pre-push.sh:39` e `bin/pre-push.sh:40`; `T` é obrigatório em `bin/esmeril_da_copia.sh:13`; os moldes atribuem literal `__D__` em `bin/molde_fatia/rodar.sh:4` e `bin/molde_autocura/rodar.sh:6`; os caminhos de sombra têm sufixo fixo em `bin/sombra.sh:81` e `bin/sombra_incremental.sh:22`.
+
+Reprodução do comportamento da expansão, somente em memória, com `rm`/`chmod` substituídos por funções: a versão anterior alcançou mensagem e rc 3; a atual abortou antes de chamar `rm`, com rc 127 neste Bash. Essa reprodução é evidência experimental sem arquivo próprio: **[nao verificado]** quanto à referência arquivo:linha; o trecho reproduzido é `bin/codex_pergunta.sh:316`.
+
+## 14/11 09:36 · sessao fbfed375b4b2 · - · - · origem=Ronald (tmux)
+
+- **PROCEDE — consumidor de rc:** `bin/volta_intermediaria.sh:32` chama a suite; `:33` captura o retorno; `:37-40` distingue falha de rc 75; `:43-47` devolve o veredito composto.
+- **DUVIDA — dependência de PID/sinal:** esse chamador usa execução em primeiro plano, sem guardar PID nem encaminhar sinais (`bin/volta_intermediaria.sh:1-47`). Chamadores externos que dependam do PID preservado pelo antigo `exec`: **[nao verificado]**.
+- **PROCEDE — outros consumidores de rc:** `bin/tests/test_suite_motivo.sh:39`; `bin/tests/test_rm_com_guarda.sh:124-125`, `:145-148`, `:177-185`. A instrução humana canônica chama a suite em `CLAUDE.md:96`.
+- **PROCEDE — derivação documental baseada no exec:** `app/docs/RELATO-ARQUIVO.md:43591` explicita que deriva o retorno de “termina em exec e nada corre depois”. É registro histórico, sem dependência executável demonstrada nesse local.
+
+- **PROCEDE — mutante da função não coberto:** trocar `rc=1` por `rc=0` quando `rmdir` falha (`bin/suite.sh:65`). O selo verifica sucessos e recusa por argumento ausente, sem provocar falha de `rmdir` (`bin/tests/test_rm_com_guarda.sh:123-134`, `:177-185`). Passagem integral inferida por leitura: **[nao verificado]**.
+
+- **PROCEDE — mutante mais perigoso:** remover `[ ! -L "$alvo" ]` em `bin/suite.sh:63` e trocar `rmdir "${alvo:?}"` por `rm -rf "${alvo:?}"` em `:65`, mantendo a verificação de saída de `find` em `:64`. Não existe fixture com symlink em `app/staticfiles`, `app/logs` ou `app/media`; as fixtures nesses caminhos são diretórios (`bin/tests/test_rm_com_guarda.sh:123`, `:131`, `:177`, `:180`). O symlink do selo aponta para a raiz viva e testa outra guarda (`:142-148`; `bin/suite.sh:50-55`). Esse mutante pode apagar o próprio symlink alvo; sua execução funcional integral: **[nao verificado]**.
+
+O componente estático do selo aceita esse último mutante: reproduzi `_varre` apenas em memória sobre todo `bin/`, substituindo a leitura de `suite.sh` pelo texto mutado, e obtive rc 0; a regra aceita expansões com `:?` (`bin/tests/test_rm_com_guarda.sh:40-54`). Não executei o selo integral, que cria e remove arquivos (`:17-18`, `:90`, `:112`).
 
 ## 14/11 09:15 · sessao c557d508274a · COERENCIA-DAS-LEIS · censo · origem=Code
 
@@ -348,215 +448,4 @@ Referências exatas solicitadas:
 
 Revisão concluída: transcrição por colaborador/motivo e soma em JavaScript, sem criar arquivos.
 
-## 14/11 08:46 · sessao fb9c0423e967 · - · - · origem=Ronald (tmux)
-
-Leitores do campo cru na cópia:
-
-| Consumidor | Referência | Filtra pela janela? |
-|---|---|---|
-| Resumo do espelho | `app/ponto/services/espelho.py:1250`–`:1252` | Sim: `apur_ini <= d <= apur_fim`. |
-| Calendário | `app/colaboradores/services/calendario.py:572`–`:574` | Sim: `data_ini <= d <= data_fim`. |
-| PDF, `resumo['datas_falta']` | `app/relatorios/pdf_espelho.py:463` | Não: copia e ordena toda a lista. |
-| PDF, `resumo['datas_furo_apurado']` | `app/relatorios/pdf_espelho.py:464` | Não: copia e ordena toda a lista. |
-| Fechamento | `app/ponto/services/fechamento.py:1120`–`:1122` | Não recorta `[ini,fim]`: passa a `_furos_encerrados`. Esse filtro exclui isentos e pergunta `dia_encerrado`, sem limites de competência (`:366`–`:378`). |
-| Composição das fatias | `app/ponto/services/fechamento.py:96`, `:294`–`:297` | Não: concatena os valores de `datas_falta` das fatias, sem recorte nem deduplicação. |
-| Diagnóstico `desvio_o68b` | `app/ponto/management/commands/desvio_o68b.py:135` | Não: imprime toda a lista. |
-| Diagnóstico `diff_espelho_alimentacao` | `app/ponto/management/commands/diff_espelho_alimentacao.py:28`, `:129`–`:143` | Não: compara comprimentos do campo cru. |
-
-O **objeto `resultado` devolvido por `espelho_do_colab` permanece cru**, mesmo havendo recorte em `resumo['datas_furo_apurado']`: o retorno devolve diretamente o mesmo objeto em `app/ponto/services/espelho.py:1295`–`:1296`.
-
-Os consumidores indiretos do fechamento recebem a lista após `_furos_encerrados`: coletor em `app/ponto/services/fechamento.py:1132`; lavratura `motor` em `:1231`; lavratura `oraculo` em `:1298`. A lavratura converte todas as datas recebidas em conjunto e cria linha para cada uma, sem recorte (`app/ponto/services/dia_pago.py:281`–`:283`), marcando `furo_apurado` pela pertinência ao conjunto (`:345`–`:346`).
-
-O derivador indireto de `datas_em_aberto` lê `datas_furo_apurado`, mas **não aplica piso de janela**: aceita `d <= ate` em `app/ponto/services/dia_decidido.py:316`. O teto vem de `ate_ontem`, que devolve `min(data_fim, hoje - 1 dia)` (`app/relatorios/cartao_pela_celula.py:37`–`:41`), passado ao derivador em `:412`–`:419`. O PDF chama esse fluxo em `app/relatorios/pdf_espelho.py:629`; espelho em `app/ponto/services/espelho.py:1285`; calendário em `app/colaboradores/services/calendario.py:583`.
-
-Não confundir esse campo com `folha.export.datas_falta`: a função da folha consulta ausências do catálogo (`app/folha/export.py:179`–`:185`) e sua expansão recorta datas por período (`:160`–`:162`); ela não lê `ResultadoMes.datas_falta`.
-
-## 14/11 08:46 · sessao 4e9d037a80d2 · - · - · origem=Ronald (tmux)
-
-Mês 9: **357 N**, linhas lógicas **1–357** do anexo, numerando a primeira N como linha 1. Fonte: `N_depois.txt:1`.
-
-| Motivo | dia_final | Quantidade | Primeira ocorrência |
-|---|---|---:|---|
-| coberto | hf | 150 | `N_depois.txt:1` |
-| turno_fechado_na_ponta | nada | 155 | `N_depois.txt:3` |
-| ancora_papel_errado | nada | 23 | `N_depois.txt:6` |
-| ancora_em_turno_de_outro_dia | nada | 22 | `N_depois.txt:29` |
-| sem_vinculo_ou_marcos | nada | 4 | `N_depois.txt:24` |
-| cruza_trabalhado | nada | 1 | `N_depois.txt:41` |
-| ancora_fora_de_turno | nada | 2 | `N_depois.txt:213` |
-
-Joins solicitados:
-
-- col709, 2026-08-25: `ancora_papel_errado`, `dia_final=nada`, j1710 — `N_depois.txt:210`.
-- col712, 2026-09-07: `ancora_fora_de_turno`, `dia_final=nada`, j2023 — `N_depois.txt:213`.
-
-Contagem feita com 155 sequências por colaborador codificadas em memória e somadas com JS; conferência independente das classes raras: 23 + 22 + 4 + 1 + 2. Soma com os outros meses: [nao verificado].
-
-## 14/11 08:43 · sessao 1f15ef3d0e49 · JUSTIFICATIVA-PAGA · sonda · origem=Code
-
-O dado termina em `F|depois|10|893` incompleto e não contém `F|depois|11`. As comparações usam somente pares F completos: mês 9 completo no trecho; mês 10 até col892. Totais integrais dos meses 10 e 11: [nao verificado].
-
-**1. Contagem das linhas N recebidas**
-
-| motivo | dia_final | mês 9 | mês 10 | referência |
-|---|---|---:|---:|---|
-| coberto | hf | 150 | 92 | [nao verificado] |
-| turno_fechado_na_ponta | nada | 155 | 104 | [nao verificado] |
-| ancora_papel_errado | nada | 23 | 12 | [nao verificado] |
-| ancora_em_turno_de_outro_dia | nada | 22 | 14 | [nao verificado] |
-| ancora_fora_de_turno | nada | 2 | 3 | [nao verificado] |
-| cruza_trabalhado | nada | 1 | 5 | [nao verificado] |
-| sem_vinculo_ou_marcos | nada | 4 | 1 | [nao verificado] |
-| **Total** | | **357** | **231** | [nao verificado] |
-
-Linhas N com `dia_final=hi` ou inteiro: **0**. Linhas N do mês 11 recebidas: **0**. Total N recebido: **588**. [nao verificado]
-
-**2. Todas as datas acrescentadas nos pares completos recebidos**
-
-Janelas usadas: mês 9 = `2026-08-21..2026-09-20`; mês 10 = `2026-09-21..2026-10-20`, pelo cálculo em [app/ponto/janelas.py:10](/home/ronald/codex_ws/eb584c2b0deeae76616b346f07f9356510730aa7/app/ponto/janelas.py:10).
-
-| mês | colab | data | motivo N do mesmo mês/data | fora da janela | referência |
-|---:|---:|---|---|---|---|
-| 9 | 29 | 2026-06-17 | sem N | sim | [nao verificado] |
-| 9 | 44 | 2026-05-21 | sem N | sim | [nao verificado] |
-| 9 | 46 | 2026-05-23 | sem N | sim | [nao verificado] |
-| 9 | 46 | 2026-05-26 | sem N | sim | [nao verificado] |
-| 9 | 81 | 2026-06-28 | sem N | sim | [nao verificado] |
-| 9 | 134 | 2026-06-22 | sem N | sim | [nao verificado] |
-| 9 | 134 | 2026-06-24 | sem N | sim | [nao verificado] |
-| 9 | 371 | 2026-08-08 | sem N | sim | [nao verificado] |
-| 9 | 707 | 2026-10-26 | sem N | sim | [nao verificado] |
-| 9 | 709 | 2026-08-25 | ancora_papel_errado | não | [nao verificado] |
-| 9 | 712 | 2026-09-07 | ancora_fora_de_turno | não | [nao verificado] |
-| 9 | 993 | 2026-10-20 | sem N | sim | [nao verificado] |
-| 9 | 1004 | 2026-10-27 | sem N | sim | [nao verificado] |
-| 10 | 29 | 2026-06-17 | sem N | sim | [nao verificado] |
-| 10 | 44 | 2026-05-21 | sem N | sim | [nao verificado] |
-| 10 | 46 | 2026-05-23 | sem N | sim | [nao verificado] |
-| 10 | 46 | 2026-05-26 | sem N | sim | [nao verificado] |
-| 10 | 81 | 2026-06-28 | sem N | sim | [nao verificado] |
-| 10 | 134 | 2026-06-22 | sem N | sim | [nao verificado] |
-| 10 | 134 | 2026-06-24 | sem N | sim | [nao verificado] |
-| 10 | 371 | 2026-08-08 | sem N | sim | [nao verificado] |
-| 10 | 707 | 2026-10-26 | sem N | sim | [nao verificado] |
-| 10 | 709 | 2026-08-25 | sem N | sim | [nao verificado] |
-| 10 | 712 | 2026-09-07 | sem N | sim | [nao verificado] |
-
-**3. Contagens do item 2 e somas das diferenças**
-
-| motivo | mês 9 | mês 10, trecho completo | total observado | referência |
-|---|---:|---:|---:|---|
-| sem N | 11 | 11 | 22 | [nao verificado] |
-| ancora_papel_errado | 1 | 0 | 1 | [nao verificado] |
-| ancora_fora_de_turno | 1 | 0 | 1 | [nao verificado] |
-| demais motivos | 0 | 0 | 0 | [nao verificado] |
-| **Total** | **13** | **11** | **24** | [nao verificado] |
-
-| mês / cobertura | Σ(dsr depois − antes) | Σ(dias_falta depois − antes) | referência |
-|---|---:|---:|---|
-| 9, pares completos recebidos | +11 | +13 | [nao verificado] |
-| 10, pares completos até col892 | +9 | +11 | [nao verificado] |
-| 11 | indeterminado | indeterminado | [nao verificado] |
-
-**4. Datas retiradas das faltas**
-
-Nos pares completos recebidos: mês 9 = **0**; mês 10 = **0**. Lista vazia, sem motivos a associar. Mês 11: indeterminado. [nao verificado]
-
-**5. Linhas ERRO**
-
-**0** linhas `ERRO` no trecho recebido. [nao verificado]
-
-## 14/11 08:43 · sessao 67cb87235023 · - · - · origem=Ronald (tmux)
-
-ferias/services.py::em_gozo_hoje (app/core/juizes.py:262) ; o colaborador esta de ferias hoje? (app/core/juizes.py:262) ; nenhum texto específico encontrado em LEIS.md/CORTES.md para este predicado, pesquisados em_gozo_hoje, ferias, férias, S4-FERIAS-HOJE [nao verificado quanto a formulações sem esses termos] ; datas do agendamento incluem hoje, exclui somente cancelado, aceita filtros colaborador/empresa, ordena por data_fim (app/ferias/services.py:53, app/ferias/services.py:64, app/ferias/services.py:65, app/ferias/services.py:67, app/ferias/services.py:69, app/ferias/services.py:70) ; nao (a descrição pelas datas corresponde ao código: app/ferias/services.py:60, app/ferias/services.py:53) ; nenhum achado de decisor autônomo para hoje, procurados AgendamentoFerias, em_gozo, situacao ferias, data_inicio__lte=hoje, data_fim__gte=hoje; bloqueador e aviso delegam (app/ponto/utils.py:89, app/ponto/services/aviso_da_batida.py:74); status_por_data responde estado do agendamento, pergunta diferente (app/ferias/models.py:277) ; -
-
-ponto/turnos.py::afastado_hoje (app/core/juizes.py:263) ; o colaborador esta afastado hoje? (app/core/juizes.py:263) ; nenhum texto específico encontrado em LEIS.md/CORTES.md para o predicado, pesquisados afastado, afastamento, afastado_hoje [nao verificado quanto a formulações sem esses termos]; DOSSIES identifica a autoridade e o escritor paralelo (app/docs/DOSSIES.md:75) ; retorna a Ausencia afastamento_inss que cobre o dia: data única, intervalo fechado ou aberto de tipo autorizado, filtra efeito folha=aprovada/cobranca=não rejeitada, desempata maior data e pk (app/ponto/turnos.py:2704, app/ponto/turnos.py:2715, app/ponto/turnos.py:2719, app/ponto/turnos.py:2721, app/ponto/turnos.py:2731, app/ponto/turnos.py:2516, app/ponto/turnos.py:2518) ; nao, o registro explicita a exceção posterior que mantém o campo enquanto divergência zero (app/core/juizes.py:451, app/core/juizes.py:461) ; achado: lançar afastamento_inss grava situacao afastado sem perguntar ao juiz (app/ponto/views.py:2433, app/ponto/views.py:2435); afastado_na_batida retorna True pelo campo mesmo sem ausência (app/ponto/services/afastado_avisa.py:41, app/ponto/services/afastado_avisa.py:42); buscados situacao afastado, afastado_hoje, TIPOS_AFASTADO ; -
-
-colaboradores/services/desligamento.py::esta_desligado (app/core/juizes.py:267) ; o colaborador esta desligado? (app/core/juizes.py:267) ; L-NNN específico nenhum texto encontrado; corte JUIZ-ESTA-DESLIGADO-NASCE define estado gravado situacao desligado, não data futura nem afastado (app/docs/CORTES.md:450) ; getattr(colaborador, situacao, None) == desligado (app/colaboradores/services/desligamento.py:32) ; nao (app/docs/CORTES.md:450, app/colaboradores/services/desligamento.py:32) ; achado: julgar_vinculo decide pelo mesmo campo cru e recusa vínculo (app/colaboradores/services/vinculo.py:91, app/colaboradores/services/vinculo.py:92); buscados situacao desligado, esta_desligado ; -
-
-ferias/models.py::PeriodoAquisitivo.dias_saldo (app/core/juizes.py:268) ; qual o saldo do periodo aquisitivo? (app/core/juizes.py:268) ; nenhum texto específico encontrado em LEIS.md/CORTES.md, pesquisados dias_saldo, saldo, aquisitivo [nao verificado quanto a formulações sem esses termos]; JUIZES somente aponta o endereço (app/docs/JUIZES.md:57, app/docs/JUIZES.md:58) ; dias_direito menos dias_concedidos menos dias_vendidos, sem piso zero (app/ferias/models.py:220) ; nao (a regra escrita corresponde à fórmula: app/ferias/models.py:22, app/ferias/models.py:220) ; nenhum achado, procuradas expressões dias_direito menos dias_concedidos, dias_concedidos e dias_vendidos, _saldo e templates; wrappers delegam (app/ferias/situacao.py:69, app/ferias/management/commands/pautas_de_ferias.py:97), status_de_periodo chama fget (app/ferias/models.py:98) ; -
-
-ferias/models.py::status_de_periodo (app/core/juizes.py:269) ; o periodo venceu ou esta vencendo (art.137)? (app/core/juizes.py:269) ; nenhum texto específico encontrado em LEIS.md/CORTES.md, pesquisados status_de_periodo, vencimento, aquisitivo, concessao, art137 [nao verificado quanto a formulações sem esses termos]; JUIZES aponta status_de_periodo como autoridade de vencimento (app/docs/JUIZES.md:57, app/docs/JUIZES.md:58) ; saldo <=0 retorna concedido; data_fim ausente ou >=hoje retorna em_curso; limite_concessao <hoje retorna vencido; restante adquirido; não retorna vencendo (app/ferias/models.py:98, app/ferias/models.py:99, app/ferias/models.py:101, app/ferias/models.py:103, app/ferias/models.py:105) ; sim: texto promete vencido ou vencendo saindo deste juiz (app/ferias/models.py:20), mas o retorno residual é adquirido sem qualquer teste de janela para vencendo (app/ferias/models.py:105; ramos completos app/ferias/models.py:99, app/ferias/models.py:101, app/ferias/models.py:103) ; achado: situacao_de_ferias decide vencido somente por limite vencido e saldo positivo, ignorando a precedência de data_fim do juiz (app/ferias/situacao.py:193, app/ferias/situacao.py:194), e vencendo por janela própria (app/ferias/situacao.py:207, app/ferias/situacao.py:209); periodos_vencendo também filtra status gravado com janela própria (app/ferias/services.py:226, app/ferias/services.py:227); buscados data_limite_concessao, vencido, vencendo, status_de_periodo ; vencendo inclui períodos vencidos? candidata escrita inclui: “Vencidos entram” (app/ferias/services.py:222); candidata do helper do juiz exige adquirido (app/ferias/models.py:260), enquanto limite vencido resulta vencido (app/ferias/models.py:103, app/ferias/models.py:104)
-
-Observação para consolidação: a coluna 7 da última linha é defensável apenas se “candidatas escritas” abranger descrição de função versus predicado de código. Se exigir duas candidatas normativas em LEIS/CORTES, use “-”: não encontrei esse par normativo nesses arquivos. A inconsistência literal “vencendo” prometido mas ausente é clara, porém o juiz também pode ser entendido como só o primeiro estágio de composição com vencendo, que o chama (app/ferias/models.py:255, app/ferias/models.py:260).
-
-Contagem deste recorte: 5 juízes lidos (app/core/juizes.py:262, app/core/juizes.py:263, app/core/juizes.py:267, app/core/juizes.py:268, app/core/juizes.py:269); 1 conflito literal; 3 com achado externo; 1 pergunta de lei sob a interpretação ampla acima, zero sob interpretação normativa estrita.
-
-## 14/11 08:43 · sessao e130c04c3e51 · - · - · origem=Ronald (tmux)
-
-app/ponto/catalogo/ausencias.py::efeito_vigente ; a ausencia paga, desconta ou suprime o dia? (app/core/juizes.py:252) ; L-006 (app/docs/LEIS.md:64), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (app/docs/CORTES.md:202) ; devolve linha[0] do catalogo vigente, ou None (app/ponto/catalogo/ausencias.py:293), cadastro ativo com fallback para CATALOGO (app/ponto/catalogo/ausencias.py:249, app/ponto/catalogo/ausencias.py:278), cadastro de producao [nao verificado] ; sim: corte determina saida_antecipada=DESCONTA (app/docs/CORTES.md:202), fallback escrito define SUPRIME (app/ponto/catalogo/ausencias.py:91) ; nenhum achado autonomo inequivoco no grep por efeito_vigente, TIPOS_PAGOS, TIPOS_ABONAM, TIPOS_DESCONTAM, .efeito e comparacoes literais de tipo, consumidores encontrados delegam ao catalogo (app/ponto/models.py:841, app/ponto/catalogo/ausencias.py:455), exaustividade [nao verificado] ; -
-
-app/ponto/turnos.py::cobertura_ausencia_periodo ; que dias a ausencia ocupa? (app/core/juizes.py:253) ; nenhum texto especifico de L-NNN/CORTES encontrado para a gramatica completa de range [nao verificado], autoridade de cobertura declarada em app/docs/JUIZES.md:55 ; data..data_fim inclusive, sem fim estende ate fim consultado somente em TIPOS_EM_ABERTO, demais ficam em data, recorta janela e vence maior data/pk (app/ponto/turnos.py:2753, app/ponto/turnos.py:2772, app/ponto/turnos.py:2781), folha somente aprovada e cobranca nao rejeitada (app/ponto/turnos.py:2516) ; nao (app/ponto/turnos.py:2737, app/ponto/turnos.py:2772) ; achado: houve_fato_novo rederiva se a ausencia alcanca o dia, tratando data_fim nulo somente como data=data, sem excecao de range aberto (app/ponto/services/cartorio.py:383), outro expansor proprio usa fim=data_fim or data (app/ponto/services/dia_decidido.py:558), este ultimo declara pergunta de topo diferente, incluindo rejeitadas (app/ponto/services/dia_decidido.py:532) ; -
-
-app/ponto/precedencia.py::veto_de_lancamento ; o lancamento colide com outro fato (recusar)? (app/core/juizes.py:254) ; L-089 para falta em dia sem jornada (app/docs/LEIS.md:121), RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER para comunicar recusas e fatos da sobreposicao (app/docs/CORTES.md:338) ; recusa sobreposicao que linha_que_veta reprova (app/ponto/precedencia.py:461), recusa folga lancada exceto travessia de ferias (app/ponto/precedencia.py:496, app/ponto/precedencia.py:514), falta recusa quando vinculo responde explicitamente dia sem trabalho (app/ponto/precedencia.py:536), senao None (app/ponto/precedencia.py:545) ; nao (app/docs/LEIS.md:121, app/ponto/precedencia.py:538) ; achado com ressalva: previa do chat responde erro de colisao compondo linha_que_veta e ausencias_sobrepostas, sem chamar veto_de_lancamento nem avaliar folga lancada (app/ponto/services/checar_ausencia.py:35), recorte exclui ferias, falta e INSS (app/ponto/services/checar_ausencia.py:10) ; -
-
-app/ponto/services/ausencia.py::estado_inicial ; a ausencia exige documento, e em que prazo? (app/core/juizes.py:255) ; nenhum texto especifico de L-NNN/CORTES encontrado para estados e sete dias [nao verificado], exclusao de ferias atribuida a corte no proprio codigo (app/ponto/services/ausencia.py:748) ; anexo ou ferias resulta aguardando_decisao sem prazo, tipo exigente sem anexo resulta aguardando_documento com prazo, demais aguardando_decisao (app/ponto/services/ausencia.py:792), prazo sete dias a partir da data local de criacao (app/ponto/services/ausencia.py:745, app/ponto/services/ausencia.py:339) ; nao (app/ponto/services/ausencia.py:748, app/ponto/services/ausencia.py:794) ; achado com ressalva: relatorio responde exigencia lendo diretamente linha[2] do catalogo, sem estado_inicial nem exclusao de ferias (app/ponto/services/atestados_lote.py:25), declara pergunta mais estreita sobre flag cadastral (app/ponto/services/atestados_lote.py:26), enquanto exigencia ao colaborador delega ao juiz (app/ponto/models.py:724, app/ponto/models.py:728) ; -
-
-app/ponto/services/ausencia.py::ABERTAS ; a ausencia esta aberta ou decidida? (app/core/juizes.py:256) ; nenhum texto especifico de L-NNN/CORTES encontrado [nao verificado], ABERTAS e ausencia de status pendente declarados em app/docs/JUIZES.md:57 ; abertas sao aguardando_documento e aguardando_decisao (app/ponto/services/ausencia.py:766), aprovadas e rejeitadas sao os outros estados declarados (app/ponto/models.py:701) ; nao (app/docs/JUIZES.md:57, app/ponto/services/ausencia.py:766) ; achado: Ausencia.save classifica aprovada/rejeitada como decisorias por tupla propria para carimbar aprovada_em (app/ponto/models.py:869, app/ponto/models.py:872), esta_aberta efetivamente delega a ABERTAS (app/ponto/models.py:719) ; -
-
-app/ponto/turnos.py::periodo_da_parcial_no_dia ; a batida do dia esta dentro do periodo que a ausencia parcial declara? (app/core/juizes.py:261) ; L-006 (app/docs/LEIS.md:64), L-088 (app/docs/LEIS.md:120), COBERTURA-PARCIAL-PERIODO (app/docs/CORTES.md:319), JUIZ-PERIODO-DA-PARCIAL (app/docs/CORTES.md:323), parcial noturna (app/docs/CORTES.md:330), aceite de nao_sei (app/docs/CORTES.md:334) ; falta qualquer ponta resulta sem_periodo, fim menor que inicio recebe 1440 minutos, alguma batida conhecida no intervalo inclusivo resulta dentro, nenhuma conhecida dentro com hora ilegivel resulta nao_sei, restantes fora (app/ponto/turnos.py:2634) ; nao (app/docs/CORTES.md:330, app/ponto/turnos.py:2638, app/docs/CORTES.md:334, app/ponto/turnos.py:2643) ; nenhum achado autonomo no grep por a.hora_ini, ausencia.hora_ini, hora_ini/hora_fim e comparacoes de pontas, ocorrencias encontradas no juiz e na porta de edicao (app/ponto/turnos.py:2634, app/ponto/services/ausencia.py:894), exaustividade [nao verificado] ; -
-
-Contagem deste recorte: seis juizes lidos (app/core/juizes.py:252, app/core/juizes.py:261), um conflito demonstrado (app/docs/CORTES.md:202, app/ponto/catalogo/ausencias.py:91), quatro linhas com candidatos externos, sendo duas exigindo avaliacao de identidade da pergunta e uma expansao com pergunta de topo diferente (app/ponto/services/cartorio.py:383, app/ponto/services/checar_ausencia.py:35, app/ponto/services/atestados_lote.py:25, app/ponto/models.py:872), nenhuma pergunta de lei sustentada por duas candidatas normativas neste recorte [nao verificado].
-
-## 14/11 08:43 · sessao b7b78710a686 · - · - · origem=Ronald (tmux)
-
-12) ferias/models.py::PeriodoAquisitivo.dias_vendaveis ; quantos dias ainda podem ser vendidos (abono, 1/3)? (app/core/juizes.py:270) ; nenhum texto específico encontrado em LEIS.md/CORTES.md para o teto do abono [nao verificado] ; max(0, dias_direito // 3 - dias_vendidos) (app/ferias/models.py:238) ; nao ; nenhum achado de fórmula autônoma, procurados dias_vendaveis, dias_vendidos, dias_direito, //3 e 1/3, os consumidores encontrados perguntam à propriedade (app/ferias/services.py:312, app/ferias/services.py:501, app/ferias/services.py:890, app/core/views_ia.py:533) ; -
-
-13) ferias/models.py::AgendamentoFerias.clean ; o fracionamento e valido (art.134)? (app/core/juizes.py:271) ; nenhum texto específico encontrado em LEIS.md/CORTES.md para as frações [nao verificado] ; considera agendados/em_gozo/concluídos, exclui o próprio, recusa mais de três frações e ausência de alguma fração com pelo menos 14 dias, delegando a violacoes_de_fracionamento, também recusa datas invertidas e dias divergentes do intervalo (app/ferias/models.py:362, app/ferias/models.py:366, app/ferias/models.py:374, app/ferias/models.py:379, app/ferias/models.py:383) ; sim, texto exige que a MENOR fração tenha pelo menos 14 dias (app/templates/ferias/agendar.html:10), juiz exige que PELO MENOS UMA tenha 14 dias (app/ferias/models.py:370, app/ferias/models.py:374) ; leitor informativo publica regra própria da menor fração em app/templates/ferias/agendar.html:10, a implementação compartilhada violacoes_de_fracionamento é chamada pelo juiz e pelo aviso, sem cópia da fórmula (app/ferias/models.py:264, app/ferias/situacao.py:227) ; a menor fração precisa ter 14 dias (app/templates/ferias/agendar.html:10) ou basta ao menos uma com 14 dias (app/ferias/models.py:374)?
-
-14) ferias/situacao.py::DIAS_AVISO_PREVIO ; o aviso de 30 dias foi dado (art.135)? (app/core/juizes.py:272) ; nenhum texto específico encontrado em LEIS.md/CORTES.md para o aviso [nao verificado] ; o juiz registrado é somente a constante 30, não um predicado de aviso efetivamente dado (app/ferias/situacao.py:56) ; nao ; escritores calculam aviso_emitido pela antecedência até o início, lendo a constante mas realizando a comparação fora dela (app/ferias/services.py:529, app/ferias/services.py:547, app/ferias/services.py:681, app/ferias/services.py:745), view repete a comparação (app/ferias/views.py:309), painel usa 30 literal para aviso pendente (app/ferias/views.py:35, app/ferias/views.py:86) ; -
-
-15) ponto/catalogo/ausencias.py::fim_de ; quanto a ausencia dura, e o tipo e valido? (app/core/juizes.py:273) ; L-006 determina cadastro com leitor, mas não estipula a duração de cada tipo (app/docs/LEIS.md:64), nenhum corte específico encontrado [nao verificado] ; devolve a gramática do fim do catálogo vigente, desconhecido ou coluna ausente/vazia devolve por_lei, não valida o código nem calcula dias, codigos_validos é outra função (app/ponto/catalogo/ausencias.py:192, app/ponto/catalogo/ausencias.py:194, app/ponto/catalogo/ausencias.py:195, app/ponto/catalogo/ausencias.py:284) ; nao ; formulário tem catálogo próprio de mínimos/máximos/dias fixos e fallback máximo 30, fixa maternidade em 120, paternidade em 5 e luto em 2 e aplica esses limites na duração (app/ponto/forms.py:13, app/ponto/forms.py:18, app/ponto/forms.py:19, app/ponto/forms.py:20, app/ponto/forms.py:38, app/ponto/forms.py:91, app/ponto/forms.py:113), modelo também deriva dias_corridos do intervalo (app/ponto/models.py:899, app/ponto/models.py:901) ; -
-
-16) ponto/services/alertas_ausencia.py::resumo_atestados ; ha 3 ou mais lancamentos medicos na competencia? (app/core/juizes.py:274) ; L-006 rege a origem cadastral do conjunto médico (app/docs/LEIS.md:64), corte PARAMETRO-GANHA-ROTULO registra TipoAusencia.medico consumido (app/docs/CORTES.md:221), nenhum desses textos estabelece a unidade do limiar três ; retorna competência da empresa, cobertura para folha filtrada por TIPOS_MEDICOS, número de registros distintos e número de dias, não aplica limiar três (app/ponto/services/alertas_ausencia.py:45, app/ponto/services/alertas_ausencia.py:48, app/ponto/services/alertas_ausencia.py:50, app/ponto/services/alertas_ausencia.py:51, app/ponto/services/alertas_ausencia.py:52) ; sim quanto ao contrato literal, texto diz conta DIAS e não REGISTROS (app/ponto/services/alertas_ausencia.py:17), código conta e publica registros também (app/ponto/services/alertas_ausencia.py:51, app/ponto/services/alertas_ausencia.py:56) ; leitores decidem o limiar registros >= 3 fora do juiz, usando a contagem oficial (app/ponto/views.py:2224, app/ponto/views.py:2447) ; -
-
-Observações para a consolidação: o conflito 13 é inequívoco e possui duas candidatas expressas. No 16, a divergência literal da docstring com a contagem de registros não permite afirmar que a lei mandaria alertar com três DIAS, porque esse limiar por dias não está escrito nos trechos encontrados. As regras do formulário em 15 são achado autônomo de duração, mas não contradizem diretamente o retorno de fim_de, que responde apenas a gramática do fim.
-
-## 14/11 08:43 · sessao 020eaa2b6e05 · - · - · origem=Ronald (tmux)
-
-Todos os números abaixo derivam apenas do dado no chat, sem arquivo:linha: **[nao verificado]**.
-
-Pares F completos comparados: mês 9 = **384**; mês 10 = **335**, até col892 inclusive; mês 11 = **0**. F depois10 col893 está truncado e foi excluído das somas. **[nao verificado]**
-
-Lista exaustiva das novas faltas nos pares completos: **[nao verificado]**
-
-| mês | colab | data | motivo N do mesmo mês/data | fora 21..20 |
-|---:|---:|---|---|---|
-| 9 | 29 | 2026-06-17 | sem N | sim |
-| 9 | 44 | 2026-05-21 | sem N | sim |
-| 9 | 46 | 2026-05-23 | sem N | sim |
-| 9 | 46 | 2026-05-26 | sem N | sim |
-| 9 | 81 | 2026-06-28 | sem N | sim |
-| 9 | 134 | 2026-06-22 | sem N | sim |
-| 9 | 134 | 2026-06-24 | sem N | sim |
-| 9 | 371 | 2026-08-08 | sem N | sim |
-| 9 | 707 | 2026-10-26 | sem N | sim |
-| 9 | 709 | 2026-08-25 | ancora_papel_errado | não |
-| 9 | 712 | 2026-09-07 | ancora_fora_de_turno | não |
-| 9 | 993 | 2026-10-20 | sem N | sim |
-| 9 | 1004 | 2026-10-27 | sem N | sim |
-| 10 | 29 | 2026-06-17 | sem N | sim |
-| 10 | 44 | 2026-05-21 | sem N | sim |
-| 10 | 46 | 2026-05-23 | sem N | sim |
-| 10 | 46 | 2026-05-26 | sem N | sim |
-| 10 | 81 | 2026-06-28 | sem N | sim |
-| 10 | 134 | 2026-06-22 | sem N | sim |
-| 10 | 134 | 2026-06-24 | sem N | sim |
-| 10 | 371 | 2026-08-08 | sem N | sim |
-| 10 | 707 | 2026-10-26 | sem N | sim |
-| 10 | 709 | 2026-08-25 | sem N | sim |
-| 10 | 712 | 2026-09-07 | sem N | sim |
-
-Contagens e somas somente dos pares completos: **[nao verificado]**
-
-| mês | sem N | ancora_papel_errado | ancora_fora_de_turno | total acrescido | fora | Δdsr | Δdias_falta |
-|---:|---:|---:|---:|---:|---:|---:|---:|
-| 9 | 11 | 1 | 1 | 13 | 11 | +11 | +13 |
-| 10 | 11 | 0 | 0 | 11 | 11 | +9 | +11 |
-| total observável | 22 | 1 | 1 | 24 | 22 | +20 | +24 |
-
-Datas removidas dos pares completos: **0**, em ambos os meses observáveis; lista vazia e nenhum motivo a associar. **[nao verificado]**
-
-Conferência dos deltas por colaborador alterado: mês9 col29 (+1 dia,+1 dsr), 44 (+1,+1), 46 (+2,+2), 81 (+1,+1), 134 (+2,+1), 371 (+1,0), 707 (+1,+1), 709 (+1,+1), 712 (+1,+1), 993 (+1,+1), 1004 (+1,+1). Mês10 repete as alterações até col712; col993 e1004 não têm depois fornecido. **[nao verificado]**
-
-_4980 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4987 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
