@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 13:45:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (672.5 MB). Acoes na janela: **1844**.
+**Medido em 14/11/2026 13:50:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (672.7 MB). Acoes na janela: **1849**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:50:41 | Bash | Read backfill command and previous pouso notes | `cd /home/ronald/saas-hasner; git show 97adbec35:app/ponto/management/commands/vincular_ausencias_ferias.py \| sed -n 1,80p; cat logs/HJ-091/pouso2/reversao.md \| head -30; head -30 logs/HJ-091/pouso2/antes_vetos.q` |
+| 13:50:27 | Bash | Read pouso conditions in HJ-091 avals | `cd /home/ronald/saas-hasner; cat logs/AVAIS-1313/hj091_rejeitada_ganha_a_origem.txt; echo ----; cat logs/AVAIS-1313/hj091_pousa_com_as_3_na_lista.txt \| head -20; ls logs/HJ-091/pouso2/` |
+| 13:50:23 | Bash | See what HJ-091 copy brings over main | `cd /home/ronald/saas-hasner; git log --oneline main..97adbec35 \| cut -c1-140; git diff --stat main...97adbec35 \| tail -15; cat logs/AVAIS-1313/hj091_pousa_hoje.txt \| head -30` |
+| 13:50:19 | Bash | Locate migration 0078 and revert commit in main | `cd /home/ronald/saas-hasner; git ls-files app \| /bin/grep -E "migrations/0078\|migrations/007[89]" ; /bin/grep -n "agendamento_ferias" app/ponto/models.py \| head -3; git log --oneline -8 --format="%h %s" \| cut -c1-120; git log --oneline 2faa678a6 -1 \| cut -c1-150; git branch --contains 2faa678a6 \| head` |
+| 13:50:12 | Bash | Check prod migration state and backfill command | `cd /home/ronald/saas-hasner; date +%H:%M; docker exec saas_core python manage.py showmigrations ponto 2>/dev/null \| tail -4; ls app/ponto/migrations \| tail -3; /bin/grep -rln "vincular_ausencias_ferias" app/*/management/commands/ \| head; git log --oneline -3; git status --porcelain \| /bin/grep -v "^??"` |
 | 13:45:09 | Bash | Re-point wait line at Codex wrapper pid | `cd /home/ronald/saas-hasner; P=$(pgrep -f "bin/codex_pergunta.sh --anexo logs/FRAC5" \| head -1); echo $P; sed -i "3s/.*/ESPERANDO: codex_pergunta.sh \| pid=$P/" app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 13:45:05 | Bash | Point RELATO wait line at live Codex launcher | `cd /home/ronald/saas-hasner; P=$(pgrep -f "logs/FRAC5/verif3/lanca.sh" \| head -1); echo $P; sed -i "3s/.*/ESPERANDO: lanca.sh \| pid=$P/" app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 13:45:02 | Bash | Run Codex verifier for FRAC5 volta 3 | `bash /home/ronald/saas-hasner/logs/FRAC5/verif3/lanca.sh; tail -3 /home/ronald/saas-hasner/logs/FRAC5/verif3/w.log` |
