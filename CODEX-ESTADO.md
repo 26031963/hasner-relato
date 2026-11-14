@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 10:56** · publicado em **14/11/2026 10:56** (UTC-3)
+> Ultima resposta processada: **14/11/2026 10:58** · publicado em **14/11/2026 11:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 10:58 · sessao 6801ddc748bf · [nome]-ANDAM-JUNTO · verificador · origem=Code
+
+**O delta fecha as lacunas de formato e de `resolve`; não comprova as três correções de conteúdo.** A autocolisão literal da E3 saiu, mas entrou uma ambiguidade em `livre (...)`; DXG e O232 continuam sem prova consultável das novas alegações (`bin/placar_grade.py:58`, `:66`, `:127`; `app/docs/GRADE-MESTRA.md:119`, `:272`, `:853`).
+
+**1. Achados da volta 2: cura e mordida**
+
+| Achado | Veredito nesta volta | Cura/preservação e caso do selo |
+|---|---|---|
+| Oito/dez colunas sem deslocamento | **PROCEDE a preservação.** | Esquema pelo cabeçalho e rejeição de largura em `bin/placar_grade.py:80`, `:93`; `RJ-LARGA` e assert em `bin/tests/test_placar_grade.sh:141`, `:174`. |
+| Células semanticamente inválidas | **Parcialmente fechado.** Número nu e os três portões nus agora são rejeitados. A identificação continua sendo apenas texto não vazio; oito colunas continuam aceitando estado por prefixo. | Curas em `bin/placar_grade.py:58`, `:66`, `:103`; prefixo antigo em `:100`. Casos negativos/positivos em `bin/tests/test_placar_grade.sh:143`, `:146`, `:149`; mordida em `:164`, `:167`, `:172`. |
+| Soma por estado | **PROCEDE a preservação.** Soma valores declarados, sem deduplicar BOs. Correspondência com BOs reais: **[nao verificado]**. | Cálculo em `bin/placar_grade.py:151`, `:155`; assert exato em `bin/tests/test_placar_grade.sh:119`, `:120`, `:177`. |
+| Complemento não aumenta obras | **PROCEDE a preservação.** | Separação em `bin/placar_grade.py:120`; participação na soma em `:151`; `(compl.)` em `:270`. Asserts em `bin/tests/test_placar_grade.sh:116`, `:124`; mutante em `:184`, `:186`. |
+| `?` no denominador, zero como medida | **PROCEDE a preservação**, agora exigindo fonte também no zero. | `bin/placar_grade.py:56`, `:112`, `:154`, `:156`; casos/asserts em `bin/tests/test_placar_grade.sh:94`, `:96`, `:119`, `:125`. |
+| Asserts antigos têm mordida | **NAO PROCEDE regressão demonstrada.** Permanecem verificações específicas para `abc`, largura, estado, complemento e apresentação. | `bin/tests/test_placar_grade.sh:124`, `:125`, `:173`, `:174`, `:175`, `:176`, `:186`. |
+| `resolve` excluía poucos marcadores; vazio sem caso | **Fechado. NAO PROCEDE a persistência dessas lacunas.** | Exclusão dos cinco marcadores, sem distinguir caixa, em `bin/placar_grade.py:44`, `:127`; fixture inclui vazio, `n/a`, `N/A` e `[nao verificado]` em `bin/tests/test_placar_grade.sh:193`, `:196`, `:197`, `:198`; assert `1/7` em `:202`. |
+
+Reproduzi em memória os casos principais e os mutantes de número nu, fonte só com espaços, portões nus, vazio, `n/a`, `[nao verificado]` e caixa: alteram os resultados fixados pelos asserts (`bin/tests/test_placar_grade.sh:161`, `:162`, `:164`, `:167`, `:202`). Execução integral do shell: **[nao verificado]**; ele cria e remove temporários (`bin/tests/test_placar_grade.sh:24`).
+
+**2. As três células de conteúdo**
+
+| Célula | Fontes disponíveis e limite | Veredito |
+|---|---|---|
+| **E3** | E3 em obra e a worktree têm apoio em `app/docs/RELATO.md:11`, `:13`. A regra distingue ramo ao lado da espinha (`app/docs/GRADE-MESTRA.md:8`). O hash `f569063be` e sua situação atual: **[nao verificado]**; a exclusão específica está afirmada na própria célula (`:119`). | **NAO PROCEDE** a persistência literal da autocolisão: foi removida. **PROCEDE** campo com dois significados: `livre` acompanhado de “fora da regra” (`app/docs/GRADE-MESTRA.md:119`). |
+| **DECLARADO-X-GRAVADO** | `materializacao.py` existe e contém `_ts_tipo_do_plantio` (`app/chamados/services/materializacao.py:333`). O commit BUG-PAR `338fd37b0` aparece no RELATO (`app/docs/RELATO.md:15`). Porém o corte das cinco leis às 10:24, citado na célula, depende de `logs/AVAIS-1313/dxg_leis_cortadas.txt`: conteúdo **[nao verificado]** (`app/docs/GRADE-MESTRA.md:272`). As fontes consultáveis ainda registram cinco leis e retirada da ordem (`app/docs/RELATO.md:7`, `:23`, `:24`). Interseção dos diffs citados: **[nao verificado]**. | **PROCEDE**, sem fechamento demonstrado. O delta reconhece o impedimento anterior, mas sustenta sua remoção numa fonte não disponível (`app/docs/GRADE-MESTRA.md:272`). |
+| **O232** | A relação de O232 com `turnos.py` existe (`app/ponto/turnos.py:913`, `:944`). JUSTIFICATIVA voltou à ordem viva (`app/docs/RELATO.md:155`), mas a GRADE continua INTERROMPIDA (`app/docs/GRADE-MESTRA.md:269`). A worktree, o hash e o `git status` novos são alegados na própria célula; prova de alteração concorrente e agente vivo: **[nao verificado]** (`:853`). | **PROCEDE** a falta de sustentação da colisão atual. Identificação mais detalhada não fecha a prova (`app/docs/GRADE-MESTRA.md:853`). |
+
+Para esses três conteúdos, **não há caso específico que morda a veracidade da correção**: a verificação da GRADE real chama apenas `--conferir`, que valida leitura e cabeçalho derivado (`bin/tests/test_placar_grade.sh:205`; `bin/placar_grade.py:222`, `:227`).
+
+**E3 entra na tabela oferecida à regra, mas sua seleção efetiva como vaga é [nao verificado].** O parser aceita o prefixo `livre` com texto, preservando a célula inteira; não transforma a ressalva em exclusão (`bin/placar_grade.py:66`, `:96`, `:118`). O PLACAR publica toda linha medida, sem filtro por espinha, estado ou ressalva — portanto publica E3 com `2`, esse portão e `EM VOO` (`:268`, `:270`; `app/docs/GRADE-MESTRA.md:119`).
+
+A tabela é declarada fonte da regra (`bin/placar_grade.py:23`), mas a regra exige ramo, censo fechado e ausência de arquivo comum com agente vivo (`app/docs/GRADE-MESTRA.md:8`). **NAO PROCEDE afirmar que o código apresentado abriu efetivamente uma vaga para E3**; decisão humana ou consumidor externo: **[nao verificado]**.
+
+**3. Consumidores e números**
+
+| Consumidor fora de `placar_grade.py` | Leitura relevante |
+|---|---|
+| Publicador | Invoca o gerador e transporta GRADE/PLACAR inteiros; não calcula as três colunas (`bin/relato.sh:101`, `:119`, `:120`). |
+| Raspador | Lê, mascara e grava texto integral (`bin/raspar_publico.py:28`, `:31`, `:40`). |
+| Selo | Confere saídas de soma, portões e `resolve` (`bin/tests/test_placar_grade.sh:120`, `:164`, `:167`, `:202`). |
+| Régua | Executa os selos pelo loop; não interpreta essas colunas (`bin/regua.sh:138`, `:140`). |
+
+**NAO PROCEDE mudança de número nos consumidores identificados.** Aplicando em memória as regras anteriores do delta e as atuais à cópia, permanecem **456 obras, zero rejeitos, `11/456`, seis medidas entre 297 linhas e soma por estado `2; 1; 9; 0; 0; 0`** — os valores registrados no cabeçalho (`app/docs/GRADE-MESTRA.md:22`, `:24`, `:26`, `:28`; cálculo em `bin/placar_grade.py:127`, `:151`, `:155`). As seis medidas já têm fonte textual entre parênteses (`app/docs/GRADE-MESTRA.md:108`, `:119`, `:137`, `:272`, `:687`, `:853`).
+
+**PROCEDE a preservação da independência de `--conferir` em relação a logs**: deriva o cabeçalho da GRADE; `sem_obra()` entra apenas no PLACAR (`bin/placar_grade.py:215`, `:227`, `:266`). Outros consumidores externos: **[nao verificado]**.
+
+**4. Classes**
+
+| Classe | Veredito |
+|---|---|
+| **Selo sem mordida** | **NAO PROCEDE** para os defeitos sintáticos e marcadores corrigidos. **PROCEDE para conteúdo**: trocar qualquer um dos três portões por `colisao com OBRA-INEXISTENTE (arquivo-inexistente)` mantém `--conferir` verde; aceita texto após o prefixo e não confere referências (`bin/placar_grade.py:66`, `:227`; selo vivo em `bin/tests/test_placar_grade.sh:205`). |
+| **Número sem fonte** | **NAO PROCEDE número nu aceito**: fechado em `bin/placar_grade.py:58`, com mordida em `bin/tests/test_placar_grade.sh:164`. **PROCEDE ausência de verificação da fonte**: `N (texto)` basta; existência e sustentação dos valores reais: **[nao verificado]** (`bin/placar_grade.py:58`, `:59`). |
+| **Campo com dois significados** | **PROCEDE na E3**: `livre` e “fora da regra” coexistem, sem exclusão executável (`app/docs/GRADE-MESTRA.md:119`; `bin/placar_grade.py:66`, `:268`). **NAO PROCEDE dupla semântica demonstrada em `resolve`**: mede células preenchidas, não quantidade de casos ou referências distintas (`bin/placar_grade.py:127`, `:128`). |
+
+**PROCEDE ainda a limitação semântica de “identificação”:** `lei ?` e `colisao com ?` passam, pois qualquer sufixo não vazio satisfaz a guarda; os casos novos cobrem prefixos nus e exemplos nomeados, sem validar a identidade indicada (`bin/placar_grade.py:66`; `bin/tests/test_placar_grade.sh:146`, `:148`, `:149`, `:151`).
 
 ## 14/11 10:56 · sessao e404bd26221d · - · - · origem=Ronald (tmux)
 
@@ -653,26 +708,4 @@ F8:
 
 Cuidado: app/chamados/management/commands/arquivar_prescritos.py:32 tem default de idade 30 e app/chamados/management/commands/arquivar_prescritos.py:48 calcula o corte para selecionar quem arquivar; a duração do silêncio consulta o juiz em app/chamados/management/commands/arquivar_prescritos.py:84. Não classificaria esse corte de idade como duplicação da duração F8.
 
-## 14/11 10:43 · sessao 14514d383bd7 · - · - · origem=Ronald (tmux)
-
-app/chamados/catalogo/motor.py::prazo_estourou ; o prazo (SLA) do chamado estourou? (app/core/juizes.py:115) ; nenhum texto específico em LEIS/CORTES sobre a comparação do prazo, endereço documentado em app/docs/JUIZES.md:63 ; prazo presente e prazo_sla <= agora, sem prazo False (app/chamados/catalogo/motor.py:56) ; nao ; sla.vencido calcula referência DP/criação + horas por urgência e compara < (app/chamados/services/sla.py:30, app/chamados/services/sla.py:39), cobranca._cobranca_vencida usa prazo ou criação+30min e < (app/chamados/services/cobranca.py:253, app/chamados/services/cobranca.py:254) ; -
-
-app/escala/services/regeneracao.py::cobranca_orfa ; a cobranca ficou orfa depois da regeneracao? (app/core/juizes.py:116) ; L-020 app/docs/LEIS.md:71, texto específico da órfã app/docs/JUIZES.md:41 ; sem marcos_faltantes ou dia retorna None, senão instante de reescrita posterior à criação, combinando regenerada_em/editada_em e janela histórica na ausência de regenerada_em (app/escala/services/regeneracao.py:149, app/escala/services/regeneracao.py:154, app/escala/services/regeneracao.py:119, app/escala/services/regeneracao.py:122) ; nao ; nenhum achado, procurados cobranca_orfa, dia_reescrito_apos, regenerada_em, editada_em, criado_em, consumidores conferidos delegam em app/ponto/management/commands/gerar_celulas.py:257 e app/ponto/management/commands/supra_juiz.py:275 ; -
-
-app/chamados/services/silencio_ausencia.py::reconciliar_por_ausencia ; a ausencia do dia suspende, fecha ou levanta a cobranca viva? (app/core/juizes.py:117) ; L-061 app/docs/LEIS.md:95, L-062 app/docs/LEIS.md:96, corte S4 registrado no próprio módulo app/chamados/services/silencio_ausencia.py:1 ; aberta silencia/renova sem sobrepor silêncio vivo alheio, aprovada fecha só com premissa morta e célula não acusadora, demais levantam somente marcador próprio (app/chamados/services/silencio_ausencia.py:78, app/chamados/services/silencio_ausencia.py:94, app/chamados/services/silencio_ausencia.py:113, app/chamados/services/silencio_ausencia.py:42) ; nao ; auditor refaz ausência aberta, marcador e outro silêncio (app/chamados/management/commands/auditar_invariantes_chamados.py:642, app/chamados/management/commands/auditar_invariantes_chamados.py:646, app/chamados/management/commands/auditar_invariantes_chamados.py:648) e acusa aprovada sem conferir lâmpada (app/chamados/management/commands/auditar_invariantes_chamados.py:660) ; -
-
-app/chamados/services/disputa_emissao.py::motivo_fora_da_fabrica ; a fabrica de perguntas alcanca o chamado e se nao por que? (app/core/juizes.py:119) ; L-061 app/docs/LEIS.md:95, FIO-MORTO-E-ESTRUTURAL app/docs/CORTES.md:253, DUAS-RESPOSTAS item 2 app/docs/CORTES.md:433 ; causas para disputa, encerrado, nunca_bateu, pergunta materializada com célula não acusadora, virada resolvida ou categoria fora do mapa, None para marcos nomeados passados ou categoria mapeada (app/chamados/services/disputa_emissao.py:753, app/chamados/services/disputa_emissao.py:758, app/chamados/services/disputa_emissao.py:760, app/chamados/services/disputa_emissao.py:772, app/chamados/services/disputa_emissao.py:783, app/chamados/services/disputa_emissao.py:785) ; nao ; nenhum achado, procurados motivo_fora_da_fabrica, chamado_orfao_e_regularizavel, pergunta_do_chamado_ja_encerrada, categoria_fora_do_mapa, consumidores delegam em app/chamados/services/disputa_emissao.py:796 e app/chamados/services/pergunta_no_app.py:133 ; -
-
-app/chamados/services/pergunta_no_app.py::retencao ; por que chamado vivo de furo nao tem pergunta no app? (app/core/juizes.py:120) ; L-061 app/docs/LEIS.md:95, FIO-MORTO-E-ESTRUTURAL app/docs/CORTES.md:253 ; sem dia retorna sem_dia, hoje/futuro ou presente no app retorna None, depois testa fábrica, ata, parcial na lista, cobertura, pergunta viva em outro chamado, marco já perguntado e fábrica não rodada (app/chamados/services/pergunta_no_app.py:127, app/chamados/services/pergunta_no_app.py:129, app/chamados/services/pergunta_no_app.py:133, app/chamados/services/pergunta_no_app.py:136, app/chamados/services/pergunta_no_app.py:144, app/chamados/services/pergunta_no_app.py:149, app/chamados/services/pergunta_no_app.py:151) ; nao ; nenhum achado, procurados retencao, fabrica_nao_rodou, pergunta_encerrada_marco_apagado, parcial_na_lista_do_admin, consumidores delegam em app/chamados/services/pergunta_no_app.py:201 e app/chamados/services/pergunta_no_app.py:223 ; -
-
-app/chamados/juizes.py::competencia_do_chamado ; qual a competencia do chamado? (app/core/juizes.py:122) ; L-026 app/docs/LEIS.md:77, K8-COMPETENCIA-NAO-E-MES-CIVIL app/docs/CORTES.md:216, DECIDIR-642 documentado em app/core/juizes.py:121 ; fato mais recente entre dia_do_fato, ausência e perguntas vivas, competência por janela_atual(dia,empresa), None sem fato datado (app/chamados/juizes.py:2360, app/chamados/juizes.py:2363, app/chamados/juizes.py:2366, app/chamados/juizes.py:2368, app/chamados/juizes.py:2370, app/chamados/juizes.py:2373) ; nao ; arquivar_competencia_encerrada escolhe dia_do_fato ou criado_em e calcula competência aritmeticamente (app/chamados/management/commands/arquivar_competencia_encerrada.py:111, app/chamados/management/commands/arquivar_competencia_encerrada.py:115, app/chamados/management/commands/arquivar_competencia_encerrada.py:177, app/chamados/management/commands/arquivar_competencia_encerrada.py:233) ; -
-
-app/chamados/juizes.py::fio_vivo ; alguma pergunta desta colecao esta viva? (app/core/juizes.py:125) ; L-002 app/docs/LEIS.md:60, FIO-MORTO-E-ESTRUTURAL app/docs/CORTES.md:64 ; any(pergunta_viva(p) for p in perguntas), vazio False (app/chamados/juizes.py:1513) ; nao ; Command._disputa_viva reduz any(p.viva for p in d.perguntas.all()) fora do juiz (app/chamados/management/commands/arquivar_competencia_encerrada.py:158), p.viva delega C6 (app/chamados/models.py:3431) ; -
-
-app/ponto/services/furos_vetados.py::motivo_do_veto ; este dia veta nascimento ou reabertura automatica de chamado de turno? (app/core/juizes.py:131) ; L-093 app/docs/LEIS.md:111, VETO-EC-NONE + JUIZ-MOTIVO-DO-VETO app/docs/CORTES.md:403 ; vínculo/template ausente ou régua degenerada retorna VETO_DEGENERADA, suspeita VETO_REGUA, demais None (app/ponto/services/furos_vetados.py:40, app/ponto/services/furos_vetados.py:42, app/ponto/services/furos_vetados.py:44) ; nao ; detectar_ausencias reconstrói os dois vetos (app/ponto/management/commands/detectar_ausencias.py:601, app/ponto/management/commands/detectar_ausencias.py:605), reconciliar_grade também (app/ponto/management/commands/reconciliar_grade.py:495, app/ponto/management/commands/reconciliar_grade.py:499), cópias declaradas em app/core/juizes.py:129 ; -
-
-Contagem deste recorte: 8 juízes lidos, 0 conflitos conclusivos, 5 linhas com achado externo, 0 perguntas de lei. Referências dos oito: app/core/juizes.py:285 a app/core/juizes.py:292.
-
-Leituras integrais sem truncamento concluídas: app/docs/JUIZES.md:1 até 127, CLAUDE.md:1 até 460, app/docs/DOSSIES.md:1 até 366 e trecho coletivo de app/docs/CORTES.md:181 até 280. LEIS e demais trechos de CORTES dependem da consolidação das outras leituras.
-
-_5102 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5103 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
