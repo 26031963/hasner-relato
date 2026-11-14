@@ -1,7 +1,135 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 20:04** · publicado em **14/11/2026 20:04** (UTC-3)
+> Ultima resposta processada: **14/11/2026 20:09** · publicado em **14/11/2026 20:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 20:09 · sessao b46ca7bab667 · - · - · origem=Ronald (tmux)
+
+- **PROCEDENTE-candidato — estrutura/texto, P3:** “Revisar aprovadas” é segunda lista, sem ligação com a decisão de HE: calcula motivos em `app/ponto/views.py:1747`, acrescenta linhas em `:1753` e abre o painel da justificativa em `app/templates/ponto/fila_justificativas.html:154`; a porta de decisão efetiva permanece `app/ponto/portas/he.py:138`, com gravação em `:181` e recalculo em `:202`. Não vi segundo escritor de `DecisaoHE` nesses trechos.
+
+  Cenário: escala 08–17, pausa12–13, previsto480, batidas E08/S18, trabalho540 e `esqueci_saida` aprovada na E08. A fonte conserva cobertura por turno fechado e devolve crédito0/motivo (`app/ponto/services/efeito_ausencia.py:128`, `:145`); o HE existente recebe a ponta60 (`app/ponto/services/espelho.py:722`, `:727`, `:776`; `app/ponto/services/he_pendente_lavrado.py:132`, `:148`). O mesmo dia entra também na revisão (`app/ponto/views.py:1747`). Sem justificativa, a revisão nem avalia o dia (`app/ponto/services/efeito_ausencia.py:98`, `:105`), embora o caminho existente de HE continue lendo a ponta (`app/ponto/services/he_pendente_lavrado.py:132`).
+
+- **PROCEDENTE-candidato — texto/estrutura, P3:** o motivo/UI não significa necessariamente trabalho excedente: compara **bruto da justificativa + trabalho**, antes do limite, com previsto (`app/ponto/services/efeito_ausencia.py:143`, `:146`), mas a UI declara “Hora além do turno” (`app/templates/ponto/fila_justificativas.html:116`). O próprio caso420/59/pago361 exige esse motivo (`app/ponto/tests/test_justificativa_soma_sem_banco.py:178`, `:185`, `:188`): trabalho59 não excede previsto420.
+
+- **PROCEDENTE-candidato — estrutura/desempenho, P5:** o request processa todas as aprovadas, sem competência/janela/paginação (`app/ponto/views.py:1707`, `:1714`, `:1732`), e cada colaborador recebe intervalo do menor ao maior dia histórico (`:1745`, `:1747`). A contagem estática típica é **8 + 2D consultas por colaborador**, com `D` dias cobertos, além de opcionais por cadastro:
+  - 3 próprias: justificativas, células e vínculos (`app/ponto/services/efeito_ausencia.py:98`, `:109`, `:110`);
+  - 4 no carregamento de turnos: batidas, células, candidatos e vínculo usado pela ata (`app/ponto/turnos.py:1879`, `:1902`, `:1903`, `:1955`; `app/escala/alimentacao.py:148`; `app/ponto/turnos.py:1609`, `:1574`);
+  - normalmente1 DNA (`app/ponto/turnos.py:1928`, `:2005`; `app/escala/utils.py:100`);
+  - 2 por dia com célula/geradora: `realizado_do_dia` recarrega vínculo/célula e pausa, pois o chamador fornece somente turnos/previsto (`app/ponto/services/efeito_ausencia.py:140`; `app/ponto/turnos.py:788`, `:794`; `app/escala/servico_jornada.py:46`; `app/escala/models.py:1187`).
+  
+  Há extras condicionais para geradora fora dos candidatos, agregação de última batida e dia sem geradora (`app/escala/alimentacao.py:157`; `app/ponto/turnos.py:1917`; `app/escala/servico_jornada.py:64`). Tempo real e timeout observado: **[nao verificado]**. A configuração é gthread/30s (`app/gunicorn.conf.py:19`, `:21`); o código registra que esse timeout não é teto rígido para request longo com gthread (`app/config/crons.py:1393`).
+
+- **P6, não vi relógio novo no delta fornecido:** funções novas de cálculo/projeção/leitura não chamam `now()`/`today()` (`app/ponto/services/efeito_ausencia.py:98`, `:136`, `:151`; `app/escala/services/leitor_celula.py:354`). `tz.localdate()` da Central aparece como contexto preexistente no delta e alimenta SLA/cards (`app/ponto/views.py:1727`, `:1733`, `:1759`). O fechamento captura um instante vivo por rodada (`app/ponto/services/fechamento.py:616`), transmite-o ao filtro de furos (`:1120`) e consulta encerramento (`:377`; `app/ponto/turnos.py:2108`). Atribuir os nove furos de14/11 a isso, ou verificar novidade desde14b61c124: **[nao verificado]**.
+
+## 14/11 20:08 · sessao 2dfc1fb51f5e · - · - · origem=Ronald (tmux)
+
+P7/P8 — achados para consolidação:
+
+1. **PROCEDENTE-candidato — texto: contrato antigo contradiz os testes atuais.** A docstring declara pagamento pelo período, C5=690, C7 sem justificativa e D1=420; as asserções atuais esperam respectivamente 720, cobertura inteira com 720 e 510. Referências: `app/ponto/tests/test_justificativa_paga_o_periodo.py:1`, `:17`, `:18`, `:20`, `:462`, `:492`, `:564`. D2/D3 dizem “nada se cobre”, porém esperam `cobre=None`, que representa cobertura inteira: `:496`, `:502`, `:509`, `:516`; semântica declarada em `app/ponto/services/efeito_ausencia.py:78`.
+
+2. **PROCEDENTE-candidato — estrutura/texto: teste “sem perda DSR” não executa o cálculo semanal completo.** Ele extrai apenas o `If` que contém `_mj`, executa esse bloco e confere `dsr_ok`; não verifica `semanas_dsr_perdido`. Referências: `app/ponto/tests/test_justificativa_soma_sem_banco.py:262`, `:267`, `:273`, `:276`, `:277`. O contador real está depois do bloco e existe outro cálculo em `MotorComercial`: `app/ponto/motor_calculo_v2.py:2641`, `:2667`, `:3474`, `:3490`, `:3515`. Prova executada somente em memória: mudar `:3474` para iniciar `semanas_dsr_perdido=1` mantém os 24 testes `SomaDoDiaTest` verdes; resultado de execução sem arquivo persistido [nao verificado].
+
+3. **PROCEDENTE-candidato — texto: “bordas ORM substituídas” omite substituição de autoridade de domínio.** A docstring diz isso em `app/ponto/tests/test_justificativa_soma_sem_banco.py:5`, mas `turnos_do_colab` inteiro é substituído por `self.ts` em `:43`, e os turnos são fabricados usando o tipo gravado para decidir entrada/saída em `:53`–`:58`. Assim, esses testes não exercitam o pareamento real, a atribuição do dia pelo envelope nem a aplicação real da L-087. Referências: `:43`, `:57`, `:58`.
+
+4. **PROCEDENTE-candidato — texto: nome da propriedade promete uma desigualdade que o próprio teste permite violar.** `test_propriedade_coberto_implica_soma_dentro_do_previsto` só registra violação quando o crédito é positivo. Com previsto=100, trabalho=120 e crédito=0, a cobertura permanece e a soma=120 passa pelo teste — comportamento compatível com a lei atual, mas incompatível com o nome. Referências: `app/ponto/tests/test_justificativa_soma_sem_banco.py:163`, `:165`, `:168`, `:172`, `:174`.
+
+**Mutantes declarados:** não vi mutante declarado que faça algo incompatível com seu nome. Li as 12 substituições em `app/ponto/tests/mutantes_justificativa_soma.py:19`–`:56`, o mecanismo de carregamento em `app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:27`–`:43` e o critério de morte em `app/ponto/tests/mutantes_justificativa_soma.py:94`. Executei `--todos`: controle com 24 testes; 12/12 mortos por asserção; retorno 0. Resultado de execução sem arquivo persistido [nao verificado]. Nenhum desses 12 muta o pareador, o motor semanal ou a porta de HE: `app/ponto/tests/mutantes_justificativa_soma.py:19`–`:56`.
+
+Não executei a suíte ORM; seus resultados permanecem [nao verificado]. [nao verificado]
+
+## 14/11 20:06 · sessao 93faa118c4dc · - · - · origem=Ronald (tmux)
+
+Censo somente leitura; nenhuma edição nem execução com banco. O recorte contém **65 métodos únicos**, correspondendo às **70 ocorrências**: cinco subtests A/S acrescentam quatro ocorrências; dois subtests R2 acrescentam uma. Isso corresponde aos 69 failures + 1 error fornecidos. As linhas abaixo são da base inspecionada.
+
+Classificação proposta: **60 métodos (a)**, **1 método (b), com cinco subtests**, e **4 métodos (c)**. A exclusão dos quatro métodos (c) depende da remoção efetiva do balde e do censo exigido por L-111.
+
+| Arquivo | Método | Classe | Adaptação proposta |
+|---|---|---|---|
+| `chamados/tests/test_o261_vigia_fio.py:624` | `test_MORDE_a_lista_e_perguntada_no_UNIVERSO_DA_TELA` | a | Usar dia efetivamente sem porta; a fixture atual publica residual `decidir`, evitando a lista. |
+| mesmo arquivo`:418` | `test_a_abertura_por_PERGUNTA_soma_o_universo_da_PORTA` | a | Adequar contagem aos dias que continuam sem porta após o juiz. |
+| mesmo arquivo`:455` | `test_a_LISTA_com_dono_leva_a_CLASSE_de_cada_dia_sem_precedencia` | a | Preservar classificação da lista apenas para dias sem porta publicada. | [nao verificado]
+| mesmo arquivo`:727` | `test_as_linhas_do_log_NAO_LEVAM_NOME_de_ninguem` | a | Preservar ausência de PII; ajustar `FIO_MORTO=1` à fixture sem porta. |
+| mesmo arquivo`:680` | `test_as_PARTES_SOMAM_o_total_e_o_fino_e_subconjunto` | a | Tirar parcela do balde extinto; Resolver oferecido integra `fio_vivo`. |
+| mesmo arquivo`:368` | `test_as_TRES_classes_de_DIA_somam_o_fio_morto` | a | Classes contam apenas dias sem porta, não residual `decidir`. |
+| mesmo arquivo`:280` | `test_dia_SEM_pergunta_nenhuma_e_a_classe_mais_crua` | a | Sem pergunta com `decidir` tem porta; inverter consequência ou construir ausência real de porta. |
+| mesmo arquivo`:557` | `test_MORDE_aguardando_DOCUMENTO_tambem_e_bola_do_DP` | a | Manter contador LU-04/R3, com fixture realmente sem porta. |
+| mesmo arquivo`:224` | `test_MORDE_a_property_viva_LE_o_juiz_e_NAO_tem_regra_propria` | a | Preservar asserts C6/property; consequência no vigia agora considera residual com porta. |
+| mesmo arquivo`:540` | `test_MORDE_ausencia_ABERTA_cobrindo_o_dia_AGUARDA_O_DP_e_nao_e_fio_morto` | a | Ausência decidível tem ação/porta; balde permanece somente para ausência sem porta. |
+| mesmo arquivo`:513` | `test_MORDE_chamado_em_analise_SEM_resolver_dia_e_FIO_MORTO` | a | Manter teste vivo; `decidir` residual alcançável implica fio vivo; retirar só assert do balde apagado. | [nao verificado]
+| mesmo arquivo`:586` | `test_MORDE_dono_BATIDA_ou_CADASTRO_NA_LISTA_e_fio_do_admin_e_o_resto_fica` | a | Manter subdivisão do sem-porta e testar com dias sem porta. |
+| mesmo arquivo`:614` | `test_MORDE_falha_da_lista_e_UMA_chamada_por_rodada_e_todos_ficam` | a | Preservar custo/falha da lista com fixture que efetivamente chega à lista. |
+| mesmo arquivo`:659` | `test_MORDE_folga_CONTESTADA_e_validada_e_ESCALA_NAO_DESCREVE_O_DIA_e_nao_fio_morto` | a | Preservar subdivisão; porta residual prevalece antes do contador. |
+| mesmo arquivo`:789` | `test_MORDE_o_carimbo_guarda_os_CONTADORES_que_a_rodada_mediu` | a | Preservar comparação com censo; mudar mistura e contadores antigos, passar instante do carimbo também ao censo. |
+| mesmo arquivo`:163` | `test_MORDE_o_dia_de_HOJE_fica_FORA_do_contador_alarmado` | a | Testar teto somente em dia sem porta, pois porta válida vence essa classificação. |
+| mesmo arquivo`:485` | `test_MORDE_o_dia_que_OFERECE_resolver_dia_e_DECISAO_PENDENTE_e_nao_fio_morto` | c | Exclusivo do balde; remover com L-111; cobertura nova M4 prova porta administrativa. |
+| mesmo arquivo`:389` | `test_MORDE_o_dia_SO_de_plantio_fora_do_slot_NAO_e_ALVO` | a | ALVO continua vivo; montar universo sem porta ou adequar contagem. |
+| mesmo arquivo`:128` | `test_MORDE_o_fio_vivo_e_o_fio_morto_dao_CONTAS_DIFERENTES` | a | Pergunta morta não remove porta residual `decidir`; escolher par que difira na porta publicada. | [nao verificado]
+| mesmo arquivo`:521` | `test_MORDE_o_passivo_ALVO_nao_some_dentro_da_decisao_pendente` | c | Exclusivo do balde e de seu contador ALVO; remover com balde. |
+| mesmo arquivo`:197` | `test_MORDE_o_VOCABULARIO_do_cartorio_e_quem_diz_quais_dias_cobram` | a | Preservar vocabulário e recorte; adaptar fixture à porta válida. |
+| mesmo arquivo`:145` | `test_MORDE_registrado_e_VIVO_mas_nao_COBRA_ninguem` | a | `registrado`/`historico` não dão porta LU-02; caso aberto com `decidir` dá porta. |
+| mesmo arquivo`:404` | `test_o_dia_MISTO_conta_UMA_vez_e_no_ALVO` | a | Preservar unidade colab-dia/ALVO; contar apenas sem porta. |
+| mesmo arquivo`:564` | `test_o_dia_que_OFERECE_resolver_dia_fica_na_DECISAO_DO_DIA_mesmo_com_ausencia_aberta` | c | Exclusivo da precedência do balde extinto. |
+| mesmo arquivo`:495` | `test_o_juiz_REAL_oferece_o_dia_que_acusa_sem_lavra` | c | Assert exclusivo do balde; a integração real útil pode migrar para M4/M8. |
+| mesmo arquivo`:606` | `test_sem_resposta_da_lista_o_dia_FICA_no_alarme` | a | Preservar falha explícita, com entrada sem porta. |
+| `chamados/tests/test_e3_tarefa_admin_sem_banco.py:133` | `test_B_252_29_set_hipotese_ultima_resposta_textual` | a | Âncora existente fora da fila dá `admin/porta_acao/validar`. |
+| mesmo arquivo`:136` | `test_B_841_10_out_hipotese_ultima_resposta_textual` | a | Mesma inversão LU-03. |
+| `chamados/tests/test_e3_c8b_sem_banco.py:196` | `test_carga_da_tarefa_pergunta_ao_c6_avulso_lote_e_idempotencia` | a | Carga passa âncoras existentes: esperar `admin/porta_acao`, preservar custo e idempotência. |
+| mesmo arquivo`:48` | `test_cinco_formas_acusadoras_sem_pergunta_viva` — cinco subtests | b | A/S sem oferta de Resolver não dá dono; manter `nada`, curar juiz e acrescentar controle oferecido. |
+| mesmo arquivo`:166` | `test_grave_respondida_em_disputa_fechada_nao_e_filtrada_por_motivo` | a | Passar mapa de âncoras existente e esperar administração alcançável. |
+| mesmo arquivo`:184` | `test_sem_trabalho_sem_lampadas_nao_esconde_resposta_viva` | a | Mesma inversão, preservando exposição da pergunta/marco. |
+| `chamados/tests/test_e4_passivo.py:57` | `test_classe_c_passivo_entra_pela_porta_da_E1_e_2x_e_uma_linha` | a | Após registrar resposta E1, passa a `admin/porta_acao`; segunda rodada não seleciona mais sem-porta; preservar uma linha E1. |
+| `chamados/tests/test_o261e_f5_alcance.py:484` | `test_a_ancora_VIVA_fora_da_fila_tambem_e_veu` | a | Resposta ancorada em registrado dá `porta_acao/admin`, sem causa sem-porta. |
+| mesmo arquivo`:213` | `test_c_respondida_com_destino_FECHADO` | a | Âncora terminal existente também dá modal: `porta_acao/admin`. |
+| `chamados/tests/test_e3_portas_tarefa.py:465` | `test_fio_normal_e_do_dono_da_acao_mesmo_com_verbo_validar` | a | Com app: `porta_app/colab`; sem app: preservar admin. |
+| mesmo arquivo`:483` | `test_historico_tem_porta_mas_nao_e_nomeado_na_lista_padrao` | a | LU-02: projeção `None`, sem dono; manter verbo como evidência. |
+| mesmo arquivo`:419` | `test_RED_A_na_fila_aparece_com_acao_sob_B` | a | Com app: `porta_app`; sem app: `porta_fila/chamado`; manter fila contextual. |
+| mesmo arquivo`:115` | `test_tarefa_propaga_relogio_a_alimentacao` | a | A pergunta pendente no app continua dando `porta_app`; manter verificação do verbo/instante. |
+| mesmo arquivo`:505` | `test_v8_R1_colab_alcancavel_e_leitores` | a | Trocar `porta_pergunta` por `porta_app`; todos os leitores seguem publicação. |
+| mesmo arquivo`:231` | `test_v8_R2_alcance_admin_com_pergunta_colab` | a | `porta_app/colab`, preservando verbo administrativo contextual. |
+| mesmo arquivo`:525` | `test_v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia` — dois subtests | a | Ambos `porta_app/colab`, sem alterar ações originais. |
+| mesmo arquivo`:265` | `test_v8_R7_membro_da_fila_sem_verbo` | a | LU-02: None não dá dono/porta. |
+| mesmo arquivo`:572` | `test_v8_R7_membro_sem_verbo_conservado` | a | Alimentação conserva membro/None; projeção da tarefa é `None`. |
+| `chamados/tests/test_o261e_f5b_juiz_porta.py:259` | `test_MORDE_ancora_arquivada_nao_abre_a_porta_da_pergunta` | a | C17 histórico pode continuar sem porta; tarefa/Folha dão `admin/porta_acao/validar`. |
+| mesmo arquivo`:276` | `test_MORDE_membro_da_fila_que_a_particao_nao_viu_nao_abre_porta` | a | C17 histórico mantém assert próprio; tarefa/Folha passam a sem porta por LU-02. |
+| mesmo arquivo`:135` | `test_MORDE_ricardo_a_folha_le_o_juiz_e_diz_nada` | a | Folha deve ler `admin`, pois há âncora existente para validar. |
+| mesmo arquivo`:140` | `test_MORDE_ricardo_folha_e_vigia_dizem_a_MESMA_coisa` | a | Ambos leem `porta_acao/admin`, sem causa c. |
+| `escala/tests/test_f3_beco1_folga_na_lista.py:137` | `test_MORDE_competencia_anterior_NAO_exportada_vai` | a | Resposta ancorada tem modal; C11 vazio. |
+| mesmo arquivo`:351` | `test_MORDE_F5_queries_nao_crescem_com_os_dias` | a | Preservar custo; ajustar cardinalidade dos resultados à exclusão por porta. |
+| mesmo arquivo`:199` | `test_RED_contraex1_chamado_da_celula_na_fila_sem_pergunta_NAO_e_porta` | a | Porta residual `decidir/chamado` permanece; atualizar projeção com `acao`, se publicada. | [nao verificado]
+| mesmo arquivo`:219` | `test_RED_contraex2_ancora_viva_fora_da_fila_nao_e_porta` | a | Agora `admin/porta_acao`, C11 vazio. |
+| mesmo arquivo`:100` | `test_RED_dia_da_competencia_aberta_vai_a_lista_com_dono_CADASTRO` | a | Fixture respondida/ancorada já tem modal; esperar porta e ausência no C11. |
+| mesmo arquivo`:244` | `test_RED_F1_lista_le_o_instante_de_quem_chama` | a | Preservar instante explícito e sua propagação, sem exigir o C11 antigo. |
+| mesmo arquivo`:292` | `test_RED_F6_C9_lavrado_divergente_nao_tira_o_dia_CADASTRO_da_mesa` | a | Preservar dono C9, retirar expectativa de C11 para dia que tem porta administrativa. |
+| `chamados/tests/test_f3_beco1_reata_limbo.py:67` | `test_MORDE_dry_nao_escreve` | a | Dia já tem porta: zero candidatos, nenhuma escrita. |
+| mesmo arquivo`:149` | `test_MORDE_pai_cujo_silencio_ja_venceu_volta_a_fila_e_reata` | a | Âncora atual já fornece modal; não há candidato a reata nesse cenário. |
+| mesmo arquivo`:76` | `test_MORDE_sem_pai_fica_na_lista_e_nenhum_pai_nasce` | a | Não cria pai; dia com modal também não entra C11. |
+| mesmo arquivo`:49` | `test_RED_apply_reata_ao_pai_e_o_dia_sai_do_beco` | a | Já sai pelo modal: zero reatas, destino preservado. |
+| mesmo arquivo`:124` | `test_RED_pai_silenciado_DEPOIS_da_selecao_nao_recebe_reata` | a | Nenhuma seleção nesse cenário; preservar destino sem reata. |
+| mesmo arquivo`:105` | `test_RED_pai_silenciado_fora_da_fila_nao_recebe_reata` | a | Sem seleção/reata; excluir expectativa de C11 para dia com modal. |
+| `chamados/tests/test_e3_bloqueantes.py:179` | `test_RED_8_pergunta_sob_ancora_REGISTRADA_nao_e_canal` | a | Assert agora exige `admin/porta_acao`; furo não inclui dia. |
+| mesmo arquivo`:170` | `test_RED_8_pergunta_sob_ancora_SILENCIADA_nao_e_canal` | a | Mesma inversão LU-03. |
+| `chamados/tests/test_n1_perguntas_do_app.py:383` | `test_RED_censo_dono_fora_do_fio_le_uma_instancia_do_colab` | a | Fixture tem três `decidir`: não chega ao balde; verificar zero chamadas ou construir entrada sem porta para continuar testando identidade. |
+| `chamados/tests/test_sombra_c1_resolver_em_lote.py:35` | `test_RED_censo_monta_um_calendario_por_colaborador` | a | Três dias com residual `decidir`: `fio_vivo=3`, zero calendários; acrescentar entrada sem dono para prova positiva uma vez por colaborador. |
+
+Pontos adicionais fora do recorte:
+
+- `chamados/tests/test_e3_c8b_sem_banco.py:81`: schema exato precisa incluir `acao`, caso publicada na tarefa.
+- `chamados/tests/test_o261_vigia_fio.py:483`: stub plural `lambda colab, datas` precisa aceitar `agora` keyword.
+- `chamados/tests/test_o261e_f5_alcance.py:293`: teste exclusivo do balde extinto, elegível a remoção L-111.
+- `chamados/tests/test_o261e_f5_alcance.py:406`: teste misto continua vivo; oferta agora deve resultar `porta_acao/admin`, sem papel inventado `regularizar_batida`.
+- `chamados/tests/test_sombra_c1_resolver_em_lote.py:49`: a prova de custo deve acompanhar a carga da tarefa; forçar `porta_da_tarefa=None` depois do julgamento já não força consulta ao Resolver.
+
+Os B sem banco possuem âncoras existentes em `forma_b`, mas os testes diretos não passam o mapa ao juiz (`chamados/tests/test_e3_tarefa_admin_sem_banco.py:103`, `chamados/tests/test_e3_tarefa_admin_sem_banco.py:127`). Para provar LU-03, passar `{p.pk: chamado_que_lista(p)}`; `_pela_decisao` atualmente reduz a porta a None fora da fila (`chamados/services/tarefa_do_dia.py:140`).
+
+Comentários V6: substituir a restrição “admin só chega por chamado na fila” por **LU-03: ação administrativa com tela dá porta, inclusive validação com âncora existente fora da fila**; None sem âncora não dá dono. Pontos: `test_e3_bloqueantes.py:97`, `test_o261e_f5_alcance.py:487`, `test_o261e_f5b_juiz_porta.py:264`, `folha/tests/test_haiku_fora_da_folha.py:160`.
+
+Comando sem banco recomendado:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e3_tarefa_admin_sem_banco chamados.tests.test_e3_c8b_sem_banco chamados.tests.test_e3_degrau_dono_e_porta
+```
+
+Não executei esse comando para evitar disputar o RED/GREEN do construtor. Os demais arquivos listados importam `django.test.TestCase` e suas fixtures escrevem no banco; execução proibida nesta sessão (`chamados/tests/test_o261_vigia_fio.py:24`, `escala/tests/test_f3_beco1_folga_na_lista.py:18`, `chamados/tests/test_f3_beco1_reata_limbo.py:17`).
 
 ## 14/11 20:04 · sessao 0a6e6dad6330 · - · - · origem=Ronald (tmux)
 
@@ -1306,116 +1434,4 @@ O POST desses forms, sem conteúdo que acione o ramo de mensagem, chega ao retor
 
 [truncado em 20000 de 49883 caracteres]
 
-## 14/11 18:52 · sessao c3a4441e6bc6 · - · - · origem=Ronald (tmux)
-
-A transcrição reconciliada soma **2.357 dias de 300 colabs**, diferença de **24** para os 2.381 declarados; não ajustei contagens para fechar o universo. `[nao verificado]`
-
-| Emp | 09/2026 | 10/2026 | 11/2026 |
-|---|---:|---:|---:|
-| 1 | 0 | 12 | 5 |
-| 2 | 545 | 615 | 790 |
-| 3 | 94 | 117 | 156 |
-| 4 | 6 | 8 | 9 |
-
-Fonte: anexo textual transcrito; conferência independente dos grupos pelos outros explorers. `[nao verificado]`
-
-Top 10, desempate pelo menor colab: **534:77; 607:72; 667:61; 717:54; 317:45; 832:40; 650:39; 114:38; 144:38; 915:38**. Soma: **502 dias**. `[nao verificado]`
-
-No corpus de 2.357 dias:
-
-- **37 colabs → 1.186 dias (50,32%)**; os primeiros 36 somam 1.168. `[nao verificado]`
-- **108 colabs → 1.888 dias (80,10%)**; os primeiros 107 somam 1.882. `[nao verificado]`
-
-Para os limiares do universo declarado de 2.381, usando somente os dias transcritos:
-
-- **38 colabs → 1.203 dias**, ultrapassando 1.191; os primeiros 37 somam 1.186. `[nao verificado]`
-- **111 colabs → 1.906 dias**, ultrapassando 1.905; os primeiros 110 somam 1.900. `[nao verificado]`
-
-Esses limiares não certificam concentração do universo completo, pois faltam reconciliar os 24 dias. `[nao verificado]`
-
-Assumindo prazos em UTC e idade em dias completos, a distribuição dos 2.357 dias é: `[nao verificado]`
-
-| Faixa | Dias |
-|---|---:|
-| <0 | 0 |
-| 0–7 | 33 |
-| 8–15 | 111 |
-| 16–30 | 99 |
-| >30 | 2.082 |
-| Prazo `None` | 32 |
-| Total | 2.357 |
-
-O anexo removeu o offset dos prazos. Interpretá-los em `-03:00` transfere os três dias de col988, prazo `2026-10-14T17:30`, de `>30` para `16–30`: essas faixas passam a **2.079** e **102**, respectivamente. `[nao verificado]`
-
-## 14/11 18:51 · sessao 32d3120f3ba2 · - · - · origem=Ronald (tmux)
-
-**Emp2 / 09/2026: 545 linhas, 123 colabs**, após cruzamento dos mapas por colaborador. Fonte: TSV colado; arquivo:linha `[nao verificado]`.
-
-A diferença para os 544 da outra agente é **col836 / 2026-09-19**, uma linha omitida do mapa dela. Col832 tem 12 linhas; col667 tem 6. Fonte: anexo colado; arquivo:linha `[nao verificado]`.
-
-Maiores: col534=31; col788=21; col607=18; col312=15; col650=15; col209=14; col832=12; col883=11; col346/362/599/820/877=10 cada. Fonte: anexo colado; arquivo:linha `[nao verificado]`.
-
-Não ajustei a soma ao universo declarado de 2381. As demais fatias não foram recontadas nesta conferência `[nao verificado]`.
-
-## 14/11 18:50 · sessao 8dc621e17fdc · GRADE-RESOLVE · censo · origem=Code
-
-(A) `resolve.tsv`
-
-```tsv
-caso_fonte	caso_id	obra_id	estado_obra	prova_arquivo:linha	lateral_cen	lateral_lei	toca_congelado
-HJ-INGESTAO-0511	HJ-005-U1	candidata sem prova: BO-ADMIN-2710	SEM OBRA	app/docs/BACKLOG.md:820;app/docs/GRADE-MESTRA.md:137;cobertura individual [nao verificado]	—	—	—
-HJ-INGESTAO-0511	HJ-005-U2	COBERTURA-PARCIAL-UM-JUIZ	NO AR	app/docs/BACKLOG.md:829;app/docs/BACKLOG.md:993;app/docs/RELATO.md:8127	—	—	—
-HJ-INGESTAO-0511	HJ-005-U4	COBERTURA-PARCIAL-UM-JUIZ	NO AR	app/docs/BACKLOG.md:829;app/docs/BACKLOG.md:993;app/docs/RELATO.md:8127	—	—	—
-HJ-INGESTAO-0511	HJ-012-U2	nenhuma obra registrada	SEM OBRA	app/docs/RELATO.md:8390;cobertura [nao verificado]	—	—	—
-HJ-INGESTAO-0511	HJ-017-U1	O232	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1239;app/docs/GRADE-MESTRA.md:853	sim	sim	não, nas linhas citadas
-HJ-INGESTAO-0511	HJ-030-U1	FIO-LE-O-JUIZ	NO AR	app/docs/BACKLOG.md:2098;app/docs/BACKLOG.md:837	—	—	—
-BO2910-ESTRUTURA	01	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
-BO2910-ESTRUTURA	02	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
-BO2910-ESTRUTURA	05	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
-BO2910-ESTRUTURA	06	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
-BO2910-ESTRUTURA	08	BO2910-ESTRUTURA	LATERAL-ESTRUTURA	app/docs/BACKLOG.md:1102;app/docs/GRADE-MESTRA.md:170	não	sim	não, nas linhas citadas
-BO-ADMIN-2710	1	COBERTURA-PARCIAL-UM-JUIZ	NO AR	app/docs/BACKLOG.md:829;app/docs/BACKLOG.md:993;app/docs/RELATO.md:8127	—	—	—
-BO-ADMIN-2710	2	JUIZ-DO-PAR-DUAS-ENTRADAS	NO AR	app/docs/GRADE-MESTRA.md:38;app/docs/BACKLOG.md:819	—	—	—
-BO-ADMIN-2710	3	JUSTIFICATIVA-PAGA-O-PERIODO	ESPINHA A FAZER	app/docs/BACKLOG.md:1918;app/docs/BACKLOG.md:9;app/docs/GRADE-MESTRA.md:269	sim	sim	não, nas linhas citadas
-BO-ADMIN-2710	5	JUIZ-DO-PAR-DUAS-ENTRADAS	NO AR	app/docs/BACKLOG.md:819	—	—	—
-BO-ADMIN-2710	6	FIO-LE-O-JUIZ	NO AR	app/docs/BACKLOG.md:837	—	—	—
-BO-ADMIN-2710	7	REGISTRADO-NAO-E-VIVO	NO AR	app/docs/BACKLOG.md:823;app/docs/RELATO.md:3371;app/docs/GRADE-MESTRA.md:139	não	sim	não, nas linhas citadas
-BO-ADMIN-2710	8.1	TRILHA-DO-VINCULO-MENTE	NO AR	app/docs/BACKLOG.md:821;app/docs/GRADE-MESTRA.md:138	sim	sim	não, nas linhas citadas
-```
-
-Cen/lei seguem as duas primeiras casas da grade: `+` feito, `.` falta. “Toca congelado” considera somente os arquivos citados nas linhas das obras. app/docs/GRADE-MESTRA.md:7; app/docs/BACKLOG.md:1102; app/docs/BACKLOG.md:1239; app/docs/BACKLOG.md:1918; app/docs/BACKLOG.md:823; app/docs/BACKLOG.md:821.
-
-Ressalvas do cruzamento:
-
-- **HJ-005-U1:** BO-ADMIN-2710 registra medição e encaminhamento; seu `fecha BO=3` agregado não individualiza cobertura de 01/10. A COBPARC nomeia col42 em 08/15/22-10. Por isso U1 permanece candidata sem prova, contada como SEM OBRA. app/docs/BACKLOG.md:820; app/docs/GRADE-MESTRA.md:137; app/docs/BACKLOG.md:829.
-- **HJ-017-U1:** O232 combina a indicação do mapa fornecido com o caso nominal col923 e `fecha BO=1` do mapa HJ. O dia 27/09 não aparece na linha da obra: cobertura específica dessa data [nao verificado]. O complemento da ata permanece pendente; não foi contado como NO AR pelos pousos A/B. app/docs/BACKLOG.md:1239; app/docs/GRADE-MESTRA.md:853.
-- **Estados divergentes:** a COBPARC tem fechamento posterior ao PARADA da grade; JUSTIFICATIVA-PAGA-O-PERIODO voltou à ordem viva e recebe o item 3, expressamente separado da obra A. app/docs/GRADE-MESTRA.md:39; app/docs/RELATO.md:8127; app/docs/BACKLOG.md:993; app/docs/BACKLOG.md:1918; app/docs/BACKLOG.md:9.
-- **BO-ADMIN/2:** a prova nas fontes autorizadas é pela classe de divergência entre motor e ata; o encaminhamento nominal do caso está registrado no relato. app/docs/GRADE-MESTRA.md:38; app/docs/BACKLOG.md:819; app/docs/RELATO.md:3423.
-
-(B) Coluna `resolve` por obra
-
-| obra_id | resolve | Prova |
-|---|---|---|
-| COBERTURA-PARCIAL-UM-JUIZ | HJ-005-U2; HJ-005-U4; BO-ADMIN-2710/1 | app/docs/BACKLOG.md:829 |
-| JUIZ-DO-PAR-DUAS-ENTRADAS | BO-ADMIN-2710/2; BO-ADMIN-2710/5 | app/docs/GRADE-MESTRA.md:38; app/docs/BACKLOG.md:819 |
-| FIO-LE-O-JUIZ | HJ-030-U1; BO-ADMIN-2710/6 | app/docs/BACKLOG.md:2098; app/docs/BACKLOG.md:837 |
-| REGISTRADO-NAO-E-VIVO | BO-ADMIN-2710/7 | app/docs/BACKLOG.md:823 |
-| TRILHA-DO-VINCULO-MENTE | BO-ADMIN-2710/8.1 | app/docs/BACKLOG.md:821 |
-| JUSTIFICATIVA-PAGA-O-PERIODO | BO-ADMIN-2710/3 | app/docs/BACKLOG.md:1918 |
-| O232 | HJ-017-U1 | app/docs/BACKLOG.md:1239; app/docs/GRADE-MESTRA.md:853 |
-| BO2910-ESTRUTURA | BO2910-ESTRUTURA/01; /02; /05; /06; /08 | app/docs/BACKLOG.md:1102; app/docs/GRADE-MESTRA.md:170 |
-
-(C) QUADRO
-
-| Parcela | Casos | Lastro |
-|---|---:|---|
-| NO AR | 9 | app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:993; app/docs/BACKLOG.md:819; app/docs/BACKLOG.md:837; app/docs/BACKLOG.md:2098; app/docs/BACKLOG.md:823; app/docs/RELATO.md:3371; app/docs/BACKLOG.md:821 |
-| EM VOO | 0 | Nenhum vínculo acima possui esse estado; fontes das respectivas linhas em (A). |
-| ESPINHA A FAZER | 1 | app/docs/BACKLOG.md:1918; app/docs/BACKLOG.md:9 |
-| LATERAL PRONTA | 1 | O232: cen+lei, nenhum congelado citado. app/docs/GRADE-MESTRA.md:853; app/docs/GRADE-MESTRA.md:7; app/docs/BACKLOG.md:1239 |
-| LATERAL NÃO PRONTA | 5 | BO2910-ESTRUTURA: cen não fechado. app/docs/GRADE-MESTRA.md:170; app/docs/GRADE-MESTRA.md:7; app/docs/BACKLOG.md:1102 |
-| SEM OBRA | 2 | HJ-005-U1: candidata sem prova; HJ-012-U2: cobertura [nao verificado]. app/docs/BACKLOG.md:820; app/docs/RELATO.md:8400 |
-
-**ESTRUTURA: 18 = 9 + 0 + 1 + 1 + 5 + 2.** Soma dos casos discriminados em (A), com as provas acima. Encerramento atual dos casos em produção: **[nao verificado]**.
-
-_5247 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5250 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
