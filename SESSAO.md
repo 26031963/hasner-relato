@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 15:50:18.** Transcript: `6ad11830-e78c-4a21-b089-2bb1de32b459.jsonl` (14.3 MB). Acoes na janela: **484**.
+**Medido em 14/11/2026 15:55:48.** Transcript: `6ad11830-e78c-4a21-b089-2bb1de32b459.jsonl` (14.5 MB). Acoes na janela: **496**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:53:44 | Bash | Add RELATO marco and commit HOOKMSG by path | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('PONTO 15:5x VAGA')) L.insert(i+1,'MARCO 15:5x HOOKMSG POUSADO (instrumento, pouso proprio; copia wt-hookmsg-144402, opus final APROVADO com 4 condicoes): 7 arquivos cp + cmp OK (bin/commit_msg.sh novo, hooks.sh, pre-push.sh, tests/tes ...` |
+| 15:53:26 | Bash | Find marco section format | `cd /home/ronald/saas-hasner/app; /bin/grep -n '^### \\|^MARCO' docs/RELATO.md \| head -8` |
+| 15:53:24 | Bash | Find RELATO section headers | `cd /home/ronald/saas-hasner/app; /bin/grep -n '^## ' docs/RELATO.md \| head -5; date '+%H:%M'` |
+| 15:53:21 | Bash | Update BACKLOG HOOKMSG rows and fila items | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md' L=open(p,encoding='utf-8').read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| HOOK-DE-MENSAGEM-EM-TODA-COPIA \|')) c=L[i].split(' \| ') c[2]='POUSADA 14/11 (opus final APROVADO, logs/HOOKMSG/; commit-msg instalado, selo rc 0). Desvio declarado (LEI-AKITA 9): "quem cria a wt configura; hooksPath inexistente  ...` |
+| 15:53:11 | Bash | Read the two BACKLOG rows | `cd /home/ronald/saas-hasner/app; sed -n 766p docs/BACKLOG.md; sed -n 774p docs/BACKLOG.md` |
+| 15:53:04 | Bash | Run lei_akita selo and find BACKLOG row | `cd /home/ronald/saas-hasner; bash bin/tests/test_lei_akita.sh > logs/HOOKMSG/lei_akita_pouso.log 2>&1; echo rc=$?; tail -2 logs/HOOKMSG/lei_akita_pouso.log \| cut -c1-300; /bin/grep -n 'HOOK-DE-MENSAGEM\\|HOOKMSG' app/docs/BACKLOG.md \| cut -c1-250` |
+| 15:52:55 | Bash | Copy HOOKMSG files, install hook, run selo | `cd /home/ronald/saas-hasner; mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner-app/6ad11830-e78c-4a21-b089-2bb1de32b459/scratchpad/hookmsg_bak; tar cf /tmp/claude-1001/-home-ronald-saas-hasner-app/6ad11830-e78c-4a21-b089-2bb1de32b459/scratchpad/hookmsg_bak/antes.tar $(cat logs/HOOKMSG/arquivos.txt \| /bin/grep -v commit_msg.sh); for f in $(cat logs/HOOKMSG/arquivos.txt); do cp -p /home/ronald/wt- ...` |
+| 15:52:48 | Bash | View prior instrument commit message format | `cd /home/ronald/saas-hasner; git log -1 --format=%B 20ce19fb5 \| head -40` |
+| 15:52:40 | Bash | Show lines removed from test_lei_akita | `cd /home/ronald/saas-hasner; git diff --no-index bin/tests/test_lei_akita.sh /home/ronald/wt-hookmsg-144402/bin/tests/test_lei_akita.sh \| /bin/grep '^-' \| head -30` |
+| 15:52:37 | Bash | Compare main vs copy per file | `cd /home/ronald/saas-hasner; git log -3 --format='%h %ad %s' --date=format:'%d %H:%M' -- bin/tests/test_lei_akita.sh; head -3 logs/HOOKMSG/diff_v4.patch; for f in $(cat logs/HOOKMSG/arquivos.txt); do printf '%s ' $f; git diff --no-index --stat $f /home/ronald/wt-hookmsg-144402/$f 2>/dev/null \| tail -1; echo; done` |
+| 15:52:33 | Bash | Check main changes to HOOKMSG files since copy | `cd /home/ronald/saas-hasner; head -5 logs/HOOKMSG/contrato.txt; ls -la --time-style=+%H:%M logs/HOOKMSG/diff_v4.patch; git log --since='14:30' --format='%h %ad %s' --date=format:%H:%M -- $(cat logs/HOOKMSG/arquivos.txt); git status --porcelain -- $(cat logs/HOOKMSG/arquivos.txt)` |
+| 15:52:28 | Bash | List HOOKMSG files in copy | `cd /home/ronald/saas-hasner; ls logs/HOOKMSG/; cat logs/HOOKMSG/arquivos*.txt 2>/dev/null; cd /home/ronald/wt-hookmsg-144402 && git status --porcelain 2>/dev/null \| head -20` |
 | 15:50:02 | Bash | Point ESPERANDO at suite.sh pid and verify | `cd /home/ronald/saas-hasner/app; sed -i '3s#^ESPERANDO: bin/suite.sh \| pid=3005469#ESPERANDO: /home/ronald/saas-hasner/bin/suite.sh \| pid=3005471#' docs/RELATO.md; sed -n 3p docs/RELATO.md; cd ..; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._prova_pid('/home/ronald/saas-hasner/bin/suite.sh',3005471) or 'PROVADO')"` |
 | 15:49:59 | Bash | Find suite.sh child process | `ps -o pid,args --ppid 3005469 \| cut -c1-150` |
 | 15:49:56 | Bash | Read process match rule | `cd /home/ronald/saas-hasner; /bin/grep -n 'def _processo_casa' -A25 bin/hook_stop_fila1.py` |
