@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=3513095
+ESPERANDO: trava_teste.sh | pid=3513107
 DESPACHO HJ-090 preverif6 (BLOQUEIA, 6a volta Codex -> sem preverif7, 5(d)): A deadlock criacao x edicao e B insert sem trava = PROCEDENTES, cura na sessao: ferias/services.py::_travar_ciclos_do_colaborador (advisory xact por colab + PAs por pk) na garantia e na edicao; C remarcacao de gozo iniciado = PROCEDENTE, guarda pode_editar_em(hoje) na linha travada da porta remarcar (corrigir admin intocado); cancelar DP de gozo iniciado com status velho = FILA/lei (test_cancelar_2x.py:200 afirma o aceite); 6 casos que mordem M1-M6 em logs/HJ-090/volta7/red7c_mutantes.log; MAPA portas sem trilha 147->148 (editar_datas_admin)
 TRIAGEM BUG-PAR pv_c + suite pre-opus (FAILED 1/15835: test_chamados_modal 93>90 queries): P1 reuso ja_satisfeita bloqueado + selo :1098 sem mordida, P2 dono=sistema "TI/DP" na espera 163, P3 perf = PROCEDENTES -> volta d na vaga unica DEPOIS do commit 7c do HJ-090 (ORDEM-POS-E4A2); gravou=False historico DUVIDOSO -> anexo opus. logs/BUG-PAR-O-PAR/e3/volta5/codex/pv_c.triagem
 HJ-090 7d COMMIT 44827a7b1 na wt: as 2 FAIL da suite 7c (suite_inteira_7c.log: ruff F401 import morto services.py; 2 relogios em listar_ferias_com_batida::handle -> agora unico, hoje=localdate(agora)); recorte green7d_recorte OK 354 rc 0; suite inteira pre-opus RODANDO -> logs/HJ-090/volta7/suite_inteira_7d.log
