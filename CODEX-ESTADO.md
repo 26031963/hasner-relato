@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 19:23** · publicado em **14/11/2026 19:26** (UTC-3)
+> Ultima resposta processada: **14/11/2026 19:27** · publicado em **14/11/2026 19:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 19:27 · sessao c4cb8db0cbc8 · BO-DISPUTA-SEM-PERGUNTA · leitura · origem=Code
+
+Referências relativas a `app/`, salvo indicação contrária. **Cópia `arquivo:+N`** significa a linha do lado novo do `diff_obra.patch` fornecido. “Push sim” significa tentativa de envio; entrega real e execução dos testes citados: **[nao verificado]**. Os testes novos da cópia foram apenas listados no anexo; sua cobertura: **[nao verificado]**. [nao verificado]
+
+Estados: **a** ata lavrada; **b** sem ata; **c** sem marcos/lâmpadas na ata; **d** pergunta respondida; **e** pergunta morta pelo C6. Respondida pode continuar viva, mas deixa de ser pendência do colaborador no app (`chamados/juizes.py:1417`; `chamados/services/pergunta_no_app.py:71`).
+
+**Porta 1 — criar ou atualizar disputa**
+
+`chamados/services/disputa_emissao.py::criar_ou_atualizar_disputa:644` → `_abrir_ou_agregar_disputa:474`. Chamadores: views de batida `api/views.py:764`, `api/views_core.py:758`; triagem `ponto/services/triagem_batida.py:735`; command `marcar_foto_ausente_retro.py:96`; fábrica da célula `chamados/services/fabrica_da_celula.py:172`. Esta última é chamada pelo cartório, reconciliador e backfill (`ponto/services/cartorio.py:1045`; `chamados/reconciliador.py:1387`; `chamados/management/commands/backfill_fio_morto_e4b.py:143`).
+
+| ID — entrada | Juiz consultado | O que persiste no hash | Push / destinatário | Prova; teste existente | Na cópia | [nao verificado]
+|---|---|---|---|---|---|
+| N0 — motivos vazios; qualquer estado | Nenhum; guarda local | Nada | Não | `disputa_emissao.py:656` | Guarda preservada. |
+| N1 — a; DS inexistente ou somente fechadas | Nenhum para nascer; procura apenas DS aberta | Cria/reusa chamado-pai; cria `DS.motivos`, `contexto`, `chamado` **antes** da geração | Sim, ao colaborador, mesmo se o gerador não entregar pergunta local | `disputa_emissao.py:531`, `:568`, `:587`, `:669` | Nascimento passa por ensaio; sem pergunta local admitida, desfaz o savepoint. Reuso estrangeiro pode ser repetido na dona (`disputa_emissao.py:+435`). |
+| N2 — b/c; DS inexistente ou somente fechadas | Nascimento não consulta ata; geração usa contexto/grade conforme insumo disponível | DS/pai já persistem. Pode criar pergunta com data do contexto; pode terminar sem pergunta | Sim, ao colaborador | `disputa_emissao.py:345`, `:350`, `:360`, `:371`, `:425`, `:669` | Resolvedor comum e ensaio evitam parte dos nascimentos vazios. **“Pergunta local admitida” não significa C6 viva**: `locais()` exclui vias, sem consultar C6 (`disputa_emissao.py:+435`). |
+| N3 — a/b/c; DS aberta | Nenhum para agregar; união e merge locais | Atualiza `DS.motivos/contexto`; contexto registra `qtd/ultima_em` | Ao colaborador somente com motivo novo; outro dia do mesmo motivo pode gerar pergunta sem push | `disputa_emissao.py:535`, `:548`, `:565`, `:682`, `:685`, `:686` | Agrega motivos locais; encaminha estrangeiros à dona. Contexto continua podendo ser salvo antes da geração (`disputa_emissao.py:+387`, `:+408`, `:+435`). | [nao verificado]
+| N4 — d/e na própria DS | Dedup local por existência; nenhum C6 nesse predicado | Pode atualizar DS como N3, sem criar pergunta nova | Regra N1/N3; resposta ou morte não são guarda desse push | `disputa_emissao.py:325`, `:398`, `:417`, `:669`, `:686` | Dedup por existência permanece; efeito passa pela pendência do app (`disputa_emissao.py:+213`, `:+1828`; `pergunta_no_app.py:+84`). | [nao verificado]
+| N5 — pergunta canônica pertence a outra DS aberta/fechada | Identidade do fato; juiz da resolvedora e guarda da costura | Pode reutilizar/atualizar pergunta estrangeira e deixar a DS nova sem filhos; `_criada` não governa o retorno do gerador | Pode enviar ao colaborador mesmo com DS local vazia | `disputa_emissao.py:444`, `:470`; `chamados/models.py:2977`, `:3035`, `:3064` | Distingue `ReusadaDeOutraDS`; desfaz nascimento sem pergunta local; agrega na dona aberta. Na fechada, não salva motivo: registra descarte após commit (`disputa_emissao.py:+435`; `descarte_disputa.py:+5`). |
+
+**Porta 2 — gerar/reaproveitar perguntas e entradas pendentes**
+
+`chamados/services/disputa_emissao.py::gerar_perguntas_disputa:300`; `::perguntar_entradas_pendentes:257`. Chamadores internos: wrapper e agrupador (`disputa_emissao.py:670`, `:682`, `:685`, `:1270`). Há geração adicional pela fábrica e pelo command smoke (`chamados/services/fabrica_da_celula.py:174`; `chamados/management/commands/smoke_chamados.py:103`).
+
+| ID — entrada | Juiz consultado | O que persiste no hash | Push / destinatário | Prova; teste existente | Na cópia | [nao verificado]
+|---|---|---|---|---|---|
+| G1 — a/b/c; texto/data resolvíveis | GEOMETRIA DE TURNO para batida; dados da célula/contexto; destino derivado separadamente | `PerguntaDisputa.abrir` cria ou retorna canônica; grava dia/destino/célula/lavra conforme nascimento ou reuso | Nenhum dentro do gerador; wrapper decide | `disputa_emissao.py:345`, `:350`, `:371`, `:391`, `:411`, `:444` | `_resolver_pergunta_por_motivo` resolve dia antes de texto/dedup/destino (`disputa_emissao.py:+213`). |
+| G2 — sem dia para pergunta de hora | Nenhum; ausência local de insumo | Nenhuma pergunta; não desfaz DS já criada pelo wrapper | Wrapper ainda pode enviar | `disputa_emissao.py:424`, `:425`, `:430` | Causa `InsumoAusente`; núcleo pode desfazer o nascimento (`disputa_emissao.py:+213`, `:+435`). |
+| G3 — d/e local, mesma identidade, fora das vias excluídas | Nenhum; existência local | Não cria; dedup não lê resposta nem C6 | Nenhum próprio | `disputa_emissao.py:325`, `:398`, `:417` | Predicado permanece no resolvedor (`disputa_emissao.py:+213`). |
+| G4 — canônica de outra DS, aberta ou fechada | Porta do fato `PerguntaDisputa.abrir` | Retorna a pergunta estrangeira; não transfere sua `disputa` | Nenhum próprio | `chamados/models.py:2833`, `:2977`, `:3064`; `disputa_emissao.py:470` | Retorno recebe causa própria e argumentos para replay; wrapper trata propriedade da pergunta (`disputa_emissao.py:+369`, `:+435`). |
+| G5 — lista de entradas pendentes | GEOMETRIA DE TURNO / `dia_do_turno_da_batida`; FURO DO DIA / `classificar_falta` | Injeta contexto por dia, chama gerador; salva `DS.contexto` quando há retorno | Nenhum próprio | `disputa_emissao.py:282`, `:288`, `:291`, `:295`, `:296` | Restaura contexto em memória, agrega conforme dona local/estrangeira e coleta criadas (`disputa_emissao.py:+136`). |
+| G6 — fábrica da célula | CÉLULA/PRECEDÊNCIA; motivos pela ata | Desfaz carimbo sem lastro; chama wrapper e depois chama gerador novamente se recebeu DS | Silenciado no julgamento da célula | `chamados/services/fabrica_da_celula.py:139`, `:169`, `:172`, `:174`, `:218` | Arquivo não alterado no diff; chamada adicional permanece. |
+
+O contrato final do dia já existe no hash: `_sob_contrato` exige saída com dia do juiz e desfaz a chamada se o contrato falhar; isso não uniformiza as decisões anteriores do gerador (`chamados/models.py:2862`; `chamados/services/fio.py:1140`). Testes dessa porta: `chamados/tests/test_e1_v15e_contrato_de_saida.py`, referenciado em `chamados/models.py:2872`; teste de derivação pelo dia da pergunta em `chamados/tests/test_selo_derivacao_pela_data_da_pergunta.py:80`.
+
+**Porta 3 — órfãos, `orfao_14h` e complementação**
+
+`chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos`; auxiliares `::_criar_pergunta_se_couber:823`, `::_complementar_marcos_faltantes:850`, `::_ata_do_dia:887`.
+
+Chamadores: commands `processar_alertas_turno.py:385`, `processar_alertas_avancados.py:159`, `detectar_ausencias.py:803`, agendados respectivamente em `*/5`, `*/30`, `*/5` (`config/crons.py:362`, `:363`, `:364`); ação de view `chamados/services/acoes_disputa.py:222`; cobrar-dia `chamados/services/cobrar_dia.py:49`; passivo `chamados/services/pergunta_no_app.py:246`, acionado pelo command `perguntar_chamados_sem_pergunta.py:20`.
+
+| ID — entrada | Juiz consultado | O que persiste no hash | Push / destinatário | Prova; teste existente | Na cópia | [nao verificado]
+|---|---|---|---|---|---|
+| O1 — elegível; DS inexistente/somente fechadas | Nenhum para nascer; busca DS aberta | Cria pai e DS antes das guardas; motivo inicial `orfao_14h` | Depende dos ramos seguintes | `disputa_emissao.py:1096`, `:1101`, `:1123` | Nascimento antecipado permanece. Rollback específico: nova + retorno estrangeiro + nenhuma pergunta local (`disputa_emissao.py:+1146`). |
+| O2 — a, marco apagado, rota por ata; DS aberta/nova | DIA DO CHAMADO / `data_do_chamado`; leitura dos marcos/lâmpadas | Cria/reusa pergunta por marco; agrega `DS.motivos`; chamado vai a análise | Sim ao colaborador, se não fechar e `notificar` | `disputa_emissao.py:1166`, `:1170`, `:1175`, `:873`, `:837`, `:1289` | Encaminha estrangeira à dona; push exige pendentes da DS e DS ainda aberta (`disputa_emissao.py:+1146`, `:+1363`). | [nao verificado]
+| O3 — b, com escala vigente; DS aberta/nova | `_marcos_faltantes`; guarda local de `sem_celula` e escala vigente | DS/pai ficam; nenhuma pergunta; abstenção impede auto-fecho | **Sim ao colaborador no hash**, se `notificar` | `disputa_emissao.py:902`, `:908`, `:911`, `:1279`, `:1289`; teste espera DS aberta com zero perguntas: `chamados/tests/test_hx_disputa_muda_sem_ata.py:51` | **DS aberta vazia permanece.** Novo filtro suprime push sem pendentes (`disputa_emissao.py:+1363`). |
+| O4 — c: ata de trabalho sem pares de marco/lâmpada | Leitor devolve `sem_celula` | Mesmo resultado de O3, havendo escala vigente | Mesmo resultado de O3 | `chamados/services/declaracao_texto.py:121`, `:126`; `disputa_emissao.py:902` | Predicado preservado; efeito filtrado como O3. |
+| O5 — b, sem escala vigente | FURO DO DIA; exceção local da guarda de ata | Permite pergunta por batidas; não exige ata impossível dessa escala | Sim se permanece aberta | `disputa_emissao.py:908`, `:910`, `:1200`, `:1205`, `:1213` | Exceção preservada no hunk do agrupador (`disputa_emissao.py:+1146`). |
+| O6 — falha ao ler ata | Nenhum; `except` local | `_ata_do_dia` devolve `True, None`; não bloqueia pergunta | Pode enviar se permanece aberta | `disputa_emissao.py:897`, `:901` | Ramo não alterado. |
+| O7 — a, sem falta acusada; DS aberta/nova | FURO DO DIA; depois DISPUTA FECHA / C7 | Pode ter criado DS/pai; fecha DS se C7 permite e não houve abstenção | Não depois do auto-fecho | `disputa_emissao.py:1201`, `:1238`, `:1278`, `:1282`, `:1284`; `chamados/tests/test_hx_disputa_muda_sem_ata.py:63` | Conserva auto-fecho e exceção por falta de ata (`disputa_emissao.py:+1146`). |
+| O8 — d, pergunta ainda viva; DS aberta | C6 por `fio_vivo` | `_ja_perguntou` bloqueia nova; resposta permanece | Hash não exige que o colaborador ainda deva resposta | `disputa_emissao.py:1415`, `:1422`, `:832`, `:1289` | Push exige pendência do app, que exclui respondida (`disputa_emissao.py:+1363`; `pergunta_no_app.py:71`). | [nao verificado]
+| O9 — e, colaborador ativo | C6 por `fio_vivo` | Permite tentar `abrir`; canônica pode ser reutilizada em vez de nascer outra | Depende de permanecer aberta no hash | `disputa_emissao.py:1415`, `:1422`, `:837`; `chamados/models.py:2977` | Trata retorno estrangeiro e filtra push (`disputa_emissao.py:+840`, `:+1363`). |
+| O10 — e, colaborador não ativo | Nenhum; guarda local de existência | Linha existente bloqueia geração antes de consultar C6 | Depende das demais perguntas/fluxo | `disputa_emissao.py:1416`, `:1420` | Predicado não alterado. |
+| O11 — intervalo explícito; a/b/c | Nenhum juiz de ata nesse ramo; lê `contexto.marcos_faltantes` | Pergunta por marco com data do contexto e destino `_chi`; não passa por `_ata_do_dia` | Sim se permanece aberta | `disputa_emissao.py:1138`, `:1155`, `:1289` | Fotografa fatos em `_marcos_de_intervalo`; destino passa pelo eleitor comum (`disputa_emissao.py:+1146`; `fio.py:+752`). |
+| O12 — chamado já tem pergunta não materializada; dona aberta **ou fechada** | Proxy SQL `materializada_em IS NULL`; depois leitor da ata | Complementa e pode salvar `DS.motivos` da dona fechada | Pode retornar antes do push principal | `disputa_emissao.py:1070`, `:1073`, `:1081`, `:1084`, `:1093` | Agregador não salva dona fechada; registra descarte. Complementos só notificam dona aberta (`disputa_emissao.py:+1092`, `:+408`; `descarte_disputa.py:+5`). | [nao verificado]
+| O13 — sem origem e sem data/base | DIA DO CONTEXTO; GEOMETRIA DE TURNO ou DIA DE TRABALHO | Pergunta não nasce; DS/pai já existem; C7 pode fechar | Não se auto-fechar | `disputa_emissao.py:1232`, `:1235`, `:816`, `:820`, `:1282` | Guardas preservadas no agrupador (`disputa_emissao.py:+1146`). |
+
+**Porta 4 — âncora, eleição e escrita do destino**
+
+`chamados/services/disputa_emissao.py::criar_disputa_ancora_de_chamado:1302`, chamada pela ação de view `chamados/services/acoes_disputa.py::nucleo_pedir_confirmacao_ancora:178`, em `:189`.
+
+| ID — entrada/porta | Juiz consultado | O que persiste no hash | Push / destinatário | Prova | Na cópia | [nao verificado]
+|---|---|---|---|---|---|
+| A1 — chamado não é `ancora_limbo` ou está encerrado | Nenhum; predicado local | Nada | Não | `disputa_emissao.py:1316`, `:1318` | Guarda preservada. |
+| A2 — d/e, pergunta de âncora não materializada já existe | Nenhum; proxy SQL, sem C6 | Nada nessa chamada | Não | `disputa_emissao.py:1323` | Guarda preservada. |
+| A3 — a/b/c; sem pergunta bloqueadora; DS aberta/nova | Nenhuma consulta à ata/marcos; busca DS aberta | Cria/agrega DS; cria **conversa**, destino `chamado_limbo`; chamado vai a análise | Sim ao colaborador | `disputa_emissao.py:1332`, `:1358`, `:1367`, `:1371`, `:1377`, `:1381` | Agregação central; push filtrado após commit. Conversa continua recebendo limbo diretamente (`disputa_emissao.py:+1411`, `:+1828`). | [nao verificado]
+| A4 — eleição na emissão datada | CHAMADO: dia/motivos atendidos; desempate local por turno | Escolhe chamado vivo; exclui candidato já com pergunta não materializada do mesmo motivo; pode devolver nenhum | Nenhum próprio | `disputa_emissao.py:156`, `:202`, `:227`, `:241` | `_derivar_chamado_destino` delega ao novo eleitor; intervalo explícito precede chamado genérico; empate usa menor PK (`disputa_emissao.py:+98`; `fio.py:+752`). |
+| A5 — eleição em outros caminhos | Órfãos escolhem primeiro do grupo; declaração pede seu chamado; âncora pede limbo | Destino recebido pela pergunta pode depender da porta de entrada | Nenhum próprio | `disputa_emissao.py:1197`, `:1377`; `chamados/services/declaracao_texto.py:376` | Emissores datados passam pelo eleitor; outros caminhos abaixo continuam escolhendo destino. |
+| A6 — reatar histórico / substituir chamado terminal | CHAMADO: resolvedora válida; C8 para sobrevivente | Reaponta pergunta ao histórico único ou sobrevivente escolhido fora do emissor | Não próprio | `chamados/reconciliador.py:1586`, `:1624`, `:1643`; `chamados/models.py:374`, `:390`, `:437` | Esses eleitores permanecem; guarda nova preserva intervalo já eleito, sem substituir todas as eleições (`fio.py:+808`). |
+| A7 — costura existente | `resolvedora_valida` + `_costura_nao_mata_o_fio` | Atualiza `PerguntaDisputa.chamado_destino`, eventualmente dia, e relavra | Não próprio | `chamados/services/fio.py::reapontar_resolvedora:804`, `:906`, `:926` | Atribuição/persistência passam por `gravar_destino_da_pergunta`; guarda protege intervalo eleito (`fio.py:+785`, `:+886`). |
+
+O pai da DS também é escolhido por três nascimentos com argumentos distintos de `ChamadoColaborador.abrir`: núcleo comum, agrupador manual e âncora (`disputa_emissao.py:568`, `:1104`, `:1339`). O diff não os transforma em um único nascimento (`disputa_emissao.py:+435`, `:+1146`, `:+1411`).
+
+**Porta 5 — declaração de horário**
+
+`chamados/services/declaracao_texto.py::declarar_hora_colab:307`, `::aplicar_declaracao:631` → `disputa_emissao.py::disputa_para_declaracao:610`. São caminhos do colaborador e da aplicação administrativa da proposta, respectivamente (`declaracao_texto.py:313`, `:632`).
+
+| ID — entrada | Juiz consultado | O que persiste no hash | Push / destinatário | Prova; teste existente | Na cópia | [nao verificado]
+|---|---|---|---|---|---|
+| D1 — sem dia; b/c; ou hora não casa com marco | DIA DO CHAMADO; leitor da ata; casamento hora→marco | Recusa antes de criar DS/pergunta | Não | `declaracao_texto.py:330`, `:334`, `:341` | Guardas anteriores preservadas. |
+| D2 — a, marco faltante; DS aberta/nova | Núcleo da DS; canônica do fato; depois resposta/validação | Cria/agrega DS; cria/reusa pergunta com dia da célula e destino solicitado; grava resposta; admin valida | Não pela declaração | `declaracao_texto.py:360`, `:363`, `:376`, `:659`, `:666`, `:696`; ausência de push coberta em `chamados/tests/test_porta_disputa_emissao.py:223` | DS/pergunta ficam no mesmo ensaio; retorno estrangeiro desfaz ensaio local e repete na dona (`disputa_emissao.py:+614`). |
+| D3 — d, mesma resposta; ou e por validação sem efeito no marco | Comparação local / `_resposta_validada` | Pode ter agregado/criado DS antes de retornar `ja_declarada` ou `validada_sem_registro` | Não | `declaracao_texto.py:378`, `:412`, `:417` | Recusas permanecem depois do novo ato conjunto (`declaracao_texto.py:+357`; `disputa_emissao.py:+614`). |
+| D4 — canônica de outra DS aberta/fechada | Identidade do fato | Reuso conserva dona original; DS local pode ter sido criada anteriormente | Não | `chamados/models.py:2833`; `declaracao_texto.py:360`, `:376` | Replay na dona; fechada recebe descarte de motivo, sem reabertura pelo agregador (`disputa_emissao.py:+614`, `:+408`). |
+
+**Porta 6 — demais atualizações de DisputaSupervisao**
+
+O censo atribui os escritores a `chamados/models.py` e `chamados/services/disputa_emissao.py`; os atos são declarados nos selos (`chamados/tests/test_porta_disputa_ciclo.py:81`, `:86`; `chamados/tests/test_porta_disputa_emissao.py:84`). As portas abaixo não distinguem a/b/c salvo pelas perguntas/guardas indicadas.
+
+| ID — porta / entrada | Juiz ou predicado | Persistência | Chamadores; push | Na cópia | [nao verificado]
+|---|---|---|---|---|
+| U1 — `DisputaSupervisao.fechar:1911`; aberta, inclusive d/e | C7: nenhuma viva e nenhuma resposta sem veredito; exceções nomeadas não dispensam resposta sem veredito | `fechada_em/por`, `resolucao`, `motivo_fechamento`; exceções podem encerrar perguntas mudas | Escrita `models.py:1992`; reconciliador `:413`, `:613`, `:1172`; materialização `materializacao.py:592`, `:1339`; tranca `competencia_trancada.py:229`; desligamento `colaboradores/services/desligamento.py:167`. Signal tenta resolver pai, sem push próprio (`chamados/signals.py:20`, `:43`). | C7 e signal não alterados no diff. |
+| U2 — `aparar_motivo_respondido:2008`; motivo presente | Nenhum; fato respondido por outro caminho | Remove motivo e contexto; não fecha sozinha (`models.py:2024`) | Upload de foto (`api/foto_recebida.py:72`); sem push nessa porta | Sem mudança. |
+| U3 — `remover_motivo:2027`; aberta e motivo presente | Predicados locais; C7 no eventual fechamento | Retrata perguntas; atualiza motivos/contexto; tenta fechar se não sobrou motivo (`models.py:2121`, `:2128`) | Signals de posto e âncora (`colaboradores/signals.py:77`; `escala/signals.py:174`); sem push próprio | Sem mudança. |
+| U4 — `anotar_contexto`; a/b/c/d/e | Nenhum; primeira presença da chave | Atualiza contexto uma vez (`models.py:2157`, `:2161`) | View `chamados/views.py:1343`; command escalonamento `escalonar_chamados_supervisao.py:159`; efeitos ficam nos chamadores | Sem mudança. |
+| U5 — `renovar_contexto:2164`; a/b/c/d/e | Nenhum; valor diferente | Atualiza contexto (`models.py:2175`, `:2179`) | Cron diário (`alertar_disputas_pendentes.py:48`), detalhado abaixo | Cópia desloca chamada do cron para callback condicionado a pendência (`alertar_disputas_pendentes.py:+41`). |
+| U6 — `reabrir_admin:2182`; fechada | Nenhum; exige usuário e teto de duas | Limpa fechamento/resolução; incrementa contador; motivo opcional (`models.py:2194`, `:2217`) | Ação de view `acoes_disputa.py:259`, delegada pelo fio `fio.py:583`; depois cria conversa em `acoes_disputa.py:263`; push supervisão/colaborador em `:277`, `:288` | Só aviso ao cola
+
+[truncado em 20000 de 34735 caracteres]
 
 ## 14/11 19:23 · sessao c50cfa1332dd · - · - · origem=Ronald (tmux)
 
@@ -1511,123 +1609,4 @@ Caminhos abaixo relativos a `app/chamados/management/commands/`:
 - `regularizar_retorno` usa `request.user.colaborador` (`app/ponto/views.py:3208`): é ação do próprio colaborador, não uma porta administrativa genérica.
 - Leitura completa dos comandos de outros apps, API, escala/cadastro, férias e ações de IA ainda é necessária para declarar **TODA ação**. `[nao verificado]`
 
-## 14/11 18:47 · sessao 505e81710761 · - · - · origem=Ronald (tmux)
-
-Leitura somente; AST executado com `python3 ast.parse` em `app/chamados/{urls,views,views_cobrar,views_arquivar,views_regularizacao}.py` e `services/{fio,acoes_disputa}.py`. `app/chamados/admin.py` está vazio; não encontrei forms Python nesse app. O fechamento global da árvore e os commands ficam com sua consolidação. [nao verificado]
-
-**Método e aliases.** Resolver `ast.ImportFrom` inclusive dentro de funções, `ast.Call(path)` nas URLs e os ramos `acao` dos roteadores; seguir chamadas aos serviços. Aliases importantes:
-
-| Alias | Destino e evidência |
-|---|---|
-| `vreg` | `chamados.views_regularizacao`, `app/chamados/urls.py:6` |
-| `_ac` | `chamados.services.acoes_chamado`, `app/chamados/views.py:423` |
-| `_ad` | `chamados.services.acoes_disputa`, `app/chamados/services/fio.py:665` |
-| `_ac_geo` | `chamados.services.acoes_chamado`, `app/chamados/services/fio.py:572` |
-| `_corrig` | `chamados.models.perguntas_corrigiveis`, `app/chamados/views.py:1419` |
-| `_reabrir2` | `chamados.models.reabrir_para_correcao`, `app/chamados/views.py:1435` |
-| `_viva_pend` | `chamados.models.pergunta_viva`, `app/chamados/views.py:1415` |
-| `_muda_a_folha` | `services.cobranca_folha.muda_a_folha`, `app/chamados/views_cobrar.py:88` |
-| `_nota` | `chamados.services.nota`, várias importações, p.ex. `app/chamados/views.py:879` |
-
-**Portas HTTP e roteadores.**
-
-- `/chamados/local/<id>/`: `urls.py:14` → `views.py:359`; POST tem guarda contextual `pode_agir_chamado` em `views.py:419`; `staff` passa `_is_gestor` em `views.py:35`.
-- `/chamados/colaborador/<id>/`: `urls.py:21` → `views.py:659`; `_is_gestor` em `:662`; POST delega a `processar_post_fio` em `:674`.
-- `/chamados/modal/<id>/`: `urls.py:39` → `views.py:869`; `_is_gestor` em `:872`; usa o mesmo roteador `services/fio.py:523`.
-- Roteador fio/modal resolve chamado pertencente ao colaborador e guarda `pode_agir_chamado` em `services/fio.py:601` e `:604`; exige disputa aberta, exceto reabertura administrativa e validação, em `:611`.
-- O detalhe exige disputa aberta para validar/recusar/corrigir por filtro, mas o fio permite validar pergunta viva em disputa fechada: `views.py:491`, `:510`, `:529`; `services/fio.py:633`, `:638`, `:644`. Isto é diferença real entre portas.
-
-**Tabela de ações principais.** Todos os nomes de arquivo abreviados abaixo partem de `app/`.
-
-| Ação/porta | Guarda real | Gravação/trilha |
-|---|---|---|
-| `validar_pergunta`, detalhe/fio/modal | `chamados/services/validacao.py:418` exige carimbo de resposta; `:421` não validada; `:429` implausível exige confirmação; entrada detalhe `views.py:483`, fio `services/fio.py:623` | `_carimbar_validacao`: `validada_em/validada_por` e `DecisaoPergunta.VALIDACAO`, `validacao.py:159`, `:164`; materialização em `:488`, `:494`; logs `:504`, `:517`; recusa de materialização pode desfazer carimbo, `:489` |
-| `recusar_pergunta`, detalhe/fio/modal | Entrada `views.py:503`, `services/fio.py:663`; `validacao.py:591` motivo, `:602` não validada, `:605` respondida, `:609` não fora do fato | `recusa_motivo`, `validacao.py:619`, `:625`; reabertura e `DecisaoPergunta` ato `recusa`, `:628`; nota `:633`, evento `:637`, log `:643`, push `:647` |
-| `corrigir_resposta`, detalhe/fio/modal | Entrada `views.py:522`, `services/fio.py:663`; `acoes_disputa.py:336` HH:MM, `:338` motivo, `:345` não validada, `:347` disputa aberta, `:349` tipo hora; **não exige resposta anterior** | Nota preserva `'(sem resposta)'` em `:353`, `:359`; core escreve `resposta_colab/respondida_em` em `disputa_emissao.py:1467`, `:1508`, decisão `RESPOSTA` em `:1511`; log `acoes_disputa.py:375`; validação/materialização em `:379`. Pode responder pergunta muda |
-| `regularizar_disputa`, detalhe | Entrada `views.py:463`; disputa aberta em `:467`; `acoes_disputa.py:124` resolução, `:130` bloqueia viva sem carimbo de resposta | Materializa validadas em `:139`; log `:144`; fechamento/modelo depende resultado |
-| `regularizar_disputa`, fio/modal | `services/fio.py:684`; resolução `:686`; **guarda própria inline** viva sem resposta em `:698` | Materialização `:708`, log `:713`; esta é cópia de guarda, não delega `acao_regularizar_disputa` |
-| `reabrir_disputa`, fio/modal | `services/fio.py:679`; `acoes_disputa.py:95` conta pendentes, `:97` chama `perguntas_corrigiveis`; sem corrigíveis recusa em `:98` | `reabrir_para_correcao` em `:103`; nota `:106`, push `:108`, log `:113`; este ramo **não recobra** questionário já pendente |
-| Endpoint reabrir/recobrar | URL `chamados/urls.py:20`; `views.py:1372`; gate especial `:1404`: só consulta `pode_agir_chamado` se **não** tem `gerir_chamados`; `_disputa_do_chamado` `:1410`; vivas `:1417`; corrigíveis `:1420` | Havendo corrigíveis, reabre em `:1436`, nota `:1440`, log `:1456`; sem corrigíveis e com pendente viva, chama `recobrar_questionario` em `:1425` |
-| Recobrança efetiva | Escolha é inline em `views.py:1421`–`:1434`; serviço em `disputa_emissao.py:1697` não é juiz puro | Renova `ChamadoColaborador.prazo_sla` em `:1725`; nota `:1728`; push `:1735`; log `:1741`; não escreve resposta | [nao verificado]
-| Reabertura administrativa de disputa fechada | Fio `:619` → `acoes_disputa.py:235`; `:245` staff/admin_ti; motivo válido `:251`; justificativa ≥20 `:253`; disputa fechada `:255` | `reabrir_admin` `:259`; nova pergunta de conversa `:263`; reabre chamado `:270`; nota `:274`, pushes `:276`/`:287`, log `:297` | [nao verificado]
-| Conferir data | URL `urls.py:18`, view `views.py:1292`; POST `:1307`, `gerir_chamados` `:1309`; serviço `validacao.py:686` existente, `:690` justificativa, `:693` `data_do_fato_de`, `:694` divergência, `:697` ainda não conferida | `PerguntaDisputa.data_conferida_em/por`, `validacao.py:699`; save `:701`; log antes/depois `:702` |
-| Aplicar declaração de texto | **Só detalhe:** `views.py:478`; `declaracao_texto.py:649` consulta propostas reais pelo followup; `:668` recusa pergunta já validada sem registro | Emite/reusa disputa `:659`; abre pergunta `:666`; core de resposta `:693`; valida com confirmação implausível em `:696` |
-| Cobrar chamado | URL `urls.py:25`; `views_cobrar.py:24`; `gerir_chamados` `:25`, POST `:27`, `recusa_de_area` `:32`; throttle por colab/dia `:36`–`:42`; push precisa sucesso `:51` | Push `:43`; nota `[COBRANCA]`, `:55`; **não renova prazo** nesta porta | [nao verificado]
-| Cobrar massa | URL `urls.py:31`; `views_cobrar.py:61`; fila filtrada `:71`, verbo `cobrar` `:79`, contextual `:92`, guarda real `_muda_a_folha` `:95`; throttle `:114`; `previa=1` leitor `:101` | Push `:119`; nota `:132`; sem mudança de resposta/prazo | [nao verificado]
-| Cobrar dia | URL `urls.py:32`; `views_cobrar.py:306`; POST+`regularizar_batida` `:314`, departamento `:317`, data `:322`; serviço `cobrar_dia.py:28` recusa dia >=hoje | **Log antes do cartório**, `cobrar_dia.py:39`; `cartorio.julgar_celula(...forcar=True,toque=True)` `:41`; possível fábrica de disputa/perguntas `:50`; não é leitura nem mesmo quando resultado posterior recusa |
-| Validar inline | URL `urls.py:33`; `views_cobrar.py:145`; permissão `:149`, área `:158`, disputa `:162`–`:167`; só perguntas vivas com `respondida_em`, `:169`; sem elas recusa `:193` | Delega `acao_validar_pergunta`, `:211`; mesmos efeitos da validação |
-| Validar lote JSON/tela | URLs `urls.py:34`, `:37`; views `views_cobrar.py:232`, `:372`; gate contextual/permissão `:247`, `_pode_validar_lote` `:334`; classe real `validacao.py:770`, já validada `:767` | Delega `acao_validar_pergunta` `validacao.py:781`; tela acrescenta log `validou_lote_tela`, `views_cobrar.py:383` |
-| Arquivar | URL `urls.py:26`; `views_arquivar.py:24`; `gerir_chamados`, POST, área `:26`, `:28`, `:32`; não exige idade no endpoint individual | `arquivo.silenciar` `:37`; `silenciado_ate/por/motivo/atualizado_em`, `services/arquivo.py:166`–`:172`; evento `:173`; nota `views_arquivar.py:44`; não muda `status_local` |
-| Arquivar lote | URL `urls.py:28`; `views_arquivar.py:93`; idade >0 `:105`; filtro e verbos `:115`, `:125`; criado antes corte e silêncio nulo `:135`; contexto `:137` | `arquivo.silenciar`, `:140`; evento por chamado; sem nota individual nesta porta |
-| Desarquivar | URL `urls.py:27`; `views_arquivar.py:52`; permissão/POST/área `:54`, `:56`, `:60`; via tranca tenta `ch.reabrir(humano=True)` `:70`, que pode recusar | `arquivo.levantar` `:77`, limpa véu e carimba `resgatado_em`; se tranca ressuscita perguntas `:86`; nota `:88`; reabertura pode ter efeitos próprios até na recusa |
-| Assumir/liberar | URL `urls.py:41`; `views.py:1008`; `_is_gestor` `:1010`, `pode_agir_chamado` `:1015` | `_vinc=services.vinculos` `:1019`; `assumir_responsavel` `vinculos.py:121`, `atribuido_a/em/atualizado_em` `:132`–`:135`; liberar `:139`; nota `views.py:1027`/`:1031` e log `:1034` só se mudou |
-| Mensagem rápida | URL `urls.py:40`; `views.py:961`; `gerir_chamados` `:967`, mensagem não vazia `:971` | `ChamadoColaborador.abrir` `:973` com módulo `mensagem_dp`; nota `:986`; push `:989`; ação é por colaborador, não carimba pergunta/dia | [nao verificado]
-| Resposta livre e status | Detalhe `views.py:544` → `acoes_chamado.py:292`; fio `services/fio.py:746`; conteúdo e/ou status válido, contexto já guardado | Nota `acoes_chamado.py:301` / `fio.py:756`; logs `:304`, `:328`; `transicionar_com_pauta`, `:325` / `fio.py:760`, que pode lançar recusa depois da nota |
-| Abrir modal/“ler” | URL `urls.py:39`, `views.py:869`; `_is_gestor` `:872` | **GET escreve** `FollowupChamado.lido_dp_em`: `views.py:880` → `services/nota.py:126`–`:133`. Não usar view inteira na sonda |
-| Regularização externa criar | URL `urls.py:49`; `views_regularizacao.py:42`; `_gate` `:19` = `_is_gestor` e departamento supervisão; motivo `:49` | `regularizacao_ext.abrir_lote` `:310`; `RegularizacaoExterna` `:237`, chamado de rastro `:247`, vínculo `:257`; sem materializar neste ato |
-| Reg externa adicionar/corrigir/remover item | URL `urls.py:51`; `views_regularizacao.py:74`; status `:80`; data/hora `:87`, `:97`; alvo do colab `:109`; horários exigidos `:114`, `:117`, diferentes `:120` | `RegularizacaoItemBatida.get_or_create`, `regularizacao_ext.py:326`: data, horas, acao, batida_alvo, intervalo |
-| Reg externa excluir item | URL `urls.py:52`; `views_regularizacao.py:137`; status `:143` | `regularizacao_ext.remover_item` `:332`, `item.delete()` `:336` |
-| Reg externa enviar | URL `urls.py:53`; `views_regularizacao.py:154`; status `:160`, itens `:163` | `regularizacao_ext.enviar_lote` `:340`, status `aguardando` em `:343`; pushes `views_regularizacao.py:170`, `:177`. Só colab confirma; materialização recusa `status != confirmada`, `regularizacao_ext.py:52`, ou qualquer disputa aberta do colab `:59`–`:66` | [nao verificado]
-
-**Ramos genéricos adicionais do detalhe/fio, não omitir pelo nome do chamado:**
-
-| Ação | Porta/guarda | Escrita |
-|---|---|---|
-| `aprovar_excecao` | `views.py:426`, `_pode_aprovar` `:41`; `acoes_chamado.py:25` só encerrou anteriormente; **serviço não exige categoria** | `registrar_batida` `acoes_chamado.py:44`, conflito `:54`, foto `:67`, nota `:69`, transição `:71`, log `:77` |
-| `autorizar_geofence` e `_advertir` | `views.py:537`, fio `services/fio.py:571`; contexto `:579`; `acoes_chamado.py:182` encerrado; **serviço não exige categoria** | `_advertir` cria `Advertencia` `:199`; nota `:224`; transição `:229`; log `:230` |
-| `recusar_geofence` | `views.py:540`, fio `:571`; `acoes_chamado.py:260` encerrado, `:263` motivo, `:265`–`:273` batida vinculada e pertencente ao colab | `retratar_batida` `:277`, nota `:281`, transição `:286`, log `:287` |
-| `aceitar_folga_limbo` | `views.py:432`; `limbo_folgas.py:85` sugestão fixa/dias/template, `:88` template existente | `salvar_tipo` `:92`, altera folgas de `TipoEscala`; log `:95`; reconcilia chamados LIMBO do mesmo template `:99`–`:104` |
-| `corroborar_regua` | `views.py:441`, procura vínculo ativo por template; `escala/regua_defesa.py:655` vínculo, `:657` ainda não corroborado | `gravar_regua` `:662`, confiança 0, dias baixo 2, avaliada/corroborada em/por `:666`–`:667`; nota `:672` |
-| `realocar_regua` | `views.py:452`; `regua_defesa.realocar_para_destino` `:326`; destino/template `:305`, `:308`; cíclico recusado `:310`; **juiz puro existente** `colaboradores.services.vinculo.julgar_vinculo` chamado `:316`; no-op `:319` | `executar_vinculo` `:321`; nota `:333` |
-| `pedir_confirmacao_ancora` | `views.py:459`, fio `:559`; `acoes_disputa.py:185` categoria, `:187` área; helper pode recusar `:190` | `criar_disputa_ancora_de_chamado` `:189`; log `:192`; fábrica em `disputa_emissao.py:1302` |
-| `iniciar_disputa_orfaos` | Só fio/modal `services/fio.py:587`; `acoes_disputa.py:219` juiz real `chamado_orfao_e_regularizavel`, nenhum `:220`, repasse recusado `:225` | Fábrica `:222`, log `:229` |
-| `aplicar_proposta_escala` | Fio/modal `services/fio.py:547`; `proposta_no_fio.py:136` gate do `INTENCOES`; `_recalcular` `:138` e `:96`; grade dia a dia recusada `:141` | `escritor_de(CHAVE_APLICAR)` `:151` = `escala.services.propositor.aplicar` pelo registro; efeitos finais desse escritor [nao verificado] |
-| `recusar_proposta_escala` | Mesmo roteador; `proposta_no_fio.py:168` gate, `:170` motivo, `_recalcular` `:173` | `escala.services.propositor.recusar` `:176`; campos exatos [nao verificado] |
-
-**Fechamento de status não é “permitido” só por `pode_transicionar`:**
-
-`ChamadoColaborador.pode_transicionar` chama o motor em `models.py:119`–`:126`, mas `transicionar` tem guardas seguintes: justificativa pendente `:136`, disputa viva `:153`–`:160`, perguntas vivas ancoradas `:165`–`:171`, premissa de furo `:181`–`:198`. Assim, sonda que só chama `pode_transicionar` precisa rotular “geometria da transição”, não “alcance final da ação”. Há leitor puro do **reconciliar** `reconciliaria`, `models.py:658`–`:662`; ele não substitui todas as guardas da transição humana.
-
-**Forms e diferença entre anunciado/executável:**
-
-- Modal tem forms validar `templates/chamados/partials/modal_fio.html:263`, `:279`; recusar `:290`; corrigir `:301`; conferir data `:173`; regularizar `:353`; reabrir `:368`; administrativo `:388`; geofence `:503`, `:514`, `:525`; folga `:548`; corroborar `:564`; realocar `:573`; exceção `:596`; órfãos `:625`; âncora `:641`.
-- Detalhe tem reabrir `templates/chamados/detalhe_local.html:9`, exceção `:256`, geofence `:285`, regularizar `:317`, resposta livre/status `:385`.
-- Reg externa tem criar `templates/chamados/regularizacao_painel.html:14`; del item `regularizacao_editar.html:30`, add `:45`, enviar `:63`.
-- Cartão de detalhe tem validar `partials/_pergunta_card.html:70`, `:95`, recusar `:112`. Não há corrigir nesse template.
-- **Três forms do modal não têm ramo do roteador correspondente:** `aplicar_declaracao_texto` em `modal_fio.html:140`, `confirmar_correcao_pergunta` `:190`, `apagar_pergunta_cega` `:197`; o conjunto de ações AST de `services/fio.py:523` não os inclui e POST sem conteúdo chega a `:781` “Nada a fazer”. `aplicar_declaracao_texto` tem handler **só no detalhe** em `views.py:478`. Os outros dois só apareceram no template e tests, sem handler de produção na busca. Portanto forms anunciados não podem ser contados como porta operante.
-
-**Chamadas reais puras úteis para sonda, com limites:**
-
-| Chamável | Uso correto |
-|---|---|
-| `_is_gestor(user)`, `_pode_aprovar(user)` | Guardas de papel, `views.py:35`, `:41` |
-| `pode_agir_chamado`, `pode_agir_departamento`, `recusa_de_area` | Guardas RBAC reais, `utils.py:68`, `:52`, `:75` |
-| `classe_do_lote(perg)` | Guarda classificatória real chamada pelo lote, `validacao.py:880`; lote usa em `:770`; não basta para todos os gates |
-| `motivo_implausivel_validacao(perg)` | Mesma guarda lida pelo validar em `validacao.py:429`; origem exportada em models, implementação não auditada aqui |
-| `data_do_fato_de(perg)` | Mesma autoridade de divergência chamada por conferir em `validacao.py:693`; não imita as outras guardas |
-| `propostas_do_chamado(ch)` | Guarda real de proposta da aplicação em `declaracao_texto.py:649`; retorno pode ter `aceita=False` `:633`–`:637`; não equivale sucesso final |
-| `perguntas_corrigiveis(d)` | Conjunto real do reabrir, `acoes_disputa.py:97`, `views.py:1420` |
-| `_disputa_do_chamado(ch)` | Resolver real de disputa, `services/fio.py:120`, usado `views.py:1410` |
-| `chamado_orfao_e_regularizavel(ch)` | Guarda da emissão órfãos usada `acoes_disputa.py:219` |
-| `muda_a_folha(ch, contador, cache)` | Guarda real adicional da cobrança massa, `views_cobrar.py:95`; identidade resolvida pelo alias `:88` |
-| `ch.pode_transicionar(status, perfil)` | Só uma parte da guarda humana, `models.py:119`; não confundir com sucesso da porta |
-| `ch.reconciliaria()` | Consulta real e explícita sem escrita da reconciliação, `models.py:658` |
-| `julgar_vinculo(colab, post, perfil)` | Juiz real da realocação chamado em `regua_defesa.py:316`; gates prévios do destino seguem inline |
-| `_recalcular(colab, assinatura, vinculo)` | Guarda de identidade da proposta, `proposta_no_fio.py:96`; pureza transitiva do propositor [nao verificado] |
-
-**Não chamar mutators na sonda**, ainda que retornem dicionário/recusa: `validar_pergunta`, `recusar_pergunta`, `conferir_data_do_fato`, `acao_corrigir_resposta`, `aplicar_declaracao`, `cobrar_dia`, `materializar_regularizacao_externa`, `ch.reabrir`, `arquivo.*`, `acao_*` e views. Guardas completas dessas ações estão embutidas em corpos que escrevem; não há modo dry na assinatura auditada. Mesmo `cobrar_dia` escreve log antes de descobrir resultado final (`cobrar_dia.py:39`). A sonda pode imprimir cobertura dos **subgates reais** e marcar a decisão final não sondável em leitura, sem copiar seus `if`s.
-
-Não inferir validar=0: `validacao.py:418` só examina carimbo, e universo de pergunta devida pode incluir carimbo com texto vazio; medir os campos reais e os juízes, não tratar o nome “sem resposta” como equivalência de `respondida_em is None`.
-
-**Perguntas de lei sugeridas, todas como perguntas:**
-
-1. Uma pergunta devida muda pode receber a hora do ADMIN pela ação `corrigir_resposta`, que não exige fala anterior do colaborador? (`acoes_disputa.py:345`–`:353`, `:371`)
-2. A recobrança que renova `prazo_sla` deve alterar a idade e o efeito da pergunta já vencida? (`disputa_emissao.py:1725`)
-3. O ADMIN tem a mesma autoridade contextual no endpoint de reabrir/recobrar e no fio, dado o gate condicional do primeiro? (`views.py:1404`, `services/fio.py:604`)
-4. Pergunta viva de disputa fechada deve ser tratável igualmente pelo detalhe e pelo fio? (`views.py:491`, `services/fio.py:638`–`:647`)
-5. Os forms do modal que não têm handler contam como ação disponível ao ADMIN? (`modal_fio.html:140`, `:190`, `:197`; `services/fio.py:781`)
-6. É permitido oferecer regularização externa para dia retido por pergunta cuja disputa aberta bloqueia sua materialização? (`views_regularizacao.py:54`, `regularizacao_ext.py:59`)
-7. Ações de exceção e geofence precisam estar vinculadas à categoria correspondente para o servidor aceitá-las? (`acoes_chamado.py:25`, `:182`)
-8. Abrir o modal deve ser considerado ação de escrita no censo? (`views.py:880`, `services/nota.py:132`)
-
-_5239 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5240 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
