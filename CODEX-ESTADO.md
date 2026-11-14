@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 20:15** · publicado em **14/11/2026 20:15** (UTC-3)
+> Ultima resposta processada: **14/11/2026 20:20** · publicado em **14/11/2026 20:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 20:20 · sessao 090dd8640d32 · - · - · origem=Ronald (tmux)
+
+**P2 — PROCEDENTE-candidato, severidade estrutura/texto: `dias_abono` passou a excluir também cobertura inteira sem trabalho.** A fonte agora coloca todos os dias cobertos no mapa, inclusive `cobre=None` (`app/ponto/services/efeito_ausencia.py:47`), mas o motor ainda usa **ausência no mapa** para contar dias abonados (`app/ponto/motor_calculo_v2.py:2629`, `app/ponto/motor_calculo_v2.py:2630`). Cenário sintético: justificativa `outro` sem batidas, previsto 480 → fonte paga 480 (`app/ponto/services/efeito_ausencia.py:122`, `app/ponto/services/efeito_ausencia.py:145`); motor produz **8 horas de abono e 0 dias**, embora o campo signifique “dias previstos sem trabalho mas justificados” (`app/ponto/motor_calculo_v2.py:284`, `app/ponto/motor_calculo_v2.py:2633`). Executei somente esse ramo real por AST em memória e obtive esse resultado; ocorrência produtiva [nao verificado].
+
+O espelho transporta esse zero (`app/ponto/services/espelho.py:1253`); PDF também (`app/relatorios/pdf_espelho.py:479`), e oculta o badge quando zero (`app/relatorios/pdf_espelho.py:787`). Já o ramo de lavratura usa outra definição de `dias_abono`: conta linhas com `minutos_abonados>0` (`app/ponto/services/dia_pago.py:701`, `app/relatorios/cartao_pela_celula.py:190`). Assim, a mesma justificativa pode contar zero pelo motor e um pela lavratura; o ramo de escolha está em `app/relatorios/cartao_pela_celula.py:341`.
+
+Mapa solicitado, para consolidar:
+
+| Campo | Escritor/fornecedor | Leitores |
+|---|---|---|
+| `minutos` | Inicializado por dia de `j.data_turno`; valor final `max(0, previsto-trabalhado)` (`app/ponto/services/efeito_ausencia.py:118`, `app/ponto/services/efeito_ausencia.py:145`). | Feed `min_justificados` (`app/ponto/services/efeito_ausencia.py:47`); overlays da grade (`app/escala/utils.py:1257`, `app/escala/utils.py:1277`). |
+| `cobre` | Resultado de `_cobertura_de_uma`, conservação e união (`app/ponto/services/efeito_ausencia.py:125`, `app/ponto/services/efeito_ausencia.py:129`, `app/ponto/services/efeito_ausencia.py:133`); juiz chamado em `app/ponto/services/efeito_ausencia.py:208`. | Inclusão em justificadas/mapa (`app/ponto/services/efeito_ausencia.py:46`); dispensa de marcos (`app/escala/utils.py:1251`, `app/escala/utils.py:1258`, `app/escala/utils.py:1267`). |
+| `motivo` excedente | Comparação **bruto+trabalhado**, seguida do literal (`app/ponto/services/efeito_ausencia.py:146`, `app/ponto/services/efeito_ausencia.py:147`). | Projeção revisão (`app/ponto/services/efeito_ausencia.py:153`); Central (`app/ponto/views.py:1747`, `app/ponto/views.py:1750`); texto HE (`app/templates/ponto/fila_justificativas.html:116`). |
+| `min_justificados` | Mapa dia→minutos (`app/ponto/services/efeito_ausencia.py:47`); ausência inteira ABONA remove a chave (`app/ponto/services/efeito_ausencia.py:63`). Linha da grade transporta o valor (`app/escala/services/leitor_celula.py:449`). | Fechamento (`app/ponto/services/fechamento.py:667`); espelho (`app/ponto/services/espelho.py:1134`); PDF (`app/relatorios/pdf_espelho.py:407`); esmeril (`app/ponto/services/esmeril_espelho.py:166`); comandos (`app/ponto/management/commands/diff_espelho_alimentacao.py:56`, `app/relatorios/management/commands/diff_extrato_parcial.py:62`). |
+| `minutos_justificados` motor | Nasce `{}` (`app/ponto/motor_calculo_v2.py:813`); alimentado pelos leitores acima e pelos dois motores do fechamento (`app/ponto/services/fechamento.py:755`, `app/ponto/services/fechamento.py:831`). | Ramo de abono usa presença da chave e converte minutos para horas dividindo por 60 (`app/ponto/motor_calculo_v2.py:2628`, `app/ponto/motor_calculo_v2.py:2634`). |
+| Abono gravado | `por_dia_da_grade` soma `min_justificados` na data da linha (`app/ponto/services/dia_pago.py:391`, `app/ponto/services/dia_pago.py:399`); fechamento soma mapa em `minutos_abonados` (`app/ponto/services/fechamento.py:1066`, `app/ponto/services/fechamento.py:1067`). | Resumo converte o gravado para horas (`app/relatorios/cartao_pela_celula.py:118`, `app/relatorios/cartao_pela_celula.py:186`). |
+
+Os transportadores examinados mantêm **minutos por chave de data** até a conversão explícita `/60`; a comparação entre a atribuição do dia e o trabalho usado pelo motor ficou com você (`app/ponto/services/efeito_ausencia.py:118`, `app/ponto/services/dia_pago.py:391`, `app/ponto/motor_calculo_v2.py:2634`).
+
+## 14/11 20:20 · sessao d24ad1288d7e · - · - · origem=Ronald (tmux)
+
+- **PROCEDENTE-candidato — estrutura — segundo juiz residual:** `minutos_do_periodo_justificado` continua respondendo “minutos que […] paga” pela duração do trecho, enquanto a fonte paga saldo diário. Cenário: previsto480, E16 sem S, hf17: antigo60, fonte480. A função permanece sustentada por testes, contrariando L-111. (`app/ponto/turnos.py:2769`, `app/ponto/turnos.py:2779`, `app/ponto/services/efeito_ausencia.py:145`, `app/ponto/tests/test_justificativa_paga_o_periodo.py:49`, `app/docs/LEIS.md:137`).
+- **PROCEDENTE-candidato — estrutura — previsto com duas autoridades:** registro aponta `minutos_previstos_do_dia`; novo helper prefere ata e só usa o registrado como fallback. Cenário sintético: ata440, marcos12:50–21:20 sem pausa: helper440, registrado510. A prioridade da ata já existia na grade; novidade demonstrada é a extração pública e seu consumo pela justificativa. (`app/core/juizes.py:185`, `app/escala/services/leitor_celula.py:354`, `app/escala/services/leitor_celula.py:361`, `app/escala/utils.py:2288`, `app/escala/utils.py:2292`, `app/ponto/services/efeito_ausencia.py:138`).
+- **PROCEDENTE-candidato — texto — excedente hipotético apresentado como HE real:** `motivo` testa bruto+trabalhado, embora o pagamento já tenha virado saldo; a UI imprime “Hora além do turno”. Cenário sintético: justificativa `outro`, previsto480 e180 trabalhados inteiramente dentro do turno: bruto480 gera motivo, pago300, sem demonstrar qualquer trabalho além do turno. (`app/ponto/services/efeito_ausencia.py:122`, `app/ponto/services/efeito_ausencia.py:143`, `app/ponto/services/efeito_ausencia.py:145`, `app/ponto/services/efeito_ausencia.py:146`, `app/templates/ponto/fila_justificativas.html:116`).
+- **Segundo escritor: não vi nos trechos lidos.** Fonte consulta e devolve estruturas; overlay altera grade em memória; fechamento recebe o mapa pela derivação existente e `lavrar` persiste `DiaPago`. Censo global de escritores [nao verificado]. (`app/ponto/services/efeito_ausencia.py:98`, `app/escala/utils.py:1251`, `app/escala/utils.py:1277`, `app/ponto/services/fechamento.py:1065`, `app/ponto/services/dia_pago.py:359`).
+
+## 14/11 20:20 · sessao 850decff23c9 · - · - · origem=Ronald (tmux)
+
+**P5 — PROCEDENTE-candidato, severidade estrutura:** `revisao` materializa **todas as aprovadas**, com filtros opcionais de empresa/nome, sem janela de competência nem paginação; para cada colaborador pergunta pelo intervalo entre a aprovação mais antiga e a mais recente. Cenário: duas aprovadas distantes fazem carregar e parear todo o histórico intermediário. (`app/ponto/views.py:1707`, `:1714`, `:1720`, `:1732`, `:1747`; `app/ponto/services/efeito_ausencia.py:98`, `:109`, `:114`.)
+
+**Consultas por colaborador:** não há número universal; são **7 fixas + consultas condicionais + consultas por dia coberto**. No caminho usual com DNA de até um intervalo e célula com geradora em cada dia, a projeção faz **8 + 2D**, sendo D o número de dias cobertos; isso exclui a consulta inicial e os cards da UI. (`app/ponto/services/efeito_ausencia.py:98`, `:109`, `:110`; `app/ponto/turnos.py:1879`, `:1900`, `:1903`, `:1931`, `:1955`; `app/escala/alimentacao.py:148`; `app/ponto/turnos.py:1574`, `:1609`, `:1925`, `:2003`; `app/escala/utils.py:100`.)
+
+O termo **2D** vem de chamar `realizado_do_dia` sem fornecer intervalo/modo: para cada dia ele busca novamente a célula com geradora e depois a pausa em outra consulta, embora `periodos_justificados` já tenha carregado células e vínculos. Cenário sintético: 100 colaboradores × 20 dias cobertos ⇒ **4.800 consultas na projeção usual**, além da UI. (`app/ponto/services/efeito_ausencia.py:109`, `:110`, `:136`, `:140`; `app/ponto/turnos.py:781`, `:788`, `:794`; `app/escala/servico_jornada.py:46`; `app/escala/models.py:1163`, `:1182`.)
+
+Há consultas adicionais condicionais: geradoras ausentes da candidatura, agregação da última batida e fallbacks em dias sem célula/previsto. (`app/escala/alimentacao.py:155`; `app/ponto/turnos.py:1914`; `app/escala/servico_jornada.py:64`.)
+
+A configuração UI declara `gthread`, quatro threads e `timeout = 30`; duração real e estouro em produção **[nao verificado]**. (`app/gunicorn.conf.py:19`, `:20`, `:21`.)
+
+## 14/11 20:20 · sessao 513b12f5fdae · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE-candidato — P3 — texto/estrutura: falso “hora além do turno”.** O motivo nasce de `bruto + trabalhado > previsto`, embora o crédito final seja `max(0, previsto - trabalhado)` (`app/ponto/services/efeito_ausencia.py:143-147`). No cenário col788 do teste, há previsto 420, par trabalhado de 59 minutos e crédito de 361; ainda assim recebe esse motivo (`app/ponto/tests/test_justificativa_soma_sem_banco.py:178-188`). A Central imprime “Hora além do turno — revisar HE” mesmo sem trabalho excedendo o previsto (`app/templates/ponto/fila_justificativas.html:116`).
+
+2. **PROCEDENTE-candidato — P3 — estrutura: segunda lista independente da decisão HE.** A Central seleciona motivos da justificativa sem consultar decisão HE (`app/ponto/views.py:1747-1754`); a Gestão de HE consulta decisões vigentes para determinar o estado do dia (`app/ponto/services/gestao_he.py:86-89`, `app/ponto/services/gestao_he.py:278-280`). Portanto, decidir HE não retira o motivo da Central: o predicado continua dependendo de bruto e trabalhado (`app/ponto/services/efeito_ausencia.py:143-147`). É segunda projeção/lista; não há novo escritor persistente nesse ramo (`app/ponto/views.py:1738-1754`).
+
+3. **PROCEDENTE-candidato — P3 — estrutura: aviso não equivale à porta HE.** O caminho existente recebe exclusivamente `he_fora_da_janela`; dia sem essa lista é ignorado pelo retrato (`app/ponto/services/he_pendente_lavrado.py:132-150`). O espelho popula essa lista por pontas fora dos marcos ou dia sem previsto, condicionado à janela ativa e à vigência (`app/ponto/services/espelho.py:721-749`); trabalho maior que previsto não é seu critério geral de entrada (`app/ponto/janela_he.py:194-230`). Cenário sintético: janela desligada e trabalho acima do previsto deixam `he_fora_da_janela=[]`, enquanto a justificativa pode receber motivo e aparecer na Central (`app/ponto/services/espelho.py:721-722`, `app/ponto/services/efeito_ausencia.py:143-147`). Falta ligação desse aviso à pendência/ação existente: o filtro apenas monta a lista (`app/ponto/views.py:1747-1754`), e a porta real exige minutos positivos de pendência (`app/ponto/portas/he.py:138-172`).
+
+Quando existem pontas reconhecidas, o dia já chega pelo caminho anterior: marcação das pontas → espelho → retrato → Gestão HE (`app/ponto/janela_he.py:218-230`, `app/ponto/services/espelho.py:727-742`, `app/ponto/services/he_pendente_lavrado.py:132-150`, `app/ponto/services/gestao_he.py:236-250`). Nessa classe, a Central acrescenta outra lista (`app/ponto/views.py:1738-1754`). Alcance produtivo e contagens: **[nao verificado]**.
+
+## 14/11 20:19 · sessao 6ab72d5695ec · - · - · origem=Ronald (tmux)
+
+P6 — não vi relógio novo no delta c5+c6: os corpos acrescentados/alterados em `app/ponto/services/efeito_ausencia.py:93`, `app/escala/services/leitor_celula.py:354`, `app/escala/utils.py:1257` e `app/ponto/views.py:1738` não consultam `now()`/`today()`. Novidade dos demais relógios desde `14b61c124`: [nao verificado].
+
+**PROCEDENTE-candidato — estrutura: DIFF sensível ao instante de execução.** `recalcular_fechamento_mes` não recebe `agora` (`app/ponto/services/fechamento.py:448`), consulta `timezone.now()` em cada execução (`app/ponto/services/fechamento.py:616`) e usa esse instante para filtrar os furos entregues ao coletor (`app/ponto/services/fechamento.py:1120`). O filtro pergunta ao juiz com esse instante (`app/ponto/services/fechamento.py:377`), cujo resultado muda quando `agora >= fim` (`app/ponto/turnos.py:2140`). Cenário: dia sem par, fim previsto 19h, sem aberta viva; às 18:59 não afirma furo, às 19:01 afirma, sem alteração das batidas (`app/ponto/turnos.py:2132`). Isso pode contaminar a comparação entre rodadas; atribuição aos nove colaboradores fornecidos: [nao verificado].
+
+Relógios fora da borda encontrados na cópia, com novidade [nao verificado]: fallbacks em `app/ponto/turnos.py:2113`, `app/ponto/turnos.py:2159`, `app/ponto/turnos.py:2307`, `app/ponto/turnos.py:2341`, `app/ponto/turnos.py:2475`, `app/ponto/turnos.py:2893`, `app/escala/utils.py:692` e `app/escala/utils.py:979`.
 
 ## 14/11 20:15 · sessao dfc90e576e7f · - · - · origem=Ronald (tmux)
 
@@ -853,227 +909,4 @@ Estado real de migrations, implantação conjunta, outras raias e cumprimento da
 
 **PERGUNTA:** conversas pendentes do app pertencem a algum colab-dia para esta lei? O app as admite; a projeção declara que não têm dia de fato, e a carga as exclui. Referências: `app/chamados/services/pergunta_no_app.py:52`, `:114`, `app/chamados/services/tarefa_do_dia.py:396`.
 
-## 14/11 19:22 · sessao 88570989b070 · - · - · origem=Ronald (tmux)
-
-Referências abaixo relativas à raiz; nada foi executado contra banco/log [nao verificado].
-
-**Portas e chamadores**
-
-| Porta | Chamador comprovado |
-|---|---|
-| `app/chamados/views_cobrar.py::cobrar_chamado:24` | View POST, URL `app/chamados/urls.py:25`; permissão/área em `views_cobrar.py:25` e `:31`. |
-| `app/chamados/views_cobrar.py::cobrar_massa:61` | View POST, URL `app/chamados/urls.py:31`; seleção VIVOS/verbo/folha em `views_cobrar.py:76`, `:78`, `:95`. |
-| `app/chamados/services/cobranca.py::cobrar_colaborador:140` | View IA `_aplicar_cobranca:834`, chamada indireta `app/core/views_ia.py:850`, escritor registrado `app/core/intake.py:67`. |
-| `app/chamados/services/disputa_emissao.py::recobrar_questionario:1690` | View `reabrir_disputa_supervisao`, chamada `app/chamados/views.py:1425`, somente após guarda `pend_vivas` em `:1417` e ausência de corrigíveis `:1421`. |
-| `app/ponto/management/commands/alertar_disputas_pendentes.py::Command.handle:30` | Cron 08:00, `app/config/crons.py:745`. |
-| `app/chamados/services/disputa_emissao.py::_enviar_push_disputa_colab:1757` | Emissor central; não consulta C6, somente silenciamento em `:1759`; envia webpush `:1777` e FCM `:1785`. |
-
-**Matriz — cobrar individual**
-
-| Estado | Juiz | Persiste | Push | Prova/teste | Cópia | [nao verificado]
-|---|---|---|---|---|---|
-| a ata; b sem ata; c sem marco; d respondida; e morta; DS aberta/fechada/inexistente | Nenhum juiz de pergunta/DS: recebe qualquer chamado existente `app/chamados/views_cobrar.py:29`; guarda é somente permissão, área e throttle `:25`, `:31`, `:36`. | Nenhuma escrita DS/P; sucesso cria `FollowupChamado` em `:55`, pelo escritor `app/chamados/services/nota.py:103`. | Tenta FCM ao `ch.colaborador`, todos os estados, em `views_cobrar.py:44`; entrega depende driver `app/chamados/fcm_utils.py:104`. | `app/chamados/tests/test_e5_cobrar.py:34` cobre envio/trilha/throttle; `:48` falha sem token. | Novo `_enviar_cobranca` consulta `_disputa_do_chamado` e app quando encontra DS aberta; **se não encontra DS e categoria do chamado não é `disputa_supervisao`, envia diretamente** (anexo diff, `app/chamados/views_cobrar.py`, hunk `+20`). |
-
-**Contraexemplo importante da cópia para I2:** chamado de furo, categoria diferente de `disputa_supervisao`, somente dona FECHADA, pergunta respondida ou morta. `_disputa_do_chamado` só busca dona ABERTA (`app/chamados/services/fio.py:131`, `:135`); retorna `None`; novo `elif ch.categoria != 'disputa_supervisao': enviar()` manda FCM sem pergunta pendente. Individual não exige VIVOS (`app/chamados/views_cobrar.py:29`). Portanto **I2 NÃO FECHA na cópia** mesmo restringindo a cobrança ao colaborador (anexo diff, `views_cobrar.py`, hunk `+20`; hash `fio.py:131`).
-
-**Matriz — massa**
-
-| Estado | Juiz | Persiste/push | Prova/teste | Cópia | [nao verificado]
-|---|---|---|---|---|
-| a/b/c, DS aberta/fechada/inexistente, desde que crédito da consulta produza verbo cobrar | Nenhum C6 atual no caminho quente: `particionar_verbos` lê créditos (`app/chamados/services/verbos.py:34`); crédito usa `q_vivas` (`app/chamados/services/raiox.py:74`) e exclui materializada+VL_SIM `:135`; não filtra DS fechada (`:56`). | FCM ao colab `views_cobrar.py:123`, uma seleção por pessoa `:97`; sucesso Followup `:132`. DS/P sem escrita nessa porta. | `app/chamados/tests/test_e5b_cobrar_massa.py:52` dedup/placar; `:74` prévia sem enviar. | Acrescenta `pendentes_da_disputa` se `_disputa_do_chamado` encontra DS aberta; preserva envio direto não-pai sem DS aberta (diff `views_cobrar.py`, hunks `+118`, `+20`). |
-| d respondida creditada | Resposta ganha verbo validar: `raiox.py:139`; `catalogo/natureza.py:48` e `:59`. | Não entra no conjunto cobrar `views_cobrar.py:78`, salvo outra pergunta que produza crédito cobrar sob outro chamado [nao verificado]. | Predicados acima. | Gate app adicional no recorte DS aberta (diff `views_cobrar.py`, `+118`). |
-| e morta C6 | A consulta de crédito pode ficar stale: código declara que conta o campo como está até próximo ciclo (`raiox.py:117`) e não consulta juiz no caminho quente (`:120`). | Possível crédito SQL divergente de C6 atual; envio permanece possível se verbo cobrar (`views_cobrar.py:78`, `:123`). | `raiox.py:117`. | C6 reaplicado se encontra DS aberta; bypass de dona fechada permanece (diff `views_cobrar.py`, `+20`, `+118`). |
-
-**Matriz — cobrança por pessoa**
-
-| Estado | Juiz | Persiste/push | Prova/teste | Cópia | [nao verificado]
-|---|---|---|---|---|
-| a/b/c, pergunta viva sem resposta, DS aberta | C6 através `_pendentes`→`consulta_do_app` (`cobranca.py:45`; `pergunta_no_app.py:70`). Ata/marco não são portas diretas desta cobrança. | `ChamadoColaborador.prazo_sla` dos pais via `definir_prazo_sla`, `cobranca.py:178`; Followup `:181`; LogAuditoria `:188`; FCM primeiro/webpush fallback ao colab em `:107`, `:112`. | `test_cobranca.py:102` um toque; `:115` prazo; `:139` trilha. | Mesmo prazo/trilha; aviso passa por lista app antes/depois commit (diff `cobranca.py`, `+179`; novo `pergunta_no_app.py:82`). | [nao verificado]
-| d respondida, e morta, DS fechada, ou nenhuma pergunta | App exclui morta antes (`pergunta_no_app.py:58`); respondida/DS fechada vão histórico `:71`; zero pendente retorna sem cobrar `cobranca.py:156`. | Nada/push não, se não existe outra pendente da pessoa (`cobranca.py:156`). | `test_cobranca.py:86` sem pendência. | Conserva e acrescenta rechecagem após commit (diff `pergunta_no_app.py:82`). | [nao verificado]
-| Prazo futuro em algum pai das pendentes | Predicado local `cobranca.py:86`. | Nada/push não `:159`. | `test_cobranca.py:127`. | Conservado, diff não altera este bloco. | [nao verificado]
-
-A cobrança por pessoa já utiliza a lista correta no hash, mas o envio fica depois de seu atomic interno e pode ainda ocorrer dentro de atomic externo, sem rechecagem imediatamente após commit (`cobranca.py:176`, `:187`). Cópia acrescenta esse controle (diff `cobranca.py`, hunk `+179`). [nao verificado]
-
-**Matriz — recobrar questionário**
-
-| Estado | Juiz | Persiste/push | Prova/teste | Cópia | [nao verificado]
-|---|---|---|---|---|
-| a/b/c, pendente viva, DS aberta, sem corrigível | A view consulta C6 `app/chamados/views.py:1417`; o serviço conta apenas `respondida_em IS NULL` `disputa_emissao.py:1712`. | Prazo do chamado `:1718`; Followup `:1721`; LogAuditoria `:1734`; FCM ao colab da DS `:1728`. | `test_recobrar_questionario.py:88` prazo; `:96` push. | Serviço usa `pendentes_da_disputa`, retorna imediatamente se zero; usa `_enviar_push_disputa_colab` com gate após commit (diff `disputa_emissao.py`, `+1785`). |
-| d respondida corrigível | View segue reabertura, não recobrança `views.py:1435`; FCM após reabertura `:1447`. | Reabertura canônica e Followup `:1440`. | `test_recobrar_questionario.py:112`. | FCM envolve `notificar_pendentes_apos_commit` (diff `views.py`, `+1444`). |
-| e morta sem resposta | View não chama serviço se nenhuma pendente viva `views.py:1431`; **serviço avulso não possui essa guarda**, conta cru e sempre tenta FCM `disputa_emissao.py:1712`, `:1728`. | Pela view: nada/push não; serviço direto: prazo/trilha/push mesmo zero pendentes, `:1716`, `:1728`. | `test_recobrar_questionario.py:122` cobre não apagar resposta, não cobre morto/zero. | Serviço avulso também protegido por app/gate (diff `disputa_emissao.py`, `+1785`). | [nao verificado]
-| DS fechada/inexistente | `_disputa_do_chamado` exclui fechada `fio.py:131`, `:135`; view retorna `views.py:1411`. | Nada/push não pela view. | `test_recobrar_questionario.py:102`. | Conservado. | [nao verificado]
-
-**Matriz — cron 08:00**
-
-| Estado | Juiz | Persiste/push | Prova/teste | Cópia | [nao verificado]
-|---|---|---|---|---|
-| a/b/c/d/e, inclusive zero perguntas, DS aberta | Nenhum C6/ata/marco: universo é só `fechada_em IS NULL` (`alertar_disputas_pendentes.py:33`). | `DisputaSupervisao.contexto.ultimo_alerta_diario` por `renovar_contexto` `:48`, escritor `models.py:2177`; webpush colab `:59`. Empresa agrupa todas as abertas `:70`; webpush supervisão `:103`; LogAuditoria `:109`; >7 dias log `:75`. | `test_porta_anotacao_contexto.py:214` mudança de data; `:219` idempotência; não verificado teste C6 deste cron. | Somente aviso colab/carimbo passam app antes/depois commit (diff `alertar_disputas_pendentes.py`, `+41`); supervisão/agrupamento/log não alterados no diff. | [nao verificado]
-| DS fechada/inexistente | Filtro inicial `alertar_disputas_pendentes.py:33`. | Nada/push não. | Mesmo filtro. | Conservado. | [nao verificado]
-
-**C6 e app — fonte comum da cópia**
-
-C6 mata validada, dia trancado e vias terminais (`app/chamados/juizes.py:1401`, `:1405`, `:1412`); resposta com texto pode continuar viva para decisão (`:1417`), porém app a coloca em histórico (`pergunta_no_app.py:71`). Sem ata/veredito, pergunta não materializada pode permanecer viva (`juizes.py:1476`). Portanto “sem ata” e “sem marco” isoladamente **não determinam** push; é preciso estado integral C6 e pendência app (`pergunta_no_app.py:58`, `:71`).
-
-**Outros pushes relacionados** [nao verificado]
-
-| Porta | Hash | Cópia |
-|---|---|---|
-| `acoes_disputa::acao_reabrir_disputa:90` | Corrigíveis `:97`, reabre `:103`, FCM colab `:109`; sem rechecagem C6 depois. | Gate app/commit (diff `acoes_disputa.py`, `+90`). | [nao verificado]
-| `acoes_disputa::acao_regularizar_disputa:118` | Bloqueia viva sem resposta `:130`; materializa `:139`; mesmo após fechar tenta webpush/FCM “regularizada” `:150`, `:156`. | Ambos envolvidos no gate pendência, portanto fechamento/zero pendente suprime esses avisos (diff `+149`). |
-| `fio::processar_post_fio:485`, regularizar | Guarda viva sem resposta `:660`; webpush/FCM regularização `:681`, `:688`. | Gate app/commit (diff `fio.py`, `+678`). | [nao verificado]
-| `acoes_disputa::acao_reabrir_disputa_admin:235` | DS fechada `:255`, reabre `:259`, conversa `:263`, push supervisão `:277`, FCM colab `:288`. | Só FCM colab passa gate; supervisão permanece (diff `+293`). | [nao verificado]
-| `validacao::recusar_pergunta:573` | Recusa somente respondida não validada `:600`, `:603`; recusa+reabertura atomic `:615`; FCM colab `:640`. | Gate app/commit (diff `validacao.py`, `+638`). | [nao verificado]
-| `fio::processar_post_fio`, mensagem DP | Nota `:718`, webpush `:726`, FCM `:734`, sem condição C6. | Sem mudança nesse bloco no diff fornecido. |
-
-Driver FCM verifica somente token, não pergunta (`app/chamados/fcm_utils.py:101`, `:104`); envio efetivo chama `messaging.send` em `:85`. Driver webpush verifica usuário/assinatura, não pergunta (`app/chamados/push_utils.py:114`, `:24`); supervisão recebe por setores ativos da empresa `:98`, `:100`, `:106`.
-
-**Para invariantes:** I2 hash **NÃO FECHA**, contraexemplos individual/cron/serviço recobrar avulso (`views_cobrar.py:44`; `alertar_disputas_pendentes.py:59`; `disputa_emissao.py:1728`). Cópia **NÃO FECHA** pelo bypass do filho com dona fechada (diff `views_cobrar.py`, hunk `+20`, cruzado com `fio.py:131`). Se I2 se aplicar literalmente a todo push, mensagem do DP e supervisão também ficam fora dessa restrição (`fio.py:734`; `alertar_disputas_pendentes.py:103`). [nao verificado]
-
-## 14/11 19:21 · sessao 2a4e6c031622 · - · - · origem=Ronald (tmux)
-
-Escopo: `E = app/chamados/services/disputa_emissao.py`; `D = app/chamados/services/declaracao_texto.py`. Referências “cópia” abaixo são linhas novas dos hunks fornecidos, não código executado. Testes da cópia só constam na lista; cobertura e resultados deles são [nao verificado].
-
-| ID / estado | Juiz / predicado | Persistência no hash | Push | Prova / cópia | [nao verificado]
-|---|---|---|---|---|
-| N1 — motivos vazios, qualquer DS | nenhum: guarda local | nada | não | E:656. Sem mudança no diff. |
-| N2 — DS inexistente ou só fechadas; com ata e dia resolvível | nenhum para nascer; busca somente DS aberta | cria/reusa `ChamadoColaborador`; cria `DisputaSupervisao(motivos, contexto, chamado)` antes de perguntar | sim, para colab, independentemente do resultado do gerador | E:531,568,587,669. Cópia E::_abrir_ou_agregar_disputa novo :474: ensaio/savepoint; rollback sem motivo local, replay estrangeiro. |
-| N3 — mesma entrada, sem ata ou sem marco | nascimento não consulta ata; gerador só consulta grade se texto não pode ser montado | DS/pai já persistidos; pergunta pode nascer se contexto tem data; sem dia/texto, zero perguntas | sim, para colab | E:345,350,360,371,425,669. Cópia passa pelo resolvedor novo :213 e ensaio; não equivale a exigir pergunta **viva**, pois `locais()` só exclui `VIAS_FORA_DO_FATO`. |
-| N4 — DS aberta | nenhum para agregar: união local de motivos + merge contexto | atualiza `DS.motivos`, `DS.contexto`; incremento `qtd`, `ultima_em` | só se motivo novo; repetição do motivo pode produzir pergunta de outro dia sem push | E:535,548,565,682,685,686. Cópia `_contexto_do_ato` novo :387 e agregador novo :408; motivos admitidos são os das perguntas locais; contexto é salvo antes do gerador. | [nao verificado]
-| G1 — pergunta do dia respondida, viva ou morta, na própria DS | nenhum/C6 ausente do dedup do gerador | dedup por existência, sem ler `respondida_em` nem `pergunta_viva`; zero nova se identidade e via correspondem | gerador não envia; wrapper segue N2/N4 | E:325,398,417. Cópia `_resolver_pergunta_por_motivo` novo :213 mantém dedup por existência. |
-| G2 — pergunta canônica pertence a outra DS aberta/fechada | porta da identidade dos fatos; resolvedora + costura no reuso | `PerguntaDisputa.abrir` pode devolver pergunta estrangeira e atualizar célula/destino/lavra; emissor ignora `_criada` e sempre inclui retorno; DS recém-criada pode ficar vazia | wrapper envia mesmo assim no hash | E:444,470; models.py:2977,3020,3024,3053,3064. Cópia distingue `ReusadaDeOutraDS`, desfaz nascimento sem pergunta local e agrega à dona; dona fechada não é salva, descarte em trilha pós-commit (diff descarte_disputa.py:5). | [nao verificado]
-| G3 — nenhum dia para pergunta de hora | nenhum: predicado local de ausência de dia | nenhuma pergunta; DS já nasceu no wrapper | wrapper envia no hash | E:424–430; teste existente `test_3b_reuso_746.py:23` chama com contexto vazio e espera DS. Cópia recusa `InsumoAusente` e rollback do nascimento. | [nao verificado]
-| P1 — entradas pendentes | GEOMETRIA DE TURNO / `dia_do_turno_da_batida`; FURO DO DIA / `classificar_falta` | para cada dia acusado, injeta contexto e chama gerador; salva `DS.contexto` se lista retornada não vazia | nenhum nesta função | E:257,282,288,291,295. Cópia novo :136 conserva contexto anterior, encaminha motivo de estrangeira à dona e coleta criadas. |
-
-| ID / órfãos | Juiz / predicado | Persistência no hash | Push | Prova / cópia | [nao verificado]
-|---|---|---|---|---|
-| O0 — parcial na lista do admin | `cartorio.parcial_so_lista` (não registrado com esse nome em JUIZES fornecido) | nada; filtro antes de DS/pai | não | E:916,940,1047. Sem mudança. |
-| O1 — elegível, DS inexistente/só fechadas | nenhum para nascer: filtro aberto | cria pai e DS antes das guardas de ata/falta; seed `orfao_14h` | depende das próximas linhas | E:1096,1101,1123. Cópia mantém nascimento antecipado no agrupador; rollback específico apenas nova + estrangeiras + zero perguntas. |
-| O2 — com ata, marco apagado, rota “por ata” | DIA DO CHAMADO (`data_do_chamado`); MARCOS / leitor da célula + lâmpadas | uma pergunta por marco, via `_complementar_marcos_faltantes` → `_criar_pergunta_se_couber`; agrega motivos e `ch.analisar()` | sim se não fechar e `notificar` | E:1166,1170,1171,1175,873,837,1289. Cópia admite local e encaminha estrangeira à dona; somente push com pendentes da DS nova :1365. | [nao verificado]
-| O3 — sem ata, com escala vigente | `_marcos_faltantes` retorna `sem_celula`; guarda local + escala vigente | DS/pai permanecem; nenhuma pergunta; `_absteve_por_ata` impede auto-fecho | **sim no hash**, se `notificar` | E:902,908,911,1172,1279,1289. Teste prova explicitamente DS aberta com zero perguntas: `test_hx_disputa_muda_sem_ata.py:51–61`. **Cópia mantém essa DS aberta**, mas não envia push sem pendentes (novo :1365). I1 não fecha na cópia por esta linha. | [nao verificado]
-| O4 — ata de trabalho sem marcos/lâmpadas | `_marcos_faltantes` trata como `sem_celula` | igual O3 | igual O3 | D:121–126; E:902. Diff não muda esse predicado. |
-| O5 — sem ata **e sem escala vigente** | FURO DO DIA; exceção local `_ata_do_dia` | permite perguntar só por batidas; sem irmãs da ata | sim se sobra aberta | E:908–910; E:1200,1205,1213. Sem alteração dessa exceção. |
-| O6 — falha ao ler ata | nenhum: `except` local | `return True,None`; mantém comportamento de perguntar sem bloqueio da ata | sim se sobra aberta | E:897–901. Sem alteração no diff. |
-| O7 — com ata, nenhum marco faltante / classificador não acusa | `classificar_falta`, depois DISPUTA FECHA / `DS.pode_fechar` | DS/pai podem ter nascido; auto-fecha DS se C7 permite e não houve abstenção | não após auto-fecho | E:1201,1238,1278,1282,1284,1288; `test_hx_disputa_muda.py:24,44`; `test_hx_disputa_muda_sem_ata.py:63`. Cópia conserva. |
-| O8 — pergunta respondida mas viva | FIO VIVO / `fio_vivo` → C6 | `_ja_perguntou` bloqueia nova; resposta não basta para decidir | push do agrupador não distingue resposta no hash | E:1415–1422; `_criar_pergunta_se_couber`:832; push:1289. Cópia usa pendência efetiva no app para push. | [nao verificado]
-| O9 — pergunta morta C6=false, colaborador ativo | FIO VIVO / C6 | `_ja_perguntou` devolve falso, permite chamar `abrir`; resultado final sujeito à identidade canônica, não necessariamente nova pergunta | hash pode enviar se DS não fecha | E:1415–1422,837; models.py:2977,3064. Cópia encaminha retorno estrangeiro e restringe push; dedup do gerador direto continua G1. | [nao verificado]
-| O10 — pergunta morta, colaborador não ativo | nenhum: guarda local | existência da linha bloqueia nova pergunta antes de C6 | nenhum garantido; resto da DS determina | E:1416–1420. Sem mudança. |
-| O11 — intervalo explícito | nenhum juiz de ata nesta rota; contexto `marcos_faltantes` → motivo/data | cria pergunta com data do marco e destino próprio `_chi`; não chama `_ata_do_dia` nessa rota | sim se permanece aberta | E:1138–1155. Cópia fotografa fatos em `_marcos_de_intervalo`, depois passa pelo eleitor central. |
-| O12 — pergunta não materializada já ligada ao chamado; dona inclusive fechada | **proxy SQL**, não C6: `materializada_em is null`; depois leitor de ata | complemento pode salvar `DS.motivos` da dona fechada | fluxo pode retornar antes do push principal | E:1070,1073,1081,1084,1093. Cópia `_agregar_motivos_na_dona` recusa salvar dona fechada e registra descarte; notifica complementos somente dona aberta. | [nao verificado]
-| O13 — sem origem e sem base/data | DIA DO CONTEXTO; base por batidas do turno ou `eh_dia_trabalho` | DS/pai já nascidos, pergunta não nasce; C7 pode fechar | não se auto-fecha | E:1232,1235; `_tem_base`:816–820; E:1282. Cópia conserva. |
-
-Chamadores:
-
-- Nascimento: view `api/views.py::api_bater_ponto:764`; duplicata `api/views_core.py::api_bater_ponto:758`; `ponto/services/triagem_batida.py::ramo_registrar_es:735`; command `marcar_foto_ausente_retro.py:96`; `fabrica_da_celula.py::perguntar:172` e gerador novamente `:174`; este serviço é alcançado por `ponto/services/cartorio.py:1045`, `chamados/reconciliador.py:1387` e command `backfill_fio_morto_e4b.py:143`.
-- Órfãos: command `processar_alertas_turno.py::_abrir_chamado_critico:385` (cron */5, `config/crons.py:362`); command `processar_alertas_avancados.py::handle:159` (*/30, `:363`); command `detectar_ausencias.py::_abrir_chamado:803` (*/5, `:364`); ação de view `acoes_disputa.py::acao_iniciar_disputa_orfaos:222`; serviço/view `cobrar_dia.py::cobrar_dia:49`; passivo `pergunta_no_app.py::perguntar:246`, alcançado pelo command `perguntar_chamados_sem_pergunta.py:20`.
-- Gerador direto adicional: command `smoke_chamados.py:103`.
-- `DisputaSupervisao` fechada não é selecionada como recipiente nos wrappers de nascimento (`E:531,1096`); pode ser dona de pergunta canônica estrangeira (`models.py:2977,3064`) ou recipiente do complemento escolhido por FK (`E:1073`).
-
-F1/F2+: o diff implementa taxonomia/contrato de saída em `_gerar_perguntas_com_causas` (`JaExisteLocal`, `InsumoAusente`, `ReusadaDeOutraDS`, novo E:198), resolvedor compartilhado (`novo E:213`), eleição explícita “RAIZ-F1” em `fio.py::eleger_destino_da_pergunta` novo :752 e tratamento observado de motivo em dona fechada (`descarte_disputa.py:5`; contador I23 novo auditor :78). Mas ensaio+rollback+replay do nascimento, atomic unindo DS/pergunta em declarações e órfãos são implementação F2; writer central de destino/selos aproximam F5; contadores I7a/I7b/I23 aproximam F7. Uma matriz F1 documental completa e aprovação de contrato no anexo não são demonstradas [nao verificado].
-
-Pergunta de lei candidata: “Quando o marco ainda exige resposta, mas a pergunta canônica pertence a uma DS fechada e o novo motivo não consta nela, qual deve ser a transição do ciclo?” O código da cópia publica I23 como “decisão na RAIZ-DA-DISPUTA F1” e só registra descarte (diff auditor novo :79; descarte_disputa.py:5); hash reusa sem mudar dona (`models.py:3064`). Não propor resposta.
-
-## 14/11 19:19 · sessao e4253e35603f · - · - · origem=Ronald (tmux)
-
-Achados para perguntas 2/3/8:
-
-1. **PROCEDENTE — carga e consulta não têm o mesmo universo.** A carga lê `colaborador_id`, `conversa=False` e `data_evento` na janela (`app/chamados/services/tarefa_do_dia.py:395`); o app lê `disputa__colaborador` e `q_vivas`, sem recorte de data/conversa (`app/chamados/services/pergunta_no_app.py:52`). A identidade dos dois colaboradores é exigida na porta de escrita (`app/chamados/models.py:3573`), portanto divergência nesse campo em dados válidos não está demonstrada [nao verificado].
-
-2. **PROCEDENTE — mesmo recorte e mesmo `agora` histórico também podem divergir.** `q_vivas` exige `validada_em IS NULL` no estado atual (`app/chamados/models.py:3468`), enquanto C6 considera inexistente a validação posterior a `agora` (`app/chamados/juizes.py:1387`). A carga não aplica `q_vivas` (`app/chamados/services/tarefa_do_dia.py:395`). Pergunta sem resposta, disputa aberta e célula acusadora, validada depois do instante consultado, pode estar nas pendentes da carga e ausente de `consulta_do_app(..., agora=agora)` (`app/chamados/services/tarefa_do_dia.py:514`; `app/chamados/juizes.py:1450`; `app/chamados/models.py:3468`).
-
-3. **NÃO PROCEDENTE — predicado local duplicado de partição.** Ambos usam `particao_do_app`: sem resposta e disputa aberta (`app/chamados/services/pergunta_no_app.py:73`; `app/chamados/services/pergunta_no_app.py:81`; `app/chamados/services/tarefa_do_dia.py:514`). Contudo, a partição lê `respondida_em` e `fechada_em` atuais, sem projeção temporal; resposta futura carimbada já manda a pergunta ao histórico em ambos (`app/chamados/services/pergunta_no_app.py:81`). C6 projeta resposta futura para inexistente, criando duas semânticas temporais dentro da composição (`app/chamados/juizes.py:1390`).
-
-4. **PROCEDENTE — contraexemplo sintético reproduzido sem banco e sem arquivos.** Executei corpos reais por AST usando os helpers existentes (`app/chamados/tests/e4_apoio.py:8`; `app/chamados/tests/e3_portas_apoio.py:18`). Hipótese: pergunta 303 de `orfao_14h`, sem resposta/validação/materialização, disputa aberta, célula `furo`, marco `fim` aceso e vencido, sem tranca, fila vazia. C6 retornou viva e a consulta/partição retornou pendente 303; a tarefa publicou `fio='nada', rota=None`, com instância `razao='aceso', pergunta_id=None, acoes=[]`. C6 mantém viva a pergunta sem materialização sobre célula acusadora (`app/chamados/juizes.py:1444`; `app/chamados/juizes.py:1450`); a tarefa pula a lâmpada acesa antes de associar a pergunta (`app/chamados/services/tarefa_do_dia.py:277`; `app/chamados/services/tarefa_do_dia.py:321`); `_portas` exige simultaneamente pendência e instância RESPONDER (`app/chamados/services/tarefa_do_dia.py:610`). Incidência em produção [nao verificado].
-
-   O mesmo bloqueio estrutural pode ocorrer em isento, sem célula/ata, sem trabalho, marco sem luz/teto, ausência ou motivo fora do mapa: esses ramos removem/excluem RESPONDER antes da publicação (`app/chamados/services/tarefa_do_dia.py:203`; `app/chamados/services/tarefa_do_dia.py:219`; `app/chamados/services/tarefa_do_dia.py:277`; `app/chamados/services/tarefa_do_dia.py:287`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:333`). Cada classe exige confirmar C6 vivo; não são ocorrências de produção demonstradas [nao verificado].
-
-5. **NÃO PROCEDENTE — cópia do corpo C6 na carga.** A carga chama o juiz registrado com `hoje`, `agora` e carregador, reutilizando resultado para perguntas candidatas já julgadas (`app/chamados/services/tarefa_do_dia.py:518`; `app/chamados/services/tarefa_do_dia.py:521`; `app/chamados/services/tarefa_do_dia.py:523`). C6 encaminha carga ao corpo único (`app/chamados/juizes.py:888`), cuja tranca lê a alimentação da carga (`app/chamados/juizes.py:1405`; `app/chamados/services/carga_pergunta_viva.py:146`).
-
-6. **NÃO PROCEDENTE — C17 ativo como juiz paralelo nos chamadores de produção rastreados.** A busca de chamadas encontrou a definição e somente o instrumento de comparação `diff_e3_sombra`, que o lê como “antes” (`app/chamados/juizes.py:1664`; `app/chamados/management/commands/diff_e3_sombra.py:127`). Seu corpo antigo continua aplicando `cobrar -> colab` (`app/chamados/juizes.py:1650`; `app/chamados/juizes.py:1709`); `_portas` exclui cobrar antes de consultar essa tabela (`app/chamados/services/tarefa_do_dia.py:618`).
-
-7. **NÃO PROCEDENTE — relógio novo interno no caminho tarefa/carga examinado.** O instante da carga segue ao C6 e ao alimentador (`app/chamados/services/tarefa_do_dia.py:519`; `app/chamados/services/tarefa_do_dia.py:521`; `app/chamados/services/tarefa_do_dia.py:565`), e a casca recusa instante nulo ou carga de instante diferente (`app/chamados/services/tarefa_do_dia.py:657`). A API chama a consulta sem instante, conservando C6 atual e seu fallback de calendário (`app/api/views.py:994`; `app/api/views.py:2534`; `app/chamados/juizes.py:592`). Igualdade de relógio com uma carga externa, portanto, não é garantida nesses leitores (`app/api/views.py:2534`).
-
-8. **PROCEDENTE — docstring da carga contradiz implementação.** Promete “uma consulta do app por colab (memo da carga)” (`app/chamados/services/tarefa_do_dia.py:362`), mas implementa uma partição em lote seguida do carregador C6 (`app/chamados/services/tarefa_do_dia.py:514`; `app/chamados/services/tarefa_do_dia.py:518`). A afirmação de igualdade integral com o universo do app também não vale sem as ressalvas acima (`app/chamados/services/tarefa_do_dia.py:512`).
-
-**PERGUNTA:** a conversa pendente do app participa de algum colab-dia? O app admite conversa, mas o juiz de dia dela devolve ausência de dia de turno e a carga exclui conversa (`app/chamados/services/pergunta_no_app.py:52`; `app/chamados/services/pergunta_no_app.py:114`; `app/chamados/services/tarefa_do_dia.py:396`). Não atribuí esse caso a um dia sem corte adicional [nao verificado].
-
-## 14/11 19:19 · sessao 9a633ee7c38b · - · - · origem=Ronald (tmux)
-
-**Pergunta 1 — mapa dos campos e leitores.**
-
-| Valor | Escritor/fornecedor | Leitores de produção |
-|---|---|---|
-| `fio`, `rota`, `fila`, `verbos` publicados | `_portas_da_tarefa`: computa `verbos`/`fila` em `app/chamados/services/tarefa_do_dia.py:608`, donos em `:615`, fio em `:622`, rota em `:629`, publica todos em `:635`. | Projeção `porta_da_tarefa` em `app/chamados/services/tarefa_do_dia.py:645`; leitores abaixo. |
-| `donos` | **Não é campo da tarefa**: conjunto local, criado em `app/chamados/services/tarefa_do_dia.py:615`, acrescido em `:617` e `:621`, consumido para `fio` em `:622`; não aparece no `out.update` de `:635`. | Apenas a seleção de fio do próprio juiz, `app/chamados/services/tarefa_do_dia.py:622`. |
-| `porta_da_tarefa` | Copia `rota`, `fila`, `verbos`, `fio`, `nao_sei`, ou retorna `None` quando `rota` é falsa, `app/chamados/services/tarefa_do_dia.py:645`. | `fora_da_folha`, `vigia_fio`, `furo_sem_canal`, `beco_em_lote` e instrumento sombra, endereços abaixo. |
-| Pendentes/histórico | `particao_do_app`, `app/chamados/services/pergunta_no_app.py:79`; predicado único sem resposta e disputa aberta, `:81`; `consulta_do_app` fornece vivas em `:73`. | API `app/api/views.py:994`, `:2534`; dashboard `app/core/views.py:253`; aviso `app/chamados/services/aviso_pendencia.py:9`; cobrança `app/chamados/services/cobranca.py:48`; projeção/badge `app/chamados/services/pergunta_no_app.py:100`; carga `app/chamados/services/tarefa_do_dia.py:514`. |
-| Vivas do app | `perguntas_do_app` seleciona pelo colaborador e `q_vivas`, `app/chamados/services/pergunta_no_app.py:52`; C6 em `:61`. | Consulta `:73`; C17 `_no_app`, `app/chamados/juizes.py:1642`; ficha, `app/colaboradores/services/ficha.py:166`; diagnóstico `pergunta_no_app.py:208`, `:231`. |
-
-**Leitores diretos da porta, com o que efetivamente usam:**
-
-- Folha `_porta` chama projeção em `app/folha/fora_da_folha.py:70`; `_fio_da_porta` usa `porta['fio']` ou `FIO_SEM_PORTA` em `:85`; o agregado lê esse fio em `:193`; `o_que_segura` lê fio, fila e `nao_sei` em `:238`–`:248`.
-- Vigia monta portas em `app/chamados/services/vigia_fio.py:649`, preserva `nao_sei` em `:656`, conta pela rota em `:662`, admin pelo fio em `:663`, publica rota/fio em `:664`.
-- Furo lê presença e rota em `app/chamados/services/furo_sem_canal.py:97`–`:99`, preserva desconhecimento em `:100`–`:102`, conta ausências em `:104`, divide rotas em `:114`–`:116`.
-- Beco exclui dia com qualquer porta em `app/escala/services/cadastro_realidade.py:469`; não traduz rota/fio.
-- Pauta usa indiretamente `_fio_do_dia` e compara com `FIO_SEM_PORTA`, `app/ponto/services/pautas_dos_discordantes.py:79`–`:82`.
-- Sombra projeta fio/fila/rota em `app/chamados/management/commands/diff_e3_sombra.py:49`–`:55`, imprime rota/fio/fila/verbos em `:143`–`:144`.
-- E4b lê **instâncias e ações**, não os campos publicados, em `app/chamados/management/commands/backfill_fio_morto_e4b.py:97`–`:107`.
-
-**Pergunta 3 — segundo escritor publicado: NÃO PROCEDENTE nos leitores acima.** A publicação fica em `app/chamados/services/tarefa_do_dia.py:635`, e a projeção apenas copia em `:645`; folha lê em `app/folha/fora_da_folha.py:85`, vigia lê em `app/chamados/services/vigia_fio.py:662`, furo lê em `app/chamados/services/furo_sem_canal.py:99`, beco testa presença em `app/escala/services/cadastro_realidade.py:469`.
-
-**C17 ainda existe, mas o chamado de produção encontrado é o instrumento sombra:** `app/chamados/management/commands/diff_e3_sombra.py:127`; sua definição e escrita antigas estão em `app/chamados/juizes.py:1664` e `:1709`. A tarefa reutiliza a autoridade `fio_pelos_verbos` em `app/chamados/services/tarefa_do_dia.py:620`–`:621`, excluindo residual cobrar antes em `:618`; tabela única em `app/chamados/juizes.py:1650`–`:1661`.
-
-**Há outros “donos” derivados, com outra unidade — PROCEDENTE como diferença semântica, não prova de segundo juiz do colab-dia:**
-
-- Ficha deriva dono **do chamado** diretamente do verbo: cobrar → colaborador, `app/colaboradores/services/ficha.py:159`–`:162`.
-- Relatório classifica **disputa** como `AGUARDA_COLAB` por `aguarda_o_colaborador`, `app/chamados/relatorios_disputa.py:24`–`:28`; essa função usa C6 e `espera_o_texto_do_colaborador`, `app/chamados/services/fio.py:172`–`:174`; respondida sem texto ainda espera colaborador, `:187`.
-- Portanto uma pergunta com `respondida_em` e texto vazio está no histórico da consulta (`app/chamados/services/pergunta_no_app.py:81`–`:84`), mas pode sustentar `AGUARDA_COLAB` no relatório (`app/chamados/services/fio.py:187`, `app/chamados/relatorios_disputa.py:26`). Não chamar esses rótulos de “fio da tarefa”.
-
-**Pergunta 6 — semântica dos leitores.**
-
-- `rota=None` implica `porta_da_tarefa=None`, independentemente de `fio`, por `app/chamados/services/tarefa_do_dia.py:645`; há exceção explícita `fio='sistema', rota=None` em `:634`.
-- `porta_app` nasce quando colab tem porta e não há `portas_vivas`, `app/chamados/services/tarefa_do_dia.py:628`–`:634`; por isso não significa necessariamente fila vazia: o cobrar residual pode continuar em `fila`/`verbos`, calculados em `:608`–`:609`.
-- `porta_fila`/`porta_pergunta` são escolhidas conforme a composição de portas, `app/chamados/services/tarefa_do_dia.py:632`; não identificam necessariamente a porta particular do dono vencedor: fio é escolhido antes em `:622`.
-- Folha não restringe quais strings de rota aceita: só recebe a projeção e lê fio, `app/folha/fora_da_folha.py:70`, `:85`; beco só testa presença, `app/escala/services/cadastro_realidade.py:469`; furo reconhece as três rotas no contador, `app/chamados/services/furo_sem_canal.py:114`–`:116`; vigia conta dinamicamente a chave da rota em `app/chamados/services/vigia_fio.py:662` e inicializa app em `:577`.
-- `nada` e `nao_sei` são distintos na tarefa, `app/chamados/services/tarefa_do_dia.py:623`; ambos ficam sem rota, `:629`–`:630`. Folha os colapsa para `FIO_SEM_PORTA='nada'` pela ausência de porta (`app/folha/fora_da_folha.py:85`, `app/chamados/juizes.py:1652`), mas `o_que_segura` preserva a flag `nao_sei` separadamente, `fora_da_folha.py:248`. Vigia e furo também preservam a flag, `vigia_fio.py:656`, `furo_sem_canal.py:100`–`:102`.
-
-**Retrato, templates e PDF — detalhe importante para “sem porta explícito”.**
-
-- Retrato é agregado por pessoa: lê `grupo` do `fora_da_folha` e grava `dono` por `_fio_cru`, `app/folha/retrato_folha.py:1158`–`:1190`; grupo D torna-se `ninguem`, `:177`–`:178`, `:368`. Leitor prefere o gravado, mas tem derivação legada por status/motivo sem grupo, `:428`–`:441`.
-- `ninguem` vira **balde Admin**, `app/folha/retrato_folha.py:192`; se todos os dias forem atuais/futuros, pode virar **Hoje**, `:477`–`:481`. A UI rotula esses baldes em `:197`.
-- Drawer mostra a frase SEM PORTA por `FIO_DO_CARTORIO` (`app/folha/retrato_folha.py:183`) e `DESTRAVA` (`:1068`–`:1069`; origem `app/folha/fora_da_folha.py:54`); template apenas renderiza os valores em `app/templates/folha/_retrato_o_que_fazer.html:33`–`:40`.
-- Lista mostra LED já montado, `app/templates/folha/_retrato_lista.html:47`; PDF mostra o mesmo rótulo do LED em `app/folha/views_retrato.py:411`–`:413`. O PDF **não imprime a frase SEM PORTA** nesse registro: colunas em `:407`–`:418`.
-- Vigia de retrato conta `ninguem` pelo gravado, `app/folha/vigia_retido_calado.py:46`–`:49`.
-
-**PERGUNTA de lei:** a exigência nova “sem porta explícito” substitui também o agrupamento legado `ninguem → Admin/Hoje` da barra/PDF, ou admite o balde com identificação no drawer? O código mantém agrupamento em `app/folha/retrato_folha.py:192`, `:477`–`:481`, rótulo Admin em `:197`, PDF pelo LED em `app/folha/views_retrato.py:413`, e SEM PORTA apenas na frase do drawer em `app/folha/retrato_folha.py:1069`.
-
-**Pergunta 7 — comentários que permanecem incompatíveis/incompletos.**
-
-- **PROCEDENTE:** “TODO chamado VIVO na fila ... são publicadas” no cabeçalho, `app/chamados/services/tarefa_do_dia.py:27`–`:29`, e “CHAMADO VIVO NA FILA TEM PORTA”, `:580`; residual cobrar perde dono e rota em `:618`, `:629`–`:630`.
-- **PROCEDENTE:** “ações exigíveis e chamados vivos ligados ao dia conservam suas portas”, `app/chamados/services/tarefa_do_dia.py:641`, não ressalva residual cobrar que não publica rota, `:618`, `:629`–`:630`.
-- **PROCEDENTE:** `_fio_do_dia` documenta somente admin/colab/nada, `app/folha/fora_da_folha.py:74`, mas retorna qualquer fio publicado, `:85`, inclusive chamado do juiz, `app/chamados/services/tarefa_do_dia.py:622`.
-- **PROCEDENTE:** retrato ainda descreve grupo D como “ninguém está esperando ninguém”, `app/folha/retrato_folha.py:361`–`:362`; nova frase diz ausência de ação alcançável, `app/folha/fora_da_folha.py:54`. Há chamado cobrar e ação interna possíveis sem porta, `app/chamados/services/tarefa_do_dia.py:618`–`:635`.
-- **PROCEDENTE:** doc do beco diz `None = nenhuma ação ... por porta da fila`, `app/escala/services/cadastro_realidade.py:419`–`:420`; a projeção agora também publica app sem fila, `app/chamados/services/tarefa_do_dia.py:634`, e None também cobre sistema sem rota, `:614`, `:634`.
-
-## 14/11 19:19 · sessao 42afa79ed43b · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-1. **PROCEDENTE — bateria de mutantes incompleta.** `--todos` aborta no 12º registro, `sem_memo_por_colab`, porque o texto alvo já não existe; `carga_sem_relogio` também está obsoleto. Ambos ainda apontam para um teste removido. A validação do alvo ocorre antes do controle verde, portanto esses dois nem chegam a executar teste. Referências: `app/chamados/tests/e3_degrau_mutantes.py:41`, `:43`, `:87`, `:92`, `:112`; implementação atual em `app/chamados/services/tarefa_do_dia.py:514`. Execução nesta sessão: 19 registros morreram por assertion após controle verde; dois produziram `ValueError`. Resultado sem artefato persistido: [nao verificado em arquivo].
-
-2. **PROCEDENTE — selo L129 não prova leitura efetiva da tarefa.** Ele proíbe imports/nomes e exige a presença dos imports autorizados, mas não exige chamadas nem consumo da resposta. Em mutação somente em memória, substituí todas as chamadas `carga_da_tarefa(...)` e `porta_da_tarefa(...)` por `None`, preservando imports: os três testes do selo passaram. Referências: `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:24`, `:57`, `:61`; o degrau apenas executa esse selo em `app/chamados/tests/test_e3_degrau_dono_e_porta.py:293`. Resultado experimental sem artefato persistido: [nao verificado em arquivo].
-
-3. **NÃO PROCEDENTE — vacuidade específica de `assertEqual({}, por_colab)` por ninguém ser chamado.** A mesma execução exige `particao_do_app` exatamente uma vez. O teste de `o_que_segura` exige também um dia produzido. Ainda assim, esses testes medem chamadas; não demonstram equivalência do conjunto ao app nem consumo das pendentes retornadas. Referências: `app/chamados/tests/test_n1_alimentacao_unica.py:110`, `:114`, `:115`, `:161`, `:164`.
-
-4. **NÃO PROCEDENTE — nova asserção de `test_e3_portas_tarefa` ficou vazia.** Exige exatamente `[p.pk]` no C6, uma alimentação do painel, verbos específicos e repetição sem queries; C6 ausente ou adicional nesta fixture falha. Referências: `app/chamados/tests/test_e3_portas_tarefa.py:139`, `:144`, `:146`, `:148`, `:152`.
-
-5. **NÃO PROCEDENTE — `pos_suite` perdeu toda mordida contra C6 redundante.** O contrato ficou mais estreito: pergunta respondida na grade, fora dos pendentes. O mutante registrado que remove a exclusão das perguntas da grade continua produzindo assertion após controle verde. Referências: `app/chamados/tests/test_e3_pos_suite_sem_banco.py:50`, `:52`, `:65`, `:67`; mutante em `app/chamados/tests/e3_pos_suite_sem_banco.py:31`. Resultado experimental sem artefato persistido: [nao verificado em arquivo].
-
-6. **NÃO PROCEDENTE — E4b mascara residual `cobrar` como resolvido.** A fixture mudou para disputa fechada; o teste agora exige `segue_sem_porta`, chamado reaberto, nota única e idempotência. O teste do universo exige dois dias antes e um sem porta depois. Referências: `app/chamados/tests/test_e4_passivo.py:42`, `:76`, `:81`, `:83`, `:86`, `:89`, `:117`, `:122`, `:125`.
-
-7. **PROCEDENTE, alcance limitado — teste `o261e` deixou de demonstrar ausência de consulta paralela pelo vigia.** Antes o mock de app devia receber zero chamadas; agora a partição deve receber chamadas e a saída deve mudar. Isso demonstra influência do insumo sobre tarefa e vigia, mas um vigia com consulta paralela à mesma partição também poderia mudar e satisfazer esse teste. Referências: `app/chamados/tests/test_o261e_f5_alcance.py:264`, `:273`, `:274`, `:278`, `:280`.
-
-8. **Item 3 coberto nos corpos testados.** C4 elimina o dono por `cobrar`; C14 conserva a porta `validar` do admin quando o colab não tem pendência; C15 publica app quando o único residual é `cobrar`. Os respectivos mutantes morreram com controle verde nesta sessão. Referências: `app/chamados/tests/test_e3_degrau_dono_e_porta.py:58`, `:105`, `:113`; implementação em `app/chamados/services/tarefa_do_dia.py:610`, `:618`, `:629`. Equivalência real de universo/C6 não é demonstrada pela matriz: o teste da carga usa C6 mockado e `_perg` já pronto, em `app/chamados/tests/test_e3_degrau_dono_e_porta.py:229`, `:236`, `:246`.
-
-Executados juntos, sem banco: degrau 33, pós-suite 7 e portas-v6 10, total 50 testes verdes, processo rc 0. Referências das suítes: `app/chamados/tests/test_e3_degrau_dono_e_porta.py:40`, `app/chamados/tests/test_e3_pos_suite_sem_banco.py:19`, `app/chamados/tests/test_e3_portas_v6_sem_banco.py:15`; resultado sem artefato persistido: [nao verificado em arquivo]. Os testes ORM n1/portas/E4/o261 foram avaliados por leitura; execução: [nao verificado].
-
-_5252 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5257 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
