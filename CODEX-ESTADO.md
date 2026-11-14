@@ -1,7 +1,140 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 19:27** · publicado em **14/11/2026 19:31** (UTC-3)
+> Ultima resposta processada: **14/11/2026 19:41** · publicado em **14/11/2026 19:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 19:41 · sessao baf83260c678 · E3-V10-DEGRAU-DONO-E-PORTA · construtor · origem=Code
+
+Cura implementada em [tarefa_do_dia.py:573](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/services/tarefa_do_dia.py:573): LU-02, LU-03 e LU-07 ficam no juiz único. A certificação pela suite/opus permanece pendente **[nao verificado]**. [nao verificado]
+
+A execução local terminou com **76 testes OK**, **34/34 mutantes mortos**, controles verdes e nenhum erro nos alvos. Os dois mutantes legados adaptados também retornaram RC 1. Referências: `chamados/tests/test_e3_degrau_dono_e_porta.py:41`, `chamados/tests/e3_degrau_mutantes.py:127`, `chamados/tests/e3_portas_v6_mutantes.py:90`, `chamados/tests/e3_volta7_mutantes.py:123`.
+
+O diff por arquivo e função ficou assim:
+
+| Arquivo::função — referência | Alteração |
+|---|---|
+| `chamados/services/tarefa_do_dia.py:573::_portas_da_tarefa` | Exclui residual histórico/None; aceita ação direta administrativa; publica a rota do dono. |
+| `chamados/services/tarefa_do_dia.py:633::porta_da_tarefa` | Documenta a projeção vigente; mantém leitura dos cinco campos. |
+| `chamados/services/vigia_fio.py:318::censo` | Consome a porta da tarefa antes dos baldes. |
+| `chamados/services/vigia_fio.py:553::censo_alcance` | Acrescenta `alcance_porta_acao`; publica o contador no log. |
+| `chamados/services/furo_sem_canal.py:43::medir` | Acrescenta `com_porta_acao`. |
+| `chamados/management/commands/lavrar_furo_sem_canal.py:29::handle` | Exibe o contador de ação direta. |
+| `chamados/management/commands/vigiar_fio_morto.py:180::handle` | Encaminha o mesmo `agora` aos dois censos. |
+| `folha/fora_da_folha.py:38::GRUPOS/DESTRAVA` | Rótulo administrativo passa a incluir ação direta. |
+| `folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:26::chamadas/violacoes` | Confere chamadas, inclusive aliases; exige chamadas à carga/projeção. |
+| `chamados/tests/test_e3_degrau_dono_e_porta.py:41::DegrauDonoEPorta` | Matriz L1–L10, caracterizações invertidas, consumidores e traps de prazo. |
+| `chamados/tests/e3_degrau_mutantes.py:17::MUTANTES` | Quatro mutantes pedidos, equivalentes vivos de P1 e cobertura dos leitores alterados. |
+| `chamados/tests/test_o261e_f5_alcance.py:122::_soma` | Inclui `porta_acao` na soma L-110; P3 exige uma chamada à partição por rodada. |
+| `chamados/tests/test_n1_alimentacao_unica.py:104` | Corrige docstrings para carga em lote, com os IDs LU. |
+| `chamados/tests/test_e3_portas_tarefa.py:48` | Ajusta expectativas de rota do colab e residual histórico. |
+| `chamados/tests/test_e3_portas_v6_sem_banco.py:45` | Ajusta a prioridade da ação administrativa direta. |
+| `chamados/tests/test_o261e_f5b_juiz_porta.py:232` | Preserva fila/verbos e exige a nova porta administrativa. |
+| `chamados/tests/test_e3_diff_sombra.py:170` | Exige a diferença de rota A/B prevista por LU-07. |
+| `chamados/tests/e3_portas_v6_mutantes.py:63` e `chamados/tests/e3_volta7_mutantes.py:24` | Invertem os mutantes legados para negar a ação direta. |
+
+A matriz foi executada **antes da alteração da regra**, com este comando:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v chamados.tests.test_e3_degrau_dono_e_porta.DegrauDonoEPorta -k test_L
+```
+
+Trecho da saída RED inicial:
+
+```text
+test_L1_historico_sem_porta ... FAIL
+test_L2_verbo_nulo_sem_porta ... FAIL
+test_L4_admin_direto_tem_porta_e_folha_le_admin ... FAIL
+test_L5_admin_direto_com_cobrar ... FAIL
+test_L6_rota_colab_com_decidir_na_celula ... FAIL
+test_L7_rota_colab_com_acao_admin_na_fila ... FAIL
+Ran 10 tests in 1.069s
+FAILED (failures=6)
+```
+
+Os resultados antes/depois, em `(fio, rota)`, foram:
+
+| Caso e referência no teste | Fase RED | GREEN | [nao verificado]
+|---|---|---|
+| L1 — `test_e3_degrau_dono_e_porta.py:41` | FAIL: `chamado, porta_fila` | `nada, None`; projeção None |
+| L2 — `:47` | FAIL: `chamado, porta_fila` | `nada, None`; projeção None |
+| L3 — `:53` | OK: `chamado, porta_fila` | Preservado |
+| L4 — `:57` | FAIL: `nada, None` | `admin, porta_acao`; Folha lê admin |
+| L5 — `:67` | FAIL: `nada, None` | `admin, porta_acao` |
+| L6 — `:72` | FAIL: `colab, porta_fila` | `colab, porta_app` |
+| L7 — `:76` | FAIL: `colab, porta_fila` | `colab, porta_app` |
+| L8 — `:81` | OK: `admin, porta_fila` | Preservado |
+| L9 — `:86` | OK: `admin, porta_fila` | Preservado |
+| L10 — `:91` | OK: `nada, None` | Preservado |
+
+L9 conserva `porta_fila`: o residual `validar` fornece uma porta administrativa na célula, que prevalece sobre a rota da ação direta. Já ação administrativa direta com residual `decidir` usa `porta_acao`, sem converter o residual em admin: `chamados/services/tarefa_do_dia.py:619`, `chamados/tests/test_e3_degrau_dono_e_porta.py:96`.
+
+O censo de leitores foi feito antes da primeira gravação, usando `git grep -n` pelos termos solicitados. O tratamento de `porta_acao` é:
+
+| Leitor — referência | Tratamento |
+|---|---|
+| `folha/fora_da_folha.py:37`, `:82`, `:238` | `FIOS` continua sendo vocabulário de fio; lê `admin` diretamente. Rótulo atualizado em `:45`; chamados continuam vindo de `fila`, em `:244`. |
+| `folha/retrato_folha.py:192`, `:974`, `:1015`, `:1069` | Consome fio/grupo e rótulo. Não discrimina a rota da tarefa; links continuam pelo mapa de fio/tipo. `PORTA_DO_FIO['admin']` permanece None. |
+| `chamados/services/furo_sem_canal.py:97`, `:117` | Reconhece a presença da porta e conta `com_porta_acao`. |
+| `chamados/services/vigia_fio.py:412`, `:428` | `censo()` lê a projeção e conta em `fio_vivo`; não separa por rota. |
+| `chamados/services/vigia_fio.py:588`, `:673`, `:740` | `censo_alcance()` inicializa, conta e imprime `alcance_porta_acao`. Soma cobrada em `chamados/tests/test_o261e_f5_alcance.py:124`. |
+| `escala/services/cadastro_realidade.py:469` | Testa presença da projeção; qualquer porta publicada exclui o dia do beco. |
+| `ponto/services/pautas_dos_discordantes.py:79` | Lê indiretamente o fio da Folha; admin deixa de ser sem fio. |
+| `chamados/management/commands/diff_e3_sombra.py:46` | Projeta rota/fio/fila e testa presença, sem enumeração fechada de rotas. |
+| `chamados/management/commands/lavrar_furo_sem_canal.py:37` | Exibe o contador novo. |
+
+Os escritores e consumidores dos campos permanecem identificáveis:
+
+| Campo | Escrita/fornecimento | Leitura |
+|---|---|---|
+| `rota`, `fio` | Seleção e publicação únicas em `chamados/services/tarefa_do_dia.py:615`, `:630` | Projeção `:641`; consumidores no censo acima. |
+| `verbos` | Painel/alimentação em `chamados/juizes.py:1570`; seleção na tarefa em `tarefa_do_dia.py:601` | Residual em `:611`; projeção em `:641`; instrumento em `diff_e3_sombra.py:144`. |
+| `fila` | Alimentação em `chamados/juizes.py:1573`; seleção publicada em `tarefa_do_dia.py:602` | Folha em `folha/fora_da_folha.py:244`; instrumento em `diff_e3_sombra.py:143`. |
+| Projeção C17 histórica | `chamados/juizes.py:1709` | Lado anterior do comparador, `diff_e3_sombra.py:127`; não foi alterada. |
+
+Nos baldes do vigia, os dias com ação administrativa já publicada pela tarefa passam antes dos baldes: `censo()` em `vigia_fio.py:428`; `censo_alcance()` em `:669`. [nao verificado]
+
+- **Decidir ausência:** quando a tarefa expõe a ação, sai de `aguarda_decisao_de_ausencia` e ganha porta administrativa. Fontes: `tarefa_do_dia.py:174`, `:305`, `:606`.
+- **A/S validar:** quando a tarefa publica `validar` sem chamado, ganha `porta_acao`. Fonte: `tarefa_do_dia.py:352`.
+- **Resolver dia:** dias que também tenham ação administrativa na tarefa saem de `decisao_do_dia_pendente`. A oferta do calendário sozinha continua podendo alcançar o balde; não foi criada ação nova neste lote. Fontes: `vigia_fio.py:306`, `:442`, `:683`.
+- **Aguardando documento:** continua sem dono por essa ação, preservando L10/LU-04 fora do lote. Fontes: `tarefa_do_dia.py:299`, `test_e3_degrau_dono_e_porta.py:91`.
+
+Os dois baldes conservam chamadores condicionados à ausência de porta. Quantos dias restam em cada um, ou se algum fica vazio na frota: **[nao verificado]**.
+
+Para reproduzir as verificações:
+
+```bash
+# Reproduz os seis REDs contra a base fornecida; RC esperado 1.
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --base
+
+# GREEN final: 76 testes OK. [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -q \
+  chamados.tests.test_e3_degrau_dono_e_porta \
+  chamados.tests.test_e3_pos_suite_sem_banco \
+  chamados.tests.test_e3_portas_v6_sem_banco \
+  chamados.tests.test_e3_volta7_sem_banco
+
+# Concluiu: MORTOS=34 TOTAL=34; RC 0.
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --todos
+```
+
+O runner imprime o comando individual antes de cada controle verde; falha do controle levanta `AssertionError`: `chamados/tests/e3_degrau_mutantes.py:132`. Os quatro pedidos e os equivalentes vivos de P1 são:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --mutante historico_da_dono
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --mutante acao_direta_sem_dono
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --mutante rota_colab_pela_fila
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --mutante porta_acao_some
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --mutante sem_memo_por_colab
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --mutante carga_sem_relogio
+
+# Legados adaptados; ambos RC 1.
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_portas_v6_mutantes --mutante fio_acao_sem_porta_ignorada
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_volta7_mutantes --mutante fio_v6
+```
+
+P2 agora acusa chamadas proibidas inseridas em memória, inclusive por alias: `folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:90`. P4 usa traps de prazo, sem alegar vencimento C9: `test_e3_degrau_dono_e_porta.py:105`. P3 exige `call_count == 1` por rodada, mas sua execução com fixture ORM permanece **[nao verificado]**: `test_o261e_f5_alcance.py:264`.
+
+Ficaram fora LU-01, LU-04, LU-05 e LU-06: residual `decidir` continua `chamado` (`test_e3_degrau_dono_e_porta.py:53`); documento sem porta continua sem dono (`:91`); agrupamento `ninguem` permanece (`folha/retrato_folha.py:192`); universo da carga não foi alterado. Integração ORM, remedida e totais novos de produção: **[nao verificado]**. Registro sem construção: **PORTA-DO-ADMIN-NA-PERGUNTA-VENCIDA**, número informado no anexo **2.333**; remedida **[nao verificado]**.
 
 ## 14/11 19:27 · sessao c4cb8db0cbc8 · BO-DISPUTA-SEM-PERGUNTA · leitura · origem=Code
 
@@ -1530,83 +1663,4 @@ Provas específicas, todas em **app/docs/BACKLOG.md:1102**:
 
 A referência `BACKLOG:1059` impressa na grade está desatualizada: a linha efetiva da obra nesta cópia é **app/docs/BACKLOG.md:1102**. Nenhum dos seis congelados é citado nessa linha; alteração efetiva futura desses arquivos permanece **[nao verificado]**.
 
-## 14/11 18:47 · sessao 32d3120f3ba2 · - · - · origem=Ronald (tmux)
-
-Censo parcial consolidável, todo por leitura; **não sustento fechamento de toda a árvore** com esta fatia. Os caminhos abaixo foram identificados em AST e conferidos no fonte; permissões efetivamente atribuídas em produção permanecem `[nao verificado]`.
-
-**Método executado:** `python3 -B`, `ast.parse`, `ast.walk`, inspeção de `Call`, `FunctionDef` e mapa de `ImportFrom` com `asname`. Leitura de URLs, chamadas e escritores complementar; nenhum arquivo criado.
-
-**Portas especialmente relevantes fora de chamados**
-
-| Ação | Porta e URL | Guarda real | Gravação/trilha |
-|---|---|---|---|
-| Resolver dia: trabalhou/faltou/justificado | `app/ponto/urls.py:58`; `app/ponto/views.py:3352` | POST + `tem_acao(...,'regularizar_batida')`, `views.py:3355`; alias `_vc` importado em `3354`; guardas de negócio **inline** em `services/veredito_celula.py:220`, `243`, `249`, `309`, `334` | Batida via `registrar_batida`, `:323`; Ausencia aprovada via `criar_ausencia`, `:337`; perguntas via `fechar_por_admin`, `:190`; decisão SILENCIO, `:195`; chamado reconciliado e ocorrência, `:203`; `CelulaDia.lavrar_veredito`, `:352`; LogAuditoria, `:356`. |
-| Inverter batida | `urls.py:59`; `views.py:3300` | View `:3303`; guardas inline `flip_batida.py:15` retratada, `:19` autor, `:22` `competencia_fechada`, `:26` tipo | `Batida.tipo`, via `registro_batida.anotar`, `flip_batida.py:30`; trilha antes/depois e recompute `:39`. |
-| Retratar batida | `urls.py:61`; `views.py:3314` | `_retratar` → `retratar_humano.retratar`, import `:3316`; `_pode` chamável `retratar_humano.py:131`; motivo/ativo inline `:166`, `:170` | `retratar_batida`, `:179`, motivo estruturado `:181`; efeito no dia. |
-| Desfazer retratação | `urls.py:62`; `views.py:3326` | `_desfazer` → `retratar_humano.desfazer`, import `:3328`; `_pode`, `:194`; retratada/origem/prazo inline `:197`, `:199`, `:203`; `pode_desfazer(batida,agora=AGORA)` existe em `:105` mas **não cobre a guarda toda** | `Batida.aprovada=True,retratada_em=None`, `:207`, trilha via `anotar`. |
-| Aprovar/rejeitar justificativa | `urls.py:40`, `43`; `views.py:1914`, `1926` | POST + `avaliar_justificativas`, `:1916`, `:1928`; executores `justificativa.py:132`, `262`; guardas inline | Aprovação `status/aprovada_por/aprovada_em/batida_gerada`, `justificativa.py:204`; Batida S, `:188`; invalida fechamento `:215`; encerra origem `:217`; trilha `:230`. Rejeição campos `:283`, chamado `:291`. |
-| Aprovar justificativas em lote | `urls.py:41`; `views.py:1766` | Inline `:1769`, pendente `:1783`, `:1797`, batida recusada `:1825`, saída já utilizada `:1829` | Escrita **própria** `Justificativa.status/aprovada_por/aprovada_em`, `:1799`; batida S `:1818`; `batida_gerada` `:1834`; invalidação `:1808`; encerra origem `:1840`. |
-| Rejeitar justificativas em lote | `urls.py:42`; `views.py:1862` | Inline POST/permissão `:1865`, pendente `:1877` | Campos próprios `status/aprovada_por/aprovada_em/motivo_rejeicao`, `:1878`; save `:1882`; notificações. Trilha própria de sucesso não observada nessa função `[nao verificado]`. |
-| Materializar saída retroativa | `urls.py:44`; `views.py:3146` | `materializar_saida` `:3158`; hora e motivo mínimo `:3173`, `:3175`; executor `justificativa.materializar_saida_dp`, `:3185` | Executor pode registrar saída e justificativa; campos completos `[nao verificado]`. |
-| Lançar ausência | `urls.py:57`; `views.py:2400` | `editar_ausencias`, `:2402`; `corpo_chegou_inteiro`, `:2431`; guardas inline `ausencia.criar_ausencia`, `ausencia.py:242`, `247`, `249`, `261` e sobreposição posterior | Ausencia aprovada `views.py:2447`; afastamento altera `Colaborador.situacao`, `:2465`. |
-| Operar ausência existente | `urls.py:54`–`56`, `65`–`76`; funções em `views.py:2279`, `2320`, `2356`, `2601`, `2631`, `2697`, `2715`, `2758`, `2791` | `_a4_decidir` `views.py:85` chama `ponto.services.ausencia.decidir`; edição e reversão usam serviços respectivos; guardas completas `[nao verificado]` | Estado/range/dados de Ausencia; campos completos por variante `[nao verificado]`. |
-| Recalcular/aprovar/reabrir fechamento | `urls.py:31`–`36`; funções `views.py:1229`, `1260`, `1386`, `1437`, `1464`, `1523` | `editar_folha`/POST; `aprovar_colaborador` lê `fechamento_lido` `:1483` e `_classificar_export` alias `folha.export.classificar_export` `:1508`; seleção de travas inline `:1512` | Serviços `fechamento.aprovar_lote:1323`, `aprovar:1335`, `reabrir_lote:1344`, `reabrir:1349`, `trancar_periodo:1400`, `reabrir_periodo:1432`; status/carimbos e período, com efeitos adicionais. |
-| Exportar folha | `folha/urls.py:14`; `folha/views.py:102` | Guarda completa `[nao verificado]` | `ExportacaoDominio.registrar`, `aprovar_lote`, `registrar_log` na função. |
-
-O serviço `veredito_celula` **não pode ser chamado por uma sonda somente leitura**: guarda e execução estão misturadas e ele inicia transação/travas em `app/ponto/services/veredito_celula.py:224`, antes da decisão final. Uma sonda não deve copiar essas condições.
-
-**Porta administrativa adicional**
-
-`/admin/` é publicado em `app/config/urls.py:24`. `JustificativaAdmin` deriva diretamente de `admin.ModelAdmin`, sem `SoLeitura`, sem `readonly_fields` e sem override de permissão (`app/ponto/admin.py:18`). Campos editáveis incluem colaborador, turno, batida de entrada, tipo, saída informada, status, aprovador, carimbo, rejeição, batida gerada e chamado de origem (`app/ponto/models.py:136`–`179`). Quem possui as permissões Django em produção `[nao verificado]`; trilha `LogAuditoria` da aplicação por esta porta `[nao verificado]`.
-
-Batida, ImportacaoAEJ e Ausencia herdam `SoLeitura` (`app/ponto/admin.py:11`, `25`, `37`): recusas reais de add/change/delete retornam `False` em `app/core/admin.py:59`, `62`, `65`; todos os campos readonly em `:68`.
-
-**Comandos de escrita identificados por AST**
-
-Caminhos abaixo relativos a `app/chamados/management/commands/`:
-
-| Comando | Chamada de escrita | Guarda/restrição observada |
-|---|---|---|
-| `curar_perguntas_em_limbo` | `:67 carimbar_resposta_pela_trilha`; `:69 reabrir_para_correcao` | Comparação exata com conjunto MEDIDAS inline `:46`–`53`; nota encontrada `:55`; `--apply` `:64`. |
-| `fechar_becos_disputa` | `:57 becos.fechar_beco` | Guarda **chamável** `becos.classificar(d)` `:39`; implementação `services/becos.py:25`–`33`, usa `d.pode_fechar()`. |
-| `carimbar_por_batida_coincidente` | `:98 _ctx.renovar_contexto`; `:100 _vinc.apontar_celula`; trilha `:101` | `_ctx` → `chamados.services.contexto`; `_vinc` → `.vinculos` imports `:58`; seleção inline `:60`–`85`. |
-| `encerrar_perguntas_com_fato` | `:68 p.encerrar_por_fato_no_espelho`; `:88 d.fechar` | Seleção inline `:31`–`43` exige materializada, não validada, via sem história e `fato_do_marco_no_espelho(p) is True`. |
-| `perguntar_chamados_sem_pergunta` | `:29 pergunta_no_app.perguntar` | Guarda integral `[nao verificado]`. |
-| `silenciar_chamados_isentos` | `:49 silencio_isentos.silenciar` | Guarda chamável `silencio_isentos.alvos()` `:36`; implementação `services/silencio_isentos.py:20`: flag isento, estado vivo, ainda sem silêncio. |
-| `arquivar_prescritos` | `:94 arquivo.silenciar` | Recortes inline `:43`, `49`, `53`, `60`; verbo validar/cobrar/decidir; idade criado_em; não silenciado nem resgatado. |
-| `arquivar_sem_dia_irrecuperavel` | `:94 arquivo.silenciar` | Recortes inline `:58`–`68`; escopo DIA, sem dia do fato e anterior à corrente. |
-| `arquivar_competencia_encerrada` | `:288 arquivo.silenciar` | `_disputa_viva` chamável `:148`; conjunto/corte integral inline `handle`. |
-| `reabrir_orfas_enterradas` | `:157 p.reabrir_fantasma`; `:165 d.reabrir_sistema`; `:172 pai.reabrir` | Recortes inline `:67`–`112`; via fantasma, lâmpada False, pergunta viva, janela fixa do carimbo, exportada fora, recusa/irmãs do pai. |
-| `encerrar_por_competencia_trancada` | `:29 competencia_trancada.encerrar` | Guarda completa de planejamento **chamável** `services/competencia_trancada.medir`, `:90`–`185`; `encerrar(...,aplicar=False)` `:188`–`193` só devolve medida. |
-| `nomear_marco_por_lampada` | `:109 contexto.renovar_contexto`; evento `:111` | Guardas inline `:47`–`85`; dia apurável, lâmpada apagada e desempate da hora/origem/única. |
-| `relavrar_via_i6` | `:102 relavra_via.relavrar` | `planejar` chamável `:44`–`70`; executa `universo_i6()`, vias derivadas, exclusão por ordem, `via_de_hoje`. |
-| `backfill_decisoes_pergunta` | `:324 DecisaoPergunta.registrar` | Guardas do apply misturadas à execução; detalhes `[nao verificado]`. |
-| `dedup_perguntas_fato` | `:105 aplicar` → `backfill_decisoes_pergunta.aplicar` import `:104` | Grupos `:58`; `plano_de_retratacao` real `:81`; recorte/horizonte/merito/exportada no apply. |
-| `lavrar_perguntas_stale` | `:89 veredito_lavrado.lavrar` | Guarda chamável `raiox.pks_stale_por_varredura` `:60`; candidatos pelo destino vivo `:57`–`58`; teto inline `:61`. |
-| `backfill_veredito_lavrado` | `:143`, `:146 gravar_lavras_em_lote` | Juiz real `_pergunta_materializada_de_fato` `:105`; divergência e não apagar lavra por indeterminação inline `:120`, `124`. |
-| `backfill_fio_morto_e4b` | `_executar_dia:125`: reabrir credor `:135`, registrar decisão `:141`, perguntar `:143`, materializar `:147` | Planejamento chamável `ato_do_dia:82`; usa `T.tarefa_do_dia` e `reabrir_credor_de_pergunta_viva(...executar=False)` `:90`. |
-| `validar_classe_a` | `:100 validacao.validar_pergunta` | Recorte inline `:44`–`67`; só respostas sem veredito, classificação real CLASSE_A; autor existente `:90`. |
-| `reatar_beco_folga_ao_limbo` | `limbo_folgas.reatar_perguntas_ao_limbo`, import `:50` | Guarda real de seleção `_folga_nao_definida_sem_porta(...agora=AGORA)` `:54`; pai na `qs_na_fila` `:59`; sem pai/fora da fila `:63`–`68`; reversão obrigatória `:39`–`43`. |
-| `retratar_chamados_lei_cala` | `:59 retratar` → `chamados.reconciliador.retratar`, import `:29` | Guardas inline `:32`–`47`: dia passado e `classificar_falta(...)[1] is None`. |
-| `auditar_chamados_orfaos --fechar` | `:68 transicionar_com_pauta(...ato=ch.reconciliar)`; ocorrência `:73` | Recorte inline `:35`–`44`; gate real dentro da transição. |
-| `materializar_passivo_validado` | `:104`, `:113 passivo_validado.reparar` | Mais restrições/autor em `:70`–`83`; **até dry escreve arquivo** `:85`, `:117`–`130`. |
-| `geofence_registrados_para_analise` | `:32 ch.analisar` | Guarda integral `[nao verificado]`. |
-| `alertar_chamados_sla` | `:44 nota.anexar_ocorrencia`; push `:48` | Guardas reais chamáveis `sla.vencido`, `sla.ja_avisado`, `sla.vence_em` `:32`–`34`; teto da passada inline `:37`. | [nao verificado]
-
-`arquivo.silenciar` grava `ChamadoColaborador.silenciado_ate`, `.silenciado_por`, `.silenciado_motivo`, `.atualizado_em` e trilha `evento` (`app/chamados/services/arquivo.py:156`–`173`). Não muda `status_local`.
-
-`relavra_via.relavrar` grava `PerguntaDisputa.via_resolucao`, `.veredito_lavrado`, `.julgado_em`, `.janela_expira_em` e evento por pergunta (`app/chamados/services/relavra_via.py:118`–`138`).
-
-`competencia_trancada.encerrar` hoje não carimba perguntas (`app/chamados/services/competencia_trancada.py:133`–`135`, `203`). Encerra chamados pela transição (`:209`), anexa ocorrência e evento (`:210`–`219`), fecha disputa pela porta (`:229`), pode criar Pauta DP (`:232`, `256`).
-
-**Cuidados necessários para a sonda**
-
-- Não chamar comandos em dry presumindo ausência de escrita: `materializar_passivo_validado` cria pasta/JSON mesmo sem apply (`:85`, `118`).
-- Não chamar serviço mutador e fazer rollback: isso já executa escrita e sinais; não satisfaz a restrição.
-- Guardas inline devem sair como **não sondável**, sem contagem inventada.
-- `core.portas_da_tela` não fecha este censo: exclui API/admin em `app/core/portas_da_tela.py:24` e detecta POST por texto em `:52`; guardas por regex em `:57`.
-- `core.views.painel_operacional` e seu lote são leitura (`app/core/views.py:589`, `621`), não outra porta de decisão.
-- `regularizar_retorno` usa `request.user.colaborador` (`app/ponto/views.py:3208`): é ação do próprio colaborador, não uma porta administrativa genérica.
-- Leitura completa dos comandos de outros apps, API, escala/cadastro, férias e ações de IA ainda é necessária para declarar **TODA ação**. `[nao verificado]`
-
-_5240 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5241 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
