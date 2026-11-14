@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 11:28** · publicado em **14/11/2026 11:29** (UTC-3)
+> Ultima resposta processada: **14/11/2026 11:40** · publicado em **14/11/2026 11:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 11:40 · sessao 94f383df6683 · - · - · origem=Ronald (tmux)
+
+- [fila] **O selo morde ambas as mutações.** Reproduzindo somente a seção A em memória: atual passa 11/11; regra velha falha em sexta `1800`, sábado `1000`/`0600` e domingo `2319` (`bin/tests/test_janela_auth.sh:28-31`). “Nunca barrar” falha em sábado `2320`, domingo `0559`, quarta `2320`/`0559` (`bin/tests/test_janela_auth.sh:32-36`). Os resultados decorrem do prefixo esperado comparado em `bin/tests/test_janela_auth.sh:41-44`.
+
+- [fila] **Limite do selo:** A ignora o código de saída e compara somente o prefixo da saída combinada; uma resposta textual certa com status errado passa essa seção (`bin/tests/test_janela_auth.sh:41-44`). `proxima()` também fica descoberta: `--janela` termina sem chamá-la (`bin/janela_auth.sh:75-81`); D2 verifica apenas status e `BLOQUEADO`, D3 apenas status e `nao existe` (`bin/tests/test_janela_auth.sh:105`, `bin/tests/test_janela_auth.sh:118`).
+
+- [fila] **Não executei o selo completo:** ele cria temporários, escreve carimbos e apaga diretórios (`bin/tests/test_janela_auth.sh:79-82`, `bin/tests/test_janela_auth.sh:125`, `bin/tests/test_janela_auth.sh:160-161`). A reprodução acima usou texto extraído e substituições exclusivamente em memória, sem arquivos [não verificado por artefato persistido].
+
+- [fila] **No arquivo `deploy.sh`, o hunk fornecido altera só comentário** (`bin/deploy.sh:127-130`); o desvio com motivo e a chamada da guarda permanecem em `bin/deploy.sh:144-148`. **O comportamento efetivo do deploy muda indiretamente**, pois a guarda chamada passa a liberar sexta à noite/fim de semana dentro da faixa diurna (`bin/janela_auth.sh:55-60`, `bin/deploy.sh:146`).
 
 ## 14/11 11:28 · sessao 5dd1b348cf18 · HJ-091 · sonda · origem=Code
 
@@ -878,20 +888,4 @@ Grep utilizado: `rg -n --glob '*.py' --glob '!**/test*' --glob '!**/migrations/*
 
 - **Cobertura adicional não demonstrada.** O selo cobre saída isolada, entrada e ausência de marcação, mas não inclui retratada isolada, saída órfã, turno atravessando meia-noite, fuso ou contexto real de `relatorios/furos.html`. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:41`, `:45`, `:49`, `:54`; `app/templates/relatorios/furos.html:42`). Isso limita a prova, sem retirar a mordida lógica específica da saída isolada. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:41`).
 
-## 14/11 10:45 · sessao 198cbbbb991a · - · - · origem=Ronald (tmux)
-
-- **NAO PROCEDE — produtor sem `batidas` ou significado diferente entre rotas reais.** Os três caminhos convergem para `contexto_calendario`: perfil/admin em `app/colaboradores/views.py:1948` e `:1949`, render em `:1965`; drawer em `app/colaboradores/services/drawer.py:120` e `:121`, entregue como `cal` em `:153`; auditoria de espelhos em `app/relatorios/furos.py:160`. Os includes leem os mesmos dias em `app/templates/colaboradores/calendario_partial.html:62`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` e `app/templates/relatorios/furos.html:42`.
-
-- **Escritor único do dict real:** `batidas` em `app/colaboradores/services/calendario.py:729`; `retratadas` em `:730`; `entradas` em `:740`. A lista viva nasce do achatamento dos turnos em `:610` e `:611`, filtrada por `retratada_em is None` em `:621`; entradas são o subconjunto `tipo == 'E'` em `:658`. Retratadas são consultadas separadamente em `:239`, agrupadas por data local em `:244` e selecionadas para a célula em `:640`. O `batidas` de `app/colaboradores/services/drawer.py:147` é contexto superior; a grade recebe `cal.dias`, conforme `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`.
-
-- **PROCEDE — ambiguidade “dia” civil × turno no argumento da cura.** `batidas` e `entradas` pertencem ao **dia do turno**, pois a carga é agrupada por `t.data_turno` em `app/colaboradores/services/calendario.py:223` e `:224`; `retratadas` pertence ao **dia civil local**, conforme `:244`. O comentário novo chama `batidas` de “toda marcação viva do dia” sem explicitar o eixo em `app/templates/colaboradores/partials/_calendario_grade.html:120`. A distinção entre as listas já existe no produtor; a mudança do gate não altera essa classificação (`app/colaboradores/services/calendario.py:224`, `:244`, `:621`).
-
-- **NAO PROCEDE como regressão de atribuição de dia causada pelo gate.** A autoridade registrada para o dono da batida é `turnos_do_colab`, em `app/core/juizes.py:208`. O turno pode conter marcação de outro dia civil (`app/ponto/turnos.py:322` e `:324`), e inclusive uma saída órfã pode pertencer à véspera (`:293` e `:298`). O produtor preserva essa decisão (`app/colaboradores/services/calendario.py:224`); o gate novo apenas permite desenhar a lista já atribuída (`app/templates/colaboradores/partials/_calendario_grade.html:122` e `:125`). Portanto, “saída na manhã seguinte aparece na célula do turno anterior” é possível e segue o eixo usado pelo produtor; ocorrência em produção: **[não verificado]**.
-
-- **PROCEDE — terceira raiz omitida pelo teste das duas cascas.** Além das duas raízes enumeradas em `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:57` e `:58`, `app/templates/relatorios/furos.html:42` inclui a grade com `only`, alimentada pelo mesmo serviço em `app/relatorios/furos.py:160`. A view renderiza essa raiz em `app/relatorios/views.py:1566`. O teste novo, portanto, não prova a completude do grafo real (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:57` e `:60`).
-
-- **NAO PROCEDE — novo juiz ou nova derivação de turnos introduzidos pela troca.** O gate lê a mesma lista que o laço desenha (`app/templates/colaboradores/partials/_calendario_grade.html:122` e `:125`); a geometria continua vindo da autoridade registrada (`app/core/juizes.py:208`, `app/colaboradores/services/calendario.py:220` e `:224`). `resolver_dia_oferecido` permanece uma pergunta distinta registrada em `app/core/juizes.py:739` e lida em `app/templates/colaboradores/partials/_calendario_grade.html:129`.
-
-Nenhuma execução contra banco, logs ou código-base histórico foi realizada nesta exploração; resultados de execução e mordida efetivamente observada em `f7510b95a`: **[não verificado]**.
-
-_5109 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5110 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
