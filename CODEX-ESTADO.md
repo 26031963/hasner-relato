@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 16:59** · publicado em **14/11/2026 17:00** (UTC-3)
+> Ultima resposta processada: **14/11/2026 17:00** · publicado em **14/11/2026 17:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 17:00 · sessao 8fb89e816b92 · E3-V10-DEGRAU-PUB · censo · origem=Code
+
+**Nenhum B identificado nos 40 testes.** [não verificado: conclusão da triagem estática, sem reexecução] [nao verificado]
+
+Referências relativas a `app/`. Nomes dos testes sem o prefixo `test_`. [nao verificado]
+
+Regras usadas: **1** = responder + pergunta pendente no app, independentemente da âncora/prazo (`chamados/services/tarefa_do_dia.py:43`); **2** = ação administrativa/sistema alcançável (`:45`); **3** = residual sem `cobrar` (`:46`). **4*** = publicar rota somente com dono (`chamados/services/tarefa_do_dia.py:612`); sua numeração literal como item 4 é **[não verificado]**, pois o topo enumera apenas 1–3.
+
+| teste | arquivo:linha do assert/erro | CLASSE | o que mudar e onde | [nao verificado]
+|---|---|---|---|
+| MORDE_o_universo_e_o_mesmo_do_fora_da_folha | chamados/tests/test_n1_alimentacao_unica.py:127 | F | Helper `_conta_pda`, em `:90`, precisa receber/repassar `em_lote` e `agora`; assinatura exigida em `chamados/services/pergunta_no_app.py:74`. Preservar igualdade dos universos. |
+| RED_a_porta_e_alimentada_uma_vez_por_rodada | chamados/tests/test_n1_alimentacao_unica.py:99 | F | Mesmo helper `:90`: repassar os argumentos novos. Preservar alimentação única em `:101`; consulta do app é memorizada separadamente por colab (`chamados/services/tarefa_do_dia.py:551`). |
+| RED_o_que_esta_no_app_se_pergunta_uma_vez_por_colaborador | chamados/tests/test_n1_alimentacao_unica.py:106 | F | Corrigir helper `:90`; depois, regra **1**: trocar expectativa zero de `:107` por uma consulta por colab utilizado na carga, constante em dias (`chamados/services/tarefa_do_dia.py:551`). |
+| RED_o_que_segura_semeia_o_mapa_com_o_colaborador_pedido | chamados/tests/test_n1_alimentacao_unica.py:147 | F | `_le`, em `:141`, deve repassar kwargs. Regra **1**: atualizar zero leituras em `:149`; preservar proibição de busca individual em `:153` (`chamados/services/pergunta_no_app.py:59`). |
+| a_saida_do_dia_nao_muda | chamados/tests/test_n1_alimentacao_unica.py:111 | F | Corrigir `_conta_pda` em `:90`. Regra **1** conserva a porta existente neste cenário pendente; manter verificações de saída (`chamados/tests/test_n1_alimentacao_unica.py:113`). |
+| v8_R10_ancora_fora_do_fato_sem_acao | chamados/tests/test_e3_portas_tarefa.py:601 → chamados/services/tarefa_do_dia.py:551 | F | Inicializar `_pendentes_app` no objeto criado por `__new__`, `chamados/tests/e3_v8_apoio.py:127`; fornecer pendentes vazios ou mock de consulta. Inicialização real em `chamados/services/tarefa_do_dia.py:388`. |
+| lote_responde_o_mesmo_que_o_avulso_e_com_queries_constantes | chamados/tests/test_e2_tarefa_do_dia.py:1180 | F | Separar custo do lote e nova consulta por colab; preservar igualdade lote/avulso. Parcela nova constante com dias, crescente com colabs; não fixar simplesmente 26 (`chamados/services/tarefa_do_dia.py:551`). |
+| lote_tem_queries_constantes | chamados/tests/test_e2_tarefa_do_dia.py:938 | F | Comparação altera simultaneamente dias e colabs. Medir dias com colabs fixos e contabilizar consulta por colab; não substituir por teto 45 (`chamados/tests/test_e2_tarefa_do_dia.py:931`; `chamados/services/tarefa_do_dia.py:551`). |
+| RED_8_pergunta_sob_ancora_REGISTRADA_nao_e_canal | chamados/tests/test_e3_bloqueantes.py:168 | L | **1**: novo `porta_app/colab`; atualizar também `:170` para excluir dos sem canal (`chamados/services/tarefa_do_dia.py:43`). |
+| RED_8_pergunta_sob_ancora_SILENCIADA_nao_e_canal | chamados/tests/test_e3_bloqueantes.py:161 | L | **1**: novo `porta_app/colab`; atualizar também `:163` para excluir dos sem canal (`chamados/services/tarefa_do_dia.py:43`). |
+| classe_e_viva_sob_terminal_reabre_pela_porta_com_nota | chamados/tests/test_e4_passivo.py:73 → chamados/tests/test_e4_backfill.py:112 | L | **1**: pendente sob terminal já tem `porta_app/colab`; esperar plano desse dia zero, sem reabertura/nota. Atualizar caracterização em `:73` (`chamados/services/tarefa_do_dia.py:43`; `chamados/services/vigia_fio.py:658`). |
+| mutante_sem_porta_morde_caracterizacao_classe_e | chamados/tests/test_e4_passivo.py:90 | L | **1**: neste cenário, reabrir credor deixou de ser necessário. Reenquadrar teste de `:87` para verificar ausência dessa chamada; trocar apenas regex esconderia a mudança (`chamados/services/tarefa_do_dia.py:43`). |
+| MORDE_dry_nao_escreve | chamados/tests/test_f3_beco1_reata_limbo.py:72 | L | **1**: novo zero candidatos/pais C11; preservar ausência de escrita. Para exercitar DRY com candidatos, montar cenário realmente sem porta (`escala/services/cadastro_realidade.py:469`). |
+| MORDE_pai_cujo_silencio_ja_venceu_volta_a_fila_e_reata | chamados/tests/test_f3_beco1_reata_limbo.py:159 | L | **1**: pergunta já tem porta do app; novo zero reatas. Refazer cenário sem porta para continuar cobrindo silêncio vencido (`escala/services/cadastro_realidade.py:469`). |
+| MORDE_sem_pai_fica_na_lista_e_nenhum_pai_nasce | chamados/tests/test_f3_beco1_reata_limbo.py:82 | L | **1**: novo sem linha `SEM PAI`, pois não entra em C11. Preservar teste de ausência de pai com cenário sem porta (`escala/services/cadastro_realidade.py:469`). |
+| RED_apply_reata_ao_pai_e_o_dia_sai_do_beco | chamados/tests/test_f3_beco1_reata_limbo.py:53 | L | **1**: novo `_c11()==[]` antes do apply; zero reatas. Refazer cenário sem porta para testar costura (`escala/services/cadastro_realidade.py:469`). |
+| RED_pai_silenciado_DEPOIS_da_selecao_nao_recebe_reata | chamados/tests/test_f3_beco1_reata_limbo.py:145 | L | **1**: cenário atual não seleciona C11, portanto não alcança a corrida. Criar candidato sem porta e preservar guarda contra reata após silêncio (`escala/services/cadastro_realidade.py:469`). |
+| RED_pai_silenciado_fora_da_fila_nao_recebe_reata | chamados/tests/test_f3_beco1_reata_limbo.py:119 | L | **1**: novo sem linha `PAI FORA DA FILA`; há porta do app. Refazer cenário sem porta para conservar essa cobertura (`escala/services/cadastro_realidade.py:469`). |
+| MORDE_F5_queries_nao_crescem_com_os_dias | escala/tests/test_f3_beco1_folga_na_lista.py:322 | L | **1**: novo `(d1,d5)=(0,0)`. Refazer cenário C11 sem porta antes de medir queries; consulta nova fica uma por colab, constante com dias (`escala/services/cadastro_realidade.py:469`; `chamados/services/tarefa_do_dia.py:551`). |
+| MORDE_competencia_anterior_NAO_exportada_vai | escala/tests/test_f3_beco1_folga_na_lista.py:110 | L | **1**: novo C11 `[]`; competência anterior não elimina porta da pergunta pendente (`chamados/services/tarefa_do_dia.py:43`; `escala/services/cadastro_realidade.py:469`). |
+| RED_F1_lista_le_o_instante_de_quem_chama | escala/tests/test_f3_beco1_folga_na_lista.py:219 | L | **1**: novo C11 `[]` nesse instante. Refazer cenário sem porta para preservar prova do relógio (`escala/tests/test_f3_beco1_folga_na_lista.py:215`; `escala/services/cadastro_realidade.py:469`). |
+| RED_F6_C9_lavrado_divergente_nao_tira_o_dia_CADASTRO_da_mesa | escala/tests/test_f3_beco1_folga_na_lista.py:265 | L | **1** remove C11; novo conjunto `{('C9','BATIDA')}`, preservando dono lavrado. Refazer C11 sem porta para continuar testando reconciliação de donos (`escala/tests/test_f3_beco1_folga_na_lista.py:262`; `escala/services/cadastro_realidade.py:988`). |
+| RED_contraex1_chamado_da_celula_na_fila_sem_pergunta_NAO_e_porta | escala/tests/test_f3_beco1_folga_na_lista.py:180 | L | **1**: manter rota/fila/verbos; novo `fio='colab'` pela pergunta pendente sob outra âncora. C11 continua vazio (`escala/tests/test_f3_beco1_folga_na_lista.py:173`; `chamados/services/tarefa_do_dia.py:43`). |
+| RED_contraex2_ancora_viva_fora_da_fila_nao_e_porta | escala/tests/test_f3_beco1_folga_na_lista.py:204 | L | **1**: novo C11 `[]`; pendentes sob terminal/registrado têm porta do app (`escala/tests/test_f3_beco1_folga_na_lista.py:193`; `chamados/services/tarefa_do_dia.py:43`). |
+| RED_dia_da_competencia_aberta_vai_a_lista_com_dono_CADASTRO | escala/tests/test_f3_beco1_folga_na_lista.py:88 | L | **1**: novo C11 `[]`, sem dono C11. Refazer cenário sem porta para testar destino CADASTRO (`escala/services/cadastro_realidade.py:469`). |
+| MORDE_ancora_arquivada_nao_abre_a_porta_da_pergunta | chamados/tests/test_o261e_f5b_juiz_porta.py:272 | L | **1**: novo fio da folha `colab`, com `porta_app`; arquivamento da âncora não impede resposta pendente (`chamados/services/tarefa_do_dia.py:43`). |
+| MORDE_a_porta_vem_da_TAREFA_e_nao_do_app | chamados/tests/test_o261e_f5_alcance.py:256 | L | **1, 4***: carga deve consultar app; mock vazio em `:253` implica `nada/None`. Atualizar também contadores em `:255`, além de zero→uma consulta (`chamados/services/tarefa_do_dia.py:551`; `:616`). |
+| a_ancora_VIVA_fora_da_fila_tambem_e_veu | chamados/tests/test_o261e_f5_alcance.py:460 → helper :134 | L | **1**: novo `porta_app/colab`; retirar expectativa de causa sem porta `a/registrado` (`chamados/services/tarefa_do_dia.py:43`). |
+| b_respondida_com_resposta_VAZIA_e_porta_do_COLABORADOR_pela_tarefa | chamados/tests/test_o261e_f5_alcance.py:196 | L | **1, 4***: carimbo respondido exclui dos pendentes; novo `nada/None`, não colab. A cópia já suprime a rota sem dono exibida no anexo (`chamados/services/pergunta_no_app.py:75`; `chamados/services/tarefa_do_dia.py:616`). |
+| e_pergunta_viva_sob_chamado_TERMINAL_tem_nome | chamados/tests/test_o261e_f5_alcance.py:222 → helper :134 | L | **1**: novo `porta_app/colab`; não pertence à lista sem porta da causa `e` (`chamados/services/tarefa_do_dia.py:43`). |
+| MORDE_a_frase_do_fio_nada_nao_afirma_o_que_o_juiz_nao_garante | folha/tests/test_haiku_fora_da_folha.py:173 | M | **4***: renovar substrings para texto `SEM PORTA`, preservando garantia de ação alcançável (`folha/fora_da_folha.py:54`; `chamados/services/tarefa_do_dia.py:612`). |
+| o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA | folha/tests/test_haiku_fora_da_folha.py:81 | M | **4***: `SEM FIO`→`SEM PORTA`; preservar verificação `fio=nada` (`folha/fora_da_folha.py:54`; `chamados/services/tarefa_do_dia.py:612`). |
+| endpoint_do_app_filtra_por_q_vivas | chamados/tests/test_contract_pergunta_viva.py:76 | M | Atualizar string para `perguntas_do_app(colab, em_lote=True, agora=agora)`; conservar lote/C6 e encaminhamento do relógio (`chamados/services/pergunta_no_app.py:74`). |
+| todo_mutante_da_E3_tem_alvo_unico | chamados/tests/test_e3_mutantes_alvo.py:25 | M | Retargetar `consulta_vazia` e `consulta_sem_lote` para assinatura com `agora=agora`. **Já ajustados na cópia**; manter unicidade (`chamados/tests/e3_mutantes.py:34`; `:59`). |
+| cobrar_precede_validar_e_decidir_sem_depender_dos_donos | chamados/tests/test_e3_portas_tarefa.py:478 | L | **2, 3**: novo `fio='admin'`; conservar fila/verbos. `cobrar` residual não dá dono colab (`chamados/services/tarefa_do_dia.py:45`; `:46`). |
+| fio_normal_e_do_dono_da_acao_mesmo_com_verbo_validar | chamados/tests/test_e3_portas_tarefa.py:457 | L | **1, 4***: entrada não fornece pergunta pendente; novo `nada/None`. Esse `validar` está na porta da ação, não no residual (`chamados/services/tarefa_do_dia.py:584`; `:606`). |
+| RED_A_na_fila_aparece_com_acao_sob_B | chamados/tests/test_e3_portas_tarefa.py:413 | L | **1, 3**: novo `fio='chamado'` pelo residual `decidir`; conservar rota/fila/verbos. Não há pendente fornecida (`chamados/tests/test_e3_portas_tarefa.py:411`; `chamados/services/tarefa_do_dia.py:46`). |
+| v8_R1_colab_alcancavel_e_leitores | chamados/tests/test_e3_portas_tarefa.py:490 | L | **1, 4***: entrada atual dá `nada/None`. Para preservar cenário nominal colab, fornecer `pendentes_app={303}` em `:489`; então colab é justificado pela regra **1** (`chamados/services/tarefa_do_dia.py:43`). |
+| v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia — ambos subtestes | chamados/tests/test_e3_portas_tarefa.py:514 | L | **1, 2**: entrada atual dá `porta_fila/admin`, mantendo verbos/ações. Para provar simultaneidade com colab, fornecer identidade da pergunta e pendentes em `:509`/`:513` (`chamados/services/tarefa_do_dia.py:43`; `:45`). |
+| alvos | chamados/tests/test_e3_volta7_sem_banco.py:92 → chamados/tests/test_e3_mutantes_alvo.py:25 | M | Mesmo selo delegado: conservar execução; alvos com relógio já atualizados na cópia (`chamados/tests/e3_mutantes.py:34`; `:59`). |
+
+**B: nenhum identificado. Contagem: L=27; F=8; M=5; B=0; ?=0 — 40 testes distintos.** [não verificado por execução; consolidação das linhas acima] [nao verificado]
 
 ## 14/11 16:59 · sessao 47b7900a56ce · - · - · origem=Ronald (tmux)
 
@@ -808,36 +861,4 @@ Os testes v6 usam corpos reais extraídos por AST com fornecedores em memória; 
 
 Para fechar os pontos main ainda não verificáveis, faltam **`app/chamados/services/verbos.py`**, **`app/chamados/services/painel.py`**, **`app/ponto/services/pautas_dos_discordantes.py`** e **`app/escala/services/cadastro_realidade.py`** do main. Eles não estão nos hunks fornecidos; suas respostas integrais no main permanecem `[nao verificado]`.
 
-## 14/11 15:09 · sessao bba7f77d5034 · - · - · origem=Ronald (tmux)
-
-Valores reconstituídos do patch, sem executar ORM:
-
-| Estado canônico do anexo | C17 main | tarefa main | tarefa árvore |
-|---|---|---|---|
-| P13 responder + validar | admin | colab | colab |
-| P14 validar + cobrar | colab | admin | admin |
-| P19 A residual decidir + ação admin sob B cobrar | colab; PF; fila `(A,)`; verbos `{A:decidir,B:cobrar}` | admin; PP; fila `()`; verbos `{B:cobrar}` | admin; PF; fila `(A,)`; verbos `{A:decidir,B:cobrar}` |
-| Simultâneo, uma porta com validar | admin | colab | colab |
-
-Fontes: C17 main `app/chamados/juizes.py:1608–1619,1653–1668`, reconstruído do patch; árvore `app/chamados/juizes.py:1650–1661,1695–1710`. Tarefa main `app/chamados/services/tarefa_do_dia.py:538–554`, reconstruído do patch; árvore `app/chamados/services/tarefa_do_dia.py:553–598`.
-
-Para P13/P14, porta da própria célula produz PF/fila `(A,)`; âncora exclusivamente externa produz PP/fila `()`, preservando o mapa do verbo. Não existe uma localização única da âncora nos nomes P13/P14 fornecidos; o anexo admite explicitamente ambas. Fonte: C17 main `app/chamados/juizes.py:1657–1668`; tarefa main `app/chamados/services/tarefa_do_dia.py:545–554`; árvore `app/chamados/services/tarefa_do_dia.py:571–598`.
-
-Vigia, por dia com porta:
-
-| Estado | papel main → árvore | exige_admin main → árvore |
-|---|---|---|
-| P13 | validar → colab | 1 → 0 |
-| P14 | cobrar → admin | 0 → 1 |
-| P19 | cobrar,decidir → admin | **1 → 1** |
-| Simultâneo uma porta validar | validar → colab | 1 → 0 |
-
-O main usa interseção com `VERBOS_DO_ADMIN`, que inclui **decidir**; a árvore usa igualdade do fio com admin. Fontes: patch main `app/chamados/services/vigia_fio.py:648–651`; árvore `app/chamados/services/vigia_fio.py:657–663`; `app/chamados/services/verbos.py:22`. Portanto não classificar todo o contador P19 como DIFERE: o papel difere, o incremento administrativo coincide.
-
-Há outra variante de simultâneo: portas distintas `{101:validar,202:cobrar}`. Nela, C17 e tarefa retornam colab; o contador administrativo ainda muda de 1 para 0. O teste percorre ambas as variantes: `app/chamados/tests/test_e3_portas_tarefa.py:503–515`. A descrição do anexo corresponde à variante com um único validar.
-
-`furo_sem_canal` main **não devolve fio/rota/verbos/fila**. Decide cobertura por pergunta da própria célula com `respondida_em IS NULL` OU chamado da própria célula em VIVOS: main reconstruído `app/chamados/services/furo_sem_canal.py:80–86`; suas métricas antigas estão em `:95–96`. A árvore decide pela existência de porta e publica contagens por rota: `app/chamados/services/furo_sem_canal.py:89–116`. Cobertura main de P14 com âncora exclusivamente externa não decorre do par ação/verbo: os demais registros da célula são `[nao verificado]`. O ingresso no universo também exige veredito e janela: `app/chamados/services/furo_sem_canal.py:75–87`.
-
-Os comentários que chamam a preferência colab da tarefa de “main” preservam **a tarefa main**, mas não preservam a saída do C17 main para os leitores anteriormente ligados a ele: `app/chamados/services/tarefa_do_dia.py:589–598`; `app/chamados/tests/test_e3_portas_tarefa.py:221–225,503–515`; C17 main `app/chamados/juizes.py:1608–1619`.
-
-_5190 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5191 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
