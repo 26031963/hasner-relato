@@ -1,7 +1,99 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 17:38** · publicado em **14/11/2026 17:42** (UTC-3)
+> Ultima resposta processada: **14/11/2026 17:46** · publicado em **14/11/2026 17:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 17:46 · sessao 68b2829022d2 · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
+
+lei: falta regra escrita que determine o abono quando o período justificado 13h–18h30 se sobrepõe ao trabalho 08h–17h; L-088/L-089 não respondem essa conta, e o corte define o marco coberto, sem definir o pagamento dessa interseção (`docs/LEIS.md:120–121`; `docs/CORTES.md:342`).
+
+**(a) Origem, escritor e intervalo**
+
+O escritor do valor é `periodos_justificados`: consulta justificativas aprovadas por `data_turno`, reúne seus intervalos e mede a união. `efeitos_da_ausencia` monta `min_justificados` e remove o parcial quando existe Ausencia ABONA inteira (`ponto/services/efeito_ausencia.py:99–102`, `137–154`, `47`, `63`).
+
+O intervalo depende do marco:
+
+- `esqueci_saida`: de `max(ponta_real, hi)` até `hf`; a ponta considera a última batida do turno e eventual `saida_informada` (`ponto/turnos.py:2737–2738`; `ponto/services/efeito_ausencia.py:197–202`).
+- `esqueci_entrada`: de `hi` até `min(primeira_batida, hf)` (`ponto/turnos.py:2739`; `ponto/services/efeito_ausencia.py:203–204`).
+
+Desconta pausas previstas e une intervalos sobrepostos de justificativas. **Não subtrai o trabalho do período.** Antes da medição, um filtro retira o marco inteiro se seu trecho cruza algum par fechado identificado; portanto, rejeição de cobertura e desconto de minutos trabalhados são comportamentos distintos (`ponto/turnos.py:2751–2766`, `2792–2805`; `ponto/services/efeito_ausencia.py:205–206`, `144–154`).
+
+A grade transporta o mapa para a linha; `por_dia_da_grade` soma esse valor sem outra medição (`escala/services/leitor_celula.py:365`, `435–436`; `ponto/services/dia_pago.py:398–399`).
+
+Para **col82 em 31/10** e **col592 em 10/09**, os totais fornecidos não identificam início/fim do período nem por que o filtro anterior permitiu crédito. Reprodução individual: **[nao verificado]**. Para decidir, faltam, em cada dia: justificativas aprovadas, tipo, âncora, `saida_informada`, marcos/pausas do vínculo, turnos pareados com papéis e timestamps, além da ata que forneceu realizado/previsto (`ponto/services/efeito_ausencia.py:99–129`, `172–205`; `escala/services/leitor_celula.py:385`, `403–429`).
+
+**(b) Motor versus gravado**
+
+No ramo com dias previstos informados, o motor soma integralmente `_mj[d] / 60` para os dias obrigatórios justificados. Não desconta realizado nessa soma (`ponto/motor_calculo_v2.py:2628–2634`).
+
+Assim, **com o mesmo mapa e o mesmo enquadramento do dia, motor e gravado recebem o mesmo abono parcial**, inclusive quando há trabalho: o motor soma `_mj[d]`; a grade soma `min_justificados`. A igualdade efetiva dos resultados completos nos 41 dias: **[nao verificado]** (`ponto/motor_calculo_v2.py:2633–2634`; `ponto/services/dia_pago.py:398–399`).
+
+A obra manda ambos seguirem **`efeito_ausencia`**, não escolher um resultado divergente como autoridade. O fechamento injeta esse mapa no motor e grava o abono retornado pela grade (`docs/CORTES.md:375`; `ponto/services/fechamento.py:665–667`, `755`, `1066–1067`).
+
+A divergência A2 do anexo é outro ramo: Ausencia inteira com trabalho. Ela não demonstra divergência nestes casos de crédito parcial (`ponto/services/dia_pago.py:396–399`; `ponto/motor_calculo_v2.py:2611–2614`).
+
+**(c) Caso antes de qualquer código**
+
+**CASO:** período justificado 13h–18h30; trabalho 08h–17h. **Resposta legal numérica: [nao verificado].** As regras encontradas não determinam se deve haver subtração da interseção ou outro tratamento (`docs/LEIS.md:120–121`; `docs/CORTES.md:342`, `352`, `375`).
+
+Se esses intervalos forem apresentados diretamente ao filtro atual, ele rejeita o marco inteiro por cruzamento. Isso descreve o código existente; não fornece fundamento para instituir outra conta (`ponto/turnos.py:2762–2766`).
+
+**(d) Classificação dos 41**
+
+Pela função medida, os 41 pertencem ao ramo **trabalho com crédito justificado positivo**: no ramo `ausencia`, abono é `previsto − realizado_capado`, logo sua soma com realizado não produziria o excesso observado. A grade emite uma linha por data (`ponto/services/dia_pago.py:394–404`; `escala/services/leitor_celula.py:383`, `451–452`).
+
+Os totais `pv/abono/real` **não distinguem a causa temporal dos 41**. Não permitem atribuí-los individualmente a pausa fora de ordem ou sobreposição com trabalho. A classificação causal permanece **[nao verificado]**.
+
+O encadeamento realmente desloca para D+1 um marco que não sucede o anterior; isso comprova o mecanismo possível, não sua ocorrência nesses registros (`escala/utils.py:345–347`). A indicação de sobreposição para col82 veio da triagem fornecida; sua reconstrução pelos instantes permanece **[nao verificado]**.
+
+**Censo de escritores e leitores**
+
+| Papel | Arquivo:linha |
+|---|---|
+| Calcula período e escreve mapa | `ponto/services/efeito_ausencia.py:140`, `47`, `68` |
+| Escreve `min_justificados` nas grades | `escala/utils.py:1276`; `escala/services/leitor_celula.py:436` |
+| Lê crédito na grade | `ponto/services/dia_pago.py:398–399` |
+| Alimenta motor | `ponto/services/fechamento.py:755`, `831`; `ponto/services/espelho.py:1134`; `relatorios/pdf_espelho.py:407` |
+| Alimenta caminhos de comparação | `ponto/management/commands/diff_espelho_alimentacao.py:56`, `124`; `relatorios/management/commands/diff_extrato_parcial.py:62`; `ponto/services/esmeril_espelho.py:166` |
+| Escreve `FechamentoMensal.minutos_abonados` | `ponto/services/fechamento.py:1067` |
+| Escreve abono em DiaPago: lavratura/retrato | `ponto/services/dia_pago.py:288–292`, `479`, `484` |
+| Lê abono: prontidão, conferência, cartão e contador | `folha/export.py:1078`, `1104`; `folha/porta_export.py:139`; `relatorios/cartao_pela_celula.py:118`, `186`; `ponto/services/dia_pago.py:702` |
+
+Comando do censo executado:
+
+```bash
+git grep -n -E 'min_justificados|minutos_justificados|minutos_abonados|por_dia_da_grade' \
+  -- ponto escala folha relatorios ':!**/models.py' ':!**/migrations/**'
+```
+
+Vizinhos identificados: transporte e cálculo parcial (`ponto/tests/test_justificativa_periodo_v2_sem_banco.py:196`, `285`, `307`), percurso ORM até fechamento/DiaPago (`ponto/tests/test_justificativa_paga_o_periodo.py:395–408`), realizado da grade (`escala/tests/test_montador_realizado_pela_autoridade.py:479`), conferência da folha (`folha/tests/test_gravado_discorda_da_propria_grade.py:50–58`) e leitores do cartão (`relatorios/cartao_pela_celula.py:118`, `186`).
+
+Executei **15 testes existentes, todos passando**, com: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  ponto.tests.test_justificativa_periodo_v2_sem_banco -v
+```
+
+Esse conjunto declara que não prova ORM, frota, DSR produtivo nem hashes TXT (`ponto/tests/test_justificativa_periodo_v2_sem_banco.py:6–8`).
+
+**Diff por arquivo::função: vazio.** `git diff --stat` e `git status --short` terminaram sem saída. Não construí cura, RED novo nem mutantes novos porque a condição (c) não foi satisfeita. Não executei ORM, banco ou nova medição de frota; resultados desses percursos permanecem **[nao verificado]**. A certificação pelo Code e pelo opus final permanece pendente, conforme `docs/LEIS.md:147`.
+
+## 14/11 17:43 · sessao b1bc8dd9fd69 · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Cura entregue na cópia. A lista dos oito arquivos tocados, motivo por item, censo e comandos está na [entrega c24](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/docs/BO_DISPUTA_C24_ENTREGA.txt:6).
+
+- **Catraca:** o `IfExp` contaminava `_bo` e, transitivamente, `_linhas_do_fato`. A cura usa `if/else` somente no hunk P3, preservando `None` explícito e a entrega integral do universo à canônica. A catraca permanece intacta. [models.py:2923](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/models.py:2923), [explicação:26](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/docs/BO_DISPUTA_C24_ENTREGA.txt:26).
+- **(a)** A mudança relevante da c22 consulta a ata **antes** do classificador silencioso no ramo `sem_origem`. Isso marca a abstenção e impede o autofecho. [disputa_emissao.py:1465](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/services/disputa_emissao.py:1465).
+- **(b)** A fixture original não lavra ata nem cria batida-origem; cria vínculo, chamado e disputa vazia. [test_b2d_resposta_visivel.py:29](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/tests/test_b2d_resposta_visivel.py:29).
+- **(c)** Para essa fixture original, a resposta correta é **acender e esperar**. Os casos antigos ganharam ata pelas portas reais; o caso sem ata ganhou teste próprio, mantendo abertura, luz e silêncio em duas passadas. [regra:1532](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/services/disputa_emissao.py:1532), [fixture e contraste:16](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/tests/test_hx_disputa_muda.py:16). [nao verificado]
+- **(d)** Sem nenhuma pergunta, não pode notificar. O envio observado é da **principal**, não de `complementadas`: esse dicionário exige pergunta anterior e complemento admitido. A guarda nova exige pergunta na própria disputa. [inclusão:1295](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/services/disputa_emissao.py:1295), [push:1552](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/chamados/services/disputa_emissao.py:1552). [nao verificado]
+
+O [censo completo](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/docs/BO_DISPUTA_C24_ENTREGA.txt:90) registra todas as escritas e leituras das três variáveis. Os [seis chamadores produtivos](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/docs/BO_DISPUTA_C24_ENTREGA.txt:112) passam a suprimir o push da principal vazia quando a notificação está habilitada; retorno e autofecho conservam seus caminhos. [nao verificado]
+
+Resultados locais: cinco testes c24 passaram; a base reproduziu três falhas por asserção; os cinco mutantes novos morreram, sem errors. A catraca original executada em memória passou oito testes, e as regressões passaram 8 + 12 + 6. Cada comando está [registrado na entrega](/home/ronald/wt-codex-bo-disputa-sem-pergunta-172807/app/docs/BO_DISPUTA_C24_ENTREGA.txt:130). [nao verificado]
+
+Certificação pela suíte real, ORM e execução da fixture nova: **[nao verificado]**. [nao verificado]
 
 ## 14/11 17:38 · sessao 190a94933cb1 · - · - · origem=Ronald (tmux)
 
@@ -756,58 +848,4 @@ As mudanças perguntadas preservam asserções: `test_cobparc` acrescenta mock d
 
 Não demonstrar “segundo juiz duplicando juiz registrado” apenas pela ausência de registro: o catálogo de turno e ausência não lista o juiz novo (`app/core/juizes.py:207`, `:251`), e o documento distingue lookup de registro vivo (`app/docs/JUIZES.md:7`). O corte fornecido autoriza expressamente seu nascimento. Há, porém, uma decisão posterior que ainda altera `cobre`: a fonte chama o juiz e depois remove cobertura por cruzamento (`app/ponto/services/efeito_ausencia.py:176`, `:182`; `app/ponto/turnos.py:2750`). Isso mostra cobertura decidida em duas etapas, não prova duplicação de autoridade já registrada.
 
-## 14/11 16:35 · sessao 3c37fe314776 · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — há derivação paralela e o período novo não chega ao abono materializado.**
-
-- O motor lê `minutos_justificados` e soma o período em `horas_abono` (`app/ponto/motor_calculo_v2.py:2628-2634`), mas `FechamentoMensal.minutos_abonados` vem exclusivamente de `por_dia_da_grade` (`app/ponto/services/fechamento.py:1065-1067`).
-- Essa função só abona `tipo_dia == 'ausencia'`, usando `previsto - realizado`; ignora `min_justificados` e `justificado` (`app/ponto/services/dia_pago.py:387-401`). A justificativa parcial mantém `tipo_dia='trabalho'` e apenas acrescenta o campo de minutos (`app/escala/utils.py:1257-1278`).
-- A grade usada pelo fechamento lê a ATA (`app/folha/export.py:335-338`); o cartório não lavra `min_justificados` (`app/ponto/services/cartorio.py:738-739`) e o leitor não o transporta (`app/escala/services/leitor_celula.py:422-444`).
-- O mesmo mapa inadequado alimenta a lavratura `DiaPago` (`app/ponto/services/fechamento.py:1217-1218`). Na competência, PDF/espelho recebem `horas_abono=minutos_abonados/60` do fechamento online (`app/relatorios/cartao_pela_celula.py:69-76,118`) ou da lavratura (`app/relatorios/cartao_pela_celula.py:186`), sobrescrevendo o resumo (`app/relatorios/cartao_pela_celula.py:323-346`).
-- Contraexemplo sintético da função real, executada isolada por AST, sem banco e sem escrita: dia `trabalho`, previsto 720, realizado 0, `min_justificados=690`, `justificado=True` devolve `abono={}`. É consequência direta de `app/ponto/services/dia_pago.py:395-401`.
-
-**PROCEDENTE — chamador de sombra continua com memo vazio.**
-
-- `diff_espelho_alimentacao` monta motor, alimenta os demais memos e calcula sem alimentar `minutos_justificados` (`app/ponto/management/commands/diff_espelho_alimentacao.py:41-59`), inclusive no degrau anunciado como completo, que recebe `ef['justificadas']` e `ef['dia_inteiro']` (`app/ponto/management/commands/diff_espelho_alimentacao.py:113-122`).
-- Como o memo nasce `{}` (`app/ponto/motor_calculo_v2.py:813`), esse degrau pode dar abono previsto inteiro enquanto os leitores migrados pagam o período (`app/ponto/motor_calculo_v2.py:2628-2634`).
-- `diff_extrato_parcial` consulta as justificativas por conta própria e monta motor sem o novo memo (`app/relatorios/management/commands/diff_extrato_parcial.py:42-68`); seus campos retornados não incluem abono (`app/relatorios/management/commands/diff_extrato_parcial.py:70-76`).
-- `esmeril_espelho` também não alimenta o memo e usa o resultado somente para assinaturas de pontualidade/HE (`app/ponto/services/esmeril_espelho.py:160-177`). `vigiar_motor_autoridade` não alimenta os efeitos, mas compara geometria/trabalhado (`app/ponto/management/commands/vigiar_motor_autoridade.py:57-68`). Esses dois caminhos não provam diferença de abono pago.
-
-Mapa dos campos:
-
-| Campo | Escritores/fontes | Leitores |
-|---|---|---|
-| `minutos_justificados` | Inicialização `app/ponto/motor_calculo_v2.py:813`; alimentação fechamento normal/órfão `app/ponto/services/fechamento.py:755,831`; espelho `app/ponto/services/espelho.py:1134`; PDF `app/relatorios/pdf_espelho.py:407` | Conta mensal `app/ponto/motor_calculo_v2.py:2628-2634`; declaração de memo `app/ponto/calculador/nucleo.py:424` |
-| `min_justificados` | Efeito deriva de `periodos_justificados` (`app/ponto/services/efeito_ausencia.py:45-47,67`); grade escreve o valor (`app/escala/utils.py:1276`); fechamento deriva novamente o mapa (`app/ponto/services/fechamento.py:665-667`) | Espelho/PDF alimentam memo (`app/ponto/services/espelho.py:1134`; `app/relatorios/pdf_espelho.py:407`); nenhum leitor de dinheiro da grade usa essa chave (`app/ponto/services/dia_pago.py:387-401`) |
-| `dias_com_ausencia_inteira` | Fonte `app/ponto/turnos.py:2829-2846`; efeito `app/ponto/services/efeito_ausencia.py:68`; fechamento `app/ponto/services/fechamento.py:688-689,754,830`; espelho `app/ponto/services/espelho.py:1133`; PDF `app/relatorios/pdf_espelho.py:406`; diagnósticos `app/ponto/services/esmeril_espelho.py:164`, `app/relatorios/management/commands/diff_extrato_parcial.py:67`, `app/ponto/management/commands/diff_espelho_alimentacao.py:57` | Teto de pontualidade `app/ponto/motor_calculo_v2.py:1090-1109`; contexto calculador `app/ponto/calculador/regras.py:117-120`; alimentação por dia `app/ponto/calculador/alimentacao.py:532`; fechamento envia ao oráculo `app/ponto/services/fechamento.py:1281` |
-| `horas_abono` | Dataclass `app/ponto/motor_calculo_v2.py:292`; cálculo `app/ponto/motor_calculo_v2.py:2631-2634`; composição de fatias `app/ponto/services/fechamento.py:99` | PDF primeiro lê motor+parcial (`app/relatorios/pdf_espelho.py:480`), depois autoridade do resumo usa fechamento/lavratura (`app/relatorios/cartao_pela_celula.py:118,186,346`) |
-| `dias_abono` | Dataclass `app/ponto/motor_calculo_v2.py:284`; motor `app/ponto/motor_calculo_v2.py:2630`; composição `app/ponto/services/fechamento.py:99`; resumo espelho/PDF `app/ponto/services/espelho.py:1253`, `app/relatorios/pdf_espelho.py:479` | PDF badge `app/relatorios/pdf_espelho.py:787`; ramo lavratura sobrescreve usando dias com minutos abonados positivos (`app/relatorios/cartao_pela_celula.py:190`; `app/ponto/services/dia_pago.py:687-699`) |
-| `resumo_dias_abono` | Não localizado na cópia pela busca literal; existência/caminho [nao verificado] | [nao verificado] |
-
-**PROCEDENTE — campo `dias_abono` possui dois significados conforme a fonte.** O motor exclui todo dia em `_mj`, mesmo com minutos pagos (`app/ponto/motor_calculo_v2.py:2629-2630`); o resumo da lavratura conta qualquer dia com `minutos_abonados>0` (`app/ponto/services/dia_pago.py:687-699`; `app/relatorios/cartao_pela_celula.py:190`).
-
-**PROCEDENTE — ausência inteira coexistente não limpa o mapa parcial.** `efeitos_da_ausencia` conserva `min_justificados` ao acrescentar uma ausência ABONA (`app/ponto/services/efeito_ausencia.py:47,55-67`); fechamento faz o mesmo (`app/ponto/services/fechamento.py:667,695-701`). O motor então exclui esse dia do abono inteiro e paga apenas `_mj`, embora exista ausência inteira (`app/ponto/motor_calculo_v2.py:2628-2634`).
-
-Fora do diff:
-
-- TXT Domínio monta os eventos do fechamento, sem evento de abono/período na lista (`app/folha/export.py:439-461,730-732`). `datas_abonadas` usa `Ausencia`/catálogo para dias da rubrica 8932, não o mapa de justificativas (`app/folha/export.py:193-206`). Impacto financeiro efetivo no Domínio [nao verificado].
-- Prontidão soma `minutos_abonados` do fechamento (`app/folha/export.py:1076-1079`), mas seu fallback rederiva abono pelo previsto inteiro de dias de ausência (`app/folha/export.py:1095-1111`).
-- Haiku “fora da folha” lê `classificar_export` (`app/folha/fora_da_folha.py:115-119,216-222`); não lê os seis campos diretamente nesses sítios. Holerite nesta cópia recebe arquivos de folha, com lote de upload (`app/holerite/models.py:6-20`); equivalência de valores importados com os novos minutos [nao verificado].
-
-## 14/11 16:35 · sessao 2a67c3406a0b · - · - · origem=Ronald (tmux)
-
-2. **PROCEDENTE — segunda pausa perdida e crédito acima do previsto.** A fonte constrói somente `hi/hii/hfi/hf`, via quatro valores de `marcos_do_dia`; a segunda pausa nunca chega ao medidor (`app/ponto/services/efeito_ausencia.py:156`, `app/escala/models.py:1131`). O medidor só desconta pares presentes no mapa (`app/ponto/turnos.py:2786`). Já o previsto lê todas as pausas (`app/escala/models.py:1197`, `app/escala/utils.py:2310`, `app/escala/utils.py:2324`). Contraexemplo: jornada 07–19, duas pausas de 85 minutos, entrada 07:00 e saída justificada: crédito calculado 635 minutos, previsto 550; o motor soma o crédito sem teto (`app/ponto/turnos.py:2738`, `app/ponto/turnos.py:2791`, `app/ponto/motor_calculo_v2.py:2633`).
-
-A chave é `Justificativa.data_turno`, e a fonte exige que o turno da âncora tenha essa mesma data (`app/ponto/services/efeito_ausencia.py:107`, `app/ponto/services/efeito_ausencia.py:165`). A cadeia dos marcos começa nessa data, permitindo saída no dia seguinte (`app/ponto/services/efeito_ausencia.py:163`). No Base, a comparação usa o dia da jornada; no Comercial, o DSR é refeito por data civil da entrada, constituindo derivação paralela preexistente (`app/ponto/motor_calculo_v2.py:2581`, `app/ponto/motor_calculo_v2.py:3473`, `app/ponto/motor_calculo_v2.py:3477`). Ocorrência desse desvio nos dias raspados: [nao verificado].
-
-3. **PROCEDENTE — duas âncoras do mesmo turno podem duplicar minutos.** A cobertura une os rótulos, mas soma os minutos de cada justificativa (`app/ponto/services/efeito_ausencia.py:133`). Duas justificativas aprovadas, uma ancorada na entrada 07:30 e outra na volta 12:00 do mesmo turno `E07:30/S11:00/E12:00`, medem ambas a cauda 12–19: 420 + 420 = 840 minutos (`app/ponto/services/efeito_ausencia.py:168`, `app/ponto/services/efeito_ausencia.py:179`, `app/ponto/turnos.py:2738`). A unicidade impede repetir a mesma âncora, mas permite âncoras distintas; a restrição por dia vale apenas para pendentes (`app/ponto/models.py:187`, `app/ponto/models.py:189`). O motor soma os 840 sem deduplicar nem limitar ao previsto (`app/ponto/motor_calculo_v2.py:2633`). Ocorrência em produção: [nao verificado].
-
-Um dia em `_mj` pode estar fora de `_abono` porque teve período de trabalho; a soma nova o inclui expressamente, independentemente de `_abono` (`app/ponto/motor_calculo_v2.py:2611`, `app/ponto/motor_calculo_v2.py:2633`). Dias fora dos obrigatórios não recebem esse crédito (`app/ponto/motor_calculo_v2.py:2601`, `app/ponto/motor_calculo_v2.py:2634`).
-
-4. **PROCEDENTE — cobertura vazia tem caminho distinto de conserva.** Sem âncora, papel errado e turno fechado retornam motivo; célula sem marcos também conserva (`app/ponto/turnos.py:2694`, `app/ponto/turnos.py:2700`, `app/ponto/turnos.py:2703`, `app/ponto/services/efeito_ausencia.py:154`). Entretanto, depois desse predicado, o filtro de sobreposição pode remover o marco e retornar vazio sem motivo (`app/ponto/services/efeito_ausencia.py:182`, `app/ponto/services/efeito_ausencia.py:183`, `app/ponto/turnos.py:2764`). O efeito exclui esse dia de `justificadas` e de `min_justificados` (`app/ponto/services/efeito_ausencia.py:46`). Há caso sintético correspondente e referência nominal a col451 no teste (`app/ponto/tests/test_justificativa_paga_o_periodo.py:212`, `app/ponto/tests/test_justificativa_paga_o_periodo.py:383`).
-
-Vazio não implica automaticamente falta: o Base considera todo período presente como dia trabalhado, inclusive aberto, sem testar minutos positivos (`app/ponto/motor_calculo_v2.py:2499`, `app/ponto/motor_calculo_v2.py:2581`). Portanto, nesses dias, paga o trabalho calculado e nenhum crédito de justificativa; falta/DSR dependem de o dia estar em `datas_trabalho` (`app/ponto/motor_calculo_v2.py:2605`, `app/ponto/motor_calculo_v2.py:2633`). Resultado individual de col206, col451 e col551, e condição global 0/0: [nao verificado].
-
-O filtro ainda compara contra envelope bruto entrada–fim, sem retirar pausas, enquanto o motor calcula pares com intervalos; sobreposição detectada não prova sobreposição com minutos efetivamente pagos (`app/ponto/turnos.py:2745`, `app/ponto/turnos.py:2748`, `app/ponto/motor_calculo_v2.py:2551`, `app/ponto/motor_calculo_v2.py:2558`).
-
-_5198 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5200 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
