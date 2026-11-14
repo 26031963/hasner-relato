@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 11:49** · publicado em **14/11/2026 11:51** (UTC-3)
+> Ultima resposta processada: **14/11/2026 12:02** · publicado em **14/11/2026 12:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 12:02 · sessao eceeba4f7e5d · RMDIR-COM-GUARDA · verificador · origem=Code
+
+**[bloqueia] A garantia irrestrita do rc ainda tem um contraexemplo: Bash em modo POSIX, arquivo do rc vazio e sinal tratado numa janela que força repetir um `wait` já concluído. O segundo `wait` pode devolver 127, que vira a saída da suíte.** O script não desliga esse modo; sua ativação no pouso é **[não verificado]**. (`bin/suite.sh:34`, `bin/suite.sh:358`, `bin/suite.sh:360`, `bin/suite.sh:364`)
+
+1. **Caminhos do rc**
+
+   **[fila] O caminho normal preserva o rc:** o subshell captura `_r`, tenta gravá-lo e executa `exit "$_r"`, mesmo se o `echo` falhar. Arquivo legível e não vazio prevalece; vazio ou ilegível usa `_RC_WAIT`. (`bin/suite.sh:341`, `bin/suite.sh:359`, `bin/suite.sh:360`, `bin/suite.sh:364`)
+
+   | Sequência | Resultado |
+   |---|---|
+   | Sinal após instalar a trap, antes de lançar o subshell: fica enfileirado; quando houver filho, o polling tenta entregá-lo. | O sinal não determina mais o rc de reserva. (`bin/suite.sh:333`, `bin/suite.sh:341`, `bin/suite.sh:347`, `bin/suite.sh:360`) |
+   | Sinal antes ou durante o polling; trava termina com 9; arquivo escrito. | Lê 9 do arquivo. A marca antiga é zerada antes da espera final. (`bin/suite.sh:341`, `bin/suite.sh:358`, `bin/suite.sh:359`) |
+   | Mesma sequência, mas escrita impedida. | Usa o rc da espera final; desapareceu a fabricação de 143 pelo nome TERM. (`bin/suite.sh:358`, `bin/suite.sh:360`) |
+   | Sinal realmente interrompe o `wait` final. | A trap marca `_NO_WAIT`; o laço chama `wait` novamente. Com arquivo válido, seu conteúdo ainda prevalece. (`bin/suite.sh:333`, `bin/suite.sh:358`, `bin/suite.sh:359`) |
+   | **[bloqueia]** Arquivo vazio; primeiro `wait` completo devolve 9; sinal chega antes do teste da marca; Bash POSIX. | Repete uma espera já consumida, obtém 127 e devolve 127. Também há falso positivo se o sinal chegar entre o zeramento e a entrada no `wait`. Ocorrência no pouso **[não verificado]**. (`bin/suite.sh:358`, `bin/suite.sh:360`, `bin/suite.sh:364`) |
+
+   **[fila] Há outra divergência condicional:** arquivo já contém 9, mas um sinal externo mata o próprio subshell entre o `echo` e seu `exit`; a suíte prefere o arquivo, embora o status terminal do subshell seja outro. Esse evento não aparece no dado: **[não verificado]**. (`bin/suite.sh:341`, `bin/suite.sh:359`, `bin/suite.sh:364`)
+
+2. **Término, 127 e identidade do processo**
+
+   - **[fila] Pode não terminar sob sinais incessantes:** basta que toda tentativa receba uma marca antes do teste. O laço não limita tentativas. Uma sequência finita, por si, não demonstra travamento permanente. (`bin/suite.sh:333`, `bin/suite.sh:334`, `bin/suite.sh:335`, `bin/suite.sh:358`)
+   - **[bloqueia] Pode devolver 127 por espera repetida em Bash POSIX**, conforme a sequência acima. Em Bash padrão, recolher o filho pelo mecanismo interno do shell não significa automaticamente esquecer seu status; não há outro `wait "$_PID_RUN"` nesse trecho. Modo/versão de produção **[não verificado]**. (`bin/suite.sh:358`)
+   - **[fila] PID reciclado ameaça principalmente o polling anterior:** arquivo vazio mais `kill -0` verdadeiro para o número reaproveitado pode prolongar a espera; com fila pendente, `pkill -P` pode atingir filhos desse novo processo. Arquivo não vazio rompe esse polling. (`bin/suite.sh:344`, `bin/suite.sh:347`)
+   - **[fila] Reciclagem numérica não faz `wait` obter status de qualquer processo do sistema:** ele depende da tabela de filhos/status do Bash. Para devolver o rc de outro filho, seria necessária substituição da identidade guardada, por exemplo por um novo filho com o mesmo número; isso não está demonstrado pelo dado: **[não verificado]**. Os pontos envolvidos são o armazenamento do PID e sua reutilização nas consultas. (`bin/suite.sh:342`, `bin/suite.sh:344`, `bin/suite.sh:358`)
+
+3. **Leitores e escritores**
+
+   **[fila] O mapa atual é:** (`bin/suite.sh:329`, `bin/suite.sh:333`, `bin/suite.sh:347`, `bin/suite.sh:358`, `bin/suite.sh:359`, `bin/suite.sh:360`, `bin/suite.sh:364`)
+
+   | Campo | Escritores | Leitores |
+   |---|---|---|
+   | `_NO_WAIT` | Inicialização `:329`; traps `:333–335`; zeramento `:358` | Teste em `:358` | [nao verificado]
+   | `_FILA` | Inicialização `:329`; acréscimo nas traps `:333–335`; retirada da cabeça `:347` | Traps `:333–335`; teste e extração `:345–347` | [nao verificado]
+   | `_RC_WAIT` | Captura de `$?` em `:358` | Reserva em `:360` |
+   | `_RC_RUN` | Leitura do arquivo `:359`; reserva `:360` | Teste `:360`; aviso `:361`; saída `:364` | [nao verificado]
+
+   **[fila] A busca em `bin/` não encontrou `_HOUVE` nem `_ULTIMO`.** A ausência é resultado da inspeção, sem uma linha individual para citar: **[não verificado por referência pontual]**. Os testes ainda leem e reescrevem textualmente âncoras de `_RC_RUN`, `_RC_WAIT` e `_FILA` para produzir mutantes. (`bin/tests/test_rm_com_guarda.sh:264`, `bin/tests/test_rm_com_guarda.sh:273`, `bin/tests/test_rm_com_guarda.sh:379`, `bin/tests/test_rm_com_guarda.sh:380`)
+
+4. **Mordida do caso novo**
+
+   - **[fila] Por leitura, morde dedc3e324 fora de root:** TERM executa `chmod 000` no arquivo temporário e encerra a trava com 9; o teste exige 9. O fallback antigo mostrado no delta escolheria 143 por TERM. Execução efetiva contra dedc3e324 **[não verificado]**. (`bin/tests/test_rm_com_guarda.sh:316`, `bin/tests/test_rm_com_guarda.sh:319`, `bin/tests/test_rm_com_guarda.sh:320`; delta fornecido)
+   - **[fila] Não roda sob root:** o cenário inteiro está condicionado a UID diferente de zero; o sucesso geral do caso 6 não explicita essa omissão. (`bin/tests/test_rm_com_guarda.sh:314`, `bin/tests/test_rm_com_guarda.sh:322`, `bin/tests/test_rm_com_guarda.sh:386`)
+   - **[fila] Há mutante que pode passar:** substituir o laço final por um único `wait`, mantendo o fallback novo. O cenário pode entregar TERM durante o polling e encontrar o run já terminado na espera final; `sleep 1` não sincroniza essa janela. Execução desse mutante **[não verificado]**. (`bin/tests/test_rm_com_guarda.sh:319`, `bin/suite.sh:344`, `bin/suite.sh:358`, `bin/suite.sh:360`)
+   - **[fila] A ressalva de root alcança o selo anterior:** o caso 5 também usa `chmod 000`, sem excluir root; se a escrita continuar permitida, o mutante do fallback fixo em 1 não é exercido e pode provocar a própria reprovação do selo. Execução sob root **[não verificado]**. (`bin/tests/test_rm_com_guarda.sh:130`, `bin/tests/test_rm_com_guarda.sh:233`, `bin/tests/test_rm_com_guarda.sh:273`, `bin/tests/test_rm_com_guarda.sh:274`)
+
+5. **Classes anteriores no delta**
+
+   - **[fila] Segundo escritor, derivação paralela e ordem de trava:** não identifiquei reintrodução nas alterações fornecidas. Os alvos continuam vindo da porta, e as duas limpezas permanecem no comando executado pela trava. (`bin/suite.sh:112`, `bin/suite.sh:117`, `bin/suite.sh:293`, `bin/suite.sh:296`, `bin/suite.sh:317`, `bin/suite.sh:318`)
+   - **[fila] Selo sem mordida:** o cenário novo distingue o fallback antigo fora de root, mas deixa sem cobertura garantida a interrupção da espera final e o cenário sob root. (`bin/tests/test_rm_com_guarda.sh:314`, `bin/tests/test_rm_com_guarda.sh:319`, `bin/suite.sh:358`)
+   - **[bloqueia] Campo com significado ampliado:** `_NO_WAIT` registra “chegou sinal desde a marca”, mas seu leitor invalida também um `wait` que terminou corretamente. Essa diferença entre chegada e interrupção produz o contraexemplo POSIX; não é necessário PID reciclado. (`bin/suite.sh:331`, `bin/suite.sh:333`, `bin/suite.sh:358`, `bin/suite.sh:360`)
+
+## 14/11 12:00 · sessao 62343981bf41 · - · - · origem=Ronald (tmux)
+
+- **Fluxo normal:** não há divergência demonstrada. `_run` fornece `_r`; o subshell tenta gravá-lo e sai com o mesmo `_r`, mesmo quando o `echo` falha. Arquivo legível não vazio prevalece; vazio/ilegível aciona `_RC_WAIT`. `bin/suite.sh:341`, `bin/suite.sh:359`, `bin/suite.sh:360`, `bin/suite.sh:364`.
+
+- **Sinal anterior ao laço ou recebido no polling:** fica em `_FILA`, segue ao filho e não define mais o rc de reserva. `_NO_WAIT` é zerado ao entrar na espera final; portanto um sinal já tratado não transforma rc 9 em 143. `bin/suite.sh:333`, `bin/suite.sh:344`, `bin/suite.sh:347`, `bin/suite.sh:358`.
+
+- **Sinal durante a espera final:** a marca força outra chamada a `wait`; sinal depois do retorno de um `wait` completo, antes do teste da marca, também força repetição. Esse segundo caso é decisivo no Bash POSIX. `bin/suite.sh:333`, `bin/suite.sh:358`.
+
+- **[bloqueia], condicional ao modo POSIX:** conforme a sonda informada pelo pai, nesse modo `wait "$p"` completo seguido de novo `wait "$p"` retorna respectivamente 9 e 127 [não verificado na cópia]. Sequência: arquivo do rc vazio; primeiro `wait` devolve 9; sinal chega antes do teste e marca `_NO_WAIT`; segundo `wait` devolve 127; fallback devolve 127. O script não desliga POSIX. `bin/suite.sh:34`, `bin/suite.sh:358`, `bin/suite.sh:360`. Ativação desse modo em produção: **[não verificado]**.
+
+- **Bash padrão:** experimento local apenas em memória obteve `wait` repetido 9/9 e `wait` interrompido por TERM 143 seguido de espera 9 [não verificado na cópia]. Recolhimento do filho pelo shell, por si, não demonstra perda do status; não existe outro `wait` desse PID neste trecho. `bin/suite.sh:358`.
+
+- **[fila], sinais incessantes:** se cada iteração receber sinal antes de testar a marca, o laço final pode continuar indefinidamente, mesmo com o filho terminado. Uma quantidade finita de sinais permite sair quando houver iteração sem marca, ressalvada a questão POSIX acima. `bin/suite.sh:333`, `bin/suite.sh:358`.
+
+- **[fila], PID reciclado e arquivo vazio:** o polling pode continuar enquanto o número reaproveitado responder a `kill -0`; com fila pendente, pode tentar sinalizar filhos desse outro processo. Arquivo não vazio rompe esse polling. `bin/suite.sh:343`, `bin/suite.sh:344`, `bin/suite.sh:347`. O `wait` não passa a obter status arbitrário de um processo não filho apenas pelo reaproveitamento numérico [não verificado na cópia]. Substituição/perda do cache Bash por outro filho com o mesmo PID exige condições adicionais não demonstradas [não verificado].
+
+- **Mapa:** `_FILA`: inicialização 329; leitura/escrita nas traps 333–335; leitura 345–347; remoção da cabeça 347. `_NO_WAIT`: inicialização 329; escrita nas traps 333–335; zeramento e leitura 358. `_RC_WAIT`: escrita 358, leitura 360. `_RC_RUN`: escrita 359/360, leitura 360/361/364. `bin/suite.sh:329`, `bin/suite.sh:333`, `bin/suite.sh:345`, `bin/suite.sh:347`, `bin/suite.sh:358`, `bin/suite.sh:359`, `bin/suite.sh:360`, `bin/suite.sh:361`, `bin/suite.sh:364`.
+
+- Busca de `bin/` não encontrou `_HOUVE` nem `_ULTIMO`; os símbolos atuais aparecem nos lugares acima e nos leitores/escritores textuais dos mutantes. `bin/tests/test_rm_com_guarda.sh:264`, `bin/tests/test_rm_com_guarda.sh:265`, `bin/tests/test_rm_com_guarda.sh:272`, `bin/tests/test_rm_com_guarda.sh:273`, `bin/tests/test_rm_com_guarda.sh:379`, `bin/tests/test_rm_com_guarda.sh:380`.
+
+- Divergência entre arquivo já escrito e status do subshell também seria possível se um agente externo matasse o subshell entre o `echo` e `exit`, ou adulterasse o arquivo; esses eventos não constam dos dados. **[fila] [não verificado]**, pontos envolvidos: `bin/suite.sh:341`, `bin/suite.sh:359`, `bin/suite.sh:364`.
+
+## 14/11 11:59 · sessao 4539784bb97f · - · - · origem=Ronald (tmux)
+
+- **[fila] O caso novo morde o defeito anterior fora de root:** TERM faz a trava executar `chmod 000 .../tmp.*` e sair 9; a asserção exige 9. O subshell preserva esse 9 apesar da falha do `echo`. No delta fornecido, dedc3e324 escolheria 143 pelo nome TERM quando o arquivo estivesse vazio. Referências: `bin/tests/test_rm_com_guarda.sh:314`, `:316`, `:319`, `:320`; `bin/suite.sh:341`; comportamento da versão anterior deduzido do anexo, execução **[não verificado]**.
+
+- **[fila] O caso novo não roda sob root:** todo o cenário está dentro de `if [ "$(id -u)" != 0 ]`. Não há aviso específico de cenário pulado antes do texto de sucesso do caso 6. Referências: `bin/tests/test_rm_com_guarda.sh:314`, `:322`, `:386`.
+
+- **[fila] Não força sinal durante o `wait` final:** usa somente `sleep 1; kill -TERM`, sem marco que confirme a entrada em `bin/suite.sh:358`. Um mutante que substitua o laço de reespera por um único `wait`, mantendo o fallback novo, pode passar quando TERM for tratado no laço de polling e o run terminar antes da espera final. Referências: `bin/tests/test_rm_com_guarda.sh:318`, `:319`; `bin/suite.sh:344`, `:352`, `:358`, `:360`. Execução do mutante **[não verificado]**.
+
+- **[fila] Não há mutante novo que restaure o fallback por nome do sinal:** o acréscimo é apenas cenário funcional; os mutantes existentes do caso 6 cobrem caminho físico, erro de rmdir, limpeza após sinal, nome repassado e sobrescrita da fila. Referências: `bin/tests/test_rm_com_guarda.sh:312`, `:345`, `:353`, `:362`, `:370`, `:378`.
+
+- **[fila] Ressalva já existente para root no selo inteiro:** o caso 5 tenta impedir escrita com chmod, mas não pula root; seu mutante troca somente o fallback por 1. Se root escrever normalmente, esse fallback não é exercido e o mutante pode passar, provocando `_falha`. Referências: `bin/tests/test_rm_com_guarda.sh:130`, `:231`, `:233`, `:271`, `:273`, `:274`. Execução sob root **[não verificado]**.
+
+- **[fila] Classes do delta:** nenhuma segunda origem de limpeza, derivação paralela de alvos ou mudança na ordem da trava aparece nas alterações fornecidas; o código continua derivando alvos da porta e executando `_run` pela trava. Referências: `bin/suite.sh:293`, `:296`, `:317`, `:318`; alcance exato do histórico além do delta fornecido **[não verificado]**. A limitação concreta do selo é a cobertura omitida sob root e a ausência de sincronização com a espera final, acima.
 
 ## 14/11 11:49 · sessao 7df6ebc9fb89 · FRAC5 · sonda · origem=Code
 
@@ -557,270 +644,4 @@ Essa tabela é declarada como fonte da REGRA DA VAGA VAZIA (`bin/placar_grade.py
 
 O232 é complemento sob O54, não obra do denominador (`app/docs/GRADE-MESTRA.md:838`, `:839`, `:853`; `bin/placar_grade.py:120`). Ele participa da tabela numérica e da soma, recebendo `(compl.)` (`bin/placar_grade.py:149`, `:151`, `:268`, `:270`).
 
-## 14/11 10:48 · sessao 3217cb06c88f · FRAC5 · verificador · origem=Code
-
-**NÃO: o diff acrescenta a recusa de frações de 1–4 dias no `clean()`, mas não garante a regra completa em todos os caminhos de gravação.** A edição continua salvando sem esse julgamento; o histórico também o dispensa; e a própria porta aceita um período que já contenha fração curta. (`app/ferias/models.py:387`; `app/ferias/services.py:493`; `app/ferias/services.py:693`; `app/ponto/tests/test_ferias_fracao_demais_5.py:83`)
-
-A comparação com a base abaixo é contrafactual pelo diff fornecido. Executei somente o juiz extraído em memória; execução da suíte Django e execução real contra `f7510b95a`: **[nao verificado]**. Ocorrência desses casos em produção: **[nao verificado]**.
-
-1. **Quem escreve e quem lê**
-
-| Campo/valor | Quem escreve ou monta | Quem lê |
-|---|---|---|
-| `AgendamentoFerias.dias` | Campo inteiro; criação normal, histórico, edição e aprovação escrevem o valor. (`app/ferias/models.py:320`; `app/ferias/services.py:544`; `app/ferias/services.py:487`; `app/ferias/services.py:680`; `app/ferias/services.py:743`) | Porta carrega os dias das outras frações; aviso carrega os dias gravados. (`app/ferias/models.py:372`; `app/ferias/models.py:378`; `app/ferias/situacao.py:122`) |
-| `dias_self` | Variável local calculada por `(data_fim-data_inicio).days+1`. (`app/ferias/models.py:377`) | Entra no conjunto para a exigência de uma fração ≥14; entra sozinho para o mínimo de 5. (`app/ferias/models.py:379`; `app/ferias/models.py:387`) |
-| Frações do período | `clean()` consulta agendado/em_gozo/concluido e exclui o próprio PK. O aviso repete essa seleção, com exclusão opcional. (`app/ferias/models.py:368`; `app/ferias/models.py:371`; `app/ferias/situacao.py:115`) | O juiz puro recebe os números; a porta seleciona violações; o aviso apresenta os resultados. (`app/ferias/models.py:265`; `app/ferias/models.py:372`; `app/ferias/models.py:380`; `app/ferias/situacao.py:227`) |
-| `FRACAO_MINIMA_DEMAIS=5` | Definição única encontrada. (`app/ferias/models.py:253`) | Comparação no juiz; interpolação dos dois avisos. (`app/ferias/models.py:277`; `app/ferias/situacao.py:249`; `app/ferias/situacao.py:359`) |
-| Limites 14 e 3 | Constantes existentes. (`app/ferias/models.py:251`; `app/ferias/models.py:252`) | Comparações no mesmo juiz. (`app/ferias/models.py:273`; `app/ferias/models.py:275`) |
-
-**PROCEDE — o conjunto julgado muda conforme a cláusula.** O caput recebe outras frações mais um marcador `[1]`; a exigência de 14 recebe outras mais a duração atual; o mínimo de 5 recebe somente a duração atual. Portanto, chamar o mesmo juiz não significa aplicar o mesmo julgamento ao período inteiro. (`app/ferias/models.py:372`; `app/ferias/models.py:379`; `app/ferias/models.py:387`)
-
-**PROCEDE — histórico curto permanece aceito expressamente.** `[14,3]` mais uma nova fração de 13 passa pela porta, conforme o próprio teste. O período resultante continua contendo uma fração abaixo de 5. Isso limita a promessa de defesa integral feita no mapa do modelo. (`app/ponto/tests/test_ferias_fracao_demais_5.py:79`; `app/ponto/tests/test_ferias_fracao_demais_5.py:83`; `app/ferias/models.py:15`)
-
-O grep de leitores foi:
-
-```bash
-rg -n \
-'violacoes_de_fracionamento|FRACAO_MINIMA|FRACOES_MAXIMAS|checar_fracionamento|avisos_de_agendamento|fracionamento|frações|fracoes|menor.*14' \
-app --glob '*.py' --glob '*.html' --glob '*.js' \
---glob '!**/migrations/**'
-```
-
-Os leitores relevantes encontrados foram:
-
-| Leitor | Resultado |
-|---|---|
-| Views de criação | Delegam a `checar_fracionamento`, que instancia e chama `clean()`. **NÃO PROCEDE** outro comparador próprio nesse caminho. (`app/ferias/views.py:258`; `app/ferias/services.py:293`) |
-| Preview com abono/intake | Delegam à validação existente. (`app/ferias/services.py:309`; `app/core/intake.py:34`; `app/core/intake.py:35`) |
-| Aviso do período e da proposta | Chamam o juiz puro. (`app/ferias/situacao.py:227`; `app/ferias/situacao.py:348`) |
-| API de mensageria | Delega à situação e aos avisos. (`app/api/views_mensageria.py:791`; `app/api/views_mensageria.py:812`; `app/api/views_mensageria.py:824`) |
-| Comando de simulação | Usa `_validar_agendamento`. (`app/ferias/management/commands/listar_ferias_dp.py:107`) |
-| Tela principal | Texto corrigido para 3/14/5. (`app/templates/ferias/agendar.html:10`) |
-| Formulário inline | **PROCEDE** texto incompleto: continua anunciando apenas 3/14. (`app/templates/ferias/_secao_colab.html:63`) |
-
-**NÃO PROCEDE — segundo comparador numérico de fracionamento encontrado em views/forms/services/crons/API/JS.** Os caminhos encontrados acima delegam; ausência absoluta de variantes dinâmicas ou não reconhecidas pelo grep: **[nao verificado]**. O `min="1"` da interface não constitui sozinho outro juiz, pois a criação delega ao servidor. (`app/templates/ferias/_secao_colab.html:68`; `app/ferias/views.py:259`)
-
-**PROCEDE — aviso incompleto quando duas violações coexistem.** Para `[5,5,5,5]`, o juiz retorna `par1` e `caput`, mas o aviso usa `if par1 / elif caput` e omite o caput. É comportamento preexistente que permanece. (`app/ferias/models.py:273`; `app/ferias/models.py:275`; `app/ferias/situacao.py:228`; `app/ferias/situacao.py:237`)
-
-**PROCEDE — zero desaparece do julgamento.** O filtro `if f` elimina zero antes do mínimo e da contagem: `[14,0] → []` e `[14,5,5,0] → []`. Não demonstra uma gravação real com zero, mas demonstra que o juiz isolado não expressa literalmente “nenhuma fração <5” para toda entrada inteira. (`app/ferias/models.py:271`; `app/ferias/models.py:275`; `app/ferias/models.py:277`)
-
-2. **Edição, cancelamento, status e caminhos de gravação**
-
-**NÃO PROCEDE — `clean()` só funciona para objeto novo.** Ele exclui o próprio PK e julgaria corretamente uma edição explícita para quatro dias, havendo outra fração de 14. O furo está nos chamadores que não executam `clean()`. (`app/ferias/models.py:371`; `app/ferias/models.py:377`; `app/ferias/models.py:387`)
-
-| Caminho | Julga fracionamento antes de gravar? |
-|---|---|
-| Criação normal/individual/lote | Sim: trava o período, valida e depois cria. (`app/ferias/services.py:531`; `app/ferias/services.py:541`; `app/ferias/services.py:544`) |
-| Aprovação de solicitação | Sim: `full_clean()` antes de `save()`. (`app/ferias/services.py:749`; `app/ferias/services.py:750`) |
-| Edição regular | **PROCEDE o bypass:** aceita duração ≥1 e chama remarcação; o serviço troca dias/datas e salva sem `clean()`. (`app/ferias/views.py:712`; `app/ferias/views.py:722`; `app/ferias/services.py:680`; `app/ferias/services.py:693`) |
-| Correção administrativa | **PROCEDE o bypass, documentado:** dispensa `full_clean()` e usa o mesmo escritor da edição. (`app/ferias/views.py:508`; `app/ferias/views.py:531`; `app/ferias/services.py:702`) |
-| Gozo histórico | **PROCEDE o bypass:** valida datas/saldo/abono, mas dispensa fracionamento e salva. Pode admitir `<5`, ausência de 14 ou quarta fração, se as demais guardas permitirem. (`app/ferias/services.py:492`; `app/ferias/services.py:507`; `app/ferias/services.py:510`) |
-| Cancelamentos | Não reavaliam as frações restantes; alteram saldo/status. (`app/ferias/services.py:616`; `app/ferias/services.py:620`; `app/ferias/services.py:643`; `app/ferias/services.py:652`) |
-| Cron de status | Salva somente status, sem `clean()`. (`app/ferias/services.py:916`; `app/ferias/services.py:920`) |
-
-**PROCEDE — cancelamento pode remover a única fração ≥14.** Cancelar o 14 de `[14,5]` deixa `[5]` no universo considerado pelo juiz; o cancelamento não consulta esse resultado. (`app/ferias/services.py:619`; `app/ferias/services.py:620`; `app/ferias/models.py:370`)
-
-**NÃO PROCEDE — remarcação oficial ressuscita cancelado.** Ela relê o status sob trava e recusa `cancelado`. Reagendar pela criação produz outra linha e desconsidera cancelados na duplicidade. (`app/ferias/services.py:599`; `app/ferias/services.py:600`; `app/ferias/services.py:670`; `app/ferias/models.py:313`; `app/ferias/services.py:534`; `app/ferias/services.py:544`)
-
-**PROCEDE — o status da própria instância não é filtrado pelo `clean()`.** As outras linhas são filtradas, mas `self` entra incondicionalmente. Assim, chamar `clean()` num cancelado também o conta/julga; os serviços de cancelamento normalmente não fazem essa chamada. (`app/ferias/models.py:370`; `app/ferias/models.py:372`; `app/ferias/models.py:379`; `app/ferias/models.py:387`)
-
-**PROCEDE — `save()` não é a porta obrigatória dessa regra.** Ele executa guarda de sobreposição, persistência e espelho; não chama `clean()`. (`app/ferias/models.py:461`)
-
-**NÃO PROCEDE — segundo escritor de produção fora do módulo registrado, no censo encontrado.** O registro permite `ferias/services.py`, e os escritores materiais acima estão nele. Há vários caminhos dentro dessa porta que pulam o juiz. (`app/core/portas.py:489`; `app/ferias/services.py:510`; `app/ferias/services.py:693`)
-
-Grep complementar de escritores:
-
-```bash
-rg -n \
-'AgendamentoFerias|_AgFer|ferias_agendamentoferias|agendamentos\.(create|update|bulk_create)' \
-. --glob '*.py' --glob '!**/test*' --glob '!**/migrations/**'
-```
-
-Não apareceu `bulk_create`/`bulk_update`/`QuerySet.update` de produção para esse modelo nesse censo; mecanismos externos ou dinâmicos: **[nao verificado]**. O admin local registra somente `Afastamento`; o teste novo usa `bulk_create` deliberadamente para preparar histórico. (`app/ferias/admin.py:2`; `app/ferias/admin.py:4`; `app/ponto/tests/test_ferias_fracao_demais_5.py:69`; `app/ponto/tests/test_ferias_fracao_demais_5.py:82`)
-
-**PROCEDE — mensagem nova contradiz um caminho real.** A correção admin coleta “este agendamento será recusado”, grava a fração curta e retorna sucesso anexando esse aviso. (`app/ferias/situacao.py:359`; `app/ferias/views.py:517`; `app/ferias/views.py:531`; `app/ferias/views.py:549`; `app/ferias/views.py:553`)
-
-3. **Unidade e abono**
-
-**NÃO PROCEDE — unidade diferente em `dias_self`.** Início e fim são `DateField`; a diferença mais um conta dias civis corridos inclusivos. Não há conversão por turno, escala ou fuso nessa expressão. (`app/ferias/models.py:318`; `app/ferias/models.py:319`; `app/ferias/models.py:377`)
-
-**PROCEDE — a equivalência com `dias` depende do caminho.** `clean()` exige `dias == intervalo inclusivo`; `save()` não exige. O serviço de edição recebe datas e quantidade separadamente, embora as views atuais calculem o fim coerentemente. Divergência efetivamente gravada em produção: **[nao verificado]**. (`app/ferias/models.py:395`; `app/ferias/models.py:461`; `app/ferias/services.py:657`; `app/ferias/services.py:680`; `app/ferias/views.py:718`)
-
-**NÃO PROCEDE — abono aumenta a duração da fração.** O gozo escreve `dias`; a venda incrementa separadamente `PeriodoAquisitivo.dias_vendidos`. O saldo desconta ambos, mas o fim é calculado somente pelos dias de gozo. Portanto, 20 gozados + 10 vendidos constituem fração de 20 nesse código. (`app/ferias/services.py:269`; `app/ferias/services.py:277`; `app/ferias/models.py:220`; `app/ferias/services.py:319`)
-
-4. **Cada asserção morde a base?**
-
-Todas as referências desta tabela são de `app/ponto/tests/test_ferias_fracao_demais_5.py`. “Sim” significa falha contrafactual pelo diff; execução real na base: **[nao verificado]**.
-
-| Linha / asserção | Falharia? | Motivo |
-|---|---|---|
-| `:20` — `[14,4]` | Sim | Base retornaria `[]`. |
-| `:21` — `[25,1]` | Sim | Base retornaria `[]`. |
-| `:22` — `[4]` | Sim | Base retornaria somente `['par1']`. |
-| `:26` — `[14,5]` | Não | Já retornava `[]`. |
-| `:27` — `[20,5,5]` | Não | Já retornava `[]`. |
-| `:28` — `[30]` | Não | Já retornava `[]`. |
-| `:32` — `[10,10]` | Não | Já retornava `['par1']`. |
-| `:33` — `[14,5,5,5]` | Não | Já retornava `['caput']`. |
-| `:34` — `[14,3,5,5]` | Sim | Base retornaria somente `['caput']`. |
-| `:41` — ausência da comparação literal | Sim | A comparação existia no texto-base. |
-| `:42` — presença da chamada ao juiz | Sim | A chamada não existia nessa função-base. |
-| `:70`/`:71` — `assertRaises` para quatro dias | Sim | A base aceitaria. |
-| `:72` — mensagem contém `5 dias` | Sim, isoladamente | Base não produz essa mensagem; a execução já falharia no `assertRaises`. |
-| `:77` — aceita cinco, implicitamente | Não | A base também aceitava. |
-| `:83` — aceita treze ao lado de `[14,3]` | Não | A base também aceitava. |
-| `:91` — aviso do período contém `5 dias` | Sim | Aviso novo não existia. |
-| `:97` — aviso da proposta contém `5 dias` | Sim | Aviso novo não existia. |
-| `:106` — remove texto antigo | Sim | Base continha a expressão. |
-| `:107` — contém “ao menos uma…” | Sim, isoladamente | Base não continha; normalmente para na `:106`. |
-| `:108` — contém “nenhuma…” | Sim, isoladamente | Mesmo motivo. |
-
-**NÃO PROCEDE — conjunto inteiro sem mordida.** Há testes comportamentais que distinguem a cura da base. **PROCEDE — selo estrutural fraco:** buscar substrings não prova exclusividade nem uso efetivo do juiz. (`app/ponto/tests/test_ferias_fracao_demais_5.py:20`; `app/ponto/tests/test_ferias_fracao_demais_5.py:70`; `app/ponto/tests/test_ferias_fracao_demais_5.py:91`; `app/ponto/tests/test_ferias_fracao_demais_5.py:40`)
-
-**PROCEDE — lacunas materiais:** os testes novos não exercitam edição pelo serviço, cancelamento, `save()` como entrada, zero ou aviso simultâneo `par1+caput`; o helper sempre fornece dias/datas coerentes e usa concluído por padrão. (`app/ponto/tests/test_ferias_fracao_demais_5.py:61`; `app/ponto/tests/test_ferias_fracao_demais_5.py:64`; `app/ponto/tests/test_ferias_fracao_demais_5.py:71`; `app/ponto/tests/test_ferias_fracao_demais_5.py:83`; `app/ponto/tests/test_ferias_fracao_demais_5.py:95`)
-
-5. **Classes de reprovação pedidas**
-
-| Classe | Veredito e motivo |
-|---|---|
-| Segundo juiz duplicando o registrado | **NÃO PROCEDE como introdução deste diff.** O puro já existia e a porta delega. O endereço vivo continua sendo `AgendamentoFerias.clean`, não o puro; o lookup manda consultar esse registro. (`app/ferias/models.py:266`; `app/ferias/models.py:380`; `app/core/juizes.py:271`; `app/docs/JUIZES.md:14`) |
-| Segundo escritor fora da porta | **NÃO PROCEDE no censo de produção; PROCEDE gravação sem julgamento dentro da porta.** (`app/core/portas.py:489`; `app/ferias/services.py:693`) |
-| Relógio fora da borda | **PROCEDE na árvore preexistente:** avisos têm fallback `date.today()` e cancelamento admin lê a data internamente. **NÃO PROCEDE no juiz novo**, que só recebe números. (`app/ferias/situacao.py:156`; `app/ferias/situacao.py:326`; `app/ferias/services.py:649`; `app/ferias/models.py:265`) |
-| Derivação paralela da fonte única | **PROCEDE na montagem duplicada do universo**, sem divergência atual de status: porta e aviso repetem a consulta. **NÃO PROCEDE outro cálculo numérico independente encontrado.** (`app/ferias/models.py:368`; `app/ferias/situacao.py:117`; `app/ferias/situacao.py:227`) |
-| Selo/RED sem mordida | **NÃO PROCEDE para o conjunto; PROCEDE a limitação dos testes por substring e a falta da edição real.** (`app/ponto/tests/test_ferias_fracao_demais_5.py:20`; `app/ponto/tests/test_ferias_fracao_demais_5.py:41`; `app/ponto/tests/test_ferias_fracao_demais_5.py:71`) |
-| Ordem de trava | **NÃO PROCEDE alteração de ordem pelo diff.** Criação trava PA antes de validar; edição trava AG → PA antes dos efeitos. Deadlock real: **[nao verificado]**. (`app/ferias/services.py:531`; `app/ferias/services.py:541`; `app/ferias/services.py:599`; `app/ferias/services.py:602`; `app/ferias/services.py:688`) |
-| Pouso antes do pré-requisito | **NÃO PROCEDE como achado demonstrado.** Sequência efetiva de pouso/deploy e pré-requisitos cumpridos: **[nao verificado]**. | [nao verificado]
-| Campo com dois significados | **NÃO PROCEDE confusão de unidade demonstrada; PROCEDE falta de imposição universal da equivalência dias/datas.** Abono permanece separado. (`app/ferias/models.py:377`; `app/ferias/models.py:395`; `app/ferias/models.py:461`; `app/ferias/services.py:277`) |
-
-## 14/11 10:48 · sessao 149f75f30723 · [nome]-ANDAM-JUNTO · verificador · origem=Code
-
-**O delta fecha parte dos problemas do leitor e das provas do selo; os três achados de conteúdo continuam abertos.** A validação semântica também permanece incompleta: aceita portões sem identificação e `fecha BO` sem fonte (`bin/placar_grade.py:55`, `bin/placar_grade.py:60`, `app/docs/GRADE-MESTRA.md:119`, `app/docs/GRADE-MESTRA.md:272`, `app/docs/GRADE-MESTRA.md:853`).
-
-**1. Volta 1: cura e caso que morde**
-
-| Achado | Veredito na volta 2 | Cura/preservação e selo |
-|---|---|---|
-| Tabelas de oito/dez colunas sem deslocamento | **PROCEDE, preservado.** Esquema vem do cabeçalho; largura incompatível é rejeitada. | Leitor: `bin/placar_grade.py:76`, `bin/placar_grade.py:87`. Caso novo `RJ-LARGA`, com nove células: `bin/tests/test_placar_grade.sh:138`; rejeição exigida em `:150`. |
-| Células semanticamente inválidas entram | **PROCEDE, parcialmente fechado.** `REGISTRADAxyz` foi corrigido nas dez colunas; nas oito continua reconhecimento por prefixo. `lei`, `arquivo congelado`, `colisao com` sem identificação e número sem fonte continuam aceitos. | Cura: `bin/placar_grade.py:97`; caso que morde: `bin/tests/test_placar_grade.sh:151`. Pendências: `bin/placar_grade.py:94`, `bin/placar_grade.py:55`, `bin/placar_grade.py:60`. |
-| Soma dos valores informados por estado | **PROCEDE, preservado.** Soma declarações; não demonstra BO distintos nem ausência de sobreposição. | Soma: `bin/placar_grade.py:145`, `bin/placar_grade.py:149`; assert exato: `bin/tests/test_placar_grade.sh:117`. Correspondência com BO reais: **[nao verificado]**. |
-| Complemento não aumenta obras | **PROCEDE, preservado.** Complementos ficam separados, participam da soma e recebem `(compl.)`. | Separação: `bin/placar_grade.py:114`; soma: `:145`; apresentação: `:264`. Mordida: total em `bin/tests/test_placar_grade.sh:113` e linha completa em `:121`. |
-| `?` entra no denominador, não nas medidas | **PROCEDE, preservado.** Zero também é medido. | `bin/placar_grade.py:53`, `bin/placar_grade.py:145`, `bin/placar_grade.py:150`. Soma exige quatro medidas entre seis linhas; zero aparece explicitamente: `bin/tests/test_placar_grade.sh:116`, `:117`, `:122`. |
-| Asserts existentes têm mordida | **PROCEDE; lacunas apontadas foram cobertas.** Há agora casos para `abc`, zero, largura, estado inválido, complemento inválido e sufixo. | `bin/tests/test_placar_grade.sh:121`, `:122`, `:149`, `:150`, `:151`, `:152`. O mutante que apaga a medida do complemento continua exigindo vermelho em `:160`, `:161`, `:162`. |
-| DECLARADO-X-GRAVADO omite impedimento de lei | **PROCEDE, aberto.** Continua “colisao”, enquanto o RELATO retira a obra até corte de cinco questões. | Sem cura: `app/docs/GRADE-MESTRA.md:272`, `app/docs/RELATO.md:7`, `app/docs/RELATO.md:24`. Nenhum caso específico no selo apresentado: `bin/tests/test_placar_grade.sh:132`, `:165`. |
-| E3 registra colisão consigo mesma | **PROCEDE, aberto.** “A propria obra em voo” continua no portão; a regra compara arquivos entre raias. | Sem cura: `app/docs/GRADE-MESTRA.md:119`, `CLAUDE.md:309`, `CLAUDE.md:310`. Nenhuma prova dessa relação no selo: `bin/tests/test_placar_grade.sh:132`, `:165`. |
-| O232 aponta JUSTIFICATIVA como colisão em voo | **PROCEDE a falta de sustentação, aberto.** A referência continua; JUSTIFICATIVA está INTERROMPIDA na própria GRADE. | `app/docs/GRADE-MESTRA.md:853`, `app/docs/GRADE-MESTRA.md:269`. Colisão atual com agente vivo: **[nao verificado]**. |
-
-Reproduzi em memória os asserts relevantes e mutantes: rejeitar zero, aceitar `abc`, aceitar `REGISTRADAxyz`, aceitar complemento inválido e retirar `(compl.)` derrubam verificações; retirar a guarda de largura provoca exceção, também detectável pelo selo (`bin/tests/test_placar_grade.sh:112`, `:121`, `:122`, `:146`, `:149`, `:151`, `:152`). Execução integral do shell: **[nao verificado]**; ele cria e remove temporários (`bin/tests/test_placar_grade.sh:21`, `:26`).
-
-**2. Escritores, leitores e significado dos números**
-
-| Objeto | Quem escreve | Quem lê |
-|---|---|---|
-| Coluna `resolve` | Escritor efetivo: **[nao verificado]**. A GRADE atribui origem à leitura Codex e determina manutenção por marco (`app/docs/GRADE-MESTRA.md:4`, `:5`). | `ler()` monta o campo pelo cabeçalho; `resolve_preenchido()` conta sua presença (`bin/placar_grade.py:39`, `:90`, `:121`). |
-| `logs/GRADE-MESTRA/resolve/quadro.md` | Escritor de produção: **[nao verificado]**. O selo escreve apenas quadros de fixture (`bin/tests/test_placar_grade.sh:125`, `:128`). | `sem_obra()` escolhe caminho explícito/env/padrão, lê o arquivo e extrai `sem obra: N` (`bin/placar_grade.py:132`, `:134`, `:137`). |
-| Linhas derivadas | `--cabecalho` escreve o bloco da GRADE; `--placar` escreve o documento derivado (`bin/placar_grade.py:195`, `:205`, `:260`, `:270`). | `--conferir` compara o bloco completo; o selo verifica as linhas novas (`bin/placar_grade.py:221`, `bin/tests/test_placar_grade.sh:123`, `:127`, `:159`). |
-
-**NAO PROCEDE “456 digitado no cálculo”.** O denominador é `len(lidas)`; complementos ficam separados. A cópia registra `11/456`, e o selo também exige `1/5` na fixture, contrariando uma constante 456 (`bin/placar_grade.py:114`, `:122`, `app/docs/GRADE-MESTRA.md:28`, `bin/tests/test_placar_grade.sh:123`).
-
-**PROCEDE exclusão incompleta de marcadores:** somente vazio, `?` e `-` são excluídos, após remoção dos espaços das extremidades. `n/a` e `[nao verificado]` seriam contados como preenchidos (`bin/placar_grade.py:48`, `:121`). Esses marcadores não aparecem na coluna desta cópia; inflação atual causada por eles: **NAO PROCEDE**, conforme os valores distintos abaixo (`app/docs/GRADE-MESTRA.md:35`, `bin/placar_grade.py:90`).
-
-Valores distintos de `resolve`, incluindo obras e complementos:
-
-| Valor literal | Exemplo |
-|---|---|
-| `-` | `app/docs/GRADE-MESTRA.md:37` |
-| `HJ-074` | `app/docs/GRADE-MESTRA.md:127` |
-| `HJ-092` | `app/docs/GRADE-MESTRA.md:128` |
-| `casos 01, 02, 05, 06, 08` | `app/docs/GRADE-MESTRA.md:170` |
-| `caso 03` | `app/docs/GRADE-MESTRA.md:267` |
-| `HJ-090; HJ-091` | `app/docs/GRADE-MESTRA.md:268` |
-| `HJ-093` | `app/docs/GRADE-MESTRA.md:269` |
-| `HJ-091` | `app/docs/GRADE-MESTRA.md:288` |
-| `casos 01–10` | `app/docs/GRADE-MESTRA.md:289` |
-| `caso 01–14` | `app/docs/GRADE-MESTRA.md:431` |
-| `caso 10` | `app/docs/GRADE-MESTRA.md:505` |
-| `caso 13–14` | `app/docs/GRADE-MESTRA.md:686` |
-| `HJ-095` | `app/docs/GRADE-MESTRA.md:687` |
-| `caso 07` | `app/docs/GRADE-MESTRA.md:705` |
-| `caso 09` | `app/docs/GRADE-MESTRA.md:1052` |
-| `caso 02,03,05,07,08,09,10,11,12` | `app/docs/GRADE-MESTRA.md:1059` |
-| `HJ-090` | `app/docs/GRADE-MESTRA.md:1351` |
-
-O numerador mede **células de obras preenchidas**, sem deduplicar referências nem contar casos individualmente: `HJ-090; HJ-091` vale uma célula; `HJ-092` aparece em duas obras. Complementos preenchidos ficam fora desse indicador (`bin/placar_grade.py:121`, `app/docs/GRADE-MESTRA.md:268`, `:128`, `:469`, `bin/placar_grade.py:114`).
-
-**3. Determinismo e consumidores**
-
-**PROCEDE: `--conferir` continua independente de `logs/`.** Seu caminho lê a GRADE e deriva `cabecalho()`; `sem_obra()` só entra no PLACAR. A conferência da cópia retornou verde com 456 obras, inclusive variando `PLACAR_QUADRO_RESOLVE` (`bin/placar_grade.py:209`, `:218`, `:221`, `:181`, `:260`, `app/docs/GRADE-MESTRA.md:22`, `:24`, `:28`).
-
-O **PLACAR completo** depende agora do quadro/env; já continha horário e commit. Portanto essa independência vale para `--conferir`, não para todo o documento produzido (`bin/placar_grade.py:132`, `:241`, `:260`).
-
-**NAO PROCEDE quebra nos consumidores nomeados:**
-
-| Consumidor | Leitura relevante |
-|---|---|
-| `relato.sh` | Gera com o leitor atualizado e transporta GRADE/PLACAR inteiros (`bin/relato.sh:101`, `:119`, `:120`). |
-| Raspador | Lê texto inteiro, mascara e escreve; não interpreta esses contadores (`bin/raspar_publico.py:28`, `:31`, `:40`). |
-| `hook_stop_fila1` | Lê BACKLOG e RELATO (`bin/hook_stop_fila1.py:33`, `:34`, `:186`, `:472`). |
-| Pre-push | Lê referências Git, carimbo e labels da régua (`bin/pre-push.sh:8`, `:53`, `:184`; `app/core/hooks/pre-push.sh:22`, `:80`). |
-
-O selo está ligado ao loop da régua; **não é chamado diretamente pelo pre-push**, cujo comentário explicita essa diferença (`bin/regua.sh:138`, `:140`, `:143`, `bin/pre-push.sh:14`, `:15`). Outros consumidores externos: **[nao verificado]**.
-
-**4. Classes pedidas**
-
-| Classe | Veredito |
-|---|---|
-| **Selo sem mordida** | **NAO PROCEDE** para as lacunas antigas agora cobertas. **PROCEDE uma lacuna residual:** retirar vazio da lista de exclusão de `resolve` passa pelas fixtures, pois elas exercitam referência, `?` e `-`, sem célula vazia (`bin/placar_grade.py:121`, `bin/tests/test_placar_grade.sh:90`, `:92`, `:123`, `:159`). |
-| **Número sem fonte** | **PROCEDE em `fecha BO`:** a fonte é opcional no parser, embora exigida na descrição da GRADE; a fixture usa `2` sem fonte (`bin/placar_grade.py:55`, `app/docs/GRADE-MESTRA.md:8`, `bin/tests/test_placar_grade.sh:92`). **NAO PROCEDE como constante inventada em `sem obra`:** lê o quadro ou publica “nao medido”; validade do censo real: **[nao verificado]** (`bin/placar_grade.py:134`, `:137`, `:139`). |
-| **Campo com dois significados** | **PROCEDE em `portao` da E3:** “a própria obra está em voo” foi registrado como colisão entre raias (`app/docs/GRADE-MESTRA.md:119`, `CLAUDE.md:309`). **NAO PROCEDE dupla semântica demonstrada em `resolve`:** o indicador implementado mede presença textual; interpretá-lo como quantidade de casos resolvidos não tem sustentação nesse cálculo (`bin/placar_grade.py:119`, `:121`, `app/docs/GRADE-MESTRA.md:268`). |
-
-## 14/11 10:47 · sessao 54e270c3155d · COERENCIA-DAS-LEIS · censo · origem=Code
-
-app/chamados/catalogo/motor.py::VIVOS ; o chamado esta vivo? (app/core/juizes.py:107) ; REGISTRADO-NAO-E-VIVO-DESVIO conserva registrado em VIVOS (app/docs/CORTES.md:328) ; vivo corresponde a aberto, em_analise ou registrado (app/chamados/catalogo/motor.py:24) ; nao ; nenhum achado independente buscando status_local, status_local__in e tuplas aberto/em_analise/registrado, consumidores conferidos usam VIVOS (app/ponto/services/cartorio.py:1384, app/chamados/services/historico.py:180) ; -
-
-app/chamados/catalogo/motor.py::decidir ; pode transitar de um estado a outro? (app/core/juizes.py:108) ; nenhum texto sobre a matriz, endereco documentado em app/docs/JUIZES.md:37 ; nascimento aceita EMITIR/REGISTRAR, transicao humana consulta matriz e perfil, cancelado/superado sao terminais absolutos, eventos do sistema consultam mapa e combinacoes ausentes recusam (app/chamados/catalogo/motor.py:130, app/chamados/catalogo/motor.py:142, app/chamados/catalogo/motor.py:153, app/chamados/catalogo/motor.py:158) ; nao ; nenhum achado independente buscando TRANSICOES_PERMITIDAS, TRANSICAO_HUMANA, pode_transicionar e decidir, modelo deriva a matriz e delega a decisao (app/chamados/models.py:117, app/chamados/models.py:124) ; -
-
-app/chamados/catalogo/premissa.py::premissa_morta ; a premissa do chamado morreu, podendo fechar? (app/core/juizes.py:109) ; L-125 para cluster (app/docs/LEIS.md:146), O169-DECIDIDO-PELA-LEI (app/docs/CORTES.md:430), RESPOSTAS-2910-MANHA aponta a celula para premissa de turno (app/docs/CORTES.md:357) ; True somente para classe reconhecida cujo fato sustentador foi coletado e e falso, classe desconhecida ou fato ausente conservam a premissa viva (app/chamados/catalogo/premissa.py:124, app/chamados/catalogo/premissa.py:128, app/chamados/catalogo/premissa.py:134, app/chamados/catalogo/premissa.py:150) ; nao ; _absolvido_pela_celula responde pela absolvição do chamado de turno usando veredito nao acusador e ausencia de marcos pendentes, autoridade expressamente nomeada pelo corte (app/chamados/reconciliador.py:1019, app/chamados/reconciliador.py:1028, app/chamados/reconciliador.py:1030, app/docs/CORTES.md:357) ; -
-
-app/chamados/utils.py::pode_agir_chamado ; quem pode agir no chamado? (app/core/juizes.py:110) ; nenhum texto especifico em LEIS/CORTES, endereco documentado em app/docs/JUIZES.md:49 ; usa departamento do dono do modulo ou area da solicitacao, recusa anonimo, aceita gestor geral, departamento desconhecido ou usuario sem competencias declaradas, demais precisam da competencia ou perfil correspondente (app/chamados/utils.py:39, app/chamados/utils.py:42, app/chamados/utils.py:55, app/chamados/utils.py:57, app/chamados/utils.py:60, app/chamados/utils.py:65, app/chamados/utils.py:72) ; nao ; nenhum achado contextual independente buscando pode_agir_chamado, departamento_do_chamado, tem_perfil e departamento, consumidores conferidos consultam o juiz (app/chamados/views.py:1015, app/chamados/services/acoes_disputa.py:187) ; -
-
-app/chamados/catalogo/modulos.py::data_do_chamado ; qual o dia do chamado? (app/core/juizes.py:111) ; K1-DIA-DO-CHAMADO declara chave_data=data_turno (app/docs/CORTES.md:177), lookup proibe leitura crua dessa chave (app/docs/JUIZES.md:62) ; devolve o valor da chave_data declarada no catalogo atual ou aposentado, sem modulo ou chave declarada devolve None (app/chamados/catalogo/modulos.py:222, app/chamados/catalogo/modulos.py:225) ; nao ; dias_do_fato determina o dia pela celula e depois por data_turno cru, sem consultar data_do_chamado, o singular tambem acrescenta fallback cru (app/chamados/juizes.py:184, app/chamados/juizes.py:187, app/chamados/juizes.py:118) ; -
-
-app/chamados/juizes.py::pergunta_viva ; a pergunta da disputa esta viva? (app/core/juizes.py:112) ; L-051 (app/docs/LEIS.md:92), L-061 (app/docs/LEIS.md:95), FIO-MORTO-E-ESTRUTURAL (app/docs/CORTES.md:253), leitura da tranca (app/docs/CORTES.md:272), absolvicao pelo marco respondido por batida (app/docs/CORTES.md:413) ; delega ao calculo com memo, validacao, tranca e determinadas vias encerram, resposta preenchida permanece viva salvo decisao administrativa ou concordancia resposta/luz, depois consulta identidade, marco, celula, falta e testemunha da materializacao (app/chamados/juizes.py:894, app/chamados/juizes.py:1401, app/chamados/juizes.py:1405, app/chamados/juizes.py:1412, app/chamados/juizes.py:1417, app/chamados/juizes.py:1429, app/chamados/juizes.py:1438, app/chamados/juizes.py:1444, app/chamados/juizes.py:1450, app/chamados/juizes.py:1462, app/chamados/juizes.py:1476, app/chamados/juizes.py:1483) ; nao ; nenhum achado exato independente buscando pergunta_viva, viva, q_vivas, validada_em, materializada_em e estado, property delega e q_vivas declara somente pre-filtro por contencao (app/chamados/models.py:3392, app/chamados/models.py:3398, app/chamados/models.py:3431) ; -
-
-app/chamados/models.py::DisputaSupervisao.pode_fechar ; a disputa pode fechar? (app/core/juizes.py:113) ; JUIZ-PODE-FECHAR-NASCE exige fio vazio e nenhuma resposta sem veredito (app/docs/CORTES.md:272) ; fechamento ordinario exige simultaneamente respostas_sem_veredito vazia e fio_vivo falso (app/chamados/models.py:1905, app/chamados/models.py:1909) ; nao ; relatorios_disputa.classificar declara PRONTA_FECHAR apenas pela ausencia de perguntas vivas, sem consultar respostas_sem_veredito (app/chamados/relatorios_disputa.py:18, app/chamados/relatorios_disputa.py:20) ; -
-
-app/chamados/models.py::ChamadoColaborador.abrir ; o chamado e duplicado, do mesmo fato? (app/core/juizes.py:114) ; L-007 exige escritor unico e trilha (app/docs/LEIS.md:65), lookup aponta abrir como autoridade do duplicado (app/docs/JUIZES.md:62), nenhum texto especifico da chave em LEIS/CORTES ; sob trava do colaborador busca colaborador mais lookup, reutiliza existente e tenta renascer encerrado, aceita filho agrupado sob pai vivo, senao consulta o motor para nascer (app/chamados/models.py:949, app/chamados/models.py:953, app/chamados/models.py:968, app/chamados/models.py:976, app/chamados/models.py:982) ; nao ; abertura faz dedup proprio por colaborador, modulo, VIVOS, assunto, descricao, prazo e autor, retornando igual ou chamando criar, auditor tambem agrupa duplicatas por colaborador/modulo/dia (app/chamados/services/abertura.py:165, app/chamados/services/abertura.py:170, app/chamados/services/abertura.py:172, app/chamados/management/commands/auditar_invariantes_chamados.py:625, app/chamados/management/commands/auditar_invariantes_chamados.py:626) ; -
-
-app/chamados/catalogo/motor.py::prazo_estourou ; o prazo SLA do chamado estourou? (app/core/juizes.py:115) ; nenhum texto especifico da comparacao em LEIS/CORTES, endereco documentado em app/docs/JUIZES.md:63 ; True quando prazo_sla existe e prazo_sla <= agora, sem prazo retorna False (app/chamados/catalogo/motor.py:56) ; nao ; sla.vencido calcula referencia DP/criacao mais horas por urgencia e compara com <, cobranca._cobranca_vencida usa prazo_sla ou criacao mais 30 minutos e compara com < (app/chamados/services/sla.py:30, app/chamados/services/sla.py:39, app/chamados/services/cobranca.py:253, app/chamados/services/cobranca.py:254) ; -
-
-app/escala/services/regeneracao.py::cobranca_orfa ; a cobranca ficou orfa depois da regeneracao? (app/core/juizes.py:116) ; L-020 sobre reescrita denunciada (app/docs/LEIS.md:71), resposta especifica documentada em app/docs/JUIZES.md:41 ; sem marcos_faltantes ou dia retorna None, senao procura reescrita posterior a criacao, combinando regenerada_em/editada_em e consultando janela historica somente na ausencia de regenerada_em (app/escala/services/regeneracao.py:149, app/escala/services/regeneracao.py:154, app/escala/services/regeneracao.py:119, app/escala/services/regeneracao.py:122, app/escala/services/regeneracao.py:124) ; nao ; nenhum achado independente buscando cobranca_orfa, dia_reescrito_apos, regenerada_em, editada_em e criado_em, consumidores conferidos delegam (app/ponto/management/commands/gerar_celulas.py:257, app/ponto/management/commands/supra_juiz.py:275) ; -
-
-app/chamados/services/silencio_ausencia.py::reconciliar_por_ausencia ; a ausencia do dia suspende, fecha ou levanta a cobranca viva? (app/core/juizes.py:117) ; L-061 (app/docs/LEIS.md:95), L-062 (app/docs/LEIS.md:96), corte S4-PENDENTE-[nome]-COBRANCA transcrito no modulo (app/chamados/services/silencio_ausencia.py:1) ; ausencia aberta silencia ou renova sem sobrepor silencio vivo alheio, aprovada fecha somente com premissa morta e celula nao acusadora, demais casos levantam apenas o marcador proprio (app/chamados/services/silencio_ausencia.py:78, app/chamados/services/silencio_ausencia.py:81, app/chamados/services/silencio_ausencia.py:94, app/chamados/services/silencio_ausencia.py:42, app/chamados/services/silencio_ausencia.py:113) ; nao ; auditor refaz ausencia aberta, marcador e silencio alheio, e acusa cobranca com ausencia aprovada sem a guarda da lampada (app/chamados/management/commands/auditar_invariantes_chamados.py:643, app/chamados/management/commands/auditar_invariantes_chamados.py:646, app/chamados/management/commands/auditar_invariantes_chamados.py:648, app/chamados/management/commands/auditar_invariantes_chamados.py:660) ; -
-
-app/chamados/services/disputa_emissao.py::motivo_fora_da_fabrica ; a fabrica de perguntas alcanca o chamado e, se nao, por que? (app/core/juizes.py:119) ; L-061 (app/docs/LEIS.md:95), FIO-MORTO-E-ESTRUTURAL (app/docs/CORTES.md:253), DUAS-RESPOSTAS item 2 destina nunca_bateu sem adesao a C5 (app/docs/CORTES.md:433) ; retorna causa para disputa, encerrado, nunca_bateu sem adesao, pergunta materializada com celula ausente ou nao acusadora, virada resolvida ou categoria fora do mapa, retorna None para marcos nomeados passados ou categoria mapeada (app/chamados/services/disputa_emissao.py:753, app/chamados/services/disputa_emissao.py:758, app/chamados/services/disputa_emissao.py:760, app/chamados/services/disputa_emissao.py:772, app/chamados/services/disputa_emissao.py:783, app/chamados/services/disputa_emissao.py:785) ; nao ; nenhum achado independente buscando motivo_fora_da_fabrica, chamado_orfao_e_regularizavel, pergunta_do_chamado_ja_encerrada e categoria_fora_do_mapa, consumidores delegam (app/chamados/services/disputa_emissao.py:796, app/chamados/services/pergunta_no_app.py:133) ; -
-
-app/chamados/services/pergunta_no_app.py::retencao ; por que o chamado vivo de furo nao tem pergunta no app? (app/core/juizes.py:120) ; L-061 (app/docs/LEIS.md:95), FIO-MORTO-E-ESTRUTURAL (app/docs/CORTES.md:253) ; sem dia retorna sem_dia, hoje/futuro ou presente no app retorna None, depois verifica fabrica, ata, parcial na lista administrativa, cobertura, pergunta viva em outro chamado, marco ja perguntado e fabrica nao rodada (app/chamados/services/pergunta_no_app.py:127, app/chamados/services/pergunta_no_app.py:129, app/chamados/services/pergunta_no_app.py:133, app/chamados/services/pergunta_no_app.py:136, app/chamados/services/pergunta_no_app.py:144, app/chamados/services/pergunta_no_app.py:146, app/chamados/services/pergunta_no_app.py:149, app/chamados/services/pergunta_no_app.py:151, app/chamados/services/pergunta_no_app.py:153) ; nao ; nenhum achado independente buscando retencao, fabrica_nao_rodou, pergunta_encerrada_marco_apagado e parcial_na_lista_do_admin, consumidores delegam (app/chamados/services/pergunta_no_app.py:201, app/chamados/services/pergunta_no_app.py:223) ; -
-
-app/chamados/juizes.py::competencia_do_chamado ; qual a competencia do chamado? (app/core/juizes.py:122) ; L-026 (app/docs/LEIS.md:77), L-090 (app/docs/LEIS.md:123), K8-COMPETENCIA-NAO-E-MES-CIVIL (app/docs/CORTES.md:216) ; escolhe o fato mais recente entre dia_do_fato, ausencia e perguntas vivas, determina a competencia por janela_atual com a empresa, retorna None sem fato datado (app/chamados/juizes.py:2360, app/chamados/juizes.py:2363, app/chamados/juizes.py:2366, app/chamados/juizes.py:2368, app/chamados/juizes.py:2370, app/chamados/juizes.py:2373) ; nao ; arquivar_competencia_encerrada escolhe dia do fato ou criacao conforme escopo e calcula a competencia aritmeticamente, sem consultar competencia_do_chamado (app/chamados/management/commands/arquivar_competencia_encerrada.py:111, app/chamados/management/commands/arquivar_competencia_encerrada.py:115, app/chamados/management/commands/arquivar_competencia_encerrada.py:177, app/chamados/management/commands/arquivar_competencia_encerrada.py:233) ; -
-
-app/chamados/juizes.py::fio_vivo ; alguma pergunta desta colecao esta viva? (app/core/juizes.py:125) ; L-002 (app/docs/LEIS.md:60), FIO-MORTO-E-ESTRUTURAL declara a autoridade da reducao da colecao (app/docs/CORTES.md:253) ; retorna any(pergunta_viva(p) for p in perguntas), colecao vazia retorna False (app/chamados/juizes.py:1513) ; nao ; Command._disputa_viva faz a reducao any(p.viva for p in d.perguntas.all()) fora do juiz, embora p.viva delegue individualmente a C6 (app/chamados/management/commands/arquivar_competencia_encerrada.py:158, app/chamados/models.py:3431) ; -
-
-app/ponto/services/furos_vetados.py::motivo_do_veto ; este dia veta nascimento ou reabertura automatica de chamado de turno? (app/core/juizes.py:131) ; L-093 (app/docs/LEIS.md:111), VETO-EC-NONE e JUIZ-MOTIVO-DO-VETO (app/docs/CORTES.md:403) ; vinculo/template ausente ou regua degenerada retorna VETO_DEGENERADA, regua suspeita retorna VETO_REGUA, demais retornam None (app/ponto/services/furos_vetados.py:40, app/ponto/services/furos_vetados.py:42, app/ponto/services/furos_vetados.py:44) ; nao ; detectar_ausencias e reconciliar_grade recompõem os dois vetos fora do juiz, copias tambem declaradas no registro (app/ponto/management/commands/detectar_ausencias.py:601, app/ponto/management/commands/detectar_ausencias.py:605, app/ponto/management/commands/reconciliar_grade.py:495, app/ponto/management/commands/reconciliar_grade.py:499, app/core/juizes.py:129) ; -
-
-app/chamados/juizes.py::porta_alcancavel_do_dia ; por onde alguem chega a este dia, com o verbo do painel? (app/core/juizes.py:135) ; L-002 (app/docs/LEIS.md:60), LAUDO-3010-JUIZ-DA-ACAO-DO-ADMIN (app/docs/CORTES.md:404), O261-E-F5-DESENHO (app/docs/CORTES.md:409) ; soma chamados da celula na fila e ancoras na fila de perguntas vivas no app sem resposta vazia, devolve rota, fila visivel, verbos e fio, ou None sem porta (app/chamados/juizes.py:1657, app/chamados/juizes.py:1661, app/chamados/juizes.py:1663, app/chamados/juizes.py:1667) ; nao ; nenhum achado da mesma pergunta buscando porta_alcancavel_do_dia, alimentar_portas, fila_cel, FIO_DO_VERBO e projecoes rota/fila/verbos/fio, _portas_da_tarefa restringe a portas de acoes exigiveis e declara nao reconstituir C17 (app/chamados/services/tarefa_do_dia.py:541, app/chamados/services/tarefa_do_dia.py:546) ; -
-
-app/chamados/juizes.py::dia_sem_trabalho ; a cobranca cala porque a celula lavrada diz que o dia nao e de trabalho? (app/core/juizes.py:149) ; L-061 (app/docs/LEIS.md:95), L-125 (app/docs/LEIS.md:146), JUIZ-DIA-SEM-TRABALHO (app/docs/CORTES.md:416), excecao de ausencia parcial documentada em app/docs/JUIZES.md:67 ; True para trabalha is False ou ata.tipo_dia preenchido diferente de trabalho, na ausencia parcial somente trabalha is False cala, trabalha=None sozinho nao cala (app/chamados/juizes.py:438, app/chamados/juizes.py:454, app/chamados/juizes.py:456) ; nao ; cartorio._protesta deriva parcialmente a resposta usando trabalha is not False e marcos nao acesos, excecao expressamente declarada nos textos (app/ponto/services/cartorio.py:1458, app/ponto/services/cartorio.py:1459, app/docs/CORTES.md:416, app/docs/JUIZES.md:75) ; -
-
-app/chamados/services/tarefa_do_dia.py::tarefa_do_dia ; quais acoes ainda sao exigiveis por instancia de marco, de quem e por quais portas? (app/core/juizes.py:155) ; L-002 (app/docs/LEIS.md:60), L-061 (app/docs/LEIS.md:95), FIO-E0-V4 (app/docs/CORTES.md:426), LEI-TRANCA-E2-JUIZ (app/docs/CORTES.md:427) ; exige agora e carga no mesmo instante, combina grade, lampadas, teto, tranca, ultima decisao e efeitos para produzir acoes com dono e porta, expondo nao_sei quando indeterminado (app/chamados/services/tarefa_do_dia.py:116, app/chamados/services/tarefa_do_dia.py:164, app/chamados/services/tarefa_do_dia.py:204, app/chamados/services/tarefa_do_dia.py:306, app/chamados/services/tarefa_do_dia.py:562, app/chamados/services/tarefa_do_dia.py:566) ; nao ; vigia_fio.dono_fora_do_fio decide separadamente se a pendencia espera decisao do dia, ausencia ou cadastro, respondedor antigo nomeado para substituicao na E3 (app/chamados/services/vigia_fio.py:306, app/chamados/services/vigia_fio.py:309, app/chamados/services/vigia_fio.py:311, app/chamados/services/vigia_fio.py:313, app/docs/CORTES.md:426) ; -
-
-app/chamados/juizes.py::dia_da_pergunta_trancado ; o dia da pergunta esta arquivado por competencia trancada sem toque posterior do admin? (app/core/juizes.py:161) ; L-051 (app/docs/LEIS.md:92), L-090 (app/docs/LEIS.md:123), LEI-TRANCA-E2-JUIZ (app/docs/CORTES.md:427), assinatura humana do toque documentada em app/docs/JUIZES.md:88 ; consulta dias_trancados pela competencia da empresa e responde True somente sem toque administrativo posterior, conversa nao tem dia de turno a trancar (app/chamados/juizes.py:338, app/chamados/juizes.py:991, app/chamados/juizes.py:1062, app/chamados/juizes.py:1078) ; nao ; nenhum achado independente buscando dia_da_pergunta_trancado, dias_trancados, periodo_trancado, TOQUE_COBRAR_DIA e _admin_tocou, consumidores conferidos delegam (app/chamados/reconciliador.py:668, app/chamados/services/disputa_emissao.py:1970, app/chamados/services/tarefa_do_dia.py:422) ; -
-
-app/chamados/services/fabrica_da_celula.py::pauta_cadastro_existente ; o dia passado sem turno previsto ja esta entregue ao DP como pendencia de cadastro? (app/core/juizes.py:297) ; MODO-COMUM-PASSADO-SEM-TURNO e LEI-PASSADO-SEM-MARCOS (app/docs/CORTES.md:428) ; True quando existe cabeca DP viva do marcador para o colaborador ou pauta fechada por feito/cancelado em data local igual ou posterior ao dia consultado, dia=None consulta somente viva (app/chamados/services/fabrica_da_celula.py:308, app/chamados/services/fabrica_da_celula.py:327, app/chamados/services/fabrica_da_celula.py:329, app/chamados/services/fabrica_da_celula.py:331, app/chamados/services/fabrica_da_celula.py:334) ; nao ; nenhum achado independente buscando PAUTA_SEM_TURNO, CADASTRO: PASSADO SEM TURNO PREVISTO e pauta_cadastro_existente, o escritor pergunta ao juiz (app/chamados/services/fabrica_da_celula.py:367) ; -
-
-app/chamados/models.py::DisputaSupervisao.respostas_sem_veredito ; quais respostas do colaborador na disputa esperam veredito? (app/core/juizes.py:298) ; O168-JUIZ-DO-VEREDITO (app/docs/CORTES.md:449), tranca por leitura L-051 (app/docs/LEIS.md:92, app/chamados/models.py:1896) ; lista perguntas sem validada_em nem materializada_em, com respondida_em ou texto preenchido apos strip, excluindo dia trancado salvo ignorar_tranca=True (app/chamados/models.py:1886, app/chamados/models.py:1898, app/chamados/models.py:1902) ; nao ; auditor deriva I21 por respondida_em preenchido, validada/materializada nulas e texto diferente de vazio, restringindo a pais/destinos mortos sem chamar o juiz (app/chamados/management/commands/auditar_invariantes_chamados.py:1572, app/chamados/management/commands/auditar_invariantes_chamados.py:1575, app/chamados/management/commands/auditar_invariantes_chamados.py:1576) ; -
-
-app/ponto/supra_juiz.py::pode_executar_csf ; o chamado tem resposta sem veredito que impede encerramento pelo sistema? (app/core/juizes.py:299) ; O168-JUIZ-CSF com predicado antigo expressamente superado (app/docs/CORTES.md:448), O168-JUIZ-DO-VEREDITO (app/docs/CORTES.md:449) ; True permite encerrar somente sem respostas pendentes de veredito nas disputas de origem e nas perguntas que resolvem o chamado, consulta sem_veredito_entre com ignorar_tranca=True nas duas metades (app/ponto/supra_juiz.py:567, app/ponto/supra_juiz.py:573, app/ponto/supra_juiz.py:574, app/ponto/supra_juiz.py:588) ; nao ; 
-
-[truncado em 20000 de 20531 caracteres]
-
-_5117 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5120 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
