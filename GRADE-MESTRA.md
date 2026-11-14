@@ -14,18 +14,18 @@
 |---|---|---|
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
-| LATERAL-ESTRUTURA | 155 | 155 |
+| LATERAL-ESTRUTURA | 156 | 156 |
 | INSTRUMENTO | 177 | 177 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **456** | **455** |
+| **total** | **457** | **456** |
 
-Estados: EM VOO 3; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 59; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 59; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 297 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 298 com a coluna
 
-resolve preenchido 11/456
+resolve preenchido 12/457
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -120,7 +120,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 | ? | ? |
 | E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) | BACKLOG:2016 | ? | ? |
 
-## LATERAL-ESTRUTURA (155)
+## LATERAL-ESTRUTURA (156)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
@@ -266,6 +266,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | V2-BUGS-DO-MOTOR | LATERAL-ESTRUTURA | Corrige prorrogação, feriado, passagem de turno e dias abertos. | - | itens 1,3,4,5; apply 11; DIFF/pauta 10 | .++...+++ | REGISTRADA (item 2 no ar; restante pendente) | BACKLOG:1862 [+4 compl.] | ? | ? |
 | LOTE-VALIDAR-VIRA-JOB | LATERAL-ESTRUTURA | Executa a validação em segundo plano com resultado na tela. | caso 03 | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1866 [+2 compl.] | ? | ? |
 | HJ-090 | LATERAL-ESTRUTURA | Faz alterações de férias respeitarem o mesmo saldo e trava. | HJ-090; HJ-091 | datas do DP; aplicação após pouso | +++++~... | EM VOO | BACKLOG:1874; RELATO:10; RELATO:17; RELATO:19; RELATO:53 [+4 compl.] | ? | ? |
+| FRAC5 | LATERAL-ESTRUTURA | Faz o juiz do fracionamento de ferias recusar fracao menor que 5 dias (CLT 134 par.1), com tela e aviso lendo dele. | RC1-3 (lei: corte RESPOSTAS-COERENCIA-1 item 3) | verificador v3; suite inteira; opus | ++++.~... | EM VOO (wt-frac5-cura-100047 @20ba35281; origem: aval COERENCIA-CORTE-AUSENCIA-TURNO (3) 09:50, substituido 10:27 pelo RC1 "conferir e relatar"; segue por iniciativa da sessao a partir do censo da COERENCIA) | BACKLOG FRAC5; logs/AVAIS-1313/coerencia_corte_ausencia_turno.txt; logs/AVAIS-1313/respostas_coerencia_1.txt | ? | ? |
 | JUSTIFICATIVA-PAGA-O-PERIODO | LATERAL-ESTRUTURA | Paga somente o período do turno coberto pela justificativa. | HJ-093 | HJ-090; DIFF; motor e folha | ++....... | INTERROMPIDA (brief pronto; ordem viva divergente) | BACKLOG:1875; RELATO:11; RELATO:23; anexo:interrompidas.txt:25 [+1 compl.] | ? | ? |
 | HOLERITE-ZIP-MATRICULA | LATERAL-ESTRUTURA | Retira o envio antigo de holerites sem uso pela tela. | - | E1; E2 | ++....... | REGISTRADA | BACKLOG:1883 [+1 compl.] | ? | ? |
 | BO-0611-05 | LATERAL-ESTRUTURA | Permite registrar ponto sem coordenadas de GPS. | - | liberação B3; revisão; smoke | ++.+.+... | PARADA (último estado da linha) | BACKLOG:1927 [+7 compl.] | ? | ? |
