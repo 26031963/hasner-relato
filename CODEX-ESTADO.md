@@ -1,7 +1,36 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 17:19** · publicado em **14/11/2026 17:21** (UTC-3)
+> Ultima resposta processada: **14/11/2026 17:31** · publicado em **14/11/2026 17:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 17:31 · sessao 190a94933cb1 · - · - · origem=Ronald (tmux)
+
+Censo por leitura da cópia; execução ORM e efeitos reais de signals: [nao verificado].
+
+| Variável | Escrita | Leitura |
+|---|---|---|
+| `_absteve_por_ata` | Inicializada em `chamados/services/disputa_emissao.py:1289`; marcada nos complementos `:1304`, caminho de ata `:1392`, batida com classificador silencioso `:1428`, batida classificada `:1438` e sem origem `:1467`. | Veto de auto-fecho em `:1540`; acende em `:1542`, preservando a disputa aberta. |
+| `complementadas` | Criada em `:1277`; única inclusão em `:1310`, seguida de atualização de motivos em `:1311`. Exige pergunta anterior `:1295`, ata disponível `:1302` e complemento admitido `:1307`. | Percorrida em `notificar_complementos`, `:1280`; push em `:1283`. Chamadas em `:1320`, `:1527`, `:1531`; esta última exclui a principal pela condição `:1281`. | [nao verificado]
+| `motivos_atualizados` | Inicializada pelos motivos da principal em `:1327-1328`; recebe resultados de pergunta/complemento em `:1373`, `:1394`, `:1440`, `:1446`, `:1472`, `:1477`; seed `orfao_14h` em `:1486`. | Criação da disputa `:1354`; agregação `:1360`, `:1380`, `:1487`; insumo das mesmas portas de pergunta/complemento; entradas pendentes `:1501`; condição do push `:1550` e argumentos em `:1552`. Persistência dos motivos pertence a `_agregar_motivos_na_dona`, `:587`, `:601`, `:607`. | [nao verificado]
+
+A fixture HX **não entra em `complementadas`**: o preparo cria disputa vazia com `motivos=['orfao_14h']`, sem perguntas (`chamados/tests/test_b2d_resposta_visivel.py:44-50`); a inclusão no dicionário exige pergunta anterior e complemento admitido (`chamados/services/disputa_emissao.py:1295`, `:1307`, `:1310`). O push `nova=False` do anexo corresponde ao push principal em `:1552`, após selecionar a disputa aberta existente em `:1323-1325` e copiar seus motivos em `:1327-1328`.
+
+Também não há batida-origem criada pelo preparo (`chamados/tests/test_b2d_resposta_visivel.py:29-50`). Sem candidatas, `_achar_batida_origem` devolve `None` (`chamados/services/materializacao.py:140`); portanto a reordenação da c22 que alcança esse cenário é a consulta à ata antes do classificador no ramo sem origem (`chamados/services/disputa_emissao.py:1465-1471`). O ramo silencioso de batida existe separadamente em `:1420-1429`.
+
+Os seis chamadores produtivos encontrados são:
+
+- `ponto/management/commands/processar_alertas_turno.py:385`.
+- `ponto/management/commands/processar_alertas_avancados.py:159`.
+- `ponto/management/commands/detectar_ausencias.py:803`.
+- `chamados/services/acoes_disputa.py:222`.
+- `chamados/services/cobrar_dia.py:49`.
+- `chamados/services/pergunta_no_app.py:246`, cujo parâmetro padrão é `notificar=False` em `:231`.
+
+Os quatro primeiros importam pela reexportação de `chamados/models.py:4151`; os dois últimos importam diretamente do emissor (`cobrar_dia.py:20`, `pergunta_no_app.py:238`).
+
+Adicionar existência de pergunta apenas à condição do push principal suprime, para esses chamadores, a notificação da principal aberta e vazia que passa pela condição atual (`chamados/services/disputa_emissao.py:1550-1552`). O retorno e a decisão de auto-fecho ficam nas linhas anteriores (`:1539-1549`); complementos continuam pelo caminho próprio (`:1279-1283`).
+
+Há dois contratos de teste anteriores incompatíveis com essa supressão: ambos exigem push após afirmar zero perguntas sem ata (`chamados/tests/test_bo_disputa_volta5b_orfaos.py:191-199`, `chamados/tests/test_bo_disputa_volta5b_orfaos_memoria.py:187-193`). A resposta textual administrativa também afirma “Colaborador notificado” incondicionalmente após retorno de disputa (`chamados/services/acoes_disputa.py:231-232`); o efeito real dessa mensagem na execução corrigida é [nao verificado].
 
 ## 14/11 17:19 · sessao 7db8be5ab487 · JUSTIFICATIVA-PAGA · verificador · origem=Code
 
@@ -881,55 +910,4 @@ Todos os leitores efetivos encontrados, incluindo aliases e o leitor indireto da
 
 [truncado em 20000 de 29318 caracteres]
 
-## 14/11 16:01 · sessao 47e77db94853 · - · - · origem=Ronald (tmux)
-
-Não há AGENTS.md listado no escopo pela busca de arquivos; não executei banco/Django nem escrita. [nao verificado] [nao verificado]
-
-**1. Caminho C17 e tarefa, inclusive B.**
-
-- `alimentar_portas` (C17) chama `alimentar_fila`; tarefa chama a mesma função. Essa função chama `particionar_verbos(qs_vivos(), agora=agora)`, obtém pertença em `qs_na_fila(agora=agora)` e guarda mapa de verbos. Portanto **trocar apenas o leitor de C17 para tarefa não transforma `validar` em `cobrar`**. Provas: `app/chamados/juizes.py:1559`, `:1570`, `:1573`, `:1616`; `app/chamados/services/tarefa_do_dia.py:541`, `:543`, `:583`.
-- C17 forma portas de chamados da célula na fila e de pergunta C6 viva, não respondida sem texto, no app e com âncora na fila; retorna `fio_pelos_verbos`. `app/chamados/juizes.py:1695`, `:1699`, `:1701`, `:1703`, `:1709`.
-- `fio_pelos_verbos` prioriza `cobrar -> colab`, depois `validar -> admin`, resto `chamado`. `app/chamados/juizes.py:1650`, `:1655`.
-- Tarefa lê verbos sem alterá-los; forma donos das ações alcançáveis mais dono dos verbos residuais; prioriza colab, admin, chamado, sistema. `app/chamados/services/tarefa_do_dia.py:570`, `:583`, `:588`, `:591`, `:594`, `:595`.
-- Folha projeta a porta e lê `porta['fio']`, retornando `nada` sem porta. `app/folha/fora_da_folha.py:71`, `:77`, `:86`.
-- Candidato de mudança de verbo na cópia: crédito passou a exigir **carimbo E texto**; `_resp` usa `respondida_em != None && !texto_vazio`; `_naoresp` inclui texto vazio. O comentário registra explicitamente a alteração b6. `app/chamados/services/raiox.py:135`, `:139`, `:143`, `:144`, `:155`.
-- Crédito atribui ao destino vivo, senão chamado da disputa. `app/chamados/services/raiox.py:146`.
-- A partição chama crédito e depois `verbo_do_chamado`. `app/chamados/services/verbos.py:34`, `:47`.
-- Natureza prioriza módulo próprio de validar, depois crédito de resposta, depois crédito de pergunta viva; a tradução é `admin_validar -> validar`, `colab -> cobrar`. `app/chamados/catalogo/natureza.py:41`, `:46`, `:48`, `:50`, `:58`.
-- Essa mudança de tratamento do par resposta pode explicar B; **não se prova que os chamados 33525/23072 tenham carimbo sem texto**, nem que essa era a implementação de `91207281b`, pois sonda não traz esses campos e main não está disponível. [nao verificado]
-
-**2. Classe C: ramo exato.**
-
-- `CargaDaTarefa.tarefa` chama `_portas_da_tarefa` com âncoras **de todas as perguntas carregadas do dia**, não só ações. `app/chamados/services/tarefa_do_dia.py:535`, `:547`.
-- Portas incluem ações, chamados da célula, âncoras das perguntas na fila e vivos sem FK ligados pelo dia forte. `app/chamados/services/tarefa_do_dia.py:571`, `:573`, `:574`, `:575`, `:577`.
-- No dado C há ação admin via 38666 e verbo residual 33362=`cobrar`. Se 38666 é porta da ação e 33362 não é, `residuais = portas - portas_acoes` inclui 33362; `fio_pelos_verbos` retorna colab, que ganha de admin. Esse é o ramo compatível e suficiente para explicar o resultado, sem ação colab alguma. `app/chamados/services/tarefa_do_dia.py:588`, `:591`, `:594`, `:595`; `app/chamados/juizes.py:1650`.
-- Qual caminho incluiu 33362 — célula, âncora de pergunta ou dia forte — não é determinado pela sonda. [nao verificado]
-- Não é `nao_sei` que cria colab: esse fallback só é usado depois da busca por donos, e C traz falso na sonda. `app/chamados/services/tarefa_do_dia.py:595`.
-
-**3. Portas reais do admin e colab.**
-
-- Lista do admin abre fio por clique na linha. `app/templates/chamados/partials/_lista_chamados.html:42`.
-- `validar` oferece botão `validar_inline`; `cobrar` oferece push, salvo já cobrado hoje; `decidir` apenas rótulo na coluna. `app/templates/chamados/partials/_lista_chamados.html:81`, `:82`, `:83`, `:84`, `:86`.
-- Assim B perde o botão inline **na linha**, porque verbo virou cobrar; isso não prova inexistência de validação no fio. `app/templates/chamados/partials/_lista_chamados.html:81`.
-- `validar_inline` exige `gerir_chamados`, POST e área; busca disputa aberta direta ou por destino; percorre perguntas vivas com carimbo de resposta e chama `acao_validar_pergunta`. `app/chamados/views_cobrar.py:145`, `:149`, `:151`, `:156`, `:160`, `:168`, `:208`.
-- Se não houver resposta candidata, retorna aguardando colab/nada aguardando validação. `app/chamados/views_cobrar.py:169`, `:175`, `:192`, `:198`.
-- Fio completo e modal exigem gestor, carregam `montar_chamados_fio` sem recorte de janela; essa montagem carrega todos os chamados do colaborador e perguntas de disputas abertas; em disputas fechadas só as C6 vivas. `app/chamados/views.py:659`, `:662`, `:676`, `:869`, `:872`, `:889`; `app/chamados/services/fio.py:190`, `:204`, `:246`, `:251`, `:265`, `:267`.
-- Perguntas aparecem sob `chamado_destino_id`, senão chamado da disputa, via `chamado_que_lista`. `app/chamados/services/fio.py:97`, `:116`, `:117`, `:270`, `:274`.
-- Modal desenha Validar quando há `respondida_em`, sem pendência administrativa e sem `validada_em`; não depende do verbo nem dono da tarefa. `app/templates/chamados/partials/modal_fio.html:217`, `:222`, `:228`, `:239`, `:279`, `:281`, `:284`.
-- POST do fio exige `pode_agir_chamado`, confirma pergunta sob mesmo chamado e colaborador e chama `acao_validar_pergunta`; disputa fechada requer C6 viva e usa `sem_reabrir`. `app/chamados/services/fio.py:596`, `:601`, `:604`, `:623`, `:636`, `:638`, `:644`, `:647`.
-- `acao_validar_pergunta` delega à autoridade `validacao.validar_pergunta`; esta recusa pergunta sem `respondida_em` e já validada. `app/chamados/services/acoes_disputa.py:13`, `:18`, `:19`; `app/chamados/services/validacao.py:398`, `:418`, `:421`.
-- Portanto há porta estrutural de validar na árvore: **fio/modal, ação `validar_pergunta`**, e detalhe local para disputa aberta. Não se pode afirmar sucesso/alcance concreto em B: sonda não fornece resposta atual, disputa aberta/fechada, validação, permissão/área do usuário; suas ações só têm responder. [nao verificado]
-- Outra casca é detalhe local `/chamados/local/<id>/`: para gestor, valida se pergunta em disputa aberta e `chamado_que_lista` corresponde. `app/chamados/urls.py:14`; `app/chamados/views.py:483`, `:493`, `:495`, `:499`, `:501`.
-- URLs: fio colaborador em `/chamados/colaborador/<id>/`, responder em `/chamados/disputa/responder/<pergunta_id>/`, cobrar em `/chamados/cobrar/<cid>/`, inline em `/chamados/validar-inline/<cid>/`. `app/chamados/urls.py:17`, `:21`, `:25`, `:33`.
-- Push cobrar exige `gerir_chamados`, POST e área, limita uma cobrança por colab/dia local e depende de push ativo; não valida a pergunta. `app/chamados/views_cobrar.py:23`, `:25`, `:27`, `:30`, `:35`, `:36`, `:41`, `:44`, `:51`.
-- Colab responder: endpoint verifica usuário vinculado ao colaborador, pergunta desse colaborador e C6 viva, depois chama `responder_pergunta_disputa_core`; não consulta dono da tarefa nem SLA nessa casca. `app/chamados/views.py:1228`, `:1233`, `:1239`, `:1242`, `:1281`, `:1283`.
-- App: `perguntas_do_app` seleciona q_vivas e C6; UI pendentes exige `respondida_em is None` e disputa aberta, demais vivas vão para histórico. `app/chamados/services/pergunta_no_app.py:45`, `:52`, `:61`, `:64`, `:74`.
-- Ação responder com porta `None` na sonda **não garante porta de fila publicada nem pergunta visível no app**; é preciso conferir C6 e estado da disputa para a tela real. `app/chamados/services/tarefa_do_dia.py:137`, `:141`; `app/chamados/services/pergunta_no_app.py:74`.
-
-**4. Consequência para contrato.**
-
-- Mudar somente `out['fio']` em `_tarefa_pura` seria sobrescrito pela projeção `_portas_da_tarefa`; esta recalcula o fio das ações e residuais. O degrau precisa sobreviver a essa etapa do mesmo juiz, inclusive a residual `cobrar` de C. `app/chamados/services/tarefa_do_dia.py:537`, `:547`, `:588`, `:591`, `:595`, `:598`.
-- Passar dono a admin não cria resposta nem validação: `validar_pergunta` permanece recusando sem resposta, e o painel continua tomando botões de `item.verbo`. `app/chamados/services/validacao.py:418`; `app/templates/chamados/partials/_lista_chamados.html:81`.
-- “Admin passa a poder validar todas as A” seria conclusão incorreta: muitas só têm ação responder e o dado não demonstra resposta validável. [nao verificado]
-
-_5196 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5197 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
