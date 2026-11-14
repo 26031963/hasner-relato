@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 17:31** · publicado em **14/11/2026 17:31** (UTC-3)
+> Ultima resposta processada: **14/11/2026 17:38** · publicado em **14/11/2026 17:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 17:38 · sessao 190a94933cb1 · - · - · origem=Ronald (tmux)
+
+Não encontrei defeito concreto que exija ajuste na fixture atual; execução ORM continua [nao verificado].
+
+- O isolamento intercepta o nome importado dinamicamente pelo cartório e permanece ativo durante o `post_save` do órfão (`chamados/tests/test_hx_disputa_muda.py:28`, `ponto/services/cartorio.py:1033`, `:1045`, `chamados/signals.py:190-218`).
+- O piso impede que o julgamento de 20/05 espelhe marcos ou abra cobranças pela emissão automática (`ponto/services/cartorio.py:298`, `:340-354`, `:1727`, `:1813`). A entrada real mantém a premissa acusadora; a guarda de nascimento só absolve diante de veredito conhecido fora de `VEREDITOS_ACUSAM` (`chamados/reconciliador.py:1027-1031`).
+- O preparo exige resposta real `lido`; o novo caso exige `sem_celula` e origem ausente antes do repasse, depois verifica duas passadas abertas, sem pergunta, com luz e sem push (`chamados/tests/test_hx_disputa_muda.py:34-35`, `:80-94`).
+
+Precisão para a entrega: esses dois casos não variam apenas a ata. O preparo com ata também cria batida-origem; o caso sem ata mantém origem ausente (`chamados/tests/test_hx_disputa_muda.py:29-31`, `:81`). Assim exercitam os dois ramos silenciosos distintos (`chamados/services/disputa_emissao.py:1420-1429`, `:1459-1471`).
 
 ## 14/11 17:31 · sessao 190a94933cb1 · - · - · origem=Ronald (tmux)
 
@@ -800,114 +810,4 @@ Vazio não implica automaticamente falta: o Base considera todo período present
 
 O filtro ainda compara contra envelope bruto entrada–fim, sem retirar pausas, enquanto o motor calcula pares com intervalos; sobreposição detectada não prova sobreposição com minutos efetivamente pagos (`app/ponto/turnos.py:2745`, `app/ponto/turnos.py:2748`, `app/ponto/motor_calculo_v2.py:2551`, `app/ponto/motor_calculo_v2.py:2558`).
 
-## 14/11 16:06 · sessao dd2c6ced8087 · E3-V10 · leitura · origem=Code
-
-**A classe C é explicável pelo residual `cobrar`; a causa exata da mudança de verbo em B não está demonstrada; e `sla.vencido=True` não comprova vencimento do prazo de resposta da pergunta.** (`app/chamados/services/tarefa_do_dia.py:591`, `app/chamados/juizes.py:1650`, `app/chamados/services/sla.py:33`, `app/chamados/catalogo/motor.py:54`; causa concreta de B: [nao verificado])
-
-Uso os resultados de produção conforme o anexo. Campos brutos ausentes e execução no banco ficam [nao verificado]. O código literal de `91207281b` não está disponível nesta cópia; o percurso anterior abaixo é o C17 preservado nela, cuja leitura histórica pela Folha está documentada. (`app/folha/fora_da_folha.py:22`; equivalência integral ao main indicado: [nao verificado])
-
-**1. Matriz de transições**
-
-O estado bruto comum está incompleto: a sonda informa IDs, ações e resultados de SLA, mas não traz `status_local`, `prazo_sla`, texto/carimbo da resposta, sequência de decisões ou situação da disputa. Portanto, não permite reconstituir integralmente “o que o banco tem” para cada linha. [nao verificado]
-
-Na cópia, pertença à fila implica `status_local` em `COBRANCA`, isto é, `aberto` ou `em_analise`, e ausência de silêncio futuro; qual desses status cada chamado possui não consta do anexo. (`app/chamados/services/painel.py:188`, `app/chamados/catalogo/motor.py:29`; status individual: [nao verificado])
-
-| Classe/árvore | Estado informado → juiz → dono mostrado → possibilidades |
-|---|---|
-| **A — main** | Os 53 dias informados aparecem como `admin`, com portas `porta_fila` ou `porta_pergunta`, verbos predominantemente `validar` e alguns `decidir`. [nao verificado] No percurso C17 preservado, `porta_alcancavel_do_dia` reúne portas e chama `fio_pelos_verbos`: `validar` produz `admin`; `decidir` sozinho produz `chamado`. (`app/chamados/juizes.py:1699`, `app/chamados/juizes.py:1709`, `app/chamados/juizes.py:1650`) A disponibilidade concreta dos botões no main não pode ser certificada pela árvore atual. [nao verificado] |
-| **A — v10** | A sonda mostra perguntas devidas e ações `responder/colaborador`, eventualmente coexistindo com `validar/admin`; todos os chamados publicados têm o SLA operacional vencido, sem aviso e sem escalonamento. [nao verificado] `tarefa_do_dia` lê a última decisão; ausência de decisão, resposta vazia ou devolução ao colaborador produzem `responder`; a agregação das portas prioriza `colab`, mesmo havendo ação administrativa. (`app/chamados/services/tarefa_do_dia.py:140`, `app/chamados/services/tarefa_do_dia.py:143`, `app/chamados/services/tarefa_do_dia.py:147`, `app/chamados/services/tarefa_do_dia.py:588`, `app/chamados/services/tarefa_do_dia.py:595`) As portas efetivas de cada lado estão discriminadas abaixo. |
-| **B — main** | c204/07-09, chamado `33525`, e c903/14-09, chamado `23072`: `porta_fila`, verbo `validar`, fio `admin`, conforme anexo. [nao verificado] O C17 preservado traduz esse verbo em `admin`; ele não calcula o verbo. (`app/chamados/juizes.py:1700`, `app/chamados/juizes.py:1709`) |
-| **B — v10** | A sonda mostra `33525→cobrar`, perguntas `28256/29043→responder`; `23072→cobrar`, pergunta `28150→responder`; nenhuma ação administrativa da tarefa. [nao verificado] O dono vem dessas ações alcançáveis e resulta `colab`; o mapa de verbos é apenas copiado da alimentação. (`app/chamados/services/tarefa_do_dia.py:583`, `app/chamados/services/tarefa_do_dia.py:588`, `app/chamados/services/tarefa_do_dia.py:595`) A linha do painel oferece cobrança em lugar do botão inline de validar. (`app/templates/chamados/partials/_lista_chamados.html:81`, `app/templates/chamados/partials/_lista_chamados.html:83`) |
-| **C — main** | emp3/c996/30-10: somente `38666→validar`, fio `admin`, conforme anexo. [nao verificado] Esse resultado é compatível com a tradução do C17 preservado. (`app/chamados/juizes.py:1650`, `app/chamados/juizes.py:1709`) |
-| **C — v10** | A sonda mostra apenas `validar/admin/38666/pergunta52035`, mas publica também `33362→cobrar`, sem pergunta devida pelo colaborador. [nao verificado] `38666` fornece dono administrativo pela ação; `33362`, residual, fornece `colab` pelo verbo; `colab` vence na agregação final. (`app/chamados/services/tarefa_do_dia.py:588`, `app/chamados/services/tarefa_do_dia.py:591`, `app/chamados/services/tarefa_do_dia.py:594`, `app/chamados/services/tarefa_do_dia.py:595`) |
-
-As classes se sobrepõem: os dois B aparecem em A; C também aparece em A2. Não são contagens independentes somáveis. [nao verificado]
-
-**Portas do colaborador, aplicáveis à matriz.** A ação da tarefa usa como porta `chamado_que_lista(p)` quando essa âncora pertence à fila; essa função escolhe destino da pergunta, senão chamado da disputa. Uma ação com `porta=None` não comprova alcance pela fila. (`app/chamados/services/tarefa_do_dia.py:135`, `app/chamados/services/tarefa_do_dia.py:137`, `app/chamados/services/fio.py:116`)
-
-A resposta efetiva passa pelo endpoint `responder_pergunta_disputa`, que verifica vínculo do usuário, propriedade da pergunta e C6 vivo, depois chama `responder_pergunta_disputa_core`. A casca não exige que o fio da tarefa seja `colab` nem verifica SLA. (`app/chamados/views.py:1228`, `app/chamados/views.py:1233`, `app/chamados/views.py:1239`, `app/chamados/views.py:1242`, `app/chamados/views.py:1283`)
-
-**Ação `responder` não garante pergunta visível como pendente no app:** a consulta do app exige C6 vivo e coloca em pendentes somente pergunta sem `respondida_em` e com disputa aberta; as demais vivas vão ao histórico. Isso importa especialmente para o estado “carimbo de resposta com texto vazio”. (`app/chamados/services/pergunta_no_app.py:52`, `app/chamados/services/pergunta_no_app.py:61`, `app/chamados/services/pergunta_no_app.py:73`; presença efetiva dos IDs da sonda na tela: [nao verificado])
-
-**Portas do admin, aplicáveis à matriz.**
-
-- **Validar:** a linha `validar` oferece `validar_inline`; clicar na linha abre o fio. No modal há ação individual `validar_pergunta`, condicionada ao estado da pergunta, sem depender do dono publicado pela tarefa. (`app/templates/chamados/partials/_lista_chamados.html:42`, `app/templates/chamados/partials/_lista_chamados.html:81`, `app/templates/chamados/partials/modal_fio.html:217`, `app/templates/chamados/partials/modal_fio.html:228`, `app/templates/chamados/partials/modal_fio.html:279`)
-- **Cobrar:** a linha `cobrar` oferece push, salvo cobrança já registrada no dia. O endpoint exige `gerir_chamados`, POST, área permitida e sucesso do canal de envio. (`app/templates/chamados/partials/_lista_chamados.html:83`, `app/chamados/views_cobrar.py:25`, `app/chamados/views_cobrar.py:30`, `app/chamados/views_cobrar.py:35`, `app/chamados/views_cobrar.py:44`)
-- **Decidir:** o verbo `decidir` aparece como rótulo na linha; a decisão é feita nas portas do caso. “Regularizar disputa” não permite fechar pergunta viva sem resposta. Existe também “Resolver dia”, condicionado a último recurso, dia passado, status que pede decisão e permissão `regularizar_batida`. (`app/templates/chamados/partials/_lista_chamados.html:86`, `app/chamados/services/fio.py:684`, `app/chamados/services/fio.py:698`, `app/colaboradores/services/calendario.py:97`, `app/templates/colaboradores/partials/_calendario_grade.html:131`, `app/ponto/views.py:3355`)
-
-Logo, nos A com ações simultâneas, o fio `colab` não remove por si a validação administrativa. Nos A contendo somente `responder`, a tarefa não fornece ação administrativa de validar; o serviço de validação recusa pergunta sem resposta. O alcance concreto por usuário, disputa e pergunta não é demonstrado pela sonda. (`app/chamados/services/tarefa_do_dia.py:143`, `app/chamados/services/validacao.py:418`; alcance individual: [nao verificado])
-
-**2. B: caminho exato de `validar` para `cobrar`**
-
-O caminho comprovado **na cópia** é:
-
-`alimentar_fila` → `particionar_verbos(qs_vivos())` → `creditos_perguntas` → `verbo_do_chamado` → mapa consumido pelo C17 ou pela tarefa. Ambos usam essa alimentação; `_portas_da_tarefa` não converte `validar` em `cobrar`. (`app/chamados/juizes.py:1570`, `app/chamados/juizes.py:1616`, `app/chamados/services/verbos.py:34`, `app/chamados/services/verbos.py:47`, `app/chamados/services/tarefa_do_dia.py:543`, `app/chamados/services/tarefa_do_dia.py:583`)
-
-Há uma mudança documentada capaz de produzir essa conversão: o crédito exige **carimbo e texto não vazio** para contar resposta. Carimbo sem texto entra no conjunto sem resposta; a natureza traduz crédito de resposta em `validar` e crédito de pergunta sem resposta em `cobrar`. (`app/chamados/services/raiox.py:139`, `app/chamados/services/raiox.py:143`, `app/chamados/services/raiox.py:144`, `app/chamados/catalogo/natureza.py:48`, `app/chamados/catalogo/natureza.py:50`, `app/chamados/catalogo/natureza.py:58`)
-
-**Não está provado que esse seja o motivo de `33525/23072`.** Faltam o código anterior e os campos que determinaram os créditos, inclusive texto, carimbos, destino e universo vivo. Atribuir a mudança somente à substituição de C17 pela tarefa seria incorreto diante da alimentação compartilhada. (`app/chamados/juizes.py:1562`; causalidade desses IDs: [nao verificado])
-
-O admin conserva uma **porta estrutural de validação pelo fio/modal**, ação `validar_pergunta`, além do detalhe local quando aplicável. O botão individual não depende do verbo `cobrar/validar` da linha. Porém, a validação exige pergunta respondida e ainda não validada; não é possível certificar sucesso para os dois B. (`app/templates/chamados/partials/modal_fio.html:217`, `app/templates/chamados/partials/modal_fio.html:279`, `app/chamados/services/fio.py:623`, `app/chamados/services/fio.py:644`, `app/chamados/services/validacao.py:418`, `app/chamados/services/validacao.py:421`; sucesso concreto: [nao verificado])
-
-**3. C: ramo que produz `colab` sem ação do colaborador**
-
-O encadeamento é:
-
-1. `CargaDaTarefa.tarefa` chama `_portas_da_tarefa`, levando âncoras de todas as perguntas carregadas do dia. (`app/chamados/services/tarefa_do_dia.py:535`, `app/chamados/services/tarefa_do_dia.py:547`)
-2. As portas publicadas incluem portas das ações, chamados da célula, âncoras na fila e chamados sem célula ligados pelo dia forte. (`app/chamados/services/tarefa_do_dia.py:571`, `app/chamados/services/tarefa_do_dia.py:573`, `app/chamados/services/tarefa_do_dia.py:575`, `app/chamados/services/tarefa_do_dia.py:577`)
-3. `38666`, porta da ação `validar`, fornece `admin`. O `33362` não pertence às portas das ações, portanto entra em `residuais = portas - portas_acoes`. (`app/chamados/services/tarefa_do_dia.py:588`, `app/chamados/services/tarefa_do_dia.py:591`; associação dos IDs: [nao verificado])
-4. O residual `cobrar` vira `colab` por `fio_pelos_verbos`; a ordem final escolhe `colab` antes de `admin`. (`app/chamados/services/tarefa_do_dia.py:594`, `app/chamados/juizes.py:1650`, `app/chamados/services/tarefa_do_dia.py:595`)
-5. `porta_da_tarefa` apenas projeta esse resultado; `_fio_do_dia` apenas o lê. (`app/chamados/services/tarefa_do_dia.py:607`, `app/folha/fora_da_folha.py:83`, `app/folha/fora_da_folha.py:89`)
-
-Portanto, **o `colab` de C vem do dono do verbo residual, não de uma ação `responder` nem de `nao_sei`**. Qual das ligações incluiu `33362` — célula, âncora ou dia forte — não consta da sonda. (`app/chamados/services/tarefa_do_dia.py:591`, `app/chamados/services/tarefa_do_dia.py:595`; ligação concreta: [nao verificado])
-
-**4. Definições de “vencida” e seus campos**
-
-| Definição | Regra, unidade e autoridade |
-|---|---|
-| **`sla.vencido` da sonda** | Última nota `dp_rh`, senão criação do chamado, mais SLA por urgência; vence com **`< agora`**, apenas em status de cobrança. Limites: 1/2/24/48 horas. Não lê `prazo_sla` nem resposta da pergunta. (`app/chamados/services/sla.py:17`, `app/chamados/services/sla.py:26`, `app/chamados/services/sla.py:33`, `app/chamados/catalogo/motor.py:35`) |
-| **Prazo de cobrança — C9** | `prazo_estourou(prazo_sla, agora)` é verdadeiro com **`prazo_sla <= agora`**; sem prazo retorna falso. O helper `prazo_de_cobranca_do_chamado` usa prazo explícito ou criação +20 minutos. (`app/chamados/catalogo/motor.py:45`, `app/chamados/catalogo/motor.py:54`, `app/chamados/catalogo/motor.py:59`) |
-| **Prazo da pergunta** | A pergunta não tem campo próprio de prazo. A cobrança por pessoa grava prazo no chamado **pai da disputa**, compartilhado: 48h por padrão ou prazo informado. Recobrança por chamado usa 20min. (`app/chamados/models.py:2499`, `app/chamados/models.py:2525`, `app/chamados/services/cobranca.py:51`, `app/chamados/services/cobranca.py:170`, `app/chamados/services/disputa_emissao.py:1692`, `app/chamados/services/disputa_emissao.py:1725`) |
-| **Marco vencido da instância** | Horário previsto do marco +30min, comparado ao instante. É exigibilidade da marcação, não prazo para responder pergunta. (`app/ponto/services/cartorio.py:882`, `app/ponto/services/cartorio.py:892`, `app/chamados/services/tarefa_do_dia.py:102`) |
-| **Lavra vencida/stale** | Ausência/futuro da lavra, expiração por dia civil local ou insumo posterior. Significa que o veredito não responde com segurança. (`app/chamados/veredito_lavrado.py:95`, `app/chamados/veredito_lavrado.py:213`, `app/chamados/services/tarefa_do_dia.py:415`) |
-| **Silêncio/arquivo e atraso** | `silenciado_ate` determina exclusão temporal da fila; o painel também distingue arquivado/histórico. “Atrasado” das pílulas conta idade em dias, com limite 3; não é C9. (`app/chamados/services/painel.py:188`, `app/chamados/services/verbos.py:48`, `app/chamados/services/verbos.py:12`, `app/chamados/services/verbos.py:57`) |
-| **Prazo de justificativa DP** | Outro domínio: dias civis locais desde criação, vencendo quando a quantidade supera o prazo do tipo. (`app/ponto/catalogo/justificativas.py:21`, `app/ponto/catalogo/justificativas.py:34`) |
-
-Os escritores e leitores relevantes são:
-
-| Campo/insumo | Quem escreve → quem lê |
-|---|---|
-| `status_local`, criação e urgência | Nascimento pelas portas do modelo; transições por `_gravar_estado`; criação tem `auto_now_add`; subida de urgência por `escalar_urgencia`. SLA operacional lê status/criação/urgência; fila lê status. (`app/chamados/models.py:1101`, `app/chamados/models.py:201`, `app/chamados/models.py:67`, `app/chamados/models.py:514`, `app/chamados/services/sla.py:17`, `app/chamados/services/sla.py:37`, `app/chamados/services/painel.py:188`) |
-| Nota DP: autor, conteúdo, criação | Porta `nota.anexar_ocorrencia`; criação automática do followup. SLA lê a última nota DP como referência. (`app/chamados/services/nota.py:75`, `app/chamados/services/nota.py:88`, `app/chamados/models.py:1721`, `app/chamados/services/sla.py:19`) |
-| `prazo_sla` | Emissores gravam na abertura; recobrança e cobrança por pessoa passam por `definir_prazo_sla`. Abertura manual pode transformar data em 23:59 local. C9 é lido pelo escalonamento, pauta de calados e gestão da fila. (`app/chamados/services/disputa_emissao.py:581`, `app/chamados/services/disputa_emissao.py:1117`, `app/chamados/services/disputa_emissao.py:1352`, `app/chamados/services/disputa_emissao.py:1725`, `app/chamados/services/cobranca.py:178`, `app/chamados/models.py:574`, `app/chamados/services/abertura.py:154`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:96`, `app/chamados/services/cobranca.py:255`, `app/chamados/services/fila.py:167`) |
-| Texto/carimbo e decisão de resposta | O core grava texto, `respondida_em` e linha `RESPOSTA` no mesmo ato; a tarefa lê decisões ordenadas por `ato_em,pk`, até `agora`. Projeção sem linha é reconhecida como passivo. (`app/chamados/services/disputa_emissao.py:1460`, `app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/disputa_emissao.py:1508`, `app/chamados/services/tarefa_do_dia.py:403`, `app/chamados/services/tarefa_do_dia.py:412`) |
-| `ja_avisado` | **Não é campo boolean persistido:** é derivado de nota de sistema contendo `SLA`. O cron escreve a nota; consulta e cron leem o predicado. (`app/chamados/services/sla.py:42`, `app/chamados/management/commands/alertar_chamados_sla.py:32`, `app/chamados/management/commands/alertar_chamados_sla.py:44`, `app/chamados/services/sla.py:66`) |
-| `escalonado_para_dp` | O cron chama `marcar_escalonado_dp` depois do push; a porta grava boolean e instante, com guarda para não repetir. O cron lê o boolean para evitar novo N1. (`app/ponto/management/commands/escalonar_chamados_supervisao.py:96`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:103`, `app/chamados/models.py:595`, `app/chamados/models.py:604`) |
-
-A configuração usa `America/Sao_Paulo` e `USE_TZ=True`. Entretanto, **não são a mesma unidade nem a mesma fronteira**: SLA e C9 comparam instantes, com `<` versus `<=`; lavra e justificativa usam dia civil local; a pergunta da tarefa pertence ao **dia do turno**, por `data_evento`, inclusive em turno noturno. (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`, `app/chamados/services/sla.py:39`, `app/chamados/catalogo/motor.py:56`, `app/chamados/veredito_lavrado.py:104`, `app/ponto/catalogo/justificativas.py:34`, `app/chamados/services/tarefa_do_dia.py:227`)
-
-O juiz existente candidato ao degrau é **C9, `chamados/catalogo/motor.py::prazo_estourou`**, registrado no lookup e no registro vivo. A pergunta a lhe entregar é o prazo de cobrança associado à pergunta relevante; isso não autoriza escolher qualquer chamado vencido publicado no dia. (`app/docs/JUIZES.md:63`, `app/core/juizes.py:289`, `app/chamados/services/cobranca.py:51`)
-
-**Não é possível contar quantos dos 53 A satisfazem esse C9:** a sonda mediu outro SLA e não fornece os prazos nem o vínculo pergunta→pai necessário para essa conclusão. [nao verificado]
-
-**5. Contrato de saída do degrau**
-
-**O degrau ainda não existe no julgamento mostrado.** Os ramos sem resposta continuam entregando `responder/colaborador`, sem consultar prazo; a escolha final também não consulta vencimento de resposta. (`app/chamados/services/tarefa_do_dia.py:140`, `app/chamados/services/tarefa_do_dia.py:144`, `app/chamados/services/tarefa_do_dia.py:147`, `app/chamados/services/tarefa_do_dia.py:588`)
-
-O ponto de saída que precisa satisfazer o contrato é a composição final **dentro do mesmo juiz**, em `_portas_da_tarefa`, antes da projeção. Alterar somente `_pela_decisao` não garante `admin`, porque um residual `cobrar` pode acrescentar `colab` novamente. Alterar somente a Folha criaria uma segunda decisão do dono e violaria a dependência exigida pelo selo. (`app/chamados/services/tarefa_do_dia.py:591`, `app/chamados/services/tarefa_do_dia.py:595`, `app/chamados/services/tarefa_do_dia.py:598`, `app/chamados/services/tarefa_do_dia.py:607`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:16`)
-
-O contrato pedido é devolver **o dono do dia** ao admin quando estiver estabelecida a condição “pergunta vencida sem resposta”; isso não fabrica resposta, validação ou decisão de silêncio. As portas de escrita continuam exigindo seus próprios requisitos. (`app/chamados/services/validacao.py:418`, `app/chamados/services/fio.py:698`; complemento literal recebido apenas no anexo: [nao verificado])
-
-Todos os leitores efetivos encontrados, incluindo aliases e o leitor indireto da pauta, são:
-
-| Leitor | Consequência de mudar somente `fio: colab→admin` |
-|---|---|
-| Folha: `_porta`/`_fio_do_dia` | Lê o novo dono literalmente. (`app/folha/fora_da_folha.py:71`, `app/folha/fora_da_folha.py:83`) |
-| Folha: `fora_da_folha` | Muda contagem por fio e possivelmente grupo da pessoa; outro dia `colab` pode manter seu grupo B. (`app/folha/fora_da_folha.py:197`, `app/folha/fora_da_folha.py:200`, `app/folha/fora_da_folha.py:92`) |
-| Folha: `o_que_segura` | Muda `fio` e frase de destravamento. (`app/folha/fora_da_folha.py:241`, `app/folha/fora_da_folha.py:249`) |
-| Vigia: `censo_alcance` | Muda papel listado e contador `alcance_porta_exige_o_admin`. (`app/chamados/services/vigia_fio.py:646`, `app/chamados/services/vigia_fio.py:662`) |
-| `furo_se
-
-[truncado em 20000 de 29318 caracteres]
-
-_5197 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5198 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
