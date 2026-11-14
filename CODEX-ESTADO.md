@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 22:14** · publicado em **13/11/2026 22:15** (UTC-3)
+> Ultima resposta processada: **13/11/2026 22:16** · publicado em **13/11/2026 22:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 22:16 · sessao ab3aa9767a9b · BUG-PAR · verificador · origem=Code
+
+**Procedente: a volta c bloqueia um reuso legítimo.** A testemunha reconhece `ja_satisfeita`, mas a nova guarda compara o plantio hipotético e impede chegar ao reuso, que conservaria hora e tipo da batida existente. (`app/chamados/services/materializacao.py:814`, `app/chamados/services/materializacao.py:751`, `app/chamados/services/materializacao.py:1257`)
+
+**1. Quem escreve e quem lê**
+
+| Campo/valor | Escritor/fonte | Leitores |
+|---|---|---|
+| Identidade da pergunta: `motivo`, `tipo_resposta`, disputa, destino e dia | Emissor fornece os campos; a porta insere a pergunta. | O novo portão seleciona metade de intervalo com resposta `hora`. (`app/chamados/services/disputa_emissao.py:444`, `app/chamados/models.py:3040`, `app/chamados/services/materializacao.py:732`) |
+| Declaração: `resposta_colab` | Resposta humana gravada por `responder_pergunta_disputa_core`. | `_declarado_da_metade` normaliza HH:MM; o tipo declarado vem de `MARCO_DA_PERGUNTA`, saída=S/volta=E. (`app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/materializacao.py:693`, `app/chamados/services/materializacao.py:696`, `app/chamados/juizes.py:925`) |
+| Hora/tipo previstos para gravação | `_ts_tipo_do_plantio`; intervalo pode substituir a hora declarada pela hora do marco. | Testemunha, nova guarda direta e escritor efetivo consultam esse derivador. (`app/chamados/services/materializacao.py:649`, `app/chamados/services/materializacao.py:751`, `app/chamados/services/materializacao.py:811`, `app/chamados/services/materializacao.py:1244`) |
+| `espera_declarado_x_gravado` | Constante em materialização; `_espera_do_aval_163` produz o resultado; validação devolve a mesma constante. | Helper, contador, modal, página e casca da ação. (`app/chamados/services/materializacao.py:680`, `app/chamados/services/materializacao.py:723`, `app/chamados/services/validacao.py:517`, `app/chamados/services/materializacao.py:736`, `app/chamados/services/materializacao.py:337`, `app/templates/chamados/partials/modal_fio.html:274`, `app/templates/chamados/partials/_pergunta_card.html:43`, `app/chamados/services/acoes_disputa.py:50`) |
+| `validacao.ESTADOS` | Tupla de vocabulário; recebe o novo literal. | O selo compara os estados retornados com essa tupla. Não é persistência do estado na pergunta. (`app/chamados/services/validacao.py:63`, `app/chamados/tests/test_porta_validacao_pergunta.py:164`, `app/chamados/models.py:3060`) |
+| `gravou` | Explicador escreve `False` para recusa, espera, cadastro e sistema. | Desenlace seleciona estritamente `is False` e distingue validação sem gravação de recusa pelo `estado` do item. (`app/chamados/services/explicador.py:103`, `app/chamados/services/explicador.py:111`, `app/chamados/services/explicador.py:117`, `app/chamados/services/explicador.py:120`, `app/chamados/services/desenlace.py:67`, `app/chamados/services/desenlace.py:70`) |
+| Texto do desenlace | `desenlace` monta `estado` e `acao`. | Fio transporta; modal exibe. (`app/chamados/services/desenlace.py:76`, `app/chamados/services/fio.py:444`, `app/templates/chamados/partials/modal_fio.html:119`) |
+
+**Procedente — ESMERIL-SEMÂNTICA na apresentação.** O novo item manda esperar DECLARADO-X-GRAVADO, com `dono=sistema`; o resumo traduz esse dono como “correcao de batida”, e o modal atribui “Quem resolve: TI/DP”. Quando a disputa não pode fechar, o resumo e a ação específica dão orientações diferentes. (`app/chamados/services/explicador.py:111`, `app/chamados/services/explicador.py:180`, `app/templates/chamados/partials/modal_fio.html:468`)
+
+**Duvidoso — `gravou` como prova histórica.** O novo `False` também representa reprovação pelo juiz; o diagnóstico admite “a batida existe ... mas o juiz ainda nao a reconhece”. Portanto, a chave não prova que nenhuma escrita ocorreu. Ocorrência concreta desse ramo em produção: **[não verificado]**. (`app/chamados/services/explicador.py:93`, `app/chamados/services/explicador.py:65`, `app/chamados/services/explicador.py:120`)
+
+**2. Porta de escrita e falsos positivos**
+
+**Descartável — fuga nos caminhos pedidos.** Os caminhos encontrados convergem em `_materializar_uma`, cuja guarda antecede o ramo que chama `registrar_batida`. (`app/chamados/services/materializacao.py:1704`, `app/chamados/services/materializacao.py:1715`, `app/chamados/services/materializacao.py:1343`)
+
+| Caminho | Convergência |
+|---|---|
+| Laço da disputa | Chama `_materializar_uma`. (`app/chamados/services/materializacao.py:1904`) |
+| Passivo validado | Chama `_materializar_uma`. (`app/chamados/services/passivo_validado.py:537`) |
+| Irmã do par | Chama `_materializar_uma`; falha desfaz o savepoint. (`app/chamados/services/materializacao.py:1575`, `app/chamados/services/materializacao.py:1578`) |
+| Commands | Passivo chama `reparar`; backfill chama o materializador da disputa; BUG-PAR-103 chama a devolução. (`app/chamados/management/commands/materializar_passivo_validado.py:113`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:147`, `app/chamados/management/commands/bug_par_103.py:85`) |
+| Reconciliador/S144 | Os caminhos examinados recusam resposta com texto ou apenas carimbam pelo juiz. (`app/chamados/reconciliador.py:365`, `app/chamados/reconciliador.py:1083`, `app/chamados/services/materializacao.py:1955`, `app/chamados/services/materializacao.py:1959`) |
+
+**Procedente — falso positivo de reuso.** O próprio teste fornece declaração **S 01:20** e batida aprovada **S 01:00**. A testemunha retorna `ja_satisfeita`, e o helper retorna vazio; a nova comparação direta encontra divergência e bloqueia antes do reuso. O resultado deixa de alcançar o sucesso `ja_no_espelho` e pode retornar `nao_gravou`. (`app/chamados/tests/test_bug_par_projetado.py:1090`, `app/chamados/tests/test_bug_par_projetado.py:1095`, `app/chamados/services/materializacao.py:751`, `app/chamados/services/materializacao.py:1257`, `app/chamados/services/validacao.py:624`, `app/chamados/services/validacao.py:639`)
+
+**Descartável — falso positivo estritamente IGUAL em hora e tipo, sem irmã divergente.** A comparação retorna vazio quando ambos coincidem; há teste específico para carimbada sem lastro com declaração igual. Igualdade apenas da hora não basta se o tipo divergir. Uma metade igual pode esperar pela irmã divergente quando o ato contempla o par. (`app/chamados/services/materializacao.py:708`, `app/chamados/tests/test_bug_par_projetado.py:1183`, `app/chamados/tests/test_bug_par_projetado.py:1071`, `app/chamados/services/materializacao.py:838`)
+
+**3. Classes de reprovação**
+
+| Classe | Classificação |
+|---|---|
+| Segundo juiz registrado / derivação paralela | **Descartável neste delta:** consulta a tabela existente para o declarado e reutiliza o derivador do plantio. Próxima batida/flip são outras perguntas registradas. (`app/chamados/services/materializacao.py:693`, `app/chamados/services/materializacao.py:751`, `app/core/juizes.py:213`) |
+| Segundo escritor fora da porta | **Descartável nos caminhos rastreados:** convergência e guarda descritas acima. (`app/chamados/services/materializacao.py:1704`, `app/chamados/services/materializacao.py:1715`) |
+| Relógio fora da borda | **Descartável na alteração:** compara o timestamp derivado; `hora_local` converte o instante recebido. (`app/chamados/services/materializacao.py:707`, `app/core/fmt.py:10`) |
+| Ordem de trava | **Descartável como regressão do delta:** laço e passivo travam antes da unidade; a ordem inclui irmã e destinos. Concorrência executada: **[não verificado]**. (`app/chamados/services/materializacao.py:1895`, `app/chamados/services/passivo_validado.py:379`, `app/chamados/services/materializacao.py:1848`) |
+| Selo sem mordida | **Procedente para o reuso:** o teste exige apenas estado diferente de espera e nenhuma batida nova; `nao_gravou` satisfaz ambos. (`app/chamados/tests/test_bug_par_projetado.py:1098`, `app/chamados/services/validacao.py:624`) |
+| Selo de vocabulário sem mordida | **Descartável para a constante atual:** agora resolve `ast.Name` e confronta `ESTADOS`. (`app/chamados/tests/test_porta_validacao_pergunta.py:159`, `app/chamados/tests/test_porta_validacao_pergunta.py:164`) |
+| Campo com significados diferentes | **Procedente na apresentação de `dono=sistema`; duvidoso na interpretação histórica de `gravou`**, conforme os leitores acima. (`app/chamados/services/explicador.py:111`, `app/chamados/services/explicador.py:180`, `app/chamados/services/explicador.py:65`) |
+
+**4. Impacto de todo `validada_sem_gravar` receber `gravou=False`**
+
+- **Desenlace/Central:** quando `pode_fechar=True`, `_sem` passa a incluir também os itens de cadastro/sistema, além das recusas. A mudança alcança todos esses itens, independentemente de serem metades de intervalo; a frase passa a discriminar “validada(s) e NAO gravada(s)”. (`app/chamados/services/explicador.py:117`, `app/chamados/services/explicador.py:120`, `app/chamados/services/desenlace.py:63`, `app/chamados/services/desenlace.py:67`, `app/chamados/services/desenlace.py:75`)
+- **Tela:** exibe o novo desenlace; os detalhes continuam lendo `estado/dono/motivo/acao`, com a divergência de orientação já apontada. (`app/templates/chamados/partials/modal_fio.html:119`, `app/templates/chamados/partials/modal_fio.html:468`)
+- **Contadores e fechamento:** a contagem local `_sem` muda; o contador BUG-PAR lê a testemunha, e `pode_fechar` continua vindo do juiz da disputa. Esses dois não leem `gravou`. (`app/chamados/services/desenlace.py:68`, `app/chamados/services/materializacao.py:332`, `app/chamados/services/explicador.py:157`)
+- **Testes leitores diretos:** paridade, fato ocupado e Central antes de fechar verificam `gravou`; os testes antigos dos ramos sistema/cadastro verificam estado e diagnóstico. (`app/chamados/tests/test_bug_par_projetado.py:267`, `app/chamados/tests/test_bug_par_projetado.py:283`, `app/chamados/tests/test_bug_par_projetado.py:1204`, `app/chamados/tests/test_explicador_disputa.py:76`, `app/chamados/tests/test_explicador_disputa.py:100`)
+
+Execução integral dos testes, evidência histórica RED→GREEN e quantidade de casos afetados em produção: **[não verificado]**. [nao verificado]
 
 ## 13/11 22:14 · sessao 88862ea946a0 · - · - · origem=Ronald (tmux)
 
@@ -692,106 +749,4 @@ PY
 
 [truncado em 20000 de 31975 caracteres]
 
-## 13/11 21:20 · sessao e24b9b71fe55 · GRADE-MESTRA · leitura · origem=Code
-
-| id | balde | existe (SIM/NAO/PARCIAL/?) | prova (arquivo:linha do HEAD ou commit; LEU x INFERIU) | mae | veredito (CONTA/DOBRA/OBSOLETA) | [nao verificado]
-|---|---|---|---|---|---|
-| O244 | INSTRUMENTO | PARCIAL | LEU app/docs/MAPA/chamado.md:9: contratos documentados; app/docs/MAPA/README.md:10: ainda há módulos sem contrato. | - | CONTA |
-| O245 | INSTRUMENTO | PARCIAL | LEU app/core/management/commands/gerar_diagrama.py:805: cobertura implementada; INFERIU cobertura incompleta de leis e obras exigidas em app/docs/BACKLOG.md:1477. | - | CONTA |
-| O250 | INSTRUMENTO | NAO | LEU bin/gerar_estado.py:215: gerador consulta o medidor e publica linhas das raias, agentes e pendências. | - | OBSOLETA |
-| HAIKU-CELULA-E-FOLGA | INSTRUMENTO | PARCIAL | LEU app/escala/management/commands/celulas_contra_o_template.py:43 e bin/placar_code.sh:265: metade folga implementada; contador sem veredito e golden [não verificado]. | - | CONTA |
-| PORTAO-FATURAMENTO-A1 | INSTRUMENTO | PARCIAL | LEU app/chamados/services/vigia_fio.py:542 e app/chamados/services/vigia_fio.py:640: censo consulta portas; rodadas limpas exigidas [não verificado]. | - | CONTA |
-| PORTAO-FATURAMENTO-RESTO | INSTRUMENTO | PARCIAL | LEU app/folha/porta_export.py:779: há contadores de coerência; cobertura dos outros 14 e rodadas limpas [não verificado]. | - | CONTA |
-| SOMBRA-SH-PROSA-DA-LAVRA | INSTRUMENTO | SIM | LEU bin/sombra.sh:128 e bin/sombra.sh:368: comentários ainda atribuem à lavra a decisão de folga trabalhada a 100%. | - | CONTA |
-| CRON-SOMBRA-NAO-CABE | INSTRUMENTO | SIM | LEU app/config/crons_duracao.json:78: sombra 5.188 s; app/config/crons.py:219 e app/config/crons.py:270: corredor insuficiente. INFERIU raiz pelo mesmo defeito. | SOMBRA-NAO-CABE-ANTES-DO-VIZINHO | DOBRA |
-| VIGIA-FIO-BEST-EFFORT-TIPO-MARCO | INSTRUMENTO | ? | LEU app/chamados/services/materializacao.py:304: tratamento de divergência permanece; cadeia específica vigia → tentativa de escrita [não verificado]. | - | CONTA |
-| O279 | INSTRUMENTO | SIM | LEU bin/keepalive.sh:3 e bin/keepalive.sh:7: laço contínuo e decisão pelo token PAREI permanecem. | - | CONTA |
-| O283 | INSTRUMENTO | ? | LEU app/templates/chamados/partials/modal_fio.html:49: alvo existe no template; selo por grafo das duas cascas e situação dos três hosts [não verificado]. | - | CONTA |
-| O285 | INSTRUMENTO | SIM | LEU bin/simular_folha.sh:73: foto continua fixando --recalcular, sem opção --lido. | - | CONTA |
-| O290 | INSTRUMENTO | NAO | LEU app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:109: motivos de não medição derivados e agregados do retorno. | - | OBSOLETA |
-| O293 | INSTRUMENTO | SIM | LEU app/folha/porta_export.py:774 e app/folha/porta_export.py:779: snapshot mantém falhas misturadas; metades ausentes do detalhe. | - | CONTA |
-| O294 | INSTRUMENTO | ? | LEU app/folha/management/commands/vigiar_txt_dominio.py:49: instrumento existe; duas alterações históricas e autoria [não verificado]. | - | CONTA |
-| O296 | INSTRUMENTO | SIM | LEU app/chamados/juizes.py:153: identificação nominal permanece no comentário; total dos dez sítios [não verificado]. | - | CONTA |
-| O297 | INSTRUMENTO | PARCIAL | LEU bin/relato.sh:55 e bin/relato.sh:67: retenção tem aviso público; vigilância de envelhecimento e contador [não verificado]. | - | CONTA |
-| O298 | INSTRUMENTO | PARCIAL | LEU app/ponto/tests/test_o280_bateria_da_lei.py:1091: mes/periodo conferidos; app/ponto/tests/test_o280_bateria_da_lei.py:1093: demais aceitos por nota de 40 caracteres. | - | CONTA |
-| O299 | INSTRUMENTO | SIM | LEU bin/gerar_backlog_topo.py:31: estado ainda procurado em portão, onde e descrição. | - | CONTA |
-| O301 | INSTRUMENTO | SIM | LEU app/ponto/tests/test_o280_bateria_da_lei.py:278 e app/ponto/tests/test_o280_bateria_da_lei.py:1074: catálogo dict já colapsado antes da guarda. INFERIU lacuna contra ids repetidos. | - | CONTA |
-| O302 | INSTRUMENTO | SIM | LEU bin/suite.sh:226: docker run sem nome e label próprios. | - | CONTA |
-| O303 | INSTRUMENTO | SIM | LEU app/ponto/tests/test_s5b_porta_unica.py:150: guarda textual; app/ponto/calculador/periodo.py:647: ramo sem_carimbo permanece. INFERIU proteção insuficiente por ramo. | - | CONTA |
-| O305 | INSTRUMENTO | SIM | LEU app/ponto/calculador/periodo.py:660: referência por offset permanece; INFERIU mãe mais ampla conforme app/docs/BACKLOG.md:1608. | CITACAO-POR-LINHA-DERIVA | DOBRA |
-| O312 | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1598: caso para smoke da O214; existência do colaborador sintético autorizável [não verificado], depende de banco. | O214 | DOBRA |
-| CITACAO-POR-LINHA-DERIVA | INSTRUMENTO | SIM | LEU app/ponto/calculador/periodo.py:660: offset antigo continua identificando função; conferência pelo conteúdo [não verificado]. | - | CONTA |
-| NOME-EM-COMENTARIO-DE-CODIGO | INSTRUMENTO | SIM | LEU app/chamados/juizes.py:153: identificação nominal permanece; INFERIU raiz na remoção ampla da app/docs/BACKLOG.md:1582. | O296 | DOBRA |
-| O319 | INSTRUMENTO | ? | LEU app/chamados/services/vigia_carimbo.py:119: contador existe; smoke de persistência e chegada ao supervisor [não verificado]. INFERIU mãe pelo defeito de app/docs/BACKLOG.md:1592. | O306 | DOBRA |
-| TRAVA-FILA1-STRING-E-TRUTHY | INSTRUMENTO | SIM | LEU bin/gerar_avais.py:60: ordenação ainda usa truthiness de trava_fila1. | - | CONTA |
-| CELULA-DE-ESTADO-TEM-FORMA | INSTRUMENTO | PARCIAL | LEU app/docs/BACKLOG.md:1627: correções pontuais registradas; bin/gerar_backlog_topo.py:23: interpretação posicional sem validar forma. | - | CONTA |
-| CONTROLE-SEM-PLANTIO-SEPARA-AS-DUAS-METADES | INSTRUMENTO | SIM | LEU app/chamados/management/commands/materializar_passivo_validado.py:54: ensaio/apply sem modo controle; mãe declarada em app/docs/BACKLOG.md:1628. | O317 | DOBRA |
-| PROTEGE-VAZIA-EM-55-LEIS | INSTRUMENTO | SIM | LEU app/docs/LEIS.md:64: PROTEGE vazio; bin/tests/test_lei_protege_sitio.sh:78: célula vazia pulada. Total atual 55 [não verificado]. | - | CONTA |
-| EXCECAO-DE-IMPORT-TARDIO-VIRA-INSTRUMENTO | INSTRUMENTO | ? | LEU bin/tests/test_import_tardio_contra_o_ar.sh:24: sítio normal existe; exceção citada em app/docs/BACKLOG.md:1638 não localizada. INFERIU raiz da conferência disco/ar. | O173 | DOBRA |
-| RESIDUO-PREMIG-NO-BIND-MOUNT | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1639: sítio é árvore viva ignorada pelo git; arquivos e bind-mount atuais [não verificado]. | - | CONTA |
-| REVERSAO-DA-10-NAO-COBRE-O-CARIMBO-DO-ESPELHO | INSTRUMENTO | SIM | LEU bin/snapshot_relavratura_10_2026.py:22 e bin/snapshot_relavratura_10_2026.py:31: CAMPOS emprestados e serialização por str permanecem. | - | CONTA |
-| APLICACAO-ATIVA-EM-EMPRESA-SEM-CCT | INSTRUMENTO | SIM | LEU app/core/regua_cct.py:354: CLT retorna antes de consultar aplicação em app/core/regua_cct.py:366. Contagem em produção [não verificado]. | - | CONTA |
-| LAPIDE-DO-O197-ESPERA-CORTE-QUE-JA-VEIO | INSTRUMENTO | NAO | LEU app/relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:51: texto declara que o corte já veio e explica a migração. | - | OBSOLETA |
-| CENSO-PRATICA-DECLARADA-X-LEI-E-CCT | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1658: entrega depende de tabela e PDFs em logs; sem sítio verificável desses anexos na cópia [não verificado]. | - | CONTA |
-| O324 | INSTRUMENTO | SIM | LEU eval/juiz.py:276: erro_parse permanece; eval/juiz.py:331: veredito fora de VEREDITOS_OK vira FALHA. | - | CONTA |
-| O326 | INSTRUMENTO | SIM | LEU app/chamados/models.py:2462; INFERIU pela leitura da classe ausência de campo próprio de nascimento. | - | CONTA |
-| BREAKER-COSMETICO-DISPARA-SEM-CONTADOR | INSTRUMENTO | SIM | LEU app/core/service_class.py:72: rejeição retorna 503; estado local ao worker sem publicação de contador. | - | CONTA |
-| CONTADOR-DE-ESCRITA-POR-CRON | INSTRUMENTO | NAO | LEU app/chamados/services/vigia_loop.py:71, bin/placar_code.sh:205 e app/docs/RELATO.md:3636: implementação e tabela entregues. Mãe literal em app/docs/BACKLOG.md:1690 sem raiz identificada no universo. | ? | OBSOLETA |
-| RELAMPAGO-DURACAO-REMEDIR | INSTRUMENTO | NAO | LEU app/config/crons_duracao.json:22 e app/config/crons.py:160: medição de 30 s substitui declaração antiga. INFERIU mãe pelo detector. | PAR-RELAMPAGO-PELO-TURNO | OBSOLETA |
-| PAPEL-PRAZO-CABECALHO | INSTRUMENTO | SIM | LEU bin/tests/test_papel_prazo_nao_deriva.sh:32: comentário antigo permanece; app/config/crons.py:2125: delegação declarada. INFERIU mãe pelo detector. | PAR-RELAMPAGO-PELO-TURNO | DOBRA |
-| ESMERIL-7-ACHADOS | INSTRUMENTO | SIM | LEU app/ponto/services/vigia_ausencia.py:246, app/ponto/services/ausencia.py:953 e app/folha/porta_export.py:870: peças nomeadas permanecem. INFERIU raiz da revisão por famílias. | O137 | DOBRA |
-| ESMERIL-V2 | INSTRUMENTO | PARCIAL | LEU app/core/tests/test_contract_esmeril.py:26 e app/requirements.txt:19: vulture e Hypothesis existem; conjunto ampliado e state machine [não verificado]. | - | CONTA |
-| SELO-FASE-12X36-MEIA-NOITE | INSTRUMENTO | SIM | LEU app/colaboradores/tests/test_fase_12x36_tela.py:31 e app/colaboradores/tests/test_fase_12x36_tela.py:83: relógio real e comparação com hoje guardado permanecem. | - | CONTA |
-| DEPLOY-SEM-SOMBRA-SO-NO-1O-ARG | INSTRUMENTO | SIM | LEU bin/deploy.sh:56 e bin/deploy.sh:86: modo vem somente de $1; --sem-sombra depende dele. | - | CONTA |
-| DESCARTADAS-SEM-LEITOR | INSTRUMENTO | SIM | LEU app/api/hora_do_aparelho.py:156: contador permanece; INFERIU ausência de consumidor operacional pelas referências localizadas apenas nos testes e dobra na entrega O204. | O204 | DOBRA |
-| SELO-IMPORT-TARDIO-INSTAVEL | INSTRUMENTO | ? | LEU bin/tests/test_import_tardio_contra_o_ar.sh:24 e bin/import_tardio_contra_o_ar.py:45: sítio existe; interferência entre execuções [não verificado]. INFERIU raiz O173. | O173 | DOBRA |
-| FOTOS-SO-A-DE-HOJE-SEM-LEITOR | INSTRUMENTO | PARCIAL | LEU app/ponto/management/commands/censo_fase_12x36.py:89: competência literal removida; app/escala/services/previsto_cego.py:138: janela atual permanece. Alcance real [não verificado]. | - | CONTA |
-| PASTA-DE-SELOS-NO-PUSH | INSTRUMENTO | SIM | LEU bin/pre-push.sh:16 e bin/pre-push.sh:159: chamadas nominais e suíte, sem laço da pasta de selos. | - | CONTA |
-| CATRACA-DA-PERGUNTA-2 | INSTRUMENTO | NAO | LEU app/core/censo_pergunta2.py:37: censo AST retornou zero cópias; app/docs/RELATO.md:3696: migração dos leitores de dinheiro documentada. | - | OBSOLETA |
-| GERAR-DIAGRAMA-ESCREVE-NA-ARVORE-VIVA | INSTRUMENTO | SIM | LEU bin/gerar_diagrama.py:15: executa no saas_core; INFERIU mãe pelo gerador de app/docs/BACKLOG.md:1477. | O245 | DOBRA |
-| DEPLOY-AGENDADO-LISTAR-OCTAL | INSTRUMENTO | NAO | LEU bin/deploy_agendado.sh:92: conversão explícita com 10# antes do printf. | - | OBSOLETA |
-| CRONS-DURACAO-CRESCERAM | INSTRUMENTO | PARCIAL | LEU app/config/crons_duracao.json:11: auditor 420 s; app/config/crons.py:542 e app/config/crons.py:661: horários ainda sobrepostos. Instalação atual [não verificado]. | - | CONTA |
-| AUDITOR-ESPELHO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1768; auditor e cartão do DP não localizados: sem sítio verificável [não verificado]. | - | CONTA |
-| V-FASE-FILA-PENDENTE-912 | INSTRUMENTO | SIM | LEU app/core/juizes.py:971: referência antiga; app/api/views_mensageria.py:1684: leitura de ultimo_lavrado. Mãe explícita em app/docs/BACKLOG.md:1770. | O141 | DOBRA |
-| V-FASE-FILA-LAVRA-TODAS-AS-COMPS | INSTRUMENTO | ? | LEU app/ponto/management/commands/censo_fase_12x36.py:44: padrão corrente/anterior; custo de todas as competências [não verificado]. INFERIU mãe pelo censo. | FAMILIA-FASE-12x36 | DOBRA |
-| AUDIT-[nome]-0311 | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1777; arquivo dos dez itens, tradução e clique não localizados: sem sítio verificável [não verificado]. | - | CONTA |
-| VERIFICADOR-EM-FABLE | INSTRUMENTO | PARCIAL | LEU bin/disjuntor.py:1644 e bin/disjuntor.py:2199: guarda e contador implementados; app/docs/RELATO.md:556: decisão mantém Opus e transfere avaliação à sombra. Conclusão da medida [não verificado]. | - | CONTA |
-| R1-E6PLACAR-2O-NUMERO | INSTRUMENTO | SIM | LEU bin/gerar_estado.py:145 e bin/gerar_estado.py:168: publica rodada e6_placar além do placar. INFERIU mãe pelo placar de app/docs/BACKLOG.md:1522. | ESPELHO-VERDADE-REMEDIDO | DOBRA |
-| R1-ROTULOS-FILA | INSTRUMENTO | PARCIAL | LEU app/core/espelho_verdade.py:189: exclusões corrigidas; bin/gerar_estado.py:51: glob permanece; app/core/placar_estrutural.py:117: rótulo PRODUCAO permanece. INFERIU mãe pelo mesmo placar. | ESPELHO-VERDADE-REMEDIDO | DOBRA |
-| CODEX-CONSTRUTOR-NEGOCIO | INSTRUMENTO | PARCIAL | LEU bin/codex_pergunta.sh:197 e bin/codex_pergunta.sh:253: papel e vaga existem; acompanhamento integral do piloto de app/docs/BACKLOG.md:1803 [não verificado]. | - | CONTA |
-| CODEX-BANCO-DIRETO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1804 e bin/codex_pergunta.sh:200; runner dedicado não localizado; alcance e credenciais atuais [não verificado]. | - | CONTA |
-| SOMBRA-NAO-CABE-2 | INSTRUMENTO | PARCIAL | LEU app/escala/services/leitor_celula.py:411: lote implementado; app/config/crons_duracao.json:78: sombra 5.188 s. Sete sombras limpas [não verificado]; INFERIU raiz comum com app/docs/BACKLOG.md:1544. | SOMBRA-NAO-CABE-ANTES-DO-VIZINHO | DOBRA |
-| CONFIG-RAIZ-INERTE-EM-APP | INSTRUMENTO | ? | LEU .claude/settings.json:34 e app/docs/RELATO.md:8039: configuração existe e reinício estava pendente; configuração efetiva atual [não verificado]. | - | CONTA |
-| CODEX-PRE-DESENHO-PILOTO | INSTRUMENTO | PARCIAL | LEU app/docs/RELATO.md:1535 e app/docs/RELATO.md:1538: oito obras e exigência da tabela identificadas; tabela final e conclusão [não verificado]. | - | CONTA |
-| BO-[nome]-0511-CENSO | INSTRUMENTO | ? | LEU app/docs/RELATO.md:8053: triagem parcial; fontes citadas em app/docs/BACKLOG.md:1814 indisponíveis na cópia. Completude [não verificado]. | - | CONTA |
-| MEDE-CLEAR-X-COMPACT | INSTRUMENTO | NAO | LEU app/docs/RELATO.md:8014 e app/docs/RELATO.md:8015: tabela dos sete dias e métricas solicitadas entregues. INFERIU conclusão documental, sem revalidar números. | - | OBSOLETA |
-| CODEX-QUEIMA-B | INSTRUMENTO | ? | LEU app/docs/RELATO.md:1551 e app/docs/RELATO.md:8012: conciliação parcial e diagnóstico pendente; sondas completas [não verificado]. | - | CONTA |
-| HJ-INGESTAO-0511 | INSTRUMENTO | PARCIAL | LEU app/docs/RELATO.md:8188: quadro de 80 unidades; app/docs/RELATO.md:8204: obras por unidade e pós-F3 incompletos. Conclusão posterior [não verificado]. | - | CONTA |
-| ESPURIA-E-O-QUE-E | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1833 e app/templates/core/_icone_dia_espuria.html:1; quadro integral e golden não localizados. Medida completa [não verificado]. | - | CONTA |
-| TIPO-ITEM1-DIMENSAO | INSTRUMENTO | NAO | LEU bin/leitores_de_chave.py:4 e bin/leitores_de_chave.py:24: limites declarados; bin/tests/test_leitores_de_chave.sh:1: mutantes presentes. INFERIU conclusão do instrumento. | TIPO-NA-FONTE | OBSOLETA |
-| VIGIA-PLANTIO-CRIADO-EM-NAO-E-REAPLICACAO | INSTRUMENTO | SIM | LEU app/ponto/management/commands/vigia_plantio_overnight.py:76: filtro por criado_em permanece; raiz explícita da obra de plantio em app/docs/BACKLOG.md:1978. | FIO-E0-V4-E1-ENTRADAS | DOBRA |
-| SELO-SEM-RELOGIO-JULGA-ARQUIVO | INSTRUMENTO | SIM | LEU app/core/tests/test_selo_teste_sem_relogio.py:34: congelamento em qualquer ponto do arquivo retorna zero; mãe em app/docs/BACKLOG.md:1855. | ESMERIL-V2 | DOBRA |
-| ESMERIL-SEMANTICA | INSTRUMENTO | PARCIAL | LEU app/docs/RELATO.md:1347: inventário publicado; app/docs/RELATO.md:1353: REDs e aprovação documental pendentes. Conclusão posterior [não verificado]. | - | CONTA |
-| PUSH-PRESO-14 | INSTRUMENTO | NAO | LEU app/docs/RELATO.md:1220: push da faixa fde354ac..487b4961 concluído; bin/tests/test_lei_akita.sh:296: distinção de medida implementada. | - | OBSOLETA |
-| L-123-MEDIDA-EM-PY | INSTRUMENTO | NAO | LEU bin/tests/test_lei_akita.sh:151 e bin/tests/test_lei_akita.sh:296: registro central e árvore por commit; bin/handoff_sessao.sh:202: consumo por placar(). | - | OBSOLETA |
-| ESMERIL-V2-PLACAR-DADO-GERADO | INSTRUMENTO | SIM | LEU app/core/placar_estrutural.py:118 e app/core/espelho_verdade.py:181: medições continuam literais em Python; mãe em app/docs/BACKLOG.md:1864. | ESMERIL-V2 | DOBRA |
-| E-SEM-VIVA-B-VIGIA-POR-DIA | INSTRUMENTO | SIM | LEU app/folha/vigia_retido_calado.py:46 e app/folha/vigia_retido_calado.py:48: unidade continua linha/colaborador; residual em app/docs/BACKLOG.md:2048. | E-SEM-VIVA-B | DOBRA |
-| BO-[nome]-0611 | INSTRUMENTO | ? | LEU app/docs/RELATO.md:1363 e app/docs/RELATO.md:1301: quadro contestado pela retriagem; anexos e prova atual dos catorze itens [não verificado]. | - | CONTA |
-| BO-[nome]-0611-V2 | INSTRUMENTO | ? | LEU app/docs/RELATO.md:1301 e app/docs/RELATO.md:1302: retriagem documentada; ações e pagamento atuais [não verificado]. Mesma triagem em app/docs/BACKLOG.md:1869. | BO-[nome]-0611 | DOBRA |
-| MOTOR-LE-O-TURNO-INSTRUMENTO | INSTRUMENTO | PARCIAL | LEU app/core/medida_turno_do_par.py:32: limites publicados; bin/turno_do_par_estado.py:50 e bin/turno_do_par_estado.py:70: cortes sem marca permanecem. Raiz em app/docs/BACKLOG.md:1879. | MOTOR-LE-O-TURNO | DOBRA |
-| MOTOR-TURNO-INSTR-FILA | INSTRUMENTO | SIM | LEU bin/turno_do_par_estado.py:50 e bin/turno_do_par_estado.py:70: cortes permanecem; app/core/medida_turno_do_par.py:72: alcance limitado. Residual e raiz em app/docs/BACKLOG.md:1881 e app/docs/BACKLOG.md:1879. | MOTOR-LE-O-TURNO | DOBRA |
-| DISJUNTOR-B3-TARDIO | INSTRUMENTO | SIM | LEU bin/disjuntor.py:11 e bin/hook_stop_fila1.py:1204: detecção por varredura e consulta posterior; latência atual [não verificado]. INFERIU raiz do mesmo B3. | DISJUNTOR-E-CLEAR-RAPIDO | DOBRA |
-| PLACAR-LIVENESS | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1885 e bin/placar_code.sh:189: ligação ao portão prevista; contrato completo não localizado [não verificado]. Mãe pelo destino explícito. | PORTAO-DE-FATURAMENTO | DOBRA |
-| FIO-COM-ASSENTO-E0-V3 | INSTRUMENTO | NAO | LEU app/docs/RELATO.md:1285: parecer entregue; app/docs/BACKLOG.md:1886: rejeição e sucessor registrados. INFERIU conclusão da leitura, sem atribuir cura de produto. | - | OBSOLETA |
-| BUG-DEPLOY-PORTAO-ANTES-DO-MIGRATE | INSTRUMENTO | PARCIAL | LEU bin/deploy.sh:145 e bin/deploy.sh:162: verificações antecipadas; bin/deploy.sh:201: recomendação residual incompatível com bin/deploy.sh:225. | - | CONTA |
-| DEPLOY-RESPAWN-SEM-PORTAO | INSTRUMENTO | SIM | LEU app/gunicorn.core.conf.py:2 e app/gunicorn.core.conf.py:20: workers sem porta de inicialização. INFERIU risco estático; frequência de reinícios [não verificado]. | - | CONTA |
-| ATOMICIDADE-DA-PORTA-DIVIDA | INSTRUMENTO | ? | LEU app/ferias/services.py:359 e app/pautas/services.py:345: auxiliares dependem do atomic do chamador; sete sinalizações sem atomic local não provam fuga. Transações dos chamadores [não verificado]. | - | CONTA |
-| SIGPIPE-PRINTF-CAT-GREP-Q | INSTRUMENTO | SIM | LEU bin/regua_tickets.sh:87, bin/tests/test_suite_sh.sh:62 e bin/tests/test_codex_sonda.sh:91: pipelines com grep -q permanecem. INFERIU exposição; ocorrência concreta [não verificado]. | - | CONTA |
-| DEPLOY-PORTAO-RESTOS-V6 | INSTRUMENTO | SIM | LEU bin/deploy.sh:201 e bin/deploy.sh:225: recomendação e recusa incompatíveis; complemento explícito em app/docs/BACKLOG.md:1899. | BUG-DEPLOY-PORTAO-ANTES-DO-MIGRATE | DOBRA |
-| DEPLOY-EXCLUSAO-ENVELOPE | INSTRUMENTO | SIM | LEU bin/cron_run.sh:9: marca PID; bin/deploy.sh:108 e bin/deploy.sh:312: consulta sem exclusão integral e janela reconhecida. INFERIU raiz do deploy. | BUG-DEPLOY-PORTAO-ANTES-DO-MIGRATE | DOBRA |
-| ORDEM-ATE-O-ZERO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1913: substitui item do plano anterior; alcance zero e três sombras [não verificado], anexos ausentes. | PLANO-JANELA-POS-RESET | DOBRA |
-| MAPA-DA-FILA-BO | INSTRUMENTO | ? | LEU app/docs/BACKLOG.md:1931: complemento de CENSO-ANTES-DA-VAGA; raiz correspondente no universo e mapa completo [n
-
-[truncado em 20000 de 30739 caracteres]
-
-_4881 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4882 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
