@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 13:24:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (672.3 MB). Acoes na janela: **1858**.
+**Medido em 14/11/2026 13:29:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (672.3 MB). Acoes na janela: **1849**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1859,12 +1859,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:39:27 | Bash |  | `cd /home/ronald/saas-hasner; git diff --name-only e439fac78 main \| wc -l; comm -12 <(git diff --name-only e439fac78 main \| sort) <(git diff --name-only e439fac78 d9cff7653 \| sort); git diff --name-only e439fac78 main \| /bin/grep -v '^app/docs\\|^logs\\|^bin/' \| head -20` |
 | 01:39:21 | Bash |  | `cd /home/ronald/saas-hasner; bin/sombra.sh --conferir >/dev/null 2>&1; echo conferir_rc=$?; W=/home/ronald/wt-codex-hj-090-152256; git -C $W log --oneline -1 \| cut -c1-80; git -C $W status --porcelain \| head; git merge-base --is-ancestor e439fac78 main && echo base_ok; git diff --name-only e439fac78 d9cff7653 \| tr '\n' ' '; echo; git status --porcelain \| /bin/grep -v '^??'; bin/trava_teste.sh  ...` |
 | 01:39:15 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bb62rsmjm.output; cd /home/ronald/saas-hasner; bin/sombra.sh --conferir 2>&1 \| tail -4; echo rc=$?; date +%H:%M` |
-| 01:28:04 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="PONTO 01:3x BUG-PAR suite inteira VERDE (logs/BUG-PAR/suite_inteira_1411.log: OK skipped=42 xfail=41, Ran 15838, rc 0; PRE-VOO logs/BUG-PAR/prevoo/prevoo_1.log OK Ran 69) \| POUSO NAO ABRE: a copia (338fd37b0) esta empilhada sobre o merge 6c465cb80 = main + E3-FORMA-SQL volta 4 (91bed1694), e  ...` |
-| 01:27:53 | Bash |  | `cd /home/ronald/saas-hasner; for c in 91bed1694 2b0739004 6c465cb80; do git merge-base --is-ancestor $c main && echo "$c in main" \|\| echo "$c NOT in main"; done; git merge-base --is-ancestor 91bed1694 2b0739004 && echo "v4 ancestor of v7"; git log --oneline -1 $(git merge-base main 338fd37b0) \| cut -c1-100` |
-| 01:27:48 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/BUG-PAR-O-PAR/e3/volta5/ logs/BUG-PAR-O-PAR/e3/volta5/codex/ logs/BUG-PAR-O-PAR/e3/; git -C /home/ronald/wt-bugpar-124848 log --oneline main..HEAD \| cat \| cut -c1-120` |
-| 01:27:44 | Bash |  | `cd /home/ronald/saas-hasner; find logs -newermt "2026-11-13 12:00" \( -name "pv_c*" -o -name "pv_d*" -o -name "recorte_d3*" \) 2>/dev/null \| head` |
-| 01:27:40 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/BUG-PAR-O-PAR \| head -30; ls logs/codex \| /bin/grep -i "BUG-PAR" \| tail -8` |
-| 01:27:38 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/BUG-PAR-POUSA \| head -30` |
-| 01:27:35 | Bash |  | `cd /home/ronald/saas-hasner; ls -d logs/*BUG*PAR* logs/*bugpar* 2>/dev/null; ls -t logs \| /bin/grep -i "par" \| head` |
-| 01:27:33 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/BUG-PAR/ \| head -50; git -C /home/ronald/wt-bugpar-124848 status --porcelain \| head; git -C /home/ronald/wt-bugpar-124848 log --oneline -1` |
-| 01:27:28 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bovc74k97.output; date +%H:%M` |
