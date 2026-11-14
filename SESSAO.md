@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 22:26:01.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (612.2 MB). Acoes na janela: **2367**.
+**Medido em 13/11/2026 22:31:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (612.2 MB). Acoes na janela: **2366**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2376,4 +2376,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:31:34 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/feriado_na_frente_da_trava.txt <<'EOF' aval Ronald: FERIADO-NA-FRENTE-DA-TRAVA (ordem, sem lei nova): HJ-074 FERIADO-NASCE-DA-ESCALA passa na frente da suite inteira da TIPO item 3 v5b na trava de testes -- a TIPO depois da suite ainda espera a sombra (DIFF da E3 em curso), entao a troca nao atrasa o pouso dela; o feriado tem prazo de dinheiro (co ...` |
 | 10:31:28 | Bash |  | `cd /home/ronald/saas-hasner; ps -eo pid,ppid,args \| /bin/grep 1758517 \| /bin/grep -v grep \| cut -c1-250; ls -la logs/FERIADO-ESCALA/red_green/ logs/O168/v6/cura_triagem/; date +%H:%M` |
 | 10:31:20 | Bash |  | `cd /home/ronald/saas-hasner; C=$(docker ps --format '{{.ID}} {{.Mounts}}' --no-trunc \| /bin/grep -c .); for id in $(docker ps -q); do if docker inspect $id --format '{{range .Mounts}}{{.Source}} {{end}}' \| /bin/grep -q wt-codex-tipo-na-fonte-184856; then echo "container $id"; CID=$id; fi; done; kill 1757875 1757876 1758976; [ -n "$CID" ] && docker kill $CID; /usr/bin/sleep 3; bin/trava_teste.sh  ...` |
-| 10:31:14 | Bash |  | `cd /home/ronald/saas-hasner; ps -eo pid,ppid,lstart,args \| /bin/grep -E "suite_pre_opus_b\|wt-codex-tipo-na-fonte-184856\|red_green/roda\|cura_triagem" \| /bin/grep -v grep; bin/trava_teste.sh --quem; sed -n 1,30p bin/trava_teste.sh \| /bin/grep -n "fila\\|flock\\|ordem"` |
