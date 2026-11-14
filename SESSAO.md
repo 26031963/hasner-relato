@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 13:34:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (672.4 MB). Acoes na janela: **1857**.
+**Medido em 14/11/2026 13:40:18.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (672.4 MB). Acoes na janela: **1843**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1853,17 +1853,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:40:32 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/E3-FORMA-SQL/construtor_v8/log \| tail -4 \| cut -c1-200; ls logs/E3-FORMA-SQL/construtor_v8/` |
 | 01:40:28 | Bash |  | `cd /home/ronald/saas-hasner/app; ps -p 3922817 -o etime= ; sed -i '3s/.*/ESPERANDO: codex_pergunta.sh \| pid=3922817/' docs/RELATO.md; cd ../bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 01:40:23 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/.*/ESPERANDO: suite.sh \| pid=63512/' docs/RELATO.md; cd ../bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"; cd ../app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="PONTO 01:4x HJ-090 sombra --bloco OK (81/81, erro=0, alarme=12; --conferir rc 0, carimbo 20261114 status=OK diverge=0) \| ARVORE D ...` |
-| 01:40:16 | Bash |  | `ps -o pid,ppid,args -p 63512 \| cut -c1-80; P=$(ps -o ppid= -p 63512); ps -o pid,ppid,args -p $P \| cut -c1-80` |
-| 01:40:13 | Bash |  | `ps -eo pid,args \| /bin/grep "suite_inteira_merge" \| /bin/grep -v grep \| cut -c1-60` |
-| 01:40:10 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/.*/ESPERANDO: suite.sh \| pid=64087/' docs/RELATO.md; cd ../bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 01:40:04 | Bash |  | `ps -eo pid,ppid,args \| awk '$2==63512' \| cut -c1-150` |
-| 01:40:04 | Bash |  | `ps -eo pid,ppid,etime,args \| /bin/grep -E "suite\|manage.py test" \| /bin/grep -v -E "grep\|snapshot" \| cut -c1-160` |
-| 01:40:01 | Bash |  | `ps -eo pid,ppid,args \| /bin/grep -E "[s]uite\.sh --dir" \| /bin/grep -v "shell-snapshots" \| cut -c1-140` |
-| 01:39:59 | Bash |  | `pgrep -a -f "bin/suite.sh" \| cut -c1-150` |
-| 01:39:54 | Bash |  | `cd /home/ronald/saas-hasner; /usr/bin/sleep 3; pgrep -f "suite.sh --dir /home/ronald/wt-pouso-hj090" \| head -3; ps -o pid,ppid,cmd -p $(pgrep -f "suite.sh --dir /home/ronald/wt-pouso-hj090" \| head -1) \| cut -c1-120` |
-| 01:39:49 | Bash |  | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-pouso-hj090-013936; D=logs/HJ-090/pouso; M="core.tests.test_contract_esmeril core.tests.test_contract_mypy core.tests.test_medida_turno_do_par core.tests.test_selo_diagrama_do_codigo escala.tests.test_selo_grade_pede_o_instante"; bin/suite.sh --dir $W --only "$M" > $D/prevoo_merge.log 2>&1; echo "rc=$?" >> $D/prevoo_merge.log; echo "== prevoo"; /bin/g ...` |
-| 01:39:42 | Bash |  | `cd /home/ronald/wt-pouso-hj090-013936; git commit -q -F - <<'EOF' COPIA DE POUSO HJ-090: main 9077bff58 + d9cff7653 (arvore a certificar pela suite inteira antes do pouso) Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com> Claude-Session: https://claude.ai/code/session_01RgKEoyUK8HcLgCfgrgR9bA EOF git log --oneline -1 \| cut -c1-60; git rev-parse HEAD^{tree}` |
-| 01:39:36 | Bash |  | `cd /home/ronald/saas-hasner; N=$(date +%H%M%S); W=/home/ronald/wt-pouso-hj090-$N; git worktree add -b pouso-hj090-$N $W main 2>&1 \| tail -1 \| cut -c1-60; cd $W && git merge --no-ff --no-commit d9cff7653 2>&1 \| tail -5; git status --porcelain \| /bin/grep -v '^M ' \| head; echo $W` |
-| 01:39:27 | Bash |  | `cd /home/ronald/saas-hasner; git diff --name-only e439fac78 main \| wc -l; comm -12 <(git diff --name-only e439fac78 main \| sort) <(git diff --name-only e439fac78 d9cff7653 \| sort); git diff --name-only e439fac78 main \| /bin/grep -v '^app/docs\\|^logs\\|^bin/' \| head -20` |
-| 01:39:21 | Bash |  | `cd /home/ronald/saas-hasner; bin/sombra.sh --conferir >/dev/null 2>&1; echo conferir_rc=$?; W=/home/ronald/wt-codex-hj-090-152256; git -C $W log --oneline -1 \| cut -c1-80; git -C $W status --porcelain \| head; git merge-base --is-ancestor e439fac78 main && echo base_ok; git diff --name-only e439fac78 d9cff7653 \| tr '\n' ' '; echo; git status --porcelain \| /bin/grep -v '^??'; bin/trava_teste.sh  ...` |
-| 01:39:15 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bb62rsmjm.output; cd /home/ronald/saas-hasner; bin/sombra.sh --conferir 2>&1 \| tail -4; echo rc=$?; date +%H:%M` |
