@@ -1,7 +1,50 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 12:27** · publicado em **14/11/2026 12:29** (UTC-3)
+> Ultima resposta processada: **14/11/2026 12:50** · publicado em **14/11/2026 12:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 12:50 · sessao aaf08d3738b9 · E3-FORMA-SQL · construtor · origem=Code
+
+**Pergunta ao topo:** o recuo deve preservar especificamente C17 nos consumidores migrados? No main, esses consumidores usam C17, mas a API `tarefa_do_dia` já devolve outro fio. O instrumento de sombra distingue expressamente “atual” de “candidata” (`folha/fora_da_folha.py@ac431c506:65–78`; `chamados/management/commands/diff_e3_sombra.py@ac431c506:124–127`).
+
+Pela sua cláusula de divergência no main, deixei os quatro estados sem cura enquanto essa referência permanece pendente.
+
+As referências `@ac431c506` abaixo são do segundo pai, lidas com `git show`.
+
+| Estado | E3 v9 | Main: C17 / tarefa | Autoridades no main | Após esta volta |
+|---|---|---|---|---|
+| P13: responder; verbo validar | colab (`chamados/tests/test_e3_portas_v6_sem_banco.py:20`) | **admin / colab** | C17: `chamados/juizes.py@ac431c506:1608–1619,1668`; tarefa: `chamados/services/tarefa_do_dia.py@ac431c506:550–554` | Sem cura; colab |
+| P14: validar; verbo cobrar | admin (`chamados/tests/test_e3_portas_v6_sem_banco.py:26`) | **colab / admin** | Mesmas autoridades acima | Sem cura; admin |
+| P19: residual decidir; ação admin sob B/cobrar | admin (`chamados/tests/test_e3_portas_v6_sem_banco.py:31`) | **colab / admin** | Mesmas autoridades acima | Sem cura; admin |
+| Simultâneo colab+admin; verbo validar | colab (`chamados/tests/test_e3_portas_tarefa.py:225`) | **admin / colab** | Mesmas autoridades acima | Sem cura; colab |
+
+O simultâneo já retorna **colab na tarefa do main**; portanto a v9 coincide com essa API, mas diverge de C17 quando o único verbo publicado é validar (`chamados/services/tarefa_do_dia.py@ac431c506:550–552`; `chamados/juizes.py@ac431c506:1608`).
+
+Quanto a portas e verbos:
+
+- **P13/P14/simultâneo sem residual:** ambos publicam PF quando a porta pertence à célula e PP quando apenas a âncora externa abre a porta; preservam o verbo recebido (`chamados/services/tarefa_do_dia.py@ac431c506:546–554`; `chamados/juizes.py@ac431c506:1657–1668`).
+- **P19 com A residual da célula e B externo:** C17 publica **PF**, `fila=(A,)`, verbos `{A: decidir, B: cobrar}`. A tarefa do main publica **PP**, `fila=()`, somente `{B: cobrar}`: ela seleciona portas pelas ações (`chamados/juizes.py@ac431c506:1657–1668`; `chamados/services/tarefa_do_dia.py@ac431c506:545–554`).
+
+Quem lê na árvore atual:
+
+| Leitor | Uso |
+|---|---|
+| Folha | Recebe a porta e devolve seu fio: `folha/fora_da_folha.py:74,89` |
+| Vigia | Recebe a porta e conta admin pelo fio: `chamados/services/vigia_fio.py:648,662` |
+| `furo_sem_canal` | Usa existência/rota e `nao_sei`: `chamados/services/furo_sem_canal.py:97–104` |
+| Painel | Fornece fila e partição dos verbos: `chamados/services/painel.py:188–190,229–230` |
+
+Executei o controle existente: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e3_portas_v6_sem_banco -v
+```
+
+Resultado local: **10 testes passaram**, incluindo as expectativas E3 ainda presentes (`chamados/tests/test_e3_portas_v6_sem_banco.py:16–42`); certificação pela suite **[não verificado]**.
+
+Também comparei os corpos reais do main e da v9 por AST, em memória: oito combinações sintéticas confirmaram as divergências acima; alcance ORM **[não verificado]**.
+
+**Arquivos tocados: nenhum**, incluindo os seis congelados; `git diff --name-only` e `git status --short` terminaram vazios **[não verificado]**. Não produzi cura, RED novo nem mutantes, para não fixar uma das respostas antes da definição solicitada. Permanecem incompletos esses três entregáveis; ocorrência em produção, contadores reais e execução com banco **[não verificado]**.
 
 ## 14/11 12:27 · sessao 812f3f6bae91 · COERENCIA-PELO-EFEITO · censo · origem=Code
 
@@ -871,42 +914,4 @@ Não creditei como prova normativa inequívoca:
 - Impedir nascimento/pergunta em exportada: testes citam L-092 (`app/chamados/tests/test_f1c4_3_emissores.py:158`; `app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py:65`), enquanto o texto L-113 responde expressamente que chamado pode nascer nessa competência (`app/docs/LEIS.md:153`). Qual corte vale [não verificado].
 - Congelamento da célula: `app/escala/tests/test_celula_dia.py:68` verifica conservação de estado contra L-020 (`app/docs/LEIS.md:71`), porém a instrução exclui testes de “não mudou”; crédito como caso admissível [não verificado].
 
-## 14/11 12:06 · sessao a55411207dc0 · - · - · origem=Ronald (tmux)
-
-Casos que atendem ao critério estrito identificado:
-
-| Decisão coberta | Caso pela regra | Regra e resposta verificáveis |
-|---|---|---|
-| Dia trancado fecha disputa sem carimbar pergunta nova | `app/chamados/tests/test_c7_red_minimos.py::C7_08_CompetenciaTrancadaTest::test_RED_trancada_fecha_pela_porta_com_trilha_e_nao_carimba:329` | L-051 escrita em `app/docs/LEIS.md:92`; caso em `app/chamados/tests/test_c7_red_minimos.py:319`; resultado explícito em `:343–350`. |
-| Tranca mata pergunta por leitura; destranca devolve viva | Mesma classe, `test_RED_o_C6_le_a_tranca_sem_escrever:361` e `test_RED_destrancar_devolve_a_pergunta_viva_sozinha:369` | L-051 e interpretação do caso em `app/chamados/tests/test_c7_red_minimos.py:326`; respostas literais em `:364–375`. |
-| Ausência parcial cobra restante; ausência integral/folga cala | `app/chamados/tests/test_emis_ausencia_parcial_cobra.py::JuizAusenciaParcialTest::test_RED_ausencia_parcial_com_trabalha_true_NAO_e_dia_sem_trabalho:40` e demais métodos `:43`, `:46`, `:50`, `:54` | L-061 explicitamente associada à leitura da ata em `:10`; casos e respostas em `:13–18`; asserts concretos em `:40–55`. |
-| Emissores leem folga/ausência na ata | `app/chamados/tests/test_f1c4_3_emissores.py::EmissoresPerguntamAoJuizTest::test_fabrica_ausencia_lavrada_com_trabalha_true_nao_pergunta:89` | L-061 em `:6`; casos e respostas em `:20–29`. Há também materialização `:109`, cluster `:127`, intervalo `:149`. |
-| Supra lê célula soberana para cobrança em dia sem trabalho | `app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py::SupraPerguntaAoJuizTest::test_RED_celula_folga_com_ata_trabalho_e_dia_sem_trabalho_pelo_juiz:47` | L-061, caso e resposta em `:5–9`; assert do código de acusação em `:53`. |
-| Teto por instante também no turno de ontem | `app/chamados/tests/test_pergunta_do_dia_em_curso.py::TetoPorInstanteParaToda_a_Data::test_MORDE_noturno_de_ontem_saida_das_06h_nao_vencida_as_0610:291` e `test_MORDE_noturno_de_ontem_saida_vencida_as_0640:294` | L-073 em `:213`; expectativa literal: 06:10 não pergunta; 06:40 pergunta `orfao_14h`, em `:291–295`. |
-| Justificativa dispensa lâmpada do marco | `app/ponto/tests/test_ausencia_ata_dispensa.py::DispensaPorJustificativa::test_MORDE_dia_justificado_dispensa_o_marco:58` | L-061 e caso em `:50–55`; resposta lâmpada acesa/dispensada/n_missing zero em `:59–63`. Não prova diretamente fechamento da origem. |
-| Justificado não vira furo na releitura | `app/ponto/tests/test_cobparc8_leitor_transporta_justificado.py::DiaJustificadoNaoEFuroTest::test_RED_dia_justificado_sem_batida_nao_e_furo_pelo_leitor:87` | L-061 em `:4`; cadastro e resposta em `:13–17`; resultado sem `FURO_*` em `:100`. |
-| Comando pontual não reabre pergunta exportada e aponta pauta | `app/chamados/tests/test_reabrir_orfas_enterradas.py::ReabrirOrfasEnterradasTest::test_exportada_nao_reabre_e_vai_para_a_pauta:128` | L-092 e caso em `:1–11`; resultado em `:139–140`. Vigência de corte não decidida. |
-
-**SEM CASO pelo critério estrito:**
-
-- Aprovação de justificativa → encerra origem: `app/ponto/tests/test_justificativa_encerra_origem.py:6–8` usa o próprio coletor como fundamento; LEI-AKITA 13 é protocolo, sem CLT/CCT/L-NNN substantiva.
-- Ausência aberta segura / decidida fecha: testes em `app/ponto/tests/test_ausencia_aberta_nao_fecha_chamado.py:39` e `app/ponto/tests/test_chamado_ausencia_fecha.py:45` conferem comportamento, mas fundamentação `:1–6` de ambos não apresenta CLT/CCT/L-NNN substantiva.
-- C7 geral — muda viva, resposta sem veredito, vazia, motivo administrativo, desligamento: `app/chamados/tests/test_c7_red_minimos.py:128–317` tem casos por aval C7; só recorte da tranca `:319` apresenta L-051 substantiva.
-- O168: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:1–15` fundamenta pelo aval/cascata; sem CLT/CCT/L-NNN substantiva.
-- SLA: `app/chamados/tests/test_prazo_vencido_pelo_juiz.py:1–9` declara a soma do juiz; teste de paridade em `:51–62`.
-- Reabrir pela premissa/fato novo: `app/chamados/tests/test_reabrir_pergunta_a_premissa.py:7–12` cita L-110, que é protocolo; não apresenta a regra substantiva que decide aqueles resultados.
-- Fechar pela premissa: `app/chamados/tests/test_reconciliar_pergunta_a_premissa.py:1–12` fundamenta pelos avais e pelo mesmo coletor, sem CLT/CCT/L-NNN substantiva.
-- `AprovarExcecaoCLTTest` cita art.468 em `app/chamados/tests/test_views.py:284`, mas não explicita como a regra jurídica responde ao caso; há apenas expectativa de implementação em `:334–340`.
-
-**Registro efetivo:**
-
-- `_C3` registra somente `chamados/catalogo/premissa.py::premissa_morta`, em `app/core/juizes.py:279`; função real `app/chamados/catalogo/premissa.py:144–150`.
-- `ChamadoColaborador.premissa_regularizada`, `_gate_premissa_do_fechamento`, `recusa_da_reabertura`, `cartorio.houve_fato_novo`, `lastro.marcos_acesos`, `lastro.marcos_inexistentes`, `cartorio.marcos_vencidos` e `marcos_com_teto`: **SEM JUIZ próprio** no registro `app/core/juizes.py:182–345`.
-- `_C11` registra `reconciliar_por_ausencia`, em `app/core/juizes.py:287`; não registra `ponto.services.ausencia.fechar_chamados_ausencia_decidida`.
-- `_C18`: `dia_sem_trabalho`, `app/core/juizes.py:294`; `_C19`: `tarefa_do_dia`, `:295`; `_C20`: `dia_da_pergunta_trancado`, `:296`.
-- `dia_encerrado`: registrado por pergunta literal na família turno/marcos, `app/core/juizes.py:235`.
-- Juízes sem id `_C`: pauta cadastro `app/core/juizes.py:297`, `respostas_sem_veredito` `:298`, `pode_executar_csf` `:299`.
-
-L-110 exige indicar a regra substantiva aplicada ao cadastro/batidas; sua simples citação não certifica o caso: `app/docs/LEIS.md:136`.
-
-_5140 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5141 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

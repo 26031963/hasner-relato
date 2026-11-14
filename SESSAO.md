@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 12:46:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (669.5 MB). Acoes na janela: **1791**.
+**Medido em 14/11/2026 12:51:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (669.6 MB). Acoes na janela: **1798**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:51:44 | Bash | Confirm hook accepts ESPERANDO line | `cd /home/ronald/saas-hasner && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; ps -p 2334848 -o etime=` |
+| 12:51:41 | Bash | Put E3 design question at RELATO top | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova=("PERGUNTA DE DESENHO E3-FORMA-SQL 12:5x (E3-MORRE item 5: o que reprovou toca o NUCLEO, a E3 para aqui; as outras seguem): " "o opus v9 mandou P13/P14/P19 'ficarem como o main', e o main tem DOIS fios nesses estados. C17 chamados/juizes.py@ac431c506:1607-1618 " "(escada pelo VERBO: cobrar=cola ...` |
+| 12:51:19 | Bash | Verify Codex claims on main sites | `cd /home/ronald/saas-hasner; git show ac431c506:app/chamados/juizes.py \| sed -n 1600,1670p; echo ======; git show ac431c506:app/chamados/services/tarefa_do_dia.py \| sed -n 538,556p; echo =====; git show ac431c506:app/folha/fora_da_folha.py \| sed -n 60,80p` |
+| 12:51:01 | Bash | Read construtor v10 answer | `cat /home/ronald/saas-hasner/logs/E3-FORMA-SQL/construtor_v10/r.r` |
+| 12:50:59 | Bash | Check construtor v10 result and copy changes | `cd /home/ronald/saas-hasner; tail -4 logs/E3-FORMA-SQL/construtor_v10/log; wc -c logs/E3-FORMA-SQL/construtor_v10/r.r; cd /home/ronald/wt-codex-e3-forma-sql-005806 && git status --porcelain \| head -20` |
+| 12:46:42 | Bash | Write provisional nominal P list | `cd /home/ronald/saas-hasner; f=logs/E3-FORMA-SQL/resto/lista_nominal_v10.md; { echo "# E3-FORMA-SQL v10 -- lista nominal dos estados P (FORMA 3, opus v9 item 3)"; echo "Fonte: logs/E3-FORMA-SQL/matriz/r.r:160-187 (P01-P28). I3a/I3b NAO sao linhas P: ficam fora desta soma (contrato de impacto, nao estado)."; echo "PROVISORIA ate o construtor v10 entregar a tabela P13/P14/P19 (valor main x valor apo ...` |
+| 12:46:37 | Bash | Wait for E3 v10 construtor to finish | `cd /home/ronald/saas-hasner; until [ -e logs/E3-FORMA-SQL/construtor_v10/fim ]; do /usr/bin/sleep 20; done; tail -2 logs/E3-FORMA-SQL/construtor_v10/log` |
 | 12:46:13 | Bash | Clear pycache in E3 copy and relaunch construtor | `W=/home/ronald/wt-codex-e3-forma-sql-005806; cd "${W:?}" && find app -type d -name __pycache__ -prune -print \| wc -l; find app -type d -name __pycache__ -prune -exec rm -rf {} +; git status --porcelain --ignored \| head -3; cd /home/ronald/saas-hasner && rm -f logs/E3-FORMA-SQL/construtor_v10/fim && setsid nohup logs/E3-FORMA-SQL/construtor_v10/lanca.sh >/dev/null 2>&1 < /dev/null & disown; /usr/ ...` |
 | 12:46:08 | Bash | Read construtor rc=2 failure reason | `cd /home/ronald/saas-hasner; cat logs/E3-FORMA-SQL/construtor_v10/log \| tail -15; ls -a /home/ronald/wt-codex-e3-forma-sql-005806/app \| head -40 \| tr '\n' ' '; cd /home/ronald/wt-codex-e3-forma-sql-005806 && git status --porcelain --ignored \| head` |
 | 12:46:05 | Bash | Extract P rows and FORMA 3 text | `cd /home/ronald/saas-hasner; /bin/grep -nE '^\\| ?P[0-9]{2}' logs/E3-FORMA-SQL/matriz/r.r \| cut -c1-200; /bin/grep -nE 'I3a\|I3b\|soma\|28' logs/E3-FORMA-SQL/opus_final_v9/r.md \| head -10` |
