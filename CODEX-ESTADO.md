@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 04:57** · publicado em **14/11/2026 04:59** (UTC-3)
+> Ultima resposta processada: **14/11/2026 05:00** · publicado em **14/11/2026 05:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 05:00 · sessao 2f5c80e150d0 · - · - · origem=Ronald (tmux)
+
+Restante do censo estático encontrado:
+
+- **Telas de ausências:** `ponto/views.py::painel_fechamento` recorta por `data` (`app/ponto/views.py:1005`); `painel_ausencia` ordena irmãos por dia e entrega a origem (`app/ponto/views.py:2079`; `app/ponto/views.py:2093`); `lista_ausencias` recorta/ordena por dia, conta e filtra estados, pré-seleciona atestados aprovados e identifica fim aberto (`app/ponto/views.py:2188`; `app/ponto/views.py:2196`; `app/ponto/views.py:2204`; `app/ponto/views.py:2215`; `app/ponto/views.py:2231`; `app/ponto/views.py:2252`).
+- **Portas web:** lotes de aprovação/rejeição/cancelamento selecionam pelo estado; aprovação individual e rejeição propagam aos irmãos abertos; edição do período exige aprovada; cancelamento lê estado e range para recusa/auditoria (`app/ponto/views.py:2293`; `app/ponto/views.py:2334`; `app/ponto/views.py:2370`; `app/ponto/views.py:2638`; `app/ponto/views.py:2650`; `app/ponto/views.py:2705`; `app/ponto/views.py:2722`; `app/ponto/views.py:2726`; `app/ponto/views.py:2767`; `app/ponto/views.py:2770`).
+- **Histórico/relatórios:** histórico de atestados exige aprovada no ano e expande o range pelo juiz; absenteísmo e acumulados também selecionam aprovadas e expandem datas (`app/ponto/views.py:2881`; `app/ponto/views.py:2916`; `app/relatorios/views.py:197`; `app/relatorios/views.py:205`; `app/relatorios/views.py:278`; `app/relatorios/views.py:283`; `app/relatorios/views.py:292`).
+- **API colaborador:** lista `data` e `status` da ausência; lista o status do agendamento (`app/api/views.py:1859`; `app/api/views.py:1860`; `app/api/views.py:2247`).
+- **API mensageria:** resumo de ausências conta estados, distingue fim aberto e calcula espera pelo início; situação/férias/pessoa exibem período e status dos agendamentos ou ausências (`app/api/views_mensageria.py:745`; `app/api/views_mensageria.py:746`; `app/api/views_mensageria.py:748`; `app/api/views_mensageria.py:764`; `app/api/views_mensageria.py:843`; `app/api/views_mensageria.py:934`; `app/api/views_mensageria.py:944`; `app/api/views_mensageria.py:1034`; `app/api/views_mensageria.py:1035`; `app/api/views_mensageria.py:1075`; `app/api/views_mensageria.py:1096`).
+- **Detalhe/Inteligência:** detalhe seleciona ausências pelo início no mês; resumo ordena pelo início e conta somente aprovadas; painéis/KPI/PDF recortam por início; score e alerta de recorrência excluem rejeitadas (`app/colaboradores/services/detalhe.py:104`; `app/inteligencia/resumo.py:39`; `app/inteligencia/resumo.py:42`; `app/inteligencia/views.py:71`; `app/inteligencia/views.py:84`; `app/inteligencia/views.py:239`; `app/inteligencia/views.py:516`; `app/inteligencia/management/commands/calcular_scores.py:12`; `app/inteligencia/management/commands/gerar_alertas.py:55`).
+- **Comandos de fiscalização/correção:** curador lê vivas/duração/fim; rejulgador lê filas documentais e decisórias; ausência bloqueante seleciona viva sem fim; ausência sem efeito seleciona aprovadas por range; ausência em folga carrega aprovadas e datas; relatório de férias com batida usa o início da ausência; comando H06 carrega a linha e entrega a edição à porta (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`; `app/ponto/management/commands/rejulgar_status_por_tipo.py:25`; `app/ponto/management/commands/rejulgar_status_por_tipo.py:36`; `app/ponto/management/commands/ausencia_bloqueante_sem_fim.py:27`; `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:41`; `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:56`; `app/ferias/management/commands/listar_ferias_com_batida.py:41`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`).
+- **Templates de ausência:** tabela e painel mostram dia, range e status; estado rejeitada/aprovada controla ações; espelho ainda consulta literalmente `pendente`; histórico/detalhe/fechamento exibem dia e estado (`app/templates/ponto/ausencias.html:150`; `app/templates/ponto/ausencias.html:177`; `app/templates/ponto/partials/painel_ausencia.html:51`; `app/templates/ponto/partials/painel_ausencia.html:124`; `app/templates/ponto/partials/painel_ausencia.html:155`; `app/templates/ponto/partials/painel_ausencia.html:293`; `app/templates/ponto/partials/painel_ausencia.html:310`; `app/templates/ponto/espelho.html:191`; `app/templates/ponto/historico_atestados.html:39`; `app/templates/colaboradores/detalhe.html:74`; `app/templates/chamados/fio_colaborador.html:62`; `app/templates/ponto/partials/painel_fechamento.html:55`).
+- **Admin:** é somente leitura, mas lista e filtra `data`/`status`; ficha genérica exibe os demais campos (`app/ponto/admin.py:38`; `app/ponto/admin.py:44`; `app/ponto/admin.py:45`; `app/ponto/admin.py:47`).
+- **Ferramenta externa ao app:** a prova de sombra incremental inclui `ponto_ausencia.data/status/minutos` (`bin/sombra_incremental.sh:36`).
+
+**Complemento AgendamentoFerias.status:** sincronizador seleciona estados não cancelados, compara o derivado e chama a porta; alerta de retorno seleciona agendado/em gozo terminando hoje; API mensageria exibe status (`app/ferias/management/commands/sincronizar_status_ferias.py:33`; `app/ferias/management/commands/sincronizar_status_ferias.py:39`; `app/ferias/management/commands/sincronizar_status_ferias.py:49`; `app/ferias/management/commands/alertar_retornos.py:20`; `app/api/views_mensageria.py:845`; `app/api/views_mensageria.py:946`; `app/api/views_mensageria.py:1098`).
+
+**Limite:** exaustividade para SQL construído dinamicamente, nomes de modelo/campo montados em execução e consumidores externos à cópia: **[nao verificado]**.
 
 ## 14/11 04:57 · sessao a80d22f28cd2 · - · - · origem=Ronald (tmux)
 
@@ -936,47 +955,4 @@ A fila anterior não foi promovida a bloqueio novo: autoria de `ERRO-BOBO`, excl
 
 **Veredito final: REPROVADO.** (`bin/classe_da_obra.py:144`, `bin/classe_da_obra.py:175`, `bin/disjuntor.py:1025`, `bin/disjuntor.py:1031`)
 
-## 14/11 01:39 · sessao 3bde72701314 · - · - · origem=Ronald (tmux)
-
-Achados no delta:
-
-- **[bloqueia] `bin/disjuntor.py:1024-1026` — fim anterior ao ini desaparece como zero.** `pop` consome a ocorrência; a condição descarta o par e `[]` vira rc 0 em `bin/disjuntor.py:1052`. Contraexemplo sintético confirmado em memória: ini `10:00:00`, fim rc 0/dur 0 `09:59:59`, trilha vazia → `[]`. Esse formato pode sair do escritor: `T0C` é capturado antes do ini (`bin/codex_pergunta.sh:265,305`); T0C `09:59:59`, ini `10:00:00`, relógio recua, fim e leitura de epoch `09:59:59` produzem duração 0 (`bin/codex_pergunta.sh:272-273`). Produção desse cenário: `[nao verificado]`. O algoritmo anterior contaria pendência; o delta afrouxa esse caso.
-
-- **[bloqueia] `bin/disjuntor.py:1031` — uma triagem quita várias ocorrências.** `any` não consome nem vincula univocamente a linha, e os intervalos são inclusivos. Contraexemplo sintético confirmado: mesma chave, ocorrências `10:00..10:05` e `10:05..10:10`; somente primeira triada em `10:05` → `[]`. Com recuo de relógio, primeira `10:00..10:05`, segunda `10:03..10:06`, única triagem `10:04:59` também quita ambas. O escritor conserva identidade completa `hash@pid@fim@sha` (`bin/disjuntor.py:928`); o vigia reduz a chave e aceita pertença temporal (`bin/disjuntor.py:1011,1031`).
-
-- **[bloqueia ou agrupável ao anterior] `bin/disjuntor.py:1011,1031` — instante não é validado antes da comparação.** `_triagens` aceita qualquer identificador não vazio (`bin/disjuntor.py:974-976`). Contraexemplo sintético: terceira parte `2026-11-12T10:03:XX`, ini `10:00`, fim `10:05` → considerada triada pela comparação textual. Antes, a igualdade com o fim normal não casava. O escritor normal produz formato válido (`bin/codex_pergunta.sh:464`); corrupção em produção `[nao verificado]`.
-
-Comportamentos examinados:
-
-| Histórico sintético | Resultado | Referência |
-|---|---|---|
-| Ini sem fim | `[]`, coerente com universo concluído | `bin/disjuntor.py:990,1019-1033` |
-| Dois ini consecutivos da mesma chave, depois fim | Somente o segundo pareia | `bin/disjuntor.py:1022-1026` |
-| Fim de outra chave entre ini e fim | Não consome a ocorrência da primeira chave | `bin/disjuntor.py:1024` |
-| Fim anterior ao ini | `[]`, problema bloqueante acima | `bin/disjuntor.py:1025` |
-
-Escritores e leitores:
-
-| Campo | Quem escreve | Quem lê / significado |
-|---|---|---|
-| Ini/fim, chave, rc, duração | `bin/codex_pergunta.sh:272-273,305-306` | `bin/codex_limite_estado.py:63-82`; eventos por ordem do arquivo, `bin/disjuntor.py:1020-1026` |
-| Fim do sidecar | `bin/codex_pergunta.sh:464-466` | `_le_id`, `bin/disjuntor.py:879-886`; compõe volta, `bin/disjuntor.py:928` |
-| Terceira parte da volta | `bin/disjuntor.py:928,939-940` | Identidade completa no B3, `bin/disjuntor.py:976,984-985`; intervalo inclusivo no vigia, `bin/disjuntor.py:1011,1031` |
-| Hora da própria triagem | `bin/disjuntor.py:939` | `_triagens` não valida nem usa esse primeiro campo temporal, `bin/disjuntor.py:973-976` |
-
-Os escritores usam hora local textual sem offset (`bin/codex_pergunta.sh:272,305,464`; `bin/disjuntor.py:939`); o parser cria `datetime` sem fuso (`bin/codex_limite_estado.py:65`) e o vigia compara strings (`bin/disjuntor.py:1025,1029,1031`). Uniformidade de fuso entre execuções em produção: `[nao verificado]`.
-
-Selos novos:
-
-| Caso | Mutante que a asserção reprova | Mutante relevante que sobrevive |
-|---|---|---|
-| PID reutilizado, contagem exata | Algoritmo anterior com último `fins[chave]`: produziria duas pendências | Pareamento com chave global fixa: os históricos da suíte são seriais | [nao verificado]
-| Inverso, nova triada/velha pendente | Mesmo algoritmo anterior: produziria zero | Mesmo mutante de chave global |
-| Sidecar 1 s antes | Igualdade exata com fim do chamadas.log | Comparar instantes somente até minuto; a suíte continua verde | [nao verificado]
-| Rc/duração vazios; rc `abc` | Remover as novas condições numéricas | Duração `.isdigit()` → `bool(p[8])`: nenhuma fixture testa duração não vazia e não numérica |
-
-Referências das asserções: `bin/tests/test_triagem_pendente.sh:59-83`; fixtures seriais: `bin/tests/test_triagem_pendente.sh:18-28,55-56,81`. A suíte não executa explicitamente mutantes da triagem (`bin/tests/test_triagem_pendente.sh:59-83`). Outro sobrevivente é trocar a atribuição por `aberto.setdefault(...)`: passa os casos atuais, mas pareia o primeiro de dois ini consecutivos (`bin/disjuntor.py:1022`).
-
-**Veredito deste recorte: REPROVADO**, pelos falsos zeros em `bin/disjuntor.py:1025,1031`.
-
-_4930 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4931 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
