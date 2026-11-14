@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 11:40** · publicado em **14/11/2026 11:40** (UTC-3)
+> Ultima resposta processada: **14/11/2026 11:42** · publicado em **14/11/2026 11:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 11:42 · sessao 758c610315a2 · JANELA-NAO-SEGURA-POUSO · verificador · origem=Code
+
+1. **[fila] A faixa está correta para todos os dias: 10.080 pares dia/minuto conferidos em memória, sem divergência.** `proibido()` retorna **0 quando barra**; `--janela` retorna **1 quando barra**. ([bin/janela_auth.sh:55](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:55), [modo horário:75](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:75))
+
+   | Dia | HHMM | Guarda | `proxima()` |
+   |---|---|---|---|
+   | Segunda a domingo | `0000`–`0559` | PROIBIDA | hoje às 06:00 |
+   | Segunda a domingo | `0600`–`2319` | PERMITIDA | agora |
+   | Segunda a domingo | `2320`–`2359` | PROIBIDA | amanhã às 06:00 |
+
+   **[fila] Bordas:** `0000` e `2359` barram; `0600` libera; `2320` barra inclusivamente, embora a mensagem diga “depois das 23:20”. Zeros à esquerda, inclusive `0008`, `0559`, `0600`, `0808` e `0909`, não causaram erro octal: as comparações usam `[ ... -ge/-lt ... ]`. Não encontrei contraexemplo entre horários HHMM válidos. ([bin/janela_auth.sh:58](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:58), [próxima abertura:63](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:63))
+
+2. **[fila] Escritor e leitores da regra:**
+
+   - A decisão horária é escrita em `proibido`; a próxima abertura, em `proxima`. ([bin/janela_auth.sh:55](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:55), [63](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:63))
+   - A guarda lê os alvos declarados em `auth_sitios.txt` e consulta a decisão nos modos horário e deploy. ([bin/janela_auth.sh:84](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:84), [75](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:75), [107](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:107))
+   - O deploy chama a guarda ou a atravessa quando recebe motivo não vazio; o selo chama a guarda diretamente. ([bin/deploy.sh:144](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/deploy.sh:144), [bin/tests/test_janela_auth.sh:41](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/tests/test_janela_auth.sh:41))
+
+   **[fila] Prosa velha ainda afirmativa:** a lista de alvos continua proibindo sexta 18h+/fim de semana; O4 no BACKLOG conserva a mesma formulação. A guarda também repete a frase antiga, embora seu cabeçalho já declare a substituição. ([bin/auth_sitios.txt:3](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/auth_sitios.txt:3), [app/docs/BACKLOG.md:1257](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/app/docs/BACKLOG.md:1257), [bin/janela_auth.sh:9](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:9))
+
+   **[fila] Há registros históricos de bloqueio por fim de semana**, que não demonstram um segundo cálculo vigente. `trava.sh` calcula outra janela, de dinheiro/backup; não reproduz a velha proibição de auth. Outro recálculo dessa proibição em `bin/` ou `app/config/`: **[nao verificado]**. ([app/docs/RELATO.md:4251](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/app/docs/RELATO.md:4251), [bin/trava.sh:25](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/trava.sh:25))
+
+   **[bloqueia] Falta registrar o corte e a obra futura.** A busca integral não encontrou `JANELA-NAO-SEGURA-POUSO` em CORTES nem `JANELA-VIRA-SMOKE` no BACKLOG; o cabeçalho promete “Texto literal em CORTES.md”. Isso deixa incompletos os itens 3 e 4 do corte fornecido. ([bin/janela_auth.sh:4](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:4), [app/docs/CORTES.md:1](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/app/docs/CORTES.md:1), [app/docs/BACKLOG.md:1](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/app/docs/BACKLOG.md:1))
+
+3. **[fila] O selo morde as duas regressões pedidas.** Reprodução da seção A exclusivamente em memória:
+
+   - Regra atual: **11/11**.
+   - Regra velha: **4 falhas** — sexta `1800`, sábado `1000`/`0600`, domingo `2319`.
+   - Nunca barrar: **4 falhas** — sábado `2320`, domingo `0559`, quarta `2320`/`0559`.
+
+   Os casos e expectativas estão em [bin/tests/test_janela_auth.sh:26](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/tests/test_janela_auth.sh:26).
+
+   **[fila] Lacunas:** a seção A só confere prefixo da saída, ignorando status; `proxima()` não é exercitada pelo modo `--janela`. O selo completo não foi executado porque cria, escreve e apaga temporários. ([bin/tests/test_janela_auth.sh:41](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/tests/test_janela_auth.sh:41), [bin/janela_auth.sh:75](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:75), [temporários:79](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/tests/test_janela_auth.sh:79))
+
+4. **[fila] Diretamente, o diff de `deploy.sh` muda só comentário. Indiretamente, o deploy passa a liberar os horários novos porque chama a guarda alterada.** O motivo do corte não é preenchido automaticamente: continua dependendo de quem chama fornecer `SEM_JANELA_AUTH_MOTIVO`. ([bin/deploy.sh:127](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/deploy.sh:127), [144](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/deploy.sh:144), [bin/janela_auth.sh:55](/home/ronald/codex_ws/2b9450e717ef6b6450a5bbd2d77c7ffa03fcaf47/bin/janela_auth.sh:55))
+
+   **[fila] Cumprimento em produção de reversão pré-anotada, ato único, `/api/me/` 401 e linha no topo do RELATO: [nao verificado].**
+
+## 14/11 11:41 · sessao daef3b0a03f3 · - · - · origem=Ronald (tmux)
+
+- **[fila] Prosa antiga ainda prescritiva:** `bin/auth_sitios.txt:3-4` afirma que sexta 18h+ e fim de semana barram; `app/docs/BACKLOG.md:1257` conserva a mesma regra no item O4. `bin/janela_auth.sh:9` repete a frase antiga, embora o próprio cabeçalho `bin/janela_auth.sh:2-4` a revogue expressamente. O selo contextualiza a citação antiga com a mudança em `bin/tests/test_janela_auth.sh:4-6`; o deploy também a marca como passado em `bin/deploy.sh:128-129`.
+
+- **[bloqueia] Registro exigido pelo corte não encontrado:** buscas literais por `JANELA-NAO-SEGURA-POUSO` e `JANELA-VIRA-SMOKE` em `app/docs` não retornaram ocorrência; logo o código promete “Texto literal em CORTES.md” sem que eu localizasse o registro (`bin/janela_auth.sh:4`). A exigência geral de registrar no mesmo turno está em `app/docs/CORTES.md:5-7`. A página é gerada de `app/docs/CORTES.json` (`app/docs/CORTES.md:3`), pelo escritor `bin/gerar_cortes.py:114-116`. A ausência em quaisquer fontes externas à cópia é **[não verificado]**.
+
+- **[fila] Escritor e leitores:** a decisão horária mora em `bin/janela_auth.sh:55-60`; a próxima abertura em `bin/janela_auth.sh:63-69`. A guarda lê a lista declarada (`bin/auth_sitios.txt:13-22`) em `bin/janela_auth.sh:84-95`. O modo horário consulta a decisão em `bin/janela_auth.sh:75-81`; o modo de deploy em `bin/janela_auth.sh:107-114`. O consumidor operacional em `bin/` chama essa guarda, ou atravessa com motivo não vazio, em `bin/deploy.sh:144-148`. O selo chama a guarda em `bin/tests/test_janela_auth.sh:41`, `:86`, `:97`, `:116`.
+
+- **[fila] Sem segundo cálculo encontrado no escopo:** as buscas em `bin/` e `app/config/` localizaram a comparação horária na guarda (`bin/janela_auth.sh:58-59`, `:66-67`) e a chamada pelo deploy (`bin/deploy.sh:146`). Não há diretório `config/` na raiz desta cópia **[não verificado por arquivo:linha]**.
+
+- **[fila] Referências históricas não devem ser tratadas como regra nova:** a negativa de um deploy de outubro em domingo permanece em `app/docs/RELATO.md:3853`; o relato de fim de semana em `app/docs/RELATO.md:4251`; os estados antigos das obras Q4/Q4b em `app/docs/TICKETS.md:224-225`. São registros de atos anteriores, embora estes últimos conservem linguagem de estado corrente.
+
+- **[fila] Consumidor fora do escopo solicitado:** `fatias_agendadas/o135-teto20/esteira.sh:64` também chama a guarda da cópia com `origin/main`, sem recalcular o horário. Outra prosa antiga fora de `bin/`, `app/docs`, `app/config` está em `app/core/management/commands/replay_credenciais.py:4-5`.
 
 ## 14/11 11:40 · sessao 94f383df6683 · - · - · origem=Ronald (tmux)
 
@@ -836,56 +888,4 @@ Todas as linhas acima pertencem a `app/ponto/tests/test_ferias_fracao_demais_5.p
 
 - **Coerência dias/datas — PROCEDE a lacuna.** O helper sempre cria datas e `dias` coerentes, impedindo que estes testes detectem divergência entre as duas fontes. (`app/ponto/tests/test_ferias_fracao_demais_5.py:63–64`; guarda existente em `app/ferias/models.py:395–398`)
 
-## 14/11 10:46 · sessao 11c8bef045f8 · - · - · origem=Ronald (tmux)
-
-Achados de escritores, todos por inspeção estática:
-
-- **PROCEDE — edição regular contorna o juiz.** A view exige apenas `novos_dias >= 1`, calcula fim inclusivo e chama `remarcar_agendamento` (`app/ferias/views.py:712`, `:718`, `:722`). Essa função delega a `_trocar_janela` (`app/ferias/services.py:705`, `:709`), que muda datas/dias e salva sem `clean`/`full_clean` (`:680`, `:693`). `AgendamentoFerias.save` chama somente guarda de sobreposição, persistência e espelho (`app/ferias/models.py:461`). Assim uma edição para 1–4 dias pode persistir apesar do diff, desde que saldo, status e colisão permitam (`app/ferias/services.py:670`, `:675`, `:693`).
-
-- **PROCEDE — correção admin também contorna o juiz, explicitamente.** A view exige somente duração positiva e documenta que retirou `full_clean` para permitir correções (`app/ferias/views.py:503`, `:508`). Chama `corrigir_datas_agendamento` (`:531`), que usa o mesmo `_trocar_janela` sem `clean` (`app/ferias/services.py:700`, `:702`, `:693`).
-
-- **PROCEDE — mensagem nova diverge da escrita admin.** O aviso novo promete “este agendamento sera recusado” (`app/ferias/situacao.py:358`); a correção admin coleta esse aviso (`app/ferias/views.py:516`), salva (`:531`) e retorna sucesso anexando os avisos (`:549`, `:552`, `:554`). Logo pode devolver “Datas corrigidas…” e “sera recusado” depois de já gravar uma fração curta (`app/ferias/views.py:549`, `:553`).
-
-- **PROCEDE — criação histórica pula art.134 inteiro.** `registrar_gozo_historico` monta dias por diferença inclusiva (`app/ferias/services.py:484`, `:487`), documenta que valida só coerência de datas, sem fracionamento (`:492`), confere datas/saldo/abono (`:495`, `:501`, `:507`) e salva diretamente (`:510`). Portanto pode criar `<5`, quarta fração ou conjunto sem 14, conforme saldo e ausência de colisão (`app/ferias/services.py:492`, `:510`; `app/ferias/models.py:461`).
-
-- **PROCEDE — cancelamento pode desfazer “uma >=14”.** DP e admin devolvem saldo e mudam status para cancelado sem reavaliar as frações restantes (`app/ferias/services.py:615`, `:616`, `:619`, `:620`; `:642`, `:643`, `:651`, `:652`). Exemplo deduzido: cancelar a fração 14 de `[14,5]` deixa `[5]` para o conjunto vivo consultado pelo juiz (`app/ferias/models.py:368`, `:370`).
-
-- **NÃO PROCEDE — reagendar ressuscita cancelado pelo escritor oficial.** `_travar_agendamento` relê status sob trava e recusa os estados informados (`app/ferias/services.py:599`, `:600`). Remarcação usa `RECUSA_ESCRITA`, que contém cancelado (`:670`; `app/ferias/models.py:311`, `:313`). Agendar novamente cria outra linha, excluindo cancelados da duplicidade (`app/ferias/services.py:532`, `:534`, `:544`); não altera a linha cancelada (`:544`).
-
-- **PROCEDE — `clean` não distingue status da própria fração.** O filtro de status se aplica às *outras* linhas, excluindo `self.pk`, mas a própria duração entra incondicionalmente (`app/ferias/models.py:368`, `:371`, `:377`, `:379`, `:387`). Se chamado explicitamente num cancelado, julga também esse cancelado; `save` normalmente não o chama (`:461`).
-
-- **NÃO PROCEDE — segundo escritor de produção fora da porta registrada, no censo por grep.** O registro permite escrita de `AgendamentoFerias` em `ferias/services.py` (`app/core/portas.py:489`). As construções/escritas de produção encontradas estão nesse módulo: histórico `:484`/`:510`, criação normal `:544`, cancelamentos `:620`/`:652`, edição `:693`, aprovação `:739`/`:750`, confirmação `:854`/`:872`/`:876`, cron `:920`. Isso **não** elimina o achado de bypass de `clean`, pois a porta de serviços não exige esse método em todos esses caminhos (`app/ferias/models.py:461`; `app/ferias/services.py:693`).
-
-- **Criação normal e aprovação leem o juiz.** `executar_agendamento` trava PA antes de `_validar_agendamento` e só depois cria (`app/ferias/services.py:531`, `:541`, `:544`); a validação delega a `checar_fracionamento` (`app/ferias/views.py:257`, `:259`), que monta objeto e chama `clean` (`app/ferias/services.py:293`, `:294`). Aprovação chama `full_clean` antes de salvar (`:749`, `:750`). Chat/IA usa o escritor registrado, sem escrita própria (`app/core/views_ia.py:684`).
-
-- **Admin/import/update/bulk.** O admin local registra apenas `Afastamento` (`app/ferias/admin.py:2`, `:4`). Grep de produção não encontrou `AgendamentoFerias.objects.bulk_create/bulk_update/update/update_or_create`, tabela SQL `ferias_agendamentoferias` ou registro admin de AG; cobertura de mecanismos externos/dinâmicos e importações executadas fora da cópia: **[não verificado]**. O teste do diff usa `bulk_create` para injetar histórico (`app/ponto/tests/test_ferias_fracao_demais_5.py:70`, `:83`, `:90`).
-
-- **Cron escreve sem `clean`, mas só status.** Command lê data na borda e chama serviço (`app/ferias/management/commands/sincronizar_status_ferias.py:27`, `:49`); serviço trava AG, recalcula pelo juiz de status e salva apenas status (`app/ferias/services.py:916`, `:917`, `:920`).
-
-- **Ordem de trava: NÃO PROCEDE como alteração introduzida pelo diff.** Criação trava PA (`app/ferias/services.py:531`); edição/cancelamento travam AG → PA (`:599`, `:602`), antes da escrita/ausências (`:688`, `:693`). O diff não altera esses pontos. Deadlock real em produção: **[não verificado]**.
-
-- **Relógio fora da borda: PROCEDE na árvore preexistente, sem relação com predicado novo.** Cancelamentos chamam `periodo.aplicar_status()` sem dia (`app/ferias/services.py:617`, `:644`), admin carimba `date.today()` dentro do serviço (`:649`), resposta carimba `timezone.now()` dentro do serviço (`:875`), venda chama `aplicar_status()` sem dia (`:898`). `PeriodoAquisitivo.aplicar_status` recebe dia opcional e o passa ao juiz (`app/ferias/models.py:207`, `:215`). O juiz puro de fracionamento não precisa de relógio (`app/ferias/models.py:265`).
-
-Grep utilizado: `rg -n --glob '*.py' --glob '!**/test*' --glob '!**/migrations/**' '\b(AgendamentoFerias|_AgFer)\b|agendamentos\.(create|update|bulk_create)' .`, complementado por `ferias_agendamentoferias|agendamentoferias|agendamentos\.bulk_|AgendamentoFerias\.objects\.(bulk_create|bulk_update|update|update_or_create)|admin\.site\.register.*Agendamento`; resultados materiais citados acima. Ausência de acesso a banco/log e ausência de execução de testes: **[não verificado]**. [nao verificado]
-
-## 14/11 10:45 · sessao 818416232d8a · - · - · origem=Ronald (tmux)
-
-- **Selo/RED sem mordida — NÃO PROCEDE quanto à lógica do caso 09.** A fixture põe `batidas=[S]`, `entradas=[]`, `retratadas=[]`; o teste exige `◀ 07:06`, que a guarda antiga do anexo impede de renderizar. A nova guarda abre o laço já existente. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:22`, `:28`, `:41`; `app/templates/colaboradores/partials/_calendario_grade.html:122`, `:125`). Execução real no pai `f7510b95a` e RED cronologicamente anterior à cura: **[não verificado]**. O ambiente não oferece `django.template`, e a cópia não contém metadados Git **[não verificado]**.
-
-- **“O teste das duas cascas prova o grafo real completo” — NÃO PROCEDE; lacuna do selo PROCEDE.** Ele apenas verifica se o caminho aparece no texto-fonte de dois templates; não renderiza as raízes, valida contextos nem percorre includes. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:54`). Há terceira inclusão direta, fora da lista: `relatorios/furos.html`, com `dias=card.cal.dias` e `only`. (`app/templates/relatorios/furos.html:42`). As outras duas inclusões efetivas estão em `app/templates/colaboradores/calendario_partial.html:62` e `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`.
-
-- **Segundo juiz duplicado — NÃO PROCEDE no diff.** A alteração troca a condição de visibilidade pela própria lista que o laço desenha; não redefine status, geometria ou oferta de Resolver dia. (`app/templates/colaboradores/partials/_calendario_grade.html:122`, `:125`, `:129`). Resolver dia continua lendo `dia.resolver_dia_oferecido`, cuja autoridade registrada é `calendario.py::resolver_dia_oferecido`. (`app/core/juizes.py:725`, `:739`).
-
-- **Segundo escritor fora da porta — NÃO PROCEDE no diff.** A mudança de execução é leitura de `dia.batidas`; a escrita adicionada é apenas construção da fixture de teste. (`app/templates/colaboradores/partials/_calendario_grade.html:122`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:28`). A lei exige escritor canônico de **estado**, não proíbe fixtures locais. (`CLAUDE.md:32`).
-
-- **Relógio fora da borda — NÃO PROCEDE como introdução do diff.** A guarda nova não consulta relógio. (`app/templates/colaboradores/partials/_calendario_grade.html:122`). As leituras existentes de `timezone.now()` ficam na montagem do contexto, em `app/colaboradores/services/calendario.py:163` e `:250`; sua simples existência não demonstra leitura fora da borda. Julgamento completo dessa fronteira: **[não verificado]**.
-
-- **Derivação paralela da fonte única — NÃO PROCEDE no diff.** O bloco passa a consultar diretamente a lista que já desenhava, sem adicionar filtragem ou cálculo paralelo. (`app/templates/colaboradores/partials/_calendario_grade.html:122`, `:125`). Isso corresponde à lei “testemunha lê”. (`CLAUDE.md:20`).
-
-- **Ordem de trava — NÃO PROCEDE no diff.** A alteração executável é uma condição de template, e os testes usam `SimpleTestCase` com objetos locais; não foi acrescentada aquisição de trava. (`app/templates/colaboradores/partials/_calendario_grade.html:122`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:24`, `:36`).
-
-- **Pouso antes do pré-requisito — [não verificado].** A lei exige suíte verde antes do opus e proíbe pular o opus final; o material fornecido não demonstra cronologia de suíte, opus ou pouso. (`CLAUDE.md:377`). Não há base para afirmar infração histórica nem cumprimento. **[não verificado]** [nao verificado]
-
-- **Cobertura adicional não demonstrada.** O selo cobre saída isolada, entrada e ausência de marcação, mas não inclui retratada isolada, saída órfã, turno atravessando meia-noite, fuso ou contexto real de `relatorios/furos.html`. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:41`, `:45`, `:49`, `:54`; `app/templates/relatorios/furos.html:42`). Isso limita a prova, sem retirar a mordida lógica específica da saída isolada. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:41`).
-
-_5110 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5112 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
