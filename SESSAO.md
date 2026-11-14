@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 01:02:47.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (617.8 MB). Acoes na janela: **1932**.
+**Medido em 14/11/2026 01:08:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.0 MB). Acoes na janela: **1943**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:06:39 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (g) 01:1x: matriz_transicoes.md nos censos JUSTIFICATIVA-PAGA (33 linhas, 13 SEM PROVA, 5 aberto:) e CONTRATO-DE-ENTRADA-DO-FIO (30 linhas, 12 SEM PROVA, 6 aberto:); entram como ANEXO do brief do construtor de cada uma no ato de abrir \| achados p/ o brief: juiz marcos_cob ...` |
+| 01:04:28 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (f) 01:0x: logs/PREPARACAO/LEIS-ABERTAS/para_o_corte.md, 26 itens (LA-01..21 + 5 DXG) com procurei/achei, opcoes, efeito, lei mais proxima: lei escrita indica 6 (LA-02 L-035, LA-06 L-004, LA-08 CORTES:348, LA-09 L-125, LA-10 L-007, LA-11 CORTES:416), nenhuma 20; LA-21 (fer ...` |
+| 01:04:22 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rn -i "lei:" logs/HJ-090/censo1 logs/HJ-090/sonda1 logs/HJ-090/sonda2 logs/HJ-090/build 2>/dev/null \| cut -c1-350 \| head -6` |
+| 01:04:17 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/HJ-090 \| head -40; /bin/grep -rln -i "antecipa" logs/HJ-090/censo* logs/HJ-090/sonda* /tmp/hj090.out 2>/dev/null` |
+| 01:04:13 | Bash |  | `cd /home/ronald/saas-hasner; git show 0dbaf92cb -- app/docs/RELATO.md \| /bin/grep -i "antecipad" \| /bin/grep -o -i ".\{0,250\}antecipad.\{0,250\}" \| head -2` |
+| 01:04:10 | Bash |  | `cd /home/ronald/saas-hasner; git show 0dbaf92cb -- app/docs/RELATO.md \| /bin/grep -o -i ".\{300\}ferias antecipad.\{300\}" \| head -2` |
+| 01:04:06 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rn "^lei:\\|lei: 1\\|lei: " logs/HJ-090/*.md logs/HJ-090/*/*.md logs/HJ-090/*/r.r 2>/dev/null \| /bin/grep -i "antecip\\|ferias" \| cut -c1-300 \| head -5; git show 0dbaf92cb -- app/docs/RELATO.md \| /bin/grep -i "antecipad" \| cut -c1-400 \| head -3` |
+| 01:04:00 | Bash |  | `cd /home/ronald/saas-hasner; git log -S"ferias antecipadas" --oneline -3 -- app/docs/RELATO.md app/docs/BACKLOG.md app/docs/RELATO-ARQUIVO.md \| cat; git grep -n -i "antecipad" 9077bff58 -- app/docs/BACKLOG.md app/docs/LEIS.md app/docs/CORTES.md \| cut -c1-250 \| head -8` |
+| 01:03:55 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i -B2 -A4 "antecipad" logs/HJ-090/preverif2/r.r \| cut -c1-300 \| head -30` |
+| 01:03:51 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rl -i "antecipad" logs/HJ-090 logs/AVAIS-1313 2>/dev/null \| head; /bin/grep -rh -i -m2 "ferias antecipad" logs/HJ-090 2>/dev/null \| cut -c1-300 \| head -4` |
+| 01:03:46 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n "LA-21" logs/PREPARACAO/LEIS-ABERTAS/lista.md \| cut -c1-400` |
 | 01:01:09 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (h)+(j) 01:0x: E4c fatias.md = 9 fatias, 0 arquivo comum, universo REAL 57 arquivos/177 unidades/534 sitios (censo dizia 56/176: 225-47-1=177), 19 em voo (nao 20: desligamento.py so le o continente F); ordem F1,F2,{F3,F4,F5,F6,F8},F7 apos F6,F9 \| proposta_linhas_893_959.m ...` |
 | 00:59:24 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '5s/(14\/11 01:0x,/(14\/11 00:5x,/' docs/RELATO.md; sed -n 5p docs/RELATO.md \| cut -c1-80` |
 | 00:59:21 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="AVAL NOITE-1411-B (14/11 01:0x, logs/AVAIS-1313/noite_1411_b.txt): DECLARADO-X-GRAVADO SAI da ordem ate o corte (5 lei abertas); ORDEM construtor = E3 v8 (na vaga 00:58, wt-codex-e3-forma-sql-005812, copia NOVA de 2b0739004 -- a 1a chamada 00:54 na wt da v7 devolveu pergunta e foi descartada s ...` |
