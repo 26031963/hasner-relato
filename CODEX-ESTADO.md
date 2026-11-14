@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 01:14** · publicado em **14/11/2026 01:13** (UTC-3)
+> Ultima resposta processada: **14/11/2026 01:17** · publicado em **14/11/2026 01:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 01:17 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
+
+Os ajustes corrigem os pontos de revisão R8, R4 ORM e a declaração de R11. (`chamados/juizes.py:1572`, `chamados/tests/test_e3_portas_tarefa.py:235`, `chamados/management/commands/diff_e3_sombra.py:107`)
+
+R13 ganhou cobertura do caminho administrativo dispensado. (`chamados/tests/test_e3_portas_tarefa.py:585`)
+
+Persiste uma falha no executor: `absorcao_admin_sem_rotulo` tem alvo repetido e encerrou com prova inválida. É necessário tornar o contexto da substituição exclusivo de `expor_admin`. (`chamados/tests/e3_v8_mutantes.py:62`, `e3-v8-mutantes.out:1464`)
+
+R2 continua pendente de alcance ORM e cura; o teste puro agora identifica corretamente a hipótese administrativa isolada. (`chamados/tests/test_e3_portas_tarefa.py:220`, `:440`)
+
+Execução ORM e certificação: **[nao verificado]**.
 
 ## 14/11 01:14 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
 
@@ -491,61 +503,4 @@ Censo do explicador e avaliação semântica:
 
 **Descartável — selo de reuso permitindo `nao_gravou`.** Agora exige `ok=True`, estado exato `ja_no_espelho` e nenhuma nova batida, em `app/chamados/tests/test_bug_par_projetado.py:1100`, `:1101`, `:1102`. Execução de RED/GREEN e resultado de testes [nao verificado].
 
-## 13/11 22:16 · sessao ab3aa9767a9b · BUG-PAR · verificador · origem=Code
-
-**Procedente: a volta c bloqueia um reuso legítimo.** A testemunha reconhece `ja_satisfeita`, mas a nova guarda compara o plantio hipotético e impede chegar ao reuso, que conservaria hora e tipo da batida existente. (`app/chamados/services/materializacao.py:814`, `app/chamados/services/materializacao.py:751`, `app/chamados/services/materializacao.py:1257`)
-
-**1. Quem escreve e quem lê**
-
-| Campo/valor | Escritor/fonte | Leitores |
-|---|---|---|
-| Identidade da pergunta: `motivo`, `tipo_resposta`, disputa, destino e dia | Emissor fornece os campos; a porta insere a pergunta. | O novo portão seleciona metade de intervalo com resposta `hora`. (`app/chamados/services/disputa_emissao.py:444`, `app/chamados/models.py:3040`, `app/chamados/services/materializacao.py:732`) |
-| Declaração: `resposta_colab` | Resposta humana gravada por `responder_pergunta_disputa_core`. | `_declarado_da_metade` normaliza HH:MM; o tipo declarado vem de `MARCO_DA_PERGUNTA`, saída=S/volta=E. (`app/chamados/services/disputa_emissao.py:1467`, `app/chamados/services/materializacao.py:693`, `app/chamados/services/materializacao.py:696`, `app/chamados/juizes.py:925`) |
-| Hora/tipo previstos para gravação | `_ts_tipo_do_plantio`; intervalo pode substituir a hora declarada pela hora do marco. | Testemunha, nova guarda direta e escritor efetivo consultam esse derivador. (`app/chamados/services/materializacao.py:649`, `app/chamados/services/materializacao.py:751`, `app/chamados/services/materializacao.py:811`, `app/chamados/services/materializacao.py:1244`) |
-| `espera_declarado_x_gravado` | Constante em materialização; `_espera_do_aval_163` produz o resultado; validação devolve a mesma constante. | Helper, contador, modal, página e casca da ação. (`app/chamados/services/materializacao.py:680`, `app/chamados/services/materializacao.py:723`, `app/chamados/services/validacao.py:517`, `app/chamados/services/materializacao.py:736`, `app/chamados/services/materializacao.py:337`, `app/templates/chamados/partials/modal_fio.html:274`, `app/templates/chamados/partials/_pergunta_card.html:43`, `app/chamados/services/acoes_disputa.py:50`) |
-| `validacao.ESTADOS` | Tupla de vocabulário; recebe o novo literal. | O selo compara os estados retornados com essa tupla. Não é persistência do estado na pergunta. (`app/chamados/services/validacao.py:63`, `app/chamados/tests/test_porta_validacao_pergunta.py:164`, `app/chamados/models.py:3060`) |
-| `gravou` | Explicador escreve `False` para recusa, espera, cadastro e sistema. | Desenlace seleciona estritamente `is False` e distingue validação sem gravação de recusa pelo `estado` do item. (`app/chamados/services/explicador.py:103`, `app/chamados/services/explicador.py:111`, `app/chamados/services/explicador.py:117`, `app/chamados/services/explicador.py:120`, `app/chamados/services/desenlace.py:67`, `app/chamados/services/desenlace.py:70`) |
-| Texto do desenlace | `desenlace` monta `estado` e `acao`. | Fio transporta; modal exibe. (`app/chamados/services/desenlace.py:76`, `app/chamados/services/fio.py:444`, `app/templates/chamados/partials/modal_fio.html:119`) |
-
-**Procedente — ESMERIL-SEMÂNTICA na apresentação.** O novo item manda esperar DECLARADO-X-GRAVADO, com `dono=sistema`; o resumo traduz esse dono como “correcao de batida”, e o modal atribui “Quem resolve: TI/DP”. Quando a disputa não pode fechar, o resumo e a ação específica dão orientações diferentes. (`app/chamados/services/explicador.py:111`, `app/chamados/services/explicador.py:180`, `app/templates/chamados/partials/modal_fio.html:468`)
-
-**Duvidoso — `gravou` como prova histórica.** O novo `False` também representa reprovação pelo juiz; o diagnóstico admite “a batida existe ... mas o juiz ainda nao a reconhece”. Portanto, a chave não prova que nenhuma escrita ocorreu. Ocorrência concreta desse ramo em produção: **[não verificado]**. (`app/chamados/services/explicador.py:93`, `app/chamados/services/explicador.py:65`, `app/chamados/services/explicador.py:120`)
-
-**2. Porta de escrita e falsos positivos**
-
-**Descartável — fuga nos caminhos pedidos.** Os caminhos encontrados convergem em `_materializar_uma`, cuja guarda antecede o ramo que chama `registrar_batida`. (`app/chamados/services/materializacao.py:1704`, `app/chamados/services/materializacao.py:1715`, `app/chamados/services/materializacao.py:1343`)
-
-| Caminho | Convergência |
-|---|---|
-| Laço da disputa | Chama `_materializar_uma`. (`app/chamados/services/materializacao.py:1904`) |
-| Passivo validado | Chama `_materializar_uma`. (`app/chamados/services/passivo_validado.py:537`) |
-| Irmã do par | Chama `_materializar_uma`; falha desfaz o savepoint. (`app/chamados/services/materializacao.py:1575`, `app/chamados/services/materializacao.py:1578`) |
-| Commands | Passivo chama `reparar`; backfill chama o materializador da disputa; BUG-PAR-103 chama a devolução. (`app/chamados/management/commands/materializar_passivo_validado.py:113`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:147`, `app/chamados/management/commands/bug_par_103.py:85`) |
-| Reconciliador/S144 | Os caminhos examinados recusam resposta com texto ou apenas carimbam pelo juiz. (`app/chamados/reconciliador.py:365`, `app/chamados/reconciliador.py:1083`, `app/chamados/services/materializacao.py:1955`, `app/chamados/services/materializacao.py:1959`) |
-
-**Procedente — falso positivo de reuso.** O próprio teste fornece declaração **S 01:20** e batida aprovada **S 01:00**. A testemunha retorna `ja_satisfeita`, e o helper retorna vazio; a nova comparação direta encontra divergência e bloqueia antes do reuso. O resultado deixa de alcançar o sucesso `ja_no_espelho` e pode retornar `nao_gravou`. (`app/chamados/tests/test_bug_par_projetado.py:1090`, `app/chamados/tests/test_bug_par_projetado.py:1095`, `app/chamados/services/materializacao.py:751`, `app/chamados/services/materializacao.py:1257`, `app/chamados/services/validacao.py:624`, `app/chamados/services/validacao.py:639`)
-
-**Descartável — falso positivo estritamente IGUAL em hora e tipo, sem irmã divergente.** A comparação retorna vazio quando ambos coincidem; há teste específico para carimbada sem lastro com declaração igual. Igualdade apenas da hora não basta se o tipo divergir. Uma metade igual pode esperar pela irmã divergente quando o ato contempla o par. (`app/chamados/services/materializacao.py:708`, `app/chamados/tests/test_bug_par_projetado.py:1183`, `app/chamados/tests/test_bug_par_projetado.py:1071`, `app/chamados/services/materializacao.py:838`)
-
-**3. Classes de reprovação**
-
-| Classe | Classificação |
-|---|---|
-| Segundo juiz registrado / derivação paralela | **Descartável neste delta:** consulta a tabela existente para o declarado e reutiliza o derivador do plantio. Próxima batida/flip são outras perguntas registradas. (`app/chamados/services/materializacao.py:693`, `app/chamados/services/materializacao.py:751`, `app/core/juizes.py:213`) |
-| Segundo escritor fora da porta | **Descartável nos caminhos rastreados:** convergência e guarda descritas acima. (`app/chamados/services/materializacao.py:1704`, `app/chamados/services/materializacao.py:1715`) |
-| Relógio fora da borda | **Descartável na alteração:** compara o timestamp derivado; `hora_local` converte o instante recebido. (`app/chamados/services/materializacao.py:707`, `app/core/fmt.py:10`) |
-| Ordem de trava | **Descartável como regressão do delta:** laço e passivo travam antes da unidade; a ordem inclui irmã e destinos. Concorrência executada: **[não verificado]**. (`app/chamados/services/materializacao.py:1895`, `app/chamados/services/passivo_validado.py:379`, `app/chamados/services/materializacao.py:1848`) |
-| Selo sem mordida | **Procedente para o reuso:** o teste exige apenas estado diferente de espera e nenhuma batida nova; `nao_gravou` satisfaz ambos. (`app/chamados/tests/test_bug_par_projetado.py:1098`, `app/chamados/services/validacao.py:624`) |
-| Selo de vocabulário sem mordida | **Descartável para a constante atual:** agora resolve `ast.Name` e confronta `ESTADOS`. (`app/chamados/tests/test_porta_validacao_pergunta.py:159`, `app/chamados/tests/test_porta_validacao_pergunta.py:164`) |
-| Campo com significados diferentes | **Procedente na apresentação de `dono=sistema`; duvidoso na interpretação histórica de `gravou`**, conforme os leitores acima. (`app/chamados/services/explicador.py:111`, `app/chamados/services/explicador.py:180`, `app/chamados/services/explicador.py:65`) |
-
-**4. Impacto de todo `validada_sem_gravar` receber `gravou=False`**
-
-- **Desenlace/Central:** quando `pode_fechar=True`, `_sem` passa a incluir também os itens de cadastro/sistema, além das recusas. A mudança alcança todos esses itens, independentemente de serem metades de intervalo; a frase passa a discriminar “validada(s) e NAO gravada(s)”. (`app/chamados/services/explicador.py:117`, `app/chamados/services/explicador.py:120`, `app/chamados/services/desenlace.py:63`, `app/chamados/services/desenlace.py:67`, `app/chamados/services/desenlace.py:75`)
-- **Tela:** exibe o novo desenlace; os detalhes continuam lendo `estado/dono/motivo/acao`, com a divergência de orientação já apontada. (`app/templates/chamados/partials/modal_fio.html:119`, `app/templates/chamados/partials/modal_fio.html:468`)
-- **Contadores e fechamento:** a contagem local `_sem` muda; o contador BUG-PAR lê a testemunha, e `pode_fechar` continua vindo do juiz da disputa. Esses dois não leem `gravou`. (`app/chamados/services/desenlace.py:68`, `app/chamados/services/materializacao.py:332`, `app/chamados/services/explicador.py:157`)
-- **Testes leitores diretos:** paridade, fato ocupado e Central antes de fechar verificam `gravou`; os testes antigos dos ramos sistema/cadastro verificam estado e diagnóstico. (`app/chamados/tests/test_bug_par_projetado.py:267`, `app/chamados/tests/test_bug_par_projetado.py:283`, `app/chamados/tests/test_bug_par_projetado.py:1204`, `app/chamados/tests/test_explicador_disputa.py:76`, `app/chamados/tests/test_explicador_disputa.py:100`)
-
-Execução integral dos testes, evidência histórica RED→GREEN e quantidade de casos afetados em produção: **[não verificado]**. [nao verificado]
-
-_4901 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4902 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
