@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 16:53** · publicado em **14/11/2026 16:54** (UTC-3)
+> Ultima resposta processada: **14/11/2026 16:59** · publicado em **14/11/2026 17:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 16:59 · sessao 47b7900a56ce · - · - · origem=Ronald (tmux)
+
+| Teste | Assert/erro | Classe | Mudança justificada | [nao verificado]
+|---|---|---|---|
+| `test_v8_R10_ancora_fora_do_fato_sem_acao` | `app/chamados/tests/test_e3_portas_tarefa.py:601`; erro `app/chamados/services/tarefa_do_dia.py:551` | F | Inicializar `_pendentes_app={1: frozenset()}` no helper que usa `__new__`, `app/chamados/tests/e3_v8_apoio.py:127`. A carga real inicializa o memo em `app/chamados/services/tarefa_do_dia.py:388`. Não introduz queries no helper; na carga real, consulta uma vez por colab, constante com os dias, crescente com colabs (`app/chamados/services/tarefa_do_dia.py:551`). |
+| `test_RED_8_pergunta_sob_ancora_SILENCIADA_nao_e_canal` | `app/chamados/tests/test_e3_bloqueantes.py:161` | L | Item 1: pergunta pendente com responder tem porta independente da âncora; novo `rota='porta_app'`, `fio='colab'` (`app/chamados/services/tarefa_do_dia.py:43`). Atualizar também a exclusão do furo: `assertNotIn` em `app/chamados/tests/test_e3_bloqueantes.py:163`; porta publicada sai dos sem canal (`app/chamados/services/furo_sem_canal.py:104`). |
+| `test_RED_8_pergunta_sob_ancora_REGISTRADA_nao_e_canal` | `app/chamados/tests/test_e3_bloqueantes.py:168` | L | Item 1: novo `porta_app/colab`, independentemente da âncora registrada (`app/chamados/services/tarefa_do_dia.py:43`). Atualizar também para `assertNotIn` em `app/chamados/tests/test_e3_bloqueantes.py:170`, conforme consumo da porta em `app/chamados/services/furo_sem_canal.py:98`. |
+| `test_classe_e_viva_sob_terminal_reabre_pela_porta_com_nota` | `app/chamados/tests/test_e4_passivo.py:73` → helper `app/chamados/tests/test_e4_backfill.py:112` | L | Item 1: responder pendente abre `porta_app/colab` sem reabrir terminal (`app/chamados/services/tarefa_do_dia.py:43`). Novo cenário: plano desse dia `0`, sem reabertura/nota; adaptar verificações em `app/chamados/tests/test_e4_passivo.py:73`. O vigia trata porta antes da classe sem porta (`app/chamados/services/vigia_fio.py:658`). |
+| `test_mutante_sem_porta_morde_caracterizacao_classe_e` | `app/chamados/tests/test_e4_passivo.py:90` | L | Mesma mudança do item 1: reabrir credor deixou de ser necessário para esta pendente (`app/chamados/services/tarefa_do_dia.py:43`). Reenquadrar o selo em `app/chamados/tests/test_e4_passivo.py:87` para verificar que a porta de reabertura não é chamada; não basta trocar o regex, pois o alvo comportamental mudou (`app/chamados/services/vigia_fio.py:658`). |
+| `test_RED_A_na_fila_aparece_com_acao_sob_B` | `app/chamados/tests/test_e3_portas_tarefa.py:413` | L | Itens 1 e 3: sem pergunta pendente fornecida, responder não dá colab; residual A `decidir` dá `chamado`. Novo `('porta_fila',(101,),{101:'decidir',202:'cobrar'},'chamado')`; modificar expectativa em `app/chamados/tests/test_e3_portas_tarefa.py:414`, pelas regras `app/chamados/services/tarefa_do_dia.py:43` e `:46`. |
+| `test_fio_normal_e_do_dono_da_acao_mesmo_com_verbo_validar` | `app/chamados/tests/test_e3_portas_tarefa.py:457` | L | Itens 1 e 4: insumo atual não informa pergunta pendente; novo `fio='nada'`, `rota=None` (`app/chamados/services/tarefa_do_dia.py:43`, `:612`). `validar` pertence à porta da ação, portanto não é residual separado (`app/chamados/services/tarefa_do_dia.py:584`, `:606`). Alterar expectativa em `app/chamados/tests/test_e3_portas_tarefa.py:457`. |
+| `test_cobrar_precede_validar_e_decidir_sem_depender_dos_donos` | `app/chamados/tests/test_e3_portas_tarefa.py:478` | L | Itens 2 e 3: validar/admin alcançável permanece; cobrar residual não cria colab. Novo mesmo `fila/verbos`, `fio='admin'`; modificar `app/chamados/tests/test_e3_portas_tarefa.py:479`, conforme `app/chamados/services/tarefa_do_dia.py:45`. |
+| `test_v8_R1_colab_alcancavel_e_leitores` | `app/chamados/tests/test_e3_portas_tarefa.py:490` | L | Itens 1 e 4: embora tenha `pergunta_id=303`, não fornece pendentes; novo `fio='nada'`, `rota=None`, `porta_da_tarefa=None`, mantendo verbos (`app/chamados/services/tarefa_do_dia.py:43`, `:612`). Atualizar assert e projeções em `app/chamados/tests/test_e3_portas_tarefa.py:490`. Para preservar o cenário nominal alcançável, fornecer explicitamente `pendentes_app={303}` na chamada de `:489`. |
+| `test_v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia` — ambos subtestes | `app/chamados/tests/test_e3_portas_tarefa.py:514` | L | Itens 1 e 2: fixture não fornece pergunta identificada nem pendentes; `dia_plano` usa `pergunta_id=None` (`app/chamados/tests/e3_portas_apoio.py:29`). Novo `('porta_fila','admin',verbos)` em ambos, mantendo ações; mudar `app/chamados/tests/test_e3_portas_tarefa.py:514`, conforme `app/chamados/services/tarefa_do_dia.py:43`. Para continuar provando simultaneidade com colab pendente, fornecer identidade e `pendentes_app` em `:509`/`:513`. |
+
+Nestes **10 testes distintos: L=9, F=1, B=0**; R2 aparece duas vezes por subtestes (`app/chamados/tests/test_e3_portas_tarefa.py:507`). A cópia já impede publicar rota com `fio=nada`, embora o anexo anterior mostre `porta_pergunta/nada` (`app/chamados/services/tarefa_do_dia.py:616`).
+
+O topo enumera somente itens 1–3 (`app/chamados/services/tarefa_do_dia.py:43`); usei “item 4” como a regra explícita do aval 16:16 sobre publicação somente com dono, registrada em `app/chamados/services/tarefa_do_dia.py:612`. A numeração literal 1–4 no corte 16:16 permanece [não verificado].
+
+## 14/11 16:58 · sessao af390de1e0e6 · - · - · origem=Ronald (tmux)
+
+Na cópia, os itens numerados são apenas 1–3; a regra de publicação às 16:16 aparece separadamente, sem número (`app/chamados/services/tarefa_do_dia.py:43`, `:45`, `:46`, `:612`). O item 4 literal em CORTES é [não verificado].
+
+| Teste | Assert/erro na cópia | Classe | Mudança justificada | [nao verificado]
+|---|---|---|---|
+| `test_MORDE_ancora_arquivada_nao_abre_a_porta_da_pergunta` | `app/chamados/tests/test_o261e_f5b_juiz_porta.py:272` | L | Item 1: pergunta pendente + responder dá `colab`, mesmo com âncora arquivada; sem fila, `porta_app` (`app/chamados/services/tarefa_do_dia.py:43`, `:621`). Atualizar expectativa da folha. |
+| `test_MORDE_a_porta_vem_da_TAREFA_e_nao_do_app` | `app/chamados/tests/test_o261e_f5_alcance.py:256` | L | Item 1 torna a consulta necessária: carga consulta uma vez por colaborador (`app/chamados/services/tarefa_do_dia.py:551`). O mock deliberadamente vazio em `app/chamados/tests/test_o261e_f5_alcance.py:253` significa pergunta fora dos pendentes: esperar `nada`, sem porta, e não conservar `(fio_morto=0, porta_pergunta=1)` (`app/chamados/services/tarefa_do_dia.py:598`, `:616`). |
+| `test_a_ancora_VIVA_fora_da_fila_tambem_e_veu` | `app/chamados/tests/test_o261e_f5_alcance.py:460`; helper `:134` | L | Item 1: trocar causa `a/registrado` por `porta_app/colab`; a fila da âncora não limita o colaborador (`app/chamados/services/tarefa_do_dia.py:43`). |
+| `test_b_respondida_com_resposta_VAZIA_e_porta_do_COLABORADOR_pela_tarefa` | `app/chamados/tests/test_o261e_f5_alcance.py:196` | L | Item 1: carimbo de resposta vazia não integra pendentes (`app/chamados/tests/test_o261e_f5_alcance.py:109`; `app/chamados/services/pergunta_no_app.py:75`). Não esperar `colab`; sem outro dono, `fio=nada`, `rota=None` pela publicação (`app/chamados/services/tarefa_do_dia.py:612`). O anexo mostra `porta_pergunta/nada`, estado já eliminado na cópia por `:616`. |
+| `test_e_pergunta_viva_sob_chamado_TERMINAL_tem_nome` | `app/chamados/tests/test_o261e_f5_alcance.py:222`; helper `:134` | L | Item 1: pendente a responder conserva `porta_app/colab` sob terminal; não é linha sem porta da causa `e` (`app/chamados/services/tarefa_do_dia.py:43`, `:621`). |
+| `test_MORDE_a_frase_do_fio_nada_nao_afirma_o_que_o_juiz_nao_garante` | `app/folha/tests/test_haiku_fora_da_folha.py:173` | M | Renovar as três substrings antigas de `:172` para o contrato textual publicado, `SEM PORTA: a tarefa nao aponta acao alcancavel neste dia; alguem precisa olhar` (`app/folha/fora_da_folha.py:54`), coerente com publicação apenas com dono (`app/chamados/services/tarefa_do_dia.py:612`). |
+| `test_o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA` | `app/folha/tests/test_haiku_fora_da_folha.py:81` | M | Selo textual mudou de `SEM FIO` para `SEM PORTA`; preservar assert `fio=nada` em `:80` e verificar o texto publicado (`app/folha/fora_da_folha.py:54`; `app/chamados/services/tarefa_do_dia.py:616`). |
+
+Contagem deste subconjunto: **L=5, M=2, B=0** (classificações e fundamentos nas sete linhas acima).
+
+## 14/11 16:58 · sessao 2b92adb14c68 · - · - · origem=Ronald (tmux)
+
+Os **13 testes deste recorte são L**: `_beco` cria pergunta de marco sem resposta em disputa aberta (`app/escala/tests/test_f3_beco1_folga_na_lista.py:55-57`), pendente no app (`app/chamados/services/pergunta_no_app.py:74-76`). Pela lei **item 1**, responder+pendente dá `fio='colab'`, independentemente da âncora (`app/chamados/services/tarefa_do_dia.py:43-44`). C11 só admite tarefa sem porta (`app/escala/services/cadastro_realidade.py:469`).
+
+| teste | assert/erro | CLASSE | mudança | [nao verificado]
+|---|---|---|---|
+| `test_MORDE_dry_nao_escreve` | `app/chamados/tests/test_f3_beco1_reata_limbo.py:72` | L | Item 1: cenário atual tem `porta_app/colab`; esperar zero candidatos/zero pais no DRY. Refazer cenário sem porta para conservar cobertura do command (`app/escala/services/cadastro_realidade.py:469`). |
+| `test_MORDE_pai_cujo_silencio_ja_venceu_volta_a_fila_e_reata` | `app/chamados/tests/test_f3_beco1_reata_limbo.py:159` | L | Item 1: cenário atual tem porta do app; zero reatas. Refazer cenário sem porta para testar vencimento do silêncio (`app/escala/services/cadastro_realidade.py:469`). |
+| `test_MORDE_sem_pai_fica_na_lista_e_nenhum_pai_nasce` | `app/chamados/tests/test_f3_beco1_reata_limbo.py:82` | L | Item 1: não entra em C11; sem linha `SEM PAI`, zero reatas. Refazer cenário sem porta para testar ausência de pai (`app/escala/services/cadastro_realidade.py:469`). |
+| `test_RED_apply_reata_ao_pai_e_o_dia_sai_do_beco` | `app/chamados/tests/test_f3_beco1_reata_limbo.py:53` | L | Item 1: `_c11()` novo é `[]` antes do apply; zero reatas. Refazer cenário sem porta para cobrir reapontamento (`app/escala/services/cadastro_realidade.py:469`). |
+| `test_RED_pai_silenciado_DEPOIS_da_selecao_nao_recebe_reata` | `app/chamados/tests/test_f3_beco1_reata_limbo.py:145` | L | Item 1: cenário atual nem seleciona C11; não alcança a disputa de concorrência. Refazer cenário sem porta, conservando a proibição de reatar após silêncio (`app/escala/services/cadastro_realidade.py:469`). |
+| `test_RED_pai_silenciado_fora_da_fila_nao_recebe_reata` | `app/chamados/tests/test_f3_beco1_reata_limbo.py:119` | L | Item 1: cenário atual não entra em C11; não há linha `PAI FORA DA FILA`. Refazer cenário sem porta para testar a guarda (`app/escala/services/cadastro_realidade.py:469`). |
+| `test_MORDE_F5_queries_nao_crescem_com_os_dias` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:322` | L | Item 1: neste cenário `(d1,d5)` novo é `(0,0)`; para preservar o teste de custo, refazer cenário realmente sem porta e manter assert de queries constantes por dia (`app/escala/services/cadastro_realidade.py:429-432,469`). |
+| `test_MORDE_competencia_anterior_NAO_exportada_vai` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:110` | L | Item 1: aberta/anterior não suprime a porta do app; C11 novo `[]` (`app/chamados/services/tarefa_do_dia.py:43-44`; `app/escala/services/cadastro_realidade.py:469`). |
+| `test_RED_F1_lista_le_o_instante_de_quem_chama` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:219` | L | Item 1: no instante passado fornecido a pergunta está pendente; C11 novo `[]`. Refazer cenário sem porta para conservar a prova do relógio (`app/escala/tests/test_f3_beco1_folga_na_lista.py:215-218`; `app/escala/services/cadastro_realidade.py:469`). |
+| `test_RED_F6_C9_lavrado_divergente_nao_tira_o_dia_CADASTRO_da_mesa` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:265` | L | Item 1 remove C11; resta só C9 lavrado `BATIDA`, portanto novo conjunto `{('C9','BATIDA')}` e `dias[...]='BATIDA'`. Sem dois donos, não há reconciliação; refazer cenário C11 sem porta para continuar testando divergência (`app/escala/tests/test_f3_beco1_folga_na_lista.py:262`; `app/escala/services/cadastro_realidade.py:988-989`). |
+| `test_RED_contraex1_chamado_da_celula_na_fila_sem_pergunta_NAO_e_porta` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:180` | L | Item 1: manter rota/fila/verbos, mudar `fio` para `colab` pela pergunta pendente sob a outra âncora; C11 continua `[]` (`app/chamados/services/tarefa_do_dia.py:43-44`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:173-175`). |
+| `test_RED_contraex2_ancora_viva_fora_da_fila_nao_e_porta` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:204` | L | Item 1: perguntas pendentes têm porta do app mesmo sob terminal/registrado; C11 novo `[]` (`app/escala/tests/test_f3_beco1_folga_na_lista.py:193-198`; `app/chamados/services/tarefa_do_dia.py:43-44`). |
+| `test_RED_dia_da_competencia_aberta_vai_a_lista_com_dono_CADASTRO` | `app/escala/tests/test_f3_beco1_folga_na_lista.py:88` | L | Item 1: dia com porta do app não é C11; novo `c11=[]`, sem dono C11 publicado. Refazer cenário sem porta para testar `CADASTRO` (`app/escala/services/cadastro_realidade.py:469,512`). |
+
+**B: nenhum neste recorte. Contagem: L=13, F=0, M=0, B=0, ?=0** — enumeração das linhas da tabela acima. [não verificado]
 
 ## 14/11 16:53 · sessao 870e29998817 · E3-V10-DEGRAU-PUB · verificador · origem=Code
 
@@ -783,96 +840,4 @@ Há outra variante de simultâneo: portas distintas `{101:validar,202:cobrar}`. 
 
 Os comentários que chamam a preferência colab da tarefa de “main” preservam **a tarefa main**, mas não preservam a saída do C17 main para os leitores anteriormente ligados a ele: `app/chamados/services/tarefa_do_dia.py:589–598`; `app/chamados/tests/test_e3_portas_tarefa.py:221–225,503–515`; C17 main `app/chamados/juizes.py:1608–1619`.
 
-## 14/11 15:09 · sessao df8530d7400e · - · - · origem=Ronald (tmux)
-
-Mapa dos consumidores e escritores da árvore:
-
-| Campo | Quem escreve o resultado | Quem lê |
-|---|---|---|
-| Verbo por chamado | `particionar_verbos`: chama `verbo_do_chamado` e monta mapa (`app/chamados/services/verbos.py:47-52`); natureza escolhe validar/cobrar/decidir (`app/chamados/catalogo/natureza.py:41-75`). | Painel (`app/chamados/services/painel.py:229-232,383`), alimentação comum (`app/chamados/juizes.py:1570`). |
-| Pertença à fila | `qs_na_fila` seleciona vivos em COBRANCA e exclui silêncio vigente (`app/chamados/services/painel.py:188-190`); `alimentar_fila` monta `fila_ids`, `fila_cel`, `fila_dia` (`app/chamados/juizes.py:1573-1589`). | C17 (`app/chamados/juizes.py:1699-1708`) e tarefa (`app/chamados/services/tarefa_do_dia.py:571-584`). |
-| C17: porta/fila/verbos/fio | `porta_alcancavel_do_dia`, fio pela escada `fio_pelos_verbos` (`app/chamados/juizes.py:1650-1661,1699-1710`). | Sombra, lado atual (`app/chamados/management/commands/diff_e3_sombra.py:127`). |
-| Tarefa: porta/fila/verbos/fio | `_portas_da_tarefa` reúne portas, lê verbos, combina donos das ações com residuais e escreve `out` (`app/chamados/services/tarefa_do_dia.py:570-598`). | `porta_da_tarefa` apenas projeta (`app/chamados/services/tarefa_do_dia.py:607`); Folha, vigia, furo e beco leem essa projeção (`app/folha/fora_da_folha.py:74,89`; `app/chamados/services/vigia_fio.py:648,661-663`; `app/chamados/services/furo_sem_canal.py:97-115`; `app/escala/services/cadastro_realidade.py:469`). |
-
-**Vigia merece comparação própria:** no main, segundo o patch fornecido, papel é a lista de verbos e `exige_admin` testa interseção com `VERBOS_DO_ADMIN`; na árvore, papel é fio e admin significa `fio == 'admin'` (`diff_leitores.patch`, hunk antigo `vigia_fio.py:650-653`; árvore `app/chamados/services/vigia_fio.py:661-663`). A constante atual inclui **validar e decidir** (`app/chamados/services/verbos.py:22`); sua identidade com main fora do patch é `[nao verificado]`.
-
-| Estado | Vigia main: papel / admin | Árvore: papel / admin |
-|---|---|---|
-| P13, verbo validar | `validar / 1` | `colab / 0` |
-| P14, verbo cobrar | `cobrar / 0` | `admin / 1` |
-| P19, verbos decidir+cobrar | `cobrar,decidir / 1` | `admin / 1` |
-| Simultâneo, verbo validar | `validar / 1` | `colab / 0` |
-
-Evidências dos valores E3: `app/chamados/tests/test_e3_portas_v6_sem_banco.py:20-41`; simultâneo `app/chamados/tests/test_e3_portas_tarefa.py:225`. Evidências da projeção vigia: patch antigo acima e `app/chamados/services/vigia_fio.py:661-663`. **Devolver fio C17 ao vigia sem restaurar sua projeção antiga ainda erra P19:** C17 colab não implica `exige_admin=False`, porque o main conta decidir (`app/chamados/juizes.py:1650-1661`; `app/chamados/services/verbos.py:22`).
-
-Outros leitores:
-
-- **Pauta `dias_sem_fio`:** só compara fio com `FIO_SEM_PORTA`; não publica fio/porta/verbos/fila. Trocar colab por admin não altera sua inclusão nesses estados com porta (`app/ponto/services/pautas_dos_discordantes.py:79-84`).
-- **Beco:** só observa presença de porta; não lê fio/rota/fila/verbos (`app/escala/services/cadastro_realidade.py:464-471`).
-- **Furo:** main não devolve fio/porta/verbos/fila; o patch usa pergunta com carimbo cru nulo ou chamado vivo com FK da célula. Não deduzir canal main de C17: uma âncora externa não satisfaz o segundo teste; ação responder/validar não basta para provar `respondida_em` cru. Resultado main por fixture exige conferir seus carimbos/FKs; produção `[nao verificado]`. A árvore exclui do sem_canal qualquer célula com porta e conta rota PF/PP (`app/chamados/services/furo_sem_canal.py:97-115`).
-- **Retrato Folha:** lê os grupos da fonte e monta `dono` (`app/folha/retrato_folha.py:1158-1190`); command existente persiste (`app/folha/management/commands/lavrar_retrato_folha.py:69,78`). Divergência de um dia pode propagar, mas o grupo agregado depende dos outros dias (`app/folha/fora_da_folha.py:92-103,197-215`); valor final por pessoa `[nao verificado]`.
-
-Pontos de cura sem derivador local:
-
-- **Folha:** delegar novamente ao C17 existente preserva sua resposta anterior; alterar globalmente fio da tarefa para coincidir com C17 muda a resposta da API cujo main já divergia, conforme o anexo fornecido (`diff_leitores.patch`, lados antigos `folha/fora_da_folha.py:65-78` e `tarefa_do_dia.py:545-554`).
-- **Vigia:** restaurar a autoridade anterior **e a projeção anterior** de papel/admin; não usar fio como substituto da pergunta “algum verbo exige admin” (`diff_leitores.patch`, antigo `vigia_fio.py:643,650-653`; árvore `app/chamados/services/vigia_fio.py:648,662-663`).
-- **API P19:** o menor lugar comum é `_portas_da_tarefa`, onde a união residual amplia a saída original escolhida apenas pelas ações; não corrigir no consumidor (`app/chamados/services/tarefa_do_dia.py:571-584`; main no patch `tarefa_do_dia.py:545-554`).
-- Uma saída única idêntica para Folha e API não pode reproduzir dois valores diferentes do main para o mesmo estado; preservar os dois exige manter as perguntas/projeções distintas das autoridades existentes, ou declarar a incompatibilidade com a exigência de unificação. Dedução a partir dos dois corpos fornecidos no patch; a solução arquitetural aprovada `[nao verificado]`.
-
-Para fechar referências **do main** dos leitores adicionais, faltam os corpos de `app/ponto/services/pautas_dos_discordantes.py` e `app/escala/services/cadastro_realidade.py`; o patch fornecido não os inclui. Seus comentários atuais documentam a migração (`app/ponto/services/pautas_dos_discordantes.py:51-54`; `app/escala/services/cadastro_realidade.py:419-422`), mas não provam o corpo main `[nao verificado]`.
-
-## 14/11 15:08 · sessao 3f5e5f8708fc · - · - · origem=Ronald (tmux)
-
-Auditoria dos testes, sem alterar arquivos. [nao verificado]
-
-| Teste | O que fixa na árvore | Comparação com main | [nao verificado]
-|---|---|---|
-| `test_e3_portas_v6_sem_banco.py:16–20` | Ação responder/colaborador + verbo validar → fio **colab** | P13: coincide com tarefa do main; contraria C17 **admin**. Referência main fornecida: `codex_v10_construtor.r`, tabela P13. |
-| `test_e3_portas_v6_sem_banco.py:22–26` | Ação validar/admin + verbo cobrar → fio **admin** | P14: coincide com tarefa do main; contraria C17 **colab**. Referência main fornecida: `codex_v10_construtor.r`, tabela P14. |
-| `test_e3_portas_v6_sem_banco.py:28–42` | Caso `('admin','cobrar','decidir','admin')` exige **admin**; publica os dois chamados/verbos | P19: fixa o conflito **admin** contra C17 **colab**; a geometria não é a mesma do anexo: o teste põe **ambos** em `fila_cel`, portanto espera `(101,202)`, não somente `(A,)` (`:38–42`). | [nao verificado]
-| `test_e3_portas_tarefa.py:85–97` | ORM: A residual decidir; B externo GPS validar; tarefa responder sob B → **colab** | Variante de P13 com residual; contraria o fio **admin** de C17 sobre verbos decidir+validar. Fixture A/B em `:29–38`. |
-| `test_e3_portas_tarefa.py:451–457` | Mesmo P13 sintético: responder+validar → **colab** | Repete a expectativa E3/tarefa do main, não C17. |
-| `test_v8_R2_hipotese_acao_admin_isolada`, `test_e3_portas_tarefa.py:496–501` | Validar/admin isolado → PF/admin/validar | Não cobre simultâneo; não serve como prova de preservação de R2 (`:497`). |
-| `test_v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia`, `test_e3_portas_tarefa.py:503–515` | Simultâneo: **colab**, mantendo ações e verbos; testa porta compartilhada e portas distintas | Com mesma porta, só verbo validar: tarefa main **colab**, C17 **admin**. Com portas distintas, mapa validar+cobrar: C17 também **colab**; portanto essa segunda combinação não demonstra divergência de fio. |
-| `test_v8_R2_alcance_admin_com_pergunta_colab`, `test_e3_portas_tarefa.py:221–225` | ORM: PF/validar/**colab** | Expectativa da tarefa main; diverge de C17/admin. O arranjo consulta fila/partição reais antes de afirmar resultado (`:203–219`). Execução ORM nesta auditoria: `[nao verificado]`. |
-| `test_e3_diff_sombra.py:157–164` | Vigia: verbo validar, fio colab → `exige_admin=False` | Fixa precisamente a mudança do vigia E3, pois o main conta presença de verbo administrativo, conforme patch fornecido em `vigia_fio.py`, hunk `@@ -631,24 +636,31 @@`. |
-| `test_e3_portas_v6_sem_banco.py:55–63` | Sem portas/residual: admin+colaborador → **colab**, projeção `None` | Trata prioridade interna sem porta; não demonstra preservação dos consumidores com porta. |
-| `test_e3_portas_tarefa.py:473–479` | Ação admin/validar + residual cobrar+decidir → **colab** | É caso em que dono residual cobrar resolve a precedência; não cobre P14 isolado nem P19 residual decidir. |
-
-Os testes v6 executam corpos reais extraídos por AST com fornecedores em memória; o próprio módulo declara que não substituem execução Django (`test_e3_portas_v6_sem_banco.py:1–4`; `e3_portas_apoio.py:18–26`). O executor puro remove a classe ORM inteira de `test_e3_portas_tarefa.py` (`e3_portas_regra.py:22–29`). [nao verificado]
-
-Executei, com `PYTHONDONTWRITEBYTECODE=1`, somente os 10 testes v6 e os dois R2 puros: **10/10, 1/1 e 1/1 passaram**; nenhum banco acessado; resultados de terminal sem arquivo persistido: `[nao verificado]`. [nao verificado]
-
-Há também catraca que bloqueia uma cura por simples retorno dos consumidores ao C17: somente o instrumento de sombra é permitido como chamador (`test_e3_pendentes_app.py:19–21,145–148`); um `_porta` da folha voltando ao C17 é explicitamente o mutante reprovado (`:150–159`). Essa expectativa teria de ser alinhada à regra de preservação solicitada, sem tratar a catraca atual como prova de equivalência com main.
-
-O teste M6 preserva o **corpo do C17** e suas respostas próprias — inclusive pergunta externa validar → admin — mas não exige que os leitores migrados conservem essas respostas (`test_e3_pendentes_app.py:171–202`). [nao verificado]
-
-## 14/11 15:07 · sessao fb10aa8e5988 · HOOKMSG · verificador · origem=Code
-
-Referências marcadas **v3** usam a numeração nova do diff fornecido; as demais são da cópia-base.
-
-1. **PROCEDENTE — o early-exit pode aprovar uma entrada ilegível.** Existe `git -C R`, mas seu retorno é ignorado: erro com stdout vazio → `tem_linha(False)` → `PADRAO_MSG_OK`, antes do leitor estrito. Isso permite verde sem conhecer a mensagem; ocorrência em produção: [nao verificado]. (`bin/tests/test_lei_akita.sh:89–92`, **v3**; leitor estrito: `:414–426`, **v3**.)
-
-   A cura de argv fecha a herança isolada de `LEI_AKITA_COMMIT`: exige `--commit` e rejeita combinação com HEAD/MORDE. A régua não passa posicionais; o pre-push também não; o MORDE interno chama Python diretamente. Não apareceu mudança acidental de modo nesses caminhos. A bateria real também foi restaurada. (`bin/tests/test_lei_akita.sh:26–33`, **v3**; `bin/regua.sh:138–140`; `bin/pre-push.sh:38`, **v3**; `bin/tests/test_lei_akita.sh:979`, base; `bin/tests/test_hook_mensagem_em_toda_copia.sh:81–82`, **v3**.)
-
-2. **PROCEDENTE — o selo ainda admite verde parcial e vermelho falso.** [nao verificado]
-
-   **Verde parcial:** os cinco casos exercitam o script da cópia; instalado e alternativos recebem apenas “padrão inventado” e “sem linha”. Um hook que cite o script, recuse exclusivamente o texto inventado da fixture e aceite todo o restante passa, inclusive aceitando `n/a (instrumento)` em negócio. Os mutantes atuais não cobrem isso. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:71–90`, `:101–115`, **v3**.)
-
-   **Vermelho falso por relocação:** `_roda` copia somente o wrapper. Um hook válido que localize o script relativamente ao próprio `$0` perde seu destino na cópia e passa a recusar até mensagem sem linha. Existência desse wrapper em produção: [nao verificado]. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:87–90`, **v3**.)
-
-   **Vermelho falso por configuração herdada:** os plantados não fixam `core.hooksPath`; uma configuração global pode fazer seus commits ignorarem `.git/hooks`, inclusive o mutante, invalidando a mordida. Configuração global efetiva: [nao verificado]. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:59–66`, `:101–109`, **v3**.)
-
-   Quanto a efeitos colaterais: os casos usam o repo plantado, e o wrapper novo obtém dele o `TOPO`; não há escrita direta em `$wt` nesse fluxo. Porém, copiar um hook não restringe seus acessos absolutos. Escrita efetiva no repo real por algum alternativo: [nao verificado]. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:35–42`, `:87–90`, **v3**; `bin/commit_msg.sh:19–29`, **v3**.)
-
-3. **PROCEDENTE — reclassifico o descarte por “fora do escopo”; permanece preexistente, sem cura.** O integrador é chamador de `git commit` e consumidor de sua recusa: recebe falso, não interrompe nem desfaz a cópia, faz push e pode seguir ao deploy. A definição local de escopo inclui chamadores e leitores fora do diff. (`app/core/integrador_lote.py:481`, `:714–720`, `:739–753`; `CLAUDE.md:379–380`.)
-
-   Há uma ordem ainda anterior: `rodar` solicita reload da cópia **antes** do commit; esse modo chega ao HUP. Portanto, interromper apenas o deploy posterior não fecha toda a publicação. (`app/core/integrador_lote.py:638`, `:701`; `bin/deploy.sh:82`, `:360`.)
-
-   “Antes de religar a esteira” cobre a entrada oficial condicionada à pausa, mas a CLI admite `rodar` diretamente. A condição completa seria **antes de qualquer execução do integrador**. Uso direto em produção e alcance integral do E3-V10: [nao verificado]. A decisão fila/bloqueio cabe ao opus com o descarte anexado. (`bin/integrador.sh:19–32`; `bin/trava.sh:40–42`; `app/core/integrador_lote.py:614–638`, `:857–859`; `CLAUDE.md:376–377`.)
-
-4. **PROCEDENTE — classes demonstradas:** selo sem mordida suficiente, pelos casos ausentes no hook efetivo; ordem de validação/publicação, pelo OK antes de validar a leitura e pelo reload anterior ao commit. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:81–90`, **v3**; `bin/tests/test_lei_akita.sh:89–92`, **v3**; `app/core/integrador_lote.py:638`, `:719`.)
-
-   **Segundo juiz, derivação paralela da regra e campo com dois significados: nada demonstrado no delta** — os dois modos chamam `julgar_commit`; o defeito apontado está no atalho de leitura anterior. (`bin/tests/test_lei_akita.sh:84–92`, `:421–443`, `:513`, `:524–529`, **v3**.)
-
-_5187 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5190 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
