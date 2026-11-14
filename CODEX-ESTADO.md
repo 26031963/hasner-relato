@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 17:00** · publicado em **14/11/2026 17:05** (UTC-3)
+> Ultima resposta processada: **14/11/2026 17:16** · publicado em **14/11/2026 17:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 17:16 · sessao 9cc2d627f055 · - · - · origem=Ronald (tmux)
+
+Resultados do explorer, somente leitura:
+
+- Os 15 testes sem banco passam; os 14 mutantes declarados morrem por asserção. A suíte carrega funções reais por AST, substituindo as bordas ORM; o runner exige falha sem erro (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:38`; `app/ponto/tests/mutantes_justificativa_periodo_v2.py:76`). Execuções locais confirmadas, sem artefato escrito.
+- Há mordida de classe na união de intervalos sobrepostos/disjuntos, duas pausas, duas âncoras, precedência ABONA e transporte à grade; não é apenas comparação com o golden (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:186`, `:192`, `:201`, `:207`, `:258`).
+- **Mutante plausível sobrevivente comprovado em memória:** trocar `ef['min_justificados']` por `{}` em `app/ponto/services/esmeril_espelho.py:166`. Todos os 15 continuam verdes quando a alteração antecede as mutações internas do teste 12. O selo só verifica Store e ordem textual, sem verificar RHS nem percurso (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:83`, `:90`). O mutante declarado só apaga a atribuição, deixando essa classe descoberta (`app/ponto/tests/mutantes_justificativa_periodo_v2.py:42`).
+- O teste 06 usa motor falso que devolve o próprio atributo; prova contrato de argumento/transporte, **não** cálculo do motor (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:226`, `:235`). O teste 07 usa contador falso limitado a `data__in`; não prova filtros reais de colaborador, versão, tipo ou positividade (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:243`). Esses testes têm mordida localizada, mas não sustentam certificação financeira integral.
+- O teste 09 executa somente cinco instruções extraídas do bloco `_mj`, com previsto falso; não executa seleção dos dias obrigatórios, DSR ou motor completo (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:293`, `:297`, `:299`). A suíte explicita não provar ORM/frota/DSR/TXT (`:6`).
+- O teste ORM novo confere fechamento e DiaPago reais, mas só roda fechamento **uma vez**; não prova idempotência (`app/ponto/tests/test_justificativa_paga_o_periodo.py:398`, `:406`, `:408`). Não foi executado: import local de `django.core` confirmou `ModuleNotFoundError`; resultado ORM [nao verificado].
+- **Estado integral duas vezes não é idêntico:** renovam-se timestamps de fechamento e DiaPago é apagado/recriado, mudando identidade/carimbo (`app/ponto/services/fechamento.py:1091`, `:1148`, `:1166`, `:1194`; `app/ponto/services/dia_pago.py:359`; `app/ponto/models.py:380`). Igualdade dos números sob entradas fixas no fechamento completo: [nao verificado].
+- Executei o censo puro existente: zero escrita atribuída a FechamentoMensal fora da porta; o contrato e a porta estão em `app/folha/tests/test_chokepoint_folha_gate.py:58`, `:72`. O censo tem limites explícitos para escritas não atribuíveis (`app/core/censo_escritas.py:43`). No delta fornecido, nenhum novo escritor persistente.
+- Não há trava nova no delta. Fechamento não possui `select_for_update` ou `atomic` próprio no percurso principal; acusar mudança de ordem de trava nesta volta não está demonstrado (`app/ponto/services/fechamento.py:448`; gravações `:1149`, `:1165`). Operações concorrentes completas [nao verificado].
+- A guarda existente protege **somente 09/2026** (`app/ponto/services/fechamento.py:36`). 10 exportada recebe aviso, mas pode ser regravada se o chamador executar (`:539`, `:542`, `:1142`, `:1165`). Apply/deploy efetivo [nao verificado].
+- Sem `.git` na cópia: o RED histórico, que exige `git show`, não pode ser reproduzido aqui (`app/ponto/tests/test_justificativa_periodo_v2_sem_banco.py:28`). Delta anexado não toca o motor; presença no diff inteiro e inventário exato histórico precisam ser sustentados pelo anexo v1 ou marcados [nao verificado]. No hash há init do memo e leitura parcial (`app/ponto/motor_calculo_v2.py:813`, `:2628`, `:2633`).
+
+## 14/11 17:11 · sessao 750d1e2f857d · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
+
+Cura escrita na cópia. **Certificação pelo Code/opus permanece pendente.** O teste ORM está escrito, mas sua execução ficou bloqueada por `ModuleNotFoundError: No module named 'django.core'` em `manage.py:11`; resultado ORM [nao verificado]. [nao verificado]
+
+O diff por arquivo::função:
+
+| Arquivo::função | Mudança |
+|---|---|
+| `ponto/services/efeito_ausencia.py::periodos_justificados` | Une intervalos antes de medir (`:139`, `:144`). |
+| `efeito_ausencia.py::_cobertura_de_uma` | Usa `cadeia_do_dia` com todas as pausas; considera a saída informada após aceitar a âncora (`:176`, `:201`). |
+| `efeito_ausencia.py::efeitos_da_ausencia` | Ausência inteira ABONA retira o dia do mapa parcial (`:63`). |
+| `ponto/turnos.py::intervalos_do_periodo_justificado` | Extrai os trechos sem pausas para a união na fonte (`:2783`). |
+| `escala/services/leitor_celula.py::grade_da_celula` | Transporta o número da fonte até a grade usada pelo fechamento (`:365`, `:436`). |
+| `ponto/services/dia_pago.py::por_dia_da_grade` | Abona também `trabalho`, lendo `min_justificados` da linha (`:397`). |
+| `dia_pago.py::dias_com_abono` | Conta dias lavrados classificados como `ausencia` (`:701`). |
+| `ponto/services/fechamento.py::recalcular_fechamento_mes` | Lê o mapa filtrado de `efeitos_da_ausencia`, eliminando a derivação própria (`:667`). |
+| `diff_espelho_alimentacao.py::_motor/handle` | Exige mapa explícito e alimenta o degrau D pela fonte (`:42`, `:124`). |
+| `diff_extrato_parcial.py::_antes` | Alimenta justificadas e mapa pela fonte (`:43`, `:62`). |
+| `ponto/services/esmeril_espelho.py::assinaturas_do_colab` | Alimenta justificadas e mapa pela fonte (`:161`, `:166`). |
+| `relatorios/cartao_pela_celula.py::totais_da_lavratura` | Lê a contagem compartilhada de dias inteiros (`:188`). |
+
+Os casos e seus números estão registrados nos testes: [nao verificado]
+
+| Caso | Resposta exigida |
+|---|---|
+| E07:00, saída **informada** 07:30, pausa 10–11 | **630 min** — `test_justificativa_periodo_v2_sem_banco.py:172` |
+| 07–19, duas pausas de 85 min | **550**, contra 635 na base — `:186` |
+| E07:30/S11/E12, duas âncoras | **420**, contra 840 na base — `:192` |
+| ABONA inteira junto de parcial | Mapa parcial `{}`; abono **660−180=480** — `:207` |
+| Inteiro junto de parcial | **720+630=1.350**, um dia inteiro — `:280` |
+| Controle do motor completo | **720+690=1.410** — `test_justificativa_paga_o_periodo.py:268` |
+| Fechamento real e DiaPago | Ambos devem gravar **630** — `test_justificativa_paga_o_periodo.py:367`; execução [nao verificado] |
+
+O caso com **batida S07:30** continua conservando o inteiro, conforme o aval; ele é distinguido da saída apenas informada (`test_justificativa_periodo_v2_sem_banco.py:321`).
+
+O selo mantém a distinção da casa: atributo ausente é cobrado por `exige_memos`; omissão do chamador é cobrada pela alimentação explícita antes do cálculo. `{}` informado continua legítimo (`ponto/calculador/nucleo.py:424`; `ponto/tests/test_s5b_porta_unica.py:985`; `test_justificativa_periodo_v2_sem_banco.py:220`).
+
+Comandos executados e resultados locais:
+
+```bash
+# RED: lê os arquivos da base informada, sem restaurá-los no disco
+PYTHONDONTWRITEBYTECODE=1 JPP_BASE=1 python3 -m unittest ponto.tests.test_justificativa_periodo_v2_sem_banco -q
+# Ran 15 tests — FAILED (failures=15)
+
+# GREEN isolado
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_periodo_v2_sem_banco -q
+# Ran 15 tests — OK
+
+# Mutantes em memória
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_periodo_v2 --todos
+# 14/14 mortos por assercao, sem escrever fontes
+```
+
+O carregamento da base está em `test_justificativa_periodo_v2_sem_banco.py:27`; os mutantes e seus testes estão em `mutantes_justificativa_periodo_v2.py:12`. Cada mutante também tem comando individual: [nao verificado]
+
+```bash
+for mutante in \
+  ignora_saida_informada gravado_ignora_periodo \
+  fonte_so_primeira_pausa medidor_so_primeira_pausa soma_ancoras \
+  ausencia_nao_precede fechamento_rederiva_mapa \
+  diff_sem_mapa extrato_sem_mapa esmeril_sem_mapa diff_aceita_omissao \
+  contador_inclui_trabalho grade_perde_periodo motor_velho_em_memoria
+do
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_periodo_v2 "$mutante" || exit 1
+done
+```
+
+O comando Django deixado para a sessão é:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  ponto.tests.test_justificativa_paga_o_periodo \
+  ponto.tests.test_justificativa_periodo_v2_sem_banco \
+  ponto.tests.test_s5b_porta_unica \
+  relatorios.tests.test_s3_cartao_le_dia_pago \
+  escala.tests.test_grade_alimentada \
+  escala.tests.test_cobparc7_leitor_transporta_a_lampada \
+  --settings=config.settings_test --noinput
+```
+
+Depois da cura, o censo fica:
+
+| Campo | Quem escreve/alimenta | Quem lê |
+|---|---|---|
+| `min_justificados` | Fonte: `efeito_ausencia.py:47`, `:63`; grades: `escala/utils.py:1276`, `leitor_celula.py:436` | `dia_pago.py:397`; `fechamento.py:667`; alimentadores do motor |
+| `minutos_justificados` | Init: `motor_calculo_v2.py:813`; fechamento `:755`, `:831`; espelho `:1134`; PDF `:407`; laterais acima | `motor_calculo_v2.py:2628` |
+| `minutos_abonados` | Fechamento: `fechamento.py:1067`; DiaPago: `dia_pago.py:288`; retrato: `:484` | `cartao_pela_celula.py:118`, `:186`; prontidão: `folha/export.py:1078` |
+| `dias_abono` | Motor: `motor_calculo_v2.py:2630`; lavratura: `dia_pago.py:701` | Espelho `:1253`; PDF `:479`, `:787`; cartão `:188` |
+| `horas_abono` | Motor: `motor_calculo_v2.py:2631`, `:2633`; resumo por minutos gravados: `cartao_pela_celula.py:118`, `:186` | PDF: `pdf_espelho.py:480` |
+
+`folha/export.py` permanece com os leitores existentes: prontidão usa `minutos_abonados`; seu fallback ainda soma o previsto inteiro dos dias `ausencia` (`:1078`, `:1100`). A rubrica TXT 8932 continua derivando dos tipos de Ausência (`:193`, `:202`). Igualdade dos hashes exportados e pagamento efetivo [nao verificado].
+
+O DSR Comercial continua usando data civil da entrada e `self.datas_justificadas`; a cura alcança sua alimentação, sem corrigir essa rederivação (`motor_calculo_v2.py:3477`, `:3478`, `:3490`).
+
+Não houve implementação em motor, porta da célula, juízes, models/migrations, export, crons ou docs; o diff protegido foi conferido vazio. Não executei banco, Docker, rede, commit, merge, push, deploy ou apply. **Frota 0/0, hashes das competências exportadas, multiplicidade dos 45 e contagens do admin por motivo: [nao verificado].** [nao verificado]
 
 ## 14/11 17:00 · sessao 8fb89e816b92 · E3-V10-DEGRAU-PUB · censo · origem=Code
 
@@ -740,125 +852,4 @@ Em memória: **8 testes verdes**, RED da fixture base com **1 failure/0 errors**
 
 Certificação ORM: **[nao verificado]**, reservada à sessão. Ruff indisponível (`No module named ruff`); lint limpo: **[nao verificado]**. [Limites](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/docs/BO_DISPUTA_C23_ENTREGA.txt:87)
 
-## 14/11 15:20 · sessao 5573ac6b03cc · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
-
-Implementação, inventário dos 13 arquivos, censo e comandos estão na [entrega c22](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:14).
-
-- Verificação local: 83 testes legados, 7 suplementares e 35 da catraca passaram; 19 mutantes e o registro antigo morreram por assertion. [Resultados](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:103). [nao verificado]
-- RED/GREEN ORM, incluindo P3 vermelho: **[não verificado]**. P3 foi entregue sem `expectedFailure`; o hunk protegido continua pendente da sessão. [Comando](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:108).
-- Ruff limpo: **[não verificado]**, ferramenta ausente. [Registro](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:11).
-
-Ressalva explícita: `[G]` normalizado pede I e espera zero recusas; o teste da guarda força o pedido G na entrada e exige uma trilha em duas passadas. [Detalhe](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:37). [nao verificado]
-
-## 14/11 15:11 · sessao fbfa3d68b664 · E3-V10 · leitura · origem=Code
-
-**A árvore não preserva o main por leitor:** Folha muda o fio nos quatro estados; a API conserva o fio, mas muda porta/fila/verbos em P19; o vigia troca sua própria projeção de papel e admin. (`M:app/folha/fora_da_folha.py:65–78`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `M:app/chamados/services/vigia_fio.py:648–651`; `E:app/folha/fora_da_folha.py:74–89`; `E:app/chamados/services/tarefa_do_dia.py:570–598`; `E:app/chamados/services/vigia_fio.py:661–663`)
-
-Uso **M** para linhas do main reconstruídas do lado antigo do patch fornecido e **E** para linhas da cópia. Não atribuo ao main arquivos ausentes do patch. Identidade integral desses arquivos entre main e cópia: `[nao verificado]`.
-
-**Valores das portas**
-
-Notação: `PF=porta_fila`, `PP=porta_pergunta`; cada saída abaixo é **fio / rota / fila / verbos**. Essas são as chaves devolvidas pelas duas implementações. (`M:app/chamados/juizes.py:1667–1668`; `M:app/chamados/services/tarefa_do_dia.py:553–554`; `E:app/chamados/services/tarefa_do_dia.py:597–598`)
-
-Para P13/P14, o dado admite porta na própria célula ou âncora exclusivamente externa. Portanto, não há uma localização única demonstrada: na primeira, rota/fila são `PF/(A,)`; na segunda, `PP/()`. O mapa conserva o verbo informado. Localização concreta em produção: `[nao verificado]`. (`M:app/chamados/juizes.py:1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–598`)
-
-| Estado | C17 main | API tarefa main | Tarefa na árvore | Evidência M / E |
-|---|---|---|---|---|
-| P13: responder; painel validar | **admin** / PF ou PP / `(A,)` ou `()` / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | `M:app/chamados/juizes.py:1608–1619,1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–598` |
-| P14: validar; painel cobrar | **colab** / PF ou PP / `(A,)` ou `()` / `{A:cobrar}` | **admin** / mesma geometria / `{A:cobrar}` | **admin** / mesma geometria / `{A:cobrar}` | Mesmos trechos da linha anterior |
-| P19: A residual da célula decidir; ação admin sob B externo cobrar | **colab / PF / `(A,)` / `{A:decidir,B:cobrar}`** | **admin / PP / `()` / `{B:cobrar}`** | **admin / PF / `(A,)` / `{A:decidir,B:cobrar}`** | `M:app/chamados/juizes.py:1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–598` |
-| Simultâneo do anexo: colab+admin; único verbo validar | **admin** / geometria da porta / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | `M:app/chamados/juizes.py:1608–1619,1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/tests/test_e3_portas_tarefa.py:507–515` |
-
-O C17 continua na árvore com a escada `cobrar→colab`, `validar→admin`, demais→chamado. Sua resposta própria foi preservada; seus antigos leitores passaram a receber outra resposta. (`M:app/chamados/juizes.py:1608–1619,1653–1668`; `E:app/chamados/juizes.py:1650–1661,1695–1710`; `E:app/core/juizes.py:132–138`)
-
-**Comparação por leitor**
-
-As referências “C17”, “tarefa main” e “tarefa árvore” nesta tabela remetem às saídas completas e às linhas da tabela anterior.
-
-| Leitor × estado | Main | Árvore | IGUAL/DIFERE |
-|---|---|---|---|
-| Folha/`fora_da_folha` — P13 | C17: **admin** | tarefa: **colab**; porta/fila/verbos conservados | **DIFERE fio** |
-| Folha/`fora_da_folha` — P14 | C17: **colab** | tarefa: **admin**; porta/fila/verbos conservados | **DIFERE fio** |
-| Folha/`fora_da_folha` — P19 | C17: **colab**, PF, `(A,)`, `{A:decidir,B:cobrar}` | **admin**, PF, `(A,)`, mesmo mapa | **DIFERE fio** |
-| Folha/`fora_da_folha` — simultâneo | C17: **admin** | tarefa: **colab**; porta/fila/verbos conservados | **DIFERE fio** |
-| API `tarefa_do_dia` — P13 | tarefa main: colab | colab, mesma porta/fila/verbos | **IGUAL** nesses campos |
-| API `tarefa_do_dia` — P14 | tarefa main: admin | admin, mesma porta/fila/verbos | **IGUAL** nesses campos |
-| API `tarefa_do_dia` — P19 | admin, **PP, `()`, `{B:cobrar}`** | admin, **PF, `(A,)`, `{A:decidir,B:cobrar}`** | **DIFERE porta/fila/verbos** |
-| API `tarefa_do_dia` — simultâneo | tarefa main: colab | colab, mesma porta/fila/verbos | **IGUAL** nesses campos |
-
-A Folha lê o fio da porta e `o_que_segura` também publica os chamados de `fila`; não publica o mapa completo de verbos. Fontes da comparação Folha: `M:app/folha/fora_da_folha.py:65–78,225–235`; `E:app/folha/fora_da_folha.py:71–89,241–252`. Fontes da comparação API: `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:570–598`.
-
-O vigia precisa de tabela própria: **seu papel no main era a lista de verbos, não o fio C17**. (`M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:661–663`)
-
-| Vigia × estado | Main: papel; incremento admin | Árvore: papel; incremento admin | IGUAL/DIFERE |
-|---|---|---|---|
-| P13 | `validar`; `bool({'validar'} ∩ VERBOS_DO_ADMIN_main)` | `colab`; **0** | **DIFERE papel**; número main `[nao verificado]` |
-| P14 | `cobrar`; `bool({'cobrar'} ∩ VERBOS_DO_ADMIN_main)` | `admin`; **1** | **DIFERE papel**; número main `[nao verificado]` |
-| P19 | `cobrar,decidir`; `bool({'cobrar','decidir'} ∩ VERBOS_DO_ADMIN_main)` | `admin`; **1** | **DIFERE papel**; número main `[nao verificado]` |
-| Simultâneo | `validar`; `bool({'validar'} ∩ VERBOS_DO_ADMIN_main)` | `colab`; **0** | **DIFERE papel**; número main `[nao verificado]` |
-
-Fontes: `M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:661–663`. A rota recebida acompanha C17 no main e tarefa na árvore, conforme a primeira tabela; em P19 ambos recebem PF. (`M:app/chamados/services/vigia_fio.py:640,649`; `E:app/chamados/services/vigia_fio.py:648,661`)
-
-**Corrijo o limite da atualização anterior:** só está comprovado na cópia que `VERBOS_DO_ADMIN=('validar','decidir')`. O arquivo correspondente do main não veio no patch; portanto, os números main **1/0/1/1** e a igualdade numérica de P19 ficam `[nao verificado]`. (`E:app/chamados/services/verbos.py:22`)
-
-| Demais leitores × estado | Main | Árvore | IGUAL/DIFERE |
-|---|---|---|---|
-| `furo_sem_canal` — P13 | Não devolve fio/porta/verbos/fila; cobertura pelos registros crus da célula | Não devolve esses campos; havendo a porta descrita, exclui a célula de `sem_canal` | **DIFERE formato**; igualdade da cobertura `[nao verificado]` |
-| `furo_sem_canal` — P14 | Mesma regra crua; carimbos/FKs concretos `[nao verificado]` | Havendo a porta descrita, exclui de `sem_canal` | **DIFERE formato**; igualdade da cobertura `[nao verificado]` |
-| `furo_sem_canal` — P19 | A vivo da própria célula fornece cobertura | A porta fornece cobertura | **IGUAL cobertura da célula; DIFERE formato** |
-| `furo_sem_canal` — simultâneo | Mesma regra crua; carimbos/FKs concretos `[nao verificado]` | Havendo a porta descrita, exclui de `sem_canal` | **DIFERE formato**; igualdade da cobertura `[nao verificado]` |
-
-O main testa **pergunta da célula com `respondida_em IS NULL` OU chamado da célula em VIVOS**. A árvore testa presença da porta. O main publica `com_pergunta_aberta/com_chamado_vivo`; a árvore publica `com_porta_fila/com_porta_pergunta/nao_sei`. A entrada no universo também depende de janela/veredito; totais de produção `[nao verificado]`. (`M:app/chamados/services/furo_sem_canal.py:80–86,95–96`; `E:app/chamados/services/furo_sem_canal.py:75–87,97–116`)
-
-| Leitor | P13 | P14 | P19 | Simultâneo | Evidência e limite |
-|---|---|---|---|---|---|
-| Painel | Mapa dado: `{A:validar}` | `{A:cobrar}` | `{A:decidir,B:cobrar}` | `{A:validar}` | Na árvore, fila e verbos vêm de `qs_na_fila/particionar_verbos`; não há fio/rota de dia nesse contrato. **IGUAL/DIFERE do corpo main `[nao verificado]`**: falta seu arquivo main. (`E:app/chamados/services/painel.py:188–190,212–232`) |
-| Pauta `dias_sem_fio` | Árvore não inclui como sem fio | Mesmo resultado | Mesmo resultado | Mesmo resultado | Só compara fio com `FIO_SEM_PORTA`; todos os fios acima são diferentes de nada. **Main `[nao verificado]`**, arquivo ausente. (`E:app/ponto/services/pautas_dos_discordantes.py:79–84`) |
-| Beco `cadastro_realidade` | Árvore não inclui como sem porta | Mesmo resultado | Mesmo resultado | Mesmo resultado | Só observa existência da porta nesse ramo. **Main `[nao verificado]`**, arquivo ausente. (`E:app/escala/services/cadastro_realidade.py:464–471`) |
-| Retrato/tela da Folha | Valor agregado `[nao verificado]` | Idem | Idem | Idem | Recebe os grupos da fonte; outros dias podem determinar o grupo da pessoa. Foto efetivamente lavrada não foi fornecida. (`E:app/folha/fora_da_folha.py:92–103,197–215`; `E:app/folha/retrato_folha.py:1158–1190`) |
-
-**Quem escreve e quem lê**
-
-“Escrever” aqui distingue produzir o resultado em memória de persistir uma foto. A tarefa produz saída pura; a persistência do retrato ocorre no command próprio. (`E:app/chamados/services/tarefa_do_dia.py:597–618`; `E:app/folha/management/commands/lavrar_retrato_folha.py:69–78`)
-
-| Informação | Quem produz | Quem lê nos pontos relevantes |
-|---|---|---|
-| Verbo do chamado | `verbo_do_chamado`; `particionar_verbos` escreve `mapa[ch_id]` | Painel e `alimentar_fila`. (`E:app/chamados/catalogo/natureza.py:41–75`; `E:app/chamados/services/verbos.py:47–52`; `E:app/chamados/services/painel.py:229–232`; `E:app/chamados/juizes.py:1570`) |
-| Pertença à fila | `qs_na_fila`; `alimentar_fila` monta `fila_ids/fila_cel/fila_dia` | C17 e tarefa. (`E:app/chamados/services/painel.py:188–190`; `E:app/chamados/juizes.py:1573–1589,1699–1708`; `E:app/chamados/services/tarefa_do_dia.py:571–584`) |
-| Porta/fila/verbos/fio C17 | `porta_alcancavel_do_dia`, com `fio_pelos_verbos` | Na árvore, lado antigo da sombra. (`E:app/chamados/juizes.py:1655–1661,1699–1710`; `E:app/chamados/management/commands/diff_e3_sombra.py:127`) |
-| Porta/fila/verbos/fio da tarefa | `_portas_da_tarefa`; `porta_da_tarefa` apenas projeta | API, Folha, vigia, furo, beco. (`E:app/chamados/services/tarefa_do_dia.py:570–607`; `E:app/folha/fora_da_folha.py:74–89`; `E:app/chamados/services/vigia_fio.py:648–663`; `E:app/chamados/services/furo_sem_canal.py:97–115`; `E:app/escala/services/cadastro_realidade.py:469`) |
-| Papel/admin do vigia | Main: verbos/interseção; árvore: fio/igualdade | Contadores e linhas de alcance. (`M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:635–663`) |
-
-**Menor ponto de cura de cada diferença**
-
-| DIFERE | Menor retorno ao contrato do mesmo leitor no main | Restrição |
-|---|---|---|
-| Folha — quatro estados | Voltar sua porta à autoridade **C17 existente**, no limite `_porta/_fio_do_dia`; o leitor continua apenas lendo fio/fila | Não mudar globalmente o fio da tarefa: isso quebraria a API main em P13/P14/simultâneo. (`M:app/folha/fora_da_folha.py:65–78`; `M:app/chamados/services/tarefa_do_dia.py:550–554`; `E:app/folha/fora_da_folha.py:71–89`) |
-| API — P19 | Em `_portas_da_tarefa`, restaurar a projeção original **selecionada pelas ações**, antes da união residual | O trecho que acrescenta A é a união com `da_celula`; dele saem a mudança de rota, fila e mapa. (`M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–584,597–598`) |
-| Vigia — quatro papéis | Restaurar a projeção main: papel é a lista ordenada de verbos | Trocar apenas o fio não reproduz o papel textual main. (`M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:662–663`) |
-| Vigia — regra administrativa | Restaurar a pergunta main: **existe verbo administrativo?** | `fio == admin` responde outra pergunta. A regra main deve continuar usando sua autoridade `VERBOS_DO_ADMIN`; seu conteúdo main falta. (`M:app/chamados/services/vigia_fio.py:650`; `E:app/chamados/services/vigia_fio.py:662`; `E:app/chamados/services/verbos.py:22`) |
-| Furo — formato/cobertura | Restaurar o retorno e o teste main no próprio `medir` | Esse teste cru era **regra própria do leitor**. Restaurá-lo literalmente mantém um derivador paralelo à porta da tarefa; o dado não demonstra equivalência que permita substituí-lo sem mudar comportamento. (`M:app/chamados/services/furo_sem_canal.py:80–96`; `E:app/chamados/services/furo_sem_canal.py:97–116`) | [nao verificado]
-
-**Não existe um único valor de `fio` que reproduza simultaneamente Folha-main e API-main nesses estados.** O registro vivo já distingue as perguntas: C17 responde alcançabilidade com verbo do painel; C19 responde ações exigíveis por instância. Preservar essas autoridades nas respectivas perguntas evita inventar regra no leitor. Unificá-las sob uma única resposta exige mudar pelo menos um contrato main. (`E:app/core/juizes.py:138,153–159`; `M:app/chamados/juizes.py:1608–1619`; `M:app/chamados/services/tarefa_do_dia.py:550–554`)
-
-No vigia, a projeção antiga também era regra do leitor. Para ele apenas ler respostas prontas, seria necessário **mover essa mesma projeção para uma autoridade existente**, conservando a pergunta “algum verbo exige admin”; deduzi-la novamente do fio não serve. Já no furo, uma cura sem sua regra própria ou sem transferir integralmente essa regra não está demonstrada. (`M:app/chamados/services/vigia_fio.py:648–651`; `M:app/chamados/services/furo_sem_canal.py:80–86`; `E:app/core/juizes.py:138,159`)
-
-**O que os testes fixam** [nao verificado]
-
-| Teste | Espera na árvore | Relação com o main | [nao verificado]
-|---|---|---|
-| `test_e3_portas_v6_sem_banco.py:16–20` | P13: responder + validar → **colab** | Preserva tarefa-main; fixa divergência da Folha/C17-main, que dá admin. (`M:app/chamados/juizes.py:1608–1619`; `M:app/chamados/services/tarefa_do_dia.py:550–554`) |
-| Mesmo arquivo `:22–26` | P14: validar + cobrar → **admin** | Preserva tarefa-main; contraria Folha/C17-main colab. Mesmas fontes main acima. |
-| Mesmo arquivo `:28–42` | Ação admin/cobrar + residual decidir → **admin** | Fixa conflito de fio com C17. **Não fixa a geometria exata de P19:** põe ambos os chamados na célula e espera fila `(101,202)`. (`E:app/chamados/tests/test_e3_portas_v6_sem_banco.py:38–42`) |
-| `test_e3_portas_tarefa.py:85–97` | Variante P13: A residual decidir, B externo validar, ação responder → colab | Espera tarefa, enquanto C17 dá admin para decidir+validar. (`M:app/chamados/juizes.py:1608–1619`) |
-| `test_v8_R2_hipotese_acao_admin_isolada`, `test_e3_portas_tarefa.py:496–501` | Admin isolado → admin | **Não cobre simultâneo.** (`E:app/chamados/tests/test_e3_portas_tarefa.py:497–501`) |
-| `test_v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia`, mesmo arquivo `:503–515` | Simultâneo → **colab** | Mesma porta, só validar: contraria C17 admin. Portas distintas, validar+cobrar: C17 também colab; essa variante não demonstra divergência de fio. (`M:app/chamados/juizes.py:1608–1619`; `E:app/chamados/tests/test_e3_portas_tarefa.py:507–514`) |
-| `test_v8_R2_alcance_admin_com_pergunta_colab`, mesmo arquivo `:203–225` | Fixture ORM consulta crédito/fila e espera validar/colab | Fixa a expectativa E3/tarefa-main; execução ORM nesta auditoria `[nao verificado]`. (`E:app/chamados/tests/test_e3_portas_tarefa.py:203–225`) |
-| `test_e3_diff_sombra.py:157–164` | Validar com fio colab → `exige_admin=False` | Fixa a nova projeção do vigia; não testa sua expressão main por interseção. (`M:app/chamados/services/vigia_fio.py:648–651`) |
-| `test_e3_pendentes_app.py:145–159` | Só a sombra pode chamar C17; acusa Folha voltando a ele | A catraca impede o retorno direto à fonte main; não prova equivalência das respostas. (`E:app/chamados/tests/test_e3_pendentes_app.py:145–159`) |
-
-Os testes v6 usam corpos reais extraídos por AST com fornecedores em memória; não substituem ORM. O executor puro remove a classe ORM. Foram executados 10 testes v6 e os dois R2 puros, todos passaram; resultado de terminal sem arquivo persistido: `[nao verificado]`. (`E:app/chamados/tests/test_e3_portas_v6_sem_banco.py:1–4`; `E:app/chamados/tests/e3_portas_apoio.py:18–26`; `E:app/chamados/tests/e3_portas_regra.py:22–29`) [nao verificado]
-
-Para fechar os pontos main ainda não verificáveis, faltam **`app/chamados/services/verbos.py`**, **`app/chamados/services/painel.py`**, **`app/ponto/services/pautas_dos_discordantes.py`** e **`app/escala/services/cadastro_realidade.py`** do main. Eles não estão nos hunks fornecidos; suas respostas integrais no main permanecem `[nao verificado]`.
-
-_5191 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5193 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
