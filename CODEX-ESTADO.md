@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 01:17** · publicado em **14/11/2026 01:19** (UTC-3)
+> Ultima resposta processada: **14/11/2026 01:24** · publicado em **14/11/2026 01:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 01:24 · sessao 21bb236c1f22 · E3-FORMA-SQL · construtor · origem=Code
+
+Entrega escrita, **ainda pendente de R2**: a hipótese simultânea retorna `colab`; a matriz exige `admin`. ([evidência](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-r2-pendente.out:1))
+
+Resultados sem banco:
+
+- Base: `Ran 25; FAILED=14; ERROR=0`. ([RED](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-red.out:208))
+- Após alterações: `Ran 25; OK`; regressões: `Ran 70; OK`. ([GREEN](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-green.out:28), [regressões](/home/ronald/wt-codex-e3-forma-sql-005806/app/e3-v8-regressoes.out:3))
+- Mutantes: **42 + 15 mordidas por assert**, com comandos individuais na [tabela](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:73).
+
+Entregues a [matriz R1–R16](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:8), o [ESMERIL de escritores/leitores](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:194) e a [pré-verificação](/home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt:235).
+
+Alcance ORM de R2/R3/R8, persistência zero ORM e R16: **[nao verificado]**. Falta a sessão executar:
+
+```bash
+bash ~/saas-hasner/bin/suite.sh \ [nao verificado]
+  --dir /home/ronald/wt-codex-e3-forma-sql-005806 \
+  --only "chamados core"
+```
+
+Sem declaração de pouso ou certificação. [nao verificado]
+
+## 14/11 01:20 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
+
+Os ajustes apontados foram atendidos por leitura: R8 limpa relações antes de `.only`; R4 verifica Q11; R13 cobre os dois caminhos; R14 verifica `limite=0`; R15 coleta a razão efetiva. (`chamados/juizes.py:1572`, `chamados/tests/test_e3_portas_tarefa.py:241`, `:584`, `:589`, `:619`, `:658`)
+
+O alvo administrativo agora é específico de `expor_admin`. (`chamados/tests/e3_v8_mutantes.py:65`)
+
+Persiste **R2**: a hipótese simultânea obtém `colab`, enquanto a matriz exige `admin`; alcance ORM continua pendente. (`e3-v8-r2-pendente.out:1`)
+
+Execução ORM, R16 e certificação final: **[nao verificado]**. Nenhum novo defeito concreto encontrado nesta revisão limitada.
 
 ## 14/11 01:17 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
 
@@ -460,47 +492,4 @@ Não localizei flip de tipo nos efeitos imediatos examinados: a gravação receb
 
 Os testes existentes têm assertivas pertinentes para reuso e passivo: sucesso `ja_no_espelho` e nenhuma batida nova em `app/chamados/tests/test_bug_par_projetado.py:1100`, `:1101`, `:1102`; passivo divergente recusado sem alterar a foto em `:1180`, `:1183`, `:1184`; controle positivo do passivo igual ao declarado em `:1193`, `:1194`. Resultado RED/GREEN e execução desses testes: [nao verificado].
 
-## 13/11 23:28 · sessao 8d1c142b9b8f · - · - · origem=Ronald (tmux)
-
-**Pergunta 3 — descartável como regressão comprovada.**
-
-- O escritor dedicado só cria `DEVOLUCAO/BUG-PAR-103` depois de `paridade_absolvida_bug_par_103` aprovar; esse predicado exige `p.motivo in _PAR_DO_INTERVALO`. Portanto a saída antecipada do rótulo preserva o universo desse escritor. Referências: `app/chamados/services/validacao.py:263`, `app/chamados/services/validacao.py:264`, `app/chamados/services/validacao.py:279`, `app/chamados/services/validacao.py:282`, `app/chamados/services/materializacao.py:274`.
-
-- Existe outro escritor genérico de `DEVOLUCAO`, que copia `recusa_motivo`; ele não fabrica o identificador BUG-PAR-103. Uma linha histórica com esse prefixo fora de intervalo permanece **[nao verificado]**. Referências: `app/chamados/services/validacao.py:210`, `app/chamados/services/validacao.py:213`.
-
-- O único chamador produtivo localizado da devolução BUG-PAR-103 é o comando, passando identificador à porta, que carrega uma instância nova. Não há nesse caminho instância prefetched sendo reutilizada para desenhar o rótulo. Referências: `app/chamados/management/commands/bug_par_103.py:81`, `app/chamados/management/commands/bug_par_103.py:85`, `app/chamados/services/validacao.py:263`.
-
-- O fio faz `Prefetch('decisoes')` antes de chamar o explicador e calcular `estado_aplicacao`; o rótulo é chamado por `_estado_pelo_derivador`. Referências: `app/chamados/services/fio.py:255`, `app/chamados/services/fio.py:261`, `app/chamados/services/fio.py:346`, `app/chamados/services/fio.py:373`, `app/chamados/services/materializacao.py:813`.
-
-- No POST do modal, a ação é processada antes de reconstruir o fio. A reconstrução consulta novamente perguntas e decisões; o render parcial também chama novamente esse construtor. Não localizei caminho produtivo com decisão BUG-PAR-103 escrita depois do prefetch e leitura posterior na mesma instância. Referências: `app/chamados/views.py:951`, `app/chamados/views.py:954`, `app/chamados/views.py:889`, `app/chamados/services/fio.py:535`, `app/chamados/services/fio.py:538`, `app/chamados/services/fio.py:487`.
-
-**Duvidoso como fragilidade genérica:** `DecisaoPergunta.registrar` usa `bulk_create` e não invalida caches de instâncias previamente carregadas; o rótulo agora pode consumir esses caches. Falta um chamador concreto retendo a instância através da escrita para converter isso em achado procedente. Referências: `app/chamados/models.py:4037`, `app/chamados/models.py:4039`, `app/chamados/services/materializacao.py:291`.
-
-O teste existente verifica o rótulo após a devolução e numa montagem posterior do modal; não reproduz retenção de instância prefetched através da escrita. Referências: `app/chamados/tests/test_bug_par_projetado.py:794`, `app/chamados/tests/test_bug_par_projetado.py:797`, `app/chamados/tests/test_bug_par_projetado.py:802`. Execução desses testes: **[nao verificado]**.
-
-## 13/11 23:28 · sessao 79cd380c31aa · - · - · origem=Ronald (tmux)
-
-Censo do explicador e avaliação semântica:
-
-| Valor | Escritor | Leitor |
-|---|---|---|
-| `dono` | `explicar_pergunta`: `colaborador`, `admin`, `ninguem` em `app/chamados/services/explicador.py:97`, `:101`, `:109`, `:117`; os três donos de não gravação passam por `_sem_gravar`, `:43`, chamados em `:134`, `:139`, `:142`. | Agrupamento do resumo em `app/chamados/services/explicador.py:184`; testes de contrato anteriores em `app/chamados/tests/test_explicador_disputa.py:54`, `:63`, `:77`, `:101`; teste impede falso `ninguem` em `app/chamados/tests/test_o261_paridade_respeita_a_lampada.py:207`. |
-| `quem_resolve` | Somente `_sem_gravar`, consultando tabela em `app/chamados/services/explicador.py:43`. | Modal lê texto pronto em `app/templates/chamados/partials/modal_fio.html:468`; teste novo em `app/chamados/tests/test_bug_par_projetado.py:1229`. |
-| `gravou` | `False` no não gravado em `app/chamados/services/explicador.py:43`; também no resolvido pela recusa em `:126`. Não há emissão explícita de `True` nesses caminhos (`:94`, `:117`, `:127`). | Desenlace considera exclusivamente `is False`, `app/chamados/services/desenlace.py:67`, e separa causas pelo `estado`, `:70`; testes em `app/chamados/tests/test_bug_par_projetado.py:267`, `:283`, `:1207`. O teste de caminho positivo explicita item sem `gravou` em `:291`. |
-| `estado` do item | `app/chamados/services/explicador.py:43`, `:97`, `:101`, `:109`, `:117`. | Resumo exclui resolvida em `:178`; desenlace classifica `validada_sem_gravar` em `app/chamados/services/desenlace.py:70`; modal filtra e escolhe mensagens em `app/templates/chamados/partials/modal_fio.html:463`, `:466`, `:467`, `:468`. |
-| `SEM_GRAVAR_POR_DONO` | Definição única em `app/chamados/services/explicador.py:32`. | Item lê índice `[1]` em `:43`; resumo percorre frases em `:200` e aplica contagem em `:202`. `cadastro` tem frase `None`, sendo tratado especificamente em `:190` a `:199`. |
-| `resumo` | `app/chamados/services/explicador.py:180` ou `:203`, retornado em `:204`. | Fio chama produtor e guarda explicação em `app/chamados/services/fio.py:346`, `:348`; desenlace usa resumo em `app/chamados/services/desenlace.py:83`; modal apresenta em `app/templates/chamados/partials/modal_fio.html:462`. |
-
-**Descartável — sobrevivência do antigo “todo não cadastro é TI/DP”.** O modal agora lê `quem_resolve` pronto, e a tabela distingue expressamente a obra sem ação humana; o resumo usa a mesma tabela. Referências: `app/templates/chamados/partials/modal_fio.html:468`; `app/chamados/services/explicador.py:35`, `:43`, `:200`.
-
-**Descartável — Central/desenlace interpretando o novo `dono` como `sistema`.** O desenlace recebe a explicação por `app/chamados/services/fio.py:445` e usa `pode_fechar`, `gravou`, `estado` e `resumo`; não consulta `dono` nem `quem_resolve` nesse caminho (`app/chamados/services/desenlace.py:62`, `:67`, `:70`, `:83`). A classificação por dono é apresentação, enquanto a permissão de fechar vem diretamente de C7 em `app/chamados/services/explicador.py:177`.
-
-**Descartável — contador externo dependendo da enumeração antiga desse item.** O contador localizado para esse `dono` é o agrupamento interno do resumo, que aceita qualquer chave em `app/chamados/services/explicador.py:184` e traduz o novo valor pela tabela em `:200`. Os consumidores de runtime localizados para a explicação são fio, desenlace e modal, acima; existência de leitor dinâmico não localizado [nao verificado].
-
-**Duvidoso, apresentação anterior ao delta — ação genérica do desenlace quando C7 libera e há espera.** Esse estado é explicitamente montado pelo teste em `app/chamados/tests/test_bug_par_projetado.py:1198`, `:1203`, `:1205`; o item manda esperar a obra em `app/chamados/services/explicador.py:135`, enquanto a ação geral do desenlace sugere conferir/corrigir marcação e fechar em `app/chamados/services/desenlace.py:79`. Isso não é leitura divergente de `dono`/`quem_resolve`, pois esses campos não são consultados; não demonstrado como violação da regra literal de escrita.
-
-**Descartável — selo novo sem mordida, por inspeção.** O teste exige a premissa C7 bloqueando, o estado correto, a causa no resumo e no resolvedor, além de impedir a tradução antiga no HTML: `app/chamados/tests/test_bug_par_projetado.py:1224`, `:1226`, `:1227`, `:1228`, `:1229`, `:1230`, `:1232`, `:1233`. O HTML passa pelo contexto real do fio, não por texto fabricado (`app/chamados/tests/test_bug_par_projetado.py:765`, `:768`; `app/chamados/services/fio.py:487`).
-
-**Descartável — selo de reuso permitindo `nao_gravou`.** Agora exige `ok=True`, estado exato `ja_no_espelho` e nenhuma nova batida, em `app/chamados/tests/test_bug_par_projetado.py:1100`, `:1101`, `:1102`. Execução de RED/GREEN e resultado de testes [nao verificado].
-
-_4902 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4904 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
