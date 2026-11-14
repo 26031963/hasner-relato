@@ -1,7 +1,101 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 16:36** · publicado em **14/11/2026 16:38** (UTC-3)
+> Ultima resposta processada: **14/11/2026 16:39** · publicado em **14/11/2026 16:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 16:39 · sessao 5f078705d999 · JUSTIFICATIVA-PAGA · verificador · origem=Code
+
+1. **PROCEDENTE — o período do motor não chega ao abono gravado.**
+
+O motor soma `minutos_justificados`, mas o fechamento grava `minutos_abonados` por outra derivação: `por_dia_da_grade`. Ela só abona dias classificados como `ausencia`, por `previsto − realizado`; ignora `min_justificados`. A justificativa mantém o dia como `trabalho`. (`app/ponto/motor_calculo_v2.py:2633`; `app/ponto/services/fechamento.py:1065`; `app/ponto/services/dia_pago.py:395`; `app/escala/utils.py:1257`)
+
+Contraexemplo sintético: dia `trabalho`, previsto 720, realizado 0, `min_justificados=690`: a função real `por_dia_da_grade`, executada isoladamente em memória, devolve **abono vazio**. Esse mapa alimenta tanto o fechamento quanto o `DiaPago`. (`app/ponto/services/dia_pago.py:387`; `app/ponto/services/fechamento.py:1067`; `app/ponto/services/fechamento.py:1217`)
+
+Na competência, o resumo do PDF/espelho recebe `minutos_abonados/60` do fechamento ou da lavratura, sobrescrevendo o número apurado pelo motor. Portanto, podem existir **11,5 h no motor e 0 h no resumo**. (`app/relatorios/pdf_espelho.py:480`; `app/relatorios/cartao_pela_celula.py:118`; `app/relatorios/cartao_pela_celula.py:186`; `app/relatorios/cartao_pela_celula.py:346`)
+
+| Campo | Quem escreve/alimenta | Quem lê |
+|---|---|---|
+| `minutos_justificados` | Inicialização: `app/ponto/motor_calculo_v2.py:813`; fechamento normal/órfão: `app/ponto/services/fechamento.py:755`, `:831`; espelho: `app/ponto/services/espelho.py:1134`; PDF: `app/relatorios/pdf_espelho.py:407` | Conta mensal: `app/ponto/motor_calculo_v2.py:2628`; contrato de memo: `app/ponto/calculador/nucleo.py:424` |
+| `min_justificados` | Efeito: `app/ponto/services/efeito_ausencia.py:47`, `:67`; grade: `app/escala/utils.py:1276`; fechamento monta mapa equivalente: `app/ponto/services/fechamento.py:667` | Alimentação do espelho/PDF: `app/ponto/services/espelho.py:1134`; `app/relatorios/pdf_espelho.py:407`. A derivação do abono gravado não lê essa chave: `app/ponto/services/dia_pago.py:387` |
+| `dias_com_ausencia_inteira` | Fonte: `app/ponto/turnos.py:2829`; inicialização: `app/ponto/motor_calculo_v2.py:808`; fechamento: `app/ponto/services/fechamento.py:754`, `:830`; espelho/PDF: `app/ponto/services/espelho.py:1133`; `app/relatorios/pdf_espelho.py:406` | Teto de pontualidade: `app/ponto/motor_calculo_v2.py:1090`; calculador: `app/ponto/calculador/regras.py:120`, `app/ponto/calculador/alimentacao.py:532`; envio ao oráculo: `app/ponto/services/fechamento.py:1281` |
+| `horas_abono` | Inicialização: `app/ponto/motor_calculo_v2.py:292`; conta: `:2631`, `:2633`; composição de fatias: `app/ponto/services/fechamento.py:99` | PDF: `app/relatorios/pdf_espelho.py:480`; resumo substitui pela outra fonte: `app/relatorios/cartao_pela_celula.py:118`, `:186` |
+| `dias_abono` | Inicialização: `app/ponto/motor_calculo_v2.py:284`; conta: `:2630`; composição: `app/ponto/services/fechamento.py:99`; resumos: `app/ponto/services/espelho.py:1253`, `app/relatorios/pdf_espelho.py:479` | Badge PDF: `app/relatorios/pdf_espelho.py:787`; ramo de lavratura substitui por contagem de dias com abono positivo: `app/relatorios/cartao_pela_celula.py:190` |
+| `resumo_dias_abono` | Não localizado pela busca literal na cópia: [nao verificado] | [nao verificado] |
+
+**PROCEDENTE — chamador de sombra ficou sem alimentação.** `diff_espelho_alimentacao` passa justificadas e ausência inteira, mas não passa o mapa novo, inclusive no degrau denominado “cura completa”. O memo permanece vazio: aplica o comportamento anterior — previsto inteiro quando o dia entra em `_abono`, nenhum crédito parcial quando não entra. (`app/ponto/management/commands/diff_espelho_alimentacao.py:41`; `:120`; `app/ponto/motor_calculo_v2.py:813`; `:2611`; `:2628`)
+
+Outros caminhos fora do diff:
+
+- `diff_extrato_parcial` consulta justificativas diretamente e calcula sem o memo novo; `esmeril_espelho` também não o alimenta, mas usa o resultado para assinaturas de pontualidade/HE. Divergência de **pagamento** nesses dois caminhos: [nao verificado]. (`app/relatorios/management/commands/diff_extrato_parcial.py:42`; `:67`; `app/ponto/services/esmeril_espelho.py:160`; `:170`)
+- TXT Domínio monta eventos sem ler `horas_abono` ou o mapa novo; a rubrica 8932 deriva de tipos de `Ausencia`. Igualdade entre período justificado e pagamento no Domínio: [nao verificado]. (`app/folha/export.py:439`; `app/folha/export.py:201`)
+- Prontidão lê `minutos_abonados`; seu fallback ainda soma o previsto inteiro dos dias de ausência, constituindo outra derivação de abono. (`app/folha/export.py:1078`; `app/folha/export.py:1100`)
+- Tela e app recebem o resumo do espelho; Haiku consulta classificação de exportação e cópias dos TXT. O holerite é recebido por upload. Esses caminhos não comprovam que o período novo foi pago. (`app/ponto/views.py:161`; `app/api/views.py:1354`; `app/api/views_mensageria.py:283`; `app/folha/haiku_export.py:79`; `app/holerite/models.py:6`; pagamento efetivo [nao verificado])
+
+2. **PROCEDENTE — a fonte perde a segunda pausa.**
+
+A fonte desempacota quatro marcos e reconstrói apenas `hi/hii/hfi/hf`. O medidor desconta somente pausas presentes nesse mapa. O previsto, entretanto, consulta e desconta todas as pausas do dia. (`app/ponto/services/efeito_ausencia.py:156`; `app/ponto/services/efeito_ausencia.py:163`; `app/ponto/turnos.py:2786`; `app/escala/utils.py:2310`; `app/escala/utils.py:2324`)
+
+Contraexemplo confirmado em memória: jornada 07–19, pausas 10–11:25 e 14–15:25, entrada 07:00 e saída justificada: **635 minutos pela cadeia construída pela fonte; 550 minutos com ambas as pausas**. O motor aceita o valor sem teto pelo previsto. (`app/ponto/services/efeito_ausencia.py:158`; `app/ponto/turnos.py:2791`; `app/ponto/motor_calculo_v2.py:2633`)
+
+Quanto às demais perguntas semânticas:
+
+- A chave é **dia do turno**, `Justificativa.data_turno`; a fonte recusa usar a âncora de turno com outra data. A cadeia encadeia a saída noturna no dia seguinte. (`app/ponto/services/efeito_ausencia.py:107`; `:165`; `:163`; `app/escala/utils.py:345`)
+- O Base compara pelo dia da jornada, mas o Comercial refaz DSR pela **data civil da entrada**. Essa derivação paralela preexistente continua alcançável quando a justificativa deixa de integrar `datas_justificadas`. (`app/ponto/motor_calculo_v2.py:2581`; `:3473`; `:3477`; `:3490`)
+- Os caminhos identificados convertem minutos para horas por `/60`; não encontrei erro de fator nesses sítios. (`app/ponto/motor_calculo_v2.py:2634`; `app/relatorios/pdf_espelho.py:480`; `app/relatorios/cartao_pela_celula.py:118`)
+- A seleção de dias inclui as duas datas; a duração é diferença entre instantes, sem minuto adicional; toque entre extremidades não configura sobreposição, pois o teste usa `<`. (`app/ponto/services/efeito_ausencia.py:100`; `app/ponto/turnos.py:2764`; `app/ponto/turnos.py:2783`)
+
+3. **PROCEDENTE — duas âncoras do mesmo turno podem pagar a mesma cauda duas vezes.**
+
+A agregação une os rótulos cobertos, mas **soma os minutos**, sem deduplicar trechos. Ambas as justificativas usam a última entrada do turno para medir a saída coberta. (`app/ponto/services/efeito_ausencia.py:133`; `:134`; `:179`)
+
+Contraexemplo: turno `E07:30/S11:00/E12:00`, fim previsto 19:00; uma justificativa aprovada ancorada na primeira entrada e outra na segunda: ambas medem 12–19, produzindo **420 + 420 = 840 minutos**. A unicidade impede repetir a mesma âncora, mas permite âncoras distintas; a unicidade por dia restringe apenas pendentes. (`app/ponto/services/efeito_ausencia.py:168`; `:179`; `app/ponto/turnos.py:2738`; `app/ponto/models.py:187`; `:189`)
+
+O motor soma esses 840 sem deduplicação nem limite pelo previsto. Ocorrência produtiva: [nao verificado]. (`app/ponto/motor_calculo_v2.py:2633`)
+
+Um dia em `_mj` fora de `_abono` por ter trabalho **não desaparece**: a soma nova independe de `_abono`. Já dia fora dos obrigatórios — inclusive folga corretamente excluída dos previstos — não recebe esse crédito. (`app/ponto/motor_calculo_v2.py:2611`; `:2601`; `:2634`)
+
+**PROCEDENTE — precedência incompatível com ausência inteira.** O efeito mantém o mapa parcial mesmo quando uma ausência `ABONA` cobre o mesmo dia; a grade dá precedência à ausência, enquanto o motor continua usando `_mj` para excluir o abono inteiro. (`app/ponto/services/efeito_ausencia.py:47`; `:61`; `app/ponto/services/fechamento.py:667`; `:700`; `app/escala/utils.py:1207`; `app/ponto/motor_calculo_v2.py:2629`)
+
+A troca não altera diretamente o predicado de DSR do Base; altera sua alimentação de justificadas. O Comercial conserva a rederivação por data civil descrita no item 2. **Zero falta inteira adicional e zero semana perdida no universo informado: [nao verificado].** (`app/ponto/services/efeito_ausencia.py:46`; `app/ponto/motor_calculo_v2.py:2605`; `:3477`)
+
+4. **nada quanto a demonstrar que os dez dias viraram falta inteira.**
+
+Sem âncora, papel errado e turno fechado retornam motivo de conservação; célula sem marcos também conserva. A fonte transforma esses motivos em `cobre=None`. (`app/ponto/turnos.py:2694`; `:2700`; `:2703`; `app/ponto/services/efeito_ausencia.py:154`; `:129`)
+
+O caminho para **vazio sem `conserva`** vem depois: o juiz cobre o marco, o filtro encontra cruzamento com um turno fechado e remove a cobertura; a função retorna vazio com motivo `None`. O efeito então exclui o dia tanto de `justificadas` quanto de `min_justificados`. (`app/ponto/services/efeito_ausencia.py:176`; `:182`; `:183`; `app/ponto/turnos.py:2764`; `app/ponto/services/efeito_ausencia.py:46`)
+
+Esse mecanismo tem caso sintético e referência a col451 no teste; a reprodução individual de col206 31/08 e col551 27/10 não está demonstrada pelo dado fornecido. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:191`; `:383`; demais resultados [nao verificado])
+
+Com vazio, o dia recebe **nenhum crédito da justificativa**; conserva o trabalho que o motor calcular. Vazio não implica automaticamente falta: o Base inclui períodos abertos em `datas_trabalho`, sem exigir minutos positivos. Os valores individuais dos dez dias permanecem [nao verificado]. (`app/ponto/motor_calculo_v2.py:2499`; `:2581`; `:2605`; `:2634`)
+
+5. **nada de falha nova de relógio demonstrada.**
+
+A fonte usa datas explícitas, ordenação por `data_turno, pk` e timestamps explícitos nas conversões locais. O previsto consulta escala, marcos e pausas, sem depender das batidas nesse cálculo. (`app/ponto/services/efeito_ausencia.py:98`; `:122`; `:179`; `app/escala/utils.py:2288`; `:2310`)
+
+Os testes repetem o juiz puro e a consulta da fonte; não demonstram duas execuções completas do fechamento. **Idempotência integral do recálculo: [nao verificado].** (`app/ponto/tests/test_justificativa_paga_o_periodo.py:134`; `:320`)
+
+6. **PROCEDENTE — há mordida localizada, mas falta prova do percurso até o gravado.**
+
+O teste principal exige `horas_abono=11.5`; essa asserção distingue a conta nova da antiga. O controle de dia inteiro passaria com o motor velho, pois exige apenas um dia abonado e horas positivas. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:255`; `:258`; `:262`; `:265`)
+
+Os testes da fonte conferem seus próprios minutos e a grade; as propriedades somam trabalho com crédito da fonte, sem conferir o abono materializado que apresenta a falha do item 1. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:320`; `:325`; `:338`; `:350`; `app/ponto/services/fechamento.py:1067`)
+
+- `test_cobparc_marco_no_periodo.py`: **só atualiza a fixture**, acrescentando mock da fonte sem banco; mantém asserções de dispensa, ausência de hora fabricada e preservação da batida. (`app/ponto/tests/test_cobparc_marco_no_periodo.py:60`; `:75`)
+- `test_s5b_porta_unica.py`: **só amplia lista e fixture** com o memo; preserva o teste que remove cada atributo e exige exceção nominal. Contudo, aceita `{}` e não detecta o chamador que esqueceu de alimentar o mapa. (`app/ponto/tests/test_s5b_porta_unica.py:989`; `:1000`; `:1006`; `:1014`)
+- O caso de papel errado é sintético; reprodução dos três dias produtivos exigidos no aval: [nao verificado]. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:429`)
+- RED histórico e suíte verde efetivamente executada: [nao verificado]. [nao verificado]
+
+7. **PROCEDENTE — derivação paralela, selo insuficiente e campo com dois significados.**
+
+A cadeia manual de quatro marcos duplica uma composição já existente que recebe todas as pausas, causando os 85 minutos indevidos do item 2. (`app/ponto/services/efeito_ausencia.py:156`; `app/escala/utils.py:353`; `app/escala/utils.py:363`)
+
+`dias_abono` também possui dois significados: no motor, exclui todo dia em `_mj`; no resumo da lavratura, conta qualquer dia com minutos abonados positivos. (`app/ponto/motor_calculo_v2.py:2629`; `app/ponto/services/dia_pago.py:698`; `app/relatorios/cartao_pela_celula.py:190`)
+
+A cobertura ainda muda **depois** da resposta do juiz anunciado, pelo filtro de cruzamento. Isso demonstra decisão adicional de cobertura; duplicação de um juiz **já registrado**, especificamente: [nao verificado]. (`app/ponto/services/efeito_ausencia.py:176`; `:182`; `app/ponto/turnos.py:2751`; `app/core/juizes.py:207`; `:251`)
+
+Segundo escritor persistente novo, relógio novo fora da borda ou toque adicional no motor além da inicialização e do bloco de abono apresentado: **nada demonstrado**. A falha comprovada é que essa leitura nova permanece desconectada do abono gravado. (`app/ponto/motor_calculo_v2.py:813`; `:2628`; `app/ponto/services/fechamento.py:1067`)
+
+DIFF produtivo 0/0, hashes iguais dos TXT exportados e aplicação restrita à competência 11: **[nao verificado]**.
 
 ## 14/11 16:36 · sessao 2224a6af9587 · E3-V10-DEGRAU-DONO-E-PORTA · construtor · origem=Code
 
@@ -710,16 +804,4 @@ API de férias recusa POST com 405; Django admin desta app registra somente Afas
 
 Possível apoio ao item 5: o aviso hipotético não pergunta ao juiz agregado: usa diretamente `int(dias) < FRACAO_MINIMA`, enquanto a situação existente chama `violacoes_de_fracionamento`. Porém sua mensagem manda verificar as outras frações e não afirma proibição individual; é aviso conservador, não outra porta de recusa. Evidências: `app/ferias/situacao.py:227`, `:341`, `:344`, `:345`, `:346`.
 
-## 14/11 15:05 · sessao f31cd24de3b1 · - · - · origem=Ronald (tmux)
-
-Item 3: **PROCEDENTE, preexistente; adiamento não é cura.** `_commitar` devolve falso na recusa (`app/core/integrador_lote.py:481`); `_subir` apenas deixa de acumular a fatia, sem desfazer a cópia nem interromper (`app/core/integrador_lote.py:714-720`); faz push incondicional e, com rc zero, deploy (`app/core/integrador_lote.py:739-753`). A fatia recusada permanece na árvore publicada; só as commitadas recebem FIM (`app/core/integrador_lote.py:763-770`).
-
-Não há fundamento para chamar isso de regressão introduzida pelo delta: o comportamento já está na cópia-base (`app/core/integrador_lote.py:719-753`). A cura HOOKMSG adiciona outra causa de recusa à mesma falha preexistente (`diff_v3.patch`, `bin/commit_msg.sh:29-31`).
-
-A pausa protege a entrada oficial: o wrapper consulta os portões antes de montar e adquirir a árvore (`bin/integrador.sh:19-24`, `bin/integrador.sh:32`); a pausa fecha esses portões (`bin/trava.sh:40-42`, `bin/trava.sh:62-65`). Contudo, “dormente” não vale como garantia universal: a CLI admite `rodar` diretamente (`app/core/integrador_lote.py:857-859`), e `rodar` copia e recarrega sem consultar a pausa (`app/core/integrador_lote.py:614-638`). Uso direto em produção: **[não verificado]**.
-
-Portanto, manter na fila é compatível com a pausa informada, mas a condição completa é **antes de qualquer execução do integrador, inclusive direta**. “Antes de religar a esteira” cobre o caminho oficial; não fecha todas as entradas (`bin/integrador.sh:19-32`; `app/core/integrador_lote.py:857-859`). O texto integral do aval E3-V10 e o estado atual da pausa não foram verificados independentemente: **[não verificado]**.
-
-Classe concreta: **ordem/propagação de reprovação** — commit recusado não interrompe a publicação da árvore copiada (`app/core/integrador_lote.py:719-753`).
-
-_5182 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
