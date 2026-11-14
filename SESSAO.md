@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 03:45:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (622.4 MB). Acoes na janela: **1661**.
+**Medido em 14/11/2026 03:51:02.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (622.4 MB). Acoes na janela: **1659**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1669,5 +1669,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:52:19 | Bash |  | `cd /home/ronald/saas-hasner/logs/CONTRATOS-ENTRADA; python3 - <<'EOF' rows=[l for l in open('censo_escala.r') if l.startswith('\|') and not l.startswith('\|---')] d=[r.split('\|')[1:-1] for r in rows if r.count('\|')>=10] d=[c for c in d if c[0].strip() not in ('Estrutura',)] print(len(d)); print('classe sim',sum(1 for c in d if c[8].strip().lower().startswith(('sim','**sim')))); print('desenc',su ...` |
 | 15:52:13 | Bash |  | `cd /home/ronald/saas-hasner/logs/CONTRATOS-ENTRADA; python3 - <<'EOF' rows=[l for l in open('censo_escala.r') if l.startswith('\|') and not l.startswith('\|---')] big=[r.split('\|')[1:-1] for r in rows if r.count('\|')>=10] hdr=big[0]; data=big[1:] print(len(hdr),[h.strip()[:15] for h in hdr]); print('pares',len(data)) dc=sum(1 for c in data if not c[5].strip().startswith('Nenhum')) ss=sum(1 for c ...` |
 | 15:52:06 | Bash |  | `cd /home/ronald/saas-hasner/logs/CONTRATOS-ENTRADA; tail -n 2 log_escala; wc -c censo_escala.r 2>/dev/null; tail -n 25 censo_escala.r 2>/dev/null \| cut -c1-400` |
-| 15:51:01 | Monitor | fim da suite inteira LEI-DESLIGADO | `cd /home/ronald/saas-hasner; until [ -e logs/DESLIGADO-NAO-TRAVA/suite/fim ] \|\| ! ps -p 2434966 >/dev/null; do /usr/bin/sleep 20; done; /usr/bin/sleep 5; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/DESLIGADO-NAO-TRAVA/suite/suite_inteira.log \| tail -n 3; ls logs/DESLIGADO-NAO-TRAVA/suite/` |
-| 15:50:55 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/DESLIGADO-NAO-TRAVA/suite/; tail -c 300 logs/DESLIGADO-NAO-TRAVA/suite/suite_inteira.log; echo; bin/trava_teste.sh --quem; date +%H:%M` |
