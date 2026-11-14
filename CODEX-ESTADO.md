@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 00:56** · publicado em **14/11/2026 00:57** (UTC-3)
+> Ultima resposta processada: **14/11/2026 01:00** · publicado em **14/11/2026 01:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 01:00 · sessao 2e75ba60ed53 · - · - · origem=Ronald (tmux)
+
+Achados de leitura, sem edições ou execução ORM:
+
+- **R5 exige cuidado posicional:** Vigia publica oito colunas em `chamados/services/vigia_fio.py:633`. `backfill_fio_morto_e4b.py:252` desempacota exatamente oito campos. Uma nona coluna exige adaptar esse leitor, preservando os índices usados em `:79`, `:242` e `:250`. Nenhum consumidor CSV/template/JS dessa lista foi encontrado nas buscas realizadas; consumidores externos são [nao verificado].
+- **Folha:** dict de cada dia nasce em `folha/fora_da_folha.py:241-242`, sem `nao_sei`. Não encontrei chamador de produção de `o_que_segura` nos arquivos Python/HTML pesquisados; há testes. O Vigia usa `dias_que_seguram`, em `vigia_fio.py:589`.
+- **Universos diferem na entrada:** Folha parte de `classificar_export` e retidos (`fora_da_folha.py:130-149`); Vigia deduplica `(colab,data)` desses dias (`vigia_fio.py:585-592`); furo parte das células `furo/cobrado` nas empresas ativas (`furo_sem_canal.py:61`, `:79-85`). Paridade global sem alinhar recortes seria [nao verificado]. `dias_por_fio` da Folha conta dias (`fora_da_folha.py:190-192`), enquanto grupos contam colaboradores (`:195`).
+- **R8 compatível com escritor real:** `ChamadoColaborador.criar` resolve célula somente quando o campo não foi passado (`chamados/models.py:1066-1068`) e grava em `:1096`. `_celula_de` retorna `.first()` do dia (`:1241`), podendo retornar `None`. O formulário entrega a data do catálogo em `services/abertura.py:191`. Alcance ORM efetivo segue [nao verificado].
+- **Dia forte existente:** `dia_do_fato` prefere célula (`juizes.py:98-99`), catálogo (`:113-114`) e fallback `data_turno` (`:118`); `fortes=True` termina antes dos degraus fracos (`:127-128`). Catálogo lê a chave declarada em `catalogo/modulos.py:219-225`.
+- **R11 alcançável por leitura:** `perguntas_do_app` chama `pergunta_viva` sem instante (`pergunta_no_app.py:62`); o cálculo chega à janela (`juizes.py:1455`), cujo default lê `date.today()` (`:592`). Com `agora`, `pergunta_viva` deriva o dia civil local (`:885-887`). Portanto a injeção opcional deve atravessar a cadeia inteira.
+- **Escritores de campos persistentes:** `status_local`: `_gravar_estado`, `models.py:201-204`, atribuição `:228`; nascimento `:1096`. `silenciado_ate`: `arquivo.py:166/:171` e limpeza `:202/:210`. `celula_id`: nascimento acima e `services/vinculos.py:93-101`.
+- **Borda do silêncio:** fila exclui somente `silenciado_ate > agora` (`painel.py:188-190`); igualdade já pertence à fila. Partição usa arquivado quando `> agora` e histórico quando `<= agora` (`verbos.py:51`), diferença que permanece na obra R6.
+- **R2/R3:** natureza prioriza validar (`catalogo/natureza.py:46-49`); crédito separa respondidas/vivas (`raiox.py:143-144`) e destino vivo vence pai (`:150-153`). O filtro anterior exclui materializada com lavra sim (`:135-138`). Prova ORM com consulta e valor: [nao verificado].
 
 ## 14/11 00:56 · sessao eee42a348fa5 · E3-FORMA-SQL · construtor · origem=Code
 
@@ -542,33 +556,4 @@ Há ainda lacuna de **fuso na view de avaliação**: os novos testes chamam os s
 
 Os executores e arquivos de prova `hj090_volta7_mutantes.py`, `*_green.txt`, `*_red*.txt`, `*_mordidas.txt`, `*_django.txt` e `*_catraca.txt` não foram localizados pelo censo incluindo ignorados; implementação, 33/33 e execução anunciada: **[nao verificado]**. O teste menciona executor separado sem fornecê-lo no próprio arquivo. (`app/ferias/test_hj090_volta7.py:3`)
 
-## 13/11 22:01 · sessao 9439b1771695 · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-1. **Nova inversão de travas entre edição e sincronização/criação de ciclos.** A edição materializa PAs por PK (`app/ferias/services.py:784`); a criação mantém uma transação externa e percorre aniversários em ordem cronológica (`app/ferias/views.py:168`, `app/ferias/views.py:171`, `app/ferias/views.py:191`), travando cada PA reaproveitado (`app/ferias/services.py:392`). Contraexemplo: PK10=2026 e PK20=2024; criação segura PK20, edição segura PK10 e espera PK20, criação chega a 2026 e espera PK10. Deadlock inferido do protocolo; reprodução PostgreSQL: **[nao verificado]**.
-
-2. **F5 fecha duas edições de irmãos existentes, mas não edição × inserção.** A edição trava somente linhas já encontradas (`app/ferias/services.py:784`); criação usa `get_or_create` sem trava comum do colaborador (`app/ferias/services.py:387`); a guarda apenas consulta sobreposição (`app/ferias/models.py:193`). Contraexemplo melhor sugerido pelo pai: admissão 01/01/2025, único PA inicialmente em 2027; T1 move esse PA para 01/06/2025..31/05/2026, T2 cria o ciclo 01/01/2025..31/12/2025. Ambas as guardas podem consultar antes dos commits e aceitar; inícios distintos escapam à unicidade (`app/ferias/models.py:138`). Reprodução/isolation real: **[nao verificado]**.
-
-3. **Remarcação ainda tem dois significados para “não iniciado”.** O juiz de apresentação exige status `agendado` e início posterior a hoje (`app/ferias/models.py:334`, `app/ferias/models.py:338`), mas a view tocada consulta somente o status da foto (`app/ferias/views.py:703`). A porta não repete a guarda temporal: `remarcar_agendamento` delega à troca (`app/ferias/services.py:682`), cuja linha travada recusa somente cancelado (`app/ferias/services.py:651`, `app/ferias/models.py:307`). Contraexemplo: hoje=13/11/2026, início=10/11/2026, status gravado ainda `agendado`; tela desabilita Editar, POST direto remarca para dezembro. Há também corrida entre a guarda da view e a trava, se outro escritor mudar o status para `em_gozo`. O teste v7 remarca somente início futuro (`app/ferias/test_hj090_volta7.py:63`).
-
-Fechamentos e mordida:
-
-- **F4 corrigido nos três criadores persistentes nominais:** histórico (`app/ferias/services.py:469`), agendamento (`app/ferias/services.py:527`) e aprovação (`app/ferias/services.py:721`) passam hoje ao juiz; intake delega (`app/ferias/services.py:269`), troca também usa o juiz (`app/ferias/services.py:662`). Teste v7 distingue o default nos regimes presente/passado (`app/ferias/test_hj090_volta7.py:113`) e intake iniciado (`app/ferias/test_hj090_volta7.py:126`).
-- **Trava do preflight não é mordida pelo teste Django novo.** A exclusão é na mesma conexão (`app/ferias/test_hj090_volta7.py:237`); retirar apenas `select_for_update` do command mantém exatamente esse cenário de exclusão e rollback (`app/ferias/management/commands/realinhar_concedidos_ferias.py:125`). Ele testa atomicidade de lote, não impedimento de exclusão concorrente.
-- **Save dentro do atomic tem verificação pertinente:** usa `TransactionTestCase`, espia `connection.in_atomic_block` no save e exige uma chamada (`app/ferias/test_hj090_volta7.py:258`, `app/ferias/test_hj090_volta7.py:264`, `app/ferias/test_hj090_volta7.py:270`). Execução: **[nao verificado]**.
-
-Mapa dos campos:
-
-| Campo | Escritores | Leitores / significado |
-|---|---|---|
-| Agendamento.status | Histórico `services.py:469`; criação `:527`; aprovação `:721`; troca `:662`; cancelamentos `:600`, `:632`; cron `:900` | Juiz temporal `models.py:276`; status humano cancelado é terminal `services.py:898`; guardas `:581`; apresentação `models.py:335`; espelho aceita três status ativos `ponto/services/ausencia.py:1181`; API `api/views_mensageria.py:845`. |
-| Agendamento.data_inicio | Histórico `services.py:467`; criação `:526`; aprovação `:718`; troca `:657` | Juiz `models.py:276`; apresentação `:335`; guarda calendário `:437`; espelho `ponto/services/ausencia.py:1185`; cron `management/commands/sincronizar_status_ferias.py:38`; API `api/views_mensageria.py:843`. |
-| Solicitacao.status | Default `models.py:486`; aprovação `services.py:697`; rejeição `:738` | Guarda pendente travada `views.py:776`; template `templates/ferias/solicitacoes.html:19`. |
-| Solicitacao.avaliado_em | Origem instante `views.py:787`; aprovação `services.py:699`; rejeição `:740`; campo DateTime `models.py:491` | Testes `test_hj090_volta7.py:111`, `:145`; leitor produtivo nominal específico adicional: **[nao verificado]**. O `sol.avaliado_em` de `templates/colaboradores/painel_solicitacao_beneficio.html:32` pertence a outro modelo (`colaboradores/models.py:786`). |
-| PA.dias_concedidos | Default `models.py:128`; realinhar/reverter `services.py:160`, `:197`; histórico `:492`; criação `:529`; cancelamentos `:597`, `:624`; troca `:656`; aprovação `:728` | Saldo `models.py:220`; contador soma todos não cancelados `services.py:105`; tela explicita agendados/gozados no tooltip `templates/ferias/_secao_colab.html:49`. |
-| PA.status | Juiz `models.py:98`; apply/reversão `services.py:162`, `:199`; sincronização `:362`; reaproveitamento `:396`; histórico `:495`; criação `:531`; cancelamentos `:599`, `:626`; troca `:672`; aprovação `:730`; edição `:800`; venda `:880` | Permissões `models.py:234`, `:242`; aprovação seleciona status armazenado `services.py:706`; lista DP `management/commands/listar_ferias_dp.py:67`; API `api/views_mensageria.py:841`. Seleção de aprovação não recalcula todos os candidatos no hoje recebido: comportamento preservado, obrigação de mudança **[nao verificado]**. |
-
-Não encontrei segundo escritor produtivo nominal das datas de Agendamento fora de `_trocar_janela`; wrappers delegam (`app/ferias/services.py:677`, `app/ferias/services.py:682`). A obrigação de escrita por porta está registrada em `app/core/contratos_estruturais.py:126`; confirmação e cancelamento têm escritores separados para seus campos (`app/ferias/services.py:588`, `app/ferias/services.py:825`, `app/ferias/services.py:840`).
-
-_4895 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4896 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
