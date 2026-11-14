@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 00:03:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (615.1 MB). Acoes na janela: **2025**.
+**Medido em 14/11/2026 00:09:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (615.2 MB). Acoes na janela: **2027**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:05:13 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir; echo rc=$?; date '+%H:%M'` |
+| 00:05:04 | Bash |  | `sed -n 140,175p /home/ronald/saas-hasner/bin/deploy.sh` |
+| 00:05:03 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc='HJ-090 SUITE INTEIRA pre-opus VERDE' assert s.count(anc)==1 s=s.replace(anc,'HJ-090 OPUS FINAL APROVA 00:1x (logs/HJ-090/opus_final/r.md): 0 bloqueia, 7 FILA (1 cancelar_dp iniciado = lei A15; 2 relogio residual aplicar_status/vender/sincronizar; 3 juiz _validar_agendamento na view; 4 volta7 RED so mutante; 5 3 commits sem LEI-AKITA -> po ...` |
+| 00:04:52 | Bash |  | `O=/home/ronald/saas-hasner/logs/HJ-090/opus_final; cat > $O/r.md <<'EOF' APROVA (opus final HJ-090, verificador, escopo e439fac78..d9cff7653; gravado pela sessao a partir da resposta do agente, que e so-leitura) NENHUM BLOQUEIA; todos FILA: 1. services.py:607-620 cancelar_agendamento_dp aceita agendamento ja iniciado por data com status 'agendado'; _sync_ausencia (models.py:453) remove Ausencias d ...` |
 | 23:59:53 | Bash |  | `sed -i '3s/.*/ESPERANDO: push.sh \| pid=3646643/' docs/RELATO.md && cd ../bin && python3 -c " import hook_stop_fila1 as h print(h._esperando_com_prova())"` |
 | 23:59:50 | Bash |  | `cd /home/ronald/saas-hasner/bin && python3 -c " import hook_stop_fila1 as h print(h._esperando_com_prova()) " 2>&1 \| tail -3; /bin/grep -n "def _prova_pid" -A20 hook_stop_fila1.py \| head -25` |
 | 23:59:46 | Bash |  | `sed -n 789,856p /home/ronald/saas-hasner/bin/hook_stop_fila1.py` |
@@ -2033,5 +2037,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:09:50 | Bash |  | `cd /home/ronald/wt-codex-tipo-na-fonte-184856; MB=$(git merge-base HEAD 7621a973f); echo $MB; git log --oneline $MB..HEAD \| wc -l; git log --oneline $MB -1; git diff --stat $MB HEAD \| tail -3; ls /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/volta4/ \| head -40` |
 | 12:09:47 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/TIPO-NA-FONTE/item3/volta5/ logs/TIPO-NA-FONTE/item3/ \| head -60; cd /home/ronald/wt-codex-tipo-na-fonte-184856; git status --porcelain \| head; git log --oneline -8` |
 | 12:09:43 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b16k3outk.output; L=logs/TIPO-NA-FONTE/item3/volta5/suite_pre_opus_c/suite.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; /bin/grep -E '^Ran ' $L\|tail -1; tail -3 $L; /bin/grep -E '^(ERROR\|FAIL):' $L \| head -20` |
-| 12:04:08 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read(); a='\| construcao -> opus (sessao), na copia wt-desligado-112447 depois do GREEN da lei' assert s.count(a)==1; s=s.replace(a,'\| construcao -> opus (sessao) [RESPONDIDA por COMPLEMENTO-DESLIGAR-1311 12:2x: vai como item (d) da O50, fora da copia wt-desligado-112447]'); open(p,'w').write(s) EOF echo ok` |
-| 12:04:04 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' s=open('BACKLOG.md').read(); a='\| O59 \| **RESCISAO-LE-O-REGISTRO**'; assert s.count(a)==1 s=s.replace(a,'\| O59 \| **ABSORVIDA pela UI-RESCISAO (COMPLEMENTO-DESLIGAR-1311 13/11)**; **RESCISAO-LE-O-REGISTRO**'); open('BACKLOG.md','w').write(s) EOF cd /home/ronald/saas-hasner; D=logs/UI-RESCISAO; mkdir -p $D; cp logs/AVAIS-1313/complemento_de ...` |
