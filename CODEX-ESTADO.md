@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 08:18** · publicado em **14/11/2026 08:19** (UTC-3)
+> Ultima resposta processada: **14/11/2026 08:21** · publicado em **14/11/2026 08:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 08:21 · sessao 26e1e732f6da · HJ-091 · censo · origem=Code
+
+As referências aos anexos usam **linhas contadas na transcrição fornecida**; correspondência com a numeração dos arquivos originais: [nao verificado].
+
+**1a — Classe (b): visto pelo Codex na volta 1; descartado na triagem como conduta do pouso.** (preverif1/r.r:116; preverif1/triagem.md:9.)
+
+- **Pergunta:** “O que acontece entre o deploy e o backfill, e entre o backfill e a primeira gravacao de agendamento?” (preverif1/q.q:9.)
+- **Resposta:** “Cancelamento limpa somente linhas vinculadas, deixando as antigas NULL.” (preverif1/r.r:116.)
+- **Triagem/motivo:** “DESCARTADO p/ codigo: acoplamento migrate->backfill e CONDUTA DO POUSO (merge -> deploy com migrate -> DRY -> --apply com registro em logs/HJ-091), no mesmo ato”. (preverif1/triagem.md:9.)
+
+**1b — Classe (d): modo comum; nenhum identificou a rejeitada sem origem renascendo como aprovada.** A cobertura era genérica sobre preservação do passivo, status/origem e intervalo anterior ao backfill; as respostas trataram da rejeitada **própria**. (preverif1/q.q:3; preverif1/q.q:8; preverif1/q.q:9; preverif1/r.r:104; preverif2/r_sonnet.r:6.)
+
+- **Pergunta:** “passivo so como lista ao DP, ‘NADA se corrige por codigo’”; “todo escritor e leitor dos campos que o diff toca supoe o MESMO significado […] status, origem”. (preverif1/q.q:3; preverif1/q.q:8.)
+- **Resposta que tocou o tema:** Codex: “O espelho conserva explicitamente a rejeitada própria”; Sonnet: “Teste: test_hj091...:543 (rejeitada propria)”. **Sobre recriar a rejeitada sem origem como aprovada: nenhum.** (preverif1/r.r:104; preverif2/r_sonnet.r:6.)
+- A distinção aparece no código: a busca da rejeitada restringe a origem, enquanto o espelho cria com status aprovado; o teste de preservação usa a linha do próprio agendamento. (app/ponto/services/ausencia.py:314; app/ponto/services/ausencia.py:1277; app/ponto/tests/test_hj091_ferias_derivadas.py:187.)
+
+**1c — Classe (b): visto pelo Codex na volta 1; descartado como conduta do pouso.** A resposta já registrava recusa/Pauta e passagem da mudança somente de status. (preverif1/r.r:116; preverif1/triagem.md:9.)
+
+- **Pergunta:** “migration 0078 + backfill --apply no mesmo ato do deploy. O que acontece entre o deploy e o backfill”. (preverif1/q.q:9.)
+- **Resposta:** “o espelho não as reconhece, tenta criar e transforma colisões em recusa/Pauta. Mudança somente de status passa pela guarda.” (preverif1/r.r:116.)
+- **Triagem/motivo:** “DESCARTADO p/ codigo: acoplamento migrate->backfill e CONDUTA DO POUSO”. (preverif1/triagem.md:9.)
+
+**2 — Classe (e): NÃO PERGUNTADO quanto à fidelidade da linha LEI-AKITA e à correspondência entre padrão declarado e padrão realizado.** As perguntas pediam leitores e classes estruturais, sem pedir essa conferência dos metadados. (preverif1/q.q:4; preverif1/q.q:5; preverif2/q.q:4; preverif2/q.q:6.)
+
+- **Pergunta que cobria essa conferência:** “nenhum”. (preverif1/q.q:1–11; preverif2/q.q:1–7.)
+- **Resposta que tocou o tema:** Sonnet identificou “ponto/services/cartorio.py:383-386 (houve_fato_novo)” e afirmou que “ponto/services/ausencia.py:960 e :990 (comentario) sao ESCRITA […] nao leitura”; sobre o padrão, limitou-se a “padrao=Single Writer Principle existe em GLOSSARIO.md e PLANO-PADROES.md”. (preverif2/r_sonnet.r:26; preverif2/r_sonnet.r:30; preverif2/r_sonnet.r:22.)
+- Portanto, o leitor real foi encontrado; a denúncia da referência falsa na LEI-AKITA e do padrão inadequado não aparece nessas respostas. (preverif2/r_sonnet.r:22; preverif2/r_sonnet.r:26; preverif2/r_sonnet.r:30.)
+
+**3 — Classe (a): falha do Codex, volta 1.** A pergunta nomeava `STATUS_QUE_ESPELHAM`; a resposta não identificou as quatro cópias apontadas pelo opus. (preverif1/q.q:5; preverif1/r.r:70; opus_final/r.md:9.)
+
+- **Pergunta:** “Ha 2o juiz que duplica juiz registrado em JUIZES.md (status de ferias, STATUS_QUE_ESPELHAM, sobreposicao)? derivacao paralela de fonte unica?” (preverif1/q.q:5.)
+- **Resposta:** “`STATUS_QUE_ESPELHAM` é compartilhado pelos três novos consumidores”, seguida de outra duplicidade: representação separada de “não cancelado”. (preverif1/r.r:70.)
+- As cópias numeradas pelo opus estão presentes na cópia examinada. (app/ferias/situacao.py:119; app/ferias/services.py:872; app/ferias/models.py:364; app/ferias/management/commands/sincronizar_status_ferias.py:34.)
+
+**4 — Classe (a): falha do Sonnet, volta 2.** A pergunta nomeava os contadores e o pouso antes do pré-requisito; a resposta declarou a integração curada sem apontar seu efeito sobre o legado anterior ao backfill. (preverif2/q.q:5; preverif2/q.q:6; preverif2/r_sonnet.r:13.)
+
+- **Pergunta:** “os contadores ferias_ausencia_sem_agendamento e ferias_dia_sem_ausencia”; “pouso antes do pre-requisito”. (preverif2/q.q:5; preverif2/q.q:6.)
+- **Resposta:** “(j) CURADO. […] Contadores no carimbo: vigiar_fio_morto.py:102-104,238-258 (ESPERADO_DO_CARIMBO=0, fora de ALARMA_*)”. (preverif2/r_sonnet.r:13.)
+- O efeito estrutural é legível sem banco: origem nula entra no contador, e os dois contadores recebem esperado zero. Quantidade efetiva em produção: [nao verificado]. (app/ferias/services.py:150; app/ferias/services.py:155; app/chamados/management/commands/vigiar_fio_morto.py:102.)
+
+**5 — Classe (b): achados vistos e encaminhados à fila, com ressalva documental.** O opus diz expressamente “concorda com a triagem B.2-B.6”; portanto, esse item não demonstra que o encaminhamento à fila foi errado. (opus_final/r.md:11.)
+
+- **Pergunta:** “Cada item do aval esta realizado no diff”; “ordem de trava (lock ordering) e TOCTOU”; “campo com dois significados”. (preverif1/q.q:3; preverif2/q.q:6.)
+- **Resposta:** “B.2 [fila] Ordem de trava”; “B.3 [fila] Legado com range”; “B.4 [fila] FK com CASCADE”; “B.5 [fila] Beco sem saida do DP”; “B.6 [fila] Link do painel abre o saldo”. (preverif2/r_sonnet.r:17–21.)
+- **Triagem/motivo documentado:** “FILA (nao bloqueia): link abre saldo e nao o agendamento; CASCADE na FK; test_a_recusa_MORDE auto-instala; data_fim legado.” Motivo adicional da sessão para B.2/B.5: [nao verificado]. (preverif1/triagem.md:12.)
+
+**Contagem por classe**, nas sete classificações acima: **(a) 2; (b) 3; (c) 0; (d) 1; (e) 1**. O item 5 integra (b) com a ressalva de concordância do opus. (opus_final/r.md:5–11.)
+
+**Falhas atribuíveis ao CODEX — somente (a), volta 1: 1, achado 3.** (preverif1/q.q:5; preverif1/r.r:70.)
 
 ## 14/11 08:18 · sessao ee2645500978 · - · - · origem=Ronald (tmux)
 
@@ -725,39 +775,4 @@ Os testes de custo usam texto `'07:00'`; não fornecem uma expectativa para text
 
 Tentei `git show 96aa51407:app/chamados/models.py`; falhou porque a cópia não é repositório Git. Portanto não verifiquei o corpo histórico, e “retirar apenas a condição” acima é um contrafactual explícito, sem afirmar que reproduz exatamente aquele commit. [não verificado]
 
-## 14/11 04:08 · sessao f474698533df · - · - · origem=Ronald (tmux)
-
-**Regra R-a: literal completo não localizado nos três arquivos pedidos.** Fiz grep por `E3-10`, `CURA.NO.ESCRITOR`, `respondida_sem_texto` e `sem_veredito_entre` em `app/docs/CORTES.md`, `app/docs/LEIS.md` e `app/docs/DOSSIES.md`: não achei nenhuma ocorrência desses identificadores nesses arquivos. A íntegra do aval de 12/11 item 2 fica **[não verificado]**; há ponteiros para `logs/AVAIS-1212/e3_10_cura_no_escritor.txt`, fora do material fornecido. Os registros disponíveis são:
-
-- `app/docs/PROMPTS.md:2171`: literal da **linha de registro**, não da íntegra do aval: “E3-10-CURA-NO-ESCRITOR (aval Ronald): censo Codex do escritor das 143 vivas em respondida_sem_texto pela trilha; cura na PORTA com RED+mutante; respostas_sem_veredito pergunta ao predicado; passivo so se o app dos 17 nao muda.”
-- `app/docs/BACKLOG.md:1944`: item (2) escrito “cura na porta com RED+mutante; respostas_sem_veredito pergunta ao predicado”; nomeia 143 vivas em `respondida_sem_texto`, sem explicitar `texto=''`.
-- `app/chamados/models.py:1900-1901`: comentário do corpo atual atribui ao item 2: “‘o colaborador falou’ pergunta ao predicado UNICO -- respondida SEM texto (HX-PAR-RESPOSTA) nao e resposta a julgar: a bola segue com o colaborador (C6/fio), nao com o admin.”
-- Assim, R-a nomeia o caso “carimbo de resposta sem texto”; o significado computável de vazio depende do predicado, não de um literal `texto=''` presente no aval disponível. `app/chamados/models.py:1899-1908`.
-
-**Regra R-b: encontrada em CORTES, sem menção literal a vazio.**
-
-- `app/docs/CORTES.md:449`: “corte Ronald: juiz DisputaSupervisao.respostas_sem_veredito nasce” e “`ponto/supra_juiz.py::pode_executar_csf` passa a PERGUNTAR a ele em vez de ler `respondida_em` cru: pai/destino seguro so com resposta SEM veredito; validada/materializada fecha normal pela Defesa 1.” Proíbe “(A) segurar todo pai respondido e (C) fechar o pai nas 3 views”.
-- A mesma linha **não** contém `sem_veredito_entre`, retratação, `texto=''` nem a expressão “perguntam a ESSE juiz”. `app/docs/CORTES.md:449`.
-- A migração do reconciliador está registrada em `app/docs/PROMPTS.md:2208`: “pode_executar_csf (...) e reconciliador.py:1465 perguntam a DisputaSupervisao.respostas_sem_veredito”.
-- A interpretação da retratação está documentada no próprio código em `app/chamados/juizes.py:2063-2066`: “O PREDICADO E O DO JUIZ DO VEREDITO” / “mesma pergunta na retratacao por premissa morta”; usa `sem_veredito_entre`, corpo de `respostas_sem_veredito`, com `ignorar_tranca=True`. É comentário que atribui frase ao aval; íntegra do aval **[não verificado]**.
-- O comentário de `sem_veredito_entre` atribui ao aval “um predicado so”, com CSF e retratação lendo a mesma pergunta sobre universos distintos. `app/chamados/models.py:1894-1898`.
-- `app/docs/CORTES.md:448` marca expressamente como superada a afirmação anterior “MESMO predicado”: após (B) CSF passa a perguntar ao juiz em vez do carimbo cru; não declara que (B) define o comportamento de texto vazio.
-
-**Regras gerais encontradas, sem eleger resposta para vazio.**
-
-- L-039: “FALTA TEM UM SIGNIFICADO = decidida (ausencia lancada cujo tipo desconta)”. Trata classificação de falta, não o par carimbo/texto de resposta. `app/docs/LEIS.md:87`.
-- Corte FALTA-UM-SIGNIFICADO: furo sem decisão aparece como “dias em aberto (a decidir)”, “nunca some, nunca vira falta sozinho”. Não define se texto vazio é resposta. `app/docs/CORTES.md:179`.
-- L-088: furo é “marco nao cumprido, que e PERGUNTA em aberto e nao decisao”. Não define resposta vazia. `app/docs/LEIS.md:120`.
-- L-002: “TESTEMUNHA LE, NAO RECALCULA: tela, PDF, TXT, badge e contador leem a MESMA autoridade”. Sustenta compartilhamento de autoridade, sem escolher valor do predicado para vazio. `app/docs/LEIS.md:60`.
-- L-061: “O CONSUMIDOR LE A LAMPADA, nunca re-julga: chamado, pergunta, tela e folha leem a celula/ata”. Não define resposta vazia. `app/docs/LEIS.md:95`.
-- C7: “DisputaSupervisao.pode_fechar (fio_vivo C6 vazio + nenhuma resposta sem veredito) e o juiz unico da pergunta C7 ‘a disputa pode fechar?’”. Não define texto vazio. `app/docs/CORTES.md:272`.
-- A formulação geral “resposta sem veredito segura” existe na documentação do código: fechar é veredito sobre silêncio, não sobre resposta; resposta sem veredito está parada no admin; materializada não conta. `app/chamados/models.py:1874-1884`.
-- `fechar` atribui ao aval C7 literal: “fecha quando `pergunta_viva(disputa)` esta vazio (C6), e a porta recusa resposta sem veredito, como ja faz”; comentário diz recusar em todas as portas. Nenhum desses trechos define se vazio conta como resposta. `app/chamados/models.py:1922-1930`.
-- L-110: referência é regra, “o codigo de hoje nao e gabarito”; onde regra não responde, sobe pergunta de lei. É pertinente para não converter teste/código existente em decisão normativa. `app/docs/LEIS.md:136`.
-- Contrato “1 JUIZ por pergunta”, não “um juiz para todas as perguntas”: `CLAUDE.md:178`. Dois predicados podem exigir distinguir perguntas; os textos disponíveis da O168 chamam CSF e retratação da **mesma** pergunta, portanto separar especificamente essas respostas não tem autorização literal encontrada. `app/chamados/models.py:1896-1898`; `app/chamados/juizes.py:2063-2066`. Corte para novo predicado ou duas candidatas é tratado em `CLAUDE.md:269-273`.
-- Anexo JUIZES é lookup, não lei; a lei mora em CLAUDE 4b e registro vivo em core/juizes. `app/docs/JUIZES.md:7-14`.
-- Registro vivo pergunta: “quais respostas do colaborador na disputa esperam veredito (nem validadas nem materializadas)?”, autoridade `respostas_sem_veredito`. Não acrescenta condição de vazio. `app/core/juizes.py:302`.
-
-**Compatibilidade por leitura:** é possível satisfazer simultaneamente R-a como mudança no **conteúdo** da pergunta e R-b como mudança no **endereçamento** dos leitores. Atualmente `respostas_sem_veredito` delega a `sem_veredito_entre`; esse corpo consulta `respondida_sem_texto`; CSF/retratação compartilham esse corpo. Logo, excluir “respondida sem texto” do juiz não contradiz, por estrutura, exigir que todos perguntem a esse juiz. `app/chamados/models.py:1886-1909`; `app/chamados/juizes.py:2063-2076`. Se o aval O168 quis **também** obrigar inclusão de texto vazio, não sei: essa definição não está em `CORTES.md:449`, e a íntegra do aval não está no dado fornecido **[não verificado]**.
-
-_4943 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4944 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

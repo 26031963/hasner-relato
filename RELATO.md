@@ -1,6 +1,10 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: push.sh | pid=867550
+ESPERANDO: suite.sh GREEN HJ-091-G | arquivo=logs/HJ-091/g_red/fim
+MODO-COMUM: HJ-091 1b (postmortem Codex censo, logs/HJ-091/postmortem/r.r): rejeitada SEM origem renascendo como aprovada pelo espelho (ausencia.py:314 x :1277) -- nem Codex nem sonnet viram; obra ESTRUTURA na frente da fila 1 = HJ-091-G (o --apply no mesmo ato do deploy fecha a janela; o que o apply nao resolve vai a LISTA-DP) + RED que morde a recriacao
+POSTMORTEM HJ-091: (a) 2 [3 Codex volta1 STATUS_QUE_ESPELHAM 4 copias; 4 sonnet volta2 contadores] (b) 3 [1a,1c,5] (d) 1 [1b] (e) 1 [2 LEI-AKITA/padrao nao perguntado] | falha do Codex 1 (item 3)
+PUSH-1411 FECHADO 08:1x: push.sh rc=0 (logs/push/push_1411_074749.log), origin/main == 3bbe58e86, pos_push f7510b95a local
+HJ-091-G RED 08:2x: 6 RED novos vermelhos e so eles (FAILED failures=4 errors=2, Ran 60; logs/HJ-091/g_red/red.log, copia wt-hj091-red-082121 = HEAD 9ec21614c + testes)
 DESENHO HJ-091: lei=juiz unico pergunta=vinculo de origem e fato novo? app/ponto/services/cartorio.py:383 -- resposta HJ-091-G (b) nao e; backfill pela porta nominal do PERMITIDOS com trilha e prazo; aval logs/AVAIS-1313/libera_b3_hj091.txt:1
 CODEX DE VOLTA 08:11 (aval CODEX-VOLTOU 08:0x, logs/AVAIS-1313/codex_voltou.txt): 1 leitura curta pelo wrapper rc 0 em 17 s (logs/codex/voltou/r1.r) | DESPACHO CODEX-VOLTOU: refazer no Codex preverif JUSTIFICATIVA dobra+dobra2, preverif2 HJ-091, postmortem opus HJ-091, COERENCIA frente A universo inteiro (98 juizes @3bbe58e86) -> Codex | reconciliacao -> sessao | 08:1x preverif2 HJ-091 no Codex RECUSADO pelo wrapper (DISJUNTOR B3 HJ-091 parada; logs/HJ-091/preverif2/codex_voltou.log) -> espera o mesmo "libera B3 HJ-091", sem contorno; postmortem HJ-091 (CODEX_PAPEL=censo) e dobra2/dobra3 JUSTIFICATIVA rodando
 RESPONDIDA por libera B3 HJ-091 (08:2x, logs/AVAIS-1313/libera_b3_hj091.txt): b3-HJ-091 | espera Ronald (libera B3 HJ-091: opus final reprovou @9ec21614c; o (g) foi RESPONDIDO pelo HJ-091-G e a construcao do PERMITIDOS + trilha do backfill SEGUE na copia; so o proximo verificador final espera)
