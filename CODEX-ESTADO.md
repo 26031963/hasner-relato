@@ -1,7 +1,137 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 11:42** · publicado em **14/11/2026 11:46** (UTC-3)
+> Ultima resposta processada: **14/11/2026 11:49** · publicado em **14/11/2026 11:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 11:49 · sessao 7df6ebc9fb89 · FRAC5 · sonda · origem=Code
+
+Não reexecutei: não localizei o anexo `sonda.py` na cópia. [nao verificado]
+
+Transcrição da saída fornecida: [nao verificado]
+
+```text
+universo_agendado_nao_iniciado 5
+recusados_total 0
+fracao_menor_que_5_dias (literal dias<5; o juiz do main ainda nao tem a 2a metade) 0 []
+ERROS 0
+```
+
+Não há linhas `RECUSA`, contagens por recusa ou PKs no trecho fornecido. [nao verificado]
+
+Não há `Traceback` no trecho fornecido; sua ocorrência fora desse trecho é [nao verificado].
+
+## 14/11 11:49 · sessao 87a073847532 · RMDIR-COM-GUARDA · verificador · origem=Code
+
+**[bloqueia] A condição (1), lida como “sempre devolver o rc do run”, não está integralmente cumprida:** sem conteúdo em `_RCF` e havendo sinal registrado, o código ignora `_RC_WAIT` e fabrica o retorno pelo último sinal. A correção específica do rc do `echo` está presente. — [bin/suite.sh:341](/home/ronald/codex_ws/dedc3e324465be37cb9faa2e2f17ac29fcbc4c1e/bin/suite.sh:341), `bin/suite.sh:354`, `bin/suite.sh:358`.
+
+Esta é uma verificação estática. Execução dos REDs, resultados de suite/opus e efeitos em produção: **[nao verificado]**. [nao verificado]
+
+1. **Condição (1): correção implementada; garantia absoluta incompleta.** O subshell captura `_r` imediatamente após `_run` e termina com `exit "$_r"`; falha do `echo` deixa de determinar seu status. Sem sinal e sem arquivo legível, o pai usa `_RC_WAIT`. — `bin/suite.sh:341`, `bin/suite.sh:354`, `bin/suite.sh:357`.
+
+   O RED faz o docker falso aplicar `chmod 000` ao arquivo e exige retorno 75; o mutante substitui o fallback por 1. Pelo delta fornecido, o caso falharia no `0fae8f7f8`: falhando a escrita, o subshell antigo terminaria com o status do `echo`. Essa comparação é estrutural; execução contra o hash anterior **[nao verificado]**. — [bin/tests/test_rm_com_guarda.sh:130](/home/ronald/codex_ws/dedc3e324465be37cb9faa2e2f17ac29fcbc4c1e/bin/tests/test_rm_com_guarda.sh:130), `bin/tests/test_rm_com_guarda.sh:233`, `bin/tests/test_rm_com_guarda.sh:235`, `bin/tests/test_rm_com_guarda.sh:273`.
+
+   **[bloqueia] Falta o cruzamento sinal + arquivo indisponível:** se `_RC_WAIT` for 9, `_RCF` vier vazio e `_ULTIMO=TERM`, a suite devolve 143. Os testes atuais exercitam retorno 9 após TERM e arquivo indisponível separadamente; não cobrem essa combinação. — `bin/suite.sh:355`, `bin/suite.sh:358`, `bin/tests/test_rm_com_guarda.sh:233`, `bin/tests/test_rm_com_guarda.sh:305`, `bin/tests/test_rm_com_guarda.sh:309`.
+
+2. **Condição (2): cumpre para os seis alvos entregues pela porta.** A limpeza percorre os argumentos derivados da montagem; a porta escreve staticfiles, três caches, logs e media. O RED cria os seis diretórios vazios, conta os ausentes e exige exatamente 6. — `bin/suite.sh:60`, `bin/suite.sh:296`, [bin/arvore_do_push.sh:55](/home/ronald/codex_ws/dedc3e324465be37cb9faa2e2f17ac29fcbc4c1e/bin/arvore_do_push.sh:55), `bin/arvore_do_push.sh:80`, `bin/arvore_do_push.sh:81`, `bin/tests/test_rm_com_guarda.sh:153`, `bin/tests/test_rm_com_guarda.sh:157`.
+
+   **O RED tem mordida específica:** o mutante restaura a lista antiga de três. Pelo delta, no `0fae8f7f8` sobrariam os três caches e a contagem seria 3. Execução histórica **[nao verificado]**. — `bin/tests/test_rm_com_guarda.sh:211`, `bin/tests/test_rm_com_guarda.sh:213`, `bin/tests/test_rm_com_guarda.sh:214`.
+
+   **[fila] “Sempre seis” exige qualificação:** staticfiles só é emitido quando existe na raiz da própria porta; sem esse diretório, ela entrega cinco. A fixture garante staticfiles preenchido, portanto testa efetivamente seis, mas não prova uma saída invariável da porta. — `bin/arvore_do_push.sh:50`, `bin/arvore_do_push.sh:55`, `bin/tests/test_rm_com_guarda.sh:114`, `bin/tests/test_rm_com_guarda.sh:115`.
+
+3. **Condição (3): cumpre no caminho normal de dois `--dir`.** Fora da trava há apenas `--so-confere`, que retorna antes do laço de remoção. `_run` chama a trava, que adquire o flock antes de executar `--na-vez`; ambas as limpezas ficam nesse comando. — `bin/suite.sh:58`, `bin/suite.sh:289`, `bin/suite.sh:317`, `bin/suite.sh:318`, `bin/suite.sh:112`, `bin/suite.sh:117`, [bin/trava_teste.sh:35](/home/ronald/codex_ws/dedc3e324465be37cb9faa2e2f17ac29fcbc4c1e/bin/trava_teste.sh:35), `bin/trava_teste.sh:42`.
+
+   **O RED tem mordida específica:** a trava falsa usa flock; o primeiro docker falso mantém `logs`, o segundo `--dir` é lançado durante essa espera e o teste acusa seu desaparecimento. O mutante recoloca a limpeza fora da trava. Pelo delta, a limpeza prévia do `0fae8f7f8` também removeria esse diretório durante a sobreposição. Execução histórica **[nao verificado]**. — `bin/tests/test_rm_com_guarda.sh:120`, `bin/tests/test_rm_com_guarda.sh:132`, `bin/tests/test_rm_com_guarda.sh:245`, `bin/tests/test_rm_com_guarda.sh:250`, `bin/tests/test_rm_com_guarda.sh:281`.
+
+   **[fila] O RED comprova preservação do diretório com docker falso; bind real permanece [nao verificado].** A sobreposição depende de quatro segundos e não há confirmação de que o segundo processo alcançou o ponto relevante dentro dessa janela. — `bin/tests/test_rm_com_guarda.sh:132`, `bin/tests/test_rm_com_guarda.sh:245`, `bin/tests/test_rm_com_guarda.sh:248`.
+
+**a) Quem escreve e quem lê**
+
+| Objeto | Escritor | Leitor |
+|---|---|---|
+| Nomes da montagem | `arvore_do_push.sh --montagem`, nos `printf` | A suite recebe `_m` e tokeniza `MONTAGEM`. — `bin/arvore_do_push.sh:55`, `bin/arvore_do_push.sh:80`, `bin/arvore_do_push.sh:81`, `bin/suite.sh:293`, `bin/suite.sh:295`. |
+| `_alvos_da_montagem` | Extrai destinos de `-v` e `--tmpfs`; escreve sua saída | `ALVOS` e `_alvos_da_porta`. — `bin/suite.sh:81`, `bin/suite.sh:88`, `bin/suite.sh:92`, `bin/suite.sh:296`. |
+| `_alvos_da_porta` | Chama a porta e reutiliza a mesma extração | Ramo `--limpa-montagens`, por `_al`/`_AL`. — `bin/suite.sh:90`, `bin/suite.sh:98`. |
+| `ALVOS` | Inicializado vazio; preenchido pela extração da montagem | `_run` transporta; `--na-vez` divide em `_NV_AL`; pré/pós consomem esse array. — `bin/suite.sh:283`, `bin/suite.sh:296`, `bin/suite.sh:318`, `bin/suite.sh:109`, `bin/suite.sh:112`, `bin/suite.sh:117`. |
+| `_RCF` | Pai cria o caminho; subshell escreve o conteúdo | Pai consulta tamanho, lê e remove. — `bin/suite.sh:338`, `bin/suite.sh:341`, `bin/suite.sh:344`, `bin/suite.sh:355`. |
+| `_NV_RC` | Uma atribuição imediatamente após `"$@"` | Decide pós-limpeza e fornece o retorno. — `bin/suite.sh:115`, `bin/suite.sh:116`, `bin/suite.sh:120`. |
+
+Não identifiquei segundo escritor **da lista usada pela limpeza normal**: ela recebe argumentos derivados da montagem. Os nomes repetidos no teste constituem o oráculo e o mutante, não outra lista operacional. — `bin/suite.sh:60`, `bin/suite.sh:296`, `bin/tests/test_rm_com_guarda.sh:153`, `bin/tests/test_rm_com_guarda.sh:213`.
+
+**[fila] A exclusividade não é imposta à interface:** uma invocação direta de `--na-vez` fornece sua própria lista, sem consultar a porta. — `bin/suite.sh:108`, `bin/suite.sh:109`.
+
+**b) Entradas de `--na-vez`**
+
+| Entrada | Chega a `rmdir`? |
+|---|---|
+| Caminho absoluto ou fora de `app/` | Recusado pelo primeiro `case`. — `bin/suite.sh:61`. |
+| Barra adicional, como `app/a/b` | Recusado pelo segundo `case`. — `bin/suite.sh:62`. |
+| Qualquer `..` | Recusado, inclusive dentro do nome. — `bin/suite.sh:62`. |
+| `app/` | Recusado por faltar o primeiro caractere do nome. — `bin/suite.sh:61`. |
+| Lista vazia | Nenhum alvo é percorrido; o comando continua. — `bin/suite.sh:109`, `bin/suite.sh:115`. |
+| Symlink final | Ignorado por `! -L`. — `bin/suite.sh:67`. |
+| Symlink intermediário que saia da cópia | Barrado pela comparação física. — `bin/suite.sh:70`, `bin/suite.sh:71`. |
+
+**[fila] Nome com espaço perde identidade:** `"app/foo bar"` vira `app/foo` e `bar`; se `app/foo` for diretório físico vazio, pode ser removido. `bar` é recusado com rc 1, que não impede o comando. Além disso, `app/[A-Za-z0-9._-]*` restringe apenas o primeiro caractere após a barra; o `*` não repete a classe. — `bin/suite.sh:109`, `bin/suite.sh:61`, `bin/suite.sh:73`, `bin/suite.sh:113`, `bin/suite.sh:115`.
+
+**Rc 2 da limpeza anterior impede, sim, o comando.** Isso cobre cópia inválida e árvore viva; alvo malformado recebe rc 1, não 2. — `bin/suite.sh:53`, `bin/suite.sh:56`, `bin/suite.sh:61`, `bin/suite.sh:112`, `bin/suite.sh:113`.
+
+**c) Outros caminhos de rc**
+
+- **[fila] Trava ocupada:** retorna 75 antes de executar `--na-vez` ou docker. É “não executou”, não rc de um run realizado. — `bin/trava_teste.sh:36`, `bin/trava_teste.sh:38`, `bin/trava_teste.sh:42`.
+- **[fila] Docker ausente:** se alcançar a invocação, o status de comando ausente é 127 e será preservado. Pode haver recusa anterior com 1 em `teste_envfile`, que também pode tentar docker. Disponibilidade real **[nao verificado]**. — `bin/suite.sh:319`, `bin/suite.sh:115`, `bin/suite.sh:120`, `bin/suite.sh:276`, `bin/recursos.sh:122`.
+- **[fila] Sinal na cadeia real:** o repasse alcança a trava, filha direta do subshell; ela não implementa repasse explícito aos descendentes. Os REDs usam travas falsas com handlers próprios. Portanto, rc da trava e rc do docker não são demonstrados como equivalentes sob sinal. — `bin/suite.sh:347`, `bin/trava_teste.sh:41`, `bin/trava_teste.sh:42`, `bin/tests/test_rm_com_guarda.sh:305`, `bin/tests/test_rm_com_guarda.sh:314`.
+
+**d) Classes de reprovação**
+
+- **Segundo escritor / derivação paralela:** não demonstrados no caminho normal; os dois consumidores reutilizam `_alvos_da_montagem`. A lista livre de `--na-vez` permanece **[fila]**. — `bin/suite.sh:92`, `bin/suite.sh:296`, `bin/suite.sh:109`.
+- **[fila] Selo dependente de permissão:** o RED de `_RCF` não confirma que `chmod 000` impediu o acesso nem exclui root. Se a injeção não funcionar, o mutante sobrevive e o próprio selo acusa falta de mordida; não é verde silencioso. — `bin/tests/test_rm_com_guarda.sh:130`, `bin/tests/test_rm_com_guarda.sh:235`, `bin/tests/test_rm_com_guarda.sh:274`.
+- **[fila] Ordem de trava nas portas avulsas:** `--limpa-montagens` limpa diretamente; `--na-vez` também não verifica posse da trava. Isso não invalida a ordem comprovada para dois `--dir`, mas impede afirmar “toda limpeza é travada”. — `bin/suite.sh:94`, `bin/suite.sh:99`, `bin/suite.sh:108`, `bin/suite.sh:112`.
+- **[fila] Campo com dois significados:** `ALVOS` representa uma coleção, mas é transportado como texto separado por espaços, permitindo a perda de identidade descrita acima. — `bin/suite.sh:296`, `bin/suite.sh:109`.
+
+A identificação dos **quatro `[fila]` originais**, seu registro em linhas de fila e a conclusão posterior de suite + um opus permanecem **[nao verificado]**. [nao verificado]
+
+## 14/11 11:47 · sessao 57ec1f874399 · - · - · origem=Ronald (tmux)
+
+- `--na-vez` recusa barra adicional e qualquer `..` antes de `rmdir`; `app/` também não passa. Lista vazia produz zero alvos e permite o comando. Referências: `bin/suite.sh:61`, `bin/suite.sh:62`, `bin/suite.sh:109`, `bin/suite.sh:115`.
+- [fila] Nome com espaço é ambíguo: `app/foo bar` vira dois tokens; pode remover `app/foo`, rejeitar `bar` com rc 1 e ainda executar o comando. O padrão `app/[A-Za-z0-9._-]*` restringe somente o primeiro caractere do nome; o `*` seguinte admite outros caracteres. Referências: `bin/suite.sh:61`, `bin/suite.sh:73`, `bin/suite.sh:109`, `bin/suite.sh:112`, `bin/suite.sh:113`, `bin/suite.sh:115`.
+- Symlink final é ignorado; symlink intermediário que saia da cópia falha na comparação física. Recusa rc 2 da limpeza anterior impede o comando. Referências: `bin/suite.sh:67`, `bin/suite.sh:70`, `bin/suite.sh:71`, `bin/suite.sh:112`, `bin/suite.sh:113`, `bin/suite.sh:115`.
+- As duas limpezas do caminho normal `--dir` estão dentro da trava: esta prende fd 9 antes de executar `--na-vez`, que limpa antes/depois do comando. Referências: `bin/trava_teste.sh:35`, `bin/trava_teste.sh:36`, `bin/trava_teste.sh:42`, `bin/suite.sh:317`, `bin/suite.sh:318`, `bin/suite.sh:112`, `bin/suite.sh:117`.
+- [fila] Isso não vale para toda entrada pública: `--limpa-montagens` chama a limpeza diretamente; `--na-vez` também não verifica posse da trava. Referências: `bin/suite.sh:94`, `bin/suite.sh:99`, `bin/suite.sh:108`, `bin/suite.sh:112`.
+- O caminho normal preserva o rc do comando, inclusive se o `echo` falhar; a mudança relevante é `exit "$_r"` no subshell. Referências: `bin/suite.sh:115`, `bin/suite.sh:120`, `bin/trava_teste.sh:42`, `bin/suite.sh:341`, `bin/suite.sh:354`, `bin/suite.sh:357`.
+- [fila] Há exceção explícita a “sempre rc do run”: sem conteúdo em `_RCF` e havendo sinal, o código ignora `_RC_WAIT` e devolve 143/130/129 pelo último sinal, independentemente do rc obtido. Os REDs de sinal e arquivo indisponível são separados. Referências: `bin/suite.sh:355`, `bin/suite.sh:356`, `bin/suite.sh:357`, `bin/suite.sh:358`, `bin/tests/test_rm_com_guarda.sh:233`, `bin/tests/test_rm_com_guarda.sh:305`, `bin/tests/test_rm_com_guarda.sh:317`.
+- rc 75 pode vir da trava sem executar o comando: `bin/trava_teste.sh:35`, `bin/trava_teste.sh:38`, `bin/trava_teste.sh:42`. Docker ausente no ponto da invocação resulta em status de comando ausente, preservado pelo encadeamento; a existência/disponibilidade real do Docker é [nao verificado]. Referências: `bin/suite.sh:319`, `bin/suite.sh:115`, `bin/suite.sh:120`, `bin/suite.sh:341`.
+- Sinais são enviados ao filho direto do subshell, a trava; a trava real não implementa repasse explícito aos descendentes. Os REDs verificam travas falsas que recebem TERM/HUP e escolhem seus próprios rc. Referências: `bin/suite.sh:347`, `bin/trava_teste.sh:35`, `bin/trava_teste.sh:41`, `bin/trava_teste.sh:42`, `bin/tests/test_rm_com_guarda.sh:305`, `bin/tests/test_rm_com_guarda.sh:314`.
+- `rc >= 128` evita a limpeza posterior, mas a chamada seguinte volta a fazer a limpeza anterior; sobrevivência efetiva de container/bind após sinal é [nao verificado]. Referências: `bin/suite.sh:112`, `bin/suite.sh:116`, `bin/suite.sh:117`.
+
+## 14/11 11:46 · sessao 558dff52491e · - · - · origem=Ronald (tmux)
+
+- **Escritor da montagem:** os nomes saem de `bin/arvore_do_push.sh:55` e `bin/arvore_do_push.sh:80-81`; o staticfiles é condicional à existência do diretório da própria porta (`bin/arvore_do_push.sh:50`). Portanto, “sempre seis” exige essa condição; sem ela são cinco (`bin/arvore_do_push.sh:50-56`, `bin/arvore_do_push.sh:80-82`).
+
+- **Leitura/derivação na suite:** `_m` recebe a porta (`bin/suite.sh:293`), `MONTAGEM` tokeniza (`bin/suite.sh:295`), `_alvos_da_montagem` extrai destinos de `-v`/`--tmpfs` (`bin/suite.sh:81-88`) e escreve o valor derivado de `ALVOS` (`bin/suite.sh:296`), inicialmente vazio (`bin/suite.sh:283`). `_run` o transporta (`bin/suite.sh:318`); `--na-vez` o divide em `_NV_AL` e ambas as limpezas o leem (`bin/suite.sh:109-117`). `_alvos_da_porta` chama a mesma extração para a porta avulsa; não há implementação paralela desse cálculo nesses dois caminhos (`bin/suite.sh:90-99`).
+
+- **Segundo escritor:** nenhuma lista de nomes de limpeza está repetida no caminho normal da suite: a função itera os argumentos (`bin/suite.sh:60`), que vêm da montagem (`bin/suite.sh:296`). Os seis nomes explícitos do selo são o oráculo independente e o mutante de três nomes (`bin/tests/test_rm_com_guarda.sh:153-156`, `bin/tests/test_rm_com_guarda.sh:210-217`). Há listas de logs/media/staticfiles fora da porta, por exemplo a sonda de montagem `:ro`, que declara outro escopo (`bin/sonda_leitura.sh:197-210`); chamá-las de segundo escritor da limpeza da suite não se sustenta nessas linhas.
+
+- **[fila] Interface aceita outro produtor:** `--na-vez` aceita diretamente a string de alvos fornecida pelo chamador, sem consultar a porta nem adquirir trava (`bin/suite.sh:108-120`). O chamador normal a põe sob `trava_teste.sh` (`bin/suite.sh:317-318`), mas exclusividade da fonte para todas as invocações diretas é **[nao verificado]**.
+
+- **Arquivo de rc:** o pai cria e guarda o caminho em `_RCF` (`bin/suite.sh:338`); o subshell escreve o conteúdo pelo único `echo` (`bin/suite.sh:341`); o pai lê tamanho no laço (`bin/suite.sh:344`), lê conteúdo com `cat` e remove (`bin/suite.sh:355`). Em seguida escolhe a reserva somente se o conteúdo vier vazio (`bin/suite.sh:356-359`). `_NV_RC` recebe uma vez o status de `"$@"`, serve de guarda da limpeza posterior e é devolvido (`bin/suite.sh:115-120`).
+
+- **[fila] Campo delimitado por espaço:** `ALVOS` é serializado com espaços (`bin/suite.sh:296`) e desserializado com `read -a` (`bin/suite.sh:109`); a própria montagem também é texto tokenizado por espaços (`bin/suite.sh:295`, `bin/suite.sh:92`). Um nome com espaço perde sua identidade nesses passos; isso não constitui saída de diretório, mas impede tratar a lista como uma coleção geral de nomes (`bin/suite.sh:61-70`).
+
+- A existência e o conteúdo das quatro linhas de fila exigidas pelo aval permanecem **[nao verificado]**; não há referência delas no dado fornecido, além da exigência de registrá-las **[nao verificado]**.
+
+## 14/11 11:46 · sessao 3ab108696133 · - · - · origem=Ronald (tmux)
+
+- Condição (1): o subshell agora termina com `_r`, preservando rc do `_run` mesmo se `echo` falhar; sem sinal, o fallback usa `_RC_WAIT` (`bin/suite.sh:341`, `bin/suite.sh:354-358`). O RED injeta `chmod 000` e exige rc 75 (`bin/tests/test_rm_com_guarda.sh:130`, `bin/tests/test_rm_com_guarda.sh:233-235`); o mutante força fallback 1 (`bin/tests/test_rm_com_guarda.sh:271-275`). No código anterior mostrado pelo delta, falha de escrita deixaria o subshell com rc do `echo`, portanto esse caso falharia com 1 em vez de 75 [nao verificado por execução].
+
+- **[fila] Mordida do RC depende de permissão:** esse caso não confirma que a escrita/leitura de `_RCF` efetivamente falhou e não exclui root (`bin/tests/test_rm_com_guarda.sh:130`, `bin/tests/test_rm_com_guarda.sh:233-235`). Para outro teste baseado em chmod, o selo explicitamente exclui root (`bin/tests/test_rm_com_guarda.sh:299`, `bin/tests/test_rm_com_guarda.sh:345`). Se chmod não bloquear, o mutante de fallback sobreviverá, e o próprio selo ficará vermelho pela falta de mordida (`bin/tests/test_rm_com_guarda.sh:274`).
+
+- Condição (2): há RED comportamental que cria seis diretórios, conta seis ausentes e exige exatamente 6 (`bin/tests/test_rm_com_guarda.sh:153-157`). O mutante troca a derivação pela lista antiga de três (`bin/tests/test_rm_com_guarda.sh:211-215`). Na versão anterior do delta, os três caches ficariam; a contagem seria 3 [nao verificado por execução].
+
+- Condição (3): o caminho normal chama `trava_teste.sh` e só então `--na-vez`; pre/post estão nesse modo (`bin/suite.sh:317-318`, `bin/suite.sh:112-118`); a trava real adquire flock antes de executar o comando (`bin/trava_teste.sh:35-42`). O RED usa flock real numa trava falsa, segura o primeiro run com `logs` e lança segundo `--dir`, exigindo ausência de `montagem.arrancada` (`bin/tests/test_rm_com_guarda.sh:120`, `bin/tests/test_rm_com_guarda.sh:131-133`, `bin/tests/test_rm_com_guarda.sh:245-250`). O mutante recoloca limpeza fora da trava (`bin/tests/test_rm_com_guarda.sh:279-283`); a limpeza anterior do delta também removeria `logs` durante essa janela [nao verificado por execução].
+
+- **[fila] Concorrência tem janela temporal:** o primeiro run dorme quatro segundos, e o teste não confirma que o segundo chegou à limpeza antes de essa janela acabar (`bin/tests/test_rm_com_guarda.sh:132`, `bin/tests/test_rm_com_guarda.sh:245-250`). O teste detecta o mutante sob sobreposição; a sobreposição numa execução concreta está [nao verificado].
+
+- **[fila] Guarda da viva pode não ser exercida:** o caso e seu mutante dependem da existência da viva e de nenhum dos seis alvos estar vazio; caso contrário imprimem aviso e seguem (`bin/tests/test_rm_com_guarda.sh:170-185`, `bin/tests/test_rm_com_guarda.sh:192-197`). Isso pode deixar o mutante sem mordida; o próprio selo o acusa como falha (`bin/tests/test_rm_com_guarda.sh:196`).
 
 ## 14/11 11:42 · sessao 758c610315a2 · JANELA-NAO-SEGURA-POUSO · verificador · origem=Code
 
@@ -693,199 +823,4 @@ app/ponto/supra_juiz.py::pode_executar_csf ; o chamado tem resposta sem veredito
 
 [truncado em 20000 de 20531 caracteres]
 
-## 14/11 10:47 · sessao dc5489172e29 · CAL09 · verificador · origem=Code
-
-**PROCEDE a lacuna do teste de “duas cascas” e a ambiguidade entre dia civil e dia do turno. NÃO PROCEDE atribuir ao novo gate uma mudança na classificação das batidas:** ele passa a consultar a lista que o próprio laço já desenha. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:54`; `app/colaboradores/services/calendario.py:224`; `app/colaboradores/services/calendario.py:244`; `app/templates/colaboradores/partials/_calendario_grade.html:122`; `app/templates/colaboradores/partials/_calendario_grade.html:125`)
-
-1. **Escritores e produtores — NÃO PROCEDE produtor real sem `batidas` nos caminhos encontrados.**
-
-   O escritor do dict real é `contexto_calendario`:
-
-   | Campo | Construção e escrita |
-   |---|---|
-   | `batidas` | Achata as batidas dos turnos atribuídos à célula; exclui `retratada_em` preenchido; escreve a chave. (`app/colaboradores/services/calendario.py:610`, `:611`, `:621`, `:729`) |
-   | `entradas` | Subconjunto de `batidas_dia` com `tipo == 'E'`; escreve a chave. (`app/colaboradores/services/calendario.py:658`, `:740`) |
-   | `retratadas` | Consulta separada com `retratada_em__isnull=False`, intervalo de instantes com fim exclusivo, agrupamento por data civil local; escreve a chave. (`app/colaboradores/services/calendario.py:239`, `:241`, `:244`, `:640`, `:730`) |
-
-   Os três caminhos encontrados entregam esses mesmos dias:
-
-   | Caminho | Alimentação → inclusão |
-   |---|---|
-   | Calendário do perfil | `app/colaboradores/views.py:1949` → render em `:1965` → `app/templates/colaboradores/calendario_partial.html:62` |
-   | Drawer | `app/colaboradores/services/drawer.py:121` → `cal` em `:153` → `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` |
-   | Relatório de furos | `app/relatorios/furos.py:160` → `app/templates/relatorios/furos.html:42` |
-
-   Portanto, **o significado é igual entre esses caminhos: marcação viva dos turnos atribuídos ao dia**, excluindo retratadas; não significa necessariamente marcação ocorrida naquele dia civil. (`app/colaboradores/services/calendario.py:224`; `app/colaboradores/services/calendario.py:621`)
-
-   O `batidas` superior do drawer não é outro produtor do dict diário: a grade recebe explicitamente `cal.dias`. (`app/colaboradores/services/drawer.py:147`; `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`)
-
-2. **Leitor órfão de `entradas` — NÃO PROCEDE.**
-
-   A chave continua escrita e o teste de caracterização ainda a lê. Não foi encontrado leitor executável do **campo diário** em templates, views ou JS; as ocorrências restantes na grade são comentários. (`app/colaboradores/services/calendario.py:740`; `app/colaboradores/tests/test_calendario_caracterizacao.py:28`; `app/templates/colaboradores/partials/_calendario_grade.html:115`; `app/templates/colaboradores/partials/_calendario_grade.html:119`)
-
-   A **variável local** `entradas` permanece necessária: alimenta presença geográfica, entrada principal e `houve_trabalho`. As fixtures que montam a chave não são leitores. (`app/colaboradores/services/calendario.py:693`; `app/colaboradores/services/calendario.py:696`; `app/colaboradores/services/calendario.py:715`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:32`; `app/colaboradores/tests/test_ui_pilulas_quebram_linha.py:56`; `app/colaboradores/tests/test_e4cal_l1_r7_grade_le_o_rotulo.py:24`)
-
-3. **Dia civil × dia do turno — PROCEDE a distinção; NÃO PROCEDE como regressão de atribuição introduzida pelo diff.**
-
-   `batidas` pode conter marcação de outro dia civil: o produtor agrupa por `t.data_turno`, e um turno fechado pode atravessar meia-noite. Até uma saída sem entrada pode ser atribuída à véspera pelo juiz. (`app/colaboradores/services/calendario.py:223`; `app/colaboradores/services/calendario.py:224`; `app/ponto/turnos.py:293`; `app/ponto/turnos.py:298`; `app/ponto/turnos.py:322`)
-
-   Assim, a saída da manhã seguinte pode aparecer na célula do turno anterior. Isso segue a autoridade registrada para o pertencimento da batida; o novo gate não recalcula esse pertencimento. (`app/core/juizes.py:208`; `app/colaboradores/services/calendario.py:224`; `app/templates/colaboradores/partials/_calendario_grade.html:122`)
-
-   **PROCEDE a ressalva ao argumento da cura:** `batidas`/`entradas` usam dia do turno, enquanto `retratadas` usa dia civil local. O comentário novo “toda marcação viva do dia” não explicita essa diferença. Uma cauda normalmente pareada já acompanha sua entrada na mesma célula; o caso novo demonstrado pelo teste é uma lista contendo somente saída. (`app/colaboradores/services/calendario.py:224`; `app/colaboradores/services/calendario.py:244`; `app/colaboradores/services/calendario.py:611`; `app/colaboradores/services/calendario.py:658`; `app/templates/colaboradores/partials/_calendario_grade.html:120`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:42`)
-
-   Ocorrências concretas dessa distribuição em produção: **[não verificado]**.
-
-4. **Mordida e grafo — a mordida lógica PROCEDE; a prova completa das cascas NÃO PROCEDE.**
-
-   Para a fixture de saída, `batidas=[S]`, `entradas=[]` e `retratadas=[]`. A guarda antiga do diff anexado fecha o bloco; o teste exige `◀ 07:06`. Portanto, **transplantado para o código anterior, esse teste tem mordida lógica**. Execução efetiva em `f7510b95a`, GREEN atual e RED anterior à cura: **[não verificado]**. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:28`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:41`; `app/templates/colaboradores/partials/_calendario_grade.html:125`)
-
-   **PROCEDE a lacuna do selo:** ele procura uma substring nas fontes de dois templates; não percorre o grafo nem renderiza essas raízes com seus contextos. Omite a terceira inclusão, `relatorios/furos.html`. (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:54`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:60`; `app/templates/relatorios/furos.html:42`)
-
-   Também não prova uma casca de acesso do colaborador: o calendário é servido pela view do gestor, e a página de perfil estende `base.html`. Já existe teste anterior que percorre includes/extends, contempla o relatório e cobra ausência da grade sob `base_app.html`. (`app/colaboradores/views.py:1939`; `app/colaboradores/views.py:1940`; `app/templates/colaboradores/detalhe.html:1`; `app/colaboradores/tests/test_calendario_mostra_o_carro.py:224`; `app/colaboradores/tests/test_calendario_mostra_o_carro.py:247`; `app/colaboradores/tests/test_calendario_mostra_o_carro.py:251`)
-
-As classes pedidas, consolidadas no escopo deste diff:
-
-| Classe | Veredito e motivo |
-|---|---|
-| Segundo juiz duplicando registrado | **NÃO PROCEDE.** O gate lê a lista existente; `Resolver dia` continua lendo seu campo próprio, com autoridade registrada. (`app/templates/colaboradores/partials/_calendario_grade.html:122`, `:129`; `app/core/juizes.py:739`) |
-| Segundo escritor fora da porta | **NÃO PROCEDE.** A mudança de produção é uma leitura no template; o dict acrescentado pertence à fixture. (`app/templates/colaboradores/partials/_calendario_grade.html:122`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:28`) |
-| Relógio fora da borda | **NÃO PROCEDE como introdução do diff.** O gate não lê relógio; as leituras existentes ficam na montagem do contexto. (`app/templates/colaboradores/partials/_calendario_grade.html:122`; `app/colaboradores/services/calendario.py:163`, `:250`) |
-| Derivação paralela de fonte única | **NÃO PROCEDE.** A condição consulta exatamente a lista iterada, sem nova regra de pareamento. (`app/templates/colaboradores/partials/_calendario_grade.html:122`, `:125`) |
-| Selo/RED sem mordida | **NÃO PROCEDE para a saída isolada; PROCEDE a insuficiência da alegação de grafo completo.** (`app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:41`, `:54`; `app/templates/relatorios/furos.html:42`) |
-| Ordem de trava | **NÃO PROCEDE no diff.** A alteração executável é uma condição de template; os testes constroem objetos locais em `SimpleTestCase`. (`app/templates/colaboradores/partials/_calendario_grade.html:122`; `app/colaboradores/tests/test_cal09_dia_so_com_saidas.py:24`, `:36`) |
-| Pouso antes do pré-requisito | **NÃO PROCEDE como acusação comprovada.** Cronologia de suíte, aprovação e pouso: **[não verificado]**. | [nao verificado]
-| Campo com dois significados | **PROCEDE a ambiguidade preexistente do eixo “dia”:** vivas por turno, retratadas por civil; o comentário novo não distingue. (`app/colaboradores/services/calendario.py:224`, `:244`; `app/templates/colaboradores/partials/_calendario_grade.html:120`) |
-
-## 14/11 10:46 · sessao f287baced451 · COERENCIA-DAS-LEIS · censo · origem=Code
-
-app/ponto/precedencia.py::fatos_do_dia ; F2 — o feriado suprime o trabalho do dia? ; nenhum L-NNN específico localizado [nao verificado], corte E2-EMISSORES-COMPLEMENTO manda consultar este juiz em app/docs/CORTES.md:360 ; delega a fatos_do_periodo, preserva trabalho previsto quando o vínculo não transforma feriado em folga, caso contrário inclui feriado na precedência (app/ponto/precedencia.py:256, app/ponto/precedencia.py:376, app/ponto/precedencia.py:382), feriado_vira_folga exige ciclo 6x1/5x2/semanal e trabalha_em_feriado falso (app/escala/models.py:32, app/escala/models.py:1390, app/escala/models.py:1392) ; sim: texto apresenta trabalha_em_feriado como exceção (app/docs/JUIZES.md:94), código também preserva plantão 12x36 com essa flag falsa (app/ponto/precedencia.py:373, app/ponto/precedencia.py:377) ; nenhum achado independente confirmado, procurados trabalha_em_feriado, feriado_vira_folga e vetos de feriado [nao verificado], o helper é chamado pelo juiz (app/ponto/precedencia.py:377), o veto do posto declara outra pergunta contratual (app/ponto/management/commands/detectar_ausencias.py:619) ; -
-
-app/ponto/motor_calculo_v2.py::CICLOS_FERIADO_SIMPLES ; F3 — feriado trabalhado paga dobra ou hora simples? ; L-086 em app/docs/LEIS.md:118, cuja própria linha registra a revogação da proibição de dobrar feriado previsto, corte corretivo transcrito em app/ponto/motor_calculo_v2.py:917, entrada correspondente em CORTES.md [nao verificado] ; somente 12x36 pertence ao conjunto de hora simples (app/ponto/motor_calculo_v2.py:3623), fábrica resolve os demais ciclos como dobra (app/ponto/motor_calculo_v2.py:3694), admite parâmetro explícito por cláusula cadastrada (app/ponto/motor_calculo_v2.py:3633), dobra exige feriado_em_dobra e feriado no dia (app/ponto/motor_calculo_v2.py:934) ; sim: comentário ainda afirma que plantão previsto nunca dobra (app/ponto/precedencia.py:375), corte corretivo exclui feriado dessa proibição (app/ponto/motor_calculo_v2.py:917), a revogação já está reconhecida em app/docs/LEIS.md:118 ; achado: fechamento seleciona períodos de feriado e escreve suas horas integralmente em HE100 feriado por regra própria de classificação (app/ponto/services/fechamento.py:949, app/ponto/services/fechamento.py:954, app/ponto/services/fechamento.py:955), sítio ausente dos PENDENTES declarados (app/core/juizes.py:475) ; -
-
-SEM_JUIZ ; F4 — que horas do turno que cruza a meia-noite contam como feriado? ; L-085 atribui toda jornada ao dia de início, inclusive feriado e horas após meia-noite (app/docs/LEIS.md:117), entrada correspondente em CORTES.md [nao verificado] ; Motor12x36 julga feriado pela data local da entrada efetiva de cada período (app/ponto/motor_calculo_v2.py:2759, app/ponto/motor_calculo_v2.py:2809), Comercial agrupa pelo dia do turno e aplica feriado nesse dia (app/ponto/motor_calculo_v2.py:3325, app/ponto/motor_calculo_v2.py:3326, app/ponto/motor_calculo_v2.py:3350), TurnoPartido faz equivalente (app/ponto/motor_calculo_v2.py:2942, app/ponto/motor_calculo_v2.py:3092) ; sim: jornada inteira pertence ao início (app/docs/LEIS.md:117), mas Motor12x36 consulta a data de cada período (app/ponto/motor_calculo_v2.py:2809), divergência também descrita em app/docs/LEIS.md:175 ; achado: fechamento decide feriado pela data civil de cada entrada para classificar horas como HE100 feriado (app/ponto/services/fechamento.py:947, app/ponto/services/fechamento.py:949, app/ponto/services/fechamento.py:955), sítio ausente dos PENDENTES declarados (app/core/juizes.py:475) ; -
-
-app/ponto/janelas.py::janela_atual ; F5 — a que competência, corte a corte, pertence o dia? ; L-026 em app/docs/LEIS.md:77, L-090 em app/docs/LEIS.md:123, corte K8-COMPETENCIA-NAO-E-MES-CIVIL em app/docs/CORTES.md:216 ; usa corte da empresa limitado a 2–28 (app/ponto/janelas.py:51, app/ponto/janelas.py:63), intervalo começa no corte e termina no corte menos um, avançando a competência quando data.day atinge o corte (app/ponto/janelas.py:12, app/ponto/janelas.py:27), fallback executado é 20 para empresa ausente ou campo falso (app/ponto/janelas.py:50) ; sim: docstring estabelece default 21 (app/ponto/janelas.py:37), implementação usa 20 (app/ponto/janelas.py:50) ; achado: _jornada_que_mente escolhe mês/ano civil de hoje e corte 21 literal (app/escala/services/cadastro_realidade.py:224, app/escala/services/cadastro_realidade.py:225), fora dos três sítios F5 declarados (app/core/juizes.py:488, app/core/juizes.py:489, app/core/juizes.py:490) ; -
-
-app/ponto/janelas.py::competencia_fechada ; F6 — a competência do dia está fechada, pode escrever? ; L-026 em app/docs/LEIS.md:77, L-090 em app/docs/LEIS.md:123 e corte K8 em app/docs/CORTES.md:216 fixam competência da data, predicado específico aprovado/exportado nesses textos [nao verificado] ; converte timestamp em dia local, resolve competência pela empresa e consulta FechamentoMensal do colaborador (app/ponto/janelas.py:84, app/ponto/janelas.py:85, app/ponto/janelas.py:86), aprovado/exportado devolvem impedimento, demais casos devolvem vazio (app/ponto/janelas.py:87, app/ponto/janelas.py:88, app/ponto/janelas.py:89) ; nao, predicado escrito no registro coincide com código (app/core/juizes.py:80, app/ponto/janelas.py:87) ; nenhum achado, procurados competencia_fechada, consultas FechamentoMensal e condições aprovado/exportado fora de testes/migrations [nao verificado], consumidores conferidos consultam o juiz (app/ponto/registro_batida.py:135, app/ponto/services/flip_batida.py:22, app/escala/management/commands/lavrar_foto_folgas.py:95), tranca por empresa é pergunta distinta (app/core/juizes.py:76) ; -
-
-app/ponto/catalogo/justificativas.py::prazo_estourou ; F7 — qual o prazo do DP para responder à justificativa? ; nenhum texto específico de duração localizado em LEIS.md/CORTES.md [nao verificado] ; esqueci_entrada/esqueci_saida têm 1 dia, batida_errada/batida_duplicada 2, hora_extra/banco_horas/folga_trabalhada/troca_turno 3, outro 7, demais tipos 3 (app/ponto/catalogo/justificativas.py:22, app/ponto/catalogo/justificativas.py:23, app/ponto/catalogo/justificativas.py:24, app/ponto/catalogo/justificativas.py:26, app/ponto/catalogo/justificativas.py:31), estoura quando dias corridos locais excedem o prazo, mas ignora hoje recebido e consulta o relógio (app/ponto/catalogo/justificativas.py:36, app/ponto/catalogo/justificativas.py:41) ; sim: teste escrito exige estouro ao avançar hoje informado (app/ponto/tests/test_prazo_justificativa_pelo_juiz.py:81), código ignora esse argumento (app/ponto/catalogo/justificativas.py:36) ; nenhum achado, procurados PRAZO_DP, prazo_dp_dias, dias_em_aberto, prazo_estourou e limites fixos de justificativas [nao verificado], tela consulta juiz (app/ponto/views.py:1734), backlog fixo de sete dias já está declarado como PENDENTE (app/ponto/views.py:1747, app/core/juizes.py:491) ; -
-
-app/chamados/catalogo/motor.py::PRAZO_ARQUIVO_DIAS ; F8 — qual o prazo de arquivo/silêncio do chamado? ; nenhum texto em LEIS.md/CORTES.md fixando a duração localizado [nao verificado], corte QUARENTENA-DO-COLAB-POR-PERIODO preserva arquivamento por chamado com prazo sem numerá-lo (app/docs/CORTES.md:348) ; padrão de 30 dias (app/chamados/catalogo/motor.py:84), vencimento calculado como agora mais essa constante (app/chamados/services/arquivo.py:117, app/chamados/services/arquivo.py:118), horizontes explícitos de cinco/dez anos são exceções separadas (app/chamados/services/arquivo.py:112) ; nao, duração do juiz e texto de tela coincidem (app/chamados/catalogo/motor.py:84, app/templates/chamados/partials/_lista_chamados.html:116) ; achado: leitor de tela responde Arquivar por 30 dias por literal próprio (app/templates/chamados/partials/_lista_chamados.html:116), fora dos PENDENTES declarados (app/core/juizes.py:475) ; -
-
-SEM_JUIZ ; F9 — o que é dia útil? ; nenhum texto específico localizado em LEIS.md/CORTES.md [nao verificado] ; VT/VA contam segunda a sexta excluindo feriados, sem município consideram somente nacionais e não consultam escala (app/colaboradores/models.py:996, app/colaboradores/models.py:997, app/colaboradores/models.py:1005), escalonamento aceita segunda a sexta das 08h às 18h sem consultar feriado (app/ponto/management/commands/escalonar_chamados_supervisao.py:25, app/ponto/management/commands/escalonar_chamados_supervisao.py:26) ; sim: registro descreve seg-sex sem considerar feriado (app/core/juizes.py:353), texto de VT/VA exige excluir feriado (app/colaboradores/models.py:994) ; achado: dias_uteis_do_mes define o calendário comercial de VT/VA por conta própria (app/colaboradores/models.py:1005), fora do único PENDENTE F9, que é o escalonamento (app/core/juizes.py:492) ; feriado em segunda a sexta deve ser excluído como em VT/VA (app/colaboradores/models.py:994), ou admitido na janela comercial como no escalonamento (app/ponto/management/commands/escalonar_chamados_supervisao.py:25, app/ponto/management/commands/escalonar_chamados_supervisao.py:26)?
-
-Contagem das linhas acima: perguntas lidas == 8, sendo seis com juiz e duas SEM_JUIZ (app/core/juizes.py:301, app/core/juizes.py:350). Coluna 5 sim: 6. Coluna 6 achado: 5. Coluna 7 preenchida: 1. Alcance em produção: [nao verificado].
-
-## 14/11 10:46 · sessao b0057b754654 · - · - · origem=Ronald (tmux)
-
-- **Escritor de produção da coluna `resolve`: [nao verificado].** A GRADE atribui sua origem a leitura de Codex e manda atualizar a linha no mesmo commit do marco; não identifica automação de preenchimento (`app/docs/GRADE-MESTRA.md:4`, `app/docs/GRADE-MESTRA.md:5`). `--cabecalho` substitui apenas o bloco derivado, preservando as tabelas (`bin/placar_grade.py:192`, `bin/placar_grade.py:198`, `bin/placar_grade.py:205`).
-- **Escritor de produção de `quadro.md`: [nao verificado].** Os escritores demonstrados são as fixtures de quadro com `sem obra: 7` e quadro sem esse campo (`bin/tests/test_placar_grade.sh:125`, `bin/tests/test_placar_grade.sh:128`).
-- O leitor da coluna é `ler`, pelo cabeçalho e montagem do dicionário; `resolve_preenchido` calcula a presença textual (`bin/placar_grade.py:39`, `bin/placar_grade.py:90`, `bin/placar_grade.py:121`). O leitor do quadro é `sem_obra`, que consulta caminho explícito/env/padrão, lê o texto e extrai `sem obra: N` (`bin/placar_grade.py:132`, `bin/placar_grade.py:134`, `bin/placar_grade.py:137`).
-- O denominador é `len(lidas)`, não constante `456`; complemento segue lista separada (`bin/placar_grade.py:114`, `bin/placar_grade.py:122`). A linha persistida declara `11/456` (`app/docs/GRADE-MESTRA.md:28`).
-
-Valores distintos de `resolve`, contando tabelas de obras **e** complementos:
-
-| Valor | Exemplo |
-|---|---|
-| `-` | `app/docs/GRADE-MESTRA.md:37` |
-| `HJ-074` | `app/docs/GRADE-MESTRA.md:127` |
-| `HJ-092` | `app/docs/GRADE-MESTRA.md:128` |
-| `casos 01, 02, 05, 06, 08` | `app/docs/GRADE-MESTRA.md:170` |
-| `caso 03` | `app/docs/GRADE-MESTRA.md:267` |
-| `HJ-090; HJ-091` | `app/docs/GRADE-MESTRA.md:268` |
-| `HJ-093` | `app/docs/GRADE-MESTRA.md:269` |
-| `HJ-091` | `app/docs/GRADE-MESTRA.md:288` |
-| `casos 01–10` | `app/docs/GRADE-MESTRA.md:289` |
-| `caso 01–14` | `app/docs/GRADE-MESTRA.md:431` |
-| `caso 10` | `app/docs/GRADE-MESTRA.md:505` |
-| `caso 13–14` | `app/docs/GRADE-MESTRA.md:686` |
-| `HJ-095` | `app/docs/GRADE-MESTRA.md:687` |
-| `caso 07` | `app/docs/GRADE-MESTRA.md:705` |
-| `caso 09` | `app/docs/GRADE-MESTRA.md:1052` |
-| `caso 02,03,05,07,08,09,10,11,12` | `app/docs/GRADE-MESTRA.md:1059` |
-| `HJ-090` | `app/docs/GRADE-MESTRA.md:1351` |
-
-`preenchido` só exclui `''`, `?`, `-`; aceitaria `n/a` e `[nao verificado]` (`bin/placar_grade.py:121`). Esses dois marcadores não aparecem nos valores da coluna acima; aparecem como linguagem documental em outros contextos, o que não prova uso na coluna (`app/docs/RELATO.md:1406`, `app/docs/RELATO.md:86`).
-
-Os três problemas de conteúdo seguem na cópia:
-
-| Achado | Veredito e prova |
-|---|---|
-| DECLARADO-X-GRAVADO omite impedimento de lei | **PROCEDE, aberto:** portão continua colisão; RELATO retira a obra até corte e enumera cinco questões (`app/docs/GRADE-MESTRA.md:272`, `app/docs/RELATO.md:7`, `app/docs/RELATO.md:24`). |
-| FIO-E0-V4-E3-LEITORES colide consigo mesma | **PROCEDE, aberto:** texto diz “a própria obra em voo”; regra exige comparação de arquivo com outra raia (`app/docs/GRADE-MESTRA.md:119`, `CLAUDE.md:309`, `CLAUDE.md:310`). |
-| O232 usa JUSTIFICATIVA como colisão em voo | **PROCEDE falta de sustentação, aberto:** portão continua JUSTIFICATIVA; sua linha está INTERROMPIDA (`app/docs/GRADE-MESTRA.md:853`, `app/docs/GRADE-MESTRA.md:269`). Colisão com agente efetivamente vivo: **[nao verificado]**. |
-
-Não há prova de dois significados diferentes na coluna `resolve`: seus valores são referências HJ/casos, e o cálculo novo só mede presença textual (`app/docs/GRADE-MESTRA.md:127`, `app/docs/GRADE-MESTRA.md:170`, `bin/placar_grade.py:121`). Há coexistência de motivos de impedimento no campo `portao`, prevista no próprio contrato; o defeito demonstrado é preencher esse campo com motivo que não sustenta a situação documental, conforme os três achados acima (`app/docs/GRADE-MESTRA.md:8`, `app/docs/GRADE-MESTRA.md:119`, `app/docs/GRADE-MESTRA.md:272`, `app/docs/GRADE-MESTRA.md:853`).
-
-## 14/11 10:46 · sessao d0e842e7b48f · - · - · origem=Ronald (tmux)
-
-Leitores e unidade, só por leitura estática:
-
-- **PROCEDE — tela paralela incompleta.** O texto corrigido está em `app/templates/ferias/agendar.html:10`, mas o formulário inline ainda declara somente “até 3 frações, uma ≥14 dias”, omitindo mínimo 5, em `app/templates/ferias/_secao_colab.html:63`. O input inline aceita `min="1"` em `app/templates/ferias/_secao_colab.html:68`; isso é permissividade da interface, não segundo juiz, pois o POST dessa forma vai a `agendar_ferias` (`app/templates/ferias/_secao_colab.html:60`) e a validação server delega ao juiz (`app/ferias/views.py:258`, `app/ferias/services.py:293`).
-
-- **PROCEDE — aviso agora mente em caminho real.** `avisos_de_agendamento` diz que a fração `<5` “será recusada” (`app/ferias/situacao.py:359`), mas a correção administrativa usa esse mesmo aviso (`app/ferias/views.py:516`) e grava as novas datas/dias sem `clean()` (`app/ferias/services.py:680`, `app/ferias/services.py:693`). A própria view documenta a dispensa do art.134 nessa correção (`app/ferias/views.py:508`).
-
-- **NÃO PROCEDE — segundo comparador novo de fracionamento fora do juiz.** Os locais executáveis encontrados delegam: `_validar_agendamento` → `checar_fracionamento` → `AgendamentoFerias.clean` (`app/ferias/views.py:258`, `app/ferias/services.py:293`); aviso do período → puro (`app/ferias/situacao.py:227`); aviso hipotético → puro (`app/ferias/situacao.py:348`); preview de abono → `_validar_agendamento` (`app/ferias/services.py:309`); API → avisos/situação (`app/api/views_mensageria.py:791`, `app/api/views_mensageria.py:812`, `app/api/views_mensageria.py:824`); intake declara esses escritor/preview (`app/core/intake.py:34`); comando de simulação usa `_validar_agendamento` (`app/ferias/management/commands/listar_ferias_dp.py:107`). Ausência absoluta de variantes não reconhecidas lexicalmente: **[não verificado]**.
-
-- **Registro: endereço vivo ainda é a porta.** `core/juizes.py` registra `AgendamentoFerias.clean`, não `violacoes_de_fracionamento` (`app/core/juizes.py:271`). O lookup diz explicitamente que o registro vivo manda (`app/docs/JUIZES.md:10`, `app/docs/JUIZES.md:14`). A função pura já é descrita como AUS-ESPELHO-1 de 19/09 (`app/ferias/models.py:266`); portanto esse diff não introduziu uma segunda função de julgamento, embora a descrição “juiz puro registrado” não corresponda ao endereço atual (`app/core/juizes.py:271`).
-
-- **NÃO PROCEDE — unidade divergente em `dias_self`.** Os campos são `DateField` (`app/ferias/models.py:318`), e `dias_self=(fim-início).days+1`, dias civis corridos inclusivos (`app/ferias/models.py:377`); o mesmo `clean` exige igualdade do campo `dias` com esse intervalo (`app/ferias/models.py:395`). A prévia constrói `fim=início+(dias-1)` (`app/ferias/services.py:294`), o histórico faz a inversa (`app/ferias/services.py:487`), e JS calcula fim com `(n-1)` dias e retorno com `n` dias em UTC (`app/templates/ferias/_secao_colab.html:196`).
-
-- **PROCEDE — integridade dessa equivalência depende do caminho.** O `save()` só chama guarda de colisão e sincronização de ausências (`app/ferias/models.py:461`); portanto não impõe a igualdade `dias`/intervalo verificada por `clean()` (`app/ferias/models.py:395`). A edição aceita separadamente `nova_ini`, `nova_fim`, `novos_dias` no escritor (`app/ferias/services.py:657`) e grava os três (`app/ferias/services.py:680`). A view atual calcula fim por dias (`app/ferias/views.py:507`); divergência efetivamente gravada em produção: **[não verificado]**.
-
-- **NÃO PROCEDE — abono contado como fração.** `dias` da fração é gozo; o saldo desconta gozo e vendidos separadamente (`app/ferias/models.py:220`). O preview de abono compara `dias+dias_vendidos` ao saldo, mas mantém fim calculado só por `dias` (`app/ferias/services.py:315`, `app/ferias/services.py:319`). A porta cria o agendamento de gozo e depois só incrementa `PeriodoAquisitivo.dias_vendidos` (`app/ferias/services.py:269`, `app/ferias/services.py:275`). A venda isolada só altera período (`app/ferias/services.py:897`). Frações são apenas os `dias` dos agendamentos em estados agendado/em_gozo/concluido (`app/ferias/situacao.py:115`).
-
-- **Duplicação de insumo, sem divergência atual de estados:** a porta carrega `dias` de agendados/em_gozo/concluidos (`app/ferias/models.py:368`); `_fracoes_do_periodo` repete a seleção (`app/ferias/situacao.py:117`). A porta exclui o próprio PK (`app/ferias/models.py:371`); o aviso oferece exclusão opcional (`app/ferias/situacao.py:120`). O juiz recebe esses números; não reconstrói datas de frações antigas (`app/ferias/models.py:271`).
-
-Grep aplicado à árvore: [nao verificado]
-
-```bash
-rg -n 'violacoes_de_fracionamento|FRACAO_MINIMA_DEMAIS|FRACAO_MINIMA|FRACOES_MAXIMAS|checar_fracionamento|checar_ferias_com_abono|avisos_de_agendamento|_fracoes_do_periodo|14 dias|14d|ate 3 fra|até 3 fra|menor.*14|[Ff]racionamento' \
-  --glob '*.py' --glob '*.js' --glob '*.html' \
-  --glob '!**/tests/**' --glob '!**/test*' --glob '!**/migrations/**' .
-```
-
-Os hits pertinentes estão listados acima; hits de “14 dias” sem relação com férias foram descartados pelo contexto dos respectivos arquivos **[não verificado: exaustividade semântica além do grep]**.
-
-## 14/11 10:46 · sessao a81d86ae6c85 · - · - · origem=Ronald (tmux)
-
-Análise contrafactual estática pelo diff fornecido; execução real contra f7510b95a: [não verificado].
-
-| Asserção no teste | Falharia na base? | Motivo | [nao verificado]
-|---|---|---|
-| `:20`, `[14,4]` | SIM | Base retornaria `[]`; exige `['par1_demais']`. |
-| `:21`, `[25,1]` | SIM | Base retornaria `[]`. |
-| `:22`, `[4]` | SIM | Base retornaria apenas `['par1']`. |
-| `:26`, `[14,5]` | NÃO | Base já retornava `[]`. |
-| `:27`, `[20,5,5]` | NÃO | Base já retornava `[]`. |
-| `:28`, `[30]` | NÃO | Base já retornava `[]`. |
-| `:32`, `[10,10]` | NÃO | Base já retornava `['par1']`. |
-| `:33`, `[14,5,5,5]` | NÃO | Base já retornava `['caput']`. |
-| `:34`, `[14,3,5,5]` | SIM | Base retornaria apenas `['caput']`. |
-| `:41`, ausência da comparação literal | SIM | Base continha exatamente `int(dias) < FRACAO_MINIMA`. |
-| `:42`, presença da chamada literal | SIM | Base não continha chamada ao juiz nessa função. |
-| `:70–71`, `assertRaises` | SIM | Base aceitaria quatro dias ao lado de quatorze. |
-| `:72`, mensagem contém `5 dias` | SIM, isoladamente | Base não produz essa mensagem; normalmente fica inalcançável depois da falha do `assertRaises`. |
-| `:77`, aceitação de cinco | NÃO | Ausência implícita de exceção já ocorria. |
-| `:83`, aceitação de treze junto ao histórico `[14,3]` | NÃO | Aceitação já ocorria. |
-| `:91`, aviso do período contém `5 dias` | SIM | Base não emitia o novo aviso. |
-| `:97`, aviso da proposta contém `5 dias` | SIM | Base só emitia o texto referente aos quatorze. |
-| `:106`, ausência do texto antigo | SIM | Texto antigo continha a substring. |
-| `:107`, presença de “ao menos uma…” | SIM, isoladamente | Texto antigo não continha a substring; execução normalmente para na `:106`. |
-| `:108`, presença de “nenhuma…” | SIM, isoladamente | Mesmo motivo. |
-
-Todas as linhas acima pertencem a `app/ponto/tests/test_ferias_fracao_demais_5.py`; o contrafactual usa as remoções do diff anexo e o comportamento atual em `app/ferias/models.py:271`, `app/ferias/situacao.py:348`, `app/templates/ferias/agendar.html:10`.
-
-- **Selo/RED sem mordida — NÃO PROCEDE para o conjunto; PROCEDE como limitação dos selos sintáticos.** Há regressões comportamentais que falhariam na base (`test_ferias_fracao_demais_5.py:20`, `:70`, `:91`, `:97`). As verificações por substring não provam exclusividade do juiz: a presença de uma chamada, inclusive em comentário, satisfaz `:42`; mudança de espaços pode contornar `:41`. (`app/ponto/tests/test_ferias_fracao_demais_5.py:40–42`)
-
-- **Cobertura da porta real — PROCEDE a lacuna.** Os testes chamam `clean()` em objetos novos, usando `bulk_create` só para preparar histórico; não exercitam `save()` nem os serviços reais de edição. (`app/ponto/tests/test_ferias_fracao_demais_5.py:63`, `:69`, `:71`, `:77`, `:83`) A edição muda dias e grava sem `clean()` (`app/ferias/services.py:680`, `:693`); `save()` só executa guarda de sobreposição e espelho (`app/ferias/models.py:461–466`).
-
-- **Status não vivo — PROCEDE a lacuna.** O helper usa exclusivamente `status='concluido'` por padrão; nenhum teste passa `cancelado` ou exercita transição de status. (`app/ponto/tests/test_ferias_fracao_demais_5.py:61–65`)
-
-- **Zero e contagem — PROCEDE a lacuna.** Nenhuma entrada dos testes contém zero; o juiz elimina valores falsos antes de verificar mínimo e quantidade, logo `[14,0] → []` e `[14,0,5,5] → []`. (`app/ferias/models.py:271–278`; entradas em `app/ponto/tests/test_ferias_fracao_demais_5.py:20–34`)
-
-- **Caput junto com par1 — PROCEDE a lacuna.** Nenhum teste verifica aviso simultâneo para `[5,5,5,5]`; o juiz retorna ambas as violações, mas o `elif` suprime o aviso do caput. (`app/ferias/models.py:273–276`; `app/ferias/situacao.py:228`, `:237`; testes em `app/ponto/tests/test_ferias_fracao_demais_5.py:32–34`, `:85–97`)
-
-- **Coerência dias/datas — PROCEDE a lacuna.** O helper sempre cria datas e `dias` coerentes, impedindo que estes testes detectem divergência entre as duas fontes. (`app/ponto/tests/test_ferias_fracao_demais_5.py:63–64`; guarda existente em `app/ferias/models.py:395–398`)
-
-_5112 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5117 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
