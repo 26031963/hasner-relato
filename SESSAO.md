@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 13/11/2026 23:41:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (615.0 MB). Acoes na janela: **2129**.
+**Medido em 13/11/2026 23:47:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (615.0 MB). Acoes na janela: **2114**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2124,18 +2124,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:47:29 | Bash |  | `cd /home/ronald/wt-feriado1609-110424/app; sed -n 930,970p ponto/services/fechamento.py; echo ----; sed -n 1395,1440p escala/models.py; echo; cat /home/ronald/saas-hasner/logs/FERIADO-LEI-1609/foco_v4/roda.sh \| head -30` |
 | 11:47:21 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/FERIADO-LEI-1609/preverif3/preverif3.r \| head -120` |
 | 11:47:19 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; for f in logs/FERIADO-LEI-1609/foco_v4 logs/FERIADO-LEI-1609/preverif3 logs/TIPO-NA-FONTE/item3/volta5/suite_pre_opus_c logs/DESLIGADO-NAO-TRAVA/censo_o50b; do echo "== $f"; ls $f; done; f=logs/FERIADO-LEI-1609/foco_v4/foco.log; [ -f $f ] && { grep -E '^(OK\|FAILED)($\| \()' $f\|tail -1; grep '^Ran' $f\|tail -1; grep -E '^(ERROR\|FAIL):' $f; }` |
-| 11:46:22 | Bash |  | `cd /home/ronald/wt-feriado1609-110424/app; git grep -n "marcar_trabalha_em_feriado(" -- '*.py' \| grep -v "def marcar"; git grep -ln "acao=" -- '*/tests/*.py' \| xargs /bin/grep -ln "EscalaColaborador" \| xargs /bin/grep -ln "LogAuditoria.objects.count\\|LogAuditoria.objects.filter(modelo='EscalaColaborador'" \| head` |
-| 11:43:05 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; python3 - <<'EOF' import py_compile p='folha/export.py' s=open(p).read() old1=""" chamadores de hoje nao mudam de linha.\"\"\" import datetime as _dt from django.utils import timezone as _tz from escala.models import CelulaDia from core.constants import isento_ponto as _isento if _isento(colab): # HX-BORDA-ISENTO: Art.62 nao e auditavel por celula # A FORMA ...` |
-| 11:42:41 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; sed -n 115,145p folha/tests/test_e4_parte5_dinheiro.py` |
-| 11:42:39 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; /bin/grep -n "ast\.\\|getsource\\|FunctionDef" folha/tests/test_e4_parte5_dinheiro.py ponto/tests/test_contract_juiz_batida.py \| head; /bin/grep -rn "motivos_retencao_celula\\|'export.py'" --include=*.py core/tests ponto/tests \| /bin/grep -v "^.*#" \| head` |
-| 11:42:36 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; for f in folha/tests/test_haiku_fora_da_folha.py folha/tests/test_retrato_folha_quadros.py folha/tests/test_e4_parte5_dinheiro.py folha/tests/test_classificar_export.py folha/tests/test_previa_cobre_pelo_juiz.py folha/tests/test_porta_do_export.py ponto/tests/test_contract_juiz_batida.py; do echo "== $f"; /bin/grep -n "motivos_retencao_celula" $f \| head -4 ...` |
-| 11:42:33 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; /bin/grep -rln "motivos_retencao_celula" --include=*.py */tests \| xargs /bin/grep -ln "ast\.\\|FunctionDef\\|inspect.getsource" \| head;` |
-| 11:42:27 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; python3 - <<'EOF' import py_compile p='colaboradores/services/desligamento.py' s=open(p).read() old="""def julgar_desligamento(colaborador, post): # Guard idempotencia (esmero 11/07): re-POST em ja-desligado re-rodava a # cascade inteira (duplicava HistoricoVinculo + chamado dp_rh, sobrescrevia data). if colaborador.situacao == 'desligado': """ new="""def e ...` |
-| 11:42:16 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; sed -n 40,62p colaboradores/services/desligamento.py; sed -n 100,120p colaboradores/services/desligamento.py` |
-| 11:42:11 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; python3 - <<'EOF' import re s=open('core/juizes.py').read() print(re.findall(r"^ '([^']+)': \{", s, re.M)); print(re.findall(r"^JUIZES\['([^']+)'\]", s, re.M)) EOF /bin/grep -rn "def test.*familia\\|FAMILIAS\b" core/tests/test_juizes*.py 2>/dev/null \| head` |
-| 11:42:00 | Bash |  | `cd /home/ronald/wt-desligado-112447; sed -n 245,300p bin/gerar_estado.py; cat bin/turno_do_par_estado.py \| head -50` |
-| 11:41:58 | Bash |  | `cd /home/ronald/wt-desligado-112447; /bin/grep -n "esperado 0\\|def _linha\\|def main\\|sombra\\|docker exec\\|alarme" bin/gerar_estado.py \| head -40; wc -l bin/gerar_estado.py` |
-| 11:41:56 | Bash |  | `cd /home/ronald/wt-desligado-112447; ls bin \| /bin/grep -i estado; git grep -ln "retido_calado\\|vigiar_pausa_export" -- bin app/core \| head` |
-| 11:41:53 | Bash |  | `cd /home/ronald/wt-desligado-112447; git grep -n "respostas_intervalo_recusadas_paridade\\|vigia_retido_calado" -- app bin \| grep -v "/tests/" \| head -15` |
-| 11:41:50 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; sed -n 250,272p core/juizes.py; /bin/grep -n "ESTADO\b\\|desligados_retidos\\|def contadores\\|'vigia_retido_calado'\\|retido_calado" core/estado*.py core/placar*.py 2>/dev/null \| head; ls core \| /bin/grep -i estado` |
-| 11:41:47 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; /bin/grep -n "isento\\|afastad\\|situacao\\|colaborador'" core/juizes.py \| head -20; sed -n 303,330p core/juizes.py; cat ../bin/tests/test_juiz_novo_tem_corte.sh \| head -60` |
