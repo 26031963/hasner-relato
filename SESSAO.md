@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 01:24:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.0 MB). Acoes na janela: **1921**.
+**Medido em 14/11/2026 01:30:16.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.1 MB). Acoes na janela: **1928**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:28:04 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="PONTO 01:3x BUG-PAR suite inteira VERDE (logs/BUG-PAR/suite_inteira_1411.log: OK skipped=42 xfail=41, Ran 15838, rc 0; PRE-VOO logs/BUG-PAR/prevoo/prevoo_1.log OK Ran 69) \| POUSO NAO ABRE: a copia (338fd37b0) esta empilhada sobre o merge 6c465cb80 = main + E3-FORMA-SQL volta 4 (91bed1694), e  ...` |
+| 01:27:53 | Bash |  | `cd /home/ronald/saas-hasner; for c in 91bed1694 2b0739004 6c465cb80; do git merge-base --is-ancestor $c main && echo "$c in main" \|\| echo "$c NOT in main"; done; git merge-base --is-ancestor 91bed1694 2b0739004 && echo "v4 ancestor of v7"; git log --oneline -1 $(git merge-base main 338fd37b0) \| cut -c1-100` |
+| 01:27:48 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/BUG-PAR-O-PAR/e3/volta5/ logs/BUG-PAR-O-PAR/e3/volta5/codex/ logs/BUG-PAR-O-PAR/e3/; git -C /home/ronald/wt-bugpar-124848 log --oneline main..HEAD \| cat \| cut -c1-120` |
+| 01:27:44 | Bash |  | `cd /home/ronald/saas-hasner; find logs -newermt "2026-11-13 12:00" \( -name "pv_c*" -o -name "pv_d*" -o -name "recorte_d3*" \) 2>/dev/null \| head` |
+| 01:27:40 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/BUG-PAR-O-PAR \| head -30; ls logs/codex \| /bin/grep -i "BUG-PAR" \| tail -8` |
+| 01:27:38 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/BUG-PAR-POUSA \| head -30` |
+| 01:27:35 | Bash |  | `cd /home/ronald/saas-hasner; ls -d logs/*BUG*PAR* logs/*bugpar* 2>/dev/null; ls -t logs \| /bin/grep -i "par" \| head` |
+| 01:27:33 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/BUG-PAR/ \| head -50; git -C /home/ronald/wt-bugpar-124848 status --porcelain \| head; git -C /home/ronald/wt-bugpar-124848 log --oneline -1` |
+| 01:27:28 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bovc74k97.output; date +%H:%M` |
 | 01:15:31 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (i) 01:1x: censos fechados, git==AST SIM nos dois, lei: 0 \| RAIZ-DA-DISPUTA (logs/PREPARACAO/censos/RAIZ-DA-DISPUTA/censo.md): chamado_destino 3 escritores persistentes em 2 funcoes (models.py _nascer :3038/:3070, fio.py:926 reapontar_resolvedora) + 2 so em memoria (selo  ...` |
 | 01:06:39 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (g) 01:1x: matriz_transicoes.md nos censos JUSTIFICATIVA-PAGA (33 linhas, 13 SEM PROVA, 5 aberto:) e CONTRATO-DE-ENTRADA-DO-FIO (30 linhas, 12 SEM PROVA, 6 aberto:); entram como ANEXO do brief do construtor de cada uma no ato de abrir \| achados p/ o brief: juiz marcos_cob ...` |
 | 01:04:28 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (f) 01:0x: logs/PREPARACAO/LEIS-ABERTAS/para_o_corte.md, 26 itens (LA-01..21 + 5 DXG) com procurei/achei, opcoes, efeito, lei mais proxima: lei escrita indica 6 (LA-02 L-035, LA-06 L-004, LA-08 CORTES:348, LA-09 L-125, LA-10 L-007, LA-11 CORTES:416), nenhuma 20; LA-21 (fer ...` |
@@ -1929,5 +1938,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:31:06 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; /bin/grep -n "travas_aprovacao" -r --include=*.py . \| /bin/grep -v tests \| head -20; echo ===; sed -n 2365,2440p ponto/views.py; echo ===; sed -n 240,275p ../bin/gerar_estado.py` |
 | 13:30:53 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; sed -n 820,860p folha/export.py; echo ====; sed -n 1195,1260p folha/export.py; echo ===; sed -n 585,620p folha/views.py; echo ===; sed -n 390,405p folha/views.py; echo ===; sed -n 20,40p ponto/services/fechamento_lista.py; echo ===; sed -n 275,305p api/views_mensageria.py` |
 | 13:30:47 | Bash |  | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks; tail -c 2500 a9e87c3e88c19914a.output; echo ====; tail -c 1500 ab5ac1df46e4eca47.output; date +%H:%M` |
-| 13:29:58 | Bash |  | `cd /home/ronald/saas-hasner; tail -c 6000 logs/DESLIGADO-NAO-TRAVA/preverif1/r.r` |
-| 13:29:46 | Bash |  | `cd /home/ronald/saas-hasner; wc -c logs/DESLIGADO-NAO-TRAVA/preverif1/r.r; cat logs/DESLIGADO-NAO-TRAVA/preverif1/r.r \| head -c 9000` |
