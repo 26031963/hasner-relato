@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 13:13:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (671.3 MB). Acoes na janela: **1834**.
+**Medido em 14/11/2026 13:18:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (671.3 MB). Acoes na janela: **1833**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1843,4 +1843,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:27:35 | Bash |  | `cd /home/ronald/saas-hasner; ls -d logs/*BUG*PAR* logs/*bugpar* 2>/dev/null; ls -t logs \| /bin/grep -i "par" \| head` |
 | 01:27:33 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/BUG-PAR/ \| head -50; git -C /home/ronald/wt-bugpar-124848 status --porcelain \| head; git -C /home/ronald/wt-bugpar-124848 log --oneline -1` |
 | 01:27:28 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bovc74k97.output; date +%H:%M` |
-| 01:15:31 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="ENTREGA NOITE-1411-B (i) 01:1x: censos fechados, git==AST SIM nos dois, lei: 0 \| RAIZ-DA-DISPUTA (logs/PREPARACAO/censos/RAIZ-DA-DISPUTA/censo.md): chamado_destino 3 escritores persistentes em 2 funcoes (models.py _nascer :3038/:3070, fio.py:926 reapontar_resolvedora) + 2 so em memoria (selo  ...` |
