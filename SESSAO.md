@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 10:13:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (651.1 MB). Acoes na janela: **1377**.
+**Medido em 14/11/2026 10:18:48.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (651.9 MB). Acoes na janela: **1386**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:18:37 | Bash | RED do selo novo contra suite.sh da volta 3 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad; R4="$S/red_rmdir_v4"; mkdir -p "$R4" && cd /home/ronald/wt-rmdir-guarda-083536 && git archive HEAD bin \| tar -x -C "$R4" && cp bin/tests/test_rm_com_guarda.sh "$R4/bin/tests/" && cd "$R4" && git init -q . 2>/dev/null; timeout 400 bash "$R4/bin/tests/test_rm_com_guarda.sh" 2>&1 \| /bin/grep -v ' -- ok$ ...` |
+| 10:18:31 | Bash | Ver commit da volta 3 e o delta | `cd /home/ronald/wt-rmdir-guarda-083536 && git log -1 --format=%B \| head -30; git diff --stat` |
+| 10:16:27 | Bash | Rodar selos vizinhos na copia | `cd /home/ronald/wt-rmdir-guarda-083536 && for t in test_codex_pergunta test_suite_sh test_suite_motivo test_segredo_fora_do_argv test_recursos_sourced; do timeout 300 bash bin/tests/$t.sh >/tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/scratchpad/$t.out 2>&1; echo "$t rc=$?"; done; git status --porcelain` |
+| 10:15:34 | Bash | Caso de dois sinais e mutante da fila | `cd /home/ronald/wt-rmdir-guarda-083536 && python3 - <<'EOF' p='bin/tests/test_rm_com_guarda.sh'; s=open(p).read() a=''' [ "$rc" -eq 127 ] \|\| { echo " HUP: rc $rc (esperado 127: o sinal chega com o proprio nome e o 127 do run e o rc)"; ok=1; } pkill -f "$A/bin/trava_teste.sh" 2>/dev/null return "$ok"''' b=''' [ "$rc" -eq 127 ] \|\| { echo " HUP: rc $rc (esperado 127: o sinal chega com o proprio n ...` |
+| 10:15:17 | Bash | Ler o laço de repasse | `cd /home/ronald/wt-rmdir-guarda-083536 && sed -n 280,320p bin/suite.sh` |
+| 10:14:49 | Bash | Reancorar mutantes e rodar o selo | `cd /home/ronald/wt-rmdir-guarda-083536 && python3 - <<'EOF' p='bin/tests/test_rm_com_guarda.sh'; s=open(p).read() rep=[ ("""if [ "$(/bin/grep -c '\\[ -z "\\$_SINAL" \\] && ' "$_ms6")" = 1 ]; then sed -i 's/\\[ -z "\\$_SINAL" \\] && //' "$_ms6\"""", """if [ "$(/bin/grep -c '\\[ -z "\\$_HOUVE" \\] && ' "$_ms6")" = 1 ]; then sed -i 's/\\[ -z "\\$_HOUVE" \\] && //' "$_ms6\""""), ("""_falha 'ancora `[  ...` |
+| 10:14:42 | Bash | Conferir âncoras novas e a suite viva | `cd /home/ronald/wt-rmdir-guarda-083536 && /bin/grep -n '_HOUVE\\|pkill "-\$_S"\\|_FILA\\|_RCF' bin/suite.sh \| head -30; ps -p 1706575 -o pid,etime,cmd \| tail -1; bash bin/trava_teste.sh --quem 2>/dev/null \| head -3` |
+| 10:13:38 | Bash | Ler caso 6 do selo | `cd /home/ronald/wt-rmdir-guarda-083536 && sed -n 205,285p bin/tests/test_rm_com_guarda.sh` |
+| 10:13:34 | Bash | Fila de sinais, saída por rc escrito, DADOS no shell principal | `cd /home/ronald/wt-rmdir-guarda-083536 && python3 - <<'EOF' p='bin/codex_pergunta.sh'; s=open(p).read() a='''WS="${CODEX_WS_BASE:-$HOME/codex_ws}/$HASH" printf '%s\\t%s\\t%s\\t%s\\t%s\\tini\\t%s\\n' "$(date'''; assert s.count(a)==1, s.count(a) s=s.replace(a,'''WS="${CODEX_WS_BASE:-$HOME/codex_ws}/$HASH" # DADOS nasce AQUI, no shell principal (Codex v3): dentro do $(_pergunta_raspada) o `exit 3` do ...` |
 | 10:13:15 | Bash | Ler trecho DADOS do codex_pergunta | `cd /home/ronald/wt-rmdir-guarda-083536 && sed -n 280,310p bin/codex_pergunta.sh; sed -n 415,425p bin/codex_pergunta.sh` |
 | 10:13:03 | Bash | Ler início do v3 e o trecho do laço | `cd /home/ronald/saas-hasner && head -c 4500 logs/RMDIR-GUARDA/v3.r \| tail -c 4200; echo; sed -n 280,312p /home/ronald/wt-rmdir-guarda-083536/bin/suite.sh` |
 | 10:13:00 | Bash | Ler resposta do Codex verificador v3 | `cd /home/ronald/saas-hasner && wc -c logs/RMDIR-GUARDA/v3.r && sed -n '/^```text/,$p' logs/RMDIR-GUARDA/v3.r \| head -0; tail -c 6000 logs/RMDIR-GUARDA/v3.r` |
