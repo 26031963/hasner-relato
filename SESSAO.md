@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 12:24:19.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (667.2 MB). Acoes na janela: **1749**.
+**Medido em 14/11/2026 12:29:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (667.2 MB). Acoes na janela: **1749**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:24:25 | Bash | Write RED tests and run them in the copy | `cd /home/ronald/wt-hj091-origem-122335/app; cat >> ponto/tests/test_hj091_ferias_derivadas.py <<'EOF' # --------------------------------------------------------------------------- HJ-091-REJEITADA-GANHA-A-ORIGEM class RejeitadaGanhaAOrigemTest(_BaseV2): """Aval Ronald HJ-091-REJEITADA-GANHA-A-ORIGEM (14/11 12:2x, logs/AVAIS-1313/hj091_rejeitada_ganha_a_origem.txt). FATO (prod, logs/HJ-091/ato_rece ...` |
 | 12:24:05 | Bash | Read espelhar_ferias and reopen filter | `cd /home/ronald/wt-hj091-origem-122335/app; sed -n 1240,1300p ponto/services/ausencia.py; sed -n 300,320p ponto/services/ausencia.py; /bin/grep -n "STATUS_QUE_ESPELHAM =" ferias/services.py` |
 | 12:23:48 | Bash | Read test base fixtures and backfill tests | `cd /home/ronald/wt-hj091-origem-122335/app; sed -n 1,76p ponto/tests/test_hj091_ferias_derivadas.py; sed -n 312,384p ponto/tests/test_hj091_ferias_derivadas.py; sed -n 411,465p ponto/tests/test_hj091_ferias_derivadas.py; sed -n 492,497p ponto/tests/test_hj091_ferias_derivadas.py` |
 | 12:23:45 | Bash | Map test classes and helpers in HJ-091 tests | `cd /home/ronald/wt-hj091-origem-122335/app; /bin/grep -n "^class \\|def _ag\\|def _aus\\|def setUp\\|vincular_ausencias_ferias(" ponto/tests/test_hj091_ferias_derivadas.py \| head -50` |
@@ -1758,4 +1759,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:34:44 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b7f1behv3.output \| cut -c1-200; cd /home/ronald/saas-hasner; git log --oneline -1 origin/main; date +%H:%M` |
 | 00:32:19 | Bash |  | `ps -p 3646643 -o etime=; tail -2 /home/ronald/saas-hasner/logs/PUSH/push_grade_1411.log \| cut -c1-150` |
 | 00:32:16 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bhemsfzax.output; tail -5 /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/volta5/recorte_d2.log \| cut -c1-200` |
-| 00:25:58 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(3,'PONTO 01:0x NOITE-1411 (a) censo E4c + E4d FECHADOS (logs/PREPARACAO/censos/E4c\|E4d/censo.md @94d2533a0): E4c 1031 file:line git==AST, 176 funcoes leitoras em 56 arquivos + 4 templates (20 arquivos em voo); E4d 47 git x 44 AST (3 explicados), 10 escritores no escopo; lei: 1 (A20, BACKLO ...` |
