@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 13:55** · publicado em **14/11/2026 13:56** (UTC-3)
+> Ultima resposta processada: **14/11/2026 14:50** · publicado em **14/11/2026 14:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 14:50 · sessao b39e0829dc2b · - · - · origem=Ronald (tmux)
+
+Referências **B** = arquivo da cópia/base; **P** = linhas resultantes do diff fornecido.
+
+- **1 — nada na extração do PUSH, isoladamente.** `julgar_commit` conserva os comandos de merge, raiz, `--no-renames`, `-z` e a chamada de `medida_do_commit`; o laço conserva os filtros de duplicatas antes e exceção nominal depois. Apenas relê mensagem/pais do SHA. [B `bin/tests/test_lei_akita.sh:458`; B `bin/tests/test_lei_akita.sh:468`; P `bin/tests/test_lei_akita.sh:408`; P `bin/tests/test_lei_akita.sh:490`; P `bin/tests/test_lei_akita.sh:500`]
+
+- **3 — itens 1–3 executam, mas não decidem o modo commit.** O script não tem `errexit`; essas verificações só incrementam `falhas`. O modo commit redireciona stdout e retorna antes do tratamento final desse contador. Vocabulário executa efetivamente antes do ramo commit e rejeita GLOSSARIO/NORTE ilegíveis; `producao`, catraca e MORDE não são chamados nesse caminho. [B `bin/tests/test_lei_akita.sh:16`; B `bin/tests/test_lei_akita.sh:24`; B `bin/tests/test_lei_akita.sh:35`; B `bin/tests/test_lei_akita.sh:100`; B `bin/tests/test_lei_akita.sh:129`; P `bin/tests/test_lei_akita.sh:23`; P `bin/tests/test_lei_akita.sh:507`; P `bin/tests/test_lei_akita.sh:996`]
+
+- **ALVO: nada quanto a campo com dois significados, no caminho normal.** É a revisão que fornece o vocabulário: ponta do push ou objeto sintético do commit. O shell força `LEI_AKITA_HEAD="$LEI_AKITA_COMMIT"` para o Python. `medida_do_commit` continua consultando `h`, independentemente do ALVO global. [B `bin/tests/test_lei_akita.sh:74`; B `bin/tests/test_lei_akita.sh:76`; B `bin/tests/test_lei_akita.sh:296`; P `bin/tests/test_lei_akita.sh:998`]
+
+- **PROCEDENTE — nasce seletor ambiental que pode desviar o juiz do PUSH.** O pre-push força apenas `LEI_AKITA_HEAD`; um `LEI_AKITA_COMMIT=<SHA válido aprovado>` herdado ativa o novo modo, troca o alvo e evita universo, catraca e itens 1–3. Não há evidência de uso em produção. [B `bin/pre-push.sh:38`; P `bin/tests/test_lei_akita.sh:23`; P `bin/tests/test_lei_akita.sh:507`; P `bin/tests/test_lei_akita.sh:998`; produção: **[nao verificado]**]
+
+- **PROCEDENTE — segundo reconhecedor divergente produz verde vazio.** O gate `grep` retorna “sem linha”, mas `tem_linha` do juiz retorna verdadeiro para `titulo\rLEI-AKITA: padrao=Inventado\n`, `titulo\vLEI-AKITA: ...` e prefixo NBSP. Verifiquei as expressões em memória, sem arquivos; `git stripspace -s` preserva esses bytes. O hook sai antes de chamar o juiz; o juiz do PUSH reconhece tais linhas. [P `bin/commit_msg.sh:17`; B `bin/tests/test_lei_akita.sh:354`; B `bin/tests/test_lei_akita.sh:339`]
+
+- **PROCEDENTE condicional — `LEI_AKITA_MORDE=1` herdado troca o vocabulário.** O Python fixa ALVO em HEAD quando MORDE está ativo; o ramo commit roda antes do ramo MORDE. Assim pode julgar o SHA sintético com vocabulário do HEAD. A ocorrência desse ambiente em produção não foi demonstrada. [B `bin/tests/test_lei_akita.sh:68`; B `bin/tests/test_lei_akita.sh:74`; P `bin/tests/test_lei_akita.sh:507`; P `bin/tests/test_lei_akita.sh:513`; produção: **[nao verificado]**]
+
+Coordenadas P conferidas por contagem das alterações: início `+2`, extração `+30`, substituição de 14 linhas por uma `−13`, ramo commit Python `+6`, total `+25`; `julgar_commit:408–430`, ramo Python `507–512`, ramo shell `996–1002`. [diff fornecido: **[nao verificado por arquivo físico]**] [nao verificado]
+
+## 14/11 14:50 · sessao ff798a325404 · - · - · origem=Ronald (tmux)
+
+Q4: **PROCEDENTE condicional nos geradores de mensagens; nenhum travamento demonstrado.**
+
+- `bin/hooks.sh install` escreve o wrapper no caminho fixo da principal, delegando para `bin/commit_msg.sh`; os destinos novos são `FONTE_MSG`/`ALVO_MSG` e o `exec` está no bloco adicionado do diff. Não há instalação realizada nem hooks reais no dado fornecido. (`diff_v1.patch`, hunk de `bin/hooks.sh:9` e hunk `+65`; instalação atual [nao verificado].)
+- Escritor de `LEI_AKITA_COMMIT` e `LEI_AKITA_R`: a nova chamada de `bin/commit_msg.sh:28`; leitores: modo Bash e ramo Python acrescentados em `bin/tests/test_lei_akita.sh`. `LEI_AKITA_HEAD` já é escrito pelo pre-push e lido pelo selo; `ALVO` Bash alimenta `_ler`, e o Python possui sua própria variável `ALVO`. (`bin/pre-push.sh:38`; `bin/tests/test_lei_akita.sh:17`; `bin/tests/test_lei_akita.sh:21`; `bin/tests/test_lei_akita.sh:22`; `bin/tests/test_lei_akita.sh:74`; `diff_v1.patch`, hunks `+19`, `+497`, `+993`.)
+- **Possível bypass novo:** `LEI_AKITA_COMMIT=<SHA sem linha>` herdado no push ativa o modo que julga apenas aquele SHA e sai antes do universo/catraca; o pre-push atribui somente `LEI_AKITA_HEAD`, sem limpar a variável nova. Outras guardas do push continuam aplicáveis. Isso contradiz a promessa “nenhum env de bypass nasce”. (`bin/pre-push.sh:38`; `diff_v1.patch`, ramo `if os.environ.get('LEI_AKITA_COMMIT')` e bloco Bash do hunk `+993`; `contrato.txt:1`.)
+
+Chamadores:
+
+| Sítio | Resultado pelo código |
+|---|---|
+| `pos_push.sh` | Mensagem automática não contém LEI-AKITA; passa pelo retorno inicial do hook. (`bin/pos_push.sh:30`; `bin/pos_push.sh:31`; `bin/pos_push.sh:37`; proposta `bin/commit_msg.sh:17`.) |
+| `codex_pergunta --construtor` | Proíbe commit; inventário verifica HEAD e descarta a saída quando alterado. Não monta mensagem de commit. (`bin/codex_pergunta.sh:345`; `bin/codex_pergunta.sh:148`; `bin/codex_pergunta.sh:181`; `bin/codex_pergunta.sh:437`; `bin/codex_pergunta.sh:441`.) |
+| `disjuntor.py` | Os subprocessos Git encontrados consultam worktrees, log e status, sem commit; ele não depende de mensagem automática LEI-AKITA. (`bin/disjuntor.py:1234`; `bin/disjuntor.py:1237`; `bin/disjuntor.py:1244`; `bin/disjuntor.py:1247`.) |
+| Fabricante | Prompt exige formato “exato” de LEI-AKITA **sem `padrao=`** e proíbe commit direto; se seguido literalmente, o novo hook recusará no integrador. (`bin/fabricante_prompt.md:49`; `bin/fabricante_prompt.md:52`; `bin/fabricante_prompt.md:70`; `bin/tests/test_lei_akita.sh:319`; `bin/tests/test_lei_akita.sh:321`.) |
+| Esteira/integrador | Copia `msg_commit.molde` para `.txt`, substitui somente RED/Suite e entrega ao integrador; este executa `git commit -F msg_commit.txt -- caminhos`, sem completar o campo ausente. (`bin/molde_fatia/esteira.sh:14`; `bin/molde_fatia/esteira.sh:22`; `bin/molde_fatia/esteira.sh:26`; `app/core/integrador_lote.py:481`.) |
+| Cadeias antigas | Também commitam o arquivo de mensagem diretamente; mensagem sem `padrao=` será recusada. (`bin/molde_fatia/cadeia.sh:68`; `bin/molde_autocura/cadeia.sh:65`; `bin/tests/test_lei_akita.sh:321`.) |
+| Outros automáticos | `relato`, `codex_estado` e `reverter_o122` geram mensagens sem LEI-AKITA, portanto passam pelo retorno inicial. (`bin/relato.sh:136`; `bin/codex_estado.sh:83`; `bin/reverter_o122.sh:30`; proposta `bin/commit_msg.sh:17`.) |
+
+A recusa de `_commitar` apenas impede adicionar a fatia em `subiram`; o integrador segue ao push. Incidência em pacotes reais e produção: [nao verificado]. (`app/core/integrador_lote.py:719`; `app/core/integrador_lote.py:720`; `app/core/integrador_lote.py:739`.)
+
+Q6, juiz registrado: **nada quanto a duplicação de juiz de domínio**. O mapa descreve juízes de domínio gerados de `core/juizes.py`; a proposta reutiliza `julgar` existente por meio de `julgar_commit`. Há, porém, reconhecimento paralelo de “tem linha” no grep do hook e em `tem_linha` Python, sujeito a divergência de whitespace Unicode. (`app/docs/MAPA-JUIZES.md:3`; `app/docs/MAPA-JUIZES.md:7`; `bin/tests/test_lei_akita.sh:336`; `bin/tests/test_lei_akita.sh:354`; proposta `bin/commit_msg.sh:17`; `diff_v1.patch`, definição nova `julgar_commit`.)
+
+## 14/11 14:49 · sessao 1b363f83bb2d · - · - · origem=Ronald (tmux)
+
+**Item 5 — PROCEDENTE: selo pode ficar verde com hook instalado inoperante.** `_delega` verifica somente executável e ocorrência textual de `bin/commit_msg.sh`; um wrapper executável contendo `exit 0` e `# /caminho/existente/bin/commit_msg.sh` satisfaz a inspeção, inclusive existência do alvo. A bateria executa outro wrapper, criado no repositório plantado, e não o instalado. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:24`, `:40`, `:41`, `:55`, `:74`.
+
+**Item 5 — PROCEDENTE: censo vazio por erro pode passar.** Falha de `worktree list` não é checada pelo chamador; erro de `config --get` vira `continue`; caminhos inexistentes também são pulados. `DESV` vazio é aprovado independentemente do status da função. O MORDE usa outro repositório e não exige uma worktree sequer enumerada no repositório real. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:28`, `:29`, `:30`, `:44`, `:45`, `:83`. Ocorrência disso em produção: **[nao verificado]**.
+
+**MORDE (a): prova estreita, válida por inspeção.** O mutante ganha `exit 0`; sua bateria precisa denunciar aceitação do padrão inventado. Isso testa o script mutante na fixture, não a execução efetiva do hook instalado. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:76`, `:78`, `:81`.
+
+**MORDE (b): prova estreita, válida por inspeção.** Planta configuração por worktree apontando para pasta vazia, exige denúncia e depois ausência de denúncia ao remover a configuração. Não cobre configuração global/sistema plantada nem enumeração real vazia. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:82`, `:83`, `:85`, `:86`.
+
+**hooksPath global/sistema/relativo: nada quanto à omissão explícita de escopo.** A consulta usa `git config --get`, sem restringir a `--local` ou `--worktree`; valores relativos são ancorados na raiz de cada worktree. São usadas as mesmas condições textuais fracas de delegação. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:30`, `:31`, `:32`. Configurações efetivamente presentes no host: **[nao verificado]**.
+
+**Selo órfão: nada.** A régua descobre `bin/tests/test_*.sh` e executa cada arquivo por Bash; o novo nome entra no glob. `bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`.
+
+**Item 6 — selo sem mordida: PROCEDENTE na ligação com o instalado.** A mordida funcional existe na fixture; a ligação com o wrapper real permanece um grep que aceita comentário ou código inalcançável. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:24`, `:40`, `:55`, `:74`.
 
 ## 14/11 13:55 · sessao 0911a0f79119 · HJ-091 · sonda · origem=Code
 
@@ -798,123 +856,4 @@ Os filtros relevantes são:
 
 **Essas condições não desempataram pela data dos atos:** os trechos decisórios usam origem, dia, status e sobreposição. (`app/ponto/services/ausencia.py:1255`, `app/ponto/services/ausencia.py:1271`, `app/ponto/turnos.py:2827`.)
 
-## 14/11 12:18 · sessao 229c782bbacc · - · - · origem=Ronald (tmux)
-
-A comparação com **aprovação/última alteração de AG103 é “não determinável” nos três dias**: o dado mostra `confirmado_em None`, `confirmacao nao_enviado`, `criado_em 2026-09-11 09:14:06` e nenhuma linha de auditoria de AG103; não mostra o instante da aprovação nem da última alteração. [nao verificado]
-
-| Dia | Rejeitada | Instante da rejeição pela trilha fornecida | Outro carimbo da ausência |
-|---|---:|---|---|
-| 05/11 | 3985 | `2026-11-13 13:13:00`: `LOG_AUS 3985 946042 editar`, com antes `aprovada`, depois `rejeitada`; corroborado por `946043 cancelar_ausencia`. [nao verificado] | `aprovada_em 2026-11-13 13:12:59`; `atualizado_em 2026-09-11 09:14:06`. [nao verificado] |
-| 06/11 | 3995 | `2026-11-13 13:12:45`: `LOG_AUS 3995 946033 editar`, com antes `aprovada`, depois `rejeitada`; corroborado por `946034 cancelar_ausencia`. [nao verificado] | `aprovada_em 2026-11-13 13:12:44`; `atualizado_em 2026-09-11 09:14:06`. [nao verificado] |
-| 07/11 | 3977 | `2026-11-13 12:20:17`: `LOG_AUS 3977 945693 editar`, com antes `aprovada`, depois `rejeitada`; corroborado por `945694 cancelar_ausencia`. [nao verificado] | `aprovada_em 2026-11-13 12:20:17`; `atualizado_em 2026-09-11 09:14:06`. [nao verificado] |
-
-A rejeição é posterior à **criação mostrada** de AG103 em todos os casos; isso não estabelece que seja posterior à sua aprovação/última alteração. [nao verificado]
-
-Referências da cópia:
-
-- AG tem `confirmado_em` nullable e `criado_em` com `auto_now_add`: `app/ferias/models.py:328-329`. `confirmado_em` registra a resposta “confirmar” do colaborador: `app/ferias/services.py:909-912`. Não é, por definição deste escritor, um carimbo genérico de aprovação ou última alteração.
-- Ausência tem `aprovada_em`, `criado_em` com `auto_now_add` e `atualizado_em` com `auto_now`: `app/ponto/models.py:820-824`.
-- `cancelar_ausencia` chama decisão `'rejeitada'` fornecendo `aprovada_em=timezone.now()`, depois registra `'cancelar_ausencia'`: `app/ponto/views.py:2772-2779`. `_a4_decidir` encaminha para `decidir`: `app/ponto/views.py:85-89`.
-- `decidir` aceita aprovação e rejeição (`app/ponto/services/ausencia.py:970`), chama `mudar_estado` (`:978`) e grava o `aprovada_em` fornecido (`:983-985`). Assim, o campo também pode conter o carimbo de uma rejeição.
-- `mudar_estado` grava auditoria `'editar'`, com status antes/depois: `app/ponto/services/ausencia.py:901-904`. O modelo de auditoria usa `criado_em auto_now_add`: `app/core/models.py:307`. Qual campo a sonda efetivamente imprimiu como instante de `LOG_AUS` não está verificável sem o arquivo da sonda. [nao verificado]
-- `mudar_estado` usa `save(update_fields=campos)` sem incluir `atualizado_em`: `app/ponto/services/ausencia.py:888-900`; a gravação posterior dos carimbos também usa campos explícitos: `:979-994`. Portanto, o `atualizado_em` antigo mostrado não deve substituir a evidência direta dos logs.
-- As guardas **atuais** recusam decisões genéricas de férias, inclusive sem origem: `app/ponto/services/ausencia.py:92-98`, `:972`. O código presente não prova qual versão ou rota produziu os cancelamentos históricos. [nao verificado]
-
-## 14/11 12:17 · sessao 43b4d9175ee2 · - · - · origem=Ronald (tmux)
-
-Há uma ressalva decisiva: **nesta árvore, rejeitada vinculada ao próprio agendamento impede recriação**. `espelhar_ferias` busca `tipo='ferias', agendamento_ferias=agendamento` sem filtro de status; monta `existentes` e pula qualquer dia já presente, inclusive rejeitado. (`app/ponto/services/ausencia.py:1255`, `:1257`, `:1271`, `:1273`.)
-
-A sonda não imprime `agendamento_ferias_id`; `desc_tem_# True` não demonstra vínculo FK. Portanto, atribuir categoricamente as duas criações à exclusão das rejeitadas seria incorreto. Para criar #5595 e #5596 pelo fluxo mostrado, seus dias precisam faltar em `existentes`; o vínculo das rejeitadas #3995/#3977 é [nao verificado].
-
-Fluxo:
-
-- O colaborador vem de `agendamento.periodo_aquisitivo.colaborador`; status ativo usa `STATUS_QUE_ESPELHAM`, cujo conjunto inclui `concluido`. (`app/ponto/services/ausencia.py:1249`, `:1250`, `:1251`; `app/ferias/services.py:132`.)
-- A janela percorre `data_inicio` até `data_fim`, inclusive. Dias sem linha própria chamam `criar_ausencia` com `tipo='ferias'`, `dias_corridos=1`, `status='aprovada'`, FK de origem e descrição. (`app/ponto/services/ausencia.py:1266`, `:1267`, `:1275`, `:1277`, `:1280`.)
-- `criar_ausencia` procura rejeitada do mesmo colaborador/tipo/data, mas, havendo origem, restringe também ao mesmo agendamento. Assim, rejeitada sem FK ou de outro agendamento não é reaberta. (`app/ponto/services/ausencia.py:309`, `:310`, `:312`, `:314`, `:315`.)
-- A consulta de sobreposição exclui **todos** os registros com `status='rejeitada'`, sem restringir tipo; aceita início no intervalo, intervalo com `data_fim` que alcance o dia ou tipo aberto sem fim. (`app/ponto/turnos.py:2827`, `:2831`, `:2832`, `:2833`, `:2834`, `:2835`.)
-- Se o fluxo chega ao criador em 05/11, #5592 `abono/aprovada`, com data 05/11 e `data_fim=None`, entra pela primeira condição de interseção. `linha_que_veta` o devolve: a exceção permissiva exige que o registro existente seja `falta`, e #5592 é `abono`. O criador levanta `AusenciaInvalida`, e o espelhamento registra o dia recusado. (`app/ponto/turnos.py:2832`; `app/ponto/precedencia.py:127`, `:128`, `:145`, `:146`, `:147`; `app/ponto/services/ausencia.py:368`, `:382`, `:383`, `:385`, `:1282`, `:1283`.) Os valores de #5592 vêm exclusivamente do dado fornecido [nao verificado].
-- Em 06/11 e 07/11, as rejeitadas informadas não participam da consulta de sobreposição; #5592 não se estende a esses dias por `data_fim=None` — ressalvada configuração de tipo aberto, que depende do catálogo vivo. A inexistência de outras sobreposições, especialmente anteriores à janela da sonda, é [nao verificado]. (`app/ponto/turnos.py:2827`, `:2832`, `:2833`, `:2834`, `:2835`.)
-
-A função que efetivamente cria a aprovada é `criar_ausencia`: define status em `kwargs`, carimba `aprovada_em`, instancia `Ausencia` e salva. (`app/ponto/services/ausencia.py:179`, `:403`, `:406`, `:408`, `:446`, `:479`.) Depois registra auditoria `criar`. (`app/ponto/services/ausencia.py:502`.)
-
-Há ainda segunda passagem pelo veto antes do `save`: `criar_ausencia` chama `veto_de_lancamento`, que reutiliza `ausencias_sobrepostas` e `linha_que_veta`. (`app/ponto/services/ausencia.py:438`, `:441`; `app/ponto/precedencia.py:461`, `:463`, `:464`.)
-
-Em `ferias/`, `AgendamentoFerias.save()` chama `_sync_ausencia` quando salva todos os campos ou toca campos relevantes; `_sync_ausencia` delega a `espelhar_ferias`. (`app/ferias/models.py:442`, `:444`, `:448`, `:449`, `:388`, `:393`, `:394`.)
-
-## 14/11 12:16 · sessao 3676ed2c34ec · COERENCIA-PELO-EFEITO · censo · origem=Code
-
-Censo estático da cópia. Ocorrências, frequência, execução dos caminhos e aplicação das migrações em produção: [nao verificado].
-
-Os caminhos abaixo são relativos a `app/`. **E** identifica escritores; **D** identifica as decisões contadas; **L** identifica leitores. `SEM JUIZ` significa ausência de registro próprio do predicado: chamar uma autoridade registrada não registra automaticamente a composição. A comparação considera o registro executável, inclusive seus acréscimos posteriores. (`core/juizes.py:182`, `core/juizes.py:1195`, `core/juizes.py:1310`)
-
-`SEM CASO` significa que esta leitura não demonstrou caso com regra substantiva escrita e resposta esperada independente da implementação; inexistência global de outro caso: [nao verificado]. A simples referência ao protocolo de teste não demonstra a regra que decide o caso. (`docs/LEIS.md:136`)
-
-Casos abreviados na tabela:
-
-- **T1 — L-061, ausência parcial:** `chamados/tests/test_emis_ausencia_parcial_cobra.py::JuizAusenciaParcialTest::test_RED_ausencia_parcial_com_trabalha_true_NAO_e_dia_sem_trabalho:40`; contrapontos integral/folga em `:46`, `:50`, `:54`. Regra e respostas escritas em `:10`, `:13`.
-- **T2 — L-051, tranca:** `chamados/tests/test_c7_red_minimos.py::C7_08_CompetenciaTrancadaTest::test_RED_trancada_fecha_pela_porta_com_trilha_e_nao_carimba:329`; `::test_RED_o_C6_le_a_tranca_sem_escrever:361`; `::test_RED_resposta_de_dia_trancado_nao_segura_a_disputa:377`. Regra/caso em `:319`, `:326`.
-- **T3 — L-061, emissor:** `chamados/tests/test_f1c4_3_emissores.py::EmissoresPerguntamAoJuizTest::test_fabrica_ausencia_lavrada_com_trabalha_true_nao_pergunta:89`; regra/casos em `:6`, `:20`.
-- **T4 — L-073, teto por instante:** `chamados/tests/test_pergunta_do_dia_em_curso.py::TetoPorInstanteParaToda_a_Data::test_MORDE_noturno_de_ontem_saida_das_06h_nao_vencida_as_0610:291`; contraponto vencido em `::test_MORDE_noturno_de_ontem_saida_vencida_as_0640:294`; referência da regra em `:213`.
-- **T5 — L-061, dispensa:** `ponto/tests/test_ausencia_ata_dispensa.py::DispensaPorJustificativa::test_MORDE_dia_justificado_dispensa_o_marco:58`; caso e resposta em `:50`, `:59`.
-- **T9 — L-092, reabertura pontual:** `chamados/tests/test_reabrir_orfas_enterradas.py::ReabrirOrfasEnterradasTest::test_exportada_nao_reabre_e_vai_para_a_pauta:128`; regra/caso em `:1`, resposta em `:139`. Isso identifica o teste desse caminho, sem escolher a vigência de cortes.
-
-| passo | decisao | arquivo::funcao:linha | grava em | relido por | juiz | caso pela regra |
-|---|---|---|---|---|---|---|
-| E1 — efeito | Estado terminal grava status, instante e via; rebaixa urgência. Estado vivo limpa instante/via e restaura urgência. | `chamados/models.py::ChamadoColaborador._gravar_estado:228`, `:233`, `:248`, `:296` | `status_local`, `resolvido_em`, `via_encerramento`, urgência; ator quando solicitado | Painel `chamados/services/painel.py:217`; perguntas `chamados/juizes.py:780` | Decisões abaixo | — |
-| E2 — nascimento | Há INSERT fora de `_gravar_estado`: `abrir` usa defaults; `criar` recebe também um status explícito. | `chamados/models.py::ChamadoColaborador.abrir:985`, `:1018`; `::criar:1110`, `:1142` | `ChamadoColaborador.status_local`, demais campos iniciais | E1 e leitores L | D79–D81 | — |
-| E3 — arquivo | Silenciar grava o véu de exibição; levantar limpa seus campos e pode carimbar resgate. | `chamados/services/arquivo.py::silenciar:166`, `:171`; `::levantar:202`, `:205`, `:210` | `silenciado_ate`, `silenciado_por`, `silenciado_motivo`, `resgatado_em` | Verbos `chamados/services/verbos.py:47`; arquivo `chamados/views_arquivar.py:164` | D71–D78 | — |
-| E4 — disputa | Fechamento grava os quatro campos juntos; pode primeiro encerrar perguntas mudas pela identidade administrativa. | `chamados/models.py::DisputaSupervisao.fechar:1974`, `:1988`, `:1992` | `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; carimbos das perguntas | Signal `chamados/signals.py:29`; app `chamados/services/pergunta_no_app.py:71` | D50–D51 | — |
-| E5 — pergunta | Escrita do carimbo passa por `carimbar`/`carimbar_identidade`; a volta passa por `descarimbar`/lote. Há ainda troca isolada de via por fato no espelho. | `chamados/models.py::PerguntaDisputa._escrever_carimbo:3153`; `::carimbar:3208`; `::carimbar_identidade:3246`; `::descarimbar:3268`; `::encerrar_por_fato_no_espelho:3331` | `materializada_em`, `materializada_por`, `via_resolucao`; carimbos auxiliares conforme ramo | C6 `chamados/juizes.py:1399`; estado `chamados/models.py:3097` | D52–D55 | — |
-| E6 — fora da porta, histórico | Migrações escrevem status por `update`; são escritores fora do núcleo atual. Aplicação em produção: [nao verificado]. | `chamados/migrations/0039_a3_via_backfill.py::backfill:24`, `::desfazer:33`; `0038_a3_registrado_backfill.py::registrar:10`, `::desfazer:15` | Status, via e `superado_por` | E1/leitores L | D110–D111 | — |
-| E7 — pergunta nascente | Inserção da pergunta grava o dia pela porta do fato e depois insere a linha. | `chamados/models.py::PerguntaDisputa._nascer:3070`, `:3072`, `:3073` | Pergunta, destino, célula, dia e identidade | Fábrica, C6, validação | D121 | — |
-| E8 — insumos | Batida, ausência, justificativa e vínculo acordam núcleo/cartório/reconciliação; a célula é lavrada pela porta própria. | `ponto/registro_batida.py::registrar_batida:94`; `ponto/signals.py:35`, `:73`, `:132`, `:144`, `:162`, `:207`, `:263`; `ponto/portas/celula.py::lavrar_veredito:1032` | Batida; célula/ata/veredito; eventos | Decisões de célula e reconciliação abaixo | Conforme predicado | — |
-| D01 | Estado/evento/destino/perfil determinam transição: nascimento aberto/registrado; reconciliação→resolvido; encerramento→fechado; cancelamento; reabertura; terminais absolutos e restrição humana. | `chamados/catalogo/motor.py::decidir:125`; matrizes `:99`, `:110` | E1/E2, pelo gate chamador | Todos os gates; painel | `_C2` — `core/juizes.py:278` | SEM CASO |
-| D02 | Pedido humano de `fechado` é recusado quando a justificativa relacionada está pendente, aguardando DP ou colaborador. | `chamados/models.py::ChamadoColaborador.transicionar:136` | Recusa; preserva estado | Ação humana `chamados/services/acoes_chamado.py:325` | SEM JUIZ | SEM CASO |
-| D03 | Disputa aberta ligada ao pai impede encerramento humano se não tem perguntas ou tem fio vivo. | `chamados/juizes.py::disputa_viva_do_chamado:2396`, `:2400`; chamada `chamados/models.py:154` | Recusa do estado | Formulário/fio humano | SEM JUIZ; `_C7` registra outro corpo | SEM CASO |
-| D04 | Perguntas ancoradas são julgadas no pós-estado; sistema só encerra se todas puderem ser reatadas a cobrança válida do mesmo dia; humano recusa as vivas. | `chamados/models.py::_vivas_entre:356`, `:364`, `:368`; `::_plano_pergunta_viva:390`; `::transicionar:165` | Reaponte ou recusa; depois E1 | Tripwire `chamados/models.py:221`; fio | SEM JUIZ para a composição | SEM CASO |
-| D05 | `resolvido` humano de furo exige premissa regularizada; sem dia forte, aceita existência de disputa fechada do colaborador. | `chamados/models.py::ChamadoColaborador.transicionar:181`, `:187`, `:190` | E1 ou recusa | Painel/fio | SEM JUIZ | SEM CASO |
-| D06 | Sistema deixa fechar não-furo, furo sem dia forte, premissa regularizada para folha ou filho agrupado sob pai vivo. | `chamados/models.py::_gate_premissa_do_fechamento:774`, `:779`, `:785` | E1; trilha específica quando sem dia | `reconciliaria` em `chamados/models.py:662`; cron `chamados/management/commands/reconciliar_chamados.py:79` | SEM JUIZ | SEM CASO |
-| D07 | Se o dia segue furado, somente os demais chamados fecham por dedup apoiados na cobrança sobrevivente; o próprio sobrevivente fica. | `chamados/models.py::_gate_premissa_do_fechamento:795`, `:796`, `:814` | E1 ou recusa; trilha de dedup | Reabertura; cartório `ponto/services/cartorio.py:1655` | SEM JUIZ para este corte; usa C8 | SEM CASO |
-| D08 | Resposta sem veredito nas perguntas do pai ou nas que o resolvem segura a cascata; o gate restringe essa guarda ao pai de categoria `disputa_supervisao`. | `ponto/supra_juiz.py::perguntas_que_seguram_csf:573`, `::pode_executar_csf:588`; `chamados/models.py::_gate_conversa_do_pai:716`, `:719` | Recusa, trilha e nota no fio | Contador `chamados/juizes.py:2513`; cron supra | Pergunta literal — `core/juizes.py:299` | SEM CASO |
-| D09 | Justificativa apontada pelo próprio chamado e aprovada regulariza imediatamente a premissa. | `chamados/models.py::premissa_regularizada:1313` | Resultado usado por E1/reabertura | Fecho humano, sistema e reabertura | SEM JUIZ; `_C3` registra o catálogo | SEM CASO |
-| D10 | Célula do julgamento com `veredito_via='admin'` regulariza a premissa. | `chamados/models.py::premissa_regularizada:1327`, `:1329` | Resultado usado pelos gates | Fecho e reabertura | SEM JUIZ | SEM CASO |
-| D11 | Dia sem trabalho: `trabalha=False` ou ata com tipo preenchido diferente de trabalho; ausência parcial só cala com `trabalha=False`. `None` isolado não cala. | `chamados/juizes.py::dia_sem_trabalho:450`, `:454`, `:456` | Predicado usado no fechamento/nascimento | Premissa `chamados/models.py:1331`; fábrica `chamados/services/fabrica_da_celula.py:112` | `_C18` — `core/juizes.py:294` | T1 |
-| D12 | Todos os marcos cobrados devem estar tipados, existir na ata e estar acesos; desconhecimento retorna `None`. | `ponto/services/lastro.py::marcos_acesos:170`, `:175`, `:179` | Predicado; fechamento por E1 | Premissa `chamados/models.py:1335`; evento `ponto/services/lastro.py:395` | SEM JUIZ | SEM CASO |
-| D13 | Cobrança perde objeto se há lâmpadas na ata e nenhum dos marcos cobrados, todos tipados, existe nela. | `ponto/services/lastro.py::marcos_inexistentes:110`, `:113`, `:115` | Predicado; E1 | Premissa `chamados/models.py:1344`; cartório `ponto/services/cartorio.py:1551` | SEM JUIZ | SEM CASO |
-| D14 | Célula furada considera ausência que explica o dia inteiro, dia sem trabalho/recursão à véspera, lâmpada explicitamente apagada e órfã com régua confiável; sem ata suficiente retorna desconhecido. | `chamados/juizes.py::_celula_furada:476`, `:494`, `:505`, `:508`, `:516` | Predicado | Premissa `chamados/models.py:1346` | SEM JUIZ para a composição | SEM CASO |
-| D15 | Sem resposta da célula, a premissa recua a feriado/folga; depois coleta ausência de batidas e turno aberto; categoria legada usa existência de batida da jornada. | `chamados/models.py::premissa_regularizada:1351`, `:1357`, `:1363` | Predicado usado por E1/reabertura | Gates humano/sistema/reabertura | SEM JUIZ | SEM CASO |
-| D16 | Catálogo só mata premissa de classe conhecida cujo fato sustentador foi coletado falso; fato ausente/`None` preserva. | `chamados/catalogo/premissa.py::avaliar:123`, `:127`, `:132`; `::premissa_morta:149` | Veredito para retratação | `chamados/reconciliador.py:1459`, `:1465`; satélites | `_C3` — `core/juizes.py:279` | SEM CASO |
-| D17 | Coletor de turno distingue o turno pelo instante da entrada ou dia; sem dia usa busca global; completude posicional pode retirar os abertos. | `chamados/reconciliador.py::turnos_abertos_de:97`, `:113`; `::turno_do_chamado_aberto:140`; `::_veredito_premissa:287` | Fato entregue ao catálogo | Retratador e vigia | SEM JUIZ para o coletor | SEM CASO |
-| D18 | Par denunciado só permanece íntegro se cada hora encontra exatamente uma batida; retratação ou dois tipos iguais dissolve; ambiguidade conserva desconhecido. | `chamados/reconciliador.py::_par_integro:197`, `:214`, `:217`, `:222` | Fato entregue ao catálogo | `chamados/reconciliador.py:295` | SEM JUIZ | SEM CASO |
-| D19 | Âncora ausente é derivada da escala ativa com âncora nula. | `chamados/reconciliador.py::_ancora_ausente:233` | Fato entregue ao catálogo | `chamados/reconciliador.py:291` | SEM JUIZ | SEM CASO |
-| D20 | Pai agregador continua sustentado se os IDs de filhos do contexto possuem chamado VIVO; contexto sem IDs retorna desconhecido. | `chamados/reconciliador.py::_filhos_vivos:243`, `:246` | Fato entregue ao catálogo | `chamados/reconciliador.py:293` | SEM JUIZ | SEM CASO |
-| D21 | Retratação fica retida por irmã respondida sem consumo; também por justificativa alheia pendente durante aprovação de outra justificativa. | `chamados/reconciliador.py::retencao_da_retratacao:448`, `:451` | Recusa/trilha | `_retratar:519`; `encerrar_com_retencao:493`; cron `chamados/management/commands/reconciliar_chamados.py:79` | SEM JUIZ para a composição | SEM CASO |
-| D22 | Aprovação só solicita encerramento da origem quando justificativa está aprovada, tem origem e o chamado existe e está VIVO. | `ponto/services/justificativa.py::encerrar_chamado_de_origem:33`, `:43`, `:46` | Retratador→E1 | Aprovação DP `ponto/services/justificativa.py:217` | SEM JUIZ | SEM CASO |
-| D23 | Aprovação seleciona o bloqueio de entrada mais recente do colaborador, em `NAO_FECHADOS`, excluindo a origem; a consulta não filtra dia. | `ponto/services/justificativa.py::_encerrar_bloqueio_de_entrada:76`, `:81`, `:87` | Fecho com retenção→E1 | Nota/push da aprovação | SEM JUIZ | SEM CASO |
-| D24 | Cascata retroativa seleciona módulos de turno, `NAO_FECHADOS`, pelo dia no contexto ou criação no dia quando contexto ausente. | `ponto/services/justificativa.py::_cascata_do_turno:55`; `::materializar_saida_dp:396` | Fecho com retenção→E1 | Fio e perguntas | SEM JUIZ | SEM CASO |
-| D25 | Solicitação de ausência fecha quando a ausência existe e saiu de `ABERTAS`, incluindo decisão diferente de aprovação. | `ponto/services/ausencia.py::fechar_chamado_da_ausencia:693`, `:695` | Reconciliação→E1 | Evento `ponto/signals.py:271`; cron `ponto/management/commands/fechar_chamados_ausencia.py:44` | SEM JUIZ para a composição; `ABERTAS` registrado em `core/juizes.py:256` | SEM CASO |
-| D26 | Ausência aberta suspende/renova cobrança sem sobrepor silêncio vivo alheio; aprovada tenta fechar se a premissa morreu; perda da cobertura levanta o silêncio marcado. | `chamados/services/silencio_ausencia.py::reconciliar_por_ausencia:61`, `:78`, `:81`, `:94`, `:113` | E3 ou E1 | Evento `ponto/signals.py:263`; varredura `ponto/management/commands/reavaliar_ausencias_lancadas.py:25` | `_C11` — `core/juizes.py:287` | SEM CASO |
-| D27 | Ausência mata a premissa de justificativa diretamente; demais módulos exigem catálogo favorável e veredito da célula fora dos acusadores. | `chamados/services/silencio_ausencia.py::_premissa_morre:35`, `:37`, `:42` | Resultado para D26 | `chamados/services/silencio_ausencia.py:95` | SEM JUIZ para este predicado | SEM CASO |
-| D28 | Feriado/folga encerra se o dia é conhecido, a previsão não é desconhecida, a faixa é feriado/folga e o catálogo aceita falta descoberta falsa. | `chamados/services/feriado_reavaliar.py::espurios:31`, `:35`, `:37`, `:39`; `::encerrar:48` | E1 | Eventos de feriado/folga em `:83`; premissa `chamados/models.py:1352` | SEM JUIZ para a composição | SEM CASO |
-| D29 | Cluster deriva assinatura da ata: dia sem trabalho esvazia; ata insuficiente conserva desconhecido; órfãs próximas e lâmpada apagada sustentam o fato. | `ponto/services/cluster_espurio.py::_leitura_da_celula:25`; `::_vivos_que_a_premissa_matou:74`; `::reconciliar_colab:183` | Catálogo→E1 | Evento/reconciliador do cluster | SEM JUIZ para assinatura/composição | SEM CASO |
-| D30 | Geofence reavalia ocorrências contra posto atual; nenhuma posição classificada fora alimenta premissa morta e retratação. | `ponto/services/geofence.py::reavaliar_chamados_geofence:423`, `:433`, `:441` | Retratador→E1 | Evento do posto `ponto/signals.py:291` | SEM JUIZ para composição; posição registrada em `core/juizes.py:1197` | SEM CASO |
-| D31 | Designação de cobertura solicita fecho da origem VIVA se o catálogo aceita os fatos de falta/turno/intervalo como falsos. | `ponto/services/cobertura.py::designar_cobertura:115`, `:118`, `:123` | E1 | Nota informa se o gate recusou, `:130` | SEM JUIZ para a composição | SEM CASO |
-| D32 | Cobertura passada percorre chamados vivos do dia; catálogo favorável ainda passa pelo gate da premissa real do dia. | `ponto/services/cobertura.py::declarar_cobertura_passada:311`, `:312`, `:319` | E1; listas explicados/recusados | Resposta ao admin `:320` | SEM JUIZ para a composição | SEM CASO |
-| D33 | Evento fecha adesão com batida não retratada dentro do período do contexto, quando há dois extremos; sem eles usa existência de batida. | `colaboradores/services/pos_vinculo.py::fechar_adesao_com_batida:37`, `:40`, `:43` | E1 | Signal `ponto/signals.py:233` | SEM JUIZ | SEM CASO |
-| D34 | Lote de adesão considera qualquer batida não retratada na vida; só executa com `fechar` e fora de dry-run. | `chamados/services/adesao.py::sincronizar_adesao:143`, `:145`, `:149`, `:151` | E1 | Contador `fechaveis`, `:148` | SEM JUIZ | SEM CASO |
-| D35 | Adesão agrupa filhos não terminais, dentro do período quando têm dia, e ainda não agrupados sob o pai. | `chamados/services/adesao.py::sincronizar_adesao:103`, `:108`, `:111`, `:116` | Contexto `agrupado_em`; E1 | Gate de agrupamento `chamados/models.py:785` | SEM JUIZ | SEM CASO |
-| D36 | Limbo não pode calar furo quando a semana inteira está sem batida não retratada. | `chamados/services/limbo_folgas.py::semana_muda:155`; `::pode_calar:167` | Permite/recusa agrupamento→E1 | `chamados/services/limbo_folgas.py::agrupar_furo:276` | SEM JUIZ | SEM CASO |
-| D37 | Filho segura limbo se não está absolvido, tem vínculo cobrindo a data com defeito de folga e fio vivo de fato daquele dia. | `chamados/services/limbo_folgas.py::filhos_no_defeito:195` | Conserva pai ou permite E1 | Detector `ponto/management/commands/detectar_ausencias.py:146` | SEM JUIZ para a composição | SEM CASO |
-| D38 | Decisão administrativa do dia encerra perguntas de fato selecionadas por `q_vivas` e depois tenta reconciliar os chamados vivos do dia. | `ponto/services/veredito_celula.py::fechar_o_fio_do_dia:180`, `:190`, `:203` | E5, `DecisaoPergunta`, E1 | Fio, C6 e painel | SEM JUIZ para a composição | SEM CASO |
-| D39 | Regularização externa retorna antes se só houve erros sem ações; concluído o ato, marca materializada e encerra o chamado vinculado. | `chamados/services/regularizacao_ext.py::materializar_regularizacao_externa:192`, `:198`, `:206` | Regularização; E1 via `encerrar` | App/fio da regularização | SEM JUIZ | SEM CASO |
-| D40 | Desligamento fecha disputas sem resposta sem veredito pela exceção nomeada e percorre chamados `NAO_FECHADOS` pelo encerramento forçado. | `colaboradores/services/desligamento.py::executar_desligamento:164`, `:167`, `:182`, `:187` | E4/E5/E1 | Fio; estado do colaborador | SEM JUIZ para a composição | SEM CASO |
-| D41 | Novo aceite de escala encerra os chamados anteriores VIVOS da categoria `escala_aceite` do colaborador. | `colaboradores/services/vinculo.py::_executar_aceite:401`, `:404` | E1 | Novo chamado de aceite; painel | SEM JUIZ | SEM CASO |
-| D42 | Aprovação de exceção evita repetir encerrado; monta instante pela criação/hora informada, registra batida e pede `resolvido`. | `chamados/services/acoes_chamado.py::acao_aprovar_excecao:25`, `:36`, `:44`, `:71` | Batida e E1 | Push/fio `:69`, `:72` | SEM JUIZ para a composição | SEM CASO |
-| D43 | Resposta de agenda exige categoria, dono, IDs e atualização de proposta válida; aceita ou rejeita e pede `resolvido`. | `chamados/services/acoes_chamado.py::acao_responder_agenda:89`, `:99`, `:105`, `:110` | Agenda; E1 | Push/fio | SEM JUIZ | SEM CASO |
-| D44 | Resposta de escala exige categoria/dono; recusa exige snapshot e reversão; ambos os resultados pedem `resolvido`. | `chamados/services/acoes_chamado.py::acao_responder_escala:132`, `:139`, `:143`, `:155` | Vínculo quando recusado; E1 | Push/fio | SEM JUIZ | SEM CASO |
-| D45 | Autorização geofence impede repetição de encerrado, pode criar advertência e pede `resolvido`. | `chamados/services/acoes_chamado.py::acao_autorizar_geofence:182`, `:186`, `:199`, `:229` | Advertência; E1 | Histórico/fio | SEM JUIZ | SEM CASO |
-| D46 | Recusa geofence exige motivo e batida pertencente ao chamado; retrata a batida e 
-
-[truncado em 20000 de 51545 caracteres]
-
-_5151 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
