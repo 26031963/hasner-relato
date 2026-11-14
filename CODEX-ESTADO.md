@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 20:22** · publicado em **14/11/2026 20:26** (UTC-3)
+> Ultima resposta processada: **14/11/2026 20:27** · publicado em **14/11/2026 20:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 20:27 · sessao defe70908db2 · E3-V10-DEGRAU-DONO-E-PORTA · construtor · origem=Code
+
+A [entrega completa]( /home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_entrega.txt:1) contém diff por função, matriz M1–M8, leitores dos campos, custo por carga, remoções L-111 e classificação dos 65 métodos do recorte.
+
+Execuções locais:
+
+- **159 testes OK**, sem banco. [Saída](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_suite.txt:167) [nao verificado]
+- **45/45 mutantes mortos**, com controle verde. [Saída e comandos individuais](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_mutantes.txt:1478) [nao verificado]
+- **RED anterior à cura preservado**; M7 foi controle verde. [Saída original](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_red.txt:1) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_lu2_suite
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --todos
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --base
+```
+
+O último comando reproduz os REDs na base e retorna **1 esperado**. [Registro](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_entrega.txt:8)
+
+Suite ORM completa, frota e timeout de 30 segundos: **[não verificado]**. Certificação do Code e opus final: **[não verificado]**. [nao verificado]
 
 ## 14/11 20:22 · sessao 9138e639ec97 · JUSTIFICATIVA-PAGA · verificador · origem=Code
 
@@ -592,18 +612,4 @@ Semântica: tarefa `nada`/`nao_sei` publica rota `None`; `porta_da_tarefa` entã
 
 C17 continua sendo segundo derivador no código, mas seu chamador de produção encontrado é o instrumento de comparação, não os leitores migrados. `app/chamados/juizes.py:1664`, `:1709`; `app/chamados/management/commands/diff_e3_sombra.py:127`. A agregação do retrato é outra unidade — colaborador/competência, com fallback legado — e conserva o agrupamento sem porta→Admin declarado fora deste pouso. `app/folha/retrato_folha.py:192`, `:343`, `:368`, `:441`, `:1190`.
 
-## 14/11 19:50 · sessao 4923414193e6 · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — `porta_acao` pode nascer sem tela capaz de executar a ação publicada.** Basta pergunta respondida com linha E1, marco vencido apagado, sem `chamado_destino` nem chamado da disputa, em dia da competência atual e resposta fora da classe A: ambos os vínculos aceitam NULL; `_pela_decisao` produz `validar/admin/None`; `_portas_da_tarefa` publica `admin/porta_acao`. (`app/chamados/models.py:1796`, `app/chamados/models.py:3494`, `app/chamados/services/tarefa_do_dia.py:140`, `app/chamados/services/tarefa_do_dia.py:150`, `app/chamados/services/tarefa_do_dia.py:606`, `app/chamados/services/tarefa_do_dia.py:629`.)
-
-O modal carrega somente disputas com chamado e descarta perguntas sem âncora; o POST exige chamado real e correspondência da âncora. O detalhe impõe a mesma correspondência. (`app/chamados/services/fio.py:211`, `app/chamados/services/fio.py:271`, `app/chamados/services/fio.py:600`, `app/chamados/services/fio.py:636`, `app/chamados/views.py:493`, `app/chamados/views.py:499`.)
-
-O lote não salva esse contraexemplo: resposta além do envelope é classe B; o escritor do lote recusa tudo fora de A, e a prévia apresenta as classes externas apenas por contagem. Resolver dia tampouco aparece na competência atual. (`app/chamados/services/validacao.py:902`, `app/chamados/services/validacao.py:770`, `app/templates/chamados/partials/_lote_preview.html:15`, `app/colaboradores/services/calendario.py:738`, `app/colaboradores/services/calendario.py:103`.) Incidência em produção: **[não verificado]**.
-
-**NÃO PROCEDENTE — âncora terminal/silenciada, isoladamente, torna a ação inalcançável.** O fio administrativo carrega todos os chamados da pessoa, sem `qs_na_fila`; o POST de validar não exige fila. Havendo container e pergunta listada, existe botão no modal e execução pelo endpoint. (`app/chamados/services/fio.py:204`, `app/chamados/services/fio.py:600`, `app/chamados/services/fio.py:636`, `app/templates/chamados/partials/modal_fio.html:279`.)
-
-**PROCEDENTE — a Folha pode dizer “admin agir” sem oferecer link para a ação.** `o_que_segura` conserva fio e frase, mas descarta rota; no retrato, `PORTA_DO_FIO['admin']` é `None`, assim como tipos `nao_bate`, `falta` e `ferias`; a combinação devolve lista vazia, e o template só mostra botões com `retrato_portas`. Não há KeyError nesse caminho: há omissão de link. (`app/folha/fora_da_folha.py:238`, `app/folha/fora_da_folha.py:246`, `app/folha/retrato_folha.py:975`, `app/folha/retrato_folha.py:990`, `app/folha/retrato_folha.py:1015`, `app/templates/folha/_retrato_o_que_fazer.html:66`.)
-
-Telas existentes para ações legítimas: validar no modal do fio, decidir ausência no painel da ausência, Resolver dia no calendário condicionado ao juiz de oferta e à permissão. Nenhuma delas interpreta a string `porta_acao` para selecionar tela. (`app/templates/chamados/partials/modal_fio.html:279`, `app/templates/ponto/partials/painel_ausencia.html:323`, `app/templates/ponto/partials/painel_ausencia.html:344`, `app/templates/colaboradores/partials/_calendario_grade.html:131`, `app/colaboradores/services/calendario.py:97`.)
-
-_5261 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5262 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
