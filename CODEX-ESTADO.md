@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 18:01** · publicado em **14/11/2026 18:04** (UTC-3)
+> Ultima resposta processada: **14/11/2026 18:21** · publicado em **14/11/2026 18:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 18:21 · sessao ca67df423b4b · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
+
+Cura escrita: após a união dos períodos, soma acima do previsto retira todos os marcos do dia, zera os minutos e registra `pago_mais_trabalhado_passa_do_previsto`. Igualdade continua pagando (`ponto/services/efeito_ausencia.py:141–150`).
+
+**Q1.** O previsto lavrado vem da ata (`ponto/services/cartorio.py:739`). Extraí a leitura existente da grade para `minutos_previstos_da_celula`: ata primeiro, inclusive zero; fallback em `minutos_previstos_do_dia`, sem cálculo paralelo (`escala/services/leitor_celula.py:354–366`). Grade e guarda compartilham essa leitura (`escala/services/leitor_celula.py:431`; `ponto/services/efeito_ausencia.py:145`). Isso evita chamar a grade inteira, que já lê os efeitos da justificativa (`escala/services/leitor_celula.py:379–380`).
+
+O trabalhado usado na soma é `realizado_do_dia`, sobre todos os turnos do dia; pares fechados, pausas e E solta seguem a autoridade existente (`ponto/turnos.py:707–795`). `trabalhado_do_turno` permanece na DOBRA 2 (`ponto/services/efeito_ausencia.py:129`).
+
+**Q2.** A fila anterior não consumia cobertura nem `conserva`. Acrescentei `justificativas_para_revisao`, reunindo recusa por soma, cobertura vazia da DOBRA e motivos de conservação (`ponto/services/efeito_ausencia.py:154–178`). A fila agora oferece **Revisar cobertura** e mostra o motivo (`ponto/views.py:1738–1743`; `templates/ponto/fila_justificativas.html:60,117`).
+
+**Q3.** Não existe tolerância cadastrada **com juiz aplicável** encontrada: os campos existem (`core/models.py:59–62`), mas estão declarados sem efeito no cálculo (`core/regua_cct.py:72–75`). A tolerância de HE é constante (`ponto/motor_calculo_v2.py:51`). **TOLERANCIA-NA-JUSTIFICATIVA: sem construção**; +1 minuto recusa (`ponto/tests/test_justificativa_soma_sem_banco.py:104`).
+
+O diff e seus escritores/leitores ficaram assim:
+
+| Arquivo::função / campo | Escrita ou mudança | Leitores |
+|---|---|---|
+| `efeito_ausencia.py::periodos_justificados` — `cobre`, `minutos` | União e recusa integral: `ponto/services/efeito_ausencia.py:138–150` | Efeito financeiro: `:46–47`; grade: `escala/utils.py:1251–1276` |
+| Mesmo serviço — `conserva`, `motivo` | Conservação em `:134`; motivo da soma em `:150` | Revisão em `:172–176`; fila em `ponto/views.py:1740`; template em `templates/ponto/fila_justificativas.html:117` |
+| `leitor_celula.py::minutos_previstos_da_celula` — previsto | Extração da leitura: `escala/services/leitor_celula.py:354–366`; ata escrita por `ponto/services/cartorio.py:739` | Grade em `:431`; guarda em `ponto/services/efeito_ausencia.py:145` |
+| Trabalhado/realizado | Autoridade existente: `ponto/turnos.py:707–795`; transporte à ata: `ponto/services/cartorio.py:740` | Guarda em `ponto/services/efeito_ausencia.py:147–148`; grade em `escala/utils.py:2064` |
+| Testes | S1–S6, propriedade, fontes e fila: `ponto/tests/test_justificativa_soma_sem_banco.py:83–272`; adaptação das bordas v2: `ponto/tests/test_justificativa_periodo_v2_sem_banco.py:135–183` | Runner de mutantes: `ponto/tests/mutantes_justificativa_soma.py:73` |
+
+O crédito continua chegando ao motor pelo mapa existente (`ponto/services/fechamento.py:755`; `ponto/services/espelho.py:1134`; `relatorios/pdf_espelho.py:407`), lido em `ponto/motor_calculo_v2.py:2628–2634`.
+
+Resultados locais, para revisão pelo Code/suite e opus final: [nao verificado]
+
+- **RED antes da cura:** 14 testes, 10 falhas de asserção — [saída preservada](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_red.txt:127). [nao verificado]
+- **GREEN:** 32 testes sem banco — [saída](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_green.txt:35). [nao verificado]
+- **Mutantes novos:** 16/16 mortos por asserção; o comando individual de cada um está na [saída](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_mutantes.txt:1).
+- **Regressão v2:** 21/21 mutantes mortos — [saída](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_regressao_mutantes.txt:22).
+
+Comandos do RED, GREEN e dos três mutantes exigidos, respectivamente (`ponto/tests/justificativa_soma_red.txt:127`; `ponto/tests/justificativa_soma_green.txt:35`; `ponto/tests/justificativa_soma_mutantes.txt:1–6`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_soma_sem_banco -v
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_soma_sem_banco ponto.tests.test_justificativa_periodo_v2_sem_banco -v
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma sem_guarda
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma limite_exclusivo
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma so_turno_da_ancora
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma --todos
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_periodo_v2 --todos
+```
+
+Três testes ORM foram escritos para a sessão executar; resultado **[nao verificado]** (`ponto/tests/test_justificativa_paga_o_periodo.py:325–369`):
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_justificativa_paga_o_periodo
+```
+
+Sem teto, desconto parcial ou tolerância nova na guarda (`ponto/services/efeito_ausencia.py:148–150`). Nenhum caminho proibido aparece entre os alterados; `git diff --check` passou (`ponto/tests/justificativa_soma_verificacao.txt:3,17`). Frota, DSR, TXT, banco produtivo e aplicação em competência: **[nao verificado]**.
+
+`LEI-AKITA | origem=anexo justificativa_pela_soma.txt, Ronald 14/11 18:08 [nao verificado na copia] | testemunha=S1–S6 (ponto/tests/test_justificativa_soma_sem_banco.py:83–139) | RED=justificativa_soma_red.txt:129 | quem-mais-le=efeito/grade/fila (ponto/services/efeito_ausencia.py:46,172; escala/utils.py:1257; ponto/views.py:1740) | juizes novos=0 | padrao=Single Source of Truth / Aggregate Root (docs/GLOSSARIO.md:11; escala/services/leitor_celula.py:354–366)`
 
 ## 14/11 18:01 · sessao b161216b6cea · E3-V10-DEGRAU-DONO-E-PORTA · leitura · origem=Code
 
@@ -748,18 +801,4 @@ Execuções em memória reportaram: degrau **27 OK**, mutantes novos **22/22 mor
 
 - **Pouso/pré-requisitos: [nao verificado].** A cópia encerra `CORTES.md` no aval de 15:37 e o topo do relato mantém “PAREI” com condições anteriores; não comprova matriz final conferida, remedida final, suite integral ou pouso. `app/docs/CORTES.md:401`, `app/docs/RELATO.md:4`. O anexo fornecido atualiza a lei aplicável; a documentação da cópia não prova sua execução.
 
-## 14/11 16:51 · sessao d54d687beb51 · - · - · origem=Ronald (tmux)
-
-- **PROCEDENTE: há segundo escritor literal de `rota`, preservado como comparação histórica.** C17 devolve `porta_fila/porta_pergunta` e fio próprio em `app/chamados/juizes.py:1709`. O único chamador encontrado em produção é o lado `atual` de `diff_e3_sombra`; a candidata vem separadamente da tarefa, e as assinaturas distinguem `C17`/`candidata`: `app/chamados/management/commands/diff_e3_sombra.py:127`, `:129`, `:141`. **NAO PROCEDENTE: contaminação dos leitores atuais pelo C17.** O registro declara essa fronteira em `app/core/juizes.py:132`; o selo exige um único chamador nomeado em `app/chamados/tests/test_e3_pendentes_app.py:145`.
-
-- **NAO PROCEDENTE: vocabulário runtime esqueceu `porta_acao`.** Está no publicador `app/chamados/services/tarefa_do_dia.py:621`, no contador furo `app/chamados/services/furo_sem_canal.py:117`, na inicialização e impressão do vigia `app/chamados/services/vigia_fio.py:577`, `:730`, e na soma contratual `app/chamados/tests/test_o261e_f5_alcance.py:124`. O C17 mantém suas duas rotas por contrato histórico `app/chamados/tests/test_e3_pendentes_app.py:171`. `PORTA_DO_FIO` enumera fios, não rotas; adicionar `porta_acao` ali não corresponde à chave desse mapa: `app/folha/retrato_folha.py:974`.
-
-- **NAO PROCEDENTE no caminho alterado: relógio novo fora da borda.** A carga repassa `self.agora` tanto à alimentação quanto ao app em `app/chamados/services/tarefa_do_dia.py:549`, `:556`; a alimentação repassa-o ao painel e à partição em `app/chamados/juizes.py:1570`, `:1573`. Defaults internos de relógio existem, mas são condicionais à ausência de `agora`: `app/chamados/services/verbos.py:35`, `app/chamados/services/painel.py:190`.
-
-- **PROCEDENTE: C13 não sela a propriedade universal anunciada.** O laço verifica apenas seis exemplos, e depois afirma explicitamente o caso `('sistema', None)`: `app/chamados/tests/test_e3_degrau_dono_e_porta.py:113`, `:125`. Ações de sistema sem chamado podem nascer do corpo real em `app/chamados/services/tarefa_do_dia.py:312`, `:316`; sistema recebe dono por `:601`, mas não rota por `:621`. Dia nominal de produção dessa classe: **[nao verificado]**.
-
-- **Possível rótulo incorreto já identificável por código:** `decidir_ausencia` é ação admin em `app/chamados/services/tarefa_do_dia.py:303`; pode publicar `porta_acao` por `:621`, enquanto a descrição admin da Folha fala apenas em validar/recusar o que o painel põe em Validar: `app/folha/fora_da_folha.py:46`. Ocorrência nominal de produção: **[nao verificado]**.
-
-Verificação executada sem bytecode: CatracaC17Test passou 7 testes; selo AST da Folha passou 3 testes por extração dos corpos; suíte degrau passou 27 testes. Corpos respectivos: `app/chamados/tests/test_e3_pendentes_app.py:118`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:52`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:40`; saída persistida em arquivo: **[nao verificado]**.
-
-_5204 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5205 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
