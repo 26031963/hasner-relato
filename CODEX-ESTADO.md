@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 01:03** · publicado em **14/11/2026 01:08** (UTC-3)
+> Ultima resposta processada: **14/11/2026 01:14** · publicado em **14/11/2026 01:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 01:14 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
+
+Pré-verificação encontrou:
+
+- **R8 reprovado:** `.only(...)` conserva os `select_related` herdados da fila, incluindo relações omitidas, podendo gerar `FieldError`. Limpar relações antes da seleção ou fornecer `_base` adequado. (`chamados/juizes.py:1571`, `chamados/services/painel.py:98`)
+- **R2 ainda não curado:** ações simultâneas `validar/admin` e `responder/colaborador` sobre a mesma porta produzem `fio='colab'`. O teste puro contém somente a ação administrativa; não comprova o caso simultâneo do teste ORM. (`chamados/services/tarefa_do_dia.py:588`, `chamados/tests/test_e3_portas_tarefa.py:212`, `:439`)
+- **R4 ORM não representa Q11:** registra `SILENCIO` sem projetar o encerramento da pergunta e espera `cobrar/colab`. O puro cobre validação com lavra; a fixture ORM precisa corresponder. (`chamados/tests/test_e3_portas_tarefa.py:235`, `:452`)
+- **R11 deixou declaração obsoleta:** o comando ainda anuncia leitura do relógio da máquina pelo app. (`chamados/management/commands/diff_e3_sombra.py:107`)
+- **R13:** falta mutante do segundo caminho alterado, `expor_admin`. (`chamados/services/tarefa_do_dia.py:258`, `chamados/tests/e3_v8_mutantes.py:55`)
+
+A adaptação posicional preserva os oito índices anteriores. (`chamados/services/vigia_fio.py:635`, `chamados/management/commands/backfill_fio_morto_e4b.py:253`)
+
+Comando executado sem banco:
+
+```bash
+env -u DJANGO_SETTINGS_MODULE PYTHONDONTWRITEBYTECODE=1 \
+python3 -m unittest chamados.tests.test_e3_pendentes_app.CatracaC17Test
+```
+
+Resultado: **Ran 7; OK**. A catraca cobra um único chamador permitido de C17. (`chamados/tests/test_e3_pendentes_app.py:146`)
+
+Alcance e execução ORM: **[nao verificado]**. Nenhum arquivo editado por este revisor.
+
+## 14/11 01:08 · sessao bb855a61a1c6 · CORTE-DAS-TRAVAS · verificador · origem=Code
+
+**REPROVADO para pouso.** Há caminhos que classificam dinheiro/universo como “so leitor”, certificação que ignora arquivos executáveis não rastreados e catraca que ainda reprova sem aumento do total (`bin/classe_da_obra.py:151`; `bin/classe_da_obra.py:237`; `app/core/tests/test_medida_turno_do_par.py:563`).
+
+Identidade do commit/base, arquivo original do aval, inteira final e retomada efetiva em produção: **[nao verificado]**. [nao verificado]
+
+1. **[bloqueia] Classificador: dinheiro pode sair “so leitor”.**  
+   O reconhecimento de dinheiro depende do caminho; qualquer `.py` restante sem os tokens enumerados recebe `LEITOR` (`bin/classe_da_obra.py:50`; `bin/classe_da_obra.py:145`). Contraprovas em memória: mudar `adicional_noturno_pct: 20.0` para `40.0`, ou a conversão de horas extras de `/ 60` para `/ 30`, devolve **“so leitor”** (`app/core/regua_cct.py:42`; `app/ponto/services/dia_pago.py:180`; `bin/classe_da_obra.py:151`). Isso viola diretamente a proibição de usar essa classe em dinheiro.
+
+2. **[bloqueia] Classificador: mudar universo julgado também pode sair “so leitor”.**  
+   O trecho `j[0] <= dia <= j[1]` seleciona os dias da janela de cada empresa. Trocar somente os limites por `<` altera o universo e devolve **“so leitor”**, confirmado em memória (`app/chamados/services/furo_sem_canal.py:75`; `bin/classe_da_obra.py:151`). O classificador examina somente linhas alteradas e procura uma enumeração de tokens, sem reconhecer essa restrição de universo (`bin/classe_da_obra.py:117`; `bin/classe_da_obra.py:55`).
+
+3. **[bloqueia] Inteira final: os arquivos executados podem divergir da tree certificada.**  
+   Trecho: `status --porcelain --untracked-files=no`. Arquivos não rastreados ficam fora da limpeza, mas a suite monta o diretório físico `copia/app` (`bin/classe_da_obra.py:237`; `bin/suite.sh:204`; `bin/suite.sh:230`). Portanto, um módulo não rastreado pode participar da execução sem integrar a tree registrada; comparar `HEAD^{tree}` antes/depois não detecta isso (`bin/classe_da_obra.py:247`; `bin/classe_da_obra.py:255`). Ocorrência em produção: **[nao verificado]**.
+
+4. **[bloqueia] Catraca: o corte “reprova só pelo total” não alcançou o teste completo.**   [nao verificado]
+   `_catraca()` aceita redução, mas logo depois permanece `assertEqual(CRITERIOS_REGISTRADOS, ...)`, congelando A1/B1 em 6/82 (`app/core/tests/test_medida_turno_do_par.py:508`; `app/core/tests/test_medida_turno_do_par.py:108`; `app/core/tests/test_medida_turno_do_par.py:563`). Esses campos são **contagens**, apesar do nome “critérios” (`app/core/medida_turno_do_par.py:441`).  
+   Contraprova em memória: retirar o corpo pareador de `_alinhar_por_papel` produz pareadores **9→8**, derivações **85→85**, A1 **6→5**. `_catraca()` apenas avisa; o teste completo reprova pela igualdade restante (`app/core/tests/test_medida_turno_do_par.py:158`; `app/core/tests/test_medida_turno_do_par.py:563`).
+
+5. **[bloqueia] Triagem: o destino implementado diverge do destino literal pedido.**  
+   O aval fornecido pede `logs/AUDITORIA-TRAVAS/triagem.log` **[nao verificado no arquivo original]**. O código escreve e vigia **`logs/codex/triagem.log`** (`bin/disjuntor.py:148`; `bin/disjuntor.py:936`). O acréscimo no wrapper apenas imprime uma instrução; não chama o escritor de triagem (`bin/codex_pergunta.sh:469`). A retomada da escrita no destino pedido permanece **[nao verificado]**.
+
+6. **[bloqueia] Vigia: há falsos “zero pendentes” por integridade e por identidade.**  
+   `chamadas.log` malformado tem linhas descartadas silenciosamente; um `fim` cortado também desaparece da leitura. O vigia interpreta a ausência resultante como nenhuma conclusão a triar e retorna rc 0 (`bin/codex_limite_estado.py:57`; `bin/codex_limite_estado.py:66`; `bin/disjuntor.py:1015`; `bin/disjuntor.py:1038`). Ambos foram reproduzidos em memória.  
+   Além disso, a triagem identifica a volta por `hash12@pid@fim@sha12`, mas o vigia reduz isso a **obra/hash12/pid**. Uma chamada posterior no mesmo hash, após reutilização do PID, pode herdar a triagem antiga e sumir das pendências (`bin/disjuntor.py:928`; `bin/disjuntor.py:1003`). Essa contraprova também retornou zero em memória. O vigia ainda passa `{}` ao leitor, perdendo a conferência histórica de truncamento usada pelo B3 (`bin/disjuntor.py:997`; `bin/disjuntor.py:955`).
+
+7. **[fila — brecha herdada] B3: “linha do Ronald” é reserva textual, sem autoria conferida.**  
+   `ERRO-BOBO` é aceito pelo conteúdo; a cota só se aplica a `tipo == 'auto'` (`bin/disjuntor.py:772`; `bin/disjuntor.py:1115`). Uma linha nova `ERRO-BOBO OBRA-X: texto do Code` liberou, em simulação em memória, uma obra com AUTO já esgotada (`bin/disjuntor.py:1124`). A guarda protege `--rearma-b3`, mas não autentica quem escreveu essa linha no RELATO (`bin/disjuntor.py:249`; `bin/disjuntor.py:264`). **Não é afrouxamento introduzido pelo diff**: o reconhecedor antigo já aparece como contexto no anexo fornecido **[nao verificado na base Git]**.
+
+8. **[fila] Os selos ainda têm mutantes plausíveis que passam.**
+   
+   - **GATE:** o selo fabrica certificados diretamente no livro e testa o portão, sem executar `pouso_inteira`. Suprimir a condição de recusa do emissor não é exercitado por esse selo (`bin/tests/test_gate_pela_classe.sh:121`; `bin/tests/test_gate_pela_classe.sh:135`; `bin/classe_da_obra.py:256`).
+   - **B3/caso 9:** adicionar o literal `B3: o Code libera desenho pela AUTOLIBERA, do Ronald` passou o **caso 9 completo em memória**. `DESENHO` é procurado distinguindo maiúsculas/minúsculas; sujeito/verbo não (`bin/tests/test_disjuntor.sh:1332`; `bin/tests/test_disjuntor.sh:1356`).
+   - **Triagem:** o selo corrompe `triagem.log`, mas não cobre `chamadas.log` malformado nem reutilização de PID/hash, os falsos zeros do achado 6 (`bin/tests/test_triagem_pendente.sh:17`; `bin/tests/test_triagem_pendente.sh:50`).
+
+9. **[fila] Catraca: aviso ao RELATO não tem entrega comprovada.**  
+   `_aviso()` somente escreve stderr; os novos MORDE conferem listas retornadas, sem cobrar a publicação (`app/core/tests/test_medida_turno_do_par.py:467`; `app/core/tests/test_medida_turno_do_par.py:593`; `app/core/tests/test_medida_turno_do_par.py:602`). O filtro do pre-push descarta `CATRACA-AVISO` da saída apresentada (`bin/pre-push.sh:146`). Escrita desses avisos no RELATO: **[nao verificado]**.
+
+10. **[fila] Leitores humanos externos continuam recebendo o significado antigo de `arquivo=`.**  
+    O wrapper ainda diz “jsonl cresce = prova de vida”, e LEIS ainda descreve prova por “pid/arquivo” (`bin/codex_pergunta.sh:51`; `app/docs/LEIS.md:66`). Agora arquivo sozinho falha e, junto do PID, é inerte (`bin/hook_stop_fila1.py:748`).
+
+O mapa de escritores, leitores e significados ficou assim:
+
+| Dado | Quem escreve | Quem lê / significado |
+|---|---|---|
+| `chamadas.log` | Wrapper: `ini` e `fim` (`bin/codex_pergunta.sh:305`, `:272`). | Leitor comum `_linhas_chamadas`; vigia o reutiliza (`bin/codex_limite_estado.py:49`; `bin/disjuntor.py:1007`). TAB; chave obra/hash12/PID; duração em segundos desde `T0C`, incluindo etapas do wrapper (`bin/codex_pergunta.sh:265`, `:273`). |
+| Sidecar `.id` | Wrapper remove o anterior e grava obra/papel/hash/PID/fim/SHA da resposta desta chamada (`bin/codex_pergunta.sh:401`, `:464`). | `_le_id` e `_triagem_sob_trava`, com conferência do SHA (`bin/disjuntor.py:879`, `:926`). Seu `fim` é carimbado antes do `fim` escrito pelo EXIT; não são necessariamente o mesmo instante (`bin/codex_pergunta.sh:464`, `:272`). |
+| `triagem.log` | `--triagem`, sob trava da resposta e depois do estado (`bin/disjuntor.py:912`, `:930`, `:938`). | B3/rearme e vigia usam `_triagens`; última linha por volta prevalece (`bin/disjuntor.py:976`, `:1062`, `:1195`, `:997`). Volta completa contém fim/SHA; vigia descarta essas parcelas — achado 6. |
+| Estado do disjuntor | `_com_estado`: flock exclusivo, temporário e replace (`bin/disjuntor.py:374`, `:392`). | Decisão, rearme e mensagens (`bin/disjuntor.py:1147`, `:1220`, `:1260`). `auto_usada` conta liberações históricas por obra; `auto_sobe` deduplica anúncios por SHA (`bin/disjuntor.py:1116`, `:1123`, `:1243`). |
+| Fotografia B3 | `_fotografa` grava SHA das linhas e instante Unix em segundos (`bin/disjuntor.py:847`, `:856`). | Liberação exige linha nova/não consumida e **mtime ≥ disparado_em**; igualdade é aceita (`bin/disjuntor.py:1111`, `:1113`). |
+| `disjuntor.log` | `trilha`; anúncio B3 depois da gravação do estado, ainda sob trava (`bin/disjuntor.py:220`, `:406`, `:1139`). | Painel conta eventos `LIBERA (auto)` desde `agora−86400`, limite inferior inclusivo (`bin/disjuntor.py:2087`, `:2107`, `:2114`). Isso não é a cota histórica `auto_usada` (`bin/disjuntor.py:158`). |
+| `REGISTRO` / `LINHAS_REGISTRADAS` | Literais no teste (`app/core/tests/test_medida_turno_do_par.py:158`, `:254`). | `_identidade`: chave `(arquivo::função, sítio ou critério)`; linhas são ocorrências AST (`app/core/tests/test_medida_turno_do_par.py:518`, `:523`). Unidade da medida: função/critério mais parcelas nomeadas; uma função pode contar duas vezes (`app/core/medida_turno_do_par.py:10`). |
+| Topo do RELATO | Porta automática `no_topo`; wrapper apenas emite a sugestão ESPERANDO (`app/core/esteira_vigia.py:865`; `bin/codex_pergunta.sh:397`). Autoria material de AUTOLIBERA/DESENHO: **[nao verificado]**. | Stop usa `_topo`; B3 usa o mesmo recorte, com dupla leitura estável (`bin/hook_stop_fila1.py:717`; `bin/disjuntor.py:805`, `:812`). |
+| `hook_stop_espera.json` | Rotina de escrita retirada no diff fornecido **[nao verificado na base Git]**. | Restam lápide e teste de ausência; consumidor executável restante não localizado na cópia (`bin/hook_stop_fila1.py:538`; `bin/tests/test_hook_esperando_com_prova.sh:114`). Remoção do arquivo legado no host: **[nao verificado]**. |
+| Livro/log da inteira | `pouso_inteira` grava log e seis campos no livro (`bin/classe_da_obra.py:250`, `:258`). | Parser usa último veredito/último `Ran N`; portão usa a **tree**, não o commit (`bin/classe_da_obra.py:224`, `:207`, `:216`). O leitor do livro não valida commit, obra, hora ou conteúdo do log (`bin/classe_da_obra.py:207`). |
+
+Os carimbos de chamadas, triagem, trilha e livro usam hora local sem fuso gravado; igualdade dos fusos dos processos em produção: **[nao verificado]** (`bin/codex_pergunta.sh:272`; `bin/disjuntor.py:939`, `:220`; `bin/classe_da_obra.py:259`).
+
+Por peça, os limites preservados que consegui conferir são:
+
+- **ESPERANDO:** não encontrei afrouxamento além de tornar `arquivo=` inerte. Permanecem PID vivo, identidade do processo, ancestralidade e rejeição de campos repetidos; a prova do RELATO vem antes da liberação (`bin/hook_stop_fila1.py:605`, `:739`, `:1261`, `:1294`). PID vivo com arquivo parado/ausente está explicitamente coberto (`bin/tests/test_hook_esperando_com_prova.sh:117`).
+- **AUTOLIBERA:** aceita somente FORMA/ERRO-BOBO, uma vez por obra; rearme preserva a cota. Não aceita `classe=DESENHO` (`bin/disjuntor.py:151`, `:778`, `:1115`, `:1206`).
+- **Juízes/ordem/escritor:** classificador consulta a união base/cabeça de JUIZES; B3 mantém decisão/gravação/anúncio na mesma transição; catraca e ESTADO reutilizam o mesmo medidor (`bin/classe_da_obra.py:166`; `bin/disjuntor.py:1147`; `bin/turno_do_par_estado.py:36`). Nenhum segundo juiz de negócio foi identificado nesses caminhos; abrangência fora da cópia: **[nao verificado]**.
+- **Consumidores externos:** o selo do censo mantém a tupla de ESPERANDO; ESTADO lê o medidor, sem depender de REGISTRO; novos selos entram pelo glob da régua (`bin/tests/test_censo_antes_da_vaga.sh:329`; `bin/gerar_estado.py:299`; `bin/regua.sh:138`). O classificador declara estar sem ligação à conduta; pouso real protegido por ele: **[nao verificado]** (`bin/classe_da_obra.py:35`).
+- **p95/andável:** a cópia contém tetos em segundos por papel e exige ausência de outro item andável para PAREI devolver o turno (`bin/codex_pergunta.sh:95`; `bin/hook_stop_fila1.py:1151`). Medição que sustenta os percentis, execução dos selos completos e inteira final: **[nao verificado]**.
 
 ## 14/11 01:03 · sessao 8bdaa99be379 · - · - · origem=Ronald (tmux)
 
@@ -459,43 +548,4 @@ Censo do explicador e avaliação semântica:
 
 Execução integral dos testes, evidência histórica RED→GREEN e quantidade de casos afetados em produção: **[não verificado]**. [nao verificado]
 
-## 13/11 22:14 · sessao 88862ea946a0 · - · - · origem=Ronald (tmux)
-
-Achado **procedente**: a nova comparação direta bloqueia **reuso**, embora nenhuma hora/tipo fosse criada ou alterada. A testemunha retorna `ja_satisfeita` quando há batida aprovada (`app/chamados/services/materializacao.py:814`); `espera_declarado_x_gravado` devolve `''` nesse estado (`:735`), mas `espera_na_escrita` ignora essa razão e compara novamente (`:751`). Exemplo já existente: declaração S01:20, batida aprovada S01:00 (`app/chamados/tests/test_bug_par_projetado.py:1090`). A nova guarda barra antes do ramo que reutilizaria a batida (`app/chamados/services/materializacao.py:1257`) e devolveria sucesso `ja_no_espelho` (`app/chamados/services/validacao.py:636`). Isso cria desacordo entre tela/testemunha e escritor (`materializacao.py:814`, `:751`, `:1704`).
-
-Achado **procedente — selo sem mordida nesta regressão**: o teste `test_ja_satisfeita_no_universo_as_tres_portas_concordam` verifica somente que o estado retornado não é `espera_declarado_x_gravado` e que não nasceram batidas (`app/chamados/tests/test_bug_par_projetado.py:1098`). O retorno regressivo `nao_gravou` satisfaz ambas as asserções; falta exigir `ok=True`, `ja_no_espelho` e permanência da validação (`app/chamados/services/validacao.py:623`, `:639`). Resultado executado da suíte: **[não verificado]**.
-
-Sobre **resposta igual ao marco**: igual em **hora e tipo**, isoladamente, não é barrada pela comparação (`app/chamados/services/materializacao.py:708`). Há cobertura declarada para madrugada D+1 (`app/chamados/tests/test_bug_par_projetado.py:995`) e carimbada sem lastro (`:1183`). Igual só em hora pode ser barrada legitimamente quando o tipo difere (`:1071`). Uma metade igual também pode esperar pela irmã divergente, porque o ato grava o par (`app/chamados/services/materializacao.py:838`; teste `app/chamados/tests/test_bug_par_projetado.py:1016`). Falso positivo **estritamente igual em hora e tipo, sem irmã divergente**: **descartável pelo fluxo examinado** (`materializacao.py:708`, `:719`).
-
-**Segundo escritor produtivo fora da porta: descartável nos caminhos pedidos.** O único chamador produtivo encontrado de `_materializar_resposta_hora` é `_materializar_uma` (`app/chamados/services/materializacao.py:1715`), depois da guarda (`:1704`); a gravação efetiva chama `registrar_batida` (`:1343`). Os caminhos convergem:
-
-- Laço da disputa → `_materializar_uma` (`app/chamados/services/materializacao.py:1904`).
-- Irmã projetada → `_materializar_uma` (`:1575`), com rollback se não gravou (`:1578`).
-- Passivo → `_materializar_uma` (`app/chamados/services/passivo_validado.py:537`).
-- Command do passivo → `reparar` (`app/chamados/management/commands/materializar_passivo_validado.py:104`, `:113`).
-- Backfill de fio → materializador da disputa (`app/chamados/management/commands/backfill_fio_morto_e4b.py:147`).
-- `bug_par_103` devolve pela porta de validação, sem plantar (`app/chamados/management/commands/bug_par_103.py:85`).
-
-**Reconciliador e lote das aprovadas não constituem fuga de plantio:** o reconciliador evita carimbar resposta com texto no caminho C1 (`app/chamados/reconciliador.py:365`) e no encerramento de órfãs (`:1083`); S144 apenas carimba pelo juiz, sem criar batida (`app/chamados/services/materializacao.py:1955`, `:1959`).
-
-**Derivador paralelo/segundo juiz: descartável nesta alteração:** declarado usa o tipo da tabela existente (`app/chamados/services/materializacao.py:693`; autoridade `app/chamados/juizes.py:925`); a nova direta chama o mesmo derivador do plantio (`materializacao.py:751`, `:1244`) e o mesmo comparador (`:754`, `:838`). O problema encontrado é **precedência e significado** — tratar derivação hipotética como escrita efetiva mesmo quando haverá reuso (`:751`, `:1257`).
-
-**Ordem de trava: descartável como regressão deste delta.** Laço trava antes da unidade (`app/chamados/services/materializacao.py:1895`), passivo também (`app/chamados/services/passivo_validado.py:379`), e o universo inclui irmã/destinos antes das perguntas (`app/chamados/services/materializacao.py:1839`, `:1848`). A nova função não adquire travas (`:748`).
-
-Nenhuma medição de ocorrência/quantidade em produção foi fornecida para o falso positivo de reuso: **[não verificado]**.
-
-## 13/11 22:13 · sessao 6f6c4964f4fd · - · - · origem=Ronald (tmux)
-
-**Descartável — estado novo sem leitor ou com sentido divergente.** `materializacao.py:680` define a constante; `_espera_do_aval_163` produz o estado em `materializacao.py:723`; a testemunha o devolve em `materializacao.py:838-840` e `:852-854`; `espera_declarado_x_gravado` traduz-o para detalhe em `:735-736`; `validar_pergunta` devolve a mesma constante em `validacao.py:514-518`. A casca lê `ok=False` e mostra `msg`, sem atribuir sucesso ao estado desconhecido (`acoes_disputa.py:50-51`). O contador separa a espera em `materializacao.py:337-338`, e o modal mostra o detalhe e retira Validar (`app/templates/chamados/partials/modal_fio.html:242-244`, `:274-275`).
-
-**Descartável — segundo juiz de tipo introduzido pelo delta.** `_declarado_da_metade` passou a consultar `MARCO_DA_PERGUNTA` (`materializacao.py:693-694`), cuja fonte define saída=S e volta=E (`app/chamados/juizes.py:922-927`). Isso responde ao tipo perguntado/declarado; os juízes registrados de próxima batida e flip respondem perguntas distintas (`app/core/juizes.py:213-214`). A previsão continua chamando o derivador do plantio (`materializacao.py:751`), sem copiar sua derivação.
-
-**Descartável — relógio novo fora da borda.** A comparação nova usa o timestamp derivado (`materializacao.py:751-754`); a comparação de hora chama `hora_local(ts)` (`materializacao.py:706-708`), que converte o instante recebido sem consultar o relógio (`app/core/fmt.py:10-15`).
-
-**Descartável — inversão de trava introduzida pelo delta.** O trecho novo acrescenta a consulta em `materializacao.py:1704`, antes do `atomic` já existente em `:1713`; não introduz aquisição de trava. A validação continua chamando `trava_na_ordem` antes do carimbo (`validacao.py:552-557`). Prova concorrente em execução: [não verificado].
-
-**Descartável — selo sem mordida para a constante atual.** A varredura agora inclui `ast.Name` e o resolve (`app/chamados/tests/test_porta_validacao_pergunta.py:159-162`), comparando o resultado com `validacao.ESTADOS` (`:164-165`). O import atual é local, absoluto e único (`validacao.py:514`), e seu valor está em `materializacao.py:680`; retirar `'espera_declarado_x_gravado'` da tupla faz a diferença de conjuntos ficar não vazia. Execução da suíte e evidência histórica RED→GREEN: [não verificado].
-
-**Duvidoso — robustez geral do resolvedor do selo.** `_valor_do_nome` escolhe o primeiro import com o nome em toda a árvore, sem respeitar escopo (`app/chamados/tests/test_porta_validacao_pergunta.py:173-177`). Poderia resolver outro import homônimo em evolução futura; esse conflito não aparece no import atual (`validacao.py:514`). Não caracteriza falha concreta deste delta.
-
-_4899 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4901 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
