@@ -1,7 +1,111 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 19:04** · publicado em **14/11/2026 19:04** (UTC-3)
+> Ultima resposta processada: **14/11/2026 19:19** · publicado em **14/11/2026 19:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 19:19 · sessao e4253e35603f · - · - · origem=Ronald (tmux)
+
+Achados para perguntas 2/3/8:
+
+1. **PROCEDENTE — carga e consulta não têm o mesmo universo.** A carga lê `colaborador_id`, `conversa=False` e `data_evento` na janela (`app/chamados/services/tarefa_do_dia.py:395`); o app lê `disputa__colaborador` e `q_vivas`, sem recorte de data/conversa (`app/chamados/services/pergunta_no_app.py:52`). A identidade dos dois colaboradores é exigida na porta de escrita (`app/chamados/models.py:3573`), portanto divergência nesse campo em dados válidos não está demonstrada [nao verificado].
+
+2. **PROCEDENTE — mesmo recorte e mesmo `agora` histórico também podem divergir.** `q_vivas` exige `validada_em IS NULL` no estado atual (`app/chamados/models.py:3468`), enquanto C6 considera inexistente a validação posterior a `agora` (`app/chamados/juizes.py:1387`). A carga não aplica `q_vivas` (`app/chamados/services/tarefa_do_dia.py:395`). Pergunta sem resposta, disputa aberta e célula acusadora, validada depois do instante consultado, pode estar nas pendentes da carga e ausente de `consulta_do_app(..., agora=agora)` (`app/chamados/services/tarefa_do_dia.py:514`; `app/chamados/juizes.py:1450`; `app/chamados/models.py:3468`).
+
+3. **NÃO PROCEDENTE — predicado local duplicado de partição.** Ambos usam `particao_do_app`: sem resposta e disputa aberta (`app/chamados/services/pergunta_no_app.py:73`; `app/chamados/services/pergunta_no_app.py:81`; `app/chamados/services/tarefa_do_dia.py:514`). Contudo, a partição lê `respondida_em` e `fechada_em` atuais, sem projeção temporal; resposta futura carimbada já manda a pergunta ao histórico em ambos (`app/chamados/services/pergunta_no_app.py:81`). C6 projeta resposta futura para inexistente, criando duas semânticas temporais dentro da composição (`app/chamados/juizes.py:1390`).
+
+4. **PROCEDENTE — contraexemplo sintético reproduzido sem banco e sem arquivos.** Executei corpos reais por AST usando os helpers existentes (`app/chamados/tests/e4_apoio.py:8`; `app/chamados/tests/e3_portas_apoio.py:18`). Hipótese: pergunta 303 de `orfao_14h`, sem resposta/validação/materialização, disputa aberta, célula `furo`, marco `fim` aceso e vencido, sem tranca, fila vazia. C6 retornou viva e a consulta/partição retornou pendente 303; a tarefa publicou `fio='nada', rota=None`, com instância `razao='aceso', pergunta_id=None, acoes=[]`. C6 mantém viva a pergunta sem materialização sobre célula acusadora (`app/chamados/juizes.py:1444`; `app/chamados/juizes.py:1450`); a tarefa pula a lâmpada acesa antes de associar a pergunta (`app/chamados/services/tarefa_do_dia.py:277`; `app/chamados/services/tarefa_do_dia.py:321`); `_portas` exige simultaneamente pendência e instância RESPONDER (`app/chamados/services/tarefa_do_dia.py:610`). Incidência em produção [nao verificado].
+
+   O mesmo bloqueio estrutural pode ocorrer em isento, sem célula/ata, sem trabalho, marco sem luz/teto, ausência ou motivo fora do mapa: esses ramos removem/excluem RESPONDER antes da publicação (`app/chamados/services/tarefa_do_dia.py:203`; `app/chamados/services/tarefa_do_dia.py:219`; `app/chamados/services/tarefa_do_dia.py:277`; `app/chamados/services/tarefa_do_dia.py:287`; `app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:333`). Cada classe exige confirmar C6 vivo; não são ocorrências de produção demonstradas [nao verificado].
+
+5. **NÃO PROCEDENTE — cópia do corpo C6 na carga.** A carga chama o juiz registrado com `hoje`, `agora` e carregador, reutilizando resultado para perguntas candidatas já julgadas (`app/chamados/services/tarefa_do_dia.py:518`; `app/chamados/services/tarefa_do_dia.py:521`; `app/chamados/services/tarefa_do_dia.py:523`). C6 encaminha carga ao corpo único (`app/chamados/juizes.py:888`), cuja tranca lê a alimentação da carga (`app/chamados/juizes.py:1405`; `app/chamados/services/carga_pergunta_viva.py:146`).
+
+6. **NÃO PROCEDENTE — C17 ativo como juiz paralelo nos chamadores de produção rastreados.** A busca de chamadas encontrou a definição e somente o instrumento de comparação `diff_e3_sombra`, que o lê como “antes” (`app/chamados/juizes.py:1664`; `app/chamados/management/commands/diff_e3_sombra.py:127`). Seu corpo antigo continua aplicando `cobrar -> colab` (`app/chamados/juizes.py:1650`; `app/chamados/juizes.py:1709`); `_portas` exclui cobrar antes de consultar essa tabela (`app/chamados/services/tarefa_do_dia.py:618`).
+
+7. **NÃO PROCEDENTE — relógio novo interno no caminho tarefa/carga examinado.** O instante da carga segue ao C6 e ao alimentador (`app/chamados/services/tarefa_do_dia.py:519`; `app/chamados/services/tarefa_do_dia.py:521`; `app/chamados/services/tarefa_do_dia.py:565`), e a casca recusa instante nulo ou carga de instante diferente (`app/chamados/services/tarefa_do_dia.py:657`). A API chama a consulta sem instante, conservando C6 atual e seu fallback de calendário (`app/api/views.py:994`; `app/api/views.py:2534`; `app/chamados/juizes.py:592`). Igualdade de relógio com uma carga externa, portanto, não é garantida nesses leitores (`app/api/views.py:2534`).
+
+8. **PROCEDENTE — docstring da carga contradiz implementação.** Promete “uma consulta do app por colab (memo da carga)” (`app/chamados/services/tarefa_do_dia.py:362`), mas implementa uma partição em lote seguida do carregador C6 (`app/chamados/services/tarefa_do_dia.py:514`; `app/chamados/services/tarefa_do_dia.py:518`). A afirmação de igualdade integral com o universo do app também não vale sem as ressalvas acima (`app/chamados/services/tarefa_do_dia.py:512`).
+
+**PERGUNTA:** a conversa pendente do app participa de algum colab-dia? O app admite conversa, mas o juiz de dia dela devolve ausência de dia de turno e a carga exclui conversa (`app/chamados/services/pergunta_no_app.py:52`; `app/chamados/services/pergunta_no_app.py:114`; `app/chamados/services/tarefa_do_dia.py:396`). Não atribuí esse caso a um dia sem corte adicional [nao verificado].
+
+## 14/11 19:19 · sessao 9a633ee7c38b · - · - · origem=Ronald (tmux)
+
+**Pergunta 1 — mapa dos campos e leitores.**
+
+| Valor | Escritor/fornecedor | Leitores de produção |
+|---|---|---|
+| `fio`, `rota`, `fila`, `verbos` publicados | `_portas_da_tarefa`: computa `verbos`/`fila` em `app/chamados/services/tarefa_do_dia.py:608`, donos em `:615`, fio em `:622`, rota em `:629`, publica todos em `:635`. | Projeção `porta_da_tarefa` em `app/chamados/services/tarefa_do_dia.py:645`; leitores abaixo. |
+| `donos` | **Não é campo da tarefa**: conjunto local, criado em `app/chamados/services/tarefa_do_dia.py:615`, acrescido em `:617` e `:621`, consumido para `fio` em `:622`; não aparece no `out.update` de `:635`. | Apenas a seleção de fio do próprio juiz, `app/chamados/services/tarefa_do_dia.py:622`. |
+| `porta_da_tarefa` | Copia `rota`, `fila`, `verbos`, `fio`, `nao_sei`, ou retorna `None` quando `rota` é falsa, `app/chamados/services/tarefa_do_dia.py:645`. | `fora_da_folha`, `vigia_fio`, `furo_sem_canal`, `beco_em_lote` e instrumento sombra, endereços abaixo. |
+| Pendentes/histórico | `particao_do_app`, `app/chamados/services/pergunta_no_app.py:79`; predicado único sem resposta e disputa aberta, `:81`; `consulta_do_app` fornece vivas em `:73`. | API `app/api/views.py:994`, `:2534`; dashboard `app/core/views.py:253`; aviso `app/chamados/services/aviso_pendencia.py:9`; cobrança `app/chamados/services/cobranca.py:48`; projeção/badge `app/chamados/services/pergunta_no_app.py:100`; carga `app/chamados/services/tarefa_do_dia.py:514`. |
+| Vivas do app | `perguntas_do_app` seleciona pelo colaborador e `q_vivas`, `app/chamados/services/pergunta_no_app.py:52`; C6 em `:61`. | Consulta `:73`; C17 `_no_app`, `app/chamados/juizes.py:1642`; ficha, `app/colaboradores/services/ficha.py:166`; diagnóstico `pergunta_no_app.py:208`, `:231`. |
+
+**Leitores diretos da porta, com o que efetivamente usam:**
+
+- Folha `_porta` chama projeção em `app/folha/fora_da_folha.py:70`; `_fio_da_porta` usa `porta['fio']` ou `FIO_SEM_PORTA` em `:85`; o agregado lê esse fio em `:193`; `o_que_segura` lê fio, fila e `nao_sei` em `:238`–`:248`.
+- Vigia monta portas em `app/chamados/services/vigia_fio.py:649`, preserva `nao_sei` em `:656`, conta pela rota em `:662`, admin pelo fio em `:663`, publica rota/fio em `:664`.
+- Furo lê presença e rota em `app/chamados/services/furo_sem_canal.py:97`–`:99`, preserva desconhecimento em `:100`–`:102`, conta ausências em `:104`, divide rotas em `:114`–`:116`.
+- Beco exclui dia com qualquer porta em `app/escala/services/cadastro_realidade.py:469`; não traduz rota/fio.
+- Pauta usa indiretamente `_fio_do_dia` e compara com `FIO_SEM_PORTA`, `app/ponto/services/pautas_dos_discordantes.py:79`–`:82`.
+- Sombra projeta fio/fila/rota em `app/chamados/management/commands/diff_e3_sombra.py:49`–`:55`, imprime rota/fio/fila/verbos em `:143`–`:144`.
+- E4b lê **instâncias e ações**, não os campos publicados, em `app/chamados/management/commands/backfill_fio_morto_e4b.py:97`–`:107`.
+
+**Pergunta 3 — segundo escritor publicado: NÃO PROCEDENTE nos leitores acima.** A publicação fica em `app/chamados/services/tarefa_do_dia.py:635`, e a projeção apenas copia em `:645`; folha lê em `app/folha/fora_da_folha.py:85`, vigia lê em `app/chamados/services/vigia_fio.py:662`, furo lê em `app/chamados/services/furo_sem_canal.py:99`, beco testa presença em `app/escala/services/cadastro_realidade.py:469`.
+
+**C17 ainda existe, mas o chamado de produção encontrado é o instrumento sombra:** `app/chamados/management/commands/diff_e3_sombra.py:127`; sua definição e escrita antigas estão em `app/chamados/juizes.py:1664` e `:1709`. A tarefa reutiliza a autoridade `fio_pelos_verbos` em `app/chamados/services/tarefa_do_dia.py:620`–`:621`, excluindo residual cobrar antes em `:618`; tabela única em `app/chamados/juizes.py:1650`–`:1661`.
+
+**Há outros “donos” derivados, com outra unidade — PROCEDENTE como diferença semântica, não prova de segundo juiz do colab-dia:**
+
+- Ficha deriva dono **do chamado** diretamente do verbo: cobrar → colaborador, `app/colaboradores/services/ficha.py:159`–`:162`.
+- Relatório classifica **disputa** como `AGUARDA_COLAB` por `aguarda_o_colaborador`, `app/chamados/relatorios_disputa.py:24`–`:28`; essa função usa C6 e `espera_o_texto_do_colaborador`, `app/chamados/services/fio.py:172`–`:174`; respondida sem texto ainda espera colaborador, `:187`.
+- Portanto uma pergunta com `respondida_em` e texto vazio está no histórico da consulta (`app/chamados/services/pergunta_no_app.py:81`–`:84`), mas pode sustentar `AGUARDA_COLAB` no relatório (`app/chamados/services/fio.py:187`, `app/chamados/relatorios_disputa.py:26`). Não chamar esses rótulos de “fio da tarefa”.
+
+**Pergunta 6 — semântica dos leitores.**
+
+- `rota=None` implica `porta_da_tarefa=None`, independentemente de `fio`, por `app/chamados/services/tarefa_do_dia.py:645`; há exceção explícita `fio='sistema', rota=None` em `:634`.
+- `porta_app` nasce quando colab tem porta e não há `portas_vivas`, `app/chamados/services/tarefa_do_dia.py:628`–`:634`; por isso não significa necessariamente fila vazia: o cobrar residual pode continuar em `fila`/`verbos`, calculados em `:608`–`:609`.
+- `porta_fila`/`porta_pergunta` são escolhidas conforme a composição de portas, `app/chamados/services/tarefa_do_dia.py:632`; não identificam necessariamente a porta particular do dono vencedor: fio é escolhido antes em `:622`.
+- Folha não restringe quais strings de rota aceita: só recebe a projeção e lê fio, `app/folha/fora_da_folha.py:70`, `:85`; beco só testa presença, `app/escala/services/cadastro_realidade.py:469`; furo reconhece as três rotas no contador, `app/chamados/services/furo_sem_canal.py:114`–`:116`; vigia conta dinamicamente a chave da rota em `app/chamados/services/vigia_fio.py:662` e inicializa app em `:577`.
+- `nada` e `nao_sei` são distintos na tarefa, `app/chamados/services/tarefa_do_dia.py:623`; ambos ficam sem rota, `:629`–`:630`. Folha os colapsa para `FIO_SEM_PORTA='nada'` pela ausência de porta (`app/folha/fora_da_folha.py:85`, `app/chamados/juizes.py:1652`), mas `o_que_segura` preserva a flag `nao_sei` separadamente, `fora_da_folha.py:248`. Vigia e furo também preservam a flag, `vigia_fio.py:656`, `furo_sem_canal.py:100`–`:102`.
+
+**Retrato, templates e PDF — detalhe importante para “sem porta explícito”.**
+
+- Retrato é agregado por pessoa: lê `grupo` do `fora_da_folha` e grava `dono` por `_fio_cru`, `app/folha/retrato_folha.py:1158`–`:1190`; grupo D torna-se `ninguem`, `:177`–`:178`, `:368`. Leitor prefere o gravado, mas tem derivação legada por status/motivo sem grupo, `:428`–`:441`.
+- `ninguem` vira **balde Admin**, `app/folha/retrato_folha.py:192`; se todos os dias forem atuais/futuros, pode virar **Hoje**, `:477`–`:481`. A UI rotula esses baldes em `:197`.
+- Drawer mostra a frase SEM PORTA por `FIO_DO_CARTORIO` (`app/folha/retrato_folha.py:183`) e `DESTRAVA` (`:1068`–`:1069`; origem `app/folha/fora_da_folha.py:54`); template apenas renderiza os valores em `app/templates/folha/_retrato_o_que_fazer.html:33`–`:40`.
+- Lista mostra LED já montado, `app/templates/folha/_retrato_lista.html:47`; PDF mostra o mesmo rótulo do LED em `app/folha/views_retrato.py:411`–`:413`. O PDF **não imprime a frase SEM PORTA** nesse registro: colunas em `:407`–`:418`.
+- Vigia de retrato conta `ninguem` pelo gravado, `app/folha/vigia_retido_calado.py:46`–`:49`.
+
+**PERGUNTA de lei:** a exigência nova “sem porta explícito” substitui também o agrupamento legado `ninguem → Admin/Hoje` da barra/PDF, ou admite o balde com identificação no drawer? O código mantém agrupamento em `app/folha/retrato_folha.py:192`, `:477`–`:481`, rótulo Admin em `:197`, PDF pelo LED em `app/folha/views_retrato.py:413`, e SEM PORTA apenas na frase do drawer em `app/folha/retrato_folha.py:1069`.
+
+**Pergunta 7 — comentários que permanecem incompatíveis/incompletos.**
+
+- **PROCEDENTE:** “TODO chamado VIVO na fila ... são publicadas” no cabeçalho, `app/chamados/services/tarefa_do_dia.py:27`–`:29`, e “CHAMADO VIVO NA FILA TEM PORTA”, `:580`; residual cobrar perde dono e rota em `:618`, `:629`–`:630`.
+- **PROCEDENTE:** “ações exigíveis e chamados vivos ligados ao dia conservam suas portas”, `app/chamados/services/tarefa_do_dia.py:641`, não ressalva residual cobrar que não publica rota, `:618`, `:629`–`:630`.
+- **PROCEDENTE:** `_fio_do_dia` documenta somente admin/colab/nada, `app/folha/fora_da_folha.py:74`, mas retorna qualquer fio publicado, `:85`, inclusive chamado do juiz, `app/chamados/services/tarefa_do_dia.py:622`.
+- **PROCEDENTE:** retrato ainda descreve grupo D como “ninguém está esperando ninguém”, `app/folha/retrato_folha.py:361`–`:362`; nova frase diz ausência de ação alcançável, `app/folha/fora_da_folha.py:54`. Há chamado cobrar e ação interna possíveis sem porta, `app/chamados/services/tarefa_do_dia.py:618`–`:635`.
+- **PROCEDENTE:** doc do beco diz `None = nenhuma ação ... por porta da fila`, `app/escala/services/cadastro_realidade.py:419`–`:420`; a projeção agora também publica app sem fila, `app/chamados/services/tarefa_do_dia.py:634`, e None também cobre sistema sem rota, `:614`, `:634`.
+
+## 14/11 19:19 · sessao 42afa79ed43b · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+1. **PROCEDENTE — bateria de mutantes incompleta.** `--todos` aborta no 12º registro, `sem_memo_por_colab`, porque o texto alvo já não existe; `carga_sem_relogio` também está obsoleto. Ambos ainda apontam para um teste removido. A validação do alvo ocorre antes do controle verde, portanto esses dois nem chegam a executar teste. Referências: `app/chamados/tests/e3_degrau_mutantes.py:41`, `:43`, `:87`, `:92`, `:112`; implementação atual em `app/chamados/services/tarefa_do_dia.py:514`. Execução nesta sessão: 19 registros morreram por assertion após controle verde; dois produziram `ValueError`. Resultado sem artefato persistido: [nao verificado em arquivo].
+
+2. **PROCEDENTE — selo L129 não prova leitura efetiva da tarefa.** Ele proíbe imports/nomes e exige a presença dos imports autorizados, mas não exige chamadas nem consumo da resposta. Em mutação somente em memória, substituí todas as chamadas `carga_da_tarefa(...)` e `porta_da_tarefa(...)` por `None`, preservando imports: os três testes do selo passaram. Referências: `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:24`, `:57`, `:61`; o degrau apenas executa esse selo em `app/chamados/tests/test_e3_degrau_dono_e_porta.py:293`. Resultado experimental sem artefato persistido: [nao verificado em arquivo].
+
+3. **NÃO PROCEDENTE — vacuidade específica de `assertEqual({}, por_colab)` por ninguém ser chamado.** A mesma execução exige `particao_do_app` exatamente uma vez. O teste de `o_que_segura` exige também um dia produzido. Ainda assim, esses testes medem chamadas; não demonstram equivalência do conjunto ao app nem consumo das pendentes retornadas. Referências: `app/chamados/tests/test_n1_alimentacao_unica.py:110`, `:114`, `:115`, `:161`, `:164`.
+
+4. **NÃO PROCEDENTE — nova asserção de `test_e3_portas_tarefa` ficou vazia.** Exige exatamente `[p.pk]` no C6, uma alimentação do painel, verbos específicos e repetição sem queries; C6 ausente ou adicional nesta fixture falha. Referências: `app/chamados/tests/test_e3_portas_tarefa.py:139`, `:144`, `:146`, `:148`, `:152`.
+
+5. **NÃO PROCEDENTE — `pos_suite` perdeu toda mordida contra C6 redundante.** O contrato ficou mais estreito: pergunta respondida na grade, fora dos pendentes. O mutante registrado que remove a exclusão das perguntas da grade continua produzindo assertion após controle verde. Referências: `app/chamados/tests/test_e3_pos_suite_sem_banco.py:50`, `:52`, `:65`, `:67`; mutante em `app/chamados/tests/e3_pos_suite_sem_banco.py:31`. Resultado experimental sem artefato persistido: [nao verificado em arquivo].
+
+6. **NÃO PROCEDENTE — E4b mascara residual `cobrar` como resolvido.** A fixture mudou para disputa fechada; o teste agora exige `segue_sem_porta`, chamado reaberto, nota única e idempotência. O teste do universo exige dois dias antes e um sem porta depois. Referências: `app/chamados/tests/test_e4_passivo.py:42`, `:76`, `:81`, `:83`, `:86`, `:89`, `:117`, `:122`, `:125`.
+
+7. **PROCEDENTE, alcance limitado — teste `o261e` deixou de demonstrar ausência de consulta paralela pelo vigia.** Antes o mock de app devia receber zero chamadas; agora a partição deve receber chamadas e a saída deve mudar. Isso demonstra influência do insumo sobre tarefa e vigia, mas um vigia com consulta paralela à mesma partição também poderia mudar e satisfazer esse teste. Referências: `app/chamados/tests/test_o261e_f5_alcance.py:264`, `:273`, `:274`, `:278`, `:280`.
+
+8. **Item 3 coberto nos corpos testados.** C4 elimina o dono por `cobrar`; C14 conserva a porta `validar` do admin quando o colab não tem pendência; C15 publica app quando o único residual é `cobrar`. Os respectivos mutantes morreram com controle verde nesta sessão. Referências: `app/chamados/tests/test_e3_degrau_dono_e_porta.py:58`, `:105`, `:113`; implementação em `app/chamados/services/tarefa_do_dia.py:610`, `:618`, `:629`. Equivalência real de universo/C6 não é demonstrada pela matriz: o teste da carga usa C6 mockado e `_perg` já pronto, em `app/chamados/tests/test_e3_degrau_dono_e_porta.py:229`, `:236`, `:246`.
+
+Executados juntos, sem banco: degrau 33, pós-suite 7 e portas-v6 10, total 50 testes verdes, processo rc 0. Referências das suítes: `app/chamados/tests/test_e3_degrau_dono_e_porta.py:40`, `app/chamados/tests/test_e3_pos_suite_sem_banco.py:19`, `app/chamados/tests/test_e3_portas_v6_sem_banco.py:15`; resultado sem artefato persistido: [nao verificado em arquivo]. Os testes ORM n1/portas/E4/o261 foram avaliados por leitura; execução: [nao verificado].
 
 ## 14/11 19:04 · sessao 062f239e93bc · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -1327,274 +1431,4 @@ Nos contraexemplos, **S** significa situação atual discordante de vínculo vá
 
 **Consolidação das 25 linhas: 23 conferem, 2 divergem, 0 sumiram.** Dos seis “folha diretamente”, **F05 e F06 caem na fundamentação RET→TXT/vigia**, enquanto **F01, F02, P34 e C35 mantêm os caminhos diretos documentados acima**. A consequência exata sobre antecipação/prazo depende do aval não fornecido: **[não verificado]**.
 
-## 14/11 18:42 · sessao 89d24e9eeb22 · GRADE-RESOLVE · censo · origem=Code
-
-**O PASSO 0 fica incompleto:** há **18 casos individualizados com dono ESTRUTURA escrito**, mas faltam os IDs de 63 unidades da ingestão e o rol autônomo das atas do Fernando. Portanto, **18 é o subtotal documental recuperável; o total integral para o cruzamento é [nao verificado]**. (app/docs/RELATO.md:8390, :8398; app/docs/BACKLOG.md:1102; app/docs/RELATO.md:52)
-
-**(A) Fontes, unidades e contagens**
-
-| Fonte | Onde mora o registro | O que contei como um caso | Contagem |
-|---|---|---|---:|
-| GRADE-MESTRA — SEGUE | app/docs/GRADE-MESTRA.md:33 até :522 | Uma linha de dados das sete tabelas por balde; excluí cabeçalhos e separadores | **456 obras** |
-| GRADE-MESTRA — complementos | app/docs/GRADE-MESTRA.md:525 até :1551 | Uma linha de dados das tabelas `complemento`; excluí cabeçalhos e separadores | **548 complementos**, sob **119 mães** |
-| Linhas HJ- do BACKLOG | app/docs/BACKLOG.md:734, :744–749, :784, :786, :1868, :1917, :2547–2555 | Um identificador-raiz HJ-NNN representado nas linhas; derivados agrupados na raiz | **11 raízes**; quantidade de casos pessoa+dia: **[nao verificado]** |
-| Fernando — ingestão localizada | app/docs/BACKLOG.md:1868; app/docs/RELATO.md:8368, :8386 | Uma unidade pessoa+dia HJ-NNN-Uk | **80 unidades declaradas; 17 IDs recuperáveis** |
-| Atas do Fernando — coleção autônoma | **NAO ACHADA**; há remissão a ATA-1111 em app/docs/PROMPTS.md:2125 | Rol original necessário para estabelecer a unidade | **[nao verificado]** |
-| BO-0611 | app/docs/BACKLOG.md:1911–1912; app/docs/RELATO.md:1471, :1533–1534 | Um item numerado 01–14; 11 e 12 permanecem separados | **14** |
-| BO-1311-ROTEIRO | Nome encontrado: BO-[nome]-1311-ROTEIRO, app/docs/BACKLOG.md:783; app/docs/RELATO.md:222, :226 | Uma ficha 01–10; perguntas vivas são subunidades | **10** |
-| BO2910-ESTRUTURA | app/docs/BACKLOG.md:1102 | Uma das classes explicitamente enumeradas: 01, 02, 05, 06, 08 | **5** |
-| BO-ADMIN-2710 | app/docs/CORTES.md:330, :332; app/docs/RELATO.md:3421–3429 | Um item 1–8, mais os complementos 8.1, 8.2 e 8.3 | **11**, confirmado em app/docs/RELATO.md:52 |
-
-A recontagem da grade deu **75+5+155+177+39+1+4 = 456**. Os **548 complementos** foram contados diretamente nas linhas de dados; a soma dos números dos 119 subtítulos também deu 548. Os dois números do aval conferem. (app/docs/GRADE-MESTRA.md:15–22, :525–1551)
-
-Nas linhas HJ-, encontrei **20 linhas: dez IDs HJ-NNN diretos, nove derivados e um instrumento de ingestão**. Os derivados representam HJ-091, HJ-075 e HJ-058; o TSV agrupa-os em suas raízes para evitar contar achados de opus e complementos como novos BOs originais. A granularidade original desses casos permanece **[nao verificado]**. (app/docs/BACKLOG.md:734, :744–749, :784, :786, :1868, :1917, :2547–2555)
-
-O mapa integral da ingestão é remetido a `logs/hj_0511/mapa.md`, **NAO ACHADO nesta cópia**. A publicação permite recuperar 17 IDs dos 80; os outros **63 IDs ficam [nao verificado]**. O vínculo entre essa ingestão e a totalidade das “atas do Fernando” também é **[nao verificado]**. (app/docs/RELATO.md:8386, :8390–8398)
-
-No BO-0611, o aval V2 **substitui o quadro anterior**. Por isso, BATIDA para 01/04 e CADASTRO para 06, escritos no quadro antigo, não foram transportados como donos vigentes; a V2 escreve CADASTRO para 11/12. (app/docs/PROMPTS.md:1925; app/docs/RELATO.md:1533, :1471)
-
-As buscas abrangeram a árvore inteira, incluindo arquivos ocultos/ignorados e os documentos RELATO-ARQUIVO, LAPIDES, DOSSIES, CORTES e TICKETS. Os comandos executados seguem abaixo; a execução e a ausência física dos arquivos não possuem referência arquivo:linha. **[nao verificado]**
-
-```sh
-rg -n --hidden --no-ignore -i 'BO[-_]?0611|BO[-_]?1311[-_]?ROTEIRO|BO2910[-_]?ESTRUTURA|BO[-_]?ADMIN[-_]?2710' .
-rg -n --hidden --no-ignore -i 'bo[-_]mauricio[-_]0611|bo[-_]mauricio[-_]1311|bo2910|bo2710' .
-rg -n --hidden --no-ignore -i 'atas.{0,60}fernando|fernando.{0,60}atas|ata.{0,40}ingerid|ingerid.{0,40}ata' .
-rg -n --hidden --no-ignore -i 'fernando|ingestao|ingestão|ingeridas|ingeridos|ATA-1111' .
-rg -n --hidden --no-ignore 'HJ-' .
-rg -n --hidden --no-ignore 'HJ-[0-9]{3}-U[0-9]+' .
-rg --files --hidden --no-ignore | rg -i '0611|1311|2910|2710|fernando|ata|relato|lapides|dossies|cortes|tickets'
-git grep -n -I -E 'BO[-_]?0611|BO[-_]?1311[-_]?ROTEIRO|BO2910-ESTRUTURA|BO-ADMIN-2710|Fernando|HJ-'
-```
-
-O `git grep` falhou porque a cópia não contém metadados Git; a identidade HEAD informada no pedido não pôde ser conferida. As buscas equivalentes usaram `rg`. **[nao verificado]**
-
-Os testes encontrados com BO-0611 no nome documentam o caso 05 e cenários sintéticos; não fornecem o rol original dos 14 itens. (app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:1, :13; app/ponto/tests/test_bo0611_05_vinculo_geo_parcial_django.py:9)
-
-**(B) TSV recuperável — 68 linhas**
-
-Os donos da ingestão abaixo preservam a classificação escrita em **05/11**. A publicação posterior registra cinco mudanças de estado, porém marca a própria remedida como **[nao verificado]**; não fornece novo dono. Assim, os seis ESTRUTURA históricos não comprovam seis divergências atuais. (app/docs/RELATO.md:8390–8394, :52)
-
-```tsv
-fonte	id_do_caso	arquivo:linha	dono_L099	prova_do_dono
-BACKLOG-HJ	HJ-058	app/docs/BACKLOG.md:2554	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-066	app/docs/BACKLOG.md:2547	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-068	app/docs/BACKLOG.md:2548	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-071	app/docs/BACKLOG.md:2549	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-073	app/docs/BACKLOG.md:2550	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-074	app/docs/BACKLOG.md:2551	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-075	app/docs/BACKLOG.md:2552	SEM_DONO	[nao verificado] dono L-099 fechado
-BACKLOG-HJ	HJ-090	app/docs/BACKLOG.md:1917	SEM_DONO	[nao verificado] dono único fechado; linha pede classificação dos dias
-BACKLOG-HJ	HJ-091	app/docs/BACKLOG.md:1917	SEM_DONO	[nao verificado] dono único fechado; derivados em BACKLOG:734 e :744-749
-BACKLOG-HJ	HJ-092	app/docs/BACKLOG.md:784	BATIDA	app/docs/BACKLOG.md:784: FECHADA como BATIDA; confirmado em app/docs/RELATO.md:271
-BACKLOG-HJ	HJ-093	app/docs/BACKLOG.md:786	SEM_DONO	[nao verificado] dono único fechado para o caso composto
-HJ-INGESTAO-0511	HJ-001-U1	app/docs/RELATO.md:8391	CADASTRO	app/docs/RELATO.md:8391: divergente com dono CADASTRO
-HJ-INGESTAO-0511	HJ-001-U2	app/docs/RELATO.md:8391	CADASTRO	app/docs/RELATO.md:8391: divergente com dono CADASTRO
-HJ-INGESTAO-0511	HJ-002-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392: divergente com dono BATIDA; mudança de estado ressalvada em :52
-HJ-INGESTAO-0511	HJ-003-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392: divergente com dono BATIDA
-HJ-INGESTAO-0511	HJ-005-U1	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390: divergente com dono ESTRUTURA; mudança de estado ressalvada em :52
-HJ-INGESTAO-0511	HJ-005-U2	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390: divergente com dono ESTRUTURA; mudança de estado ressalvada em :52
-HJ-INGESTAO-0511	HJ-005-U4	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390: divergente com dono ESTRUTURA; mudança de estado ressalvada em :52
-HJ-INGESTAO-0511	HJ-005-U5	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392: divergente com dono BATIDA; mudança de estado ressalvada em :52
-HJ-INGESTAO-0511	HJ-012-U1	app/docs/RELATO.md:8394	SEM_DONO	app/docs/RELATO.md:8394: indeterminado; dono [nao verificado]
-HJ-INGESTAO-0511	HJ-012-U2	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390: divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-015-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392: divergente com dono BATIDA
-HJ-INGESTAO-0511	HJ-016-U1	app/docs/RELATO.md:8391	CADASTRO	app/docs/RELATO.md:8391: divergente com dono CADASTRO
-HJ-INGESTAO-0511	HJ-017-U1	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390: divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-027-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392: divergente com dono BATIDA
-HJ-INGESTAO-0511	HJ-030-U1	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390: divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-031-U1	app/docs/RELATO.md:8394	SEM_DONO	app/docs/RELATO.md:8394: indeterminado; dono [nao verificado]
-HJ-INGESTAO-0511	HJ-050-U2	app/docs/RELATO.md:8394	SEM_DONO	app/docs/RELATO.md:8394: indeterminado; dono [nao verificado]
-BO-0611	01	app/docs/RELATO.md:1533	SEM_DONO	[nao verificado] dono vigente; quadro substituído por app/docs/PROMPTS.md:1925
-BO-0611	02	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] dono fechado; queixa não identificada
-BO-0611	03	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono fechado
-BO-0611	04	app/docs/RELATO.md:1533	SEM_DONO	[nao verificado] dono vigente; quadro substituído por app/docs/PROMPTS.md:1925
-BO-0611	05	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono fechado
-BO-0611	06	app/docs/RELATO.md:1533	SEM_DONO	[nao verificado] dono vigente; quadro substituído por app/docs/PROMPTS.md:1925
-BO-0611	07	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono fechado
-BO-0611	08	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] dono fechado; registro diz sem divergência
-BO-0611	09	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono fechado
-BO-0611	10	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono fechado
-BO-0611	11	app/docs/RELATO.md:1471	CADASTRO	app/docs/RELATO.md:1471: 11/12 col921 CADASTRO -> lista do admin
-BO-0611	12	app/docs/RELATO.md:1471	CADASTRO	app/docs/RELATO.md:1471: 11/12 col921 CADASTRO -> lista do admin
-BO-0611	13	app/docs/RELATO.md:1534	SEM_DONO	[nao verificado] frase vigente de dono; item preservado em app/docs/BACKLOG.md:2025
-BO-0611	14	app/docs/RELATO.md:1534	SEM_DONO	[nao verificado] frase vigente de dono; item preservado em app/docs/BACKLOG.md:2025
-BO-1311-ROTEIRO	01	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	02	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	03	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	04	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	05	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	06	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	07	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	08	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	09	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO-1311-ROTEIRO	10	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] dono por ficha; numeração contestável em app/docs/RELATO.md:226
-BO2910-ESTRUTURA	01	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA, cada uma como linha, item 01
-BO2910-ESTRUTURA	02	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA, cada uma como linha, item 02
-BO2910-ESTRUTURA	05	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA, cada uma como linha, item 05
-BO2910-ESTRUTURA	06	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA, cada uma como linha, item 06
-BO2910-ESTRUTURA	08	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA, cada uma como linha, item 08
-BO-ADMIN-2710	1	app/docs/RELATO.md:3422	ESTRUTURA	app/docs/RELATO.md:3422: Dono ESTRUTURA
-BO-ADMIN-2710	2	app/docs/RELATO.md:3423	ESTRUTURA	app/docs/CORTES.md:334: ESTRUTURA dentro do item 2
-BO-ADMIN-2710	3	app/docs/RELATO.md:3424	ESTRUTURA	app/docs/RELATO.md:3424: ESTRUTURA
-BO-ADMIN-2710	4	app/docs/RELATO.md:3425	CADASTRO	app/docs/RELATO.md:3425: CADASTRO; confirmado em app/docs/CORTES.md:337
-BO-ADMIN-2710	5	app/docs/RELATO.md:3426	ESTRUTURA	app/docs/RELATO.md:3426: Dono ESTRUTURA
-BO-ADMIN-2710	6	app/docs/RELATO.md:3427	ESTRUTURA	app/docs/RELATO.md:3427: Dono ESTRUTURA
-BO-ADMIN-2710	7	app/docs/RELATO.md:3428	ESTRUTURA	app/docs/RELATO.md:3428: Dono ESTRUTURA
-BO-ADMIN-2710	8	app/docs/RELATO.md:3429	CADASTRO	app/docs/RELATO.md:3429: CADASTRO, ativa=False sem data_fim
-BO-ADMIN-2710	8.1	app/docs/RELATO.md:3429	ESTRUTURA	app/docs/RELATO.md:3429: item 8.1 Dono ESTRUTURA
-BO-ADMIN-2710	8.2	app/docs/RELATO.md:3429	SEM_DONO	app/docs/RELATO.md:52: não fechado, 8.2 e 8.3
-BO-ADMIN-2710	8.3	app/docs/RELATO.md:3429	SEM_DONO	app/docs/RELATO.md:52: não fechado, 8.2 e 8.3
-```
-
-**(C) Totais por fonte × dono**
-
-Contagem das **68 linhas efetivamente individualizadas no TSV**, conforme as provas indicadas em cada linha:
-
-| Fonte | ESTRUTURA | CADASTRO | BATIDA | DECISAO_ADMIN | SEM_DONO | Total | Prova |
-|---|---:|---:|---:|---:|---:|---:|---|
-| BACKLOG-HJ, por raiz | 0 | 0 | 1 | 0 | 10 | 11 | app/docs/BACKLOG.md:784, :1917, :2547–2555; demais registros acima |
-| HJ-INGESTAO, IDs recuperáveis | 6 | 3 | 5 | 0 | 3 | 17 | app/docs/RELATO.md:8390–8394 |
-| BO-0611 | 0 | 2 | 0 | 0 | 12 | 14 | app/docs/BACKLOG.md:1911–1912; app/docs/RELATO.md:1471 |
-| BO-1311-ROTEIRO | 0 | 0 | 0 | 0 | 10 | 10 | app/docs/BACKLOG.md:783; dono por ficha [nao verificado] |
-| BO2910-ESTRUTURA | 5 | 0 | 0 | 0 | 0 | 5 | app/docs/BACKLOG.md:1102 |
-| BO-ADMIN-2710 | 7 | 2 | 0 | 0 | 2 | 11 | app/docs/RELATO.md:52, :3422–3429 |
-| **Subtotal individualizado** | **18** | **7** | **6** | **0** | **37** | **68** | Soma das linhas acima |
-
-Para a **ingestão inteira declarada**, a publicação histórica dá **80 = 6 ESTRUTURA + 3 CADASTRO + 5 BATIDA + 66 sem dono publicado**. Esses 66 são os 33 “sem divergência hoje” e 33 “indeterminados”; somente três têm ID exposto. As 63 unidades restantes não foram inventadas no TSV. (app/docs/RELATO.md:8390–8395, :8398)
-
-A lista individualizada **“falta triagem” contém os 37 SEM_DONO do TSV**. Na ingestão há ainda 63 unidades sem ID recuperável e sem dono publicado; o conteúdo integral das atas permanece **[nao verificado]**. (provas do TSV; app/docs/RELATO.md:8393–8398)
-
-**Entrada documental ESTRUTURA recuperável: 18 = 6 da ingestão histórica + 5 BO2910 + 7 BO-ADMIN-2710.** O universo integral e a situação atual das seis unidades históricas não estão certificados; por isso, o contrato completo de entrada ainda fica **[nao verificado]**. (app/docs/RELATO.md:8390, :52; app/docs/BACKLOG.md:1102)
-
-## 14/11 18:39 · sessao 67ed0ab09ba7 · - · - · origem=Ronald (tmux)
-
-Fonte recuperável das atas/relatos ingeridos: **HJ-INGESTAO-0511**, 56 TXT do Fernando → **80 unidades pessoa+dia HJ-NNN-Uk**; regra escrita em `app/docs/BACKLOG.md:1868`, ingestão em `app/docs/RELATO.md:8368`, contagem em `app/docs/RELATO.md:8386`.
-
-O rol completo mora no **mapa privado `logs/hj_0511/mapa.md`**, remissão em `app/docs/RELATO.md:8398`; arquivo **NÃO ACHADO na cópia**, portanto os IDs das outras **63 unidades são [nao verificado]**. A árvore publica individualmente apenas estes **17 IDs**, expandindo abreviações `/U2/U4` da própria tabela (`app/docs/RELATO.md:8390`–`:8394`):
-
-```tsv
-fonte	id_do_caso	arquivo:linha	dono_L099	prova_do_dono
-HJ-INGESTAO-0511	HJ-001-U1	app/docs/RELATO.md:8391	CADASTRO	app/docs/RELATO.md:8391 — divergente com dono CADASTRO; lista do admin
-HJ-INGESTAO-0511	HJ-001-U2	app/docs/RELATO.md:8391	CADASTRO	app/docs/RELATO.md:8391 — divergente com dono CADASTRO; lista do admin
-HJ-INGESTAO-0511	HJ-002-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392 — divergente com dono BATIDA; lista do admin
-HJ-INGESTAO-0511	HJ-003-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392 — divergente com dono BATIDA; lista do admin
-HJ-INGESTAO-0511	HJ-005-U1	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390 — divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-005-U2	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390 — divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-005-U4	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390 — divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-005-U5	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392 — divergente com dono BATIDA; lista do admin
-HJ-INGESTAO-0511	HJ-012-U1	app/docs/RELATO.md:8394	SEM_DONO	app/docs/RELATO.md:8394 — indeterminado; lavrado irregular sem segurar
-HJ-INGESTAO-0511	HJ-012-U2	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390 — divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-015-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392 — divergente com dono BATIDA; lista do admin
-HJ-INGESTAO-0511	HJ-016-U1	app/docs/RELATO.md:8391	CADASTRO	app/docs/RELATO.md:8391 — divergente com dono CADASTRO; lista do admin
-HJ-INGESTAO-0511	HJ-017-U1	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390 — divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-027-U1	app/docs/RELATO.md:8392	BATIDA	app/docs/RELATO.md:8392 — divergente com dono BATIDA; lista do admin
-HJ-INGESTAO-0511	HJ-030-U1	app/docs/RELATO.md:8390	ESTRUTURA	app/docs/RELATO.md:8390 — divergente com dono ESTRUTURA
-HJ-INGESTAO-0511	HJ-031-U1	app/docs/RELATO.md:8394	SEM_DONO	app/docs/RELATO.md:8394 — indeterminado; lavrado irregular sem segurar
-HJ-INGESTAO-0511	HJ-050-U2	app/docs/RELATO.md:8394	SEM_DONO	app/docs/RELATO.md:8394 — indeterminado; dia futuro
-```
-
-A publicação de **05/11** soma **6 ESTRUTURA + 3 CADASTRO + 5 BATIDA + 33 sem divergência + 33 indeterminados = 80** (`app/docs/RELATO.md:8390`, `:8391`, `:8392`, `:8393`, `:8394`, `:8395`). Para vocabulário solicitado, há **66 sem dono publicado**, mas somente três deles têm ID exposto (`app/docs/RELATO.md:8393`, `:8394`). O TSV recuperável soma **17 = 6 E + 3 C + 5 B + 3 SEM_DONO**; **63 sem ID**, sem inventar placeholders.
-
-**Ressalva atual:** a linha mais recente registra mudanças de **estado**, não escreve novos donos: HJ-002-U1 D-B→S; HJ-005-U1 D-E→I; HJ-005-U2/U4 D-E→S; HJ-005-U5 D-B→S. A própria linha marca a remedida **[nao verificado]** por faltar arquivo:linha da saída (`app/docs/RELATO.md:52`). Portanto os seis ESTRUTURA acima são **donos escritos em 05/11**, e não prova de seis divergências atuais. Não retirei dono a partir de S/I por inferência.
-
-**Atas como coleção autônoma:** **NÃO ACHADA**. Existe referência à **ATA-1111**, em aval que lista cinco itens e inclui HJ-066/068/071/073, mas ela não prova autor Fernando nem universo completo: `app/docs/PROMPTS.md:2125`, `app/docs/BACKLOG.md:2544` a `:2550`. O arquivo apontado `logs/CASO-0711/aval_caso_0711_hj003_ata_1111.txt` não está na cópia [nao verificado: conteúdo].
-
-Greps feitos na árvore inteira, incluindo ocultos e ignorados:
-
-```text
-rg --files --hidden -g AGENTS.md
-rg -n --hidden --no-ignore -i 'atas.{0,60}fernando|fernando.{0,60}atas|ata.{0,40}ingerid|ingerid.{0,40}ata' .
-rg -n --hidden --no-ignore -i 'fernando' .
-rg -n --hidden --no-ignore -i '\b(ingestao|ingestão|ingeridas|ingerida|ingerido|ingeridos|ingest)\b' .
-rg -n --hidden --no-ignore -i '\batas\b' .
-rg -n --hidden --no-ignore -i 'ATA-1111|ata 11/11|ata.{0,30}1111' .
-rg -n --hidden --no-ignore 'HJ-[0-9]{3}-U[0-9]+' .
-rg --files --hidden --no-ignore | rg -i 'fernando|ata|auditoria|laudo|bo[-_]'
-```
-
-Não somar os **80 ingeridos** como se fossem os **19 IDs de linhas de BACKLOG**: são granularidades diferentes, sem mapa completo para deduplicação (`app/docs/BACKLOG.md:1868`; `app/docs/RELATO.md:8398`).
-
-## 14/11 18:39 · sessao d6c942a36ee4 · - · - · origem=Ronald (tmux)
-
-(A) Fontes e contagem:
-
-- **BO-0611:** encontrada como `BO-[nome]-0611` e V2, `app/docs/BACKLOG.md:1911`, `app/docs/BACKLOG.md:1912`; registro resumido vigente em `app/docs/RELATO.md:1471`. Unidade = número de item 01–14; **14 casos**, preservando 11 e 12 separados embora juntos no resumo. O quadro anterior está em `app/docs/RELATO.md:1533` e `app/docs/RELATO.md:1534`, mas foi **substituído explicitamente**, conforme `app/docs/PROMPTS.md:1925`. Assim, não usei seus donos históricos de 01/04/06 como donos vigentes. V2 escreve CADASTRO para 11/12; encaminhar outro item a uma obra não escreve seu dono. (`app/docs/RELATO.md:1471`)
-- **BO-1311-ROTEIRO:** encontrada como `BO-[nome]-1311-ROTEIRO`; `app/docs/BACKLOG.md:783` enumera casos 01–10 e dez colaboradores; `app/docs/RELATO.md:226` diz que a numeração segue a ordem do UNIVERSO e é contestável. Unidade = ficha numerada, não pergunta viva; **10 casos**. Totais a/b/c/d são por pergunta, sem fechamento de dono L-099 por ficha. (`app/docs/RELATO.md:222`)
-- **BO2910-ESTRUTURA:** registro completo das **cinco classes** 01,02,05,06,08 em `app/docs/BACKLOG.md:1102`, literalmente “classes ESTRUTURA ... cada uma como linha”. Unidade = classe enumerada nessa linha, não todos os BOs do dia 29/10. As queixas originais podem conter outros donos; não expandi a fonte. (`app/docs/RELATO.md:2829`, `app/docs/RELATO.md:2848`, `app/docs/RELATO.md:2849`, `app/docs/RELATO.md:2851`)
-- **BO-ADMIN-2710:** oito itens originais em `app/docs/CORTES.md:330`; três complementos do item 8 em `app/docs/CORTES.md:332`; resultado em `app/docs/RELATO.md:3422` a `app/docs/RELATO.md:3429`. Unidade = item 1–8 mais 8.1,8.2,8.3; **11 casos**, expressamente confirmado por `app/docs/RELATO.md:52`. Item 2 teve CADASTRO preliminar corrigido: “ESTRUTURA dentro do item 2”, `app/docs/CORTES.md:334`. Resumo mais recente fecha **7 ESTRUTURA, 2 CADASTRO, 2 não fechados**, identificando estes como 8.2/8.3. (`app/docs/RELATO.md:52`)
-
-Os registros privados `logs/bo_mauricio_0611/`, `logs/BO-[nome]-1311/`, `logs/bo2910/`, `logs/bo2710/` **NÃO ACHADOS nesta cópia**; `ls -ld logs .git` devolveu inexistência. [nao verificado por arquivo:linha; verificação de árvore nesta exploração]
-
-Greps executados em toda a árvore, incluindo ocultos/ignorados:
-
-```sh
-rg --files --hidden --no-ignore -g 'AGENTS.md'
-rg -n -i --hidden --no-ignore 'BO[-_]?0611|BO[-_]?1311[-_]?ROTEIRO|BO2910[-_]?ESTRUTURA|BO[-_]?ADMIN[-_]?2710' .
-rg -n -i --hidden --no-ignore '1311.*ROTEIRO|ROTEIRO.*1311|BO.?06.?11|BO.?0611|BO.?1311' app/docs/RELATO-ARQUIVO.md app/docs/LAPIDES.md app/docs/DOSSIES.md app/docs/TICKETS.md app/docs/RELATO.md app/docs/BACKLOG.md app/docs/CORTES.md
-rg -n -i --hidden --no-ignore 'bo_mauricio_0611|BO-[nome]-0611|BO-[nome]-1311|bo_mauricio_1311|bo2910|BO2910' .
-rg --files --hidden --no-ignore | rg -i '0611|1311|2910|2710|relato|lapides|dossies|tickets'
-```
-
-Não existe metadado `.git` nesta cópia; portanto `git grep` não executável aqui, e buscas equivalentes foram feitas com `rg`. [nao verificado por arquivo:linha; verificação de árvore nesta exploração]
-
-Testes com BO no nome encontrados: sete `app/ponto/tests/test_*bo0611*`; eles tratam o caso 05 e variantes sintéticas, sem fornecer registro numerado dos 14 casos nem dono L-099 dos outros casos. (`app/ponto/tests/test_bo061105_tem_gps_juiz_unico.py:1`, `app/ponto/tests/test_bo0611_05_templates_geo.py:1`, `app/ponto/tests/test_bo0611_05_leitores_geo.py:1`, `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:1`, `app/ponto/tests/test_bo0611_05_vinculo_geo_parcial_django.py:9`, `app/ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:1`)
-
-(B) TSV:
-
-```tsv
-fonte	id_do_caso	arquivo:linha	dono_L099	prova_do_dono
-BO-0611	01	app/docs/RELATO.md:1533	SEM_DONO	[nao verificado] dono vigente; quadro 18:58 substituído por app/docs/PROMPTS.md:1925
-BO-0611	02	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono; V2: queixa não identificada no dado
-BO-0611	03	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono
-BO-0611	04	app/docs/RELATO.md:1533	SEM_DONO	[nao verificado] dono vigente; quadro 18:58 substituído por app/docs/PROMPTS.md:1925
-BO-0611	05	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono
-BO-0611	06	app/docs/RELATO.md:1533	SEM_DONO	[nao verificado] dono vigente; quadro 18:58 substituído por app/docs/PROMPTS.md:1925
-BO-0611	07	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono
-BO-0611	08	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono; sem divergência não é categoria L-099
-BO-0611	09	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono
-BO-0611	10	app/docs/RELATO.md:1471	SEM_DONO	[nao verificado] frase de dono
-BO-0611	11	app/docs/RELATO.md:1471	CADASTRO	app/docs/RELATO.md:1471: 11/12 col921 CADASTRO #37165 -> lista do admin
-BO-0611	12	app/docs/RELATO.md:1471	CADASTRO	app/docs/RELATO.md:1471: 11/12 col921 CADASTRO #37165 -> lista do admin
-BO-0611	13	app/docs/RELATO.md:1534	SEM_DONO	[nao verificado] frase vigente de dono; vínculo ao item13 também em app/docs/BACKLOG.md:2025
-BO-0611	14	app/docs/RELATO.md:1534	SEM_DONO	[nao verificado] frase vigente de dono; vínculo ao item14 também em app/docs/BACKLOG.md:2025
-BO-1311-ROTEIRO	01	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	02	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	03	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	04	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	05	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	06	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	07	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	08	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	09	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO-1311-ROTEIRO	10	app/docs/BACKLOG.md:783	SEM_DONO	[nao verificado] frase de dono por caso; numeração contestável app/docs/RELATO.md:226
-BO2910-ESTRUTURA	01	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA ... cada uma como linha ... (01)
-BO2910-ESTRUTURA	02	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA ... cada uma como linha ... (02)
-BO2910-ESTRUTURA	05	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA ... cada uma como linha ... (05)
-BO2910-ESTRUTURA	06	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA ... cada uma como linha ... (06)
-BO2910-ESTRUTURA	08	app/docs/BACKLOG.md:1102	ESTRUTURA	app/docs/BACKLOG.md:1102: classes ESTRUTURA ... cada uma como linha ... (08)
-BO-ADMIN-2710	1	app/docs/RELATO.md:3422	ESTRUTURA	app/docs/RELATO.md:3422: Dono ESTRUTURA
-BO-ADMIN-2710	2	app/docs/RELATO.md:3423	ESTRUTURA	app/docs/CORTES.md:334: ESTRUTURA dentro do item 2; corrige CADASTRO preliminar
-BO-ADMIN-2710	3	app/docs/RELATO.md:3424	ESTRUTURA	app/docs/RELATO.md:3424: ESTRUTURA
-BO-ADMIN-2710	4	app/docs/RELATO.md:3425	CADASTRO	app/docs/RELATO.md:3425: CADASTRO; confirmado app/docs/CORTES.md:337
-BO-ADMIN-2710	5	app/docs/RELATO.md:3426	ESTRUTURA	app/docs/RELATO.md:3426: Dono ESTRUTURA
-BO-ADMIN-2710	6	app/docs/RELATO.md:3427	ESTRUTURA	app/docs/RELATO.md:3427: Dono ESTRUTURA
-BO-ADMIN-2710	7	app/docs/RELATO.md:3428	ESTRUTURA	app/docs/RELATO.md:3428: Dono ESTRUTURA
-BO-ADMIN-2710	8	app/docs/RELATO.md:3429	CADASTRO	app/docs/RELATO.md:3429: CADASTRO (ativa=False sem data_fim)
-BO-ADMIN-2710	8.1	app/docs/RELATO.md:3429	ESTRUTURA	app/docs/RELATO.md:3429: (8.1) ... Dono ESTRUTURA
-BO-ADMIN-2710	8.2	app/docs/RELATO.md:3429	SEM_DONO	app/docs/RELATO.md:52: nao fechado 2 (8.2, 8.3)
-BO-ADMIN-2710	8.3	app/docs/RELATO.md:3429	SEM_DONO	app/docs/RELATO.md:52: nao fechado 2 (8.2, 8.3)
-```
-
-(C) Totais desta exploração, derivados das linhas acima:
-
-| Fonte | ESTRUTURA | CADASTRO | BATIDA | DECISAO_ADMIN | SEM_DONO | Total |
-|---|---:|---:|---:|---:|---:|---:|
-| BO-0611 | 0 | 2 | 0 | 0 | 12 | 14 |
-| BO-1311-ROTEIRO | 0 | 0 | 0 | 0 | 10 | 10 |
-| BO2910-ESTRUTURA | 5 | 0 | 0 | 0 | 0 | 5 |
-| BO-ADMIN-2710 | 7 | 2 | 0 | 0 | 2 | 11 |
-| **Subtotal** | **12** | **4** | **0** | **0** | **24** | **40** |
-
-Provas das contagens e categorias: `app/docs/BACKLOG.md:1911`, `app/docs/PROMPTS.md:1925`, `app/docs/RELATO.md:1471`, `app/docs/BACKLOG.md:783`, `app/docs/BACKLOG.md:1102`, `app/docs/RELATO.md:52`.
-
-_5232 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5235 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
