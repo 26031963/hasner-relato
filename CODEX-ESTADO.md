@@ -1,7 +1,214 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 10:08** · publicado em **14/11/2026 10:07** (UTC-3)
+> Ultima resposta processada: **14/11/2026 10:11** · publicado em **14/11/2026 10:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 10:11 · sessao 40c452a14830 · - · - · origem=Ronald (tmux)
+
+Complemento upstream. Todos os caminhos abaixo são leituras da cópia; campos `_...` nas batidas são marcas transitórias produzidas pelo pareador (`app/ponto/turnos.py:1315-1325,1370,1413,1477`).
+
+| Pergunta / decisão | Predicado lido no código | Endereço |
+|---|---|---|
+| Universo apurável | `Batida.objects.filter(retratada_em__isnull=True)`; aplica `timestamp>=ini`, `timestamp<=fim`, colaborador quando informados; ordena timestamp | `app/ponto/turnos.py::batidas_apuraveis:2875-2883` |
+| Duplicata no motor | Só tipos `E/S`; compara com última limpa; mesmo tipo e gap `<3min` ignora; constante3 em `:70` | `app/ponto/motor_calculo_v2.py::MotorBase.remover_duplicatas:897-911`; chamadas `:2351,882` |
+| Eco de flush | Ordena por `criado_em` ou timestamp; somente `E`; ambas criações conhecidas; diferença de chegada ≤120s; diferença de evento entre1800s e `cont_max_s`; atual ao vivo até600s; anterior retida ao menos1800s → `_eco_flush=True` | `app/ponto/turnos.py::_marca_ecos_flush:355-374` |
+| Uso do eco | `E` com `_eco_flush` é anexada ao turno existente, sem abrir novo | `app/ponto/turnos.py::parear_turnos:1398-1401` |
+| Ordem e modo de intervalo | Ordena batidas por timestamp; sem marco de intervalo chama `_marca_intra_duracao` | `app/ponto/turnos.py::parear_turnos:1217-1221` |
+| Marcos DNA ou template | Para o dia local da batida, usa pausa DNA se suas duas pontas existem; senão pausa template; bordas DNA se presentes; senão bordas template | `app/ponto/turnos.py::parear_turnos._ivm_de:1229-1236`, `._bm_de:1237-1244` |
+| Modo duração sem bordas | `intra_max_s<=0` desliga; sem bordas, depois de E aberta, padrão S,E,S, gap S→E entre0 e teto da pausa, e E→S seguinte entre0 e envelope contínuo → marca S/E como intra | `app/ponto/turnos.py::_marca_intra_duracao:386,392-419` |
+| Modo duração com bordas | Ignora já marcadas; padrão S→E com gap0..`intra_max_s`; S distante >90min das bordas; E distante >90min **ou** S imediatamente posterior dentro de `cont_max_s` comprova continuidade → marca pausa | `app/ponto/turnos.py::_marca_intra_duracao:425-458` |
+| Duas saídas sem volta registrada | Para S distante >90min da borda seguida de S, busca S posterior dentro de `cont_max_s` e a≤90min de borda; a primeira vira interna | `app/ponto/turnos.py::_marca_intra_duracao:476-490` |
+| Ata informa papel | Chave é timestamp local naive truncado no minuto; aceita somente `E/S/X/Xi`; sem mapa/timestamp → `None` | `app/ponto/turnos.py::_papel_da_ata:896-909` |
+| Ata vence papel gravado | `X/Xi` marca intra/ata; `Xi` também declarado; demais usam papel da ata ou primeira letra do tipo gravado | `app/ponto/turnos.py::parear_turnos:1310-1326,1382` |
+| Teto da absorção de pausa | Batida ainda não interna, há marcos de intervalo e E atual, duração desde E >`cont_max_s`, distância ao intervalo ≤90min → termina corrente como aberto antes de tratar batida | `app/ponto/turnos.py::parear_turnos:1349-1355` |
+| Marco de intervalo mais próximo | Ainda não interna e turno existe; distância intervalo≤90min; borda ausente ou distância intervalo≤distância borda → marca interna | `app/ponto/turnos.py::parear_turnos:1356-1370` |
+| Batida interna | Anexa ao corrente; uma S interna grava `_ult_iv_s`; não abre/fecha turno | `app/ponto/turnos.py::parear_turnos:1371-1376` |
+| Volta deslocada | E com corrente, S interna anterior, gap `>0` e `<=intra_max_s`, e E longe >90min das bordas ou sem bordas → interna; senão E fecha corrente como aberto e inicia outro | `app/ponto/turnos.py::parear_turnos:1406-1420` |
+| Teto do par | Com DNA `hi/hf`, teto é `(hf-hi)%1440 +240min`; sem ambas ou bordas iguais usa envelope26h; ambas distâncias das pontas aos respectivos marcos >180min devolvem envelope26h; duração >teto separa E aberta/S órfã | `app/ponto/turnos.py::_teto_da_jornada:78-82`; `::parear_turnos:1430-1457` |
+| Pausa deslocada com marcos | Há intervalo template e duas próximas batidas; S longe>90min das bordas; próximas E,S; S→E entre0 e teto pausa; E longe>90min da borda; E→S entre0 e envelope; S final não absorvível por marco → marca primeira S/próxima E internas | `app/ponto/turnos.py::parear_turnos:1466-1481`; `_absorvivel:1246-1251` |
+| Par degenerado | Duração≤`DURACAO_ECO_SEG` recusa fecho, declara par degenerado e produz S órfã mantendo E corrente; constante lida do detector | `app/ponto/turnos.py::_par_degenerado:130-131`; `::parear_turnos:1487-1490` |
+| Par normal / órfã | S não recusada fecha corrente; S sem corrente vira órfã; corrente remanescente vira aberto | `app/ponto/turnos.py::parear_turnos:1491-1498` |
+| Pós-fecho com próxima S | Só turno com E sem S; procura primeiro turno seguinte; próxima E interrompe busca, salvo candidato posicional; primeira S órfã é candidata; recusa degenerado ou duração>jornada+4h/default`cont_max_s`; funde batidas e remove candidato | `app/ponto/turnos.py::_fechar_aberto_com_saida_seguinte:1061-1102` |
+| Candidata posicional entre turnos | Exige mapa; turno candidato sem S e com exatamente1 batida; ata não a chama E/S; dia anterior com `hi/hf`; pausa fechada/carimbada de15min..3h e candidata posterior; se `hi` da candidata existe, distância à instância mais próxima de `hi` deve ser **maior** que distância ao `hf` anterior; empate recusa | `app/ponto/turnos.py::_saida_pela_posicao_entre_turnos:991-1026`; `::_pausa_fechada_carimbada:923-928` |
+| Pós-fecho na pausa sem volta | Turno com E sem S/batidas; última batida é S marcada intra e há alguma batida posterior na vida ou recorte; duração não degenerada e≤teto jornada → fecha nessa S | `app/ponto/turnos.py::_fechar_aberto_na_pausa_sem_volta:1156-1188` |
+| Dia da véspera | Sem marcos véspera ou sem cruzamento → data local; S órfã pertence à véspera se cabe no envelope `hi_véspera+teto`; com E, hora antes de `hf`, distância modular desde início>90min e saída ausente ou dentro do envelope → véspera; senão dia local | `app/ponto/turnos.py::_data_do_turno:285-309`; `::_cabe_na_jornada_da_vespera:229-231` |
+| Véspera elegível no pareador | Não considera véspera se já existe turno dela aberto ou cuja S tem data local da véspera; com mapa exige ambas bordas dela; sem mapa exige duas bordas template | `app/ponto/turnos.py::parear_turnos._vespera:1295-1302` |
+| Pausas monetizadas | Primeiro casa pares `_intra_declarado` não coincidentes com bordas; depois pares adjacentes não usados, primeira marcada, ambas fora das bordas, duas marcas da ata **ou** próxima marcada+papel da primeira S **ou** tipos S→E, cronológicos; `intervalos_do_turno` só devolve duração≥15min | `app/ponto/turnos.py::_pares_marcados:811-816,819-885`; `::intervalos_do_turno:542-546` |
+| Borda posicional do dia | Exige exatamente1 turno com fim fechado; nenhum par marcado;≥4 batidas distintas; entrada do fechado é primeira batida; última após fim fechado; exatamente1 gap interior15min..3h; minuto final>inicial | `app/ponto/turnos.py::_borda_posicional:673-704` |
+| Número pela borda posicional | Trabalhado do dia vira vão primeira→última menos único gap, truncados ao minuto; mínimo0 | `app/ponto/turnos.py::realizado_dos_turnos:725-732`; motor lê a borda em `app/ponto/motor_calculo_v2.py:2527-2538` |
+| Cadastro usado para papel da ata | Sem alimentação, `_escalas_da_ata` ordena por colaborador, ativa, início e última linha ganha; escolha é por período, sem filtro de vigência aqui | `app/ponto/turnos.py::_escalas_da_ata:1556-1562`; `::papel_por_minuto_da_ata:1592-1594` |
+| Ata admissível para relabelar | `periodos_do_dia` sem erro/desalinhado; alguma luz acesa; cada minuto de luz contém exatamente1 batida apurável; exige entrada/saída e não aberto; ambas pontas distantes>180min do marco recusam | `app/ponto/turnos.py::papel_por_minuto_da_ata:1631-1657,1682-1700` |
+| Batidas sobrantes na ata | Só interior entrada→saída e fora de todas luzes; minuto com≠1 batida torna dia ambíguo; próxima de luz até`JANELA_CLUSTER_MIN` vira órfã interna; restante aceito apenas como par de2 com gap≤teto ou perna única até teto de luz de intervalo; demais dias não emitem papel | `app/ponto/turnos.py::papel_por_minuto_da_ata:1728-1767` |
+| Ata versus DNA | `periodos_do_dia` monta esperados sobre DNA; forma posicional aceita lâmpadas com nomes `·I\d+` quando não existem esperados; ausentes/tamanhos diferentes recusam; hora de cada lâmpada deve casar HH:MM do esperado | `app/ponto/juiz_batida.py::periodos_do_dia:157-176,190-204,227-235` |
+| Dia posicional | Luzes acesas HH:MM legíveis ancoradas na data da célula; se próxima hora anda para trás, soma1dia | `app/ponto/juiz_batida.py::periodos_do_dia:212-224` |
+| Bordas pela ata | Usa `hi/hf` ou primeira/última lâmpada posicional; só acesa gera entrada/saída; qualquer ponta não acesa deixa aberto | `app/ponto/juiz_batida.py::periodos_do_dia:256-267` |
+| Intervalos pela ata | Par de pausa com ambas acesas/instantes e fim≥início entra na lista;>1 pausa soma minutos truncados; primeiro par aceso usa diferença; par incompleto usa cadastro; sem marco de pausa→0; flag indenizável lida do template | `app/ponto/juiz_batida.py::periodos_do_dia:280-313` |
+| Dono do dia | Célula com geradora exige geradora entre candidatos e vigência contendo data, senão`None`; sem geradora filtra candidatos com início≤data, fim ausente/ou≥data e vigência declarada, escolhe máximo `(ativa,data_inicio)` | `app/escala/alimentacao.py::vinculo_do_dia:269-286`; `::vinculo_cobre_a_data:214-216` |
+| Segmentação dos turnos | Para cada dia pergunta dono; dias consecutivos de mesmo dono juntam segmento; batidas dentro de segmento±2dias; cada segmento pareia separado e conserva só turnos com `data_turno` dentro do segmento | `app/ponto/turnos.py::_turnos_do_colab_puro:1956-1995` |
+| Trabalho do dia cadastrado | Célula existente devolve `cel.trabalha`, inclusive `None`; sem célula usa cálculo | `app/escala/models.py::EscalaColaborador.eh_dia_trabalho:1087-1096` |
+| Fase dos ciclos | Âncora do colaborador com ano>1940 e sem foto do mês:12x36 `delta%2==0`;24x48 `delta%3==0` | `app/escala/models.py::EscalaColaborador.eh_dia_trabalho_calculado:1280-1295` |
+| Foto de folgas | Dia na foto→False; fora da foto usa ciclo template se sabe; senão referência de folga mais próxima, empate dia anterior, distância ímpar→trabalho, par→folga; sem referência→None | `app/escala/models.py::EscalaColaborador.eh_dia_trabalho_calculado:1296-1364` |
+| Ciclo template | Intermitente→False;12x36/24x48→None; semanal sem lista→True/senão weekday na lista;6x1 com folga válida exclui weekdays/senãoTrue;5x2 com folga exclui weekdays/senão weekday<5;personalizado com dict não vazio→chave weekday presente/senãoNone | `app/escala/models.py::TipoEscala.eh_dia_trabalho:820-868` |
+| Feriado vira folga | Só muda base exatamenteTrue; exige `not trabalha_em_feriado`, escala presente, ciclo em `CICLOS_FERIADO_VIRA_FOLGA`, feriado alcança município do posto do vínculo | `app/escala/models.py::EscalaColaborador.eh_dia_trabalho_calculado:1369-1371`; `::feriado_vira_folga:1389-1395` |
+| Alcance territorial do feriado | Nacional sempre; estadual UF normalizada igual; municipal UF e nome normalizado iguais; restanteFalse; sem município só nacional | `app/core/feriados.py::alcanca:59-67`; `::_lugar:50-54`, `::_norm:35-37`; `::eh_feriado:105` |
+| Local cadastrado do feriado | Posto do vínculo→município; datas do período perguntam vínculo por dia e alcance pelo lugar daquele vínculo | `app/core/feriados.py::lugar_do_vinculo:131-132`; `::feriados_do_colab:160-166` |
+| Marcos do vínculo | DNA com `marcos` não vazio →hi,hf,hii,hfi congelados; sem isso usa template | `app/escala/models.py::EscalaColaborador.marcos_do_dia:1117-1133` |
+| Marcos do template | Override do dia ganha; entrada/saída do override caem no padrão se vazias; modo intervalo livre retira marcos de pausa; sem override usa horários padrão | `app/escala/models.py::TipoEscala.marcos_do_dia:335-345` |
+| Pausas declaradas | DNA com marcos: pares completos; célula existente sem marcos→nenhuma; sem célula template; template adiciona2ª pausa somente se primeira existe, sem override e sem modo livre | `app/escala/models.py::EscalaColaborador.pausas_do_dia:1182-1208`; `::TipoEscala.pausas_do_dia:304-308` |
+| Extra declarada | Célula existente usa apenas `dna.extra_declarada`; objeto não dict→0/0; ausência da chave→0/0; somente sem célula usa campos vivos do template | `app/escala/models.py::EscalaColaborador.extra_declarada_do_dia:1230-1239`; `::TipoEscala.extra_declarada_do_dia:324` |
+| Minutos previstos | Lista de vínculos explicitamente vazia→0; sem vínculo/template→0; trabalho não exatamenteTrue→0; semhi/hf→0; span≤0 soma1440; pausas com duração positiva<span descontam; se lista de pausas vazia, usa primeiro parhii/hfi | `app/escala/utils.py::minutos_previstos_do_dia:2256-2274,2291,2305-2320` |
+| Intervalo já descontado do previsto | Mesmas guardas vínculo/trabalho; exigehi,hf,hii,hfi; span≤0 soma1440, intra negativa soma1440; devolve só se`0<intr<span` | `app/escala/utils.py::intervalo_declarado_do_dia:2208-2227` |
+| Instantes dos marcos | Lê vínculo quando fornecido, senão template; semhi/hf→[]; encadeia E,S,E,S; cada marco≤anterior avança1dia | `app/escala/servico_jornada.py::marcos_turno:76-94` |
+| Matching por papel | Obtém papel do turno ou alternância; L084 nas duas pontas desliga esse modo; estrutura dos marcos deve ser E,(S,E)*,S; entrada no marco de volta somente se ele é mais próximo; saída no último; pares ocupam pausas em ordem com menor distância; soltas só marco mais próximo livre e cronológico | `app/escala/utils.py::_match_marcos:596-614`; `::_alinhar_por_papel:515-571` |
+| Cluster no matching por papel | Batida perde marco se seu marco mais próximo já pertence a outra batida com distância menor ou igual | `app/escala/utils.py::_alinhar_por_papel:577-581` |
+| Matching sem papel | Candidatos não consumidos dentro de primeiro-marco−tolerância até último+tolerância; DP minimiza distância absoluta em minutos, salto custa1e9; cluster retira ocupação de marco distante se marco mais próximo já tem batida tão próxima ou melhor | `app/escala/utils.py::_match_marcos:625-652`; `::_alinhar:222-239` |
+
+Registro para consolidar sem confundir nome do arquivo com inscrição: `_T1` turno e `_T6` intervalo constam efetivamente de `JUIZES['turno/marcos']` em `app/core/juizes.py:208,214`; `_T4` matching em `:212`, `_T5` marcos em `:213`; trabalho/previsto/feriado em `:184-188`; período pela ata em `JUIZES['batida']` `:1193`; PAR monetário em `:1194`. Os predicados internos adicionais acima não têm cada um inscrição individual identificada [não verificado]. Registro do vínculo e cobertura está na família escala definida após `app/core/juizes.py:1303` [não verificado o endereço exato da inscrição nesta leitura].
+
+Correção sobre caso do degrau: existe teste numérico com regra escrita no plantão — `app/ponto/tests/test_plantao_he_distribuicao.py::TestPlantaoHEDistribuicao::test_plantao_24h_distribui_he50_he100:23`, referência Art59 em `:4-8`, asserts960extra/120HE50/840HE100 em `:28-31` — informado pelo explorador de casos. A bateria declara que não certifica o degrau em `app/ponto/tests/test_o280_bateria_da_lei.py:3710-3713,5994-5996`; esses textos devem aparecer sem escolher entre eles.
+
+## 14/11 10:09 · sessao 7e09ef4f766a · - · - · origem=Ronald (tmux)
+
+| Predicado solicitado | Resultado da busca |
+|---|---|
+| Classe da saída | `app/ponto/tests/test_janela_he_saida.py::JanelaHeSaidaTest::test_RED_so_a_saida_07h06_conta_ate_o_marco:91`; classe em `:34`. |
+| `classificar_export` | **SEM CASO** pelo filtro CLT/CCT/L-NNN localizado. Testes comportamentais em `app/folha/tests/test_classificar_export.py::ClassificarExportTest:34`, `:40`, `:47`, `:56`; a referência de `:48` é somente “LEI31/07”. |
+| Carimbo `conferir` | **SEM CASO** pelo filtro CLT/CCT/L-NNN localizado. `app/folha/tests/test_porta_do_export.py:2-13` ancora em O1/corte; casos de ausência/divergência/verde/outra competência/ontem/erro em `::PortaDoExportTest:44`, `:50`, `:508`, `:514`, `:520`, `:528`. |
+| Rubrica ativa, empresa sobre global | **SEM CASO** pela regra. `app/folha/tests/test_r1_caracterizacao_rubricas_map.py:1-5` declara caracterização; `::RubricasMapCaracterizacaoTest::test_02_override_vence_global:31` e `::test_04_inativa_cai_fora:45`. |
+| Unidade/centésimos do TXT | **SEM CASO** CLT/CCT/L-NNN localizado. `app/folha/tests/test_integracao.py::LinhaDominioTests::test_horas_centesimal_const11:38` espera `1,5→000000150` em `:39-40`, sem regra identificada. |
+| Forma CRLF | Há L-113 no cabeçalho, mas teste de forma, sem conferir dinheiro pela regra: `app/folha/tests/test_l113_a0_forma_do_txt.py::FormaDoTxtTest::test_MORDE_duas_listas_dao_dois_conteudos:66`, `::test_MORDE_lista_vazia_da_string_vazia:73`, `::test_MORDE_uma_linha_nao_perde_o_terminador:78`; escopo declarado em `:11-18`. |
+| Dedup/colisão Batida | **SEM CASO** CLT/CCT/L-NNN localizado. Testes numéricos sem esse lastro em `app/ponto/tests/test_registrar_batida.py::RegistrarBatidaGuardTest::test_oposto_60s_automatico_recusa:32`, `::test_oposto_60s_humano_cria_e_flaga:45`, `::test_mesmo_tipo_60s_dedup:67`; cabeçalho apenas S137/S148 em `:9-12`. |
+| Envelope e exceção de marco próprio | **SEM CASO** CLT/CCT/L-NNN localizado. `app/ponto/tests/test_dedup_envelope_template.py::DedupEnvelopeTemplateTest::test_eco_oposto_120s_recusado_com_template:37`, `::test_marco_proprio_tipo_cria_mesmo_perto_de_oposto:48`; cabeçalho P5/status quo em `:9-12`. |
+| Ciclo semanal complementado por foto | **CASO:** `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F_FOTO_folga_avulsa_no_mes_nao_apaga_o_folga_dia_semana:2058`. L-023 em `:2059`; previstos 14/15/17/18, quatro faltas e32h em `:2066-2088`. |
+| Paridade 12x36 pela foto | **CASO:** mesmo arquivo/classe, `::test_F_FOTOb_foto_parcial_no_12x36_a_fase_sai_da_foto_nao_da_ancora:2090`. L-023/L-022 em `:2091`; foto14/16→previstos15/17/19, três faltas e33h em `:2106-2134`. |
+| Marcos/previsto descontam pausas | **CASO:** `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F7_intervalo_dividido_em_dois:1968`; Art71 em `:1969`, `660−75=585` em `:1971-1982`. O teste específico `app/escala/tests/test_previsto_desconta_as_duas_pausas.py::PrevistoDescontaTodasAsPausasTest::test_MORDE_duas_pausas_descontam_as_DUAS:58` espera550, mas cabeçalho `:2-21` só ordem/R4/O114, sem CLT/CCT/L-NNN. |
+| Vigência/troca de vínculo | **CASO:** `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F5_troca_de_vinculo_no_meio_da_competencia:1867`; L-021/L-099 em `:1868`; regra/caso em `:1875-1892`, resposta16h trabalhadas/1h atraso/2h antecipada em `:1944-1952`. |
+| Folga calendário versus manual | Caso escrito com L-110, porém resposta categórica sem minutos/dinheiro: `app/escala/tests/test_grade_folga_de_calendario_e_do_vinculo.py::GradePorTurnoFolgaDoVinculoTest` (`:98`) herda `::test_MORDE_folga_de_calendario_de_outro_vinculo_e_trabalho_na_grade:70`, `::test_folga_a_mao_e_da_pessoa_e_folga_na_grade:75`, `::test_folga_de_calendario_do_vinculo_do_dia_e_folga_na_grade:80`; regra em `:10-20`, respostas literais em `:72`, `:77`, `:82`. |
+
+## 14/11 10:09 · sessao b6c44cd5961f · - · - · origem=Ronald (tmux)
+
+| Decisão | Caso forte pela regra |
+|---|---|
+| Chegada antes do marco | `app/ponto/tests/test_janela_he_regra.py::JanelaHeRegraTest::test_RED_06h40_com_marco_07h00_nao_gera_HE:83`; L-097 escrita :2-6; 20 min antecipados → trabalho660/HE0, :86-89 |
+| Piso da janela | Mesmo arquivo, `JanelaHeRegraTest::test_MORDE_06h52_esta_dentro_do_piso_e_NADA_muda:91`; Art.58 §1, :92; piso10/antecipação8 → trabalho668, :94 |
+| Teto da janela | Mesmo arquivo, `JanelaHeRegraTest::test_RED_05h30_passa_do_teto_e_entra_em_CADASTRO_x_REALIDADE:97`; antecipação90 → trabalho660/HE0 e acusação, :100-103 |
+| Vigência da janela | Mesmo arquivo, `JanelaHeRegraTest::test_MORDE_a_vigencia_protege_a_competencia_09:107`; L-092, :108; antes da vigência → trabalho680, :110 |
+| Duas pontas fora | `app/ponto/tests/test_janela_he_saida.py::JanelaHeSaidaTest::test_RED_as_duas_pontas_juntas_nao_geram_HE:82`; L-097/bloqueio total, :2-15; 18:51–07:06 contra19–07, pausa1h → trabalho660/HE0, :85-89 |
+| Saída depois do marco | Mesmo arquivo, `JanelaHeSaidaTest::test_RED_so_a_saida_07h06_conta_ate_o_marco:91`; trabalho660/HE0, :94-95 |
+| Entrada antes, piso zero | Mesmo arquivo, `JanelaHeSaidaTest::test_RED_so_a_entrada_18h51_conta_do_marco:97`; trabalho660/HE0, :100-101 |
+| Autorização faz contar | Mesmo arquivo, `DiaAutorizadoContaTest::test_RED_o_dia_AUTORIZADO_passa_a_contar_os_minutos_de_fora:255`; L-097 escrita :199; trabalho740, :258 |
+| Recusa mantém padrão | Mesmo arquivo, `DiaAutorizadoContaTest::test_MORDE_o_NAO_tem_o_efeito_do_PADRAO_e_nao_muda_numero:262`; trabalho720, :265 |
+| Autorização abrange ambas as pontas | Mesmo arquivo, `DiaAutorizadoContaTest::test_MORDE_a_decisao_e_do_DIA_e_nao_da_PONTA:269`; trabalho735, :274 |
+| Decisão de outra data não autoriza | Mesmo arquivo, `DiaAutorizadoContaTest::test_MORDE_a_decisao_de_OUTRO_dia_nao_vale_para_este:277`; trabalho720, :282 |
+| Dia sem previsto bloqueia inteiro | `app/ponto/tests/test_he100_dia_sem_previsto.py::DiaSemPrevistoForaDaJanelaTest::test_RED_dia_sem_previsto_nao_paga_sem_decisao:69`; L-097 escrita :4-9; 330 reais → trabalho0/fora330/FT0, :73-75 |
+| Dia sem previsto autorizado | Mesmo arquivo, `DiaSemPrevistoForaDaJanelaTest::test_autorizado_paga_inteiro:83`; trabalho330/fora0/FT5,5h, :89-91 |
+| Duas pontas longe preservam trabalho | `app/ponto/tests/test_o280_bateria_da_lei.py::V3Familia3Test::test_v3_F9c_a_L084_recusa_o_marco_e_as_horas_CONTAM:4013`; L-084+Art.4 CLT, :4014; trabalho300/atraso0/antecipada0, :4027-4029 |
+| Duas pontas longe acusam cadastro | Mesmo arquivo, `V3ReapontarTest::test_i26_B4_as_duas_pontas_longe_viram_CADASTRO_x_REALIDADE:5654`; L-084, :5655; trabalho540/atraso0/antecipada0 e CXR1, :5667-5670 |
+| Uma ponta longe cobra atraso | `app/ponto/tests/test_l084_vence_o_t8.py::L084VenceOT8Test::test_RED_a_entrada_a_452_min_do_marco_VOLTA_a_ser_atraso:69`; L-084 escrita :6-17; atraso452, :76 |
+| Duas pausas saem do trabalho | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F7_intervalo_dividido_em_dois:1968`; Art.71 §1 e ordem02/10, :1969; trabalho585/pausa75/HE0, :1981-1982 |
+
+Não encontrei caso forte **numérico de folha** para exclusão de batida retratada ou recorte pela data: `[nao verificado]`. Há L-025 escrita e casos comportamentais em `app/ponto/tests/test_o247_retratada_fora_do_pareamento.py:3-6`, :84, :96, :117, mas seus resultados são listas/booleanos/contagem de saídas, :91-94, :114, :133-136.
+
+O teste de par aberto em `app/ponto/tests/test_o280_bateria_da_lei.py::V3Familia1Test::test_v3_turno_aberto_nao_recebe_hora_inventada:3694` afirma trabalho/intra zero, :3699-3700, porém o método cita somente a matriz “absurdo”, :3695; lastro CLT/CCT/L-NNN para esse caso: `[nao verificado]`.
+
+O caso de cauda inteiramente após o marco existe pela L-097 em `app/ponto/tests/test_o280_bateria_da_lei.py::V3FrotaTest::test_v3_B_I28_PINADO_o_minuto_fora_do_marco_nao_gera_HE:5124`, esperado HE50 zero, :5142; está marcado `expectedFailure`, :5123.
+
+## 14/11 10:09 · sessao d40d5604fe39 · - · - · origem=Ronald (tmux)
+
+`remover_duplicatas` está ativo: é chamado para o mapa de turnos e para os períodos calculados; mantém somente E/S e exclui repetição do mesmo tipo com intervalo inferior a três minutos (`app/ponto/motor_calculo_v2.py:882`, `:902`, `:909`, `:2351`, `:2354`).
+
+| Decisão | Predicado efetivo | Referência |
+|---|---|---|
+| Papel da batida | Papel E/S/X/Xi da ata prevalece sobre tipo gravado; X/Xi vira interna | `app/ponto/turnos.py::parear_turnos:1310`, `:1316`, `:1382` |
+| Eco de entrada | E com `_eco_flush=True` não abre turno | `app/ponto/turnos.py::parear_turnos:1398` |
+| Identificação do eco | Chegadas ≤120s; eventos entre 1.800s e 14h; atual ao vivo ≤600s; anterior atrasado ≥1.800s | `app/ponto/turnos.py::_marca_ecos_flush:368`, `:370` |
+| Pausa por marco | Distância ao intervalo ≤90min e não maior que distância à borda | `app/ponto/turnos.py::parear_turnos:1358`, `:1364` |
+| Volta deslocada | E após S interna; `0<gap≤intra_max_s`; distante >90min das bordas | `app/ponto/turnos.py::parear_turnos:1408` |
+| Nova entrada | E seguinte deixa turno anterior aberto e inicia outro | `app/ponto/turnos.py::parear_turnos:1417` |
+| Teto do fechamento | Jornada declarada +4h; sem bordas diferentes, teto recebido; no fechamento principal, fallback 26h | `app/ponto/turnos.py::_teto_da_jornada:78`, `:82`; `::parear_turnos:1433` |
+| Exceção do teto | Ambas as pontas distantes mais que `CADASTRO_NAO_DESCREVE_MIN` devolvem envelope 26h | `app/ponto/turnos.py::parear_turnos:1444` |
+| S além do teto | Entrada fica aberta; saída vira órfã | `app/ponto/turnos.py::parear_turnos:1447`, `:1453` |
+| Par mínimo | Duração ≤60s não forma turno; S fica órfã | `app/ponto/turnos.py::_par_degenerado:130`; `::parear_turnos:1487` |
+| Saída restante | S fecha entrada disponível; sem entrada, vira órfã | `app/ponto/turnos.py::parear_turnos:1491`, `:1495` |
+| Dia do turno | Dia local; pode migrar à véspera quando cruza meia-noite, entrada antes de `hf`, distante >90min de `hi`, saída dentro do envelope da véspera | `app/ponto/turnos.py::_data_do_turno:285`, `:291`, `:301`, `:302` |
+| Intervalo descontável | Par marcado com duração ≥900s | `app/ponto/turnos.py::intervalos_do_turno:545` |
+| S órfã no motor | Não produz período calculável | `app/ponto/adaptador_motor.py::periodos_de_turnos:30`, `:36` |
+
+Os dois caminhos têm alimentação diferente: o mapa do dia usa `turnos_de_batidas`, que marca ecos e não recebe o mapa de papéis; a formação dos períodos recebe papéis da ata e os parâmetros `AUT_*` (`app/ponto/motor_calculo_v2.py:882`, `:503`; `app/ponto/turnos.py:1533`, `:1535`).
+
+## 14/11 10:08 · sessao cb2d6c9fd49a · - · - · origem=Ronald (tmux)
+
+Inventário final complementar, com caminhos relativos à raiz:
+
+| Decisão | Código / predicado efetivo | Gravação e registro | Caso pela regra |
+|---|---|---|---|
+| Ativar janela HE | `app/ponto/motor_calculo_v2.py::MotorBase._empresa_da_janela_do_dia:1390`: exige empresa, `janela_he_ativa`, `janela_he_desde` preenchida e `dia >= desde`. | Alimenta `_janela_do_dia`; SEM JUIZ específico no registro `app/core/juizes.py:182` e `:1192`. | `app/ponto/tests/test_o280_bateria_da_lei.py::BugsTest::test_B_O273_recusa_revogada_nao_move_o_dia_e_a_autorizacao_move:2606` liga o cadastro e confere 720 min, HE0, fora40. Não isola borda da vigência; SEM CASO dessa borda [nao verificado]. |
+| Excluir janela por folga ou cadastro | `_janela_do_dia:1526` folga memorizada retorna `None`; `:1532-1542` sem função/marco retorna `None`; `:1562` e `:1606` `_cadastro_nao_descreve` para par e para pontas do dia retorna `None`. | A janela deixa E/S intactas. SEM JUIZ da janela. Marcos são `_T5` em `app/core/juizes.py:213`; tolerância é `_T7:215`, cuja pergunta registrada se restringe à pontualidade. | Caso específico da L084 na janela não confirmado [nao verificado]. |
+| Autorização do dia | `_carregar_decisoes_he:1416` lê `DecisaoHE.objects.vigentes()`; `_janela_do_dia:1653` testa estado `autorizado`; `_entrada_efetiva:1697` e `_saida_efetiva:1739` retornam timestamps crus se autorizado. | Não escreve DecisaoHE; altera os insumos do período. SEM JUIZ específico no registro. | `BugsTest::test_B_O273_recusa_revogada_nao_move_o_dia_e_a_autorizacao_move:2606`: L097, sem decisão/recusada/revogada=720/HE0/fora40; autorizada=760/HE40/fora0, asserções `:2655`, `:2684`. |
+| Recortar entrada | `app/ponto/janela_he.py::entrada_efetiva:94`: `bruto=marco-entrada`; `minutos_fora_da_extra:73` calcula `max(0, bruto-extra)`; `dentro_da_janela:51` aceita `sobra<=piso`; senão retorna marco deslocado e sobra `:102`. | `MotorBase._entrada_efetiva:1702`; SEM JUIZ específico. | `app/ponto/tests/test_o146_extra_declarada_da_escala.py::O146ExtraDeclaradaTest::test_e_extra_antes_60_entrada_no_limite_deslocado_da_60_de_HE:221`; `::test_d_entrada_10_min_antes_SEM_extra_declarada_e_ponta_de_10_como_hoje:212`, regra L097 `:213`. |
+| Recortar saída | `MotorBase._saida_efetiva:1734` exige janela, `saida_ativa` e marco; `app/ponto/janela_he.py::saida_efetiva:145-153` usa sobra após extra, tolera `<=piso`, senão retorna marco+extra. | E/S efetivas e `minutos_fora_janela`; SEM JUIZ específico. | `O146ExtraDeclaradaTest::test_a_saida_em_marco_mais_127_com_extra_120_da_120_de_HE_e_ponta_de_7:148`: 120HE/7fora, L097 `:160`; `::test_b_saida_em_marco_mais_60_com_extra_120_da_60_de_HE_e_ponta_zero:185` afirma 60, não 120, L024 `:186`. |
+| Dia inteiro sem previsto | `_dia_sem_previsto_fora_da_janela:1448-1469`: exige folga OU feriado, empresa em janela, previsto exatamente0, sem autorização; se folga e colaborador conhecido exige `escala_certa_no_dia`. | `:1472` soma trabalhadas em fora; `:1473-1476` zera trabalhadas, noturnas, extras50/100 e subconjuntos, intra. SEM JUIZ da composição. | SEM CASO confirmado [nao verificado]. |
+| Extra declarada por célula | `app/escala/models.py::EscalaColaborador.extra_declarada_do_dia:1234-1239`: célula existente lê `dna.extra_declarada`; chave ausente/malformada=>zeros; somente sem célula lê template. | Alimenta limites da janela; SEM JUIZ específico. | `O146ExtraDeclaradaTest::test_k_celula_que_EXISTE_e_nao_declara_responde_ZERO_nunca_o_template_vivo:312`: L020/L052, 480trabalho/HE0/127fora `:324-328`. |
+| Jornada prevista | `app/escala/utils.py::minutos_previstos_do_dia:2256-2274`: zero sem vínculos, vínculo/tipo, dia `is not True`, hi/hf; span<=0 soma1440; `:2305-2319` subtrai pausas válidas `0<intr<span`, inclusive segunda pausa. | Lido por `_previsto_do_dia:1253`, `_jornada_do_dia:1273`. Juiz registrado `app/core/juizes.py:185`. | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F1_previsto_do_mes_e_soma_dos_dias_nao_30_x_jornada:1299`. |
+| Intervalo devolvido ao limite | `app/escala/utils.py::intervalo_declarado_do_dia:2208-2227`: mesmas guardas de vínculo/dia; exige quatro marcos; somente primeiro intervalo, válido `0<intr<span`. `MotorBase._limite_com_suprimido:1785-1803` soma `min(suprimido, declarado)`. | Altera limite HE; SEM JUIZ específico do intervalo devolvido. | `app/ponto/tests/test_he_intra_dobrada.py::HeIntraDobradaTest::test_RED_doze_horas_sem_intervalo_NAO_tem_hora_extra:77` e `::test_MORDE_treze_horas_sem_intervalo_TEM_uma_hora_de_extra:88`; regra escrita `:12-20`. |
+| HE diária no partido | `MotorTurnoPartido.calcular_mes:2933-2939` zera HE individuais; `:3092` feriado em dobra tudo100; `:3120` semanal pula diária; `:3128-3144` usa previsto ou trabalho, legais limita480 e soma ganho noturno, aplica limite com suprimido; `:3151` excesso<=10 exclui; `:3154-3158` até120 é50, restante100. | `ultimo.minutos_extra_50`; SEM JUIZ do cálculo mensal. Registro `app/core/juizes.py:1194` declara somente `MotorBase.calcular_periodo`. | Régua legais: `app/ponto/tests/test_regua_excedente.py::ReguaExcedenteTest::test_regua_legais_parecer:55` cita CCTcl10, calcula ~111,4min por turno; usa fator importado, sem independência desse fator. Degrau120: SEM CASO pela regra, explicitamente excluído pela bateria `app/ponto/tests/test_o280_bateria_da_lei.py:2203-2207`. |
+| HE semanal no partido | `MotorTurnoPartido.calcular_mes:3161-3187`: apenas `semanal_44`; exclui feriados; agrupa seg-dom; excesso=soma−2640; exclui `<=10*dias`; lança inteiro como50 no último período da última jornada. | `ultimo.minutos_extra_50=:3187`; SEM JUIZ específico. | `test_tolerancia_he.py::ToleranciaHeTest::test_semanal_dentro_da_tolerancia_nao_gera_he:49` e `::test_semanal_estourou_o_teto_conta_integral:53` conferem40=>0,60=>60, mas arquivo só cita mandato, não CLT/CCT/L. Pelo critério estrito: SEM CASO confirmado [nao verificado]. |
+| HE mensal comercial | `MotorComercial.calcular_mes:3332-3337` zera HE individuais; `:3350` feriado tudo100 e `continue`; `:3387-3407` limite inicial480, marcos do vínculo/template se turno não cruza meia-noite, subtrai intervalo; `:3409` devolve suprimido; `:3414` excesso<=10 exclui; `:3417-3421` degrau120. | `ultimo.minutos_extra_50`; SEM JUIZ específico da função mensal. | Tolerância pela regra na v3: `app/ponto/tests/test_o280_bateria_da_lei.py::V3Familia2Test::test_v3_F9b_a_tolerancia_do_Art58_tambem_e_da_HORA_EXTRA:3829` confere8=>HE0,15=>HE15; é calculador v3, não esse método. Degrau: SEM CASO. |
+| Selecionar motor | `get_motor:3640-3692`: sem tipo=>12x36; intermitente por ciclo OU base; base desconhecida levanta; 12x36+hi=>com escala; base partido com hi/hf e geometria contínua troca para comercial ou12x36 conforme cruza meia-noite; senão mapa. | Instância do motor. SEM JUIZ da fábrica; geometria partido e meia-noite registradas `app/core/juizes.py:216-220`. | SEM CASO pela regra confirmado para dispatch inteiro [nao verificado]. |
+| Dia de trabalho e ciclo | `app/escala/models.py::EscalaColaborador.eh_dia_trabalho:1094` célula=>trabalha; senão `eh_dia_trabalho_calculado:1289-1295` ancora válida sem foto=>%2/%3; foto `:1309-1364` data presente folga, fora template se sabe, senão paridade da folga mais próxima; `:1369` feriado pode converter True emFalse. | Decide periodos/periodos_ft do motor `:2447`, `:2492-2494`. Juiz `app/core/juizes.py:184`. | `FronteiraTest::test_F_FOTOb_foto_parcial_no_12x36_a_fase_sai_da_foto_nao_da_ancora:2090`; ver corpo antes certificar números [nao verificado]. |
+| Universo batidas | `app/ponto/turnos.py::batidas_apuraveis:2875-2883`: retratada NULL, datas inclusivas, colaborador opcional, ordenação timestamp; não exige aprovada. | Input dos turnos. SEM JUIZ registrado por essa função. | SEM CASO pela regra confirmado [nao verificado]. |
+| Intervalo julgado | `app/ponto/turnos.py::intervalos_do_turno:542-546`: somente pares marcados de duração>=15min. | `app/ponto/adaptador_motor.py::periodos_de_turnos:44`, depois período do motor. Juiz `_T6`, `app/core/juizes.py:214`. | SEM CASO numérico especificamente do piso confirmado [nao verificado]. |
+| Ata substitui geometria | `_periodos_pelo_marco:559-576` exclui partido/sem células; `:632-645` exclui desalinhado, aberto, sem pontas/batidas reais; `:669-675` se apuráveis dentro do período excedem lâmpadas mantém geometria; `:685-721` substitui períodos e pausas pelos da ata com timestamps reais. | `periodos`, `intervalos`; juiz `periodos_do_dia` registrado `app/core/juizes.py:1193`, mas composição das guardas não registrada separadamente. | SEM CASO pela regra de todas essas guardas confirmado [nao verificado]. |
+
+Escritores diretos HE50 do motor: default `app/ponto/motor_calculo_v2.py:222`; zero por `setattr :1473-1476`; `Motor12x36.calcular_periodo:2851,2853`; `MotorTurnoPartido.calcular_mes:2934,3155,3157,3187`; `MotorComercial.calcular_periodo:3290,3292`; `MotorComercial.calcular_mes:3333,3418,3420`. Delegações: 24x48 `:3535`; 12x36ComEscala `:3553`.
+
+Escritores HE50 noturna: default `:224`; `_aplicar_he_noturna:1012-1022` grava apenas se resultado truthy; zeros `:1473-1476`, `:2937`, `:3336`. `he_noturna:430-451` recua pela ponta trabalhada, desconta intervalo e reparte minutos noturnos proporcionalmente entre50/100. Caso Sum264: `app/ponto/tests/test_he_noturna_sumula264.py::TestHeNoturnaSumula264::test_19_00_com_1h_extra_dentro_da_noite:29` e `::test_07_20_extra_fora_da_noite:43`; não conferem rateio proporcional misto. SEM CASO confirmado desse rateio [nao verificado].
+
+A bateria explicitamente recusa usar degrau120 como resposta da regra: `app/ponto/tests/test_o280_bateria_da_lei.py:2203-2207` e `::V3ReapontarTest::test_i26_H2_acima_do_limite_a_hora_segue_devida_sem_teto:5991-6004`.
+
+## 14/11 10:08 · sessao 07d4b231675a · - · - · origem=Ronald (tmux)
+
+Inventário complementar, em ordem do efeito à origem:
+
+| Decisão | Predicado e origem efetivos | Juiz registrado | Caso pela regra |
+|---|---|---|---|
+| Somar noturno normal e folga | `ResultadoMes.horas_noturnas`: soma `minutos_noturnos_legais` de `periodos + periodos_ft`, divide por 60 (`app/ponto/motor_calculo_v2.py:321`). | SEM JUIZ específico; registro amplo do par em `app/core/juizes.py:1194`. | `app/ponto/tests/test_dia_pago_soma.py::LavraDaFolgaTrabalhadaTest::test_MORDE_no_dia_com_OS_DOIS_as_horas_somam_e_as_rubricas_seguem_a_lei_de_cada_um:260`; regra cl.38-d/Art.73 em `:179`, assert numérico em `:273`. |
+| Quantificar janela noturna | Localiza pontas; `inicio >= fim` ou duração `>26h` retorna zero; soma interseções 00–05 e 22–24 (`app/ponto/motor_calculo_v2.py::minutos_noturnos:89`). | SEM JUIZ específico; `app/core/juizes.py:1194` registra o par. | Janela: `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F2_borda_utc_turno_21_03:1330`, esperado 300/342,86 em `:1346`. **Teto 26h: SEM CASO pela regra**; `::AbsurdoTest::test_A7_par_de_26h_exatas_fecha_e_26h01_nao:2278` declara medir comportamento atual em `:2287`. |
+| Prorrogar após 05h | `prorrogacao and max(inicio,00h)<05h and fim>05h` estende segmento até `fim` (`app/ponto/motor_calculo_v2.py::minutos_noturnos:110`). | SEM JUIZ específico. | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F4b_a_prorrogacao_pos_05h_e_cadastro_e_nao_default:1420`, esperado 480/548,57 em `:1441`. |
+| Descontar pausa noturna | Recorta pausas ao par, une sobreposições; só soma trecho com incremento positivo de `minutos_noturnos`; desconto limitado ao todo (`app/ponto/motor_calculo_v2.py::minutos_noturnos_dos_intervalos:164`, `:191`, `:196`). | SEM JUIZ específico da conta; juiz de intervalo registrado em `app/core/juizes.py:214`. | `app/ponto/tests/test_o280_bateria_da_lei.py::BugsTest::test_B_O263_intervalo_batido_nao_recebe_adicional_noturno:2689`, esperado 360/411,43 em `:2700`. |
+| Aplicar hora de 60 ou 52,5 min | `1.0 if hora_reduzida_afastada else FATOR_HORA_NOTURNA`; multiplica relógio (`app/ponto/motor_calculo_v2.py::MotorBase.fator_hora_noturna:992`, `::calcular_noturnas:986`). | SEM JUIZ específico do fator. | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F4c_a_hora_reduzida_afastada_muda_o_fator_nao_o_relogio:1446`, esperado 360/360 em `:1463`. |
+| Escrita normal dos minutos | `_escrever_noturnas` atribui ambos os campos (`app/ponto/motor_calculo_v2.py:1003`). Chamado por 12x36 em `:2792`, partido em `:2896`. | Registro amplo do par: `app/core/juizes.py:1194`; escritor específico não registrado. | Casos F4/F4c acima exercem o resultado (`app/ponto/tests/test_o280_bateria_da_lei.py:1416`, `:1463`). |
+| Zerar dia sem previsto não autorizado | Exige folga ou feriado, empresa com janela, previsto zero, ausência de autorização; folga sem escala certa retorna antes; zera minutos noturnos via `setattr` (`app/ponto/motor_calculo_v2.py::MotorBase._dia_sem_previsto_fora_da_janela:1448`, `:1469`, `:1473`). | SEM JUIZ específico desse bloqueio. | SEM CASO confirmado para o número noturno desse bloqueio [não verificado]. |
+| Cortar pontas antes da conta | `calcular_periodo` chama `_janela_do_par`, recorta intervalos e então calcula noturno (`app/ponto/motor_calculo_v2.py::Motor12x36.calcular_periodo:2759`, `:2764`, `:2792`). | SEM JUIZ específico da janela. | `app/ponto/tests/test_o280_bateria_da_lei.py::BugsTest::test_B_O272b_com_a_janela_LIGADA_o_recorte_nao_desconta_duas_vezes:2552`; esperado trabalhado 720 e pausa descontada zero em `:2600`; não mede noturno. |
+| Dispensar janela para folga/cadastro incompatível | Folga retorna `None`; empresa/marco ausente retorna `None`; duas pontas além do teto do cadastro recusam janela, por par e por dia (`app/ponto/motor_calculo_v2.py::MotorBase._janela_do_dia:1526`, `:1530`, `:1541`, `:1562`, `:1606`). | Folga: pergunta registrada em `app/core/juizes.py:184`; L-084/janela específica: SEM JUIZ. | `app/ponto/tests/test_bob_dia_pago_se_contradiz.py::DiaPagoSeContradizTest::test_caso2_col577_L084_do_dia_sem_corte_e_com_o_par_posicional:157`, esperado 438/zero fora em `:161`; não mede noturno. |
+| Honrar autorização | Estado vigente `autorizado` evita clipe nas duas pontas (`app/ponto/motor_calculo_v2.py:1416`, `:1697`, `:1739`). | SEM JUIZ específico. | `app/ponto/tests/test_o280_bateria_da_lei.py::BugsTest::test_B_O273_recusa_revogada_nao_move_o_dia_e_a_autorizacao_move:2606`; regra explícita 720 sem decisão/760 autorizado em `:2616`. |
+| Piso e extra declarada das pontas | Sobra `max(0,minutos-extra)`; sobra `<=piso` preserva batida; senão usa marco deslocado (`app/ponto/janela_he.py::minutos_fora_da_extra:73`, `::entrada_efetiva:99`, `::saida_efetiva:149`). Saída desativada preserva ponta (`app/ponto/motor_calculo_v2.py:1734`). | SEM JUIZ específico. | Caso B-O273 acima cobre entrada sem extra declarada (`app/ponto/tests/test_o280_bateria_da_lei.py:2612`); cobertura numérica de extra declarada/saída noturna [não verificado]. |
+| Dia aberto não recebe noturno dos pares fechados | Sem saída, `calcular_periodo` retorna período com zeros; crédito posterior calcula par fechado mas copia somente trabalhadas e fora da janela (`app/ponto/motor_calculo_v2.py:2752`, `:2553`, `:2559`). | SEM JUIZ específico da exclusão noturna. | SEM CASO para noturno parcial; o caso encontrado confere 357 minutos **diurnos** (`app/ponto/tests/test_bob_dia_pago_se_contradiz.py::DiaPagoSeContradizTest::test_caso1_col349_dia_aberto_leva_a_soma_dos_pares_fechados:131`). |
+| Dia da jornada e competência | Mapa usa turnos do juiz; entrada sem mapa usa data civil; período até 6h após fim anterior herda dia; exclui jornada fora de `[ini,fim]` (`app/ponto/motor_calculo_v2.py::MotorBase._dia_do_turno:889`, `::calcular_mes:2403`, `:2407`, `:2429`). | `_T1`, registro em `app/core/juizes.py:208`; herança de 6h específica: SEM JUIZ. | Caso do dia de entrada/madrugada: `app/ponto/tests/test_bateria_lavratura.py::TurnoCruzaMeiaNoiteTest::test_MORDE_o_dia_de_entrada_leva_a_saida_da_madrugada_seguinte:534`, esperado 720 em `:541`; herança 6h específica [não verificado]. |
+| Ata substitui geometria | Somente resposta alinhada/fechada, com batidas reais nas pontas e sem mais batidas internas que lâmpadas; substitui períodos desse dia e recupera segundos das batidas (`app/ponto/motor_calculo_v2.py::_periodos_pelo_marco:632`, `:641`, `:669`, `:685`, `:688`, `:717`). | `periodos_do_dia` registrado em `app/core/juizes.py:1193`; guardas específicas de substituição: SEM JUIZ. | Caso pela regra específico dessas guardas [não verificado]. |
+| Ler entrada/saída/pausas da ata | Exige ata/DNA alinhados; bordas acesas fornecem pontas; pausa batida exige ambas as lâmpadas e volta `>=` ida (`app/ponto/juiz_batida.py::periodos_do_dia:195`, `:230`, `:259`, `:282`). | Registro em `app/core/juizes.py:1193`. | `app/ponto/tests/test_bateria_lavratura.py::TresParesNoMesmoDiaTest::test_MORDE_as_duas_pausas_batidas_saem_do_tempo:964`, esperado 630 em `:967`; testa pausas múltiplas, não diretamente noturno. |
+| Piso do intervalo julgado | Só retorna pares marcados com duração `>=PISO_INTERVALO_SEGUNDOS` (`app/ponto/turnos.py::intervalos_do_turno:544`). | `_T6`, registro em `app/core/juizes.py:214`. | Caso numérico desse piso contra regra [não verificado]. |
+| Parear tipos e marcos | Papel da ata precede tipo gravado; intervalo absorvido não abre/fecha; E abre e S fecha; teto da jornada e par degenerado podem impedir fecho (`app/ponto/turnos.py::parear_turnos:1310`, `:1371`, `:1382`, `:1402`, `:1421`, `:1447`, `:1487`). | `_T1` aponta wrapper `turnos_do_colab`, em `app/core/juizes.py:208`; subdecisões não têm IDs próprios. | Teto do dia: `app/ponto/tests/test_h_portao_teto_do_dia.py::PortaoDoFechoLeOTetoDoDiaTest::test_col879_par_de_21h27_nao_fecha:32`; aderência desse teste à regra escrita [não verificado]. |
+| Excluir duplicata/tipo D | Só E/S; elimina mesmo tipo quando gap `<3min` (`app/ponto/motor_calculo_v2.py::MotorBase.remover_duplicatas:902`, `:909`; constante em `:70`). | SEM JUIZ específico. | SEM CASO pela regra: bateria A3 compara caminho com/sem duplicata, em `app/ponto/tests/test_o280_bateria_da_lei.py:2163`; teste dedicado só espera geometria em `app/ponto/tests/test_motor.py::Test12x36Patologico::test_batida_dentro_gap_duplicata:744`. |
+| Leitor v3 recalcula e reescreve | Com `cct is not None`, releitura calcula noturno do par e atribui ambos os minutos; rubrica v3 também calcula `legais/60` (`app/ponto/calculador/periodo.py:748`, `:754`, `:755`; `app/ponto/calculador/regras.py:844`, `:849`). | SEM JUIZ específico do recálculo noturno. | `app/ponto/tests/test_o280_bateria_da_lei.py::V3ReapontarTest::test_i26_H1_a_janela_noturna_do_PAR_e_o_intervalo_gozado:5966`, esperado 420/480 sem pausa e 360/411,43 com pausa em `:5986`. |
+
+A decisão de **26h na janela noturna** permanece independente do teto atual do pareador: `minutos_noturnos` mantém o literal `26*3600` (`app/ponto/motor_calculo_v2.py:94`), enquanto o fecho de turno lê `_teto_da_jornada` e pode voltar a 26h por L-084 (`app/ponto/turnos.py:1433`, `:1444`).
+
+## 14/11 10:08 · sessao 0752a4a800ac · - · - · origem=Ronald (tmux)
+
+Há mais três escritores diretos fora de `app/`, todos lendo valores de snapshot:
+
+| Escritor | Origem e gravação | Condição |
+|---|---|---|
+| `bin/restore_o263_comp10.py::<módulo>:48` | `VALOR` vem de `CAMPOS` importado em `:21`, filtrado em `:27`; `setattr(f,c,r[c])` em `:49`, `save(update_fields=VALOR)` em `:50`. `DiaPago(**r)` em `:34`, `bulk_create` em `:56`. | `DRY` default `True` em `:23`; escrita no `else` de `:39`. |
+| `bin/restore_relavratura_10_2026.py::<módulo>:79` | `CAMPOS` importado em `:29`, `VALOR` em `:34`; `setattr` em `:80`, `save(update_fields=VALOR)` em `:81`. `DiaPago(**r)` em `:61`, `bulk_create` em `:86`. | `DRY` default `True` em `:31`; escrita no `else` de `:68`. |
+| `bin/restore_badge_linha_09_10.py::<módulo>:38` | Lista de campos da foto em `:27`; valores por `zip(campos,l['val'])` em `:38`, `DiaPago(**kw)` em `:39-41`; `bulk_create` em `:63`. | `DRY=True` literal em `:23`; escrita no `else` de `:58`. |
+
+Os dois primeiros incluem `horas_folga_trabalhada` pela lista `app/ponto/management/commands/aplicar_09_corte_b.py:70`. O terceiro aceita a lista de campos do snapshot; presença concreta do campo na foto **[não verificado]**. Execução desses scripts e valores restaurados **[não verificado]**.
+
+A afirmação anterior de censo completo apenas em `app/` estava incompleta: esses scripts persistem fora da porta `restaurar_fechamento`, conforme `bin/restore_o263_comp10.py:50`, `bin/restore_relavratura_10_2026.py:81` e `bin/restore_badge_linha_09_10.py:63`.
+
+`bin/sombra_mascara_pessoal.py:44-64` tem escrita genérica, mas a configuração de `FechamentoMensal` limita-se a `observacao` em `bin/sombra_regras_pessoais.py:110`; esse caminho não configura a rubrica examinada.
 
 ## 14/11 10:08 · sessao 567935764c13 · - · - · origem=Ronald (tmux)
 
@@ -568,255 +775,4 @@ Leitores/reinterpretações:
 
 Nenhum dado fornecido demonstra uma linha real do TXT, rubrica ativa, batidas ou valores de produção: **[não verificado]**.
 
-## 14/11 10:07 · sessao 983d44d8d8fa · - · - · origem=Ronald (tmux)
-
-Registros efetivos relevantes:
-
-- `JUIZES['batida']['quantas horas este PAR (turno) vale?'] = MotorBase.calcular_periodo`: `app/core/juizes.py:1194`.
-- `JUIZES['batida']['que periodos e que intervalo teve este dia?'] = periodos_do_dia`: `app/core/juizes.py:1193`.
-- `turno/marcos`: tolerância `MotorBase.aplicar_tolerancia`: `app/core/juizes.py:215`; marcos do vínculo: `:213`; intervalo: `:214`; turno da batida: `:208`.
-- Precedência, feriado, trabalho previsto e cobertura de ausência registrados: `app/core/juizes.py:184`, `:186`, `:188`, `:190`.
-- **SEM JUIZ próprio para seleção de CCT, switch, prorrogação legal, seleção do fator da hora reduzida, janela noturna ou soma mensal**: não aparecem no dicionário `JUIZES` nem em suas atribuições posteriores (`app/core/juizes.py:182`, `:1192`, `:1310`). O registro amplo do par existe em `:1194`; não o confundir com registro específico de `regua_para`.
-
-| Decisão efetiva | Fonte do predicado | Caso pela regra e número |
-|---|---|---|
-| Switch ativo somente se parâmetro global existir e `valor.strip() == '1'`; desligado injeta prorrogação apenas para empresa `clt` | `app/core/regua_cct.py::get_motor_cct:444`, `:446`, `:449`, `:453` | `app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py::ProrrogacaoPos5hPorCadastroTest::test_o_switch_da_regua_CCT_nao_desliga_a_CLT:142` verifica flag, **não número**; caso numérico específico do switch: **SEM CASO localizado** |
-| Praça e ciclo vêm do vínculo da data, ciclo explícito vence o derivado | `app/core/regua_cct.py::regua_para:328`, `:329`, `:338` | `app/core/tests/test_semselo5_regua_pelo_vinculo_do_dia.py::ReguaPeloVinculoDoDiaTest::test_RED_o_ciclo_da_regua_e_o_do_vinculo_do_DIA:69` verifica flag; número por fatia no caso abaixo |
-| Regime `clt` usa piso legal com ciclo; regime diferente de `cct` usa piso histórico; `cct` consulta aplicação | `app/core/regua_cct.py::regua_para:353`, `:354`, `:363`, `:366` | `app/core/tests/test_regua_pela_empresa.py::ReguaPelaEmpresaTest::test_RED2_empresa_em_CLT_vence_a_linha_de_aplicacao_ATIVA:139`, `::test_RED4_regime_VAZIO_cai_no_piso_legal_e_o_contador_ACUSA:168` (regra escrita `:4`, `:7`; flags e contador 1/0 em `:189`, `:193`; não horas) |
-| Aplicação ativa da empresa, praça exata ou global, sindicato com início/fim e competência inclusiva; praça antes de empresa; 1 vence, >1 vira piso | `app/core/regua_cct.py::_aplicacao_vigente:253`, `:256`, `:261`, `:265`, `:267`, `:269` | `app/core/tests/test_regua_pela_empresa.py::ReguaPelaEmpresaTest::test_RED5_empresa_cct_SEM_linha_de_aplicacao_e_LACUNA_nao_decisao:199`; `::test_RED6_linha_de_PRACA_vence_a_linha_de_EMPRESA_da_mesma_empresa:224` (30/20 em `:240`, `:243`); `::test_RED7_duas_linhas_ATIVAS_do_mesmo_nivel_dao_piso_legal_e_ACUSAM:247` (piso em `:261`, mas esperado lido da constante) |
-| Piso CLT: prorrogação se ciclo diferente de `12x36` | `app/core/regua_cct.py::prorrogacao_pos5h_legal:182`; `::_regua_legal:211` | `app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py::ProrrogacaoPos5hPorCadastroTest::test_o_numero_do_col639_18_06:105`: 420 sem prorrogação/480 com e 8h/9,1428h (`:108`–`:112`), regra CLT/Súmula escrita `:6`–`:8` |
-| CCT fornece prorrogação, sobrescrevendo kwarg do chamador | `app/core/regua_cct.py::regua_para:374`; `::get_motor_cct:466` | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F4b_a_prorrogacao_pos_05h_e_cadastro_e_nao_default:1420`: 480 minutos relógio, 548,57 legais (`:1441`); Art.73 §5/Súmula 60 II em `:1421` |
-| Hora de 60 minutos somente se flag CCT, ciclo `12x36`, trava desligada; `setdefault` permite kwarg previamente fornecido vencer | `app/core/regua_cct.py::get_motor_cct:470`; trava `app/core/regua_cct.py:150` | `app/ponto/tests/test_cl38d_hora_reduzida_12x36.py::CadeiaTest::test_o_12x36_do_sindicato_recebe_o_parametro:132`: fator 1 em `:138`; `::test_o_6x1_do_mesmo_sindicato_NAO_recebe:140`: fator 60/52,5 em `:148`; cl.38-d escrita `:141` |
-| Fator altera legais, preservando relógio | `app/core/regua_cct.py::get_motor_cct:470` | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F4c_a_hora_reduzida_afastada_muda_o_fator_nao_o_relogio:1446`: 360 relógio e 360 legais (`:1463`), cl.38-d/Art.73 §1 `:1447`–`:1455` |
-| Janela 22–05 e desconto de intervalo gozado | Motor, confirmar linhas com outro explorer | `app/ponto/tests/test_o280_bateria_da_lei.py::BugsTest::test_B_O263_intervalo_batido_nao_recebe_adicional_noturno:2689`: 420−60=360 relógio, 411,43 legais (`:2700`), O263/Art.73 em `:2690`; também `::V3ReapontarTest::test_i26_H1_a_janela_noturna_do_PAR_e_o_intervalo_gozado:5966`: 420/480 sem pausa, 360/411,43 com (`:5985`), Art.73/Art.4 `:5967` |
-| Feriado 12x36 mantém noturno e não cria dobra no piso | Motor, confirmar linhas com outro explorer | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F4_feriado_em_12x36_noturno_e_hora_simples:1399`: 360/411,43 noturno, HE feriado zero (`:1416`); Art.59-A/Art.73 em `:1400`–`:1410` |
-| Fatias com ciclos diferentes somam regras por vínculo | `app/ponto/services/fechamento.py::apurar_por_fatia` — outro explorer tem linhas | `app/ponto/tests/test_regua_por_fatia_na_janela.py::DuasReguasNaJanelaTest::test_a_regra_de_cada_fatia_isolada_e_a_que_a_lei_diz:160`: 10,29h no 6x1/8h no 12x36 (`:180`); regra CLT/Súmula escrita `:22`–`:42` |
-| Tela/PDF devem mostrar soma das fatias | Outro explorer tem caminhos | Mesmo arquivo/classe: `::test_RED_a_testemunha_paga_a_regua_de_hoje_na_janela_inteira:186` verifica 18,29h em `:198`; `::test_RED_o_cartao_em_pdf_mostra_o_mesmo_numero_da_regra:204` verifica 18,29h em `:214` |
-| Justificativa sobre batida não apaga trabalho | Motor, confirmar linhas | `app/ponto/tests/test_o280_bateria_da_lei.py::FronteiraTest::test_F6_ausencia_sobreposta_a_batida_nao_apaga_o_trabalho:1956`: trabalhado 480, faltas/abonos zero (`:1966`); Lei 605/49 e regra escrita `:1957`–`:1961`; **não verifica noturno especificamente** |
-| Noturno da folga trabalhada entra na lavra; normal e folga somam | Motor/serviço dia pago, confirmar linhas | `app/ponto/tests/test_dia_pago_soma.py::LavraDaFolgaTrabalhadaTest::test_MORDE_ft_certa_leva_hora_NOTURNO_e_INTRA_e_nao_leva_antecipada_nem_HE:220`: 68,4/60 h (`:231`); `::test_MORDE_no_dia_com_OS_DOIS_as_horas_somam_e_as_rubricas_seguem_a_lei_de_cada_um:260`: (68,4+10)/60 h (`:273`); regra cl.38-d/Art.73 escrita `:179` |
-
-Há distinção relevante para o censo: casos da aplicação CCT exercitam regra escrita, mas vários só verificam flags/fonte; se “confere o número” exigir horas finais, não os contar para cada ramo isolado. Os casos F4b/F4c e fatias têm respostas numéricas independentes explícitas (`app/ponto/tests/test_o280_bateria_da_lei.py:1431`, `:1455`; `app/ponto/tests/test_regua_por_fatia_na_janela.py:42`).
-
-## 14/11 10:05 · sessao b3f61d1e2f4a · - · - · origem=Ronald (tmux)
-
-1. **PROCEDE: há perda de sinais consecutivos.** As traps guardam somente o último nome; o contador não preserva a sequência (`bin/suite.sh:284-287`). TERM e HUP recebidos durante o mesmo sleep podem resultar em apenas um `pkill -HUP`, que marca ambos como entregues (`bin/suite.sh:294-299`). Também há janela entre a expansão de `pkill "-$_SINAL"` e `_N_ENTREGUE=$_N_SINAL`: outra trap pode incrementar o contador durante o comando externo e ser quitada sem repasse (`bin/suite.sh:295`). Inferência estática; ocorrência em produção [nao verificado].
-
-2. **PROCEDE: arquivo vazio não prova morte do subshell.** A escrita não verifica falha de redireção/`echo`, e a leitura não verifica falha de `cat` (`bin/suite.sh:291`, `bin/suite.sh:302`). Assim, falha de E/S pode deixar o arquivo vazio mesmo com `_run` concluído normalmente; ocorrência [nao verificado]. O resultado de `wait` é descartado, e o fallback substitui o rc real por 143/130/129/1 (`bin/suite.sh:301-305`).
-
-3. **PROCEDE: a origem normal do rc está correta.** O único escritor visível escreve `$?` imediatamente depois de `_run`; não escreve o resultado de sleep, pkill ou wait (`bin/suite.sh:291`). `_run` termina na chamada da trava (`bin/suite.sh:273-280`); a trava devolve 75 por falta de vez ou o status do comando executado (`bin/trava_teste.sh:36-42`). Não identifiquei caminho interno que escreva rc de processo alheio nesses locais; interferência externa [nao verificado].
-
-4. **DUVIDA: loop, zombies e reciclagem.** O término é decidido exclusivamente pela existência do PID numérico, sem consultar o arquivo de rc ou a identidade do processo (`bin/suite.sh:293-300`). A reapagem assíncrona usual do Bash evita que um filho terminado permaneça zombie aguardando este `wait`; esse comportamento nesta execução [nao verificado]. Se o PID for reciclado antes do próximo teste, o loop pode acompanhar um processo alheio e o pkill pode alcançar seus filhos (`bin/suite.sh:293-295`); ocorrência [nao verificado].
-
-5. **DUVIDA: sinal durante sleep.** A trap só registra estado, e o repasse depende da próxima passagem pelo laço (`bin/suite.sh:285-299`). Na semântica usual do Bash, a trap de sinal recebido enquanto espera comando externo roda quando esse comando termina; isso permite atraso pelo sleep de 0,5 s, sem bloqueio pela duração inteira do run (`bin/suite.sh:299`). Comportamento medido nesta cópia [nao verificado].
-
-6. **DUVIDA adicional: INT.** O wrapper nasce em background (`bin/suite.sh:291`); o Bash costuma iniciar comandos assíncronos sem job control com INT ignorado, e a trava não instala handler INT (`bin/trava_teste.sh:20-42`). Portanto, sucesso de `pkill -INT` pode não significar interrupção. Herança efetiva nesta execução [nao verificado].
-
-Mapa solicitado:
-
-| Variável | Quem escreve | Quem lê |
-|---|---|---|
-| `_RCF` | Pai atribui o caminho: `bin/suite.sh:290`; wrapper escreve conteúdo: `bin/suite.sh:291` | Wrapper usa caminho: `bin/suite.sh:291`; pai lê e remove: `bin/suite.sh:302` |
-| `_N_SINAL` | Inicialização e traps: `bin/suite.sh:284-287` | Incrementos: `bin/suite.sh:285-287`; comparação: `bin/suite.sh:294`; quitação: `bin/suite.sh:295` |
-| `_SINAL` | Inicialização e traps: `bin/suite.sh:284-287` | Repasse: `bin/suite.sh:295`; fallback: `bin/suite.sh:304`; veto à limpeza: `bin/suite.sh:308` |
-| `_PID_RUN` | Pai recebe `$!`: `bin/suite.sh:292` | Existência: `bin/suite.sh:293`; seleção dos filhos: `bin/suite.sh:295`; wait: `bin/suite.sh:301` |
-
-**PROCEDE: `_SINAL` acumula funções.** Representa o último nome recebido, escolhe o fallback e funciona como memória de “houve sinal” para impedir limpeza (`bin/suite.sh:285-287`, `bin/suite.sh:295`, `bin/suite.sh:304`, `bin/suite.sh:308`). `_PID_RUN` identifica o wrapper que grava o rc, enquanto o processo sinalizado é seu filho (`bin/suite.sh:291-295`).
-
-## 14/11 10:05 · sessao e1c4fbaf8ef6 · - · - · origem=Ronald (tmux)
-
-- **Item 5, DADOS/CAB — fechamento parcial.** Os dois `mktemp` agora verificam falha antes de usar o caminho; isso impede cair em `mkdir -p "/pub"` por `DADOS` vazio e impede gerar cabeçalho com `CAB` vazio (`bin/codex_pergunta.sh:285`, `bin/codex_pergunta.sh:336`). Porém o primeiro `_nomes` roda dentro de `$(_pergunta_raspada)`; seu `exit 3` encerra a substituição, cujo status o `printf` externo ignora. Sem sonda/anexo, o processo principal pode continuar e chamar Codex se os próximos passos funcionarem (`bin/codex_pergunta.sh:296`, `bin/codex_pergunta.sh:306`, `bin/codex_pergunta.sh:321`, `bin/codex_pergunta.sh:422`). Portanto **PROCEDE** a guarda contra caminho vazio; **DUVIDA** se a cura prometia abortar todo o wrapper em toda falha de DADOS.
-
-- **Caso 6 morde partes do delta.** TERM exige rc 9 e preservação de `app/media`; HUP exige rc 127; o novo mutante que troca o sinal por TERM é julgado pela mesma função e HUP deveria fazê-lo devolver 9 (`bin/tests/test_rm_com_guarda.sh:224`, `bin/tests/test_rm_com_guarda.sh:228`, `bin/tests/test_rm_com_guarda.sh:229`, `bin/tests/test_rm_com_guarda.sh:233`, `bin/tests/test_rm_com_guarda.sh:236`, `bin/tests/test_rm_com_guarda.sh:267`). Execução verde/vermelha desta cópia: **[nao verificado]**.
-
-- **Caso 6 não força entrega pendente nem `wait` interrompido.** Os dois sinais são enviados após espera fixa de um segundo; não há sincronização antes do nascimento do filho. O `wait` atual só aparece depois da saída do laço `kill -0`, portanto o comentário “depois de um wait interrompido” não descreve o caminho que o teste constrói deliberadamente (`bin/tests/test_rm_com_guarda.sh:227`, `bin/tests/test_rm_com_guarda.sh:231`, `bin/tests/test_rm_com_guarda.sh:235`, `bin/suite.sh:293`, `bin/suite.sh:301`). **PROCEDE** como lacuna de cobertura.
-
-- **Mutante plausivelmente verde: voltar ao `wait` final.** Trocar `bin/suite.sh:291` por `_run &` e `bin/suite.sh:302` por `_RC_RUN=$?; rm -f "${_RCF:?}"` elimina o transporte pelo arquivo e usa o status do `wait` da linha anterior. Os casos existentes sinalizam durante a execução, sem segundo sinal no `wait` final; continuam esperando exatamente o rc da trava (`bin/suite.sh:301`, `bin/tests/test_rm_com_guarda.sh:227`, `bin/tests/test_rm_com_guarda.sh:235`). Verde efetivo **[nao verificado]**.
-
-- **Mutante plausivelmente verde: descartar sinais anteriores ao PID.** Inserir `_N_ENTREGUE=$_N_SINAL` imediatamente após `_PID_RUN=$!` perde o sinal contado antes desse ponto; o caso 6 não provoca essa janela (`bin/suite.sh:284`, `bin/suite.sh:285`, `bin/suite.sh:292`, `bin/tests/test_rm_com_guarda.sh:227`, `bin/tests/test_rm_com_guarda.sh:235`). Verde efetivo **[nao verificado]**.
-
-- **Remover todo `pkill` não é bom exemplo de verde:** a trava falsa terminaria pelo `sleep`/`wait` sem seus traps receberem TERM/HUP, enquanto o selo exige 9 e 127 (`bin/suite.sh:295`, `bin/tests/test_rm_com_guarda.sh:224`, `bin/tests/test_rm_com_guarda.sh:228`, `bin/tests/test_rm_com_guarda.sh:233`, `bin/tests/test_rm_com_guarda.sh:236`). Resultado executado **[nao verificado]**.
-
-## 14/11 10:04 · sessao 1138db07edb3 · - · - · origem=Ronald (tmux)
-
-- **PROCEDE — há consumidor que distingue 75:** `bin/volta_intermediaria.sh:32` chama a suite, `:33` captura o rc, `:37` trata qualquer não zero diferente de 75 como vermelho e `:39-44` devolve 75 quando nenhum outro veredito ficou vermelho. Rc 2 da suite vira vermelho/rc 1 da volta, sem tratamento especial (`bin/volta_intermediaria.sh:37-43`).
-- **PROCEDE — o caminho normal preserva 75:** a trava sai 75 em `bin/trava_teste.sh:38`; `_run` chama essa trava em `bin/suite.sh:273`; o subshell escreve seu rc em `:291`, o pai lê em `:302` e devolve em `:312`. A preservação depende da escrita/leitura do arquivo; o fallback substitui conteúdo vazio (`bin/suite.sh:303-305`).
-- **PROCEDE — régua não consome o rc de `suite.sh`:** chama `trava_teste.sh` diretamente (`bin/regua.sh:165-169`) e julga o texto do log (`:170-181`). Portanto o delta da suite não altera esse caminho (`bin/regua.sh:165-181`).
-- **PROCEDE — pre-push também chama a trava diretamente:** captura seu rc em `bin/pre-push.sh:142-145`, distingue 75 em `:149-150` e devolve o rc em `:157`; não depende do novo transporte de rc da suite (`bin/pre-push.sh:142-157`). A cópia alternativa chama Docker diretamente (`app/core/hooks/pre-push.sh:54-56`, `:82-88`).
-- **DUVIDA — scripts em `logs/` e hook efetivamente instalado:** não existem `logs/` nem `.git` nesta cópia; consumidores de produção nesses caminhos e sua dependência de 75/2 ficam **[nao verificado]**.
-- **PROCEDE — há selo existente para preservar 75:** `bin/tests/test_suite_motivo.sh:87` exige `75 sim` com uma trava falsa que devolve 75. Resultado de execução nesta revisão: **[nao verificado]**.
-
-## 14/11 10:00 · sessao e532ac148c99 · COERENCIA-CORTE-AUSENCIA-TURNO · sonda · origem=Code
-
-```text
-sonda_leitura: sonda.py [620bfaf5bdb593ae] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-UNIVERSO agendamentos=104 periodos=104
-RESUMO periodos_com_fracao_menor_que_5=0 agendamentos_curtos=0 por_status={} juiz_de_hoje_acusa={}
-```
-
-1) `RESUMO periodos_com_fracao_menor_que_5=0 agendamentos_curtos=0 por_status={} juiz_de_hoje_acusa={}` — saída fornecida, sem reexecução. [nao verificado]
-2) Nenhum PA aparece com fração curta no dado fornecido; `por_status={}` não discrimina `concluido` versus `agendado`. [nao verificado]
-
-## 14/11 09:57 · sessao e1b162ec3bf0 · COERENCIA-CORTE-AUSENCIA-TURNO · leitura · origem=Code
-
-Leitura estática da árvore fornecida. Estado efetivo em produção, contagens atuais, crons instalados e entrega de notificações: **[não verificado]**.
-
-**A — Onde o ADMIN vê férias vencidas**
-
-O juiz retorna `vencido` quando há saldo positivo, o ciclo aquisitivo terminou e o limite de concessão é **anterior** a hoje. Saldo zerado resulta primeiro em `concedido`. `status_por_data` julga o **agendamento**, retornando `agendado`, `em_gozo` ou `concluido`; não determina vencimento aquisitivo. (`app/ferias/models.py:98-105`; `app/ferias/models.py:276-288`)
-
-| Leitor | Nome do colaborador | Número/contagem | Dono da pendência |
-|---|---|---|---|
-| **Gestão de Férias: chip “Vencidas” e tabela filtrada.** Conta e filtra o **status persistido**, sem consultar o juiz nessa leitura. (`app/ferias/views.py:38`; `app/ferias/views.py:57-66`; `app/templates/ferias/lista.html:18`) | Sim na tabela, com badge “Vencido”. (`app/templates/ferias/_tabela_ferias.html:24-29`) | Sim: **períodos**, não pessoas distintas. Tabela limitada a 300 registros; KPI calculado antes dos filtros empresa/posto. (`app/ferias/views.py:38`; `app/ferias/views.py:71-75`) | Não atribui responsável: colunas colaborador, posto, saldo, limite e status. (`app/templates/ferias/_tabela_ferias.html:5-9`) |
-| **Saldo individual**, `/ferias/<cid>/saldo/`. Sincroniza os períodos antes de renderizar. (`app/ferias/urls.py:13`; `app/ferias/views.py:117-124`) | Sim, no cabeçalho. (`app/templates/ferias/saldo.html:7`) | Sem contagem agregada de vencidos; enumera períodos, badges e dias. (`app/templates/ferias/saldo.html:14-42`) | Sem responsável explícito nessa apresentação. (`app/templates/ferias/saldo.html:14-50`) |
-| **Drawer/aba Férias do colaborador**. Sincroniza os períodos; abre pela linha da Gestão. (`app/ferias/views.py:807-821`; `app/templates/ferias/lista.html:78-81`) | Sim. (`app/templates/ferias/_secao_colab.html:3`) | Sem agregado de vencidos; lista períodos e saldos. (`app/templates/ferias/_secao_colab.html:37-54`) | **RH**: “Período vencido — pagamento em dobro (art. 137). Regularize com o RH.” (`app/templates/ferias/_secao_colab.html:77`) |
-| **PDF Gestão de Férias**, com `situacao=vencido`, encaminhado pelo chip. Filtra status persistido e imprime “VENCIDA” em vermelho. (`app/templates/ferias/lista.html:63-70`; `app/ferias/views.py:735-750`; `app/relatorios/services.py:285-286`; `app/relatorios/services.py:309-320`) | Sim, truncado a 32 caracteres. (`app/relatorios/services.py:312`) | Calcula `total`, mas **não imprime essa contagem no corpo**; guarda em `RegistroPDFAuditavel.total_registros`. (`app/relatorios/services.py:291-305`; `app/relatorios/services.py:335-344`; `app/relatorios/pdf_base.py:162`) | Sem coluna de responsável. (`app/relatorios/services.py:305`) |
-| **Inteligência Operacional: KPI “Férias vencidas” e modal**. Consulta o juiz ao vivo por `_pas_vencidos`. (`app/inteligencia/views.py:13-21`; `app/inteligencia/views.py:89`; `app/templates/inteligencia/index.html:111-113`) | No modal: matrícula, nome, empresa e vencimento. (`app/inteligencia/views.py:267-272`) | Sim: quantidade de **períodos**; modal lista todos os retornados. (`app/inteligencia/views.py:89`; `app/inteligencia/views.py:268-272`) | Sem responsável: apenas aquelas quatro colunas. (`app/inteligencia/views.py:269`) |
-| **PDF Inteligência Operacional: “Ferias Vencidas — Risco Trabalhista”**. Usa o juiz, limitado aos **15 primeiros**, ordenados pelo limite de concessão. (`app/inteligencia/views.py:17-18`; `app/inteligencia/views.py:542-546`; `app/inteligencia/views.py:626-633`) | Sim. (`app/inteligencia/views.py:629-631`) | Sem contagem específica impressa nessa seção. (`app/inteligencia/views.py:626-633`) | Sem responsável: nome, empresa e vencimento. (`app/inteligencia/views.py:631`) |
-| **Feed de alertas da Inteligência e push crítico**, produzido por `gerar_alertas`. Seleciona limite passado + status persistido `vencido`, até **20 períodos** por execução. (`app/inteligencia/management/commands/gerar_alertas.py:85-95`; `app/inteligencia/management/commands/gerar_alertas.py:21-38`) | Nome completo no título do alerta, exibido no feed. (`app/inteligencia/management/commands/gerar_alertas.py:92`; `app/templates/inteligencia/index.html:56`) | O contador visível soma **todos os alertas não lidos**, não somente férias vencidas; feed limitado aos 20 mais novos. (`app/inteligencia/views.py:130-132`; `app/templates/inteligencia/index.html:48`) | Push para grupos do DP e `admin_ti`; registro não possui responsável por resolver, apenas colaborador e leitura. (`app/chamados/push_utils.py:75-86`; `app/inteligencia/models.py:56-70`) |
-| **Push `alertar_ferias_vencendo`**: também comunica **novos vencidos**, apesar do nome. Só busca `em_curso`/`adquirido`, portanto não reavisa o estoque já persistido como `vencido`. (`app/ferias/management/commands/alertar_ferias_vencendo.py:22-36`) | Primeiros nomes de até cinco registros no push ao DP. (`app/ferias/management/commands/alertar_ferias_vencendo.py:48-52`) | `len(vencidos)` conta **períodos**, embora o título diga “colaborador(es)”; não deduplica pessoas. (`app/ferias/management/commands/alertar_ferias_vencendo.py:36`; `app/ferias/management/commands/alertar_ferias_vencendo.py:44-52`) | DP/`admin_ti`; também avisa individualmente: “Procure o DP urgentemente”. Link genérico `/ferias/`, sem filtro de vencidas. (`app/ferias/management/commands/alertar_ferias_vencendo.py:50-54`; `app/ferias/management/commands/alertar_ferias_vencendo.py:70-85`; `app/chamados/push_utils.py:75-86`) |
-| **Pauta `[FERIAS/PA-VENCIDO]` do DP**. Consulta o juiz para colaboradores **ativos**, em empresas ativas; agrega por empresa/competência. (`app/ferias/management/commands/pautas_de_ferias.py:58-71`; `app/ferias/management/commands/pautas_de_ferias.py:149-168`) | Até oito nomes completos, depois “e mais N”. (`app/ferias/management/commands/pautas_de_ferias.py:105-120`) | Sim: períodos vencidos e dias de atraso do mais antigo. (`app/ferias/management/commands/pautas_de_ferias.py:114-120`) | **DP**, no texto e em `destinatario_departamento='dp'`, prazo de 30 dias. Chega à aba de pautas pelo JSON/render do copiloto. (`app/ferias/management/commands/pautas_de_ferias.py:118`; `app/ferias/management/commands/pautas_de_ferias.py:167-170`; `app/pautas/views.py:29-40`; `app/templates/core/_copiloto.html:394-405`) |
-| **Copiloto: situação individual de férias**, ferramenta `situacao_de_ferias`. Endpoint devolve identidade, períodos e avisos. (`app/api/views_mensageria.py:828-847`; `mensageria/nucleo/ferramentas.py:2103-2120`) | Sim no payload. (`app/api/views_mensageria.py:831`) | Sem contagem específica; aviso descreve até três períodos/saldos. (`app/ferias/situacao.py:198-204`) | **“Decisao do DP.”** Porém o aviso deriva `limite<hoje && saldo>0` por conta própria, sem a condição de ciclo encerrado do juiz. Texto efetivamente apresentado pela IA: **[não verificado]**. (`app/ferias/situacao.py:193-204`; `app/ferias/models.py:101-104`) |
-
-**Leitores que mostram “vencendo” e omitem vencidos:**
-
-- **Relatórios → Férias vencendo, contador e CSV:** a view chama `vencendo()`, que exige `status_de_periodo(...) == 'adquirido'`; vencidos reais ficam fora. O template ainda escreve **“Vencido!”** para `limite<=hoje`, mas, no dia exato do limite, o juiz ainda considera adquirido; o vencido real, com limite anterior, já foi excluído. (`app/relatorios/views.py:358-381`; `app/ferias/models.py:103-105`; `app/ferias/models.py:260-261`; `app/templates/relatorios/ferias_vencendo.html:50-53`)
-- **Chip “Vencendo ≤60d” da Gestão:** exclui vencidos pelo juiz; existe o chip separado “Vencidas”. Já o filtro e o PDF de `vencendo` usam status persistido `adquirido`. (`app/ferias/views.py:36-38`; `app/templates/ferias/lista.html:17-18`; `app/ferias/views.py:63-66`; `app/relatorios/services.py:287-288`)
-- **Copiloto agregado e visão individual geral:** chamam `periodos_vencendo`, que filtra status persistido `adquirido`, embora a docstring diga **“Vencidos entram”**. O agregado calcula `ja_vencido` somente nos registros que sobreviveram àquela query: pode reconhecer um adquirido defasado, mas não constitui censo do estoque vencido. (`app/api/views_mensageria.py:905`; `app/api/views_mensageria.py:949-957`; `app/api/views_mensageria.py:1050`; `app/api/views_mensageria.py:1100-1105`; `app/ferias/services.py:219-233`)
-
-**Contagens que ficam em terminal/log ou persistência:**
-
-| Leitor | O que fica fora da tela |
-|---|---|
-| `pautas_de_ferias` **sem `--apply`** | Calcula vencidos e imprime trecho de até 120 caracteres; retorna antes de criar pauta. Com `--apply`, existe o caminho para tela descrito acima. (`app/ferias/management/commands/pautas_de_ferias.py:70-89`; `app/ferias/management/commands/pautas_de_ferias.py:159-170`) |
-| stdout de `alertar_ferias_vencendo` | Publica períodos atualizados e total de alertas de **todos os marcos**, sem contador separado do estoque vencido; novos vencidos também têm saída por push. (`app/ferias/management/commands/alertar_ferias_vencendo.py:35-44`; `app/ferias/management/commands/alertar_ferias_vencendo.py:88`) |
-| Total do PDF Gestão | `total_registros` é persistido na auditoria; a view recebe `_n` e o descarta. (`app/relatorios/services.py:344-348`; `app/relatorios/pdf_base.py:162`; `app/ferias/views.py:750`) |
-
-`tripwire_status_ferias` conta **divergências**, não vencidos. `sincronizar_status_ferias` trata **agendamentos**, cujo vocabulário não inclui `vencido`. Não identifiquei outro contador exclusivo do estoque vencido restrito a cron/log; inexistência absoluta: **[não verificado]**. (`app/ferias/management/commands/tripwire_status_ferias.py:27-40`; `app/ferias/services.py:89-97`; `app/ferias/management/commands/sincronizar_status_ferias.py:31-38`)
-
-Os horários **configurados** são 07:47 para alertas de férias, 07:49 para pautas `--apply`, ambos em `ferias.log`; Inteligência às 08h/18h em `alertas_intel.log`. Instalação e execução real: **[não verificado]**. (`app/config/crons.py:708-711`; `app/config/crons.py:746`)
-
-**B1 — Origem escrita da decisão**
-
-**A transcrição original de 11/08 não foi localizada: [não verificado].** Há atribuições retrospectivas do fabricante e há **falas posteriores atribuídas literalmente a Ronald** confirmando dez por marcação e vinte no dia. A lápide do código é atribuição autoral, sem transcrição direta de Ronald. (`app/ponto/motor_calculo_v2.py:52-59`; `app/docs/RELATO-ARQUIVO.md:30488-30494`; `app/docs/PROMPTS.md:1205`; `app/docs/PENDENTES_RONALD.json:2771`)
-
-Inventário dos registros relevantes; as aspas abaixo reproduzem trechos literais:
-
-| Arquivo:linha | Citação literal | Autoria documental |
-|---|---|---|
-| `app/ponto/motor_calculo_v2.py:52-55` | “F0-CONFORMIDADE (mandato Ronald 11/08)”; “10min por marcacao / 20min por dia = o DOBRO do legal (Art.58 par.1 = 5/10).”; “decisao de NEGOCIO declarada pelo Ronald” | Comentário do fabricante atribuindo a decisão. |
-| `app/docs/RELATO-ARQUIVO.md:15622-15624` | “O corte diz "tolerancia da REGUA (10 min)"”; “O **10** e uma CONSTANTE do motor, posta por mandato seu em 11/08”; “o DOBRO do legal, de proposito, para nao premiar quem cava HE com sobra de minutos” | Relato posterior; não apresenta o prompt original. |
-| `app/docs/RELATO-ARQUIVO.md:15626-15633` | “Ligar o parametro como ele esta HOJE baixaria a tolerancia da folha de 10 para 5”; “reversao de uma decisao de negocio sua” | Interpretação do fabricante. |
-| `app/docs/RELATO-ARQUIVO.md:30179-30189` | “TOLERANCIA_CONFORMIDADE_MIN = 10”; “decisao F0 dele, o dobro do piso legal”; “a tolerancia e deliberadamente **nao por praca**” | Relato do fabricante. |
-| `app/docs/RELATO-ARQUIVO.md:30488-30494` | “TOLERANCIA_CONFORMIDADE_MIN = 10”; “TOLERANCIA_CONFORMIDADE_DIA = 20”; “F0-CONFORMIDADE, mandato Ronald 11/08”; “a lapide ali diz o porque com a palavra dele” | Cita o comentário do código como “palavra dele”; não oferece a fala original. |
-| `app/docs/RELATO-ARQUIVO.md:30505-30510` | “**10** por marcacao, **20** no dia”; “o numero que decide (10/20) continua declarado onde sempre esteve” | Relato sobre tela 5 × constantes 10/20. |
-| `app/docs/RELATO-ARQUIVO.md:31225` | “TOLERANCIA_CONFORMIDADE_MIN/_DIA` = **10/20**”; “a tela mostrava 5 que ninguem lia” | Resumo retrospectivo. |
-| `app/docs/PROMPTS.md:358` | “Antes de tirar as duas tolerancias, dizer qual fonte o motor le hoje”; “**10/20**”; “F0-CONFORMIDADE 11/08 -- a tela mostra **5** e nunca foi lida” | Ordem posterior com resposta do fabricante inserida no registro. |
-| `app/docs/PENDENTES_RONALD.json:107` | “a fonte de tolerancia do motor e `TOLERANCIA_CONFORMIDADE_MIN/_DIA` = 10/20”; “F0-CONFORMIDADE 11/08” | Campo `resposta` mistura decisão posterior e verificação do fabricante. |
-| `app/docs/TICKETS.md:240` | “TOLERANCIA_CONFORMIDADE_MIN=10”; “o numero gravado na tela era 5, o da que NAO julga pontualidade” | Resumo O124. |
-| `app/docs/PROMPTS.md:316` | “a faixa *"atraso/saida antecipada admitidos"* comeca na tolerancia com que a FOLHA julga”; “**nao em 5**” | Registro de ajuste posterior da apresentação. |
-| `app/docs/TICKETS.md:278` | “A faixa que promete folha comeca em `TOLERANCIA_CONFORMIDADE_MIN` (10), nao nos 5 da classe” | Resumo do ajuste da apresentação. |
-| `app/docs/PROMPTS.md:1205` | “corte Ronald: volta da pausa dentro da tolerancia de conformidade (10 min por marcacao) (nao desconta OU desconta) do adicional noturno.” | **Fala atribuída diretamente a Ronald, 13/10**, inicialmente com alternativa aberta. |
-| `app/docs/PROMPTS.md:1205` | “volta da pausa dentro da tolerancia de conformidade (10 min por marcacao) **NAO desconta** do adicional noturno.” | **Resposta posterior atribuída diretamente a Ronald, 13/10 16h.** |
-| `app/docs/PROMPTS.md:1205` | “mandato dele de 11/08”; “o DOBRO do legal” | Comentário retrospectivo do fabricante na mesma linha. |
-| `app/docs/PROMPTS.md:1223` | “aval Ronald: BUG-COMERCIAL-SEM-PONTUALIDADE -- MotorComercial.calcular_periodo nao chama aplicar_tolerancia (regua unica F0-CONFORMIDADE 11/08, "consumida pelos dois julgadores")” | **Fala posterior atribuída diretamente a Ronald, 13/10**, nomeando o mandato. |
-| `app/docs/BACKLOG.md:1556` | “a regua unica da F0-CONFORMIDADE (11/08) diz "consumida pelos DOIS julgadores"” | Relato O271. |
-| `app/docs/TICKETS.md:135` | “a regua unica da F0-CONFORMIDADE (11/08, *"consumida pelos DOIS julgadores"*)” | Resumo O271. |
-| `app/docs/RELATO-ARQUIVO.md:1571` | “`aplicar_tolerancia` (regua unica F0-CONFORMIDADE)” | Referência secundária. |
-| `app/docs/RELATO-ARQUIVO.md:762` | “o teto DIARIO de 20 min da F0-CONFORMIDADE ganha leitor”; “**ZERO** leitor de producao” | Pergunta do fabricante. |
-| `app/docs/RELATO-ARQUIVO.md:765` | “`TOLERANCIA_CONFORMIDADE_DIA` sem leitor -- 22 min onde o teto diario diz 0” | Repetição de exemplo **posteriormente retratado**. |
-| `app/docs/PENDENTES_RONALD.json:2766` | “o teto DIARIO que voce declarou em 11/08 nao existe no calculo”; “Ganha leitor ou sai da declaracao” | Pergunta do fabricante. |
-| `app/docs/PENDENTES_RONALD.json:2767` | “I17 ganha leitor, teto diario de 20 passa a julgar” | **Frase oferecida pelo fabricante**, ainda não a resposta humana. |
-| `app/docs/PENDENTES_RONALD.json:2771` | “corte Ronald 18/10 ~03:1x (LITERAL)”; “(2) I17 ganha leitor, teto diario de 20 passa a julgar” | **Resposta identificada como literal de Ronald.** |
-| `app/docs/PROMPTS.md:1259` | “literal”; “(2) I17 ganha leitor, teto diario de 20 passa a julgar” | Repetição da resposta de Ronald de 18/10. |
-| `app/docs/BACKLOG.md:1602` | “LITERAL”; “I17 ganha LEITOR e o teto diario de 20 passa a julgar”; “I17 PARADO em zona inviolavel, destino a troca” | Registro da decisão e da implementação pendente. |
-| `app/docs/PENDENTES_RONALD.json:2772` | “a resposta dele NAO muda”; “4 pontas de 10 min cada dao 40 min de perdao, o DOBRO do teto de 20” | Retratação do fabricante, preservando a resposta de Ronald. |
-| `app/docs/RELATO.md:5168` | “o mandato `TOL=10` dele de 11/08” | Atribuição retrospectiva. |
-| `app/docs/RELATO.md:5205-5206` | “o `TOL = 10` por marcacao (mandato dele 11/08) e mais generoso que o Art.58 par.1” | Comparação do fabricante. |
-| `app/docs/BACKLOG.md:1665` | “Art.58 par.1 (5 min por MARCACAO) x os 10 min por PONTA do codigo” | Registro posterior da divergência de dimensionamento. |
-
-Não localizei passagem específica desse mandato/escolha em `CLAUDE.md`, `app/docs/LEIS.md`, `app/docs/CORTES.md`, `app/docs/LAPIDES.md` ou `app/docs/DOSSIES.md`: **[não verificado quanto à inexistência absoluta]**. A “LAPIDE” explicitamente citada pelo relato está **no código**, em `app/ponto/motor_calculo_v2.py:54`, conforme `app/docs/RELATO-ARQUIVO.md:30489-30491`.
-
-Portanto: existe **ratificação posterior atribuída literalmente a Ronald**; a **origem literal de 11/08** continua sem documento localizado. (`app/docs/PROMPTS.md:1205`; `app/docs/PENDENTES_RONALD.json:2771`; origem original: **[não verificado]**)
-
-**B2 — Todos os leitores executáveis das três constantes**
-
-Nos quadros, “patch alcança” significa alterar o atributo do módulo **antes da próxima leitura**, no mesmo processo. Os imports locais aparecem no corpo das funções; os dois imports dos calculadores ficam no topo dos módulos. (`app/escala/utils.py:299-307`; `app/ponto/calculador/regras.py:402`; `app/ponto/calculador/periodo.py:163`)
-
-| Constante e leitor de produção | Forma de leitura | Patch no atributo do motor alcança? |
-|---|---|---|
-| `CONFORMIDADE_MIN` — `MotorBase.aplicar_tolerancia`, `app/ponto/motor_calculo_v2.py:2006,2008` | Global do próprio módulo, resolvido durante a execução. | **Sim.** |
-| `CONFORMIDADE_MIN` — `status_do_delta`, import `app/escala/utils.py:306`, uso `:307` | `from ... import ... as _CONF`, **local à função**. | **Sim**, na próxima chamada. |
-| `CONFORMIDADE_MIN` — `cumpriu_a_volta_do_intervalo`, import `app/escala/regua_defesa.py:490`, uso `:495` | Import por valor **local à função**. | **Sim**, na próxima chamada. |
-| `CONFORMIDADE_MIN` — `frase_da_resposta`, import `app/chamados/rotulos.py:134`, uso `:135,154` | Import local, somente quando `tolerancia_folha_min is None`. | **Sim nesse ramo**; argumento explícito prevalece. |
-| `CONFORMIDADE_MIN` — `_envelope_lote_min`, `app/chamados/services/validacao.py:823-826` | Import por valor **local à função**. | **Sim**, na próxima chamada. |
-| `CONFORMIDADE_DIA` | **Nenhum leitor executável de produção localizado**; definição em `app/ponto/motor_calculo_v2.py:61`, ausência registrada pelo censo em `app/ponto/tests/test_f0_conformidade.py:163-173`. | Alterar o atributo sozinho **não produz efeito no cálculo**. |
-| `HE_MIN_DIA` — período 12x36, `app/ponto/motor_calculo_v2.py:2845` | Global do próprio módulo durante execução. | **Sim.** |
-| `HE_MIN_DIA` — diário turno partido, `app/ponto/motor_calculo_v2.py:3151` | Global do próprio módulo durante execução. | **Sim.** |
-| `HE_MIN_DIA` — semanal turno partido, `app/ponto/motor_calculo_v2.py:3179` | Global do módulo, multiplicado pelos dias apurados. | **Sim.** |
-| `HE_MIN_DIA` — diário comercial, `app/ponto/motor_calculo_v2.py:3414` | Global do próprio módulo durante execução. | **Sim.** |
-| `HE_MIN_DIA` — `he_contabilizavel`, import `app/colaboradores/services/calendario.py:74`, uso `:75` | Import por valor **local à função**. | **Sim**, na próxima chamada. |
-| `HE_MIN_DIA` — `do_dia`, import `app/ponto/calculador/regras.py:402`, uso `:774` | Import por valor **no topo do módulo**. | **Não**, se o calculador já foi importado antes do patch. |
-| `HE_MIN_DIA` — `excesso_do_dia`, import `app/ponto/calculador/periodo.py:163`, uso `:418` | Import por valor **no topo do módulo**. | **Não**, se o calculador já foi importado antes do patch. |
-
-**Não localizei captura dessas constantes ou dos aliases importados em defaults de funções**, na varredura AST do `app`; verificação em execução: **[não verificado]**. Nos leitores locais acima, as assinaturas não capturam a constante; `frase_da_resposta` usa default `None`. (`ap
-
-[truncado em 20000 de 24872 caracteres]
-
-## 14/11 09:54 · sessao ae252b1a896e · - · - · origem=Ronald (tmux)
-
-B2 — leitores executáveis encontrados por busca textual e AST; comentários, docstrings e strings não foram tratados como consumo da constante. O próprio censo existente define essa separação em `app/ponto/tests/test_f0_conformidade.py:103-138`.
-
-| Constante / leitor de produção | Como lê | Patch posterior no atributo do motor alcança? |
-|---|---|---|
-| `_CONFORMIDADE_MIN`: `MotorBase.aplicar_tolerancia`, `app/ponto/motor_calculo_v2.py:2006,2008` | Nome global do próprio módulo, resolvido na execução | Sim |
-| `_CONFORMIDADE_MIN`: `status_do_delta`, import `app/escala/utils.py:306`, uso `:307` | `from ... import ... as _CONF` **dentro da função** | Sim, na próxima chamada |
-| `_CONFORMIDADE_MIN`: `cumpriu_a_volta_do_intervalo`, import `app/escala/regua_defesa.py:490`, uso `:495` | `from ... import X` **dentro da função** | Sim, na próxima chamada |
-| `_CONFORMIDADE_MIN`: `frase_da_resposta`, import `app/chamados/rotulos.py:134`, uso `:135` | Import local, somente se parâmetro `tolerancia_folha_min is None` (`:133`); assinatura usa default `None` (`:114-115`) | Sim, nesse ramo; parâmetro explícito prevalece |
-| `_CONFORMIDADE_MIN`: `_envelope_lote_min`, `app/chamados/services/validacao.py:823-826` | Import local por valor | Sim, na próxima chamada |
-| `_CONFORMIDADE_DIA` | Nenhum leitor executável de produção encontrado; só definição `app/ponto/motor_calculo_v2.py:61`. O teste registra e cobra esse vazio em `app/ponto/tests/test_f0_conformidade.py:163-173,175-213` | Alterar atributo sozinho não produz efeito de cálculo |
-| `_HE_MIN_DIA`: cálculo de período 12x36, `app/ponto/motor_calculo_v2.py:2845` | Global do próprio módulo na execução | Sim |
-| `_HE_MIN_DIA`: fechamento diário do turno partido, `app/ponto/motor_calculo_v2.py:3151` | Global do próprio módulo na execução | Sim |
-| `_HE_MIN_DIA`: fechamento semanal do turno partido, `app/ponto/motor_calculo_v2.py:3179` | Global do próprio módulo; multiplica pelos dias apurados | Sim |
-| `_HE_MIN_DIA`: fechamento diário comercial, `app/ponto/motor_calculo_v2.py:3414` | Global do próprio módulo na execução | Sim |
-| `_HE_MIN_DIA`: `he_contabilizavel`, import `app/colaboradores/services/calendario.py:74`, uso `:75` | Import local por valor | Sim, na próxima chamada |
-| `_HE_MIN_DIA`: `do_dia`, import `app/ponto/calculador/regras.py:402`, uso `:774` | Import **no topo do módulo**, por valor | **Não**, depois de carregado esse módulo |
-| `_HE_MIN_DIA`: `excesso_do_dia`, import `app/ponto/calculador/periodo.py:163`, uso `:418` | Import **no topo do módulo**, por valor | **Não**, depois de carregado esse módulo |
-
-**Leitor indireto relevante:** `_ContextoPontualidade.aplicar_tolerancia = MotorBase.aplicar_tolerancia`, em `app/ponto/calculador/regras.py:114`, executado em `:264`. Importar/emprestar a função não copia suas constantes: ela continua resolvendo `_CONFORMIDADE_MIN` nos globals de `motor_calculo_v2.py:2006,2008`; portanto o patch alcança também essa passagem. `pontualidade_no_dia` delega a ela por `pontualidade_do_dia`, em `app/ponto/calculador/periodo.py:464,474-476`.
-
-**Envelope indireto:** `ENVELOPE_LOTE_MIN` é atributo virtual entregue por `__getattr__`, que chama `_envelope_lote_min`, em `app/chamados/services/validacao.py:846-849`; rótulos também consultam a função em `:837-840,850-851`. O classificador consulta a função em `:894`. Assim, essas consultas novas acompanham o patch; um consumidor que já tenha guardado o número via `from ... import ENVELOPE_LOTE_MIN` conserva o valor recebido — exemplo do import por valor em `app/chamados/tests/test_lote_seguro_envelope.py:32`.
-
-**Defaults:** não encontrei captura de nenhuma das três constantes, nem de seus aliases importados, em defaults de funções na varredura AST do `app` [não verificado em execução]. Nas funções diretamente consumidoras, os imports ficam no corpo e a assinatura de `frase_da_resposta` usa `None`, não a constante: `app/escala/utils.py:299,306`; `app/escala/regua_defesa.py:459,490`; `app/chamados/rotulos.py:114-115,133-135`; `app/chamados/services/validacao.py:823-826`; `app/colaboradores/services/calendario.py:62,74`.
-
-Leitores executáveis **de testes**, separados dos de produção: [nao verificado]
-
-| Constante | Arquivo: import e uso |
-|---|---|
-| `_CONFORMIDADE_MIN` | `app/ponto/tests/test_f0_conformidade.py:20`: atributo `M.X` |
-| `_CONFORMIDADE_DIA` | `app/ponto/tests/test_f0_conformidade.py:21,213`: atributo `M.X` |
-| `_CONFORMIDADE_MIN` | `app/escala/tests/test_grade_fuzz.py:17-18`: import local alias `_CONF` |
-| `_CONFORMIDADE_MIN` | `app/escala/tests/test_t4_lei_lampada_delta.py:42,51`: import local alias `CONF` |
-| `_CONFORMIDADE_MIN` | `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:273,298`: import local |
-| `_CONFORMIDADE_MIN` | `app/chamados/tests/test_lote_seguro_envelope.py:33,35,40,59-60`: imports locais |
-| `_CONFORMIDADE_MIN` | `app/chamados/tests/test_ui_resposta_diz_o_que_e.py:300,302`: import local |
-| `_CONFORMIDADE_MIN` | `app/ponto/tests/test_o280_bateria_da_lei.py:3453,3487`: import local |
-| `_HE_MIN_DIA` | `app/colaboradores/tests/test_calendario_um_juiz.py:49-51`: import local |
-| `_HE_MIN_DIA` | `app/ponto/tests/test_tolerancia_he.py:58-61`: import local |
-| `_HE_MIN_DIA` | `app/ponto/tests/test_janela_he_saida.py:159,168`: import local |
-
-Nos imports locais dos testes, o patch anterior à entrada no método alcança o número importado; nos atributos `M.X`, a leitura acontece diretamente no atributo no momento do assert. As linhas acima mostram ambas as formas; o alias `M` vem de `app/ponto/tests/test_f0_conformidade.py:13`.
-
-B3 — **a implementação atual não é “até N por marcação e teto M no dia” para conformidade.** É tolerância independente por ponta desfavorável: `_de = entrada - prevista_entrada` e `_ds = prevista_saida - saida`, em `app/ponto/motor_calculo_v2.py:1973-1976`; cada valor `<=10` fica zerado, cada valor `>10` é cobrado inteiro, em `:2006-2010`. Não se subtrai franquia de dez minutos, nem se acumula ali o total perdoado do dia (`:1970-2010`).
-
-O teto de vinte anunciado em `app/ponto/motor_calculo_v2.py:53,61` não participa desse cálculo; o teste registra explicitamente que não há leitor de produção em `app/ponto/tests/test_f0_conformidade.py:163-173`. Consequência local deduzida da função: quatro pontas desfavoráveis de dez minutos, em dois pares, produzem zero de pontualidade embora somem quarenta minutos; o próprio registro do teste explicita esse exemplo em `:188-195`.
-
-Há outro teto de pontualidade, mas é diferente: soma os descontos já apurados e limita-os a `max(0, previsto - trabalhado real)`, com rateio proporcional, em `app/ponto/motor_calculo_v2.py:1170-1196`. Ele não aplica o limite F0 de vinte minutos (`:1170-1196`).
-
-**Na HE**, a condição é agregada: calcula excesso de duração sobre limite e zera se `<=10`; ultrapassado o limite, preserva o excesso integral, em `app/ponto/motor_calculo_v2.py:2840-2854,3144-3158,3409-3421`. No semanal, compara excesso sobre 2.640 minutos com `10 × dias apurados`, em `:3169-3187`. Os calculadores repetem a comparação agregada com a constante importada em `app/ponto/calculador/regras.py:771-775` e `app/ponto/calculador/periodo.py:416-421`.
-
-**Diferença de forma perante a leitura literal fornecida pelo usuário:** essa leitura associa duas condições, por marcação **e** por dia; a conformidade atual só testa cada ponta separadamente, sem teto agregado F0, enquanto a HE testa excesso agregado de duração sem exigir ali que cada marcação respeite um máximo individual. Isso resulta diretamente de `app/ponto/motor_calculo_v2.py:1973-2010,2840-2854,3144-3158`. Além disso, a função de pontualidade trata apenas atraso de entrada e antecipação de saída, com sinais definidos em `:1973-1976`; ela não trata simetricamente todas as variações positivas e negativas.
-
-O docstring diz “tolerancia de 5 min”, mas o corpo lê a constante dez: `app/ponto/motor_calculo_v2.py:1952,2006-2009`, com valor em `:60`. A discrepância já está registrada literalmente na lápide de `app/ponto/calculador/periodo.py:153-160`.
-
-_5018 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5025 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
