@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 15:11** · publicado em **14/11/2026 15:11** (UTC-3)
+> Ultima resposta processada: **14/11/2026 15:20** · publicado em **14/11/2026 15:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 15:20 · sessao 5573ac6b03cc · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Implementação, inventário dos 13 arquivos, censo e comandos estão na [entrega c22](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:14).
+
+- Verificação local: 83 testes legados, 7 suplementares e 35 da catraca passaram; 19 mutantes e o registro antigo morreram por assertion. [Resultados](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:103). [nao verificado]
+- RED/GREEN ORM, incluindo P3 vermelho: **[não verificado]**. P3 foi entregue sem `expectedFailure`; o hunk protegido continua pendente da sessão. [Comando](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:108).
+- Ruff limpo: **[não verificado]**, ferramenta ausente. [Registro](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:11).
+
+Ressalva explícita: `[G]` normalizado pede I e espera zero recusas; o teste da guarda força o pedido G na entrada e exige uma trilha em duas passadas. [Detalhe](/home/ronald/wt-codex-bo-disputa-sem-pergunta-221357/app/docs/BO_DISPUTA_C22_ENTREGA.txt:37). [nao verificado]
 
 ## 14/11 15:11 · sessao fbfa3d68b664 · E3-V10 · leitura · origem=Code
 
@@ -536,28 +546,4 @@ Referências **B** = arquivo da cópia/base; **P** = linhas resultantes do diff 
 
 Coordenadas P conferidas por contagem das alterações: início `+2`, extração `+30`, substituição de 14 linhas por uma `−13`, ramo commit Python `+6`, total `+25`; `julgar_commit:408–430`, ramo Python `507–512`, ramo shell `996–1002`. [diff fornecido: **[nao verificado por arquivo físico]**] [nao verificado]
 
-## 14/11 14:50 · sessao ff798a325404 · - · - · origem=Ronald (tmux)
-
-Q4: **PROCEDENTE condicional nos geradores de mensagens; nenhum travamento demonstrado.**
-
-- `bin/hooks.sh install` escreve o wrapper no caminho fixo da principal, delegando para `bin/commit_msg.sh`; os destinos novos são `FONTE_MSG`/`ALVO_MSG` e o `exec` está no bloco adicionado do diff. Não há instalação realizada nem hooks reais no dado fornecido. (`diff_v1.patch`, hunk de `bin/hooks.sh:9` e hunk `+65`; instalação atual [nao verificado].)
-- Escritor de `LEI_AKITA_COMMIT` e `LEI_AKITA_R`: a nova chamada de `bin/commit_msg.sh:28`; leitores: modo Bash e ramo Python acrescentados em `bin/tests/test_lei_akita.sh`. `LEI_AKITA_HEAD` já é escrito pelo pre-push e lido pelo selo; `ALVO` Bash alimenta `_ler`, e o Python possui sua própria variável `ALVO`. (`bin/pre-push.sh:38`; `bin/tests/test_lei_akita.sh:17`; `bin/tests/test_lei_akita.sh:21`; `bin/tests/test_lei_akita.sh:22`; `bin/tests/test_lei_akita.sh:74`; `diff_v1.patch`, hunks `+19`, `+497`, `+993`.)
-- **Possível bypass novo:** `LEI_AKITA_COMMIT=<SHA sem linha>` herdado no push ativa o modo que julga apenas aquele SHA e sai antes do universo/catraca; o pre-push atribui somente `LEI_AKITA_HEAD`, sem limpar a variável nova. Outras guardas do push continuam aplicáveis. Isso contradiz a promessa “nenhum env de bypass nasce”. (`bin/pre-push.sh:38`; `diff_v1.patch`, ramo `if os.environ.get('LEI_AKITA_COMMIT')` e bloco Bash do hunk `+993`; `contrato.txt:1`.)
-
-Chamadores:
-
-| Sítio | Resultado pelo código |
-|---|---|
-| `pos_push.sh` | Mensagem automática não contém LEI-AKITA; passa pelo retorno inicial do hook. (`bin/pos_push.sh:30`; `bin/pos_push.sh:31`; `bin/pos_push.sh:37`; proposta `bin/commit_msg.sh:17`.) |
-| `codex_pergunta --construtor` | Proíbe commit; inventário verifica HEAD e descarta a saída quando alterado. Não monta mensagem de commit. (`bin/codex_pergunta.sh:345`; `bin/codex_pergunta.sh:148`; `bin/codex_pergunta.sh:181`; `bin/codex_pergunta.sh:437`; `bin/codex_pergunta.sh:441`.) |
-| `disjuntor.py` | Os subprocessos Git encontrados consultam worktrees, log e status, sem commit; ele não depende de mensagem automática LEI-AKITA. (`bin/disjuntor.py:1234`; `bin/disjuntor.py:1237`; `bin/disjuntor.py:1244`; `bin/disjuntor.py:1247`.) |
-| Fabricante | Prompt exige formato “exato” de LEI-AKITA **sem `padrao=`** e proíbe commit direto; se seguido literalmente, o novo hook recusará no integrador. (`bin/fabricante_prompt.md:49`; `bin/fabricante_prompt.md:52`; `bin/fabricante_prompt.md:70`; `bin/tests/test_lei_akita.sh:319`; `bin/tests/test_lei_akita.sh:321`.) |
-| Esteira/integrador | Copia `msg_commit.molde` para `.txt`, substitui somente RED/Suite e entrega ao integrador; este executa `git commit -F msg_commit.txt -- caminhos`, sem completar o campo ausente. (`bin/molde_fatia/esteira.sh:14`; `bin/molde_fatia/esteira.sh:22`; `bin/molde_fatia/esteira.sh:26`; `app/core/integrador_lote.py:481`.) |
-| Cadeias antigas | Também commitam o arquivo de mensagem diretamente; mensagem sem `padrao=` será recusada. (`bin/molde_fatia/cadeia.sh:68`; `bin/molde_autocura/cadeia.sh:65`; `bin/tests/test_lei_akita.sh:321`.) |
-| Outros automáticos | `relato`, `codex_estado` e `reverter_o122` geram mensagens sem LEI-AKITA, portanto passam pelo retorno inicial. (`bin/relato.sh:136`; `bin/codex_estado.sh:83`; `bin/reverter_o122.sh:30`; proposta `bin/commit_msg.sh:17`.) |
-
-A recusa de `_commitar` apenas impede adicionar a fatia em `subiram`; o integrador segue ao push. Incidência em pacotes reais e produção: [nao verificado]. (`app/core/integrador_lote.py:719`; `app/core/integrador_lote.py:720`; `app/core/integrador_lote.py:739`.)
-
-Q6, juiz registrado: **nada quanto a duplicação de juiz de domínio**. O mapa descreve juízes de domínio gerados de `core/juizes.py`; a proposta reutiliza `julgar` existente por meio de `julgar_commit`. Há, porém, reconhecimento paralelo de “tem linha” no grep do hook e em `tem_linha` Python, sujeito a divergência de whitespace Unicode. (`app/docs/MAPA-JUIZES.md:3`; `app/docs/MAPA-JUIZES.md:7`; `bin/tests/test_lei_akita.sh:336`; `bin/tests/test_lei_akita.sh:354`; proposta `bin/commit_msg.sh:17`; `diff_v1.patch`, definição nova `julgar_commit`.)
-
-_5172 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5173 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
