@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 13:50** · publicado em **14/11/2026 13:51** (UTC-3)
+> Ultima resposta processada: **14/11/2026 13:55** · publicado em **14/11/2026 13:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 13:55 · sessao 0911a0f79119 · HJ-091 · sonda · origem=Code
+
+| Campo | Valor |
+|---|---|
+| universo_admin_encerrado_colab_com_ferias | `845` [nao verificado] |
+| com_dia_do_fato | `419` [nao verificado] |
+| dia_coberto_por_ferias | `27` [nao verificado] |
+| veto_admin_sem_fato_novo_ativo_hoje | `16` [nao verificado] |
+| erros | `0` [nao verificado] |
+| pks_veto | `[3331, 3444, 3934, 4533, 4879, 5968, 6184, 7081, 7084, 7805, 7809, 8640, 11141, 11776, 12526, 12801]` [nao verificado] |
+| DEPOIS | `{'pk': 3977, 'tipo': 'ferias', 'status': 'rejeitada', 'agendamento_ferias_id': 103, 'data': datetime.date(2026, 11, 7)}` [nao verificado] |
+| DEPOIS | `{'pk': 3985, 'tipo': 'ferias', 'status': 'rejeitada', 'agendamento_ferias_id': 103, 'data': datetime.date(2026, 11, 5)}` [nao verificado] |
+| DEPOIS | `{'pk': 3995, 'tipo': 'ferias', 'status': 'rejeitada', 'agendamento_ferias_id': 103, 'data': datetime.date(2026, 11, 6)}` [nao verificado] |
+| DEPOIS | `{'pk': 5592, 'tipo': 'abono', 'status': 'aprovada', 'agendamento_ferias_id': None, 'data': datetime.date(2026, 11, 5)}` [nao verificado] |
+| col344_0507 | `[(3977, 'ferias', 'rejeitada', 103), (3985, 'ferias', 'rejeitada', 103), (3995, 'ferias', 'rejeitada', 103), (5592, 'abono', 'aprovada', None)]` [nao verificado] |
+| rejeitadas_sem_origem_em_agendamento_vivo | `0 []` [nao verificado] |
+| ferias_sem_origem_total | `60` [nao verificado] |
+| Ocorrências literais de ERRO no dado raspado | `0` [nao verificado] |
+| Ocorrências literais de Traceback no dado raspado | `0` [nao verificado] |
+
+## 14/11 13:53 · sessao 3423c9c36e81 · HJ-091 · sonda · origem=Code
+
+| Campo | Valor |
+|---|---|
+| universo_admin_encerrado_colab_com_ferias [nao verificado] | 845 |
+| com_dia_do_fato [nao verificado] | 419 |
+| dia_coberto_por_ferias [nao verificado] | 27 |
+| veto_admin_sem_fato_novo_ativo_hoje [nao verificado] | 16 |
+| erros [nao verificado] | 0 |
+| pks_veto [nao verificado] | [3331, 3444, 3934, 4533, 4879, 5968, 6184, 7081, 7084, 7805, 7809, 8640, 11141, 11776, 12526, 12801] |
+| TRES [nao verificado] | 3977 col 344 data 2026-11-07 tipo ferias status rejeitada marcas [103] janelas [103] |
+| TRES [nao verificado] | 3985 col 344 data 2026-11-05 tipo ferias status rejeitada marcas [103] janelas [103] |
+| TRES [nao verificado] | 3995 col 344 data 2026-11-06 tipo ferias status rejeitada marcas [103] janelas [103] |
+| coluna_fk_existe [nao verificado] | False |
+| Ocorrências literais de ERRO no bloco fornecido [nao verificado] | 0 |
+| Ocorrências literais de Traceback no bloco fornecido [nao verificado] | 0 |
+
+O bloco transcrito informa `erros 0`; a afirmação “erro NAO e zero” não encontra suporte nesse bloco. O total real de erros da execução permanece [nao verificado].
 
 ## 14/11 13:50 · sessao af94840d4a0c · FRAC5 · verificador · origem=Code
 
@@ -878,89 +917,4 @@ Casos abreviados na tabela:
 
 [truncado em 20000 de 51545 caracteres]
 
-## 14/11 12:16 · sessao f3a6a08a7dfd · COERENCIA-PELO-EFEITO · censo · origem=Code
-
-Censo estático da cópia; ocorrência do efeito em produção e resultado de execução dos testes: [nao verificado]. **M conta somente as linhas D**; linhas E identificam escrita e transporte do efeito. [nao verificado]
-
-“SEM JUIZ” refere-se ao predicado completo, mesmo quando ele consulta subpredicados registrados. O registro considerado é o executável, incluindo suas extensões. (app/core/juizes.py:182; app/core/juizes.py:727; app/core/juizes.py:1044; app/core/juizes.py:1192; app/core/juizes.py:1310)
-
-“SEM CASO” significa caso qualificado não localizado; completude dessa ausência: [nao verificado]. A referência isolada a L-110 não foi contada como regra substantiva de reabertura: ela exige conferir contra a regra, mas não determina quando reabrir. (app/docs/LEIS.md:136; app/chamados/tests/test_reabrir_pergunta_a_premissa.py:7)
-
-| passo | decisao | arquivo::funcao:linha | grava em | relido por | juiz | caso pela regra |
-|---|---|---|---|---|---|---|
-| E1 | Estado persistido do chamado: reaberto recebe `em_analise`; vida limpa encerramento e restaura urgência original. | app/chamados/models.py::ChamadoColaborador._gravar_estado:228 | `status_local`, `resolvido_em=None`, `via_encerramento=''`, urgência; save :296 | Painel/badges: app/chamados/services/painel.py:212; relavra das perguntas: app/chamados/models.py:303 | Escrita; decisões abaixo | — |
-| E2 | Escritores encontrados do estado existente: `_aplicar`, `reconciliar`, `cancelar`, `analisar`, `reabrir`, `encerrar`, encerramento por tranca convergem no núcleo. | app/chamados/models.py::_aplicar:450; ::reconciliar:655; ::cancelar:835; ::analisar:853; ::reabrir:1489; ::encerrar:1666; ::encerrar_por_competencia_trancada:1686 | Pelo núcleo E1 | app/chamados/services/vigia_loop.py::trilha_x_banco:114 | Escrita; decisões abaixo | — |
-| E3 | Nascimento também escreve estado: `abrir` monta defaults; `criar` insere estado inicial. Não é atualização de uma linha encerrada. | app/chamados/models.py::ChamadoColaborador.abrir:985; ::criar:1142 | `status_local` no INSERT | Dedup: app/chamados/models.py:953 | Escrita | — |
-| E4 | Reabrir disputa limpa fechamento; reabrir questionário limpa resposta/validação; são projeções diferentes. | app/chamados/models.py::DisputaSupervisao.reabrir_admin:2205; ::reabrir_sistema:2229; app/chamados/services/disputa_emissao.py::reabrir_para_correcao:1593 | Disputa: quatro campos de fechamento; pergunta: resposta e validação | `aberta`: app/chamados/models.py:1870; estado da pergunta: :3097 | Escrita; decisões abaixo | — |
-| E5 | Descarimbo individual e em lote zeram o trio de materialização; a correção pode acrescentar outros campos no mesmo update. | app/chamados/models.py::PerguntaDisputa._escrever_carimbo:3153; ::descarimbar:3264; ::descarimbar_em_lote:3320 | `materializada_em`, `materializada_por`, `via_resolucao` | C6: app/chamados/juizes.py:1400; fila: app/chamados/services/pergunta_no_app.py:70 | Escrita; decisões abaixo | — |
-| E6 | A correção guarda a projeção anterior em sequência de decisões antes de limpar; emite evento para a célula. | app/chamados/services/disputa_emissao.py::reabrir_para_correcao:1615 | `DecisaoPergunta`; update :1630/:1632; evento :1633 | Histórico do fio: app/chamados/services/fio.py:228 | Escrita | — |
-| E7 | Batida, ausência e justificativa chegam ao cartório por eventos; batida alcança dia e véspera. | app/ponto/signals.py::_dias_batida:108; ::_cartorio_post_save_batida:131; ::_cartorio_post_delete_batida:138; ::_cartorio_post_save_ausencia:143; ::_cartorio_post_delete_ausencia:150; ::_cartorio_post_save_justificativa:161 | Julgamento por `_julgar_dias`:93 | Emissor do cartório: app/ponto/services/cartorio.py:1791 | Transporte | — |
-| E8 | Depois de renascer, o emissor espelha os marcos novos somente se o chamado voltou a vivo. | app/ponto/management/commands/detectar_ausencias.py::Command._abrir_chamado:739; ::_espelhar_marcos:544 | Contexto por porta :559; ocorrência :564 | Próxima conferência: app/chamados/models.py:1334 | Transporte | — |
-| D01 | `REABRIR` permite exclusivamente `resolvido/fechado → em_analise`; demais origens não têm transição. | app/chamados/catalogo/motor.py::decidir:158; mapa :113 | E1, chamado por app/chamados/models.py:1487 | `recusa_da_reabertura`:1405 | C2 — app/core/juizes.py:278 | SEM CASO |
-| D02 | Transição humana: terminais absolutos recusam; fechado exige perfil administrativo; esse perfil também ultrapassa a matriz humana. | app/chamados/catalogo/motor.py::decidir:139 | `_aplicar`: app/chamados/models.py:450 | Porta humana: app/chamados/models.py:132 | C2 — app/core/juizes.py:278 | SEM CASO |
-| D03 | Dedup encontrou chamado encerrado: pede renascimento com os marcos do pedido; existente é devolvido sem criar outra linha. | app/chamados/models.py::ChamadoColaborador.abrir:953 | Via `_renascer_por_premissa_viva`:969 | Emissor confere VIVOS: app/ponto/management/commands/detectar_ausencias.py:739 | C8 — app/core/juizes.py:284 | SEM CASO |
-| D04 | Renascimento automático recusa colaborador cuja situação não seja `ativo`. | app/chamados/models.py::ChamadoColaborador._renascer_por_premissa_viva:1052 | Nenhuma | Dedup :969; resposta tardia: app/chamados/services/resposta_tardia.py:46 | SEM JUIZ | SEM CASO |
-| D05 | Renascimento automático recusa encerramento pela via `cascade`. | app/chamados/models.py::ChamadoColaborador._renascer_por_premissa_viva:1054 | Nenhuma | Dedup :969; adesão: app/chamados/services/adesao.py:91 | SEM JUIZ | SEM CASO |
-| D06 | Módulo fora da tranca passa; demais dependem da competência do chamado estar trancada. | app/chamados/models.py::ChamadoColaborador._dia_em_competencia_trancada:1085 | Nenhuma; bloqueia :1056 | Legado de cluster: app/ponto/services/cluster_espurio.py:254 | SEM JUIZ da composição; C14 e K4 registrados em app/core/juizes.py:290/:322 | SEM CASO |
-| D07 | Veto automático por régua degenerada: sem template, erro ao obter marcos, falta de início/fim ou início igual ao fim. Universo e dia são conferidos antes; ato `humano=True` não aplica esse veto. | app/ponto/services/furos_vetados.py::motivo_do_veto:40; app/escala/regua_defesa.py::regua_degenerada:23; app/chamados/models.py:1384 | Recusa; trilha :1439 | Vigia: app/ponto/services/furos_vetados.py:106 | C16 — app/core/juizes.py:292 | SEM CASO |
-| D08 | Veto por régua suspeita: vínculo avaliado, faixa suspeita e pelo menos duas avaliações baixas. | app/escala/regua_defesa.py::vetar_cobranca_se_regua_suspeita:560; ::deve_vetar_regua:644 | Recusa pelo veto do dia | app/ponto/services/furos_vetados.py::motivo_do_veto:42 | C16, por essa autoridade — app/core/juizes.py:292 | SEM CASO |
-| D09 | Encerrado pelo admin, com data de resolução e dia identificável: sem fato novo, recusa reabrir, inclusive no pedido humano. | app/chamados/models.py::ChamadoColaborador.recusa_da_reabertura:1389 | Nenhuma; trilha :1443 | Contador usa o mesmo fato: app/chamados/services/vigia_loop.py:50 | SEM JUIZ | SEM CASO |
-| D10 | Batida é fato novo se está na janela de dia−1 até dia+2 e foi criada ou retratada em `(desde, até]`. | app/ponto/services/cartorio.py::houve_fato_novo:378 | Nenhuma | Porta: app/chamados/models.py:1393; contador: app/chamados/services/vigia_loop.py:50 | SEM JUIZ | SEM CASO |
-| D11 | Ausência é fato novo se cobre o dia e criação, atualização ou aprovação caiu no intervalo. Não exige que o novo status seja aprovado. | app/ponto/services/cartorio.py::houve_fato_novo:383 | Nenhuma | app/chamados/models.py:1393; app/chamados/services/vigia_loop.py:50 | SEM JUIZ | SEM CASO |
-| D12 | Justificativa do dia é fato novo por criação, atualização ou aprovação no intervalo. | app/ponto/services/cartorio.py::houve_fato_novo:387 | Nenhuma | app/chamados/models.py:1393; app/chamados/services/vigia_loop.py:50 | SEM JUIZ | SEM CASO |
-| D13 | Célula existente com `regenerada_em` ou `editada_em` no intervalo é fato novo; célula ausente retorna falso. | app/ponto/services/cartorio.py::houve_fato_novo:390 | Nenhuma | Porta :1393; contador: app/chamados/services/vigia_loop.py:50 | SEM JUIZ | SEM CASO |
-| D14 | Outro marco vencido é fato novo somente quando pertence à diferença dos vencidos entre os instantes e sua lâmpada está exatamente apagada. Recalcula os vencidos duas vezes. | app/ponto/services/cartorio.py::_marco_venceu_apagado:445 | Nenhuma | `houve_fato_novo`:395; contador: app/chamados/services/vigia_loop.py:50 | SEM JUIZ | SEM CASO |
-| D15 | Marco vence quando seu instante encadeado mais `teto_min` é menor ou igual a `agora`; vínculo/template ausente produz lista vazia. | app/ponto/services/cartorio.py::marcos_com_teto:890 | Nenhuma | `marcos_vencidos`:877; fábrica: app/chamados/services/fabrica_da_celula.py:45 | SEM JUIZ do vencimento | SEM CASO |
-| D16 | Agrupamento segura o filho somente com pai existente, do mesmo colaborador e em VIVOS. | app/chamados/models.py::ChamadoColaborador.agrupado_sob_pai_vivo:862 | Nenhuma | Recusa :1398; fechamento :785 | SEM JUIZ | SEM CASO |
-| D17 | Irmão vivo do mesmo turno bloqueia reabertura: compara chave da entrada; escolhe estágio mais avançado. O efeito migra resolvedoras vivas ao irmão. | app/chamados/juizes.py::irmao_vivo_do_turno:2213; app/chamados/models.py::reabrir:1458 | Costura pela porta :1462; chamado antigo permanece encerrado | Nota de redirecionamento :1474 | SEM JUIZ desse desempate; C8 registra `abrir`, app/core/juizes.py:284 | SEM CASO |
-| D18 | Justificativa relacionada aprovada torna a premissa regularizada. | app/chamados/models.py::ChamadoColaborador.premissa_regularizada:1313 | Nenhuma; recusa reabrir :1395 | Fechamento humano :183; sistema :785 | SEM JUIZ desse coletor | SEM CASO |
-| D19 | Sem dia forte identificável, premissa não é considerada regularizada. | app/chamados/models.py::ChamadoColaborador.premissa_regularizada:1315 | Nenhuma | Recusa :1396 | SEM JUIZ | SEM CASO |
-| D20 | Célula do julgamento com `veredito_via='admin'` regulariza a premissa. | app/chamados/models.py::ChamadoColaborador.premissa_regularizada:1327 | Nenhuma | Fechar :785; reabrir :1396 | SEM JUIZ desse predicado | SEM CASO |
-| D21 | Dia sem trabalho: `trabalha=False` ou ata com tipo preenchido diferente de trabalho; ausência parcial cobra o resto, salvo `trabalha=False`. `None` sozinho não cala. | app/chamados/juizes.py::dia_sem_trabalho:450; ::ausencia_parcial_cobra_o_resto:438 | Nenhuma | Premissa: app/chamados/models.py:1331; fábrica: app/chamados/services/fabrica_da_celula.py:112 | C18 — app/core/juizes.py:294 | L-022/L-061: app/chamados/tests/test_f1c4_3_none_cobra.py::JuizDiaSemTrabalhoTest::test_RED_none_com_ata_de_trabalho_NAO_e_dia_sem_trabalho:39; ::test_clausula_2_ata_de_folga_segue_dia_sem_trabalho:45. Parcial: app/chamados/tests/test_emis_ausencia_parcial_cobra.py::JuizAusenciaParcialTest::test_RED_ausencia_parcial_com_trabalha_true_NAO_e_dia_sem_trabalho:40 |
-| D22 | Todos os marcos cobrados devem existir e estar acesos para regularizar; marco/tipo/lâmpada desconhecido retorna `None`. No renascimento podem valer os marcos novos do pedido. | app/ponto/services/lastro.py::marcos_acesos:170; app/chamados/models.py:1334 | Nenhuma | Premissa :1335; conferência do cartório | SEM JUIZ próprio no registro | SEM CASO |
-| D23 | Marcos cobrados inexistentes regularizam somente se há lâmpadas e todos os marcos tipados estão ausentes; existência parcial não basta. | app/ponto/services/lastro.py::marcos_inexistentes:110 | Nenhuma | app/chamados/models.py::premissa_regularizada:1344 | SEM JUIZ | SEM CASO |
-| D24 | Cobertura da ausência depende do efeito pedido e de alcançar a data; a consulta ordena pela ausência mais recente. | app/ponto/turnos.py::ausencia_cobre:2554 | Nenhuma | `_celula_furada`: app/chamados/juizes.py:476; devolução: app/chamados/services/materializacao.py:669 | Ausência/folha e ausência/cobrança — app/core/juizes.py:190 | SEM CASO |
-| D25 | Dia furado: ausência inteira cobre; sem célula/ata retorna desconhecido; dia sem trabalho consulta véspera; lâmpada exatamente apagada acusa; órfã acusa apenas com régua sem rótulo suspeito. | app/chamados/juizes.py::_celula_furada:476 | Nenhuma | Premissa: app/chamados/models.py:1346 | SEM JUIZ próprio; consulta cobertura e C18 | L-061, trecho da ata: app/chamados/tests/test_f1c4_3_none_cobra.py::LeitoresDoJuizNoneCobraTest::test_RED_premissa_do_furo_em_dia_none_NAO_esta_regularizada:105; ::test_clausula_2_premissa_em_ata_de_folga_esta_regularizada:111 |
-| D26 | Sem resposta conclusiva da célula, feriado/folga pode matar premissa: recalcula fatos; previsto desconhecido não decide; exige faixa feriado/folga e premissa morta. | app/chamados/services/feriado_reavaliar.py::espurios:31 | Via `reconciliar` em ::encerrar:48 | Premissa: app/chamados/models.py:1352; evento/cron: app/chamados/services/feriado_reavaliar.py:83 | SEM JUIZ da seleção composta; usa F2 e C3 | SEM CASO |
-| D27 | Fallback consulta falta descoberta e turno aberto; classe/fato desconhecido preserva premissa viva; fato falso permite considerá-la morta. | app/chamados/models.py::premissa_regularizada:1354; app/chamados/catalogo/premissa.py::avaliar:121 | Nenhuma | Reabrir :1396; `premissa_morta`: app/chamados/catalogo/premissa.py:149 | C3, pelo núcleo compartilhado — app/core/juizes.py:279 | SEM CASO |
-| D28 | Resposta tardia reabre somente com célula cujo veredito acusa e aprovação do renascimento; caso contrário vira ocorrência e texto livre pode virar pauta. | app/chamados/services/resposta_tardia.py::receber:35 | Porta de renascimento :46; nota :53; pauta :63 | Fio e DP | SEM JUIZ da bifurcação | SEM CASO |
-| D29 | Desarquivar reabre chamado encerrado por tranca; após levantar arquivo e registrar toque, pede ressuscitação novamente. | app/chamados/views_arquivar.py::desarquivar_chamado:63 | `reabrir(humano=True)` :70; arquivo :77; perguntas :86 | C20 lê toque; fila lê silêncio | SEM JUIZ da seleção | SEM CASO |
-| D30 | Reabrir competência seleciona perguntas pela via e janela; chamados pela via e dia do fato dentro da janela. | app/chamados/services/competencia_trancada.py::reabrir:272 | Pergunta :279; chamado :290; trilha :293 | C6/tranca: app/chamados/juizes.py:1405 | SEM JUIZ da seleção completa | SEM CASO |
-| D31 | Comando de órfãs: competência exportada encaminha à Pauta DP e não reabre. | app/chamados/management/commands/reabrir_orfas_enterradas.py::Command.handle:93 | Pauta :100/:178 | Saída administrativa :101 | SEM JUIZ da decisão completa; entrega é subconsulta | L-092: app/chamados/tests/test_reabrir_orfas_enterradas.py::ReabrirOrfasEnterradasTest::test_exportada_nao_reabre_e_vai_para_a_pauta:128 |
-| D32 | Mesmo comando exige fantasma carimbada, não validada, datada, luz exatamente apagada, C6 viva, janela histórica e pai sem recusa nem irmãs ressuscitáveis. | app/chamados/management/commands/reabrir_orfas_enterradas.py::Command.handle:67 | Pergunta :157; disputa :165; pai :172 | Contadores do comando :113 | SEM JUIZ da seleção composta | SEM CASO |
-| D33 | Restaurar alcance: pergunta sem resposta e viva, âncora existente fora de VIVOS; recusa se conjunto alcança competência entregue/indecidível, limbo ou guarda do credor. | app/chamados/services/disputa_emissao.py::reabrir_credor_de_pergunta_viva:1821 | `credor.reabrir()` :1851 | Fio volta a listar; ocorrência :1852 | SEM JUIZ da composição; usa C6/C1 | SEM CASO |
-| D34 | Pai volta quando disputa segue aberta, pai não está vivo e há respostas creditadas sem veredito. | app/chamados/services/disputa_emissao.py::resolver_perguntas_por_chamado_resolvido:2003; app/chamados/juizes.py::irmas_respondidas_sem_consumo:2033 | `pai.reabrir()` :2011 | Mesa/fio por crédito :2034 | SEM JUIZ da decisão de reabrir; respostas sem veredito têm registro em app/core/juizes.py:298 | SEM CASO |
-| D35 | Adesão: exclui quem bateu, isento, desligado ou coberto por ausência não-falta; pai encerrado não-cascade recebe pedido de reabertura. | app/chamados/services/adesao.py::processar:61 | `pai.reabrir()` :93 | Agrupamento dos filhos :103 | SEM JUIZ da composição | SEM CASO |
-| D36 | Comando histórico de ausência reabre encerrados identificados pela nota antiga somente se a ausência ainda está em ABERTAS e há `--apply`. | app/ponto/management/commands/reabrir_chamados_ausencia_aberta.py::Command.handle:28 | `ch.reabrir()` :49 | Nota :50 | SEM JUIZ da seleção | SEM CASO |
-| D37 | Limbo de âncora: sem âncora declarada, após início e sem afastamento; existente encerrado recebe pedido de reabertura. | app/ponto/management/commands/detectar_ausencias.py::Command.handle:245 | `abrir` :272; `reabrir` :302 | Chamado de cadastro | SEM JUIZ da seleção | SEM CASO |
-| D38 | Legado de cluster só aplica no conjunto medido esperado; relê universo sob trava e pede renascimento se o chamado ainda pertence a ele. | app/ponto/services/cluster_espurio.py::tratar_legado_encerrado_sem_lastro:264 | Renascimento :287 | Contador :283; trilha :291 | SEM JUIZ dessa seleção | SEM CASO |
-| D39 | Universo de ressuscitação: materializada, sem texto de resposta e fora das vias terminais do fato. | app/chamados/models.py::ChamadoColaborador._universo_da_ressuscitacao:1530 | Descarimbo em lote :1613 | Dry/diagnóstico :1507/:1512 | SEM JUIZ desse universo | SEM CASO |
-| D40 | Próprio marco comprovadamente aceso impede ressuscitação; `None` não impede. Motivo determina chave DNA; pausas exigem todas as lâmpadas correspondentes. | app/chamados/models.py::_universo_da_ressuscitacao:1550; app/chamados/juizes.py::fato_do_marco_no_espelho:941 | Nenhuma para puladas | C6 usa o mesmo fato :1445 | SEM JUIZ próprio dessa pergunta | SEM CASO |
-| D41 | Ressuscitação simula a pergunta sem carimbo, validação e resposta; somente C6 viva entra nos IDs a limpar. | app/chamados/models.py::ChamadoColaborador._universo_da_ressuscitacao:1541 | Lote :1613; disputa fechada reabre :1622 | C6 sobre célula do julgamento :1548 | C6 — app/core/juizes.py:282 | SEM CASO |
-| D42 | Ação administrativa permite staff ou integrante do grupo administrativo. | app/chamados/services/acoes_disputa.py::acao_reabrir_disputa_admin:245 | Autoriza chamada :259 | Formulário: app/templates/chamados/partials/modal_fio.html:382 | SEM JUIZ desse predicado | SEM CASO |
-| D43 | Ação administrativa exige motivo válido, justificativa de pelo menos 20 caracteres e disputa fechada mais recente do chamado. | app/chamados/services/acoes_disputa.py::acao_reabrir_disputa_admin:248 | Porta :259 | Mensagens de recusa :251/:253/:256 | SEM JUIZ | SEM CASO |
-| D44 | Porta administrativa exige disputa fechada, menos de duas reaberturas e usuário presente; motivo novo entra se ainda ausente. | app/chamados/models.py::DisputaSupervisao.reabrir_admin:2194 | Limpa fechamento :2205; incrementa contador :2209; motivos :2211 | Modal lê contador e refaz teto: app/templates/chamados/partials/modal_fio.html:380 | SEM JUIZ | SEM CASO |
-| D45 | Reabertura administrativa cria nova pergunta de conversa de confirmação; conversa recebe dia civil e não deduplica fato. Se chamado está encerrado, pede reabertura humana. | app/chamados/services/acoes_disputa.py::acao_reabrir_disputa_admin:263; app/chamados/models.py::PerguntaDisputa.abrir_conversa:2856 | Pergunta nova; chamado :270 | Fio; pushes em app/chamados/services/acoes_disputa.py:286 | SEM JUIZ da emissão | SEM CASO |
-| D46 | Porta do sistema: disputa já aberta é no-op; fechada reabre sem consumir contador administrativo. | app/chamados/models.py::DisputaSupervisao.reabrir_sistema:2223 | Limpa quatro campos :2229; ocorrência :2236 | Cron de cobrança: app/ponto/management/commands/alertar_disputas_pendentes.py:33 | SEM JUIZ | SEM CASO |
-| D47 | Colaborador: exige autor, disputa aberta, menos de duas correções e respostas corrigíveis; reabre perguntas, não uma disputa fechada. | app/chamados/models.py::DisputaSupervisao.reabrir_por_colab:2276 | Perguntas :2293; `reaberturas_colab` :2295 | Fio :342; API: app/api/views.py:1169 | SEM JUIZ da elegibilidade/teto | SEM CASO |
-| D48 | Corrigíveis são respondidas e sem materialização ou ainda vivas pelo C6. | app/chamados/juizes.py
-
-[truncado em 20000 de 42537 caracteres]
-
-## 14/11 12:08 · sessao e2117872ca12 · - · - · origem=Ronald (tmux)
-
-Casos adicionais confirmados:
-
-| Decisão | Regra escrita / caso e resultado | Teste | [nao verificado]
-|---|---|---|
-| C18: `None` não equivale a folga | L-022/L-061; `trabalha=None`, ata trabalho ou sem tipo → `dia_sem_trabalho=False`; ata folga → `True`; `trabalha=False` → `True`. `app/docs/LEIS.md:73,95`; matriz `app/chamados/tests/test_f1c4_3_none_cobra.py:1-13` | `app/chamados/tests/test_f1c4_3_none_cobra.py::JuizDiaSemTrabalhoTest::test_RED_none_com_ata_de_trabalho_NAO_e_dia_sem_trabalho:39`; `::test_RED_none_sem_tipo_dia_NAO_e_dia_sem_trabalho:42`; `::test_clausula_2_ata_de_folga_segue_dia_sem_trabalho:45`; `::test_MORDE_trabalha_false_e_dia_sem_trabalho:50` |
-| Premissa pela ata | L-061; saída apagada em ata trabalho e `trabalha=None` → premissa não regularizada; ata folga → regularizada. `app/chamados/tests/test_f1c4_3_none_cobra.py:7-12` | `app/chamados/tests/test_f1c4_3_none_cobra.py::LeitoresDoJuizNoneCobraTest::test_RED_premissa_do_furo_em_dia_none_NAO_esta_regularizada:105`; `::test_clausula_2_premissa_em_ata_de_folga_esta_regularizada:111` |
-| Parcial cobra resto | Regra literal “abono parcial = cobra o resto”, leitura L-061; ata ausência parcial e `trabalha=True/None` → `False`; ausência integral ou `trabalha=False` → `True`. `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:4-20` | `app/chamados/tests/test_emis_ausencia_parcial_cobra.py::JuizAusenciaParcialTest::test_RED_ausencia_parcial_com_trabalha_true_NAO_e_dia_sem_trabalho:40`; `::test_RED_ausencia_parcial_com_trabalha_none_NAO_e_dia_sem_trabalho:43`; `::test_MORDE_ausencia_de_dia_inteiro_segue_dia_sem_trabalho:46`; `::test_trabalha_false_segue_dia_sem_trabalho:54` |
-| Ata transporta parcial ao juiz | Mesma matriz; ata lavrada parcial → cobra; integral → cala. `app/chamados/tests/test_emis_ausencia_parcial_cobra.py:19-20,76-82` | `app/chamados/tests/test_emis_ausencia_parcial_cobra.py::AtaLavraACoberturaParcialTest::test_RED_a_ata_lavrada_e_o_juiz_concordam_com_a_regra:76` |
-| Fábrica lê folga/ausência/limbo | L-061 explicitada; limbo com saída apagada → pergunta; ata folga/ausência → nenhuma. `app/chamados/tests/test_f1c4_3_emissores.py:6,20-30` | `app/chamados/tests/test_f1c4_3_emissores.py::EmissoresPerguntamAoJuizTest::test_RED_fabrica_limbo_pergunta:80`; `::test_fabrica_folga_nao_pergunta:83`; `::test_fabrica_ausencia_lavrada_com_trabalha_true_nao_pergunta:89` |
-| Limbo exportado vai ao DP | L-092 explicitada; limbo + TXT vigente → zero pergunta/uma pauta; sem TXT → pergunta/zero pauta; trabalho `True` + TXT → pergunta/zero pauta. `app/chamados/tests/test_f1c4_3_emissores.py:158-166` | `app/chamados/tests/test_f1c4_3_emissores.py::LimboEmCompetenciaExportadaVaiAPautaTest::test_RED_limbo_em_exportada_nao_pergunta_e_vai_a_pauta_dp:199`; `::test_limbo_em_aberta_pergunta_sem_pauta:207`; `::test_MORDE_trabalho_em_exportada_segue_perguntando_sem_pauta:212` |
-| Leitor supra lê célula soberana | L-061; `trabalha=False` com ata trabalho → `COBRANCA_EM_DIA_SEM_TRABALHO`; limbo sem tipo não ganha código. `app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:5-9` | `app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py::SupraPerguntaAoJuizTest::test_RED_celula_folga_com_ata_trabalho_e_dia_sem_trabalho_pelo_juiz:47`; `::test_MORDE_limbo_trabalha_none_sem_tipo_na_ata_nao_retrata:56` |
-
-A referência L-092 em `test_fio_le_o_juiz.py:11-12` versa sobre preservar TXT/gravado. Os testes de leitura admin `:105`, `:115`, `:121`, `:277` e validação `:291` não verificam TXT/gravado; não constituem caso L-092 da decisão de mostrar pergunta no fio. `app/chamados/tests/test_fio_le_o_juiz.py:105-125,277-313`.
-
-_5149 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5151 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
