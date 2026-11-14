@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 10:58** · publicado em **14/11/2026 11:02** (UTC-3)
+> Ultima resposta processada: **14/11/2026 11:23** · publicado em **14/11/2026 11:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 11:23 · sessao 0c1c22091564 · - · - · origem=Ronald (tmux)
+
+**PROCEDE — ocultação do caput foi fechada. NÃO PROCEDE — `if` novo gera aviso duplicado ou contraditório:** cada ramo relata uma violação distinta; código e âncora coincidem, mas textos diferem, e o índice preserva uma lista. (`app/ferias/situacao.py:227`; `app/ferias/situacao.py:228`; `app/ferias/situacao.py:237`; `app/ferias/situacao.py:244`; `app/ferias/situacao.py:300`)
+
+Tabela confirmada executando somente o juiz extraído por AST em memória; os avisos correspondentes decorrem dos três ramos independentes. (`app/ferias/models.py:265`; `app/ferias/situacao.py:228`; `app/ferias/situacao.py:237`; `app/ferias/situacao.py:244`)
+
+| Frações | Violações/avisos |
+|---|---|
+| `[14,5]` | nenhum |
+| `[5,5]` | `par1` |
+| `[14,5,5,5]` | `caput` |
+| `[5,5,5,5]` | `par1`, `caput` |
+| `[4,5,5,5]` | `par1`, `caput`, `par1_demais` |
+| `[14,4,5,5]` | `caput`, `par1_demais` |
+| `[4]` | `par1`, `par1_demais` |
+
+Fonte de todas as linhas: `app/ferias/models.py:271`, `app/ferias/models.py:273`, `app/ferias/models.py:275`, `app/ferias/models.py:277`.
+
+**PROCEDE — permanece o zero ignorado:** `[14,0] → []`; isso precede o delta, pois o filtro elimina valores falsos. (`app/ferias/models.py:271`)
+
+Produtores e consumidores:
+
+| Valor | Quem escreve/monta | Quem lê |
+|---|---|---|
+| Violações | `out.append` em `app/ferias/models.py:274`, `:276`, `:278`; retorno em `:279` | `clean`: `app/ferias/models.py:372`, `:380`, `:387`; remarcação: `app/ferias/services.py:714`; situação: `app/ferias/situacao.py:227`; proposta: `:348` |
+| `_v` | Situação em `app/ferias/situacao.py:227`; proposta em `:348` | Situação em `:228`, `:237`, `:244`; proposta em `:349`, `:355` |
+| Avisos `fracionamento` | Formato em `app/ferias/situacao.py:64`; situação em `:229`, `:238`, `:245`; proposta em `:350`, `:356` | Situação indexa em `:300` e retorna em `:311`; API entrega em `app/api/views_mensageria.py:847`, `:849`; correção filtra em `app/ferias/views.py:517` e apresenta textos em `:552` |
+
+**PROCEDE — contradição “será recusado” na correção foi fechada:** o texto atual apenas relata o mínimo; a correção continua exibindo esse aviso após o sucesso. (`app/ferias/situacao.py:359`; `app/ferias/views.py:549`; `app/ferias/views.py:552`)
+
+Contrafactual dos testes contra a base, pelo delta fornecido; execução real da base e da suíte: **[nao verificado]**. [nao verificado]
+
+| Asserção | Base 5d8bc6879 |
+|---|---|
+| `assertRaises(ValidationError)` | **Falharia:** o serviço anterior delegava diretamente a `_trocar_janela`, que gravava quatro dias sem `clean()`. (`app/ponto/tests/test_ferias_fracao_demais_5.py:135`; `app/ferias/services.py:680`; `app/ferias/services.py:693`; delta fornecido) |
+| Mensagem contém `5 dias` | **Não alcançada na base:** a asserção anterior já falha; a guarda nova produz a mensagem. (`app/ponto/tests/test_ferias_fracao_demais_5.py:137`; `app/ferias/services.py:714`) |
+| `dias == 14` após refresh | **Não alcançada na base; isoladamente falharia:** a escrita anterior deixaria quatro. (`app/ponto/tests/test_ferias_fracao_demais_5.py:139`; `app/ferias/services.py:680`; `app/ferias/services.py:693`) |
+| Fonte de `corrigir_datas_agendamento` não contém o nome do juiz | **Passaria na base e agora:** wrapper permanece igual; não prova execução nem presença do aviso. (`app/ponto/tests/test_ferias_fracao_demais_5.py:145`; `app/ferias/services.py:700`) |
+| Fonte da situação não contém `elif 'caput' in _v` | **Falharia na base:** o delta substitui essa expressão; não verifica comportamento ou quantidade de avisos. (`app/ponto/tests/test_ferias_fracao_demais_5.py:153`; `app/ferias/situacao.py:237`; delta fornecido) |
+
+**NÃO PROCEDE — conjunto novo inteiro sem mordida:** há teste comportamental da recusa. **PROCEDE — selo fraco nos outros dois:** ausência de substring não prova política de correção nem os dois avisos anunciados pelo nome do teste. (`app/ponto/tests/test_ferias_fracao_demais_5.py:135`; `app/ponto/tests/test_ferias_fracao_demais_5.py:145`; `app/ponto/tests/test_ferias_fracao_demais_5.py:153`)
+
+## 14/11 11:23 · sessao 751f412b7a4f · - · - · origem=Ronald (tmux)
+
+**PROCEDE — `ValidationError` também pode vir de colisão, mas NÃO PROCEDE mensagem enganosa na view.** `_trocar_janela` chama `vivo.save()`, que executa `_guard_sobreposicao`; esta traduz `VetoDePrecedencia` em `ValidationError` conservando a mensagem do veto. A view apresenta `e.messages` diretamente; “juiz do fracionamento” aparece apenas no comentário do `except`. (`app/ferias/services.py:693`; `app/ferias/models.py:449`; `app/ferias/models.py:454`; `app/ferias/views.py:729`; `app/ferias/views.py:730`)
+
+**Ordem efetiva das recusas:**
+
+1. Novo mínimo de cinco, antes de qualquer trava: `ValidationError`. (`app/ferias/services.py:714`)
+2. Dentro do `atomic`, status cancelado sob trava: `AgendamentoNaoRemarcavel`; depois guarda de ainda não iniciado, também sob trava. (`app/ferias/services.py:669`; `app/ferias/services.py:670`; `app/ferias/services.py:599`; `app/ferias/services.py:600`; `app/ferias/services.py:671`)
+3. Saldo sob trava: `SaldoInsuficienteParaRemarcar`. (`app/ferias/services.py:675`)
+4. Colisão no `save`: `ValidationError`; a transação engloba a limpeza da janela antiga e a gravação. (`app/ferias/services.py:688`; `app/ferias/services.py:693`; `app/ferias/models.py:454`)
+
+**PROCEDE — o delta altera a precedência observável de erros.** Uma chamada ao serviço com quatro dias falha pelo mínimo antes de descobrir que a linha está cancelada, iniciada ou sem saldo. A ordem dos `except` na view — não remarcável, saldo, validação — não modifica essa precedência de execução. (`app/ferias/services.py:714`; `app/ferias/services.py:717`; `app/ferias/views.py:725`; `app/ferias/views.py:727`; `app/ferias/views.py:729`)
+
+**PROCEDE — cura parcial e fonte diferente da criação.** O delta julga `[novos_dias]`; a criação calcula a duração pelas datas e verifica sua igualdade com `dias`. `_trocar_janela` grava os três argumentos sem executar `clean()`, e o `save()` também não o chama. Portanto, uma chamada direta com `novos_dias=5` e intervalo de quatro dias atravessa a nova guarda, ressalvadas as demais condições da porta. A possibilidade de divergência já existia; o delta não a fecha. (`app/ferias/services.py:714`; `app/ferias/services.py:680`; `app/ferias/services.py:693`; `app/ferias/models.py:377`; `app/ferias/models.py:395`; `app/ferias/models.py:461`)
+
+**PROCEDE — zero atravessa a guarda isolada.** `violacoes_de_fracionamento([0])` elimina o zero por `if f`; a nova guarda não o recusa. As duas views barram valores inferiores a um e calculam o fim a partir de `novos_dias`, portanto não demonstram esse acesso pela interface. Chamadas externas e ocorrência em produção: **[nao verificado]**. (`app/ferias/models.py:271`; `app/ferias/services.py:714`; `app/ferias/views.py:503`; `app/ferias/views.py:507`; `app/ferias/views.py:712`; `app/ferias/views.py:718`)
+
+**Outras origens inspecionadas:** o `PeriodoAquisitivo.save(update_fields=['dias_concedidos', 'status'])` não executa sua guarda de sobreposição de datas, pois ela retorna quando `update_fields` não contém datas. A validação de campo de uma Ausência recém-criada é convertida em `AusenciaInvalida`, que o espelhador captura; a criação da pauta captura exceções. O `Ausencia.save()` tem ainda uma `ValidationError` para fim anterior ao início, mas o espelhador fornece um dia por criação e deriva o fim; não há entrada invertida demonstrada nesse caminho. (`app/ferias/services.py:695`; `app/ferias/models.py:185`; `app/ponto/services/ausencia.py:387`; `app/ponto/services/ausencia.py:389`; `app/ponto/services/ausencia.py:1203`; `app/ponto/services/ausencia.py:1210`; `app/ponto/services/ausencia.py:1257`; `app/ponto/models.py:895`; `app/ponto/services/ausencia.py:197`)
+
+## 14/11 11:23 · sessao 10ff1864ec85 · - · - · origem=Ronald (tmux)
+
+- **PROCEDE — fechamento parcial da remarcação.** Agora `novos_dias=1..4` é recusado pelo mesmo helper numérico usado por `clean()`. Porém não chama o juiz registrado `AgendamentoFerias.clean`: deixa de julgar `par1`, `caput` e coerência dias/datas. Assim, remarcação de única fração `14→5` passa pelo serviço, embora `clean()` recusasse ausência de ≥14; datas de quatro dias com `novos_dias=14` também escapam da nova guarda. Isso já era permitido pelo escritor; o delta fecha somente o mínimo declarado em `novos_dias`. (`app/ferias/services.py:714`; `app/ferias/services.py:717`; `app/core/juizes.py:271`; `app/ferias/models.py:372`; `app/ferias/models.py:377`; `app/ferias/models.py:380`; `app/ferias/models.py:395`)
+
+- **NÃO PROCEDE — duplicação do comparador numérico.** A remarcação chama o helper existente, sem introduzir outro `<5`. **PROCEDE — julgamento parcial fora do juiz registrado:** selecionar apenas `par1_demais` não equivale a passar por `clean()`. (`app/ferias/services.py:713`; `app/ferias/services.py:714`; `app/core/juizes.py:271`)
+
+| Caminho de produção | Fração `<5` e escrita |
+|---|---|
+| Remarcação regular | Recusa `novos_dias` não zero abaixo de cinco antes do escritor; view exige ≥1 e calcula fim coerente. (`app/ferias/services.py:714`; `app/ferias/views.py:712`; `app/ferias/views.py:718`) |
+| Correção administrativa | Delega diretamente ao mesmo escritor; não julga fracionamento. View monta avisos e os anexa ao sucesso. Exceção A3 expressa: não constitui furo novo. (`app/ferias/services.py:702`; `app/ferias/views.py:508`; `app/ferias/views.py:517`; `app/ferias/views.py:531`; `app/ferias/views.py:552`) |
+| `_trocar_janela` | Única atribuição material encontrada para datas/dias existentes; aceita `<5` se demais guardas permitirem. `save()` não chama `clean()`. (`app/ferias/services.py:680`; `app/ferias/services.py:693`; `app/ferias/models.py:461`) |
+| Django admin | Só registra `Afastamento`; não oferece edição de `AgendamentoFerias`. (`app/ferias/admin.py:2`; `app/ferias/admin.py:4`) |
+| Comando de sincronização | Delega à porta que atualiza apenas status; não corrige nem rejeita duração curta. (`app/ferias/management/commands/sincronizar_status_ferias.py:48`; `app/ferias/services.py:925`; `app/ferias/services.py:928`) |
+| Comando `listar_ferias_dp` | Simula cancelamento, consulta validação e força rollback; não altera datas/dias. (`app/ferias/management/commands/listar_ferias_dp.py:100`; `app/ferias/management/commands/listar_ferias_dp.py:107`; `app/ferias/management/commands/listar_ferias_dp.py:109`) |
+| API do colaborador | POST retorna 405; GET serializa inclusive dias gravados. (`app/api/views.py:2223`; `app/api/views.py:2224`; `app/api/views.py:2244`; `app/api/views.py:2246`) |
+| API de mensageria | Consulta situação e proposta hipotética; não escreve agendamento. (`app/api/views_mensageria.py:812`; `app/api/views_mensageria.py:824`; `app/api/views_mensageria.py:828`) |
+
+- **NÃO PROCEDE — segundo escritor fora da porta no censo encontrado.** O registro permite `ferias/services.py`, e as duas entradas de edição usam `_trocar_janela`. Escritores dinâmicos/externos: **[nao verificado]**. (`app/core/portas.py:489`; `app/ferias/services.py:702`; `app/ferias/services.py:717`)
+
+- **NÃO PROCEDE — mudança da ordem de travas pelo delta.** A ordem segue agendamento → período → ausências. A nova validação usa somente argumento e acontece antes dessas travas; pode mudar qual erro aparece primeiro, mas não adquire trava em ordem inversa. (`app/ferias/services.py:599`; `app/ferias/services.py:602`; `app/ferias/services.py:688`; `app/ferias/services.py:714`; `app/ferias/services.py:717`)
+
+- **PROCEDE — precedência nova das recusas.** Pedido de quatro dias levanta `ValidationError` antes de verificar status, início e saldo da linha travada. Para pedidos que passam no mínimo: status → `pode_editar_em` → saldo → colisão no `save()`. (`app/ferias/services.py:714`; `app/ferias/services.py:717`; `app/ferias/services.py:600`; `app/ferias/services.py:671`; `app/ferias/services.py:676`; `app/ferias/services.py:693`)
+
+- **NÃO PROCEDE — unidade nova ou confusão com abono.** `dias` continua quantidade do gozo; venda segue em `PeriodoAquisitivo.dias_vendidos`. **PROCEDE — falta preexistente de imposição universal da equivalência dias/datas:** criação deriva duração pelas datas, remarcação julga parâmetro e grava ambos independentemente. (`app/ferias/services.py:277`; `app/ferias/models.py:377`; `app/ferias/models.py:395`; `app/ferias/services.py:714`; `app/ferias/services.py:680`)
+
+- **PROCEDE preexistente — relógio fora da borda.** Cancelamento admin usa `date.today()` internamente e avisos possuem fallback; a nova guarda não lê relógio. (`app/ferias/services.py:649`; `app/ferias/situacao.py:326`; `app/ferias/services.py:714`)
+
+- **NÃO PROCEDE — contradição “será recusado” na correção administrativa após delta.** O aviso agora informa somente a regra; a correção segue gravando e anexando avisos conforme A3. (`app/ferias/situacao.py:358`; `app/ferias/situacao.py:359`; `app/ferias/views.py:508`; `app/ferias/views.py:552`)
 
 ## 14/11 10:58 · sessao 6801ddc748bf · [nome]-ANDAM-JUNTO · verificador · origem=Code
 
@@ -666,46 +756,4 @@ F3 — Juiz declarado em app/core/juizes.py:303. Regra executável: somente 12x3
 
 F4 — SEM_JUIZ em app/core/juizes.py:351-352. L-085 manda atribuir toda jornada ao dia de início, inclusive feriado e cauda após meia-noite, em app/docs/LEIS.md:117. A prática é heterogênea: Motor12x36.calcular_periodo usa a data local da entrada efetiva de cada período, em app/ponto/motor_calculo_v2.py:2759-2760, app/ponto/motor_calculo_v2.py:2796 e app/ponto/motor_calculo_v2.py:2809; MotorComercial usa o mapa do dia da jornada em app/ponto/motor_calculo_v2.py:3325-3327 e julga a dobra por esse dia em app/ponto/motor_calculo_v2.py:3350; MotorTurnoPartido faz equivalente em app/ponto/motor_calculo_v2.py:2942 e app/ponto/motor_calculo_v2.py:3092. Conflito: app/docs/LEIS.md:117 contra data civil de cada período em app/ponto/motor_calculo_v2.py:2809; a auditoria documental já descreve exatamente essa divergência em app/docs/LEIS.md:175. Sítio externo não incluído nos PENDENTES: app/ponto/services/fechamento.py:947-955 decide feriado por data civil de cada entrada para transferir horas a HE100 feriado. Não inferir produção atingida: [não verificado]. Para coluna 7, não achei duas candidatas legais independentes e atuais: há uma lei escrita e implementações divergentes, em app/docs/LEIS.md:117 e app/ponto/motor_calculo_v2.py:2809.
 
-## 14/11 10:43 · sessao f6c292934bd4 · - · - · origem=Ronald (tmux)
-
-Retiro o conflito C6 baseado em app/docs/CORTES.md:342: app/docs/CORTES.md:451 o substitui expressamente. C6 fica com coluna 5 = nao e coluna 7 = -.
-
-O corte novo governa o ato de desligamento. A divergência comprovada está no escritor: app/colaboradores/services/desligamento.py:165 preserva disputa com resposta sem veredito, e app/chamados/models.py:1942 recusa fechá-la; para as demais, a porta ainda grava admin_decidiu, app/chamados/models.py:1974 e app/chamados/models.py:1986. Isso contraria “tudo morre, com ou sem resposta” e “via própria, nunca admin_decidiu”, app/docs/CORTES.md:451.
-
-Não atribuo essa divergência ao predicado C6 nem ao fechamento ordinário C7: o corte determina a transformação pelo ato específico, enquanto os juízes leem o estado recebido, app/chamados/juizes.py:1400 e app/chamados/models.py:1909.
-
-Contagem final do lote 1–8: conflitos na coluna 5 = 0, achados na coluna 6 = 4, perguntas na coluna 7 = 0. Mantém-se C3 externo autorizado como achado, app/chamados/reconciliador.py:1019, sem conflito de resultado demonstrado.
-
-## 14/11 10:43 · sessao ddb4065f7d55 · - · - · origem=Ronald (tmux)
-
-F5 — app/ponto/janelas.py::janela_atual ; a que competencia (corte a corte) pertence o dia? ; L-026 app/docs/LEIS.md:77, L-090 app/docs/LEIS.md:123, K8-COMPETENCIA-NAO-E-MES-CIVIL app/docs/CORTES.md:216 ; janela_atual chama periodo_apuracao_atual com corte_da_empresa, corte limitado a 2–28, inicio no corte do mes anterior e fim no corte-1, competencia avanca quando data.day >= corte (app/ponto/janelas.py:63, app/ponto/janelas.py:26, app/ponto/janelas.py:27, app/ponto/janelas.py:15, app/ponto/janelas.py:16), fallback efetivo 20 para empresa ausente/campo falso (app/ponto/janelas.py:50) ; sim: default 21 escrito em CLAUDE.md:82 e app/ponto/janelas.py:37 contradiz fallback 20 executado em app/ponto/janelas.py:50 ; achado: _jornada_que_mente escolhe periodo_apuracao(hoje.month, hoje.year,21), com corte proprio e mes civil, fora dos PENDENTES F5 (app/escala/services/cadastro_realidade.py:225, app/core/juizes.py:488, app/core/juizes.py:489, app/core/juizes.py:490), achado ja descrito em app/docs/LEIS.md:189 ; -
-
-F6 — app/ponto/janelas.py::competencia_fechada ; a competencia do dia esta fechada (pode escrever)? ; L-026 app/docs/LEIS.md:77, L-090 app/docs/LEIS.md:123 e corte K8 app/docs/CORTES.md:216 respondem competencia da data, predicado aprovado/exportado nao localizado nesses textos [nao verificado] ; data local do timestamp, janela_atual pela empresa, busca FechamentoMensal do colaborador no mes/ano do fim da janela, recusa quando status aprovado/exportado e devolve vazio nos demais casos (app/ponto/janelas.py:84, app/ponto/janelas.py:85, app/ponto/janelas.py:86, app/ponto/janelas.py:87, app/ponto/janelas.py:89) ; nao ; nenhum achado: procurados competencia_fechada, consultas FechamentoMensal e testes de status aprovado/exportado nos .py de app fora tests/migrations, consumidores confirmados chamam juiz em app/ponto/registro_batida.py:135, app/ponto/services/flip_batida.py:22 e app/escala/management/commands/lavrar_foto_folgas.py:95, fronteira com tranca da EMPRESA explicita em app/core/juizes.py:76 ; -
-
-F9 — SEM_JUIZ ; o que e dia util? ; nenhum texto especifico encontrado em LEIS/CORTES [nao verificado] ; VT/VA contam segunda a sexta excluindo feriados obtidos de feriados_de, sem municipio somente nacionais, sem ler escala (app/colaboradores/models.py:996, app/colaboradores/models.py:997, app/colaboradores/models.py:1003, app/colaboradores/models.py:1005), escalonamento considera segunda a sexta entre 08h e 18h sem consultar feriado (app/ponto/management/commands/escalonar_chamados_supervisao.py:24, app/ponto/management/commands/escalonar_chamados_supervisao.py:26) ; sim: descricao seg-sex sem feriado em app/core/juizes.py:353 contradiz exclusao explicita de feriados em app/colaboradores/models.py:1005 ; achado: dias_uteis_do_mes define por conta propria o dia util de VT/VA em app/colaboradores/models.py:1005, consumido para custo por app/colaboradores/models.py:825 e app/colaboradores/models.py:826, esse sitio nao esta no unico PENDENTE F9 declarado em app/core/juizes.py:492 ; -
-
-Observacoes para consolidacao:
-
-- Coluna 7 de F5 ficou “-” por leitura estrita: encontrei apenas default 21 como texto de regra e default 20 no codigo, sem segundo corte/prosa normativo que sustente 20. Se “candidata escrita” incluir implementacao, o par existe em app/ponto/janelas.py:37 e app/ponto/janelas.py:50.
-- F9 coluna 5 descreve conflito entre registro e implementacao de sitio SEM_JUIZ. Se o criterio literal limitar texto x codigo apenas ao juiz declarado, marque “nao” e mantenha a divergencia somente na resposta vigente. As duas implementacoes comerciais efetivamente diferem em feriado (app/colaboradores/models.py:1005, app/ponto/management/commands/escalonar_chamados_supervisao.py:26).
-- JUIZES.md ainda diz F6 SEM juiz, mas isso e divergencia do registro, nao candidata de regra de negocio (app/docs/JUIZES.md:96, app/docs/JUIZES.md:97, app/core/juizes.py:305).
-
-## 14/11 10:43 · sessao 8d296e4010c4 · - · - · origem=Ronald (tmux)
-
-F7:
-- Coluna 3: nenhum texto específico de prazo em LEIS.md/CORTES.md encontrado pela busca de prazo, justificativa, SLA e PRAZO-JUSTIFICATIVA [não verificado]. JUIZES.md:97 diz “prazo do DP ... SEM juiz”, contradizendo o registro app/core/juizes.py:307 e o próprio juiz app/ponto/catalogo/justificativas.py:15.
-- Coluna 4: esqueci_entrada/esqueci_saida 1 dia, batida_errada/batida_duplicada 2 dias, hora_extra/banco_horas/folga_trabalhada/troca_turno 3 dias, outro 7 dias, demais tipos 3 dias (app/ponto/catalogo/justificativas.py:22, app/ponto/catalogo/justificativas.py:23, app/ponto/catalogo/justificativas.py:24, app/ponto/catalogo/justificativas.py:26, app/ponto/catalogo/justificativas.py:31). Dias corridos desde a data local de criação, estoura somente quando dias > prazo; usa timezone.localdate() e ignora o argumento hoje (app/ponto/catalogo/justificativas.py:36, app/ponto/catalogo/justificativas.py:41).
-- Coluna 5: sim documental quanto à existência de juiz: app/docs/JUIZES.md:97 (“SEM juiz”) x app/ponto/catalogo/justificativas.py:15 (“juiz único”). Não achei dois prazos vigentes contraditórios além do backlog já declarado [não verificado].
-- Coluna 6: nenhum achado fora dos PENDENTES, procurando PRAZO_DP, prazo_dp_dias, dias_em_aberto, prazo_estourou e limites fixos de justificativas em Python/templates/JS [não verificado]. A Central chama o juiz em app/ponto/views.py:1729, app/ponto/views.py:1734; o cron também em app/ponto/management/commands/alertar_justificativas_sla.py:10, app/ponto/management/commands/alertar_justificativas_sla.py:20. O backlog fixo de 7 dias está em app/ponto/views.py:1747 e já declarado em app/core/juizes.py:491.
-- Coluna 7: “-”. As antigas duas regras (1/2/3/7 x 7 fixos) aparecem como história expressamente resolvida em app/ponto/catalogo/justificativas.py:3 e app/ponto/catalogo/justificativas.py:6.
-
-F8:
-- Coluna 3: nenhum texto específico com o número 30 em LEIS.md/CORTES.md encontrado [não verificado]. CORTES.md:348, item 4, preserva “arquivamento por chamado com prazo”, sem definir duração. O mandato 05/08 com 30 dias está escrito no código, app/chamados/catalogo/motor.py:84.
-- Coluna 4: 30 dias, app/chamados/catalogo/motor.py:84; a data padrão é agora + essa constante, app/chamados/services/arquivo.py:117 e app/chamados/services/arquivo.py:118.
-- Coluna 5: não quanto ao número: constante 30 em app/chamados/catalogo/motor.py:84 e texto de tela 30 em app/templates/chamados/partials/_lista_chamados.html:116 coincidem. Os horizontes excepcionais de 10/5 anos estão expressamente separados do prazo padrão em app/chamados/services/arquivo.py:112 e app/chamados/services/arquivo.py:114.
-- Coluna 6: achado: o leitor de tela responde por literal “Arquivar por 30 dias?” em app/templates/chamados/partials/_lista_chamados.html:116, sem consultar o juiz; outro texto independente “Silenciado por idade (30d)” em app/chamados/views_arquivar.py:35. Nenhum dos dois consta dos PENDENTES de feriado/prazo (app/core/juizes.py:475, app/core/juizes.py:492). São textos próprios, embora o valor atual coincida com o juiz (app/chamados/catalogo/motor.py:84). A escrita efetiva da view consulta arquivo.prazo_padrao(), app/chamados/views_arquivar.py:36.
-- Coluna 7: “-”. As duas fontes acima dizem o mesmo número, app/chamados/catalogo/motor.py:84 e app/templates/chamados/partials/_lista_chamados.html:116.
-
-Cuidado: app/chamados/management/commands/arquivar_prescritos.py:32 tem default de idade 30 e app/chamados/management/commands/arquivar_prescritos.py:48 calcula o corte para selecionar quem arquivar; a duração do silêncio consulta o juiz em app/chamados/management/commands/arquivar_prescritos.py:84. Não classificaria esse corte de idade como duplicação da duração F8.
-
-_5103 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5106 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -1,7 +1,10 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: trava_teste.sh | pid=2043871
-PAREI: b3-RMDIR-COM-GUARDA | espera Ronald (libera B3) -- opus final REPROVOU v4 @0fae8f7f8 (3 [bloqueia]: bin/suite.sh:294/:307 rc do subshell e o do echo, nao do run -- fere L-074; limpeza dos pontos de montagem cobre 3 de 6 pastas root; as duas limpezas rodam FORA da trava, um 2o --dir desmonta o bind do container vivo) + 4 [fila]; cura descrita, volta 5 parada sem commit na wt-rmdir-guarda-083536. Proposta da sessao: ERRO-BOBO (implementacao, nenhuma lei falta) -- so com o seu "libera B3"
+ESPERANDO: codex_pergunta.sh | pid=2106507
+ERRO-BOBO RMDIR-COM-GUARDA: aval Ronald 14/11 11:2x libera B3, implementacao sem lei nova (logs/AVAIS-1313/libera_b3_rmdir.txt); volta 5 com as 3 condicoes, suite + UM opus, reprovou = PAREI sem volta
+FRAC5 volta 2 11:1x: 63ff6e88b (remarcacao le o juiz; aviso caput com par1). RED 2 FAIL Ran 13 rc=1 no codigo velho; GREEN recorte OK Ran 355 -> Codex verificador delta (pid 2106507)
+CAL09 opus 11:2x REPROVOU (FORMA: RED sem log; laudo logs/CAL09/opus_final/r.md) -> RED do modulo contra copia de f7510b95a em curso (logs/CAL09/red.log); fila: calendario.py:740-741 'entradas'/'saidas' sem leitor, prosa _calendario_grade.html:119
+CAL09 11:2x: suite inteira @3dbe6a768 OK (skipped=42, expected failures=41) Ran 15808 rc=0 -> UM opus final aberto (brief logs/CAL09/opus_final/brief.md)
 E3 v9 11:0x: opus REPROVOU v8 (FORMA impacto @hash velho; DESENHO R2, furo universo, I3) -> E3-MORRE item 5: R2 e furo voltam ao main como E3-RESTO, recorte de modulos na fila da trava, depois remedida do impacto no hash novo
 [nome] item 1 volta 4 11:0x: ca77b4c37 (portao da E3 = arquivo congelado, nao livre+fora; triagem logs/[nome]-ANDAM-JUNTO/grade_verif3/triagem.md) -> suite inteira na fila (pid 2064821), depois opus (>3 voltas)
 E3 v8 11:0x: suite inteira "pre-opus E3" @f569063be OK (skipped=42, expected failures=41) Ran 15984 rc=0 -> UM opus final aberto (brief logs/E3-FORMA-SQL/opus_final/brief.md, E3-IMPACTO na 1a linha)
