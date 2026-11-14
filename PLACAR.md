@@ -1,6 +1,6 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 14/11/2026 12:13 @9990a5d2f
+medido em 14/11/2026 12:19 @2b0f888d5
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
@@ -24,6 +24,21 @@ medido em 14/11/2026 12:13 @9990a5d2f
 | COBERTURA-PARCIAL-UM-JUIZ | 67 | COBPARC-DIFF-ISOLADO; autorização sobre  |
 | ATA-NAO-DISPENSA-JUSTIFICADA | 67 | Acesso para aplicar o acervo da 10 |
 | H12H06-SEPARA-E-CRONTAB | 67 | censo de trava; desenho da parte B |
+
+resolve preenchido 11/456
+
+casos ESTRUTURA sem obra: nao medido (GRADE-RESOLVE)
+
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 297 com a coluna
+
+| obra | fecha BO | portao | estado |
+|---|---|---|---|
+| DECLARADO-X-GRAVADO | 4 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS e E3 (app/chamados/services/materializacao.py no diff de wt-bugpar-124848 @338fd37b0 e de wt-codex-e3-forma-sql-005806 @f569063be; as 5 lei cortadas por DXG-LEIS-CORTADAS 14/11 10:24, logs/AVAIS-1313/dxg_leis_cortadas.txt) | REGISTRADA |
+| BO-ADMIN-2710 | 3 (roteiro BO-[nome]-1311 / mapa HJ) | censo | REGISTRADA |
+| FIO-E0-V4-E3-LEITORES | 2 (roteiro BO-[nome]-1311 / mapa HJ) | arquivo congelado (base E3-MORRE 14/11 07:5x: chamados/models.py, chamados/juizes.py, tarefa_do_dia.py, painel.py, ponto/vigia_fio.py, ponto/supra_juiz.py; espinha em voo na copia wt-codex-e3-forma-sql-005806, nao entra na REGRA DA VAGA VAZIA) | EM VOO |
+| RAIZ-DA-DISPUTA | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) | REGISTRADA |
+| CONTRATO-DE-ENTRADA-DO-FIO (compl.) | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/juizes.py) | BRIEF PRONTO |
+| O232 (compl.) | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com JUSTIFICATIVA-PAGA-O-PERIODO (app/ponto/turnos.py alterado sem commit na wt-justif-040525 @eb584c2b0, git status 14/11 10:5x) | REGISTRADA |
 
 casas cheias na frota: cen 235, lei 320, con 75, R/G 32, mut 3, ver 14, opus 9, pou 43, ar 38
 

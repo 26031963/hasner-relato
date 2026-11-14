@@ -5,6 +5,7 @@
 > Manutencao (L-106): marco que muda o estado de uma obra atualiza a linha dela no MESMO commit de docs; obra nova entra no registro.
 > PASSADA 2 (13/11, aval SEXTA-NOITE-1311 item 6): 1143 = 456 SEGUE (tabelas por balde, contam no placar) + 548 COMPLEMENTO sob 119 obras-mae (secao COMPLEMENTOS; a mae leva `[+N compl.]` na fonte) + 139 OBSOLETA (secao propria). Fonte: logs/GRADE-MESTRA/passada2/passada2b.tsv (8 faixas Codex + 68 casos revistos pelo Codex @78ede5958, amostra de 5 citacoes conferida pelo Code; a 1a rodada acertou 16/20 na amostra). Nada saiu do BACKLOG; baixa e decidida no chat.
 > Grade (9 casas, nesta ordem): cen-lei-con-R/G-mut-ver-opus-pou-ar. `+` feito, `~` parcial, `.` falta.
+> [nome]-ANDAM-JUNTO (14/11, logs/AVAIS-1313/ramos_andam_junto.txt item 1): as tabelas ESPINHA-E, 20/20 e LATERAL-ESTRUTURA e os complementos sob FIO-E0-V4-E1-ENTRADAS e O54 ganham `fecha BO` (quantas perguntas/unidades com dono ESTRUTURA dos lotes BO-[nome]-1311 e HJ a obra fecha, com a fonte; `?` = nao medido) e `portao` (lei <qual> | arquivo congelado <qual> | colisao com <obra em voo> | censo | livre; `?` = nao medido). O placar soma `fecha BO` por estado (complemento de 10 colunas entra so nessa soma). REGRA DA VAGA VAZIA (item 2): sem obra elegivel na ordem vigente, a vaga vai ao ramo de `portao` livre com maior `fecha BO`, censo fechado e `git diff --name-only` sem arquivo comum com raia de agente vivo; teto 1 ramo de negocio ao lado da espinha + a raia wt-ui; o ramo pousa pequeno (uma classe por pouso) e cede a vez na trava de teste quando a espinha chega.
 
 ## Contagem por balde
 
@@ -21,259 +22,263 @@
 | **total** | **456** | **455** |
 
 Estados: EM VOO 3; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 59; NO AR hoje 1; nao lidas: 0
+
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 297 com a coluna
+
+resolve preenchido 11/456
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
 
 ## ESPINHA-E (75)
 
-| id | balde | entrega | resolve | depende de | grade | estado | fonte |
-|---|---|---|---|---|---|---|---|
-| PERGUNTA-SEM-SELO | ESPINHA-E | Faz leitores estruturais consultarem a autoridade correta. | - | FECHAR2; autorização sobre exportada | +++...... | REGISTRADA (construção histórica) | BACKLOG:751 |
-| JUIZ-DO-PAR-DUAS-ENTRADAS | ESPINHA-E | Faz motor e ata formarem os mesmos turnos. | - | MOTOR-PASSA-O-TURNO-A-VOLTA; grupo 1 | ++.....+~ | REGISTRADA (cura no ar; resíduos pendentes) | BACKLOG:776 [+19 compl.] |
-| COBERTURA-PARCIAL-UM-JUIZ | ESPINHA-E | Faz ausências parciais cobrirem apenas o trecho devido. | - | COBPARC-DIFF-ISOLADO; autorização sobre exportada | .+++.+~+~ | PARADA (reaberta; PAREI de impacto) | BACKLOG:786 [+17 compl.] |
-| FIO-LE-O-JUIZ | ESPINHA-E | Mostra perguntas vivas mesmo em disputas encerradas. | - | clique de validação; push | .++....+~ | REGISTRADA (no ar antigo; push pendente) | BACKLOG:794 |
-| CXR-TELA-LE-O-MOTOR | ESPINHA-E | Mostra ao admin os dias divergentes apontados pelo motor. | - | ATA-X-TURNO-PAUSA; CXR-PRONTO5-DEFINICAO; lavra | .+++..++~ | REGISTRADA (no ar; conclusão parcial) | BACKLOG:798 [+4 compl.] |
-| C6-TETO-MARCO-PENDENTE | ESPINHA-E | Evita cobrar um marco antes de terminar seu prazo. | - | cura no juiz C6 | .+....... | REGISTRADA | BACKLOG:818 |
-| PASSIVO-VALIDADO-K6 | ESPINHA-E | Usa a autoridade correta para reconhecer competência entregue. | - | juiz K6 | .+....... | REGISTRADA | BACKLOG:819 |
-| PROGRAMA-CELULA-E-O-DIA | ESPINHA-E | Faz todas as telas lerem o mesmo julgamento do dia. | - | E1; E2; E3; E4 | .++...... | REGISTRADA (programa parcial) | BACKLOG:821 [+106 compl.] |
-| GRADE-FOLGA-JUIZ | ESPINHA-E | Faz os leitores usarem a mesma decisão sobre folga lançada. | - | decisão GRADE-TETO | .++...~.. | REGISTRADA (construção antiga; opus reprovado) | BACKLOG:845 [+2 compl.] |
-| A2-RAISE-NO-FUROS | ESPINHA-E | Evita erro de tela quando A2 recusa o estado do dia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:883 |
-| O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | ESPINHA-E | Identifica perguntas cujo clique já não produz efeito. | - | registro do juiz com corte | .+....... | REGISTRADA | BACKLOG:896 |
-| E1-PERGUNTA-AO-DP-CONTADOR | ESPINHA-E | Obtém respostas pendentes sobre horas extras, intervalo e convenção. | - | DP/contador | .+....... | PARADA (três respostas pendentes) | BACKLOG:898 |
-| V-FASE-AS-OF-CADASTRO-SEM-LINHA | ESPINHA-E | Leva ao admin problemas de cadastro de dias passados. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:903 |
-| BUG-ENC-CELULAS-FORMA | ESPINHA-E | Corrige o formato das células entregues ao julgamento de turnos. | - | F2; E4-CARGA-PARIDADE | ++....... | INTERROMPIDA | BACKLOG:933; anexo:interrompidas.txt:9 [+2 compl.] |
-| MODO-COMUM-OUT-DO-LOTE | ESPINHA-E | Impede dados do lote de decidirem o resultado de um ato individual. | - | prova do cartório; resíduos indicados | +++~..~+~ | REGISTRADA (código no ar; portão posterior indicado) | BACKLOG:946 |
-| BACKFILL-UNICO | ESPINHA-E | Centraliza correções antigas com responsável e destino explícitos. | - | antes do último horizonte; corte de exportada | .+....... | REGISTRADA | BACKLOG:947 [+2 compl.] |
-| ISENTO-PONTO-JUIZ-REGISTRADO | ESPINHA-E | Declara a autoridade da isenção e elimina consultas paralelas. | - | corte; comparação de predicado e universo | ......... | REGISTRADA | BACKLOG:955 |
-| RESPONDIDA-SEM-TEXTO-DUAS-COPIAS | ESPINHA-E | Unifica a identificação de resposta sem texto. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:988 |
-| DIA-DA-PERGUNTA-E-O-TURNO | ESPINHA-E | Liga cada pergunta ao dia correto do turno. | - | pouso A do VETO | .+....~.. | REGISTRADA (cópia anterior reprovada) | BACKLOG:1025 [+2 compl.] |
-| O261-VETO-NA-PORTA | ESPINHA-E | Impede cobrança automática em dia vetado e preserva a decisão humana. | - | comparação posterior; lotes B/C | .++....~~ | REGISTRADA (A no ar; B/C pendentes) | BACKLOG:1026 [+3 compl.] |
-| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | ESPINHA-E | Faz os turnos antigos usarem a mesma regra de expiração dos demais. | - | ORFAS | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1076 |
-| JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | ESPINHA-E | Impede que a mesma pergunta mude de estado sem um fato registrado. | - | ? (precedência da retomada não escrita) | + + + + . + . . + | REGISTRADA (cura no ar; passivo e trilha pendentes) | app/docs/BACKLOG.md:1077 [+1 compl.] |
-| JUIZ-DE-DONO-DO-DIA | ESPINHA-E | Separa problemas do sistema de problemas de cadastro ou batida. | - | corte para predicado de dono | + . . . . . . . . | PARADA (sem predicado autorizado) | app/docs/BACKLOG.md:1080 |
-| VINCULO-LINHA-DO-TEMPO | ESPINHA-E | Mantém uma sequência de vínculos válidos sem sobreposição. | - | ESMERIL-2; censo de leitores; autorização para col899 | + + + + . . . . . | PARADA (porta pronta; tripwire e constraint pendentes) | app/docs/BACKLOG.md:1127 [+3 compl.] |
-| O-DIA-PAGO | ESPINHA-E | Faz todas as telas lerem um único valor diário de pagamento. | - | fatias S3, S4, S5 e S5b | + + + . . . . . . | REGISTRADA (fechada por fatias; S5b citada em voo antigo) | app/docs/BACKLOG.md:1131 [+14 compl.] |
-| PLACAR-ESTRUTURAL | ESPINHA-E | Mostra se cálculo, telas e folha permanecem coerentes com o cadastro. | - | autorização dos casos da 09 exportada; lote do R6 | + + + . . . . . . | PARADA (resultados parciais; espera autorização) | app/docs/BACKLOG.md:1173 [+5 compl.] |
-| L111-ORFAOS-DO-MOTOR | ESPINHA-E | Remove duas respostas antigas de cálculo que já não têm leitores. | - | conferência da O275/O277 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1181 |
-| O219 | ESPINHA-E | Rejulga dias quando muda a regra, respeitando seu alcance e período. | - | TXT novo da 09; Pauta DP | + + + . . . . + + | REGISTRADA (regra no ar; TXT e pauta pendentes) | app/docs/BACKLOG.md:1197 [+1 compl.] |
-| O228 | ESPINHA-E | Remove código obsoleto de célula e turno com prova de desuso. | - | - | + + + + . . . + + | REGISTRADA (inteira no ar; data do fecho incerta) | app/docs/BACKLOG.md:1201 |
-| O218 | ESPINHA-E | Certifica que a lavratura produz ata correta e estável em diferentes cenários. | - | cura O217; cenários; relavra de col146 | + + . . . . . . . | REGISTRADA (instrumento no ar; bateria incompleta na fonte) | app/docs/BACKLOG.md:1214 [+1 compl.] |
-| O221 | ESPINHA-E | Integra as curas de escrita única e julgamento pelas autoridades. | - | marco O218; suíte da junção | + + + . . . . + + | REGISTRADA (fonte diz no ar e também nada juntado) | app/docs/BACKLOG.md:1215 |
-| O129 | ESPINHA-E | Declara o efeito dos 28 campos editáveis do assistente de escalas. | - | O127 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1220 |
-| O117 | ESPINHA-E | Resolve a divergência sobre o previsto de células sem marcos. | - | corte se ainda desejado | + + . . . . . . . | PARADA (zero casos na frota; corte pendente) | app/docs/BACKLOG.md:1234 |
-| O105 | ESPINHA-E | Faz o arquivo da folha refletir de forma estável o valor gravado. | - | decidir substituição ou autópsia de datas_falta | + + . . . . . . . | PARADA (PAREI por divergência no TXT) | app/docs/BACKLOG.md:1246 [+1 compl.] |
-| O44 | ESPINHA-E | Permite retomar um dia antigo sem destrancar outros dias. | - | smoke do caso 1; critérios do item | + + + + . . . + . | REGISTRADA (pousada; marco sem data explícita) | app/docs/BACKLOG.md:1325 [+3 compl.] |
-| O54 | ESPINHA-E | Faz previsão, cálculo, telas e fechamento concordarem sobre cada dia. | - | portas E0→E6 provadas em sequência | + + ~ . . . . . . | REGISTRADA (programa parcial; curso atual deste id não demonstrado) | app/docs/BACKLOG.md:1338 [+46 compl.] |
-| O95 | ESPINHA-E | Impede absorver saída real como pausa sem prova de retorno. | - | censo; DIFF de frota | + . . . . . . . . | PARADA (cura candidata revertida; espera censo) | app/docs/BACKLOG.md:1371 |
-| O92 | ESPINHA-E | Alimenta a previsão em lote para evitar consultas repetidas por dia. | - | quatro leitores; DIFF da cópia inline | + + ~ . . . . . . | REGISTRADA (chamador da tela fechado; demais pendentes) | app/docs/BACKLOG.md:1375 |
-| O136 | ESPINHA-E | Faz a escolha do motor reconhecer turno partido nos dois sentidos. | - | O134 item 5; DIFF; ! do motor | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1389 |
-| CHAMADO-EM-RAIA | ESPINHA-E | Concentra as mudanças de estado dos chamados numa porta. | - | O123; régua da trilha principal | . + . . . . . . . | REGISTRADA (voo só registrado em 03/10) | app/docs/BACKLOG.md:1394 [+23 compl.] |
-| DOSSIES-DAS-CELULAS | ESPINHA-E | Organiza a cura dos contratos e leitores das famílias estruturais. | - | ordem O134; obras dos seis itens | + + ~ . . . . . + | REGISTRADA (parte no ar; restante sem curso atual comprovado) | app/docs/BACKLOG.md:1396 [+14 compl.] |
-| O142 | ESPINHA-E | Faz o mesmo dia produzir o mesmo turno em janelas diferentes. | - | vínculo do dia; provas de invariância | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1398 [+1 compl.] |
-| O177 | ESPINHA-E | Faz o cálculo considerar todas as pausas cadastradas. | - | DIFF de frota; reversão; exportadas intactas | ++....... | REGISTRADA | BACKLOG:1432 |
-| O178 | ESPINHA-E | Dá responsável e prazo às pendências do administrador. | - | Prazo, dono e contador de leitura da pauta | ++....... | REGISTRADA | BACKLOG:1433 |
-| O179 | ESPINHA-E | Investiga dias com batidas que chegam zerados à folha. | - | Medir horas e decidir o dono pela L-099 | ++....... | REGISTRADA | BACKLOG:1434 [+1 compl.] |
-| O180 | ESPINHA-E | Entrega ao administrador dias gerados além do vínculo. | - | Lista dos colaboradores; ! para regenerar passado | ++....... | PARADA (ato de passado espera !) | BACKLOG:1435 |
-| O183 | ESPINHA-E | Impede chamados com urgências desconhecidas pelo sistema. | - | Merge; DIFF; tratamento do estoque | ++++..... | REGISTRADA (cura na raia; estoque pendente) | BACKLOG:1438 |
-| O229 | ESPINHA-E | Corrige diferenças entre marcos e leitores de horas. | - | Censo e RED por classe; O197 no item 9 | ++....... | REGISTRADA | BACKLOG:1466 [+1 compl.] |
-| O216 | ESPINHA-E | Refaz a medição após a correção do juiz dos turnos. | - | O195; medição pela função real | ++....... | REGISTRADA | BACKLOG:1468 |
-| SOBRA-NA-BORDA-O-QUE-FICOU | ESPINHA-E | Reúne problemas restantes após mudanças em batidas antigas. | - | Obra própria do item a; censos por classe | ++....... | REGISTRADA | BACKLOG:1493 |
-| ATA-NAO-DISPENSA-JUSTIFICADA | ESPINHA-E | Faz a ata reconhecer o período abonado pela justificativa. | - | Acesso para aplicar o acervo da 10 | ++++...++ | PARADA (cura publicada; aplicação sem permissão) | BACKLOG:1515 |
-| CONCORDE-PREVISTO-ZERO | ESPINHA-E | Investiga dias corretos com batidas e previsão zerada. | - | Medir a causa da previsão zero | ++....... | REGISTRADA | BACKLOG:1517 |
-| ESPELHO-VERDADE-REMEDIDO | ESPINHA-E | Atualiza o placar com testes e medições comprovados. | - | K6/E1; termômetro R1; antes da triagem | ++....... | REGISTRADA | BACKLOG:1522 [+2 compl.] |
-| C5-LISTA-DE-FROTA | ESPINHA-E | Corrige faltas descontadas acima da jornada prevista. | - | Medir os 27 casos; invariante falta ≤ previsto | ++....... | REGISTRADA | BACKLOG:1529 [+2 compl.] |
-| FERIADO-DIA-CHAVE | ESPINHA-E | Faz cálculo e fechamento reconhecerem o mesmo dia de feriado. | - | Dia-chave único; caso atravessando meia-noite | ++....... | REGISTRADA | BACKLOG:1532 |
-| LISTA-POR-COMPETENCIA | ESPINHA-E | Separa problemas cadastrais por competência da folha. | - | Apply da competência 10 | .+....... | REGISTRADA | BACKLOG:1534 |
-| REGUA-DO-PERIODO-COMPLEMENTO-19-10 | ESPINHA-E | Confere a régua por fatia e encaminha divergências. | - | Itens 1 e 2; pergunta 18; item 5 após 2 | ++....... | REGISTRADA | BACKLOG:1634 |
-| O327 | ESPINHA-E | Mostra quem o cálculo independente conseguiu avaliar. | - | Lei do ancoramento do trecho extra | +........ | PARADA (espera lei) | BACKLOG:1662 [+1 compl.] |
-| RETIFICACAO-DA-10-8069-PRIMEIRO | ESPINHA-E | Corrige diferenças de pagamento começando pela rubrica 8069. | - | Corte da 243; HE publicada; decisão do admin | ++....... | REGISTRADA (243 parada por corte) | BACKLOG:1666 |
-| REABRIR-PERGUNTA-A-PREMISSA | ESPINHA-E | Evita reabrir cobrança encerrada sem fato novo. | - | Contador; conferência de sete dias sem ciclo | +++....++ | REGISTRADA (medição do portão pendente) | BACKLOG:1686 [+3 compl.] |
-| LOTE-VAZA-ENTRE-COLABS | ESPINHA-E | Faz o cálculo em lote igualar o cálculo individual. | - | Medir a causa | +........ | REGISTRADA | BACKLOG:1709 |
-| PASSADO-SEM-MARCOS-SEM-TETO | ESPINHA-E | Verifica perguntas que nascem antes do fim real do trabalho. | - | Medir encerramento do fato | +........ | REGISTRADA | BACKLOG:1721 |
-| LEGADO-51-ACESAS | ESPINHA-E | Encerra perguntas antigas cujo marco já está atendido. | - | Medição pelo juiz real | ++....... | REGISTRADA | BACKLOG:1724 |
-| DIA-DA-BATIDA-JUIZ-UNICO | ESPINHA-E | Faz decisões usarem o dia definido pelo juiz do turno. | - | Rejulgamento de col33; antes de fechar contrato 20 | .+....... | REGISTRADA | BACKLOG:1727 [+4 compl.] |
-| PERGUNTA-DO-DIA-EM-CURSO | ESPINHA-E | Abre cobrança do marco vencido pelo evento e instante corretos. | - | Medição das 48 perguntas futuras | ++....... | REGISTRADA | BACKLOG:1729 |
-| R1-ESTRUTURA-91 | ESPINHA-E | Corrige famílias de divergência entre cálculo e regra. | - | E4; E5; motor; classes cegas | .+......+ | REGISTRADA (restante pendente) | BACKLOG:1765 [+1 compl.] |
-| BATERIA-QUEIXAS-ADMIN | ESPINHA-E | Testa quatro queixas nas escalas canônicas pela regra. | - | casos; validação do DP; FIO MUDO | .+....... | REGISTRADA | BACKLOG:1809 |
-| TIPO-NA-FONTE | ESPINHA-E | Entrega a ata aos leitores por acesso de significado explícito. | - | corte; E3; DESLIGADO; FERIADO; O168; HJ-090 | ++++.+... | PARADA | BACKLOG:1836; RELATO:112; RELATO:149 [+7 compl.] |
-| MOTOR-LE-O-TURNO | ESPINHA-E | Faz cálculo e pagamento usarem o mesmo turno oficial. | - | E2; E3; DIFF; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1879 [+3 compl.] |
-| FIO-E0-V4-E1-ENTRADAS | ESPINHA-E | Faz as perguntas nascerem ligadas ao fato correto. | - | desenho; suite; sombra; opus | ++.+.+... | PARADA (último estado escrito) | BACKLOG:1888 [+16 compl.] |
-| FIO-E0-V4-E4-ESCRITORES | ESPINHA-E | Substitui estados paralelos por atos registrados da pergunta. | - | E4B; E4C; E4D | ++.+.++++ | REGISTRADA (E4a-1 no ar; restante pendente) | BACKLOG:1915 [+24 compl.] |
-| RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA | BACKLOG:1934 [+15 compl.] |
-| LAVRA-PREMATURA-CONCORDE | ESPINHA-E | Define quando o dia pode ser confirmado antes do turno terminar. | - | decisão de desenho | ...+.+... | PARADA (construção vedada) | BACKLOG:1981 |
-| RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA | BACKLOG:2039 |
-| JV1-MERGE-FILA | ESPINHA-E | Trata lacunas de janela e alimentação dos feriados. | - | medir dinheiro antes | ......... | REGISTRADA | BACKLOG:2061 |
+| id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
+|---|---|---|---|---|---|---|---|---|---|
+| PERGUNTA-SEM-SELO | ESPINHA-E | Faz leitores estruturais consultarem a autoridade correta. | - | FECHAR2; autorização sobre exportada | +++...... | REGISTRADA (construção histórica) | BACKLOG:751 | ? | ? |
+| JUIZ-DO-PAR-DUAS-ENTRADAS | ESPINHA-E | Faz motor e ata formarem os mesmos turnos. | - | MOTOR-PASSA-O-TURNO-A-VOLTA; grupo 1 | ++.....+~ | REGISTRADA (cura no ar; resíduos pendentes) | BACKLOG:776 [+19 compl.] | ? | ? |
+| COBERTURA-PARCIAL-UM-JUIZ | ESPINHA-E | Faz ausências parciais cobrirem apenas o trecho devido. | - | COBPARC-DIFF-ISOLADO; autorização sobre exportada | .+++.+~+~ | PARADA (reaberta; PAREI de impacto) | BACKLOG:786 [+17 compl.] | ? | ? |
+| FIO-LE-O-JUIZ | ESPINHA-E | Mostra perguntas vivas mesmo em disputas encerradas. | - | clique de validação; push | .++....+~ | REGISTRADA (no ar antigo; push pendente) | BACKLOG:794 | ? | ? |
+| CXR-TELA-LE-O-MOTOR | ESPINHA-E | Mostra ao admin os dias divergentes apontados pelo motor. | - | ATA-X-TURNO-PAUSA; CXR-PRONTO5-DEFINICAO; lavra | .+++..++~ | REGISTRADA (no ar; conclusão parcial) | BACKLOG:798 [+4 compl.] | ? | ? |
+| C6-TETO-MARCO-PENDENTE | ESPINHA-E | Evita cobrar um marco antes de terminar seu prazo. | - | cura no juiz C6 | .+....... | REGISTRADA | BACKLOG:818 | ? | ? |
+| PASSIVO-VALIDADO-K6 | ESPINHA-E | Usa a autoridade correta para reconhecer competência entregue. | - | juiz K6 | .+....... | REGISTRADA | BACKLOG:819 | ? | ? |
+| PROGRAMA-CELULA-E-O-DIA | ESPINHA-E | Faz todas as telas lerem o mesmo julgamento do dia. | - | E1; E2; E3; E4 | .++...... | REGISTRADA (programa parcial) | BACKLOG:821 [+106 compl.] | ? | ? |
+| GRADE-FOLGA-JUIZ | ESPINHA-E | Faz os leitores usarem a mesma decisão sobre folga lançada. | - | decisão GRADE-TETO | .++...~.. | REGISTRADA (construção antiga; opus reprovado) | BACKLOG:845 [+2 compl.] | ? | ? |
+| A2-RAISE-NO-FUROS | ESPINHA-E | Evita erro de tela quando A2 recusa o estado do dia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:883 | ? | ? |
+| O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | ESPINHA-E | Identifica perguntas cujo clique já não produz efeito. | - | registro do juiz com corte | .+....... | REGISTRADA | BACKLOG:896 | ? | ? |
+| E1-PERGUNTA-AO-DP-CONTADOR | ESPINHA-E | Obtém respostas pendentes sobre horas extras, intervalo e convenção. | - | DP/contador | .+....... | PARADA (três respostas pendentes) | BACKLOG:898 | ? | ? |
+| V-FASE-AS-OF-CADASTRO-SEM-LINHA | ESPINHA-E | Leva ao admin problemas de cadastro de dias passados. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:903 | ? | ? |
+| BUG-ENC-CELULAS-FORMA | ESPINHA-E | Corrige o formato das células entregues ao julgamento de turnos. | - | F2; E4-CARGA-PARIDADE | ++....... | INTERROMPIDA | BACKLOG:933; anexo:interrompidas.txt:9 [+2 compl.] | ? | ? |
+| MODO-COMUM-OUT-DO-LOTE | ESPINHA-E | Impede dados do lote de decidirem o resultado de um ato individual. | - | prova do cartório; resíduos indicados | +++~..~+~ | REGISTRADA (código no ar; portão posterior indicado) | BACKLOG:946 | ? | ? |
+| BACKFILL-UNICO | ESPINHA-E | Centraliza correções antigas com responsável e destino explícitos. | - | antes do último horizonte; corte de exportada | .+....... | REGISTRADA | BACKLOG:947 [+2 compl.] | ? | ? |
+| ISENTO-PONTO-JUIZ-REGISTRADO | ESPINHA-E | Declara a autoridade da isenção e elimina consultas paralelas. | - | corte; comparação de predicado e universo | ......... | REGISTRADA | BACKLOG:955 | ? | ? |
+| RESPONDIDA-SEM-TEXTO-DUAS-COPIAS | ESPINHA-E | Unifica a identificação de resposta sem texto. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:988 | ? | ? |
+| DIA-DA-PERGUNTA-E-O-TURNO | ESPINHA-E | Liga cada pergunta ao dia correto do turno. | - | pouso A do VETO | .+....~.. | REGISTRADA (cópia anterior reprovada) | BACKLOG:1025 [+2 compl.] | ? | ? |
+| O261-VETO-NA-PORTA | ESPINHA-E | Impede cobrança automática em dia vetado e preserva a decisão humana. | - | comparação posterior; lotes B/C | .++....~~ | REGISTRADA (A no ar; B/C pendentes) | BACKLOG:1026 [+3 compl.] | ? | ? |
+| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | ESPINHA-E | Faz os turnos antigos usarem a mesma regra de expiração dos demais. | - | ORFAS | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1076 | ? | ? |
+| JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | ESPINHA-E | Impede que a mesma pergunta mude de estado sem um fato registrado. | - | ? (precedência da retomada não escrita) | + + + + . + . . + | REGISTRADA (cura no ar; passivo e trilha pendentes) | app/docs/BACKLOG.md:1077 [+1 compl.] | ? | ? |
+| JUIZ-DE-DONO-DO-DIA | ESPINHA-E | Separa problemas do sistema de problemas de cadastro ou batida. | - | corte para predicado de dono | + . . . . . . . . | PARADA (sem predicado autorizado) | app/docs/BACKLOG.md:1080 | ? | ? |
+| VINCULO-LINHA-DO-TEMPO | ESPINHA-E | Mantém uma sequência de vínculos válidos sem sobreposição. | - | ESMERIL-2; censo de leitores; autorização para col899 | + + + + . . . . . | PARADA (porta pronta; tripwire e constraint pendentes) | app/docs/BACKLOG.md:1127 [+3 compl.] | ? | ? |
+| O-DIA-PAGO | ESPINHA-E | Faz todas as telas lerem um único valor diário de pagamento. | - | fatias S3, S4, S5 e S5b | + + + . . . . . . | REGISTRADA (fechada por fatias; S5b citada em voo antigo) | app/docs/BACKLOG.md:1131 [+14 compl.] | ? | ? |
+| PLACAR-ESTRUTURAL | ESPINHA-E | Mostra se cálculo, telas e folha permanecem coerentes com o cadastro. | - | autorização dos casos da 09 exportada; lote do R6 | + + + . . . . . . | PARADA (resultados parciais; espera autorização) | app/docs/BACKLOG.md:1173 [+5 compl.] | ? | ? |
+| L111-ORFAOS-DO-MOTOR | ESPINHA-E | Remove duas respostas antigas de cálculo que já não têm leitores. | - | conferência da O275/O277 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1181 | ? | ? |
+| O219 | ESPINHA-E | Rejulga dias quando muda a regra, respeitando seu alcance e período. | - | TXT novo da 09; Pauta DP | + + + . . . . + + | REGISTRADA (regra no ar; TXT e pauta pendentes) | app/docs/BACKLOG.md:1197 [+1 compl.] | ? | ? |
+| O228 | ESPINHA-E | Remove código obsoleto de célula e turno com prova de desuso. | - | - | + + + + . . . + + | REGISTRADA (inteira no ar; data do fecho incerta) | app/docs/BACKLOG.md:1201 | ? | ? |
+| O218 | ESPINHA-E | Certifica que a lavratura produz ata correta e estável em diferentes cenários. | - | cura O217; cenários; relavra de col146 | + + . . . . . . . | REGISTRADA (instrumento no ar; bateria incompleta na fonte) | app/docs/BACKLOG.md:1214 [+1 compl.] | ? | ? |
+| O221 | ESPINHA-E | Integra as curas de escrita única e julgamento pelas autoridades. | - | marco O218; suíte da junção | + + + . . . . + + | REGISTRADA (fonte diz no ar e também nada juntado) | app/docs/BACKLOG.md:1215 | ? | ? |
+| O129 | ESPINHA-E | Declara o efeito dos 28 campos editáveis do assistente de escalas. | - | O127 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1220 | ? | ? |
+| O117 | ESPINHA-E | Resolve a divergência sobre o previsto de células sem marcos. | - | corte se ainda desejado | + + . . . . . . . | PARADA (zero casos na frota; corte pendente) | app/docs/BACKLOG.md:1234 | ? | ? |
+| O105 | ESPINHA-E | Faz o arquivo da folha refletir de forma estável o valor gravado. | - | decidir substituição ou autópsia de datas_falta | + + . . . . . . . | PARADA (PAREI por divergência no TXT) | app/docs/BACKLOG.md:1246 [+1 compl.] | ? | ? |
+| O44 | ESPINHA-E | Permite retomar um dia antigo sem destrancar outros dias. | - | smoke do caso 1; critérios do item | + + + + . . . + . | REGISTRADA (pousada; marco sem data explícita) | app/docs/BACKLOG.md:1325 [+3 compl.] | ? | ? |
+| O54 | ESPINHA-E | Faz previsão, cálculo, telas e fechamento concordarem sobre cada dia. | - | portas E0→E6 provadas em sequência | + + ~ . . . . . . | REGISTRADA (programa parcial; curso atual deste id não demonstrado) | app/docs/BACKLOG.md:1338 [+46 compl.] | ? | ? |
+| O95 | ESPINHA-E | Impede absorver saída real como pausa sem prova de retorno. | - | censo; DIFF de frota | + . . . . . . . . | PARADA (cura candidata revertida; espera censo) | app/docs/BACKLOG.md:1371 | ? | ? |
+| O92 | ESPINHA-E | Alimenta a previsão em lote para evitar consultas repetidas por dia. | - | quatro leitores; DIFF da cópia inline | + + ~ . . . . . . | REGISTRADA (chamador da tela fechado; demais pendentes) | app/docs/BACKLOG.md:1375 | ? | ? |
+| O136 | ESPINHA-E | Faz a escolha do motor reconhecer turno partido nos dois sentidos. | - | O134 item 5; DIFF; ! do motor | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1389 | ? | ? |
+| CHAMADO-EM-RAIA | ESPINHA-E | Concentra as mudanças de estado dos chamados numa porta. | - | O123; régua da trilha principal | . + . . . . . . . | REGISTRADA (voo só registrado em 03/10) | app/docs/BACKLOG.md:1394 [+23 compl.] | ? | ? |
+| DOSSIES-DAS-CELULAS | ESPINHA-E | Organiza a cura dos contratos e leitores das famílias estruturais. | - | ordem O134; obras dos seis itens | + + ~ . . . . . + | REGISTRADA (parte no ar; restante sem curso atual comprovado) | app/docs/BACKLOG.md:1396 [+14 compl.] | ? | ? |
+| O142 | ESPINHA-E | Faz o mesmo dia produzir o mesmo turno em janelas diferentes. | - | vínculo do dia; provas de invariância | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1398 [+1 compl.] | ? | ? |
+| O177 | ESPINHA-E | Faz o cálculo considerar todas as pausas cadastradas. | - | DIFF de frota; reversão; exportadas intactas | ++....... | REGISTRADA | BACKLOG:1432 | ? | ? |
+| O178 | ESPINHA-E | Dá responsável e prazo às pendências do administrador. | - | Prazo, dono e contador de leitura da pauta | ++....... | REGISTRADA | BACKLOG:1433 | ? | ? |
+| O179 | ESPINHA-E | Investiga dias com batidas que chegam zerados à folha. | - | Medir horas e decidir o dono pela L-099 | ++....... | REGISTRADA | BACKLOG:1434 [+1 compl.] | ? | ? |
+| O180 | ESPINHA-E | Entrega ao administrador dias gerados além do vínculo. | - | Lista dos colaboradores; ! para regenerar passado | ++....... | PARADA (ato de passado espera !) | BACKLOG:1435 | ? | ? |
+| O183 | ESPINHA-E | Impede chamados com urgências desconhecidas pelo sistema. | - | Merge; DIFF; tratamento do estoque | ++++..... | REGISTRADA (cura na raia; estoque pendente) | BACKLOG:1438 | ? | ? |
+| O229 | ESPINHA-E | Corrige diferenças entre marcos e leitores de horas. | - | Censo e RED por classe; O197 no item 9 | ++....... | REGISTRADA | BACKLOG:1466 [+1 compl.] | ? | ? |
+| O216 | ESPINHA-E | Refaz a medição após a correção do juiz dos turnos. | - | O195; medição pela função real | ++....... | REGISTRADA | BACKLOG:1468 | ? | ? |
+| SOBRA-NA-BORDA-O-QUE-FICOU | ESPINHA-E | Reúne problemas restantes após mudanças em batidas antigas. | - | Obra própria do item a; censos por classe | ++....... | REGISTRADA | BACKLOG:1493 | ? | ? |
+| ATA-NAO-DISPENSA-JUSTIFICADA | ESPINHA-E | Faz a ata reconhecer o período abonado pela justificativa. | - | Acesso para aplicar o acervo da 10 | ++++...++ | PARADA (cura publicada; aplicação sem permissão) | BACKLOG:1515 | ? | ? |
+| CONCORDE-PREVISTO-ZERO | ESPINHA-E | Investiga dias corretos com batidas e previsão zerada. | - | Medir a causa da previsão zero | ++....... | REGISTRADA | BACKLOG:1517 | ? | ? |
+| ESPELHO-VERDADE-REMEDIDO | ESPINHA-E | Atualiza o placar com testes e medições comprovados. | - | K6/E1; termômetro R1; antes da triagem | ++....... | REGISTRADA | BACKLOG:1522 [+2 compl.] | ? | ? |
+| C5-LISTA-DE-FROTA | ESPINHA-E | Corrige faltas descontadas acima da jornada prevista. | - | Medir os 27 casos; invariante falta ≤ previsto | ++....... | REGISTRADA | BACKLOG:1529 [+2 compl.] | ? | ? |
+| FERIADO-DIA-CHAVE | ESPINHA-E | Faz cálculo e fechamento reconhecerem o mesmo dia de feriado. | - | Dia-chave único; caso atravessando meia-noite | ++....... | REGISTRADA | BACKLOG:1532 | ? | ? |
+| LISTA-POR-COMPETENCIA | ESPINHA-E | Separa problemas cadastrais por competência da folha. | - | Apply da competência 10 | .+....... | REGISTRADA | BACKLOG:1534 | ? | ? |
+| REGUA-DO-PERIODO-COMPLEMENTO-19-10 | ESPINHA-E | Confere a régua por fatia e encaminha divergências. | - | Itens 1 e 2; pergunta 18; item 5 após 2 | ++....... | REGISTRADA | BACKLOG:1634 | ? | ? |
+| O327 | ESPINHA-E | Mostra quem o cálculo independente conseguiu avaliar. | - | Lei do ancoramento do trecho extra | +........ | PARADA (espera lei) | BACKLOG:1662 [+1 compl.] | ? | ? |
+| RETIFICACAO-DA-10-8069-PRIMEIRO | ESPINHA-E | Corrige diferenças de pagamento começando pela rubrica 8069. | - | Corte da 243; HE publicada; decisão do admin | ++....... | REGISTRADA (243 parada por corte) | BACKLOG:1666 | ? | ? |
+| REABRIR-PERGUNTA-A-PREMISSA | ESPINHA-E | Evita reabrir cobrança encerrada sem fato novo. | - | Contador; conferência de sete dias sem ciclo | +++....++ | REGISTRADA (medição do portão pendente) | BACKLOG:1686 [+3 compl.] | ? | ? |
+| LOTE-VAZA-ENTRE-COLABS | ESPINHA-E | Faz o cálculo em lote igualar o cálculo individual. | - | Medir a causa | +........ | REGISTRADA | BACKLOG:1709 | ? | ? |
+| PASSADO-SEM-MARCOS-SEM-TETO | ESPINHA-E | Verifica perguntas que nascem antes do fim real do trabalho. | - | Medir encerramento do fato | +........ | REGISTRADA | BACKLOG:1721 | ? | ? |
+| LEGADO-51-ACESAS | ESPINHA-E | Encerra perguntas antigas cujo marco já está atendido. | - | Medição pelo juiz real | ++....... | REGISTRADA | BACKLOG:1724 | ? | ? |
+| DIA-DA-BATIDA-JUIZ-UNICO | ESPINHA-E | Faz decisões usarem o dia definido pelo juiz do turno. | - | Rejulgamento de col33; antes de fechar contrato 20 | .+....... | REGISTRADA | BACKLOG:1727 [+4 compl.] | ? | ? |
+| PERGUNTA-DO-DIA-EM-CURSO | ESPINHA-E | Abre cobrança do marco vencido pelo evento e instante corretos. | - | Medição das 48 perguntas futuras | ++....... | REGISTRADA | BACKLOG:1729 | ? | ? |
+| R1-ESTRUTURA-91 | ESPINHA-E | Corrige famílias de divergência entre cálculo e regra. | - | E4; E5; motor; classes cegas | .+......+ | REGISTRADA (restante pendente) | BACKLOG:1765 [+1 compl.] | ? | ? |
+| BATERIA-QUEIXAS-ADMIN | ESPINHA-E | Testa quatro queixas nas escalas canônicas pela regra. | - | casos; validação do DP; FIO MUDO | .+....... | REGISTRADA | BACKLOG:1809 | ? | ? |
+| TIPO-NA-FONTE | ESPINHA-E | Entrega a ata aos leitores por acesso de significado explícito. | - | corte; E3; DESLIGADO; FERIADO; O168; HJ-090 | ++++.+... | PARADA | BACKLOG:1836; RELATO:112; RELATO:149 [+7 compl.] | ? | ? |
+| MOTOR-LE-O-TURNO | ESPINHA-E | Faz cálculo e pagamento usarem o mesmo turno oficial. | - | E2; E3; DIFF; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1879 [+3 compl.] | ? | ? |
+| FIO-E0-V4-E1-ENTRADAS | ESPINHA-E | Faz as perguntas nascerem ligadas ao fato correto. | - | desenho; suite; sombra; opus | ++.+.+... | PARADA (último estado escrito) | BACKLOG:1888 [+16 compl.] | ? | ? |
+| FIO-E0-V4-E4-ESCRITORES | ESPINHA-E | Substitui estados paralelos por atos registrados da pergunta. | - | E4B; E4C; E4D | ++.+.++++ | REGISTRADA (E4a-1 no ar; restante pendente) | BACKLOG:1915 [+24 compl.] | ? | ? |
+| RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA | BACKLOG:1934 [+15 compl.] | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) |
+| LAVRA-PREMATURA-CONCORDE | ESPINHA-E | Define quando o dia pode ser confirmado antes do turno terminar. | - | decisão de desenho | ...+.+... | PARADA (construção vedada) | BACKLOG:1981 | ? | ? |
+| RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA | BACKLOG:2039 | ? | ? |
+| JV1-MERGE-FILA | ESPINHA-E | Trata lacunas de janela e alimentação dos feriados. | - | medir dinheiro antes | ......... | REGISTRADA | BACKLOG:2061 | ? | ? |
 
 ## 20/20 (5)
 
-| id | balde | entrega | resolve | depende de | grade | estado | fonte |
-|---|---|---|---|---|---|---|---|
-| O168 | 20/20 | Preserva a cobrança enquanto uma resposta aguarda julgamento. | - | Guarda no evento antes de retirar o executor do supra | +++..++++ | NO AR hoje | BACKLOG:1422; BACKLOG:2076; app/docs/RELATO.md:5; app/docs/RELATO.md:7; app/docs/RELATO.md:31 [+3 compl.] |
-| O169 | 20/20 | Impede encerrar cobranças apenas porque envelheceram. | - | ? (célula antiga conserva pergunta já superada) | +........ | REGISTRADA (pousada em outra fonte) | BACKLOG:1424; BACKLOG:1821; BACKLOG:2076 [+11 compl.] |
-| FIO-E0-V4-E3-LEITORES | 20/20 | Faz telas e contadores mostrarem a mesma tarefa diária. | - | cura; preverif; suite; sombra; opus | ++++.~... | EM VOO | BACKLOG:1902; RELATO:6; RELATO:33 [+9 compl.] |
-| E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 |
-| E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) | BACKLOG:2016 |
+| id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
+|---|---|---|---|---|---|---|---|---|---|
+| O168 | 20/20 | Preserva a cobrança enquanto uma resposta aguarda julgamento. | - | Guarda no evento antes de retirar o executor do supra | +++..++++ | NO AR hoje | BACKLOG:1422; BACKLOG:2076; app/docs/RELATO.md:5; app/docs/RELATO.md:7; app/docs/RELATO.md:31 [+3 compl.] | ? | ? |
+| O169 | 20/20 | Impede encerrar cobranças apenas porque envelheceram. | - | ? (célula antiga conserva pergunta já superada) | +........ | REGISTRADA (pousada em outra fonte) | BACKLOG:1424; BACKLOG:1821; BACKLOG:2076 [+11 compl.] | ? | ? |
+| FIO-E0-V4-E3-LEITORES | 20/20 | Faz telas e contadores mostrarem a mesma tarefa diária. | - | cura; preverif; suite; sombra; opus | ++++.~... | EM VOO | BACKLOG:1902; RELATO:6; RELATO:33 [+9 compl.] | 2 (roteiro BO-[nome]-1311 / mapa HJ) | arquivo congelado (base E3-MORRE 14/11 07:5x: chamados/models.py, chamados/juizes.py, tarefa_do_dia.py, painel.py, ponto/vigia_fio.py, ponto/supra_juiz.py; espinha em voo na copia wt-codex-e3-forma-sql-005806, nao entra na REGRA DA VAGA VAZIA) |
+| E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 | ? | ? |
+| E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) | BACKLOG:2016 | ? | ? |
 
 ## LATERAL-ESTRUTURA (155)
 
-| id | balde | entrega | resolve | depende de | grade | estado | fonte |
-|---|---|---|---|---|---|---|---|
-| FERIADO-ESCALA | LATERAL-ESTRUTURA | Corrige o trabalho em feriados conforme a regra vigente. | HJ-074 | FERIADO-USA-A-LEI-DE-1609 | +++~.~... | EM VOO (escopo anterior superado) | BACKLOG:728; app/docs/RELATO.md:134 [+3 compl.] |
-| HJ-092 | LATERAL-ESTRUTURA | Encaminha ao admin as batidas que exigem decisão humana. | HJ-092 | decisão do admin | ++....... | REGISTRADA (fechada como BATIDA; deploy não comprovado) | BACKLOG:741 |
-| LANCAR-AUSENCIA-AFASTA-DESLIGADO | LATERAL-ESTRUTURA | Impede que lançar ausência transforme um desligado em afastado. | - | corte para ampliar o escopo | .+....... | REGISTRADA | BACKLOG:745 |
-| PILHA-DA-BATIDA-RECALCULO-INLINE | LATERAL-ESTRUTURA | Reduz o cálculo feito durante o registro da batida. | - | medir latência; O-OUTBOX | +........ | REGISTRADA | BACKLOG:753 |
-| O-BITEMPORAL-2 | LATERAL-ESTRUTURA | Preserva quando vínculos e regras valeram e foram registrados. | - | contratos_estruturais 20/20 | .+....... | REGISTRADA | BACKLOG:758 |
-| IA-DOMINIO-POR-FERRAMENTA | LATERAL-ESTRUTURA | Limita respostas da mensageria aos dados permitidos ao usuário. | - | 20/20 | .+....... | REGISTRADA | BACKLOG:759 |
-| REJULGAR-COMP10-4-REVERTIDOS | LATERAL-ESTRUTURA | Reaplica correções revertidas com prova do que muda. | - | medida atual; SOMBRA-X-PROD-COL988-124639 | .+.....+. | REGISTRADA (aplicação feita; divergência restante) | BACKLOG:766 |
-| TROCA-DE-POSTO-SEM-VINCULO | LATERAL-ESTRUTURA | Mantém coerentes o posto do cadastro e o vínculo vigente. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:771 |
-| LAVRAR-HE-PENDENTE-ESCALA | LATERAL-ESTRUTURA | Acelera a apuração de horas extras reutilizando dados carregados. | - | resíduos de leitores; decisão sobre segunda apuração | ..++.+.+~ | REGISTRADA (núcleo no ar; resíduos pendentes) | BACKLOG:773 |
-| N1-ALIMENTACAO-UNICA | LATERAL-ESTRUTURA | Evita carregar repetidamente os mesmos dados das portas. | - | N1; interface E3 se ampliada | +........ | REGISTRADA (não aplicável ao corte atual da E3) | BACKLOG:774; app/docs/RELATO.md:71 |
-| BO-ADMIN-2710 | LATERAL-ESTRUTURA | Classifica problemas do admin e os encaminha às obras responsáveis. | - | medidas; dono e destino por item | .+....... | REGISTRADA (medição histórica) | BACKLOG:777 |
-| TRILHA-DO-VINCULO-MENTE | LATERAL-ESTRUTURA | Faz o histórico do vínculo registrar corretamente as mudanças. | - | residual RT-03; push FIO | ++...+.+~ | REGISTRADA (núcleo no ar; RT-03 pendente) | BACKLOG:778 |
-| REGISTRADO-NAO-E-VIVO | LATERAL-ESTRUTURA | Evita mostrar auditoria como pendência de ação. | - | instrumento de fiscalização | .+.....+~ | REGISTRADA (produto no ar; instrumento pendente) | BACKLOG:780 |
-| SILENCIO-VENCIDO-VOLTA | LATERAL-ESTRUTURA | Faz cobranças reaparecerem quando termina seu silêncio. | - | QUARENTENA-DO-COLAB; E3 | .++...... | INTERROMPIDA | BACKLOG:783; anexo:interrompidas.txt:1 [+2 compl.] |
-| FECHAR3-SOBREVIVENTE-NO-RECONCILIAR | LATERAL-ESTRUTURA | Preserva o chamado correto na conciliação de duplicados. | - | medir ocorrência | .+....... | REGISTRADA | BACKLOG:797 |
-| V-FASE-AS-OF-TRANSFERIDO | LATERAL-ESTRUTURA | Usa a empresa correta do dia ao conferir colaborador transferido. | - | medir transferidos | ......... | REGISTRADA | BACKLOG:900 |
-| V-FASE-AS-OF-PARIDADE-UNIVERSO | LATERAL-ESTRUTURA | Faz a comparação usar o mesmo conjunto de dias e folgas. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:901 |
-| V-FASE-AS-OF-CUSTO | LATERAL-ESTRUTURA | Mede o custo de buscar decisões anteriores quando falta cobertura. | - | medição na sombra | ......... | REGISTRADA | BACKLOG:902 |
-| DEGRAU-HE-100-CADASTRO | LATERAL-ESTRUTURA | Torna configurável pela convenção o limite da hora extra integral. | - | cadastro; leitor na UI | .+....... | REGISTRADA | BACKLOG:904 |
-| V-FASE-AS-OF-SEM-CELULA | LATERAL-ESTRUTURA | Reabre a conferência após mudar dia passado sem célula. | - | lei SEM-CELULA | .+....... | REGISTRADA | BACKLOG:905 |
-| V-FASE-AS-OF-ATRASO | LATERAL-ESTRUTURA | Reduz atraso entre a mudança do dia e a conferência da fase. | - | próxima lavra; dependências do cron | ......... | REGISTRADA | BACKLOG:916 |
-| V-FASE-AS-OF-SOBREPOSTA | LATERAL-ESTRUTURA | Trata janelas sobrepostas após mudar o início da competência. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:918 |
-| V-FASE-AS-OF-INTRADIA | LATERAL-ESTRUTURA | Preserva versões anteriores de decisões do mesmo dia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:919 |
-| PROPOSITOR-JANELA-LONGA | LATERAL-ESTRUTURA | Mantém propostas coerentes em consultas com mais de duas janelas. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:920 |
-| FILA-POR-CAUSA-AS-OF | LATERAL-ESTRUTURA | Faz a fila passada ler a decisão daquela data. | - | pouso F1/F5 | ......... | REGISTRADA | BACKLOG:921 |
-| GRADE-09-PAUTA | LATERAL-ESTRUTURA | Entrega ao DP a diferença entre pago e devido sem regravar a folha. | - | GRADE-v5; ensaio; diferença medida | ......... | REGISTRADA | BACKLOG:940 |
-| NOREVERSE-UI-NO-CORE | LATERAL-ESTRUTURA | Impede links de tela de derrubarem o processamento do núcleo. | - | resultado 6 após a corrente | ++++++++~ | REGISTRADA (cura no ar; resultado posterior pendente) | BACKLOG:953; app/docs/RELATO.md:1810 [+1 compl.] |
-| ISENTO-FLAG-ATEMPORAL | LATERAL-ESTRUTURA | Define o efeito da isenção atual sobre decisões antigas. | - | E3-ISENTO-INSUMOS | ......... | REGISTRADA (desenho futuro) | BACKLOG:956 [+1 compl.] |
-| GRADE-FOLGA-C5 | LATERAL-ESTRUTURA | Confere folgas de calendário dentro do vínculo válido. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:970 |
-| GRADE-FOLGA-GERADOR | LATERAL-ESTRUTURA | Faz a nova escala respeitar a folga pessoal lançada. | - | juiz da folga; ensaio; autorização do passado | .+....... | REGISTRADA | BACKLOG:971 |
-| P14-CONFIRMAR-IMPLAUSIVEL-SEM-MOTIVO | LATERAL-ESTRUTURA | Exige motivo escrito para confirmar resposta improvável. | - | fatia em curso; exame das permissões | .+....... | REGISTRADA | BACKLOG:985 |
-| PERGUNTA-VIVA-LOGA-PREVISTO-COMO-FALHA | LATERAL-ESTRUTURA | Evita alarmes de erro para divergências já previstas. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:989 |
-| JUIZ-UNICO-DA-ANCORA | LATERAL-ESTRUTURA | Usa referência única para a fase da escala 12x36. | - | V-FASE | .+....... | REGISTRADA | BACKLOG:1000 |
-| BO-[nome]-DESTRAVA | LATERAL-ESTRUTURA | Indica a correção de cadastro que libera o dia na folha. | - | lavrador do retrato; dono do dia | .+....... | REGISTRADA | BACKLOG:1003 |
-| FIO-DO-ADMIN-LAVRA-VELHA | LATERAL-ESTRUTURA | Alerta quando a lista do admin usa medição antiga. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1007 |
-| AVISO-ATIVO-SEM-VINCULO-NO-DIA | LATERAL-ESTRUTURA | Avisa quando falta vínculo para dia de colaborador ativo. | - | ? (não indicada) | .+....... | REGISTRADA | BACKLOG:1011 |
-| REABRIR-DISPUTA-ADMIN-IGNORA-RETORNO | LATERAL-ESTRUTURA | Evita anunciar reabertura quando o chamado continuou encerrado. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1015 |
-| CXR-FALHA-CALADA | LATERAL-ESTRUTURA | Mostra falhas de leitura em vez de lista vazia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1022 |
-| COL309-SETEMBRO | LATERAL-ESTRUTURA | Corrige células antigas usando o vínculo autorizado. | - | COL309-09-RECALCULO-DEPOIS-DO-ADMIN | .+.....+. | REGISTRADA (células aplicadas; recálculo separado) | BACKLOG:1027 [+1 compl.] |
-| CAL-CUSTO-NO-MAPA-DE-FUROS | LATERAL-ESTRUTURA | Mede e reduz consultas repetidas no mapa de furos. | - | medição do custo | ......... | REGISTRADA | BACKLOG:1032 |
-| ENTRADA-BLOQUEADA-SEM-DATA-TURNO | LATERAL-ESTRUTURA | Registra o dia do turno no chamado de entrada bloqueada. | - | JUSTIFICATIVA-ENCERRA-ORIGEM | ......... | REGISTRADA | BACKLOG:1048 |
-| POSICAO-FALTAS-E-AUSENCIAS | LATERAL-ESTRUTURA | Reúne faltas e ausências com seus tipos. | - | fonte unificada | .+....... | REGISTRADA | BACKLOG:1050 |
-| POSICAO-FERIAS-ATE-A-DATA | LATERAL-ESTRUTURA | Apura férias proporcionais até a data escolhida. | - | regra de proporcionais e avos | .+....... | REGISTRADA | BACKLOG:1051 |
-| BO2910-ESTRUTURA | LATERAL-ESTRUTURA | Corrige classes de cadastro, ausência e julgamento da triagem. | casos 01, 02, 05, 06, 08 | obras por classe | .+....... | REGISTRADA | BACKLOG:1059 |
-| GRADE-DEPENDE-DA-JANELA | LATERAL-ESTRUTURA | Faz o mesmo dia produzir a mesma grade em qualquer janela. | - | LASTRO; grupo 1, sítio 1 | .+....... | REGISTRADA | BACKLOG:1068 |
-| PAUTAS-PREFILTRO-REPETIDO | LATERAL-ESTRUTURA | Retira a repetição do filtro que decide chamar o motor. | - | pouso COL129 | ......... | REGISTRADA | BACKLOG:1070 |
-| OUTBOX-EVENTO-DUPLO | LATERAL-ESTRUTURA | Mede e evita emissão repetida do mesmo evento pelo chamador. | - | pesquisa e medição | .+....... | REGISTRADA | BACKLOG:1071 |
-| JUSTIFICATIVA-ENCERRA-ORIGEM | LATERAL-ESTRUTURA | Encerra a cobrança de origem quando a justificativa é aprovada. | - | grupo (1), sítio 1; irmã para cinco casos | + + + . . . . . + | REGISTRADA (parte no ar; cinco casos retidos) | app/docs/BACKLOG.md:1074 [+1 compl.] |
-| BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR | LATERAL-ESTRUTURA | Permite enviar atestado e explica corretamente os erros de reenvio. | - | smoke de reenvio | + + + + . . . . + | REGISTRADA (parte no ar; falta smoke) | app/docs/BACKLOG.md:1091 [+1 compl.] |
-| REABRIR-NAO-DESTROI | LATERAL-ESTRUTURA | Preserva respostas anteriores quando uma pergunta é reaberta. | - | smoke de clique | + + + . . . . . + | REGISTRADA (no ar desde 25/10; falta smoke) | app/docs/BACKLOG.md:1094 |
-| HE-DE-14H-NUM-DIA (col945 12/09) | LATERAL-ESTRUTURA | Apura por que um dia recebeu quase quinze horas extras. | - | corte; medição da causa | + . . . . . . . . | PARADA (aguarda corte para entrar na fila) | app/docs/BACKLOG.md:1103 |
-| BUG-ANCORA-NAO-REGENERA | LATERAL-ESTRUTURA | Faz a correção da fase de trabalho chegar aos dias afetados. | - | decisão sobre col824 e col899 | + + + + . . . . . | PARADA (cura fechada; decisões de cadastro pendentes) | app/docs/BACKLOG.md:1118 |
-| O-HAIKU-INVESTIGA | LATERAL-ESTRUTURA | Dá ao assistente consultas para investigar escalas e preparar propostas. | - | O-DIA-PAGO S4; VINCULO-LINHA-DO-TEMPO | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1130 [+4 compl.] |
-| O-JANELA-HE | LATERAL-ESTRUTURA | Conta hora extra fora da jornada conforme a regra ou autorização. | - | smoke dos treze passos | + + + . . . . + + | REGISTRADA (no ar desde 01/10; falta smoke) | app/docs/BACKLOG.md:1134 [+8 compl.] |
-| CHAMADO-NASCE-EM-EXPORTADA | LATERAL-ESTRUTURA | Investiga cobranças novas abertas para competências já pagas. | - | censo dos emissores; decisão de desenho | + + . . . . . . . | REGISTRADA (não construir) | app/docs/BACKLOG.md:1137 |
-| COL369-TRES-RESTANTES | LATERAL-ESTRUTURA | Apura três diferenças de intervalo, pagamento e vínculo do colaborador. | - | smoke da Gestão de HE; autorização para vínculo | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1156 |
-| O-GEO-DECISAO | LATERAL-ESTRUTURA | Registra decisões de localização e avisa quando um turno fica sem sinal. | - | corte das etapas 1-2; O198 antes do complemento | . + . . . . . . . | PARADA (etapas congeladas; complemento registrado) | app/docs/BACKLOG.md:1165 |
-| O146 | LATERAL-ESTRUTURA | Paga a extra declarada na escala sem aumentar a jornada devida. | - | linha do copiloto | + + + + . . . . + | REGISTRADA (no ar; falta linha do copiloto) | app/docs/BACKLOG.md:1171 |
-| O236 | LATERAL-ESTRUTURA | Identifica por que colaboradores ficam fora do arquivo da folha. | - | medição por motivo; autorização se tocar exportada | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1203 |
-| O121 | LATERAL-ESTRUTURA | Permite corrigir vínculo passado pela tela com regeneração e trilha. | - | remedição; O65; seis testes antigos | + + + + . . . . . | REGISTRADA (A1 construído; suíte com seis falhas) | app/docs/BACKLOG.md:1228 [+1 compl.] |
-| O123 | LATERAL-ESTRUTURA | Carrega pendências de disputas sem multiplicar consultas por pergunta. | - | pista de testes após fila 1 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1230 |
-| O118 | LATERAL-ESTRUTURA | Faz a grade casar as batidas de todas as pausas do dia. | - | print do calendário | + + + . . . . + + | REGISTRADA (código no ar; print pendente) | app/docs/BACKLOG.md:1233 [+1 compl.] |
-| O101 | LATERAL-ESTRUTURA | Exige motivo e registra antes e depois ao mudar a isenção de ponto. | - | pista para executar o selo | + + + . . . . + + | REGISTRADA (código no ar; selo espera pista) | app/docs/BACKLOG.md:1250 |
-| O99 | LATERAL-ESTRUTURA | Aplica correções provadas preservando a história do arquivo da folha. | - | decisão sobre 61 dias; TXT | + + + . . . . + + | PARADA (cura 2 no ar; cura 1 e TXT pendentes) | app/docs/BACKLOG.md:1252 [+7 compl.] |
-| O10 | LATERAL-ESTRUTURA | Registra troca de plantão com dias, documentos e confirmação administrativa. | - | credencial; confirmação com dois anexos | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1263 [+4 compl.] |
-| HE-OCORRENCIA-COMO-LINHA | LATERAL-ESTRUTURA | Guarda cada ocorrência de hora extra e sua história numa linha consultável. | - | autorização da troca S5b | . + . . . . . . . | REGISTRADA (desenho publicado; nenhuma migration) | app/docs/BACKLOG.md:1271 |
-| LOTE-1-PENDENTES | LATERAL-ESTRUTURA | Entrega censos, diferenças e pautas dos cinco grupos de pendências. | - | autorização da troca; decisões dos itens 2 e 5; cadastro do item 3 | + + . . . . . . . | PARADA (item 1 feito; restante espera autorização) | app/docs/BACKLOG.md:1279 |
-| LOTE-ATRASO-ADMITIDO | LATERAL-ESTRUTURA | Permite validar em lote os atrasos admitidos pelo colaborador. | - | S5b; UI-RESPOSTA-DIZ-O-QUE-E com smoke; autorização | . . . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1284 |
-| O19 | LATERAL-ESTRUTURA | Explica falhas e permite enviar documento de ausência pelo aplicativo. | - | autorização e retomada do APP | + . + . . . . . + | PARADA (servidor no ar; APP espera autorização) | app/docs/BACKLOG.md:1298 |
-| O28 | LATERAL-ESTRUTURA | Desconta a saída antecipada conforme o catálogo e explica o desconto. | - | DIFF de dinheiro; ! | + + . . . . . . . | PARADA (espera !) | app/docs/BACKLOG.md:1309 |
-| O38 | LATERAL-ESTRUTURA | Explica por que uma resposta validada não virou marcação de ponto. | - | O39 para item a; smoke | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1319 |
-| O43 | LATERAL-ESTRUTURA | Registra atos e perdas de sessão do administrador para auditoria. | - | O47; esteira seca | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1324 |
-| O58 | LATERAL-ESTRUTURA | Registra a emissão do espelho e permite auditoria por período livre. | - | parecer jurídico para hash; Card 4 | + + . . . . . . . | PARADA (hash espera parecer; registro pode avançar) | app/docs/BACKLOG.md:1342 |
-| O96 | LATERAL-ESTRUTURA | Permite cadastrar o limite de pausa fixado no código. | - | exportação de 09 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1372 |
-| O144 | LATERAL-ESTRUTURA | Faz duas telas contarem os mesmos dias para o limite de atestados. | - | prova do leitor absenteísmo; censo de derivações | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1400 |
-| O147 | LATERAL-ESTRUTURA | Mede o efeito financeiro dos atrasos lançados na competência 09. | - | !; REGEN-EM-EXPORTADA | . + . . . . . . . | PARADA (competência exportada) | app/docs/BACKLOG.md:1401 |
-| O151 | LATERAL-ESTRUTURA | Julga chamados do rejulgamento forçado e retrata os sem lastro. | - | porta de retratação; trilha | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1405 |
-| O157 | LATERAL-ESTRUTURA | Conta os tipos corretos de ausência ao projetar férias. | - | DIFF por colaborador; catálogo | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1410 |
-| O175 | LATERAL-ESTRUTURA | Evita reconstruir turnos em competências já exportadas. | - | Teto de competência aberta ou corte sobre o cache | ++....... | PARADA (espera corte) | BACKLOG:1430 |
-| O199 | LATERAL-ESTRUTURA | Faz o aceite da folga decidir o dia e encerrar a cobrança. | - | ! para estoque antigo; O246 | +++....++ | REGISTRADA (ato publicado; estoque pendente) | BACKLOG:1454 [+1 compl.] |
-| O202 | LATERAL-ESTRUTURA | Faz pings consultarem a mesma avaliação oficial de localização. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1457 |
-| O204 | LATERAL-ESTRUTURA | Preserva a hora enviada pelo aparelho e registra descartes. | - | Linha do placar em pouso próprio | ++++...++ | REGISTRADA (produto publicado; placar pendente) | BACKLOG:1459 [+1 compl.] |
-| O213 | LATERAL-ESTRUTURA | Conta perguntas cujo tipo de marcação discorda da ata. | - | Publicação do censo antes da cura | ++....... | REGISTRADA (censo feito; nada alterado) | BACKLOG:1465 |
-| O243 | LATERAL-ESTRUTURA | Revisa setores críticos e a utilidade dos respectivos testes. | - | Contratos estruturais 20/20; censo antes da poda | .+....... | REGISTRADA | BACKLOG:1474 |
-| PORTA-CELULA-EDITADA | LATERAL-ESTRUTURA | Permite registrar pela tela o turno autorizado do dia. | - | ? (não indicada) | .+....... | REGISTRADA | BACKLOG:1502 [+2 compl.] |
-| INTERVALO-DECLARADO | LATERAL-ESTRUTURA | Pergunta sobre intervalo incompleto e registra a resposta aprovada. | - | BOs em curso; sinal da célula; validação | ++....... | REGISTRADA | BACKLOG:1503 |
-| REGEN-EXPORTADA-SEM-EFEITO | LATERAL-ESTRUTURA | Permite corrigir células exportadas sem outros efeitos medidos. | - | Seis condições; reversão; janela de autorização | ++....... | REGISTRADA (validade atual da janela ?) | BACKLOG:1512 |
-| INTERMITENTE-BATIDA-SOLTA | LATERAL-ESTRUTURA | Investiga batida isolada de intermitente mostrada como dia correto. | - | Censo de frota; juiz de turno aberto | ++....... | REGISTRADA | BACKLOG:1526 |
-| INTERMITENTE-K-FORA-DO-DNA | LATERAL-ESTRUTURA | Preserva o desenho histórico do intervalo do intermitente. | - | Medição e decisão | +........ | REGISTRADA | BACKLOG:1527 |
-| INTERMITENTE-CONVOCACAO-CADASTRO | LATERAL-ESTRUTURA | Registra a convocação que define o trabalho do intermitente. | - | Cadastro; leitor na porta da célula | .+....... | REGISTRADA | BACKLOG:1528 [+1 compl.] |
-| O269 | LATERAL-ESTRUTURA | Atualiza setembro preservando o arquivo pago e nomeando diferenças. | - | Prova do retrato; DIFF; reversão; Pauta DP | .+....... | REGISTRADA | BACKLOG:1554 [+1 compl.] |
-| O270 | LATERAL-ESTRUTURA | Calcula indenização de intervalo nas jornadas de quatro a seis horas. | - | O263-FT; conferência de CCT; DIFF | ++....... | REGISTRADA | BACKLOG:1555 |
-| O271 | LATERAL-ESTRUTURA | Aplica pontualidade ao trabalho comercial pela regra comum. | - | DIFF da 10; condições do apply | ++....... | REGISTRADA | BACKLOG:1556 |
-| O273 | LATERAL-ESTRUTURA | Devolve ao admin recusas automáticas que perderam sua justificativa. | - | Elo do cron para 17 revogações | ++++...++ | REGISTRADA (cura publicada; revogações pendentes) | BACKLOG:1558 |
-| O275 | LATERAL-ESTRUTURA | Permite cadastrar feriado como dia previsto de trabalho. | - | Decisão FORMA A × FORMA B | ++++..... | INTERROMPIDA | BACKLOG:1560; anexo:interrompidas.txt:19 |
-| O277 | LATERAL-ESTRUTURA | Ajusta a dobra de feriado de SDF e intermitente. | - | Pouso da O275 | ++....... | REGISTRADA | BACKLOG:1562 [+1 compl.] |
-| O281 | LATERAL-ESTRUTURA | Mede quatro suspeitas antes de decidir as correções. | - | Medição do bloco A | .+....... | REGISTRADA (leitura antiga) | BACKLOG:1567 |
-| O282 | LATERAL-ESTRUTURA | Atualiza estados que ficaram antigos após mudanças nos fatos. | - | O281, bloco A item 3 | .+....... | REGISTRADA | BACKLOG:1568 |
-| O314 | LATERAL-ESTRUTURA | Verifica se a falta do mesmo dia é descontada duas vezes. | - | Medir 28 linhas | .+....... | REGISTRADA | BACKLOG:1600 |
-| CARIMBO-POR-ORIGEM | LATERAL-ESTRUTURA | Mantém corretos os horários de atualização das gravações. | - | Autorização de desenho | ++....... | PARADA | BACKLOG:1604 |
-| EMPATES-SEM-VIGENCIA | LATERAL-ESTRUTURA | Evita anunciar empate com convenção fora da vigência. | - | Decisão da competência de referência | ++....... | PARADA | BACKLOG:1607 |
-| EXPIRA-EM-ANDA-COM-HOJE | LATERAL-ESTRUTURA | Guarda a expiração real sem avançá-la diariamente. | - | Censo dos leitores | ++....... | REGISTRADA | BACKLOG:1609 |
-| FIO-MORTO-NASCE-NO-DIA-21 | LATERAL-ESTRUTURA | Mede a perda de caminhos de resolução no início da competência. | - | Censo por data da competência | ++....... | REGISTRADA (não construir) | BACKLOG:1611 |
-| A2-SO-CHEGA-PELA-UNIDADE | LATERAL-ESTRUTURA | Define quem registra mudanças de precedência no julgamento em lote. | - | Decisão entre lote e unidade | ++....... | PARADA | BACKLOG:1619 |
-| GRAVADO-NAO-CARIMBA-A-REGUA | LATERAL-ESTRUTURA | Registra qual régua calculou cada competência. | - | Decisão do local e obrigação do carimbo | ++....... | PARADA | BACKLOG:1630 [+4 compl.] |
-| ESCREVER-CORTA-PAUTA-EM-SILENCIO | LATERAL-ESTRUTURA | Impede perder orientação ao gravar uma pauta longa. | - | Censo dos 22 chamadores | ++....... | REGISTRADA | BACKLOG:1636 [+1 compl.] |
-| COL30-FORA-DOS-TRES-CONJUNTOS-DA-FOLHA | LATERAL-ESTRUTURA | Investiga colaborador ausente das categorias da prévia da folha. | - | Localizar a causa antes da relavratura | ++....... | REGISTRADA | BACKLOG:1644 |
-| ABRANGENCIA-DOS-QUATRO-INSTRUMENTOS-SEM-PDF | LATERAL-ESTRUTURA | Confere o enquadramento territorial pelos documentos das convenções. | - | Chegada dos PDFs | ++....... | PARADA | BACKLOG:1645 |
-| PERCENTUAL-DO-NOTURNO-SEM-LEITOR | LATERAL-ESTRUTURA | Faz o cálculo consumir o percentual noturno cadastrado. | - | Cadastro e leitor do instrumento | ++....... | REGISTRADA | BACKLOG:1646 |
-| JANELA-DO-NOTURNO-CRAVADA | LATERAL-ESTRUTURA | Permite cadastrar a janela noturna da convenção. | - | ! para zona inviolável | ++....... | PARADA | BACKLOG:1647 |
-| EXCEDENTE-IGNORA-O-SINDICATO | LATERAL-ESTRUTURA | Faz o cálculo obedecer à regra de excedentes cadastrada. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1648 |
-| TOLERANCIA-SEM-LEITOR | LATERAL-ESTRUTURA | Faz tolerâncias cadastradas chegarem ao cálculo. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1649 |
-| INTERVALO-MINIMO-SEM-LEITOR | LATERAL-ESTRUTURA | Aplica o intervalo mínimo da convenção cadastrada. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1650 |
-| TETO-SEMANAL-12X36-INEXISTENTE | LATERAL-ESTRUTURA | Permite cadastrar o limite semanal da escala 12x36. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1651 |
-| RUBRICA-DE-PRONTIDAO-INEXISTENTE | LATERAL-ESTRUTURA | Permite cadastrar o pagamento de prontidão no intervalo. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1652 |
-| FURO-APURADO-FALSE-EM-VEZ-DE-NONE | LATERAL-ESTRUTURA | Distingue dia não apurado de dia apurado sem falta. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1653 |
-| TRES-GRAFIAS-DE-HOJE-MENOS-UM | LATERAL-ESTRUTURA | Faz três leitores esperarem o encerramento real do turno. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1654 |
-| BO-HE-RECUSAR-LOTE-500 | LATERAL-ESTRUTURA | Permite decidir horas extras sem erro de transação. | - | Smoke de tela | +++....++ | REGISTRADA (publicada; smoke pendente) | BACKLOG:1663 |
-| SEM-CELULA-11-DEVE-TER-CELULA | LATERAL-ESTRUTURA | Gera previsão também para afastados com vínculo válido. | - | ! para col305 | +++....++ | PARADA (parte publicada; col305 espera !) | BACKLOG:1664 |
-| ORIGEM-DISPUTA-S84-RETRO | LATERAL-ESTRUTURA | Identifica origens de batida fora do catálogo permitido. | - | Censo do escritor; ! para reescrever batidas | ++....... | REGISTRADA | BACKLOG:1670 |
-| FALTA-EM-FOLGA-VIRA-NUNCA-BATEU | LATERAL-ESTRUTURA | Evita acusar ausência de batida em folga com falta aprovada. | - | Medir a classe; localizar o ramo | ......... | REGISTRADA | BACKLOG:1675 [+1 compl.] |
-| SILENCIO-SEM-PRAZO | LATERAL-ESTRUTURA | Impede cobranças ocultas por silêncios excessivamente longos. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1704 |
-| HE100-SEM-PREVISTO-SOZINHA | LATERAL-ESTRUTURA | Evita horas extras de 100% sem a decisão exigida. | - | ? (resíduo sem destino explícito) | +++....++ | REGISTRADA (publicada; resíduo de 75 dias) | BACKLOG:1705 |
-| PERIODO-RELER-SEM-CHAMADOR | LATERAL-ESTRUTURA | Remove cálculo paralelo de pontualidade sem uso. | - | Refazer o censo no ato | ++....... | REGISTRADA | BACKLOG:1710 |
-| ESMERIL-EXIGE-MEMOS-NO-TRY | LATERAL-ESTRUTURA | Torna visível a falta de dados exigidos pela conferência. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1713 |
-| LAUDO-col33-0310 | LATERAL-ESTRUTURA | Rejulga dias antigos que conservam o veredito anterior. | - | Corte sobre o restante da frota | +++.....+ | PARADA (universo A publicado; restante espera corte) | BACKLOG:1722 (id anonimizado) |
-| PRACA-TOLERANCIA-SEM-LEITOR | LATERAL-ESTRUTURA | Dá destino ao parâmetro de tolerância sem leitor. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1750 |
-| RBAC-ESCRITA-POR-PAPEL | LATERAL-ESTRUTURA | Restringe alterações ao papel autorizado e registra o operador. | - | ESMERIL-V2; UIs | .+....... | REGISTRADA | BACKLOG:1769 |
-| TOAST-CORRIDA-2O-POST | LATERAL-ESTRUTURA | Evita erro quando dois envios simultâneos repetem o nome. | - | ? (precedência não indicada) | .+....... | REGISTRADA | BACKLOG:1780 |
-| PEP-REENTRADA-FILA | LATERAL-ESTRUTURA | Completa proteções contra reentrada e consultas desnecessárias. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1792 |
-| EFEITO-NONE-UM-LEITOR | LATERAL-ESTRUTURA | Dá resposta única para ausência com tipo fora do catálogo. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1815 [+4 compl.] |
-| SNC2-FILA | LATERAL-ESTRUTURA | Completa testes e trata resíduos de relógio e criação. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1816 |
-| H12H06-SEPARA-E-CRONTAB | LATERAL-ESTRUTURA | Separa a correção da falta da atualização do passivo. | - | censo de trava; desenho da parte B | ++...++++ | PARADA (parte B aguarda desenho) | BACKLOG:1827 [+7 compl.] |
-| DIA-SEM-TRABALHO-PORTA | LATERAL-ESTRUTURA | Oferece decisão administrativa para batida em folga ou feriado. | - | LEI-FIO-MUDO-B | .+.+..... | REGISTRADA | BACKLOG:1848 [+1 compl.] |
-| AUSENCIA-UMA-VIGENTE | LATERAL-ESTRUTURA | Evita descontar dias apresentados como abonados. | - | lei da família; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1849 |
-| PAINEL-SITUACIONAL-UM-MONTADOR | LATERAL-ESTRUTURA | Usa o mesmo montador na atualização individual e na lista. | - | censo; vaga de negócio | .+....... | REGISTRADA | BACKLOG:1851 |
-| ESMERIL-SEM-INSTANTE | LATERAL-ESTRUTURA | Unifica o significado dos instantes e das datas locais. | - | RED; vaga; rebase; opus; pouso | ..~...... | REGISTRADA (suite antiga não certifica) | BACKLOG:1857 |
-| ESMERIL-SEM-BORDA | LATERAL-ESTRUTURA | Unifica datas finais e limites das janelas. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1859 |
-| ESMERIL-SEM-DIAS-PREVISTOS | LATERAL-ESTRUTURA | Conta dias previstos somente quando a célula exige trabalho. | - | cura; selo O155; vaga | ++....... | REGISTRADA | BACKLOG:1860 [+1 compl.] |
-| V2-BUGS-DO-MOTOR | LATERAL-ESTRUTURA | Corrige prorrogação, feriado, passagem de turno e dias abertos. | - | itens 1,3,4,5; apply 11; DIFF/pauta 10 | .++...+++ | REGISTRADA (item 2 no ar; restante pendente) | BACKLOG:1862 [+4 compl.] |
-| LOTE-VALIDAR-VIRA-JOB | LATERAL-ESTRUTURA | Executa a validação em segundo plano com resultado na tela. | caso 03 | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1866 [+2 compl.] |
-| HJ-090 | LATERAL-ESTRUTURA | Faz alterações de férias respeitarem o mesmo saldo e trava. | HJ-090; HJ-091 | datas do DP; aplicação após pouso | +++++~... | EM VOO | BACKLOG:1874; RELATO:10; RELATO:17; RELATO:19; RELATO:53 [+4 compl.] |
-| JUSTIFICATIVA-PAGA-O-PERIODO | LATERAL-ESTRUTURA | Paga somente o período do turno coberto pela justificativa. | HJ-093 | HJ-090; DIFF; motor e folha | ++....... | INTERROMPIDA (brief pronto; ordem viva divergente) | BACKLOG:1875; RELATO:11; RELATO:23; anexo:interrompidas.txt:25 [+1 compl.] |
-| HOLERITE-ZIP-MATRICULA | LATERAL-ESTRUTURA | Retira o envio antigo de holerites sem uso pela tela. | - | E1; E2 | ++....... | REGISTRADA | BACKLOG:1883 [+1 compl.] |
-| BO-0611-05 | LATERAL-ESTRUTURA | Permite registrar ponto sem coordenadas de GPS. | - | liberação B3; revisão; smoke | ++.+.+... | PARADA (último estado da linha) | BACKLOG:1927 [+7 compl.] |
-| DECLARADO-X-GRAVADO | LATERAL-ESTRUTURA | Faz a gravação respeitar o horário declarado na resposta. | - | censo; construtor; passivo separado | ++....... | REGISTRADA | BACKLOG:1939 [+1 compl.] |
-| BATIDA-ID-DO-CLIQUE | LATERAL-ESTRUTURA | Identifica cada clique para evitar batidas duplicadas. | - | migration; PWA; build nativo posterior | ......... | REGISTRADA | BACKLOG:1963 |
-| ADMIN-FECHA-SEM-MOTIVO | LATERAL-ESTRUTURA | Exige motivo e histórico ao encerrar o chamado. | - | correção da porta administrativa | ++....... | REGISTRADA | BACKLOG:1973 |
-| G3G4-ESTRUTURA-RESIDUO | LATERAL-ESTRUTURA | Dá obra aos resíduos estruturais sem cobertura. | - | nomear padrão | .+....... | REGISTRADA | BACKLOG:2048 |
-| C6-IDENTITY-MAP | LATERAL-ESTRUTURA | Reduz consultas repetidas ao montar a lista. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:2052 |
-| FUROS-EMPRESA-TIMEOUT | LATERAL-ESTRUTURA | Evita o relatório da empresa ultrapassar o tempo da tela. | - | medir produção; execução em job | ......... | REGISTRADA | BACKLOG:2070 |
-| CICLO-C-CEL-TEMPLATE | LATERAL-ESTRUTURA | Trata possível espera circular entre cadastro e célula. | - | reproduzir e medir | ......... | REGISTRADA | BACKLOG:2077 |
-| EFEITO-SEM-FALLBACK-CATALOGO | LATERAL-ESTRUTURA | Evita voltar silenciosamente ao efeito antigo quando a leitura falha. | - | medir alcance | ......... | REGISTRADA | BACKLOG:2079 |
-| TRANCA-VIVAS-08-FILA | LATERAL-ESTRUTURA | Alinha o significado do resgate e mede seus efeitos. | - | medir universo e impacto | ......... | REGISTRADA | BACKLOG:2095 |
-| SETNULL-ORFA-DNA | LATERAL-ESTRUTURA | Trata célula futura com vínculo apagado ainda no DNA. | - | corte de desenho | +........ | PARADA (pergunta de desenho) | BACKLOG:2099 |
+| id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
+|---|---|---|---|---|---|---|---|---|---|
+| FERIADO-ESCALA | LATERAL-ESTRUTURA | Corrige o trabalho em feriados conforme a regra vigente. | HJ-074 | FERIADO-USA-A-LEI-DE-1609 | +++~.~... | EM VOO (escopo anterior superado) | BACKLOG:728; app/docs/RELATO.md:134 [+3 compl.] | ? | ? |
+| HJ-092 | LATERAL-ESTRUTURA | Encaminha ao admin as batidas que exigem decisão humana. | HJ-092 | decisão do admin | ++....... | REGISTRADA (fechada como BATIDA; deploy não comprovado) | BACKLOG:741 | ? | ? |
+| LANCAR-AUSENCIA-AFASTA-DESLIGADO | LATERAL-ESTRUTURA | Impede que lançar ausência transforme um desligado em afastado. | - | corte para ampliar o escopo | .+....... | REGISTRADA | BACKLOG:745 | ? | ? |
+| PILHA-DA-BATIDA-RECALCULO-INLINE | LATERAL-ESTRUTURA | Reduz o cálculo feito durante o registro da batida. | - | medir latência; O-OUTBOX | +........ | REGISTRADA | BACKLOG:753 | ? | ? |
+| O-BITEMPORAL-2 | LATERAL-ESTRUTURA | Preserva quando vínculos e regras valeram e foram registrados. | - | contratos_estruturais 20/20 | .+....... | REGISTRADA | BACKLOG:758 | ? | ? |
+| IA-DOMINIO-POR-FERRAMENTA | LATERAL-ESTRUTURA | Limita respostas da mensageria aos dados permitidos ao usuário. | - | 20/20 | .+....... | REGISTRADA | BACKLOG:759 | ? | ? |
+| REJULGAR-COMP10-4-REVERTIDOS | LATERAL-ESTRUTURA | Reaplica correções revertidas com prova do que muda. | - | medida atual; SOMBRA-X-PROD-COL988-124639 | .+.....+. | REGISTRADA (aplicação feita; divergência restante) | BACKLOG:766 | ? | ? |
+| TROCA-DE-POSTO-SEM-VINCULO | LATERAL-ESTRUTURA | Mantém coerentes o posto do cadastro e o vínculo vigente. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:771 | ? | ? |
+| LAVRAR-HE-PENDENTE-ESCALA | LATERAL-ESTRUTURA | Acelera a apuração de horas extras reutilizando dados carregados. | - | resíduos de leitores; decisão sobre segunda apuração | ..++.+.+~ | REGISTRADA (núcleo no ar; resíduos pendentes) | BACKLOG:773 | ? | ? |
+| N1-ALIMENTACAO-UNICA | LATERAL-ESTRUTURA | Evita carregar repetidamente os mesmos dados das portas. | - | N1; interface E3 se ampliada | +........ | REGISTRADA (não aplicável ao corte atual da E3) | BACKLOG:774; app/docs/RELATO.md:71 | ? | ? |
+| BO-ADMIN-2710 | LATERAL-ESTRUTURA | Classifica problemas do admin e os encaminha às obras responsáveis. | - | medidas; dono e destino por item | .+....... | REGISTRADA (medição histórica) | BACKLOG:777 | 3 (roteiro BO-[nome]-1311 / mapa HJ) | censo |
+| TRILHA-DO-VINCULO-MENTE | LATERAL-ESTRUTURA | Faz o histórico do vínculo registrar corretamente as mudanças. | - | residual RT-03; push FIO | ++...+.+~ | REGISTRADA (núcleo no ar; RT-03 pendente) | BACKLOG:778 | ? | ? |
+| REGISTRADO-NAO-E-VIVO | LATERAL-ESTRUTURA | Evita mostrar auditoria como pendência de ação. | - | instrumento de fiscalização | .+.....+~ | REGISTRADA (produto no ar; instrumento pendente) | BACKLOG:780 | ? | ? |
+| SILENCIO-VENCIDO-VOLTA | LATERAL-ESTRUTURA | Faz cobranças reaparecerem quando termina seu silêncio. | - | QUARENTENA-DO-COLAB; E3 | .++...... | INTERROMPIDA | BACKLOG:783; anexo:interrompidas.txt:1 [+2 compl.] | ? | ? |
+| FECHAR3-SOBREVIVENTE-NO-RECONCILIAR | LATERAL-ESTRUTURA | Preserva o chamado correto na conciliação de duplicados. | - | medir ocorrência | .+....... | REGISTRADA | BACKLOG:797 | ? | ? |
+| V-FASE-AS-OF-TRANSFERIDO | LATERAL-ESTRUTURA | Usa a empresa correta do dia ao conferir colaborador transferido. | - | medir transferidos | ......... | REGISTRADA | BACKLOG:900 | ? | ? |
+| V-FASE-AS-OF-PARIDADE-UNIVERSO | LATERAL-ESTRUTURA | Faz a comparação usar o mesmo conjunto de dias e folgas. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:901 | ? | ? |
+| V-FASE-AS-OF-CUSTO | LATERAL-ESTRUTURA | Mede o custo de buscar decisões anteriores quando falta cobertura. | - | medição na sombra | ......... | REGISTRADA | BACKLOG:902 | ? | ? |
+| DEGRAU-HE-100-CADASTRO | LATERAL-ESTRUTURA | Torna configurável pela convenção o limite da hora extra integral. | - | cadastro; leitor na UI | .+....... | REGISTRADA | BACKLOG:904 | ? | ? |
+| V-FASE-AS-OF-SEM-CELULA | LATERAL-ESTRUTURA | Reabre a conferência após mudar dia passado sem célula. | - | lei SEM-CELULA | .+....... | REGISTRADA | BACKLOG:905 | ? | ? |
+| V-FASE-AS-OF-ATRASO | LATERAL-ESTRUTURA | Reduz atraso entre a mudança do dia e a conferência da fase. | - | próxima lavra; dependências do cron | ......... | REGISTRADA | BACKLOG:916 | ? | ? |
+| V-FASE-AS-OF-SOBREPOSTA | LATERAL-ESTRUTURA | Trata janelas sobrepostas após mudar o início da competência. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:918 | ? | ? |
+| V-FASE-AS-OF-INTRADIA | LATERAL-ESTRUTURA | Preserva versões anteriores de decisões do mesmo dia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:919 | ? | ? |
+| PROPOSITOR-JANELA-LONGA | LATERAL-ESTRUTURA | Mantém propostas coerentes em consultas com mais de duas janelas. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:920 | ? | ? |
+| FILA-POR-CAUSA-AS-OF | LATERAL-ESTRUTURA | Faz a fila passada ler a decisão daquela data. | - | pouso F1/F5 | ......... | REGISTRADA | BACKLOG:921 | ? | ? |
+| GRADE-09-PAUTA | LATERAL-ESTRUTURA | Entrega ao DP a diferença entre pago e devido sem regravar a folha. | - | GRADE-v5; ensaio; diferença medida | ......... | REGISTRADA | BACKLOG:940 | ? | ? |
+| NOREVERSE-UI-NO-CORE | LATERAL-ESTRUTURA | Impede links de tela de derrubarem o processamento do núcleo. | - | resultado 6 após a corrente | ++++++++~ | REGISTRADA (cura no ar; resultado posterior pendente) | BACKLOG:953; app/docs/RELATO.md:1810 [+1 compl.] | ? | ? |
+| ISENTO-FLAG-ATEMPORAL | LATERAL-ESTRUTURA | Define o efeito da isenção atual sobre decisões antigas. | - | E3-ISENTO-INSUMOS | ......... | REGISTRADA (desenho futuro) | BACKLOG:956 [+1 compl.] | ? | ? |
+| GRADE-FOLGA-C5 | LATERAL-ESTRUTURA | Confere folgas de calendário dentro do vínculo válido. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:970 | ? | ? |
+| GRADE-FOLGA-GERADOR | LATERAL-ESTRUTURA | Faz a nova escala respeitar a folga pessoal lançada. | - | juiz da folga; ensaio; autorização do passado | .+....... | REGISTRADA | BACKLOG:971 | ? | ? |
+| P14-CONFIRMAR-IMPLAUSIVEL-SEM-MOTIVO | LATERAL-ESTRUTURA | Exige motivo escrito para confirmar resposta improvável. | - | fatia em curso; exame das permissões | .+....... | REGISTRADA | BACKLOG:985 | ? | ? |
+| PERGUNTA-VIVA-LOGA-PREVISTO-COMO-FALHA | LATERAL-ESTRUTURA | Evita alarmes de erro para divergências já previstas. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:989 | ? | ? |
+| JUIZ-UNICO-DA-ANCORA | LATERAL-ESTRUTURA | Usa referência única para a fase da escala 12x36. | - | V-FASE | .+....... | REGISTRADA | BACKLOG:1000 | ? | ? |
+| BO-[nome]-DESTRAVA | LATERAL-ESTRUTURA | Indica a correção de cadastro que libera o dia na folha. | - | lavrador do retrato; dono do dia | .+....... | REGISTRADA | BACKLOG:1003 | ? | ? |
+| FIO-DO-ADMIN-LAVRA-VELHA | LATERAL-ESTRUTURA | Alerta quando a lista do admin usa medição antiga. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1007 | ? | ? |
+| AVISO-ATIVO-SEM-VINCULO-NO-DIA | LATERAL-ESTRUTURA | Avisa quando falta vínculo para dia de colaborador ativo. | - | ? (não indicada) | .+....... | REGISTRADA | BACKLOG:1011 | ? | ? |
+| REABRIR-DISPUTA-ADMIN-IGNORA-RETORNO | LATERAL-ESTRUTURA | Evita anunciar reabertura quando o chamado continuou encerrado. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1015 | ? | ? |
+| CXR-FALHA-CALADA | LATERAL-ESTRUTURA | Mostra falhas de leitura em vez de lista vazia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1022 | ? | ? |
+| COL309-SETEMBRO | LATERAL-ESTRUTURA | Corrige células antigas usando o vínculo autorizado. | - | COL309-09-RECALCULO-DEPOIS-DO-ADMIN | .+.....+. | REGISTRADA (células aplicadas; recálculo separado) | BACKLOG:1027 [+1 compl.] | ? | ? |
+| CAL-CUSTO-NO-MAPA-DE-FUROS | LATERAL-ESTRUTURA | Mede e reduz consultas repetidas no mapa de furos. | - | medição do custo | ......... | REGISTRADA | BACKLOG:1032 | ? | ? |
+| ENTRADA-BLOQUEADA-SEM-DATA-TURNO | LATERAL-ESTRUTURA | Registra o dia do turno no chamado de entrada bloqueada. | - | JUSTIFICATIVA-ENCERRA-ORIGEM | ......... | REGISTRADA | BACKLOG:1048 | ? | ? |
+| POSICAO-FALTAS-E-AUSENCIAS | LATERAL-ESTRUTURA | Reúne faltas e ausências com seus tipos. | - | fonte unificada | .+....... | REGISTRADA | BACKLOG:1050 | ? | ? |
+| POSICAO-FERIAS-ATE-A-DATA | LATERAL-ESTRUTURA | Apura férias proporcionais até a data escolhida. | - | regra de proporcionais e avos | .+....... | REGISTRADA | BACKLOG:1051 | ? | ? |
+| BO2910-ESTRUTURA | LATERAL-ESTRUTURA | Corrige classes de cadastro, ausência e julgamento da triagem. | casos 01, 02, 05, 06, 08 | obras por classe | .+....... | REGISTRADA | BACKLOG:1059 | ? | ? |
+| GRADE-DEPENDE-DA-JANELA | LATERAL-ESTRUTURA | Faz o mesmo dia produzir a mesma grade em qualquer janela. | - | LASTRO; grupo 1, sítio 1 | .+....... | REGISTRADA | BACKLOG:1068 | ? | ? |
+| PAUTAS-PREFILTRO-REPETIDO | LATERAL-ESTRUTURA | Retira a repetição do filtro que decide chamar o motor. | - | pouso COL129 | ......... | REGISTRADA | BACKLOG:1070 | ? | ? |
+| OUTBOX-EVENTO-DUPLO | LATERAL-ESTRUTURA | Mede e evita emissão repetida do mesmo evento pelo chamador. | - | pesquisa e medição | .+....... | REGISTRADA | BACKLOG:1071 | ? | ? |
+| JUSTIFICATIVA-ENCERRA-ORIGEM | LATERAL-ESTRUTURA | Encerra a cobrança de origem quando a justificativa é aprovada. | - | grupo (1), sítio 1; irmã para cinco casos | + + + . . . . . + | REGISTRADA (parte no ar; cinco casos retidos) | app/docs/BACKLOG.md:1074 [+1 compl.] | ? | ? |
+| BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR | LATERAL-ESTRUTURA | Permite enviar atestado e explica corretamente os erros de reenvio. | - | smoke de reenvio | + + + + . . . . + | REGISTRADA (parte no ar; falta smoke) | app/docs/BACKLOG.md:1091 [+1 compl.] | ? | ? |
+| REABRIR-NAO-DESTROI | LATERAL-ESTRUTURA | Preserva respostas anteriores quando uma pergunta é reaberta. | - | smoke de clique | + + + . . . . . + | REGISTRADA (no ar desde 25/10; falta smoke) | app/docs/BACKLOG.md:1094 | ? | ? |
+| HE-DE-14H-NUM-DIA (col945 12/09) | LATERAL-ESTRUTURA | Apura por que um dia recebeu quase quinze horas extras. | - | corte; medição da causa | + . . . . . . . . | PARADA (aguarda corte para entrar na fila) | app/docs/BACKLOG.md:1103 | ? | ? |
+| BUG-ANCORA-NAO-REGENERA | LATERAL-ESTRUTURA | Faz a correção da fase de trabalho chegar aos dias afetados. | - | decisão sobre col824 e col899 | + + + + . . . . . | PARADA (cura fechada; decisões de cadastro pendentes) | app/docs/BACKLOG.md:1118 | ? | ? |
+| O-HAIKU-INVESTIGA | LATERAL-ESTRUTURA | Dá ao assistente consultas para investigar escalas e preparar propostas. | - | O-DIA-PAGO S4; VINCULO-LINHA-DO-TEMPO | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1130 [+4 compl.] | ? | ? |
+| O-JANELA-HE | LATERAL-ESTRUTURA | Conta hora extra fora da jornada conforme a regra ou autorização. | - | smoke dos treze passos | + + + . . . . + + | REGISTRADA (no ar desde 01/10; falta smoke) | app/docs/BACKLOG.md:1134 [+8 compl.] | ? | ? |
+| CHAMADO-NASCE-EM-EXPORTADA | LATERAL-ESTRUTURA | Investiga cobranças novas abertas para competências já pagas. | - | censo dos emissores; decisão de desenho | + + . . . . . . . | REGISTRADA (não construir) | app/docs/BACKLOG.md:1137 | ? | ? |
+| COL369-TRES-RESTANTES | LATERAL-ESTRUTURA | Apura três diferenças de intervalo, pagamento e vínculo do colaborador. | - | smoke da Gestão de HE; autorização para vínculo | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1156 | ? | ? |
+| O-GEO-DECISAO | LATERAL-ESTRUTURA | Registra decisões de localização e avisa quando um turno fica sem sinal. | - | corte das etapas 1-2; O198 antes do complemento | . + . . . . . . . | PARADA (etapas congeladas; complemento registrado) | app/docs/BACKLOG.md:1165 | ? | ? |
+| O146 | LATERAL-ESTRUTURA | Paga a extra declarada na escala sem aumentar a jornada devida. | - | linha do copiloto | + + + + . . . . + | REGISTRADA (no ar; falta linha do copiloto) | app/docs/BACKLOG.md:1171 | ? | ? |
+| O236 | LATERAL-ESTRUTURA | Identifica por que colaboradores ficam fora do arquivo da folha. | - | medição por motivo; autorização se tocar exportada | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1203 | ? | ? |
+| O121 | LATERAL-ESTRUTURA | Permite corrigir vínculo passado pela tela com regeneração e trilha. | - | remedição; O65; seis testes antigos | + + + + . . . . . | REGISTRADA (A1 construído; suíte com seis falhas) | app/docs/BACKLOG.md:1228 [+1 compl.] | ? | ? |
+| O123 | LATERAL-ESTRUTURA | Carrega pendências de disputas sem multiplicar consultas por pergunta. | - | pista de testes após fila 1 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1230 | ? | ? |
+| O118 | LATERAL-ESTRUTURA | Faz a grade casar as batidas de todas as pausas do dia. | - | print do calendário | + + + . . . . + + | REGISTRADA (código no ar; print pendente) | app/docs/BACKLOG.md:1233 [+1 compl.] | ? | ? |
+| O101 | LATERAL-ESTRUTURA | Exige motivo e registra antes e depois ao mudar a isenção de ponto. | - | pista para executar o selo | + + + . . . . + + | REGISTRADA (código no ar; selo espera pista) | app/docs/BACKLOG.md:1250 | ? | ? |
+| O99 | LATERAL-ESTRUTURA | Aplica correções provadas preservando a história do arquivo da folha. | - | decisão sobre 61 dias; TXT | + + + . . . . + + | PARADA (cura 2 no ar; cura 1 e TXT pendentes) | app/docs/BACKLOG.md:1252 [+7 compl.] | ? | ? |
+| O10 | LATERAL-ESTRUTURA | Registra troca de plantão com dias, documentos e confirmação administrativa. | - | credencial; confirmação com dois anexos | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1263 [+4 compl.] | ? | ? |
+| HE-OCORRENCIA-COMO-LINHA | LATERAL-ESTRUTURA | Guarda cada ocorrência de hora extra e sua história numa linha consultável. | - | autorização da troca S5b | . + . . . . . . . | REGISTRADA (desenho publicado; nenhuma migration) | app/docs/BACKLOG.md:1271 | ? | ? |
+| LOTE-1-PENDENTES | LATERAL-ESTRUTURA | Entrega censos, diferenças e pautas dos cinco grupos de pendências. | - | autorização da troca; decisões dos itens 2 e 5; cadastro do item 3 | + + . . . . . . . | PARADA (item 1 feito; restante espera autorização) | app/docs/BACKLOG.md:1279 | ? | ? |
+| LOTE-ATRASO-ADMITIDO | LATERAL-ESTRUTURA | Permite validar em lote os atrasos admitidos pelo colaborador. | - | S5b; UI-RESPOSTA-DIZ-O-QUE-E com smoke; autorização | . . . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1284 | ? | ? |
+| O19 | LATERAL-ESTRUTURA | Explica falhas e permite enviar documento de ausência pelo aplicativo. | - | autorização e retomada do APP | + . + . . . . . + | PARADA (servidor no ar; APP espera autorização) | app/docs/BACKLOG.md:1298 | ? | ? |
+| O28 | LATERAL-ESTRUTURA | Desconta a saída antecipada conforme o catálogo e explica o desconto. | - | DIFF de dinheiro; ! | + + . . . . . . . | PARADA (espera !) | app/docs/BACKLOG.md:1309 | ? | ? |
+| O38 | LATERAL-ESTRUTURA | Explica por que uma resposta validada não virou marcação de ponto. | - | O39 para item a; smoke | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1319 | ? | ? |
+| O43 | LATERAL-ESTRUTURA | Registra atos e perdas de sessão do administrador para auditoria. | - | O47; esteira seca | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1324 | ? | ? |
+| O58 | LATERAL-ESTRUTURA | Registra a emissão do espelho e permite auditoria por período livre. | - | parecer jurídico para hash; Card 4 | + + . . . . . . . | PARADA (hash espera parecer; registro pode avançar) | app/docs/BACKLOG.md:1342 | ? | ? |
+| O96 | LATERAL-ESTRUTURA | Permite cadastrar o limite de pausa fixado no código. | - | exportação de 09 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1372 | ? | ? |
+| O144 | LATERAL-ESTRUTURA | Faz duas telas contarem os mesmos dias para o limite de atestados. | - | prova do leitor absenteísmo; censo de derivações | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1400 | ? | ? |
+| O147 | LATERAL-ESTRUTURA | Mede o efeito financeiro dos atrasos lançados na competência 09. | - | !; REGEN-EM-EXPORTADA | . + . . . . . . . | PARADA (competência exportada) | app/docs/BACKLOG.md:1401 | ? | ? |
+| O151 | LATERAL-ESTRUTURA | Julga chamados do rejulgamento forçado e retrata os sem lastro. | - | porta de retratação; trilha | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1405 | ? | ? |
+| O157 | LATERAL-ESTRUTURA | Conta os tipos corretos de ausência ao projetar férias. | - | DIFF por colaborador; catálogo | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1410 | ? | ? |
+| O175 | LATERAL-ESTRUTURA | Evita reconstruir turnos em competências já exportadas. | - | Teto de competência aberta ou corte sobre o cache | ++....... | PARADA (espera corte) | BACKLOG:1430 | ? | ? |
+| O199 | LATERAL-ESTRUTURA | Faz o aceite da folga decidir o dia e encerrar a cobrança. | - | ! para estoque antigo; O246 | +++....++ | REGISTRADA (ato publicado; estoque pendente) | BACKLOG:1454 [+1 compl.] | ? | ? |
+| O202 | LATERAL-ESTRUTURA | Faz pings consultarem a mesma avaliação oficial de localização. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1457 | ? | ? |
+| O204 | LATERAL-ESTRUTURA | Preserva a hora enviada pelo aparelho e registra descartes. | - | Linha do placar em pouso próprio | ++++...++ | REGISTRADA (produto publicado; placar pendente) | BACKLOG:1459 [+1 compl.] | ? | ? |
+| O213 | LATERAL-ESTRUTURA | Conta perguntas cujo tipo de marcação discorda da ata. | - | Publicação do censo antes da cura | ++....... | REGISTRADA (censo feito; nada alterado) | BACKLOG:1465 | ? | ? |
+| O243 | LATERAL-ESTRUTURA | Revisa setores críticos e a utilidade dos respectivos testes. | - | Contratos estruturais 20/20; censo antes da poda | .+....... | REGISTRADA | BACKLOG:1474 | ? | ? |
+| PORTA-CELULA-EDITADA | LATERAL-ESTRUTURA | Permite registrar pela tela o turno autorizado do dia. | - | ? (não indicada) | .+....... | REGISTRADA | BACKLOG:1502 [+2 compl.] | ? | ? |
+| INTERVALO-DECLARADO | LATERAL-ESTRUTURA | Pergunta sobre intervalo incompleto e registra a resposta aprovada. | - | BOs em curso; sinal da célula; validação | ++....... | REGISTRADA | BACKLOG:1503 | ? | ? |
+| REGEN-EXPORTADA-SEM-EFEITO | LATERAL-ESTRUTURA | Permite corrigir células exportadas sem outros efeitos medidos. | - | Seis condições; reversão; janela de autorização | ++....... | REGISTRADA (validade atual da janela ?) | BACKLOG:1512 | ? | ? |
+| INTERMITENTE-BATIDA-SOLTA | LATERAL-ESTRUTURA | Investiga batida isolada de intermitente mostrada como dia correto. | - | Censo de frota; juiz de turno aberto | ++....... | REGISTRADA | BACKLOG:1526 | ? | ? |
+| INTERMITENTE-K-FORA-DO-DNA | LATERAL-ESTRUTURA | Preserva o desenho histórico do intervalo do intermitente. | - | Medição e decisão | +........ | REGISTRADA | BACKLOG:1527 | ? | ? |
+| INTERMITENTE-CONVOCACAO-CADASTRO | LATERAL-ESTRUTURA | Registra a convocação que define o trabalho do intermitente. | - | Cadastro; leitor na porta da célula | .+....... | REGISTRADA | BACKLOG:1528 [+1 compl.] | ? | ? |
+| O269 | LATERAL-ESTRUTURA | Atualiza setembro preservando o arquivo pago e nomeando diferenças. | - | Prova do retrato; DIFF; reversão; Pauta DP | .+....... | REGISTRADA | BACKLOG:1554 [+1 compl.] | ? | ? |
+| O270 | LATERAL-ESTRUTURA | Calcula indenização de intervalo nas jornadas de quatro a seis horas. | - | O263-FT; conferência de CCT; DIFF | ++....... | REGISTRADA | BACKLOG:1555 | ? | ? |
+| O271 | LATERAL-ESTRUTURA | Aplica pontualidade ao trabalho comercial pela regra comum. | - | DIFF da 10; condições do apply | ++....... | REGISTRADA | BACKLOG:1556 | ? | ? |
+| O273 | LATERAL-ESTRUTURA | Devolve ao admin recusas automáticas que perderam sua justificativa. | - | Elo do cron para 17 revogações | ++++...++ | REGISTRADA (cura publicada; revogações pendentes) | BACKLOG:1558 | ? | ? |
+| O275 | LATERAL-ESTRUTURA | Permite cadastrar feriado como dia previsto de trabalho. | - | Decisão FORMA A × FORMA B | ++++..... | INTERROMPIDA | BACKLOG:1560; anexo:interrompidas.txt:19 | ? | ? |
+| O277 | LATERAL-ESTRUTURA | Ajusta a dobra de feriado de SDF e intermitente. | - | Pouso da O275 | ++....... | REGISTRADA | BACKLOG:1562 [+1 compl.] | ? | ? |
+| O281 | LATERAL-ESTRUTURA | Mede quatro suspeitas antes de decidir as correções. | - | Medição do bloco A | .+....... | REGISTRADA (leitura antiga) | BACKLOG:1567 | ? | ? |
+| O282 | LATERAL-ESTRUTURA | Atualiza estados que ficaram antigos após mudanças nos fatos. | - | O281, bloco A item 3 | .+....... | REGISTRADA | BACKLOG:1568 | ? | ? |
+| O314 | LATERAL-ESTRUTURA | Verifica se a falta do mesmo dia é descontada duas vezes. | - | Medir 28 linhas | .+....... | REGISTRADA | BACKLOG:1600 | ? | ? |
+| CARIMBO-POR-ORIGEM | LATERAL-ESTRUTURA | Mantém corretos os horários de atualização das gravações. | - | Autorização de desenho | ++....... | PARADA | BACKLOG:1604 | ? | ? |
+| EMPATES-SEM-VIGENCIA | LATERAL-ESTRUTURA | Evita anunciar empate com convenção fora da vigência. | - | Decisão da competência de referência | ++....... | PARADA | BACKLOG:1607 | ? | ? |
+| EXPIRA-EM-ANDA-COM-HOJE | LATERAL-ESTRUTURA | Guarda a expiração real sem avançá-la diariamente. | - | Censo dos leitores | ++....... | REGISTRADA | BACKLOG:1609 | ? | ? |
+| FIO-MORTO-NASCE-NO-DIA-21 | LATERAL-ESTRUTURA | Mede a perda de caminhos de resolução no início da competência. | - | Censo por data da competência | ++....... | REGISTRADA (não construir) | BACKLOG:1611 | ? | ? |
+| A2-SO-CHEGA-PELA-UNIDADE | LATERAL-ESTRUTURA | Define quem registra mudanças de precedência no julgamento em lote. | - | Decisão entre lote e unidade | ++....... | PARADA | BACKLOG:1619 | ? | ? |
+| GRAVADO-NAO-CARIMBA-A-REGUA | LATERAL-ESTRUTURA | Registra qual régua calculou cada competência. | - | Decisão do local e obrigação do carimbo | ++....... | PARADA | BACKLOG:1630 [+4 compl.] | ? | ? |
+| ESCREVER-CORTA-PAUTA-EM-SILENCIO | LATERAL-ESTRUTURA | Impede perder orientação ao gravar uma pauta longa. | - | Censo dos 22 chamadores | ++....... | REGISTRADA | BACKLOG:1636 [+1 compl.] | ? | ? |
+| COL30-FORA-DOS-TRES-CONJUNTOS-DA-FOLHA | LATERAL-ESTRUTURA | Investiga colaborador ausente das categorias da prévia da folha. | - | Localizar a causa antes da relavratura | ++....... | REGISTRADA | BACKLOG:1644 | ? | ? |
+| ABRANGENCIA-DOS-QUATRO-INSTRUMENTOS-SEM-PDF | LATERAL-ESTRUTURA | Confere o enquadramento territorial pelos documentos das convenções. | - | Chegada dos PDFs | ++....... | PARADA | BACKLOG:1645 | ? | ? |
+| PERCENTUAL-DO-NOTURNO-SEM-LEITOR | LATERAL-ESTRUTURA | Faz o cálculo consumir o percentual noturno cadastrado. | - | Cadastro e leitor do instrumento | ++....... | REGISTRADA | BACKLOG:1646 | ? | ? |
+| JANELA-DO-NOTURNO-CRAVADA | LATERAL-ESTRUTURA | Permite cadastrar a janela noturna da convenção. | - | ! para zona inviolável | ++....... | PARADA | BACKLOG:1647 | ? | ? |
+| EXCEDENTE-IGNORA-O-SINDICATO | LATERAL-ESTRUTURA | Faz o cálculo obedecer à regra de excedentes cadastrada. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1648 | ? | ? |
+| TOLERANCIA-SEM-LEITOR | LATERAL-ESTRUTURA | Faz tolerâncias cadastradas chegarem ao cálculo. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1649 | ? | ? |
+| INTERVALO-MINIMO-SEM-LEITOR | LATERAL-ESTRUTURA | Aplica o intervalo mínimo da convenção cadastrada. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1650 | ? | ? |
+| TETO-SEMANAL-12X36-INEXISTENTE | LATERAL-ESTRUTURA | Permite cadastrar o limite semanal da escala 12x36. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1651 | ? | ? |
+| RUBRICA-DE-PRONTIDAO-INEXISTENTE | LATERAL-ESTRUTURA | Permite cadastrar o pagamento de prontidão no intervalo. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1652 | ? | ? |
+| FURO-APURADO-FALSE-EM-VEZ-DE-NONE | LATERAL-ESTRUTURA | Distingue dia não apurado de dia apurado sem falta. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1653 | ? | ? |
+| TRES-GRAFIAS-DE-HOJE-MENOS-UM | LATERAL-ESTRUTURA | Faz três leitores esperarem o encerramento real do turno. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1654 | ? | ? |
+| BO-HE-RECUSAR-LOTE-500 | LATERAL-ESTRUTURA | Permite decidir horas extras sem erro de transação. | - | Smoke de tela | +++....++ | REGISTRADA (publicada; smoke pendente) | BACKLOG:1663 | ? | ? |
+| SEM-CELULA-11-DEVE-TER-CELULA | LATERAL-ESTRUTURA | Gera previsão também para afastados com vínculo válido. | - | ! para col305 | +++....++ | PARADA (parte publicada; col305 espera !) | BACKLOG:1664 | ? | ? |
+| ORIGEM-DISPUTA-S84-RETRO | LATERAL-ESTRUTURA | Identifica origens de batida fora do catálogo permitido. | - | Censo do escritor; ! para reescrever batidas | ++....... | REGISTRADA | BACKLOG:1670 | ? | ? |
+| FALTA-EM-FOLGA-VIRA-NUNCA-BATEU | LATERAL-ESTRUTURA | Evita acusar ausência de batida em folga com falta aprovada. | - | Medir a classe; localizar o ramo | ......... | REGISTRADA | BACKLOG:1675 [+1 compl.] | ? | ? |
+| SILENCIO-SEM-PRAZO | LATERAL-ESTRUTURA | Impede cobranças ocultas por silêncios excessivamente longos. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1704 | ? | ? |
+| HE100-SEM-PREVISTO-SOZINHA | LATERAL-ESTRUTURA | Evita horas extras de 100% sem a decisão exigida. | - | ? (resíduo sem destino explícito) | +++....++ | REGISTRADA (publicada; resíduo de 75 dias) | BACKLOG:1705 | ? | ? |
+| PERIODO-RELER-SEM-CHAMADOR | LATERAL-ESTRUTURA | Remove cálculo paralelo de pontualidade sem uso. | - | Refazer o censo no ato | ++....... | REGISTRADA | BACKLOG:1710 | ? | ? |
+| ESMERIL-EXIGE-MEMOS-NO-TRY | LATERAL-ESTRUTURA | Torna visível a falta de dados exigidos pela conferência. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1713 | ? | ? |
+| LAUDO-col33-0310 | LATERAL-ESTRUTURA | Rejulga dias antigos que conservam o veredito anterior. | - | Corte sobre o restante da frota | +++.....+ | PARADA (universo A publicado; restante espera corte) | BACKLOG:1722 (id anonimizado) | ? | ? |
+| PRACA-TOLERANCIA-SEM-LEITOR | LATERAL-ESTRUTURA | Dá destino ao parâmetro de tolerância sem leitor. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1750 | ? | ? |
+| RBAC-ESCRITA-POR-PAPEL | LATERAL-ESTRUTURA | Restringe alterações ao papel autorizado e registra o operador. | - | ESMERIL-V2; UIs | .+....... | REGISTRADA | BACKLOG:1769 | ? | ? |
+| TOAST-CORRIDA-2O-POST | LATERAL-ESTRUTURA | Evita erro quando dois envios simultâneos repetem o nome. | - | ? (precedência não indicada) | .+....... | REGISTRADA | BACKLOG:1780 | ? | ? |
+| PEP-REENTRADA-FILA | LATERAL-ESTRUTURA | Completa proteções contra reentrada e consultas desnecessárias. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1792 | ? | ? |
+| EFEITO-NONE-UM-LEITOR | LATERAL-ESTRUTURA | Dá resposta única para ausência com tipo fora do catálogo. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1815 [+4 compl.] | ? | ? |
+| SNC2-FILA | LATERAL-ESTRUTURA | Completa testes e trata resíduos de relógio e criação. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1816 | ? | ? |
+| H12H06-SEPARA-E-CRONTAB | LATERAL-ESTRUTURA | Separa a correção da falta da atualização do passivo. | - | censo de trava; desenho da parte B | ++...++++ | PARADA (parte B aguarda desenho) | BACKLOG:1827 [+7 compl.] | ? | ? |
+| DIA-SEM-TRABALHO-PORTA | LATERAL-ESTRUTURA | Oferece decisão administrativa para batida em folga ou feriado. | - | LEI-FIO-MUDO-B | .+.+..... | REGISTRADA | BACKLOG:1848 [+1 compl.] | ? | ? |
+| AUSENCIA-UMA-VIGENTE | LATERAL-ESTRUTURA | Evita descontar dias apresentados como abonados. | - | lei da família; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1849 | ? | ? |
+| PAINEL-SITUACIONAL-UM-MONTADOR | LATERAL-ESTRUTURA | Usa o mesmo montador na atualização individual e na lista. | - | censo; vaga de negócio | .+....... | REGISTRADA | BACKLOG:1851 | ? | ? |
+| ESMERIL-SEM-INSTANTE | LATERAL-ESTRUTURA | Unifica o significado dos instantes e das datas locais. | - | RED; vaga; rebase; opus; pouso | ..~...... | REGISTRADA (suite antiga não certifica) | BACKLOG:1857 | ? | ? |
+| ESMERIL-SEM-BORDA | LATERAL-ESTRUTURA | Unifica datas finais e limites das janelas. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1859 | ? | ? |
+| ESMERIL-SEM-DIAS-PREVISTOS | LATERAL-ESTRUTURA | Conta dias previstos somente quando a célula exige trabalho. | - | cura; selo O155; vaga | ++....... | REGISTRADA | BACKLOG:1860 [+1 compl.] | ? | ? |
+| V2-BUGS-DO-MOTOR | LATERAL-ESTRUTURA | Corrige prorrogação, feriado, passagem de turno e dias abertos. | - | itens 1,3,4,5; apply 11; DIFF/pauta 10 | .++...+++ | REGISTRADA (item 2 no ar; restante pendente) | BACKLOG:1862 [+4 compl.] | ? | ? |
+| LOTE-VALIDAR-VIRA-JOB | LATERAL-ESTRUTURA | Executa a validação em segundo plano com resultado na tela. | caso 03 | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1866 [+2 compl.] | ? | ? |
+| HJ-090 | LATERAL-ESTRUTURA | Faz alterações de férias respeitarem o mesmo saldo e trava. | HJ-090; HJ-091 | datas do DP; aplicação após pouso | +++++~... | EM VOO | BACKLOG:1874; RELATO:10; RELATO:17; RELATO:19; RELATO:53 [+4 compl.] | ? | ? |
+| JUSTIFICATIVA-PAGA-O-PERIODO | LATERAL-ESTRUTURA | Paga somente o período do turno coberto pela justificativa. | HJ-093 | HJ-090; DIFF; motor e folha | ++....... | INTERROMPIDA (brief pronto; ordem viva divergente) | BACKLOG:1875; RELATO:11; RELATO:23; anexo:interrompidas.txt:25 [+1 compl.] | ? | ? |
+| HOLERITE-ZIP-MATRICULA | LATERAL-ESTRUTURA | Retira o envio antigo de holerites sem uso pela tela. | - | E1; E2 | ++....... | REGISTRADA | BACKLOG:1883 [+1 compl.] | ? | ? |
+| BO-0611-05 | LATERAL-ESTRUTURA | Permite registrar ponto sem coordenadas de GPS. | - | liberação B3; revisão; smoke | ++.+.+... | PARADA (último estado da linha) | BACKLOG:1927 [+7 compl.] | ? | ? |
+| DECLARADO-X-GRAVADO | LATERAL-ESTRUTURA | Faz a gravação respeitar o horário declarado na resposta. | - | censo; construtor; passivo separado | ++....... | REGISTRADA | BACKLOG:1939 [+1 compl.] | 4 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS e E3 (app/chamados/services/materializacao.py no diff de wt-bugpar-124848 @338fd37b0 e de wt-codex-e3-forma-sql-005806 @f569063be; as 5 lei cortadas por DXG-LEIS-CORTADAS 14/11 10:24, logs/AVAIS-1313/dxg_leis_cortadas.txt) |
+| BATIDA-ID-DO-CLIQUE | LATERAL-ESTRUTURA | Identifica cada clique para evitar batidas duplicadas. | - | migration; PWA; build nativo posterior | ......... | REGISTRADA | BACKLOG:1963 | ? | ? |
+| ADMIN-FECHA-SEM-MOTIVO | LATERAL-ESTRUTURA | Exige motivo e histórico ao encerrar o chamado. | - | correção da porta administrativa | ++....... | REGISTRADA | BACKLOG:1973 | ? | ? |
+| G3G4-ESTRUTURA-RESIDUO | LATERAL-ESTRUTURA | Dá obra aos resíduos estruturais sem cobertura. | - | nomear padrão | .+....... | REGISTRADA | BACKLOG:2048 | ? | ? |
+| C6-IDENTITY-MAP | LATERAL-ESTRUTURA | Reduz consultas repetidas ao montar a lista. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:2052 | ? | ? |
+| FUROS-EMPRESA-TIMEOUT | LATERAL-ESTRUTURA | Evita o relatório da empresa ultrapassar o tempo da tela. | - | medir produção; execução em job | ......... | REGISTRADA | BACKLOG:2070 | ? | ? |
+| CICLO-C-CEL-TEMPLATE | LATERAL-ESTRUTURA | Trata possível espera circular entre cadastro e célula. | - | reproduzir e medir | ......... | REGISTRADA | BACKLOG:2077 | ? | ? |
+| EFEITO-SEM-FALLBACK-CATALOGO | LATERAL-ESTRUTURA | Evita voltar silenciosamente ao efeito antigo quando a leitura falha. | - | medir alcance | ......... | REGISTRADA | BACKLOG:2079 | ? | ? |
+| TRANCA-VIVAS-08-FILA | LATERAL-ESTRUTURA | Alinha o significado do resgate e mede seus efeitos. | - | medir universo e impacto | ......... | REGISTRADA | BACKLOG:2095 | ? | ? |
+| SETNULL-ORFA-DNA | LATERAL-ESTRUTURA | Trata célula futura com vínculo apagado ainda no DNA. | - | corte de desenho | +........ | PARADA (pergunta de desenho) | BACKLOG:2099 | ? | ? |
 
 ## INSTRUMENTO (177)
 
@@ -675,24 +680,24 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | R1-ROTULOS-FILA | INSTRUMENTO | Alinha rótulos, datas e selos às fontes do placar. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1798 |
 
 ### FIO-E0-V4-E1-ENTRADAS (16)
-| complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
-|---|---|---|---|---|---|---|---|
-| ABSOLVIDA-PELA-FOLGA | LATERAL-ESTRUTURA | Evita absolver cobrança noturna pela folga do dia errado. | - | autorização das exportadas; construção | ++....... | REGISTRADA | BACKLOG:1976 |
-| BUG-PLANTIO-NOTURNO-MAIS-1 | LATERAL-ESTRUTURA | Evita plantar a saída noturna um dia depois do correto. | caso 13–14 | E1-ENTRADAS; BO-0611-05; migração autorizada | .++...... | REGISTRADA (absorvida na E1; complemento pendente) | BACKLOG:1852; BACKLOG:1975 |
-| CONTRATO-DE-ENTRADA-DO-FIO | LATERAL-ESTRUTURA | Faz o emissor entregar a batida correta ao nascimento da pergunta. | HJ-095 | E3; DESLIGADO/FERIADO | ++....... | BRIEF PRONTO | BACKLOG:2103; RELATO:26 |
-| E1-A2-VAZIO-MEDIR | ESPINHA-E | Identifica perguntas cuja origem não permite determinar o dia. | - | pouso E1; medida na sombra | .+....... | REGISTRADA | BACKLOG:803 |
-| E1-ACERVO-5-GRUPOS-09 | ESPINHA-E | Trata cinco grupos antigos preservando a competência exportada. | - | REGEN-EM-EXPORTADA; DIFF; autorização | .+....... | PARADA (retida por aval) | BACKLOG:800 |
-| E1-FILA-OPUS6-FILA | ESPINHA-E | Apura riscos e custos restantes da revisão da E1. | - | medir acervo e custo | ......... | REGISTRADA | BACKLOG:1895 |
-| E1-FILA-V2-2-OUTRAS-PORTAS | ESPINHA-E | Alinha as outras entradas à mesma ordem de travas. | - | censo das portas | +........ | REGISTRADA | BACKLOG:1897 |
-| E1-FILA-V2-2-RESIDUOS | ESPINHA-E | Esclarece documentos e mede o custo da transferência. | - | medição SQL | ......... | REGISTRADA | BACKLOG:1898 |
-| E1-FILA-V2-2-TRAVA | ESPINHA-E | Trava os registros envolvidos antes de transferir perguntas. | - | resíduos A3/A4/B3/B4 | ..++..+++ | REGISTRADA (no ar antigo; residual pendente) | BACKLOG:1896 |
-| E1-FILA-V2-3-A-6 | ESPINHA-E | Corrige leituras, relógios e travas restantes das perguntas. | - | fila da E1 | ......... | REGISTRADA | BACKLOG:1894 |
-| E1-RECUSAS-SEM-CONTADOR | INSTRUMENTO | Conta recusas de perguntas com origem inválida ou sem dia. | - | pouso E1 | ......... | REGISTRADA | BACKLOG:804 |
-| FIO-E0-V4-E1-FILA | ESPINHA-E | Corrige travas e leitores restantes do nascimento das perguntas. | - | achados f1–f4; ordem das travas | ..++..+++ | REGISTRADA (no ar antigo; residual pendente) | BACKLOG:1889 |
-| PLANTIO-SILENCIO-SEM-DIA | LATERAL-ESTRUTURA | Dá destino visível ao plantio descartado sem dia do turno. | - | desenho da obra mãe | ......... | REGISTRADA | BACKLOG:2031 |
-| RETRATADA-CONVERSA-E-REABRIR | ESPINHA-E | Impede conversas sobre batidas já retratadas. | - | pouso E1 | .+....... | REGISTRADA | BACKLOG:802 |
-| SELFIE-RETRO-SEM-ULTIMA-BATIDA | LATERAL-ESTRUTURA | Faz foto atrasada encerrar a disputa criada pelo retroativo. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1723 |
-| VIGIA-PLANTIO-CRIADO-EM-NAO-E-REAPLICACAO | INSTRUMENTO | Faz a vigilância enxergar reaplicações de batidas antigas. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1854 |
+| complemento | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
+|---|---|---|---|---|---|---|---|---|---|
+| ABSOLVIDA-PELA-FOLGA | LATERAL-ESTRUTURA | Evita absolver cobrança noturna pela folga do dia errado. | - | autorização das exportadas; construção | ++....... | REGISTRADA | BACKLOG:1976 | ? | ? |
+| BUG-PLANTIO-NOTURNO-MAIS-1 | LATERAL-ESTRUTURA | Evita plantar a saída noturna um dia depois do correto. | caso 13–14 | E1-ENTRADAS; BO-0611-05; migração autorizada | .++...... | REGISTRADA (absorvida na E1; complemento pendente) | BACKLOG:1852; BACKLOG:1975 | ? | ? |
+| CONTRATO-DE-ENTRADA-DO-FIO | LATERAL-ESTRUTURA | Faz o emissor entregar a batida correta ao nascimento da pergunta. | HJ-095 | E3; DESLIGADO/FERIADO | ++....... | BRIEF PRONTO | BACKLOG:2103; RELATO:26 | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/juizes.py) |
+| E1-A2-VAZIO-MEDIR | ESPINHA-E | Identifica perguntas cuja origem não permite determinar o dia. | - | pouso E1; medida na sombra | .+....... | REGISTRADA | BACKLOG:803 | ? | ? |
+| E1-ACERVO-5-GRUPOS-09 | ESPINHA-E | Trata cinco grupos antigos preservando a competência exportada. | - | REGEN-EM-EXPORTADA; DIFF; autorização | .+....... | PARADA (retida por aval) | BACKLOG:800 | ? | ? |
+| E1-FILA-OPUS6-FILA | ESPINHA-E | Apura riscos e custos restantes da revisão da E1. | - | medir acervo e custo | ......... | REGISTRADA | BACKLOG:1895 | ? | ? |
+| E1-FILA-V2-2-OUTRAS-PORTAS | ESPINHA-E | Alinha as outras entradas à mesma ordem de travas. | - | censo das portas | +........ | REGISTRADA | BACKLOG:1897 | ? | ? |
+| E1-FILA-V2-2-RESIDUOS | ESPINHA-E | Esclarece documentos e mede o custo da transferência. | - | medição SQL | ......... | REGISTRADA | BACKLOG:1898 | ? | ? |
+| E1-FILA-V2-2-TRAVA | ESPINHA-E | Trava os registros envolvidos antes de transferir perguntas. | - | resíduos A3/A4/B3/B4 | ..++..+++ | REGISTRADA (no ar antigo; residual pendente) | BACKLOG:1896 | ? | ? |
+| E1-FILA-V2-3-A-6 | ESPINHA-E | Corrige leituras, relógios e travas restantes das perguntas. | - | fila da E1 | ......... | REGISTRADA | BACKLOG:1894 | ? | ? |
+| E1-RECUSAS-SEM-CONTADOR | INSTRUMENTO | Conta recusas de perguntas com origem inválida ou sem dia. | - | pouso E1 | ......... | REGISTRADA | BACKLOG:804 | ? | ? |
+| FIO-E0-V4-E1-FILA | ESPINHA-E | Corrige travas e leitores restantes do nascimento das perguntas. | - | achados f1–f4; ordem das travas | ..++..+++ | REGISTRADA (no ar antigo; residual pendente) | BACKLOG:1889 | ? | ? |
+| PLANTIO-SILENCIO-SEM-DIA | LATERAL-ESTRUTURA | Dá destino visível ao plantio descartado sem dia do turno. | - | desenho da obra mãe | ......... | REGISTRADA | BACKLOG:2031 | ? | ? |
+| RETRATADA-CONVERSA-E-REABRIR | ESPINHA-E | Impede conversas sobre batidas já retratadas. | - | pouso E1 | .+....... | REGISTRADA | BACKLOG:802 | ? | ? |
+| SELFIE-RETRO-SEM-ULTIMA-BATIDA | LATERAL-ESTRUTURA | Faz foto atrasada encerrar a disputa criada pelo retroativo. | - | ? (não indicada) | +........ | REGISTRADA | BACKLOG:1723 | ? | ? |
+| VIGIA-PLANTIO-CRIADO-EM-NAO-E-REAPLICACAO | INSTRUMENTO | Faz a vigilância enxergar reaplicações de batidas antigas. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1854 | ? | ? |
 
 ### FIO-E0-V4-E4-ESCRITORES (24)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
@@ -831,54 +836,54 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | QUARENTENA-DO-COLAB | LATERAL-ESTRUTURA | Isola cobranças por período e permite seu retorno. | - | reaplicar SPEC; DIFF; E3 | .+++..~.. | INTERROMPIDA | BACKLOG:784; anexo:interrompidas.txt:3 |
 
 ### O54 (46)
-| complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
-|---|---|---|---|---|---|---|---|
-| BO-354 | LATERAL-ESTRUTURA | Evita perguntas de saída erradas quando as batidas têm tipos invertidos. | - | descongelamento pela L-096 | ++....... | PARADA (congelada) | app/docs/BACKLOG.md:1161 |
-| BUG-DIA-SEM-SAIDA | ESPINHA-E | Oferece ação aos dias retidos sem pergunta viva. | - | Medições residuais; casos do DP | +++....++ | REGISTRADA (partes publicadas; resíduo pendente) | BACKLOG:1497 |
-| BUG-RETRATO-VELHO-NA-TELA | UI | Avisa quando o retrato da folha está desatualizado. | - | O48 passo 6 após 20/20; medição residual | ++~...... | REGISTRADA | BACKLOG:1498 |
-| CORTE-B-30 | LATERAL-ESTRUTURA | Explica individualmente os casos separados do lote de correção. | - | descongelamento; corte do lote B | ++....... | PARADA (congelada) | app/docs/BACKLOG.md:1167 |
-| DESLIGAMENTO-NAO-CARIMBA-RESPONDIDA | LATERAL-ESTRUTURA | Corrige o tratamento das respostas quando ocorre desligamento. | - | DESLIGAR-LIQUIDA-TUDO | ++....... | REGISTRADA (superada em 13/11; sucessora definida) | app/docs/BACKLOG.md:1079 |
-| DESLIGAR-LIQUIDA-TUDO | LATERAL-ESTRUTURA | Encerra cobranças do desligado e encaminha respostas ao DP. | - | LEI-DESLIGADO-NAO-TRAVA; O50 | ++....... | REGISTRADA (censo entregue) | BACKLOG:731; app/docs/RELATO.md:125 |
-| E6-14 | ESPINHA-E | Identifica a causa de cada colaborador ainda fora da certificação. | - | troca da S3; descongelamento | .+....... | PARADA (congelada) | app/docs/BACKLOG.md:1162 |
-| O14 | ESPINHA-E | Faz o aplicativo atribuir batidas ao mesmo dia de turno do espelho. | - | smoke no celular | +++....++ | REGISTRADA (no ar desde 01/10; smoke pendente) | app/docs/BACKLOG.md:1293 |
-| O156 | ESPINHA-E | Faz o cartão totalizar os valores impressos nas linhas. | - | item em curso; O27/O33 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1409 |
-| O171 | ESPINHA-E | Faz a folha acompanhar o julgamento atualizado do dia. | - | Medir primeiro evento posterior ao deploy | ++....... | REGISTRADA | BACKLOG:1426 |
-| O210 | ESPINHA-E | Atualiza fechamentos que ficaram atrás do cálculo atual. | - | Foto nova; DIFF; reversão; prova posterior | ++....... | REGISTRADA | BACKLOG:1464 |
-| O210-COL417-COL931 | LATERAL-ESTRUTURA | Atualiza a apuração de dois colaboradores cujo fechamento ficou antigo. | - | O210 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1081 |
-| O232 | LATERAL-ESTRUTURA | Faz a ata reconhecer a saída tardia do mesmo turno. | - | complemento de 25/10; impacto de frota | +++....++ | REGISTRADA (A/B no ar; complemento da ata pendente) | app/docs/BACKLOG.md:1196 |
-| O265 | ESPINHA-E | Atualiza o retrato da folha quando o dia termina. | - | Exportação da 10; BUG-LINHA-X-BADGE | .+....... | REGISTRADA | BACKLOG:1550 |
-| O27 | ESPINHA-E | Faz o cartão usar a janela correta e totalizar suas linhas. | - | decisão sobre total; O156 | ++....... | PARADA (espera !) | app/docs/BACKLOG.md:1308 |
-| O325 | ESPINHA-E | Detecta fechamentos vencidos e identifica quem os atualiza. | - | ! RECALC-09 para a exportada | ++....... | REGISTRADA | BACKLOG:1660 |
-| O33 | ESPINHA-E | Faz o total do cartão somar os minutos exibidos nas linhas. | - | O27; O156 | ++....... | PARADA (espera ! da O27) | app/docs/BACKLOG.md:1314 |
-| O37 | ESPINHA-E | Preserva a alternância do plantão quando existe folga avulsa. | - | ! do passivo exportado | +++.....+ | PARADA (cura no ar; passivo espera !) | app/docs/BACKLOG.md:1318 |
-| O48 | ESPINHA-E | Faz o fechamento ler o dia atual em vez de cálculo envelhecido. | - | status encerrado; migration; ! do passo 5 | ++~....++ | REGISTRADA (passos no ar; status e exportação pendentes) | app/docs/BACKLOG.md:1329 |
-| O49 | ESPINHA-E | Impede pagar o intervalo cadastrado como hora extra indevida. | - | E2; DIFF; ! | ++....... | PARADA (espera !) | app/docs/BACKLOG.md:1330 |
-| O50 | ESPINHA-E | Impede vínculos com fim anterior ao início e encaminha o passivo. | - | saneamento dos 62; !; constraint | +++...... | PARADA (passivo espera !) | app/docs/BACKLOG.md:1331 |
-| O50-CELULA-APOS-DESLIGAMENTO | ESPINHA-E | Impede gerar trabalho previsto após o desligamento. | - | O50-DESLIGAR-ENCERRA-TUDO; ! retroativo | ++....... | REGISTRADA (absorvida pela variante da O50) | app/docs/BACKLOG.md:1333; app/docs/BACKLOG.md:1332 |
-| O50-COMPLEMENTO-LAUDO-1311 | ESPINHA-E | Preserva trabalho anterior e elimina previsões futuras indevidas ao desligar. | - | O50-DESLIGAR-ENCERRA-TUDO; ! retroativo | ++....... | REGISTRADA (absorvida pela variante da O50) | app/docs/BACKLOG.md:1334; app/docs/BACKLOG.md:1332 |
-| O50-DESLIGAR-ENCERRA-TUDO | ESPINHA-E | Faz o desligamento encerrar vínculos, previsões futuras e pendências pela porta. | - | LEI-DESLIGADO; vaga serial; ! retroativo | ++....... | REGISTRADA (censo concluído; construção na próxima vaga) | app/docs/BACKLOG.md:1332 |
-| O51b | ESPINHA-E | Mostra atraso e saída antecipada com os valores da folha. | - | O68; antes do envio de 09 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1355 |
-| O52 | ESPINHA-E | Impede que o cartão rotule folga como dia abonado por treino. | - | E4; leitura da célula | .+....... | REGISTRADA | app/docs/BACKLOG.md:1336; app/docs/BACKLOG.md:1338 |
-| O53 | ESPINHA-E | Faz cálculo e telas usarem uma única interpretação das marcações. | - | quatro itens da FILA; O37 antes da fase 2 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1337 |
-| O60 | ESPINHA-E | Faz o motor ler períodos e jornada declarados pelas autoridades. | - | DIFF; ! da competência 09 | ++....... | PARADA (espera ! de critério) | app/docs/BACKLOG.md:1345 |
-| O62 | ESPINHA-E | Faz o juiz reconhecer intervalo cadastrado sem depender de marcos congelados. | - | corte de alcance do juiz | +........ | PARADA (espera corte) | app/docs/BACKLOG.md:1347 |
-| O66 | ESPINHA-E | Garante caminho de resolução para todo dia em furo ou cobrança. | - | O65; ! do passivo | ++....... | REGISTRADA | app/docs/BACKLOG.md:1351 |
-| O67 | ESPINHA-E | Corrige dias com tipo errado, julgamento prematuro ou abono em folga. | - | O66; medições por classe | .+....... | REGISTRADA | app/docs/BACKLOG.md:1352 |
-| O67b | ESPINHA-E | Faz totais, datas e rótulos do cartão corresponderem ao trabalho apurado. | - | O66; O67; medição de frota | .+....... | REGISTRADA | app/docs/BACKLOG.md:1353 |
-| O68 | ESPINHA-E | Impede pagamento silencioso de dias que a ata não explica. | - | O71; O65; ! da parte b | ++....... | REGISTRADA | app/docs/BACKLOG.md:1354 |
-| O70 | ESPINHA-E | Faz cada célula informar qual vínculo gerou a previsão do dia. | - | O68; DIFF; ! se mudar número | ++....... | REGISTRADA | app/docs/BACKLOG.md:1357 |
-| O71 | ESPINHA-E | Atualiza vereditos antigos antes de decidir quem entra na folha. | - | DIFF; ! se alguém sair do TXT | .+....... | REGISTRADA | app/docs/BACKLOG.md:1358 |
-| O73 | ESPINHA-E | Impede atraso na volta da pausa e certifica resíduos do intervalo. | - | bateria; baldes restantes; L-115 | ++~....+. | REGISTRADA (núcleo FEITO no placar; complemento pendente) | app/docs/BACKLOG.md:1360; app/core/espelho_verdade.py:117 |
-| O73b | LATERAL-ESTRUTURA | Corrige a cobrança de atraso na volta da pausa do turno partido. | - | descongelamento; autorização sobre a 09 | .+....... | PARADA (congelada) | app/docs/BACKLOG.md:1166 |
-| O83 | ESPINHA-E | Separa por causa as horas que a folha deixa de reconhecer. | - | obras das classes A/B/C/D | ++....... | REGISTRADA (curso atual deste id não demonstrado) | app/docs/BACKLOG.md:1381 |
-| O85 | ESPINHA-E | Faz horas sem vínculo cobrindo o dia entrarem na apuração. | - | dado de vínculo pelo propositor; L-009 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1379 |
-| O86 | ESPINHA-E | Separa saída realmente ausente de falha no pareamento do turno. | - | O85; O84; causas O87/O88 | ++~+..... | REGISTRADA (guarda com DIFF zero; investigação residual) | app/docs/BACKLOG.md:1370 |
-| O88 | ESPINHA-E | Evita que cadastro deslocado impeça parear um dia trabalhado. | - | O86; L-084 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1368 |
-| O9 | ESPINHA-E | Faz PDF, tela e aplicativo mostrarem os mesmos dados do espelho. | - | pista para DIFF de frota; passos restantes | +++...... | REGISTRADA (passo 1 fechado; restantes pendentes) | app/docs/BACKLOG.md:1262 |
-| O93 | ESPINHA-E | Impede herdar um dia anterior sem turno real ao pagar folga trabalhada. | - | decisão sobre o dinheiro de 09 | ++....... | PARADA (apply parado) | app/docs/BACKLOG.md:1374 |
-| O94 | ESPINHA-E | Submete à decisão o pagamento antigo de turnos sem saída. | - | ! sobre o gravado | +++.....+ | PARADA (código no ar; gravado espera !) | app/docs/BACKLOG.md:1373 |
-| POSICAO-PORTA-POR-MOTIVO | LATERAL-ESTRUTURA | Oferece o acesso correto para resolver cada impedimento. | - | fonte de URL e pergunta | .+....... | REGISTRADA | BACKLOG:1052 |
-| SITUACAO-LEITOR-CRU | LATERAL-ESTRUTURA | Unifica como o sistema reconhece um desligamento. | - | O50 | .+....... | REGISTRADA | BACKLOG:735 |
+| complemento | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
+|---|---|---|---|---|---|---|---|---|---|
+| BO-354 | LATERAL-ESTRUTURA | Evita perguntas de saída erradas quando as batidas têm tipos invertidos. | - | descongelamento pela L-096 | ++....... | PARADA (congelada) | app/docs/BACKLOG.md:1161 | ? | ? |
+| BUG-DIA-SEM-SAIDA | ESPINHA-E | Oferece ação aos dias retidos sem pergunta viva. | - | Medições residuais; casos do DP | +++....++ | REGISTRADA (partes publicadas; resíduo pendente) | BACKLOG:1497 | ? | ? |
+| BUG-RETRATO-VELHO-NA-TELA | UI | Avisa quando o retrato da folha está desatualizado. | - | O48 passo 6 após 20/20; medição residual | ++~...... | REGISTRADA | BACKLOG:1498 | ? | ? |
+| CORTE-B-30 | LATERAL-ESTRUTURA | Explica individualmente os casos separados do lote de correção. | - | descongelamento; corte do lote B | ++....... | PARADA (congelada) | app/docs/BACKLOG.md:1167 | ? | ? |
+| DESLIGAMENTO-NAO-CARIMBA-RESPONDIDA | LATERAL-ESTRUTURA | Corrige o tratamento das respostas quando ocorre desligamento. | - | DESLIGAR-LIQUIDA-TUDO | ++....... | REGISTRADA (superada em 13/11; sucessora definida) | app/docs/BACKLOG.md:1079 | ? | ? |
+| DESLIGAR-LIQUIDA-TUDO | LATERAL-ESTRUTURA | Encerra cobranças do desligado e encaminha respostas ao DP. | - | LEI-DESLIGADO-NAO-TRAVA; O50 | ++....... | REGISTRADA (censo entregue) | BACKLOG:731; app/docs/RELATO.md:125 | ? | ? |
+| E6-14 | ESPINHA-E | Identifica a causa de cada colaborador ainda fora da certificação. | - | troca da S3; descongelamento | .+....... | PARADA (congelada) | app/docs/BACKLOG.md:1162 | ? | ? |
+| O14 | ESPINHA-E | Faz o aplicativo atribuir batidas ao mesmo dia de turno do espelho. | - | smoke no celular | +++....++ | REGISTRADA (no ar desde 01/10; smoke pendente) | app/docs/BACKLOG.md:1293 | ? | ? |
+| O156 | ESPINHA-E | Faz o cartão totalizar os valores impressos nas linhas. | - | item em curso; O27/O33 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1409 | ? | ? |
+| O171 | ESPINHA-E | Faz a folha acompanhar o julgamento atualizado do dia. | - | Medir primeiro evento posterior ao deploy | ++....... | REGISTRADA | BACKLOG:1426 | ? | ? |
+| O210 | ESPINHA-E | Atualiza fechamentos que ficaram atrás do cálculo atual. | - | Foto nova; DIFF; reversão; prova posterior | ++....... | REGISTRADA | BACKLOG:1464 | ? | ? |
+| O210-COL417-COL931 | LATERAL-ESTRUTURA | Atualiza a apuração de dois colaboradores cujo fechamento ficou antigo. | - | O210 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1081 | ? | ? |
+| O232 | LATERAL-ESTRUTURA | Faz a ata reconhecer a saída tardia do mesmo turno. | - | complemento de 25/10; impacto de frota | +++....++ | REGISTRADA (A/B no ar; complemento da ata pendente) | app/docs/BACKLOG.md:1196 | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com JUSTIFICATIVA-PAGA-O-PERIODO (app/ponto/turnos.py alterado sem commit na wt-justif-040525 @eb584c2b0, git status 14/11 10:5x) |
+| O265 | ESPINHA-E | Atualiza o retrato da folha quando o dia termina. | - | Exportação da 10; BUG-LINHA-X-BADGE | .+....... | REGISTRADA | BACKLOG:1550 | ? | ? |
+| O27 | ESPINHA-E | Faz o cartão usar a janela correta e totalizar suas linhas. | - | decisão sobre total; O156 | ++....... | PARADA (espera !) | app/docs/BACKLOG.md:1308 | ? | ? |
+| O325 | ESPINHA-E | Detecta fechamentos vencidos e identifica quem os atualiza. | - | ! RECALC-09 para a exportada | ++....... | REGISTRADA | BACKLOG:1660 | ? | ? |
+| O33 | ESPINHA-E | Faz o total do cartão somar os minutos exibidos nas linhas. | - | O27; O156 | ++....... | PARADA (espera ! da O27) | app/docs/BACKLOG.md:1314 | ? | ? |
+| O37 | ESPINHA-E | Preserva a alternância do plantão quando existe folga avulsa. | - | ! do passivo exportado | +++.....+ | PARADA (cura no ar; passivo espera !) | app/docs/BACKLOG.md:1318 | ? | ? |
+| O48 | ESPINHA-E | Faz o fechamento ler o dia atual em vez de cálculo envelhecido. | - | status encerrado; migration; ! do passo 5 | ++~....++ | REGISTRADA (passos no ar; status e exportação pendentes) | app/docs/BACKLOG.md:1329 | ? | ? |
+| O49 | ESPINHA-E | Impede pagar o intervalo cadastrado como hora extra indevida. | - | E2; DIFF; ! | ++....... | PARADA (espera !) | app/docs/BACKLOG.md:1330 | ? | ? |
+| O50 | ESPINHA-E | Impede vínculos com fim anterior ao início e encaminha o passivo. | - | saneamento dos 62; !; constraint | +++...... | PARADA (passivo espera !) | app/docs/BACKLOG.md:1331 | ? | ? |
+| O50-CELULA-APOS-DESLIGAMENTO | ESPINHA-E | Impede gerar trabalho previsto após o desligamento. | - | O50-DESLIGAR-ENCERRA-TUDO; ! retroativo | ++....... | REGISTRADA (absorvida pela variante da O50) | app/docs/BACKLOG.md:1333; app/docs/BACKLOG.md:1332 | ? | ? |
+| O50-COMPLEMENTO-LAUDO-1311 | ESPINHA-E | Preserva trabalho anterior e elimina previsões futuras indevidas ao desligar. | - | O50-DESLIGAR-ENCERRA-TUDO; ! retroativo | ++....... | REGISTRADA (absorvida pela variante da O50) | app/docs/BACKLOG.md:1334; app/docs/BACKLOG.md:1332 | ? | ? |
+| O50-DESLIGAR-ENCERRA-TUDO | ESPINHA-E | Faz o desligamento encerrar vínculos, previsões futuras e pendências pela porta. | - | LEI-DESLIGADO; vaga serial; ! retroativo | ++....... | REGISTRADA (censo concluído; construção na próxima vaga) | app/docs/BACKLOG.md:1332 | ? | ? |
+| O51b | ESPINHA-E | Mostra atraso e saída antecipada com os valores da folha. | - | O68; antes do envio de 09 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1355 | ? | ? |
+| O52 | ESPINHA-E | Impede que o cartão rotule folga como dia abonado por treino. | - | E4; leitura da célula | .+....... | REGISTRADA | app/docs/BACKLOG.md:1336; app/docs/BACKLOG.md:1338 | ? | ? |
+| O53 | ESPINHA-E | Faz cálculo e telas usarem uma única interpretação das marcações. | - | quatro itens da FILA; O37 antes da fase 2 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1337 | ? | ? |
+| O60 | ESPINHA-E | Faz o motor ler períodos e jornada declarados pelas autoridades. | - | DIFF; ! da competência 09 | ++....... | PARADA (espera ! de critério) | app/docs/BACKLOG.md:1345 | ? | ? |
+| O62 | ESPINHA-E | Faz o juiz reconhecer intervalo cadastrado sem depender de marcos congelados. | - | corte de alcance do juiz | +........ | PARADA (espera corte) | app/docs/BACKLOG.md:1347 | ? | ? |
+| O66 | ESPINHA-E | Garante caminho de resolução para todo dia em furo ou cobrança. | - | O65; ! do passivo | ++....... | REGISTRADA | app/docs/BACKLOG.md:1351 | ? | ? |
+| O67 | ESPINHA-E | Corrige dias com tipo errado, julgamento prematuro ou abono em folga. | - | O66; medições por classe | .+....... | REGISTRADA | app/docs/BACKLOG.md:1352 | ? | ? |
+| O67b | ESPINHA-E | Faz totais, datas e rótulos do cartão corresponderem ao trabalho apurado. | - | O66; O67; medição de frota | .+....... | REGISTRADA | app/docs/BACKLOG.md:1353 | ? | ? |
+| O68 | ESPINHA-E | Impede pagamento silencioso de dias que a ata não explica. | - | O71; O65; ! da parte b | ++....... | REGISTRADA | app/docs/BACKLOG.md:1354 | ? | ? |
+| O70 | ESPINHA-E | Faz cada célula informar qual vínculo gerou a previsão do dia. | - | O68; DIFF; ! se mudar número | ++....... | REGISTRADA | app/docs/BACKLOG.md:1357 | ? | ? |
+| O71 | ESPINHA-E | Atualiza vereditos antigos antes de decidir quem entra na folha. | - | DIFF; ! se alguém sair do TXT | .+....... | REGISTRADA | app/docs/BACKLOG.md:1358 | ? | ? |
+| O73 | ESPINHA-E | Impede atraso na volta da pausa e certifica resíduos do intervalo. | - | bateria; baldes restantes; L-115 | ++~....+. | REGISTRADA (núcleo FEITO no placar; complemento pendente) | app/docs/BACKLOG.md:1360; app/core/espelho_verdade.py:117 | ? | ? |
+| O73b | LATERAL-ESTRUTURA | Corrige a cobrança de atraso na volta da pausa do turno partido. | - | descongelamento; autorização sobre a 09 | .+....... | PARADA (congelada) | app/docs/BACKLOG.md:1166 | ? | ? |
+| O83 | ESPINHA-E | Separa por causa as horas que a folha deixa de reconhecer. | - | obras das classes A/B/C/D | ++....... | REGISTRADA (curso atual deste id não demonstrado) | app/docs/BACKLOG.md:1381 | ? | ? |
+| O85 | ESPINHA-E | Faz horas sem vínculo cobrindo o dia entrarem na apuração. | - | dado de vínculo pelo propositor; L-009 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1379 | ? | ? |
+| O86 | ESPINHA-E | Separa saída realmente ausente de falha no pareamento do turno. | - | O85; O84; causas O87/O88 | ++~+..... | REGISTRADA (guarda com DIFF zero; investigação residual) | app/docs/BACKLOG.md:1370 | ? | ? |
+| O88 | ESPINHA-E | Evita que cadastro deslocado impeça parear um dia trabalhado. | - | O86; L-084 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1368 | ? | ? |
+| O9 | ESPINHA-E | Faz PDF, tela e aplicativo mostrarem os mesmos dados do espelho. | - | pista para DIFF de frota; passos restantes | +++...... | REGISTRADA (passo 1 fechado; restantes pendentes) | app/docs/BACKLOG.md:1262 | ? | ? |
+| O93 | ESPINHA-E | Impede herdar um dia anterior sem turno real ao pagar folga trabalhada. | - | decisão sobre o dinheiro de 09 | ++....... | PARADA (apply parado) | app/docs/BACKLOG.md:1374 | ? | ? |
+| O94 | ESPINHA-E | Submete à decisão o pagamento antigo de turnos sem saída. | - | ! sobre o gravado | +++.....+ | PARADA (código no ar; gravado espera !) | app/docs/BACKLOG.md:1373 | ? | ? |
+| POSICAO-PORTA-POR-MOTIVO | LATERAL-ESTRUTURA | Oferece o acesso correto para resolver cada impedimento. | - | fonte de URL e pergunta | .+....... | REGISTRADA | BACKLOG:1052 | ? | ? |
+| SITUACAO-LEITOR-CRU | LATERAL-ESTRUTURA | Unifica como o sistema reconhece um desligamento. | - | O50 | .+....... | REGISTRADA | BACKLOG:735 | ? | ? |
 
 ### PLACAR-ESTRUTURAL (5)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
