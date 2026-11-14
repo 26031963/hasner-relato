@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 07:19:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (631.8 MB). Acoes na janela: **1149**.
+**Medido em 14/11/2026 07:25:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (631.8 MB). Acoes na janela: **1143**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1153,9 +1153,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:31:27 | Bash |  | `cd /home/ronald/saas-hasner; D=$(date +%H:%M); cat > logs/AVAIS-1313/push_padrao_c.txt <<'EOF' aval Ronald 13/11 ~19:3x: PUSH-PADRAO-FORA-DO-GLOSSARIO = (c) (substitui a (a) digitada e nao enviada; corte Ronald: o termo nasce no GLOSSARIO). app/docs/GLOSSARIO.md ganha a linha: "\| Policy Enforcement Point (o gate que APLICA a decisao; o juiz e o Policy Decision Point) \| porta / gate do pai \| pon ...` |
 | 19:31:17 | Bash |  | `cd /home/ronald/saas-hasner; tail -c1 app/docs/GLOSSARIO.md \| od -c \| head -1; printf '%s\n' '\| Policy Enforcement Point (o gate que APLICA a decisao; o juiz e o Policy Decision Point) \| porta / gate do pai \| ponto/supra_juiz.py (gate do CSF) lendo chamados/juizes.py::respostas_sem_veredito \|' >> app/docs/GLOSSARIO.md; tail -2 app/docs/PROMPTS.md \| cut -c1-200` |
 | 19:31:09 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 88,135p bin/tests/test_lei_akita.sh; sed -n 1,8p app/docs/GLOSSARIO.md \| cut -c1-200; tail -3 app/docs/GLOSSARIO.md \| cut -c1-200` |
-| 19:20:57 | Bash |  | `cd /home/ronald/wt-e3-b6-114947; git log --oneline -3 \| cut -c1-140; git status --porcelain \| head` |
-| 19:20:53 | Bash |  | `cd /home/ronald/saas-hasner/app/docs; ps -p 2962648 -o args= \| cut -c1-80; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() anc='ESPERANDO: trava_teste.sh \| pid=2914225\n' assert s.count(anc)==1 novo=('ESPERANDO: trava_teste.sh \| pid=2962648\n' 'PAREI: push-padrao-fora-do-glossario \| espera Ronald (!) -- push de d33c0a899 recusado no pre-push (logs/O168/v9/push.log): lei_akita 2 falhas, commi ...` |
-| 19:20:37 | Bash |  | `cd /home/ronald/saas-hasner; git log --format='%h %s' e439fac78..d33c0a899 \| wc -l; git log --format='%H' e439fac78..d33c0a899 \| while read h; do git log -1 --format=%B $h \| /bin/grep -o 'padrao=[^,]*$' ; done \| sort \| uniq -c; cut -d'\|' -f2 app/docs/GLOSSARIO.md \| /bin/grep -i -E 'guard\|gate\|chokepoint\|porta\|policy' \| head` |
-| 19:20:29 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i -E 'PADRAO-NA-CURA\|errata\|corrig\|excec\|allow\|GLOSSARIO\|NORTE' bin/tests/test_lei_akita.sh \| head -30` |
-| 19:20:23 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i -E 'enforcement\|PEP\b\|porta' app/docs/GLOSSARIO.md \| head -10; /bin/grep -n -i -E 'enforcement\|PEP' app/docs/PLANO-PADROES.md \| head; git log -1 --format='%s%n%b' 31874371 \| /bin/grep -n 'padrao='` |
-| 19:20:16 | Bash |  | `cd /home/ronald/saas-hasner; f=logs/E3-FORMA-SQL/porta_sem_caso/green2.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; /bin/grep '^Ran' $f \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' $f \| head; tail -5 logs/O168/v9/push.log; pgrep -f bin/push.sh; git log --oneline origin/main -1; bash bin/trava_teste.sh --quem; date +%H:%M` |
