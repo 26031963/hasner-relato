@@ -1,7 +1,146 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 03:59** · publicado em **14/11/2026 04:01** (UTC-3)
+> Ultima resposta processada: **14/11/2026 04:02** · publicado em **14/11/2026 04:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 04:02 · sessao 1e7c0e692fc2 · HJ-091 · verificador · origem=Code
+
+**[bloqueia] REPROVA nesta volta:** há passivo que o contador considera coberto, escritor de férias fora dos declarados e caminho web com exceção sem tratamento. O selo não detecta o escritor adicional. (`app/ferias/services.py:153`; `app/ponto/services/ausencia.py:1451`; `app/ferias/views.py:722`; `app/ponto/tests/selo_hj091.py:26`.)
+
+Identidade do commit/base, completude do diff fornecido, resultados históricos RED/GREEN, execução de deploy e medidas de produção: **[nao verificado]**. [nao verificado]
+
+**1. Aval realizado e escopo respeitado**
+
+| Item | Parecer |
+|---|---|
+| FK nullable | **[fila] Realizado**, com `CASCADE`. (`app/ponto/models.py:796`; `app/ponto/migrations/0078_ausencia_agendamento_ferias.py:15`.) |
+| Backfill pela descrição, DRY e contador | **[fila] Implementado**, com ressalvas de reversão, campos escritos e concorrência no item 9. (`app/ponto/management/commands/vincular_ausencias_ferias.py:21`; `app/ponto/services/ausencia.py:1377`.) |
+| Espelho só reconhece o mesmo agendamento | **[fila] Realizado** pela FK; criação, exclusão e rejeição passaram a usar a origem. (`app/ponto/services/ausencia.py:1253`; `app/ponto/services/ausencia.py:1278`; `app/ponto/services/ausencia.py:1339`; `app/ponto/services/ausencia.py:1352`.) |
+| Recusar portas genéricas | **[bloqueia] Parcial:** as guardas existem, mas sobra `rederivar_fim`, e nem todo chamador trata a nova recusa. (`app/ponto/services/ausencia.py:95`; `app/ponto/services/ausencia.py:1451`; `app/ponto/services/ausencia.py:1069`.) |
+| Painel com período, dias, status e origem | **[fila] Realizado para origem resolvida.** O dia consultado aparece separado. (`app/ponto/services/ausencia.py:110`; `app/templates/ponto/partials/painel_ausencia.html:136`; `app/templates/ponto/partials/painel_ausencia.html:139`.) |
+| Link para o agendamento | **[fila] Entrega mais fraca que o literal:** mostra o número, mas o link abre o saldo da pessoa, sem identificar o agendamento no endereço. (`app/ponto/services/ausencia.py:76`; `app/templates/ponto/partials/painel_ausencia.html:140`; `app/ferias/urls.py:13`.) |
+| Sonda das três classes de passivo | **[bloqueia] Incompleta:** rejeitada própria dentro de agendamento vivo é considerada coberta; detalhe no item 6. (`app/ferias/services.py:146`; `app/ferias/services.py:153`.) |
+| Lista ao DP por pessoa | **[bloqueia] Não comprovada:** o tripwire imprime totais; o backfill imprime IDs de ausências por motivo. Publicação da lista nominal/por pessoa e da sonda: **[nao verificado]**. (`app/ferias/management/commands/tripwire_status_ferias.py:64`; `app/ponto/management/commands/vincular_ausencias_ferias.py:45`.) |
+| Contadores no ESTADO | **[bloqueia] Integração [nao verificado].** Consumo confirmado no tripwire; o teste verifica sua saída textual. (`app/ferias/management/commands/tripwire_status_ferias.py:43`; `app/ponto/tests/test_hj091_ferias_derivadas.py:294`.) |
+
+**[fila]** No diff fornecido, `folha/export.py` não aparece alterado; continua consultando `ferias_na_janela` para férias com batida. Igualdade integral desse arquivo com a base: **[nao verificado]**. (`app/folha/export.py:484`; `app/folha/export.py:491`.)
+
+**[fila]** As recusas de criação avulsa e de anexo ampliam as portas afetadas, coerentemente com “escritor único”; a API agora trata a recusa do anexo. Os ajustes de precedência usam criação direta somente nas fixtures de teste. (`app/ponto/services/ausencia.py:247`; `app/ponto/services/ausencia.py:921`; `app/api/views.py:3111`; `app/ponto/tests/test_a2_precedencia.py:89`.)
+
+**2. Quem escreve e quem lê**
+
+**[fila] FK — escritores explícitos encontrados no código de aplicação:**
+
+| Escritor | Operação |
+|---|---|
+| `espelhar_ferias → criar_ausencia` | Passa a origem; a porta inclui a FK na instância e salva. (`app/ponto/services/ausencia.py:1278`; `app/ponto/services/ausencia.py:414`; `app/ponto/services/ausencia.py:446`; `app/ponto/services/ausencia.py:479`.) |
+| `vincular_ausencias_ferias` | Preenche FK nula por `update`. (`app/ponto/services/ausencia.py:1413`.) |
+| `reverter_vinculo_ausencias_ferias` | Volta a FK para NULL, condicionado ao mesmo agendamento. (`app/ponto/services/ausencia.py:1436`.) |
+
+**[fila] FK — leitores explícitos encontrados:**
+
+| Leitor | Uso |
+|---|---|
+| Mensagem e painel | Identificação da origem e período integral. (`app/ponto/services/ausencia.py:85`; `app/ponto/services/ausencia.py:106`.) |
+| `criar_ausencia` | Valida presença/tipo e restringe busca de rejeitada à mesma origem. (`app/ponto/services/ausencia.py:247`; `app/ponto/services/ausencia.py:249`; `app/ponto/services/ausencia.py:314`.) |
+| Auditoria da criação | Registra o ID da origem. (`app/ponto/services/ausencia.py:509`.) |
+| Espelho | Seleciona exclusivamente as próprias linhas. (`app/ponto/services/ausencia.py:1253`.) |
+| Apagar/rejeitar férias | Seleciona pela origem. (`app/ponto/services/ausencia.py:1339`; `app/ponto/services/ausencia.py:1352`.) |
+| Backfill/reversão | Seleção de NULL e condições dos updates. (`app/ponto/services/ausencia.py:1377`; `app/ponto/services/ausencia.py:1413`; `app/ponto/services/ausencia.py:1436`.) |
+| Guarda de sobreposição | Define quais ausências são próprias. (`app/ferias/models.py:431`.) |
+| Contador | Valida origem e monta pares origem/dia. (`app/ferias/services.py:147`; `app/ferias/services.py:154`.) |
+| Exclusão da fonte | `CASCADE` elimina derivados; a exclusão da instância também chama a limpeza. (`app/ponto/models.py:797`; `app/ferias/models.py:453`.) |
+
+**[bloqueia] Existe segundo escritor de férias fora dessas portas:** `curar_ausencia_sem_fim --apply` seleciona tipos vivos com duração maior que um, sem excluir férias; chama `rederivar_fim`, que salva sem guarda. O modelo pode preencher `data_fim`. Existência dessas linhas em produção: **[nao verificado]**. (`app/ponto/management/commands/curar_ausencia_sem_fim.py:29`; `app/ponto/management/commands/curar_ausencia_sem_fim.py:46`; `app/ponto/services/ausencia.py:1451`; `app/ponto/models.py:912`.)
+
+**[fila] Demais campos — escritores e leitores conferidos, inclusive fora do diff:**
+
+| Campos | Escritores | Leitores |
+|---|---|---|
+| `tipo`, `colaborador`, `data` | Criação; edição guarda férias antes de alterar tipo/data. (`app/ponto/services/ausencia.py:401`; `app/ponto/services/ausencia.py:536`; `app/ponto/services/ausencia.py:561`.) | Guarda, espelho, backfill, contador e cobertura. (`app/ponto/services/ausencia.py:95`; `app/ponto/services/ausencia.py:1256`; `app/ponto/services/ausencia.py:1378`; `app/ferias/services.py:150`; `app/ponto/turnos.py:2554`.) |
+| `data_fim`, `dias_corridos` | Criação/edição; derivação no modelo; `rederivar_fim`. (`app/ponto/services/ausencia.py:402`; `app/ponto/services/ausencia.py:563`; `app/ponto/models.py:911`; `app/ponto/models.py:917`; `app/ponto/services/ausencia.py:1451`.) | Cobertura/expansão, folha, relatórios, vigia e apresentação do dia. (`app/ponto/turnos.py:2772`; `app/ponto/turnos.py:2791`; `app/folha/export.py:70`; `app/relatorios/views.py:205`; `app/ponto/services/vigia_ausencia.py:136`; `app/ponto/services/dia_decidido.py:620`.) |
+| `status` | Criação; `mudar_estado`; rejeição pela origem. (`app/ponto/services/ausencia.py:403`; `app/ponto/services/ausencia.py:889`; `app/ponto/services/ausencia.py:1353`.) | Contador, cobertura por efeito, vigias, API e materialização. (`app/ferias/services.py:146`; `app/ponto/turnos.py:2516`; `app/ponto/services/vigia_ausencia.py:108`; `app/api/views.py:1858`; `app/chamados/services/materializacao.py:662`.) |
+| `minutos` | Espelho passa zero; criação/edição persistem; modelo deriva para falta aprovada. (`app/ponto/services/ausencia.py:1275`; `app/ponto/services/ausencia.py:402`; `app/ponto/services/ausencia.py:571`; `app/ponto/models.py:887`.) | Rateio da folha, API, lista e apresentação do dia. (`app/folha/export.py:121`; `app/api/views.py:1858`; `app/templates/ponto/ausencias.html:159`; `app/ponto/services/dia_decidido.py:496`.) |
+| `descricao` | Criação, edição, decisão e reabertura; guardas públicas impedem férias nas portas genéricas. (`app/ponto/services/ausencia.py:403`; `app/ponto/services/ausencia.py:566`; `app/ponto/services/ausencia.py:987`; `app/ponto/services/ausencia.py:1206`.) | Backfill interpreta `#N`; painel/API/dia exibem texto. (`app/ponto/services/ausencia.py:1381`; `app/templates/ponto/partials/painel_ausencia.html:57`; `app/api/views.py:1858`; `app/ponto/services/dia_decidido.py:624`.) |
+| `documento` | Criação, anexo e reabertura. (`app/ponto/services/ausencia.py:410`; `app/ponto/services/ausencia.py:923`; `app/ponto/services/ausencia.py:1196`.) | Estado inicial/rejulgamento, propriedade de tipo real, lista e dia. (`app/ponto/services/ausencia.py:392`; `app/ponto/services/ausencia.py:606`; `app/ponto/models.py:857`; `app/templates/ponto/ausencias.html:168`; `app/ponto/services/dia_decidido.py:623`.) |
+| `aprovado_por`, `aprovada_em`, `registrado_por`, `atualizado_em` | Criação/decisão, carimbo do modelo, rejeição e backfill/reversão. (`app/ponto/services/ausencia.py:404`; `app/ponto/services/ausencia.py:407`; `app/ponto/services/ausencia.py:981`; `app/ponto/models.py:882`; `app/ponto/services/ausencia.py:1353`; `app/ponto/services/ausencia.py:1414`; `app/ponto/services/ausencia.py:1437`.) | Histórico e verificação de aprovador; o arquivo de reversão não conserva o timestamp anterior. (`app/chamados/services/historico.py:129`; `app/ponto/services/vigia_ausencia.py:120`; `app/ponto/services/ausencia.py:1409`.) |
+| Agendamento: período/colaborador, início/fim, dias, status, agendador | Criação normal/histórica/solicitação; troca de janela; cancelamento e sincronização. (`app/ferias/services.py:519`; `app/ferias/services.py:579`; `app/ferias/services.py:773`; `app/ferias/services.py:714`; `app/ferias/services.py:654`; `app/ferias/services.py:686`; `app/ferias/services.py:938`.) | Espelho, backfill, painel, contador, saldo e folha. (`app/ponto/services/ausencia.py:1247`; `app/ponto/services/ausencia.py:1276`; `app/ponto/services/ausencia.py:1396`; `app/ponto/services/ausencia.py:110`; `app/ferias/services.py:149`; `app/ferias/services.py:105`; `app/folha/export.py:491`.) |
+
+**[fila]** Outros consumidores conferidos dos mesmos campos: precedência, grade, espelho, motor, signals, carga de perguntas e foto do acervo. (`app/ponto/precedencia.py:338`; `app/escala/utils.py:1189`; `app/ponto/services/espelho.py:582`; `app/ponto/services/espelho.py:588`; `app/ponto/motor_calculo_v2.py:1092`; `app/ponto/signals.py:123`; `app/chamados/services/carga_pergunta_viva.py:101`; `app/chamados/services/foto_e4b.py:285`.)
+
+Exaustividade para aliases dinâmicos, SQL e todos os leitores indiretos de todos esses campos: **[nao verificado]**.
+
+**3. Segundo juiz / derivação paralela**
+
+**[fila]** A sobreposição continua delegada ao juiz registrado: mudou a identificação das linhas próprias, sem copiar o julgamento. (`app/ferias/models.py:431`; `app/ferias/models.py:433`; `app/core/juizes.py:254`.)
+
+**[fila]** `STATUS_QUE_ESPELHAM` é compartilhado pelos três novos consumidores, mas representa separadamente “não cancelado”, já usado por `ferias_na_janela`. Os conjuntos são equivalentes nos quatro status declarados; resta duplicidade de representação. (`app/ferias/services.py:132`; `app/ponto/services/ausencia.py:1248`; `app/ponto/services/ausencia.py:1375`; `app/ferias/services.py:156`; `app/ferias/services.py:53`; `app/ferias/models.py:296`.)
+
+**[fila]** Isso não duplica `status_por_data` nem `status_de_periodo`: respondem, respectivamente, fase temporal do agendamento e situação do período aquisitivo. (`app/ferias/models.py:276`; `app/core/juizes.py:269`.)
+
+**4. Relógio fora da borda**
+
+**[fila]** Não encontrei relógio nas decisões novas de recusa, origem, seleção do espelho, contador ou elegibilidade do backfill. As novas chamadas de `now()` são carimbos; o tripwire lê o dia na borda do command. (`app/ponto/services/ausencia.py:95`; `app/ponto/services/ausencia.py:106`; `app/ponto/services/ausencia.py:1249`; `app/ferias/services.py:149`; `app/ponto/services/ausencia.py:1396`; `app/ponto/services/ausencia.py:1353`; `app/ponto/services/ausencia.py:1414`; `app/ponto/services/ausencia.py:1437`; `app/ferias/management/commands/tripwire_status_ferias.py:28`.)
+
+**5. Os REDs mordem?**
+
+**[fila]** O cancelamento canônico verifica permanência de `aprovada` e frase; os testes de origem alheia e cancelamento com linha deslocada verificam efeitos relevantes. Execução Django e morte efetiva dos mutantes nesta cópia: **[nao verificado]**. (`app/ponto/tests/test_hj091_ferias_derivadas.py:74`; `app/ponto/tests/test_hj091_ferias_derivadas.py:157`; `app/ponto/tests/test_hj091_ferias_derivadas.py:195`.)
+
+**[fila] Sim, há teste que passa com a cura revertida:** `test_a_recusa_MORDE...` instala ele próprio a guarda vazia e espera rejeição. Ele é contraprova do mecanismo; o canônico anterior é quem deve matar esse mutante. (`app/ponto/tests/test_hj091_ferias_derivadas.py:128`; `app/ponto/tests/test_hj091_ferias_derivadas.py:132`; `app/ponto/tests/test_hj091_ferias_derivadas.py:135`.)
+
+**[bloqueia] O selo não garante escritor único.** Não examina `save()` nem atribuição de status/FK. Na execução somente em memória, ambos os exemplos abaixo retornaram lista vazia; a árvore atual também não acusou escritor externo. (`app/ponto/tests/selo_hj091.py:26`; `app/ponto/tests/selo_hj091.py:78`; `app/ponto/tests/selo_hj091.py:89`.)
+
+```python
+a = Ausencia.objects.filter(tipo="ferias").first()
+a.status = "rejeitada"
+a.save()
+```
+
+```python
+a = Ausencia.objects.filter(tipo="ferias").first()
+a.agendamento_ferias = g
+a.save(update_fields=["agendamento_ferias"])
+```
+
+**[fila]** A caracterização de remarcação sem origem espera `ValidationError` diretamente no modelo; não verifica a tradução dessa recusa pela view. Os testes APPLY não exigem arquivo anterior à escrita. (`app/ponto/tests/test_hj091_ferias_derivadas.py:442`; `app/ponto/tests/test_hj091_ferias_derivadas.py:318`; `app/ponto/tests/test_hj091_ferias_derivadas.py:355`.)
+
+**6. ESMERIL-SEMÂNTICA**
+
+**[bloqueia] Status/cobertura divergem.** O contador exclui rejeitadas do primeiro lado e aceita qualquer status no conjunto de dias cobertos. Uma rejeitada própria em agendamento vivo pode produzir **0/0**, embora folha exija aprovada e cobrança exclua rejeitada. Preservar o passivo sem corrigi-lo não dispensa denunciá-lo. (`app/ferias/services.py:146`; `app/ferias/services.py:153`; `app/ponto/turnos.py:2516`; `app/ponto/turnos.py:2519`.)
+
+**[bloqueia]** O espelho conserva explicitamente a rejeitada própria, e o teste fixa essa preservação sem exigir denúncia pelo contador. Essa classe do passivo permanece sem detector correspondente. (`app/ponto/services/ausencia.py:1269`; `app/ponto/tests/test_hj091_ferias_derivadas.py:178`.)
+
+**[fila]** Para linhas novas normais, as datas são inclusivas; cada derivado tem um dia, zero minutos e fim nulo interpretado como dia único. O painel lê os dias integrais do agendamento. (`app/ponto/services/ausencia.py:1265`; `app/ponto/services/ausencia.py:1275`; `app/ponto/turnos.py:2777`; `app/ponto/services/ausencia.py:110`.)
+
+**[fila]** Para legado com range, há hipótese diferente: backfill confere somente `data`; contador considera somente `(origem, data)`, enquanto cobertura oficial expande até `data_fim`. Existência desse formato em produção: **[nao verificado]**. (`app/ponto/services/ausencia.py:1378`; `app/ponto/services/ausencia.py:1398`; `app/ferias/services.py:154`; `app/ponto/turnos.py:2772`.)
+
+**7. Ordem de trava e de pouso** [nao verificado]
+
+**[fila]** A ordem existente é agendamento → período → ausência. Na troca de janela, limpeza e save estão no mesmo `atomic`; o veto desfaz a limpeza. (`app/ferias/services.py:634`; `app/ferias/services.py:637`; `app/ferias/services.py:704`; `app/ferias/services.py:723`; `app/ferias/services.py:727`.)
+
+**[bloqueia]** Migration e backfill não estão acoplados: a migration só adiciona a coluna, e o command está fora do pipeline. Garantia operacional de “mesmo ato, antes de qualquer save”: **[nao verificado]**. (`app/ponto/migrations/0078_ausencia_agendamento_ferias.py:15`; `app/config/crons.py:781`.)
+
+**[fila] Entre migration e backfill:** linhas antigas ficam sem origem; o espelho não as reconhece, tenta criar e transforma colisões em recusa/Pauta. Mudança somente de status passa pela guarda. Cancelamento limpa somente linhas vinculadas, deixando as antigas NULL. (`app/ponto/services/ausencia.py:1253`; `app/ponto/services/ausencia.py:1273`; `app/ponto/services/ausencia.py:1288`; `app/ferias/models.py:406`; `app/ponto/services/ausencia.py:1339`.)
+
+**[fila] Entre backfill e primeira gravação:** resolvidas já têm origem, sem disparar signals pelo `update`; não resolvidas continuam NULL. O primeiro espelho ainda preserva rejeitada própria. (`app/ponto/services/ausencia.py:1414`; `app/ponto/services/ausencia.py:1403`; `app/ponto/services/ausencia.py:1269`.)
+
+**[bloqueia] Há porta com caminho para 500:** remarcação que cruza ausência sem origem levanta `ValidationError`; `editar_agendamento` captura somente duas outras exceções. A porta administrativa de correção captura `ValidationError`. Resposta HTTP executada: **[nao verificado]**. (`app/ferias/models.py:437`; `app/ferias/views.py:722`; `app/ferias/views.py:723`; `app/ferias/views.py:725`; `app/ferias/views.py:544`.)
+
+**8. Chamadores das portas que recusam**
+
+| Porta | Chamadores/tratamento |
+|---|---|
+| `decidir` | **[fila]** Wrapper em `app/ponto/views.py:88`; lotes em `app/ponto/views.py:2301`, `app/ponto/views.py:2337`, `app/ponto/views.py:2377`, com captura em `app/ponto/views.py:2306`, `app/ponto/views.py:2344`, `app/ponto/views.py:2383`; individuais/período em `app/ponto/views.py:2675`, `app/ponto/views.py:2708`, `app/ponto/views.py:2736`, `app/ponto/views.py:2772`, tratados em `app/ponto/views.py:2690`, `app/ponto/views.py:2709`, `app/ponto/views.py:2751`, `app/ponto/views.py:2786`. |
+| Editar | **[fila]** Web e command H06 capturam a recusa. (`app/ponto/views.py:2834`; `app/ponto/views.py:2858`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:169`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:171`.) |
+| Reverter | **[fila]** View captura; `_reabrir` recebe chamadas da criação e da reversão pública. (`app/ponto/views.py:2616`; `app/ponto/views.py:2620`; `app/ponto/services/ausencia.py:350`; `app/ponto/services/ausencia.py:1170`.) |
+| Anexar | **[fila]** Web captura; API retorna 409. Reenvio da API não captura nessa chamada, mas férias são recusadas antes na criação. (`app/ponto/views.py:2158`; `app/ponto/views.py:2159`; `app/api/views.py:3111`; `app/api/views.py:1838`; `app/ponto/services/ausencia.py:247`; `app/api/views.py:1813`.) |
+| `mudar_estado` | **[bloqueia]** Chamado por decisão, anexo, reabertura, rejulgamento e escalonador. Os dois últimos podem propagar a nova exceção. (`app/ponto/services/ausencia.py:978`; `app/ponto/services/ausencia.py:940`; `app/ponto/services/ausencia.py:1209`; `app/ponto/services/ausencia.py:609`; `app/ponto/services/ausencia.py:1069`.) |
+| Criar | **[fila]** Administração, colaborador web, API, veredito da célula, copiloto e espelho têm captura. (`app/ponto/views.py:2455`; `app/ponto/views.py:2575`; `app/api/views.py:1813`; `app/ponto/services/veredito_celula.py:341`; `app/core/views_ia.py:988`; `app/ponto/services/ausencia.py:1280`.) |
+| Garantir/materializar | **[fila]** Regularização e abandono chamam para falta; materialização declara falta/atestado. (`app/ponto/services/regularizacao.py:118`; `app/ponto/management/commands/marcar_abandono_provisorio.py:76`; `app/chamados/services/materializacao.py:491`; `app/chamados/services/materializacao.py:527`; `app/chamados/services/materializacao.py:603`.) |
+
+**[bloqueia, condicionado ao acervo]** Férias antigas em `aguardando_documento` podem interromper escalonamento ou `rejulgar_status_por_tipo --apply`: ambos alcançam a guarda sem captura por item. O escalonador está instalado com `--apply
+
+[truncado em 20000 de 22593 caracteres]
 
 ## 14/11 03:59 · sessao 79cf44923d6c · - · - · origem=Ronald (tmux)
 
@@ -685,14 +824,4 @@ bash ~/saas-hasner/bin/suite.sh \ [nao verificado]
 
 Sem declaração de pouso ou certificação. [nao verificado]
 
-## 14/11 01:20 · sessao df4d76a780ab · - · - · origem=Ronald (tmux)
-
-Os ajustes apontados foram atendidos por leitura: R8 limpa relações antes de `.only`; R4 verifica Q11; R13 cobre os dois caminhos; R14 verifica `limite=0`; R15 coleta a razão efetiva. (`chamados/juizes.py:1572`, `chamados/tests/test_e3_portas_tarefa.py:241`, `:584`, `:589`, `:619`, `:658`)
-
-O alvo administrativo agora é específico de `expor_admin`. (`chamados/tests/e3_v8_mutantes.py:65`)
-
-Persiste **R2**: a hipótese simultânea obtém `colab`, enquanto a matriz exige `admin`; alcance ORM continua pendente. (`e3-v8-r2-pendente.out:1`)
-
-Execução ORM, R16 e certificação final: **[nao verificado]**. Nenhum novo defeito concreto encontrado nesta revisão limitada.
-
-_4922 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4923 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
