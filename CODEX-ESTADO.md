@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 02:27** · publicado em **14/11/2026 02:30** (UTC-3)
+> Ultima resposta processada: **14/11/2026 03:39** · publicado em **14/11/2026 03:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 03:39 · sessao fa514ab77cc5 · CORTE-DAS-TRAVAS · censo · origem=Code
+
+1. **(a) O Codex não viu o bloqueio com o tema presente.** (`verif_final.q:4` e `verif_final.q:7`)
+
+   **Pergunta — verif_final.q:** “cura do "andavel" do hook Stop”; “Cada peca faz o que o texto do aval diz, nem mais nem menos?” (`verif_final.q:4` e `verif_final.q:7`)
+
+   **Resposta — verif_final.r:** “a cópia contém tetos em segundos por papel e exige ausência de outro item andável para PAREI devolver o turno” (`bin/codex_pergunta.sh:95`; `bin/hook_stop_fila1.py:1151`, referências da resposta).
+
+2. **(b) O Codex viu e a triagem descartou.** (`verif_v2.q:6`)
+
+   **Pergunta — verif_final.q:** “Mais: religar a escrita do logs/AUDITORIA-TRAVAS/triagem.log (parou em 10/11 13:42).” (`verif_final.q:4`)
+
+   **Resposta — verif_final.r:** “O acréscimo no wrapper apenas imprime uma instrução; não chama o escritor de triagem” (`bin/codex_pergunta.sh:469`, referência da resposta).
+
+   **Descarte literal — verif_v2.q:** “#5 destino logs/AUDITORIA-TRAVAS/triagem.log x logs/codex/triagem.log, wrapper so imprime: DESCARTADO (o arquivo de AUDITORIA e copia byte a byte da trilha unica; um 2o escritor violaria um-escritor-por-estado; triar exige juizo de quem leu a resposta) -- vai ao opus como contestavel.” (`verif_v2.q:6`)
+
+3. **(a) O Codex não viu esse bloqueio com o tema presente.** (`verif_final.q:3`; `verif_v2.r:7`)
+
+   **Pergunta — verif_final.q:** “PROIBIDO: afrouxar qualquer trava fora desta lista; usar "so leitor" em obra que toca dinheiro, escala, vinculo ou exportada.” (`verif_final.q:3`)
+
+   **Resposta — verif_v2.r:** “Mesmo assim, esse arquivo continua “so leitor”: o ramo de templates não examina conteúdo.” (`verif_v2.r:7`; `bin/classe_da_obra.py:156`, referência da resposta).
+
+4. **(a) O Codex não viu os casos residuais com o tema presente.** (`verif_v3.q:13`; `verif_v3.r:7`)
+
+   **Pergunta — verif_v3.q:** “O ramo template de classe_da_obra.py: ha mudanca de template/static que move dinheiro, escrita ou universo julgado e ainda sai "so leitor"?” (`verif_v3.q:13`)
+
+   **Resposta — verif_v3.r:** “A regex examina a linha alterada, sem reconhecer tags Django que produzem controles.”; “Portanto, a alteração muda uma entrada de escrita, embora escape da cura.” (`verif_v3.r:7`; `bin/classe_da_obra.py:175`, referência da resposta).
 
 ## 14/11 02:27 · sessao 20149fde517f · E3-FORMA-SQL · verificador · origem=Code
 
@@ -691,28 +719,4 @@ Por peça, os limites preservados que consegui conferir são:
 - **Memória removida:** `hook_stop_espera.json` aparece apenas como lápide e verificação de ausência no recorte examinado (`bin/hook_stop_fila1.py:538`, `bin/tests/test_hook_esperando_com_prova.sh:114`). Nenhum consumidor executável restante localizado **[nao verificado fora da cópia pesquisada]**.
 - **Chamador externo preservado:** o selo do censo continua consumindo a mesma tupla de três posições de `_esperando_com_prova()` (`bin/tests/test_censo_antes_da_vaga.sh:329`). Handoff e alarme usam o reconhecedor de PAREI-censo preservado (`bin/handoff_sessao.sh:129`, `bin/alarme_sessao_ociosa.py:137`).
 
-## 14/11 01:03 · sessao 8aee5e252b0d · - · - · origem=Ronald (tmux)
-
-Achados para consolidação, todos por leitura e probes em memória:
-
-1. **BLOQUEIA — dinheiro sai `so leitor`.** O dinheiro é reconhecido pelo nome do caminho; o fallback para `.py` examina só tokens nas linhas alteradas (`bin/classe_da_obra.py:50`, `:145–151`). Confirmei que mudar somente `'adicional_noturno_pct': 20.0` para `40.0` em `app/core/regua_cct.py:42`, ou `/ 60` para `/ 30` em `app/ponto/services/dia_pago.py:180`, resulta em `so leitor`. Esses arquivos não estão no conjunto extraído do `JUIZES` atual pelo extrator (`bin/classe_da_obra.py:81–114`); a função do dinheiro está explícita em `app/ponto/services/dia_pago.py:4`, `:34–43`, `:178–186`. O selo não contém fixture desses casos (`bin/tests/test_gate_pela_classe.sh:104–117`).
-
-2. **BLOQUEIA — mudança de universo sai `so leitor`.** `app/chamados/services/furo_sem_canal.py:70–76` restringe o universo à janela inclusiva de cada empresa. Alterar apenas os `<=` de `:75` para `<` muda o universo e resulta em `so leitor`, confirmado em memória. O instrumento perde o contexto ao extrair só linhas alteradas (`bin/classe_da_obra.py:117–125`); `UNIVERSO` enumera tokens e não reconhece essa fronteira (`:55–58`, `:145–151`). Também não há fixture desse caso no selo (`bin/tests/test_gate_pela_classe.sh:104–117`).
-
-3. **BLOQUEIA — a árvore certificada pode divergir dos arquivos executados.** `_limpa` deliberadamente ignora não rastreados (`bin/classe_da_obra.py:236–237`), mas a suite monta o diretório do disco (`bin/suite.sh:203–204`, `:230–233`). A certificação só compara árvores de `HEAD` e esse estado parcial de limpeza (`bin/classe_da_obra.py:246–256`). Logo um módulo/teste não rastreado pode participar da execução sem pertencer à tree certificada. Ocorrência concreta em produção: **[nao verificado]**.
-
-4. **FILA — selo não morde a emissão de certificados.** O caso de pouso escreve o livro sintético diretamente e chama apenas `--portao-pouso`; os últimos testes chamam somente o parser de log (`bin/tests/test_gate_pela_classe.sh:119–145`). Um mutante que troque a condição de recusa em `bin/classe_da_obra.py:256` por `if False:` passa esse selo sem testar a supressão de `rc`, limpeza ou igualdade de árvores. Remover a detecção de dinheiro em `:131` também não encontra fixture de dinheiro no selo (`bin/tests/test_gate_pela_classe.sh:104–117`). Não executei esses mutantes em disco: conclusão por alcance das chamadas citadas.
-
-Mapa do certificado:
-
-| Dado | Escritor | Leitor/significado |
-|---|---|---|
-| `logs/INTEIRA-FINAL.tsv` | `pouso_inteira`, append de seis campos (`bin/classe_da_obra.py:258–259`) | `trees_certificadas` aceita `>=6` campos, tree hex40 e N inteiro positivo; não verifica commit, obra, hora ou log (`:200–208`); `portao_pouso` compara tree de head (`:214–217`). |
-| Tree/commit | `git rev-parse` em `:196–197`, `:246–247` | Certificado é por tree, não commit (`:255–259`); coerente com a comparação do portão (`:216–217`). | [nao verificado]
-| N/veredito | Saída de `suite.sh`, processo em `:250–254` | Último `Ran N` e último `OK/FAILED`, independentes entre si (`:220–233`); exige rc0/OK/N>0 (`:256`). | [nao verificado]
-| Hora | `time.strftime` sem timezone explícito (`:259`) | Leitor do livro não interpreta hora (`:206–208`); fuso real **[nao verificado]**. |
-| Log | Arquivo por obra/tree12, truncado na nova execução (`:249–250`) | Parser lê ao terminar (`:253–254`); livro conserva só caminho (`:259`), sem hash do conteúdo. |
-
-A busca incluindo arquivos ocultos encontrou referências à nova classe/livro somente no próprio instrumento e no selo; ausência de outros consumidores é limitada à cópia examinada. O próprio arquivo declara não estar conectado à conduta (`bin/classe_da_obra.py:35`); portanto não afirmaria que o pouso real já esteja protegido. Os selos novos entram no glob existente da régua (`bin/regua.sh:138–145`).
-
-_4917 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4918 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
