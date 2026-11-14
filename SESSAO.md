@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 04:27:15.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (624.0 MB). Acoes na janela: **1626**.
+**Medido em 14/11/2026 04:32:46.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (624.0 MB). Acoes na janela: **1615**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:30:10 | Bash | Esperar relato final HJ-091 ou JUSTIFICATIVA | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do /bin/grep -q "__HASH__" logs/HJ-091/volta2/relato.md \|\| { echo hj091-final; exit 0; }; [ -s logs/JUSTIFICATIVA-PAGA/construtor/relato.md ] && { echo justif; exit 0; }; /usr/bin/sleep 10; done; echo nada` |
+| 04:30:05 | Bash | Ler relato do construtor HJ-091 volta 2 | `cd /home/ronald/saas-hasner; cat logs/HJ-091/volta2/relato.md \| cut -c1-400` |
+| 04:27:21 | Bash | Esperar relato de construtor por ate 10 min | `cd /home/ronald/saas-hasner; for i in $(seq 1 57); do for f in logs/HJ-091/volta2/relato.md logs/JUSTIFICATIVA-PAGA/construtor/relato.md; do [ -s $f ] && { echo "entregue: $f"; exit 0; }; done; /usr/bin/sleep 10; done; echo nada; ps -p 531985 -o pid=,etimes=` |
 | 04:20:22 | Bash | Apontar ESPERANDO a suite viva de construtor | `cd /home/ronald/saas-hasner; sed -i "3s/.*/ESPERANDO: trava_teste.sh \| pid=531985/" app/docs/RELATO.md; cd bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 04:20:18 | Bash | Anotar material no RELATO e achar produtor vivo | `cd /home/ronald/saas-hasner; sed -i '0,/^lei: E3-V8/s\|^\(lei: E3-V8.*\)$\|\1 MATERIAL do corte (Codex leitura, nada decide): logs/E3-FORMA-SQL/lei_csf_texto/r.r -- R-a literal so em PROMPTS.md:2171/BACKLOG.md:1944 (sem texto=x27x27 escrito), R-b em CORTES.md:449 (nomeia resposta esperando veredito, sem texto vazio); a inclusao do vazio vem so do teste O168.\|' app/docs/RELATO.md; sed -i "s/texto= ...` |
 | 04:20:09 | Bash | Ler o material do Codex sobre a lei E3 | `cd /home/ronald/saas-hasner; wc -c logs/E3-FORMA-SQL/lei_csf_texto/r.r; cut -c1-600 logs/E3-FORMA-SQL/lei_csf_texto/r.r \| head -60` |
@@ -1622,17 +1625,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:32:54 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; cat mutar.py \| head -60; cat roda.sh \| head -40` |
 | 16:32:50 | Bash |  | `cd /home/ronald/wt-codex-hj-090-152256/app; /bin/grep -n "def editar_periodo_aquisitivo" -A45 ferias/services.py \| /bin/grep -n "travar\\|aplicar_status\\|vivo"` |
 | 16:32:47 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; ls; /bin/grep -n "direito_julga_foto\\|direito_sem_trava\\|direito_sem_status" -A6 hj090_volta3_mutantes.py \| head -50` |
-| 16:32:42 | Bash |  | `cd /home/ronald/saas-hasner/logs; cat HJ-090/volta3/mutantes.txt; ls O168/v8/; tail -n 3 O168/v8/green2.log; cat O168/v8/mede_green.sh` |
-| 16:32:36 | Bash |  | `cd /home/ronald/saas-hasner/logs; date +%H:%M; ls BUG-PAR-O-PAR/e3/volta3/*.fim O168/v8/ E3-FORMA-SQL/impacto/codex/ 2>&1 \| tr '\n' ' '; echo; tail -n 3 HJ-090/volta3/mutantes.txt; cat O168/v8/medida.log \| /bin/grep -E 'Error\|!=\|>' \| head -5` |
-| 16:31:30 | Monitor | BUG-PAR base e fix2 | `cd /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/volta3; a=0;b=0; while true; do if [ $a = 0 ] && [ -e base.fim ]; then a=1; echo "base $(cat base.fim)"; fi; if [ $b = 0 ] && [ -e fix2.fim ]; then b=1; echo "fix2 $(cat fix2.fim)"; fi; [ $a$b = 11 ] && break; /usr/bin/sleep 30; done` |
-| 16:30:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: run.sh \| pid=2541123$/ESPERANDO: roda.sh \| pid=2481296/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 16:30:02 | Bash |  | `cd /home/ronald/saas-hasner; ps -eo pid,etime,cmd \| /bin/grep -E 'HJ-090/volta3/roda.sh\|mede_green' \| /bin/grep -v grep \| cut -c1-100` |
-| 16:29:59 | SendMessage |  | `-` |
-| 16:29:49 | Bash |  | `cd /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/volta3; /bin/grep -E '^(OK\|FAILED)($\| \()' green.log \| tail -1; /bin/grep '^Ran' green.log \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' green.log \| head -20` |
-| 16:27:51 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: suite \| pid=2541123$/ESPERANDO: run.sh \| pid=2541123/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
-| 16:27:48 | Bash |  | `cd /home/ronald/saas-hasner; tail -n 6 logs/hook_stop_fila1.log \| cut -c1-250; ps -p 2541123 -o pid,cmd \| cut -c1-120` |
-| 16:27:45 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n '_trilha(' bin/hook_stop_fila1.py \| head -3; /bin/grep -n 'def _trilha' -A8 bin/hook_stop_fila1.py \| /bin/grep -o "'[^']*\.log'\\|logs/[a-z_./]*" \| head; ls -t logs/*.log \| head -5` |
-| 16:27:40 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 789,856p bin/hook_stop_fila1.py; sed -n 1360,1400p bin/hook_stop_fila1.py; tail -n 5 logs/pisos.log 2>/dev/null \| cut -c1-200` |
-| 16:27:37 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n 'ESPERANDO' bin/hook_stop_fila1.py \| head -30` |
-| 16:27:22 | Bash |  | `cd /home/ronald/saas-hasner/logs/HJ-090/volta3; ls -l --time-style=+%H:%M \| /bin/grep -iE 'green\|red\|fim'; for f in green*.log red_base*.log; do [ -e $f ] && { echo "== $f"; /bin/grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; /bin/grep '^Ran' $f \| tail -1; }; done; cat mutantes.txt \| tail -n 20` |
-| 16:27:17 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/aval_ordem_pos_e4a2_1110.txt \| head -c 3000; echo; cat logs/HJ-090/volta3/fim_greenred 2>/dev/null; ls -t logs/HJ-090/volta3/ \| head` |
