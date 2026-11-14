@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 00:30:58.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (616.5 MB). Acoes na janela: **1971**.
+**Medido em 14/11/2026 00:35:59.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (616.6 MB). Acoes na janela: **1980**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:35:16 | Bash |  | `L=/home/ronald/saas-hasner/logs/HJ-090/pouso/sombra_refazer_1411.log; until /bin/grep -q '^rc=' $L; do /usr/bin/sleep 30; done; tail -6 $L \| cut -c1-200` |
+| 00:35:15 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/.*/ESPERANDO: sombra.sh \| pid=3834920/' docs/RELATO.md; cd ../bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 00:35:11 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/HJ-090/pouso/sombra_refazer_1411.log \| tail -15 \| cut -c1-200; pgrep -af "sombra" \| /bin/grep -v pgrep \| head` |
+| 00:35:08 | Bash |  | `cd /home/ronald/saas-hasner/app; ps -p 3834915 -o pid,cmd \| cat; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: sombra.sh \| pid=3834915' L.insert(3,'PONTO 00:3x PUSH rc=0 (logs/PUSH/push_grade_1411.log: 897184a6f..94d2533a0, pos_push 9077bff58) \| BUG-PAR recorte_d2 chamados+core OK Ran 6222 rc 0 (espera handback do constr ...` |
+| 00:34:58 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/HJ-090/pouso/sombra_refazer_1411.log; mkdir -p logs/HJ-090/pouso; setsid nohup bash -c "bin/sombra.sh --refazer --dump-agora > $L 2>&1; echo rc=\$? >> $L" </dev/null >/dev/null 2>&1 & disown; /usr/bin/sleep 3; pgrep -f "sombra.sh --refazer --dump-agora" \| head -2` |
+| 00:34:52 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,30p bin/sombra.sh \| cut -c1-160; sed -n 437,462p bin/sombra.sh` |
+| 00:34:49 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -E "^\s*--(refazer\|dump-agora\|bloco\|conferir)\)\|dump-agora" bin/sombra.sh \| head -12; ls logs/crons_em_curso 2>/dev/null \| head` |
+| 00:34:44 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b7f1behv3.output \| cut -c1-200; cd /home/ronald/saas-hasner; git log --oneline -1 origin/main; date +%H:%M` |
+| 00:32:19 | Bash |  | `ps -p 3646643 -o etime=; tail -2 /home/ronald/saas-hasner/logs/PUSH/push_grade_1411.log \| cut -c1-150` |
+| 00:32:16 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bhemsfzax.output; tail -5 /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/e3/volta5/recorte_d2.log \| cut -c1-200` |
 | 00:25:58 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(3,'PONTO 01:0x NOITE-1411 (a) censo E4c + E4d FECHADOS (logs/PREPARACAO/censos/E4c\|E4d/censo.md @94d2533a0): E4c 1031 file:line git==AST, 176 funcoes leitoras em 56 arquivos + 4 templates (20 arquivos em voo); E4d 47 git x 44 AST (3 explicados), 10 escritores no escopo; lei: 1 (A20, BACKLO ...` |
 | 00:24:06 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(3,'PONTO 01:0x NOITE-1411 (b) censo DECLARADO-X-GRAVADO FECHADO (codigo): fechamento.md -- 4 templates conferidos @94d2533a0 (nenhuma tela mostra declarado x gravado; estado_aplicacao so em modal_fio.html:230-246); justificativa.py:188/:361 e ponto/views.py:1815 FORA do universo (gravam ins ...` |
 | 00:23:22 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L.insert(3,'PONTO 00:5x NOITE-1411 (b) censo DECLARADO-X-GRAVADO (logs/PREPARACAO/censos/DECLARADO-X-GRAVADO/censo.md @94d2533a0, raia BUG-PAR 3348ae69f por diff): 18 alvos N==N (AST/tokenize/grep), 29 chamadas registrar_batida ~13 sitios; BUG-PAR cobre so o portao intervalo, S139 _ts_tipo_do_planti ...` |
@@ -1980,4 +1990,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:40:29 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/predesenho; sed -n '/^\*\*5/,$p' predesenho.r \| head -c 9000` |
 | 12:40:25 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/predesenho; sed -n '/^\*\*2/,$p' predesenho.r \| head -c 14000` |
 | 12:40:23 | Bash |  | `cd /home/ronald/saas-hasner/logs/TIPO-NA-FONTE/item3/predesenho; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b83a0y4mh.output; wc -c predesenho.r; cat predesenho.r` |
-| 12:31:50 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1313/e3_um_diff_so.txt <<'EOF' aval Ronald: E3-UM-DIFF-SO (complementa E3-SUITE-JA-E-BO-NA-FRENTE). UNIDADE: obra E3, etapa DIFF. O 2o DIFF inteiro (base main 7621a973f x copia mesclada 6c465cb80) NAO roda. Pela L-110 e DINHEIRO item 4 o DIFF e IMPACTO lido uma vez, nunca validacao: o impacto do delta da E3 e o DIFF em curso; TRANCA-VIVAS-08 e c5e medi ...` |

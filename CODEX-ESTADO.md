@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 00:27** · publicado em **14/11/2026 00:31** (UTC-3)
+> Ultima resposta processada: **14/11/2026 00:34** · publicado em **14/11/2026 00:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 00:34 · sessao 64afa9b3793f · BUG-PAR · verificador · origem=Code
+
+**A criação divergente está bloqueada no ponto do TOCTOU, mas resta um achado procedente: a espera da irmã pode virar recusa escrita da metade externa.** (`app/chamados/services/materializacao.py:1355`, `app/chamados/services/materializacao.py:1599`, `app/chamados/services/materializacao.py:1814`).
+
+1. **Outro caminho de criação — descartável como bypass demonstrado.**
+
+   O ramo `hora` compara os mesmos `ts/_tipo` que entrega a `registrar_batida`; irmã e passivo passam por `_materializar_uma`. O chokepoint cria com os valores recebidos. (`app/chamados/services/materializacao.py:1253`, `app/chamados/services/materializacao.py:1355`, `app/chamados/services/materializacao.py:1359`, `app/chamados/services/materializacao.py:1596`, `app/chamados/services/passivo_validado.py:537`, `app/ponto/registro_batida.py:175`).
+
+   Existe outra criação em `data_hora`, sem portão 163, fixando tipo `E`. Contudo, as fábricas consultadas dão `hora` às metades de intervalo e `data_hora` à âncora. Uma metade efetivamente chegando por esse ramo é **[nao verificado]**; promovê-la a bypass seria **duvidoso**. (`app/chamados/services/materializacao.py:1460`, `app/chamados/models.py:3709`, `app/chamados/models.py:3714`, `app/chamados/models.py:3721`, `app/chamados/services/disputa_emissao.py:1371`).
+
+   `escolha` não cria batida; o command do passivo delega ao reparador, e BUG-PAR-103 chama a devolução. (`app/chamados/services/materializacao.py:1529`, `app/chamados/management/commands/materializar_passivo_validado.py:113`, `app/chamados/management/commands/bug_par_103.py:85`).
+
+2. **Rollback e engolimento — descartáveis no trajeto direto.**
+
+   A premissa sobre `pendencia_admin/recusa_motivo` precisa de correção: o `save` deles ocorre **dentro** do `atomic` de `_materializar_uma`. A espera tardia atravessa esse bloco; portanto, desfaz essas escritas e as da irmã já materializada dentro dele. O carimbo final da própria metade vem depois do ponto que levanta. (`app/chamados/services/materializacao.py:1735`, `app/chamados/services/materializacao.py:1737`, `app/chamados/services/materializacao.py:1257`, `app/chamados/services/materializacao.py:1593`, `app/chamados/services/materializacao.py:1357`, `app/chamados/services/materializacao.py:1792`).
+
+   A captura específica antecede `except Exception`; a mensagem da espera só entra em `erros` depois do `finally`, evitando a recusa nesse retorno direto. (`app/chamados/services/materializacao.py:1798`, `app/chamados/services/materializacao.py:1802`, `app/chamados/services/materializacao.py:1813`, `app/chamados/services/materializacao.py:1815`).
+
+   Escritas realmente anteriores não pertencem a esse rollback. Por exemplo, a recusa `DATA_EM_DISPUTA` ocorre antes do bloco, mas retorna imediatamente e não alcança a espera tardia. (`app/chamados/services/materializacao.py:1720`, `app/chamados/services/materializacao.py:1721`, `app/chamados/services/materializacao.py:1735`).
+
+3. **Irmã esperando — procedente, residual.**
+
+   A irmã devolve `False` com a mensagem de espera. O wrapper transforma **qualquer** retorno falso em `_ParNaoFechou`, desfaz o savepoint da irmã e devolve um impedimento textual. A categoria “espera” se perde nessa fronteira. (`app/chamados/services/materializacao.py:1726`, `app/chamados/services/materializacao.py:1817`, `app/chamados/services/materializacao.py:1819`, `app/chamados/services/materializacao.py:1596`, `app/chamados/services/materializacao.py:1599`, `app/chamados/services/materializacao.py:1602`).
+
+   A externa conserva `_viz`, acrescenta erro de **guarda de paridade** e segue pelas portas de recusa/carimbo. O `finally` grava o erro contendo o impedimento da irmã. Isso impede a batida divergente, mas **não respeita “espera não carimba recusa” para a externa**. (`app/chamados/services/materializacao.py:1290`, `app/chamados/services/materializacao.py:1299`, `app/chamados/services/materializacao.py:1303`, `app/chamados/services/materializacao.py:1338`, `app/chamados/services/materializacao.py:1349`, `app/chamados/services/materializacao.py:1814`, `app/chamados/services/materializacao.py:1555`).
+
+   O caminho cabe justamente na corrida examinada: a externa passa inicialmente por reuso; na reconsulta precisa criar e chama a irmã. Na avaliação aninhada, a externa em voo fica excluída da seleção de irmã, enquanto a escrita considera sua batida projetada; assim, o portão tardio da irmã pode ser alcançado. Ocorrência em produção: **[nao verificado]**. (`app/chamados/services/materializacao.py:824`, `app/chamados/services/materializacao.py:1266`, `app/chamados/services/materializacao.py:1290`, `app/chamados/services/materializacao.py:146`, `app/chamados/services/materializacao.py:1594`, `app/chamados/services/materializacao.py:1282`, `app/chamados/services/materializacao.py:1355`).
+
+4. **RED novo — procedente por leitura; execução do mutante [nao verificado].**
+
+   Ele desliga somente o portão antecipado e exige retorno falso, mensagem de espera, nenhuma criação e foto preservada. Retirar o portão tardio deixa aberto o caminho para criar S `01:00` diante da declaração `01:20`; o controle vizinho confirma a criação nesse cenário quando a declaração coincide. (`app/chamados/tests/test_bug_par_projetado.py:1158`, `app/chamados/tests/test_bug_par_projetado.py:1190`, `app/chamados/tests/test_bug_par_projetado.py:1193`, `app/chamados/tests/test_bug_par_projetado.py:1206`, `app/chamados/tests/test_bug_par_projetado.py:1207`, `app/chamados/tests/test_bug_par_projetado.py:1210`).
+
+   A cobertura não alcança o residual aninhado: a fixture carimba ambas as perguntas, enquanto selecionar a irmã exige `materializada_em` nulo. A foto também omite `pendencia_admin` e `materializada_por`. (`app/chamados/tests/test_bug_par_projetado.py:1163`, `app/chamados/services/materializacao.py:145`, `app/chamados/tests/test_bug_par_projetado.py:990`).
+
+| Classe no delta d2 | Classificação e evidência |
+|---|---|
+| 2º juiz | **Descartável:** reutiliza `_espera_do_aval_163`. `app/chamados/services/materializacao.py:847`, `app/chamados/services/materializacao.py:1355`. |
+| 2º escritor | **Descartável:** mantém `registrar_batida`; irmã usa a mesma unidade. `app/chamados/services/materializacao.py:1359`, `app/chamados/services/materializacao.py:1596`. |
+| Derivação paralela | **Descartável:** compara os valores já derivados. `app/chamados/services/materializacao.py:1253`, `app/chamados/services/materializacao.py:1355`. |
+| Ordem de trava | **Descartável neste delta:** comparação sem trava nova; porta trava antes de reler/materializar. `app/chamados/services/materializacao.py:725`, `app/chamados/services/materializacao.py:1921`. |
+| Campo com dois significados | **Descartável como novidade persistida; procedente na perda de significado do retorno:** espera e falha comum chegam como `False` e recebem o mesmo tratamento. `app/chamados/services/materializacao.py:1687`, `app/chamados/services/materializacao.py:1819`, `app/chamados/services/materializacao.py:1599`. |
+
+## 14/11 00:33 · sessao d00fa833a560 · - · - · origem=Ronald (tmux)
+
+Q1 — **Descartável como bypass concreto demonstrado.**
+
+- A criação de resposta `hora` passa pelo portão imediatamente antes de `registrar_batida`: `app/chamados/services/materializacao.py:1355-1360`. A irmã usa `_materializar_uma`, portanto alcança o mesmo escritor: `app/chamados/services/materializacao.py:1596`.
+- O passivo também usa `_materializar_uma`: `app/chamados/services/passivo_validado.py:537`. Seu command delega a `reparar`: `app/chamados/management/commands/materializar_passivo_validado.py:113`.
+- BUG-PAR-103 apenas chama a porta de devolução, sem criar batida: `app/chamados/management/commands/bug_par_103.py:85`.
+- `escolha` pode ter motivo intervalo por reabertura administrativa, mas seu ramo não cria batida: `app/chamados/services/acoes_disputa.py:252-268`; `app/chamados/services/materializacao.py:1529-1533`.
+- Existe outra criação em `data_hora`, sem portão 163 e com tipo fixo `E`: `app/chamados/services/materializacao.py:1448-1461`. Entretanto, a fábrica de intervalo usa `hora`, enquanto `data_hora` nasce para `ancora_ausente`: `app/chamados/models.py:3709-3723`; `app/chamados/services/disputa_emissao.py:1371-1375`. Uma metade de intervalo efetivamente chegando como `data_hora` permanece **[nao verificado]**; seria **duvidoso** promover essa hipótese a bypass.
+- O chokepoint cria com o timestamp/tipo recebidos, sem derivação alternativa: `app/ponto/registro_batida.py:170-176`. A criação por bulk em `semear` exige banco de ensaio: `app/ponto/registro_batida.py:349-353`.
+
+Q3 — **Procedente a perda da natureza “espera” na propagação; sem criação divergente nesse caminho.**
+
+A irmã que retorna `False` vira `_ParNaoFechou`; seu relato é convertido em impedimento textual: `app/chamados/services/materializacao.py:1599-1603`. A metade externa conserva a vizinha ofensora e entra na recusa de paridade: `app/chamados/services/materializacao.py:1299-1307`. Pode gravar `_carimbar_recusa` diretamente e o `finally` também carimba havendo erro: `app/chamados/services/materializacao.py:1338-1341`; `app/chamados/services/materializacao.py:1813-1814`. Isso preserva o impedimento de criar a batida, mas não propaga a espera como espera à metade externa: `app/chamados/services/materializacao.py:1341`.
+
+## 14/11 00:33 · sessao 3f970a8ac939 · - · - · origem=Ronald (tmux)
+
+**PROCEDENTE — a espera da irmã pode virar recusa escrita da externa.** `_materializar_uma(q)` devolve `False` com a mensagem de espera; `_gravar_irma_do_par` converte esse resultado em `_ParNaoFechou` e devolve apenas um impedimento textual (`app/chamados/services/materializacao.py:1726`, `:1798`, `:1815`, `:1596`, `:1599`, `:1601`).
+
+A externa mantém `_viz`, acrescenta erro de “guarda de paridade” e escreve recusa; o `finally` ainda grava o erro que contém o impedimento da irmã. Portanto, a irmã permanece preservada pelo rollback, mas a externa pode ter `recusa_motivo` alterado (`app/chamados/services/materializacao.py:1290`, `:1299`, `:1303`, `:1338`, `:1813`, `:1554`).
+
+Caminho concreto dedutível do código, sem afirmar ocorrência em produção:
+
+- Externa S declarou `01:00`; irmã E declarou `02:20`, marco `02:00`. A primeira leitura da externa encontra S `01:00` aprovada e retorna `ja_satisfeita`; essa batida deixa de existir antes da reconsulta do escritor (`app/chamados/services/materializacao.py:824`, `:1266`).
+- Com E `18:30` e S `06:30`, o par projetado resolve a paridade, conforme a geometria da fixture (`app/chamados/tests/test_bug_par_projetado.py:61`, `:69`, `:112`, `:114`).
+- A externa chama a irmã; no derivador da irmã, a externa em voo não pode ser selecionada como irmã, produzindo `bloqueada_paridade`, que não aciona a espera antecipada (`app/chamados/services/materializacao.py:146`, `:1659`, `:832`, `:853`, `:756`).
+- O escritor da irmã considera a externa projetada e alcança o portão tardio, que levanta pela divergência E `02:00` × E `02:20`; o resultado segue a conversão em recusa externa descrita acima (`app/chamados/services/materializacao.py:1594`, `:1282`, `:1355`, `:1357`, `:1602`).
+
+**DESCARTÁVEL — engolimento por `except Exception` nesse trajeto.** A captura específica de `_EsperaNaCriacao` antecede a genérica; o problema é a perda da categoria “espera” ao retornar `False` e convertê-lo em `_ParNaoFechou` (`app/chamados/services/materializacao.py:1798`, `:1802`, `:1599`).
+
+**Rollback:** `pendencia_admin`/`recusa_motivo` de `_materializar_resposta_hora` são escritos dentro do atomic do chamador, portanto entram no rollback provocado pela espera; não estão antes desse atomic. Escritas realmente anteriores, como a recusa `DATA_EM_DISPUTA`, pertencem a outro ramo que retorna antes de alcançar o raise tardio (`app/chamados/services/materializacao.py:1735`, `:1737`, `:1257`, `:1720`, `:1721`).
+
+## 14/11 00:33 · sessao 2491ebd33a06 · - · - · origem=Ronald (tmux)
+
+- **RED novo: procedente, por análise estática.** Ele desliga apenas o portão antecipado e exige retorno falso, mensagem de espera, nenhuma batida e foto preservada (`app/chamados/tests/test_bug_par_projetado.py:1206-1211`). O mutante sem o portão tardio alcançaria `registrar_batida` após derivar S 01:00 para resposta 01:20 (`app/chamados/services/materializacao.py:659-662,1253,1355-1359`); o controle com declaração 01:00 confirma a criação nesse caminho (`app/chamados/tests/test_bug_par_projetado.py:1189-1194`). Execução do mutante nesta cópia: **[nao verificado]**.
+
+- **Cobertura limitada:** o teste não produz uma corrida real, substitui `espera_na_escrita` por `''` (`app/chamados/tests/test_bug_par_projetado.py:1206`). A foto não cobre `pendencia_admin` nem `materializada_por` (`app/chamados/tests/test_bug_par_projetado.py:990-992`). A fixture carimba ambas as perguntas, enquanto a seleção da irmã exige `materializada_em` nulo; portanto esse RED não exercita a irmã esperando (`app/chamados/tests/test_bug_par_projetado.py:1163-1166`; `app/chamados/services/materializacao.py:145`).
+
+- **Segundo juiz, segundo escritor e derivação paralela: descartáveis neste delta.** A nova consulta usa o mesmo `_espera_do_aval_163`, com `ts` e `_tipo` já derivados, e mantém `registrar_batida` como criação (`app/chamados/services/materializacao.py:725,847,861,1253,1355-1359`).
+
+- **Ordem de trava: descartável neste delta.** O portão só compara valores; a porta existente trava antes de reler e materializar (`app/chamados/services/materializacao.py:725-731,1921-1931`).
+
+- **Campo com dois significados: descartável como novidade.** `_espera_na_criacao` é variável local e vira mensagem após o `finally`; não há campo persistido novo (`app/chamados/services/materializacao.py:1687,1798-1799,1815-1817`).
+
+- **Irmã esperando: candidato procedente.** O retorno falso da irmã vira `_ParNaoFechou` e impedimento textual; a metade externa segue a recusa de paridade, podendo reescrever sua recusa ou carimbar identidade (`app/chamados/services/materializacao.py:1596-1603,1290,1299-1307,1338-1349,1813-1814`).
 
 ## 14/11 00:27 · sessao 5cc64f975557 · CORTE-DAS-TRAVAS · leitura · origem=Code
 
@@ -504,171 +592,4 @@ Cancelamentos/venda ainda escrevem status com default implícito e depois chegam
 
 A derivação de aviso no JS permanece registrada como pendência: o relógio mudou de origem, mas o navegador continua decidindo o aviso por comparações próprias. Não apresentar sua existência como descoberta nova desta volta. (`app/templates/ferias/_secao_colab.html:202`; `app/templates/ferias/_secao_colab.html:204`; `app/core/juizes.py:925`)
 
-## 13/11 21:55 · sessao 7a5421752418 · HJ-090 · construtor · origem=Code
-
-Entrega parcial no [relato, com comandos, fila e matriz de leitores/escritores](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_relato.txt:1).
-
-- Ensaio em memória: [RED 15, 22 falhas](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_red_base_integral.txt:1) → [GREEN 15](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_green.txt:18).
-- [33/33 mutantes mordidos](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_mordidas.txt:34); [catraca 35/OK](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_catraca.txt:38).
-- Django não iniciou: falta `django.core`; integração **[nao verificado]** ([registro](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_django.txt:6)).
-
-F3 permanece pendente conforme seu critério de perguntar quando faltar função parametrizada: autoriza o adaptador de `ja_iniciou` descrito no [relato](/home/ronald/wt-codex-hj-090-152256/app/ferias/hj090_volta7_relato.txt:6)?
-
-**FRONT: smoke do Ronald nas duas cascas — [nao verificado].**
-
-## 13/11 21:54 · sessao 8497247b8d3e · BUG-PAR · verificador · origem=Code
-
-**Procedente: o portão não cobre integralmente o passivo.** Uma pergunta com `materializada_em` antigo pode voltar à escrita, mas a testemunha responde `aplicada` antes da comparação declarado × gravado. O helper é chamado; `_espera_do_aval_163` não chega a executar. (`app/chamados/services/passivo_validado.py:537`; `app/chamados/services/materializacao.py:734`; `app/chamados/services/materializacao.py:782`.)
-
-Histórico completo `0da6483e2..HEAD`, execução da suíte, mutações dos portões e ocorrência/quantidade desses casos em produção: **[nao verificado]**. A análise abaixo usa o diff fornecido e a cópia.
-
-**1. Caminhos de validação e escrita**
-
-**Procedente — brecha no passivo por carimbo sem lastro.** O caminho é:
-
-- `vigia_carimbo.classificar` seleciona perguntas validadas sem exigir `materializada_em` nulo; quando falta a batida, entrega `sem_plantio_nenhum`. (`app/chamados/services/vigia_carimbo.py:97`; `app/chamados/services/vigia_carimbo.py:116`.)
-- `reparar` encaminha essa classe ao plantio; `_plantar_o_dia` preserva o carimbo antigo e chama `_materializar_uma`. (`app/chamados/services/passivo_validado.py:327`; `app/chamados/services/passivo_validado.py:353`; `app/chamados/services/passivo_validado.py:534`; `app/chamados/services/passivo_validado.py:537`.)
-- A nova guarda consulta `espera_declarado_x_gravado`, mas `estado_aplicacao_pergunta` retorna `aplicada` pelo carimbo, antes de derivar e comparar. O helper transforma esse resultado em espera vazia. (`app/chamados/services/materializacao.py:1684`; `app/chamados/services/materializacao.py:782`; `app/chamados/services/materializacao.py:735`.)
-- O escritor continua aplicando S139 e registra a hora do marco. (`app/chamados/services/materializacao.py:653`; `app/chamados/services/materializacao.py:1224`; `app/chamados/services/materializacao.py:1323`.)
-
-**Contraexemplo estrutural:** `intervalo_saida/hora`, resposta `12:20`, marco `S 12:00`, `validada_em` e `materializada_em` preenchidos, via `declaracao`, competência aberta, apenas `E 08:00` no espelho. O passivo pode plantar `S 12:00`: não existe vizinha S impeditiva, e o fechamento E08/S12 não aumenta a quantidade de turnos sem par. Execução integral desse cenário: **[nao verificado]**. (`app/chamados/services/materializacao.py:121`; `app/chamados/services/materializacao.py:653`; `app/chamados/services/passivo_validado.py:557`.)
-
-**Demais caminhos examinados:**
-
-| Caminho | Resultado |
-|---|---|
-| `_gravar_irma_do_par` | Usa `_materializar_uma(q)`; não possui escritor paralelo de batida. (`app/chamados/services/materializacao.py:1555`.) |
-| `_validar_o_par` | Carimba a irmã pelo escritor canônico e materializa pela unidade; desfaz o savepoint se as duas não terminarem materializadas. (`app/chamados/services/validacao.py:461`; `app/chamados/services/validacao.py:463`; `app/chamados/services/validacao.py:464`.) |
-| `_materializar_resposta_hora` | O chamador produtivo encontrado é `_materializar_uma`; `models.py` reexporta o símbolo. (`app/chamados/services/materializacao.py:1695`; `app/chamados/models.py:4174`.) |
-| Folga | Aceita `FOLGA_CONTESTA`, declara o dia e encerra pela porta administrativa; esse ramo não registra HH:MM de intervalo. (`app/chamados/services/validacao.py:77`; `app/chamados/services/validacao.py:386`; `app/chamados/services/validacao.py:387`; `app/chamados/services/validacao.py:395`.) |
-| `data_hora` | Ramo distinto, selecionado pelo tipo; lê data/hora textual e registra E, origem `disputa_ancora`. Não é a classe `tipo_resposta='hora'`. (`app/chamados/services/materializacao.py:1412`; `app/chamados/services/materializacao.py:1425`; `app/chamados/services/materializacao.py:1696`.) |
-| Reconciliador | Os caminhos examinados lavram carimbos e fechamentos; `lavrar_sem_turno_aberto` restringe seus motivos e exclui pergunta com texto. Não demonstram outro plantio de metade. (`app/chamados/reconciliador.py:333`; `app/chamados/reconciliador.py:363`; `app/chamados/reconciliador.py:365`; `app/chamados/reconciliador.py:406`.) |
-| Management | `validar_classe_a` usa a validação; `backfill_fio_morto_e4b` usa o laço; `materializar_passivo_validado` usa `reparar` e alcança a brecha descrita. (`app/chamados/management/commands/validar_classe_a.py:100`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:147`; `app/chamados/management/commands/materializar_passivo_validado.py:113`.) |
-| S144 ao fechar | Carimba após consultar lastro; não fabrica outra batida. (`app/chamados/services/materializacao.py:1935`; `app/chamados/services/materializacao.py:1939`.) |
-
-Os registros encontrados com origem de disputa estão nos ramos hora e data_hora; os outros registradores em chamados usam `excecao_autorizada` e `reg_externa`. **Duvidoso** atribuir-lhes um bypass desta classe sem outro encadeamento demonstrado. (`app/chamados/services/materializacao.py:1324`; `app/chamados/services/materializacao.py:1425`; `app/chamados/services/acoes_chamado.py:45`; `app/chamados/services/regularizacao_ext.py:79`.)
-
-**2. Limitação a metades de intervalo**
-
-**Procedente.** Nesses dois sítios, a única substituição explícita da hora digitada pela hora do marco é S139, restrita a `intervalo_saida/intervalo_volta`. Fora disso, `_hora_fonte` permanece `resposta_colab`. (`app/chamados/services/materializacao.py:652`; `app/chamados/services/materializacao.py:653`; `app/chamados/services/materializacao.py:659`.)
-
-`_ajustar_saida_overnight` conserva `.time()` local e recombina somente a data entre D e D+1; não encontrei outra alteração de HH:MM nesse método. (`app/chamados/juizes.py:325`; `app/chamados/juizes.py:326`; `app/chamados/juizes.py:327`; `app/chamados/juizes.py:331`.)
-
-Há uma ressalva à descrição “fora dele o tipo vem do marco”: quando nenhum marco é identificado, o código admite tipo pelo motivo e registra pendência administrativa. É comportamento anterior ao complemento. (`app/chamados/services/materializacao.py:630`; `app/chamados/services/materializacao.py:632`; `app/chamados/services/materializacao.py:637`; `app/chamados/services/materializacao.py:640`.)
-
-**3. Escritores, leitores e significado dos campos**
-
-| Campo/valor | Quem escreve | Quem lê e significado |
-|---|---|---|
-| `resposta_colab` | Resposta humana; resposta automática; limpeza na reabertura pela porta de lote. (`app/chamados/services/disputa_emissao.py:1467`; `app/chamados/services/disputa_emissao.py:1659`; `app/chamados/services/disputa_emissao.py:1595`; `app/chamados/models.py:3308`.) | Plantio, novo normalizador, contador e C7. É texto: pode conter hora ou escape; não é timestamp UTC. (`app/chamados/services/materializacao.py:599`; `app/chamados/services/materializacao.py:652`; `app/chamados/services/materializacao.py:695`; `app/chamados/services/materializacao.py:261`; `app/chamados/models.py:1850`.) |
-| `recusa_motivo` | Recusa de plantio, pendência de tipo, recusa humana, escape e duplicata. (`app/chamados/services/materializacao.py:1519`; `app/chamados/services/materializacao.py:1228`; `app/chamados/services/validacao.py:715`; `app/chamados/services/disputa_emissao.py:1497`; `app/chamados/services/fio.py:1402`.) | O contador traduz pelo catálogo e seleciona PARIDADE; o explicador apresenta pendência. Não significa exclusivamente recusa de plantio. (`app/chamados/services/materializacao.py:258`; `app/chamados/services/explicador.py:90`.) |
-| `validada_em` | `_carimbar_validacao`; devoluções; resposta nova/reabertura zeram; `carimbar(resposta='validar')` pode preenchê-lo por simetria. (`app/chamados/services/validacao.py:136`; `app/chamados/services/validacao.py:201`; `app/chamados/services/validacao.py:271`; `app/chamados/services/disputa_emissao.py:1480`; `app/chamados/services/disputa_emissao.py:1595`; `app/chamados/models.py:3160`.) | C6/C7 tratam preenchimento como veredito; fila de escrita exige preenchimento. Essa interpretação independe de a espera ter recusado a escrita. (`app/chamados/juizes.py:1401`; `app/chamados/models.py:1848`; `app/chamados/services/materializacao.py:1865`.) |
-| `materializada_em` | Trio central em `_escrever_carimbo`, pelas portas de carimbo; descarimbo em lote. (`app/chamados/models.py:3123`; `app/chamados/models.py:3155`; `app/chamados/models.py:3211`; `app/chamados/models.py:3308`.) | Testemunha, fila, contador, C6/C7 e lastro. **Não prova batida:** também carimba recusas sem plantio, embora o help text ainda diga “batida criada + chamado fechado”. (`app/chamados/services/materializacao.py:773`; `app/chamados/services/materializacao.py:1866`; `app/chamados/services/materializacao.py:327`; `app/chamados/juizes.py:1386`; `app/chamados/models.py:1848`; `app/chamados/models.py:3447`.) |
-| `via_resolucao` | Primeiro carimbo pelo modelo; descarimbo; troca por fato no espelho; relavra. (`app/chamados/models.py:3127`; `app/chamados/models.py:3308`; `app/chamados/models.py:3317`; `app/chamados/services/relavra_via.py:125`.) | Testemunha distingue recusa/aplicação; lastro e C6 interpretam as vias. É nome da resolução/testemunha, não hora nem dia. (`app/chamados/services/materializacao.py:752`; `app/chamados/services/materializacao.py:773`; `app/chamados/juizes.py:679`; `app/chamados/juizes.py:1386`.) |
-| Dict `estado_aplicacao` | Resultado canônico em `estado_aplicacao_pergunta`; atributo transitório atribuído por `fio`. (`app/chamados/services/materializacao.py:764`; `app/chamados/services/fio.py:374`.) | Modal lê atributo; helper da espera, contador e explicador consultam a função. (`app/templates/chamados/partials/modal_fio.html:242`; `app/chamados/services/materializacao.py:734`; `app/chamados/services/materializacao.py:332`; `app/chamados/services/explicador.py:101`.) |
-| `indisponivel` | Apenas a casca `fio`, quando a testemunha levanta exceção. (`app/chamados/services/fio.py:375`; `app/chamados/services/fio.py:379`.) | Modal mostra aviso e suprime Validar. O card consulta diretamente o filtro e não recebe essa tradução de exceção. (`app/templates/chamados/partials/modal_fio.html:268`; `app/templates/chamados/partials/modal_fio.html:274`; `app/templates/chamados/partials/_pergunta_card.html:43`; `app/chamados/templatetags/chamados_tags.py:126`.) |
-| `espera_declarado` | Lista `(pk, detalhe)` construída pelo contador, incluída no universo. A unidade é **pergunta**, não par/disputa. (`app/chamados/services/materializacao.py:337`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:347`.) | O teste lê a chave; o comando consumidor do contador lê `bug_par_103`, `universo` e `total_aval`, sem apresentar especificamente a nova lista. (`app/chamados/tests/test_bug_par_projetado.py:1054`; `app/chamados/management/commands/bug_par_103.py:44`; `app/chamados/management/commands/bug_par_103.py:45`; `app/chamados/management/commands/bug_par_103.py:62`.) |
-
-**Procedente — os leitores não supõem todos o mesmo significado.** A testemunha equipara carimbo a `aplicada`, enquanto o passivo existe justamente para contradizer carimbo sem lastro; essa divergência produz a brecha do item 1. (`app/chamados/services/materializacao.py:782`; `app/chamados/services/materializacao.py:1627`; `app/chamados/services/vigia_carimbo.py:106`.)
-
-Quanto ao tempo, a configuração declara São Paulo e `USE_TZ=True`; a comparação nova usa HH:MM local, e os carimbos registram instantes dos atos. `data_evento` é tratado pelo ajuste como dia do turno; conversa possui exceção de dia civil explicitamente discriminada. Configuração efetiva e armazenamento de produção: **[nao verificado]**. (`app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/chamados/services/materializacao.py:706`; `app/chamados/services/validacao.py:136`; `app/chamados/juizes.py:306`; `app/chamados/juizes.py:334`.)
-
-**4. C7 e fechamento por cima da espera**
-
-**Procedente.** A espera preserva `validada_em`; com esse campo preenchido, a metade sai de `respostas_sem_veredito` e C6 a considera morta. Se nenhuma outra pergunta bloquear, C7 permite fechar. (`app/chamados/services/materializacao.py:1684`; `app/chamados/models.py:1848`; `app/chamados/juizes.py:1401`; `app/chamados/models.py:1860`.)
-
-O laço normal chama `_fechar_disputa_se_quitada` mesmo com zero materializações e erros de espera; a cauda não consulta esses erros antes de fechar. (`app/chamados/services/materializacao.py:1884`; `app/chamados/services/materializacao.py:1886`; `app/chamados/services/materializacao.py:1789`; `app/chamados/services/materializacao.py:1806`.)
-
-Todos os chamadores produtivos encontrados de `pode_fechar`:
-
-| Chamador | Efeito |
-|---|---|
-| `reconciliador.lavrar_sem_turno_aberto` | Fecha se alcançado e liberado. (`app/chamados/reconciliador.py:412`; `app/chamados/reconciliador.py:413`.) |
-| `reconciliador.retratar_perguntas_absolvidas_por_celula` | Fecha. (`app/chamados/reconciliador.py:612`; `app/chamados/reconciliador.py:613`.) |
-| `reconciliador.encerrar_orfas_pela_lampada` | Fecha. (`app/chamados/reconciliador.py:1171`; `app/chamados/reconciliador.py:1172`.) |
-| `materializacao._materializar_ausencia_de_resposta` | Fecha. (`app/chamados/services/materializacao.py:963`; `app/chamados/services/materializacao.py:964`.) |
-| `materializacao._fechar_disputa_se_quitada` | Fecha; é o fechamento diretamente alcançado após a espera no laço. (`app/chamados/services/materializacao.py:1789`; `app/chamados/services/materializacao.py:1806`; `app/chamados/services/materializacao.py:1886`.) |
-| `disputa_emissao.criar_disputa_a_partir_de_chamados_orfaos` | Pode fechar, salvo abstenção por ata. (`app/chamados/services/disputa_emissao.py:1278`; `app/chamados/services/disputa_emissao.py:1284`.) |
-| `disputa_emissao._resolver_perguntas_por_chamado_resolvido` | Fecha, com proteção de pergunta em voo. (`app/chamados/services/disputa_emissao.py:2096`; `app/chamados/services/disputa_emissao.py:2098`; `app/chamados/services/disputa_emissao.py:2099`.) |
-| `entrada_sincronizada.resolver_cobranca_da_entrada` | Fecha. (`app/ponto/services/entrada_sincronizada.py:59`; `app/ponto/services/entrada_sincronizada.py:60`.) |
-| `becos.fechar_beco` | Fecha. (`app/chamados/services/becos.py:56`; `app/chamados/services/becos.py:57`.) |
-| `competencia_trancada.encerrar` | Fecha após seleção e nova conferência. (`app/chamados/services/competencia_trancada.py:227`; `app/chamados/services/competencia_trancada.py:229`.) |
-| `relatorios_disputa.classificar`; `explicador.por_que_nao_fecha`; `becos.classificar`; `competencia_trancada.medir` | Somente classificação/leitura/seleção. (`app/chamados/relatorios_disputa.py:24`; `app/chamados/services/explicador.py:147`; `app/chamados/services/becos.py:33`; `app/chamados/services/competencia_trancada.py:178`.) |
-
-Os dois chamadores da cauda são o laço normal e `passivo_validado.reparar`. No passivo, **espera pura não fecha por essa cauda**: a disputa só entra no mapa após algum plantio aceito. Espera mais outro sucesso na mesma disputa pode alcançar o fechamento. (`app/chamados/services/materializacao.py:1886`; `app/chamados/services/passivo_validado.py:413`; `app/chamados/services/passivo_validado.py:537`; `app/chamados/services/passivo_validado.py:542`; `app/chamados/services/passivo_validado.py:573`.)
-
-**5. Classes de reprovação**
-
-- **Segundo juiz registrado: duvidoso.** `_declarado_da_metade` deriva o tipo declarado pelo motivo; `_tipo_pelo_marco` deriva o tipo que seria gravado. São lados distintos da comparação, não dois julgamentos do tipo gravado. Existe, contudo, repetição do mapa motivo→tipo já disponível em `MARCO_DA_PERGUNTA`. (`app/chamados/services/materializacao.py:486`; `app/chamados/services/materializacao.py:693`; `app/chamados/juizes.py:922`.)
-- **Segundo escritor fora da porta: duvidoso.** Os caminhos do par reutilizam a unidade; a brecha comprovada é uma comparação omitida dentro da porta compartilhada. (`app/chamados/services/materializacao.py:1555`; `app/chamados/services/validacao.py:463`; `app/chamados/services/materializacao.py:782`.)
-- **Relógio novo fora da borda: não identificado nos helpers adicionados.** Eles comparam texto e timestamp recebido, sem nova leitura de `now`. (`app/chamados/services/materializacao.py:690`; `app/chamados/services/materializacao.py:701`; `app/chamados/services/materializacao.py:713`; `app/chamados/services/materializacao.py:727`.)
-- **Ordem de trava: nenhuma inversão nova demonstrada.** O POST faz a primeira consulta antes da trava; a escrita repete a guarda dentro do ato, e o laço relê a pergunta depois de travar. Concorrência efetiva: **[nao verificado]**. (`app/chamados/services/validacao.py:510`; `app/chamados/services/validacao.py:549`; `app/chamados/services/materializacao.py:1684`; `app/chamados/services/materializacao.py:1875`; `app/chamados/services/materializacao.py:1876`.)
-- **Testes sem mordida: parcialmente procedente.** Há assertivas diretas para tela, POST, escrita e controle positivo do botão; não são apenas nomes RED. Porém o teste de escrita usa carimbo de materialização nulo e não cobre o passivo carimbado; execução retirando cada portão é **[nao verificado]**. (`app/chamados/tests/test_bug_par_projetado.py:1008`; `app/chamados/tests/test_bug_par_projetado.py:1019`; `app/chamados/tests/test_bug_par_projetado.py:1032`; `app/chamados/tests/test_bug_par_projetado.py:1171`.)
-- **Teste da Central com conclusão excessiva: procedente.** Depois do fechamento, exige apenas ausência de “Tudo validado e gravado”. O desenlace já retorna antes para chamado terminal; portanto essa assertiva não prova que a Central compreende a espera. Antes de fechar, C7 pode liberar e o desenlace ainda emitir aquela frase, pois o explicador só marca `gravou=False` para os estados de recusa, não para espera. (`app/chamados/tests/test_bug_par_projetado.py:1046`; `app/chamados/tests/test_bug_par_projetado.py:1050`; `app/chamados/services/desenlace.py:48`; `app/chamados/services/desenlace.py:63`; `app/chamados/services/desenlace.py:72`; `app/chamados/services/explicador.py:93`; `app/chamados/services/explicador.py:102`.)
-- **Vocabulário/selo incompleto: procedente.** O novo estado retornado não foi acrescentado a `validacao.ESTADOS`; o selo só reconhece valores literais, deixando passar o retorno por constante. (`app/chamados/services/validacao.py:55`; `app/chamados/services/validacao.py:514`; `app/chamados/tests/test_porta_validacao_pergunta.py:155`.)
-- **`indisponivel` × `None`: distinção local correta, cobertura desigual.** No modal, exceção vira indisponibilidade restritiva; `None` continua sendo fora de escopo. O card não possui a mesma captura. (`app/chamados/services/fio.py:375`; `app/chamados/services/fio.py:379`; `app/chamados/services/materializacao.py:780`; `app/templates/chamados/partials/modal_fio.html:274`; `app/chamados/templatetags/chamados_tags.py:126`.)
-
-**6. Contraexemplo de formato**
-
-**Procedente — os domínios aceitos diferem.** Com marco S139 `12:00`, uma resposta legada `12:00:00` produz timestamp pelo marco, mas `_declarado_da_metade` rejeita os três componentes e devolve `None`; a comparação retorna espera. Chamar isso de **espera falsa é duvidoso**, porque a porta normal exige HH:MM e rejeita segundos. (`app/chamados/services/materializacao.py:652`; `app/chamados/services/materializacao.py:658`; `app/chamados/services/materializacao.py:695`; `app/chamados/services/materializacao.py:707`; `app/chamados/services/disputa_emissao.py:1448`.)
-
-No sentido inverso, `24:00` e `01:60` são normalizados pelo novo helper, mas `datetime.time` rejeita quando o texto é a fonte do plantio. A entrada humana verifica formato, sem verificar faixa. Isso demonstra assimetria de validação, mas não igualdade falsa com uma hora gravável válida. (`app/chamados/services/materializacao.py:696`; `app/chamados/services/materializacao.py:659`; `app/chamados/services/disputa_emissao.py:1448`; `app/chamados/services/materializacao.py:707`.)
-
-## 13/11 21:51 · sessao ddef20ed25b9 · - · - · origem=Ronald (tmux)
-
-**Procedente — o passivo pode gravar divergência apesar de chamar o helper.** O helper consulta a testemunha, mas ela retorna `aplicada` para `materializada_em` preenchido antes de derivar/comparar; assim `_espera_do_aval_163` não roda (`app/chamados/services/materializacao.py:727`, `:782`, `:818`, `:832`).
-
-Contraexemplo por leitura: `intervalo_saida/hora`, `validada_em` e `materializada_em` preenchidos, via `declaracao`, resposta `12:20`, marco `S 12:00`, apenas batida `E 08:00`, competência aberta e sem irmã respondida. O passivo seleciona perguntas validadas independentemente do carimbo e classifica a ausência de batida como `sem_plantio_nenhum`; preserva o carimbo e chama a unidade (`app/chamados/services/vigia_carimbo.py:97`, `:106`, `:116`; `app/chamados/services/passivo_validado.py:327`, `:353`, `:534`, `:537`). A unidade recebe espera vazia, deriva pelo marco e registra `S 12:00`; não há vizinha S, e fechar E08/S12 reduz a geometria incompleta, evitando rollback (`app/chamados/services/materializacao.py:649`, `:658`, `:1224`, `:1253`, `:1323`, `:1684`; `app/chamados/services/passivo_validado.py:557`). Execução completa desse caso e existência em produção: **[nao verificado]**.
-
-**Demais caminhos rastreados:**
-
-- `_gravar_irma_do_par` chama `_materializar_uma(q)`; `_validar_o_par` carimba a irmã pelo escritor canônico e chama `_materializar_uma(p)` (`app/chamados/services/materializacao.py:1555`; `app/chamados/services/validacao.py:461`, `:463`).
-- O único chamador produtivo encontrado de `_materializar_resposta_hora` é `_materializar_uma`; `models.py` apenas reexporta o símbolo (`app/chamados/services/materializacao.py:1695`; `app/chamados/models.py:4174`).
-- Folga reconhece `FOLGA_CONTESTA`, declara o dia e carimba a pergunta; não registra hora de intervalo (`app/chamados/services/validacao.py:300`, `:354`, `:362`, `:386`, `:387`, `:395`).
-- `data_hora` tem ramo distinto: interpreta a data/hora textual e registra E com origem `disputa_ancora`; a seleção depende de `tipo_resposta == 'data_hora'` (`app/chamados/services/materializacao.py:1412`, `:1419`, `:1425`, `:1696`).
-- O reconciliador não registra batidas; sua lavra `sem_turno_aberto` exclui intervalos pelo conjunto de motivos e recusa pergunta com texto (`app/chamados/reconciliador.py:333`, `:363`, `:365`, `:406`).
-- Management: `validar_classe_a` usa `validar_pergunta`; `backfill_fio_morto_e4b` usa o laço; `materializar_passivo_validado` usa `reparar`, portanto alcança o bypass acima (`app/chamados/management/commands/validar_classe_a.py:100`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:147`; `app/chamados/management/commands/materializar_passivo_validado.py:113`).
-- A materialização S144 ao fechar disputa grava somente carimbos após aprovação do lastro, sem criar batida (`app/chamados/services/materializacao.py:1935`, `:1939`).
-
-## 13/11 21:51 · sessao 26f9615c2c31 · - · - · origem=Ronald (tmux)
-
-- **Procedente — C7 fecha disputa com resposta validada que ficou em espera**, desde que as demais perguntas também não segurem o fechamento: `respostas_sem_veredito` exige `validada_em is None` ([models.py:1848](/home/ronald/codex_ws/423c6dc8c121b65e8fd36afa924ed9b242e1a858/app/chamados/models.py:1848)); C6 retorna morta imediatamente com validação preenchida ([juizes.py:1401](/home/ronald/codex_ws/423c6dc8c121b65e8fd36afa924ed9b242e1a858/app/chamados/juizes.py:1401)); espera retorna preservando essa validação ([materializacao.py:1684](/home/ronald/codex_ws/423c6dc8c121b65e8fd36afa924ed9b242e1a858/app/chamados/services/materializacao.py:1684)); o laço sempre chama a cauda, independentemente dos erros ([materializacao.py:1886](/home/ronald/codex_ws/423c6dc8c121b65e8fd36afa924ed9b242e1a858/app/chamados/services/materializacao.py:1886)); a cauda fecha por C7 sem consultar espera/erros ([materializacao.py:1789](/home/ronald/codex_ws/423c6dc8c121b65e8fd36afa924ed9b242e1a858/app/chamados/services/materializacao.py:1789)).
-
-- **Precisão do passivo:** espera pura não põe a disputa no mapa que recebe a cauda: `_plantar_o_dia` adiciona `tmp['disputas']` apenas se `_pela_irma` ou `_materializar_uma` retornar verdadeiro (`app/chamados/services/passivo_validado.py:537-543`), transfere os sucessos após a guarda geométrica (`:573-575`) e `reparar` fecha somente esse mapa (`:411-414`). Portanto o passivo pode fechar uma disputa contendo espera se outra pergunta da mesma disputa tiver sucesso; o laço normal da disputa pode fechar mesmo com zero materializações (`app/chamados/services/materializacao.py:1884-1887`).
-
-- **Todos os chamadores produtivos de `pode_fechar` encontrados por AST, com função e linha:**
-  - `reconciliador.py::lavrar_sem_turno_aberto`, `app/chamados/reconciliador.py:412`, fecha em `:413`.
-  - `reconciliador.py::retratar_perguntas_absolvidas_por_celula`, `:612`, fecha em `:613`.
-  - `reconciliador.py::encerrar_orfas_pela_lampada`, `:1171`, fecha em `:1172`.
-  - `relatorios_disputa.py::classificar`, `app/chamados/relatorios_disputa.py:24`, somente classificação.
-  - `entrada_sincronizada.py::resolver_cobranca_da_entrada`, `app/ponto/services/entrada_sincronizada.py:59`, fecha em `:60`.
-  - `materializacao.py::_materializar_ausencia_de_resposta`, `app/chamados/services/materializacao.py:963`, fecha em `:964`.
-  - `materializacao.py::_fechar_disputa_se_quitada`, `:1789`, fecha em `:1806`.
-  - `disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos`, `app/chamados/services/disputa_emissao.py:1278`, fecha em `:1284`, salvo abstenção por ata (`:1279-1282`).
-  - `disputa_emissao.py::_resolver_perguntas_por_chamado_resolvido`, `:2098`, fecha em `:2099`, salvo pergunta em voo (`:2096-2097`).
-  - `explicador.py::por_que_nao_fecha`, `app/chamados/services/explicador.py:147`, somente leitura.
-  - `competencia_trancada.py::medir`, `app/chamados/services/competencia_trancada.py:178`, somente seleção.
-  - `competencia_trancada.py::encerrar`, `:227`, fecha em `:229`.
-  - `becos.py::classificar`, `app/chamados/services/becos.py:33`, somente classificação.
-  - `becos.py::fechar_beco`, `:56`, fecha em `:57`.
-
-- **Todos os chamadores produtivos da cauda:** `materializar_perguntas_validadas_da_disputa` em `app/chamados/services/materializacao.py:1886`; `passivo_validado.reparar` em `app/chamados/services/passivo_validado.py:413`. Outros fechadores acima também aceitam a pergunta já validada se seu caminho externo chegar à disputa e as demais guardas permitirem; somente o laço normal demonstradamente alcança a cauda após espera pura (`materializacao.py:1884-1887`).
-
-- **Procedente — significado histórico múltiplo já existente:** help text de `materializada_em` diz “batida criada + chamado fechado” (`app/chamados/models.py:3445-3447`), mas a testemunha reconhece carimbo de recusa sem batida (`app/chamados/services/materializacao.py:773-779`); `via_resolucao` é necessária para distinguir o resultado. O diff não cria esse duplo significado; preserva a recusa antiga e acrescenta estado transitório de espera (`materializacao.py:1680-1687`).
-
-- **Escritores e leitores relevantes dos cinco campos:**
-  - `resposta_colab`: resposta humana em `app/chamados/services/disputa_emissao.py:1467-1508`; resposta automática em `:1659-1664`; limpeza na reabertura em `:1595` através de `PerguntaDisputa.descarimbar_em_lote` (`app/chamados/models.py:3306-3308`). Consumidores deste complemento: parser de plantio (`materializacao.py:652-659`), novo normalizador (`:695-696`), comparador (`:705-710`), contador (`:249-262`), C6 (`juizes.py:1385-1429`) e C7 (`models.py:1848-1851`).
-  - `recusa_motivo`: materializador `_carimbar_recusa` (`materializacao.py:1500-1520`), pendência de tipo (`:1228`), recusa humana (`validacao.py:715-721`), escape humano (`disputa_emissao.py:1497-1508`) e duplicata via porta do modelo (`fio.py:1402`; `models.py:3213-3216`). Portanto não significa apenas recusa de plantio; o próprio arquivo documenta múltiplos donos (`fio.py:32-33`). Contador traduz texto pelo catálogo para selecionar PARIDADE (`materializacao.py:258-262`), sem presumir que qualquer motivo seja paridade.
-  - `validada_em`: assinatura da validação em `validacao.py:129-143`; devoluções em `:201-207` e `:271-277`; resposta nova zera em `disputa_emissao.py:1480-1482`; reabertura zera em `:1595`; autoassinatura do materializador pela porta `carimbar(resposta='validar')` em `models.py:3160-3163`. Leitores C6/C7 interpretam qualquer valor preenchido como veredito (`juizes.py:1401-1402`; `models.py:1848`), mesmo quando escrita recusada por espera.
-  - `materializada_em` + `via_resolucao`: atribuição central do trio em `models.py:3123-3127`; portas `carimbar` (`:3129-3183`) e `carimbar_identidade` (`:3194-3216`); desfazimento em lote (`:3306-3308`). Exceções de troca somente de via já existentes: `models.py:3317-3318` e `services/relavra_via.py:125-128`. Leitores relevantes são testemunha (`materializacao.py:773-783`), contador (`:327-330`), C6 (`juizes.py:1386-1445`), C7 (`models.py:1848`), fila de materialização (`materializacao.py:1863-1867`) e explicador (`explicador.py:93-105`).
-
-- **Estado transitório e contador:**
-  - `estado_aplicacao` é atributo em memória escrito em `app/chamados/services/fio.py:374` ou, na exceção, `:379`; dict canônico é produzido por `materializacao.py:764-837`. `None` significa fora de escopo em `:780-781`; `indisponivel` significa exceção capturada pela casca (`fio.py:375-379`), e só o modal recebe essa tradução (`modal_fio.html:246-248,268-275`). Card consulta diretamente o filtro (`_pergunta_card.html:43` → `chamados_tags.py:126-127`), portanto exceção ali não vira o mesmo dict.
-  - `espera_declarado` é lista de **perguntas** `(pk, detalhe)`, não de pares nem disputas: `materializacao.py:337-347`; entra na soma do universo em `:344`. Em código produtivo, consumidor encontrado do contador é `management/commands/bug_par_103.py:44`, que lê `bug_par_103`, `universo` e `total_aval` (`:45,:62-63`), mas não apresenta a nova chave. Teste lê explicitamente a chave em `test_bug_par_projetado.py:1054-1058`.
-  - Configuração da cópia usa `TIME_ZONE='America/Sao_Paulo'` e `USE_TZ=True` (`app/config/settings/base.py:93-95`); comparação nova usa hora local HH:MM (`materializacao.py:703-707`), excluindo data civil. Carimbos são instantes de atos (`validacao.py:136-143`; `models.py:3150-3163`), e `data_evento` é dia do fato (`models.py:2472-2477`).
-
-- **Procedente — lacuna de leitura da espera no explicador:** só consulta estado de aplicação quando `_pergunta_materializada_de_fato` é verdadeiro e só marca `gravou=False` para `ESTADOS_DE_RECUSA` (`app/chamados/services/explicador.py:93-104`). Validação legada em espera sem batida cai em `_explicar_validada` (`:105-108`), cujo ramo sem vizinha mas com batidas no dia atribui CADASTRO (`:43-59`). O teste novo reconhece a consequência no comentário (`app/chamados/tests/test_bug_par_projetado.py:1044-1048`) e apenas proíbe “Tudo validado e gravado” depois do fechamento (`:1050`); não exige disputa aberta nem presença do rótulo de espera.
-
-- **Limite dessa prova do selo:** `desenlace` ainda emite “Tudo validado e gravado” se C7 permite fechar e nenhum item tem `gravou=False` (`app/chamados/services/desenlace.py:63-73`); para chamado terminal ele retorna antes (`:48-49`). Logo a ausência da frase após o laço não prova que o explicador entenda espera; pode decorrer do fechamento do pai. Execução e mutantes: [nao verificado].
-
-_4890 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4894 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
