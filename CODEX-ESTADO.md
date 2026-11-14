@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 15:20** · publicado em **14/11/2026 15:22** (UTC-3)
+> Ultima resposta processada: **14/11/2026 15:39** · publicado em **14/11/2026 15:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 15:39 · sessao 3eb93b59aecc · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
+
+Corrigi o lado **TESTE** nos três casos: [nao verificado]
+
+- **(a)** I agora encerra pela porta real, sem pergunta ancorada; depois nasce P e o reaponte para G continua exigido. Nenhuma guarda é substituída. [ORM:181](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/chamados/tests/test_bo_disputa_c22_orm.py:181)
+- **(b)** A fixture antiga perdia elegibilidade e retornava `None` antes de criar disputa. Agora invalida somente a data do marco, preserva tipo/hora e exige disputa produzida e fechada. [ORM:300](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/chamados/tests/test_bo_disputa_c22_orm.py:300)
+- **(c)** Dona/local empatavam no relógio congelado. Agora a local é efetivamente posterior e o teste verifica o pedido G na porta real, mantendo **uma trilha**. A seleção efetiva na execução anexada é [nao verificado]. [ORM:116](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/chamados/tests/test_bo_disputa_c22_orm.py:116) [nao verificado]
+
+A guarda grava `valor_depois={'chamado_destino_atual': I.pk, 'chamado_destino_pedido': G.pk}`; `models._nascer` evita duplicar essa chave. [fio:790](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/chamados/services/fio.py:790), [models:2990](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/chamados/models.py:2990)
+
+Foram tocados quatro arquivos: teste ORM, suplemento em memória, mutações e entrega. Motivos, três hipóteses e comandos individuais estão no [inventário](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/docs/BO_DISPUTA_C23_ENTREGA.txt:5). [nao verificado]
+
+Em memória: **8 testes verdes**, RED da fixture base com **1 failure/0 errors**, nove mutantes mortos por assertion e seis contrastes anteriores verdes. [Resultados e comandos](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/docs/BO_DISPUTA_C23_ENTREGA.txt:60) [nao verificado]
+
+Certificação ORM: **[nao verificado]**, reservada à sessão. Ruff indisponível (`No module named ruff`); lint limpo: **[nao verificado]**. [Limites](/home/ronald/wt-codex-bo-disputa-sem-pergunta-152912/app/docs/BO_DISPUTA_C23_ENTREGA.txt:87)
 
 ## 14/11 15:20 · sessao 5573ac6b03cc · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -528,22 +544,4 @@ Os MORDEs provam menos que a promessa:
 | **Selo sem mordida** | **PROCEDENTE na ligação com o instalado:** a mordida funcional está na fixture; o wrapper real passa por inspeção textual. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:24,40,55,74–81`) |
 | **ALVO com dois significados** | **nada no caminho normal:** significa revisão-fonte, seja ponta do push ou objeto sintético. O defeito demonstrado é o seletor ambiental que pode trocar indevidamente o caminho de julgamento. (`P bin/tests/test_lei_akita.sh:21–24,76–78,507–512,998`) |
 
-## 14/11 14:50 · sessao b39e0829dc2b · - · - · origem=Ronald (tmux)
-
-Referências **B** = arquivo da cópia/base; **P** = linhas resultantes do diff fornecido.
-
-- **1 — nada na extração do PUSH, isoladamente.** `julgar_commit` conserva os comandos de merge, raiz, `--no-renames`, `-z` e a chamada de `medida_do_commit`; o laço conserva os filtros de duplicatas antes e exceção nominal depois. Apenas relê mensagem/pais do SHA. [B `bin/tests/test_lei_akita.sh:458`; B `bin/tests/test_lei_akita.sh:468`; P `bin/tests/test_lei_akita.sh:408`; P `bin/tests/test_lei_akita.sh:490`; P `bin/tests/test_lei_akita.sh:500`]
-
-- **3 — itens 1–3 executam, mas não decidem o modo commit.** O script não tem `errexit`; essas verificações só incrementam `falhas`. O modo commit redireciona stdout e retorna antes do tratamento final desse contador. Vocabulário executa efetivamente antes do ramo commit e rejeita GLOSSARIO/NORTE ilegíveis; `producao`, catraca e MORDE não são chamados nesse caminho. [B `bin/tests/test_lei_akita.sh:16`; B `bin/tests/test_lei_akita.sh:24`; B `bin/tests/test_lei_akita.sh:35`; B `bin/tests/test_lei_akita.sh:100`; B `bin/tests/test_lei_akita.sh:129`; P `bin/tests/test_lei_akita.sh:23`; P `bin/tests/test_lei_akita.sh:507`; P `bin/tests/test_lei_akita.sh:996`]
-
-- **ALVO: nada quanto a campo com dois significados, no caminho normal.** É a revisão que fornece o vocabulário: ponta do push ou objeto sintético do commit. O shell força `LEI_AKITA_HEAD="$LEI_AKITA_COMMIT"` para o Python. `medida_do_commit` continua consultando `h`, independentemente do ALVO global. [B `bin/tests/test_lei_akita.sh:74`; B `bin/tests/test_lei_akita.sh:76`; B `bin/tests/test_lei_akita.sh:296`; P `bin/tests/test_lei_akita.sh:998`]
-
-- **PROCEDENTE — nasce seletor ambiental que pode desviar o juiz do PUSH.** O pre-push força apenas `LEI_AKITA_HEAD`; um `LEI_AKITA_COMMIT=<SHA válido aprovado>` herdado ativa o novo modo, troca o alvo e evita universo, catraca e itens 1–3. Não há evidência de uso em produção. [B `bin/pre-push.sh:38`; P `bin/tests/test_lei_akita.sh:23`; P `bin/tests/test_lei_akita.sh:507`; P `bin/tests/test_lei_akita.sh:998`; produção: **[nao verificado]**]
-
-- **PROCEDENTE — segundo reconhecedor divergente produz verde vazio.** O gate `grep` retorna “sem linha”, mas `tem_linha` do juiz retorna verdadeiro para `titulo\rLEI-AKITA: padrao=Inventado\n`, `titulo\vLEI-AKITA: ...` e prefixo NBSP. Verifiquei as expressões em memória, sem arquivos; `git stripspace -s` preserva esses bytes. O hook sai antes de chamar o juiz; o juiz do PUSH reconhece tais linhas. [P `bin/commit_msg.sh:17`; B `bin/tests/test_lei_akita.sh:354`; B `bin/tests/test_lei_akita.sh:339`]
-
-- **PROCEDENTE condicional — `LEI_AKITA_MORDE=1` herdado troca o vocabulário.** O Python fixa ALVO em HEAD quando MORDE está ativo; o ramo commit roda antes do ramo MORDE. Assim pode julgar o SHA sintético com vocabulário do HEAD. A ocorrência desse ambiente em produção não foi demonstrada. [B `bin/tests/test_lei_akita.sh:68`; B `bin/tests/test_lei_akita.sh:74`; P `bin/tests/test_lei_akita.sh:507`; P `bin/tests/test_lei_akita.sh:513`; produção: **[nao verificado]**]
-
-Coordenadas P conferidas por contagem das alterações: início `+2`, extração `+30`, substituição de 14 linhas por uma `−13`, ramo commit Python `+6`, total `+25`; `julgar_commit:408–430`, ramo Python `507–512`, ramo shell `996–1002`. [diff fornecido: **[nao verificado por arquivo físico]**] [nao verificado]
-
-_5173 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5174 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
