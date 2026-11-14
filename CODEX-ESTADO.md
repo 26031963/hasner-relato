@@ -1,7 +1,92 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **13/11/2026 20:40** · publicado em **13/11/2026 20:43** (UTC-3)
+> Ultima resposta processada: **13/11/2026 20:52** · publicado em **13/11/2026 20:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 13/11 20:52 · sessao 406035113e6f · E3-FORMA-SQL · construtor · origem=Code
+
+Cura escrita: o fio publicado considera somente ações cuja porta está na fila; C em `decidir` conserva fio `chamado` quando a ação administrativa está sob D fora da fila. Sem porta publicada, o fio interno da E2 foi preservado. ([tarefa_do_dia.py:579](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:579)) [nao verificado]
+
+| Teste | Classe | Arquivo:linha | O que mudou | Mutante que morde | [nao verificado]
+|---|---|---|---|---|
+| `RED_8_chamado_da_celula_sem_acao_exigivel_nao_e_canal` | I | [bloqueantes:148](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_bloqueantes.py:148) | Exige `porta_fila` e saída do contador sem canal; comentário cita o aval. | `omitir_vivos` |
+| `AB_categorizado_e_diff_por_consumidor` | I | [diff:170](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_diff_sombra.py:170) | Exige igualdade com C17, mantendo universo não vazio. | `omitir_vivos` |
+| `RED_contraex1_chamado_da_celula_na_fila_sem_pergunta_NAO_e_porta` | I | [beco:166](/home/ronald/wt-codex-e3-forma-sql-195919/app/escala/tests/test_f3_beco1_folga_na_lista.py:166) | Exige porta completa e ausência no beco; comentário cita o aval. | `omitir_vivos` |
+| `MORDE_destino_registrado_o_verbo_de_C_e_o_do_painel` | II | [F5B:257](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o261e_f5b_juiz_porta.py:257) | Asserts preservados; correção dos donos em produção. | `fio_v6` |
+| `MORDE_destino_silenciado_vigente_o_verbo_de_C_e_o_do_painel` | II | [F5B:253](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o261e_f5b_juiz_porta.py:253) | Asserts preservados; mesma correção. | `fio_v6` |
+| `so_a_fila_sem_pergunta_e_chamado` | I | [F5B:159](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o261e_f5b_juiz_porta.py:159) | Exige porta e fio `chamado`, conservando a ausência de perguntas. | `omitir_vivos` |
+| `MORDE_o_mesmo_dia_so_com_chamado_na_fila_SEM_pergunta_segue_sem_porta` | I | [alcance:152](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o261e_f5_alcance.py:152) | Exige uma porta, zero mortos e soma preservada. | `omitir_vivos` |
+| `MORDE_o_papel_SEGUE_o_juiz_e_nao_uma_tabela_do_vigia` | I | [alcance:366](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o261e_f5_alcance.py:366) | Atualiza o residual; mantém a prova com `fio-xyz`. | `omitir_vivos`, `vigia_rejulga_fio` |
+| `MORDE_so_a_fila_sem_pergunta_nao_vence_o_teto_de_hoje` | I | [alcance:466](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o261e_f5_alcance.py:466) | Mesmo dia: sem porta `(0,1)`; com vivo `(1,0)`; ambas as somas conferidas. | `omitir_vivos`, `teto_antes_porta`, `teto_removido` |
+| `chamado_vivo_SEM_porta_da_tarefa_nao_e_canal` | I | [O66:105](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_o66_furo_sem_canal.py:105) | Exige saída da amostra e uma porta de fila. | `omitir_vivos` |
+| `fachada_candidata_conserva_campos_exigiveis` | III | [diff:131](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_diff_sombra.py:131) | Compara os quatro campos protegidos e exige `nao_sei` separadamente, em `True` e `False`. O campo permanece publicado conforme o aval. | `projecao_sem_nao_sei`, `projecao_fio_errado` | [nao verificado]
+| `todo_mutante_da_E3_tem_alvo_unico` | II — executor | [catraca:15](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_mutantes_alvo.py:15) | Corrige três alvos obsoletos e exige registro dos 15 mutantes v6. | `alvos_antigos`, `registro_v6_omitido` |
+
+A classificação II da última linha corresponde à quebra real do executor pela v6: foram corrigidos os alvos, sem inverter a exigência de alvo único. ([e3_mutantes.py:89](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_mutantes.py:89))
+
+Os comandos usam:
+
+```bash
+m() { env -u DJANGO_SETTINGS_MODULE PYTHONDONTWRITEBYTECODE=1 python3 -m "$@"; }
+```
+
+| Comando | Resultado observado |
+|---|---|
+| `m unittest chamados.tests.test_e3_volta7_sem_banco` | Ran 12; OK. Corpos dos selos executados com fornecedores sintéticos, sem fixtures ORM. ([executor:18](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_volta7_sem_banco.py:18)) |
+| `m chamados.tests.e3_volta7_mutantes --mutante omitir_vivos` | Controle: Ran 8, OK. Cura revertida em memória: Ran 8, FAILED=8, ERROR=0. ([saída:131](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-mutantes.out:131)) |
+| `m chamados.tests.e3_volta7_mutantes --mutante fio_v6` | Controle: Ran 2, OK. Fio v6 restaurado: Ran 2, FAILED=2, ERROR=0. ([saída:196](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-mutantes.out:196)) |
+| `m chamados.tests.e3_volta7_mutantes --mutante todos` | 12/12 mutantes detectados; cada alvo passa antes e falha por assert depois, ERROR=0. ([critério:109](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_volta7_mutantes.py:109), [saída final:502](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-mutantes.out:502)) |
+| `m chamados.tests.e3_portas_v6_mutantes --mutante todos` | **15/15 detectados**, ERROR=0; cada controle Ran 1, OK. ([saída:26](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v6-mutantes.out:26), [último:586](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v6-mutantes.out:586)) |
+| `m chamados.tests.e3_portas_regra` | Ran 10; OK. ([executor:69](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_portas_regra.py:69)) |
+
+O conjunto abaixo deu **Ran 70; OK**. ([saída:3](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-green.out:3))
+
+```bash
+m unittest \
+  chamados.tests.test_e3_tarefa_admin_sem_banco \
+  chamados.tests.test_e3_c8b_sem_banco \
+  chamados.tests.test_e3_c8c_sem_banco \
+  chamados.tests.test_e3_pos_suite_sem_banco \
+  chamados.tests.test_e3_portas_v6_sem_banco \
+  chamados.tests.test_e3_volta7_sem_banco
+```
+
+Estes laços fornecem o comando individual de cada mutante. RC 1 significa mordida válida; RC 2 significa prova inválida. ([v7:127](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_volta7_mutantes.py:127), [v6:130](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_portas_v6_mutantes.py:130))
+
+```bash
+for n in omitir_vivos fio_v6 teto_antes_porta teto_removido \
+  vigia_rejulga_fio projecao_sem_nao_sei projecao_fio_errado \
+  legado_fila_residual legado_fila_A_em_vez_B legado_rota_fila_sempre \
+  alvos_antigos registro_v6_omitido
+do
+  m chamados.tests.e3_volta7_mutantes --mutante "$n"
+done
+
+for n in razao_esconde sistema_esconde residual_A_some ancora_some \
+  ancora_so_exposta fora_da_fila_entra historico_nomeado verbo_inventado \
+  fio_unificado_pela_escada fio_residual_admin fio_residual_ignorado \
+  fio_acao_sem_porta_ignorada encerrada_rota_pergunta \
+  projecao_sem_nao_sei contador_so_sem_porta
+do
+  m chamados.tests.e3_portas_v6_mutantes --mutante "$n"
+done
+```
+
+O teto tem duas provas adicionais por assert: antecipá-lo à porta e removê-lo do controle sem porta. A remoção também amplia, em memória, a carga de permissões necessária ao ramo seguinte. ([mutação:74](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/e3_volta7_mutantes.py:74), [RED antecipação:227](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-mutantes.out:227), [RED remoção:262](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-mutantes.out:262))
+
+“Escreve” abaixo significa compor a projeção em memória. ([tarefa_do_dia.py:563](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:563))
+
+| Campo | Quem escreve/fornece | Quem lê |
+|---|---|---|
+| `rota` | `_portas_da_tarefa`, [tarefa:588](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:588) | [vigia:652](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/vigia_fio.py:652), [furo:97](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/furo_sem_canal.py:97), [diff:53](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/management/commands/diff_e3_sombra.py:53). |
+| `fila` | `alimentar_fila` fornece pertença; tarefa seleciona a lista visível: [juiz:1549](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/juizes.py:1549), [tarefa:577](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:577) | [folha:239](/home/ronald/wt-codex-e3-forma-sql-195919/app/folha/fora_da_folha.py:239), [diff:50](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/management/commands/diff_e3_sombra.py:50). |
+| `verbos` | Partição do painel; seleção pela tarefa: [verbos:52](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/verbos.py:52), [tarefa:576](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:576) | Dono residual em [tarefa:585](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:585); assinatura do [diff:144](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/management/commands/diff_e3_sombra.py:144). |
+| `fio` | Donos alcançáveis + residual + prioridade: [tarefa:581](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:581) | [folha:89](/home/ronald/wt-codex-e3-forma-sql-195919/app/folha/fora_da_folha.py:89), [vigia:653](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/vigia_fio.py:653); pauta indiretamente em [pautas:81](/home/ronald/wt-codex-e3-forma-sql-195919/app/ponto/services/pautas_dos_discordantes.py:81). |
+| `nao_sei` | `_tarefa_pura`, inclusive passivo; publicado por `porta_da_tarefa`: [tarefa:319](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:319), [projeção:598](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/tarefa_do_dia.py:598) | O contador lê a **tarefa original** em [furo:98](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/furo_sem_canal.py:98); o selo lê o campo publicado em [diff/teste:141](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/tests/test_e3_diff_sombra.py:141). | [nao verificado]
+
+O beco lê a existência da porta, sem recalcular seus campos. ([cadastro_realidade.py:497](/home/ronald/wt-codex-e3-forma-sql-195919/app/escala/services/cadastro_realidade.py:497))
+
+A tentativa dos sete módulos Django deu **Ran 7; FAILED(errors=7)** na importação, sem executar os casos ORM. Execução Django efetiva, suite completa e efeito em produção: **[nao verificado]**. ([saída:3](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-django.out:3), [resultado:94](/home/ronald/wt-codex-e3-forma-sql-195919/app/e3-v7-django.out:94)) [nao verificado]
 
 ## 13/11 20:40 · sessao 9027c836a629 · - · - · origem=Ronald (tmux)
 
@@ -1408,106 +1493,4 @@ Divergências:
 - O218 — BACKLOG afirma que a bateria e cenários continuam não escritos; placar raspado declara bateria turno/marcos de 16 cenários e 64 testes. A equivalência integral de escopo entre os dois registros é [nao verificado]. app/docs/BACKLOG.md:1214; anexo:ESTADO.md, PLACAR-ESTRUTURAL, linha BATERIA [linha não numerada].
 - GESTAO-HE-FATIA-2-LOTE-E-LIMITE — descrição pede default 10 e efeito só de tela; localização registra entrega pela O214 com default 15 e efeito real. app/docs/BACKLOG.md:1269.
 
-## 13/11 20:30 · sessao 824c5a9cccdf · - · - · origem=Ronald (tmux)
-
-| GRADE-V5-SEM-PORTAO | ESPINHA-E | Corrige a folga de vínculo encerrado preservando a folha já entregue. | - | ? (não declarada) | .++...... | REGISTRADA (construída; sem curso em 13/11) | app/docs/BACKLOG.md:844 |
-| GRADE-FOLGA-JUIZ | ESPINHA-E | Faz os leitores usarem a mesma decisão sobre folga lançada. | - | decisão GRADE-TETO | .++...~.. | REGISTRADA (construção antiga; opus reprovado) | app/docs/BACKLOG.md:845 |
-| FASE-CONFLITANTE-VINCULO-DO-DIA | INSTRUMENTO | Faz o vigia conferir o vínculo correto de cada dia. | - | GRADE-FOLGA-JUIZ | ++....... | REGISTRADA | app/docs/BACKLOG.md:846 |
-| E4-7-D4-ABERTO-SEM-TURNO | ESPINHA-E | Investiga dias que aparecem abertos sem existir turno aberto. | - | ? (não declarada) | .+....... | REGISTRADA | app/docs/BACKLOG.md:848 |
-| B3-RAIZ-DO-WRAPPER | INSTRUMENTO | Impede uma cópia de consultar o estado de contenção no lugar errado. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:849 |
-| B3-CHAVE-DA-OBRA-NOS-DOIS-CONTADORES | INSTRUMENTO | Faz os dois contadores reconhecerem a mesma identificação de obra. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:850 |
-| B3-NAO-SEI-SEM-SAIDA | INSTRUMENTO | Dá tratamento explícito ao estado de contenção que não pôde ser lido. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:851 |
-| E4-8-SAIDA-I | ESPINHA-E | Mostra na tela a mesma ausência de cobrança registrada pela célula. | - | decisão de manter ou reverter; E4-D5-PROD | .+++++++~ | PARADA (parte no ar; manter ou reverter aguarda decisão) | app/docs/BACKLOG.md:852 |
-| B3-CODEX-PREEXISTENTES | INSTRUMENTO | Corrige brechas dos controles e a publicação de zero sem leitura. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:853 |
-| CODEX-CUSTO-POR-OBRA | INSTRUMENTO | Publica o custo e o resultado das chamadas por obra. | - | CLAUDE-MD-ENXUTO; vaga de instrumento | .++...... | REGISTRADA (contrato escrito; sem brief admitido) | app/docs/BACKLOG.md:854 |
-| E4-CAL-DIA-COM-FIM-LE-A-FOLHA | ESPINHA-E | Faz o calendário mostrar a mesma pendência que a folha. | - | E4-CALENDARIO-L1 | .+....... | REGISTRADA (complemento da L1) | app/docs/BACKLOG.md:855 |
-| E4-CALENDARIO-L1 | ESPINHA-E | Faz o calendário ler o estado oficial do dia sem recalculá-lo. | casos 01–10 | ISENTO-H10; complementos da L1 | .+++~.... | PARADA (interrupção antiga fora do anexo; novo complemento registrado) | app/docs/BACKLOG.md:856; app/docs/RELATO.md:37 |
-| PARCIAL-NA-PORTA | LATERAL-ESTRUTURA | Impede cobranças indevidas de ausência parcial já no nascimento da pergunta. | - | E4-CALENDARIO-L1 | .+....... | REGISTRADA | app/docs/BACKLOG.md:857 |
-| COBPARC-ROTULO-FILA-V2 | LATERAL-ESTRUTURA | Corrige rótulos e contagens de marcos dispensados por ausência ou justificativa. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:859 |
-| COBPARC-PORTAO-PARCIAL-JUIZ-UNICO | ESPINHA-E | Faz os leitores usarem uma única regra para cobrar ausências parciais. | - | ? (não declarada) | .+....... | REGISTRADA | app/docs/BACKLOG.md:860 |
-| COBPARC-FILA-RELOGIO | LATERAL-ESTRUTURA | Faz cada ato usar um único instante ao decidir se houve fato novo. | - | resposta do padrão; mutantes; suíte | .++...... | INTERROMPIDA | app/docs/BACKLOG.md:861; anexo:interrompidas.txt:7 |
-| COBPARC-FILA-MATERIALIZACAO | ESPINHA-E | Faz a cobertura da ausência ser lida da decisão registrada na célula. | - | COBERTURA-PARCIAL-UM-JUIZ; possível PARCIAL-NA-PORTA | ......... | REGISTRADA | app/docs/BACKLOG.md:862 |
-| COBPARC-FILA-CENSO-V7 | LATERAL-ESTRUTURA | Corrige leitores restantes que interpretam ausências parciais por caminhos diferentes. | - | COBERTURA-PARCIAL-UM-JUIZ; autorização para dinheiro | ......... | REGISTRADA | app/docs/BACKLOG.md:863 |
-| COBPARC-FILA-V8-PARCIAL-DEMISSAO | LATERAL-ESTRUTURA | Confere a ausência parcial no dia da demissão sem batida. | - | primeira rodada do cartório após COBPARC | ......... | REGISTRADA | app/docs/BACKLOG.md:864 |
-| COBPARC-FILA-V8-VOCABULARIO | LATERAL-ESTRUTURA | Evita confundir ausência chamada justificativa com justificativa aprovada. | - | COBERTURA-PARCIAL-UM-JUIZ | ......... | REGISTRADA | app/docs/BACKLOG.md:865 |
-| COBPARC-FILA-V8-PARCIAL-JUSTIF | LATERAL-ESTRUTURA | Corrige a cobrança restante quando ausência parcial e justificativa coincidem. | - | COBPARC-FILA-RELOGIO; vaga | ......... | PARADA (construtor estacionado; cópia vazia) | app/docs/BACKLOG.md:866 |
-| COBPARC-FILA-H10-PARCIAIS-09 | LATERAL-ESTRUTURA | Trata ausências parciais antigas sem alterar silenciosamente competência entregue. | - | fato novo ou porta REGEN | .+....... | REGISTRADA | app/docs/BACKLOG.md:867 |
-| COBPARC-FILA-H10-COL926 | LATERAL-ESTRUTURA | Encaminha ao DP o caso de batida separado do pouso da ausência parcial. | - | ? (não declarada) | .+....... | REGISTRADA | app/docs/BACKLOG.md:868 |
-| E4-CALENDARIO-QUEM-PUBLICA-EH-TRABALHO | ESPINHA-E | Faz o calendário perguntar à decisão oficial se o dia é de trabalho. | - | E4-CALENDARIO-L1, passo 3 | .++...... | REGISTRADA (obra antiga; sem curso em 13/11) | app/docs/BACKLOG.md:869 |
-| D5-VIA-NULA | ESPINHA-E | Impede completar o estado do dia por uma via sem identificação. | - | ? (não declarada) | +........ | REGISTRADA | app/docs/BACKLOG.md:870 |
-| E4CAL-P1-REVERTER-AMPLO | INSTRUMENTO | Permite desfazer todos os campos alterados pela porta de preenchimento do estado. | - | D5-VIA-NULA | ......... | REGISTRADA | app/docs/BACKLOG.md:871 |
-| E4CAL-P1-PAREI-FM-CORRENTE | INSTRUMENTO | Evita falso alarme ao comparar a folha corrente que continua mudando. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:872 |
-| E4CAL-P1-SELO-CAMPOS-ACORDAM | INSTRUMENTO | Faz o teste detectar eventos ou auditoria alterados fora do esperado. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:873 |
-| E4CAL-P1-ROTULO-SEM-CERTIDAO | ESPINHA-E | Investiga células com estado preenchido e rótulo antigo de falta de certidão. | - | medir dono L-099 | ......... | REGISTRADA | app/docs/BACKLOG.md:874 |
-| E4CAL-P3-ULTIMO-RECURSO-ENGOLE | ESPINHA-E | Impede o calendário de esconder falhas na decisão sobre o dia. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:875 |
-| E4CAL-P3-CENSO-HOJE-PORTA-CURTA | ESPINHA-E | Faz a porta curta receber o mesmo relógio usado pelo censo. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:876 |
-| E4CAL-P3-LEITURA-ESCREVE | ESPINHA-E | Evita que a simples consulta do calendário tente materializar perguntas. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:877 |
-| E4CAL-P3-DOCS-VELHAS | INSTRUMENTO | Atualiza comentários e registros que ainda descrevem a decisão antiga do calendário. | - | pouso da L1 | ......... | REGISTRADA (complemento não incluído no pouso) | app/docs/BACKLOG.md:879; app/docs/RELATO.md:1775 |
-| PAREADOR-JANELA-ORFA | ESPINHA-E | Faz o mesmo dia receber a mesma decisão em consulta mensal ou isolada. | - | ? (não declarada) | ...~..... | PARADA (RED antigo estacionado) | app/docs/BACKLOG.md:880 |
-| E4CAL-CARD-LE-NUCLEO | ESPINHA-E | Faz os cartões do calendário usarem os rótulos oficiais do núcleo. | - | retomada da L1 | ......... | REGISTRADA | app/docs/BACKLOG.md:881 |
-| STATUS-ESCALA-SUSPEITA-VOCAB | ESPINHA-E | Corrige o rótulo que diz ausência de batida quando existe batida. | - | aval para mudar a lavra | ......... | PARADA (depende de aval) | app/docs/BACKLOG.md:882 |
-| A2-RAISE-NO-FUROS | ESPINHA-E | Evita erro de tela quando a regra A2 recusa um estado do dia. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:883 |
-| TT6-PENDENTE-VELHO | INSTRUMENTO | Reconcilia a descrição da pendência TT6 com a mudança do calendário. | - | conferir L-118 após L1 | ......... | REGISTRADA | app/docs/BACKLOG.md:884 |
-| E4-APP-MAPA | ESPINHA-E | Faz o aplicativo mostrar o estado oficial do dia por um único adaptador. | - | leitores 1–3 da E4 | .+++++.++ | NO AR hoje (pouso de 04/11 relatado; BACKLOG antigo) | app/docs/BACKLOG.md:885; app/docs/RELATO.md:1720; app/docs/RELATO.md:1718 |
-| CONTENCAO-QUE-MORDE-V2 | INSTRUMENTO | Aplica controles de voltas, agentes, revisão e certificação antes dos pousos. | - | contrato 20; contrato novo | .+++..~.. | PARADA (estacionada por aval) | app/docs/BACKLOG.md:889 |
-| CONTENCAO-V2-HORA-DE-LINHA | INSTRUMENTO | Impede publicar horários futuros também em linhas de lista. | - | CONTENCAO-QUE-MORDE-V2 | .+....... | REGISTRADA | app/docs/BACKLOG.md:890 |
-| V3-DOBRA-SEM-NOTURNA | CEREJA | Corrige a dobra do calculador mantendo o motor e a folha exportada estáveis. | - | localizar residual LMT | ..++..++~ | REGISTRADA (parte no ar; residual LMT pendente) | app/docs/BACKLOG.md:891 |
-| V3-LAVRAR-ATRASO-CREDITO | CEREJA | Preserva o desconto do crédito ao gravar o atraso calculado. | - | medir frota | ......... | REGISTRADA | app/docs/BACKLOG.md:892 |
-| O261-E-CELULA-20-UM-DONO | ESPINHA-E | Garante que perguntas vivas tenham um caminho disponível para alguém agir. | - | decisões da F3; etapas F4–F5 | ++++++++~ | PARADA (F1–F2 no ar; F3 aguarda desenho) | app/docs/BACKLOG.md:893 |
-| O261-E-PAI-TERMINAL-RESIDUAL | ESPINHA-E | Trata o que falta da ligação entre pergunta e chamado vivo por dia. | - | corte da tabela de triagem | +........ | PARADA (não entra na ordem antes do corte) | app/docs/BACKLOG.md:894 |
-| O261-E-F5B-JUIZ-PORTA-ALCANCAVEL | ESPINHA-E | Faz os leitores concordarem sobre o caminho para agir no dia. | - | antes da F5 por código; posição diverge na célula | .+....... | REGISTRADA | app/docs/BACKLOG.md:895 |
-| O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | ESPINHA-E | Nomeia a decisão que identifica uma pergunta cujo clique já não produz efeito. | - | registro do juiz com corte | .+....... | REGISTRADA | app/docs/BACKLOG.md:896 |
-| O261-E-F5C-FILA-DO-OPUS | ESPINHA-E | Corrige divergências restantes entre fila, auditoria, responsáveis e caminhos de ação. | - | cortes F5C-1 e F5C-2 | ......... | REGISTRADA | app/docs/BACKLOG.md:897 |
-| E1-PERGUNTA-AO-DP-CONTADOR | ESPINHA-E | Obtém as respostas pendentes sobre horas extras, intervalo e convenção. | - | resposta do DP/contador | .+....... | PARADA (três respostas pendentes) | app/docs/BACKLOG.md:898 |
-| E1-STATUS-VERMELHOS | ESPINHA-E | Corrige pela E3 e E4 os leitores reprovados na certificação do estado. | - | E3/E4; um leitor por pouso | .+....... | REGISTRADA | app/docs/BACKLOG.md:899 |
-| V-FASE-AS-OF-TRANSFERIDO | LATERAL-ESTRUTURA | Usa a empresa correta do dia ao conferir fase de colaborador transferido. | - | medir transferidos | ......... | REGISTRADA | app/docs/BACKLOG.md:900 |
-| V-FASE-AS-OF-PARIDADE-UNIVERSO | LATERAL-ESTRUTURA | Faz a previsão comparada usar o mesmo conjunto de dias e folgas. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:901 |
-| V-FASE-AS-OF-CUSTO | LATERAL-ESTRUTURA | Mede o custo de procurar decisões anteriores quando falta cobertura do dia. | - | medição na sombra | ......... | REGISTRADA | app/docs/BACKLOG.md:902 |
-| V-FASE-AS-OF-CADASTRO-SEM-LINHA | ESPINHA-E | Leva ao admin os problemas de cadastro encontrados em dias passados. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:903 |
-| DEGRAU-HE-100-CADASTRO | LATERAL-ESTRUTURA | Torna configurável pela convenção o limite usado na hora extra de cem por cento. | - | cadastro e leitor na UI | .+....... | REGISTRADA | app/docs/BACKLOG.md:904 |
-| V-FASE-AS-OF-SEM-CELULA | LATERAL-ESTRUTURA | Reabre a conferência quando muda um dia passado que ficou sem célula. | - | lei SEM-CELULA | .+....... | REGISTRADA | app/docs/BACKLOG.md:905 |
-| O261-E-F1C4-LEN-VIVOS | ESPINHA-E | Faz o suprajuiz ler a cobrança já decidida na célula. | - | LENVIVOS-A6-ALARME residual | .+++++++~ | REGISTRADA (item c pousado; A6 pendente) | app/docs/BACKLOG.md:906 |
-| LENVIVOS-A6-ALARME | ESPINHA-E | Faz o alarme ler a cobrança lavrada em vez de recalculá-la. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:907 |
-| LENVIVOS-SOBRAS-ESMERIL | LATERAL-ESTRUTURA | Trata sobras de teste, alarme e cobertura do julgamento de cobrança. | - | ESMERIL-V2 | .+....... | REGISTRADA | app/docs/BACKLOG.md:908 |
-| LENVIVOS-EMITIR-INERTE | LATERAL-ESTRUTURA | Remove ou corrige um parâmetro que não interfere na emissão de cobrança. | - | ? (não declarada) | +........ | REGISTRADA | app/docs/BACKLOG.md:909 |
-| LENVIVOS-CHAVE-DO-DIA | LATERAL-ESTRUTURA | Faz emissor e cartório associarem a cobrança ao mesmo dia. | - | ? (não declarada) | +........ | REGISTRADA | app/docs/BACKLOG.md:910 |
-| LENVIVOS-COBRANCAS-VIVAS | LATERAL-ESTRUTURA | Confere se a cobrança viva recebe o mesmo filtro aplicado aos chamados vivos. | - | conferir antes da cura | +........ | REGISTRADA (candidata ainda em conferência) | app/docs/BACKLOG.md:911 |
-| O261-E-F1C4-MEMO-C6 | ESPINHA-E | Evita reutilizar uma resposta antiga após mudar a célula no mesmo ato. | - | próxima obra que tocar C6 | +........ | REGISTRADA (falha latente; caminho real não demonstrado) | app/docs/BACKLOG.md:912 |
-| MEMO-C6-BATIDAS-PREFETCH | ESPINHA-E | Confere se uma mudança de batidas deixa a decisão em memória desatualizada. | - | medir composição com transação externa | ......... | REGISTRADA (hipótese não verificada) | app/docs/BACKLOG.md:913 |
-| V-FASE-AS-OF-ATRASO | LATERAL-ESTRUTURA | Reduz o atraso entre a mudança do dia e a nova conferência da fase. | - | próxima lavra e dependências do cron | ......... | REGISTRADA | app/docs/BACKLOG.md:916 |
-| V-FASE-AS-OF-UNIVERSO | LATERAL-ESTRUTURA | Reconcilia decisões antigas quando o colaborador deixa a escala de doze por trinta e seis. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:917 |
-| V-FASE-AS-OF-SOBREPOSTA | LATERAL-ESTRUTURA | Trata janelas sobrepostas criadas por mudança do início da competência. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:918 |
-| V-FASE-AS-OF-INTRADIA | LATERAL-ESTRUTURA | Preserva versões anteriores de decisões feitas no mesmo dia. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:919 |
-| PROPOSITOR-JANELA-LONGA | LATERAL-ESTRUTURA | Mantém a proposta de escala coerente quando a consulta ultrapassa duas janelas. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:920 |
-| FILA-POR-CAUSA-AS-OF | LATERAL-ESTRUTURA | Faz a fila de chamados passados ler a decisão correspondente àquela data. | - | pouso F1/F5 | ......... | REGISTRADA | app/docs/BACKLOG.md:921 |
-| F1C4-3-NONE-LEITORES | ESPINHA-E | Faz os leitores restantes tratarem trabalho indefinido pela mesma regra central. | - | censo; um leitor por pouso | ......... | REGISTRADA | app/docs/BACKLOG.md:923 |
-| CARTORIO-PROTESTA-1A-CLAUSULA | ESPINHA-E | Define com números como o cartório deve aplicar a regra de dia sem trabalho. | - | corte sobre o novo alcance do predicado | ......... | PARADA (pergunta necessária antes da migração) | app/docs/BACKLOG.md:925 |
-| F1C4-3-RG-SEM-CELULA-CASO | INSTRUMENTO | Acrescenta o caso de teste de dia sem âncora e sem célula. | - | ESMERIL-V2 | ......... | REGISTRADA (volta antiga; sem curso em 13/11) | app/docs/BACKLOG.md:926 |
-| E3-GRADE-SUBTIPO-FOLGA | ESPINHA-E | Preserva na grade o subtipo de folga necessário ao estado oficial. | - | cura da grade fora da E3 | ......... | REGISTRADA | app/docs/BACKLOG.md:927 |
-| E3-GRADE-POR-TURNO-MEDIR | INSTRUMENTO | Mede se a opção alternativa de grade ainda é usada antes de removê-la. | - | medição do valor em produção | ......... | REGISTRADA | app/docs/BACKLOG.md:928 |
-| E3-HASH-A2 | ESPINHA-E | Faz mudanças de feriado e folga invalidarem a decisão antiga do dia. | - | E2 | ......... | REGISTRADA | app/docs/BACKLOG.md:929 |
-| EMIS-LEITORES-RESTANTES | ESPINHA-E | Migra os últimos leitores para a regra única de dia sem trabalho. | - | COBERTURA-PARCIAL-UM-JUIZ | .+.+..... | PARADA (aguarda precedência registrada) | app/docs/BACKLOG.md:930 |
-| EMIS-PAUTA-DEDUP | LATERAL-ESTRUTURA | Evita duplicar a pauta do DP em julgamentos concorrentes. | - | nova medição na sombra | ......... | REGISTRADA | app/docs/BACKLOG.md:931 |
-| EMIS-CATRACA-FLUXO | INSTRUMENTO | Faz o selo conferir o percurso completo do dado de dia sem trabalho. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:932 |
-| BUG-ENC-CELULAS-FORMA | ESPINHA-E | Corrige o formato das células repassadas ao julgamento de turnos. | - | F2; E4-CARGA-PARIDADE | ++....... | INTERROMPIDA | app/docs/BACKLOG.md:933; anexo:interrompidas.txt:9 |
-| E4-CARGA-PARIDADE | INSTRUMENTO | Prova que consulta em lote e consulta isolada carregam os mesmos dados. | - | F2; antes de BUG-ENC-CELULAS-FORMA | +........ | REGISTRADA | app/docs/BACKLOG.md:934 |
-| RELATO-ESCRITOR-FORA-DO-FLOCK | INSTRUMENTO | Faz todos os escritores do relato respeitarem a trava central. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:935 |
-| PDC-RELOGIO-NA-CLI | INSTRUMENTO | Faz a linha de comando receber o relógio na entrada da decisão. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:936 |
-| PDC-PAINEL-SEM-DUVIDA | INSTRUMENTO | Mostra quando o painel não conseguiu determinar a quantidade de disparos. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:937 |
-| E4-S4-ENCERRADOS | INSTRUMENTO | Mede o limite de consultas do painel com turnos já encerrados. | - | fixture com turno encerrado lavrado | ......... | REGISTRADA | app/docs/BACKLOG.md:938 |
-| E4-NAO-LAVRADO-PASSADO | ESPINHA-E | Corrige a apresentação de dias passados sem decisão registrada. | - | migração dos leitores E4 | ......... | REGISTRADA | app/docs/BACKLOG.md:939 |
-| GRADE-09-PAUTA | LATERAL-ESTRUTURA | Entrega ao DP a diferença entre o pago e o devido sem regravar a folha entregue. | - | GRADE-v5; ensaio e diferença medida | ......... | REGISTRADA | app/docs/BACKLOG.md:940 |
-| E3-STATUS-EXPORTADA | ESPINHA-E | Completa o estado dos dias antigos sem modificar valores pagos ou arquivos entregues. | - | pouso E3 | .+....... | REGISTRADA | app/docs/BACKLOG.md:942 |
-| ISENTO-H10-MENORES | LATERAL-ESTRUTURA | Trata leitores, testes e decisões antigas que restaram da regra de isenção. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:945 |
-| BACKFILL-UNICO | ESPINHA-E | Centraliza o tratamento de correções antigas com responsável e destino explícitos. | - | antes do último horizonte; corte de exportada | .+....... | REGISTRADA | app/docs/BACKLOG.md:947 |
-| CODS-ORFAO14H-SEM-GATILHO | INSTRUMENTO | Confere a emissão de perguntas atrasadas e corrige o nome de um teste de controle. | - | renomear o teste residual | +........ | REGISTRADA (emissão conferida; renomeação pendente) | app/docs/BACKLOG.md:948 |
-| ENCADEADO-0111-SEM-CARIMBO | INSTRUMENTO | Identifica por que etapas da corrente matinal ficaram sem prova de execução. | - | NOREVERSE-UI-NO-CORE; investigar outros carimbos | +........ | REGISTRADA (uma causa identificada; outros dias sem explicação) | app/docs/BACKLOG.md:949 |
-| DEPLOY-RELOAD-RESIDUOS | INSTRUMENTO | Corrige falhas restantes na conferência e propagação do resultado de deploy. | - | contrato de instrumento; pouso próprio | ......... | REGISTRADA | app/docs/BACKLOG.md:951 |
-| TELA-PREFIXO-SEM-GUARDA | INSTRUMENTO | Detecta mudanças de endereço que quebrariam links entre o núcleo e as telas. | - | ? (não declarada) | ......... | REGISTRADA | app/docs/BACKLOG.md:952 |
-| NOREVERSE-UI-NO-CORE | LATERAL-ESTRUTURA | Impede que a geração de links de tela derrube o processamento do núcleo. | - | resultado 6 após primeira corrente | ++++++++~ | REGISTRADA (cura no ar; resultado posterior pendente) | app/docs/BACKLOG.md:953; app/docs/RELATO.md:1810 |
-| E3-ISENTO-INSUMOS | ESPINHA-E | Faz a decisão do dia considerar a isenção de ponto na impressão dos dados. | - | ISENTO-H10 substituta | .+++..~.. | PARADA (SUPERADA por ISENTO-H10; não excluída pela lista literal) | app/docs/BACKLOG.md:954 |
-| ISENTO-PONTO-JUIZ-REGISTRADO | ESPIN
-
-[truncado em 20000 de 22468 caracteres]
-
-_4822 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4823 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
