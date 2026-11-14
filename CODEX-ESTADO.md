@@ -1,7 +1,101 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 02:24** · publicado em **14/11/2026 02:24** (UTC-3)
+> Ultima resposta processada: **14/11/2026 02:27** · publicado em **14/11/2026 02:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 02:27 · sessao 20149fde517f · E3-FORMA-SQL · verificador · origem=Code
+
+1. **[bloqueia] Falta a matriz normativa anunciada para validar integralmente as prioridades.** O anexo disponível se declara histórico da volta 1 e contém status R1–R16, mas não o contrato I1–I8 nem as linhas prescritivas originais. Ele registra R2 como “esperado admin, obtido colab”; essa descrição ficou desatualizada para o caso simultâneo simples, que agora espera e obtém `admin` no teste sem banco. A autorização das demais combinações permanece **[não verificado]**. (`app/docs/e3_v8_matriz.txt:1`; `app/docs/e3_v8_matriz.txt:5`; `app/docs/e3_v8_matriz.txt:9`; `app/chamados/tests/test_e3_portas_tarefa.py:459`)
+
+   As referências abaixo são da cópia indicada. A correspondência criptográfica com o hash informado e a comparação Git com a base são **[não verificado]**.
+
+2. **[fila] A prioridade nova depende da origem do dono; não estabelece “admin sempre vence colab”.** `_portas_da_tarefa` literalmente retorna `None` e modifica `out`; a publicação ocorre depois por `porta_da_tarefa`. O corpo elimina `colab` dos donos das ações quando há ação administrativa alcançável, acrescenta o dono residual e então escolhe `colab` primeiro. (`app/chamados/services/tarefa_do_dia.py:588`; `app/chamados/services/tarefa_do_dia.py:591`; `app/chamados/services/tarefa_do_dia.py:596`; `app/chamados/services/tarefa_do_dia.py:599`; `app/chamados/services/tarefa_do_dia.py:609`)
+
+   Na tabela, **A** são donos humanos das ações exigíveis com porta na fila; **R** são donos correspondentes aos verbos residuais, antes de a escada residual escolher um deles. `C=colab`, `A=admin`. As nove combinações abaixo cobrem a presença dos dois donos nessas fontes; acrescentar `chamado` ou `sistema` não muda a precedência humana. (`app/chamados/services/tarefa_do_dia.py:588`; `app/chamados/services/tarefa_do_dia.py:597`; `app/chamados/juizes.py:1640`)
+
+   | Donos das ações | Donos residuais | Prescrição recuperável da matriz | Docstring antes do diff | Docstring depois / resultado atual |
+   |---|---|---|---|---|
+   | nenhum | C+A | [não verificado] | colab | colab |
+   | C | A | [não verificado] | colab | colab |
+   | C | C+A | [não verificado] | colab | colab |
+   | A | C | [não verificado] | colab | colab |
+   | A | C+A | [não verificado] | colab | colab |
+   | C+A | nenhum | **R2: admin** | colab | **admin** |
+   | C+A | A | [não verificado] | colab | admin |
+   | C+A | C | [não verificado] | colab | **colab** |
+   | C+A | C+A | [não verificado] | colab | **colab** |
+
+   Fontes de todas as saídas: ações em `app/chamados/services/tarefa_do_dia.py:588`, descarte em `:591`, residual em `:596`, seleção em `:597`; escada residual em `app/chamados/juizes.py:1640`. A prescrição R2 está registrada em `app/docs/e3_v8_matriz.txt:5`. A coluna anterior deriva do trecho removido no diff fornecido; conferência na base Git **[não verificado]**.
+
+   **Contraexemplo concreto:** `validar@101 + responder@202` publica `admin`; acrescentar `303:cobrar`, residual do mesmo colab-dia, publica `colab`, conservadas as duas ações. Isso corresponde à docstring nova: fonte (1) prioriza admin entre ações; fonte (3) prioriza colab ao combinar residual. Não há divergência demonstrada entre essa docstring e o corpo; falta a prescrição independente da matriz para julgar a combinação. (`app/chamados/services/tarefa_do_dia.py:42`; `app/chamados/services/tarefa_do_dia.py:45`; `app/chamados/services/tarefa_do_dia.py:591`; `app/chamados/services/tarefa_do_dia.py:596`)
+
+   **Linhas nomeadas:** R2 é o único corpo da matriz que coloca as duas ações humanas juntas: mesma porta `101` ou portas distintas `101/202`, obtendo `admin` nos dois casos. R1 contém apenas `responder`; o verbo `validar` da mesma porta não constitui outra ação administrativa. R3 é administrativo isolado. (`app/chamados/tests/test_e3_portas_tarefa.py:441`; `app/chamados/tests/test_e3_portas_tarefa.py:459`; `app/chamados/tests/test_e3_portas_tarefa.py:463`; `app/chamados/tests/test_e3_portas_tarefa.py:473`)
+
+   R4–R5, R7–R12 e R14 não exercitam duas ações humanas simultâneas; R13 exercita a ação administrativa isolada; R15 varia uma pergunta e preserva residual `decidir`, sem afirmar `fio`; R6 está fora da obra e R16 é execução pendente. Portanto esses corpos não prescrevem as combinações adicionais da tabela. (`app/chamados/tests/test_e3_portas_tarefa.py:479`; `app/chamados/tests/test_e3_portas_tarefa.py:490`; `app/chamados/tests/test_e3_portas_tarefa.py:505`; `app/chamados/tests/test_e3_portas_tarefa.py:615`; `app/chamados/tests/test_e3_portas_tarefa.py:633`; `app/chamados/tests/test_e3_portas_tarefa.py:683`; `app/chamados/tests/test_e3_portas_tarefa.py:686`; `app/docs/e3_v8_matriz.txt:16`; `app/docs/e3_v8_matriz.txt:26`)
+
+   **Outra combinação não nomeada:** `decidir_ausencia@101 + responder@202` também passa a publicar `admin`, porque a condição nova examina apenas `de`, não `acao`. R13 fornece `decidir_ausencia`, mas testa essa ação sozinha. Justificação normativa específica dessa extensão: **[não verificado]**. (`app/chamados/services/tarefa_do_dia.py:170`; `app/chamados/services/tarefa_do_dia.py:591`; `app/chamados/tests/test_e3_portas_tarefa.py:629`)
+
+3. **[fila] Escrita e leitura dos cinco campos estão concentradas, mas os consumidores não têm todos o mesmo universo.** O mapa público é uma cópia de cinco chaves da tarefa, sem nova decisão ou persistência. (`app/chamados/services/tarefa_do_dia.py:603`; `app/chamados/services/tarefa_do_dia.py:609`)
+
+   | Campo | Quem escreve/fornece | Quem lê |
+   |---|---|---|
+   | `fio` | ações + residual, seleção final: `app/chamados/services/tarefa_do_dia.py:588`, `:597`; residual: `app/chamados/juizes.py:1645` | Folha: `app/folha/fora_da_folha.py:89`, `:236`; Vigia: `app/chamados/services/vigia_fio.py:658`; diff: `app/chamados/management/commands/diff_e3_sombra.py:143` |
+   | `nao_sei` | inicialização e causas da tarefa: `app/chamados/services/tarefa_do_dia.py:193`, `:258`, `:320` | Folha: `app/folha/fora_da_folha.py:245`; Vigia: `app/chamados/services/vigia_fio.py:651`; furo: `app/chamados/services/furo_sem_canal.py:98` |
+   | `rota` | `app/chamados/services/tarefa_do_dia.py:599` | Vigia: `app/chamados/services/vigia_fio.py:657`; furo: `app/chamados/services/furo_sem_canal.py:97`; diff: `app/chamados/management/commands/diff_e3_sombra.py:143` |
+   | `fila` | associação à célula: `app/chamados/juizes.py:1568`; filtro nomeável: `app/chamados/services/tarefa_do_dia.py:584` | Folha: `app/folha/fora_da_folha.py:241`; diff: `app/chamados/management/commands/diff_e3_sombra.py:50` |
+   | `verbos` | partição: `app/chamados/services/verbos.py:47`; transporte: `app/chamados/juizes.py:1565`; projeção: `app/chamados/services/tarefa_do_dia.py:583` | filtro de `fila` e residual: `app/chamados/services/tarefa_do_dia.py:584`, `:596`; diff: `app/chamados/management/commands/diff_e3_sombra.py:144` |
+
+   **Tela:** a Folha lê fios por dia, escolhe o grupo por colaborador e o retrato converte esse grupo no fio gravado sob `dono`; depois faz o agrupamento visual em baldes e escolhe a frase. Isso não reescreve a porta. O novo `nao_sei` não é transportado por esse caminho da tela. (`app/folha/fora_da_folha.py:190`; `app/folha/fora_da_folha.py:195`; `app/folha/retrato_folha.py:364`; `app/folha/retrato_folha.py:1187`; `app/folha/retrato_folha.py:438`; `app/folha/retrato_folha.py:481`; `app/folha/retrato_folha.py:1069`)
+
+   Pauta lê ausência de fio pela Folha; beco testa existência da projeção; backfill preserva as oito colunas antigas com `linha[:8]`. (`app/ponto/services/pautas_dos_discordantes.py:81`; `app/escala/services/cadastro_realidade.py:497`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:253`)
+
+   **Semântica e contraexemplos:**
+
+   - Dia do turno e dia civil permanecem separados: uma saída após meia-noite pode ter `data_civil` seguinte sem mudar `dia_do_turno`. A associação sem célula usa colaborador e dia forte. (`app/chamados/services/tarefa_do_dia.py:113`; `app/chamados/services/tarefa_do_dia.py:228`; `app/chamados/services/tarefa_do_dia.py:577`; `app/chamados/juizes.py:1574`)
+   - `None` significa nenhuma porta; `{}` não é saída válida. Substituir a projeção por `{}` provoca chave ausente nos leitores. Uma porta com `fila=()` continua sendo porta. (`app/chamados/services/tarefa_do_dia.py:609`; `app/folha/fora_da_folha.py:89`; `app/chamados/services/vigia_fio.py:651`; `app/chamados/services/furo_sem_canal.py:97`; `app/chamados/tests/test_e3_portas_tarefa.py:483`)
+   - Vigia deduplica colab-dia; grupos da Folha contam colaboradores; furo conta células do seu recorte. Logo comparar diretamente esses totais não prova divergência nem igualdade em produção. (`app/chamados/services/vigia_fio.py:593`; `app/folha/fora_da_folha.py:195`; `app/chamados/services/furo_sem_canal.py:79`; `app/chamados/services/furo_sem_canal.py:109`)
+
+4. **[fila] Checklist das classes reprovadoras: há limites remanescentes, sem novo defeito persistente demonstrado nos corpos alterados.**
+
+   | Classe | Resultado e contraprova |
+   |---|---|
+   | Segundo juiz duplicando registrado | **Ausente nos corpos alterados.** A projeção copia a tarefa; C17 permanece apenas no comparador. A catraca rejeita um leitor adicional. (`app/chamados/services/tarefa_do_dia.py:609`; `app/chamados/management/commands/diff_e3_sombra.py:127`; `app/chamados/tests/test_e3_pendentes_app.py:145`; `:150`) |
+   | Segundo escritor fora da porta | **Ausente nos corpos alterados.** A escrita produtiva acrescentada compõe `out` em memória. Persistência zero em integração ORM: **[não verificado]**. (`app/chamados/services/tarefa_do_dia.py:599`; `app/docs/e3_v8_matriz.txt:6`) |
+   | Relógio fora da borda | **Ausente na cadeia E3 com instante injetado; presente no legado sem instante.** `consulta_do_app` ainda omite `agora`; os fallbacks internos continuam existentes. (`app/chamados/juizes.py:1619`; `:1632`; `app/chamados/services/pergunta_no_app.py:61`; `:73`; `app/chamados/juizes.py:592`; `app/chamados/services/verbos.py:35`; `app/chamados/services/painel.py:190`) |
+   | Derivação paralela da decisão | **Ausente nos leitores alterados:** leem o mapa; sem porta, leem `nao_sei` da tarefa original. (`app/folha/fora_da_folha.py:235`; `:245`; `app/chamados/services/vigia_fio.py:644`; `:651`; `app/chamados/services/furo_sem_canal.py:98`) |
+   | Ordem de trava | **Nenhuma nova ordem de locks SQL identificada nos corpos alterados.** Os contextos usados são de consulta da tranca. Comportamento concorrente ORM: **[não verificado]**. (`app/chamados/services/pergunta_no_app.py:60`; `app/chamados/management/commands/diff_e3_sombra.py:100`) |
+   | Pouso antes do pré-requisito | Pouso efetivo **[não verificado]**. O próprio anexo deixa alcance ORM e R16 pendentes; não há prova fornecida de cumprimento desses pré-requisitos. (`app/docs/e3_v8_matriz.txt:6`; `:26`) |
+   | Campo com dois significados | **Não demonstrado para dia/porta.** Há duas origens para `verbos[pk]=None`: registro sem verbo ou membro ausente da partição. A projeção perde essa proveniência, mas conserva ambos como ausência de verbo observado; nenhum erro adicional foi demonstrado por isso. (`app/chamados/catalogo/natureza.py:63`; `app/chamados/juizes.py:1565`; `:1651`) |
+
+5. **[fila] Os dois selos destacados conservam mordida, com níveis diferentes de prova.**
+
+   **C6:** executei os três mutantes sem banco; retirar C6, retirar `q_vivas` ou retirar o instante produziu, cada um, uma falha de assert e zero erros após controle verde. O executor exige essa distinção. (`app/chamados/tests/e3_v8_volta2_selos.py:11`; `:36`; `:46`; `app/chamados/tests/test_contract_pergunta_viva.py:81`; `:84`)
+
+   **Golden:** por inspeção, a reversão “chamado vivo sem pergunta não move fio” é rejeitada: o teste cria chamado real, exige fio `chamado` e sua frase, mantém o balde e depois verifica a mudança para admin por projeção substituída. Não depende apenas da contagem do balde. Execução ORM dessa mordida: **[não verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:517`; `:522`; `:523`; `:524`; `:535`; `:541`; `:542`)
+
+6. **[fila] Expectativas alteradas: há respaldo referenciado, mas o golden não é justificado especificamente pela linha R7 fornecida.**
+
+   | Alteração | Justificação recuperável |
+   |---|---|
+   | `colab_ids` nos argumentos do alimentador | R8, ligação sem célula. (`app/chamados/tests/test_e3_portas_tarefa.py:140`; `app/docs/e3_v8_matriz.txt:18`) |
+   | F5B: `None/nada` → porta com verbo `None/chamado` | R7 explicitamente registra a inversão. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:291`; `app/docs/e3_v8_matriz.txt:17`) |
+   | Texto do relógio no diff | R11 e transmissão atual do instante. (`app/chamados/tests/test_e3_diff_sombra.py:23`; `app/docs/e3_v8_matriz.txt:21`; `app/chamados/services/pergunta_no_app.py:61`) |
+   | Assert AST do filtro C6 com `agora` | R11/L-128; preserva C6 e exige instante. (`app/chamados/tests/test_contract_pergunta_viva.py:81`; `app/docs/e3_v8_matriz.txt:21`; `app/docs/LEIS.md:149`) |
+   | Mocks acrescentam `nao_sei`; assert de repasse | Contrato aditivo/independência de R5. (`app/chamados/tests/test_e3_bloqueantes.py:188`; `app/chamados/tests/test_o261e_f5_alcance.py:372`; `app/folha/tests/test_haiku_fora_da_folha.py:154`; `app/docs/e3_v8_matriz.txt:201`) |
+   | Golden: chamado sem pergunta passa a mover fio | Cita E3-PORTA-SEM-CASO. R7 da tabela trata especificamente membro ausente da partição; I5 não foi fornecido. O respaldo geral aparece no contrato de publicação, mas o aval original está **[não verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:502`; `app/docs/e3_v8_matriz.txt:17`; `app/chamados/services/tarefa_do_dia.py:559`) |
+   | Mock golden: `decidir` → `validar`, mantendo fio admin | Ajuste de fixture; a expectativa final de admin continua explícita. (`app/folha/tests/test_haiku_fora_da_folha.py:532`; `:541`) |
+
+   Portanto, não identifiquei inversão sem **referência alegada**; a autorização independente do golden por I5/aval integral e a extensão de R2 para `decidir_ausencia + responder` permanecem **[não verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:502`; `app/chamados/services/tarefa_do_dia.py:170`; `:591`)
+
+7. **[fila] O instrumento de sombra não compara o novo `nao_sei`.** `projecoes` enumera os campos dos consumidores, mas omite esse campo, agora lido por Folha e Vigia. **Contraexemplo:** duas portas iguais em rota/fio/fila/verbos, diferentes apenas em `nao_sei`, geram projeções iguais no comparador. Isso limita a evidência do instrumento; os testes específicos dos leitores cobrem separadamente o repasse. (`app/chamados/management/commands/diff_e3_sombra.py:46`; `:49`; `:53`; `:133`; `app/folha/fora_da_folha.py:245`; `app/chamados/services/vigia_fio.py:651`; `app/chamados/tests/test_e3_portas_tarefa.py:490`)
+
+8. **[bloqueia] Alcance ORM e conclusão dos proibidos têm limites explícitos.** R2/R3 precisam confirmar crédito/partição reais; R8 precisa confirmar nascimento pelo escritor, dia forte e pertencimento à fila; R14 precisa confirmar integração e persistência; R16 precisa da execução da sessão. Os corpos preparados não substituem esses resultados. (`app/chamados/tests/test_e3_portas_tarefa.py:202`; `:220`; `:225`; `:267`; `:301`; `app/docs/e3_v8_matriz.txt:26`)
+
+   Nos corpos produtivos alterados, não identifiquei juiz novo, encerramento de chamado ou supressão nova de chamado vivo: a união conserva portas residuais e apenas restringe a nomeação em `fila` à lista padrão. SC-A/R6 continua declarado fora da obra. (`app/chamados/services/tarefa_do_dia.py:575`; `:584`; `:599`; `app/docs/e3_v8_matriz.txt:16`)
+
+   No diff textual fornecido não aparecem alterações em models/migrations/`core/juizes.py`/motor/crons/bin; confirmação de ausência de mudanças fora desse diff: **[não verificado]**.
+
+   Reexecutei **26 testes sem banco e 7 da catraca C17, todos passando**. Isso não executa os casos ORM: o executor sem banco remove expressamente a classe correspondente. (`app/chamados/tests/e3_portas_regra.py:25`; `:27`; `:77`; `app/chamados/tests/test_e3_pendentes_app.py:118`)
 
 ## 14/11 02:24 · sessao 7f6a76a4a4f0 · - · - · origem=Ronald (tmux)
 
@@ -621,30 +715,4 @@ Mapa do certificado:
 
 A busca incluindo arquivos ocultos encontrou referências à nova classe/livro somente no próprio instrumento e no selo; ausência de outros consumidores é limitada à cópia examinada. O próprio arquivo declara não estar conectado à conduta (`bin/classe_da_obra.py:35`); portanto não afirmaria que o pouso real já esteja protegido. Os selos novos entram no glob existente da régua (`bin/regua.sh:138–145`).
 
-## 14/11 01:03 · sessao c15daa2ec8c3 · - · - · origem=Ronald (tmux)
-
-1. **[bloqueia, fragilidade herdada] A exclusividade “linha do Ronald” depende de conduta.** `ERRO-BOBO` é aceito somente pelo conteúdo, sem autoria (`bin/disjuntor.py:772-775`); a cota verifica exclusivamente `tipo == 'auto'`, enquanto a linha antiga ganha precedência e libera sem gastar cota (`bin/disjuntor.py:1108-1130`). `guarda_chave` protege o comando de rearme, mas não a edição da linha no RELATO (`bin/disjuntor.py:239-265`); chamadas comuns sem `agent_id` saem do PreToolUse antes de qualquer outra verificação (`bin/disjuntor.py:1931-1932`). A reserva das linhas ao Ronald aparece na nova mensagem (`bin/disjuntor.py:1264-1267`), sem mecanismo correspondente nesses caminhos. O reconhecedor antigo já existia no diff fornecido; portanto, **não caracterizo como afrouxamento novo**. Em simulação exclusivamente em memória, estado parado com `auto_usada=['auto-antiga']` foi liberado por `ERRO-BOBO OBRA-X: texto do Code`, mantendo a cota esgotada — resultado previsto pelos ramos citados (`bin/disjuntor.py:1115-1130`).
-
-2. **[fila] Caso 9 ainda admite mutante plausível de orientação proibida.** `_NOMEIA` e a condição específica de `DESENHO` distinguem caixa, enquanto sujeito e verbo usam `re.I` (`bin/tests/test_disjuntor.sh:1332-1335`, `bin/tests/test_disjuntor.sh:1356-1361`). Troquei somente em memória o trecho de `_recado_auto` para `FORMA, ERRO-BOBO ou desenho: o Code libera sozinho`; `b3_quem_libera` continuou retornando universo 4 e zero violações. O trecho alterável está em `bin/disjuntor.py:1252`; a combinação que deixa passar está em `bin/tests/test_disjuntor.sh:1351-1361`. Esse mutante ensina a liberar desenho apesar da proibição descrita pelo próprio selo (`bin/tests/test_disjuntor.sh:1327-1330`).
-
-3. **AUTOLIBERA, isoladamente, preserva as restrições verificáveis.** Classes válidas são somente FORMA e ERRO-BOBO (`bin/disjuntor.py:151`, `bin/disjuntor.py:776-779`); a cota é uma por obra (`bin/disjuntor.py:152`, `bin/disjuntor.py:1240-1243`); o rearme não limpa `auto_usada` (`bin/disjuntor.py:1204-1208`); a segunda AUTO permanece parada, grava SOBE uma vez por SHA e deixa tentar outra candidata (`bin/disjuntor.py:1115-1121`). `classe=DESENHO` retornou lista vazia na execução do reconhecedor em memória, conforme o ramo citado (`bin/disjuntor.py:776-779`).
-
-4. **Mapa dos campos B3 e seus sentidos:**
-
-   | Campo/arquivo | Escritor | Leitores e significado |
-   |---|---|---|
-   | `logs/sessao/disjuntor_estado.json` | `_com_estado`: flock exclusivo, JSON temporário, replace (`bin/disjuntor.py:368-406`) | `ler_estado` rejeita objeto ilegível (`bin/disjuntor.py:412-423`); decisão B3 roda dentro de `_com_estado` (`bin/disjuntor.py:1146-1153`). |
-   | `b3[obra].auto_usada` | Apenas a AUTO efetivamente aceita acrescenta SHA (`bin/disjuntor.py:1122-1123`) | `auto_esgotada`: quantidade de liberações durante a vida do estado da obra, ausência vale zero (`bin/disjuntor.py:1240-1243`); mensagens consultam a mesma fonte (`bin/disjuntor.py:1256-1262`). |
-   | `auto_sobe` | SHA da AUTO recusada (`bin/disjuntor.py:1115-1120`) | A mesma condição evita repetir o anúncio por SHA (`bin/disjuntor.py:1116`). |
-   | `consumidas`, `liberado`, `disparado` | Transição de liberação (`bin/disjuntor.py:1124-1127`) | `consumidas` impede reutilizar linha (`bin/disjuntor.py:1110-1112`); `liberado` impede recontar reprovação antiga (`bin/disjuntor.py:1073-1083`). |
-   | `topo_no_disparo`, `disparado_em` | `_fotografa`, sob a transição (`bin/disjuntor.py:839-856`) | SHA normalizado da linha, instante Unix em segundos; liberação exige linha fora da fotografia e `mtime >= disparado_em` (`bin/disjuntor.py:692-694`, `bin/disjuntor.py:1110-1114`). Igualdade é aceita. |
-   | Topo do RELATO | Escritor de máquina comum usa `_trava_relato` e temporário/replace (`app/core/esteira_vigia.py:847-875`, `app/core/esteira_vigia.py:916-927`); autoria humana das linhas liberadoras: **[nao verificado]** | B3 usa dois conteúdos integrais iguais, inode/mtime/tamanho estáveis e o recorte do Stop (`bin/disjuntor.py:788-815`). |
-   | `logs/sessao/disjuntor.log` | `trilha`: data/hora local sem fuso explícito, detalhe normalizado; B3 anuncia após gravar estado e ainda sob flock (`bin/disjuntor.py:213-223`, `bin/disjuntor.py:1136-1147`, `bin/disjuntor.py:403-406`) | `ler` conta LIBERA `(auto)` desde `agora-86400`, com limite inferior inclusivo e sem limite superior (`bin/disjuntor.py:2085-2116`); `linha` apresenta a contagem (`bin/disjuntor.py:2376-2381`). |
-
-   `auto_usada` é cota histórica por obra; `b3_libera.auto` é número de eventos na janela de 24 horas. O código distingue expressamente os dois sentidos (`bin/disjuntor.py:158-159`). Escritor e leitor da trilha usam respectivamente `datetime.now()` e `strptime(...).timestamp()`, ambos dependentes do fuso local do processo; igualdade dos fusos em produção é **[nao verificado]** (`bin/disjuntor.py:220`, `bin/disjuntor.py:2102`).
-
-5. **Ordem e consumidores externos preservados nos caminhos examinados.** A decisão completa, gravação e anúncio ficam sob `_com_estado`; falha de gravação devolve como parada uma obra que teria sido liberada (`bin/disjuntor.py:358-409`, `bin/disjuntor.py:1136-1153`). Stop consulta `julga_b3` e usa `mensagem_b3` (`bin/hook_stop_fila1.py:1111-1116`); PreToolUse consulta `estado_b3` pela mesma decisão (`bin/disjuntor.py:1890-1896`, `bin/disjuntor.py:1174-1182`); wrapper consulta a porta `b3_parada` (`bin/disjuntor.py:1224-1236`). Não encontrei nova decisão B3 paralela nesses consumidores; execução real dos hooks e resultado dos selos completos são **[nao verificado]**.
-
-As verificações executadas acima limitaram-se a importação com `python3 -B`, reconhecedores puros e transição com I/O substituído por mocks; não executei os selos que criam arquivos. Referências dos selos com escrita: `bin/tests/test_disjuntor.sh:1148-1164`.
-
-_4916 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4917 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
