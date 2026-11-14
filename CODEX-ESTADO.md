@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 02:12** · publicado em **14/11/2026 02:13** (UTC-3)
+> Ultima resposta processada: **14/11/2026 02:24** · publicado em **14/11/2026 02:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 02:24 · sessao 7f6a76a4a4f0 · - · - · origem=Ronald (tmux)
+
+1. **Escritores e leitores do mapa.** Os cinco campos são projeção em memória; `porta_da_tarefa` copia cinco chaves da tarefa e devolve `None` quando não há rota (`app/chamados/services/tarefa_do_dia.py:603-609`).
+
+| Campo | Escritor / fornecedor | Leitores de produção |
+|---|---|---|
+| `fio` | decisão final em `_portas_da_tarefa`: `app/chamados/services/tarefa_do_dia.py:588-600`; residual consulta `app/chamados/juizes.py:1645-1651` | Folha `app/folha/fora_da_folha.py:86-89,190,236`; Vigia `app/chamados/services/vigia_fio.py:658-659`; diff `app/chamados/management/commands/diff_e3_sombra.py:143` |
+| `nao_sei` | inicialização `app/chamados/services/tarefa_do_dia.py:192-193`; causas `:215,224,258-262,284,288,320-323`; copiado na projeção `:609` | Folha `app/folha/fora_da_folha.py:245`; Vigia `app/chamados/services/vigia_fio.py:651-652,635`; furo `app/chamados/services/furo_sem_canal.py:98-100` |
+| `rota` | `app/chamados/services/tarefa_do_dia.py:599-600` | projeção `:609`; Vigia `app/chamados/services/vigia_fio.py:657-659`; furo `app/chamados/services/furo_sem_canal.py:97`; diff `app/chamados/management/commands/diff_e3_sombra.py:143` |
+| `fila` | associação célula `app/chamados/juizes.py:1567-1568`; filtro nomeável `app/chamados/services/tarefa_do_dia.py:584,600` | Folha `app/folha/fora_da_folha.py:241`; diff `app/chamados/management/commands/diff_e3_sombra.py:50,143` |
+| `verbos` | partição `app/chamados/services/verbos.py:30-52`; transporte `app/chamados/juizes.py:1560,1565,1578`; recorte portas `app/chamados/services/tarefa_do_dia.py:583,600` | residual `:596`; nomeação fila `:584`; diff `app/chamados/management/commands/diff_e3_sombra.py:144` |
+
+2. **Tela: leitores indiretos, sem segundo escritor da porta.** `fora_da_folha` lê cada fio, soma dias e escolhe grupo do colaborador (`app/folha/fora_da_folha.py:190-205`; prioridade grupo `:92-103`). `montar_linhas` consulta essa fonte e grava o grupo convertido em fio sob a chave `dono` (`app/folha/retrato_folha.py:1158,1187`; conversão `:364-368`). A tela lê o fio gravado (`:438-441`), converte-o em balde visual (`:192,474-481`) e lê a frase `DESTRAVA` (`:1069`). `nao_sei` não é transportado por esse caminho: a linha montada contém `dono`, tipo e datas, mas não esse campo (`:1187-1194`). Exibição por outros consumidores: **[não verificado]**.
+
+3. **Unidades e `None`.** O dia da tarefa é o dia do turno (`app/chamados/services/tarefa_do_dia.py:192,228-246`); a data civil do marco permanece campo separado (`:112-113`). O vínculo sem célula usa `(colaborador_id,dia_do_turno)` e `dia_do_fato(fortes=True)` (`:577-578`; `app/chamados/juizes.py:1574-1576`). Vigia deduplica `(colab,data)` (`app/chamados/services/vigia_fio.py:591-594`); furo conta PKs de células (`app/chamados/services/furo_sem_canal.py:79-100,109`). Portanto, igualdade universal entre contagens em produção é **[não verificado]**.
+
+   `None` é ausência de porta; `{}` não é saída válida da projeção (`app/chamados/services/tarefa_do_dia.py:604-609`). Contraexemplo: substituir a projeção por `{}` causa acesso a chave inexistente em Folha, Vigia e furo (`app/folha/fora_da_folha.py:89`; `app/chamados/services/vigia_fio.py:651`; `app/chamados/services/furo_sem_canal.py:97`). Uma porta válida com `fila=()` continua porta, por exemplo a âncora externa R4 (`app/chamados/tests/test_e3_portas_tarefa.py:477-478`, conferir numeração atual com agente da matriz).
+
+4. **Classes do checklist, escopo produção alterada.**
+   - **Segundo juiz duplicado: ausente nos corpos alterados.** A projeção copia a decisão, e C17 permanece apenas no comparador (`app/chamados/services/tarefa_do_dia.py:606-609`; `app/chamados/management/commands/diff_e3_sombra.py:127`; exceção registrada `app/core/juizes.py:132-138`).
+   - **Segundo escritor persistente: ausente nos corpos alterados.** A escrita acrescentada é `out.update`, em memória (`app/chamados/services/tarefa_do_dia.py:599-600`).
+   - **Relógio fora da borda: ausente na cadeia E3 injetada; presente no comportamento legado sem instante.** Cadeia atual: `alimentar_portas` guarda instante (`app/chamados/juizes.py:1619`), `_no_app` repassa (`:1632`), app entrega a C6 (`app/chamados/services/pergunta_no_app.py:61`), C6 converte o instante em dia local (`app/chamados/juizes.py:885-887`). Sem instante existem `date.today()` e `timezone.now()` internos (`app/chamados/juizes.py:592`; `app/chamados/services/verbos.py:35`; `app/chamados/services/painel.py:190`); a consulta normal do app continua omitindo `agora` (`app/chamados/services/pergunta_no_app.py:73`).
+   - **Derivação paralela nos leitores alterados: ausente.** Todos leem a projeção ou, sem ela, apenas `nao_sei` da tarefa original (`app/folha/fora_da_folha.py:235-245`; `app/chamados/services/vigia_fio.py:643-659`; `app/chamados/services/furo_sem_canal.py:95-100`).
+   - **Ordem de trava SQL nova: ausente nos corpos alterados.** O app usa contexto de consulta da tranca, e o diff envolve a consulta em `tranca_em_lote` (`app/chamados/services/pergunta_no_app.py:60`; `app/chamados/management/commands/diff_e3_sombra.py:100`). Efeito ORM e ausência global de persistência: **[não verificado]**.
+   - **Campo com duas causas: presente, fila.** `None` no verbo pode vir da auditoria/registro (`app/chamados/catalogo/natureza.py:63,68,73`) ou da ausência do membro na partição (`app/chamados/juizes.py:1565`). Ambos são tratados como ausência de verbo observado; o residual conserva `fio=chamado` (`app/chamados/juizes.py:1647-1651`). Não há contraexemplo de erro adicional demonstrado só por essa perda de proveniência.
+
+5. **Outros consumidores.** Pauta identifica ausência de fio pela Folha (`app/ponto/services/pautas_dos_discordantes.py:79-84`); beco testa diretamente `porta_da_tarefa(...) is not None` (`app/escala/services/cadastro_realidade.py:492-498`). Backfill aceita a nona coluna e preserva as oito anteriores por `linha[:8]` (`app/chamados/management/commands/backfill_fio_morto_e4b.py:253`).
+
+6. **Proibidos, limitação da prova.** Nos trechos produtivos do diff fornecido não aparece escrita em models/migrations/core/juizes/motor/crons/bin nem chamada de encerramento; os corpos alterados alimentam e projetam dados (`app/chamados/juizes.py:1549-1579`; `app/chamados/services/tarefa_do_dia.py:553-609`). Alteração fora do diff fornecido e confirmação criptográfica do hash: **[não verificado]**. A obra continua publicando chamados residuais e preservando histórico fora da lista padrão (`app/chamados/services/tarefa_do_dia.py:575-584`); R6 segue fora da obra conforme matriz (`app/docs/e3_v8_matriz.txt:16`).
+
+## 14/11 02:24 · sessao b7b3cb0bd835 · - · - · origem=Ronald (tmux)
+
+1. **[fila] Falta contrato normativo integral para julgar todas as combinações.** O arquivo é explicitamente histórico da volta 1 e contém status, não o contrato I1..I8 anunciado. R2 registra esperado `admin`, mas as demais prescrições de prioridade não estão presentes. Não usar a nova docstring como prova independente de autorização. `app/docs/e3_v8_matriz.txt:1`, `:5`, `:9`, `:30`.
+
+2. **[fila] A nova prioridade é condicional à origem do dono.** Com `C=colab`, `A=admin`, ações alcançáveis e donos dos verbos residuais:
+
+| Donos das ações | Donos residuais | Antes do diff | Hash atual |
+|---|---|---|---|
+| nenhum | C+A | colab | colab |
+| C | A | colab | colab |
+| C | C+A | colab | colab |
+| A | C | colab | colab |
+| A | C+A | colab | colab |
+| C+A | nenhum | colab | admin |
+| C+A | A | colab | admin |
+| C+A | C | colab | colab |
+| C+A | C+A | colab | colab |
+
+O código remove `colab` dos donos das ações antes de acrescentar o residual, que pode recolocá-lo. A escada final volta a priorizar `colab`. Confirmei as nove saídas executando somente os corpos AST em memória. `app/chamados/services/tarefa_do_dia.py:588`, `:591`, `:596`, `:597`; `app/chamados/juizes.py:1640`, `:1645`.
+
+Contraexemplo: `validar@101 + responder@202` devolve `admin`; acrescentar residual `303:cobrar` devolve `colab`, preservadas as duas ações. Isto corresponde à docstring nova — fonte (1), admin entre ações; fonte (3), colab ao combinar residual — mas não prova a prescrição integral da matriz. `app/chamados/services/tarefa_do_dia.py:42`, `:45`.
+
+3. **[fila] R2 cobre apenas parte das dimensões possíveis.** O teste novo verifica duas ações humanas na mesma porta `101` e em portas distintas `101/202`, ambas ligadas à célula; em ambos os casos espera e obtém `admin`. `app/chamados/tests/test_e3_portas_tarefa.py:459`, `:463`, `:469`, `:470`.
+
+Com `fila_cel={}` e as duas portas nas ações, o resultado é `porta_pergunta`, `fila=()`, `fio=admin`. Acrescentar residual `cobrar` fora dessas portas muda para `porta_fila`, `fio=colab`. Essas extensões não aparecem no corpo R2; alcance ORM não demonstrado. `app/chamados/services/tarefa_do_dia.py:571`, `:581`, `:599`; `app/docs/e3_v8_matriz.txt:29`.
+
+4. **[fila] A correção identificada como R2 também muda ações administrativas diferentes de validar.** `decidir_ausencia@101 + responder@202`, ambas na fila, passa de `colab` para `admin`, porque o novo `if` olha apenas o dono. A razão R13 produz `decidir_ausencia`, mas seu teste contém apenas essa ação administrativa. Sustentação normativa específica para alterar essa combinação: **[não verificado]**. `app/chamados/services/tarefa_do_dia.py:170`, `:591`; `app/chamados/tests/test_e3_portas_tarefa.py:615`, `:629`, `:630`.
+
+5. **[fila] Relação observável das linhas R com simultaneidade.**
+
+- **R1:** só ação `responder`; `validar` é verbo da mesma porta, não outra ação admin. Prescreve/obtém `colab` no teste. `app/chamados/tests/test_e3_portas_tarefa.py:441`, `:444`, `:447`.
+- **R2:** único corpo R contendo duas ações humanas simultâneas; prescreve/obtém `admin`, mesma porta ou portas distintas. `app/chamados/tests/test_e3_portas_tarefa.py:459`.
+- **R3:** só ação admin, não prova concorrência humana. `app/chamados/tests/test_e3_portas_tarefa.py:473`.
+- **R4:** pergunta encerrada, nenhuma ação humana; residual `decidir`. `app/chamados/tests/test_e3_portas_tarefa.py:479`.
+- **R5:** substitui o mapa para testar leitores; não produz simultaneidade. `app/chamados/tests/test_e3_portas_tarefa.py:490`, `:497`.
+- **R6:** fora da obra segundo o anexo. `app/docs/e3_v8_matriz.txt:16`.
+- **R7:** membro sem verbo, sem ações humanas. `app/chamados/tests/test_e3_portas_tarefa.py:505`.
+- **R8:** residual sem célula com verbo `decidir`, sem ações humanas. `app/chamados/tests/test_e3_portas_tarefa.py:518`.
+- **R9:** passivo/âncora `validar`, sem ação colab simultânea. `app/chamados/tests/test_e3_portas_tarefa.py:283`, `:289`, `:537`.
+- **R10:** nenhuma ação; conserva âncora. `app/chamados/tests/test_e3_portas_tarefa.py:291`, `:299`.
+- **R11:** testa cadeia de relógio até C6, não concorrência de donos. `app/chamados/tests/test_e3_portas_tarefa.py:560`.
+- **R12:** motivos de desconhecimento com residual `decidir`, não concorrência humana. `app/chamados/tests/test_e3_portas_tarefa.py:570`, `:586`.
+- **R13:** ato desconhecido ou absorção pendente; teste administrativo isolado. `app/chamados/tests/test_e3_portas_tarefa.py:594`, `:615`.
+- **R14:** paridade de universo/contagem; sem duas ações humanas. `app/chamados/tests/test_e3_portas_tarefa.py:633`, `:640`.
+- **R15:** varia uma pergunta Q2..Q16 e conserva residual `101:decidir`; não põe ações colab+admin juntas e nem afirma `fio`. `app/chamados/tests/test_e3_portas_tarefa.py:651`, `:683`, `:686`.
+- **R16:** execução de suíte pendente, não um caso de concorrência. `app/docs/e3_v8_matriz.txt:26`.
+
+O teste anterior explícito `validar@101 + residual cobrar@202` permanece esperando `colab`; outro teste conserva essa expectativa com terceiro residual `decidir`. Portanto a cópia mantém contratos diferentes para admin vindo de ação e colab vindo do residual, coerentes com a docstring nova. A aprovação normativa dessa combinação além do material fornecido permanece **[não verificado]**. `app/chamados/tests/test_e3_portas_v6_sem_banco.py:32`; `app/chamados/tests/test_e3_portas_tarefa.py:429`.
+
+## 14/11 02:23 · sessao 78ed26487d90 · - · - · origem=Ronald (tmux)
+
+1. **Selos de C6 mordem a reversão.** Executei sem banco os três mutantes de `app/chamados/tests/e3_v8_volta2_selos.py:11`: `sem_C6`, `sem_q_vivas` e `sem_instante`; cada controle passou e cada mutante produziu uma falha de assert, zero erros. Os asserts são `app/chamados/tests/test_contract_pergunta_viva.py:81` e `:84`; o executor exige controle verde e falha real em `app/chamados/tests/e3_v8_volta2_selos.py:36` e `:46`.
+
+2. **Golden conserva mordida por inspeção; execução ORM [nao verificado].** O chamado real nasce em `app/folha/tests/test_haiku_fora_da_folha.py:517`; as expectativas `{'chamado':1,'admin':1}` e `DESTRAVA['chamado']` em `:522` e `:523` rejeitam a volta do defeito “vivo sem pergunta não move fio”. O balde continua conferido em `:524` e `:525`; a projeção trocada posteriormente deve mover fio/frase para admin em `:535`, `:541` e `:542`. A fonte da tela passa por `montar_linhas` nos helpers `:402`, `:419` e `:432`.
+
+3. **Expectativas alteradas e respaldo verificável:**
+
+   | Alteração | Respaldo |
+   |---|---|
+   | `test_e3_portas_tarefa.py:140`: `colab_ids` no carregamento | R8, `app/docs/e3_v8_matriz.txt:18`; implementação `app/chamados/services/tarefa_do_dia.py:545` |
+   | `test_o261e_f5b_juiz_porta.py:291`: None/nada → porta com verbo None/chamado | R7, `app/docs/e3_v8_matriz.txt:17`; aval (ii) alegado em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:277` |
+   | `test_e3_diff_sombra.py:23`: texto do relógio | R11, `app/docs/e3_v8_matriz.txt:21`; cadeia `app/chamados/services/pergunta_no_app.py:61` |
+   | `test_contract_pergunta_viva.py:81`: igualdade AST com `agora` | R11, `app/docs/e3_v8_matriz.txt:21`; L-128, `app/docs/LEIS.md:149` |
+   | Golden `test_haiku_fora_da_folha.py:522`: chamado vivo sem pergunta muda fio | Aval E3-PORTA-SEM-CASO alegado em `:502`, já citado em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:163` e `:241` |
+   | Mocks recebem `nao_sei`, com assert adicional em `test_haiku_fora_da_folha.py:154` | R5, `app/docs/e3_v8_matriz.txt:15`; semântica em `:201` |
+   | Golden mock passa de verbo decidir para validar, mantendo fio admin em `test_haiku_fora_da_folha.py:532` | Adequação de fixture; o assert final de fio admin já permanece em `:541` |
+
+4. **Limite documental relevante.** A matriz disponível contém status históricos R1–R16 em `app/docs/e3_v8_matriz.txt:9`, mas não contém o contrato anunciado I1–I8; I1 e I5 aparecem como referências nos comentários `app/folha/tests/test_haiku_fora_da_folha.py:149` e `:502`. O conteúdo literal original desses contratos/avais é **[nao verificado]**. Assim, nenhuma inversão de expectativa está totalmente sem justificativa alegada, mas a autorização integral não pode ser validada só pelo anexo disponível.
 
 ## 14/11 02:12 · sessao 359866b81b9d · E3-FORMA-SQL · construtor · origem=Code
 
@@ -548,71 +647,4 @@ A busca incluindo arquivos ocultos encontrou referências à nova classe/livro s
 
 As verificações executadas acima limitaram-se a importação com `python3 -B`, reconhecedores puros e transição com I/O substituído por mocks; não executei os selos que criam arquivos. Referências dos selos com escrita: `bin/tests/test_disjuntor.sh:1148-1164`.
 
-## 14/11 01:00 · sessao 2e75ba60ed53 · - · - · origem=Ronald (tmux)
-
-Achados de leitura, sem edições ou execução ORM:
-
-- **R5 exige cuidado posicional:** Vigia publica oito colunas em `chamados/services/vigia_fio.py:633`. `backfill_fio_morto_e4b.py:252` desempacota exatamente oito campos. Uma nona coluna exige adaptar esse leitor, preservando os índices usados em `:79`, `:242` e `:250`. Nenhum consumidor CSV/template/JS dessa lista foi encontrado nas buscas realizadas; consumidores externos são [nao verificado].
-- **Folha:** dict de cada dia nasce em `folha/fora_da_folha.py:241-242`, sem `nao_sei`. Não encontrei chamador de produção de `o_que_segura` nos arquivos Python/HTML pesquisados; há testes. O Vigia usa `dias_que_seguram`, em `vigia_fio.py:589`.
-- **Universos diferem na entrada:** Folha parte de `classificar_export` e retidos (`fora_da_folha.py:130-149`); Vigia deduplica `(colab,data)` desses dias (`vigia_fio.py:585-592`); furo parte das células `furo/cobrado` nas empresas ativas (`furo_sem_canal.py:61`, `:79-85`). Paridade global sem alinhar recortes seria [nao verificado]. `dias_por_fio` da Folha conta dias (`fora_da_folha.py:190-192`), enquanto grupos contam colaboradores (`:195`).
-- **R8 compatível com escritor real:** `ChamadoColaborador.criar` resolve célula somente quando o campo não foi passado (`chamados/models.py:1066-1068`) e grava em `:1096`. `_celula_de` retorna `.first()` do dia (`:1241`), podendo retornar `None`. O formulário entrega a data do catálogo em `services/abertura.py:191`. Alcance ORM efetivo segue [nao verificado].
-- **Dia forte existente:** `dia_do_fato` prefere célula (`juizes.py:98-99`), catálogo (`:113-114`) e fallback `data_turno` (`:118`); `fortes=True` termina antes dos degraus fracos (`:127-128`). Catálogo lê a chave declarada em `catalogo/modulos.py:219-225`.
-- **R11 alcançável por leitura:** `perguntas_do_app` chama `pergunta_viva` sem instante (`pergunta_no_app.py:62`); o cálculo chega à janela (`juizes.py:1455`), cujo default lê `date.today()` (`:592`). Com `agora`, `pergunta_viva` deriva o dia civil local (`:885-887`). Portanto a injeção opcional deve atravessar a cadeia inteira.
-- **Escritores de campos persistentes:** `status_local`: `_gravar_estado`, `models.py:201-204`, atribuição `:228`; nascimento `:1096`. `silenciado_ate`: `arquivo.py:166/:171` e limpeza `:202/:210`. `celula_id`: nascimento acima e `services/vinculos.py:93-101`.
-- **Borda do silêncio:** fila exclui somente `silenciado_ate > agora` (`painel.py:188-190`); igualdade já pertence à fila. Partição usa arquivado quando `> agora` e histórico quando `<= agora` (`verbos.py:51`), diferença que permanece na obra R6.
-- **R2/R3:** natureza prioriza validar (`catalogo/natureza.py:46-49`); crédito separa respondidas/vivas (`raiox.py:143-144`) e destino vivo vence pai (`:150-153`). O filtro anterior exclui materializada com lavra sim (`:135-138`). Prova ORM com consulta e valor: [nao verificado].
-
-## 14/11 00:56 · sessao eee42a348fa5 · E3-FORMA-SQL · construtor · origem=Code
-
-Preciso resolver uma contradição antes de escrever: o brief v8 proíbe reutilizar `wt-codex-e3-forma-sql-195919`, mas esse é o único diretório autorizado pelo ambiente. A conformidade da cópia com essa exigência permanece **[nao verificado]**.
-
-A leitura confirmou os pontos de R7 e R11:
-
-- R7 descarta membros da fila sem verbo: [juizes.py:1562](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/juizes.py:1562).
-- R11 chama C6 sem `agora`: [pergunta_no_app.py:60](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/services/pergunta_no_app.py:60); a janela pode consultar `date.today()`: [juizes.py:592](/home/ronald/wt-codex-e3-forma-sql-195919/app/chamados/juizes.py:592).
-
-**A sessão fornecerá a cópia nova ou autoriza expressamente aplicar a v8 nesta cópia, dispensando essa proibição?** A confirmação é necessária pela restrição explícita do próprio brief v8.
-
-## 14/11 00:34 · sessao 64afa9b3793f · BUG-PAR · verificador · origem=Code
-
-**A criação divergente está bloqueada no ponto do TOCTOU, mas resta um achado procedente: a espera da irmã pode virar recusa escrita da metade externa.** (`app/chamados/services/materializacao.py:1355`, `app/chamados/services/materializacao.py:1599`, `app/chamados/services/materializacao.py:1814`).
-
-1. **Outro caminho de criação — descartável como bypass demonstrado.**
-
-   O ramo `hora` compara os mesmos `ts/_tipo` que entrega a `registrar_batida`; irmã e passivo passam por `_materializar_uma`. O chokepoint cria com os valores recebidos. (`app/chamados/services/materializacao.py:1253`, `app/chamados/services/materializacao.py:1355`, `app/chamados/services/materializacao.py:1359`, `app/chamados/services/materializacao.py:1596`, `app/chamados/services/passivo_validado.py:537`, `app/ponto/registro_batida.py:175`).
-
-   Existe outra criação em `data_hora`, sem portão 163, fixando tipo `E`. Contudo, as fábricas consultadas dão `hora` às metades de intervalo e `data_hora` à âncora. Uma metade efetivamente chegando por esse ramo é **[nao verificado]**; promovê-la a bypass seria **duvidoso**. (`app/chamados/services/materializacao.py:1460`, `app/chamados/models.py:3709`, `app/chamados/models.py:3714`, `app/chamados/models.py:3721`, `app/chamados/services/disputa_emissao.py:1371`).
-
-   `escolha` não cria batida; o command do passivo delega ao reparador, e BUG-PAR-103 chama a devolução. (`app/chamados/services/materializacao.py:1529`, `app/chamados/management/commands/materializar_passivo_validado.py:113`, `app/chamados/management/commands/bug_par_103.py:85`).
-
-2. **Rollback e engolimento — descartáveis no trajeto direto.**
-
-   A premissa sobre `pendencia_admin/recusa_motivo` precisa de correção: o `save` deles ocorre **dentro** do `atomic` de `_materializar_uma`. A espera tardia atravessa esse bloco; portanto, desfaz essas escritas e as da irmã já materializada dentro dele. O carimbo final da própria metade vem depois do ponto que levanta. (`app/chamados/services/materializacao.py:1735`, `app/chamados/services/materializacao.py:1737`, `app/chamados/services/materializacao.py:1257`, `app/chamados/services/materializacao.py:1593`, `app/chamados/services/materializacao.py:1357`, `app/chamados/services/materializacao.py:1792`).
-
-   A captura específica antecede `except Exception`; a mensagem da espera só entra em `erros` depois do `finally`, evitando a recusa nesse retorno direto. (`app/chamados/services/materializacao.py:1798`, `app/chamados/services/materializacao.py:1802`, `app/chamados/services/materializacao.py:1813`, `app/chamados/services/materializacao.py:1815`).
-
-   Escritas realmente anteriores não pertencem a esse rollback. Por exemplo, a recusa `DATA_EM_DISPUTA` ocorre antes do bloco, mas retorna imediatamente e não alcança a espera tardia. (`app/chamados/services/materializacao.py:1720`, `app/chamados/services/materializacao.py:1721`, `app/chamados/services/materializacao.py:1735`).
-
-3. **Irmã esperando — procedente, residual.**
-
-   A irmã devolve `False` com a mensagem de espera. O wrapper transforma **qualquer** retorno falso em `_ParNaoFechou`, desfaz o savepoint da irmã e devolve um impedimento textual. A categoria “espera” se perde nessa fronteira. (`app/chamados/services/materializacao.py:1726`, `app/chamados/services/materializacao.py:1817`, `app/chamados/services/materializacao.py:1819`, `app/chamados/services/materializacao.py:1596`, `app/chamados/services/materializacao.py:1599`, `app/chamados/services/materializacao.py:1602`).
-
-   A externa conserva `_viz`, acrescenta erro de **guarda de paridade** e segue pelas portas de recusa/carimbo. O `finally` grava o erro contendo o impedimento da irmã. Isso impede a batida divergente, mas **não respeita “espera não carimba recusa” para a externa**. (`app/chamados/services/materializacao.py:1290`, `app/chamados/services/materializacao.py:1299`, `app/chamados/services/materializacao.py:1303`, `app/chamados/services/materializacao.py:1338`, `app/chamados/services/materializacao.py:1349`, `app/chamados/services/materializacao.py:1814`, `app/chamados/services/materializacao.py:1555`).
-
-   O caminho cabe justamente na corrida examinada: a externa passa inicialmente por reuso; na reconsulta precisa criar e chama a irmã. Na avaliação aninhada, a externa em voo fica excluída da seleção de irmã, enquanto a escrita considera sua batida projetada; assim, o portão tardio da irmã pode ser alcançado. Ocorrência em produção: **[nao verificado]**. (`app/chamados/services/materializacao.py:824`, `app/chamados/services/materializacao.py:1266`, `app/chamados/services/materializacao.py:1290`, `app/chamados/services/materializacao.py:146`, `app/chamados/services/materializacao.py:1594`, `app/chamados/services/materializacao.py:1282`, `app/chamados/services/materializacao.py:1355`).
-
-4. **RED novo — procedente por leitura; execução do mutante [nao verificado].**
-
-   Ele desliga somente o portão antecipado e exige retorno falso, mensagem de espera, nenhuma criação e foto preservada. Retirar o portão tardio deixa aberto o caminho para criar S `01:00` diante da declaração `01:20`; o controle vizinho confirma a criação nesse cenário quando a declaração coincide. (`app/chamados/tests/test_bug_par_projetado.py:1158`, `app/chamados/tests/test_bug_par_projetado.py:1190`, `app/chamados/tests/test_bug_par_projetado.py:1193`, `app/chamados/tests/test_bug_par_projetado.py:1206`, `app/chamados/tests/test_bug_par_projetado.py:1207`, `app/chamados/tests/test_bug_par_projetado.py:1210`).
-
-   A cobertura não alcança o residual aninhado: a fixture carimba ambas as perguntas, enquanto selecionar a irmã exige `materializada_em` nulo. A foto também omite `pendencia_admin` e `materializada_por`. (`app/chamados/tests/test_bug_par_projetado.py:1163`, `app/chamados/services/materializacao.py:145`, `app/chamados/tests/test_bug_par_projetado.py:990`).
-
-| Classe no delta d2 | Classificação e evidência |
-|---|---|
-| 2º juiz | **Descartável:** reutiliza `_espera_do_aval_163`. `app/chamados/services/materializacao.py:847`, `app/chamados/services/materializacao.py:1355`. |
-| 2º escritor | **Descartável:** mantém `registrar_batida`; irmã usa a mesma unidade. `app/chamados/services/materializacao.py:1359`, `app/chamados/services/materializacao.py:1596`. |
-| Derivação paralela | **Descartável:** compara os valores já derivados. `app/chamados/services/materializacao.py:1253`, `app/chamados/services/materializacao.py:1355`. |
-| Ordem de trava | **Descartável neste delta:** comparação sem trava nova; porta trava antes de reler/materializar. `app/chamados/services/materializacao.py:725`, `app/chamados/services/materializacao.py:1921`. |
-| Campo com dois significados | **Descartável como novidade persistida; procedente na perda de significado do retorno:** espera e falha comum chegam como `False` e recebem o mesmo tratamento. `app/chamados/services/materializacao.py:1687`, `app/chamados/services/materializacao.py:1819`, `app/chamados/services/materializacao.py:1599`. |
-
-_4913 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4916 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
