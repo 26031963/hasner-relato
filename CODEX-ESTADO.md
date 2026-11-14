@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 15:39** · publicado em **14/11/2026 15:39** (UTC-3)
+> Ultima resposta processada: **14/11/2026 16:01** · publicado em **14/11/2026 16:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 16:01 · sessao 32de8a9570c1 · - · - · origem=Ronald (tmux)
+
+**Achado decisivo:** o `sla.vencido=True` da sonda não prova que venceu o prazo de resposta da pergunta: o SLA de tela mede horas por urgência desde a última nota do DP ou o nascimento; o C9 mede `prazo_sla <= agora`, com opção de derivar nascimento + 20 minutos. Os valores de `prazo_sla` e a associação pergunta→pai não constam da sonda. (`app/chamados/services/sla.py:17–39`; `app/chamados/catalogo/motor.py:54–72`; campos concretos da sonda: [nao verificado])
+
+**Definições distintas e candidatos:**
+
+| Definição | Regra / campos lidos | Escritor / leitor |
+|---|---|---|
+| SLA operacional de tela | `status_local in COBRANCA` e `referencia + timedelta(hours=sla_limite_horas(urgencia)) < agora`; referência = última nota `dp_rh` ou `criado_em`. Não lê resposta da pergunta nem `prazo_sla`. | Regra: `app/chamados/services/sla.py:17–39`; tabela 1/2/24/48h: `app/chamados/catalogo/motor.py:35–41`; leitores tela `app/chamados/services/painel.py:372–379`, cron `app/chamados/management/commands/alertar_chamados_sla.py:25–46`; timestamps automáticos de chamado/nota: `app/chamados/models.py:67`, `app/chamados/models.py:1721`; notas pela porta `app/chamados/services/nota.py:75–109`; subida de urgência pela porta `app/chamados/models.py:514–545`. |
+| Prazo de cobrança C9 | `bool(prazo_sla and prazo_sla <= agora)`; helper retorna prazo explícito, senão `criado_em+20min`. | `app/chamados/catalogo/motor.py:45–72`; registro vivo `app/core/juizes.py:289`; lookup `app/docs/JUIZES.md:59–63`; escritores nascimento `app/chamados/services/disputa_emissao.py:581`, `:1117`, `:1352`; recobrança `:1725`; cobrança em lote `app/chamados/services/cobranca.py:170–178`; gate único `app/chamados/models.py:574–593`; leitores `app/ponto/management/commands/escalonar_chamados_supervisao.py:96`, `app/chamados/services/cobranca.py:255`, `app/chamados/services/fila.py:165–169`. |
+| Prazo “da pergunta” | Não há campo prazo na pergunta; a cobrança guarda prazo no **pai da disputa**, compartilhado pelas perguntas. Cobrança em lote usa 48h por padrão ou prazo explícito; recobrança usa 20min. | Campos `app/chamados/models.py:2499–2527`; associação ao pai `app/chamados/services/cobranca.py:51–65`; 48h `app/chamados/services/cobranca.py:38`, `:165–178`; 20min `app/chamados/services/disputa_emissao.py:1692–1725`. |
+| Marco previsto vencido | `quando+30min <= agora`; marco do turno encadeado atravessa meia-noite. Não é prazo para responder. | `app/ponto/services/cartorio.py:862`, `:882–893`; `app/escala/servico_jornada.py:69–94`; fábrica `app/chamados/services/fabrica_da_celula.py:35–49`; tarefa lê o teto em `app/chamados/services/tarefa_do_dia.py:82–113`. |
+| Lavra vencida / stale | Lavra ausente, posterior a `agora`, janela civil local expirada ou insumo posterior; não é atraso de resposta. | Escritor `app/chamados/veredito_lavrado.py:254–275`; leitor `:213–231`; relógio civil local `:95–116`; tarefa `app/chamados/services/tarefa_do_dia.py:415–418`. |
+| Silêncio / arquivo | `silenciado_ate > agora` esconde; vencimento devolve à fila. Constante de arquivo = 30 dias. | `app/chamados/models.py:87–92`, `:509–512`; `app/chamados/catalogo/motor.py:83–84`; fila `app/chamados/services/painel.py:158`. |
+| Justificativa DP | Dias civis locais desde nascimento; vence quando `dias > prazo_do_tipo`. Outro domínio. | `app/ponto/catalogo/justificativas.py:21–41`; registro `app/core/juizes.py:311`. |
+
+**Candidata do degrau:** o prazo de cobrança entregue ao C9 `catalogo/motor.py::prazo_estourou`, já registrado para a pergunta “o prazo (SLA) do chamado estourou?”. Usar `sla.vencido` da sonda substituiria essa pergunta por horas de ausência de resposta do DP; usar marco vencido substituiria por horário de batida. A escolha de qual pai/prazo corresponde à pergunta concreta precisa respeitar a associação existente, pois cobrança em lote grava nos pais compartilhados. (`app/core/juizes.py:115`, `:289`; `app/docs/JUIZES.md:63`; `app/chamados/services/sla.py:17–39`; `app/chamados/services/cobranca.py:51–65`)
+
+**Relógio:** a configuração é `America/Sao_Paulo`, `USE_TZ=True`; SLA de tela e C9 comparam instantes, com limites distintos (`<` versus `<=`), horas versus prazo explícito/fallback em minutos; marcos têm instante aware encadeado e teto de 30min; a lavra e a justificativa usam dia civil local; identidade da pergunta da tarefa usa **dia do turno** `data_evento`. Portanto não são o mesmo relógio semântico nem a mesma unidade. (`app/config/settings/base.py:93–95`; `app/chamados/services/sla.py:30–39`; `app/chamados/catalogo/motor.py:45–72`; `app/escala/servico_jornada.py:89–93`; `app/ponto/services/cartorio.py:892`; `app/chamados/veredito_lavrado.py:104–116`; `app/ponto/catalogo/justificativas.py:34–41`; `app/chamados/services/tarefa_do_dia.py:227–230`)
+
+**Sem resposta não deve ser reconstruído apenas de `respondida_em`:** a tarefa usa última `DecisaoPergunta` até `agora`: ausência de decisão, resposta vazia, recusa e reabertura produzem responder/colaborador; resposta com texto produz validar/admin. O carregador ordena por `ato_em,pk`, corta o horizonte e reconhece projeção sem linha como passivo. (`app/chamados/services/tarefa_do_dia.py:126–150`, `:400–413`)
+
+**Escritores de resposta:** o core de resposta grava texto e `respondida_em` no mesmo instante da linha de decisão; resposta nova invalida validação anterior; reabertura zera resposta/carimbo por porta e registra o ato; resposta automática e recuperação pela trilha também registram decisões. (`app/chamados/services/disputa_emissao.py:1460–1485`, `:1562–1608`, `:1640–1664`, `:1668–1685`)
+
+**Aviso e escalonamento:**
+
+- `ja_avisado` é derivado, não campo boolean: nota de sistema cujo conteúdo contém `'SLA'`. O cron registra a nota via `anexar_ocorrencia`; passivo anterior ao corte e teto por passada podem deixar chamado vencido sem aviso. (`app/chamados/services/sla.py:42–45`; `app/chamados/management/commands/alertar_chamados_sla.py:32–46`; `app/chamados/services/nota.py:75–109`)
+- `escalonado_para_dp` é recibo de push do N1: o cron compara C9, envia push e chama `marcar_escalonado_dp`; o gate escreve boolean, instante e trilha, com guarda idempotente. (`app/ponto/management/commands/escalonar_chamados_supervisao.py:93–107`; `app/chamados/models.py:595–616`)
+- O escalonamento N2 pode alterar urgência para emergência, afetando o SLA operacional baseado em urgência; isso é efeito indireto no prazo operacional, não autorização para usar flags de aviso como dono do dia. (`app/ponto/management/commands/escalonar_chamados_supervisao.py:109–138`; `app/chamados/services/sla.py:26–39`)
+- A tarefa não recebe aviso/escalonamento como critério no julgamento da última decisão; nesse julgamento o lado resulta do ato da pergunta. (`app/chamados/services/tarefa_do_dia.py:126–150`)
+- Na sonda, as 53 linhas da classe A provam o agrupamento pelo SLA operacional informado, mas não permitem afirmar quantas satisfariam o C9 no prazo associado à pergunta; faltam prazo explícito, nascimento, última nota DP e associação pergunta→pai. [nao verificado]
 
 ## 14/11 15:39 · sessao 3eb93b59aecc · BO-DISPUTA-SEM-PERGUNTA · construtor · origem=Code
 
@@ -463,85 +495,4 @@ A guarda não derruba o MORDE interno normal: ele chama diretamente `python3 -c`
 
 4. **nada.** O selo lê os dois textos, mas exige somente a presença de `LEI-AKITA` (`bin/tests/test_lei_akita.sh:30,58-59`, linhas novas; base `:24,52-53`). Outro selo exige `registro.baixa`, fora do trecho alterado (`bin/tests/test_baixa_diferida_host.sh:34`; `bin/fabricante_prompt.md:49-58`, diff). O fabricante entrega o prompt inteiro ao modelo (`bin/fabricante.sh:158-162`); o gerador lê apenas `esteira.sh`, `rodar.sh` e `cadeia.sh` (`bin/molde_fatia/gerar.py:29-35`). O efeito nas próximas saídas do modelo [nao verificado].
 
-## 14/11 14:54 · sessao 9e692c4352d3 · HOOKMSG · verificador · origem=Code
-
-Referências **B** = cópia/base; **P** = linhas resultantes do patch fornecido. HEAD efetivo, instalação dos hooks e censo das 113 worktrees: **[nao verificado]**.
-
-**1. Extração de `julgar_commit`: nada isoladamente; PROCEDENTE na integração.**
-
-A extração preserva o julgamento: merge continua pelo hunk próprio; raiz pelo `show`; demais commits pelo diff contra primeiro pai, com `--no-renames` e `-z`. `medida_do_commit` continua recebendo o SHA julgado. Duplicatas continuam dispensadas antes do julgamento e `EXCECAO_NOMINAL` aplicada depois. Há releitura de mensagem/pais, sem alteração demonstrada do predicado. (`B bin/tests/test_lei_akita.sh:458–486`; `P bin/tests/test_lei_akita.sh:408–430,490–505`)
-
-**PROCEDENTE:** o modo novo pode desviar o juiz do push. O pre-push define somente `LEI_AKITA_HEAD`; um `LEI_AKITA_COMMIT=<SHA válido aprovado>` herdado ativa a saída antecipada, força esse SHA como alvo e pula universo, catraca e verificações gerais. Isso contradiz “nenhum env de bypass nasce”; as outras guardas do pre-push continuam existindo. (`B bin/pre-push.sh:38`; `P bin/tests/test_lei_akita.sh:23,507–512,996–1002`; `contrato.txt:1`, cláusula 5)
-
-**2. Objeto sintético: PROCEDENTE quanto à equivalência geral.**
-
-**`GIT_INDEX_FILE`: nada contra a ordem apresentada.** O `write-tree` ocorre antes da remoção das variáveis `GIT_*`, portanto recebe o índice herdado do hook. O cálculo de `CASA` acontece em subshell e não muda o diretório corrente. Não há fundamento no script para afirmar que ele troca prematuramente o índice temporário pelo índice normal. (`P bin/commit_msg.sh:15,18–19,27`)
-
-A entrega efetiva do índice temporário pelo Git e o ciclo interno dos comandos abaixo não foram reproduzidos nesta cópia: **[nao verificado]**.
-
-| Caso | Classificação |
-|---|---|
-| **Merge direto, `git merge -m`** | **Julga a errada** no fluxo automático em que o hook antecede a gravação de `MERGE_HEAD` **[nao verificado quanto ao ciclo interno do Git]**. Sem esse arquivo, o script monta somente o pai HEAD: passa a julgar todo o delta recebido, em vez do hunk próprio do merge. Pode recusar `n/a (instrumento)` num merge limpo que o juiz do push aceitaria. (`P bin/commit_msg.sh:20–25`; `P bin/tests/test_lei_akita.sh:416–429`) |
-| **`merge --no-ff --no-commit` seguido de `commit`** | **Julga a estrutura certa**, desde que `MERGE_HEAD` contenha os pais finais: usa árvore do índice, HEAD e os pais desse arquivo. Continua sujeito à divergência de limpeza da mensagem abaixo. (`P bin/commit_msg.sh:19–25`) |
-| **`--amend`** | **Julga a errada relativamente ao commit final:** usa HEAD como pai, portanto julga o delta da emenda. Emenda apenas de mensagem pode ter lista de arquivos vazia e aceitar `n/a` embora o commit final contenha negócio. É limite expressamente declarado, coberto posteriormente pelo push. (`P bin/commit_msg.sh:10–11,21`; `P bin/tests/test_lei_akita.sh:427–430`; `contrato.txt:1`, cláusula 3) |
-| **Commit inicial** | **Julga a estrutura certa:** sem HEAD, monta raiz; o juiz enumera os arquivos pelo `show`. Se faltar vocabulário na árvore, recusa antes do julgamento. (`P bin/commit_msg.sh:19–25`; `P bin/tests/test_lei_akita.sh:91–131,427–429`) |
-| **`commit -a` / `commit <paths>`** | **Julga a árvore certa se o Git entregar o índice preparado:** o script preserva `GIT_INDEX_FILE` até concluir a montagem. A comparação efetiva com um commit desses: **[nao verificado]**. (`P bin/commit_msg.sh:19–27`) |
-| **`cleanup=verbatim` / `scissors`** | **Pode julgar mensagem errada.** O script aplica sempre `stripspace -s`, sem consultar o modo de cleanup. Em scissors, pode julgar uma linha inválida abaixo do corte e recusar indevidamente; em verbatim, não preserva necessariamente os bytes que serão gravados. Com `core.commentChar=L`, por exemplo, a limpeza pode eliminar a própria linha LEI-AKITA. Aplicação efetiva desses modos pelo Git: **[nao verificado]**. (`P bin/commit_msg.sh:17,24–25`) |
-| **Rebase / cherry-pick** | **Sem invocação do hook, não julga.** Se chamado para um commit novo de um pai, a montagem usa HEAD; se envolver emenda/reword, existe o problema de `--amend`. A generalização “sem `--edit` não chama” aparece somente como comentário, sem prova na cópia: **[nao verificado]**. (`P bin/commit_msg.sh:10–11,21–28`) |
-
-O objeto também não reproduz explicitamente todos os metadados e assinatura do commit final; o juiz usa mensagem, árvore e pais, portanto identidade exata do SHA não é demonstrada nem necessária para esse predicado. (`P bin/commit_msg.sh:25`; `P bin/tests/test_lei_akita.sh:413–430`)
-
-**3. Modo `LEI_AKITA_COMMIT`: nada quanto aos itens 1–3 decidirem o resultado; vocabulário decide.**
-
-Os itens 1–3 **rodam antes**, mas apenas acumulam `falhas`; não há `errexit`. O modo commit oculta seu stdout e retorna antes de consultar esse contador. Assim, esses itens não recusam nem aprovam por conta própria nesse caminho. (`B bin/tests/test_lei_akita.sh:16,24–53,983–987`; `P bin/tests/test_lei_akita.sh:23,996–1002`)
-
-O vocabulário é carregado efetivamente antes do ramo commit; GLOSSARIO ou NORTE ilegíveis recusam. `producao` e a catraca são definidos, mas não chamados nesse modo; o ramo também sai antes do MORDE. (`P bin/tests/test_lei_akita.sh:91–131,394–400,507–513`)
-
-**ALVO correto no caminho normal:** o shell passa `LEI_AKITA_HEAD="$LEI_AKITA_COMMIT"` ao Python, que lê o vocabulário da árvore sintética. Entretanto, `LEI_AKITA_MORDE=1` herdado força o ALVO Python para HEAD e pode trocar essa fonte: **PROCEDENTE condicional**. (`P bin/tests/test_lei_akita.sh:70–78,507–513,998`)
-
-**4. QUEM ESCREVE / QUEM LÊ: PROCEDENTE no contrato das mensagens fabricadas.**
-
-| Elemento | Escritor → leitor |
-|---|---|
-| `.git/hooks/commit-msg` | `hooks.sh install` escreve o wrapper no caminho fixo da principal; o conteúdo executa `commit_msg.sh` com os argumentos recebidos. (`P bin/hooks.sh:9,14–15,70–76`) |
-| `bin/commit_msg.sh` | Novo arquivo do patch, chamado pelo wrapper; monta o objeto e chama o selo existente. (`P bin/hooks.sh:74`; `P bin/commit_msg.sh:19–28`) |
-| `LEI_AKITA_R` | Escrito pelo hook com `TOPO`; lido para definir `R` no selo. (`P bin/commit_msg.sh:18,28`; `B bin/tests/test_lei_akita.sh:17`) |
-| `LEI_AKITA_COMMIT` | Escrito pelo hook com o SHA sintético; lido no seletor Bash, ramo Python e execução do juiz. (`P bin/commit_msg.sh:25,28`; `P bin/tests/test_lei_akita.sh:23,507–510,996–998`) |
-| `LEI_AKITA_HEAD` / `ALVO` | Pre-push escreve HEAD do push; modo commit substitui pela revisão sintética. `_ler` e `_show` usam ALVO como revisão-fonte. (`B bin/pre-push.sh:38`; `P bin/tests/test_lei_akita.sh:21–24,76–78,998`) |
-
-Quanto aos chamadores:
-
-- **`pos_push.sh`: passa pela ausência de linha**, pois sua mensagem automática não contém LEI-AKITA. O mesmo ocorre nas mensagens de `relato`, `codex_estado` e `reverter_o122`. (`B bin/pos_push.sh:30–38`; `B bin/relato.sh:136`; `B bin/codex_estado.sh:83`; `B bin/reverter_o122.sh:30`; `P bin/commit_msg.sh:17`)
-- **Fabricante: PROCEDENTE.** O prompt exige formato “exato” sem `padrao=`, e o LEIAME repete esse formato. Se seguido literalmente, o juiz recusa por campo ausente. (`B bin/fabricante_prompt.md:49–56`; `B bin/molde_fatia/LEIAME:44–46`; `B bin/tests/test_lei_akita.sh:319–321`)
-- **Esteira/integrador:** copia a mensagem, substitui RED/Suite e commita com `-F ... -- caminhos`; não acrescenta `padrao=`. As cadeias antigas também usam diretamente o arquivo de mensagem. (`B bin/molde_fatia/esteira.sh:14,22,26`; `B app/core/integrador_lote.py:481`; `B bin/molde_fatia/cadeia.sh:68`; `B bin/molde_autocura/cadeia.sh:65`)
-- **`codex_pergunta --construtor`:** proíbe commit; **disjuntor:** os comandos Git encontrados consultam worktrees, histórico e status. Não há mensagem automática desses caminhos demonstrada como vítima do hook. (`B bin/codex_pergunta.sh:343–346`; `B bin/disjuntor.py:1234–1247`)
-
-Recusa não demonstra travamento: no integrador, commit malsucedido não entra em `subiram`, mas o fluxo segue ao push. Incidência em pacotes reais: **[nao verificado]**. (`B app/core/integrador_lote.py:719–720,739`)
-
-**5. Selo: PROCEDENTE — há verdes vazios.**
-
-**Reconhecedor divergente:** para `titulo\rLEI-AKITA: padrao=Inventado`, o `grep` inicial não encontra a linha e o hook retorna 0; `tem_linha` Python reconhece a linha após o CR. Conferido em memória, sem arquivos. Logo existe mensagem que o hook dispensa e o juiz do push examinaria. (`P bin/commit_msg.sh:17`; `B bin/tests/test_lei_akita.sh:339–355`)
-
-**Delegação apenas textual:** `_delega` exige executável e substring. Um hook com `exit 0` e a referência somente em comentário satisfaz essa condição. A bateria executa outro wrapper, plantado pelo teste, sem provar a execução do instalado ou do alvo efetivo dele. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:24,40–42,55,74`)
-
-**Censo vazio por erro:** falha de `worktree list` não é conferida pelo chamador; falha de configuração vira `continue`; diretório ausente é pulado. Só a saída textual vazia determina aprovação. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:28–33,44–45`)
-
-Os MORDEs provam menos que a promessa:
-
-- **(a)** detecta o script mutante que aceita tudo na fixture; não testa o wrapper instalado. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:76–81`)
-- **(b)** detecta o desvio plantado por worktree e sua retirada; não prova que o censo real enumerou alguma worktree. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:83–88`)
-
-**Global/sistema e relativo: nada quanto à omissão explícita desses escopos.** A consulta não restringe a configuração a `--local`; caminhos relativos são ancorados em cada worktree. A cobertura continua sujeita aos erros silenciosos e ao teste textual de delegação. Configurações efetivas do host: **[nao verificado]**. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:30–32`)
-
-**Selo órfão: nada.** Seu nome entra no glob executado pela régua. (`B bin/regua.sh:138–145`)
-
-**6. Classes de reprovação.**
-
-| Classe | Achado |
-|---|---|
-| **Segundo juiz duplicando o registrado** | **nada no predicado principal:** `julgar_commit` chama o `julgar` existente. (`P bin/tests/test_lei_akita.sh:408–430`; `B bin/tests/test_lei_akita.sh:336–344`) |
-| **Derivação paralela de fonte única** | **PROCEDENTE:** “tem linha” é recalculado pelo `grep`, com semântica divergente do reconhecedor Python. (`P bin/commit_msg.sh:17`; `B bin/tests/test_lei_akita.sh:354–355`) |
-| **Selo sem mordida** | **PROCEDENTE na ligação com o instalado:** a mordida funcional está na fixture; o wrapper real passa por inspeção textual. (`P bin/tests/test_hook_mensagem_em_toda_copia.sh:24,40,55,74–81`) |
-| **ALVO com dois significados** | **nada no caminho normal:** significa revisão-fonte, seja ponta do push ou objeto sintético. O defeito demonstrado é o seletor ambiental que pode trocar indevidamente o caminho de julgamento. (`P bin/tests/test_lei_akita.sh:21–24,76–78,507–512,998`) |
-
-_5174 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5175 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
