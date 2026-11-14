@@ -1,7 +1,287 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 15:06** · publicado em **14/11/2026 15:06** (UTC-3)
+> Ultima resposta processada: **14/11/2026 15:11** · publicado em **14/11/2026 15:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 15:11 · sessao fbfa3d68b664 · E3-V10 · leitura · origem=Code
+
+**A árvore não preserva o main por leitor:** Folha muda o fio nos quatro estados; a API conserva o fio, mas muda porta/fila/verbos em P19; o vigia troca sua própria projeção de papel e admin. (`M:app/folha/fora_da_folha.py:65–78`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `M:app/chamados/services/vigia_fio.py:648–651`; `E:app/folha/fora_da_folha.py:74–89`; `E:app/chamados/services/tarefa_do_dia.py:570–598`; `E:app/chamados/services/vigia_fio.py:661–663`)
+
+Uso **M** para linhas do main reconstruídas do lado antigo do patch fornecido e **E** para linhas da cópia. Não atribuo ao main arquivos ausentes do patch. Identidade integral desses arquivos entre main e cópia: `[nao verificado]`.
+
+**Valores das portas**
+
+Notação: `PF=porta_fila`, `PP=porta_pergunta`; cada saída abaixo é **fio / rota / fila / verbos**. Essas são as chaves devolvidas pelas duas implementações. (`M:app/chamados/juizes.py:1667–1668`; `M:app/chamados/services/tarefa_do_dia.py:553–554`; `E:app/chamados/services/tarefa_do_dia.py:597–598`)
+
+Para P13/P14, o dado admite porta na própria célula ou âncora exclusivamente externa. Portanto, não há uma localização única demonstrada: na primeira, rota/fila são `PF/(A,)`; na segunda, `PP/()`. O mapa conserva o verbo informado. Localização concreta em produção: `[nao verificado]`. (`M:app/chamados/juizes.py:1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–598`)
+
+| Estado | C17 main | API tarefa main | Tarefa na árvore | Evidência M / E |
+|---|---|---|---|---|
+| P13: responder; painel validar | **admin** / PF ou PP / `(A,)` ou `()` / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | `M:app/chamados/juizes.py:1608–1619,1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–598` |
+| P14: validar; painel cobrar | **colab** / PF ou PP / `(A,)` ou `()` / `{A:cobrar}` | **admin** / mesma geometria / `{A:cobrar}` | **admin** / mesma geometria / `{A:cobrar}` | Mesmos trechos da linha anterior |
+| P19: A residual da célula decidir; ação admin sob B externo cobrar | **colab / PF / `(A,)` / `{A:decidir,B:cobrar}`** | **admin / PP / `()` / `{B:cobrar}`** | **admin / PF / `(A,)` / `{A:decidir,B:cobrar}`** | `M:app/chamados/juizes.py:1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–598` |
+| Simultâneo do anexo: colab+admin; único verbo validar | **admin** / geometria da porta / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | **colab** / mesma geometria / `{A:validar}` | `M:app/chamados/juizes.py:1608–1619,1657–1668`; `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/tests/test_e3_portas_tarefa.py:507–515` |
+
+O C17 continua na árvore com a escada `cobrar→colab`, `validar→admin`, demais→chamado. Sua resposta própria foi preservada; seus antigos leitores passaram a receber outra resposta. (`M:app/chamados/juizes.py:1608–1619,1653–1668`; `E:app/chamados/juizes.py:1650–1661,1695–1710`; `E:app/core/juizes.py:132–138`)
+
+**Comparação por leitor**
+
+As referências “C17”, “tarefa main” e “tarefa árvore” nesta tabela remetem às saídas completas e às linhas da tabela anterior.
+
+| Leitor × estado | Main | Árvore | IGUAL/DIFERE |
+|---|---|---|---|
+| Folha/`fora_da_folha` — P13 | C17: **admin** | tarefa: **colab**; porta/fila/verbos conservados | **DIFERE fio** |
+| Folha/`fora_da_folha` — P14 | C17: **colab** | tarefa: **admin**; porta/fila/verbos conservados | **DIFERE fio** |
+| Folha/`fora_da_folha` — P19 | C17: **colab**, PF, `(A,)`, `{A:decidir,B:cobrar}` | **admin**, PF, `(A,)`, mesmo mapa | **DIFERE fio** |
+| Folha/`fora_da_folha` — simultâneo | C17: **admin** | tarefa: **colab**; porta/fila/verbos conservados | **DIFERE fio** |
+| API `tarefa_do_dia` — P13 | tarefa main: colab | colab, mesma porta/fila/verbos | **IGUAL** nesses campos |
+| API `tarefa_do_dia` — P14 | tarefa main: admin | admin, mesma porta/fila/verbos | **IGUAL** nesses campos |
+| API `tarefa_do_dia` — P19 | admin, **PP, `()`, `{B:cobrar}`** | admin, **PF, `(A,)`, `{A:decidir,B:cobrar}`** | **DIFERE porta/fila/verbos** |
+| API `tarefa_do_dia` — simultâneo | tarefa main: colab | colab, mesma porta/fila/verbos | **IGUAL** nesses campos |
+
+A Folha lê o fio da porta e `o_que_segura` também publica os chamados de `fila`; não publica o mapa completo de verbos. Fontes da comparação Folha: `M:app/folha/fora_da_folha.py:65–78,225–235`; `E:app/folha/fora_da_folha.py:71–89,241–252`. Fontes da comparação API: `M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:570–598`.
+
+O vigia precisa de tabela própria: **seu papel no main era a lista de verbos, não o fio C17**. (`M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:661–663`)
+
+| Vigia × estado | Main: papel; incremento admin | Árvore: papel; incremento admin | IGUAL/DIFERE |
+|---|---|---|---|
+| P13 | `validar`; `bool({'validar'} ∩ VERBOS_DO_ADMIN_main)` | `colab`; **0** | **DIFERE papel**; número main `[nao verificado]` |
+| P14 | `cobrar`; `bool({'cobrar'} ∩ VERBOS_DO_ADMIN_main)` | `admin`; **1** | **DIFERE papel**; número main `[nao verificado]` |
+| P19 | `cobrar,decidir`; `bool({'cobrar','decidir'} ∩ VERBOS_DO_ADMIN_main)` | `admin`; **1** | **DIFERE papel**; número main `[nao verificado]` |
+| Simultâneo | `validar`; `bool({'validar'} ∩ VERBOS_DO_ADMIN_main)` | `colab`; **0** | **DIFERE papel**; número main `[nao verificado]` |
+
+Fontes: `M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:661–663`. A rota recebida acompanha C17 no main e tarefa na árvore, conforme a primeira tabela; em P19 ambos recebem PF. (`M:app/chamados/services/vigia_fio.py:640,649`; `E:app/chamados/services/vigia_fio.py:648,661`)
+
+**Corrijo o limite da atualização anterior:** só está comprovado na cópia que `VERBOS_DO_ADMIN=('validar','decidir')`. O arquivo correspondente do main não veio no patch; portanto, os números main **1/0/1/1** e a igualdade numérica de P19 ficam `[nao verificado]`. (`E:app/chamados/services/verbos.py:22`)
+
+| Demais leitores × estado | Main | Árvore | IGUAL/DIFERE |
+|---|---|---|---|
+| `furo_sem_canal` — P13 | Não devolve fio/porta/verbos/fila; cobertura pelos registros crus da célula | Não devolve esses campos; havendo a porta descrita, exclui a célula de `sem_canal` | **DIFERE formato**; igualdade da cobertura `[nao verificado]` |
+| `furo_sem_canal` — P14 | Mesma regra crua; carimbos/FKs concretos `[nao verificado]` | Havendo a porta descrita, exclui de `sem_canal` | **DIFERE formato**; igualdade da cobertura `[nao verificado]` |
+| `furo_sem_canal` — P19 | A vivo da própria célula fornece cobertura | A porta fornece cobertura | **IGUAL cobertura da célula; DIFERE formato** |
+| `furo_sem_canal` — simultâneo | Mesma regra crua; carimbos/FKs concretos `[nao verificado]` | Havendo a porta descrita, exclui de `sem_canal` | **DIFERE formato**; igualdade da cobertura `[nao verificado]` |
+
+O main testa **pergunta da célula com `respondida_em IS NULL` OU chamado da célula em VIVOS**. A árvore testa presença da porta. O main publica `com_pergunta_aberta/com_chamado_vivo`; a árvore publica `com_porta_fila/com_porta_pergunta/nao_sei`. A entrada no universo também depende de janela/veredito; totais de produção `[nao verificado]`. (`M:app/chamados/services/furo_sem_canal.py:80–86,95–96`; `E:app/chamados/services/furo_sem_canal.py:75–87,97–116`)
+
+| Leitor | P13 | P14 | P19 | Simultâneo | Evidência e limite |
+|---|---|---|---|---|---|
+| Painel | Mapa dado: `{A:validar}` | `{A:cobrar}` | `{A:decidir,B:cobrar}` | `{A:validar}` | Na árvore, fila e verbos vêm de `qs_na_fila/particionar_verbos`; não há fio/rota de dia nesse contrato. **IGUAL/DIFERE do corpo main `[nao verificado]`**: falta seu arquivo main. (`E:app/chamados/services/painel.py:188–190,212–232`) |
+| Pauta `dias_sem_fio` | Árvore não inclui como sem fio | Mesmo resultado | Mesmo resultado | Mesmo resultado | Só compara fio com `FIO_SEM_PORTA`; todos os fios acima são diferentes de nada. **Main `[nao verificado]`**, arquivo ausente. (`E:app/ponto/services/pautas_dos_discordantes.py:79–84`) |
+| Beco `cadastro_realidade` | Árvore não inclui como sem porta | Mesmo resultado | Mesmo resultado | Mesmo resultado | Só observa existência da porta nesse ramo. **Main `[nao verificado]`**, arquivo ausente. (`E:app/escala/services/cadastro_realidade.py:464–471`) |
+| Retrato/tela da Folha | Valor agregado `[nao verificado]` | Idem | Idem | Idem | Recebe os grupos da fonte; outros dias podem determinar o grupo da pessoa. Foto efetivamente lavrada não foi fornecida. (`E:app/folha/fora_da_folha.py:92–103,197–215`; `E:app/folha/retrato_folha.py:1158–1190`) |
+
+**Quem escreve e quem lê**
+
+“Escrever” aqui distingue produzir o resultado em memória de persistir uma foto. A tarefa produz saída pura; a persistência do retrato ocorre no command próprio. (`E:app/chamados/services/tarefa_do_dia.py:597–618`; `E:app/folha/management/commands/lavrar_retrato_folha.py:69–78`)
+
+| Informação | Quem produz | Quem lê nos pontos relevantes |
+|---|---|---|
+| Verbo do chamado | `verbo_do_chamado`; `particionar_verbos` escreve `mapa[ch_id]` | Painel e `alimentar_fila`. (`E:app/chamados/catalogo/natureza.py:41–75`; `E:app/chamados/services/verbos.py:47–52`; `E:app/chamados/services/painel.py:229–232`; `E:app/chamados/juizes.py:1570`) |
+| Pertença à fila | `qs_na_fila`; `alimentar_fila` monta `fila_ids/fila_cel/fila_dia` | C17 e tarefa. (`E:app/chamados/services/painel.py:188–190`; `E:app/chamados/juizes.py:1573–1589,1699–1708`; `E:app/chamados/services/tarefa_do_dia.py:571–584`) |
+| Porta/fila/verbos/fio C17 | `porta_alcancavel_do_dia`, com `fio_pelos_verbos` | Na árvore, lado antigo da sombra. (`E:app/chamados/juizes.py:1655–1661,1699–1710`; `E:app/chamados/management/commands/diff_e3_sombra.py:127`) |
+| Porta/fila/verbos/fio da tarefa | `_portas_da_tarefa`; `porta_da_tarefa` apenas projeta | API, Folha, vigia, furo, beco. (`E:app/chamados/services/tarefa_do_dia.py:570–607`; `E:app/folha/fora_da_folha.py:74–89`; `E:app/chamados/services/vigia_fio.py:648–663`; `E:app/chamados/services/furo_sem_canal.py:97–115`; `E:app/escala/services/cadastro_realidade.py:469`) |
+| Papel/admin do vigia | Main: verbos/interseção; árvore: fio/igualdade | Contadores e linhas de alcance. (`M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:635–663`) |
+
+**Menor ponto de cura de cada diferença**
+
+| DIFERE | Menor retorno ao contrato do mesmo leitor no main | Restrição |
+|---|---|---|
+| Folha — quatro estados | Voltar sua porta à autoridade **C17 existente**, no limite `_porta/_fio_do_dia`; o leitor continua apenas lendo fio/fila | Não mudar globalmente o fio da tarefa: isso quebraria a API main em P13/P14/simultâneo. (`M:app/folha/fora_da_folha.py:65–78`; `M:app/chamados/services/tarefa_do_dia.py:550–554`; `E:app/folha/fora_da_folha.py:71–89`) |
+| API — P19 | Em `_portas_da_tarefa`, restaurar a projeção original **selecionada pelas ações**, antes da união residual | O trecho que acrescenta A é a união com `da_celula`; dele saem a mudança de rota, fila e mapa. (`M:app/chamados/services/tarefa_do_dia.py:545–554`; `E:app/chamados/services/tarefa_do_dia.py:571–584,597–598`) |
+| Vigia — quatro papéis | Restaurar a projeção main: papel é a lista ordenada de verbos | Trocar apenas o fio não reproduz o papel textual main. (`M:app/chamados/services/vigia_fio.py:648–651`; `E:app/chamados/services/vigia_fio.py:662–663`) |
+| Vigia — regra administrativa | Restaurar a pergunta main: **existe verbo administrativo?** | `fio == admin` responde outra pergunta. A regra main deve continuar usando sua autoridade `VERBOS_DO_ADMIN`; seu conteúdo main falta. (`M:app/chamados/services/vigia_fio.py:650`; `E:app/chamados/services/vigia_fio.py:662`; `E:app/chamados/services/verbos.py:22`) |
+| Furo — formato/cobertura | Restaurar o retorno e o teste main no próprio `medir` | Esse teste cru era **regra própria do leitor**. Restaurá-lo literalmente mantém um derivador paralelo à porta da tarefa; o dado não demonstra equivalência que permita substituí-lo sem mudar comportamento. (`M:app/chamados/services/furo_sem_canal.py:80–96`; `E:app/chamados/services/furo_sem_canal.py:97–116`) | [nao verificado]
+
+**Não existe um único valor de `fio` que reproduza simultaneamente Folha-main e API-main nesses estados.** O registro vivo já distingue as perguntas: C17 responde alcançabilidade com verbo do painel; C19 responde ações exigíveis por instância. Preservar essas autoridades nas respectivas perguntas evita inventar regra no leitor. Unificá-las sob uma única resposta exige mudar pelo menos um contrato main. (`E:app/core/juizes.py:138,153–159`; `M:app/chamados/juizes.py:1608–1619`; `M:app/chamados/services/tarefa_do_dia.py:550–554`)
+
+No vigia, a projeção antiga também era regra do leitor. Para ele apenas ler respostas prontas, seria necessário **mover essa mesma projeção para uma autoridade existente**, conservando a pergunta “algum verbo exige admin”; deduzi-la novamente do fio não serve. Já no furo, uma cura sem sua regra própria ou sem transferir integralmente essa regra não está demonstrada. (`M:app/chamados/services/vigia_fio.py:648–651`; `M:app/chamados/services/furo_sem_canal.py:80–86`; `E:app/core/juizes.py:138,159`)
+
+**O que os testes fixam** [nao verificado]
+
+| Teste | Espera na árvore | Relação com o main | [nao verificado]
+|---|---|---|
+| `test_e3_portas_v6_sem_banco.py:16–20` | P13: responder + validar → **colab** | Preserva tarefa-main; fixa divergência da Folha/C17-main, que dá admin. (`M:app/chamados/juizes.py:1608–1619`; `M:app/chamados/services/tarefa_do_dia.py:550–554`) |
+| Mesmo arquivo `:22–26` | P14: validar + cobrar → **admin** | Preserva tarefa-main; contraria Folha/C17-main colab. Mesmas fontes main acima. |
+| Mesmo arquivo `:28–42` | Ação admin/cobrar + residual decidir → **admin** | Fixa conflito de fio com C17. **Não fixa a geometria exata de P19:** põe ambos os chamados na célula e espera fila `(101,202)`. (`E:app/chamados/tests/test_e3_portas_v6_sem_banco.py:38–42`) |
+| `test_e3_portas_tarefa.py:85–97` | Variante P13: A residual decidir, B externo validar, ação responder → colab | Espera tarefa, enquanto C17 dá admin para decidir+validar. (`M:app/chamados/juizes.py:1608–1619`) |
+| `test_v8_R2_hipotese_acao_admin_isolada`, `test_e3_portas_tarefa.py:496–501` | Admin isolado → admin | **Não cobre simultâneo.** (`E:app/chamados/tests/test_e3_portas_tarefa.py:497–501`) |
+| `test_v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia`, mesmo arquivo `:503–515` | Simultâneo → **colab** | Mesma porta, só validar: contraria C17 admin. Portas distintas, validar+cobrar: C17 também colab; essa variante não demonstra divergência de fio. (`M:app/chamados/juizes.py:1608–1619`; `E:app/chamados/tests/test_e3_portas_tarefa.py:507–514`) |
+| `test_v8_R2_alcance_admin_com_pergunta_colab`, mesmo arquivo `:203–225` | Fixture ORM consulta crédito/fila e espera validar/colab | Fixa a expectativa E3/tarefa-main; execução ORM nesta auditoria `[nao verificado]`. (`E:app/chamados/tests/test_e3_portas_tarefa.py:203–225`) |
+| `test_e3_diff_sombra.py:157–164` | Validar com fio colab → `exige_admin=False` | Fixa a nova projeção do vigia; não testa sua expressão main por interseção. (`M:app/chamados/services/vigia_fio.py:648–651`) |
+| `test_e3_pendentes_app.py:145–159` | Só a sombra pode chamar C17; acusa Folha voltando a ele | A catraca impede o retorno direto à fonte main; não prova equivalência das respostas. (`E:app/chamados/tests/test_e3_pendentes_app.py:145–159`) |
+
+Os testes v6 usam corpos reais extraídos por AST com fornecedores em memória; não substituem ORM. O executor puro remove a classe ORM. Foram executados 10 testes v6 e os dois R2 puros, todos passaram; resultado de terminal sem arquivo persistido: `[nao verificado]`. (`E:app/chamados/tests/test_e3_portas_v6_sem_banco.py:1–4`; `E:app/chamados/tests/e3_portas_apoio.py:18–26`; `E:app/chamados/tests/e3_portas_regra.py:22–29`) [nao verificado]
+
+Para fechar os pontos main ainda não verificáveis, faltam **`app/chamados/services/verbos.py`**, **`app/chamados/services/painel.py`**, **`app/ponto/services/pautas_dos_discordantes.py`** e **`app/escala/services/cadastro_realidade.py`** do main. Eles não estão nos hunks fornecidos; suas respostas integrais no main permanecem `[nao verificado]`.
+
+## 14/11 15:09 · sessao bba7f77d5034 · - · - · origem=Ronald (tmux)
+
+Valores reconstituídos do patch, sem executar ORM:
+
+| Estado canônico do anexo | C17 main | tarefa main | tarefa árvore |
+|---|---|---|---|
+| P13 responder + validar | admin | colab | colab |
+| P14 validar + cobrar | colab | admin | admin |
+| P19 A residual decidir + ação admin sob B cobrar | colab; PF; fila `(A,)`; verbos `{A:decidir,B:cobrar}` | admin; PP; fila `()`; verbos `{B:cobrar}` | admin; PF; fila `(A,)`; verbos `{A:decidir,B:cobrar}` |
+| Simultâneo, uma porta com validar | admin | colab | colab |
+
+Fontes: C17 main `app/chamados/juizes.py:1608–1619,1653–1668`, reconstruído do patch; árvore `app/chamados/juizes.py:1650–1661,1695–1710`. Tarefa main `app/chamados/services/tarefa_do_dia.py:538–554`, reconstruído do patch; árvore `app/chamados/services/tarefa_do_dia.py:553–598`.
+
+Para P13/P14, porta da própria célula produz PF/fila `(A,)`; âncora exclusivamente externa produz PP/fila `()`, preservando o mapa do verbo. Não existe uma localização única da âncora nos nomes P13/P14 fornecidos; o anexo admite explicitamente ambas. Fonte: C17 main `app/chamados/juizes.py:1657–1668`; tarefa main `app/chamados/services/tarefa_do_dia.py:545–554`; árvore `app/chamados/services/tarefa_do_dia.py:571–598`.
+
+Vigia, por dia com porta:
+
+| Estado | papel main → árvore | exige_admin main → árvore |
+|---|---|---|
+| P13 | validar → colab | 1 → 0 |
+| P14 | cobrar → admin | 0 → 1 |
+| P19 | cobrar,decidir → admin | **1 → 1** |
+| Simultâneo uma porta validar | validar → colab | 1 → 0 |
+
+O main usa interseção com `VERBOS_DO_ADMIN`, que inclui **decidir**; a árvore usa igualdade do fio com admin. Fontes: patch main `app/chamados/services/vigia_fio.py:648–651`; árvore `app/chamados/services/vigia_fio.py:657–663`; `app/chamados/services/verbos.py:22`. Portanto não classificar todo o contador P19 como DIFERE: o papel difere, o incremento administrativo coincide.
+
+Há outra variante de simultâneo: portas distintas `{101:validar,202:cobrar}`. Nela, C17 e tarefa retornam colab; o contador administrativo ainda muda de 1 para 0. O teste percorre ambas as variantes: `app/chamados/tests/test_e3_portas_tarefa.py:503–515`. A descrição do anexo corresponde à variante com um único validar.
+
+`furo_sem_canal` main **não devolve fio/rota/verbos/fila**. Decide cobertura por pergunta da própria célula com `respondida_em IS NULL` OU chamado da própria célula em VIVOS: main reconstruído `app/chamados/services/furo_sem_canal.py:80–86`; suas métricas antigas estão em `:95–96`. A árvore decide pela existência de porta e publica contagens por rota: `app/chamados/services/furo_sem_canal.py:89–116`. Cobertura main de P14 com âncora exclusivamente externa não decorre do par ação/verbo: os demais registros da célula são `[nao verificado]`. O ingresso no universo também exige veredito e janela: `app/chamados/services/furo_sem_canal.py:75–87`.
+
+Os comentários que chamam a preferência colab da tarefa de “main” preservam **a tarefa main**, mas não preservam a saída do C17 main para os leitores anteriormente ligados a ele: `app/chamados/services/tarefa_do_dia.py:589–598`; `app/chamados/tests/test_e3_portas_tarefa.py:221–225,503–515`; C17 main `app/chamados/juizes.py:1608–1619`.
+
+## 14/11 15:09 · sessao df8530d7400e · - · - · origem=Ronald (tmux)
+
+Mapa dos consumidores e escritores da árvore:
+
+| Campo | Quem escreve o resultado | Quem lê |
+|---|---|---|
+| Verbo por chamado | `particionar_verbos`: chama `verbo_do_chamado` e monta mapa (`app/chamados/services/verbos.py:47-52`); natureza escolhe validar/cobrar/decidir (`app/chamados/catalogo/natureza.py:41-75`). | Painel (`app/chamados/services/painel.py:229-232,383`), alimentação comum (`app/chamados/juizes.py:1570`). |
+| Pertença à fila | `qs_na_fila` seleciona vivos em COBRANCA e exclui silêncio vigente (`app/chamados/services/painel.py:188-190`); `alimentar_fila` monta `fila_ids`, `fila_cel`, `fila_dia` (`app/chamados/juizes.py:1573-1589`). | C17 (`app/chamados/juizes.py:1699-1708`) e tarefa (`app/chamados/services/tarefa_do_dia.py:571-584`). |
+| C17: porta/fila/verbos/fio | `porta_alcancavel_do_dia`, fio pela escada `fio_pelos_verbos` (`app/chamados/juizes.py:1650-1661,1699-1710`). | Sombra, lado atual (`app/chamados/management/commands/diff_e3_sombra.py:127`). |
+| Tarefa: porta/fila/verbos/fio | `_portas_da_tarefa` reúne portas, lê verbos, combina donos das ações com residuais e escreve `out` (`app/chamados/services/tarefa_do_dia.py:570-598`). | `porta_da_tarefa` apenas projeta (`app/chamados/services/tarefa_do_dia.py:607`); Folha, vigia, furo e beco leem essa projeção (`app/folha/fora_da_folha.py:74,89`; `app/chamados/services/vigia_fio.py:648,661-663`; `app/chamados/services/furo_sem_canal.py:97-115`; `app/escala/services/cadastro_realidade.py:469`). |
+
+**Vigia merece comparação própria:** no main, segundo o patch fornecido, papel é a lista de verbos e `exige_admin` testa interseção com `VERBOS_DO_ADMIN`; na árvore, papel é fio e admin significa `fio == 'admin'` (`diff_leitores.patch`, hunk antigo `vigia_fio.py:650-653`; árvore `app/chamados/services/vigia_fio.py:661-663`). A constante atual inclui **validar e decidir** (`app/chamados/services/verbos.py:22`); sua identidade com main fora do patch é `[nao verificado]`.
+
+| Estado | Vigia main: papel / admin | Árvore: papel / admin |
+|---|---|---|
+| P13, verbo validar | `validar / 1` | `colab / 0` |
+| P14, verbo cobrar | `cobrar / 0` | `admin / 1` |
+| P19, verbos decidir+cobrar | `cobrar,decidir / 1` | `admin / 1` |
+| Simultâneo, verbo validar | `validar / 1` | `colab / 0` |
+
+Evidências dos valores E3: `app/chamados/tests/test_e3_portas_v6_sem_banco.py:20-41`; simultâneo `app/chamados/tests/test_e3_portas_tarefa.py:225`. Evidências da projeção vigia: patch antigo acima e `app/chamados/services/vigia_fio.py:661-663`. **Devolver fio C17 ao vigia sem restaurar sua projeção antiga ainda erra P19:** C17 colab não implica `exige_admin=False`, porque o main conta decidir (`app/chamados/juizes.py:1650-1661`; `app/chamados/services/verbos.py:22`).
+
+Outros leitores:
+
+- **Pauta `dias_sem_fio`:** só compara fio com `FIO_SEM_PORTA`; não publica fio/porta/verbos/fila. Trocar colab por admin não altera sua inclusão nesses estados com porta (`app/ponto/services/pautas_dos_discordantes.py:79-84`).
+- **Beco:** só observa presença de porta; não lê fio/rota/fila/verbos (`app/escala/services/cadastro_realidade.py:464-471`).
+- **Furo:** main não devolve fio/porta/verbos/fila; o patch usa pergunta com carimbo cru nulo ou chamado vivo com FK da célula. Não deduzir canal main de C17: uma âncora externa não satisfaz o segundo teste; ação responder/validar não basta para provar `respondida_em` cru. Resultado main por fixture exige conferir seus carimbos/FKs; produção `[nao verificado]`. A árvore exclui do sem_canal qualquer célula com porta e conta rota PF/PP (`app/chamados/services/furo_sem_canal.py:97-115`).
+- **Retrato Folha:** lê os grupos da fonte e monta `dono` (`app/folha/retrato_folha.py:1158-1190`); command existente persiste (`app/folha/management/commands/lavrar_retrato_folha.py:69,78`). Divergência de um dia pode propagar, mas o grupo agregado depende dos outros dias (`app/folha/fora_da_folha.py:92-103,197-215`); valor final por pessoa `[nao verificado]`.
+
+Pontos de cura sem derivador local:
+
+- **Folha:** delegar novamente ao C17 existente preserva sua resposta anterior; alterar globalmente fio da tarefa para coincidir com C17 muda a resposta da API cujo main já divergia, conforme o anexo fornecido (`diff_leitores.patch`, lados antigos `folha/fora_da_folha.py:65-78` e `tarefa_do_dia.py:545-554`).
+- **Vigia:** restaurar a autoridade anterior **e a projeção anterior** de papel/admin; não usar fio como substituto da pergunta “algum verbo exige admin” (`diff_leitores.patch`, antigo `vigia_fio.py:643,650-653`; árvore `app/chamados/services/vigia_fio.py:648,662-663`).
+- **API P19:** o menor lugar comum é `_portas_da_tarefa`, onde a união residual amplia a saída original escolhida apenas pelas ações; não corrigir no consumidor (`app/chamados/services/tarefa_do_dia.py:571-584`; main no patch `tarefa_do_dia.py:545-554`).
+- Uma saída única idêntica para Folha e API não pode reproduzir dois valores diferentes do main para o mesmo estado; preservar os dois exige manter as perguntas/projeções distintas das autoridades existentes, ou declarar a incompatibilidade com a exigência de unificação. Dedução a partir dos dois corpos fornecidos no patch; a solução arquitetural aprovada `[nao verificado]`.
+
+Para fechar referências **do main** dos leitores adicionais, faltam os corpos de `app/ponto/services/pautas_dos_discordantes.py` e `app/escala/services/cadastro_realidade.py`; o patch fornecido não os inclui. Seus comentários atuais documentam a migração (`app/ponto/services/pautas_dos_discordantes.py:51-54`; `app/escala/services/cadastro_realidade.py:419-422`), mas não provam o corpo main `[nao verificado]`.
+
+## 14/11 15:08 · sessao 3f5e5f8708fc · - · - · origem=Ronald (tmux)
+
+Auditoria dos testes, sem alterar arquivos. [nao verificado]
+
+| Teste | O que fixa na árvore | Comparação com main | [nao verificado]
+|---|---|---|
+| `test_e3_portas_v6_sem_banco.py:16–20` | Ação responder/colaborador + verbo validar → fio **colab** | P13: coincide com tarefa do main; contraria C17 **admin**. Referência main fornecida: `codex_v10_construtor.r`, tabela P13. |
+| `test_e3_portas_v6_sem_banco.py:22–26` | Ação validar/admin + verbo cobrar → fio **admin** | P14: coincide com tarefa do main; contraria C17 **colab**. Referência main fornecida: `codex_v10_construtor.r`, tabela P14. |
+| `test_e3_portas_v6_sem_banco.py:28–42` | Caso `('admin','cobrar','decidir','admin')` exige **admin**; publica os dois chamados/verbos | P19: fixa o conflito **admin** contra C17 **colab**; a geometria não é a mesma do anexo: o teste põe **ambos** em `fila_cel`, portanto espera `(101,202)`, não somente `(A,)` (`:38–42`). | [nao verificado]
+| `test_e3_portas_tarefa.py:85–97` | ORM: A residual decidir; B externo GPS validar; tarefa responder sob B → **colab** | Variante de P13 com residual; contraria o fio **admin** de C17 sobre verbos decidir+validar. Fixture A/B em `:29–38`. |
+| `test_e3_portas_tarefa.py:451–457` | Mesmo P13 sintético: responder+validar → **colab** | Repete a expectativa E3/tarefa do main, não C17. |
+| `test_v8_R2_hipotese_acao_admin_isolada`, `test_e3_portas_tarefa.py:496–501` | Validar/admin isolado → PF/admin/validar | Não cobre simultâneo; não serve como prova de preservação de R2 (`:497`). |
+| `test_v8_R2_validacao_e_resposta_alcancaveis_no_mesmo_dia`, `test_e3_portas_tarefa.py:503–515` | Simultâneo: **colab**, mantendo ações e verbos; testa porta compartilhada e portas distintas | Com mesma porta, só verbo validar: tarefa main **colab**, C17 **admin**. Com portas distintas, mapa validar+cobrar: C17 também **colab**; portanto essa segunda combinação não demonstra divergência de fio. |
+| `test_v8_R2_alcance_admin_com_pergunta_colab`, `test_e3_portas_tarefa.py:221–225` | ORM: PF/validar/**colab** | Expectativa da tarefa main; diverge de C17/admin. O arranjo consulta fila/partição reais antes de afirmar resultado (`:203–219`). Execução ORM nesta auditoria: `[nao verificado]`. |
+| `test_e3_diff_sombra.py:157–164` | Vigia: verbo validar, fio colab → `exige_admin=False` | Fixa precisamente a mudança do vigia E3, pois o main conta presença de verbo administrativo, conforme patch fornecido em `vigia_fio.py`, hunk `@@ -631,24 +636,31 @@`. |
+| `test_e3_portas_v6_sem_banco.py:55–63` | Sem portas/residual: admin+colaborador → **colab**, projeção `None` | Trata prioridade interna sem porta; não demonstra preservação dos consumidores com porta. |
+| `test_e3_portas_tarefa.py:473–479` | Ação admin/validar + residual cobrar+decidir → **colab** | É caso em que dono residual cobrar resolve a precedência; não cobre P14 isolado nem P19 residual decidir. |
+
+Os testes v6 executam corpos reais extraídos por AST com fornecedores em memória; o próprio módulo declara que não substituem execução Django (`test_e3_portas_v6_sem_banco.py:1–4`; `e3_portas_apoio.py:18–26`). O executor puro remove a classe ORM inteira de `test_e3_portas_tarefa.py` (`e3_portas_regra.py:22–29`). [nao verificado]
+
+Executei, com `PYTHONDONTWRITEBYTECODE=1`, somente os 10 testes v6 e os dois R2 puros: **10/10, 1/1 e 1/1 passaram**; nenhum banco acessado; resultados de terminal sem arquivo persistido: `[nao verificado]`. [nao verificado]
+
+Há também catraca que bloqueia uma cura por simples retorno dos consumidores ao C17: somente o instrumento de sombra é permitido como chamador (`test_e3_pendentes_app.py:19–21,145–148`); um `_porta` da folha voltando ao C17 é explicitamente o mutante reprovado (`:150–159`). Essa expectativa teria de ser alinhada à regra de preservação solicitada, sem tratar a catraca atual como prova de equivalência com main.
+
+O teste M6 preserva o **corpo do C17** e suas respostas próprias — inclusive pergunta externa validar → admin — mas não exige que os leitores migrados conservem essas respostas (`test_e3_pendentes_app.py:171–202`). [nao verificado]
+
+## 14/11 15:07 · sessao fb10aa8e5988 · HOOKMSG · verificador · origem=Code
+
+Referências marcadas **v3** usam a numeração nova do diff fornecido; as demais são da cópia-base.
+
+1. **PROCEDENTE — o early-exit pode aprovar uma entrada ilegível.** Existe `git -C R`, mas seu retorno é ignorado: erro com stdout vazio → `tem_linha(False)` → `PADRAO_MSG_OK`, antes do leitor estrito. Isso permite verde sem conhecer a mensagem; ocorrência em produção: [nao verificado]. (`bin/tests/test_lei_akita.sh:89–92`, **v3**; leitor estrito: `:414–426`, **v3**.)
+
+   A cura de argv fecha a herança isolada de `LEI_AKITA_COMMIT`: exige `--commit` e rejeita combinação com HEAD/MORDE. A régua não passa posicionais; o pre-push também não; o MORDE interno chama Python diretamente. Não apareceu mudança acidental de modo nesses caminhos. A bateria real também foi restaurada. (`bin/tests/test_lei_akita.sh:26–33`, **v3**; `bin/regua.sh:138–140`; `bin/pre-push.sh:38`, **v3**; `bin/tests/test_lei_akita.sh:979`, base; `bin/tests/test_hook_mensagem_em_toda_copia.sh:81–82`, **v3**.)
+
+2. **PROCEDENTE — o selo ainda admite verde parcial e vermelho falso.** [nao verificado]
+
+   **Verde parcial:** os cinco casos exercitam o script da cópia; instalado e alternativos recebem apenas “padrão inventado” e “sem linha”. Um hook que cite o script, recuse exclusivamente o texto inventado da fixture e aceite todo o restante passa, inclusive aceitando `n/a (instrumento)` em negócio. Os mutantes atuais não cobrem isso. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:71–90`, `:101–115`, **v3**.)
+
+   **Vermelho falso por relocação:** `_roda` copia somente o wrapper. Um hook válido que localize o script relativamente ao próprio `$0` perde seu destino na cópia e passa a recusar até mensagem sem linha. Existência desse wrapper em produção: [nao verificado]. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:87–90`, **v3**.)
+
+   **Vermelho falso por configuração herdada:** os plantados não fixam `core.hooksPath`; uma configuração global pode fazer seus commits ignorarem `.git/hooks`, inclusive o mutante, invalidando a mordida. Configuração global efetiva: [nao verificado]. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:59–66`, `:101–109`, **v3**.)
+
+   Quanto a efeitos colaterais: os casos usam o repo plantado, e o wrapper novo obtém dele o `TOPO`; não há escrita direta em `$wt` nesse fluxo. Porém, copiar um hook não restringe seus acessos absolutos. Escrita efetiva no repo real por algum alternativo: [nao verificado]. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:35–42`, `:87–90`, **v3**; `bin/commit_msg.sh:19–29`, **v3**.)
+
+3. **PROCEDENTE — reclassifico o descarte por “fora do escopo”; permanece preexistente, sem cura.** O integrador é chamador de `git commit` e consumidor de sua recusa: recebe falso, não interrompe nem desfaz a cópia, faz push e pode seguir ao deploy. A definição local de escopo inclui chamadores e leitores fora do diff. (`app/core/integrador_lote.py:481`, `:714–720`, `:739–753`; `CLAUDE.md:379–380`.)
+
+   Há uma ordem ainda anterior: `rodar` solicita reload da cópia **antes** do commit; esse modo chega ao HUP. Portanto, interromper apenas o deploy posterior não fecha toda a publicação. (`app/core/integrador_lote.py:638`, `:701`; `bin/deploy.sh:82`, `:360`.)
+
+   “Antes de religar a esteira” cobre a entrada oficial condicionada à pausa, mas a CLI admite `rodar` diretamente. A condição completa seria **antes de qualquer execução do integrador**. Uso direto em produção e alcance integral do E3-V10: [nao verificado]. A decisão fila/bloqueio cabe ao opus com o descarte anexado. (`bin/integrador.sh:19–32`; `bin/trava.sh:40–42`; `app/core/integrador_lote.py:614–638`, `:857–859`; `CLAUDE.md:376–377`.)
+
+4. **PROCEDENTE — classes demonstradas:** selo sem mordida suficiente, pelos casos ausentes no hook efetivo; ordem de validação/publicação, pelo OK antes de validar a leitura e pelo reload anterior ao commit. (`bin/tests/test_hook_mensagem_em_toda_copia.sh:81–90`, **v3**; `bin/tests/test_lei_akita.sh:89–92`, **v3**; `app/core/integrador_lote.py:638`, `:719`.)
+
+   **Segundo juiz, derivação paralela da regra e campo com dois significados: nada demonstrado no delta** — os dois modos chamam `julgar_commit`; o defeito apontado está no atalho de leitura anterior. (`bin/tests/test_lei_akita.sh:84–92`, `:421–443`, `:513`, `:524–529`, **v3**.)
+
+## 14/11 15:07 · sessao ecf9ce507b74 · FRAC5-TEXTO · verificador · origem=Code
+
+1. **PROCEDENTE — o texto proposto corresponde ao juiz atual, mas nem todas as portas o cumprem.** O juiz exige uma fração ≥14 e no máximo três; aceita `[14,2]`, sem mínimo de 5. (`app/ferias/models.py:251`, `:252`, `:267`, `:269`, `:271`; anexo `templates/ferias/agendar.html:10`)
+
+   - **Remarcação comum:** pode transformar a única fração de 14 em 2, satisfeitas as demais guardas. A view chama `_trocar_janela`, que verifica estado/saldo e salva sem `clean()`; `save()` também não chama o juiz. (`app/ferias/views.py:723`; `app/ferias/services.py:707`, `:712`, `:716`, `:729`, `:745`; `app/ferias/models.py:444`)
+   - **Histórico e correção administrativa:** dispensam deliberadamente a validação de fracionamento; a correção apresenta aviso. (`app/ferias/services.py:529`, `:547`; `app/ferias/views.py:508`, `:517`, `:531`)
+   - **Aprovação:** a materialização usa `full_clean()`, mas sua recusa deixa a solicitação aprovada, com aviso e resposta `ok=True`. Portanto, aprovação não garante agendamento aceito. (`app/ferias/services.py:756`, `:759`, `:785`, `:790`; `app/ferias/views.py:799`)
+   - **Cancelamento:** pode retirar a única fração ≥14 sem revalidar as restantes. (`app/ferias/services.py:652`, `:656`, `:657`, `:688`, `:689`)
+   - Individual, lote e escrita pelo Haiku chegam ao mesmo juiz de criação. A API de férias recusa POST; o admin desta app registra somente `Afastamento`. (`app/ferias/services.py:578`, `:330`; `app/ferias/views.py:669`; `app/core/intake.py:34`; `app/ferias/services.py:306`; `app/api/views.py:2224`; `app/ferias/admin.py:4`)
+
+2. **PROCEDENTE — outros textos exibidos:**
+
+   - Outro formulário: “até 3 frações, uma ≥14 dias”. (`app/templates/ferias/_secao_colab.html:63`)
+   - Erros: máximo três; pelo menos uma com mínimo 14. (`app/ferias/models.py:368`, `:376`)
+   - Avisos do período: nenhuma alcança o mínimo; quantidade excede o máximo. (`app/ferias/situacao.py:231`, `:240`)
+   - Proposta/correção: fração curta pede verificar as demais; esse aviso também entra na mensagem de sucesso da correção. (`app/ferias/situacao.py:341`, `:344`; `app/ferias/views.py:552`)
+   - Haiku recebe e retransmite esses avisos. (`app/api/views_mensageria.py:812`, `:824`, `:847`; `mensageria/nucleo/ferramentas.py:2117`, `:2119`)
+
+   O “menor deve ter no mínimo 14” está na linha antiga da cópia, substituída pelo diff. Outro equivalente em JS, comunicados persistidos ou respostas efetivamente geradas: **[não verificado]**. (`app/templates/ferias/agendar.html:10`)
+
+3. **PROCEDENTE — o selo morde os casos pedidos, mas admite falsos verdes.** As referências abaixo são ao arquivo **do anexo** `ferias/test_frac5_texto_agendar.py`.
+
+   - Texto antigo: vermelho pelas asserções da frase e de ausência de “menor”. (`ferias/test_frac5_texto_agendar.py:27`, `:28`)
+   - Juiz passa a recusar `[14,2]`, mantendo o texto: vermelho. (`ferias/test_frac5_texto_agendar.py:38`, `:39`)
+   - Linha com `art. 134` ausente ou duplicada: vermelho pela contagem. (`ferias/test_frac5_texto_agendar.py:18`, `:19`)
+   - **Falso verde:** juiz passa a aceitar somente duas frações. O selo testa duas aceitas e quatro recusadas, mas não três aceitas. (`ferias/test_frac5_texto_agendar.py:32`, `:34`)
+   - **Falso verde:** aviso inteiro dentro de comentário HTML; continua presente na fonte, embora desapareça da tela. (`ferias/test_frac5_texto_agendar.py:17`, `:18`, `:26`, `:27`)
+   - **Falso verde:** acrescentar “as demais precisam ter ao menos cinco dias” escapa da busca pelas duas expressões reconhecidas. (`ferias/test_frac5_texto_agendar.py:39`)
+   - **Origem:** não confere `origin.name`; outro template resolvido pelo loader pode satisfazer o selo. A view usa o mesmo nome lógico, mas a configuração admite diretório e templates de apps. Sombreamento efetivo: **[não verificado]**. (`ferias/test_frac5_texto_agendar.py:17`; `app/ferias/views.py:338`; `app/config/settings/base.py:73`, `:74`)
+
+   Esses resultados foram conferidos pelas asserções em memória; execução real do selo pelo Django/loader: **[não verificado]**.
+
+4. **PROCEDENTE — escritores, leitores e unidade:**
+
+   - Escrita única: `FRACAO_MINIMA=14` e `FRACOES_MAXIMAS=3`. O primeiro é limiar da **maior** fração; o segundo limita a contagem das frações não nulas. (`app/ferias/models.py:251`, `:252`, `:267`, `:269`, `:271`)
+   - Outros leitores: mensagens e pré-aviso em `situacao.py`; o anexo acrescenta comparações no selo. Há também uma ocorrência textual em teste estrutural. (`app/ferias/situacao.py:57`, `:234`, `:235`, `:242`, `:341`, `:346`; anexo `ferias/test_frac5_texto_agendar.py:13`, `:26`, `:27`; `app/ponto/tests/test_aus_espelho_1.py:43`)
+   - Dias são corridos e inclusivos: diferença entre datas +1; construção do fim usa dias −1. (`app/ferias/models.py:371`, `:382`; `app/ferias/services.py:565`, `:524`)
+   - Entretanto, outras frações são lidas pelo campo `dias` armazenado, e `_trocar_janela` recebe datas/duração separadamente sem conferir coerência. Uniformidade real dos registros: **[não verificado]**. (`app/ferias/models.py:372`; `app/ferias/situacao.py:122`; `app/ferias/services.py:694`, `:716`, `:729`)
+
+5. **Classes de reprovação:**
+
+   - **Derivação paralela de fonte única — PROCEDENTE:** pré-aviso decide por `dias < FRACAO_MINIMA`, sem consultar o conjunto; pode avisar sobre fração curta mesmo existindo outra ≥14. É aviso, não recusa. A coleta das frações também está duplicada entre porta e situação. (`app/ferias/situacao.py:341`, `:344`, `:117`; `app/ferias/models.py:362`)
+   - **Selo sem mordida — PROCEDENTE parcialmente:** há mordida para regressão textual e `[14,2]`, mas faltam a fronteira de três frações, renderização e vínculo com as portas divergentes. (anexo `ferias/test_frac5_texto_agendar.py:17`, `:32`, `:34`, `:38`; `app/ferias/services.py:729`)
+   - **Selo que copia valor — nada nas comparações de 3/14:** elas leem as constantes. Porém, a frase da tela permanece literal; a docstring não demonstra geração do texto pelo juiz. (anexo `ferias/test_frac5_texto_agendar.py:8`, `:26`, `:27`; anexo `templates/ferias/agendar.html:10`)
 
 ## 14/11 15:06 · sessao 645ea3ab9938 · - · - · origem=Ronald (tmux)
 
@@ -280,236 +560,4 @@ A recusa de `_commitar` apenas impede adicionar a fatia em `subiram`; o integrad
 
 Q6, juiz registrado: **nada quanto a duplicação de juiz de domínio**. O mapa descreve juízes de domínio gerados de `core/juizes.py`; a proposta reutiliza `julgar` existente por meio de `julgar_commit`. Há, porém, reconhecimento paralelo de “tem linha” no grep do hook e em `tem_linha` Python, sujeito a divergência de whitespace Unicode. (`app/docs/MAPA-JUIZES.md:3`; `app/docs/MAPA-JUIZES.md:7`; `bin/tests/test_lei_akita.sh:336`; `bin/tests/test_lei_akita.sh:354`; proposta `bin/commit_msg.sh:17`; `diff_v1.patch`, definição nova `julgar_commit`.)
 
-## 14/11 14:49 · sessao 1b363f83bb2d · - · - · origem=Ronald (tmux)
-
-**Item 5 — PROCEDENTE: selo pode ficar verde com hook instalado inoperante.** `_delega` verifica somente executável e ocorrência textual de `bin/commit_msg.sh`; um wrapper executável contendo `exit 0` e `# /caminho/existente/bin/commit_msg.sh` satisfaz a inspeção, inclusive existência do alvo. A bateria executa outro wrapper, criado no repositório plantado, e não o instalado. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:24`, `:40`, `:41`, `:55`, `:74`.
-
-**Item 5 — PROCEDENTE: censo vazio por erro pode passar.** Falha de `worktree list` não é checada pelo chamador; erro de `config --get` vira `continue`; caminhos inexistentes também são pulados. `DESV` vazio é aprovado independentemente do status da função. O MORDE usa outro repositório e não exige uma worktree sequer enumerada no repositório real. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:28`, `:29`, `:30`, `:44`, `:45`, `:83`. Ocorrência disso em produção: **[nao verificado]**.
-
-**MORDE (a): prova estreita, válida por inspeção.** O mutante ganha `exit 0`; sua bateria precisa denunciar aceitação do padrão inventado. Isso testa o script mutante na fixture, não a execução efetiva do hook instalado. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:76`, `:78`, `:81`.
-
-**MORDE (b): prova estreita, válida por inspeção.** Planta configuração por worktree apontando para pasta vazia, exige denúncia e depois ausência de denúncia ao remover a configuração. Não cobre configuração global/sistema plantada nem enumeração real vazia. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:82`, `:83`, `:85`, `:86`.
-
-**hooksPath global/sistema/relativo: nada quanto à omissão explícita de escopo.** A consulta usa `git config --get`, sem restringir a `--local` ou `--worktree`; valores relativos são ancorados na raiz de cada worktree. São usadas as mesmas condições textuais fracas de delegação. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:30`, `:31`, `:32`. Configurações efetivamente presentes no host: **[nao verificado]**.
-
-**Selo órfão: nada.** A régua descobre `bin/tests/test_*.sh` e executa cada arquivo por Bash; o novo nome entra no glob. `bin/regua.sh:138`, `bin/regua.sh:140`, `bin/regua.sh:143`.
-
-**Item 6 — selo sem mordida: PROCEDENTE na ligação com o instalado.** A mordida funcional existe na fixture; a ligação com o wrapper real permanece um grep que aceita comentário ou código inalcançável. Referências propostas: `bin/tests/test_hook_mensagem_em_toda_copia.sh:24`, `:40`, `:55`, `:74`.
-
-## 14/11 13:55 · sessao 0911a0f79119 · HJ-091 · sonda · origem=Code
-
-| Campo | Valor |
-|---|---|
-| universo_admin_encerrado_colab_com_ferias | `845` [nao verificado] |
-| com_dia_do_fato | `419` [nao verificado] |
-| dia_coberto_por_ferias | `27` [nao verificado] |
-| veto_admin_sem_fato_novo_ativo_hoje | `16` [nao verificado] |
-| erros | `0` [nao verificado] |
-| pks_veto | `[3331, 3444, 3934, 4533, 4879, 5968, 6184, 7081, 7084, 7805, 7809, 8640, 11141, 11776, 12526, 12801]` [nao verificado] |
-| DEPOIS | `{'pk': 3977, 'tipo': 'ferias', 'status': 'rejeitada', 'agendamento_ferias_id': 103, 'data': datetime.date(2026, 11, 7)}` [nao verificado] |
-| DEPOIS | `{'pk': 3985, 'tipo': 'ferias', 'status': 'rejeitada', 'agendamento_ferias_id': 103, 'data': datetime.date(2026, 11, 5)}` [nao verificado] |
-| DEPOIS | `{'pk': 3995, 'tipo': 'ferias', 'status': 'rejeitada', 'agendamento_ferias_id': 103, 'data': datetime.date(2026, 11, 6)}` [nao verificado] |
-| DEPOIS | `{'pk': 5592, 'tipo': 'abono', 'status': 'aprovada', 'agendamento_ferias_id': None, 'data': datetime.date(2026, 11, 5)}` [nao verificado] |
-| col344_0507 | `[(3977, 'ferias', 'rejeitada', 103), (3985, 'ferias', 'rejeitada', 103), (3995, 'ferias', 'rejeitada', 103), (5592, 'abono', 'aprovada', None)]` [nao verificado] |
-| rejeitadas_sem_origem_em_agendamento_vivo | `0 []` [nao verificado] |
-| ferias_sem_origem_total | `60` [nao verificado] |
-| Ocorrências literais de ERRO no dado raspado | `0` [nao verificado] |
-| Ocorrências literais de Traceback no dado raspado | `0` [nao verificado] |
-
-## 14/11 13:53 · sessao 3423c9c36e81 · HJ-091 · sonda · origem=Code
-
-| Campo | Valor |
-|---|---|
-| universo_admin_encerrado_colab_com_ferias [nao verificado] | 845 |
-| com_dia_do_fato [nao verificado] | 419 |
-| dia_coberto_por_ferias [nao verificado] | 27 |
-| veto_admin_sem_fato_novo_ativo_hoje [nao verificado] | 16 |
-| erros [nao verificado] | 0 |
-| pks_veto [nao verificado] | [3331, 3444, 3934, 4533, 4879, 5968, 6184, 7081, 7084, 7805, 7809, 8640, 11141, 11776, 12526, 12801] |
-| TRES [nao verificado] | 3977 col 344 data 2026-11-07 tipo ferias status rejeitada marcas [103] janelas [103] |
-| TRES [nao verificado] | 3985 col 344 data 2026-11-05 tipo ferias status rejeitada marcas [103] janelas [103] |
-| TRES [nao verificado] | 3995 col 344 data 2026-11-06 tipo ferias status rejeitada marcas [103] janelas [103] |
-| coluna_fk_existe [nao verificado] | False |
-| Ocorrências literais de ERRO no bloco fornecido [nao verificado] | 0 |
-| Ocorrências literais de Traceback no bloco fornecido [nao verificado] | 0 |
-
-O bloco transcrito informa `erros 0`; a afirmação “erro NAO e zero” não encontra suporte nesse bloco. O total real de erros da execução permanece [nao verificado].
-
-## 14/11 13:50 · sessao af94840d4a0c · FRAC5 · verificador · origem=Code
-
-**Os dois bypasses centrais da volta 2 estão fechados na remarcação regular: ausência de fração ≥14 e divergência entre `dias` e intervalo. Não encontrei novo bypass de gravação introduzido pelo delta.** Permanecem limitações nos testes e caminhos anteriores que não passam por `clean()`. (`app/ferias/services.py:680`; `app/ferias/services.py:686`; `app/ferias/services.py:718`; `app/ferias/models.py:380`; `app/ferias/models.py:396`)
-
-Execução de RED contra `63ff6e88b`, suíte, navegador, pouso e impacto em produção: **[nao verificado]**. Os resultados contra o pai abaixo são contrafactuais pelo delta fornecido.
-
-**1. NÃO PROCEDE [bloqueia] — julgamento sobre foto velha ou antes da atribuição.**
-
-`vivo` vem de `select_for_update()`. O período também é relido sob trava e atribuído à relação de `vivo`. Depois são atribuídos os novos `data_inicio`, `data_fim` e `dias`; somente então roda `vivo.clean()`. O juiz exclui o próprio PK e usa o intervalo novo para julgar a fração substituta. (`app/ferias/services.py:599`; `app/ferias/services.py:602`; `app/ferias/services.py:603`; `app/ferias/services.py:680`; `app/ferias/services.py:686`; `app/ferias/models.py:371`; `app/ferias/models.py:377`)
-
-**NÃO PROCEDE [bloqueia] — suposta aplicação de saldo, abono, período e sobreposição pelo `clean()`.** O corpo desse método contém somente fracionamento, ordem das datas e igualdade entre quantidade e intervalo. A chamada acrescentada é `clean()`, não `full_clean()`. (`app/ferias/models.py:363`; `app/ferias/models.py:399`; `app/ferias/services.py:686`)
-
-| Validação | Onde ocorre; pertinência à remarcação |
-|---|---|
-| Máximo de três frações | `clean()` conta os irmãos ativos e a fração substituta. Pode recusar a remarcação de um período que já tenha quatro frações. É o mesmo julgamento registrado, agora aplicado à substituição. (`app/ferias/models.py:368`; `app/ferias/models.py:372`; `app/core/juizes.py:271`) |
-| Alguma fração ≥14 | Usa dias gravados dos irmãos e duração nova do próprio objeto. Fecha o caso único **14→5**. (`app/ferias/models.py:377`; `app/ferias/models.py:380`) |
-| Fração escrita ≥5 | Julga o intervalo novo; frações curtas históricas dos irmãos não bloqueiam essa cláusula. (`app/ferias/models.py:384`; `app/ferias/models.py:387`) |
-| Ordem e equivalência das datas | Recusa fim anterior ao início e `dias` diferente do intervalo inclusivo. Ambas fazem sentido numa troca de janela. Fracionamento tem precedência sobre essas mensagens. (`app/ferias/models.py:380`; `app/ferias/models.py:387`; `app/ferias/models.py:392`; `app/ferias/models.py:396`) |
-| Sobreposição | Continua no `save()`, pelo juiz de precedência. A limpeza anterior e a gravação estão no mesmo `atomic`; o veto desfaz ambas. (`app/ferias/services.py:669`; `app/ferias/services.py:694`; `app/ferias/services.py:699`; `app/ferias/models.py:450`; `app/ferias/models.py:454`; `app/ferias/models.py:463`) |
-| Período aquisitivo/concessivo | `clean()` usa o período para selecionar irmãos; não exige status `adquirido` nem enquadramento das novas datas no ciclo ou limite concessivo. A troca salva somente concedidos/status do PA. (`app/ferias/models.py:363`; `app/ferias/models.py:368`; `app/ferias/services.py:701`) |
-| Saldo | É julgado **antes** da atribuição: saldo atual mais os dias já reservados pelo agendamento. Isso permite substituir a reserva sem cobrá-la duas vezes. O novo `clean()` não refaz essa conta. (`app/ferias/services.py:675`; `app/ferias/services.py:679`; `app/ferias/models.py:220`; `app/ferias/models.py:225`) |
-| Abono | A troca não vende dias; vendidos já são descontados pelo saldo. O teto de venda é aplicado nas portas que incluem abono, separadamente. (`app/ferias/models.py:220`; `app/ferias/services.py:312`; `app/ferias/services.py:277`; `app/ferias/services.py:699`; `app/ferias/services.py:701`) |
-
-**NÃO PROCEDE [bloqueia] — ausência de `clean()` significar gravação regular liberada.** Ele não roda quando:
-
-- A linha está `cancelado`: a trava recusa antes, impedindo ressuscitar a reserva. (`app/ferias/models.py:313`; `app/ferias/services.py:600`; `app/ferias/services.py:670`)
-- Está `em_gozo`, `concluido`, outro status diferente de `agendado`, ou `agendado` com início já alcançado: `pode_editar_em(hoje)` recusa antes. (`app/ferias/models.py:340`; `app/ferias/models.py:344`; `app/ferias/services.py:671`)
-- Falta saldo: a recusa também antecede o julgamento. (`app/ferias/services.py:675`; `app/ferias/services.py:677`)
-- A entrada é a correção administrativa: o wrapper mantém `so_nao_iniciado=False`, independentemente do status não cancelado. É a exceção A3 expressa, com aviso pela view. (`app/ferias/services.py:657`; `app/ferias/services.py:681`; `app/ferias/services.py:708`; `app/ferias/views.py:508`; `app/ferias/views.py:552`)
-
-O status novo só é atribuído depois do `clean()`. Isso não altera seu resultado atual: ele filtra o status dos irmãos, mas não consulta `self.status`. (`app/ferias/services.py:691`; `app/ferias/models.py:363`; `app/ferias/models.py:370`)
-
-**2. NÃO PROCEDE [bloqueia] — perda de cobertura ao remover o recorte do wrapper.**
-
-Toda remarcação regular que chega à gravação passa `so_nao_iniciado=True` e atravessa `clean()`. Para `novos_dias=1–4`, um intervalo curto é recusado pelo fracionamento; um intervalo maior é recusado pela desigualdade com `dias`. Chamadas inválidas por status/início/saldo agora podem receber essas recusas primeiro, sem gravar. (`app/ferias/services.py:718`; `app/ferias/services.py:671`; `app/ferias/services.py:676`; `app/ferias/services.py:686`; `app/ferias/services.py:699`; `app/ferias/models.py:387`; `app/ferias/models.py:396`)
-
-| Caminho encontrado | Tratamento de existente e de fração `<5` |
-|---|---|
-| `remarcar_agendamento` | Converge no escritor com julgamento obrigatório. (`app/ferias/services.py:718`; `app/ferias/services.py:686`) |
-| `corrigir_datas_agendamento` | Converge no mesmo escritor sem `clean()`; admite curto sujeito a status, saldo e colisão. A view exige quantidade positiva, calcula o fim e acrescenta avisos. (`app/ferias/services.py:708`; `app/ferias/services.py:670`; `app/ferias/services.py:675`; `app/ferias/views.py:503`; `app/ferias/views.py:507`; `app/ferias/views.py:517`; `app/ferias/views.py:552`) |
-| `_trocar_janela` diretamente | O padrão é administrativo, sem `clean()`. Os dois wrappers encontrados escolhem explicitamente suas modalidades. (`app/ferias/services.py:657`; `app/ferias/services.py:708`; `app/ferias/services.py:718`) |
-| Django admin | O registro local contém somente `Afastamento`; não oferece edição de `AgendamentoFerias`. (`app/ferias/admin.py:2`; `app/ferias/admin.py:4`) |
-| `sincronizar_status_ferias` | Usa a porta que altera somente status; não julga nem corrige duração curta. (`app/ferias/management/commands/sincronizar_status_ferias.py:48`; `app/ferias/services.py:928`; `app/ferias/services.py:929`) |
-| `listar_ferias_dp` | Simula cancelamento e validação, depois força rollback; não remarca datas/dias. (`app/ferias/management/commands/listar_ferias_dp.py:100`; `app/ferias/management/commands/listar_ferias_dp.py:107`; `app/ferias/management/commands/listar_ferias_dp.py:109`) |
-| Realinhamento de concedidos | Altera o contador do PA, não dias/datas do agendamento. (`app/ferias/services.py:156`; `app/ferias/services.py:160`; `app/ferias/services.py:162`) |
-| API do colaborador | POST retorna 405; GET serializa datas, dias e status existentes. (`app/api/views.py:2223`; `app/api/views.py:2244`; `app/api/views.py:2246`) |
-| API de mensageria | Consulta situação e pedido hipotético; entrega avisos. (`app/api/views_mensageria.py:812`; `app/api/views_mensageria.py:824`; `app/api/views_mensageria.py:847`) |
-
-**PROCEDE [fila] — pontos anteriores não fechados por este delta:** histórico cria fração curta sem fracionamento; cancelar a fração de 14 pode deixar somente a de 5; `save()` não chama `clean()` universalmente; chamada direta à correção ainda aceita `dias` e intervalo independentes. Nenhum desses mecanismos foi acrescentado pelo delta. (`app/ferias/services.py:492`; `app/ferias/services.py:510`; `app/ferias/services.py:616`; `app/ferias/services.py:620`; `app/ferias/models.py:461`; `app/ferias/services.py:680`; `app/ferias/services.py:681`; `app/ferias/services.py:708`)
-
-O helper ainda ignora zero por `if f`; isso permanece uma limitação dele, mas não permite gravar zero pela remarcação regular com intervalo coerente: igualdade e ordem das datas também são verificadas. (`app/ferias/models.py:271`; `app/ferias/models.py:392`; `app/ferias/models.py:396`)
-
-**3. Quem escreve e quem lê os campos/valores envolvidos no delta.**
-
-| Campo/valor | Quem escreve ou monta | Quem lê |
-|---|---|---|
-| `so_nao_iniciado` | Padrão `False`; remarcação passa `True`; correção conserva o padrão. (`app/ferias/services.py:657`; `app/ferias/services.py:708`; `app/ferias/services.py:718`) | Guarda de edição e condição do `clean()`. (`app/ferias/services.py:671`; `app/ferias/services.py:681`) |
-| `hoje` | Borda lê uma vez por request; testes fornecem datas explícitas. (`app/ferias/views.py:15`; `app/ferias/views.py:695`; `app/ponto/tests/test_ferias_fracao_demais_5.py:145`) | Guarda de início, aviso, status do agendamento e do PA. (`app/ferias/services.py:671`; `app/ferias/services.py:687`; `app/ferias/services.py:691`; `app/ferias/services.py:700`) |
-| `nova_ini`, `novos_dias`, `nova_fim` | Views convertem POST e derivam fim; testes também chamam o serviço diretamente. (`app/ferias/views.py:499`; `app/ferias/views.py:507`; `app/ferias/views.py:708`; `app/ferias/views.py:718`; `app/ponto/tests/test_ferias_fracao_demais_5.py:154`) | Saldo, atribuição da janela e, agora, `clean()`. (`app/ferias/services.py:676`; `app/ferias/services.py:680`; `app/ferias/services.py:686`) |
-| PK e vínculo ao PA | Criações associam o agendamento ao período; o próprio banco atribui a identidade na inserção. (`app/ferias/services.py:544`; `app/ferias/services.py:545`) | Releitura/travas; seleção dos irmãos; exclusão do próprio PK. (`app/ferias/services.py:599`; `app/ferias/services.py:602`; `app/ferias/models.py:369`; `app/ferias/models.py:371`) |
-| `AgendamentoFerias.data_inicio/data_fim/dias` | Escritor da troca atribui e persiste; criação e histórico inicializam. (`app/ferias/services.py:680`; `app/ferias/services.py:699`; `app/ferias/services.py:484`; `app/ferias/services.py:544`) | `clean()`, colisão, espelho, situação e API. (`app/ferias/models.py:377`; `app/ferias/models.py:396`; `app/ferias/models.py:450`; `app/ponto/services/ausencia.py:1185`; `app/ferias/situacao.py:122`; `app/api/views.py:2244`) |
-| `AgendamentoFerias.status` | Criação/status por data, troca, cancelamentos e sincronização. (`app/ferias/services.py:546`; `app/ferias/services.py:691`; `app/ferias/services.py:619`; `app/ferias/services.py:651`; `app/ferias/services.py:928`) | Guardas, seleção de irmãos, espelho e API. (`app/ferias/services.py:600`; `app/ferias/models.py:344`; `app/ferias/models.py:370`; `app/ponto/services/ausencia.py:1181`; `app/api/views.py:2247`) |
-| `PeriodoAquisitivo.dias_concedidos` | Troca substitui a reserva; criação/histórico somam; cancelamentos subtraem; realinhamento grava a soma. (`app/ferias/services.py:679`; `app/ferias/services.py:548`; `app/ferias/services.py:511`; `app/ferias/services.py:616`; `app/ferias/services.py:643`; `app/ferias/services.py:160`) | Saldo, saldo para remarcar, status do PA e contador de divergência. (`app/ferias/models.py:220`; `app/ferias/models.py:225`; `app/ferias/models.py:98`; `app/ferias/services.py:125`) |
-| `dias_direito` e `dias_vendidos` do PA | Art.130/edição escrevem direito; portas de abono/histórico escrevem vendidos. (`app/ferias/services.py:373`; `app/ferias/services.py:824`; `app/ferias/services.py:277`; `app/ferias/services.py:512`; `app/ferias/services.py:906`) | Saldo utilizado antes do novo `clean()`; teto de venda. (`app/ferias/models.py:220`; `app/ferias/models.py:238`; `app/ferias/services.py:675`) |
-| `PeriodoAquisitivo.status` | `aplicar_status()` recebe o veredito e a troca o persiste. (`app/ferias/models.py:215`; `app/ferias/services.py:700`; `app/ferias/services.py:701`) | Elegibilidade para agendar e apresentação da API. (`app/ferias/models.py:234`; `app/api/views_mensageria.py:841`) |
-| `aviso_emitido`, antecedência 30 | A troca deriva o flag usando a constante; criação também o inicializa. (`app/ferias/situacao.py:56`; `app/ferias/services.py:687`; `app/ferias/services.py:547`) | View, situação e API. (`app/ferias/views.py:733`; `app/ferias/situacao.py:265`; `app/api/views_mensageria.py:845`) |
-| Irmãos: `dias`, status e PA | Portas acima; fixtures novas inserem irmã `concluido`, 20 dias, de 05–24/01/2026, com PA e usuário existentes. (`app/ferias/test_cancelar_2x.py:247`; `app/ferias/test_remarcar_limpa_janela_f346.py:35`) | Consultas de irmãos do `clean()` e da situação; o novo `clean()` não lê `agendado_por`. (`app/ferias/models.py:363`; `app/ferias/models.py:368`; `app/ferias/situacao.py:117`) |
-| Duração calculada, frações e `caput/par1/par1_demais` | `clean()` monta duração/listas; helper compara com constantes 3/14/5. (`app/ferias/models.py:251`; `app/ferias/models.py:273`; `app/ferias/models.py:275`; `app/ferias/models.py:277`; `app/ferias/models.py:377`; `app/ferias/models.py:379`) | Ramos de recusa do `clean()` e ramos de aviso; wrapper regular deixou de escolher somente `par1_demais`. (`app/ferias/models.py:372`; `app/ferias/models.py:380`; `app/ferias/models.py:387`; `app/ferias/situacao.py:227`; `app/ferias/services.py:718`) |
-| Mensagens de `ValidationError` | Ramos do `clean()`; colisão traduzida no `save()`. (`app/ferias/models.py:373`; `app/ferias/models.py:381`; `app/ferias/models.py:388`; `app/ferias/models.py:397`; `app/ferias/models.py:454`) | View apresenta `e.messages`; testes conferem trechos. (`app/ferias/views.py:730`; `app/ponto/tests/test_ferias_fracao_demais_5.py:137`; `app/ponto/tests/test_ferias_fracao_demais_5.py:146`; `app/ponto/tests/test_ferias_fracao_demais_5.py:155`) |
-| Avisos `{codigo,texto,nivel,ancora}` | `_aviso()` e situação montam. (`app/ferias/situacao.py:64`; `app/ferias/situacao.py:229`; `app/ferias/situacao.py:238`) | Índice preserva listas, API entrega, correção mostra textos e novo teste inspeciona a saída. (`app/ferias/situacao.py:302`; `app/api/views_mensageria.py:847`; `app/ferias/views.py:552`; `app/ponto/tests/test_ferias_fracao_demais_5.py:183`) |
-
-**4. PROCEDE [fila] — as fixtures perderam coerência agregada; NÃO PROCEDE [bloqueia] — terem eliminado a mordida da limpeza e do veto.**
-
-Na F346, o contador continua **10**, mas as linhas passam a somar **30**. Após reduzir para cinco, a asserção exige contador **5**, enquanto os agendamentos somam **25**. No teste da foto velha, contador **30** e agendamento **30** recebem uma irmã **20**; após remarcar para dez, espera-se contador **10**, mas as linhas somam **30**. Essas fixtures deixam de provar saldo agregado íntegro; a divergência é precisamente a condição medida pelo contador existente. (`app/ferias/test_remarcar_limpa_janela_f346.py:28`; `app/ferias/test_remarcar_limpa_janela_f346.py:35`; `app/ferias/test_remarcar_limpa_janela_f346.py:83`; `app/ferias/test_cancelar_2x.py:51`; `app/ferias/test_cancelar_2x.py:55`; `app/ferias/test_cancelar_2x.py:247`; `app/ferias/test_cancelar_2x.py:253`; `app/ferias/services.py:117`)
-
-A irmã elimina o impedimento de falta de fração ≥14 para manter os cenários de limpeza. O R06 continua com três frações, alcança a colisão no `save()` e confere rollback de ausências, contador e início. A adulteração da foto para 999 também continua exercitada. (`app/ferias/test_remarcar_limpa_janela_f346.py:35`; `app/ferias/test_remarcar_limpa_janela_f346.py:99`; `app/ferias/test_remarcar_limpa_janela_f346.py:105`; `app/ferias/test_remarcar_limpa_janela_f346.py:108`; `app/ferias/test_remarcar_limpa_janela_f346.py:110`; `app/ferias/test_cancelar_2x.py:251`)
-
-Cada asserção nova/alterada, contra `63ff6e88b`, pelo trecho anterior fornecido no delta:
-
-| Asserção | Falharia no pai? |
-|---|---|
-| Quatro dias: `assertRaises` | **Não:** o recorte anterior já recusava quatro. (`app/ponto/tests/test_ferias_fracao_demais_5.py:135`) |
-| Quatro dias: contém `art. 134` | **Não:** a mensagem anterior também continha isso. A troca de `5 dias` por esse trecho reduz a especificidade: agora a fração única de quatro cai primeiro na exigência de 14. (`app/ponto/tests/test_ferias_fracao_demais_5.py:137`; `app/ferias/models.py:380`; `app/ferias/models.py:387`) |
-| Quatro dias: permanece 14 | **Não:** já havia recusa antes de escrever. (`app/ponto/tests/test_ferias_fracao_demais_5.py:139`) |
-| Única 14→5: `assertRaises` | **Sim:** cinco passava no recorte anterior. (`app/ponto/tests/test_ferias_fracao_demais_5.py:144`) |
-| Única 14→5: mensagem `14 dias` | Não seria alcançada, pois faltaria a exceção. (`app/ponto/tests/test_ferias_fracao_demais_5.py:146`) |
-| Única 14→5: permanece 14 | Não seria alcançada; isoladamente falharia, pois seria gravado cinco. (`app/ponto/tests/test_ferias_fracao_demais_5.py:148`; `app/ferias/services.py:680`; `app/ferias/services.py:699`) |
-| Dias 14/intervalo 15: `assertRaises` | **Sim:** o parâmetro 14 passava e não havia conferência do intervalo. (`app/ponto/tests/test_ferias_fracao_demais_5.py:153`) |
-| Divergência: mensagem `intervalo real` | Não seria alcançada, pois faltaria a exceção. (`app/ponto/tests/test_ferias_fracao_demais_5.py:155`) |
-| Divergência: `(14, fim14)` preservado | Não seria alcançada; isoladamente falharia pelo fim alterado para dia 15. (`app/ponto/tests/test_ferias_fracao_demais_5.py:157`; `app/ferias/services.py:680`; `app/ferias/services.py:699`) |
-| Sucesso: dias 15 | **Não:** controle positivo que passa antes e depois. (`app/ponto/tests/test_ferias_fracao_demais_5.py:161`; `app/ponto/tests/test_ferias_fracao_demais_5.py:163`) |
-| Correção: ausência de substring | **Não:** permanece inspeção textual do wrapper; não executa correção nem verifica aviso. (`app/ponto/tests/test_ferias_fracao_demais_5.py:169`) |
-| Aviso contém §1 | **Não:** esse ramo já existia. (`app/ponto/tests/test_ferias_fracao_demais_5.py:184`; `app/ferias/situacao.py:228`) |
-| Aviso contém caput | **Não:** o `if caput` já estava no pai deste delta. O teste melhora a prova comportamental da cura anterior. (`app/ponto/tests/test_ferias_fracao_demais_5.py:185`; `app/ferias/situacao.py:237`) |
-
-**NÃO PROCEDE [bloqueia] — conjunto sem mordida:** há dois casos que distinguem este delta do pai. **PROCEDE [fila] — cobertura incompleta:** o selo administrativo continua textual, e os novos casos de remarcação não exercitam quatro frações nem quatro dias ao lado de uma irmã ≥14; este último existe apenas diretamente sobre `clean()`. (`app/ponto/tests/test_ferias_fracao_demais_5.py:144`; `app/ponto/tests/test_ferias_fracao_demais_5.py:153`; `app/ponto/tests/test_ferias_fracao_demais_5.py:169`; `app/ponto/tests/test_ferias_fracao_demais_5.py:128`; `app/ponto/tests/test_ferias_fracao_demais_5.py:67`)
-
-**5. NÃO PROCEDE [bloqueia] — `ValidationError` engolida ou rebatizada pela view.**
-
-As exceções anteriores não são superclasses de `ValidationError`: não remarcável deriva da exceção de domínio; saldo deriva de `Exception`. A captura final entrega `'; '.join(e.messages)`, preservando inclusive mensagens de coerência e colisão. O comentário “juiz do fracionamento” não vira texto de tela. (`app/ferias/services.py:555`; `app/ferias/services.py:576`; `app/ferias/services.py:586`; `app/ferias/views.py:725`; `app/ferias/views.py:727`; `app/ferias/views.py:729`; `app/ferias/views.py:730`)
-
-A precedência efetiva passou a ser **status → início → saldo → `clean()` → colisão no `save()`**. Dentro do `clean()`, uma única fração de quatro dias recebe primeiro a mensagem da exigência de 14; com irmã ≥14, recebe a de cinco. Ambas vêm dos respectivos ramos do juiz. (`app/ferias/services.py:670`; `app/ferias/services.py:671`; `app/ferias/services.py:675`; `app
-
-[truncado em 20000 de 22824 caracteres]
-
-## 14/11 13:47 · sessao 5e3828cd3955 · - · - · origem=Ronald (tmux)
-
-**Censo e recorte removido**
-
-- **NÃO PROCEDE [bloqueia] — perda de julgamento de chamada regular antes coberta.** `remarcar_agendamento` sempre encaminha `so_nao_iniciado=True`; `_trocar_janela` atribui datas/dias e chama `vivo.clean()` antes de qualquer gravação. O `clean` julga a duração pelas datas e exige igualdade com `dias`; uma declaração 1–4 com intervalo ≥5 também termina recusada pela divergência. (`app/ferias/services.py:680`; `app/ferias/services.py:681`; `app/ferias/services.py:686`; `app/ferias/services.py:718`; `app/ferias/models.py:377`; `app/ferias/models.py:387`; `app/ferias/models.py:395`)
-- **NÃO PROCEDE [bloqueia] — segundo escritor produtivo encontrado.** O registro permite `ferias/services.py`; o escritor material identificado é `_trocar_janela`, convergência das duas portas. As atribuições em `services.py:821` pertencem a `PeriodoAquisitivo`, não a `AgendamentoFerias`. (`app/core/portas.py:489`; `app/ferias/services.py:680`; `app/ferias/services.py:699`; `app/ferias/services.py:708`; `app/ferias/services.py:718`; `app/ferias/services.py:816`)
-- **PROCEDE [fila] — correção administrativa continua permitindo fração <5.** O wrapper usa o padrão `so_nao_iniciado=False`; não chama o `clean`. Isso tem mandato explícito A3: corrigir o lançamento com aviso. A view exige dias positivos, deriva o fim, coleta os avisos e os acrescenta ao sucesso. Não é furo novo. (`app/ferias/services.py:657`; `app/ferias/services.py:681`; `app/ferias/services.py:708`; `app/ferias/views.py:503`; `app/ferias/views.py:507`; `app/ferias/views.py:508`; `app/ferias/views.py:517`; `app/ferias/views.py:552`)
-
-| Caminho | Alteração de existente / tratamento de `<5` |
-|---|---|
-| `remarcar_agendamento` | Usa o escritor e `clean`; recusa nova fração curta. (`app/ferias/services.py:718`; `app/ferias/services.py:686`; `app/ferias/models.py:387`) |
-| `corrigir_datas_agendamento` | Usa o mesmo escritor sem `clean`; aceita curto sujeito a saldo, status e colisão. Aviso é providenciado pela view. (`app/ferias/services.py:708`; `app/ferias/services.py:670`; `app/ferias/services.py:675`; `app/ferias/services.py:699`; `app/ferias/views.py:517`; `app/ferias/views.py:552`) |
-| Django admin | Registro local somente de `Afastamento`; nenhuma edição de `AgendamentoFerias`. (`app/ferias/admin.py:2`; `app/ferias/admin.py:4`) |
-| `sincronizar_status_ferias` | Encaminha para `alinhar_status_por_data`, que salva somente `status`; não reavalia duração curta. (`app/ferias/management/commands/sincronizar_status_ferias.py:48`; `app/ferias/services.py:928`; `app/ferias/services.py:929`) |
-| `listar_ferias_dp` | Simula cancelamento e validação; rollback obrigatório. Não remarca. (`app/ferias/management/commands/listar_ferias_dp.py:100`; `app/ferias/management/commands/listar_ferias_dp.py:107`; `app/ferias/management/commands/listar_ferias_dp.py:109`; `app/ferias/management/commands/listar_ferias_dp.py:110`) |
-| `alertar_retornos` | Consulta por fim/status e envia alerta; não muda agendamento. (`app/ferias/management/commands/alertar_retornos.py:20`; `app/ferias/management/commands/alertar_retornos.py:24`; `app/ferias/management/commands/alertar_retornos.py:45`) |
-| API colaborador | POST 405; GET serializa o que está gravado. (`app/api/views.py:2223`; `app/api/views.py:2224`; `app/api/views.py:2244`; `app/api/views.py:2246`) |
-| API mensageria | Consulta situação e avisos de pedido hipotético, sem escrita. (`app/api/views_mensageria.py:812`; `app/api/views_mensageria.py:824`; `app/api/views_mensageria.py:847`; `app/api/views_mensageria.py:849`) |
-
-**Quem escreve e quem lê, para consolidar a tabela da raiz**
-
-| Campo/valor | Escritor/montador | Leitores |
-|---|---|---|
-| `nova_ini`, `novos_dias`, `nova_fim` | Views leem POST e derivam fim. (`app/ferias/views.py:499`; `app/ferias/views.py:500`; `app/ferias/views.py:507`; `app/ferias/views.py:708`; `app/ferias/views.py:709`; `app/ferias/views.py:718`) | Escritor verifica saldo, atribui e passa a `clean`. (`app/ferias/services.py:676`; `app/ferias/services.py:679`; `app/ferias/services.py:680`; `app/ferias/services.py:686`) |
-| `vivo.data_inicio`, `data_fim`, `dias` | `_trocar_janela`. (`app/ferias/services.py:680`; `app/ferias/services.py:699`) | `clean` calcula duração/confere dias; guarda de colisão; espelho; situação; APIs. (`app/ferias/models.py:377`; `app/ferias/models.py:395`; `app/ferias/models.py:450`; `app/ponto/services/ausencia.py:1185`; `app/ferias/situacao.py:122`; `app/api/views.py:2244`; `app/api/views.py:2246`) |
-| `periodo.dias_concedidos` | Troca subtrai dias antigos e soma novos, depois salva. Criação e histórico também somam; cancelamentos subtraem. (`app/ferias/services.py:679`; `app/ferias/services.py:701`; `app/ferias/services.py:548`; `app/ferias/services.py:511`; `app/ferias/services.py:616`; `app/ferias/services.py:643`) | Juiz de saldo e saldo para remarcar; aplicação de status. (`app/ferias/models.py:220`; `app/ferias/models.py:225`; `app/ferias/services.py:700`) |
-| `vivo.aviso_emitido` | Derivado da antecedência pelo escritor. (`app/ferias/services.py:687`; `app/ferias/services.py:699`) | View acrescenta aviso de antecedência; API mensageria entrega o flag. (`app/ferias/views.py:733`; `app/api/views_mensageria.py:845`) |
-| `vivo.status` | `status_por_data` e escritor; cancelamentos; sincronização. (`app/ferias/services.py:691`; `app/ferias/services.py:699`; `app/ferias/services.py:619`; `app/ferias/services.py:651`; `app/ferias/services.py:928`) | Guardas sob trava, edição, seleção das frações, espelho e APIs. (`app/ferias/services.py:600`; `app/ferias/models.py:344`; `app/ferias/models.py:370`; `app/ponto/services/ausencia.py:1181`; `app/api/views.py:2247`) |
-| Frações irmãs (`dias`, `status`, vínculo ao PA, `pk`) | Criações e portas acima; fixtures novas usam `bulk_create`. (`app/ferias/services.py:544`; `app/ferias/services.py:484`; `app/ferias/test_remarcar_limpa_janela_f346.py:35`; `app/ferias/test_cancelar_2x.py:247`) | `clean` filtra por PA/status e exclui a própria pk; situação repete a coleta. (`app/ferias/models.py:368`; `app/ferias/models.py:371`; `app/ferias/models.py:378`; `app/ferias/situacao.py:115`; `app/ferias/situacao.py:122`) |
-| `caput`, `par1`, `par1_demais` | Helper e constantes 3/14/5. (`app/ferias/models.py:251`; `app/ferias/models.py:252`; `app/ferias/models.py:253`; `app/ferias/models.py:273`; `app/ferias/models.py:275`; `app/ferias/models.py:277`) | `clean` e avisos; não mais wrapper de remarcação. (`app/ferias/models.py:372`; `app/ferias/models.py:380`; `app/ferias/models.py:387`; `app/ferias/situacao.py:227`; `app/ferias/situacao.py:348`; `app/ferias/services.py:718`) |
-
-**Classes solicitadas**
-
-- **Relógio fora da borda: PROCEDE [fila], preexistente.** Situação e proposta mantêm fallback `date.today`; cancelamento administrativo lê a data para o carimbo. A alteração usa `hoje` explícito e não acrescenta leitura de relógio. (`app/ferias/situacao.py:156`; `app/ferias/situacao.py:326`; `app/ferias/services.py:649`; `app/ferias/services.py:671`; `app/ferias/services.py:687`; `app/ferias/services.py:691`; `app/ferias/services.py:700`)
-- **Derivação paralela: NÃO PROCEDE [bloqueia] quanto ao recorte novo/removido; PROCEDE [fila] quanto à coleta duplicada antiga.** A duração da remarcação agora vem das datas no juiz e é conferida contra `dias`. Permanecem duas consultas montando as frações do período, no modelo e na situação. (`app/ferias/models.py:377`; `app/ferias/models.py:395`; `app/ferias/models.py:368`; `app/ferias/situacao.py:117`)
-- **Campo com dois significados: NÃO PROCEDE [bloqueia] entre gozo e abono.** Dias vendidos são armazenados separadamente e entram separadamente no saldo. **PROCEDE [fila] divergência dias/datas ainda possível em chamada direta de correção**, que recebe ambos sem conferir equivalência; a view administrativa deriva o fim e evita esse caso. (`app/ferias/services.py:277`; `app/ferias/models.py:220`; `app/ferias/services.py:680`; `app/ferias/services.py:681`; `app/ferias/services.py:708`; `app/ferias/views.py:507`)
-- **Save universal sem juiz: PROCEDE [fila], preexistente.** `save()` chama colisão e espelho, não `clean`; histórico explicitamente permite criação curta sem fracionamento. Não é alteração de linha existente nem abertura do delta. (`app/ferias/models.py:461`; `app/ferias/models.py:466`; `app/ferias/services.py:492`; `app/ferias/services.py:510`)
-
-Outros escritores externos ou dinâmicos e efeitos em produção: **[nao verificado]**.
-
-## 14/11 13:47 · sessao 76905d2e0dc4 · - · - · origem=Ronald (tmux)
-
-**PROCEDE [fila] — fixtures passam a representar contadores diferentes da soma dos agendamentos.** F346 mantém `dias_concedidos=10` e acrescenta irmã concluída de 20 à linha de 10; a redução para 5 continua esperando contador 5, embora as linhas somem 25. O teste continua verificando limpeza e atualização incremental, mas não saldo agregado coerente. (`app/ferias/test_remarcar_limpa_janela_f346.py:28`; `app/ferias/test_remarcar_limpa_janela_f346.py:35`; `app/ferias/test_remarcar_limpa_janela_f346.py:80`; `app/ferias/test_remarcar_limpa_janela_f346.py:83`)
-
-O teste da foto velha mantém contador 30 e linha de 30, acrescenta irmã de 20, remarca para 10 e espera contador 10: soma final das linhas 30. A adulteração da foto para 999 continua sendo exercitada; um cenário com irmã registrada e contador reconciliado não está coberto por esse teste. (`app/ferias/test_cancelar_2x.py:51`; `app/ferias/test_cancelar_2x.py:55`; `app/ferias/test_cancelar_2x.py:247`; `app/ferias/test_cancelar_2x.py:251`; `app/ferias/test_cancelar_2x.py:253`)
-
-**NÃO PROCEDE [fila] — irmã esconde o veto do `save` no R06.** Com irmã20 e outro10, permanecem três frações; `clean` não verifica colisão, e o teste ainda pode alcançar o veto no `save`, após a limpeza. As asserções conferem restauração das ausências, contador e início. (`app/ferias/test_remarcar_limpa_janela_f346.py:35`; `app/ferias/test_remarcar_limpa_janela_f346.py:99`; `app/ferias/test_remarcar_limpa_janela_f346.py:105`; `app/ferias/test_remarcar_limpa_janela_f346.py:108`; `app/ferias/test_remarcar_limpa_janela_f346.py:110`; `app/ferias/models.py:363`; `app/ferias/models.py:399`; `app/ferias/services.py:694`; `app/ferias/services.py:699`)
-
-Contrafactual contra 63ff, pelo delta fornecido:
-
-| Asserção | Resultado no pai |
-|---|---|
-| Quatro dias: `assertRaises` | Passa: a guarda anterior já recusava quatro. (`app/ponto/tests/test_ferias_fracao_demais_5.py:135`; delta fornecido, remoção em `remarcar_agendamento`) |
-| Quatro dias: contém `art. 134` | Passa: a mensagem anterior também continha esse trecho; a asserção foi ampliada de `5 dias` para `art. 134`. (`app/ponto/tests/test_ferias_fracao_demais_5.py:137`; delta fornecido) |
-| Quatro dias: permanece14 | Passa: recusa anterior precedia escrita. (`app/ponto/tests/test_ferias_fracao_demais_5.py:139`; delta fornecido) |
-| Única14→5: `assertRaises` | **Falha**: cinco não acionava o recorte anterior. (`app/ponto/tests/test_ferias_fracao_demais_5.py:144`; delta fornecido) |
-| Única14→5: mensagem14 | Não alcançada após falha do contexto; falta a exceção que conteria a mensagem. (`app/ponto/tests/test_ferias_fracao_demais_5.py:146`) |
-| Única14→5: permanece14 | Não alcançada; isoladamente falharia, pois o escritor gravaria5. (`app/ponto/tests/test_ferias_fracao_demais_5.py:148`; `app/ferias/services.py:680`; `app/ferias/services.py:699`) |
-| Dias14/intervalo15: `assertRaises` | **Falha**: parâmetro14 passa na guarda anterior; sem `clean` o intervalo divergente é gravado. (`app/ponto/tests/test_ferias_fracao_demais_5.py:153`; delta fornecido; `app/ferias/services.py:680`; `app/ferias/services.py:699`) |
-| Divergência: mensagem `intervalo real` | Não alcançada após falha do contexto. (`app/ponto/tests/test_ferias_fracao_demais_5.py:155`) |
-| Divergência: `(14,fim14)` | Não alcançada; isoladamente falharia por fim15. (`app/ponto/tests/test_ferias_fracao_demais_5.py:157`; `app/ferias/services.py:680`; `app/ferias/services.py:699`) |
-| Sucesso15: dias15 | Passa antes e depois; controle positivo, sem RED contra pai. (`app/ponto/tests/test_ferias_fracao_demais_5.py:161`; `app/ponto/tests/test_ferias_fracao_demais_5.py:163`) |
-| Correção: ausência de substring | Passa antes e depois; não executa correção nem comprova aviso. (`app/ponto/tests/test_ferias_fracao_demais_5.py:165`; `app/ponto/tests/test_ferias_fracao_demais_5.py:169`; `app/ferias/services.py:706`) |
-| Aviso: contém §1 | Passa antes e depois: o ramo `par1` já existia e não mudou neste delta. (`app/ponto/tests/test_ferias_fracao_demais_5.py:184`; `app/ferias/situacao.py:228`) |
-| Aviso: contém caput | Passa antes e depois: o `if caput` também já existia no pai; o delta melhora o selo, substituindo inspeção textual por comportamento. (`app/ponto/tests/test_ferias_fracao_demais_5.py:185`; `app/ferias/situacao.py:237`; delta fornecido) |
-
-**NÃO PROCEDE [fila] — conjunto novo sem mordida.** Existem dois casos comportamentais que distinguem o delta do pai: única fração reduzida a5 e divergência dias/intervalo. **PROCEDE [fila] — selo administrativo permanece fraco:** verifica apenas substring do wrapper. (`app/ponto/tests/test_ferias_fracao_demais_5.py:144`; `app/ponto/tests/test_ferias_fracao_demais_5.py:153`; `app/ponto/tests/test_ferias_fracao_demais_5.py:169`)
-
-**PROCEDE [fila] — não há caso novo de remarcação exercitando `caput` com quatro frações nem fração4 com irmã≥14 para exigir especificamente a segunda metade.** A fixture de remarcação tem uma única14; os casos acrescentados são5, intervalo divergente e15. O caso específico quatro ao lado de14 existe no teste direto de `clean`, sem atravessar o serviço. (`app/ponto/tests/test_ferias_fracao_demais_5.py:67`; `app/ponto/tests/test_ferias_fracao_demais_5.py:128`; `app/ponto/tests/test_ferias_fracao_demais_5.py:141`; `app/ponto/tests/test_ferias_fracao_demais_5.py:150`; `app/ponto/tests/test_ferias_fracao_demais_5.py:159`)
-
-Execução de suíte, RED real contra o pai e efeitos de produção: **[nao verificado]**. [nao verificado]
-
-_5166 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5172 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
