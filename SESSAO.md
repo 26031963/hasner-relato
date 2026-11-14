@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 11:13:20.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (658.7 MB). Acoes na janela: **1520**.
+**Medido em 14/11/2026 11:18:45.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (658.7 MB). Acoes na janela: **1513**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1523,10 +1523,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:21:05 | Bash |  | `W=/home/ronald/wt-codex-e3-forma-sql-195919/app; /bin/grep -rn "def _no_app" $W/chamados \| head -2; f=$(/bin/grep -rln "def _no_app" $W/chamados \| head -1); n=$(/bin/grep -n "def _no_app" $f \| cut -d: -f1); sed -n "${n},$((n+15))p" $f` |
 | 23:21:03 | Bash |  | `W=/home/ronald/wt-codex-e3-forma-sql-195919/app; /bin/grep -n "def _no_app" -A12 $W/chamados/services/vigia_fio.py \| /bin/grep -nE "now\|localdate\|agora\|def " ; /bin/grep -n "^lei:\\|lei:" /home/ronald/saas-hasner/logs/E3-FORMA-SQL/v8_matriz/q.q \| head` |
 | 23:20:59 | Bash |  | `W=/home/ronald/wt-codex-e3-forma-sql-195919/app; wc -l /home/ronald/saas-hasner/logs/E3-FORMA-SQL/v8_matriz/q.q; f=$(cd $W && git ls-files \| /bin/grep -E "vigia_fio.py$" \| head -1); echo $f; sed -n '606,609p;624,626p;699,701p' $W/$f; sed -n 238,243p $W/folha/fora_da_folha.py; sed -n 897,902p $W/chamados/views.py` |
-| 23:15:55 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() anc='HJ-090 7d COMMIT' assert s.count(anc)==1 s=s.replace(anc,'AVAL E3-NA-PROXIMA-VAGA (13/11 23:15, logs/AVAIS-1313/e3_na_proxima_vaga.txt): agente LEITURA escrevendo o brief v8-matriz em logs/E3-FORMA-SQL/v8_matriz/q.q (secao 4 + 16 linhas da secao 6 da matriz, base 2b0739004); volta d BUG-PAR termina no construtor e a vaga passa a E3 antes  ...` |
-| 23:15:51 | Agent | Brief E3 v8-matriz (leitura) | `Papel: agente de LEITURA (aval PRODUZ-EM-PARALELO). Voce so escreve UM arquivo: /home/ronald/saas-hasner/logs/E3-FORMA-SQL/v8_matriz/q.q. Nao edite nenhuma arvore (nem /home/ronald/saas-hasner/app nem worktree), nao rode suite, sombra, DIFF nem docker, nao decida lei, nao chame Codex. Nunca escreva nome nem CPF de pessoa: so colNNN/pk. Use /bin/grep (o grep da sessao nao e GNU). TAREFA (aval Ronal ...` |
-| 23:15:32 | Bash |  | `D=/home/ronald/saas-hasner/logs/AVAIS-1313; cat > $D/e3_na_proxima_vaga.txt <<'EOF' aval Ronald: E3-NA-PROXIMA-VAGA = ordem de vaga, nada substitui; nenhuma lei nova (e a regra ja aprovada: fila 1 antes de negocio antes de instrumento, e a ORDEM-POS-E4A2 poe a serie E antes da BUG-PAR). FATO: E3 PORTA-SEM-CASO sem ato desde 21:06 (logs/E3-FORMA-SQL/matriz e a ultima pasta); o RELATO 21:2x diz "con ...` |
-| 23:15:24 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL; /bin/grep -nE "^(\*\*)?[0-9#]\|^SE\|^Se\|^\*\*[0-9]" matriz/r.r \| head -40; git -C /home/ronald/saas-hasner log --oneline -1 b2dc7586a 2>&1; git -C /home/ronald/saas-hasner log --oneline -1 2b0739004 2>&1; ls -d /home/ronald/wt-codex-e3* 2>&1; git -C /home/ronald/wt-codex-e3-forma-sql-195919 log --oneline -2 2>&1` |
-| 23:15:21 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL; /bin/grep -nE "^#{1,3} " matriz/r.r \| head -30; cat construtor_v7/log \| tail -5; /bin/grep -hoE "wt-[a-z0-9-]+\|[0-9a-f]{9}" construtor_v7/q.q matriz/q.q \| sort \| uniq -c \| sort -rn \| head; cat matriz/r.r.id` |
-| 23:15:15 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL/matriz && cat aval.txt aval_1311.txt triagem.txt; /bin/grep -nE "^#+ \|^[0-9]+\. \|^SE[CÇ]" r.r \| head -40; ls ../construtor_v7 \| head; cat ../../AVAIS-1313/*.txt 2>/dev/null \| /bin/grep -n "E3" \| head` |
-| 23:15:13 | Bash |  | `cd /home/ronald/saas-hasner/logs/E3-FORMA-SQL && ls; ls -la matriz \| head -30; ls v8_matriz 2>&1` |
