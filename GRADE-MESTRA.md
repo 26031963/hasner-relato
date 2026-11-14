@@ -7,6 +7,7 @@
 
 ## Contagem por balde
 
+<!-- placar_grade:cabecalho inicio (escrito por bin/placar_grade.py --cabecalho; nao editar a mao) -->
 | balde | obras | faltam (estado != NO AR hoje) |
 |---|---|---|
 | ESPINHA-E | 327 | 327 |
@@ -18,7 +19,8 @@
 | ? | 11 | 11 |
 | **total** | **1143** | **1138** |
 
-Estados: REGISTRADA 976; PARADA 137; INTERROMPIDA 16; EM VOO 7; NO AR hoje 5; BRIEF PRONTO 2
+Estados: EM VOO 7; BRIEF PRONTO 2; REGISTRADA 976; INTERROMPIDA 16; PARADA 137; NO AR hoje 5; nao lidas: 0
+<!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
 
@@ -96,7 +98,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | E4-NAO-LAVRADO-PASSADO | ESPINHA-E | Corrige a apresentação de dias passados sem decisão lavrada. | - | leitores E4 | ......... | REGISTRADA | BACKLOG:939 |
 | E3-STATUS-EXPORTADA | ESPINHA-E | Completa o estado antigo sem modificar valores ou arquivos entregues. | - | pouso E3 | .+....... | REGISTRADA | BACKLOG:942 |
 | CODS-DO-ATO | ESPINHA-E | Faz cada julgamento reagir apenas aos dados do próprio ato. | - | conferências posteriores registradas | .+++..++. | REGISTRADA (pouso antigo; deploy não comprovado na célula) | BACKLOG:943 |
-| MODO-COMUM-OUT-DO-LOTE | ESPINHA-E | Impede dados do lote de decidirem o resultado de um ato individual. | - | prova do cartório; resíduos indicados | +++~..n+~ | REGISTRADA (código no ar; portão posterior indicado) | BACKLOG:946 |
+| MODO-COMUM-OUT-DO-LOTE | ESPINHA-E | Impede dados do lote de decidirem o resultado de um ato individual. | - | prova do cartório; resíduos indicados | +++~..~+~ | REGISTRADA (código no ar; portão posterior indicado) | BACKLOG:946 |
 | BACKFILL-UNICO | ESPINHA-E | Centraliza correções antigas com responsável e destino explícitos. | - | antes do último horizonte; corte de exportada | .+....... | REGISTRADA | BACKLOG:947 |
 | E3-ISENTO-INSUMOS | ESPINHA-E | Faz a decisão do dia considerar a isenção de ponto. | - | ISENTO-H10 substituta | .+++..~.. | PARADA (SUPERADA por ISENTO-H10) | BACKLOG:954 |
 | ISENTO-PONTO-JUIZ-REGISTRADO | ESPINHA-E | Declara a autoridade da isenção e elimina consultas paralelas. | - | corte; comparação de predicado e universo | ......... | REGISTRADA | BACKLOG:955 |
@@ -373,7 +375,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 |
 | E3-X2-NUNCA-JULGADAS | 20/20 | Identifica células que ainda não receberam julgamento. | - | possível comboio com X1 | +........ | REGISTRADA | BACKLOG:1909 |
 | E3-COL962-C6-X-LAMPADA | 20/20 | Apura discordância entre pergunta viva e marcação do dia. | - | medir divergência | ......... | REGISTRADA | BACKLOG:1910 |
-| FIO-E0-V4-E4B | 20/20 | Repara perguntas antigas pela entrada normal das correções. | - | itens 18–19; autorização das exportadas | ++++.+ ب++ | REGISTRADA (pouso antigo; partes finais pendentes) | BACKLOG:1924 |
+| FIO-E0-V4-E4B | 20/20 | Repara perguntas antigas pela entrada normal das correções. | - | itens 18–19; autorização das exportadas | ++++.++++ | REGISTRADA (pouso antigo; partes finais pendentes) | BACKLOG:1924 |
 | E4B-C12-DIFF-DE-PAUTA | 20/20 | Confere se a correção cria somente pautas permitidas. | - | comparação c12 com base | .+....... | REGISTRADA | BACKLOG:1925 |
 | E3-10-CURA-NO-ESCRITOR | 20/20 | Corrige na origem respostas carimbadas sem texto. | - | censo do escritor; prova no aplicativo | ~+....... | REGISTRADA | BACKLOG:1941 |
 | O168-GUARDA-NO-GATE-DO-PAI | 20/20 | Segura o chamado enquanto houver resposta sem julgamento. | - | - | +++++++++ | NO AR hoje | BACKLOG:1942; RELATO:5; RELATO:7; RELATO:31; RELATO:173 |
