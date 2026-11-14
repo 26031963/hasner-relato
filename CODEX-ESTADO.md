@@ -1,7 +1,120 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 19:53** · publicado em **14/11/2026 19:53** (UTC-3)
+> Ultima resposta processada: **14/11/2026 20:04** · publicado em **14/11/2026 20:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 20:04 · sessao 0a6e6dad6330 · - · - · origem=Ronald (tmux)
+
+Censo realizado somente por leitura.
+
+- `vigia_fio.fio_do_dia` não tem chamador de produção encontrado: a busca encontra somente sua definição em `chamados/services/vigia_fio.py:156`. Os homônimos da Folha e do serviço de veredito são funções distintas. Comando:  
+  `git grep -n -E '(vigia_fio import.*fio_do_dia|vigia_fio\.fio_do_dia|fio_do_dia\()' -- '*.py' ':!*/tests/*' ':!*/migrations/*'`
+
+- `_resolver_da_rodada` tem somente os dois chamadores internos dos censos, em `chamados/services/vigia_fio.py:440` e `chamados/services/vigia_fio.py:661`; sua definição fica em `chamados/services/vigia_fio.py:258`. Depois de transferir a consulta para a carga da tarefa e remover essas chamadas, cabe apagá-lo com lápide L-111.
+
+- O balde `decisao_do_dia_pendente` não tem consumidor de produção fora de `vigia_fio.py`: inicialização `:365`, classificação `:443`, passivo `:494`, enumeração `:547` e impressão `:906`. Comando:  
+  `git grep -n 'decisao_do_dia_pendente' -- '*.py' ':!*/tests/*' ':!*/migrations/*'`
+
+- `aguarda_decisao_de_ausencia`, `escala_nao_descreve_o_dia` e `fio_do_admin` são atualmente subdivisões dos dias sem porta: o censo já passou pela guarda da porta em `chamados/services/vigia_fio.py:428`; o alcance passou pela guarda em `chamados/services/vigia_fio.py:669`. As classificações em `chamados/services/vigia_fio.py:308` não escrevem campos da tarefa. Os comentários ainda atribuem “bola” e deveriam declarar explicitamente essa limitação LU-03.
+
+- As duas construções avulsas de `ListaDoAdmin` perdem o instante em `chamados/services/vigia_fio.py:391` e `chamados/services/vigia_fio.py:645`. Devem receber `agora=agora`. A classe já encaminha `self.agora` em `chamados/services/vigia_fio.py:216`; o default de `escala/services/cadastro_realidade.py:775` deixa de ser acionado nesse caminho.
+
+Leitores encontrados:
+
+| Leitor | Uso atual |
+|---|---|
+| `folha/fora_da_folha.py:244` | Usa `fila` como números de chamados exibidos; a documentação `:241` declara chamados exigíveis da célula. |
+| `folha/retrato_folha.py:1190` | Grava fio agregado como `dono`; `portas_da_linha`, `:1015`, consulta mapas de fio/tipo. |
+| `chamados/services/vigia_fio.py:412` | Testa presença; o alcance `:673` conta rota e `:675` publica fio. |
+| `chamados/services/furo_sem_canal.py:97` | Testa presença e conta rota em `:99`. |
+| `escala/services/cadastro_realidade.py:469` | Exclui o beco quando existe porta. |
+| `ponto/services/pautas_dos_discordantes.py:81` | Lê fio por projeção da Folha. |
+| `chamados/management/commands/diff_e3_sombra.py:50` | Diagnóstico de `fila`; `:143` imprime rota, fio e tamanho. |
+
+Nenhum deles interpreta `acao` atualmente, pela busca textual acima. Incidência dinâmica: `[não verificado]`.
+
+Para M5, conservar `fila=(101,)` faz a Folha exibir 101 ao lado da porta administrativa da pergunta 202 (`folha/fora_da_folha.py:244`). Recomendo alinhar `fila` aos chamados da célula pertencentes às portas do dono e passar âncora/ação separadamente para produzir o link correto.
+
+Consequências nos testes: [nao verificado]
+
+| Teste/local | Tratamento sugerido | [nao verificado]
+|---|---|
+| `test_o261_vigia_fio.py:485` | Classe c: comportamento específico do balde removido; M4 passa a provar porta administrativa. |
+| `test_o261_vigia_fio.py:521` | Classe c: contador `decisao_do_dia_pendente_com_alvo` removido. |
+| `test_o261_vigia_fio.py:564` | Classe c quanto à precedência do balde; M4/M6 devem preservar a cobertura de porta. |
+| `test_o261_vigia_fio.py:495` | Preservar: prova o juiz real; inverter resultado para `fio_vivo`, sem balde. |
+| `test_o261_vigia_fio.py:513` | Preservar a contraprova sem oferta; retirar somente consulta à chave apagada. |
+| `test_o261_vigia_fio.py:680` | Preservar soma; retirar termo do balde e contar o dia oferecido em `fio_vivo`. |
+| `test_sombra_c1_resolver_em_lote.py:35` | Preservar desempenho; trocar termo do balde por `fio_vivo`. |
+| `test_sombra_c1_resolver_em_lote.py:70` | Preservar paridade e fragmentação da plural, que continua viva. |
+| `test_n1_perguntas_do_app.py:383` | Fixar oferta falsa para os dias chegarem ao subdivisor; a transferência da consulta para a tarefa muda o caminho. |
+
+A fixture `_oferece` em `chamados/tests/test_o261_vigia_fio.py:483` precisa aceitar `**kw` para receber `agora`. A constante `PERMISSAO_DO_RESOLVER_DIA` tem teste de tela em `chamados/tests/test_o261e_f5_alcance.py:451`; não removê-la inadvertidamente junto do balde sem adaptar essa prova viva.
+
+## 14/11 20:02 · sessao 941f6ed772c9 · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
+
+Cura escrita na fonte: `pago = max(0, previsto - trabalhado_do_dia)`, preservando `cobre` e nomeando o excedente para revisão. O bruto informa o motivo; não impõe outro teto (`ponto/services/efeito_ausencia.py:138`, `ponto/services/efeito_ausencia.py:145`).
+
+**Q1.** O motor recebe o crédito pelo mapa alimentado em `ponto/services/fechamento.py:755`, `ponto/services/espelho.py:1134` e `relatorios/pdf_espelho.py:407`. Quando um dia justificado está ausente desse mapa, o motor usa o previsto inteiro (`ponto/motor_calculo_v2.py:2629`).
+
+Com `cobre` vazio, a fonte exclui o dia de `justificadas`; portanto, os dados fornecidos não demonstram como os 420 chegaram ao motor. Além disso, o campo medido `minutos_abonados` é gravado da grade, por `por_dia_da_grade`, em `ponto/services/fechamento.py:1066`. A origem exata dos 420 produtivos permanece **[nao verificado]**. A cura utiliza o feed existente, sem editar o motor (`ponto/services/efeito_ausencia.py:47`).
+
+**Q2.** A recusa integral podia retirar a justificativa usada pelo DSR. O leitor exige que o dia obrigatório tenha trabalho reconhecido ou esteja em `datas_justificadas`; não exige pagamento integral (`ponto/motor_calculo_v2.py:2605`, `ponto/motor_calculo_v2.py:3490`). O teste local executa o ramo real do motor com crédito 361, sem falta e com `dsr_ok=True` (`ponto/tests/test_justificativa_soma_sem_banco.py:262`). A explicação exata do 4→3 produtivo permanece **[nao verificado]**.
+
+**Q3.** Existe `decidir_he`, destinada a minutos reais fora da janela (`ponto/portas/he.py:138`). A Gestão de HE lê essas pontas do retrato (`ponto/services/he_pendente_lavrado.py:19`). Para o excedente da justificativa, acrescentei a projeção `justificativas_para_revisao`, consumida pela Central no filtro “Revisar aprovadas”, uma linha por dia-colaborador (`ponto/services/efeito_ausencia.py:151`, `ponto/views.py:1738`, `templates/ponto/fila_justificativas.html:56`).
+
+**Q4.** `cobre` mantém os marcos; somente o crédito muda. A grade dispensa os marcos cobertos e transporta o número; `dia_pago` soma esse número sem exigir a duração integral do período (`escala/utils.py:1266`, `escala/utils.py:1277`, `ponto/services/dia_pago.py:398`). Cobertura inteira também recebe mapa explícito, inclusive zero, evitando o fallback do motor (`ponto/services/efeito_ausencia.py:47`).
+
+| Campo | Quem escreve/fornece | Quem lê |
+|---|---|---|
+| `previsto` | Ata: `ponto/services/cartorio.py:739`; leitor comum: `escala/services/leitor_celula.py:354` | `ponto/services/efeito_ausencia.py:138` |
+| `trabalhado` | Autoridade `realizado_do_dia`: `ponto/turnos.py:774`; sem turno retorna `None`: `ponto/turnos.py:721` | Adaptação para zero e conta: `ponto/services/efeito_ausencia.py:141` |
+| `cobre` | Cobertura e união existentes: `ponto/services/efeito_ausencia.py:125`, `ponto/services/efeito_ausencia.py:133` | Efeito: `ponto/services/efeito_ausencia.py:46`; grade: `escala/utils.py:1257` |
+| `minutos` | Saldo diário: `ponto/services/efeito_ausencia.py:145` | Feed: `ponto/services/efeito_ausencia.py:47`; grade: `escala/utils.py:1277` |
+| `motivo` | `ponto/services/efeito_ausencia.py:147` | Projeção: `ponto/services/efeito_ausencia.py:153`; Central: `ponto/views.py:1747`; apresentação: `templates/ponto/fila_justificativas.html:116` |
+| Feed do motor | Três chamadores citados em Q1, incluindo órfão em `ponto/services/fechamento.py:831` | Abono: `ponto/motor_calculo_v2.py:2628` |
+
+Outros alimentadores permanecem lendo o mesmo mapa: esmeril (`ponto/services/esmeril_espelho.py:166`), extrato (`relatorios/management/commands/diff_extrato_parcial.py:62`) e comparação de alimentação (`ponto/management/commands/diff_espelho_alimentacao.py:124`).
+
+Diff por arquivo::função:
+
+- `efeito_ausencia.py::periodos_justificados`: substitui recusa integral pelo saldo diário; trata ausência de turno (`ponto/services/efeito_ausencia.py:136`).
+- `efeitos_da_ausencia` e `utils.py::_marcar_ausencias`: transportam crédito explícito para cobertura inteira (`ponto/services/efeito_ausencia.py:47`, `escala/utils.py:1257`).
+- `views.py::fila_justificativas` e template: revisão pelo motivo da fonte (`ponto/views.py:1738`, `templates/ponto/fila_justificativas.html:116`).
+- Testes: S1–S6 invertidos, T1/T7, propriedades, feed real, ramo do motor e Central (`ponto/tests/test_justificativa_soma_sem_banco.py:83`, `ponto/tests/test_justificativa_soma_sem_banco.py:163`, `ponto/tests/test_justificativa_soma_sem_banco.py:185`).
+- Caracterizações anteriores ajustadas à fórmula nova; ORM escrito, com relógio fixado (`ponto/tests/test_justificativa_periodo_v2_sem_banco.py:209`, `ponto/tests/test_justificativa_paga_o_periodo.py:600`).
+
+RED antes da implementação: **20 testes, 15 falhas por asserção**, preservado em [justificativa_soma_red.txt](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_red.txt:179). [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_soma_sem_banco -v
+```
+
+GREEN local: **39 testes passando**, em [justificativa_soma_green.txt](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_green.txt:42). [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_justificativa_soma_sem_banco ponto.tests.test_justificativa_periodo_v2_sem_banco -v
+```
+
+Mutantes: **controle verde e 12/12 mortos por asserção**. Os comandos individuais e resultados estão em [justificativa_soma_mutantes.txt](/home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app/ponto/tests/justificativa_soma_mutantes.txt:1). [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma recusa_integral_c5
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma sem_max_zero
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma so_turno_da_ancora
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma feed_motor_le_bruto
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_justificativa_soma --todos
+```
+
+ORM escrito para a sessão executar; resultado **[nao verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_justificativa_paga_o_periodo --settings=config.settings.ci
+```
+
+Não executei ORM, banco, rede, Docker, reconstrução, commit, merge, push, deploy ou crons. Não alterei motor, portas protegidas, modelos, migrations ou docs. Certificação independente dessas restrições: **[nao verificado]**. Frota dos 41, contagem produtiva por motivo, 9 colaboradores da competência 11 e exportadas: **[nao verificado]**. A certificação fica com Code/suíte e opus final. [nao verificado]
+
+`LEI-AKITA: origem=Ronald 14/11 19:4x (ponto/services/efeito_ausencia.py:83); testemunha=feed real PDF e ramo real motor (ponto/tests/test_justificativa_soma_sem_banco.py:242, :262); RED=ponto/tests/justificativa_soma_red.txt:181; quem-mais-le=grade/fechamento/espelho/PDF/esmeril/extrato; juizes novos=0; padrao=single source of truth / um juiz por pergunta (docs/PLANO-PADROES.md:46).`
 
 ## 14/11 19:53 · sessao e037f87dec36 · E3-V10-DEGRAU-DONO-E-PORTA · verificador · origem=Code
 
@@ -1305,445 +1418,4 @@ Ressalvas do cruzamento:
 
 **ESTRUTURA: 18 = 9 + 0 + 1 + 1 + 5 + 2.** Soma dos casos discriminados em (A), com as provas acima. Encerramento atual dos casos em produção: **[nao verificado]**.
 
-## 14/11 18:50 · sessao 58e554e940f1 · E3-X2-NUNCA-JULGADAS · censo · origem=Code
-
-**E3-X2-NUNCA-JULGADAS — leitura**
-
-A lista contém **136 colab-dias únicos**. Quantos são nunca lavrados, vencidos ou indeterminados, e os exemplos de cada estado, permanecem **[nao verificado]**: o anexo não contém `veredito_lavrado`, `julgado_em`, `janela_expira_em`, marcos ou perguntas. Fonte: anexo `u136.tsv:1–137` — numeração considerando o cabeçalho como linha 1.
-
-| Empresa | Competência | Colab-dias | Fonte no anexo |
-|---|---|---:|---|
-| 1 | 10/2026 | 17 | `u136.tsv:2–18` |
-| 1 | 11/2026 | 20 | `u136.tsv:19–38` |
-| 2 | 09/2026 | 56 | `u136.tsv:39–94` |
-| 2 | 10/2026 | 21 | `u136.tsv:95–115` |
-| 2 | 11/2026 | 9 | `u136.tsv:116–124` |
-| 3 | 09/2026 | 9 | `u136.tsv:125–133` |
-| 3 | 10/2026 | 4 | `u136.tsv:134–137` |
-
-**O recorte exige uma ressalva.** Os 136 representam o recorte sem dono informado. Não representam necessariamente todos os dias com `t['nao_sei'] == True`: a escolha do dono precede o fallback `nao_sei`, e uma porta publicada conserva essa flag. Excluir os outros 390 é coerente com “sem dono”, mas reduz o universo se o item 4 pretendia **todos** os dias com a flag. O número 390 não foi recontado aqui **[nao verificado]**. Fontes: `app/chamados/services/tarefa_do_dia.py:604–614`, `:629–636`; anexo `leitura_nao_fica_ociosa_complemento.txt:3`.
-
-**Como nasce o desconhecimento**
-
-A implementação de `esta_stale` está em `app/chamados/veredito_lavrado.py:213`. A carga admite em `_lavra` somente valores `sim/nao` que não estejam stale. Quando a última decisão é validação e a pergunta ficou fora desse mapa, `_pela_decisao` devolve `veredito_sem_lavra_vigente`; a tarefa então marca `nao_sei=True`. Fontes: `app/chamados/services/tarefa_do_dia.py:153–156`, `:320–325`, `:419–422`.
-
-| Situação da pergunta | Ramo real |
-|---|---|
-| Campo vazio ou `julgado_em` ausente | `esta_stale=True`; `app/chamados/veredito_lavrado.py:224–225` |
-| Lavra posterior ao instante consultado | Também stale; não prova que nunca houve lavra. `app/chamados/veredito_lavrado.py:224–225` |
-| Relógio venceu a janela e a lavra antecede a expiração | Stale. A comparação usa datas locais. `app/chamados/veredito_lavrado.py:114–116`, `:228–229` |
-| Marco do colaborador posterior à lavra | Stale. `app/chamados/veredito_lavrado.py:230–233` |
-| Nenhum desses motivos | `esta_stale=False`. `app/chamados/veredito_lavrado.py:234` |
-| Valor persistido `indeterminado` | Nasce quando o juiz lança exceção; não é, sozinho, motivo de stale. `app/chamados/veredito_lavrado.py:261–269`, `:224–234` |
-
-`nao_sei` também nasce fora da lavra: célula ausente, ata sem lâmpadas, lâmpada desconhecida, marco sem teto, identidade insuficiente e outros retornos sem decisão. Portanto, não cabe converter automaticamente os 136 em “perguntas nunca julgadas”. Fontes: `app/chamados/services/tarefa_do_dia.py:216–226`, `:140–141`, `:173`, `:284–290`, `:305–310`, `:322–325`.
-
-O próprio anexo contém **20 dias do colab 924 sem célula identificada**; isso não comprova ausência de pergunta ou de lavra. Fonte: `u136.tsv:74–93`; situação das perguntas desses dias **[nao verificado]**.
-
-**Quem deveria lavrar**
-
-| Estado/evento | Rotina e alcance demonstrado |
-|---|---|
-| Nunca lavrado ou vencido, com destino vivo | `lavrar_perguntas_stale`: seleciona perguntas cujo `chamado_destino` está em `VIVOS`, limita a rodada a 500 por padrão e chama `lavrar(p)` com `--apply`. `app/chamados/management/commands/lavrar_perguntas_stale.py:35`, `:57–62`, `:82–89` |
-| Papel do cron | Cadastrado a cada cinco minutos, com `--apply`, estágio `continuo`, sem dependências; papel **`lavra`**. Cadastro não comprova execução. `app/config/crons.py:390–391`, `:2264`; execução **[nao verificado]** |
-| Indeterminado com carimbos vigentes | Não há nova tentativa nesse cron apenas pelo valor `indeterminado`; precisa entrar por algum motivo de stale. `app/chamados/services/raiox.py:40–47` |
-| Materialização | O materializador chama `carimbar(..., lavrar_veredito=True)`; a porta chama `lavrar(salvar=False)` e salva os campos juntos. `app/chamados/services/materializacao.py:1283–1284`; `app/chamados/models.py:3232–3235` |
-| Fechamento do chamado | O signal S143 aciona o resolvedor; este seleciona perguntas do destino, não materializadas e com disputa aberta, e pode carimbar com lavra. `app/chamados/signals.py:91–117`; `app/chamados/services/disputa_emissao.py:1913–1917`, `:1993–1994` |
-| Mudança do estado do destino | `_gravar_estado` relavra no ramo de cruzamento da fronteira de encerramento, para perguntas daquele destino sem validação. `app/chamados/models.py:303–312` |
-| Reapontamento, mudança de dia ou via derivada | Relavram junto da alteração correspondente. `app/chamados/services/fio.py:964–967`, `:1081–1082`; `app/chamados/services/relavra_via.py:118–128` |
-| Backfill | É sob ordem, não rotina; seu recorte compara o valor do veredito. `app/config/crons.py:1420`; `app/chamados/management/commands/backfill_veredito_lavrado.py:115–132` |
-
-Assim, sem os destinos e campos das perguntas, atribuir falha individual a cron, signal ou porta permanece **[nao verificado]**. O leitor GET não é o lavrador atual. Fonte: `app/chamados/services/raiox.py:112–119`.
-
-**Sonda proposta**
-
-A sonda abaixo usa o mesmo universo, janela, `_carga` e chamadas de tarefa da remedida; reutiliza as perguntas carregadas e chama `esta_stale` real. Fontes: `app/folha/fora_da_folha.py:58–79`, `:109–144`; `app/chamados/services/tarefa_do_dia.py:392–422`, `:533–560`.
-
-Para não inventar prioridade entre perguntas, o dia recebe `nunca_lavrado` ou `vencido` somente quando suas perguntas causais concordam. Ausência de causa de lavra exposta ou causas mistas ficam em `indeterminado`, identificadas como **classificação não resolvida [nao verificado]**, separadamente do valor persistido `VL_INDETERMINADO`. A necessidade dessa distinção decorre dos vários ramos de `nao_sei`. Fonte: `app/chamados/services/tarefa_do_dia.py:216–325`.
-
-O congelamento abrange o shell porque o universo contém `localdate()` implícito. O bootstrap desativa os handlers de arquivo antes do Django iniciar e usa `-B`. Fontes: `app/folha/export.py:1238`; `app/requirements.txt:43`; `app/config/settings/saas.py:136–166`. Execução no ambiente de banco e resultados: **[nao verificado]**.
-
-```bash
-# Executar a partir de app/. Saida apenas em stdout; sem redirecionamento.
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import datetime as dt
-import importlib
-import json
-import os
-import sys
-from collections import Counter, defaultdict
-
-# app/manage.py:9; app/config/settings/saas.py:136,160.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.saas")
-os.environ["PGOPTIONS"] = (
-    os.environ.get("PGOPTIONS", "") + " -c default_transaction_read_only=on"
-).strip()
-config = importlib.import_module(os.environ["DJANGO_SETTINGS_MODULE"])
-config.LOGGING_CONFIG = None
-
-# Anexo u136.tsv:2-137. Cada linha agrupa datas do mesmo emp/comp/colab.
-DADOS = """1 10/2026 950 2026-09-29 2026-10-08 2026-10-09 2026-10-14 2026-10-15 2026-10-16 2026-10-19 2026-10-20
-1 10/2026 969 2026-10-07 2026-10-08 2026-10-09 2026-10-13 2026-10-14 2026-10-15 2026-10-16 2026-10-18 2026-10-20
-1 11/2026 950 2026-10-21 2026-10-22 2026-10-23 2026-10-27 2026-10-30 2026-11-03 2026-11-11 2026-11-12 2026-11-13
-1 11/2026 969 2026-10-22 2026-10-24 2026-10-26 2026-10-28 2026-10-30 2026-11-01 2026-11-03 2026-11-05 2026-11-07 2026-11-09 2026-11-13
-2 09/2026 192 2026-08-23
-2 09/2026 207 2026-08-22 2026-08-26 2026-08-30 2026-09-05 2026-09-13 2026-09-19
-2 09/2026 209 2026-08-21 2026-08-23
-2 09/2026 268 2026-08-21 2026-08-23
-2 09/2026 301 2026-08-23
-2 09/2026 327 2026-08-23
-2 09/2026 382 2026-08-27
-2 09/2026 435 2026-09-20
-2 09/2026 438 2026-09-07
-2 09/2026 439 2026-09-15
-2 09/2026 451 2026-08-21 2026-08-23
-2 09/2026 468 2026-09-17
-2 09/2026 491 2026-09-20
-2 09/2026 556 2026-09-14
-2 09/2026 726 2026-09-08
-2 09/2026 789 2026-08-26 2026-09-01 2026-09-13
-2 09/2026 822 2026-08-28
-2 09/2026 849 2026-09-18 2026-09-19
-2 09/2026 915 2026-09-07
-2 09/2026 921 2026-09-05 2026-09-12 2026-09-19
-2 09/2026 922 2026-09-18
-2 09/2026 923 2026-09-06
-2 09/2026 924 2026-09-01 2026-09-02 2026-09-03 2026-09-04 2026-09-05 2026-09-06 2026-09-07 2026-09-08 2026-09-09 2026-09-10 2026-09-11 2026-09-12 2026-09-13 2026-09-14 2026-09-15 2026-09-16 2026-09-17 2026-09-18 2026-09-19 2026-09-20
-2 09/2026 953 2026-09-16
-2 10/2026 207 2026-10-10
-2 10/2026 243 2026-09-27
-2 10/2026 252 2026-09-29
-2 10/2026 297 2026-09-21
-2 10/2026 821 2026-09-30 2026-10-10 2026-10-12
-2 10/2026 841 2026-10-10
-2 10/2026 849 2026-10-02 2026-10-03
-2 10/2026 922 2026-09-29 2026-10-17
-2 10/2026 924 2026-09-22
-2 10/2026 957 2026-09-21
-2 10/2026 988 2026-10-10 2026-10-15 2026-10-16 2026-10-18 2026-10-19
-2 10/2026 991 2026-10-11 2026-10-14
-2 11/2026 265 2026-10-31 2026-11-14
-2 11/2026 407 2026-10-21 2026-10-29 2026-11-02
-2 11/2026 516 2026-10-22
-2 11/2026 673 2026-10-21
-2 11/2026 821 2026-10-24
-2 11/2026 922 2026-10-23
-3 09/2026 129 2026-08-28 2026-08-30 2026-09-08 2026-09-13 2026-09-15 2026-09-20
-3 09/2026 515 2026-09-09
-3 09/2026 829 2026-08-25 2026-09-15
-3 10/2026 155 2026-09-27 2026-10-04 2026-10-11 2026-10-12"""
-
-AGORA = dt.datetime.fromisoformat("2026-11-14T18:45:00+00:00")
-ESTADOS = ("nunca_lavrado", "vencido", "indeterminado")
-
-
-def sonda():
-    from django.db import connection, transaction
-    from django.utils import timezone
-    from django_tenants.utils import schema_context
-    from folha import fora_da_folha as F
-    from colaboradores.models import Empresa
-    from chamados.catalogo.motor import VIVOS
-    from chamados.veredito_lavrado import (
-        esta_stale, marcos_do_lote, relogio_virou,
-    )
-    from ponto.janelas import janela_fechamento
-
-    alvos = []
-    for linha in DADOS.splitlines():
-        emp, comp, cid, *dias = linha.split()
-        alvos.extend(
-            (int(emp), comp, int(cid), dt.date.fromisoformat(d))
-            for d in dias
-        )
-    assert len(alvos) == len({
-        (cid, d) for _, _, cid, d in alvos
-    }) == 136
-
-    def j(obj):
-        return json.dumps(
-            obj, ensure_ascii=False, sort_keys=True, default=str,
-        )
-
-    def diagnostico(p, marcos):
-        # Funcao REAL: app/chamados/veredito_lavrado.py:213.
-        stale = esta_stale(p, marcos, AGORA)
-        if not p.veredito_lavrado or p.julgado_em is None:
-            estado = "nunca_lavrado"
-            motivo = "campo_vazio_ou_julgado_ausente"
-        elif stale:
-            estado = "vencido"
-            if p.julgado_em > AGORA:
-                motivo = "lavra_posterior_a_agora"
-            elif relogio_virou(
-                p.julgado_em, p.janela_expira_em, AGORA,
-            ):
-                motivo = "relogio"
-            else:
-                motivo = "marco_posterior"
-        elif p.veredito_lavrado not in ("sim", "nao"):
-            estado = "indeterminado"
-            motivo = "valor_da_lavra:" + p.veredito_lavrado
-        else:
-            estado, motivo = "vigente", "lavra_vigente"
-
-        destino = p.chamado_destino
-        no_cron = bool(destino and destino.status_local in VIVOS)
-        return {
-            "pergunta": p.pk,
-            "motivo": p.motivo,
-            "instancia": p.instancia_marco,
-            "estado": estado,
-            "diagnostico": motivo,
-            "esta_stale": stale,
-            "veredito_lavrado": p.veredito_lavrado,
-            "vl_indeterminado_gravado":
-                p.veredito_lavrado == "indeterminado",
-            "julgado_em": p.julgado_em,
-            "janela_expira_em": p.janela_expira_em,
-            "marco": marcos.get(p.disputa.colaborador_id),
-            "chamado_destino": p.chamado_destino_id,
-            "status_destino":
-                destino.status_local if destino else None,
-            "no_universo_cron": no_cron,
-            "elegivel_cron_stale": no_cron and stale,
-            "fonte": (
-                "app/chamados/veredito_lavrado.py:224; "
-                "app/chamados/management/commands/"
-                "lavrar_perguntas_stale.py:57"
-            ),
-        }
-
-    resultados = []
-    # Mesma carga/janela da remedida: fora_da_folha.py:58.
-    with timezone.override("America/Sao_Paulo"):
-        with schema_context("juliani"), transaction.atomic():
-            with connection.cursor() as cur:
-                cur.execute(
-                    "SET TRANSACTION ISOLATION LEVEL "
-                    "REPEATABLE READ, READ ONLY"
-                )
-                cur.execute("SHOW transaction_read_only")
-                assert cur.fetchone()[0] == "on"
-                cur.execute("SELECT current_schema()")
-                assert cur.fetchone()[0] == "juliani"
-
-            for emp_id, comp in sorted({
-                (e, c) for e, c, _, _ in alvos
-            }):
-                mes, ano = map(int, comp.split("/"))
-                emp = Empresa.objects.get(pk=emp_id)
-                u = F.dias_que_seguram(emp, mes, ano)
-                colabs, por = u["colabs"], u["dias"]
-                retidos = [colabs[c] for c in por if por[c][1]]
-                carga = (
-                    F._carga(
-                        retidos,
-                        *janela_fechamento(mes, ano, emp),
-                        AGORA,
-                    )
-                    if retidos else None
-                )
-                ids = {c.pk for c in retidos}
-                marcos = (
-                    marcos_do_lote(ids, ate=AGORA) if ids else {}
-                )
-                universo = {
-                    (cid, d["data"])
-                    for cid, (_, ds) in por.items()
-                    for d in ds
-                }
-
-                for e, c, cid, dia in alvos:
-                    if (e, c) != (emp_id, comp):
-                        continue
-
-                    r = {
-                        "emp": e, "comp": c,
-                        "colab": cid, "dia": dia,
-                        "no_universo_atual": (cid, dia) in universo,
-                        "estado": "indeterminado",
-                        "perguntas": [],
-                        "diagnostico":
-                            "colab_fora_da_carga:[nao verificado]",
-                        "fio": None,
-                        "nao_sei": None,
-                        "confere_recorte": False,
-                    }
-
-                    if carga is not None and cid in ids:
-                        # As mesmas duas chamadas da remedida.
-                        fio = F._fio_do_dia(
-                            colabs[cid], dia, carga,
-                        )
-                        t = carga.tarefa(colabs[cid], dia)
-
-                        causais = {
-                            i["pergunta_id"]
-                            for i in t["instancias"]
-                            if i.get("razao")
-                                == "veredito_sem_lavra_vigente"
-                            and i.get("pergunta_id") is not None
-                        }
-                        # Objetos reais da carga:
-                        # tarefa_do_dia.py:392-398.
-                        ps = carga._perg.get((cid, dia), [])
-                        diags = [
-                            diagnostico(p, marcos) for p in ps
-                        ]
-                        escolhidas = [
-                            p for p in diags
-                            if p["pergunta"] in causais
-                        ]
-                        estados = {
-                            p["estado"] for p in escolhidas
-                        }
-
-                        if (
-                            escolhidas
-                            and len(estados) == 1
-                            and estados <= set(ESTADOS)
-                            and len(escolhidas) == len(causais)
-                        ):
-                            r["estado"] = next(iter(estados))
-                            r["diagnostico"] = (
-                                "lavra_indeterminada"
-                                if r["estado"] == "indeterminado"
-                                else "perguntas_causais_concordam"
-                            )
-                        elif escolhidas:
-                            r["diagnostico"] = (
-                                "causas_mistas_ou_incompletas:"
-                                "[nao verificado]"
-                            )
-                        else:
-                            r["diagnostico"] = (
-                                "nao_sei_sem_causa_de_lavra_exposta:"
-                                "[nao verificado]"
-                            )
-
-                        r.update(
-                            fio=fio,
-                            fio_tarefa=t["fio"],
-                            nao_sei=t["nao_sei"],
-                            razao=t["razao"],
-                            razoes_instancias=[
-                                {
-                                    "pergunta": i["pergunta_id"],
-                                    "razao": i["razao"],
-                                }
-                                for i in t["instancias"]
-                            ],
-                            perguntas=escolhidas,
-                            perguntas_do_dia=diags,
-                            confere_recorte=(
-                                r["no_universo_atual"]
-                                and fio == "nada"
-                                and t["nao_sei"]
-                            ),
-                        )
-                    resultados.append(r)
-
-    # Erro de carga/banco aborta: nao vira contagem aparente.
-    assert len(resultados) == 136
-
-    print("**E3-X2-NUNCA-JULGADAS — sonda de leitura**")
-    print("\nAGORA=" + AGORA.isoformat() + "; tenant=juliani.")
-    print(
-        "\nFonte da carga: app/folha/fora_da_folha.py:58; "
-        "fonte da tarefa: "
-        "app/chamados/services/tarefa_do_dia.py:533; "
-        "fonte stale: app/chamados/veredito_lavrado.py:213."
-    )
-    print(
-        "\nIndeterminado do DIA inclui falta de classificacao "
-        "unica; o valor persistido fica separado em "
-        "veredito_lavrado. Convencao diagnostica "
-        "[nao verificado]."
-    )
-
-    print(
-        "\n| emp | comp | colab | dia | estado | "
-        "perguntas causais |"
-    )
-    print("|---|---|---|---|---|---|")
-    for r in resultados:
-        pks = ",".join(
-            str(p["pergunta"]) for p in r["perguntas"]
-        ) or "[nao verificado]"
-        print(
-            "| {emp} | {comp} | {colab} | {dia} | "
-            "{estado} | ".format(**r) + pks + " |"
-        )
-
-    print("\nDetalhes por dia, sem nomes, CPF ou respostas:")
-    print("\n~~~jsonl")
-    for r in resultados:
-        print(j(r))
-    print("~~~")
-
-    cont = Counter(
-        (r["estado"], r["comp"], r["emp"])
-        for r in resultados
-    )
-    exemplos = defaultdict(list)
-    for r in resultados:
-        chave = r["estado"], r["comp"], r["emp"]
-        if len(exemplos[chave]) < 3:
-            exemplos[chave].append({
-                "colab": r["colab"],
-                "dia": r["dia"],
-                "perguntas": [
-                    p["pergunta"] for p in r["perguntas"]
-                ],
-                "diagnostico": r["diagnostico"],
-            })
-
-    print(
-        "\n| estado | comp | emp | colab-dias | "
-        "ate 3 exemplos |"
-    )
-    print("|---|---|---|---|---|")
-    for comp, emp in sorted({
-        (c, e) for e, c, _, _ in alvos
-    }):
-        for estado in ESTADOS:
-            k = estado, comp, emp
-            print(
-                "| %s | %s | %s | %s | %s |" % (
-                    estado, comp, emp,
-                    cont[k], j(exemplos[k]),
-                )
-            )
-
-    print(
-        "\nSubtipos de indeterminado "
-        "(nao confundir com VL_INDETERMINADO):"
-    )
-    for motivo, n in sorted(Counter(
-        r["diagnostico"] for r in resultados
-        if r["estado"] == "indeterminado"
-    ).items()):
-        print("- %s: %s" % (motivo, n))
-
-    print("\nE3X2_TOTAL " + j(dict(Counter(
-        r["estado"] for r 
-
-[truncado em 20000 de 20915 caracteres]
-
-## 14/11 18:49 · sessao 505e81710761 · - · - · origem=Ronald (tmux)
-
-Estatística independente do anexo, agregada só em memória:
-
-| Empresa | 09/2026 | 10/2026 | 11/2026 | Total |
-|---|---:|---:|---:|---:|
-| 3 | 94 | 117 | 156 | 367 |
-| 4 | 6 | 8 | 9 | 23 |
-
-Fonte: `universo_dias.tsv` do prompt; sem arquivo local numerado, portanto `[nao verificado]` para citação arquivo:linha.
-
-**Correção certa:** empresa 2, competência 10, col607 tem **30 linhas**, de 21/09 a 20/10 consecutivos; contar 10 omite as 20 linhas de outubro. Fonte: anexo do prompt `[nao verificado]`.
-
-Meu mapa preliminar empresa 2/10 soma **615**, encaminhado integralmente para comparação; ainda há diferença de 2 contra a contagem informada de 593 após corrigir col607 (+20). Não ajustei ao universo declarado. `[nao verificado]`
-
-_5245 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5247 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
