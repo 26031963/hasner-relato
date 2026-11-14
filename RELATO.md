@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-! PAREI: DISJUNTOR B3 BO-DISPUTA-SEM-PERGUNTA + B3 E3-V10-DEGRAU-DONO-E-PORTA | espera Ronald (DESENHO/ERRO-BOBO ou rearma de cada)
+ERRO-BOBO E3-V10-DEGRAU-DONO-E-PORTA: aval Ronald 14/11 19:1x "libera B3" (logs/AVAIS-1313/libera_b3_e3_v10.txt) -- disparo falso: o B3 contou os 2 ataques de preparo so leitura (5a/5b) como leitura final pela palavra no prompt; o opus final NAO rodou; procedentes ja na copia (1ee368261). Segue suite inteira, verificador Codex, UM opus final.
+! PAREI: DISJUNTOR B3 BO-DISPUTA-SEM-PERGUNTA | espera Ronald (DESENHO/ERRO-BOBO ou rearma)
 B3 E3-V10-DEGRAU-DONO-E-PORTA 18:55: disparado pelos 2 ataques PREPARA-ESPINHA (5a/5b, so leitura) -- o prompt dizia "ATAQUE ANTES DO OPUS FINAL" e o B3 conta a palavra 'final' como leitura final; o opus final da obra NAO rodou. Procedentes deles entram na obra (lote4 docstring pronto; testemunha corrigida no commit); a construcao segue (recorte lote3 em voo, suite, Codex) ate o verificador, que espera a liberacao. Instrumento: linha de fila 'B3 conta ataque de preparo como final', sem obra agora.
 lei: LISTA-UNICA pronta, 22 perguntas de lei + 3 de desenho (logs/PREPARA-ESPINHA/LISTA-UNICA-DE-LEI.md, LU-01..22 / LD-01..03; fontes: ataques 5a/5b E3, E4c, E4d, CONTRATO, O50, MAPA DOS RIOS, PORTA-DO-ADMIN censo). Nenhuma trava obra em voo; E4c/E4d/O50 abrem so depois do pouso da E3.
 ESTADO 19:1x BO-DISPUTA c25 (construtor Codex, rc 0, inventario 14 arquivos = git status): hunk de models.py aplicado pela sessao (logs/BO-DISPUTA-SEM-PERGUNTA/c25_models.hunk); censos rc 0; 18 sem banco OK; mutantes hunk_* MORTOS; helper do hunk ganhou skip-guard. Proximo: commit na copia + recorte. Verificador final espera rearma B3.
