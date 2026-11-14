@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 01:40:58.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.4 MB). Acoes na janela: **1907**.
+**Medido em 14/11/2026 01:46:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.4 MB). Acoes na janela: **1910**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:41:16 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -i '3s/.*/ESPERANDO: trava_teste.sh \| pid=73545/' docs/RELATO.md; (cd ../bin && python3 -c "import hook_stop_fila1 as h; print(h._esperando_com_prova())"); python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') nova="PONTO 01:5x E3 v8 volta 1 devolvida (Codex construtor 00:58-01:24, rc 0): wt-codex-e3-forma-sql-005806 commit be856fb8b; sem banco RE ...` |
+| 01:41:05 | Bash |  | `/usr/bin/sleep 5; ps -eo pid,etime,args \| /bin/grep -E "^ *[0-9]+ +[0-9:]+ bash .*bin/(trava_teste\|suite)\.sh" \| cut -c1-160` |
+| 01:41:02 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/E3-FORMA-SQL/construtor_v8; L=$D/recorte_v8_1.log; bin/suite.sh --dir /home/ronald/wt-codex-e3-forma-sql-005806 --only "chamados core folha" > $L 2>&1; echo "rc=$?" >> $L; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran' $L \| tail -1; tail -1 $L; /bin/grep -E '^(FAIL\|ERROR):' $L \| cut -c1-220 \| head -40` |
 | 01:40:56 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 55,75p logs/E3-FORMA-SQL/construtor_v8/q.q \| cut -c1-400; /bin/grep -n "R2" /home/ronald/wt-codex-e3-forma-sql-005806/app/docs/e3_v8_matriz.txt \| head -10 \| cut -c1-300` |
 | 01:40:51 | Bash |  | `cd /home/ronald/wt-codex-e3-forma-sql-005806/app; D=/home/ronald/saas-hasner/logs/E3-FORMA-SQL/construtor_v8; mkdir -p $D/saidas; mv e3-v8-*.out $D/saidas/; cd ..; git add app/chamados app/docs/JUIZES.md app/docs/e3_v8_matriz.txt app/folha; git status --porcelain \| /bin/grep -v '^[AM] ' \| head; git commit -q -F - <<'EOF' E3-FORMA-SQL v8-matriz (copia, Codex construtor): matriz R1-R16 pela regra, ...` |
 | 01:40:41 | Bash |  | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-codex-e3-forma-sql-005806; /bin/grep -n "R2" logs/E3-FORMA-SQL/construtor_v8/q.q \| cut -c1-400 \| head -8; cat $W/app/e3-v8-r2-pendente.out \| head -30 \| cut -c1-300; git -C $W status --porcelain \| cut -c1-100` |

@@ -1,7 +1,110 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 01:39** · publicado em **14/11/2026 01:41** (UTC-3)
+> Ultima resposta processada: **14/11/2026 01:42** · publicado em **14/11/2026 01:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 01:42 · sessao 7ad1129d1278 · CORTE-DAS-TRAVAS · verificador · origem=Code
+
+**REPROVADO.** A cura melhora os casos apresentados, mas ainda permite escrita classificada como `so leitor` e pendências apagadas como zero. (`bin/classe_da_obra.py:144`, `bin/classe_da_obra.py:175`, `bin/disjuntor.py:1025`, `bin/disjuntor.py:1031`)
+
+Os contraexemplos abaixo são sintéticos, exercitados em memória sobre o código da cópia; ocorrência em produção `[nao verificado]`. Execução integral dos selos `[nao verificado]`: os scripts criam e removem arquivos, contrariando a restrição desta verificação. (`bin/tests/test_triagem_pendente.sh:12`, `bin/tests/test_gate_pela_classe.sh:27`)
+
+1. **[bloqueia] `bin/classe_da_obra.py:175` — controle de formulário gerado por template continua “só marcação”.**
+
+   A regex examina a linha alterada, sem reconhecer tags Django que produzem controles. Contraexemplo sobre arquivo existente: trocar `{% opcao_mover "fechado" %}` por `{% opcao_mover "resolvido" %}` em `app/templates/chamados/detalhe.html:134` resulta em `so leitor`. A tag gera `<option value=...>`, dentro do campo `novo_status`; o backend lê esse valor e o entrega à transição. Portanto, a alteração muda uma entrada de escrita, embora escape da cura. (`app/chamados/templatetags/chamados_tags.py:77`, `app/templates/chamados/detalhe.html:130`, `app/chamados/services/acoes_chamado.py:296`, `app/chamados/services/acoes_chamado.py:325`, `bin/classe_da_obra.py:215`)
+
+2. **[bloqueia] `bin/classe_da_obra.py:144` — conteúdo do diff confundido com cabeçalho.**
+
+   Contraexemplo: dentro de `<script>`, trocar `--saldo;` por `++saldo;`. As linhas do diff são `---saldo;` e `+++saldo;`; ambas são descartadas como cabeçalho. Nenhuma chega à verificação de faixa de script, e a classe sai `so leitor`. O descarte também deixa de avançar a numeração dessas linhas. (`bin/classe_da_obra.py:144`, `bin/classe_da_obra.py:149`, `bin/classe_da_obra.py:153`, `bin/classe_da_obra.py:174`, `bin/classe_da_obra.py:181`, `bin/classe_da_obra.py:215`)
+
+3. **[bloqueia] `bin/disjuntor.py:1025` — retrocesso de relógio vira zero silencioso.**
+
+   Contraexemplo: `ini=10:00:00`, seguido no arquivo por `fim=09:59:59`, rc `0`, duração `0`, sem triagem. O `pop` remove a ocorrência, a comparação rejeita o par, e a CLI devolve rc `0`, em vez de `None`/rc `4`. O algoritmo anterior ainda apontaria pendência; aqui há afrouxamento do delta. (`bin/disjuntor.py:1024`, `bin/disjuntor.py:1025`, `bin/disjuntor.py:1045`, `bin/disjuntor.py:1052`)
+
+   Duração zero não impede esse histórico de ser produzido: `T0C` é capturado antes do `ini`. Se `T0C=09:59:59`, o `ini` cruza para `10:00:00` e o relógio recua para `09:59:59`, o trap pode escrever fim anterior e duração zero, aceita pelo parser. Produção desse cenário `[nao verificado]`. (`bin/codex_pergunta.sh:265`, `bin/codex_pergunta.sh:305`, `bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:273`, `bin/codex_limite_estado.py:69`)
+
+4. **[bloqueia] `bin/disjuntor.py:1031` — uma triagem pode quitar duas ocorrências.**
+
+   Contraexemplo, mesma obra/hash/pid: ocorrência A em `[10:00,10:05]`, ocorrência B em `[10:05,10:10]`; apenas A está triada, com fim `10:05`. O intervalo inclusivo aceita esse mesmo instante para ambas e devolve zero. A linha não é consumida nem vinculada univocamente à ocorrência. Com relógio recuado e intervalos sobrepostos, o problema também ocorre longe da borda. (`bin/disjuntor.py:1011`, `bin/disjuntor.py:1031`, `bin/disjuntor.py:1052`)
+
+   Há ainda aceitação de instante inválido: terceira parte `2026-11-12T10:03:XX` satisfaz textualmente um intervalo `10:00..10:05`. `_triagens` valida a estrutura externa, mas não esse instante; o vigia corta e compara a string sem parse. O escritor normal gera formato válido; corrupção real `[nao verificado]`. (`bin/disjuntor.py:974`, `bin/disjuntor.py:1011`, `bin/disjuntor.py:1031`, `bin/codex_pergunta.sh:464`)
+
+O rastreio dos campos responde à pergunta 1:
+
+| Campo/valor | Quem escreve | Quem lê e significado |
+|---|---|---|
+| `ini/fim`, obra, papel, hash12, pid, sessão, rc, duração | Wrapper: `bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:305` | Parser único: `bin/codex_limite_estado.py:63`; chave sem papel em `bin/codex_limite_estado.py:74`. |
+| `eventos` | Lista local preenchida pelo parser: `bin/codex_limite_estado.py:78`, `bin/codex_limite_estado.py:82` | Pareamento por ordem do arquivo: `bin/disjuntor.py:1020`. Não é uma nova trilha persistida. |
+| “fim legível” | Predicado local: hora parseável, quebra final, tipo, campos mínimos, rc inteiro e duração com dígitos. `bin/codex_limite_estado.py:68` | Alimenta `ilegiveis`; o vigia transforma lista não vazia em `None`. `bin/codex_limite_estado.py:70`, `bin/disjuntor.py:1017`. |
+| Fim do sidecar | Wrapper antes do EXIT/trap: `bin/codex_pergunta.sh:464`, `bin/codex_pergunta.sh:472`, `bin/codex_pergunta.sh:282` | `_le_id` e composição da volta: `bin/disjuntor.py:886`, `bin/disjuntor.py:928`. |
+| Terceiro campo da volta, `hash12@pid@fim@sha12` | Composto e gravado por `--triagem`: `bin/disjuntor.py:928`, `bin/disjuntor.py:939` | B3 conserva a volta completa como identidade; vigia interpreta o terceiro componente como instante pertencente a intervalo. `bin/disjuntor.py:976`, `bin/disjuntor.py:985`, `bin/disjuntor.py:1011`, `bin/disjuntor.py:1031`. |
+| Hora da própria linha de triagem | `datetime.now()`: `bin/disjuntor.py:939` | `_triagens` não usa esse primeiro campo para casar ocorrências. `bin/disjuntor.py:973`, `bin/disjuntor.py:976`. |
+| Classe do template/obra | Decisão por arquivo e máximo pela precedência: `bin/classe_da_obra.py:212`, `bin/classe_da_obra.py:240` | Publicada pela CLI, consultada pelo portão e pelos testes. `bin/classe_da_obra.py:334`, `bin/classe_da_obra.py:277`, `bin/tests/test_gate_pela_classe.sh:70`. |
+
+**Os significados não estão inteiramente alinhados.** As horas escritas são instantes com precisão de segundos, sem offset; o parser produz `datetime` sem fuso, enquanto o vigia compara strings. Uniformidade do fuso entre execuções `[nao verificado]`. O corte `desde` inclui igualdade, e o casamento da triagem inclui ambas as bordas. A identidade completa usada pelo B3 não equivale ao casamento temporal usado pelo vigia, como demonstra o achado 4. (`bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:305`, `bin/codex_pergunta.sh:464`, `bin/codex_limite_estado.py:65`, `bin/disjuntor.py:1029`, `bin/disjuntor.py:1031`, `bin/disjuntor.py:985`)
+
+Quanto aos históricos pedidos na pergunta 3:
+
+| Histórico construído | Resultado do código |
+|---|---|
+| `ini` sem `fim` | Não conta: pertence ao universo ainda não concluído. `bin/disjuntor.py:990`, `bin/disjuntor.py:1028`. |
+| Dois `ini` consecutivos da mesma chave, depois `fim` | O segundo substitui o primeiro e recebe o fim. `bin/disjuntor.py:1022`, `bin/disjuntor.py:1024`. |
+| `fim` de outra chave entre `ini` e `fim` | Não consome a primeira chave. `bin/disjuntor.py:1024`. |
+| `fim` anterior ao `ini` | Descarta o par e pode retornar zero: achado 3. `bin/disjuntor.py:1025`, `bin/disjuntor.py:1052`. |
+
+**O ramo template não afrouxa em execução normal:** o retorno anterior era leitor; agora é leitor ou escritor, e a agregação escolhe o máximo. Isso não elimina os falsos leitores dos achados 1–2. (`bin/classe_da_obra.py:214`, `bin/classe_da_obra.py:215`, `bin/classe_da_obra.py:240`)
+
+5. **[fila] `bin/classe_da_obra.py:350` — existe afrouxamento excepcional para obra combinada com dinheiro.**
+
+   Contraexemplo com falha Git injetada em memória: a obra contém arquivo `app/folha/...`, já classificado como dinheiro, e template; a nova leitura do diff desse template lança `Erro`. A CLI devolve `escritor`, rc `3`; com o retorno anterior do ramo template, devolve `dinheiro`, rc `0`. É consequência da política existente “erro = escritor”, agora alcançável por uma operação adicional do delta. Falha equivalente em produção `[nao verificado]`. (`bin/classe_da_obra.py:187`, `bin/classe_da_obra.py:137`, `bin/classe_da_obra.py:75`, `bin/classe_da_obra.py:352`, `bin/classe_da_obra.py:353`)
+
+**A exigência numérica não muda os números dos outros leitores, na pergunta 4.** `legivel` somente alimenta `ilegiveis`; os ramos que montam `inis/fins` continuam sem consultar esse predicado. Permanecem iguais `ler_chamadas`, `ultimas_chamadas`, `sessoes_do_code`, `tokens_por_papel` e `_censo_24h`. As derivações de origem e tokens também recebem os mesmos retornos legados. (`bin/codex_limite_estado.py:70`, `bin/codex_limite_estado.py:75`, `bin/codex_limite_estado.py:79`, `bin/codex_limite_estado.py:91`, `bin/codex_limite_estado.py:99`, `bin/codex_limite_estado.py:109`, `bin/codex_limite_estado.py:204`, `bin/disjuntor.py:2254`, `bin/gerar_codex_estado.py:176`, `bin/disjuntor.py:2156`)
+
+6. **[fila] `bin/codex_limite_estado.py:69` — duração emitida pode ser considerada ilegível.**
+
+   O escritor calcula duração por subtração de relógio civil; um recuo pode produzir duração negativa, rejeitada por `isdigit()`. Nesse caso o vigia devolve `None`, conservadoramente; não é o falso zero do achado 3. (`bin/codex_pergunta.sh:265`, `bin/codex_pergunta.sh:273`, `bin/disjuntor.py:1017`)
+
+As mordidas dos casos novos, na pergunta 5:
+
+| Caso novo | Mutante da fonte que a asserção elimina |
+|---|---|
+| Marcação fora do script | Classificar como escritor qualquer template que contenha script, ignorando a posição da linha. `bin/tests/test_gate_pela_classe.sh:139`, `bin/classe_da_obra.py:179`. |
+| Divisor dentro do script | Remover as faixas de script; M8 exercita explicitamente esse mutante. `bin/tests/test_gate_pela_classe.sh:140`, `bin/tests/test_gate_pela_classe.sh:143`, `bin/tests/test_gate_pela_classe.sh:144`. |
+| Campo `name=` | Desativar `FORM.search`; M9 exercita explicitamente esse mutante. `bin/tests/test_gate_pela_classe.sh:141`, `bin/tests/test_gate_pela_classe.sh:145`, `bin/tests/test_gate_pela_classe.sh:146`. |
+| Static `.js` | Desativar o ramo incondicional `.js`. `bin/tests/test_gate_pela_classe.sh:142`, `bin/classe_da_obra.py:171`. |
+| PID reutilizado, exatamente uma pendência nova | Restaurar o casamento pelo último `fins[chave]`: produziria duas pendências. `bin/tests/test_triagem_pendente.sh:61`, `bin/codex_limite_estado.py:80`. |
+| Inverso: nova triada, velha pendente | Mesmo mutante anterior: produziria zero. `bin/tests/test_triagem_pendente.sh:68`. |
+| Sidecar um segundo antes | Trocar pertinência ao intervalo por igualdade dos fins. `bin/tests/test_triagem_pendente.sh:76`, `bin/disjuntor.py:1031`. |
+| Rc/duração vazios; rc `abc` | Remover a exigência numérica: deixaria de retornar rc `4` nesses três casos. `bin/tests/test_triagem_pendente.sh:79`, `bin/tests/test_triagem_pendente.sh:83`, `bin/codex_limite_estado.py:69`. |
+
+7. **[fila] `bin/tests/test_gate_pela_classe.sh:139` — há mutantes que passam em falso.**
+
+   Trocar o `yield` do lado removido por `pass` preserva os quatro resultados novos, mas faz a remoção isolada de `<input name="valor">` sair `so leitor`. Os novos fixtures usam substituições, cujo lado adicionado ainda denuncia script/formulário. Tampouco exercitam tags Django ou a colisão `---`/`+++` dos bloqueios acima. (`bin/classe_da_obra.py:148`, `bin/tests/test_gate_pela_classe.sh:61`, `bin/tests/test_gate_pela_classe.sh:62`, `bin/tests/test_gate_pela_classe.sh:63`, `bin/tests/test_gate_pela_classe.sh:64`)
+
+8. **[fila] `bin/tests/test_triagem_pendente.sh:79` — as novas asserções não fecham as classes de falha.**
+
+   Sobrevivem: trocar `p[8].isdigit()` por `bool(p[8])`, aceitando duração `abc`; usar chave global no pareamento, pois os fixtures são seriais; usar `setdefault` para conservar o primeiro de dois `ini`; comparar horas só até minuto. Os casos novos não cobrem duração não numérica preenchida, intercalação de chaves, dois inícios consecutivos, retrocesso ou compartilhamento de borda. (`bin/codex_limite_estado.py:69`, `bin/disjuntor.py:1022`, `bin/disjuntor.py:1024`, `bin/disjuntor.py:1031`, `bin/tests/test_triagem_pendente.sh:18`, `bin/tests/test_triagem_pendente.sh:55`, `bin/tests/test_triagem_pendente.sh:79`)
+
+9. **[fila] `bin/pre-push.sh:147` — grep corrigido, sem mordida correspondente nos casos novos.**
+
+   O emissor escreve no stderr; `_teste_irmao` reúne as saídas e agora aceita `.CATRACA-AVISO:`. Reintroduzir a âncora não afetaria os novos casos de classificação/triagem. O filtro continua apenas imprimindo: o retorno é `_rc`. Destino do aviso e truncamento por `tail -12` permanecem na fila anterior. (`app/core/tests/test_medida_turno_do_par.py:467`, `bin/pre-push.sh:145`, `bin/pre-push.sh:147`, `bin/pre-push.sh:157`, `bin/tests/test_gate_pela_classe.sh:139`, `bin/tests/test_triagem_pendente.sh:59`)
+
+No checklist da pergunta 6:
+
+| Classe de reprovação | Resultado neste recorte |
+|---|---|
+| Segundo juiz duplicado | O delta continua usando o leitor único de chamadas e `_triagens`; a divergência nova é o significado de identidade versus intervalo, bloqueio 4. `bin/disjuntor.py:1003`, `bin/disjuntor.py:1014`, `bin/disjuntor.py:1031`. |
+| Segundo escritor fora da porta | `eventos` é local; a escrita persistida continua em `--triagem`, sob a porta existente. `bin/codex_limite_estado.py:78`, `bin/disjuntor.py:938`, `bin/disjuntor.py:944`. |
+| Relógio fora da borda | O problema demonstrado é o uso dos instantes persistidos sem tratamento suficiente de recuo/ambiguidade: bloqueios 3–4. `bin/disjuntor.py:1025`, `bin/disjuntor.py:1031`. |
+| Derivação paralela de fonte única | Não nasce outro parser de chamadas; nasce uma associação temporal incapaz de garantir uma triagem por ocorrência. `bin/disjuntor.py:1014`, `bin/disjuntor.py:1031`. |
+| Selo/RED sem mordida suficiente | Lacunas concretas nos achados 7–9. `bin/tests/test_gate_pela_classe.sh:139`, `bin/tests/test_triagem_pendente.sh:79`, `bin/pre-push.sh:147`. |
+| Ordem de trava | A porta existente adquire a trava da resposta antes da triagem e usa a trava do estado para ler/acrescentar. `bin/disjuntor.py:912`, `bin/disjuntor.py:915`, `bin/disjuntor.py:944`. |
+| Pouso antes do pré-requisito | O portão continua exigindo tree certificada; a insuficiência de `_limpa` permanece fila anterior. `bin/classe_da_obra.py:279`, `bin/classe_da_obra.py:301`, `bin/classe_da_obra.py:340`. |
+| Campo com dois significados | Confirmado no terceiro componente da volta: identidade integral no B3, pertinência temporal no vigia. `bin/disjuntor.py:985`, `bin/disjuntor.py:1011`, `bin/disjuntor.py:1031`. |
+
+A fila anterior não foi promovida a bloqueio novo: autoria de `ERRO-BOBO`, exclusões por caminho, ignorados em `_limpa`, mutantes combinados M2/M3/M4, vigia com `{}` e texto de LEIS continuam nos respectivos pontos. (`bin/disjuntor.py:772`, `bin/classe_da_obra.py:186`, `bin/classe_da_obra.py:301`, `bin/tests/test_gate_pela_classe.sh:120`, `bin/disjuntor.py:1003`, `app/docs/LEIS.md:66`)
+
+**Veredito final: REPROVADO.** (`bin/classe_da_obra.py:144`, `bin/classe_da_obra.py:175`, `bin/disjuntor.py:1025`, `bin/disjuntor.py:1031`)
 
 ## 14/11 01:39 · sessao 3bde72701314 · - · - · origem=Ronald (tmux)
 
@@ -503,21 +606,4 @@ Q3 — **Procedente a perda da natureza “espera” na propagação; sem criaç
 
 A irmã que retorna `False` vira `_ParNaoFechou`; seu relato é convertido em impedimento textual: `app/chamados/services/materializacao.py:1599-1603`. A metade externa conserva a vizinha ofensora e entra na recusa de paridade: `app/chamados/services/materializacao.py:1299-1307`. Pode gravar `_carimbar_recusa` diretamente e o `finally` também carimba havendo erro: `app/chamados/services/materializacao.py:1338-1341`; `app/chamados/services/materializacao.py:1813-1814`. Isso preserva o impedimento de criar a batida, mas não propaga a espera como espera à metade externa: `app/chamados/services/materializacao.py:1341`.
 
-## 14/11 00:33 · sessao 3f970a8ac939 · - · - · origem=Ronald (tmux)
-
-**PROCEDENTE — a espera da irmã pode virar recusa escrita da externa.** `_materializar_uma(q)` devolve `False` com a mensagem de espera; `_gravar_irma_do_par` converte esse resultado em `_ParNaoFechou` e devolve apenas um impedimento textual (`app/chamados/services/materializacao.py:1726`, `:1798`, `:1815`, `:1596`, `:1599`, `:1601`).
-
-A externa mantém `_viz`, acrescenta erro de “guarda de paridade” e escreve recusa; o `finally` ainda grava o erro que contém o impedimento da irmã. Portanto, a irmã permanece preservada pelo rollback, mas a externa pode ter `recusa_motivo` alterado (`app/chamados/services/materializacao.py:1290`, `:1299`, `:1303`, `:1338`, `:1813`, `:1554`).
-
-Caminho concreto dedutível do código, sem afirmar ocorrência em produção:
-
-- Externa S declarou `01:00`; irmã E declarou `02:20`, marco `02:00`. A primeira leitura da externa encontra S `01:00` aprovada e retorna `ja_satisfeita`; essa batida deixa de existir antes da reconsulta do escritor (`app/chamados/services/materializacao.py:824`, `:1266`).
-- Com E `18:30` e S `06:30`, o par projetado resolve a paridade, conforme a geometria da fixture (`app/chamados/tests/test_bug_par_projetado.py:61`, `:69`, `:112`, `:114`).
-- A externa chama a irmã; no derivador da irmã, a externa em voo não pode ser selecionada como irmã, produzindo `bloqueada_paridade`, que não aciona a espera antecipada (`app/chamados/services/materializacao.py:146`, `:1659`, `:832`, `:853`, `:756`).
-- O escritor da irmã considera a externa projetada e alcança o portão tardio, que levanta pela divergência E `02:00` × E `02:20`; o resultado segue a conversão em recusa externa descrita acima (`app/chamados/services/materializacao.py:1594`, `:1282`, `:1355`, `:1357`, `:1602`).
-
-**DESCARTÁVEL — engolimento por `except Exception` nesse trajeto.** A captura específica de `_EsperaNaCriacao` antecede a genérica; o problema é a perda da categoria “espera” ao retornar `False` e convertê-lo em `_ParNaoFechou` (`app/chamados/services/materializacao.py:1798`, `:1802`, `:1599`).
-
-**Rollback:** `pendencia_admin`/`recusa_motivo` de `_materializar_resposta_hora` são escritos dentro do atomic do chamador, portanto entram no rollback provocado pela espera; não estão antes desse atomic. Escritas realmente anteriores, como a recusa `DATA_EM_DISPUTA`, pertencem a outro ramo que retorna antes de alcançar o raise tardio (`app/chamados/services/materializacao.py:1735`, `:1737`, `:1257`, `:1720`, `:1721`).
-
-_4911 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_4912 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
