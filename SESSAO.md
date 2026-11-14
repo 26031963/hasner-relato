@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 18:09:48.** Transcript: `6ad11830-e78c-4a21-b089-2bb1de32b459.jsonl` (33.9 MB). Acoes na janela: **1085**.
+**Medido em 14/11/2026 18:15:17.** Transcript: `6ad11830-e78c-4a21-b089-2bb1de32b459.jsonl` (34.7 MB). Acoes na janela: **1091**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:11:57 | Bash | Add JUSTIFICATIVA-PELA-SOMA and backfill rows to BACKLOG | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; s=open(p).read() anc=s.splitlines()[767] # linha 768 PORTA-DO-ADMIN assert anc.startswith('\| PORTA-DO-ADMIN-NA-PERGUNTA-VENCIDA') and s.count(anc)==1 novo=("\| JUSTIFICATIVA-PELA-SOMA \| aval 14/11 18:08 (logs/AVAIS-1313/justificativa_pela_soma.txt), dentro da JUSTIFICATIVA-PAGA-O-PERIODO: pago + trabalhado nunca passa do pre ...` |
+| 18:11:49 | Bash | Locate related BACKLOG lines | `cd /home/ronald/saas-hasner/app/docs; /bin/grep -n "JUSTIFICATIVA-PAGA\\|E3-V10-DEGRAU\\|PORTA-DO-ADMIN-NA-PERGUNTA" BACKLOG.md \| head -20` |
+| 18:11:45 | Bash | Wait for c5 construtor to finish | `cd /home/ronald/saas-hasner; until [ -f logs/JUSTIFICATIVA-PAGA/c5/c5.rc ]; do /usr/bin/sleep 30; done; cat logs/JUSTIFICATIVA-PAGA/c5/c5.rc` |
+| 18:11:12 | Bash | Confirm c5 Codex construtor started | `cd /home/ronald/saas-hasner; /usr/bin/sleep 30; ps aux \| /bin/grep -c "[c]odex_pergunta.sh --construtor"; tail -3 logs/JUSTIFICATIVA-PAGA/c5/c5.log; cat logs/JUSTIFICATIVA-PAGA/c5/c5.rc 2>/dev/null` |
+| 18:11:08 | Bash | Check construtor slot and suite, launch c5 | `cd /home/ronald/saas-hasner; cat logs/construtor.vaga 2>/dev/null; echo "--"; cat logs/BO-DISPUTA-SEM-PERGUNTA/suite_full.fim 2>/dev/null; tail -2 logs/BO-DISPUTA-SEM-PERGUNTA/suite_full.log; setsid nohup logs/JUSTIFICATIVA-PAGA/c5/run.sh >/dev/null 2>&1 < /dev/null & echo launched` |
+| 18:10:08 | Bash | Write c5 construtor brief and runner | `mkdir -p /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c5; cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c5; cat > brief.md <<'EOF' OBRA JUSTIFICATIVA-PAGA-O-PERIODO volta c5 -- PAPEL construtor (L-126). Voce trabalha SO em <wt>/app. Base = HEAD da wt (0333f2ac6). LEI (corte Ronald 14/11 18:08, literal no anexo justificativa_pela_soma.txt): "a justificativa paga o periodo do turno que ela ...` |
 | 18:09:34 | Bash | Read Codex run template and vaga | `cd /home/ronald/saas-hasner; cat logs/JUSTIFICATIVA-PAGA/c4/run.sh; cat logs/construtor.vaga 2>/dev/null; ls logs/JUSTIFICATIVA-PAGA/motivos logs/JUSTIFICATIVA-PAGA/dobra3 \| head` |
 | 18:09:20 | Bash | Read periodos_justificados source | `cd /home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app; sed -n 90,260p ponto/services/efeito_ausencia.py` |
 | 18:09:18 | Bash | Read DOBRA 2 commit and filter code | `cd /home/ronald/wt-codex-justificativa-paga-o-periodo-164913/app; git status --porcelain \| head; git show 7d0dceef4 --stat \| head -20; sed -n 2700,2830p ponto/turnos.py` |
