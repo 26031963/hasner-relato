@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 01:46:17.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.4 MB). Acoes na janela: **1910**.
+**Medido em 14/11/2026 01:51:44.** Transcript: `707e509b-29e4-4438-9018-16733980c39a.jsonl` (618.4 MB). Acoes na janela: **1899**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1909,14 +1909,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:53:14 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/HJ-090/build/sombra_dry.run 2>/dev/null \| head -n 30; ls logs/sombra/ \| /bin/grep -i hj090` |
 | 13:53:11 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -rln 'HJ-090' logs/*.txt logs/AVAIS-1313 2>/dev/null \| head; ls logs/HJ-090/; ls logs/HJ-090/build \| /bin/grep -i dry; /bin/grep -n 'rodar)' -A12 bin/sombra.sh \| /bin/grep -n 'SOMBRA_ARVORE\\|script\\|\$2\\|\$3' \| head` |
 | 13:53:08 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -i 'flock\\|lock' bin/sombra.sh \| head -n 12; ls /home/ronald/wt-hj090-sombra/app/hj090_dry.py 2>&1; ls logs/AVAIS-1313/ \| head -n 30` |
-| 13:49:19 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; until /bin/grep -q '^rc=' green4.log; do /usr/bin/sleep 60; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()' green4.log \| tail -n 1; /bin/grep -E '^Ran [0-9]+' green4.log \| tail -n 1; tail -n 1 green4.log; /bin/grep -E '^(FAIL\|ERROR):' green4.log \| head` |
-| 13:49:14 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; ls -l fim3 fim4 green4.log; tail -n 8 green4.log; cat roda4.out` |
-| 13:49:11 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/b9x67xjvo.output` |
-| 13:49:04 | Bash |  | `cd /home/ronald/saas-hasner; until [ -e logs/DESLIGADO-NAO-TRAVA/redgreen/fim4 ]; do /usr/bin/sleep 60; done; date +%H:%M; grep -E '^(OK\|FAILED)($\| \()' logs/DESLIGADO-NAO-TRAVA/redgreen/green4.log \| tail -n 1; /bin/grep -E '^Ran [0-9]+' logs/DESLIGADO-NAO-TRAVA/redgreen/green4.log \| tail -n 1; tail -n 1 logs/DESLIGADO-NAO-TRAVA/redgreen/green4.log; /bin/grep -E '^(FAIL\|ERROR):' logs/DESLIGAD ...` |
-| 13:49:00 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; python3 - <<'EOF' p='folha/tests/test_retrato_folha_quadros.py'; s=open(p).read() a=""" mock.patch('folha.retrato_folha._causas_gravadas', return_value=causas) as _cg: _linhas = rf.montar_linhas(object(), 9, 2026) self.assertEqual(1, _ff.call_count, 'UMA chamada a fonte, nao uma por pessoa') self.assertEqual(1, _cg.call_count, 'UMA query de causa, nao uma p ...` |
-| 13:48:51 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; sed -n 1418,1428p folha/tests/test_retrato_folha_quadros.py` |
-| 13:48:49 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; /bin/grep -n "'saldo'" folha/tests/test_retrato_folha_quadros.py \| head; /bin/grep -rn "'saldo'}" folha/tests/ \| head` |
-| 13:48:44 | Bash |  | `cd /home/ronald/wt-desligado-112447/app; sed -n 1120,1230p folha/retrato_folha.py; sed -n 800,822p chamados/tests/test_o261_vigia_fio.py; sed -n 1330,1350p folha/tests/test_retrato_folha_quadros.py` |
-| 13:48:40 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; n=$(/bin/grep -n '^FAIL: test_MORDE_o_carimbo_guarda' green3.log \| cut -d: -f1); sed -n "$n,$((n+30))p" green3.log \| tail -n 22; n=$(/bin/grep -n '^FAIL: test_as_chaves_antigas_NAO' green3.log \| cut -d: -f1); sed -n "$n,$((n+30))p" green3.log \| tail -n 20` |
-| 13:48:37 | Bash |  | `cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; awk '/^FAIL: test_MORDE_o_carimbo_guarda/,/^------/' green3.log \| head -n 40 \| tail -n 25; awk '/^FAIL: test_as_chaves_antigas_NAO/{f=1} f&&/Error\|assert\|Traceback\|File/{print} /^------/{if(f)exit}' green3.log \| tail -n 12` |
-| 13:48:34 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/707e509b-29e4-4438-9018-16733980c39a/tasks/bmhlbqg6q.output; cd /home/ronald/saas-hasner/logs/DESLIGADO-NAO-TRAVA/redgreen; /bin/grep -E '^(FAIL\|ERROR):' green3.log \| head -n 20` |
