@@ -1,7 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=2106507
+PAREI: HJ-091-POUSA-HOJE condicao (1) = 3 > 0 -- rejeitadas sem origem dentro de agendamento vivo #3977 #3995 #3985 (col344, agendamento 103; sonda passivo 11:26 @a1fddccfa, ERROS 0; vetos 16 iguais aos das 10:33); nada entrou na arvore viva, reversao anotada logs/HJ-091/pouso2/reversao.md | espera Ronald (cadastro das 3 ou novo corte)
 ERRO-BOBO RMDIR-COM-GUARDA: aval Ronald 14/11 11:2x libera B3, implementacao sem lei nova (logs/AVAIS-1313/libera_b3_rmdir.txt); volta 5 com as 3 condicoes, suite + UM opus, reprovou = PAREI sem volta
+FRAC5 volta 3 11:3x: Codex v2 PROCEDE derivacao paralela (remarcacao julgava recorte do juiz sobre o parametro) -> remarcacao passa pela porta da criacao (AgendamentoFerias.clean dentro de _trocar_janela, so_nao_iniciado); +3 REDs (14->5 unica, dias x intervalo, aviso por SAIDA) -> recorte
 FRAC5 volta 2 11:1x: 63ff6e88b (remarcacao le o juiz; aviso caput com par1). RED 2 FAIL Ran 13 rc=1 no codigo velho; GREEN recorte OK Ran 355 -> Codex verificador delta (pid 2106507)
 CAL09 opus 11:2x REPROVOU (FORMA: RED sem log; laudo logs/CAL09/opus_final/r.md) -> RED do modulo contra copia de f7510b95a em curso (logs/CAL09/red.log); fila: calendario.py:740-741 'entradas'/'saidas' sem leitor, prosa _calendario_grade.html:119
 CAL09 11:2x: suite inteira @3dbe6a768 OK (skipped=42, expected failures=41) Ran 15808 rc=0 -> UM opus final aberto (brief logs/CAL09/opus_final/brief.md)
