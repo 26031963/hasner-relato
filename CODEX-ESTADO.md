@@ -1,7 +1,13 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 04:21** · publicado em **15/11/2026 04:22** (UTC-3)
+> Ultima resposta processada: **15/11/2026 05:16** · publicado em **15/11/2026 05:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 05:16 · sessao f9325d08478f · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
+
+Entrega em [cef_c2_entrega.txt](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c2_entrega.txt:1): cura nas duas APIs, RED/GREEN, censo, comandos, 27 testes verdes, Ruff e nove mutantes mortos. [nao verificado]
+
+Medição em sombra, suite e opus final: **[nao verificado]**, registrados nas [pendências](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c2_entrega.txt:210). [nao verificado]
 
 ## 15/11 04:21 · sessao 3453bc3dc40d · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
 
@@ -684,30 +690,4 @@ Os selos **mordem os casos declarados**, mas não certificam toda a semântica: 
 
 Reexecutei C1–C3: **31 testes OK**, incluindo os contratos existentes. Suite inteira, opus final, smoke real col677 nas duas cascas e medições de produção dos 60 dias: **[nao verificado]**; os testes locais não encerram esses requisitos. (`ponto/tests/dedup_retratada_c3_green.txt:38`; `ponto/tests/dedup_retratada_c3_entrega.txt:169`; `ponto/tests/dedup_retratada_c3_entrega.txt:176`)
 
-## 15/11 02:18 · sessao 085ea1e4b857 · - · - · origem=Ronald (tmux)
-
-Achado reproduzido, referências relativas a `app/`:
-
-| Arquivo:linha | O que está errado | Caso concreto | Gravidade |
-|---|---|---|---|
-| `ponto/services/triagem_batida.py:666`; `ponto/tests/test_dedup_retratada_c1.py:261` | Falta teste com **duas duplas vivas elegíveis**. Mutante de uma linha adicionando `.order_by('-timestamp')` antes de `.first()` passa nos 31 testes C1–C3, com zero falhas/erros. A paridade API fica legitimamente intacta; o tripwire mantém a mesma contagem. | Duas S vivas: 17:59, id=1; 18:02, id=2. Tentativa às 18:03: original retorna id=1; mutante retorna id=2. O teste existente põe apenas uma viva e uma retratada. (`ponto/tests/test_dedup_retratada_c1.py:261–268`; `ponto/tests/test_tripwire_bocais_apuracao.py:30`; `api/tests/test_contract_paridade_kernels.py:28`) | **fila**: lacuna real de cobertura; a implementação atual conserva a escolha anterior. (`ponto/models.py:105`; `ponto/turnos.py:2883`) |
-| `ponto/registro_batida.py:152`; `ponto/registro_batida.py:158`; `ponto/models.py:106` | `IntegrityError` concorrente continua sem captura nesses creates. É preexistente conforme o diff fornecido; não confundir com a corrida de classificação do v2. | A e B passam pelas duas consultas sem linha; B grava a chave antes do create de A. A encontra a restrição `(colaborador,timestamp)`. Resposta HTTP/ocorrência em produção: **[nao verificado]**. (`ponto/registro_batida.py:107`; `ponto/registro_batida.py:120`; `ponto/models.py:106`) | **fila** |
-
-Ramos conferidos:
-
-| Ramo da porta | Resposta e efeitos nas cascas |
-|---|---|
-| Viva mesmo tipo ≤60 s | Retorna existente sem marca, sem create/fechamento da porta; helper produz `ja_registrada`, interrompendo efeitos posteriores. Normalmente dedup de cinco minutos captura antes; APIs podem chegar após correção de tipo, triagem pode chegar por concorrência/futuro ≤60 s. (`ponto/registro_batida.py:113`; `ponto/services/resposta_batida.py:14`; `api/views.py:577`; `api/views.py:693`; `api/views_core.py:684`; `ponto/services/triagem_batida.py:723`) |
-| Mesma chave viva/retratada/outro tipo | Temporal ganha primeiro; caso contrário retorna a chave exata sem marca. Payload usa os campos antigos; não cria, não desfaz retratação e não roda efeitos posteriores. (`ponto/registro_batida.py:113`; `ponto/registro_batida.py:120`; `ponto/services/resposta_batida.py:17`) |
-| Oposta → `None` | As três chamadas usam `autoridade_humana=False`; retornam `ignorada_intervalo` antes do helper/efeitos posteriores. Triagem consulta agora a janela da porta e o universo vivo para apresentar id/tipo. (`api/views.py:656`; `api/views.py:669`; `api/views_core.py:647`; `api/views_core.py:660`; `ponto/services/triagem_batida.py:702`; `ponto/services/triagem_batida.py:713`) |
-| Create com conflito revisado | Marca True e fechamento; inacessível pelas três chamadas, que passam autoridade False. (`ponto/registro_batida.py:150`; `ponto/registro_batida.py:152`; `ponto/registro_batida.py:155`; `api/views.py:656`; `api/views_core.py:647`; `ponto/services/triagem_batida.py:702`) |
-| Create normal, inclusive oposta admitida pelo marco | Marca True, fechamento; helper libera efeitos. APIs: ordem, detector/chamado leve, disputa, foto, geofence, autoresolve de E, aviso, `ok`. Triagem: disputa quando pendente, ordem, foto, geofence, autoresolve, contexto de sucesso e aviso. (`ponto/registro_batida.py:145`; `ponto/registro_batida.py:158`; `api/views.py:696`; `api/views.py:702`; `api/views.py:758`; `api/views.py:772`; `api/views.py:780`; `api/views.py:792`; `api/views.py:810`; `ponto/services/triagem_batida.py:726`; `ponto/services/triagem_batida.py:745`; `ponto/services/triagem_batida.py:748`; `ponto/services/triagem_batida.py:757`) |
-| `IntegrityError` | Exceção escapa antes da marca/helper/efeitos posteriores; HTTP efetivo **[nao verificado]**. (`ponto/registro_batida.py:152`; `ponto/registro_batida.py:155`; `ponto/registro_batida.py:158`; `ponto/registro_batida.py:161`) |
-
-Em todos os ramos de triagem, `_bloqueio_horario_clt` roda antes da confirmação/dedup/porta e pode criar chamado e atualizar contexto/sessão. Essa posição/condição coincide com o diff integral fornecido e com a conferência histórica registrada; o objeto git `880331a8c` não está disponível nesta cópia para repetir a comparação. (`ponto/services/triagem_batida.py:657`; `ponto/services/triagem_batida.py:459`; `ponto/services/triagem_batida.py:478`; `ponto/services/triagem_batida.py:486`; `ponto/tests/dedup_retratada_c3_checks.txt:28`; `ponto/tests/dedup_retratada_c3_checks.txt:39`)
-
-Não encontrei alteração adicional de janela, sequência ou mensagem da dupla viva no código atual: APIs conservam ±5 min e mais recente; triagem conserva `[agora−5min,agora]` e mais antiga para o colaborador fixo. A sequência continua calculada pela mesma autoridade. (`api/views.py:529`; `api/views.py:531`; `api/views.py:541`; `api/views.py:554`; `api/views_core.py:515`; `api/views_core.py:517`; `api/views_core.py:540`; `ponto/services/triagem_batida.py:665`; `ponto/services/triagem_batida.py:666`; `ponto/services/triagem_batida.py:672`; `ponto/models.py:105`; `ponto/turnos.py:2883`)
-
-O helper acrescenta classificação do retorno para suprimir efeitos posteriores em reutilização; não consulta universo nem escreve `Batida`. A mudança de `ignorada_intervalo` na triagem é de identificação da testemunha após a recusa, com a mesma janela e universo da porta; a decisão de recusar continua exclusivamente na porta. (`ponto/services/resposta_batida.py:7`; `ponto/services/resposta_batida.py:14`; `ponto/registro_batida.py:138`; `ponto/registro_batida.py:145`; `ponto/services/triagem_batida.py:713`)
-
-_5505 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5506 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
