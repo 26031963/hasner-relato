@@ -1,7 +1,148 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 10:28** · publicado em **15/11/2026 10:31** (UTC-3)
+> Ultima resposta processada: **15/11/2026 10:35** · publicado em **15/11/2026 10:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 10:35 · sessao 3a515ace382d · - · - · origem=Ronald (tmux)
+
+Use `T = app/templates/ponto/bater_ponto_v2.html`.
+
+- **NÃO PROCEDENTE — aviso persistente após selfie no fluxo normal.** O handler só aceita arquivo existente, grava `_fotoBlob` e repinta; o ramo com blob apaga o aviso, insere a imagem e troca o chip conjuntamente (`T:269-271`, `T:255-261`).
+- **NÃO PROCEDENTE — cancelar a segunda seleção perde a primeira selfie.** `if(!f)return` preserva `_fotoBlob`, URL, imagem e chip anteriores; cancelamento não significa “apagar selfie” nesse contrato (`T:270-271`).
+- **NÃO PROCEDENTE — segunda selfie conserva imagem anterior.** Primeiro revoga a URL anterior, cria URL do novo blob e remove o filho antigo por `innerHTML=''` antes de anexar o novo (`T:254-261`).
+- **NÃO PROCEDENTE — prévia com `_fotoBlob` nulo por algum escritor normal.** A imagem só é criada sob `if(_fotoBlob)`; os escritores são inicialização nula, arquivo recebido e captura com preservação do blob anterior; nenhum escritor posterior limpa o blob (`T:146`, `T:255-260`, `T:271`, `T:305`).
+- **Limite PROCEDENTE — blob existente não garante imagem decodificável.** O handler não verifica conteúdo nem decodificação, e a pintura marca “selfie pronta” antes de `load`, sem `error` handler; um arquivo inválido pode dar imagem quebrada com chip pronto. Existência desse caso em produção: **[não verificado]** (`T:90`, `T:270-271`, `T:256-261`).
+- **NÃO PROCEDENTE — fluxo ao vivo passa a depender da prévia.** Sucesso de `getUserMedia` continua exibindo vídeo, escondendo placeholder e marcando câmera ao vivo; `capturarFrame` continua lendo vídeo quando há largura e usando `_fotoBlob` quando não há quadro (`T:238-240`, `T:277-285`). Uma câmera que pare depois de ter funcionado não tem observador de tracks/error para corrigir o chip; esse limite já pertence ao fluxo ao vivo, não à pintura nova (`T:235-245`, `T:151`).
+- **NÃO PROCEDENTE — bfcache conserva indefinidamente selfie antiga por decisão desta tela.** `pageshow.persisted` pede reload; retorno visível após mais de cinco minutos também pede reload; nova execução inicializa `_fotoBlob=null` e markup inicial. Comportamento efetivo no iPhone/PWA e restauração de campos pelo navegador: **[não verificado]** (`T:319-324`, `T:146`, `T:87-90`).
+- **Observação PROCEDENTE — prévia posterior não identifica a foto já salva offline.** Os dois ramos offline escondem apenas o botão, mantendo input/quadro interativos; selecionar outra selfie muda `_fotoBlob` e prévia, enquanto a fila conserva a foto passada no registro anterior. Pode haver f2 visível junto do aviso “Batida registrada localmente” referente a f1; isso não demonstra mudança do envio pelo diff (`T:269-271`, `T:352-357`, `T:365-370`; `app/static/pwa.js:107-118`; aviso em `T:122-126`).
+- **NÃO PROCEDENTE — `v2Sucesso` deixa chip divergente visível.** Ele para tracks e cobre a página com overlay antes do redirecionamento; não limpa estado interno nem URL. O vídeo/chip subjacentes podem ficar congelados, mas o overlay os cobre (`T:150-157`, chamada `T:346`).
+
+Item 3:
+
+- **PROCEDENTE apenas na ordem literal — URL revogada ainda referenciada pelo `<img>`.** Revogação em `T:254` precede remoção da imagem em `T:260`. Isso ocorre na mesma execução síncrona; imagem quebrada persistente no caminho normal não está demonstrada. Uma exceção entre essas linhas poderia conservar a referência antiga; ocorrência concreta: **[não verificado]** (`T:254-260`).
+- **NÃO PROCEDENTE — acúmulo de `<img>` a cada selfie.** `ph.innerHTML=''` remove a imagem anterior; a URL anterior também é revogada (`T:254`, `T:260`).
+- **PROCEDENTE — falta cleanup explícito da última URL.** Há revogação somente na próxima pintura; `v2Sucesso`, `pageshow` e `visibilitychange` não revogam nem limpam a última imagem. É retenção durante a vida do documento, não prova de vazamento ilimitado (`T:254`, `T:150-157`, `T:319-324`).
+- **NÃO PROCEDENTE — declaração tardia de `var` provoca corrida com `abrirCamera`.** A inicialização em `T:251` acontece antes do registro do listener em `T:273`; declarar a função antes não a executa (`T:235`, `T:251`, `T:273`).
+- **NÃO PROCEDENTE — `innerHTML` novo recebe valor não confiável.** `_camNegada` apenas seleciona entre duas strings constantes; nome, conteúdo e nome de arquivo não são concatenados no HTML; a imagem é criada por DOM e recebe URL gerada (`T:242`, `T:256-266`).
+
+## 15/11 10:35 · sessao c0a8833e7ae8 · - · - · origem=Ronald (tmux)
+
+Item 4 — **MORDE parcialmente; há lacunas procedentes, sem asserção globalmente vazia.** A conclusão abaixo é leitura estática da sonda; execução e resultado verde/RED **[não verificado]**. O teste criaria e removeria diretório temporário, e o helper escreveria HTML/symlink/cópia; não foi executado para preservar a regra de somente leitura (`app/ponto/tests/test_camera_alternativa_previa.py:163`, `app/ponto/tests/test_camera_alternativa_previa.py:167`, `app/core/tests/test_smoke_chromium.py:94`, `app/core/tests/test_smoke_chromium.py:100`).
+
+| Asserção | O que alcança; mutante plausível |
+|---|---|
+| `assertIsNotNone(chromium())` | Cobra executável presente, sem skip; não prova que JS executou (`app/ponto/tests/test_camera_alternativa_previa.py:158`, `app/core/tests/test_smoke_chromium.py:76`). |
+| `assertIn('id="v2-cam-fallback"', html)` | Cobra presença literal no HTML renderizado; sozinha aceitaria elemento inutilizável, mas a sonda cobra acesso DOM e change (`app/ponto/tests/test_camera_alternativa_previa.py:162`, `app/ponto/tests/test_camera_alternativa_previa.py:80`, `app/ponto/tests/test_camera_alternativa_previa.py:91`). |
+| `assertIsNotNone(veredito)` | Cobra marcador emitido pela sonda; ausência de JS/veredito falha, sem verde por silêncio (`app/ponto/tests/test_camera_alternativa_previa.py:66`, `app/ponto/tests/test_camera_alternativa_previa.py:168`, `app/core/tests/test_smoke_chromium.py:123`). |
+| `assertNotIn('erro', r)` | Cobra elemento presente, aviso inicial e ausência das exceções capturadas; aviso inicial é somente `textContent`, não visibilidade (`app/ponto/tests/test_camera_alternativa_previa.py:82`, `app/ponto/tests/test_camera_alternativa_previa.py:84`, `app/ponto/tests/test_camera_alternativa_previa.py:125`, `app/ponto/tests/test_camera_alternativa_previa.py:176`). |
+| `aviso=False` | Remove palavras do aviso do texto de todo quadro; trocar somente texto poderia passar esta parcela, mas falharia as parcelas de imagem (`app/ponto/tests/test_camera_alternativa_previa.py:77`, `app/ponto/tests/test_camera_alternativa_previa.py:99`, `app/ponto/tests/test_camera_alternativa_previa.py:131`). |
+| `previa=True` | Exige primeiro `img` do pai de `ph` com URL `blob:`; não exige imagem descendente de `#v2-cam-ph` nem id `v2-cam-previa` (`app/ponto/tests/test_camera_alternativa_previa.py:83`, `app/ponto/tests/test_camera_alternativa_previa.py:94`, `app/ponto/tests/test_camera_alternativa_previa.py:100`). |
+| `decodificada=True` | Exige imagem completa com largura natural 4; mata simples texto e imagem quebrada, mas não compara bytes, pixels nem altura (`app/ponto/tests/test_camera_alternativa_previa.py:89`, `app/ponto/tests/test_camera_alternativa_previa.py:95`, `app/ponto/tests/test_camera_alternativa_previa.py:101`). |
+| `area=True` | Cobra área geométrica positiva; não verifica `visibility`, opacidade ou oclusão da imagem (`app/ponto/tests/test_camera_alternativa_previa.py:102`, `app/ponto/tests/test_camera_alternativa_previa.py:103`). |
+| `toque=True` | Faz hit test real no centro de `ph` e cobra uma chamada ao `inp.click` substituído; mata perda do caminho de clique nesse ponto, mas não exige propriedade `ph.onclick`, nem abertura real da câmera do sistema (`app/ponto/tests/test_camera_alternativa_previa.py:87`, `app/ponto/tests/test_camera_alternativa_previa.py:104`, `app/ponto/tests/test_camera_alternativa_previa.py:108`). |
+| `troca=True` | Exige URL blob diferente na segunda imagem; mata prévia estagnada, mas não prova local DOM ou conteúdo por si só (`app/ponto/tests/test_camera_alternativa_previa.py:109`, `app/ponto/tests/test_camera_alternativa_previa.py:113`). |
+| `revoga=True` | Mata omissão da revogação anterior; não examina ordem relativa à retirada da imagem, nem se a URL nova também foi revogada indevidamente (`app/ponto/tests/test_camera_alternativa_previa.py:85`, `app/ponto/tests/test_camera_alternativa_previa.py:86`, `app/ponto/tests/test_camera_alternativa_previa.py:114`). |
+| `decodificada2=True` | Cobra largura natural 8 e imagem completa; não compara bytes/altura e não mede área nem clique depois da segunda selfie (`app/ponto/tests/test_camera_alternativa_previa.py:110`, `app/ponto/tests/test_camera_alternativa_previa.py:115`). |
+| `aviso2=False` | Cobra ausência textual depois da segunda selfie; novamente não inspeciona chip ou visibilidade (`app/ponto/tests/test_camera_alternativa_previa.py:116`). |
+| `envio=True` | Cobra exatamente um POST anotado, foto presente e igualdade de tamanho/tipo com a segunda selfie; mata ausência de foto/POST e primeira foto com tamanho diferente, mas não compara conteúdo (`app/ponto/tests/test_camera_alternativa_previa.py:60`, `app/ponto/tests/test_camera_alternativa_previa.py:62`, `app/ponto/tests/test_camera_alternativa_previa.py:118`, `app/ponto/tests/test_camera_alternativa_previa.py:120`). |
+| `assertEqual(r, ESPERADO)` | Cobra todos os dez resultados e conjunto exato de chaves; não há passe apenas por ausência do aviso (`app/ponto/tests/test_camera_alternativa_previa.py:131`, `app/ponto/tests/test_camera_alternativa_previa.py:177`). |
+
+**PROCEDENTE — alcance mais amplo anunciado que o efetivamente medido:** uma prévia irmã de `ph`, dentro do quadro e posicionada fora do centro clicado, com `ph` ainda abrindo input, poderia passar; a busca é pelo pai e o clique por um ponto de `ph`, sem verificar descendência ou `onclick` da imagem (`app/ponto/tests/test_camera_alternativa_previa.py:83`, `app/ponto/tests/test_camera_alternativa_previa.py:94`, `app/ponto/tests/test_camera_alternativa_previa.py:106`). O chip também não é consultado pela sonda (`app/ponto/tests/test_camera_alternativa_previa.py:80`, `app/ponto/tests/test_camera_alternativa_previa.py:120`).
+
+**PROCEDENTE — identidade da segunda foto insuficiente:** um mutante que envia outro blob de mesmo tamanho e MIME passa `envio`; não há comparação dos bytes da segunda foto (`app/ponto/tests/test_camera_alternativa_previa.py:120`). O mutante simples “guardar primeira foto e mostrar segunda” é detectado se os PNG gerados tiverem tamanhos diferentes; os tamanhos efetivos nesta execução **[não verificado]** (`app/ponto/tests/test_camera_alternativa_previa.py:70`, `app/ponto/tests/test_camera_alternativa_previa.py:95`, `app/ponto/tests/test_camera_alternativa_previa.py:110`).
+
+**NÃO PROCEDENTE — sonda tentando ler variável privada inexistente:** `_fotoBlob` está no IIFE, mas a sonda chama a função global `window.v2Confirmar`, que usa o fecho, passa por `garantirRequisitos`, cai no fallback de `capturarFrame` quando vídeo não tem quadro e coloca `_fotoBlob` em `FormData`; o fetch interceptado observa esse valor por um leitor válido (`app/templates/ponto/bater_ponto_v2.html:138`, `app/templates/ponto/bater_ponto_v2.html:146`, `app/templates/ponto/bater_ponto_v2.html:278`, `app/templates/ponto/bater_ponto_v2.html:305`, `app/templates/ponto/bater_ponto_v2.html:326`, `app/templates/ponto/bater_ponto_v2.html:339`, `app/ponto/tests/test_camera_alternativa_previa.py:62`).
+
+**NÃO PROCEDENTE — apenas uma casca no código do teste:** percorre `base.html` e `base_app.html`, remapeia o nome `base.html` no loader locmem para o conteúdo da casca escolhida, e renderiza o template que estende esse nome; ambas têm bloco `content`, que inclui o script da página (`app/ponto/tests/test_camera_alternativa_previa.py:38`, `app/ponto/tests/test_camera_alternativa_previa.py:141`, `app/ponto/tests/test_camera_alternativa_previa.py:148`, `app/ponto/tests/test_camera_alternativa_previa.py:172`, `app/templates/ponto/bater_ponto_v2.html:1`, `app/templates/ponto/bater_ponto_v2.html:3`, `app/templates/base.html:336`, `app/templates/base_app.html:94`). A seleção real de casca por sessão/rota não é exercitada: usa renderização direta e `AnonymousUser` (`app/ponto/tests/test_camera_alternativa_previa.py:148`, `app/ponto/tests/test_camera_alternativa_previa.py:150`).
+
+**PROCEDENTE — não há prova de mutação RED neste teste:** o arquivo tem cenário verde esperado, mas não reinjeta cura defeituosa nem exige falha de mutante; o nome `test_MORDE` não acrescenta essa execução (`app/ponto/tests/test_camera_alternativa_previa.py:171`, `app/ponto/tests/test_camera_alternativa_previa.py:177`). Diferentemente, o helper smoke possui outro teste que injeta defeito explicitamente, mas esse teste não é chamado pelo teste da câmera (`app/core/tests/test_smoke_chromium.py:191`, `app/core/tests/test_smoke_chromium.py:212`, `app/ponto/tests/test_camera_alternativa_previa.py:35`).
+
+**PROCEDENTE — caminhos ausentes da cobertura:** a câmera sempre rejeita, rede sempre é marcada online e o POST recebe HTTP 599; logo esse caso não cobre câmera funcionando, offline/fila, sucesso, cancelamento, pageshow/bfcache ou reload (`app/ponto/tests/test_camera_alternativa_previa.py:48`, `app/ponto/tests/test_camera_alternativa_previa.py:57`, `app/ponto/tests/test_camera_alternativa_previa.py:63`, `app/ponto/tests/test_camera_alternativa_previa.py:88`, `app/ponto/tests/test_camera_alternativa_previa.py:118`). Os erros de console retornados pelo helper são descartados (`app/ponto/tests/test_camera_alternativa_previa.py:165`, `app/core/tests/test_smoke_chromium.py:124`).
+
+## 15/11 10:35 · sessao af0477d00d94 · - · - · origem=Ronald (tmux)
+
+**Item 5 — classes da casa**
+
+| Classe | Veredito sobre o diff | Evidência |
+|---|---|---|
+| Segundo juiz registrado | **NÃO PROCEDENTE.** O juiz registrado `selfie_ausente` decide ausência de foto da batida persistida e prazo do canal; o pintor apenas apresenta a selfie local já guardada. | `app/core/juizes.py:1202-1205`; `app/templates/ponto/bater_ponto_v2.html:255-267`. |
+| Segundo escritor fora da porta | **NÃO PROCEDENTE para envio/persistência.** O handler continua atribuindo o arquivo a `_fotoBlob`; o novo pintor lê esse estado, cria a URL e escreve quadro/chip. As portas existentes continuam lendo `_fotoBlob` para FormData e fila. | `app/templates/ponto/bater_ponto_v2.html:254-271`, `:305`, `:339`, `:352`, `:365`; `app/static/pwa.js:107-118`. |
+| Relógio fora da borda | **NÃO PROCEDENTE no diff.** O novo pintor não lê relógio; leituras existentes permanecem em relógio/GPS/retomada/feedback, fora do trecho alterado fornecido. | `app/templates/ponto/bater_ponto_v2.html:252-271`, `:163-170`, `:177-178`, `:311-323`, `:353-368`; comparação com `diff_v1.txt` anexado. |
+| Derivação paralela de fonte única | **NÃO PROCEDENTE como nova fonte de verdade.** A decisão “prévia ou aviso” deriva diretamente de `_fotoBlob`; `_previaUrl` guarda o recurso visual, `_camNegada` seleciona um de dois avisos literais. | `app/templates/ponto/bater_ponto_v2.html:251-267`. |
+| Selo/RED sem mordida | A análise detalhada cabe ao agente do teste; **não há prova de execução RED/GREEN no dado fornecido [não verificado]**. O teste contém verificações de prévia, troca, revogação e envio, portanto a acusação genérica de “só selo textual” não corresponde à implementação. | `app/ponto/tests/test_camera_alternativa_previa.py:99-125`, `:131-134`, `:170-177`. |
+| Campo com dois significados | **NÃO PROCEDENTE como incompatibilidade de contrato.** `#v2-cam-ph` passa de placeholder/aviso para contêiner de prévia; o leitor de captura usa `#v2-cam`, não o conteúdo do quadro. `_fotoBlob` continua sendo o material enviado; File e Blob já são os valores originados pelo fallback e captura. | `app/templates/ponto/bater_ponto_v2.html:89`, `:255-271`, `:275-286`, `:305`, `:339`. |
+
+**Item 6 — dependências externas**
+
+- **NÃO PROCEDENTE: leitores externos dos ids/markup trocado.** A busca textual em `app` por `v2-cam` localizou os ids no próprio template e no teste novo; não localizou leitores executáveis nas outras telas/JS citados. A ausência é delimitada à cópia e à busca literal; dependências por código gerado ou serviços externos **[não verificado]**. Definição/escrita dos ids: `app/templates/ponto/bater_ponto_v2.html:87-90`, `:236-277`; consumo do teste: `app/ponto/tests/test_camera_alternativa_previa.py:80-81`, `:162`.
+- `static/pwa.js` recebe a foto como argumento, grava-a em IndexedDB e depois a põe no FormData; não precisa inspecionar a prévia nem o placeholder. **NÃO PROCEDENTE.** `app/static/pwa.js:107-118`, `:143-156`.
+- `sw.js` seleciona tratamento por método/URL e comunica sincronização por mensagem; a troca interna do quadro não participa desses contratos. **NÃO PROCEDENTE.** `app/static/sw.js:33-85`, `:112-125`; `app/static/pwa.js:16`.
+- `triagem/apto.html` possui seu próprio estado e ids (`camera`, `preview`, `foto-input`, `camera-off`), sem consumir `v2-cam-*`. **NÃO PROCEDENTE.** `app/templates/ponto/triagem/apto.html:138-150`, `:167-186`, `:229-232`, `:242-282`.
+- Ambos os dashboards apenas apontam para a rota `ponto:bater_ponto_v2`; não precisam do markup do quadro. **NÃO PROCEDENTE.** `app/templates/core/dashboard_colaborador.html:39-46`; `app/templates/core/dashboard_colaborador_v2.html:31-38`.
+
+**Limite da comparação:** esta cópia não tem repositório Git utilizável pelo comando executado; comparação com os commits depende do diff anexado **[não verificado independentemente]**. [nao verificado]
+
+## 15/11 10:34 · sessao ef7e8a8767ea · FATO-DE-AUSENCIA-ACORDA-A-PROJECAO · verificador · origem=Code
+
+1. **Sim, a consulta é válida por análise estática para o Django 5.2.14 declarado.** `values_list` seleciona inclusive a PK da própria `Ausencia`, compatível com `of=('self',)`; o filtro usa a FK diretamente, e `order_by('pk')` substitui o `Meta.ordering` que levaria a `colaborador__nome`. A forma resultante termina em `ORDER BY id ASC FOR UPDATE OF ponto_ausencia`. Compilação e execução reais no Django/Postgres: **[nao verificado]**. (`app/requirements.txt:13`; `app/ponto/services/ausencia.py:1416`; `app/ponto/services/ausencia.py:1419`; `app/ponto/services/ausencia.py:1421`; `app/ponto/models.py:829`.)
+
+   Os bloqueios de linha abrangem as Ausencias **daquele agendamento**, tipo `ferias`, com status diferente de `rejeitada`, em PK crescente. Não abrangem Colaborador, Agendamento ou Periodo por essa consulta. O `UPDATE pk__in` posterior encontra essas linhas já travadas; sua própria ordem de execução não introduz outra aquisição entre elas. (`app/ponto/services/ausencia.py:1420`; `app/ponto/services/ausencia.py:1421`; `app/ponto/services/ausencia.py:1425`.)
+
+   Comparação com os demais usos efetivos de `of=('self',)`:
+
+   - `trava_na_ordem`: também combina PK crescente com `values_list('pk')`, sobre `PerguntaDisputa`. (`app/chamados/models.py:2770`.)
+   - `trocar_plantao`: carrega instâncias e faz `select_related('colaborador')`, mas restringe o bloqueio às Ausencias; ordena por PK. (`app/ponto/portas/celula.py:695`.)
+   - H06: busca uma única Ausencia por PK, remove a ordenação padrão e restringe o bloqueio a `self`. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138`.)
+
+2. **Não identifiquei ordem cruzada entre essas Ausencias nos fluxos normais examinados.** A rejeição agora segue PK crescente; o backfill e o registro normalmente consumido pela reversão seguem essa mesma ordem. (`app/ponto/services/ausencia.py:1420`; `app/ponto/services/ausencia.py:1608`; `app/ponto/services/ausencia.py:1619`; `app/ponto/services/ausencia.py:1650`.)
+
+   - **Backfill:** trava Agendamentos e respectivos Periodos pelo join, ordenando por PK de Agendamento; depois trava Ausencias de férias sem origem por PK crescente, antes dos updates individuais. (`app/ponto/services/ausencia.py:1601`; `app/ponto/services/ausencia.py:1607`; `app/ponto/services/ausencia.py:1622`.)
+   - **Reversão:** cada `UPDATE` por PK adquire o bloqueio correspondente. Consome a ordem do JSON, sem ordenar novamente; o arquivo produzido pelo apply herda a ordem crescente das Ausencias. (`app/ponto/services/ausencia.py:1537`; `app/ponto/services/ausencia.py:1479`; `app/ponto/services/ausencia.py:1619`; `app/ponto/services/ausencia.py:1650`.)
+   - **Cancelamento admin:** adquire Agendamento → Periodo → Ausencias, chamando esta função depois das duas primeiras travas. (`app/ferias/services.py:636`; `app/ferias/services.py:639`; `app/ferias/services.py:679`; `app/ferias/services.py:683`.)
+   - **Troca de plantão:** pode tecnicamente travar férias recebidas como cartas, pois não filtra tipo; adquire as Ausencias por PK crescente, depois as células por colaborador/data. (`app/ponto/portas/celula.py:695`; `app/ponto/portas/celula.py:711`.)
+   - **H06:** trava uma linha por transação e confere sua identidade, incluindo tipo; divergência impede a edição. As portas genéricas de edição e mudança de estado recusam férias. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:142`; `app/ponto/services/ausencia.py:579`; `app/ponto/services/ausencia.py:920`.)
+
+   Há também updates históricos por PK nas migrations, fora deste delta, sem exclusão explícita de férias. (`app/ponto/migrations/0057_a4_backfill_pendente.py:43`; `app/ponto/migrations/0058_a4_relogio_recomeca.py:42`; `app/ponto/migrations/0059_a4_d0_no_primeiro_dia_do_cron.py:36`.)
+
+3. **Os dois asserts mordem a regressão pretendida e nenhum exige um resultado falso.** A execução integral da suíte ORM/Postgres permanece **[nao verificado]**. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:141`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:271`.)
+
+   **Editar:** o resultado legítimo atual é `data_fim=None`: um dia deriva `None`, a edição grava `dias_corridos=1`, e o modelo só recompõe fim vazio quando há mais de um dia. A releitura rejeita o antigo `21/10`. No ensaio dos corpos reais em memória, o código atual passou; retirar o `save()` deixou `21/10` e derrubou o assert. (`app/ponto/services/ausencia.py:164`; `app/ponto/services/ausencia.py:606`; `app/ponto/services/ausencia.py:615`; `app/ponto/models.py:912`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:140`.)
+
+   **Desfazer:** a fixture nasce aprovada; retratar grava `False`; desfazer grava expressamente `True` e limpa `retratada_em`. No ensaio em memória, remover apenas a restauração de `aprovada` preservou `False` e derrubou o assert novo, mesmo limpando a retratação. (`app/ponto/models.py:63`; `app/ponto/registro_batida.py:276`; `app/ponto/services/retratar_humano.py:207`; `app/ponto/registro_batida.py:256`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:271`.)
+
+4. **Nenhum outro defeito funcional identificado no delta fornecido.** A ressalva é o alcance do comentário “nunca”: a ordenação sustenta a aquisição dessas Ausencias, mas não constitui garantia global contra deadlocks envolvendo outras tabelas ou travas previamente adquiridas pelo chamador. (`app/ponto/services/ausencia.py:1418`; `app/ponto/services/ausencia.py:1420`; `app/ferias/services.py:679`.)
+
+   Completude da comparação direta entre `1d806e163` e o hash informado, além do diff anexado: **[nao verificado]**.
+
+## 15/11 10:33 · sessao b0adef3e92f4 · - · - · origem=Ronald (tmux)
+
+Os dois asserts são corretos e mordem a regressão pretendida; a execução da suíte ORM/Postgres permanece **[nao verificado]**. [nao verificado]
+
+- **Editar:** o estado legítimo atual é `data_fim=None`: `derivar_data_fim` retorna `None` para um dia; a edição atribui `dias_corridos=1`, atribui o fim e salva; `Ausencia.save` só recompõe fim vazio quando dias > 1. O assert aceita esse estado e rejeita o antigo `2026-10-21`. (`app/ponto/services/ausencia.py:154`, `app/ponto/services/ausencia.py:606`, `app/ponto/services/ausencia.py:615`, `app/ponto/models.py:903`, `app/ponto/models.py:912`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:141`.)
+
+- **Desfazer:** a fixture nasce aprovada pelo default; retratar grava `aprovada=False`; desfazer manda gravar expressamente `aprovada=True` e `retratada_em=None`; `anotar` persiste ambos com `save(update_fields=...)`. Portanto o novo assert não exige um estado falso para essa fixture. Um teste anterior já cobra a mesma aprovação após desfazer. (`app/ponto/models.py:63`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:256`, `app/ponto/registro_batida.py:276`, `app/ponto/services/retratar_humano.py:207`, `app/ponto/registro_batida.py:254`, `app/ponto/registro_batida.py:256`, `app/ponto/tests/test_porta_retratar_batida.py:138`, `app/ponto/tests/test_porta_retratar_batida.py:142`.)
+
+Executei os corpos reais extraídos por AST, com persistência e dependências simuladas em memória: editar atual → `None`, assert passa; mutante sem `ausencia.save()` → releitura `21/10`, assert falha. Desfazer atual → `True/None`, assert passa; mutante removendo apenas a chave `aprovada` → `False/None`, assert falha. Essa checagem comprova a mordida isolada dos asserts; integração com ORM, signals e banco **[nao verificado]**. (`app/ponto/services/ausencia.py:615`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:140`, `app/ponto/services/retratar_humano.py:207`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:269`.)
+
+## 15/11 10:33 · sessao aa7283c56f82 · - · - · origem=Ronald (tmux)
+
+- **Backfill:** dentro de `atomic`, trava agendamentos e períodos pelo join, ordenando por PK de agendamento; depois trava todas as Ausencias de férias sem origem por PK crescente e atualiza uma a uma nessa ordem (`app/ponto/services/ausencia.py:1599`, `:1601`, `:1607`, `:1622`, `:1624`).
+- **Reversão:** faz `UPDATE` por PK, sem `select_for_update`, na ordem dos pares do registro; o registro produzido pelo apply herda a ordem crescente das Ausencias (`app/ponto/services/ausencia.py:1479`, `:1608`, `:1619`, `:1646`, `:1650`, `:1537`).
+- **Cancelamento administrativo:** trava Agendamento → Periodo antes de chamar a rejeição; a rejeição passa a travar Ausencias por PK crescente (`app/ferias/services.py:636`, `:639`, `:679`, `:683`; `app/ponto/services/ausencia.py:1419`).
+- **Troca de plantão:** pode receber Ausencias de qualquer tipo, pois a consulta não filtra `tipo`; trava as duas cartas por PK crescente, somente `self`, e depois as células por colaborador/data. Não cria inversão entre PKs de Ausencia frente à rejeição (`app/ponto/portas/celula.py:695`, `:696`, `:708`, `:711`).
+- **H06:** trava somente uma Ausencia por transação; sua lista é de atestados/faltas e a identidade inclui tipo, portanto uma linha que virou férias é pulada antes da edição (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:50`, `:67`, `:137`, `:139`, `:142`, `:146`).
+- **Portas genéricas:** edição, mudança de estado, anexo, decisão e reversão da rejeição recusam férias antes da gravação (`app/ponto/services/ausencia.py:579`, `:920`, `:966`, `:1017`, `:1209`; guarda em `:92`).
+- **Migrações históricas:** também contêm updates por PK, sem filtro explícito excluindo férias, seguindo a iteração do queryset; não são consumidores novos do delta (`app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `:43`; `0058_a4_relogio_recomeca.py:37`, `:42`, `:59`, `:63`; `0059_a4_d0_no_primeiro_dia_do_cron.py:32`, `:36`).
+
+**Conclusão restrita ao delta:** não identifiquei ordem cruzada entre as Ausencias da rejeição e os registros normalmente produzidos pelo backfill/reversão; todos seguem PK crescente (`app/ponto/services/ausencia.py:1420`, `:1608`, `:1619`, `:1650`). A frase “nunca se travam em ordem cruzada” não prova ausência global de deadlocks: backfill adquire múltiplos agendamentos e seus períodos por join, enquanto cancelamento adquire um agendamento e depois seu período; eventual ciclo com período compartilhado seria preexistente e anterior à entrada em `rejeitar_ausencias_de_ferias` (`app/ponto/services/ausencia.py:1601`; `app/ferias/services.py:636`, `:639`, `:683`); ocorrência/SQL executado [nao verificado].
+
+## 15/11 10:32 · sessao edbbd489bd52 · - · - · origem=Ronald (tmux)
+
+Nenhum outro defeito funcional identificado no delta fornecido: a alteração de produção restringe e ordena a seleção das Ausencias; as outras duas alterações acrescentam verificações de persistência. (`app/ponto/services/ausencia.py:1416`, `app/ponto/services/ausencia.py:1419`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:140`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:271`)
+
+Ressalva: a frase “duas chamadas nunca se travam em ordem cruzada” não demonstra ausência global de deadlock envolvendo outras tabelas ou uma transação externa; o trecho ordena apenas a aquisição dessas Ausencias. (`app/ponto/services/ausencia.py:1418`, `app/ponto/services/ausencia.py:1420`)
+
+A completude do delta entre os hashes, além do anexo fornecido, permanece [nao verificado].
 
 ## 15/11 10:28 · sessao 80cd60d8871b · FATO-DE-AUSENCIA-ACORDA-A-PROJECAO · verificador · origem=Code
 
@@ -814,390 +955,4 @@ O comando de medição está explicitamente autorizado a chamar o motor; a proib
 
 Não há função pronta observada que produza `sem_divergencia` nesse caminho. Caso o script precise imprimir essa categoria, deve aplicar os gates reais do comando E6 e deixar os dias sem julgamento identificados como erros, sem chamar ausência de julgamento de concordância. `app/ponto/management/commands/e6_oraculo.py:334`, `:346`, `:365`.
 
-## 15/11 10:18 · sessao da5e5106c4ab · - · - · origem=Ronald (tmux)
-
-P4: **“sem obra” para todas as classes, no sentido de zeragem demonstrável pelo dado fornecido**; E4B tem atos candidatos, mas o próprio comando escolhe a cura pela tarefa real e exige recenso para declarar `resolvido`. `app/chamados/management/commands/backfill_fio_morto_e4b.py:12`, `:82`, `:368`.
-
-| Classe e quantidade do anexo [nao verificado] | Atribuição sustentada |
-|---|---|
-| c — 11 | **sem obra**. O classificador exige pergunta respondida sob terminal; a reabertura E4B retorna `None` para respondida. `app/chamados/services/vigia_fio.py:694`; `app/chamados/services/disputa_emissao.py:1842`. |
-| a/em_analise — 10 | **sem obra**. Estado vivo explica o véu, mas não identifica o ato que falta nem qual obra o produz. `app/chamados/services/vigia_fio.py:683`; `app/chamados/services/vigia_fio.py:689`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:97`. |
-| a/aberto — 7 | **sem obra**, pela mesma insuficiência: classificação por estado não determina ato corretor. Mesmas referências. |
-| a/registrado — 2 | **sem obra**. `registrado` é VIVO, porém não COBRANCA; o relato reconhece “PRONTO nao transforma registrado em acao”. `app/chamados/catalogo/motor.py:24`; `:29`; `app/docs/RELATO.md:8823`. |
-| e/terminal — 4 | **sem obra com zeragem demonstrada; candidata E4B**. Ato concreto: `_executar_dia` chama `reabrir_credor_de_pergunta_viva`; esta chama `credor.reabrir()`. Falta medir se os quatro passam todas as recusas. `app/chamados/management/commands/backfill_fio_morto_e4b.py:132`; `app/chamados/services/disputa_emissao.py:1872`. |
-| e/sem_viva — 2 | **sem obra**. O rótulo só prova ausência de pergunta viva; E4B pode planejar perguntar, registrar decisão, materializar, rejulgar ou nenhuma ação. `app/chamados/services/vigia_fio.py:704`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:97`; `:114`. |
-| ANTIGO/pergunta_morreu — 6 | **sem obra**. O antigo distingue apenas presença de `ps`; não informa o ato necessário. `app/chamados/services/vigia_fio.py:449`. Identidades/carga desses seis não fornecidas [nao verificado]. |
-| ANTIGO/sem_pergunta — 1 | **sem obra**, mesma limitação. `app/chamados/services/vigia_fio.py:450`. Identidade/carga desse dia não fornecida [nao verificado]. |
-
-Para os quatro e/terminal, o caminho E4B só reabre quando: pergunta sem resposta e viva, âncora existente e fora de VIVOS, carga sem limbo/exportada e `recusa_da_reabertura()` sem motivo. Recusas são reais, portanto o rótulo terminal não garante êxito. `app/chamados/services/disputa_emissao.py:1842`, `:1844`, `:1848`, `:1855`, `:1860`, `:1869`, `:1872`.
-
-A GRADE não permite completar o vínculo ausente:
-
-- E4c migra leitores e E4d para a projeção; esses atos não são, por si, reparação dos dias atuais. `app/docs/BACKLOG.md:1968`.
-- E4B declara classes a–e, mas o programa não escolhe atos pelo rótulo e mede o resultado. `app/docs/BACKLOG.md:1977`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:12`, `:368`.
-- E3-RESTO-R3 remete ao lote LU e aos achados descartados do pouso, sem vincular essas classes atuais. `app/docs/BACKLOG.md:768`.
-- RAIZ trata o agregado raiz/filhos; ZUMBI trata carimbadores sem C7 e fechamento por beco. Nenhuma dessas linhas identifica os sete antigos ou garante sua zeragem. `app/docs/BACKLOG.md:1988`, `:2015`.
-
-Os detalhes F1–F9 de `e4c_reconfere_v2.md` não foram encontrados na cópia; atribuir ato específico a uma fatia seria [nao verificado].
-
-## 15/11 10:18 · sessao ae04dabb3731 · - · - · origem=Ronald (tmux)
-
-**Achados de transação e auditoria**
-
-- A trilha nova das férias não é obrigatória: `rejeitar_ausencias_de_ferias` ignora o retorno de `evento`; este retorna `None` quando falha, preservando a rejeição e permitindo trilha incompleta. O próprio domínio já tem `_trilha`, que exige o registro e desfaz a escrita sem ele. `app/ponto/services/ausencia.py:1418-1425`; `app/core/observ.py:94-139`; `app/ferias/services.py:460-468`.
-- O cancelamento admin executa a nova rejeição/invalidação dentro de `atomic`, após travar agendamento e período. Cancelamento DP chega à nova invalidação pelo `save → _sync_ausencia → espelhar_ferias`; remarcação chega por apagar e depois salvar; exclusão do período chega pelo `delete` individual dos agendamentos. `app/ferias/services.py:636-639`; `app/ferias/services.py:651-657`; `app/ferias/services.py:674-689`; `app/ferias/services.py:706-731`; `app/ferias/services.py:870-877`; `app/ferias/models.py:444-454`.
-- `invalidar_fechamento` protege suas consultas/escritas com savepoints e engole exceções; falhar ali mantém o ato, podendo deixar carimbo fresco ou invalidar apenas competências anteriores à falha. A nova `_acordar_projecao` calcula datas fora dessa proteção, portanto exceções nessa preparação propagam e podem desfazer o ato transacional; em autocommit, o `save` anterior já pode estar gravado. Ocorrência real: [nao verificado]. `app/ponto/services/fechamento.py:1640-1665`; `app/ponto/services/ausencia.py:133-149`; `app/ponto/services/ausencia.py:515-551`; `app/ponto/services/ausencia.py:938-947`.
-- A regularização grava justificativa e invalida dentro do mesmo `atomic`; sua falha protegida não desfaz justificativa. Não há `select_for_update` nesse fluxo: busca da batida e julgamento de órfã acontecem antes do `atomic`. `app/ponto/services/regularizacao.py:50-89`; `app/ponto/services/regularizacao.py:102-114`; `app/ponto/services/fechamento.py:1648-1665`.
-- A rejeição bulk fotografa linhas sem trava e depois repete o filtro `status != rejeitada` no UPDATE; em interleaving com outro escritor, pode registrar trilhas para linhas que esta chamada não alterou, com “antes” desatualizado. O chamador admin trava agendamento/PA, mas o helper não trava Ausencia; ocorrência em produção: [nao verificado]. `app/ponto/services/ausencia.py:1412-1423`; `app/ferias/services.py:636-639`.
-- O cartório de Ausencia e Batida já roda sincronamente durante `save/delete`, portanto antes do commit quando existe transação; o consumidor de Ausencia é `on_commit`. O diff acrescenta invalidação após os sinais, não transfere esses efeitos anteriores para depois do commit. `app/ponto/signals.py:85-93`; `app/ponto/signals.py:131-152`; `app/ponto/signals.py:250-284`; `app/ponto/services/ausencia.py:938-943`.
-- `desfazer` usa `anotar`, grava e audita, depois chama a porta de evento; o recálculo real fica em `on_commit`, com exceções engolidas. Esse recálculo pode reescrever campos calculados de fechamento exportado e lavrar DiaPago; portanto a chamada nova ultrapassa mero `derivado_em=NULL`, embora use escritor existente. `app/ponto/services/retratar_humano.py:207-213`; `app/ponto/registro_batida.py:237-265`; `app/ponto/registro_batida.py:177-185`; `app/ponto/services/fechamento.py:1790-1824`; `app/ponto/services/fechamento.py:1160-1201`.
-
-**Testes: mutantes sobreviventes por caso** [nao verificado]
-
-Todos os números abaixo são de `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py`.
-
-| Caso | Mutante que não detecta |
-|---|---|
-| Esticar fim, 77–89 | Invalidar somente o range novo: este contém o anterior; encolhimento deixando competência abandonada não é exercitado. |
-| Idempotência, 91–98 | Comparar somente `data_fim` em `_derivados`; mudanças exclusivas de minutos/status/aprovada_em deixam carimbo fresco. `app/ponto/services/ausencia.py:1656-1664`. |
-| Criar falta, 103–109 | Invalidar somente criação já aprovada; criação aberta fica sem invalidação. |
-| Retornar existente, 111–119 | Não invalidar retorno que reabre rejeitada; a fixture retorna a mesma aprovada. |
-| Aberta sem fim, 121–127 | Invalidar somente competências das duas pontas, perdendo intermediárias: fixture atravessa apenas competências 10 e 11. |
-| Reverter rejeição, 132–140 | Em `mudar_estado`, invalidar somente quando estado anterior é rejeitada; outras transições ficam descobertas. |
-| Rejeitar férias, 161–177 | Gerar cinco trilhas para o mesmo `objeto_id`, todas com status esperado; só exige quantidade e conjuntos de status. Também não exige ator. |
-| Apagar férias, 179–184 | Ignorar `exceto`; o teste não fornece esse argumento. | [nao verificado]
-| Espelhar cancelado, 186–194 | Invalidar somente ramo inativo; remoção de dias fora da nova janela ativa fica descoberta. `app/ponto/services/ausencia.py:1328-1335`. |
-| Regularização, 199–212 | Invalidar competência da saída, em vez do início: 04/11 e 05/11 pertencem à mesma competência da fixture. |
-| Desfazer, 217–241 | Chamar evento sem restaurar `aprovada/retratada_em`; não há assert desses campos após desfazer. Também não testa commit/rollback: mocka a entrada `recalcular_por_evento`. | [nao verificado]
-
-Não identifiquei caso principal vazio por leitura: férias exigem cinco linhas, regularização exige `pendente`, recálculo de retratação exige uma chamada antes do desfazer. Entretanto, regularização não cria ausências intermediárias: com início ontem, o primeiro dia do laço já é hoje e interrompe. `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:155`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:211`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:235`; `app/ponto/services/regularizacao.py:119-122`.
-
-A base não cria escala/célula; os casos de falta não testemunham dinheiro, marcos ou turno noturno definido por escala. Nenhum novo teste verifica valor financeiro, TXT, exportada, rollback, concorrência ou falha de trilha. `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:44-52`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:77-241`. Execução da suíte: [nao verificado].
-
-## 15/11 10:18 · sessao 24df9e7abeeb · SITUACAO-DESLIGADO-SEM-PORTA · verificador · origem=Code
-
-**Não considero a cura fechada:** permanece um save completo fora da porta, na selfie, e a guarda permite uma intercalação entre consulta e gravação. Ambos podem regravar situação antiga sem `executar_reativacao` (`app/core/views.py:1061`; `app/colaboradores/models.py:439`; `app/colaboradores/services/colaborador.py:118`).
-
-A análise abaixo é estática. Execução dos testes na base, ocorrência dos cenários em produção e valores financeiros efetivamente alterados: **[nao verificado]**. [nao verificado]
-
-**1. Escritores de `Colaborador.situacao` e passagem pela guarda**
-
-| Escritor de produção encontrado | Depois do diff |
-|---|---|
-| Lançamento INSS: grava `afastado` (`app/ponto/views.py:2472`). | **Passa**, por `gravar` → `_guarda_da_linha` (`app/colaboradores/services/colaborador.py:94`). |
-| Reversor de afastamento: grava `ativo` (`app/ponto/management/commands/reverter_situacao_afastado.py:73`; `app/ponto/services/afastado_avisa.py:101`). | **Passa** pela mesma guarda; o universo inicial contém apenas `afastado` (`app/ponto/services/afastado_avisa.py:126`). |
-| Desligamento efetivo: atribui `desligado` e salva inteiro (`app/colaboradores/services/desligamento.py:129`; `app/colaboradores/services/desligamento.py:133`). | **Chama a guarda**, mas ela retorna antes de consultar a linha porque o valor proposto já é `desligado` (`app/colaboradores/services/colaborador.py:57`). |
-| Reativação: atribui `ativo`, limpa demissão e usa `salvar_reativacao` (`app/colaboradores/services/desligamento.py:242`; `app/colaboradores/services/desligamento.py:247`). | **Não passa**, deliberadamente; essa porta faz save completo direto (`app/colaboradores/services/colaborador.py:136`). |
-| Vinculação de posto: save completo transporta também a situação do objeto (`app/colaboradores/views.py:329`). | **Passa**, por `salvar_inteiro` (`app/colaboradores/services/colaborador.py:118`). |
-| Edição cadastral: save completo (`app/colaboradores/views.py:1345`). | **Passa**, pelo mesmo ponto (`app/colaboradores/services/colaborador.py:118`). |
-| Transferência de posto: save completo (`app/colaboradores/views.py:1391`). | **Passa**, pelo mesmo ponto (`app/colaboradores/services/colaborador.py:118`). |
-| **Selfie do onboarding:** `colab.foto.save(..., save=True)` implica save completo do Colaborador (`app/core/views.py:1048`; `app/core/views.py:1061`). | **Não passa pela porta.** O `save()` do modelo termina em `super().save()` sem essa guarda (`app/colaboradores/models.py:415`; `app/colaboradores/models.py:439`). |
-| Admissão: cria pessoa com `ativo` (`app/colaboradores/views.py:1185`; `app/colaboradores/views.py:1208`). | **Não passa**: criação direta na porta; não é transição de uma linha desligada existente (`app/colaboradores/services/colaborador.py:144`). |
-| Comando `smoke_chamados`: cria Colaborador pelo serviço, usando situação padrão (`app/chamados/management/commands/smoke_chamados.py:78`). | **Não passa**: mesma criação; padrão `ativo` no modelo (`app/colaboradores/models.py:323`; `app/colaboradores/services/colaborador.py:146`). |
-
-As demais modalidades ficam assim:
-
-- `salvar_campos` protege quando `situacao` está nos nomes; `atualizar_em_lote` protege quando está nos kwargs (`app/colaboradores/services/colaborador.py:106`; `app/colaboradores/services/colaborador.py:131`). Não localizei chamador produtivo atual dessas duas modalidades escrevendo situação: **[nao verificado quanto à inexistência absoluta]**.
-- **`save()` direto continua capaz de tirar de desligado**, porque a guarda não está no modelo. A selfie é o sítio concreto que conserva esse risco com objeto antigo (`app/core/views.py:1061`; `app/colaboradores/models.py:439`).
-- **`objects...update(situacao=...)` e `bulk_update(..., ['situacao'])` continuam sem proteção própria**: o diff protege wrappers, não instala manager/queryset protegido no modelo (`app/colaboradores/services/colaborador.py:123`; `app/colaboradores/models.py:283`). Sítio produtivo concreto dessas formas sobre situação, ou raw SQL correspondente: **não localizado [nao verificado quanto à inexistência absoluta]**.
-- Há ainda um escape na própria assinatura: `gravar` valida `campos + tocar`, mas só guarda se situação estiver em `campos`. Portanto `tocar=['situacao']` pode persistir uma situação previamente atribuída sem guarda; chamador atual desse formato: **[nao verificado]** (`app/colaboradores/services/colaborador.py:92`; `app/colaboradores/services/colaborador.py:94`; `app/colaboradores/services/colaborador.py:98`).
-- `salvar_reativacao` pode ser chamada diretamente: não verifica procedência, valor proposto ou trilha. O chamador encontrado usa o executor correto, mas a exclusividade é convenção de chamada (`app/colaboradores/services/colaborador.py:136`; `app/colaboradores/services/desligamento.py:247`).
-- Admin está fechado por `SoLeitura`; signals examinados gravam somente onboarding, sem transportar situação (`app/colaboradores/admin.py:48`; `app/core/admin.py:59`; `app/colaboradores/signals.py:102`; `app/colaboradores/signals.py:119`). A migração de isenção também salva apenas `isento_ponto` (`app/colaboradores/migrations/0043_isento_ponto.py:14`).
-
-**Sim, há possibilidade de sair de desligado sem executar reativação.** Além dos escapes acima, existe a sequência concorrente: guarda lê ativo → outro ato desliga → save completo grava ativo. A consulta e a escrita estão separadas, sem bloqueio nessa porta (`app/colaboradores/services/colaborador.py:71`; `app/colaboradores/services/colaborador.py:118`; `app/colaboradores/services/colaborador.py:119`). Reprodução concorrente: **[nao verificado]**.
-
-**2. Caminho legítimo que a guarda passa a recusar**
-
-Não identifiquei esse caminho entre os examinados; a reativação explícita foi migrada à porta separada (`app/colaboradores/views.py:1417`; `app/colaboradores/services/desligamento.py:247`).
-
-- Vínculo novo **já recusava desligado**. A “reativação” dentro de `vinculo.py` altera `EscalaColaborador.ativa`, não `Colaborador.situacao` (`app/colaboradores/services/vinculo.py:91`; `app/colaboradores/services/vinculo.py:276`; `app/colaboradores/services/vinculo.py:283`).
-- Pós-vínculo reconcilia células, furos e adesão; cadastro futuro regenera células (`app/colaboradores/services/pos_vinculo.py:73`; `app/colaboradores/services/pos_vinculo.py:85`; `app/ponto/services/cadastro_futuro.py:44`).
-- Importação de contatos salva telefone/email; admissão rejeita CPF existente e cria pessoa nova ativa (`app/colaboradores/management/commands/importar_telefones_nexti.py:113`; `app/colaboradores/views.py:1133`; `app/colaboradores/views.py:1208`).
-- Agendamento/revisão pelo fluxo de desligamento grava data e motivo, sem escrever situação; portanto essa escrita não aciona a guarda nova (`app/colaboradores/services/desligamento.py:107`; `app/colaboradores/services/desligamento.py:110`).
-- Porta específica de **cancelamento de desligamento agendado**: **não localizada [nao verificado]**. A limpeza explícita encontrada de `data_demissao` pertence à reativação (`app/colaboradores/services/desligamento.py:243`).
-
-Isso não elimina a mudança funcional da tela de ausências descrita no item 5 (`app/ponto/views.py:2441`).
-
-**3. `salvar_inteiro`: objeto novo, custo e erro de tela**
-
-A premissa “consulta em TODO save completo” é excessiva: a função chama a guarda sempre, mas `pk=None` e proposta `situacao='desligado'` retornam antes da consulta (`app/colaboradores/services/colaborador.py:68`; `app/colaboradores/services/colaborador.py:57`; `app/colaboradores/services/colaborador.py:118`).
-
-| Chamador encontrado | Efeito |
-|---|---|
-| Vincular posto: carrega objeto existente e salva (`app/colaboradores/views.py:319`; `app/colaboradores/views.py:329`). | Recusa é capturada e apresentada por toast/resposta de erro (`app/colaboradores/views.py:333`; `app/colaboradores/views.py:350`; `app/colaboradores/views.py:353`). |
-| Editar cadastro: carrega existente e salva (`app/colaboradores/views.py:1243`; `app/colaboradores/views.py:1345`). | Se houver desligamento entre carga e guarda, o novo `ValueError` pode escapar como **500**, sem tratamento de formulário nesse fluxo (`app/colaboradores/views.py:1343`; `app/colaboradores/views.py:1355`). |
-| Transferir posto: carrega existente e salva (`app/colaboradores/views.py:1374`; `app/colaboradores/views.py:1391`). | Mesma possibilidade de **500** por objeto antigo; o fluxo não captura essa recusa (`app/colaboradores/views.py:1387`; `app/colaboradores/views.py:1405`). |
-| Efetivador: laço chama executor, que salva inteiro (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:43`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`). | **Sem SELECT adicional da guarda**, pois já propõe desligado (`app/colaboradores/services/desligamento.py:129`; `app/colaboradores/services/colaborador.py:57`). |
-
-Não encontrei chamada de `salvar_inteiro` com objeto novo ou outro laço grande: **[nao verificado quanto à inexistência absoluta]**. Os 500 acima são possibilidades demonstradas pelo fluxo; ocorrência real: **[nao verificado]**.
-
-**4. `esta_desligado(SimpleNamespace(situacao=novo))`**
-
-**Funciona para o juiz atual.** Ele lê exclusivamente `getattr(colaborador, 'situacao', None) == 'desligado'`; não acessa demissão, nome ou qualquer outro atributo. Não ocorre `AttributeError` por ausência desses atributos (`app/colaboradores/services/desligamento.py:32`; `app/colaboradores/services/colaborador.py:57`).
-
-**5. Universo novo de `lancar_ausencia`**
-
-**Sim, muda além do desligado:** também recusa pessoa com situação gravada `ferias`. O queryset admite apenas `ativo`/`afastado`, e agora o POST precisa pertencer a ele (`app/ponto/views.py:2404`; `app/ponto/views.py:2441`).
-
-Os choices atuais são **`ativo`, `afastado`, `ferias`, `desligado`** (`app/colaboradores/models.py:295`). Antes, pelo diff fornecido, o POST buscava qualquer PK; agora a recusa acontece antes de criar qualquer tipo de ausência, não apenas INSS (`app/ponto/views.py:2443`; `app/ponto/views.py:2452`). Logo, uma ausência válida para pessoa marcada `ferias`, antes alcançável por POST, passa a ser recusada nessa tela; ocorrência desse uso em produção: **[nao verificado]**.
-
-**6. Alcance de `registrar_log`**
-
-A distinção decisiva é **`request=None` versus objeto de request com `user=None`**. O primeiro já funcionava pelo curto-circuito; o segundo antes falhava no acesso a `.is_authenticated` e agora alcança `evento` (`app/core/auditoria.py:18`; `app/core/auditoria.py:24`).
-
-- Chamadas com `None` em backfills/correções continuam no mesmo comportamento: município, escala retroativa e carimbo por batida (`app/colaboradores/management/commands/backfill_municipio_posto.py:96`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:198`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:213`; `app/chamados/management/commands/carimbar_por_batida_coincidente.py:101`).
-- Comandos de credenciais também já passam `None` (`app/colaboradores/management/commands/diagnostico_login.py:30`; `app/colaboradores/management/commands/regerar_senhas_iniciais.py:70`; `app/core/credenciais.py:43`).
-- **Efetivador passa a gravar o log final `Desligamento:`**, pois usa `_ReqSistema(user=None, META={})` (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:63`; `app/colaboradores/services/desligamento.py:229`). A trilha de credencial desse ato já passava `None`, portanto essa parte não é nova (`app/colaboradores/services/desligamento.py:136`).
-- **`calcular_scores --motivo` também muda se não existir superusuário ativo**: a busca devolve `None`, mas ainda fabrica request e chama auditoria (`app/inteligencia/management/commands/calcular_scores.py:121`; `app/inteligencia/management/commands/calcular_scores.py:125`; `app/chamados/services/validacao.py:98`).
-- Outros requests sintéticos estão em vínculo, regeneração exportada, regularização e validação; passam a registrar se chegarem com usuário nulo/sem atributo de autenticação. Ocorrência concreta dessa condição: **[nao verificado]** (`app/colaboradores/services/vinculo.py:19`; `app/ponto/portas/regen_exportada.py:41`; `app/ponto/services/regularizacao.py:146`; `app/chamados/services/validacao.py:94`).
-- Request verdadeiro **sem `META` continua falhando**, antes de chegar à correção de usuário (`app/core/auditoria.py:18`; `app/core/auditoria.py:26`).
-
-Há testes que contam logs: total zero da porta, retrato de idempotência dos turnos e trilha filtrada do vínculo (`app/colaboradores/tests/test_porta_colaborador.py:189`; `app/ponto/tests/test_selo_idempotencia_porta_turno.py:59`; `app/colaboradores/tests/test_trilha_do_vinculo.py:78`). A contagem do efetivador muda intencionalmente; quebra desses outros selos: **[nao verificado]**. O teste novo exige justamente o log antes ausente (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:200`).
-
-**7. Classes de reprovação**
-
-- **Segundo juiz:** a guarda nova não duplica o predicado registrado; consulta `esta_desligado` nos dois lados (`app/colaboradores/services/colaborador.py:56`; `app/colaboradores/services/colaborador.py:60`; `app/core/juizes.py:271`).
-- **Segundo escritor:** permanece o save implícito da selfie; portanto a exclusividade da porta não está fechada (`app/core/views.py:1061`; `app/colaboradores/models.py:439`).
-- **Relógio fora da borda:** o diff não acrescenta relógio à guarda. Permanecem leituras internas em `julgar_desligamento`, no executor e na reativação; o cron captura `hoje`, mas o juiz ainda lê seu próprio dia (`app/colaboradores/services/desligamento.py:40`; `app/colaboradores/services/desligamento.py:60`; `app/colaboradores/services/desligamento.py:155`; `app/colaboradores/services/desligamento.py:255`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`).
-- **Derivação paralela:** a guarda usa o juiz, mas permanece a convivência entre situação gravada e situação exibida derivada do afastamento real (`app/colaboradores/services/situacao_exibida.py:56`; `app/colaboradores/services/situacao_exibida.py:63`; `app/ponto/views.py:2472`).
-- **Dois significados:** `situacao` mistura estado cadastral com lâmpada de afastamento; `data_demissao` representa tanto intenção agendada quanto saída efetivada. Os leitores distinguem esses casos de maneiras diferentes: juiz de desligado lê só estado; efetivador combina data vencida e estado; rescisão lê somente data (`app/colaboradores/services/desligamento.py:32`; `app/colaboradores/services/desligamento.py:110`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`; `app/folha/export.py:60`). Portanto não há uma interpretação uniforme de “desligado” em todos esses leitores.
-
-**RED contra `77dfa94fa`, reconstruído estaticamente pelo diff:**
-
-| Resultado esperado na base | Testes | [nao verificado]
-|---|---|
-| **Falham: sete.** Cinco testes de recusa, POST para desligado e trilha do efetivador. | `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:76`, `:83`, `:89`, `:96`, `:106`, `:173`, `:200`. |
-| **Passam: quatro.** Reativação, transições do vivo, save mantendo desligado e INSS de ativo. São controles de preservação. | `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:115`, `:122`, `:133`, `:188`. |
-
-Há mordida estática, mas não prova executada aqui: **[nao verificado]**. Além disso:
-
-- Na base, o teste conjunto falha primeiro em `salvar_campos`; não chega à tentativa de lote (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:109`; `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:111`).
-- O teste chamado “reativação ... idempotente” chama o ato **uma vez**. O executor registra evento por criação direta, portanto esse teste não certifica duas chamadas sem duplicata (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:117`; `app/colaboradores/services/historico_vinculo.py:25`).
-- O teste de objeto velho desliga **antes** da guarda; não cobre desligamento entre consulta e save, nem o caminho da selfie (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:100`; `app/colaboradores/services/colaborador.py:118`; `app/core/views.py:1061`).
-
-**8. LEI-AKITA, padrão e cortes**
-
-`Policy Enforcement Point` **existe** literalmente no glossário. A consulta ao juiz seguida de recusa corresponde ao padrão, mas sua cobertura está incompleta pelos escapes do item 1 (`app/docs/GLOSSARIO.md:32`; `app/colaboradores/services/colaborador.py:56`; `app/core/views.py:1061`).
-
-**`juizes novos=0` é compatível com as funções acrescentadas:** `DesligadoSemReadmissao` é uma classe de exceção; `salvar_reativacao` é uma porta de persistência. Nenhuma delas cria outro predicado para responder “está desligado?” (`app/colaboradores/services/colaborador.py:45`; `app/colaboradores/services/colaborador.py:136`; `app/core/juizes.py:271`). O texto real da linha LEI-AKITA do commit: **[nao verificado]**.
-
-Não localizei `LEI-DESLIGADO-NAO-TRAVA`, `BUG 96`, reativação ou situação no `CORTES.md` da cópia; a frase literal alegada pelo código fica **[nao verificado]**. Os ponteiros que a alegam estão em `app/core/juizes.py:268` e `app/colaboradores/services/desligamento.py:26`. O ticket BUG 96 documenta futuro recusado/agendado, não demonstra sozinho a exclusividade de reativação (`app/docs/TICKETS.md:394`).
-
-Os cortes encontrados sobre desligamento preservam resposta já dada para eventual rescisão e impedem reabrir disputa de desligado; não identifiquei contradição direta do diff com essas duas frases (`app/docs/CORTES.md:393`; `app/docs/CORTES.md:444`; `app/colaboradores/services/desligamento.py:165`).
-
-**9. Dinheiro**
-
-**Sim, pode mudar entradas e resultados da folha; mudança efetiva de número em produção: [nao verificado].** Não há alteração direta de fórmula nos sítios do diff, mas conservar `desligado` em vez de permitir `afastado` muda:
-
-- o universo do recálculo, que condiciona a inclusão do desligado à data de demissão (`app/ponto/services/fechamento.py:439`);
-- retenção versus informativo de rescisão (`app/folha/export.py:1206`; `app/folha/export.py:1225`);
-- as ausências que chegam a ser criadas para pessoas fora da lista (`app/ponto/views.py:2441`; `app/ponto/views.py:2452`).
-
-A classificação de saída do TXT pela rescisão continua dependendo de `data_demissao <= fim_janela`, independentemente de situação (`app/folha/export.py:54`). Assim, **“nenhum número muda” não está demonstrado** pelos dados fornecidos **[nao verificado]**.
-
-## 15/11 10:14 · sessao 823b62bae5b0 · - · - · origem=Ronald (tmux)
-
-1. **Escritores efetivos encontrados na cópia, fora dos testes** [nao verificado]
-
-| Sítio | Escrita de `situacao` | Guarda depois do diff |
-|---|---|---|
-| `app/ponto/views.py:2472` | `gravar(..., {'situacao':'afastado'})`, no lançamento INSS | Sim, `app/colaboradores/services/colaborador.py:94` |
-| `app/ponto/management/commands/reverter_situacao_afastado.py:73` | `gravar(..., situacao=SITUACAO_VOLTA)`; alvo vem de quem estava afastado | Sim; alvo em `app/ponto/services/afastado_avisa.py:126` |
-| `app/colaboradores/services/desligamento.py:129` e `:133` | Atribui `'desligado'`; `salvar_inteiro` | Chama guarda, mas `'desligado'` retorna antes de consultar banco (`app/colaboradores/services/colaborador.py:57`) |
-| `app/colaboradores/services/desligamento.py:242` e `:247` | Reativação: ativo, demissão limpa | **Não**: usa `salvar_reativacao`, cujo corpo salva diretamente (`app/colaboradores/services/colaborador.py:136`) |
-| `app/colaboradores/views.py:329` | Save completo na vinculação de posto; leva a situação do objeto | Sim (`app/colaboradores/services/colaborador.py:118`) |
-| `app/colaboradores/views.py:1345` | Save completo na edição cadastral; leva a situação do objeto | Sim (`app/colaboradores/services/colaborador.py:118`) |
-| `app/colaboradores/views.py:1391` | Save completo na transferência; leva a situação do objeto | Sim (`app/colaboradores/services/colaborador.py:118`) |
-| **`app/core/views.py:1061`** | **`colab.foto.save(..., save=True)` no onboarding de selfie: persistência completa implícita do Colaborador** | **Não passa pela porta.** O objeto vem de `request.user.colaborador` (`app/core/views.py:1048`); o modelo salva sem guarda (`app/colaboradores/models.py:415`–`:439`). Consequência de `FieldFile.save(save=True)` inferida pela API; reprodução de execução [nao verificado]. |
-| `app/colaboradores/views.py:1185` e `:1208` | Criação com `'ativo'` | Não: `criar_colaborador` faz `objects.create` diretamente (`app/colaboradores/services/colaborador.py:144`) |
-| `app/chamados/management/commands/smoke_chamados.py:78` | Criação de fixture por comando, situação default `'ativo'` | Não: mesma criação; default no modelo (`app/colaboradores/models.py:323`) |
-
-**API da porta:** `salvar_campos` protege quando `situacao` aparece nos nomes (`app/colaboradores/services/colaborador.py:106`); `atualizar_em_lote` protege quando aparece nos kwargs (`:131`); não encontrei chamador produtivo atual dessas duas formas escrevendo `situacao`, além dos sítios enumerados. Universo/suposições do censo existente: `app/core/censo_escritas.py:6`, `:43`, `:54`.
-
-**Bypasses:**
-
-- `Colaborador.save()` direto não recebe a guarda; o override só normaliza CPF, onboarding e matrícula, chegando a `super().save` (`app/colaboradores/models.py:415`, `:439`). Logo `save()` direto pode remover desligado sem executar reativação; existe o sítio implícito da selfie acima (`app/core/views.py:1061`).
-- `Colaborador.objects...update(situacao=...)` e `bulk_update(..., ['situacao'])` não foram protegidos no manager/modelo: a guarda está somente nos wrappers (`app/colaboradores/services/colaborador.py:90`, `:123`; definição do modelo sem manager customizado em `app/colaboradores/models.py:283`). Chamador concreto produtivo dessas formas sobre `situacao` não encontrado; ocorrência real [nao verificado].
-- `salvar_reativacao` é pública e não exige prova do ato, não valida valor nem grava trilha por si; salva qualquer objeto recebido (`app/colaboradores/services/colaborador.py:136`). Seu único chamador produtivo encontrado é o executor (`app/colaboradores/services/desligamento.py:247`).
-- Também existe corrida **SELECT → UPDATE**: a guarda lê sem lock e depois salva; desligamento concorrente após a leitura pode ser sobrescrito (`app/colaboradores/services/colaborador.py:59`, `:71`, `:98`, `:119`, `:133`). Reprodução concorrente [nao verificado].
-- Admin não é escritor: `ColaboradorAdmin(SoLeitura, ...)` (`app/colaboradores/admin.py:48`) e o mixin recusa add/change/delete (`app/core/admin.py:59`).
-- Signals de Colaborador encontrados só alteram onboarding, via escrita parcial (`app/colaboradores/signals.py:101`, `:118`); não transportam situação. Comando efetivador chama o executor existente (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`). Raw SQL produtivo de `situacao` não encontrado; existência fora da cópia [nao verificado].
-
-2. **Não identifiquei caminho legítimo da cópia que precise ressuscitar desligado pelas quatro portas comuns.** Readmissão/reativação explícita foi migrada à exceção (`app/colaboradores/views.py:1417`, `app/colaboradores/services/desligamento.py:247`).
-
-- Vínculo novo já recusa desligado antes deste diff (`app/colaboradores/services/vinculo.py:91`); “reativar existente” nesse serviço significa **EscalaColaborador**, não situação da pessoa (`app/colaboradores/services/vinculo.py:259`, `:276`, `:283`).
-- Cadastro futuro escreve células por sua porta, não Colaborador (`app/ponto/services/cadastro_futuro.py:31`, `:44`).
-- Pós-vínculo reavalia células, furos e adesão, não situação cadastral (`app/colaboradores/services/pos_vinculo.py:73`, `:85`, `:89`).
-- Importação disponível de telefones salva apenas telefone/email, logo não ativa a guarda (`app/colaboradores/management/commands/importar_telefones_nexti.py:113`).
-- Admissão cria pessoa nova ativa e rejeita CPF já existente (`app/colaboradores/views.py:1133`, `:1185`, `:1208`).
-- Revisão do agendamento pelo fluxo de desligar ainda grava data/motivo sem escrever situação (`app/colaboradores/services/desligamento.py:107`–`:111`); portanto não aciona a nova guarda.
-- Não encontrei porta específica de cancelamento de desligamento agendado; tal fluxo legítimo existente [nao verificado]. A única limpeza explícita de `data_demissao` encontrada é a reativação (`app/colaboradores/services/desligamento.py:243`). O chamado `desligamento_revisao` é criado após a efetivação, não uma rotina que desfaça situação (`app/colaboradores/services/desligamento.py:192`, `:208`).
-
-3. **Chamadores de `salvar_inteiro`:**
-
-- `vincular_posto`: objeto existente carregado em `app/colaboradores/views.py:319`, save em `:329`; captura `Exception` em `:333`, devolvendo toast/erro (`:350`, `:353`).
-- `editar_colaborador`: objeto existente (`app/colaboradores/views.py:1243`), save em `:1345`, sem captura genérica nesse trecho; caso a guarda detecte desligamento concorrente, pode devolver **500** ao usuário em vez de erro de formulário (`:1343`–`:1355`). Execução concreta [nao verificado].
-- `transferir_posto`: objeto existente (`app/colaboradores/views.py:1374`), save em `:1391`, sem captura no fluxo; mesma possibilidade de **500** por objeto stale (`:1387`–`:1405`). Execução concreta [nao verificado].
-- Executor de desligamento: save em `app/colaboradores/services/desligamento.py:133`; alcançado em laço pelo cron (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:43`, `:57`). **Aqui não há SELECT extra da guarda**, porque o executor já atribuiu `'desligado'` (`app/colaboradores/services/desligamento.py:129`) e a guarda retorna antes de iterar o queryset (`app/colaboradores/services/colaborador.py:57`–`:59`).
-
-Não encontrei `salvar_inteiro` com objeto novo na cópia; a função ainda pula a guarda para `pk=None` (`app/colaboradores/services/colaborador.py:68`). O rascunho novo da admissão não é salvo por ela (`app/colaboradores/views.py:1096`; `app/colaboradores/services/colaborador.py:149`). Portanto a premissa “leitura no banco em **TODO** save completo” é excessiva: ocorre a chamada da guarda, mas novo ou situação proposta desligado não executam aquela leitura (`app/colaboradores/services/colaborador.py:57`, `:68`, `:118`).
-
-## 15/11 10:14 · sessao b5d8736cfd18 · - · - · origem=Ronald (tmux)
-
-6. **O efeito é global, mas depende do tipo de request.**
-
-- `request=None` já alcançava `evento` antes: o `and` curto-circuitava o acesso a `request.user`; agora continua assim. Chamadas explícitas: `app/colaboradores/management/commands/backfill_municipio_posto.py:96`; `app/colaboradores/management/commands/corrigir_escala_retroativa.py:198` e `:213`; `app/chamados/management/commands/carimbar_por_batida_coincidente.py:101`; definição atual em `app/core/auditoria.py:18`.
-- Comandos de credencial também passam `None`: `app/colaboradores/management/commands/diagnostico_login.py:30`; `app/colaboradores/management/commands/regerar_senhas_iniciais.py:70`; chegam ao adaptador por `app/core/credenciais.py:40`. Portanto **não passam a gravar por causa deste diff**; já gravavam pelo caminho de ator nulo (`app/core/observ.py:94`, `:118`, `:134`).
-- O efetivador usa objeto verdadeiro com `user=None`, `META={}`: `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`, `:63`. Antes o acesso a `.is_authenticated` falhava; agora o log final `Desligamento:` alcança `evento`, com usuário nulo (`app/core/auditoria.py:24`; `app/colaboradores/services/desligamento.py:229`). **A trilha de credencial desse mesmo desligamento já usava `None`**, portanto não é nova (`app/colaboradores/services/desligamento.py:135`).
-- Outro caso comprovável: `calcular_scores --motivo` busca o primeiro superusuário ativo e monta request mesmo se a busca devolver `None`; nessa condição passa a gravar `score_recalculado` (`app/inteligencia/management/commands/calcular_scores.py:121`; `app/chamados/services/validacao.py:94`).
-- Outros requests sintéticos: `_ReqDoAutor` (`app/colaboradores/services/vinculo.py:19`), `_ReqDaPorta` (`app/ponto/portas/regen_exportada.py:41`), `_ReqShim` (`app/ponto/services/regularizacao.py:146`) e `_req_para_trilha` (`app/chamados/services/validacao.py:94`). O efeito novo existe se carregarem usuário nulo/sem `is_authenticated`; ocorrência concreta desses estados em produção, além dos caminhos acima, **[nao verificado]**. A porta da batida já fabrica um usuário com `is_authenticated=False`, portanto esse fallback já funcionava (`app/ponto/registro_batida.py:227`).
-- A alteração não resolve request sintético verdadeiro sem `META`: o acesso continua direto e a exceção continua capturada (`app/core/auditoria.py:18`, `:26`).
-- Há selos contando logs: total zero da porta do colaborador (`app/colaboradores/tests/test_porta_colaborador.py:189`); total no retrato de idempotência do cron de turnos (`app/ponto/tests/test_selo_idempotencia_porta_turno.py:59`, `:96`); lista filtrada na idempotência do calendário (`app/colaboradores/tests/test_trilha_do_vinculo.py:78`, `:141`). Isso exige revisão dos universos; quebra efetiva desses testes **[nao verificado]**. O novo teste exige a existência do log do efetivador anteriormente ausente (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:200`).
-
-9. **Existe potencial de mudança nos resultados; valores efetivos em produção [nao verificado].**
-
-- Conservar `desligado` em vez de permitir `afastado` muda o universo do recálculo: não desligados entram; desligados dependem de `data_demissao >= início da janela` (`app/ponto/services/fechamento.py:439`). O recálculo produz `FechamentoMensal` (`app/ponto/services/fechamento.py:448`).
-- A mesma diferença muda retenção e informativo: desligado retorna motivos vazios; afastado segue ao cálculo dos dias (`app/folha/export.py:1206`). O informativo de rescisão faz o recorte oposto (`app/folha/export.py:1225`).
-- O crivo de âncora exige `situacao='ativo'` (`app/folha/export.py:806`).
-- A regra de saída do TXT pela rescisão permanece baseada em **data**, independentemente de situação: `data_demissao <= fim_janela` (`app/folha/export.py:54`, `:866`). Não há alteração direta dessa fórmula nos sítios anexados; afirmar “nenhum número muda” não é sustentado pelos leitores acima.
-- O filtro novo também impede criar ausências que antes o POST podia criar para estados fora da lista (`app/ponto/views.py:2441`, `:2452`); impacto monetário concreto dessas ausências recusadas **[nao verificado]**.
-
-## 15/11 10:13 · sessao de2eba907074 · - · - · origem=Ronald (tmux)
-
-Itens 7–8, análise estática:
-
-- **Juiz duplicado: não no diff.** `_recusar_volta_de_desligado` consulta `esta_desligado` tanto para o novo valor quanto para a linha gravada; o predicado permanece somente `getattr(..., 'situacao', None) == 'desligado'`. O juiz já está registrado. `app/colaboradores/services/colaborador.py:56`, `app/colaboradores/services/colaborador.py:60`, `app/colaboradores/services/desligamento.py:32`, `app/core/juizes.py:271`.
-- **`DesligadoSemReadmissao` é exceção; `salvar_reativacao` é porta, não juiz.** A primeira apenas declara uma subclasse de `ValueError`; a segunda apenas confere a operação e executa `save()`. Contudo, esta porta pública não verifica que foi chamada por `executar_reativacao` nem produz a trilha por si; a disciplina depende do chamador. `app/colaboradores/services/colaborador.py:45`, `app/colaboradores/services/colaborador.py:136`, `app/colaboradores/services/desligamento.py:247`, `app/colaboradores/services/desligamento.py:251`.
-- **Guarda não atômica:** a consulta da situação e o `save()` são operações separadas; a porta não usa bloqueio da linha. Uma intercalação “guarda lê ativo → outro escritor desliga → primeiro salva ativo” continua possível em termos do código. O RED do objeto velho cobre desligamento antes da guarda, não durante esse intervalo. `app/colaboradores/services/colaborador.py:71`, `app/colaboradores/services/colaborador.py:118`, `app/colaboradores/services/colaborador.py:119`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:100`.
-- **Relógio:** o diff não adiciona leitura de relógio aos guardas. Há leituras preexistentes fora da borda: `julgar_desligamento` chama `date.today()` duas vezes; o executor chama `timezone.now()` e a reativação chama `localdate()`. O cron já captura `hoje`, mas não o fornece ao juiz. Isso contrasta com o desenho documentado de Clock Injection. `app/colaboradores/services/desligamento.py:40`, `app/colaboradores/services/desligamento.py:60`, `app/colaboradores/services/desligamento.py:155`, `app/colaboradores/services/desligamento.py:255`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`, `app/docs/PLANO-PADROES.md:92`.
-- **Derivação paralela:** o guarda novo não replica o predicado de desligado; chama o juiz. O campo continua tendo a dívida anterior de situação gravada versus situação derivada: a apresentação consulta o juiz de afastamento, enquanto a tela grava `afastado`; o registro de juízes documenta explicitamente essa convivência e os 104 leitores ainda não migrados. `app/colaboradores/services/colaborador.py:56`, `app/colaboradores/services/situacao_exibida.py:56`, `app/colaboradores/services/situacao_exibida.py:63`, `app/ponto/views.py:2472`, `app/core/juizes.py:470`.
-
-**RED contra a base, reconstruída pelo diff fornecido — execução real [nao verificado]:**
-
-- **Sete testes deveriam falhar:** cinco testes da guarda, o POST para desligado e a trilha do cron. As operações antigas não levantavam a exceção esperada; o POST antigo buscava qualquer PK; `user=None` interrompia a auditoria antes do evento. `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:76`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:83`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:89`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:96`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:106`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:173`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:200`.
-- **Quatro testes deveriam passar na base:** reativação, vivo transitando, desligado sendo salvo sem mudar situação, e afastamento INSS de ativo. São controles de preservação, não demonstração individual do defeito. `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:115`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:122`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:133`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:188`.
-- **Mordida parcial:** no teste conjunto `salvar_campos_e_lote`, a primeira `assertRaises` já falha na base; a chamada de lote não chega a executar. O teste chamado “reativação ... idempotente” executa a reativação somente uma vez. Não há teste do atalho `salvar_reativacao` isolado nem da concorrência descrita acima. `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:109`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:111`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:117`.
-
-**LEI-AKITA e cortes:**
-
-- `padrao=Policy Enforcement Point` existe literalmente no glossário e descreve aplicação de decisão recebida de um juiz; essa parte corresponde ao guarda consultando `esta_desligado`. `juizes novos=0` também corresponde às novas funções do diff, que não criam outro predicado de desligado. `app/docs/GLOSSARIO.md:32`, `app/colaboradores/services/colaborador.py:56`, `app/core/juizes.py:271`.
-- A **linha real LEI-AKITA do commit** não está no anexo nem há histórico Git nesta cópia: **[nao verificado]**. [nao verificado]
-- Não localizei `LEI-DESLIGADO-NAO-TRAVA`, `BUG 96`, `reativacao` ou `situacao` em `app/docs/CORTES.md`; portanto não consigo confirmar a frase de corte alegada pelo próprio código: **[nao verificado]**. Os ponteiros que alegam sua existência estão em `app/core/juizes.py:268` e `app/colaboradores/services/desligamento.py:26`.
-- Os cortes de desligamento que efetivamente aparecem dizem que resposta já dada segue viva, porque pode valer na rescisão, e que disputa de desligado não reabre. O diff fornecido não altera essas regras. `app/docs/CORTES.md:393`, `app/docs/CORTES.md:444`, `app/colaboradores/services/desligamento.py:165`.
-
-## 15/11 10:09 · sessao ae03da037804 · HE-REVOGADA-NA-PORTA · verificador · origem=Code
-
-A correção resolve os dois bloqueios identificados: `NAO` sobre recusa revogada deixa de ser `no_op`, e autorização em lote deixa de barrar essa linha. Há, porém, duas ressalvas materiais: os testes novos não comprovam relavratura efetiva, e “DIFF gravado” no serviço não significa dinheiro persistido conferido após o commit. (`app/ponto/portas/he.py:197`, `app/ponto/portas/he.py:587`, `app/ponto/tests/test_he_revogada_na_porta.py:55`, `app/ponto/services/autorizacao_he_periodo.py:94`)
-
-O “antes” abaixo vem do patch fornecido. Execução Django na base e no commit, identidade Git da cópia e impacto quantitativo em produção: **[nao verificado]**. O dado fornecido não traz linhas `colNN` nem valores financeiros de produção: **[nao verificado]**. [nao verificado]
-
-**1. Escritores, leitores e ESMERIL-SEMÂNTICA**
-
-| Campo | Quem escreve em produção | Quem consome diretamente |
-|---|---|---|
-| `estado` | `_gravar`, criação e atualização. (`app/ponto/portas/he.py:66`, `app/ponto/portas/he.py:75`) | Porta: antes/trilha, idempotência, retorno da ponta pequena, guarda da revogação e guarda do lote; modelo: `__str__`; motor; gestão; montador do retrato. (`app/ponto/portas/he.py:61`, `app/ponto/portas/he.py:197`, `app/ponto/portas/he.py:355`, `app/ponto/portas/he.py:395`, `app/ponto/portas/he.py:408`, `app/ponto/portas/he.py:485`, `app/ponto/portas/he.py:587`, `app/ponto/models.py:1361`, `app/ponto/motor_calculo_v2.py:1417`, `app/ponto/services/gestao_he.py:86`, `app/ponto/services/gestao_he.py:107`, `app/ponto/services/he_pendente_lavrado.py:145`) |
-| `origem` | `_gravar`, criação e atualização; recebe `admin` de `decidir_he` e `sistema` da ponta pequena. (`app/ponto/portas/he.py:68`, `app/ponto/portas/he.py:76`, `app/ponto/portas/he.py:208`, `app/ponto/portas/he.py:368`) | Antes/trilhas, proteção contra revogar decisão administrativa e mensagem da guarda do lote. (`app/ponto/portas/he.py:62`, `app/ponto/portas/he.py:396`, `app/ponto/portas/he.py:408`, `app/ponto/portas/he.py:475`, `app/ponto/portas/he.py:591`) |
-| `revogada_em` | Nulo na criação; `_gravar` limpa; `_marcar_revogada` preenche e persiste. (`app/ponto/models.py:1335`, `app/ponto/portas/he.py:83`, `app/ponto/portas/he.py:398`, `app/ponto/portas/he.py:400`) | Juiz `vigentes()`, antes da redecisão e trilha da revogação. O helper consulta o juiz. (`app/ponto/models.py:1267`, `app/ponto/portas/he.py:63`, `app/ponto/portas/he.py:409`, `app/ponto/portas/he.py:148`) |
-| `revogada_motivo` | Vazio na criação; `_gravar` limpa; `_marcar_revogada` preenche. (`app/ponto/models.py:1340`, `app/ponto/portas/he.py:83`, `app/ponto/portas/he.py:399`) | Não encontrei consumo explícito do atributo armazenado na lógica do produto. A trilha recebe o argumento `motivo`. A ferramenta de sombra inventaria e processa esse campo, com banco explicitamente restrito à sombra. (`app/ponto/portas/he.py:409`, `bin/sombra_regras_pessoais.py:125`, `bin/sombra_mascara_pessoal.py:10`, `bin/sombra_mascara_pessoal.py:44`, `bin/sombra_selo_pessoal.py:74`) |
-| `minutos_na_decisao` | `_gravar`, criação e atualização; a revogação preserva a foto. (`app/ponto/portas/he.py:67`, `app/ponto/portas/he.py:75`, `app/ponto/portas/he.py:400`) | Antes/trilhas, retornos idempotentes, retornos da revogação e agregação da gestão. (`app/ponto/portas/he.py:61`, `app/ponto/portas/he.py:203`, `app/ponto/portas/he.py:355`, `app/ponto/portas/he.py:395`, `app/ponto/portas/he.py:408`, `app/ponto/portas/he.py:477`, `app/ponto/portas/he.py:484`, `app/ponto/portas/he.py:490`, `app/ponto/portas/he.py:493`, `app/ponto/portas/he.py:494`, `app/ponto/services/gestao_he.py:108`) |
-| `minutos_na_revogacao` | Nulo na criação; `_gravar` limpa; `_marcar_revogada` preenche. (`app/ponto/models.py:1343`, `app/ponto/portas/he.py:83`, `app/ponto/portas/he.py:399`) | Não encontrei consumo explícito do atributo armazenado na lógica do produto; a trilha recebe `int(minutos)`. (`app/ponto/portas/he.py:410`) |
-
-As consultas que hidratam objetos completos também carregam os seis campos, mesmo sem consumir todos: quatro consultas cruas na porta e os mapas dos dois comandos. (`app/ponto/portas/he.py:195`, `app/ponto/portas/he.py:343`, `app/ponto/portas/he.py:470`, `app/ponto/portas/he.py:580`, `app/ponto/management/commands/lavrar_he_pendente.py:48`, `app/ponto/management/commands/recusar_ponta_pequena.py:120`)
-
-Os demais leitores de produção recebem projeções desses valores:
-
-- **Motor:** carrega decisões vigentes por `_DHE`; consulta autorização para dia sem previsto e para o tratamento das pontas de entrada/saída. Não usa a foto dos minutos para pagar. (`app/ponto/motor_calculo_v2.py:1417`, `app/ponto/motor_calculo_v2.py:1456`, `app/ponto/motor_calculo_v2.py:1653`, `app/ponto/motor_calculo_v2.py:1697`, `app/ponto/motor_calculo_v2.py:1739`)
-- **Gestão:** `estado_por_dia` e `_decisoes` consultam vigentes; `enriquecer` publica estados, pendências e agregados; calendário, filtros, seleção de lote e contador da Central consomem essas projeções. (`app/ponto/services/gestao_he.py:87`, `app/ponto/services/gestao_he.py:105`, `app/ponto/services/gestao_he.py:141`, `app/ponto/services/gestao_he.py:249`, `app/ponto/services/gestao_he.py:278`, `app/ponto/services/gestao_he.py:281`, `app/ponto/services/gestao_he.py:312`, `app/ponto/services/gestao_he.py:332`, `app/ponto/services/gestao_he.py:405`, `app/ponto/services/gestao_he.py:475`)
-- **Template:** espigas, badges, calendário, oferta de autorização e tabela de apoio leem estado/agregados publicados pela gestão. (`app/templates/ponto/gestao_he.html:109`, `app/templates/ponto/gestao_he.html:124`, `app/templates/ponto/gestao_he.html:125`, `app/templates/ponto/gestao_he.html:219`, `app/templates/ponto/gestao_he.html:220`, `app/templates/ponto/gestao_he.html:256`, `app/templates/ponto/gestao_he.html:258`, `app/templates/ponto/gestao_he.html:267`, `app/templates/ponto/gestao_he.html:273`, `app/templates/ponto/gestao_he.html:314`)
-- **Folha:** `porta_export.medir` usa `estado_por_dia`; qualquer decisão vigente presente, inclusive `nao`, libera aquele dia da trava específica de HE. Ausência acima do limite entra na trava quando habilitada. (`app/folha/porta_export.py:230`, `app/folha/porta_export.py:232`, `app/folha/porta_export.py:682`, `app/folha/porta_export.py:690`)
-- **Lavrador:** fornece mapa vigente ao montador, que pode revogar pela porta antes de ler `estado`. (`app/ponto/management/commands/lavrar_he_pendente.py:48`, `app/ponto/management/commands/lavrar_he_pendente.py:59`, `app/ponto/services/he_pendente_lavrado.py:143`, `app/ponto/services/he_pendente_lavrado.py:145`)
-- **Comando da ponta pequena:** consulta existência de vigentes, pula essas chaves e chama a porta para as restantes. (`app/ponto/management/commands/recusar_ponta_pequena.py:120`, `app/ponto/management/commands/recusar_ponta_pequena.py:141`, `app/ponto/management/commands/recusar_ponta_pequena.py:170`)
-- **Serviço de período:** delega a escrita ao lote e lê o efeito pela autoridade do motor; não consulta diretamente `DecisaoHE.objects`. (`app/ponto/services/autorizacao_he_periodo.py:94`, `app/ponto/services/autorizacao_he_periodo.py:271`, `app/ponto/services/autorizacao_he_periodo.py:277`, `app/ponto/services/autorizacao_he_periodo.py:280`)
-
-**Semântica:** os campos conservam seus contratos: `estado` é a resposta, vigência é outra dimensão; `origem` identifica quem escreveu o estado atual; os dois campos de minutos são fotos de instantes diferentes. (`app/ponto/models.py:1267`, `app/ponto/models.py:1278`, `app/ponto/models.py:1283`, `app/ponto/models.py:1290`, `app/ponto/models.py:1345`)
-
-Há uma ambiguidade preexistente na apresentação: todo `nao` aparece como “ciência”, inclusive recusa automática, porque a agregação não distingue origem. Além disso, `NAO` humano sobre **recusa vigente do sistema** continua `no_op`, preservando origem e minutos antigos. Portanto “com ciência” não comprova ciência humana. (`app/templates/ponto/gestao_he.html:125`, `app/templates/ponto/gestao_he.html:314`, `app/ponto/services/gestao_he.py:107`, `app/ponto/portas/he.py:197`, `app/ponto/portas/he.py:203`)
-
-Ao reviver, os três campos da revogação são limpos; o histórico depende da trilha anterior, cuja gravação é best-effort. Esse comportamento já está no escritor. (`app/ponto/portas/he.py:83`, `app/ponto/portas/he.py:406`, `app/ponto/portas/he.py:411`)
-
-**2. Censo de consultas fora de `.vigentes()`**
-
-Encontrei quatro consultas executáveis de leitura, todas na porta:
-
-| Sítio | Com `revogada_em` preenchido |
-|---|---|
-| `decidir_he` | Trava a linha crua; `_vigente` devolve `None`; não aplica idempotência pelo estado antigo; atualiza a mesma linha e limpa a revogação. (`app/ponto/portas/he.py:195`, `app/ponto/portas/he.py:196`, `app/ponto/portas/he.py:206`, `app/ponto/portas/he.py:83`) |
-| `recusar_ponta_pequena` | Depois das guardas de minutos/limite, não considera já decidido; dry-run sinaliza recusa; apply revive a linha como recusa do sistema. (`app/ponto/portas/he.py:338`, `app/ponto/portas/he.py:343`, `app/ponto/portas/he.py:344`, `app/ponto/portas/he.py:357`, `app/ponto/portas/he.py:366`) |
-| `revogar_recusa_do_sistema` | Origem administrativa retorna “decisão do admin”; origem sistema revogada retorna “já revogada”, sem escrita. (`app/ponto/portas/he.py:470`, `app/ponto/portas/he.py:475`, `app/ponto/portas/he.py:478`, `app/ponto/portas/he.py:483`) |
-| `autorizar_em_lote` | Trava a linha crua; revogada não aciona a guarda de estado; segue para `decidir_he`. (`app/ponto/portas/he.py:580`, `app/ponto/portas/he.py:586`, `app/ponto/portas/he.py:587`, `app/ponto/portas/he.py:592`) |
-
-`objects.create` é escrita. O `objects.filter` no texto `como_reverter` é instrução impressa, não consulta executada naquele comando. (`app/ponto/portas/he.py:66`, `app/ponto/management/commands/recusar_ponta_pequena.py:219`)
-
-**3. Matriz antes → depois**
-
-Pressupostos: autorização/permissão e motivo válidos; minutos positivos; autorização em lote acima do limite; ponta pequena dentro do limite; revogação acima do limite. As rejeições dessas entradas permanecem nas mesmas guardas. (`app/ponto/portas/he.py:175`, `app/ponto/portas/he.py:178`, `app/ponto/portas/he.py:184`, `app/ponto/portas/he.py:190`, `app/ponto/portas/he.py:335`, `app/ponto/portas/he.py:338`, `app/ponto/portas/he.py:491`, `app/ponto/portas/he.py:574`)
-
-`=` significa mesmo resultado antes e depois; “troca” atualiza a linha existente. Referências por porta constam na última linha.
-
-| Linha existente | `decidir NAO` | `decidir AUT` | `recusar_em_lote` | `autorizar_em_lote` | `recusar_ponta_pequena` | `revogar_recusa_do_sistema` |
-|---|---|---|---|---|---|---|
-| Sem linha | cria = | cria = | recusa = | autoriza = | cria sistema = | “sem decisão” = |
-| Vigente admin `nao` | `no_op` = | troca = | `no_op` = | erro = | já decidido = | “decisão do admin” = |
-| Vigente admin autorizado | troca = | `no_op` = | troca para `nao` = | `no_op` = | já decidido = | “decisão do admin” = |
-| Vigente sistema `nao` | `no_op` = | troca = | `no_op` = | erro = | já decidido = | revoga = |
-| Revogada sistema `nao` | **`no_op` → revive admin** | troca/revive = | **`no_op` → recusa contabilizada** | **erro → autoriza/revive** | revive sistema = | “já revogada” = |
-| Fontes | `app/ponto/portas/he.py:195`, `:197`, `:206` | `app/ponto/portas/he.py:197`, `:206` | `app/ponto/portas/he.py:262`, `:267`, `:270` | `app/ponto/portas/he.py:580`, `:587`, `:592`, `:597` | `app/ponto/portas/he.py:343`, `:355`, `:366` | `app/ponto/portas/he.py:470`, `:475`, `:478`, `:497` |
-
-Para linha **não revogada**, não identifiquei mudança de resultado de negócio: o juiz atual equivale precisamente à nulidade usada anteriormente nas portas do sistema. Há consulta adicional quando existe linha. (`app/ponto/models.py:1267`, `app/ponto/portas/he.py:148`)
-
-A correção de `decidir_he` vale genericamente para qualquer linha revogada, independentemente da origem; o caminho normal de revogação, porém, só admite recusa do sistema. Existência de outras combinações em produção: **[nao verificado]**. (`app/ponto/portas/he.py:196`, `app/ponto/portas/he.py:475`, `app/ponto/portas/he.py:485`)
-
-**4. Chamadores e prévia/confirmar**
-
-- **View de um dia:** `NAO` sobre revogada muda de “já estava assim” para “Trocado”, com chamada ao recalculador. (`app/ponto/views.py:532`, `app/ponto/views.py:539`, `app/ponto/views.py:542`, `app/ponto/portas/he.py:227`)
-- **View de recusa em lote:** esse dia passa de `no_op` para `recusados`. (`app/ponto/views.py:617`, `app/ponto/portas/he.py:262`, `app/ponto/portas/he.py:267`, `app/ponto/portas/he.py:270`)
-- **Ato de período:** recusa revogada acima do limite passa de erro para autorização, tanto na prévia quanto no confirmar. (`app/ponto/services/autorizacao_he_periodo.py:277`, `app/ponto/portas/he.py:586`, `app/ponto/portas/he.py:592`)
-- **Comandos:** para o mesmo estado inicial, mantêm o resultado; seus mapas já usam vigentes. A substituição por `_vigente` acrescenta leitura, preservando o predicado anterior. (`app/ponto/management/commands/lavrar_he_pendente.py:48`, `app/ponto/management/commands/lavrar_he_pendente.py:59`, `app/ponto/management/commands/recusar_ponta_pequena.py:120`, `app/ponto/management/commands/recusar_ponta_pequena.py:170`, `app/ponto/models.py:1267`)
-- **Gestão:** já exibia revogada como `sem_decisao`; agora os gestos conseguem concluí-la. Após a escrita, estado e agregados vêm das decisões vigentes. A trava específica da folha também passa a reconhecer a decisão recém-gravada. (`app/ponto/services/gestao_he.py:278`, `app/ponto/services/gestao_he.py:311`, `app/folha/porta_export.py:232`, `app/folha/porta_export.py:686`)
-
-**A igualdade entre os dois DIFFs continua protegida pelo código:** ambos executam `_ato`, medindo antes, autorizando e medindo depois; a prévia desfaz a transação; confirmar compara o dicionário exato e desfaz tudo se divergir. A revogada entra nesse mesmo caminho. (`app/ponto/services/autorizacao_he_periodo.py:271`, `app/ponto/services/autorizacao_he_periodo.py:277`, `app/ponto/services/autorizacao_he_periodo.py:280`, `app/ponto/services/autorizacao_he_periodo.py:287`, `app/ponto/services/autorizacao_he_periodo.py:321`, `app/ponto/services/autorizacao_he_periodo.py:343`, `app/ponto/services/autorizacao_he_periodo.py:346`)
-
-A tela transporta exatamente `r['diff']`; cada medição cria autoridade/motor que consulta as decisões vigentes, sem reutilizar o mapa anterior à escrita. (`app/ponto/views.py:720`, `app/ponto/views.py:723`, `app/ponto/services/autorizacao_he_periodo.py:96`, `app/ponto/services/espelho.py:1111`, `app/ponto/motor_calculo_v2.py:1400`)
-
-**Limite importante:** essa guarda compara o efeito no motor após gravar `DecisaoHE`. Não lê `DiaPago`/`FechamentoMensal` depois da relavratura. Esta roda por callback de commit e pode falhar sem desfazer a decisão; também pode ser barrada pela guarda de competência. Portanto, “DIFF mostrado == dinheiro efetivamente persistido” não está demonstrado por essa comparação. (`app/ponto/services/autorizacao_he_periodo.py:94`, `app/ponto/services/fechamento.py:561`, `app/ponto/services/fechamento.py:1818`, `app/ponto/services/fechamento.py:1824`)
-
-**5. Checklist e selos**
-
-- **Segundo juiz:** não nasce outro predicado; `_vigente` delega ao modelo. Não encontrei registro específico de HE em `core/juizes.py`; chamar esse juiz de “registrado” permanece **[nao verificado]**. (`app/ponto/portas/he.py:148`, `app/ponto/models.py:1267`, `app/core/juizes.py:7`)
-- **Segundo escritor fora da porta:** não aparece no diff. Estado continua em `_gravar`; revogação em `_marcar_revogada`. (`app/ponto/portas/he.py:66`, `app/ponto/portas/he.py:84`, `app/ponto/portas/he.py:400`)
-- **Relógio fora da borda:** nenhuma leitura nova. `vigentes()` testa nulidade; o relógio existente continua no escritor da revogação. (`app/ponto/models.py:1267`, `app/ponto/portas/he.py:398`)
-- **Derivação paralela:** o helper não calcula minutos nem reproduz o predicado de vigência. (`app/ponto/portas/he.py:146`, `app/ponto/portas/he.py:148`)
-- **Ordem de trava:** os quatro usos vêm depois de `select_for_update`; as três portas individuais têm `atomic`, e o lote tem bloco por dia. O helper acrescenta `exists()` sobre o mesmo PK, sem travar outra entidade. Quando o lote chega a `decidir_he` com linha existente, há duas consultas adicionais de vigência. Não identifiquei inversão nova de ordem. (`app/ponto/portas/he.py:148`, `app/ponto/portas/he.py:158`, `app/ponto/portas/he.py:195`, `app/ponto/portas/he.py:293`, `app/ponto/portas/he.py:343`, `app/ponto/portas/he.py:417`, `app/ponto/portas/he.py:470`, `app/ponto/portas/he.py:573`, `app/ponto/portas/he.py:580`, `app/ponto/portas/he.py:592`)
-- **Campo com dois significados:** não identifiquei novo significado nos seis campos; permanecem as ressalvas de apresentação de “ciência” e de “gravado” descritas acima. (`app/ponto/models.py:1306`, `app/ponto/models.py:1314`, `app/ponto/models.py:1337`, `app/ponto/models.py:1345`, `app/templates/ponto/gestao_he.html:314`, `app/ponto/services/autorizacao_he_periodo.py:94`)
-
-Resultado **esperado por análise estática**, sem certificação de execução:
-
-| Teste novo | Base do patch | Cópia atual | Fonte | [nao verificado]
-|---|---|---|---|
-| RED_1 | Falha: `no_op=True` | Passa: revive | `app/ponto/tests/test_he_revogada_na_porta.py:57`, `app/ponto/portas/he.py:197` |
-| RED_1b | Falha: `(True, True)` | Passa: `(False, True)` | `app/ponto/tests/test_he_revogada_na_porta.py:78` |
-| RED_1c | Falha: contabiliza `no_op` | Passa: contabiliza recusa | `app/ponto/tests/test_he_revogada_na_porta.py:89`, `app/ponto/portas/he.py:267` |
-| RED_2 | Falha: guarda do lote barra | Passa: autoriza | `app/ponto/tests/test_he_revogada_na_porta.py:100`, `app/ponto/portas/he.py:587` |
-| MORDE_3 | Já passa | Continua passando | `app/ponto/tests/test_he_revogada_na_porta.py:113` |
-| MORDE_4 | Já passa | Continua passando | `app/ponto/tests/test_he_revogada_na_porta.py:125` |
-
-Os dois MORDE preservam comportamento anterior; não precisam ficar vermelhos na base. MORDE_3 exige a mensagem específica da guarda, evitando passar simplesmente por falta de permissão. (`app/ponto/tests/test_he_revogada_na_porta.py:114`)
-
-A alegação “relavrou o dia” excede a mordida dos testes novos: o recalculador está mockado; `call_count` comprova chamada. Não há caso novo de prévia/confirmar com revogada nem conferência financeira após commit. (`app/ponto/tests/test_he_revogada_na_porta.py:55`, `app/ponto/tests/test_he_revogada_na_porta.py:66`, `app/ponto/tests/test_he_revogada_na_porta.py:97`)
-
-Quanto aos selos existentes:
-
-- **O273:** o helper respeita o juiz, limpeza e escritores existentes. O censo textual exclui integralmente `he.py`; portanto esse selo, sozinho, não fiscaliza a política interna da porta. (`app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:426`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:445`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:473`)
-- **O214:** permanecem os escritores e os três chamadores de `acima_do_limite`; não identifiquei contradição estática introduzida. (`app/ponto/tests/test_o214_ponta_pequena.py:296`, `app/ponto/tests/test_o214_ponta_pequena.py:313`, `app/ponto/tests/test_o214_item4_dia_do_admin.py:530`)
-- **`test_tela_gestao_he*`:** não identifiquei expectativa contrariada pelo diff; resultado executado: **[nao verificado]**.
-- **Atomicidade:** executei somente `python3 -B bin/atomicidade_da_porta.py app`, que lê AST. Retornou **rc=1, 35 travas, 25 cobertas, 10 violações**, nenhuma em `he.py`. O estágio de produção do shell reprova esse retorno. (`bin/atomicidade_da_porta.py:55`, `bin/atomicidade_da_porta.py:97`, `bin/atomicidade_da_porta.py:103`, `bin/tests/test_atomicidade_da_porta.sh:28`)
-- As ocorrências foram em `app/chamados/models.py:2744`, `app/chamados/models.py:2753`, `app/chamados/models.py:2766`, `app/chamados/models.py:2770`, `app/ferias/services.py:485`, `app/ferias/services.py:495`, `app/fe
-
-[truncado em 20000 de 22645 caracteres]
-
-_5580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5587 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
