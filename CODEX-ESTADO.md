@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 14:09** · publicado em **15/11/2026 14:10** (UTC-3)
+> Ultima resposta processada: **15/11/2026 14:11** · publicado em **15/11/2026 14:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 14:11 · sessao e8e3cd768849 · CORTES-1358-B · sonda · origem=Code
+
+O invólucro executa a sonda antes de anexar o resultado raspado (`bin/codex_pergunta.sh:327-335`). Não realizei nova execução; não tenho o `sonda.py` anexado disponível nesta cópia. [nao verificado]
+
+Não devolvo uma nova saída JSON como se tivesse sido executada. A tabela abaixo consolida exclusivamente o JSON fornecido; a transcrição integral das listas de IDs não está incluída. [nao verificado]
+
+| Grupo | Chave | n | Referência |
+|---|---|---:|---|
+| TOTAL | — | 8709 | Dado fornecido [nao verificado] |
+| TIPO_RESPOSTA | data_hora | 24 | Dado fornecido [nao verificado] |
+| TIPO_RESPOSTA | escolha | 5 | Dado fornecido [nao verificado] |
+| TIPO_RESPOSTA | hora | 8680 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-05 · aberta | 3 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-06 · exportada | 50 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-07 · aberta | 116 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-07 · exportada | 691 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-08 · aberta | 1110 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-08 · exportada | 6268 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-09 · exportada | 412 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-10 · aberta | 52 | Dado fornecido [nao verificado] |
+| COMPETENCIA | 2026-11 · aberta | 7 | Dado fornecido [nao verificado] |
+| EVIDENCIA_FOTO | SEM_EPISODIO | 8709 | Dado fornecido [nao verificado] |
+
+Não há grupo `INDETERMINADA` informado. As competências listadas somam 8709, igual ao TOTAL; o resíduo aritmético é 0. [nao verificado]
+
+| Situação da competência | n | n REGISTRO_FOTO_CRIADO_APOS_V | IDs de pergunta após V | Referência |
+|---|---:|---:|---|---|
+| exportada | 7421 | 0 | `[]` | Soma dos grupos fornecidos [nao verificado] |
+| aberta | 1288 | 0 | `[]` | Soma dos grupos fornecidos [nao verificado] |
 
 ## 15/11 14:09 · sessao 85e7e5cdf17b · E4D-PRE-DESENHO · leitura · origem=Code
 
@@ -871,23 +901,4 @@ Atenção: fio admin residual atualmente publica `acao='validar'` pela expressã
 
 `LEI-AKITA: padrao=Single Source of Truth / Aggregate Root; Clock Injection; CQRS com projecoes reconstruiveis` — vocabulário em `docs/GLOSSARIO.md:11`, `:19`, `:24`; exigência em `docs/PLANO-PADROES.md:53`.
 
-## 15/11 13:28 · sessao 071afeef32a4 · E4C-F1V3 · construtor · origem=Code
-
-Aplicada a tipagem explícita, sem alterar os predicados: [juizes.py:1652](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:1652), [juizes.py:1674](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:1674). [nao verificado]
-
-- Censo completo: **2 Coalesce, 4 Subquery, 5 Value, 0 Case**, em 89 arquivos Python examinados; todas as 11 expressões receberam tipo. [resultados:30](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:30)
-- Tipos: `ato_texto → TextField`; `ato → CharField(max_length=16)`; PK → `BigAutoField`. [models.py:4015](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/models.py:4015), [apps.py:5](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/apps.py:5)
-- Doubles adaptados para aceitar `output_field`, sem mudar asserções. [teste:460](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1_juizes_le_o_ato.py:460), [teste SQL:88](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v4_sql.py:88) [nao verificado]
-
-O `test_o261` tem causa independente, por leitura: a fixture omite `respondida_em`; a conservação gera somente validação, que não fornece texto de resposta. [fixture:357](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_o261_vigia_fio.py:357), [models.py:4074](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/models.py:4074), [leitura:50](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/services/atos_pergunta.py:50)
-O `except` existente engole o erro de parsing do texto vazio e devolve slot ausente: sem plantio resulta `slot_nao_derivavel`; com plantio ligado resulta `com_registro`. Esse defeito permanece nesta volta. [juizes.py:459](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:459), [juizes.py:862](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:862), [classificador:106](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/services/vigia_carimbo.py:106)
-
-- RED estrutural: `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v5_mutantes --red-base` → 11 falhas, rc=1. [resultados:46](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:46)
-- GREEN/regressão: 49 testes, rc=0, **2 skips ORM**; comando completo registrado. [resultados:157](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:157) [nao verificado]
-- Mutantes: `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v5_mutantes --todos` → 22 detectados; comandos individuais registrados. [resultados:166](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:166)
-- Ruff com `ruff.toml` e `py_compile` em memória: rc=0; comandos registrados. [resultados:249](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:249)
-- **FieldError real ainda não reproduzido aqui:** Django ORM indisponível. Os testes de `str(qs.query)`, com conexão/cursor proibidos, ficaram para Code/suite. [teste:110](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v5_tipos_sql.py:110), [resultados:169](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:169) [nao verificado]
-
-LEI-AKITA: origem=`chamados/juizes.py:1636` (face SQL da conservação); testemunha=`DecisaoPergunta` via `atos_pergunta.leitura:22`; RED=`test_e4c_f1v5_tipos_sql.py:42`; quem-mais-lê=`raiox.py:135`, `fio.py:428`, `juizes.py:1708`, `cadastro_realidade.py:460`; juízes novos=0; padrão=Parallel Change / Expand-Contract (`juizes.py:318`). Certificação permanece com Code/suite e opus final.
-
-_5657 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5658 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
