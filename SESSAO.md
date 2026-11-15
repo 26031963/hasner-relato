@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 19:18:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (93.1 MB). Acoes na janela: **1489**.
+**Medido em 15/11/2026 19:23:45.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (93.1 MB). Acoes na janela: **1488**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1498,4 +1498,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:24:27 | Bash | Find verifier files and write delta diff | `cd /home/ronald/saas-hasner && ls logs/JUSTIFICATIVA-PAGA/verif logs/JUSTIFICATIVA-PAGA/c13 \| tr '\n' ' '; grep -n 'triagem v9' app/docs/RELATO.md \| head -2; mkdir -p logs/JUSTIFICATIVA-PAGA/opus && cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 && git diff a36c12d27 74ec17605 > /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/opus/delta_c17.diff && wc -l /home/ronald/saas-hasner/l ...` |
 | 07:24:24 | Bash | Locate JUSTIFICATIVA verifier inputs | `cd /home/ronald/saas-hasner && D=logs/JUSTIFICATIVA-PAGA && ls $D \| tr '\n' ' '; echo; ls $D/c17 $D/opus* 2>/dev/null \| tr '\n' ' '; cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 && git log --oneline -8 && git diff --stat a36c12d27 74ec17605 \| tail -3` |
 | 07:24:20 | Bash | Read JUSTIFICATIVA suite verdict and clean mount dirs safely | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17 && cat inteira.rc; grep -E '^(OK\|FAILED)($\| \()' inteira.log \| tail -1; grep '^Ran' inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' inteira.log \| head; W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; for d in logs media staticfiles .hypothesis .mypy_cache .ruff_cache; do [ -d "${W:?}/${d:?}" ] && rmdir "${W:?}/${d:?}";  ...` |
-| 07:22:17 | Bash | Read JUSTIFICATIVA suite verdict and clean mount dirs | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17 && cat inteira.rc; grep -E '^(OK\|FAILED)($\| \()' inteira.log \| tail -1; grep '^Ran' inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' inteira.log \| head; W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; for d in logs media staticfiles .hypothesis .mypy_cache .ruff_cache; do [ -d $W/$d ] && rmdir $W/$d 2>&1; done; ls -a $W  ...` |
