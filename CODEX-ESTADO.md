@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 13:03** · publicado em **15/11/2026 13:06** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:10** · publicado em **15/11/2026 13:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:10 · sessao 93b182aaef10 · - · - · origem=Ronald (tmux)
+
+Criado apenas `chamados/tests/test_e4c_f1v4_sql.py`.
+
+- RED contra c3 em memória: FAIL `AssertionError: frota materializada antes do filtro SQL` (`:68`), rc=1.
+- GREEN: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f1v4_sql -v`, 1 teste OK. [nao verificado]
+- Propriedade compara 271 cenários × 3 faces com a leitura Python e porta real de conservação (`:81–122`).
+- Mutante sem correspondência R: 6 falhas de asserção, zero erros.
+- Para mutante `gt→gte`, adicionar suporte explícito a `gte` na álgebra (`:39`) antes de contar a mordida.
+- SQL real e quantidade de queries: [não verificado].
+
+## 15/11 13:08 · sessao b739c6c69e07 · - · - · origem=Ronald (tmux)
+
+[e4c_f1v4_mutantes.py](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v4_mutantes.py:1) criado com `--red-base`, `--todos` e `--mutante NOME`.
+
+Comandos executados com `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v4_mutantes`:
+
+- `--red-base`: rc=1, sete casos, 14 falhas de asserção, zero erros.
+- `--todos`: rc=0, controle sete GREEN; oito mutantes mordidos, inclusive L2 e vias.
+
+Contagem ORM N=1/N=20 permanece reservada ao Code, [não verificado].
 
 ## 15/11 13:03 · sessao b739c6c69e07 · - · - · origem=Ronald (tmux)
 
@@ -500,30 +522,4 @@ Achados para consolidação:
 
 **Guardas relevantes:** função real, rótulo=universo e condição literal (`CLAUDE.md:35`, `:37`); consumidor lê a lâmpada (`:173`); retenção atual lê célula/protestos (`app/folha/export.py:1273`, `:1293`). FERIADO-SO-NA-ESCALA-CERTA não localizado na cópia; estado da obra além do anexo [nao verificado].
 
-## 15/11 12:04 · sessao 7d357aae9472 · - · - · origem=Ronald (tmux)
-
-LU2-10 tem ressalvas para as perguntas 1/2; o fato do pagamento manual não é contradito por `paga=True`.
-
-- **Existe porta para recalcular a 11**, inclusive por colaborador: `--mes`, `--ano`, `--empresa`, `--colabs`, `--apply`; ela chama o serviço único. Porém o aval não nomeia qual execução fará isso. Não há recálculo periódico desse comando; evento depende de fato novo e captura falhas. (`app/ponto/management/commands/recalcular_fechamento.py:77-120`; `app/config/crons.py:1148-1155`; `app/ponto/services/fechamento.py:1798-1824`.)
-- **A porta atual não atende à condição instrumental de RELAVRA-11-DOS-50**: `foto()` só lê FechamentoMensal; o apply precede a escrita do arquivo, e falha de gravação apenas avisa. O serviço também lavra DiaPago, cujo escritor apaga/recria as linhas. (`app/ponto/management/commands/recalcular_fechamento.py:57-71`, `:118-139`; `app/ponto/services/fechamento.py:1191-1201`; `app/ponto/services/dia_pago.py:359-360`.)
-- **Não existe impedimento nominal à 11 pela guarda atual**: ela contém somente `(9,2026)` e exclui colaboradores quando a competência guardada tem empresas exportadas. Logo não afirmar que qualquer exportada é bloqueada; a recusa geral caiu pela L-113. (`app/ponto/services/fechamento.py:36-43`, `:539-564`; `app/docs/LEIS.md:154`.)
-- A convergência de col1020/col67 não está provada pelo código; o próprio anexo k a declara não verificada. Interseção com os 50/47, ordem concreta e prova dos hashes/foto/reversão: **[nao verificado]**.
-- **`paga=True` não prova pagamento por TXT**: o campo é existência de holerite de lote publicado. Portanto não contradiz “10 fechada à mão”. (`app/ponto/services/fechamento.py:1521-1540`.)
-- **`exportada=False` não prova inexistência de ExportacaoDominio histórica**: o juiz consulta o vigente e desconsidera vigente invalidado. O modelo guarda conteúdo/hash e trilha de invalidação; isso não comprova importação/pagamento no Domínio. (`app/folha/export.py:556-594`; `app/folha/models.py:75-100`.) ED históricos/Pautas existentes na 10: **[nao verificado]**.
-- O anexo LU2-06-P2-MEDIDA impede usar o zero anterior como prova de pouso c6 depois da marcação da 10: ele informa zero por cadastro vazio e divergências após marcar. LU2-10, literalmente, não manda marcar cadastro nem autoriza pousar c6; colisão automática entre ambos: **[nao verificado]**. [nao verificado]
-
-## 15/11 12:04 · sessao 2f544e86c9f5 · - · - · origem=Ronald (tmux)
-
-LU2-07: **PROCEDE no item 1, pelo alcance literal das mudanças anunciadas**.
-
-- É possível medir os insumos por dia-colab: `InsumosDoDono` calcula `oraculo.minutos` por dia e `linhas_do_periodo` lê `DiaPago` por data. Não cabe afirmar inexistência das primitivas. (`app/ponto/management/commands/e6_oraculo.py:149-154`; `app/ponto/services/dia_pago.py:833-856`)
-- Entretanto, o gate atual não alcança os `E6SemLavratura`: `minutos_do_espelho` devolve `None` sem `minutos_realizados`/`pago_h`; o comando sai nesse caso antes do teste zero/zero. (`app/ponto/management/commands/e6_oraculo.py:263-269,342-353`)
-- Ausência de linha e linha com rubricas todas zero produzem igualmente `None` em `pago_do_dia`; a implementação precisa distinguir esses casos pela fonte, e não usar conversão genérica `None -> 0`. (`app/ponto/services/dia_pago.py:890-893`; `app/ponto/services/dia_pago.py:854-856`)
-- Alterar apenas o gate do comando E6 e `vigia_fio.py:697-703` não produz a prometida mudança dos 22 na lista do admin: a lista chama `InsumosDoDono.dono`, que continua devolvendo CADASTRO primeiro para folga indefinida/sem vínculo; esse caminho não consulta o gate do comando. (`app/escala/services/cadastro_realidade.py:1001-1007`; `app/ponto/management/commands/e6_oraculo.py:98-99,182-195`)
-- O vigia lê os dias retidos da folha, resolve portas/lista e só então atribui a causa d/e; `:697-703` não contém comparação de lavra com oráculo nem resultado `sem_divergencia`. (`app/chamados/services/vigia_fio.py:584-599,658-679,696-714`)
-- A lista exige assinatura datada; alterar o vigia também não cria nem remove as assinaturas lidas pelo admin. (`app/escala/services/cadastro_realidade.py:1038-1045`)
-- A rota da lista usa `sem_motor=True` e CXR lavrado; sem cobertura, o ramo residual pode continuar sem resposta, `None`. (`app/escala/services/cadastro_realidade.py:1001-1007`; `app/ponto/management/commands/e6_oraculo.py:189-195`)
-
-A condição dos 22 possui “senão” expresso no aval fornecido; portanto, **não é ela que fundamenta PROCEDE no item 2**. A conferência atual, individual, dos 22 permanece **[nao verificado]**: os anexos fornecem contagens, não nova execução nem tabela individual verificável nesta cópia.
-
-_5628 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5630 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
