@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 02:07** · publicado em **15/11/2026 02:11** (UTC-3)
+> Ultima resposta processada: **15/11/2026 02:16** · publicado em **15/11/2026 02:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 02:16 · sessao 5ce9eaee8b60 · - · - · origem=Ronald (tmux)
+
+**Pauta 1 — `test_MORDE_o_universo_le_a_celula_e_o_FIO`**
+
+- A fixture cria D1 `discordante`, `trabalha=True`, DNA de 07h–19h, mas não fornece `ata`; o campo aceita `NULL` (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:39`, `app/escala/models.py:1778`). O leitor transforma ata ausente em `{}`, mantém tipo `trabalho` e obtém zero lâmpadas (`app/escala/services/leitor_celula.py:379`, `app/escala/services/leitor_celula.py:397`, `app/escala/services/leitor_celula.py:413`).
+- Sem instâncias de lâmpadas, a tarefa escreve `nao_sei=True`, razão `ata_sem_lampadas`; essa ignorância não nasceu no diff fornecido, mas o diff passa a publicá-la mesmo sem rota (`app/chamados/services/tarefa_do_dia.py:232`, `app/chamados/services/tarefa_do_dia.py:238`, `app/chamados/services/tarefa_do_dia.py:700`). A Folha lê esse envelope como fio `nao_sei`; a pauta exclui esse fio, resultando em `[]` na asserção que exige `[D1]` (`app/folha/fora_da_folha.py:87`, `app/ponto/services/pautas_dos_discordantes.py:90`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:68`). **O valor final interno da tarefa após a consulta real ao Resolver dia não aparece no traceback; atribuir toda a execução exclusivamente a esse caminho é [não verificado].**
+- O corte O320 manda enviar os dias discordantes **sem fio** à pauta de DP; o próprio teste explica que SEM FIO é `fio == 'nada'`, e não ausência de qualquer pergunta/chamado (`app/ponto/services/pautas_dos_discordantes.py:4`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:96`). A regra nova separa desconhecimento de ausência conhecida de porta e impede pauta de DP para `nao_sei`, interpretado como ESTRUTURA (`app/chamados/services/tarefa_do_dia.py:697`, `app/ponto/services/pautas_dos_discordantes.py:60`).
+- Portanto, o nome continua medindo duas autoridades, mas a fixture não estabelece a premissa **SEM FIO conhecido**: estabelece trabalho sem ata de lâmpadas (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:39`, `app/chamados/services/tarefa_do_dia.py:238`). Cura proposta: **teste/fixture**, lavrando um caso conhecido sem porta e controlando a oferta de Resolver; se a intenção for desconhecimento, exigir exclusão e testemunho em `sem_leitura` (`app/ponto/services/pautas_dos_discordantes.py:90`).
+- Volta identificável: publicação do envelope em **c5**, documentada na entrega; ramo explícito da pauta em **c6 K3** (`app/chamados/tests/e3_r3_c5_entrega.txt:54`, `app/chamados/tests/e3_r3_c6_entrega.txt:20`).
+
+**Pauta 2 — `test_MORDE_contagem_IMPAR_e_BATIDA_e_o_motor_NAO_roda`**
+
+- A fixture cria uma célula discordante e uma única batida; depois restaura **somente** `veredito='discordante'` por `update()` (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:182`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:202`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:206`). O save da batida chama o cartório e pode alterar ata/status antes desse update (`app/ponto/signals.py:132`, `app/ponto/signals.py:85`).
+- A fixture deliberadamente não cria vínculo real e simula cadastro apenas por mock de `cadastro_do_dia_carregado`; esse mock não fornece vínculo à carga da tarefa (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:212`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:216`, `app/ponto/turnos.py:3053`). Sem vínculo, o teto dos marcos retorna `[]`; uma lâmpada apagada fica sem teto e a tarefa marca desconhecimento (`app/ponto/turnos.py:3065`, `app/ponto/services/cartorio.py:890`, `app/chamados/services/tarefa_do_dia.py:123`, `app/chamados/services/tarefa_do_dia.py:300`).
+- Outra mudança do diff permite que a oferta real de Resolver dia publique `admin/porta_acao`; a fixture não controla essa oferta (`app/chamados/services/tarefa_do_dia.py:597`, `app/chamados/services/tarefa_do_dia.py:605`, `app/chamados/services/tarefa_do_dia.py:674`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:217`). **O traceback mostra somente `[]`; não mostra se D1 saiu por `nao_sei`, por `admin` ou por outro fio: origem interna exata [não verificado].**
+- A cadeia comprovável termina antes do juiz da paridade: `apurar()` primeiro chama `dias_sem_fio()`, que só inclui fio `nada`; com lista vazia, retorna `[]` imediatamente. A montagem de `InsumosDoDono`, o pré-teste do motor e `_ins.dono()` ficam depois desse retorno (`app/ponto/services/pautas_dos_discordantes.py:87`, `app/ponto/services/pautas_dos_discordantes.py:95`, `app/ponto/management/commands/pautas_discordantes.py:71`, `app/ponto/management/commands/pautas_discordantes.py:85`, `app/ponto/management/commands/pautas_discordantes.py:100`, `app/ponto/management/commands/pautas_discordantes.py:112`).
+- A regra BUG-144 continua escrita e implementada no juiz; a falha fornecida não demonstra violação dela, porque a asserção recebe um universo vazio antes dessa pergunta (`app/ponto/management/commands/e6_oraculo.py:62`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:229`, `app/ponto/management/commands/pautas_discordantes.py:72`). A regra nova LU-03 considera ação direta administrativa com tela como porta; K3 exclui desconhecimento do universo de pauta (`app/docs/CORTES.md:435`, `app/ponto/services/pautas_dos_discordantes.py:60`).
+- Cura proposta: **teste/fixture**, separar a montagem da paridade do pré-filtro de alcance — ou fornecer explicitamente um dia conhecido sem fio. A identificação do ramo concreto que excluiu D1 permanece **[não verificado]**, portanto não agrupar automaticamente esta falha com “ata vazia” (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:208`, `app/ponto/management/commands/pautas_discordantes.py:71`).
+
+**Agrupamento:** a primeira integra a causa “ausência de lâmpadas antes mascarada como ausência de porta”; a segunda integra “fixture do teste de paridade não fixa mais o universo sem fio”. Ambas indicam cura de fixture, preservando testes próprios para `nao_sei` e para porta administrativa; não há, nestes dois tracebacks, prova de regressão no juiz BUG-144 (`app/chamados/services/tarefa_do_dia.py:238`, `app/chamados/services/tarefa_do_dia.py:700`, `app/ponto/management/commands/pautas_discordantes.py:71`, `app/ponto/management/commands/e6_oraculo.py:62`).
+
+## 15/11 02:15 · sessao 8be6effeb4cc · - · - · origem=Ronald (tmux)
+
+Os três C11 têm a **mesma falha de preparação**: `_beco()` exige `(False, None, None)` na linha 385; nenhuma das três execuções chega às asserções sobre lavra ou motor (`app/ponto/tests/test_cxr_tela_le_o_motor.py:385`, `:409`, `:422`, `:429`).
+
+**Cadeia comum escritor → leitor → asserção**
+
+- A fixture cria chamado `resolvido`, pergunta com `resposta_colab='17:00'` e `respondida_em` anterior ao instante da consulta; depois registra a conservação dessa resposta na E1 (`app/ponto/tests/test_cxr_tela_le_o_motor.py:359`, `:366`, `:372`).
+- `linhas_da_projecao_sem_linha` produz ato `RESPOSTA` com o texto da projeção; `registrar` grava a sequência (`app/chamados/models.py:4074`, `:4086`, `:4096`).
+- A carga lê decisões até `agora` e as ordena por ato; `_pela_decisao` transforma a última resposta textual em `aguarda_validacao`, ação `validar/admin` (`app/chamados/services/tarefa_do_dia.py:419`, `:421`, `:157`, `:160`).
+- A âncora sai de `chamado_que_lista`: prevalece o `chamado_destino_id`; a ação recebe `porta=None` quando essa âncora está fora da fila (`app/chamados/services/fio.py:117`; `app/chamados/services/tarefa_do_dia.py:150`, `:151`).
+- **Trecho causal do diff:** `admin_alcancavel` agora aceita `VALIDAR` com âncora existente mesmo fora da fila; escolhe `fio='admin'`, publica `rota='porta_acao'`, `acao='validar'`, e `porta_da_tarefa` devolve o envelope (`app/chamados/services/tarefa_do_dia.py:646`, `:648`, `:659`, `:673`, `:684`, `:700`).
+- Isso explica o valor raspado `(False, 'porta_acao', {...fio:'admin', acao:'validar'...})` diante da expectativa de `_beco()` (`app/ponto/tests/test_cxr_tela_le_o_motor.py:385`; dado fornecido no traceback dessa linha).
+
+**Cada teste, separadamente** [nao verificado]
+
+| Teste | O que pretendia provar depois de `_beco()` | O que a falha prova | [nao verificado]
+|---|---|---|
+| `test_MORDE_C11_le_a_lista_lavrada_e_nao_chama_o_motor` | Dia coberto e presente na lavra → C11 com `CADASTRO`, zero chamadas ao motor e juiz consultado com lista positiva (`app/ponto/tests/test_cxr_tela_le_o_motor.py:408`, `:410`, `:413`, `:415`, `:417`). | Falha antes de produzir a lavra ou consultar a lista; comportamento posterior nesta execução **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:409`, `:385`). |
+| `test_MORDE_C11_lavra_que_cobre_sem_dia_e_lista_vazia_sem_motor` | Cobertura com conjunto vazio → `ESTRUTURA`, zero chamadas ao motor (`app/ponto/tests/test_cxr_tela_le_o_motor.py:419`, `:420`, `:423`, `:425`, `:426`). | Falha antes da lavra vazia; comportamento posterior nesta execução **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:422`, `:385`). |
+| `test_MORDE_C11_fora_da_lavra_fica_sem_resposta_e_nao_chama_o_motor` | Sem lavra → dono `None`, zero chamadas ao motor (`app/ponto/tests/test_cxr_tela_le_o_motor.py:428`, `:430`, `:431`, `:432`). | Falha antes da consulta à lista; comportamento posterior nesta execução **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:429`, `:385`). |
+
+O contrato de lavra continua escrito no código: `cxr_lavrado` distingue ausência de cobertura (`None`) de cobertura sem dias (`set()`); `InsumosDoDono` com `sem_motor=True` conserva a ausência de resposta e impede fallback para motor (`app/ponto/services/cxr_na_lista.py:165`, `:171`, `:182`; `app/ponto/management/commands/e6_oraculo.py:142`, `:166`, `:189`, `:193`). Nada no dado fornecido demonstra regressão nesse contrato; os tracebacks param antes dele (`app/ponto/tests/test_cxr_tela_le_o_motor.py:385`).
+
+**Regra velha, regra nova e conflito escrito**
+
+1. A fixture segue a leitura antiga de porta: pergunta respondida sob âncora terminal fica sem porta; ainda verifica o C17 antigo como `None` (`app/ponto/tests/test_cxr_tela_le_o_motor.py:364`, `:376`). O C17 continua documentado como “chamado da célula em `qs_na_fila` OU pergunta viva no app com âncora na fila” (`app/chamados/juizes.py:1667`).
+2. O comentário da fixture ainda diz que resposta com linha espera **SISTEMA**; o corpo atual diz que última `RESPOSTA` textual espera **ADMIN validar**. Essa discordância é direta, independentemente da discussão sobre alcance (`app/ponto/tests/test_cxr_tela_le_o_motor.py:382`; `app/chamados/services/tarefa_do_dia.py:157`, `:160`).
+3. A implementação nova segue LU-03: “ação direta do admin com tela = porta”; seu docstring interpreta âncora existente, inclusive fora da fila, como tela de validar (`app/docs/CORTES.md:435`; `app/chamados/services/tarefa_do_dia.py:622`). O teste M2 exige exatamente ação `validar` com `porta=None`, mapa de âncora e resultado `admin/porta_acao` (`app/chamados/tests/test_e3_degrau_dono_e_porta.py:540`).
+4. Há texto contemporâneo contrário: LU-04 diz que pergunta em marco dispensado, fora de marco **ou porta None** não dá dono (`app/docs/CORTES.md:436`). Também permanece a regra escrita “âncora terminal é fio morto — o admin não a vê” (`app/chamados/services/fio.py:785`, `:789`). Não achei nesses sítios declaração que revogue essas restrições para a interpretação nova de LU-03 **[nao verificado]**.
+5. O novo teste “caminho terminal de antes segue” não resolve essa composição: força tarefa `fio='nada'` e `porta_da_tarefa=lambda t:None`; testa o beco depois de supor ausência de porta (`app/chamados/tests/test_e3_r3_c6_sem_banco.py:283`, `:285`, `:323`).
+
+**A fixture ainda monta o caso do nome?**
+
+Pelo juiz publicado no hash, **não monta o beco SEM PORTA**: sua resposta textual conhecida e âncora existente passam a produzir `validar/admin/porta_acao`; o beco real rejeita qualquer envelope não `None` (`app/ponto/tests/test_cxr_tela_le_o_motor.py:366`, `:372`, `:385`; `app/chamados/services/tarefa_do_dia.py:648`, `:673`; `app/escala/services/cadastro_realidade.py:472`).
+
+Contudo, existência de âncora **não comprova a tela desta fixture**: ela cria `DisputaSupervisao` sem `chamado`; esse campo admite `NULL`; a montagem do modal busca disputas com `chamado__isnull=False` e carrega perguntas somente das disputas selecionadas (`app/ponto/tests/test_cxr_tela_le_o_motor.py:363`; `app/chamados/models.py:1796`; `app/chamados/services/fio.py:211`, `:214`, `:247`, `:255`). A rota do modal usa essa montagem (`app/chamados/views.py:889`). A tela efetivamente renderizada não foi executada **[nao verificado]**.
+
+**Agrupamento e cura**
+
+Os três pertencem à causa comum **“a fixture antes sem porta ganhou porta administrativa pela interpretação nova de LU-03”** (`app/chamados/services/tarefa_do_dia.py:646`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:385`). Classificação principal: **PERGUNTA**, pois LU-03/comentário da implementação e LU-04/regra de âncora terminal sustentam leituras diferentes (`app/docs/CORTES.md:435`, `:436`; `app/chamados/services/tarefa_do_dia.py:622`; `app/chamados/services/fio.py:789`).
+
+- Se âncora terminal existente garante tela de validar, a cura dos três selos é **na fixture do teste**, preservando a anti-vacuidade do C11 e suas três situações de lavra; trocar apenas a expectativa para aceitar porta faria o caso deixar de percorrer o beco (`app/escala/services/cadastro_realidade.py:472`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:412`).
+- Se prevalece “porta None/âncora terminal sem tela não dá dono”, a cura é **no código que publica alcance administrativo**, com prova da composição real, pois `admin_alcancavel` hoje aceita apenas a existência da âncora (`app/docs/CORTES.md:436`; `app/chamados/services/fio.py:789`; `app/chamados/services/tarefa_do_dia.py:648`).
+- A volta exata c3/c4/c5/c6 que introduziu esse hunk é **[nao verificado]**; o comentário o vincula a LU-03/LU-07 (`app/chamados/services/tarefa_do_dia.py:620`).
+
+## 15/11 02:14 · sessao 2418af21e5c7 · - · - · origem=Ronald (tmux)
+
+Os três failures da Folha têm uma causa comum: a fixture cria `veredito='furo'` e DNA de marcos, mas não fornece `ata` com lâmpadas; o juiz distingue agora ausência **conhecida** de porta de ausência de leitura. A regra E2 já classifica trabalho com marcos vencidos e nenhuma instância como `nao_sei=True, razao='ata_sem_lampadas'`; o diff passa a publicar esse testemunho e a Folha passa a preservá-lo (`app/folha/tests/test_haiku_fora_da_folha.py:53`, `app/folha/tests/test_haiku_fora_da_folha.py:425`, `app/chamados/services/tarefa_do_dia.py:232`, `app/chamados/services/tarefa_do_dia.py:692`, `app/folha/fora_da_folha.py:84`).
+
+**Cadeia comum, até o primeiro valor alterado.** `CelulaDia.ata` é nullable; o leitor usa `{}` quando falta ata, mantém o tipo trabalho de `trabalha=True`, e deriva as células exclusivamente da ata. Sem lâmpadas, nenhum marco com tipo/hora emerge para `instancias_do_turno`; `_tarefa_pura` responde desconhecimento. O patch de oferta `False` impede Resolver dia, mas não apaga esse desconhecimento (`app/escala/models.py:1778`, `app/escala/services/leitor_celula.py:379`, `app/escala/services/leitor_celula.py:397`, `app/escala/services/leitor_celula.py:413`, `app/escala/services/leitor_celula.py:114`, `app/chamados/services/tarefa_do_dia.py:106`, `app/chamados/services/tarefa_do_dia.py:232`, `app/chamados/services/tarefa_do_dia.py:609`).
+
+O trecho novo determinante é `porta_da_tarefa`: antes o resultado sem rota desaparecia como `None`; agora `nao_sei=True` também publica envelope. `_fio_da_porta` interpreta envelope sem rota como `nao_sei`, e `_grupo` dá E quando não há dia com ação (`app/chamados/services/tarefa_do_dia.py:692`, `app/folha/fora_da_folha.py:84`, `app/folha/fora_da_folha.py:92`).
+
+1. **`HaikuForaDaFolhaTest.test_o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA`.** O patch retorna oferta `False`; a célula tem DNA/veredito, sem ata. `o_que_segura` carrega tarefa, projeta porta, lê fio e grava o resultado em `_d['fio']`; a asserção exige `nada`, embora a cadeia entregue `nao_sei` (`app/folha/tests/test_haiku_fora_da_folha.py:53`, `app/folha/tests/test_haiku_fora_da_folha.py:75`, `app/folha/fora_da_folha.py:257`, `app/folha/fora_da_folha.py:260`, `app/folha/fora_da_folha.py:272`, `app/folha/tests/test_haiku_fora_da_folha.py:83`).
+
+   A regra do teste é explícita: “LU-03/M4: sem pergunta, chamado E oferta, o fio e nada”. A regra da implementação também: “None = ausência conhecida de porta”; desconhecimento publica testemunho, conforme DESENHOS-DA-NOITE 2A. As duas regras não precisam conflitar: o teste deixou de montar uma negativa conhecida, porque suprimir oferta não fornece as lâmpadas que faltam (`app/folha/tests/test_haiku_fora_da_folha.py:83`, `app/chamados/services/tarefa_do_dia.py:697`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:5`, `app/chamados/services/tarefa_do_dia.py:238`).
+
+2. **`GoldenDonoDoBloqueadoTest.test_GOLDEN_quantos_bloqueados_dependem_SO_do_admin_na_competencia`.** A fixture cobre toda a competência com células e deixa apenas um dia acusador, mas todas continuam sem ata/lâmpadas; seu patch de oferta também é `False`. `fora_da_folha` lê o fio `nao_sei` e conta grupo E; `_esperado_pela_ferramenta` preserva E como `nao_sei`; `_esperado_por_dono` aplica `DONO_DO_FIO`, que manda esse fio para `sem_leitura_sistema`. Por isso `sem_acao_disponivel` dá zero na asserção que pede um (`app/folha/tests/test_haiku_fora_da_folha.py:374`, `app/folha/tests/test_haiku_fora_da_folha.py:425`, `app/folha/fora_da_folha.py:203`, `app/folha/fora_da_folha.py:215`, `app/folha/tests/test_haiku_fora_da_folha.py:483`, `app/folha/tests/test_haiku_fora_da_folha.py:497`, `app/folha/retrato_folha.py:193`, `app/folha/tests/test_haiku_fora_da_folha.py:517`).
+
+   A comparação ferramenta/tela vem **antes** da asserção fixa que falha; o traceback fornecido não demonstra divergência entre esses dois caminhos. O teste já incorporou LU-05, que exige balde próprio para `ninguem`, e já incorporou E na tradução; o erro restante é presumir que sua fixture produz grupo D. A regra 2A exige separar desconhecimento, e a fixture produz justamente esse caso (`app/folha/tests/test_haiku_fora_da_folha.py:511`, `app/folha/tests/test_haiku_fora_da_folha.py:515`, `app/folha/tests/test_haiku_fora_da_folha.py:485`, `app/docs/CORTES.md:437`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
+
+3. **`GoldenDonoDoBloqueadoTest.test_MORDE_a_GOLDEN_o_dono_ANDA_quando_o_fio_do_dia_muda`.** A mesma fixture vira E. Na cadeia da tela, `montar_linhas` chama `fora_da_folha`, `_fio_cru` traduz a letra E por `FIO_DA_LETRA`, e grava `dono='nao_sei'`; `_fio_na_tela` conta o fio gravado. A asserção inicial exige um `ninguem`, antes de criar o chamado que exercitaria a mudança (`app/folha/retrato_folha.py:1192`, `app/folha/retrato_folha.py:1228`, `app/folha/retrato_folha.py:378`, `app/folha/retrato_folha.py:179`, `app/folha/tests/test_haiku_fora_da_folha.py:452`, `app/folha/tests/test_haiku_fora_da_folha.py:546`, `app/folha/tests/test_haiku_fora_da_folha.py:551`).
+
+   O nome e docstring descrevem uma transição `nada → chamado → admin`; a fixture atual inicia em `nao_sei`. O teste conserva escrita histórica “vivo na fila TEM porta”, enquanto LU-02 exclui residuais cobrar/histórico/arquivado/None; isso merece revisar o verbo efetivo do chamado depois de reparar o início, mas esse trecho posterior **não foi alcançado** no traceback fornecido (`app/folha/tests/test_haiku_fora_da_folha.py:528`, `app/folha/tests/test_haiku_fora_da_folha.py:536`, `app/chamados/services/tarefa_do_dia.py:655`, `app/folha/tests/test_haiku_fora_da_folha.py:546`). O comportamento posterior desse chamado smoke é [nao verificado].
+
+**Volta e cura.** A entrega c5 declara expressamente a publicação do envelope desconhecido e o grupo E/mapas da Folha. A entrega c6 declara ajuste do grupo misto; isso não explica estes casos de um único dia acusador. Identificar commits exatos sem `.git` é [nao verificado] (`app/chamados/tests/e3_r3_c5_entrega.txt:1`, `app/chamados/tests/e3_r3_c5_entrega.txt:54`, `app/chamados/tests/e3_r3_c5_entrega.txt:56`, `app/chamados/tests/e3_r3_c6_entrega.txt:16`).
+
+**Classificação: cura no teste/fixture**, preservando a prova de ausência conhecida de porta e seu caso irmão com oferta. A fixture precisa fornecer os insumos lavrados suficientes para `nao_sei=False`; trocar simplesmente `nada` por `nao_sei` eliminaria a prova nominal do dia sem ação conhecida. Acrescentar um caso distinto de ata sem lâmpadas preservaria a regra 2A e separaria as duas situações (`app/chamados/services/tarefa_do_dia.py:238`, `app/chamados/services/tarefa_do_dia.py:697`, `app/folha/tests/test_haiku_fora_da_folha.py:83`, `app/folha/tests/test_haiku_fora_da_folha.py:88`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
+
+## 15/11 02:14 · sessao 0d23cacef646 · BATIDA-DEDUP-RETRATADA · construtor · origem=Code
+
+C3 entregue em [dedup_retratada_c3_entrega.txt](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_entrega.txt:7), com cura, diff, RED/GREEN, censo e comandos.
+
+Validação local: **31 testes verdes e 40 mutantes mortos**, com controles verdes ([evidências](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_entrega.txt:68)). `py_compile` e Ruff passaram ([checks](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_checks.txt:18), [Ruff](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_checks.txt:43)). [nao verificado]
+
+Suite, smoke real e certificação Code/opus: [nao verificado]. [nao verificado]
 
 ## 15/11 02:07 · sessao ab1e79bc6658 · JUSTIFICATIVA-PAGA-O-PERIODO · verificador · origem=Code
 
@@ -878,928 +976,4 @@ Leitores encontrados, distinguindo código executável dos comentários antigos:
 
 Par concreto de leitores de **fontes diferentes**: relatório/lista que lê FM salvo versus extrato parcial que soma DiaPago, desde que comparados sobre intervalo comum; já espelho e PDF compartilham o mesmo seletor de fonte, portanto atribuir a eles uma oposição fixa “FM versus soma diária” seria incorreto. Fontes acima: `app/relatorios/views.py:68`, `app/relatorios/views.py:487`, `app/relatorios/cartao_pela_celula.py:321-346`.
 
-## 15/11 01:42 · sessao bfb6a09b5bab · BATIDA-DEDUP-RETRATADA · sonda · origem=Code
-
-```python
-# Django shell; tenant juliani ja ativo. Producao: [nao verificado].
-# Guardas e UTC-03 conforme q3a fornecida: [nao verificado].
-# Convencoes desta sonda: "-" = inaplicavel; "[nao verificado]" = desconhecido.
-# FALHA_T4 informa a primeira condicao que falharia na q3a fornecida.
-# Ausencia/divergencia diagnosticada nao incrementa ERRO; falha de leitura sim.
-# Correspondencia e resultados atuais em producao: [nao verificado].
-
-erros = 0
-nivel_logging_anterior = None
-pergunta_atual = None
-
-
-def erro(etapa, exc):
-    global erros
-    erros += 1
-    alvo = str(pergunta_atual) if pergunta_atual is not None else "SONDA"
-    print(
-        "P{}_ERRO_{} {}".format(alvo, etapa, type(exc).__name__),
-        flush=True,
-    )
-
-
-try:
-    import logging
-    import re
-    from contextlib import ExitStack
-    from datetime import timedelta, timezone as dt_timezone
-    from unittest.mock import patch
-
-    from django.db import connection, connections
-    from django.utils import timezone
-    from django.utils.dateparse import parse_datetime
-
-    nivel_logging_anterior = logging.root.manager.disable
-    logging.disable(logging.CRITICAL)
-
-    alias_leitura = connection.alias
-    local = dt_timezone(timedelta(hours=-3))
-
-    def somente_select(execute, sql, params, many, context):
-        if (
-            many
-            or context["connection"].alias != alias_leitura
-            or not re.match(r"\s*SELECT\b", sql, re.I)
-            or ";" in sql
-            or re.search(
-                r"\bFOR\s+(?:(?:NO\s+KEY|KEY)\s+)?(?:UPDATE|SHARE)\b",
-                sql,
-                re.I,
-            )
-        ):
-            raise RuntimeError("consulta_recusada")
-        return execute(sql, params, many, context)
-
-    # app/core/observ.py:73; app/chamados/juizes.py:1473 e :1486.
-    def best_effort_falhou(logger_nome, operacao, exc, **contexto):
-        erro("BEST_EFFORT", exc)
-
-    with ExitStack() as pilha:
-        for alias in connections:
-            pilha.enter_context(
-                connections[alias].execute_wrapper(somente_select)
-            )
-        pilha.enter_context(timezone.override(local))
-        pilha.enter_context(
-            patch("core.observ.registrar_engolido", new=best_effort_falhou)
-        )
-
-        from chamados.models import PerguntaDisputa
-        from chamados.juizes import tranca_da_consulta
-        from ponto.models import Batida
-        from ponto.janelas import janela_atual
-        from folha.export import competencia_entregue
-
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT current_schema()")
-            if cursor.fetchone()[0] != "juliani":
-                raise RuntimeError("tenant_incorreto")
-
-        cache_exportada = {}
-
-        def competencia_no_dia(empresa, dia):
-            # app/ponto/janelas.py:60; app/folha/export.py:556 e :588.
-            _, fim = janela_atual(dia, empresa)
-            chave = (empresa.pk, fim.month, fim.year)
-            if chave not in cache_exportada:
-                cache_exportada[chave] = competencia_entregue(*chave)
-            return (
-                "{:04d}-{:02d}".format(fim.year, fim.month),
-                int(cache_exportada[chave]),
-            )
-
-        def sondar(pk, dados):
-            # Consulta direta aos tres PKs, sem excluir perguntas agora mortas.
-            # Vida exata: app/chamados/models.py:3474.
-            try:
-                p = (
-                    PerguntaDisputa.objects.using(alias_leitura)
-                    .select_related(
-                        "disputa__colaborador__empresa",
-                        "celula",
-                        "chamado_destino",
-                        "batida_origem",
-                    )
-                    .defer(
-                        "disputa__colaborador__nome",
-                        "disputa__colaborador__cpf",
-                    )
-                    .get(pk=pk)
-                )
-            except PerguntaDisputa.DoesNotExist as exc:
-                dados["PERGUNTA_EXISTE"] = 0
-                erro("PERGUNTA", exc)
-                return
-
-            dados["PERGUNTA_EXISTE"] = 1
-
-            # app/chamados/models.py:2494, :2511 e :1783.
-            dados["COLABORADOR_DISPUTA_PK"] = p.disputa.colaborador_id
-            dados["COLABORADOR_PERGUNTA_PK"] = p.colaborador_id
-
-            # app/colaboradores/models.py:321.
-            empresa = p.disputa.colaborador.empresa
-            dados["EMPRESA_Q3A_PK"] = empresa.pk
-
-            ub = None
-            bid = None
-            dia_contexto = None
-            dia_batida = None
-
-            try:
-                # Contexto: app/chamados/models.py:1792.
-                # Formato efetivo destes registros: [nao verificado].
-                ctx = p.disputa.contexto
-                if ctx is None:
-                    ctx = {}
-                if not isinstance(ctx, dict):
-                    raise ValueError("contexto_invalido")
-
-                ub = ctx.get("ultima_batida")
-                if not isinstance(ub, dict):
-                    raise ValueError("ultima_batida_ausente_ou_invalida")
-
-                bruto_id = ub.get("id")
-                if (
-                    isinstance(bruto_id, bool)
-                    or not isinstance(bruto_id, (int, str))
-                    or not re.fullmatch(r"[0-9]+", str(bruto_id))
-                    or int(bruto_id) <= 0
-                ):
-                    raise ValueError("batida_id_invalido")
-
-                bid = int(bruto_id)
-                dados["ULTIMA_BATIDA_ID"] = bid
-            except BaseException as exc:
-                erro("CONTEXTO_ID", exc)
-
-            if isinstance(ub, dict):
-                try:
-                    bruto_ts = ub.get("timestamp")
-                    if not isinstance(bruto_ts, str):
-                        raise ValueError("timestamp_ausente_ou_invalido")
-
-                    ts = parse_datetime(bruto_ts)
-                    if ts is None or timezone.is_naive(ts):
-                        raise ValueError("timestamp_invalido_ou_sem_fuso")
-
-                    dia_contexto = ts.astimezone(local).date()
-                    dados["DIA_CONTEXTO_LOCAL"] = dia_contexto.isoformat()
-                except BaseException as exc:
-                    erro("CONTEXTO_DIA", exc)
-
-            if bid is not None:
-                try:
-                    # app/ponto/models.py:22, :23 e :67.
-                    b = (
-                        Batida.objects.using(alias_leitura)
-                        .filter(pk=bid)
-                        .values(
-                            "pk", "colaborador_id", "timestamp", "retratada_em"
-                        )
-                        .first()
-                    )
-                    dados["BATIDA_EXISTE"] = int(b is not None)
-
-                    if b is None:
-                        dados["FALHA_T4"] = "batida_referenciada_ausente"
-                        for chave in (
-                            "BATIDA_RETRATADA",
-                            "COLABORADOR_BATIDA_PK",
-                            "DIA_BATIDA_LOCAL",
-                            "COMPETENCIA_BATIDA",
-                            "EXPORTADA_BATIDA",
-                        ):
-                            dados[chave] = "-"
-                    else:
-                        dados["BATIDA_RETRATADA"] = int(
-                            b["retratada_em"] is not None
-                        )
-                        dados["COLABORADOR_BATIDA_PK"] = b["colaborador_id"]
-
-                        cid = p.disputa.colaborador_id
-                        dados["FALHA_T4"] = (
-                            "colaborador_divergente"
-                            if (
-                                b["colaborador_id"] != cid
-                                or p.colaborador_id != cid
-                            )
-                            else "nenhuma_das_duas"
-                        )
-
-                        if timezone.is_naive(b["timestamp"]):
-                            raise ValueError("batida_timestamp_sem_fuso")
-
-                        dia_batida = b["timestamp"].astimezone(local).date()
-                        dados["DIA_BATIDA_LOCAL"] = dia_batida.isoformat()
-                except BaseException as exc:
-                    erro("BATIDA", exc)
-
-            try:
-                # app/chamados/juizes.py:1128;
-                # app/chamados/models.py:3484.
-                antes = erros
-                with tranca_da_consulta([p]):
-                    viva = int(p.viva)
-
-                if erros == antes:
-                    dados["VIVA"] = viva
-            except BaseException as exc:
-                erro("VIDA", exc)
-
-            # Usar a empresa da disputa para ambos os dias, conforme q3a
-            # fornecida. FK: app/colaboradores/models.py:321.
-            # Consultar exportacao mesmo se houver divergencia ou pergunta morta.
-            for rotulo, dia in (
-                ("CONTEXTO", dia_contexto),
-                ("BATIDA", dia_batida),
-            ):
-                if dia is None:
-                    continue
-                try:
-                    comp, exportada = competencia_no_dia(empresa, dia)
-                    dados["COMPETENCIA_" + rotulo] = comp
-                    dados["EXPORTADA_" + rotulo] = exportada
-                except BaseException as exc:
-                    erro("EXPORTACAO_" + rotulo, exc)
-
-        campos = (
-            "PERGUNTA_EXISTE",
-            "ULTIMA_BATIDA_ID",
-            "FALHA_T4",
-            "BATIDA_EXISTE",
-            "BATIDA_RETRATADA",
-            "COLABORADOR_DISPUTA_PK",
-            "COLABORADOR_PERGUNTA_PK",
-            "COLABORADOR_BATIDA_PK",
-            "DIA_CONTEXTO_LOCAL",
-            "DIA_BATIDA_LOCAL",
-            "VIVA",
-            "EMPRESA_Q3A_PK",
-            "COMPETENCIA_CONTEXTO",
-            "EXPORTADA_CONTEXTO",
-            "COMPETENCIA_BATIDA",
-            "EXPORTADA_BATIDA",
-        )
-
-        for pk in (115, 116, 1339):
-            pergunta_atual = pk
-            dados = dict.fromkeys(campos, "[nao verificado]")
-            try:
-                sondar(pk, dados)
-            except BaseException as exc:
-                erro("ITEM", exc)
-            finally:
-                for chave in campos:
-                    print(
-                        "P{}_{} {}".format(pk, chave, dados[chave]),
-                        flush=True,
-                    )
-
-        pergunta_atual = None
-
-except BaseException as exc:
-    erro("SONDA", exc)
-finally:
-    try:
-        if nivel_logging_anterior is not None:
-            logging.disable(nivel_logging_anterior)
-    except BaseException as exc:
-        erro("RESTAURA_LOGGING", exc)
-
-    print("ERRO {}".format(erros), flush=True)
-    print("FIM ok={}".format(int(erros == 0)), flush=True)
-```
-
-## 15/11 01:35 · sessao 0f4c61a1ae54 · SILENCIO-VENCIDO · sonda · origem=Code
-
-```python
-"""
-SONDA SILENCIO-VENCIDO. Execucao na SOMBRA: [nao verificado].
-
-FechamentoMensal esta em app/ponto/models.py:398; o arquivo pedido,
-app/folha/models.py:310, referencia esse modelo. Os campos solicitados
-sao totais mensais, sem decomposicao diaria:
-app/ponto/models.py:405, :408, :412, :432, :440, :445.
-Por isso, DIA.gravado=null; gravado_competencia informa o total mensal.
-
-Lavra diaria: mesma chamada da m2 colada [nao verificado por arquivo local],
-linhas_do_periodo(colab, ini, fim), ds.get(dia), getattr(dp, campo).
-Contrato: app/ponto/services/dia_pago.py:833 e :855.
-Soma mensal: app/ponto/services/dia_pago.py:550.
-
-InsumosDoDono.dono(data) carrega os insumos e chama dono_da_divergencia:
-app/ponto/management/commands/e6_oraculo.py:182, :190, :195.
-Preparo usado pelo command: mesmo arquivo:316, :328, :378.
-
-Sem gravado diario, percorremos TODOS os dias de janela_fechamento:
-app/ponto/janelas.py:54. O dono e diario; sua responsabilidade pela
-diferenca mensal continua [nao verificado]. Nao elegemos dono mensal.
-
-TOT unidade=dia_campo: empresa x campo individual x dono; conta DIA.
-As incidencias de pares podem se sobrepor entre campos e donos.
-TOT unidade=par: empresa x conjunto exato de campos x conjunto de donos
-encontrados; cada par completo entra uma vez, fechando 59.
-O conjunto de donos e um perfil, nao um novo veredito mensal.
-59 pares e 65 ocorrencias de campos: [nao verificado — anexo colado].
-
-FIM ok=1 indica coleta completa sem excecao, nao divergencia resolvida.
-Bloqueios baseados no anexo m2_sonda.py [nao verificado por arquivo local]
-e em app/chamados/management/commands/diff_e3_sombra.py:30.
-"""
-import sys
-
-_BYTECODE_ANTERIOR = sys.dont_write_bytecode
-sys.dont_write_bytecode = True
-
-import datetime as dt
-import json
-import logging
-import re
-from collections import Counter, defaultdict
-from contextlib import ExitStack, redirect_stdout, redirect_stderr
-from decimal import Decimal, localcontext
-from unittest.mock import patch
-
-# Relogio da m2 colada: [nao verificado por arquivo local].
-AGORA = dt.datetime.fromisoformat("2026-11-15T02:20:00+00:00")
-
-R = "minutos_realizados"
-A = "minutos_abonados"
-P = "minutos_previstos"
-T = "horas_trabalhadas"
-
-# (empresa, colab, mes, ano, #fechamento, campos divergentes).
-# Lista literal do m2_extrato.txt colado: [nao verificado por arquivo local].
-PARES = (
-    (2, 174, 9, 2026, 4825, (R,)),
-    (2, 191, 9, 2026, 4518, (R,)),
-    (2, 193, 9, 2026, 4801, (R,)),
-    (2, 206, 9, 2026, 4418, (R,)),
-    (2, 211, 9, 2026, 4648, (R,)),
-    (2, 214, 9, 2026, 4668, (A,)),
-    (2, 231, 9, 2026, 4699, (R,)),
-    (2, 242, 9, 2026, 4503, (T, R)),
-    (2, 252, 9, 2026, 4796, (R,)),
-    (2, 269, 9, 2026, 4569, (R,)),
-    (2, 272, 9, 2026, 4828, (A,)),
-    (2, 278, 9, 2026, 4750, (T, R)),
-    (2, 292, 9, 2026, 4671, (A, R)),
-    (2, 331, 9, 2026, 4737, (R,)),
-    (2, 349, 9, 2026, 4666, (R,)),
-    (2, 355, 9, 2026, 4782, (A,)),
-    (2, 371, 9, 2026, 4564, (R,)),
-    (2, 444, 9, 2026, 4571, (R,)),
-    (2, 489, 9, 2026, 4552, (R,)),
-    (2, 529, 9, 2026, 4698, (R,)),
-    (2, 532, 9, 2026, 4508, (R,)),
-    (2, 592, 9, 2026, 4512, (R,)),
-    (2, 616, 9, 2026, 4703, (R,)),
-    (2, 634, 9, 2026, 4442, (R,)),
-    (2, 735, 9, 2026, 4496, (R,)),
-    (2, 788, 9, 2026, 4475, (R,)),
-    (2, 789, 9, 2026, 4551, (R,)),
-    (2, 833, 9, 2026, 4434, (R,)),
-    (2, 849, 9, 2026, 4640, (P,)),
-    (2, 859, 9, 2026, 4820, (A,)),
-    (2, 865, 9, 2026, 4694, (R,)),
-    (2, 872, 9, 2026, 4744, (R,)),
-    (2, 885, 9, 2026, 4702, (R,)),
-    (2, 915, 9, 2026, 4759, (R,)),
-    (2, 923, 9, 2026, 4642, (R,)),
-    (2, 941, 9, 2026, 4436, (R,)),
-    (2, 945, 9, 2026, 4608, (R,)),
-    (2, 301, 10, 2026, 5308, (T,)),
-    (2, 899, 10, 2026, 5220, (T,)),
-    (2, 191, 11, 2026, 6074, (T,)),
-    (2, 369, 11, 2026, 5970, (T,)),
-    (2, 415, 11, 2026, 6054, (T,)),
-    (2, 476, 11, 2026, 5855, (T,)),
-    (2, 788, 11, 2026, 6139, (T,)),
-    (2, 899, 11, 2026, 6004, (T,)),
-    (2, 961, 11, 2026, 6018, (T,)),
-    (3, 82, 9, 2026, 4856, (R,)),
-    (3, 87, 9, 2026, 4861, (R,)),
-    (3, 114, 9, 2026, 4892, (R,)),
-    (3, 133, 9, 2026, 4915, (A,)),
-    (3, 145, 9, 2026, 4926, (R,)),
-    (3, 165, 9, 2026, 4946, (R,)),
-    (3, 502, 9, 2026, 4887, (R,)),
-    (3, 638, 9, 2026, 4839, (P, R)),
-    (3, 749, 9, 2026, 4910, (P, R)),
-    (3, 868, 9, 2026, 4905, (R,)),
-    (3, 749, 11, 2026, 5630, (T,)),
-    (3, 911, 11, 2026, 6041, (T,)),
-    (4, 50, 9, 2026, 4964, (A, R)),
-)
-
-
-class EscritaProibida(BaseException):
-    pass
-
-
-class Descartar:
-    def write(self, texto):
-        return len(texto)
-
-    def flush(self):
-        pass
-
-
-def bloquear(*args, **kwargs):
-    raise EscritaProibida()
-
-
-def so_select(execute, sql, params, many, context):
-    s = str(sql).strip()
-    if (
-        many
-        or context["connection"].alias != "default"
-        or not re.match(r"^SELECT\b", s, re.I)
-        or ";" in s
-        or "--" in s
-        or "/*" in s
-        or re.search(
-            r"\b(INSERT|UPDATE|DELETE|MERGE|INTO|CREATE|ALTER|DROP|"
-            r"TRUNCATE|COPY|CALL|DO|SET|RESET|GRANT|REVOKE|"
-            r"NEXTVAL|SETVAL|PG_ADVISORY_LOCK|PG_TRY_ADVISORY_LOCK|"
-            r"PG_ADVISORY_XACT_LOCK|PG_TRY_ADVISORY_XACT_LOCK|"
-            r"LO_IMPORT|LO_EXPORT|PG_TERMINATE_BACKEND|PG_CANCEL_BACKEND|"
-            r"PG_RELOAD_CONF|SET_CONFIG)\b|\bFOR\s+(SHARE|KEY)\b",
-            s, re.I,
-        )
-    ):
-        raise EscritaProibida()
-    return execute(sql, params, many, context)
-
-
-def sonda():
-    saida = sys.stdout
-    erros = 0
-    pars = []
-    totais_dia = Counter()
-    membros = defaultdict(set)
-    totais_par = Counter()
-    dias_par = Counter()
-    linhas_dia = 0
-    etapa = "preparo"
-    contexto = {}
-    nivel = logging.root.manager.disable
-    bytecode = _BYTECODE_ANTERIOR
-
-    def emitir(tipo, **dados):
-        def numero(x):
-            if isinstance(x, Decimal):
-                return format(x, "f")
-            raise TypeError()
-
-        saida.write(tipo + "|" + json.dumps(
-            dados, ensure_ascii=False, sort_keys=True,
-            default=numero, allow_nan=False,
-        ) + "\n")
-
-    def erro(onde, exc, **chaves):
-        nonlocal erros
-        erros += 1
-        # Sem mensagem da excecao, modelo, SQL ou traceback.
-        emitir(
-            "ERRO " + str(erros),
-            etapa=onde,
-            escrita_bloqueada=isinstance(exc, EscritaProibida),
-            **chaves,
-        )
-
-    def exigir(condicao):
-        if not condicao:
-            raise ValueError()
-
-    def minutos(valor, campo):
-        if valor is None:
-            return None
-        n = Decimal(str(valor))
-        exigir(n.is_finite())
-        return n if campo.startswith("minutos_") else n * 60
-
-    try:
-        sys.dont_write_bytecode = True
-        logging.disable(logging.CRITICAL)
-
-        with ExitStack() as stack, localcontext() as ctx:
-            ctx.prec = 50
-            stack.enter_context(redirect_stdout(Descartar()))
-            stack.enter_context(redirect_stderr(Descartar()))
-
-            from django.db import connection, connections
-            from django.db.models import Model
-            from django.db.models.query import QuerySet
-
-            exigir(connection.settings_dict["NAME"] == "sombra")
-            exigir(connection.schema_name == "juliani")
-
-            for alias in connections:
-                stack.enter_context(
-                    connections[alias].execute_wrapper(so_select)
-                )
-
-            for classe, metodos in (
-                (Model, ("save", "delete")),
-                (QuerySet, (
-                    "create", "update", "delete", "_raw_delete",
-                    "bulk_create", "bulk_update", "get_or_create",
-                    "update_or_create",
-                )),
-            ):
-                for metodo in metodos:
-                    stack.enter_context(
-                        patch.object(classe, metodo, bloquear)
-                    )
-
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SELECT current_database(), current_schema()"
-                )
-                exigir(cursor.fetchone() == ("sombra", "juliani"))
-
-            from freezegun import freeze_time
-            from django.contrib.auth import get_user_model
-            from django.utils import timezone
-            from chamados.juizes import tranca_em_lote
-            from colaboradores.models import Colaborador
-            from ponto.models import FechamentoMensal
-            from ponto.janelas import janela_fechamento
-            from ponto.services.dia_pago import (
-                CAMPOS_DIA, linhas_do_periodo, soma_da_competencia,
-            )
-            from ponto.services.espelho import espelho_do_colab
-            from ponto.management.commands.e6_oraculo import InsumosDoDono
-
-            stack.enter_context(freeze_time(AGORA, tick=False))
-            stack.enter_context(
-                timezone.override("America/Sao_Paulo")
-            )
-            hoje = timezone.localtime(AGORA).date()
-
-            sistema_pk = (
-                get_user_model().objects.filter(username="sistema")
-                .values_list("pk", flat=True).first()
-            )
-            exigir(sistema_pk is not None)
-            stack.enter_context(
-                tranca_em_lote(sistema_pk=sistema_pk)
-            )
-
-            exigir(len(PARES) == len({p[:4] for p in PARES}) == 59)
-            exigir(
-                Counter(p[0] for p in PARES) == {2: 46, 3: 12, 4: 1}
-            )
-            exigir(sum(len(p[5]) for p in PARES) == 65)
-            exigir(all(
-                set(p[5]) <= set(CAMPOS_DIA) for p in PARES
-            ))
-
-            emitir(
-                "META",
-                unidade="minutos",
-                gravado_diario=False,
-                selecao="todos os dias de janela_fechamento",
-                fonte_lavra="app/ponto/services/dia_pago.py:833",
-                fonte_gravado="app/ponto/models.py:398",
-                fonte_dono=(
-                    "app/ponto/management/commands/e6_oraculo.py:182"
-                ),
-                execucao_nesta_resposta="[nao verificado]",
-            )
-
-            for eid, cid, mes, ano, fid, campos in PARES:
-                contexto = dict(
-                    empresa=f"emp{eid}",
-                    colab=f"col{cid}",
-                    comp=f"{mes:02d}/{ano}",
-                )
-                donos = Counter()
-                dias = 0
-                inicio_erros = erros
-                etapa = "preparo_par"
-
-                try:
-                    c = (
-                        Colaborador.objects
-                        .select_related("empresa").get(pk=cid)
-                    )
-                    exigir(c.empresa_id == eid)
-
-                    fm = FechamentoMensal.objects.filter(
-                        colaborador_id=cid, mes=mes, ano=ano,
-                    ).first()
-                    exigir(fm is not None and fm.pk == fid)
-
-                    ini, fim = janela_fechamento(
-                        mes, ano, c.empresa
-                    )
-                    exigir(fim >= ini)
-                    dias = (fim - ini).days + 1
-
-                    # Mesmas chamadas da m2 colada [nao verificado].
-                    # app/ponto/services/dia_pago.py:833 e :550.
-                    ds = linhas_do_periodo(c, ini, fim)
-                    soma_lavra = soma_da_competencia(c, mes, ano)
-
-                    gravado_comp = {
-                        k: minutos(getattr(fm, k), k)
-                        for k in campos
-                    }
-
-                    emitir(
-                        "COMP",
-                        **contexto,
-                        fechamento=f"#{fm.pk}",
-                        ini=ini.isoformat(),
-                        fim=fim.isoformat(),
-                        campos_anexo=list(campos),
-                        gravado_diario=False,
-                        gravado_competencia=gravado_comp,
-                        soma_lavra_competencia=(
-                            None if soma_lavra is None else {
-                                k: minutos(soma_lavra[k], k)
-                                for k in campos
-                            }
-                        ),
-                        campos_divergentes_agora=(
-                            None if soma_lavra is None else [
-                                k for k in CAMPOS_DIA
-                                if getattr(fm, k) is not None
-                                and round(float(getattr(fm, k)), 2)
-                                    != soma_lavra[k]
-                            ]
-                        ),
-                    )
-
-                    # Mesmo preparo do command:
-                    # app/ponto/management/commands/e6_oraculo.py:316/:328.
-                    esp = espelho_do_colab(
-                        c, hoje, ini, fim, agora=AGORA
-                    )
-                    ins = InsumosDoDono(
-                        c, ini, fim, hoje,
-                        espelho=esp, agora=AGORA,
-                    )
-
-                    for offset in range(dias):
-                        dia = ini + dt.timedelta(days=offset)
-                        etapa = "dia"
-
-                        try:
-                            dp = ds.get(dia)
-                            if dp is not None:
-                                exigir(
-                                    (dp.mes, dp.ano) == (mes, ano)
-                                )
-
-                            valores = {
-                                k: (
-                                    None if dp is None
-                                    else minutos(getattr(dp, k), k)
-                                )
-                                for k in campos
-                            }
-
-                            # Carregador E juiz real, sem reproduzir regras:
-                            # e6_oraculo.py:182/:190/:195.
-                            dono = ins.dono(dia)
-                            exigir(dono in (
-                                "ESTRUTURA", "CADASTRO", "BATIDA",
-                            ))
-
-                            registros = [
-                                dict(
-                                    **contexto,
-                                    dia=dia.isoformat(),
-                                    campo=k,
-                                    lavra=valores[k],
-                                    gravado=None,
-                                    dono=dono,
-                                    unidade="minutos",
-                                    gravado_estado=(
-                                        "sem valor diario no fechamento"
-                                    ),
-                                    gravado_competencia=gravado_comp[k],
-                                    dia_pago=(
-                                        None if dp is None
-                                        else f"#{dp.pk}"
-                                    ),
-                                    lavra_estado=(
-                                        "sem lavratura do dia"
-                                        if dp is None else
-                                        "sem valor no campo"
-                                        if valores[k] is None else
-                                        "lavrado"
-                                    ),
-                                    divergencia_diaria_comprovada=False,
-                                )
-                                for k in campos
-                            ]
-
-                            for registro in registros:
-                                emitir("DIA", **registro)
-                                chave = (
-                                    eid, registro["campo"], dono,
-                                )
-                                totais_dia[chave] += 1
-                                membros[chave].add((cid, mes, ano))
-                                linhas_dia += 1
-
-                            # Uma contagem por DIA, mesmo com dois campos.
-                            donos[dono] += 1
-
-                        except Exception as exc:
-                            erro(
-                                "dia", exc, **contexto,
-                                dia=dia.isoformat(),
-                            )
-
-                except Exception as exc:
-                    erro(etapa, exc, **contexto)
-
-                completo = (
-                    erros == inicio_erros
-                    and sum(donos.values()) == dias > 0
-                )
-                par = dict(
-                    **contexto,
-                    campos=list(campos),
-                    donos=dict(sorted(donos.items())),
-                    dias=dias,
-                    dias_julgados=sum(donos.values()),
-                    completo=completo,
-                )
-                pars.append(par)
-                emitir("PAR", **par)
-
-                if completo:
-                    perfil = (
-                        eid,
-                        tuple(sorted(campos)),
-                        tuple(sorted(donos)),
-                    )
-                    totais_par[perfil] += 1
-                    dias_par[perfil] += dias
-
-            etapa, contexto = "conferencia", {}
-            exigir(len(pars) == 59)
-
-            if erros == 0:
-                exigir(all(p["completo"] for p in pars))
-                exigir(sum(totais_par.values()) == 59)
-                exigir(
-                    sum(dias_par.values())
-                    == sum(p["dias"] for p in pars)
-                )
-                exigir(
-                    sum(totais_dia.values()) == linhas_dia
-                )
-                exigir(
-                    linhas_dia == sum(
-                        p["dias"] * len(p["campos"])
-                        for p in pars
-                    )
-                )
-
-    except BaseException as exc:
-        erro(etapa, exc, **contexto)
-
-    finally:
-        logging.disable(nivel)
-        sys.dont_write_bytecode = bytecode
-
-    for (eid, campo, dono), n in sorted(totais_dia.items()):
-        emitir(
-            "TOT",
-            unidade="dia_campo",
-            empresa=f"emp{eid}",
-            campo=campo,
-            dono=dono,
-            dias=n,
-            pares_incidentes=len(membros[(eid, campo, dono)]),
-        )
-
-    for (eid, campos, perfil), n in sorted(totais_par.items()):
-        emitir(
-            "TOT",
-            unidade="par",
-            empresa=f"emp{eid}",
-            campo=list(campos),
-            dono=list(perfil),
-            pares=n,
-            dias=dias_par[(eid, campos, perfil)],
-        )
-
-    saida.write(
-        f"FIM ok={int(erros == 0)} erros={erros}"
-        f" pares={len(pars)}"
-        f" pares_completos={sum(totais_par.values())}"
-        f" esperado=59 linhas_dia_campo={linhas_dia}\n"
-    )
-
-    if erros:
-        raise SystemExit(1)
-
-
-sonda()
-```
-
-## 15/11 01:35 · sessao d3bab7ce6ebf · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
-
-**REPROVADO nesta volta.** Há incoerências nos retornos que a cura passa a alcançar e uma guarda existente que não preserva a remoção do filtro cru (`app/ponto/registro_batida.py:120`; `app/ponto/services/triagem_batida.py:716`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`).
-
-As referências abaixo usam a numeração do HEAD. O teste novo, seus RED/GREEN e mutantes permanecem **[nao verificado]**. [nao verificado]
-
-1. **Campos, significados, ordem e ID**
-
-   | Campo/valor | Quem escreve/define; quem lê; conclusão |
-   |---|---|
-   | `retratada_em` | `retratar_batida` fornece o instante **da retratação**, e `anotar` persiste; desfazer restaura `None` pela mesma porta. A autoridade e o dedup temporal da porta leem apenas NULL/não NULL. Não comparam esse carimbo com a janela do toque (`app/ponto/registro_batida.py:274`; `app/ponto/registro_batida.py:252`; `app/ponto/services/retratar_humano.py:207`; `app/ponto/turnos.py:2876`; `app/ponto/registro_batida.py:109`). |
-   | `timestamp` | As APIs obtêm `ts_efetivo` da autoridade de hora; a triagem captura `agora`; `registrar_batida` grava o argumento recebido. Dedup, chave exata e respostas leem esse instante (`app/api/views.py:507`; `app/api/views_core.py:493`; `app/ponto/services/triagem_batida.py:626`; `app/ponto/registro_batida.py:158`; `app/api/views.py:540`). |
-   | `tipo` | Entra pelo request, mas as APIs podem substituí-lo **depois do dedup**, antes da porta. O campo persistido também pode ser invertido por `flip_tipo`, via `anotar`. Portanto, dedup da casca e porta podem perguntar por tipos diferentes, mesmo após c1 (`app/api/views.py:420`; `app/api/views.py:529`; `app/api/views.py:578`; `app/api/views.py:601`; `app/api/views.py:655`; `app/ponto/services/flip_batida.py:30`). |
-   | Janela | APIs: ±5 minutos do fato; triagem: `[agora−5min, agora]`; porta, mesmo tipo: ±60 segundos. Todos usam limites **inclusivos**, `gte/lte`; continuam sendo perguntas temporalmente diferentes (`app/api/views.py:527`; `app/api/views_core.py:513`; `app/ponto/services/triagem_batida.py:663`; `app/ponto/registro_batida.py:110`; `app/ponto/turnos.py:2878`). |
-   | Fuso/dia | A autoridade não converte os limites em dia nem consulta relógio. A entrada de hora torna timestamps aware; a configuração declara São Paulo e `USE_TZ=True`; apresentação usa `localtime`. Nesse caminho, não encontrei troca de instante por dia causada pela substituição (`app/ponto/turnos.py:2875`; `app/api/hora_do_aparelho.py:116`; `app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/api/views.py:535`). |
-
-   **A ordem efetiva da triagem não muda entre candidatas vivas.** Antes, `Meta.ordering=["colaborador","timestamp"]`; depois, a autoridade ordena por `timestamp`. Com colaborador fixo, ambos escolhem o menor instante; a unicidade colaborador/timestamp elimina empate. Antes sai o ID da primeira candidata, inclusive retratada; depois sai o ID da primeira **viva**, ou a execução continua se nenhuma existir (`app/ponto/models.py:105`; `app/ponto/models.py:106`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/services/triagem_batida.py:671`; `app/ponto/turnos.py:2883`).
-
-   Nas APIs continua saindo a candidata de **maior timestamp**, agora dentro do universo vivo proposto; `id`, horário e sequência vêm dessa linha (`app/api/views.py:532`; `app/api/views.py:538`; `app/api/views.py:541`; `app/api/views_core.py:518`; `app/api/views_core.py:524`).
-
-   Quanto ao consumidor: o PWA online presente ignora o corpo e considera `r.ok` sucesso; o sincronizador apaga a pendência em todo `resp.ok`, sem usar o ID retornado. O upload servidor recebe `batida_id`, mas o cliente APK que ligaria esse campo ao retorno está **[nao verificado]** (`app/templates/ponto/bater_ponto_v2.html:327`; `app/static/pwa.js:158`; `app/static/pwa.js:162`; `app/api/views.py:836`; `app/api/views.py:842`).
-
-2. **O que acontece depois que a batida chega à porta**
-
-   | Caso | Resultado da porta |
-   |---|---|
-   | Retratada dentro de 60 s, **instante diferente** | A retratada não satisfaz o dedup. Sem outra viva, chave exata ou colisão impeditiva, cria uma nova viva. Não duplica a chave de banco (`app/ponto/registro_batida.py:109`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:157`; `app/ponto/models.py:106`). |
-   | Chave exata colaborador/timestamp | Devolve a anterior, **inclusive retratada ou de outro tipo**. Não cria nem desfaz a retratação; portanto, pode continuar sem nova batida apurável (`app/ponto/registro_batida.py:116`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:122`; `app/ponto/turnos.py:2876`). |
-   | Oposta viva na janela | Usa ±300 s com escala/marcos ou ±60 s sem eles. Salvo correspondência ao marco próprio, retorna `None, conflito` para o automático: **barra a materialização**. As três cascas passam `autoridade_humana=False` (`app/ponto/registro_batida.py:21`; `app/ponto/registro_batida.py:145`; `app/ponto/registro_batida.py:151`; `app/api/views.py:656`; `app/api/views_core.py:647`; `app/ponto/services/triagem_batida.py:704`). |
-
-   **A resposta posterior não é coerente em todos os casos.** A porta não distingue criação de reaproveitamento no retorno. Após chave exata, as APIs anunciam `status=ok`, usando `tipo` e rótulo da variável local, mas timestamp/sequência do objeto devolvido. Se ele for de outro tipo, o payload pode contradizer o registro; se retratado, não informa que continua fora da apuração. A sequência retornada é a antiga, não a recém-calculada (`app/ponto/registro_batida.py:102`; `app/ponto/registro_batida.py:122`; `app/api/views.py:555`; `app/api/views.py:799`; `app/api/views.py:812`; `app/api/views.py:814`; `app/api/views_core.py:806`).
-
-   **Há outro erro concreto na triagem:** após a recusa, ela procura oposta em ±60 s **sem excluir retratadas**. A porta pode ter recusado por uma viva a três minutos; a resposta então pode trazer `id=None`, ou apontar uma retratada próxima que não causou a recusa. As APIs usam a janela da porta e excluem retratadas nesse retorno (`app/ponto/services/triagem_batida.py:716`; `app/ponto/services/triagem_batida.py:723`; `app/ponto/registro_batida.py:31`; `app/ponto/registro_batida.py:141`; `app/api/views.py:672`; `app/api/views_core.py:663`).
-
-   Esses ramos já existem no HEAD; retirar o retorno antecipado por retratada permite que mais chamadas os alcancem. A troca de consulta não garante, sozinha, resposta correta depois da porta (`app/ponto/services/triagem_batida.py:670`; `app/ponto/services/triagem_batida.py:702`; `app/ponto/services/triagem_batida.py:715`; `app/api/views.py:533`; `app/api/views.py:654`).
-
-3. **Pendente de DP, origem e canal**
-
-   `aprovada=False`, origem e canal, isoladamente, **não explicam divergência entre esses dedups**: as consultas antigas não os filtram; a autoridade também não; a porta temporal também não. Pendente de DP continua contando. `aprovada` é crivo do DP, enquanto `retratada_em` determina exclusão da apuração (`app/api/views.py:529`; `app/api/views_core.py:515`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/turnos.py:2859`; `app/ponto/turnos.py:2876`; `app/ponto/registro_batida.py:107`; `app/ponto/models.py:63`).
-
-   Permanecem as diferenças de janela, a possível correção de tipo entre casca e porta e a exceção da chave exata, que aceita até retratada. Não atribuo essas diferenças a um estado de aprovação/canal (`app/api/views.py:527`; `app/api/views.py:578`; `app/ponto/registro_batida.py:106`; `app/ponto/registro_batida.py:120`).
-
-4. **Censo independente e classes estruturais**
-
-   O censo encontrou **três dedups de chão** antes dos três chamadores de origem `app`: API original, API core e triagem. Coincide com os três sítios do T3; quarto sítio estático não encontrado. Caminhos dinâmicos não identificados permanecem **[nao verificado]** (`app/api/views.py:529`; `app/api/views.py:654`; `app/api/views_core.py:515`; `app/api/views_core.py:645`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/services/triagem_batida.py:702`).
-
-   Fora desse conjunto há reaproveitamento de materialização por ±20 minutos, guardas de vizinhas e chave exata de regularização externa. São controles existentes, mas não outro toque de chão (`app/chamados/juizes.py:235`; `app/chamados/juizes.py:243`; `app/chamados/services/materializacao.py:95`; `app/chamados/services/materializacao.py:101`; `app/chamados/services/regularizacao_ext.py:74`).
-
-   A substituição usa uma autoridade existente; ela não acrescenta escritor, relógio ou trava. A criação encontrada permanece na porta, inclusive o bulk de ensaio (`app/ponto/turnos.py:2856`; `app/ponto/turnos.py:2875`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:157`; `app/ponto/registro_batida.py:335`).
-
-   **Derivação paralela está presente no retorno da triagem:** ela tenta reconstruir a causa da recusa com universo e janela diferentes. Também permanece a divergência entre instante do fato e recepção no envelope `ultima_batida.timestamp`, escrito com `agora`; isso pertence ao item T4 distinto, não foi corrigido por c1 (`app/ponto/services/triagem_batida.py:716`; `app/ponto/registro_batida.py:139`; `app/api/views.py:761`; `app/api/views_core.py:755`; `app/chamados/juizes.py:151`).
-
-   Um selo restrito aos `SITIOS` enumerados deixaria um quarto sítio fora da lista sem cobertura, conforme a limitação relatada; implementação e mordida do teste novo **[nao verificado]**. Suite inteira, opus, smoke e eventual pouso antes desses pré-requisitos **[nao verificado]**. [nao verificado]
-
-5. **Import local e uso de `Batida`**
-
-   Não encontrei ciclo no trajeto estático: o topo de `turnos` importa bibliotecas e `core.dia_do_turno`; este último só constrói o tipo com `datetime/typing`. `batidas_apuraveis` apenas monta a consulta. Execução real do novo import **[nao verificado]** (`app/ponto/turnos.py:36`; `app/ponto/turnos.py:41`; `app/core/dia_do_turno.py:10`; `app/core/dia_do_turno.py:13`; `app/ponto/turnos.py:2875`).
-
-   **`Batida` continua usado nos três módulos**, particularmente nas buscas de oposta após a porta; remover seu import seria errado (`app/api/views.py:674`; `app/api/views_core.py:665`; `app/ponto/services/triagem_batida.py:716`).
-
-6. **Selos existentes: distinguir duas situações**
-
-   **B5j não perde copiadores com esta cura.** Seu detector considera funções que alimentam o pareador, não qualquer dedup. A contagem em memória permanece **6 → 6**; os seis estão em `turnos` duas vezes, lastro, piso, meio período e fila por causa. O teto oito já deixa duas posições de folga no HEAD; essa folga não nasceu em c1 (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:123`; `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:191`; `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:217`; `app/ponto/turnos.py:1863`; `app/ponto/turnos.py:1901`; `app/ponto/services/lastro.py:261`; `app/ponto/services/piso_intervalo.py:39`; `app/escala/services/meio_periodo.py:158`; `app/chamados/services/fila_por_causa.py:190`).
-
-   **O tripwire de bocais perde uma ocorrência e deveria guardar essa remoção.** No HEAD, sua regex encontra três filtros em `api/views`; com a troca, ficam dois. O teto continua sete, e a asserção usa `<=`: restaurar a consulta removida passa nesse selo. `views_core` e triagem sequer estão nessa allowlist (`app/api/views.py:296`; `app/api/views.py:529`; `app/api/views.py:674`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:13`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:20`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:25`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`).
-
-**Veredito final: REPROVADO**, pelos retornos inconsistentes detalhados no item 2 e pela guarda incompleta do item 6. A ordem da triagem e a contagem de pendentes de DP não são defeitos da substituição (`app/ponto/models.py:105`; `app/ponto/turnos.py:2859`; `app/ponto/turnos.py:2883`).
-
-## 15/11 01:32 · sessao 9e8e05c97134 · - · - · origem=Ronald (tmux)
-
-1. **Não há mudança na escolha entre batidas vivas da triagem.** Antes, `Meta.ordering=["colaborador","timestamp"]`; depois, `order_by("timestamp")`. Como a query restringe um colaborador e existe unicidade `(colaborador,timestamp)`, ambas devolvem o menor instante elegível; a diferença é remover retratadas (`app/ponto/models.py:105`, `app/ponto/models.py:106`, `app/ponto/services/triagem_batida.py:664`, `app/ponto/turnos.py:2883`). A afirmação de equivalência da entrega está correta para esse cenário; confirmação SQL executada [nao verificado].
-
-2. **B5j não cai com esta cura.** Executei apenas suas funções AST em memória, simulando as três substituições em strings: copiadores `6 → 6`; os três módulos tocados contribuem `0 → 0`. O detector considera funções que chamam `parear_turnos`/`_turnos_do_colab_puro`, não qualquer função do módulo (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:123`). Os seis copiadores atuais são:
-   - `app/ponto/turnos.py:1863`;
-   - `app/ponto/turnos.py:1901`;
-   - `app/ponto/services/lastro.py:261`;
-   - `app/ponto/services/piso_intervalo.py:39`;
-   - `app/escala/services/meio_periodo.py:158`;
-   - `app/chamados/services/fila_por_causa.py:190`.
-
-3. **B5j já tem folga anterior: teto 8 para seis atuais.** O comentário promete catraca fundada no número contado, mas a implementação exige somente `total <= 8`, permitindo dois copiadores adicionais (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:184`, `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:191`, `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:215`). Não atribuir essa folga à cura: ela já existe no HEAD; a lei apenas declara “8 copiadores ... não cresce” (`CLAUDE.md:163`).
-
-4. **O selo de bocais deveria apertar sua contagem para guardar a remoção.** A regex encontra três filtros em `api/views.py`, nas linhas `296`, `529`, `674`; a substituição proposta leva a dois. Entretanto, o teto permanece sete e a asserção é somente `<=`, aumentando a folga de quatro para cinco (`app/ponto/tests/test_tripwire_bocais_apuracao.py:20`, `app/ponto/tests/test_tripwire_bocais_apuracao.py:25`, `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`). Restaurar o filtro removido continuará passando nesse selo (`app/api/views.py:529`, `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`). `views_core` e `triagem_batida` não constam da allowlist (`app/ponto/tests/test_tripwire_bocais_apuracao.py:13`).
-
-5. **Sem troca de instante por dia no predicado novo.** A autoridade aplica `timestamp__gte` e `timestamp__lte`, inclusive nas duas pontas; filtra somente retratação, contando pendentes de DP e sem restrição por origem/canal (`app/ponto/turnos.py:2859`, `app/ponto/turnos.py:2876`). Ela não lê relógio, não escreve e não trava (`app/ponto/turnos.py:2875`). As APIs fornecem `ts_efetivo` da autoridade de hora; a triagem usa seu `agora` capturado (`app/api/views.py:497`, `app/api/views.py:507`, `app/ponto/services/triagem_batida.py:626`).
-
-6. **Retratação é carimbo do ato, não o instante da batida.** `retratar_batida` anota `aprovada=False` e `retratada_em=timezone.now()`; o gravador material é `anotar`/`save(update_fields=...)` (`app/ponto/registro_batida.py:274`, `app/ponto/registro_batida.py:252`). O modelo declara `aprovada` como crivo do DP e retratação como exclusão da geometria/apuração (`app/ponto/models.py:63`, `app/ponto/models.py:64`).
-
-7. **Fuso consistente para o caminho inspecionado.** A configuração declara `America/Sao_Paulo` e `USE_TZ=True`; a regra documental exige UTC no banco e apresentação UTC−3 (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`, `CLAUDE.md:146`). A autoridade da hora torna timestamps ingênuos aware; aceita o aparelho com atraso inclusivo de zero a 48 horas e retorna `agora` fora disso (`app/api/hora_do_aparelho.py:116`, `app/api/hora_do_aparelho.py:141`, `app/api/hora_do_aparelho.py:153`). Persistência/fuso efetivos de produção [nao verificado].
-
-_5478 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5482 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
