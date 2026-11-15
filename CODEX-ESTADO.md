@@ -1,7 +1,262 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 02:16** · publicado em **15/11/2026 02:15** (UTC-3)
+> Ultima resposta processada: **15/11/2026 02:20** · publicado em **15/11/2026 02:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 02:20 · sessao 6e535e4da7d0 · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
+
+**Não demonstrei regressão nova de produção no diff. A corrida de classificação do v2 está fechada, e o horário da triagem foi restaurado. Encontrei três lacunas concretas de testes e a corrida SQL preexistente.** (`app/ponto/registro_batida.py:155`; `app/ponto/registro_batida.py:161`; `app/ponto/services/triagem_batida.py:657`; `app/ponto/tests/dedup_retratada_c3_checks.txt:39`)
+
+Referências abaixo relativas a `app/`, salvo indicação contrária.
+
+| Arquivo:linha | O que está errado | Caso concreto | Gravidade |
+|---|---|---|---|
+| `ponto/services/triagem_batida.py:666`; `ponto/tests/test_dedup_retratada_c1.py:150` | **Cobertura insuficiente de sequência no dedup.** Mutante acrescentando `sequencia=1` ao `.filter(tipo=tipo)` passou nos **31 testes**, inclusive tripwire e paridade. As fixtures anteriores têm sequência 1; o selo verifica a origem da consulta, sem conferir esse filtro. (`ponto/tests/test_dedup_retratada_c1.py:194`) | Viva S18:00, sequência 2; pedido S18:03. Original responde `ja_registrada`; mutante chama a porta, cria segunda linha e preenche sucesso. Reproduzido em memória pelo executor existente. (`ponto/tests/test_dedup_retratada_c2.py:47`) | **fila** — lacuna da bateria; esse filtro não existe no código atual. |
+| `ponto/registro_batida.py:161`; `ponto/tests/test_dedup_retratada_c1.py:26` | **Cobertura temporal concentrada no segundo zero.** Mutante `batida.criada_neste_toque = timestamp.second == 0` passou nos **31 testes**. Variar microssegundos conserva o segundo zero. (`ponto/tests/test_dedup_retratada_c3.py:79`) | Nova batida às 18:03:01 nas três cascas: mutante grava uma linha, publica SSE, responde `ja_registrada` e pula foto/ordem. Reproduzido em memória; o código atual atribui `True` incondicionalmente. (`ponto/tests/test_dedup_retratada_c2.py:64`; `ponto/services/resposta_batida.py:14`) | **fila** — defeito do mutante, não do original. |
+| `ponto/services/triagem_batida.py:716`; `ponto/tests/test_dedup_retratada_c2.py:252` | **Falta controle com duas opostas vivas elegíveis.** Remover `.order_by('-timestamp')` passou nos **31 testes**. Sem essa ordenação, a autoridade entrega ordem crescente. (`ponto/turnos.py:2883`) | E18:00/id1 e E18:02/id2; pedido S18:03, janela 300 s. Original apresenta id2; mutante apresenta id1. Reproduzido em memória. (`ponto/tests/test_dedup_retratada_c2.py:47`) | **fila** — cobertura insuficiente da testemunha apresentada. |
+| `ponto/registro_batida.py:152`; `ponto/registro_batida.py:158`; `ponto/models.py:106` | **`IntegrityError` concorrente continua sem captura.** É preexistente; o diff somente acrescenta as marcas após os creates. (`ponto/tests/dedup_retratada_c3_checks.txt:38`) | A e B consultam ausência; B grava antes do create de A. A colide na unicidade colaborador/timestamp e não alcança marca/helper. Resposta HTTP e ocorrência em produção: **[nao verificado]**. | **fila** — distinta da corrida do v2. |
+
+Os três mutantes foram aplicados somente em memória, nos dois mapas `SOBRESCRITAS`; também adaptei a leitura de `open()` para conferir a paridade sobre fontes mutadas. Cada execução terminou com **31 testes, zero falhas e zero erros**. Os pontos de injeção e execução são os usados pela própria entrega. (`ponto/tests/test_dedup_retratada_c3.py:228`; `ponto/tests/test_dedup_retratada_c3.py:234`; `ponto/tests/test_dedup_retratada_c2.py:288`)
+
+A marca e os valores consumidos pelo diff ficaram assim:
+
+| Valor | Quem escreve e quem lê |
+|---|---|
+| `criada_neste_toque` | **Dois escritores de produção**, ambos dentro de `registrar_batida`, imediatamente após cada create. **Um leitor direto**, o helper; as três cascas consomem seu resultado. Não é campo do modelo nem argumento persistido pelo create. (`ponto/registro_batida.py:155`; `ponto/registro_batida.py:161`; `ponto/services/resposta_batida.py:14`; `ponto/models.py:8`; `api/views.py:693`; `api/views_core.py:684`; `ponto/services/triagem_batida.py:723`) |
+| Colaborador, instante e tipo pedidos | Cascas fornecem os argumentos; dedup/porta os usam nas consultas; create persiste os argumentos. As APIs usam `ts_efetivo`; triagem usa `agora`. (`api/views.py:507`; `api/views.py:531`; `api/views.py:654`; `api/views_core.py:645`; `ponto/services/triagem_batida.py:626`; `ponto/services/triagem_batida.py:700`; `ponto/registro_batida.py:153`) |
+| `retratada_em` | Dedup lê o filtro da autoridade; porta mantém seus filtros vivos e o lookup de chave exata. Helper não usa retratação para inferir criação. Nenhuma retratação é desfeita pelo delta. (`ponto/turnos.py:2876`; `ponto/registro_batida.py:109`; `ponto/registro_batida.py:120`; `ponto/services/resposta_batida.py:14`) |
+| PK, tipo, timestamp e sequência devolvidos | Helper lê exclusivamente o objeto retornado. Apresenta seu timestamp local, preservando microssegundos, e sua sequência antiga. A sequência de uma nova continua vindo de `sequencia_na_jornada`. (`ponto/services/resposta_batida.py:17`; `ponto/services/resposta_batida.py:21`; `api/views.py:554`; `api/views_core.py:540`; `ponto/services/triagem_batida.py:672`) |
+| `status`, mensagem, sucesso e disputa | Helper escreve `ja_registrada`, mensagem derivada do objeto, `sucesso=True`, `em_disputa=False`, motivos vazios. As duas últimas constantes não certificam a disputa atual da batida. (`ponto/services/resposta_batida.py:19`) |
+| `_resposta_existente` | Helper produz; cada casca retorna antes dos efeitos posteriores de criação. (`api/views.py:693`; `api/views_core.py:684`; `ponto/services/triagem_batida.py:723`) |
+| `g_op`, `op`, id/tipo da recusa | `_janela_oposto` fornece a janela; triagem consulta a autoridade viva e apresenta a candidata. Essa consulta não decide a recusa. (`ponto/registro_batida.py:21`; `ponto/registro_batida.py:145`; `ponto/services/triagem_batida.py:714`) |
+| `fora_horario_info`, justificativa e aprovação | Emissor escreve informação/contexto/sessão; triagem transforma a informação em justificativa e `aprovada=False` enviados à porta. (`ponto/services/triagem_batida.py:478`; `ponto/services/triagem_batida.py:486`; `ponto/services/triagem_batida.py:685`; `ponto/services/triagem_batida.py:709`) |
+| `ALLOW`, contagem e dono | Tripwire declara os totais e compara igualdade exata: APIs 2/2, triagem 1, helper 0. (`ponto/tests/test_tripwire_bocais_apuracao.py:21`; `ponto/tests/test_tripwire_bocais_apuracao.py:27`; `ponto/tests/test_tripwire_bocais_apuracao.py:37`) |
+
+**Não encontrei caminho atual de criação chegando sem marca, nem reutilização chegando marcada.** Entre create e retorno não há cópia, refresh ou reconsulta; entre retorno e helper também não. Fechamento recebe colaborador/instante, sem receber a batida. Os receivers inspecionados não substituem a instância retornada. (`ponto/registro_batida.py:152`; `ponto/registro_batida.py:177`; `api/views.py:669`; `api/views_core.py:660`; `ponto/services/triagem_batida.py:713`; `ponto/signals.py:35`; `ponto/signals.py:132`; `ponto/signals.py:207`; `colaboradores/signals.py:87`)
+
+O censo direto fora dos testes encontrou **16 sítios**, incluindo o comando de ensaio: [nao verificado]
+
+| Chamador | Arquivo:linha; consumo |
+|---|---|
+| Três cascas | `api/views.py:654`; `api/views_core.py:645`; `ponto/services/triagem_batida.py:700`: objeto passa diretamente ao helper. |
+| Justificativas e aprovação em lote | `ponto/services/justificativa.py:188`; `ponto/services/justificativa.py:361`; `ponto/views.py:1818`: leem `None`, PK, justificativa e vinculam FK. (`ponto/services/justificativa.py:195`; `ponto/services/justificativa.py:370`; `ponto/views.py:1825`) |
+| Veredito | `ponto/services/veredito_celula.py:323`: verifica recusa por `None`. (`ponto/services/veredito_celula.py:325`) |
+| Materialização | `chamados/services/materializacao.py:933`; `chamados/services/materializacao.py:1013`: leem vínculo/PK e anotam campos explícitos. (`chamados/services/materializacao.py:952`; `chamados/services/materializacao.py:1041`) |
+| Regularização externa | `chamados/services/regularizacao_ext.py:78`: lê PK para auditoria e retorna o objeto. (`chamados/services/regularizacao_ext.py:95`; `chamados/services/regularizacao_ext.py:106`) |
+| Exceção autorizada | `chamados/services/acoes_chamado.py:44`: lê justificativa e passa objeto a anotação/foto. (`chamados/services/acoes_chamado.py:54`; `chamados/services/acoes_chamado.py:67`) |
+| Comando de ensaio | `ponto/management/commands/testar_pwa.py:184`, `:198`, `:219`, `:228`, `:229`: três retornos descartados; depois compara `None`/PK. (`ponto/management/commands/testar_pwa.py:230`) |
+
+Nesses consumidores não encontrei enumeração dos atributos da batida que incorporasse a marca nova. `anotar` lê somente campos explicitamente fornecidos, sob allowlist; SSE também monta payload explícito. Chamadas dinâmicas e execução desses fluxos com ORM real: **[nao verificado]**. (`ponto/registro_batida.py:243`; `ponto/registro_batida.py:246`; `ponto/realtime.py:32`)
+
+Para os ramos da porta, o comportamento é:
+
+| Ramo | APIs UI/core | Triagem |
+|---|---|---|
+| Viva do mesmo tipo ≤60 s | Se alcançar a porta, retorna existente sem marca; helper responde `ja_registrada` com seus campos e interrompe efeitos posteriores. Normalmente o dedup de cinco minutos captura antes; correção de tipo pode permitir alcançar a porta. (`ponto/registro_batida.py:113`; `api/views.py:577`; `api/views.py:693`; `api/views_core.py:684`) | Mesmo tratamento pelo helper; pode alcançar por intercalação concorrente ou batida futura dentro dos 60 s. (`ponto/registro_batida.py:113`; `ponto/services/triagem_batida.py:666`; `ponto/services/triagem_batida.py:723`) |
+| Mesma chave viva/retratada/outro tipo | Consulta temporal tem precedência; depois chave exata. Retorna objeto antigo, sem desfazer retratação, com `ja_registrada` e sem efeitos posteriores. (`ponto/registro_batida.py:113`; `ponto/registro_batida.py:120`; `ponto/services/resposta_batida.py:19`) | Igual. (`ponto/services/triagem_batida.py:723`) |
+| Oposta → `None` | `ignorada_intervalo` antes do helper; sem efeitos posteriores. Reconsulta oposta para apresentar payload. (`api/views.py:669`; `api/views_core.py:660`) | `ignorada_intervalo`, com id/tipo consultados no universo vivo e janela da porta; sem efeitos posteriores. (`ponto/services/triagem_batida.py:713`) |
+| Create com conflito revisado | **Inalcançável pelas três chamadas**, que passam autoridade humana falsa. Na porta, esse ramo marca True e agenda fechamento. (`api/views.py:656`; `api/views_core.py:647`; `ponto/services/triagem_batida.py:702`; `ponto/registro_batida.py:150`) | Mesma restrição. (`ponto/services/triagem_batida.py:702`) |
+| Create normal, inclusive oposta admitida pelo marco próprio | Marca True; helper libera ordem, detector/chamado leve, disputa, foto, geofence, autoresolve de entrada e aviso; responde `ok`. Efeitos são condicionais aos respectivos ramos. (`ponto/registro_batida.py:145`; `ponto/registro_batida.py:158`; `api/views.py:696`; `api/views.py:704`; `api/views.py:758`; `api/views.py:772`; `api/views.py:792`; `api/views.py:812`) | Libera disputa pendente, ordem, foto, geofence, autoresolve, contexto de sucesso e aviso. (`ponto/services/triagem_batida.py:726`; `ponto/services/triagem_batida.py:745`; `ponto/services/triagem_batida.py:757`) |
+| `IntegrityError` concorrente | Exceção escapa antes da marca/helper; HTTP efetivo **[nao verificado]**. (`ponto/registro_batida.py:158`) | Igual. (`ponto/services/triagem_batida.py:700`) |
+
+Criação também dispara os receivers do ORM e fechamento da porta; reutilização não executa novo create. SSE consulta `created` do ORM, independentemente da marca transiente. (`ponto/signals.py:40`; `ponto/registro_batida.py:156`; `ponto/registro_batida.py:162`)
+
+**A corrida específica do v2 está fechada:** se B confirma antes das consultas de A, A reutiliza objeto sem marca; somente o create executado por A recebe a marca. A colisão posterior às consultas permanece sendo o problema SQL separado da tabela. (`ponto/registro_batida.py:113`; `ponto/registro_batida.py:120`; `ponto/registro_batida.py:161`)
+
+Quanto à ordem e ao escopo completo:
+
+| Conferência | Resultado |
+|---|---|
+| `_bloqueio_horario_clt` | Está incondicionalmente antes da recuperação da confirmação e do dedup. Pode criar chamado e atualizar contexto/sessão mesmo quando depois houver reutilização ou recusa. Essa posição corresponde ao diff fornecido e à comparação histórica registrada; não reexecutei o objeto git nesta cópia. (`ponto/services/triagem_batida.py:657`; `ponto/services/triagem_batida.py:459`; `ponto/services/triagem_batida.py:486`; `ponto/tests/dedup_retratada_c3_checks.txt:39`) |
+| Outros efeitos anteriores à porta | Não identifiquei outro reposicionamento no diff integral fornecido. O novo predicado permite que tentativas antes barradas pela retratada alcancem o preparo já existente. (`api/views.py:531`; `api/views.py:554`; `ponto/services/triagem_batida.py:666`; `ponto/services/triagem_batida.py:672`) |
+| Janelas, dupla viva e sequência | APIs conservam ±5 min e escolha mais recente; triagem conserva `[agora−5min, agora]` e escolha crescente. Porta conserva ±60 s para mesmo tipo. Mensagens da dupla viva e autoridade da sequência permanecem. (`api/views.py:529`; `api/views.py:531`; `api/views.py:542`; `ponto/services/triagem_batida.py:665`; `ponto/turnos.py:2883`; `ponto/models.py:105`; `ponto/registro_batida.py:106`) |
+| Mudanças além do filtro | O helper muda resposta/efeitos de reutilização. Na triagem, `ignorada_intervalo` passa a apresentar testemunha viva usando 60/300 s da porta, em lugar da reconsulta crua fixa em 60 s. Não muda quem a porta recusa. (`ponto/services/resposta_batida.py:14`; `ponto/services/triagem_batida.py:714`; `ponto/registro_batida.py:145`) |
+| Escritor, universo e juiz | Não identifiquei escritor novo fora da porta nem derivação paralela do universo vivo. Helper apresenta o resultado causal declarado pela porta; não decide admissibilidade. (`ponto/registro_batida.py:155`; `ponto/services/resposta_batida.py:14`; `ponto/turnos.py:2876`; `core/portas.py:103`) |
+
+Os selos **mordem os casos declarados**, mas não certificam toda a semântica: tripwire conta regex exata; C1 acompanha origem da consulta; paridade compara AST das funções de mesmo nome nas duas APIs, com whitelist vazia. O harness original da paridade lê disco, sem `SOBRESCRITAS`; essa limitação já está declarada na entrega. (`ponto/tests/test_tripwire_bocais_apuracao.py:30`; `ponto/tests/test_dedup_retratada_c1.py:175`; `api/tests/test_contract_paridade_kernels.py:12`; `api/tests/test_contract_paridade_kernels.py:19`; `api/tests/test_contract_paridade_kernels.py:31`; `ponto/tests/dedup_retratada_c3_entrega.txt:162`)
+
+Reexecutei C1–C3: **31 testes OK**, incluindo os contratos existentes. Suite inteira, opus final, smoke real col677 nas duas cascas e medições de produção dos 60 dias: **[nao verificado]**; os testes locais não encerram esses requisitos. (`ponto/tests/dedup_retratada_c3_green.txt:38`; `ponto/tests/dedup_retratada_c3_entrega.txt:169`; `ponto/tests/dedup_retratada_c3_entrega.txt:176`)
+
+## 15/11 02:18 · sessao 085ea1e4b857 · - · - · origem=Ronald (tmux)
+
+Achado reproduzido, referências relativas a `app/`:
+
+| Arquivo:linha | O que está errado | Caso concreto | Gravidade |
+|---|---|---|---|
+| `ponto/services/triagem_batida.py:666`; `ponto/tests/test_dedup_retratada_c1.py:261` | Falta teste com **duas duplas vivas elegíveis**. Mutante de uma linha adicionando `.order_by('-timestamp')` antes de `.first()` passa nos 31 testes C1–C3, com zero falhas/erros. A paridade API fica legitimamente intacta; o tripwire mantém a mesma contagem. | Duas S vivas: 17:59, id=1; 18:02, id=2. Tentativa às 18:03: original retorna id=1; mutante retorna id=2. O teste existente põe apenas uma viva e uma retratada. (`ponto/tests/test_dedup_retratada_c1.py:261–268`; `ponto/tests/test_tripwire_bocais_apuracao.py:30`; `api/tests/test_contract_paridade_kernels.py:28`) | **fila**: lacuna real de cobertura; a implementação atual conserva a escolha anterior. (`ponto/models.py:105`; `ponto/turnos.py:2883`) |
+| `ponto/registro_batida.py:152`; `ponto/registro_batida.py:158`; `ponto/models.py:106` | `IntegrityError` concorrente continua sem captura nesses creates. É preexistente conforme o diff fornecido; não confundir com a corrida de classificação do v2. | A e B passam pelas duas consultas sem linha; B grava a chave antes do create de A. A encontra a restrição `(colaborador,timestamp)`. Resposta HTTP/ocorrência em produção: **[nao verificado]**. (`ponto/registro_batida.py:107`; `ponto/registro_batida.py:120`; `ponto/models.py:106`) | **fila** |
+
+Ramos conferidos:
+
+| Ramo da porta | Resposta e efeitos nas cascas |
+|---|---|
+| Viva mesmo tipo ≤60 s | Retorna existente sem marca, sem create/fechamento da porta; helper produz `ja_registrada`, interrompendo efeitos posteriores. Normalmente dedup de cinco minutos captura antes; APIs podem chegar após correção de tipo, triagem pode chegar por concorrência/futuro ≤60 s. (`ponto/registro_batida.py:113`; `ponto/services/resposta_batida.py:14`; `api/views.py:577`; `api/views.py:693`; `api/views_core.py:684`; `ponto/services/triagem_batida.py:723`) |
+| Mesma chave viva/retratada/outro tipo | Temporal ganha primeiro; caso contrário retorna a chave exata sem marca. Payload usa os campos antigos; não cria, não desfaz retratação e não roda efeitos posteriores. (`ponto/registro_batida.py:113`; `ponto/registro_batida.py:120`; `ponto/services/resposta_batida.py:17`) |
+| Oposta → `None` | As três chamadas usam `autoridade_humana=False`; retornam `ignorada_intervalo` antes do helper/efeitos posteriores. Triagem consulta agora a janela da porta e o universo vivo para apresentar id/tipo. (`api/views.py:656`; `api/views.py:669`; `api/views_core.py:647`; `api/views_core.py:660`; `ponto/services/triagem_batida.py:702`; `ponto/services/triagem_batida.py:713`) |
+| Create com conflito revisado | Marca True e fechamento; inacessível pelas três chamadas, que passam autoridade False. (`ponto/registro_batida.py:150`; `ponto/registro_batida.py:152`; `ponto/registro_batida.py:155`; `api/views.py:656`; `api/views_core.py:647`; `ponto/services/triagem_batida.py:702`) |
+| Create normal, inclusive oposta admitida pelo marco | Marca True, fechamento; helper libera efeitos. APIs: ordem, detector/chamado leve, disputa, foto, geofence, autoresolve de E, aviso, `ok`. Triagem: disputa quando pendente, ordem, foto, geofence, autoresolve, contexto de sucesso e aviso. (`ponto/registro_batida.py:145`; `ponto/registro_batida.py:158`; `api/views.py:696`; `api/views.py:702`; `api/views.py:758`; `api/views.py:772`; `api/views.py:780`; `api/views.py:792`; `api/views.py:810`; `ponto/services/triagem_batida.py:726`; `ponto/services/triagem_batida.py:745`; `ponto/services/triagem_batida.py:748`; `ponto/services/triagem_batida.py:757`) |
+| `IntegrityError` | Exceção escapa antes da marca/helper/efeitos posteriores; HTTP efetivo **[nao verificado]**. (`ponto/registro_batida.py:152`; `ponto/registro_batida.py:155`; `ponto/registro_batida.py:158`; `ponto/registro_batida.py:161`) |
+
+Em todos os ramos de triagem, `_bloqueio_horario_clt` roda antes da confirmação/dedup/porta e pode criar chamado e atualizar contexto/sessão. Essa posição/condição coincide com o diff integral fornecido e com a conferência histórica registrada; o objeto git `880331a8c` não está disponível nesta cópia para repetir a comparação. (`ponto/services/triagem_batida.py:657`; `ponto/services/triagem_batida.py:459`; `ponto/services/triagem_batida.py:478`; `ponto/services/triagem_batida.py:486`; `ponto/tests/dedup_retratada_c3_checks.txt:28`; `ponto/tests/dedup_retratada_c3_checks.txt:39`)
+
+Não encontrei alteração adicional de janela, sequência ou mensagem da dupla viva no código atual: APIs conservam ±5 min e mais recente; triagem conserva `[agora−5min,agora]` e mais antiga para o colaborador fixo. A sequência continua calculada pela mesma autoridade. (`api/views.py:529`; `api/views.py:531`; `api/views.py:541`; `api/views.py:554`; `api/views_core.py:515`; `api/views_core.py:517`; `api/views_core.py:540`; `ponto/services/triagem_batida.py:665`; `ponto/services/triagem_batida.py:666`; `ponto/services/triagem_batida.py:672`; `ponto/models.py:105`; `ponto/turnos.py:2883`)
+
+O helper acrescenta classificação do retorno para suprimir efeitos posteriores em reutilização; não consulta universo nem escreve `Batida`. A mudança de `ignorada_intervalo` na triagem é de identificação da testemunha após a recusa, com a mesma janela e universo da porta; a decisão de recusar continua exclusivamente na porta. (`ponto/services/resposta_batida.py:7`; `ponto/services/resposta_batida.py:14`; `ponto/registro_batida.py:138`; `ponto/registro_batida.py:145`; `ponto/services/triagem_batida.py:713`)
+
+## 15/11 02:18 · sessao 4b4dee27661a · - · - · origem=Ronald (tmux)
+
+Encontrei três mutantes de uma linha que sobrevivem aos **31 testes C1+C2+C3**, inclusive com `builtins.open` adaptado para a paridade ler fontes mutadas. São lacunas da bateria; os defeitos abaixo pertencem aos mutantes, não ao código atual. (`app/ponto/tests/test_dedup_retratada_c2.py:288`; `app/ponto/tests/test_dedup_retratada_c3.py:234`)
+
+| Sítio | Mutante sobrevivente | Caso concreto fora da bateria | Gravidade sugerida |
+|---|---|---|---|
+| `app/ponto/registro_batida.py:161` | `batida.criada_neste_toque = timestamp.second == 0` | Nova S às **18:03:01**, nas três cascas: grava uma linha/SSE, responde `ja_registrada` e pula foto/ordem. Todos os creates da bateria partem de `FATO` com segundo zero; variar microssegundos conserva isso. (`app/ponto/tests/test_dedup_retratada_c1.py:26`; `app/ponto/tests/test_dedup_retratada_c3.py:79`) | **fila**: cobertura insuficiente da marca; não demonstra bug atual. |
+| `app/ponto/services/triagem_batida.py:666` | Acrescentar `sequencia=1` ao `.filter(tipo=tipo)` | Viva S18:00 com sequência 2 + pedido S18:03: original retorna `ja_registrada`; mutante cria segunda batida. As fixtures `anterior()` fixam sequência 1; o selo verifica origem da consulta, sem proibir esse filtro. (`app/ponto/tests/test_dedup_retratada_c1.py:150`; `app/ponto/tests/test_dedup_retratada_c1.py:194`) | **fila**. |
+| `app/ponto/services/triagem_batida.py:716` | Remover `.order_by('-timestamp')` | E18:00 id1 e E18:02 id2, pedido S18:03, janela 300 s: original responde `ignorada_intervalo` id2; mutante id1. O ORM também muda, pois a ordenação padrão é crescente. (`app/ponto/models.py:105`; `app/ponto/tests/test_dedup_retratada_c2.py:252`) | **fila**. |
+
+Reprodução compacta do sobrevivente principal, sem escrita:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import sys, io, unittest
+sys.path.insert(0, 'app')
+from ponto.tests import test_dedup_retratada_c1 as c1
+from ponto.tests import test_dedup_retratada_c2 as c2
+
+p = 'ponto/registro_batida.py'
+antes = '\n    batida.criada_neste_toque = True\n'
+depois = '\n    batida.criada_neste_toque = timestamp.second == 0\n'
+fonte = c2.fonte(p)
+assert fonte.count(antes) == 1
+c1.SOBRESCRITAS[p] = c2.SOBRESCRITAS[p] = fonte.replace(antes, depois)
+
+nomes = ['ponto.tests.test_dedup_retratada_c1',
+         'ponto.tests.test_dedup_retratada_c2',
+         'ponto.tests.test_dedup_retratada_c3']
+unittest.TextTestRunner().run(
+    unittest.defaultTestLoader.loadTestsFromNames(nomes))
+for sitio in c1.SITIOS:
+    resposta, store, _, efeitos, _ = c2.executar(
+        sitio, [], instante=c1.FATO.replace(second=1))
+    print(sitio, resposta['status'], len(store.linhas),
+          efeitos['foto'].call_count, efeitos['ordem'].call_count)
+PY
+```
+
+Resultado observado: `31 testes OK`; nas três cascas, `ja_registrada 1 0 0`. O mecanismo de injeção utilizado é o mesmo `SOBRESCRITAS` da entrega. (`app/ponto/tests/test_dedup_retratada_c3.py:228`)
+
+O tripwire tem mordida real contra queries diretas novas/restauradas e compara contagem **exata**, mas continua uma regex de `Batida|_Bat.objects.filter`; não certifica semântica de filtros, ordenação ou causalidade. (`app/ponto/tests/test_tripwire_bocais_apuracao.py:30`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:37`; `app/ponto/tests/test_dedup_retratada_c2.py:266`; `app/ponto/tests/test_dedup_retratada_c3.py:172`)
+
+A paridade compara AST de funções com nomes presentes nos dois módulos, whitelist vazia; o harness entregue normalmente lê disco via `open()`, sem aplicar `SOBRESCRITAS`. Os sobreviventes acima não alteram APIs, e permaneceram verdes mesmo com essa leitura corrigida em memória. (`app/api/tests/test_contract_paridade_kernels.py:12`; `app/api/tests/test_contract_paridade_kernels.py:19`; `app/api/tests/test_contract_paridade_kernels.py:31`; `app/ponto/tests/test_dedup_retratada_c2.py:288`)
+
+## 15/11 02:17 · sessao 1964f311ddf6 · E3-RESTO-R3 · leitura · origem=Code
+
+A triagem separa **três falhas da Folha por desconhecimento antes ocultado**, **três C11 por uma nova porta administrativa com regras escritas conflitantes** e **duas da pauta cujo pré-filtro de fio impede chegar à prova pretendida**. Nos dois casos da pauta, o traceback não informa qual fio final excluiu D1; esse detalhe permanece **[nao verificado]** (`app/chamados/services/tarefa_do_dia.py:700`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:385`; `app/ponto/management/commands/pautas_discordantes.py:71`).
+
+**Cadeia compartilhada pela Folha.** As fixtures gravam DNA e veredito, mas não ata com lâmpadas; `ata` admite `NULL`. O leitor transforma essa ausência em `{}`, e a tarefa responde `nao_sei=True`, razão `ata_sem_lampadas`. Esse julgamento já existia; o trecho determinante do diff é publicar o envelope desconhecido mesmo sem rota, em vez de devolver `None`. A Folha passa a lê-lo como `nao_sei`, grupo E (`app/folha/tests/test_haiku_fora_da_folha.py:53`; `app/folha/tests/test_haiku_fora_da_folha.py:425`; `app/escala/models.py:1778`; `app/escala/services/leitor_celula.py:379`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:700`; `app/folha/fora_da_folha.py:87`; `app/folha/fora_da_folha.py:109`).
+
+1. **`test_o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA` — Folha.**
+
+   **Cadeia até a asserção:** célula sem ata → tarefa desconhecida → novo envelope sem rota → `_fio_da_porta()` devolve `nao_sei` → `o_que_segura()` publica esse fio → linha 83 exige `nada`. O patch de oferta `False` impede Resolver dia, mas não fornece as lâmpadas ausentes nem limpa o desconhecimento (`app/folha/tests/test_haiku_fora_da_folha.py:53`; `app/folha/tests/test_haiku_fora_da_folha.py:75`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:609`; `app/folha/fora_da_folha.py:260`; `app/folha/fora_da_folha.py:272`; `app/folha/tests/test_haiku_fora_da_folha.py:83`).
+
+   **Regra versus expectativa:** o teste escreve “LU-03/M4: sem pergunta, chamado E oferta, o fio é nada”; a implementação escreve “None = ausência conhecida de porta” e preserva desconhecimento conforme 2A. Essas regras podem coexistir: falta à fixture estabelecer uma **negativa conhecida**, além de ausência de oferta (`app/folha/tests/test_haiku_fora_da_folha.py:83`; `app/chamados/services/tarefa_do_dia.py:697`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
+
+   **Fixture e cura:** ainda monta um dia acusador, mas seu início é desconhecido, não `nada`. **Cura no teste/fixture:** fornecer leitura lavrada suficiente para provar ausência conhecida de porta; conservar separadamente um caso sem lâmpadas que espere `nao_sei` (`app/folha/tests/test_haiku_fora_da_folha.py:55`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:697`).
+
+2. **`test_GOLDEN_quantos_bloqueados_dependem_SO_do_admin_na_competencia` — Folha.**
+
+   **Cadeia até a asserção:** mesma ausência de ata → fio `nao_sei` → grupo E → `_esperado_pela_ferramenta()` preserva E → `_esperado_por_dono()` aplica `DONO_DO_FIO` → `sem_leitura_sistema`, deixando `sem_acao_disponivel=0`, contra o `1` da linha 517 (`app/folha/tests/test_haiku_fora_da_folha.py:425`; `app/folha/fora_da_folha.py:203`; `app/folha/fora_da_folha.py:215`; `app/folha/tests/test_haiku_fora_da_folha.py:483`; `app/folha/tests/test_haiku_fora_da_folha.py:497`; `app/folha/retrato_folha.py:193`; `app/folha/tests/test_haiku_fora_da_folha.py:517`).
+
+   **Regra versus expectativa:** a golden já incorpora LU-05 e já traduz o grupo E. A igualdade ferramenta/tela é verificada **antes** da constante que falha; portanto, este traceback aponta a premissa “furo sem fio = um balde próprio”, não uma divergência demonstrada entre ferramenta e tela. LU-05 separa `ninguem`; 2A separa desconhecimento (`app/folha/tests/test_haiku_fora_da_folha.py:485`; `app/folha/tests/test_haiku_fora_da_folha.py:511`; `app/folha/tests/test_haiku_fora_da_folha.py:515`; `app/docs/CORTES.md:437`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
+
+   **Fixture e cura:** preencher a competência inteira resolveu a ausência de células, mas não a ausência de leitura das lâmpadas. **Cura no teste/fixture**, preservando a golden positiva de `ninguem → sem_acao_disponivel`; simplesmente mudar o esperado para E substituiria o caso que ela pretende provar (`app/folha/tests/test_haiku_fora_da_folha.py:415`; `app/folha/tests/test_haiku_fora_da_folha.py:425`; `app/folha/tests/test_haiku_fora_da_folha.py:521`).
+
+3. **`test_MORDE_a_GOLDEN_o_dono_ANDA_quando_o_fio_do_dia_muda` — Folha.**
+
+   **Cadeia até a asserção:** mesma fixture → grupo E → `montar_linhas()` grava o fio correspondente em `dono` → `_fio_na_tela()` conta `nao_sei` → linha 546 exige um `ninguem`. A falha acontece antes da criação do chamado que exercitaria a transição (`app/folha/retrato_folha.py:179`; `app/folha/retrato_folha.py:1228`; `app/folha/tests/test_haiku_fora_da_folha.py:452`; `app/folha/tests/test_haiku_fora_da_folha.py:546`; `app/folha/tests/test_haiku_fora_da_folha.py:551`).
+
+   **Regra versus expectativa:** o teste descreve `nada → chamado → admin`, mas inicia atualmente em `nao_sei`. Também conserva a frase histórica “vivo na fila TEM porta”, enquanto o código novo exclui residuais `cobrar`, histórico/arquivado e `None`; a transição posterior precisa respeitar esse recorte, mas não foi alcançada no dado fornecido **[nao verificado]** (`app/folha/tests/test_haiku_fora_da_folha.py:528`; `app/folha/tests/test_haiku_fora_da_folha.py:536`; `app/chamados/services/tarefa_do_dia.py:655`).
+
+   **Fixture e cura:** **cura no teste/fixture**, reconstruindo o início conhecido sem porta e conservando a prova de movimento conjunto; aceitar o início desconhecido mudaria a transição descrita (`app/folha/tests/test_haiku_fora_da_folha.py:528`; `app/folha/tests/test_haiku_fora_da_folha.py:546`).
+
+A publicação do envelope e os mapas E estão atribuídos textualmente à **c5**; a c6 altera o agrupamento misto, que não explica estes três casos com um único dia acusador. O commit exato de introdução é **[nao verificado]** (`app/chamados/tests/e3_r3_c5_entrega.txt:54`; `app/chamados/tests/e3_r3_c5_entrega.txt:56`; `app/chamados/tests/e3_r3_c6_entrega.txt:16`).
+
+**Cadeia compartilhada pelos três C11.** `_beco()` cria âncora `resolvido`, pergunta respondida e registra a resposta na sequência E1. `_pela_decisao()` transforma a resposta textual em `validar/admin`; a ação tem `porta=None` porque a âncora está fora da fila. O hunk novo aceita a existência dessa âncora para `admin_alcancavel`, publica `admin/porta_acao/validar`, e a projeção entrega o envelope. Os três testes param na exigência `(False, None, None)` da linha 385 (`app/ponto/tests/test_cxr_tela_le_o_motor.py:359`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:366`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:372`; `app/chamados/services/tarefa_do_dia.py:151`; `app/chamados/services/tarefa_do_dia.py:160`; `app/chamados/services/tarefa_do_dia.py:648`; `app/chamados/services/tarefa_do_dia.py:673`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:385`).
+
+4. **`test_MORDE_C11_le_a_lista_lavrada_e_nao_chama_o_motor`.**
+
+   A cadeia acima interrompe o teste **antes de lavrar** `[BECO]`. Sua prova pretendida continua sendo C11 com dono `CADASTRO`, nenhuma chamada ao motor e juiz consultado com lista positiva; o comportamento dessas etapas nesta execução é **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:409`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:410`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:413`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:415`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:417`).
+
+5. **`test_MORDE_C11_lavra_que_cobre_sem_dia_e_lista_vazia_sem_motor`.**
+
+   A mesma guarda interrompe o teste **antes da lavra vazia**. A regra escrita distingue cobertura sem dias de ausência de resposta, esperando `ESTRUTURA` sem motor; essa prova não foi alcançada **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:420`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:422`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:423`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:425`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:426`).
+
+6. **`test_MORDE_C11_fora_da_lavra_fica_sem_resposta_e_nao_chama_o_motor`.**
+
+   A mesma guarda interrompe o teste antes da consulta sem lavra. A expectativa posterior é dono `None`, sem motor; o traceback não verifica nem refuta esse comportamento **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:429`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:430`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:431`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:432`).
+
+**Regras, fixture e cura dos três C11: PERGUNTA.** A fixture segue a leitura antiga de que resposta sob âncora terminal fica sem porta, inclusive verificando o C17. Seu comentário “espera o SISTEMA” também diverge diretamente do corpo atual, que manda validar pelo ADMIN (`app/ponto/tests/test_cxr_tela_le_o_motor.py:365`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:376`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:382`; `app/chamados/services/tarefa_do_dia.py:160`).
+
+A leitura nova segue LU-03, “ação direta do admin **com tela** = porta”, interpretando âncora existente fora da fila como suficiente; o teste M2 fixa essa interpretação. Entretanto, LU-04 escreve que pergunta com “porta None” não dá dono, e a costura conserva a regra “âncora terminal é fio morto — o admin não a vê”. Falta reconciliar o significado de “porta None” e o alcance de validar sob terminal (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`; `app/chamados/services/tarefa_do_dia.py:622`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:540`; `app/chamados/services/fio.py:789`).
+
+Há ainda um limite concreto da suposição “com tela”: esta fixture cria disputa **sem chamado**, enquanto a montagem do modal seleciona disputas com `chamado__isnull=False` e busca perguntas dessas disputas. A existência de `chamado_destino` não comprova, sozinha, o botão de validar dessa pergunta; a renderização efetiva é **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:363`; `app/chamados/services/fio.py:211`; `app/chamados/services/fio.py:247`; `app/chamados/services/fio.py:255`; `app/chamados/views.py:889`).
+
+Assim, a fixture **não monta SEM PORTA segundo o juiz atual**, e o beco real a excluiria. Se essa interpretação de LU-03 prevalecer, cura na fixture para conservar um C11 positivo; se prevalecer a restrição terminal/sem tela, cura no publicador de alcance administrativo. Trocar somente a asserção para aceitar a porta deixaria de exercitar o beco (`app/chamados/services/tarefa_do_dia.py:648`; `app/escala/services/cadastro_realidade.py:472`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:412`).
+
+Essa interpretação já aparece na entrega LU2 anterior à LU3; atribuir sua introdução especificamente a c3, c4, c5 ou c6 é **[nao verificado]** (`app/chamados/tests/e3_lu2_entrega.txt:20`; `app/chamados/tests/e3_lu3_entrega.txt:53`).
+
+7. **`test_MORDE_o_universo_le_a_celula_e_o_FIO` — pauta.**
+
+   **Cadeia:** a fixture cria D1 discordante sem ata. Isso oferece o caminho trabalho sem lâmpadas → `nao_sei` → envelope novo → `_fio_da_porta()` → exclusão em `dias_sem_fio()`. O leitor só acrescenta ao resultado dias cujo fio é `nada`; a asserção recebe `[]`, esperando `[D1]`. Porém a consulta real ao Resolver também participa: o fio final dessa execução não está no traceback **[nao verificado]** (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:39`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:597`; `app/chamados/services/tarefa_do_dia.py:700`; `app/folha/fora_da_folha.py:87`; `app/ponto/services/pautas_dos_discordantes.py:90`; `app/ponto/services/pautas_dos_discordantes.py:95`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:68`).
+
+   **Regra versus expectativa:** O320 exige discordante **sem fio**, e o próprio teste define isso como `fio == 'nada'`. K3 interpreta 2A + L-099 como exclusão de desconhecimento da pauta de DP, com registro separado em `sem_leitura`. Portanto, a expectativa `[D1]` continua válida para um dia conhecido sem fio; a fixture deixou essa premissa sem estabelecer (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:1`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:96`; `app/ponto/services/pautas_dos_discordantes.py:60`).
+
+   **Cura:** **teste/fixture**, fornecendo leitura conhecida e controlando a oferta. A publicação desconhecida é c5; o ramo explícito da pauta é **c6 K3**. Atribuir o `[]` exclusivamente a K3, sem o fio final, permanece **[nao verificado]** (`app/chamados/tests/e3_r3_c5_entrega.txt:54`; `app/chamados/tests/e3_r3_c6_entrega.txt:20`).
+
+8. **`test_MORDE_contagem_IMPAR_e_BATIDA_e_o_motor_NAO_roda` — pauta.**
+
+   **Cadeia comprovável:** uma batida é criada; seu signal chama o cartório; a fixture restaura **somente o veredito**. `apurar()` consulta primeiro `dias_sem_fio()` e pode retornar `[]` antes de montar os insumos ou perguntar a paridade. O traceback não mostra se D1 foi excluído por `nao_sei`, por porta administrativa ou por outro fio: origem interna exata **[nao verificado]** (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:202`; `app/ponto/signals.py:132`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:206`; `app/ponto/management/commands/pautas_discordantes.py:71`; `app/ponto/management/commands/pautas_discordantes.py:85`; `app/ponto/management/commands/pautas_discordantes.py:100`).
+
+   **Fixture:** monta uma contagem ímpar, mas não fixa a premissa adicional de dia conhecido sem fio. Deliberadamente não cria vínculo real; o mock de cadastro usado na classificação do dono não fornece vínculo à carga da tarefa. Sem vínculo, o teto dos marcos pode ficar vazio; lâmpada apagada sem teto produz desconhecimento. A oferta real de Resolver também não está controlada (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:212`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:216`; `app/ponto/turnos.py:3065`; `app/ponto/services/cartorio.py:890`; `app/chamados/services/tarefa_do_dia.py:300`; `app/chamados/services/tarefa_do_dia.py:605`).
+
+   **Regra e cura:** BUG-144 continua exigindo classificação da contagem ímpar pelo juiz, e o comando conserva essa consulta depois do filtro de universo. Este failure não demonstra regressão na paridade. **Cura no teste/fixture:** estabelecer explicitamente entrada no universo sem fio, preservando a prova positiva `BATIDA` e motor não chamado; não trocar o esperado para lista vazia (`app/ponto/management/commands/e6_oraculo.py:63`; `app/ponto/management/commands/e6_oraculo.py:106`; `app/ponto/management/commands/pautas_discordantes.py:87`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:229`).
+
+O agrupamento para encaminhamento fica:
+
+| Causa comum | Casos | Encaminhamento |
+|---|---|---|
+| Fixture presume ausência conhecida; c5 passa a expor desconhecimento já julgado | Folha ×3 | **Teste/fixture**, conservando também um irmão desconhecido (`app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/tests/e3_r3_c5_entrega.txt:54`). |
+| Âncora fora da fila passa a bastar para porta administrativa, incluindo a terminal da fixture | C11 ×3 | **PERGUNTA** entre LU-03/com tela e restrições escritas de LU-04/âncora terminal; depois, código ou fixture conforme a resposta (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`; `app/chamados/services/fio.py:789`). |
+| Fixture não estabelece o novo pré-requisito de fio conhecido `nada` | Pauta ×2 | **Teste/fixture**; o ramo final que excluiu cada D1 é **[nao verificado]** no dado fornecido (`app/ponto/services/pautas_dos_discordantes.py:87`; `app/ponto/services/pautas_dos_discordantes.py:95`; `app/ponto/management/commands/pautas_discordantes.py:71`). |
+
+## 15/11 02:17 · sessao a4f7fab07c05 · - · - · origem=Ronald (tmux)
+
+Não achei defeito atual na propagação da marca pelos caminhos inspecionados: os dois `create` recebem `True` antes do retorno; os dois ramos de reutilização retornam objetos consultados sem atribuição; as três cascas passam diretamente o objeto ao helper. (`app/ponto/registro_batida.py:113`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:155`; `app/ponto/registro_batida.py:158`; `app/ponto/registro_batida.py:161`; `app/api/views.py:654`; `app/api/views.py:693`; `app/api/views_core.py:645`; `app/api/views_core.py:684`; `app/ponto/services/triagem_batida.py:700`; `app/ponto/services/triagem_batida.py:723`)
+
+| Item | Conferência |
+|---|---|
+| Escritores/leitores | Escritores de produção: `registrar_batida`, dois sítios; leitor direto único: `resposta_se_reutilizada`. As cascas leem o dicionário retornado. (`app/ponto/registro_batida.py:155`; `app/ponto/registro_batida.py:161`; `app/ponto/services/resposta_batida.py:14`; `app/api/views.py:693`; `app/api/views_core.py:684`; `app/ponto/services/triagem_batida.py:723`) |
+| Substituição/perda entre criação e casca | Não existe cópia, reconsulta ou `refresh_from_db` nesses segmentos; fechamento recebe colaborador/instante, sem receber a batida. (`app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:177`; `app/api/views.py:669`; `app/api/views_core.py:660`; `app/ponto/services/triagem_batida.py:713`) |
+| Modelo/receivers | `Batida` herda diretamente `models.Model`, sem `save`, manager ou `from_db` próprios nessa classe. Receivers chamam serviços usando `instance`, sem substituir o retorno da porta. SSE usa `created`, não a marca; seu payload enumera campos explicitamente. (`app/ponto/models.py:8`; `app/ponto/models.py:111`; `app/ponto/signals.py:34`; `app/ponto/signals.py:40`; `app/ponto/signals.py:132`; `app/ponto/signals.py:207`; `app/ponto/realtime.py:32`) |
+| Segundo escritor pela porta | Os únicos `Batida.objects.create` de produção encontrados são os dois ramos marcados. Reutilização não executa esses ramos. (`app/ponto/registro_batida.py:115`; `app/ponto/registro_batida.py:122`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:158`) |
+| Outros consumidores | Leem campos explícitos, identidade, `None`, justificativa ou vinculam FK; não enumeram `vars`/`__dict__` da batida. `anotar` lê apenas os campos fornecidos, sob allowlist. (`app/ponto/services/justificativa.py:195`; `app/ponto/services/justificativa.py:197`; `app/ponto/services/justificativa.py:202`; `app/ponto/services/justificativa.py:204`; `app/ponto/services/justificativa.py:370`; `app/ponto/services/justificativa.py:381`; `app/ponto/views.py:1825`; `app/ponto/views.py:1829`; `app/ponto/views.py:1834`; `app/ponto/services/veredito_celula.py:325`; `app/chamados/services/materializacao.py:952`; `app/chamados/services/materializacao.py:959`; `app/chamados/services/materializacao.py:1041`; `app/chamados/services/regularizacao_ext.py:95`; `app/chamados/services/regularizacao_ext.py:106`; `app/chamados/services/acoes_chamado.py:54`; `app/chamados/services/acoes_chamado.py:67`; `app/ponto/registro_batida.py:243`; `app/ponto/registro_batida.py:246`) |
+
+Censo AST dos **16 sítios diretos fora dos testes**: [nao verificado]
+
+| Chamador | Sítios |
+|---|---|
+| Três cascas | `app/api/views.py:654`; `app/api/views_core.py:645`; `app/ponto/services/triagem_batida.py:700` |
+| Justificativas | `app/ponto/services/justificativa.py:188`; `app/ponto/services/justificativa.py:361`; `app/ponto/views.py:1818` |
+| Veredito | `app/ponto/services/veredito_celula.py:323` |
+| Materialização | `app/chamados/services/materializacao.py:933`; `app/chamados/services/materializacao.py:1013` |
+| Regularização externa | `app/chamados/services/regularizacao_ext.py:78` |
+| Exceção autorizada | `app/chamados/services/acoes_chamado.py:44` |
+| Comando de ensaio | `app/ponto/management/commands/testar_pwa.py:184`; `app/ponto/management/commands/testar_pwa.py:198`; `app/ponto/management/commands/testar_pwa.py:219`; `app/ponto/management/commands/testar_pwa.py:228`; `app/ponto/management/commands/testar_pwa.py:229` |
+
+O comando descarta os três primeiros retornos e compara `None`/PK nos dois últimos; a entrega cita `:230` como segunda chamada, mas ali está a comparação: a chamada real é `:229`. (`app/ponto/management/commands/testar_pwa.py:184`; `app/ponto/management/commands/testar_pwa.py:198`; `app/ponto/management/commands/testar_pwa.py:219`; `app/ponto/management/commands/testar_pwa.py:229`; `app/ponto/management/commands/testar_pwa.py:230`)
+
+A corrida específica de V2 fica causalmente resolvida pelo código: concorrente confirmado antes da consulta gera retorno por reutilização sem marca; criação local recebe marca. A colisão posterior às consultas ainda escapa como exceção, sem alcançar helper, porque não há captura de `IntegrityError` no corpo da porta. (`app/ponto/registro_batida.py:113`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:158`; `app/ponto/models.py:106`)
+
+Execução SQL/Django, chamadas dinâmicas, comportamento de bibliotecas externas e frequência em produção: **[nao verificado]**.
 
 ## 15/11 02:16 · sessao 5ce9eaee8b60 · - · - · origem=Ronald (tmux)
 
@@ -844,136 +1099,4 @@ A mudança de sinalização para dupla viva merece reprovação por ampliação 
 
 7. **Não há prova de duplicação de um juiz *registrado* para “foi criada neste toque”.** O registro da família batida declara período, cálculo, geofence, selfie e GPS; não essa pergunta. O helper compara identidade e campos e constrói resposta, sem selecionar tipo, criar Batida ou consultar relógio (`app/core/juizes.py:1196`, `app/core/juizes.py:1201`, `app/core/juizes.py:1205`, `app/core/juizes.py:1211`, `app/ponto/services/resposta_batida.py:10`, `app/ponto/services/resposta_batida.py:23`). A inferência de causalidade a partir do snapshot continua sendo derivação da operação de escrita, cuja correção concorrente deve ser examinada pelo responsável pelos ramos da porta (`app/ponto/services/resposta_batida.py:17`, `app/ponto/services/resposta_batida.py:23`).
 
-## 15/11 01:51 · sessao 6c989965197c · BATIDA-DEDUP-RETRATADA · construtor · origem=Code
-
-Curas e evidências registradas na [entrega c2](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c2_entrega.txt:1).
-
-- 20 testes locais verdes, incluindo C1 e paridade: [resultado](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c2_green.txt:27). [nao verificado]
-- 10 mutantes mortos: [evidências](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c2_entrega.txt:86).
-- Compilação e Ruff OK: [checks](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c2_checks.txt:6).
-
-Suite e certificação Code/opus: [nao verificado]. [nao verificado]
-
-## 15/11 01:43 · sessao 13f3357d7635 · BATIDA-DEDUP-RETRATADA · leitura · origem=Code
-
-**Há um mecanismo de arredondamento que reproduz 0,01 h: o mensal arredonda um subtotal e depois arredonda novamente ao acrescentar folga trabalhada sem escala certa. A lavra soma os valores completos e arredonda no fim. Não é arredondamento por dia.** (`app/ponto/services/fechamento.py:902–903,984–985`; `app/ponto/services/dia_pago.py:178,264,562–563`)
-
-**Atribuir esse mecanismo a cada um dos 13 pares: [não verificado].** O anexo não traz os subtotais necessários para essa atribuição nem a implementação da sonda q4b. [não verificado]
-
-1. **Quem escreve o mensal e como arredonda**
-
-   O campo é `DecimalField(... decimal_places=2)`. O escritor de cálculo é `recalcular_fechamento_mes`; ele persiste por `save()` no ramo aberto e por `update()` no outro ramo. (`app/ponto/models.py:412`; `app/ponto/services/fechamento.py:448,1137–1144,1160–1162`)
-
-   A sequência executável é:
-
-   ```python
-   # Primeiro: total dos períodos comuns + órfãos, em horas
-   round(resultado.horas_trabalhadas + _min_orfaos / 60, 2)
-
-   # Depois, se houver folga sem escala certa:
-   round(float(fechamento.horas_trabalhadas) + _min_sem / 60, 2)
-   ```
-
-   Essas são as expressões de `app/ponto/services/fechamento.py:902–903,982–985`. `resultado.horas_trabalhadas` soma **minutos dos períodos e divide por 60**, sem arredondar cada período/dia nessa propriedade. (`app/ponto/motor_calculo_v2.py:294–296`)
-
-   Portanto, são **duas casas de hora decimal**, com um arredondamento intermediário antes da parcela de folga sem escala certa. (`app/ponto/services/fechamento.py:902–903,984–985`)
-
-   Existe também `restaurar_fechamento`: aceita o campo e atualiza o valor recebido, sem cálculo ou arredondamento explícito próprio. (`app/ponto/services/fechamento.py:1373–1380,1391–1393`)
-
-2. **O que `soma_da_competencia` devolve**
-
-   Filtra `DiaPago` por colaborador, mês, ano e versão — padrão `motor` —, retorna `None` sem lavratura e, havendo linhas, executa `Sum` de cada campo seguido de `round(float(total), 2)`. Para `horas_trabalhadas`, devolve um **float em horas, arredondado no total da competência**. (`app/ponto/services/dia_pago.py:550–563`)
-
-   A lavra recebe minutos, divide por 60 e acumula sem arredondar as horas diárias: períodos comuns, folgas sem escala certa e órfãos entram pelos caminhos de `:178`, `:264` e `:271`; os valores seguem para `DiaPago` em `:340–347`. (`app/ponto/services/dia_pago.py:178,264,271,340–347`)
-
-3. **Quem lê e o que apresenta**
-
-   | Leitor | Número utilizado |
-   |---|---|
-   | Lista de fechamento | **Mensal gravado**, exibido com duas casas. (`app/ponto/views.py:1137–1154`; `app/ponto/services/fechamento_lista.py:80,105–107`; `app/templates/ponto/_fech_linha.html:30`) |
-   | Relatório “Horas por colaborador”/CSV | **Mensal gravado**. (`app/relatorios/views.py:68–73,89–95`; `app/templates/relatorios/horas_mes.html:67`) |
-   | Espelho e resumo do PDF | Preferem **fechamento derivado agora**, pela mesma fórmula mensal; se indisponível, usam **`soma_da_competencia`**. Não constituem um par fixo “mensal versus lavra”. (`app/relatorios/cartao_pela_celula.py:69–76,111,142–174,321–346`; `app/ponto/services/fechamento.py:1759–1761`) |
-   | Formatação do espelho/PDF | Espelho mostra uma casa decimal; PDF converte para horas e minutos inteiros. Isso pode ocultar a diferença centesimal. (`app/templates/ponto/espelho.html:39`; `app/relatorios/pdf_espelho.py:667–678,766`) |
-   | Extrato parcial | Soma **`DiaPago` por intervalo**, via `soma_do_periodo`, e mostra trabalhadas com duas casas. Sua janela precisa ser conferida antes da comparação com uma competência. (`app/relatorios/views.py:463–487,523`; `app/templates/relatorios/extrato_parcial.html:73`) |
-   | TXT Domínio | O gerador recebe fechamentos **derivados em leitura**, mas a lista de eventos **não emite esse total T como rubrica de trabalhadas**; emite HE, folga, noturno, intra e atraso. (`app/folha/views.py:207–209,265–268`; `app/folha/export.py:439–461`) |
-   | Comparador/vigia disponível | Lê **ambos**, mensal e soma lavrada, para produzir divergências. (`app/folha/porta_export.py:388,451–458`) |
-   | Selo disponível | `selo_leitores_no_mesmo_numero` publica **contagens de divergências**; esse contador fica fora da reprovação. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:67,88–107`) |
-
-   A identificação específica de **m2**, **“selo de silêncio”** e da sonda **SILENCIO-VENCIDO/q4b** com esses leitores permanece **[não verificado]**.
-
-4. **A comparação arredonda igualmente?**
-
-   No comparador localizado, a soma já chega arredondada; o mensal gravado tem duas casas. A decisão compara os `float`s **sem novo `round`**, usando `abs(mensal - soma) > 0.015`. Só depois arredonda ambos igualmente para o registro de saída. (`app/ponto/services/dia_pago.py:563`; `app/ponto/models.py:412`; `app/folha/porta_export.py:239,451–458`)
-
-   **Logo, esse comparador não acusa uma diferença de exatamente 0,01 h.** A fórmula que fez a sonda q4b acusá-la é **[não verificado]**. (`app/folha/porta_export.py:239,455`)
-
-5. **Mesmo cadastro e mesmas batidas podem resultar em números diferentes?**
-
-   **Sim:** lista de fechamento versus extrato parcial, quando suas janelas contêm exatamente os mesmos dias pagos. Um lê o mensal; outro soma a lavra. (`app/ponto/views.py:1137–1154`; `app/relatorios/views.py:463–487,523`)
-
-   Exemplo aritmético de três dias, usando as parcelas previstas no código: dois dias comuns de **482 minutos** cada e uma folga sem escala certa de **481 minutos**. (`app/ponto/services/fechamento.py:902–903,980–985`; `app/ponto/services/dia_pago.py:178,264`)
-
-   ```text
-   Mensal:
-   round((482 + 482) / 60, 2) = 16,07
-   round(16,07 + 481 / 60, 2) = 24,09 h
-
-   Soma lavrada:
-   round(482/60 + 482/60 + 481/60, 2) = 24,08 h
-
-   Mensal − lavra = +0,01 h
-   ```
-
-   A reprodução decorre do **arredondamento do subtotal antes de acrescentar a última parcela**, pelas expressões de `app/ponto/services/fechamento.py:902–903,984–985`, contra o arredondamento final de `app/ponto/services/dia_pago.py:562–563`. A ocorrência dessas parcelas nos 13 casos reais permanece **[não verificado]**.
-
-## 15/11 01:42 · sessao a186d9d5c966 · - · - · origem=Ronald (tmux)
-
-Confirmado: há arredondamento intermediário do subtotal mensal, seguido de outro ao acrescentar folga sem escala certa; não há arredondamento diário nesse caminho. (`app/ponto/services/fechamento.py:902–903`, `app/ponto/services/fechamento.py:980–985`)
-
-O exemplo solicitado reproduz **FM − soma = +0,01 h**:
-
-| Peça | Minutos | Horas |
-|---|---:|---:|
-| Dia comum 1 | 482 | 8,033333… |
-| Dia comum 2 | 482 | 8,033333… |
-| Folga sem escala certa | 481 | 8,016666… |
-
-As conversões correspondem aos caminhos de `DiaPago` em `app/ponto/services/dia_pago.py:178` e `app/ponto/services/dia_pago.py:264`.
-
-- FM: `round((482+482)/60, 2) = 16,07`; depois `round(16,07 + 481/60, 2) = 24,09`. (`app/ponto/services/fechamento.py:902–903`, `app/ponto/services/fechamento.py:984–985`)
-- Soma lavrada: `round(482/60 + 482/60 + 481/60, 2) = 24,08`. (`app/ponto/services/dia_pago.py:178`, `app/ponto/services/dia_pago.py:264`, `app/ponto/services/dia_pago.py:562–563`)
-
-Verifiquei a conta com `python3 -B`, sem importar a aplicação e sem escrever arquivos; sua reprodução fica sustentada pelas expressões citadas acima.
-
-Quanto a outros escritores: `restaurar_fechamento` aceita campos válidos do modelo, inclui `horas_trabalhadas` entre os possíveis, e os entrega diretamente a `.update(**_upd)`, sem recalcular nem acrescentar arredondamento explícito nessa função. (`app/ponto/services/fechamento.py:1373–1380`, `app/ponto/services/fechamento.py:1391–1393`)
-
-A gravação ordinária persiste pelo `.save()` para status aberto ou pelo `.update(horas_trabalhadas=...)` no outro ramo. (`app/ponto/services/fechamento.py:1137–1144`, `app/ponto/services/fechamento.py:1160–1162`)
-
-Não encontrei outra atribuição operacional explícita a esse campo fora dessas rotas na busca textual; exaustividade contra atribuições dinâmicas externas: [não verificado].
-
-## 15/11 01:42 · sessao e3c7fb0de668 · - · - · origem=Ronald (tmux)
-
-- O comparador disponível é `app/folha/porta_export.py::_medir_dia_pago`: chama `soma_da_competencia` em `:388`, lê cada campo do fechamento em `:451-452` e compara os valores convertidos em `float`, sem novo arredondamento, em `:455`. A soma já veio arredondada a duas casas (`app/ponto/services/dia_pago.py:559-563`).
-- A tolerância é **0,015 h** (`app/folha/porta_export.py:239`). Portanto esse comparador **não acusa diferença de exatamente 0,01 h** (`app/folha/porta_export.py:455`). Só depois de decidir a divergência ele arredonda ambos os lados igualmente para o registro de saída (`app/folha/porta_export.py:456-458`).
-- `linha_x_badge` também lê a soma (`app/folha/porta_export.py:267-268`), compara badge contra soma com a mesma tolerância (`:272-276`) e combina trabalhadas com folga trabalhada (`:245-248`).
-- O selo concreto disponível chama `medir` e `lavrar` (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:88-92`), conta elementos das listas (`:106-107`) e imprime contagens (`:153-155`). O contador `fechamento_x_soma_dias_pagos` fica publicado, fora de `falhas` (`app/folha/porta_export.py:687-697`; rótulo explícito em `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:67`). Seus detalhes ficam em `MetricaSnapshot` (`app/folha/porta_export.py:772-782`).
-- O TXT consulta o carimbo desse selo (`app/folha/views.py:128-133`); `conferir` lê `MetricaSnapshot` e testa seu valor (`app/folha/porta_export.py:807-821`). Não mostra outro total de trabalhadas nesse caminho (`app/folha/porta_export.py:800-821`).
-- `e6_oraculo.dono_da_divergencia` classifica cadastro/batida/estrutura (`app/ponto/management/commands/e6_oraculo.py:98-110`); isso não demonstra a fórmula da comparação da sonda q4b. A identificação do código de **m2**, **selo de silêncio** e da **sonda específica SILENCIO-VENCIDO/q4b**, ausentes como fontes identificáveis na cópia pesquisada, permanece **[não verificado]**.
-
-## 15/11 01:42 · sessao 54e5daabd0c0 · - · - · origem=Ronald (tmux)
-
-Leitores encontrados, distinguindo código executável dos comentários antigos:
-
-- **Lista de fechamento:** lê os `FechamentoMensal` salvos, passa-os a `montar_resumos`, que conserva o objeto em `r.fechamento`; a coluna mostra `horas_trabalhadas|floatformat:2`. Caminho: `app/ponto/views.py:1137-1154`, `app/ponto/services/fechamento_lista.py:80`, `app/ponto/services/fechamento_lista.py:105-107`, `app/templates/ponto/_fech_linha.html:30`.
-- **Relatório “Horas por colaborador” e CSV:** usa diretamente o FM gravado; HTML com duas casas e CSV com o próprio Decimal. `app/relatorios/views.py:68-73`, `app/relatorios/views.py:89-95`, `app/templates/relatorios/horas_mes.html:67`.
-- **Painel individual de fechamento:** lê apenas o `pk` do gravado, mas o número vem de `fechamento_lido`; template com duas casas. `app/ponto/views.py:993-996`, `app/templates/ponto/partials/painel_fechamento.html:32`.
-- **Espelho (tela/app) e resumo do PDF:** para competência identificada, passam por `folha_manda`, que primeiro chama `totais_da_folha`. Esta exige existência de FM, mas lê **`fechamento_lido` derivado agora**, não as horas do FM salvo. Mapeia `fe.horas_trabalhadas` a `total_trabalhadas`. `app/relatorios/cartao_pela_celula.py:69-76`, `app/relatorios/cartao_pela_celula.py:111`, `app/relatorios/cartao_pela_celula.py:321-346`. `fechamento_lido` chama o mesmo recálculo com `somente_leitura=True, retornar_objeto=True`: `app/ponto/services/fechamento.py:1759-1761`.
-- **Fallback do espelho/PDF:** se não obtiver totais daquele fechamento, `_totais_da_lavratura` lê `soma_da_competencia` e mapeia sua `horas_trabalhadas` a `total_trabalhadas`; escolhido por `folha_manda`. `app/relatorios/cartao_pela_celula.py:142-146`, `app/relatorios/cartao_pela_celula.py:174`, `app/relatorios/cartao_pela_celula.py:340-346`.
-- **Formatação desses resumos:** espelho exibe uma casa decimal; PDF converte a horas/minutos inteiros, com `round((horas-h)*60)`. Portanto nem toda diferença centesimal será visível nesses dois formatos. `app/templates/ponto/espelho.html:39`, `app/relatorios/pdf_espelho.py:766`, `app/relatorios/pdf_espelho.py:667-678`. Entradas de tela/PDF em `app/ponto/services/espelho.py:1283-1284` e `app/relatorios/pdf_espelho.py:628`.
-- **Linhas diárias:** tela usa rubricas do `DiaPago` (trabalhadas com uma casa); PDF reaproveita o dict de dias da tela, e seu “Trabalhado” usa `pago_h`, que soma trabalhadas+folga+feriado pertinente, arredondado a duas casas no serviço e depois formatado por `_h`. Não confundir esse “pago” com `horas_trabalhadas` isolada. `app/ponto/services/espelho.py:805-813`, `app/ponto/services/dia_pago.py:898`, `app/templates/ponto/espelho.html:273-274`, `app/relatorios/pdf_espelho.py:596-598`, `app/relatorios/pdf_espelho.py:901-902`, `app/relatorios/pdf_espelho.py:981`.
-- **Extrato parcial:** lê soma de `DiaPago` por intervalo (`soma_do_periodo`, não diretamente `soma_da_competencia`); arredonda o total de trabalhadas em duas casas e exibe duas casas, inclusive no CSV. Atenção: janela própria do mês civil expandido por 12h e limitado a agora; não presumir igualdade de universo com competência. `app/relatorios/views.py:463-471`, `app/relatorios/views.py:481-487`, `app/relatorios/views.py:523`, `app/templates/relatorios/extrato_parcial.html:73`, `app/relatorios/views.py:560-561`.
-- **TXT Domínio:** o gerador atual recalcula objetos em leitura e os injeta na montagem; não confiar no comentário antigo de que todo chamador usa gravado. `app/folha/views.py:207-209`, `app/folha/views.py:265-268`. **Nenhum dos dois totais T é emitido como rubrica de trabalhadas**: a lista de eventos contém HE50, HE100, feriado, folga, noturno, intra e atraso. `app/folha/export.py:439-461`. Cada valor emitido vira centésimos com `int(round(float(valor)*100))`. `app/folha/export.py:34-45`. O classificador/prontidão lê `fech.horas_trabalhadas` para condições/retorno, mas isso não transforma T em linha TXT. `app/folha/export.py:831`, `app/folha/export.py:902`, `app/folha/export.py:1036`.
-
-Par concreto de leitores de **fontes diferentes**: relatório/lista que lê FM salvo versus extrato parcial que soma DiaPago, desde que comparados sobre intervalo comum; já espelho e PDF compartilham o mesmo seletor de fonte, portanto atribuir a eles uma oposição fixa “FM versus soma diária” seria incorreto. Fontes acima: `app/relatorios/views.py:68`, `app/relatorios/views.py:487`, `app/relatorios/cartao_pela_celula.py:321-346`.
-
-_5482 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5487 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
