@@ -1,7 +1,25 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 03:58** · publicado em **15/11/2026 03:59** (UTC-3)
+> Ultima resposta processada: **15/11/2026 04:05** · publicado em **15/11/2026 04:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 04:05 · sessao 0c663ade5d11 · - · - · origem=Ronald (tmux)
+
+Censo somente por leitura; nenhuma escrita.
+
+- `chamados/models.py:1541`: cópia de pergunta do queryset de `:1530`; `:1544`: cópia de `_state`. Falsos positivos para ResultadoMes.
+- `chamados/services/carga_pergunta_viva.py:177`: cópia de batidas, com filtro sobre `timestamp` em `:178`; classe herda `CargaDaJanela` em `:83`. Falso positivo.
+- `escala/utils.py:1929`: cópia de célula do mapa produzido por `celulas_do_periodo` em `:1351`, iterado em `:1924`. Falso positivo.
+- `ponto/portas/celula.py:1001`: cópia de célula para sobrepor ata/veredito em `:1002-1005`. Falso positivo.
+- `ponto/turnos.py:1543`, `:1999`, `:3121`: cópias de batidas; origem da carga em `:3101-3105`. Falsos positivos.
+- `ponto/motor_calculo_v2.py:2268`: cópias das batidas de entrada, usadas em `:2273`. Falso positivo.
+- `core/management/commands/describe.py:71`: membership em `alvo.__dict__` para listar métodos, sem transportar valores. Falso positivo.
+
+Os demais `__dict__` encontrados fazem seleção de chave (`get`, `pop`, `setdefault`, subscrito), como `chamados/juizes.py:1112` e `escala/alimentacao.py:43`. Separar seleção de chave de abertura inteira é um estreitamento estrutural útil.
+
+Não há prova de tipo em `def f(resultado): return {**vars(resultado)}`. Capturá-lo exige tratar parâmetro desconhecido conservadoramente; distinguir esse parâmetro de `cel` em `ponto/portas/celula.py:1001` exige proveniência por chamadas/tipos. Exclusão apenas por nomes ou por acesso a atributos estranhos é insegura: ResultadoMes admite atributos dinâmicos, e o motor o constrói em `ponto/motor_calculo_v2.py:2274`.
+
+Tipos efetivos em execução e ocorrência em produção: [nao verificado].
 
 ## 15/11 03:58 · sessao 90dd9a6ed7b7 · JUSTIFICATIVA-PAGA-O-PERIODO · verificador · origem=Code
 
@@ -729,84 +747,4 @@ O tripwire tem mordida real contra queries diretas novas/restauradas e compara c
 
 A paridade compara AST de funções com nomes presentes nos dois módulos, whitelist vazia; o harness entregue normalmente lê disco via `open()`, sem aplicar `SOBRESCRITAS`. Os sobreviventes acima não alteram APIs, e permaneceram verdes mesmo com essa leitura corrigida em memória. (`app/api/tests/test_contract_paridade_kernels.py:12`; `app/api/tests/test_contract_paridade_kernels.py:19`; `app/api/tests/test_contract_paridade_kernels.py:31`; `app/ponto/tests/test_dedup_retratada_c2.py:288`)
 
-## 15/11 02:17 · sessao 1964f311ddf6 · E3-RESTO-R3 · leitura · origem=Code
-
-A triagem separa **três falhas da Folha por desconhecimento antes ocultado**, **três C11 por uma nova porta administrativa com regras escritas conflitantes** e **duas da pauta cujo pré-filtro de fio impede chegar à prova pretendida**. Nos dois casos da pauta, o traceback não informa qual fio final excluiu D1; esse detalhe permanece **[nao verificado]** (`app/chamados/services/tarefa_do_dia.py:700`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:385`; `app/ponto/management/commands/pautas_discordantes.py:71`).
-
-**Cadeia compartilhada pela Folha.** As fixtures gravam DNA e veredito, mas não ata com lâmpadas; `ata` admite `NULL`. O leitor transforma essa ausência em `{}`, e a tarefa responde `nao_sei=True`, razão `ata_sem_lampadas`. Esse julgamento já existia; o trecho determinante do diff é publicar o envelope desconhecido mesmo sem rota, em vez de devolver `None`. A Folha passa a lê-lo como `nao_sei`, grupo E (`app/folha/tests/test_haiku_fora_da_folha.py:53`; `app/folha/tests/test_haiku_fora_da_folha.py:425`; `app/escala/models.py:1778`; `app/escala/services/leitor_celula.py:379`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:700`; `app/folha/fora_da_folha.py:87`; `app/folha/fora_da_folha.py:109`).
-
-1. **`test_o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA` — Folha.**
-
-   **Cadeia até a asserção:** célula sem ata → tarefa desconhecida → novo envelope sem rota → `_fio_da_porta()` devolve `nao_sei` → `o_que_segura()` publica esse fio → linha 83 exige `nada`. O patch de oferta `False` impede Resolver dia, mas não fornece as lâmpadas ausentes nem limpa o desconhecimento (`app/folha/tests/test_haiku_fora_da_folha.py:53`; `app/folha/tests/test_haiku_fora_da_folha.py:75`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:609`; `app/folha/fora_da_folha.py:260`; `app/folha/fora_da_folha.py:272`; `app/folha/tests/test_haiku_fora_da_folha.py:83`).
-
-   **Regra versus expectativa:** o teste escreve “LU-03/M4: sem pergunta, chamado E oferta, o fio é nada”; a implementação escreve “None = ausência conhecida de porta” e preserva desconhecimento conforme 2A. Essas regras podem coexistir: falta à fixture estabelecer uma **negativa conhecida**, além de ausência de oferta (`app/folha/tests/test_haiku_fora_da_folha.py:83`; `app/chamados/services/tarefa_do_dia.py:697`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
-
-   **Fixture e cura:** ainda monta um dia acusador, mas seu início é desconhecido, não `nada`. **Cura no teste/fixture:** fornecer leitura lavrada suficiente para provar ausência conhecida de porta; conservar separadamente um caso sem lâmpadas que espere `nao_sei` (`app/folha/tests/test_haiku_fora_da_folha.py:55`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:697`).
-
-2. **`test_GOLDEN_quantos_bloqueados_dependem_SO_do_admin_na_competencia` — Folha.**
-
-   **Cadeia até a asserção:** mesma ausência de ata → fio `nao_sei` → grupo E → `_esperado_pela_ferramenta()` preserva E → `_esperado_por_dono()` aplica `DONO_DO_FIO` → `sem_leitura_sistema`, deixando `sem_acao_disponivel=0`, contra o `1` da linha 517 (`app/folha/tests/test_haiku_fora_da_folha.py:425`; `app/folha/fora_da_folha.py:203`; `app/folha/fora_da_folha.py:215`; `app/folha/tests/test_haiku_fora_da_folha.py:483`; `app/folha/tests/test_haiku_fora_da_folha.py:497`; `app/folha/retrato_folha.py:193`; `app/folha/tests/test_haiku_fora_da_folha.py:517`).
-
-   **Regra versus expectativa:** a golden já incorpora LU-05 e já traduz o grupo E. A igualdade ferramenta/tela é verificada **antes** da constante que falha; portanto, este traceback aponta a premissa “furo sem fio = um balde próprio”, não uma divergência demonstrada entre ferramenta e tela. LU-05 separa `ninguem`; 2A separa desconhecimento (`app/folha/tests/test_haiku_fora_da_folha.py:485`; `app/folha/tests/test_haiku_fora_da_folha.py:511`; `app/folha/tests/test_haiku_fora_da_folha.py:515`; `app/docs/CORTES.md:437`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
-
-   **Fixture e cura:** preencher a competência inteira resolveu a ausência de células, mas não a ausência de leitura das lâmpadas. **Cura no teste/fixture**, preservando a golden positiva de `ninguem → sem_acao_disponivel`; simplesmente mudar o esperado para E substituiria o caso que ela pretende provar (`app/folha/tests/test_haiku_fora_da_folha.py:415`; `app/folha/tests/test_haiku_fora_da_folha.py:425`; `app/folha/tests/test_haiku_fora_da_folha.py:521`).
-
-3. **`test_MORDE_a_GOLDEN_o_dono_ANDA_quando_o_fio_do_dia_muda` — Folha.**
-
-   **Cadeia até a asserção:** mesma fixture → grupo E → `montar_linhas()` grava o fio correspondente em `dono` → `_fio_na_tela()` conta `nao_sei` → linha 546 exige um `ninguem`. A falha acontece antes da criação do chamado que exercitaria a transição (`app/folha/retrato_folha.py:179`; `app/folha/retrato_folha.py:1228`; `app/folha/tests/test_haiku_fora_da_folha.py:452`; `app/folha/tests/test_haiku_fora_da_folha.py:546`; `app/folha/tests/test_haiku_fora_da_folha.py:551`).
-
-   **Regra versus expectativa:** o teste descreve `nada → chamado → admin`, mas inicia atualmente em `nao_sei`. Também conserva a frase histórica “vivo na fila TEM porta”, enquanto o código novo exclui residuais `cobrar`, histórico/arquivado e `None`; a transição posterior precisa respeitar esse recorte, mas não foi alcançada no dado fornecido **[nao verificado]** (`app/folha/tests/test_haiku_fora_da_folha.py:528`; `app/folha/tests/test_haiku_fora_da_folha.py:536`; `app/chamados/services/tarefa_do_dia.py:655`).
-
-   **Fixture e cura:** **cura no teste/fixture**, reconstruindo o início conhecido sem porta e conservando a prova de movimento conjunto; aceitar o início desconhecido mudaria a transição descrita (`app/folha/tests/test_haiku_fora_da_folha.py:528`; `app/folha/tests/test_haiku_fora_da_folha.py:546`).
-
-A publicação do envelope e os mapas E estão atribuídos textualmente à **c5**; a c6 altera o agrupamento misto, que não explica estes três casos com um único dia acusador. O commit exato de introdução é **[nao verificado]** (`app/chamados/tests/e3_r3_c5_entrega.txt:54`; `app/chamados/tests/e3_r3_c5_entrega.txt:56`; `app/chamados/tests/e3_r3_c6_entrega.txt:16`).
-
-**Cadeia compartilhada pelos três C11.** `_beco()` cria âncora `resolvido`, pergunta respondida e registra a resposta na sequência E1. `_pela_decisao()` transforma a resposta textual em `validar/admin`; a ação tem `porta=None` porque a âncora está fora da fila. O hunk novo aceita a existência dessa âncora para `admin_alcancavel`, publica `admin/porta_acao/validar`, e a projeção entrega o envelope. Os três testes param na exigência `(False, None, None)` da linha 385 (`app/ponto/tests/test_cxr_tela_le_o_motor.py:359`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:366`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:372`; `app/chamados/services/tarefa_do_dia.py:151`; `app/chamados/services/tarefa_do_dia.py:160`; `app/chamados/services/tarefa_do_dia.py:648`; `app/chamados/services/tarefa_do_dia.py:673`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:385`).
-
-4. **`test_MORDE_C11_le_a_lista_lavrada_e_nao_chama_o_motor`.**
-
-   A cadeia acima interrompe o teste **antes de lavrar** `[BECO]`. Sua prova pretendida continua sendo C11 com dono `CADASTRO`, nenhuma chamada ao motor e juiz consultado com lista positiva; o comportamento dessas etapas nesta execução é **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:409`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:410`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:413`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:415`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:417`).
-
-5. **`test_MORDE_C11_lavra_que_cobre_sem_dia_e_lista_vazia_sem_motor`.**
-
-   A mesma guarda interrompe o teste **antes da lavra vazia**. A regra escrita distingue cobertura sem dias de ausência de resposta, esperando `ESTRUTURA` sem motor; essa prova não foi alcançada **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:420`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:422`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:423`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:425`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:426`).
-
-6. **`test_MORDE_C11_fora_da_lavra_fica_sem_resposta_e_nao_chama_o_motor`.**
-
-   A mesma guarda interrompe o teste antes da consulta sem lavra. A expectativa posterior é dono `None`, sem motor; o traceback não verifica nem refuta esse comportamento **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:429`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:430`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:431`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:432`).
-
-**Regras, fixture e cura dos três C11: PERGUNTA.** A fixture segue a leitura antiga de que resposta sob âncora terminal fica sem porta, inclusive verificando o C17. Seu comentário “espera o SISTEMA” também diverge diretamente do corpo atual, que manda validar pelo ADMIN (`app/ponto/tests/test_cxr_tela_le_o_motor.py:365`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:376`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:382`; `app/chamados/services/tarefa_do_dia.py:160`).
-
-A leitura nova segue LU-03, “ação direta do admin **com tela** = porta”, interpretando âncora existente fora da fila como suficiente; o teste M2 fixa essa interpretação. Entretanto, LU-04 escreve que pergunta com “porta None” não dá dono, e a costura conserva a regra “âncora terminal é fio morto — o admin não a vê”. Falta reconciliar o significado de “porta None” e o alcance de validar sob terminal (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`; `app/chamados/services/tarefa_do_dia.py:622`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:540`; `app/chamados/services/fio.py:789`).
-
-Há ainda um limite concreto da suposição “com tela”: esta fixture cria disputa **sem chamado**, enquanto a montagem do modal seleciona disputas com `chamado__isnull=False` e busca perguntas dessas disputas. A existência de `chamado_destino` não comprova, sozinha, o botão de validar dessa pergunta; a renderização efetiva é **[nao verificado]** (`app/ponto/tests/test_cxr_tela_le_o_motor.py:363`; `app/chamados/services/fio.py:211`; `app/chamados/services/fio.py:247`; `app/chamados/services/fio.py:255`; `app/chamados/views.py:889`).
-
-Assim, a fixture **não monta SEM PORTA segundo o juiz atual**, e o beco real a excluiria. Se essa interpretação de LU-03 prevalecer, cura na fixture para conservar um C11 positivo; se prevalecer a restrição terminal/sem tela, cura no publicador de alcance administrativo. Trocar somente a asserção para aceitar a porta deixaria de exercitar o beco (`app/chamados/services/tarefa_do_dia.py:648`; `app/escala/services/cadastro_realidade.py:472`; `app/ponto/tests/test_cxr_tela_le_o_motor.py:412`).
-
-Essa interpretação já aparece na entrega LU2 anterior à LU3; atribuir sua introdução especificamente a c3, c4, c5 ou c6 é **[nao verificado]** (`app/chamados/tests/e3_lu2_entrega.txt:20`; `app/chamados/tests/e3_lu3_entrega.txt:53`).
-
-7. **`test_MORDE_o_universo_le_a_celula_e_o_FIO` — pauta.**
-
-   **Cadeia:** a fixture cria D1 discordante sem ata. Isso oferece o caminho trabalho sem lâmpadas → `nao_sei` → envelope novo → `_fio_da_porta()` → exclusão em `dias_sem_fio()`. O leitor só acrescenta ao resultado dias cujo fio é `nada`; a asserção recebe `[]`, esperando `[D1]`. Porém a consulta real ao Resolver também participa: o fio final dessa execução não está no traceback **[nao verificado]** (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:39`; `app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/services/tarefa_do_dia.py:597`; `app/chamados/services/tarefa_do_dia.py:700`; `app/folha/fora_da_folha.py:87`; `app/ponto/services/pautas_dos_discordantes.py:90`; `app/ponto/services/pautas_dos_discordantes.py:95`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:68`).
-
-   **Regra versus expectativa:** O320 exige discordante **sem fio**, e o próprio teste define isso como `fio == 'nada'`. K3 interpreta 2A + L-099 como exclusão de desconhecimento da pauta de DP, com registro separado em `sem_leitura`. Portanto, a expectativa `[D1]` continua válida para um dia conhecido sem fio; a fixture deixou essa premissa sem estabelecer (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:1`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:96`; `app/ponto/services/pautas_dos_discordantes.py:60`).
-
-   **Cura:** **teste/fixture**, fornecendo leitura conhecida e controlando a oferta. A publicação desconhecida é c5; o ramo explícito da pauta é **c6 K3**. Atribuir o `[]` exclusivamente a K3, sem o fio final, permanece **[nao verificado]** (`app/chamados/tests/e3_r3_c5_entrega.txt:54`; `app/chamados/tests/e3_r3_c6_entrega.txt:20`).
-
-8. **`test_MORDE_contagem_IMPAR_e_BATIDA_e_o_motor_NAO_roda` — pauta.**
-
-   **Cadeia comprovável:** uma batida é criada; seu signal chama o cartório; a fixture restaura **somente o veredito**. `apurar()` consulta primeiro `dias_sem_fio()` e pode retornar `[]` antes de montar os insumos ou perguntar a paridade. O traceback não mostra se D1 foi excluído por `nao_sei`, por porta administrativa ou por outro fio: origem interna exata **[nao verificado]** (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:202`; `app/ponto/signals.py:132`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:206`; `app/ponto/management/commands/pautas_discordantes.py:71`; `app/ponto/management/commands/pautas_discordantes.py:85`; `app/ponto/management/commands/pautas_discordantes.py:100`).
-
-   **Fixture:** monta uma contagem ímpar, mas não fixa a premissa adicional de dia conhecido sem fio. Deliberadamente não cria vínculo real; o mock de cadastro usado na classificação do dono não fornece vínculo à carga da tarefa. Sem vínculo, o teto dos marcos pode ficar vazio; lâmpada apagada sem teto produz desconhecimento. A oferta real de Resolver também não está controlada (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:212`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:216`; `app/ponto/turnos.py:3065`; `app/ponto/services/cartorio.py:890`; `app/chamados/services/tarefa_do_dia.py:300`; `app/chamados/services/tarefa_do_dia.py:605`).
-
-   **Regra e cura:** BUG-144 continua exigindo classificação da contagem ímpar pelo juiz, e o comando conserva essa consulta depois do filtro de universo. Este failure não demonstra regressão na paridade. **Cura no teste/fixture:** estabelecer explicitamente entrada no universo sem fio, preservando a prova positiva `BATIDA` e motor não chamado; não trocar o esperado para lista vazia (`app/ponto/management/commands/e6_oraculo.py:63`; `app/ponto/management/commands/e6_oraculo.py:106`; `app/ponto/management/commands/pautas_discordantes.py:87`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:229`).
-
-O agrupamento para encaminhamento fica:
-
-| Causa comum | Casos | Encaminhamento |
-|---|---|---|
-| Fixture presume ausência conhecida; c5 passa a expor desconhecimento já julgado | Folha ×3 | **Teste/fixture**, conservando também um irmão desconhecido (`app/chamados/services/tarefa_do_dia.py:238`; `app/chamados/tests/e3_r3_c5_entrega.txt:54`). |
-| Âncora fora da fila passa a bastar para porta administrativa, incluindo a terminal da fixture | C11 ×3 | **PERGUNTA** entre LU-03/com tela e restrições escritas de LU-04/âncora terminal; depois, código ou fixture conforme a resposta (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`; `app/chamados/services/fio.py:789`). |
-| Fixture não estabelece o novo pré-requisito de fio conhecido `nada` | Pauta ×2 | **Teste/fixture**; o ramo final que excluiu cada D1 é **[nao verificado]** no dado fornecido (`app/ponto/services/pautas_dos_discordantes.py:87`; `app/ponto/services/pautas_dos_discordantes.py:95`; `app/ponto/management/commands/pautas_discordantes.py:71`). |
-
-_5503 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5504 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
