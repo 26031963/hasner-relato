@@ -1,7 +1,112 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 15:10** · publicado em **15/11/2026 15:09** (UTC-3)
+> Ultima resposta processada: **15/11/2026 15:13** · publicado em **15/11/2026 15:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 15:13 · sessao 8a4705563cb1 · BUG-PAR-VOLTA-AGORA · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: COMPLEMENTO-4 QUEIMA — BUG-PAR-VOLTA-AGORA | itens 1, 2, 3 e 4.** Uso **PROCEDE** para objeção procedente, conforme o protocolo; qualquer PROCEDE impede executar. (`revisao_do_aval.txt:6`, bloco do anexo `avais.txt`.)
+
+Nos anexos, conto linhas desde o primeiro conteúdo; nos avais, cada bloco começa em 1 após o separador `=====`.
+
+1. **PROCEDE — as premissas não ficam integralmente certificadas.**
+
+   - **Portão confirmado:** `_espera_do_aval_163` aplica a comparação às metades de intervalo e declara “Sem universo nem ordem de clique”; a escrita consulta esse portão antes de materializar. (`app/chamados/services/materializacao.py:720`, `app/chamados/services/materializacao.py:724`, `app/chamados/services/materializacao.py:1745`.)
+   - **Os quatro testes existem:** resposta nova divergente, saída primeiro, volta primeiro e testemunha indisponível no modal. (`app/chamados/tests/test_bug_par_projetado.py:1107`, `app/chamados/tests/test_bug_par_projetado.py:1130`, `app/chamados/tests/test_bug_par_projetado.py:1135`, `app/chamados/tests/test_bug_par_projetado.py:1140`.)
+   - **O RED fornecido mostra 61 testes descobertos e quatro falhas:** nas ordens de clique aparecem duas batidas; a resposta nova recebe `aplicavel`; o modal oferece Validar sem testemunha. Isso evidencia aquela execução, não o resultado atual desta cópia **[nao verificado]**. (`red163b.log:1`, `red163b.log:18`, blocos `FAIL` seguintes.) [nao verificado]
+   - **As inversões estão documentadas no código:** `test_intervalo_volta_com_hora_diferente_do_marco_espera_e_nao_planta` exige nenhuma batida e espera; o outro é o atual `test_RED_resposta_nova_nunca_recusada_que_gravaria_diferente_espera`, cujo comentário registra o nome anterior `test_fora_do_universo_diferente_segue_aplicavel`. A atribuição histórica exata ao commit `43c820cbc` é **[nao verificado]** nesta cópia. (`app/chamados/tests/test_s139.py:26`, `app/chamados/tests/test_s139.py:49`, `app/chamados/tests/test_bug_par_projetado.py:1108`.)
+   - **“RELATO:262” identifica a frase errada:** “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. O código exclui validadas da lista sem veredito; `pode_fechar` consulta essa lista e `fio_vivo`, sem consultar aquela testemunha. A posição atual da frase original no RELATO vivo é **[nao verificado]**; não confundir com a linha que relata sua reprovação. (`app/docs/RELATO.md:262`, `app/chamados/models.py:1905`, `app/chamados/models.py:1917`; anexo `relato_topo.txt:72`.)
+   - **163 = 60 + 103 está documentado, mas o selecionador existente lê a recusa:** o queryset exclui `recusa_motivo=''`, o classificador traduz o campo e o predicado dos 103 também o exige. Portanto reutilizá-lo para montar o novo universo viola o PROIBIDO. (`app/chamados/services/materializacao.py:327`, `app/chamados/services/materializacao.py:251`, `app/chamados/services/materializacao.py:262`, `app/chamados/services/materializacao.py:278`.)
+   - **Há uma alternativa documental por listas de PK**, mencionada pelos censos, independente dos cliques; porém o conteúdo integral dessas listas não foi fornecido. Remontar e conferir exatamente os 163 com o material disponível é **[nao verificado]**. Isso não prova impossibilidade técnica; impede certificar a montagem existente. (Anexo `logs/OITO-LEITORES/y-bugpar-alcance-espera/entrega.md:19`, `logs/OITO-LEITORES/y-bugpar-alcance-espera/entrega.md:22`.)
+
+2. **PROCEDE — permanece dependência de condição de pouso devolvida.** [nao verificado]
+
+   O COMPLEMENTO-4 exige as três provas do CORTES-1358 C2, mas o topo vivo declara **“C2 espera reemissao”**. Repetir essa referência não fornece o produtor que separa NOVA de legado nem o contrato do contador. (`complemento4_bugpar_volta_agora.txt:7`; anexo `relato_topo.txt:15`.)
+
+   A exceção à QUEIMA e à espera do CORTES C é expressamente declarada para BUG-PAR. A política de aguardar a espinha cruzada permanece compatível com o próprio portão. Já a frase do COMPLEMENTO-3 — “nenhuma volta de construtor antes da redefinicao” — não é nominalmente substituída; sua compatibilização exige interpretar a autorização posterior como exceção, interpretação que o literal não explicita. (`complemento4_bugpar_volta_agora.txt:1`, `complemento4_bugpar_volta_agora.txt:3`; `complemento2_queima.txt:4`; `complemento3_queima.txt:5`.)
+
+   **Não procede objeção automática por segunda vaga Codex:** o construtor pedido é opus; o teto escrito admite 1 opus + 1 Codex, mantendo um único Codex construtor por repositório. A ocupação efetiva completa desse teto é **[nao verificado]**. (`complemento4_bugpar_volta_agora.txt:4`; `app/docs/LEIS.md:147`; `CLAUDE.md:355`.)
+
+   C7 intocado corresponde ao predicado registrado; não significa C7 curado. Colisão com o **PORTAO-DA-11** é **[nao verificado]**: seu literal não foi fornecido. (`app/docs/CORTES.md:83`; `app/core/juizes.py:302`; `complemento4_bugpar_volta_agora.txt:4`.)
+
+3. **PROCEDE — a abertura já falhou e há exigências que não fecham juntas como estão.**
+
+   **A condição (1) tem “senão” e ele já foi acionado:** cruzou `app/config/crons.py` e `app/core/tests/test_medida_turno_do_par.py` com F1 e R3. O aval manda registrar espera pelo pouso e **não abrir**; a medição fornecida conclui exatamente isso. Não cabe avançar à construção por disponibilidade de vaga. (`condicao1.txt:3`, `condicao1.txt:6`, `condicao1.txt:11`; `complemento4_bugpar_volta_agora.txt:3`; `CLAUDE.md:37`.)
+
+   **Os testes precisam ser reconciliados explicitamente:** um dos quatro RED é justamente a caracterização invertida de “fora do universo segue aplicável”. O complemento manda desfazer essa inversão, manter os quatro verdes e exigir que fora163 divergente não espere. Os dois testes de ordem também apenas respondem perguntas novas, sem inclusão explícita no universo163. Não se pode presumir essa inclusão para fechar as expectativas. (`complemento4_bugpar_volta_agora.txt:4`, `complemento4_bugpar_volta_agora.txt:5`; `app/chamados/tests/test_bug_par_projetado.py:1108`, `app/chamados/tests/test_bug_par_projetado.py:1117`.)
+
+   **C2 continua pendente:** o I18 disponível mede validação sem **carimbo** e sem recusa, não ausência de **batida**, nem distingue NOVA de legado. Os censos fornecidos documentam 15 do laço e 29 exportadas em disputas fechadas, mas mantêm 8×79 sem reconciliação e não entregam a execução exigida. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1074`; anexo `logs/LU2-CORTES/15/entrega.md:52`, `logs/LU2-CORTES/15/entrega.md:54`; `relato_topo.txt:15`.)
+
+   **“Cópia nova sobre 6e2fc9133 reaplicada no HEAD”** só atende à lei com base efetiva no HEAD e reaplicação do delta; construir simplesmente sobre o hash antigo não atende. Essa reaplicação é **[nao verificado]**. (`CLAUDE.md:39`; `complemento4_bugpar_volta_agora.txt:4`.)
+
+   **A suíte esperar atrás da espinha não é defeito:** o aval preserva a prioridade e exige inteira antes do opus final, conforme a lei. Deve certificar a árvore resultante, não aproveitar o verde anterior. (`complemento4_bugpar_volta_agora.txt:6`, `complemento4_bugpar_volta_agora.txt:7`; `CLAUDE.md:320`, `CLAUDE.md:377`.) [nao verificado]
+
+4. **PROCEDE — o alcance exportado não está operacionalmente fechado.**
+
+   O universo163 **inclui metade em competência exportada pelo censo fornecido**: a projeção b103 contém `3 ABE + 1 EXP`. Isso demonstra pelo menos uma; a quantidade exportada de **todo** o universo163 é **[nao verificado]**. (`logs/LU2-CORTES/15/entrega.md:51`, anexo.)
+
+   `bug_par_103 --apply` está declarado como ato separado, portanto sua menção não autoriza executá-lo nesta construção. Contudo, o comando apenas conta exportadas e depois percorre todas as linhas no apply; a porta descarimba e zera a validação. “Ato separado” não equivale a exclusão mecânica das exportadas. (`complemento4_bugpar_volta_agora.txt:6`, `complemento4_bugpar_volta_agora.txt:7`; `app/chamados/management/commands/bug_par_103.py:52`, `app/chamados/management/commands/bug_par_103.py:83`; `app/chamados/services/validacao.py:294`, `app/chamados/services/validacao.py:297`.)
+
+   Restaurar o comportamento fora163 também altera a passagem de caminhos de escrita: o gate antecede o plantio e alcança laço, lote, passivo e irmã; no passivo exportado, plantio pode seguir para REGEN e Pauta. Logo “qualquer apply proibido” durante construção não comprova ausência de efeito posterior em exportada ou dinheiro. O impacto monetário é **[nao verificado]**; o gravado exportado continua sujeito a `!`, DIFF, reversão e prova. (`app/chamados/services/materializacao.py:1741`, `app/chamados/services/materializacao.py:1757`; `app/chamados/services/passivo_validado.py:444`, `app/chamados/services/passivo_validado.py:453`; `CLAUDE.md:411`.)
+
+## 15/11 15:11 · sessao dc628975f96d · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+- **RELATO:262 confere nesta cópia.** Afirma: “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. O corpo contradiz essa explicação: `sem_veredito_entre` exige `validada_em is None`, e `pode_fechar` consulta essa lista e `fio_vivo`, sem chamar `estado_aplicacao_pergunta`. Fontes: `app/docs/RELATO.md:262`; `app/chamados/models.py:1905`; `app/chamados/models.py:1917`. No RELATO vivo do anexo, a posição atual exata dessa frase original não foi fornecida `[nao verificado]`.
+
+- **O seletor disponível não satisfaz “sem ler recusa_motivo”.** `_qs_recusadas_paridade_de_intervalo` exclui recusa vazia; `_recusa_e_de_paridade` traduz esse campo; o contador chama ambos; a condição dos 103 também chama `_recusa_e_de_paridade`. Fontes: `app/chamados/services/materializacao.py:246`, `:251`, `:258`, `:262`, `:278`, `:330`. O contador documenta `total_aval = universo + len(bug_par_103)` e sua transição após devolução, mas o código não fixa nem prova cardinalidade 163. Fonte: `app/chamados/services/materializacao.py:327`, `:350`, `:353`. As listas primárias `u163.py`/`pks103.txt` citadas nos anexos não estão disponíveis nesta cópia `[nao verificado]`.
+
+- **`bug_par_103 --apply` é escrita real separável.** Sem `--apply`, retorna após o DRY; com apply, grava reversão antes e chama a porta para cada linha. Fontes: `app/chamados/management/commands/bug_par_103.py:65`, `:77`, `:85`. A porta descarimba, zera validação e grava DP/trilha; conserva a disputa fechada. Fontes: `app/chamados/services/validacao.py:269`, `:272`, `:294`, `:297`, `:302`, `:307`. Assim, a proibição de apply durante construção não autoriza executar esse ato nesta revisão; sua menção em “DEPOIS” identifica ato futuro declarado, cujo fechamento operacional não foi provado `[nao verificado]`.
+
+- **O comando conta exportadas, mas não as exclui.** O laço marca `exportada`, a saída conta, e o laço do apply percorre todas as linhas, sem veto de competência. Fontes: `app/chamados/management/commands/bug_par_103.py:48`, `:52`, `:55`, `:62`, `:83`. A devolução em si não planta batida no corpo dessa porta, mas a validação posterior agenda recálculo pela data do fato. Fontes: `app/chamados/services/validacao.py:294`, `:299`, `:580`, `:590`.
+
+- **Restaurar comportamento fora do 163 também alcança caminhos que escrevem.** O gate fica antes de `_materializar_resposta_hora`; seu comentário nomeia laço, lote, passivo e irmã. Fontes: `app/chamados/services/materializacao.py:1741`, `:1745`, `:1755`. No passivo, plantio em exportada pode seguir para REGEN e Pauta. Fontes: `app/chamados/services/passivo_validado.py:442`, `:444`, `:453`, `:458`. Portanto “sem apply” sozinho não prova ausência de efeito posterior em exportada/dinheiro; impacto da implementação futura `[nao verificado]`.
+
+- **Lei escrita sobre gravado exportado continua exigente.** Exige `!`, DIFF prévio, reversão, prova e porta REGEN; L-113 conserva versões TXT, trilha e DIFF anterior ao ato de frota. Fontes: `CLAUDE.md:404`, `:411`, `:412`, `:415`; `app/docs/LEIS.md:154`.
+
+- **Cuidado com a contagem exportada do anexo.** O censo LU2-15 fornecido informa “b103 projecao 3 ABE + 1 EXP”; isso demonstra pelo dado fornecido pelo menos uma metade do universo em exportada. A subtração `76 − 75 = 1` refere-se às oito metades **em espera dentro do 163**, não a todas as 163. Contagem exportada de todo o universo 163 `[nao verificado]`. Os arquivos originais do censo não existem nesta cópia, portanto arquivo:linha primário dessa medição `[nao verificado]`.
+
+## 15/11 15:11 · sessao 77ec9dcbca3e · - · - · origem=Ronald (tmux)
+
+Leitura concluída sem escrita.
+
+- **Portão sem universo confirmado:** `app/chamados/services/materializacao.py:720-731` compara toda metade de intervalo; `:724` diz literalmente “Sem universo nem ordem de clique”. Chamadas da testemunha em `:847` e `:861`; da escrita em `:1745-1749`; proteção tardia no ponto de criação em `:1355-1357`; validação antes da escrita em `app/chamados/services/validacao.py:532-541`. `no_universo_163` está morto/documentado em `materializacao.py:692-693`.
+
+- **Os quatro testes do RED existem na classe**, com linhas deslocadas em relação ao log fornecido: [nao verificado]
+  1. `test_RED_resposta_nova_nunca_recusada_que_gravaria_diferente_espera`: `app/chamados/tests/test_bug_par_projetado.py:1107-1115`.
+  2. `test_RED_ordem_saida_primeiro_espera`: `:1130-1133`.
+  3. `test_RED_ordem_volta_primeiro_o_MESMO_resultado`: `:1135-1138`.
+  4. `test_RED_testemunha_que_falha_no_modal_nao_oferece_validar`: `:1140-1153`.
+  
+  O anexo `red163b.log` fornecido mostra precisamente quatro falhas, 61 testes, `rc=1`: dois testes de ordem plantaram duas batidas; o de resposta nova recebeu `aplicavel`; o modal ofereceu validar sem testemunha. Isso prova o RED daquela execução, **não prova falha nem verde desta cópia** `[nao verificado: execução atual]`. [nao verificado]
+
+- **Incompatibilidade literal relevante:** três dos quatro RED exigem espera em respostas novas sem inclusão explicitada no universo 163. O teste `:1108-1109` diz que antes se chamava `test_fora_do_universo_diferente_segue_aplicavel`; a fixture apenas cria perguntas novas em `:74-76` e as responde em `:78-81`. Os testes das duas ordens usam `_as_duas_ordens` em `:1117-1128`, que apenas responde e exige zero batidas, imutabilidade e espera. O C4 manda “os testes invertidos ... voltam”, “os 4 ... verdes” e simultaneamente MORDE fora163 com divergência sem espera. **Sem redefinir/separar as fixtures, o literal mantém expectativas opostas para o caso fora163.** Inclusão destas fixtures sintéticas no universo 163 não está especificada `[nao verificado]`. O quarto RED (testemunha indisponível) é independente dessa divergência. [nao verificado]
+
+- **Testes invertidos existentes:** `app/chamados/tests/test_s139.py:26` chama-se `test_intervalo_volta_com_hora_diferente_do_marco_espera_e_nao_planta`; `:49-56` documenta caracterização invertida e exige nenhuma batida/espera para E02 declarada versus E03 do marco. Outro é o acima, antigo `test_fora_do_universo_diferente_segue_aplicavel`, documentado em `test_bug_par_projetado.py:1108`. **Atribuição histórica exata ao commit 43c820cbc não verificável:** não há repositório `.git` nesta cópia `[nao verificado]`. Há ainda teste cuja cauda foi invertida pela obra, mas sem atribuição específica a esse commit: `test_RED_2_irma_implausivel_a_tela_nao_diz_aplicavel`, `:315-335`; comentário `:318-321` descreve a inversão para espera.
+
+- **163 = 60 + 103 consta no código**, em `materializacao.py:315-328`; `total_aval` é computado em `:350-353`. **Mas o selecionador existente viola a nova proibição se reutilizado para montar o universo:** `_qs_recusadas_paridade_de_intervalo` exclui `recusa_motivo=''` em `:246-255`; `_recusa_e_de_paridade` lê e traduz esse texto em `:258-262`; `paridade_absolvida_bug_par_103` exige `_recusa_e_de_paridade` em `:265-278`; o contador aplica ambos em `:330-335`. Não existe no código examinado seletor persistente/estático do 163 independente desse texto. O rótulo de devolução lê trilha e independe da recusa em `:281-294`, mas só cobre quem já passou pela devolução, não as 60 nem os 103 ainda não devolvidos. [nao verificado]
+
+- **Os anexos afirmam outra via viável, documental:** leitor y diz ter casado lista de PK de prod, U60 por `r.r:46`, U103 por `pks103.txt`, união sem sobreposição via `u163.py`; LU2-15 repete essa via. Esses arquivos/listas não constam da cópia e seus conteúdos não foram fornecidos; portanto **existência da técnica é evidência documental, mas remontar/verificar exatamente os 163 sem recusa, aqui e agora, é `[nao verificado]`**. Não transformar isso em prova de impossibilidade técnica: é ausência da lista/material executável na cópia, e a implementação foi expressamente deixada ao construtor.
+
+- **RELATO:262 está exatamente na cópia** e afirma: “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. `app/docs/RELATO.md:262`. A frase é falsa pelo código: `app/chamados/models.py:1905-1909` só considera sem veredito quem não tem validação nem materialização; `:1911-1917` usa a lista sem veredito e `fio_vivo`, sem chamar a testemunha. Os juízes estão registrados em `app/core/juizes.py:287` e `:302`. O próprio teste legado documenta fechamento sem batida em `test_bug_par_projetado.py:1046-1049`. A ocorrência histórica da reprovação no RELATO vivo não é a frase que o aval manda corrigir.
+
+## 15/11 15:11 · sessao ff9d18f38647 · - · - · origem=Ronald (tmux)
+
+Conferências em leitura; nenhum arquivo alterado.
+
+- **Escopo e condição:** `CLAUDE.md:37` manda parar quando condição literal não fecha. `CLAUDE.md:39-40` exige cópia nascida do HEAD na hora do patch. Portanto “cópia nova sobre 6e2fc9133 reaplicada no HEAD” só satisfaz a lei se a base efetiva for o HEAD, com o delta BUG-PAR reaplicado; uma cópia simplesmente fundada no hash antigo não satisfaz. O resultado reaplicado não está disponível `[nao verificado]`.
+- **Cruzamento:** paralelismo é permitido somente sem arquivo comum, independentemente de família/app (`CLAUDE.md:309-311`; `app/docs/PISTA.md:44-48`). O anexo condicao1 mede cruzamento com F1 e R3; o próprio COMPLEMENTO-4 fornece o senão: registrar espera pelo pouso e não abrir. A medição fornecida não permite abertura; contagem independente de commits/diffs não foi possível nesta cópia sem `.git` `[nao verificado]`.
+- **Teto:** conferir antes de abrir é obrigatório (`CLAUDE.md:290-292`). O teto é **1 opus + 1 Codex**, total 2 (`app/docs/LEIS.md:147`). Há somente **1 Codex construtor por repositório** (`CLAUDE.md:355-356`; guarda real `bin/codex_pergunta.sh:253`). C4 nomeia **opus** para BUG-PAR, portanto não pede segunda vaga Codex. Ocupação efetiva de todos os construtores não é demonstrada pelo material `[nao verificado]`.
+- **QUEIMA/COMPLEMENTO-2/3:** só existem no texto fornecido `[nao verificado quanto a arquivo local]`. C4 substitui nominalmente a proibição QUEIMA e a espera CORTES C; não nomeia a frase do COMPLEMENTO-3 g “nenhuma volta de construtor antes da redefinicao”. Existe tensão textual a explicitar, embora o comando específico posterior de retorno da BUG-PAR possa ser lido como exceção; não afirmar revogação tácita como fato. A política C2 de esperar a espinha cruzada fica preservada pelo próprio portão C4.
+- **CORTES C2 devolvido:** topo vivo fornecido declara “C2 espera reemissao” e ausência de produtor para separar NOVA de legado, além do instrumento contar “sem carimbo”, não “sem batida”. C4 volta a exigir as mesmas três provas no pouso, mas não reemite esse contrato nem fornece produtor. Isso continua pendência literal; censos fornecidos reforçam números documentais, mas não substituem execução/instrumento. [nao verificado]
+- **Suite:** espera pela trava atrás da espinha é compatível com `CLAUDE.md:95-104` (porta canônica, motivo e trava) e `CLAUDE.md:372-381` (pré-verificador, inteira verde, depois opus). **Não existe colisão por a suite inteira não rodar imediatamente.** Toda a árvore reaplicada deve ser certificada (`CLAUDE.md:320-324`), e não a antiga suite do hash-base. [nao verificado]
+- **C7 intocado:** corresponde ao registro escrito: C7 pergunta fio_vivo vazio + ausência de resposta sem veredito (`app/docs/CORTES.md:83`, literal completo em `:323`). “Sem veredito” exclui validadas/materializadas (`app/core/juizes.py:302`; `app/docs/CORTES.md:415` diz “validada/materializada fecha normal”). Logo não apresentar C7 como curado apenas por limitar portão.
+- **Dinheiro/exportada:** regra fora do pedido e gravado de exportada exigem `!` (`CLAUDE.md:265-268`); apply em aberta exige reversão prévia, hash exportada intacta e prova de frota (`:406-410`); mudança de gravado exportado só com `!`, DIFF, reversão e porta REGEN (`:411-417`). “Nenhuma trava nem aviso por exportada” (`:421-422`) não revoga essas condições.
+- **PORTAO-DA-11:** `rg` na cópia inteira não encontrou o nome; o literal não consta dos anexos fornecidos. Colisão com esse aval **[nao verificado]**.
+- **Padrão:** Single Writer Principle existe no glossário (`app/docs/GLOSSARIO.md:12`); selo de padrão e classe existe em `CLAUDE.md:65-70`. Isso por si só não autoriza ampliar o universo, pois escopo literal permanece em `CLAUDE.md:37-38`.
+
+A fonte textual dos anexos não existe como arquivo nesta cópia; para citar anexos com linha, contar as linhas do bloco fornecido e identificar explicitamente “anexo fornecido”.
 
 ## 15/11 15:10 · sessao 03daea7a0683 · - · - · origem=Ronald (tmux)
 
@@ -513,217 +618,4 @@ AVAL-DEVOLVIDO: CORTES-1358 E | perguntas 1, 3
 
    Há porta de recalculo que pode escrever fechamento inclusive em exportada; entretanto, movimento efetivo de FM/TXT neste ensaio e a cadeia completa desde cada DP permanecem **[nao verificado]**. Não se pode afirmar nem movimento certo, nem impacto zero. (`app/ponto/services/fechamento.py:1790`; `app/ponto/services/fechamento.py:1810`)
 
-## 15/11 14:07 · sessao aa265cd5f3ea · RESPOSTA-AUTOMATICA-SOBRE-VALIDADA · censo · origem=Code
-
-**RESPOSTA-AUTOMATICA-SOBRE-VALIDADA: registro textual do censo, sem cura.** Registro externo da obra: [nao verificado].
-
-**Quantidade na frota: [nao verificado].** O dado fornecido contém os avais, mas não contém resultado dessa contagem. Não usei números históricos dos documentos da cópia como medição de produção. [nao verificado]
-
-A função está agora em **1654–1679**; a faixa **1640–1666** citada pelo aval deslocou-se. A chamada da foto continua na linha **48**. A identidade Git do snapshot e o diff exato contra `origin 4b75cba` são [nao verificado], pois a cópia não contém metadados Git. [disputa_emissao.py:1654](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1654), [foto_recebida.py:48](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:48)
-
-**1. Porta e chamadores**
-
-`responder_automaticamente` tem estas recusas:
-
-- **Texto anterior não vazio após `strip()`**: retorna `False`, antes de consultar o banco ou examinar o texto novo. [disputa_emissao.py:1663](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1663)
-- **Texto novo vazio com instante não nulo**: levanta `RespondidaSemTexto` antes de alterar a instância. Portanto, “só recusa quando já há texto” está incompleto nesta cópia. A guarda recusa o par carimbo preenchido/texto vazio; não é uma validação incondicional do texto isoladamente. [disputa_emissao.py:1671](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1671), [fio.py:1595](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/fio.py:1595), [juizes.py:1528](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/juizes.py:1528)
-
-**Não usa `validada_em` como impedimento.** O auxiliar chamado antes da alteração lê esse campo para conservar uma validação antiga sem ato correspondente. [disputa_emissao.py:1672](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1672), [models.py:4078](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:4078)
-
-Quando aceita, grava diretamente `resposta_colab=texto` e `respondida_em=instante`. No mesmo `atomic`, registra uma `DecisaoPergunta` com `ato='resposta'`, `ato_em=instante`, `ato_texto=texto` e motivo constante; não informa `ato_por`. Também registra as projeções antigas sem linha que o auxiliar encontrou. Retorna `True`. [disputa_emissao.py:1672](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1672), [models.py:4000](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:4000), [models.py:4017](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:4017)
-
-O censo encontrou **um sítio produtivo direto**, oito sítios diretos em testes e dois sítios dinâmicos em teste. Os imports encontrados são locais, sem apelido; as duas chamadas dinâmicas usam o nome da função como string. Chamadas externas à cópia: [nao verificado]. [foto_recebida.py:39](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:39), referências dos testes abaixo.
-
-| Chamador — todos os sítios encontrados | O que faz depois |
-|---|---|
-| Produção: `api/foto_recebida.py:48`, import local em `:39` | Ignora o booleano; chama sempre `validar_pergunta`; incrementa `n` somente quando `r.get('ok')`; retorna `n`. [foto_recebida.py:48](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:48) |
-| `test_porta_chamado_e3.py:46,48,53` | Em `:46`, exige `True` e repete; em `:48`, exige `False` com zero consultas; em `:53`, exige `False` e relê o texto original para conferir preservação. [test_porta_chamado_e3.py:43](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/tests/test_porta_chamado_e3.py:43) |
-| `test_e3_10_cura_no_escritor.py:62,75,85` | Em `:62`, espera exceção e confere banco/memória sem alteração; em `:75`, exige `True`, relê o par e verifica ausência do estado sem texto; em `:85`, exige `False` e zero consultas. [test_e3_10_cura_no_escritor.py:55](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/tests/test_e3_10_cura_no_escritor.py:55) |
-| `test_e4_expand_orm.py:176,177` | Exige `True`, depois `False`; confere projeção preservada nos demais campos e ato de resposta com o instante passado. [test_e4_expand_orm.py:172](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/tests/test_e4_expand_orm.py:172) |
-| Dinâmicos: `test_e4_expand.py:207,208` | O executor extrai a função pelo nome; exige `True`, depois `False`, confere projeção, ato e uma gravação. [test_e4_expand.py:204](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/tests/test_e4_expand.py:204), [test_e4_expand.py:119](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/tests/test_e4_expand.py:119), [e4_apoio.py:8](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/tests/e4_apoio.py:8) |
-
-Na cadeia produtiva, `resolver_disputas_de_foto` seleciona disputas abertas com `foto_ausente` e perguntas desse motivo vinculadas à `batida_origem`, **sem filtro de validação**. Ignora também o retorno de `_validar_pelo_dono`, relê a disputa e incrementa `fechadas` antes de verificar se ela fechou. Se ainda aberta, pode aparar o motivo, fechar a disputa e anexar ocorrência. Assim, esse contador mede disputas **tratadas**, embora a API o exponha como `disputas_fechadas`. [foto_recebida.py:65](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:65), [foto_recebida.py:74](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:74)
-
-As duas entradas de API primeiro anexam a foto, depois chamam esse kernel e devolvem o contador: `views.py:851,861,863` e `views_core.py:835,845,847`. [views.py:851](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/views.py:851), [views_core.py:835](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/views_core.py:835)
-
-**2. Pergunta já validada e sem texto**
-
-Para texto novo não vazio e instante preenchido, a escrita direta bem-sucedida é esta; os demais efeitos dependem das cascatas descritas adiante. [disputa_emissao.py:1671](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1671)
-
-| Campo/estado | Antes → depois direto |
-|---|---|
-| `resposta_colab` | Vazio ou só brancos → texto recebido; no upload, `'[auto] Foto recebida em upload separado.'`. [disputa_emissao.py:1673](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1673), [foto_recebida.py:25](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:25) |
-| `respondida_em` | Nulo **ou data anterior** → `instante`; não preserva o carimbo anterior. [disputa_emissao.py:1674](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1674) |
-| `validada_em`, `validada_por` | Permanecem como estavam. [disputa_emissao.py:1676](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1676) |
-| `materializada_em`, `materializada_por`, `via_resolucao`, `tipo_resposta`, demais campos da pergunta | Não são escritos diretamente pela função. [disputa_emissao.py:1676](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1676) |
-| `DecisaoPergunta` | Acrescenta a resposta nova; pode conservar também resposta antiga e validação antiga sem correspondência por ato/instante, inclusive com texto anterior vazio. [models.py:4070](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:4070), [disputa_emissao.py:1677](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/disputa_emissao.py:1677) |
-| `.respondida` | `False → True` se o carimbo era nulo; caso contrário, continua `True`. [models.py:3640](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:3640) |
-| `.estado` | Continua `VALIDADA` se não materializada; continua `RESOLVIDA` se materializada. [models.py:3124](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:3124) |
-
-Os leitores relevantes produzem estas consequências:
-
-- **Validador chamado logo depois:** relê o banco, encontra resposta preenchida e devolve `{'ok': False, 'estado': 'ja_validada', 'msg': 'Pergunta ja validada.', 'erros': []}`. Esse caminho retorna antes de nova validação/materialização. [validacao.py:414](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/validacao.py:414)
-- **C6 e face SQL:** validação preenchida continua matando a pergunta; uma resposta posterior não desassina nesta cópia. [juizes.py:1403](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/juizes.py:1403), [models.py:3468](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:3468)
-- **App:** a consulta primeiro usa `q_vivas`; portanto essa pergunta continua fora do universo retornado. Não cabe afirmar que passou de pendente para histórico do app. [pergunta_no_app.py:52](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/pergunta_no_app.py:52)
-- **`respostas_sem_veredito`/`pode_fechar`:** a pergunta continua excluída da lista por ter validação; ela própria não impede o fechamento por esses juízes. Outras perguntas podem impedir. [models.py:1905](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:1905), [models.py:1915](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:1915)
-- **Materializador geral, se chamado posteriormente por outra via:** seleciona resposta preenchida + validação preenchida + materialização nula. Se `respondida_em` era nulo, a chamada automática pode colocar a pergunta nesse universo. Isso não prova que será materializada. [materializacao.py:1375](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/materializacao.py:1375)
-- **Apresentação e histórico:** `resposta_display` passa a ler o texto novo; `respostas_anteriores` lê a sequência de decisões para identificar respostas superadas. [models.py:3662](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:3662), [models.py:3643](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:3643)
-
-**Há efeitos indiretos:** o `save` acorda células pelo outbox; o registro das decisões também as acorda. Outro receiver agenda, no commit, a verificação de beco, que pode resolver perguntas e fechar a disputa. Depois, o chamador da foto ainda executa sua própria sequência de aparar/fechar. Portanto, “globalmente só dois campos mudam” seria incorreto; quais cascatas ocorreram em produção é [nao verificado]. [signals.py:229](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/signals.py:229), [signals.py:252](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/signals.py:252), [models.py:4095](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:4095), [becos.py:25](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/becos.py:25), [foto_recebida.py:74](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/api/foto_recebida.py:74)
-
-**3. Sonda proposta, somente como texto**
-
-A classificação usa **`competencia_do_dia_entregue`**, composição real de `janela_atual` — respeitando o corte da empresa — com `competencia_entregue`, que exige exportação vigente não invalidada. Sem data, a função devolve `None`; a sonda separa esse universo como indeterminado. [vigia_fio.py:843](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/services/vigia_fio.py:843), [janelas.py:60](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/ponto/janelas.py:60), [export.py:588](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/folha/export.py:588)
-
-A medida temporal disponível é **registro de foto criado após a validação**, pelo episódio `batida_origem`. Não equivale a todos os uploads posteriores: atualizar uma `FotoBatida` existente não renova `criado_em`. Data do último recebimento: [nao verificado]. [models.py:2518](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/chamados/models.py:2518), [ponto/models.py:1036](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/ponto/models.py:1036), [registro_batida.py:313](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/app/ponto/registro_batida.py:313)
-
-O envelope já executa o shell no tenant `juliani`. Execução desta sonda e resultados: [nao verificado]. [sonda_leitura.sh:239](/home/ronald/codex_ws/151b0666a04a8cabd726ac637c217730408872a8/bin/sonda_leitura.sh:239)
-
-```python
-# Execucao e resultados em prod: [nao verificado].
-# Envelope: bin/sonda_leitura.sh:239-240.
-import json
-from collections import defaultdict
-
-from django.db import connection, transaction
-from chamados.models import PerguntaDisputa
-from chamados.juizes import texto_vazio
-from chamados.services.vigia_fio import competencia_do_dia_entregue
-from ponto.janelas import janela_atual
-
-assert connection.schema_name == "juliani", "tenant inesperado"
-
-grupos = defaultdict(list)
-
-
-def incluir(grupo, chave, pk, foto_estado):
-    grupos[(grupo, tuple(chave))].append((pk, foto_estado))
-
-
-with transaction.atomic():
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-        )
-
-    # Universo inteiro, incluindo disputas fechadas e respondida_em nulo.
-    # chamados/models.py:2525-2527; juizes.py:1523-1525.
-    qs = (
-        PerguntaDisputa.objects.filter(validada_em__isnull=False)
-        .select_related(
-            "disputa__colaborador__empresa",
-            "batida_origem__foto_batida",
-        )
-        .order_by("pk")
-    )
-    memo = {}
-    grupos[("TOTAL", ())] = []
-
-    for p in qs.iterator(chunk_size=500):
-        if not texto_vazio(p.resposta_colab):
-            continue
-
-        empresa = p.disputa.colaborador.empresa
-
-        # Funcao real: chamados/services/vigia_fio.py:843-865.
-        entregue = competencia_do_dia_entregue(
-            p.data_evento, empresa, memo=memo
-        )
-        if entregue is None:
-            competencia, situacao = "SEM_DATA", "INDETERMINADA"
-        else:
-            fim = janela_atual(p.data_evento, empresa)[1]
-            competencia = "%04d-%02d" % (fim.year, fim.month)
-            situacao = "exportada" if entregue else "aberta"
-
-        # Mesmo episodio: chamados/models.py:2518-2519.
-        # Criacao do registro, nao ultimo upload:
-        # ponto/models.py:1036-1041; registro_batida.py:298-313.
-        b = p.batida_origem
-        fb = getattr(b, "foto_batida", None) if b is not None else None
-        if b is None:
-            foto_estado = "SEM_EPISODIO"
-        elif fb is None:
-            foto_estado = "SEM_REGISTRO_FOTO"
-        elif not fb.foto.name:
-            foto_estado = "REGISTRO_SEM_ARQUIVO"
-        elif fb.criado_em > p.validada_em:
-            foto_estado = "REGISTRO_FOTO_CRIADO_APOS_V"
-        else:
-            foto_estado = "REGISTRO_FOTO_CRIADO_ATE_V"
-
-        incluir("TOTAL", (), p.pk, foto_estado)
-        incluir("TIPO_RESPOSTA", (p.tipo_resposta,), p.pk, foto_estado)
-        incluir(
-            "COMPETENCIA", (competencia, situacao), p.pk, foto_estado
-        )
-        incluir(
-            "TIPO_COMPETENCIA",
-            (p.tipo_resposta, competencia, situacao), p.pk, foto_estado
-        )
-        incluir("EVIDENCIA_FOTO", (foto_estado,), p.pk, foto_estado)
-
-# Saida: rotulos, contagens e apenas PKs de PerguntaDisputa.
-for (grupo, chave), linhas in sorted(grupos.items()):
-    ids = [pk for pk, _ in linhas]
-    posteriores = [
-        pk for pk, estado in linhas
-        if estado == "REGISTRO_FOTO_CRIADO_APOS_V"
-    ]
-    print(json.dumps({
-        "grupo": grupo,
-        "chave": chave,
-        "n": len(ids),
-        "pergunta_ids": ids,
-        "n_registro_foto_criado_apos_v": len(posteriores),
-        "pergunta_ids_registro_foto_criado_apos_v": posteriores,
-    }, ensure_ascii=True))
-
-print("FIM")
-```
-
-## 15/11 14:06 · sessao 18c2f107bdb2 · - · - · origem=Ronald (tmux)
-
-E — evidências para consolidação:
-
-- **Q1:** schema confere: `RETRATACAO` em `app/chamados/models.py:4001`, `ato_motivo` em `:4019`, `materializada_em` em `:3502`. O escritor existente em `:2121-2124` registra remoção de motivo, sem usar o literal `'obsoleta'`. `RELATO.md:4` declara 52 L2/39 exportadas; as 13 abertas resultam da subtração e do aval. A medição primária não está disponível: **[nao verificado]**.
-- **A ordem existe:** o anexo `avais_todos.txt`, bloco `E4C/aval_expand_contract.txt:1`, diz “E4c MIGRAR LEITORES [...] só depois da E4b medida”. `app/docs/LEIS.md:148` é somente vocabulário, conforme o complemento.
-- **Marcação sem campo novo:** há infraestrutura de trilha com ação livre, modelo, identificador, descrição e JSON em `app/core/models.py:295-306`, escrita por `app/core/observ.py:133-137`; convenção L2 implementada **[nao verificado]**. Não usar `ato_texto` como marcador: sua semântica é texto da resposta (`app/chamados/models.py:3996-3997`).
-- **Q2 — NAO PROCEDE:** o aval autoriza expressamente ensaio de escrita na sombra; seu literal não manda abrir construtor nem enfileirar job na pista (anexo `cortes_1358.txt`, item E; `complemento_cortes_1358.txt`, item 1).
-- **Q3 — PROCEDE:** não está definido o “senão” para segunda rodada com linhas novas ou diferenças nos resultados publicados (anexo `cortes_1358.txt`, item E). A porta `registrar` faz `bulk_create` sem deduplicação (`app/chamados/models.py:4095-4096`); o backfill existente descreve R/V e outros itens, sem L2 obsoleta (`app/chamados/management/commands/backfill_decisoes_pergunta.py:3-12`, `:324-327`). A idempotência pedida ainda não tem implementação/prova disponível **[nao verificado]**.
-- **Q4 — NAO PROCEDE quanto a extrapolação:** escrita DP, eventos, FM/TXT das exportadas na sombra e `PAREI !` no apply estão declarados em E. Criar DP realmente acorda células (`app/chamados/models.py:4096-4098`), que emitem `EventoCelula` (`:3314-3331`; `app/ponto/portas/celula.py:953-954`). O consumidor alcança o colaborador e outras operações (`app/chamados/reconciliador.py:1365-1388`). Movimento real de FM/TXT e alcance numérico: **[nao verificado]**. A porta de recalculo por evento pode escrever FM (`app/ponto/services/fechamento.py:1809-1810`), mas não comprovei cadeia automática direta de um INSERT DP até ela **[nao verificado]**.
-
-## 15/11 14:06 · sessao 022385a85885 · E4C-F1V3 · construtor · origem=Code
-
-Leis pendentes: L1 e L2 mantidas por conservação, sem backfill; frota [não verificado]. [Relato:1](chamados/tests/e4c_f1v6_entrega.txt:1)
-
-[Entrega P1–P12, em 23 linhas](chamados/tests/e4c_f1v6_entrega.txt): RED→GREEN por propriedade, arquivo::função, comandos, escritores/leitores e pendências.
-
-- RED antes da cura: **11 falhas por asserção**. [Evidência](chamados/tests/e4c_f1v6_red.txt:114)
-- GREEN local: **112 testes, 2 skips**. [Resultado](chamados/tests/e4c_f1v6_green.txt:4)
-- Mutantes: **19 c6 + 22 de tipos SQL**, mortos por asserção. [C6](chamados/tests/e4c_f1v6_mutantes.txt:7), [SQL](chamados/tests/e4c_f1v6_tipos_mutantes.txt:10)
-
-Não fechou: execução ORM/SQL, frota P6, vigia e suite paralela reais. P5 foi tratada na adaptação de leitura; a cura canônica em models/dado permanece pendente pelas proibições desta volta. [Limites](chamados/tests/e4c_f1v6_entrega.txt:21)
-
-LEI-AKITA padrão=**Parallel Change / Expand-Contract**. Certificação reservada ao Code/suite e opus final. [Relato:23](chamados/tests/e4c_f1v6_entrega.txt:23)
-
-## 15/11 14:05 · sessao 55c4017566ce · - · - · origem=Ronald (tmux)
-
-Complemento do censo:
-
-| Classe | Locais efetivos |
-|---|---|
-| Produção, chamadas diretas | `app/chamados/reconciliador.py:406`, `:596`; `app/chamados/services/disputa_emissao.py:2007`, `:2081`; `app/chamados/services/materializacao.py:567`, `:1283`, `:1437`; `app/chamados/models.py:3386` |
-| Testes, chamadas diretas reais | `app/chamados/tests/test_o261e_f2_fila.py:194`, `:205`, `:221`, `:228`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:725`, `:738` |
-| Apelido efetivo em teste | `orig = PerguntaDisputa.carimbar`, seguido de `orig(self_p, via, ...)`: `app/chamados/tests/test_pep_reentrada.py:92`, `:96`; wrapper instalado em `:100`, exercitado em `:102` |
-| Atribuições de Mock | `app/chamados/tests/test_e4b_c6_memoria.py:27`; `app/chamados/tests/test_e4b_classe_e_memoria.py:287`, `:1001` |
-| Asserts sobre Mock | `app/chamados/tests/test_e4b_classe_e_memoria.py:399`, `:462`, `:490`, `:575`, `:1006`; `app/chamados/tests/test_e4b_c4v14_memoria.py:114` |
-| Código sintético em strings, excluído das chamadas | `app/chamados/tests/test_o261e_f2_fila.py:63`, `:66`, `:67` |
-
-Não encontrei alias de produção nem `getattr`/`methodcaller` efetivos para essa porta na varredura AST; ausência de construções dinâmicas não literais permanece [não verificado].
-
-**Correção importante de W7:** escolha não chega hoje à chamada `materializar_pendentes_aprovadas → carimbar`: o queryset exige `materializada_em IS NULL` (`app/chamados/services/materializacao.py:1424`), o gate é `_pergunta_materializada_de_fato` (`:1433`), e o ramo escolha desse gate exige `materializada_em IS NOT NULL` (`app/chamados/juizes.py:709`). O ramo anterior de vias também exige materialização não nula (`app/chamados/juizes.py:682`). Isso descreve o fluxo sem mutação concorrente entre carga e gate; concorrência desse cenário: [não verificado].
-
-As cinco choices de tipo não fecham o universo legado: teste existente cria `tipo_resposta='texto'` (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:635`), e `carimbar` não testa `tipo_resposta` (`app/chamados/models.py:3186`). Assim, nas linhas sem filtro de tipo, escrever “sem restrição de tipo no chamador”, não “somente os cinco tipos das choices”.
-
-_5671 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5675 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
