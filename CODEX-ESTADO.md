@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 18:53** · publicado em **15/11/2026 18:56** (UTC-3)
+> Ultima resposta processada: **15/11/2026 19:40** · publicado em **15/11/2026 19:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 19:40 · sessao dd6001c0d496 · - · - · origem=Ronald (tmux)
+
+Todas as referências abaixo são relativas à raiz da cópia; não executei testes nem fiz alterações. [nao verificado]
+
+**Chamadores de `censo`**
+
+| Classe | Sítios |
+|---|---|
+| Produção direta | Import e chamada no command: `app/folha/management/commands/vigiar_retido_calado.py:14`, `:33`. |
+| Produção indireta | Cron `ENC(... args='--alarme')`: `app/config/crons.py:1681`; dependência do lavrador `:1683`; papel `vigia` `:2260`. |
+| Testes ORM diretos | Helpers `app/folha/tests/test_vigia_retido_calado.py:29`, `:161`; chamadas `:90`, `:126`, `:139`, `:140`; command interceptado com `wraps=vrc.censo` `:148`. |
+| Testes ORM pelo command | `app/folha/tests/test_vigia_retido_calado.py:62`, `:65`, `:67`, `:149`. |
+| Testes sem banco, função real extraída | `app/chamados/tests/test_e3_r3_c4_sem_banco.py:154`, `:157`; `test_e3_r3_c5_sem_banco.py:103`; `test_e3_r3_c6_sem_banco.py:253`; `test_e3_r3_c14_sem_banco.py:350`; `test_e3_r3_c15_sem_banco.py:85`; `test_e3_r3_c16_sem_banco.py:74`. |
+| Chamadas negativas de assinatura | `app/chamados/tests/test_e3_r3_c5_sem_banco.py:243`, `:245`: sem `hoje`, devem continuar `TypeError`. |
+| Testes do command com censo substituído | `app/chamados/tests/test_e3_r3_c11_sem_banco.py:275`, `:281`; `test_e3_r3_c14_sem_banco.py:317`, `:321`. |
+
+**Retorno e leitores**
+
+`censo` escreve as nove chaves: `retratos`, `competencias_sem_retrato`, `bloqueados`, `calados`, `roteados`, `dias_sem_leitura_sistema`, `linhas_sem_campo_leitura`, `por_empresa`, `cego` (`app/folha/vigia_retido_calado.py:61`, `:62`, `:88`, `:89`).
+
+| Saída | Quem escreve | Quem lê e efeito de 4.2 |
+|---|---|---|
+| `retratos`: `(empresa,mes,ano)` | `app/folha/vigia_retido_calado.py:76` | `linhas` imprime quantidade `:95`; `cego` usa vazio `:89`. Passa a conter somente fotos nas visíveis/interseção e nas janelas. |
+| `competencias_sem_retrato`: `(empresa,mes,ano)` | `app/folha/vigia_retido_calado.py:58`, `:61` | `linhas` conta `:95` e nomeia cada par `:96`. Precisa passar a incluir empresa visível sem **nenhuma** foto; hoje loop só existe a partir das fotos `:51`. |
+| `bloqueados`, `calados`, `roteados` | `app/folha/vigia_retido_calado.py:77`, `:78`, `:79` | `linhas`: universo `:95`, roteados `:101`, contador `:102`; command alarma `calados` somente com passivo, `app/folha/management/commands/vigiar_retido_calado.py:17`, `:37`. Valores podem mudar pela seleção de fotos. |
+| `dias_sem_leitura_sistema` | `app/folha/vigia_retido_calado.py:88` | `linhas` `:103`, `:105`; command passivo `app/folha/management/commands/vigiar_retido_calado.py:17`. Mantém positivo conhecido; `None` só sem soma conhecida e com legado `app/folha/vigia_retido_calado.py:88`. |
+| `linhas_sem_campo_leitura` | `app/folha/vigia_retido_calado.py:80` | `linhas` `:104`, `:105`; muda somente seleção do universo. |
+| `por_empresa`: chave `(empresa,ano,mes)` | `app/folha/vigia_retido_calado.py:83` | `linhas` `:98`, `:99` lê mês/ano/bloqueados/calados/roteados. Campos aninhados de leitura são cobrados nos testes `app/chamados/tests/test_e3_r3_c6_sem_banco.py:269`, `test_e3_r3_c14_sem_banco.py:309`, `:352`. **Ordem difere** de `retratos` e `competencias_sem_retrato`. |
+| `cego` | `app/folha/vigia_retido_calado.py:89` | `linhas` `:102`; único estrutural atual, `app/folha/management/commands/vigiar_retido_calado.py:16`, acionado `:38`. Não identifica cobertura parcial se já existe um bloqueado. |
+
+O contador de ausências **já é impresso**, mas ainda não é estrutural no alarme: o command só tem `ALARMA_SEMPRE=('cego',)` (`app/folha/management/commands/vigiar_retido_calado.py:16`), enquanto `competencias_sem_retrato` é apenas listado (`app/folha/vigia_retido_calado.py:94`, `:96`). Para cumprir “par sem retrato no contador estrutural”, é preciso consumir a falta no alarme, preservando sua lista nomeada; a alternativa exata de nome/schema adicional não foi decidida no texto **[nao verificado]**.
+
+**Cron, placar, tela, RELATO, contador**
+
+- Cron continua chamando o command com `--alarme`; comentário “só pelo cego” fica incorreto se a falta de par virar estrutural (`app/config/crons.py:1679`, `:1681`; `app/folha/management/commands/vigiar_retido_calado.py:5`).
+- Placar não recebe o dict: `encadeado` passa pelo envelope (`bin/encadeado.sh:102`); o envelope grava `nome/emp/ini/fim/dur/exit` (`bin/cron_run.sh:13`); `pipeline_placar` conta `exit==2` como alarme (`app/core/management/commands/pipeline_placar.py:77`). Assim mudam potencialmente rc/alarmes/duração, sem nova chave no JSON do placar.
+- Tela consulta fotos diretamente (`app/folha/views_retrato.py:192`), e frescor separado (`:210`); template mostra `frescor_aviso[*].rotulo_admin` (`app/templates/folha/_retrato_barra.html:22`). Não é migração de consumidor VRC: permanece divergência de universo porque aviso só aceita empresas com foto (`app/folha/views_retrato.py:209`, `:211`).
+- `RELATO` registra medidas históricas, não é consumidor executável: explica origem/unidade e command (`app/docs/RELATO.md:4347`, `:4349`), conserva smoke histórico (`:4353`, `:1644`). Não inferir números novos desses registros **[nao verificado]**.
+- Contador separado `retratos_desatualizados` é `len(frescor)` com `desatualizado` **ou** `nunca lavrado`, sem VRC (`app/folha/retrato_folha.py:1448`, `:1454`).
+
+**Testes que precisam mudar ou ser ampliados** [nao verificado]
+
+1. Empresa sem qualquer foto: exigir pares nomeados; hoje só exige `cego=1` (`app/folha/tests/test_vigia_retido_calado.py:31`, `:33`; sem banco `app/chamados/tests/test_e3_r3_c16_sem_banco.py:111`, `:113`).
+2. Alarme de cobertura parcial: hoje aceita `--alarme` com só foto 10 e falta 11 (`app/folha/tests/test_vigia_retido_calado.py:64`, `:65`); passa a precisar foto 11 ou esperar rc2.
+3. Caso de falta parcial preserva positivo (`app/folha/tests/test_vigia_retido_calado.py:186`, `:190`; sem banco `app/chamados/tests/test_e3_r3_c16_sem_banco.py:103`, `:108`): acrescentar verificação estrutural/command.
+4. Selo compartilhado prova apenas helper de competências, não empresas (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:127`, `:133`, `:134`): acrescentar visíveis/interseção e empresa sem fotos.
+5. Adaptar fixtures sem banco ao import/consulta de `empresas_visiveis`; hoje c4/c5/c6/c14/c15/c16 só simulam fotos na fase leitora (`app/chamados/tests/test_e3_r3_c4_sem_banco.py:149`; `test_e3_r3_c5_sem_banco.py:96`; `test_e3_r3_c6_sem_banco.py:246`; `test_e3_r3_c14_sem_banco.py:341`; `test_e3_r3_c15_sem_banco.py:77`; `test_e3_r3_c16_sem_banco.py:63`).
+6. Mock c11 precisa chave estrutural se command mantiver acesso `d[k]`; retorno atual tem apenas `cego/calados/dias_sem_leitura_sistema` (`app/chamados/tests/test_e3_r3_c11_sem_banco.py:275`; acesso `app/folha/management/commands/vigiar_retido_calado.py:38`).
+7. Mutantes de seleção/falta c16 dependem de strings do loop antigo e precisam alvo vivo se refatorado (`app/chamados/tests/e3_r3_c16_mutantes.py:26`, `:28`). Mutantes de c4/c5/c6/c14 preservam contratos de balde/unidade/desconhecido (`e3_r3_c4_mutantes.py:33`, `e3_r3_c5_mutantes.py:44`, `e3_r3_c6_mutantes.py:45`, `e3_r3_c14_mutantes.py:53`).
+
+**Insumos: escritor/leitor e significado**
+
+- `Empresa.ativa/cnpj/razao_social`: visibilidade definida por `empresas_visiveis` = ativa, exclui CNPJ `11222333*`, ordena razão social (`app/colaboradores/queries.py:85`). Escritores desses campos não investigados **[nao verificado]**.
+- `--empresa`: command escreve lista de IDs ou `None` (`app/folha/management/commands/vigiar_retido_calado.py:31`); censo lê filtro (`app/folha/vigia_retido_calado.py:47`). Lavrador usa uma PK intersectando visíveis (`app/folha/management/commands/lavrar_retrato_folha.py:51`, `:53`).
+- `hoje`: command escreve pelo relógio da borda (`app/folha/management/commands/vigiar_retido_calado.py:33`); helper usa para janelas (`app/folha/retrato_folha.py:1379`), balde usa para hoje/futuro (`:491`), C5 recebe (`app/folha/vigia_retido_calado.py:60`).
+- Foto `empresa/mes/ano/linhas/lavrado_em`: escritor lavrador `update_or_create` por trio, defaults linhas/carimbo (`app/folha/management/commands/lavrar_retrato_folha.py:77`); unicidade garantida (`app/folha/models.py:366`). Censo lê empresa/mes/ano/linhas (`app/folha/vigia_retido_calado.py:51`, `:56`, `:65`), não usa `lavrado_em` para universo; frescor lê carimbo (`app/folha/retrato_folha.py:1413`).
+- Linhas `colab/status/motivo/dias/datas/dias_sem_leitura/dias_sem_porta/dono`: montador escreve (`app/folha/retrato_folha.py:1237`); VRC pede bloqueados pela porta `linhas_do_retrato` (`app/folha/vigia_retido_calado.py:65`), balde por `dono_da_linha` (`:66`), C5 pelo `colab` (`:67`), dias sem leitura por presença e tamanho (`:72`, `:73`). `dono` gravado significa **fio**, não balde (`app/folha/retrato_folha.py:1246`, `:1248`; leitor `:446`, `:486`).
+- C5: hoje recebe IDs originais; `None` significa **todas** em `colabs_nunca_bateu`, inclusive ocultas (`app/folha/vigia_retido_calado.py:60`; `app/escala/services/cadastro_realidade.py:163`). C17 deve passar IDs efetivamente visíveis/intersectados para alinhar empresas; sua janela continua anterior até ontem (`cadastro_realidade.py:162`, `:167`), não “competência do dia civil”.
+- Não há mesmo significado em todos os consumidores: consulta documenta que export/internos não usam visibilidade de propósito (`app/colaboradores/queries.py:82`); vigia hoje parte de todas as fotos (`app/folha/vigia_retido_calado.py:46`), frescor usa visíveis (`app/folha/retrato_folha.py:1410`), tela por PK pode pegar oculta (`app/folha/views_retrato.py:161`). Competência é fim da janela por empresa (`app/folha/retrato_folha.py:1380`), enquanto filtro civil `lavrado_em` é explicitamente recusado (`app/folha/vigia_retido_calado.py:23`).
+
+## 15/11 19:39 · sessao bb4d3cb27c21 · - · - · origem=Ronald (tmux)
+
+(b) **O conjunto de correções de relógio não coincide com “todos os sítios de relógio no salto 1”**; o anexo distingue leituras próprias, fallbacks suprimidos e omissões, e o código confirma essa distinção (`app/relatorios/furos.py:59`, `app/colaboradores/services/calendario.py:192`, `app/chamados/juizes.py:888`).
+
+| Classificação | Sítio e motivo |
+|---|---|
+| **DENTRO correto** | `furos_espelho → escalas_em_limbo`: salto 1, leitura própria `timezone.localdate()`, embora a view já tenha `_agora` e `hoje`; falta transmitir o dia recebido (`app/relatorios/views.py:1519`, `app/relatorios/views.py:1520`, `app/relatorios/views.py:1554`, `app/relatorios/furos.py:59`). |
+| **FALTA ao conjunto de sítios salto 1, mas FORA expresso** | `retrato_pdf → gerar_pdf_auditavel`: salto 1, outra chamada `timezone.now()`; `_recorte_da_barra` só devolve `hoje`, não `_agora` (`app/folha/views_retrato.py:245`, `app/folha/views_retrato.py:386`, `app/folha/views_retrato.py:441`, `app/relatorios/pdf_base.py:133`). |
+| **FALTA ao conjunto de sítios salto 1, mas FORA expresso** | `retrato_raiox → placar_aceite`: salto 1, **duas** leituras próprias, `.now()` e `.localdate()`, no ramo `dono == ['colab']` (`app/folha/views_retrato.py:511`, `app/folha/views_retrato.py:513`, `app/chamados/services/verbos.py:286`, `app/chamados/services/verbos.py:287`). |
+| **Sítio salto 1 ausente da lista; fallback já suprimido** | `calendario_ponto/contexto_drawer → contexto_calendario`: o helper contém `.now()`, mas ambas as bordas fornecem `agora`; não representa nova leitura nesses caminhos (`app/colaboradores/views.py:1952`, `app/colaboradores/services/drawer.py:123`, `app/colaboradores/services/drawer.py:124`, `app/colaboradores/services/calendario.py:192`). |
+| **Sítio salto 1 adicional se incluídas as entradas auxiliares do anexo** | `ListaDoAdmin._carregar → cadastro_realidade.lista`: `.now()` no salto 1; fica suprimido quando `self.agora` foi fornecido, mas o construtor permite `None` (`app/chamados/services/vigia_fio.py:177`, `app/chamados/services/vigia_fio.py:179`, `app/chamados/services/vigia_fio.py:194`, `app/escala/services/cadastro_realidade.py:780`). |
+| **SOBRA somente se a lista for intitulada “sítios de relógio salto 1”** | `dataset_furos` não lê relógio: tem `agora=None` e repassa o argumento ao D4 e calendário; o D4 está no salto 2 da view. Tornar `agora` obrigatório é endurecimento de contrato válido, não remoção de relógio próprio no salto 1 (`app/relatorios/furos.py:103`, `app/relatorios/furos.py:123`, `app/relatorios/furos.py:164`, `app/ponto/status_dia.py:253`). |
+
+**Não classificaria selo e docstrings como SOBRA da obra:** são instrumentos e documentação, não nós de relógio do grafo; o defeito do selo é concreto, pois `_le_relogio` usa conjunto de nomes e `_instante_da_borda` conta alvos de atribuição (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:162`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:182`). O selo do drawer só compara `['now']`; o do relatório combina esse conjunto com a quantidade de alvos, sem contar todas as chamadas (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:152`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:156`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:158`).
+
+**Não são relógios salto 1 faltantes:** `viva_em_disputa_fechada` e `carimbos_sem_lastro_por_dono` chamam `pergunta_viva` sem argumentos no salto 1, mas `pergunta_viva` não consulta relógio: apenas deriva o dia se recebeu instante; os relógios surgem nos degraus seguintes (`app/chamados/services/vigia_fio.py:718`, `app/chamados/services/vigia_fio.py:776`, `app/chamados/juizes.py:886`, `app/chamados/juizes.py:888`, `app/chamados/juizes.py:897`). A propriedade `estado` é salto 2 a partir de `dono_fora_do_fio`, não salto 1 dos censos principais (`app/chamados/services/vigia_fio.py:259`, `app/chamados/services/vigia_fio.py:387`, `app/chamados/services/vigia_fio.py:615`).
+
+A identidade exata de “docstrings G3” não aparece nomeada nos arquivos examinados **[nao verificado]**. Documentação evidentemente afetada por 4.2: o vigia promete “universo do retrato gravado” e descreve faltantes, embora derive empresas apenas dos retratos existentes; a docstring do helper promete que os três consumidores medem o mesmo universo (`app/folha/vigia_retido_calado.py:16`, `app/folha/vigia_retido_calado.py:27`, `app/folha/vigia_retido_calado.py:51`, `app/folha/retrato_folha.py:1372`). O help text do carimbo já diz “INICIO da rodada”, também na migração declarada apenas de help text (`app/folha/models.py:358`, `app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:1`, `app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:16`).
+
+## 15/11 19:39 · sessao 94c8f53bb9d0 · - · - · origem=Ronald (tmux)
+
+A comparação exata `f31a8d09e × base da obra` fica **[nao verificado]**: não há metadados Git nesta cópia; os artefatos identificam bases parciais distintas — LU3 `522b7eb48` (`app/chamados/tests/e3_lu3_censo.txt:3`; `app/chamados/tests/e3_lu3_entrega.txt:2`), LU2 `de702cb2f` (`app/chamados/tests/e3_lu2_censo.txt:1`) e c12 `20f5a0338` (`app/chamados/tests/e3_r3_c12_entrega.txt:1`).
+
+Outros leitores que montam universos, confirmados no código:
+
+| Leitor | Universo próprio e divergência |
+|---|---|
+| `_recorte_da_barra`, compartilhado por tela/PDF/raiox | Dropdown visível, mas seleção por PK não cruza visibilidade; `todas` usa a competência atual da primeira empresa; URL escolhe outro par; navegação calcula ±1 mês (`app/folha/views_retrato.py:147`, `:153`, `:157`, `:161`, `:164`, `:179`, `:181`, `:189`, `:192`). As três views chamam o recorte (`app/folha/views_retrato.py:258`, `:386`, `:487`). |
+| Aviso de frescor | Refiltra o frescor pelas empresas com foto existente, omitindo justamente as sem retrato (`app/folha/views_retrato.py:209`, `:211`). |
+| Painel do colaborador | Empresa do colaborador cruzada com visíveis, competência exata da URL; não percorre as duas janelas (`app/colaboradores/views.py:975`, `:977`, `:982`). |
+| `vigia_fio.censo_alcance` | Visíveis com interseção, mas usa `competencias_a_lavrar`, cuja anterior só entra se não entregue (`app/chamados/services/vigia_fio.py:517`, `:520`, `:535`; `app/ponto/services/he_pendente_lavrado.py:220`, `:223`). |
+| `vigia_fio.censo` antigo | Chamados vivos com célula, sem cruzar visibilidade quando `empresas=None`; não escolhe duas competências (`app/chamados/services/vigia_fio.py:290`, `:292`). |
+| `ListaDoAdmin` | Cruza novamente empresas visíveis e o recorte fornecido (`app/chamados/services/vigia_fio.py:191`, `:193`, `:194`). |
+| C5 `colabs_nunca_bateu` | `None` significa todas as empresas; seleciona células entre início da anterior e ontem. Em 4.2 deve receber os IDs **efetivos visíveis**, para não conservar o universo largo subsidiário (`app/escala/services/cadastro_realidade.py:162`, `:163`, `:167`; chamada atual `app/folha/vigia_retido_calado.py:60`). |
+| `contexto_drawer` | Recompõe atual e anterior por `_ja(atual_ini-1dia)`, com piso visual próprio (`app/colaboradores/services/drawer.py:111`, `:115`, `:116`, `:118`, `:123`). |
+| `contexto_calendario` | Default mês/ano civil; modo competência consulta `janela_fechamento`; demais modos constroem períodos próprios (`app/colaboradores/services/calendario.py:194`, `:205`, `:209`, `:210`, `:227`, `:239`). |
+| Consulta plural do calendário | Calcula janela atual da empresa para excluir dias correntes da oferta (`app/colaboradores/services/calendario.py:140`, `:143`, `:150`). |
+| `CargaDaTarefa._ler_exportadas` | Deriva competência de cada dia recebido, sem usar as duas competências de hoje (`app/chamados/services/tarefa_do_dia.py:467`, `:471`, `:479`, `:482`). |
+| `escalas_em_limbo` | Universo de escalas ativas, recorte opcional de empresa e foto `FolgaDia` do mês civil (`app/relatorios/furos.py:60`, `:63`, `:86`, `:88`). |
+
+Os módulos `vigia_fio`, calendário, drawer e furos constam do diff **parcial LU3** documentado (`app/chamados/tests/e3_lu3_entrega.txt:151`, `:163`, `:164`, `:168`); pertença de cada função ao diff integral solicitado: **[nao verificado]**.
+
+Escritores e significado das fontes usadas por 4.2:
+
+- `Empresa.ativa`, `cnpj` e `dia_inicio_competencia` são campos definidos em `app/colaboradores/models.py:43`, `:44`, `:46`. A tela recebe os valores e chama `atualizar_empresa`/`criar_empresa` (`app/colaboradores/views.py:492`, `:493`, `:496`, `:521`, `:532`); as portas gravam por `create`/`save` (`app/colaboradores/services/estrutura.py:13`, `:15`, `:18`, `:21`). Também existe escritor explícito de normalização do CNPJ (`app/colaboradores/services/estrutura.py:25`, `:28`), e `EmpresaAdmin` deixa apenas `regime_trabalhista` somente leitura (`app/colaboradores/admin.py:8`, `:19`).
+- `empresas_visiveis` lê `ativa=True` e exclui CNPJ `11222333*` (`app/colaboradores/queries.py:85`, `:86`); o contrato documentado do helper diz que integrações e lógica interna não o usam deliberadamente (`app/colaboradores/queries.py:79`, `:82`). Logo, a equivalência “empresa = visível” **não é universal** (`app/escala/services/cadastro_realidade.py:163`; `app/chamados/services/vigia_fio.py:290`).
+- `competencias_do_retrato` deriva mês/ano do fim de anterior/atual, com deduplicação (`app/folha/retrato_folha.py:1377`, `:1380`, `:1382`). As janelas leem o corte empresarial; competência corresponde ao mês do **fim**, não ao mês civil de hoje (`app/ponto/janelas.py:10`, `:16`, `:36`, `:50`, `:60`, `:66`).
+- `RetratoFolha.empresa/mes/ano/linhas/lavrado_em` são gravados pelo lavrador via `update_or_create`; `lavrado_em` recebe o instante inicial da rodada (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `:77`, `:79`). A chave única é empresa/mês/ano (`app/folha/models.py:366`). Frescor lê o par e o carimbo (`app/folha/retrato_folha.py:1412`, `:1413`); vigia lê o par e as linhas, sem selecionar por `lavrado_em` (`app/folha/vigia_retido_calado.py:51`, `:55`, `:65`).
+- O lavrador explícito pode gravar competência fora das duas janelas (`app/folha/management/commands/lavrar_retrato_folha.py:57`, `:58`); a tela e o painel podem lê-la por URL (`app/folha/views_retrato.py:181`, `:192`; `app/colaboradores/views.py:975`, `:982`). Portanto, “competência lida = competência das duas janelas automáticas” também **não é universal**.
 
 ## 15/11 18:53 · sessao 3b3ebdd4be3c · E3-RESTO-R3 · censo · origem=Code
 
@@ -747,291 +857,4 @@ Os números R identificam usos separados por função/finalidade, inclusive quan
 
 [truncado em 20000 de 54902 caracteres]
 
-## 15/11 17:51 · sessao 24efca2a894e · - · - · origem=Ronald (tmux)
-
-| Sítio escritor | Função / valor | `DecisaoPergunta` e transação |
-|---|---|---|
-| `app/chamados/models.py:3097`, `:3100` | `PerguntaDisputa._nascer`: instancia com `**campos`, salva inserção; recebe o par opcionalmente; defaults `resposta_colab=''`, `respondida_em=NULL` (`:2525`, `:2526`). Recusa instante sem texto antes da escrita (`:2922`). | Mesma transação: `registrar(linhas_da_projecao_sem_linha([p]))` (`:3102`), sob `atomic(savepoint=False)` (`:2924`) e `atomic` de `_sob_contrato` (`:2897`). Atos condicionais `resposta` / `validacao` conforme assinaturas (`:4074`, `:4078`); nascimento pendente produz lista vazia (`:4067`). |
-| `app/chamados/services/disputa_emissao.py:1481`, `:1482`, `:1522` | `responder_pergunta_disputa_core`: texto normalizado por `.strip()` (`:1446`), instante `_tz.now()` (`:1476`); `save(update_fields=_campos)`. | Mesma transação `atomic` (`:1517`): ato `RESPOSTA` em `:1525`; também preserva projeção anterior sem linha (`:1480`, `:1525`). |
-| `app/chamados/services/disputa_emissao.py:1673`, `:1674`, `:1676` | `responder_automaticamente`: `resposta_colab=texto`, `respondida_em=instante`, `save(update_fields=['resposta_colab','respondida_em'])`; guarda texto existente (`:1663`) e recusa par ilegal (`:1671`). | Mesma transação (`:1675`): ato `RESPOSTA` (`:1677`), mais projeção anterior sem linha (`:1672`). Chamador de foto passa literal não vazio definido em `app/api/foto_recebida.py:25`, chamada `:48`. |
-| `app/chamados/services/disputa_emissao.py:1695`, `:1697` | `carimbar_resposta_pela_trilha`: `respondida_em=instante`; apenas com texto e sem instante (`:1691`); `save(update_fields=['respondida_em'])`. | Mesma transação (`:1696`): ato `RESPOSTA` (`:1698`). Instante vem de `nota.criado_em` no comando (`app/chamados/management/commands/curar_perguntas_em_limbo.py:67`). |
-| `app/chamados/models.py:3215`, `:3235` | `PerguntaDisputa.carimbar`: `respondida_em=quando`, somente se `resposta` habilitada, texto não vazio e instante ausente (`:3213`, `:3214`); acrescenta campo à lista salva (`:3216`). `quando` recebido ou `now()` (`:3207`). | A porta não registra ato; `save` abre transação própria (`:3532`). A garantia de decisão depende do chamador — ver linhas seguintes. |
-| `app/chamados/services/materializacao.py:567` | `_materializar_ausencia_de_resposta`: chama `carimbar(..., resposta='validar')`; pode preencher instante de irmã com texto. | Mesma transação (`:563`): ato `ABSORCAO` (`:569`), condicionado ao sucesso do carimbo (`:568`). |
-| `app/chamados/services/materializacao.py:1283` | `_materializar_uma`: chama `carimbar(..., resposta='validar')`; pode preencher instante com texto. | Corpo tem `atomic` (`:1226`) mas não registra decisão própria. Na rota `validar_pergunta`, compartilha transação externa (`app/chamados/services/validacao.py:450`) com ato `VALIDACAO` (`:460` → `:164`) quando unidade chamada em `:488`. O lote posterior é chamado fora desse bloco (`:494`); não há garantia geral de ato nesta escrita. |
-| `app/chamados/services/disputa_emissao.py:2007` | `_resolver_perguntas_por_chamado_resolvido`: `carimbar(..., resposta='validar')`. | Nenhum ato próprio de `DecisaoPergunta` no corpo. Transação garantida pelo wrapper `resolver_perguntas_por_chamado_resolvido` (`:1900`); existência de ato incidental em todo chamador: **[nao verificado]**. |
-| `app/chamados/services/disputa_emissao.py:2081` | Mesma função: `carimbar(..., resposta='responder')`; somente instante com texto pela porta (`models.py:3213`). | Nenhum ato próprio de `DecisaoPergunta` no corpo; escreve evento de auditoria (`:2084`), que não é decisão. Transação do wrapper (`:1900`). |
-| `app/chamados/services/disputa_emissao.py:1609`, `:1648` → `app/chamados/models.py:3363` | `reabrir_para_correcao`: passa `respondida_em=None`, `resposta_colab=''` em `campos`; porta `descarimbar_em_lote` executa `update(..., **outros)` (`models.py:3365`). | Mesma transação (`disputa_emissao.py:1621`): ato parametrizado `ato` (`:1632`), default `reabertura` (`:1576`); `recusa` via `validacao.py:629`. Registra somente linhas das quais retira texto/carimbo/validação/materialização (`:1645`, `:1646`); exclui vias fora do fato na decisão e na escrita (`models.py:3364`). |
-| `app/chamados/models.py:1613` → `:3363` | `ChamadoColaborador.ressuscitar_perguntas`: zera somente `respondida_em` do par; não apaga texto; seleção prévia admite texto NULL ou `''` (`:1533`). | Mesma transação (`:1604`): preserva decisões projetadas ainda sem linha (`:1610`). Atos `resposta`/`validacao` condicionais (`:4074`, `:4078`); não cria ato novo de reabertura, podendo registrar nenhum se não há projeção órfã. |
-| `app/chamados/services/validacao.py:628` | `recusar_pergunta`: delega zeragem do par a `reabrir_para_correcao`, com `ato='recusa'` (`:629`). | Mesma transação externa (`:623`) e interna da porta (`disputa_emissao.py:1621`), ato `recusa` (`:1632`). |
-| `app/chamados/services/materializacao.py:688` | `devolver_absorvidas_da_ausencia_rejeitada`: delega zeragem a `reabrir_para_correcao`. | Mesma transação externa (`:681`), ato default `reabertura` (`disputa_emissao.py:1576`, `:1632`). |
-| `app/chamados/management/commands/curar_perguntas_em_limbo.py:69` | `Command.handle`: delega limpeza de texto sem instante à reabertura; só executa após `--apply` (`:64`). | Mesma transação da porta, ato `reabertura` conforme condição da foto (`disputa_emissao.py:1621`, `:1632`, `:1646`). |
-| `app/chamados/models.py:1555` | `_universo_da_ressuscitacao`: `_q.respondida_em=None` em cópia (`:1541`). | **Só memória**, sem persistência nem ato desta atribuição (`:1556`). |
-| `app/chamados/models.py:3246` | `_desfazer_em_memoria`: restaura `self.respondida_em=respondida` da foto anterior (`:3244`). | **Só memória**, sem persistência; chamado ao recusar ou falhar carimbo (`:3224`, `:3227`, `:3238`). |
-| `bin/sombra_mascara_pessoal.py:57`, `:62`, `:64` | Escritor operacional **da cópia sombra**: `setattr(o,c,novo)` e `_base_manager.bulk_update`; tabela inclui `PerguntaDisputa.resposta_colab` (`bin/sombra_regras_pessoais.py:85`). `novo=texto(v)` (`sombra_mascara_pessoal.py:55`); transformação preserva formatos aceitos ou produz marcador/hash (`sombra_regras_pessoais.py:29`). | Nenhum ato próprio da alteração; transação da máscara (`sombra_mascara_pessoal.py:16`). Banco exigido `sombra` (`:10`); não contar como escritor de produção. |
-
-Observações verificadas: `PerguntaDisputa.descarimbar()` só salva os três campos de materialização, sem tocar o par (`app/chamados/models.py:3293`); o `bulk_update` de lavras salva apenas `veredito_lavrado`, `julgado_em`, `janela_expira_em` (`app/chamados/veredito_lavrado.py:237`, `:250`). `devolver_validacao_recusada` conserva a resposta e salva somente `validada_em`/`validada_por` (`app/chamados/services/validacao.py:204`, `:227`), embora registre ato `devolucao` (`:230`).
-
-Script AST inicial executado via stdin, sem arquivo:
-
-```python
-import ast, pathlib
-fields = {'respondida_em', 'resposta_colab'}
-
-for p in pathlib.Path('.').rglob('*.py'):
-    if 'tests' in p.parts or 'migrations' in p.parts:
-        continue
-    try:
-        t = ast.parse(p.read_text())
-    except (SyntaxError, UnicodeError):
-        continue
-    parent = {c: n for n in ast.walk(t)
-              for c in ast.iter_child_nodes(n)}
-
-    def fn(n):
-        while n in parent:
-            n = parent[n]
-            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                return n.name
-        return '<module>'
-
-    for n in ast.walk(t):
-        hit = False
-        if isinstance(n, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
-            targets = n.targets if isinstance(n, ast.Assign) else [n.target]
-            hit = any(
-                isinstance(x, ast.Attribute) and x.attr in fields
-                for target in targets for x in ast.walk(target)
-            )
-        if isinstance(n, ast.Call):
-            name = ast.unparse(n.func)
-            if name.endswith((
-                '.update', '.create', '.get_or_create',
-                '.update_or_create', '.bulk_update', '.save'
-            )) or name == 'setattr':
-                hit = any(
-                    isinstance(x, ast.Constant)
-                    and isinstance(x.value, str)
-                    and x.value in fields
-                    for x in ast.walk(n)
-                ) or any(k.arg in fields for k in n.keywords)
-        if hit:
-            print(f'{p}:{n.lineno} {fn(n)} {ast.unparse(n)}')
-```
-
-Foram executados complementos AST para: chamadas com keywords/literais dos campos (achou `dict(...)` e chamada indireta de lote); todas as chamadas `carimbar`, `descarimbar_em_lote`, `reabrir_para_correcao`, `bulk_update`; `setattr`/`getattr` literais e subscripts de escrita; constantes contendo campos e termos SQL de escrita. O primeiro script sozinho **não prova completude**, pois não faz fluxo de dados interprocedural/aliases; a conferência dos sítios indiretos acima foi manual a partir da AST. Nenhum SQL literal de escrita dos campos foi encontrado pelos complementos; SQL gerado dinamicamente arbitrário permanece **[nao verificado]**.
-
-## 15/11 17:51 · sessao dfb8f9bc785a · - · - · origem=Ronald (tmux)
-
-Inventário de testes obtido por AST e conferência das asserções. Os testes não foram executados; resultado em execução: [nao verificado]. [nao verificado]
-
-| Teste / asserção | Predicado efetivamente fixado | Corte/lei citado no próprio teste | [nao verificado]
-|---|---|---|
-| `app/chamados/tests/test_e3_forma_sql_do_juiz.py:91`, `:95` — `test_face_sem_texto_igual_ao_juiz` / `test_face_com_texto_igual_ao_juiz` | As faces SQL equivalem, em `filter`, `exclude` e negação, a **instante E vazio(strip)** / **instante E texto(strip)**; comparação definida em `:69-80`. | `E3-FORMA-SQL-DO-JUIZ`, aval Ronald 12/11 19:1x, itens 1 e 2, em `:1-15`. |
-| `app/chamados/tests/test_e3_forma_sql_do_juiz.py:185`, `:190` | `q_vivas`: instante + brancos não entra pelo degrau da resposta; instante + `' 14:20 '` entra. | Mesma origem `:1-15`; especificação de `q_vivas` em `:160-164`. |
-| `app/chamados/tests/test_e3_forma_sql_do_juiz.py:259`, `:260` | Fila de validar inclui par com texto; exclui instante + espaços. | Mesma origem `:1-15`. |
-| `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:283`, `:287`, `:289` — `test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito` | `irmas_respondidas_sem_consumo`: **instante OU texto**; instante sem texto segura, texto sem instante segura, com validação libera. | Docstring `:276-279`: aval `O168-JUIZ-DO-VEREDITO`, literalmente contrapõe antigo E ao atual OU; medição 13/11. |
-| `app/chamados/tests/test_e3_10_cura_no_escritor.py:132`, `:133`, `:134`, `:140`, `:141`, `:147` | `respostas_sem_veredito` inclui instante + vazio/espaços/par; impede fechamento; `sem_veredito_entre` inclui instante sem texto. | Docstring da classe `:122-124`: `E3-V8-TEXTO-VAZIO`, 14/11 07:4x, “caracterizacao invertida do E3-10 item 2”. O header antigo `:10-12` não descreve essa caracterização atual. |
-| `app/chamados/tests/test_service_validar_puro.py:101`, `:102`, `:103` — `test_05_sem_resposta_nao_valida` | Texto `'17:00'` sem instante é recusado por `validar_pergunta`: `sem_resposta`; fixa necessidade do instante, sem provar sozinho suficiência. Fixture `:49-51`, retirada do instante `:98`. | Header `:1-13`: peça 1 da fatia 2-A, 09/08. Corte específico para esse predicado: [nao verificado]. |
-| `app/chamados/tests/test_pergunta_estado.py:59`, `:60` — `test_reabertura_volta_a_ser_viva` | `.estado`: texto `'19:00'` sem instante resulta `pendente`; junto de `:35-37`, par resulta `respondida`. | Comentário `:57`: reabertura limpa instante/validação e mantém texto; sem corte nomeado nesse teste [nao verificado]. |
-| `app/chamados/tests/test_o261e_f5_alcance.py:194`, `:196`, `:197`, `:199`, `:200` | Instante sem texto sai dos pendentes do app; tarefa preserva `respondida_sem_texto`; vigia mede fio morto causa `b`, sem porta. | Docstring `:185-189`: aval `E3-V10-DEGRAU-DONO-E-PORTA` 14/11 16:16; explicita diferença entre app e crédito. |
-| `app/chamados/tests/test_o261e_f5_alcance.py:378`, `:380`, `:386`, `:388` | Sem resposta: porta app/colab e verbo cobrar; depois de gravar par + decisão (`:381-384`): porta pergunta/admin, validar. | Docstring `:373-374`: `E3 b3`, aval `E3-TRIAGEM-FABLE` 12/11; comentário `:382`: E1. |
-| `app/chamados/tests/test_e4b_c6_orm.py:130`, `:132` — `_provar`, exercitado por `test_RED_limbo_misto_fecha_mortas_orfa_e_entrega_motivo_proprio` `:153-156` | Texto sem instante na irmã morta produz recusa `credor_carrega_limbo`, materializa mortas e conserva fechamento do chamado. Fixture: texto `:77`, instante nulo `:86`; assert de materialização `:115`. | Comentário `:154-155`: F1 e S143; header `:1`: c6, admin fecha, S143 recusa só reabertura. |
-| `app/chamados/tests/test_e4b_c11_orm.py:121-122` — `test_RED_A6_beneficio_rejeitado_limbo` | Repete caracterização de limbo de c6 pelo caminho de benefício rejeitado: herda classe c6 em `:27`, chama `_provar(limbo=...)` em `:99-101`, com asserts efetivos em `test_e4b_c6_orm.py:130-132`. | Header c11 `:1-4`: provas ORM c11, S143 e C6 reais; nomes F1/S143 no comentário herdado c6 `:154-155`. |
-| `test_e4c_f1v6_orm.py` | Arquivo não encontrado na árvore disponibilizada; conteúdo, predicado e origem: **[nao verificado]**. | **[nao verificado]**. |
-| `app/chamados/tests/test_e3_item1b.py:94`, `:108`, `:114` | Relatório: viva com instante sem texto → `AGUARDA_COLAB`; par → `AGUARDA_SUPERVISAO`; sem resposta → `AGUARDA_COLAB`. | Header `:1-12`: E3 item1b, LEI-AKITA 13, casos pela regra. |
-| `app/chamados/tests/test_e3_item1b.py:124`, `:130`, `:136` | Cobrança: instante sem texto conta como calado; par não conta; morta pelo C6 não conta. | Header `:3-10`: LEI-AKITA 13, item 1(c). |
-| `app/chamados/tests/test_e3_item1b.py:154`, `:155`, `:156`, `:162`, `:163`, `:171` | Template do colaborador: instante sem texto não exibe “Resposta enviada”/“Reenviar resposta”; par exibe; contexto derivado pode apagar caixa mesmo com par. | Header `:11-12`: item 1(d); teste de contexto `:165-166`. |
-| `app/chamados/tests/test_e3_leitores_fio_disputa.py:131`, `:136`, `:141`, `:146` | `todas_respondidas`: morta sem resposta não fica devendo; viva sem resposta ou instante sem texto fica devendo; viva com par não fica. | Header `:2-11`: `FIO-E0-V4-E3-LEITORES`, aval `CASO-7445-COMPLEMENTO-E3`; C6, C7, `respondida_sem_texto`. |
-| `app/chamados/tests/test_e3_leitores_fio_disputa.py:161`, `:167` | API: instante sem texto não pode solicitar correção; com par pode. | Mesma origem `:2-11`; comentário `:149`: API lê mesma derivação. |
-| `app/chamados/tests/test_sem_resposta_nao_planta_batida.py:99`, `:104`, `:111`, `:125` | Materialização recusa instante sem texto; par com texto produz batida. Fixação efetiva distingue texto, com os carimbos mantidos nas duas fixtures (`:72-86`). | Aval Ronald 30/09 ~13:3x em `:2`; lei “motor NUNCA fabrica batida” em `:9-10`; medição dos 8.622 carimbos sem texto em `:116-120`. **A frase OU do header `:14-15` diverge dessas asserções.** |
-| `app/chamados/tests/test_o261_resposta_vazia.py:85`, `:95`, `:109`, `:113`, `:149`, `:151`, `:153`, `:155` | Escritor não carimba vazio nem espaços; recusa carimbar texto se C6 o daria vivo; contador conta instante sem texto apenas após marco, espaços equivalem a vazio. | Header `:2-17`: `O261-RESPOSTA-VAZIA-COM-LEITOR-VIVO`, aval 29/10 17:2x; comentário `:97-102`: inversão O261-E-F2, mandato F2 e LEI-AKITA 2. |
-| `app/chamados/tests/test_e3_10_cura_no_escritor.py:63-69`, `:77`, `:106-107`, `:168-170`, `:176-184`, `:205-212` | Guardas de escrita: resposta automática/nascimento/save/lote recusam transição para instante sem texto; par legal passa; legado ilegal pode alterar outros campos (`:186-197`). | Header `:1-13`: E3-10, aval Ronald 12/11 item 2; classe `:152-155`: E3 item1b item 3, LEI-AKITA 7. |
-| `app/chamados/tests/test_reabrir_nao_destroi.py:49-52`, `:58`, `:64`, `:72` | Devolução: zera texto/instante/validação; guarda texto e instante originais na decisão `reabertura`; pendente não fabrica versão; duas devoluções geram uma versão. | Header `:1-5`: `REABRIR-NAO-DESTROI`, aval 21/10 RAIA D, resposta é fato. |
-| `app/chamados/tests/test_e3_porta_A_reabrir.py:41-42`, `:51`, `:62-64`, `:82-83` | Reabertura comum zera par/materialização/via; carimbo sozinho deixa ato `reabertura`; fora do fato conserva par e não gera decisão; recusa comum zera par e gera ato `recusa`. | Header `:1-10`: aval `E3-PORTA-DA-RESPOSTA = (A)`, item 2, Single Writer Principle. |
-| `app/chamados/tests/test_contract_par_resposta.py:90-95`, `:111-113`; `app/chamados/tests/test_contract_texto_com_carimbo.py:119`, `:124`, `:136`, `:138`, `:166-172` | Contratos estáticos de escrita do par; não provam equivalência dos leitores nem atomicidade por execução. | Primeiro `:1-2`: HX-PAR-RESPOSTA, E2 item 2, 03/09; segundo `:1-5`: BUG121, 12/09, ordem “MESMO atomic”. |
-
-Script efetivamente usado para localizar candidatos Python (a interpretação acima foi conferida lendo os corpos e asserções):
-
-```bash
-python3 -B - <<'PY'
-import ast, pathlib
-for p in pathlib.Path('app').rglob('test*.py'):
-    try:
-        t = ast.parse(p.read_text())
-    except (SyntaxError, UnicodeError):
-        continue
-    hits = []
-    for n in ast.walk(t):
-        if isinstance(n, ast.Attribute) and n.attr in {
-            'respondida_em', 'resposta_colab'
-        }:
-            hits.append(n.lineno)
-        if isinstance(n, ast.keyword) and n.arg and any(
-            x in n.arg.split('__')
-            for x in ('respondida_em', 'resposta_colab')
-        ):
-            hits.append(n.lineno)
-        if isinstance(n, ast.Constant) and isinstance(n.value, str) \
-                and n.value.split('__')[-1] in (
-                    'respondida_em', 'resposta_colab'
-                ):
-            hits.append(n.lineno)
-    if hits:
-        print(p, ','.join(map(str, sorted(set(hits)))))
-PY
-```
-
-Script adicional efetivamente usado para localizar testes dos helpers OR, inclusive arquivos sem acesso direto aos campos: [nao verificado]
-
-```bash
-python3 -B - <<'PY'
-import ast, pathlib
-targets = {
-    'sem_veredito_entre',
-    'irmas_respondidas_sem_consumo',
-    'respostas_sem_veredito',
-}
-for p in pathlib.Path('app').rglob('test*.py'):
-    try:
-        t = ast.parse(p.read_text())
-    except (SyntaxError, UnicodeError):
-        continue
-    for n in ast.walk(t):
-        if isinstance(n, (ast.Attribute, ast.Name)) and \
-                getattr(n, 'attr', getattr(n, 'id', '')) in targets:
-            print(p, n.lineno, ast.unparse(n))
-PY
-```
-
-Limite: esses scripts descobrem candidatos e helpers pelo AST; não fazem resolução de tipos/imports nem provam cobertura exaustiva de predicados exercitados indiretamente. O script central do censo deve incorporar a resolução de aliases solicitada pelo usuário; estes são os scripts auxiliares de investigação de testes. [nao verificado]
-
-## 15/11 17:51 · sessao 834316ebacdd · JUIZ-RESPONDIDA · sonda · origem=Code
-
-1. O universo informado não é vazio: **50292** perguntas, **14790** candidatas em `q_vivas` e **899** com ato `RESPOSTA`. A soma fecha: **8192 + 9626 + 0 + 32474 = 50292**. E3 é zero por diferença; não há linha `CONT E3` na saída. [nao verificado]
-
-2. Tabela consolidada do dado fornecido. Nas quatro colunas booleanas, cada célula apresenta **False / True**; os cruzamentos completos estão na transcrição abaixo. [nao verificado]
-
-| Estado | Situação | Total | validada F/T | materializada F/T | viva F/T | ato RESPOSTA F/T | Fonte |
-|---|---|---:|---:|---:|---:|---:|---|
-| E1 instante E texto | ABERTA | 4011 | 1100 / 2911 | 974 / 3037 | 3059 / 952 | 3193 / 818 | [nao verificado] |
-| E1 instante E texto | ENTREGUE | 4181 | 346 / 3835 | 139 / 4042 | 4014 / 167 | 4124 / 57 | [nao verificado] |
-| E2 instante sem texto | ABERTA | 1502 | 214 / 1288 | 2 / 1500 | 1500 / 2 | 1502 / 0 | [nao verificado] |
-| E2 instante sem texto | ENTREGUE | 8124 | 703 / 7421 | 111 / 8013 | 7983 / 141 | 8124 / 0 | [nao verificado] |
-| E3 texto sem instante¹ | ABERTA | 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | [nao verificado] |
-| E3 texto sem instante¹ | ENTREGUE | 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | [nao verificado] |
-| E4 nenhum | ABERTA | 19017 | 19017 / 0 | 7244 / 11773 | 11847 / 7170 | 18993 / 24 | [nao verificado] |
-| E4 nenhum | ENTREGUE | 13457 | 13457 / 0 | 3808 / 9649 | 10652 / 2805 | 13457 / 0 | [nao verificado] |
-
-¹ E3 deduzido por diferença, sem contagem `CONT` explícita. As somas internas da tabela conferem com os totais e marginais fornecidos; o total com ato é **875 + 24 = 899**. [nao verificado]
-
-3. **As expressões exatas usadas pelo script não são verificáveis:** `sonda_quadro.py` não foi localizado na cópia e seu conteúdo não acompanha a saída fornecida. [nao verificado]
-
-A correspondência lógica dos rótulos é a seguinte, tomando `I = p.respondida_em is not None` e `T = not texto_vazio(p.resposta_colab)`; atribuir essas expressões ao script permanece [nao verificado].
-
-| Estado | Expressão lógica do rótulo | Evidência na cópia |
-|---|---|---|
-| E1 | `I and T` | Predicado descrito e face SQL `q_respondida_com_texto()` em [app/chamados/juizes.py:1554](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1554) |
-| E2 | `I and not T` | Predicado em [app/chamados/juizes.py:1531](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1531); face SQL em [app/chamados/juizes.py:1551](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1551) |
-| E3 | `not I and T` | [nao verificado] |
-| E4 | `not I and not T` | [nao verificado] |
-
-O juiz define `texto_vazio(t)` como `not (t or '').strip()`. [app/chamados/juizes.py:1525](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1525)
-
-Sobre E3 ter face no juiz: o enunciado informa que o script declara que não; essa declaração não aparece na saída transcrita, e não foi possível conferir o script. [nao verificado]
-
-4. `PKS_VIVAS_ABERTA`: **E2 = 2**, PKs **38251 e 38252**; **E3 = 0**, lista vazia. Total das duas listas: **2**. [nao verificado]
-
-Transcrição integral da saída fornecida, sem nova execução nem verificação em banco ou logs. [nao verificado]
-
-```text
-sonda_leitura: sonda_quadro.py [8d93c0f8e754674b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-UNIVERSO PerguntaDisputa total 50292 | candidatas q_vivas 14790 | com ato RESPOSTA 899
-SOMA_DOS_ESTADOS 50292 TOTAL 50292 FECHA
-CONT E1_instante_E_texto ABERTA 4011
-CONT E1_instante_E_texto ABERTA validada False materializada False viva True ato False 497
-CONT E1_instante_E_texto ABERTA validada False materializada False viva True ato True 428
-CONT E1_instante_E_texto ABERTA validada False materializada True viva False ato False 106
-CONT E1_instante_E_texto ABERTA validada False materializada True viva False ato True 42
-CONT E1_instante_E_texto ABERTA validada False materializada True viva True ato False 24
-CONT E1_instante_E_texto ABERTA validada False materializada True viva True ato True 3
-CONT E1_instante_E_texto ABERTA validada True materializada False viva False ato False 47
-CONT E1_instante_E_texto ABERTA validada True materializada False viva False ato True 2
-CONT E1_instante_E_texto ABERTA validada True materializada True viva False ato False 2519
-CONT E1_instante_E_texto ABERTA validada True materializada True viva False ato True 343
-CONT E1_instante_E_texto ABERTA viva False 3059
-CONT E1_instante_E_texto ABERTA viva True 952
-CONT E1_instante_E_texto ENTREGUE 4181
-CONT E1_instante_E_texto ENTREGUE validada False materializada False viva False ato False 4
-CONT E1_instante_E_texto ENTREGUE validada False materializada False viva True ato False 55
-CONT E1_instante_E_texto ENTREGUE validada False materializada False viva True ato True 30
-CONT E1_instante_E_texto ENTREGUE validada False materializada True viva False ato False 174
-CONT E1_instante_E_texto ENTREGUE validada False materializada True viva False ato True 1
-CONT E1_instante_E_texto ENTREGUE validada False materializada True viva True ato False 82
-CONT E1_instante_E_texto ENTREGUE validada True materializada False viva False ato False 49
-CONT E1_instante_E_texto ENTREGUE validada True materializada False viva False ato True 1
-CONT E1_instante_E_texto ENTREGUE validada True materializada True viva False ato False 3760
-CONT E1_instante_E_texto ENTREGUE validada True materializada True viva False ato True 25
-CONT E1_instante_E_texto ENTREGUE viva False 4014
-CONT E1_instante_E_texto ENTREGUE viva True 167
-CONT E1_instante_E_texto ato_RESPOSTA False 7317
-CONT E1_instante_E_texto ato_RESPOSTA True 875
-CONT E1_instante_E_texto materializada False 1113
-CONT E1_instante_E_texto materializada True 7079
-CONT E1_instante_E_texto validada False 1446
-CONT E1_instante_E_texto validada True 6746
-CONT E1_instante_E_texto viva False 7073
-CONT E1_instante_E_texto viva True 1119
-CONT E1_instante_E_texto 8192
-CONT E2_instante_sem_texto ABERTA 1502
-CONT E2_instante_sem_texto ABERTA validada False materializada False viva True ato False 2
-CONT E2_instante_sem_texto ABERTA validada False materializada True viva False ato False 212
-CONT E2_instante_sem_texto ABERTA validada True materializada True viva False ato False 1288
-CONT E2_instante_sem_texto ABERTA viva False 1500
-CONT E2_instante_sem_texto ABERTA viva True 2
-CONT E2_instante_sem_texto ENTREGUE 8124
-CONT E2_instante_sem_texto ENTREGUE validada False materializada False viva True ato False 111
-CONT E2_instante_sem_texto ENTREGUE validada False materializada True viva False ato False 562
-CONT E2_instante_sem_texto ENTREGUE validada False materializada True viva True ato False 30
-CONT E2_instante_sem_texto ENTREGUE validada True materializada True viva False ato False 7421
-CONT E2_instante_sem_texto ENTREGUE viva False 7983
-CONT E2_instante_sem_texto ENTREGUE viva True 141
-CONT E2_instante_sem_texto ato_RESPOSTA False 9626
-CONT E2_instante_sem_texto materializada False 113
-CONT E2_instante_sem_texto materializada True 9513
-CONT E2_instante_sem_texto validada False 917
-CONT E2_instante_sem_texto validada True 8709
-CONT E2_instante_sem_texto viva False 9483
-CONT E2_instante_sem_texto viva True 143
-CONT E2_instante_sem_texto 9626
-CONT E4_nenhum ABERTA 19017
-CONT E4_nenhum ABERTA validada False materializada False viva False ato False 115
-CONT E4_nenhum ABERTA validada False materializada False viva False ato True 1
-CONT E4_nenhum ABERTA validada False materializada False viva True ato False 7109
-CONT E4_nenhum ABERTA validada False materializada False viva True ato True 19
-CONT E4_nenhum ABERTA validada False materializada True viva False ato False 11727
-CONT E4_nenhum ABERTA validada False materializada True viva False ato True 4
-CONT E4_nenhum ABERTA validada False materializada True viva True ato False 42
-CONT E4_nenhum ABERTA viva False 11847
-CONT E4_nenhum ABERTA viva True 7170
-CONT E4_nenhum ENTREGUE 13457
-CONT E4_nenhum ENTREGUE validada False materializada False viva False ato False 1221
-CONT E4_nenhum ENTREGUE validada False materializada False viva True ato False 2587
-CONT E4_nenhum ENTREGUE validada False materializada True viva False ato False 9431
-CONT E4_nenhum ENTREGUE validada False materializada True viva True ato False 218
-CONT E4_nenhum ENTREGUE viva False 10652
-CONT E4_nenhum ENTREGUE viva True 2805
-CONT E4_nenhum ato_RESPOSTA False 32450
-CONT E4_nenhum ato_RESPOSTA True 24
-CONT E4_nenhum materializada False 11052
-CONT E4_nenhum materializada True 21422
-CONT E4_nenhum validada False 32474
-CONT E4_nenhum viva False 22499
-CONT E4_nenhum viva True 9975
-CONT E4_nenhum 32474
-PKS_VIVAS_ABERTA E2_instante_sem_texto 2 38251 38252
-PKS_VIVAS_ABERTA E3_texto_sem_instante 0 
-pergunta_viva chamada 14790 vezes; segundos 53.1
-```
-
-_5726 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5729 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
