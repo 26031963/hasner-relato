@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 23:47** · publicado em **14/11/2026 23:47** (UTC-3)
+> Ultima resposta processada: **14/11/2026 23:49** · publicado em **14/11/2026 23:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 23:49 · sessao 8d0468b6cb0b · GRADE-RESOLVE-67 · censo · origem=Code
+
+**São 30 unidades no recorte dos 67:** os 33 indeterminados incluem três unidades já individualizadas, restando 30 sem col/dia. (app/docs/RELATO.md:8386, :8394)
+
+Os **63 IDs não expostos** mencionados no anexo abrangem outro conjunto: essas 30 unidades **mais 33 sem divergência**. (app/docs/RELATO.md:8390–8395)
+
+**Recuperadas: 0; não recuperáveis nesta cópia: 30.** Nenhum vínculo adicional com unidade individualizada, colNNN+data ou dono L-099 foi encontrado nas buscas; ausência documental: [nao verificado].
+
+Há uma identificação parcial: **HJ-054**, registrado como não casado, sem col. A linha não fornece sufixo de unidade, data nem dono; esses campos permanecem [nao verificado]. (app/docs/RELATO.md:8397)
+
+O `git grep` comum falhou por ausência de metadados Git; executei então `git grep --no-index` em **todo `app/docs`**, incluindo RELATO-ARQUIVO, BACKLOG, PROMPTS e LAPIDES. HEAD não conferível: [nao verificado]. Buscas executadas: [nao verificado]. [nao verificado]
+
+```sh
+git grep --no-index --no-exclude-standard -n -I -i -E \
+'HJ-[0-9]{3}-U[0-9]+|HJ-NNN|hj_0511|HJ-INGESTAO' -- app/docs
+
+git grep --no-index --no-exclude-standard -n -I -i -E \
+'HJ[-_ ]?054|30 sem (col/dia|dia)|GRADE-RESOLVE-67|falta triagem' -- app/docs
+
+git grep --no-index --no-exclude-standard -n -I -i -E \
+'HJ[-_ ]?0(0[1-9]|[1-4][0-9]|5[0-6])([^0-9]|$)' -- app/docs
+
+rg -l --hidden --no-ignore -i -g '!app/docs/**' \
+'hj_0511|HJ-[0-9]{3}-U[0-9]+|GRADE-MESTRA/resolve/p0\.r|HJ-INGESTAO' .
+```
+
+RESULTADO|INGESTAO-SEM-ID|30|recuperadas=0|nao_recuperaveis=30
+
+## 14/11 23:48 · sessao 95865902b27b · - · - · origem=Ronald (tmux)
+
+Não recuperei nenhuma das 30 unidades indeterminadas sem col/dia nos documentos fora `RELATO.md`. A ausência de correspondências é resultado da busca, sem prova documental positiva: [nao verificado].
+
+As remissões encontradas apenas definem a ingestão e o diretório privado:
+
+- `app/docs/BACKLOG.md:1868`: unidades pessoa+dia `HJ-NNN-Ux`, casamento por colNNN e fonte privada `logs/hj_0511/`.
+- `app/docs/PROMPTS.md:1888`: mesma ingestão de 56 TXT, resultado por função real e diretório privado.
+- `app/docs/GRADE-MESTRA.md:427`: instrumento da ingestão, com remissão ao BACKLOG.
+
+`HJ003` aparece em `app/docs/PROMPTS.md:2125` e `app/docs/BACKLOG.md:2544–2550`, mas não individualiza nova unidade sem ID; o vínculo dessas referências com uma das 30 é [nao verificado]. `HJ-058` pertence ao registro posterior descrito em `app/docs/BACKLOG.md:2554–2555`, sem vínculo publicado com as 30: [nao verificado].
+
+Buscas executadas, em `app/docs` inteiro excluindo somente `RELATO.md`, com inspeção específica de `RELATO-ARQUIVO.md`, `BACKLOG.md`, `PROMPTS.md` e `LAPIDES.md`: [nao verificado].
+
+```sh
+rg -n --hidden --no-ignore -H -i \
+'HJ-[0-9]{3}-U[0-9]+|hj_0511|sem col/dia|HJ-054' \
+app/docs --glob '!RELATO.md'
+
+rg -n --hidden --no-ignore -H -i \
+'HJ[-_ ]?0[0-5][0-9]|HJ-INGEST[AÃ]O|ingest[aã]o|ingerid' \
+app/docs --glob '!RELATO.md'
+
+rg -n --hidden --no-ignore -H -i \
+'ata[-_ ]?1111|pessoa.{0,8}dia|unidade.{0,30}HJ|HJ.{0,30}unidade|casad.{0,30}dia|30.{0,30}indetermin' \
+app/docs --glob '!RELATO.md' --glob '!*.pdf'
+```
+
+Nenhuma correspondência da ingestão nos dois arquivos `RELATO-ARQUIVO.md` e `LAPIDES.md`: [nao verificado]. Nenhum dono L-099 adicional recuperado para as 30: [nao verificado].
+
+## 14/11 23:48 · sessao 2a8da8b4cf54 · - · - · origem=Ronald (tmux)
+
+Nenhuma unidade recuperada fora `app/docs`; ausência de identificação verificável por arquivo:linha: **[nao verificado]**.
+
+Buscas executadas, todas somente leitura **[nao verificado]**:
+
+```sh
+rg --files --hidden --no-ignore -g '!app/docs/**' |
+  rg -i 'hj[_-]?0511|grade.mestra/resolve|(^|/)p0\.r$|hj-[0-9]{3}-u[0-9]+'
+
+rg -l --hidden --no-ignore -i -g '!app/docs/**' \
+  'hj_0511|HJ-[0-9]{3}-U[0-9]+|GRADE-MESTRA/resolve/p0\.r|HJ-INGESTAO' .
+
+rg -l --hidden --no-ignore -i -g '!app/docs/**' \
+  'HJ-0(01|02|03|05|12|15|16|17|27|30|31|50|54)|30 sem (col|dia)|sem col/dia|80 unidades|76 casadas' .
+
+rg --files --hidden --no-ignore -g '!app/docs/**' |
+  rg -i '(^|/)(logs|ata|atas|fonte|ingest|sonda|mapa)|manifesto|indice'
+
+rg -l --hidden --no-ignore -i -g '!app/docs/**' \
+  'ingest[aã]o.{0,60}(HJ|ata|80)|80.{0,30}unidades|56 HJ|30.{0,30}(sem dia|indeterminad)|mapa.{0,30}0511|0511.{0,30}mapa' .
+```
+
+Os únicos HJ relacionados à numeração procurada fora dos documentos são fixtures `HJ-001` do teste de contador, sem colab ou data; não identificam unidade da ingestão. (`bin/tests/test_placar_grade.sh:93`, `:126`, `:195`)
+
+As coincidências “30” e “SEM DIA” pertencem a casos de setembro, distintos da ingestão: corte Q2-JA em 10/09 e roteamento de chamados em 16/09. (`app/chamados/tests/test_q2ja_v2_corte_por_janela.py:1`, `:16`, `:96`; `app/chamados/tests/test_fila_roteia_catalogo.py:1`, `:3`, `:5`)
+
+Quanto ao denominador: o texto documental separa **30 indeterminadas sem col/dia**, **33 sem divergência** e **três indeterminadas individualizadas**; os 63 IDs não publicados do anexo correspondem a **30+33**, enquanto o resíduo do enunciado `67−37` corresponde a **30**. A equivalência entre esses 30 e uma lista autônoma de unidades sem ID não está documentada individualmente. (`app/docs/RELATO.md:8386`, `:8393`, `:8394`)
 
 ## 14/11 23:47 · sessao 9f9127827fdf · E3-RESTO-R3 · sonda · origem=Code
 
@@ -533,34 +620,4 @@ O `git grep` falhou por ausência de metadados Git; a busca equivalente com `rg`
 
 RESULTADO|BO-1311-ROTEIRO|07|SEM DIA-COLAB|-|-
 
-## 14/11 23:37 · sessao 4462d0de0bd6 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro permite apenas associar provisoriamente o caso 06 a **col982**, sexto da lista; não informa uma data para ele. A numeração é expressamente contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
-
-O resumo dos casos 06–10 identifica datas somente para **col859**: não estabelece dia-colab do caso 06. (app/docs/RELATO.md:222)
-
-(4) Dono ESTRUTURA, padrão quebrado e obra que fecha: **[nao verificado]**. Sem dia-colab identificado, encerro sem sonda, conforme solicitado.
-
-RESULTADO|BO-1311-ROTEIRO|06|SEM DIA-COLAB|-|-
-
-## 14/11 23:37 · sessao 586a02ef3245 · GRADE-RESOLVE-67 · censo · origem=Code
-
-1. **col407 — 21/10**: o registro vincula os itens 13/14 a col407 e identifica, especificamente para o item 13, o turno iniciado em 21/10. (app/docs/RELATO.md:1534)
-
-2. **Dono: BATIDA.** A tabela de triagem L-099 publica expressamente **col407 21/10 → BATIDA → lista do admin**. Portanto, há prova documental para o mesmo dia-colab; o rótulo antigo “NOSSO” não precisa ser interpretado como dono. (app/docs/RELATO.md:1642; app/docs/RELATO.md:1648; app/docs/RELATO.md:1534)
-
-3. **Sonda dispensada para recuperar o dono publicado**, pois a casa já o escreveu. Uma nova medição do estado atual permanece [nao verificado]. (app/docs/RELATO.md:1648)
-
-4. **Padrão e obra: —**, pois o dono documental é BATIDA. (app/docs/RELATO.md:1648)
-
-RESULTADO|BO-0611|13|BATIDA|-|-
-
-## 14/11 23:37 · sessao 1a116d502ffb · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **O registro não identifica dia-colab do caso 05.** A lista coloca col265 na quinta posição, mas não fornece data; a numeração é expressamente contestável (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226). O relato posterior apresenta apenas totais conjuntos dos casos 01–05, sem individualizar seus dias (app/docs/RELATO.md:222).
-
-(4) Dono L-099, padrão quebrado e obra correspondente: **[nao verificado]**. Sem dia-colab identificado, encerro sem sonda.
-
-RESULTADO|BO-1311-ROTEIRO|05|SEM DIA-COLAB|-|-
-
-_5397 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5400 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
