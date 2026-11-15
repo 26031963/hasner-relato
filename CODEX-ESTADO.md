@@ -1,7 +1,33 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 12:34** · publicado em **15/11/2026 12:34** (UTC-3)
+> Ultima resposta processada: **15/11/2026 12:38** · publicado em **15/11/2026 12:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 12:38 · sessao b5803b7c5092 · LOTE7-POSTMORTEM · censo · origem=Code
+
+```text
+1 | c | “Os testes novos [...] mordem” (lote7_codex_v1.q:19): pergunta estática, sem comprovação do RED executado | “Execução dos testes [...] [nao verificado]” (lote7_codex_v1.r:3) | “e do c1 e NAO contem os casos acrescentados em c3/c4” (lote7_entrega.md:31). Falta de RED demonstrado fica fora do alcance. [nao verificado]
+
+2 | d | Auditoria dos selos por commit e da constância de padrao= ausente das perguntas (lote7_codex_v1.q:1–24; lote7_codex_v2.q:1–7; lote7_codex_v3.q:1–5) | Nenhum trecho identifica esses dois problemas (lote7_codex_v1.r:1–133; lote7_codex_v2.r:1–44; lote7_codex_v3.r:1–29) | Nenhuma identificação na triagem; a entrega registra apenas “padrao=CQRS com projecoes reconstruiveis” (lote7_entrega.md:48–69; lote7_entrega.md:83). MODO-COMUM conforme a definição deste pedido. [nao verificado]
+
+3 | e | Faltou perguntar: “A entrega final corresponde aos vereditos disponíveis e às correções, inclusive sobre o cron?”; o escopo solicitado era “Leia o diff e os sitios que ele toca ou de que depende” (lote7_codex_v1.q:3) | “Reconstrução automática prometida sem mecanismo correspondente” (lote7_codex_v1.r:130) | “v1 rotulo falso "o cron reconstroi" [...] -> c3” foi PROCEDENTE, não descartado (lote7_entrega.md:50; lote7_entrega.md:52). A entrega conservou “ZERO testes executados” e “o recalculo do cron reconstroi a projecao” (lote7_entrega.md:3; lote7_entrega.md:80). [nao verificado]
+
+4 | a | “Ausencia.status” e “QUEM ESCREVE e QUEM LE em toda a arvore” (lote7_codex_v1.q:9; lote7_codex_v1.q:11) | “Cobertura para folha exige `aprovada`; cobrança admite qualquer não rejeitada”; não apontou a invalidação desnecessária de não aprovadas nem seu efeito no contador (lote7_codex_v1.r:11; lote7_codex_v1.r:1–133) | “chamadores (todos passam a acordar)” e “fechamento le `status='aprovada'`”: fatos registrados, sem identificar o problema de desenho (lote7_entrega.md:24; lote7_entrega.md:26).
+
+5 | b | “dia do turno x dia civil” e “Mudou o valor gravado de alguma competencia EXPORTADA” (lote7_codex_v1.q:11; lote7_codex_v1.q:21) | “o evento recalcula somente novembro, embora o turno seja atribuído a outubro”; também apontou recálculo persistente em aprovado/exportado (lote7_codex_v1.r:129; lote7_codex_v1.r:121) | “COMPETENCIA ERRADA NO DESFAZER (procedente como bug, FORA do escopo de arquivo)” e “FILA: obra propria” (lote7_entrega.md:58). Reversão/hash efetivos em produção: [nao verificado].
+
+6 | b | “o que acontece [...] com o chamador quando a trilha nao grava (RuntimeError)?” (lote7_codex_v2.q:4) | “As três views capturam somente `AgendamentoNaoCancelavel`; o `RuntimeError` escapa desses tratamentos” (lote7_codex_v2.r:11) | “views fora da lista de arquivos; FILA (traduzir RuntimeError da trilha no lote)” (lote7_entrega.md:69). O descarte demonstrado é o das views; que o Codex também tenha identificado o alcance KERNEL: [nao verificado].
+
+7 | b | “para cada caso, um mutante plausivel da cura que ele NAO pegaria?” (lote7_codex_v1.q:19–20) | “Invalidar somente criações aprovadas, deixando abertas descobertas”; “invalidar somente quando o estado anterior for rejeitada” (lote7_codex_v1.r:103; lote7_codex_v1.r:106) | “v1 mutantes nao mortos (FILA de reforco do RED, sem codigo de producao)” e “mas o teste nao os prende” (lote7_entrega.md:65). O descarte demonstrado é o dos mutantes; a alteração c5 posterior foi relatada pelo opus, sem diff correspondente fornecido (lote7_c5_opus.md:8). [nao verificado]
+
+8 | b | “data_fim”, “minutos” e “Algum caso passa vazio (fixture que nao exercita o ramo)?” (lote7_codex_v1.q:9; lote7_codex_v1.q:20) | “o modelo calcula minutos antes de completar `data_fim`” e “o teste novo usa atestado e não detecta isso” (lote7_codex_v1.r:131) | “pre-existente em models.py (proibido); FILA” (lote7_entrega.md:63). [nao verificado]
+
+TOTAL | a | 1 — achado 4 (lote7_codex_v1.q:9; lote7_entrega.md:26).
+TOTAL | b | 4 — achados 5, 6, 7, 8 (lote7_entrega.md:58; lote7_entrega.md:69; lote7_entrega.md:65; lote7_entrega.md:63).
+TOTAL | c | 1 — achado 1 (lote7_entrega.md:31).
+TOTAL | e | 1 — achado 3 (lote7_codex_v1.q:3; lote7_entrega.md:52; lote7_entrega.md:80).
+TOTAL | d | 1 — achado 2 (lote7_codex_v1.q:1–24; lote7_codex_v2.q:1–7; lote7_codex_v3.q:1–5; lote7_entrega.md:48–69).
+```
 
 ## 15/11 12:34 · sessao 8ee20ef0a20d · - · - · origem=Ronald (tmux)
 
@@ -506,92 +532,4 @@ Achados de código, só leitura:
 - **INSS não entra diretamente nos eventos monetários pelo campo `minutos_abonados`.** A lista de eventos lê HE, noturno, intra e pontualidade; `minutos_abonados` participa da prontidão. Isso não prova TXT real dos 47 inalterado. `app/folha/export.py:439`, `:447`, `:451`, `:1078`.
 - **A referência do z a “rubricas 8932/8792” merece restrição.** `tipos_abonados_8932` lê catálogo, mas `montar_linhas_export` aqui emite eventos e bloco de faltas; não chama `datas_abonadas`. Ausência de efeito no TXT dos 47 permanece **[não verificado]** até comparação concreta. `app/folha/export.py:193`, `:201`, `:730`, `:740`, `:746`.
 
-## 15/11 11:46 · sessao 4bdcc344d986 · ABONO-LE-O-CATALOGO · censo · origem=Code
-
-**O achado está confirmado no código:** o abono persistido nasce de `tipo_dia == 'ausencia'`, sem consultar o efeito do tipo; a grade coloca nesse grupo todo tipo coberto diferente do literal `falta`. A regra alcança, portanto, mais tipos que os dois INSS (`app/ponto/services/dia_pago.py:386-401`; `app/escala/utils.py:1210-1222`).
-
-1. **Escritores e calculadores**
-
-| Sítio | Conta ou gravação | De onde vem a classe |
-|---|---|---|
-| Grade, `_marcar_ausencias` | Produz o insumo: `falta` literal vira falta; demais tipos viram ausência. | Consulta cobertura e catálogo de parciais, mas **não usa o efeito para separar ABONA/SUPRIME/DESCONTA** (`app/escala/utils.py:1174-1191`, `1210-1230`). |
-| Célula/cartório | Ata grava `tipo_dia`, previsto e realizado; não calcula minutos de abono nessa montagem. | Copia a grade; o leitor reconstrói esses campos da ata (`app/ponto/services/cartorio.py:738-740`; `app/escala/services/leitor_celula.py:397-423`). |
-| `por_dia_da_grade` | Abono por data = previsto − `min(realizado, previsto)`, para todo dia ausência. | **Regra própria por `tipo_dia`**, sem catálogo nem `ausencia_tipo` (`app/ponto/services/dia_pago.py:386-401`). |
-| `recalcular_fechamento_mes` → FM | Soma o mapa em `minutos_abonados`; salva aberto e atualiza os demais status. Falha da grade pode produzir `None`. | Herda `por_dia_da_grade`, sem reclassificação nessa conta (`app/ponto/services/fechamento.py:1060-1064`, `1094-1098`, `1137-1144`, `1184`). |
-| `lavrar` → DiaPago, versão motor | Recebe o mapa, copia minutos e substitui as linhas da competência/versão. | Recebe valores prontos, sem decidir tipos (`app/ponto/services/fechamento.py:1200-1217`; `app/ponto/services/dia_pago.py:288-292`, `359-360`). |
-| DiaPago, versão oráculo | Desde 10/2026 recebe **o mesmo mapa de abono**; o calculador fornece outras rubricas. | Mesma classificação herdada da grade (`app/ponto/services/fechamento.py:1265-1294`; `app/ponto/services/dia_pago.py:295-299`). |
-| `retratar_exportada` → DiaPago | Calcula novamente os três campos da grade, cria/atualiza linhas e zera dias ausentes. | Chama a mesma `por_dia_da_grade`, sem catálogo (`app/ponto/services/dia_pago.py:464-495`, `538-545`). |
-| Motor, `ResultadoMes.horas_abono` | Soma previsto/60 dos dias obrigatórios **sem trabalho e justificados**; a composição soma as fatias. | Recebe conjuntos: o fechamento usa `Ausencia.efeito`; ABONA justifica, efeito diferente de DESCONTA suprime. Aqui desconhecido também suprime (`app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/fechamento.py:693-701`, `96-100`, `298-300`). |
-| Crédito parcial | Soma `Ausencia.minutos` por data e abate atraso daquele dia. | `TIPOS_PAGOS`, catálogo de parciais e juiz `cobre_parte_do_dia`; não há lista nominal própria (`app/ponto/services/credito_parcial.py:20-29`, `50-61`; `app/ponto/services/fechamento.py:994-1001`). |
-| Efeito de ausência para espelho/PDF | Calcula minutos parciais pagos e conjuntos justificados/suprimidos. | Usa `TIPOS_PAGOS` e `a.efeito`, separando ABONA de SUPRIME (`app/ponto/services/efeito_ausencia.py:38-65`). |
-| Resumo inicial do PDF | `horas_abono = motor.horas_abono + minutos_parciais/60`. | Herda motor e efeito de ausência; posteriormente pode receber totais substitutos (`app/relatorios/pdf_espelho.py:478-479`, `628`). |
-| Prontidão sem snapshot válido | Soma o **previsto inteiro** de todo dia ausência. | **Segunda regra própria**, sem catálogo; também não desconta realizado do abono (`app/folha/export.py:1095-1111`). |
-| Restauração de FM | Pode gravar `minutos_abonados` recebido em snapshot. | Não classifica nem recalcula; copia campos fornecidos (`app/ponto/services/fechamento.py:1373-1393`; `app/ponto/management/commands/aplicar_09_corte_b.py:67-73`, `265-268`). |
-
-2. **Leitores**
-
-| Leitor | Gravado ou rederivado? |
-|---|---|
-| Tela/app do espelho e cartão/PDF por competência | Havendo FM, verifica sua existência e chama **`fechamento_lido`**, que recalcula em memória, somente leitura. O abono usual desses totais **não vem do FM gravado** (`app/relatorios/cartao_pela_celula.py:69-76`, `118`; `app/ponto/services/fechamento.py:1759-1761`; `app/ponto/services/espelho.py:1283-1284`; `app/relatorios/pdf_espelho.py:628`). |
-| Mesmos leitores, sem totais do FM e com DiaPago | Leem soma gravada do DiaPago: minutos/60 e quantidade de linhas com abono positivo (`app/relatorios/cartao_pela_celula.py:141-144`, `186-190`, `340-346`; `app/ponto/services/dia_pago.py:699`). |
-| PDF em período livre | Permanece motor + parcial, pois a substituição exige período reconhecido como competência (`app/relatorios/pdf_espelho.py:478-479`; `app/relatorios/cartao_pela_celula.py:321-346`). |
-| Prontidão com snapshot válido | Lê o objeto FM recebido: realizado + abonado, dividido pelo previsto, com teto de 100% (`app/folha/export.py:1045`, `1076-1080`). |
-| Prontidão sem snapshot válido | Rederiva pela regra própria de ausência descrita acima (`app/folha/export.py:1095-1113`). |
-| Inteligência | Conta registros de ausência pelo catálogo, não minutos de DP/FM; assiduidade e alertas excluem tipos de `abonam_vigentes()` (`app/inteligencia/resumo.py:39-44`; `app/inteligencia/management/commands/calcular_scores.py:11-16`; `app/inteligencia/management/commands/gerar_alertas.py:53-61`). |
-| Tela de ausências; relatório de atestados/CSV | Reclassificam pelo catálogo vivo; relatório conta dias pela expansão da ausência. O contador INSS tem ramo nominal `atestado_inss` (`app/ponto/views.py:2199-2225`; `app/relatorios/views.py:275-319`). |
-| Extrato parcial | Soma DiaPago, mas as colunas apresentadas nesse caminho não incluem abono (`app/relatorios/views.py:481-487`, `520-537`). |
-| Porta/comparadores | Recalculam pela mesma `por_dia_da_grade` e comparam com FM e soma DiaPago; concordância entre eles não certifica a classificação pelo catálogo (`app/folha/porta_export.py:133-145`, `346-347`). |
-| Holerite | Guarda PDF recebido; download abre esse arquivo e maço concatena suas páginas. Cálculo local de abono e conteúdo das rubricas reais: **[nao verificado]** (`app/holerite/models.py:103-110`; `app/holerite/views.py:1193-1203`, `1453-1458`, `935-938`). |
-
-**TXT Domínio:** a montagem efetiva emite extras, folga trabalhada, adicional noturno, intrajornada, atraso/saída e bloco de faltas; nenhum desses eventos lê `minutos_abonados` ou `horas_abono`. A geração pela tela injeta fechamento rederivado; sem injeção, a montagem consulta FM gravado (`app/folha/export.py:439-461`, `717-745`; `app/folha/views.py:207-212`).
-
-Os helpers de 8932 consultam `abonam_vigentes() − FORA_DO_8932`, mas **não são chamados pela montagem examinada**; não há prova de emissão de 8932 nessa cadeia. Faltas vêm de ausências aprovadas classificadas por `descontam_vigentes()`. O código numérico efetivo da rubrica de cada empresa é cadastro: **[nao verificado]** (`app/folha/export.py:179-206`, `730-745`, `984-991`).
-
-A afirmação dos anexos de que o cartão “mostra horas de abono” exige ressalva: o resumo contém `horas_abono`, mas o renderer encontrado imprime **“Abonos: N dia(s)”**; impressão efetiva das horas: **[nao verificado]** (`app/relatorios/cartao_pela_celula.py:118`, `186`; `app/relatorios/pdf_espelho.py:786`).
-
-3. **Autoridade e ESMERIL-SEMÂNTICA**
-
-A autoridade é o **cadastro ativo `TipoAusencia.efeito`**, acessado por `catalogo.ausencias.vigente()`; `efeito_vigente(tipo)` responde a classe e `abonam_vigentes()` fornece o conjunto ABONA. `Ausencia.efeito` delega a essa função; `Ausencia.TIPOS_PAGOS` aponta para o conjunto vivo, não para lista própria (`app/ponto/models.py:571-582`, `680-684`, `850-852`; `app/ponto/catalogo/ausencias.py:249-251`, `267-281`, `293-310`, `455-457`).
-
-O contrato distingue **ABONA = empresa paga/cumprido**, **SUPRIME = sai do previsto**, **DESCONTA = falta sem abono**. A semente classifica ambos os INSS como SUPRIME; o cadastro atual além do dado raspado é **[nao verificado]** (`app/ponto/catalogo/ausencias.py:9-12`, `92-93`, `278`).
-
-Ignoram essa distinção na conta de abono: a classificação literal da grade, `por_dia_da_grade` e o fallback da prontidão; FM, DiaPago e retrato propagam a primeira conta (`app/escala/utils.py:1210-1222`; `app/ponto/services/dia_pago.py:395-396`, `464`; `app/ponto/services/fechamento.py:1060-1062`; `app/folha/export.py:1100-1101`).
-
-| Dimensão | Divergência comprovada |
-|---|---|
-| Minutos × horas | FM tem `minutos_abonados` inteiro/anulável; DP, float; motor tem `horas_abono`. Leitores dividem explicitamente por 60: **não há erro de unidade demonstrado nessa conversão** (`app/ponto/models.py:349`, `440`; `app/ponto/motor_calculo_v2.py:292`; `app/relatorios/cartao_pela_celula.py:118`, `186`). |
-| Significado | Motor abona dia obrigatório sem trabalho; grade abona complemento mesmo com realizado; prontidão alternativa abona previsto inteiro. São contas diferentes sob o nome abono (`app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/dia_pago.py:393-401`; `app/folha/export.py:1100-1106`). |
-| Dias × horas no resumo | Com FM online, horas são substituídas, mas `dias_abono` permanece do motor; no ramo DP, ambos vêm do DP. Divergência numérica real por isso: **[nao verificado]** (`app/relatorios/cartao_pela_celula.py:93-123`, `186-190`; `app/relatorios/pdf_espelho.py:478`). |
-| Turno × dia civil | Abono da grade usa sua `data`; períodos do DP recebem mapa de jornada, com alternativa pela data local da entrada. Crédito parcial usa `Ausencia.data`, e atraso parcial usa data local da entrada, sem esse mapa. Caso concreto de desencontro: **[nao verificado]** (`app/ponto/services/dia_pago.py:128-132`, `390-396`; `app/ponto/services/fechamento.py:1217`; `app/ponto/services/credito_parcial.py:27-28`, `32-46`). |
-| “Retrato” × insumo atual | O retrato chama `grade_do_fechamento`, que lê célula/ata da janela; não lê uma grade congelada dentro do FM (`app/ponto/services/dia_pago.py:464`; `app/folha/export.py:329-338`). |
-
-4. **Alcance e proteção da 09/2026**
-
-O recalculador regrava competência já lavrada: salva FM aberto, atualiza os demais status e relavra DiaPago. Aprovação não impede essa atualização calculada; a proteção de `FM.save()` é ultrapassada pelo `QuerySet.update()` desse escritor (`app/ponto/services/fechamento.py:1137-1191`; `app/ponto/models.py:492-503`).
-
-| Entrada | Caminho até a regravação |
-|---|---|
-| Botão e CLI | Chamam o recalculador; CLI sem `--apply` retorna antes (`app/ponto/views.py:1255`; `app/ponto/management/commands/recalcular_fechamento.py:110-120`). |
-| Batida criada ou retratada | Acionam evento; ele resolve a competência do fato e recalcula após commit (`app/ponto/registro_batida.py:156-180`, `283`; `app/ponto/services/fechamento.py:1809-1824`). |
-| HE, folga aceita e resposta validada | Chamam a mesma porta por evento (`app/ponto/portas/he.py:202`; `app/chamados/services/validacao.py:386`, `471`). |
-| Regeneração de célula/vínculo | Pode recalcular as competências tocadas; porta explícita de exportada chama recalculador e retrato (`app/ponto/portas/celula.py:483-496`; `app/ponto/portas/regen_exportada.py:184`, `193`). |
-| Backfill | Não exportada: leitura com lavratura de DP; exportada: retrato (`app/ponto/management/commands/lavrar_dias_pagos.py:104-123`). |
-| Comandos de obra | Também passam pelo recalculador; alguns fazem ensaio com rollback (`app/ponto/management/commands/aplicar_09_corte_b.py:212`; `app/ponto/management/commands/celula_veredito_velho.py:149-157`; `app/ponto/management/commands/desvio_o68b.py:93-99`; `app/ponto/management/commands/plano_b_no_dinheiro.py:109-114`). |
-
-**A guarda vigente é específica:** `GUARDA_COMPETENCIA[(9,2026)]`. Quando há escrita, inclusive `somente_leitura=True` com `lavrar_dias_pagos=True`, exclui antes do laço os colaboradores das empresas consideradas exportadas. O retrato tem guarda equivalente antes de calcular (`app/ponto/services/fechamento.py:36-43`, `539-564`; `app/ponto/services/dia_pago.py:449-460`).
-
-“Exportada” vem de `competencia_entregue`, por empresa; não é simplesmente o status do FM. A recusa geral de recalcular qualquer exportada foi retirada, e a tabela específica não contém 10/2026 nem 11/2026 (`app/ponto/services/fechamento.py:1496-1515`, `1537`, `485-498`, `36-43`).
-
-Não há cron regular declarado para recalcular nem para o backfill. Existe caminho indireto: cron `detectar_par_relampago --apply --retratar` → retratação → evento → recalculador. Execução efetiva ou agenda externa: **[nao verificado]** (`app/config/crons.py:1043-1051`, `1148-1155`, `605`; `app/ponto/management/commands/detectar_par_relampago.py:224`; `app/ponto/registro_batida.py:283`).
-
-**Contrafactual solicitado:** mudada a função `por_dia_da_grade`, recalcular propagaria o novo mapa para FM e DP; retratar propagaria para DP. Na 09 das empresas exportadas, ambos são barrados pelas guardas acima; leitura pura continua podendo devolver outro número sem alterar o gravado (`app/ponto/services/fechamento.py:1060-1062`, `1212`, `539-564`, `1759-1761`; `app/ponto/services/dia_pago.py:451-464`).
-
-A proteção **não cobre toda escrita possível**: `restaurar_fechamento` atualiza campos fornecidos sem consultar a guarda, e `lavrar` não a verifica internamente. Restauração copia snapshot; não aplica automaticamente uma regra nova (`app/ponto/services/fechamento.py:1373-1393`; `app/ponto/services/dia_pago.py:288-292`, `359-360`; `app/ponto/management/commands/aplicar_09_corte_b.py:265-268`).
-
-5. **Contraexemplo que deve permanecer abonado**
-
-`atestado` até 15 dias é ABONA na semente, assim como férias e licença-maternidade. Num dia obrigatório sem trabalho, classificado como ABONA pelo catálogo vigente, o motor soma o previsto/60 e a grade soma o previsto em minutos; suprimir esse abono contrariaria a classificação (`app/ponto/catalogo/ausencias.py:95`, `99-101`; `app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/dia_pago.py:393-396`).
-
-O contraexemplo inclui **tipo criado pelo cadastro com `efeito='abona'`**, mesmo ausente da semente: ele entra em `abonam_vigentes()` pelo campo, não pelo nome (`app/ponto/models.py:565-582`; `app/ponto/catalogo/ausencias.py:249-251`, `308-310`).
-
-_5625 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5626 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
