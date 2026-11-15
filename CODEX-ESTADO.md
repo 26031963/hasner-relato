@@ -1,7 +1,143 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 06:02** · publicado em **15/11/2026 06:05** (UTC-3)
+> Ultima resposta processada: **15/11/2026 06:13** · publicado em **15/11/2026 06:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 06:13 · sessao 09489d17e7f7 · JUSTIFICATIVA-PAGA-O-PERIODO · verificador · origem=Code
+
+1. **Existe, mas não concentra toda a decisão de cobertura.** O registro aponta para `marcos_cobertos_por_justificativa`, definida na árvore; a fonte intermediária também decide cobertura sem passar por ela. (`app/core/juizes.py:265`; `app/ponto/turnos.py:2703`; `app/ponto/services/efeito_ausencia.py:143`; `app/ponto/services/efeito_ausencia.py:187`.)
+
+| Sítio de produção | Decisão / relação com a função registrada |
+|---|---|
+| `app/ponto/turnos.py:2668` | Define quais tipos nomeiam marco: `esqueci_saida→hf`, `esqueci_entrada→hi`. |
+| `app/ponto/turnos.py:2686` | `ancora_nao_cobre` decide ausência de âncora, papel errado e ponta já fechada. É chamada pela função registrada em `app/ponto/turnos.py:2723` e separadamente pela fonte em `app/ponto/services/efeito_ausencia.py:204`. |
+| `app/ponto/turnos.py:2720` | Função registrada: devolve dia inteiro (`None`), nenhum marco (`frozenset()`) ou o marco nomeado (`frozenset({alvo})`). |
+| `app/ponto/services/efeito_ausencia.py:121` | Define o universo: justificativas aprovadas do colaborador, `data_turno` não nula e dentro do intervalo. |
+| `app/ponto/services/efeito_ausencia.py:141` | Cobertura inteira anterior prevalece; tipo sem marco recebe `cobre=None` diretamente, **sem chamar a registrada**. |
+| `app/ponto/services/efeito_ausencia.py:148` | Motivo conserva o inteiro; demais aprovações do dia têm os conjuntos unidos em `app/ponto/services/efeito_ausencia.py:153`. |
+| `app/ponto/services/efeito_ausencia.py:185` | `_cobertura_de_uma`: sem vínculo/marcos ou sem entrada/saída previstas, conserva inteiro com `celula_sem_marco`, **sem chamar a registrada**. |
+| `app/ponto/services/efeito_ausencia.py:195` | Seleciona o turno da âncora e exige o mesmo dia; resolve papéis, consulta `ancora_nao_cobre` e retorna inteiro quando há motivo. Só o restante chama a registrada, por parâmetro, em `app/ponto/services/efeito_ausencia.py:207`. |
+| `app/escala/utils.py:1208` | A grade aplica precedência da ausência; aplica justificativa somente em dia de trabalho, em `app/escala/utils.py:1252` e `app/escala/utils.py:1261`. Lê a fonte intermediária em `app/escala/utils.py:1197`. |
+| `app/escala/utils.py:1270` | Converte `hi/hf` em extremos da cadeia e dispensa somente células faltantes; decide `justificado` pela ausência de `missing` em `app/escala/utils.py:1283`. Usa o resultado da fonte, sem repetir o predicado de âncora. |
+| `app/ponto/services/cartorio.py:802` | Lê `dia['justificado']` e dispensa lâmpadas restantes; não chama a registrada. A escrita ocorre em `app/ponto/services/cartorio.py:808`. |
+| `app/escala/services/leitor_celula.py:85` | Reconstrói `justificado` pelas lâmpadas dispensadas e ausência de apagadas; transporta para o dia em `app/escala/services/leitor_celula.py:472`. Não chama a registrada. |
+
+Também há decisões financeiras próprias:
+
+| Sítio | Predicado efetivo |
+|---|---|
+| `app/ponto/services/efeito_ausencia.py:170` | Pagamento = `max(0, previsto − trabalhado)`, depois de montar a cobertura. |
+| `app/ponto/services/efeito_ausencia.py:55` | Todos os dias presentes no mapa entram em `justificadas`; o mapa financeiro depende de `trabalhado != 0` e de haver apuração, em `app/ponto/services/efeito_ausencia.py:57`. |
+| `app/ponto/motor_calculo_v2.py:2581` | O motor usa existência de período para `datas_trabalho`; separa abono inteiro pela ausência da chave em `minutos_justificados`, em `app/ponto/motor_calculo_v2.py:2629`. Não consulta o juiz de marcos. |
+| `app/ponto/services/dia_pago.py:395` | A projeção financeira trata `sem_ata` como desconhecido, ausência pelo saldo previsto e justificativa pelo crédito recebido, em `app/ponto/services/dia_pago.py:401`. |
+| `app/ponto/services/dia_pago.py:717` | Competência entregue conserva a contagem gravada; fora dela, conta dia inteiro por `tipo_dia='ausencia'` ou realizado zero, em `app/ponto/services/dia_pago.py:737`. |
+
+**Predicado e universo:** a função pura recebe tipo, papel da âncora, papéis e marcos; a fonte acrescenta aprovação, colaborador, datas, existência da célula e composição entre justificativas. Portanto, função registrada e fonte completa não têm o mesmo universo. (`app/ponto/turnos.py:2703`; `app/ponto/services/efeito_ausencia.py:121`; `app/ponto/services/efeito_ausencia.py:141`; `app/ponto/services/efeito_ausencia.py:185`.)
+
+Pelo delta fornecido, esses corpos não foram alterados: houve registro e troca de docstring. A comparação histórica independente com a autoridade anterior a esse registro está **[nao verificado]**.
+
+2. **Sim, a frase existe com o nome exato `marcos_cobertos_por_justificativa`.** Consta no corte geral e no registro específico, tanto em Markdown quanto em JSON. (`app/docs/CORTES.md:341`; `app/docs/CORTES.md:342`; `app/docs/CORTES.json:1097`; `app/docs/CORTES.json:1104`.)
+
+3. **Os dois arquivos citados leem a cadeia, mas de formas diferentes.** `efeito_ausencia.py` importa a registrada, passa-a para `_cobertura_de_uma` e a executa apenas no ramo restante; `escala/utils.py` chama `periodos_justificados`, portanto a leitura é indireta e sujeita aos desvios descritos acima. (`app/ponto/services/efeito_ausencia.py:118`; `app/ponto/services/efeito_ausencia.py:146`; `app/ponto/services/efeito_ausencia.py:207`; `app/escala/utils.py:1197`.)
+
+Outros leitores não enumerados no comentário do registro:
+
+| Leitor | Caminho |
+|---|---|
+| `efeitos_da_ausencia` | Chama a fonte em `app/ponto/services/efeito_ausencia.py:54`. |
+| Fase financeira da grade | Chama a fonte com o realizado do julgamento em `app/escala/utils.py:1297`. |
+| Grade da folha | Chama a fonte em `app/folha/export.py:339`. |
+| Grade do espelho | Chama a fonte em `app/ponto/services/espelho.py:520`. |
+| Contador de dias abonados | Chama a fonte em `app/ponto/services/dia_pago.py:722`. |
+| Fechamento, PDF e esmeril | Leem por `efeitos_da_ausencia`: `app/ponto/services/fechamento.py:665`; `app/relatorios/pdf_espelho.py:332`; `app/ponto/services/esmeril_espelho.py:161`. |
+| Comandos de comparação | Leem por `efeitos_da_ausencia`: `app/relatorios/management/commands/diff_extrato_parcial.py:41`; `app/ponto/management/commands/diff_espelho_alimentacao.py:117`. |
+
+4. **Restou “fallback” em comentário identificado nominalmente com a obra.** O bloco começa com `JUSTIFICATIVA-PAGA-O-PERIODO (verificador v2 A3, 14/11)` e contém “o fallback dizia 0%% onde o gravado tem 630”. Descreve o caminho anterior, mas a palavra permanece. (`app/folha/export.py:1105`; `app/folha/export.py:1108`.)
+
+A docstring alvo do delta já usa `de minutos_previstos_do_dia`. (`app/escala/services/leitor_celula.py:370`.)
+
+Persistem ainda docstrings com “a cura e do motor e espera `!`; ao curar, esta assercao TROCA”, nos quatro pontos abaixo; a entrega c9 registra que os casos foram deixados como caracterização com lei/pergunta na docstring. (`app/ponto/tests/test_justificativa_c8_sem_banco.py:126`; `app/ponto/tests/test_justificativa_c8_sem_banco.py:269`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:325`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:653`; `app/ponto/tests/c9_entrega.txt:98`.)
+
+A introdução histórica dessas ocorrências pelo **diff integral**, excluindo tudo que já existia antes da obra, está **[nao verificado]**.
+
+5. **Escritores e leitores dos valores envolvidos no delta e no contrato que ele documenta:**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| Pergunta e endereço em `JUIZES['ausencia/ferias']` | Declaração em `app/core/juizes.py:265`. | Selo de existência em `app/ponto/tests/test_contract_juiz_ausencia.py:39`; gerador em `app/core/management/commands/gerar_diagrama.py:729` e `app/core/management/commands/gerar_diagrama.py:781`. |
+| Retornos `None` / `frozenset` | Registrada em `app/ponto/turnos.py:2722`, `app/ponto/turnos.py:2724`, `app/ponto/turnos.py:2726` e `app/ponto/turnos.py:2727`; a fonte também produz cobertura inteira em `app/ponto/services/efeito_ausencia.py:144` e `app/ponto/services/efeito_ausencia.py:149`. | Fonte recebe e compõe em `app/ponto/services/efeito_ausencia.py:151` e `app/ponto/services/efeito_ausencia.py:153`; grade lê em `app/escala/utils.py:1252` e `app/escala/utils.py:1270`. |
+| `celulas={(colaborador_id,data):celula}` | Carregador em `app/escala/alimentacao.py:73`; conversão do mapa por data em `app/escala/services/leitor_celula.py:407` e `app/escala/services/leitor_celula.py:442`. | Fonte passa ao helper em `app/ponto/services/efeito_ausencia.py:159`; grade passa em `app/escala/services/leitor_celula.py:443`; helper encaminha ao juiz do previsto em `app/escala/services/leitor_celula.py:375`. |
+| `ata['minutos_previstos']` | Cartório monta em `app/ponto/services/cartorio.py:739` e entrega à lavra em `app/ponto/services/cartorio.py:1853`; porta atribui a ata em `app/ponto/portas/celula.py:1064` e `app/ponto/portas/celula.py:1091`. | Helper lê em `app/escala/services/leitor_celula.py:372`. |
+| Previsto devolvido pelo helper | Usa ata ou `minutos_previstos_do_dia`, com zero para célula sem trabalho no segundo caminho, em `app/escala/services/leitor_celula.py:372` e `app/escala/services/leitor_celula.py:375`. | Saldo pago em `app/ponto/services/efeito_ausencia.py:170`; saída da grade em `app/escala/services/leitor_celula.py:453`. |
+
+O registro é consumido como catálogo; o contador `fora_de_autoridade` apenas conta `PENDENTES`, e seu zero não demonstra unicidade de chamadas. (`app/core/management/commands/gerar_diagrama.py:729`; `app/core/juizes.py:1486`.)
+
+## 15/11 06:12 · sessao 8734c0e0a169 · - · - · origem=Ronald (tmux)
+
+Q5 — leitura estrita do delta fornecido:
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `JUIZES['ausencia/ferias']['que marcos do turno a justificativa aprovada cobre?']` e endereço da função | Declaração em `app/core/juizes.py:265`; família em `app/core/juizes.py:251`. | Selo confere existência por AST em `app/ponto/tests/test_contract_juiz_ausencia.py:39`; gerador lê referências em `app/core/management/commands/gerar_diagrama.py:729`, `:770`, `:781`; diagrama agrega arquivos e contagens em `:344`. |
+| `None` / `frozenset` descritos no comentário | Função produz `None` em `app/ponto/turnos.py:2722`, `:2724`, conjunto vazio em `:2726`, conjunto do marco em `:2727`. | Fonte recebe retorno por função injetada em `app/ponto/services/efeito_ausencia.py:146`; combina cobertura em `:151`, `:153`. |
+| Contrato `celulas={(colaborador_id,data):celula}` nomeado pela docstring | Carregador produz mapa em `app/escala/alimentacao.py:73`; efeito o carrega em `app/ponto/services/efeito_ausencia.py:131`. Grade converte seu mapa `{data:celula}` ao contrato de pares em `app/escala/services/leitor_celula.py:407`, `:442`. | Efeito passa mapa ao helper em `app/ponto/services/efeito_ausencia.py:159`; grade passa em `app/escala/services/leitor_celula.py:443`; helper encaminha à autoridade em `:375`; autoridade usa vínculo, dia de trabalho, marcos e pausas em `app/escala/utils.py:2307`, `:2313`, `:2316`, `:2338`. |
+| `ata['minutos_previstos']`, lido pelo helper cuja docstring mudou | `ata_do_dia` monta valor em `app/ponto/services/cartorio.py:739`; entrega ata à lavra em `:1851`, `:1853`; método delega em `app/escala/models.py:1826`; porta atribui em `app/ponto/portas/celula.py:1064`, `:1091` e salva em `:1066`, `:1098`. | Helper lê em `app/escala/services/leitor_celula.py:372`; resultado vai à saída da grade em `:453` e ao saldo pago em `app/ponto/services/efeito_ausencia.py:170`. |
+
+O comentário do registro não cria despacho: API usa apenas nomes de famílias em `app/api/views_mensageria.py:1448`; contador `fora_de_autoridade` conta `PENDENTES`, não chamadas nem unicidade, em `app/core/juizes.py:1486`.
+
+O delta fornecido altera registro e documentação; os campos de dados acima são o contexto executável referido pela docstring, sem alteração executável no helper mostrado em `app/escala/services/leitor_celula.py:372`.
+
+## 15/11 06:11 · sessao e30ac8989913 · - · - · origem=Ronald (tmux)
+
+Q4 tem ocorrência remanescente identificada como parte da obra: o comentário começa com `JUSTIFICATIVA-PAGA-O-PERIODO (verificador v2 A3, 14/11)` em `app/folha/export.py:1105` e contém **“o fallback dizia 0%% onde o gravado tem 630”** em `app/folha/export.py:1108`. Descreve o caminho anterior; a palavra continua no comentário. A introdução histórica pelo diff integral é [nao verificado].
+
+O alvo do delta foi corrigido: a docstring agora diz `de minutos_previstos_do_dia` em `app/escala/services/leitor_celula.py:370`. A docstring A3 atual descreve “previsto injetado”, sem `fallback`, em `app/ponto/tests/test_justificativa_soma_sem_banco.py:425-426`.
+
+Persistem docstrings da obra com **“a cura e do motor e espera !; ao curar, esta assercao TROCA”** em:
+
+- `app/ponto/tests/test_justificativa_c8_sem_banco.py:126-127`;
+- `app/ponto/tests/test_justificativa_c8_sem_banco.py:269-270`;
+- `app/ponto/tests/test_justificativa_paga_o_periodo.py:325-326`;
+- `app/ponto/tests/test_justificativa_paga_o_periodo.py:653-654`.
+
+A entrega c9 declara a alteração desses casos para caracterização e registra que deixaram “lei/pergunta na docstring”, em `app/ponto/tests/c9_entrega.txt:98-100`. O dado fornecido já assinala que o `!` fora concedido; não inferi uma aprovação nova.
+
+Existem outras palavras `fallback`/`band-aid` nos arquivos tocados, mas atribuí-las à obra inteira, sem comparação com a base, é [nao verificado]. Não há base suficiente para afirmar **“todos os comentários introduzidos pela obra foram saneados”** [nao verificado].
+
+## 15/11 06:11 · sessao 5ca348ddc426 · - · - · origem=Ronald (tmux)
+
+A função registrada existe em `app/ponto/turnos.py:2703`; o retorno efetivo é `None`, `frozenset()` ou `frozenset({alvo})` em `app/ponto/turnos.py:2720-2727`. Ela chama `ancora_nao_cobre` (`app/ponto/turnos.py:2723`), cujo predicado fica em `app/ponto/turnos.py:2686-2700`.
+
+Não é o único sítio que determina cobertura na composição de produção:
+
+| Sítio | Decisão e relação com juiz |
+|---|---|
+| `app/ponto/services/efeito_ausencia.py:121-124` | Define universo ORM: justificativas aprovadas do colaborador com `data_turno` no intervalo e não nula. |
+| `app/ponto/services/efeito_ausencia.py:141-145` | Dia previamente coberto inteiro prevalece; tipo que não nomeia marco recebe `cobre=None` diretamente, sem chamada do juiz. |
+| `app/ponto/services/efeito_ausencia.py:148-153` | Motivo conserva dia inteiro diretamente; demais coberturas do mesmo dia são unidas. |
+| `app/ponto/services/efeito_ausencia.py:185-188` | Sem vínculo/marcos, ou sem entrada/saída prevista, retorna cobertura inteira e `celula_sem_marco`, sem chamada do juiz. Este caso não existe na assinatura do juiz registrado. |
+| `app/ponto/services/efeito_ausencia.py:195-207` | Define turno da âncora, exige mesmo dia, resolve papéis; chama `ancora_nao_cobre` e conserva inteiro antes do juiz quando há motivo. Só o ramo restante chama o juiz, por parâmetro `juiz`, na linha 207. |
+| `app/escala/utils.py:1197-1199` | Lê `periodos_justificados`, portanto juiz indiretamente e apenas nos ramos anteriores que chegam nele. |
+| `app/escala/utils.py:1252-1260` | Aplica cobertura inteira apenas a `tipo_dia='trabalho'`; apaga marcos faltantes e órfãs. |
+| `app/escala/utils.py:1261-1284` | Aplica cobertura parcial aos marcos extremos da cadeia e determina `justificado` se não restar `missing`; lê `cobre`, sem refazer tipo/âncora do juiz. |
+| `app/ponto/services/cartorio.py:800-810` | Lê `dia['justificado']` e dispensa todas as lâmpadas ainda não acesas; não consulta o juiz. |
+| `app/escala/services/leitor_celula.py:83-86` | Reconstrói `justificado` de lâmpada dispensada por justificativa e ausência de lâmpada apagada; lê ata, não o juiz. |
+
+O universo do juiz puro é tipo/papel da âncora/papéis/marcos, sem status, colaborador, data ou precedência (`app/ponto/turnos.py:2703`). A fonte acrescenta essas restrições e compõe aprovações (`app/ponto/services/efeito_ausencia.py:121-153`). A aplicação da grade restringe novamente a dias de trabalho e dá precedência à ausência (`app/escala/utils.py:1208`, `app/escala/utils.py:1252`, `app/escala/utils.py:1261`). Portanto, juiz puro, fonte por dia e efeito da grade não têm o mesmo universo (`app/ponto/turnos.py:2703`; `app/ponto/services/efeito_ausencia.py:121-153`; `app/escala/utils.py:1208-1261`). Comparação histórica com implementação anterior ao registro: [nao verificado].
+
+O comentário do registro cita dois arquivos, mas o leitor direto do juiz é somente `efeito_ausencia.py`, com importação em `app/ponto/services/efeito_ausencia.py:118-119`, passagem em `app/ponto/services/efeito_ausencia.py:146-147` e chamada em `app/ponto/services/efeito_ausencia.py:207`. `escala/utils.py` lê a fonte intermediária em `app/escala/utils.py:1197-1199`.
+
+Outros leitores da fonte intermediária, ausentes do comentário do registro:
+
+- `efeitos_da_ausencia`: `app/ponto/services/efeito_ausencia.py:54`.
+- Fase financeira do julgamento: `app/escala/utils.py:1295-1302`.
+- Grade do fechamento: `app/folha/export.py:336-341`.
+- Grade do espelho: `app/ponto/services/espelho.py:519-522`.
+- Contagem de dias com abono: `app/ponto/services/dia_pago.py:720-723`.
+
+Leitores financeiros por `efeitos_da_ausencia`: fechamento em `app/ponto/services/fechamento.py:664-667`, PDF em `app/relatorios/pdf_espelho.py:332-336`; crédito chega aos motores em `app/ponto/services/fechamento.py:755`, `app/relatorios/pdf_espelho.py:407` e `app/ponto/services/espelho.py:1141`.
+
+Separação necessária: cobertura de marcos e pagamento não usam o mesmo predicado. A fonte paga `max(0, previsto - trabalhado)` após montar cobertura (`app/ponto/services/efeito_ausencia.py:158-170`), inclui todo dia do mapa em `justificadas` (`app/ponto/services/efeito_ausencia.py:54-58`), o motor distingue dias sem período e presença da chave do crédito (`app/ponto/motor_calculo_v2.py:2581-2586`, `app/ponto/motor_calculo_v2.py:2611-2634`), e `dias_com_abono` conta por `tipo_dia='ausencia'` ou realizado zero (`app/ponto/services/dia_pago.py:729-738`).
 
 ## 15/11 06:02 · sessao 004e56fcc326 · CORTES-RECEBIDO-FORA-DA-PAUSA · censo · origem=Code
 
@@ -365,112 +501,4 @@ Cura A1/A2 e entrega em [cef_c3_entrega.txt](/home/ronald/wt-codex-contrato-de-e
 
 Sonda e integração com banco não executadas; comandos e limites constam na [entrega](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c3_entrega.txt:234).
 
-## 15/11 05:26 · sessao a9a6cd709e27 · JUSTIFICATIVA-PAGA-O-PERIODO · censo · origem=Code
-
-**A v8 terminou REPROVADA**, com bloqueios de exportada e `None` explicitamente apontados; esses alertas não podem ser contabilizados como omissões do Codex (v8.r:63).
-
-As referências aos anexos abaixo usam a numeração da transcrição fornecida, contando linhas em branco, a partir da primeira linha de cada anexo. A classificação limita-se à v8; o conteúdo das demais voltas é **[nao verificado]**. Aplico as classes de CLAUDE.md:382–393.
-
-Desdobro o achado 6: a precedência da ausência inteira foi apontada, mas isso não comprova detecção das críticas específicas ao previsto antigo e ao contador de dias (v8.r:14; v8.r:21; app/ponto/services/dia_pago.py:730).
-
-| achado | classe | trecho q | trecho r | trecho triagem |
-|---|---|---|---|---|
-| **1 — DIFF de frota, condições do aval e sonda vazia** | **(c) — não conta:** depende da medição de frota/prod/sombra. O dado fornecido relata a insuficiência; não permite refazer a medição (opus_final.txt:2; CLAUDE.md:386). | “pre-verificacao antes da suite INTEIRA e do opus final”; “Avais anexos.” Não há pedido literal para medir os 41 nessa pergunta (v8.q:1; v8.q:3). | “**FORA**, destino declarado: sessão mede 09/10.” Isso registra o destino da medição, sem certificar seu resultado (v8.r:7). | “PERGUNTA DE LEI (a)(b)(c) [...] pouso espera”. A triagem não apresenta DIFF nem números da frota (triagem_v8.txt:3). | [nao verificado]
-| **2 — exportada sem guarda genérica** | **(b) — falha da triagem.** O Codex viu e marcou **bloqueia**. Motivo do descarte: remessa a pergunta de lei, sem cura por iniciativa, invocando L-117 e DINHEIRO item 3 (v8.r:7; triagem_v8.txt:3). | “Algum achado do v7 ficou sem cura e sem destino?” (v8.q:5–6). | “Continua existindo somente a guarda de 09/2026; exportação nas demais competências gera aviso e permite persistência”; gravidade: “**bloqueia**” (v8.r:7). | “itens 1 (exportada sem guarda generica) [...] -> PERGUNTA DE LEI (a)(b)(c) no topo do RELATO [...] nao curados por iniciativa (L-117)”; “nenhuma trava nem aviso de tela por exportada” (triagem_v8.txt:3). O opus contesta o encaminhamento: “o topo nao tinha essa pergunta” (opus_final.txt:3). |
-| **3 — suíte inteira de árvore anterior; c13b posterior** | **(c) — não conta:** execução da suíte e certificação de alterações posteriores à v8. A pergunta identifica c12/c12b/c12c, enquanto o opus cobra c13b (v8.q:2; opus_final.txt:4). | “pre-verificacao antes da suite INTEIRA e do opus final” (v8.q:1). | “sua execução independente nesta volta e a suíte inteira são **[nao verificado]**” (v8.r:61). | “item 4 K1 escapes -> PROCEDE, curado na c13 (326a796aa).” Esse trecho registra a cura posterior, sem certificar a suíte da árvore final (triagem_v8.txt:2). |
-| **5 — motor × ata em batida aberta; K2 ainda ‘espera !’** | **(a) — falha do Codex.** O tema estava presente; a resposta não identifica a divergência K2 nem o comentário de espera. A cópia contém expectativa divergente entre motor e grade e a frase de espera (v8.q:18; app/ponto/tests/test_justificativa_paga_o_periodo.py:653; app/ponto/tests/test_justificativa_paga_o_periodo.py:656). | “Regra fora do aval, derivacao paralela [...] selo sem mordida, campo com dois significados.” Também pergunta: “Algum esperado foi trocado para passar?” (v8.q:18; v8.q:17). | Trecho relacionado, **sem detectar K2**: “**NÃO PROCEDE fórmula ou juiz novo nos três hunks produtivos c12**”; “A fórmula continua na fonte de períodos” (v8.r:59). | Nenhum descarte específico de K2 registrado. “item 4 K1 escapes [...] curado na c13” refere-se a **K1**, não a K2 (triagem_v8.txt:2). |
-| **6 — parte: override de `None` e precedência da ausência inteira** | **(b) — falha da triagem, nesta parte.** O Codex viu a divergência entre feed e grade. Motivo do descarte: “residuo pre-existente ou fixture” (v8.r:14; triagem_v8.txt:4). | “Quem ESCREVE motivo_justificativa='sem_ata'”; “Todos supoem o mesmo significado”; “campo com dois significados” (v8.q:7–9; v8.q:18). | “Precedência da ausência inteira diverge na grade”; “O feed remove o desconhecido, mas a grade financeira recebe os períodos crus” (v8.r:14). A entrega citada nessa resposta localiza a precedência em `leitor_celula.py:479` (app/ponto/tests/c12_entrega.txt:139). | “8 (grade crua x feed) [...] -> FILA, nao bloqueiam (motivo: residuo pre-existente ou fixture; opus decide se bloqueia)” (triagem_v8.txt:4). |
-| **6 — demais partes: previsto da ata antiga e `dia_pago.py` ~730** | **(a) — falha do Codex.** O censo de escritores/leitores estava pedido, mas citar o builder não equivale a detectar o uso do previsto antigo; os alertas de conversão `None→0` também não identificam o contador em ~730 (v8.q:7–9; v8.r:21; v8.r:23; app/ponto/services/efeito_ausencia.py:159; app/ponto/services/dia_pago.py:730). | “Quem ESCREVE [...] e quem LE”; “2o escritor [...] campo com dois significados” (v8.q:7–9; v8.q:18). | Trecho mais próximo: “O censo de escritores da marca precisa incluir **também o builder**”; “Ambos recebem a indicação da mesma fonte de períodos”. Não aponta o problema do previsto antigo (v8.r:21). Para DiaPago, aponta outros locais: “lavratura e retrato de exportada fazem exatamente essa conversão” (v8.r:23). | “2 (lavratura None->0 em DiaPago), 6 (None com 2 significados) -> PERGUNTA DE LEI”. Esse descarte é correlato, sem demonstrar detecção dos subachados específicos do opus (triagem_v8.txt:3; opus_final.txt:6). |
-| **7 — juiz com corte, sem registro em `core/juizes.py`** | **(a) — falha do Codex.** “Juiz novo” estava literalmente perguntado; a resposta restringiu sua conclusão aos três hunks produtivos c12 e não apontou a falta de registro relatada pelo opus (v8.q:18; v8.r:59; opus_final.txt:7). | “juiz novo” (v8.q:18). | “**NÃO PROCEDE fórmula ou juiz novo nos três hunks produtivos c12**” (v8.r:59). O corte literal existe na cópia (app/docs/CORTES.md:342). | Nenhum trecho específico sobre esse juiz; as destinações registradas tratam dos itens enumerados da resposta e do limite de c13 (triagem_v8.txt:3–5). |
-| **8 — palavra `fallback` em docstring e commit A3** | **(e) — NÃO PERGUNTADO.** Não houve pedido literal de revisão lexical de docstrings ou da mensagem do commit A3; perguntar por derivação paralela não demonstra esse pedido específico (v8.q:1–19; opus_final.txt:8). | Trecho mais próximo: “Regra fora do aval, derivacao paralela” (v8.q:18). Não menciona `fallback`, `obra.diff:140` ou A3 (v8.q:1–19). | Sem apontamento sobre essa palavra ou A3. O trecho relacionado examina comportamento: “A fórmula continua na fonte de períodos” (v8.r:59). | Sem descarte desse achado registrado nas destinações da triagem (triagem_v8.txt:2–5). | [nao verificado]
-
-## 15/11 05:21 · sessao 90735d134d0d · CONTRATO-DE-ENTRADA-DO-FIO · verificador · origem=Code
-
-**REPROVA.** Há dois defeitos demonstráveis no código e falta comprovação do pré-requisito de sombra. (`app/chamados/services/disputa_emissao.py:570`; `app/api/foto_recebida.py:68`; `app/chamados/tests/cef_c2_entrega.txt:214`)
-
-1. **BLOQUEIA — o retro apaga uma recepção já conhecida.**
-
-   Cenário: APK envia batida sem foto, com `from_mock=true`. A API abre disputa por `gps_mock` e registra `ultima_batida.recebida_em`; depois do prazo, o retro emite `foto_ausente` para **a mesma batida**, enviando `ultima_batida` sem recepção. O merge substitui o dicionário inteiro. Resultado: `{id:101, timestamp:08:00, recebida_em:08:01}` → `{id:101, timestamp:08:00}`. (`app/api/views.py:447`; `app/api/views.py:457`; `app/api/views.py:765`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:73`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`; `app/chamados/services/disputa_emissao.py:557`; `app/chamados/services/disputa_emissao.py:570`)
-
-   Portanto, omitir uma recepção desconhecida no envelope do retro acaba destruindo uma recepção conhecida no agregado. Isso contraria o “nada se perde” do aval fornecido; quantidade afetada em produção **[nao verificado]**.
-
-2. **BLOQUEIA — o upload abandona perguntas sem `batida_origem`, inclusive após reemissão pelo retro novo.**
-
-   Cenário: disputa aberta com `foto_ausente`, `ultima_batida.id=101` e pergunta viva com `batida_origem_id=None`. Chega a foto de 101: o filtro novo não encontra pergunta, não chama a validação e devolve zero. A foto é salva antes dessa tentativa de resolução; a pergunta permanece pendente. (`app/api/views.py:851`; `app/api/views.py:861`; `app/api/foto_recebida.py:68`; `app/api/foto_recebida.py:69`; `app/chamados/juizes.py:1479`)
-
-   O envelope correto não elimina esse cenário: a porta inclui deliberadamente perguntas legadas sem episódio do mesmo dia no dedup; pode reutilizar essa pergunta e retornar sem preencher `batida_origem_id`. Assim, nova passagem do retro também pode terminar numa pergunta que o upload agora ignora. (`app/chamados/models.py:2793`; `app/chamados/models.py:2798`; `app/chamados/models.py:3004`; `app/chamados/models.py:3046`; `app/chamados/models.py:3091`)
-
-   Esse acervo é uma possibilidade expressamente prevista pelo código; sua existência e quantidade em produção **[nao verificado]**. A mudança precisa tratar essa compatibilidade sem inferir silenciosamente um episódio pelo contexto acumulado, cuja insuficiência está documentada. (`app/chamados/services/fio.py:1286`; `app/chamados/models.py:3599`)
-
-3. **BLOQUEIA a liberação — a medição obrigatória em sombra não está comprovada.**
-
-   A entrega registra “quantas perguntas vivas mudam de dia, abertas × exportadas” como **[nao verificado]** e manda não presumir zero. A frase “140 vivas, zero exportadas” do commit anexado não vem acompanhada, no dado fornecido, de resultado rastreável da sonda. Não é possível certificar o cumprimento desse pré-requisito, nem afirmar `exportada > 0`. (`app/chamados/tests/cef_c2_entrega.txt:214`; `app/chamados/tests/cef_c2_entrega.txt:217`)
-
-4. **Forward only: C2 não acrescenta um passe de reescrita, mas “nenhuma escrita no passado” não está garantido transitivamente.**
-
-   Cenário admitido: batida noturna pertence a 13/11, mas sua pergunta com episódio está gravada em 14/11. O retro novo entrega o episódio; o gerador pergunta o dia ao juiz; a porta encontra a pergunta e chama `rechavear_no_reuso`. Com competências não exportadas e demais condições satisfeitas, essa porta pode mudar a pergunta antiga para 13/11. (`app/ponto/management/commands/marcar_foto_ausente_retro.py:96`; `app/chamados/services/disputa_emissao.py:396`; `app/chamados/models.py:3023`; `app/chamados/models.py:3035`; `app/chamados/services/fio.py:1107`; `app/chamados/services/fio.py:1112`)
-
-   **Não conto isso como mecanismo novo nem como bloqueio independente:** é comportamento preexistente alcançável pela emissão. Porém, ele impede certificar ausência de escrita histórica apenas olhando as linhas alteradas. Ocorrência concreta no dado de produção **[nao verificado]**. (`app/chamados/tests/cef_c1_entrega.txt:170`; `app/chamados/models.py:3010`)
-
-5. **Censo dos contratos: episódio, instante, recepção e dia não são a mesma unidade.**
-
-   | Campo ou valor | Escritores | Leitores e significado |
-   |---|---|---|
-   | `ultima_batida.id` | APIs e retro. (`app/api/views.py:762`; `app/api/views_core.py:756`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:99`) | Derivador confere posse; grade e gerador buscam a batida para perguntar o **dia do turno**. (`app/chamados/models.py:3606`; `app/chamados/models.py:3610`; `app/chamados/services/disputa_emissao.py:72`; `app/chamados/services/disputa_emissao.py:396`) |
-   | `ultima_batida.tipo` | Tipo da batida nos três emissores. (`app/api/views.py:763`; `app/api/views_core.py:757`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:100`) | Nenhum leitor semântico específico localizado; leitura dinâmica **[nao verificado]**. |
-   | `ultima_batida.timestamp` | APIs: `ts_efetivo` local; retro: `Batida.timestamp` local. (`app/api/views.py:764`; `app/api/views_core.py:758`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:101`) | Juiz fraco extrai **dia civil no offset da string**, não dia do turno. (`app/chamados/juizes.py:162`; `app/chamados/juizes.py:169`) |
-   | `recebida_em` | Relógio da recepção das APIs; retro omite. (`app/api/views.py:765`; `app/api/views_core.py:759`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`) | Nenhum leitor semântico específico localizado; preservação falha no achado 1. (`app/chamados/services/disputa_emissao.py:570`) |
-   | Contexto persistido e envelope da emissão | Nascimento grava chamado/disputa; recorrência substitui chaves do agregado; gerador recebe cópia com o envelope atual. (`app/chamados/services/disputa_emissao.py:589`; `app/chamados/services/disputa_emissao.py:599`; `app/chamados/services/disputa_emissao.py:570`; `app/chamados/services/disputa_emissao.py:312`) | Reuso do chamado funde contexto preservando chave já existente; template também exibe o contexto genericamente. (`app/chamados/services/nota.py:110`; `app/chamados/services/contexto.py:155`; `app/templates/chamados/partials/painel_chamado_turno.html:35`) |
-   | `batida_origem` e `data_evento` | Origem deriva na porta; dia passa pelo juiz e pelo ponto de escrita do fio. (`app/chamados/models.py:2949`; `app/chamados/models.py:2958`; `app/chamados/models.py:3099`) | Dedup lê episódio ou acervo do dia; upload exige episódio exato. (`app/chamados/models.py:2795`; `app/api/foto_recebida.py:68`) |
-
-   No upload, as duas cascas selecionam a batida do colaborador e chamam `anexar_foto`; essa porta escreve `Batida.foto` e `FotoBatida`. O resolver responde pela porta automática, valida pelo dono, consulta vitalidade e fecha pela porta existente. (`app/api/views.py:846`; `app/api/views_core.py:830`; `app/ponto/registro_batida.py:309`; `app/ponto/registro_batida.py:313`; `app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/api/foto_recebida.py:78`; `app/api/foto_recebida.py:80`)
-
-6. **Ordenação e UTC/local: não encontrei comparação lexicográfica desse timestamp; há agregação indireta pelo dia.**
-
-   O merge não escolhe o maior instante: substitui o bloco, podendo fazê-lo retroceder quando chega batida offline. O leitor direto apenas executa `fromisoformat(...).date()`; portanto, legado UTC conserva o dia UTC e envelope novo fornece o dia local. Essa convivência é explicitamente mantida pelo teste de legado. (`app/chamados/services/disputa_emissao.py:570`; `app/chamados/juizes.py:169`; `app/chamados/tests/test_cef_c2_sem_banco.py:104`)
-
-   **Sim, existem consumidores cujo agrupamento pode mudar:** o canal agrupa respostas por colaborador/dia do juiz; a fila usa o mesmo dia e pode agrupar toques por semana. Uma mudança domingo→sábado permanece na mesma semana; domingo→segunda pode mudar essa chave semanal. Isso é consequência indireta do novo dia, não ordenação pelo ISO completo. (`app/chamados/canal.py:45`; `app/chamados/canal.py:49`; `app/chamados/services/fila_por_causa.py:298`; `app/chamados/services/fila_por_causa.py:319`; `app/chamados/services/fila_por_causa.py:324`)
-
-   Completude para acesso dinâmico e impacto em produção **[nao verificado]**.
-
-7. **Os testes mordem regras, mas deixam sobreviver transições relevantes.** [nao verificado]
-
-   Há casos comportamentais de episódios fora de ordem, repetição, isolamento do upload, fato/recepção e fuso; não são apenas testes da forma textual. Entretanto, o núcleo de persistência é substituído por `Mock`, os uploads começam com origem preenchida e o teste do retro captura o envelope sem fundi-lo no agregado existente. Assim, os achados 1 e 2 ficam descobertos. (`app/chamados/tests/test_cef_c1_sem_banco.py:144`; `app/chamados/tests/test_cef_c1_sem_banco.py:177`; `app/chamados/tests/test_cef_c1_sem_banco.py:205`; `app/chamados/tests/test_cef_c2_sem_banco.py:74`; `app/chamados/tests/test_cef_c2_sem_banco.py:131`)
-
-   Mutante plausível sobrevivente aos testes **sem banco**: `_validar_pelo_dono` virar `return 0`. O double usado pelo teste continua extinguindo perguntas independentemente dessa implementação. A integração tem asserções capazes de matá-lo; execução dessa integração nesta revisão **[nao verificado]**. (`app/api/foto_recebida.py:28`; `app/chamados/tests/test_cef_c1_sem_banco.py:216`; `app/chamados/tests/test_cef_c1_sem_banco.py:227`; `app/chamados/tests/test_cef_c1_episodios.py:101`)
-
-   O selo AST também aceita `id` vindo de variável nula e atribuição de envelope em ramo não executado; alias por atribuição escapa do reconhecimento. **Não bloqueia isoladamente**, mas limita a promessa de catraca completa. (`app/chamados/tests/test_e1_v5_familia.py:133`; `app/chamados/tests/test_e1_v5_familia.py:170`; `app/chamados/tests/test_e1_v5_familia.py:180`)
-
-8. **Arquitetura e sítios proibidos: nenhum novo desvio demonstrado no recorte.**
-
-   O upload consulta os juízes existentes e delega resposta/validação às portas existentes; não identifiquei segundo juiz ou escritor direto novo nesses trechos. Há relógio interno preexistente no merge para `ultima_em`, que esta obra mantém. (`app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/api/foto_recebida.py:78`; `app/chamados/models.py:1917`; `app/chamados/services/disputa_emissao.py:567`; `app/chamados/tests/cef_c1_entrega.txt:192`)
-
-   Os inventários de C1/C2 não apontam alterações em motor, `ponto/portas/celula.py`, `core/juizes.py`, models/migrations, crons ou `bin/`. Conferência independente contra objetos Git do hash **[nao verificado]**; não atribuo a esta obra o merge de dedup indicado como externo. (`app/chamados/tests/cef_c1_verificar.py:16`; `app/chamados/tests/cef_c2_verificacao.txt:68`; `app/chamados/tests/cef_c2_verificacao.txt:79`)
-
-## 15/11 05:19 · sessao 97571a15e9af · - · - · origem=Ronald (tmux)
-
-1. **Regressão demonstrável: upload abandona perguntas legadas sem episódio. Bloqueia compatibilidade com esse acervo; ocorrência em produção [nao verificado].** Entrada: disputa aberta com `foto_ausente`, `contexto.ultima_batida.id=101` e pergunta viva com `batida_origem_id=None`; chega foto da batida 101. O filtro novo não encontra pergunta e retorna 0 sem responder/validar (`app/api/foto_recebida.py:62`, `:68`, `:69`, `:85`). Pergunta sem origem pode continuar viva: não existe descarte automático desse legado, e pergunta sem materialização retorna viva (`app/chamados/juizes.py:1402`, `:1479`). Reproduzi o corpo real por AST com doubles somente de ORM: retorno 0, validação não chamada [nao verificado por integração/banco].
-
-   Isso alcança inclusive **nova execução do retro**: a porta deliberadamente reutiliza pergunta antiga sem origem do mesmo dia (`app/chamados/models.py:2793`, `:2798`, `:2800`); escolhe a canônica (`:2990`, `:3004`) e o ramo de reuso atualiza célula/destino/lavra, sem preencher a origem (`:3046`, `:3080`, `:3091`). Portanto, emitir agora envelope correto não garante pergunta com episódio que o upload exige (`app/ponto/management/commands/marcar_foto_ausente_retro.py:96`, `app/api/foto_recebida.py:68`). O legado sem episódio é previsto expressamente pelo código (`app/chamados/services/fio.py:1286`).
-
-   Os casos de upload usam exclusivamente perguntas com origem conhecida (`app/chamados/tests/test_cef_c1_sem_banco.py:205`); a integração começa criando novas batidas/perguntas (`app/chamados/tests/test_cef_c1_episodios.py:36`, `:51`). Não cobre essa regressão.
-
-2. **Forward only: caminho transitivo que pode reescrever passado existe, mas não é defeito novo inequívoco desta obra.** O retro novo pode reapresentar batida cujo episódio já possui pergunta gravada em dia errado (`app/ponto/management/commands/marcar_foto_ausente_retro.py:96`). O gerador resolve o dia correto (`app/chamados/services/disputa_emissao.py:396`), e o nascimento reutiliza a pergunta e chama `rechavear_no_reuso` quando o dia gravado difere (`app/chamados/models.py:3023`, `:3035`). A porta veta exportada/desconhecida, mas escreve a data antiga quando ambos os dias pertencem a competência não exportada (`app/chamados/services/fio.py:1107`, `:1112`). Esse mecanismo já existia e depende de estado anterior; incidência no dado fornecido [nao verificado]. **Não afirmar que legado sem origem em outro dia será necessariamente encontrado:** a busca desse legado é pela data gravada igual ao dia pedido (`app/chamados/models.py:2798`).
-
-3. **Inventário c1, portas e fontes.** O retro escreve `ultima_batida.{id,tipo,timestamp}` da batida examinada e entrega ao escritor existente (`app/ponto/management/commands/marcar_foto_ausente_retro.py:96`). O agregado persiste contexto no nascimento da disputa/chamado e sobrescreve a chave de topo na recorrência (`app/chamados/services/disputa_emissao.py:570`, `:589`, `:599`); o gerador usa cópia transitória com o envelope atual (`:312`). Identidade do episódio sai do derivador existente, que verifica posse da batida (`app/chamados/models.py:3603`, `:3606`, `:3610`); dia passa pelo juiz existente do turno (`app/chamados/services/disputa_emissao.py:396`, `app/chamados/models.py:2958`). Upload lê a coluna de episódio, responde pela porta automática e valida pelo dono (`app/api/foto_recebida.py:48`, `:51`, `:68`); vitalidade/fecho consultam autoridades existentes (`:78`, `:80`, `app/chamados/models.py:1911`). Não identifiquei juiz novo ou escritor de validação fora da porta nesses trechos (`app/api/foto_recebida.py:51`, `app/chamados/models.py:1917`).
-
-4. **Detalhe do relógio/merge preexistente:** a recorrência lê relógio dentro do núcleo para `contexto[motivo].ultima_em`, independentemente do instante recebido da API (`app/chamados/services/disputa_emissao.py:567`); o retro lê relógio na borda do comando (`app/ponto/management/commands/marcar_foto_ausente_retro.py:63`). A obra não introduz essa leitura interna (`app/chamados/tests/cef_c1_entrega.txt:196`).
-
-## 15/11 05:19 · sessao 90f92ea505b7 · - · - · origem=Ronald (tmux)
-
-1. Os testes sem banco mordem comportamentos: dois episódios fora de ordem, repetição, envelope vazio e isolamento do upload; C2 verifica fato, recepção, offset e prioridade da escada. Executei os 16 casos: OK. Evidência dos casos: `app/chamados/tests/test_cef_c1_sem_banco.py:177`, `:192`, `:230`, `:250`; `app/chamados/tests/test_cef_c2_sem_banco.py:74`, `:86`, `:95`, `:112`. Resultado desta execução: [nao verificado por artefato persistido; saída da ferramenta].
-
-2. Mutante concreto sobrevivente aos 16: substituir `_validar_pelo_dono` por `return 0`. Entrada upload de B1 → nenhuma resposta nem validação real; o resolver chama o helper e ignora seu retorno (`app/api/foto_recebida.py:71`). Sobrevive porque o teste injeta outro helper que sempre extingue as perguntas (`app/chamados/tests/test_cef_c1_sem_banco.py:216`, `:227`). Demonstrei em memória: 16 OK. A integração existente deve matá-lo: exige `validada_em` e pergunta morta (`app/chamados/tests/test_cef_c1_episodios.py:98`–`:103`); execução dessa integração [nao verificado]. **Não é bug atual de produção, nem razão isolada para bloquear: delimita a prova sem banco.**
-
-3. O selo T5 tem falsos negativos demonstrados: aceita ID nulo vindo de variável; aceita atribuição de envelope dentro de ramo não executado; ignora alias por atribuição (`porta = criar_ou_atualizar_disputa`). A análise considera qualquer expressão não constante suficiente para `id` (`app/chamados/tests/test_e1_v5_familia.py:180`), ignora fluxo ao selecionar atribuições (`:170`–`:179`) e reconhece apenas nome direto/import aliases (`:133`, `:149`). Nos três exemplos, retornou `[]` em memória. **Fragilidade da catraca; não prova defeito no emissor atual.**
-
-4. Medida obrigatória anterior ao pouso permanece sem prova no material: a própria entrega registra sombra, abertas/exportadas e lista como `[nao verificado]`, proibindo presumir zero (`app/chamados/tests/cef_c2_entrega.txt:214`–`:217`). A alegação “140 / 0 exportadas” do commit fornecido não vem acompanhada de sonda/lista no dado [nao verificado]. **Bloqueia comprovar liberação pelo aval; não permite afirmar exportadas > 0.**
-
-5. Não executar `cef_c1_verificar.py` nesta auditoria: ele escreve `cef_c1_mutantes.txt` (`app/chamados/tests/cef_c1_verificar.py:40`). Os testes unitários foram executados com `PYTHONDONTWRITEBYTECODE=1`; nenhum arquivo foi escrito pelos comandos realizados [nao verificado por censo posterior].
-
-_5527 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5531 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
