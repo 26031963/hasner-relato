@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 03:04:09.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (36.1 MB). Acoes na janela: **1118**.
+**Medido em 15/11/2026 03:08:41.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (36.2 MB). Acoes na janela: **1119**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:08:31 | Bash | Republish RELATO with corrected pid | `cd /home/ronald/saas-hasner && bin/relato.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/scratchpad/relato_pub2.log 2>&1; echo rc=$?` |
 | 03:00:44 | Bash | Fix ESPERANDO pid and verify hook proof | `cd /home/ronald/saas-hasner && sed -i '3s/^ESPERANDO: suite.sh \| pid=503644$/ESPERANDO: suite.sh \| pid=503651/' app/docs/RELATO.md && sed -i 's/(pid 503644, logs\/BATIDA-DEDUP-RETRATADA\/c5/(pid 503651, logs\/BATIDA-DEDUP-RETRATADA\/c5/; s/suite inteira c5, pid 503644)/suite inteira c5, pid 503651)/' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && grep -c 503644 app/docs/RELATO.md; python3 ...` |
 | 03:00:39 | Bash | Check why dedup suite launcher died | `cd /home/ronald/saas-hasner && cat logs/BATIDA-DEDUP-RETRATADA/c5/suite/inteira.fim; tail -15 logs/BATIDA-DEDUP-RETRATADA/c5/suite/inteira.log; pgrep -af "suite.sh" \| head` |
 | 03:00:35 | Bash | Test hook ESPERANDO proof directly | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h print(h._esperando_com_prova()); print(repr(h._prova_pid('suite.sh',503644))) "; ps -o pid,args -p 503644` |
