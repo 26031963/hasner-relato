@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 01:42** · publicado em **15/11/2026 01:43** (UTC-3)
+> Ultima resposta processada: **15/11/2026 01:43** · publicado em **15/11/2026 01:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 01:43 · sessao 13f3357d7635 · BATIDA-DEDUP-RETRATADA · leitura · origem=Code
+
+**Há um mecanismo de arredondamento que reproduz 0,01 h: o mensal arredonda um subtotal e depois arredonda novamente ao acrescentar folga trabalhada sem escala certa. A lavra soma os valores completos e arredonda no fim. Não é arredondamento por dia.** (`app/ponto/services/fechamento.py:902–903,984–985`; `app/ponto/services/dia_pago.py:178,264,562–563`)
+
+**Atribuir esse mecanismo a cada um dos 13 pares: [não verificado].** O anexo não traz os subtotais necessários para essa atribuição nem a implementação da sonda q4b. [não verificado]
+
+1. **Quem escreve o mensal e como arredonda**
+
+   O campo é `DecimalField(... decimal_places=2)`. O escritor de cálculo é `recalcular_fechamento_mes`; ele persiste por `save()` no ramo aberto e por `update()` no outro ramo. (`app/ponto/models.py:412`; `app/ponto/services/fechamento.py:448,1137–1144,1160–1162`)
+
+   A sequência executável é:
+
+   ```python
+   # Primeiro: total dos períodos comuns + órfãos, em horas
+   round(resultado.horas_trabalhadas + _min_orfaos / 60, 2)
+
+   # Depois, se houver folga sem escala certa:
+   round(float(fechamento.horas_trabalhadas) + _min_sem / 60, 2)
+   ```
+
+   Essas são as expressões de `app/ponto/services/fechamento.py:902–903,982–985`. `resultado.horas_trabalhadas` soma **minutos dos períodos e divide por 60**, sem arredondar cada período/dia nessa propriedade. (`app/ponto/motor_calculo_v2.py:294–296`)
+
+   Portanto, são **duas casas de hora decimal**, com um arredondamento intermediário antes da parcela de folga sem escala certa. (`app/ponto/services/fechamento.py:902–903,984–985`)
+
+   Existe também `restaurar_fechamento`: aceita o campo e atualiza o valor recebido, sem cálculo ou arredondamento explícito próprio. (`app/ponto/services/fechamento.py:1373–1380,1391–1393`)
+
+2. **O que `soma_da_competencia` devolve**
+
+   Filtra `DiaPago` por colaborador, mês, ano e versão — padrão `motor` —, retorna `None` sem lavratura e, havendo linhas, executa `Sum` de cada campo seguido de `round(float(total), 2)`. Para `horas_trabalhadas`, devolve um **float em horas, arredondado no total da competência**. (`app/ponto/services/dia_pago.py:550–563`)
+
+   A lavra recebe minutos, divide por 60 e acumula sem arredondar as horas diárias: períodos comuns, folgas sem escala certa e órfãos entram pelos caminhos de `:178`, `:264` e `:271`; os valores seguem para `DiaPago` em `:340–347`. (`app/ponto/services/dia_pago.py:178,264,271,340–347`)
+
+3. **Quem lê e o que apresenta**
+
+   | Leitor | Número utilizado |
+   |---|---|
+   | Lista de fechamento | **Mensal gravado**, exibido com duas casas. (`app/ponto/views.py:1137–1154`; `app/ponto/services/fechamento_lista.py:80,105–107`; `app/templates/ponto/_fech_linha.html:30`) |
+   | Relatório “Horas por colaborador”/CSV | **Mensal gravado**. (`app/relatorios/views.py:68–73,89–95`; `app/templates/relatorios/horas_mes.html:67`) |
+   | Espelho e resumo do PDF | Preferem **fechamento derivado agora**, pela mesma fórmula mensal; se indisponível, usam **`soma_da_competencia`**. Não constituem um par fixo “mensal versus lavra”. (`app/relatorios/cartao_pela_celula.py:69–76,111,142–174,321–346`; `app/ponto/services/fechamento.py:1759–1761`) |
+   | Formatação do espelho/PDF | Espelho mostra uma casa decimal; PDF converte para horas e minutos inteiros. Isso pode ocultar a diferença centesimal. (`app/templates/ponto/espelho.html:39`; `app/relatorios/pdf_espelho.py:667–678,766`) |
+   | Extrato parcial | Soma **`DiaPago` por intervalo**, via `soma_do_periodo`, e mostra trabalhadas com duas casas. Sua janela precisa ser conferida antes da comparação com uma competência. (`app/relatorios/views.py:463–487,523`; `app/templates/relatorios/extrato_parcial.html:73`) |
+   | TXT Domínio | O gerador recebe fechamentos **derivados em leitura**, mas a lista de eventos **não emite esse total T como rubrica de trabalhadas**; emite HE, folga, noturno, intra e atraso. (`app/folha/views.py:207–209,265–268`; `app/folha/export.py:439–461`) |
+   | Comparador/vigia disponível | Lê **ambos**, mensal e soma lavrada, para produzir divergências. (`app/folha/porta_export.py:388,451–458`) |
+   | Selo disponível | `selo_leitores_no_mesmo_numero` publica **contagens de divergências**; esse contador fica fora da reprovação. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:67,88–107`) |
+
+   A identificação específica de **m2**, **“selo de silêncio”** e da sonda **SILENCIO-VENCIDO/q4b** com esses leitores permanece **[não verificado]**.
+
+4. **A comparação arredonda igualmente?**
+
+   No comparador localizado, a soma já chega arredondada; o mensal gravado tem duas casas. A decisão compara os `float`s **sem novo `round`**, usando `abs(mensal - soma) > 0.015`. Só depois arredonda ambos igualmente para o registro de saída. (`app/ponto/services/dia_pago.py:563`; `app/ponto/models.py:412`; `app/folha/porta_export.py:239,451–458`)
+
+   **Logo, esse comparador não acusa uma diferença de exatamente 0,01 h.** A fórmula que fez a sonda q4b acusá-la é **[não verificado]**. (`app/folha/porta_export.py:239,455`)
+
+5. **Mesmo cadastro e mesmas batidas podem resultar em números diferentes?**
+
+   **Sim:** lista de fechamento versus extrato parcial, quando suas janelas contêm exatamente os mesmos dias pagos. Um lê o mensal; outro soma a lavra. (`app/ponto/views.py:1137–1154`; `app/relatorios/views.py:463–487,523`)
+
+   Exemplo aritmético de três dias, usando as parcelas previstas no código: dois dias comuns de **482 minutos** cada e uma folga sem escala certa de **481 minutos**. (`app/ponto/services/fechamento.py:902–903,980–985`; `app/ponto/services/dia_pago.py:178,264`)
+
+   ```text
+   Mensal:
+   round((482 + 482) / 60, 2) = 16,07
+   round(16,07 + 481 / 60, 2) = 24,09 h
+
+   Soma lavrada:
+   round(482/60 + 482/60 + 481/60, 2) = 24,08 h
+
+   Mensal − lavra = +0,01 h
+   ```
+
+   A reprodução decorre do **arredondamento do subtotal antes de acrescentar a última parcela**, pelas expressões de `app/ponto/services/fechamento.py:902–903,984–985`, contra o arredondamento final de `app/ponto/services/dia_pago.py:562–563`. A ocorrência dessas parcelas nos 13 casos reais permanece **[não verificado]**.
 
 ## 15/11 01:42 · sessao a186d9d5c966 · - · - · origem=Ronald (tmux)
 
@@ -2600,250 +2672,4 @@ def coletar():
 
 [truncado em 20000 de 23309 caracteres]
 
-## 15/11 00:47 · sessao 05c12876a823 · MADRUGADA-PREPARA · sonda · origem=Code
-
-**A18/A19 da matriz são identificáveis; sua equivalência aos “itens 18–19 da E4B” não está demonstrada.** A árvore também usa “18–19” para o fim do programa E4B. O `fatias.md` fornecido descreve leitores; atribuir a projeção legada R/V a uma fatia executora da E4c permanece **[nao verificado]**. (`app/docs/BACKLOG.md:1977`; `app/docs/GRADE-MESTRA.md:717`)
-
-A leitura abaixo usa **A18/A19** e identifica separadamente a operação real **R/V → DecisaoPergunta**. O comando E4B chama fábrica, registro de decisões e materialização; não contém uma aplicação automática de recusa humana A19. Exportadas são recusadas pelo planejamento e novamente antes da execução. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:125`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:260`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:304`)
-
-| Operação | Modelo, campos e escritor na cópia |
-|---|---|
-| **A18: recusa técnica** | `PerguntaDisputa.recusa_motivo` recebe o motivo técnico truncado em 240 caracteres. Em colisão sem carimbo, delega também `materializada_em`, `materializada_por_id` e `via_resolucao=fato_ocupado`. Escritores: `app/chamados/services/materializacao.py:1096`, `app/chamados/services/materializacao.py:1105`, `app/chamados/services/materializacao.py:1108`; executor do carimbo: `app/chamados/models.py:3182`, `app/chamados/models.py:3268`, `app/chamados/models.py:3273`. |
-| **A19: recusa humana** | `PerguntaDisputa.recusa_motivo` recebe autor e motivo; a reabertura limpa `respondida_em`, `resposta_colab`, `validada_em`, `validada_por`, `materializada_em`, `materializada_por` e `via_resolucao`. Escritores: `app/chamados/services/validacao.py:619`, `app/chamados/services/validacao.py:628`; operação delegada: `app/chamados/services/disputa_emissao.py:1595`, `app/chamados/services/disputa_emissao.py:1634`; executor: `app/chamados/models.py:3363`. |
-| **A19: decisão preservada** | Insere `DecisaoPergunta` com `pergunta_id`, `ato=recusa`, `ato_texto`, `respondida_original_em`, `validada_original_em`, `validada_original_por_id`, `ato_em`, `ato_por`, `ato_motivo`. Produtor: `app/chamados/services/disputa_emissao.py:1617`; executor: `app/chamados/models.py:4096`. |
-| **Projeção legada R/V** | Insere DP `resposta`: `pergunta_id`, `ato`, `ato_em=respondida_em`, `ato_texto=resposta_colab`, `ato_motivo`; DP `validacao`: os mesmos campos, com `ato_em=validada_em` e `ato_por_id=validada_por_id`. Produtor: `app/chamados/models.py:4074`, `app/chamados/models.py:4078`; executor: `app/chamados/models.py:4096`. Identificação como E4c: **[nao verificado]**. |
-| **Notas e auditoria** | A18 e A19 podem inserir `FollowupChamado`: `chamado_id`, `autor_tipo`, `autor_user`, `conteudo`, `anexo_hash`, e chave de evento quando cabível. A19 também chama os adaptadores de `LogAuditoria`. (`app/chamados/services/materializacao.py:1113`; `app/chamados/services/validacao.py:633`; `app/chamados/services/nota.py:88`; `app/chamados/services/nota.py:101`; `app/chamados/services/validacao.py:637`; `app/chamados/services/validacao.py:643`; `app/core/observ.py:134`) |
-| **Eventos decorrentes** | DP registrada e reabertura chamam `acordar_celulas`; A18 com carimbo também pode chegar por signal. A escrita é `EventoCelula(celula_id, colaborador_id, data)`, com os defaults do modelo; localizar a célula apenas a lê. (`app/chamados/models.py:4097`; `app/chamados/services/disputa_emissao.py:1635`; `app/chamados/signals.py:257`; `app/chamados/models.py:3325`; `app/ponto/portas/celula.py:954`; `app/escala/models.py:1860`) |
-
-Isso não fecha todas as cascatas: salvar pergunta agenda um callback de beco; quando elegível, ele resolve perguntas e fecha a disputa. O consumidor da outbox é outra execução. Linhas e efeitos efetivamente atingidos por essas cascatas: **[nao verificado]**. (`app/chamados/signals.py:230`; `app/chamados/signals.py:240`; `app/chamados/services/becos.py:54`; `app/chamados/services/becos.py:57`; `app/chamados/reconciliador.py:1316`)
-
-**Nos leitores examinados do GRAVADO/TXT, não há leitura direta dos campos R/V/C/recusa, das DP, notas ou eventos acima.** A montagem seleciona `FechamentoMensal`, lê seus valores e consulta autoridades de ausência e retenção. Cobertura de todo despacho transitivo/dinâmico: **[nao verificado]**. (`app/folha/export.py:714`; `app/folha/export.py:719`; `app/folha/export.py:730`; `app/folha/export.py:740`; `app/folha/export.py:968`)
-
-| Leitor | O que efetivamente lê |
-|---|---|
-| **Valores do TXT** | FM: `horas_extras_50`, `horas_extras_100`, `horas_extras_100_feriado`, `horas_folga_trabalhada`, `horas_noturnas`, `horas_intra_indenizada`, `horas_atraso`, `horas_saida_antecipada`. (`app/folha/export.py:420`; `app/folha/export.py:439`) |
-| **Entrada/retenção** | FM e cadastro; a retenção consulta o juiz da célula. (`app/folha/export.py:785`; `app/folha/export.py:831`; `app/folha/export.py:968`; `app/folha/export.py:1306`) |
-| **Faltas e rubricas** | Datas de falta vêm da autoridade de ausência; o código da rubrica vem do mapa de rubricas. (`app/folha/export.py:169`; `app/folha/export.py:184`; `app/folha/export.py:735`; `app/folha/export.py:740`; `app/folha/export.py:984`) |
-| **TXT já registrado** | `ExportacaoDominio` guarda `conteudo`, `hash_sha256` e `total_linhas`; `registrar` recebe o conteúdo pronto. (`app/folha/models.py:82`; `app/folha/models.py:174`; `app/folha/models.py:182`) |
-
-Portanto, **ausência de escrita direta em horas não certifica dinheiro zero**. `fechamento_lido()` deriva o estado atual sem persistir; `txt_vigente_x_gravado()` compara o TXT vigente com a montagem atual. Nenhuma dessas funções fornece, por si, o estado posterior hipotético de A18/A19. Delta atribuível em minutos ou rubricas: **[nao verificado]**. (`app/ponto/services/fechamento.py:1759`; `app/folha/export.py:655`)
-
-A sonda abaixo usa dois universos distintos, sem somar suas unidades:
-
-- **E4B: dia-colaborador**, `sem_porta` de `_alcance`, mais o complemento declarado de classe e em `[hoje−45, hoje)`. Esse complemento não representa todo o histórico exportado. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:76`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:153`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:248`)
-- **Projeção R/V: novas linhas DP**, pelo alcance real `linhas_a_criar()`: R ou V presente, horizonte canônico/sem dia ou conversa; conversa e sem dia ficam separados. O comando existente declara que não aplica essa projeção. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:3`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:44`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:73`)
-
-A18/A19 não expõem alcance planejável em leitura; a sonda conta esses **dois escritores sem alcance chamável**, deixando suas quantidades de linhas e mudanças como `null`, nunca zero. A atribuição da projeção à E4c também fica explícita como não verificada. (`app/chamados/services/materializacao.py:1089`; `app/chamados/services/validacao.py:562`)
-
-Texto para o envelope `bin/sonda_leitura.sh --sombra <sonda.py>`; execução e resultados: **[nao verificado]**. (`bin/sonda_leitura.sh:56`)
-
-```python
-# Apenas TEXTO: nao salvar nem executar nesta leitura.
-# Envelope: bin/sonda_leitura.sh --sombra <sonda.py>
-# RV_DP nomeia a operacao real; atribuicao a E4c nao verificada.
-
-import io
-import json
-import logging
-import re
-from collections import Counter
-from contextlib import ExitStack, redirect_stdout, redirect_stderr
-
-
-class SQLRecusado(Exception):
-    pass
-
-
-def so_select(execute, sql, params, many, context):
-    texto = sql.strip()
-    if (
-        many
-        or not re.match(r"^SELECT\b", texto, re.I)
-        or ";" in texto
-        or re.search(
-            r"\bFOR\s+(?:(?:NO\s+KEY|KEY)\s+)?(?:UPDATE|SHARE)\b",
-            texto, re.I,
-        )
-    ):
-        raise SQLRecusado()
-    return execute(sql, params, many, context)
-
-
-def medir():
-    from django.db import connections
-    from django.utils import timezone
-
-    saida = []
-    with ExitStack() as pilha:
-        for conn in connections.all():
-            pilha.enter_context(conn.execute_wrapper(so_select))
-
-        from folha.export import competencia_entregue
-        from folha.models import ExportacaoDominio
-        from colaboradores.models import Colaborador
-        from chamados.management.commands.backfill_fio_morto_e4b import (
-            _alcance, _exportadas_classe_e,
-        )
-        from chamados.management.commands.backfill_decisoes_pergunta import (
-            linhas_a_criar,
-        )
-
-        agora = timezone.localtime()
-        hoje = agora.date()
-
-        # Enumerar triplas nao decide entrega: somente K6 decide.
-        # folha/export.py:556,580
-        triplas = set(
-            ExportacaoDominio.objects.order_by()
-            .values_list("empresa_id", "mes", "ano").distinct()
-        )
-        entregue = {}
-
-        def k6(chave):
-            if chave not in entregue:
-                entregue[chave] = competencia_entregue(*chave) is True
-            return entregue[chave]
-
-        exportadas = {k for k in triplas if k6(k)}
-
-        # E4B: alcance declarado, unidade dia-colaborador.
-        # backfill_fio_morto_e4b.py:76,153,237
-        _, base = _alcance(None, hoje, agora)
-        extra = _exportadas_classe_e(None, hoje)
-        dias = {(x[1], x[2]): x for x in base}
-        for x in extra:
-            dias.setdefault((x[1], x[2]), x)
-
-        empresas = dict(
-            Colaborador.objects.filter(
-                pk__in={cid for cid, dia in dias}
-            ).values_list("pk", "empresa_id")
-        )
-        e4b_exp = Counter()
-        e4b_partes = Counter(
-            exportada=0, nao_exportada=0, indeterminada=0,
-        )
-        for (cid, dia), x in dias.items():
-            emp = empresas.get(cid)
-            try:
-                # Competencia produzida pelo alcance real.
-                mes, ano = map(int, x[3].split("/"))
-                chave = (emp, mes, ano)
-            except (ValueError, TypeError, AttributeError):
-                e4b_partes["indeterminada"] += 1
-                continue
-
-            if emp is None:
-                e4b_partes["indeterminada"] += 1
-            elif k6(chave):
-                e4b_partes["exportada"] += 1
-                e4b_exp[chave] += 1
-                exportadas.add(chave)
-            else:
-                e4b_partes["nao_exportada"] += 1
-
-        assert sum(e4b_partes.values()) == len(dias)
-        assert sum(e4b_exp.values()) == e4b_partes["exportada"]
-
-        # Projecao: alcance real, unidade nova linha DP.
-        # backfill_decisoes_pergunta.py:44,67,73,79,82
-        rv = linhas_a_criar()
-        rv_partes = Counter(
-            exportada=0, nao_exportada=0,
-            conversa=0, sem_competencia=0,
-        )
-        rv_exp = {}
-        total_rv = 0
-
-        for chave, atos in rv.items():
-            r = atos.get("resposta", [])
-            v = atos.get("validacao", [])
-            n = len(r) + len(v)
-            assert n == sum(len(itens) for itens in atos.values())
-            total_rv += n
-            emp, mes, ano = chave
-
-            if mes is None or ano is None or emp is None:
-                balde = (
-                    "conversa" if ano == "conversa"
-                    else "sem_competencia"
-                )
-                rv_partes[balde] += n
-            elif k6(chave):
-                rv_partes["exportada"] += n
-                exportadas.add(chave)
-                rv_exp[chave] = dict(
-                    resposta=len(r),
-                    validacao=len(v),
-                    total=n,
-                    perguntas=len({pk for cid, pk in r + v}),
-                )
-            else:
-                rv_partes["nao_exportada"] += n
-
-        assert sum(rv_partes.values()) == total_rv
-        assert (
-            sum(x["total"] for x in rv_exp.values())
-            == rv_partes["exportada"]
-        )
-
-        for emp, mes, ano in sorted(exportadas):
-            desconhecido = dict(
-                alcance="sem alcance chamavel",
-                linhas=None,
-                mudariam_campo_lido_gravado_TXT=None,
-            )
-            proj = rv_exp.get(
-                (emp, mes, ano),
-                dict(resposta=0, validacao=0, total=0, perguntas=0),
-            )
-            saida.append(dict(
-                empresa="emp%d" % emp,
-                competencia="%02d/%04d" % (mes, ano),
-                E4B_dias_no_alcance=e4b_exp[(emp, mes, ano)],
-                A18=desconhecido,
-                A19=desconhecido,
-                sem_alcance_chamavel=2,
-                RV_DP=dict(
-                    proj, mudariam_campo_lido_gravado_TXT=None,
-                ),
-                atribuicao_RV_DP_a_E4c="nao_verificado",
-            ))
-
-        saida.append(dict(
-            TOTAL_E4B_dias=len(dias),
-            partes=dict(e4b_partes),
-        ))
-        saida.append(dict(
-            TOTAL_RV_DP=total_rv,
-            partes=dict(rv_partes),
-        ))
-        saida.append(dict(
-            TOTAL_exportadas=len(exportadas),
-            escritores_distintos_sem_alcance_chamavel=2,
-            pares_escritor_competencia_sem_alcance_chamavel=(
-                2 * len(exportadas)
-            ),
-            delta_minutos_rubricas="nao_verificado",
-        ))
-    return saida
-
-
-ok = False
-nivel_anterior = logging.root.manager.disable
-try:
-    logging.disable(logging.CRITICAL)
-    with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-        linhas = medir()
-    for linha in linhas:
-        print(json.dumps(linha, sort_keys=True, ensure_ascii=True))
-    ok = True
-except Exception:
-    # Nao imprimir excecao, parametros SQL ou dados pessoais.
-    print("ERRO leitura incompleta; resultados nao verificados")
-finally:
-    logging.disable(nivel_anterior)
-    print("FIM completo=%d" % int(ok))
-```
-
-_5465 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

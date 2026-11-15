@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 01:43:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (28.2 MB). Acoes na janela: **844**.
+**Medido em 15/11/2026 01:47:42.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (28.3 MB). Acoes na janela: **852**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:44:42 | Bash |  | `cd /home/ronald/saas-hasner && bash bin/relato.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/scratchpad/relato_pub.log 2>&1; echo rc=$?; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/scratchpad/relato_pub.log` |
+| 01:44:37 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() o='12 CADASTRO no mes inteiro, 36 sem dono por dia' assert s.count(o)==1 s=s.replace(o,'12 CADASTRO no mes inteiro, 34 sem dono por dia (e os 2 pares T+R da 09 tambem sem dono no R)') o2='R/A/P 52 ocorrencias de 3 a 6500 min, todas na 09 exportada: 12 pares CADASTRO no mes inteiro, 36 nao sei.' if s.count(o2)==1: s=s.replace(o2,'R/A/P 52 ocorre ...` |
+| 01:44:32 | Bash |  | `cd /home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA && awk -F'\|' 'NR>3 && $2 ~ /\/2026/ {t=($5 ~ /T/)?"comT":"semT"; print t, $9}' q4b_tabela.md \| sort \| uniq -c` |
+| 01:44:27 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() old_t4=s[s.index('ESTADO 02:0x T4 (aval item 1)'):] old_t4=old_t4[:old_t4.index('\n')+1] new_t4=('ESTADO 02:1x T4 (aval item 1) FECHADO na sombra: 140 perguntas vivas mudariam de dia, 0 exportada -> sem PAREI, CEF c2 liberada quando o dedup soltar api/views.py e views_core.py; os 3 ERRO da q3a (pk 115/116/1339) sao perguntas MORTAS com batida a ...` |
+| 01:44:11 | Bash |  | `cd /home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA && sed -n 30,60p q3b_sonda.py; cd /home/ronald/saas-hasner && bash bin/sonda_leitura.sh --sombra logs/BATIDA-DEDUP-RETRATADA/q3b_sonda.py > logs/BATIDA-DEDUP-RETRATADA/q3b_saida.txt 2>&1; echo rc=$?; tail -40 logs/BATIDA-DEDUP-RETRATADA/q3b_saida.txt` |
+| 01:44:08 | Bash |  | `cd /home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA && wc -l q3b.r; awk '/^```python/{f=1;next} /^```/{if(f){f=0;exit}} f' q3b.r > q3b_sonda.py && python3 -m py_compile q3b_sonda.py && echo compila && /bin/grep -nE "save\|create\|update\|delete\|execute\(" q3b_sonda.py \| head` |
+| 01:43:57 | Bash |  | `sed -n 898,905p ponto/services/fechamento.py; echo ---; sed -n 976,988p ponto/services/fechamento.py; echo ---; sed -n 556,564p ponto/services/dia_pago.py` |
+| 01:43:53 | Bash |  | `cd /home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA && cat q4c.r` |
 | 01:41:01 | Bash |  | `cd /home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA && for i in $(seq 1 58); do [ -f q3b.fim ] && [ -f q4c.fim ] && break; /usr/bin/sleep 10; done; cat q3b.fim q4c.fim 2>/dev/null; ls c2` |
 | 01:40:58 | Bash |  | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p).read() anc='ESTADO 01:4x BATIDA-DEDUP-RETRATADA c1:' assert s.count(anc)==1 i=s.index(anc); j=s.index('\n',i)+1 add=('ESTADO 02:0x SILENCIO-VENCIDO (aval 01:2x item 4), sombra q4b FIM ok=1 59/59: juiz e6_oraculo.py:53 devolve ESTRUTURA como RESIDUO (:111), dia normal sai ESTRUTURA, e o FechamentoMensal nao tem gravado diario -> dono por DIA da diverge ...` |
 | 01:40:44 | Bash |  | `/usr/bin/sleep 5; cd /home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA; tail -2 q4c.log; ls q3b* c2/` |
