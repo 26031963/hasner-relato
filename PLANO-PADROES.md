@@ -41,6 +41,15 @@ _A linha **Lei** e o corte literal dele; contexto, alternativas, consequencias, 
 - **Padrao conhecido:** *Architecture Decision Record* (Nygard).
 - **Armadilha:** ADR escrito depois da lei vira justificativa, nao decisao; escreve-se no ATO do corte.
 
+### L-130 — JUIZ-PERGUNTA-RESPONDIDA (corte literal Ronald 15/11 20:0x)
+- **Lei:** "respondida" = tem instante (respondida_em) E texto nao vazio; "instante sem texto" e "texto sem instante" sao ILEGAIS e o sistema recusa gravar; UM juiz `pergunta_respondida` para todas as finalidades (fila a validar, vitalidade, retencao, app, materializacao); reabrir/ressuscitar zera instante E texto, o texto anterior fica na trilha do ato; estoque vivo instante-sem-texto volta a pendente com trilha (2 abertas na obra, 141 entregues so com `!` proprio).
+- **Contexto:** o censo de 15/11 (logs/JUIZ-RESPONDIDA/censo.md) achou 152 usos praticando TRES predicados -- instante E texto (11), instante OU texto (16), so instante (31), mais so texto (19) -- e o quadro de prod 9.626 perguntas com instante sem texto (143 vivas); `ressuscitar_perguntas` zerava so o instante (escritor do par texto-sem-instante).
+- **Alternativas descartadas:** um predicado por finalidade (mantem as tres verdades e a P5 sem saida); "so instante" (fila a validar aceitaria resposta vazia); tolerar os pares ilegais e classificar na leitura (derivador paralelo, LEI-AKITA 1).
+- **Consequencias:** todo leitor migra para o juiz (F1 nova, pre-desenho antes de construir); a gravacao ganha recusa nos dois pares; reabertura zera os dois campos com trilha; 143 vivas mudam de estado (2 na obra, 141 por `!`).
+- **Padrao conhecido:** *single source of truth / um juiz por pergunta*; invariante no escritor (*make illegal states unrepresentable*).
+- **Armadilha:** recusar na gravacao sem migrar o estoque deixa linha ilegal que nenhum escritor consegue mais tocar; migrar o leitor antes do escritor deixa o par ilegal nascer de novo.
+_(contexto/alternativas/armadilha: redacao do Code a partir do corte e do censo; revise.)_
+
 ## NORTE DO SISTEMA (corte Ronald `PADRAO-NA-CURA`, 27/10 17:0x -- L-123; texto LITERAL, nao padrao novo)
 
 "o norte do sistema e o desenho de engenharia do GLOSSARIO e do PLANO-PADROES": **single source of truth / um juiz por
