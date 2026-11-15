@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 23:20** · publicado em **14/11/2026 23:20** (UTC-3)
+> Ultima resposta processada: **14/11/2026 23:24** · publicado em **14/11/2026 23:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 23:24 · sessao 91bc3e2e85f6 · E3-RESTO-R3 · censo · origem=Code
+
+## CENSO
+leitores:
+
+- app/chamados/services/tarefa_do_dia.py:683 lê o fio cru e publica uma cópia quando há rota; sem rota devolve a porta inteira como `None`, eliminando também o fio interno.
+- app/folha/fora_da_folha.py:85 `_fio_da_porta` interpreta porta `None` como `'nada'`, constante de app/chamados/juizes.py:1652; com porta presente devolve literalmente `porta['fio']`, inclusive eventual valor inesperado.
+- app/folha/fora_da_folha.py:194 lê esse resultado e conta dias por fio em app/folha/fora_da_folha.py:200; aceita como chaves `admin/colab/chamado/nada`, declaradas em app/folha/fora_da_folha.py:37; `sistema/nao_sei/None/outro` publicados provocariam `KeyError`; ocorrência desses valores publicados [nao verificado].
+- app/folha/fora_da_folha.py:93 `_grupo` interpreta `nada→D`, depois `chamado→C`, depois `colab→B`, restante não vazio→A; conjunto vazio→None em app/folha/fora_da_folha.py:91.
+- app/folha/fora_da_folha.py:244 `o_que_segura` lê o fio publicado e procura `DESTRAVA[_f]` em app/folha/fora_da_folha.py:252: admin executa ação administrativa, colab responde, chamado resolve a porta aberta, nada significa “SEM PORTA” — app/folha/fora_da_folha.py:45; valores fora dessas quatro chaves provocariam `KeyError`.
+- app/chamados/services/vigia_fio.py:354 `censo` lê a existência da porta: qualquer porta presente conta como fio vivo em app/chamados/services/vigia_fio.py:369; `None` segue para contagem temporal e baldes históricos em app/chamados/services/vigia_fio.py:372 e app/chamados/services/vigia_fio.py:382.
+- app/chamados/services/vigia_fio.py:589 `censo_alcance` lê a porta; presente, conserva qualquer fio como papel em app/chamados/services/vigia_fio.py:602 e exige admin somente para `'admin'` em app/chamados/services/vigia_fio.py:601; `None` segue para hoje/futuro, baldes históricos ou `sem_porta`, respectivamente em app/chamados/services/vigia_fio.py:604, app/chamados/services/vigia_fio.py:610 e app/chamados/services/vigia_fio.py:655.
+- app/chamados/services/furo_sem_canal.py:97 lê a projeção, sem interpretar fio: porta presente fornece rota; `None` entra em `sem_canal` em app/chamados/services/furo_sem_canal.py:104; desconhecimento vem da porta ou da tarefa em app/chamados/services/furo_sem_canal.py:100.
+- app/escala/services/cadastro_realidade.py:469 lê existência da porta: com perguntas vivas, `None` permite candidato a beco; qualquer porta presente exclui o dia.
+- app/ponto/services/pautas_dos_discordantes.py:81 lê `_fio_do_dia`, que passa por `_fio_da_porta` em app/folha/fora_da_folha.py:79; conserva somente `'nada'`, excluindo os demais fios.
+- app/chamados/management/commands/diff_e3_sombra.py:49 instrumento projeta porta ausente como fio `'nada'` para Folha, mas fio `None` para vigia em app/chamados/management/commands/diff_e3_sombra.py:54; isso é simulação declarada dos consumidores, não execução deles — app/chamados/management/commands/diff_e3_sombra.py:47.
+- app/chamados/management/commands/diff_e3_sombra.py:143 instrumento também lê rota/fio para construir a assinatura comparada.
+- app/folha/retrato_folha.py:1181 lê a Folha agregada; app/folha/retrato_folha.py:1213 transforma grupo em fio gravado: A/B/C/D→admin/colab/chamado/ninguem, pelo mapa de app/folha/retrato_folha.py:177 e função de app/folha/retrato_folha.py:368.
+- app/folha/retrato_folha.py:438 `fio_da_linha` aceita os quatro fios gravados; ausência ou valor inválido aciona a leitura legada em app/folha/retrato_folha.py:441.
+- app/folha/retrato_folha.py:474 `dono_da_linha` lê esse fio como agrupamento da UI: admin→Admin, colab→Colab, chamado/ninguem→Admin pelo mapa de app/folha/retrato_folha.py:192; ninguem com todas as datas atuais/futuras→Hoje em app/folha/retrato_folha.py:477.
+- app/folha/retrato_folha.py:1038 lê o fio gravado para oferecer link de fallback; ações publicadas têm prioridade em app/folha/retrato_folha.py:1025.
+- app/folha/retrato_folha.py:1081 `o_que_fazer` lê fio e agrupamento separadamente; mostra o dono em app/folha/retrato_folha.py:1089 e a frase correspondente ao fio em app/folha/retrato_folha.py:1092.
+- app/folha/vigia_retido_calado.py:47 lê o fio gravado `'ninguem'` e separa roteados/calados pela lista em app/folha/vigia_retido_calado.py:49.
+- app/colaboradores/views.py:986 lê as respostas prontas do retrato e as entrega ao template em app/colaboradores/views.py:996; app/templates/colaboradores/partials/painel_colaborador.html:26 inclui app/templates/folha/_retrato_o_que_fazer.html:33, que renderiza rótulo/valor/cor, sem decidir fio.
+- app/folha/views_retrato.py:318 usa os quadros do módulo do retrato; o agrupamento por dono consulta `dono_da_linha` em app/folha/retrato_folha.py:576.
+- app/chamados/management/commands/backfill_fio_morto_e4b.py:87 lê a tarefa, mas não `tarefa['fio']`: seleciona ações sistêmicas perguntar/materializar/rejulgar em app/chamados/management/commands/backfill_fio_morto_e4b.py:101.
+
+- app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:17 funções permitidas vigiadas: `carga_da_tarefa` e `porta_da_tarefa`; nos itens seguintes, I=importação e C=chamada de produção.
+- app/folha/fora_da_folha.py:63 I `carga_da_tarefa`; app/folha/fora_da_folha.py:64 C.
+- app/folha/fora_da_folha.py:69 e app/folha/fora_da_folha.py:231 I `porta_da_tarefa`; app/folha/fora_da_folha.py:70 e app/folha/fora_da_folha.py:243 C.
+- app/chamados/services/furo_sem_canal.py:50 I ambas; app/chamados/services/furo_sem_canal.py:93 C carga; app/chamados/services/furo_sem_canal.py:97 C porta.
+- app/chamados/services/vigia_fio.py:277 e app/chamados/services/vigia_fio.py:501 I ambas; app/chamados/services/vigia_fio.py:352 e app/chamados/services/vigia_fio.py:587 C carga; app/chamados/services/vigia_fio.py:354 e app/chamados/services/vigia_fio.py:589 C porta.
+- app/escala/services/cadastro_realidade.py:438 I ambas; app/escala/services/cadastro_realidade.py:464 C carga; app/escala/services/cadastro_realidade.py:469 C porta.
+- app/chamados/management/commands/diff_e3_sombra.py:22 I ambas; app/chamados/management/commands/diff_e3_sombra.py:117 C carga; app/chamados/management/commands/diff_e3_sombra.py:43 cria alias `candidata=porta_da_tarefa`, chamado em app/chamados/management/commands/diff_e3_sombra.py:129.
+- app/chamados/services/tarefa_do_dia.py:698 C local `carga_da_tarefa`, sem importação.
+
+- app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:21 também vigia oito funções proibidas naquele leitor: `porta_alcancavel_do_dia`, `alimentar_portas`, `prazo_estourou`, `particao_do_app`, `consulta_do_app`, `perguntas_do_app`, `fio_pelos_verbos`, `pergunta_viva`; `FIO_DO_VERBO` é constante.
+- app/chamados/management/commands/diff_e3_sombra.py:20 I `porta_alcancavel_do_dia`; app/chamados/management/commands/diff_e3_sombra.py:127 C.
+- app/chamados/management/commands/diff_e3_sombra.py:20 I `alimentar_portas`; app/chamados/management/commands/diff_e3_sombra.py:116 C; app/escala/services/cadastro_realidade.py:437 I e app/escala/services/cadastro_realidade.py:458 C; app/chamados/services/vigia_fio.py:498 I e app/chamados/services/vigia_fio.py:555 C; app/chamados/juizes.py:1698 C local.
+- app/chamados/services/tarefa_do_dia.py:641 I `fio_pelos_verbos`; app/chamados/services/tarefa_do_dia.py:642 e app/chamados/services/tarefa_do_dia.py:649 C; app/chamados/juizes.py:1710 C local.
+- app/chamados/services/tarefa_do_dia.py:515 I `particao_do_app`; app/chamados/services/tarefa_do_dia.py:516 C; app/chamados/services/pergunta_no_app.py:73 C local.
+- app/chamados/juizes.py:1636 I `perguntas_do_app`; app/chamados/juizes.py:1642 C; app/chamados/services/pergunta_no_app.py:73, app/chamados/services/pergunta_no_app.py:208 e app/chamados/services/pergunta_no_app.py:231 C locais; app/colaboradores/services/ficha.py:105 I módulo e app/colaboradores/services/ficha.py:166 C por atributo.
+- app/core/views.py:252 I `consulta_do_app` e app/core/views.py:253 C; app/api/views.py:993 e app/api/views.py:2533 I, app/api/views.py:994 e app/api/views.py:2534 C; app/chamados/services/cobranca.py:47 I e app/chamados/services/cobranca.py:48 C; app/chamados/services/aviso_pendencia.py:8 I e app/chamados/services/aviso_pendencia.py:9 C; app/chamados/services/pergunta_no_app.py:100 C local.
+- app/ponto/management/commands/escalonar_chamados_supervisao.py:18 I `prazo_estourou` do C9 e app/ponto/management/commands/escalonar_chamados_supervisao.py:96 C; app/chamados/services/cobranca.py:33 I e app/chamados/services/cobranca.py:255 C; app/chamados/services/fila.py:30 I e app/chamados/services/fila.py:169 C.
+- app/ponto/views.py:1729 I homônimo `prazo_estourou` de justificativas e app/ponto/views.py:1734 C; app/ponto/management/commands/alertar_justificativas_sla.py:10 I desse homônimo e app/ponto/management/commands/alertar_justificativas_sla.py:20 C; o selo proíbe pelo nome terminal — app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:74.
+
+- app/chamados/reconciliador.py:398 I `pergunta_viva` também em linhas 651, 758, 1079 e 1552; C nas linhas 399, 662, 759, 1087 e 1595 do mesmo arquivo.
+- app/chamados/models.py:352 I `pergunta_viva` também em linhas 1528, 1938, 3200 e reexportação 4226; C nas linhas 368, 1556, 1960, 3127, 3222 e 3484 do mesmo arquivo.
+- app/chamados/juizes.py:1496 C local `pergunta_viva`, também nas linhas 1501, 1513, 1625, 1725 e 2388 do mesmo arquivo.
+- app/chamados/views.py:1238 I `pergunta_viva` por alias, também em linhas 1256 e 1415; C nas linhas 1242, 1257 e 1417 do mesmo arquivo.
+- app/api/views.py:2607 I `pergunta_viva` via models; app/api/views.py:2611 C.
+- app/colaboradores/services/calendario.py:478 I `pergunta_viva` como `_pv`; app/colaboradores/services/calendario.py:486 C.
+- app/ponto/services/dia_do_colab.py:62 I `pergunta_viva` via models; app/ponto/services/dia_do_colab.py:71 C.
+- app/chamados/services/cobranca.py:225 I `pergunta_viva`; app/chamados/services/cobranca.py:241 C.
+- app/chamados/services/vigia_fio.py:704 e app/chamados/services/vigia_fio.py:761 I `pergunta_viva`; app/chamados/services/vigia_fio.py:713 e app/chamados/services/vigia_fio.py:771 C.
+- app/chamados/services/pergunta_no_app.py:51 e app/chamados/services/pergunta_no_app.py:171 I `pergunta_viva` via models; app/chamados/services/pergunta_no_app.py:61 e app/chamados/services/pergunta_no_app.py:180 C.
+- app/chamados/services/tarefa_do_dia.py:474 I `pergunta_viva`; app/chamados/services/tarefa_do_dia.py:523 e app/chamados/services/tarefa_do_dia.py:527 C.
+- app/chamados/services/acoes_chamado.py:357 I `pergunta_viva` via models; app/chamados/services/acoes_chamado.py:358 C.
+- app/chamados/services/disputa_emissao.py:1823 e app/chamados/services/disputa_emissao.py:1918 I `pergunta_viva`; app/chamados/services/disputa_emissao.py:1828, app/chamados/services/disputa_emissao.py:1973 e app/chamados/services/disputa_emissao.py:2055 C.
+- app/chamados/services/competencia_trancada.py:83 I `pergunta_viva`; app/chamados/services/competencia_trancada.py:144 e app/chamados/services/competencia_trancada.py:167 C.
+- app/chamados/services/fio.py:267 I `pergunta_viva` também em linhas 643, 812, 988 e 2174; C nas linhas 268, 644, 820, 999, 2180 e 2185 do mesmo arquivo.
+- app/chamados/services/relavra_via.py:209 I `pergunta_viva`; app/chamados/services/relavra_via.py:242 C.
+- app/chamados/management/commands/disparar_perguntas_competencia.py:96 I `pergunta_viva` via models; app/chamados/management/commands/disparar_perguntas_competencia.py:111 C.
+- app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:434 I `pergunta_viva`; app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:449 C.
+- app/chamados/management/commands/auditar_invariantes_chamados.py:192 I `pergunta_viva` por aliases também em linhas 521, 854, 885 e 1615; C nas linhas 202, 540, 858, 894, 1653, 1710, 1769 e 1782 do mesmo arquivo.
+- app/chamados/management/commands/reabrir_orfas_enterradas.py:58 I `pergunta_viva`; app/chamados/management/commands/reabrir_orfas_enterradas.py:83 C.
+- app/chamados/juizes.py:1658 lê `FIO_DO_VERBO`; app/folha/fora_da_folha.py:84 importa `FIO_SEM_PORTA`, lido em app/folha/fora_da_folha.py:85; app/ponto/services/pautas_dos_discordantes.py:62 importa essa constante, lida em app/ponto/services/pautas_dos_discordantes.py:81.
+
+escritores:
+
+- app/chamados/services/tarefa_do_dia.py:672 grava o campo cru `out['fio']`; a seleção em app/chamados/services/tarefa_do_dia.py:643 admite `colab/admin/chamado/sistema/nao_sei/nada`; nenhum desses caminhos escreve `fio=None`.
+- app/chamados/services/tarefa_do_dia.py:627 dá `colab` somente com pergunta pendente no app e ação RESPONDER do colaborador; prazo não participa desse degrau.
+- app/chamados/services/tarefa_do_dia.py:630 dá candidato `admin` para decidir ausência, resolver dia ou validar com âncora; a prioridade final continua abaixo de colab — app/chamados/services/tarefa_do_dia.py:643.
+- app/chamados/services/tarefa_do_dia.py:639 exclui do residual `cobrar`, `None` e `FORA_DA_LISTA_PADRAO`; app/chamados/services/tarefa_do_dia.py:642 consulta `fio_pelos_verbos`, que devolve admin para validar e chamado para os demais residuais — app/chamados/juizes.py:1655.
+- app/chamados/services/tarefa_do_dia.py:635 dá candidato `sistema` para ação sistêmica sem portas ligadas ao dia ou com porta nas ações alcançáveis; as portas sistêmicas nativas são strings emissor/cartorio/materializacao — app/chamados/services/tarefa_do_dia.py:69 — e sistema sem porta termina com rota `None` em app/chamados/services/tarefa_do_dia.py:657.
+- app/chamados/services/tarefa_do_dia.py:644 escreve `nao_sei` quando não há candidato e há desconhecimento; caso contrário escreve `nada`; ambos ficam sem rota — app/chamados/services/tarefa_do_dia.py:650.
+- app/chamados/services/tarefa_do_dia.py:667 sobrescreve a escolha com `admin/porta_acao` quando Resolver dia foi oferecido e a primeira passagem ficou sem rota.
+- app/chamados/services/tarefa_do_dia.py:683 escreve o fio publicado copiando o cru; rota ausente produz porta `None`, não `{'fio': None}`; sistema/nao_sei/nada internos acabam ocultados por essa projeção — app/chamados/services/tarefa_do_dia.py:650 e app/chamados/services/tarefa_do_dia.py:657.
+- app/chamados/juizes.py:1575 e app/chamados/juizes.py:1588 escrevem verbo `None` como alimentação, não fio; o filtro atual de app/chamados/services/tarefa_do_dia.py:639 impede que esse residual sozinho dê dono.
+- app/folha/fora_da_folha.py:254 escreve o fio derivado no resultado de `o_que_segura`; app/folha/retrato_folha.py:1213 grava a representação agregada sob a chave `dono`, com `ninguem` para grupo D — app/folha/retrato_folha.py:368.
+
+decisoes:
+
+- SIM, há respostas diferentes a jusante: para um dia histórico retido sem porta, Folha responde `nada/grupo D`, enquanto o retrato responde balde Admin; isso decorre de app/folha/fora_da_folha.py:85, app/folha/fora_da_folha.py:93, app/folha/retrato_folha.py:368 e app/folha/retrato_folha.py:192; ocorrência individual nesta cópia [nao verificado].
+- Para uma porta presente, Folha e vigia conservam o mesmo fio; o vigia apenas calcula `exige_admin` pela igualdade com admin — app/folha/fora_da_folha.py:85 e app/chamados/services/vigia_fio.py:601.
+- O caso `sistema/rota=None` distingue trabalho sistêmico de porta publicada: a tarefa pode exigir materializar/rejulgar enquanto Folha responde nada; o backfill lê essas ações, sem ler o fio cru — app/chamados/services/tarefa_do_dia.py:163, app/chamados/services/tarefa_do_dia.py:165, app/chamados/services/tarefa_do_dia.py:683 e app/chamados/management/commands/backfill_fio_morto_e4b.py:101.
+- A fixture citada não prova `fio=='sistema'`: a palavra está no comentário; a asserção verifica somente desconhecimento falso, rota None e porta None — app/ponto/tests/test_cxr_tela_le_o_motor.py:382 e app/ponto/tests/test_cxr_tela_le_o_motor.py:385.
+- A cura deve distinguir fio interno, porta publicada e agrupamento da UI; a substituição do agrupamento de sem porta por balde próprio já tem resposta em LU-05 — app/docs/CORTES.md:437; residual decidir como admin já está decidido em LU-01 — app/docs/CORTES.md:433.
+- O selo atual fiscaliza somente `fora_da_folha.py`, identificado em app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:14; confere imports, nomes, atributos, strings e chamadas proibidas em app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:48.
+- O selo atual exige chamadas de carga e porta, resolvendo aliases; importar sem chamar já não basta — app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:26, app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:83 e app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:99.
+- O selo prova presença sintática de chamadas, sem provar execução, alcance de todos os caminhos ou uso dos retornos: coleta `ast.Call` em app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:45 e exige presença dos nomes em app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:87.
+- Os 60 mutantes abaixo têm alvo literal com 1 casamento no respectivo arquivo; nenhum tem 0 ou >1; o executor exige unicidade em app/chamados/tests/e3_degrau_mutantes.py:202; morte efetiva dos mutantes nesta cópia [nao verificado].
+- `cobrar_residual_colab`, `historico_da_dono`, `nulo_da_dono`: alvo `if verbos[pk] not in (*FORA_DA_LISTA_PADRAO, None, 'cobrar')` → 1 casamento, app/chamados/services/tarefa_do_dia.py:639.
+- `devida_fora_do_app_colab`: alvo `i['pergunta_id'] in pendentes_app and` → 1 casamento, app/chamados/services/tarefa_do_dia.py:627.
+- `admin_antes_colab`: alvo `('colab', 'admin', 'chamado', 'sistema')` → 1 casamento, app/chamados/services/tarefa_do_dia.py:643.
+- `app_sem_rota`: alvo `elif fio == 'colab':\n        rota = 'porta_app'` → 1 casamento, app/chamados/services/tarefa_do_dia.py:652.
+- `acao_direta_sem_dono`: alvo `com_dono = admin_alcancavel` → 1 casamento, app/chamados/services/tarefa_do_dia.py:634.
+- `rota_colab_pela_fila`, `app_com_cobrar_vira_fila`: alvo `elif fio == 'colab':` → 1 casamento, app/chamados/services/tarefa_do_dia.py:652.
+- `porta_acao_some`: alvo `'porta_acao' if fio == 'admin' else None` → 1 casamento, app/chamados/services/tarefa_do_dia.py:657.
+- `residual_ignora_acao_do_colab`: alvo `portas - {a['porta'] for a in com_dono}` → 1 casamento, app/chamados/services/tarefa_do_dia.py:639.
+- `rota_sem_dono_publicada`: alvo `if fio in ('nada', 'nao_sei'):\n        rota = None` → 1 casamento, app/chamados/services/tarefa_do_dia.py:650.
+- `sistema_sem_alcance`: alvo `(not portas or a['porta'] in portas_acoes)` → 1 casamento, app/chamados/services/tarefa_do_dia.py:635.
+- `documento_da_colab`: alvo `a['acao'] == RESPONDER and a['de'] == COLABORADOR` → 1 casamento, app/chamados/services/tarefa_do_dia.py:628.
+- `sem_memo_por_colab`: alvo `if self._vida_carregada:` → 1 casamento, app/chamados/services/tarefa_do_dia.py:472.
+- `carga_sem_relogio`: alvo `pergunta_viva(p, hoje=hoje, carga=carga, agora=self.agora)))` → 1 casamento, app/chamados/services/tarefa_do_dia.py:527.
+- `relogio_perdido`, `consulta_fora_do_app`: alvo `em_lote=True, agora=agora` → 1 casamento, app/chamados/services/pergunta_no_app.py:73.
+- `predicado_pendente_afrouxado`: alvo `p.respondida_em is None and p.disputa.fechada_em is None` → 1 casamento, app/chamados/services/pergunta_no_app.py:81.
+- `canal_nao_conta_app`: alvo `sum(1 for r in rota.values() if r == 'porta_app')` → 1 casamento, app/chamados/services/furo_sem_canal.py:116.
+- `vigia_contador_deslocado`: alvo `'alcance_porta_app': 0` → 1 casamento, app/chamados/services/vigia_fio.py:517.
+- `vigia_log_omite_app`: alvo `|porta_app=%d|` → 1 casamento, app/chamados/services/vigia_fio.py:667.
+- `command_omite_app`: alvo `| app %s ;` → 1 casamento, app/chamados/management/commands/lavrar_furo_sem_canal.py:37.
+- `canal_nao_conta_acao`: alvo `sum(1 for r in rota.values() if r == 'porta_acao')` → 1 casamento, app/chamados/services/furo_sem_canal.py:117.
+- `vigia_contador_acao_deslocado`: alvo `'alcance_porta_acao': 0` → 1 casamento, app/chamados/services/vigia_fio.py:517.
+- `vigia_log_omite_acao`: alvo 
+
+[truncado em 20000 de 26580 caracteres]
+
+## 14/11 23:21 · sessao caf66e264376 · - · - · origem=Ronald (tmux)
+
+Censo concluído: o selo atual exige chamadas sintáticas de `carga_da_tarefa` e `porta_da_tarefa`, além de fiscalizar imports e nomes proibidos; não prova execução nem consumo efetivo dos retornos (`app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:26`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:73`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:83`).
+
+Os 60 mutantes têm exatamente um casamento literal no respectivo arquivo; inclusive `sem_memo_por_colab` em `app/chamados/services/tarefa_do_dia.py:472` e `carga_sem_relogio` em `app/chamados/services/tarefa_do_dia.py:527`. Inventários completos, textos dos alvos e referências foram enviados nas mensagens anteriores (`app/chamados/tests/e3_degrau_mutantes.py:17`, `app/chamados/tests/e3_degrau_mutantes.py:105`, `app/chamados/tests/e3_degrau_mutantes.py:141`).
+
+As únicas importações de funções de `chamados` em `fora_da_folha.py` são carga em `app/folha/fora_da_folha.py:63` e porta em `app/folha/fora_da_folha.py:69` e `app/folha/fora_da_folha.py:231`; suas chamadas estão em `app/folha/fora_da_folha.py:64`, `app/folha/fora_da_folha.py:70` e `app/folha/fora_da_folha.py:243`.
+
+`FIO_DO_VERBO` é definido e consumido em `app/chamados/juizes.py:1650` e `app/chamados/juizes.py:1658`. `FIO_SEM_PORTA` é definido em `app/chamados/juizes.py:1652`, importado e consumido por `app/folha/fora_da_folha.py:84` e `app/folha/fora_da_folha.py:85`, e por `app/ponto/services/pautas_dos_discordantes.py:62` e `app/ponto/services/pautas_dos_discordantes.py:81`.
+
+## 14/11 23:20 · sessao 96f929834b13 · - · - · origem=Ronald (tmux)
+
+Censo do item (1), somente pelo código:
+
+- `app/chamados/services/tarefa_do_dia.py:643` escolhe o fio cru na ordem `colab > admin > chamado > sistema`; sem candidato, escreve `nao_sei` se `out['nao_sei']`, senão `nada` (`:644`).
+- `app/chamados/services/tarefa_do_dia.py:667` sobrescreve a escolha com `fio='admin', rota='porta_acao'` quando a autoridade oferece Resolver dia e a primeira passagem ficou sem rota.
+- `app/chamados/services/tarefa_do_dia.py:672` é o único ponto encontrado de gravação do campo `out['fio']`; recebe essas escolhas. `None` não é produzido como valor do fio cru (`:643-644`, `:667`).
+- `app/chamados/services/tarefa_do_dia.py:627` supõe `colab` = pergunta pendente no app e ação RESPONDER do colaborador; `:630-633` supõe `admin` = ação administrativa com alcance; `:639-642` deriva residual dos verbos, excluindo `None`, `cobrar` e `FORA_DA_LISTA_PADRAO`; `app/chamados/juizes.py:1655-1661` traduz residual `validar` em admin e os demais em chamado.
+- `app/chamados/services/tarefa_do_dia.py:634-635` supõe sistema = ação de sistema sem nenhuma porta ligada ao dia ou cuja porta inteira esteja nas portas das ações; as ações nativas de sistema usam apenas strings `emissor`, `materializacao`, `cartorio` (`:69`, `:163`, `:165`, `:317`, `:321`), portanto o caso nativo sistema só entra sem portas ligadas; termina com rota None (`:657`). Publicação de `fio='sistema'` num dict não é alcançada por essas ações nativas; incidência em produção [nao verificado].
+- `app/chamados/services/tarefa_do_dia.py:683` é o único leitor direto encontrado do fio cru e escritor do fio publicado: copia `tarefa.get('fio')` quando rota é verdadeira; quando rota é None, retorna **porta None**, não um dict com `fio=None`. Logo sistema/nao_sei/nada crus se tornam ausência de porta (`:650-657`).
+
+Leitores diretos e de existência de porta:
+
+- `app/folha/fora_da_folha.py:85` `_fio_da_porta`: porta None → `FIO_SEM_PORTA`, definido como `nada` em `app/chamados/juizes.py:1652`; qualquer dict → preserva seu fio, sem validar.
+- `app/folha/fora_da_folha.py:193-200` `fora_da_folha`: lê a projeção, acumula contadores por fio; admin/colab/chamado/nada são as únicas chaves (`:37`, `:184`). Dict publicado com sistema/nao_sei/None/outro resultaria em KeyError em `:200`; isso não prova ocorrência em produção.
+- `app/folha/fora_da_folha.py:93-99` `_grupo`: nada → D; senão chamado → C; senão colab → B; qualquer conjunto restante não vazio → A; conjunto vazio → None (`:91-92`). Semântica nominal dos quatro grupos em `:38-42`.
+- `app/folha/fora_da_folha.py:243-254` `o_que_segura`: publica fio lido e busca `DESTRAVA[_f]` em `:252`; admin = executar ação administrativa, colab = responder, chamado = resolver porta do chamado, nada = SEM PORTA (`:45-54`). Valor publicado sistema/nao_sei/None/outro também daria KeyError em `:252`.
+- `app/chamados/services/vigia_fio.py:354`/`:366-370` `censo`: lê apenas presença da porta; qualquer porta é fio vivo; None segue aos contadores históricos sem porta, independentemente do fio cru.
+- `app/chamados/services/vigia_fio.py:589`/`:594-602` `censo_alcance`: lê porta e desconhecimento; porta presente conta rota e conserva o fio como papel; exige admin somente quando `fio == 'admin'`; qualquer outro fio presente tem exige_admin falso. Porta None segue a `de_hoje_pra_frente` (`:604-606`), subdivisões históricas (`:610-614`) ou sem_porta (`:655`). As subdivisões são explicitamente papel da fonte, não fio, em `:240-245`.
+- `app/chamados/services/furo_sem_canal.py:97-104` `medir`: não lê fio; porta presente fornece rota, None entra em sem_canal; lê desconhecimento da porta ou da tarefa (`:100-102`).
+- `app/escala/services/cadastro_realidade.py:469` `beco_em_lote`: não lê fio; com perguntas vivas, porta None permite candidato a beco; qualquer porta exclui.
+- `app/ponto/services/pautas_dos_discordantes.py:81-84` `dias_sem_fio`: por `_fio_do_dia` → `_fio_da_porta` (`app/folha/fora_da_folha.py:79`), conserva apenas `nada`, portanto porta None; os demais fios publicados excluem o dia.
+
+Instrumento, separado de produção funcional:
+
+- `app/chamados/management/commands/diff_e3_sombra.py:49-59` projeta porta None como folha fio nada, vigia fio None/exige_admin falso e beco/pauta sem porta verdadeiro; porta presente preserva fio para folha e vigia, exige_admin só para admin. `:143` usa rota/fio na assinatura da comparação. É projeção declarada, não execução dos consumidores (`:47`).
+
+Leitores transitivos do fio agregado:
+
+- `app/folha/retrato_folha.py:1181` chama fora_da_folha; `:1213` grava `dono` por `_fio_cru`; grupos A/B/C/D viram admin/colab/chamado/ninguem (`:177-178`, `:368`); sem grupo também vira ninguem; motivo diverso de furo vira admin (`:364-368`).
+- `app/folha/retrato_folha.py:438-441` `fio_da_linha` aceita os quatro fios gravados de `:175`; valor ausente/inválido cai no legado.
+- `app/folha/retrato_folha.py:474-481` `dono_da_linha` traduz admin→Admin, colab→Colab, chamado/ninguem→Admin pelo mapa `:192`; ninguem vira Hoje quando todas as datas são de hoje em diante (`:477-480`). É um balde de UI, distinto do fio de alcance.
+- `app/folha/retrato_folha.py:1038` `portas_da_linha` usa o fio gravado como fallback de link; mapas admin/colab/chamado em `:975-977`, ninguem sem link de fio. Ações publicadas têm prioridade (`:1025-1037`).
+- `app/folha/retrato_folha.py:1081-1092` `o_que_fazer` lê fio e balde UI, expõe separadamente “Depende de” e texto literal de DESTRAVA.
+- `app/colaboradores/views.py:986-987` lê essas respostas prontas e passa ao template (`:996-997`); `app/templates/colaboradores/partials/painel_colaborador.html:26` inclui a parcial; `app/templates/folha/_retrato_o_que_fazer.html:33-38` só renderiza rótulo/valor/cor; não interpreta fio.
+- `app/folha/views_retrato.py:49-52`/`:318` usa agrupamento/quadros do módulo do retrato; o leitor por grupo dono está em `app/folha/retrato_folha.py:576`, apontando para dono_da_linha.
+- `app/folha/vigia_retido_calado.py:47-49` lê fio gravado ninguem e separa roteados/calados pela lista Cadastro x Realidade; não reinterpreta o fio cru.
+
+Resposta à divergência:
+
+- **Não há dois leitores diretos de produção atribuindo fios diferentes ao mesmo fio publicado**: o único que materializa o fio da porta é `_fio_da_porta`, que preserva o valor (`app/folha/fora_da_folha.py:85`); o vigia preserva o mesmo fio quando há porta (`app/chamados/services/vigia_fio.py:601-602`). O caso interno sistema/rota None não é um segundo leitor cru: a projeção o elimina (`app/chamados/services/tarefa_do_dia.py:683`).
+- **Sim há respostas diferentes a jusante, por perguntas diferentes**: num dia histórico retido sem porta, Folha dá nada/grupo D (`app/folha/fora_da_folha.py:85`, `:93-94`), enquanto o retrato grava ninguem e exibe balde Admin (`app/folha/retrato_folha.py:368`, `:192`, `:481`). Esse comportamento é declarado como agrupamento da UI em `:189-191`; ocorrência nominal no hash [nao verificado].
+- **Também há ação sistêmica apesar da Folha dizer nada**: `app/chamados/management/commands/backfill_fio_morto_e4b.py:87` lê a tarefa e `:101-106` seleciona perguntar/materializar/rejulgar das ações de sistema; o mesmo tipo de tarefa pode ter fio sistema e porta None (`app/chamados/services/tarefa_do_dia.py:163-165`, `:643-657`), portanto Folha devolve nada (`app/folha/fora_da_folha.py:85`). Ele não lê `tarefa['fio']`; lê ações.
+- A fixture confirma somente a ausência da porta e desconhecimento falso, não igualdade do fio com sistema: `app/ponto/tests/test_cxr_tela_le_o_motor.py:382-386`; a palavra sistema está no comentário, enquanto a asserção verifica `(nao_sei, rota, porta) == (False,None,None)`.
 
 ## 14/11 23:20 · sessao 8d6200514031 · - · - · origem=Ronald (tmux)
 
@@ -1004,197 +1176,4 @@ Estes sitios alimentam as nascentes A/B; nao representam novos escritores de nas
 
 [truncado em 20000 de 28205 caracteres]
 
-## 14/11 21:47 · sessao b777389f245f · - · - · origem=Ronald (tmux)
-
-Todas as referencias abaixo sao da copia, sem executar testes nem escrever arquivos. [nao verificado]
-
-| transicao | juiz / nascente | escritor / persistencia | leitor / prova |
-|---|---|---|---|
-| token vazio/antigo -> token registrado | Duas funcoes `api_registrar_fcm`: formato minimo e `:`; app/api/views.py:2461-2476; app/api/views_core.py:994-1009. Rotas app/api/urls.py:99; app/api/urls_core.py:18 | `_gravar_colab(...,'aparelho',{'fcm_token':token})`; app/api/views.py:2476; app/api/views_core.py:1009; `setattr/save` em app/colaboradores/services/colaborador.py:55-61. Nao limpa carimbos antigos de remocao nessas operacoes | Canal: app/core/canal.py:22. Envio: app/chamados/fcm_utils.py:104-106. Prova especifica de registro: nenhum identificado |
-| token presente -> vazio por token compartilhado | Ambas APIs filtram mesmo token excluindo dono atual; app/api/views.py:2473; app/api/views_core.py:1006 | `limpar_fcm` -> update token, `fcm_removido_em`, `fcm_removido_motivo`; evento `fcm_token_removido`; app/colaboradores/fcm.py:55-67 | app/holerite/tests/test_selo_sem_notificacao.py::test_MORDE_aparelho_compartilhado_nao_rouba_token_em_silencio:182; o teste chama limpeza diretamente, nao as duas APIs |
-| token presente -> vazio por FCM invalido | `_token_invalido`: NotFound ou InvalidArgument contendo registration/token; app/chamados/fcm_utils.py:20-27; `push_fcm`:89-94 | `_limpar_token`:41 -> `limpar_fcm`; app/colaboradores/fcm.py:61-67 | app/chamados/tests/test_push_fcm.py::test_10_push_fcm_token_invalido_limpa:206; app/holerite/tests/test_selo_sem_notificacao.py::test_o_FCM_que_recusa_o_token_passa_pelo_escritor_unico:173 |
-| token presente -> vazio no logout | `api_logout`, `if colab.fcm_token`; app/api/views.py:2483-2494 | `_gravar_colab` direto, apenas token e atualizado_em; app/api/views.py:2494. Fora de `limpar_fcm`; nao grava motivo/carimbo especializado nesse sitio | app/core/canal.py:22; prova especializada nenhum |
-| token presente -> vazio no reset onboarding | `resetar_onboarding`; app/core/credenciais.py:150-166; nascente tela app/colaboradores/views.py:1506 | `_gravar_colab(...,'credenciais',...)`:165-166. Trilha `reset_onboarding_adm` se usuario existir:174-181; nao `fcm_token_removido` | app/core/tests/test_bug116_credencial_deixa_trilha.py::test_MORDE_desparear_aparelho_deixa_linha_sem_o_token:108 |
-| subscription inexistente/inativa -> ativa | `salvar_subscription`: POST, colaborador, endpoint/chaves completos; app/ponto/views.py:1975-1990 | `update_or_create(endpoint=..., defaults={'ativa':True,...})`; app/ponto/views.py:1991-1998; modelo app/ponto/models.py:542-552 | Cinco emissores leem ativa; app/chamados/push_utils.py:24; app/ponto/webpush.py:37; commands/processar_alertas_turno.py:275; processar_alertas_avancados.py:206/247. Prova de filtro: app/chamados/tests/test_push_subscription_ativa.py::test_04_nenhum_acesso_ignora_ativa:89 |
-| subscription ativa -> inativa | WebPushException com 410/404; app/ponto/webpush.py:57-59 | `sub.ativa=False; save(['ativa'])`; app/ponto/webpush.py:65-66 | app/core/canal.py:30; app/holerite/tests/test_selo_sem_notificacao.py::test_MORDE_assinatura_DESLIGADA_nao_conta_como_canal:363 |
-| subscription ativa -> apagada | Quatro juizes locais de 410/404: app/chamados/push_utils.py:50; app/ponto/management/commands/processar_alertas_turno.py:298; processar_alertas_avancados.py:225/260 | `sub.delete` respectivamente :51, :300, :226/:261 | app/chamados/tests/test_push_fcm.py::test_08_webpush_410_deleta_subscription:159-172 exige apagar |
-| notificacao_negada_em None -> timestamp | `notificacao_negada`: POST, colaborador, campo ainda None; app/ponto/views.py:1941/1956-1962 | `atualizar_em_lote(...'onboarding', notificacao_negada_em=now)` e evento `notificacao_negada`; app/ponto/views.py:1964-1971 | Campo nunca descarimbado declarado app/ponto/views.py:1949-1951. Estado derivado prefere canal vivo antes da negativa: app/holerite/matriz.py:483-491. Prova app/holerite/tests/test_selo_sem_notificacao.py::test_a_porta_do_beacon_carimba_uma_vez_e_deixa_trilha:416 |
-| inexistente -> EnvioHolerite pendente | `_talvez_job`, quantidade > CORTE_JOB; app/holerite/views.py:635-638. Nascentes validar_e_enviar :615 e reenviar_filtro :740 | create alvo congelado/total/criador/opcoes; app/holerite/views.py:638-642; default pendente app/holerite/models.py:252. Dispara command por Popen e grava pid/iniciado_em :643-645/:664-678 | Polling `_tela_envio`; app/holerite/views.py:681/724-729. app/holerite/tests/test_selo_job_envio.py::test_acima_do_corte_o_request_NAO_empurra_nada:80 |
-| pendente -> enviando | command `_rodar`, estado em EM_CURSO; app/holerite/management/commands/enviar_holerites_em_lote.py:43-50 | queryset.update estado/pid/iniciado_em :51-53 | app/holerite/views.py:698-702. app/holerite/tests/test_selo_job_envio.py::test_o_job_envia_carimba_progresso_e_fecha_o_placar:143 |
-| enviando -> concluido | `servicos.enviar` retorna sem exception; app/holerite/management/commands/enviar_holerites_em_lote.py:66-81 | estado, placar, progresso=total, concluido_em, pid=None; :79-81 | app/holerite/views.py:702-719. Prova anterior :143-155 |
-| enviando -> erro | exception de `servicos.enviar`; command :71-78 | estado erro, repr(exc), concluido_em, pid=None; :74-76 | app/holerite/views.py:717-719. Prova especifica exception: nenhum identificado |
-| pendente/enviando -> erro por processo morto | `_tela_envio` chama `job_morreu`; app/holerite/views.py:688; predicado estado/pid/carencia 15s/os.kill; app/holerite/models.py:283-293 | queryset.update estado erro/pid=None/erro/concluido_em; app/holerite/views.py:690-694 | app/holerite/tests/test_selo_job_envio.py::test_MORDE_job_morto_vira_erro_e_nao_barra_eterna:221 |
-| holerite sem aviso/falha -> avisado | `servicos.enviar`, retorno _push ok; app/holerite/servicos.py:109-114. Nascentes views.validar_e_enviar :618 via servicos :155; views.reenviar_filtro :745; command enviar_holerites_em_lote :66 | `avisado_em=now`, limpa falha; app/holerite/servicos.py:113-114; evento holerite_envio :134-140 | Juiz leitura app/holerite/matriz.py:480-495. Prova app/holerite/tests/test_selo_vocabulario_envio.py::test_MORDE_o_envio_que_da_certo_apaga_a_falha:287 |
-| holerite -> falha carimbada | _push sem ok e motivo diferente de sem_token; app/holerite/servicos.py:109/116/124 | falha_em/falha_motivo; :129-131; nao zera aviso anterior | app/holerite/matriz.py:480/493. app/holerite/tests/test_selo_vocabulario_envio.py::test_MORDE_push_que_falha_CARIMBA_a_falha:301 |
-| holerite com falha -> falha limpa por sem_token | retorno motivo sem_token; app/holerite/servicos.py:116 | update falha_em=None/falha_motivo=''; :121. Nao escreve estado enum | app/holerite/matriz.py:483-493. Prova especifica dessa limpeza: nenhum identificado |
-| holerite sem aviso/falha/avisado -> aviso/lembrete carimbado | command lembrar_holerites `--apply`; elegibilidade :77-94 e token_voltou :46-56 | no ok: lembretes_n+1, ultimo_lembrete_em, limpa falha; se sem aviso, avisado_em=agora; app/holerite/management/commands/lembrar_holerites.py:95-108 | proximo_lembrete :123-144. app/holerite/tests/test_selo_vocabulario_envio.py::test_MORDE_o_cron_REALMENTE_reenvia_quem_falhou:274. **Nao cron ativo**, exclusao expressa app/config/crons.py:1397 |
-| holerite/lote -> aviso legado carimbado | `avisar_lote`, POST, nao avisado ou forcar=1, resultado FCM ok; app/holerite/views.py:1794/1803-1815 | holerite avisado_em :1821-1823; lote avisado_em e avisados_n mesmo com zero sucesso :1826-1828. Nao limpa falha de holerite | app/holerite/matriz.py:480. Prova especifica nenhum identificado |
-| inexistente -> cobertura.push_status pendente | `designar_cobertura`; app/ponto/services/cobertura.py:22; validacoes :52-98 | create ordem com push_status pendente :101-113 | proprio emissor :156-187. app/ponto/tests/test_cobertura_caracterizacao.py::test_caminho_feliz_201:109 |
-| pendente -> enviado / falhou | juiz local push_ok e FCM ok; app/ponto/services/cobertura.py:157-183 | push_enviado_em=now mesmo falhou; push_status e save :185-187 | resposta JSON :192-193; teste anterior so aceita enviado/falhou e carimbo :116-118 |
-| inexistente -> cobertura.push_status '' | declaracao passada com substituto, marcos e ordem ainda inexistente; app/ponto/services/cobertura.py:275-291 | create push_status='' :291-294; sem envio deliberado :203-206 | app/ponto/tests/test_declarar_cobertura_passada.py::test_MORDE_com_nome_a_ordem_nasce_concluida_no_turno_e_sem_push:54 |
-
-Censos e achados para consolidacao:
-
-- **FCM: 26 nascentes diretas de producao** chamam `push_fcm_colaborador`; wrapper unico chama `push_fcm` em app/chamados/fcm_utils.py:106. Lista completa enviada em mensagem anterior. Envio externo e retorno message_id em app/chamados/fcm_utils.py:85-87; isso nao constitui ACK de consumo no aparelho.
-- **Web Push: cinco sitios de chamada do driver**: app/chamados/push_utils.py:40; app/ponto/webpush.py:50; app/ponto/management/commands/processar_alertas_turno.py:288; processar_alertas_avancados.py:215/250. Os wrappers tradicionais tem **23 chamadas push_colaborador + 35 push_dp + 10 push_supervisao**; mais uma chamada push_web_colaborador app/holerite/servicos.py:42. Lista completa enviada.
-- **L1 token removido**: cinco nascentes julgadoras (duas APIs compartilham, FCM invalido, logout, reset), referencias na tabela.
-- **L1 registro token**: duas funcoes/predicados clonados app/api/views.py:2461-2476 e app/api/views_core.py:994-1009.
-- **L1 subscription expirada**: cinco predicados 410/404, com destinos diferentes (um desativa, quatro apagam), referencias na tabela.
-- **L1 EnvioHolerite -> erro**: exception no command app/holerite/management/commands/enviar_holerites_em_lote.py:71 e processo morto no polling app/holerite/views.py:688 / models.py:283-293.
-- **L1 aviso holerite**: tres operacoes escrevem aviso por sucesso: app/holerite/servicos.py:113, app/holerite/management/commands/lembrar_holerites.py:99-104, app/holerite/views.py:1821-1823; elegibilidades diferentes.
-- **L2 limpeza token: dois sitios fora da funcao especializada declarada escritora unica** (app/colaboradores/fcm.py:1): logout app/api/views.py:2494 e reset app/core/credenciais.py:165-166. Ambos passam pelo escritor generico do Colaborador, app/colaboradores/services/colaborador.py:55-61. Nao confundir fora de limpar_fcm com fora de toda porta.
-- **Selo fraco identificado**: app/holerite/tests/test_selo_sem_notificacao.py::test_MORDE_nenhum_sitio_apaga_o_token_por_fora:240 procura so regex `update(...fcm_token='')` na mesma linha (:264), nao morde os dois dicionarios passados para `gravar`.
-- **L2 Web Push**: app/ponto/webpush.py:1 declara emissor unico; quatro chamadas de driver/limpezas existem fora dele, referencias acima. `push_utils` nao passa pelo escritor que desativa.
-- **L2 holerite**: `servicos.enviar` declara carimbar aviso (app/holerite/servicos.py:78), mas command e avisar_lote tambem escrevem campos de aviso (tabela). Nao ha porta unica de EnvioHolerite declarada no modelo lido: sua escrita dispersa nao deve virar violacao de porta inventada.
-- **L3 EnvioHolerite**: concluido e erro sao dois terminais declarados app/holerite/models.py:241; command recusa fora de EM_CURSO app/holerite/management/commands/enviar_holerites_em_lote.py:47-50.
-- **L3 cobertura push**: enviado, falhou e '' sao alcancaveis pelos escritores da tabela; nao encontrei operacao de producao que os retire. Terminal nao declarado app/ponto/models.py:1119-1126. As funcoes nao reapresentam a mesma ordem ao envio.
-- **L3 campo de negativa**: notificacao_negada_em carimbado nao sai por operacao lida; terminal do campo declarado app/ponto/views.py:1949-1951. O estado derivado de canal pode sair pela assinatura/token; app/core/canal.py:22-30; app/holerite/matriz.py:483-491.
-- **Falso positivo persistido**: cobertura define push_ok=True depois de `push_colaborador`, ignorando seu dict de retorno (app/ponto/services/cobertura.py:160-166); o wrapper pode devolver ok=False sem excecao por falta de usuario/subscription (app/chamados/push_utils.py:24-26/116-118). Assim `push_status='enviado'` nao prova que sequer algum driver confirmou sucesso; escritor app/ponto/services/cobertura.py:186. Teste caminho feliz nao morde essa distincao (app/ponto/tests/test_cobertura_caracterizacao.py:116-118).
-- **Falso positivo nao persistido como estado local de push**: recobrar_questionario ignora dict de retorno FCM e marca `enviou=True` apos a chamada (app/chamados/services/disputa_emissao.py:1728-1732); apenas citar sitio da outra entidade.
-- **Concorrencia EnvioHolerite**: command aceita tambem estado enviando e faz update por pk sem comparar estado no update, app/holerite/management/commands/enviar_holerites_em_lote.py:47-53. Corrida efetiva em producao [nao verificado]. Reentrada `enviando -> enviando` nao e mudanca de valor do estado.
-- Command `zerar_dados_operacionais` apaga subscriptions app/ponto/management/commands/zerar_dados_operacionais.py:88, mas exige banco de ensaio :25-27; nao contar como nascente alcancavel em producao.
-- Sem banco/log, ocorrencias reais, volume e entrega no aparelho [nao verificado]. Testes citados foram lidos, nao executados. [nao verificado]
-
-## 14/11 21:46 · sessao b14fc0b2ba21 · - · - · origem=Ronald (tmux)
-
-Censo por AST, sem importar o modulo: **89 entradas de relogio** (76 `C`, 13 `RAW`), **15 `ENC`**, **104 declaracoes**; 8 entradas `por_empresa=True` e universo de 3 empresas resultam em 105 linhas de relogio, antes de tentar derivar os horarios (`app/config/crons.py:17`, `:281`, `:755`, `:1523`, `:1801`, `:1888-1909`). A instalacao real e a execucao em producao sao [nao verificado].
-
-### Outbox MensagemSaida
-
-Modelo com **4 estados**: `pendente`, `enviada`, `falha`, `descartada`; default `pendente`; chave unica `dedup_key`; contador de tentativas, erro e datas (`mensageria/nucleo/models.py:79-95`).
-
-| # | estado de partida -> estado de chegada | juiz (arquivo:linha) | operacao (funcao) | escritor (arquivo:linha) | o que persiste (campos/modelos/trilha) | leitores (arquivo:linha) | prova (teste ou selo que morde, arquivo::nome, ou "nenhum") | [nao verificado]
-|---|---|---|---|---|---|---|---|
-| M1 | inexistente -> pendente | Cliente ativo e nao pausado; core devolve algum chamado com `verbo=cobrar`; dedup da chave (`mensageria/nucleo/management/commands/cobrar.py:46-61`). Na escalada WhatsApp exige telefone e `_deve_escalar`: canal habilitado mais push descartado ou 2 enviados nos ultimos 7 dias (`:18-30`, `:73-75`). Sentinela exige cliente ativo, alerta elegivel, fora da sombra e destino cadastrado (`mensageria/nucleo/management/commands/entregar.py:35-55`) | `cobrar.Command.handle`; `entregar(cliente)` | **3 sitios** `get_or_create`: `cobrar.py:60`, `:75`; `entregar.py:54`; default do status em `models.py:91` | `MensagemSaida`: cliente, identificador destino, canal, corpo, dedup_key, status default e criada_em (`models.py:84-95`). Sentinela tambem grava `RegistroAcao`, sitio apenas (`entregar.py:64-74`) | Sender seleciona pendentes (`enviar_outbox.py:36-40`); admin (`mensageria/nucleo/admin.py:10-14`) | `mensageria/nucleo/tests/test_cobrar.py::test_01_so_verbo_cobrar_vira_mensagem` (:34), `::test_03_dedup_por_colab_dia` (:46); `test_cobrar_escalada.py::test_02_push_descartado_escala_na_hora` (:58), `::test_03_silencio_apos_dois_pushes_escala` (:66); `test_entregar.py::test_09_fora_da_sombra_materializa_uma_linha_por_alerta_por_dia` (:83) |
-| M2 | pendente -> enviada | Cliente ativo/nao pausado e saldo do teto; push so quando resposta dict tem `ok`; WhatsApp quando driver retorna sem excecao (`enviar_outbox.py:28-40`, `:45-63`) | `enviar_outbox.Command.handle -> _enviar` | `mensageria/nucleo/management/commands/enviar_outbox.py:74-77` | status enviada, enviada_em=now, erro vazio; tentativas nao incrementa no sucesso (`:74-77`) | Teto do sender conta enviadas (`:29-32`); `_deve_escalar` conta enviadas (`cobrar.py:25-30`); admin (`admin.py:12-13`) | `test_enviar_outbox.py::test_01_envia_e_respeita_teto` (:24-31), `::test_04_enviada_nao_reenvia` (:58-62); `test_outbox_whatsapp.py::test_01_roteia_para_o_driver_com_o_destino_da_linha` (:34-43) |
-| M3 | pendente -> pendente, com tentativa registrada | Excecao transitoria e tentativas ainda abaixo de 3 (`enviar_outbox.py:15`, `:64-71`) | `_enviar` | `enviar_outbox.py:65-71` | tentativas+1, erro truncado a 1000; status permanece pendente; logger.error (`:65-72`) | Proxima selecao de pendentes (`:36-40`); admin (`admin.py:12-13`) | `test_enviar_outbox.py::test_ok_false_nao_vira_enviada` (:83-91), `::test_erro_transitorio_continua_pendente` (:130-133); `test_outbox_whatsapp.py::test_03_erro_transitorio_tenta_de_novo` (:56-63) |
-| M4 | pendente -> falha | Excecao que nao e `RecusaPermanente`, com tentativas >=3 (`enviar_outbox.py:64-70`) | `_enviar` | `enviar_outbox.py:65-71` | status falha, tentativas+1, erro, log (`:65-72`) | Admin (`admin.py:12-13`); sender deixa fora por selecionar somente pendente (`enviar_outbox.py:37`) | `test_enviar_outbox.py::test_03_falha_conta_tentativa_e_sela_na_terceira` (:47-55) |
-| M5 | pendente -> descartada | `RecusaPermanente`; push classifica `sem_token`, `token_invalido` ou flag token_invalido (`enviar_outbox.py:19`, `:49-54`, `:67-68`); WhatsApp decide destino invalido e codigos permanentes do provedor (`mensageria/nucleo/whatsapp.py:33-34`, `:65-68`) | `_enviar`, chamando core ou driver WhatsApp | `enviar_outbox.py:65-71` | status descartada, tentativas+1 mesmo na primeira recusa, erro, log (`:65-72`) | `_deve_escalar` le descartada (`cobrar.py:25-29`); admin (`admin.py:12-13`); sender deixa fora (`enviar_outbox.py:37`) | `test_enviar_outbox.py::test_sem_token_vira_descartada_na_primeira` (:118-122), `::test_descartada_nao_e_reprocessada` (:124-128); `test_outbox_whatsapp.py::test_02_recusa_permanente_descarta_sem_queimar_tentativas` (:46-53) |
-
-**Nascentes de producao do nascimento M1:** comando `cobrar` (`cobrar.py:39-45`); comando `entregar` (`entregar.py:79-91`); cron RAW 07:24 `sentinela_diario.sh` (`app/config/crons.py:688`) chama loop cujo terceiro passo e `entregar` (`mensageria/bin/sentinela_diario.sh:14-16`). Agendamento de `cobrar` e de `enviar_outbox`: [nao verificado]; nao aparecem literalmente nas declaracoes lidas de `config/crons.py`.
-
-**Caminho push do sender:** `core_client.push` faz POST e devolve JSON, levantando em HTTP falho (`mensageria/nucleo/core_client.py:83-93`); a API tenta FCM, depois webpush quando FCM nao confirmou, e devolve `ok` agregado; em falha preserva motivo FCM para classificacao permanente do sender (`app/api/views_mensageria.py:478-520`). O driver WhatsApp exige ID de mensagem na resposta para retornar sucesso (`mensageria/nucleo/whatsapp.py:70-74`). O sender nao persiste esse ID em `MensagemSaida` (`enviar_outbox.py:74-77`; campos do modelo em `models.py:84-95`).
-
-**L1 desta fatia:** M1 tem tres ramos de nascimento/juizes; M2 tem selecao do sender e confirmacao de dois drivers; M5 tem classificacao permanente no sender e no driver WhatsApp, nos sitios acima. M3/M4 compartilham a decisao excecao/teto dentro de `_enviar` (`enviar_outbox.py:64-71`).
-
-**L2 desta fatia:** nao encontrei escrita explicita de status fora do sender, alem do nascimento pelos 3 `get_or_create` e default do modelo, nos sitios acima. Ha registro de `MensagemSaida` em `ModelAdmin` sem `readonly_fields` e sem override de gravacao (`mensageria/nucleo/admin.py:10-14`); **ESPECULACAO**: CRUD herdado pode fornecer uma porta generica para status, pois o codigo do framework nao foi lido. Portanto, nao afirmar escritor unico absoluto.
-
-**L3 desta fatia:** `enviada`, `falha`, `descartada` nao saem por nenhuma operacao explicita lida; sender so seleciona pendente (`enviar_outbox.py:37`), levando a esses estados em `:68`, `:70`, `:74`. Sao terminais operacionais do sender, sem declaracao `TERMINAIS` no modelo (`models.py:82-95`); terminalidade absoluta diante do admin: [nao verificado]. `descartada` pode originar **outra mensagem** WhatsApp, sem mudar a mensagem anterior (`cobrar.py:28-29`, `:74-85`).
-
-### Ciclo cron: marcas reais, sem inventar coluna status
-
-Nao ha status persistido do cron em `config/crons.py`; o runner persiste marca de processo, linha de corrida JSONL, carimbo de fim e flag de quebra (`bin/cron_run.sh:9-13`, `:22-35`). `AGUARDA`, `OK`, `ERRO`, `NAO_RODOU`, `ALARME`, `DEPENDENCIA_QUEBRADA` sao classificacoes calculadas na leitura do placar, sem save (`app/core/management/commands/pipeline_placar.py:110-137`).
-
-| # | estado de partida -> estado de chegada | juiz (arquivo:linha) | operacao (funcao) | escritor (arquivo:linha) | o que persiste (campos/modelos/trilha) | leitores (arquivo:linha) | prova (teste ou selo que morde, arquivo::nome, ou "nenhum") | [nao verificado]
-|---|---|---|---|---|---|---|---|
-| C1 | marca em_curso ausente -> presente | Invocacao do runner (`bin/cron_run.sh:5-10`) | script `cron_run.sh` | `bin/cron_run.sh:9-10` | `logs/crons_em_curso/<nome>_<emp>.<pid>` contendo timestamp (`:9-10`) | Deploy consulta marca e PID (`bin/deploy.sh:108-113`) | Estrutural somente: `bin/contrato_deploy.sh:81-82`; nenhum teste comportamental lido do writer |
-| C2 | marca em_curso presente -> ausente | Trap EXIT (`bin/cron_run.sh:10`) | trap do runner | `bin/cron_run.sh:10` | Remove marca (`:10`) | Deploy (`bin/deploy.sh:108-113`) | nenhum |
-| C3 | marca em_curso presente -> ausente | PID da marca nao existe em `/proc` (`bin/deploy.sh:108-109`) | `em_curso` | `bin/deploy.sh:109` | Remove marca considerada lixo (`:104`, `:109`) | `recusa_restart_com_cron` (`:110-113`) | nenhum comportamental lido para a remocao |
-| C4 | corrida sem registro de fim -> registro JSONL | Retorno do comando `bash -c` (`bin/cron_run.sh:11-13`) | `cron_run.sh` | `bin/cron_run.sh:13` | Append nome, emp, ini, fim, dur, exit em `app/logs/placar.jsonl` (`:6-13`) | `pipeline_placar.medidos` (`app/core/management/commands/pipeline_placar.py:61-82`); `crons_quebrados` (`app/core/services/crons_quebrados.py:24-47`); medidor (`bin/crons_duracao.py:26`, `:59`) | `app/core/tests/test_crons_quebrados.py::test_MORDE_a_ultima_corrida_morta_conta_e_a_recuperada_nao` (:41-49), testa leitor |
-| C5 | carimbo fim ausente -> presente; ou presente -> sobrescrito | RC igual 0 ou 2 (`bin/cron_run.sh:22`) | `cron_run.sh` | `bin/cron_run.sh:23-25` | timestamp em `logs/fim/<nome>.<emp>.<data>` (`:23-25`) | Encadeado verifica ja rodou (`bin/encadeado.sh:81-82`) e todos os gatilhos (`:84-90`) | `bin/tests/test_furo_encadeado_ao_cartorio.sh:24-27` e `:45-76`, com limitacoes abaixo |
-| C6 | flag quebrado ausente -> presente | Nome != cron_quebrado, RC fora 0/2, flag ausente e comando avisar termina sucesso (`bin/cron_run.sh:29-33`) | `cron_run.sh -> cron_quebrado -> avisar_quebra` | `bin/cron_run.sh:33` | Touch `logs/crons_quebrados/<nome>_<emp>.flag`; chamada de Pauta apenas sitio (`app/core/management/commands/cron_quebrado.py:37`, `app/core/services/crons_quebrados.py:57-73`) | Runner consulta flag (`bin/cron_run.sh:33-35`) | `app/core/tests/test_crons_quebrados.py::test_MORDE_pauta_na_quebra_uma_so_e_fecha_na_volta` (:54-62), testa servico/command, nao touch |
-| C7 | flag quebrado presente -> ausente | RC 0/2, flag presente, command recuperacao termina sucesso (`bin/cron_run.sh:32-35`) | `cron_run.sh -> cron_quebrado -> avisar_recuperacao` | `bin/cron_run.sh:35` | Remove flag; recuperacao da Pauta so sitio (`app/core/management/commands/cron_quebrado.py:34-35`, `app/core/services/crons_quebrados.py:76-82`) | Runner (`bin/cron_run.sh:33-35`) | Mesmo teste (:54-62), sem teste shell da flag lido |
-
-**Todas as nascentes do runner:** render de entradas RAW e C pelo `_run` (`app/config/crons.py:1506-1509`, `:1883-1897`); entradas encadeadas pelo `exec` de `bin/encadeado.sh:101-104`. O render chama `--corrente` na linha da raiz quando ha elos (`app/config/crons.py:1907-1908`); o modo corrente consulta a declaracao e percorre elos (`bin/encadeado.sh:40-68`). A entrada `consumir_eventos_celula` roda declaradamente a cada minuto (`app/config/crons.py:393-394`); `reconciliar_chamados` esta como vigia `--alarme`, a cada 15 minutos (`:395`).
-
-**L1 cron: 1 transicao** com dois juizes de remocao de marca: C2/C3, EXIT e PID inexistente (`bin/cron_run.sh:10`; `bin/deploy.sh:109`). Se a tabela consolidada mantiver C2 e C3 como duas linhas, reunir como mesma aresta com duas operacoes para contar L1 uma vez.
-
-**L2 cron: 1 escritor fora do runner**: `em_curso` remove a marca (`bin/deploy.sh:109`), cujo escritor/deletor original e o envelope (`bin/cron_run.sh:9-10`).
-
-**L3 cron:** registro JSONL e carimbo fim nao apresentam remocao de producao encontrada nos sitios pesquisados; sao trilhas/marcos historicos, nao coluna de estado da entidade (`bin/cron_run.sh:13`, `:25`). Nao converter automaticamente em “estado sem saida”. A flag quebrado e a marca em_curso tem saidas explicitas (`:10`, `:35`; `bin/deploy.sh:109`).
-
-### Limitacoes que importam para consolidacao
-
-- **15 selos cron estao marcados expectedFailure ate 20/11/2026**, inclusive envelope, expansao, duplicata, horarios e placar (`app/core/tests/marca_cron15.py:24`, `:29-47`, `:57-62`). Os nomes dos testes existem e suas assercoes mordem, mas nao sao prova de verde atual executado.
-- A razao declarada e a sombra que nao cabe no corredor (`app/core/tests/marca_cron15.py:3-15`). Nao medi nem derivei o horario real.
-- O selo shell de encadeamento tem parte estrutural e parte executavel, mas foi somente lido (`bin/tests/test_furo_encadeado_ao_cartorio.sh:24-27`, `:45-76`); nao o executar no trabalho somente leitura.
-- Contagens sao da copia lida; crontab instalado, banco, flags e logs atuais sao [nao verificado].
-- Agendamento efetivo do sender `enviar_outbox` e do `cobrar` permanece [nao verificado]; nascimento por `entregar` tem cron indireto confirmado nos sitios acima.
-- O admin de `MensagemSaida` e uma lacuna de exclusividade de escritor, nao um `.save()` local demonstrado (`mensageria/nucleo/admin.py:10-14`).
-
-## 14/11 21:46 · sessao 8c339da2e6f9 · MAPAS-DOS-RIOS · leitura · origem=Code
-
-# MAPA DOS RIOS — FERIADO E CALENDARIO
-
-## 1. RESUMO
-
-1. `Feriado` tem **6 campos cadastrais**, **3 abrangencias** (`nacional`, `estadual`, `municipal`) e **nenhum campo de status**. (`app/core/models.py:5-28`)
-2. Foram identificados **4 eventos de transicao**: nascimento, edicao, carimbo historico de fonte e exclusao; **5 sitios de persistencia**. (`app/core/views_config.py:70`, `:83`, `:144`, `:201`; `app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:35`)
-3. Nascimento tem **2 portas**: cadastro manual e importacao; existem **4 rotas mutantes** e **1 entrada historica por RunPython**. (`app/core/urls.py:42-45`; `app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:58`)
-4. Importacao admite **9 combinacoes mes/dia**; unicidade cadastral usa **4 campos**: data, abrangencia, UF e municipio. (`app/core/views_config.py:113-123`; `app/core/models.py:28`)
-5. Calendario acrescenta **0 transicoes persistidas proprias**: oferta e competencia sao resultados em memoria. (`app/colaboradores/services/calendario.py:11`, `:769`, `:794-810`)
-6. Oferta tem **3 pernas** e aceita **4 status**; permissao de quem observa fica separada. (`app/colaboradores/services/calendario.py:94-104`; `app/templates/colaboradores/partials/_calendario_grade.html:131`)
-7. Existem **4 chamadas diretas** ao produtor do calendario; a porta plural tem **1 consumidor direto**. (`app/colaboradores/views.py:1949`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160`; `app/colaboradores/services/calendario.py:132`; `app/chamados/services/vigia_fio.py:271`)
-8. CRUD solicita trilha; importacao e backfill nao a solicitam nesses corpos; falhas de auditoria sao capturadas. (`app/core/views_config.py:75`, `:87`, `:127-152`, `:194`; `app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:20-35`; `app/core/auditoria.py:17-29`)
-
-## 2. TABELA DE TRANSICOES
-
-“Cadastrado”, “alterado” e “removido” abaixo descrevem existencia e valores do registro; nao sao enums adicionados ao modelo. As abrangencias usam as mesmas operacoes, sem portas especificas nacional→estadual→municipal. (`app/core/models.py:5-31`; `app/core/views_config.py:55-70`)
-
-| # | estado de partida -> estado de chegada | juiz (arquivo:linha) | operacao (funcao) | escritor (arquivo:linha) | o que persiste (campos/modelos/trilha) | leitores (arquivo:linha) | prova (teste ou selo que morde, arquivo::nome, ou "nenhum") | [nao verificado]
-|---|---|---|---|---|---|---|---|
-| T1 | Registro inexistente → `Feriado` cadastrado. (`app/core/views_config.py:83`, `:144`) | Manual: `_requer_admin`, POST e `fonte` preenchida. (`app/core/views_config.py:12-13`, `:42-50`) Importacao: permissao/POST, data parseavel, allowlist e deduplicacao. (`app/core/views_config.py:136-147`, `:158`) Unicidade no modelo. (`app/core/models.py:28`) | **Nascente manual:** rota novo → `form_feriado`. (`app/core/urls.py:42`) **Nascente importacao:** rota importar → `importar_feriados_nacionais` → `_importar_do_payload`. (`app/core/urls.py:45`; `app/core/views_config.py:156`, `:167`) | Manual: `objects.create`. (`app/core/views_config.py:83-86`) Importado: `objects.get_or_create`. (`app/core/views_config.py:144-147`) | Manual grava os 6 campos e solicita trilha `criar`, com valores posteriores. (`app/core/views_config.py:83-94`) Importacao fixa nacional/UF vazia/municipio vazio e usa nome/fonte da allowlist como defaults; existente e preservado, sem nova criacao. Nao chama auditoria nesse corpo. (`app/core/views_config.py:127-152`) | Lista cadastral. (`app/core/views_config.py:24`) Alcance territorial. (`app/core/feriados.py:57-83`) Calendario. (`app/colaboradores/services/calendario.py:317-318`) | `app/core/tests/test_smoke_clique_feriado_form.py::test_o_clique_no_Salvar_do_novo_grava_o_feriado_digitado` — `app/core/tests/test_smoke_clique_feriado_form.py:119-127`. Importacao: `app/core/tests/test_contract_feriado_fonte.py::test_MORDE_payload_com_carnaval_cria_zero_carnaval` — `app/core/tests/test_contract_feriado_fonte.py:55-74`. |
-| T2 | Mesmo registro, valores anteriores → valores submetidos dos 6 campos. (`app/core/views_config.py:61-70`) | `_requer_admin`, existencia por `fid`, POST e fonte preenchida. (`app/core/views_config.py:42-50`) | **Nascente:** rota editar → `form_feriado`. (`app/core/urls.py:43`; `app/core/views_config.py:41`) | Atribuicoes e `feriado.save()`. (`app/core/views_config.py:64-70`) | Atualiza nome/data/abrangencia/UF/municipio/fonte; solicita trilha `editar` com antes/depois. (`app/core/views_config.py:61-80`) | Lista e alcance. (`app/core/views_config.py:24`; `app/core/feriados.py:57-83`) Signal captura a data antiga e entrega datas antiga/nova ao servico de futuras. (`app/core/signals.py:14-36`) | `app/core/tests/test_smoke_clique_feriado_form.py::test_o_clique_no_Salvar_do_editar_muda_o_feriado_e_nao_cria_outro` — `app/core/tests/test_smoke_clique_feriado_form.py:135-143`. |
-| T3 | Registro legado com `fonte=''` → fonte carimbada pela migracao. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:29-35`) | Pula fonte preenchida; distingue nacional das demais abrangencias; nacional consulta mapa de datas ou recebe texto de ausencia de base. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:29-34`) | **Nascente historica:** `Migration.operations` → `RunPython(carimbar_fonte, desfazer)`. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:58`) | Modelo historico via `apps.get_model`; atribuicao e `save(update_fields=['fonte'])`. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:27-35`) | Somente `fonte`: referencia cadastrada ou declaracao textual de pendencia. Sem chamada de auditoria nesse corpo. Reverso `desfazer` e `pass`. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:17`, `:20-39`) | Lista exibe fonte. (`app/templates/core/config/feriados.html:48`) O predicado de alcance nao consulta fonte. (`app/core/feriados.py:57-67`) | nenhum |
-| T4 | `Feriado` cadastrado → registro removido fisicamente. (`app/core/views_config.py:188-201`) | `_requer_admin`, POST e existencia do registro. (`app/core/views_config.py:186-188`) | **Nascente:** rota excluir → `excluir_feriado`. (`app/core/urls.py:44`; `app/core/views_config.py:185`) | `feriado.delete()`. (`app/core/views_config.py:201`) | Solicita trilha `excluir` antes do delete; motivo opcional; retrato anterior inclui nome/data/abrangencia/UF/municipio, sem fonte. (`app/core/views_config.py:193-200`) | `post_delete` entrega a data ao servico de futuras. (`app/core/signals.py:39-43`) Consultas seguintes leem o cadastro restante. (`app/core/feriados.py:27-29`) | `app/core/tests/test_smoke_clique_excluir_feriado.py::test_o_clique_em_Excluir_confirmado_na_caixa_apaga_o_feriado_com_trilha` — `app/core/tests/test_smoke_clique_excluir_feriado.py:110-126`. |
-
-A trilha solicitada pelo CRUD passa por `registrar_log` e chega a `LogAuditoria`; o adaptador captura excecoes, portanto a chamada nao garante que a trilha persistiu. (`app/core/auditoria.py:8-29`; `app/core/observ.py:133-139`)
-
-### Percurso do calendario: leitura, oferta, acao e competencia
-
-- **Feriado nacional/local/praca:** `alcanca` decide por abrangencia, UF e municipio normalizado; sem municipio, somente nacional alcanca. `feriados_do_colab` compoe esse alcance com o municipio do posto do vinculo que responde pela data. Isso seleciona dados para leitura, sem alterar `Feriado`. (`app/core/feriados.py:32-67`, `:101-105`, `:124-166`)
-- **Oferta de “Resolver dia”:** exige ultimo recurso, data passada e status em `falta|irregular|aberto|sem_certidao`. Ultimo recurso depende do inicio da competencia atual e da ausencia de pergunta viva respondida. O resultado e atribuido ao dicionario da tela. (`app/colaboradores/services/calendario.py:94-104`, `:463-477`, `:738-739`, `:769`)
-- **Oferta versus permissao:** o template exige `pode_veredito` e `dia.resolver_dia_oferecido`; o predicado da oferta declara que permissao pertence ao observador. (`app/templates/colaboradores/partials/_calendario_grade.html:131-132`; `app/colaboradores/services/calendario.py:100-104`)
-- **Resolver efetivamente:** o POST entra em `veredito_celula_view`, verifica metodo/permissao, datas e veredito, e despacha ao servico; esse corpo nao consulta novamente `resolver_dia_oferecido`. O cruzamento com a entidade que recebe a decisao fica no sitio `app/ponto/services/veredito_celula.py:211`. (`app/ponto/views.py:3352-3381`)
-- **Competencia do calendario:** `janela_fechamento` usa corte da empresa, fallback 21 e limite 2–28. O calendario consulta a janela uma vez, usa-a em `modo=competencia` e entrega o rotulo pronto; as setas preservam esse modo. Nao grava competencia. (`app/ponto/janelas.py:10-21`, `:36-57`; `app/colaboradores/services/calendario.py:175-180`, `:794-810`; `app/templates/colaboradores/calendario_partial.html:37-41`)
-
-**Nascentes de leitura localizadas:** perfil, drawer, relatorio e porta plural chamam `contexto_calendario`; o vigia consome a plural pelos seus dois censos. (`app/colaboradores/views.py:1949`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160`; `app/colaboradores/services/calendario.py:132`; `app/chamados/services/vigia_fio.py:271`, `:429`, `:641`)
-
-**Commands e crons que chegam a essa leitura:** `vigiar_fio_morto`, `backfill_fio_morto_e4b` e `materializar_passivo_validado` chamam os censos; o primeiro participa de encadeamento de cron. Esses sitios nao acrescentam escritor de Feriado ou Calendario. (`app/chamados/management/commands/vigiar_fio_morto.py:180-181`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:78`; `app/chamados/management/commands/materializar_passivo_validado.py:206`; `app/config/crons.py:1736-1738`)
-
-**Demais commands com feriado no nome, discriminados por destino:** `reavaliar_ausencias_feriado` e vigia sem escrita, agendado as 07:02 com `--alarme`; `marcar_feriado_do_posto` escreve cadastro de Posto; `sincronizar_feriado_admin` chega ao escritor do vinculo. Os dois ultimos constam como atos humanos/sob ordem. Sao cruzamentos, sem mapa dessas outras entidades aqui. (`app/ponto/management/commands/reavaliar_ausencias_feriado.py:35-46`; `app/config/crons.py:608`, `:1346-1351`, `:1421`; `app/colaboradores/management/commands/marcar_feriado_do_posto.py:131-137`; `app/colaboradores/management/commands/sincronizar_feriado_admin.py:53-56`)
-
-**Efeitos dos eventos de Feriado sobre outras entidades:** os sitios de saida sao `app/ponto/services/cadastro_futuro.py:49-79` e `app/chamados/signals.py:326-337`. O primeiro recebe datas antiga/nova no save e a data removida no delete; o segundo recebe apenas a data atual no save e declara nao tratar delete. (`app/core/signals.py:35-43`; `app/chamados/signals.py:322-337`)
-
-**Provas do calendario, sem converter projecoes em transicoes:**
-
-- Oferta: `app/chamados/tests/test_o261_vigia_fio.py::test_MORDE_cada_perna_do_predicado`, em `app/chamados/tests/test_o261_vigia_fio.py:930-934`; leitura pelo template: `app/chamados/tests/test_o261_vigia_fio.py::test_o_template_LE_o_juiz_e_nao_tem_segunda_copia`, em `app/chamados/tests/test_o261_vigia_fio.py:943-952`.
-- Paridade da porta plural: `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py::test_RED_porta_do_vigia_le_o_mesmo`, em `app/colaboradores/tests/test_e4cal_l1_r8_resolver_pela_lavra.py:79-87`.
-- Competencia: `app/colaboradores/tests/test_ui_cal_competencia.py::test_RED_as_setas_nao_perdem_o_modo`, em `app/colaboradores/tests/test_ui_cal_competencia.py:135-144`; `app/colaboradores/tests/test_ui_cal_competencia.py::test_MORDE_o_template_NAO_deriva_a_janela`, em `app/colaboradores/tests/test_ui_cal_competencia.py:147-167`.
-
-## 3. TRES LISTAS
-
-### L1 TRANSICAO COM MAIS DE UM JUIZ — 4
-
-Contagem literal de transicoes condicionadas por mais de uma funcao/predicado, incluindo permissao, metodo e existencia; essa contagem nao significa quatro conflitos entre regras concorrentes. Os gates correspondentes estao nos sitios abaixo. (`app/core/views_config.py:42-50`, `:136-147`, `:158`, `:186-188`; `app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:29-34`)
-
-1. **T1 — nascimento:** manual combina `_requer_admin`, POST e fonte; importacao combina permissao/POST, data parseavel, allowlist e `get_or_create`. Sao duas admissoes distintas para o mesmo nascimento cadastral. (`app/core/views_config.py:12-13`, `:42-50`, `:136-147`, `:158`)
-2. **T2 — edicao:** autorizacao, registro identificado, POST e fonte preenchida. (`app/core/views_config.py:42-50`)
-3. **T3 — carimbo historico:** fonte ainda vazia, abrangencia nacional ou local e consulta ao mapa de datas no ramo nacional. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:29-34`)
-4. **T4 — exclusao:** autorizacao, POST e registro existente. (`app/core/views_config.py:186-188`)
-
-A composicao da oferta do calendario nao aumenta essa contagem: ela produz um booleano em memoria, sem transicao persistida propria. (`app/colaboradores/services/calendario.py:103-104`, `:769`)
-
-### L2 ESCRITOR FORA DA PORTA — 0 desvios demonstrados
-
-- As cinco escritas localizadas estao dentro das operacoes identificadas na matriz: `form_feriado`, `_importar_do_payload`, `carimbar_fonte` e `excluir_feriado`. O modelo nao declara um escritor unico de estado que essas operacoes estejam contornando. (`app/core/models.py:5-31`; `app/core/views_config.py:41-94`, `:127-152`, `:185-201`; `app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:20-35`)
-- Existe **1 escritor historico fora do CRUD runtime**, o backfill de fonte; ele foi incluido como porta propria T3, sem transforma-lo em violacao de uma porta unica inexistente. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:20-35`, `:58`)
-- O selo de consulta ao modelo **nao prova escritor unico**: isenta todo `views_config.py` e exclui migrations da varredura. (`app/core/tests/test_contract_feriado.py:49-64`)
-
-### L3 ESTADO ALCANCAVEL SEM SAIDA — 0 demonstrados
-
-- Registro nascido pelo cadastro ou importacao pode ser editado ou excluido; fonte carimbada tambem pode ser substituida pela edicao. (`app/core/views_config.py:83-86`, `:144-147`, `:64-70`, `:201`)
-- Exclusao elimina o registro; nao grava um estado terminal. O modelo nao declara terminal, e nascimento continua disponivel para a chave cadastral. (`app/core/models.py:5-31`; `app/core/views_config.py:83`, `:201`)
-- O reverso vazio da migracao nao torna a fonte terminal: a porta de edicao continua escrevendo esse campo. (`app/core/migrations/0013_remove_feriado_recorrente_feriado_fonte.py:38-39`; `app/core/views_config.py:69-70`)
-- Oferta e modo do calendario sao recalculados por leitura; nao constituem estados persistidos sem saida. (`app/colaboradores/services/calendario.py:168-212`, `:769`, `:804`)
-
-## 4. NAO LIDO OU INCERTO
-
-- Correspondencia independente desta copia com o hash informado: **[nao verificado]**; a arvore disponibilizada nao permitiu confirmar o commit pelo Git. [nao verificado]
-- Quantidades, ocorrencias, execucoes de cron e trilhas efetivamente existentes em producao para Feriado/Calendario: **[nao verificado]**. O dado raspado fornecido nao apresenta essa populacao.
-- Testes citados foram lidos; resultado de execucao nesta analise: **[nao verificado]**. Nao foi localizada prova especifica do carimbo historico T3: **[nao verificado]**. [nao verificado]
-- Quando a consulta de janela/perguntas do ultimo recurso falha, o calendario captura a excecao depois de inicializar valores de fallback; frequencia e efeito ocorrido em producao: **[nao verificado]**. (`app/colaboradores/services/calendario.py:459-479`)
-- A fonte e exigida na porta manual, mas o campo aceita vazio no modelo e o alcance territorial nao a consulta. Qualidade das fontes existentes e consequencias concretas em producao: **[nao verificado]**. (`app/core/views_config.py:50-54`; `app/core/models.py:19-22`; `app/core/feriados.py:57-67`)
-- Escritas externas a esta copia, comandos ad hoc e SQL executado fora dos sitios lidos: **[nao verificado]**.
-
-_5347 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5350 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
