@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 20:44:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.1 MB). Acoes na janela: **1788**.
+**Medido em 15/11/2026 20:49:19.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.1 MB). Acoes na janela: **1792**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:48:57 | Monitor | BUG-ENC casos sombra rc | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/ORDEM-VIVA-1511/BUG-ENC/casos_rodar.log; do /usr/bin/sleep 5; done; echo "casos $(grep '^rc=' logs/ORDEM-VIVA-1511/BUG-ENC/casos_rodar.log) $(grep total_erros logs/BUG-ENC-CASOS-1511.out 2>/dev/null)"` |
+| 20:48:53 | Bash | Write and run per-case detail script in sombra | `cd /home/ronald/saas-hasner/logs/sombra; cat > bug_enc_casos.py <<'EOF' # BUG-ENC-CELULAS-FORMA -- os casos divergentes do IMPACTO v2, um por um, com batidas e marcos (somente leitura, colNNN). import logging, sys, traceback, datetime as _dt sys.dont_write_bytecode = True from django.utils import timezone logging.disable(logging.CRITICAL) from colaboradores.models import Colaborador from escala.mo ...` |
+| 20:48:40 | Bash | List divergent colabs | `cd /home/ronald/saas-hasner; grep -E '^\s+col' logs/BUG-ENC-IMPACTO-V2-1511.out` |
+| 20:48:35 | Bash | Read impact v2 output | `cd /home/ronald/saas-hasner; ls -t logs/BUG-ENC-IMPACTO-V2* 2>/dev/null \| head -2; tail -5 logs/ORDEM-VIVA-1511/BUG-ENC/impacto2_rodar.log \| cut -c1-200; f=$(ls -t logs/BUG-ENC-IMPACTO-V2*.out 2>/dev/null \| head -1); [ -n "$f" ] && grep -vE '^\s+col' $f \| head -40` |
 | 20:38:40 | Monitor | Suite inteira BUG-ENC rc | `cd /home/ronald/saas-hasner; f=logs/ORDEM-VIVA-1511/BUG-ENC/suite_inteira.log; until grep -q '^rc=' $f; do /usr/bin/sleep 15; done; echo "suite inteira BUG-ENC $(grep '^rc=' $f) $(grep -E '^(OK\|FAILED)($\| \()' $f\|tail -1) $(grep -E '^Ran ' $f\|tail -1)"` |
 | 20:38:34 | Bash | Launch full suite pre-opus BUG-ENC | `cd /home/ronald/saas-hasner; L=logs/ORDEM-VIVA-1511/BUG-ENC/suite_inteira.log; setsid nohup bash -c "bash bin/suite.sh --dir /home/ronald/wt-bug-enc-201609 --motivo 'pre-opus BUG-ENC-CELULAS-FORMA' > $L 2>&1; echo rc=\$? >> $L" >/dev/null 2>&1 & /usr/bin/sleep 3; P=$(pgrep -f '^bash bin/suite.sh --dir /home/ronald/wt-bug-enc-201609' \| head -1); echo $P; sed -i "3s/.*/ESPERANDO: suite.sh \| pid=$P ...` |
 | 20:38:31 | Bash | Confirm volta2 and copy clean | `cd /home/ronald/saas-hasner; f=logs/ORDEM-VIVA-1511/BUG-ENC/volta2.log; grep -E '^Ran ' $f\|tail -1; cd /home/ronald/wt-bug-enc-201609; git status --porcelain \| head; ls -la app \| awk '$3=="root"{print $NF}'` |
