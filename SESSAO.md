@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 02:59:35.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (35.9 MB). Acoes na janela: **1106**.
+**Medido em 15/11/2026 03:04:09.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (36.1 MB). Acoes na janela: **1118**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:00:44 | Bash | Fix ESPERANDO pid and verify hook proof | `cd /home/ronald/saas-hasner && sed -i '3s/^ESPERANDO: suite.sh \| pid=503644$/ESPERANDO: suite.sh \| pid=503651/' app/docs/RELATO.md && sed -i 's/(pid 503644, logs\/BATIDA-DEDUP-RETRATADA\/c5/(pid 503651, logs\/BATIDA-DEDUP-RETRATADA\/c5/; s/suite inteira c5, pid 503644)/suite inteira c5, pid 503651)/' app/docs/RELATO.md && sed -n 3p app/docs/RELATO.md && grep -c 503644 app/docs/RELATO.md; python3 ...` |
+| 03:00:39 | Bash | Check why dedup suite launcher died | `cd /home/ronald/saas-hasner && cat logs/BATIDA-DEDUP-RETRATADA/c5/suite/inteira.fim; tail -15 logs/BATIDA-DEDUP-RETRATADA/c5/suite/inteira.log; pgrep -af "suite.sh" \| head` |
+| 03:00:35 | Bash | Test hook ESPERANDO proof directly | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h print(h._esperando_com_prova()); print(repr(h._prova_pid('suite.sh',503644))) "; ps -o pid,args -p 503644` |
+| 03:00:30 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner && sed -n 789,856p bin/hook_stop_fila1.py; sed -n 1360,1400p bin/hook_stop_fila1.py; tail -5 logs/pisos.log 2>/dev/null` |
+| 03:00:26 | Bash | Inspect how hook parses ESPERANDO | `cd /home/ronald/saas-hasner && grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -30` |
+| 03:00:16 | Bash | Record why constructor slot waits in RELATO | `date '+%H:%M' && python3 - <<'PY' p='docs/RELATO.md' t=open(p).read() anchor='ESTADO 02:5x BATIDA-DEDUP-RETRATADA' assert t.count(anchor)==1 l=('ESTADO 03:0x VAGA (VAGA-LIVRE-ABRE, ordem E3-V10-E-A-PROXIMA): vaga de construtor vazia SEM obra elegivel, por arquivo em comum com obra em voo: ' 'CONTRATO-DE-ENTRADA-DO-FIO c2 (T4) muda api/views.py e api/views_core.py = arquivos da cura BATIDA-DEDUP-RE ...` |
+| 03:00:07 | Bash | Read CEF line and E4c status in RELATO | `cd /home/ronald/saas-hasner && sed -n 27p app/docs/RELATO.md; grep -n "E4c\\|E4C" app/docs/RELATO.md \| cut -c1-300 \| head -12` |
+| 03:00:02 | Bash | Find CONTRATO-DE-ENTRADA-DO-FIO status | `cd /home/ronald/saas-hasner && grep -n "CONTRATO-DE-ENTRADA-DO-FIO" app/docs/RELATO.md \| cut -c1-500 \| head -8; ls -t logs/ \| grep -i contrato \| head; ls -t logs/CONTRATO-DE-ENTRADA-DO-FIO 2>/dev/null \| head` |
+| 02:59:56 | Bash | Read recent avals about vaga and path to E4c | `cd /home/ronald/saas-hasner && cat logs/AVAIS-1313/vaga_livre_abre.txt logs/AVAIS-1313/caminho_ate_e4c_relido.txt logs/AVAIS-1313/madrugada_prepara.txt 2>/dev/null \| cut -c1-1500` |
+| 02:59:53 | Bash | Read latest ordering aval comment and newest avals | `sed -n 9,12p docs/BACKLOG.md; ls -t ../logs/AVAIS-1313/ \| head -15` |
+| 02:59:48 | Bash | Find order items' state in BACKLOG | `grep -n "BO-0611-05\\|BO-DISPUTA-SEM-PERGUNTA\\|E4b\\|E4c\\|E4d\\|BUG-PAR-FROTA\\|ZUMBI\\|CEF\\|SILENCIO-VENCIDO\\|T4-C10" docs/BACKLOG.md \| cut -c1-260 \| head -40` |
+| 02:59:43 | Bash | Read order aval and constructor slot | `cd /home/ronald/saas-hasner && cat logs/aval_ordem_pos_e4a2_1110.txt \| head -40; cat logs/construtor.vaga 2>/dev/null; ls ~ \| grep wt-codex` |
 | 02:59:27 | Bash | Check the other recortes' progress | `cd /home/ronald/saas-hasner && tail -c 600 logs/E3-RESTO-R3/c7/suite/recorte.log; echo ---; tail -c 400 logs/JUSTIFICATIVA-PAGA/c12b/suite/recorte.log; echo; bin/trava_teste.sh --quem` |
 | 02:59:26 | Bash | Republish RELATO | `cd /home/ronald/saas-hasner && bin/relato.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/scratchpad/relato_pub.log 2>&1; echo rc=$?` |
 | 02:59:22 | Bash | Update ESPERANDO pid and add ESTADO line in RELATO | `python3 - <<'PY' p='docs/RELATO.md' t=open(p).read() old='ESPERANDO: suite.sh \| pid=418565\n' assert t.count(old)==1 new='ESPERANDO: suite.sh \| pid=503644\n' est=('ESTADO 02:5x BATIDA-DEDUP-RETRATADA suite INTEIRA c4 FAILED failures=2 (Ran 16129, rc 1, logs/BATIDA-DEDUP-RETRATADA/c4/suite/inteira.log), as duas mecanicas: ' 'ruff B023 em ponto/tests/test_dedup_retratada_c4.py:56/:87 (lambda no la ...` |
