@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 22:23** · publicado em **14/11/2026 22:25** (UTC-3)
+> Ultima resposta processada: **14/11/2026 23:20** · publicado em **14/11/2026 23:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 23:20 · sessao 8d6200514031 · - · - · origem=Ronald (tmux)
+
+- app/chamados/services/tarefa_do_dia.py:73 — divergência objetiva: “[(instancia, pos, tipo, hora)]”; o terceiro elemento real é o dicionário `lp`, escrito em app/chamados/services/tarefa_do_dia.py:82 e consumido como dicionário em app/chamados/services/tarefa_do_dia.py:116.
+- app/chamados/services/tarefa_do_dia.py:8 — “nenhum cache” precisa de qualificação: há memos por carga para grade, marcos, instâncias e tarefas, respectivamente em app/chamados/services/tarefa_do_dia.py:534, app/chamados/services/tarefa_do_dia.py:541, app/chamados/services/tarefa_do_dia.py:547 e app/chamados/services/tarefa_do_dia.py:582; se a frase pretendia excluir somente cache persistente, essa intenção é [nao verificado].
+- app/chamados/services/tarefa_do_dia.py:28 — “rota, fila e verbos leem alimentar_fila” é uma descrição incompleta: `verbos` vêm dessa alimentação em app/chamados/services/tarefa_do_dia.py:626, mas a rota colaborador depende dos pendentes do app em app/chamados/services/tarefa_do_dia.py:627 e a oferta do calendário pode escrever `admin/porta_acao` em app/chamados/services/tarefa_do_dia.py:658.
+- As regiões antigas indicadas pelo anexo não conservam automaticamente as descrições abandonadas: a docstring atual da carga está em app/chamados/services/tarefa_do_dia.py:363; a descrição de memo e calendário plural em app/chamados/services/tarefa_do_dia.py:552 corresponde a app/chamados/services/tarefa_do_dia.py:582; a descrição da publicação em app/chamados/services/tarefa_do_dia.py:677 corresponde ao retorno em app/chamados/services/tarefa_do_dia.py:683.
+- app/chamados/services/tarefa_do_dia.py:21 — “por colaborador sem porta” corresponde a uma chamada plural por colaborador com algum dia sem rota: constrói todos os dias em app/chamados/services/tarefa_do_dia.py:585, seleciona os dias sem rota em app/chamados/services/tarefa_do_dia.py:588 e só chama a plural quando esse conjunto existe em app/chamados/services/tarefa_do_dia.py:589.
+- app/chamados/services/tarefa_do_dia.py:41 — a enumeração do fio bruto é compatível com os escritores em app/chamados/services/tarefa_do_dia.py:643 e app/chamados/services/tarefa_do_dia.py:667; `None` é retorno integral de `porta_da_tarefa`, não um valor escrito no fio, conforme app/chamados/services/tarefa_do_dia.py:683.
+- app/chamados/services/tarefa_do_dia.py:606 — “A/S so tem tela pelo Resolver dia” continua correspondendo à extensão `fato_em_ausencia`: ela cria `VALIDAR/admin` sem porta em app/chamados/services/tarefa_do_dia.py:348, não passa no teste de alcance de validar em app/chamados/services/tarefa_do_dia.py:632 e depende da oferta do calendário em app/chamados/services/tarefa_do_dia.py:658.
 
 ## 14/11 22:23 · sessao 4302027cff09 · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
 
@@ -1187,40 +1197,4 @@ A composicao da oferta do calendario nao aumenta essa contagem: ela produz um bo
 - A fonte e exigida na porta manual, mas o campo aceita vazio no modelo e o alcance territorial nao a consulta. Qualidade das fontes existentes e consequencias concretas em producao: **[nao verificado]**. (`app/core/views_config.py:50-54`; `app/core/models.py:19-22`; `app/core/feriados.py:57-67`)
 - Escritas externas a esta copia, comandos ad hoc e SQL executado fora dos sitios lidos: **[nao verificado]**.
 
-## 14/11 21:46 · sessao 9737e6e4000b · - · - · origem=Ronald (tmux)
-
-Censo adicional: **59 chamadas sintaticas `.eh_dia_trabalho(...)` em 39 arquivos de producao**, excluindo `tests/`, `test_*.py` e migrations; os 59 sitios estao agrupados abaixo. A contagem e de chamadas, portanto `relatorios/furos.py:67` e `ferias/management/commands/alertar_retornos.py:34` contam duas cada. Limite: chamadas dinamicas/aliases sem esse nome [nao verificado].
-
-A autoridade `EscalaColaborador.eh_dia_trabalho` retorna `cel.trabalha` quando existe celula; senao chama a versao calculada. Nao consulta `ata.tipo_dia`, diferentemente de `dia_sem_trabalho`. `escala/models.py:1087-1096`.
-
-| Consumo da resposta | Sitios lidos |
-|---|---|
-| **Somente True aceita trabalho** | `colaboradores/views_fase.py:101`; `colaboradores/views.py:2887`; `ponto/motor_calculo_v2.py:3449` (previstos da semana); `api/views.py:1580-1583` (marcos somente True e dentro vinculo); `ponto/services/cartorio.py:1769`; `escala/services/impacto_troca.py:39`; `escala/services/fase_na_tela.py:186`, `escala/services/fase_na_tela.py:196`; retorno amanha em `ferias/management/commands/alertar_retornos.py:34`. |
-| **`is not True` recusa False e None** | `escala/utils.py:2216-2217` (`intervalo_declarado_do_dia` retorna zero); `escala/utils.py:2266-2267` (`minutos_previstos_do_dia` retorna zero); `core/services/painel_op.py:151-152`; `ponto/services/cartorio.py:1904-1905`; `ponto/management/commands/emitir_furo_retroativo.py:139-141` (conta limbo e ignora). |
-| **False identifica folga/nao trabalho** | `ponto/motor_calculo_v2.py:2448`; `ponto/precedencia.py:538-543` (veta falta); `escala/utils.py:1605-1606` (ignora na grade por turno); `escala/regua_defesa.py:199` (fase invertida); `ponto/management/commands/vigia_plantio_overnight.py:46-49`; `escala/management/commands/celulas_contra_o_template.py:36-37`; hoje em `ferias/management/commands/alertar_retornos.py:34`. |
-| **`is not False`: None segue admitido** | `chamados/services/disputa_emissao.py:820`; `ponto/calculador/alimentacao.py:445-447` (excecao tambem retorna True); `ponto/management/commands/diff_calculador.py:404-406` (mesmo fallback); `escala/services/escala_auto.py:144-145` (qualquer resposta naoFalse na amostra permite proposta de folga). |
-| **`is not False` como exclusao: somente False permanece** | `colaboradores/views.py:2883-2884` filtra quem esta de folga hoje, antes de buscar retorno True em `colaboradores/views.py:2887`. |
-| **Truthy seleciona trabalho; False e None ficam fora** | `colaboradores/views.py:289-294` e `colaboradores/views.py:2227-2239` (marcos e repasse da resposta); `escala/alimentacao.py:396-397` (datas previstas); `core/views.py:404-405` (ausentes hoje); `ponto/services/fechamento.py:731-732` (datas previstas, tambem exclui suprimidas); `ponto/services/espelho.py:224` (dias da semana); `ponto/management/commands/censo_fase_12x36.py:179`; `relatorios/management/commands/diff_extrato_parcial.py:53-54`; `ponto/management/commands/processar_alertas_avancados.py:49-50` (`not` => ignora False/None). |
-| **Truthy para marcos, None separado e resposta repassada** | `api/views.py:260-261` e `api/views.py:269-270`; `api/views_core.py:248-249`, `api/views_core.py:257-258`; `api/views.py:920-924`, `api/views.py:936-937`. |
-| **False/None/True explicitamente distintos** | `escala/utils.py:760-764` (False => folga, None => sem_ancora); `escala/views.py:40-54` (marcos truthy; False => folga, None => escala_suspeita, outro => previsto); `core/services/painel_op.py:34-35` (mesmo rotulo ternario); `escala/views_plano_folgas.py:76-82` (naoNone conta calculavel, somente False projeta folga); `escala/servico_jornada.py:548-555` (False => improcedente, True => falta_real, None/excecao => ambiguo); `chamados/detector_anomalias.py:166-172` (None => ok por ancora indefinida, False => grave); `escala/services/previsto_cego.py:103-107` (None => causa fase, True => causa marcos); `escala/services/propositor.py:225-231` (None/excecao => sem proposta; truthy adiciona previsto). |
-| **None identifica desconhecimento/limbo** | `escala/utils.py:1760`; `escala/regua_defesa.py:145`, `escala/regua_defesa.py:176` (OR defeito_folga_nao_definida); `escala/services/furos_diarios.py:316-318` (`any None` => limbo); `ponto/management/commands/detectar_ausencias.py:188` (OR defeito); `relatorios/furos.py:67` (duas chamadas, hoje e amanha; qualquer naoNone exclui do levantamento de ancora indefinida). |
-| **Consumo misto limbo/trabalho** | `ponto/management/commands/detectar_ausencias.py:144-160` usa naoNone para cadastro calculavel e None OR defeito para limbo; depois `ponto/management/commands/detectar_ausencias.py:306-307` ignora resposta falsy. `ponto/services/faltas_de_hoje.py:39-41` admite somente True OR defeito de folga, este ultimo denominado `limbo`. |
-| **Repasse para outro leitor** | `ponto/services/diagnostico_escala.py:152`, `ponto/services/diagnostico_escala.py:173-174` leva resposta em `previsto`; `escala/services/fase_na_tela.py:68-70` tambem leva a `troca_de_ritmo`. O consumidor exige False para sequencia trabalhada em folga, True para ritmo anterior/furo, exclui None do universo trabalhado: `ponto/services/diagnostico_escala.py:64-75`; discordancia e contagens tambem distinguem True/False: `ponto/services/diagnostico_escala.py:110-112`, `ponto/services/diagnostico_escala.py:229-232`. |
-| **Chamadas internas ao template, sem novo juiz de ata** | `escala/models.py:1319-1321` aceita resultado naoNone; se None, usa foto/paridade ou None em `escala/models.py:1363-1364`. `escala/models.py:1366-1371` repassa base, convertendo somente True em False quando feriado_vira_folga. |
-
-**Mais 8 chamadas `.eh_dia_trabalho_calculado(...)`, separadas das 59**
-
-- Adaptador interno: `escala/models.py:1096`.
-- Precedencia: prefere `_cel_trabalha` naoNone convertido em bool; senao pergunta calculado, excecao => None. `ponto/precedencia.py:357-368`.
-- Dois escritores/geradores usam a resposta diretamente como `CelulaDia.trabalha` e insumo de DNA: `ponto/portas/celula.py:289-294`, `ponto/portas/celula.py:911-917`. Apenas sitios citados; nao mapeei essas transicoes.
-- Comparadores: resposta atual vs projetada e truthy/falsy para efeito em `colaboradores/management/commands/corrigir_escala_retroativa.py:120-133`; resposta para DNA candidato em `ponto/management/commands/censo_col900.py:115`; igualdade de trabalha+DNA em `ponto/management/commands/tripwire_celulas.py:27-33`; desigualdade de trabalha+DNA em `ponto/services/vigia_cadastro_futuro.py:76-80`.
-
-**Outros sitios pedidos**
-
-- `chamados/services/feriado_reavaliar.py:35-39`: exige `era_dia_previsto is not None`, faixa feriado/folga e `premissa_morta`; nao usa o juiz completo `dia_sem_trabalho`.
-- `escala/utils.py:1645` nao decide trabalho/folga: testa nenhuma batida interna AND intervalo_livre; a finalidade local e derivacao de intervalo com copia do consumo. `escala/utils.py:1640-1650`.
-- Criador da grade antiga: False vira folga e sai, None permanece como trabalho com `sem_ancora`; `escala/utils.py:760-764`. Criador por turno ignora somente False e depois carimba None; `escala/utils.py:1605-1606`, `escala/utils.py:1760-1765`.
-
-Nao afirmo que os 59 sitios estejam todos ativos em uma configuracao concreta de producao: sua presenca e consumo no codigo foram lidos; execucao efetiva/alcancabilidade por URL, cron ou configuracao [nao verificado].
-
-_5346 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5347 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
