@@ -1,7 +1,144 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 03:35** · publicado em **15/11/2026 03:36** (UTC-3)
+> Ultima resposta processada: **15/11/2026 03:39** · publicado em **15/11/2026 03:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 03:39 · sessao 0556b8c85746 · E3-RESTO-R3 · leitura · origem=Code
+
+Os 16 casos se dividem em **2 FIXTURE, 11 EXPECTATIVA QUE CODIFICA UMA REGRA e 3 CONHECIDO**, conforme as cadeias abaixo. Os valores obtidos são os transcritos no `fails.txt` fornecido; reprodução própria da execução e comprovação pela história Git da c6 exata `a5ff3627f`: **[nao verificado]**. A entrega local declara essa base, mas também registra sua identidade Git como não verificada (`app/chamados/tests/e3_r3_c7_entrega.txt:2`).
+
+**Cadeia compartilhada pelos 11 casos de expectativa**
+
+Esses testes afirmam que uma resposta sob âncora **terminal** oferece modal administrativo. Isso é literal em “âncora terminal COM modal”, “inclusive terminal” e “mesmo terminal”; portanto trocar a âncora por uma viva mudaria a prova pretendida (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:79`; `app/chamados/tests/test_e4_passivo.py:8`).
+
+A cadeia aberta é:
+
+- **Identidade e estado:** as fixtures escrevem `chamado_destino`, o chamado container e `status_local`; `chamado_que_lista` lê primeiro o destino, depois o container. `resolvido` e `fechado` pertencem a `TERMINAIS` (`app/chamados/services/fio.py:116`; `app/chamados/catalogo/motor.py:30`).
+- **Resposta → ação exigível:** a carga lê as decisões E1; `_pela_decisao` lê a última resposta textual e escreve a ação `validar/admin`. Se a âncora estiver fora da fila, a ação conserva `porta=None` (`app/chamados/services/tarefa_do_dia.py:419`; `app/chamados/services/tarefa_do_dia.py:150`; `app/chamados/services/tarefa_do_dia.py:160`).
+- **Estado terminal → alimentação:** o construtor lê `status_local`, escreve `_ancoras_terminais`, e `tarefa::ler` transporta o conjunto para `alimentacao['ancoras_terminais']` (`app/chamados/services/tarefa_do_dia.py:448`; `app/chamados/services/tarefa_do_dia.py:449`; `app/chamados/services/tarefa_do_dia.py:589`).
+- **Ação → porta publicada:** `_portas_da_tarefa` exclui a validação por âncora terminal de `admin_alcancavel`. Sem outro dono, escreve `fio='nada'`, `rota=None`, `acao=None`; `porta_da_tarefa` devolve `None` para essa ausência conhecida de porta (`app/chamados/services/tarefa_do_dia.py:652`; `app/chamados/services/tarefa_do_dia.py:656`; `app/chamados/services/tarefa_do_dia.py:667`; `app/chamados/services/tarefa_do_dia.py:696`; `app/chamados/services/tarefa_do_dia.py:708`).
+
+**A c7 participa diretamente nos 11:** hunks de `chamados/services/tarefa_do_dia.py::_carga_da_tarefa_cls` — `__init__` e `tarefa::ler` — e de `::_portas_da_tarefa`, especialmente o filtro de terminais (`app/chamados/services/tarefa_do_dia.py:407`; `app/chamados/services/tarefa_do_dia.py:449`; `app/chamados/services/tarefa_do_dia.py:589`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+O aval LU-03 registrado diz **“acao direta do admin com tela = porta”**; LU-04 diz **“pergunta em marco dispensado, fora de marco ou porta None NAO da dono”**. Nenhuma dessas frases, isoladamente, declara modal sob terminal (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`). Já o sítio da costura declara, citando O261-E F1, aval Ronald 30/10 17:3x: **“ancora terminal e fio morto -- o admin nao a ve, o colab a ve”** (`app/chamados/services/fio.py:786`; `app/chamados/services/fio.py:789`). O aval específico que autorizaria a extensão dos testes, “inclusive terminal”, permanece **[nao verificado]**.
+
+1. **`test_v8_R10_ancora_fora_do_fato_sem_acao` — FIXTURE.**
+
+   O traceback inteiro fornecido percorre `unittest/case.py:58` → `:651` → `:606` → teste `:626` → apoio `:150` → `tarefa_do_dia.py:598` → `:589`. A exceção é **`AttributeError: 'CargaDaTarefa' object has no attribute '_ancoras_terminais'`**, originada na leitura de `self._ancoras_terminais` em `app/chamados/services/tarefa_do_dia.py:589`; os fontes externos de `unittest` não foram abertos **[nao verificado]**.
+
+   A chamada falha antes das asserções: esperava-se nenhuma ação nas instâncias e `('porta_fila', (202,), {202: 'decidir'})`; não houve valor de tarefa obtido (`app/chamados/tests/test_e3_portas_tarefa.py:626`; `app/chamados/tests/test_e3_portas_tarefa.py:627`; `app/chamados/tests/test_e3_portas_tarefa.py:628`).
+
+   **Escritor/leitor:** o apoio cria a carga por `cls.__new__`, preenche seus atributos manualmente e chama `obj.tarefa`; assim contorna o construtor que escreve `_ancoras_terminais` (`app/chamados/tests/e3_v8_apoio.py:130`; `app/chamados/tests/e3_v8_apoio.py:132`; `app/chamados/tests/e3_v8_apoio.py:150`; `app/chamados/services/tarefa_do_dia.py:449`). Em produção, `carga_da_tarefa` chama o construtor normal (`app/chamados/services/tarefa_do_dia.py:711`).
+
+   **C7:** participa pelo hunk `CargaDaTarefa.tarefa::ler`, que introduziu a leitura obrigatória (`app/chamados/services/tarefa_do_dia.py:589`). **Cura:** completar a fixture com o conjunto de terminais correspondente ao cenário; aqui, conjunto vazio conserva a prova sobre âncora fora do fato, sem acrescentar terminalidade que o teste não monta. A fixture sintética irmã já recebeu exatamente essa inicialização na c7 (`app/chamados/tests/test_e3_c8b_sem_banco.py:247`).
+
+2. **`test_classe_c_passivo_entra_pela_porta_da_E1_e_2x_e_uma_linha` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_e4_passivo.py:65`: esperado conter **`-> resolvido`**, obtido **`-> segue_sem_porta`**.
+
+   **Escritor/leitor:** a fixture monta resposta sob destino `resolvido`; o comando identifica o passivo sem linha, registra a decisão E1, mede novamente o alcance e escreve `segue_sem_porta` quando o dia permanece sem porta. A impressão do comando lê esse resultado (`app/chamados/tests/test_e4_passivo.py:59`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:98`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:352`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:368`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:378`).
+
+   **Regra literal:** “VALIDAR do admin tem modal na ancora existente, mesmo terminal (LU-03)”. Afirma precisamente **terminal → porta do admin**; o filtro terminal da cadeia comum participa (`app/chamados/tests/test_e4_passivo.py:8`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+3. **`test_MORDE_dry_nao_escreve` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:74`: esperado **`0 pergunta(s) em 0 pai(s)`**, obtido **`1 pergunta(s) em 1 pai(s)`**.
+
+   **Escritor/leitor:** `_beco` monta a âncora terminal; `_pai` escreve pai `aberto`. O leitor C11 admite o dia quando `porta_da_tarefa` é `None`, escreve sua assinatura, e o comando agrupa as perguntas por pai e imprime as contagens (`app/chamados/tests/test_f3_beco1_reata_limbo.py:28`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:38`; `app/escala/services/cadastro_realidade.py:472`; `app/escala/services/cadastro_realidade.py:515`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:68`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:74`).
+
+   **Regra:** terminal COM modal, logo nenhum candidato C11. A falha é na seleção; o comando retorna no ramo DRY antes da escrita de destinos (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:90`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
+
+4. **`test_MORDE_pai_cujo_silencio_ja_venceu_volta_a_fila_e_reata` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:160`: esperado **`com pai LIMBO vivo: 0 pergunta(s)`**, obtido **`1 pergunta(s) em 1 pai(s)`**, seguido de **`{"reatada": 1}`**.
+
+   **Escritor/leitor:** o teste escreve `silenciado_ate` no passado; a fila volta a admitir o pai. O comando lê a assinatura C11, agrupa a pergunta, chama a reata e imprime seu resultado (`app/chamados/tests/test_f3_beco1_reata_limbo.py:158`; `app/chamados/services/painel.py:169`; `app/chamados/services/painel.py:188`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:68`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:118`).
+
+   A reata efetiva passa por `reatar_perguntas_ao_limbo` e pela porta que atribui/salva `chamado_destino` (`app/chamados/services/limbo_folgas.py:239`; `app/chamados/services/limbo_folgas.py:245`; `app/chamados/services/fio.py:964`). Apesar do nome histórico, a asserção atual espera **nenhum candidato**, pela regra terminal COM modal; a c7 participa nessa seleção (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:160`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+5. **`test_MORDE_sem_pai_fica_na_lista_e_nenhum_pai_nasce` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:84`: esperava ausência de **`SEM PAI:`**, obtida presença dessa linha com uma pergunta.
+
+   **Escritor/leitor:** o teste monta o beco sem criar pai; C11 escreve a assinatura sem `pai_limbo`; o comando a coloca em `sem_pai` e imprime a mensagem (`app/chamados/tests/test_f3_beco1_reata_limbo.py:80`; `app/escala/services/cadastro_realidade.py:518`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:71`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:83`).
+
+   **Regra literal:** “a ancora existente oferece o modal”; junto do wrapper terminal, afirma terminal → admin. A presença da mensagem não demonstra nascimento de pai; a asserção que conferiria a contagem de chamados vem depois da falha (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:85`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:87`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
+
+6. **`test_RED_apply_reata_ao_pai_e_o_dia_sai_do_beco` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:55`: esperado **`[]`**, obtida uma assinatura C11 com pergunta `342`, âncora terminal `205` e pai `206`.
+
+   **Escritor/leitor:** `_c11` chama o leitor de produção; este lê a ausência de porta e escreve a assinatura com `pai_limbo`, perguntas e detalhe (`app/chamados/tests/test_f3_beco1_reata_limbo.py:45`; `app/escala/services/cadastro_realidade.py:472`; `app/escala/services/cadastro_realidade.py:515`; `app/escala/services/cadastro_realidade.py:520`).
+
+   **Regra literal:** “a ancora terminal abre o modal; nao seleciona reata”. Afirma terminal → admin. A falha ocorre **antes** da chamada `--apply`; esse traceback não demonstra resultado de reata (`app/chamados/tests/test_f3_beco1_reata_limbo.py:55`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:58`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
+
+7. **`test_RED_pai_silenciado_DEPOIS_da_selecao_nao_recebe_reata` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:146`: esperava ausência de **`pai saiu da fila antes da costura`**, obtida contagem `1` dessa recusa.
+
+   **Escritor/leitor:** o mock escreve silêncio futuro depois de gravar a reversão; o comando consulta novamente a fila sob trava, encontra o pai ausente e escreve a recusa (`app/chamados/tests/test_f3_beco1_reata_limbo.py:139`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:141`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:113`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:115`).
+
+   Há duas regras: a docstring exige **“A fila tem de ser perguntada de novo sob a trava do pai”**; a asserção que falhou exige **“LU-03: nenhum candidato”**, pela premissa terminal COM modal. O dado mostra a recusa prevista pela primeira; a divergência está na segunda, atingida pela c7 (`app/chamados/tests/test_f3_beco1_reata_limbo.py:127`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:146`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+8. **`test_RED_pai_silenciado_fora_da_fila_nao_recebe_reata` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:120`: esperava ausência de **`PAI FORA DA FILA:`**, obtida uma linha com pai e uma pergunta.
+
+   **Escritor/leitor:** o teste escreve silêncio futuro; o comando lê a fila, separa a assinatura em `fora_da_fila` e imprime a mensagem (`app/chamados/tests/test_f3_beco1_reata_limbo.py:114`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:59`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:69`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:89`).
+
+   O aval próprio citado é **“reata SO a pai LIMBO vivo NA FILA”**, Ronald 05/11 13:0x; a falha atual exige **nenhuma seleção**, pela outra regra, terminal COM modal. A mensagem observada não prova reata ao pai silenciado (`app/chamados/tests/test_f3_beco1_reata_limbo.py:103`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:120`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:29`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
+
+9. **`test_ancora_terminal_com_modal_NAO_e_C11` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+   Falha em `app/escala/tests/test_f3_beco1_folga_na_lista.py:72`: esperado **`('admin', 'porta_acao', 'validar')`**, obtido **`('nada', None, None)`**.
+
+   **Escritor/leitor:** a fixture escreve destino `resolvido`, resposta textual anterior à leitura, registra E1 e recarimba por último a ata conhecida. O teste chama diretamente `tarefa_do_dia`, antes da leitura da lista C11 (`app/escala/tests/test_f3_beco1_folga_na_lista.py:29`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:36`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:70`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:93`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:97`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:107`).
+
+   **Regra literal:** “COM modal (LU-03), inclusive terminal”. Aqui a expectativa terminal → admin está isolada de qualquer pai ou reata; a c7 a altera diretamente (`app/escala/tests/test_f3_beco1_folga_na_lista.py:79`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+10. **`test_MORDE_ricardo_a_folha_le_o_juiz_e_diz_nada` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+    Falha em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:139`: esperado **`admin`**, obtido **`nada`**.
+
+    **Escritor/leitor:** `_ricardo` escreve destino `fechado`, container `resolvido` e resposta textual com E1. `_fio_da_folha` chama a carga e o leitor reais; a Folha lê a porta publicada e devolve `FIO_SEM_PORTA='nada'` quando ela é `None` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:90`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:97`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:127`; `app/folha/fora_da_folha.py:72`; `app/folha/fora_da_folha.py:89`; `app/chamados/juizes.py:1652`).
+
+    **Regra literal:** “LU-03: a Folha le admin, cuja tela e o modal da ancora existente”. Nessa fixture, “existente” é terminal; portanto afirma terminal → admin, atingido pela c7 (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:137`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+11. **`test_MORDE_ricardo_folha_e_vigia_dizem_a_MESMA_coisa` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+    Falha em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:143`: esperado **`('porta_acao', '')`**, obtido **`('sem_porta', 'c')`**.
+
+    **Escritor/leitor:** usa a mesma fixture terminal de `_ricardo`; o Vigia lê a tarefa/porta e, sem rota, classifica a respondida sob terminal como causa `c`. O teste lê os índices de rota/causa de `alcance_dias` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:116`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:121`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:142`; `app/chamados/services/vigia_fio.py:587`; `app/chamados/services/vigia_fio.py:631`; `app/chamados/services/vigia_fio.py:655`).
+
+    **Regra literal:** “LU-03: respondida ancorada tem modal”; pela fixture, terminal → admin. A asserção seguinte da Folha não foi alcançada no traceback fornecido (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:143`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:144`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
+
+12. **`test_c_respondida_com_destino_FECHADO` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
+
+    Falha em `app/chamados/tests/test_o261e_f5_alcance.py:217`: esperado **`('porta_acao', 'admin')`**, obtido **`('sem_porta', 'nenhuma porta')`**.
+
+    **Escritor/leitor:** apesar do nome, o corpo escreve destino `resolvido`; o apoio monta resposta com E1 e nega a oferta de Resolver dia. O Vigia publica rota/papel, e `_rota_e_papel` lê os índices 4/7 (`app/chamados/tests/test_o261e_f5_alcance.py:80`; `app/chamados/tests/test_o261e_f5_alcance.py:103`; `app/chamados/tests/test_o261e_f5_alcance.py:113`; `app/chamados/tests/test_o261e_f5_alcance.py:138`; `app/chamados/tests/test_o261e_f5_alcance.py:214`; `app/chamados/services/vigia_fio.py:655`).
+
+    **Regra:** a própria asserção exige porta/admin sob terminal e cita LU-03; participa o filtro terminal da c7 (`app/chamados/tests/test_o261e_f5_alcance.py:217`; `app/chamados/services/tarefa_do_dia.py:656`).
+
+13. **`test_o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA` — FIXTURE.**
+
+    Falha em `app/folha/tests/test_haiku_fora_da_folha.py:95`: esperado grupo **`D`**, obtido **`E`**. As asserções anteriores do mesmo teste exigem e já ultrapassam `veredito='furo'`, `fio='nada'` e texto `SEM PORTA` para **01/09**; a falha é no grupo da pessoa (`app/folha/tests/test_haiku_fora_da_folha.py:91`; `app/folha/tests/test_haiku_fora_da_folha.py:92`; `app/folha/tests/test_haiku_fora_da_folha.py:94`).
+
+    **Escritores:** a fixture cria vínculo desde janeiro e somente duas células explícitas na competência: furo em 01/09, agora com ata conhecida, e trabalhou em 02/09. A janela declarada é 21/08–20/09 (`app/folha/tests/test_haiku_fora_da_folha.py:56`; `app/folha/tests/test_haiku_fora_da_folha.py:58`; `app/folha/tests/test_haiku_fora_da_folha.py:61`; `app/folha/tests/test_haiku_fora_da_folha.py:65`).
+
+    **Leitores e agregação:** o export percorre a janela inteira; dia passado sem célula, havendo vínculo, entra como `sem_celula`. A grade transporta essa ausência; a tarefa escreve `nao_sei`; a Folha lê os fios de **todos** os dias retentores e calcula o grupo (`app/folha/export.py:1264`; `app/folha/export.py:1270`; `app/escala/services/leitor_celula.py:394`; `app/chamados/services/tarefa_do_dia.py:228`; `app/folha/fora_da_folha.py:259`; `app/folha/fora_da_folha.py:283`).
+
+    Pela função `_grupo`, **E** significa que não houve fio de ação e houve pelo menos um `nao_sei`; **D** exige todos `nada`. Isso não contradiz o `nada` já conferido para 01/09. A lista exata dos outros dias dessa execução não veio no dado **[nao verificado]** (`app/folha/fora_da_folha.py:99`; `app/folha/fora_da_folha.py:109`).
+
+    **C7:** participa pelo hunk da fixture `folha/tests/test_haiku_fora_da_folha.py::_ata_conhecida_sem_porta` e `HaikuForaDaFolhaTest.setUpTestData`; a ata foi acrescentada ao furo, mas não completou a competência (`app/folha/tests/test_haiku_fora_da_folha.py:32`; `app/folha/tests/test_haiku_fora_da_folha.py:63`). O selo sem banco calcula `_grupo([fio])` de um único dia, portanto não prova esse agregado mensal (`app/chamados/tests/test_e3_r3_c7_sem_banco.py:99`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:106`).
+
+    **Cura:** montar os demais dias cobertos da competência com estado conhecido e não retentor, mantendo a prova furo/sem porta de 01/09 e trabalhou de 02/09; não trocar o esperado para E nem retirar o desconhecimento do código (`app/folha/tests/test_haiku_fora_da_folha.py:58`; `app/folha/export.py:1270`; `app/folha/fora_da_folha.py:109`).
+
+14. **`test_MORDE_pendente_curado_sai_da_lista` — CONHECIDO.**
+
+    Falha em `app/core/tests/test_contract_juiz_tela.p
+
+[truncado em 20000 de 28149 caracteres]
 
 ## 15/11 03:35 · sessao 7683d0944868 · - · - · origem=Ronald (tmux)
 
@@ -663,12 +800,4 @@ O trecho novo determinante é `porta_da_tarefa`: antes o resultado sem rota desa
 
 **Classificação: cura no teste/fixture**, preservando a prova de ausência conhecida de porta e seu caso irmão com oferta. A fixture precisa fornecer os insumos lavrados suficientes para `nao_sei=False`; trocar simplesmente `nada` por `nao_sei` eliminaria a prova nominal do dia sem ação conhecida. Acrescentar um caso distinto de ata sem lâmpadas preservaria a regra 2A e separaria as duas situações (`app/chamados/services/tarefa_do_dia.py:238`, `app/chamados/services/tarefa_do_dia.py:697`, `app/folha/tests/test_haiku_fora_da_folha.py:83`, `app/folha/tests/test_haiku_fora_da_folha.py:88`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:6`).
 
-## 15/11 02:14 · sessao 0d23cacef646 · BATIDA-DEDUP-RETRATADA · construtor · origem=Code
-
-C3 entregue em [dedup_retratada_c3_entrega.txt](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_entrega.txt:7), com cura, diff, RED/GREEN, censo e comandos.
-
-Validação local: **31 testes verdes e 40 mutantes mortos**, com controles verdes ([evidências](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_entrega.txt:68)). `py_compile` e Ruff passaram ([checks](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_checks.txt:18), [Ruff](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c3_checks.txt:43)). [nao verificado]
-
-Suite, smoke real e certificação Code/opus: [nao verificado]. [nao verificado]
-
-_5498 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5499 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
