@@ -1,7 +1,147 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 16:06** · publicado em **15/11/2026 16:09** (UTC-3)
+> Ultima resposta processada: **15/11/2026 17:18** · publicado em **15/11/2026 17:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 17:18 · sessao d2bf99cfb25b · - · - · origem=Ronald (tmux)
+
+Leitura concluída sem execução; não há evidência suficiente para certificar nenhuma cura dos vermelhos informados. Previsões abaixo são [nao verificado], exceto a permanência da falha estática demonstrada pelo código.
+
+| Teste | Previsão D1+J1 | Referências | [nao verificado]
+|---|---|---|
+| BUG113, nas duas classes | Sem cura identificada | Asserções `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:163`, `:165`, `:169`, `:170`; herança `app/chamados/tests/test_e1_v8.py:118`. Escritor grava o par em `app/chamados/services/disputa_emissao.py:1481`; escape não deriva slot em `app/chamados/services/materializacao.py:359`. |
+| Recusa por paridade | Sem cura identificada | Asserções `app/chamados/tests/test_o261_recusa_fala.py:95`; fixture com par completo `:67`. Devolução preserva resposta em `app/chamados/services/validacao.py:213`, `:230`; leitura preserva texto/instante em `app/chamados/services/atos_pergunta.py:56`. |
+| Irmãs que gravaram | Sem cura identificada | `app/chamados/tests/test_o261_recusa_fala.py:116`, `:124`, `:126`, `:133`; mesma fixture com par completo `:67`. |
+| Idempotência da recusada | Sem cura identificada | `app/chamados/tests/test_o261_recusa_fala.py:158`, `:159`, `:161`, `:162`; mesmo fluxo de devolução acima. |
+| Carimbo em voo: validar recusada | Sem cura identificada | Fixture completa `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:64`; asserções `:87`, `:90`, `:92`, `:93`. |
+| Carimbo em voo: segunda tentativa | Sem cura identificada | `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:105`, `:113`, `:114`, `:118`. |
+| Carimbo em voo: determinismo | Sem cura identificada | `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:128`, `:130`. |
+| Propriedades sob intercalação | Indeterminado | Asserções `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:276`, `:281`, `:289`; a regra de nova resposta escreve somente projeção em `:243`, após possível recusa `:237`. Assim, igualdade entre texto dos atos e projeção não está garantida em todas as trajetórias. |
+| Endpoint filtra por q_vivas | **Permanece vermelho** | Teste exige exatamente um filtro de list comprehension em `app/chamados/tests/test_contract_pergunta_viva.py:78`; código possui filtro adicional em `app/chamados/services/pergunta_no_app.py:65`, além de `:67`. D1/J1 não removem esse filtro. |
+| Recusa da porta nova | Sem cura identificada | Fixture completa `app/chamados/tests/test_fio_le_o_juiz.py:167`; materializador substituído por mock em `:251`; asserções `:257`, `:258`, `:259`, `:260`. |
+| Alimentação e _no_app contam tranca | Sem cura identificada | Fixture completa `app/chamados/tests/test_n1_perguntas_do_app.py:29`; asserções `:153`, `:154`, `:156`, `:157`; contador mede `periodo_trancado` em `:65`. |
+| R11, duas máquinas | Indeterminado | Asserções `app/chamados/tests/test_e3_portas_tarefa.py:634`, `:636`; fixture sem resposta em `app/chamados/tests/e3_v8_apoio.py:167`; corpos e mocks carregados em `:189`. Não achei traceback no dado fornecido; causa específica e estado posterior [nao verificado]. |
+
+Nos fluxos determinísticos de paridade, D1 acrescentaria condição verdadeira ao par completo das fixtures; J1 recebe o mesmo texto conservado. A conservação nasce em `app/chamados/models.py:4123`; devolução altera validação, preservando resposta, em `app/chamados/services/atos_pergunta.py:56`. Isso não demonstra cura dos vermelhos.
+
+Ressalva textual: a cópia testa **somente instante** em `app/chamados/services/validacao.py:418`, enquanto o C6 testa **somente texto** em `app/chamados/juizes.py:1572`. A afirmação sobre o predicado literal do main não pode ser comprovada por essas linhas da cópia [nao verificado].
+
+O artefato `app/chamados/tests/e4c_f1v5_base_juizes.txt:1` identifica uma fotografia do BASE `97bbaa60`, não do main solicitado; portanto, não serve como substituto do diff contra `151b0666a` (`:2`, `:3`).
+
+## 15/11 17:18 · sessao 66db28c118f0 · - · - · origem=Ronald (tmux)
+
+**Embrulho e leitores**
+
+- A única instanciação produtiva encontrada de `_PerguntaParaPlantio` é `_slot_esperado`, que passa `atos.resposta` à classe e entrega o objeto a `_ts_tipo_do_plantio` (`app/chamados/juizes.py:525`). A classe só substitui `resposta_colab`; todos os demais atributos são delegados à pergunta (`app/chamados/juizes.py:384-391`). Portanto, não expõe atributo público exclusivo exigido por outro leitor (`app/chamados/juizes.py:388-391`).
+- Leitores indiretos desse objeto: `_ts_tipo_do_plantio` lê `chamado_destino`, `motivo`, `data_evento`, `pk` e `resposta_colab`; `_tipo_pelo_marco`, chamado pelo primeiro, lê `motivo`, `resposta_colab`, `data_evento` e `pk` (`app/chamados/services/materializacao.py:342-359`, `:390`, `:412-421`, `:275-289`, `:308`). Esses atributos existem na pergunta original; a única diferença é o valor de `resposta_colab` substituído pelo embrulho (`app/chamados/juizes.py:389-391`).
+- Ocorrências adicionais encontradas na busca global são suporte/testes/documentos: carregamento no ambiente recortado (`app/chamados/tests/e3_c8b_apoio.py:128-129`); exigência da presença do símbolo (`app/chamados/tests/test_e4c_f1v2_harnesses.py:55-56`, `:105`); mutante que remove o símbolo (`app/chamados/tests/e4c_f1v2_mutantes.py:61-65`); teste que instancia a classe e exige texto substituído, pergunta original intacta e ausência do campo em `vars` do embrulho (`app/chamados/tests/test_e4c_f1v7_regressoes.py:55-58`); relatos históricos (`app/chamados/tests/e4c_f1v7_entrega.txt:9`, `app/chamados/tests/e4c_f1v7_red.txt:38`).
+
+**J1: fonte realmente usada**
+
+- Materializador de hora chama `_ts_tipo_do_plantio` com a pergunta original e lê `p.resposta_colab`; o slot passa o embrulho com texto dos atos (`app/chamados/services/materializacao.py:852`; `:359`, `:412`; `app/chamados/juizes.py:525`).
+- Existe outra divergência: slot de `data_hora` lê `atos.resposta`, enquanto o materializador de `data_hora` lê `p.resposta_colab` (`app/chamados/juizes.py:512-519`; `app/chamados/services/materializacao.py:1001-1008`). Assim, **só retirar o embrulho na linha 525 não basta para cumprir a expressão “mesma fonte que o materializador” para todos os tipos** (`app/chamados/juizes.py:513`; `app/chamados/services/materializacao.py:1001`).
+- Texto sem instante pode continuar alimentando cálculo de slot sem ser classificado como “respondida”; esse caso está explicitamente testado sem fabricar instante (`app/chamados/tests/test_e4c_f1v6_matriz.py:143-146`). Portanto, esse leitor não demonstra contradição lógica com D1 (`app/chamados/tests/test_e4c_f1v6_matriz.py:144-146`). Há, entretanto, testes adicionais da obra que exigem texto sem instante em filas chamadas “respondidas a validar”, potencialmente incompatíveis com D1 aplicado a essas filas (`app/chamados/tests/test_e4c_f1v6_orm.py:54-58`).
+
+**Ponto/core: tabela para consolidação**
+
+“Vermelho” vem do anexo fornecido; onde não há transição demonstrável, mantenho resultado contrafactual `[nao verificado]`.
+
+| Teste | c9 → D1+J1 | Fundamentação | [nao verificado]
+|---|---|---|
+| `test_calendario` | vermelho → `[nao verificado]`; sem cura demonstrada | Mede contagem SQL da rota e compara teto; as perguntas da fixture já têm texto e instante (`app/core/tests/test_selo_performance.py:402-406`, `:333-350`, `:317-322`). |
+| `test_chamados_modal` | vermelho → `[nao verificado]`; sem cura demonstrada | Mesma medição; fixture já satisfaz D1 (`app/core/tests/test_selo_performance.py:377-380`, `:333-350`, `:317-322`). |
+| `test_pendencias_disputa` | vermelho → `[nao verificado]`; sem cura demonstrada | Mesma medição; fixture já satisfaz D1 (`app/core/tests/test_selo_performance.py:354-357`, `:333-350`, `:317-322`). |
+| `test_MORDE_pendente_curado_sai_da_lista` | vermelho → vermelho, se somente D1/J1 | Causa estática concreta encontrada: registro exige chamada completa numa linha; código agora acrescenta `agora=agora` e fecha chamada na linha seguinte, faltando a impressão literal (`app/core/juizes.py:878`; `app/colaboradores/services/drawer.py:121-122`; asserção `app/core/tests/test_contract_juiz_tela.py:35-38`). |
+| `test_MORDE_o_mmd_commitado_bate_com_o_codigo` | vermelho → `[nao verificado]` | Exige igualdade entre artefatos e geração; D1/J1 não especificam atualização desses artefatos nem foi fornecida a divergência (`app/core/tests/test_selo_diagrama_do_codigo.py:44-47`; `app/core/management/commands/gerar_diagrama.py:921-930`). |
+| `test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` | vermelho → `[nao verificado]` | Duas asserções: arquivo adulterado retorna 1 e arquivo restaurado retorna 0. Sem traceback não se sabe qual falhou (`app/core/tests/test_selo_diagrama_do_codigo.py:90-98`). O próprio teste escreve arquivo, portanto não deve ser executado nesta tarefa (`app/core/tests/test_selo_diagrama_do_codigo.py:90-96`). |
+| `test_registrar_batida_com_1_furo_vivo_que_ela_fecha` | vermelho → `[nao verificado]`; sem cura semântica demonstrada | Fixture cria célula/chamados de furo; verifica fechamento, callbacks e consultas, sem inserir PerguntaDisputa nesse cenário (`app/ponto/tests/test_selo_chokepoint_escrita.py:413-433`, `:435-438`, `:287-298`). |
+| `test_registrar_batida_com_3_furos_vivos_que_ela_fecha` | vermelho → `[nao verificado]`; sem cura semântica demonstrada | Mesmo cenário com três chamados; verifica três fechamentos e custos (`app/ponto/tests/test_selo_chokepoint_escrita.py:416-433`, `:440-443`, `:287-298`). |
+| `test_registrar_batida_com_3_furos_vivos_que_ficam` | vermelho → `[nao verificado]`; sem cura semântica demonstrada | Fixture cria célula/chamados cobrando saída e registra entrada; verifica vivos e custos (`app/ponto/tests/test_selo_chokepoint_escrita.py:453-468`, `:475-478`, `:287-298`). |
+| `test_ruff_zero` | vermelho → `[nao verificado]` | Asserta código de saída do Ruff sobre a árvore inteira; anexo não fornece diagnósticos que permitam atribuir a falha a D1/J1 (`app/core/tests/test_contract_esmeril.py:22-24`). |
+
+As medições de consultas ou callbacks não podem ser substituídas pela constatação de que o predicado mudou: os testes cobram valores medidos e o anexo só fornece nomes das falhas (`app/core/tests/test_selo_performance.py:338-350`; `app/ponto/tests/test_selo_chokepoint_escrita.py:287-298`; diagnóstico concreto das falhas: `[nao verificado]`).
+
+## 15/11 17:17 · sessao 86555b64bf04 · - · - · origem=Ronald (tmux)
+
+Resultados por inspeção; execução com D1+J1: [nao verificado].
+
+| Teste | Estado informado → previsão D1+J1 | Fundamentação | [nao verificado]
+|---|---|---|
+| C6 `test_RED_limbo_misto_fecha_mortas_orfa_e_entrega_motivo_proprio` | vermelho → vermelho | A própria preparação exige texto **sem instante** vivo em `app/chamados/tests/test_e4b_c6_orm.py:82`; D1 torna essa pergunta morta pela célula `ok` (`app/chamados/juizes.py:1618`). Falharia antes do ato. |
+| C11 mesmo teste herdado | vermelho → vermelho | Herança em `app/chamados/tests/test_e4b_c11_orm.py:27`; mesmo assert C6 `:82`. |
+| C11 `test_RED_A6_beneficio_rejeitado_limbo` | vermelho → vermelho | Aciona `limbo=True` (`app/chamados/tests/test_e4b_c11_orm.py:122`), chama `_provar` (`:101`), chega ao mesmo assert C6 `:82`. |
+| C12 `test_RED_desligamento` | vermelho → verde previsto [nao verificado] | Limbo sem instante em `app/chamados/tests/test_e4b_c12_orm.py:58`; D1 permite que S128 o carimbe; segunda cascata consegue carimbar a muda `admin_decidiu`, satisfazendo `:179`. |
+| Demais testes C6/C11/C12 | sem mudança lógica identificada; estados de execução [nao verificado] | Preparação padrão sem texto (`app/chamados/tests/test_e4b_c6_orm.py:71`); somente desligamento acrescenta limbo em C12 (`app/chamados/tests/test_e4b_c12_orm.py:136`). Não criam divergência texto do ato/projeção para J1. |
+
+Cadeia C12: a primeira tentativa continua retida pelo juiz próprio `respostas_sem_veredito`, cujo predicado é instante **OU** texto (`app/chamados/models.py:1952`), consultado em `app/colaboradores/services/desligamento.py:165`. Entretanto, no fechamento do chamado, D1 torna o limbo morto; S128 deixa de pulá-lo (`app/chamados/services/disputa_emissao.py:1987`), chama `carimbar(... resposta='validar')` (`:2007`), que preenche resposta/validação (`app/chamados/models.py:3260`). Na segunda execução (`app/chamados/tests/test_e4b_c12_orm.py:171`), a disputa deixa de ter a pendência e a porta de desligamento carimba a muda (`app/chamados/models.py:2029`).
+
+No subteste desligamento **não exportado**, nenhuma mudança identificada: a pergunta viva não exportada continua impedindo o fechamento e a varredura do limbo; a expectativa é chamado aberto (`app/chamados/tests/test_e4b_c12_orm.py:166`).
+
+Contradição explícita dos **testes** com D1: assert C6 `:82`, expectativas de conservar o limbo sem carimbo em `:116`, e os três testes que os utilizam. Isso não demonstra necessidade técnica de texto sem instante no plantio. O predicado distinto de proteção `respostas_sem_veredito` permanece OR na cópia (`app/chamados/models.py:1954`).
+
+Cobertura: C6 tem 11 métodos de teste; C11 acrescenta 13 e herda os 11 C6 (`app/chamados/tests/test_e4b_c11_orm.py:27`); C12 tem 10, incluindo sete subcenários em `test_nao_exportada_zero_pauta_por_gatilho` (`app/chamados/tests/test_e4b_c12_orm.py:209`). Nenhum verde→vermelho adicional foi identificado [nao verificado].
+
+## 15/11 17:17 · sessao f0c6835096f7 · E4C-F1V3 · sonda · origem=Code
+
+Não executei o envelope: ele cria/reescreve arquivos e acrescenta uma trilha, contrariando a regra de somente leitura (bin/sonda_leitura.sh:132, bin/sonda_leitura.sh:134, bin/sonda_leitura.sh:216, bin/sonda_leitura.sh:250).
+
+O universo fornecido não é vazio: **898 perguntas com ato RESPOSTA; 50.283 perguntas no total**. [nao verificado]
+
+| Classe | ABE | EXP |
+|---|---:|---:|
+| TEXTO_DIFERE | 24 [nao verificado] | Não consta [nao verificado] |
+| RESPONDIDA_SEM_ATO | 4695 [nao verificado] | 12248 [nao verificado] |
+| ATO_SEM_RESPONDIDA_EM | 24 [nao verificado] | Não consta [nao verificado] |
+
+Transcrição integral da saída fornecida; todo o bloco é **[nao verificado]**, sem nova execução:
+
+```text
+sonda_leitura: sonda_ato_x_projecao.py [2f7516615f14db9b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO perguntas_com_ato_RESPOSTA 898 perguntas_total 50283
+CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE') 24
+CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp2 06/2026') 1
+CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp2 10/2026') 2
+CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp2 11/2026') 13
+CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp3 10/2026') 2
+CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp3 11/2026') 6
+CONT ('RESPONDIDA_SEM_ATO', 'ABE') 4695
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp1 08/2026') 2
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp1 10/2026') 38
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp1 11/2026') 4
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 05/2026') 6
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 06/2026') 1
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 07/2026') 139
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 10/2026') 1889
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 11/2026') 468
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp29 07/2026') 1
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 05/2026') 2
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 06/2026') 21
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 08/2026') 1252
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 10/2026') 290
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 11/2026') 156
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 05/2026') 7
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 08/2026') 270
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 10/2026') 96
+CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 11/2026') 53
+CONT ('RESPONDIDA_SEM_ATO', 'EXP') 12248
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp2 08/2026') 7909
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp2 09/2026') 2334
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp3 07/2026') 907
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp3 09/2026') 473
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp4 06/2026') 235
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp4 07/2026') 327
+CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp4 09/2026') 63
+CONT ('TEXTO_DIFERE', 'ABE') 24
+CONT ('TEXTO_DIFERE', 'ABE', 'emp2 06/2026') 1
+CONT ('TEXTO_DIFERE', 'ABE', 'emp2 10/2026') 2
+CONT ('TEXTO_DIFERE', 'ABE', 'emp2 11/2026') 13
+CONT ('TEXTO_DIFERE', 'ABE', 'emp3 10/2026') 2
+CONT ('TEXTO_DIFERE', 'ABE', 'emp3 11/2026') 6
+PKS TEXTO_DIFERE 24 38887 39180 42244 46751 48773 51830 52502 52698 53491 53644 53782 53900 54260 54385 55295 55313 55641 56287 56608 56718 56883 56923 57211 57214
+PKS RESPONDIDA_SEM_ATO 16943 6 7 8 118 119 120 158 174 175 176 180 181 183 184 185 186 189 190 193 194 200 202 203 207 208 263 264 265 266 267 268 272 287 289 292 293 294 295 301 302 305 307 308 309 310 311 313 320 321 322 323 324 325 326 327 328 329 330 331 334 335 337 345 348 349 350 351 354 355 357 358 359 363 364 365 366 369 370 373 374 375 381 390 398 400 401 405 406 407 412 415 418 419 420 424 427 430 435 439 445 448 454 455 456 457 458 459 461 463 466 470 473 476 482 483 484 488 490 495 496 499 504 505 510 511 513 514 516 518 519 521 524 525 526 528 531 534 540 545 547 550 551 553 557 560 562 563 564 565 566 567 569 570 576 577 578 612 613 614 615 616 626 627 671 672 673 674 675 676 677 678 690 691 692 700 701 703 704 705 706 707 709 710 711 712 713 714 715 716 717 719 720 721 723 725 726 727 728 729 730
+PKS ATO_SEM_RESPONDIDA_EM 24 38887 39180 42244 46751 48773 51830 52502 52698 53491 53644 53782 53900 54260 54385 55295 55313 55641 56287 56608 56718 56883 56923 57211 57214
+```
 
 ## 15/11 16:06 · sessao 68f26a1eb8a9 · L2-BACKFILL · verificador · origem=Code
 
@@ -452,102 +592,4 @@ Os demais retornos explícitos dos handlers são 404, 403 e 400 (`app/api/views.
 
 A própria suite escrita afirma 200 para `ok` e `ja_registrada`, mas não foi executada nesta revisão (`app/api/tests/test_api_bater_ponto.py:617-620`).
 
-## 15/11 15:33 · sessao 162998a4eebf · - · - · origem=Ronald (tmux)
-
-- **1 — NAO PROCEDE quanto à inexequibilidade demonstrada.** Um Codex da F1 mais C em opus soma dois construtores; o teto geral é dois, enquanto a trava de um limita especificamente Codex construtor (`CLAUDE.md:291-292`, `:353-356`; anexo `queima_util_1530.txt:2,6`). Conferência efetiva de todas as vagas antes da abertura **[nao verificado]**. Cópia do HEAD e raia de UI são procedimentos previstos (`CLAUDE.md:39-40`, `:309-313`). `--sem-migrate` existe e recusa migrations pendentes; pendência concreta **[nao verificado]** (`bin/deploy.sh:185-219`). A suite pode esperar a trava; rc 75 significa ausência de vez (`bin/suite.sh:31-33`, `:317-319`).
-
-- **2 — NAO PROCEDE.** Sem vaga não abre; BUG-PAR aberta tem precedência; cota esgotada determina commit parcial e RELATO (anexo `queima_util_1530.txt:6-8`). Condição literal não satisfeita encontra o PAROU geral (`CLAUDE.md:37-38`). Respostas desconhecidas/ausentes e JSON ilegível têm mensagem definida; sítios fora de templates vão ao BACKLOG (anexo `reemissao_1215.txt:4-5`). [nao verificado]
-
-- **3 — Não encontrei colisão normativa demonstrada; colisão por diff depende da conferência das outras cópias [nao verificado].** A proibição anterior recebe exceção nominal para C (anexo `queima_util_1530.txt:6`). A v2 continua **classe A nominal**, com escada inteira (`app/docs/CORTES.md:409,411,413`); “tela” não revoga preverificador e suite inteira antes do opus (`CLAUDE.md:372-381`; `app/docs/PISTA.md:102-114`). C exige expressamente DUAS cascas, portanto não elimina BUG 73 (`CLAUDE.md:202-203`; anexo `queima_util_1530.txt:6`). iPhone/Android identificam plataformas e não comprovam, por si, clique nas árvores admin `base.html` e colaborador `base_app.html`; smoke cumprido **[nao verificado]** (`app/docs/LEIS.md:98-99`).
-
-- **4 — Referências operacionais conferidas:** cópia HEAD, teto, raia UI, deploy e smoke têm suporte nas linhas acima. A grafia `static/js/pwa.js` deve ser conferida: os cortes nominais apontam **`app/static/pwa.js`** (`app/docs/CORTES.md:411,413`). Estados reais de vagas, fila da VM, migrations e cliques não são provados pelas leis **[nao verificado]**.
-
-## 15/11 15:13 · sessao 8a4705563cb1 · BUG-PAR-VOLTA-AGORA · verificador · origem=Code
-
-**AVAL-DEVOLVIDO: COMPLEMENTO-4 QUEIMA — BUG-PAR-VOLTA-AGORA | itens 1, 2, 3 e 4.** Uso **PROCEDE** para objeção procedente, conforme o protocolo; qualquer PROCEDE impede executar. (`revisao_do_aval.txt:6`, bloco do anexo `avais.txt`.)
-
-Nos anexos, conto linhas desde o primeiro conteúdo; nos avais, cada bloco começa em 1 após o separador `=====`.
-
-1. **PROCEDE — as premissas não ficam integralmente certificadas.**
-
-   - **Portão confirmado:** `_espera_do_aval_163` aplica a comparação às metades de intervalo e declara “Sem universo nem ordem de clique”; a escrita consulta esse portão antes de materializar. (`app/chamados/services/materializacao.py:720`, `app/chamados/services/materializacao.py:724`, `app/chamados/services/materializacao.py:1745`.)
-   - **Os quatro testes existem:** resposta nova divergente, saída primeiro, volta primeiro e testemunha indisponível no modal. (`app/chamados/tests/test_bug_par_projetado.py:1107`, `app/chamados/tests/test_bug_par_projetado.py:1130`, `app/chamados/tests/test_bug_par_projetado.py:1135`, `app/chamados/tests/test_bug_par_projetado.py:1140`.)
-   - **O RED fornecido mostra 61 testes descobertos e quatro falhas:** nas ordens de clique aparecem duas batidas; a resposta nova recebe `aplicavel`; o modal oferece Validar sem testemunha. Isso evidencia aquela execução, não o resultado atual desta cópia **[nao verificado]**. (`red163b.log:1`, `red163b.log:18`, blocos `FAIL` seguintes.) [nao verificado]
-   - **As inversões estão documentadas no código:** `test_intervalo_volta_com_hora_diferente_do_marco_espera_e_nao_planta` exige nenhuma batida e espera; o outro é o atual `test_RED_resposta_nova_nunca_recusada_que_gravaria_diferente_espera`, cujo comentário registra o nome anterior `test_fora_do_universo_diferente_segue_aplicavel`. A atribuição histórica exata ao commit `43c820cbc` é **[nao verificado]** nesta cópia. (`app/chamados/tests/test_s139.py:26`, `app/chamados/tests/test_s139.py:49`, `app/chamados/tests/test_bug_par_projetado.py:1108`.)
-   - **“RELATO:262” identifica a frase errada:** “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. O código exclui validadas da lista sem veredito; `pode_fechar` consulta essa lista e `fio_vivo`, sem consultar aquela testemunha. A posição atual da frase original no RELATO vivo é **[nao verificado]**; não confundir com a linha que relata sua reprovação. (`app/docs/RELATO.md:262`, `app/chamados/models.py:1905`, `app/chamados/models.py:1917`; anexo `relato_topo.txt:72`.)
-   - **163 = 60 + 103 está documentado, mas o selecionador existente lê a recusa:** o queryset exclui `recusa_motivo=''`, o classificador traduz o campo e o predicado dos 103 também o exige. Portanto reutilizá-lo para montar o novo universo viola o PROIBIDO. (`app/chamados/services/materializacao.py:327`, `app/chamados/services/materializacao.py:251`, `app/chamados/services/materializacao.py:262`, `app/chamados/services/materializacao.py:278`.)
-   - **Há uma alternativa documental por listas de PK**, mencionada pelos censos, independente dos cliques; porém o conteúdo integral dessas listas não foi fornecido. Remontar e conferir exatamente os 163 com o material disponível é **[nao verificado]**. Isso não prova impossibilidade técnica; impede certificar a montagem existente. (Anexo `logs/OITO-LEITORES/y-bugpar-alcance-espera/entrega.md:19`, `logs/OITO-LEITORES/y-bugpar-alcance-espera/entrega.md:22`.)
-
-2. **PROCEDE — permanece dependência de condição de pouso devolvida.** [nao verificado]
-
-   O COMPLEMENTO-4 exige as três provas do CORTES-1358 C2, mas o topo vivo declara **“C2 espera reemissao”**. Repetir essa referência não fornece o produtor que separa NOVA de legado nem o contrato do contador. (`complemento4_bugpar_volta_agora.txt:7`; anexo `relato_topo.txt:15`.)
-
-   A exceção à QUEIMA e à espera do CORTES C é expressamente declarada para BUG-PAR. A política de aguardar a espinha cruzada permanece compatível com o próprio portão. Já a frase do COMPLEMENTO-3 — “nenhuma volta de construtor antes da redefinicao” — não é nominalmente substituída; sua compatibilização exige interpretar a autorização posterior como exceção, interpretação que o literal não explicita. (`complemento4_bugpar_volta_agora.txt:1`, `complemento4_bugpar_volta_agora.txt:3`; `complemento2_queima.txt:4`; `complemento3_queima.txt:5`.)
-
-   **Não procede objeção automática por segunda vaga Codex:** o construtor pedido é opus; o teto escrito admite 1 opus + 1 Codex, mantendo um único Codex construtor por repositório. A ocupação efetiva completa desse teto é **[nao verificado]**. (`complemento4_bugpar_volta_agora.txt:4`; `app/docs/LEIS.md:147`; `CLAUDE.md:355`.)
-
-   C7 intocado corresponde ao predicado registrado; não significa C7 curado. Colisão com o **PORTAO-DA-11** é **[nao verificado]**: seu literal não foi fornecido. (`app/docs/CORTES.md:83`; `app/core/juizes.py:302`; `complemento4_bugpar_volta_agora.txt:4`.)
-
-3. **PROCEDE — a abertura já falhou e há exigências que não fecham juntas como estão.**
-
-   **A condição (1) tem “senão” e ele já foi acionado:** cruzou `app/config/crons.py` e `app/core/tests/test_medida_turno_do_par.py` com F1 e R3. O aval manda registrar espera pelo pouso e **não abrir**; a medição fornecida conclui exatamente isso. Não cabe avançar à construção por disponibilidade de vaga. (`condicao1.txt:3`, `condicao1.txt:6`, `condicao1.txt:11`; `complemento4_bugpar_volta_agora.txt:3`; `CLAUDE.md:37`.)
-
-   **Os testes precisam ser reconciliados explicitamente:** um dos quatro RED é justamente a caracterização invertida de “fora do universo segue aplicável”. O complemento manda desfazer essa inversão, manter os quatro verdes e exigir que fora163 divergente não espere. Os dois testes de ordem também apenas respondem perguntas novas, sem inclusão explícita no universo163. Não se pode presumir essa inclusão para fechar as expectativas. (`complemento4_bugpar_volta_agora.txt:4`, `complemento4_bugpar_volta_agora.txt:5`; `app/chamados/tests/test_bug_par_projetado.py:1108`, `app/chamados/tests/test_bug_par_projetado.py:1117`.)
-
-   **C2 continua pendente:** o I18 disponível mede validação sem **carimbo** e sem recusa, não ausência de **batida**, nem distingue NOVA de legado. Os censos fornecidos documentam 15 do laço e 29 exportadas em disputas fechadas, mas mantêm 8×79 sem reconciliação e não entregam a execução exigida. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1074`; anexo `logs/LU2-CORTES/15/entrega.md:52`, `logs/LU2-CORTES/15/entrega.md:54`; `relato_topo.txt:15`.)
-
-   **“Cópia nova sobre 6e2fc9133 reaplicada no HEAD”** só atende à lei com base efetiva no HEAD e reaplicação do delta; construir simplesmente sobre o hash antigo não atende. Essa reaplicação é **[nao verificado]**. (`CLAUDE.md:39`; `complemento4_bugpar_volta_agora.txt:4`.)
-
-   **A suíte esperar atrás da espinha não é defeito:** o aval preserva a prioridade e exige inteira antes do opus final, conforme a lei. Deve certificar a árvore resultante, não aproveitar o verde anterior. (`complemento4_bugpar_volta_agora.txt:6`, `complemento4_bugpar_volta_agora.txt:7`; `CLAUDE.md:320`, `CLAUDE.md:377`.) [nao verificado]
-
-4. **PROCEDE — o alcance exportado não está operacionalmente fechado.**
-
-   O universo163 **inclui metade em competência exportada pelo censo fornecido**: a projeção b103 contém `3 ABE + 1 EXP`. Isso demonstra pelo menos uma; a quantidade exportada de **todo** o universo163 é **[nao verificado]**. (`logs/LU2-CORTES/15/entrega.md:51`, anexo.)
-
-   `bug_par_103 --apply` está declarado como ato separado, portanto sua menção não autoriza executá-lo nesta construção. Contudo, o comando apenas conta exportadas e depois percorre todas as linhas no apply; a porta descarimba e zera a validação. “Ato separado” não equivale a exclusão mecânica das exportadas. (`complemento4_bugpar_volta_agora.txt:6`, `complemento4_bugpar_volta_agora.txt:7`; `app/chamados/management/commands/bug_par_103.py:52`, `app/chamados/management/commands/bug_par_103.py:83`; `app/chamados/services/validacao.py:294`, `app/chamados/services/validacao.py:297`.)
-
-   Restaurar o comportamento fora163 também altera a passagem de caminhos de escrita: o gate antecede o plantio e alcança laço, lote, passivo e irmã; no passivo exportado, plantio pode seguir para REGEN e Pauta. Logo “qualquer apply proibido” durante construção não comprova ausência de efeito posterior em exportada ou dinheiro. O impacto monetário é **[nao verificado]**; o gravado exportado continua sujeito a `!`, DIFF, reversão e prova. (`app/chamados/services/materializacao.py:1741`, `app/chamados/services/materializacao.py:1757`; `app/chamados/services/passivo_validado.py:444`, `app/chamados/services/passivo_validado.py:453`; `CLAUDE.md:411`.)
-
-## 15/11 15:11 · sessao dc628975f96d · - · - · origem=Ronald (tmux)
-
-Achados para consolidação:
-
-- **RELATO:262 confere nesta cópia.** Afirma: “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. O corpo contradiz essa explicação: `sem_veredito_entre` exige `validada_em is None`, e `pode_fechar` consulta essa lista e `fio_vivo`, sem chamar `estado_aplicacao_pergunta`. Fontes: `app/docs/RELATO.md:262`; `app/chamados/models.py:1905`; `app/chamados/models.py:1917`. No RELATO vivo do anexo, a posição atual exata dessa frase original não foi fornecida `[nao verificado]`.
-
-- **O seletor disponível não satisfaz “sem ler recusa_motivo”.** `_qs_recusadas_paridade_de_intervalo` exclui recusa vazia; `_recusa_e_de_paridade` traduz esse campo; o contador chama ambos; a condição dos 103 também chama `_recusa_e_de_paridade`. Fontes: `app/chamados/services/materializacao.py:246`, `:251`, `:258`, `:262`, `:278`, `:330`. O contador documenta `total_aval = universo + len(bug_par_103)` e sua transição após devolução, mas o código não fixa nem prova cardinalidade 163. Fonte: `app/chamados/services/materializacao.py:327`, `:350`, `:353`. As listas primárias `u163.py`/`pks103.txt` citadas nos anexos não estão disponíveis nesta cópia `[nao verificado]`.
-
-- **`bug_par_103 --apply` é escrita real separável.** Sem `--apply`, retorna após o DRY; com apply, grava reversão antes e chama a porta para cada linha. Fontes: `app/chamados/management/commands/bug_par_103.py:65`, `:77`, `:85`. A porta descarimba, zera validação e grava DP/trilha; conserva a disputa fechada. Fontes: `app/chamados/services/validacao.py:269`, `:272`, `:294`, `:297`, `:302`, `:307`. Assim, a proibição de apply durante construção não autoriza executar esse ato nesta revisão; sua menção em “DEPOIS” identifica ato futuro declarado, cujo fechamento operacional não foi provado `[nao verificado]`.
-
-- **O comando conta exportadas, mas não as exclui.** O laço marca `exportada`, a saída conta, e o laço do apply percorre todas as linhas, sem veto de competência. Fontes: `app/chamados/management/commands/bug_par_103.py:48`, `:52`, `:55`, `:62`, `:83`. A devolução em si não planta batida no corpo dessa porta, mas a validação posterior agenda recálculo pela data do fato. Fontes: `app/chamados/services/validacao.py:294`, `:299`, `:580`, `:590`.
-
-- **Restaurar comportamento fora do 163 também alcança caminhos que escrevem.** O gate fica antes de `_materializar_resposta_hora`; seu comentário nomeia laço, lote, passivo e irmã. Fontes: `app/chamados/services/materializacao.py:1741`, `:1745`, `:1755`. No passivo, plantio em exportada pode seguir para REGEN e Pauta. Fontes: `app/chamados/services/passivo_validado.py:442`, `:444`, `:453`, `:458`. Portanto “sem apply” sozinho não prova ausência de efeito posterior em exportada/dinheiro; impacto da implementação futura `[nao verificado]`.
-
-- **Lei escrita sobre gravado exportado continua exigente.** Exige `!`, DIFF prévio, reversão, prova e porta REGEN; L-113 conserva versões TXT, trilha e DIFF anterior ao ato de frota. Fontes: `CLAUDE.md:404`, `:411`, `:412`, `:415`; `app/docs/LEIS.md:154`.
-
-- **Cuidado com a contagem exportada do anexo.** O censo LU2-15 fornecido informa “b103 projecao 3 ABE + 1 EXP”; isso demonstra pelo dado fornecido pelo menos uma metade do universo em exportada. A subtração `76 − 75 = 1` refere-se às oito metades **em espera dentro do 163**, não a todas as 163. Contagem exportada de todo o universo 163 `[nao verificado]`. Os arquivos originais do censo não existem nesta cópia, portanto arquivo:linha primário dessa medição `[nao verificado]`.
-
-## 15/11 15:11 · sessao 77ec9dcbca3e · - · - · origem=Ronald (tmux)
-
-Leitura concluída sem escrita.
-
-- **Portão sem universo confirmado:** `app/chamados/services/materializacao.py:720-731` compara toda metade de intervalo; `:724` diz literalmente “Sem universo nem ordem de clique”. Chamadas da testemunha em `:847` e `:861`; da escrita em `:1745-1749`; proteção tardia no ponto de criação em `:1355-1357`; validação antes da escrita em `app/chamados/services/validacao.py:532-541`. `no_universo_163` está morto/documentado em `materializacao.py:692-693`.
-
-- **Os quatro testes do RED existem na classe**, com linhas deslocadas em relação ao log fornecido: [nao verificado]
-  1. `test_RED_resposta_nova_nunca_recusada_que_gravaria_diferente_espera`: `app/chamados/tests/test_bug_par_projetado.py:1107-1115`.
-  2. `test_RED_ordem_saida_primeiro_espera`: `:1130-1133`.
-  3. `test_RED_ordem_volta_primeiro_o_MESMO_resultado`: `:1135-1138`.
-  4. `test_RED_testemunha_que_falha_no_modal_nao_oferece_validar`: `:1140-1153`.
-  
-  O anexo `red163b.log` fornecido mostra precisamente quatro falhas, 61 testes, `rc=1`: dois testes de ordem plantaram duas batidas; o de resposta nova recebeu `aplicavel`; o modal ofereceu validar sem testemunha. Isso prova o RED daquela execução, **não prova falha nem verde desta cópia** `[nao verificado: execução atual]`. [nao verificado]
-
-- **Incompatibilidade literal relevante:** três dos quatro RED exigem espera em respostas novas sem inclusão explicitada no universo 163. O teste `:1108-1109` diz que antes se chamava `test_fora_do_universo_diferente_segue_aplicavel`; a fixture apenas cria perguntas novas em `:74-76` e as responde em `:78-81`. Os testes das duas ordens usam `_as_duas_ordens` em `:1117-1128`, que apenas responde e exige zero batidas, imutabilidade e espera. O C4 manda “os testes invertidos ... voltam”, “os 4 ... verdes” e simultaneamente MORDE fora163 com divergência sem espera. **Sem redefinir/separar as fixtures, o literal mantém expectativas opostas para o caso fora163.** Inclusão destas fixtures sintéticas no universo 163 não está especificada `[nao verificado]`. O quarto RED (testemunha indisponível) é independente dessa divergência. [nao verificado]
-
-- **Testes invertidos existentes:** `app/chamados/tests/test_s139.py:26` chama-se `test_intervalo_volta_com_hora_diferente_do_marco_espera_e_nao_planta`; `:49-56` documenta caracterização invertida e exige nenhuma batida/espera para E02 declarada versus E03 do marco. Outro é o acima, antigo `test_fora_do_universo_diferente_segue_aplicavel`, documentado em `test_bug_par_projetado.py:1108`. **Atribuição histórica exata ao commit 43c820cbc não verificável:** não há repositório `.git` nesta cópia `[nao verificado]`. Há ainda teste cuja cauda foi invertida pela obra, mas sem atribuição específica a esse commit: `test_RED_2_irma_implausivel_a_tela_nao_diz_aplicavel`, `:315-335`; comentário `:318-321` descreve a inversão para espera.
-
-- **163 = 60 + 103 consta no código**, em `materializacao.py:315-328`; `total_aval` é computado em `:350-353`. **Mas o selecionador existente viola a nova proibição se reutilizado para montar o universo:** `_qs_recusadas_paridade_de_intervalo` exclui `recusa_motivo=''` em `:246-255`; `_recusa_e_de_paridade` lê e traduz esse texto em `:258-262`; `paridade_absolvida_bug_par_103` exige `_recusa_e_de_paridade` em `:265-278`; o contador aplica ambos em `:330-335`. Não existe no código examinado seletor persistente/estático do 163 independente desse texto. O rótulo de devolução lê trilha e independe da recusa em `:281-294`, mas só cobre quem já passou pela devolução, não as 60 nem os 103 ainda não devolvidos. [nao verificado]
-
-- **Os anexos afirmam outra via viável, documental:** leitor y diz ter casado lista de PK de prod, U60 por `r.r:46`, U103 por `pks103.txt`, união sem sobreposição via `u163.py`; LU2-15 repete essa via. Esses arquivos/listas não constam da cópia e seus conteúdos não foram fornecidos; portanto **existência da técnica é evidência documental, mas remontar/verificar exatamente os 163 sem recusa, aqui e agora, é `[nao verificado]`**. Não transformar isso em prova de impossibilidade técnica: é ausência da lista/material executável na cópia, e a implementação foi expressamente deixada ao construtor.
-
-- **RELATO:262 está exatamente na cópia** e afirma: “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. `app/docs/RELATO.md:262`. A frase é falsa pelo código: `app/chamados/models.py:1905-1909` só considera sem veredito quem não tem validação nem materialização; `:1911-1917` usa a lista sem veredito e `fio_vivo`, sem chamar a testemunha. Os juízes estão registrados em `app/core/juizes.py:287` e `:302`. O próprio teste legado documenta fechamento sem batida em `test_bug_par_projetado.py:1046-1049`. A ocorrência histórica da reprovação no RELATO vivo não é a frase que o aval manda corrigir.
-
-_5692 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5696 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
