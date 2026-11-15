@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 20:49:19.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.1 MB). Acoes na janela: **1792**.
+**Medido em 15/11/2026 20:54:30.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.2 MB). Acoes na janela: **1794**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:49:48 | Bash | Write impact reading and RELATO line | `cd /home/ronald/saas-hasner; cat > logs/ORDEM-VIVA-1511/BUG-ENC/impacto_v2_leitura.md <<'EOF' # BUG-ENC impacto v2 -- leitura caso a caso (sessao, 15/11 20:4x) Fonte: logs/BUG-ENC-IMPACTO-V2-1511.out (29.370 dia x instante, D+1 03h/08h, total_erros 0) e logs/BUG-ENC-CASOS-1511.out (batidas em hora local). Valor = motivo de NAO encerrado; None = encerrado. HOJE = cartorio com celulas compostas (bug ...` |
+| 20:49:25 | Bash | Read per-case detail | `cd /home/ronald/saas-hasner; grep -v 'objects imported' logs/BUG-ENC-CASOS-1511.out \| cut -c1-260 \| head -90` |
 | 20:48:57 | Monitor | BUG-ENC casos sombra rc | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/ORDEM-VIVA-1511/BUG-ENC/casos_rodar.log; do /usr/bin/sleep 5; done; echo "casos $(grep '^rc=' logs/ORDEM-VIVA-1511/BUG-ENC/casos_rodar.log) $(grep total_erros logs/BUG-ENC-CASOS-1511.out 2>/dev/null)"` |
 | 20:48:53 | Bash | Write and run per-case detail script in sombra | `cd /home/ronald/saas-hasner/logs/sombra; cat > bug_enc_casos.py <<'EOF' # BUG-ENC-CELULAS-FORMA -- os casos divergentes do IMPACTO v2, um por um, com batidas e marcos (somente leitura, colNNN). import logging, sys, traceback, datetime as _dt sys.dont_write_bytecode = True from django.utils import timezone logging.disable(logging.CRITICAL) from colaboradores.models import Colaborador from escala.mo ...` |
 | 20:48:40 | Bash | List divergent colabs | `cd /home/ronald/saas-hasner; grep -E '^\s+col' logs/BUG-ENC-IMPACTO-V2-1511.out` |
