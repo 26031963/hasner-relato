@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 23:31:20.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (14.6 MB). Acoes na janela: **403**.
+**Medido em 14/11/2026 23:36:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (14.6 MB). Acoes na janela: **404**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:36:44 | Bash | Read which job finished and its tail | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks/bczk75meg.output; tail -12 logs/E3-V10/pousa_verde/push2.out 2>/dev/null \| cut -c1-200; tail -5 logs/E3-RESTO-R3/c4/c4.log \| cut -c1-300` |
 | 23:26:29 | Bash | Put ESPERANDO on RELATO line 3 and check hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('DESPACHO E3-RESTO-R3') and L[4].startswith('ESPERANDO:') desp=L[2]; L[2]='ESPERANDO: codex_pergunta.sh \| pid=19564'; L[4]=desp L.insert(5,'ESTADO 23:27 E3-RESTO-R3 c4: vaga unica de construtor ocupada (Codex construtor pid 19564, wt-codex-e3-resto-r3-231625, brief logs/E3-RE ...` |
 | 23:26:23 | Bash | Check RELATO top and live jobs | `cd /home/ronald/saas-hasner; head -5 app/docs/RELATO.md \| cut -c1-100; kill -0 19564 && echo c4-vivo; kill -0 4167543 && echo push-vivo` |
 | 23:26:10 | Bash | Wait for constructor or push | `cd /home/ronald/saas-hasner; until [ -s logs/E3-RESTO-R3/c4/c4.rc ] \|\| [ -s logs/E3-V10/pousa_verde/push2.rc ]; do /usr/bin/sleep 30; done; cat logs/E3-RESTO-R3/c4/c4.rc logs/E3-V10/pousa_verde/push2.rc 2>/dev/null; ls logs/GRADE-MESTRA/resolve67/*.rc 2>/dev/null \| wc -l` |
