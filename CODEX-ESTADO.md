@@ -1,7 +1,481 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 23:36** · publicado em **14/11/2026 23:36** (UTC-3)
+> Ultima resposta processada: **14/11/2026 23:41** · publicado em **14/11/2026 23:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 23:41 · sessao 8ccf40c881f4 · - · - · origem=Ronald (tmux)
+
+Achados:
+
+1. **Média — selo existente contradiz a cura.** `app/folha/tests/test_retrato_folha_quadros.py:1250` exige **5** bloqueados sob `f=bloqueado&dono=admin`. A mesma fixture passou a produzir **4**, conforme novo mapa `app/folha/retrato_folha.py:193`; o próprio teste atualizado já espera 4 em `app/folha/tests/test_retrato_folha_quadros.py:710`. Executei sem BD o módulo real + `_l`/`LINHAS` reais extraídos por AST: resultado **4**. Logo a suíte contém falha determinística.
+
+2. **Média — golden e teste de transição fora do diff continuam cobrando a partição antiga.** `app/folha/tests/test_haiku_fora_da_folha.py:496` inicializa os donos pelo eixo vivo e `:499` traduz pelo mapa vivo, mas `:516` exige Admin=2 para o caso com um fio admin e um ninguem (`:521`). Com LU-05, essa expectativa é Admin=1/Sem ação=1. O teste seguinte exige que o balde fique igual antes/depois de surgir chamado (`:559`) e porta admin (`:580`), embora a cura deva mover a pessoa de Sem ação para Admin. Execução com BD `[nao verificado]`; incompatibilidade das asserções demonstrada pelo código.
+
+3. **Baixa — leitores documentais mantêm o significado antigo do contador.** O help promete “pessoas bloqueadas ... com fio ninguem” (`app/folha/management/commands/vigiar_retido_calado.py:21`) e a definição do módulo faz a mesma promessa (`app/folha/vigia_retido_calado.py:4`), enquanto o novo filtro exclui Hoje/futuro (`:48`, via `app/folha/retrato_folha.py:480`). O comentário do cron também mantém a definição antiga (`app/config/crons.py:1677`).
+
+Inventário:
+
+- **Escritores das constantes:** `app/folha/retrato_folha.py:190` DONOS; `:193` DONO_DO_FIO; `:197` FIOS_DO_DONO derivado; `:198` ROTULO_DO_DONO; `:302` LED_DA_LINHA. Em produção, não localizei outro escritor explícito desses nomes; mutações de teste em `app/folha/tests/test_retrato_folha_dono_sao_tres.py:117`, `app/folha/tests/test_retrato_folha_drawer.py:81`/`:235`.
+- **Leitores:** tooltip lê FIOS_DO_DONO (`app/folha/retrato_folha.py:72`); dono lê DONO_DO_FIO (`:484`); LED deriva do dono (`:523`); derivados de LED (`:311`); URL do LED consulta DONOS (`:555`); filtros e rótulos publicam os mapas (`:579`, `:581`, `:588`); agrupamento (`:687`); barra itera valores publicados (`:898`); drawer lê dono/rótulo/cor (`:1084`, `:1092`); legenda itera LED_DA_LINHA (`:1117`).
+- **Views/exportação:** tela lê desenho (`app/folha/views_retrato.py:280`), barra (`:318`) e legenda (`:325`); PDF lê barra (`:394`) e LED (`:411`); lente lê LED (`:494`). Drawer do colaborador chama `o_que_fazer` e legenda (`app/colaboradores/views.py:986`, `:988`). Esses caminhos acompanham o mapa único.
+- **Contadores gerais:** `contadores` conta exclusivamente os três filtros de folha, sem ler DONOS (`app/folha/retrato_folha.py:120`); lavrador o consome (`app/folha/management/commands/lavrar_retrato_folha.py:72`). `placar_ontem_hoje` trata existência de fotos (`app/folha/retrato_folha.py:707`); lente o lê (`app/folha/views_retrato.py:515`).
+- **Vigia antes/depois:** pelo diff fornecido, antes selecionava todos os bloqueados de fio ninguem; agora seleciona o balde Sem ação (`app/folha/vigia_retido_calado.py:48`). Ambos descontam C5 para roteados (`:49`). Portanto saem **de calados e de roteados** as linhas ninguem cujas datas são todas hoje/futuro; bloqueados não muda (`:52`). Universo: retratos do último dia de lavra de cada empresa (`:39`), unidade efetiva **pessoa por retrato/competência**, somada entre competências (`:46`, `:53`).
+- **Leitores do vigia:** serialização lê calados/roteados (`app/folha/vigia_retido_calado.py:64`, `:67`); command lê para apresentação e alarme (`app/folha/management/commands/vigiar_retido_calado.py:31`, `:35`); cron chama somente `--alarme` (`app/config/crons.py:1680`), que alarma cego, sem incluir calados (`app/folha/management/commands/vigiar_retido_calado.py:16`). Leitor específico em ESTADO/placar `[nao verificado]`; não localizado nas buscas da cópia.
+
+Mapa próprio fio→balde encontrado: os testes citados nos achados preservam expectativas antigas literais (`app/folha/tests/test_haiku_fora_da_folha.py:516`, `:559`; `app/folha/tests/test_retrato_folha_quadros.py:1250`). Nenhum segundo mapa de produção identificado nos leitores examinados; varredura de chamadas indiretas arbitrárias `[nao verificado]`.
+
+## 14/11 23:40 · sessao cb4838ab95cd · - · - · origem=Ronald (tmux)
+
+Achado **MÉDIO — testes fora do diff ainda exigem a partição antiga**: [nao verificado]
+
+- `app/folha/tests/test_haiku_fora_da_folha.py:516` exige `Admin == 2`, embora o próprio teste declare `{admin: 1, ninguem: 1}` em `:521` e derive os baldes pelo mapa real em `:496-500`. Com `ninguem → sem_acao_disponivel` em `app/folha/retrato_folha.py:193`, o esperado passa a `Admin == 1`.
+- O mesmo arquivo exige que o balde permaneça igual ao trocar `ninguem → chamado` (`:559`) e `ninguem → admin` (`:580`). Isso contradiz a nova partição em `app/folha/retrato_folha.py:193`. Execução integral desses testes com BD: `[nao verificado]`.
+
+Tela: nenhum erro confirmado de iteração ou tooltip:
+
+- Barra deriva valores de `DONOS` (`app/folha/retrato_folha.py:581`, `:893-901`) e o template itera todos os quadros/itens (`app/templates/core/_barra_gestao.html:63`, `:67`); vermelho já existe em `:67`.
+- Legenda itera a lista completa, com `flex-wrap:wrap` (`app/templates/folha/_retrato_legenda.html:26-30`).
+- Lista e Raio-X recebem LED pronto (`app/folha/views_retrato.py:280`, `:494`; `app/templates/folha/_retrato_lista.html:47`; `app/templates/folha/_retrato_raiox.html:67`).
+- Drawer recebe rótulo e legenda do módulo (`app/colaboradores/views.py:986-988`) e os renderiza genericamente (`app/templates/folha/_retrato_o_que_fazer.html:33-36`, `:83`).
+- Tooltip novo existe por `FIOS_DO_DONO → GRUPOS['D']` (`app/folha/retrato_folha.py:69-72`, `:197`; `app/folha/fora_da_folha.py:42`).
+- Geometria efetiva nas três larguras: `[nao verificado]`; o próprio smoke registra essa limitação (`app/folha/tests/test_retrato_folha_smoke_chromium.py:4`). Seus testes dependem de BD e arquivos temporários (`:229-261`).
+- PDF recebe o rótulo novo como string em coluna fixa de 26 mm (`app/folha/views_retrato.py:411-425`). Transbordo do texto: `[nao verificado]`; ReportLab não está disponível para medição local `[nao verificado]`.
+
+Os seis testes sem banco passaram; abrangem agrupamento, tooltip, drawer e vigia, sem prova de geometria (`app/chamados/tests/test_e3_r3_c4_sem_banco.py:53`, `:69`, `:98`, `:134`).
+
+## 14/11 23:40 · sessao da2fa83bcebb · - · - · origem=Ronald (tmux)
+
+- **Alta — “Sem ação disponível” pode ter ação publicada.** O fio gravado é agregado por pessoa: basta um dia `nada` para `_grupo` produzir `D`, mesmo havendo outros dias `admin` (`app/folha/fora_da_folha.py:88-99`). O mesmo laço conserva as ações dos outros dias (`app/folha/fora_da_folha.py:192-205`); o lavrador grava `dono=ninguem` e essas ações juntas (`app/folha/retrato_folha.py:1215-1216`). Caso sintético executado em memória: pessoa com 12/11 `admin/resolver_dia` e 13/11 `nada` recebe `sem_acao_disponivel` e mantém botão “Resolver dia no calendário” (`app/folha/retrato_folha.py:480-484`, `app/folha/retrato_folha.py:1027-1039`). Portanto o balde significa “há algum dia sem porta”, não “esta pessoa não tem ação disponível”; ocorrência real em produção `[nao verificado]`.
+
+- **Alta — desconhecimento vira “Sem ação disponível”.** Falha da autoridade de calendário produz `None` (`app/colaboradores/services/calendario.py:127-145`); a tarefa corretamente marca `nao_sei=True` (`app/chamados/services/tarefa_do_dia.py:614-615`). Sem outra ação/porta, escolhe fio `nao_sei` e rota `None` (`app/chamados/services/tarefa_do_dia.py:646-654`); `porta_da_tarefa` devolve apenas `None`, descartando o desconhecimento (`app/chamados/services/tarefa_do_dia.py:686`). A Folha converte isso em `nada`, depois grupo `D`, fio gravado `ninguem` e o novo balde afirmativo (`app/folha/fora_da_folha.py:82-85`, `app/folha/fora_da_folha.py:93-94`, `app/folha/retrato_folha.py:370`, `app/folha/retrato_folha.py:193`). Ocorrência real `[nao verificado]`.
+
+- **Média — `ninguem` também cobre ausência de dia e legado, sem julgamento de porta.** `_grupo([])` retorna `None`; `_fio_cru('fora','furo_espelho',None)` retorna `ninguem` (`app/folha/fora_da_folha.py:91-92`, `app/folha/retrato_folha.py:370`). Retrato sem fio gravado também vira `ninguem` pelo fallback, sem consultar porta (`app/folha/retrato_folha.py:438-443`). São outros universos além de “dia sem porta”; quantidades atuais `[nao verificado]`.
+
+- **Selo incompleto para esses casos.** O teste novo de ausência de porta usa uma linha sem `acoes` e `tipo=sem_causa`; não exerce pessoa com dias mistos (`app/chamados/tests/test_e3_r3_c4_sem_banco.py:33-35`, `app/chamados/tests/test_e3_r3_c4_sem_banco.py:93-102`). O contrato integrado cobre somente sistema sem fila/âncora/oferta, não desconhecimento da autoridade (`app/chamados/tests/test_e3_r3_c4_sem_banco.py:104-130`).
+
+- **Docstrings alteradas de `tarefa_do_dia`: nenhum erro identificado.** Os memos existem por instância (`app/chamados/services/tarefa_do_dia.py:397`, `app/chamados/services/tarefa_do_dia.py:543-551`, `app/chamados/services/tarefa_do_dia.py:565-600`); as fontes adicionais da rota são usadas (`app/chamados/services/tarefa_do_dia.py:580-582`, `app/chamados/services/tarefa_do_dia.py:592-599`); `_posicoes` efetivamente devolve o dict da lâmpada (`app/chamados/services/tarefa_do_dia.py:80-85`).
+
+- **Juiz duplicado/escritor/trava/pré-requisito:** nenhum acréscimo dessas classes nos corpos alterados pelo diff fornecido; `tarefa_do_dia` mantém a tranca lida de `dias_trancados` e retorno sem ações (`app/chamados/services/tarefa_do_dia.py:215-223`, `app/chamados/services/tarefa_do_dia.py:443-448`). Auditoria completa de todos os caminhos históricos `[nao verificado]`.
+
+## 14/11 23:40 · sessao d9f48c61f263 · - · - · origem=Ronald (tmux)
+
+**São 30 unidades no recorte dos 67.** A publicação registra 80 unidades: 50 com col+dia e **30 indeterminadas por ausência de col ou dia**; a sonda registra essas mesmas 30 como puladas. (app/docs/RELATO.md:8386, :8394, :8399)
+
+Os **63 IDs ausentes** mencionados no anexo abrangem outro conjunto: **33 “sem divergência hoje” + essas 30 indeterminadas**. Portanto, não são 63 unidades adicionais aos 37 individualizados. (app/docs/RELATO.md:8390–8394; anexo p0.r [nao verificado])
+
+**Recuperadas: 0; não recuperáveis nesta cópia: 30.** Não encontrei ID de unidade nem par colNNN + data explicitamente vinculado a qualquer dessas 30 nas buscas da árvore inteira. Resultado negativo: [nao verificado].
+
+Conferi também as pistas documentais:
+
+- **HJ-054** aparece como “não casado”, sem col. Recupera somente a raiz; não fornece sufixo `Uk`, colNNN ou data para individualizar uma unidade. (app/docs/RELATO.md:8397)
+- A tabela dos 46 e a tabela G3/G4 publicam pares e donos, mas a correspondência desses registros com as 30 unidades puladas permanece **[nao verificado]**. Não transportei suas datas ou donos. (app/docs/RELATO.md:1642–1656, :8478–8498)
+- **Dono L-099 das 30: [nao verificado]**; a publicação as inclui entre os indeterminados, sem dono escrito. (app/docs/RELATO.md:8394)
+
+Buscas executadas em todo `app/docs`, incluindo `RELATO-ARQUIVO`, `BACKLOG`, `PROMPTS` e `LAPIDES`, e fora dele: **[nao verificado]**. Usei `git grep --no-index` porque a cópia não possui metadados Git; HEAD **[nao verificado]**.
+
+```sh
+git grep --no-index -n -I -o -E 'HJ-[0-9]{3}-U[0-9]+(/[U]?[0-9]+)*|hj_0511|HJ-INGESTAO' -- app/docs
+
+rg -n --hidden --no-ignore -i 'sem col/dia|sem dia|nao casad|indeterminad' app/docs
+
+rg -n --hidden --no-ignore -i 'G3G4|G1-PORTA|G2-TRIAGEM|G6-PAGINA' app/docs
+
+git grep --no-index -n -I -o -i -E 'hj_0511|HJ[-_][0-9]{3}[-_]U[0-9]+|GRADE-RESOLVE-67|GRADE-MESTRA/resolve|p0\.r|resolve\.tsv' -- . ':(exclude)app/docs/**'
+```
+
+RESULTADO|INGESTAO-SEM-ID|30|recuperadas=0|nao_recuperaveis=30
+
+## 14/11 23:40 · sessao e090e83eb1f9 · - · - · origem=Ronald (tmux)
+
+Recorte dos 67: **30 unidades = 67 − 37**, compatíveis com as 30 sem col/dia; nenhuma unidade adicional recuperada por ID `HJ-NNN-Uk` ou par colNNN + data. A ingestão registra 50 casadas com col+dia e 30 indeterminadas, e distingue essas 30 dos três indeterminados já individualizados. (`app/docs/RELATO.md:8386`, `app/docs/RELATO.md:8394`)
+
+As tabelas alternativas fornecem datas e donos, mas não vinculam seus casos às 30 unidades puladas:
+
+- BO-0511: universo 46, com 16 sem dia; tabela em `app/docs/RELATO.md:1642`, casos sem dia em `app/docs/RELATO.md:1647` e soma em `app/docs/RELATO.md:1656`.
+- G3/G4: universo 19, sendo 11 com dia e oito sem dia; IDs próprios G3/G4, sem correspondência publicada com `HJ-NNN-Uk`. (`app/docs/RELATO.md:8478`, `app/docs/RELATO.md:8485`, `app/docs/RELATO.md:8498`)
+- `HJ-054` é apenas raiz não casada, sem col, data ou sufixo de unidade; não conta como recuperação. (`app/docs/RELATO.md:8397`)
+- Dono L-099 fechado para as 30: [nao verificado]; publicação as inclui como indeterminadas sem dono. (`app/docs/RELATO.md:8394`)
+
+Os 63 sem ID do anexo abrangem **33 sem divergência + 30 sem col/dia**, portanto são universo distinto do complemento 30 dos 67. (`app/docs/RELATO.md:8393`, `app/docs/RELATO.md:8394`)
+
+Buscas realizadas em todo `app/docs`, incluindo os quatro documentos solicitados: [nao verificado]
+
+```sh
+rg -n --hidden --no-ignore 'HJ-[0-9]{3}-U[0-9]+|hj_0511|HJ-INGESTAO' app/docs
+rg -n --hidden --no-ignore -i 'HJ[ _-]?[0-9]{1,3}|G[1-6][- _][0-9]{1,2}' app/docs
+rg -n --hidden --no-ignore -i 'sem col/dia|sem dia|nao casad|indeterminad' app/docs
+rg -n --hidden --no-ignore -i 'G3G4|G1-PORTA|G2-TRIAGEM|G6-PAGINA' app/docs
+```
+
+Recomendação de consolidação: `RESULTADO|INGESTAO-SEM-ID|30|recuperadas=0|nao_recuperaveis=30`.
+
+## 14/11 23:39 · sessao 183d2f4773c6 · - · - · origem=Ronald (tmux)
+
+Fora de `app/docs`, não encontrei unidades adicionais da ingestão, IDs `HJ-NNN-Uk` nem pares colNNN+data vinculados a ela. Resultado negativo de busca: [nao verificado].
+
+A contagem pertinente é **30 unidades sem col/dia**, declaradas em `app/docs/RELATO.md:8386` e `app/docs/RELATO.md:8394`; a publicação registra 30 puladas em `app/docs/RELATO.md:8399`.
+
+Existe **HJ-054**, explicitamente “não casado”, sem col pelo mapa. Isso recupera uma raiz documental, mas não identifica `HJ-054-Uk`, data ou colaborador; não permite contar uma unidade individual recuperada. (`app/docs/RELATO.md:8397`)
+
+O código apenas aponta ao quadro externo e retorna “não medido” se ele não puder ser lido; não contém o rol de casos. (`bin/placar_grade.py:130`, `bin/placar_grade.py:134`, `bin/placar_grade.py:139`, `bin/placar_grade.py:145`)
+
+Greps executados:
+
+```sh
+rg -n --hidden --no-ignore -g '!app/docs/**' 'hj_0511|HJ-[0-9]{3}-U[0-9]+|GRADE-RESOLVE-67|GRADE-MESTRA/resolve|p0\.r|resolve\.tsv' .
+rg --files --hidden --no-ignore | rg '(^|/)(logs|hj_0511|GRADE-RESOLVE-67|p0\.r|resolve\.tsv|quadro\.md)(/|$)|HJ-|hj_'
+rg -n --hidden --no-ignore -g '!app/docs/**' -i 'ingest[aã]o.{0,30}hj|hj.{0,30}ingest[aã]o|HJ-054|HJ-050' .
+rg -n --hidden --no-ignore -g '!app/docs/**' 'HJ-0[0-9][0-9]|80 unidades|30 sem dia|30 indeterminad|76 casadas' .
+rg -n --hidden --no-ignore 'hj_0511|HJ-054|HJ-050-U2|30 indeterminadas|30 sem col/dia' app/docs
+```
+
+Verificação física com `os.path.exists`: `logs/`, `logs/hj_0511/mapa.md`, `logs/hj_0511/sonda_a.out` e `logs/GRADE-MESTRA/resolve/{p0.r,resolve.tsv,quadro.md}` ausentes. Ausência e execução dos comandos: [nao verificado].
+
+## 14/11 23:39 · sessao 4cd2f4d61152 · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) O complemento identifica estes dia-colab como classe 8.2; o ano vem do registro datado de 2026-10-27 (`app/docs/CORTES.md:343`; também `app/docs/BACKLOG.md:821`):
+
+```text
+col789|2026-10-14
+col789|2026-10-15
+col789|2026-10-17
+col789|2026-10-20
+col789|2026-10-21
+col789|2026-10-26
+```
+
+(2) **PRECISA SONDA.** A casa registra 8.2 como “não fechado” (`app/docs/RELATO.md:52`). O juiz depende de cadastro, batidas, fase e Cadastro × Realidade; esses insumos dos seis dias são `[nao verificado]` (`app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:182`). O ESTRUTURA escrito no registro pertence a 8.1 (`app/docs/RELATO.md:3429`).
+
+(3) Sonda para o shell Django já inicializado; execução e resultados `[nao verificado]`. Usa a assinatura real e a janela da empresa (`app/ponto/management/commands/e6_oraculo.py:128`; `app/ponto/janelas.py:60`). Bloqueia SQL diferente de SELECT e suprime mensagens internas.
+
+```python
+import io
+import logging
+import re
+from contextlib import ExitStack, redirect_stdout, redirect_stderr
+from datetime import date
+
+from django.db import connections
+from django.utils import timezone
+
+dias = [date(2026, 10, n) for n in (14, 15, 17, 20, 21, 26)]
+erros = 0
+linhas = []
+nivel_anterior = logging.root.manager.disable
+
+def somente_select(execute, sql, params, many, context):
+    texto = sql.strip()
+    if (
+        many
+        or not re.match(r"(?is)^SELECT\b", texto)
+        or ";" in texto
+        or re.search(r"(?is)\bINTO\b|\bFOR\s+(UPDATE|SHARE)\b", texto)
+    ):
+        raise RuntimeError("SQL bloqueado")
+    return execute(sql, params, many, context)
+
+try:
+    logging.disable(logging.CRITICAL)
+    with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+        with ExitStack() as pilha:
+            for alias in connections:
+                pilha.enter_context(
+                    connections[alias].execute_wrapper(somente_select)
+                )
+
+            from colaboradores.models import Colaborador
+            from ponto.janelas import janela_atual
+            from ponto.management.commands.e6_oraculo import InsumosDoDono
+
+            agora = timezone.now()
+            hoje = timezone.localtime(agora).date()
+            colab = Colaborador.objects.select_related("empresa").get(pk=789)
+
+            for dia in dias:
+                try:
+                    ini, fim = janela_atual(dia, colab.empresa)
+                    dono = InsumosDoDono(
+                        colab, ini, fim, hoje, agora=agora
+                    ).dono(dia)
+                    if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
+                        raise RuntimeError("Juiz sem resposta")
+                    linhas.append(f"DONO|col789|{dia.isoformat()}|{dono}")
+                except Exception:
+                    erros += 1
+except Exception:
+    erros += 1
+finally:
+    logging.disable(nivel_anterior)
+
+for linha in linhas:
+    print(linha)
+print(f"FIM|erros={erros}")
+```
+
+(4) Se a sonda confirmar ESTRUTURA: o enquadramento documental é **bitemporal**, explicitamente ligado à classe 8.2 (`app/docs/BACKLOG.md:821`), termo existente em `app/docs/PLANO-PADROES.md:47`. A obra de destino é **TENTATIVA-DO-ADMIN-VIRA-COBRANCA**, registrada na grade; fechamento efetivo `[nao verificado]` (`app/docs/GRADE-MESTRA.md:472`).
+
+RESULTADO|BO-ADMIN-2710|8.2|PRECISA SONDA|-|-
+
+## 14/11 23:39 · sessao 346937135ca3 · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) Dia-colab:
+
+- col859 — 2026-11-07. (app/docs/RELATO.md:222)
+- col859 — 2026-11-09. (app/docs/RELATO.md:222)
+
+O vínculo ao caso 10 segue a ordem publicada, expressamente contestável. Os dias aparecem como 07/11 e 09/11; ano 2026 adotado pelo contexto, sem ano explícito nesse registro. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226) [nao verificado]
+
+(2) **PRECISA SONDA.** O relato registra ambos como classe “c” e aponta falha visual, mas não escreve o dono L-099 desses dias. A montagem real consulta batidas, cadastro, fase e, quando necessário, o motor. (app/docs/RELATO.md:222; app/ponto/management/commands/e6_oraculo.py:182; app/ponto/management/commands/e6_oraculo.py:162)
+
+O `git grep` falhou por ausência de metadados Git; a busca equivalente com `rg` não localizou teste citando a fonte/caso. [nao verificado] [nao verificado]
+
+(3) Sonda proposta para o shell Django já inicializado; execução e resultados **[nao verificado]**. Assinatura conferida, incluindo `agora` obrigatório; janela obtida pela função real da empresa. (app/ponto/management/commands/e6_oraculo.py:128; app/ponto/janelas.py:54)
+
+```python
+import io
+import logging
+from contextlib import ExitStack, redirect_stdout, redirect_stderr
+from datetime import date
+
+from django.db import connections
+from django.utils import timezone
+
+ALVOS = (
+    (859, date(2026, 11, 7)),
+    (859, date(2026, 11, 9)),
+)
+
+
+def somente_select(execute, sql, params, many, context):
+    texto = sql.strip()
+    if (
+        many
+        or not texto.upper().startswith("SELECT ")
+        or ";" in texto
+        or "--" in texto
+        or "/*" in texto
+    ):
+        raise RuntimeError("SQL bloqueado")
+    return execute(sql, params, many, context)
+
+
+linhas = []
+erros = 0
+nivel_anterior = logging.root.manager.disable
+logging.disable(logging.CRITICAL)
+
+try:
+    with ExitStack() as pilha:
+        for alias in connections:
+            pilha.enter_context(
+                connections[alias].execute_wrapper(somente_select)
+            )
+
+        agora = timezone.now()
+        hoje = timezone.localtime(agora).date()
+
+        for pk, dia in ALVOS:
+            try:
+                with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    from colaboradores.models import Colaborador
+                    from ponto.janelas import janela_fechamento
+                    from ponto.management.commands.e6_oraculo import InsumosDoDono
+
+                    colab = Colaborador.objects.only("pk", "empresa_id").get(pk=pk)
+                    ini, fim = janela_fechamento(11, 2026, colab.empresa_id)
+                    if not ini <= dia <= fim:
+                        raise RuntimeError("Dia fora da janela")
+
+                    dono = InsumosDoDono(
+                        colab, ini, fim, hoje, agora=agora
+                    ).dono(dia)
+
+                    if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
+                        raise RuntimeError("Dono indisponivel")
+
+                linhas.append(f"DONO|col{pk}|{dia.isoformat()}|{dono}")
+            except Exception:
+                erros += 1
+finally:
+    logging.disable(nivel_anterior)
+
+for linha in linhas:
+    print(linha)
+print(f"FIM|erros={erros}")
+```
+
+(4) Padrão quebrado e obra que fecha: **[nao verificado]**, dependentes da confirmação de ESTRUTURA.
+
+RESULTADO|BO-1311-ROTEIRO|10|PRECISA SONDA|-|-
+
+## 14/11 23:38 · sessao 46ae9e0cd25e · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB.** O registro menciona “40 dias de férias com batida” para classificação L-099, sem enumerar colNNN/data; a remissão documental repete essa contagem. (app/docs/BACKLOG.md:1917; app/docs/PROMPTS.md:2226)
+
+O teste da listagem cria ausência e batida sintéticas; não identifica os dias de produção do caso. (app/ferias/test_hj090_um_juiz.py:480–490) Os pares publicados para HJ-091 tratam de ausência versus agendamento; sua participação nos 40 dias com batida é [nao verificado]. (app/docs/RELATO.md:291)
+
+(4) Dono ESTRUTURA e correspondente padrão/obra deste julgamento: [nao verificado]. Encerrado sem sonda, conforme a condição de ausência de dia-colab.
+
+RESULTADO|BACKLOG-HJ|HJ-090|SEM DIA-COLAB|-|-
+
+## 14/11 23:38 · sessao fef0127e9f1d · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB.** O registro lista col996 na segunda posição, mas não informa data do caso; a numeração pela ordem do universo é expressamente contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
+
+O relato dos casos 01–05 fornece apenas totais agregados, sem individualizar os dias do caso 02. (app/docs/RELATO.md:222)
+
+(4) Dono ESTRUTURA, padrão quebrado e obra correspondente: [nao verificado]. Sem dia-colab identificado, encerro sem sonda.
+
+RESULTADO|BO-1311-ROTEIRO|02|SEM DIA-COLAB|-|-
+
+## 14/11 23:38 · sessao addb1107546f · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB.** O registro identifica **col789**, mas não individualiza nenhuma data de apuração para o caso **8.3**. A fonte informa a alteração em 27/10 e uma janela de regenerações de 21/09 a 30/11, sem discriminar os dias deste subitem. (app/docs/RELATO.md:3429; app/docs/CORTES.md:332)
+
+As datas individualizadas no complemento pertencem expressamente à classe **8.2**. (app/docs/BACKLOG.md:821)
+
+(4) Dono ESTRUTURA **[nao verificado]**: a casa registra **8.3 como não fechado**. Há encaminhamento à E4-REGENERAR-VINCULO-SEM-VIGENCIA, mas nenhuma classificação fechada que permita atribuir padrão quebrado neste censo. (app/docs/RELATO.md:52; app/docs/RELATO.md:3419)
+
+RESULTADO|BO-ADMIN-2710|8.3|SEM DIA-COLAB|-|-
+
+## 14/11 23:38 · sessao 76876f71497a · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **col246 — 2026-11-01**. O vínculo explícito com o caso 04 está em `app/docs/BACKLOG.md:1970`; o ano é contextualizado em `app/docs/RELATO.md:168`. Isso supera a associação apenas pela ordem, marcada como contestável em `app/docs/RELATO.md:226`.
+
+(2) **Dono L-099: [nao verificado]; PRECISA SONDA.** A casa registra “cobrança indevida” e encaminhamento à E4b, mas não informa os insumos que determinam o dono (`app/docs/BACKLOG.md:1970`; `app/ponto/management/commands/e6_oraculo.py:98`). A montagem real consulta batidas, cadastro, fase e motor (`app/ponto/management/commands/e6_oraculo.py:182`).
+
+(3) Sonda para contexto Django já inicializado, com bloqueio de SQL diferente de SELECT. Assinatura conferida em `app/ponto/management/commands/e6_oraculo.py:128`; janela por empresa conforme `app/ponto/management/commands/e6_oraculo.py:304`.
+
+```python
+import contextlib
+import datetime as dt
+import io
+import logging
+
+from django.db import connections
+from django.utils import timezone
+from colaboradores.models import Colaborador
+from ponto.janelas import janela_fechamento
+from ponto.management.commands.e6_oraculo import InsumosDoDono
+
+
+def somente_select(execute, sql, params, many, context):
+    if not sql.lstrip().upper().startswith("SELECT "):
+        raise RuntimeError("SQL bloqueado")
+    return execute(sql, params, many, context)
+
+
+erros = 0
+linhas = []
+nivel_anterior = logging.root.manager.disable
+logging.disable(10**9)
+
+try:
+    with contextlib.ExitStack() as pilha:
+        pilha.enter_context(contextlib.redirect_stdout(io.StringIO()))
+        pilha.enter_context(contextlib.redirect_stderr(io.StringIO()))
+        for conexao in connections.all():
+            pilha.enter_context(conexao.execute_wrapper(somente_select))
+
+        agora = timezone.now()
+        hoje = timezone.localtime(agora).date()
+        dia = dt.date(2026, 11, 1)
+        colab = Colaborador.objects.get(pk=246)
+        ini, fim = janela_fechamento(11, 2026, colab.empresa_id)
+        dono = InsumosDoDono(
+            colab, ini, fim, hoje, agora=agora
+        ).dono(dia)
+
+        if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
+            raise RuntimeError("Dono indisponivel")
+        linhas.append(f"DONO|col246|{dia.isoformat()}|{dono}")
+except Exception:
+    erros += 1
+finally:
+    logging.disable(nivel_anterior)
+
+for linha in linhas:
+    print(linha)
+print(f"FIM|erros={erros}")
+```
+
+(4) Padrão quebrado e obra que fecha como ESTRUTURA: **[nao verificado]**, dependentes do resultado do juiz.
+
+RESULTADO|BO-1311-ROTEIRO|04|PRECISA SONDA|-|-
+
+## 14/11 23:37 · sessao 4b70da878e72 · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB.** A oitava posição da lista aponta para **col523**, mas não informa data do caso; a própria numeração é contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
+
+O resumo dos casos 06–10 só individualiza datas de col859, sem identificar dia-colab do caso 08. (app/docs/RELATO.md:222)
+
+(4) Dono L-099, padrão quebrado e obra correspondente: **[nao verificado]**. Encerrado sem sonda, conforme a condição de parada por ausência de dia-colab.
+
+RESULTADO|BO-1311-ROTEIRO|08|SEM DIA-COLAB|-|-
+
+## 14/11 23:37 · sessao 25e4ee69042b · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **O registro não identifica dia-colab do caso 09.** Pela ordem da lista, corresponderia a **col866**, mas sem data; a própria numeração é contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
+
+O resumo dos casos 06–10 só individualiza datas de col859; não fornece data para col866. (app/docs/RELATO.md:222)
+
+O `git grep` falhou por ausência de metadados Git; usei `rg` equivalente, sem localizar testes que citem esta fonte/caso. [nao verificado] [nao verificado]
+
+(4) Dono ESTRUTURA e padrão quebrado: [nao verificado]. Obra que fecha este caso: [nao verificado]. Sem dia-colab identificado, encerro sem sonda, conforme solicitado.
+
+RESULTADO|BO-1311-ROTEIRO|09|SEM DIA-COLAB|-|-
+
+## 14/11 23:37 · sessao 91bee8cf4a64 · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB identificado para o caso 07.** A sétima posição da lista corresponde a **col1004**, mas a numeração é expressamente contestável; o registro menciona competência 11 sem individualizar a data desse caso. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
+
+A data **27/10** aparece para col1004 no **HJ-093**; seu vínculo com o caso 07 deste roteiro permanece **[nao verificado]**. Os dias individualizados na síntese dos casos 06–10 pertencem a col859. (app/docs/BACKLOG.md:786; app/docs/RELATO.md:222)
+
+O `git grep` falhou por ausência de metadados Git; a busca equivalente com `rg` não encontrou testes que citassem a fonte ou col1004. **[nao verificado]** [nao verificado]
+
+(4) Sem dia-colab identificado, encerro sem sonda, conforme solicitado. Dono L-099, padrão quebrado e obra que fecha: **[nao verificado]**.
+
+RESULTADO|BO-1311-ROTEIRO|07|SEM DIA-COLAB|-|-
+
+## 14/11 23:37 · sessao 4462d0de0bd6 · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB.** O registro permite apenas associar provisoriamente o caso 06 a **col982**, sexto da lista; não informa uma data para ele. A numeração é expressamente contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
+
+O resumo dos casos 06–10 identifica datas somente para **col859**: não estabelece dia-colab do caso 06. (app/docs/RELATO.md:222)
+
+(4) Dono ESTRUTURA, padrão quebrado e obra que fecha: **[nao verificado]**. Sem dia-colab identificado, encerro sem sonda, conforme solicitado.
+
+RESULTADO|BO-1311-ROTEIRO|06|SEM DIA-COLAB|-|-
+
+## 14/11 23:37 · sessao 586a02ef3245 · GRADE-RESOLVE-67 · censo · origem=Code
+
+1. **col407 — 21/10**: o registro vincula os itens 13/14 a col407 e identifica, especificamente para o item 13, o turno iniciado em 21/10. (app/docs/RELATO.md:1534)
+
+2. **Dono: BATIDA.** A tabela de triagem L-099 publica expressamente **col407 21/10 → BATIDA → lista do admin**. Portanto, há prova documental para o mesmo dia-colab; o rótulo antigo “NOSSO” não precisa ser interpretado como dono. (app/docs/RELATO.md:1642; app/docs/RELATO.md:1648; app/docs/RELATO.md:1534)
+
+3. **Sonda dispensada para recuperar o dono publicado**, pois a casa já o escreveu. Uma nova medição do estado atual permanece [nao verificado]. (app/docs/RELATO.md:1648)
+
+4. **Padrão e obra: —**, pois o dono documental é BATIDA. (app/docs/RELATO.md:1648)
+
+RESULTADO|BO-0611|13|BATIDA|-|-
+
+## 14/11 23:37 · sessao 1a116d502ffb · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **O registro não identifica dia-colab do caso 05.** A lista coloca col265 na quinta posição, mas não fornece data; a numeração é expressamente contestável (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226). O relato posterior apresenta apenas totais conjuntos dos casos 01–05, sem individualizar seus dias (app/docs/RELATO.md:222).
+
+(4) Dono L-099, padrão quebrado e obra correspondente: **[nao verificado]**. Sem dia-colab identificado, encerro sem sonda.
+
+RESULTADO|BO-1311-ROTEIRO|05|SEM DIA-COLAB|-|-
+
+## 14/11 23:37 · sessao 0c63fff7741a · GRADE-RESOLVE-67 · censo · origem=Code
+
+(1) **SEM DIA-COLAB individualizado para o caso 14.** O registro associa “13+14” a **col407**, mas a data **21/10** aparece explicitamente no texto do **item 13**; atribuí-la ao 14 seria [nao verificado]. (app/docs/RELATO.md:1534)
+
+O BACKLOG preserva os itens 13/14 vinculados a `BUG-PLANTIO-NOTURNO-MAIS-1`, sem informar data. (app/docs/BACKLOG.md:2025)
+
+(4) Dono L-099 do caso 14: [nao verificado]. Sem dia-colab identificado, encerro sem sonda nem atribuição de padrão/obra.
+
+RESULTADO|BO-0611|14|SEM DIA-COLAB|-|-
 
 ## 14/11 23:36 · sessao 6da85c384ba5 · GRADE-RESOLVE-67 · censo · origem=Code
 
@@ -13,416 +487,4 @@ O relato dos casos 01–05 publica apenas contagens agregadas, sem individualiza
 
 RESULTADO|BO-1311-ROTEIRO|03|SEM DIA-COLAB|-|-
 
-## 14/11 23:36 · sessao ab60c66aed9d · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro lista dez colaboradores, com col1019 primeiro, mas não informa os dias do caso; a numeração pela ordem do universo é expressamente contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
-
-O relato agrupa os casos 01–05 sem individualizar suas datas; os dias explicitados pertencem ao lote 06–10. Portanto, não permite recuperar o dia-colab do caso 01. (app/docs/RELATO.md:222)
-
-(4) Dono ESTRUTURA, padrão quebrado e obra que fecha: [nao verificado]. Sem dia-colab identificado, encerro conforme solicitado.
-
-RESULTADO|BO-1311-ROTEIRO|01|SEM DIA-COLAB|-|-
-
-## 14/11 23:36 · sessao 4a87c6b43143 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro identifica **col1000**, mas não informa a data: “09 col1000 sem porta antes da resposta → O261”. (app/docs/RELATO.md:1471)
-
-O quadro anterior foi substituído pela V2; seu “já OK” não comprova o dono vigente. (app/docs/PROMPTS.md:1925; app/docs/RELATO.md:1533)
-
-Sem a data do caso, encerro sem sonda, conforme solicitado. Dono L-099: **[nao verificado]**.
-
-(4) Padrão quebrado e obra que fecha como ESTRUTURA: **[nao verificado]**. O261 é o encaminhamento registrado, sem declaração de dono nesse trecho. (app/docs/RELATO.md:1471)
-
-RESULTADO|BO-0611|09|SEM DIA-COLAB|-|-
-
-## 14/11 23:36 · sessao b1d97c04491b · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) O caso identifica **col399**, mas não informa a data da troca; portanto, não identifica um dia-colab completo. O registro descreve “troca sem UI → O10-C”. (app/docs/RELATO.md:1471; app/docs/BACKLOG.md:1912)
-
-(4) Dono L-099 e padrão quebrado: **[nao verificado]**. A obra específica registrada é **BO-0611-10-TELA-DA-TROCA**, mas isso não comprova dono ESTRUTURA pelo juiz. (app/docs/GRADE-MESTRA.md:505; app/docs/BACKLOG.md:2030)
-
-RESULTADO|BO-0611|10|SEM DIA-COLAB|-|-
-
-## 14/11 23:36 · sessao 9ba390edada1 · E3-RESTO-R3 · construtor · origem=Code
-
-Entrega em [e3_r3_c4_entrega.txt](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:1), com diff por arquivo::função, evidências e comandos.
-
-- **I4:** documentado cache apenas por instância, as fontes adicionais da rota e o retorno `(instancia, pos, lp, hora)`. As três frases antes/depois estão na [entrega:24](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:24); a AST executável permaneceu idêntica à base ([entrega:182](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:182)).
-- **I5:** `ninguem` fora de Hoje vai para **Sem ação disponível**; Hoje conserva seu teto e `chamado` permanece em Admin. O vigia lê o mesmo agrupamento ([origem](/home/ronald/wt-codex-e3-resto-r3-231625/app/folha/retrato_folha.py:190), [vigia](/home/ronald/wt-codex-e3-resto-r3-231625/app/folha/vigia_retido_calado.py:48)).
-- **Verificação:** RED com 7 falhas; GREEN com 6 testes; 11/11 mutantes mortos; regressão sem banco com 168 testes passando. Saídas e comando individual de cada mutante na [entrega:51](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:51). [nao verificado]
-- **Censo:** leitores, templates e comportamento antes/depois na [entrega:35](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:35).
-- **Pendências:** perguntas de lei nesta fatia: 0. Itens excluídos e motivos registrados; suite com banco e geometria da tela [nao verificado]. ([entrega:206](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:206)) [nao verificado]
-
-Comando pendente para o Code ([entrega:219](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c4_entrega.txt:219)):
-
-```bash
-bin/suite.sh --dir /home/ronald/wt-codex-e3-resto-r3-231625 --only "chamados folha escala"
-```
-
-LEI-AKITA: origem=folha/retrato_folha.py:193, dono_da_linha:460; testemunha=LISTA-UNICA-CORTADA LU-05 (entrega:6); RED=chamados/tests/test_e3_r3_c4_sem_banco.py:53; quem-mais-le=chamados/tests/e3_r3_c4_entrega.txt:35; juizes novos=0; padrao=Single Writer Principle
-
-## 14/11 23:36 · sessao b0cb9d481705 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **col39 — 2026-10-15.** O registro vincula os itens 01/04 a col39 em 15/10; o teste desse dia-colab explicita o ano. (app/docs/RELATO.md:1533; app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:9; app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:55)
-
-(2) **BATIDA, já documentado pela casa.** Há prova independente do quadro substituído: a medição G3G4 declara como testemunha `e6_oraculo.py::dono_da_divergencia` e registra **G4-01 | col39 | 15/10 | BATIDA**, confirmado na tabela consolidada de donos L-099. (app/docs/RELATO.md:8483; app/docs/RELATO.md:8497; app/docs/RELATO.md:1642; app/docs/RELATO.md:1654)
-
-O aval V2 substitui especificamente o quadro das 18:58; a classificação acima está também nessa medição independente. (app/docs/PROMPTS.md:1925; app/docs/RELATO.md:8482; app/docs/RELATO.md:8497)
-
-(3) Sonda dispensada para recuperar o dono escrito pela casa. Estado atual de produção após aquela medição: [nao verificado].
-
-(4) Padrão e obra estrutural: não se aplica ao dono BATIDA documentado. (app/docs/RELATO.md:1654)
-
-RESULTADO|BO-0611|04|BATIDA|-|-
-
-## 14/11 23:36 · sessao 9d559da36139 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **col836 — 14/10**, vinculado explicitamente ao BO-0611-07. (app/docs/RELATO.md:928)
-
-(2) **CADASTRO**: a tabela publicada como “dono L-099” classifica expressamente col836 em 14/10 como CADASTRO, com destino à lista do admin. (app/docs/RELATO.md:1642, app/docs/RELATO.md:1649)
-
-(3) Sonda dispensada pelo critério de dono já escrito. A classificação publicada usa sombra de 06/11; eventual mudança posterior é **[nao verificado]**. (app/docs/RELATO.md:1642, app/docs/RELATO.md:1649)
-
-(4) Não se aplica: o dono documental é CADASTRO. (app/docs/RELATO.md:1649)
-
-RESULTADO|BO-0611|07|CADASTRO|-|-
-
-## 14/11 23:36 · sessao c91a52373966 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) O registro identifica **col617**, mas não informa a data do dia-colab; o BACKLOG também associa o caso 08 a col617 sem indicar o dia. Portanto, o dia-colab não está identificado. (app/docs/RELATO.md:1471; app/docs/BACKLOG.md:1912)
-
-A frase documental é “atestado ja aprovado, sem divergencia”, sem data vinculada ao caso. Encerro sem sonda, conforme a condição de (1). (app/docs/RELATO.md:1471)
-
-(4) Padrão e obra: `-` / `-`; classificação ESTRUTURA [nao verificado].
-
-RESULTADO|BO-0611|08|SEM DIA-COLAB|-|-
-
-## 14/11 23:35 · sessao 2692e2e8060f · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro identifica **col456**, com queixa de barreira GPS, mas não informa a data do fato. A V2 confirma esse colaborador, também sem indicar o dia. (app/docs/RELATO.md:1471; app/docs/PROMPTS.md:1925)
-
-As datas dos testes pertencem a cenários em memória com outro colaborador; não identificam o dia deste caso. (app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:18; app/ponto/tests/test_bo0611_05_vinculo_geo_parcial.py:95)
-
-(4) Dono L-099 do caso: **[nao verificado]**. Encerro conforme a condição de ausência de dia-colab, sem sonda ou atribuição de padrão/obra.
-
-RESULTADO|BO-0611|05|SEM DIA-COLAB|-|-
-
-## 14/11 23:35 · sessao bb7a42ee33a2 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro identifica `col950`, “conta de teste ativa”, sem data de dia-colab para o caso 06. (app/docs/RELATO.md:1533)
-
-O CADASTRO escrito pertence ao quadro substituído pela V2; dono vigente **[nao verificado]**. (app/docs/RELATO.md:1533; app/docs/PROMPTS.md:1925)
-
-(4) ESTRUTURA **[nao verificado]**; padrão e obra: `-`.
-
-RESULTADO|BO-0611|06|SEM DIA-COLAB|-|-
-
-## 14/11 23:35 · sessao f9c9b1631595 · GRADE-RESOLVE-67 · censo · origem=Code
-
-1. **Dia-colab: col39, 2026-10-15.** O registro associa explicitamente o caso 01 a col39 em 15/10; o teste do mesmo dia-colab explicita 2026 (app/docs/RELATO.md:1533; app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:9, :55).
-
-2. **Dono documentado: BATIDA.** Há prova independente do quadro substituído: a medida G3G4 identifica `dono_da_divergencia` como testemunha e classifica G4-01, col39 em 15/10, como BATIDA; a consolidação L-099 repete essa classificação (app/docs/RELATO.md:8483, :8497, :1642, :1654). A V2 substitui especificamente o quadro das 18:58 (app/docs/PROMPTS.md:1925).
-
-3. A classificação documental dispensa nova sonda, pois já está publicada pela medida do juiz; o estado atual em produção é **[nao verificado]** (app/docs/RELATO.md:8482, :8483, :8497).
-
-4. Padrão estrutural e obra: não se aplicam à classificação BATIDA (app/docs/RELATO.md:1654).
-
-RESULTADO|BO-0611|01|BATIDA|-|-
-
-## 14/11 23:35 · sessao 35f19041bb6b · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro do item 03 informa apenas “lote → LOTE-VALIDAR-VIRA-JOB, motivos das 40 sem dado”, sem identificar colaborador e data. O relato anterior também descreve apenas a execução síncrona do lote. (app/docs/RELATO.md:1471; app/docs/RELATO.md:1534)
-
-(4) Dono L-099: [nao verificado]. A obra encaminhada consta como LATERAL-ESTRUTURA, mas isso não fornece um dia-colab para julgamento. (app/docs/GRADE-MESTRA.md:267)
-
-RESULTADO|BO-0611|03|SEM DIA-COLAB|-|-
-
-## 14/11 23:35 · sessao 55eef25ddf58 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) Dias individualizados nas referências de HJ-091:
-
-| Colab | Data | Prova |
-|---|---|---|
-| col127 | 2026-10-02 | app/docs/RELATO.md:291 |
-| col344 | 2026-11-05 | app/docs/RELATO.md:31 |
-| col344 | 2026-11-06 | app/docs/RELATO.md:31 |
-| col344 | 2026-11-07 | app/docs/RELATO.md:31, :291 |
-
-O registro-base não enumera dia-colab; o passivo publicado contém contagens sem lista integral. Completude desses quatro dias para a raiz HJ-091: **[nao verificado]**. (app/docs/BACKLOG.md:1917; app/docs/RELATO.md:291)
-
-(2) **PRECISA SONDA.** Dono L-099 desses dias: **[nao verificado]**. O relato posterior comprova vinculação de origem e preservação das rejeições, sem publicar classificação L-099; os testes documentam a correção com fixtures. (app/docs/RELATO.md:25; app/ponto/tests/test_hj091_ferias_derivadas.py:8–10, :875–881)
-
-O juiz depende de batidas, cadastro, fase e eventualmente da lista do motor. Sua montagem real recebe `colaborador, ini, fim, hoje` e `agora` obrigatório; `dono(data)` encaminha esses insumos ao juiz. (app/ponto/management/commands/e6_oraculo.py:128–195)
-
-(3) Sonda para ambiente Django já inicializado; usa a janela real que contém cada dia. Assinaturas: app/ponto/janelas.py:60–63; app/ponto/management/commands/e6_oraculo.py:128, :182. **Não executada: [nao verificado].**
-
-```python
-from contextlib import ExitStack, redirect_stdout, redirect_stderr
-from datetime import date
-import io
-import logging
-import re
-
-from django.db import connections
-from django.utils import timezone
-
-CASOS = (
-    (127, date(2026, 10, 2)),
-    (344, date(2026, 11, 5)),
-    (344, date(2026, 11, 6)),
-    (344, date(2026, 11, 7)),
-)
-
-def somente_select(execute, sql, params, many, context):
-    if (
-        not re.match(r"^\s*SELECT\b", sql, re.I)
-        or ";" in sql
-        or re.search(r"\bFOR\s+(UPDATE|SHARE|NO\s+KEY|KEY)\b", sql, re.I)
-    ):
-        raise RuntimeError("SQL recusado")
-    return execute(sql, params, many, context)
-
-erros = 0
-linhas = []
-nivel_anterior = logging.root.manager.disable
-logging.disable(10**9)
-
-try:
-    with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-        from colaboradores.models import Colaborador
-        from ponto.janelas import janela_atual
-        from ponto.management.commands.e6_oraculo import InsumosDoDono
-
-        agora = timezone.now()
-        hoje = timezone.localdate(agora)
-
-        with ExitStack() as stack:
-            for conexao in connections.all():
-                stack.enter_context(conexao.execute_wrapper(somente_select))
-
-            for pk, dia in CASOS:
-                try:
-                    colab = Colaborador.objects.select_related("empresa").get(pk=pk)
-                    ini, fim = janela_atual(dia, colab.empresa)
-                    dono = InsumosDoDono(
-                        colab, ini, fim, hoje, agora=agora
-                    ).dono(dia)
-                    if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
-                        raise RuntimeError("Sem resposta do juiz")
-                    linhas.append(f"DONO|col{pk}|{dia.isoformat()}|{dono}")
-                except Exception:
-                    erros += 1
-finally:
-    logging.disable(nivel_anterior)
-
-for linha in linhas:
-    print(linha)
-print(f"FIM|erros={erros}")
-```
-
-`dono(dia)` atribui responsabilidade; sozinho não comprova divergência existente. O comando E6 compara os valores antes de chamá-lo, portanto esse retorno isolado não certifica **SEM DIVERGENCIA**. (app/ponto/management/commands/e6_oraculo.py:365–378)
-
-(4) Padrão quebrado e obra que fecha, condicionados a dono ESTRUTURA: **[nao verificado]**.
-
-RESULTADO|BACKLOG-HJ|HJ-091|PRECISA SONDA|-|-
-
-## 14/11 23:34 · sessao 55dad5d71360 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **col1004 — 2026-10-27**. Dia e colaborador em `app/docs/BACKLOG.md:786`; ano inferido do contexto de competência 2026-11 em `app/docs/RELATO.md:266`.
-
-(2) **PRECISA SONDA**. A casa confirma o mecanismo JUSTIFICATIVA-PAGA-O-PERIODO, mas o registro composto também contém decisão humana e cadastro (`app/docs/BACKLOG.md:786`). O balde LATERAL-ESTRUTURA está escrito na grade; a classificação L-099 depende de vínculo, folga, batidas, fase e cadastro × realidade (`app/docs/GRADE-MESTRA.md:1376`; `app/ponto/management/commands/e6_oraculo.py:98–110`). Esses insumos completos para o dia: **[nao verificado]**.
-
-`git grep` indisponível nesta cópia; buscas equivalentes com `rg`, por ID e fonte, sem teste localizado citando HJ-093: **[nao verificado]**. [nao verificado]
-
-(3) Sonda para shell Django inicializado; não executada **[nao verificado]**. Usa a assinatura real e chama `.dono(dia)` sem reproduzir sua lógica (`app/ponto/management/commands/e6_oraculo.py:128–129`, `:182–195`); obtém a janela pela função da casa (`app/ponto/janelas.py:60–63`).
-
-```python
-import sys
-sys.dont_write_bytecode = True
-
-import io
-import logging
-from contextlib import ExitStack, redirect_stdout, redirect_stderr
-from datetime import date
-
-erros = 0
-linhas = []
-nivel_anterior = logging.root.manager.disable
-
-def somente_select(execute, sql, params, many, context):
-    if many or str(sql).lstrip().split(None, 1)[0].upper() != "SELECT":
-        raise RuntimeError("SQL bloqueado")
-    return execute(sql, params, many, context)
-
-try:
-    logging.disable(sys.maxsize)
-    with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-        from django.apps import apps
-        from django.db import connections
-        from django.utils import timezone
-        from ponto.janelas import janela_atual
-        from ponto.management.commands.e6_oraculo import InsumosDoDono
-
-        with ExitStack() as pilha:
-            for alias in connections:
-                pilha.enter_context(
-                    connections[alias].execute_wrapper(somente_select)
-                )
-
-            agora = timezone.now()
-            hoje = timezone.localtime(agora).date()
-            Colaborador = apps.get_model("colaboradores", "Colaborador")
-
-            for col_id, dia in ((1004, date(2026, 10, 27)),):
-                try:
-                    colab = Colaborador.objects.get(pk=col_id)
-                    ini, fim = janela_atual(dia, colab.empresa_id)
-                    dono = InsumosDoDono(
-                        colab, ini, fim, hoje, agora=agora
-                    ).dono(dia)
-                    if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
-                        raise RuntimeError("Dono ausente")
-                    linhas.append(f"DONO|col{col_id}|{dia.isoformat()}|{dono}")
-                except Exception:
-                    erros += 1
-except Exception:
-    erros += 1
-finally:
-    logging.disable(nivel_anterior)
-
-for linha in linhas:
-    print(linha)
-print(f"FIM|erros={erros}")
-```
-
-(4) **Se retornar ESTRUTURA:** o padrão documental é **juiz unico**, declarado na obra em `app/docs/BACKLOG.md:1918` e reconhecido como alias de **Single Writer Principle** em `app/docs/GLOSSARIO.md:12`. A obra vinculada é **JUSTIFICATIVA-PAGA-O-PERIODO**, com HJ-093 na coluna `resolve` (`app/docs/GRADE-MESTRA.md:269`). A quebra do padrão neste dia pelo juiz L-099 permanece **[nao verificado]**.
-
-RESULTADO|BACKLOG-HJ|HJ-093|PRECISA SONDA|-|-
-
-## 14/11 23:34 · sessao 9f80e752b50c · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** A V2 identifica `col78`, mas não informa a data e registra “queixa nao identificada no dado”. O aval confirma a correção do identificador para `col78`. (app/docs/RELATO.md:1471; app/docs/PROMPTS.md:1925)
-
-O quadro anterior já dizia “sem dia/id” e foi substituído pela V2; portanto, não fornece uma data utilizável para este caso. (app/docs/RELATO.md:1533; app/docs/PROMPTS.md:1925)
-
-(4) Dono ESTRUTURA, padrão quebrado e obra correspondente: [nao verificado].
-
-RESULTADO|BO-0611|02|SEM DIA-COLAB|-|-
-
-## 14/11 23:34 · sessao d9da9cdcfda7 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) O registro identifica **col247**, mas não informa a data de **HJ-031-U1**; portanto, não identifica o dia-colab completo. (app/docs/RELATO.md:8394)
-
-Há **col247, 24/10, BATIDA** sob o identificador **G3-15**, mas o vínculo desse registro com HJ-031-U1 está **[nao verificado]**. (app/docs/RELATO.md:8496)
-
-(4) ESTRUTURA, padrão quebrado e obra correspondente: **[nao verificado]**. Sem dia-colab identificado, encerro conforme solicitado.
-
-RESULTADO|HJ-INGESTAO-0511|HJ-031-U1|SEM DIA-COLAB|-|-
-
-## 14/11 23:34 · sessao 384b7504fab6 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) HJ-050-U2 consta apenas como **“1 dia futuro”**, sem colNNN nem data explícita; o registro não identifica o dia-colab necessário. (app/docs/RELATO.md:8394)
-
-(4) Dono ESTRUTURA, padrão quebrado e obra que fecha: **[nao verificado]**. Encerramento sem sonda, conforme a condição de ausência de dia-colab do pedido.
-
-RESULTADO|HJ-INGESTAO-0511|HJ-050-U2|SEM DIA-COLAB|-|-
-
-## 14/11 23:34 · sessao a249310b6f62 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) O registro identifica **col239**, mas não informa a data de **HJ-012-U1**; falta o dia-colab completo. O caso consta como “lavrado irregular sem segurar”, indeterminado. (app/docs/RELATO.md:8394)
-
-(4) Dono ESTRUTURA, padrão quebrado e obra correspondente: [nao verificado]. Sem data identificada, encerro sem sonda.
-
-RESULTADO|HJ-INGESTAO-0511|HJ-012-U1|SEM DIA-COLAB|-|-
-
-## 14/11 23:30 · sessao 2376bf496618 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **col148 — 02/11**. O registro não individualiza os demais cobrados nem explicita o ano; a sonda adota 2026 pelo contexto desta chamada **[nao verificado]**. (app/docs/BACKLOG.md:2551)
-
-(2) **PRECISA SONDA**. A obra FERIADO-ESCALA está vinculada ao caso, mas seu balde não comprova dono L-099: a mesma grade inclui HJ-092 como LATERAL-ESTRUTURA e registra seu fechamento como BATIDA. O juiz depende dos insumos reais do dia. (app/docs/GRADE-MESTRA.md:127–128; app/ponto/management/commands/e6_oraculo.py:182–195)
-
-O `git grep` solicitado falhou por ausência de metadados Git; a busca equivalente com `rg` não encontrou testes citando literalmente HJ-074 ou BACKLOG-HJ. **[nao verificado]** [nao verificado]
-
-(3) Sonda para shell Django já inicializado no schema do caso, com credencial somente SELECT. Usa a assinatura conferida e a janela oficial da empresa; execução e resultado **[nao verificado]**. (app/ponto/management/commands/e6_oraculo.py:128–129; app/ponto/janelas.py:60–63; bin/sonda_leitura.sh:239–240)
-
-```python
-import contextlib
-import datetime as dt
-import io
-import logging
-import re
-
-from django.db import connections
-from django.utils import timezone
-
-def somente_select(execute, sql, params, many, context):
-    texto = sql.strip()
-    if (
-        many
-        or not re.match(r"SELECT\b", texto, re.I)
-        or ";" in texto
-        or re.search(r"\bINTO\b|\bFOR\s+(UPDATE|SHARE)\b", texto, re.I)
-    ):
-        raise RuntimeError("SQL recusado")
-    return execute(sql, params, many, context)
-
-erros = 0
-linhas = []
-nivel_anterior = logging.root.manager.disable
-
-try:
-    logging.disable(logging.CRITICAL)
-    with contextlib.redirect_stdout(io.StringIO()), \
-         contextlib.redirect_stderr(io.StringIO()), \
-         contextlib.ExitStack() as pilha:
-        for conexao in connections.all():
-            pilha.enter_context(conexao.execute_wrapper(somente_select))
-
-        from colaboradores.models import Colaborador
-        from ponto.janelas import janela_atual
-        from ponto.management.commands.e6_oraculo import InsumosDoDono
-
-        agora = timezone.now()
-        hoje = timezone.localtime(agora).date()
-
-        for identificador, dia in [(148, dt.date(2026, 11, 2))]:
-            try:
-                colab = Colaborador.objects.get(pk=identificador)
-                ini, fim = janela_atual(dia, colab.empresa_id)
-                dono = InsumosDoDono(
-                    colab, ini, fim, hoje, agora=agora
-                ).dono(dia)
-                if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
-                    raise RuntimeError("Dono sem resposta")
-                linhas.append(
-                    f"DONO|col{identificador}|{dia.isoformat()}|{dono}"
-                )
-            except Exception:
-                erros += 1
-except Exception:
-    erros += 1
-finally:
-    logging.disable(nivel_anterior)
-
-for linha in linhas:
-    print(linha)
-print(f"FIM|erros={erros}")
-```
-
-`dono(dia)` classifica os insumos e não retorna “SEM DIVERGENCIA”; essa ausência não pode ser certificada apenas por sua resposta. (app/ponto/management/commands/e6_oraculo.py:98–110, :182–195)
-
-(4) Padrão quebrado: **[nao verificado]**, enquanto faltar o dono. Obra documentalmente vinculada: **FERIADO-ESCALA**; fechamento do caso **[nao verificado]**. (app/docs/GRADE-MESTRA.md:127)
-
-RESULTADO|BACKLOG-HJ|HJ-074|PRECISA SONDA|-|-
-
-## 14/11 23:30 · sessao 6edd0b133cbb · - · - · origem=Ronald (tmux)
-
-(1) **SEM DIA-COLAB.** O registro pede dono L-099 para “40 dias de férias com batida”, mas não enumera colaboradores e datas; o complemento repete essa contagem sem individualização. (app/docs/BACKLOG.md:1917; app/docs/PROMPTS.md:2226)
-
-O teste correspondente cria ausência e batida em uma fixture; não identifica dia-colab de produção do caso. (app/ferias/test_hj090_um_juiz.py:63; app/ferias/test_hj090_um_juiz.py:480–490)
-
-(4) Dono ESTRUTURA e respectivo padrão/obra: [nao verificado]. Encerrado sem sonda pela ausência de dia-colab identificado no registro. (app/docs/BACKLOG.md:1917)
-
-RESULTADO|BACKLOG-HJ|HJ-090|SEM DIA-COLAB|-|-
-
-_5376 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5395 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
