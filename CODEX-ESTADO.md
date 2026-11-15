@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 05:38** · publicado em **15/11/2026 05:38** (UTC-3)
+> Ultima resposta processada: **15/11/2026 05:40** · publicado em **15/11/2026 05:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 05:40 · sessao a8ee662a6825 · CONTRATO-DE-ENTRADA-DO-FIO · verificador · origem=Code
+
+**REPROVA.** A1 corrige o apagamento sequencial apontado na v1; A2 pode validar pergunta legada de **outra batida** usando a última identidade do contexto agregado. (`app/chamados/services/disputa_emissao.py:569`; `app/api/foto_recebida.py:70`; `app/chamados/models.py:3599`)
+
+1. **A1 — cura correta, com alcance limitado.**
+
+   Mesmo `id` conhecido: `{**anterior, **novo}` preserva `recebida_em` omitida e deixa valor explicitamente enviado vencer. Outro `id`, identidade ausente ou bloco incompatível: substituição integral. Isso cura API→retro consecutivos da mesma batida; não transforma o contexto em histórico de episódios. (`app/chamados/services/disputa_emissao.py:569`; `app/chamados/services/disputa_emissao.py:573`; `app/chamados/services/disputa_emissao.py:575`)
+
+   **Reuso por `nota.py` não repete esse apagamento:** escreve `Chamado.contexto_json`, delegando a `fundir_contexto`; dicionário já presente não é substituído. Entretanto, também não incorpora uma recepção nova se `ultima_batida` já existir sem ela, podendo conservar inclusive um episódio antigo. É comportamento distinto da fusão da disputa. (`app/chamados/services/disputa_emissao.py:600`; `app/chamados/services/nota.py:110`; `app/chamados/services/nota.py:123`; `app/chamados/services/contexto.py:155`)
+
+   Os outros escritores examinados preservam o bloco sequencialmente: preenchimento de motivo/data, remoção da chave de um motivo e acréscimo de `revalidacoes`. O envelope atribuído no gerador pertence a uma cópia transitória. (`app/chamados/services/disputa_emissao.py:291`; `app/chamados/services/disputa_emissao.py:312`; `app/chamados/models.py:2028`; `app/chamados/models.py:2104`; `app/chamados/models.py:2128`)
+
+   **Há possibilidade preexistente de perda por concorrência:** o cron carrega contexto antigo; a API salva a recepção; depois `renovar_contexto('ultimo_alerta_diario', ...)` salva o JSON inteiro da instância antiga. Essa porta não relê o contexto antes de gravar. Ocorrência concreta na sombra: **[nao verificado]**. (`app/ponto/management/commands/alertar_disputas_pendentes.py:33`; `app/ponto/management/commands/alertar_disputas_pendentes.py:48`; `app/chamados/models.py:2182`; `app/chamados/models.py:2187`)
+
+2. **A2 — bloqueio: contexto de B pode quitar pergunta NULL de A.**
+
+   Cenário: pergunta de foto da batida A permanece viva, com origem NULL; outra emissão B reutiliza a disputa e substitui `ultima_batida` por B; chega foto de B. O ramo novo inclui **todas** as perguntas `foto_ausente` NULL daquela disputa, inclusive a de A. Não compara dia nem vínculo individual. O próprio modelo documenta que esse contexto, depois do nascimento, pode apontar outra anomalia. (`app/chamados/services/disputa_emissao.py:540`; `app/chamados/services/disputa_emissao.py:575`; `app/api/foto_recebida.py:70`; `app/api/foto_recebida.py:72`; `app/chamados/models.py:3599`)
+
+   As portas seguintes não corrigem a seleção: recebem pergunta/disputa, sem receber a batida do upload. O ramo `escolha` de `foto_ausente` pode materializar sem conferir foto ou episódio; a validação já retira a pergunta da vitalidade. Portanto, **usar o dono correto da escrita não garante que ele recebeu a pergunta correta**. (`app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/chamados/catalogo/perguntas.py:94`; `app/chamados/services/materializacao.py:1082`; `app/chamados/services/materializacao.py:1238`; `app/chamados/juizes.py:1404`)
+
+3. **Sombra — duas candidatas, quantidade com associação errada desconhecida.**
+
+   O dado fornecido registra 15 perguntas vivas NULL e duas com disputa aberta/contexto com ID: pergunta **40112**, disputa **5158**, batida contextual **118315**; pergunta **56615**, disputa **8065**, batida contextual **155158**. Isso identifica candidatas, não comprova a origem histórica delas. (`sonda.out:3`, anexo fornecido; `app/chamados/tests/cef_c3_sonda.py:23`; `app/chamados/tests/cef_c3_sonda.py:31`)
+
+   **Quantas dessas duas caem no cenário: [nao verificado].** A sonda não mede correspondência pergunta↔episódio, nem exige o motivo na lista atual da disputa, exigência existente no resolver. (`app/chamados/tests/cef_c3_sonda.py:23`; `app/chamados/tests/cef_c3_sonda.py:33`; `app/api/foto_recebida.py:64`)
+
+   Para contar, faltam elegibilidade completa do resolver, existência/posse da batida contextual e lastro independente da batida que originou cada pergunta. Comparar dia do turno pode revelar incompatibilidade, mas **dia igual não prova episódio igual**: o acervo NULL tem somente chave de dia. Se o lastro disponível não distinguir episódios, o resultado deve continuar indeterminado. (`app/chamados/models.py:3610`; `app/chamados/models.py:3599`; `app/chamados/services/fio.py:1286`)
+
+   Não reabro o bloqueio antigo da medição 140/0, descartado pela triagem fornecida. (`triagem_v1.txt:6`, anexo fornecido)
+
+4. **O `|` não causa o erro de associação.**
+
+   Os conjuntos são disjuntos: `batida_origem=batida` versus `batida_origem IS NULL`, ambos no mesmo relacionamento da disputa. Não há sobreposição entre os ramos que explique duplicação; a união inclui o conjunto legado inteiro quando o contexto casa. Quando não casa, as NULL ficam excluídas deliberadamente. O problema é esse critério de inclusão. (`app/api/foto_recebida.py:68`; `app/api/foto_recebida.py:70`; `app/api/foto_recebida.py:72`)
+
+   Execução SQL real: **[nao verificado]**. O teste sem banco usa uma implementação própria de união, que não demonstra comportamento do ORM. (`app/chamados/tests/test_cef_c1_sem_banco.py:49`; `app/chamados/tests/test_cef_c3_sem_banco.py:3`)
+
+5. **Escritores e leitores dos valores envolvidos.**
+
+   | Valor | Quem escreve | Quem lê |
+   |---|---|---|
+   | `ultima_batida.id` | APIs e retro; fusão persiste na disputa. (`app/api/views.py:762`; `app/api/views_core.py:756`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:99`; `app/chamados/services/disputa_emissao.py:576`) | Comparação A1; associação legada A2; busca do dia/episódio no nascimento. (`app/chamados/services/disputa_emissao.py:571`; `app/api/foto_recebida.py:70`; `app/chamados/services/disputa_emissao.py:396`; `app/chamados/models.py:3606`) |
+   | `tipo` | APIs e retro. (`app/api/views.py:763`; `app/api/views_core.py:757`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:100`) | Transporte genérico pelo merge; leitor semântico específico: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:573`) |
+   | `timestamp` | APIs: instante local do fato; retro: timestamp local da batida. (`app/api/views.py:764`; `app/api/views_core.py:758`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:101`) | Juiz fraco extrai a data da string. (`app/chamados/juizes.py:162`; `app/chamados/juizes.py:169`) |
+   | `recebida_em` | APIs; retro omite; A1 conserva a omissão no mesmo episódio. (`app/api/views.py:765`; `app/api/views_core.py:759`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`; `app/chamados/services/disputa_emissao.py:573`) | Merge genérico; consumidor semântico específico: **[nao verificado]**. O juiz fraco lê `timestamp`. (`app/chamados/juizes.py:163`) |
+   | `Disputa.contexto` / `Chamado.contexto_json` | Emissão escreve ambos no nascimento; agrega contexto da disputa; reuso do chamado passa por nota/contexto. (`app/chamados/services/disputa_emissao.py:594`; `app/chamados/services/disputa_emissao.py:604`; `app/chamados/services/disputa_emissao.py:576`; `app/chamados/services/nota.py:123`) | Gerador usa envelope do ato; upload legado usa agregado; template exibe contexto do chamado. (`app/chamados/services/disputa_emissao.py:315`; `app/api/foto_recebida.py:70`; `app/templates/chamados/partials/painel_chamado_turno.html:35`) |
+   | Pergunta: `motivo`, `batida_origem`, `data_evento` | Porta de nascimento recebe motivo, deriva origem e grava dia pela porta do fio. (`app/chamados/models.py:2903`; `app/chamados/models.py:2949`; `app/chamados/models.py:3097`; `app/chamados/models.py:3099`) | Dedup lê episódio/acervo; upload lê motivo e origem, sem usar dia no ramo legado. (`app/chamados/models.py:2798`; `app/api/foto_recebida.py:68`; `app/api/foto_recebida.py:72`) |
+   | Resposta e validação | `responder_automaticamente` grava texto/carimbo; validação grava carimbo/autor. (`app/chamados/services/disputa_emissao.py:1673`; `app/chamados/services/validacao.py:159`) | Validador, materializador e juiz de vitalidade. (`app/chamados/services/validacao.py:418`; `app/chamados/services/materializacao.py:1375`; `app/chamados/juizes.py:1403`) |
+   | Motivos e fechamento da disputa | Emissão agrega motivos; portas existentes aparam motivo e fecham disputa. (`app/chamados/services/disputa_emissao.py:550`; `app/chamados/models.py:2030`; `app/chamados/models.py:1996`) | Resolver seleciona abertas com `foto_ausente`; consulta vitalidade e possibilidade de fechar. (`app/api/foto_recebida.py:62`; `app/api/foto_recebida.py:82`; `app/api/foto_recebida.py:84`) |
+
+6. **Testes mordem os cortes escolhidos, mas não o bloqueio encontrado.** [nao verificado]
+
+   Os quatro operadores registrados têm asserções específicas: preservar sempre, substituir sempre, retirar legado e aceitar legado sem conferir ID. O runner distingue falha esperada de erro de execução. (`app/chamados/tests/cef_c3_verificar.py:12`; `app/chamados/tests/cef_c3_verificar.py:31`)
+
+   A fixture sem banco assume uma NULL associada ao contexto atual; a integração apaga a origem justamente da última batida emitida. Nenhuma exercita **NULL de A → contexto atualizado para B → upload de B**, nem múltiplas NULL de episódios diferentes. (`app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c3_integracao.py:33`; `app/chamados/tests/test_cef_c3_integracao.py:38`)
+
+   **Mutante plausível vivo na C3 sem banco:** retirar `motivo='foto_ausente'` apenas do filtro legado, passando a selecionar NULL de outros motivos. O ensaio em memória manteve os dez testes verdes; as fixtures desse caminho só contêm `foto_ausente`. Registro persistido desse ensaio: **[nao verificado]**. (`app/api/foto_recebida.py:72`; `app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c1_sem_banco.py:208`)
+
+   ORM, persistência, concorrência e validação real continuam fora da prova sem banco; execução da integração nesta revisão: **[nao verificado]**. (`app/chamados/tests/test_cef_c3_sem_banco.py:3`; `app/chamados/tests/test_cef_c1_sem_banco.py:219`; `app/chamados/tests/test_cef_c3_integracao.py:1`)
+
+7. **Classes de reprovação.**
+
+   **Derivação paralela / campo com dois significados: presente em A2.** O último episódio do agregado passa a funcionar como origem presumida de cada pergunta NULL, contrariando a distinção documentada entre contexto corrente e episódio da pergunta. (`app/api/foto_recebida.py:70`; `app/chamados/models.py:3599`; `app/chamados/services/fio.py:1286`)
+
+   **Segundo juiz de vitalidade ou segundo escritor de resposta/validação: nenhum novo demonstrado nesses trechos.** As portas e `fio_vivo` são reutilizados; o defeito está no universo entregue a elas. (`app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/api/foto_recebida.py:82`)
+
+   **Relógios internos são preexistentes**, para `ultima_em` e resposta automática; a convivência de timestamp legado de recepção com timestamp novo do fato também já está documentada. (`app/chamados/services/disputa_emissao.py:567`; `app/api/foto_recebida.py:42`; `app/chamados/juizes.py:152`; `app/chamados/juizes.py:155`)
+
+   **O selo tem mordida parcial:** verifica estrutura do envelope, mas não comprova correspondência histórica entre pergunta NULL e contexto. Os quatro mutantes mortos não cobrem essa propriedade. (`app/chamados/tests/test_e1_v5_familia.py:133`; `app/chamados/tests/test_e1_v5_familia.py:170`; `app/chamados/tests/cef_c3_verificar.py:12`)
 
 ## 15/11 05:38 · sessao 862111608ebb · - · - · origem=Ronald (tmux)
 
@@ -557,43 +626,4 @@ O aval LU-03 citado pelos testes diz literalmente **“acao direta do admin com 
 
 Para os quatro, uma cura que preserve a afirmação atual do teste exige **decisão sobre a regra/tela de terminal**; alterar a âncora para viva apagaria precisamente a prova que eles montam. Se o contrato terminal atual prevalecer, mudam as expectativas; se a decisão instituir modal terminal, muda o código de alcance e a tela correspondente. A autorização literal para essa segunda alternativa não foi encontrada nos avais abertos. (`app/chamados/tests/test_e4_passivo.py:8`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`, `:137`; `app/chamados/tests/test_o261e_f5_alcance.py:214`, `:217`; `app/chamados/services/tarefa_do_dia.py:628`; `app/chamados/services/fio.py:789`; `app/docs/CORTES.md:435`.)
 
-## 15/11 03:35 · sessao e954b47bcdea · - · - · origem=Ronald (tmux)
-
-Os três casos são **CONHECIDO** no material da cópia: a entrega da c6 já os enumera como pendências da sessão, e a entrega da c7 os conserva explicitamente como “três falhas conhecidas fora da c7”. Isso é evidência documental anterior, mas **não prova execução na árvore exata c6 `a5ff3627f`**: a própria entrega da c7 declara a identidade Git da base `[nao verificado]`. [`app/chamados/tests/e3_r3_c6_entrega.txt:55`–65; `app/chamados/tests/e3_r3_c7_entrega.txt:2`,175–176]
-
-1. **`test_MORDE_pendente_curado_sai_da_lista`**
-
-   - Falha em `app/core/tests/test_contract_juiz_tela.py:38`: esperado `sumiram == []`; o dado fornecido mostra obtido uma lista com a impressão antiga de `cal = contexto_calendario(...)`. O teste constrói essa lista lendo cada `PENDENTES['tela']` e procurando sua impressão como substring literal do arquivo correspondente. [`app/core/tests/test_contract_juiz_tela.py:34`–38]
-   - Escritor do valor divergente: `PENDENTES['tela']` registra a impressão antiga com o fechamento `..._fim.isoformat()})`; `_p` transforma os argumentos em dicionário com `arquivo`/`impressao`. [`app/core/juizes.py:367`–368,878–879]
-   - Leitor: o teste lê o arquivo e usa `p['impressao'] not in texto`, sem interpretação semântica. [`app/core/tests/test_contract_juiz_tela.py:35`–37]
-   - Sítio de produção: `contexto_drawer` agora chama `contexto_calendario` em duas linhas, passando `agora=agora`; portanto a antiga substring inteira deixou de existir por mudança da chamada, o que por si só **não prova cura semântica do pendente**. [`app/colaboradores/services/drawer.py:121`–122]
-   - Continuação até a tela: `contexto_drawer` devolve `'cal': cal`; a view usa esse contexto ao renderizar o drawer; o template mostra `cal.data_ini`, `cal.data_fim`, `cal.dias` e `cal.resumo`. [`app/colaboradores/services/drawer.py:154`; `app/colaboradores/views.py:2945`–2947; `app/templates/colaboradores/partials/_drawer_diagnostico.html:33`–35]
-   - Delta c7: nenhum hunk fornecido altera o registro, o drawer ou este teste; a entrega da c7 afirma que `core/juizes.py` e templates não foram alterados. [`app/chamados/tests/e3_r3_c7_entrega.txt:172`–175]
-   - Antiguidade: já mencionado no relatório de vermelhos do recorte c5, dentro da entrega da c6; execução na base exata `a5ff3627f` `[nao verificado]`. [`app/chamados/tests/e3_r3_c6_entrega.txt:55`,64; `app/chamados/tests/e3_r3_c7_entrega.txt:2`]
-   - Cura: **código do registro**, após verificar se a pendência foi efetivamente curada: reancorar a impressão se o problema continua, ou aplicar baixa se houver prova de cura. O contrato exige impressão existente e o registro explica o vínculo entre impressão e derivação; o mecanismo de baixa prevê explicitamente distinguir “outra fatia tirou” de “a impressão mudou”. [`app/core/juizes.py:10`–14; `app/core/registro_baixa.py:84`–103]
-
-2. **`test_MORDE_o_mmd_commitado_bate_com_o_codigo`**
-
-   - Falha em `app/core/tests/test_selo_diagrama_do_codigo.py:46`: esperado `rc == 0`; obtido `rc == 1`, com `DIVERGE: docs/MAPA.md nao bate com o codigo`, conforme dado fornecido. O nome/mensagem do teste menciona MMD, mas a função chamada confere **MMD e MAPA**. [`app/core/tests/test_selo_diagrama_do_codigo.py:44`–47; `app/core/management/commands/gerar_diagrama.py:921`–930]
-   - Cadeia: `_gerar` chama `gerar(check=True)` e captura stdout; `gerar` monta `txt` e `mapa`, lê ambos os arquivos persistidos, escreve `rc = 1` quando um conteúdo diverge e devolve esse inteiro; o teste lê esse retorno. [`app/core/tests/test_selo_diagrama_do_codigo.py:29`–39; `app/core/management/commands/gerar_diagrama.py:911`–930]
-   - Quem escreve os arquivos em produção/ferramenta: `gerar(check=False)` abre `ARQUITETURA.mmd` e `MAPA.md` com `'w'` e grava as projeções; `gerar_mapa` devolve o texto do MAPA e inclui `mapa_cobertura()`. [`app/core/management/commands/gerar_diagrama.py:906`–908,931–935]
-   - Fontes lidas pelo MAPA: registro de juízes, classificação dos pendentes por fonte AST, selos que referenciam o registro e portas da tela; não há banco nessa declaração da camada de cobertura. [`app/core/management/commands/gerar_diagrama.py:712`–719,750–784,799–848]
-   - Relação específica possível com o primeiro conhecido: se a impressão não é achada, `classificar_pendente` publica `nao_sei / impressao nao achada`, e esses contadores entram no MAPA. **Que essa seja a única ou efetiva diferença do MAPA anexado `[nao verificado]`**, pois o dado só fornece a mensagem de divergência. [`app/core/management/commands/gerar_diagrama.py:603`–605,764–780,829–838]
-   - Delta c7: não altera gerador ou docs; suas mudanças de imports/leitores não entram automaticamente nos números publicados de leitores, que ficam fora do MAPA commitado. Uma contribuição indireta específica da c7 à divergência do MAPA `[nao verificado]`; documentação da c7 classifica esse vermelho como externo ao delta. [`app/core/management/commands/gerar_diagrama.py:715`–716,821–822; `app/chamados/tests/e3_r3_c7_entrega.txt:172`–176]
-   - Antiguidade: “selo_diagrama x2” já consta na entrega da c6, na tabela dos vermelhos do recorte c5; execução na base exata `a5ff3627f` `[nao verificado]`. [`app/chamados/tests/e3_r3_c6_entrega.txt:55`,65; `app/chamados/tests/e3_r3_c7_entrega.txt:2`]
-   - Cura: **artefato gerado/código documental**, regenerar e revisar os arquivos a partir da árvore final; não mudar expectativa para aceitar `rc=1`. Esse é precisamente o contrato de regeneração e comparação. [`app/core/tests/test_selo_diagrama_do_codigo.py:13`–18; `app/core/management/commands/gerar_diagrama.py:931`–935]
-
-3. **`test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo`**
-
-   - Falha em `app/core/tests/test_selo_diagrama_do_codigo.py:98`: esperado `rc == 0` **após restaurar o MMD original**; obtido `rc == 1` com a mesma mensagem de divergência do MAPA, conforme dado fornecido. [`app/core/tests/test_selo_diagrama_do_codigo.py:94`–98]
-   - Cadeia própria do teste: lê e guarda o MMD original; grava uma aresta extra; verifica `rc == 1`; no `finally` regrava exatamente `original`; chama novamente `_gerar` e espera zero. O erro anexado está nessa última verificação, não na verificação de rejeição da aresta. [`app/core/tests/test_selo_diagrama_do_codigo.py:88`–98]
-   - Cadeia restante igual ao caso anterior: `_gerar → gerar(check=True) → comparação dos dois arquivos → rc`; o `MAPA.md` não é modificado/restaurado por este teste. Assim a saída fornecida não prova falha da restauração do MMD nem aceitação da aresta. [`app/core/tests/test_selo_diagrama_do_codigo.py:29`–39,88–98; `app/core/management/commands/gerar_diagrama.py:921`–930]
-   - Delta, antiguidade e cura: mesmos limites do caso anterior; documentação anterior já enumera dois vermelhos do selo, mas a execução na c6 exata continua `[nao verificado]`. [`app/chamados/tests/e3_r3_c6_entrega.txt:55`,65; `app/chamados/tests/e3_r3_c7_entrega.txt:2`,175–176]
-
-| teste | classe | sítio | cura | [nao verificado]
-|---|---|---|---|
-| `test_MORDE_pendente_curado_sai_da_lista` | CONHECIDO | impressão em `app/core/juizes.py:878` versus chamada em `app/colaboradores/services/drawer.py:121` | Código do registro: reancorar ou baixar conforme prova semântica; baixa automática por mera ausência textual não está provada. [`app/core/registro_baixa.py:91`–103] |
-| `test_MORDE_o_mmd_commitado_bate_com_o_codigo` | CONHECIDO | comparação de `MAPA.md` em `app/core/management/commands/gerar_diagrama.py:923`–927 | Regenerar/revisar artefatos após acertar a árvore final. [`app/core/management/commands/gerar_diagrama.py:931`–935] |
-| `test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` | CONHECIDO | última chamada do selo em `app/core/tests/test_selo_diagrama_do_codigo.py:97`–98, mesma comparação do MAPA | Mesma cura do MAPA; nenhuma alteração da prova da aresta está sustentada pelo dado. [`app/core/management/commands/gerar_diagrama.py:923`–930] |
-
-_5515 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5516 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
