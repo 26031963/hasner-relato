@@ -1,7 +1,216 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 17:18** · publicado em **15/11/2026 17:19** (UTC-3)
+> Ultima resposta processada: **15/11/2026 17:24** · publicado em **15/11/2026 17:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 17:24 · sessao 30c7b5361d1d · TRIAGEM-DA-TRAVA · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — ITEM B.** O item A permanece independente e registrado como vigente. [app/docs/RELATO.md:9208](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/app/docs/RELATO.md:9208)
+
+1. **NAO PROCEDE — as premissas não conferem integralmente.**
+
+   `_GUARDA_MOTIVO` está exatamente em **:236**, mas essa linha declara a regex; a conferência ocorre em **:255**, com recusa rc 2 em **:262**. Hoje verifica a forma do motivo, sem consultar aprovação ou hash. `--dir` existe e escolhe o diretório montado para executar os testes; não certifica sua identidade. [bin/suite.sh:236](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:236), [bin/suite.sh:255](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:255), [bin/suite.sh:136](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:136), [bin/suite.sh:284](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:284)
+
+   O selo existe, contém recusas comportamentais e exige que o mutante `aceita_sem_motivo` seja detectado. Entretanto, seu positivo atual aceita pre-opus sem fornecer prova de aprovação. Execução do selo nesta revisão: **[nao verificado]**. [bin/tests/test_suite_motivo.sh:46](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/tests/test_suite_motivo.sh:46), [bin/tests/test_suite_motivo.sh:61](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/tests/test_suite_motivo.sh:61), [bin/tests/test_suite_motivo.sh:156](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/tests/test_suite_motivo.sh:156)
+
+   **A premissa dos três chamadores está errada:** `volta_intermediaria.sh` chama `suite.sh --dir … --volta …`, atravessando a guarda. Somente `regua.sh` e `pre-push.sh`, entre esses três, executam pela trava própria fora dela. [bin/volta_intermediaria.sh:32](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/volta_intermediaria.sh:32), [bin/regua.sh:165](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/regua.sh:165), [bin/pre-push.sh:142](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/pre-push.sh:142)
+
+   **Já existe escritor de lastro por hash:** `<resposta>.id` registra obra, papel, hash, PID, fim e SHA da resposta. Pode ser lido sem escritor novo, mas comprova identidade e sucesso da chamada, não “zero achados procedentes”. `.rc` é escrito somente para construtor; a triagem existente distingue `procedente|descartado`, sem certificado específico de aprovação limpa. Existência de artefato concreto aprovado em produção: **[nao verificado]**. [bin/codex_pergunta.sh:464](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/codex_pergunta.sh:464), [bin/codex_pergunta.sh:274](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/codex_pergunta.sh:274), [bin/disjuntor.py:869](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/disjuntor.py:869)
+
+2. **PROCEDE — há colisão com uma saída vigente do CODEX.**
+
+   O item 5(d) manda subir ao opus **após mais de três voltas Codex, sem esperar**; o item 5(c) exige suite inteira verde antes desse opus. A guarda literal que exige aprovação prévia para liberar a suite não contempla essa saída: pode impedir o requisito necessário ao encaminhamento obrigatório. [CLAUDE.md:377](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:377)
+
+   Também é preciso preservar a triagem: achados descartados com motivo seguem anexados ao opus, que decide. Exigir uma resposta textual de “APROVA” do Codex seria mais restritivo que essa regra. [CLAUDE.md:375](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:375)
+
+   Motivo obrigatório e chamadas próprias da régua/pre-push são compatíveis com a seção 3 e com o contrato registrado de TRAVA-MENOS-FILA-COM-SELO. O literal original desse aval em `CORTES.md`: **[nao verificado]**; o conteúdo verificável está nas referências seguintes. [CLAUDE.md:101](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:101), [app/docs/RELATO.md:9059](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/app/docs/RELATO.md:9059)
+
+   Contrato de cinco linhas antes da construção confere. “UMA vez” conserva a ressalva vigente: **mudou a forma do contrato, exige nova chamada**. A consolidação CODEX da 7b prevalece sobre blocos antigos da PISTA. [app/docs/PISTA.md:170](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/app/docs/PISTA.md:170), [app/docs/PISTA.md:10](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/app/docs/PISTA.md:10)
+
+3. **PROCEDE — há condições que não fecham no literal.**
+
+   **Delta:** é permitido nas voltas intermediárias. Uma revisão do delta pode produzir lastro para o **novo commit**, passado ao wrapper; a prova do hash anterior não passa automaticamente a valer para ele. Portanto, delta e identidade por hash são compatíveis, mas a herança de aprovação entre hashes não está demonstrada. [CLAUDE.md:366](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:366), [bin/codex_pergunta.sh:79](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/codex_pergunta.sh:79), [bin/codex_pergunta.sh:467](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/codex_pergunta.sh:467)
+
+   **Identidade da árvore:** o sidecar identifica um commit; `--dir` monta conteúdo de um diretório. O fluxo atual não confere que os bytes montados correspondem àquele commit, nem revalida isso depois da espera pela trava. “Hash de `--dir`” precisa fechar essa relação; igualdade efetiva durante a execução: **[nao verificado]**. [bin/suite.sh:284](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:284), [bin/suite.sh:317](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:317)
+
+   **Substituto com rc 75:** a regra permite sonnet com motivo, mas o wrapper sai por limite antes de criar o `.id`. Protocolo existente que grave aprovação desse substituto vinculada ao hash: **[nao verificado]**. O rc 75 da trava significa outra coisa: a vez não chegou. [CLAUDE.md:360](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:360), [bin/codex_pergunta.sh:451](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/codex_pergunta.sh:451), [bin/trava_teste.sh:18](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/trava_teste.sh:18)
+
+   **Contadores:** falta fonte histórica completa demonstrada. A suite remove seu rc temporário; a trava sobrescreve dono/início por “livre”; a volta intermediária grava resultado e duração, sem estado simultâneo da segunda pista. A régua possui carimbo próprio com resultado e horário, mas não cobre todas as chamadas de `suite.sh`. O histórico geral continua registrado como obra separada aberta. Valores dos dois contadores nas 24 horas: **[nao verificado]**. [bin/suite.sh:367](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:367), [bin/trava_teste.sh:40](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/trava_teste.sh:40), [bin/volta_intermediaria.sh:45](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/volta_intermediaria.sh:45), [bin/regua.sh:196](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/regua.sh:196), [app/docs/BACKLOG.md:2581](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/app/docs/BACKLOG.md:2581)
+
+   **Sem `--dir`:** `pre-opus <OBRA>` é uso canônico para a árvore viva, mas B só nomeia “hash de `--dir`”. Deixar passar abre esse caminho; exigir `--dir` muda o comando canônico e esbarra na recusa atual de passar a viva explicitamente. Se for literalmente apenas `"pre-opus"`, sem obra, já retorna rc 2. [CLAUDE.md:96](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:96), [bin/suite.sh:289](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:289), [bin/suite.sh:298](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/suite.sh:298), [bin/tests/test_suite_motivo.sh:48](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/bin/tests/test_suite_motivo.sh:48)
+
+4. **NAO PROCEDE — não há ato fora do declarado demonstrado no escopo B.**
+
+   O registro limita B a guarda, selo e contadores, em instrumento com pouso próprio; não encomenda alteração de exportada, dinheiro ou regra de negócio. Esses atos continuam sujeitos ao `!`, e config do Code permanece proibida. Respeito efetivo aos limites de config, trava e motivo `pouso` pela implementação futura: **[nao verificado]**. [app/docs/BACKLOG.md:1954](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/app/docs/BACKLOG.md:1954), [CLAUDE.md:265](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:265), [CLAUDE.md:350](/home/ronald/codex_ws/a56ea92aa8c8617cac5f7a064a5723d46bf5200f/CLAUDE.md:350)
+
+## 15/11 17:22 · sessao f0dfa0f0ad86 · - · - · origem=Ronald (tmux)
+
+- **Há escritor existente de identidade por hash**, mas existência de aprovação concreta em produção é **[nao verificado]**. O wrapper resolve o argumento como commit completo (`bin/codex_pergunta.sh:79`), arquiva esse commit (`bin/codex_pergunta.sh:311`) e, se o processo retorna 0 e produz resposta nova, grava `<resposta>.id` com obra, papel, hash completo, pid, fim e SHA da resposta (`bin/codex_pergunta.sh:464`). Esse sidecar já pode ser lido sem novo escritor; não constitui sozinho aprovação sem achados: o wrapper só testa sucesso do processo e presença da resposta (`bin/codex_pergunta.sh:428`, `bin/codex_pergunta.sh:466`).
+
+- **`.rc` não é prova atual do verificador.** O arquivo `<resposta>.rc` só é escrito para `PAPEL=construtor` (`bin/codex_pergunta.sh:274`). `.r` é convenção de nome do arquivo de resposta fornecido pelo chamador; o wrapper aceita `RESPOSTA="$3"` (`bin/codex_pergunta.sh:67`).
+
+- **Existe outro escritor registrado, mas não de aprovação sem achados:** `disjuntor.py --triagem` aceita sidecar de verificador, confere SHA e grava a triagem (`bin/disjuntor.py:892`, `bin/disjuntor.py:910`). Seus vereditos são `procedente|descartado` (`bin/disjuntor.py:139`); “procedente” significa achado procedente, não resposta “0 procedentes”, conforme CODEX item 5(b) (`CLAUDE.md:375`).
+
+- **rc75 não deixa aprovação substituta nesse protocolo.** O wrapper registra limite e sai 75 antes da criação do sidecar (`bin/codex_pergunta.sh:451`, `bin/codex_pergunta.sh:459`, `bin/codex_pergunta.sh:464`). A lei permite leitura sonnet com rc75/falha e motivo no RELATO (`CLAUDE.md:360`; `app/docs/PISTA.md:94`), mas escritor que transforme a decisão desse substituto em aprovação verificável por hash é **[nao verificado]**.
+
+- **Delta não contradiz necessariamente hash igual.** A pergunta de volta intermediária pode conter só delta (`CLAUDE.md:366`); passando o novo commit ao wrapper, o sidecar identifica o novo hash (`bin/codex_pergunta.sh:79`, `bin/codex_pergunta.sh:467`). Reutilizar prova de hash anterior para árvore modificada não é sustentado por esse mecanismo (`bin/codex_pergunta.sh:467`).
+
+- **“Hash de `--dir`” precisa de definição.** Hoje `--dir` é apenas caminho (`bin/suite.sh:136`), montado como diretório (`bin/suite.sh:284`). Não há nesse caminho conferência HEAD/limpeza entre diretório e commit; a porta `--montagem` monta assets/cache, sem esse vínculo (`bin/arvore_do_push.sh:28`). Cópia archive pode nem ter `.git`, pois nasce por `git archive` (`bin/codex_pergunta.sh:315`). Sem `--dir`, roda a árvore viva por default (`bin/suite.sh:23`, `bin/suite.sh:297`); o literal “hash de --dir” não define esse caso **[nao verificado]**.
+
+- **Fonte histórica suficiente para os dois contadores não foi demonstrada.** A suite executa testes sem gravar evento persistente de seleção/hash/data (`bin/suite.sh:317`); o rc temporário é removido (`bin/suite.sh:338`, `bin/suite.sh:367`). A trava grava dono+pid e início, sobrescrevendo com “livre” na saída; não guarda histórico nem pista viva (`bin/trava_teste.sh:23`, `bin/trava_teste.sh:40`). A volta intermediária grava OUT.log/.fim e duração, mas não estado da segunda pista (`bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:42`). O ESTADO lê atualmente chamadas/limites Codex (`bin/gerar_estado.py:267`; `bin/codex_limite_estado.py:49`), não esses eventos de suite.
+
+- **Segunda pista é externa ao repo.** O contrato registrado diz “servidor do GLPI; nenhum arquivo do repo”, com estado consultado por `ssh pista estado` (`app/docs/BACKLOG.md:2039`). Há fotografias textuais de 10:22 e 11:3x (`app/docs/RELATO.md:161`, `app/docs/RELATO.md:88`); não provam estado simultâneo a cada volta nem fornecem histórico completo dos contadores. Valores efetivos nas 24h são **[nao verificado]**.
+
+## 15/11 17:22 · sessao f1505d748fb8 · E4C-F1V3 · leitura · origem=Code
+
+**D1+J1 apontam uma candidata a cura: C12/desligamento. Os três vermelhos de limbo de C6/C11 continuam vermelhos, pois suas próprias asserções exigem texto sem instante vivo. O verde final de C12 não foi verificado por execução.** (`chamados/tests/test_e4b_c12_orm.py:179`; `chamados/tests/test_e4b_c6_orm.py:82`; `chamados/tests/test_e4b_c11_orm.py:122`.)
+
+Todos os caminhos abaixo são relativos a `app/`. Não achei `.git` nesta árvore; `git diff 151b0666a..d36ecbddd` falhou com “not a git repository”. Procurei também arquivos de diff e fotografias históricas. A fotografia encontrada identifica outro BASE, `97bbaa60`, e não substitui o main solicitado. Portanto, **a lista completa dos sítios alterados por c2..c9 e sua comparação literal com main ficam [nao verificado]**. (`chamados/tests/e4c_f1v5_base_juizes.txt:1`.)
+
+**(a) Escritores e leitores encontrados na cópia.**
+
+Os escritores abaixo permitem rastrear os valores consumidos pelos sítios seguintes; a presença e o comportamento desses escritores no main são [nao verificado].
+
+| Escritor na cópia | Texto e instante escritos |
+|---|---|
+| `responder_pergunta_disputa_core` | Escreve `resposta_colab=resposta` e `respondida_em=_agora`; registra RESPOSTA com os mesmos texto e instante. (`chamados/services/disputa_emissao.py:1481`; `chamados/services/disputa_emissao.py:1525`.) |
+| Escrita de resposta por texto | Escreve `resposta_colab=texto`, `respondida_em=instante` e a RESPOSTA correspondente. (`chamados/services/disputa_emissao.py:1673`; `chamados/services/disputa_emissao.py:1677`.) |
+| Recuperação pela trilha | Preenche `respondida_em=instante`; registra RESPOSTA usando o texto já existente na projeção. (`chamados/services/disputa_emissao.py:1695`; `chamados/services/disputa_emissao.py:1698`.) |
+| `PerguntaDisputa.carimbar` | Com `resposta` solicitado e texto preenchido, preenche o instante ausente; com `'validar'`, também preenche validação. (`chamados/models.py:3260`.) |
+| `reabrir_para_correcao` | Registra a foto anterior e zera texto e instante da projeção. (`chamados/services/disputa_emissao.py:1609`; `chamados/services/disputa_emissao.py:1632`.) |
+| Ressuscitação | Registra REABERTURA com texto/foto anteriores; depois zera `respondida_em` e validação, conservando o texto. (`chamados/models.py:1655`; `chamados/models.py:1660`.) |
+| Conservação do legado | Converte projeção com instante sem linha correspondente em payload RESPOSTA, copiando texto e instante. (`chamados/models.py:4121`.) |
+| `DecisaoPergunta.registrar` | Persiste os payloads recebidos por `bulk_create`; `ato_em` e `ato_texto` são campos próprios da decisão. (`chamados/models.py:4063`; `chamados/models.py:4065`; `chamados/models.py:4143`.) |
+
+Na tabela seguinte, “texto” significa texto após `strip()`. “Não classifica” significa que o sítio transporta ou interpreta valores, sem decidir sozinho que a pergunta está respondida. A condição de cada sítio **no main** permanece [nao verificado], pela ausência do diff.
+
+| Sítio leitor na cópia | Fonte e predicado efetivo |
+|---|---|
+| `atos_pergunta.leitura` | RESPOSTA fornece `ato_texto` e `ato_em`; RECUSA/REABERTURA limpam ambos; DEVOLUÇÃO limpa somente validação. Não exige texto para transportar o instante. (`chamados/services/atos_pergunta.py:46`; `chamados/services/atos_pergunta.py:52`; `chamados/services/atos_pergunta.py:56`.) |
+| `_leitura_conservada`, objeto sem relação/PK | Transporta diretamente texto e instante projetados, recortando instante futuro. Não classifica. (`chamados/juizes.py:296`; `chamados/juizes.py:307`.) |
+| `_leitura_conservada`, objeto persistido | Combina atos reais e conservação R/V; pode conservar texto legado **sem instante**, sem fabricar decisão. (`chamados/juizes.py:321`; `chamados/juizes.py:336`; `chamados/juizes.py:352`.) |
+| `_leitura_da_pergunta` | Obtém os atos por carga, prefetch ou relação e entrega à conservação. Não acrescenta predicado de respondida. (`chamados/juizes.py:362`; `chamados/juizes.py:375`.) |
+| `_slot_esperado`, `hora` | Usa texto dos atos pelo embrulho; não exige o par completo, embora impeça resposta posterior ao horizonte de fornecer slot. (`chamados/juizes.py:500`; `chamados/juizes.py:525`.) |
+| `_slot_esperado`, `data_hora` | Interpreta diretamente `atos.resposta`; não exige instante de resposta. (`chamados/juizes.py:512`.) |
+| `_resposta_concorda_com_a_luz` | Lê **texto** da leitura dos atos para comparar a hora. (`chamados/juizes.py:1511`.) |
+| `projecao_temporal_da_pergunta` | Transporta instante e texto da leitura, além de validação/materialização/via. Não classifica. (`chamados/juizes.py:1539`; `chamados/juizes.py:1550`.) |
+| `_pergunta_viva_calc`, degrau da resposta | Aplica **só texto**; o instante retornado em `respondida` não participa desse `if`. (`chamados/juizes.py:1554`; `chamados/juizes.py:1572`.) |
+| `respondida_sem_texto` | Aplica **instante E ausência de texto**. É detector do estado ilegal, não o predicado positivo D1. (`chamados/juizes.py:1683`.) |
+| `q_respondida_com_texto` | RESPOSTA corrente com texto, acrescida da conservação; esta inclui legado **com texto e sem instante**, quando não há ato terminal. Portanto, não implementa D1 estrito. (`chamados/juizes.py:1715`; `chamados/juizes.py:1737`; `chamados/juizes.py:1759`.) |
+| `PerguntaDisputa.q_vivas` | Consome aquela face SQL como ramo da resposta; continua sendo prefiltro de vitalidade. (`chamados/models.py:3500`; `chamados/models.py:3515`.) |
+| `perguntas_corrigiveis` | Aplica **instante OU texto**, mais a proteção de lastro/vitalidade. (`chamados/juizes.py:1921`.) |
+| `perguntas_respondidas_a_validar` | Filtra pela face SQL anterior e pelo C6; ordena pelo instante da leitura. Assim, admite o legado sem instante conservado pela face SQL. (`chamados/juizes.py:1929`; `chamados/juizes.py:1932`.) |
+| `declarou_hora` | Interpreta **só texto** dos atos, excluindo escapes e descartados. (`chamados/juizes.py:1958`.) |
+| `delta_da_resposta` | Interpreta **só texto** dos atos para calcular delta. (`chamados/juizes.py:2105`.) |
+| `classificar_resposta_validacao` | Em escolha, interpreta **só texto**; em hora, delega ao delta. (`chamados/juizes.py:2209`; `chamados/juizes.py:2216`.) |
+| `motivo_implausivel_validacao` | Interpreta **só texto** dos atos para comparar com o marco. (`chamados/juizes.py:2232`.) |
+| `validar_pergunta` | Seu gate inicial exige **só `respondida_em` projetado**. Não achei teste de texto nesse gate. (`chamados/services/validacao.py:418`.) |
+| `_item_validar`, mensageria | Transporta **instante dos atos**, mas ainda transporta **texto da projeção**; aceita instante nulo. (`api/views_mensageria.py:564`; `api/views_mensageria.py:574`; `api/views_mensageria.py:576`.) |
+| Cargas de leitura | Transportam `ato_em`/`ato_texto`, conservações e snapshots; não definem respondida. (`chamados/services/carga_pergunta_viva.py:80`; `chamados/services/carga_pergunta_viva.py:88`; `chamados/services/carga_pergunta_viva.py:258`; `chamados/services/carga_pergunta_viva.py:281`.) |
+| Fio, app e relavra | Alimentam a leitura dos atos antes de consultar o juiz; não criam outro predicado positivo nesse carregamento. (`chamados/services/fio.py:255`; `chamados/services/pergunta_no_app.py:66`; `chamados/services/relavra_via.py:235`.) |
+
+Há ainda leitores relevantes para a interpretação de D1: a partição do app usa **só instante projetado**, enquanto `sem_veredito_entre` usa **instante OU texto projetados**. Não posso afirmar que esses sítios pertençam ao diff c2..c9. (`chamados/services/pergunta_no_app.py:87`; `chamados/models.py:1952`; pertença ao diff [nao verificado].)
+
+**(b) Veredito por teste dos anexos.** [nao verificado]
+
+Os estados vermelhos/erros são os informados nos anexos. As setas abaixo são previsões por inspeção, com execução D1+J1 **[nao verificado]**. “?” significa que não há evidência para determinar o resultado posterior.
+
+| Teste | c9 → D1+J1 | Motivo e asserção | [nao verificado]
+|---|---|---|
+| `test_v8_R11_um_instante_ate_o_app`, máquina 2026-07-25 | erro → ? | Fixture sem resposta; D1 não aponta mudança desse ramo. Não achei traceback no dado fornecido. Asserções: `chamados/tests/test_e3_portas_tarefa.py:634`; fixture: `chamados/tests/e3_v8_apoio.py:167`. |
+| Mesmo teste, máquina 2027-01-21 | erro → ? | Mesmo limite de evidência e mesmas asserções. (`chamados/tests/test_e3_portas_tarefa.py:634`; `chamados/tests/test_e3_portas_tarefa.py:636`.) |
+| `test_e1_v8…test_BUG113_resposta_nova_reabre_a_MESMA_ausencia_e_reabsorve` | vermelho → vermelho previsto | Herda o teste de ausência; a resposta nova escreve o par completo e `ATESTADO` não deriva slot. (`chamados/tests/test_e1_v8.py:118`; `chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:163`; `chamados/services/disputa_emissao.py:1481`; `chamados/services/materializacao.py:359`.) |
+| `test_o261_e1_ausencia_rejeitada_devolve…test_BUG113_resposta_nova_reabre_a_MESMA_ausencia_e_reabsorve` | vermelho → vermelho previsto | Mesma cadeia; não identifiquei cura por D1/J1 nas verificações de reabertura e reabsorção. (`chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:165`; `chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:169`.) |
+| `test_determinismo_juiz_antes_e_depois_do_ato_recusado` | vermelho → vermelho previsto | Fixture com par completo; D1 mantém sua condição verdadeira. Asserções: `chamados/tests/test_pvmuda_carimbo_em_voo.py:128`; fixture: `chamados/tests/test_pvmuda_carimbo_em_voo.py:64`. |
+| `test_endpoint_do_app_filtra_por_q_vivas` | **vermelho → vermelho** | O teste exige exatamente um filtro de compreensão; a cópia possui também o filtro de carregamento por tranca. D1/J1 não o removem. (`chamados/tests/test_contract_pergunta_viva.py:82`; `chamados/services/pergunta_no_app.py:65`; `chamados/services/pergunta_no_app.py:67`.) |
+| `test_idempotente_validar_2x_a_recusada_mesmo_estado_uma_trilha` | vermelho → vermelho previsto | Par completo; DEVOLUÇÃO preserva resposta e instante, alterando validação. (`chamados/tests/test_o261_recusa_fala.py:67`; `chamados/tests/test_o261_recusa_fala.py:158`; `chamados/services/atos_pergunta.py:56`.) |
+| `test_irmas_que_gravaram_ficam_como_estao` | vermelho → vermelho previsto | Mesmo cenário com par completo; nenhuma cura específica identificada nas verificações das irmãs. (`chamados/tests/test_o261_recusa_fala.py:67`; `chamados/tests/test_o261_recusa_fala.py:124`; `chamados/tests/test_o261_recusa_fala.py:133`.) |
+| `test_propriedades_sob_intercalacao` | vermelho → ? | A máquina de estados pode responder novamente escrevendo só projeção após recusa. Sem o traço reduzido do Hypothesis, não se pode assumir igualdade entre ato e projeção para J1. (`chamados/tests/test_pvmuda_carimbo_em_voo.py:237`; `chamados/tests/test_pvmuda_carimbo_em_voo.py:243`; asserções: `chamados/tests/test_pvmuda_carimbo_em_voo.py:276`; `chamados/tests/test_pvmuda_carimbo_em_voo.py:289`.) |
+| `test_recusa_da_porta_do_ponto_na_porta_nova_nao_reabre_a_disputa_e_deixa_trilha` | vermelho → vermelho previsto | Fixture com par completo; materializador substituído por mock de recusa. D1/J1 não corrigem essa devolução. (`chamados/tests/test_fio_le_o_juiz.py:167`; `chamados/tests/test_fio_le_o_juiz.py:251`; `chamados/tests/test_fio_le_o_juiz.py:257`.) |
+| C11 `test_RED_A6_beneficio_rejeitado_limbo` | **vermelho → vermelho** | `limbo=True` chega à preparação que exige texto sem instante vivo; D1 falha antes do ato. (`chamados/tests/test_e4b_c11_orm.py:122`; `chamados/tests/test_e4b_c6_orm.py:82`.) |
+| `test_RED_alimentacao_e_no_app_contam_a_tranca_uma_vez` | vermelho → vermelho previsto | Fixture já tem texto e instante; a asserção cobra contagem de tranca, sem cura identificada por D1/J1. (`chamados/tests/test_n1_perguntas_do_app.py:29`; `chamados/tests/test_n1_perguntas_do_app.py:153`; `chamados/tests/test_n1_perguntas_do_app.py:157`.) |
+| C12 `test_RED_desligamento` | **vermelho → verde candidato** | D1 permite ao S128 carimbar o limbo; a segunda cascata pode satisfazer `admin_decidiu`. (`chamados/services/disputa_emissao.py:1987`; `chamados/services/disputa_emissao.py:2007`; `chamados/tests/test_e4b_c12_orm.py:171`; `chamados/tests/test_e4b_c12_orm.py:179`.) |
+| C11 `test_RED_limbo_misto_fecha_mortas_orfa_e_entrega_motivo_proprio` | **vermelho → vermelho** | Método herdado de C6; D1 contradiz a própria precondição. (`chamados/tests/test_e4b_c11_orm.py:27`; `chamados/tests/test_e4b_c6_orm.py:82`.) |
+| C6 `test_RED_limbo_misto_fecha_mortas_orfa_e_entrega_motivo_proprio` | **vermelho → vermelho** | Mesmo conflito; também permanece incompatível a expectativa posterior de conservar o limbo sem carimbo. (`chamados/tests/test_e4b_c6_orm.py:82`; `chamados/tests/test_e4b_c6_orm.py:116`.) |
+| `test_RED_recusa_por_paridade_devolve_ao_admin_com_o_motivo` | vermelho → vermelho previsto | Par completo; DEVOLUÇÃO não remove a resposta. D1/J1 não mostram cura para as verificações da recusa. (`chamados/tests/test_o261_recusa_fala.py:67`; `chamados/tests/test_o261_recusa_fala.py:95`; `chamados/services/atos_pergunta.py:56`.) |
+| `test_RED_segunda_tentativa_e_o_estado_de_prod` | vermelho → vermelho previsto | Fixture completa; nenhuma mudança identificada no estado/trilha exigidos pela segunda tentativa. (`chamados/tests/test_pvmuda_carimbo_em_voo.py:64`; `chamados/tests/test_pvmuda_carimbo_em_voo.py:113`; `chamados/tests/test_pvmuda_carimbo_em_voo.py:118`.) |
+| `test_RED_validar_recusada_por_paridade_nao_fecha_a_disputa` | vermelho → vermelho previsto | Mesmo par completo; D1 não muda sua classificação. (`chamados/tests/test_pvmuda_carimbo_em_voo.py:64`; `chamados/tests/test_pvmuda_carimbo_em_voo.py:87`; `chamados/tests/test_pvmuda_carimbo_em_voo.py:93`.) |
+
+A candidata C12 depende desta cadeia concreta: o limbo tem texto sem instante; a primeira cascata ainda encontra a proteção `instante OU texto`; D1 deixa o limbo morrer pelo C6 e o S128 chamar `carimbar(..., resposta='validar')`; essa porta preenche resposta/validação; na segunda cascata, a disputa pode fechar por desligamento. Isso explica a possível cura da asserção final, sem certificar o teste inteiro. (`chamados/tests/test_e4b_c12_orm.py:58`; `chamados/models.py:1954`; `colaboradores/services/desligamento.py:165`; `chamados/services/disputa_emissao.py:2007`; `chamados/models.py:3260`; `chamados/tests/test_e4b_c12_orm.py:179`.)
+
+| Teste de ponto/core | c9 → D1+J1 | Motivo e asserção | [nao verificado]
+|---|---|---|
+| `test_calendario` | vermelho → ? | Cobra medição SQL; fixture já tem o par completo. (`core/tests/test_selo_performance.py:322`; `core/tests/test_selo_performance.py:344`; `core/tests/test_selo_performance.py:406`.) |
+| `test_chamados_modal` | vermelho → ? | Mesma limitação: não há nova contagem nem diagnóstico da falha. (`core/tests/test_selo_performance.py:344`; `core/tests/test_selo_performance.py:380`.) |
+| `test_pendencias_disputa` | vermelho → ? | Mesma limitação de medição. (`core/tests/test_selo_performance.py:344`; `core/tests/test_selo_performance.py:357`.) |
+| `test_MORDE_o_mmd_commitado_bate_com_o_codigo` | vermelho → ? | Exige igualdade entre geração e artefato; o anexo não mostra a divergência. (`core/tests/test_selo_diagrama_do_codigo.py:46`.) |
+| `test_MORDE_pendente_curado_sai_da_lista` | **vermelho → vermelho** | A impressão registrada não existe literalmente na chamada atual, que acrescentou `agora=agora`; D1/J1 não alteram isso. (`core/juizes.py:878`; `colaboradores/services/drawer.py:121`; `core/tests/test_contract_juiz_tela.py:38`.) |
+| `test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` | vermelho → ? | Sem traceback, não se sabe se falhou a detecção da adulteração ou a restauração. (`core/tests/test_selo_diagrama_do_codigo.py:93`; `core/tests/test_selo_diagrama_do_codigo.py:98`.) |
+| `test_registrar_batida_com_1_furo_vivo_que_ela_fecha` | vermelho → ? | Cobra fechamento, callbacks e consultas; o cenário não insere pergunta explicitamente. (`ponto/tests/test_selo_chokepoint_escrita.py:416`; `ponto/tests/test_selo_chokepoint_escrita.py:437`; `ponto/tests/test_selo_chokepoint_escrita.py:289`; `ponto/tests/test_selo_chokepoint_escrita.py:293`.) |
+| `test_registrar_batida_com_3_furos_vivos_que_ela_fecha` | vermelho → ? | Mesmo cenário com três chamados; sem cura semântica demonstrada. (`ponto/tests/test_selo_chokepoint_escrita.py:416`; `ponto/tests/test_selo_chokepoint_escrita.py:442`; `ponto/tests/test_selo_chokepoint_escrita.py:293`.) |
+| `test_registrar_batida_com_3_furos_vivos_que_ficam` | vermelho → ? | Cobra permanência dos vivos e custo da escrita; sem medição contrafactual. (`ponto/tests/test_selo_chokepoint_escrita.py:456`; `ponto/tests/test_selo_chokepoint_escrita.py:477`; `ponto/tests/test_selo_chokepoint_escrita.py:293`.) |
+| `test_ruff_zero` | vermelho → ? | Cobra Ruff na árvore inteira; não achei os diagnósticos no dado fornecido. (`core/tests/test_contract_esmeril.py:23`; `core/tests/test_contract_esmeril.py:24`.) |
+
+Para os demais testes C6/C11/C12, **não identifiquei mudança semântica causada por D1/J1**: as preparações comuns não têm resposta, e C12 acrescenta limbo especificamente no desligamento. O estado c9 dos testes ausentes dos anexos e seu resultado posterior continuam **[nao verificado]**; ausência da lista de falhas não prova verde. (`chamados/tests/test_e4b_c6_orm.py:71`; `chamados/tests/test_e4b_c11_orm.py:99`; `chamados/tests/test_e4b_c12_orm.py:136`.)
+
+A tabela completa esses testes individualmente. “?” nas duas posições indica estado não fornecido, sem alteração prevista: [nao verificado]
+
+| Teste — C6 e também sua execução herdada em C11 | c9 → D1+J1 | Asserção pertinente | [nao verificado]
+|---|---|---|
+| `test_RED_exportada_mista_fecha_mortas_orfa_e_entrega_pauta` | ? → ? | Carimbos e pauta: `chamados/tests/test_e4b_c6_orm.py:118`; `chamados/tests/test_e4b_c6_orm.py:128`. |
+| `test_RED_fio_tambem_entrega_pauta_no_fechamento` | ? → ? | Mesmo corpo: `chamados/tests/test_e4b_c6_orm.py:113`; `chamados/tests/test_e4b_c6_orm.py:128`. |
+| `test_RED_passivo_ja_encerrado_nao_ganha_pauta` | ? → ? | `chamados/tests/test_e4b_c6_orm.py:174`. |
+| `test_RED_c7_conversa_sem_competencia` | ? → ? | `chamados/tests/test_e4b_c6_orm.py:190`. |
+| `test_RED_c7_trava_antes_exists_mesma_ancora` | ? → ? | `chamados/tests/test_e4b_c6_orm.py:216`. |
+| `test_RED_c7_texto_cabe_com_limbo_longo` | ? → ? | Mede texto de pauta, sem classificar resposta: `chamados/tests/test_e4b_c6_orm.py:238`; `chamados/tests/test_e4b_c6_orm.py:241`. |
+| `test_RED_c8_todas_ancoras_antes_de_escrever` | ? → ? | Encaminha ao selo SQL: `chamados/tests/test_e4b_c6_orm.py:246`; asserção: `chamados/tests/test_e4b_c6_orm.py:301`. |
+| `test_RED_c9_contador_dp_antes_das_ancoras` | ? → ? | Encaminha ao selo SQL: `chamados/tests/test_e4b_c6_orm.py:249`; asserção: `chamados/tests/test_e4b_c6_orm.py:301`. |
+| `test_RED_c9_lote_vazio_nao_toca_contador` | ? → ? | `chamados/tests/test_e4b_c6_orm.py:264`; `chamados/tests/test_e4b_c6_orm.py:265`. |
+| `test_RED_c7_recusa_rollback_nao_entrega` | ? → ? | `chamados/tests/test_e4b_c6_orm.py:321`; `chamados/tests/test_e4b_c6_orm.py:322`. |
+
+A execução duplicada em C11 decorre da herança da classe C6. (`chamados/tests/test_e4b_c11_orm.py:27`.)
+
+| Demais testes próprios de C11 | c9 → D1+J1 | Asserção/caminho pertinente | [nao verificado]
+|---|---|---|
+| `test_RED_A1_excecao` | ? → ? | Usa cenário sem limbo e verificações comuns: `chamados/tests/test_e4b_c11_orm.py:104`; `chamados/tests/test_e4b_c11_orm.py:101`; `chamados/tests/test_e4b_c6_orm.py:128`. |
+| `test_RED_A2_agenda` | ? → ? | `chamados/tests/test_e4b_c11_orm.py:107`; chamada da agenda: `chamados/tests/test_e4b_c11_orm.py:94`. |
+| `test_RED_A3_escala` | ? → ? | `chamados/tests/test_e4b_c11_orm.py:110`; verificações comuns: `chamados/tests/test_e4b_c6_orm.py:128`. |
+| `test_RED_A4_autorizar_geofence` | ? → ? | `chamados/tests/test_e4b_c11_orm.py:113`; registro: `chamados/tests/test_e4b_c11_orm.py:92`. |
+| `test_RED_A5_recusar_geofence` | ? → ? | `chamados/tests/test_e4b_c11_orm.py:116`; retratação: `c
+
+[truncado em 20000 de 26345 caracteres]
+
+## 15/11 17:22 · sessao a0d55dc0e9f7 · - · - · origem=Ronald (tmux)
+
+Conclusões para consolidar, todas só da cópia:
+
+- **Pergunta 2 — PROCEDE, com colisão/omissão específica:** a guarda literal exige aprovação para o hash, mas CODEX item 5 admite achado descartado com motivo e anexo ao opus, e manda subir ao opus após mais de três voltas sem esperar. O B não declara como esses caminhos continuam atravessando a guarda. Evidência: `CLAUDE.md:375-379`. A exigência de suite inteira verde antes do opus continua: `CLAUDE.md:377-378`, `app/docs/PISTA.md:113-114`.
+- **Sem colisão demonstrada** com motivo obrigatório, porta canônica, prioridade de instrumento ou pouso próprio: `CLAUDE.md:95-105`, `CLAUDE.md:290-295`, `CLAUDE.md:325-328`. O próprio registro B conserva redefinição, teto 2 livre, revisão e contrato antes da construção: `app/docs/BACKLOG.md:1954`.
+- **Contrato não é autorização de chamada única para sempre:** contrato de cinco linhas e revisão prévia conferem; se a forma mudar, exige nova chamada. `CLAUDE.md:394`, `app/docs/PISTA.md:170-176`. O literal “UMA vez antes” precisa ser lido junto dessa condição.
+- **Delta:** voltas do meio podem verificar só o delta (`CLAUDE.md:366-368`); pre-verificador recebe diff do hash da cópia (`CLAUDE.md:372-373`). Isso permite revisar delta, mas não define mecanismo que transfira prova do hash antigo ao novo [nao verificado].
+- **rc 75:** substituição da leitura por sonnet/falha do Codex é prevista com motivo (`CLAUDE.md:358-362`, `app/docs/PISTA.md:91-96`). Essa regra não define certificado persistente de aprovação por hash que a guarda poderia ler [nao verificado]. Não confundir com rc 75 da trava: ali é “a vez não chegou” (`CLAUDE.md:103-105`).
+- **A permanece independente:** está registrado vigente, enquanto B está só registrado para revisão antes de construir: `app/docs/RELATO.md:9208`, `app/docs/BACKLOG.md:1954`.
+- **TRAVA-MENOS-FILA-COM-SELO não consta nominalmente em `app/docs/CORTES.md` nesta cópia** [nao verificado quanto ao literal original]. Seu conteúdo verificável está em `CLAUDE.md:101-105`, `app/docs/RELATO.md:9057-9063` e `app/docs/PROMPTS.md:2087`. O contrato original declara regua/pre-push fora dessa porta (`app/docs/RELATO.md:9059`) e separa histórico/ESTADO por cruzarem trava+gerador (`app/docs/RELATO.md:9063`, `app/docs/BACKLOG.md:2581`).
+- **Pergunta 4 — NAO PROCEDE no escopo declarado:** instrumento com pouso próprio é permitido (`CLAUDE.md:325-328`); config do Code é proibida (`CLAUDE.md:350-352`), e exportada/escala/vínculo/atalho pedem `!` (`CLAUDE.md:265-268`). Nenhum desses atos é necessário pelo escopo B registrado (`app/docs/BACKLOG.md:1954`). Implementação futura respeitando o escopo: [nao verificado].
+- Para precedência normativa, a consolidação 7b é mais nova e prevalece sobre blocos antigos de PISTA (`app/docs/PISTA.md:10-12`).
+
+## 15/11 17:22 · sessao b835b1f65803 · - · - · origem=Ronald (tmux)
+
+- **Premissa da guarda: PROCEDE com correção.** `_GUARDA_MOTIVO` existe exatamente em `bin/suite.sh:236`, mas essa linha só declara a regex; a decisão é `bin/suite.sh:255` e a recusa rc 2 é `bin/suite.sh:262`. A regex admite `pre-opus <OBRA>` e `pouso <OBRA>`; não consulta prova nem hash. (`bin/suite.sh:236`, `bin/suite.sh:255`)
+
+- **`--dir` existe e escolhe a árvore: PROCEDE.** Parse em `bin/suite.sh:136`, atribuição em `bin/suite.sh:137`; descoberta da seleção efetiva em `${DIR:-$RAIZ}/app` em `bin/suite.sh:238`; montagem da cópia em `bin/suite.sh:284`–`296`. A árvore viva passada explicitamente como `--dir` é recusada pela proteção de limpeza; sem `--dir`, usa `$RAIZ/app`. (`bin/suite.sh:289`, `bin/suite.sh:290`, `bin/suite.sh:298`)
+
+- **Selo existente que morde: PROCEDE para a guarda atual de motivo.** O selo executa a suite real numa árvore falsa e detecta se chegou à trava, recusando também custo anterior à recusa; exige rc 2 sem motivo e aceita `pre-opus FIO-E0-V4-E3`. (`bin/tests/test_suite_motivo.sh:3`, `bin/tests/test_suite_motivo.sh:37`, `bin/tests/test_suite_motivo.sh:41`, `bin/tests/test_suite_motivo.sh:46`, `bin/tests/test_suite_motivo.sh:61`) Há mutantes explícitos, inclusive `aceita_sem_motivo`, e o juiz precisa reprovar cada mutante. (`bin/tests/test_suite_motivo.sh:156`, `bin/tests/test_suite_motivo.sh:162`, `bin/tests/test_suite_motivo.sh:164`) **Não prova hoje aprovação prévia por hash**: o positivo atual passa sem fornecer tal prova. (`bin/tests/test_suite_motivo.sh:61`)
+
+- **“Os três chamam por caminho próprio, fora da guarda”: NAO PROCEDE.** `volta_intermediaria.sh` chama a própria suite com `--dir` e `--volta`, atravessando a guarda; se o helper produzir seleção inteira, a guarda atual também a alcança. (`bin/volta_intermediaria.sh:32`, `bin/suite.sh:164`, `bin/suite.sh:255`) `regua.sh` e `pre-push.sh` usam diretamente `trava_teste.sh` e `manage.py test`, fora dessa guarda. (`bin/regua.sh:165`, `bin/regua.sh:168`, `bin/pre-push.sh:142`, `bin/pre-push.sh:186`)
+
+- **Lacuna literal sem `--dir`: PROCEDE.** `--motivo "pre-opus <OBRA>"` sem `--dir` é uso documentado para árvore viva, e hoje usa `$RAIZ/app`; o item B citado só especifica prova para “hash de `--dir`”, deixando esse caminho sem condição explícita de prova. (`bin/suite.sh:23`, `bin/suite.sh:129`, `bin/suite.sh:298`; literal do anexo, sem arquivo:linha disponível [nao verificado]) Se a pergunta quer dizer literalmente `--motivo "pre-opus"` **sem nome de obra**, já recusa rc 2, independentemente de `--dir`. (`bin/suite.sh:236`, `bin/suite.sh:255`, `bin/tests/test_suite_motivo.sh:48`)
+
+- **Momento da prova:** colocar a guarda junto à atual significa verificar antes de env-file, montagem e espera pela trava; a trava só é pedida posteriormente. (`bin/suite.sh:255`, `bin/suite.sh:276`, `bin/suite.sh:284`, `bin/suite.sh:317`) A árvore viva permanece um bind mount de `$RAIZ/app`; uma prova anterior à espera, sozinha, não comprova que esse conteúdo permaneceu igual até a execução. (`bin/suite.sh:298`, `bin/suite.sh:317`, `bin/suite.sh:322`; ausência de mutação durante a espera [nao verificado])
+
+- **Escopo material do código atual:** a porta executa testes em container com settings CI; `REGUA_DB`, quando existente, é apenas repassado. (`bin/suite.sh:305`, `bin/suite.sh:306`, `bin/suite.sh:319`, `bin/suite.sh:324`, `bin/suite.sh:325`) Nenhuma implementação do item B foi fornecida para provar ausência futura de alterações em exportada, dinheiro, config do Code, trava ou pouso [nao verificado]. O literal do anexo proíbe essas três últimas mudanças, mas o cumprimento futuro não é provado pelo código atual [nao verificado].
+
+Inspeção estática apenas; não executei o selo, pois ele cria, copia e remove arquivos temporários. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:11`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:16`)
 
 ## 15/11 17:18 · sessao d2bf99cfb25b · - · - · origem=Ronald (tmux)
 
@@ -485,111 +694,4 @@ Não encontrei novo escritor persistente nem nova lista literal de status nos do
 
 Candidato temporal reproduzido, **não recomendado como regressão da R3**: uma resposta posterior a `agora` já exclui a pergunta dos pendentes porque a partição lê `respondida_em` atual (`app/chamados/services/pergunta_no_app.py:76-85`), antes do C6 (`app/chamados/services/tarefa_do_dia.py:527-539`). Reproduzi fio `nada` para uma ação RESPONDER histórica. Esses trechos não aparecem alterados no diff fornecido; atribuição à obra [nao verificado].
 
-## 15/11 15:34 · sessao ba29aa6690aa · - · - · origem=Ronald (tmux)
-
-Achados na Folha/UI:
-
-1. **P2 — positivo conhecido deixa de alarmar quando há retrato legado.** `vigia_retido_calado.censo` substitui o total por `None` se uma linha não tem `dias_sem_leitura`; isso também elimina dias conhecidos de outras linhas/empresas/competências. O comando ignora `None`. Caso reproduzido em memória: uma linha com um dia desconhecido → contador `1`, rc `2`; acrescentando linha legado → contador `None`, rc `0`. Fontes: `app/folha/vigia_retido_calado.py:57`, `app/folha/vigia_retido_calado.py:63`, `app/folha/management/commands/vigiar_retido_calado.py:38`. Os testes cobrem positivo e legado separadamente, não a combinação: `app/chamados/tests/test_e3_r3_c6_sem_banco.py:251`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:258`. A cura do item 5 é parcial.
-
-2. **P2 — relógio ainda lido dentro dos leitores reais da tela.** O `hoje` passou a atravessar `o_que_fazer` quando fornecido, mas o chamador de produção não o fornece; `desenho_do_led` tampouco recebe/repassa o instante. O recorte e cada pílula também reconsultam o relógio por linha. Numa resposta atravessando meia-noite, a mesma linha pode passar pelo filtro como Hoje e ganhar LED/barra Sem ação disponível. Fontes: `app/colaboradores/views.py:986`, `app/folha/retrato_folha.py:460`, `app/folha/retrato_folha.py:553`, `app/folha/retrato_folha.py:650`, `app/folha/retrato_folha.py:830`, `app/folha/views_retrato.py:280`. Reproduzi em memória o mesmo dado retornando os dois LEDs conforme a segunda leitura. O teste c11 só exerce `hoje` explícito: `app/chamados/tests/test_e3_r3_c11_sem_banco.py:230`.
-
-3. **P2 — navegação do calendário aberto pelo novo link não encontra o alvo HTMX.** A Folha abre `calendario_ponto` diretamente no drawer; a resposta é `calendario_partial.html`, cujas setas/modos usam `hx-target="#calendario-container"`. Esse container pertence ao painel anterior e é apagado por `corpo.innerHTML = html`; o partial novo não o cria. Portanto o mês inicial contém a ação, mas navegar mês/modo não encontra o destino. Fontes: `app/folha/retrato_folha.py:1042`, `app/templates/folha/_retrato_o_que_fazer.html:73`, `app/colaboradores/views.py:1965`, `app/templates/core/_drawer_generico.html:26`, `app/templates/colaboradores/calendario_partial.html:38`, `app/templates/colaboradores/partials/painel_colaborador.html:183`. Execução em navegador [nao verificado].
-
-4. **P3 — comentários continuam afirmando cardinalidades e apresentação incorretas.** “QUATRO fios” contraria os cinco de `FIOS`; “baldes QUATRO” contraria os cinco de `DONOS`; a promessa de marcar também `dias_sem_leitura` não se realiza no template, que só marca `dias_sem_porta`. Fontes: `app/folha/retrato_folha.py:164`, `app/folha/fora_da_folha.py:39`, `app/folha/retrato_folha.py:521`, `app/folha/retrato_folha.py:190`, `app/folha/fora_da_folha.py:96`, `app/templates/folha/_retrato_o_que_fazer.html:46`. Texto técnico segue visível em “Datas (ISO)” e “Sem porta”: `app/templates/folha/_retrato_o_que_fazer.html:43`, `app/templates/folha/_retrato_o_que_fazer.html:46`.
-
-Curas e provas conferidas:
-
-- **1a:** dia do turno atravessa porta → Folha → href; ano/mês são consumidos pelo calendário. `app/chamados/services/tarefa_do_dia.py:714`, `app/folha/fora_da_folha.py:212`, `app/folha/retrato_folha.py:1047`, `app/colaboradores/services/calendario.py:193`. Mutantes desses três transportes e href morreram por asserção; definição em `app/chamados/tests/e3_r3_c11_mutantes.py:21`.
-- **1b:** marca é lida no template; mutante removendo a condição morre. `app/templates/folha/_retrato_o_que_fazer.html:46`, `app/chamados/tests/e3_r3_c11_mutantes.py:29`.
-- **5:** inclusão em `ALARMA_EM_0` existe e seu mutante morre, mas permanece o achado 1. `app/folha/management/commands/vigiar_retido_calado.py:17`, `app/chamados/tests/e3_r3_c11_mutantes.py:50`.
-- **8/c13:** `neutro/#374151` não colide com os sete tokens da paleta; barra usa fundo `#f9fafb` e borda `#e5e7eb`. Os mutantes de colisão e hex morreram. `app/folha/retrato_folha.py:307`, `app/folha/retrato_folha.py:323`, `app/templates/core/_barra_gestao.html:67`, `app/chamados/tests/e3_r3_c11_mutantes.py:53`. Existe status de app chamado `neutro`, mas é outro vocabulário, sem uso dessa paleta: `app/ponto/status_dia.py:84`.
-- **9/editor ausência:** link acrescenta `somente_decisao=1`, view suprime o editor dependente de `salvarAusencia`; os dois mutantes morreram. `app/folha/retrato_folha.py:1051`, `app/ponto/views.py:2090`, `app/templates/ponto/partials/painel_ausencia.html:145`, `app/chamados/tests/e3_r3_c11_mutantes.py:63`.
-
-Reexecutei os 18 testes c11 e 12 mutantes relevantes: controles verdes, mortes por asserção; nenhum arquivo escrito. Os limites desses testes estão declarados em `app/chamados/tests/test_e3_r3_c11_sem_banco.py:1` e no runner em `app/chamados/tests/e3_r3_c11_mutantes.py:74`. Renderização Django, navegador e estilo computado [nao verificado].
-
-## 15/11 15:34 · sessao eafaf45faa0a · - · - · origem=Ronald (tmux)
-
-- **P1 — pauta fechada após falha de apuração.** Se `_ins.cxr()` falha, `apurar` omite o colaborador sem anotá-lo em `sem_leitura`; o recorte ainda inclui sua empresa/competência e `sincronizar` fecha sua pauta viva por ausência no alvo. Caso reproduzido em memória: col7, empresa1, competência10/2026, `RuntimeError` no espelho → `apurado=[]`, `sem_leitura=[]`, uma chamada de fechamento. Fontes: `app/ponto/management/commands/pautas_discordantes.py:103`, `:109`, `:126`, `:128`; `app/ponto/services/pautas_dos_discordantes.py:194`, `:198`, `:211`. O teste do comando substitui `apurar` por mock e não cobre esse caminho: `app/chamados/tests/test_e3_r3_c11_sem_banco.py:142`.
-
-- **Cura 3 real, porém incompleta:** empresa/competência fora do recorte ficam protegidas pelo filtro `ancora_id__in`; lista vazia de empresas não expande para a frota. `app/ponto/services/pautas_dos_discordantes.py:73`, `:190`; `app/ponto/management/commands/pautas_discordantes.py:125`. Rodei os três mutantes correspondentes, todos mortos por asserção com controles verdes; definições em `app/chamados/tests/e3_r3_c11_mutantes.py:29`.
-
-- **Cura 4 real:** `censo` exige `agora` quando recebe `hoje` e confere o dia local; o comando passa o instante; o reatador passa seu instante às duas consultas da fila. `app/chamados/services/vigia_fio.py:273`, `:282`; `app/chamados/management/commands/vigiar_fio_morto.py:171`, `:180`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:52`, `:59`, `:113`. Rodei os quatro mutantes desses pontos, todos mortos; definições em `app/chamados/tests/e3_r3_c11_mutantes.py:37`.
-
-- **Descartado 6:** a R3 não acrescenta juiz ao registro; altera a impressão de um pendente. `app/core/juizes.py:878`. As frases de nascimento dos juízes C19/C20 estão no dado fornecido da principal, `app/docs/CORTES.md:418` e `:419`; execução da trava na principal [nao verificado].
-
-- **Descartado 3b:** `get_user_sistema` escreve eventualmente `User`, não as entidades da obra; existência desse usuário na frota [nao verificado]. `app/core/utils.py:18`. Sua docstring promete exceção por inexistência, embora use `get_or_create`: dívida documental preexistente em `app/core/utils.py:15`.
-
-- **Descartado 10:** permanece condição anterior ao pouso, e não obrigação de construção. A entrega exige medida comparativa das duas árvores e interrupção para resultado inesperado; medida no hash final e pouso [nao verificado]. `app/chamados/tests/e3_r3_c6_entrega.txt:86`, `:94`.
-
-- **Portas/travas:** Pauta passa por `escrever`/`marcar_feita_pelo_sistema`; reata passa por `reatar_perguntas_ao_limbo` → `reapontar_resolvedora`; reversão é gravada antes, trava Colaborador antecede Chamado e fila é relida. `app/ponto/services/pautas_dos_discordantes.py:205`, `:211`; `app/pautas/services.py:153`, `:256`; `app/chamados/services/limbo_folgas.py:245`; `app/chamados/services/fio.py:920`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:99`, `:112`, `:113`.
-
-- **M1/autoridade:** `perguntas=[]` é produzido apenas no caminho sem âncora terminal e impede reata; `dono_fora_do_fio` subdivide dias cuja rota já foi negada, sem refazer o dono publicado. `app/escala/services/cadastro_realidade.py:502`, `:520`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:63`; `app/chamados/services/vigia_fio.py:240`, `:601`, `:615`.
-
-- **P3 documental:** os papéis de cron são coerentes, mas comentários ainda descrevem leitores antigos: `VIVOS/respondida_em` e `fio_da_linha`, enquanto os caminhos usam porta da tarefa e `dono_da_linha`. `app/config/crons.py:2289`, `:2261`; `app/chamados/services/furo_sem_canal.py:96`; `app/folha/vigia_retido_calado.py:55`.
-
-## 15/11 15:34 · sessao 245db1a466e1 · E4C-F1V3 · construtor · origem=Code
-
-Curas aplicadas; execução ORM e certificação Code/opus **[não verificado]**. Classificação e tracebacks: [nao verificado]
-
-| Falha | Classe |
-|---|---|
-| [Selo SQL: executável git ausente](chamados/tests/e4c_f1v8_classificacao.txt:8) | B — pendente |
-| [Competência: desarquivar](chamados/tests/e4c_f1v8_classificacao.txt:14) | B — especificação |
-| [E3_v4: nove queries](chamados/tests/e4c_f1v8_classificacao.txt:20) | B |
-| [C12: desligamento](chamados/tests/e4c_f1v8_classificacao.txt:26) | A/P5 |
-| [C11: A6 benefício](chamados/tests/e4c_f1v8_classificacao.txt:32) | A/P5 |
-| [C11: limbo misto](chamados/tests/e4c_f1v8_classificacao.txt:38) | A/P5 |
-| [C6: limbo misto](chamados/tests/e4c_f1v8_classificacao.txt:44) | A/P5 |
-| [Escala: F5](chamados/tests/e4c_f1v8_classificacao.txt:50) | B |
-| [O261: custo constante](chamados/tests/e4c_f1v8_classificacao.txt:56) | B |
-| [O44: caso1b](chamados/tests/e4c_f1v8_classificacao.txt:62) | B — especificação |
-| [Memo: teto zero](chamados/tests/e4c_f1v8_classificacao.txt:68) | B |
-| [SNC2: toque em lote](chamados/tests/e4c_f1v8_classificacao.txt:74) | B |
-| [Modal: teto](chamados/tests/e4c_f1v8_classificacao.txt:80) | B |
-| [Catálogo: quatro declarados](chamados/tests/e4c_f1v8_classificacao.txt:86) | A |
-| [Catálogo: universo](chamados/tests/e4c_f1v8_classificacao.txt:92) | A |
-| [Catálogo: declaração morta](chamados/tests/e4c_f1v8_classificacao.txt:98) | A |
-| [Catálogo: leitura nova dentro](chamados/tests/e4c_f1v8_classificacao.txt:104) | A |
-| [Catálogo: sítio novo fora](chamados/tests/e4c_f1v8_classificacao.txt:110) | A |
-| [Catálogo: volta4 a](chamados/tests/e4c_f1v8_classificacao.txt:116) | A |
-| [Catálogo: volta4 b](chamados/tests/e4c_f1v8_classificacao.txt:122) | A |
-| [Catálogo: volta4 c](chamados/tests/e4c_f1v8_classificacao.txt:128) | A |
-
-[Funções curadas](chamados/tests/e4c_f1v8_especificacao.txt:19), [campos: quem escreve/lê](chamados/tests/e4c_f1v8_especificacao.txt:10), [models: protocolo exato, sem migration](chamados/tests/e4c_f1v8_especificacao.txt:2).
-GREEN local: **55 + 54 testes (2 skips preexistentes), catálogo 18, contratos AST 14**; [comandos e resultados](chamados/tests/e4c_f1v8_comandos.txt:2).
-RED c7: **14 falhas**; RED models: **1 falha**; **20 mutantes novos + 11 anteriores morderam**, com [comandos individuais](chamados/tests/e4c_f1v8_comandos.txt:10).
-C12 teve expectativas corrigidas por P5; ORM e frescor após escrita externa continuam [não verificado]: [limites](chamados/tests/e4c_f1v8_especificacao.txt:9).
-LEI-AKITA: **padrão=Parallel Change / Expand-Contract**; L2 conserva, sem backfill. [Registro](chamados/tests/e4c_f1v8_especificacao.txt:23). Sem commit, conforme [restrição registrada](chamados/tests/e4c_f1v8_especificacao.txt:25).
-
-PERGUNTA: autoriza substituir a aquisição via `git` por fixture histórica, preservando a asserção FieldError? [Proposta](chamados/tests/e4c_f1v8_especificacao.txt:22).
-
-A regra recebida **“teste B intocado”** impede essa alteração; por isso o selo permanece pendente em [test_e4c_f1v5_tipos_sql.py:132](chamados/tests/test_e4c_f1v5_tipos_sql.py:132).
-
-## 15/11 15:33 · sessao f50acd349e69 · - · - · origem=Ronald (tmux)
-
-- **`r.ok` confirmado:** POST em `app/templates/ponto/bater_ponto_v2.html:343-346`; redirect tratado antes, em `:347`; ramo 2xx chama diretamente `v2Sucesso(tipo,false)` em `:348`, sem ler JSON. JSON só é lido depois, no tratamento não 2xx (`:349`). O texto “Sua batida foi registrada com êxito” está em `:155`; retorno ao `core:dashboard` após 3000 ms em `:157`.
-- **Sincronizador:** caminho real `app/static/pwa.js`; faz esse POST em `:153-157`, lê JSON em `:159`, porém não consulta `data.status`: remove a pendência para qualquer `resp.ok` (`:158-165`). Atualiza indicador agregado em `:182`, com “Sincronizando...”/“Online” em `:194-201`, sem anunciar resultado individual. `app/static/js/pwa.js` não existe na cópia.
-- **Censo de templates:** N=1 consumidor direto identificado, o próprio v2 (`app/templates/ponto/bater_ponto_v2.html:343-350`); nenhum outro consumidor dessa resposta encontrado no censo por endpoint, nome de rota e status. A tela antiga envia para `_form.action || location.href` e escreve HTML recebido (`app/templates/ponto/bater_ponto.html:533-539`); trata o endpoint de tela, cujo caminho é `app/ponto/urls.py:11`, distinto da API em `app/api/urls.py:67` e `app/api/urls_core.py:14`.
-- **Duas cascas são tecnicamente exercitáveis:** teste existente compõe ambas as bases reais e renderiza v2 (`app/ponto/tests/test_l030_templates_renderizados.py:15-30`). UI-CAMERA também tem renderização real e teste de navegador para ambas (`app/ponto/tests/test_camera_alternativa_previa.py:144-158`, `:178-184`). RED/verde específicos de C e smoke humano efetivamente executados: **[nao verificado]**.
-- **UI-CAMERA está presente no código:** prévia e remoção do aviso conforme `_fotoBlob`, com handler da alternativa, em `app/templates/ponto/bater_ponto_v2.html:247-273`.
-- **Linhas antigas:** `:327` do aval original substituído não é mais o ramo `r.ok`; atualmente é linha vazia, e o ramo está em `:348`. REEMISSAO A não fixa essa linha antiga: sua descrição “hoje `v2Sucesso(tipo,false)`” confere com `:348`.
-
-## 15/11 15:33 · sessao 3383ed049566 · - · - · origem=Ronald (tmux)
-
-O universo da rota está comprovado nas duas cascas: `app/config/urls.py:37` inclui `api.urls`, que liga `ponto/bater/` a `views.api_bater_ponto` em `app/api/urls.py:67`; a casca core inclui `api.urls_core` em `app/config/urls_core.py:6`, e esse arquivo importa `views_core` em `app/api/urls_core.py:5` e liga a mesma rota em `:14`.
-
-Os handlers só aceitam POST autenticado (`app/api/views.py:386-388`; `app/api/views_core.py:372-374`). Todos os retornos explícitos de sucesso usam `Response(...)` sem status HTTP alternativo, portanto 200; os três valores encontrados são:
-
-| Status 2xx | `views.py` | `views_core.py` |
-|---|---|---|
-| `ok` | `app/api/views.py:813-824` — campo em `:814` | `app/api/views_core.py:807-818` — campo em `:808` |
-| `ja_registrada` | `app/api/views.py:535-545` — campo em `:536` | `app/api/views_core.py:521-531` — campo em `:522` |
-| `ignorada_intervalo` | `app/api/views.py:682-692` — campo em `:683` | `app/api/views_core.py:673-683` — campo em `:674` |
-
-Existe **quarto caminho 2xx, mas não quarto status**: retorno por reaproveitamento da porta em `app/api/views.py:693-695` e `app/api/views_core.py:684-686`; o helper devolve novamente `ja_registrada` em `app/ponto/services/resposta_batida.py:14-31`, campo `:22`. Não achei outro valor de status 2xx no universo desses dois handlers (`app/api/views.py:388-824`; `app/api/views_core.py:374-818`; `app/ponto/services/resposta_batida.py:7-31`).
-
-Os demais retornos explícitos dos handlers são 404, 403 e 400 (`app/api/views.py:392`, `:411`, `:427`; `app/api/views_core.py:378`, `:397`, `:413`). Ocorrência concreta dos três status em produção permanece **[nao verificado]**.
-
-A própria suite escrita afirma 200 para `ok` e `ja_registrada`, mas não foi executada nesta revisão (`app/api/tests/test_api_bater_ponto.py:617-620`).
-
-_5696 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5701 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
