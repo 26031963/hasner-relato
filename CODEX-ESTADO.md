@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 19:42** · publicado em **15/11/2026 19:45** (UTC-3)
+> Ultima resposta processada: **15/11/2026 19:50** · publicado em **15/11/2026 19:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 19:50 · sessao 4317c1388896 · - · - · origem=Ronald (tmux)
+
+Inventário de leitura/escrita consolidado:
+
+- `fechada_em`: `fechar()` grava o instante em `app/chamados/models.py:1996` e salva junto com autor, resolução e motivo em `:2000`; `reabrir_admin()` limpa em `:2213` e salva em `:2225`; `reabrir_sistema()` limpa em `:2237` e salva em `:2241`. Desligamento chama a porta, sem `update` paralelo: `app/colaboradores/services/desligamento.py:164-167`.
+- `pode_fechar()` calcula somente ausência de resposta sem veredito e ausência de fio vivo; não verifica aberta/fechada, pai ou operação em curso: `app/chamados/models.py:1911-1917`.
+- Chamadores C7: `app/chamados/relatorios_disputa.py:24`; `app/api/foto_recebida.py:83`; `app/chamados/services/becos.py:33,56`; `app/chamados/services/competencia_trancada.py:178,227`; `app/chamados/services/explicador.py:139`; `app/chamados/services/disputa_emissao.py:1292,2112`; `app/chamados/services/materializacao.py:591,1322`; `app/chamados/reconciliador.py:412,612,1171`; `app/ponto/services/entrada_sincronizada.py:59`.
+- Leitores estruturais de `fechada_em`: signals fecham pai pelo gate (`app/chamados/signals.py:29-46`), retomam regularizações após commit (`:131-146`) e materializam pendentes aprovadas (`:155-165`); regularização externa bloqueia qualquer aberta (`app/chamados/services/regularizacao_ext.py:59-66`); app usa aberta para pendência/histórico (`app/chamados/services/pergunta_no_app.py:81-85`; `app/api/views.py:1016-1035`); tela conta todas abertas (`app/chamados/views.py:909-912`).
+- Fora chamados: mapa de situação (`app/colaboradores/services/situacional.py:117`), célula de painel (`app/colaboradores/painel_cell.py:31-32`), banner (`app/colaboradores/services/drawer.py:69-78`). Helper central consulta qualquer aberta em `app/chamados/services/disputa_emissao.py:34-42`; consumidores indiretos: `app/ponto/services/disputa.py:31`, `app/ponto/views.py:143-144`, `app/api/views.py:1335-1336`, `app/colaboradores/mixins.py:304-307`, `app/relatorios/pdf_espelho.py:1082-1085`. Comportamento indireto da folha: [nao verificado].
+
+Semânticas divergentes:
+
+- Disputa vazia tem C7=True (`app/chamados/models.py:1916-1917`; `app/chamados/juizes.py:1516`), mas relatório classifica antes como `SEM_PERGUNTA` (`app/chamados/relatorios_disputa.py:13-14`) e juiz do bloqueio do pai considera vazia bloqueadora (`app/chamados/juizes.py:2440-2446`; consumidor `app/chamados/models.py:153-160`).
+- Leitor legado de chamado de furo sem dia considera existência de qualquer disputa fechada do colaborador prova de regularização: `app/chamados/models.py:187-190`.
+- `EXITS_DE_ALARME=(0,2)` exclui rc 2 de cron quebrado (`app/core/services/crons_quebrados.py:16,46-47`); pipeline distingue rc 2 como alarme (`app/core/management/commands/pipeline_placar.py:76-80`), mostra `ALARME` (`:124-125`), porém não o inclui no agregado A5 (`:131-132`), que determina seu próprio rc (`:158-163`).
+
+Contraexemplos de aberta+C7=True:
+
+- **Sem ata:** escritor deliberadamente preserva aberta mesmo C7=True quando `_absteve_por_ata` (`app/chamados/services/disputa_emissao.py:1292-1295`); teste `DisputaMudaSemAtaTest.test_sem_ata_nao_fecha_e_acende` fixa perguntas=0 e aberta (`app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51-61`). É contraexemplo concreto de teste/código, não ocorrência demonstrada em produção.
+- **Pai vivo fora da tranca:** medidor só depois de C7=True preserva disputa cujo pai vivo não será encerrado (`app/chamados/services/competencia_trancada.py:173-183`); propósito declarado em `:24-28`.
+- **Materialização em voo:** fecho S143 pula disputa com pergunta em voo antes de C7 (`app/chamados/services/disputa_emissao.py:2110-2113`); sinal é ContextVar dentro de atomic (`app/chamados/services/materializacao.py:1137-1161`). C7 não olha esse sinal (`app/chamados/models.py:1911-1917`); observabilidade desse intervalo por cron externo: [nao verificado].
+- **Tranca:** C6 retorna False na tranca (`app/chamados/juizes.py:1406-1409`) e lista sem veredito exclui resposta trancada (`app/chamados/models.py:1903-1909`); portanto, se todas as perguntas estão assim, C7=True. Testes fixam isso em `app/chamados/tests/test_c7_red_minimos.py:361-367,377-382`. Tranca sozinha não justifica afirmar C7=False.
+- **Conversa legítima do pai:** guarda do pai e guarda da disputa têm domínios distintos; pai pode ficar humano enquanto disputa fecha (`app/chamados/models.py:699-712`). C7=False quando a própria disputa possui resposta não materializada nem validada fora da tranca (`app/chamados/models.py:1905-1917`).
+
+## 15/11 19:50 · sessao 0792a45ace27 · - · - · origem=Ronald (tmux)
+
+Leitura concluída, sem alterações. Evidências para Q1/Q2:
+
+- **Existe contador parcial de aberta+C7=True:** `fechar_becos_disputa` seleciona todas as abertas, mas chama C7 somente após `becos.classificar` exigir pai terminal e nenhuma pergunta visível; imprime candidatos e dá rc2 com `--alarme`. Universo: becos, sem janela temporal. `app/chamados/management/commands/fechar_becos_disputa.py:32–44,67–70`; `app/chamados/services/becos.py:25–33`.
+- **Existe outra classificação parcial:** relatório de pendências percorre todas abertas e classifica `PRONTA_FECHAR` pelo C7, exceto as sem perguntas, classificadas antes como `SEM_PERGUNTA`. Command imprime categorias/contagens sem rc2; é sob demanda. `app/chamados/relatorios_disputa.py:11–28,45–58`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:14–40`; `app/config/crons.py:1463`.
+- **Existe contador de competência trancada:** `medir` pergunta C7 às abertas vinculadas às perguntas da competência e conta `disputas`; exclui pai vivo fora do conjunto de chamados que encerra. `medir_frota` soma por competências com tranca viva; command imprime contagens e soma chamados+perguntas+disputas, sem rc2. Está no `placar_code`, sem cron próprio. `app/chamados/services/competencia_trancada.py:119–126,173–183,331–356`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:12–30`; `app/config/crons.py:1291–1297`; `bin/placar_code.sh:287–289`.
+- **Não encontrei contador exato global de todas abertas+C7=True nos caminhos lidos.** O vigia de carimbo conta perguntas hora/data_hora validadas, independentemente de disputa aberta/fechada; não chama C7. `app/chamados/services/vigia_carimbo.py:95–132`. `desenlace` apresenta estado/ação recebendo explicação, sem varredura nem contagem. `app/chamados/services/desenlace.py:44–67`. Reconciliador chama C7 para fechar disputas atingidas por determinados eventos, não para censo global: `app/chamados/reconciliador.py:411–414,600–615,1158–1173`.
+
+**Sítios possíveis, ainda sem implementação:**
+
+1. **Estender `fechar_becos_disputa --alarme`:** N chamadas C7 para N abertas; hoje são B chamadas, B=becos candidatos à classificação. Se a implementação acrescentar consulta global e conservar `classificar` sem reaproveitamento, seriam N+B. `app/chamados/management/commands/fechar_becos_disputa.py:32–43`; `app/chamados/services/becos.py:25–33`. Já agendado 07:10 com `--alarme`. `app/config/crons.py:663`.
+2. **Acrescentar ao vigia de carimbo:** N chamadas C7 novas além do seu universo atual P de perguntas validadas; a alimentação atual não cobre todas disputas abertas. Ele já executa `--alarme`, como elo após fio morto; rc2 hoje significa censo cego, e passivo só entra com outra flag. `app/chamados/services/vigia_carimbo.py:97–132`; `app/chamados/management/commands/vigiar_carimbo_sem_registro.py:38–39,56–78`; `app/config/crons.py:1770–1776`.
+3. **Acrescentar a `reconciliar_chamados --alarme`:** N chamadas C7 novas a cada 15 minutos. Universo atual é chamados vivos, perguntas e resíduos do outbox, com exclusões próprias por evento pendente; não representa todas abertas. `app/chamados/management/commands/reconciliar_chamados.py:57–100,118–124`; `app/config/crons.py:395`.
+4. **Relatório/contador sob demanda:** reaproveitar relatório exige incluir vazias para equivaler ao predicado exato; hoje são N−E chamadas C7, E=abertas sem perguntas. Não possui caminho próprio de rc2 nem agendamento. `app/chamados/relatorios_disputa.py:11–25`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:11–40`; `app/config/crons.py:1463`.
+
+**Custo comum do C7:** carrega lista de perguntas, avalia respostas sem veredito e, se nenhuma, `fio_vivo` com curto circuito. `app/chamados/models.py:1889–1917`; `app/chamados/juizes.py:1507–1516`. Respostas sem veredito podem consultar tranca por pergunta; C6 consulta tranca, célula/ata/lâmpadas, classificação de falta e testemunha de materialização conforme os ramos percorridos. Contagem exata de SQL depende dos estados e caches; não é constante por disputa. `app/chamados/models.py:1905–1909`; `app/chamados/juizes.py:977–995,1013–1024,1402–1488`. Tempo/quantidade de queries na produção atual: [nao verificado].
+
+**Caminho do rc2 ao placar e semântica:**
+
+- `cron_run.sh` recolhe rc, grava JSONL e devolve rc; rc2 também deixa carimbo de fim e não gera pauta de cron quebrado. `bin/cron_run.sh:11–13,19–25,27–38`.
+- `crons_quebrados` usa `EXITS_DE_ALARME=(0,2)` e exclui ambos do contador de quebrados. `app/core/services/crons_quebrados.py:16,39–47`.
+- `pipeline_placar.medidos` conta rc2 como `alarmes`, separado de `erros`; `placar` pode mostrar situação `ALARME`. Entretanto só `ERRO`, `NAO_RODOU` e `DEPENDENCIA_QUEBRADA` entram na lista que faz o próprio pipeline sair rc2. Assim uma linha `ALARME` pode coexistir com `A5 OK` e saída normal. `app/core/management/commands/pipeline_placar.py:61–81,118–137,151–163`.
+- Diferença adicional: `crons_quebrados` considera última corrida nas 26h; pipeline agrega todas corridas do dia. `app/core/services/crons_quebrados.py:17,39–46`; `app/core/management/commands/pipeline_placar.py:66–81`.
+- Mudar o alarme de beco para universo global altera significado específico da mensagem atual “beco(s) que o evento nao fechou”; o transporte do rc2 permanece “alarme de negócio”. `app/chamados/management/commands/fechar_becos_disputa.py:68–70`; `bin/cron_run.sh:19–22`.
+
+**Contraexemplo de código:** competência trancada conserva disputa aberta com C7=True quando seu pai vivo está fora do conjunto encerrável. É exclusão explícita para impedir fechamento do pai por tabela. `app/chamados/services/competencia_trancada.py:24–28,173–183`. Ocorrência concreta na produção: [nao verificado].
+
+## 15/11 19:49 · sessao 15f9f9749b4d · - · - · origem=Ronald (tmux)
+
+Inventário somente leitura, sem execução de testes. [nao verificado]
+
+- **Único teste encontrado que fixa o rc do command:** `BecoPeloEventoDaPergunta.test_o_cron_virou_VIGIA_alarme_nao_escreve_e_sai_2`, em `app/chamados/tests/test_varredura_becos_evento_pergunta.py:97`; cria beco via `update` (:102–104), executa `--alarme --apply` (:106), exige `SystemExit(2)` (:107) e disputa ainda aberta (:109). Esse contrato continua válido ao ampliar o universo do alarme.
+- **Não achei teste que compare texto de stdout/stderr desse command.** Os chamadores capturam `StringIO()` sem examinar seu conteúdo: `app/chamados/tests/test_fio_disputa_resolvido.py:152`, `:160`, `:166`; `app/chamados/tests/test_varredura_becos_evento_pergunta.py:93`, `:106`.
+- **Outros contratos do command:** `test_command_fecha_beco_pai_resolvido` (:149), apesar do nome, exige `pode_fechar=False` e disputa aberta quando pergunta continua viva (:154–156); `test_command_nao_fecha_pai_aberto` (:158–162); `test_command_dry_run_nao_fecha` (:164–168), todos em `app/chamados/tests/test_fio_disputa_resolvido.py`.
+- **Delegação e idempotência:** `test_idempotente_e_uma_linha_de_trilha`, em `app/chamados/tests/test_varredura_becos_evento_pergunta.py:83`, chama `--apply` (:93) e exige uma trilha (:94–95); `test_o_cron_e_o_receiver_chamam_a_MESMA_porta` (:111–117) exige referência a `fechar_beco` e proíbe corpo próprio contendo `resolver_perguntas_por_chamado_resolvido`.
+- **Quais mudariam:** se a ampliação afetar somente a contagem de `--alarme` e preservar aplicação/porta, nenhum desses asserts precisa mudar obrigatoriamente; falta acrescentar teste que morda aberta+C7=True fora do beco, zero candidatos/rc normal e saída nova. A inexistência desses asserts decorre do inventário acima; o resultado após alteração é [nao verificado]. [nao verificado]
+
+Casos úteis para pergunta 5:
+
+1. **Pai aberto legítimo, pergunta já validada:** `test_pai_aberto_NAO_fecha`, em `app/chamados/tests/test_varredura_becos_evento_pergunta.py:71–81`, mantém pai aberto, valida a pergunta e exige disputa ainda aberta. O resultado `pode_fechar=True` é inferência do corpo de C7, que só consulta perguntas/respostas, sem pai: `app/chamados/models.py:1911–1917`. O filtro atual recusa esse universo antes de C7: `app/chamados/services/becos.py:29–33`. O teste não afirma que esse caso deva ou não alarmar.
+2. **Dia trancado:** fixture `_trancada`, em `app/chamados/tests/test_c7_red_minimos.py:352–359`, cria disputa e pergunta, depois apenas `PeriodoFechado`; `test_RED_o_C6_le_a_tranca_sem_escrever` (:361–367) exige pergunta morta e `pode_fechar=True`; `test_RED_resposta_de_dia_trancado_nao_segura_a_disputa` (:377–382) exige `respostas_sem_veredito=[]` e `pode_fechar=True`, mesmo com resposta. Tranca é causa de C7=True, não exceção interna de alarme: `app/chamados/models.py:1903–1909`, `:1917`.
+3. **“Não deveria alarmar” por estar em tranca:** não estabelecido pelo teste acima; pelo contrário, `test_RED_trancada_fecha_pela_porta_com_trilha_e_nao_carimba`, em `app/chamados/tests/test_c7_red_minimos.py:329–350`, exige que `competencia_trancada.encerrar` feche a disputa (:340–344). A política de tolerar a janela entre trancar e encerrar é [nao verificado].
+4. **Fechamento em curso:** `_EM_CURSO` protege reentrada do evento, em `app/chamados/services/becos.py:62–80`; C7 não consulta essa estrutura: `app/chamados/models.py:1911–1917`. Logo C7 pode continuar True durante essa fase (inferência); flag global de “em curso” como exclusão do contador ou concorrência real de produção é [nao verificado].
 
 ## 15/11 19:42 · sessao 0de49a4c7cf5 · E3-RESTO-R3 · leitura · origem=Code
 
@@ -761,90 +830,4 @@ O contrato dos cinco retornos de `_fio_do_dia` foi corrigido e corresponde à pr
 
 **VEREDITO: REPROVA.**
 
-## 15/11 18:14 · sessao 4b9631d94182 · - · - · origem=Ronald (tmux)
-
-Achados de G2/C/E4:
-
-- **Média — relógios divergentes no drawer, fora do delta fornecido.** `contexto_drawer` captura `agora` em `app/colaboradores/services/drawer.py:19`, mas lê datas novas em `:43` e `:111`; entrega o instante antigo ao calendário em `:121–122`. Caso concreto, corte 21: `agora=20/11/2026 23:59:59`, leitura de `:111=21/11`. A janela apresentada passa de **21/09–20/11** para **21/10–20/12**, enquanto a grade julga com `hoje=20/11` derivado do instante antigo (`app/ponto/janelas.py:24`, `app/colaboradores/services/calendario.py:192`). Pré-existência no hash anterior: [nao verificado].
-
-- **Média — instante não chega ao calendário do relatório.** A borda lê `hoje` em `app/relatorios/views.py:1518`, mas chama `dataset_furos` sem `agora` em `:1541`; o default `None` (`app/relatorios/furos.py:103`) desce ao D4 em `:123` e ao calendário em `:164`, cujo fallback lê o relógio em `app/colaboradores/services/calendario.py:192`. Uma frota atravessando meia-noite pode receber dias de julgamento diferentes, com recorte escolhido pelo dia antigo (`app/relatorios/views.py:1536–1537`). Fora do delta fornecido; pré-existência: [nao verificado].
-
-- **Baixa — proteção dos testes não cobre esses relógios.** O censo exige presença sintática do argumento (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:140–143`); portanto aceita `agora=None`. A proibição de relógio próprio restringe-se às seis funções de `LEITORES_SEM_RELOGIO`, sem drawer/dataset (`:168–170`).
-
-Censo atual de chamadas de produção, incluindo aliases:
-
-| Função | Chamadas | Locais |
-|---|---:|---|
-| `frescor_dos_retratos` | 2 | `app/folha/views_retrato.py:210`; `app/folha/retrato_folha.py:1443` |
-| `retratos_desatualizados` | 0 | Definição em `app/folha/retrato_folha.py:1437`; nenhuma referência executável externa localizada [nao verificado] |
-| `o_que_segura` | 0 | Definição em `app/folha/fora_da_folha.py:257`; uso humano HAIKU declarado em `app/docs/BACKLOG.md:1772` |
-| `dias_que_seguram` | 2 | `app/chamados/services/vigia_fio.py:537`; `app/folha/fora_da_folha.py:200` |
-| `_dias_que_retem` | 2 | `app/folha/fora_da_folha.py:165`, `:275` |
-| `contexto_calendario` | 4 | `app/colaboradores/views.py:1952`; `app/colaboradores/services/calendario.py:157`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160` |
-
-Todos esses chamadores presentes entregam o keyword correspondente; o relatório entrega `None` por default (`app/relatorios/furos.py:103`, `:164`).
-
-As curas diretas são reais:
-
-- Barra: único `_agora`, deriva `_hoje` e transmite o instante ao frescor (`app/folha/views_retrato.py:177`, `:178`, `:210`).
-- Calendário de perfil: captura `_agora`, passa à grade e deriva `hoje` dele (`app/colaboradores/views.py:1951`, `:1952`, `:1965`).
-- Vigia normal: comando captura `agora/hoje` juntos e transmite aos dois censos (`app/chamados/management/commands/vigiar_fio_morto.py:171`, `:172`, `:180`, `:181`); `censo_alcance` deriva o default e passa `hoje` à retenção (`app/chamados/services/vigia_fio.py:516`, `:537`).
-- `_dias_que_retem` transmite `hoje` à autoridade (`app/folha/fora_da_folha.py:121`); `o_que_segura` deriva uma data para retenção e informativo (`:270`, `:275`, `:301`).
-
-Nuance do vigia: `censo_alcance` aceita `hoje` explícito divergente sem validar (`app/chamados/services/vigia_fio.py:516`), ao contrário de `censo` (`:283–284`). Backfill permite `--hoje` histórico em DRY/LISTA (`app/chamados/management/commands/backfill_fio_morto_e4b.py:218–221`, `:237`); após o ato relê `timezone.localtime()` preservando o `hoje` antigo (`:352`). É caminho externo ao delta fornecido.
-
-Resíduo dinheiro:
-
-- Exatamente duas chamadas a `motivos_retencao_espelho`: `app/folha/export.py:968`; `app/ponto/services/fechamento.py:1067`.
-- Ambas omitem `hoje`; o wrapper transmite `None` (`app/folha/export.py:1307`), chegando ao relógio interno (`:1238`).
-- `motivos_retencao_celula` tem quatro chamadas: export `:1307`, fora_da_folha `:121`, previa `app/folha/previa.py:170`, vigia_pausa `app/folha/services/vigia_pausa.py:125`. As duas últimas já fornecem `hoje`.
-- Export/fechamento estão ausentes do delta de produção fornecido; comparação por git indisponível nesta cópia [nao verificado].
-
-D/histórico: `app/docs/BACKLOG.md:1772` já documenta zero chamador de `retratos_desatualizados` em 27/10. Isso é evidência documental anterior; não prova contagem executável nos hashes `57c1c9b94`/`77dfa94fa` [nao verificado]. O delta fornecido não remove chamada dessa função; muda sua assinatura (`app/folha/retrato_folha.py:1437`).
-
-Testes: executei em memória, com `python3 -B`: **9/9 OK e 15/15 mutantes mortos**, sem escrita; resultado transitório sem log arquivado [nao verificado]. O instrumento efetivamente troca fontes em memória (`app/chamados/tests/e3_r3_c15_mutantes.py:73–78`), exige falha de asserção e rejeita erro de infraestrutura (`:80–83`). G2 possui mutantes das bordas, propagação e defaults (`:30–47`); não é cura só textual.
-
-E2: no calendário, status/rotulo vêm do D4 (`app/colaboradores/services/calendario.py:638`, `:695–696`); precedência vem de `fatos_do_periodo` (`:538`). Não localizei clone novo de juiz no delta [nao verificado].
-
-## 15/11 18:13 · sessao e3b4179907c7 · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-1. **G3 sem selo que morda a regressão textual — baixa.** O teste c15 contém apenas G1 e G2 (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:81`, `:185`); os 15 mutantes também cobrem exclusivamente essas duas curas (`app/chamados/tests/e3_r3_c15_mutantes.py:27`). Reintroduzi, apenas em memória, textos antigos contraditórios em tarefa_do_dia, fora_da_folha, retrato_folha e models: os nove testes c15 continuam verdes. O selo textual c14 cobre outros sítios explicitamente enumerados (`app/chamados/tests/test_e3_r3_c14_sem_banco.py:409`). A cura documental existe nos arquivos vivos, portanto não foi feita só no teste/texto de entrega; falta a mordida pedida para G3 (`app/chamados/services/tarefa_do_dia.py:32`; `app/folha/fora_da_folha.py:77`; `app/folha/retrato_folha.py:474`; `app/folha/models.py:306`).
-
-2. **Contrato documental de RetratoFolha ainda contraditório — baixa.**
-   - Afirma que linha antiga sem as três chaves cai em fio `ninguem` (`app/folha/models.py:315`), mas `{status:'fora', motivo:'sem_codigo_dominio'}` sem `dono` cai em `admin`: `fio_da_linha` usa `_fio_cru` (`app/folha/retrato_folha.py:449`), que retorna admin para motivo diferente de furo (`:374`).
-   - Enumeração de grupos ainda diz A/B/C/D (`app/folha/models.py:308`), embora `_grupo(['nao_sei'])` retorne E (`app/folha/fora_da_folha.py:112`).
-   - Schema de saldo ainda enumera somente `1|2a5|6mais|None` (`app/folha/models.py:307`), embora motivo cadastral produza `cadastro` (`app/folha/retrato_folha.py:424`).
-
-Resultados executados sem gravação:
-
-- c15: nove testes verdes, quinze mutantes mortos por asserção, sem erro de infraestrutura; o runner rejeita morte por erro (`app/chamados/tests/e3_r3_c15_mutantes.py:80`).
-- c5+c6+nome_indefinido: 34 testes verdes (`app/chamados/tests/test_e3_r3_c5_sem_banco.py:24`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:87`; `app/chamados/tests/test_e3_r3_c6_nome_indefinido.py:29`).
-- Vizinhos de desligamento têm lei explícita justificando inversão, preservam gêmeo ativo e verificam informativo (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:1`, `:102`, `:116`; `app/folha/tests/test_lei_desligado_nao_trava.py:79`, `:103`).
-- Medida mantém números registrados 9/85 e critérios A1=6/B1=82 (`app/core/tests/test_medida_turno_do_par.py:100`); os três sítios novos aparecem na classificação informativa (`:391`, `:415`).
-- Enfraquecimento relativo dos testes entre hashes anteriores: **[nao verificado]**, porque esta cópia não disponibiliza histórico Git acessível. [nao verificado]
-
-## 15/11 18:13 · sessao 091be4eebcf9 · - · - · origem=Ronald (tmux)
-
-- **G1, média: cura parcial.** O escritor grava `_agora` em todos os retratos (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `:83`), mas o vigia ainda identifica rodada por dia civil local (`app/folha/vigia_retido_calado.py:47-50`). O próprio comentário promete ler a última lavra (`:20-25`).
-
-  Casos concretos reproduzidos executando `censo` real com dependências em memória:
-  1. Legado: comp10 carimbada em **14/11 23:59:59**, com um dia sem leitura; comp11 em **15/11 00:00:01**, sem linhas bloqueadas. Retorna apenas comp11, `dias_sem_leitura_sistema=0`, `calados=0`, `cego=1`; o positivo de comp10 desaparece pela seleção em `:48-50`, antes das somas em `:65-80`.
-  2. Duas rodadas novas no mesmo dia: às06h, execução explícita de comp09 grava positivo1; às07h, execução completa grava comp10 e comp11, ambas zero. O vigia retorna **09+10+11 e positivo1**, embora a rodada completa mais recente contenha apenas10/11. Execução explícita é permitida em `lavrar_retrato_folha.py:57-58`; universo automático vem de `:62-69`; competências antigas permanecem porque `update_or_create` só substitui sua própria chave (`:81-83`). Não é versão física antiga da mesma competência: a unicidade está em `app/folha/models.py:363-364`.
-  3. Rodada completa comp10/11 às06h, comp10 positivo1; relavra parcial de comp11 às07h, zero: continuam ambas e positivo1. Isso confirma que o resultado depende da interpretação “união do dia”, não “última rodada” (`vigia_retido_calado.py:47-50`). A entrega assume deliberadamente essa interpretação, apesar da cura pedida na triagem. [nao verificado: ocorrência desses casos em produção]
-
-- **Mordida G1:** os dois mutantes registrados em `app/chamados/tests/e3_r3_c15_mutantes.py:28-29` foram executados e morreram com falha de asserção, sem erro de infraestrutura; sustentam a cura do escritor nos testes `app/chamados/tests/test_e3_r3_c15_sem_banco.py:85-92`. O leitor não é protegido: substituir em memória `vigia_retido_calado.py:48` o dia pelo instante manteve os três testes G1 verdes. A fixture só produz uma rodada (`test_e3_r3_c15_sem_banco.py:35-78`) e não distingue agrupamento por dia de agrupamento por instante. O teste vizinho exige dois carimbos diferentes, T0 e T0+1min, como uma lavra (`app/folha/tests/test_vigia_retido_calado.py:42-52`); essa fixture representa o escritor antigo e não justifica conservar a ambiguidade do leitor após a mudança.
-
-- **Leitores de `RetratoFolha.lavrado_em`:**
-  - Vigia: dia civil local identifica a última lavra (`app/folha/vigia_retido_calado.py:47-50`).
-  - Frescor: instante comparado ao maior `FechamentoMensal.atualizado_em`; fechamento estritamente posterior significa desatualizado, igualdade significa atualizado (`app/folha/retrato_folha.py:1401-1411`). Assume início da rodada, explicitamente conservador (`:1382`).
-  - Rótulo: converte o instante para horário local e apresenta “retrato lavrado em” (`app/folha/retrato_folha.py:1430-1434`).
-  - View: usa o mínimo dos instantes dos retratos exibidos (`app/folha/views_retrato.py:201-203`), repassa como `atualizado` (`:241`, `:319`), e a barra mostra “atualizado HH:MM” (`app/templates/folha/_retrato_barra.html:22`).
-  - Escritor único encontrado: `app/folha/management/commands/lavrar_retrato_folha.py:81-83`. Outros campos homônimos encontrados pertencem a DiaPago/Placar/Pauta, não a RetratoFolha (`app/folha/porta_export.py:283-287`, `app/chamados/views.py:843-848`).
-
-- **G3/semântica, baixa:** o help_text ainda define o campo como “Quando o lavrador escreveu esta linha” (`app/folha/models.py:354-357`), mas ele passou a conter o início da rodada, possivelmente anterior à montagem e à gravação daquela competência (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `:69`, `:83`). Há três sentidos concorrentes: início da rodada, momento da escrita e dia identificador de rodada; os locais acima demonstram a divergência.
-
-**Recomendação do recorte B/G1: REPROVA**, pela seleção incorreta do universo ainda em `app/folha/vigia_retido_calado.py:47-50`.
-
-_5730 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5733 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
