@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 22:15** · publicado em **14/11/2026 22:19** (UTC-3)
+> Ultima resposta processada: **14/11/2026 22:23** · publicado em **14/11/2026 22:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 22:23 · sessao 4302027cff09 · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
+
+Entrega, censo e comandos em [c9_entrega.txt](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c9_entrega.txt:1).
+
+- C1 usa o mesmo W do julgamento; C3 caracteriza os números atuais. [Referências](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c9_entrega.txt:5).
+- **78 testes passaram; 53/53 mutantes morreram por asserção**, com controles verdes. [Saídas](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c9_green.txt:90). [nao verificado]
+- **C2 permanece parcial:** fonte e leitores adaptados preservam `None/sem_ata`, mas a autoridade completa ainda encontra `TypeError` no motor. [Reprodução](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c9_limites.txt:2).
+
+**PERGUNTA pendente:** como representar esse desconhecido no contrato numérico do motor inviolável? Retirar a chave pode pagar inteiro; usar zero inventa saldo. [Censo do bloqueio](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c9_entrega.txt:19).
+
+Persistência ORM [nao verificado]. Sem certificação.
 
 ## 14/11 22:15 · sessao e70026a4847b · - · - · origem=Ronald (tmux)
 
@@ -1211,39 +1223,4 @@ A autoridade `EscalaColaborador.eh_dia_trabalho` retorna `cel.trabalha` quando e
 
 Nao afirmo que os 59 sitios estejam todos ativos em uma configuracao concreta de producao: sua presenca e consumo no codigo foram lidos; execucao efetiva/alcancabilidade por URL, cron ou configuracao [nao verificado].
 
-## 14/11 21:45 · sessao c0e564baf62e · - · - · origem=Ronald (tmux)
-
-Catalogo concluido, so leitura; testes nao executados. [nao verificado] [nao verificado]
-
-- **11 nascentes diretas de criacao em producao**: `app/api/views.py:654`; `app/api/views_core.py:645`; `app/ponto/services/triagem_batida.py:702`; `app/chamados/services/acoes_chamado.py:44`; `app/chamados/services/materializacao.py:933` e `:1013`; `app/chamados/services/regularizacao_ext.py:78`; `app/ponto/views.py:1818`; `app/ponto/services/justificativa.py:188` e `:361`; `app/ponto/services/veredito_celula.py:323`.
-- **8 chamadas externas de `anotar`**: aprovacao offline `app/ponto/views.py:475`; conflitos `app/ponto/views.py:1838`, `app/chamados/services/acoes_chamado.py:54`, `app/ponto/services/justificativa.py:202` e `:377`; procedencia `app/chamados/services/materializacao.py:954`; desfazer retratacao `app/ponto/services/retratar_humano.py:207`; flip `app/ponto/services/flip_batida.py:30`.
-- **7 nascentes de foto**: `app/api/views.py:772` e `:847`; `app/api/views_core.py:766` e `:831`; `app/ponto/services/triagem_batida.py:752`; `app/ponto/views.py:2943`; `app/chamados/services/acoes_chamado.py:67`. Escrita de `Batida.foto` em `app/ponto/registro_batida.py:307`; criacao/atualizacao de FotoBatida em `:306`/`:311`.
-- **3 nascentes de flip**: `app/ponto/views.py:3306`; `app/ponto/services/veredito_celula.py:317`; `app/ponto/management/commands/flip_automatico.py:68`; cron diario `app/config/crons.py:707`.
-- **1 aprovacao de existente alem desfazer**: offline muda `aprovada`, autor, instante e origem para `app`, em `app/ponto/views.py:475`. Desfazer escreve `aprovada=True,retratada_em=None` em `app/ponto/services/retratar_humano.py:207`. Geofence nao localizado como anotador de existente. [nao verificado]
-- **2 escritores fora da porta**: remover faz `alvo.delete()` em `app/chamados/services/regularizacao_ext.py:137`; corrigir atribui tipo/instante e salva em `:154-156`. `alvo` e Batida pela FK `app/chamados/models.py:4101-4103`. Porta declarada `app/core/portas.py:103`.
-- **Furo do selo AST**: essas duas escritas ficam sem entidade atribuida; balde documentado em `app/core/censo_escritas.py:43-47`, ignorado por `app/ponto/tests/test_chokepoint_batida_gate.py:30-31`. Nao concluir “zero fora da porta” pelo selo.
-- **5 chamadas de criacao em comando de ensaio**: `app/ponto/management/commands/testar_pwa.py:184`, `:198`, `:219`, `:228`, `:229`; guarda em `:40`. `semear` tambem exige ensaio antes do bulk em `app/ponto/registro_batida.py:333-335`; fabrica smoke chama em `app/ponto/management/commands/gerar_batidas_smoke_motor.py:107`.
-- **Origem nao e estado fechado pelos choices**: 6 choices declaradas em `app/ponto/models.py:13-20`, mas materializacao grava `disputa_s84_retro` e `disputa_ancora` em `app/chamados/services/materializacao.py:934` e `:1014`.
-- **AEJ nao e nascente ativa pela interface**: retorna 410 em `app/ponto/views.py:57-70`.
-
-Upstream de criacao para citar sem mapear outras entidades:
-
-- Materializacao por disputa: `app/chamados/services/fio.py:670`, `app/chamados/services/acoes_disputa.py:139`, `app/chamados/services/validacao.py:492`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:147` → laco `app/chamados/services/materializacao.py:1382` → ramos `:1228`/`:1230` → criacoes `:933`/`:1013`.
-- Unidade de materializacao chamada diretamente tambem em `app/chamados/services/validacao.py:486` e `app/chamados/services/passivo_validado.py:522`; ultimo pelo comando `app/chamados/management/commands/materializar_passivo_validado.py:113` e `app/chamados/services/passivo_validado.py:434`. Ambos comandos declarados sob demanda em `app/config/crons.py:786-787` e `:848-853`.
-- Regularizacao, incluindo as escritas fora da porta: `app/chamados/views_regularizacao.py:217`, `app/api/views.py:2988`, `app/api/views_core.py:1309` → `app/chamados/services/regularizacao_ext.py:357`; retomada em `:225`, disparada por signal `app/chamados/signals.py:139`, on_commit `:146`.
-- Veredito que pode criar/flipar: unica nascente externa localizada `app/ponto/views.py:3380`; a outra chamada fixa `faltou`, sem criacao, em `app/ponto/services/declarar_dia.py:215`.
-- `materializar_pendentes_aprovadas` nao cria Batida: contrato e corpo em `app/chamados/services/materializacao.py:1414-1416` e `:1424-1437`; nao contar seu signal como nascente de criacao.
-
-Provas precisas:
-
-- `app/ponto/tests/test_porta_batida.py::test_MORDE_registrar_2x_a_mesma_batida_e_uma_so` (`:49`).
-- `app/ponto/tests/test_porta_batida.py::test_MORDE_anotar_2x_mesmo_estado_1_trilha` (`:56`).
-- `app/ponto/tests/test_porta_batida.py::test_MORDE_apagar_2x_1_trilha` (`:77`).
-- `app/ponto/tests/test_offline_pendentes_trilha.py::test_rejeitar_deixa_trilha` (`:31`).
-- `app/ponto/tests/test_flip_batida.py::test_post_flip_inverte_com_trilha` (`:20`) e `::test_retratada_nao_flipa` (`:29`).
-- `app/chamados/tests/test_reg_externa_corrigir_remover.py::test_corrigir_tipo_E_para_S` (`:32`), `::test_remover` (`:46`), `::test_MORDE_competencia_trancada_NAO_segura_o_corrigir` (`:55`).
-- `app/chamados/tests/test_chokepoint_reg_externa.py::test_reg_externa_nao_gera_par_oposto_em_60s` (`:23`).
-- `app/ponto/tests/test_registrar_batida.py::test_oposto_60s_automatico_recusa` (`:32`), `::test_oposto_60s_humano_cria_e_flaga` (`:45`), `::test_mesmo_tipo_60s_dedup` (`:67`).
-- Prova comportamental especifica de aprovar offline: nenhuma localizada. [nao verificado]
-
-_5345 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5346 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
