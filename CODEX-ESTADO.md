@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 01:28** · publicado em **15/11/2026 01:28** (UTC-3)
+> Ultima resposta processada: **15/11/2026 01:32** · publicado em **15/11/2026 01:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 01:32 · sessao 9e8e05c97134 · - · - · origem=Ronald (tmux)
+
+1. **Não há mudança na escolha entre batidas vivas da triagem.** Antes, `Meta.ordering=["colaborador","timestamp"]`; depois, `order_by("timestamp")`. Como a query restringe um colaborador e existe unicidade `(colaborador,timestamp)`, ambas devolvem o menor instante elegível; a diferença é remover retratadas (`app/ponto/models.py:105`, `app/ponto/models.py:106`, `app/ponto/services/triagem_batida.py:664`, `app/ponto/turnos.py:2883`). A afirmação de equivalência da entrega está correta para esse cenário; confirmação SQL executada [nao verificado].
+
+2. **B5j não cai com esta cura.** Executei apenas suas funções AST em memória, simulando as três substituições em strings: copiadores `6 → 6`; os três módulos tocados contribuem `0 → 0`. O detector considera funções que chamam `parear_turnos`/`_turnos_do_colab_puro`, não qualquer função do módulo (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:123`). Os seis copiadores atuais são:
+   - `app/ponto/turnos.py:1863`;
+   - `app/ponto/turnos.py:1901`;
+   - `app/ponto/services/lastro.py:261`;
+   - `app/ponto/services/piso_intervalo.py:39`;
+   - `app/escala/services/meio_periodo.py:158`;
+   - `app/chamados/services/fila_por_causa.py:190`.
+
+3. **B5j já tem folga anterior: teto 8 para seis atuais.** O comentário promete catraca fundada no número contado, mas a implementação exige somente `total <= 8`, permitindo dois copiadores adicionais (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:184`, `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:191`, `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:215`). Não atribuir essa folga à cura: ela já existe no HEAD; a lei apenas declara “8 copiadores ... não cresce” (`CLAUDE.md:163`).
+
+4. **O selo de bocais deveria apertar sua contagem para guardar a remoção.** A regex encontra três filtros em `api/views.py`, nas linhas `296`, `529`, `674`; a substituição proposta leva a dois. Entretanto, o teto permanece sete e a asserção é somente `<=`, aumentando a folga de quatro para cinco (`app/ponto/tests/test_tripwire_bocais_apuracao.py:20`, `app/ponto/tests/test_tripwire_bocais_apuracao.py:25`, `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`). Restaurar o filtro removido continuará passando nesse selo (`app/api/views.py:529`, `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`). `views_core` e `triagem_batida` não constam da allowlist (`app/ponto/tests/test_tripwire_bocais_apuracao.py:13`).
+
+5. **Sem troca de instante por dia no predicado novo.** A autoridade aplica `timestamp__gte` e `timestamp__lte`, inclusive nas duas pontas; filtra somente retratação, contando pendentes de DP e sem restrição por origem/canal (`app/ponto/turnos.py:2859`, `app/ponto/turnos.py:2876`). Ela não lê relógio, não escreve e não trava (`app/ponto/turnos.py:2875`). As APIs fornecem `ts_efetivo` da autoridade de hora; a triagem usa seu `agora` capturado (`app/api/views.py:497`, `app/api/views.py:507`, `app/ponto/services/triagem_batida.py:626`).
+
+6. **Retratação é carimbo do ato, não o instante da batida.** `retratar_batida` anota `aprovada=False` e `retratada_em=timezone.now()`; o gravador material é `anotar`/`save(update_fields=...)` (`app/ponto/registro_batida.py:274`, `app/ponto/registro_batida.py:252`). O modelo declara `aprovada` como crivo do DP e retratação como exclusão da geometria/apuração (`app/ponto/models.py:63`, `app/ponto/models.py:64`).
+
+7. **Fuso consistente para o caminho inspecionado.** A configuração declara `America/Sao_Paulo` e `USE_TZ=True`; a regra documental exige UTC no banco e apresentação UTC−3 (`app/config/settings/base.py:93`, `app/config/settings/base.py:95`, `CLAUDE.md:146`). A autoridade da hora torna timestamps ingênuos aware; aceita o aparelho com atraso inclusivo de zero a 48 horas e retorna `agora` fora disso (`app/api/hora_do_aparelho.py:116`, `app/api/hora_do_aparelho.py:141`, `app/api/hora_do_aparelho.py:153`). Persistência/fuso efetivos de produção [nao verificado].
+
+## 15/11 01:32 · sessao cfe31aeba724 · - · - · origem=Ronald (tmux)
+
+1. **Retratada dentro de 60s:** a porta exclui a anterior no filtro (`app/ponto/registro_batida.py:107-113`). Sem outra viva do mesmo tipo, chave exata ou oposta impeditiva, cria linha viva (`app/ponto/registro_batida.py:120`, `app/ponto/registro_batida.py:145`, `app/ponto/registro_batida.py:157`). Não grava duplicata da chave; o banco exige unicidade por colaborador+timestamp (`app/ponto/models.py:106`).
+
+2. **Chave exata:** devolve a linha anterior, inclusive retratada ou de outro tipo, sem revivê-la e sem criar nova (`app/ponto/registro_batida.py:116-122`). A cura portanto não garante nova batida apurável nesse caso (`app/ponto/turnos.py:2876`).
+
+3. **Oposta na janela:** a janela é ±300s com escala/marcos e ±60s sem eles (`app/ponto/registro_batida.py:21-32`). Considera só opostas vivas e recusa o automático com `(None, conflito)`, salvo correspondência ao marco próprio (`app/ponto/registro_batida.py:139-151`). A tolerância do marco próprio é inclusiva, `<=5min` (`app/ponto/registro_batida.py:41`, `app/ponto/registro_batida.py:48`). As três cascas passam `autoridade_humana=False` (`app/api/views.py:656`, `app/api/views_core.py:647`, `app/ponto/services/triagem_batida.py:704`). Esse caminho continua barrando materialização (`app/ponto/registro_batida.py:151`).
+
+4. **Resposta rica após retorno existente:** a porta não distingue “criada” de “reaproveitada” no contrato de retorno (`app/ponto/registro_batida.py:102`, `app/ponto/registro_batida.py:115`, `app/ponto/registro_batida.py:122`, `app/ponto/registro_batida.py:161`). As APIs devolvem `status=ok`, tipo e rótulo calculados da variável `tipo`, mas timestamp e sequência da linha retornada (`app/api/views.py:799-815`, `app/api/views_core.py:793-809`). Se a chave exata devolver retratada/outro tipo, o payload não informa a retratação e pode anunciar um tipo diferente do objeto (`app/ponto/registro_batida.py:116-122`, `app/api/views.py:812-815`). A sequência devolvida é a gravada na linha antiga, não `sequencia_jornada` recém-calculada (`app/api/views.py:555`, `app/api/views.py:659`, `app/api/views.py:814`). A linha reutilizada também recebe os efeitos posteriores, como foto e geofence (`app/api/views.py:769-781`).
+
+5. **Triagem possui divergência adicional na resposta de oposta:** após `None`, procura oposta crua em ±60s, sem excluir retratada (`app/ponto/services/triagem_batida.py:715-725`). A porta pode ter recusado por uma viva a 3min, pois usa até ±300s (`app/ponto/registro_batida.py:21-32`, `app/ponto/registro_batida.py:139-151`). Logo a resposta pode trazer `id=None`, ou apontar uma retratada que não causou a recusa (`app/ponto/services/triagem_batida.py:716-725`). As APIs consultam a janela da porta e excluem retratada (`app/api/views.py:672-687`, `app/api/views_core.py:663-678`).
+
+6. **Pendente DP/origem/canal:** as três queries antigas não filtram esses estados (`app/api/views.py:529-532`, `app/api/views_core.py:515-518`, `app/ponto/services/triagem_batida.py:664-669`). `batidas_apuraveis` também não os filtra; exclui somente retratada (`app/ponto/turnos.py:2876-2883`). A porta usa o mesmo critério no dedup e na colisão, e nem esse filtro na chave exata (`app/ponto/registro_batida.py:107-120`, `app/ponto/registro_batida.py:139-144`). Portanto `aprovada=False`, origem ou canal, isoladamente, não são divergências entre essas consultas (`app/ponto/turnos.py:2876-2883`, `app/ponto/registro_batida.py:107-120`).
+
+7. **Divergências remanescentes:** API usa ±5min, triagem `[agora−5min,agora]`, porta ±60s para mesmo tipo (`app/api/views.py:527-532`, `app/ponto/services/triagem_batida.py:663-669`, `app/ponto/registro_batida.py:106-113`). Na API, dedup usa o tipo solicitado antes da correção pela autoridade; a porta recebe o tipo corrigido (`app/api/views.py:529-532`, `app/api/views.py:570-601`, `app/api/views.py:654-655`). Essas diferenças já existem no HEAD; a cura informada não as altera [nao verificado].
+
+## 15/11 01:32 · sessao 747fd334a147 · - · - · origem=Ronald (tmux)
+
+Censo independente por busca textual e AST dos `.py` da cópia, excluindo testes/migrations: encontrei os mesmos **três sítios de dedup de chão**, antes dos únicos três chamadores com origem `'app'`: `app/api/views.py:529` → `:654`; `app/api/views_core.py:515` → `:645`; `app/ponto/services/triagem_batida.py:664` → `:702`. Quarto sítio estático de chão não encontrado; cobertura de caminhos dinâmicos [nao verificado].
+
+Outros controles antes de criar/reaproveitar batida, sem serem toque de chão:
+
+- Materialização: `_batida_existente_na_janela`, mesmo tipo ±20 min, primeiro timestamp, sem filtro de retratação (`app/chamados/juizes.py:235`, `:243`); guarda de vizinha imediata anterior/posterior até 12h, também crua (`app/chamados/services/materializacao.py:86`, `:95`, `:101`).
+- Regularização externa: chave exata colaborador+timestamp, pula antes da porta (`app/chamados/services/regularizacao_ext.py:71`, `:74`, `:78`).
+- Veredito humano: carga crua, simulação e criação somente das novas propostas pela porta (`app/ponto/services/veredito_celula.py:237`, `:323`).
+- Demais chamadores são autorização humana/justificativa: `app/chamados/services/acoes_chamado.py:44`; `app/ponto/views.py:1818`; `app/ponto/services/justificativa.py:188`, `:361`; materialização com `fato_de_chao=False`: `app/chamados/services/materializacao.py:933`, `:1013`. O comando de ensaio também chama a porta (`app/ponto/management/commands/testar_pwa.py:184`, `:198`, `:219`, `:228`, `:229`).
+
+O AST encontrou criação de Batida apenas dentro da porta: `app/ponto/registro_batida.py:152`, `:157`, `:335`. Escritas via reflexão/SQL dinâmico [nao verificado].
+
+**ID e clientes:** APIs devolvem `dupla.pk` em `ja_registrada` (`app/api/views.py:538`; `app/api/views_core.py:524`), triagem devolve `dupla.id` (`app/ponto/services/triagem_batida.py:671`). No cliente v2 presente, todo HTTP 2xx vira sucesso sem ler corpo/ID (`app/templates/ponto/bater_ponto_v2.html:327`); sincronizador PWA lê JSON e descarta a fila em todo `resp.ok`, ignorando status/ID (`app/static/pwa.js:158`, `:162`). Leitor Android/APK desse ID [nao verificado]. Há consumidor servidor de `batida_id` no upload separado de foto (`app/api/views.py:836`, `:842`; `app/api/views_core.py:820`, `:826`), mas vincular esse consumidor ao ID retornado exige o cliente ausente [nao verificado]. O cliente web antigo envia formulário normal (`app/templates/ponto/bater_ponto.html:237`), e a view repassa a resposta JSON de triagem (`app/ponto/views.py:353`, `:356`).
+
+**Ordem:** triagem no HEAD usa `Meta.ordering = ["colaborador", "timestamp"]` (`app/ponto/models.py:105`) com colaborador fixo (`app/ponto/services/triagem_batida.py:665`), portanto escolhe o menor timestamp. A autoridade também usa timestamp ascendente (`app/ponto/turnos.py:2883`): a troca proposta não muda a escolha entre vivas; elimina candidatas retratadas [nao verificado: diff proposto]. APIs mantêm a maior timestamp (`app/api/views.py:532`; `app/api/views_core.py:518`). A chave única impede empate de timestamp no mesmo colaborador (`app/ponto/models.py:106`).
+
+**Import/uso:** trajeto de topo de `turnos.py` é copy/datetime/namedtuple/timezone/`core.dia_do_turno` (`app/ponto/turnos.py:36`–`:43`); `core.dia_do_turno` só importa datetime/typing e constrói NewType (`app/core/dia_do_turno.py:10`–`:13`). Não há import de retorno para as views/triagem nesse trajeto; execução real do novo import [nao verificado]. `Batida` continua necessário nas buscas de oposta posteriores à porta (`app/api/views.py:674`; `app/api/views_core.py:665`; `app/ponto/services/triagem_batida.py:716`) e na busca de entrada da triagem (`app/ponto/services/triagem_batida.py:257`).
 
 ## 15/11 01:28 · sessao d954e76d3e69 · BATIDA-DEDUP-RETRATADA · construtor · origem=Code
 
@@ -2156,78 +2213,4 @@ Transições/partes sem resposta normativa específica encontrada nos textos exa
 
 Cuidado com cortes curtos sem a pergunta de origem: `LU-20 = nao validavel` e `LU-21 = reinicia` estão escritos, mas o referente completo não está nesses registros; não atribuir escopo inventado (`app/docs/CORTES.json:1673`, `app/docs/CORTES.json:1680`).
 
-## 15/11 00:44 · sessao 215a8f9a2af7 · - · - · origem=Ronald (tmux)
-
-- Universo real: `F.dias_que_seguram(empresa, mes, ano)` chama `classificar_export` e `_dias_que_retem`; esta delega a `motivos_retencao_celula(..., com_dias=True)`. Não reconstruir pelo TSV. (`app/folha/fora_da_folha.py:109`, `:126`, `:144`, `:105`)
-- Carga/tarefa: `F._carga(colabs, ini, fim, AGORA)` → `carga_da_tarefa`; usar `carga.tarefa(colab, dia)` e `porta_da_tarefa(t)['fio']`. (`app/folha/fora_da_folha.py:58`, `app/chamados/services/tarefa_do_dia.py:648`, `:549`, `:638`)
-- Vencimento deve preservar o anexo: ler **pai da disputa**, `p.disputa.chamado.prazo_sla`, e chamar `prazo_estourou(prazo, AGORA)`, cujo critério é `prazo <= agora`. Não trocar pelo destino retornado por `chamado_que_lista`, nem pelo prazo derivado de cobrança. (`app/chamados/catalogo/motor.py:54`, `app/chamados/services/fio.py:97`, `:117`; seleção do anexo `[nao verificado]`)
-- Previsto único: `escala.utils.minutos_previstos_do_dia(colab, data, celulas=None, folgas=None, escalas=None)`. Ela consulta vínculo, dia de trabalho, marcos e todas as pausas; não usa `minutos_jornada`. (`app/escala/utils.py:2230`, `:2234`, `:2260`, `:2266`, `:2269`, `:2291`, `:2320`)
-- Para alimentar essa função pela carga: `carga.celulas_de(cid, ini, fim)` oferece o formato `{(cid, data): celula}`; `carga._vinculos[cid]` contém todos os vínculos carregados, compatíveis com o contrato de `escalas`. (`app/ponto/turnos.py:2988`, `:2990`, `:3003`; `app/escala/utils.py:2252`)
-- Relógio: `dias_que_seguram` chega a `timezone.localdate()`; congelar `AGORA` evita calendário divergente. A carga declara que vários estados continuam atuais mesmo recebendo horizonte histórico. (`app/folha/export.py:1238`; `app/chamados/services/tarefa_do_dia.py:370`, `:374`)
-- Proteção de leitura já existente: `somente_leitura`, em `diff_e3_sombra.py`, recusa comandos múltiplos, CTE, `INTO`, `NEXTVAL`, operações de escrita e outros SQL não reconhecidos. O comando instala wrappers em todos os aliases. (`app/chamados/management/commands/diff_e3_sombra.py:30`, `:94`)
-- **Dependência crítica:** antes da carga, ler usuário reservado com SELECT e abrir `tranca_em_lote(sistema_pk=...)`, como o comando existente faz; isso impede dependências de chegarem ao `get_user_sistema/get_or_create`. Ausência do usuário deve ser erro, sem criação. (`app/chamados/management/commands/diff_e3_sombra.py:96`, `:100`; `app/chamados/tests/test_e3_diff_sombra.py:26`, `:38`; `app/chamados/juizes.py:1225`)
-- Escritor de `prazo_sla`: `ChamadoColaborador.definir_prazo_sla`, atribuição e `save` exclusivos dessa porta; emissores também fornecem o prazo na criação. Leitor do vencimento: `prazo_estourou`. (`app/chamados/models.py:574`, `:589`, `:592`; `app/chamados/services/disputa_emissao.py:581`, `:1117`, `:1352`, `:1725`; `app/chamados/services/cobranca.py:178`; `app/chamados/catalogo/motor.py:54`)
-- Escritor de `CelulaDia.veredito/protestos`: `ponto.portas.celula.lavrar_veredito`; leitor da retenção: `_dias_sem_decisao`. (`app/ponto/portas/celula.py:1032`, `:1092`, `:1093`, `:1098`; `app/folha/export.py:1273`, `:1286`, `:1293`)
-- O envelope só monta a árvore em `/app` e a sonda em `/sonda/sonda.py`; não disponibiliza automaticamente o TSV colado. Portanto, a conferência precisa de texto embutido ou entrada explicitamente fornecida e legível. (`bin/sonda_leitura.sh:214`, `:217`, `:238`, `:240`)
-- As leituras atuais da tarefa carregam `veredito_lavrado` e executam `_tarefa_pura`/`_portas_da_tarefa`, sem chamada explícita ao materializador nesses trechos. (`app/chamados/services/tarefa_do_dia.py:421`, `:424`, `:549`, `:557`, `:567`)
-
-## 15/11 00:44 · sessao 31ff7cb1277f · - · - · origem=Ronald (tmux)
-
-Transitivos confirmados:
-
-- **A19 e projeção:** `DecisaoPergunta.registrar` insere DP e chama `PerguntaDisputa.acordar_celulas` (`app/chamados/models.py:4096`, `:4097`). A reabertura também chama `acordar_celulas` explicitamente (`app/chamados/services/disputa_emissao.py:1635`).
-- **`acordar_celulas` apenas lê `CelulaDia`** para localizar célula e delega inserção do evento (`app/chamados/models.py:3323`, `:3325`, `:3327`, `:3331`). A escrita concreta é **`escala.EventoCelula(celula_id, colaborador_id, data)`**, em `app/ponto/portas/celula.py:954`; `criado_em` e defaults de processamento estão em `app/escala/models.py:1860`.
-- **A18 colisão** salva C/via, acionando o receiver da outbox (`app/chamados/signals.py:253`, `:257`, `:259`). Gravar somente `recusa_motivo` não passa pelo conjunto `CAMPOS_QUE_ACORDAM` (`app/chamados/models.py:3303`, `app/chamados/signals.py:257`).
-- **Não há escrita direta de `CelulaDia`, `FechamentoMensal.derivado_em` ou L** nas funções `acordar_celulas`, `reabrir_para_correcao`, `carimbar_identidade` e `DecisaoPergunta.registrar` examinadas (`app/chamados/models.py:3314`, `:3251`, `:4086`; `app/chamados/services/disputa_emissao.py:1562`). Generalização para todo despacho dinâmico: **[nao verificado]**.
-- A função de invalidação de FM escreveria `derivado_em=None` e `atualizado_em` quando chamada, mas pertence a outro caminho; nenhuma chamada direta A18/A19/DP foi encontrada (`app/ponto/services/fechamento.py:1616`, `:1656`; cobertura dinâmica **[nao verificado]**).
-- **L** tem escritores próprios: `gravar_lavras_em_lote` (`app/chamados/veredito_lavrado.py:240`, `:250`) e `lavrar`, que grava `veredito_lavrado`, `julgado_em`, `janela_expira_em` (`:270`, `:272`, `:273`, `:275`).
-
-Existe cascata **após commit**: qualquer `PerguntaDisputa.save` agenda `becos.fechar_beco_da_disputa` (`app/chamados/signals.py:230`, `:240`). Se o classificador real permitir, chama resolver e `DisputaSupervisao.fechar` (`app/chamados/services/becos.py:25`, `:54`, `:57`, `:74`). Esse fechamento grava F (`app/chamados/models.py:1996`–`:2000`) e dispara os receivers da disputa, inclusive transição do chamado-pai e retomada de regularização (`app/chamados/signals.py:43`, `:139`, `:146`, `:165`). Quantidade/campos efetivamente atingidos nessa cascata sem dados/alcance leitor completo: **[nao verificado]**.
-
-O consumidor da outbox é outra execução, `consumir_eventos_celula`, que chama rejunção, retratações, lastro e fábrica (`app/chamados/reconciliador.py:1316`, `:1365`–`:1388`). Seu efeito não deve ser confundido com o simples INSERT do evento (`app/ponto/portas/celula.py:954`).
-
-A19 também cria `LogAuditoria` pelos dois adaptadores de auditoria (`app/chamados/services/validacao.py:637`, `:643`; `app/core/auditoria.py:22`; `app/core/observ.py:134`–`:138`), além da nota já informada.
-
-## 15/11 00:44 · sessao 697894d24fd9 · - · - · origem=Ronald (tmux)
-
-Conferência das referências sob minha responsabilidade:
-
-| Citação anexada | Estado | Sítio desta cópia e conteúdo |
-|---|---|---|
-| `CLAUDE.md:142` | SEGUE | Motor exige aval explícito. (`CLAUDE.md:142`) |
-| `CLAUDE.md:143` | SEGUE | Porta única de escrita da batida; motor não fabrica batida. (`CLAUDE.md:143`) |
-| `CLAUDE.md:146` | SEGUE | UTC no banco; apresentação UTC-3; sonda usa `timezone.localtime`. (`CLAUDE.md:146`) |
-| `CLAUDE.md:148` | SEGUE | Grade como fonte única de previsto. (`CLAUDE.md:148`) |
-| `CLAUDE.md:178` | SEGUE | Idempotência estrutural: 2x = mesmo estado, uma trilha, zero duplicata; parâmetro consumido ou declarado sem efeito. (`CLAUDE.md:178`) |
-| `CLAUDE.md:179` | SEGUE | Separação ESTRUTURA/CADASTRO/BATIDA; só ESTRUTURA é cura de código. (`CLAUDE.md:179`) |
-| `CLAUDE.md:411` | SEGUE | Gravado exportado não muda por caminho genérico; regime da porta específica nas linhas seguintes. (`CLAUDE.md:411`) |
-| `app/docs/LEIS.md:107` | SEGUE | L-080 inclui UTC/UTC-3. (`app/docs/LEIS.md:107`) |
-| `app/docs/LEIS.md:136` | SEGUE | L-110: casos pela regra antes do código, perguntas sem resposta escrita separadas, código atual não é gabarito. (`app/docs/LEIS.md:136`) |
-| `app/docs/LEIS.md:145` | SEGUE | L-124: horizonte para frente, passado FOTO até fato novo, backfill único. (`app/docs/LEIS.md:145`) |
-| `app/docs/LEIS.md:152` citado como L-114 | MUDOU | L-114 está em `app/docs/LEIS.md:153`; a linha 152 agora contém L-115. (`app/docs/LEIS.md:152`; `app/docs/LEIS.md:153`) |
-| `app/docs/LEIS.md:153` citado como L-113 | MUDOU | L-113 está em `app/docs/LEIS.md:154`; conserva nascimento permitido em exportada, trilha e DIFF anterior ao ato de frota. (`app/docs/LEIS.md:154`) |
-| `app/docs/JUIZES.md:14` | SEGUE | Registro vivo prevalece sobre lookup. (`app/docs/JUIZES.md:14`) |
-| `app/docs/JUIZES.md:20` | SEGUE | `turnos_do_colab` continua no lookup da geometria do turno. (`app/docs/JUIZES.md:20`) |
-| `app/docs/JUIZES.md:38` | SEGUE | `validar_pergunta` continua escritor único de `validada_em`. (`app/docs/JUIZES.md:38`) |
-| `app/core/juizes.py:208` citado como registro `turnos_do_colab` | MUDOU | Registro em `app/core/juizes.py:212`; pergunta: a que turno/data_turno pertence a batida. A linha 208 hoje registra folga lançada. (`app/core/juizes.py:208`; `app/core/juizes.py:212`) |
-| `app/core/juizes.py:1199` citado como registro `selfie_ausente` | MUDOU | Registro em `app/core/juizes.py:1205`; comentários de prazo/canal em 1202–1204. (`app/core/juizes.py:1202`; `app/core/juizes.py:1205`) |
-| `app/docs/CORTES.md:283` citado como corte da selfie | MUDOU | Texto integral em `app/docs/CORTES.md:334`; resumo também em 94. A linha 283 atual trata de outras assinaturas. (`app/docs/CORTES.md:283`; `app/docs/CORTES.md:334`) |
-| `BACKLOG.md:2109` na matriz | MUDOU | Caminho correto `app/docs/BACKLOG.md:2166`: mesmo desencontro emissor/leitores, entrega do episódio e selo AST; texto recebeu atualização de aval. (`app/docs/BACKLOG.md:2166`) |
-| `app/colaboradores/services/ficha.py:215` | SEGUE | Lê `app['ultima_batida']` de ficha; escritor próprio em 147, sem relação com contexto da disputa. (`app/colaboradores/services/ficha.py:147`; `app/colaboradores/services/ficha.py:215`) |
-| `app/escala/services/furos_diarios.py:281` | SEGUE | Escreve data civil local de última batida em linha de relatório, outro domínio. (`app/escala/services/furos_diarios.py:281`) |
-| `app/relatorios/views.py:1675` | SEGUE | Formata a última batida da linha de relatório. (`app/relatorios/views.py:1675`) |
-
-Nenhuma referência normativa acima SUMIU; houve deslocamentos e duas referências antigas de LEIS passaram a apontar outra lei. (`app/docs/LEIS.md:152`; `app/docs/LEIS.md:153`; `app/docs/LEIS.md:154`)
-
-Há dois cortes específicos desta obra, ausentes do envelope anexado:
-
-- LU-09 diz literalmente “por episodio via batida_origem” e que foto fora do prazo também extingue. É corte explícito para D5. (`app/docs/CORTES.md:441`; `app/docs/CORTES.json:1596`)
-- LU-10 diz “retirar o campo sem leitor”, sem nomear o campo. Sua aplicação a `qtd` permanece **[nao verificado]**; o texto normativo reproduzido em JSON também não identifica o campo. (`app/docs/CORTES.md:442`; `app/docs/CORTES.json:1603`)
-
-A declaração posterior de que D1–D4 estariam decididos não substitui o teor de um corte: o registro não reproduz as decisões nem identifica o enunciado que escolhe o transporte, o alcance do merge ou o significado do timestamp. Portanto, essas escolhas devem continuar como perguntas separadas, sem resposta **[nao verificado quanto ao corte específico]**.
-
-Para o CENSO: o juiz do dia de turno tem registro verificável; o juiz de ausência de foto tem registro e corte verificáveis; a validação tem lookup verificável. (`app/core/juizes.py:212`; `app/core/juizes.py:1205`; `app/docs/CORTES.md:334`; `app/docs/JUIZES.md:38`)
-
-Não transportar dados adicionais de produção encontrados em documentos da árvore: eles não pertencem ao envelope autorizado **[nao verificado pelo dado fornecido]**.
-
-_5456 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5459 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
