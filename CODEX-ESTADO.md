@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 18:34** · publicado em **15/11/2026 18:34** (UTC-3)
+> Ultima resposta processada: **15/11/2026 18:36** · publicado em **15/11/2026 18:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 18:36 · sessao 5f5716b33138 · E3-RESTO-R3 · verificador · origem=Code
+
+**Ocorrência dos casos abaixo em produção: [nao verificado]. São contraprovas construídas a partir do código.**
+
+**A. Cura incompleta.**
+
+As curas chegaram aos sítios de produção: seleção das competências, dia do drawer, instante do relatório e documentação de `lavrado_em`. Entretanto, restam falhas de universo, propagação do relógio e documentação, detalhadas em B, D e G. (`app/folha/vigia_retido_calado.py:46–58`; `app/colaboradores/services/drawer.py:21–22`; `app/relatorios/views.py:1519–1543`; `app/folha/models.py:315–321`)
+
+Os oito mutantes registrados do c16 morreram por asserção na execução em memória; eles cobrem V/U/R/N, mas não os contraexemplos abaixo. E5 foi corrigido no instrumento `censo_none_literal`; a API de `dataset_furos` continua aceitando `agora=None`. (`app/chamados/tests/e3_r3_c16_mutantes.py:25–38`; `app/chamados/tests/e3_r3_c15_mutantes.py:65–83`; `app/chamados/tests/test_e3_r3_c16_sem_banco.py:162–185`; `app/relatorios/furos.py:103`)
+
+**B. Dois achados de universo.**
+
+- **Alta — empresa sem nenhum retrato desaparece.** O vigia descobre empresas pelos próprios retratos. Em **25/10/2026**, empresa visível E2, corte 21, sem retratos: deveria nomear `(E2,10,2026)` e `(E2,11,2026)`, mas devolve nenhuma falta para E2. Lavrador e frescor incluem essa empresa. Havendo outra empresa com bloqueados, `cego=0`, ocultando a cobertura ausente. (`app/folha/vigia_retido_calado.py:46–58`; `app/folha/vigia_retido_calado.py:89`; `app/folha/management/commands/lavrar_retrato_folha.py:51–61`; `app/folha/retrato_folha.py:1410–1418`)
+
+- **Média — inclui empresas fora do universo automático.** `censo(None)` inclui retratos de empresas inativas ou de diagnóstico; lavrador e frescor usam `empresas_visiveis()`. Exemplo: E3 inativa, retrato 11/2026, hoje 25/10/2026: o vigia conta esse retrato e declara falta da competência 10; os outros dois excluem E3. (`app/folha/vigia_retido_calado.py:46–58`; `app/colaboradores/queries.py:85–87`; `app/folha/management/commands/lavrar_retrato_folha.py:51`; `app/folha/retrato_folha.py:1410`)
+
+Nos demais casos pedidos, nenhum erro encontrado: em **21/10/2026**, corte 21 produz competências **10/11**, enquanto corte 26 produz **09/10**; competência futura fora dessas duas é excluída. Retrato duplicado por empresa/competência é vedado pela constraint. (`app/ponto/janelas.py:24–33`; `app/ponto/janelas.py:66–72`; `app/folha/retrato_folha.py:1377–1383`; `app/folha/vigia_retido_calado.py:56`; `app/folha/models.py:365–367`)
+
+**C. Escritores, leitores e significado.**
+
+| Campo/lista | Quem escreve | Quem lê |
+|---|---|---|
+| `competencias_sem_retrato` | `censo`, `app/folha/vigia_retido_calado.py:53–61` | `linhas`, no mesmo arquivo:94–97; command imprime em `app/folha/management/commands/vigiar_retido_calado.py:34–35` |
+| Lista de `competencias_do_retrato` | `app/folha/retrato_folha.py:1377–1383` | Lavrador: `app/folha/management/commands/lavrar_retrato_folha.py:61`; frescor: `app/folha/retrato_folha.py:1411`; vigia: `app/folha/vigia_retido_calado.py:55–58` |
+| `RetratoFolha.lavrado_em` | Instante capturado e gravado pelo lavrador: `app/folha/management/commands/lavrar_retrato_folha.py:49–50`, `:77–79` | Frescor/rótulo: `app/folha/retrato_folha.py:1412–1445`; mínimo da tela: `app/folha/views_retrato.py:203`; apresentação: `app/templates/folha/_retrato_barra.html:22` |
+
+As competências significam **mês/ano do fim da janela da empresa**, não mês civil. `lavrado_em` significa **instante do início da rodada**; o vigia deixou de usá-lo para selecionar universo. A divergência encontrada é de empresas abrangidas, conforme B. (`app/ponto/janelas.py:10–21`; `app/folha/retrato_folha.py:1380–1382`; `app/folha/retrato_folha.py:1399`; `app/folha/vigia_retido_calado.py:55–58`)
+
+`competencias_sem_retrato` é publicado, mas não participa do alarme: este consulta apenas `cego`, `calados` e `dias_sem_leitura_sistema`. (`app/folha/management/commands/vigiar_retido_calado.py:16–17`; `app/folha/management/commands/vigiar_retido_calado.py:37–41`)
+
+**D. Dois relógios ainda fora da borda.**
+
+- **Média — relatório.** `furos_espelho` chama `escalas_em_limbo(empresa)`, que lê outro `localdate()`. Caso: borda **15/11 às 23:59:59**; limbo executado em **16/11 às 00:00:01**; células de col7 em 15/16/17 com `trabalha=None,None,True`. Pelo dia da borda, col7 entra no limbo; pelo relógio interno, sai: **1 → 0**. (`app/relatorios/views.py:1554`; `app/relatorios/furos.py:59–68`; `app/escala/models.py:1092–1095`)
+
+- **Média — drawer.** `_vivas_de(disp)` não recebe instante; seu wrapper chama `pergunta_viva(p)` sem `hoje/agora`, permitindo `date.today()` e `_tz.now()`. Caso: pergunta materializada de **20/09/2026**, via `completude_turno`, sem resposta/validação/célula, sem tranca, marco sem fato e falta ainda acusada. Em **20/11**, permanece viva; em **21/11**, sai da janela e é considerada materializada: **1 → 0 perguntas**, embora o calendário ainda receba o instante anterior da borda. (`app/colaboradores/services/drawer.py:79–80`; `app/colaboradores/services/drawer.py:123–124`; `app/chamados/juizes.py:1502–1504`; `app/chamados/juizes.py:595–621`; `app/chamados/juizes.py:696–703`; `app/escala/servico_jornada.py:387`)
+
+**E. `padrao=` dos dois commits: [nao verificado].** [nao verificado]
+
+A cópia não disponibiliza o histórico Git para consultar as mensagens ou o diff do c15b. No delta c16 apresentado, a centralização das competências corresponde a **Single Source of Truth**; a propagação do instante corresponde a **Clock Injection**. Não é possível afirmar se os campos declarados coincidem sem lê-los. (`app/folha/retrato_folha.py:1369–1383`; `app/relatorios/views.py:1519–1543`; `app/docs/GLOSSARIO.md:11`; `app/docs/GLOSSARIO.md:19`; [nao verificado])
+
+**F. Nenhum achado estrutural na migration.**
+
+A 0013 altera somente `help_text`, preservando `DateTimeField(db_index=True)` da definição anterior; não acrescenta coluna, índice nem transformação de dados. Depende expressamente da 0012. Ser esta a última migration de folha no `main`: **[nao verificado]**. (`app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:8–18`; `app/folha/migrations/0011_retratofolha.py:22`)
+
+**G. Dois achados adicionais.**
+
+- **Média — selo de “um relógio” aceita dois.** `_le_relogio` usa um conjunto, eliminando chamadas repetidas pelo nome. Substituir a linha do drawer por `_hoje_da_borda = timezone.localtime(timezone.now()).date()` mantém o teste verde, embora introduza uma segunda leitura. Na virada **20/10 23:59:59 → 21/10 00:00:01**, dia e calendário podem divergir. O mutante registrado só testa a introdução de `localdate()`. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:162–163`; `app/chamados/tests/test_e3_r3_c16_sem_banco.py:149–152`; `app/colaboradores/services/drawer.py:21–22`; `app/chamados/tests/e3_r3_c16_mutantes.py:34`)
+
+- **Baixa — G3 permanece parcialmente incorreto no texto curado.** A docstring ainda afirma que o legado cai em `sem_causa`/sem saldo. Contraexemplos: legado `sem_codigo_dominio` produz **tipo `cadastro`, saldo `cadastro`**; legado `furo_espelho`, `dias=2`, produz **saldo `2a5`**. A referência “letra → fio em `LETRA_DO_FIO`” também está invertida: essa direção é `FIO_DA_LETRA`. (`app/folha/models.py:308–316`; `app/folha/retrato_folha.py:180–181`; `app/folha/retrato_folha.py:388–389`; `app/folha/retrato_folha.py:424–432`; `app/folha/retrato_folha.py:496–513`)
+
+Nenhum segundo juiz ou escritor fora da porta identificado no delta apresentado: a função nova delega às janelas, e a gravação continua no lavrador de `RetratoFolha`. Alteração histórica de asserções e valores reais de TXT/FechamentoMensal/dinheiro: **[nao verificado]**. (`app/folha/retrato_folha.py:1377–1383`; `app/folha/management/commands/lavrar_retrato_folha.py:77–79`)
+
+**VEREDITO: REPROVA.**
+
+## 15/11 18:35 · sessao d251dcf115c8 · - · - · origem=Ronald (tmux)
+
+Achados D/G:
+
+1. **Média — relatório ainda consulta outro relógio.** `furos_espelho` fixa `_agora` em `app/relatorios/views.py:1519`, mas chama `escalas_em_limbo(empresa)` em `:1554`; esta lê `timezone.localdate()` em `app/relatorios/furos.py:59`. Caso sintético: borda em **15/11/2026 23:59:59**, execução do limbo em **16/11 00:00:01**, células de col7 com `trabalha=None,None,True` em 15,16,17/11. O vínculo devolve esses valores diretamente (`app/escala/models.py:1092-1095`): o teste de dois dias incluiria col7 usando 15/16 e exclui usando 16/17 (`app/relatorios/furos.py:67-68`). Instrumento em memória confirmou contagem **1 → 0**; ocorrência em produção [nao verificado].
+
+2. **Média — drawer perde o instante ao consultar perguntas vivas.** `contexto_drawer` chama `_vivas_de(disp)` sem instante (`app/colaboradores/services/drawer.py:79-80`); o wrapper chama `pergunta_viva(p)` sem `agora`/`hoje` (`app/chamados/juizes.py:1502-1504`). A cadeia pode ler `date.today()` (`:595`) e `_tz.now()` (`app/escala/servico_jornada.py:387`).
+
+   Caso sintético executado com os corpos reais do C6 e janelas reais: pergunta de **20/09/2026**, materializada, via `completude_turno`, sem resposta/validação/célula, tranca falsa, marco sem fato e autoridade de falta acusando `orfao_14h`. Com relógio em **20/11**, wrapper retorna **1 pergunta viva**; em **21/11**, retorna **0**. A janela deixa de alcançar 20/09 (`app/chamados/juizes.py:595-621`) e o lastro absolve fora dela (`:696-697`). Assim, uma borda de 20/11 pode produzir calendário de 20/11 e banner de 21/11; ocorrência em produção [nao verificado].
+
+3. **Lacuna dos selos — cadeia não coberta.** Os testes R examinam apenas o AST de `contexto_drawer` e `furos_espelho` (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:149-159`), permitindo os dois caminhos acima. Os mutantes R alteram somente esses corpos (`app/chamados/tests/e3_r3_c16_mutantes.py:34-37`).
+
+As suítes c15+c16 sem banco passaram **19/19**, executadas com `PYTHONDONTWRITEBYTECODE=1`; saída não persistida [nao verificado]. Na cadeia principal do calendário, o instante recebido segue para pergunta viva, folha e D4 (`app/colaboradores/services/calendario.py:506`, `:614`, `:638`); nenhum outro relógio nessa cadeia foi comprovado [nao verificado].
 
 ## 15/11 18:34 · sessao e42efb08fe33 · - · - · origem=Ronald (tmux)
 
@@ -999,36 +1067,4 @@ A execução duplicada em C11 decorre da herança da classe C6. (`chamados/tests
 
 [truncado em 20000 de 26345 caracteres]
 
-## 15/11 17:22 · sessao a0d55dc0e9f7 · - · - · origem=Ronald (tmux)
-
-Conclusões para consolidar, todas só da cópia:
-
-- **Pergunta 2 — PROCEDE, com colisão/omissão específica:** a guarda literal exige aprovação para o hash, mas CODEX item 5 admite achado descartado com motivo e anexo ao opus, e manda subir ao opus após mais de três voltas sem esperar. O B não declara como esses caminhos continuam atravessando a guarda. Evidência: `CLAUDE.md:375-379`. A exigência de suite inteira verde antes do opus continua: `CLAUDE.md:377-378`, `app/docs/PISTA.md:113-114`.
-- **Sem colisão demonstrada** com motivo obrigatório, porta canônica, prioridade de instrumento ou pouso próprio: `CLAUDE.md:95-105`, `CLAUDE.md:290-295`, `CLAUDE.md:325-328`. O próprio registro B conserva redefinição, teto 2 livre, revisão e contrato antes da construção: `app/docs/BACKLOG.md:1954`.
-- **Contrato não é autorização de chamada única para sempre:** contrato de cinco linhas e revisão prévia conferem; se a forma mudar, exige nova chamada. `CLAUDE.md:394`, `app/docs/PISTA.md:170-176`. O literal “UMA vez antes” precisa ser lido junto dessa condição.
-- **Delta:** voltas do meio podem verificar só o delta (`CLAUDE.md:366-368`); pre-verificador recebe diff do hash da cópia (`CLAUDE.md:372-373`). Isso permite revisar delta, mas não define mecanismo que transfira prova do hash antigo ao novo [nao verificado].
-- **rc 75:** substituição da leitura por sonnet/falha do Codex é prevista com motivo (`CLAUDE.md:358-362`, `app/docs/PISTA.md:91-96`). Essa regra não define certificado persistente de aprovação por hash que a guarda poderia ler [nao verificado]. Não confundir com rc 75 da trava: ali é “a vez não chegou” (`CLAUDE.md:103-105`).
-- **A permanece independente:** está registrado vigente, enquanto B está só registrado para revisão antes de construir: `app/docs/RELATO.md:9208`, `app/docs/BACKLOG.md:1954`.
-- **TRAVA-MENOS-FILA-COM-SELO não consta nominalmente em `app/docs/CORTES.md` nesta cópia** [nao verificado quanto ao literal original]. Seu conteúdo verificável está em `CLAUDE.md:101-105`, `app/docs/RELATO.md:9057-9063` e `app/docs/PROMPTS.md:2087`. O contrato original declara regua/pre-push fora dessa porta (`app/docs/RELATO.md:9059`) e separa histórico/ESTADO por cruzarem trava+gerador (`app/docs/RELATO.md:9063`, `app/docs/BACKLOG.md:2581`).
-- **Pergunta 4 — NAO PROCEDE no escopo declarado:** instrumento com pouso próprio é permitido (`CLAUDE.md:325-328`); config do Code é proibida (`CLAUDE.md:350-352`), e exportada/escala/vínculo/atalho pedem `!` (`CLAUDE.md:265-268`). Nenhum desses atos é necessário pelo escopo B registrado (`app/docs/BACKLOG.md:1954`). Implementação futura respeitando o escopo: [nao verificado].
-- Para precedência normativa, a consolidação 7b é mais nova e prevalece sobre blocos antigos de PISTA (`app/docs/PISTA.md:10-12`).
-
-## 15/11 17:22 · sessao b835b1f65803 · - · - · origem=Ronald (tmux)
-
-- **Premissa da guarda: PROCEDE com correção.** `_GUARDA_MOTIVO` existe exatamente em `bin/suite.sh:236`, mas essa linha só declara a regex; a decisão é `bin/suite.sh:255` e a recusa rc 2 é `bin/suite.sh:262`. A regex admite `pre-opus <OBRA>` e `pouso <OBRA>`; não consulta prova nem hash. (`bin/suite.sh:236`, `bin/suite.sh:255`)
-
-- **`--dir` existe e escolhe a árvore: PROCEDE.** Parse em `bin/suite.sh:136`, atribuição em `bin/suite.sh:137`; descoberta da seleção efetiva em `${DIR:-$RAIZ}/app` em `bin/suite.sh:238`; montagem da cópia em `bin/suite.sh:284`–`296`. A árvore viva passada explicitamente como `--dir` é recusada pela proteção de limpeza; sem `--dir`, usa `$RAIZ/app`. (`bin/suite.sh:289`, `bin/suite.sh:290`, `bin/suite.sh:298`)
-
-- **Selo existente que morde: PROCEDE para a guarda atual de motivo.** O selo executa a suite real numa árvore falsa e detecta se chegou à trava, recusando também custo anterior à recusa; exige rc 2 sem motivo e aceita `pre-opus FIO-E0-V4-E3`. (`bin/tests/test_suite_motivo.sh:3`, `bin/tests/test_suite_motivo.sh:37`, `bin/tests/test_suite_motivo.sh:41`, `bin/tests/test_suite_motivo.sh:46`, `bin/tests/test_suite_motivo.sh:61`) Há mutantes explícitos, inclusive `aceita_sem_motivo`, e o juiz precisa reprovar cada mutante. (`bin/tests/test_suite_motivo.sh:156`, `bin/tests/test_suite_motivo.sh:162`, `bin/tests/test_suite_motivo.sh:164`) **Não prova hoje aprovação prévia por hash**: o positivo atual passa sem fornecer tal prova. (`bin/tests/test_suite_motivo.sh:61`)
-
-- **“Os três chamam por caminho próprio, fora da guarda”: NAO PROCEDE.** `volta_intermediaria.sh` chama a própria suite com `--dir` e `--volta`, atravessando a guarda; se o helper produzir seleção inteira, a guarda atual também a alcança. (`bin/volta_intermediaria.sh:32`, `bin/suite.sh:164`, `bin/suite.sh:255`) `regua.sh` e `pre-push.sh` usam diretamente `trava_teste.sh` e `manage.py test`, fora dessa guarda. (`bin/regua.sh:165`, `bin/regua.sh:168`, `bin/pre-push.sh:142`, `bin/pre-push.sh:186`)
-
-- **Lacuna literal sem `--dir`: PROCEDE.** `--motivo "pre-opus <OBRA>"` sem `--dir` é uso documentado para árvore viva, e hoje usa `$RAIZ/app`; o item B citado só especifica prova para “hash de `--dir`”, deixando esse caminho sem condição explícita de prova. (`bin/suite.sh:23`, `bin/suite.sh:129`, `bin/suite.sh:298`; literal do anexo, sem arquivo:linha disponível [nao verificado]) Se a pergunta quer dizer literalmente `--motivo "pre-opus"` **sem nome de obra**, já recusa rc 2, independentemente de `--dir`. (`bin/suite.sh:236`, `bin/suite.sh:255`, `bin/tests/test_suite_motivo.sh:48`)
-
-- **Momento da prova:** colocar a guarda junto à atual significa verificar antes de env-file, montagem e espera pela trava; a trava só é pedida posteriormente. (`bin/suite.sh:255`, `bin/suite.sh:276`, `bin/suite.sh:284`, `bin/suite.sh:317`) A árvore viva permanece um bind mount de `$RAIZ/app`; uma prova anterior à espera, sozinha, não comprova que esse conteúdo permaneceu igual até a execução. (`bin/suite.sh:298`, `bin/suite.sh:317`, `bin/suite.sh:322`; ausência de mutação durante a espera [nao verificado])
-
-- **Escopo material do código atual:** a porta executa testes em container com settings CI; `REGUA_DB`, quando existente, é apenas repassado. (`bin/suite.sh:305`, `bin/suite.sh:306`, `bin/suite.sh:319`, `bin/suite.sh:324`, `bin/suite.sh:325`) Nenhuma implementação do item B foi fornecida para provar ausência futura de alterações em exportada, dinheiro, config do Code, trava ou pouso [nao verificado]. O literal do anexo proíbe essas três últimas mudanças, mas o cumprimento futuro não é provado pelo código atual [nao verificado].
-
-Inspeção estática apenas; não executei o selo, pois ele cria, copia e remove arquivos temporários. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:11`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:16`)
-
-_5716 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5718 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
