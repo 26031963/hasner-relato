@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 14:46** · publicado em **15/11/2026 14:48** (UTC-3)
+> Ultima resposta processada: **15/11/2026 14:49** · publicado em **15/11/2026 14:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 14:49 · sessao 337107b7918f · E3-RESTO-R3 · censo · origem=Code
+
+Referências: T=`app/templates`; S=`app/static`; R=`app/folha/retrato_folha.py`; P=`S/css/hasner-ponto.css`; U=`S/css/hasner-ui.css`; I=`S/css/ui-table.css`; L=`S/leaflet/leaflet.css`.  
+1) Usados por LED: verde/entram (R:308), cinza/modulo_proprio (R:309), amarelo/admin (R:310), azul/colab (R:311), roxo/hoje (R:312), **vermelho/sem_acao_disponivel** (R:313), petroleo/sem_leitura_sistema (R:314). Único token de HEX_DO_TOKEN sem LED: **bloqueio** (R:306,323).   [nao verificado]
+Leitores diretos em R: LED_DA_LINHA → :316,317,318,1131; COR_DO_LED → :559,871,874,901,1106; HEX_DO_TOKEN → :559,1106,1130.  
+Testes leitores, testemunhas por arquivo: `app/folha/tests/test_retrato_folha_quadros.py:439,929,938`; `app/folha/tests/test_retrato_folha_drawer.py:73,81,83`.  
+Demais testes leitores: `app/chamados/tests/test_e3_r3_c4_sem_banco.py:74,90`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:372,374,375`; `app/chamados/tests/test_e3_r3_c11_sem_banco.py:242`; `app/chamados/tests/test_e3_r3_c12_sem_banco.py:38,39,41`.  
+Consumidores indiretos em produção: `app/folha/views_retrato.py:280,318,325,394,411,421,494`; `app/colaboradores/views.py:986,988`.  
+Renderização indireta: T/core/_led.html:16; T/core/_barra_gestao.html:67; T/folha/_retrato_lista.html:47; T/folha/_retrato_legenda.html:29; T/folha/_retrato_o_que_fazer.html:36,83; T/folha/_retrato_raiox.html:67; T/folha/_retrato_barra.html:134.  
+2) **A barra atual tem oito trios**, contando o fallback cinza (T/core/_barra_gestao.html:67). Ordem abaixo: background/border/color; escalas conferidas no [Tailwind v3, colors.js:14–256](https://github.com/tailwindlabs/tailwindcss/blob/v3.4.17/src/public/colors.js#L14).  
+vermelho=`#fef2f2/#fecaca/#b91c1c`→red-50/200/700; amarelo=`#fffbeb/#fde68a/#92400e`→amber-50/200/800; azul=`#eff6ff/#bfdbfe/#1e40af`→blue-50/200/800; verde=`#f0fdf4/#bbf7d0/#166534`→green-50/200/800 (T/core/_barra_gestao.html:67).  
+bloqueio=`#fee2e2/#fca5a5/#991b1b`→red-100/300/800; cinza/fallback=`#f8fafc/#e2e8f0/#475569`→slate-50/200/600; roxo=`#f5f3ff/#ddd6fe/#6d28d9`→violet-50/200/700; petroleo=`#f0fdfa/#99f6e4/#0f766e`→teal-50/200/700 (T/core/_barra_gestao.html:67).  
+3) Marca **B**: pertence aos sete trios incluindo cinza e excluindo petroleo; **E**: pertence ao trio adicional petroleo; sem marca: fora dos oito. Definição dos conjuntos: T/core/_barra_gestao.html:67.  
+Excluídos os minificados terceiros S/leaflet/leaflet.js:2, S/pdfjs/pdf.min.js:5 e S/pdfjs/pdf.worker.min.js:5; mantido o CSS não minificado L:1. staticfiles/, vendor/ e SVG avulsos ficam fora do recorte; SVG inline próprio entra. [não verificado]  
+Formato `hex[marca]×ocorrências fonte`; caixa normalizada, abreviações preservadas. Foram 315 literais distintos/5.899 ocorrências; excluídos números de ticket/pergunta como T/ponto/ausencias.html:237 e T/chamados/partials/_card_atendimento.html:191. Totais agregados sem relatório persistido: [não verificado].
+```text
+#000×3 T/core/onboarding.html:29; #003580×27 T/chamados/fio_colaborador.html:45; #004085×1 U:1177; #0055a5×14 T/chamados/partials/_relatorio_geo.html:33; #005a9e×1 P:20; #0078a8×1 L:265; #0078d4×186 P:18; #0369a1×26 P:605; #065f46×3 T/chamados/partials/_lote_preview.html:6; #066×1 T/chamados/meu_atendimento.html:8
+#075985×8 T/chamados/partials/_card_atendimento.html:265; #0891b2×9 T/colaboradores/partials/agenda_modal.html:156; #0a7×9 T/chamados/fio_colaborador.html:15; #0a7a4a×2 T/holerite/_lote_progresso.html:49; #0c447c×3 T/colaboradores/partials/painel_situacional.html:259; #0c4a6e×3 T/chamados/fio_colaborador.html:238; #0e7490×2 T/colaboradores/partials/painel_vinculo.html:240; #0ea5e9×7 T/chamados/partials/modal_fio.html:235; #0f172a×279 P:10; #0f5132×1 I:156
+#0f766e[E]×1 T/core/_barra_gestao.html:67; #106ebe×1 P:19; #10b981×11 T/chamados/detalhe.html:85; #14532d×4 T/chamados/meu_atendimento.html:222; #15803d×24 S/pwa.js:197; #166534[B]×78 P:12; #16a34a×176 P:12; #173404×2 T/core/dashboard_colaborador_v2.html:32; #185fa5×11 T/colaboradores/partials/painel_vinculo.html:74; #1a1a2e×40 P:35
+#1a3a5c×14 T/chamados/verificar_pdf.html:10; #1a3a6b×49 T/base.html:11; #1b6ca8×17 T/core/landing.html:9; #1d4220×1 T/comunicados/ciencia_ok.html:6; #1d4ed8×21 S/js/geo-colab-map.js:48; #1e293b×17 U:122; #1e3a5f×1 T/core/manual.html:10; #1e3a8a×17 S/pwa.js:356; #1e40af[B]×67 P:9; #1f2937×11 U:570
+#1f2a44×2 T/base.html:99; #1f2d4d×1 T/comunicados/ciencia.html:6; #1f3a93×1 U:183; #1f7a4d×2 T/core/dashboard_colaborador_v2.html:67; #222×2 L:583; #22c55e×4 T/colaboradores/partials/painel_colaborador.html:70; #2563eb×48 P:9; #27500a×1 T/core/dashboard_colaborador.html:148; #27ae60×2 T/colaboradores/gestao_usuarios.html:70; #2c3a58×1 T/comunicados/ciencia.html:7
+#2f57a4×3 T/comunicados/ciencia.html:11; #333×6 I:146; #334155×56 P:10; #334e68×3 T/relatorios/builder.html:12; #33523a×1 T/comunicados/ciencia_ok.html:7; #3730a3×6 T/chamados/partials/_lista_chamados.html:63; #374151×121 U:866; #378add×1 T/core/_voltar.html:7; #38f×1 L:268; #3b6d11×10 T/core/dashboard_colaborador.html:67
+#3b82f6×4 T/chamados/partials/modal_fio.html:76; #3c3489×1 T/core/dashboard_colaborador.html:91; #3f6212×2 T/chamados/partials/_card_atendimento.html:107; #431407×1 T/relatorios/furos.html:26; #444×5 T/chamados/meu_atendimento.html:9; #475569[B]×171 P:10; #4ade80×6 T/base.html:68; #4b0082×1 U:1172; #4b5563×2 U:349; #4c1d95×3 T/chamados/detalhe_local.html:226
+#4f46e5×6 T/escala/minha_escala.html:43; #534ab7×2 T/core/dashboard_colaborador.html:84; #555×8 T/core/onboarding.html:19; #585858×1 L:542; #5872a8×2 T/comunicados/ciencia.html:5; #5a6679×2 T/core/dashboard_colaborador.html:189; #5a6a85×4 P:36; #5b21b6×1 T/core/painel_tv.html:71; #5b4a12×2 T/core/_copiloto.html:419; #5bb8f5×3 T/core/dashboard_colaborador.html:12
+#60a5fa×3 T/core/manual.html:29; #6277eb×1 U:919; #633806×2 T/core/dashboard_colaborador.html:30; #6366f1×16 U:1182; #64748b×524 P:10; #65a30d×2 T/ponto/_fech_linha.html:11; #664d03×1 I:157; #666×14 L:571; #6b7280×28 U:374; #6d28d9[B]×20 T/chamados/detalhe_local.html:223
+#6ee7b7×1 T/chamados/partials/modal_fio.html:435; #757575×1 L:536; #777×3 L:444; #78350f×14 T/chamados/detalhe_local.html:248; #7a3500×2 T/core/dashboard_colaborador_v2.html:32; #7a5c00×3 T/core/_copiloto.html:35; #7aa7ff×1 I:130; #7c2d12×21 T/chamados/partials/modal_fio.html:622; #7c3aed×39 T/chamados/detalhe_local.html:222; #7c93c4×1 T/comunicados/ciencia.html:4
+#7dd3fc×1 T/chamados/partials/modal_fio.html:312; #7f1d1d×16 T/chamados/detalhe_local.html:156; #842029×1 I:158; #84cc16×1 T/ponto/_fech_linha.html:10; #854d0e×33 P:473; #854f0b×4 T/core/dashboard_colaborador.html:31; #86efac×7 T/chamados/meu_atendimento.html:409; #888×2 T/core/gate_apk.html:4; #8896ab×30 P:37; #8a2318×1 T/comunicados/console.html:9
+#8a4b09×2 T/ponto/bater_ponto_v2.html:21; #8a5a12×1 T/ponto/bater_ponto_v2.html:18; #8b5cf6×2 T/ponto/espelho.html:117; #8c2e22×1 T/core/_icone_pauta.html:18; #92400e[B]×123 P:13; #9333ea×1 T/relatorios/index.html:196; #93c5fd×7 T/chamados/painel_gestao.html:539; #94a3b8×59 P:10; #97c459×1 T/core/dashboard_colaborador.html:148; #991b1b[B]×84 P:11
+#997×1 T/chamados/fio_colaborador.html:54; #999×9 I:139; #99f6e4[E]×1 T/core/_barra_gestao.html:67; #9a3412×17 U:359; #9a4a00×1 T/ponto/bater_ponto_v2.html:13; #9ca3af×11 U:931; #9d174d×6 T/colaboradores/partials/_lista_tabela.html:27; #9dc49b×1 T/comunicados/ciencia_ok.html:4; #a08a4a×3 T/core/_copiloto.html:36; #a16207×3 T/chamados/partials/modal_fio.html:319
+#a21caf×1 T/escala/plano_folgas.html:104; #a32d2d×4 T/core/dashboard_colaborador.html:112; #a5b4fc×1 U:877; #a5f3fc×1 T/colaboradores/partials/painel_vinculo.html:240; #a78bfa×1 T/core/manual.html:31; #a855f7×1 U:1182; #a8b3c4×1 T/base.html:108; #aaa×1 T/colaboradores/gestao_usuarios.html:45; #ad6800×1 T/ferias/_meu_atendimento_ferias.html:3; #afa9ec×1 T/core/dashboard_colaborador.html:91
+#b45309×45 S/pwa.js:196; #b5d4f4×7 T/core/_voltar.html:6; #b91c1c[B]×67 P:472; #bae6fd×15 T/chamados/partials/_card_atendimento.html:227; #bbb×2 L:321; #bbf7d0[B]×30 P:478; #be185d×1 T/escala/plano_folgas.html:102; #bfdbfe[B]×36 P:480; #c00×6 T/chamados/fio_colaborador.html:18; #c0392b×1 T/holerite/historico_lotes.html:29
+#c2410c×34 T/chamados/painel_gestao.html:108; #c4b5fd×4 T/colaboradores/partials/_calendario_grade.html:73; #c7d2fe×2 T/colaboradores/partials/_calendario_grade.html:132; #c9efdb×1 T/core/dashboard_colaborador_v2.html:67; #ca8a04×4 T/colaboradores/partials/_calendario_grade.html:180; #cbd5e1×210 P:10; #ccc×6 S/js/hasner-icons.js:53; #cce5ff×1 U:1176; #cdd7e5×1 T/chamados/fio_colaborador.html:116; #cfe3f7×1 T/folha/_retrato_o_que_fazer.html:74
+#cffafe×1 T/escala/plano_folgas.html:103; #d0ecd3×1 T/core/dashboard_colaborador_v2.html:105; #d1d5db×31 U:35; #d1e7dd×1 I:156; #d1fae5×1 T/core/onboarding.html:36; #d3e7fb×1 T/core/dashboard_colaborador_v2.html:57; #d6dde8×1 T/ponto/bater_ponto_v2.html:59; #d7dee8×3 T/base.html:98; #d8b4fe×8 T/chamados/partials/_card_atendimento.html:66; #d97706×61 P:13
+#d9a521×1 T/core/_icone_pauta.html:13; #d9e2ef×2 T/comunicados/console.html:47; #db2777×1 T/inteligencia/index.html:377; #dbeafe×44 P:9; #dc2626×209 P:11; #dce8f5×16 T/core/dashboard_colaborador.html:40; #dcecc3×2 T/core/dashboard_colaborador_v2.html:61; #dcfce7×70 P:12; #ddd×5 L:261; #ddd6fe[B]×3 T/chamados/painel_gestao.html:78
+#dde×2 T/colaboradores/partials/vinculos_tabela.html:12; #dde2f2×1 U:911; #dfefff×1 I:129; #e08080×1 T/chamados/regularizacao_editar.html:11; #e08e00×2 T/chamados/fio_colaborador.html:18; #e0bbff×1 U:1171; #e0ddfb×1 T/core/dashboard_colaborador_v2.html:79; #e0e6ef×1 T/chamados/fio_colaborador.html:12; #e0e7ff×3 T/chamados/partials/_lista_chamados.html:63; #e0f0ff×9 T/colaboradores/lista.html:14
+#e0f2fe×4 T/chamados/fio_colaborador.html:238; #e0f2ff×1 U:343; #e2d5a8×8 T/core/_copiloto.html:86; #e2e8f0[B]×480 P:10; #e5533d×4 T/base.html:293; #e5b4ae×1 T/comunicados/console.html:9; #e5e7eb×39 P:516; #e5e7ff×1 U:882; #e6f1fb×2 T/core/_voltar.html:6; #e6f2fa×3 T/core/landing.html:8
+#e8edf5×1 T/chamados/fio_colaborador.html:27; #e8effe×1 T/login.html:13; #e8f0f8×2 P:30; #e8f0fe×6 T/core/_copiloto.html:186; #e8f4ff×1 T/login.html:13; #e9d5ff×3 T/ponto/_fech_linha.html:7; #e9ecef×1 I:70; #ea580c×20 T/chamados/partials/modal_fio.html:629; #eab308×7 T/colaboradores/partials/_calendario_legenda.html:34; #eaf0fb×1 P:448
+#eaf3de×7 T/core/dashboard_colaborador.html:66; #eaf3fb×2 T/escala/folga_calendario_editar.html:98; #ecfccb×1 T/escala/plano_folgas.html:104; #ecfdf5×4 T/chamados/partials/modal_fio.html:118; #ecfeff×2 T/colaboradores/partials/painel_vinculo.html:240; #ede9fe×8 T/chamados/fio_colaborador.html:180; #eee×4 T/chamados/regularizacao_editar.html:26; #eeedfe×2 T/core/dashboard_colaborador.html:83; #eef2f7×13 T/chamados/fio_colaborador.html:116; #eef2ff×9 S/js/geo-colab-map.js:50
+#eef3f8×1 T/core/_copiloto.html:286; #eef3fa×9 T/core/dashboard_colaborador_v2.html:56; #eef3fb×1 T/comunicados/ciencia.html:4; #eef4fc×1 T/login.html:20; #eef5ff×1 I:44; #eef8ee×1 T/comunicados/ciencia_ok.html:4; #ef4444×13 T/base.html:173; #ef9f27×2 T/core/dashboard_colaborador.html:29; #eff6ff[B]×44 T/chamados/detalhe_local.html:46; #f0c040×1 T/chamados/regularizacao_painel.html:7
+#f0e6c8×3 T/core/_copiloto.html:83; #f0f0f0×1 T/chamados/fio_colaborador.html:88; #f0f4f8×8 T/colaboradores/lista.html:7; #f0f4ff×3 T/base.html:23; #f0f6ff×11 P:361; #f0f7ff×3 T/colaboradores/partials/painel_colaborador.html:99; #f0f9ff×24 T/chamados/partials/_card_atendimento.html:227; #f0fdf4[B]×43 T/chamados/detalhe_local.html:177; #f0fdf8×1 T/chamados/meu_atendimento.html:7; #f0fdfa[E]×1 T/core/_barra_gestao.html:67
+#f1f3f4×1 T/core/_copiloto.html:171; #f1f3f5×1 I:48; #f1f5f9×193 P:10; #f3e8ff×6 T/colaboradores/partials/_calendario_grade.html:76; #f3f4f6×9 U:373; #f3f4ff×1 U:876; #f4f4f4×2 L:307; #f4f6f8×4 T/core/gate_admin_mobile.html:4; #f4f7fc×3 P:437; #f59e0b×56 T/chamados/detalhe.html:84
+#f5a623×2 T/core/dashboard_colaborador.html:193; #f5f3ff[B]×8 T/chamados/painel_gestao.html:78; #f5f5f5×1 T/holerite/comprovante.html:16; #f7c94b×1 T/core/_icone_pauta.html:12; #f7f9fc×2 T/comunicados/console.html:47; #f87171×2 T/base.html:70; #f8d7da×1 I:158; #f8fafc[B]×131 P:10; #f8fbff×26 T/core/dashboard_colaborador.html:40; #f97316×7 T/core/_painel_card.html:19
+#f9fafb×10 U:390; #f9fbff×1 U:620; #facc15×3 T/core/_icone_barra.html:8; #fae8ff×1 T/escala/plano_folgas.html:104; #faeeda×3 T/core/dashboard_colaborador.html:29; #faf5ff×7 T/chamados/detalhe_local.html:222; #fafafa×6 T/chamados/partials/modal_fio.html:388; #fafbfc×4 I:32; #fafcff×2 P:451; #fb923c×3 T/core/painel_tv.html:70
+#fbbf24×4 T/chamados/detalhe_local.html:335; #fbcfe8×1 T/colaboradores/vincular.html:83; #fbd0e0×1 T/core/dashboard_colaborador_v2.html:111; #fbd8d8×1 T/core/dashboard_colaborador_v2.html:89; #fbfcff×1 U:912; #fc0×2 T/colaboradores/beneficio_lote.html:10; #fca5a5[B]×32 T/chamados/partials/_pergunta_card.html:117; #fcd34d×15 T/chamados/partials/_card_atendimento.html:88; #fce7f3×6 T/colaboradores/partials/_lista_tabela.html:27; #fcebeb×2 T/core/dashboard_colaborador.html:111
+#fcfdff×1 I:43; #fdba74×13 T/chamados/partials/modal_fio.html:435; #fde047×3 T/base.html:69; #fde2c8×1 T/ponto/bater_ponto_v2.html:21; #fde68a[B]×46 T/chamados/detalhe_local.html:7; #fdecea×1 T/comunicados/console.html:9; #fdf2e0×1 T/ponto/bater_ponto_v2.html:18; #fdf4ff×1 T/relatorios/index.html:195; #fecaca[B]×50 P:479; #fed7aa×18 T/chamados/painel_gestao.html:108
+#fee2e2[B]×76 P:11; #fef08a×4 T/colaboradores/partials/_calendario_grade.html:74; #fef2f2[B]×51 T/chamados/detalhe_local.html:154; #fef3c7×76 P:13; #fef9c3×28 P:473; #fefce8×14 T/chamados/partials/_card_atendimento.html:74; #ff6b00×17 P:21; #ffb3a7×1 T/core/_icone_pauta.html:17; #ffd591×1 T/ferias/_meu_atendimento_ferias.html:2; #ffe0e0×1 T/chamados/regularizacao_editar.html:11
+#ffe4e6×1 T/chamados/partials/_lista_chamados.html:40; #ffe6c2×1 T/core/dashboard_colaborador_v2.html:83; #ffe7ba×1 T/ferias/_meu_atendimento_ferias.html:5; #ffedd5×9 U:358; #fff×217 P:512; #fff1f2×2 T/chamados/partials/_lista_chamados.html:37; #fff3cd×1 I:157; #fff3e0×8 T/core/dashboard_colaborador.html:41; #fff3f3×1 T/core/painel_tv.html:22; #fff5f5×7 T/colaboradores/editar.html:269
+#fff6e0×1 T/chamados/regularizacao_painel.html:7; #fff7ed×40 T/chamados/partials/modal_fio.html:435; #fffbe6×1 T/ferias/_meu_atendimento_ferias.html:2; #fffbeb[B]×63 T/chamados/detalhe_local.html:246; #ffffff×24 P:29
+```
+4) Fora de B, famílias completas no conjunto de literais abaixo; **junto** significa trio demonstrado no mesmo componente/bloco. Escalas: [Tailwind colors.js:27–256](https://github.com/tailwindlabs/tailwindcss/blob/v3.4.17/src/public/colors.js#L27).  
+gray, **NEUTRA**, 50/200/700: `#f9fafb` T/core/onboarding.html:31; `#e5e7eb` T/core/onboarding.html:31; `#374151` T/folha/index.html:121; fontes dispersas.  
+orange, 50/200/700, **junto**: `#fff7ed` T/ponto/bater_ponto.html:175; `#fed7aa` T/ponto/bater_ponto.html:175; `#c2410c` T/ponto/bater_ponto.html:176.  
+yellow, 50/200/700: `#fefce8` T/ponto/espelho.html:118; `#fef08a` T/ponto/espelho.html:118; `#a16207` T/chamados/partials/modal_fio.html:319; fontes dispersas.  
+cyan, 50/200/700, **junto**: `#ecfeff/#a5f3fc/#0e7490`, todos T/colaboradores/partials/painel_vinculo.html:240.  
+sky, 50/200/700, **junto**: `#f0f9ff/#bae6fd/#0369a1`, todos T/escala/minha_escala.html:90.  
+indigo, 50/200/600: `#eef2ff/#c7d2fe` T/colaboradores/partials/_calendario_grade.html:132; `#4f46e5` T/ponto/espelho.html:59; fontes dispersas; 700 `#4338ca` ausente [não verificado].  
+purple, 50/200/600: `#faf5ff/#e9d5ff` T/ponto/_fech_linha.html:7; `#9333ea` T/relatorios/index.html:196; fontes dispersas; 700 `#7e22ce` ausente [não verificado].  
+teal, 50/200/700, **junto**: `#f0fdfa/#99f6e4/#0f766e`, todos T/core/_barra_gestao.html:67; pertence a E, portanto sai da lista quando excluídos os **oito** trios atuais.  
+Demais NEUTRAS: slate já é cinza (`#475569`=600), com 50/200 na barra (T/core/_barra_gestao.html:67); slate700 também existe (P:10). Zinc/neutral têm apenas 50 `#fafafa` (T/escala/tipos_lista.html:65); stone sem trio-alvo [não verificado].  
+5) **Não encontrei `#0f766e` fora de retrato_folha.py, _barra_gestao.html e testes**, em busca textual incluindo ocultos; ausência sem arquivo:linha positivo [não verificado]. Ocorrências de produção: R:305,324 e T/core/_barra_gestao.html:67.
 
 ## 15/11 14:46 · sessao 94382d8dd9d9 · - · - · origem=Ronald (tmux)
 
@@ -739,41 +800,4 @@ Não achei outro leitor direto de DP, alias de DP, relação `decisoes` da pergu
 - DP + EventoCelula no mesmo atomic, inclusive falha do outbox: `app/chamados/tests/test_e4_expand.py:353`, `:375`, `:378`.
 - Teste do ato novo de conclusão: **sem teste**; valor ainda ausente das choices (`app/chamados/models.py:4002`).
 
-## 15/11 14:04 · sessao 6e36adaf9c8d · - · - · origem=Ronald (tmux)
-
-Censo de chamadores conferido por busca textual e AST em memória, sem executar Django/banco nem escrever arquivos:
-
-| Chamador | Depois do retorno |
-|---|---|
-| **Produção:** import local em `app/api/foto_recebida.py:39`, chamada `:48` | Ignora o `bool`; chama **sempre** `validar_pergunta(p.pk, user, disputa=...)` em `:51`; incrementa `n` somente se `r.get('ok')`, `:52-54`. |
-| `app/chamados/tests/test_porta_chamado_e3.py:46` | Exige `True`; chama novamente em `:48`, exige `False` dentro de `assertNumQueries(0)`, `:47-48`. |
-| Mesmo arquivo `:48` | Depois da asserção termina o teste, `:48-49`. | [nao verificado]
-| Mesmo arquivo `:53` | Exige `False`, relê banco e exige texto original preservado, `:54`. |
-| `app/chamados/tests/test_e3_10_cura_no_escritor.py:62` | Espera exceção; confere motivo `respondida_sem_texto`, ausência de carimbo/texto/DP e memória intacta, `:63-69`. |
-| Mesmo arquivo `:75` | Exige `True`; relê pergunta, confere par e predicado `respondida_sem_texto=False`, `:76-78`. |
-| Mesmo arquivo `:85` | Exige `False` e zero queries, `:84-85`; termina teste. | [nao verificado]
-| `app/chamados/tests/test_e4_expand_orm.py:176` | Exige `True`; chama outra vez em `:177`, exige `False`; compara foto e DP, `:178-179`. |
-| Mesmo arquivo `:177` | Compara foto preservando demais campos e ato resposta com instante anterior, `:178-179`. |
-| **Teste dinâmico:** `app/chamados/tests/test_e4_expand.py:207` | `self.executar(EMISSAO, 'responder_automaticamente', ...)`, exige `True`; repete em `:208`, exige `False`; compara foto, ato e uma gravação, `:209-211`. |
-| Mesmo arquivo `:208` | Compara foto, ato e uma gravação, `:209-211`. O executor extrai/compila função pelo nome, `:119-121`, `app/chamados/tests/e4_apoio.py:8-16`. |
-
-Não achei alias da função: todos os imports dela encontrados são locais sem `as`, nos arquivos acima; `models.py` **não** a reexporta na lista de compatibilidade (`app/chamados/models.py:4235-4237`). A busca de `.py` achou 9 chamadas sintáticas diretas e as duas chamadas dinâmicas de teste acima; qualquer chamada gerada externamente à cópia: `[nao verificado]`.
-
-A base arquivada contém **definição**, não outro chamador: `app/chamados/tests/e4b_c6_bases/0a65a5d64ae282a4ec55e468baf227b93609dcba/chamados/services/disputa_emissao.py.txt:1638-1658`. Menções em catracas e comentários não são chamadas (`app/chamados/tests/test_porta_resposta_pergunta.py:72`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:45`, `app/chamados/tests/test_porta_chamado_e3.py:102`).
-
-Cascata produtiva:
-
-- `resolver_disputas_de_foto` seleciona disputas **abertas** com motivo foto, `app/api/foto_recebida.py:65-68`; perguntas pelo episódio `motivo='foto_ausente', batida_origem=batida`, sem filtro de validação, `:71`.
-- Ignora também o total de `_validar_pelo_dono`, `:74`; relê disputa, `:76`; incrementa `fechadas` em `:77` **antes** de verificar `d.fechada_em`, `:78-79`. Esse retorno conta disputas tratadas, inclusive as que permanecem abertas (`:62`, `:77-88`).
-- Se ainda aberta, consulta `fio_vivo`, pode aparar motivo, `:81-82`; consulta `pode_fechar`, pode fechar, `:83-84`; se houver chamado, anexa ocorrência, `:85-87`; retorna contador, `:88`.
-- APIs: anexam foto antes do kernel (`app/api/views.py:850-851`, `app/api/views_core.py:834-835`); chamam kernel (`views.py:860-862`, `views_core.py:844-846`); retornam o contador como `disputas_fechadas` (`views.py:863`, `views_core.py:847`).
-- Para pergunta já validada, `validar_pergunta` relê banco, `app/chamados/services/validacao.py:410-417`; como a automática acabou de preencher `respondida_em`, passa a guarda `:418-420`; encontra `validada_em` e retorna exatamente `{'ok': False, 'estado': 'ja_validada', 'msg': 'Pergunta ja validada.', 'erros': []}`, `:421-423`. A materialização dessa função fica após esse retorno, `:450-477`.
-
-Cuidado com “efeito exato”: o save direto em `app/chamados/services/disputa_emissao.py:1676` dispara receivers:
-
-- `_becos_post_save_pergunta` agenda `fechar_beco_da_disputa` em `on_commit`, `app/chamados/signals.py:229-240`; o leitor classifica pelo `respondida_em`/estado dos chamados e `pode_fechar`, `app/chamados/services/becos.py:25-33`; pode resolver perguntas e fechar disputa, `:36-59`; evento reconsulta após commit, `:66-80`.
-- `_outbox_post_save_pergunta` atua sincronamente quando `update_fields` intersecta `CAMPOS_QUE_ACORDAM`, `app/chamados/signals.py:252-259`. Portanto distinguir “dois campos escritos diretamente” de eventuais efeitos condicionais da rede. Sem caso concreto, quais cascatas realmente ocorreram: `[nao verificado]`.
-
-Recusa de texto novo é mais precisa que “recusa sempre vazio”: `recusa_respondida_sem_texto` chama o predicado com o par solicitado, `app/chamados/services/fio.py:1595-1605`; só lança se o par for `respondida_sem_texto`. O teste cobre instante preenchido e `('', '   ', None)`, `app/chamados/tests/test_e3_10_cura_no_escritor.py:58-69`.
-
-_5666 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
