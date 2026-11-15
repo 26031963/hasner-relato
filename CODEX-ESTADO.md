@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 14:11** · publicado em **15/11/2026 14:15** (UTC-3)
+> Ultima resposta processada: **15/11/2026 14:38** · publicado em **15/11/2026 14:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 14:38 · sessao b0efe9af1207 · - · - · origem=Ronald (tmux)
+
+Achados somente leitura; nenhum arquivo editado.
+
+- **B — três selos de escrita:** `chamados/juizes.py:346` atribui `resposta_colab` no adaptador. Guarde `_resposta` e exponha-a em `__getattr__`, mantendo o adaptador estritamente de leitura; testes permanecem intocados (`test_contract_par_resposta.py:90`, `test_contract_texto_com_carimbo.py:166`, `test_e3_porta_A_escritor_do_par.py:229`).
+- **B — contador 24→21:** comparação com `151b0666a`, usando fontes integralmente em memória, encontrou três extras: `_q_resposta_conservada`, `reabrir_credor_de_pergunta_viva`, `Command._relavrar_orfa`. Os dois últimos têm código idêntico ao main; perderam classificação PAR porque a origem agora usa `getattr`, invisível ao detector de texto (`test_e3_catraca_respondedores.py:134`). Leia `p.resposta_colab` diretamente na adaptação permitida `_leitura_conservada`, com guarda de existência; isso restaura o fechamento transitivo dos predicados.
+- **B — extra SQL:** incorpore a expressão `legado_sem_instante` no próprio OR de `candidatas`, sem alterar sua lógica; a catraca então reconhece texto e instante no mesmo statement (`juizes.py:1668–1672`, detector `test_e3_catraca_respondedores.py:386`).
+- **A — equivalência SQL antiga:** a lambda exige carimbo para reconhecer texto (`test_e3_forma_sql_do_juiz.py:96`), contradizendo literalmente P5/P10 da matriz fornecida. Troque somente essa asserção para o texto da leitura canônica; o mutante da face reutiliza essa mesma asserção (`:143`).
+- **Incompatibilidade de selos:** a catraca exige uma leitura nominal `.respondida_em` no slot e PAR em `respondida_sem_texto` (`test_e3_catraca_respondedores.py:91`, `:507`), enquanto F1 proíbe esses atributos nesses sítios independentemente de serem aliases de atos (`test_e4c_f1_juizes_le_o_ato.py:134`, `:595`, `:599`). Não há catálogo produtivo consumido por esses testes; os registros moram nos próprios testes (`:22` e catraca `:74`). Propriedades em `LeituraDosAtos` não resolvem a contradição sintática. [nao verificado]
+
+Experimento sem escrita: adaptador recebendo `LeituraDosAtos`, leitura direta na origem e OR SQL incorporado produziram **21 respondedores, nenhuma declaração morta e nenhuma divergência declarada**. Não executei Django/banco. A solução exige registrar nominalmente os aliases canônicos nas asserções F1 ou atualizar o reconhecimento da fonte ato na catraca; esconder atributos por reflexão seria maquiagem. [nao verificado]
+
+## 15/11 14:37 · sessao 405c5a69e6cc · - · - · origem=Ronald (tmux)
+
+Classificação por leitura da cópia, sem edição:
+
+| Ocorrência | Classe | Fundamento |
+|---|---|---|
+| `e4b_c11_orm::test_RED_A6_beneficio_rejeitado_limbo` | A | Herda cenário texto sem instante, que P5 manda enxergar em D1: `test_e4b_c6_orm.py:77,81`; `test_e4b_c11_orm.py:122`. |
+| `e4b_c11_orm::test_RED_limbo_misto...` | A | Mesmo cenário herdado: `test_e4b_c6_orm.py:154`. |
+| `e4b_c6_orm::test_RED_limbo_misto...` | A | Mesma causa P5: `test_e4b_c6_orm.py:77,81`. |
+| `e4b_c6_memoria::test_RED_limbo...` | A | Texto sem instante permanece vivo; `materializada_em` deve ficar `None`: `test_e4b_c6_memoria.py:110-112`; matriz §4 P5. |
+| `e4b_classe_e_memoria::test_P3_P4_evento_recusado...` | A | `q.carimbar` só deve ser chamado no caso texto vazio; texto `'08:00'` permanece vivo: `test_e4b_classe_e_memoria.py:1015-1024`; matriz §4 P5. |
+| `e4b_classe_e_memoria::test_mutantes_mordem...` | A | Erro secundário à asserção anterior: `test_e4b_classe_e_memoria.py:1051-1054`. O mutante ainda morde no primeiro caso vazio. |
+| `e4b_c12_orm::test_RED_desligamento` | A | P5 torna o limbo da competência aberta vivo (`test_e4b_c12_orm.py:60`); gate recusa fechamento (`models.py:422`). Resultado esperado: chamado aberto, zero pauta e sem carimbos, inclusive após repetição. |
+| `fechar_disputa_materializada::test_pergunta_materializada...` | A | Texto sem instante entra em D1 antes do carimbo: `test_fechar_disputa_materializada.py:41-43,60`; matriz §4 P5. `fechada_em` deve continuar `None`. |
+| `materializar_carimba_respondida::test_carimba...` | A | Mesmo P5: `test_materializar_carimba_respondida.py:62,75-79`; os três carimbos devem continuar nulos. |
+| `reconciliar_pergunta_orfa::test_06...` | A | Mesmo P5: `test_reconciliar_pergunta_orfa.py:104,111-114`; esperado `n=0`, FK e carimbos nulos. |
+| `o261e_f2_ramo_e_i20::test_caso2...` | A | P5 conserva texto; motivo `batida_ausente` não tem marco próprio, portanto concordância não mata: `test_o261e_f2_ramo_e_i20.py:260-261`; `juizes.py:1046-1048`. Premissa deve ser `assertTrue`. |
+| `e4_passivo::test_classe_c...` | B | Código converte falta de porta em resultado errado: `backfill_fio_morto_e4b.py:264-265`; teste exige `segue_sem_porta`: `test_e4_passivo.py:70`. Cura: nessa atribuição, ação humana sem porta recebe `SEGUE`, mantendo `ato`. | [nao verificado]
+
+Reproduzi sem banco os dois testes de memória: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4b_c6_memoria.C6MemoriaTest.test_RED_limbo_tem_motivo_proprio_e_limpeza_continua chamados.tests.test_e4b_classe_e_memoria.AlcanceTest.test_P3_P4_evento_recusado_segue_pelos_juizes`: `Ran 2`, `FAILED (failures=2)` [saída do comando; não persistida]. [nao verificado]
+
+Achado adicional B: `test_fio_le_o_juiz.py:208-215` conserva validação de 16/10 com resposta de 18/10 (`:171-173`). A adaptação fabrica atos sintéticos em ordem temporal; a resposta posterior apaga a validação (`atos_pergunta.py:46-48`). A conservação R/V deve respeitar a projeção legada, sem essa reabertura artificial; teste intocado. [nao verificado]
+
+## 15/11 14:37 · sessao d3c03c670f69 · - · - · origem=Ronald (tmux)
+
+Todos os seis grupos de custo são B; nenhuma mudança literal da matriz autoriza subir contagem/teto (`chamados/tests/test_e3_v4_orm.py:91`, `test_selo_memo_pergunta_viva.py:178`, `escala/tests/test_f3_beco1_folga_na_lista.py:398`).
+
+- **Memo**: `_chave_memo_pv` consulta atos e batidas, duas vezes por primeira chamada e novamente em repetições (`chamados/juizes.py:956`, `:960`, `:998`, `:1010`). Cura: chave estritamente em memória; snapshots de decisões/plantios entram quando já carregados. Incluir os campos escalares anteriores e dados de célula/âncora preserva mutações sem `save` (`test_selo_memo_pergunta_viva.py:117`).
+- **Tranca/9 queries/SNC2**: projeção consulta atos antes da guarda de tranca (`chamados/juizes.py:1507`, `:1513`). Antecipar a mesma guarda dentro do juiz evita leitura inútil para perguntas mortas. `select_related('ato_por')` nas leituras extras explica consultas a `auth_user` contadas pelo SNC2 (`:338`; `test_snc2_toque_em_lote.py:105`).
+- **Modal**: fio já oferece decisões com autores por prefetch (`chamados/services/fio.py:257`). `_leitura_da_pergunta` chama `.select_related()` e perde esse prefetch (`chamados/juizes.py:338`). Consumir cache carregado diretamente; conservar projeções em lote.
+- **F5/C11**: `alimentar_portas` julga individualmente (`chamados/juizes.py:1780`), `_no_app` consulta outro lote avulso (`:1801`; `pergunta_no_app.py:59`) e C11 reprojeta por dia (`escala/services/cadastro_realidade.py:502`). Alimentar esses mesmos objetos com snapshot comum; leitores continuam perguntando ao juiz.
+- **Carga**: tarefa já lê decisões e correspondências conservadas (`tarefa_do_dia.py:419`, `:428`); nova carga repete ambas (`carga_pergunta_viva.py:80`, `:82`). Preservar resultados integrais e reutilizá-los em `LeiturasDaVida`, mantendo construção direta independente com três queries (`test_e4c_f1v6_orm.py:71`).
+- **Relavra ≤8**: mesmas consultas duplicadas da chave atingem pergunta validada que deveria morrer na primeira projeção (`relavra_via.py:242`; `juizes.py:1509`).
+
+**Limite real do desenho:** novos atos via `registrar` usam `bulk_create`, sem `post_save` (`models.py:4096`). O evento existente alcança somente perguntas com célula (`models.py:3317`, `:3328`; `ponto/portas/celula.py:954`). Portanto receiver de `EventoCelula` seria incompleto. Detectar alteração persistida sem atualizar a instância, sem SQL e sem aviso do escritor exige novo mecanismo [não verificado]. Não recomendo declarar invalidabilidade universal apenas com cache em memória. Os testes locais P7 alteram relações em memória e podem ser preservados integralmente (`test_e4c_f1_juizes_le_o_ato.py:277`; `test_e4c_f1v6_matriz.py:171`).
+
+## 15/11 14:33 · sessao 9455ebe3d1c5 · E3-RESTO-R3 · construtor · origem=Code
+
+Cura na cópia; **GREEN integral e ruff zero [nao verificado]**. [Entrega — 36 linhas](chamados/tests/e3_r3_c12_entrega.txt:1).
+
+| Classe | Blocos |
+|---|---:|
+| A | 40 |
+| B | 25 |
+| C | 9 |
+
+[Classificação individual](chamados/tests/e3_r3_c12_classificacao.txt:2): seis A também tinham regressões corrigidas no código. Os testes B permanecem intactos. [Auditoria](chamados/tests/e3_r3_c12_auditoria.txt:15).
+
+Evidência local: **314 testes OK**, quatro REDs contra c11 e **49/49 mutantes mortos por asserção**. Comandos e `arquivo::função` constam na [entrega](chamados/tests/e3_r3_c12_entrega.txt:21).
+
+Os 40 módulos foram tentados: 16 GREEN; 24 pararam por dependências ausentes. [Resultados por módulo](chamados/tests/e3_r3_c12_modulos.txt:3).
+
+**PERGUNTA:** qual token usar sem colisão? Mantido `#0f766e`, conforme solicitado. [Registro](folha/retrato_folha.py:303).
+
+LEI-AKITA: `padrao=Single Source of Truth / Aggregate Root; Clock Injection; CQRS com projecoes reconstruiveis`. [Referências](chamados/tests/e3_r3_c12_entrega.txt:36).
 
 ## 15/11 14:11 · sessao e8e3cd768849 · CORTES-1358-B · sonda · origem=Code
 
@@ -810,95 +878,4 @@ B — evidências no snapshot:
 
 Sugestão ao consolidador: Q1 deve registrar a ressalva literal e o deslocamento; não converter ausência de censo atual em “zero”, nem confundir a guarda extra com correção do risco sobre validação (`app/chamados/services/disputa_emissao.py:1663-1679`; `app/api/foto_recebida.py:25`, `:48`).
 
-## 15/11 13:50 · sessao 9051fd3ab9a9 · - · - · origem=Ronald (tmux)
-
-Portões identificados: V1 lê `pergunta_viva` em `chamados/reconciliador.py:399` antes de `.carimbar` em `:406`; V5 lê em `chamados/services/disputa_emissao.py:2069` antes de `.carimbar` em `:2081`.
-
-Para V1, extrair corpo integral com `e4_apoio.funcao`, fornecer `_tem_turno_aberto=False`, motivo permitido, texto vazio, C=None, `carimbar=Mock`, e importar o C6 real do harness. Esperado: retorno False e zero chamadas ao carimbo (`chamados/reconciliador.py:365`).
-
-Para V5, reutilizar `test_e4b_classe_e_memoria.AlcanceTest` e seu `resolver`, que executa o corpo produtivo integral (`chamados/tests/test_e4b_classe_e_memoria.py:382`). Cenário executado sem banco:
-
-```python
-c = E4B.AlcanceTest()
-c.setUp()
-p = c.p
-p.tipo_resposta = 'texto'
-p.data_evento = None
-p.celula = None
-p.chamado_destino = None
-p.chamado_destino_id = None
-c.pai._ancoradas = Mock(return_value=[])
-c.c6.__globals__['_pergunta_materializada_de_fato'] = lambda *a, **k: True
-completar_f1(c.c6.__globals__, '_dia_de_turno_da_pergunta')
-c.resolver(c.pai)
-assert p.carimbar.call_count == 0
-```
-
-Antes da cura: C6=False, carimbar=1, disputas_fechadas=1; captura persistida em arquivo [nao verificado]. A premissa direta `c.c6(p)` exige `E4B.modulos_isolados(c.mods)` (`chamados/tests/test_e4b_classe_e_memoria.py:382`).
-
-Censo AST local: oito chamadas, nos sítios `chamados/reconciliador.py:406`, `:596`; `chamados/models.py:3386`; `chamados/services/materializacao.py:567`, `:1283`, `:1437`; `chamados/services/disputa_emissao.py:2007`, `:2081`. Para P12, comparar `(arquivo, ast.unparse(chamada))`, preservando também argumentos. Nenhum arquivo editado.
-
-## 15/11 13:50 · sessao 633dd4848df6 · - · - · origem=Ronald (tmux)
-
-P9 tem três custos distintos:
-
-- `_leitura_da_pergunta` reconsulta decisões em cada chamada e a conservação consulta novamente: `chamados/juizes.py:329`, `chamados/models.py:4070`.
-- L2 faz `.exists()` por pergunta: `chamados/juizes.py:387`.
-- `_marco_do_efeito` agrega batidas por chamada avulsa: `chamados/juizes.py:362`. O caminho com carga já evita esse memo: `chamados/juizes.py:983`.
-
-Sugestão: carga fornecer decisões integrais agrupadas, linhas conservadas agrupadas e conjunto de IDs com trilha L2; `_leitura_da_pergunta` e `_retratada_com_trilha` recebem `carga` opcional, preservando o avulso e sua invalidação. A conservação canônica pode ser chamada uma vez sobre todas as perguntas, sem editar models: `chamados/models.py:4057`.
-
-Não usar somente `tarefa._dec`: ele já exclui atos futuros, enquanto o slot compara leitura cortada e integral: `chamados/services/tarefa_do_dia.py:421`, `chamados/juizes.py:447`.
-
-Propagar carga pelos leitores em `chamados/juizes.py:778`, `chamados/juizes.py:1451`, `chamados/juizes.py:1479` e pelas quatro chamadas de trilha em `chamados/juizes.py:902`, `chamados/juizes.py:920`, `chamados/juizes.py:923`.
-
-Testes existentes: [nao verificado]
-- N constante com carga e paridade avulsa: `chamados/tests/test_e3_c8b_sem_banco.py:268`.
-- Memo avulso isolado da carga: `chamados/tests/test_e3_c8b_sem_banco.py:302`.
-- Trilha L2 real: `chamados/tests/test_e3_c8b_sem_banco.py:421`.
-- Invalidação por ato, reabertura, plantio e retratação: `chamados/tests/test_e4c_f1_juizes_le_o_ato.py:277`.
-- A contagem ORM atual cobre apenas composição SQL; precisa extensão aos três sítios: `chamados/tests/test_e4c_f1v4_custo.py:107`.
-
-Risco: alterar os testes antigos que exigem exatamente duas leituras requer declarar as leituras adicionais de lote; a expectativa atual está em `chamados/tests/test_e3_c8b_sem_banco.py:279`. O limite documental de nove também precisa refletir a implementação: `chamados/services/carga_pergunta_viva.py:70`.
-
-Nenhum arquivo editado; nenhuma consulta a banco executada.
-
-## 15/11 13:46 · sessao 8d34801ce890 · E3-RESTO-R3 · construtor · origem=Code
-
-Base: `6fb74c6d285a3f280800a5965c41102ec7121244`. SHA256 do código: `6644768e0fea2a64ee4700a54bd0e01cf44b813decbd474b99c0294a13852a49`. [Manifesto](chamados/tests/e3_r3_c11_auditoria.txt:1)
-
-[Entrega completa — 29 linhas](chamados/tests/e3_r3_c11_entrega.txt:1), com `arquivo::função`, comandos e logs por item:
-
-| Item | RED antes da cura | GREEN |
-|---|---|---|
-| 1 — LU-01 | [FAILED](chamados/tests/e3_r3_c11_red1.txt:26) | [32 OK](chamados/tests/e3_r3_c11_green1.txt:41) |
-| 2 — dia no href e marca | [FAILED](chamados/tests/e3_r3_c11_red2.txt:25) | [4 OK](chamados/tests/e3_r3_c11_green2.txt:10) |
-| 3 — recorte das pautas | [FAILED](chamados/tests/e3_r3_c11_red3.txt:51) | [6 OK](chamados/tests/e3_r3_c11_green3.txt:15) |
-| 4 — relógio | [FAILED](chamados/tests/e3_r3_c11_red4.txt:69) | [3 OK](chamados/tests/e3_r3_c11_green4.txt:9) |
-| 5 — alarme passivo | [FAILED](chamados/tests/e3_r3_c11_red5.txt:16) | [2 OK](chamados/tests/e3_r3_c11_green5.txt:8) |
-| 6 — cor existente | [FAILED](chamados/tests/e3_r3_c11_red6.txt:29) | [2 OK](chamados/tests/e3_r3_c11_green6.txt:9) |
-| 7 — docstrings e drawer | [FAILED](chamados/tests/e3_r3_c11_red7.txt:36) | [3 OK](chamados/tests/e3_r3_c11_green7.txt:9) |
-
-Regressão local: **137 OK**; mutantes c11: **23/23 mortos por asserção**, com controles verdes. [Regressão](chamados/tests/e3_r3_c11_regressao.txt:168), [mutantes](chamados/tests/e3_r3_c11_mutantes.txt:550).
-
-Censo dos cinco leitores e escritores/leitores dos campos constam na [entrega](chamados/tests/e3_r3_c11_entrega.txt:14).
-
-LEI-AKITA: `padrao=Single Source of Truth / Aggregate Root; Clock Injection; CQRS com projecoes reconstruiveis`. [Referências](chamados/tests/e3_r3_c11_entrega.txt:29)
-
-Sem commit: o `git-dir` fica fora de `app`, único diretório autorizado para escrita. [Evidência](chamados/tests/e3_r3_c11_auditoria.txt:2). ORM, produção, renderização Django e certificação final: [nao verificado].
-
-## 15/11 13:29 · sessao 63adf9493c6c · - · - · origem=Ronald (tmux)
-
-Censo do residual `decidir → admin`:
-
-- **Folha:** dia muda `chamado→admin`; pessoa isolada `C→A`, misto com `colab` pode mudar `C→B`; outro dia `chamado` conserva C (`folha/fora_da_folha.py:89`, `:103`, `:214`, `:231`). Balde visual Admin permanece Admin (`folha/retrato_folha.py:193`).
-- **Vigia:** `alcance_por_rota_papel` muda `porta_fila|chamado→porta_fila|admin`; `alcance_porta_exige_o_admin` aumenta. Rota e `fio_vivo` permanecem (`chamados/services/vigia_fio.py:578`, `:601`, `:369`).
-- **Furo:** nenhum balde muda; lê rota (`chamados/services/furo_sem_canal.py:98`, `:104`).
-- **Cadastro:** nenhum balde muda; lê presença do envelope (`escala/services/cadastro_realidade.py:472`).
-- **Sombra:** projeções de fio e `exige_admin`, além da assinatura, mudam; `sem_porta`/`sem_fio` permanecem (`chamados/management/commands/diff_e3_sombra.py:57`, `:62`, `:63`, `:67`, `:75`). C17 e candidata usam o mesmo juiz; diferença nova entre lados é [nao verificado] (`:144`, `:145`).
-
-Atenção: fio admin residual atualmente publica `acao='validar'` pela expressão existente, antes `None` (`chamados/services/tarefa_do_dia.py:693`). Comentário contraditório em `:669` precisa acompanhar a cura.
-
-`LEI-AKITA: padrao=Single Source of Truth / Aggregate Root; Clock Injection; CQRS com projecoes reconstruiveis` — vocabulário em `docs/GLOSSARIO.md:11`, `:19`, `:24`; exigência em `docs/PLANO-PADROES.md:53`.
-
-_5658 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5662 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
