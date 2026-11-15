@@ -1,7 +1,160 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 20:23** · publicado em **15/11/2026 20:23** (UTC-3)
+> Ultima resposta processada: **15/11/2026 20:25** · publicado em **15/11/2026 20:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 20:25 · sessao 540be23be5a7 · BUG-ENC-CELULAS-FORMA · verificador · origem=Code
+
+O diff remove os dois repasses incompatíveis. Não encontrei chamador de produção residual que entregue chave composta ao tripwire. Permanecem dois problemas anteriores ao diff: alimentação potencialmente sem pad no fechamento e diferença entre os carregadores singular e plural. (`app/ponto/turnos.py:2162`; `app/ponto/services/vigia_de_hora.py:61`; `app/ponto/services/fechamento.py:605`; `app/ponto/turnos.py:2105`; `app/ponto/turnos.py:2154`.)
+
+Execução dos testes, RED anterior, GREEN, cumprimento dos tetos e alcance em produção: **[nao verificado]**. [nao verificado]
+
+**1. Quem produz, quem lê e todos os chamadores de produção**
+
+Os contratos são diferentes:
+
+| Função | Forma de `celulas` e leitores |
+|---|---|
+| `turnos_do_colab` | `{data: CelulaDia}` da janela com pad; alimenta candidatos por geradora, papel da ata e segmentação. Converte internamente para composta ao perguntar a `vinculo_do_dia`. (`app/ponto/turnos.py:1854`; `app/ponto/turnos.py:1893`; `app/ponto/turnos.py:1944`; `app/ponto/turnos.py:1961`; `app/ponto/turnos.py:1965`.) |
+| `dia_encerrado` | Repassa o argumento a `dia_encerrado_motivo`. (`app/ponto/turnos.py:2083`.) |
+| `dia_encerrado_motivo` | Repassa `{data: CelulaDia}` somente ao pareador; não fornece essa alimentação a `_escala_vigente` nem ao julgamento do fim previsto. (`app/ponto/turnos.py:2104`; `app/ponto/turnos.py:2105`.) |
+| `dias_encerrados` | `{(colaborador_id,data): CelulaDia}`; alimenta vínculo e DNA do encerramento. Depois do diff, não alimenta o pareador com esse mapa. (`app/ponto/turnos.py:2138`; `app/ponto/turnos.py:2153`; `app/ponto/turnos.py:2162`; `app/ponto/turnos.py:2178`; `app/ponto/turnos.py:2179`.) |
+
+O produtor canônico `celulas_do_periodo` constrói chaves compostas; o pareador, quando recebe `None`, carrega o pad e projeta para data. O leitor final do DNA procura `(self.colaborador_id,data)`. (`app/escala/alimentacao.py:73`; `app/ponto/turnos.py:1889`; `app/ponto/turnos.py:1891`; `app/escala/models.py:1120`.)
+
+**Chamadores que fornecem `celulas`, incluindo repasses internos:**
+
+| Chamador | Destino | Forma e alcance |
+|---|---|---|
+| `app/escala/utils.py:1581` | `turnos_do_colab` | Data, projetada da carga feita com `janela_com_pad`. (`app/escala/utils.py:1307`; `app/escala/utils.py:1308`.) |
+| `app/escala/utils.py:1898` | `turnos_do_colab` | Data; conserva células do pad e substitui a ata dos dias montados por cópias em memória. (`app/escala/utils.py:1881`; `app/escala/utils.py:1884`; `app/escala/utils.py:1886`; `app/escala/utils.py:1897`.) |
+| `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88` | `turnos_do_colab` | Data; carga `[ini−2,fim+2]`, que contém o pad atual `[ini−2,fim+1]`. (`app/ponto/management/commands/emitir_turno_aberto_retroativo.py:86`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:87`; `app/ponto/turnos.py:1847`.) |
+| `app/ponto/turnos.py:2104` | `turnos_do_colab` | Repassa o parâmetro de `dia_encerrado_motivo`. |
+| `app/ponto/services/fechamento.py:377` | `dia_encerrado` | Data; recorte do mapa recebido, com risco de pad incompleto explicado abaixo. (`app/ponto/services/fechamento.py:370`; `app/ponto/services/fechamento.py:375`.) |
+| `app/ponto/turnos.py:2083` | `dia_encerrado_motivo` | Repassa o parâmetro de `dia_encerrado`. |
+| `app/ponto/services/cartorio.py:1154` | `dias_encerrados` | Composta `(c.pk,x.data)`, sem `turnos`; agora não alcança o tripwire. (`app/ponto/turnos.py:2162`.) |
+
+**Demais chamadas de `turnos_do_colab`: todas omitem `celulas`, portanto recebem o default `None`.** (`app/ponto/turnos.py:1850`.)
+
+| Chamadas |
+|---|
+| `app/ponto/turnos.py:780`; `app/ponto/turnos.py:2162`; `app/ponto/turnos.py:2193`; `app/ponto/turnos.py:2925`; `app/ponto/turnos.py:3116` |
+| `app/ponto/turno_leitura.py:89`; `app/ponto/turno_leitura.py:95` |
+| `app/ponto/nucleo.py:47` |
+| `app/ponto/views.py:380`; `app/ponto/views.py:1588`; `app/ponto/views.py:3217` |
+| `app/relatorios/pdf_espelho.py:213`; `app/relatorios/pdf_espelho.py:451` |
+| `app/escala/regua_defesa.py:358` |
+| `app/escala/servico_jornada.py:249`; `app/escala/servico_jornada.py:403` |
+| `app/api/views.py:1441` |
+| `app/chamados/models.py:1359` |
+| `app/chamados/juizes.py:401`; `app/chamados/juizes.py:2168` |
+| `app/chamados/detector_anomalias.py:157` |
+| `app/colaboradores/services/drawer.py:45` |
+| `app/ponto/services/espelho.py:614` |
+| `app/ponto/services/bordas_realizado.py:66` |
+| `app/ponto/services/teto_na_lista.py:68` |
+| `app/ponto/services/vigia_pareador_celula.py:97` |
+| `app/ponto/services/esmeril_espelho.py:98` |
+| `app/ponto/services/triagem_batida.py:553` |
+| `app/ponto/services/regularizacao.py:61` |
+| `app/ponto/services/passivo_s84.py:82` |
+| `app/ponto/management/commands/detectar_par_relampago.py:101` |
+| `app/ponto/management/commands/dna_x_batida_real.py:69` |
+| `app/ponto/management/commands/marcar_abandono_provisorio.py:46` |
+| `app/ponto/management/commands/detectar_ausencias.py:337` |
+| `app/ponto/management/commands/vigia_plantio_overnight.py:38` |
+| `app/ponto/management/commands/verificar_nucleo.py:29` |
+| `app/ponto/management/commands/e6_oraculo.py:159` |
+| `app/ponto/management/commands/censo_fase_12x36.py:180` |
+| `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:124` |
+| `app/escala/services/escala_auto.py:87` |
+| `app/escala/services/impacto_troca.py:18` |
+| `app/chamados/services/materializacao.py:124`; `app/chamados/services/materializacao.py:221` |
+| `app/chamados/services/disputa_emissao.py:722` |
+| `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:145` |
+
+**Demais chamadas das outras três funções: todas omitem `celulas`.**
+
+| Destino | Chamadas |
+|---|---|
+| `dia_encerrado` | `app/ponto/services/vigia_de_hora.py:61`; `app/ponto/services/flip_auto.py:285`; `app/ponto/management/commands/detectar_ausencias.py:474` |
+| `dia_encerrado_motivo` | `app/chamados/reconciliador.py:1091` |
+| `dias_encerrados` | `app/ponto/turnos.py:2191`; `app/ponto/management/commands/supra_juiz.py:121`; `app/ponto/management/commands/emitir_furo_retroativo.py:63` |
+
+Os métodos homônimos chamados em `app/ponto/status_dia.py:274` e `app/core/services/painel_op.py:334` são de `CargaDaJanela`; chamam diretamente o corpo puro, sem passar pelas quatro funções públicas. (`app/ponto/turnos.py:3057`.)
+
+**Tupla residual em produção:** nenhum fornecedor acima entrega composta ao pareador depois do diff; a composta do cartório permanece no encerramento. Chamadores externos à cópia ou construídos dinamicamente: **[nao verificado]**. (`app/escala/utils.py:1581`; `app/escala/utils.py:1898`; `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:86`; `app/ponto/services/fechamento.py:375`; `app/ponto/turnos.py:2162`.)
+
+**Data sem pad: sim, há caminho no fechamento.** O envelope começa no início do corte 2 e termina no fim do corte 28; as células são carregadas nesse envelope sem ampliação. `_furos_encerrados` calcula o pad de cada dia, mas apenas copia o que encontra e sempre passa um dict, inclusive vazio. (`app/ponto/services/fechamento.py:584`; `app/ponto/services/fechamento.py:605`; `app/ponto/services/fechamento.py:606`; `app/ponto/services/fechamento.py:370`; `app/ponto/services/fechamento.py:377`.)
+
+Consequentemente, cortes **2 e 3** podem ultrapassar o envelope no início, e corte **28**, no fim. O dict não-`None` suprime a carga própria; o tripwire não verifica completude. É problema anterior ao diff; clientes nesses cortes e células efetivamente omitidas em produção são **[nao verificado]**. (`app/ponto/janelas.py:15`; `app/ponto/janelas.py:20`; `app/ponto/turnos.py:1847`; `app/ponto/turnos.py:1865`; `app/ponto/turnos.py:1889`.)
+
+**2. Testes existentes que quebrariam por chave composta** [nao verificado]
+
+Não encontrei teste existente passando composta diretamente ao pareador ou aos dois singulares. As compostas encontradas no teste existente são destinadas a `dias_encerrados`, cujo contrato continua válido. (`app/ponto/tests/test_c1_dias_encerrados.py:64`; `app/ponto/tests/test_c1_dias_encerrados.py:66`; `app/ponto/tests/test_c1_dias_encerrados.py:77`; `app/ponto/turnos.py:2162`.)
+
+O novo teste que passa composta ao pareador **espera `TypeError`**; o novo teste do cartório passa composta corretamente à casca plural. (`app/ponto/tests/test_bug_enc_celulas_forma.py:87`; `app/ponto/tests/test_bug_enc_celulas_forma.py:88`; `app/ponto/tests/test_bug_enc_celulas_forma.py:33`.)
+
+Resultado efetivo da suíte: **[nao verificado]**. [nao verificado]
+
+**3. Custo novo e selos de queries**
+
+**Sim: há uma nova consulta direta de células por execução alcançada do memo `_enc` do cartório.** Antes a alimentação não-`None` suprimia essa carga; agora a chamada sem `celulas` aciona `celulas_do_periodo` do pad, que executa um SELECT. Não é uma consulta por dia: o mapa de encerramento fica memoizado por corpo/janela. (`app/ponto/services/cartorio.py:1152`; `app/ponto/services/cartorio.py:1154`; `app/ponto/turnos.py:2162`; `app/ponto/turnos.py:1889`; `app/ponto/turnos.py:1891`; `app/escala/alimentacao.py:73`.)
+
+O cron chama o julgamento por colaborador; segunda passada e releitura podem abrir outro corpo e outro memo. O delta líquido total pode também mudar pela consulta complementar de geradoras. Volume, tempo e delta líquido de produção: **[nao verificado]**. (`app/ponto/management/commands/processar_cartorio.py:59`; `app/ponto/management/commands/processar_cartorio.py:65`; `app/ponto/services/cartorio.py:1021`; `app/ponto/services/cartorio.py:1086`; `app/escala/alimentacao.py:155`; `app/escala/alimentacao.py:157`.)
+
+**Existe cobertura indireta com teto:** o selo de chokepoint registra batida histórica com células e furos vivos, captura SQL, exige o fechamento dos chamados e cobra o teto. O outro ramo mede chamados que permanecem vivos. A cobrança usa `assertLessEqual`. (`app/ponto/tests/test_selo_chokepoint_escrita.py:281`; `app/ponto/tests/test_selo_chokepoint_escrita.py:428`; `app/ponto/tests/test_selo_chokepoint_escrita.py:437`; `app/ponto/tests/test_selo_chokepoint_escrita.py:443`; `app/ponto/tests/test_selo_chokepoint_escrita.py:464`; `app/ponto/tests/test_selo_chokepoint_escrita.py:478`; `app/ponto/tests/test_selo_chokepoint_escrita.py:293`.)
+
+O caminho é signal → `julgar_celula` → `julgar_colab` → `_turno_encerrado` para dia passado. (`app/ponto/signals.py:135`; `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:2040`; `app/ponto/services/cartorio.py:1397`.)
+
+Os testes novos verificam respostas e paridade, sem contagem de queries; o selo do D4 mede o painel com lote. Teto específico do cron e aprovação dinâmica desses tetos nesta obra: **[nao verificado]**. (`app/ponto/tests/test_bug_enc_celulas_forma.py:43`; `app/ponto/tests/test_e4_carga_paridade.py:148`; `app/core/tests/test_e4_7iii_lote_d4.py:43`; `app/core/tests/test_e4_7iii_lote_d4.py:60`.)
+
+**4. Lista, queryset e outros tipos**
+
+O tripwire verifica elementos iterados que sejam tuplas; **não valida que o argumento seja um mapa nem que suas chaves sejam datas**. Depois, o código exige `.values()` e `.items()`. (`app/ponto/turnos.py:1865`; `app/ponto/turnos.py:1893`; `app/ponto/turnos.py:1631`; `app/ponto/turnos.py:1961`.)
+
+Por leitura do código: lista não vazia contendo tupla dispara o `TypeError`; lista sem tuplas, inclusive vazia, chega a `.values()` e falha; queryset pode ser avaliado pela condição booleana e depois falhar na exigência de `.items()`. Execução desses casos: **[nao verificado]**. (`app/ponto/turnos.py:1865`; `app/ponto/turnos.py:1893`; `app/ponto/turnos.py:1631`.)
+
+Não encontrei fornecedor de produção usando lista/queryset nos quatro parâmetros; os fornecedores explícitos estão na tabela da pergunta 1. Há teste usando **`MappingProxyType({})`**, que é mapa e não `dict`, como alimentação válida. (`app/escala/utils.py:1581`; `app/escala/utils.py:1898`; `app/ponto/services/fechamento.py:377`; `app/ponto/services/cartorio.py:1154`; `app/ponto/tests/test_o142_turno_invariante_na_janela.py:54`; `app/ponto/tests/test_o142_turno_invariante_na_janela.py:169`.)
+
+**5. Classes que já reprovaram obra**
+
+| Classe | Parecer |
+|---|---|
+| Segundo juiz | Não identificado no diff: continuam as autoridades registradas e os mesmos corpos puros. (`app/core/juizes.py:212`; `app/core/juizes.py:239`; `app/ponto/turnos.py:1920`; `app/ponto/turnos.py:2161`; `app/ponto/turnos.py:3048`; `app/ponto/turnos.py:3057`.) |
+| Segundo escritor | Não identificado nas alterações: validação, carga e delegação, sem novo escritor de estado. (`app/ponto/turnos.py:1865`; `app/ponto/turnos.py:2153`; `app/ponto/services/vigia_de_hora.py:61`.) |
+| Relógio fora da borda | Não há nova leitura: o vigia fornece o instante deslocado; os defaults existentes só leem o relógio quando falta `agora`. (`app/ponto/services/vigia_de_hora.py:61`; `app/ponto/turnos.py:2102`; `app/ponto/turnos.py:2148`.) |
+| Derivação paralela | A recarga não cria regra concorrente: vínculo e pareamento continuam nas mesmas autoridades. (`app/ponto/turnos.py:1965`; `app/ponto/turnos.py:1997`; `app/ponto/turnos.py:2178`.) |
+| Selo/RED sem mordida | Há expectativas concretas para cartório/vigia e mutante que remove `mais=` do lote. Execução RED/GREEN/mutante: **[nao verificado]**. (`app/ponto/tests/test_bug_enc_celulas_forma.py:49`; `app/ponto/tests/test_bug_enc_celulas_forma.py:50`; `app/ponto/tests/test_bug_enc_celulas_forma.py:72`; `app/ponto/tests/test_bug_enc_celulas_forma.py:75`; `app/ponto/tests/test_e4_carga_paridade.py:159`; `app/ponto/tests/test_e4_carga_paridade.py:165`.) |
+| **ESMERIL-SEMANTICA** | **Permanece:** o mesmo nome representa dois formatos e alimenta leitores diferentes. O diff documenta e interrompe a passagem incompatível; não uniformiza o contrato. (`app/ponto/turnos.py:2076`; `app/ponto/turnos.py:2104`; `app/ponto/turnos.py:2138`; `app/ponto/turnos.py:2155`; `app/ponto/turnos.py:2178`.) |
+
+**6. Paridade entre lote, casca, cartório e vigia**
+
+**Lote versus casca plural:** para mesma janela, snapshot e alimentação completa, não encontrei divergência estática: ambos usam `_dias_encerrados_puro` e obtêm turnos pelo mesmo `_turnos_do_colab_puro`, com pad. Os testes disponíveis cruzam X/Y/Z, duas janelas e três instantes; paridade universal executada é **[nao verificado]**. (`app/ponto/turnos.py:2161`; `app/ponto/turnos.py:1920`; `app/ponto/turnos.py:2989`; `app/ponto/turnos.py:3048`; `app/ponto/turnos.py:3057`; `app/ponto/tests/test_e4_carga_paridade.py:47`; `app/ponto/tests/test_e4_carga_paridade.py:48`; `app/ponto/tests/test_e4_carga_paridade.py:145`.)
+
+**Plural/cartório versus singular/vigia: não há garantia universal.** Há contraexemplo além de X/Y, inferido do código:
+
+- Célula de `c1` aponta para vínculo vigente de `c2`. Isso já existe como cenário de teste: grava-se a geradora alheia e exige-se que `escala_vigente(c1,D)` a devolva. (`app/chamados/tests/test_e3_c8c_orm.py:68`; `app/chamados/tests/test_e3_c8c_orm.py:74`; `app/chamados/tests/test_e3_c8c_orm.py:78`.)
+- O singular entrega diretamente essa geradora à juíza; o plural e o lote carregam somente vínculos de `c1`. Assim, no plural a geradora falta, a juíza devolve `None` e o encerramento resulta em `sem_previsto`. (`app/escala/servico_jornada.py:61`; `app/escala/servico_jornada.py:63`; `app/ponto/turnos.py:2154`; `app/ponto/turnos.py:3002`; `app/escala/alimentacao.py:279`; `app/escala/alimentacao.py:281`; `app/ponto/turnos.py:2127`; `app/ponto/turnos.py:2129`.)
+- Com template noturno 19–07, nenhuma batida, nenhuma célula de `c2` nesse dia e consulta às 08h de D+1, o singular pode encerrar pelo template, enquanto plural/lote permanecem em `sem_previsto`. (`app/escala/models.py:1122`; `app/escala/models.py:1133`; `app/ponto/turnos.py:2122`; `app/ponto/turnos.py:2130`.)
+- No vigia às 09h, teto de 30 minutos desloca a pergunta para 08h; vencidas as guardas, ele pode soltar a célula, embora plural/lote não afirmem encerramento. (`app/ponto/services/cartorio.py:862`; `app/ponto/services/vigia_de_hora.py:47`; `app/ponto/services/vigia_de_hora.py:53`; `app/ponto/services/vigia_de_hora.py:55`; `app/ponto/services/vigia_de_hora.py:61`.)
+
+A assimetria é anterior às três mudanças; execução dessa contraprova e ocorrência em produção são **[nao verificado]**. O teste de candidatos, inclusive, exige que vínculo alheio não entre no balde do colaborador solicitado. (`app/escala/tests/test_o131_um_carregador_de_candidatos.py:150`; `app/escala/tests/test_o131_um_carregador_de_candidatos.py:155`.)
+
+**7. Leis dos sítios**
+
+Não identifiquei violação direta **introduzida pelo diff** das leis de domínio listadas:
+
+| Lei | Conferência |
+|---|---|
+| L-025 | O pareador continua excluindo retratadas. (`app/docs/LEIS.md:76`; `app/ponto/turnos.py:1869`.) |
+| L-032, L-085, L-087 | Continuam ata, seleção por geradora e pareador; não nasce regra própria de intervalo, tipo gravado ou dia civil. (`app/docs/LEIS.md:80`; `app/docs/LEIS.md:117`; `app/docs/LEIS.md:119`; `app/ponto/turnos.py:1944`; `app/ponto/turnos.py:1965`; `app/ponto/turnos.py:1997`.) |
+| L-102, L-103, L-115 | As alterações tratam entrada/carga, sem redefinir palavra, zero ou saída posicional. Regressão comportamental completa: **[nao verificado]**. (`app/docs/LEIS.md:128`; `app/docs/LEIS.md:129`; `app/docs/LEIS.md:153`; `app/ponto/turnos.py:1865`; `app/ponto/turnos.py:2161`.) |
+| L-073 | Permanece o julgamento por aberta viva e fim previsto, com instante fornecido pelo vigia. (`app/docs/LEIS.md:100`; `app/ponto/turnos.py:2122`; `app/ponto/turnos.py:2127`; `app/ponto/services/vigia_de_hora.py:61`.) |
+
+O corte que revogava o nascimento de `dia_encerrado` foi corrigido; o registro vivo mantém essa autoridade. Portanto, a existência desse juiz não reprova o diff. (`app/docs/CORTES.md:302`; `app/core/juizes.py:239`.)
+
+Entretanto, **não considero demonstrado o fechamento integral da classe**: o pad incompleto permanece em leitor alcançado, e a contraprova singular/plural limita a coerência universal exigida pela L-099. RED evidenciado, GREEN e suíte continuam **[nao verificado]**, requisitos que o código dos testes sozinho não comprova. (`app/ponto/services/fechamento.py:605`; `app/ponto/services/fechamento.py:377`; `app/ponto/turnos.py:2105`; `app/ponto/turnos.py:2154`; `app/docs/LEIS.md:122`; `CLAUDE.md:28`; `CLAUDE.md:193`.)
 
 ## 15/11 20:23 · sessao 7a047bcec0f8 · - · - · origem=Ronald (tmux)
 
@@ -1370,28 +1523,4 @@ Para ESMERIL-SEMÂNTICA:
 - A janela de saída recebe **datetime do marco já resolvido**, pois um `time` não determina o dia da saída em jornada que cruza meia-noite; a entrada recebe `time` e o coloca no dia do instante de entrada. `app/ponto/janela_he.py:20`, `app/ponto/janela_he.py:94`, `app/ponto/janela_he.py:126`.
 - `em_intervalo` interpreta **estado**: turno aberto cuja última batida é `S`; não usa relógio nem exige que a volta já exista. Isso explica por que uma cura na absorção precisa preservar o almoço em curso. `app/ponto/turnos.py:2498`, `app/ponto/turnos.py:2503`, `app/ponto/turnos.py:2508`.
 
-## 15/11 20:05 · sessao 5d92ac32c131 · O169-FECHADA · leitura · origem=Code
-
-1. **A regra de idade já saiu do fechamento.** `--dias` limita os dias consultados por `dias_com_cluster`; `pendencias` usa essa janela na abertura, mas calcula `a_fechar` por `_vivos_que_a_premissa_matou(colab)`, sem janela (`app/ponto/services/cluster_espurio.py:40-49`, `:165-173`). O fecho lê a célula do próprio dia e pergunta `premissa_morta`; sem célula/insumos, o fato é `None`, que o catálogo conserva (`app/ponto/services/cluster_espurio.py:66-77`; `app/chamados/catalogo/premissa.py:127-134`). O ato conta somente os fechamentos aceitos pela porta (`app/ponto/services/cluster_espurio.py:187-191`).
-
-2. **`fechados_por_idade` não está implementado com esse nome; existe outra medida.** O command usa `contador_cluster_encerrado_sem_lastro`, imprime seu JSON e retorna rc 2, em `--alarme`, quando há pendências ou divergência do esperado (`app/ponto/management/commands/detectar_cluster_espurio.py:92-104`).
-
-   Esse contador seleciona cluster em `ENCERRADOS`, via `RECONCILIAR`, e consulta `_leitura_da_celula`, sem copiar a regra da assinatura; retorna `numero`, `esperado=0`, universo e exclusões (`app/ponto/services/cluster_espurio.py:88-98`, `:107-150`). **Ele não prova fechamento por idade**: inclui também decisão administrativa via reconciliar, e o próprio serviço declara essa limitação (`app/ponto/services/cluster_espurio.py:228-230`). A trilha de fechamento registra status/via, sem motivo idade versus lastro; não há função causal demonstrada que responda “foi fechado por idade” (`app/chamados/models.py:292-295`; `app/docs/RELATO.md:1439`).
-
-   O delta de publicação permanece identificável: o consumo/alarme já está no command, mas esse trecho não produz carimbo persistente de negócio (`app/ponto/management/commands/detectar_cluster_espurio.py:92-104`). O canal existente do vigia do fio grava `censo` e `esperado`; o leitor compara as chaves do próprio carimbo, e o gerador do ESTADO publica suas divergências (`app/chamados/management/commands/vigiar_fio_morto.py:240-263`; `bin/fio_estado.py:121-126`, `:191-194`; `bin/gerar_estado.py:260-261`). Encaixe específico aprovado do cluster nesse carimbo: **[nao verificado]**.
-
-   Os leitores atuais são:
-
-   - `config/crons.py` agenda `--alarme` às 06:24 e envolve comandos em `cron_run.sh` (`app/config/crons.py:598`, `:1498-1509`).
-   - O runner grava o rc em `placar.jsonl`, produz carimbo de conclusão para **0 ou 2** e propaga o rc; esse carimbo contém conclusão, não o contador (`bin/cron_run.sh:11-25`, `:38`). O encadeador espera esses arquivos (`bin/encadeado.sh:81-94`).
-   - `pipeline_placar` lê rc 2 como `alarmes` e exibe `ALARME`, porém essa situação não entra na lista que provoca o rc 2 do próprio pipeline (`app/core/management/commands/pipeline_placar.py:61-81`, `:124-132`, `:158-161`). Seus leitores explícitos de contadores do carimbo cobrem `fio_mudo_alvos` e `nunca_bateu_sem_adesao`, sem cluster (`:85-106`, `:135-136`).
-
-3. **O teste existente que morde a regressão é o RED dos 15 dias:** exige ausência em `a_fechar` e chamado ainda vivo com assinatura; o helper executa `pendencias` e `reconciliar_colab` reais (`app/ponto/tests/test_o169_cluster_nao_fecha_por_idade.py:56-62`, `:74-77`). A contraprova exige fechamento fora da janela quando o lastro não tem assinatura (`:80-83`).
-
-   O mutante literal `fechar_por_idade` **já existe** e aponta para `test_vivo_de_20_dias_com_assinatura_segue_vivo_apos_o_cron`; o harness exige falha de asserção e nenhum erro de infraestrutura (`app/ponto/tests/test_o169_legado_encerrado_por_idade.py:222-225`, `:180-192`, `:286-302`). Resultado executado nesta leitura: **[nao verificado]**.
-
-4. **B3 aberto no registro documental:** o BACKLOG diz `B3 DESENHO` e o topo do RELATO ainda declara O169-FECHADA em B3 (`app/docs/BACKLOG.md:2121`; `app/docs/RELATO.md:4`). Estado efetivo do disjuntor nesta execução: **[nao verificado]**.
-
-   O bloqueio implementado é **próximo verificador final e próxima volta Codex verificador**, até liberação por DESENHO/ERRO-BOBO válido; dispara na primeira reprovação final ou terceira volta Codex procedente (`bin/disjuntor.py:1007-1014`, `:1025-1037`). O desenho registrado trata da responsabilidade pelo legado, via de tranca/trilha e reabertura pela porta — assunto além do contador nominal (`app/docs/RELATO.md:1399`; `app/docs/BACKLOG.md:2121`).
-
-_5772 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5773 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
