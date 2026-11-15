@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 11:34** · publicado em **15/11/2026 11:34** (UTC-3)
+> Ultima resposta processada: **15/11/2026 11:36** · publicado em **15/11/2026 11:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 11:36 · sessao 411bd1f6a142 · CONTADOR-ELEGIVEIS-DA-11 · leitura · origem=Code
+
+O contrato precisa de correção antes da construção: `medir` não devolve uma partição elegível/travado por colaborador, e o E6 atribui dono por **dia-colab**, permitindo vários donos para o mesmo colaborador. (`app/folha/porta_export.py:469`, `app/folha/porta_export.py:692`, `app/ponto/management/commands/e6_oraculo.py:378`)
+
+A revisão abaixo vale para a cópia disponível; sua identidade Git com o HASH/HEAD informado está [não verificado].
+
+1. **QUEM CHAMA — os sítios existem, mas a ligação proposta não está pronta.**
+
+   `medir(empresa, mes, ano)` retorna um dicionário por empresa/competência. Contém listas com IDs de colaboradores e detalhes de algumas divergências, além de contadores e motivos de não medição. Portanto, **não são apenas escalares por empresa**, mas também **não existe uma resposta completa por colaborador** dizendo “elegível/travado”. (`app/folha/porta_export.py:313`, `app/folha/porta_export.py:692`)
+
+   Seu `universo` conta apenas os classificados como `status='entra'`. Outro laço amplia algumas verificações para quem tem fechamento ou lavratura; os universos são diferentes e estão declarados no retorno. Logo, `universo` não é T de “ativos com trabalho”, e `falhas` não é quantidade de colaboradores travados. (`app/folha/porta_export.py:469`, `app/folha/porta_export.py:647`, `app/folha/porta_export.py:687`, `app/folha/porta_export.py:718`)
+
+   A assinatura efetiva é:
+
+   ```python
+   dono_da_divergencia(
+       horas_do_dia, em_cadastro_x_realidade,
+       folga_nao_definida=False, sem_vinculo_no_dia=False,
+       sem_vinculo_em_dia_de_trabalho=False,
+       batida_fora_de_turno=False, fase_deslocada=False
+   )
+   ```
+
+   Não recebe colaborador; devolve `ESTRUTURA`, `CADASTRO` ou `BATIDA` para um **dia-colab**. O carregador existente é `InsumosDoDono(colaborador, ini, fim, hoje, ..., agora=...)`, consultado por `dono(data)`; deve ser reutilizado para montar os insumos. (`app/ponto/management/commands/e6_oraculo.py:53`, `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:128`, `app/ponto/management/commands/e6_oraculo.py:182`)
+
+   Hoje, quem chama o gerador é `bin/relato.sh`, por Python no host. O serviço chama esse script; o timer declara início após dois minutos e repetição a cada cinco minutos. Ativação real: [não verificado]. (`bin/relato.sh:38`, `bin/hasner-relato.service:12`, `bin/hasner-relato.timer:5`)
+
+   `gerar_estado.py` não inicializa Django nem chama `medir` hoje. Também não “só lê arquivos”: executa Git/tmux, carrega módulos e escreve o Markdown de destino. O pipeline completo já chama Django em `saas_core` **para obter nomes**, antes do gerador; isso não fornece a execução proposta em container de leitura. (`bin/gerar_estado.py:73`, `bin/gerar_estado.py:178`, `bin/gerar_estado.py:390`, `bin/relato.sh:32`, `bin/relato_nomes.sh:17`)
+
+2. **QUEM ESPERA — já existem contadores e leitores que precisam ser reaproveitados.**
+
+   `classificar_export` já responde por colaborador `status`, `motivo` e `travas_aprovacao`. Atenção: `status` responde “entra no TXT”; `travas_aprovacao` responde outra pergunta, aprovação/tranca. Seu universo padrão são os fechamentos existentes da empresa/competência. (`app/folha/export.py:765`, `app/folha/export.py:783`, `app/folha/export.py:792`)
+
+   Já existem `prontidao_folha`, para competência encerrada, e **`prontidao_folha_em_curso`**, para competência corrente: ambas contam entradas e total a partir desse classificador, com bloqueios por motivo. A segunda já responde a parte N/T da pergunta, porém no universo de fechamentos, sem o recorte ativo-com-trabalho e sem os três donos. (`app/inteligencia/calculadores.py:183`, `app/inteligencia/calculadores.py:240`, `app/inteligencia/calculadores.py:271`)
+
+   Também existem `dias_que_seguram` e `fora_da_folha`, que expõem itens, entradas, motivos e dias retentores. O agrupamento pelo “pior dia” ali usa grupos A/B/C/D de encaminhamento; **não fornece a agregação ESTRUTURA/CADASTRO/BATIDA**. Há ainda `retrato_folha.contadores`, que lê a partição do retrato. (`app/folha/fora_da_folha.py:9`, `app/folha/fora_da_folha.py:109`, `app/folha/fora_da_folha.py:156`, `app/folha/retrato_folha.py:114`)
+
+   O copiloto já tem `prontidao_da_folha`; lê snapshots pela API e publica entradas, total, bloqueios e ressalvas. A API de panorama consulta `prontidao_folha`, não a métrica em curso. Já há pergunta próxima no golden. O símbolo exato `elegiveis_export_por_dono` como implementação atual está [não verificado]. (`mensageria/nucleo/ferramentas.py:1222`, `mensageria/nucleo/ferramentas.py:1264`, `app/api/views_mensageria.py:208`, `eval/golden.py:53`)
+
+   **Correção:** reaproveitar esses juízes e leitores, explicitando a extensão de universo e de donos. Executar o materializador existente não atende à promessa “command de leitura”: ele grava `MetricaSnapshot`. (`app/inteligencia/metricas.py:36`, `app/inteligencia/metricas.py:47`)
+
+3. **FALHA/LIMITE — a igualdade está errada e o custo foi subestimado.**
+
+   Se os donos classificam apenas travados, a identidade necessária é **`N + a + b + c = T`**, ou **`a+b+c = T−N`**, exigindo grupos exclusivos e completos. Cobrar `a+b+c=T` trata elegíveis como se também precisassem de dono de trava. A tela existente já verifica a forma equivalente “aptos + motivos = universo”. (`app/folha/views.py:342`)
+
+   Nem deduplicar IDs resolve a exclusividade entre donos: o E6 adiciona o mesmo colaborador a conjuntos independentes por dono e publica a união separadamente. A soma por dono que fecha no E6 é em **dia-colab**, não colaboradores distintos. (`app/ponto/management/commands/e6_oraculo.py:378`, `app/ponto/management/commands/e6_oraculo.py:425`, `app/ponto/management/commands/e6_oraculo.py:441`)
+
+   **`medir` é pesado.** Monta espelho, resumo do PDF e outra consulta à autoridade do período; há registro histórico no código de aproximadamente 100 segundos para 205 colaboradores e de uma medição de aproximadamente 15 minutos. Esses tempos são documentação histórica; duração atual: [não verificado]. (`app/folha/porta_export.py:7`, `app/folha/porta_export.py:476`, `app/folha/porta_export.py:496`, `app/folha/porta_export.py:78`, `app/folha/porta_export.py:641`)
+
+   Além disso, **cada chamada por empresa executa `cartao_x_txt_divergentes`, que percorre todas as empresas ativas**. Com E empresas, repete-se E vezes essa varredura da competência. “O(n) por empresa” não descreve o custo desse encadeamento; ligá-lo diretamente ao gerador também o colocaria potencialmente na cadência de cinco minutos. (`app/folha/porta_export.py:667`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51`, `bin/hasner-relato.timer:6`)
+
+   “Erro = vermelho, nunca zero” precisa abranger também retornos parciais: `cartao_x_txt=None`, contadores `*_nao_medido` e ausência de cobertura. Nem toda impossibilidade de medição levanta exceção. (`app/folha/porta_export.py:671`, `app/folha/porta_export.py:700`, `app/folha/porta_export.py:713`, `app/ponto/management/commands/e6_oraculo.py:193`)
+
+4. **MEDIDA — falta fechar o universo e a regra de dono único.**
+
+   Para o enunciado pedido, a unidade é **colaborador distinto por empresa/competência**, contado uma vez: T é o universo de ativos com trabalho na 11; N é o subconjunto elegível desse mesmo universo. Não se pode substituir T por quantidade de dias, divergências ou fechamentos: os contadores existentes usam esses outros universos. (`app/folha/export.py:783`, `app/folha/porta_export.py:718`, `app/ponto/management/commands/e6_oraculo.py:429`)
+
+   Falta nomear a autoridade que prova **“com trabalho”**. Usar simplesmente `horas_trabalhadas>0` excluiria justamente casos em que o fechamento ficou zero apesar das batidas; o classificador já possui tratamento desse problema. A cobertura real dos ativos com trabalho, inclusive sem fechamento, está [não verificado]. (`app/folha/export.py:902`, `app/folha/export.py:924`, `app/folha/export.py:959`)
+
+   **Um travado não recebe automaticamente UM dono mensal.** É necessário obter os dias relevantes pelas fontes existentes e consultar `InsumosDoDono.dono(data)`. Se os dias devolverem donos diferentes, falta uma regra explícita de agregação mensal; transportar a precedência interna de um dia para o mês criaria uma decisão adicional. Também existem retenções como ausência de código e catálogo, sem um dia divergente fornecido por esse resultado. (`app/folha/fora_da_folha.py:102`, `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:182`, `app/folha/export.py:872`, `app/folha/export.py:974`)
+
+   Os três colaboradores para conferência manual e os valores N/T/a/b/c não constam no dado fornecido: [não verificado].
+
+5. **QUEM DESLIGA — existe o juiz de exportação, mas falta definir o alcance.**
+
+   O sítio existente para decidir “já exportou” é `competencia_entregue(empresa_id, mes, ano)`: considera TXT vigente e não invalidado. Portanto, “quando a 11 exportar” precisa esclarecer se a linha some **por empresa** ou somente quando todas as empresas do universo entregarem. (`app/folha/export.py:556`, `app/folha/export.py:588`)
+
+   O corte de 13/11 está implementado na retenção por célula: desligado retorna sem motivos retentores, e os dias seguem como informativo de rescisão. Isso **não remove automaticamente desligados do denominador** dos leitores baseados em fechamentos. A exclusão do universo proposto deve consultar `esta_desligado`, sem confundir desligamento futuro com estado já desligado. (`app/folha/export.py:1197`, `app/folha/export.py:1207`, `app/folha/export.py:1216`, `app/folha/export.py:783`, `app/colaboradores/services/desligamento.py:23`)
+
+   O mecanismo específico de desligamento desse novo instrumento, sua execução no container de leitura e qualquer resultado de produção permanecem [não verificado].
+
+## 15/11 11:35 · sessao c26db7dede4e · - · - · origem=Ronald (tmux)
+
+- **Chamada e cadência:** `bin/relato.sh:38` executa `python3 bin/gerar_estado.py RAIZ TMP/ESTADO.md`. O serviço declara execução no host, `Type=oneshot`, `WorkingDirectory` e `ExecStart` do relato, com afinidade de CPU 4–7 (`bin/hasner-relato.service:12-19`). O timer declara início após 2 minutos e intervalo de 5 minutos (`bin/hasner-relato.timer:5-8`); instalação/ativação real [não verificado].
+- **Django:** o gerador atual executa Git/tmux (`bin/gerar_estado.py:178-184`), importa e executa módulos puros (`bin/gerar_estado.py:73-81`, `bin/gerar_estado.py:140-145`) e leitores de `bin/` (`bin/gerar_estado.py:198-200`, `bin/gerar_estado.py:260-276`, `bin/gerar_estado.py:289-301`), depois escreve o destino (`bin/gerar_estado.py:390`). Não é literalmente “só lê arquivos”; não há inicialização Django nem command de medição nesse fluxo atual (`bin/gerar_estado.py:12-14`, `bin/gerar_estado.py:178-301`). O leitor existente explica que carrega módulo puro porque o host não tem Django (`bin/leitor_dia_estado.py:7-14`).
+- **Distinção importante:** o pipeline completo de publicação já chama Django em **saas_core para obter nomes**, antes do gerador (`bin/relato.sh:30-38` → `bin/relato_nomes.sh:17-21`). Isso não prova execução do novo contador em container de leitura; configuração/execução dele [não verificado].
+- **Contador existente próximo:** `classificar_export` já retorna lista por colaborador com `status`, `motivo` e `travas_aprovacao`; seu universo padrão são fechamentos da empresa/competência, sem filtro de ativo/com trabalho (`app/folha/export.py:765-788`). `status` responde entra no TXT; `travas_aprovacao` responde aprovação/tranca, que é outra pergunta (`app/folha/export.py:792-823`).
+- **Métricas existentes:** `prontidao_folha` mede N/T e bloqueios por motivo na competência anterior (`app/inteligencia/calculadores.py:183-237`); **`prontidao_folha_em_curso` já existe** e mede competência corrente com `janela_atual`, N=itens `entra`, T=`len(itens)`, e bloqueios por motivo (`app/inteligencia/calculadores.py:240-299`). Nenhuma dessas implementações traz decomposição ESTRUTURA/CADASTRO/BATIDA nesses retornos (`app/inteligencia/calculadores.py:223-235`, `app/inteligencia/calculadores.py:278-297`).
+- **Copiloto existente:** `prontidao_da_folha` lê snapshots por API, com cache e competência derivada da última medida; expõe entram, total, travam e ressalvas de rescisão (`mensageria/nucleo/ferramentas.py:1222-1270`), além dos agregados da frota (`mensageria/nucleo/ferramentas.py:1276-1304`). A API de panorama lê `prontidao_folha`, não `prontidao_folha_em_curso`, e escolhe a última competência medida (`app/api/views_mensageria.py:185-239`). Logo, não basta adicionar um nome ao copiloto para responder ativos-com-trabalho na 11; esse universo difere do fechamento usado hoje (`app/folha/export.py:783-788`).
+- **Golden já possui pergunta próxima:** prontidão para gerar TXT (`eval/golden.py:53-55`), cujo oráculo chama a ferramenta real (`eval/oraculo.py:23`). O símbolo exato `elegiveis_export_por_dono` não apareceu na busca global da cópia; implantação atual [não verificado].
+- **Reaproveitamento e escrita:** a materialização existente roda pelo command `calcular_metricas`, percorrendo o registro e usando ontem como fim padrão (`app/inteligencia/management/commands/calcular_metricas.py:30-44`), com cron declarado às 03:20 (`app/config/crons.py:399-400`). Ela grava no banco (`app/inteligencia/metricas.py:36-57`); portanto, reaproveitar seus juízes/leitores não significa executar esse materializador em um command prometido como leitura.
+- **Custo:** a API explica que a classificação ao vivo percorre grade por colaborador e por isso prefere snapshots (`app/api/views_mensageria.py:251-260`). Há tempos históricos documentados de ~3,5 s/empresa e ~0,35 s para snapshot (`mensageria/nucleo/core_client.py:137-142`); custo atual, volume e duração da nova medição [não verificado]. A cadência proposta, se amarrada ao gerador existente, seria potencialmente a cada cinco minutos, salvo trava explícita (`bin/hasner-relato.timer:5-8`, `bin/relato.sh:38`).
 
 ## 15/11 11:34 · sessao 6ad4362f604d · - · - · origem=Ronald (tmux)
 
@@ -730,59 +813,4 @@ Executei os corpos reais extraídos por AST, com persistência e dependências s
 
 **Conclusão restrita ao delta:** não identifiquei ordem cruzada entre as Ausencias da rejeição e os registros normalmente produzidos pelo backfill/reversão; todos seguem PK crescente (`app/ponto/services/ausencia.py:1420`, `:1608`, `:1619`, `:1650`). A frase “nunca se travam em ordem cruzada” não prova ausência global de deadlocks: backfill adquire múltiplos agendamentos e seus períodos por join, enquanto cancelamento adquire um agendamento e depois seu período; eventual ciclo com período compartilhado seria preexistente e anterior à entrada em `rejeitar_ausencias_de_ferias` (`app/ponto/services/ausencia.py:1601`; `app/ferias/services.py:636`, `:639`, `:683`); ocorrência/SQL executado [nao verificado].
 
-## 15/11 10:32 · sessao edbbd489bd52 · - · - · origem=Ronald (tmux)
-
-Nenhum outro defeito funcional identificado no delta fornecido: a alteração de produção restringe e ordena a seleção das Ausencias; as outras duas alterações acrescentam verificações de persistência. (`app/ponto/services/ausencia.py:1416`, `app/ponto/services/ausencia.py:1419`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:140`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:271`)
-
-Ressalva: a frase “duas chamadas nunca se travam em ordem cruzada” não demonstra ausência global de deadlock envolvendo outras tabelas ou uma transação externa; o trecho ordena apenas a aquisição dessas Ausencias. (`app/ponto/services/ausencia.py:1418`, `app/ponto/services/ausencia.py:1420`)
-
-A completude do delta entre os hashes, além do anexo fornecido, permanece [nao verificado].
-
-## 15/11 10:28 · sessao 80cd60d8871b · FATO-DE-AUSENCIA-ACORDA-A-PROJECAO · verificador · origem=Code
-
-**O rollback protege o cancelamento inteiro no chamador produtivo; os testes ainda deixam passar regressões de concorrência e atomicidade do lote.** Evidências: `app/ferias/services.py:674`, `app/ferias/services.py:683`, `app/ponto/services/ausencia.py:1416`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`. Execução dos testes, mutantes e concorrência: [não verificado].
-
-1. **Chamadores, transações e travas**
-
-   O único chamador direto produtivo encontrado é `executar_cancelamento_admin`: abre `atomic`, trava **agendamento → período**, devolve saldo e chama a rejeição. A função acrescenta um `atomic` interno e o `select_for_update` das Ausências. Portanto, nesse caminho, a ordem é **agendamento → período → Ausências** (`app/ferias/services.py:674`, `app/ferias/services.py:679`, `app/ferias/services.py:683`, `app/ferias/services.py:636`, `app/ferias/services.py:639`, `app/ponto/services/ausencia.py:1416`).
-
-   As entradas indiretas são cancelamento individual, correção de concluída e cancelamento em massa, pelo adaptador da view; há também a simulação de `listar_ferias_dp`, sob outro `atomic` (`app/ferias/views.py:396`, `app/ferias/views.py:444`, `app/ferias/views.py:605`, `app/ferias/views.py:557`, `app/ferias/management/commands/listar_ferias_dp.py:98`). Os demais chamadores diretos são os testes, nas linhas 180, 191 e 200 (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:180`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:191`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:200`).
-
-   Quando `evento` falha, seu próprio savepoint desfaz a tentativa de trilha; a exceção é engolida e ele retorna `None`. A rejeição transforma esse retorno em `RuntimeError` **dentro** do seu `atomic`: desfaz status, `atualizado_em` e quaisquer trilhas anteriores daquela chamada; não alcança `_acordar_projecao` nem retorna `n` (`app/core/observ.py:87`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`, `app/ponto/services/ausencia.py:1423`, `app/ponto/services/ausencia.py:1428`, `app/ponto/services/ausencia.py:1433`, `app/ponto/services/ausencia.py:1435`).
-
-   No chamador produtivo, a exceção também sai do `atomic` externo: desfaz a devolução de saldo já salva e impede a gravação de `status='cancelado'`, observação e retorno normal (`app/ferias/services.py:680`, `app/ferias/services.py:682`, `app/ferias/services.py:683`, `app/ferias/services.py:687`, `app/ferias/services.py:690`). As três views capturam somente `AgendamentoNaoCancelavel`; o `RuntimeError` escapa desses tratamentos. A resposta HTTP efetiva é [não verificado] (`app/ferias/views.py:397`, `app/ferias/views.py:445`, `app/ferias/views.py:606`). A simulação captura a exceção, imprime `ERRO:RuntimeError:...` e recarrega o agendamento (`app/ferias/management/commands/listar_ferias_dp.py:112`).
-
-   **Há risco de inversão entre linhas de Ausência**, embora o caminho principal respeite a hierarquia agendamento/período/Ausência. O novo SELECT não fixa `order_by`, herdando `-data, colaborador__nome`; a reversão do backfill atualiza as mesmas Ausências uma por vez, na ordem do arquivo, sem tomar antes as travas de agendamento/período (`app/ponto/services/ausencia.py:1417`, `app/ponto/models.py:829`, `app/ponto/services/ausencia.py:1647`, `app/ponto/services/ausencia.py:1535`). O apply produz o registro a partir de linhas ordenadas por PK (`app/ponto/services/ausencia.py:1605`, `app/ponto/services/ausencia.py:1617`).
-
-   Interleaving plausível: A1 tem PK menor/data anterior; A2, PK maior/data posterior. Cancelamento trava A2 e espera A1; reversão trava A1 e espera A2. As travas anteriores do chamador não serializam a reversão, que não as solicita. Esse deadlock é uma possibilidade deduzida dessas ordens; ocorrência real [não verificado] (`app/ponto/models.py:829`, `app/ponto/services/ausencia.py:1648`).
-
-   Também há possível ampliação da trava ao colaborador: a ordenação usa `colaborador__nome` e o SELECT não restringe `of=('self',)`. É inferência do ORM; SQL efetivo e bloqueios observados [não verificado] (`app/ponto/models.py:829`, `app/ponto/services/ausencia.py:1417`).
-
-2. **Os quatro testes novos/alterados mordem, com estas lacunas** [nao verificado]
-
-   Os mutantes abaixo são deduções estáticas; sobrevivência executada [não verificado].
-
-   | Teste | O que verifica / mutante que passa | [nao verificado]
-   |---|---|
-   | Encolher o fim | Confere a fixture inicial e os dois carimbos, mas não relê o fato depois da edição. **Retirar `ausencia.save()`**, mantendo a alteração em memória e `_acordar_projecao`, passa sem persistir a edição (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:137`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:139`, `app/ponto/services/ausencia.py:604`, `app/ponto/services/ausencia.py:615`, `app/ponto/services/ausencia.py:625`). |
-   | Rejeitar com trilha por dia | A nova comparação dos PKs mata “cinco trilhas, mas uma Ausência duplicada e outra omitida”. **Retirar `select_for_update`** continua passando: as duas chamadas são sequenciais (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:182`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:186`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:191`, `app/ponto/services/ausencia.py:1417`). |
-   | Falha de trilha desfaz rejeição | O mock falha sempre, portanto já na primeira trilha. **Trocar o atomic do conjunto por um atomic por Ausência** passa: a primeira desfaz e não sobra rejeitada. Falhar só na segunda/quinta deixaria anteriores confirmadas, caso não exercitado (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:169`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:201`, `app/ponto/services/ausencia.py:1416`). |
-   | Desfazer retratação | A releitura nova mata um falso desfazer que apenas chama recálculo. **Retirar `'aprovada': True`** do `anotar` passa, conservando `aprovada=False`: o teste só exige chamada e `retratada_em=None` (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:265`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:267`, `app/ponto/services/retratar_humano.py:207`, `app/ponto/registro_batida.py:276`). |
-
-   **Sim, o patch alcança o nome usado.** O import de `evento as _ev_rej` é local à função e acontece enquanto o `mock.patch('core.observ.evento')` está ativo; não existe alias congelado no módulo nesse caminho (`app/ponto/services/ausencia.py:1414`, `app/ponto/services/ausencia.py:1428`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`).
-
-3. **A fixture de edição chega ao helper, pela leitura estática**
-
-   A criação com três dias deriva `data_fim=21/10`; o teste confirma isso antes de carimbar. A edição com um dia deriva fim nulo, salva e chama o helper com os fatos **anterior e posterior** (`app/ponto/models.py:912`, `app/ponto/models.py:917`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:134`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:137`, `app/ponto/services/ausencia.py:164`, `app/ponto/services/ausencia.py:615`, `app/ponto/services/ausencia.py:625`).
-
-   Não há recusa por tranca nessa porta; a sobreposição exclui o próprio PK. A fixture não acrescenta outra Ausência, e essa função não exige documento nesse percurso (`app/ponto/services/ausencia.py:591`, `app/ponto/services/ausencia.py:593`, `app/ponto/turnos.py:2830`, `app/ponto/turnos.py:2851`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:45`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:134`, `app/ponto/services/ausencia.py:570`).
-
-   `atestado` consta no seed ativo; a validação consulta o catálogo vigente. Não há indicação nessa fixture de catálogo que o exclua, mas o estado efetivo do catálogo/cache durante uma execução é [não verificado] (`app/ponto/migrations/0052_seed_tipoausencia.py:17`, `app/ponto/migrations/0052_seed_tipoausencia.py:36`, `app/ponto/catalogo/ausencias.py:278`, `app/ponto/catalogo/ausencias.py:284`, `app/ponto/services/ausencia.py:580`).
-
-4. **Outro defeito exposto pelo delta: falha sem tratamento no lote**
-
-   A nova exceção interrompe o cancelamento em massa antes da mensagem de resultado. Cada item usa sua própria unidade atômica; o loop só trata `AgendamentoNaoCancelavel`. Assim, sem transação externa adicional, itens anteriores permanecem confirmados, o item falho desfaz e os seguintes não são processados. Uma transação externa de request efetivamente configurada é [não verificado] (`app/ferias/views.py:600`, `app/ferias/views.py:605`, `app/ferias/views.py:606`, `app/ferias/views.py:611`, `app/ferias/services.py:674`).
-
-   Os testes do delta chamam diretamente a rejeição; não verificam esse tratamento nas views nem o rollback conjunto de saldo/agendamento no chamador produtivo (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:180`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:200`).
-
-_5599 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5601 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
