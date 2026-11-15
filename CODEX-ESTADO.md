@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 23:49** · publicado em **14/11/2026 23:53** (UTC-3)
+> Ultima resposta processada: **15/11/2026 00:09** · publicado em **15/11/2026 00:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 00:09 · sessao daa9d57f14c4 · - · - · origem=Ronald (tmux)
+
+Nenhuma das 13 linhas da matriz exige correcao: os sitios citados permanecem nos mesmos numeros e corpos. Em `models.py`, o primeiro hunk esta depois da ultima referencia da matriz; em `juizes.py`, as alteracoes ficam depois do leitor citado. (`chamados/models.py:1686`, `chamados/models.py:1873`, `chamados/juizes.py:779`, `chamados/juizes.py:1531`)
+
+Preservar integralmente as linhas **#1–#13**, inclusive referencias dos testes. Os demais arquivos citados nessas linhas nao apresentam diff entre os hashes. (`chamados/catalogo/motor.py:99`, `chamados/services/competencia_trancada.py:209`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`)
+
+Recontagem:
+
+- **L1: 12 → 12**, sendo 11 pares runtime e 1 historico. (`chamados/catalogo/motor.py:99`, `chamados/catalogo/motor.py:111`, `chamados/catalogo/motor.py:114`, `chamados/catalogo/motor.py:116`, `chamados/models.py:1677`, `chamados/migrations/0039_a3_via_backfill.py:15`)
+- **L2: 4 → 4** sitios persistentes em migracoes; **0 → 0** externos no runtime, conservado o limite declarado pelo selo. (`chamados/migrations/0038_a3_registrado_backfill.py:10`, `chamados/migrations/0038_a3_registrado_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`, `chamados/tests/test_selo_status_so_pelas_portas.py:17`)
+- **L3: 2 → 2** sem saida runtime; **0 → 0** incluindo migracoes e reversas. (`chamados/catalogo/motor.py:104`, `chamados/catalogo/motor.py:106`, `chamados/catalogo/motor.py:142`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`)
+
+## 15/11 00:09 · sessao 12e9f2272490 · - · - · origem=Ronald (tmux)
+
+R6 E2: os 15 casos devem conservar suas asserções. A regressão comum é a consulta indiscriminada ao calendário para qualquer tarefa sem rota, inclusive respostas já conhecidas; uma falha dessa consulta acrescenta `nao_sei=True`. Origem: `chamados/services/tarefa_do_dia.py:591`, `chamados/services/tarefa_do_dia.py:614`; captura no calendário: `colaboradores/services/calendario.py:596`.
+
+A cura recomendada é compartilhar a guarda já existente da competência corrente entre contexto e plural, evitando consultar dependências incapazes de oferecer a porta naquele período. A regra está expressa em `colaboradores/services/calendario.py:464`, calculada em `colaboradores/services/calendario.py:473` e publicada em `colaboradores/services/calendario.py:750`. Isso deve resolver os 13 casos de desconhecimento e os dois selos de consultas constantes dessa fixture [nao verificado: ORM].
+
+F3 tem problema adicional de fixture: `_beco` cria célula sem lâmpadas (`escala/tests/test_f3_beco1_folga_na_lista.py:84`), `_lavra` não as restaura (`escala/tests/test_f3_beco1_folga_na_lista.py:103`), e a tarefa retorna `ata_sem_lampadas` antes de examinar a pergunta (`chamados/services/tarefa_do_dia.py:228`). O padrão deve declarar E08:00 conhecida e S17:00 apagada, conforme o cadastro de `escala/tests/test_f3_beco1_folga_na_lista.py:52`. O contraexemplo com pergunta do início precisa também declarar essa lâmpada apagada (`escala/tests/test_f3_beco1_folga_na_lista.py:249`).
+
+Classificação F3:
+
+- `:131`, `:260`: FIXTURE.
+- `:159`, `:275`, `:321`, `:378`: C11/M1, mantendo as asserções e corrigindo também a montagem conhecida.
+
+A condição terminal indevida está em `escala/services/cadastro_realidade.py:497`; a condição necessária de cadastro está em `escala/services/cadastro_realidade.py:499`.
+
+N1: os dois casos continuam classificados REGRESSÃO; origem exata das duas buscas por PK [nao verificado]. Há um caminho concreto de refetch pelo calendário: `colaboradores/services/calendario.py:581` → `ponto/services/espelho.py:1111` → FK `motor_calculo_v2.py:1382`. O motor é proibido; a cura deve ficar antes dessa abertura ou na alimentação permitida. Não recomendo trocar as asserções de `chamados/tests/test_n1_alimentacao_unica.py:169` e `chamados/tests/test_n1_alimentacao_unica.py:183`.
+
+Nenhum arquivo foi escrito por este explorer [nao verificado: auditoria externa].
+
+## 15/11 00:07 · sessao da5b20a6f474 · - · - · origem=Ronald (tmux)
+
+Os 19 blocos O261 têm duas causas distintas na cópia: montagem temporal incoerente e expectativas anteriores à LU-03. A execução ORM permanece [nao verificado].
+
+A fixture grava `veredito_em` e `validada_em` no relógio corrente, mas o censo pergunta com `agora` em abril/2026 (`chamados/tests/test_o261_vigia_fio.py:104`, `:121`, `:135`). A carga exclui decisões e passivo posteriores ao instante consultado (`chamados/services/tarefa_do_dia.py:417`, `:425`). Correção proposta: fixar o instante de escrita da fixture antes de todos os horizontes consultados, preservando as assertivas que continuam correspondendo à regra.
+
+| Teste — linha original | Classificação | Correção | [nao verificado]
+|---|---|---|
+| `test_MORDE_a_lista_e_perguntada_no_UNIVERSO_DA_TELA` — `:624` | FIXTURE | Corrigir tempo da validação; o dia sem porta chega à lista por `vigia_fio.py:381`, `:261`. |
+| `test_MORDE_ausencia_ABERTA_cobrindo_o_dia_AGUARDA_O_DP_e_nao_e_fio_morto` — `:546` | FIXTURE + TESTE VELHO | Corrigir tempo das rejeitada/aprovada; aberta com marco devido publica `decidir_ausencia`: `aguarda=1→0`, `fio_vivo=0→1`, mortos continuam 2 (`tarefa_do_dia.py:303`, `:311`, `:633`). | [nao verificado]
+| `test_MORDE_chamado_em_analise_SEM_resolver_dia_e_FIO_MORTO` — `:527` | FIXTURE | Corrigir tempo; conservar assertiva. Residual decidir já é convertido para cobrar pela fixture (`test_o261_vigia_fio.py:136`). |
+| `test_MORDE_dono_BATIDA_ou_CADASTRO_NA_LISTA_e_fio_do_admin_e_o_resto_fica` — `:586` | FIXTURE | Corrigir tempo; manter divisão 2 admin + 3 mortos (`vigia_fio.py:261`, `:391`). |
+| `test_MORDE_falha_da_lista_e_UMA_chamada_por_rodada_e_todos_ficam` — `:614` | FIXTURE | Corrigir tempo; conservar uma carga e três mortos (`vigia_fio.py:183`, `:197`, `:203`). |
+| `test_MORDE_folga_CONTESTADA_e_validada_e_ESCALA_NAO_DESCREVE_O_DIA_e_nao_fio_morto` — `:659` | FIXTURE | Corrigir tempo; manter assertivas. Subdivisão lê `p.estado` e aceite (`vigia_fio.py:259`). |
+| `test_MORDE_o_VOCABULARIO_do_cartorio_e_quem_diz_quais_dias_cobram` — `:217` | FIXTURE | Corrigir tempo; conservar um morto + um fora (`vigia_fio.py:299`, `:364`). |
+| `test_MORDE_o_dia_SO_de_plantio_fora_do_slot_NAO_e_ALVO` — `:411` | FIXTURE | Corrigir tempo também em `_porta`; conservar assertivas (`test_o261_vigia_fio.py:362`, `vigia_fio.py:408`). |
+| `test_MORDE_o_dia_de_HOJE_fica_FORA_do_contador_alarmado` — `:183` | FIXTURE | Instante de escrita anterior também ao menor horizonte, `DIA−1`; conservar teto (`vigia_fio.py:361`, `:372`). |
+| `test_MORDE_o_fio_vivo_e_o_fio_morto_dao_CONTAS_DIFERENTES` — `:148` | FIXTURE | Corrigir tempo; conservar 1 vivo + 1 morto. |
+| `test_MORDE_registrado_e_VIVO_mas_nao_COBRA_ninguem` — `:165` | FIXTURE | Corrigir tempo; conservar assertivas (`vigia_fio.py:301`, `:398`). |
+| `test_a_LISTA_com_dono_leva_a_CLASSE_de_cada_dia_sem_precedencia` — `:477` | FIXTURE | Corrigir `_porta`; preservar ambas as classes (`vigia_fio.py:413`, `:427`). |
+| `test_a_abertura_por_PERGUNTA_soma_o_universo_da_PORTA` — `:440` | FIXTURE | Corrigir `_porta`; preservar universo 3 (`vigia_fio.py:410`). |
+| `test_as_PARTES_SOMAM_o_total_e_o_fino_e_subconjunto` — `:680` | FIXTURE + TESTE VELHO | Após corrigir tempo: vivos `2→3` = app 1 + Resolver 1 + decidir ausência 1; aguardando ausência `1→0`; escala continua 1 (`tarefa_do_dia.py:311`, `:633`). | [nao verificado]
+| `test_as_TRES_classes_de_DIA_somam_o_fio_morto` — `:390` | FIXTURE | Corrigir `_porta`; conservar três mortos e partição (`vigia_fio.py:415`). |
+| `test_as_linhas_do_log_NAO_LEVAM_NOME_de_ninguem` — `:727` | FIXTURE | Corrigir tempo; preservar `FIO_MORTO=1`. |
+| `test_o_dia_MISTO_conta_UMA_vez_e_no_ALVO` — `:426` | FIXTURE | Corrigir `_porta`; conservar um dia com duas perguntas (`vigia_fio.py:410`, `:418`). |
+| `test_o_juiz_REAL_oferece_o_dia_que_acusa_sem_lavra` — `:509` | REGRESSÃO, pela regra de dúvida | Não afrouxar. Origem concreta da negativa/ignorância [nao verificado]. Calendário pode falhar e publicar `None` (`calendario.py:142`, `:489`, `:604`); tarefa lê oferta em `tarefa_do_dia.py:592`. A docstring “nem tem vínculo” contradiz a fixture atual (`test_o261_vigia_fio.py:92`). |
+| `test_sem_resposta_da_lista_o_dia_FICA_no_alarme` — `:606` | FIXTURE | Corrigir tempo; conservar dia alarmado e sem resposta 1 (`vigia_fio.py:203`, `:429`). |
+
+Na implementação de A, publicar um dicionário de desconhecimento sem rota exige revisar os leitores que confundem `porta is not None` com ação alcançável: `chamados/services/vigia_fio.py:366`, `:369` e o laço do `censo_alcance`. Sem essa revisão, desconhecimento passa a contar como fio vivo. Nenhum arquivo foi escrito.
+
+## 15/11 00:06 · sessao 5a6b3b645523 · - · - · origem=Ronald (tmux)
+
+R1: os asserts antigos encontrados são:
+
+| Sítio | Antes → regra LU-05 aplicada | [nao verificado]
+|---|---|
+| `folha/tests/test_retrato_folha_quadros.py:1250` | Admin 5 → 4: admin 103/107/108 = 3, chamado 105 = 1; ninguem 106 sai para balde próprio. Fixture em `:91-97`. |
+| `folha/tests/test_haiku_fora_da_folha.py:516` | Admin 2 → 1; Sem ação disponível = 1; total permanece 2. Fios esperados `{admin:1, ninguem:1}` em `:521`. |
+| `folha/tests/test_haiku_fora_da_folha.py:559` | Igualdade de baldes deve virar mudança: antes Admin=1/Sem ação=1; depois de chamado Admin=2/Sem ação=0. Chamado criado em `:552-555`, fio esperado em `:557`. |
+| `folha/tests/test_haiku_fora_da_folha.py:561` | Comparar esperado com quadro depois, atualmente compara com `_antes`. |
+| `folha/tests/test_haiku_fora_da_folha.py:580` | `_antes == _dep` deve virar diferença; depois Admin=2/Sem ação=0. Admin=2 em `:581` continua correto. |
+
+`haiku:499` lê o mapa; `:521` afirma fio cru, cuja expectativa continua correta. Asserts já adequados: `quadros:710,719,729,796,797,1072`; `tela2:397-405`; `dono_sao_tres:70-89`.
+
+Comentários antigos adicionais: `quadros:19,117,496,1222,1233,1267`; `haiku:445,462,476,487,505,514,520,532,578`; `drawer:169-173`; `tela2:458-462,490-493`; `smoke_chromium:37-38`.
+
+R2: chamadores sem `hoje` em `folha/tests/test_vigia_retido_calado.py:29,88,124,133`; `:134` já passa explicitamente. Produção já passa a data em `folha/management/commands/vigiar_retido_calado.py:31`; testes c4 também em `chamados/tests/test_e3_r3_c4_sem_banco.py:146,149`. Assinatura sugerida: `def censo(empresas=None, *, hoje):`, preservando empresas opcional e exigindo relógio (`folha/vigia_retido_calado.py:28`).
+
+R5: a cópia contém as métricas Helvetica em `static/pdfjs/pdf.worker.min.js:22`. “Sem ação disponível” soma 9282 unidades/1000; a 7 pt = **64,974 pt = 22,921383 mm**. Coluna = **26 mm = 73,700787 pt**, folga bruta **3,078617 mm** (`folha/views_retrato.py:425,427`). A fonte corpo Helvetica e padding padrão de 6 pt por lado dependem do ReportLab, ausente neste ambiente [nao verificado]. Com esses defaults, área útil = 61,700787 pt; texto invade o padding direito em 3,273213 pt, mas termina antes da borda física: 6+64,974=70,974 <73,700787 pt [nao verificado: renderização].
+
+Barra: fonte `"Segoe UI", system-ui, -apple-system, sans-serif`, 11 px, peso 600, padding horizontal 24 px e gap 6 px (`static/css/hasner-ponto.css:49,528`). Sua largura é `largura_texto + largura_numero700 + 6 + 24 + 2 bordas`; a pilula não possui coluna fixa (`templates/core/_barra_gestao.html:67`). O externo não quebra; o interno quebra (`:62,66`). Fonte real, largura em pixels e encaixe no viewport [nao verificado: browser indisponível].
+
+Para A, conferir hardcodes de cardinalidade em `quadros:440,443,939`, `dono_sao_tres:48,50,58,64,110`, `tela2:403`. Para B, o assert `_grupo(['admin','colab','chamado','nada']) == 'D'` deve afirmar **B**, pois há ação colab e nem todos são nada (`folha/tests/test_haiku_fora_da_folha.py:103-105`).
+
+Padrões disponíveis: **Clock Injection** (`docs/GLOSSARIO.md:19`), **Single Source of Truth / Aggregate Root** (`:11`), **Single Writer Principle** (`:12`), **CQRS com projecoes reconstruiveis** (`:24`).
+
+R3 tem conflito textual: proibição inicial absoluta de `config/crons.py`, seguida de pedido específico permitindo só comentário; o comentário alvo é `config/crons.py:1677-1679`. Não editei arquivos.
 
 ## 14/11 23:49 · sessao 8d0468b6cb0b · GRADE-RESOLVE-67 · censo · origem=Code
 
@@ -521,103 +610,4 @@ As datas individualizadas no complemento pertencem expressamente à classe **8.2
 
 RESULTADO|BO-ADMIN-2710|8.3|SEM DIA-COLAB|-|-
 
-## 14/11 23:38 · sessao 76876f71497a · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **col246 — 2026-11-01**. O vínculo explícito com o caso 04 está em `app/docs/BACKLOG.md:1970`; o ano é contextualizado em `app/docs/RELATO.md:168`. Isso supera a associação apenas pela ordem, marcada como contestável em `app/docs/RELATO.md:226`.
-
-(2) **Dono L-099: [nao verificado]; PRECISA SONDA.** A casa registra “cobrança indevida” e encaminhamento à E4b, mas não informa os insumos que determinam o dono (`app/docs/BACKLOG.md:1970`; `app/ponto/management/commands/e6_oraculo.py:98`). A montagem real consulta batidas, cadastro, fase e motor (`app/ponto/management/commands/e6_oraculo.py:182`).
-
-(3) Sonda para contexto Django já inicializado, com bloqueio de SQL diferente de SELECT. Assinatura conferida em `app/ponto/management/commands/e6_oraculo.py:128`; janela por empresa conforme `app/ponto/management/commands/e6_oraculo.py:304`.
-
-```python
-import contextlib
-import datetime as dt
-import io
-import logging
-
-from django.db import connections
-from django.utils import timezone
-from colaboradores.models import Colaborador
-from ponto.janelas import janela_fechamento
-from ponto.management.commands.e6_oraculo import InsumosDoDono
-
-
-def somente_select(execute, sql, params, many, context):
-    if not sql.lstrip().upper().startswith("SELECT "):
-        raise RuntimeError("SQL bloqueado")
-    return execute(sql, params, many, context)
-
-
-erros = 0
-linhas = []
-nivel_anterior = logging.root.manager.disable
-logging.disable(10**9)
-
-try:
-    with contextlib.ExitStack() as pilha:
-        pilha.enter_context(contextlib.redirect_stdout(io.StringIO()))
-        pilha.enter_context(contextlib.redirect_stderr(io.StringIO()))
-        for conexao in connections.all():
-            pilha.enter_context(conexao.execute_wrapper(somente_select))
-
-        agora = timezone.now()
-        hoje = timezone.localtime(agora).date()
-        dia = dt.date(2026, 11, 1)
-        colab = Colaborador.objects.get(pk=246)
-        ini, fim = janela_fechamento(11, 2026, colab.empresa_id)
-        dono = InsumosDoDono(
-            colab, ini, fim, hoje, agora=agora
-        ).dono(dia)
-
-        if dono not in {"ESTRUTURA", "CADASTRO", "BATIDA"}:
-            raise RuntimeError("Dono indisponivel")
-        linhas.append(f"DONO|col246|{dia.isoformat()}|{dono}")
-except Exception:
-    erros += 1
-finally:
-    logging.disable(nivel_anterior)
-
-for linha in linhas:
-    print(linha)
-print(f"FIM|erros={erros}")
-```
-
-(4) Padrão quebrado e obra que fecha como ESTRUTURA: **[nao verificado]**, dependentes do resultado do juiz.
-
-RESULTADO|BO-1311-ROTEIRO|04|PRECISA SONDA|-|-
-
-## 14/11 23:37 · sessao 4b70da878e72 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** A oitava posição da lista aponta para **col523**, mas não informa data do caso; a própria numeração é contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
-
-O resumo dos casos 06–10 só individualiza datas de col859, sem identificar dia-colab do caso 08. (app/docs/RELATO.md:222)
-
-(4) Dono L-099, padrão quebrado e obra correspondente: **[nao verificado]**. Encerrado sem sonda, conforme a condição de parada por ausência de dia-colab.
-
-RESULTADO|BO-1311-ROTEIRO|08|SEM DIA-COLAB|-|-
-
-## 14/11 23:37 · sessao 25e4ee69042b · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **O registro não identifica dia-colab do caso 09.** Pela ordem da lista, corresponderia a **col866**, mas sem data; a própria numeração é contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
-
-O resumo dos casos 06–10 só individualiza datas de col859; não fornece data para col866. (app/docs/RELATO.md:222)
-
-O `git grep` falhou por ausência de metadados Git; usei `rg` equivalente, sem localizar testes que citem esta fonte/caso. [nao verificado] [nao verificado]
-
-(4) Dono ESTRUTURA e padrão quebrado: [nao verificado]. Obra que fecha este caso: [nao verificado]. Sem dia-colab identificado, encerro sem sonda, conforme solicitado.
-
-RESULTADO|BO-1311-ROTEIRO|09|SEM DIA-COLAB|-|-
-
-## 14/11 23:37 · sessao 91bee8cf4a64 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB identificado para o caso 07.** A sétima posição da lista corresponde a **col1004**, mas a numeração é expressamente contestável; o registro menciona competência 11 sem individualizar a data desse caso. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
-
-A data **27/10** aparece para col1004 no **HJ-093**; seu vínculo com o caso 07 deste roteiro permanece **[nao verificado]**. Os dias individualizados na síntese dos casos 06–10 pertencem a col859. (app/docs/BACKLOG.md:786; app/docs/RELATO.md:222)
-
-O `git grep` falhou por ausência de metadados Git; a busca equivalente com `rg` não encontrou testes que citassem a fonte ou col1004. **[nao verificado]** [nao verificado]
-
-(4) Sem dia-colab identificado, encerro sem sonda, conforme solicitado. Dono L-099, padrão quebrado e obra que fecha: **[nao verificado]**.
-
-RESULTADO|BO-1311-ROTEIRO|07|SEM DIA-COLAB|-|-
-
-_5400 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5404 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
