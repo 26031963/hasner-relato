@@ -1,7 +1,162 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 18:13** · publicado em **15/11/2026 18:13** (UTC-3)
+> Ultima resposta processada: **15/11/2026 18:18** · publicado em **15/11/2026 18:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 18:18 · sessao 132e7f2bb6ed · E3-RESTO-R3 · verificador · origem=Code
+
+**A. As curas existem, mas G1 permanece incompleto.**
+
+- **G1 — média, procede parcialmente.** O escritor grava o mesmo `_agora` em todos os retratos da execução. Os dois mutantes que restauram `timezone.now()` por retrato morrem por asserção. Porém o vigia continua identificando a rodada pelo **dia civil**, contrariando a cura completa pedida na triagem. Os testes c15 criam apenas uma rodada e não distinguem os dois agrupamentos. (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/management/commands/lavrar_retrato_folha.py:83`, `app/folha/vigia_retido_calado.py:48`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:35`, `app/chamados/tests/e3_r3_c15_mutantes.py:28`)
+
+- **G2 — cura real nos sítios alterados.** O instante chega ao frescor, à retenção e ao informativo; existem mutantes que retiram essa propagação e morrem. Sobram caminhos de produção com relógios divergentes, detalhados em C. (`app/folha/views_retrato.py:210`, `app/folha/fora_da_folha.py:121`, `app/folha/fora_da_folha.py:301`, `app/chamados/tests/e3_r3_c15_mutantes.py:30`)
+
+- **G3 — baixa, cura documental incompleta e sem mordida própria.** Os textos principais foram corrigidos no código, inclusive em `models.py`; portanto não ficaram apenas na entrega. Contudo os testes e mutantes c15 cobrem exclusivamente G1/G2. Reintroduzir os textos antigos em memória conserva os nove testes verdes. Permanecem contradições documentais, listadas em E6. (`app/chamados/services/tarefa_do_dia.py:32`, `app/folha/fora_da_folha.py:77`, `app/folha/retrato_folha.py:474`, `app/folha/models.py:306`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:81`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:185`, `app/chamados/tests/e3_r3_c15_mutantes.py:27`)
+
+Execução local somente em memória: **9 testes c15 OK; 15/15 mutantes mortos**, por asserção e sem erros de infraestrutura. O instrumento rejeita erros como prova de morte. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:81`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:185`, `app/chamados/tests/e3_r3_c15_mutantes.py:80`)
+
+**B. G1 ainda permite universo errado — média.**
+
+Os casos abaixo foram reproduzidos com o `censo` real e os leitores reais do retrato, substituindo apenas dependências externas por dados em memória. A ocorrência desses casos em produção é **[nao verificado]**.
+
+| Caso concreto, horários locais | Resultado |
+|---|---|
+| **Legado:** comp10 em 14/11, 23:59:59, com um bloqueado `ninguem` e um dia sem leitura; comp11 em 15/11, 00:00:01, com um bloqueado `colab` e nenhum dia sem leitura. | Seleciona somente comp11: **calados=0, dias_sem_leitura_sistema=0, cego=0**. Apaga o positivo conhecido da comp10 na seleção anterior à soma. (`app/folha/vigia_retido_calado.py:47`, `app/folha/vigia_retido_calado.py:65`, `app/folha/vigia_retido_calado.py:80`) |
+| **Duas rodadas novas no mesmo dia:** às06h, lavra explícita da comp09 com positivo1; às07h, lavra automática das comp10/11, cada uma com bloqueado `colab` e zero dias sem leitura. | Seleciona **09+10+11**, publicando **calados=1, dias_sem_leitura_sistema=1, cego=0**, embora a rodada completa mais recente tenha zero nesses contadores. A competência explícita é permitida e não é apagada pela execução automática. (`app/folha/management/commands/lavrar_retrato_folha.py:57`, `app/folha/management/commands/lavrar_retrato_folha.py:62`, `app/folha/management/commands/lavrar_retrato_folha.py:81`, `app/folha/vigia_retido_calado.py:49`) |
+
+Uma rodada nova completa que atravessa meia-noite já conserva suas competências juntas. Isso não resolve o legado nem a mistura de rodadas do mesmo dia. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:85`, `app/folha/vigia_retido_calado.py:48`)
+
+O falso positivo acima vem de **outra competência conservada da rodada anterior**. Não há duas versões físicas da mesma chave empresa/competência: existe unicidade e `update_or_create`. (`app/folha/models.py:363`, `app/folha/management/commands/lavrar_retrato_folha.py:81`)
+
+O teste vizinho usado para justificar a conservação do agrupamento cria comp10 em T0 e comp11 em T0+1min e exige ambas como uma lavra. Essa fixture representa o escritor antigo; não demonstra que dia civil identifica corretamente uma rodada após a mudança. (`app/folha/tests/test_vigia_retido_calado.py:42`, `app/folha/tests/test_vigia_retido_calado.py:47`, `app/folha/tests/test_vigia_retido_calado.py:51`)
+
+Leitores de **`RetratoFolha.lavrado_em`**:
+
+| Leitor | Significado assumido |
+|---|---|
+| `vigia_retido_calado.censo` | Dia civil local como identidade da última lavra. (`app/folha/vigia_retido_calado.py:47`) |
+| `frescor_dos_retratos` | Instante comparável ao maior `FechamentoMensal.atualizado_em`; somente `fechamento > lavrado_em` desatualiza. Assume explicitamente início da rodada, conservador para alterações durante sua execução. (`app/folha/retrato_folha.py:1382`, `app/folha/retrato_folha.py:1403`, `app/folha/retrato_folha.py:1408`) |
+| `_rotulo_admin` | Instante apresentado no horário local como “lavrado em”. (`app/folha/retrato_folha.py:1430`) |
+| `_recorte_da_barra` e barra | Mínimo dos carimbos dos retratos exibidos, apresentado como “atualizado HH:MM”. (`app/folha/views_retrato.py:203`, `app/templates/folha/_retrato_barra.html:22`) |
+
+O escritor localizado é `lavrar_retrato_folha`; homônimos como o de `DiaPago` não pertencem a esse campo. (`app/folha/management/commands/lavrar_retrato_folha.py:81`, `app/folha/porta_export.py:283`)
+
+**C. G2: argumentos presentes não garantem instante preservado.**
+
+Censo atual de chamadas de produção, incluindo aliases:
+
+| Função | Chamadas | Sítios |
+|---|---:|---|
+| `frescor_dos_retratos` | 2 | `app/folha/views_retrato.py:210`; `app/folha/retrato_folha.py:1443` |
+| `retratos_desatualizados` | 0 | Definição em `app/folha/retrato_folha.py:1437`; órfão também documentado em `app/docs/BACKLOG.md:1772` |
+| `o_que_segura` | 0 | Definição em `app/folha/fora_da_folha.py:257`; ferramenta humana HAIKU declarada em `app/docs/BACKLOG.md:1772` |
+| `dias_que_seguram` | 2 | `app/folha/fora_da_folha.py:200`; `app/chamados/services/vigia_fio.py:537` |
+| `_dias_que_retem` | 2 | `app/folha/fora_da_folha.py:165`; `app/folha/fora_da_folha.py:275` |
+| `contexto_calendario` | 4 | `app/colaboradores/views.py:1952`; `app/colaboradores/services/calendario.py:157`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160` |
+
+Nenhuma dessas chamadas omite sintaticamente o parâmetro correspondente. Entretanto:
+
+- **Drawer — média:** captura `agora`, depois relê o dia três vezes. Exemplo com corte21: instante inicial **20/11 23:59:59**, leitura posterior em21/11. A janela do drawer passa de **21/09–20/11** para **21/10–20/12**, mas a grade recebe o instante de20/11; o `hoje` devolvido também vem de outro relógio. (`app/colaboradores/services/drawer.py:19`, `app/colaboradores/services/drawer.py:43`, `app/colaboradores/services/drawer.py:111`, `app/colaboradores/services/drawer.py:122`, `app/colaboradores/services/drawer.py:157`, `app/ponto/janelas.py:24`, `app/colaboradores/services/calendario.py:192`)
+
+- **Relatório de furos — média:** a view lê `hoje`, mas não transmite instante ao dataset. O default `None` chega ao D4 e ao calendário, que leem seus relógios. Uma execução atravessando meia-noite pode combinar o recorte do dia anterior com julgamentos de instantes diferentes por colaborador. (`app/relatorios/views.py:1518`, `app/relatorios/views.py:1541`, `app/relatorios/furos.py:103`, `app/relatorios/furos.py:123`, `app/relatorios/furos.py:164`, `app/ponto/status_dia.py:253`, `app/colaboradores/services/calendario.py:192`)
+
+- **Backfill, medição posterior — média:** após os atos, relê o instante mantendo o `hoje` inicial. Se começar em14/11 e medir depois em15/11, entrega dia14 com instante15 ao `censo_alcance`, que não valida essa divergência. O outro `censo` valida. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:218`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:352`, `app/chamados/services/vigia_fio.py:516`, `app/chamados/services/vigia_fio.py:283`)
+
+Esses caminhos não aparecem no delta fornecido; sua situação executável nos hashes anteriores é **[nao verificado]**.
+
+As três bordas nomeadas estão corretas no caminho normal: calendário do perfil, barra e comando do vigia derivam `agora`/`hoje` do mesmo instante. (`app/colaboradores/views.py:1951`, `app/colaboradores/views.py:1965`, `app/folha/views_retrato.py:177`, `app/folha/views_retrato.py:210`, `app/chamados/management/commands/vigiar_fio_morto.py:171`, `app/chamados/management/commands/vigiar_fio_morto.py:181`)
+
+O resíduo financeiro declarado continua existindo: `classificar_export` e `recalcular_fechamento_mes` omitem `hoje`; o wrapper transmite `None` até `_dias_sem_decisao`, que lê `localdate()`. Esses arquivos estão fora do delta fornecido; comparação independente por Git é **[nao verificado]**. (`app/folha/export.py:968`, `app/ponto/services/fechamento.py:1067`, `app/folha/export.py:1307`, `app/folha/export.py:1238`)
+
+**D. `retratos_desatualizados`: zero chamador de produção no hash atual.**
+
+O delta fornecido altera sua assinatura, sem remover chamador. Há registro documental de zero chamador datado de27/10, portanto não cabe atribuir o abandono à c15. A contagem executável nos hashes **57c1c9b94** e **77dfa94fa** permanece **[nao verificado]**. (`app/folha/retrato_folha.py:1437`, `app/docs/BACKLOG.md:1772`)
+
+**E. Checklist.**
+
+**1. Escritores, leitores e unidades pertinentes ao delta:**
+
+| Campo/valor | Origem/escritor | Leitura e significado |
+|---|---|---|
+| Empresa, mês e ano do retrato | Lavrador escolhe competência explícita ou janelas do juiz; persiste pela chave única. (`app/folha/management/commands/lavrar_retrato_folha.py:57`, `app/folha/management/commands/lavrar_retrato_folha.py:62`, `app/folha/management/commands/lavrar_retrato_folha.py:81`) | View filtra pela competência; frescor usa anterior/atual; vigia acrescenta o filtro divergente por dia civil descrito em B. (`app/folha/views_retrato.py:192`, `app/folha/retrato_folha.py:1396`, `app/folha/vigia_retido_calado.py:48`) |
+| `linhas.status/motivo` | Classificação do export, copiada pelo montador e persistida pelo lavrador. (`app/folha/export.py:969`, `app/folha/retrato_folha.py:1224`, `app/folha/retrato_folha.py:1240`, `app/folha/management/commands/lavrar_retrato_folha.py:83`) | `_balde` distingue entram/bloqueado/módulo próprio; fio legado usa status/motivo. (`app/folha/retrato_folha.py:89`, `app/folha/retrato_folha.py:449`) |
+| `dias/datas` | Datas do retentor; contagem e ISO publicados por `fora_da_folha`, copiados pelo montador. (`app/folha/export.py:1261`, `app/folha/fora_da_folha.py:235`, `app/folha/fora_da_folha.py:246`, `app/folha/retrato_folha.py:1242`) | Recorte inclusivo nas duas pontas; balde Hoje usa `data >= hoje`. Datas são dias da célula/turno, não instantes. (`app/folha/retrato_folha.py:1343`, `app/folha/retrato_folha.py:491`, `app/folha/export.py:1180`) |
+| `dono`, `dias_sem_leitura`, `dias_sem_porta` | Projeção da porta e agrupamento dos dias; persistidos no retrato. (`app/folha/fora_da_folha.py:217`, `app/folha/fora_da_folha.py:231`, `app/folha/retrato_folha.py:1244`, `app/folha/retrato_folha.py:1248`) | `dono` guarda **fio**; o balde vem do mapa. Vigia conta pessoas por retrato e dias sem leitura separadamente; template lê datas sem porta. (`app/folha/retrato_folha.py:194`, `app/folha/retrato_folha.py:447`, `app/folha/vigia_retido_calado.py:58`, `app/folha/vigia_retido_calado.py:65`, `app/templates/folha/_retrato_o_que_fazer.html:46`) |
+| `acao/rota/fio/nao_sei` da tarefa | Publicados pelo juiz e projetados pela porta; ações copiadas à linha. (`app/chamados/services/tarefa_do_dia.py:708`, `app/chamados/services/tarefa_do_dia.py:722`, `app/folha/fora_da_folha.py:223`) | Folha lê fio; UI traduz ação em endereço. `resolver_dia` transporta dia do turno. (`app/folha/fora_da_folha.py:86`, `app/folha/retrato_folha.py:1044`, `app/folha/retrato_folha.py:1054`) |
+| `tipo/saldo/informativo` | Montador lê causa gravada, aplica os mapas e copia informativo da autoridade. (`app/folha/retrato_folha.py:1217`, `app/folha/retrato_folha.py:1220`, `app/folha/retrato_folha.py:1250`) | Leitores dos eixos e template; informativo de rescisão não entra em `datas/dias` retentores. (`app/folha/retrato_folha.py:496`, `app/folha/retrato_folha.py:506`, `app/folha/retrato_folha.py:1252`, `app/templates/folha/_retrato_o_que_fazer.html:56`) |
+| `FechamentoMensal.atualizado_em/causa_espelho/motivos_espelho` | Carimbo `auto_now`; recalculador atribui causa/motivos e salva. (`app/ponto/models.py:479`, `app/ponto/services/fechamento.py:1067`, `app/ponto/services/fechamento.py:1080`, `app/ponto/services/fechamento.py:1144`) | Frescor compara carimbos por instante; montador lê causa; export consulta a autoridade de retenção. (`app/folha/retrato_folha.py:1408`, `app/folha/retrato_folha.py:1170`, `app/folha/export.py:968`) |
+| `CelulaDia.veredito/protestos/status_dia` | Porta da célula grava o julgamento e status. (`app/ponto/portas/celula.py:1092`, `app/ponto/portas/celula.py:1096`) | Retentor lê veredito/protestos; calendário lê status pelo D4. (`app/folha/export.py:1273`, `app/folha/export.py:1286`, `app/colaboradores/services/calendario.py:638`, `app/colaboradores/services/calendario.py:695`) |
+
+O retentor percorre `[ini,fim]` inclusivo; ausência de célula passa a reter apenas em `d < hoje`. As conversões locais usam o fuso configurado `America/Sao_Paulo`. A divergência encontrada não é inclusão de extremidade: é **instante versus identidade de rodada/dia civil**. (`app/folha/export.py:1265`, `app/folha/export.py:1271`, `app/config/settings/base.py:93`, `app/folha/vigia_retido_calado.py:48`)
+
+**2. Segundo juiz ou regra manual de status:** nenhum novo identificado no delta. A tarefa continua publicando a porta; calendário consulta D4; a classificação do export permanece na autoridade registrada. O agrupamento errado do vigia é seleção de universo, já apontada em B. (`app/core/juizes.py:299`, `app/core/juizes.py:323`, `app/chamados/services/tarefa_do_dia.py:722`, `app/colaboradores/services/calendario.py:638`)
+
+**3. Segundo escritor:** nenhum introduzido pelo delta identificado para Chamado, Pauta, CelulaDia, DiaPago ou FechamentoMensal. A escrita alterada continua sendo a de RetratoFolha, pelo lavrador. (`app/chamados/services/tarefa_do_dia.py:735`, `app/chamados/services/vigia_fio.py:490`, `app/folha/management/commands/lavrar_retrato_folha.py:81`)
+
+**4. Relógio fora da borda:** procede nos caminhos de C e no resíduo financeiro; não foi eliminado globalmente. (`app/colaboradores/services/drawer.py:111`, `app/relatorios/furos.py:164`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:352`, `app/folha/export.py:1238`)
+
+**5. Selos/asserções:** G1 não protege o agrupamento do leitor; G3 não possui mutante c15. O censo G2 aceita a presença sintática de `agora=None`, e a lista contra relógios próprios não inclui drawer/dataset/backfill. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:35`, `app/chamados/tests/e3_r3_c15_mutantes.py:27`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:140`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:168`)
+
+Nos vizinhos de desligamento há lei explícita para a inversão, gêmeo ativo preservado e asserção do informativo. A medida atual conserva os critérios9/85 e A1=6/B1=82. Enfraquecimento relativo dos arquivos de apoio e testes entre os hashes é **[nao verificado]**. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:1`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:102`, `app/folha/tests/test_lei_desligado_nao_trava.py:104`, `app/core/tests/test_medida_turno_do_par.py:100`)
+
+**6. Documentação incorreta — baixa:**
+
+- `lavrado_em` ainda é descrito como momento em que a linha foi escrita; agora contém o início da rodada, anterior à montagem daquela competência. (`app/folha/models.py:356`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/management/commands/lavrar_retrato_folha.py:69`)
+- Modelo afirma que linha antiga cai em `ninguem`; `{status:'fora', motivo:'sem_codigo_dominio'}` sem `dono` retorna `admin`. (`app/folha/models.py:315`, `app/folha/retrato_folha.py:449`, `app/folha/retrato_folha.py:374`)
+- Schema documentado omite saldo `cadastro` e grupoE, ambos produzidos pelo código. (`app/folha/models.py:307`, `app/folha/models.py:308`, `app/folha/retrato_folha.py:424`, `app/folha/fora_da_folha.py:112`)
+
+O contrato dos cinco retornos de `_fio_do_dia` foi corrigido e corresponde à projeção atual. (`app/folha/fora_da_folha.py:77`, `app/folha/fora_da_folha.py:89`)
+
+**7. ESMERIL-SEMANTICA:** procede para `lavrado_em`: início da rodada no escritor/frescor, momento da escrita no modelo e dia identificador de rodada no vigia. `dono` guardar fio está explicitamente documentado e possui mapa próprio para o balde; não demonstra outro conflito novo. (`app/folha/management/commands/lavrar_retrato_folha.py:83`, `app/folha/retrato_folha.py:1382`, `app/folha/models.py:356`, `app/folha/vigia_retido_calado.py:48`, `app/folha/retrato_folha.py:170`, `app/folha/retrato_folha.py:194`)
+
+**8. TXT/FechamentoMensal/dinheiro:** nenhuma mudança de cálculo ou escrita financeira identificada no delta fornecido. A alteração persiste o retrato e muda leituras de retenção/apresentação; o caminho financeiro conserva as chamadas sem `hoje`. Igualdade numérica em produção é **[nao verificado]**. (`app/folha/management/commands/lavrar_retrato_folha.py:83`, `app/folha/fora_da_folha.py:121`, `app/folha/export.py:968`, `app/ponto/services/fechamento.py:1067`)
+
+**VEREDITO: REPROVA.**
+
+## 15/11 18:14 · sessao 4b9631d94182 · - · - · origem=Ronald (tmux)
+
+Achados de G2/C/E4:
+
+- **Média — relógios divergentes no drawer, fora do delta fornecido.** `contexto_drawer` captura `agora` em `app/colaboradores/services/drawer.py:19`, mas lê datas novas em `:43` e `:111`; entrega o instante antigo ao calendário em `:121–122`. Caso concreto, corte 21: `agora=20/11/2026 23:59:59`, leitura de `:111=21/11`. A janela apresentada passa de **21/09–20/11** para **21/10–20/12**, enquanto a grade julga com `hoje=20/11` derivado do instante antigo (`app/ponto/janelas.py:24`, `app/colaboradores/services/calendario.py:192`). Pré-existência no hash anterior: [nao verificado].
+
+- **Média — instante não chega ao calendário do relatório.** A borda lê `hoje` em `app/relatorios/views.py:1518`, mas chama `dataset_furos` sem `agora` em `:1541`; o default `None` (`app/relatorios/furos.py:103`) desce ao D4 em `:123` e ao calendário em `:164`, cujo fallback lê o relógio em `app/colaboradores/services/calendario.py:192`. Uma frota atravessando meia-noite pode receber dias de julgamento diferentes, com recorte escolhido pelo dia antigo (`app/relatorios/views.py:1536–1537`). Fora do delta fornecido; pré-existência: [nao verificado].
+
+- **Baixa — proteção dos testes não cobre esses relógios.** O censo exige presença sintática do argumento (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:140–143`); portanto aceita `agora=None`. A proibição de relógio próprio restringe-se às seis funções de `LEITORES_SEM_RELOGIO`, sem drawer/dataset (`:168–170`).
+
+Censo atual de chamadas de produção, incluindo aliases:
+
+| Função | Chamadas | Locais |
+|---|---:|---|
+| `frescor_dos_retratos` | 2 | `app/folha/views_retrato.py:210`; `app/folha/retrato_folha.py:1443` |
+| `retratos_desatualizados` | 0 | Definição em `app/folha/retrato_folha.py:1437`; nenhuma referência executável externa localizada [nao verificado] |
+| `o_que_segura` | 0 | Definição em `app/folha/fora_da_folha.py:257`; uso humano HAIKU declarado em `app/docs/BACKLOG.md:1772` |
+| `dias_que_seguram` | 2 | `app/chamados/services/vigia_fio.py:537`; `app/folha/fora_da_folha.py:200` |
+| `_dias_que_retem` | 2 | `app/folha/fora_da_folha.py:165`, `:275` |
+| `contexto_calendario` | 4 | `app/colaboradores/views.py:1952`; `app/colaboradores/services/calendario.py:157`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160` |
+
+Todos esses chamadores presentes entregam o keyword correspondente; o relatório entrega `None` por default (`app/relatorios/furos.py:103`, `:164`).
+
+As curas diretas são reais:
+
+- Barra: único `_agora`, deriva `_hoje` e transmite o instante ao frescor (`app/folha/views_retrato.py:177`, `:178`, `:210`).
+- Calendário de perfil: captura `_agora`, passa à grade e deriva `hoje` dele (`app/colaboradores/views.py:1951`, `:1952`, `:1965`).
+- Vigia normal: comando captura `agora/hoje` juntos e transmite aos dois censos (`app/chamados/management/commands/vigiar_fio_morto.py:171`, `:172`, `:180`, `:181`); `censo_alcance` deriva o default e passa `hoje` à retenção (`app/chamados/services/vigia_fio.py:516`, `:537`).
+- `_dias_que_retem` transmite `hoje` à autoridade (`app/folha/fora_da_folha.py:121`); `o_que_segura` deriva uma data para retenção e informativo (`:270`, `:275`, `:301`).
+
+Nuance do vigia: `censo_alcance` aceita `hoje` explícito divergente sem validar (`app/chamados/services/vigia_fio.py:516`), ao contrário de `censo` (`:283–284`). Backfill permite `--hoje` histórico em DRY/LISTA (`app/chamados/management/commands/backfill_fio_morto_e4b.py:218–221`, `:237`); após o ato relê `timezone.localtime()` preservando o `hoje` antigo (`:352`). É caminho externo ao delta fornecido.
+
+Resíduo dinheiro:
+
+- Exatamente duas chamadas a `motivos_retencao_espelho`: `app/folha/export.py:968`; `app/ponto/services/fechamento.py:1067`.
+- Ambas omitem `hoje`; o wrapper transmite `None` (`app/folha/export.py:1307`), chegando ao relógio interno (`:1238`).
+- `motivos_retencao_celula` tem quatro chamadas: export `:1307`, fora_da_folha `:121`, previa `app/folha/previa.py:170`, vigia_pausa `app/folha/services/vigia_pausa.py:125`. As duas últimas já fornecem `hoje`.
+- Export/fechamento estão ausentes do delta de produção fornecido; comparação por git indisponível nesta cópia [nao verificado].
+
+D/histórico: `app/docs/BACKLOG.md:1772` já documenta zero chamador de `retratos_desatualizados` em 27/10. Isso é evidência documental anterior; não prova contagem executável nos hashes `57c1c9b94`/`77dfa94fa` [nao verificado]. O delta fornecido não remove chamada dessa função; muda sua assinatura (`app/folha/retrato_folha.py:1437`).
+
+Testes: executei em memória, com `python3 -B`: **9/9 OK e 15/15 mutantes mortos**, sem escrita; resultado transitório sem log arquivado [nao verificado]. O instrumento efetivamente troca fontes em memória (`app/chamados/tests/e3_r3_c15_mutantes.py:73–78`), exige falha de asserção e rejeita erro de infraestrutura (`:80–83`). G2 possui mutantes das bordas, propagação e defaults (`:30–47`); não é cura só textual.
+
+E2: no calendário, status/rotulo vêm do D4 (`app/colaboradores/services/calendario.py:638`, `:695–696`); precedência vem de `fatos_do_periodo` (`:538`). Não localizei clone novo de juiz no delta [nao verificado].
 
 ## 15/11 18:13 · sessao e3b4179907c7 · - · - · origem=Ronald (tmux)
 
@@ -907,86 +1062,4 @@ O artefato `app/chamados/tests/e4c_f1v5_base_juizes.txt:1` identifica uma fotogr
 
 As medições de consultas ou callbacks não podem ser substituídas pela constatação de que o predicado mudou: os testes cobram valores medidos e o anexo só fornece nomes das falhas (`app/core/tests/test_selo_performance.py:338-350`; `app/ponto/tests/test_selo_chokepoint_escrita.py:287-298`; diagnóstico concreto das falhas: `[nao verificado]`).
 
-## 15/11 17:17 · sessao 86555b64bf04 · - · - · origem=Ronald (tmux)
-
-Resultados por inspeção; execução com D1+J1: [nao verificado].
-
-| Teste | Estado informado → previsão D1+J1 | Fundamentação | [nao verificado]
-|---|---|---|
-| C6 `test_RED_limbo_misto_fecha_mortas_orfa_e_entrega_motivo_proprio` | vermelho → vermelho | A própria preparação exige texto **sem instante** vivo em `app/chamados/tests/test_e4b_c6_orm.py:82`; D1 torna essa pergunta morta pela célula `ok` (`app/chamados/juizes.py:1618`). Falharia antes do ato. |
-| C11 mesmo teste herdado | vermelho → vermelho | Herança em `app/chamados/tests/test_e4b_c11_orm.py:27`; mesmo assert C6 `:82`. |
-| C11 `test_RED_A6_beneficio_rejeitado_limbo` | vermelho → vermelho | Aciona `limbo=True` (`app/chamados/tests/test_e4b_c11_orm.py:122`), chama `_provar` (`:101`), chega ao mesmo assert C6 `:82`. |
-| C12 `test_RED_desligamento` | vermelho → verde previsto [nao verificado] | Limbo sem instante em `app/chamados/tests/test_e4b_c12_orm.py:58`; D1 permite que S128 o carimbe; segunda cascata consegue carimbar a muda `admin_decidiu`, satisfazendo `:179`. |
-| Demais testes C6/C11/C12 | sem mudança lógica identificada; estados de execução [nao verificado] | Preparação padrão sem texto (`app/chamados/tests/test_e4b_c6_orm.py:71`); somente desligamento acrescenta limbo em C12 (`app/chamados/tests/test_e4b_c12_orm.py:136`). Não criam divergência texto do ato/projeção para J1. |
-
-Cadeia C12: a primeira tentativa continua retida pelo juiz próprio `respostas_sem_veredito`, cujo predicado é instante **OU** texto (`app/chamados/models.py:1952`), consultado em `app/colaboradores/services/desligamento.py:165`. Entretanto, no fechamento do chamado, D1 torna o limbo morto; S128 deixa de pulá-lo (`app/chamados/services/disputa_emissao.py:1987`), chama `carimbar(... resposta='validar')` (`:2007`), que preenche resposta/validação (`app/chamados/models.py:3260`). Na segunda execução (`app/chamados/tests/test_e4b_c12_orm.py:171`), a disputa deixa de ter a pendência e a porta de desligamento carimba a muda (`app/chamados/models.py:2029`).
-
-No subteste desligamento **não exportado**, nenhuma mudança identificada: a pergunta viva não exportada continua impedindo o fechamento e a varredura do limbo; a expectativa é chamado aberto (`app/chamados/tests/test_e4b_c12_orm.py:166`).
-
-Contradição explícita dos **testes** com D1: assert C6 `:82`, expectativas de conservar o limbo sem carimbo em `:116`, e os três testes que os utilizam. Isso não demonstra necessidade técnica de texto sem instante no plantio. O predicado distinto de proteção `respostas_sem_veredito` permanece OR na cópia (`app/chamados/models.py:1954`).
-
-Cobertura: C6 tem 11 métodos de teste; C11 acrescenta 13 e herda os 11 C6 (`app/chamados/tests/test_e4b_c11_orm.py:27`); C12 tem 10, incluindo sete subcenários em `test_nao_exportada_zero_pauta_por_gatilho` (`app/chamados/tests/test_e4b_c12_orm.py:209`). Nenhum verde→vermelho adicional foi identificado [nao verificado].
-
-## 15/11 17:17 · sessao f0c6835096f7 · E4C-F1V3 · sonda · origem=Code
-
-Não executei o envelope: ele cria/reescreve arquivos e acrescenta uma trilha, contrariando a regra de somente leitura (bin/sonda_leitura.sh:132, bin/sonda_leitura.sh:134, bin/sonda_leitura.sh:216, bin/sonda_leitura.sh:250).
-
-O universo fornecido não é vazio: **898 perguntas com ato RESPOSTA; 50.283 perguntas no total**. [nao verificado]
-
-| Classe | ABE | EXP |
-|---|---:|---:|
-| TEXTO_DIFERE | 24 [nao verificado] | Não consta [nao verificado] |
-| RESPONDIDA_SEM_ATO | 4695 [nao verificado] | 12248 [nao verificado] |
-| ATO_SEM_RESPONDIDA_EM | 24 [nao verificado] | Não consta [nao verificado] |
-
-Transcrição integral da saída fornecida; todo o bloco é **[nao verificado]**, sem nova execução:
-
-```text
-sonda_leitura: sonda_ato_x_projecao.py [2f7516615f14db9b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-UNIVERSO perguntas_com_ato_RESPOSTA 898 perguntas_total 50283
-CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE') 24
-CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp2 06/2026') 1
-CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp2 10/2026') 2
-CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp2 11/2026') 13
-CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp3 10/2026') 2
-CONT ('ATO_SEM_RESPONDIDA_EM', 'ABE', 'emp3 11/2026') 6
-CONT ('RESPONDIDA_SEM_ATO', 'ABE') 4695
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp1 08/2026') 2
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp1 10/2026') 38
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp1 11/2026') 4
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 05/2026') 6
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 06/2026') 1
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 07/2026') 139
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 10/2026') 1889
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp2 11/2026') 468
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp29 07/2026') 1
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 05/2026') 2
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 06/2026') 21
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 08/2026') 1252
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 10/2026') 290
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp3 11/2026') 156
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 05/2026') 7
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 08/2026') 270
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 10/2026') 96
-CONT ('RESPONDIDA_SEM_ATO', 'ABE', 'emp4 11/2026') 53
-CONT ('RESPONDIDA_SEM_ATO', 'EXP') 12248
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp2 08/2026') 7909
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp2 09/2026') 2334
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp3 07/2026') 907
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp3 09/2026') 473
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp4 06/2026') 235
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp4 07/2026') 327
-CONT ('RESPONDIDA_SEM_ATO', 'EXP', 'emp4 09/2026') 63
-CONT ('TEXTO_DIFERE', 'ABE') 24
-CONT ('TEXTO_DIFERE', 'ABE', 'emp2 06/2026') 1
-CONT ('TEXTO_DIFERE', 'ABE', 'emp2 10/2026') 2
-CONT ('TEXTO_DIFERE', 'ABE', 'emp2 11/2026') 13
-CONT ('TEXTO_DIFERE', 'ABE', 'emp3 10/2026') 2
-CONT ('TEXTO_DIFERE', 'ABE', 'emp3 11/2026') 6
-PKS TEXTO_DIFERE 24 38887 39180 42244 46751 48773 51830 52502 52698 53491 53644 53782 53900 54260 54385 55295 55313 55641 56287 56608 56718 56883 56923 57211 57214
-PKS RESPONDIDA_SEM_ATO 16943 6 7 8 118 119 120 158 174 175 176 180 181 183 184 185 186 189 190 193 194 200 202 203 207 208 263 264 265 266 267 268 272 287 289 292 293 294 295 301 302 305 307 308 309 310 311 313 320 321 322 323 324 325 326 327 328 329 330 331 334 335 337 345 348 349 350 351 354 355 357 358 359 363 364 365 366 369 370 373 374 375 381 390 398 400 401 405 406 407 412 415 418 419 420 424 427 430 435 439 445 448 454 455 456 457 458 459 461 463 466 470 473 476 482 483 484 488 490 495 496 499 504 505 510 511 513 514 516 518 519 521 524 525 526 528 531 534 540 545 547 550 551 553 557 560 562 563 564 565 566 567 569 570 576 577 578 612 613 614 615 616 626 627 671 672 673 674 675 676 677 678 690 691 692 700 701 703 704 705 706 707 709 710 711 712 713 714 715 716 717 719 720 721 723 725 726 727 728 729 730
-PKS ATO_SEM_RESPONDIDA_EM 24 38887 39180 42244 46751 48773 51830 52502 52698 53491 53644 53782 53900 54260 54385 55295 55313 55641 56287 56608 56718 56883 56923 57211 57214
-```
-
-_5712 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5714 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
