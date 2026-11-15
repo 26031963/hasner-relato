@@ -1,7 +1,28 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 08:04** · publicado em **15/11/2026 08:05** (UTC-3)
+> Ultima resposta processada: **15/11/2026 09:41** · publicado em **15/11/2026 09:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 09:41 · sessao c3740e289d15 · - · - · origem=Ronald (tmux)
+
+As quatro linhas registradas de `chamados/juizes.py` coincidem com a cópia; nenhum deslocamento observado:
+
+| Sítio | Registro | Fonte atual |
+|---|---|---|
+| `_dia_da_batida` | `core/tests/test_medida_turno_do_par.py:258` → `[53]` | `chamados/juizes.py:53` |
+| `_dia_do_contexto_fraco` | `core/tests/test_medida_turno_do_par.py:259` → `[169]` | `chamados/juizes.py:169` |
+| `_plantio_na_hora_do_slot` | `core/tests/test_medida_turno_do_par.py:260` → `[274]` | `chamados/juizes.py:274` |
+| `dias_do_fato` | `core/tests/test_medida_turno_do_par.py:261` → `[203]` | `chamados/juizes.py:203` |
+
+Para `padrao=`, o termo literal é `single source of truth / um juiz por pergunta` (`docs/PLANO-PADROES.md:46–50`).
+
+Censo textual de leitores de produção, conferido por leitura:
+
+- `_portas_da_tarefa`: `chamados/services/tarefa_do_dia.py:591`, `:616`.
+- `porta_da_tarefa`: `escala/services/cadastro_realidade.py:472`; `chamados/services/vigia_fio.py:354`, `:589`; `chamados/services/furo_sem_canal.py:97`; `folha/fora_da_folha.py:72`, `:261`; alias `candidata` em `chamados/management/commands/diff_e3_sombra.py:43`, usado em `:146`.
+- `porta_alcancavel_do_dia`: único chamador de produção restante é o lado “antes” de `chamados/management/commands/diff_e3_sombra.py:144`.
+
+Censo real e suite: [nao verificado]. Nenhum arquivo editado. [nao verificado]
 
 ## 15/11 08:04 · sessao 74371de003cb · DISPUTA-ZUMBI-1110 · censo · origem=Code
 
@@ -1418,20 +1439,4 @@ BO-ADMIN-2710-LEIS | B | app/docs/TICKETS.md:156; app/docs/BACKLOG.md:829; app/d
 
    **Concorrência em `renovar_contexto` e reuso em `nota.py`: nenhuma piora demonstrada pela c4.** A retirada do leitor legado não acrescenta escrita nesses caminhos; suas implementações permanecem as da fila. (`app/api/foto_recebida.py:71`; `app/chamados/models.py:2182`; `app/chamados/services/nota.py:123`)
 
-## 15/11 05:52 · sessao 59fa89197d9f · - · - · origem=Ronald (tmux)
-
-1. **NULL não exclui a legada da tela do admin.** Fio e modal chamam `montar_chamados_fio`; no modo admin ele carrega todos os chamados do colaborador, sem janela, e todas as perguntas das disputas abertas, sem filtro de motivo/origem. A pergunta aparece sob `chamado_destino` ou, na falta dele, `disputa.chamado`. (`app/chamados/views.py:677`; `app/chamados/views.py:889`; `app/chamados/services/fio.py:190`; `app/chamados/services/fio.py:204`; `app/chamados/services/fio.py:251`; `app/chamados/services/fio.py:255`; `app/chamados/services/fio.py:117`; `app/chamados/services/fio.py:271`)
-
-2. **Admin vê e cobra a muda; valida depois de resposta.** A legada `foto_ausente` é pergunta de escolha; o colaborador possui formulário de opções e porta de resposta que testa propriedade/vitalidade, sem exigir `batida_origem`. No modal admin, muda mostra “Aguardando resposta” e botão Cobrar; resposta não validada ganha Validar. A seleção da ação usa pergunta e a mesma âncora da listagem; a validação exige resposta, sem exigir origem. (`app/chamados/catalogo/perguntas.py:94`; `app/templates/chamados/partials/_card_atendimento.html:77`; `app/templates/chamados/partials/_card_atendimento.html:110`; `app/chamados/views.py:1239`; `app/chamados/views.py:1242`; `app/templates/chamados/partials/modal_fio.html:319`; `app/templates/chamados/partials/modal_fio.html:349`; `app/templates/chamados/partials/modal_fio.html:281`; `app/chamados/services/fio.py:633`; `app/chamados/services/fio.py:636`; `app/chamados/services/validacao.py:410`; `app/chamados/services/validacao.py:418`)
-
-3. **Não fecha automaticamente enquanto só a legada continuar viva.** `pode_fechar` exige ausência de vivas e de resposta sem veredito; `fechar` recusa viva sem porta de exceção. Regularizar pelo modal também recusa viva sem resposta. Depois de resposta e validação, o ramo escolha resolve sem precisar de batida/origem; pode então permitir o fechamento normal. (`app/chamados/models.py:1917`; `app/chamados/models.py:1961`; `app/chamados/services/fio.py:697`; `app/chamados/services/fio.py:698`; `app/chamados/services/materializacao.py:1077`; `app/chamados/services/materializacao.py:1082`; `app/chamados/services/materializacao.py:1086`)
-
-4. **`admin_encerra` é exceção existente, mas não demonstrada como botão/caminho humano de produção.** O método exige motivo e delega ao fechamento excepcional; o fechamento carimba as vivas antes de salvar a disputa. Busca textual encontrou definição e testes, sem chamador produtivo literal; chamada dinâmica: [nao verificado]. Não convém chamar essa existência isolada de porta de tela. (`app/chamados/models.py:2007`; `app/chamados/models.py:2011`; `app/chamados/models.py:2014`; `app/chamados/models.py:1982`; `app/chamados/models.py:1985`)
-
-5. **C17 tem alcance condicional, não garantia universal.** `fio_vivo` reduz o mesmo C6, sem opinião sobre origem. C17 só aceita `celula_id`; carrega perguntas vivas dessa célula e reconhece chamado da célula na fila, ou pergunta viva no app com âncora na fila. O universo do app não filtra origem NULL. Sem célula, C17 retorna `None`. Silenciamento/status/âncora/célula das perguntas 40112 e 56615: [nao verificado]. (`app/chamados/juizes.py:1516`; `app/chamados/juizes.py:1624`; `app/chamados/juizes.py:1628`; `app/chamados/juizes.py:1699`; `app/chamados/juizes.py:1702`; `app/chamados/juizes.py:1706`; `app/chamados/services/pergunta_no_app.py:52`; `app/chamados/services/pergunta_no_app.py:61`)
-
-6. **Nuance relevante do juiz publicado E3:** ele conserva chamados sem FK de célula pelo dia forte e âncoras na fila; porém pergunta de motivo fora dos marcos, como foto, entra apenas por `expor_admin`, que conserva ações de ADMIN. A muda sem decisões produz RESPONDER/COLAB e não vira instância administrativa. Se a única porta residual tiver verbo `cobrar`, não dá dono e a rota publicada pode ser `None`. Isso permite diferença entre **modal/app visíveis**, **C17 alcançável** e **`porta_da_tarefa` sem porta**, em dia cujo único trabalho seja foto muda. É mecanismo preexistente; ocorrência concreta no acervo fornecido: [nao verificado]. (`app/chamados/services/tarefa_do_dia.py:145`; `app/chamados/services/tarefa_do_dia.py:256`; `app/chamados/services/tarefa_do_dia.py:268`; `app/chamados/services/tarefa_do_dia.py:331`; `app/chamados/services/tarefa_do_dia.py:338`; `app/chamados/services/tarefa_do_dia.py:599`; `app/chamados/services/tarefa_do_dia.py:601`; `app/chamados/services/tarefa_do_dia.py:618`; `app/chamados/services/tarefa_do_dia.py:624`; `app/chamados/services/tarefa_do_dia.py:629`)
-
-7. **Nenhuma prova de fio morto invisível por ser NULL.** A condição NULL não participa dos caminhos de listagem, cobrança ou validação acima. A c4 deixa de quitar a muda pelo upload e mantém o fluxo normal de resposta e decisão; “fica com admin” precisa ser lido como **visível/cobrável e validável após resposta**, sem prometer encerramento unilateral da muda pela tela. (`app/api/foto_recebida.py:71`; `app/chamados/services/fio.py:255`; `app/templates/chamados/partials/modal_fio.html:319`; `app/templates/chamados/partials/modal_fio.html:349`; `app/chamados/services/validacao.py:418`)
-
-_5539 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5540 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
