@@ -1,4 +1,4 @@
-# MAPA DOS RIOS — ChamadoColaborador ENCERRA
+# MAPA DOS RIOS — ChamadoColaborador ENCERRA — main 4b75cba10
 
 Convencao: caminhos abaixo relativos a `app/`. Cada linha da matriz representa um par origem → destino; portas alternativas ficam na mesma linha. `ENCERRADOS` significa `resolvido/fechado`; `TERMINAIS` acrescenta `cancelado/superado`. (`chamados/catalogo/motor.py:30`, `chamados/catalogo/motor.py:31`)
 
@@ -76,7 +76,7 @@ Convencao: caminhos abaixo relativos a `app/`. Cada linha da matriz representa u
 **H — 8 sitios externos sem `ato`:**
 
 - `acao_aprovar_excecao`, `acao_responder_agenda`, `acao_responder_escala`, `acao_autorizar_geofence`, `acao_recusar_geofence`: pedem `resolvido`. (`chamados/services/acoes_chamado.py:71`, `chamados/services/acoes_chamado.py:110`, `chamados/services/acoes_chamado.py:155`, `chamados/services/acoes_chamado.py:229`, `chamados/services/acoes_chamado.py:286`)
-- `acao_resposta_livre` e `processar_post_fio`: destino parametrizado, conferido contra `STATUS_CHOICES`, depois julgado pela porta. (`chamados/services/acoes_chamado.py:322`, `chamados/services/acoes_chamado.py:325`, `chamados/services/fio.py:719`, `chamados/services/fio.py:722`)
+- `acao_resposta_livre` e `processar_post_fio`: destino parametrizado, conferido contra `STATUS_CHOICES`, depois julgado pela porta. (`chamados/services/acoes_chamado.py:322`, `chamados/services/acoes_chamado.py:325`, `chamados/services/fio.py:757`, `chamados/services/fio.py:760`)
 - `avaliar_solicitacao_beneficio`: `resolvido` ao aprovar, `fechado` no outro ramo. (`colaboradores/views.py:2072`)
 
 **Atalho `fechar` — 1 sitio externo:** comando `fechar_chamados_meio_periodo`; chama `ch.fechar`, que encaminha internamente para H e acrescenta nota quando recebe resolucao. (`ponto/management/commands/fechar_chamados_meio_periodo.py:110`, `chamados/models.py:455`, `chamados/models.py:458`)
@@ -110,7 +110,7 @@ Convencao: caminhos abaixo relativos a `app/`. Cada linha da matriz representa u
 
 - Batida e ausencia: `ponto/signals.py:215`, `ponto/signals.py:234`, `ponto/signals.py:269`, `ponto/signals.py:271`.
 - API de entrada: `api/views.py:791`, `api/views_core.py:785`.
-- Declaracao/validacao do dia: `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:319`.
+- Declaracao/validacao do dia: `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:321`.
 - Justificativa, para E com retencao: `ponto/services/justificativa.py:87`, `ponto/services/justificativa.py:400`.
 - Celula/feriado: `ponto/portas/celula.py:538`, `chamados/signals.py:335`.
 - Disputa fechada, para R: `chamados/signals.py:19`, `chamados/signals.py:43`.
@@ -163,8 +163,40 @@ O **zero encontrado no runtime** tem limite: o selo exclui migracoes e declara q
 
 - **Execucao e frequencia em producao, migracoes efetivamente aplicadas, crontab instalado e resultado atual dos testes:** **[nao verificado]**. As contagens apresentadas sao de codigo e sitios, sem acesso a banco/log.
 - **Correspondencia criptografica da copia com o hash informado:** **[nao verificado]**; nao havia repositorio Git reconhecido no diretorio consultado.
-- **Nascimento diretamente em terminal:** `criar` preserva status diferente de `aberto`, e `abrir` permite defaults sobreporem o estado calculado. O exercicio concreto localizado foi no smoke, restrito e revertido; ocorrencia persistente em producao por essas entradas: **[nao verificado]**. (`chamados/models.py:987`, `chamados/models.py:1110`, `chamados/models.py:1142`, `chamados/management/commands/smoke_chamados.py:33`, `chamados/management/commands/smoke_chamados.py:44`, `chamados/management/commands/smoke_chamados.py:147`)
+- **[nome] diretamente em terminal:** `criar` preserva status diferente de `aberto`, e `abrir` permite defaults sobreporem o estado calculado. O exercicio concreto localizado foi no smoke, restrito e revertido; ocorrencia persistente em producao por essas entradas: **[nao verificado]**. (`chamados/models.py:987`, `chamados/models.py:1110`, `chamados/models.py:1142`, `chamados/management/commands/smoke_chamados.py:33`, `chamados/management/commands/smoke_chamados.py:44`, `chamados/management/commands/smoke_chamados.py:147`)
 - **As tres arestas `SUPERAR` do motor nao demonstram nascentes runtime:** permanecem na tabela do motor, mas a porta foi retirada; por isso nao foram convertidas em transicoes de producao na matriz. (`chamados/catalogo/motor.py:117`, `chamados/models.py:841`)
 - **Autor recebido pelo wrapper com `ato`:** o wrapper executa `ato()` sem repassar `user`; o autor eventual da trilha pode vir do contexto de request/processo. Autor efetivamente registrado em cada ocorrencia: **[nao verificado]**. (`chamados/services/fecho_runtime.py:157`, `chamados/services/fecho_runtime.py:165`, `core/observ.py:110`, `core/observ.py:117`)
 - **Trilha infalivel e estado final apos todos os receivers:** **[nao verificado]**. `evento` tolera falha, e o `save` pode disparar reentrada que reabre o chamado; uma transicao para terminal nao prova permanencia nele. (`core/observ.py:98`, `core/observ.py:139`, `chamados/models.py:274`, `chamados/models.py:296`)
 - **Escrita por metaprogramacao arbitraria ou receptor cujo tipo nao se resolve:** **[nao verificado]**, conforme limite expresso do selo. (`chamados/tests/test_selo_status_so_pelas_portas.py:17`)
+
+## MUDOU COM A E3
+
+### Linhas corrigidas
+
+1. **Nascentes diretas, H — `acao_resposta_livre` e `processar_post_fio`.**
+
+   **Antes — a0bf6e78e:**
+   - `acao_resposta_livre` e `processar_post_fio`: destino parametrizado, conferido contra `STATUS_CHOICES`, depois julgado pela porta. (`chamados/services/acoes_chamado.py:322`, `chamados/services/acoes_chamado.py:325`, `chamados/services/fio.py:719`, `chamados/services/fio.py:722`)
+
+   **Depois — 4b75cba10:**
+   - `acao_resposta_livre` e `processar_post_fio`: destino parametrizado, conferido contra `STATUS_CHOICES`, depois julgado pela porta. (`chamados/services/acoes_chamado.py:322`, `chamados/services/acoes_chamado.py:325`, `chamados/services/fio.py:757`, `chamados/services/fio.py:760`)
+
+   **Commits que deslocaram o sitio**, identificados por `git log a0bf6e78e..4b75cba10 -- app/chamados/services/fio.py` e seus diffs: `de125d5e1` (+17 linhas anteriores), `513ff8077` (+1), `ae66e55af` (+3), `cb7064355` (+17). Deslocamento total: **+38**; a verificacao de `STATUS_CHOICES` e a chamada da porta permanecem iguais. (`a0bf6e78e:app/chamados/services/fio.py:719`, `a0bf6e78e:app/chamados/services/fio.py:722`, `4b75cba10:app/chamados/services/fio.py:757`, `4b75cba10:app/chamados/services/fio.py:760`)
+
+2. **Entradas por evento ou tela — declaracao/validacao do dia.**
+
+   **Antes — a0bf6e78e:**
+   - Declaracao/validacao do dia: `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:319`.
+
+   **Depois — 4b75cba10:**
+   - Declaracao/validacao do dia: `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:321`.
+
+   **Commit que deslocou o sitio**, identificado por `git log a0bf6e78e..4b75cba10 -- app/chamados/services/validacao.py` e seu diff: `f1fe1d367`, duas linhas acrescentadas a `ESTADOS` antes da chamada. Deslocamento: **+2**; `fechar_o_fio_do_dia(colab, dia, autor)` permanece igual. (`f1fe1d367:app/chamados/services/validacao.py:59`, `f1fe1d367:app/chamados/services/validacao.py:60`, `a0bf6e78e:app/chamados/services/validacao.py:319`, `4b75cba10:app/chamados/services/validacao.py:321`)
+
+### Recontagem L1 / L2 / L3 — a0bf6e78e → 4b75cba10
+
+| Lista | Antes | Depois | Prova nos dois hashes |
+|---|---|---|---|
+| L1 — mais de um juiz | **12 pares: 11 runtime e 1 historico** | **12 pares: 11 runtime e 1 historico** | `chamados/catalogo/motor.py:99`, `chamados/catalogo/motor.py:111`, `chamados/catalogo/motor.py:114`, `chamados/catalogo/motor.py:116`, `chamados/catalogo/motor.py:153`, `chamados/models.py:1677`, `chamados/migrations/0039_a3_via_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:23` |
+| L2 — escritor fora da porta | **4 sitios de estado em migracoes; 0 encontrados no runtime** | **4 sitios de estado em migracoes; 0 encontrados no runtime** | `chamados/migrations/0038_a3_registrado_backfill.py:10`, `chamados/migrations/0038_a3_registrado_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`, `chamados/models.py:296`, `chamados/models.py:1018`, `chamados/models.py:1142`; limite do censo: `chamados/tests/test_selo_status_so_pelas_portas.py:17` |
+| L3 — sem saida | **2 runtime; 0 incluindo migracoes e reversas** | **2 runtime; 0 incluindo migracoes e reversas** | `chamados/catalogo/motor.py:104`, `chamados/catalogo/motor.py:106`, `chamados/catalogo/motor.py:142`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33` |

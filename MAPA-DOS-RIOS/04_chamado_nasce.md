@@ -1,6 +1,6 @@
 # MAPA DOS RIOS — ChamadoColaborador NASCE
 
-Caminhos relativos a `app/`, exceto os iniciados por `bin/`. HASH informado: `a0bf6e78e9a2e7d67f9efee9b6a14141e33e3a5f`; correspondencia com um commit Git local: [nao verificado].
+Caminhos relativos a `app/`, exceto os iniciados por `bin/`. HASH informado: `4b75cba1018af37173b5da7aa15475c13468f559`.
 
 ## 1. RESUMO
 
@@ -40,7 +40,7 @@ Em todas, o lookup inclui o colaborador. A porta consulta exatamente esse lookup
 | A10 | `ponto/services/ausencia.py:722` — `abrir_chamado_ausencia_colab` | `ausencia_colab` + `contexto_json__ausencia_id`. |
 | A11 | `ponto/views.py:3052` — `ping_geo` | `ping_geo_fora` + `criado_em__date`. |
 | A12 | `escala/regua_defesa.py:51` — `vetar_cobranca_se_degenerada` | `regua_degenerada` + `contexto_json__tipo_escala_id`. |
-| A13 | `api/views.py:1966` — `api_justificativas` | `justificativa_colab` + categoria `justificativa` + VIVOS. |
+| A13 | `api/views.py:1969` — `api_justificativas` | `justificativa_colab` + categoria `justificativa` + VIVOS. |
 | A14 | `chamados/reconciliador.py:911` — `reemitir_chamado_do_dia` | `batida_ausente` + `contexto_json__data_turno`; chave em `chamados/reconciliador.py:836`. |
 | A15 | `chamados/services/disputa_emissao.py:568` — `_abrir_ou_agregar_disputa` | `disputa_supervisao` + categoria homonima + VIVOS. |
 | A16 | `chamados/services/disputa_emissao.py:1104` — `criar_disputa_a_partir_de_chamados_orfaos` | `disputa_supervisao_manual` + categoria `disputa_supervisao` + subcategoria `orfao_14h` + VIVOS. |
@@ -63,7 +63,7 @@ Em todas, o lookup inclui o colaborador. A porta consulta exatamente esse lookup
 | B7 | `ponto/utils.py:103` — `bloquear_se_em_ferias` | `colaborador_em_ferias` -> aberto; pre-dedup por colaborador/modulo/data de criacao: `ponto/utils.py:94`. |
 | B8 | `api/views.py:717` — `api_bater_ponto` | `batida_fora_escala_leve` -> registrado; ramo de desvio leve: `api/views.py:705`, modulo em `api/views.py:725`. |
 | B9 | `api/views_core.py:711` — `api_bater_ponto` | `batida_fora_escala_leve` -> registrado; ramo de desvio leve: `api/views_core.py:696`, modulo em `api/views_core.py:719`. |
-| B10 | `api/views.py:2170` — `api_abrir_chamado` | `app_colaborador` -> aberto; modulo em `api/views.py:2179`. |
+| B10 | `api/views.py:2173` — `api_abrir_chamado` | `app_colaborador` -> aberto; modulo em `api/views.py:2182`. |
 | B11 | `ponto/services/justificativa.py:291` — `rejeitar_justificativa_dp` | `justificativa` -> aberto; origem precisa estar pendente: `ponto/services/justificativa.py:277`. |
 | B12 | `ponto/services/triagem_batida.py:107` — `triagem_bater_ponto` | `acesso_bloqueado` -> aberto; pre-dedup por colaborador/modulo/VIVOS: `ponto/services/triagem_batida.py:102`. |
 | B13 | `ponto/services/triagem_batida.py:336` — `ramo_solicitar_anuencia` | `batida_fora_horario` -> aberto; pre-dedup por colaborador/modulo/VIVOS: `ponto/services/triagem_batida.py:325`. |
@@ -81,7 +81,7 @@ As chegadas dos sitios B decorrem da natureza do modulo e da conversao do defaul
 
 Estes sitios alimentam as nascentes A/B; nao representam novos escritores de nascimento. As cadeias abaixo terminam nos escritores de `abrir`/`criar`. (`chamados/models.py:1018`, `chamados/models.py:1142`)
 
-- **Formularios:** `chamados/views.py:197` -> B17; `chamados/views.py:136` -> B18; ausencia em `ponto/views.py:2579` e `api/views.py:1842` -> A10; regularizacao em `colaboradores/views.py:2987` e `chamados/services/regularizacao_ext.py:319` -> B16.
+- **Formularios:** `chamados/views.py:197` -> B17; `chamados/views.py:136` -> B18; ausencia em `ponto/views.py:2579` e `api/views.py:1845` -> A10; regularizacao em `colaboradores/views.py:2987` e `chamados/services/regularizacao_ext.py:319` -> B16.
 - **Batida:** `ponto/views.py:353` -> ramo que chama bloqueio horario em `ponto/services/triagem_batida.py:657` e geofence em `ponto/services/triagem_batida.py:753`; APIs chamam geofence em `api/views.py:781` e `api/views_core.py:775`.
 - **Sem posto/ferias:** `ponto/services/triagem_batida.py:84` -> B6; `chamados/detector_anomalias.py:116` -> B7; detector chamado em `api/views.py:434` e `api/views_core.py:420`.
 - **Regua degenerada:** `ponto/management/commands/detectar_ausencias.py:601` e `ponto/management/commands/reconciliar_grade.py:495` -> A12.
@@ -114,7 +114,7 @@ Estes sitios alimentam as nascentes A/B; nao representam novos escritores de nas
 ### 2d. Dedup, recusas e trilha
 
 - **Encontrou pelo lookup:** devolve o existente com `False`; se esta em ENCERRADOS, chama o sitio de renascimento antes de devolver. Isso nao e um novo nascimento. (`chamados/models.py:953`, `chamados/models.py:968`, `chamados/models.py:971`)
-- **Filho agrupado sob pai vivo:** a busca sem filtros de status pode satisfazer o dedup; devolve o filho com `False`. (`chamados/models.py:974`, `chamados/models.py:978`, `chamados/models.py:979`)
+- **[nome] agrupado sob pai vivo:** a busca sem filtros de status pode satisfazer o dedup; devolve o filho com `False`. (`chamados/models.py:974`, `chamados/models.py:978`, `chamados/models.py:979`)
 - **Celula absolve:** nao cria chamado; `abrir` devolve `(None, False)`, `criar` devolve `None`. A trilha da recusa deduplica por celula/modulo/veredito, sem criterio temporal nessa consulta. (`chamados/models.py:1009`, `chamados/models.py:1118`, `chamados/models.py:1246`)
 - **Regua veta:** nao cria chamado; registra `nascimento_recusado` na celula ou no colaborador. A dedup da trilha considera modulo/dia/veto/via e verifica se houve nascimento posterior. (`chamados/models.py:1014`, `chamados/models.py:1122`, `chamados/models.py:1215`, `chamados/models.py:1219`, `chamados/models.py:1227`)
 - **Nasceu:** a trilha guarda status anterior `None`, status inicial, modulo e via `abrir`/`criar`; nao recebe motivo nem identifica a funcao nascente nesses campos. Ator/IP podem vir implicitamente da request ou do processo. (`chamados/models.py:1265`, `chamados/models.py:1268`, `core/observ.py:108`, `core/observ.py:117`)
@@ -167,3 +167,21 @@ A contagem literal de codigo fora de testes inclui esses reversos; por isso nao 
 - Resultado atual das provas comportamentais: **[nao verificado]**. Os testes foram lidos; nao foi executada a suite Django.
 - Completude contra chamadas construidas dinamicamente, SQL externo, shell externo ou receptores genericos: **[nao verificado]**. O proprio selo declara limitacoes de resolucao estatica. (`chamados/tests/test_selo_status_so_pelas_portas.py:17`)
 - `criar(status=...)` e `abrir(defaults=...)` permitem sobrepor o estado escolhido pelo motor; os sitios operacionais inventariados nao exercitam nascimento terminal. O smoke exercita estados adicionais sob restricao de banco e rollback. (`chamados/models.py:987`, `chamados/models.py:1110`, `chamados/management/commands/smoke_chamados.py:33`, `chamados/management/commands/smoke_chamados.py:44`, `chamados/management/commands/smoke_chamados.py:127`)
+
+## MUDOU COM A E3
+
+### Linhas corrigidas
+
+| linha do mapa | antes — a0bf6e78e | depois — 4b75cba10 | commit que mudou |
+|---|---|---|---|
+| 2a, A13 | `api/views.py:1966` — `api_justificativas`; `justificativa_colab` + categoria `justificativa` + VIVOS. | `api/views.py:1969` — `api_justificativas`; `justificativa_colab` + categoria `justificativa` + VIVOS. Mesmo sitio e lookup, deslocados tres linhas. | `de125d5e1befa92b8211c66e28832d3cf8728852`; insercoes em `api/views.py:962`, `api/views.py:1173`, `api/views.py:1174`. |
+| 2b, B10 | `api/views.py:2170` — `api_abrir_chamado`; `app_colaborador` -> aberto; modulo em `api/views.py:2179`. | `api/views.py:2173` — `api_abrir_chamado`; `app_colaborador` -> aberto; modulo em `api/views.py:2182`. Mesma chamada e modulo, deslocados tres linhas. | `de125d5e1befa92b8211c66e28832d3cf8728852`; insercoes em `api/views.py:962`, `api/views.py:1173`, `api/views.py:1174`. |
+| 2c, Formularios | `chamados/views.py:197` -> B17; `chamados/views.py:136` -> B18; ausencia em `ponto/views.py:2579` e `api/views.py:1842` -> A10; regularizacao em `colaboradores/views.py:2987` e `chamados/services/regularizacao_ext.py:319` -> B16. | `chamados/views.py:197` -> B17; `chamados/views.py:136` -> B18; ausencia em `ponto/views.py:2579` e `api/views.py:1845` -> A10; regularizacao em `colaboradores/views.py:2987` e `chamados/services/regularizacao_ext.py:319` -> B16. Somente a referencia da API deslocou tres linhas. | `de125d5e1befa92b8211c66e28832d3cf8728852`; insercoes em `api/views.py:962`, `api/views.py:1173`, `api/views.py:1174`. |
+
+### Recontagem L1 / L2 / L3
+
+| lista | antes — a0bf6e78e | depois — 4b75cba10 | prova nos dois hashes |
+|---|---|---|---|
+| L1 — transicao com mais de um juiz | 2 | 2 | `chamados/models.py:1098`, `chamados/models.py:1150`, `chamados/models.py:1173`, `chamados/catalogo/motor.py:130`, `chamados/catalogo/motor.py:133`. |
+| L2 — escritor fora da porta | 4 sitios historicos; 0 encontrados no runtime | 4 sitios historicos; 0 encontrados no runtime | `chamados/migrations/0038_a3_registrado_backfill.py:10`, `chamados/migrations/0038_a3_registrado_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`; escritores de runtime em `chamados/models.py:228`, `chamados/models.py:296`, `chamados/models.py:1018`, `chamados/models.py:1142`; limites do censo em `chamados/tests/test_selo_status_so_pelas_portas.py:15`, `chamados/tests/test_selo_status_so_pelas_portas.py:17`, `chamados/tests/test_selo_status_so_pelas_portas.py:340`. |
+| L3 — estado alcancavel sem saida | 0 incluindo migrations; 2 terminais no runtime | 0 incluindo migrations; 2 terminais no runtime | `chamados/catalogo/motor.py:103`, `chamados/catalogo/motor.py:106`, `chamados/catalogo/motor.py:142`; saidas historicas em `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`. |
