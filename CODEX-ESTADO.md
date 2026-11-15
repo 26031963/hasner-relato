@@ -1,7 +1,102 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 03:54** · publicado em **15/11/2026 03:54** (UTC-3)
+> Ultima resposta processada: **15/11/2026 03:58** · publicado em **15/11/2026 03:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 03:58 · sessao 90dd9a6ed7b7 · JUSTIFICATIVA-PAGA-O-PERIODO · verificador · origem=Code
+
+**Há bloqueio: K1 ainda deixa passar leitores novos, inclusive mutantes que sobrevivem aos 12 testes da própria catraca.** O rastreador não acompanha cadeias de aliases e descarta módulos sem os nomes literais dos campos (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:101`, `:147`).
+
+1. **PROCEDE parcialmente — bloqueia/fila: os achados do v7 estão mencionados, mas nem todos estão curados ou têm destino verificável.** A seção 6 lista os resíduos; para alguns, apenas diz FORA (`app/ponto/tests/c12_entrega.txt:138`).
+
+| Achado do v7 | Conferência nesta cópia | Gravidade restante |
+|---|---|---|
+| 1. Exportada sem proteção genérica | **FORA**, destino declarado: sessão mede 09/10. Continua existindo somente a guarda de 09/2026; exportação nas demais competências gera aviso e permite persistência (`app/ponto/tests/c12_entrega.txt:141`; `app/ponto/services/fechamento.py:36`, `:539`, `:1157`, `:1194`). | **bloqueia** |
+| 2. Lavratura converte `None` em zero | **FORA**, sem destino inequívoco. A seção 6 remete a “pergunta de lei (c)”, mas a pergunta local 5(c) trata de K1. A conversão continua (`app/ponto/tests/c12_entrega.txt:138`, `:132`; `app/ponto/services/dia_pago.py:292`, `:490`). | **bloqueia** |
+| 3. Template não lê o rótulo | **Fechado pelo hunk** de `espelho.html`, `@@ -92,6 +92,16 @@`: agora consulta motivo e dias desconhecidos (`app/templates/ponto/espelho.html:100`). | — |
+| 4. Rótulo usa janela visual inteira | **Fechado nesse ponto pelo hunk** de `espelho.py`, `@@ -1260,8 +1260,11 @@`: conjunto recortado por competência. Permanecem as diferenças descritas no item 3 abaixo (`app/ponto/services/espelho.py:1266`). | **fila**, para os resíduos |
+| 5. Escape literal de K1 | **Escape original fechado** pelo detector de módulo dinâmico e pelos casos acrescentados; o contrato completo continua furado, conforme item 4 (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:93`, `:289`). | **bloqueia** |
+| 6. Mutante `any → all` | **Fechado pelo hunk novo de testes c12**: fixture exige mapa misto `{D: None, D2: 180}` e conservação dos demais campos. O mutante morre (`app/ponto/tests/test_justificativa_c12_sem_banco.py:70`, `:77`; `app/ponto/tests/c12_mutantes.txt:4`). | — |
+| 7. Mutante `discard → clear` | **Fechado pelo hunk novo de testes c12**: ausência inteira em D conserva VIZ desconhecido. O mutante morre (`app/ponto/tests/test_justificativa_c12_sem_banco.py:92`; `app/ponto/tests/c12_mutantes.txt:8`). | — |
+| 8. Precedência da ausência inteira diverge na grade | **FORA**, sem encaminhamento concreto na seção 6. O feed remove o desconhecido, mas a grade financeira recebe os períodos crus (`app/ponto/tests/c12_entrega.txt:139`; `app/ponto/services/efeito_ausencia.py:75`; `app/folha/export.py:339`). | **fila** |
+| 9. Cartão sobrescreve parcialmente o rótulo | **FORA**, sem encaminhamento concreto. Horas podem ser numéricas com dias desconhecidos; motivo posterior `None` não limpa o anterior (`app/ponto/tests/c12_entrega.txt:139`; `app/relatorios/cartao_pela_celula.py:187`, `:208`, `:214`). | **fila** |
+| 10. Causa falsa de zero | **Fechado para o caso marcado `sem_ata`**, pelo hunk de `causas.py`, `@@ -83,6 +83,15 @@`, e teste com classificador real (`app/folha/causas.py:91`; `app/ponto/tests/test_justificativa_c12_sem_banco.py:145`). | — |
+| 11. Relógio fora da passada | **FORA**, sem encaminhamento concreto. A retenção continua chamada sem `hoje` e alcança `localdate()` (`app/ponto/tests/c12_entrega.txt:140`; `app/ponto/services/fechamento.py:1080`; `app/folha/export.py:1248`). | **fila** |
+
+2. **NÃO PROCEDE a persistência de `realizado_zero` nos leitores da causa corrigida; PROCEDE a quebra mais ampla de `None` — bloqueia.** Para previsto positivo, soma conhecida zero e algum dia marcado `sem_ata`, o classificador retorna `indeterminado`. O fechamento grava essa resposta; retrato e lista leem o campo gravado. O retrato traduz `indeterminado` para “sem causa”, e o template da lista mostra “a apurar” (`app/folha/causas.py:92`; `app/ponto/services/fechamento.py:1093`; `app/folha/retrato_folha.py:249`, `:1115`; `app/ponto/services/fechamento_lista.py:122`; `app/templates/ponto/_fech_linha.html:18`).
+
+   O censo de escritores da marca precisa incluir **também o builder**: `escala/utils.py` transporta `motivo='sem_ata'` para `motivo_justificativa`, além do overlay do leitor de célula. Ambos recebem a indicação da mesma fonte de períodos; isso, por si, não demonstra juiz novo (`app/escala/utils.py:1259`, `:1281`; `app/escala/services/leitor_celula.py:479`; `app/ponto/services/efeito_ausencia.py:165`).
+
+   O contrato global ainda não é “`None` nunca vira zero”: lavratura e retrato de exportada fazem exatamente essa conversão (`app/ponto/services/dia_pago.py:292`, `:490`, `:495`). Há ainda consumidor que acusa zero: com `minutos_realizados=None`, previsto 480 e `n_ok=2`, `supra_juiz.classificar_dia` produz `REALIZADO_ZERO_COM_TURNO`, pois começa por `None or 0`. É contraprova do consumidor, distinta de `causa_espelho`; ocorrência desse formato em produção **[nao verificado]** (`app/ponto/supra_juiz.py:237`, `:294`). **Fila** para esse consumidor.
+
+3. **NÃO PROCEDE a existência de autoridade nova para o rótulo; PROCEDE a identidade incompleta das janelas — fila.** Tela e PDF chamam `rotular_abono_sem_apuracao`; template e badge exigem dias `None` e motivo `sem_ata` (`app/ponto/services/espelho.py:1266`; `app/relatorios/pdf_espelho.py:483`, `:790`; `app/templates/ponto/espelho.html:100`).
+
+   O recorte nominal por competência foi corrigido, mas os universos efetivos diferem: a tela pede autoridade até **hoje**, enquanto o PDF aplica teto em **ontem**. Um dia de hoje justificado sem ata pode entrar no conjunto da tela e ficar fora do PDF (`app/ponto/services/espelho.py:1236`, `:1267`; `app/relatorios/pdf_espelho.py:287`, `:333`).
+
+   Além disso, somente o **rótulo** foi recortado: `dias_abono` continua copiado do resultado da janela visual. Quando o rótulo de competência anterior deixa de esconder esse número, ele pode aparecer no resumo atual; o mapeamento do fechamento não fornece `dias_abono` para substituí-lo. A própria entrega registra essa pendência (`app/ponto/services/espelho.py:1261`; `app/relatorios/cartao_pela_celula.py:93`; `app/ponto/tests/c12_entrega.txt:122`).
+
+   **NÃO PROCEDE parâmetro novo com default neste delta:** a assinatura conserva os parâmetros existentes, com `agora` obrigatório. O hunk altera somente o argumento do helper (`app/ponto/services/espelho.py:1203`, `:1266`). Os 12 chamadores estão enumerados na entrega (`app/ponto/tests/c12_entrega.txt:112`).
+
+4. **PROCEDE — bloqueia: K1 ainda tem escapes estáticos.** O exemplo literal do v7 agora é capturado, inclusive quando injetado na tela (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:289`, `:296`).
+
+   Entretanto, esta variante passa: o detector reconhece `g = getattr`, mas não reconhece `h = g`; a chave do dicionário volta a ser descartada (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:101`, `:125`).
+
+   ```python
+   g = getattr
+   h = g
+   def _escape(resultado):
+       nomes = {'dias_abono': 1}
+       return [h(resultado, k) for k in nomes]
+   ```
+
+   Em reprodução somente em memória, essa fonte anexada a `folha/causas.py` devolveu `[1]`, manteve a allowlist sem diferenças e sobreviveu aos **12 testes K1**. A atribuição `g, h = getattr, getattr` também escapa pelo tratamento limitado dos destinos (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:101`, `:104`, `:179`).
+
+   Outro escape é `return {**vars(resultado)}`, equivalente a `{**resultado.__dict__}`: transporta os dois campos sem nomeá-los. O filtro textual descarta o módulo antes de analisar esses acessos; a variante `vars` também sobreviveu aos 12 testes. `ResultadoMes` é dataclass com ambos os campos (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:147`; `app/ponto/motor_calculo_v2.py:268`, `:284`, `:292`).
+
+   `vars(resultado)['dias_abono']` e `resultado.__dict__['dias_abono']` são detectados. Subscript direto é ignorado em módulo não dinâmico, mas seu funcionamento sobre o resultado real **[nao verificado]** (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:107`, `:127`).
+
+5. **PROCEDE parcialmente — fila: nem toda ata nasce pela porta real.** As duas fixtures usam `montar_dna`, mas `_justificar` ainda calcula os números e grava `ata` por `QuerySet.update`. Ela própria declara que não prova a escrita do cartório (`app/ponto/tests/test_justificativa_paga_o_periodo.py:204`, `:210`, `:219`, `:224`). A aprovação posterior aciona o signal do cartório; isso não elimina a inicialização manual anterior (`app/ponto/tests/test_justificativa_paga_o_periodo.py:225`; `app/ponto/signals.py:165`, `:93`).
+
+   A fixture do PDF chama explicitamente `julgar_celula`, recarrega e exige W=0/P>0 (`app/relatorios/test_espelho_falta.py:48`, `:49`, `:51`).
+
+   **NÃO PROCEDE troca dos esperados positivos no delta fornecido:** continuam duas pausas de 85 minutos e os dois esperados **550**; continua **1 dia de abono** no PDF. O caso irmão sem ata exige `None/None/sem_ata` (`app/ponto/tests/test_justificativa_paga_o_periodo.py:282`, `:296`, `:297`; `app/relatorios/test_espelho_falta.py:97`, `:71`). Houve enfraquecimento declarado de outro teste, P3, de igualdade com 1 para `IsNotNone`; ele verifica ausência do rótulo, não a correção do total (`app/ponto/tests/c12_entrega.txt:67`; `app/ponto/tests/test_justificativa_c12_sem_banco.py:54`).
+
+6. **PROCEDE — bloqueia/fila: permanecem selo sem mordida e campos com significados divergentes.** K1 não garante a exclusividade dos leitores; `None` continua significando desconhecido no fechamento e zero no `DiaPago`; o resumo pode conservar dias desconhecidos com horas numéricas ou motivo residual (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:101`, `:147`; `app/ponto/services/fechamento.py:1073`; `app/ponto/services/dia_pago.py:292`; `app/relatorios/cartao_pela_celula.py:187`, `:214`).
+
+   **NÃO PROCEDE fórmula ou juiz novo nos três hunks produtivos c12:** eles acrescentam diagnóstico, recorte do conjunto e leitura do resumo. A fórmula continua na fonte de períodos (`app/folha/causas.py:91`; `app/ponto/services/espelho.py:1266`; `app/templates/ponto/espelho.html:100`; `app/ponto/services/efeito_ausencia.py:170`). O relógio fora da passada permanece como resíduo declarado (`app/ponto/services/fechamento.py:1080`; `app/folha/export.py:1248`).
+
+O verde de 6477 testes do recorte foi informado no dado; sua execução independente nesta volta e a suíte inteira são **[nao verificado]**. [nao verificado]
+
+**REPROVADO para liberar a suíte inteira nesta pré-verificação**, pelo escape sobrevivente de K1 e pelos bloqueios de exportada/`None` ainda abertos (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:101`, `:147`; `app/ponto/services/fechamento.py:36`; `app/ponto/services/dia_pago.py:292`).
+
+## 15/11 03:56 · sessao 3e3b5a8340d3 · - · - · origem=Ronald (tmux)
+
+Item 4 — **PROCEDE, bloqueia**: o escape literal do v7 está coberto pelos sete casos e pela injeção na tela, mas K1 ainda admite novos leitores estáticos. (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:217`, `:289`, `:296`)
+
+Reprodução em memória, anexando cada fonte a `folha/causas.py` na árvore viva:
+
+```python
+g = getattr
+h = g
+def _escape(resultado):
+    nomes = {'dias_abono': 1}
+    return [h(resultado, k) for k in nomes]
+```
+
+Também passa com `g,h=getattr,getattr`. O rastreador reconhece somente atribuição cujo valor pertence diretamente a `DINAMICOS` e cujo destino é `ast.Name`; não acompanha cadeia nem desempacotamento. Ambos devolvem `[1]`, mantêm `fora_da_allowlist={}` e sobrevivem aos **12 testes completos da K1**. (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:101`, `:103`, `:105`, `:125`)
+
+Outro escape:
+
+```python
+def _escape(resultado):
+    return {**vars(resultado)}
+```
+
+O equivalente `{**resultado.__dict__}` também transporta os dois abonos. Sem literal `dias_abono`/`horas_abono` no módulo, o filtro nem analisa seu AST; a versão `vars` sobrevive aos **12 testes completos da K1** quando injetada em `folha/causas.py`. A classe real permite isso: `ResultadoMes` é dataclass e declara ambos os campos. (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:147`, `:148`; `app/ponto/motor_calculo_v2.py:268`, `:284`, `:292`)
+
+`vars(resultado)['dias_abono']` e `resultado.__dict__['dias_abono']` são detectados; o subscript direto `resultado['dias_abono']` é ignorado, mas seu funcionamento no objeto real não foi demonstrado. (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:107`, `:118`, `:127`; funcionamento do subscript direto: [nao verificado])
+
+As execuções usaram `PYTHONDONTWRITEBYTECODE=1`/`-B`, fontes e mutações somente em memória. [nao verificado]
 
 ## 15/11 03:54 · sessao 3ea9d6f3a750 · - · - · origem=Ronald (tmux)
 
@@ -714,55 +809,4 @@ O agrupamento para encaminhamento fica:
 | Âncora fora da fila passa a bastar para porta administrativa, incluindo a terminal da fixture | C11 ×3 | **PERGUNTA** entre LU-03/com tela e restrições escritas de LU-04/âncora terminal; depois, código ou fixture conforme a resposta (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`; `app/chamados/services/fio.py:789`). |
 | Fixture não estabelece o novo pré-requisito de fio conhecido `nada` | Pauta ×2 | **Teste/fixture**; o ramo final que excluiu cada D1 é **[nao verificado]** no dado fornecido (`app/ponto/services/pautas_dos_discordantes.py:87`; `app/ponto/services/pautas_dos_discordantes.py:95`; `app/ponto/management/commands/pautas_discordantes.py:71`). |
 
-## 15/11 02:17 · sessao a4f7fab07c05 · - · - · origem=Ronald (tmux)
-
-Não achei defeito atual na propagação da marca pelos caminhos inspecionados: os dois `create` recebem `True` antes do retorno; os dois ramos de reutilização retornam objetos consultados sem atribuição; as três cascas passam diretamente o objeto ao helper. (`app/ponto/registro_batida.py:113`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:155`; `app/ponto/registro_batida.py:158`; `app/ponto/registro_batida.py:161`; `app/api/views.py:654`; `app/api/views.py:693`; `app/api/views_core.py:645`; `app/api/views_core.py:684`; `app/ponto/services/triagem_batida.py:700`; `app/ponto/services/triagem_batida.py:723`)
-
-| Item | Conferência |
-|---|---|
-| Escritores/leitores | Escritores de produção: `registrar_batida`, dois sítios; leitor direto único: `resposta_se_reutilizada`. As cascas leem o dicionário retornado. (`app/ponto/registro_batida.py:155`; `app/ponto/registro_batida.py:161`; `app/ponto/services/resposta_batida.py:14`; `app/api/views.py:693`; `app/api/views_core.py:684`; `app/ponto/services/triagem_batida.py:723`) |
-| Substituição/perda entre criação e casca | Não existe cópia, reconsulta ou `refresh_from_db` nesses segmentos; fechamento recebe colaborador/instante, sem receber a batida. (`app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:177`; `app/api/views.py:669`; `app/api/views_core.py:660`; `app/ponto/services/triagem_batida.py:713`) |
-| Modelo/receivers | `Batida` herda diretamente `models.Model`, sem `save`, manager ou `from_db` próprios nessa classe. Receivers chamam serviços usando `instance`, sem substituir o retorno da porta. SSE usa `created`, não a marca; seu payload enumera campos explicitamente. (`app/ponto/models.py:8`; `app/ponto/models.py:111`; `app/ponto/signals.py:34`; `app/ponto/signals.py:40`; `app/ponto/signals.py:132`; `app/ponto/signals.py:207`; `app/ponto/realtime.py:32`) |
-| Segundo escritor pela porta | Os únicos `Batida.objects.create` de produção encontrados são os dois ramos marcados. Reutilização não executa esses ramos. (`app/ponto/registro_batida.py:115`; `app/ponto/registro_batida.py:122`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:158`) |
-| Outros consumidores | Leem campos explícitos, identidade, `None`, justificativa ou vinculam FK; não enumeram `vars`/`__dict__` da batida. `anotar` lê apenas os campos fornecidos, sob allowlist. (`app/ponto/services/justificativa.py:195`; `app/ponto/services/justificativa.py:197`; `app/ponto/services/justificativa.py:202`; `app/ponto/services/justificativa.py:204`; `app/ponto/services/justificativa.py:370`; `app/ponto/services/justificativa.py:381`; `app/ponto/views.py:1825`; `app/ponto/views.py:1829`; `app/ponto/views.py:1834`; `app/ponto/services/veredito_celula.py:325`; `app/chamados/services/materializacao.py:952`; `app/chamados/services/materializacao.py:959`; `app/chamados/services/materializacao.py:1041`; `app/chamados/services/regularizacao_ext.py:95`; `app/chamados/services/regularizacao_ext.py:106`; `app/chamados/services/acoes_chamado.py:54`; `app/chamados/services/acoes_chamado.py:67`; `app/ponto/registro_batida.py:243`; `app/ponto/registro_batida.py:246`) |
-
-Censo AST dos **16 sítios diretos fora dos testes**: [nao verificado]
-
-| Chamador | Sítios |
-|---|---|
-| Três cascas | `app/api/views.py:654`; `app/api/views_core.py:645`; `app/ponto/services/triagem_batida.py:700` |
-| Justificativas | `app/ponto/services/justificativa.py:188`; `app/ponto/services/justificativa.py:361`; `app/ponto/views.py:1818` |
-| Veredito | `app/ponto/services/veredito_celula.py:323` |
-| Materialização | `app/chamados/services/materializacao.py:933`; `app/chamados/services/materializacao.py:1013` |
-| Regularização externa | `app/chamados/services/regularizacao_ext.py:78` |
-| Exceção autorizada | `app/chamados/services/acoes_chamado.py:44` |
-| Comando de ensaio | `app/ponto/management/commands/testar_pwa.py:184`; `app/ponto/management/commands/testar_pwa.py:198`; `app/ponto/management/commands/testar_pwa.py:219`; `app/ponto/management/commands/testar_pwa.py:228`; `app/ponto/management/commands/testar_pwa.py:229` |
-
-O comando descarta os três primeiros retornos e compara `None`/PK nos dois últimos; a entrega cita `:230` como segunda chamada, mas ali está a comparação: a chamada real é `:229`. (`app/ponto/management/commands/testar_pwa.py:184`; `app/ponto/management/commands/testar_pwa.py:198`; `app/ponto/management/commands/testar_pwa.py:219`; `app/ponto/management/commands/testar_pwa.py:229`; `app/ponto/management/commands/testar_pwa.py:230`)
-
-A corrida específica de V2 fica causalmente resolvida pelo código: concorrente confirmado antes da consulta gera retorno por reutilização sem marca; criação local recebe marca. A colisão posterior às consultas ainda escapa como exceção, sem alcançar helper, porque não há captura de `IntegrityError` no corpo da porta. (`app/ponto/registro_batida.py:113`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:158`; `app/ponto/models.py:106`)
-
-Execução SQL/Django, chamadas dinâmicas, comportamento de bibliotecas externas e frequência em produção: **[nao verificado]**.
-
-## 15/11 02:16 · sessao 5ce9eaee8b60 · - · - · origem=Ronald (tmux)
-
-**Pauta 1 — `test_MORDE_o_universo_le_a_celula_e_o_FIO`**
-
-- A fixture cria D1 `discordante`, `trabalha=True`, DNA de 07h–19h, mas não fornece `ata`; o campo aceita `NULL` (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:39`, `app/escala/models.py:1778`). O leitor transforma ata ausente em `{}`, mantém tipo `trabalho` e obtém zero lâmpadas (`app/escala/services/leitor_celula.py:379`, `app/escala/services/leitor_celula.py:397`, `app/escala/services/leitor_celula.py:413`).
-- Sem instâncias de lâmpadas, a tarefa escreve `nao_sei=True`, razão `ata_sem_lampadas`; essa ignorância não nasceu no diff fornecido, mas o diff passa a publicá-la mesmo sem rota (`app/chamados/services/tarefa_do_dia.py:232`, `app/chamados/services/tarefa_do_dia.py:238`, `app/chamados/services/tarefa_do_dia.py:700`). A Folha lê esse envelope como fio `nao_sei`; a pauta exclui esse fio, resultando em `[]` na asserção que exige `[D1]` (`app/folha/fora_da_folha.py:87`, `app/ponto/services/pautas_dos_discordantes.py:90`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:68`). **O valor final interno da tarefa após a consulta real ao Resolver dia não aparece no traceback; atribuir toda a execução exclusivamente a esse caminho é [não verificado].**
-- O corte O320 manda enviar os dias discordantes **sem fio** à pauta de DP; o próprio teste explica que SEM FIO é `fio == 'nada'`, e não ausência de qualquer pergunta/chamado (`app/ponto/services/pautas_dos_discordantes.py:4`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:96`). A regra nova separa desconhecimento de ausência conhecida de porta e impede pauta de DP para `nao_sei`, interpretado como ESTRUTURA (`app/chamados/services/tarefa_do_dia.py:697`, `app/ponto/services/pautas_dos_discordantes.py:60`).
-- Portanto, o nome continua medindo duas autoridades, mas a fixture não estabelece a premissa **SEM FIO conhecido**: estabelece trabalho sem ata de lâmpadas (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:39`, `app/chamados/services/tarefa_do_dia.py:238`). Cura proposta: **teste/fixture**, lavrando um caso conhecido sem porta e controlando a oferta de Resolver; se a intenção for desconhecimento, exigir exclusão e testemunho em `sem_leitura` (`app/ponto/services/pautas_dos_discordantes.py:90`).
-- Volta identificável: publicação do envelope em **c5**, documentada na entrega; ramo explícito da pauta em **c6 K3** (`app/chamados/tests/e3_r3_c5_entrega.txt:54`, `app/chamados/tests/e3_r3_c6_entrega.txt:20`).
-
-**Pauta 2 — `test_MORDE_contagem_IMPAR_e_BATIDA_e_o_motor_NAO_roda`**
-
-- A fixture cria uma célula discordante e uma única batida; depois restaura **somente** `veredito='discordante'` por `update()` (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:182`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:202`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:206`). O save da batida chama o cartório e pode alterar ata/status antes desse update (`app/ponto/signals.py:132`, `app/ponto/signals.py:85`).
-- A fixture deliberadamente não cria vínculo real e simula cadastro apenas por mock de `cadastro_do_dia_carregado`; esse mock não fornece vínculo à carga da tarefa (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:212`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:216`, `app/ponto/turnos.py:3053`). Sem vínculo, o teto dos marcos retorna `[]`; uma lâmpada apagada fica sem teto e a tarefa marca desconhecimento (`app/ponto/turnos.py:3065`, `app/ponto/services/cartorio.py:890`, `app/chamados/services/tarefa_do_dia.py:123`, `app/chamados/services/tarefa_do_dia.py:300`).
-- Outra mudança do diff permite que a oferta real de Resolver dia publique `admin/porta_acao`; a fixture não controla essa oferta (`app/chamados/services/tarefa_do_dia.py:597`, `app/chamados/services/tarefa_do_dia.py:605`, `app/chamados/services/tarefa_do_dia.py:674`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:217`). **O traceback mostra somente `[]`; não mostra se D1 saiu por `nao_sei`, por `admin` ou por outro fio: origem interna exata [não verificado].**
-- A cadeia comprovável termina antes do juiz da paridade: `apurar()` primeiro chama `dias_sem_fio()`, que só inclui fio `nada`; com lista vazia, retorna `[]` imediatamente. A montagem de `InsumosDoDono`, o pré-teste do motor e `_ins.dono()` ficam depois desse retorno (`app/ponto/services/pautas_dos_discordantes.py:87`, `app/ponto/services/pautas_dos_discordantes.py:95`, `app/ponto/management/commands/pautas_discordantes.py:71`, `app/ponto/management/commands/pautas_discordantes.py:85`, `app/ponto/management/commands/pautas_discordantes.py:100`, `app/ponto/management/commands/pautas_discordantes.py:112`).
-- A regra BUG-144 continua escrita e implementada no juiz; a falha fornecida não demonstra violação dela, porque a asserção recebe um universo vazio antes dessa pergunta (`app/ponto/management/commands/e6_oraculo.py:62`, `app/ponto/tests/test_o320_pauta_dos_discordantes.py:229`, `app/ponto/management/commands/pautas_discordantes.py:72`). A regra nova LU-03 considera ação direta administrativa com tela como porta; K3 exclui desconhecimento do universo de pauta (`app/docs/CORTES.md:435`, `app/ponto/services/pautas_dos_discordantes.py:60`).
-- Cura proposta: **teste/fixture**, separar a montagem da paridade do pré-filtro de alcance — ou fornecer explicitamente um dia conhecido sem fio. A identificação do ramo concreto que excluiu D1 permanece **[não verificado]**, portanto não agrupar automaticamente esta falha com “ata vazia” (`app/ponto/tests/test_o320_pauta_dos_discordantes.py:208`, `app/ponto/management/commands/pautas_discordantes.py:71`).
-
-**Agrupamento:** a primeira integra a causa “ausência de lâmpadas antes mascarada como ausência de porta”; a segunda integra “fixture do teste de paridade não fixa mais o universo sem fio”. Ambas indicam cura de fixture, preservando testes próprios para `nao_sei` e para porta administrativa; não há, nestes dois tracebacks, prova de regressão no juiz BUG-144 (`app/chamados/services/tarefa_do_dia.py:238`, `app/chamados/services/tarefa_do_dia.py:700`, `app/ponto/management/commands/pautas_discordantes.py:71`, `app/ponto/management/commands/e6_oraculo.py:62`).
-
-_5501 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5503 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
