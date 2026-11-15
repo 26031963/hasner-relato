@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 18:49** · publicado em **15/11/2026 18:50** (UTC-3)
+> Ultima resposta processada: **15/11/2026 18:53** · publicado em **15/11/2026 18:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 18:53 · sessao 3b3ebdd4be3c · E3-RESTO-R3 · censo · origem=Code
+
+Os caminhos abaixo são relativos a `app/`. Distingo **leitura própria**, **fallback suprimido pelo argumento recebido** e **omissão de argumento**. Execução efetiva em produção: **[não verificado]**.
+
+O caminho solicitado `folha/vigia_fio.py` não foi localizado **[não verificado]**. Incluí separadamente o módulo encontrado, `chamados/services/vigia_fio.py`, cujas entradas são `censo` e `censo_alcance`; equivalência com o caminho solicitado: **[não verificado]** (`chamados/services/vigia_fio.py:266`, `chamados/services/vigia_fio.py:487`).
+
+**1. Relógio transitivo — até seis chamadas**
+
+**Instante disponível nas bordas**
+
+| Borda | O que tem em mãos |
+|---|---|
+| `lavrar_retrato_folha.Command.handle` | `_agora` e seu dia local (`folha/management/commands/lavrar_retrato_folha.py:49`, `folha/management/commands/lavrar_retrato_folha.py:50`). |
+| `vigiar_retido_calado.Command.handle` | Lê somente o dia, diretamente no argumento de `censo`; não conserva um `datetime` (`folha/management/commands/vigiar_retido_calado.py:33`). |
+| `_recorte_da_barra` | `_agora` e `_hoje`; devolve o dia às views, mas não devolve `_agora` (`folha/views_retrato.py:177`, `folha/views_retrato.py:178`, `folha/views_retrato.py:238`, `folha/views_retrato.py:245`). |
+| `calendario_ponto` | `_agora`, passado ao calendário (`colaboradores/views.py:1951`, `colaboradores/views.py:1952`). |
+| `contexto_drawer` | `agora` e dia local (`colaboradores/services/drawer.py:21`, `colaboradores/services/drawer.py:22`). |
+| `furos_espelho` | `_agora`, passado ao dataset (`relatorios/views.py:1519`, `relatorios/views.py:1543`). |
+| `frescor_dos_retratos` | `agora` obrigatório (`folha/retrato_folha.py:1386`). |
+| `vigia_fio.censo` / `censo_alcance` | O primeiro recebe ou lê `agora`; o segundo o exige (`chamados/services/vigia_fio.py:266`, `chamados/services/vigia_fio.py:282`, `chamados/services/vigia_fio.py:487`). |
+
+**Lavrador**
+
+- **Salto 0:** `handle → timezone.now()` — leitura da borda (`folha/management/commands/lavrar_retrato_folha.py:49`).
+- **Salto 3:** `handle → contadores → linhas_do_retrato → recortar`. `recortar` aceita `hoje=None`, e `linhas_do_retrato` o omite. Aqui só há eixo `f` ou nenhum grupo; não se consulta o leitor de dono (`folha/management/commands/lavrar_retrato_folha.py:68`, `folha/retrato_folha.py:120`, `folha/retrato_folha.py:121`, `folha/retrato_folha.py:111`, `folha/retrato_folha.py:635`, `folha/retrato_folha.py:632`).
+- **Salto 4:** `handle → montar_linhas → _informativo_rescisao → informativo_rescisao → _dias_sem_decisao`. Contém `_tz.localdate()`, mas **o fallback está suprimido**: o dia da borda atravessa todas essas chamadas (`folha/management/commands/lavrar_retrato_folha.py:65`, `folha/retrato_folha.py:1220`, `folha/retrato_folha.py:1288`, `folha/export.py:1228`, `folha/export.py:1238`).
+- **Salto 5:** `handle → montar_linhas → fora_da_folha → dias_que_seguram → classificar_export → motivos_retencao_espelho`. A última chamada **omite `hoje`**, cujo default é `None`. `motivos_retencao_celula` fica no salto 6; seu `_dias_sem_decisao`, com relógio, fica no **salto 7**, fora deste teto (`folha/management/commands/lavrar_retrato_folha.py:65`, `folha/retrato_folha.py:1214`, `folha/fora_da_folha.py:200`, `folha/fora_da_folha.py:147`, `folha/export.py:968`, `folha/export.py:1301`, `folha/export.py:1307`, `folha/export.py:1212`).
+- **Salto 6:** `handle → montar_linhas → fora_da_folha → _carga → carga_da_tarefa → CargaDaTarefa.__init__ → qs_na_fila`. Contém `timezone.now()`, **suprimido pelo `agora` propagado**. O construtor é chamado pela classe devolvida pela fábrica local (`folha/management/commands/lavrar_retrato_folha.py:65`, `folha/retrato_folha.py:1214`, `folha/fora_da_folha.py:205`, `folha/fora_da_folha.py:67`, `chamados/services/tarefa_do_dia.py:730`, `chamados/services/tarefa_do_dia.py:452`, `chamados/services/painel.py:190`).
+
+**Vigia do retido calado**
+
+- **Salto 0:** `handle → timezone.localdate()` — leitura da borda (`folha/management/commands/vigiar_retido_calado.py:33`).
+- **Salto 2:** `handle → censo → colabs_nunca_bateu`. Contém `timezone.localdate()`, **suprimido pelo `hoje` posicional recebido** (`folha/management/commands/vigiar_retido_calado.py:33`, `folha/vigia_retido_calado.py:60`, `escala/services/cadastro_realidade.py:161`).
+- **Salto 3:** `handle → censo → linhas_do_retrato → recortar`. **Omite `hoje=None`**, no mesmo caminho restrito ao eixo `f` descrito acima (`folha/management/commands/vigiar_retido_calado.py:33`, `folha/vigia_retido_calado.py:65`, `folha/retrato_folha.py:111`, `folha/retrato_folha.py:635`).
+
+**Recorte e suas três views**
+
+- `_recorte_da_barra → timezone.now()` é a leitura direta. `retrato_folha`, `retrato_pdf` e `retrato_raiox` chegam a ela por suas chamadas ao recorte (`folha/views_retrato.py:177`, `folha/views_retrato.py:258`, `folha/views_retrato.py:386`, `folha/views_retrato.py:487`).
+- `_recorte_da_barra → linhas_do_retrato → recortar` **omite `hoje=None`**, no salto 2 do recorte e no salto 3 de cada view. Novamente, não consulta o eixo de dono nesse caminho (`folha/views_retrato.py:198`, `folha/retrato_folha.py:111`, `folha/retrato_folha.py:632`, `folha/retrato_folha.py:635`).
+- `retrato_pdf → gerar_pdf_auditavel → timezone.now()` acrescenta uma **leitura própria**, no salto 1. A view já recebeu o dia do recorte; o instante completo não veio no retorno (`folha/views_retrato.py:386`, `folha/views_retrato.py:441`, `folha/views_retrato.py:245`, `relatorios/pdf_base.py:133`).
+- `retrato_raiox → placar_aceite` acrescenta **duas leituras próprias**, `_tz.now()` e `_tz.localdate()`, no salto 1, quando `dono == ['colab']`. O import de `placar_aceite` é local (`folha/views_retrato.py:511`, `folha/views_retrato.py:512`, `folha/views_retrato.py:513`, `chamados/services/verbos.py:286`, `chamados/services/verbos.py:287`).
+- `frescor_dos_retratos` não acrescenta leitura autônoma nesse fecho: converte `agora`, passa data explícita às janelas e formata carimbos explícitos (`folha/retrato_folha.py:1408`, `folha/retrato_folha.py:1411`, `folha/retrato_folha.py:1441`, `folha/retrato_folha.py:1444`, `ponto/janelas.py:60`, `ponto/janelas.py:66`).
+
+**Família compartilhada por calendário, drawer e relatório**
+
+Use estes prefixos para as cadeias da tabela:
+
+- **K:** `calendario_ponto → contexto_calendario`, passando `agora` (`colaboradores/views.py:1952`).
+- **D:** `contexto_drawer → contexto_calendario`, passando `agora` (`colaboradores/services/drawer.py:123`, `colaboradores/services/drawer.py:124`).
+- **F:** `furos_espelho → dataset_furos → contexto_calendario`, passando `agora` nas duas arestas (`relatorios/views.py:1543`, `relatorios/furos.py:160`, `relatorios/furos.py:164`).
+
+| Cadeia depois do prefixo | Salto K/D; F | Leitura ou omissão |
+|---|---:|---|
+| `contexto_calendario` | 1; 2 | `timezone.now()` **suprimido** pelo instante recebido (`colaboradores/services/calendario.py:192`). |
+| `contexto_calendario → status_dos_dias_lavrados` | 2; 3 | `now()` **suprimido**; recebe `_agora` (`colaboradores/services/calendario.py:638`, `ponto/status_dia.py:252`, `ponto/status_dia.py:253`). |
+| `contexto_calendario → pergunta_viva` | 2; 3 | Import local com apelido `_pv`; **omite `hoje=None`**, mas fornece `agora`, do qual o juiz deriva o dia (`colaboradores/services/calendario.py:498`, `colaboradores/services/calendario.py:506`, `chamados/juizes.py:865`, `chamados/juizes.py:888`). |
+| `… → pergunta_viva → _pergunta_viva_calc → _dentro_da_janela_viva` | 4; 5 | `date.today()` **suprimido** pelo dia derivado do instante (`chamados/juizes.py:897`, `chamados/juizes.py:1468`, `chamados/juizes.py:595`). |
+| `… → pergunta_viva → _pergunta_viva_calc → classificar_falta` | 4; 5 | Import local `_cf`; `_tz.now()` **suprimido** pelo `agora` recebido (`chamados/juizes.py:1470`, `chamados/juizes.py:1472`, `chamados/juizes.py:1474`, `escala/servico_jornada.py:387`). |
+| `contexto_calendario → folha_manda → turno_aberto_de` | 3; 4 | `now()` **suprimido** pelo instante recebido (`colaboradores/services/calendario.py:614`, `relatorios/cartao_pela_celula.py:398`, `ponto/turnos.py:2291`). |
+| `contexto_calendario → folha_manda → ate_ontem` | 3; 4 | `localdate()` **suprimido** pelo dia fornecido (`colaboradores/services/calendario.py:614`, `relatorios/cartao_pela_celula.py:413`, `relatorios/cartao_pela_celula.py:40`). |
+| `contexto_calendario → folha_manda → totais_da_folha → fechamento_lido → recalcular_fechamento_mes` | 5; 6 | **Leituras próprias** em `timezone.now()` nas linhas 616 e 1086; o instante da borda não é transportado até o recálculo (`colaboradores/services/calendario.py:614`, `relatorios/cartao_pela_celula.py:323`, `relatorios/cartao_pela_celula.py:73`, `ponto/services/fechamento.py:1759`, `ponto/services/fechamento.py:616`, `ponto/services/fechamento.py:1086`). |
+| `… → recalcular_fechamento_mes → motivos_retencao_espelho` | 6; 7, fora | Import local `_mre`; **omite `hoje=None`** (`ponto/services/fechamento.py:1066`, `ponto/services/fechamento.py:1067`, `folha/export.py:1301`). |
+| `contexto_calendario → CargaDaJanela.turnos → _turnos_do_colab_puro → papel_por_minuto_da_ata → periodos_do_dia → intervalo_cadastrado` | 6; 7, fora | **Leitura própria de `date.today()`**, quando existe tipo de escala; inclui despacho pela instância `_carga` (`colaboradores/services/calendario.py:252`, `ponto/turnos.py:3036`, `ponto/turnos.py:1939`, `ponto/turnos.py:1633`, `ponto/juiz_batida.py:270`, `ponto/juiz_batida.py:117`, `ponto/juiz_batida.py:125`). |
+
+Duas condições delimitam essa tabela:
+
+- `folha_manda → totais_da_folha` exige competência inteira e fechamento existente. `recalcular_fechamento_mes` também contém relógios nas linhas 1143, 1161 e 1189, mas esses ramos de escrita ficam **suprimidos** por `somente_leitura=True` nesse caminho (`relatorios/cartao_pela_celula.py:321`, `relatorios/cartao_pela_celula.py:71`, `ponto/services/fechamento.py:1761`, `ponto/services/fechamento.py:1128`, `ponto/services/fechamento.py:1143`, `ponto/services/fechamento.py:1161`, `ponto/services/fechamento.py:1189`).
+- Pelo prefixo **F**, os caminhos através de `folha_manda` são apenas alcançabilidade **sintática**: `NAO_PERGUNTADO` impede a execução desse bloco (`relatorios/furos.py:164`, `colaboradores/services/calendario.py:594`, `colaboradores/services/calendario.py:597`, `colaboradores/services/calendario.py:614`).
+
+**Ramos adicionais do drawer e do relatório**
+
+- `contexto_drawer → perguntas_vivas_de → pergunta_viva`: import local `_vivas_de` de `chamados.models`, reexportado de `chamados.juizes`. **Omite `hoje` e `agora`**, apesar de o drawer já possuir ambos (`colaboradores/services/drawer.py:21`, `colaboradores/services/drawer.py:79`, `colaboradores/services/drawer.py:80`, `chamados/models.py:4226`, `chamados/juizes.py:1504`, `chamados/juizes.py:865`).
+- Esse ramo chega a `_dentro_da_janela_viva` e `classificar_falta` no **salto 4**, permitindo suas leituras próprias; pela perna `_pergunta_materializada_de_fato`, chega novamente aos dois no **salto 5** (`chamados/juizes.py:897`, `chamados/juizes.py:1468`, `chamados/juizes.py:1472`, `chamados/juizes.py:1486`, `chamados/juizes.py:696`, `chamados/juizes.py:701`, `chamados/juizes.py:595`, `escala/servico_jornada.py:387`).
+- Na mesma cadeia, `_pergunta_materializada_de_fato` **omite efetivamente `agora`** no salto 4, e `_slot_esperado` o omite no salto 5: os `**` condicionais viram `{}` quando o instante é `None`. As assinaturas têm default `None` (`chamados/juizes.py:1486`, `chamados/juizes.py:1487`, `chamados/juizes.py:665`, `chamados/juizes.py:755`, `chamados/juizes.py:344`).
+- `contexto_drawer → turnos_do_colab → _turnos_do_colab_puro → papel_por_minuto_da_ata → periodos_do_dia → intervalo_cadastrado`: **`date.today()` próprio no salto 5**. O import local é `_tdc` (`colaboradores/services/drawer.py:44`, `colaboradores/services/drawer.py:47`, `ponto/turnos.py:1915`, `ponto/turnos.py:1939`, `ponto/turnos.py:1633`, `ponto/juiz_batida.py:270`, `ponto/juiz_batida.py:125`).
+- `furos_espelho → escalas_em_limbo`: **`timezone.localdate()` próprio no salto 1**, embora `_agora` já exista na borda (`relatorios/views.py:1519`, `relatorios/views.py:1554`, `relatorios/furos.py:59`).
+- `furos_espelho → dataset_furos → status_dos_dias_lavrados`: contém `now()` no **salto 2**, **suprimido** pelo instante recebido. O default `agora=None` de `dataset_furos` permanece, mas essa borda fornece o argumento (`relatorios/views.py:1543`, `relatorios/furos.py:103`, `relatorios/furos.py:123`, `ponto/status_dia.py:253`).
+
+**Complemento: módulo real `chamados/services/vigia_fio.py`**
+
+Para tornar as cadeias seguintes explícitas:
+
+- **T(C/A):** `censo:359` ou `censo_alcance:593 → CargaDaTarefa.tarefa → resolver_dia_oferecido_nas_datas → contexto_calendario` (`chamados/services/vigia_fio.py:359`, `chamados/services/vigia_fio.py:593`, `chamados/services/tarefa_do_dia.py:613`, `colaboradores/services/calendario.py:157`).
+- **L(C):** `censo → dono_fora_do_fio → dia_do_admin → _carregar → cadastro_realidade.lista` (`chamados/services/vigia_fio.py:387`, `chamados/services/vigia_fio.py:261`, `chamados/services/vigia_fio.py:202`, `chamados/services/vigia_fio.py:194`).
+- **L(A):** `censo_alcance → dia_na_lista → _carregar → cadastro_realidade.lista` (`chamados/services/vigia_fio.py:621`, `chamados/services/vigia_fio.py:210`, `chamados/services/vigia_fio.py:194`).
+- **P(C/A):** `censo:387` ou `censo_alcance:615 → dono_fora_do_fio → PerguntaDisputa.estado → pergunta_viva`. A propriedade **omite ambos os argumentos**; acesso à propriedade conta como chamada (`chamados/services/vigia_fio.py:387`, `chamados/services/vigia_fio.py:615`, `chamados/services/vigia_fio.py:259`, `chamados/models.py:3127`, `chamados/juizes.py:865`).
+
+| Cadeia | Saltos C / A | Leitura e transporte do instante |
+|---|---:|---|
+| `censo → now()` | 0 / — | Fallback da própria borda, quando não recebeu `agora` (`chamados/services/vigia_fio.py:282`). |
+| `censo/censo_alcance → carga_da_tarefa → CargaDaTarefa.__init__ → qs_na_fila` | 3 / 3 | `now()` **suprimido** pelo instante propagado (`chamados/services/vigia_fio.py:357`, `chamados/services/vigia_fio.py:592`, `chamados/services/tarefa_do_dia.py:730`, `chamados/services/tarefa_do_dia.py:452`, `chamados/services/painel.py:190`). |
+| `T(C/A)` | 3 / 3 | `contexto_calendario:192`, fallback suprimido; o instante atravessa a função plural (`chamados/services/tarefa_do_dia.py:614`, `colaboradores/services/calendario.py:159`, `colaboradores/services/calendario.py:192`). |
+| `T(C/A) → status_dos_dias_lavrados` | 4 / 4 | `now()` suprimido (`colaboradores/services/calendario.py:638`, `ponto/status_dia.py:253`). |
+| `T(C/A) → folha_manda → turno_aberto_de / ate_ontem` | 5 / 5 | `now()` e `localdate()` suprimidos (`colaboradores/services/calendario.py:614`, `relatorios/cartao_pela_celula.py:398`, `relatorios/cartao_pela_celula.py:413`, `ponto/turnos.py:2291`, `relatorios/cartao_pela_celula.py:40`). |
+| `… → tarefa → ler → alimentar_fila → particionar_verbos / qs_na_fila` | 4 / 4 | Função local `ler`; ambos os relógios suprimidos pelo instante recebido (`chamados/services/tarefa_do_dia.py:600`, `chamados/services/tarefa_do_dia.py:588`, `chamados/services/tarefa_do_dia.py:590`, `chamados/juizes.py:1573`, `chamados/juizes.py:1576`, `chamados/juizes.py:1584`, `chamados/services/verbos.py:35`, `chamados/services/painel.py:190`). |
+| `L(C/A)` | 4 / 3 | `lista → now()`, suprimido pelo `self.agora` fornecido pelos censos (`chamados/services/vigia_fio.py:194`, `escala/services/cadastro_realidade.py:780`). |
+| `L(C/A) → _jornada_que_mente` | 5 / 4 | **`date.today()` próprio**; `lista` passa somente empresas (`escala/services/cadastro_realidade.py:791`, `escala/services/cadastro_realidade.py:224`). |
+| `L(C/A) → _afastado_sem_registro` | 5 / 4 | `localdate()` suprimido pelo `hoje` passado (`escala/services/cadastro_realidade.py:808`, `escala/services/cadastro_realidade.py:588`). |
+| `L(C/A) → _afastado_sem_registro → afastados_hoje` | 6 / 5 | **`localdate()` próprio**: a chamada não fornece o dia (`escala/services/cadastro_realidade.py:592`, `colaboradores/services/situacao_exibida.py:45`). |
+| `L(C/A) → _nunca_bateu → colabs_nunca_bateu` | 6 / 5 | `localdate()` suprimido pelo `hoje` propagado (`escala/services/cadastro_realidade.py:864`, `escala/services/cadastro_realidade.py:179`, `escala/services/cadastro_realidade.py:161`). |
+| `L(A) → _jornada_que_mente → periodos_do_dia → intervalo_cadastrado` | 7, fora / 6 | **`date.today()` próprio**, quando existe tipo de escala (`escala/services/cadastro_realidade.py:238`, `ponto/juiz_batida.py:270`, `ponto/juiz_batida.py:125`). |
+| `P(C/A) → _pergunta_viva_calc → _dentro_da_janela_viva / classificar_falta` | 5 / 5 | **Leituras próprias**: a propriedade perdeu o instante que os censos possuem (`chamados/models.py:3127`, `chamados/juizes.py:897`, `chamados/juizes.py:1468`, `chamados/juizes.py:1472`, `chamados/juizes.py:595`, `escala/servico_jornada.py:387`). |
+| `P(C/A) → _pergunta_viva_calc → _pergunta_materializada_de_fato →` esses dois leitores | 6 / 6 | Mesmas leituras próprias; `agora` é omitido pela expansão condicional (`chamados/juizes.py:1486`, `chamados/juizes.py:1487`, `chamados/juizes.py:696`, `chamados/juizes.py:701`). |
+
+Ainda no fecho desses censos:
+
+- `censo → vigia_carimbo.classificar → _pergunta_materializada_de_fato`: **omite `hoje` e `agora` no salto 2**. O import local `_juiz` passa por reexportação de `chamados.models`. Seus leitores `_dentro_da_janela_viva` e `classificar_falta` ficam no salto 3 e podem ler relógio próprio (`chamados/services/vigia_fio.py:415`, `chamados/services/vigia_carimbo.py:95`, `chamados/services/vigia_carimbo.py:106`, `chamados/models.py:4226`, `chamados/juizes.py:665`, `chamados/juizes.py:696`, `chamados/juizes.py:701`).
+- `censo → classificar → _slot_esperado`: **omite `agora` no salto 2**; também existe a omissão condicional pela perna `_pergunta_materializada_de_fato → _slot_esperado` (`chamados/services/vigia_fio.py:415`, `chamados/services/vigia_carimbo.py:110`, `chamados/juizes.py:344`, `chamados/juizes.py:755`).
+- `censo_alcance → dias_que_seguram → classificar_export → motivos_retencao_espelho`: **omite `hoje` no salto 3**. Seguindo `motivos_retencao_celula → _dias_sem_decisao`, alcança **`localdate()` próprio no salto 5**. Pela outra perna, `_dias_que_retem`, o mesmo leitor fica no salto 4, mas com fallback suprimido (`chamados/services/vigia_fio.py:537`, `folha/fora_da_folha.py:147`, `folha/export.py:968`, `folha/export.py:1307`, `folha/export.py:1212`, `folha/export.py:1238`, `folha/fora_da_folha.py:165`, `folha/fora_da_folha.py:121`).
+- `censo_alcance → alimentar_portas → alimentar_fila → particionar_verbos / qs_na_fila`: relógios no **salto 3**, suprimidos pelo instante propagado (`chamados/services/vigia_fio.py:560`, `chamados/juizes.py:1619`, `chamados/juizes.py:1573`, `chamados/juizes.py:1576`, `chamados/services/verbos.py:35`, `chamados/services/painel.py:190`).
+- `censo_alcance → alimentar_portas → pergunta_viva`: **omite `hoje` no salto 2**, mas fornece `agora`; seus leitores ficam no salto 4 e têm fallbacks suprimidos (`chamados/services/vigia_fio.py:560`, `chamados/juizes.py:1628`, `chamados/juizes.py:888`, `chamados/juizes.py:1468`, `chamados/juizes.py:1472`).
+- `T(C/A) → pergunta_viva` **omite `hoje` no salto 4**, fornecendo o instante. `… → tarefa → _ler_vida → pergunta_viva` fornece ambos. As expansões condicionais posteriores fornecem `agora` nesses caminhos (`colaboradores/services/calendario.py:506`, `chamados/services/tarefa_do_dia.py:574`, `chamados/services/tarefa_do_dia.py:537`, `chamados/services/tarefa_do_dia.py:541`, `chamados/juizes.py:1487`, `chamados/juizes.py:755`).
+- `censo/censo_alcance → tarefa → _ler_vida → carga_da_vida → CargaDaVida.__init__ → _slot_esperado`: **omite `agora` no salto 5**, mas passa `carga=self`; o juiz recupera o instante dessa carga (`chamados/services/vigia_fio.py:359`, `chamados/servic
+
+[truncado em 20000 de 35668 caracteres]
 
 ## 15/11 18:49 · sessao c68596c909d7 · - · - · origem=Ronald (tmux)
 
@@ -918,50 +1034,4 @@ PKS_VIVAS_ABERTA E3_texto_sem_instante 0
 pergunta_viva chamada 14790 vezes; segundos 53.1
 ```
 
-## 15/11 17:50 · sessao 9f06cb853912 · - · - · origem=Ronald (tmux)
-
-Item (d), pronto para consolidar. Os literais abaixo são trechos exatos; não interpretei qual predicado deveria prevalecer.
-
-| Tema | Literal | Fonte |
-|---|---|---|
-| Lei geral do escritor e trilha | “UM ESCRITOR POR ESTADO, NADA EM BRANCO: campo de estado tem 1 escritor canonico + tripwire; acao critica grava usuario, antes/depois e motivo” | `app/docs/LEIS.md:65` |
-| Divisão documental das portas | “Q1 identidade/via admin = models.py (abrir, fechar_por_admin, reabrir_por_competencia; desde a O261-E-F2 a PORTA UNICA DO CARIMBO carimbar/carimbar_identidade/descarimbar” e “Q2 resposta = services/disputa_emissao.py (responder_pergunta_disputa_core e irmas; absorve api/foto_recebida.py:50)” | `app/docs/DOSSIES.md:46` |
-| Resposta vazia com instante | “(b) respondida_em com resposta vazia” e “(2) escritor de respondida_em sem resposta (p#36272/36273)” | `app/docs/BACKLOG.md:1053` |
-| Predicado sem texto duplicado | “o predicado 'respondida sem resposta' tem copia em `chamados/juizes.py:1020` (dentro do C6) e em `chamados/services/vigia_fio.py::respondida_sem_texto` (:680, o unico do vigia apos o F5) -- um so juiz” | `app/docs/BACKLOG.md:1043` |
-| Texto sem instante | “(3) texto sem respondida_em: o juiz segura (models.py:1900-1901, juizes.py:2035) mas validar/recusar exigem carimbo (validacao.py:416-418), nota models.py:736-738 pede ato impossivel” | `app/docs/BACKLOG.md:1478` |
-| Instante sem texto: tratamento do passivo | “142 passivas NAO reabrem no app, vao a LISTA DO ADMIN "respondida pelo sistema sem o colab" (L-099) sem zerar respondida_em; col331/#22394 fica; cura na porta segue” | `app/docs/BACKLOG.md:2030` |
-| Instante sem texto: encaminhamento | “LU-06 = regra unica = particao_do_app; respondida sem texto e da E3-10-CURA-NO-ESCRITOR” | `app/docs/CORTES.md:438` |
-| Face SQL e vazio com espaços | “face SQL de respondida_sem_texto (trim de texto_vazio) troca a forma inline de models.py q_vivas e os 9 sitios respondida_em__isnull; selo de equivalencia com mutante sem trim; catraca pela forma de USO; os 17 do passivo medidos na sombra antes (app do colab ou supra mudou = PARA)” | `app/docs/BACKLOG.md:2035` |
-| Duas portas dos campos | “PERGUNTA DE DESENHO (2 portas declaradas Q1+Q2 gravam respondida_em)” e “duas portas Q1+Q2, selo AST por campo + mutante 8o sitio” | `app/docs/BACKLOG.md:1978` |
-| Resposta automática sobre validada | “responder_automaticamente (chamados/services/disputa_emissao.py ~1640-1666) so recusa quando ja ha texto; nao olha validada_em; chamador api/foto_recebida.py:48. Sem cura ate o censo” | `app/docs/BACKLOG.md:743` |
-| Preservar resposta na reabertura | “**Lei do fato unico: resposta e FATO, e reabrir nao apaga fato.**” e “Reabrir tem de criar versao nova preservando a anterior consultavel no proprio chamado, e "Cobrar resposta" so vale para pendentes.” | `app/docs/BACKLOG.md:1149` |
-| Zeragem histórica documentada | “o corpo de `disputa_emissao.py:1285-1310` e UM update (`respondida_em=None, validada_em=None, validada_por=None, resposta_colab=''`) e NAO toca `materializada_em`, `recusa_motivo`, `via_resolucao`.” | `app/docs/BACKLOG.md:1149` |
-| Regra de preservação e cobrança | “preservar as respostas e cobrar so a pergunta pendente, com trilha; depois do export” e “PROIBIDO apagar resposta de colaborador; PROIBIDO juiz novo.” | `app/docs/BACKLOG.md:2549` |
-| Devolução e contagem de atos | “D04 = ATOS humanos ocorridos (2 validacoes com devolucao no meio = 2); D05 = contrato publico CONSERVA as fases (app compilado nao muda), exigibilidade = campo NOVO aditivo (Expand-Contract, L-127); aguarda_admin com validacao sem efeito segue aguarda_admin ate o efeito” | `app/docs/BACKLOG.md:2032` |
-| Devolver ao admin com gravação divergente | “PROIBIDO devolver ao admin resposta cuja validacao grava hora/tipo diferente do declarado” | `app/docs/BACKLOG.md:2027` |
-| Instante não representa anuência | “sem o texto do colaborador nao se registra o horario dele, e `respondida_em` nao e anuencia” | `app/docs/BACKLOG.md:1667` |
-| Passivo sem texto: testemunha e escritor | “158 passivos sem texto em que a testemunha diz 'espera' e a escrita planta a hora do marco (testemunha x escritor discordam).” | `app/docs/BACKLOG.md:1939` |
-| Resposta sem veredito protege o pai | “`ponto/supra_juiz.py::pode_executar_csf` passa a PERGUNTAR a ele em vez de ler `respondida_em` cru: pai/destino seguro so com resposta SEM veredito; validada/materializada fecha normal pela Defesa 1.” | `app/docs/CORTES.md:415` |
-| Admin não dá primeira resposta | “LU-18 = nao (admin nao da a primeira resposta pelo colab)” | `app/docs/CORTES.md:450` |
-| Encerramento por desligamento, corte anterior | “a porta desligamento/admin_encerra deixa de carimbar via admin_decidiu em pergunta JA respondida (o carimbo diria uma decisao que nao houve -- L-007)” | `app/docs/CORTES.md:393` |
-| Encerramento por desligamento, fila posterior | “desligamento.py::executar_desligamento fecha tambem a pergunta respondida sem veredito com via propria de desligamento (molde VIA_COMPETENCIA_TRANCADA), lista dia/pergunta/resposta no chamado desligamento_revisao” | `app/docs/BACKLOG.md:732` |
-
-Não localizei texto específico sobre os quatro estados pedidos em `app/docs/LAPIDES.md`; ausência exaustiva de regra nesse documento: **[nao verificado]**. Em `LEIS.md`, o literal diretamente pertinente que encontrei foi a regra geral L-007 acima, sem equação específica entre instante e texto: **[nao verificado]** quanto à inexistência de outra formulação.
-
-Comandos usados, todos somente leitura:
-
-```bash
-rg -n -i \
-'respondida_em|resposta_colab|resposta.{0,35}vazi|texto.{0,30}instante|instante.{0,30}texto|devol.{0,50}resposta|resposta.{0,50}devol|descarimb.{0,50}resposta|JUIZ-RESPONDIDA|E4B-C6|E4B-C11|E4C-F1V6' \
-app/docs/LEIS.md app/docs/CORTES.md app/docs/LAPIDES.md \
-app/docs/BACKLOG.md app/docs/DOSSIES.md
-
-rg -n -i \
-'(devolv|devolu|descarimb|reabri|recus).{0,100}(respost|respondid)|(respost|respondid).{0,100}(devolv|devolu|descarimb|reabri|recus)|texto_vazio|sem.texto|vazi.{0,40}respost|respost.{0,40}vazi' \
-app/docs/LEIS.md app/docs/CORTES.md app/docs/LAPIDES.md \
-app/docs/BACKLOG.md app/docs/DOSSIES.md
-```
-
-Também executei consultas mais amplas por `respost|respondid|devol|descarimb|colab` e li faixas numeradas com `nl -ba ... | sed -n ...`; alguns resultados amplos foram truncados na saída da ferramenta, motivo para não certificar ausência. [nao verificado]
-
-_5725 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5726 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
