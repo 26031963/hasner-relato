@@ -1,7 +1,34 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 18:18** · publicado em **15/11/2026 18:18** (UTC-3)
+> Ultima resposta processada: **15/11/2026 18:34** · publicado em **15/11/2026 18:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 18:34 · sessao e42efb08fe33 · - · - · origem=Ronald (tmux)
+
+- **G/A — média: selo de relógio aceita regressão equivalente.** `_le_relogio` elimina duplicatas com `set`; duas chamadas `now()` aparecem como `['now']` (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:162`). O teste do drawer exige justamente esse resultado (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:149-152`). Mutação em memória de `timezone.localtime(agora).date()` para `timezone.localtime(timezone.now()).date()` em `app/colaboradores/services/drawer.py:22` **sobreviveu** ao teste. Caso: primeiro instante 20/10 23:59:59, segundo 21/10 00:00:01; calendário recebe um instante e os recortes recebem outro dia (`app/colaboradores/services/drawer.py:21-22`, `app/colaboradores/services/drawer.py:132`). O mutante registrado cobre `localdate()`, mas essa leitura duplicada de `now()` escapa (`app/chamados/tests/e3_r3_c16_mutantes.py:34`).
+
+- **F — nenhum problema estrutural encontrado na cópia.** A 0013 apenas altera o `help_text`, preservando `DateTimeField(db_index=True)` (`app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:12-18`); a definição anterior tem o mesmo tipo e índice (`app/folha/migrations/0011_retratofolha.py:22`). Depende expressamente da 0012 (`app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:8-10`), que altera somente o `help_text` de `linhas` (`app/folha/migrations/0012_retrato_linhas_help_text_o256.py:12-18`). Ser a última migration do **main**: **[nao verificado]**.
+
+- **G — outros escritores/juízes no delta:** nenhum encontrado. A única gravação identificada nos módulos alterados continua sendo `RetratoFolha.objects.update_or_create`, na porta do lavrador (`app/folha/management/commands/lavrar_retrato_folha.py:77-79`). A lista nova delega às autoridades existentes de janela (`app/folha/retrato_folha.py:1378-1384`).
+
+- Os 65 testes sem banco c4/c5/c6/c14/c15 passaram nesta execução; comparação histórica para determinar se alguma asserção foi enfraquecida: **[nao verificado]**. Os testes do vigia documentam a mudança de expectativa para janelas e preservam a verificação do instante entregue à lista (`app/folha/tests/test_vigia_retido_calado.py:131-141`, `app/folha/tests/test_vigia_retido_calado.py:154-190`).
+
+## 15/11 18:33 · sessao 4e252e0981b3 · - · - · origem=Ronald (tmux)
+
+Dois achados concretos:
+
+1. **Alta — empresa sem qualquer retrato desaparece do universo.** `censo` descobre empresas pelos próprios retratos; sem retrato, não chega a calcular nem registrar competências faltantes (`app/folha/vigia_retido_calado.py:46-58`). Em 25/10/2026, empresa visível E2 com corte 21 deveria produzir faltas `(E2,10,2026)` e `(E2,11,2026)`, pois lavrador e frescor percorrem `empresas_visiveis()` (`app/folha/management/commands/lavrar_retrato_folha.py:51-61`; `app/folha/retrato_folha.py:1410-1418`). Se E1 tiver bloqueados, `cego=0`, deixando E2 silenciosa (`app/folha/vigia_retido_calado.py:89`). Os testes de universo vazio não verificam `competencias_sem_retrato` (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:111-113`; `app/folha/tests/test_vigia_retido_calado.py:31-33`).
+
+2. **Média — universo inclui empresas que lavrador/frescor excluem.** `censo(None)` lê todos os retratos, inclusive empresas inativas ou de diagnóstico (`app/folha/vigia_retido_calado.py:46-52`). Os outros dois usam empresas visíveis, que excluem inativas e CNPJ `11222333*` (`app/colaboradores/queries.py:78-87`). Exemplo: empresa inativa E3 com retrato 11/2026 entra no contador em 25/10/2026 e ainda gera falta de 10/2026; não entra na rodada automática nem no frescor (`app/folha/vigia_retido_calado.py:55-58`; `app/folha/retrato_folha.py:1410-1411`).
+
+Demais verificações:
+
+- Cortes diferentes e virada do dia 21 usam corretamente o mesmo derivador. Em 21/10/2026: corte 21 → competências 10/11; corte 26 → 09/10 (`app/ponto/janelas.py:24-33`; `app/folha/retrato_folha.py:1377-1383`).
+- Competência futura fora dessas duas é excluída (`app/folha/vigia_retido_calado.py:56`). Duplicidade por empresa/competência é vedada por constraint (`app/folha/models.py:365-367`; `app/folha/migrations/0011_retratofolha.py:29`).
+- `competencias_sem_retrato`: escritor `censo:53-61`; leitor de produção `linhas:94-97`. O alarme não consulta esse campo (`app/folha/management/commands/vigiar_retido_calado.py:16-17`, `:37-41`).
+- `competencias_do_retrato`: escritor `app/folha/retrato_folha.py:1377-1383`; leitores lavrador `:61`, frescor `:1411`, vigia `:55-58`, nos respectivos arquivos.
+- `lavrado_em`: escritor único encontrado captura o início da rodada e grava esse instante (`app/folha/management/commands/lavrar_retrato_folha.py:49-50`, `:77-79`). Leitores usam comparação de instantes ou apresentação: frescor (`app/folha/retrato_folha.py:1412-1426`), rótulo (`:1441-1445`), mínimo da tela (`app/folha/views_retrato.py:203`) e apresentação (`app/templates/folha/_retrato_barra.html:22`).
+- Executados sem banco e sem escrita de bytecode: 10 testes c16 passaram; 8/8 mutantes morreram por asserção, sem erros. Definições dos testes/mutantes: `app/chamados/tests/test_e3_r3_c16_sem_banco.py:77-185`; `app/chamados/tests/e3_r3_c16_mutantes.py:25-38`. Testes com banco: [nao verificado].
 
 ## 15/11 18:18 · sessao 132e7f2bb6ed · E3-RESTO-R3 · verificador · origem=Code
 
@@ -1004,62 +1031,4 @@ Conclusões para consolidar, todas só da cópia:
 
 Inspeção estática apenas; não executei o selo, pois ele cria, copia e remove arquivos temporários. (`bin/tests/test_suite_motivo.sh:10`, `bin/tests/test_suite_motivo.sh:11`, `bin/tests/test_suite_motivo.sh:15`, `bin/tests/test_suite_motivo.sh:16`)
 
-## 15/11 17:18 · sessao d2bf99cfb25b · - · - · origem=Ronald (tmux)
-
-Leitura concluída sem execução; não há evidência suficiente para certificar nenhuma cura dos vermelhos informados. Previsões abaixo são [nao verificado], exceto a permanência da falha estática demonstrada pelo código.
-
-| Teste | Previsão D1+J1 | Referências | [nao verificado]
-|---|---|---|
-| BUG113, nas duas classes | Sem cura identificada | Asserções `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:163`, `:165`, `:169`, `:170`; herança `app/chamados/tests/test_e1_v8.py:118`. Escritor grava o par em `app/chamados/services/disputa_emissao.py:1481`; escape não deriva slot em `app/chamados/services/materializacao.py:359`. |
-| Recusa por paridade | Sem cura identificada | Asserções `app/chamados/tests/test_o261_recusa_fala.py:95`; fixture com par completo `:67`. Devolução preserva resposta em `app/chamados/services/validacao.py:213`, `:230`; leitura preserva texto/instante em `app/chamados/services/atos_pergunta.py:56`. |
-| Irmãs que gravaram | Sem cura identificada | `app/chamados/tests/test_o261_recusa_fala.py:116`, `:124`, `:126`, `:133`; mesma fixture com par completo `:67`. |
-| Idempotência da recusada | Sem cura identificada | `app/chamados/tests/test_o261_recusa_fala.py:158`, `:159`, `:161`, `:162`; mesmo fluxo de devolução acima. |
-| Carimbo em voo: validar recusada | Sem cura identificada | Fixture completa `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:64`; asserções `:87`, `:90`, `:92`, `:93`. |
-| Carimbo em voo: segunda tentativa | Sem cura identificada | `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:105`, `:113`, `:114`, `:118`. |
-| Carimbo em voo: determinismo | Sem cura identificada | `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:128`, `:130`. |
-| Propriedades sob intercalação | Indeterminado | Asserções `app/chamados/tests/test_pvmuda_carimbo_em_voo.py:276`, `:281`, `:289`; a regra de nova resposta escreve somente projeção em `:243`, após possível recusa `:237`. Assim, igualdade entre texto dos atos e projeção não está garantida em todas as trajetórias. |
-| Endpoint filtra por q_vivas | **Permanece vermelho** | Teste exige exatamente um filtro de list comprehension em `app/chamados/tests/test_contract_pergunta_viva.py:78`; código possui filtro adicional em `app/chamados/services/pergunta_no_app.py:65`, além de `:67`. D1/J1 não removem esse filtro. |
-| Recusa da porta nova | Sem cura identificada | Fixture completa `app/chamados/tests/test_fio_le_o_juiz.py:167`; materializador substituído por mock em `:251`; asserções `:257`, `:258`, `:259`, `:260`. |
-| Alimentação e _no_app contam tranca | Sem cura identificada | Fixture completa `app/chamados/tests/test_n1_perguntas_do_app.py:29`; asserções `:153`, `:154`, `:156`, `:157`; contador mede `periodo_trancado` em `:65`. |
-| R11, duas máquinas | Indeterminado | Asserções `app/chamados/tests/test_e3_portas_tarefa.py:634`, `:636`; fixture sem resposta em `app/chamados/tests/e3_v8_apoio.py:167`; corpos e mocks carregados em `:189`. Não achei traceback no dado fornecido; causa específica e estado posterior [nao verificado]. |
-
-Nos fluxos determinísticos de paridade, D1 acrescentaria condição verdadeira ao par completo das fixtures; J1 recebe o mesmo texto conservado. A conservação nasce em `app/chamados/models.py:4123`; devolução altera validação, preservando resposta, em `app/chamados/services/atos_pergunta.py:56`. Isso não demonstra cura dos vermelhos.
-
-Ressalva textual: a cópia testa **somente instante** em `app/chamados/services/validacao.py:418`, enquanto o C6 testa **somente texto** em `app/chamados/juizes.py:1572`. A afirmação sobre o predicado literal do main não pode ser comprovada por essas linhas da cópia [nao verificado].
-
-O artefato `app/chamados/tests/e4c_f1v5_base_juizes.txt:1` identifica uma fotografia do BASE `97bbaa60`, não do main solicitado; portanto, não serve como substituto do diff contra `151b0666a` (`:2`, `:3`).
-
-## 15/11 17:18 · sessao 66db28c118f0 · - · - · origem=Ronald (tmux)
-
-**Embrulho e leitores**
-
-- A única instanciação produtiva encontrada de `_PerguntaParaPlantio` é `_slot_esperado`, que passa `atos.resposta` à classe e entrega o objeto a `_ts_tipo_do_plantio` (`app/chamados/juizes.py:525`). A classe só substitui `resposta_colab`; todos os demais atributos são delegados à pergunta (`app/chamados/juizes.py:384-391`). Portanto, não expõe atributo público exclusivo exigido por outro leitor (`app/chamados/juizes.py:388-391`).
-- Leitores indiretos desse objeto: `_ts_tipo_do_plantio` lê `chamado_destino`, `motivo`, `data_evento`, `pk` e `resposta_colab`; `_tipo_pelo_marco`, chamado pelo primeiro, lê `motivo`, `resposta_colab`, `data_evento` e `pk` (`app/chamados/services/materializacao.py:342-359`, `:390`, `:412-421`, `:275-289`, `:308`). Esses atributos existem na pergunta original; a única diferença é o valor de `resposta_colab` substituído pelo embrulho (`app/chamados/juizes.py:389-391`).
-- Ocorrências adicionais encontradas na busca global são suporte/testes/documentos: carregamento no ambiente recortado (`app/chamados/tests/e3_c8b_apoio.py:128-129`); exigência da presença do símbolo (`app/chamados/tests/test_e4c_f1v2_harnesses.py:55-56`, `:105`); mutante que remove o símbolo (`app/chamados/tests/e4c_f1v2_mutantes.py:61-65`); teste que instancia a classe e exige texto substituído, pergunta original intacta e ausência do campo em `vars` do embrulho (`app/chamados/tests/test_e4c_f1v7_regressoes.py:55-58`); relatos históricos (`app/chamados/tests/e4c_f1v7_entrega.txt:9`, `app/chamados/tests/e4c_f1v7_red.txt:38`).
-
-**J1: fonte realmente usada**
-
-- Materializador de hora chama `_ts_tipo_do_plantio` com a pergunta original e lê `p.resposta_colab`; o slot passa o embrulho com texto dos atos (`app/chamados/services/materializacao.py:852`; `:359`, `:412`; `app/chamados/juizes.py:525`).
-- Existe outra divergência: slot de `data_hora` lê `atos.resposta`, enquanto o materializador de `data_hora` lê `p.resposta_colab` (`app/chamados/juizes.py:512-519`; `app/chamados/services/materializacao.py:1001-1008`). Assim, **só retirar o embrulho na linha 525 não basta para cumprir a expressão “mesma fonte que o materializador” para todos os tipos** (`app/chamados/juizes.py:513`; `app/chamados/services/materializacao.py:1001`).
-- Texto sem instante pode continuar alimentando cálculo de slot sem ser classificado como “respondida”; esse caso está explicitamente testado sem fabricar instante (`app/chamados/tests/test_e4c_f1v6_matriz.py:143-146`). Portanto, esse leitor não demonstra contradição lógica com D1 (`app/chamados/tests/test_e4c_f1v6_matriz.py:144-146`). Há, entretanto, testes adicionais da obra que exigem texto sem instante em filas chamadas “respondidas a validar”, potencialmente incompatíveis com D1 aplicado a essas filas (`app/chamados/tests/test_e4c_f1v6_orm.py:54-58`).
-
-**Ponto/core: tabela para consolidação**
-
-“Vermelho” vem do anexo fornecido; onde não há transição demonstrável, mantenho resultado contrafactual `[nao verificado]`.
-
-| Teste | c9 → D1+J1 | Fundamentação | [nao verificado]
-|---|---|---|
-| `test_calendario` | vermelho → `[nao verificado]`; sem cura demonstrada | Mede contagem SQL da rota e compara teto; as perguntas da fixture já têm texto e instante (`app/core/tests/test_selo_performance.py:402-406`, `:333-350`, `:317-322`). |
-| `test_chamados_modal` | vermelho → `[nao verificado]`; sem cura demonstrada | Mesma medição; fixture já satisfaz D1 (`app/core/tests/test_selo_performance.py:377-380`, `:333-350`, `:317-322`). |
-| `test_pendencias_disputa` | vermelho → `[nao verificado]`; sem cura demonstrada | Mesma medição; fixture já satisfaz D1 (`app/core/tests/test_selo_performance.py:354-357`, `:333-350`, `:317-322`). |
-| `test_MORDE_pendente_curado_sai_da_lista` | vermelho → vermelho, se somente D1/J1 | Causa estática concreta encontrada: registro exige chamada completa numa linha; código agora acrescenta `agora=agora` e fecha chamada na linha seguinte, faltando a impressão literal (`app/core/juizes.py:878`; `app/colaboradores/services/drawer.py:121-122`; asserção `app/core/tests/test_contract_juiz_tela.py:35-38`). |
-| `test_MORDE_o_mmd_commitado_bate_com_o_codigo` | vermelho → `[nao verificado]` | Exige igualdade entre artefatos e geração; D1/J1 não especificam atualização desses artefatos nem foi fornecida a divergência (`app/core/tests/test_selo_diagrama_do_codigo.py:44-47`; `app/core/management/commands/gerar_diagrama.py:921-930`). |
-| `test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` | vermelho → `[nao verificado]` | Duas asserções: arquivo adulterado retorna 1 e arquivo restaurado retorna 0. Sem traceback não se sabe qual falhou (`app/core/tests/test_selo_diagrama_do_codigo.py:90-98`). O próprio teste escreve arquivo, portanto não deve ser executado nesta tarefa (`app/core/tests/test_selo_diagrama_do_codigo.py:90-96`). |
-| `test_registrar_batida_com_1_furo_vivo_que_ela_fecha` | vermelho → `[nao verificado]`; sem cura semântica demonstrada | Fixture cria célula/chamados de furo; verifica fechamento, callbacks e consultas, sem inserir PerguntaDisputa nesse cenário (`app/ponto/tests/test_selo_chokepoint_escrita.py:413-433`, `:435-438`, `:287-298`). |
-| `test_registrar_batida_com_3_furos_vivos_que_ela_fecha` | vermelho → `[nao verificado]`; sem cura semântica demonstrada | Mesmo cenário com três chamados; verifica três fechamentos e custos (`app/ponto/tests/test_selo_chokepoint_escrita.py:416-433`, `:440-443`, `:287-298`). |
-| `test_registrar_batida_com_3_furos_vivos_que_ficam` | vermelho → `[nao verificado]`; sem cura semântica demonstrada | Fixture cria célula/chamados cobrando saída e registra entrada; verifica vivos e custos (`app/ponto/tests/test_selo_chokepoint_escrita.py:453-468`, `:475-478`, `:287-298`). |
-| `test_ruff_zero` | vermelho → `[nao verificado]` | Asserta código de saída do Ruff sobre a árvore inteira; anexo não fornece diagnósticos que permitam atribuir a falha a D1/J1 (`app/core/tests/test_contract_esmeril.py:22-24`). |
-
-As medições de consultas ou callbacks não podem ser substituídas pela constatação de que o predicado mudou: os testes cobram valores medidos e o anexo só fornece nomes das falhas (`app/core/tests/test_selo_performance.py:338-350`; `app/ponto/tests/test_selo_chokepoint_escrita.py:287-298`; diagnóstico concreto das falhas: `[nao verificado]`).
-
-_5714 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5716 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
