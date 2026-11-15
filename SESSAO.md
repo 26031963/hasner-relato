@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 06:16:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (45.2 MB). Acoes na janela: **1447**.
+**Medido em 15/11/2026 06:22:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (45.3 MB). Acoes na janela: **1456**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:17:19 | Bash | Write v9 triage line into RELATO and check hook | `cd /home/ronald/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() anc='ESTADO 06:1x JUSTIFICATIVA-PAGA suite INTEIRA de a36c12d27 VERDE' assert s.count(anc)==1 i=s.index(anc) lin=("ESTADO 06:1x JUSTIFICATIVA-PAGA triagem v9 (logs/JUSTIFICATIVA-PAGA/verif/v9.r, conferido abrindo os sitios): " "(1) PROCEDE -- o juiz registrado marcos_cobertos_por_justificativa da frozenset() pa ...` |
+| 06:17:10 | Bash | Show this session's RELATO additions | `cd /home/ronald/saas-hasner/app/docs; git diff -U0 RELATO.md \| grep '^+' \| cut -c1-200 \| head -20` |
+| 06:17:07 | Bash | Locate this morning's narrative lines | `cd /home/ronald/saas-hasner/app/docs; grep -n "v3 triag\\|c5 (\\|CEF c5\\|CORTES-RECEBIDO-FORA-DA-PAUSA curado\\|CURADO NA VIVA" RELATO.md \| tail -5` |
+| 06:17:05 | Bash | Locate the ESTADO lines added this morning | `cd /home/ronald/saas-hasner/app/docs; grep -n "06:0x\\|05:5x" RELATO.md \| tail -6` |
+| 06:17:03 | Bash | Find today's ESTADO lines in RELATO | `cd /home/ronald/saas-hasner/app/docs; grep -n "^- 0[56]:..* \(JUSTIFICATIVA\\|CEF\\|CORTES\)" RELATO.md \| tail -6` |
+| 06:17:00 | Bash | Read RELATO top and last JUSTIFICATIVA lines | `cd /home/ronald/saas-hasner/app/docs; sed -n 1,6p RELATO.md; grep -n "JUSTIFICATIVA" RELATO.md \| tail -5` |
+| 06:16:59 | Bash | Wait for c17 construtor rc file | `F=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17/c17.rc; until [ -f $F ]; do /usr/bin/sleep 30; done; cat $F` |
+| 06:16:50 | Bash | Launch the c17 Codex construtor detached | `cd /home/ronald/saas-hasner; setsid nohup logs/JUSTIFICATIVA-PAGA/c17/run.sh >/dev/null 2>&1 < /dev/null & /usr/bin/sleep 5; cat logs/JUSTIFICATIVA-PAGA/c17/c17.log \| head -5; pgrep -f "c17/run.sh" \| head -1` |
+| 06:16:47 | Bash | Write the c17 construtor brief and runner | `cd /home/ronald/saas-hasner; date '+%d/%m %H:%M'; mkdir -p logs/JUSTIFICATIVA-PAGA/c17; cat > logs/JUSTIFICATIVA-PAGA/c17/brief.md <<'EOF' OBRA JUSTIFICATIVA-PAGA-O-PERIODO -- PAPEL construtor (L-126), VOLTA c17. Base = HEAD da wt (a36c12d27). Voce trabalha SO em <wt>/app. PROIBIDO tocar: ponto/motor_calculo_v2.py, ponto/portas/celula.py, qualquer models.py, migrations, core/juizes.py, docs, bin,  ...` |
 | 06:16:15 | Bash | Read the judge test for celula sem marco | `cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; sed -n 20,35p ponto/tests/test_justificativa_paga_o_periodo.py; sed -n 80,95p ponto/tests/test_justificativa_paga_o_periodo.py; git grep -n "celula_sem_marco\\|conserva" -- 'ponto/tests/test_justificativa*' \| head` |
 | 06:16:10 | Bash | Find tests calling the judge with empty marcos | `cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; git grep -n "marcos_cobertos_por_justificativa(\\|ancora_nao_cobre(\\|celula_sem_marco" -- '*/tests/*' \| head -30` |
 | 06:16:04 | Bash | Census direct callers of the judge and readers of conserva | `W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; cd $W; git grep -n "marcos_cobertos_por_justificativa\\|ancora_nao_cobre" -- '*.py' \| grep -v "/tests/"; sed -n 1280,1310p escala/utils.py; git grep -n "'conserva'\\|\"conserva\"\\|\['conserva'\]\\|get('conserva')" -- '*.py' '*.html' \| grep -v /tests/ \| head` |
