@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 15:34** · publicado em **15/11/2026 15:37** (UTC-3)
+> Ultima resposta processada: **15/11/2026 15:40** · publicado em **15/11/2026 15:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 15:40 · sessao 3347d475b5e6 · E3-RESTO-R3 · verificador · origem=Code
+
+1. **F1 — Alta: `--apply` fecha pauta de colaborador cuja apuração falhou.** Se `_ins.cxr()` lança exceção, `apurar` omite o colaborador sem registrá-lo em `sem_leitura`. Sua empresa/competência permanece no recorte; `sincronizar` interpreta a ausência como saída do alvo e fecha a pauta, afirmando que os dias ganharam fio ou veredito novo. Caso sintético reproduzido em memória: col7, empresa1, competência10/2026, pauta viva e falha do espelho → `apurado=[]`, `sem_leitura=[]`, um fechamento. A cura protege outras empresas/competências, mas ainda permite fechar trabalho não apurado. (`app/ponto/management/commands/pautas_discordantes.py:103`, `app/ponto/management/commands/pautas_discordantes.py:126`, `app/ponto/services/pautas_dos_discordantes.py:194`, `app/ponto/services/pautas_dos_discordantes.py:211`.)
+
+   O teste do comando substitui `apurar` por `Mock(return_value=[])`; portanto não exercita essa falha. (`app/chamados/tests/test_e3_r3_c11_sem_banco.py:142`.)
+
+2. **F2 — Média: retrato legado mascara alarme positivo conhecido.** Basta uma linha bloqueada sem `dias_sem_leitura` para o total virar `None`, inclusive quando outra linha já informou dias problemáticos. O comando trata `None` como não alarmante. Caso sintético reproduzido: uma linha nova com um dia sem leitura → contador `1`, saída `2`; acrescentando uma linha legada → contador `None`, saída `0`, mesmo com `--alarme --alarme-passivo`. (`app/folha/vigia_retido_calado.py:57`, `app/folha/vigia_retido_calado.py:63`, `app/folha/management/commands/vigiar_retido_calado.py:38`.)
+
+   Os testes cobrem positivo e legado separadamente; não cobrem positivo misturado com legado. (`app/chamados/tests/test_e3_r3_c6_sem_banco.py:251`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:258`.)
+
+3. **F3 — Média: a cura do relógio não alcançou os chamadores reais da tela.** `o_que_fazer` aceita `hoje`, mas seu chamador de produção não o fornece; `desenho_do_led` também chama o leitor sem ele. Filtro, LED e pílulas continuam chegando a `timezone.localdate()` separadamente. Caso concreto: uma resposta atravessa meia-noite com linha `ninguem`, `datas=['2026-11-15']`; ela pode entrar pelo filtro **Hoje** e depois receber LED/barra **Sem ação disponível**. (`app/colaboradores/views.py:986`, `app/folha/retrato_folha.py:460`, `app/folha/retrato_folha.py:553`, `app/folha/retrato_folha.py:650`, `app/folha/retrato_folha.py:830`.)
+
+   O teste c11 prova somente o caminho com `hoje` explicitamente fornecido, não a integração desses chamadores. (`app/chamados/tests/test_e3_r3_c11_sem_banco.py:230`.)
+
+4. **F4 — Média: o novo destino “Resolver dia” perde a casca necessária à navegação do calendário.** A Folha abre diretamente `calendario_ponto` no drawer. A resposta é o partial cujas setas e modos apontam para `#calendario-container`; esse elemento pertence ao painel anterior, substituído por `corpo.innerHTML = html`, e não é recriado pelo calendário. O mês inicial abre, mas os controles ficam sem seu destino HTMX. (`app/folha/retrato_folha.py:1042`, `app/templates/folha/_retrato_o_que_fazer.html:73`, `app/colaboradores/views.py:1965`, `app/templates/core/_drawer_generico.html:26`, `app/templates/colaboradores/calendario_partial.html:38`, `app/templates/colaboradores/partials/painel_colaborador.html:183`.)
+
+   Execução desse percurso em navegador: **[nao verificado]**.
+
+5. **F5 — Baixa: residual `decidir` aparece como “Validar no fio”.** A tarefa conserva `acao=None` e depois promove o fio residual para `admin`. Sem ação publicada, a apresentação usa o fallback de `admin`, rotulado “Validar no fio”. Caso: fila `{101: 'decidir'}`, sem ação de instância. O destino continua abrindo o fio, mas a orientação nomeia outra ação. (`app/chamados/services/tarefa_do_dia.py:692`, `app/chamados/services/tarefa_do_dia.py:696`, `app/folha/retrato_folha.py:980`, `app/folha/retrato_folha.py:1055`.)
+
+6. **F6 — Baixa: permaneceram afirmações documentais falsas.**
+
+   - “QUATRO fios” e “baldes QUATRO” contradizem os cinco valores atuais. (`app/folha/retrato_folha.py:164`, `app/folha/fora_da_folha.py:39`, `app/folha/retrato_folha.py:521`, `app/folha/retrato_folha.py:190`.)
+   - A promessa de marcar também os dias `nao_sei` não se realiza por data: o template marca apenas `dias_sem_porta`. (`app/folha/fora_da_folha.py:96`, `app/templates/folha/_retrato_o_que_fazer.html:46`.)
+   - Os comentários dos crons ainda descrevem leituras de `VIVOS/respondida_em` e `fio_da_linha`; os caminhos atuais consomem a porta da tarefa e `dono_da_linha`. Os papéis declarados continuam coerentes. (`app/config/crons.py:2289`, `app/config/crons.py:2261`, `app/chamados/services/furo_sem_canal.py:98`, `app/folha/vigia_retido_calado.py:55`.)
+
+Os casos acima são demonstrações pelo código e por execução em memória; sua ocorrência em produção é **[nao verificado]**.
+
+Para **A**, a conferência das curas ficou assim:
+
+| PROCEDE | Cura no sítio-fonte e mordida |
+|---|---|
+| **2/7 — LU-01** | **Real.** A escada contém `decidir → admin`; a publicação residual a consulta preservando rota/fila. O esperado alterado possui lei explícita. Mutante removendo a entrada morre. Resta F5 na apresentação. (`app/docs/CORTES.md:433`, `app/chamados/juizes.py:1653`, `app/chamados/services/tarefa_do_dia.py:696`, `app/chamados/tests/e3_r3_c11_mutantes.py:19`.) |
+| **1a — data do Resolver dia** | **Real.** O dia atravessa projeção, Folha e href; o calendário consome ano/mês. Os quatro mutantes retirando os transportes e a querystring morrem. A integração da casca tem F4. (`app/chamados/services/tarefa_do_dia.py:714`, `app/folha/fora_da_folha.py:212`, `app/folha/retrato_folha.py:1047`, `app/colaboradores/services/calendario.py:194`, `app/chamados/tests/e3_r3_c11_mutantes.py:21`.) |
+| **1b — marca dos dias sem porta** | **Real.** O template lê o campo; o mutante retirando a condição morre. (`app/templates/folha/_retrato_o_que_fazer.html:46`, `app/chamados/tests/e3_r3_c11_mutantes.py:29`.) |
+| **3 — recorte das pautas** | **Parcial.** O filtro protege empresa/competência externa e `empresas=[]` não expande para a frota; ambos possuem mordida. Permanece F1. (`app/ponto/services/pautas_dos_discordantes.py:73`, `app/ponto/services/pautas_dos_discordantes.py:190`, `app/chamados/tests/e3_r3_c11_mutantes.py:31`.) |
+| **4 — relógio** | **Parcial.** `censo` exige instante compatível com `hoje`; o reatador transmite o mesmo instante às duas consultas. Esses mutantes morrem. A transmissão até a tela permanece incompleta: F3. (`app/chamados/services/vigia_fio.py:273`, `app/chamados/services/vigia_fio.py:283`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:59`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:113`, `app/chamados/tests/e3_r3_c11_mutantes.py:37`.) |
+| **5 — alarme sem leitura** | **Parcial.** O contador entrou em `ALARMA_EM_0` e retirar essa entrada mata o teste. Permanece F2 na formação do total. (`app/folha/management/commands/vigiar_retido_calado.py:17`, `app/chamados/tests/e3_r3_c11_mutantes.py:50`.) |
+| **8 — cor** | **Implementada na paleta.** `neutro/#374151` é distinto dos outros sete tokens; fundo/borda são `#f9fafb/#e5e7eb`. Mutantes de colisão e alteração do hex morrem. O `neutro` de `STATUS_DO_APP` pertence a outro vocabulário, sem compartilhar esse lookup de cor. (`app/folha/retrato_folha.py:315`, `app/folha/retrato_folha.py:323`, `app/templates/core/_barra_gestao.html:67`, `app/ponto/status_dia.py:84`, `app/chamados/tests/e3_r3_c11_mutantes.py:53`.) |
+| **9 — docstrings e editor da ausência** | **Os sítios apontados foram alterados.** O link solicita `somente_decisao=1`, a view desliga o editor dependente de `salvarAusencia`, e os dois mutantes morrem. Os testes documentais verificam texto; não demonstram comportamento por si. Restam F6. (`app/folha/retrato_folha.py:1051`, `app/ponto/views.py:2090`, `app/templates/ponto/partials/painel_ausencia.html:145`, `app/chamados/tests/test_e3_r3_c11_sem_banco.py:299`, `app/chamados/tests/e3_r3_c11_mutantes.py:63`.) |
+
+Não encontrei cura feita **somente no teste** nesses itens; encontrei curas incompletas nos pontos 3, 4 e 5, conforme F1–F3 e os sítios acima. [nao verificado]
+
+Para **B**:
+
+- **6 — descarte sustentado.** A R3 reancora um pendente, sem acrescentar autoridade ao registro. As frases de nascimento de C19/C20 constam no dado fornecido da principal, em `app/docs/CORTES.md:418` e `app/docs/CORTES.md:419`; execução da trava no pouso: **[nao verificado]**. (`app/core/juizes.py:153`, `app/core/juizes.py:160`, `app/core/juizes.py:878`.)
+- **3b — descarte sustentado quanto às entidades da obra.** `get_or_create` pode escrever `User`, não Chamado/Pauta/CelulaDia/DiaPago/FechamentoMensal. A existência garantida do usuário na frota é **[nao verificado]**; a docstring que promete `DoesNotExist` contradiz a implementação. (`app/core/utils.py:15`, `app/core/utils.py:18`.)
+- **10 — descarte sustentado como obrigação anterior ao pouso.** A medida M1 está exigida antes do pouso; não há prova fornecida de seu cumprimento no hash final nem de pouso prematuro: **[nao verificado]**. (`app/chamados/tests/e3_r3_c6_entrega.txt:86`, `app/chamados/tests/e3_r3_c6_entrega.txt:94`.)
+
+No **C1**, o rastreio dos campos e valores relevantes do diff, incluindo fontes e consumidores externos, é:
+
+| Campos/valores | Quem escreve ou publica | Quem lê; significado |
+|---|---|---|
+| Identidade da pergunta, `data_evento`, motivo, instância | `app/chamados/models.py:2903`; `app/chamados/services/fio.py:829` | `app/chamados/services/tarefa_do_dia.py:242`, `app/chamados/services/tarefa_do_dia.py:404`: **dia do turno**, não instante nem dia civil da resposta. |
+| Decisão, `ato_em`, texto, absorção | `app/chamados/models.py:4086` | `app/chamados/services/tarefa_do_dia.py:419`, `app/chamados/services/tarefa_do_dia.py:140`: última decisão com `ato_em <= agora`. |
+| Ata, veredito, protestos, status do dia | Porta `app/ponto/portas/celula.py:1032` | Leitor `app/escala/services/leitor_celula.py:350`; tarefa `app/chamados/services/tarefa_do_dia.py:188`; censos `app/chamados/services/vigia_fio.py:332`. |
+| Lâmpada `veredito_lavrado` e vigência | `app/chamados/veredito_lavrado.py:254` | `app/chamados/services/tarefa_do_dia.py:431`: leitura com `esta_stale`, sem novo julgamento. |
+| Efeito da batida, `pergunta_origem`, `criado_em` | Campos do modelo em `app/ponto/models.py:40`, `app/ponto/models.py:79` | `app/chamados/services/tarefa_do_dia.py:440`: universo apurável, existência limitada por `criado_em <= agora`. |
+| Ausência, status e id publicado | `app/ponto/services/ausencia.py:179`, `app/ponto/services/ausencia.py:872` | `app/chamados/services/tarefa_do_dia.py:176`, `app/chamados/services/tarefa_do_dia.py:307`; id vira destino em `app/folha/retrato_folha.py:1038`. |
+| Chamado, estado, âncora, fila e verbo | Estado pela porta `app/chamados/models.py:447`; âncora por `app/chamados/services/fio.py:97`; alimentação `app/chamados/juizes.py:1562` | Tarefa `app/chamados/services/tarefa_do_dia.py:444`, `app/chamados/services/tarefa_do_dia.py:625`; terminais vêm do catálogo, não de lista nova. |
+| `agora`, `hoje`, competência, `[ini,fim]` | Bordas `app/chamados/management/commands/vigiar_fio_morto.py:171`, `app/folha/management/commands/lavrar_retrato_folha.py:49`; janelas consultadas em `app/chamados/services/furo_sem_canal.py:66` | Carga inclusiva em `app/chamados/services/tarefa_do_dia.py:570`; decisão por instante e apresentação por dia local. Divergência: F3. |
+| Oferta `resolver_dia_oferecido`, inclusive `None` | `app/colaboradores/services/calendario.py:799`, plural `app/colaboradores/services/calendario.py:125` | `app/chamados/services/tarefa_do_dia.py:611`, `app/chamados/services/tarefa_do_dia.py:632`: desconhecimento preservado em `nao_sei`. |
+| `rota`, `fila`, `verbos`, `fio`, `acao`, `ausencia`, `dia_do_turno` | `app/chamados/services/tarefa_do_dia.py:698`, projeção `app/chamados/services/tarefa_do_dia.py:702` | Folha `app/folha/fora_da_folha.py:71`; furo `app/chamados/services/furo_sem_canal.py:98`; Vigia `app/chamados/services/vigia_fio.py:594`; beco `app/escala/services/cadastro_realidade.py:472`; pauta `app/ponto/services/pautas_dos_discordantes.py:85`. |
+| Grupo, ações, datas, `dias_sem_porta`, `dias_sem_leitura` | `app/folha/fora_da_folha.py:202` | Copiados ao retrato em `app/folha/retrato_folha.py:1230`; marca no template `app/templates/folha/_retrato_o_que_fazer.html:46`; contagem em `app/folha/vigia_retido_calado.py:57`. |
+| JSON do retrato: status, motivo, dono, tipo, saldo, dias, datas, ações, informativo | Montagem `app/folha/retrato_folha.py:1223`; persistência `app/folha/management/commands/lavrar_retrato_folha.py:78` | Tela `app/folha/views_retrato.py:196`, drawer `app/colaboradores/views.py:984`, Vigia `app/folha/vigia_retido_calado.py:53`. `dono` gravado contém **fio**; o balde visual vem de `dono_da_linha`. (`app/folha/retrato_folha.py:435`.) |
+| Contadores de furo, rotas e `nao_sei` | `app/chamados/services/furo_sem_canal.py:108` | Command `app/chamados/management/commands/lavrar_furo_sem_canal.py:34`; snapshot em `app/chamados/management/commands/lavrar_furo_sem_canal.py:50`. |
+| Contadores do Vigia e linha de nove posições | `app/chamados/services/vigia_fio.py:311`, `app/chamados/services/vigia_fio.py:521`; formato em `app/chamados/services/vigia_fio.py:494` | Command e carimbo `app/chamados/management/commands/vigiar_fio_morto.py:180`. `alcance_nao_sei` conta dias independentemente da rota. (`app/chamados/services/vigia_fio.py:599`.) |
+| `calados`, `roteados`, `dias_sem_leitura_sistema` | `app/folha/vigia_retido_calado.py:49` | Alarme `app/folha/management/commands/vigiar_retido_calado.py:37`: os dois primeiros contam pessoa por retrato/competência; o último conta dia-colab. Problema de agregação: F2. (`app/folha/vigia_retido_calado.py:7`.) |
+| Pauta: texto/chave, âncora, destinatário, `feito_em`; recorte e retenções transitórias | Seleção `app/ponto/services/pautas_dos_discordantes.py:147`; escrita `app/pautas/services.py:153`; fechamento `app/pautas/services.py:256` | Sincronização `app/ponto/services/pautas_dos_discordantes.py:189`; âncora significa `empresa:AAAA-MM`, conforme `app/pautas/models.py:84`. Problema: F1. |
+| Beco: M1, `pai_limbo`, perguntas, data e detalhe | `app/escala/services/cadastro_realidade.py:502`, `app/escala/services/cadastro_realidade.py:515` | Reatador `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:63`: lista vazia de perguntas não provoca reata nem criação de pai. |
+| Hrefs, `somente_decisao`, `pode_editar`; token, hex, fundo e borda | `app/folha/retrato_folha.py:1033`, `app/folha/retrato_folha.py:315` | View `app/ponto/views.py:2090`; templates `app/templates/ponto/partials/painel_ausencia.html:145`, `app/templates/core/_barra_gestao.html:67`. Problemas de apresentação: F4/F5. |
+
+Os demais itens de **C**:
+
+- **C2 — nenhum segundo juiz novo encontrado.** Os leitores principais consomem a projeção; `TERMINAIS` vem do catálogo. `dono_fora_do_fio` subdivide somente dias sem rota, e C17 permanece no instrumento de sombra. (`app/chamados/services/tarefa_do_dia.py:447`, `app/chamados/services/vigia_fio.py:601`, `app/chamados/services/vigia_fio.py:615`, `app/core/juizes.py:136`.)
+- **C3 — nenhum segundo escritor novo dessas cinco entidades encontrado; há F1 na decisão de fechar Pauta.** Pautas usam os serviços existentes; reata usa a porta do fio; os commands de pauta, reata e snapshot exigem `--apply`. Não apareceu escrita nova de CelulaDia, DiaPago ou FechamentoMensal no diff fornecido. (`app/ponto/services/pautas_dos_discordantes.py:201`, `app/chamados/services/limbo_folgas.py:245`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:90`, `app/chamados/management/commands/lavrar_furo_sem_canal.py:42`.)
+- **C4 — F3.** A injeção funciona no caminho testado, mas os leitores reais ainda recorrem ao relógio interno. (`app/chamados/tests/test_e3_r3_c11_sem_banco.py:239`, `app/folha/retrato_folha.py:460`.)
+- **C5 — papéis coerentes; comentários envelhecidos em F6.** Snapshot é `lavra`; os dois comandos de contagem são `vigia`. (`app/config/crons.py:2291`, `app/config/crons.py:2236`, `app/config/crons.py:2262`.)
+- **C6 — nenhum registro novo na R3.** A alteração é reancoragem do pendente TT3; C19/C20 são os registros anteriores. (`app/core/juizes.py:878`, `app/core/juizes.py:153`, `app/core/juizes.py:160`.)
+- **C7 — não encontrei enfraquecimento na troca residual ou em `3272→3273`.** C12 testa preservação de rota/fila/ação; a mudança de dono tem LU-01. A linha real está em 3273, a igualdade da catraca permanece e o mutante voltando a 3272 morre. Comparação histórica integral dos corpos B: **[nao verificado]**. (`app/chamados/tests/test_e3_r3_c12_sem_banco.py:12`, `app/docs/CORTES.md:433`, `app/ponto/views.py:3273`, `app/core/tests/test_medida_turno_do_par.py:553`, `app/chamados/tests/e3_r3_c12_mutantes.py:32`.)
+- **C8 — F4/F5.** Os números da barra são lidos de `it.numero`; a nova marca lê o campo gravado, sem contar dias no template. Permanecem textos técnicos “Datas (ISO)” e “Sem porta”. Renderização nas duas cascas e estilo computado: **[nao verificado]**. (`app/templates/core/_barra_gestao.html:67`, `app/templates/folha/_retrato_o_que_fazer.html:43`, `app/templates/folha/_retrato_o_que_fazer.html:46`.)
+- **C9 — F6.** As correções documentais apontadas na triagem existem, mas não eliminaram as contradições enumeradas. (`app/chamados/services/furo_sem_canal.py:19`, `app/chamados/management/commands/lavrar_furo_sem_canal.py:6`, `app/folha/retrato_folha.py:521`.)
+- **C10 — nenhuma inversão nova de trava encontrada.** O reatador grava a reversão antes da escrita, trava Colaborador antes de Chamado e relê a fila sob a trava. Cumprimento da medida M1 final e ordem efetiva do pouso: **[nao verificado]**. (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:99`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:112`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:113`, `app/chamados/tests/e3_r3_c6_entrega.txt:94`.)
+
+Reexecutei os **314 testes locais**, os **23 mutantes c11** e os **9 mutantes c12**: controles verdes e mortes por asserção. Isso sustenta as curas específicas, sem cobrir os casos F1–F4. Suite integral, ORM e renderização permanecem **[nao verificado]**. (`app/chamados/tests/e3_r3_c12_verificar.py:68`, `app/chamados/tests/e3_r3_c11_mutantes.py:70`, `app/chamados/tests/e3_r3_c12_mutantes.py:84`, `app/chamados/tests/e3_r3_c12_entrega.txt:34`.)
+
+**VEREDITO: REPROVA.**
 
 ## 15/11 15:34 · sessao 778c10d24aae · TELA-DIZ-O-QUE-O-SERVIDOR-DISSE · verificador · origem=Code
 
@@ -474,27 +562,4 @@ Verificação adicional concluída:
 - **Parciais 2/3, iguais fora7 e fora8:** fuchsia50 `#fdf4ff` — app/templates/relatorios/index.html:195; fuchsia700 `#a21caf` — app/templates/escala/plano_folgas.html:104; falta200 `#f5d0fe` [não verificado]. Pink200 `#fbcfe8` — app/templates/colaboradores/vincular.html:83; pink700 `#be185d` — app/templates/escala/plano_folgas.html:102; falta50 `#fdf2f8` [não verificado].
 - **Neutras restantes:** zinc/neutral só50 `#fafafa` — app/templates/escala/tipos_lista.html:65; stone nenhum dos três [não verificado].
 
-## 15/11 14:45 · sessao 940786801139 · - · - · origem=Ronald (tmux)
-
-Fora dos sete trios históricos, há estas famílias completas no conjunto de literais:
-
-| Família | 50 | 200 | 700 ou 600 |
-|---|---|---|---|
-| **gray — neutra** | `#f9fafb` — app/templates/core/onboarding.html:31 | `#e5e7eb` — mesmo arquivo:31 | `#374151` — app/templates/folha/index.html:121 |
-| orange | `#fff7ed` — app/templates/ponto/bater_ponto.html:175 | `#fed7aa` — mesmo arquivo:175 | `#c2410c` — mesmo arquivo:176 |
-| yellow | `#fefce8` — app/templates/ponto/espelho.html:118 | `#fef08a` — mesmo arquivo:118 | `#a16207` — app/templates/chamados/partials/modal_fio.html:319 |
-| teal | `#f0fdfa` — app/templates/core/_barra_gestao.html:67 | `#99f6e4` — mesmo arquivo:67 | `#0f766e` — mesmo arquivo:67 |
-| cyan | `#ecfeff` — app/templates/colaboradores/partials/painel_vinculo.html:240 | `#a5f3fc` — mesmo arquivo:240 | `#0e7490` — mesmo arquivo:240 |
-| sky | `#f0f9ff` — app/templates/escala/minha_escala.html:90 | `#bae6fd` — mesmo arquivo:90 | `#0369a1` — mesmo arquivo:90 |
-| indigo | `#eef2ff` — app/templates/colaboradores/partials/_calendario_grade.html:132 | `#c7d2fe` — mesmo arquivo:132 | `#4f46e5` (**600**) — app/templates/ponto/espelho.html:59 |
-| purple | `#faf5ff` — app/templates/ponto/_fech_linha.html:7 | `#e9d5ff` — mesmo arquivo:7 | `#9333ea` (**600**) — app/templates/relatorios/index.html:196 |
-
-A barra atual contém também `petroleo`, oitavo trio; excluindo seus três hex, a lista acima perde somente **teal** — app/templates/core/_barra_gestao.html:67.
-
-Os trios são completos como disponibilidade de literais; somente cyan, sky e teal estão demonstrados juntos nas referências acima. Purple usa o par 50/200 junto de **violet600** `#7c3aed`, enquanto purple600 aparece separadamente — app/templates/ponto/_fech_linha.html:7; app/templates/relatorios/index.html:196.
-
-**slate já está ocupada por cinza**: `#f8fafc/#e2e8f0/#475569` = slate50/200/**600**, não 700 — app/templates/core/_barra_gestao.html:67. Slate700 `#334155` também existe — app/templates/folha/_retrato_raiox.html:71.
-
-Ausências apuradas por varredura, sem linha positiva possível: indigo700 `#4338ca` e purple700 `#7e22ce`; zinc tem só50 `#fafafa`, neutral tem só50 `#fafafa`, stone nenhum dos alvos; logo nenhuma dessas três neutras tem 2/3. [não verificado]
-
-_5683 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5684 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
