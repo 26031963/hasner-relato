@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:05:46.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (45.8 MB). Acoes na janela: **1497**.
+**Medido em 15/11/2026 07:11:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.6 MB). Acoes na janela: **1501**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:11:10 | Bash | Read the real day reader and the retro window | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app && sed -n 150,235p $W/chamados/juizes.py; sed -n 35,105p $W/ponto/management/commands/marcar_foto_ausente_retro.py` |
+| 07:11:05 | Bash | Read earlier sonda launcher, brief, and the read envelope | `cd /home/ronald/saas-hasner && cat logs/BATIDA-DEDUP-RETRATADA/q3b_run.sh; echo ----; head -40 logs/BATIDA-DEDUP-RETRATADA/q3a_sonda.md; echo ----; sed -n 1,40p bin/sonda_leitura.sh` |
+| 07:11:03 | Bash | Find how the earlier q3a sonda was launched | `cd /home/ronald/saas-hasner && ls logs/BATIDA-DEDUP-RETRATADA/ \| head -50; grep -rn 'CODEX_SONDA_ENVELOPE' bin/codex_pergunta.sh \| head -5; ls logs/BATIDA-DEDUP-RETRATADA/*.sh 2>/dev/null` |
+| 07:10:59 | Bash | Read clock, RELATO top, and JUSTIFICATIVA suite status | `cd /home/ronald/saas-hasner && date '+%H:%M' && head -c 3000 app/docs/RELATO.md && echo && grep -n 'ESTADO 07:0x' app/docs/RELATO.md \| head; cat logs/JUSTIFICATIVA-PAGA/c17/inteira.rc 2>/dev/null; tail -3 logs/JUSTIFICATIVA-PAGA/c17/inteira.log` |
 | 06:59:50 | Bash | Point RELATO ESPERANDO at JUSTIFICATIVA suite and log CEF state | `cd /home/ronald/saas-hasner; P=$(pgrep -f "JUSTIFICATIVA-PAGA/c17/suite.sh" \| head -1); echo $P; bin/trava_teste.sh --quem; cd app/docs; python3 - "$P" <<'EOF' import sys,re p='RELATO.md'; s=open(p).read(); P=sys.argv[1] s=re.sub(r'^ESPERANDO: suite\.sh \\| pid=\d+$','ESPERANDO: suite.sh \| pid=%s'%P,s,count=1,flags=re.M) anc='ESTADO 06:3x CEF suite INTEIRA de 84ca75bcf' assert s.count(anc)==1; i ...` |
 | 06:59:45 | Agent | Opus final CONTRATO-DE-ENTRADA-DO-FIO | `OPUS FINAL (verificador adversarial, somente leitura) da obra CONTRATO-DE-ENTRADA-DO-FIO, antes do pouso. Copia (worktree) a examinar: /home/ronald/wt-codex-contrato-de-entrada-do-fio-005238 (HEAD da4cd1744). NAO escreva nada nela (nem __pycache__: use PYTHONDONTWRITEBYTECODE=1 / python3 -B se executar algo; prefira so ler). Nao rode docker, nem suite, nem nada contra banco. Diff SO da obra (sem o ...` |
 | 06:59:26 | Bash | Build CEF obra diff and triage anexo | `cd /home/ronald/saas-hasner; D=logs/CONTRATO-DE-ENTRADA-DO-FIO/opus; mkdir -p $D; W=/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238; git -C $W diff e1dc7b80c da4cd1744 > $D/obra.diff; git -C $W diff --stat e1dc7b80c da4cd1744 \| tail -3; ls logs/CONTRATO-DE-ENTRADA-DO-FIO/verif/; grep -n "CEF\\|CONTRATO-DE-ENTRADA" app/docs/RELATO.md \| grep "^[0-9]*:ESTADO 0[56]" \| cut -d: -f1 \| head -2 ...` |
