@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 08:05:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (48.2 MB). Acoes na janela: **1568**.
+**Medido em 15/11/2026 08:10:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (49.2 MB). Acoes na janela: **1586**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:07:22 | Bash | Fix time label | `sed -i '3s/(15\/11 08:1x)/(15\/11 08:0x)/' docs/RELATO.md && sed -n 3p docs/RELATO.md \| cut -c1-70` |
+| 08:07:20 | Bash | Insert PAREI ! line and test hook | `python3 - <<'EOF' p='docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESTADO 08:0x DISPUTA-ZUMBI') L.insert(2,"PAREI: ! ORDEM-POS-E4A2 sem item andavel (15/11 08:1x) \| espera Ronald -- o que destrava, em ordem: (1) dedup BATIDA-DEDUP-RETRATADA: smoke col677 ANTES x DEPOIS do deploy (linha PAREI abaixo); no pouso dela o CEF pousa em seguida (opus APROVA, condicao 1 cumprida) e  ...` |
+| 08:07:09 | Bash | E4b/E4d state | `cd /home/ronald/saas-hasner && git log --oneline -4 --grep='E4b\\|E4B' ; git log --oneline -3 --grep='E4d\\|E4D'; grep -n "E4c\\|E4C" app/docs/RELATO.md \| head -4 \| cut -c1-220` |
+| 08:07:07 | Bash | BO-0611-05 latest state | `grep -m1 "^\| *BO-0611-05 *\|" docs/BACKLOG.md \| awk -F'\|' '{print substr($5,280,900)}'; grep -n "BO-0611-05" docs/RELATO.md \| head -5 \| cut -c1-250; git -C /home/ronald/saas-hasner log --oneline -3 --grep=BO-0611-05` |
+| 08:07:03 | Bash | Detail BO-0611-05 and BO-DISPUTA | `grep -m1 "^\| *BO-0611-05 *\|" docs/BACKLOG.md \| awk -F'\|' '{for(i=4;i<=NF;i++) print i": "substr($i,1,300)}'; grep -m1 "^\| *BO-DISPUTA-SEM-PERGUNTA *\|" docs/BACKLOG.md \| awk -F'\|' '{print substr($3,1,700)}'; grep -n "E4b\b\\|E4b BACKFILL\\|E4-B\b" docs/BACKLOG.md \| head -5 \| cut -c1-200` |
+| 08:07:00 | Bash | Status of ORDEM items | `for id in BO-0611-05 BO-DISPUTA-SEM-PERGUNTA E4b-BACKFILL E4b E4d E4d-CONTRACT; do grep -m1 "^\| *$id *\|" docs/BACKLOG.md \| awk -F'\|' -v i=$id '{n=NF; print i" => "substr($(n-3),1,200)" \|\| "substr($(n-2),1,200)}'; done; grep -n "^\| *E4[bd]" docs/BACKLOG.md \| cut -c1-100` |
+| 08:06:54 | Bash | Read stop decision around bang | `cd /home/ronald/saas-hasner && sed -n 1240,1300p bin/hook_stop_fila1.py` |
+| 08:06:53 | Bash | Read hook bang rule | `cd /home/ronald/saas-hasner && sed -n 70,108p bin/hook_stop_fila1.py; grep -n "_SO_BANG" bin/hook_stop_fila1.py` |
+| 08:06:49 | Bash | Check remaining ORDEM-POS-E4A2 items | `grep -n "^\| *\(O169\\|BO-0611-05\\|BO-DISPUTA-SEM-PERGUNTA\\|E4b\\|E4d\\|LASTRO\)[^\|]*\|" docs/BACKLOG.md \| cut -c1-120; for id in O169 BO-0611-05 BO-DISPUTA-SEM-PERGUNTA E4d; do grep -m1 "^\| *$id[ -]" docs/BACKLOG.md \| awk -F'\|' '{print "'$id' ESTADO:", substr($(NF-2),1,260)}'; done` |
+| 08:06:44 | Bash | Ask hook for next walkable item | `cd /home/ronald/saas-hasner && python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h print('proximo:', h._proximo_da_fila()) print('travas:', h.travas_da_fila()) print('nao andam:', h._ids_que_nao_andam()) " 2>&1 \| cut -c1-1500` |
+| 08:06:40 | Bash | Fix time label, check hook state | `sed -i '3s/^ESTADO 08:1x DISPUTA-ZUMBI/ESTADO 08:0x DISPUTA-ZUMBI/' docs/RELATO.md && head -c 60 <(sed -n 3p docs/RELATO.md); echo; python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; ls /home/ronald/saas-hasner/bin/hook_stop_fila1.py && grep -n "^def \\|_SO_BANG" /home/ronald/saas-hasner/bin/hook_stop_fila1.py \ ...` |
+| 08:06:36 | Bash | Update BACKLOG ZUMBI and O168 rows | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p).read() a="\| EM CURSO v7: v6 opus final REPROVA 12:50 (logs/O168/v6/opus_final/veredito.md); construtor opus v7 na copia wt-o168v6-233014 @cb3eb7469 14:4x (logs/O168/v7/), vaga do aval VAGA-PARA-O168; frota (B) na sombra quando livre \|" b="\| NO AR 13/11 19:2x (d33c0a899, linha O168 acima); fila do opus em O168-FILA-OPUS \|" assert s.count(a)==1; s= ...` |
+| 08:06:31 | Bash | Locate BACKLOG rows | `grep -n "DISPUTA-ZUMBI-1110\\|^\| *O168" docs/BACKLOG.md \| head; sed -n 2001p docs/BACKLOG.md \| cut -c1-400` |
+| 08:06:29 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 08:06:20 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 08:05:29 | Bash | Spot-check Codex citations | `sed -n 404,415p chamados/reconciliador.py; echo ---; sed -n 25,34p chamados/services/becos.py; echo ---; sed -n 1911,1918p chamados/models.py; echo; grep -n "fechar_becos_disputa" ../logs/*.log 2>/dev/null \| tail -2; ls -t ../logs \| grep -i becos \| head -3` |
+| 08:05:21 | Read |  | `/home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2/censo2.r` |
+| 08:05:15 | Bash | Show non-zero totals | `cd /home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2 && grep "_TOTAL " saida.txt \| grep -v " 0$"; grep -c M2_DISPUTA saida.txt` |
 | 08:04:58 | Bash | Extract and run sonda on sombra | `cd /home/ronald/saas-hasner && D=logs/DISPUTA-ZUMBI-1110/v2 && sed -n '/^```python$/,/^```$/p' $D/sonda.r \| sed '1d;$d' > $D/sonda.py && python3 -m py_compile $D/sonda.py && echo compila && timeout 900 bash bin/sonda_leitura.sh --sombra $D/sonda.py > $D/saida.txt 2>&1; echo rc=$?; grep -c . $D/saida.txt; grep -E "^(ERRO\|FIM\|BANCO\|TENANT\|INSTANTE)" $D/saida.txt` |
 | 08:04:55 | Bash | Find sonda envelope usage | `cd /home/ronald/saas-hasner && grep -n "sonda_leitura" logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/*.sh logs/JUSTIFICATIVA-PAGA/c19diff/*.sh 2>/dev/null \| head; sed -n 1,30p bin/sonda_leitura.sh \| grep -n "uso\\|Uso\\|--sombra"` |
 | 08:04:51 | Read |  | `/home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2/sonda.r` |
