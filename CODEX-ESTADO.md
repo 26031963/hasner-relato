@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 20:53** · publicado em **14/11/2026 20:53** (UTC-3)
+> Ultima resposta processada: **14/11/2026 21:17** · publicado em **14/11/2026 21:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 21:17 · sessao 6670240d856c · E3-V10-DEGRAU-DONO-E-PORTA · construtor · origem=Code
+
+Entrega em [e3_lu3_entrega.txt:1](chamados/tests/e3_lu3_entrega.txt:1), com tabela dos 55, diffs, censos e comandos.
+
+- Execução local: [168 testes sem banco verdes](chamados/tests/e3_lu3_suite.txt:176).
+- Mutantes: [60/60 mortos, com controle verde](chamados/tests/e3_lu3_mutantes.txt:1954).
+- ORM e pilhas SQL de P5: [não verificado]; comandos no [relato:129](chamados/tests/e3_lu3_entrega.txt:129).
+
+Permanece uma pergunta de desenho: **C11 deve aceitar o M1 sem âncora?** O filtro atual exige âncora terminal; preservei os asserts positivos e não alterei essa regra. [cadastro_realidade.py:496](escala/services/cadastro_realidade.py:496).
 
 ## 14/11 20:53 · sessao 1ed7d5734d2d · JUSTIFICATIVA-PAGA-O-PERIODO · verificador · origem=Code
 
@@ -996,33 +1006,4 @@ O último comando reproduz os REDs na base e retorna **1 esperado**. [Registro](
 
 Suite ORM completa, frota e timeout de 30 segundos: **[não verificado]**. Certificação do Code e opus final: **[não verificado]**. [nao verificado]
 
-## 14/11 20:22 · sessao 9138e639ec97 · JUSTIFICATIVA-PAGA · verificador · origem=Code
-
-1. **PROCEDENTE-candidato — P2 — dinheiro: duas contas de trabalhado alteram o crédito.** `realizado_do_dia` desconta intervalo fixo não batido; o motor comercial desconta o intervalo efetivamente recebido e mede após a janela HE (`app/ponto/turnos.py:760`; `app/ponto/motor_calculo_v2.py:3236`; `app/ponto/motor_calculo_v2.py:3254`). Cenário sintético: previsto 480, escala 08–17, pausa 12–13, E08/S15 sem pausa, justificativa `outro`, sem recorte HE. A primeira conta dá **360**, portanto crédito **120**; o motor dá **420**, totalizando **540 com o crédito**, acima dos 480. É derivação paralela, transportada para `horas_trabalhadas` (`app/ponto/turnos.py:767`; `app/ponto/services/efeito_ausencia.py:145`; `app/ponto/motor_calculo_v2.py:3268`; `app/ponto/motor_calculo_v2.py:296`). Ocorrência produtiva: **[nao verificado]**.
-
-2. **PROCEDENTE-candidato — P2 — estrutura: o dia também tem duas atribuições.** O realizado agrupa estritamente por `data_turno`; o motor lê esse dia e depois o sobrescreve quando o intervalo entre períodos é de até seis horas (`app/ponto/turnos.py:719`; `app/ponto/motor_calculo_v2.py:2408`; `app/ponto/motor_calculo_v2.py:2413`). Cenário sintético: DNA diurno 08–17, E19/S23 em 26/09 e E03/S07 em 27/09. O pareador mantém dois dias, com 240 minutos cada; a véspera já fechada não recebe o segundo turno (`app/ponto/turnos.py:1311`; `app/ponto/turnos.py:767`). No ramo-base do motor, o segundo período herda 26/09 pelo intervalo de quatro horas; essa atribuição alimenta a presença usada em falta/abono/DSR (`app/ponto/motor_calculo_v2.py:2413`; `app/ponto/motor_calculo_v2.py:2465`; `app/ponto/motor_calculo_v2.py:2583`). Impacto produtivo: **[nao verificado]**.
-
-3. **PROCEDENTE-candidato — P2 — estrutura/texto: cobertura inteira passou a contar zero `dias_abono`.** A fonte inclui `cobre=None` no mapa; o motor continua interpretando presença nesse mapa como motivo para excluir o dia da contagem (`app/ponto/services/efeito_ausencia.py:47`; `app/ponto/motor_calculo_v2.py:2629`). Cenário: `outro`, sem batidas, previsto 480 → **8 horas de abono e zero dias** (`app/ponto/services/efeito_ausencia.py:122`; `app/ponto/services/efeito_ausencia.py:145`; `app/ponto/motor_calculo_v2.py:2630`; `app/ponto/motor_calculo_v2.py:2633`). Espelho/PDF leem esse zero; o resumo pela lavratura conta um dia com minutos abonados positivos: conceitos diferentes para `dias_abono` (`app/ponto/services/espelho.py:1253`; `app/relatorios/pdf_espelho.py:479`; `app/ponto/services/dia_pago.py:701`; `app/relatorios/cartao_pela_celula.py:190`).
-
-4. **PROCEDENTE-candidato — P3 — texto/estrutura: o motivo denuncia excedente que não existe no trabalho.** `pago_mais_trabalhado_passa_do_previsto` testa **bruto + trabalhado**, embora o pagamento final já tenha sido substituído pelo saldo (`app/ponto/services/efeito_ausencia.py:143`; `app/ponto/services/efeito_ausencia.py:145`; `app/ponto/services/efeito_ausencia.py:146`). O próprio cenário col788 do teste tem previsto 420, trabalho 59 e crédito 361, mas recebe o motivo; a Central apresenta “Hora além do turno — revisar HE” (`app/ponto/tests/test_justificativa_soma_sem_banco.py:178`; `app/ponto/tests/test_justificativa_soma_sem_banco.py:185`; `app/templates/ponto/fila_justificativas.html:116`). Nesse cenário, o excedente de trabalho sobre o previsto é **zero**, pela mesma fixture (`app/ponto/tests/test_justificativa_soma_sem_banco.py:180`).
-
-5. **PROCEDENTE-candidato — P3 — estrutura: `revisao` é segunda lista, sem integração com a porta HE.** O filtro monta uma projeção por motivo; esse ramo não grava decisão HE (`app/ponto/views.py:1738`; `app/ponto/views.py:1747`; `app/ponto/views.py:1753`). O caminho existente é **pontas fora dos marcos → espelho → retrato → Gestão HE**, e já recebe os dias com pontas reconhecidas (`app/ponto/janela_he.py:204`; `app/ponto/services/espelho.py:727`; `app/ponto/services/he_pendente_lavrado.py:132`; `app/ponto/services/gestao_he.py:236`).
-
-   Cenário de duplicação: janela ativa, previsto 480, pausa de uma hora, E07:50/S17:10 contra marcos 08–17, justificativa `outro`: as pontas entram na Gestão e o motivo também entra na Central. Uma decisão “Não” é lida pela Gestão, mas não participa do predicado da Central, que permanece baseado no bruto/trabalhado (`app/ponto/janela_he.py:205`; `app/ponto/janela_he.py:207`; `app/ponto/services/gestao_he.py:278`; `app/ponto/services/efeito_ausencia.py:146`).
-
-   **Trabalhado > previsto não garante entrada na HE:** com janela desligada, o espelho mantém a lista vazia e o retrato ignora o dia; o novo aviso não fornece encaminhamento à ação existente (`app/ponto/services/espelho.py:721`; `app/ponto/services/espelho.py:722`; `app/ponto/services/he_pendente_lavrado.py:133`; `app/ponto/views.py:1753`). Falta essa ligação com a pendência/decisão existente, cuja porta exige minutos positivos (`app/ponto/portas/he.py:138`; `app/ponto/portas/he.py:169`).
-
-O rastreamento dos campos de **P2** ficou assim:
-
-| Campo | Quem escreve/fornece | Quem lê |
-|---|---|---|
-| `minutos` | Saldo por `j.data_turno`: `app/ponto/services/efeito_ausencia.py:118`, `:145` | Feed `app/ponto/services/efeito_ausencia.py:47`; grade `app/escala/utils.py:1257`, `:1277` |
-| `cobre` | Juiz, conservação e união: `app/ponto/services/efeito_ausencia.py:208`, `:129`, `:133` | Inclusão no feed `app/ponto/services/efeito_ausencia.py:46`; dispensa dos marcos `app/escala/utils.py:1251`, `:1267` |
-| `motivo` | Literal do excedente: `app/ponto/services/efeito_ausencia.py:147`; motivo da âncora vira `conserva`: `:129` | Projeção `app/ponto/services/efeito_ausencia.py:153`; Central `app/ponto/views.py:1750`; apresentação `app/templates/ponto/fila_justificativas.html:116` |
-| `min_justificados` | Mapa da fonte `app/ponto/services/efeito_ausencia.py:47`; ausência inteira ABONA remove a chave em `:63` | Leitor da célula `app/escala/services/leitor_celula.py:380`; fechamento `app/ponto/services/fechamento.py:667`; linha da grade → abono `app/ponto/services/dia_pago.py:399` |
-| `minutos_justificados` do motor | Fechamento `app/ponto/services/fechamento.py:755`, `:831`; espelho `app/ponto/services/espelho.py:1134`; PDF `app/relatorios/pdf_espelho.py:407`; esmeril `app/ponto/services/esmeril_espelho.py:166`; comandos `app/ponto/management/commands/diff_espelho_alimentacao.py:56`, `app/relatorios/management/commands/diff_extrato_parcial.py:62` | Ramo de abono `app/ponto/motor_calculo_v2.py:2628`, com conversão minutos→horas em `:2634` |
-| `dias_abono` / `horas_abono` | Motor `app/ponto/motor_calculo_v2.py:2630`, `:2633`; alternativa gravada: `app/ponto/services/dia_pago.py:701`, `app/relatorios/cartao_pela_celula.py:186` | Espelho `app/ponto/services/espelho.py:1253`; PDF `app/relatorios/pdf_espelho.py:479`, `:480`; resumo pela lavratura `app/relatorios/cartao_pela_celula.py:190` |
-
-A unidade numérica transportada é minuto, convertido explicitamente para hora; as divergências encontradas estão na **conta do trabalhado, atribuição ao dia e significado de dia abonado** (`app/ponto/services/efeito_ausencia.py:145`; `app/ponto/motor_calculo_v2.py:2634`; achados com fontes acima). Contagens e consequências em produção: **[nao verificado]**.
-
-_5280 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5281 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
