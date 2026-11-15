@@ -1,7 +1,269 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 09:45** · publicado em **15/11/2026 09:48** (UTC-3)
+> Ultima resposta processada: **15/11/2026 09:53** · publicado em **15/11/2026 09:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 09:53 · sessao 698c79408f3e · ESPINHA-NA-FRENTE · leitura · origem=Code
+
+**“Nada” abaixo significa nenhum pedido adicional demonstrado pelo recorte descrito.** O anexo fornece alvos da E4c; o BACKLOG descreve CONTRACT e fatos da E4d, mas o diff final de cada pouso é **[nao verificado]**. `e4c_reconfere_v2.md:7–15` (anexo); `app/docs/BACKLOG.md:1968–1975`.
+
+Cláusulas usadas: **SMOKE** = BUG 73, duas cascas; PRODUCAO-MAXIMA 5 permite smoke posterior somente quando resta TELA, com reversão pronta. **BATIDA** = kernel espera Ronald. **DINHEIRO** = aberta preaprovada com reversão anterior, hash das exportadas intacto e prova de frota posterior; gravado exportado exige `!` e REGEN-EM-EXPORTADA. **PARADA 2 / §4** = dados ESCALA/VÍNCULO, motor e apagar/voltar arquivo usado em prod exigem `!`. **CADASTRO** = regra variável precisa de cadastro pela UI. `CLAUDE.md:202–203`, `CLAUDE.md:143–144`, `CLAUDE.md:265–268`, `CLAUDE.md:406–417`, `CLAUDE.md:43–44`; `producao_maxima.txt:1` (anexo).
+
+**Dinheiro não pode receber “exportada intacta” por presunção:** validação/materialização alcançam o fechamento da competência do fato; a cópia persiste também outros status e tem guarda específica para 09/2026. Competências e valores efetivamente atingidos por cada futura fatia: **[nao verificado]**. `app/chamados/services/validacao.py:470–472`; `app/ponto/services/fechamento.py:1809–1810`, `app/ponto/services/fechamento.py:1137–1162`, `app/ponto/services/fechamento.py:36–43`.
+
+| fatia | pede | cláusula | arquivo:linha |
+|---|---|---|---|
+| **E4c F1 — juízes** | **Smoke: nada direto**, sem template/JS/view no alvo. **Batida/dinheiro:** migra predicados e fila de validação; efeito efetivo sobre esses caminhos **[nao verificado]**. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE; BATIDA/DINHEIRO se alterar o caminho executor; PARADA 2; CADASTRO | `e4c_reconfere_v2.md:7` (anexo); `app/chamados/juizes.py:1528–1559`, `app/chamados/juizes.py:1722–1724` |
+| **E4c F2 — modelos** | **Smoke: nada direto. Batida: conferir com Ronald o recorte de `_nascer`**, pertencente ao caminho de emissão alcançado pela batida; estado/seleção/apresentação isolados não demonstram esse efeito. **Dinheiro: [nao verificado]. Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | BATIDA; §4; PARADA 2; CADASTRO | `e4c_reconfere_v2.md:8` (anexo); `app/chamados/models.py:2922`, `app/chamados/models.py:3124–3131`; `app/chamados/services/fio.py:1161–1167` |
+| **E4c F3 — validação/verbos/painel/ações** | **Smoke: nada direto. Batida: Ronald se mudar validação → materialização. Dinheiro:** validação agenda recálculo da competência **do fato**, aberta ou exportada conforme o caso; exportada gravada pede `!`. **Escala: `!` se atingir aceite de folga**, que chama `declarar_dia` → `lancar_folga`. **Motor, apagar arquivo, cadastro: nada descrito.** | BATIDA; DINHEIRO 1–2; PARADA 2 / §4; CADASTRO | `app/chamados/services/validacao.py:346–347`, `app/chamados/services/validacao.py:460–487`; `app/ponto/services/declarar_dia.py:179–193`; `app/chamados/services/materializacao.py:932–940` |
+| **E4c F4 — emissão/materialização/passivo** | **Smoke: nada direto. Batida: Ronald no recorte que alterar plantio. Dinheiro:** materialização → `registrar_batida` → fechamento por evento; passivo exportado tem caminho explícito **plantio → REGEN → Pauta DP**. **`!` para executar retificação exportada e regeneração de DNA/células.** Competências atingidas **[nao verificado]**. **Motor, apagar arquivo, cadastro: nada descrito.** | BATIDA; DINHEIRO 1–2; PARADA 2 / §4; CADASTRO | `app/chamados/services/materializacao.py:932–940`, `app/chamados/services/materializacao.py:1012–1024`; `app/chamados/services/passivo_validado.py:433–449`; `app/ponto/portas/regen_exportada.py:87–104` |
+| **E4c F5 — fio/reconciliador e leitores** | **Smoke: nada direto. Batida: Ronald para o recorte do reconciliador/contrato no caminho da batida. Dinheiro:** POST do fio pode chamar materialização, alcançando competência do fato; tarefa/vigia/apresentação isolados não demonstram movimento. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito; impacto real [nao verificado].** | BATIDA; DINHEIRO 1–2; PARADA 2; CADASTRO | `app/ponto/signals.py:206–215`; `app/chamados/reconciliador.py:1429–1442`; `app/chamados/services/fio.py:698–708`, `app/chamados/services/fio.py:1165` |
+| **E4c F6 — views/API/canal/tags** | **Smoke:** Meu Atendimento, detalhe local, modal do fio e prévia/resultado do lote; nas duas cascas onde compartilhados. **API:** preservar fases públicas e adicionar exigibilidade; isso não demonstra alteração da API de bater ponto. **Batida/dinheiro:** seleção do lote alcança validação → materialização/recálculo; Ronald se esse caminho mudar, `!` se mover gravado exportado. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE; BATIDA; DINHEIRO; PARADA 2; CADASTRO | `app/chamados/views.py:550`, `app/chamados/views.py:632–633`, `app/chamados/views.py:927`; `app/chamados/views_cobrar.py:169–208`, `app/chamados/views_cobrar.py:353–386`; `app/api/urls.py:67–73`; `app/docs/BACKLOG.md:1999` |
+| **E4c F7 — quatro partials** | **Smoke de Ronald:** Meu Atendimento/card, detalhe/pergunta, modal do fio e drawer do lote; **duas cascas** conforme o grafo. Pode ficar para depois **se** o diff conservar apenas apresentação/leitura, com reversão pronta. **Kernel direto: nada. Dinheiro:** nenhuma escrita demonstrada pelo recorte de apresentação; os formulários acionam portas existentes. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE + PRODUCAO-MAXIMA 5; PARADA 2; CADASTRO | `app/templates/chamados/meu_atendimento.html:1`, `app/templates/chamados/meu_atendimento.html:127`; `app/templates/chamados/detalhe_local.html:310`; `app/templates/chamados/partials/modal_fio.html:163–177`; `app/templates/chamados/partials/_lote_preview.html:21–26`; `app/core/context_processors.py:210` |
+| **E4c F8 — ponto/calendário/ficha/prévia** | **Smoke:** calendário do perfil, cabeçalho do fio e Prévia da Folha se a mudança alcançar essas saídas; template/JS futuro **[nao verificado]**. **Batida: Ronald no recorte `flip_auto`**: leitura alimenta cron com `--apply` → `flip_tipo` → `registro_batida.anotar`. **Dinheiro:** prévia é leitura; alteração monetária decorrente do flip **[nao verificado]**. **`!` se houver apply que regrave célula/ata; motor, apagar arquivo, cadastro: nada descrito.** | BATIDA; SMOKE se front; DINHEIRO se houver efeito; PARADA 2 / §4; CADASTRO | `app/colaboradores/views.py:1948–1965`; `app/chamados/views.py:918–930`; `app/folha/previa.py:28–31`; `app/ponto/services/flip_auto.py:128–140`; `app/config/crons.py:707`; `app/ponto/services/flip_batida.py:12–39`; `app/ponto/services/cartorio.py:951–956` |
+| **E4c F9 — comandos** | **Smoke: nada. Migrar leitores não implica executar apply.** Se o pouso incluir `validar_classe_a --apply`, chama validação real: **Ronald para batida**, DINHEIRO na competência do fato e **`!` se alcançar gravado exportado**. Outros comandos escrevem atos/carimbos; universo/competências dos applies **[nao verificado]**. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | BATIDA; DINHEIRO; PARADA 2; CADASTRO | `app/chamados/management/commands/validar_classe_a.py:85–100`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:323–331`; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:53–68`; `app/chamados/management/commands/relavrar_via_i6.py:96–102` |
+| **E4d — CONTRACT** | **Arquivos do futuro corte: [nao verificado].** Conferência funcional identificável: fio e atendimento ao parar projeção. **Smoke obrigatório** depende de tocar front. **Kernel/dinheiro/escala/vínculo:** conservação dos efeitos após desligar projeção **[nao verificado]**; não cabe declarar “nada”. **Motor, apagar arquivo, cadastro: nada descrito.** | SMOKE se front; BATIDA/DINHEIRO conforme alcance; PARADA 2; CADASTRO | `app/docs/BACKLOG.md:1968`; `app/chamados/models.py:2525–2527`, `app/chamados/models.py:3982–3992`; `app/templates/chamados/partials/modal_fio.html:217–229`; `app/templates/chamados/partials/_card_atendimento.html:189–192` |
+| **E4d — FATO-A03, reabertura** | **Smoke candidato:** fio, “Reabertura administrativa”; obrigatório se editar esse front. Porta atual escreve disputa/chamado/pergunta. **Batida/dinheiro diretos: nada nessa porta; alcance futuro [nao verificado]. Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE se front; PARADA 2; CADASTRO | `app/docs/BACKLOG.md:1970`; `app/chamados/services/acoes_disputa.py:235–274`; `app/templates/chamados/partials/modal_fio.html:377–390` |
+| **E4d — FATO-A05, assinatura** | **Tela/casca, kernel, dinheiro, competência e arquivos do pouso: [nao verificado].** O registro apenas nomeia “ramo de assinatura”; não sustenta escolher uma assinatura de escala como alvo. **Motor, apagar arquivo e cadastro novo: [nao verificado].** | SMOKE/BATIDA/DINHEIRO/PARADA 2/CADASTRO: enquadramento depende do sítio ainda não identificado | `app/docs/BACKLOG.md:1971`; [nao verificado] |
+| **E4d — FATO-A06, identidade/duplicata** | **Smoke candidato:** atendimento mostrando repetida/via; obrigatório se editar front. Porta atual grava identidade/carimbo/motivo. **Batida/dinheiro diretos: nada nessa porta; alcance futuro [nao verificado]. Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE se front; PARADA 2; CADASTRO | `app/docs/BACKLOG.md:1972`; `app/chamados/models.py:3251–3273`; `app/chamados/services/fio.py:1384–1401`; `app/templates/chamados/partials/_card_atendimento.html:192` |
+| **E4d — FATO-A17, pendência técnica** | **Smoke candidato:** pendência no fio/card. **Batida/dinheiro:** fato está dentro do materializador; se a troca alterar prosseguimento para plantio, espera Ronald e pode alcançar fechamento da competência do fato, inclusive exportada → `!`. Delta real **[nao verificado]**. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE se front; BATIDA; DINHEIRO; PARADA 2; CADASTRO | `app/docs/BACKLOG.md:1973`; `app/chamados/services/materializacao.py:851–857`, `app/chamados/services/materializacao.py:932–940`; `app/templates/chamados/partials/modal_fio.html:222–226`; `app/templates/chamados/partials/_card_atendimento.html:189` |
+| **E4d — FATO-A18, recusa técnica** | **Smoke candidato:** recusa/motivo no fio/card. **Batida/dinheiro:** mesma fronteira materializadora; mudança na recusa pode mudar plantio e recálculo da competência do fato. Ronald para kernel; **`!` se mover gravado exportado**; impacto **[nao verificado]**. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE se front; BATIDA; DINHEIRO; PARADA 2; CADASTRO | `app/docs/BACKLOG.md:1974`; `app/chamados/services/materializacao.py:1089–1113`, `app/chamados/services/materializacao.py:932–940`; `app/templates/chamados/partials/modal_fio.html:226`; `app/templates/chamados/partials/_card_atendimento.html:192` |
+| **E4d — FATO-A20, conferência de data** | **Smoke candidato:** fio, “Datas em disputa / Conferir data”. **Batida/dinheiro:** conferência libera gate materializador → plantio → fechamento da competência do fato; Ronald para kernel, **`!` se alcançar gravado exportado**. A regra “só o par conferido” já está decidida; implementação/impacto **[nao verificado]**. **Escala/vínculo, motor, apagar arquivo, cadastro: nada descrito.** | SMOKE se front; BATIDA; DINHEIRO; PARADA 2; CADASTRO | `app/chamados/services/validacao.py:660–709`; `app/chamados/views.py:1292–1314`; `app/templates/chamados/partials/modal_fio.html:163–177`; `app/chamados/services/materializacao.py:1199–1220`; `app/docs/CORTES.md:440` |
+| **Retirada física posterior — campos legados** | Está registrada **depois da série**, separada de parar projeção. **Smoke/kernel/dinheiro e arquivos da migration: [nao verificado].** Remover campo não demonstra apagar arquivo de prod; **se apagar/voltar arquivo usado, `!`**. **Cadastro novo: nada descrito.** | PARADA 2; demais cláusulas dependem do diff | `app/docs/BACKLOG.md:1969`; `CLAUDE.md:265–268` |
+
+## 15/11 09:52 · sessao 59206908181f · - · - · origem=Ronald (tmux)
+
+F6–F9: evidências para a lista única:
+
+| Fatia | Pedido antecipado identificado | Cláusula / prova |
+|---|---|---|
+| E4c F6 | Smoke de **Meu Atendimento**, **detalhe do chamado**, **modal do fio**, **validar inline/lote** e contrato dos endpoints de chamados/disputa. `views.py:632–633`, `:550`, `:927`; `views_cobrar.py:169`, `:208`, `:353–386`; `api/views.py:1159–1165`, `:2549–2563`, `:2611–2627`. A presença de `api/views.py` **não prova edição da API de batida**: `/ponto/bater/` é outra função/rota (`api/urls.py:67`), distinta de chamados/disputa (`:73`, `:92–93`). Há caminho transitivo **seleção → validar → materializar/recalcular**, portanto dinheiro e batida não podem ser descartados sem o diff: `views_cobrar.py:169–208` → `validacao.py:461–471`, `:487–494`. Competências/delta reais [nao verificado]. Novo cadastro, alteração de escala/vínculo, edição do motor ou exclusão de arquivo não estão demonstrados no recorte [nao verificado]. | BUG 73 `CLAUDE.md:202`; PARADA 2 `:265–268`; DINHEIRO `:406–417`; PROD-MÁXIMA item 5, anexo. |
+| E4c F7 | Smoke de **Meu Atendimento nas duas cascas**, **pergunta no detalhe DP**, **modal do fio**, **prévia/resultado de validar lote**: `_card_atendimento.html:106`, `:114`, `:141–154`; `modal_fio.html:185`, `:217–228`; `_pergunta_card.html:20–42`; `_lote_preview.html:21–26`. Casca colaborador: `meu_atendimento.html:1`, `:127`, `:144` + `core/context_processors.py:210`; detalhe DP: `detalhe_local.html:1`, `:310`; modal servido por `chamados/views.py:927`; lote servido por `views_cobrar.py:353–386`. Os quatro alvos são templates; não demonstram edição do kernel, motor, cadastro ou dados de escala/vínculo. O clique de validação já chama a porta que materializa/recalcula (`views_cobrar.py:379–381`; `validacao.py:461–494`), portanto o smoke de escrita não deve ser confundido com simples inspeção da tela (`CLAUDE.md:205`). Delta monetário/competências [nao verificado]. | BUG 73 `CLAUDE.md:202–203`; smoke de POST `:205`; PROD-MÁXIMA item 5 admite pouso com smoke depois **somente quando for só tela**, com reversão pronta, anexo. |
+| E4c F8 | Smoke das superfícies **Calendário do perfil**, **procedência no espelho/PDF**, **cabeçalho/ficha do modal do fio**, **Prévia de proposta da folha**: `colaboradores/views.py:1938`, `:1948–1965`; `ponto/services/espelho.py:755`; `relatorios/pdf_espelho.py:950`; `chamados/views.py:918`, `:930`; `modal_fio.html:13`; `folha/views.py:701–723`. **Não é fatia só de apresentação**: `flip_auto.py:128–140` lê projeção para montar fila → `:268` → cron `config/crons.py:707` (`--competencia --apply`) → `flip_automatico.py:25–31`, `:68` → `flip_batida.py:12`, `:30–39` → **`registro_batida.anotar` e recompute**. Este ramo afeta kernel/escrita de Batida e pede Ronald antes pelo item 5. Não edita `registro_batida.py` diretamente no conjunto-alvo do anexo. Janela do cron é a aberta (`flip_automatico.py:25–31`); delta/competências reais [nao verificado]. Prévia em si é leitura (`folha/previa.py:29–31`, `:139–145`). Cartório escreve campos de `CelulaDia`, mas não DNA/vínculo (`cartorio.py:951–956`); se o pouso incluir apply de relavratura desses dados de ESCALA, pede **`!`**. Edição de `motor_calculo_v2.py`, exclusão de arquivo e cadastro novo não estão demonstrados [nao verificado]. | Seção 4 `CLAUDE.md:142–153`; PARADA 2 `:265–268`; DINHEIRO `:406–417`; PROD-MÁXIMA item 5, anexo. |
+| E4c F9 | **Tela direta: nada**, pois os alvos do anexo são comandos. Smoke indireto/execução de apply não decorre automaticamente de trocar os leitores; operações efetivamente incluídas no pouso [nao verificado]. **Não declarar “nada de batida/dinheiro”** se executar `validar_classe_a --apply`: `validar_classe_a.py:85–100` chama `validar_pergunta`, que materializa e recalcula (`validacao.py:461–494`). Outros applies escrevem atos/perguntas: `backfill_decisoes_pergunta.py:323–331`; `encerrar_perguntas_com_fato.py:53–68`; `relavrar_via_i6.py:96–102` → `services/relavra_via.py:106–128`; `migrar_data_evento_dia_do_turno.py:393–400`; `reconciliar_fantasmas.py:269–281`; `reconciliar_grade.py:305–316`. Backfill/migração já excluem exportadas (`backfill_decisoes_pergunta.py:302–308`; `migrar_data_evento_dia_do_turno.py:384–398`). Alterar estado de pergunta em exportada não equivale, por si, a mexer no `FechamentoMensal`; apply monetário real/competências [nao verificado]. Novo cadastro, mudança de escala/vínculo, edição do motor e exclusão de arquivo prod [nao verificado]. | DINHEIRO `CLAUDE.md:406–417`; PARADA 2 `:265–268`; kernel pelo caminho de validação e PROD-MÁXIMA item 5, anexo. |
+
+Observações para a consolidação:
+
+- **F8 é o caso que mais facilmente receberia “nada” indevido**: a fila de recusas abastece cron escritor de Batida pela porta `registro_batida.anotar`. `flip_auto.py:128–140`; `config/crons.py:707`; `flip_automatico.py:68`; `flip_batida.py:12`, `:30–39`.
+- `cartorio.py:951–956` distingue a relavratura de veredito/ata da regeneração de DNA. O leitor R identificado pela E4c está em `cartorio.py:1637–1641`; esse ramo documenta reativação de perguntas sem tocar FechamentoMensal/batida/TXT (`:1627–1628`), mas não prova ausência de efeito de todo o arquivo ou do diff futuro.
+- O cadastro exigido por “TUDO TEM CADASTRO” só nasce se a mudança introduzir regra que varie por cliente/praça/empresa (`CLAUDE.md:43–44`). Não há essa regra nova demonstrada no inventário F6–F9 do anexo; afirmar necessidade de cadastro novo seria [nao verificado].
+- Excluir um arquivo só por achá-lo órfão é diferente de trocar leitores: exclusão de arquivo usado por prod pede `!` (`CLAUDE.md:265–267`). O inventário não demonstra exclusões futuras [nao verificado].
+
+## 15/11 09:52 · sessao 479eee87c4e0 · ESPINHA-NA-FRENTE · leitura · origem=Code
+
+**Veredito: depende do alcance efetivo dos itens 18–19. O zero atual não basta para dispensar a autorização.** A regra exige `!` para tocar o GRAVADO de competência exportada; a correspondência dos dois itens com funções e campos concretos permanece **[não verificado]**. ([CLAUDE.md:265](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/CLAUDE.md:265))
+
+**De onde nasce a exigência**
+
+- Regra geral, literal: “**tocar o GRAVADO de competencia EXPORTADA**” está entre os atos que exigem `!`, nunca previamente aprovados. ([CLAUDE.md:265](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/CLAUDE.md:265))
+- Regra de dinheiro, literal: “**o GRAVADO (`FechamentoMensal`) nao muda por caminho generico; e `!`**”, com DIFF anterior, reversão e prova posterior. ([CLAUDE.md:411](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/CLAUDE.md:411))
+- Na obra, o BACKLOG manda deixar exportadas “em lista para o `!`”; a GRADE registra explicitamente “itens 18–19; autorização das exportadas”. ([BACKLOG.md:1977](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/docs/BACKLOG.md:1977), [GRADE-MESTRA.md:717](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/docs/GRADE-MESTRA.md:717))
+
+**O número sustenta somente a fotografia fornecida**
+
+São **581 dias = 581 não exportados + 0 exportados + 0 indeterminados**; existem **7 competências exportadas**. Para A18/A19, a sonda informa “sem alcance chamável”, com `linhas=null` e `mudariam_campo_lido_gravado_TXT=null`: esses valores não demonstram delta zero nem ausência de caminho futuro. (*m5_sonda.out*, anexo fornecido:10, :12 e :3–9; linhas contadas desde `sonda_leitura`.)
+
+O BACKLOG chama os itens 18–19 de “FIM DO PROGRAMA”, e o registro do aval confirma uma lista de 26 itens, mas essas referências não descrevem seus campos ou funções. Equiparar essa numeração a A18/A19 seria **[não verificado]**. ([BACKLOG.md:1977](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/docs/BACKLOG.md:1977), [PROMPTS.md:2141](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/docs/PROMPTS.md:2141))
+
+**O alcance comprovável do código**
+
+| Caminho | O que o código demonstra |
+|---|---|
+| Backfill E4B existente | `--aplicar` exige competência corrente; o ato consulta novamente se o dia está entregue e o recusa antes da execução. Portanto, sua proteção não depende apenas do censo de hoje. ([backfill_fio_morto_e4b.py:223](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/management/commands/backfill_fio_morto_e4b.py:223), [:304](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/management/commands/backfill_fio_morto_e4b.py:304)) |
+| Cascatas desse backfill | A cerca recusa linha alterada em exportada, fora da competência ou de alcance indeterminado; a tentativa sofre rollback. A fotografia inclui `FechamentoMensal` e `DiaPago`; DML em tabela fora dela também causa recusa. ([foto_e4b.py:18](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/foto_e4b.py:18), [:145](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/foto_e4b.py:145), [backfill_fio_morto_e4b.py:324](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/management/commands/backfill_fio_morto_e4b.py:324)) |
+| Comando executado depois | `recalcular_fechamento --apply` chama `recalcular_fechamento_mes` pela competência solicitada. O serviço tem guarda nominal para **09/2026**, não uma recusa geral de exportadas; grava FM e chama a lavra de DiaPago. Há, portanto, caminho de escrita em outras competências exportadas, independentemente dos 581 dias atuais. ([recalcular_fechamento.py:118](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/recalcular_fechamento.py:118), [fechamento.py:36](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/fechamento.py:36), [:560](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/fechamento.py:560), [:1160](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/fechamento.py:1160), [:1191](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/fechamento.py:1191)) |
+
+Ligar uma alteração dos itens 18–19 a esse comando posterior, ou provar que eles ficam integralmente contidos na cerca do backfill, permanece **[não verificado]**.
+
+**Quem escreve e quem lê**
+
+Para **cada campo que os itens 18 e 19 gravariam**, campo, escritor e leitores estão **[não verificado]**: falta a definição dos itens e a sonda devolveu `null`, não uma relação de campos. (*m5_sonda.out*, anexo:3–9.)
+
+Os destinos financeiros comprováveis são estes; sua atribuição aos itens permanece **[não verificado]**:
+
+| Dados | Quem escreve | Quem lê |
+|---|---|---|
+| Campos calculados de `FechamentoMensal` | `recalcular_fechamento_mes`, incluindo horas, faltas, DSR, minutos e causas. ([fechamento.py:1160](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/fechamento.py:1160)) | `montar_linhas_export` consulta o FM gravado e entrega seus valores a `eventos_do_fechamento`. ([export.py:719](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/folha/export.py:719)) |
+| Linhas de `DiaPago` | `dia_pago.lavrar`, que apaga a versão do escopo e recria as linhas. ([dia_pago.py:359](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/dia_pago.py:359)) | Leitores por campo e influência dos itens 18–19: **[não verificado]**. |
+| `ExportacaoDominio.conteudo`, `hash_sha256` e metadados | `ExportacaoDominio.registrar`. ([models.py:174](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/folha/models.py:174)) | `competencia_entregue` lê vigência; `txt_vigente_x_gravado` lê o hash. ([export.py:588](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/folha/export.py:588), [:673](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/folha/export.py:673)) |
+
+**Depende de X:** se os itens preservarem uma exclusão efetiva de qualquer escrita em exportada, essa autorização específica não é acionada; se alcançarem o GRAVADO exportado, inclusive por execução posterior, ela continua necessária. **Com a evidência disponível, não está demonstrada a dispensa para os itens 18–19.** ([CLAUDE.md:265](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/CLAUDE.md:265); correspondência item → campo → caminho: **[não verificado]**.)
+
+## 15/11 09:51 · sessao fe287b9b65c1 · - · - · origem=Ronald (tmux)
+
+Não foi localizado mapa confiável dos itens **18–19 do PRONTO** para funções/campos: `app/docs/BACKLOG.md:1977` apenas os chama de “FIM DO PROGRAMA”; `app/docs/PROMPTS.md:2141` informa N=26 e repete isso. Não confundir com A18/A19 da matriz de projeções, que representam outro inventário (`app/docs/PROMPTS.md:2034`; `app/docs/BACKLOG.md:1974`).
+
+**O backfill existente tem cerca própria, independente do número de hoje:**
+
+- Apply só na competência corrente: `app/chamados/management/commands/backfill_fio_morto_e4b.py:223`.
+- Plano retira entregue/indeterminada dos executáveis: mesmo arquivo `:256`–`:262`.
+- Revalidação de entregue dentro do ato: `:303`–`:308`.
+- Delta de todos os campos concretos fotografados e rollback quando cruza competência/exportada: `:319`–`:334`; `app/chamados/services/foto_e4b.py:145`.
+- Foto inclui FechamentoMensal e DiaPago (`foto_e4b.py:289`–`:290`); ExportacaoDominio não está na lista de tabelas permitidas (`:18`–`:27`), portanto DML nele cairia na recusa de tabela fora da foto (`backfill_fio_morto_e4b.py:325`–`:334`).
+- Callbacks desconhecidos ou capazes de escapar do recorte recusam o ato: `foto_e4b.py:30`–`:84`.
+
+**Mas o serviço compartilhado permite alcançar gravado de exportada:**
+
+`recalcular_fechamento --apply` → `app/ponto/management/commands/recalcular_fechamento.py:118` → `recalcular_fechamento_mes` → persistência FM `app/ponto/services/fechamento.py:1144` / `:1160`, e DiaPago `:1191`–`:1201` → `app/ponto/services/dia_pago.py:359`–`:360`.
+
+A guarda é nominal para **09/2026**, não geral: `fechamento.py:36`–`:43`, aplicada em `:560`–`:564`. O serviço declara que exportada deixou de ser trava (`:485`–`:498`) e o código só registra trilha (`:539`–`:547`). Portanto, uma execução futura noutra competência exportada pode escrever FM/DiaPago; influência dos itens 18–19 nesse caminho é **[não verificado]**. [nao verificado]
+
+Caminho por evento também existe: `registro_batida.py:158`–`:180` → `fechamento.py:1809`–`:1824`. Porém materialização chama a porta com `fato_de_chao=False` (`materializacao.py:932`–`:939`), que consulta `competencia_fechada` (`registro_batida.py:132`–`:137`), barrando FM aprovado/exportado (`janelas.py:75`–`:89`). Essa guarda lê status do FM, não K6/ExportacaoDominio (`janelas.py:83`–`:88`).
+
+**Exemplo de campos/escritores/leitores comprovado, somente se o item corresponder ao registro do passivo:**
+
+`backfill_fio_morto_e4b.py:138`–`:141` chama `DecisaoPergunta.registrar(linhas_da_projecao_sem_linha(ps))`.
+
+| Campos gravados | Quem escreve | Quem lê |
+|---|---|---|
+| `pergunta_id`, `ato`, `ato_em`, `ato_texto`, `ato_motivo`; na validação também `ato_por_id` | Valores montados em `app/chamados/models.py:4073`–`:4082`; persistência única `:4086`–`:4098` | `PerguntaDisputa.respostas_anteriores` lê a sequência e `ato` em `:3643`–`:3659`; tarefa lê último `ato`/`ato_texto` em `app/chamados/services/tarefa_do_dia.py:147`–`:161`; foto lê todos os campos concretos em `foto_e4b.py:247`–`:252`, `:280` |
+
+O registro também acorda EventoCelula (`models.py:4097`–`:4098`; `:3314`–`:3331`), portanto nem esse ato deve ser tratado como inserção sem consumidores.
+
+**Leitores do dinheiro:** `folha/export.py:782`–`:788` carrega FM gravado para classificação; rubricas leem `horas_extras_50`, extras100/feriado, folga trabalhada, noturnas e intrajornada em `:420`–`:448`. Isso comprova consumidores do gravado, mas não identifica quais campos os itens 18–19 mudariam **[não verificado]**.
+
+Recomendação de veredito: **depende de X = definição exata dos itens 18–19 e sua vinculação a escritores/campos**. Zero atual sustenta ausência medida na fotografia fornecida; não sustenta ausência estrutural de caminho futuro.
+
+## 15/11 09:51 · sessao 8a636440cc56 · - · - · origem=Ronald (tmux)
+
+F1 | **nada diretamente pelo escopo leitor**; nenhum template/JS/view alvo no anexo, portanto BUG 73 não cria smoke obrigatório só por trocar o predicado. Filas de validação são alcançadas; eventual alteração de batida/dinheiro pelo diff futuro **[nao verificado]**; cadastro novo e remoção de arquivo **[nao verificado]** | BUG 73; PARADA 2 | `app/chamados/juizes.py:1528`, `app/chamados/juizes.py:1544`, `app/chamados/juizes.py:1554`, `app/chamados/juizes.py:1723`; `CLAUDE.md:202`, `CLAUDE.md:265`.
+
+F2 | **nada diretamente para estado/seleção/apresentação**; a guarda de `_nascer` está em caminho quente de emissão, portanto conferir impacto de kernel; não há tela alvo direta nem cadastro variável novo demonstrado. Dinheiro, remoção de arquivo e diff final **[nao verificado]** | BUG 73; §4; TUDO TEM CADASTRO; PARADA 2 | `app/chamados/models.py:2903`, `app/chamados/models.py:2922`, `app/chamados/models.py:3117`, `app/chamados/models.py:3454`, `app/chamados/models.py:3640`, `app/chamados/models.py:3662`; `app/chamados/services/fio.py:1165`; `CLAUDE.md:202`, `CLAUDE.md:265`.
+
+F3 | **esperar Ronald se o recorte mudar efeito de validação/batida ou dinheiro pago; `!` se mudar o ramo que grava folga**. Nenhum front alvo direto; validar/recusar aparece no detalhe/modal, mas smoke de clique obrigatório por BUG 73 somente por esse alcance **não está demonstrado**. Caminho real: validação → materialização → `registrar_batida`; validação também agenda fechamento na competência do fato, inclusive exportada. Cadastro novo/remoção de arquivo **[nao verificado]** | PRODUCAO-MAXIMA 5; PARADA 2; DINHEIRO 1–2; §4 | `app/chamados/services/validacao.py:346`, `app/chamados/services/validacao.py:460`, `app/chamados/services/validacao.py:470`; `app/ponto/services/declarar_dia.py:179`, `app/ponto/services/declarar_dia.py:191`; `app/chamados/services/materializacao.py:932`, `app/chamados/services/materializacao.py:1012`; `app/ponto/services/fechamento.py:1807`, `app/ponto/services/fechamento.py:1160`; `app/chamados/views.py:404`, `app/chamados/views.py:550`.
+
+F4 | **esperar Ronald no alcance de plantio/retificação; `!` para executar o passivo em exportada com regeneração de DNA/gravado**. Nenhum front alvo direto. Caminho real: materialização planta batida; passivo planta → `regenerar_em_exportada` → Pauta DP quando mudou; alcança competência do dia do plantio. Quantas abertas/exportadas o pouso atingirá **[nao verificado]**. Cadastro novo/remoção de arquivo **[nao verificado]** | PRODUCAO-MAXIMA 5; PARADA 2; DINHEIRO 1–2; §4 | `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:932`, `app/chamados/services/materializacao.py:1012`; `app/chamados/services/passivo_validado.py:344`, `app/chamados/services/passivo_validado.py:433`, `app/chamados/services/passivo_validado.py:435`, `app/chamados/services/passivo_validado.py:437`, `app/chamados/services/passivo_validado.py:442`, `app/chamados/services/passivo_validado.py:448`.
+
+F5 | **esperar Ronald para o recorte de kernel**: reconciliador roda por batida e fio tem guarda no caminho do chokepoint; nenhum template/JS/view alvo direto, então não há smoke obrigatório direto demonstrado por BUG 73. Dinheiro só pelo alcance comprovado de `processar_post_fio` → materialização; tarefa/Folha lê porta e não demonstra mover dinheiro por si. Cadastro novo, dado ESCALA/VÍNCULO, remoção de arquivo e impacto efetivo **[nao verificado]** | PRODUCAO-MAXIMA 5; §4; PARADA 2; DINHEIRO | `app/ponto/signals.py:206`, `app/ponto/signals.py:214`; `app/chamados/reconciliador.py:1429`, `app/chamados/reconciliador.py:1433`; `app/chamados/services/fio.py:1165`, `app/chamados/services/fio.py:701`, `app/chamados/services/fio.py:708`; `app/folha/fora_da_folha.py:63`, `app/folha/fora_da_folha.py:69`.
+
+Cuidados para consolidar:
+
+- **Não declarar exportada intacta em F3/F4:** o código real chama `recalcular_fechamento_mes` por evento; ele persiste aberto via `save` e demais status via `update`. Há apenas guarda específica de competência, sem veto genérico de exportada. `app/ponto/services/fechamento.py:1807`, `app/ponto/services/fechamento.py:1137`, `app/ponto/services/fechamento.py:1144`, `app/ponto/services/fechamento.py:1160`, `app/ponto/services/fechamento.py:558`.
+- Telas de alcance, caso o recorte exija smoke: Central de Atendimento/lote, detalhe local, modal do fio, Meu Atendimento. A casca de Meu Atendimento é dinâmica; contexto escolhe `base.html` ou `base_app.html`. Isso é alcance funcional, não prova de que F1–F5 editam front. `app/templates/chamados/painel_gestao.html:14`, `app/chamados/views.py:550`, `app/chamados/views.py:927`, `app/chamados/views.py:632`, `app/templates/chamados/meu_atendimento.html:1`, `app/core/context_processors.py:210`.
+- O anexo lista arquivos futuros, sem diff construído. Assim não há fundamento para prometer que não apagará arquivo, não tocará ramo monetário ou não exigirá cadastro; use **[nao verificado]** nesses negativos se a lista precisar ser categórica. [nao verificado]
+
+## 15/11 09:51 · sessao 55637bbee891 · - · - · origem=Ronald (tmux)
+
+E4d está descrita como CONTRACT para parar a projeção; os seis fatos próprios continuam registrados separadamente, “depois da E4d”, com projeção preservada até existirem. O aval fornecido pede E4d “com os fatos”; partição final e arquivos futuros não estão demonstrados. `app/docs/BACKLOG.md:1968`, `app/docs/BACKLOG.md:1970–1975`; [nao verificado].
+
+| Fatia | Evidência para a linha consolidada |
+|---|---|
+| E4d CONTRACT | Parar escrita de projeção de resposta/validação exige conferir leitores do fio e atendimento: campos atuais em `app/chamados/models.py:2525–2527`, sequência em `app/chamados/models.py:3982–3992`, fio em `app/templates/chamados/partials/modal_fio.html:217–229`, atendimento em `app/templates/chamados/partials/_card_atendimento.html:189–192`. Smoke das telas é identificável; tocar template/base/JS, kernel, dinheiro, escala/vínculo, apagar arquivo e cadastro novo no diff futuro: [nao verificado]. |
+| E4d FATO-A03 | Reabertura administrativa: `app/chamados/models.py:2190–2225`; casca executa a porta e cria pergunta de conversa: `app/chamados/services/acoes_disputa.py:235–274`; smoke do fio, “Reabertura administrativa”: `app/templates/chamados/partials/modal_fio.html:377–390`. Escritas demonstradas são disputa/chamado/pergunta, sem cadastro novo ou gravação direta de dinheiro/batida nessa porta. `app/chamados/services/acoes_disputa.py:259–274`. Alcance futuro [nao verificado]. |
+| E4d FATO-A05 | BACKLOG só identifica “ramo de assinatura”; sítio inequívoco e casca específica não determinados: `app/docs/BACKLOG.md:1971`; [nao verificado]. Não confundir com `assinatura_proposta` do fio, que pertence à proposta de escala: `app/chamados/services/proposta_no_fio.py:96–113`. |
+| E4d FATO-A06 | Identidade/duplicata escreve carimbo/via/motivo: `app/chamados/models.py:3251–3273`; dedup chama essa porta: `app/chamados/services/fio.py:1384–1401`. Smoke do atendimento exibindo “pergunta repetida”/via: `app/templates/chamados/partials/_card_atendimento.html:192`. Kernel e dinheiro não são escritos diretamente nessa porta; alcance futuro [nao verificado]. |
+| E4d FATO-A17 | Pendência técnica escreve `pendencia_admin` + motivo dentro do materializador: `app/chamados/services/materializacao.py:851–857`; smoke fio e atendimento: `app/templates/chamados/partials/modal_fio.html:222–226`, `app/templates/chamados/partials/_card_atendimento.html:189`. Caminho é vizinho do plantio pelo chokepoint: `app/chamados/services/materializacao.py:932–940`; mudança efetiva no plantio/dinheiro depende do futuro diff [nao verificado]. |
+| E4d FATO-A18 | Recusa técnica: `app/chamados/services/materializacao.py:1089–1113`; escreve motivo e, em colisão, identidade; anexa nota no fio. Smoke fio/atendimento: `app/templates/chamados/partials/modal_fio.html:226`, `app/templates/chamados/partials/_card_atendimento.html:192`. Integra caminho materializador; efeito futuro no plantio/dinheiro [nao verificado]. |
+| E4d FATO-A20 | Conferência de data: `app/chamados/services/validacao.py:660–709`; view `app/chamados/views.py:1292–1314`; smoke “Datas em disputa / Conferir data”: `app/templates/chamados/partials/modal_fio.html:163–177`. Destrava gate materializador: `app/chamados/services/materializacao.py:1199–1220`; plantio subsequente alcança chokepoint em `app/chamados/services/materializacao.py:932–940`. Regra do par já decidida: `app/docs/CORTES.md:440`; implementação dessa decisão não demonstrada. |
+
+**Dinheiro: cuidado material, sem inventar universo afetado.** Materializador chama `registrar_batida`; batida gravada chama fechamento por evento; fechamento recalcula a competência do fato em `on_commit`. `app/chamados/services/materializacao.py:932–940`, `app/ponto/registro_batida.py:158–180`, `app/ponto/services/fechamento.py:1798–1824`. A chamada real não filtra exportada, e o comentário explicita recalcular exportada também. `app/ponto/services/fechamento.py:1790–1793`, `app/ponto/services/fechamento.py:1809–1810`. Portanto, A17/A18/A20 e CONTRACT não podem receber “dinheiro=nada” sem provar que a migração conserva o caminho; competências, valores e frota atingidos são [nao verificado].
+
+**Cláusulas para consolidar:** aberta pode aplicar com reversão anterior, hash das exportadas intacto e prova de frota posterior; exportada gravada exige `!` e porta REGEN. `CLAUDE.md:406–417`. Kernel de batida aguarda Ronald segundo PRODUCAO-MAXIMA item 5 fornecido; regra de chokepoint está em `CLAUDE.md:143–144`. Escala/vínculo, motor ou apagar/voltar arquivo usado por produção exigem `!`; nenhum desses atos consta do escopo resumido dos seis fatos, mas diff futuro permanece [nao verificado]. `CLAUDE.md:265–268`, `app/docs/BACKLOG.md:1970–1975`. Novo cadastro de regra variável depende de UI; nenhuma variação por cliente/praça/empresa está descrita nesses fatos. `CLAUDE.md:43–44`, `app/docs/BACKLOG.md:1970–1975`.
+
+## 15/11 09:49 · sessao 5ac9eee1605f · E3-RESTO-R3 · construtor · origem=Code
+
+Os 11 testes foram reescritos pela lei (b), com antes/depois e provas conservadas na [entrega](/home/ronald/wt-codex-e3-resto-r3-093851/app/chamados/tests/e3r3_c9_entrega.txt:27). [nao verificado]
+
+Os 11 pares mutante/teste e controles GREEN→RED→GREEN estão no [script](/home/ronald/wt-codex-e3-resto-r3-093851/app/chamados/tests/e3r3_c9_mutantes.py:26). [nao verificado]
+
+[Ruff e py_compile passaram](/home/ronald/wt-codex-e3-resto-r3-093851/app/chamados/tests/e3r3_c9_entrega.txt:221). Suíte e mutantes não foram executados; resultados funcionais: [nao verificado]. [nao verificado]
+
+## 15/11 09:49 · sessao d533b23fcb35 · JUSTIFICATIVA-PAGA-O-PERIODO · censo · origem=Code
+
+**A guarda atual não protege a 10/2026 por pagamento externo.** Ela exige simultaneamente a chave `(9, 2026)` e empresa exportada; o teste da 10 exige que o evento regrave o fechamento. O marco chamado `paga` consulta holerite de lote publicado, sem consultar declaração de pagamento manual. (`app/ponto/services/fechamento.py:37`, `app/ponto/services/fechamento.py:560`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:200`, `app/ponto/services/fechamento.py:1552`)
+
+**1. Leitores da guarda e do contador**
+
+| Leitor | Significado da chave e leitura por empresa |
+|---|---|
+| `recalcular_fechamento_mes` | Usa `(mes, ano)` da **competência de apuração**, com janela pelo corte da empresa. Consulta a guarda e exclui somente colaboradores das empresas exportadas. A chave sozinha não bloqueia empresa sem entrega. (`app/ponto/services/fechamento.py:539`, `app/ponto/services/fechamento.py:560`, `app/ponto/services/fechamento.py:562`, `app/ponto/services/fechamento.py:620`) |
+| `dia_pago.retratar_exportada` | Usa a competência das linhas de `FechamentoMensal`/`DiaPago`. Exige chave guardada e empresa exportada, encontrada por `colaborador_ids=[colab.pk]`; devolve `barrado_pela_guarda=True`. (`app/ponto/services/dia_pago.py:459`, `app/ponto/services/dia_pago.py:468`, `app/ponto/services/dia_pago.py:469`) |
+| `barrados_pela_guarda` | Lê `ACAO_BARRADO_GUARDA` e conta registros de `LogAuditoria` cujo texto começa com `MM/AAAA `. Não calcula janela nem filtra empresa. (`app/ponto/services/fechamento.py:47`, `app/ponto/services/fechamento.py:50`) |
+| Command `recalcular_fechamento` | Depois do apply, testa a chave e imprime contador acumulado e `saida`. O recálculo pode receber empresa; o contador impresso recebe somente mês/ano. (`app/ponto/management/commands/recalcular_fechamento.py:118`, `app/ponto/management/commands/recalcular_fechamento.py:123`, `app/ponto/management/commands/recalcular_fechamento.py:126`) |
+| `test_bob_b2_abono_feriado_guarda` | Cenário com corte 21 e exportação 09: exige 09 preservada, contador 1; 10 regravada, contador 0; leitura pura da 09 permitida; retrato da 09 barrado. (`app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:79`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:175`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:192`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:200`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:206`, `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:211`) |
+| `test_reverter_regen_recalcula_dinheiro` | Lê o contador antes/depois da reversão de célula em 09 exportada; exige célula revertida, dinheiro preservado e contador aumentado. O contador continua sem empresa. (`app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:197`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:205`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:211`) |
+| `test_justificativa_c9_sem_banco` | Injeta guarda vazia e ação fictícia para testar retrato sem ata; não caracteriza competência nem entrega real. (`app/ponto/tests/test_justificativa_c9_sem_banco.py:138`, `app/ponto/tests/test_justificativa_c9_sem_banco.py:150`) |
+
+`ACAO_BARRADO_GUARDA='recalculo_barrado_guarda'` é escrita pelo recálculo barrado, com modelo `FechamentoMensal`, e pelo retrato barrado, com modelo `DiaPago`; seu leitor funcional é o contador acima. (`app/ponto/services/fechamento.py:44`, `app/ponto/services/fechamento.py:50`, `app/ponto/services/fechamento.py:569`, `app/ponto/services/dia_pago.py:463`)
+
+O contador mede **registros de bloqueio**, sem somar pessoas: uma chamada pode excluir vários colaboradores e produzir uma linha, com quantidade no texto e IDs no JSON. Ele também inclui o bloqueio do retrato. (`app/ponto/services/fechamento.py:569`, `app/ponto/services/fechamento.py:570`, `app/ponto/services/fechamento.py:573`, `app/ponto/services/dia_pago.py:463`)
+
+A competência termina no mês da chave: com corte 21, `10/2026` significa `21/09–20/10`; o corte vem de `Empresa.dia_inicio_competencia`, com default 21. O corte efetivo cadastrado de Juliani em produção é [nao verificado]. (`app/ponto/janelas.py:10`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`)
+
+**2. Candidatas a responder exportada, entregue, paga, fechada ou trancada**
+
+O registro vivo declara separadamente F6, K4, K6, K7 e K9; ele distingue expressamente fechamento por colaborador/status e tranca por empresa. (`app/core/juizes.py:76`, `app/core/juizes.py:309`, `app/core/juizes.py:326`, `app/core/juizes.py:337`, `app/core/juizes.py:338`, `app/core/juizes.py:347`)
+
+| Candidata | Predicado, universo e fonte |
+|---|---|
+| `competencia_entregue` — K6 | **Empresa + mês + ano**: seleciona o `ExportacaoDominio` mais recente por `(gerado_em, pk)` e exige `invalidada_em is None`. Retorna bool ou registro. Responde entrega por TXT. (`app/folha/export.py:559`, `app/folha/export.py:591`, `app/folha/export.py:594`, `app/folha/models.py:203`) |
+| `empresas_exportadas_no_escopo` | Projeta a pergunta anterior: empresa indicada; senão empresas dos colaboradores indicados; senão empresas ativas. Retorna IDs cujo marco `exportada` é verdadeiro. Lista vazia de colaboradores produz escopo vazio. (`app/ponto/services/fechamento.py:1509`, `app/ponto/services/fechamento.py:1521`, `app/ponto/services/fechamento.py:1528`) |
+| `marcos_da_competencia()['aprovada']` | **Empresa + competência**: existe ao menos um `FechamentoMensal` de colaborador da empresa com status `aprovado` ou `exportado`. (`app/ponto/services/fechamento.py:1546`) |
+| `marcos_da_competencia()['exportada']` | Chama K6; mesma pergunta de entrega por TXT. (`app/ponto/services/fechamento.py:1550`) |
+| `marcos_da_competencia()['trancada']` | Chama `competencia_trancada`; mesma pergunta da tranca viva. (`app/ponto/services/fechamento.py:1551`) |
+| `marcos_da_competencia()['paga']` | **Empresa + competência**: existe `Holerite` com lote publicado, atribuído pela `empresa_folha` ou, se ela for nula, pela empresa atual do colaborador. Um único documento satisfaz o `exists()`; não exige todos os colaboradores nem prova bancária. (`app/ponto/services/fechamento.py:1552`) |
+| `marco_da_competencia` | Retorna o verdadeiro mais adiantado na ordem `aprovada → exportada → trancada → paga`, ou `aberta`. É projeção dos marcos. (`app/ponto/services/fechamento.py:1474`, `app/ponto/services/fechamento.py:1555`, `app/ponto/services/fechamento.py:1566`) |
+| `competencia_trancada` — K4 | **Empresa + competência**: existe `PeriodoFechado` com `reaberto_em IS NULL`. Retorna bool; sem empresa retorna falso. (`app/ponto/services/fechamento.py:1486`) |
+| `periodo_trancado` — K7 | Exatamente o mesmo filtro do K4, devolvendo linha ou `None`. `ativo` não participa da decisão. (`app/ponto/services/fechamento.py:1477`, `app/ponto/services/fechamento.py:1483`) |
+| `janelas.competencia_fechada` — F6, “mês fechado” | **Colaborador + instante**: converte para data local, encontra competência pelo corte da empresa e procura FM `aprovado`/`exportado`. Retorna mensagem ou `''`. Não consulta TXT, holerite ou tranca. (`app/ponto/janelas.py:75`, `app/ponto/janelas.py:84`) |
+| `competencia_fechada_para_celula` — K9 | **Empresa + competência + colaborador opcional**: K6 **OU** holerite do próprio colaborador com lote publicado. Sem colaborador, somente TXT conta; `fontes=True` informa as metades verdadeiras. (`app/folha/export.py:600`, `app/folha/export.py:620`) |
+| `_competencias_exportadas`, `fonte_da_lavra`, `autoridade_da_lavra` | Enumeram candidatos de TXT/holerite, consultam K9 e convertem em janelas pelo corte da empresa; apresentam qual fonte intercepta o recorte. (`app/ponto/management/commands/gerar_celulas.py:135`, `app/ponto/management/commands/gerar_celulas.py:170`, `app/ponto/management/commands/gerar_celulas.py:182`, `app/ponto/management/commands/gerar_celulas.py:192`, `app/ponto/management/commands/gerar_celulas.py:217`) |
+| `dia_em_competencia_trancada` | **Empresa + dia**: enumera `PeriodoFechado` sem reabertura e testa pertencimento à janela. Sem empresa/dia retorna falso; trata falhas com abertura. (`app/chamados/juizes.py:2041`, `app/chamados/juizes.py:2051`) |
+| `dia_da_pergunta_trancado` / `dias_trancados` — C20 | **Colaborador + dia de turno**: tranca viva **e ausência de toque administrativo posterior naquele colaborador/dia**. Lê K7 e trilha de cobrar/resolver/desarquivar. (`app/chamados/juizes.py:974`, `app/chamados/juizes.py:1004`, `app/chamados/juizes.py:1066`, `app/chamados/juizes.py:1076`, `app/chamados/juizes.py:1083`) |
+| `ChamadoColaborador._dia_em_competencia_trancada` | Excetua módulos fora da tranca, obtém a competência do chamado e consulta K4. Decide escopo do chamado. (`app/chamados/models.py:1080`) |
+| `competencia_do_dia_entregue` | **Empresa + dia**: compõe `janela_atual` e K6. Sem dia retorna `None`; memo por empresa/competência. (`app/chamados/services/vigia_fio.py:827`, `app/chamados/services/vigia_fio.py:839`) |
+| `autorizacao_he_periodo._exportada` | Testa se a empresa do colaborador pertence a `empresas_exportadas_no_escopo`; mesma entrega TXT. (`app/ponto/services/autorizacao_he_periodo.py:113`) |
+| `tripwire_celulas._exportada` | Testa se a data cai nas janelas de `_competencias_exportadas(empresa)`. Sem colaborador, alcança somente a metade TXT do K9. (`app/ponto/management/commands/tripwire_celulas.py:318`, `app/folha/export.py:623`) |
+| `ExportacaoDominio.e_vigente`, `anotar_vigencia`, `so_vigentes` | Respondem **qual geração é a mais recente** por empresa/competência; não excluem o registro por `invalidada_em`. (`app/folha/models.py:120`, `app/folha/models.py:134`, `app/folha/models.py:192`, `app/folha/models.py:203`) |
+| `exportacoes_da_competencia` / `passivo_validado._esta_exportada` | O primeiro devolve o mais recente por `e_vigente`; o segundo testa `vigente is not None`. Um último TXT invalidado pode dar verdadeiro aqui e falso no K6. (`app/folha/haiku_export.py:59`, `app/folha/haiku_export.py:70`, `app/chamados/services/passivo_validado.py:116`, `app/chamados/services/passivo_validado.py:127`, `app/folha/export.py:594`) |
+| `ExportacaoDominio.registrar → ja_existia` | Testa existência de **qualquer geração anterior** da tripla. Marca reexportação; não exige entrega vigente nem pagamento. (`app/folha/models.py:174`, `app/folha/models.py:178`, `app/folha/models.py:186`) |
+
+Os chamadores das candidatas ficam assim:
+
+- **K6 direto:** marcos, preview, comparador de TXT e K9; ranking HE; Pautas pago/devido e folga exportada; Esmeril; foto E4b; vigia do fio; tarefa do dia; competências a lavrar; contagem de dias abonados; backfill de decisões; lavratura de status. (`app/ponto/services/fechamento.py:1550`, `app/folha/views.py:354`, `app/folha/export.py:621`, `app/folha/export.py:658`, `app/folha/services/ranking_he.py:89`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:124`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:93`, `app/ponto/services/esmeril_espelho.py:58`, `app/chamados/services/foto_e4b.py:245`, `app/chamados/services/vigia_fio.py:846`, `app/chamados/services/tarefa_do_dia.py:442`, `app/ponto/services/he_pendente_lavrado.py:223`, `app/ponto/services/dia_pago.py:717`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:471`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:498`, `app/ponto/management/commands/lavrar_status_competencia.py:43`)
+- **Marcos:** projeções `empresas_exportadas_no_escopo` e `marco_da_competencia`, pré-fechamento e reabertura de órfãs enterradas. (`app/ponto/services/fechamento.py:1528`, `app/ponto/services/fechamento.py:1568`, `app/folha/management/commands/pre_fechamento.py:74`, `app/chamados/management/commands/reabrir_orfas_enterradas.py:95`)
+- **K4/K7:** marcos, chamado, painel/tela/reabertura de fechamento, juiz das perguntas e serviço de encerramento por competência trancada. (`app/ponto/services/fechamento.py:1551`, `app/chamados/models.py:1091`, `app/ponto/views.py:1030`, `app/ponto/views.py:1129`, `app/ponto/views.py:1543`, `app/chamados/juizes.py:1066`, `app/chamados/services/competencia_trancada.py:95`)
+- **F6:** registro de batida, correção de tipo e lavratura de foto de folgas. (`app/ponto/registro_batida.py:135`, `app/ponto/services/flip_batida.py:22`, `app/escala/management/commands/lavrar_foto_folgas.py:95`)
+- **K9 e suas janelas:** gerador de células, apply específico, regeneração/edição/reversão de células, correção retroativa de escala, vigência impossível, tripwire e auditor de invariantes. (`app/ponto/management/commands/gerar_celulas.py:182`, `app/ponto/management/commands/gerar_celulas.py:212`, `app/ponto/management/commands/aplicar_col900.py:64`, `app/ponto/portas/celula.py:221`, `app/ponto/portas/celula.py:607`, `app/ponto/portas/celula.py:821`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:82`, `app/escala/services/vigencia_impossivel.py:42`, `app/ponto/management/commands/tripwire_celulas.py:319`, `app/chamados/management/commands/auditar_invariantes_chamados.py:372`)
+- **C20:** C6, consulta em lote, respostas sem veredito, reconciliador, tarefa do dia e emissão de disputa. O juiz simples de dia trancado é chamado por `furos_sem_cobranca`; o método do chamado também é lido por `cluster_espurio`. (`app/chamados/juizes.py:1405`, `app/chamados/juizes.py:1149`, `app/chamados/models.py:1902`, `app/chamados/reconciliador.py:668`, `app/chamados/reconciliador.py:748`, `app/chamados/services/tarefa_do_dia.py:422`, `app/chamados/services/disputa_emissao.py:1970`, `app/ponto/services/furos_sem_cobranca.py:85`, `app/ponto/services/cluster_espurio.py:254`)
+- **Entrega por dia:** modelos, reconciliador, fio, foto E4b, emissão de disputa, fábrica da célula, backfill E4b e rederivação H06. O passivo validado chama sua própria `_esta_exportada`. (`app/chamados/models.py:364`, `app/chamados/reconciliador.py:745`, `app/chamados/services/fio.py:777`, `app/chamados/services/fio.py:1317`, `app/chamados/services/foto_e4b.py:238`, `app/chamados/services/disputa_emissao.py:1837`, `app/chamados/services/fabrica_da_celula.py:231`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:173`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:115`, `app/chamados/services/passivo_validado.py:358`)
+
+**As equivalências são limitadas:** K6, marco `exportada`, empresas exportadas e entrega por dia compartilham a pergunta de TXT; K4/K7 compartilham tranca. F6 consulta status individual; C20 acrescenta toque administrativo; K9 acrescenta documento individual; `paga` é existência de holerite publicado. Nenhum desses predicados consulta pagamento manual declarado. (`app/folha/export.py:591`, `app/ponto/services/fechamento.py:1528`, `app/ponto/services/fechamento.py:1483`, `app/ponto/services/fechamento.py:1493`, `app/ponto/janelas.py:86`, `app/chamados/juizes.py:1078`, `app/folha/export.py:625`, `app/ponto/services/fechamento.py:1552`)
+
+Também há perguntas temporais: `janela_anterior` responde competência encerrada no calendário; `versao_para` e `sem_adesao_no_horizonte` respondem horizontes de regra. Não consultam pagamento. O comentário do horizonte registra a 10 paga fora, mas o corpo compara competência com `'2026-11'`. (`app/ponto/janelas.py:66`, `app/ponto/services/cartorio.py:258`, `app/ponto/services/cartorio.py:280`, `app/ponto/services/cartorio.py:291`)
+
+**3. Cadastro de competência paga fora do sistema**
+
+Não localizei cadastro específico para declarar **empresa + competência paga externamente**. Inexistência absoluta fora da cópia pesquisada: [nao verificado]. Nos modelos pertinentes encontrados:
+
+| Modelo | O que registra e quem escreve |
+|---|---|
+| `PeriodoFechado` — mais próximo estruturalmente | Empresa, competência, autor/data da tranca e reabertura; não contém declaração de pagamento. Escrito por `trancar_periodo` e `reabrir_periodo`. A aprovação da tela pode trancar; a reabertura chama a porta e registra auditoria. (`app/ponto/models.py:920`, `app/ponto/services/fechamento.py:1413`, `app/ponto/services/fechamento.py:1445`, `app/ponto/views.py:1369`, `app/ponto/views.py:1546`, `app/ponto/views.py:1548`) |
+| `ExportacaoDominio` | Geração do TXT, autor, nome, hash e conteúdo. `registrar` cria o histórico da geração. (`app/folha/models.py:75`, `app/folha/models.py:173`) |
+| `FechamentoMensal` | Por colaborador: estados aberto/aprovado/exportado, aprovação e observação; não há estado `pago`. (`app/ponto/models.py:398`, `app/ponto/models.py:471`) |
+| `Holerite` / `LoteHolerite` | Documento e publicação do lote; essa publicação alimenta o marco `paga`. O command de processamento carimba `publicado_em`. (`app/holerite/models.py:6`, `app/holerite/models.py:103`, `app/holerite/management/commands/processar_lote_holerite.py:123`, `app/ponto/services/fechamento.py:1552`) |
+
+O modelo próximo, `PeriodoFechado`, não está registrado no admin de ponto mostrado nessa cópia. (`app/ponto/admin.py:1`)
+
+Há uma diferença temporal adicional: a matriz de holerites usa mês civil, enquanto a apuração de ponto usa o corte da empresa. O registro vivo documenta essa distinção. (`app/holerite/matriz.py:51`, `app/ponto/janelas.py:10`, `app/core/juizes.py:615`)
+
+**4. O que impede regravar a 10 e quais escritores passam pela guarda**
+
+**Não há bloqueio da 10 por “competência paga” no recálculo atual.** A guarda contém somente 09; status aprovado também não impede esse escritor: aberto recebe `save()`, demais estados recebem `queryset.update()` dos campos calculados. O bloqueio aprovado→aprovado do model só atua no `save()`. O contrato existente exige que recálculo não consulte tranca. (`app/ponto/services/fechamento.py:37`, `app/ponto/services/fechamento.py:1150`, `app/ponto/services/fechamento.py:1173`, `app/ponto/models.py:492`, `app/ponto/tests/test_contract_juiz_fechamento.py:117`)
+
+Isso descreve a proteção por competência; a execução concreta para Juliani, seu universo elegível e eventuais falhas de cálculo são [nao verificado]. O serviço filtra o universo e captura falhas por colaborador. (`app/ponto/services/fechamento.py:554`, `app/ponto/services/fechamento.py:1316`)
+
+| Escritor | Escrita e passagem pela guarda |
+|---|---|
+| `recalcular_fechamento_mes` | Cria/salva/atualiza FM e chama lavratura de DP `motor` e `oraculo`. **Passa:** colaboradores barrados saem antes do laço. (`app/ponto/services/fechamento.py:564`, `app/ponto/services/fechamento.py:903`, `app/ponto/services/fechamento.py:1157`, `app/ponto/services/fechamento.py:1173`, `app/ponto/services/fechamento.py:1214`, `app/ponto/services/fechamento.py:1290`) |
+| `dia_pago.lavrar` | Apaga e recria as linhas do colaborador/competência/versão. **Sem guarda própria**; suas chamadas funcionais estão dentro do recálculo guardado. (`app/ponto/services/dia_pago.py:135`, `app/ponto/services/dia_pago.py:359`, `app/ponto/services/fechamento.py:1214`, `app/ponto/services/fechamento.py:1290`) |
+| `retratar_exportada` | Atualiza/cria campos de grade, ajuste DSR/banco e carimbos. **Tem guarda própria.** (`app/ponto/services/dia_pago.py:459`, `app/ponto/services/dia_pago.py:495`, `app/ponto/services/dia_pago.py:518`, `app/ponto/services/dia_pago.py:552`, `app/ponto/services/dia_pago.py:559`) |
+| `apurar_furo_da_exportada` | Atualiza apenas `furo_apurado` e `lavrado_em` nas linhas ainda não apuradas. **Não consulta a guarda.** (`app/ponto/services/dia_pago.py:664`, `app/ponto/services/dia_pago.py:685`, `app/ponto/services/dia_pago.py:687`) |
+| `aprovar_lote` / `aprovar` | Status e carimbos de aprovação, eventualmente observação. **Não consultam a guarda.** (`app/ponto/services/fechamento.py:1336`, `app/ponto/services/fechamento.py:1348`) |
+| `reabrir_lote` / `reabrir` | Status aberto e limpeza da aprovação. **Não consultam a guarda.** (`app/ponto/services/fechamento.py:1357`, `app/ponto/services/fechamento.py:1362`) |
+| `restaurar_fechamento` | Atualiza campos fornecidos e invalida `derivado_em` por padrão; exige motivo. **Não consulta a guarda.** (`app/ponto/services/fecham
+
+[truncado em 20000 de 29035 caracteres]
 
 ## 15/11 09:45 · sessao 0dbb05660749 · - · - · origem=Ronald (tmux)
 
@@ -1292,184 +1554,4 @@ Cura, diff, RED/GREEN e censo registrados na [entrega c17](/home/ronald/wt-codex
 
 [Suite com banco reservada ao Code; sem commit](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/justificativa_c17_entrega.txt:128). [nao verificado]
 
-## 15/11 06:13 · sessao 09489d17e7f7 · JUSTIFICATIVA-PAGA-O-PERIODO · verificador · origem=Code
-
-1. **Existe, mas não concentra toda a decisão de cobertura.** O registro aponta para `marcos_cobertos_por_justificativa`, definida na árvore; a fonte intermediária também decide cobertura sem passar por ela. (`app/core/juizes.py:265`; `app/ponto/turnos.py:2703`; `app/ponto/services/efeito_ausencia.py:143`; `app/ponto/services/efeito_ausencia.py:187`.)
-
-| Sítio de produção | Decisão / relação com a função registrada |
-|---|---|
-| `app/ponto/turnos.py:2668` | Define quais tipos nomeiam marco: `esqueci_saida→hf`, `esqueci_entrada→hi`. |
-| `app/ponto/turnos.py:2686` | `ancora_nao_cobre` decide ausência de âncora, papel errado e ponta já fechada. É chamada pela função registrada em `app/ponto/turnos.py:2723` e separadamente pela fonte em `app/ponto/services/efeito_ausencia.py:204`. |
-| `app/ponto/turnos.py:2720` | Função registrada: devolve dia inteiro (`None`), nenhum marco (`frozenset()`) ou o marco nomeado (`frozenset({alvo})`). |
-| `app/ponto/services/efeito_ausencia.py:121` | Define o universo: justificativas aprovadas do colaborador, `data_turno` não nula e dentro do intervalo. |
-| `app/ponto/services/efeito_ausencia.py:141` | Cobertura inteira anterior prevalece; tipo sem marco recebe `cobre=None` diretamente, **sem chamar a registrada**. |
-| `app/ponto/services/efeito_ausencia.py:148` | Motivo conserva o inteiro; demais aprovações do dia têm os conjuntos unidos em `app/ponto/services/efeito_ausencia.py:153`. |
-| `app/ponto/services/efeito_ausencia.py:185` | `_cobertura_de_uma`: sem vínculo/marcos ou sem entrada/saída previstas, conserva inteiro com `celula_sem_marco`, **sem chamar a registrada**. |
-| `app/ponto/services/efeito_ausencia.py:195` | Seleciona o turno da âncora e exige o mesmo dia; resolve papéis, consulta `ancora_nao_cobre` e retorna inteiro quando há motivo. Só o restante chama a registrada, por parâmetro, em `app/ponto/services/efeito_ausencia.py:207`. |
-| `app/escala/utils.py:1208` | A grade aplica precedência da ausência; aplica justificativa somente em dia de trabalho, em `app/escala/utils.py:1252` e `app/escala/utils.py:1261`. Lê a fonte intermediária em `app/escala/utils.py:1197`. |
-| `app/escala/utils.py:1270` | Converte `hi/hf` em extremos da cadeia e dispensa somente células faltantes; decide `justificado` pela ausência de `missing` em `app/escala/utils.py:1283`. Usa o resultado da fonte, sem repetir o predicado de âncora. |
-| `app/ponto/services/cartorio.py:802` | Lê `dia['justificado']` e dispensa lâmpadas restantes; não chama a registrada. A escrita ocorre em `app/ponto/services/cartorio.py:808`. |
-| `app/escala/services/leitor_celula.py:85` | Reconstrói `justificado` pelas lâmpadas dispensadas e ausência de apagadas; transporta para o dia em `app/escala/services/leitor_celula.py:472`. Não chama a registrada. |
-
-Também há decisões financeiras próprias:
-
-| Sítio | Predicado efetivo |
-|---|---|
-| `app/ponto/services/efeito_ausencia.py:170` | Pagamento = `max(0, previsto − trabalhado)`, depois de montar a cobertura. |
-| `app/ponto/services/efeito_ausencia.py:55` | Todos os dias presentes no mapa entram em `justificadas`; o mapa financeiro depende de `trabalhado != 0` e de haver apuração, em `app/ponto/services/efeito_ausencia.py:57`. |
-| `app/ponto/motor_calculo_v2.py:2581` | O motor usa existência de período para `datas_trabalho`; separa abono inteiro pela ausência da chave em `minutos_justificados`, em `app/ponto/motor_calculo_v2.py:2629`. Não consulta o juiz de marcos. |
-| `app/ponto/services/dia_pago.py:395` | A projeção financeira trata `sem_ata` como desconhecido, ausência pelo saldo previsto e justificativa pelo crédito recebido, em `app/ponto/services/dia_pago.py:401`. |
-| `app/ponto/services/dia_pago.py:717` | Competência entregue conserva a contagem gravada; fora dela, conta dia inteiro por `tipo_dia='ausencia'` ou realizado zero, em `app/ponto/services/dia_pago.py:737`. |
-
-**Predicado e universo:** a função pura recebe tipo, papel da âncora, papéis e marcos; a fonte acrescenta aprovação, colaborador, datas, existência da célula e composição entre justificativas. Portanto, função registrada e fonte completa não têm o mesmo universo. (`app/ponto/turnos.py:2703`; `app/ponto/services/efeito_ausencia.py:121`; `app/ponto/services/efeito_ausencia.py:141`; `app/ponto/services/efeito_ausencia.py:185`.)
-
-Pelo delta fornecido, esses corpos não foram alterados: houve registro e troca de docstring. A comparação histórica independente com a autoridade anterior a esse registro está **[nao verificado]**.
-
-2. **Sim, a frase existe com o nome exato `marcos_cobertos_por_justificativa`.** Consta no corte geral e no registro específico, tanto em Markdown quanto em JSON. (`app/docs/CORTES.md:341`; `app/docs/CORTES.md:342`; `app/docs/CORTES.json:1097`; `app/docs/CORTES.json:1104`.)
-
-3. **Os dois arquivos citados leem a cadeia, mas de formas diferentes.** `efeito_ausencia.py` importa a registrada, passa-a para `_cobertura_de_uma` e a executa apenas no ramo restante; `escala/utils.py` chama `periodos_justificados`, portanto a leitura é indireta e sujeita aos desvios descritos acima. (`app/ponto/services/efeito_ausencia.py:118`; `app/ponto/services/efeito_ausencia.py:146`; `app/ponto/services/efeito_ausencia.py:207`; `app/escala/utils.py:1197`.)
-
-Outros leitores não enumerados no comentário do registro:
-
-| Leitor | Caminho |
-|---|---|
-| `efeitos_da_ausencia` | Chama a fonte em `app/ponto/services/efeito_ausencia.py:54`. |
-| Fase financeira da grade | Chama a fonte com o realizado do julgamento em `app/escala/utils.py:1297`. |
-| Grade da folha | Chama a fonte em `app/folha/export.py:339`. |
-| Grade do espelho | Chama a fonte em `app/ponto/services/espelho.py:520`. |
-| Contador de dias abonados | Chama a fonte em `app/ponto/services/dia_pago.py:722`. |
-| Fechamento, PDF e esmeril | Leem por `efeitos_da_ausencia`: `app/ponto/services/fechamento.py:665`; `app/relatorios/pdf_espelho.py:332`; `app/ponto/services/esmeril_espelho.py:161`. |
-| Comandos de comparação | Leem por `efeitos_da_ausencia`: `app/relatorios/management/commands/diff_extrato_parcial.py:41`; `app/ponto/management/commands/diff_espelho_alimentacao.py:117`. |
-
-4. **Restou “fallback” em comentário identificado nominalmente com a obra.** O bloco começa com `JUSTIFICATIVA-PAGA-O-PERIODO (verificador v2 A3, 14/11)` e contém “o fallback dizia 0%% onde o gravado tem 630”. Descreve o caminho anterior, mas a palavra permanece. (`app/folha/export.py:1105`; `app/folha/export.py:1108`.)
-
-A docstring alvo do delta já usa `de minutos_previstos_do_dia`. (`app/escala/services/leitor_celula.py:370`.)
-
-Persistem ainda docstrings com “a cura e do motor e espera `!`; ao curar, esta assercao TROCA”, nos quatro pontos abaixo; a entrega c9 registra que os casos foram deixados como caracterização com lei/pergunta na docstring. (`app/ponto/tests/test_justificativa_c8_sem_banco.py:126`; `app/ponto/tests/test_justificativa_c8_sem_banco.py:269`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:325`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:653`; `app/ponto/tests/c9_entrega.txt:98`.)
-
-A introdução histórica dessas ocorrências pelo **diff integral**, excluindo tudo que já existia antes da obra, está **[nao verificado]**.
-
-5. **Escritores e leitores dos valores envolvidos no delta e no contrato que ele documenta:**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| Pergunta e endereço em `JUIZES['ausencia/ferias']` | Declaração em `app/core/juizes.py:265`. | Selo de existência em `app/ponto/tests/test_contract_juiz_ausencia.py:39`; gerador em `app/core/management/commands/gerar_diagrama.py:729` e `app/core/management/commands/gerar_diagrama.py:781`. |
-| Retornos `None` / `frozenset` | Registrada em `app/ponto/turnos.py:2722`, `app/ponto/turnos.py:2724`, `app/ponto/turnos.py:2726` e `app/ponto/turnos.py:2727`; a fonte também produz cobertura inteira em `app/ponto/services/efeito_ausencia.py:144` e `app/ponto/services/efeito_ausencia.py:149`. | Fonte recebe e compõe em `app/ponto/services/efeito_ausencia.py:151` e `app/ponto/services/efeito_ausencia.py:153`; grade lê em `app/escala/utils.py:1252` e `app/escala/utils.py:1270`. |
-| `celulas={(colaborador_id,data):celula}` | Carregador em `app/escala/alimentacao.py:73`; conversão do mapa por data em `app/escala/services/leitor_celula.py:407` e `app/escala/services/leitor_celula.py:442`. | Fonte passa ao helper em `app/ponto/services/efeito_ausencia.py:159`; grade passa em `app/escala/services/leitor_celula.py:443`; helper encaminha ao juiz do previsto em `app/escala/services/leitor_celula.py:375`. |
-| `ata['minutos_previstos']` | Cartório monta em `app/ponto/services/cartorio.py:739` e entrega à lavra em `app/ponto/services/cartorio.py:1853`; porta atribui a ata em `app/ponto/portas/celula.py:1064` e `app/ponto/portas/celula.py:1091`. | Helper lê em `app/escala/services/leitor_celula.py:372`. |
-| Previsto devolvido pelo helper | Usa ata ou `minutos_previstos_do_dia`, com zero para célula sem trabalho no segundo caminho, em `app/escala/services/leitor_celula.py:372` e `app/escala/services/leitor_celula.py:375`. | Saldo pago em `app/ponto/services/efeito_ausencia.py:170`; saída da grade em `app/escala/services/leitor_celula.py:453`. |
-
-O registro é consumido como catálogo; o contador `fora_de_autoridade` apenas conta `PENDENTES`, e seu zero não demonstra unicidade de chamadas. (`app/core/management/commands/gerar_diagrama.py:729`; `app/core/juizes.py:1486`.)
-
-## 15/11 06:12 · sessao 8734c0e0a169 · - · - · origem=Ronald (tmux)
-
-Q5 — leitura estrita do delta fornecido:
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `JUIZES['ausencia/ferias']['que marcos do turno a justificativa aprovada cobre?']` e endereço da função | Declaração em `app/core/juizes.py:265`; família em `app/core/juizes.py:251`. | Selo confere existência por AST em `app/ponto/tests/test_contract_juiz_ausencia.py:39`; gerador lê referências em `app/core/management/commands/gerar_diagrama.py:729`, `:770`, `:781`; diagrama agrega arquivos e contagens em `:344`. |
-| `None` / `frozenset` descritos no comentário | Função produz `None` em `app/ponto/turnos.py:2722`, `:2724`, conjunto vazio em `:2726`, conjunto do marco em `:2727`. | Fonte recebe retorno por função injetada em `app/ponto/services/efeito_ausencia.py:146`; combina cobertura em `:151`, `:153`. |
-| Contrato `celulas={(colaborador_id,data):celula}` nomeado pela docstring | Carregador produz mapa em `app/escala/alimentacao.py:73`; efeito o carrega em `app/ponto/services/efeito_ausencia.py:131`. Grade converte seu mapa `{data:celula}` ao contrato de pares em `app/escala/services/leitor_celula.py:407`, `:442`. | Efeito passa mapa ao helper em `app/ponto/services/efeito_ausencia.py:159`; grade passa em `app/escala/services/leitor_celula.py:443`; helper encaminha à autoridade em `:375`; autoridade usa vínculo, dia de trabalho, marcos e pausas em `app/escala/utils.py:2307`, `:2313`, `:2316`, `:2338`. |
-| `ata['minutos_previstos']`, lido pelo helper cuja docstring mudou | `ata_do_dia` monta valor em `app/ponto/services/cartorio.py:739`; entrega ata à lavra em `:1851`, `:1853`; método delega em `app/escala/models.py:1826`; porta atribui em `app/ponto/portas/celula.py:1064`, `:1091` e salva em `:1066`, `:1098`. | Helper lê em `app/escala/services/leitor_celula.py:372`; resultado vai à saída da grade em `:453` e ao saldo pago em `app/ponto/services/efeito_ausencia.py:170`. |
-
-O comentário do registro não cria despacho: API usa apenas nomes de famílias em `app/api/views_mensageria.py:1448`; contador `fora_de_autoridade` conta `PENDENTES`, não chamadas nem unicidade, em `app/core/juizes.py:1486`.
-
-O delta fornecido altera registro e documentação; os campos de dados acima são o contexto executável referido pela docstring, sem alteração executável no helper mostrado em `app/escala/services/leitor_celula.py:372`.
-
-## 15/11 06:11 · sessao e30ac8989913 · - · - · origem=Ronald (tmux)
-
-Q4 tem ocorrência remanescente identificada como parte da obra: o comentário começa com `JUSTIFICATIVA-PAGA-O-PERIODO (verificador v2 A3, 14/11)` em `app/folha/export.py:1105` e contém **“o fallback dizia 0%% onde o gravado tem 630”** em `app/folha/export.py:1108`. Descreve o caminho anterior; a palavra continua no comentário. A introdução histórica pelo diff integral é [nao verificado].
-
-O alvo do delta foi corrigido: a docstring agora diz `de minutos_previstos_do_dia` em `app/escala/services/leitor_celula.py:370`. A docstring A3 atual descreve “previsto injetado”, sem `fallback`, em `app/ponto/tests/test_justificativa_soma_sem_banco.py:425-426`.
-
-Persistem docstrings da obra com **“a cura e do motor e espera !; ao curar, esta assercao TROCA”** em:
-
-- `app/ponto/tests/test_justificativa_c8_sem_banco.py:126-127`;
-- `app/ponto/tests/test_justificativa_c8_sem_banco.py:269-270`;
-- `app/ponto/tests/test_justificativa_paga_o_periodo.py:325-326`;
-- `app/ponto/tests/test_justificativa_paga_o_periodo.py:653-654`.
-
-A entrega c9 declara a alteração desses casos para caracterização e registra que deixaram “lei/pergunta na docstring”, em `app/ponto/tests/c9_entrega.txt:98-100`. O dado fornecido já assinala que o `!` fora concedido; não inferi uma aprovação nova.
-
-Existem outras palavras `fallback`/`band-aid` nos arquivos tocados, mas atribuí-las à obra inteira, sem comparação com a base, é [nao verificado]. Não há base suficiente para afirmar **“todos os comentários introduzidos pela obra foram saneados”** [nao verificado].
-
-## 15/11 06:11 · sessao 5ca348ddc426 · - · - · origem=Ronald (tmux)
-
-A função registrada existe em `app/ponto/turnos.py:2703`; o retorno efetivo é `None`, `frozenset()` ou `frozenset({alvo})` em `app/ponto/turnos.py:2720-2727`. Ela chama `ancora_nao_cobre` (`app/ponto/turnos.py:2723`), cujo predicado fica em `app/ponto/turnos.py:2686-2700`.
-
-Não é o único sítio que determina cobertura na composição de produção:
-
-| Sítio | Decisão e relação com juiz |
-|---|---|
-| `app/ponto/services/efeito_ausencia.py:121-124` | Define universo ORM: justificativas aprovadas do colaborador com `data_turno` no intervalo e não nula. |
-| `app/ponto/services/efeito_ausencia.py:141-145` | Dia previamente coberto inteiro prevalece; tipo que não nomeia marco recebe `cobre=None` diretamente, sem chamada do juiz. |
-| `app/ponto/services/efeito_ausencia.py:148-153` | Motivo conserva dia inteiro diretamente; demais coberturas do mesmo dia são unidas. |
-| `app/ponto/services/efeito_ausencia.py:185-188` | Sem vínculo/marcos, ou sem entrada/saída prevista, retorna cobertura inteira e `celula_sem_marco`, sem chamada do juiz. Este caso não existe na assinatura do juiz registrado. |
-| `app/ponto/services/efeito_ausencia.py:195-207` | Define turno da âncora, exige mesmo dia, resolve papéis; chama `ancora_nao_cobre` e conserva inteiro antes do juiz quando há motivo. Só o ramo restante chama o juiz, por parâmetro `juiz`, na linha 207. |
-| `app/escala/utils.py:1197-1199` | Lê `periodos_justificados`, portanto juiz indiretamente e apenas nos ramos anteriores que chegam nele. |
-| `app/escala/utils.py:1252-1260` | Aplica cobertura inteira apenas a `tipo_dia='trabalho'`; apaga marcos faltantes e órfãs. |
-| `app/escala/utils.py:1261-1284` | Aplica cobertura parcial aos marcos extremos da cadeia e determina `justificado` se não restar `missing`; lê `cobre`, sem refazer tipo/âncora do juiz. |
-| `app/ponto/services/cartorio.py:800-810` | Lê `dia['justificado']` e dispensa todas as lâmpadas ainda não acesas; não consulta o juiz. |
-| `app/escala/services/leitor_celula.py:83-86` | Reconstrói `justificado` de lâmpada dispensada por justificativa e ausência de lâmpada apagada; lê ata, não o juiz. |
-
-O universo do juiz puro é tipo/papel da âncora/papéis/marcos, sem status, colaborador, data ou precedência (`app/ponto/turnos.py:2703`). A fonte acrescenta essas restrições e compõe aprovações (`app/ponto/services/efeito_ausencia.py:121-153`). A aplicação da grade restringe novamente a dias de trabalho e dá precedência à ausência (`app/escala/utils.py:1208`, `app/escala/utils.py:1252`, `app/escala/utils.py:1261`). Portanto, juiz puro, fonte por dia e efeito da grade não têm o mesmo universo (`app/ponto/turnos.py:2703`; `app/ponto/services/efeito_ausencia.py:121-153`; `app/escala/utils.py:1208-1261`). Comparação histórica com implementação anterior ao registro: [nao verificado].
-
-O comentário do registro cita dois arquivos, mas o leitor direto do juiz é somente `efeito_ausencia.py`, com importação em `app/ponto/services/efeito_ausencia.py:118-119`, passagem em `app/ponto/services/efeito_ausencia.py:146-147` e chamada em `app/ponto/services/efeito_ausencia.py:207`. `escala/utils.py` lê a fonte intermediária em `app/escala/utils.py:1197-1199`.
-
-Outros leitores da fonte intermediária, ausentes do comentário do registro:
-
-- `efeitos_da_ausencia`: `app/ponto/services/efeito_ausencia.py:54`.
-- Fase financeira do julgamento: `app/escala/utils.py:1295-1302`.
-- Grade do fechamento: `app/folha/export.py:336-341`.
-- Grade do espelho: `app/ponto/services/espelho.py:519-522`.
-- Contagem de dias com abono: `app/ponto/services/dia_pago.py:720-723`.
-
-Leitores financeiros por `efeitos_da_ausencia`: fechamento em `app/ponto/services/fechamento.py:664-667`, PDF em `app/relatorios/pdf_espelho.py:332-336`; crédito chega aos motores em `app/ponto/services/fechamento.py:755`, `app/relatorios/pdf_espelho.py:407` e `app/ponto/services/espelho.py:1141`.
-
-Separação necessária: cobertura de marcos e pagamento não usam o mesmo predicado. A fonte paga `max(0, previsto - trabalhado)` após montar cobertura (`app/ponto/services/efeito_ausencia.py:158-170`), inclui todo dia do mapa em `justificadas` (`app/ponto/services/efeito_ausencia.py:54-58`), o motor distingue dias sem período e presença da chave do crédito (`app/ponto/motor_calculo_v2.py:2581-2586`, `app/ponto/motor_calculo_v2.py:2611-2634`), e `dias_com_abono` conta por `tipo_dia='ausencia'` ou realizado zero (`app/ponto/services/dia_pago.py:729-738`).
-
-## 15/11 06:02 · sessao 004e56fcc326 · CORTES-RECEBIDO-FORA-DA-PAUSA · censo · origem=Code
-
-```text
-O148-EDITAR | B | app/docs/BACKLOG.md:817; app/docs/BACKLOG.md:1459 | Registrada, não construir agora; complemento O148/O152. Edição por versão ainda aguarda corte de lei; frase não entregue.
-IA-RBAC-INCLUDE-DO-COPILOTO | C | app/docs/RELATO.md:3603; app/docs/RELATO.md:3606; app/docs/RELATO.md:3608; app/docs/CORTES.md:351 / 329e5eca7, 4e877efa1, 44ae9d5f | Pouso integral relatado, instrumento e smoke OK; falta linha NO AR/FECHADA no BACKLOG/TICKETS. Casa documental: IA-PERGUNTAR-SEM-RBAC.
-REJULGAR-COMP10-RESTO-DA-FROTA | B | app/docs/BACKLOG.md:819; app/docs/BACKLOG.md:820; app/docs/RELATO.md:3188; app/docs/RELATO.md:3476 | Atos aplicados e lista HE regenerada, 184→249. SOMBRA-X-PROD-COL988-124639 segue registrada; fechamento integral [nao verificado].
-CONTRATO-20-TERMOMETRO-E-TOL | D | app/docs/CORTES.md:350; app/docs/RELATO.md:3548 / 9269eae07, 47ce5996d | Superado em parte por CONTRATO-20-TOL-DUAS-PONTAS: “(2.3) ... RETIRADO”; “TOL segue só pela saída”. (2.2) pousou; frase original inteira não.
-BO-ADMIN-2710 | B | app/docs/BACKLOG.md:830; app/docs/RELATO.md:3537; app/docs/RELATO.md:160; app/docs/RELATO.md:165 / 57877acf5 | Linha ainda “medindo”; revisão mantém 8.2/8.3 não fechados. 57877acf5 instrumenta a GRADE, não comprova fechamento dos oito achados.
-SEM-SELO-CAUSA-ESPELHO-09 | D | app/docs/CORTES.md:363; app/docs/RELATO.md:3516; app/docs/BACKLOG.md:1134 / 2359b756d | RESPOSTAS-TOPO-2710-1720 substitui a condição: só causa/hash nos 5 da 10; 33 da 09 intactos, col417/931→O210. Produto pousou; original não integral.
-BO-[nome]-FECHA | B | app/docs/BACKLOG.md:833; app/docs/BACKLOG.md:832; app/docs/BACKLOG.md:1928; app/docs/RELATO.md:160 / 475318fa9 | Pousos parciais; 475318fa9 entrega D. TENTATIVA-DO-ADMIN-VIRA-COBRANCA registrada; justificativa/abono em obra e 8.3 não fechado. Pacote não encerrado.
-BO-[nome]-NOMES | B | app/docs/BACKLOG.md:839; app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:847; app/docs/BACKLOG.md:1928 | Nomes incorporados às obras existentes, sem novo ID. Encaminhamento aplicado; justificativa/abono permanece em obra. Não equivale a fechamento das obras.
-BO-ADMIN-2710-LEIS | B | app/docs/TICKETS.md:156; app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:1928; app/docs/BACKLOG.md:770 / 97bcb01c, b3bf529e | Ausência parcial e juiz do par pousaram; JUSTIFICATIVA-PAGA-O-PERIODO voltou à ordem viva, com complemento EM CURSO. Entrega apenas parcial.
-JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES | D | app/docs/RELATO.md:3066; app/docs/RELATO.md:3063; app/docs/BACKLOG.md:829; app/docs/BACKLOG.md:1932 / b3bf529e, 77c6193c | JUIZ-DO-PAR-RUBRICA-E-RESIDUO substitui “não pousa”: “obra fecha com o resíduo declarado”, corrigido para 573. Cura pousou; resto em MOTOR-LE-O-TURNO.
-COBERTURA-PARCIAL-PERIODO | D | app/docs/CORTES.md:381; app/docs/TICKETS.md:156; app/docs/BACKLOG.md:1928 / 97bcb01c; anexo 399565438 WIP, 973d645ce RED | COBERTURA-ABONO-DO-PERIODO substitui o pouso conjunto: “a (A) se SEPARA”. Ausência NO AR; justificativa/abono segue em construção. Original não integral.
-FIO-EXPORTADA-X-O44 | A | app/docs/BACKLOG.md:847; app/docs/BACKLOG.md:1133; app/chamados/tests/test_fio_le_o_juiz.py:277; app/chamados/tests/test_fio_le_o_juiz.py:291 / 7c9e4c27 | NO AR documental, frase inteira: exportada igual, Validar sem reabrir/push; dono-do-dia registrado. Descrição “só leitura” do BACKLOG está desatualizada; prod atual [nao verificado].
-REGISTRADO-NAO-E-VIVO-DESVIO | B | app/docs/BACKLOG.md:834; app/docs/BACKLOG.md:835; app/docs/BACKLOG.md:836; app/core/tests/test_tripwire_contagem_de_pendencia.py:137; app/docs/CORTES.md:380 / 475318fa9, 5302ac95d, 667c94081 | Pouso parcial: falta um leitor em SILENCIO-VENCIDO-VOLTA, INTERROMPIDA; “TODA pendência” não entregue. REGISTRADO-CARD-3524 atualizou o card aceito para 3524.
-```
-
-## 15/11 06:01 · sessao 8fb299e5c2f7 · - · - · origem=Ronald (tmux)
-
-**C**, pela definição estrita: A exige linha NO AR/FECHADA no BACKLOG/TICKETS. Registre o pouso integral relatado e a falta dessa casa documental, sem negar a implementação. Evidência: `app/docs/RELATO.md:3603`, `app/docs/RELATO.md:3609`, `app/docs/CORTES.md:351`.
-
-Estado sugerido: “Pouso integral relatado, com instrumento e smoke; sem casa de encerramento [nao verificado]. Deveria constar como IA-PERGUNTAR-SEM-RBAC no BACKLOG/TICKETS.” [nao verificado]
-
-## 15/11 06:00 · sessao 3e6ba30ae74a · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
-
-Entrega em [cef_c5_entrega.txt](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c5_entrega.txt:1), com diff, comandos e saídas.
-
-- Teste novo verde; controles rc=0 e seis mutantes rc=1, incluindo `sem_fechada`. [registro](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c5_entrega.txt:48) [nao verificado]
-- `py_compile` rc=0, com gravação de bytecode interceptada. [registro](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c5_entrega.txt:113)
-- Ruff indisponível; lint **[nao verificado]**. [tentativas](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c5_entrega.txt:100)
-
-## 15/11 06:00 · sessao 3599e782e15d · - · - · origem=Ronald (tmux)
-
-Classificações sugeridas, com os pontos que impedem confundir pouso parcial com A: [nao verificado]
-
-- **JUIZ-DO-PAR-DUAS-ENTRADAS-DECISOES — D.** A exigência “NAO pousa com o residuo” de `app/docs/CORTES.md:369` foi substituída por **JUIZ-DO-PAR-RUBRICA-E-RESIDUO**, que autoriza “a obra fecha com o residuo declarado” (`app/docs/RELATO.md:3066`), depois corrigido para 573 (`app/docs/RELATO.md:3063`). A cura na fonte pousou em **b3bf529e**, com prova **77c6193c**, mas há resíduo em **MOTOR-PASSA-O-TURNO-A-VOLTA** (`app/docs/BACKLOG.md:829`, `app/docs/BACKLOG.md:866`), incorporado ao **MOTOR-LE-O-TURNO** (`app/docs/BACKLOG.md:1932`). Código: `_match_marcos` lê papel em `app/escala/utils.py:585` e `app/escala/utils.py:613`. Estado ≤200: `Superado por RUBRICA-E-RESIDUO: aceitou resíduo; cura na fonte NO AR b3bf529e, 573 seguem MOTOR-LE-O-TURNO.`
-
-- **COBERTURA-PARCIAL-PERIODO — D.** **COBERTURA-ABONO-DO-PERIODO** substitui o pouso conjunto: “a (A) se SEPARA”, ausência pousa, justificativa espera quem pague o período (`app/docs/CORTES.md:381`). Ausência parcial **NO AR 97bcb01c** (`app/docs/TICKETS.md:156`, `app/docs/RELATO.md:8272`); **JUSTIFICATIVA-PAGA-O-PERIODO** permanece viva, retomada após HJ-090 (`app/docs/BACKLOG.md:1928`, estado mais recente em `app/docs/RELATO.md:51`). Os commits do anexo **399565438** e **973d645ce** dizem WIP/RED, não encerramento [nao verificado quanto ao conteúdo integral dos commits]. Estado ≤200: `Superado por COBERTURA-ABONO-DO-PERIODO: ausência NO AR 97bcb01c; justificativa separada, ainda em construção.`
-
-- **FIO-EXPORTADA-X-O44 — A**, com **7c9e4c27** documentado em `app/docs/BACKLOG.md:847` e prova de deploy em `app/docs/RELATO.md:3227`. O **1fcc61e0** do anexo era WIP: o relato registra “NAO POUSA” por falta de prova (`app/docs/RELATO.md:3480`). A regra pedida existe no código: exportada ou não, validar sem reabrir (`app/chamados/services/fio.py:638`, `app/chamados/services/fio.py:647`), selo de modal e POST em competência exportada (`app/chamados/tests/test_fio_le_o_juiz.py:276`, `app/chamados/tests/test_fio_le_o_juiz.py:291`). A obra própria solicitada foi registrada (`app/docs/BACKLOG.md:1133`). A descrição antiga de BACKLOG:847 ainda diz “exportada só leitura”, contradizendo o corte e código citados. Estado ≤200: `NO AR integral pela árvore: fio igual nas exportadas, Validar sem reabrir/push; JUIZ-DE-DONO-DO-DIA registrado. Estado atual de prod [nao verificado].`
-
-- **REGISTRADO-NAO-E-VIVO-DESVIO — B**, se julgar literalmente “TODA pendencia pelo juiz”. Produto **NO AR 475318fa** (`app/docs/BACKLOG.md:833`, `app/docs/RELATO.md:3488`); instrumento **a8730557** pousado (`app/docs/BACKLOG.md:834`); dois leitores curados pelos commits do anexo **5302ac95d/667c94081**, mas um leitor ainda não migrou e permanece em **SILENCIO-VENCIDO-VOLTA**, interrompida (`app/docs/BACKLOG.md:835`, `app/docs/BACKLOG.md:836`). O selo confirma **SEM_JUIZ** e **TETO_SEM_JUIZ=1** (`app/core/tests/test_tripwire_contagem_de_pendencia.py:137`, `app/core/tests/test_tripwire_contagem_de_pendencia.py:146`). `registrado` segue VIVOS (`app/chamados/catalogo/motor.py:24`); fila usa COBRANCA (`app/chamados/services/painel.py:189`). Também houve substituição explícita do número por **REGISTRADO-CARD-3524**: “aceito 4165 -> 3524 [...] o 3687 era do commit anterior” (`app/docs/CORTES.md:380`); D é defensável se priorizar esse corte posterior, mas A integral não é. Estado ≤200: `Pouso parcial 475318fa; AST pousado a8730557; falta 1 leitor em SILENCIO-VENCIDO-VOLTA, INTERROMPIDA. Card aceito passou a 3524.`
-
-_5543 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5551 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
