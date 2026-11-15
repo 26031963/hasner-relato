@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=2264953
+ESPERANDO: codex_pergunta.sh | pid=2288568
 lei: MATRIZES F2-F9 (8 perguntas, nenhuma decidida, L-117; arquivos logs/ESPINHA-BRIEFS/<f>/matriz.md): F2 L1 semantica do 'efeito' (U3/supra_juiz), F2 L2 `_q_validada_pelo_ato` e face SQL de juiz registrado ou juiz novo | F4 (1) absorcao pelo ato, (2) guardas de reparo do limbo (1663/1691/1860) na projecao ou no ato | F5 resposta vazia (respondida_em com texto '') fica pendente no app? (test_o261e_f5_alcance:194 diz que nao, sem corte literal) | F6 (1) aguarda_admin nos estados de absorcao, (2) P5 legado sem instante em respondidas | F8 V legada so na projecao + R sintetica posterior segue validada? Nenhuma trava a fila: F2-F9 so constroem depois do pouso da F1.
 ESTADO 15:5x E3-RESTO-R3 pre-verificador v2 REPROVA (logs/E3-RESTO-R3/vfinal/v2.r): F1-F6 todos PROCEDE na triagem (logs/E3-RESTO-R3/c14/triagem_v2.md; F1 pauta fechada de colab nao apurado, F2 legado apaga alarme positivo, F3 hoje nao chega da borda, F4 calendario no drawer sem #calendario-container, F5 rotulo residual, F6 docs). Volta c14 = brief logs/E3-RESTO-R3/c14/brief.md, abre na vaga que a C liberar (teto 2: F1 c9 + C).
 ESTADO 15:3x QUEIMA-UTIL-1530: A 7 leitores opus (F2,F3,F5,F9,F8,F4,F6 -> logs/ESPINHA-BRIEFS/<f>/matriz.md; F7 na proxima vaga) + B censo pareador (logs/PAR-CONFIRMADO/censo.md) abertos; C em REVISAO-DO-AVAL Codex (logs/TELA-DIZ-O-QUE-O-SERVIDOR-DISSE/revisao1530.r). R3 e08db44a6 no pre-verificador v2 (logs/E3-RESTO-R3/vfinal/v2.r); F1 c8 no Codex construtor.
@@ -9186,3 +9186,4 @@ LEI-AKITA: origem=chamados/juizes.py::_toque_humano_nos_dias (etapa 2 so com a m
 - B3 liberado por aval Ronald 21:4x (ERRO-BOBO aceito); opus final v4 APROVA (logs/TRANCA-VIVAS-08/v2/opus_final_v4.md)
 - medida: voltas Codex preverif 3 (procedentes 3, todas oraculo de teste), opus 2 (v1 reprovou, v4 aprova); opus reprovou depois do Codex aprovar: nao
 - INCOMPLETO: medir frota pos-deploy (vivas_apesar_da_tranca, vivas_tocadas_pelo_admin, universo) pelo comando em prod -> Codex --sonda; FILA opus v4 itens 1,2,4 em TRANCA-VIVAS-08-FILA
+- 15:58 DESPACHO MATRIZ-ANTES-DA-C14: matriz R3 (e08db44a6 x main, contrato v1 7 + v2 6) -> opus leitor (motivo: QUEIMA, aval) | construtor c14 ENCERRADO sem edicao, copia limpa e08db44a6; c14 espera a matriz -> logs/E3-RESTO-R3/matriz/matriz.md
