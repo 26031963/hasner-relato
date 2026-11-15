@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 13:28** · publicado em **15/11/2026 13:27** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:29** · publicado em **15/11/2026 13:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:29 · sessao 63adf9493c6c · - · - · origem=Ronald (tmux)
+
+Censo do residual `decidir → admin`:
+
+- **Folha:** dia muda `chamado→admin`; pessoa isolada `C→A`, misto com `colab` pode mudar `C→B`; outro dia `chamado` conserva C (`folha/fora_da_folha.py:89`, `:103`, `:214`, `:231`). Balde visual Admin permanece Admin (`folha/retrato_folha.py:193`).
+- **Vigia:** `alcance_por_rota_papel` muda `porta_fila|chamado→porta_fila|admin`; `alcance_porta_exige_o_admin` aumenta. Rota e `fio_vivo` permanecem (`chamados/services/vigia_fio.py:578`, `:601`, `:369`).
+- **Furo:** nenhum balde muda; lê rota (`chamados/services/furo_sem_canal.py:98`, `:104`).
+- **Cadastro:** nenhum balde muda; lê presença do envelope (`escala/services/cadastro_realidade.py:472`).
+- **Sombra:** projeções de fio e `exige_admin`, além da assinatura, mudam; `sem_porta`/`sem_fio` permanecem (`chamados/management/commands/diff_e3_sombra.py:57`, `:62`, `:63`, `:67`, `:75`). C17 e candidata usam o mesmo juiz; diferença nova entre lados é [nao verificado] (`:144`, `:145`).
+
+Atenção: fio admin residual atualmente publica `acao='validar'` pela expressão existente, antes `None` (`chamados/services/tarefa_do_dia.py:693`). Comentário contraditório em `:669` precisa acompanhar a cura.
+
+`LEI-AKITA: padrao=Single Source of Truth / Aggregate Root; Clock Injection; CQRS com projecoes reconstruiveis` — vocabulário em `docs/GLOSSARIO.md:11`, `:19`, `:24`; exigência em `docs/PLANO-PADROES.md:53`.
 
 ## 15/11 13:28 · sessao 071afeef32a4 · E4C-F1V3 · construtor · origem=Code
 
@@ -543,25 +557,4 @@ Nas referências aos avais, conto as linhas dentro de cada bloco, começando por
    - `volta_intermediaria.sh` existe e executa ruff, disjuntor e recorte por `--volta`; isso não fornece o censo histórico pedido. (`bin/volta_intermediaria.sh:7`; `bin/volta_intermediaria.sh:18`; `bin/volta_intermediaria.sh:29`; `bin/volta_intermediaria.sh:32`.)
    - “Espinha E” aparece expressamente no BACKLOG. A classificação específica de HE/LOTE 3 como laterais, seus diffs disjuntos e sua elegibilidade atual são **[nao verificado]**. (`app/docs/BACKLOG.md:767`; `app/docs/BACKLOG.md:768`.)
 
-## 15/11 12:11 · sessao 2cfceb14a425 · - · - · origem=Ronald (tmux)
-
-Para a pergunta 3, há divergências literais que merecem PROCEDE; distinguem-se de alterações que o próprio aval anuncia como extensão.
-
-- **Árvore certificada e opus:** `CLAUDE.md:377-378` exige “Suite INTEIRA da arvore da obra VERDE, depois UM opus final”; `app/docs/PISTA.md:113-114` explicita que opus sobre árvore sem suite verde não conta. O comboio certifica a combinação e manda cada opus receber só o diff individual — verde da árvore individual não foi demonstrado pelo dado [nao verificado]. Também não informa expressamente qual árvore cada opus recebe [nao verificado].
-- **Papéis incompatíveis entre avais:** QUEIMA-UTIL-TARDE item 2 transfere censo, leitura e verificador intermediário a opus; COMBOIO item 2 exige “verificador Codex do meio fechado” e item 7 atribui leitura de censo ao Codex. As duas prescrições divergem no literal do anexo, sem revogação expressa dessa divisão de papéis [nao verificado quanto à precedência cronológica entre esses blocos].
-
-Não tratar como colisão automaticamente:
-
-- **Vermelho seletivo:** a regra existente determina separar qualquer comboio vermelho (`CLAUDE.md:324`; `app/docs/PISTA.md:33`). O item 3 modifica isso expressamente como extensão da regra, portanto identifica-se a mudança, sem fingir que o aval a omitiu.
-- **Contrato:** os cinco campos exigidos existem no item 6 do aval; requisitos estão em `CLAUDE.md:394` e `app/docs/PISTA.md:170-175`. Efetiva publicação no RELATO e envio pelo wrapper não constam da evidência [nao verificado].
-- **ORDEM-POS-E4A2:** a série aparece em `app/docs/BACKLOG.md:1836`, mas a linha seguinte declara substituição do E4b em diante e teto de dois construtores disjuntos (`app/docs/BACKLOG.md:1837`); PRODUCAO-MAXIMA do anexo amplia novamente as vagas. Não sustentar conflito vigente usando só a linha antiga.
-- **L-105/L-107:** pousos sequenciais e instrumento separado são compatíveis em princípio com `CLAUDE.md:325-328`, `app/docs/LEIS.md:131` e `app/docs/LEIS.md:133`. O literal não detalha recuperação de deploy que falha [nao verificado].
-
-Achados úteis para pergunta 4:
-
-- **PISTA-2 é externa:** `app/docs/BACKLOG.md:2006` a descreve no servidor GLPI, “nenhum arquivo do repo”, com `ssh pista pede`, `espera`, `log`, `estado`. Busca em `bin/` não retornou referência a pista-2; parada atual [nao verificado].
-- **Referência do backlog diverge:** `app/docs/BACKLOG.md:1930` nesta cópia é **V2-I2-FILA**, enquanto o anexo rotula linha 1930 como UI-CAMERA. O trecho raspado termina incompleto e não fornece as anunciadas linhas de HE-REVOGADA ou LOTE 3 [nao verificado].
-- **Espinha E está nomeada:** `app/docs/BACKLOG.md:768` classifica E3-RESTO-R3 como “fila 1, espinha E”. O universo completo “série E” do COMBOIO não está enumerado nessa regra [nao verificado].
-- **POUSO-EM-COMBOIO existe:** âncora e texto em `app/docs/PISTA.md:28-38`; trata outra raia “principal ou wt-bos”, duas obras, e suite de árvore mesclada. Restrição só a laterais e teto três são mudanças propostas pelo novo aval, não conteúdo da regra preexistente.
-
-_5638 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5639 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
