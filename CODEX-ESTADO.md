@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 02:44** · publicado em **15/11/2026 02:45** (UTC-3)
+> Ultima resposta processada: **15/11/2026 02:46** · publicado em **15/11/2026 02:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 02:46 · sessao 2bd3857e8104 · E3-RESTO-R3 · verificador · origem=Code
+
+1. **ESMERIL-SEMÂNTICA: nenhum desvio adicional identificado nos leitores da saída; há um selo antigo incompatível, descrito no item 6.** A mudança pretendida é: validar sob âncora terminal, sem outra porta/oferta, deixa de publicar `admin/porta_acao/validar`. Os leitores continuam distinguindo ausência conhecida de porta e desconhecimento. (`app/chamados/services/tarefa_do_dia.py:652`, `app/chamados/services/tarefa_do_dia.py:667`, `app/chamados/services/tarefa_do_dia.py:708`)
+
+   | Valor | Quem escreve → quem lê |
+   |---|---|
+   | `status_local` | Nascimento em `app/chamados/models.py:1142`; transição canônica em `app/chamados/models.py:228`, persistida em `:296`. Há simulação temporária de pós-estado em `:356`, restaurada em `:371`. A cura somente lê em `app/chamados/services/tarefa_do_dia.py:449`; a costura lê em `app/chamados/services/fio.py:809`; fila/contadores leem em `app/chamados/services/painel.py:155`, `:189`, `:213`. |
+   | `TERMINAIS` | Definido em `app/chamados/catalogo/motor.py:31`; consumido pela carga em `app/chamados/services/tarefa_do_dia.py:449`, costura em `app/chamados/services/fio.py:810` e C11 em `app/escala/services/cadastro_realidade.py:499`. |
+   | FKs da âncora | Destino nasce em `app/chamados/models.py:3097` e é reapontado em `app/chamados/services/fio.py:964`; container é atribuído em `app/chamados/services/disputa_emissao.py:591`. A identidade é lida exclusivamente por `app/chamados/services/fio.py:116`. |
+   | `ancoras` | Conjunto de IDs em `app/chamados/services/tarefa_do_dia.py:444`; mapas pergunta→ID em `:591` e `:617`; leitores em `:639`, `:646`, `:655`. |
+   | `_ancoras_terminais` | Escrito em memória em `app/chamados/services/tarefa_do_dia.py:449`; transportado para `alimentacao['ancoras_terminais']` em `:589`; lido em `:656`. |
+   | `admin_alcancavel` / `com_dono` | Locais escritos em `app/chamados/services/tarefa_do_dia.py:652`, `:658`; consumidos para donos, residuais, portas e ação em `:660`, `:663`, `:670`, `:692`. |
+   | `fio/rota/acao` | Publicados em `app/chamados/services/tarefa_do_dia.py:696`; projetados em `:708`; Folha lê em `app/folha/fora_da_folha.py:84`, agrega ações/grupos/contagens em `:203`. |
+   | Retrato e persistência | Copia fio como `dono` e ações em `app/folha/retrato_folha.py:1228`; persiste em `app/folha/management/commands/lavrar_retrato_folha.py:78`; lê fio/balde em `app/folha/retrato_folha.py:448`, `:485`; monta links em `:1036`. |
+   | Views/templates | Consomem foto, frases e links em `app/colaboradores/views.py:982`, `app/folha/views_retrato.py:318`, `app/templates/folha/_retrato_o_que_fazer.html:33`, `:72` e `app/templates/folha/_retrato_lista.html:47`. |
+   | Contadores | Folha agrega em `app/folha/retrato_folha.py:695`, `:835`; vigia dos retidos conta sem ação/sem leitura em `app/folha/vigia_retido_calado.py:53`, `:57`; alcance lê rota/fio em `app/chamados/services/vigia_fio.py:596`, `:601`; furo sem canal lê ausência de rota em `app/chamados/services/furo_sem_canal.py:98`, `:104`. |
+   | Pauta / Cadastro | Pauta aceita apenas `nada`, separando `nao_sei`, em `app/ponto/services/pautas_dos_discordantes.py:90`, `:95`. Cadastro exige projeção `None`, depois relê status e aplica `TERMINAIS`, em `app/escala/services/cadastro_realidade.py:472`, `:477`, `:499`. |
+
+   O significado permanece coerente: `nada` corresponde a ausência conhecida de porta; no retrato vira `ninguem` e depois `sem_acao_disponivel`. `nao_sei` continua chegando a `sem_leitura_sistema`. Fotos já persistidas precisam de nova lavra para refletir a mudança. (`app/chamados/services/tarefa_do_dia.py:705`, `app/folha/retrato_folha.py:185`, `:193`, `:1228`)
+
+2. **Chamadores: nenhum caminho produtivo encontrado que alcance `_portas_da_tarefa` sem o transporte dos terminais.** (`app/chamados/services/tarefa_do_dia.py:589`, `:591`, `:616`)
+
+   | Chamador produtivo | O que passa |
+   |---|---|
+   | `CargaDaTarefa.tarefa → alimentar_fila` | IDs das células da janela, `self.agora`, `colab_ids`; depois acrescenta `ancoras_terminais`. (`app/chamados/services/tarefa_do_dia.py:586`) |
+   | `alimentar_portas → alimentar_fila` | `_ids`, `agora`; não passa `colab_ids` nem acrescenta terminais. Esse resultado segue para C17, sem chamar `_portas_da_tarefa`. (`app/chamados/juizes.py:1616`, `:1627`) |
+   | Primeira publicação → `_portas_da_tarefa` | `out`, `self._portas`, mapa de âncoras e pendentes do app. (`app/chamados/services/tarefa_do_dia.py:591`) |
+   | Segunda publicação → `_portas_da_tarefa` | A mesma alimentação enriquecida, âncoras, pendentes e oferta de Resolver. (`app/chamados/services/tarefa_do_dia.py:616`) |
+
+   Nos testes diretos, omitir a chave equivale a conjunto terminal vazio: uma âncora existente será aceita. M2 omite; M2b fornece explicitamente `{202}`. Isso limita a prova desses testes, mas não demonstra outro chamador produtivo defeituoso. (`app/chamados/services/tarefa_do_dia.py:656`, `app/chamados/tests/e3_portas_apoio.py:34`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:541`, `:547`)
+
+3. **Status: mesma fonte lógica, sem garantia de mesma fotografia; limitação admissível para leitura.** A carga usa `status_local` e `motor.TERMINAIS`, como a costura. Entretanto, captura os objetos no `select_related` e congela o conjunto; a costura relê o banco e, dentro de transação, adquire a trava. (`app/chamados/services/tarefa_do_dia.py:407`, `:449`; `app/chamados/services/fio.py:794`, `:801`, `:807`, `:809`)
+
+   Janela concreta possível: a consulta inicial vê a âncora viva; ocorre fechamento; a consulta posterior da fila já a exclui. `_pela_decisao` produz `porta=None`, mas o conjunto antigo não contém o terminal e permite `admin/porta_acao`. O inverso pode negar porta após reabertura posterior às leituras. Há também desvio pelo ramo `isinstance(porta, int)`, baseado na fotografia anterior da fila. (`app/chamados/services/tarefa_do_dia.py:450`, `:151`, `:160`, `:654`, `:656`)
+
+   Não classifico isso como corrupção de estado: a carga apenas lê, declara leitura de estado atual sem reconstrução histórica e memoriza a resposta. Não oferece a garantia transacional da costura. Ocorrência e duração dessa janela em produção: **[nao verificado]**. (`app/chamados/services/tarefa_do_dia.py:383`, `:449`, `:598`)
+
+4. **KeyError: nenhum sob integridade válida das FKs.** `chamado_que_lista` retorna somente `chamado_destino_id` ou `disputa.chamado_id`; ambos os objetos entram em `chamados`, e `None` é retirado de `ancoras`. Portanto, todo PK selecionado tem correspondente no dicionário. (`app/chamados/services/fio.py:116`, `app/chamados/services/tarefa_do_dia.py:444`, `:448`, `:449`)
+
+   `PerguntaDisputa.disputa` não admite nulo; os dois chamados admitem nulo com `SET_NULL`, sendo ignorados pelo dicionário quando ausentes. Integridade efetiva do banco: **[nao verificado]**. (`app/chamados/models.py:2494`, `:1796`, `:3494`)
+
+5. **Achado — diagnóstico obrigatório de F2 permanece incompleto. Gravidade: média, lacuna de verificação.** A entrega reconhece que não identificou os dois fios finais originais e deixa esse requisito pendente. Os novos testes controlam Resolver como `False`; isso prova a fixture corrigida sob esse controle, sem determinar a oferta/ata originais. (`app/chamados/tests/e3_r3_c7_entrega.txt:56`, `:58`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:71`, `:246`)
+
+   **Nenhum esperado positivo enfraquecido identificado:** permanecem `nada`/D, golden `sem_acao_disponivel=1`, transição para chamado/admin, `[D1]` e `[(D1,'BATIDA')]` com motor não chamado. (`app/folha/tests/test_haiku_fora_da_folha.py:92`, `:537`, `:595`, `:617`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:79`, `:258`, `:260`)
+
+   Os irmãos têm asserções efetivas de desconhecimento: Folha exige `nao_sei`/E e `sem_leitura_sistema`; Pauta exige `nao_sei=True`, rota `None`, exclusão e contagem em `sem_leitura`. A execução ORM desses irmãos permanece **[nao verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:110`, `:549`, `:555`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:91`, `:93`, `:97`)
+
+   A ata é montada manualmente, sem chamar o produtor/lavra. Passa pelo leitor, instâncias, tarefa e porta reais no teste sem banco; os campos das lâmpadas existem no produtor real. Não encontrei estrutura comprovadamente impossível, mas a combinação completa de veredito acusador e lâmpadas acesas não foi produzida pelo escritor nesses testes **[nao verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:32`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:27`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:91`; `app/ponto/services/cartorio.py:711`, `:738`)
+
+6. **Achado — selo antigo conserva precisamente o comportamento proibido pela c7. Gravidade: média, regressão no contrato dos testes.** `test_ancora_terminal_com_modal_NAO_e_C11` desativa Resolver, cria âncora `resolvido` e exige `('admin','porta_acao','validar')`. O filtro novo elimina esse alcance; M2b exige ausência de porta para o mesmo princípio. (`app/escala/tests/test_f3_beco1_folga_na_lista.py:62`, `:70`, `:72`; `app/chamados/services/tarefa_do_dia.py:655`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:548`)
+
+   O caso antigo possui resposta E1 e ata conhecida, portanto não se resolve classificando-o como passivo ou ausência de lâmpadas. A execução ORM original continua **[nao verificado]**; a incompatibilidade entre as expectativas está no código. O contrato antigo também aparece nos testes de reata e passivo. (`app/escala/tests/test_f3_beco1_folga_na_lista.py:36`, `:99`, `:105`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:29`, `:55`; `app/chamados/tests/test_e4_passivo.py:65`, `:69`)
+
+   **Demais classes: nenhum problema novo identificado no delta.** Não nasce juiz, escritor persistente, relógio interno, trava ou lista terminal paralela: a cura importa a constante existente e acrescenta dados em memória. (`app/chamados/services/tarefa_do_dia.py:447`, `:449`, `:589`, `:652`; `app/chamados/catalogo/motor.py:31`)
+
+   Os nove mutantes têm controle verde e morrem por asserção; o runner recusa erro de infraestrutura como morte. O mutante obrigatório remove exatamente o filtro terminal. O mutante do join verifica presença do argumento, sem medir SQL/N+1 real. (`app/chamados/tests/e3_r3_c7_mutantes.py:17`, `:46`, `:60`; `app/chamados/tests/e3_r3_c7_mutantes.txt:206`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:215`)
+
+7. **Docstrings/comentários do diff: nenhum erro adicional demonstrado.** “Mesmo status_local/TERMINAIS” descreve corretamente campo e constante, sem prometer mesma trava ou instante. Os testes sem banco declaram seus limites de ORM, signals e calendário. A certificação dos casos ORM e C11 completos permanece ausente. (`app/chamados/services/tarefa_do_dia.py:445`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:1`, `:83`; `app/chamados/tests/e3_r3_c7_entrega.txt:167`)
+
+**VEREDITO: REPROVA.**
 
 ## 15/11 02:44 · sessao 2c5a4a7cf2df · - · - · origem=Ronald (tmux)
 
@@ -579,19 +640,4 @@ K1 captura as sete formas anunciadas em `test_catraca_abono_do_motor_c11.py:145`
 
 Os testes c10 executam somente atribuições e a chamada do rotulador, antes da aplicação final de totais e da renderização; portanto não cobrem os dois primeiros achados nem a retenção do motivo (`app/ponto/tests/test_justificativa_c10_sem_banco.py:47`, `app/ponto/tests/test_justificativa_c10_sem_banco.py:90`). Alcance desses casos em produção: **[nao verificado]**.
 
-## 15/11 02:05 · sessao 8d658e89513a · - · - · origem=Ronald (tmux)
-
-| Arquivo:linha | Erro / caso concreto | Gravidade |
-|---|---|---|
-| `app/ponto/services/fechamento.py:35`, `:539`, `:560`, `:1073`, `:1099`, `:1157`, `:1173` | **Exportada não está genericamente protegida.** A guarda contém somente 09/2026; outras competências exportadas recebem apenas log e seguem para `save/update`. Com dia `sem_ata`, c11 passa a persistir previsto/dias/carimbo onde antes o `except` os anulava, além de atualizar motivos/causa. Caso alcançável: competência 10 exportada, célula de trabalho justificada sem ata. Existência desse caso em produção: **[nao verificado]**. | **bloqueia** |
-| `app/ponto/services/dia_pago.py:395`, `:292`; `app/folha/porta_export.py:453` | **Mesmo desconhecido vira zero e desaparece da conferência.** `por_dia_da_grade` entrega abono/realizado `None`; FM conserva `None`, mas `lavrar` grava zero. Comparador pula integralmente o campo cujo FM é `None`, sem registrar desconhecimento. Caso: P=480 e W sem ata → FM desconhecido, DiaPago=0, contador sem divergência nesse campo. | **bloqueia** |
-| `app/folha/causas.py:85`, `:86`; `app/ponto/services/fechamento.py:1096`; `app/ponto/tests/test_justificativa_c11_sem_banco.py:61` | **Novo caminho ativo grava diagnóstico falso de realizado zero.** Com trabalho, P=480, W=`None`, sem missing/orfas, classificador transforma `None` em zero e devolve `realizado_zero`, evidência “zero minuto realizado”. Reproduzido executando o módulo real em memória, sem escrita. O teste substitui o classificador por resposta constante. | **fila** |
-| `app/relatorios/cartao_pela_celula.py:146`, `:187`, `:208`, `:214`; `app/ponto/services/dia_pago.py:723` | **Lavratura pode desfazer parcialmente o rótulo.** Dia sem ata produz `dias_abono=None`, mas horas vêm da soma numérica de DiaPago, que já perdeu o desconhecido. `aplicar_nos_totais` pode entregar dias desconhecidos ao lado de horas numéricas. Os testes c10 excluem expressamente `folha_manda`: `app/ponto/tests/test_justificativa_c10_sem_banco.py:12`. | **fila** |
-
-O TXT Domínio **não exporta esses três campos de minutos diretamente**: monta eventos em `app/folha/export.py:733`, definidos pelos campos `horas_*` em `:423` e `:442`. Portanto, “exporta zero silenciosamente por causa de `minutos_abonados=None`” não foi encontrado nesse emissor. Entretanto, a participação no TXT consulta motivos por `app/folha/export.py:971`; c11 passa a atualizar esses motivos em `app/ponto/services/fechamento.py:1080`.
-
-A lista lê `prontidao` por colaborador em `app/ponto/services/fechamento_lista.py:85`; abono desconhecido cai na grade e retorna cego/`sem_ata` em `app/folha/export.py:1051` e `:1112`. O custo adicional em produção é **[nao verificado]**.
-
-Há relógio herdado no caminho agora executado para `sem_ata`: `app/ponto/services/fechamento.py:1080` não fornece `hoje`; `app/folha/export.py:1317` encaminha `None` e `:1248` lê `localdate()`, apesar do instante único disponível em `app/ponto/services/fechamento.py:616`. Impacto concreto na virada de dia: **[nao verificado]**.
-
-_5494 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5495 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
