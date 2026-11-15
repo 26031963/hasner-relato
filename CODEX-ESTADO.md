@@ -1,7 +1,155 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 11:46** · publicado em **15/11/2026 11:50** (UTC-3)
+> Ultima resposta processada: **15/11/2026 12:06** · publicado em **15/11/2026 12:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 12:06 · sessao 61c62b4dde62 · REVISAO-COMPLEMENTO-PORTAO-DA-11 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: COMPLEMENTO PORTAO-DA-11 item 2 | perguntas 1, 3 e 4.** O procedimento manda devolver quando qualquer ressalva procede (anexo `revisao_avais_todos.txt`, bloco `revisao_do_aval.txt:6`).
+
+Nas referências abaixo, as linhas dos anexos são contadas desde o início do conteúdo de cada arquivo/bloco, incluindo linhas vazias. **C** = bloco `complemento_portao_da_11.txt`; **P** = bloco `portao_da_11.txt`; **E** = `entrega.md`; **B** = `brief_item2.md`.
+
+1. **PROCEDE — há condição inexequível com os elementos e a ordem apresentados.**
+
+   O aval original exige, havendo arquivo comum, empilhar **depois do pouso** da COMPETENCIA-PAGA. O brief já coloca a construção sobre a c6 **provisória**, e adia a suite inteira até a árvore final dessa obra. Entregar foto/reversão nessa cópia não satisfaz o pouso exigido; **apply em prod antes desse pouso não está autorizado pelo literal preservado** (`P:5`; `B:1`; `B:11`; `C:1`). [nao verificado]
+
+   A igualdade “DIFF aplicado = DIFF do z menos três” também não é conferível pelo material fornecido: a entrega apresenta somas/classes, mas não o mapa integral dos 50 por colaborador, competência e campo. Ela menciona `sonda_z.out`, cujo conteúdo integral não foi fornecido. O artefato comparável permanece **[não verificado]** (`C:4`; `E:11`; `E:21`; `E:25-36`; `E:65-72`). [nao verificado]
+
+   **O TXT sem escrita existe:** `montar_linhas_export` declara que apenas devolve linhas e IDs (`app/folha/export.py:690-698`). Portanto, esse exemplo isolado **não** impede a execução; a cobertura dos 47 exige cuidado porque o gerador exclui retidos e filtra status (`app/folha/export.py:716-727`).
+
+2. **NAO PROCEDE — o “senão” das condições está escrito.**
+
+   Para qualquer comparação diferente, o complemento determina **PAREI com o número**. O original determina parar sem apply quando a condição não fecha, e o brief exige recusar o apply se a foto não puder ser gravada (`C:4`; `P:5`; `B:3`). A regra geral também manda parar diante de condição literal não satisfeita (`CLAUDE.md:37-38`).
+
+   Executar automaticamente a reversão após uma divergência não está determinado nessa cláusula; o desfecho expresso é parar (`C:4`).
+
+3. **PROCEDE — há colisão com a precedência preservada pelo próprio aval.**
+
+   O complemento diz que não substitui o original, mas libera o apply “assim que” foto/reversão forem provadas na sombra; o original ainda exige o pouso prévio da COMPETENCIA-PAGA quando compartilham arquivo. O brief identifica justamente uma base provisória dessa obra. Logo, **foto/reversão aprovadas não bastam para antecipar o apply em prod** (`C:1`; `C:3`; `P:5`; `B:1`). [nao verificado]
+
+   DINHEIRO continua exigindo os três elementos juntos: reversão gerada **antes do apply**, exportada intacta com hash antes/depois e prova de frota **depois**, no RELATO e no mesmo marco. A prova anterior na sombra não substitui a prova posterior; seu cumprimento futuro permanece **[não verificado]** (`CLAUDE.md:406-410`; `C:4`).
+
+   Não procede apontar colisão com **L-039** pela decisão falta versus furo: falta lançada cujo tipo desconta é precisamente o significado escrito da lei (`C:2`; `app/docs/LEIS.md:104`). Preservar 09/10 também respeita a restrição específica do aval (`P:5`; `C:4-5`).
+
+   Quanto à **L-110**, DIFF pode medir impacto; não certifica correção pela regra, e amostra não é prova (`CLAUDE.md:45-51`). A mudança para “explicado” não transforma valores errados em corretos: o z classifica 71.400 minutos como fora da regra, incluindo +12.240 de col647/938, que não estão entre os três excluídos (`C:3`; `E:29`; `E:36`). O TXT igual pode ser uma condição de preservação, mas não certifica esse abono (`app/folha/export.py:1076-1079`; `CLAUDE.md:45-51`).
+
+4. **PROCEDE — há referências incorretas e universos ainda não demonstrados integralmente.**
+
+   | Conferência | Resultado e evidência |
+   |---|---|
+   | `ponto/dia_pago.py:359` | O caminho correto nesta cópia é **`app/ponto/services/dia_pago.py:359-360`**; essas linhas realmente apagam e recriam DiaPago. |
+   | Soma de abono sem catálogo | Confere no caminho corrigido: abona todo `tipo_dia='ausencia'` (`app/ponto/services/dia_pago.py:386-396`). Os dois tipos INSS são SUPRIME (`app/ponto/catalogo/ausencias.py:92-93`). |
+   | `recalcular_fechamento.py:118` como guarda | Essa linha chama o serviço; a consulta à guarda está em `app/ponto/management/commands/recalcular_fechamento.py:123-126`. A guarda nominal da 09 está em `app/ponto/services/fechamento.py:36-43`. |
+   | Foto/reversão no HEAD | A foto atual cobre rubricas numéricas de FM, grava depois do recálculo e apenas avisa em OSError. A entrega futura permanece **[não verificado]** (`app/ponto/management/commands/recalcular_fechamento.py:57-70`, `:118-139`; `B:3-9`). |
+   | Unidade colab–competência | O comando aceita `--colabs`, e o serviço restringe o universo por esses IDs (`app/ponto/management/commands/recalcular_fechamento.py:96-102`, `:118-120`; `app/ponto/services/fechamento.py:554-557`). |
+   | Universo 50 → 47 | Os 50 e os três excluídos têm suporte nos anexos; a lista completa dos 47 não foi fornecida **[não verificado]** (`E:17`; `E:30-31`; `E:69-71`; `C:3`). |
+   | 206 furos | Confere como contagem relatada: 11 F0 + 192 F1 + 3 X. Os três X são **dias**, enquanto as exclusões são **colaboradores inteiros**; não cabe calcular “206 menos 3” como impacto dos 47 (`E:65-72`; `C:3`). |
+   | TXT por colab/rubrica | Existe agregador, mas ele usa código Domínio, não PK `colNN`, e ignora registros que não sejam tipo 10. A associação integral dos 47 permanece **[não verificado]** (`app/folha/export.py:310-321`, `:728`). |
+   | Hashes 09/10 e TXT 11 idênticos | São condições futuras, não resultados entregues pelo z. A comparação concreta permanece **[não verificado]** (`C:4`; `E:79`; `E:82`). |
+   | Campos do brief | `furo_apurado` e `detalhe` pertencem a **DiaPago**; `derivado_em` pertence a **FechamentoMensal**. O trecho “FM: furo_apurado, detalhe” mistura as entidades (`B:8`; `app/ponto/models.py:369`, `:378`, `:398`, `:464`). |
+
+   O resultado original “50 com gravado = lido” também não pode ser declarado cumprido pelo primeiro apply de 47; os três restantes continuam pendentes das curas (`P:5`; `C:3`).
+
+## 15/11 12:05 · sessao 9cbbb5c766ea · - · - · origem=Ronald (tmux)
+
+Achados para consolidação:
+
+- **LEI-AKITA 2:** tela não pode derivar o próximo tipo por conta própria; leitores leem a autoridade comum — `CLAUDE.md:20-22`, `app/docs/LEIS.md:60`. Condição impossível no literal exige parar com o número — `CLAUDE.md:37`, `app/docs/LEIS.md:62`.
+- **Duas cascas não tornam o RED impossível:** há precedente que renderiza o mesmo filho com ambas mediante loader, inclusive `bater_ponto_v2.html` — `app/ponto/tests/test_l030_templates_renderizados.py:15-28`. O literal `extends base.html` não prova impossibilidade. O selo pode renderizar ambas ou provar o grafo de includes — `CLAUDE.md:203`, `app/docs/LEIS.md:98`. Smoke manual de sítio alcançável em produção é questão diferente — `CLAUDE.md:202`.
+- **Suite certifica a árvore que pousa:** alteração empilhada exige certificação da árvore resultante; comboio exige main + ambas e uma suite — `CLAUDE.md:320-324`. O verde exclusivo da UI-CAMERA não certifica a nova cura. O anexo `estado_uicam.txt` informa que ela já certificou; a autenticidade dessa execução permanece **[não verificado]**, pois só há o dado fornecido. [nao verificado]
+- **Classe A, escada inteira:** `bater_ponto_v2.html`, `pwa.js` e `sw.js` estão na exceção nominal — `app/docs/CORTES.md:411-413`; classe A exige escada inteira — `app/docs/CORTES.md:409`. O selo aplica a exceção antes de templates/static — `bin/selo_proporcao.py:113-114`.
+- **Padrão tem de existir e ser declarado antes da cura entrar:** `CLAUDE.md:65-70`; “sinal derivado do estado” existe — `app/docs/GLOSSARIO.md:13`. O item PRONTO(d) não substitui essa exigência de entrada — `CLAUDE.md:63-68`.
+- **Possível colisão explícita entre os anexos:** a ordem “censo Codex” encontra “CODEX-SO-NA-FINAL”, item 2 de `queima_util_tarde.txt`, que manda censo/leitura/verificação intermediária ao opus. Arquivo e linhas desse anexo na cópia: **[não verificado]**.
+- **Smoke posterior requer leitura cuidadosa dos avais:** a regra escrita exige clique nas duas cascas antes do push para `static/js/`, service worker e template base — `CLAUDE.md:202`, `app/docs/LEIS.md:99`. O anexo PRODUCAO-MAXIMA item 5 autoriza pouso com smoke posterior para obra só de tela; não concluir colisão absoluta ignorando essa autorização — localização do anexo na cópia **[não verificado]**.
+
+## 15/11 12:05 · sessao a451a6f522fb · - · - · origem=Ronald (tmux)
+
+- **Censo direto: 2 sítios de POST ao endpoint**: `app/templates/ponto/bater_ponto_v2.html:322` e `app/static/pwa.js:153`. A v2 anuncia sucesso só por `r.ok`, sem ler JSON (`app/templates/ponto/bater_ponto_v2.html:327`). O sincronizador lê JSON, ignora `data.status` e apaga a pendência por HTTP 2xx (`app/static/pwa.js:158-165`).
+
+- **O sincronizador não anuncia o resultado individual da batida.** Depois do lote, chama apenas o indicador (`app/static/pwa.js:182`), cujos textos são “Sincronizando...”, “Online” e “Offline” (`app/static/pwa.js:194-201`). Esse indicador pode nem existir: a função retorna se não encontrar o elemento (`app/static/pwa.js:185-186`). Os elementos encontrados estão no template legado (`app/templates/ponto/bater_ponto.html:41`) e nos dashboards (`app/templates/core/dashboard_colaborador.html:17`; `app/templates/core/dashboard_colaborador_v2.html:17`). Criar anúncio individual para o sincronizador exige definir destino/comportamento que o literal não especifica [não verificado].
+
+- **Offline tem produtores adicionais, mas não novos POSTs diretos ao endpoint.** O legado enfileira em `app/templates/ponto/bater_ponto.html:543` e `:597`; a triagem enfileira em `app/templates/ponto/triagem/apto.html:282`. Online, o legado recebe HTML de `_form.action || location.href` (`app/templates/ponto/bater_ponto.html:533-539`); a triagem submete seu formulário (`app/templates/ponto/triagem/apto.html:235`). Não devem ser classificados automaticamente como leitores do JSON da API.
+
+- **RED nas duas cascas é executável para a v2.** Já há teste que troca `base.html` pelas duas bases reais (`app/ponto/tests/test_l030_templates_renderizados.py:15-23`) e renderiza v2 e triagem (`app/ponto/tests/test_l030_templates_renderizados.py:28-37`). Portanto, afirmar que a v2 só pode ser testada em uma casca não se sustenta nessa cópia.
+
+- **Sincronização sem página aberta não envia POST por conta própria:** o service worker delega às páginas abertas (`app/static/sw.js:116-119`); sem páginas, mostra notificação pedindo abertura do app (`app/static/sw.js:121-127`).
+
+- **Censo do nativo:** não foram encontrados arquivos `.kt`, `.java`, `.swift` ou `.dart` na cópia; implementação/conduta do cliente nativo [não verificado]. A limitação literal do censo a `templates/` e `static/` não oferece tratamento explícito para eventual sítio fora desses diretórios — texto fornecido, sem arquivo local correspondente [não verificado].
+
+## 15/11 12:04 · sessao fa0797d363c2 · - · - · origem=Ronald (tmux)
+
+**Item 3 PROCEDE:** LU2-08 literal conflita com distinções escritas de ausência parcial/aprovada: `app/docs/CORTES.md:370` manda parcial sem período para CADASTRO; `:385` preserva FATO_EM_AUSENCIA em `nao_sei`. O HEAD afirma que ausência aprovada pode cobrir só parte do dia (`app/ponto/turnos.py:2670`) e que FATO_EM_AUSENCIA **acusa e retém**, para evitar dupla saída (`app/ponto/supra_juiz.py:413`). L-039 não autoriza o apagamento geral: trata de **falta decidida** (`app/docs/LEIS.md:87`; `app/docs/CORTES.md:230`).
+
+**Os 38 precisam de censo e separação de donos**, pois o b2 agrega D23+O14+A1 e inclui 13 sem_divergência, chamados e outras causas; aprovação individual dos38 [nao verificado]. Não podem virar automaticamente ESTRUTURA: só ESTRUTURA é fatia, CADASTRO/BATIDA seguem lista (`CLAUDE.md:179`; `app/docs/LEIS.md:122`).
+
+**“Não abre obra nova” × “vira obra REGISTRADA”** apresenta tensão literal interna; registrar é autorizado como rotina em `CLAUDE.md:285`, mas existência de obra anterior que LU2-08 apenas atualizaria [nao verificado]. L-117, isoladamente, não proíbe registrar cura estrutural amparada por corte literal: proíbe o Code inventar lei (`app/docs/LEIS.md:138`).
+
+**Arquivo comum com E3 exige ordenação:** E3-RESTO-R3 consta em `app/docs/BACKLOG.md:768`, construtor c4 em voo em `app/docs/RELATO.md:7`; o registro de achados inclui mudanças no vigia/dono (`app/docs/RELATO.md:53`). A regra exige convivência por arquivo, não por família (`CLAUDE.md:309`). Diff exato da cópia em voo [nao verificado].
+
+**Item 4 PROCEDE:** b2 afirma “Todos os21 ... têm ausência APROVADA”, enquanto topo/LU2 falam19; “2 sem aprovação” não está individualmente provado [nao verificado]. É contradição entre anexos, não ausência comprovada.
+
+**Guardas relevantes:** função real, rótulo=universo e condição literal (`CLAUDE.md:35`, `:37`); consumidor lê a lâmpada (`:173`); retenção atual lê célula/protestos (`app/folha/export.py:1273`, `:1293`). FERIADO-SO-NA-ESCALA-CERTA não localizado na cópia; estado da obra além do anexo [nao verificado].
+
+## 15/11 12:04 · sessao 7d357aae9472 · - · - · origem=Ronald (tmux)
+
+LU2-10 tem ressalvas para as perguntas 1/2; o fato do pagamento manual não é contradito por `paga=True`.
+
+- **Existe porta para recalcular a 11**, inclusive por colaborador: `--mes`, `--ano`, `--empresa`, `--colabs`, `--apply`; ela chama o serviço único. Porém o aval não nomeia qual execução fará isso. Não há recálculo periódico desse comando; evento depende de fato novo e captura falhas. (`app/ponto/management/commands/recalcular_fechamento.py:77-120`; `app/config/crons.py:1148-1155`; `app/ponto/services/fechamento.py:1798-1824`.)
+- **A porta atual não atende à condição instrumental de RELAVRA-11-DOS-50**: `foto()` só lê FechamentoMensal; o apply precede a escrita do arquivo, e falha de gravação apenas avisa. O serviço também lavra DiaPago, cujo escritor apaga/recria as linhas. (`app/ponto/management/commands/recalcular_fechamento.py:57-71`, `:118-139`; `app/ponto/services/fechamento.py:1191-1201`; `app/ponto/services/dia_pago.py:359-360`.)
+- **Não existe impedimento nominal à 11 pela guarda atual**: ela contém somente `(9,2026)` e exclui colaboradores quando a competência guardada tem empresas exportadas. Logo não afirmar que qualquer exportada é bloqueada; a recusa geral caiu pela L-113. (`app/ponto/services/fechamento.py:36-43`, `:539-564`; `app/docs/LEIS.md:154`.)
+- A convergência de col1020/col67 não está provada pelo código; o próprio anexo k a declara não verificada. Interseção com os 50/47, ordem concreta e prova dos hashes/foto/reversão: **[nao verificado]**.
+- **`paga=True` não prova pagamento por TXT**: o campo é existência de holerite de lote publicado. Portanto não contradiz “10 fechada à mão”. (`app/ponto/services/fechamento.py:1521-1540`.)
+- **`exportada=False` não prova inexistência de ExportacaoDominio histórica**: o juiz consulta o vigente e desconsidera vigente invalidado. O modelo guarda conteúdo/hash e trilha de invalidação; isso não comprova importação/pagamento no Domínio. (`app/folha/export.py:556-594`; `app/folha/models.py:75-100`.) ED históricos/Pautas existentes na 10: **[nao verificado]**.
+- O anexo LU2-06-P2-MEDIDA impede usar o zero anterior como prova de pouso c6 depois da marcação da 10: ele informa zero por cadastro vazio e divergências após marcar. LU2-10, literalmente, não manda marcar cadastro nem autoriza pousar c6; colisão automática entre ambos: **[nao verificado]**. [nao verificado]
+
+## 15/11 12:04 · sessao 2f544e86c9f5 · - · - · origem=Ronald (tmux)
+
+LU2-07: **PROCEDE no item 1, pelo alcance literal das mudanças anunciadas**.
+
+- É possível medir os insumos por dia-colab: `InsumosDoDono` calcula `oraculo.minutos` por dia e `linhas_do_periodo` lê `DiaPago` por data. Não cabe afirmar inexistência das primitivas. (`app/ponto/management/commands/e6_oraculo.py:149-154`; `app/ponto/services/dia_pago.py:833-856`)
+- Entretanto, o gate atual não alcança os `E6SemLavratura`: `minutos_do_espelho` devolve `None` sem `minutos_realizados`/`pago_h`; o comando sai nesse caso antes do teste zero/zero. (`app/ponto/management/commands/e6_oraculo.py:263-269,342-353`)
+- Ausência de linha e linha com rubricas todas zero produzem igualmente `None` em `pago_do_dia`; a implementação precisa distinguir esses casos pela fonte, e não usar conversão genérica `None -> 0`. (`app/ponto/services/dia_pago.py:890-893`; `app/ponto/services/dia_pago.py:854-856`)
+- Alterar apenas o gate do comando E6 e `vigia_fio.py:697-703` não produz a prometida mudança dos 22 na lista do admin: a lista chama `InsumosDoDono.dono`, que continua devolvendo CADASTRO primeiro para folga indefinida/sem vínculo; esse caminho não consulta o gate do comando. (`app/escala/services/cadastro_realidade.py:1001-1007`; `app/ponto/management/commands/e6_oraculo.py:98-99,182-195`)
+- O vigia lê os dias retidos da folha, resolve portas/lista e só então atribui a causa d/e; `:697-703` não contém comparação de lavra com oráculo nem resultado `sem_divergencia`. (`app/chamados/services/vigia_fio.py:584-599,658-679,696-714`)
+- A lista exige assinatura datada; alterar o vigia também não cria nem remove as assinaturas lidas pelo admin. (`app/escala/services/cadastro_realidade.py:1038-1045`)
+- A rota da lista usa `sem_motor=True` e CXR lavrado; sem cobertura, o ramo residual pode continuar sem resposta, `None`. (`app/escala/services/cadastro_realidade.py:1001-1007`; `app/ponto/management/commands/e6_oraculo.py:189-195`)
+
+A condição dos 22 possui “senão” expresso no aval fornecido; portanto, **não é ela que fundamenta PROCEDE no item 2**. A conferência atual, individual, dos 22 permanece **[nao verificado]**: os anexos fornecem contagens, não nova execução nem tabela individual verificável nesta cópia.
+
+## 15/11 12:02 · sessao d6857b2e201f · - · - · origem=Ronald (tmux)
+
+Achados de código, só leitura:
+
+- O arquivo do anexo `ponto/dia_pago.py` corresponde, nesta cópia, a `app/ponto/services/dia_pago.py`. As linhas **359–360** realmente apagam e recriam DiaPago; **386–396** realmente abonam todo `tipo_dia='ausencia'` sem consultar o catálogo. O catálogo marca os dois INSS como SUPRIME em `app/ponto/catalogo/ausencias.py:92–93`; o motor diferencia ABONA/SUPRIME em `app/ponto/services/fechamento.py:680–701`.
+
+- **Apply restrito é possível:** `--colabs` em `app/ponto/management/commands/recalcular_fechamento.py:96`, parsing em **102** e transmissão em **118–120**. O serviço restringe o universo em `app/ponto/services/fechamento.py:554–557`; o filtro não inclui colaborador já excluído pelo universo (`:511–515`). A lista literal dos 47 não vem na entrega raspada [não verificado].
+
+- **Foto/reversão futura não está demonstrada no HEAD:** `foto` atual só lê rubricas numéricas de FechamentoMensal e transforma valores em float (`app/ponto/management/commands/recalcular_fechamento.py:57–70`); escreve arquivo **depois** do recálculo (`:118–134`) e OSError só avisa (`:136–139`). Não fotografa DiaPago, PK, `lavrado_em`, `derivado_em` ou metadados; a lista de rubricas importada está em `app/ponto/management/commands/aplicar_09_corte_b.py:67–74`. A implementação e o selo futuros do brief permanecem [não verificado].
+
+- A foto atual nem restringe por `--colabs`: sua assinatura só recebe mês/ano/empresa (`app/ponto/management/commands/recalcular_fechamento.py:57`), e ambos os usos mantêm isso (`:106`, `:121`). Logo sua unidade é competência/empresa inteira, ainda que o apply seja restrito. A saída textual limita mudanças a 40 colabs (`:153–159`).
+
+- **DIFF comparável existe como instrumento**, mas não substitui o artefato faltante do z: `app/ponto/services/diff_frota.py:45–46` retorna três mapas `{colaborador_id:{campo:float}}` para mês/ano fornecidos; `:101–125` produz deltas por campo/colaborador, com limiar de 0,01. A entrega raspada não contém esse mapa integral dos 50 [não verificado]. O instrumento parte de FechamentoMensal existentes (`:62–63`, `:76–88`), portanto não se deve afirmar que mede sozinho casos sem FM anterior.
+
+- **“somente_leitura” com lavratura escreve:** `app/ponto/services/fechamento.py:535–538` e **1191–1201**. A sonda do z só é sem escrita porque afirma interceptação no anexo; não basta citar os argumentos. Interceptação real não foi disponibilizada [não verificado].
+
+- As duas versões lavram pela mesma porta: motor em `app/ponto/services/fechamento.py:1200–1237`; oráculo em **1265–1296**. Há exceções capturadas separadamente em **1238–1241**, **1297–1301**, e erro por colab também é capturado e continua em **1303–1307**. `processados` não certifica restauração ou lavratura integral.
+
+- Guarda nominal existe só para **09/2026** em `app/ponto/services/fechamento.py:36–43`; o comando a consulta em `app/ponto/management/commands/recalcular_fechamento.py:123–126`. **Não há proteção equivalente da 10 nesse HEAD** por essa guarda; a proteção futura pela COMPETENCIA-PAGA é [não verificado].
+
+- O brief mistura campos de entidades: `furo_apurado` e `detalhe` pertencem a DiaPago (`app/ponto/models.py:369`, **378**); `lavrado_em` é `auto_now=True` (`:380`). FechamentoMensal começa em **398** e possui `derivado_em` em **464**. Não tratar “FM: furo_apurado, detalhe” como descrição correta do modelo.
+
+- Referências secundárias do z conferem: grade em `app/escala/utils.py:1607`, encadeamento em **1619**, soma em **1635–1639**, autoridade em **2230** e cálculo do span em **2272–2274**. Os valores específicos de col675 só têm suporte no anexo; não são comprováveis pelo código isolado [não verificado].
+
+## 15/11 12:01 · sessao 4b3cd5f46bd3 · - · - · origem=Ronald (tmux)
+
+- **Existe gerador TXT sem gravação/exportação.** `montar_linhas_export` retorna linhas e IDs sem carimbar aprovação nem registrar exportação; aceita `FechamentoMensal` destacado ou lê o gravado. Portanto essa exigência é executável sem passar pela porta HTTP. `app/folha/export.py:690`, `:697`, `:700`, `:711`, `:746`.
+- **A autoridade precisa estar explícita.** Sem `fechamentos=`, o gerador lê o gravado; a porta HTTP atualmente fornece objetos `_fechs_lido`. O comparador existente recusa misturar `gravado` e `lido`. `app/folha/export.py:700`, `:719`; `app/folha/views.py:266`; `app/folha/management/commands/simular_folha.py:182`.
+- **Não usar a porta HTTP para essa prova.** Ela grava auditoria e `ExportacaoDominio`. `app/folha/views.py:288`, `:297`.
+- **TXT igual pode omitir colaboradores.** Só entram os classificados `entra`, com fechamento de status `aberto`/`aprovado`; eventos zero e sem rubrica também não geram linha. Igualdade vazia não demonstra cobertura dos 47. Resultado concreto desses filtros para os 47: **[não verificado]**. `app/folha/export.py:687`, `:716`, `:717`, `:726`, `:733`.
+- **Existe comparação por rubrica**, mas o agregador usa código Domínio preenchido com zeros, não PK `colNN`, e ignora registros 11/datas de faltas; o parser reconhece esses registros. A volta para colaborador exige associação `codigo_dominio`→PK. `app/folha/export.py:310`, `:319`, `:224`, `:253`, `:728`; `app/folha/haiku_export.py:111`.
+- **O comparador de simulação também mede retidos**, além das linhas TXT, e exige mesma empresa/competência/autoridade. `app/folha/management/commands/simular_folha.py:160`, `:182`, `:189`, `:202`, `:205`.
+- **INSS não entra diretamente nos eventos monetários pelo campo `minutos_abonados`.** A lista de eventos lê HE, noturno, intra e pontualidade; `minutos_abonados` participa da prontidão. Isso não prova TXT real dos 47 inalterado. `app/folha/export.py:439`, `:447`, `:451`, `:1078`.
+- **A referência do z a “rubricas 8932/8792” merece restrição.** `tipos_abonados_8932` lê catálogo, mas `montar_linhas_export` aqui emite eventos e bloco de faltas; não chama `datas_abonadas`. Ausência de efeito no TXT dos 47 permanece **[não verificado]** até comparação concreta. `app/folha/export.py:193`, `:201`, `:730`, `:740`, `:746`.
 
 ## 15/11 11:46 · sessao 4bdcc344d986 · ABONO-LE-O-CATALOGO · censo · origem=Code
 
@@ -590,332 +738,4 @@ Perguntas condicionais para esclarecer os recortes, sem propor regra nova:
 
 As quantidades são de `saída:1–13`; as perguntas são hipóteses de investigação **[não verificado]**. A pergunta de desenho já registrada — “dia que a folha retém e a tarefa não manda nada” — existe, mas enquadrar qualquer quantidade desta sonda nesse estado continua **[não verificado]**. ([RELATO.md:610](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/docs/RELATO.md:610))
 
-## 15/11 10:43 · sessao dc5c9b3e1911 · - · - · origem=Ronald (tmux)
-
-Evidências para a consolidação:
-
-- **C11 não cobre genericamente dias fora da lista.** O queryset exige `veredito='indefinida'` e protesto `PREVISTO_COM_DIA_INDEFINIDO`; depois exige pergunta viva, nenhuma porta da tarefa, âncora terminal e folga não definida. (`app/escala/services/cadastro_realidade.py:450`, `:469`, `:496`, `:499`)
-- **Causa d significa colaborador presente na lista, dia ausente e nenhuma pergunta viva da célula**, após os filtros anteriores do censo. (`app/chamados/services/vigia_fio.py:696`)
-- **Os dois erros não são donos L-099.** O E6 exclui da comparação dias com isenção/ausência e dias sem lavratura; ausência de lavratura não equivale a zero. (`app/ponto/management/commands/e6_oraculo.py:339`, `:343`, `:245`)
-- O juiz de dono retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`; esta última é residual. (`app/ponto/management/commands/e6_oraculo.py:98`, `:104`, `:106`, `:110`)
-- **E4B não promete zerar pelo rótulo d:** classe/detalhe não escolhem cura; atos vêm da tarefa; `tarefa_nada`/`nao_sei` são listados sem ato; efeito exige nova medição. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:12`, `:15`, `:23`, `:26`, `:117`)
-- Há pergunta de desenho existente sobre **C11 aceitar pergunta respondida sem âncora ou manter apenas âncora terminal**. (`app/docs/RELATO.md:14`) Vincular qualquer quantidade da sonda a esse M1 é **[não verificado]**.
-- O mapa anterior registra d `SEM_ACAO` e pergunta sobre “folha retém, tarefa nada”, mas declara que a sonda daquele mapa não chamou C19. (`app/docs/RELATO.md:8820`, `:8831`) Não transferir seus números para esta saída.
-- E3-RESTO-R3 existe como obra do lote LU e achados restantes. (`app/docs/BACKLOG.md:768`) Cobrir ou zerar algum dos recortes desta sonda é **[não verificado]**.
-
-A saída não fornece C19/razão da tarefa, ata, estado das perguntas e âncoras ou efeito antes/depois; identificar a cura e quantificar quais dias **necessariamente** exigem LEI/DESENHO a partir disso é **[não verificado]**.
-
-## 15/11 10:42 · sessao e2755ca12b7b · - · - · origem=Ronald (tmux)
-
-Achados firmes para consolidar:
-
-- **Host:** K10 está registrado em `app/core/juizes.py:356`, mas falta no MAPA-JUIZES; `app/docs/MAPA-JUIZES.md:191` ainda informa nove juízes. A cobrança por referência está em `bin/tests/test_mapa_juizes.sh:38-53`.
-- **Diagramas:** `app/docs/ARQUITETURA.mmd:352` continua nove; gerador passa a produzir dez (`app/core/management/commands/gerar_diagrama.py:344-347`). Quebra a comparação de `app/core/tests/test_selo_diagrama_do_codigo.py:44-47`. MAPA também falta K10 (`app/docs/MAPA.md:211`).
-- **Testes antigos incompatíveis:** exportada deve recalcular sem passagem e deixar carimbo em `app/ponto/tests/test_o80_selo_l092.py:98`, `:117`, `:131`, `:169`, `:188`, `:216`; novo bloqueio e carimbo condicionado à passagem contradizem essas expectativas (`app/ponto/services/fechamento.py:553`, `:576`).
-- **Migration:** campos, nulabilidade, constraint, related_names, PROTECT e ordenação conferem estaticamente (`app/folha/models.py:387`, `app/folha/migrations/0013_competenciapagaforadosistema.py:20`). Modelo usa `auth.User`, migration usa setting; settings da cópia usam padrão, sem divergência efetiva demonstrada. BigAutoField confere (`app/config/settings/base.py:104`). `makemigrations --check` não executado [nao verificado].
-
-Evasões AST comprovadas **em memória**, sem arquivos:
-
-- Importar modelo `as C` e executar `C.objects.create(...)` retorna nenhuma escrita detectada (`app/folha/tests/test_competencia_paga_um_juiz.py:363-375`).
-- Importar `PassagemRegen as P` e construir `P(...)` retorna nenhuma construção detectada (`app/folha/tests/test_competencia_paga_um_juiz.py:379-382`).
-- Importar juiz, chamá-lo sob `if False`, retornar `[]`: detector aprova leitura do juiz (`app/folha/tests/test_competencia_paga_um_juiz.py:405-418`).
-- Literal `mes == 9 and ano == 2026` escapa da catraca de tuplas (`app/folha/tests/test_competencia_paga_um_juiz.py:422-426`).
-
-Mutantes sobreviventes dos casos novos foram enviados por mensagem com as linhas de cada caso. Principais lacunas: todos os anos são 2026; nenhum teste exerce fronteira dia21; nenhum guarda DiaPago preexistente; log só tem contagem/booleanos parcialmente conferidos; retrato só verifica flag; REGEN real só verifica mudança de horas (`app/folha/tests/test_competencia_paga_um_juiz.py:93`, `:134`, `:217`, `:170`, `:278`, `:306`).
-
-**Não declarar o backfill necessariamente vácuo:** mesmo sem grade, `lavrar` cria AJUSTE (`app/ponto/services/dia_pago.py:350-360`). Entretanto, o teste só afirma ausência (`app/folha/tests/test_competencia_paga_um_juiz.py:258-262`), e erros da lavra são engolidos (`app/ponto/services/fechamento.py:1261-1264`); falta controle positivo e conferência da trilha. Retirar só a guarda mantendo execução bem-sucedida deve produzir AJUSTE; confirmação executada [nao verificado].
-
-## 15/11 10:42 · sessao 6b6106da1749 · - · - · origem=Ronald (tmux)
-
-Não localizei obra com contrato demonstrando zerar integralmente qualquer dos sete recortes motivo/dono da saída; a cobertura exata continua [não verificado].
-
-Obras relacionadas, sem equivaler a garantia de zero:
-
-- **E3-LEITORES** migra leitores para `tarefa_do_dia`, mas seu registro não identifica os recortes da sonda. `app/docs/BACKLOG.md:1955`.
-- **E4B** cobre backfill das classes a–e, porém registra resíduo `tarefa_nada` e perguntas de lei `sem_porta`; não demonstra eliminar os recortes atuais. `app/docs/BACKLOG.md:1977`.
-- **E3-X2-NUNCA-JULGADAS** trata universo específico de células nunca julgadas. O dado atual não permite equiparar esse universo aos 177 erros `E6SemLavratura`. `app/docs/BACKLOG.md:1962`; equivalência [não verificado].
-- **E3-X1-FOLGA-NAO-E-SEM-COBERTURA** trata ramo `adesao=None` do cartório. A saída não revela esse predicado. `app/docs/BACKLOG.md:1959`; cobertura atual [não verificado].
-- **E3-CADASTRO-ADMIN** é lista de cadastro para o administrador, explicitamente sem cura por código. `app/docs/BACKLOG.md:1961`.
-- **INTERMITENTE-SEM-CONVOCACAO** registra a pergunta sobre como a célula sabe do dia convocado; não pertence à E3. A saída atual não demonstra quais linhas satisfazem essa causa. `app/docs/BACKLOG.md:1967`; vínculo [não verificado].
-- **FATO-A05** registra fato próprio para assinatura após E4D, mantendo provisoriamente a projeção como fonte. Isso não prova resolver `assinaturas_sem_data`. `app/docs/BACKLOG.md:1971`; equivalência [não verificado].
-
-Evidências especialmente úteis para evitar atribuição indevida:
-
-- O registro da classe d diz que o brief da E3 não tinha decisão escrita para “dia que a folha retém e a tarefa não manda nada”. Trata-se de outra medição; não substituir seus números pelos 212 atuais. `app/docs/RELATO.md:610`.
-- **CXR-TELA não cura d/ESTRUTURA**: pode apenas mudar a classificação para e/dia na lista. `app/docs/RELATO.md:1770`.
-- O carregador do dono distingue ausência de resposta da lista do motor de lista vazia e pode retornar `None`; não autoriza converter erro em ESTRUTURA ou sem divergência. `app/ponto/management/commands/e6_oraculo.py:142`, `app/ponto/management/commands/e6_oraculo.py:193`.
-- `minutos_do_espelho` declara que `None` significa sem lavratura, não zero. `app/ponto/management/commands/e6_oraculo.py:243`.
-
-Recomendação para consolidação: usar **“sem obra comprovada para zerar este recorte [não verificado]”**, com os números do `S` fornecido; não afirmar que todos necessariamente exigem LEI/DESENHO. Essa necessidade e sua distribuição não são estabelecidas pela saída. [não verificado]
-
-## 15/11 10:42 · sessao 745ce1ea1d34 · UI-CAMERA-ALTERNATIVA · verificador · origem=Code
-
-**As cinco correções estão presentes, com limites de cobertura. Não identifiquei defeito novo no fluxo normal nem teste globalmente vazio.** (`T:253–273`; `S:95–126`, `S:137–140`, `S:184`) [nao verificado]
-
-Referências: **T** = [bater_ponto_v2.html](/home/ronald/codex_ws/93b532e5ad0c59acd80b27c79c1df55391b229d4/app/templates/ponto/bater_ponto_v2.html); **S** = [test_camera_alternativa_previa.py](/home/ronald/codex_ws/93b532e5ad0c59acd80b27c79c1df55391b229d4/app/ponto/tests/test_camera_alternativa_previa.py).
-
-| Achado da volta 1 | Veredito nesta cópia |
-|---|---|
-| Revogar antes de retirar a imagem antiga | **NÃO PROCEDENTE — curado no código.** `velha` guarda a URL anterior; o pintor substitui os filhos do placeholder antes de revogá-la. Isso também vale para o ramo sem blob. (`T:253–269`) |
-| Teste aceitar prévia fora de `#v2-cam-ph` | **NÃO PROCEDENTE — curado.** `img()` agora consulta `ph.querySelector('img')`; ambas as verificações de prévia usam essa função. (`S:95`, `S:100–103`, `S:117–120`) | [nao verificado]
-| Teste não consultar o chip | **NÃO PROCEDENTE nesse alcance — curado parcialmente.** Exige o texto “selfie pronta” depois da primeira seleção. Não verifica classe, visibilidade ou chip depois da segunda seleção. (`S:106`, `S:116–126`, `S:138`) | [nao verificado]
-| Primeiro arquivo poder passar como segundo por igualdade de tamanho/MIME | **NÃO PROCEDENTE para conservar especificamente f1 — curado.** O resultado exige `f1.size !== f2.size` e o envio com tamanho/MIME de f2. Se os tamanhos coincidirem, falha; não passa silenciosamente. Outro blob com tamanho/MIME de f2 continua podendo escapar. (`S:125–126`, `S:140`, `S:184`) |
-| Teste não exigir que a URL exibida permaneça sem revogação | **NÃO PROCEDENTE nos dois instantes medidos — curado.** Consulta a URL de i1 e depois a de i2 na lista de revogadas. Não acompanha todo o ciclo de vida. (`S:85–86`, `S:108`, `S:119`) | [nao verificado]
-
-**PROCEDENTE — a cobertura da ordem continua insuficiente.** A sonda registra quais URLs foram revogadas, mas consulta os resultados depois das seleções; não observa se a imagem antiga ainda estava anexada no momento da revogação. Portanto, restaurar a ordem anterior pode passar nessas asserções, embora o código atual tenha corrigido essa ordem. (`S:85–86`, `S:97–119`; `T:260–269`)
-
-Quem escreve e quem lê:
-
-| Variável | Escritores | Leitores |
-|---|---|---|
-| `_previaUrl` | Inicialização nula; limpeza a cada pintura; recebimento da URL recém-criada. (`T:251`, `T:254`, `T:256`) | Cópia para `velha`; atribuição ao `img.src`. (`T:253`, `T:258`) |
-| `velha` | Uma atribuição local por chamada, copiando `_previaUrl` antes de sua limpeza. (`T:253`) | Condição e argumento de `URL.revokeObjectURL`. (`T:269`) |
-
-**NÃO PROCEDENTE — novo defeito no pintor/listener pelo uso dessas variáveis.** Zerar `_previaUrl` não revoga a URL: sua referência anterior permanece em `velha`. O pintor instala a nova imagem e revoga a anterior ao final; o `else` impede que o ramo de aviso sobrescreva “selfie pronta”. O listener preserva o estado quando não recebe arquivo e, quando recebe, escreve `_fotoBlob` e chama o pintor. (`T:253–273`)
-
-**NÃO PROCEDENTE — asserção globalmente vazia.** Isoladamente, `exibida_viva` pode resultar verdadeiro sem imagem, pois consulta `''`; a parcela de URL atual em `revoga` tem a mesma limitação. Entretanto, a igualdade integral também exige presença de prévia, decodificação, área e troca: remover a imagem não deixa o teste verde. (`S:102–108`, `S:118–120`, `S:137–140`, `S:184`) [nao verificado]
-
-**PROCEDENTE ainda — falta limpeza explícita da última URL.** Manter viva a URL atualmente exibida não resolve sua liberação ao encerrar a tela: a revogação continua ocorrendo somente em outra pintura; sucesso e retomada não a executam. (`T:150–157`, `T:269`, `T:321–325`)
-
-Execução RED/GREEN, tamanhos efetivamente produzidos e comportamento em produção: **[não verificado]**. Não executei a suíte, cujo caminho cria e apaga arquivos temporários. (`S:170–174`) [nao verificado]
-
-## 15/11 10:41 · sessao 42099f31c7e3 · - · - · origem=Ronald (tmux)
-
-Achados para itens 3, 4, 6, 7 e 10:
-
-- **Passagem REGEN forjável/reutilizável:** construtor público só exige autor não nulo e motivo não vazio; não verifica staff, competência, colaborador, validade nem consumo. A guarda aceita apenas pelo tipo; qualquer chamador pode instanciar, reutilizar e passar num recálculo em lote. O próprio teste chama diretamente o recálculo com a passagem fabricada (`app/ponto/services/fechamento.py:40-52,578-583`; `app/folha/tests/test_competencia_paga_um_juiz.py:280-285`). Retrato também aceita qualquer instância (`app/ponto/services/dia_pago.py:451-453`).
-
-- **Bypass de empresa inativa:** sem filtros, escopo da guarda enumera somente empresas ativas; universo do recálculo inclui todas as empresas. Logo colaborador de empresa inativa com competência paga pode ser regravado no recálculo geral (`app/ponto/services/fechamento.py:447-453,576-587,921-924,1166-1167,1533`).
-
-- **Relógio:** borda nova lê `now/localdate`, cadastro recebe `agora` (`app/folha/views_competencia_paga.py:46,57`; `app/folha/services/competencia_paga.py:78,97`). Entretanto auditoria lê implicitamente outro relógio por `auto_now_add`, sem receber `agora` (`app/core/auditoria.py:8-24`; `app/core/models.py:307`). Funções tocadas continuam lendo relógio fora da borda: recálculo (`app/ponto/services/fechamento.py:639,1109,1166,1184,1212`) e retrato (`app/ponto/services/dia_pago.py:534`). REGEN recebe `hoje`, mas não o transmite ao recálculo/retrato (`app/ponto/portas/regen_exportada.py:107-108,188-197`).
-
-- **Testes e fuso:** classes funcionais usam freezer; constantes são fixas (`app/folha/tests/test_competencia_paga_um_juiz.py:28-29,79,167,218,309`). Porém `HOJE` não contém offset e `AGORA` é 12h local; sob São Paulo são instantes separados por três horas, permitindo auditoria anterior ao ato de marcação (`app/config/settings/base.py:93-95`; `app/core/models.py:307`). Execução desse comportamento [nao verificado].
-
-- **Mês civil × competência:** tela enumera seis meses civis até o atual; janela usa mês do término e corte da empresa. Após o corte, competência corrente é mês seguinte e não aparece. Exemplo derivado: 21/11 com corte21 pertence a12, mas tela começa11 (`app/folha/views_competencia_paga.py:16-23,57`; `app/ponto/janelas.py:10-21,24-33`; `app/folha/export.py:47-51`). Meses anteriores aos seis listados também não têm formulário acessível; inputs são ocultos (`app/templates/folha/competencias_pagas.html:24-26`).
-
-- **Dois contratos no retorno:** bool/fontes dizem paga; `registro=True` responde somente TXT e retorna `None` mesmo paga fora, conscientemente documentado. Chamador que aplicar `bool(registro)` responde entrega, não pagamento (`app/folha/export.py:610-628`). K9 acrescenta holerite publicado, outra condição (`app/folha/export.py:656-665`).
-
-- **Corrida cadastro × recálculo/retrato:** cadastro tranca somente linha viva já existente; guarda lê pagamento sem trava e grava muito depois, sem chave comum de exclusão (`app/folha/services/competencia_paga.py:72-78`; `app/ponto/services/fechamento.py:576-587,921,1167,1183`; `app/ponto/services/dia_pago.py:453,462,535-546`). Intercalação permite marcação commitar antes da escrita já autorizada pela leitura antiga.
-
-- **Dupla marcação concorrente:** sem linha viva, ambos passam pela consulta; constraint preserva unicidade, mas segunda inserção pode levantar `IntegrityError`, sem tratamento/idempotência concorrente. View só captura `MarcacaoRecusada` (`app/folha/services/competencia_paga.py:72-78`; `app/folha/models.py:404-405`; `app/folha/views_competencia_paga.py:44-48`).
-
-- **Trilha perdida:** `atomic` do cadastro não exige sucesso de auditoria. `registrar_log` engole falha; `evento` usa savepoint e retorna `None`, permitindo commit do fato sem LogAuditoria (`app/folha/services/competencia_paga.py:72-82,91-103`; `app/core/auditoria.py:17-29`; `app/core/observ.py:105-139`). Recálculo barrado também conserva bloqueio sem garantir trilha (`app/ponto/services/fechamento.py:590-598`; `app/ponto/services/dia_pago.py:454-461`).
-
-- **REGEN concorrente/parcial:** hash, valores e régua anteriores são lidos antes do `atomic`, sem trava; outro escritor pode alterar o “antes” (`app/ponto/portas/regen_exportada.py:121-127,174`). Embora doc prometa erro subir, recálculo engole erros por colaborador e de lavratura após salvar Fechamento; porta ignora retorno e segue retrato/auditoria, permitindo correção parcial (`app/ponto/portas/regen_exportada.py:95-96,188-221`; `app/ponto/services/fechamento.py:1167,1183,1261-1264,1320-1331`). Retrato cobre apenas minutos de grade/ajustes, não todas as rubricas (`app/ponto/services/dia_pago.py:482-498,517-546`).
-
-- **Cadastro inacessível após inativação:** empresas da tela vêm de filtro que exclui inativas; histórico também fica restrito àquelas empresas, impedindo desmarcar pela tela uma marcação antiga da empresa inativada (`app/folha/views_competencia_paga.py:36,39,69-72`; `app/colaboradores/queries.py:78-85`).
-
-- **Consumidor REGEN possivelmente incompleto:** único chamador encontrado da porta só entra se `exportada` e houve plantio; pagamento externo sem TXT pode não chegar à porta/Pauta, conforme origem de `exportada` a rastrear (`app/chamados/services/passivo_validado.py:435-449`).
-
-## 15/11 10:41 · sessao 97863fde7433 · - · - · origem=Ronald (tmux)
-
-Achados de maior peso:
-
-- **Segundo juiz K6 real:** `chamados/services/passivo_validado.py:116-128` pergunta “tem TXT vigente?” por `haiku_export.exportacoes_da_competencia()['vigente']`, sem chamar K6. `app/folha/haiku_export.py:65-74` escolhe `e_vigente`, que significa “último registro”, sem desconsiderar invalidação (`app/folha/models.py:120-137`); K6 desconsidera `invalidada_em` (`app/folha/export.py:588-594`). Assim pode responder exportada em TXT revogado sem substituta e responde falsa na paga fora sem TXT. Esse resultado decide se chama REGEN e cria Pauta DP (`app/chamados/services/passivo_validado.py:435-449`).
-- **Passagem não é capacidade protegida:** construtor público aceita qualquer `autor != None` e qualquer motivo não vazio; não exige staff, colaborador, empresa, competência, prazo, uso único ou contexto da porta (`app/ponto/services/fechamento.py:45-61`). As guardas só exigem `isinstance` (`app/ponto/services/fechamento.py:578-584`, `app/ponto/services/dia_pago.py:450-455`). Pode ser construída, alterada e reutilizada por outro chamador; o próprio teste faz isso (`app/folha/tests/test_competencia_paga_um_juiz.py:291-296`).
-- **Cadastro pode confirmar sem LogAuditoria:** `registrar_log` engole falha (`app/core/auditoria.py:17-29`), `evento` também usa best effort e savepoint próprio (`app/core/observ.py:94-105`, `app/core/observ.py:124-140`). Portanto o atomic da marcação não garante linha e trilha juntas (`app/folha/services/competencia_paga.py:72-84`, `app/folha/services/competencia_paga.py:91-103`).
-- **Dinheiro ainda tem bypass independente de REGEN:** `restaurar_fechamento` permite atualizar rubricas arbitrárias com motivo, sem K10 nem Passagem (`app/ponto/services/fechamento.py:1381-1419`); há chamadores de apply de competência 09 (`app/ponto/management/commands/aplicar_09_he_intra.py:137-152`, também `aplicar_09_corte_b.py:220,266`, `diff_reclassificar_partido.py:224`, `desvio_o68b.py:197`). `DiaPago.lavrar` é função pública sem guarda própria, apaga e recria (`app/ponto/services/dia_pago.py:135-163`, `app/ponto/services/dia_pago.py:359-360`); chamadores atuais de produção ficam em fechamento (`app/ponto/services/fechamento.py:1223`, `app/ponto/services/fechamento.py:1275`).
-- **Scripts fora app também escrevem:** `bin/restore_relavratura_10_2026.py:69-86` e `bin/restore_o263_comp10.py:43-56` salvam/apagam FM e recriam DP diretamente; `bin/restore_badge_linha_09_10.py:61-63` recria DP 09/10. Os tripwires novos só varrem APP (`app/folha/tests/test_competencia_paga_um_juiz.py:32`, `app/folha/tests/test_competencia_paga_um_juiz.py:362-373`).
-
-Cadastro, por campo:
-
-| Campo | Escritor | Leitores |
-|---|---|---|
-| id | ORM no create `app/folha/services/competencia_paga.py:77-78` | `_foto`, objeto do log, retorno: `:59`, `:79`, `:84`; `__str__` `app/folha/models.py:409-411` |
-| empresa, mes, ano | marcação `:77-78` | juiz `app/folha/export.py:623-624`; buscar viva `competencia_paga.py:73-74,92-93`; `_foto :59`; enumeração `app/ponto/management/commands/gerar_celulas.py:175-177`; histórico `app/folha/views_competencia_paga.py:69-72`; template `app/templates/folha/competencias_pagas.html:50-51` |
-| marcada_por, marcada_em, motivo | marcação `competencia_paga.py:77-78` | `_foto :60-61`; histórico/template `app/templates/folha/competencias_pagas.html:52-54`; ordering `app/folha/models.py:403`; view `:72` |
-| desmarcada_por/em/motivo | defaults `app/folha/models.py:395-398`; desmarcação `competencia_paga.py:97-98` | `_foto :62-64`; viva no juiz `app/folha/export.py:624`; serviço `:74,93`; template `app/templates/folha/competencias_pagas.html:55`; `__str__ app/folha/models.py:411` |
-
-Nenhum segundo escritor efetivo do cadastro foi encontrado nos arquivos pesquisados; o cadastro não tem proteção própria de `save/delete` (`app/folha/models.py:373-411`). Isso é ausência de ocorrência no censo, não impossibilidade de bypass.
-
-Retorno juiz:
-
-- Bool: guardas via `empresas_pagas_no_escopo` (`app/ponto/services/fechamento.py:1557-1558`), wrapper do dia (`app/chamados/services/vigia_fio.py:878-887`), veto do fio (`app/chamados/services/fio.py:1353-1356`).
-- Lista fontes: K9 (`app/folha/export.py:656`), tela (`app/folha/views_competencia_paga.py:65-68`), TXT sem arquivo (`app/folha/export.py:706`).
-- Registro: TXT comparador (`app/folha/export.py:693`) e vigia (`app/folha/services/vigia_txt.py:224`); `registro=True` é atalho direto ao K6 e não informa paga fora (`app/folha/export.py:617-618`).
-
-LogAuditoria:
-
-- Marca/desmarca escrevem ações, modelo/id/descrição, antes/depois por `_foto` (`app/folha/services/competencia_paga.py:79-83,99-103`); escritor final `evento` (`app/core/observ.py:134-140`).
-- Recalculo barrado escreve ação, modelo, descrição e até 200 colaboradores (`app/ponto/services/fechamento.py:591-599`); retrato barrado escreve descrição apenas (`app/ponto/services/dia_pago.py:455-461`). Leitor específico conta prefixo de descrição, sem empresa (`app/ponto/services/fechamento.py:66-70`), comando imprime (`app/ponto/management/commands/recalcular_fechamento.py:126-131`).
-- Marca/desmarca não têm leitor específico de LogAuditoria; tela mostra o próprio cadastro (`app/folha/views_competencia_paga.py:69-73`); leitor genérico do log é `app/core/views.py:705-738`. ACOES não enumera verbos novos, embora campo aceite gravação livre (`app/core/models.py:286-307`).
-
-FM/DP escritos fora dessas guardas:
-
-- Aprovar/reabrir status, autor/data e observação: `app/ponto/services/fechamento.py:1346-1377`, reabertura de período `:1472-1475`.
-- Restaurar números: `app/ponto/services/fechamento.py:1381-1419`.
-- Invalidar carimbos FM sem consultar pagamento: `app/ponto/services/fechamento.py:1650-1656,1691-1699`.
-- Backfill DP `furo_apurado/lavrado_em`: `app/ponto/services/dia_pago.py:646-675`, command `app/ponto/management/commands/apurar_furo_da_exportada.py:131`. Sem dinheiro; ainda é escrita em DP.
-- Lavratura command passa pelas guardas, mas permanece roteada por TXT (`app/ponto/management/commands/lavrar_dias_pagos.py:104-123`); paga fora entra no ramo motor e é barrada.
-- Regen de vínculo de célula recebe K9 via `_competencias_exportadas`, portanto passa a respeitar paga fora (`app/ponto/portas/celula.py:218-221`); `apesar_da_lavra` pula guarda de célula, mas recálculo segue sem Passagem fora REGEN (`app/ponto/portas/celula.py:218-221`; passagem só em `app/ponto/portas/regen_exportada.py:187-197`).
-
-Leitores fora do diff: todos que continuam em K6 terão **False** em paga fora sem TXT, versus **True** do K10; isso é diferença demonstrável, e a pergunta específica decide se é defeito:
-
-| Local | Pergunta/efeito |
-|---|---|
-| `app/folha/views.py:353-364` | já exportado? aviso com arquivo/autor; diferença coerente com TXT |
-| `app/ponto/services/fechamento.py:1580-1583` | exportada por K6; **paga significa holerite publicado**, não K10 |
-| `app/folha/services/ranking_he.py:78-91` | todas empresas entregues para status “lavrado”; paga fora continua “parcial” |
-| `app/ponto/services/esmeril_espelho.py:51-62` | retrocede janelas até primeira entregue; paga fora não encerra busca |
-| `app/ponto/services/he_pendente_lavrado.py:218-224` | mantém anterior enquanto não entregue; paga fora continua universo |
-| `app/chamados/services/cobranca_folha.py:47-72` | exclui exportada da cobrança; paga fora continua cobrança |
-| `app/ponto/services/autorizacao_he_periodo.py:113-118,288-302` | exportada decide criar Pauta DP; paga fora não gera pauta apesar de gravado barrado |
-| `app/folha/porta_export.py:339-347` | alias `_exp_no_escopo`, TXT escolhe campos do contador DP; paga fora tratada aberta |
-| `app/chamados/models.py:353-364` | competência aberta para proteger perguntas vivas no fechamento do chamado |
-| `app/chamados/services/fio.py:813-815` | competência aberta para impedir costura em terminal; este permanece K6 enquanto veto migrou |
-| `app/chamados/reconciliador.py:743-748` | entregue fica fora do alcance novo de cura |
-| `app/chamados/services/disputa_emissao.py:1855-1867` | exportada impede reabertura do credor |
-| `app/chamados/services/fabrica_da_celula.py:223-231` | limbo entregue vai Pauta DP; paga fora continua pergunta |
-| `app/chamados/services/tarefa_do_dia.py:451-467` | lote de dias exportados da carga da tarefa |
-| `app/chamados/services/vigia_fio.py:837` | dono exportada/aberta; wrapper K6 `:843-865` |
-| `app/chamados/services/foto_e4b.py:238-245` | foto entregue por dia ou competência |
-| `app/chamados/management/commands/backfill_fio_morto_e4b.py:173,256,304` | plano e rechecagem de entregue |
-| `app/chamados/management/commands/backfill_decisoes_pergunta.py:471,498` | contador/relatório exportadas, divergindo do veto migrado usado pelo apply |
-| `app/chamados/management/commands/reabrir_orfas_enterradas.py:95` | exportada via `marcos`, fora reabertura |
-| `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:107-116` | recusa rederivar se entregue |
-| `app/ponto/management/commands/lavrar_status_competencia.py:35-43` | informa entregue, não é guarda |
-| `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:109-124` | só entrega entra pauta pago/devido |
-| `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:83-93` | só entrega entra pauta de folga |
-| `app/folha/management/commands/pre_fechamento.py:72-74` | lê marcos, inclusive “paga”=holerite |
-| `app/chamados/services/passivo_validado.py:116-128` | derivação paralela acima |
-
-Leitores fora diff que **acompanham** paga fora por K9, sem segundo predicado: `app/ponto/portas/celula.py:221,607,821`, `app/escala/services/vigencia_impossivel.py:26-42`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:60-82`, `app/ponto/management/commands/aplicar_col900.py:59-64`, `app/ponto/management/commands/tripwire_celulas.py:318-319`, aliases dos censos `app/chamados/management/commands/auditar_invariantes_chamados.py:141,888,1379`. Os nomes “exportadas” desses wrappers passam a incluir paga fora/holerite; é polissemia demonstrada por `app/ponto/management/commands/gerar_celulas.py:175-188`.
-
-## 15/11 10:39 · sessao bf1ce396d09f · UI-CAMERA-ALTERNATIVA · verificador · origem=Code
-
-O diff corrige o caminho normal da câmera alternativa sem mudar os valores consumidos pelo POST ou pela fila. Há ressalvas procedentes sobre cobertura do teste, limpeza da última URL e prévia após enfileiramento offline. (`T:255–271`, `T:305`, `T:339`, `T:352`, `T:365`) [nao verificado]
-
-Referências usadas abaixo:
-
-- **T** = [app/templates/ponto/bater_ponto_v2.html](/home/ronald/codex_ws/a50f605dba2aeb0289b52ebad626c92171197e92/app/templates/ponto/bater_ponto_v2.html)
-- **S** = [app/ponto/tests/test_camera_alternativa_previa.py](/home/ronald/codex_ws/a50f605dba2aeb0289b52ebad626c92171197e92/app/ponto/tests/test_camera_alternativa_previa.py)
-- **P** = [app/static/pwa.js](/home/ronald/codex_ws/a50f605dba2aeb0289b52ebad626c92171197e92/app/static/pwa.js)
-- **H** = [app/core/tests/test_smoke_chromium.py](/home/ronald/codex_ws/a50f605dba2aeb0289b52ebad626c92171197e92/app/core/tests/test_smoke_chromium.py)
-
-**T−** designa o mesmo arquivo antes da alteração, com linhas reconstruídas do diff anexado. Autenticação independente dos commits: **[não verificado]**. Execução do teste/RED/GREEN: **[não verificado]**; ele cria e apaga arquivos temporários, incompatíveis com esta auditoria somente leitura. (`S:163–167`, `H:94–100`) [nao verificado]
-
-**1. Leitores, escritores e significado dos campos**
-
-**NÃO PROCEDENTE — alteração do envio.** O novo pintor acrescenta leitura de `_fotoBlob` para apresentação; não escreve nesse campo. `capturarFrame`, `garantirRequisitos`, POST e chamadas da fila conservam suas operações anteriores. (`T−:256–269`, `T:275–288`; `T−:285–297`, `T:304–316`; `T−:320`, `T:339`; `T−:333`, `T:352`; `T−:346`, `T:365`)
-
-| Objeto | Antes: todos os acessos relevantes | Depois: todos os acessos relevantes |
-|---|---|---|
-| `_fotoBlob` | **Escritores:** inicialização nula `T−:146`; arquivo recebido `T−:252`; resultado da captura, preservando valor anterior `T−:286`. **Leitores:** fallback da captura `T−:259`; atribuição/guarda dos requisitos `T−:286–287`; POST `T−:320`; duas chamadas offline `T−:333`, `T−:346`. | **Escritores:** `T:146`, `T:271`, `T:305`. **Leitores:** novos ramos de pintura/criação da URL `T:255–256`; captura `T:278`; requisitos `T:305–306`; POST `T:339`; fila `T:352`, `T:365`. |
-| `_stream` | **Escritores:** inicialização `T−:146`, resultado de `getUserMedia` `T−:238`. **Leitores:** parar tracks no sucesso `T−:151`; atribuir ao vídeo `T−:239`. | Mesmos acessos e linhas: `T:146`, `T:151`, `T:238–239`. Não há atribuição posterior de `null`. (`T:146–151`, `T:235–245`) |
-| `#v2-cam-ph` | Markup/classe/conteúdo inicial `T−:89`; localização em `abrirCamera` `T−:236`; `style.display='none'` `T−:239`; `className` `T−:243`; `innerHTML` do aviso `T−:244–245`; cursor e `onclick` `T−:246`. | Inicial/localização/ocultação `T:89`, `T:236`, `T:239`; cursor e `onclick` `T:243`; localização pelo pintor `T:253`; classe, limpeza de `innerHTML` e imagem anexada `T:260`; classe/conteúdo do aviso `T:264–266`. Não há escrita nova em `style.display` nem substituição de `onclick`. (`T:252–267`) |
-| `#v2-cam-chip` | Inicial `T−:87`; localização `T−:236`, `T−:252`; classe/texto ao vivo `T−:240`, falha `T−:247`, selfie recebida `T−:252`. | Inicial/localização `T:87`, `T:236`, `T:253`; classe/texto ao vivo `T:240`, selfie pronta `T:261`, sem câmera `T:267`. Não há leitor JS do texto/classe para decidir envio. (`T:275–288`, `T:304–373`) |
-| `#v2-cam` | Markup inicial `T−:88`; localização `T−:236`, `T−:258`; escrita em `srcObject`/`style.display` `T−:239`; leitura de display, largura, altura e conteúdo na captura `T−:259–261`. | Mesmas operações: `T:88`, `T:236`, `T:239`, `T:277–280`. |
-| `#v2-cam-fallback` | Markup/atributos `T−:90`; chamada de `.click()` `T−:246`; instalação de `change` `T−:250`; leitura de `files[0]` `T−:251`. | Markup `T:90`; `.click()` `T:243`; instalação de `change` `T:269`; leitura de `files[0]` `T:270`. Não há escrita/reset de `files` pelo código da tela. (`T:269–272`) |
-
-O navegador aplica às apresentações as regras de quadro, vídeo, placeholder e chip; essas regras continuam nas mesmas linhas. (`T−:14–21`, `T:14–21`)
-
-**NÃO PROCEDENTE — consumidor supondo significado incompatível.** A captura consulta o vídeo, não o conteúdo de `#v2-cam-ph`. POST e fila recebem `_fotoBlob`, não URL nem `<img>`. A fila armazena esse argumento em `foto` e posteriormente o envia como multipart. (`T:277–280`, `T:339`, `T:352`, `T:365`; `P:107–118`, `P:143–156`)
-
-**2. Coerência da tela nos caminhos pedidos**
-
-| Caminho | Veredito e evidência |
-|---|---|
-| Falha da câmera, seguida de selfie válida | **NÃO PROCEDENTE: aviso persistente.** O handler guarda o arquivo e repinta; o pintor remove o aviso, anexa a imagem e atualiza o chip. O `onclick` permanece no contêiner. (`T:243`, `T:255–261`, `T:269–271`) |
-| Seleção cancelada, sem arquivo | **NÃO PROCEDENTE: perda da selfie anterior.** O retorno antecipado preserva blob, imagem, URL e chip. Se ainda não havia selfie, preserva o aviso. (`T:270–271`) |
-| Segunda selfie | **NÃO PROCEDENTE: prévia anterior permanente.** O arquivo substitui `_fotoBlob`; o pintor revoga a URL anterior, cria outra e substitui os filhos do quadro. (`T:254–260`, `T:271`) |
-| Prévia com `_fotoBlob=null` | **NÃO PROCEDENTE nos escritores normais.** A imagem só é criada dentro de `if(_fotoBlob)`; nenhum escritor posterior limpa o blob. (`T:146`, `T:255–260`, `T:271`, `T:305`) |
-| Câmera ao vivo funcionando | **NÃO PROCEDENTE: regressão introduzida pela cura.** O sucesso continua exibindo vídeo, escondendo placeholder e marcando “câmera ao vivo”; a confirmação captura o vídeo. (`T:238–240`, `T:277–285`) |
-| Câmera ao vivo para depois de funcionar | **PROCEDENTE como limite anterior.** Não há acompanhamento de encerramento dos tracks para corrigir o chip; “câmera ao vivo” pode permanecer depois da interrupção. Isso já decorre do ramo anterior, não do novo pintor. (`T−:235–249`, `T:235–245`, `T:151`) |
-| `pageshow`/bfcache | **NÃO PROCEDENTE: preservação indefinida deliberada da selfie antiga.** `persisted` solicita reload; retorno visível após cinco minutos também. A nova execução começa com blob nulo e markup inicial. O comportamento efetivo no iPhone/PWA e eventual restauração do input são **[não verificado]**. (`T:319–324`, `T:146`, `T:87–90`) |
-| Reload | O código não reconstrói `_fotoBlob` a partir do input ou da fila; reinicia o estado local. Persistência da selfie através de reload: **NÃO PROCEDENTE como garantia desta tela**. (`T:146`, `T:269–271`) |
-| Offline ou queda de rede | **PROCEDENTE: a prévia posterior pode diferir da foto já enfileirada.** Após registrar f1, apenas o botão é escondido; o quadro continua permitindo selecionar f2. A UI passa a mostrar f2 ao lado do feedback da batida que guardou f1. Isso não altera retroativamente a fila. (`T:122–126`, `T:269–271`, `T:352–357`, `T:365–370`; `P:107–118`) |
-| `v2Sucesso` | **NÃO PROCEDENTE: chip divergente exposto por esse caminho.** O sucesso para os tracks e cobre a tela com overlay antes do redirecionamento; não limpa os elementos subjacentes. (`T:150–157`, `T:346`) |
-
-**PROCEDENTE, com limite de alcance — blob não garante imagem decodificável.** A tela marca “selfie pronta” imediatamente, sem esperar `load` nem tratar `error`. Um arquivo não decodificável pode produzir imagem quebrada com chip pronto; ocorrência no dado de produção: **[não verificado]**. Não é demonstração de `_fotoBlob` ausente. (`T:90`, `T:256–261`, `T:270–271`)
-
-**3. Revogação, limpeza, declaração e conteúdo não confiável**
-
-- **PROCEDENTE na ordem literal:** a URL antiga é revogada enquanto o `<img>` antigo ainda a referencia; a retirada ocorre depois, na mesma execução síncrona. Imagem quebrada persistente no caminho normal: **[não verificado]**. (`T:254–260`)
-- **NÃO PROCEDENTE — acúmulo de imagens/URLs a cada troca:** a pintura limpa os filhos anteriores e revoga a URL anterior. (`T:254`, `T:260`)
-- **PROCEDENTE — falta limpeza explícita da última URL:** somente outra pintura a revoga. `v2Sucesso` e os handlers de retomada não fazem essa limpeza. Isso demonstra retenção durante a vida do documento, não vazamento ilimitado comprovado. (`T:254`, `T:150–157`, `T:319–324`)
-- **NÃO PROCEDENTE — corrida pela declaração tardia:** declarar `abrirCamera` não a executa. `_camNegada`/`_previaUrl` são inicializadas antes de registrar o listener que chama a função. (`T:235`, `T:251`, `T:273`)
-- **NÃO PROCEDENTE — injeção pelo novo `innerHTML`:** `_camNegada` escolhe entre duas mensagens constantes; o valor do erro não entra no HTML. A foto recebe URL criada pelo navegador em propriedade DOM, sem concatenar nome ou conteúdo do arquivo. (`T:242`, `T:256–266`)
-
-**4. O teste MORDE?** [nao verificado]
-
-**Morde parcialmente por construção; não há comprovação executada de RED/GREEN.** O arquivo não injeta mutantes nem exige que eles falhem: executa os cenários esperados e compara o resultado. (`S:171–177`)
-
-| Asserção | Mutante alcançado e limite |
-|---|---|
-| Chromium presente | Reprova ambiente sem executável; sozinha não demonstra execução de JS. (`S:158`, `H:76–77`) |
-| Input presente no HTML | Pega remoção do id; sozinha aceita elemento inutilizável. (`S:162`) |
-| Veredito não nulo | Pega ausência do marcador; silêncio da sonda não vira verde. (`S:66–68`, `S:168`; `H:123–125`) | [nao verificado]
-| Ausência de `erro` | Pega elementos ausentes, falta do aviso inicial e exceções capturadas. A precondição verifica texto, não visibilidade. (`S:82–84`, `S:125`, `S:176`) |
-| `aviso=False` | Pega manutenção das palavras do aviso. Trocar apenas o texto passa esta parcela, mas falha nas parcelas de imagem. (`S:77`, `S:99–101`) |
-| `previa=True` | Pega ausência de `<img blob:>`. Procura no **pai** do placeholder; não exige descendência de `#v2-cam-ph`. (`S:83`, `S:94`, `S:100`) |
-| `decodificada=True` | Pega texto sem prévia e imagem quebrada; exige imagem completa com largura natural 4. Não compara pixels, bytes ou altura. (`S:101`) |
-| `area=True` | Pega área geométrica nula; não verifica opacidade, `visibility` ou oclusão. (`S:102–103`) |
-| `toque=True` | Pega perda do caminho de clique no centro medido. Não exige especificamente `ph.onclick`; `.click()` do input é substituído por contador, portanto não comprova abertura real da câmera do sistema. (`S:87`, `S:104–108`) |
-| `troca=True` | Pega URL de prévia estagnada na segunda seleção. (`S:109–113`) |
-| `revoga=True` | Pega omissão da revogação anterior; não cobra ordem de remoção nem limpeza da última URL. (`S:85–86`, `S:114`) |
-| `decodificada2=True` | Pega segunda prévia quebrada ou ainda com largura 4; não repete área ou clique depois da segunda seleção. (`S:110–115`) |
-| `aviso2=False` | Pega retorno textual do aviso após a segunda seleção. (`S:116`) |
-| `envio=True` | Pega ausência de foto/POST, quantidade diferente de um envio e tamanho/MIME divergentes. Outro blob com mesmo tamanho e MIME passa. (`S:60–64`, `S:118–120`) |
-| Igualdade integral com `ESPERADO` | Exige todos os resultados e o conjunto exato de chaves; não basta desaparecer o aviso. (`S:131–134`, `S:177`) |
-
-Sobre os mutantes propostos:
-
-- **Só trocar o texto, sem prévia: seria pego**, pelas verificações de imagem, decodificação e área. (`S:100–103`)
-- **Prévia sem revogar: seria pego**, pela anotação de `revokeObjectURL`. (`S:85–86`, `S:114`)
-- **Prévia fora de `#v2-cam-ph`, sem clique próprio: pode escapar**, se continuar dentro do pai pesquisado, tiver área e deixar o centro do placeholder acessível ao clique antigo. Perder todo caminho de clique naquele centro seria pego. (`S:83`, `S:94`, `S:104–108`)
-- **Quebrar o envio da segunda selfie: cobertura insuficiente.** Enviar blob errado de mesmo tamanho/MIME escapa. Conservar especificamente o primeiro PNG seria pego somente se seus tamanhos diferirem; tamanhos efetivamente produzidos nesta execução: **[não verificado]**. (`S:70–75`, `S:95`, `S:110`, `S:120`)
-
-**NÃO PROCEDENTE — asserção globalmente vazia.** Há precondição de aviso, exigência positiva de imagem e veredito obrigatório. **PROCEDENTE — lacunas:** nenhuma asserção consulta o chip; a sonda força câmera rejeitada, conexão online e resposta HTTP 599, deixando fora câmera funcionando, cancelamento, offline, sucesso e retomada. Os erros de console retornados são descartados. (`S:48–64`, `S:80–120`, `S:165–177`)
-
-**NÃO PROCEDENTE — acesso inválido ao `_fotoBlob` privado.** A sonda alcança um leitor legítimo: `window.v2Confirmar` fecha sobre o IIFE, chama requisitos/captura e coloca `_fotoBlob` no `FormData`; o fetch interceptado observa esse argumento. (`T:138`, `T:146`, `T:278`, `T:305`, `T:326`, `T:339`; `S:62`, `S:118`)
-
-**NÃO PROCEDENTE — somente uma casca renderizada.** O laço percorre ambas, e o loader associa `base.html` ao conteúdo do arquivo escolhido. Ambas possuem o bloco `content` usado pela tela. Isso verifica renderização direta, não seleção real da casca pela sessão/rota. (`S:38`, `S:137–150`, `S:172–175`; `T:1–3`; `app/templates/base.html:336`; `app/templates/base_app.html:94`)
-
-**5. Classes que já reprovaram obras**
-
-| Classe | Veredito |
-|---|---|
-| Segundo juiz duplicando autoridade | **NÃO PROCEDENTE.** O registro vivo contém `selfie_ausente`, que julga foto da batida persistida e prazo do canal; o pintor decide apenas apresentação do blob local. O próprio lookup manda consultar o registro vivo. (`app/docs/JUIZES.md:10–15`; `app/core/juizes.py:1202–1205`; `T:255–267`) |
-| Segundo escritor fora da porta | **NÃO PROCEDENTE para dados/envio.** O pintor não escreve `_fotoBlob` nem persiste batida; escreve apresentação e recurso visual. Os escritores anteriores do blob permanecem. (`T:146`, `T:254–271`, `T:305`; `P:107–118`) |
-| Relógio lido fora da borda | **NÃO PROCEDENTE no diff.** A nova pintura não consulta relógio; as leituras existentes permanecem nos fluxos anteriores de relógio, GPS, retomada e feedback. (`T:252–271`, `T:163–170`, `T:311–323`, `T:353–368`) |
-| Derivação paralela de fonte única | **NÃO PROCEDENTE.** A presença da prévia deriva diretamente de `_fotoBlob`; `_previaUrl` identifica o recurso visual, e `_camNegada` escolhe o aviso quando falta blob. (`T:251–267`) |
-| Selo/RED sem mordida | **NÃO PROCEDENTE como teste apenas textual; PROCEDENTE como ausência de prova de mutação e cobertura incompleta.** Há medições de imagem, clique, troca e POST, mas não execução de mutantes dentro deste teste. (`S:99–120`, `S:171–177`) | [nao verificado]
-| Campo com dois significados incompatíveis | **NÃO PROCEDENTE no contrato de envio.** O placeholder passa a conter também a prévia, mas nenhum consumidor do envio interpreta seu conteúdo. `_fotoBlob` continua sendo o material da foto; captura e fallback já produziam Blob/File. (`T−:252`, `T−:265`; `T:255–280`, `T:305`, `T:339`) |
-
-**6. Outras telas e JS**
-
-**NÃO PROCEDENTE — dependência localizada dos ids/markup substituído nas telas citadas.** Os consumidores externos examinados usam estes contratos:
-
-| Arquivo | Contrato localizado |
-|---|---|
-| `static/pwa.js` | Recebe a foto como argumento, guarda em `foto` e envia multipart; não precisa do placeholder ou da imagem de prévia. (`P:107–118`, `P:143–156`) |
-| `static/sw.js` | Trata método/URL/cache e solicita sincronização por mensagem, sem participar da pintura da câmera. (`app/static/sw.js:33–85`, `app/static/sw.js:112–125`) |
-| `triagem/apto.html` | Usa estado e elementos próprios, como `camera`, `preview` e `foto-input`. (`app/templates/ponto/triagem/apto.html:138–150`, `app/templates/ponto/triagem/apto.html:167–190`, `app/templates/ponto/triagem/apto.html:229–232`) |
-| `dashboard_colaborador.html` | Liga à rota da tela v2. (`app/templates/core/dashboard_colaborador.html:39–46`) |
-| `dashboard_colaborador_v2.html` | Liga à mesma rota. (`app/templates/core/dashboard_colaborador_v2.html:31–38`) |
-
-O teste novo é consumidor explícito do placeholder/input e pressupõe o pai como quadro da imagem. Dependências externas à cópia ou geradas dinamicamente: **[não verificado]**. (`S:80–94`) [nao verificado]
-
-## 15/11 10:35 · sessao 3a515ace382d · - · - · origem=Ronald (tmux)
-
-Use `T = app/templates/ponto/bater_ponto_v2.html`.
-
-- **NÃO PROCEDENTE — aviso persistente após selfie no fluxo normal.** O handler só aceita arquivo existente, grava `_fotoBlob` e repinta; o ramo com blob apaga o aviso, insere a imagem e troca o chip conjuntamente (`T:269-271`, `T:255-261`).
-- **NÃO PROCEDENTE — cancelar a segunda seleção perde a primeira selfie.** `if(!f)return` preserva `_fotoBlob`, URL, imagem e chip anteriores; cancelamento não significa “apagar selfie” nesse contrato (`T:270-271`).
-- **NÃO PROCEDENTE — segunda selfie conserva imagem anterior.** Primeiro revoga a URL anterior, cria URL do novo blob e remove o filho antigo por `innerHTML=''` antes de anexar o novo (`T:254-261`).
-- **NÃO PROCEDENTE — prévia com `_fotoBlob` nulo por algum escritor normal.** A imagem só é criada sob `if(_fotoBlob)`; os escritores são inicialização nula, arquivo recebido e captura com preservação do blob anterior; nenhum escritor posterior limpa o blob (`T:146`, `T:255-260`, `T:271`, `T:305`).
-- **Limite PROCEDENTE — blob existente não garante imagem decodificável.** O handler não verifica conteúdo nem decodificação, e a pintura marca “selfie pronta” antes de `load`, sem `error` handler; um arquivo inválido pode dar imagem quebrada com chip pronto. Existência desse caso em produção: **[não verificado]** (`T:90`, `T:270-271`, `T:256-261`).
-- **NÃO PROCEDENTE — fluxo ao vivo passa a depender da prévia.** Sucesso de `getUserMedia` continua exibindo vídeo, escondendo placeholder e marcando câmera ao vivo; `capturarFrame` continua lendo vídeo quando há largura e usando `_fotoBlob` quando não há quadro (`T:238-240`, `T:277-285`). Uma câmera que pare depois de ter funcionado não tem observador de tracks/error para corrigir o chip; esse limite já pertence ao fluxo ao vivo, não à pintura nova (`T:235-245`, `T:151`).
-- **NÃO PROCEDENTE — bfcache conserva indefinidamente selfie antiga por decisão desta tela.** `pageshow.persisted` pede reload; retorno visível após mais de cinco minutos também pede reload; nova execução inicializa `_fotoBlob=null` e markup inicial. Comportamento efetivo no iPhone/PWA e restauração de campos pelo navegador: **[não verificado]** (`T:319-324`, `T:146`, `T:87-90`).
-- **Observação PROCEDENTE — prévia posterior não identifica a foto já salva offline.** Os dois ramos offline escondem apenas o botão, mantendo input/quadro interativos; selecionar outra selfie muda `_fotoBlob` e prévia, enquanto a fila conserva a foto passada no registro anterior. Pode haver f2 visível junto do aviso “Batida registrada localmente” referente a f1; isso não demonstra mudança do envio pelo diff (`T:269-271`, `T:352-357`, `T:365-370`; `app/static/pwa.js:107-118`; aviso em `T:122-126`).
-- **NÃO PROCEDENTE — `v2Sucesso` deixa chip divergente visível.** Ele para tracks e cobre a página com overlay antes do redirecionamento; não limpa estado interno nem URL. O vídeo/chip subjacentes podem ficar congelados, mas o overlay os cobre (`T:150-157`, chamada `T:346`).
-
-Item 3:
-
-- **PROCEDENTE apenas na ordem literal — URL revogada ainda referenciada pelo `<img>`.** Revogação em `T:254` precede remoção da imagem em `T:260`. Isso ocorre na mesma execução síncrona; imagem quebrada persistente no caminho normal não está demonstrada. Uma exceção entre essas linhas poderia conservar a referência antiga; ocorrência concreta: **[não verificado]** (`T:254-260`).
-- **NÃO PROCEDENTE — acúmulo de `<img>` a cada selfie.** `ph.innerHTML=''` remove a imagem anterior; a URL anterior também é revogada (`T:254`, `T:260`).
-- **PROCEDENTE — falta cleanup explícito da última URL.** Há revogação somente na próxima pintura; `v2Sucesso`, `pageshow` e `visibilitychange` não revogam nem limpam a última imagem. É retenção durante a vida do documento, não prova de vazamento ilimitado (`T:254`, `T:150-157`, `T:319-324`).
-- **NÃO PROCEDENTE — declaração tardia de `var` provoca corrida com `abrirCamera`.** A inicialização em `T:251` acontece antes do registro do listener em `T:273`; declarar a função antes não a executa (`T:235`, `T:251`, `T:273`).
-- **NÃO PROCEDENTE — `innerHTML` novo recebe valor não confiável.** `_camNegada` apenas seleciona entre duas strings constantes; nome, conteúdo e nome de arquivo não são concatenados no HTML; a imagem é criada por DOM e recebe URL gerada (`T:242`, `T:256-266`).
-
-_5606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5614 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
