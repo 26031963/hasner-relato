@@ -1,7 +1,615 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 01:55** · publicado em **15/11/2026 01:56** (UTC-3)
+> Ultima resposta processada: **15/11/2026 01:58** · publicado em **15/11/2026 02:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 01:58 · sessao 556c7ef0bf1e · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
+
+**Veredito final: REPROVADO.** Há uma corrida que classifica reutilização como criação, mudança de sinalização para dupla viva e lacunas nos selos. A correção sequencial de V1, a consulta de V2 e a igualdade exigida em V3 estão presentes. (`app/ponto/services/resposta_batida.py:23`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/services/triagem_batida.py:717`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:37`)
+
+Referências abaixo relativas a `app/`, exceto `CLAUDE.md`.
+
+1. **A casca infere criação; a leitura anterior não prova quem criou.**
+
+   O snapshot lê somente o PK existente naquele momento. A porta conhece seus ramos de reutilização/criação, mas retorna apenas `(batida, conflito)`; o helper tenta reconstruir essa informação comparando PK, timestamp, tipo e retratação. (`ponto/services/resposta_batida.py:10`; `ponto/services/resposta_batida.py:23`; `ponto/registro_batida.py:102`)
+
+   **Se a execução chegou à porta**, os ramos sequenciais ficam assim:
+
+   | Ramo | Resposta e efeitos |
+   |---|---|
+   | Viva do mesmo tipo em ±60 s, instante diferente | Porta devolve existente; timestamp diferente faz o helper responder `ja_registrada`, com campos do objeto. Pula efeitos posteriores da casca. (`ponto/registro_batida.py:113`; `ponto/services/resposta_batida.py:23`; `api/views.py:694`; `ponto/services/triagem_batida.py:724`) |
+   | Viva do mesmo tipo, chave exata já vista pelo snapshot | PK igual denuncia reutilização; responde `ja_registrada`. Normalmente o dedup anterior já captura esse caso; nas APIs ele também pode ser alcançado após correção de tipo. (`ponto/services/resposta_batida.py:23`; `api/views.py:531`; `api/views.py:577`; `ponto/tests/test_dedup_retratada_c2.py:197`) |
+   | Mesma chave retratada ou de outro tipo | Porta devolve a antiga, sem criar nem desfazer retratação. Helper responde `ja_registrada` com tipo, instante e sequência **da antiga**. Se houver viva temporal do tipo pedido, esse ramo temporal ganha antes da chave exata. (`ponto/registro_batida.py:113`; `ponto/registro_batida.py:120`; `ponto/services/resposta_batida.py:29`) |
+   | Oposta viva, sem correspondência ao marco próprio | Nas três cascas, `autoridade_humana=False`: porta devolve `None`; casca responde `ignorada_intervalo`, antes do helper. (`ponto/registro_batida.py:145`; `ponto/registro_batida.py:150`; `api/views.py:657`; `api/views_core.py:648`; `ponto/services/triagem_batida.py:703`) |
+   | Create normal, inclusive oposta admitida pelo marco próprio | Objeto nasce com timestamp/tipo pedidos, retratação NULL e PK novo; helper devolve `None`, permitindo os efeitos de nova. (`ponto/registro_batida.py:145`; `ponto/registro_batida.py:157`; `ponto/models.py:67`; `ponto/services/resposta_batida.py:23`) |
+   | Create com conflito e autoridade humana | Existe na porta, mas essas três chamadas não usam autoridade humana. (`ponto/registro_batida.py:152`; `api/views.py:657`; `api/views_core.py:648`; `ponto/services/triagem_batida.py:703`) |
+   | Colisão SQL no create | A unicidade declarada é colaborador/timestamp. Não há captura de `IntegrityError` nem recuperação da vencedora nesse corpo da porta ou em torno dessas chamadas. A exceção escapa desses trechos; resposta HTTP efetiva **[nao verificado]**. (`ponto/models.py:106`; `ponto/registro_batida.py:157`; `api/views.py:655`; `api/views_core.py:646`; `ponto/services/triagem_batida.py:701`) |
+
+   **No código atual, não encontrei ramo sequencial de create normal classificado como reutilização. Encontrei o inverso em concorrência:** A lê chave ausente; B insere e confirma viva do mesmo tipo na chave; A entra na porta, que reutiliza B. Como `pk_anterior=None`, os quatro termos do helper passam e ele anuncia criação. (`ponto/services/resposta_batida.py:10`; `ponto/registro_batida.py:113`; `ponto/services/resposta_batida.py:23`)
+
+   Reproduzi essa intercalação somente em memória, usando o corpo real da porta e das cascas: as APIs responderam `ok`; a triagem preencheu sucesso; havia uma única linha, criada pelo concorrente injetado. Rodaram foto, ordem, disputa, geofence e aviso; nas APIs, também o detector. O ensaio usa ORM/emissores dublês; ocorrência e frequência reais em produção **[nao verificado]**. (`ponto/tests/test_dedup_retratada_c2.py:80`; `ponto/tests/test_dedup_retratada_c2.py:136`; `ponto/tests/test_dedup_retratada_c2.py:156`; `api/views.py:697`; `api/views.py:705`; `ponto/services/triagem_batida.py:735`)
+
+   Os efeitos posteriores protegidos são: ordem, detector/chamado leve, disputa, foto, geofence, autoresolve de entrada e aviso nas APIs; disputa, ordem, foto, geofence, autoresolve e contexto de sucesso na triagem. Create também dispara os efeitos da própria porta e signals; reutilização não produz um segundo SSE de criação. (`api/views.py:697`; `api/views.py:721`; `api/views.py:768`; `api/views.py:776`; `api/views.py:785`; `api/views.py:795`; `api/views.py:812`; `ponto/services/triagem_batida.py:735`; `ponto/services/triagem_batida.py:746`; `ponto/services/triagem_batida.py:752`; `ponto/services/triagem_batida.py:758`; `ponto/registro_batida.py:160`; `ponto/signals.py:42`)
+
+   Portanto, a informação causal precisa sair da operação da porta; o snapshot não a substitui. Se o concorrente inserir retratada ou outro tipo, os testes de retratação/tipo ainda denunciam reutilização; a falha atual é a viva de mesmo tipo e chave surgida depois do snapshot. (`ponto/services/resposta_batida.py:23`; `ponto/registro_batida.py:120`)
+
+2. **A mudança de `_bloqueio_horario_clt` altera negócio também para dupla viva.**
+
+   Antes a função era chamada antes do dedup; agora qualquer dupla viva retorna em `664–665`, antes da chamada em `669`. O próprio teste exige zero chamadas de horário nesse controle. Isso ultrapassa a troca do predicado de retratada: modifica a sinalização de tentativas envolvendo exclusivamente batidas vivas. (`ponto/tests/dedup_retratada_c2_entrega.txt:19`; `ponto/services/triagem_batida.py:664`; `ponto/services/triagem_batida.py:669`; `ponto/tests/test_dedup_retratada_c2.py:241`)
+
+   O “bloqueio” não recusa gravação. Quando encontra tentativa fora da janela, procura chamado em 14 horas e pode criar `batida_fora_horario`; escreve contexto, sessão e devolve `fora_horario_info`. Essa informação alimenta justificativa e `aprovada=False` enviados à porta. (`ponto/services/triagem_batida.py:394`; `ponto/services/triagem_batida.py:452`; `ponto/services/triagem_batida.py:459`; `ponto/services/triagem_batida.py:478`; `ponto/services/triagem_batida.py:486`; `ponto/services/triagem_batida.py:687`; `ponto/services/triagem_batida.py:710`)
+
+   **Há trilha indireta:** `Chamado.criar` cria o chamado e chama `_trilha_do_nascimento`, que emite `nascimento_chamado`. A nova ordem pode suprimir chamado, nascimento/trilha e atualização de sessão que antes ocorreriam na segunda tentativa viva. (`chamados/models.py:1142`; `chamados/models.py:1143`; `chamados/models.py:1265`)
+
+   Os leitores são a view que restaura a sessão e escolhe a tela, o template de fora de horário, o pedido de anuência e a aprovação da exceção. Essa aprovação lê tipo/hora e chama novamente a porta de batida. (`ponto/views.py:234`; `ponto/views.py:265`; `templates/ponto/triagem/fora_horario.html:15`; `templates/ponto/triagem/fora_horario.html:23`; `ponto/services/triagem_batida.py:319`; `ponto/services/triagem_batida.py:351`; `chamados/services/acoes_chamado.py:29`; `chamados/services/acoes_chamado.py:44`)
+
+   Logo: **antes a dupla viva passava pela sinalização; agora não passa**. Autorização adicional para essa supressão de negócio **[nao verificado]**; o escopo local exige leitura literal do aval. (`ponto/tests/dedup_retratada_c2_entrega.txt:19`; `ponto/services/triagem_batida.py:664`; `CLAUDE.md:37`)
+
+   A guarda também não garante ausência de emissão em toda recusa: sem chave exata, horário ainda roda antes de a porta recusar por oposta. O teste “sem efeitos” exclui `horario` por padrão. (`ponto/services/triagem_batida.py:669`; `ponto/services/triagem_batida.py:714`; `ponto/tests/test_dedup_retratada_c2.py:162`)
+
+3. **Os dois payloads ricos de `ja_registrada` são congruentes; o front presente não os consome.**
+
+   Helper e dupla viva da API têm os mesmos nove campos: `status`, `id`, `tipo`, `timestamp`, `sequencia`, `mensagem`, `sucesso`, `em_disputa`, `motivos_disputa`. Na dupla, o tipo pedido coincide com o objeto pelo filtro; no helper, vem diretamente do objeto. Ambos usam timestamp do objeto em `localtime().isoformat()` e mensagem HH:MM. (`api/views.py:531`; `api/views.py:535`; `ponto/services/resposta_batida.py:27`; `ponto/services/resposta_batida.py:29`)
+
+   **Nesse contrato, `timestamp` é o instante do objeto devolvido**, podendo diferir do pedido. Isso já acontecia no dedup de cinco minutos e também é a fonte do timestamp no retorno `ok`; o delta não introduz uma segunda semântica nesse campo da resposta. O formato local acompanha a configuração São Paulo/`USE_TZ=True`. (`api/views.py:539`; `api/views.py:817`; `ponto/services/resposta_batida.py:33`; `config/settings/base.py:93`)
+
+   `em_disputa=False` e motivos vazios não consultam disputa existente: são constantes tanto no retorno antigo quanto no helper. Portanto não certificam o estado atual de disputa do objeto reutilizado. (`api/views.py:543`; `ponto/services/resposta_batida.py:37`)
+
+   Quanto aos leitores:
+
+   | Consumidor | O que efetivamente lê |
+   |---|---|
+   | PWA online v2 | Usa HTTP `r.ok`, sem ler JSON, e apresenta sucesso com **tipo solicitado**. Pode continuar mostrando “Saída registrada” quando o objeto retornado é Entrada ou permanece retratado. (`templates/ponto/bater_ponto_v2.html:150`; `templates/ponto/bater_ponto_v2.html:310`; `templates/ponto/bater_ponto_v2.html:327`) |
+   | Fila offline | Faz `resp.json()`, mas não usa os campos; exclui pendência pelo HTTP OK e pelo ID local `b.id`. (`static/pwa.js:158`; `static/pwa.js:162`) |
+   | Template legado/triagem | Lê texto e faz `document.write`, sem interpretar o JSON; a dupla já retornava JSON mínimo e o helper acrescenta outro retorno JSON. (`templates/ponto/bater_ponto.html:533`; `templates/ponto/bater_ponto.html:539`; `ponto/services/triagem_batida.py:665`; `ponto/services/triagem_batida.py:726`) |
+   | APK | Consumo dos nove campos e expectativa de timestamp **[nao verificado]**. O servidor recebe `batida_id` no upload, mas isso não prova como o cliente o obteve. (`api/views.py:840`; `api/views.py:846`) |
+
+4. **A paridade exigida continua verde.** [nao verificado]
+
+   O selo é `ContractParidadeKernelsTest.test_pares_de_mesmo_nome_identicos`: compara AST de funções de mesmo nome nos dois módulos, com whitelist atualmente vazia. Não exige identidade integral dos arquivos. (`api/tests/test_contract_paridade_kernels.py:12`; `api/tests/test_contract_paridade_kernels.py:20`; `api/tests/test_contract_paridade_kernels.py:26`; `api/tests/test_contract_paridade_kernels.py:34`)
+
+   Reexecutei C1+C2 sem escrita: **20 testes OK**, incluindo esse contrato. O artefato entregue registra o mesmo resultado. (`ponto/tests/test_dedup_retratada_c2.py:292`; `ponto/tests/dedup_retratada_c2_green.txt:18`; `ponto/tests/dedup_retratada_c2_green.txt:27`)
+
+   Limite: nas mutações em memória, `SOBRESCRITAS` não alimenta o `open()` do contrato de paridade. Seu verde certifica a cópia em disco, não a igualdade de cada mutante injetado. (`ponto/tests/test_dedup_retratada_c2.py:22`; `ponto/tests/test_dedup_retratada_c2.py:294`; `api/tests/test_contract_paridade_kernels.py:19`)
+
+5. **V3 ganhou mordida nos três sítios, mas há mutantes de uma linha vivos.**
+
+   O tripwire agora exige contagem exata: UI=2, core=2, triagem=1, helper=1. O selo C2 restaura a consulta crua em cada um dos três dedups e exige que o tripwire existente falhe; esse teste passou na reprodução. (`ponto/tests/test_tripwire_bocais_apuracao.py:21`; `ponto/tests/test_tripwire_bocais_apuracao.py:27`; `ponto/tests/test_tripwire_bocais_apuracao.py:37`; `ponto/tests/test_dedup_retratada_c2.py:271`)
+
+   O mutante entregue “retratada tratada como nova” desliga a guarda `_resposta_existente`; ele é morto pelo caso que exige payload da retratada e ausência de efeitos. O tripwire de contagem, isoladamente, não verifica essa semântica. (`ponto/tests/test_dedup_retratada_c2.py:170`; `ponto/tests/test_dedup_retratada_c2.py:185`; `ponto/tests/test_dedup_retratada_c2.py:329`; `ponto/tests/test_tripwire_bocais_apuracao.py:30`)
+
+   **Dois mutantes adicionais sobreviveram aos 20 testes, somente em memória:** [nao verificado]
+
+   - Remover `and batida.retratada_em is None` da linha 24 do helper. A retratada dos testes já existe antes do snapshot, então o PK continua denunciando reutilização; a condição removida não é isolada. Isso deixa descoberta a chave retratada que surge depois do snapshot. (`ponto/services/resposta_batida.py:24`; `ponto/tests/test_dedup_retratada_c2.py:172`; `ponto/tests/test_dedup_retratada_c2.py:185`)
+   - Na linha 23, trocar `batida.timestamp == timestamp` por `batida.timestamp == timestamp.replace(microsecond=0)`. Os 20 testes continuam verdes porque o instante-base tem microssegundos zero. Com `microsecond=123456`, o ensaio criou uma batida nos três sítios, respondeu `ja_registrada` e pulou foto/ordem. **Essa perda de efeitos é do mutante, não do código atual.** (`ponto/services/resposta_batida.py:23`; `ponto/tests/test_dedup_retratada_c1.py:26`; `ponto/tests/test_dedup_retratada_c2.py:206`)
+
+   V2 foi corrigido quanto a universo e janela: triagem usa `_janela_oposto` e `batidas_apuraveis`, com limites inclusivos. Ainda reconstrói a testemunha depois da recusa, pois a porta devolve descrição, não o objeto causador; alterações concorrentes entre essas consultas continuam possíveis. (`ponto/services/triagem_batida.py:715`; `ponto/services/triagem_batida.py:717`; `ponto/turnos.py:2876`; `ponto/turnos.py:2878`; `ponto/registro_batida.py:146`)
+
+6. **Escritores, leitores e classes estruturais.**
+
+   | Valor lido/escrito pelo delta | Quem escreve; quem lê |
+   |---|---|
+   | Colaborador, PK/ID | Casca fornece colaborador; create da porta/ORM produz a linha e PK. Snapshot, helper e respostas leem identidade; chave única é colaborador/timestamp. (`api/views.py:654`; `ponto/registro_batida.py:157`; `ponto/models.py:106`; `ponto/services/resposta_batida.py:10`; `ponto/services/resposta_batida.py:31`) |
+   | Timestamp pedido/persistido | APIs recebem `ts_efetivo` de `hora_do_aparelho`; triagem captura `agora`; porta grava argumento. Snapshot compara chave; helper compara instante e apresenta o do objeto. (`api/views.py:507`; `api/views_core.py:493`; `ponto/services/triagem_batida.py:626`; `ponto/registro_batida.py:158`; `ponto/services/resposta_batida.py:23`; `ponto/services/resposta_batida.py:27`) |
+   | Tipo | Request fornece; APIs podem corrigir após dedup; porta persiste; flip posterior usa `anotar`. Helper compara pedido final e apresenta tipo do objeto. (`api/views.py:420`; `api/views.py:577`; `api/views.py:600`; `ponto/registro_batida.py:158`; `ponto/services/flip_batida.py:30`; `ponto/services/resposta_batida.py:24`; `ponto/services/resposta_batida.py:32`) |
+   | `retratada_em` | Retratar escreve carimbo por `anotar`; desfazer escreve NULL. Autoridade filtra NULL; snapshot inclui ambas; helper lê NULL/não NULL. (`ponto/registro_batida.py:274`; `ponto/registro_batida.py:254`; `ponto/services/retratar_humano.py:207`; `ponto/turnos.py:2876`; `ponto/services/resposta_batida.py:10`; `ponto/services/resposta_batida.py:24`) |
+   | Sequência | Cascas calculam pela autoridade e enviam à porta; helper apenas lê a sequência antiga do objeto reutilizado. (`api/views.py:554`; `api/views_core.py:540`; `ponto/services/triagem_batida.py:674`; `ponto/services/triagem_batida.py:706`; `ponto/services/resposta_batida.py:34`) |
+   | `_pk_anterior` | Snapshot escreve variável local; helper decide classificação e triagem decide antecipadamente se chama o emissor. (`api/views.py:654`; `api/views_core.py:645`; `ponto/services/triagem_batida.py:667`; `ponto/services/triagem_batida.py:669`; `ponto/services/resposta_batida.py:23`) |
+   | Payload/`_resposta_existente` | Helper monta dicionário; três cascas retornam antes dos efeitos posteriores. Leitores de front estão no item 3. (`ponto/services/resposta_batida.py:29`; `api/views.py:694`; `api/views_core.py:685`; `ponto/services/triagem_batida.py:724`) |
+   | `g_op`, `op`, ID/tipo da recusa | `_janela_oposto` fornece 300/60 s; porta e casca consultam; triagem escolhe candidata viva descendente e lê ID/tipo, sem gravá-la. (`ponto/registro_batida.py:21`; `ponto/registro_batida.py:138`; `ponto/services/triagem_batida.py:716`; `ponto/services/triagem_batida.py:720`) |
+   | `fora_horario_info`, justificativa, aprovação | Emissor produz informação/contexto/sessão; montagem local transforma em justificativa/aprovação; porta persiste. Leitores de anuência estão no item 2. (`ponto/services/triagem_batida.py:478`; `ponto/services/triagem_batida.py:491`; `ponto/services/triagem_batida.py:685`; `ponto/services/triagem_batida.py:710`) |
+   | Inventário/regex do tripwire | Teste declara contagens/donos e lê fontes para comparar igualdade. (`ponto/tests/test_tripwire_bocais_apuracao.py:14`; `ponto/tests/test_tripwire_bocais_apuracao.py:30`; `ponto/tests/test_tripwire_bocais_apuracao.py:35`) |
+
+   **Não sustento “segundo juiz registrado” específico:** o registro vivo de batida não declara a pergunta “foi criada neste toque”. Sustento **derivação paralela do resultado da escrita**, demonstrada pela corrida do item 1. (`core/juizes.py:1196`; `core/juizes.py:1211`; `ponto/registro_batida.py:113`; `ponto/registro_batida.py:157`; `ponto/services/resposta_batida.py:23`)
+
+   O helper não acrescenta escritor de `Batida` nem relógio: faz SELECT, comparação e formatação. O escritor declarado continua na porta; os relógios de `_bloqueio_horario_clt` já pertencem ao corpo existente, cuja execução foi reposicionada. (`core/portas.py:103`; `ponto/services/resposta_batida.py:10`; `ponto/services/resposta_batida.py:27`; `ponto/services/triagem_batida.py:455`; `ponto/services/triagem_batida.py:469`; `ponto/tests/dedup_retratada_c2_entrega.txt:19`)
+
+Suite inteira, opus final, smoke real nas duas cascas, medições dos 60 dias, empresas e afetados: **[nao verificado]**. A entrega também os declara pendentes; os 20 testes locais não os substituem. (`ponto/tests/dedup_retratada_c2_entrega.txt:129`; `ponto/tests/dedup_retratada_c2_entrega.txt:132`; `ponto/tests/dedup_retratada_c2_entrega.txt:137`)
+
+## 15/11 01:58 · sessao 9aa173e69482 · E3-RESTO-R3 · sonda · origem=Code
+
+import datetime as dt
+import io
+import logging
+import re
+import sys
+from contextlib import redirect_stderr, redirect_stdout
+from unittest.mock import patch
+
+AGORA = dt.datetime.fromisoformat("2026-11-15T03:00:00+00:00")
+HOJE = dt.date(2026, 11, 15)
+SAIDA = sys.stdout
+ERROS = 0
+K6_CHAVES = False
+
+
+def emitir(linha):
+    print(linha, file=SAIDA, flush=True)
+
+
+def erro(tipo, onde):
+    global ERROS
+    ERROS += 1
+    emitir("ERRO %s %s" % (tipo, onde))
+
+
+def local_seguro(caminho, numero):
+    caminho = str(caminho).replace("\\", "/")
+    if "/app/" in caminho:
+        return "%s:%d" % (caminho.rsplit("/app/", 1)[1], numero)
+    return "sonda:%d" % numero
+
+
+def registrar_log(self, registro):
+    if registro.exc_info and registro.exc_info[0]:
+        tb = registro.exc_info[2]
+        if tb is not None:
+            while tb.tb_next is not None:
+                tb = tb.tb_next
+            onde = local_seguro(tb.tb_frame.f_code.co_filename, tb.tb_lineno)
+        else:
+            onde = local_seguro(registro.pathname, registro.lineno)
+        erro(registro.exc_info[0].__name__, onde)
+    elif registro.levelno >= logging.WARNING:
+        erro("AvisoLogging", local_seguro(registro.pathname, registro.lineno))
+
+
+def protegido(onde, funcao):
+    inicio = ERROS
+    saida, diagnosticos = io.StringIO(), io.StringIO()
+    resultado = None
+    with redirect_stdout(saida), redirect_stderr(diagnosticos):
+        with patch.object(logging.Logger, "handle", registrar_log):
+            try:
+                resultado = funcao()
+            except BaseException as exc:
+                tb = exc.__traceback__
+                while tb is not None and tb.tb_next is not None:
+                    tb = tb.tb_next
+                origem = (
+                    local_seguro(tb.tb_frame.f_code.co_filename, tb.tb_lineno)
+                    if tb else onde
+                )
+                erro(type(exc).__name__, "%s %s" % (onde, origem))
+    if saida.getvalue().strip():
+        erro("SaidaInesperada", "%s stdout_suprimido" % onde)
+    for linha in diagnosticos.getvalue().splitlines():
+        if not linha.strip():
+            continue
+        achado = re.fullmatch(
+            r"col([0-9]+): espelho falhou \(([A-Za-z_][A-Za-z_0-9]*)\) -- fora da apuracao",
+            linha.strip(),
+        )
+        if achado:
+            erro(achado[2], "%s col%s apurar" % (onde, achado[1]))
+        else:
+            erro("DiagnosticoStderr", "%s stderr_suprimido" % onde)
+    return ERROS == inicio, resultado
+
+
+def carregar():
+    from colaboradores.models import Empresa
+    from escala.services.cadastro_realidade import beco_em_lote
+    from folha.export import competencia_entregue
+    from ponto.janelas import janela_fechamento
+    from ponto.management.commands import pautas_discordantes
+
+    return (
+        Empresa, beco_em_lote, competencia_entregue,
+        janela_fechamento, pautas_discordantes,
+    )
+
+
+def medir_k6(emp, mes, ano, ini, fim, beco):
+    itens = list(beco([(emp, ini, fim)], HOJE, agora=AGORA))
+    linhas = []
+    primeiras_chaves = None
+    for cid, assinatura in itens:
+        if assinatura["codigo"] != "C11":
+            raise ValueError("assinatura_invalida")
+        if primeiras_chaves is None:
+            chaves = sorted(assinatura)
+            if not all(
+                re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*", k)
+                for k in chaves
+            ):
+                raise ValueError("chaves_invalidas")
+            primeiras_chaves = " ".join(chaves)
+        data = dt.date.fromisoformat(assinatura["data"]).isoformat()
+        perguntas = assinatura.get("perguntas")
+        n_perguntas = None if perguntas is None else len(perguntas)
+        folga = assinatura.get("folga_nao_definida")
+        if folga is not None and type(folga) is not bool:
+            raise TypeError("folga_invalida")
+        linhas.append(
+            "K6I emp%d %d/%d col%d %s perguntas=%s folga=%s"
+            % (emp.pk, mes, ano, int(cid), data, n_perguntas, folga)
+        )
+    return len(itens), primeiras_chaves, linhas
+
+
+def medir_k3(emp, mes, ano, modulo):
+    nativo = io.StringIO()
+    comando = modulo.Command(
+        stdout=nativo, stderr=sys.stderr, no_color=True
+    )
+    with patch.object(modulo.tz, "now", return_value=AGORA):
+        comando.handle(
+            mes=mes,
+            ano=ano,
+            empresa=[emp.pk],
+            hoje=HOJE.isoformat(),
+            apply=False,
+        )
+    linhas = [
+        x for x in nativo.getvalue().splitlines() if x.strip()
+    ]
+    prefixos = (
+        "pautas_discordantes ",
+        "dia-colab de dono ESTRUTURA ",
+        "dia-colab sem leitura (sistema)",
+        "pautas vivas retidas",
+    )
+    if not linhas or not all(x.startswith(prefixos) for x in linhas):
+        raise ValueError("saida_do_command_inesperada")
+    return linhas
+
+
+def executar():
+    global K6_CHAVES
+    valido, fontes = protegido("imports", carregar)
+    if not valido:
+        return
+    Empresa, beco, entregue, janela, modulo_k3 = fontes
+    valido, empresas = protegido(
+        "empresas",
+        lambda: list(
+            Empresa.objects.filter(ativa=True).order_by("pk").only(
+                "pk", "ativa", "dia_inicio_competencia"
+            )
+        ),
+    )
+    if not valido:
+        return
+    for emp in empresas:
+        for mes, ano in ((11, 2026), (12, 2026)):
+            contexto = "emp%d %d/%d" % (emp.pk, mes, ano)
+            valido, periodo = protegido(
+                contexto + " janela",
+                lambda: janela(mes, ano, emp),
+            )
+            if not valido:
+                continue
+            ini, fim = periodo
+            if mes == 12 and ini > HOJE:
+                continue
+            valido, fechada = protegido(
+                contexto + " entregue",
+                lambda: entregue(emp.pk, mes, ano),
+            )
+            if not valido:
+                continue
+            if fechada:
+                emitir("COMP %s aberta=0" % contexto)
+                continue
+
+            valido, medicao = protegido(
+                "K6 " + contexto,
+                lambda: medir_k6(emp, mes, ano, ini, fim, beco),
+            )
+            if valido:
+                n, chaves, linhas = medicao
+                emitir("K6 %s n=%d" % (contexto, n))
+                if not K6_CHAVES and chaves is not None:
+                    emitir("K6K " + chaves)
+                    K6_CHAVES = True
+                for linha in linhas:
+                    emitir(linha)
+
+            valido, linhas = protegido(
+                "K3 " + contexto,
+                lambda: medir_k3(emp, mes, ano, modulo_k3),
+            )
+            if valido:
+                for linha in linhas:
+                    emitir("K3 %s %s" % (contexto, linha))
+                if not any(
+                    "dia-colab sem leitura (sistema)" in x
+                    for x in linhas
+                ):
+                    emitir("K3 sem_contador_nesta_arvore")
+
+
+try:
+    executar()
+except BaseException as exc:
+    erro(type(exc).__name__, "sonda executar")
+finally:
+    emitir("FIM ok=%d" % (ERROS == 0))
+
+---FIM-SCRIPT---
+
+- Empresas ativas e ordem: app/colaboradores/models.py:40, app/colaboradores/models.py:44, app/escala/services/cadastro_realidade.py:543, app/escala/services/cadastro_realidade.py:547.
+- janela_fechamento e corte por empresa: app/ponto/janelas.py:10, app/ponto/janelas.py:36, app/ponto/janelas.py:54.
+- Competência aberta pelo juiz de entrega: app/escala/services/cadastro_realidade.py:528, app/ponto/services/he_pendente_lavrado.py:218, app/folha/export.py:556, app/folha/export.py:580. Dependências de leitura: app/folha/models.py:192, app/folha/models.py:203.
+- beco_em_lote: app/escala/services/cadastro_realidade.py:414. Predicado de folga: app/escala/services/cadastro_realidade.py:498. Assinatura retornada, com data/perguntas e sem campo folga_nao_definida nesta cópia: app/escala/services/cadastro_realidade.py:510.
+- K3 usa handle para executar o apurar e sincronizar reais e preservar a impressão de cada árvore: app/ponto/management/commands/pautas_discordantes.py:56, app/ponto/management/commands/pautas_discordantes.py:113, app/ponto/management/commands/pautas_discordantes.py:117, app/ponto/management/commands/pautas_discordantes.py:118. Relógio da borda: app/ponto/management/commands/pautas_discordantes.py:115.
+- Contagens existentes nesta cópia: app/ponto/management/commands/pautas_discordantes.py:119, app/ponto/management/commands/pautas_discordantes.py:125. O handle termina sem os dois contadores novos: app/ponto/management/commands/pautas_discordantes.py:129.
+- DRY: sincronizar e consultas em app/ponto/services/pautas_dos_discordantes.py:155, app/ponto/services/pautas_dos_discordantes.py:165; escritores protegidos por apply em app/ponto/services/pautas_dos_discordantes.py:177.
+- Dependências da apuração auditadas: app/ponto/management/commands/e6_oraculo.py:128, app/ponto/management/commands/e6_oraculo.py:162, app/ponto/management/commands/e6_oraculo.py:182; app/ponto/services/espelho.py:1194; app/ponto/services/fechamento.py:277.
+- Erros internos que exigem captura: app/ponto/management/commands/pautas_discordantes.py:101, app/colaboradores/services/calendario.py:616, app/core/regua_cct.py:442. Uso de timezone indicado no anexo: app/relatorios/cartao_pela_celula.py:412.
+- Delta c6 e execução nas duas árvores: [nao verificado]; a adaptação aos contadores usa a saída real do comando, conforme o anexo fornecido.
+
+## 15/11 01:58 · sessao b445a52b3bee · JUSTIFICATIVA-PAGA · sonda · origem=Code
+
+import sys
+sys.dont_write_bytecode = True
+
+import io
+import time
+import logging
+from collections import Counter
+from contextlib import contextmanager, redirect_stdout, redirect_stderr
+
+# Retorno real: (abono, previsto, realizado), mapas por data.
+# app/ponto/services/dia_pago.py:364-402
+# Nesta copia, a funcao nao propaga None nem le min_justificados.
+# app/ponto/services/dia_pago.py:386-402
+# D1 mede os mapas reais da main; impacto c11: [nao verificado].
+# Execucao com banco e resultados: [nao verificado].
+
+MES, ANO = 11, 2026
+OK = True
+FALHOU = object()
+
+
+@contextmanager
+def silencioso():
+    nivel_anterior = logging.root.manager.disable
+    with io.StringIO() as descarte:
+        with redirect_stdout(descarte), redirect_stderr(descarte):
+            logging.disable(sys.maxsize)
+            try:
+                yield
+            finally:
+                logging.disable(nivel_anterior)
+
+
+def erro(exc, onde):
+    global OK
+    OK = False
+    print("ERRO {} {}".format(type(exc).__name__, onde), flush=True)
+
+
+def tentar(onde, func, *args):
+    try:
+        with silencioso():
+            return func(*args)
+    except Exception as exc:
+        erro(exc, onde)
+        return FALHOU
+
+
+def carregar():
+    global Empresa, FechamentoMensal, EscalaColaborador, Count
+    global universo_da_competencia, janela_fechamento
+    global grade_do_fechamento, por_dia_da_grade, prontidao
+
+    from colaboradores.models import Empresa
+    from ponto.models import FechamentoMensal
+    from escala.models import EscalaColaborador
+    from django.db.models import Count
+    from ponto.services.fechamento import universo_da_competencia
+    from ponto.janelas import janela_fechamento
+    from folha.export import grade_do_fechamento, prontidao
+    from ponto.services.dia_pago import por_dia_da_grade
+
+
+def ler_colaborador(colab, ini, fim):
+    # Mesmo leitor de grade do escritor; objeto apenas em memoria.
+    # app/ponto/services/fechamento.py:1013-1014
+    # app/folha/export.py:329-338
+    referencia = FechamentoMensal(
+        colaborador=colab, mes=MES, ano=ANO
+    )
+    grade = grade_do_fechamento(referencia)
+    abono, previsto, realizado = por_dia_da_grade(grade)
+
+    # Ausencia de chave nao equivale a valor None.
+    # app/ponto/services/dia_pago.py:398-402
+    sem_ata = {
+        data
+        for mapa in (abono, realizado)
+        for data, valor in mapa.items()
+        if valor is None
+    }
+
+    tipos_por_data = {}
+    for dia in grade["dias"]:
+        data = dia["data"]
+        if data in tipos_por_data:
+            raise ValueError("data_duplicada")
+        tipos_por_data[data] = dia["tipo_dia"]
+
+    if any(
+        data is None or not ini <= data <= fim
+        or data not in tipos_por_data
+        for data in sem_ata
+    ):
+        raise ValueError("data_invalida_no_retorno")
+
+    # Sem filtro de tipo_dia: inclui qualquer tipo presente nos mapas.
+    tipos = Counter(tipos_por_data[data] for data in sorted(sem_ata))
+    return len(sem_ata), tipos
+
+
+def medir_d1():
+    # Empresa.ativa: app/colaboradores/models.py:44
+    empresas = list(Empresa.objects.filter(ativa=True).order_by("pk"))
+    universo_total = []
+    universo_completo = True
+
+    for empresa in empresas:
+        emp = empresa.pk
+        janela = tentar(
+            "D1 emp{} janela".format(emp),
+            janela_fechamento, MES, ANO, empresa,
+        )
+        # Mesmo universo chamado pelo escritor.
+        # app/ponto/services/fechamento.py:428-445
+        # app/ponto/services/fechamento.py:554
+        colabs = tentar(
+            "D1 emp{} universo".format(emp),
+            lambda: list(
+                universo_da_competencia(MES, ANO, emp)
+                .select_related("empresa", "posto__praca")
+                .order_by("pk")
+            ),
+        )
+        if colabs is FALHOU:
+            universo_completo = False
+            continue
+
+        universo_total.extend(colabs)
+        if janela is FALHOU:
+            continue
+
+        ini, fim = janela
+        completo = True
+        n_colabs = 0
+        n_dias = 0
+
+        for colab in colabs:
+            resultado = tentar(
+                "D1 emp{} col{}".format(emp, colab.pk),
+                ler_colaborador, colab, ini, fim,
+            )
+            if resultado is FALHOU:
+                completo = False
+                continue
+
+            dias, tipos = resultado
+            n_colabs += int(dias > 0)
+            n_dias += dias
+            print(
+                "D1I emp{} col{} dias_sem_ata={} tipos={!r}".format(
+                    emp, colab.pk, dias, tipos
+                ),
+                flush=True,
+            )
+
+        if completo:
+            print(
+                "D1 emp{} colabs={} dias={}".format(
+                    emp, n_colabs, n_dias
+                ),
+                flush=True,
+            )
+
+    return universo_total, universo_completo
+
+
+def ler_d2():
+    # Campos e nulabilidade: app/ponto/models.py:405-409,432-453
+    return list(
+        FechamentoMensal.objects.filter(
+            previsto_em__isnull=False,
+            minutos_previstos__isnull=False,
+            minutos_abonados__isnull=True,
+        )
+        .values("colaborador__empresa_id", "mes", "ano")
+        .annotate(n=Count("pk"))
+        .order_by("colaborador__empresa_id", "ano", "mes")
+    )
+
+
+def preparar_d3(colabs):
+    ids = [colab.pk for colab in colabs]
+    fechamentos = {
+        fech.colaborador_id: fech
+        for fech in FechamentoMensal.objects.filter(
+            colaborador_id__in=ids, mes=MES, ano=ANO
+        ).select_related("colaborador__empresa", "colaborador__posto__empresa")
+    }
+
+    # Todas as escalas, sem filtro ativa, como na lista.
+    # app/ponto/services/fechamento_lista.py:54-57
+    rows = {}
+    for escala in EscalaColaborador.objects.filter(
+        colaborador_id__in=ids
+    ).select_related("tipo_escala"):
+        rows.setdefault(escala.colaborador_id, []).append(escala)
+    return fechamentos, rows
+
+
+def cronometrar(fech, rows):
+    # Mesma chamada da lista, sem alterar o snapshot.
+    # app/ponto/services/fechamento_lista.py:85-86
+    inicio = time.perf_counter()
+    prontidao(fech, rows=rows)
+    return time.perf_counter() - inicio
+
+
+def executar():
+    if tentar("imports", carregar) is FALHOU:
+        return
+
+    d1 = tentar("D1", medir_d1)
+
+    d2 = tentar("D2", ler_d2)
+    if d2 is not FALHOU:
+        for linha in d2:
+            print(
+                "D2 emp{} {}/{} n={}".format(
+                    linha["colaborador__empresa_id"],
+                    linha["mes"], linha["ano"], linha["n"],
+                ),
+                flush=True,
+            )
+
+    if d1 is FALHOU or not d1[1]:
+        raise RuntimeError("universo_D3_incompleto")
+
+    # D3: cinco primeiros PKs do universo percorrido em D1.
+    amostra = sorted(d1[0], key=lambda colab: colab.pk)[:5]
+    if len(amostra) < 5:
+        erro(RuntimeError(), "D3 amostra_insuficiente")
+
+    preparados = tentar("D3 preparacao", preparar_d3, amostra)
+    if preparados is FALHOU:
+        return
+    fechamentos, rows = preparados
+
+    for colab in amostra:
+        fech = fechamentos.get(colab.pk)
+        if fech is None:
+            erro(RuntimeError(), "D3 col{} fechamento_ausente".format(colab.pk))
+            continue
+        segundos = tentar(
+            "D3 col{}".format(colab.pk),
+            cronometrar, fech, rows.get(colab.pk),
+        )
+        if segundos is not FALHOU:
+            print("D3 col{} s={:.6f}".format(colab.pk, segundos), flush=True)
+
+
+try:
+    executar()
+except Exception as exc:
+    erro(exc, "execucao")
+finally:
+    print("FIM ok={}".format(int(OK)), flush=True)
+
+---FIM-SCRIPT---
+bin/sonda_leitura.sh:4-5,93-105,195-250
+app/colaboradores/models.py:40-53,283-340
+app/ponto/models.py:398-505
+app/ponto/janelas.py:10-57,75-108
+app/ponto/services/dia_pago.py:350-470
+app/ponto/services/fechamento.py:1-90,382-660,995-1130,1518-1573
+app/ponto/services/fechamento_lista.py:1-131
+app/folha/export.py:315-350,1020-1220
+app/escala/services/leitor_celula.py:350-451
 
 ## 15/11 01:55 · sessao d5185e3774e2 · - · - · origem=Ronald (tmux)
 
@@ -1417,393 +2025,4 @@ WHERE u.dia IS NULL OR e.dia IS NULL
 ORDER BY empresa, colab, ano, mes, dia
 ```
 
-## 15/11 01:26 · sessao 7e9c9062581d · BATIDA-DEDUP-RETRATADA · sonda · origem=Code
-
-```python
-# Django shell; tenant juliani previamente ativo no envelope.
-# Execucao e resultados de producao: [nao verificado].
-# Correspondencia da copia ao HEAD Git: [nao verificado].
-#
-# Campos Batida: app/ponto/models.py:22, app/ponto/models.py:67.
-# Empresa: app/colaboradores/models.py:40; FK do colaborador:
-# app/colaboradores/models.py:321.
-# Disputa/contexto: app/chamados/models.py:2494,
-# app/chamados/models.py:1783, app/chamados/models.py:1792.
-# Envelope ultima_batida: app/api/views.py:758.
-#
-# Terminal usado: PerguntaDisputa.fora_do_fato(),
-# app/chamados/models.py:3276; predicado em :3284.
-# Vida exata: PerguntaDisputa.viva, app/chamados/models.py:3474,
-# delegacao em :3484. q_vivas e apenas pre-filtro (:3425).
-# Exportada: folha.export.competencia_entregue,
-# app/folha/export.py:556; consulta/retorno em :588.
-# Janela por empresa: ponto.janelas.janela_atual,
-# app/ponto/janelas.py:60. Nenhuma dessas regras e replicada.
-#
-# Convencoes desta sonda:
-# 3a: 60 datas locais, incluindo hoje ate o instante da leitura.
-# Recorte pelo timestamp da retratada, nao por retratada_em.
-# A outra pode estar fora do recorte; janela inclusiva de +/- 5 minutos.
-# OUTRAS_* conta PKs distintos; PARES_* conta retratada -> outra.
-# COLABORADORES_DISTINTOS conta colaboradores com retratada que tem outra.
-# T4: todo o acervo candidato, sem recorte de 60 dias.
-# EXPORTADA = entregue em qualquer dos dois dias; ABERTA = em nenhum.
-# ABERTA aqui significa somente "nao exportada".
-# Erros tornam os resultados parciais e FIM ok=0.
-# Nenhuma mensagem inclui conteudo de excecao, nomes ou documentos.
-
-erros = 0
-nivel_logging_anterior = None
-
-
-def erro(etapa, exc, pergunta_pk=None):
-    global erros
-    erros += 1
-    print(
-        "ERRO_ITEM etapa={} pergunta_pk={} classe={}".format(
-            etapa, pergunta_pk if pergunta_pk is not None else "-",
-            type(exc).__name__,
-        ),
-        flush=True,
-    )
-
-
-try:
-    import logging
-    import re
-    from collections import Counter
-    from contextlib import ExitStack
-    from datetime import datetime, time, timedelta, timezone as dt_timezone
-    from itertools import islice
-    from unittest.mock import patch
-
-    from django.db import connection, connections
-    from django.utils import timezone
-    from django.utils.dateparse import parse_datetime
-
-    nivel_logging_anterior = logging.root.manager.disable
-    logging.disable(logging.CRITICAL)
-
-    alias_leitura = connection.alias
-
-    def somente_select(execute, sql, params, many, context):
-        if (
-            many
-            or context["connection"].alias != alias_leitura
-            or not re.match(r"\s*SELECT\b", sql, re.I)
-            or ";" in sql
-            or re.search(
-                r"\bFOR\s+(?:(?:NO\s+KEY|KEY)\s+)?(?:UPDATE|SHARE)\b",
-                sql, re.I,
-            )
-        ):
-            raise RuntimeError("consulta_recusada")
-        return execute(sql, params, many, context)
-
-    def best_effort_falhou(logger_nome, operacao, exc, **contexto):
-        # Captura sem escrever log; autoridade de observabilidade:
-        # app/core/observ.py:73; excepts do juiz:
-        # app/chamados/juizes.py:1473, app/chamados/juizes.py:1486.
-        erro("best_effort", exc)
-
-    local = dt_timezone(timedelta(hours=-3))
-
-    with ExitStack() as pilha:
-        for alias in connections:
-            pilha.enter_context(
-                connections[alias].execute_wrapper(somente_select)
-            )
-        pilha.enter_context(timezone.override(local))
-        pilha.enter_context(
-            patch("core.observ.registrar_engolido", new=best_effort_falhou)
-        )
-
-        from colaboradores.models import Colaborador, Empresa
-        from ponto.models import Batida
-        from chamados.models import PerguntaDisputa
-        from chamados.juizes import tranca_da_consulta
-        from folha.export import competencia_entregue
-        from ponto.janelas import janela_atual
-
-        # Nenhum SET, atomic, savepoint ou troca de tenant nesta sonda.
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT current_schema()")
-            if cursor.fetchone()[0] != "juliani":
-                raise RuntimeError("tenant_incorreto")
-
-        empresas = {
-            e.pk: e
-            for e in Empresa.objects.using(alias_leitura).only(
-                "pk", "dia_inicio_competencia"
-            )
-        }
-
-        agora = timezone.now().astimezone(local)
-        inicio = datetime.combine(
-            agora.date() - timedelta(days=59), time.min, tzinfo=local
-        )
-        print(
-            "JANELA_3A inicio_inclusivo={} fim_exclusivo={} datas_locais=60".format(
-                inicio.isoformat(), agora.isoformat()
-            )
-        )
-
-        # 3a: LEFT JOIN preserva tambem retratadas sem outra.
-        bt = connection.ops.quote_name(Batida._meta.db_table)
-        ct = connection.ops.quote_name(Colaborador._meta.db_table)
-        sql = f"""
-            SELECT
-                c.empresa_id,
-                COUNT(DISTINCT r.id),
-                COUNT(DISTINCT r.id) FILTER (WHERE o.id IS NOT NULL),
-                COUNT(DISTINCT r.id) FILTER (
-                    WHERE o.id IS NOT NULL AND o.retratada_em IS NULL
-                ),
-                COUNT(DISTINCT o.id),
-                COUNT(DISTINCT o.id) FILTER (
-                    WHERE o.retratada_em IS NULL
-                ),
-                COUNT(o.id),
-                COUNT(o.id) FILTER (WHERE o.retratada_em IS NULL),
-                COUNT(DISTINCT r.colaborador_id) FILTER (
-                    WHERE o.id IS NOT NULL
-                )
-            FROM {bt} r
-            JOIN {ct} c ON c.id = r.colaborador_id
-            LEFT JOIN {bt} o
-                ON o.colaborador_id = r.colaborador_id
-                AND o.tipo = r.tipo
-                AND o.id <> r.id
-                AND o.timestamp BETWEEN r.timestamp - %s
-                                    AND r.timestamp + %s
-            WHERE r.retratada_em IS NOT NULL
-                AND r.timestamp >= %s
-                AND r.timestamp < %s
-            GROUP BY c.empresa_id
-            ORDER BY c.empresa_id
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(
-                sql, [timedelta(minutes=5), timedelta(minutes=5), inicio, agora]
-            )
-            por_empresa = {
-                row[0]: tuple(int(n) for n in row[1:])
-                for row in cursor.fetchall()
-            }
-
-        metricas = (
-            "RETRATADAS",
-            "RETRATADAS_COM_OUTRA",
-            "RETRATADAS_COM_OUTRA_VIVA",
-            "OUTRAS_DISTINTAS",
-            "OUTRAS_VIVAS_DISTINTAS",
-            "PARES",
-            "PARES_OUTRA_VIVA",
-            "COLABORADORES_DISTINTOS",
-        )
-        total = [0] * len(metricas)
-        for empresa_pk in sorted(set(empresas) | set(por_empresa)):
-            valores = por_empresa.get(empresa_pk, (0,) * len(metricas))
-            for i, (chave, valor) in enumerate(zip(metricas, valores)):
-                print(f"3A_EMPRESA_{empresa_pk}_{chave} {valor}")
-                total[i] += valor
-        for chave, valor in zip(metricas, total):
-            print(f"3A_TOTAL_{chave} {valor}")
-
-        # T4: cache somente em memoria; a autoridade continua sendo chamada.
-        cache_exportada = {}
-
-        def exportada_no_dia(empresa, dia):
-            _, fim = janela_atual(dia, empresa)
-            chave = (empresa.pk, fim.month, fim.year)
-            if chave not in cache_exportada:
-                cache_exportada[chave] = competencia_entregue(*chave)
-            return cache_exportada[chave]
-
-        cont = Counter()
-        exportadas_pks = []
-        candidatas = (
-            PerguntaDisputa.objects.using(alias_leitura)
-            .filter(PerguntaDisputa.q_vivas())
-            .select_related(
-                "disputa__colaborador__empresa",
-                "celula",
-                "chamado_destino",
-                "batida_origem",
-            )
-            .defer(
-                "disputa__colaborador__nome",
-                "disputa__colaborador__cpf",
-            )
-            .order_by("pk")
-            .iterator(chunk_size=200)
-        )
-
-        while True:
-            bloco = list(islice(candidatas, 200))
-            if not bloco:
-                break
-
-            preparados = []
-            for p in bloco:
-                try:
-                    if p.fora_do_fato():
-                        continue
-                    cont["CANDIDATAS_EXAMINADAS"] += 1
-                    ctx = p.disputa.contexto
-                    if ctx is None:
-                        ctx = {}
-                    if not isinstance(ctx, dict):
-                        raise ValueError("contexto_invalido")
-                    ub = ctx.get("ultima_batida")
-                    if ub is None:
-                        cont["CANDIDATAS_SEM_ULTIMA_BATIDA"] += 1
-                        continue
-                    if not isinstance(ub, dict):
-                        raise ValueError("ultima_batida_invalida")
-                    bruto_id = ub.get("id")
-                    if (
-                        isinstance(bruto_id, bool)
-                        or not isinstance(bruto_id, (int, str))
-                        or not re.fullmatch(r"[0-9]+", str(bruto_id))
-                        or int(bruto_id) <= 0
-                    ):
-                        raise ValueError("batida_id_invalido")
-                    bruto_ts = ub.get("timestamp")
-                    if not isinstance(bruto_ts, str):
-                        raise ValueError("timestamp_ausente_ou_invalido")
-                    ts = parse_datetime(bruto_ts)
-                    if ts is None or timezone.is_naive(ts):
-                        raise ValueError("timestamp_invalido_ou_sem_fuso")
-                    preparados.append(
-                        (p, int(bruto_id), ts.astimezone(local).date())
-                    )
-                except Exception as exc:
-                    erro("t4_contexto", exc, p.pk)
-
-            batidas = {
-                b["pk"]: b
-                for b in Batida.objects.using(alias_leitura)
-                .filter(pk__in={bid for _, bid, _ in preparados})
-                .values("pk", "colaborador_id", "timestamp")
-            }
-
-            diferentes = []
-            for p, bid, dia_contexto in preparados:
-                try:
-                    b = batidas.get(bid)
-                    if b is None:
-                        raise ValueError("batida_referenciada_ausente")
-                    cid = p.disputa.colaborador_id
-                    if b["colaborador_id"] != cid or p.colaborador_id != cid:
-                        raise ValueError("colaborador_divergente")
-                    if timezone.is_naive(b["timestamp"]):
-                        raise ValueError("batida_timestamp_sem_fuso")
-                    dia_batida = b["timestamp"].astimezone(local).date()
-                    if dia_contexto != dia_batida:
-                        diferentes.append((p, dia_contexto, dia_batida))
-                except Exception as exc:
-                    erro("t4_batida", exc, p.pk)
-
-            # Autoridade de tranca em lote, sem reconstruir seu predicado:
-            # app/chamados/juizes.py:1128.
-            with tranca_da_consulta([p for p, _, _ in diferentes]):
-                for p, dia_contexto, dia_batida in diferentes:
-                    try:
-                        if not p.viva:
-                            continue
-                        empresa = empresas[p.disputa.colaborador.empresa_id]
-                        exp_ctx = exportada_no_dia(empresa, dia_contexto)
-                        exp_bat = exportada_no_dia(empresa, dia_batida)
-
-                        cont["VIVAS_DIAS_DIFERENTES"] += 1
-                        if exp_ctx or exp_bat:
-                            cont["EXPORTADA"] += 1
-                            detalhe = (
-                                "AMBAS" if exp_ctx and exp_bat
-                                else "SO_CONTEXTO" if exp_ctx
-                                else "SO_BATIDA"
-                            )
-                            cont["EXPORTADA_" + detalhe] += 1
-                            if len(exportadas_pks) < 20:
-                                exportadas_pks.append(p.pk)
-                        else:
-                            cont["ABERTA"] += 1
-                    except Exception as exc:
-                        erro("t4_vida_exportacao", exc, p.pk)
-
-        for chave in (
-            "CANDIDATAS_EXAMINADAS",
-            "CANDIDATAS_SEM_ULTIMA_BATIDA",
-            "VIVAS_DIAS_DIFERENTES",
-            "EXPORTADA",
-            "ABERTA",
-            "EXPORTADA_AMBAS",
-            "EXPORTADA_SO_CONTEXTO",
-            "EXPORTADA_SO_BATIDA",
-        ):
-            print(f"T4_{chave} {cont[chave]}")
-        print(
-            "T4_EXPORTADA_PERGUNTA_PKS "
-            + (",".join(map(str, exportadas_pks)) or "-")
-        )
-        print(f"T4_PAREI_EXPORTADA {int(cont['EXPORTADA'] > 0)}")
-
-except BaseException as exc:
-    erro("sonda", exc)
-finally:
-    if nivel_logging_anterior is not None:
-        logging.disable(nivel_logging_anterior)
-    print(f"ERRO {erros}", flush=True)
-    print(f"FIM ok={int(erros == 0)}", flush=True)
-```
-
-## 15/11 01:06 · sessao a83435cd3ae0 · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
-
-Entrega em [cef_c1_entrega.txt](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c1_entrega.txt:1), com curas T1/T2/T3 e selo T5.
-
-[Verificação local](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c1_verificacao.txt:1): oito mutantes mortos, controles verdes.
-
-T4 ficou como PERGUNTA pelo significado declarado no [leitor](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/juizes.py:151). Suite com banco e certificação final: [nao verificado]. [nao verificado]
-
-## 15/11 00:54 · sessao 7011158ac77e · - · - · origem=Ronald (tmux)
-
-Censo estático da cópia; nenhum arquivo escrito. AGENTS.md aplicável não localizado; descoberta de instruções por mecanismos dinâmicos [nao verificado].
-
-| Campo | Escritores atuais | Leitores atuais |
-|---|---|---|
-| `ultima_batida.id` | APIs: `api/views.py:758-761`, `api/views_core.py:752-755`; agregado substitui chave de topo em `chamados/services/disputa_emissao.py:548-562`; nascimento persiste em `:590` | Origem BATIDA: `chamados/models.py:3603-3610`; referência para grade: `chamados/services/disputa_emissao.py:72-76`; dia: `:387-392`; upload: `api/foto_recebida.py:67-68` |
-| `ultima_batida.tipo` | `api/views.py:760`, `api/views_core.py:754` | Nenhum leitor semântico específico localizado; despacho dinâmico [nao verificado] |
-| `ultima_batida.timestamp` | Recepção `agora`: `api/views.py:497`, `:761`; `api/views_core.py:483`, `:755` | Único leitor executável localizado: `chamados/juizes.py:159-166`, que extrai `.date()`; singular chega por `:138`, lote por `:226` |
-| `foto_ausente.tipo_batida` | APIs: `api/views.py:453`, `api/views_core.py:439`; retro: `ponto/management/commands/marcar_foto_ausente_retro.py:99` | Nenhum leitor semântico específico localizado; dinâmico [nao verificado] |
-| `foto_ausente.batida_id` | Retro: `ponto/management/commands/marcar_foto_ausente_retro.py:100` | Nenhum leitor semântico específico localizado; origem lê outro caminho em `chamados/models.py:3606` |
-| `foto_ausente.batida_em` | Retro, instante local da batida: `ponto/management/commands/marcar_foto_ausente_retro.py:101` | Nenhum leitor semântico específico localizado; gerador usa episódio em `chamados/services/disputa_emissao.py:387-392` |
-| `foto_ausente._por` | Retro: `ponto/management/commands/marcar_foto_ausente_retro.py:102` | Nenhum leitor semântico específico localizado; dinâmico [nao verificado] |
-| `contexto[motivo].data` | Triagem: `ponto/services/triagem_batida.py:739-740`; fábrica: `chamados/services/fabrica_da_celula.py:172`; enriquecimento: `chamados/services/disputa_emissao.py:283` | Gerador lê antes de buscar episódio em `chamados/services/disputa_emissao.py:372-377` |
-| `contexto[motivo].qtd` / `ultima_em` | Agregação: `chamados/services/disputa_emissao.py:552-558` | `qtd` anterior lido pelo próprio merge em `:552`; outro leitor semântico específico [nao verificado] |
-
-**Ressalva T4:** o código do único leitor executável consome apenas o dia civil do ISO (`chamados/juizes.py:166`), mas seu docstring atribui explicitamente aos carimbos o significado “QUANDO o problema foi notado” (`:151-156`); `dia_do_fato` também chama batida/disputa/carimbos de “QUANDO foi notado” (`:93-95`). Portanto, a conclusão “nenhum consumidor exige recepção” é inferência sobre execução; conflito documental deve constar da entrega. A varredura não encontrou decisão, cálculo de latência ou seleção baseada na recepção desse envelope; completude para despacho dinâmico [nao verificado].
-
-O contexto fraco vem do **chamado** (`chamados/juizes.py:100`, `:138`), cujo contexto nasce separadamente do da disputa (`chamados/services/disputa_emissao.py:580`, `:590`). Em disputa já aberta, o merge atualiza somente a disputa nesse ramo (`:543-566`). A fusão de recorrência do chamado preserva escalar já existente (`chamados/services/contexto.py:131-156`).
-
-Os cinco chamadores diretos da porta são:
-
-- APIs, potencialmente BATIDA: `api/views.py:764-766`, `api/views_core.py:758-760`.
-- Retro, motivo literal BATIDA `foto_ausente`: `ponto/management/commands/marcar_foto_ausente_retro.py:96-104`.
-- Triagem, motivo literal MARCO `saida_sem_entrada`: `ponto/services/triagem_batida.py:735-744`.
-- Fábrica, motivo variável originado da ata: `chamados/services/fabrica_da_celula.py:139`, `:157`, `:160-174`.
-
-Família BATIDA declarada pelo catálogo: `chamados/catalogo/motivos.py:16`, `:36-47`; `foto_ausente` em `:43`. O índice correspondente identifica `(batida_origem, motivo)` e tem condições próprias de horizonte, conversa, via e origem preenchida (`chamados/models.py:3631-3636`).
-
-Autoridades e padrão para a linha LEI-AKITA:
-
-- Casos pela regra antes do código: `docs/LEIS.md:136`.
-- Dia do turno por PK: `ponto/turnos.py:2927-2936`; delega a `dia_das_batidas`, cuja batida não reclamada usa o dia local (`:2955`). Registro do juiz: `core/juizes.py:212`.
-- Juiz da selfie: `core/juizes.py:1205`.
-- Corte do upload por episódio e incluindo foto tardia: `docs/CORTES.md:441`.
-- Validação pelo escritor único: `docs/JUIZES.md:38-39`, usada pelo upload em `api/foto_recebida.py:48-51`.
-- `padrao=idempotencia pela chave do fato` consta de `docs/GLOSSARIO.md:29`; para o selo AST, `Architecture Conformance Test` consta de `:15`.
-
-Homônimos `ultima_batida` da ficha/ranking não são este envelope: escritores em `colaboradores/services/ficha.py:147`, `escala/services/furos_diarios.py:281`; leitores em `colaboradores/services/ficha.py:215-216`, `relatorios/views.py:1675`. Templates também leem esses homônimos, não o JSON da disputa: `templates/colaboradores/partials/_ps_linha.html:20`, `templates/relatorios/ranking_furos.html:76`.
-
-_5471 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5474 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
