@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:21:29.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.7 MB). Acoes na janela: **1511**.
+**Medido em 15/11/2026 07:26:53.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.8 MB). Acoes na janela: **1518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:24:53 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 07:24:49 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 07:24:41 | Agent | Opus final JUSTIFICATIVA-PAGA c17 | `OBRA JUSTIFICATIVA-PAGA-O-PERIODO -- leitura FINAL de verificador (opus), somente leitura. Voce nao viu a construcao. Copia: /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 (HEAD 74ec17605). Base main 880331a8c. Regra do aval (Ronald, literal): justificativa aprovada paga max(0, previsto - trabalhado do dia); "nenhum dia vira falta nem perde DSR". Competencias exportadas 09 e 10 nao se m ...` |
+| 07:24:27 | Bash | Find verifier files and write delta diff | `cd /home/ronald/saas-hasner && ls logs/JUSTIFICATIVA-PAGA/verif logs/JUSTIFICATIVA-PAGA/c13 \| tr '\n' ' '; grep -n 'triagem v9' app/docs/RELATO.md \| head -2; mkdir -p logs/JUSTIFICATIVA-PAGA/opus && cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 && git diff a36c12d27 74ec17605 > /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/opus/delta_c17.diff && wc -l /home/ronald/saas-hasner/l ...` |
+| 07:24:24 | Bash | Locate JUSTIFICATIVA verifier inputs | `cd /home/ronald/saas-hasner && D=logs/JUSTIFICATIVA-PAGA && ls $D \| tr '\n' ' '; echo; ls $D/c17 $D/opus* 2>/dev/null \| tr '\n' ' '; cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 && git log --oneline -8 && git diff --stat a36c12d27 74ec17605 \| tail -3` |
+| 07:24:20 | Bash | Read JUSTIFICATIVA suite verdict and clean mount dirs safely | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17 && cat inteira.rc; grep -E '^(OK\|FAILED)($\| \()' inteira.log \| tail -1; grep '^Ran' inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' inteira.log \| head; W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; for d in logs media staticfiles .hypothesis .mypy_cache .ruff_cache; do [ -d "${W:?}/${d:?}" ] && rmdir "${W:?}/${d:?}";  ...` |
+| 07:22:17 | Bash | Read JUSTIFICATIVA suite verdict and clean mount dirs | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17 && cat inteira.rc; grep -E '^(OK\|FAILED)($\| \()' inteira.log \| tail -1; grep '^Ran' inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' inteira.log \| head; W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; for d in logs media staticfiles .hypothesis .mypy_cache .ruff_cache; do [ -d $W/$d ] && rmdir $W/$d 2>&1; done; ls -a $W  ...` |
 | 07:16:32 | Bash | Check JUSTIFICATIVA suite progress | `cd /home/ronald/saas-hasner && date +%H:%M; cat logs/JUSTIFICATIVA-PAGA/c17/inteira.rc 2>/dev/null \|\| echo sem-rc; ps -p 1017257 -o pid,etime --no-headers` |
 | 07:16:27 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 07:16:16 | Bash | Drop the failing .only() on disputas and rerun on sombra | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && python3 - <<'EOF' p='logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/q5_sonda.py' s=open(p).read() a=''' .select_related("colaborador", "chamado__colaborador") .only( "pk", "colaborador__empresa_id", "chamado_id", "chamado__pk", "chamado__contexto_json", "chamado__celula_id", "chamado__colaborador_id", "chamado__colaborador__empresa_id", )  ...` |
