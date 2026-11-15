@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:59:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (48.2 MB). Acoes na janela: **1564**.
+**Medido em 15/11/2026 08:05:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (48.2 MB). Acoes na janela: **1568**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:04:58 | Bash | Extract and run sonda on sombra | `cd /home/ronald/saas-hasner && D=logs/DISPUTA-ZUMBI-1110/v2 && sed -n '/^```python$/,/^```$/p' $D/sonda.r \| sed '1d;$d' > $D/sonda.py && python3 -m py_compile $D/sonda.py && echo compila && timeout 900 bash bin/sonda_leitura.sh --sombra $D/sonda.py > $D/saida.txt 2>&1; echo rc=$?; grep -c . $D/saida.txt; grep -E "^(ERRO\|FIM\|BANCO\|TENANT\|INSTANTE)" $D/saida.txt` |
+| 08:04:55 | Bash | Find sonda envelope usage | `cd /home/ronald/saas-hasner && grep -n "sonda_leitura" logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/*.sh logs/JUSTIFICATIVA-PAGA/c19diff/*.sh 2>/dev/null \| head; sed -n 1,30p bin/sonda_leitura.sh \| grep -n "uso\\|Uso\\|--sombra"` |
+| 08:04:51 | Read |  | `/home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2/sonda.r` |
+| 08:04:49 | Bash | Check Codex results | `D=/home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2; cat $D/*.fim; ls -la $D; wc -c $D/*.r` |
 | 07:55:47 | Bash | Wait for both Codex answers | `D=/home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2; for i in $(seq 1 240); do [ -f $D/censo2.fim ] && [ -f $D/sonda.fim ] && break; /usr/bin/sleep 15; done; cat $D/censo2.fim $D/sonda.fim` |
 | 07:55:44 | Bash | Point ESPERANDO at live Codex pid | `cd /home/ronald/saas-hasner/app/docs && sed -i '3s/.*/ESPERANDO: codex_pergunta.sh \| pid=1181535/' RELATO.md && sed -n 3p RELATO.md && python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova()[:2])"` |
 | 07:55:40 | Bash | Check why launcher died | `cd /home/ronald/saas-hasner/logs/DISPUTA-ZUMBI-1110/v2 && ls; cat lanca.out *.fim 2>/dev/null; tail -5 censo2.log sonda.log; pgrep -af codex_pergunta \| head` |
