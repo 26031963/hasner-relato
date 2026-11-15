@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 01:09:08.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (25.5 MB). Acoes na janela: **749**.
+**Medido em 15/11/2026 01:13:39.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (25.5 MB). Acoes na janela: **750**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:09:12 | Bash | Record E4c wait line in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() anc='ESTADO 01:08 CONTRATO-DE-ENTRADA-DO-FIO c1 ENTREGUE' assert t.count(anc)==1 t=t.replace(anc,'ESTADO 01:1x VAGA-LIVRE-ABRE: vaga Codex livre, proxima da ordem = E4c; ESPERA por arquivo em comum: F5 muda chamados/services/tarefa_do_dia.py (c6 K7 em voo) e F1 le/F2 muda chamados/juizes.py+models.py (CEF c1 em ...` |
 | 01:09:02 | Bash | Read E4c F1/F2 file scope | `cd /home/ronald/saas-hasner; /bin/grep -n -E '^#\|F1\|F2' logs/CAMINHO-E4C/e4c_reconfere_v2.md \| head -30 \| cut -c1-250` |
 | 01:08:56 | Bash | Check E4c materials and vaga aval | `cd /home/ronald/saas-hasner; ls logs/CAMINHO-E4C/ \| head; cat logs/AVAIS-1313/vaga_livre_abre.txt \| head -20` |
 | 01:08:51 | Bash | Update RELATO top with ESPERANDO and T4 question | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() old='ESPERANDO: codex_pergunta.sh \| pid=217027\n' assert t.count(old)==1 new=('ESPERANDO: suite.sh \| pid=246079\n' 'lei: T4 CONTRATO-DE-ENTRADA-DO-FIO -- ultima_batida.timestamp: o unico leitor (chamados/juizes.py:159 _dia_do_contexto_fraco, contrato declarado :151 "dia em que foi notado") consome NOTACAO; as ...` |
