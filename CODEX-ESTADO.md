@@ -1,7 +1,381 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 10:26** · publicado em **15/11/2026 10:26** (UTC-3)
+> Ultima resposta processada: **15/11/2026 10:28** · publicado em **15/11/2026 10:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 10:28 · sessao 80cd60d8871b · FATO-DE-AUSENCIA-ACORDA-A-PROJECAO · verificador · origem=Code
+
+**O rollback protege o cancelamento inteiro no chamador produtivo; os testes ainda deixam passar regressões de concorrência e atomicidade do lote.** Evidências: `app/ferias/services.py:674`, `app/ferias/services.py:683`, `app/ponto/services/ausencia.py:1416`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`. Execução dos testes, mutantes e concorrência: [não verificado].
+
+1. **Chamadores, transações e travas**
+
+   O único chamador direto produtivo encontrado é `executar_cancelamento_admin`: abre `atomic`, trava **agendamento → período**, devolve saldo e chama a rejeição. A função acrescenta um `atomic` interno e o `select_for_update` das Ausências. Portanto, nesse caminho, a ordem é **agendamento → período → Ausências** (`app/ferias/services.py:674`, `app/ferias/services.py:679`, `app/ferias/services.py:683`, `app/ferias/services.py:636`, `app/ferias/services.py:639`, `app/ponto/services/ausencia.py:1416`).
+
+   As entradas indiretas são cancelamento individual, correção de concluída e cancelamento em massa, pelo adaptador da view; há também a simulação de `listar_ferias_dp`, sob outro `atomic` (`app/ferias/views.py:396`, `app/ferias/views.py:444`, `app/ferias/views.py:605`, `app/ferias/views.py:557`, `app/ferias/management/commands/listar_ferias_dp.py:98`). Os demais chamadores diretos são os testes, nas linhas 180, 191 e 200 (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:180`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:191`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:200`).
+
+   Quando `evento` falha, seu próprio savepoint desfaz a tentativa de trilha; a exceção é engolida e ele retorna `None`. A rejeição transforma esse retorno em `RuntimeError` **dentro** do seu `atomic`: desfaz status, `atualizado_em` e quaisquer trilhas anteriores daquela chamada; não alcança `_acordar_projecao` nem retorna `n` (`app/core/observ.py:87`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/core/observ.py:139`, `app/ponto/services/ausencia.py:1423`, `app/ponto/services/ausencia.py:1428`, `app/ponto/services/ausencia.py:1433`, `app/ponto/services/ausencia.py:1435`).
+
+   No chamador produtivo, a exceção também sai do `atomic` externo: desfaz a devolução de saldo já salva e impede a gravação de `status='cancelado'`, observação e retorno normal (`app/ferias/services.py:680`, `app/ferias/services.py:682`, `app/ferias/services.py:683`, `app/ferias/services.py:687`, `app/ferias/services.py:690`). As três views capturam somente `AgendamentoNaoCancelavel`; o `RuntimeError` escapa desses tratamentos. A resposta HTTP efetiva é [não verificado] (`app/ferias/views.py:397`, `app/ferias/views.py:445`, `app/ferias/views.py:606`). A simulação captura a exceção, imprime `ERRO:RuntimeError:...` e recarrega o agendamento (`app/ferias/management/commands/listar_ferias_dp.py:112`).
+
+   **Há risco de inversão entre linhas de Ausência**, embora o caminho principal respeite a hierarquia agendamento/período/Ausência. O novo SELECT não fixa `order_by`, herdando `-data, colaborador__nome`; a reversão do backfill atualiza as mesmas Ausências uma por vez, na ordem do arquivo, sem tomar antes as travas de agendamento/período (`app/ponto/services/ausencia.py:1417`, `app/ponto/models.py:829`, `app/ponto/services/ausencia.py:1647`, `app/ponto/services/ausencia.py:1535`). O apply produz o registro a partir de linhas ordenadas por PK (`app/ponto/services/ausencia.py:1605`, `app/ponto/services/ausencia.py:1617`).
+
+   Interleaving plausível: A1 tem PK menor/data anterior; A2, PK maior/data posterior. Cancelamento trava A2 e espera A1; reversão trava A1 e espera A2. As travas anteriores do chamador não serializam a reversão, que não as solicita. Esse deadlock é uma possibilidade deduzida dessas ordens; ocorrência real [não verificado] (`app/ponto/models.py:829`, `app/ponto/services/ausencia.py:1648`).
+
+   Também há possível ampliação da trava ao colaborador: a ordenação usa `colaborador__nome` e o SELECT não restringe `of=('self',)`. É inferência do ORM; SQL efetivo e bloqueios observados [não verificado] (`app/ponto/models.py:829`, `app/ponto/services/ausencia.py:1417`).
+
+2. **Os quatro testes novos/alterados mordem, com estas lacunas** [nao verificado]
+
+   Os mutantes abaixo são deduções estáticas; sobrevivência executada [não verificado].
+
+   | Teste | O que verifica / mutante que passa | [nao verificado]
+   |---|---|
+   | Encolher o fim | Confere a fixture inicial e os dois carimbos, mas não relê o fato depois da edição. **Retirar `ausencia.save()`**, mantendo a alteração em memória e `_acordar_projecao`, passa sem persistir a edição (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:137`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:139`, `app/ponto/services/ausencia.py:604`, `app/ponto/services/ausencia.py:615`, `app/ponto/services/ausencia.py:625`). |
+   | Rejeitar com trilha por dia | A nova comparação dos PKs mata “cinco trilhas, mas uma Ausência duplicada e outra omitida”. **Retirar `select_for_update`** continua passando: as duas chamadas são sequenciais (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:182`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:186`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:191`, `app/ponto/services/ausencia.py:1417`). |
+   | Falha de trilha desfaz rejeição | O mock falha sempre, portanto já na primeira trilha. **Trocar o atomic do conjunto por um atomic por Ausência** passa: a primeira desfaz e não sobra rejeitada. Falhar só na segunda/quinta deixaria anteriores confirmadas, caso não exercitado (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:169`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:201`, `app/ponto/services/ausencia.py:1416`). |
+   | Desfazer retratação | A releitura nova mata um falso desfazer que apenas chama recálculo. **Retirar `'aprovada': True`** do `anotar` passa, conservando `aprovada=False`: o teste só exige chamada e `retratada_em=None` (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:265`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:267`, `app/ponto/services/retratar_humano.py:207`, `app/ponto/registro_batida.py:276`). |
+
+   **Sim, o patch alcança o nome usado.** O import de `evento as _ev_rej` é local à função e acontece enquanto o `mock.patch('core.observ.evento')` está ativo; não existe alias congelado no módulo nesse caminho (`app/ponto/services/ausencia.py:1414`, `app/ponto/services/ausencia.py:1428`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`).
+
+3. **A fixture de edição chega ao helper, pela leitura estática**
+
+   A criação com três dias deriva `data_fim=21/10`; o teste confirma isso antes de carimbar. A edição com um dia deriva fim nulo, salva e chama o helper com os fatos **anterior e posterior** (`app/ponto/models.py:912`, `app/ponto/models.py:917`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:134`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:137`, `app/ponto/services/ausencia.py:164`, `app/ponto/services/ausencia.py:615`, `app/ponto/services/ausencia.py:625`).
+
+   Não há recusa por tranca nessa porta; a sobreposição exclui o próprio PK. A fixture não acrescenta outra Ausência, e essa função não exige documento nesse percurso (`app/ponto/services/ausencia.py:591`, `app/ponto/services/ausencia.py:593`, `app/ponto/turnos.py:2830`, `app/ponto/turnos.py:2851`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:45`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:134`, `app/ponto/services/ausencia.py:570`).
+
+   `atestado` consta no seed ativo; a validação consulta o catálogo vigente. Não há indicação nessa fixture de catálogo que o exclua, mas o estado efetivo do catálogo/cache durante uma execução é [não verificado] (`app/ponto/migrations/0052_seed_tipoausencia.py:17`, `app/ponto/migrations/0052_seed_tipoausencia.py:36`, `app/ponto/catalogo/ausencias.py:278`, `app/ponto/catalogo/ausencias.py:284`, `app/ponto/services/ausencia.py:580`).
+
+4. **Outro defeito exposto pelo delta: falha sem tratamento no lote**
+
+   A nova exceção interrompe o cancelamento em massa antes da mensagem de resultado. Cada item usa sua própria unidade atômica; o loop só trata `AgendamentoNaoCancelavel`. Assim, sem transação externa adicional, itens anteriores permanecem confirmados, o item falho desfaz e os seguintes não são processados. Uma transação externa de request efetivamente configurada é [não verificado] (`app/ferias/views.py:600`, `app/ferias/views.py:605`, `app/ferias/views.py:606`, `app/ferias/views.py:611`, `app/ferias/services.py:674`).
+
+   Os testes do delta chamam diretamente a rejeição; não verificam esse tratamento nas views nem o rollback conjunto de saldo/agendamento no chamador produtivo (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:180`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:200`).
+
+## 15/11 10:27 · sessao 14cd1bafc151 · FIO-MORTO-CLASSE-D · leitura · origem=Code
+
+**1. O colaborador estar na lista não implica que o dia esteja nela.** `_colabs` contém os colaboradores das linhas; `_dias` contém somente assinaturas com `data`, indexadas por `(colab_id, str(data)[:10])`. Dono ausente ou divergente **não exclui a chave**: ela permanece com valor `None`. [vigia_fio.py:216](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:216), [cadastro_realidade.py:1014](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:1014), [cadastro_realidade.py:1038](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:1038).
+
+Os ramos de exclusão na composição são:
+
+| Camada | Predicado exato / efeito | Função real |
+|---|---|---|
+| Recorte da lista | `vis = {e.pk for e in empresas_visiveis()}`, intersectado com `self.empresas`, quando fornecido | `ListaDoAdmin._carregar`; visíveis são empresas ativas, excluído CNPJ de diagnóstico. [vigia_fio.py:211](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:211), [queries.py:78](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/colaboradores/queries.py:78) |
+| Lista sem conteúdo | `not por_colab and not cad` → `return None` | `cadastro_realidade.lista`. [cadastro_realidade.py:867](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:867) |
+| Colaborador excluído | `v is None or (empresas is not None and v['empresa_id'] not in empresas)` | `lista`, alimentada por `_vinculos`. Esse ramo elimina o colaborador inteiro, portanto não explica sozinho a classe d. [cadastro_realidade.py:743](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:743), [cadastro_realidade.py:878](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:878) |
+| Assinatura A desconhecida | `cod not in ASSINATURAS` → `continue`; linha só é publicada se `linha['assinaturas']` | `lista`. [cadastro_realidade.py:917](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:917) |
+| Assinatura sem dia | `not a.get('data')`: não alimenta `_dias`; assinatura de outra data alimenta outra chave | `dias_na_lista`. Inclui assinaturas agregadas, mesmo quando o detalhe textual menciona dias. [cadastro_realidade.py:1025](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:1025) |
+| C9/C10/C12 não publicaram aquele dia | Ausência de item datado correspondente nas lavras lidas; C12 admite item sem `data` | `_teto_do_dia`, `_fase_deslocada`, `_cxr_do_motor`, respectivamente. [cadastro_realidade.py:344](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:344), [cadastro_realidade.py:386](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:386), [cadastro_realidade.py:360](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:360) |
+| Falha parcial de produtor | Os `except Exception` preservam a lista, mas deixam de acrescentar as assinaturas daquele produtor | `lista`: C2–C12 possuem guardas próprias; C1 é carregada antes delas. [cadastro_realidade.py:781](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:781), [cadastro_realidade.py:785](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:785) |
+| Falha integral da lista | Exceção em `_carregar` deixa `_dias is None`; `dia_na_lista` retorna `None`, não `(False, None)` | `ListaDoAdmin._carregar` / `dia_na_lista`. Portanto essa falha não satisfaz o predicado d. [vigia_fio.py:219](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:219), [vigia_fio.py:230](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:230), [vigia_fio.py:696](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:696) |
+
+Na **C11**, todos os vetos, na ordem real, são:
+
+| Ramo | Predicado exato | Quem responde |
+|---|---|---|
+| Fora das janelas | Empresa fora de `Empresa.objects.filter(ativa=True)`/recorte; competência ausente de `competencias_a_lavrar`; ou fora de `[ini, min(fim, ontem)]`; janela vazia não entra | `_folga_nao_definida_sem_porta`, `competencias_a_lavrar`, `janela_fechamento`. [cadastro_realidade.py:542](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:542), [he_pendente_lavrado.py:209](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/he_pendente_lavrado.py:209) |
+| Fora do queryset | Não satisfaz a conjunção `colaborador__empresa=emp`, `colaborador__situacao='ativo'`, `veredito='indefinida'`, `protestos__contains=['PREVISTO_COM_DIA_INDEFINIDO']`, `data__gte=ini`, `data__lte=fim`; `not cels` encerra o lote | Query de `beco_em_lote`. [cadastro_realidade.py:449](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:449) |
+| Sem pergunta viva | `not vivas` | `alimentar_portas(..., agora=agora)['vivas']`, lido por `beco_em_lote`. [cadastro_realidade.py:458](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:458), [cadastro_realidade.py:468](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:468) |
+| Já tem porta | `porta_da_tarefa(tarefas[jan].tarefa(col[cid], d)) is not None` | `carga_da_tarefa` / `porta_da_tarefa`; `not dias` encerra o lote após esses dois vetos. [cadastro_realidade.py:464](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:464) |
+| Sem âncora terminal | `not sorted({a for _p, a in ancs if a and st.get(a) in TERMINAIS})` | Âncora por `chamado_que_lista(p)`; status por query de `ChamadoColaborador`; terminais por `catalogo.motor.TERMINAIS`. Composição em `beco_em_lote`. [cadastro_realidade.py:471](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:471), [cadastro_realidade.py:496](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:496) |
+| Folga não definida falsa | `not cad[(cid, ini)](d)['folga_nao_definida']` | `supra_juiz.cadastro_do_dia` → `vinculo_do_dia` → `_insumos_do_vinculo` → `EscalaColaborador.defeito_folga_nao_definida`. Sem vínculo, o insumo é `False`; com vínculo, é falso se não for 6x1, houver `folga_dia_semana` ou existir `FolgaDia` no mês. [cadastro_realidade.py:492](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:492), [cadastro_realidade.py:499](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:499), [supra_juiz.py:173](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/supra_juiz.py:173), [supra_juiz.py:206](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/supra_juiz.py:206), [models.py:1241](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/models.py:1241) |
+
+**2. O juiz L-099 distribui responsabilidade; não detecta divergência.** Sua assinatura real é esta. [e6_oraculo.py:53](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:53):
+
+```python
+def dono_da_divergencia(
+    horas_do_dia,
+    em_cadastro_x_realidade,
+    folga_nao_definida=False,
+    sem_vinculo_no_dia=False,
+    sem_vinculo_em_dia_de_trabalho=False,
+    batida_fora_de_turno=False,
+    fase_deslocada=False,
+):
+```
+
+Ela não recebe `(colab, dia)` e sempre retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`. Não há retorno especial “sem divergência”: `dono_da_divergencia([], False)` retorna `ESTRUTURA`. [e6_oraculo.py:98](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:98).
+
+A montagem que permite perguntar por colaborador/dia é esta, seguida de `.dono(data)`. [e6_oraculo.py:128](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:128), [e6_oraculo.py:182](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:182):
+
+```python
+InsumosDoDono(
+    colaborador, ini, fim, hoje, espelho=None, *,
+    agora, dias_de_fase=None, cadastro=None,
+    sem_motor=False, cxr=None,
+).dono(data)
+```
+
+`None` com `sem_motor=True` significa **sem resposta por falta de cobertura da lavra**, não `sem_divergencia`. O command E6 verifica a divergência antes de chamar o dono. [e6_oraculo.py:142](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:142), [e6_oraculo.py:189](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:189), [e6_oraculo.py:334](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:334).
+
+**3. Script para o envelope.** O motivo observa o primeiro veto **efetivamente executado** pela C11 durante a montagem original; não força a avaliação dos ramos posteriores. Para `sem_divergencia`, aplica as comparações do E6; dias que o E6 não julga saem como erros nomeados. [cadastro_realidade.py:469](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:469), [e6_oraculo.py:334](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:334).
+
+A soma e a distribuição na sombra continuam **[nao verificado]**.
+
+```python
+# FIO-MORTO-CLASSE-D; copia 77dfa94fa85e3403e984a17bdaf625c52e26e3a1.
+from django.utils import timezone as tz
+agora = tz.now()  # unico relogio fisico
+hoje = tz.localdate(agora)
+
+import datetime as dt
+import logging
+import re
+import sys
+from collections import Counter
+from unittest.mock import patch
+from django.db import connection
+from django_tenants.utils import schema_context
+from colaboradores.models import Colaborador
+from chamados.services.vigia_fio import ListaDoAdmin, censo, censo_alcance
+from chamados.juizes import tranca_em_lote
+from escala.services import cadastro_realidade as cr
+from ponto.janelas import janela_fechamento
+from ponto.management.commands.e6_oraculo import (
+    InsumosDoDono, minutos_do_espelho, diferenca_e_a_janela_declarada,
+)
+from ponto.services.espelho import espelho_do_colab
+
+class SQLNaoSelect(Exception): pass
+class ListaSemResposta(Exception): pass
+class ClasseDInconsistente(Exception): pass
+class RastroC11Incompleto(Exception): pass
+class E6SemLinha(Exception): pass
+class E6IsencaoOuAusencia(Exception): pass
+class E6SemLavratura(Exception): pass
+class E6JanelaDeclaradaNaoJulgada(Exception): pass
+class DonoSemResposta(Exception): pass
+class SomaDiferenteDe212(Exception): pass
+class OutrosDiferentesDe36(Exception): pass
+
+def so_select(execute, sql, params, many, context):
+    # Bloqueia DML/DDL e consultas com trava; nao imprime SQL/parametros.
+    if (many or not re.match(r"\s*SELECT\b", sql, re.I)
+            or re.search(r"\bFOR\s+(?:NO\s+KEY\s+UPDATE|KEY\s+SHARE|UPDATE|SHARE)\b",
+                         sql, re.I)):
+        raise SQLNaoSelect()
+    return execute(sql, params, many, context)
+
+# Observa a execucao REAL, sem substituir predicados ou montar outra lista.
+# cadastro_realidade.py:450-455,469-470,496-500,525-556,768-957.
+rastro = {"dados": None, "candidatos": set(), "janelas": None,
+          "vetos": {}, "falhas": Counter()}
+cod_lista = cr.lista.__code__
+cod_beco = cr.beco_em_lote.__code__
+cod_janelas = cr._folga_nao_definida_sem_porta.__code__
+codigos = {cod_lista, cod_beco, cod_janelas}
+
+def observar(frame, event, arg):
+    code = frame.f_code
+    if code not in codigos:
+        return None
+    loc = frame.f_locals
+    n = frame.f_lineno
+    if code is cod_lista:
+        if event == "exception":
+            rastro["falhas"][(n, type(arg[1]).__name__)] += 1
+        elif event == "return" and isinstance(arg, dict):
+            rastro["dados"] = arg
+    elif code is cod_janelas:
+        if event == "return" and "janelas" in loc:
+            rastro["janelas"] = [
+                (emp.pk, ini, fim) for emp, ini, fim in loc["janelas"]]
+    elif event == "line":
+        if n == 455:
+            rastro["candidatos"].update(
+                (cid, d.isoformat()) for cid, d, jan in loc["cels"].values())
+        elif n == 470:
+            k = (loc["cid"], loc["d"].isoformat())
+            rastro["vetos"][k] = (
+                "outro:C11_sem_pergunta_viva" if not loc["vivas"]
+                else "outro:C11_porta_da_tarefa")
+        elif n == 498:
+            rastro["vetos"][
+                (loc["cid"], loc["d"].isoformat())] = "sem_ancora_terminal"
+        elif n == 500:
+            rastro["vetos"][
+                (loc["cid"], loc["d"].isoformat())] = "folga_nao_definida_False"
+    return observar
+
+# Trava o instrumento nas linhas da copia lida.
+import linecache
+fonte = cr.beco_em_lote.__code__.co_filename
+for n, trecho in ((455, "if not cels:"), (470, "continue"),
+                  (498, "continue"), (500, "continue")):
+    assert linecache.getline(fonte, n).strip() == trecho
+
+def motivo_real(cid, data_iso, emp):
+    if rastro["falhas"]:
+        return "erro:" + sorted(rastro["falhas"])[0][1]
+    if (lista.dia_na_lista(cid, data_iso) != (False, None)
+            or not lista.colab_na_lista(cid)):
+        raise ClasseDInconsistente()
+    k = (cid, data_iso)
+    if k in rastro["vetos"]:
+        return rastro["vetos"][k]
+    if k in rastro["candidatos"] or rastro["janelas"] is None:
+        raise RastroC11Incompleto()
+    assinaturas = [
+        a for posto, linhas in (rastro["dados"].get("postos") or ())
+        for v in linhas if v.get("colab_id") == cid
+        for a in (v.get("assinaturas") or ())
+    ]
+    origem = ("somente_outros_dias" if any(a.get("data") for a in assinaturas)
+              else "assinaturas_sem_data")
+    dia = dt.date.fromisoformat(data_iso)
+    na_janela = any(e == emp and ini <= dia <= fim
+                    for e, ini, fim in rastro["janelas"])
+    return "outro:C11_%s+%s" % (
+        "fora_queryset" if na_janela else "fora_janelas", origem)
+
+cols, cargas = {}, {}
+def colaborador(cid):
+    if cid not in cols:
+        try:
+            cols[cid] = Colaborador.objects.select_related("empresa").get(pk=cid)
+        except Exception as exc:
+            cols[cid] = exc
+    c = cols[cid]
+    if isinstance(c, Exception):
+        raise c
+    return c
+
+def dono_real(c, dia, comp):
+    # Mesmo espelho, montagem e gates do command E6:
+    # e6_oraculo.py:304,316-328,334-378.
+    mes, ano = map(int, comp.split("/"))
+    ini, fim = janela_fechamento(mes, ano, c.empresa)
+    chave = (c.pk, ini, fim)
+    if chave not in cargas:
+        try:
+            esp = espelho_do_colab(c, hoje, ini, fim, agora=agora)
+            ins = InsumosDoDono(c, ini, fim, hoje, espelho=esp, agora=agora)
+            cargas[chave] = (
+                {str(x.get("data"))[:10]: x for x in (esp.get("dias") or [])},
+                ins,
+            )
+        except Exception as exc:
+            cargas[chave] = exc
+    carga = cargas[chave]
+    if isinstance(carga, Exception):
+        raise carga
+    dias_esp, ins = carga
+    k = dia.isoformat()
+    de = dias_esp.get(k)
+    if de is None:
+        raise E6SemLinha()
+    if de.get("isencao") or de.get("ausencia") is not None:
+        raise E6IsencaoOuAusencia()
+    m_esp, fonte_esp = minutos_do_espelho(de)
+    if m_esp is None:
+        raise E6SemLavratura()
+    m_e6 = ins.oraculo.minutos.get(k, 0.0)
+    if m_esp == 0 and m_e6 == 0:
+        return "sem_divergencia"
+    if diferenca_e_a_janela_declarada(m_e6 - m_esp, de):
+        raise E6JanelaDeclaradaNaoJulgada()
+    if abs(m_e6 - m_esp) <= 10:
+        return "sem_divergencia"
+    dono = ins.dono(dia)
+    if dono not in {"CADASTRO", "BATIDA", "ESTRUTURA"}:
+        raise DonoSemResposta()
+    return dono
+
+tot, outros, erros = Counter(), Counter(), Counter()
+nivel_log = logging.root.manager.disable
+trace_anterior = sys.gettrace()
+try:
+    # Evita nomes/CPF ou escrita nos handlers de log.
+    # Excecoes dos produtores da lista sao observadas e contadas.
+    logging.disable(logging.CRITICAL)
+    with schema_context("juliani"), \
+            patch.object(tz, "now", return_value=agora), \
+            connection.execute_wrapper(so_select):
+        sys.settrace(observar)
+        try:
+            # Composicao da sonda_mapa_v2.py:31-36 (anexo).
+            lista = ListaDoAdmin(hoje, None, agora=agora)
+            with tranca_em_lote():
+                vant = censo(None, hoje=hoje, limite=10000000, lista=lista)
+                r = censo_alcance(
+                    None, hoje=hoje, limite=10000000, lista=lista, agora=agora)
+            rows = r.get("alcance_dias", [])
+        finally:
+            sys.settrace(trace_anterior)
+        if lista._dias is None or rastro["dados"] is None:
+            raise ListaSemResposta()
+        for x in rows:
+            cel, cid, bruto, comp, rota, causa, det, papel = x[:8]
+            if rota != "sem_porta" or causa not in {"d", "c", "a", "e"}:
+                continue
+            pk = getattr(cel, "pk", cel)
+            data_iso = str(bruto)[:10]
+            emp, c, erro_col = 0, None, None
+            try:
+                c = colaborador(cid)
+                emp = c.empresa_id
+            except Exception as exc:
+                erro_col = "erro:" + type(exc).__name__
+            if causa == "d":
+                try:
+                    motivo = erro_col or motivo_real(cid, data_iso, emp)
+                except Exception as exc:
+                    motivo = "erro:" + type(exc).__name__
+                try:
+                    dono = erro_col or dono_real(
+                        c, dt.date.fromisoformat(data_iso), comp)
+                except Exception as exc:
+                    dono = "erro:" + type(exc).__name__
+                tot[(motivo, dono, comp)] += 1
+                for campo, valor in (("motivo", motivo), ("dono", dono)):
+                    if valor.startswith("erro:"):
+                        erros[(campo, valor)] += 1
+                print("D\tcel%s\tcol%s\t%s\t%s\temp%s\tmotivo=%s\tdono=%s" %
+                      (pk, cid, data_iso, comp, emp, motivo, dono))
+            else:
+                detalhe = erro_col or det or "-"
+                outros[(causa, detalhe, comp)] += 1
+                if erro_col:
+                    erros[("O", erro_col)] += 1
+                print("O\tcel%s\tcol%s\t%s\t%s\temp%s\t%s\t%s" %
+                      (pk, cid, data_iso, comp, emp, causa, detalhe))
+        for (motivo, dono, comp), n in sorted(tot.items()):
+            print("S motivo=%s dono=%s comp=%s n=%d" % (motivo, dono, comp, n))
+        soma = sum(tot.values())
+        print("S soma=%d" % soma)
+        for (causa, detalhe, comp), n in sorted(outros.items()):
+            print("S O causa=%s detalhe=%s comp=%s n=%d" %
+                  (causa, detalhe, comp, n))
+        print("S O soma=%d" % sum(outros.values()))
+        for (campo, tipo), n in sorted(erros.items()):
+            print("S campo=%s %s n=%d" % (campo, tipo, n))
+        for (linha, tipo), n in sorted(rastro["falhas"].items()):
+            print("S produtor=lista linha=%d erro:%s n=%d" % (linha, tipo, n))
+        if soma != 212:
+            raise SomaDiferenteDe212()
+        if sum(outros.values()) != 36:
+            raise OutrosDiferentesDe36()
+finally:
+    sys.settrace(trace_anterior)
+    logging.disable(nivel_log)
+print('FIM ok=1')
+```
+
+**4. Atribuição de obra:
+
+[truncado em 20000 de 24855 caracteres]
+
+## 15/11 10:27 · sessao 5c81ef3d2810 · - · - · origem=Ronald (tmux)
+
+- **Editar alcança a invalidação, por leitura estática.** A fixture cria somente um atestado; `save` deriva 21/10 (`app/ponto/models.py:912-918`; teste:134-137). `atestado` existe no seed ativo (`app/ponto/migrations/0052_seed_tipoausencia.py:17,33-36`) e no fallback (`app/ponto/catalogo/ausencias.py:95,278`). Editar não consulta tranca (`app/ponto/services/ausencia.py:591`), exclui o próprio PK da sobreposição (`:593`; `app/ponto/turnos.py:2827-2835,2851-2853`) e não exige documento nesse caminho (`app/ponto/services/ausencia.py:570-633`). `dias_corridos=1` produz fim nulo (`:154-166`), salva (`:615`) e invalida pelos fatos antigo e novo (`:625-626`). Resultado executado: [não verificado].
+
+- **Patch correto.** `mock.patch('core.observ.evento')` está ativo quando a função faz seu import local `_ev_rej`; alcança o nome efetivamente chamado (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198-200`; `app/ponto/services/ausencia.py:1414,1428`).
+
+- **Editar, mutante sobrevivente:** retirar `ausencia.save()` mantendo alteração em memória e `_acordar_projecao`. O teste verifica somente os carimbos depois da chamada, sem reler/assertar o fato editado (`app/ponto/services/ausencia.py:604-626`; teste:139-141). Sobrevivência deduzida, não executada [não verificado].
+
+- **Rejeitar/trilha, teste fortalecido:** multiconjunto de PKs agora mata cinco trilhas duplicando um ID e omitindo outro, que contagem/status permitiam (`teste:182-187`). **Mutante sobrevivente:** remover `select_for_update`; esse caso só chama sequencialmente (`app/ponto/services/ausencia.py:1417`; teste:175-193). Sobrevivência deduzida [não verificado].
+
+- **Rollback, mutante sobrevivente:** refatorar para um `atomic` por ausência, cada iteração atualizando e trilhando aquela linha. O mock sempre devolve `None`: falha a primeira e nada fica rejeitado, passando; falha apenas na segunda/quinta deixaria anteriores confirmadas. Não se injeta sequência de sucessos e falha nem se confere trilha, carimbo ou timestamp (`teste:169,195-202`; atomic atual: `app/ponto/services/ausencia.py:1416-1434`). Sobrevivência deduzida [não verificado].
+
+- **Desfazer, teste fortalecido:** releitura de `retratada_em` mata falso desfazer que apenas chama recálculo (`teste:263-268`). **Mutante sobrevivente:** retirar `'aprovada': True` do `anotar` em desfazer: o teste segue verificando apenas `retratada_em` e chamada (`app/ponto/services/retratar_humano.py:207-213`; teste:265-268), embora retratar tenha gravado `aprovada=False` (`app/ponto/registro_batida.py:276`). Sobrevivência deduzida [não verificado]. Observação: o universo apurável filtra só `retratada_em`, portanto não afirmar exclusão da apuração por esse mutante (`app/ponto/turnos.py:2876-2883`).
 
 ## 15/11 10:26 · sessao f08063655a32 · - · - · origem=Ronald (tmux)
 
@@ -826,132 +1200,4 @@ Quanto aos selos existentes:
 
 [truncado em 20000 de 22645 caracteres]
 
-## 15/11 10:05 · sessao 4a7b06c0b5f1 · - · - · origem=Ronald (tmux)
-
-Auditoria estática dos selos e checklist:
-
-- **Juiz:** `_vigente` chama exclusivamente `DecisaoHE.objects.vigentes().filter(pk=_ja.pk).exists()`; o único predicado continua `revogada_em__isnull=True`, no modelo. Não nasce segundo predicado nem derivação de minutos. `app/ponto/portas/he.py:130`, `app/ponto/portas/he.py:148`, `app/ponto/models.py:1265`.
-- **Registro:** não achei autoridade HE/DecisaoHE em `core/juizes.py`; o registro diz que suas autoridades ficam em `JUIZES[familia][pergunta]`. Distinguir “reusa o juiz já existente no modelo” de “juiz HE registrado”: a segunda afirmação é **[não verificado]**. `app/core/juizes.py:7`, `app/ponto/models.py:1265`.
-- **Escritor:** o diff não acrescenta escrita; `_gravar` cria/atualiza e limpa os três campos de revogação, `_marcar_revogada` marca e deixa trilha. Os atos continuam chamando esses escritores. `app/ponto/portas/he.py:66`, `app/ponto/portas/he.py:75`, `app/ponto/portas/he.py:83`, `app/ponto/portas/he.py:206`, `app/ponto/portas/he.py:366`, `app/ponto/portas/he.py:398`, `app/ponto/portas/he.py:497`.
-- **Relógio:** o helper novo não lê relógio; `vigentes()` verifica nulidade e não datas. O relógio explícito continua no escritor já existente `_marcar_revogada`, `timezone.now()`. `app/ponto/portas/he.py:146`, `app/ponto/models.py:1267`, `app/ponto/portas/he.py:398`.
-- **Trava:** todos os usos novos de `_vigente` vêm depois de travar a linha. `decidir_he`, `recusar_ponta_pequena` e `revogar_recusa_do_sistema` têm `@transaction.atomic`; `autorizar_em_lote` tem bloco por item e chama novamente `decidir_he` para travar a mesma linha. A mudança adiciona uma consulta `exists()` por helper com linha existente; no lote que chega a `decidir_he`, são duas consultas adicionais sobre a mesma linha. Não aparece outra entidade travada pelo helper. `app/ponto/portas/he.py:148`, `app/ponto/portas/he.py:158`, `app/ponto/portas/he.py:195`, `app/ponto/portas/he.py:293`, `app/ponto/portas/he.py:343`, `app/ponto/portas/he.py:417`, `app/ponto/portas/he.py:470`, `app/ponto/portas/he.py:573`, `app/ponto/portas/he.py:580`, `app/ponto/portas/he.py:592`.
-
-RED novos, **inferência estática contra a base descrita no patch; execução Django [não verificado]**:
-
-| Teste | Base descrita | Cópia atual esperada | Evidência | [nao verificado]
-|---|---|---|---|
-| RED_1 | Falha: devolve `no_op=True` para `NAO` revogado | Passa: atualiza e limpa marca | `app/ponto/tests/test_he_revogada_na_porta.py:50`; `app/ponto/portas/he.py:197`; `app/ponto/portas/he.py:206` |
-| RED_1b | Falha: `(True,True)` em vez de `(False,True)` | Passa: uma atualização e segundo clique idempotente | `app/ponto/tests/test_he_revogada_na_porta.py:68`; `app/ponto/portas/he.py:197` |
-| RED_1c | Falha: `(recusados=0,no_op=1)` | Passa: `(1,0)` | `app/ponto/tests/test_he_revogada_na_porta.py:83`; `app/ponto/portas/he.py:262`; `app/ponto/portas/he.py:267` |
-| RED_2 | Falha: guarda crua do lote devolve erro | Passa: linha revogada não barra autorização | `app/ponto/tests/test_he_revogada_na_porta.py:92`; `app/ponto/portas/he.py:586` |
-| MORDE_3 | Já passa na base: recusa admin vigente barra lote | Continua passando | `app/ponto/tests/test_he_revogada_na_porta.py:106`; `app/ponto/portas/he.py:587` |
-| MORDE_4 | Já passa na base: repetição vigente é `no_op` | Continua passando | `app/ponto/tests/test_he_revogada_na_porta.py:118`; `app/ponto/portas/he.py:197` |
-
-- Os dois MORDE não serem vermelhos na base é esperado: preservam comportamento anterior. MORDE_3 confere a mensagem específica da guarda, evitando verde por falta de permissão. O helper `_admin` configura a permissão RBAC correta. `app/ponto/tests/test_he_revogada_na_porta.py:114`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:66`.
-- **Limitação material:** `assert _rec.call_count == 1` comprova que houve chamada, não que `DiaPago`/fechamento foi relavrado, nem qual competência mudou: o recalculador está mockado. Os testes novos tampouco exercitam serviço prévia/confirmar ou competência exportada. `app/ponto/tests/test_he_revogada_na_porta.py:55`, `app/ponto/tests/test_he_revogada_na_porta.py:66`, `app/ponto/tests/test_he_revogada_na_porta.py:97`.
-- Os testes novos herdam `TestCase`; isoladamente não provam execução da porta fora de transação. Essa lacuna é coberta pelo selo existente em `TransactionTestCase`, que chama `decidir_he` e `recusar_em_lote` diretamente. `app/ponto/tests/test_he_revogada_na_porta.py:32`, `app/ponto/tests/test_atomicidade_porta_he.py:31`, `app/ponto/tests/test_atomicidade_porta_he.py:44`, `app/ponto/tests/test_atomicidade_porta_he.py:66`.
-
-Selos existentes:
-
-- Não encontrei expectativa nesses arquivos que o diff, por si, contrarie. O273 exige escritores únicos, limpeza de marca, ausência de estados novos e leitores por `vigentes()`; o helper satisfaz essas condições. Reproduzi somente a varredura textual de leitores de O273, sem Django: lista vazia. `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:395`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:426`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:445`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:460`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:534`.
-- O214 continua encontrando `_gravar` nos dois chamadores e continua encontrando exatamente os mesmos três chamadores de `acima_do_limite`; o diff não adiciona limites literais executáveis nem altera templates. `app/ponto/tests/test_o214_ponta_pequena.py:296`, `app/ponto/tests/test_o214_ponta_pequena.py:313`, `app/ponto/tests/test_o214_ponta_pequena.py:325`, `app/ponto/tests/test_o214_item4_dia_do_admin.py:530`.
-- **O shell de atomicidade já ficaria vermelho na cópia atual por ocorrências fora do diff.** Executei apenas `python3 -B bin/atomicidade_da_porta.py app`, ferramenta que lê/analisa AST; resultado: `total=35 sob_atomic=25 arquivos=17 VIOLACAO=10`. O shell marca vermelho quando esse varredor retorna erro. `bin/atomicidade_da_porta.py:47`, `bin/atomicidade_da_porta.py:55`, `bin/atomicidade_da_porta.py:97`, `bin/tests/test_atomicidade_da_porta.sh:28`.
-- As dez ocorrências reportadas foram `app/chamados/models.py:2744`, `app/chamados/models.py:2753`, `app/chamados/models.py:2766`, `app/chamados/models.py:2770`, `app/ferias/services.py:485`, `app/ferias/services.py:495`, `app/ferias/services.py:636`, `app/ferias/services.py:639`, `app/pautas/services.py:351`, `app/ponto/services/ausencia.py:1517`; nenhuma em `he.py`. São resultados do critério sintático do selo, não demonstração de falta efetiva de transação herdada de chamador. `bin/atomicidade_da_porta.py:70`, `bin/atomicidade_da_porta.py:76`.
-- Não execute o próprio shell sob esta autorização: ele cria diretório/arquivos temporários e os apaga. `bin/tests/test_atomicidade_da_porta.sh:41`, `bin/tests/test_atomicidade_da_porta.sh:42`, `bin/tests/test_atomicidade_da_porta.sh:43`, `bin/tests/test_atomicidade_da_porta.sh:64`.
-
-## 15/11 10:05 · sessao cde97262f688 · - · - · origem=Ronald (tmux)
-
-Chamadores e efeitos, por leitura estática:
-
-- `views.decidir_he` chama a porta por alias `_porta`; sobre recusa revogada + pedido `NAO`, passa de mensagem “já estava assim” a “Trocado”, com minutos do clique e recalcular: `app/ponto/views.py:520`, `app/ponto/views.py:532`, `app/ponto/views.py:539`, `app/ponto/views.py:542`; a nova decisão revive a linha com origem admin: `app/ponto/portas/he.py:196`, `app/ponto/portas/he.py:206`, `app/ponto/portas/he.py:75`, `app/ponto/portas/he.py:83`.
-- `views.recusar_he_em_lote` passa de contar `no_op` a contar `recusados` para esse mesmo caso: `app/ponto/views.py:617`, `app/ponto/views.py:618`, `app/ponto/views.py:619`; contador da porta em `app/ponto/portas/he.py:262`, `app/ponto/portas/he.py:267`, `app/ponto/portas/he.py:270`.
-- `autorizacao_he_periodo._ato` passa de erro nomeado a autorização efetiva sobre recusa revogada acima do limite: `app/ponto/services/autorizacao_he_periodo.py:277`, `app/ponto/portas/he.py:574`, `app/ponto/portas/he.py:586`, `app/ponto/portas/he.py:592`.
-- `lavrar_he_pendente` e comando `recusar_ponta_pequena` mantêm resultados para as mesmas linhas; apenas sofrem consulta extra de vigência quando a porta chega a ela. Seus mapas já usam `.vigentes()`: `app/ponto/management/commands/lavrar_he_pendente.py:48`, `app/ponto/management/commands/lavrar_he_pendente.py:59`, `app/ponto/management/commands/recusar_ponta_pequena.py:120`, `app/ponto/management/commands/recusar_ponta_pequena.py:170`; predicado antigo de nulidade equivale ao juiz atual `app/ponto/models.py:1265`.
-- A gestão já mostrava recusa revogada como `sem_decisao`, por consultar somente vigentes e aplicar esse default: `app/ponto/services/gestao_he.py:86`, `app/ponto/services/gestao_he.py:278`. O diff permite concluir os gestos antes bloqueados; após conclusão, estado e colunas são consultados vivos: `app/ponto/services/gestao_he.py:249`, `app/ponto/services/gestao_he.py:250`, `app/ponto/services/gestao_he.py:311`.
-
-Prévia versus confirmar:
-
-- Recusa revogada entra no universo do período porque `estado_por_dia` exclui revogadas; `itens_sem_decisao` recolhe os dias `sem_decisao` acima do limite: `app/ponto/services/gestao_he.py:86`, `app/ponto/services/gestao_he.py:401`, `app/ponto/services/gestao_he.py:405`; `_pedido_de_periodo` usa esse universo nos dois passos: `app/ponto/views.py:668`, `app/ponto/views.py:703`, `app/ponto/views.py:741`.
-- Ambos executam `_ato`, que mede antes, autoriza pela mesma porta, mede depois e subtrai: `app/ponto/services/autorizacao_he_periodo.py:271`, `app/ponto/services/autorizacao_he_periodo.py:277`, `app/ponto/services/autorizacao_he_periodo.py:280`, `app/ponto/services/autorizacao_he_periodo.py:287`.
-- A prévia desfaz tudo via rollback; confirmar compara o dicionário exato e levanta exceção dentro do atomic em divergência: `app/ponto/services/autorizacao_he_periodo.py:321`, `app/ponto/services/autorizacao_he_periodo.py:323`, `app/ponto/services/autorizacao_he_periodo.py:343`, `app/ponto/services/autorizacao_he_periodo.py:346`, `app/ponto/services/autorizacao_he_periodo.py:352`.
-- Cada `_medir` pede autoridade nova; ela cria motor e o motor carrega decisões vigentes por instância: `app/ponto/services/autorizacao_he_periodo.py:94`, `app/ponto/services/autorizacao_he_periodo.py:96`, `app/ponto/services/espelho.py:1111`, `app/ponto/motor_calculo_v2.py:1400`, `app/ponto/motor_calculo_v2.py:1416`. Assim não identifiquei cache de decisão anterior que faça prévia ignorar a autorização recém-gravada dentro da transação. Confirmação executada com cenário revogado e valores reais: [não verificado].
-- O valor mostrado é o mesmo `r['diff']` serializado e carregado no form: `app/ponto/views.py:720`, `app/ponto/views.py:723`, `app/templates/ponto/gestao_he_periodo_previa.html:50`, `app/templates/ponto/gestao_he_periodo_previa.html:90`.
-- Atenção semântica: “gravado” nesta guarda significa resultado do motor após gravar `DecisaoHE`, não comparação com `DiaPago` depois dos callbacks de commit; `_medir` só consulta `autoridade_do_periodo`: `app/ponto/services/autorizacao_he_periodo.py:88`, `app/ponto/services/autorizacao_he_periodo.py:94`. Competência exportada é rotulada e gera pauta quando houve autorização: `app/ponto/services/autorizacao_he_periodo.py:288`, `app/ponto/services/autorizacao_he_periodo.py:299`.
-
-Matriz: assumir autor autorizado, motivo válido, minutos positivos; para lote autorizar minutos acima do limite, para ponta pequena minutos dentro do limite, para revogar minutos acima. Guardas desses domínios em `app/ponto/portas/he.py:175`, `app/ponto/portas/he.py:178`, `app/ponto/portas/he.py:184`, `app/ponto/portas/he.py:190`, `app/ponto/portas/he.py:335`, `app/ponto/portas/he.py:338`, `app/ponto/portas/he.py:491`, `app/ponto/portas/he.py:574`.
-
-| Linha | decidir NAO | decidir AUT | recusar lote | autorizar lote | ponta pequena | revogar |
-|---|---|---|---|---|---|---|
-| Sem linha | cria→igual | cria→igual | recusa→igual | autoriza→igual | cria sistema→igual | sem decisão→igual |
-| Vigente admin NAO | no_op→igual | troca→igual | no_op→igual | erro→igual | já decidido→igual | admin→igual |
-| Vigente admin AUT | troca→igual | no_op→igual | recusa→igual | no_op→igual | já decidido→igual | admin→igual |
-| Vigente sistema NAO | no_op→igual | troca→igual | no_op→igual | erro→igual | já decidido→igual | revoga→igual |
-| Revogada sistema NAO | **no_op→troca/revive admin** | troca→igual | **no_op→recusa** | **erro→troca AUT** | revive sistema→igual | já revogada→igual |
-
-Referências da matriz: `app/ponto/portas/he.py:195`, `app/ponto/portas/he.py:197`, `app/ponto/portas/he.py:206`, `app/ponto/portas/he.py:262`, `app/ponto/portas/he.py:343`, `app/ponto/portas/he.py:355`, `app/ponto/portas/he.py:366`, `app/ponto/portas/he.py:470`, `app/ponto/portas/he.py:475`, `app/ponto/portas/he.py:478`, `app/ponto/portas/he.py:497`, `app/ponto/portas/he.py:587`, `app/ponto/portas/he.py:592`.
-
-Selos inspecionados:
-
-- O214 exige conjunto exato das chamadoras de `acima_do_limite`; helper novo não altera esse conjunto: `app/ponto/tests/test_o214_item4_dia_do_admin.py:530`, `app/ponto/tests/test_o214_item4_dia_do_admin.py:542`, `app/ponto/portas/he.py:148`.
-- O273 censo de leitores crus exclui explicitamente `ponto/portas/he.py` e `ponto/models.py`; helper está dentro da exclusão: `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:473`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:476`.
-- O273 marca escritor único também exclui a porta; diff não introduz atribuição fora dela: `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:438`, `app/ponto/tests/test_o273_recusa_do_sistema_envelhece.py:441`.
-- Não executei testes nem modifiquei arquivos. Verde/vermelho empírico: [não verificado]. [nao verificado]
-
-## 15/11 10:05 · sessao 2c6c74fa406d · - · - · origem=Ronald (tmux)
-
-Censo estático da cópia, sem executar testes: [nao verificado]
-
-**Escritores de produção**
-
-| Campo | Todos os sítios encontrados |
-|---|---|
-| `estado` | `_gravar`: criação `app/ponto/portas/he.py:66`, atualização `:75`, persistência `:84`. Recebe admin de `decidir_he` `:206` e sistema de `recusar_ponta_pequena` `:366`. |
-| `origem` | `_gravar`: criação `app/ponto/portas/he.py:68`, atualização `:76`, persistência `:84`; origem admin passada em `:208`, sistema em `:368`. |
-| `minutos_na_decisao` | `_gravar`: criação `app/ponto/portas/he.py:67`, atualização `:75`, persistência `:84`; nunca atualizado pela revogação `:398`. |
-| `revogada_em` | Default nulo do modelo `app/ponto/models.py:1335`; `_gravar` limpa em `app/ponto/portas/he.py:83`; `_marcar_revogada` escreve relógio em `:398`, persiste em `:400`. |
-| `revogada_motivo` | Default vazio `app/ponto/models.py:1340`; `_gravar` limpa `app/ponto/portas/he.py:83`; `_marcar_revogada` escreve `:399`, persiste `:400`. |
-| `minutos_na_revogacao` | Default nulo `app/ponto/models.py:1343`; `_gravar` limpa `app/ponto/portas/he.py:83`; `_marcar_revogada` escreve `:399`, persiste `:400`. |
-
-Não apareceu escritor de aplicação fora de `app/ponto/portas/he.py`; o suposto admin do Django mencionado em `app/ponto/models.py:1261` não está registrado no arquivo `app/ponto/admin.py:1` a `:48`. A completude contra referências dinâmicas arbitrárias é [não verificado].
-
-**Leitores diretos dos valores**
-
-- `estado`: antes da escrita/trilha `_gravar` `app/ponto/portas/he.py:61`; idempotência `:197`; retorno de ponta pequena `:355`; trilha da revogação `:395`, `:408`; guarda da revogação `:485`; guarda/erro do lote `:587`, `:591`; `__str__` `app/ponto/models.py:1361`; motor `app/ponto/motor_calculo_v2.py:1417`; mapa da gestão `app/ponto/services/gestao_he.py:86`; agregação da gestão `:107`, `:109`; montagem do retrato `app/ponto/services/he_pendente_lavrado.py:145`.
-- `origem`: antes/trilha `_gravar` `app/ponto/portas/he.py:62`; antes/trilha revogação `:396`, `:408`; guarda de autoria da revogação `:475`; mensagem de erro do lote `:591`. Nenhum template encontrado lê origem diretamente; a gestão agrupa apenas por estado em `app/ponto/services/gestao_he.py:107`.
-- `revogada_em`: antes/trilha `_gravar` `app/ponto/portas/he.py:63`; juiz `app/ponto/models.py:1267`; trilha após revogar `app/ponto/portas/he.py:409`. `_vigente` pergunta ao juiz, sem reler o atributo em Python `:148`.
-- `minutos_na_decisao`: antes/trilha `_gravar` `app/ponto/portas/he.py:61`; retorno de idempotência `:203`; retorno de ponta pequena `:355`; antes/trilha revogação `:395`, `:408`; retornos de revogação `:477`, `:484`, `:490`, `:493`, foto `:494`; soma de decisão por estado na gestão `app/ponto/services/gestao_he.py:108`.
-- `revogada_motivo` e `minutos_na_revogacao`: não encontrei leitor explícito do valor armazenado no produto; o log usa os argumentos `motivo` e `int(minutos)`, não os atributos recém-gravados, em `app/ponto/portas/he.py:409` e `:410`. A ferramenta de máscara inventaria `revogada_motivo` em `bin/sombra_regras_pessoais.py:125`; seu processamento genérico está em `bin/sombra_mascara_pessoal.py:44` e o selo em `bin/sombra_selo_pessoal.py:74`.
-
-**Leitores indiretos e telas**
-
-- Motor carrega somente vigentes por alias `_DHE`, `app/ponto/motor_calculo_v2.py:1417`; lê autorização em `:1456`, `:1653`, com efeito nos clipadores `:1697`, `:1739`. Não usa os snapshots para pagar.
-- Gestão `estado_por_dia` consulta vigentes em `app/ponto/services/gestao_he.py:87`; `_decisoes` soma snapshots das vigentes em `:105`. `enriquecer` lê ambos `:249`, `:250`, publica estado por dia `:278`, contagens pendentes `:281`, `:285`, e somas/contagens de decisões `:312`.
-- Gestão propaga estado ao calendário `app/ponto/services/gestao_he.py:141`; filtra estados `:332`; prepara seleção de lote somente sem decisão `:405`; Central considera ausente no mapa vigente como pendente `:475`, `:477`.
-- Template `app/templates/ponto/gestao_he.html`: espiga por estado `:109`; badges `:124`, `:125`; snapshots agregados `:219`, `:220`; oferta de autorização individual `:256`; tooltip/cores/LED/risco `:258`, `:259`, `:267`, `:273`; tabela de pontas `:314`.
-- Folha usa o mesmo mapa vigente em `app/folha/porta_export.py:682` a `:686`. Qualquer estado presente libera aquele dia no filtro, inclusive `nao`, em `:232`; ausência de decisão acima do limite entra na trava `:230` a `:234`.
-- Comando lavrador fornece mapa vigente de objetos `app/ponto/management/commands/lavrar_he_pendente.py:48`; `apurar` consome estado `app/ponto/services/he_pendente_lavrado.py:145`, podendo antes revogar pela porta `:143`.
-- Comando recusa pequena carrega existência de vigentes `app/ponto/management/commands/recusar_ponta_pequena.py:120`, pula essas chaves `:141`, chama porta nas restantes `:170`.
-- Serviço de período não lê campos/ORM de `DecisaoHE`; delega lote `app/ponto/services/autorizacao_he_periodo.py:277` e mede antes/depois via autoridade do motor `:271`, `:280`, `:94`.
-
-**Censo ORM fora de `.vigentes()`**
-
-Só quatro consultas executáveis encontradas, todas na porta e todas travando a linha crua:
-
-| Consulta | Com linha revogada |
-|---|---|
-| `app/ponto/portas/he.py:195` | Obtém/trava a linha; `_vigente` devolve `None` `:196`; não faz idempotência por estado; `_gravar(_ja,...)` revive a mesma linha e limpa revogação `:206`, `:83`. |
-| `app/ponto/portas/he.py:343` | Obtém/trava; não considera já decidido `:344`; dry-run retorna sucesso sem escrita `:357`; apply revive pelo `_gravar` `:366`. |
-| `app/ponto/portas/he.py:470` | Obtém/trava; para sistema revogada retorna `ja revogada` `:478`, `:483`; se origem admin retorna antes `decisao do admin` `:475`. |
-| `app/ponto/portas/he.py:580` | Obtém/trava; `_vigente` devolve `None` `:586`; não barra lote por estado; segue para `decidir_he` `:592`. |
-
-`DecisaoHE.objects.create` `app/ponto/portas/he.py:66` é escrita. `DecisaoHE.objects.filter(...)` em `app/ponto/management/commands/recusar_ponta_pequena.py:219` é texto de instrução de reversão, não consulta executada ali.
-
-**ESMERIL-SEMÂNTICA**
-
-- O contrato distingue estado da decisão e vigência: `NAO` é decisão `app/ponto/models.py:1283`, mas linha revogada não vale segundo `:1267`. A porta passa a respeitar isso em suas quatro políticas `app/ponto/portas/he.py:196`, `:344`, `:478`, `:586`.
-- `origem` é autoria do estado atual, não último clique humano `app/ponto/models.py:1290` e `:1294`. Uma recusa **vigente do sistema**, seguida de `NAO` humano, continua `no_op`, conserva origem sistema e snapshot antigo `app/ponto/portas/he.py:197` a `:204`. Isso é preexistente, não mudança do diff.
-- Consequentemente, “com ciência” na tela não prova autoria humana: template rotula todo estado `nao` assim em `app/templates/ponto/gestao_he.html:125`, `:220`, `:314`, e a agregação não separa origem em `app/ponto/services/gestao_he.py:107`. A descrição “o admin autorizou N minutos” `:96` não deve ser usada para inferir autoria dos `nao`.
-- `minutos_na_decisao` continua sempre foto, nunca pendência atual `app/ponto/models.py:1278`; a gestão soma essa foto como decisão vigente `app/ponto/services/gestao_he.py:108`, enquanto os minutos vivos dos atos vêm do retrato `:388`. `minutos_na_revogacao` é a outra foto, na revogação `app/ponto/models.py:1343`.
-- Na revivificação, o motivo/minutos da revogação deixam a linha atual `_gravar` `app/ponto/portas/he.py:83`; sua história está no log anterior de revogação `:406`, sujeito ao best-effort com exceção logada `:411`. O diff não cria esse comportamento.
-
-_5577 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
