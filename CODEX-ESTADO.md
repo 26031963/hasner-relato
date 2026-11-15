@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 00:54** · publicado em **15/11/2026 00:54** (UTC-3)
+> Ultima resposta processada: **15/11/2026 01:06** · publicado em **15/11/2026 01:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 01:06 · sessao a83435cd3ae0 · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
+
+Entrega em [cef_c1_entrega.txt](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c1_entrega.txt:1), com curas T1/T2/T3 e selo T5.
+
+[Verificação local](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c1_verificacao.txt:1): oito mutantes mortos, controles verdes.
+
+T4 ficou como PERGUNTA pelo significado declarado no [leitor](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/juizes.py:151). Suite com banco e certificação final: [nao verificado]. [nao verificado]
 
 ## 15/11 00:54 · sessao 7011158ac77e · - · - · origem=Ronald (tmux)
 
@@ -1730,18 +1738,4 @@ Deltas individuais de DSR não podem ser somados como parcelas independentes: o 
 
 Para cumprir literalmente o pedido sem criar regra, imprimir `sem funcao real` para os contrafactuais completos; “manter” pode continuar exibindo a leitura existente, mas uma API específica de delta desse cenário não foi identificada [nao verificado].
 
-## 15/11 00:43 · sessao 1b274078e0f5 · - · - · origem=Ronald (tmux)
-
-Referências e decisões para a sonda:
-
-- `EscalaColaborador` não tem campo de criação ou alteração. A classe começa em `app/escala/models.py:871` e termina antes de `AgendaDia`, em `app/escala/models.py:1399`; seus únicos `DateTimeField` são `regua_avaliada_em` (`:884`) e `regua_corroborada_em` (`:888`), que não representam criação/alteração. Emitir `campo_criacao_alteracao=null`, sem substituir por datas de régua.
-- Perguntar desligamento a `esta_desligado(colaborador)`, implementada em `app/colaboradores/services/desligamento.py:23-32` e registrada em `app/core/juizes.py:271`. Ela compara o estado gravado com `'desligado'`. Não rotular automaticamente a resposta falsa como “ativo”: há também `afastado` e `ferias` em `app/colaboradores/models.py:295-300`. Emitir o booleano do juiz e `situacao` real.
-- Competência de uma data: `ponto.janelas.janela_atual(data, empresa)`, em `app/ponto/janelas.py:60-63`. O mês/ano são os da data final da janela, conforme `periodo_apuracao`, em `app/ponto/janelas.py:10-21`. Para um intervalo, iterar blocos de competência avançando do fim da janela para o dia seguinte.
-- Classificação exportada/aberta: chamar `competencia_entregue(empresa_id, mes, ano)`, em `app/folha/export.py:556-594`, registrada em `app/core/juizes.py:337`. Ela exige uma `ExportacaoDominio` vigente e não invalidada; não substituir por `FechamentoMensal.status`.
-- Batidas: `batidas_apuraveis` filtra timestamps com `>= ini` e `<= fim`, em `app/ponto/turnos.py:2875-2883`. Passar datas simples perderia as horas do último dia. Usar limites conscientes de fuso: meia-noite inicial e último microssegundo do dia final; ou chamar o juiz com início consciente e acrescentar `timestamp__lt` à meia-noite do dia seguinte ao final.
-- Outro vínculo cobrindo todo o intervalo: usar a função real `vinculo_cobre_a_data(other, lo)` e a mesma para `hi`; seu predicado contínuo está em `app/escala/alimentacao.py:214-216`. Isso verifica existência de um vínculo individual cobrindo ambas as pontas, distinto de união de vários vínculos.
-- Há precedente de `execute_wrapper` que aceita somente SELECT e recusa CTE, múltiplos comandos, `INTO` e palavras de escrita/efeito em `app/chamados/management/commands/diff_e3_sombra.py:30-38`; instalação em todos os aliases, `:92-95`. Não imprimir SQL ou parâmetros em erro.
-- Backend é `django_tenants.postgresql_backend`, em `app/config/settings/saas.py:85`; o envelope invoca `tenant_command shell --schema=juliani`, em `bin/sonda_leitura.sh:239-240`. O comportamento interno de `SET search_path` está em dependência externa, ausente da cópia: `[não verificado]`.
-- Não executar o envelope nesta sessão: embora o corpo da sonda possa usar somente SELECT, o envelope reescreve credencial/role (`bin/sonda_leitura.sh:126-143`), concede permissões (`:157-181`), cria temporário (`:216-218`) e grava trilha (`:248-250`). Entregar somente o comando futuro como texto.
-
-_5452 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5453 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

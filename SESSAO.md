@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 01:04:40.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (25.3 MB). Acoes na janela: **737**.
+**Medido em 15/11/2026 01:09:08.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (25.5 MB). Acoes na janela: **749**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:09:02 | Bash | Read E4c F1/F2 file scope | `cd /home/ronald/saas-hasner; /bin/grep -n -E '^#\|F1\|F2' logs/CAMINHO-E4C/e4c_reconfere_v2.md \| head -30 \| cut -c1-250` |
+| 01:08:56 | Bash | Check E4c materials and vaga aval | `cd /home/ronald/saas-hasner; ls logs/CAMINHO-E4C/ \| head; cat logs/AVAIS-1313/vaga_livre_abre.txt \| head -20` |
+| 01:08:51 | Bash | Update RELATO top with ESPERANDO and T4 question | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() old='ESPERANDO: codex_pergunta.sh \| pid=217027\n' assert t.count(old)==1 new=('ESPERANDO: suite.sh \| pid=246079\n' 'lei: T4 CONTRATO-DE-ENTRADA-DO-FIO -- ultima_batida.timestamp: o unico leitor (chamados/juizes.py:159 _dia_do_contexto_fraco, contrato declarado :151 "dia em que foi notado") consome NOTACAO; as ...` |
+| 01:08:40 | Bash | Identify suite process | `ps -o pid,args -p 246078,246079 \| cut -c1-120` |
+| 01:08:32 | Bash | Check suite launch state | `cd /home/ronald/saas-hasner; /usr/bin/sleep 5; cat logs/CONTRATO-DE-ENTRADA-DO-FIO/c1/suite/recorte.log* \| tail -8; pgrep -f "suite.sh --dir /home/ronald/wt-codex-contrato" \| head` |
+| 01:08:27 | Bash | Launch CEF c1 suite recorte on the copy | `cd /home/ronald/saas-hasner; bash bin/trava_teste.sh --quem; W=/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238; mkdir -p logs/CONTRATO-DE-ENTRADA-DO-FIO/c1/suite; L=logs/CONTRATO-DE-ENTRADA-DO-FIO/c1/suite/recorte.log; setsid nohup bash -c "bash bin/suite.sh --dir $W --only 'chamados ponto api' > $L 2>&1; echo rc=\$? > $L.fim" >/dev/null 2>&1 & echo pid=$!; date +%H:%M` |
+| 01:08:20 | Bash | Read production diff and questions | `cd /home/ronald/wt-codex-contrato-de-entrada-do-fio-005238; git diff -- app/api app/chamados/services app/ponto/management app/ponto/tests; /bin/grep -n -i -A12 'PERGUNTA' app/chamados/tests/cef_c1_entrega.txt \| head -60` |
+| 01:08:16 | Bash | Inspect CEF c1 wt diff | `cd /home/ronald/wt-codex-contrato-de-entrada-do-fio-005238; git status --porcelain; git diff --stat; wc -l app/chamados/tests/cef_c1_entrega.txt` |
+| 01:08:11 | Bash | Read CEF c1 result | `cd /home/ronald/saas-hasner/logs/CONTRATO-DE-ENTRADA-DO-FIO/c1; cat c1.rc c1.r.rc; cat c1.r.inventario \| head -30; wc -l c1.r; tail -40 c1.r` |
+| 01:08:08 | Bash | Check CEF c1 producer alive | `cd /home/ronald/saas-hasner; kill -0 217027 && echo vivo \|\| echo morto; ls logs/CONTRATO-DE-ENTRADA-DO-FIO/c1/` |
+| 01:08:02 | Bash | Check RELATO top and hook | `cd /home/ronald/saas-hasner; sed -n 1,5p app/docs/RELATO.md \| cut -c1-160; python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| cut -c1-200` |
+| 01:07:57 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 01:04:36 | Bash | Fix ESPERANDO line and recheck hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() old='ESPERANDO: codex_pergunta.sh CONTRATO-DE-ENTRADA-DO-FIO c1 \| pid=217027' assert t.count(old)==1 open(p,'w').write(t.replace(old,'ESPERANDO: codex_pergunta.sh \| pid=217027')) EOF python3 bin/hook_stop_fila1.py </dev/null 2>&1 \| cut -c1-300` |
 | 01:04:32 | Bash | Check ESPERANDO producer and hook logic | `cd /home/ronald/saas-hasner; kill -0 217027 && ps -o pid,args -p 217027 \| cut -c1-200; sed -n 789,830p bin/hook_stop_fila1.py` |
 | 01:04:31 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
