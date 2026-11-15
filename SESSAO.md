@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 16:04:18.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (82.4 MB). Acoes na janela: **1430**.
+**Medido em 15/11/2026 16:09:25.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (82.5 MB). Acoes na janela: **1434**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:04:42 | Bash | Point ESPERANDO at suite.sh pid and verify | `cd /home/ronald/saas-hasner/app; sed -i '3s/.*/ESPERANDO: suite.sh \| pid=2297114/' docs/RELATO.md; cd ..; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 16:04:39 | Bash | Read rest of ESPERANDO check | `cd /home/ronald/saas-hasner; sed -n 788,850p bin/hook_stop_fila1.py; pgrep -af "suite.sh --na-vez" \| cut -c1-120` |
+| 16:04:36 | Bash | Inspect hook ESPERANDO check | `cd /home/ronald/saas-hasner; grep -n "_esperando_com_prova" -A40 bin/hook_stop_fila1.py \| head -70; ps -o pid,args -p 2297111 \| cut -c1-80` |
+| 16:04:23 | Bash | Record matriz, C v1 and update ESPERANDO | `cd /home/ronald/saas-hasner/app; cat >> docs/RELATO.md <<'EOF' - 16:2x MATRIZ R3 entregue (logs/E3-RESTO-R3/matriz/matriz.md): 14 degraus, PROVA=NENHUM 8, contrato C1-C7 cobre V1-1..7 + V2-1..6 (V2 fundidos), perguntas de lei 0 (4 DECIDIDO PELA LEI contestavel: LU-01/C17, 2A-c6K3, cobertura parcial nao cala, TETO TEMPORAL); amostra conferida (views.py:986, pautas_discordantes.py:104-108). c14 REAB ...` |
 | 16:04:16 | Agent | R3 c14 opus construtor (matriz) | `Voce e o CONSTRUTOR da volta c14 da obra E3-RESTO-R3 no repo /home/ronald/saas-hasner (Django em app/, regras em /home/ronald/saas-hasner/CLAUDE.md -- leia as secoes 0, 3 e 6). O brief literal esta em /home/ronald/saas-hasner/logs/E3-RESTO-R3/c14/brief.md: leia-o primeiro e siga-o; o contrato e o CONTRATO DE SAIDA C1-C7 da matriz /home/ronald/saas-hasner/logs/E3-RESTO-R3/matriz/matriz.md. Trabalhe ...` |
 | 16:04:05 | Bash | Write c14 brief with matriz as contract | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3/c14; mv brief.md brief_so_triagem_1545.md; { echo "OBRA E3-RESTO-R3, VOLTA c14 (aval MATRIZ-ANTES-DA-C14 15/11 16:0x: brief = MATRIZ + triagem_v2). Copia /home/ronald/wt-codex-e3-resto-r3-093851, HEAD e08db44a6 (limpa). Papel CONSTRUTOR (opus)." echo "CONTRATO = o CONTRATO DE SAIDA C1-C7 de /home/ronald/saas-hasner/logs/E3-RESTO-R3/matriz/matriz.md (lei ...` |
 | 16:03:56 | Bash | Read old c14 brief and matriz contract | `cd /home/ronald/saas-hasner; cat logs/E3-RESTO-R3/c14/brief.md; sed -n '/CONTRATO DE SA/,$p' logs/E3-RESTO-R3/matriz/matriz.md \| head -60` |

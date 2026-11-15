@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 16:04** · publicado em **15/11/2026 16:04** (UTC-3)
+> Ultima resposta processada: **15/11/2026 16:06** · publicado em **15/11/2026 16:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 16:06 · sessao 68f26a1eb8a9 · L2-BACKFILL · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: REEMISSAO-1600, item 3 — perguntas 1 e 3; ressalva de comprovação na 4.** (`avais_1600.txt:4`; `CLAUDE.md:37`)
+
+Nos anexos, conto linhas desde a primeira linha de cada bloco fornecido. [nao verificado]
+
+1. **PROCEDE — o molde citado não fornece o DRY de produção somente leitura.**
+
+   O comando tem DRY default, `--aplicar` e PAREI com lista de exportadas. Porém, **sem `--aplicar`, chama `aplicar()` dentro de uma transação e depois faz rollback**. Portanto, esse DRY tenta executar o caminho escritor; rollback não o transforma em leitura. O envelope configura transações somente leitura. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:425`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:478`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:578`; `bin/sonda_leitura.sh:142`)
+
+   Assim, “item novo no molde” não basta para executar “DRY em prod, leitura pelo envelope”: falta explicitar o caminho L2 que somente seleciona e mede. Sua implementação permanece **[nao verificado]**. O molde também deixa exportadas fora do apply; não oferece passagem específica para ensaiar escrita nelas na sombra. (`avais_1600.txt:4`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:253`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:263`)
+
+   **A porta comporta a linha pedida:** `RETRATACAO` existe; `ato_motivo` é texto sem `choices`, portanto aceita `'obsoleta'`; `ato_em` recebe o datetime fornecido, sem restrição temporal nessa porta. A chamada correta é `registrar([dict(...)])`. (`app/chamados/models.py:4001`; `app/chamados/models.py:4016`; `app/chamados/models.py:4019`; `app/chamados/models.py:4086`; `app/chamados/models.py:4096`)
+
+   “Primeira vaga depois da c14” é condição futura, não prova de vaga disponível; disponibilidade efetiva **[nao verificado]**. Antes de abrir, permanece obrigatório conferir o teto. (`avais_1600.txt:4`; `CLAUDE.md:291`)
+
+2. **NAO PROCEDE — existe “senão” geral.**
+
+   Condição literal que não fecha significa **PAROU com o número**. Isso cobre ausência de vaga, cruzamento de arquivo e resultado insuficiente das provas. Não é necessário repetir um “senão” em cada cláusula. (`CLAUDE.md:37`; `avais_1600.txt:8`)
+
+3. **PROCEDE — há cruzamento concreto com a cópia RELAVRA-11.**
+
+   O comando já diverge nela: o main consulta `competencia_entregue`, enquanto a cópia consulta `competencia_ja_paga`, incluindo o mesmo trecho de classificação usado pelo DRY. Logo, a condição “não cruza arquivo […] nem a cópia da RELAVRA-11” **não fecha agora**; não há autorização para ignorá-la. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:453`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:471`; `/home/ronald/wt-relavra11-113556/app/chamados/management/commands/backfill_decisoes_pergunta.py:456`; `/home/ronald/wt-relavra11-113556/app/chamados/management/commands/backfill_decisoes_pergunta.py:474`; `avais_1600.txt:4`; `app/docs/PISTA.md:44`; `CLAUDE.md:37`)
+
+   Nos diffs R3/F1 examinados, comando e testes diretos `*e1*` não apareceram; a ausência não tem listagem persistida com arquivo:linha: **[nao verificado]**. Há teste relacionado na F1: a catraca examina explicitamente `backfill_decisoes_pergunta::linhas_a_criar`. (`/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:68`; `/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:81`) [nao verificado]
+
+   Não há colisão demonstrada com escritor único ao usar `registrar`. A exceção ao COMPLEMENTO-3 é nominal. L-127 continua sendo vocabulário; a ordem Backfill → leitores tem suporte documental no ADR, que qualifica seu contexto como redação do Code. (`app/chamados/models.py:3989`; `avais_1600.txt:4`; `app/docs/LEIS.md:148`; `app/docs/PLANO-PADROES.md:81`; `app/docs/PLANO-PADROES.md:86`)
+
+4. **NAO PROCEDE quanto às referências principais; exclusão universal e universo permanecem não comprovados.**
+
+   - `_retratada_com_trilha` exige **carimbo + log correlacionado por ação, modelo e PK**. “O mesmo filtro” precisa preservar os três campos do log. (`app/chamados/juizes.py:291`; `app/chamados/juizes.py:294`)
+   - O caminho completo é `chamados/services/carga_pergunta_viva.py`. A linha 111 lê **LogAuditoria**, não DP. Isso não demonstra um leitor já migrado para atos. (`app/chamados/services/carga_pergunta_viva.py:110`)
+   - `remover_motivo` grava **RETRATACAO**, com motivo formatado `"<evento>: motivo <motivo> removido (via antes: <via>)"`, diferente de `'obsoleta'`, e preserva o carimbo existente. (`app/chamados/models.py:2120`; `app/chamados/models.py:2123`; `app/chamados/models.py:2125`)
+   - O selecionador exclui a pergunta **depois de persistida a DP obsoleta**, sustentando idempotência sequencial. `registrar` não deduplica nem há constraint de unicidade desse ato; execução e proteção concorrente L2 são **[nao verificado]**. (`avais_1600.txt:4`; `app/chamados/models.py:4033`; `app/chamados/models.py:4096`)
+   - O seletor **não exclui expressamente quem passou por `remover_motivo`**. Se também houver log obsoleta anterior e faltar DP obsoleta, seus critérios continuam satisfeitos. A existência dessa interseção em produção é **[nao verificado]**. (`avais_1600.txt:4`; `app/chamados/models.py:2120`; `app/chamados/juizes.py:294`)
+   - `disputa_emissao.py:1494–1495` realmente zera validação e autor. (`app/chamados/services/disputa_emissao.py:1494`)
+   - **52/39/13 não são medida primária comprovada aqui**; o aval manda substituí-los pelo DRY futuro. Contagens atuais e efeitos efetivos em FM/TXT são **[nao verificado]**. Registrar DP efetivamente aciona o acordamento de células. (`avais_1600.txt:4`; `app/chamados/models.py:4097`)
+
+## 15/11 16:04 · sessao a43f858a2c0b · - · - · origem=Ronald (tmux)
+
+**Q2 — NAO PROCEDE:** existe “senão” geral: condição literal que não fecha implica PAROU com o número; a abertura também exige conferir teto de dois construtores. (`CLAUDE.md:37`; `CLAUDE.md:291`)
+
+**Q3 — PROCEDE quanto ao cruzamento com a cópia RELAVRA-11.** O comando diverge do main: a cópia usa `competencia_ja_paga`; o main usa `competencia_entregue`. Logo, a condição “não cruza arquivo […] nem a cópia RELAVRA-11” não está satisfeita agora. Isso exige parar essa abertura; o aval não autoriza ignorar a condição. (`/home/ronald/wt-relavra11-113556/app/chamados/management/commands/backfill_decisoes_pergunta.py:456`; mesma cópia `:474`, `:501`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:453`, `:471`, `:498`; `CLAUDE.md:37`; `app/docs/PISTA.md:44`)
+
+Outras verificações:
+
+- A porta `DecisaoPergunta.registrar` respeita o escritor único requerido pelo selo existente; ele recusa construção e escrita ORM fora de `models.py`. (`app/chamados/tests/test_e1_entradas.py:185`; `:196`; `:217`)
+- `test_e4_backfill.py` está alterado nos diffs R3/F1, mas testa **outro comando**, `backfill_fio_morto_e4b`. Não deve ser apresentado como teste direto de `backfill_decisoes_pergunta`. (`/home/ronald/codex_ws/e08db44a694aa355db6abcb54ee5290419168934/app/chamados/tests/test_e4_backfill.py:31`; `:36`)
+- F1 altera um arquivo de catraca que também examina `backfill_decisoes_pergunta::linhas_a_criar`; esse arquivo relacionado não está livre de sobreposição caso L2 precise editá-lo. (`/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:65`; `:68`; `:81`)
+- Ausência do comando e dos testes diretos `*e1*` nos diffs R3/F1 foi conferida por `git diff --name-only`; não há artefato persistido com arquivo:linha dessa listagem: **[nao verificado]** segundo a exigência estrita de citação. [nao verificado]
+- A ordem Expand → Backfill → leitores → Contract tem suporte documental; o próprio ADR declara que seu contexto é redação do Code. O literal original de `aval_expand_contract.txt` não foi acessado: **[nao verificado]**, além da transcrição fornecida na revisão anterior. (`app/docs/PLANO-PADROES.md:81`; `:86`; `app/docs/BACKLOG.md:1968`)
+- L-127 continua sendo vocabulário; não é, isoladamente, a fonte da ordem. (`app/docs/LEIS.md:148`)
+- “Primeira vaga depois c14” é condição futura; sua disponibilidade efetiva permanece **[nao verificado]**. Há “senão” suficiente para não abrir quando faltar vaga ou houver cruzamento. (`CLAUDE.md:37`; `:291`; `app/docs/PISTA.md:44`)
 
 ## 15/11 16:04 · sessao 9848e5608028 · - · - · origem=Ronald (tmux)
 
@@ -496,32 +550,4 @@ Leitura concluída sem escrita.
 
 - **RELATO:262 está exatamente na cópia** e afirma: “metade validada em espera nao quita disputa (C7 pode_fechar le a testemunha estado_aplicacao_pergunta)”. `app/docs/RELATO.md:262`. A frase é falsa pelo código: `app/chamados/models.py:1905-1909` só considera sem veredito quem não tem validação nem materialização; `:1911-1917` usa a lista sem veredito e `fio_vivo`, sem chamar a testemunha. Os juízes estão registrados em `app/core/juizes.py:287` e `:302`. O próprio teste legado documenta fechamento sem batida em `test_bug_par_projetado.py:1046-1049`. A ocorrência histórica da reprovação no RELATO vivo não é a frase que o aval manda corrigir.
 
-## 15/11 15:11 · sessao ff9d18f38647 · - · - · origem=Ronald (tmux)
-
-Conferências em leitura; nenhum arquivo alterado.
-
-- **Escopo e condição:** `CLAUDE.md:37` manda parar quando condição literal não fecha. `CLAUDE.md:39-40` exige cópia nascida do HEAD na hora do patch. Portanto “cópia nova sobre 6e2fc9133 reaplicada no HEAD” só satisfaz a lei se a base efetiva for o HEAD, com o delta BUG-PAR reaplicado; uma cópia simplesmente fundada no hash antigo não satisfaz. O resultado reaplicado não está disponível `[nao verificado]`.
-- **Cruzamento:** paralelismo é permitido somente sem arquivo comum, independentemente de família/app (`CLAUDE.md:309-311`; `app/docs/PISTA.md:44-48`). O anexo condicao1 mede cruzamento com F1 e R3; o próprio COMPLEMENTO-4 fornece o senão: registrar espera pelo pouso e não abrir. A medição fornecida não permite abertura; contagem independente de commits/diffs não foi possível nesta cópia sem `.git` `[nao verificado]`.
-- **Teto:** conferir antes de abrir é obrigatório (`CLAUDE.md:290-292`). O teto é **1 opus + 1 Codex**, total 2 (`app/docs/LEIS.md:147`). Há somente **1 Codex construtor por repositório** (`CLAUDE.md:355-356`; guarda real `bin/codex_pergunta.sh:253`). C4 nomeia **opus** para BUG-PAR, portanto não pede segunda vaga Codex. Ocupação efetiva de todos os construtores não é demonstrada pelo material `[nao verificado]`.
-- **QUEIMA/COMPLEMENTO-2/3:** só existem no texto fornecido `[nao verificado quanto a arquivo local]`. C4 substitui nominalmente a proibição QUEIMA e a espera CORTES C; não nomeia a frase do COMPLEMENTO-3 g “nenhuma volta de construtor antes da redefinicao”. Existe tensão textual a explicitar, embora o comando específico posterior de retorno da BUG-PAR possa ser lido como exceção; não afirmar revogação tácita como fato. A política C2 de esperar a espinha cruzada fica preservada pelo próprio portão C4.
-- **CORTES C2 devolvido:** topo vivo fornecido declara “C2 espera reemissao” e ausência de produtor para separar NOVA de legado, além do instrumento contar “sem carimbo”, não “sem batida”. C4 volta a exigir as mesmas três provas no pouso, mas não reemite esse contrato nem fornece produtor. Isso continua pendência literal; censos fornecidos reforçam números documentais, mas não substituem execução/instrumento. [nao verificado]
-- **Suite:** espera pela trava atrás da espinha é compatível com `CLAUDE.md:95-104` (porta canônica, motivo e trava) e `CLAUDE.md:372-381` (pré-verificador, inteira verde, depois opus). **Não existe colisão por a suite inteira não rodar imediatamente.** Toda a árvore reaplicada deve ser certificada (`CLAUDE.md:320-324`), e não a antiga suite do hash-base. [nao verificado]
-- **C7 intocado:** corresponde ao registro escrito: C7 pergunta fio_vivo vazio + ausência de resposta sem veredito (`app/docs/CORTES.md:83`, literal completo em `:323`). “Sem veredito” exclui validadas/materializadas (`app/core/juizes.py:302`; `app/docs/CORTES.md:415` diz “validada/materializada fecha normal”). Logo não apresentar C7 como curado apenas por limitar portão.
-- **Dinheiro/exportada:** regra fora do pedido e gravado de exportada exigem `!` (`CLAUDE.md:265-268`); apply em aberta exige reversão prévia, hash exportada intacta e prova de frota (`:406-410`); mudança de gravado exportado só com `!`, DIFF, reversão e porta REGEN (`:411-417`). “Nenhuma trava nem aviso por exportada” (`:421-422`) não revoga essas condições.
-- **PORTAO-DA-11:** `rg` na cópia inteira não encontrou o nome; o literal não consta dos anexos fornecidos. Colisão com esse aval **[nao verificado]**.
-- **Padrão:** Single Writer Principle existe no glossário (`app/docs/GLOSSARIO.md:12`); selo de padrão e classe existe em `CLAUDE.md:65-70`. Isso por si só não autoriza ampliar o universo, pois escopo literal permanece em `CLAUDE.md:37-38`.
-
-A fonte textual dos anexos não existe como arquivo nesta cópia; para citar anexos com linha, contar as linhas do bloco fornecido e identificar explicitamente “anexo fornecido”.
-
-## 15/11 15:10 · sessao 03daea7a0683 · - · - · origem=Ronald (tmux)
-
-Proposta exata enviada e validada em memória: **17 testes OK**, sem editar arquivos. [nao verificado]
-
-- Migrar declaração `_slot_esperado` → `_q_resposta_conservada`, com metadado explícito aceitando `PAR` e `DECLARADO`; manter classificador intacto.
-- Preservar quatro sítios declarados e contador 21; nova leitura medida: SQL=2, demais=1/2/1. Atualizar mutantes para divergência `(3,2)` e compensação total seis.
-- Manter censo PAR independente e exigir duas formas PAR no novo sítio; adicionar mutante removendo ambas para provar declaração morta.
-- Origem: [catálogo](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:65), [face SQL](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:1665).
-
-Erro do selo: dependência direta de `git` no teste, [linha 132](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v5_tipos_sql.py:132). Não há cura produtiva compatível com teste intocado; alternativa seria fixture versionada dos dois corpos históricos, preservando a asserção FieldError, mediante autorização para alterar esse teste. [nao verificado]
-
-_5690 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5692 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
