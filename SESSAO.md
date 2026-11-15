@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 05:22:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (40.4 MB). Acoes na janela: **1285**.
+**Medido em 15/11/2026 05:27:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (40.4 MB). Acoes na janela: **1288**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:23:01 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('ESTADO 05:4x')) L.insert(i,"ESTADO 05:5x CONTRATO-DE-ENTRADA-DO-FIO verificador v1 REPROVA (logs/CONTRATO-DE-ENTRADA-DO-FIO/verif/v1.r), triado (c3/triagem_v1.txt): PROCEDENTES 1 (disputa_emissao.py:557-570 substitui ultima_batida inteiro -> retro ap ...` |
+| 05:22:50 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/CONTRATO-DE-ENTRADA-DO-FIO/c3; mkdir -p $D; cat > $D/triagem_v1.txt <<'EOF' TRIAGEM v1 (sessao, 15/11 05:5x), conferido no hash 29a0d0239: 1 PROCEDENTE: disputa_emissao.py:557-570 -- chave fora de motivos_lista cai em `ctx[k] = v` (substitui o dict inteiro); retro (marcar_foto_ausente_retro.py:96-101) manda ultima_batida sem recebida_em -> a recepcao gravada pel ...` |
+| 05:22:17 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 43p app/docs/RELATO.md \| cut -c1-700; ls -d logs/*T4* logs/*/t4* logs/*/q3* 2>/dev/null \| head` |
 | 05:22:10 | Bash |  | `cd /home/ronald/saas-hasner; grep -rln "T4" logs/*/ 2>/dev/null \| grep -i "t4\\|sonda" \| head; ls logs/AVAIS-1313/ \| head -40; grep -n "140" app/docs/RELATO.md \| grep -i "t4\\|viva\\|dia" \| head -5 \| cut -c1-300` |
 | 05:22:07 | Bash |  | `cd /home/ronald/saas-hasner; grep -rl "140" logs/CONTRATO-DE-ENTRADA-DO-FIO/ logs/AVAIS-1313/ 2>/dev/null \| head; ls -t logs \| head -30 \| tr '\n' ' '; grep -rn "140 vivas\\|140 viva" app/docs/RELATO.md \| head -3 \| cut -c1-300` |
 | 05:21:59 | Bash |  | `cd /home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app; sed -n 550,575p chamados/services/disputa_emissao.py; echo ----; sed -n 55,85p api/foto_recebida.py; echo ---; git show 9d2bf8759 -- api/foto_recebida.py \| head -70` |
