@@ -1,7 +1,99 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 11:36** · publicado em **15/11/2026 11:39** (UTC-3)
+> Ultima resposta processada: **15/11/2026 11:44** · publicado em **15/11/2026 11:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 11:44 · sessao 7e5d0d7504f0 · - · - · origem=Ronald (tmux)
+
+Censo de leitores, somente código:
+
+| Leitor | Fonte e classificação |
+|---|---|
+| **Tela/APP do espelho** | `espelho_do_colab` lê a autoridade do período, inicializa `dias_abono` pelo motor e termina chamando `folha_manda`: `app/ponto/services/espelho.py:1227-1229`, `:1252`, `:1283-1284`. Na competência, `folha_manda` tenta fechamento online; sem resposta, tenta DiaPago: `app/relatorios/cartao_pela_celula.py:321-346`. |
+| **Cartão/PDF por competência** | `totais_da_folha` consulta FM apenas para existência, chama `fechamento_lido` e converte `minutos_abonados / 60`: `app/relatorios/cartao_pela_celula.py:69-76`, `:118`. `fechamento_lido` executa `recalcular_fechamento_mes(... somente_leitura=True, retornar_objeto=True)`: `app/ponto/services/fechamento.py:1759-1761`. Portanto o número usual é **rederivado**, não o FM gravado. |
+| **Cartão/tela sem FM, com DiaPago** | `_totais_da_lavratura` lê `soma_da_competencia`; horas = soma `minutos_abonados / 60`, dias = `dias_com_abono`: `app/relatorios/cartao_pela_celula.py:141-144`, `:186-190`. Sem catálogo nesse leitor. |
+| **PDF em período livre / sem totais substitutos** | Coletor inicializa abono pelo motor e soma minutos pagos parciais: `app/relatorios/pdf_espelho.py:478-479`; chama `folha_manda` depois: `:628`. Fora de competência, a substituição de totais de `folha_manda` não executa (`app/relatorios/cartao_pela_celula.py:321-346`), portanto permanece o resultado motor + parcial. |
+| **Prontidão, snapshot válido** | Lê objeto FM fornecido: realizado + `minutos_abonados / 60`, dividido por previsto; teto 100: `app/folha/export.py:1045`, `:1076-1080`. Sem catálogo. |
+| **Prontidão, sem snapshot válido** | **Outra regra própria de abono**: grade da célula, previsto de TODO `tipo_dia == 'ausencia'`, sem catálogo e sem desconto do realizado para esse abono: `app/folha/export.py:1095-1101`; soma realizado dos dias `trabalho` e calcula percentual: `:1104-1113`. Este leitor/calculador também ignora ABONA versus SUPRIME. |
+| **Inteligência: resumo** | Quantidade de registros aprovados por `abonam_vigentes()`; não usa minutos de DP/FM: `app/inteligencia/resumo.py:39-44`, `:57-58`. |
+| **Inteligência: assiduidade/alertas** | Exclui tipos de `abonam_vigentes()` e rejeitadas, mas conta registros, não minutos/dias: `app/inteligencia/management/commands/calcular_scores.py:11-16`, `app/inteligencia/management/commands/gerar_alertas.py:53-61`. Score pontualidade usa atraso/falta, escala usa turnos/inconsistências, sem ler abono: `calcular_scores.py:19-37`. O FM desses componentes é online: `:87-95`. |
+| **Tela de ausências** | Chip/filtro “abona” usa catálogo vivo `abonam_vigentes()`, conta registros de Ausencia: `app/ponto/views.py:2199-2209`, `:2219-2225`. |
+| **Histórico de atestados** | Reexpande dias pelo juiz `dias_da_ausencia`; `empresa_paga` depende de `abonam_vigentes()`, INSS é ramo literal `atestado_inss`: `app/ponto/views.py:2910-2921`. |
+| **Relatório de atestados/CSV** | Reexpande dias pelo juiz, classifica `dias_empresa` por `abonam_vigentes()`, `dias_inss` por literal `atestado_inss`: `app/relatorios/views.py:275-305`; CSV imprime esses contadores: `:309-319`. |
+| **Extrato parcial** | Soma DP, mas campos efetivamente apresentados são trabalhadas, noturnas, extras, atraso, turnos abertos/batidas; abono não é coluna: `app/relatorios/views.py:481-487`, `:520-537`, `:555`. |
+| **Porta/comparadores** | `_gravado_x_grade` rederiva a mesma regra de `por_dia_da_grade` e compara com soma DP e escalar FM: `app/folha/porta_export.py:133-145`. Universo explicitamente inclui `minutos_abonados`: `:346-347`. |
+
+**TXT Domínio: conclusão mais forte que a dos anexos.**
+
+- A montagem real lê FM gravado quando não recebe objetos injetados (`app/folha/export.py:717-722`), emite só `eventos_do_fechamento` e bloco de faltas (`:730-745`).
+- Lista completa de eventos emitidos: extras 50, extra 100, feriado, folga trabalhada, adicional noturno, intrajornada e atraso+saída antecipada. Nenhum lê `minutos_abonados` ou `horas_abono`: `app/folha/export.py:439-461`.
+- Faltas (usualmente 8792) são rederivadas de Ausencia aprovada e catálogo `descontam_vigentes()`, não dos minutos de abono: `app/folha/export.py:169-185`, `:740-744`. **Código numérico concreto de cada empresa é cadastro, [nao verificado]**: resolução empresa/global está em `:984-991`.
+- Existem helpers para 8932: `tipos_abonados_8932()` = `abonam_vigentes() - FORA_DO_8932`; `datas_abonadas()` expande dias: `app/folha/export.py:193-206`. **A montagem real não chama esses helpers** (`:730-745`); busca por seus nomes só mostrou definição/chamada interna ao próprio helper. Logo não afirmar “8932 é emitida e correta”: existe regra auxiliar, sem ligação provada à emissão.
+- Formato: dias crus, horas centesimais multiplicadas por 100: `app/folha/export.py:34-45`.
+- 8932 é conceitualmente dias de ausência justificada; não é conversão do campo `minutos_abonados`: `app/folha/export.py:187-206`.
+- Abono pecuniário de férias é outro significado explicitamente documentado; catálogo de eventos não traz abono: `app/folha/models.py:5-38`.
+
+**Holerite: documento importado, sem derivação local de abono provada.**
+
+`Holerite` guarda arquivo PDF (`app/holerite/models.py:103-110`); upload grava o arquivo recebido (`app/holerite/views.py:1193-1203`); download abre exatamente `holerite.arquivo` (`:1453-1458`); maço concatena páginas desses arquivos (`:935-938`). Busca de abono/DP/FM no módulo não encontrou cálculo ou leitura de minutos de abono. Conteúdo monetário/rubrica do PDF real e eventual efeito no Domínio: **[nao verificado]**.
+
+**Precisões semânticas úteis para a consolidação:**
+
+- `horas_abono` do resumo é conversão de minutos, não campo FM com esse nome (`app/relatorios/cartao_pela_celula.py:118`, `:186`). O renderer PDF encontrado exibe **“Abonos: n dia(s)”**, usando `dias_abono` (`app/relatorios/pdf_espelho.py:786`). Exibição concreta de `horas_abono` no papel ou template HTML: **[nao verificado]**; busca só encontrou cálculo/mapeamento.
+- Com FM online, o mapeamento sobrescreve horas de abono mas **não sobrescreve dias_abono** (`app/relatorios/cartao_pela_celula.py:93-123`), que permanece motor (`app/relatorios/pdf_espelho.py:478`, `app/ponto/services/espelho.py:1252`). No ramo DP, ambos vêm do DP (`cartao_pela_celula.py:186-190`). Há fontes distintas para dias e horas no ramo FM; divergência numérica em produção: **[nao verificado]**.
+- O serviço de efeito para PDF/tela distingue corretamente catálogo ABONA/SUPRIME por `a.efeito`: `app/ponto/services/efeito_ausencia.py:53-62`. Justificativa é `data_turno` (`:40-44`), parciais são somadas por `a.data` e `a.minutos` (`:47-50`), com `Ausencia.TIPOS_PAGOS` + `CAT.parciais_vigentes()` (`:38`, `:48`, `:55`). Dependência importada/fotografada de TIPOS_PAGOS deve ser examinada pelo explorador dos escritores; não é lista literal local.
+
+## 15/11 11:44 · sessao a117335a6f7d · - · - · origem=Ronald (tmux)
+
+Censo dos escritores/calculadores de abono, somente pelo código:
+
+| Sítio | O que calcula/grava | Classe do tipo |
+|---|---|---|
+| `por_dia_da_grade` | `abono[data] += previsto - min(realizado, previsto)` para todo `tipo_dia == 'ausencia'`; também conserva a ausência no previsto. | **Não consulta catálogo nem `ausencia_tipo`**; regra própria por `tipo_dia`. `app/ponto/services/dia_pago.py:386-401`. |
+| Formação do insumo da grade | Marca slug literal `'falta'` como falta; **todos os demais tipos** cobertos viram `'ausencia'`, conservando `ausencia_tipo`. | Usa catálogo para saber parcial, porém **a separação falta/ausência é literal**, não por efeito. `app/escala/utils.py:1174-1191`, `:1210-1230`. |
+| Cartório/célula | Ata copia `tipo_dia`, `minutos_previstos` e `minutos_realizados`; não há cálculo próprio de minutos abonados nessa ata. | Copia resultado da grade. `app/ponto/services/cartorio.py:730-740`. O leitor reconstrói grade pelos campos da ata: `app/escala/services/leitor_celula.py:397-423`. |
+| `recalcular_fechamento_mes` → FM | Chama `por_dia_da_grade`, soma mapas em `fechamento.minutos_abonados`; falha da grade atribui `None`. Persiste por `save()` no aberto e `update()` nos demais status. | **Herda a regra da grade**, sem nova consulta ao efeito na conta de abono. `app/ponto/services/fechamento.py:1060-1064`, `:1094-1098`, `:1137-1144`, `:1160-1185`. |
+| `lavrar` → DiaPago | Recebe o mapa do fechamento, copia/soma em `minutos_abonados`, substitui linhas por `delete` + `bulk_create`. | Não decide tipo; recebe valor pronto. `app/ponto/services/fechamento.py:1200-1217`; `app/ponto/services/dia_pago.py:288-292`, `:345-360`. |
+| `retratar_exportada` → DiaPago | Rederiva os três campos da grade do fechamento, cria/atualiza linhas e zera dias ausentes da grade. | Mesma `por_dia_da_grade`, sem catálogo. `app/ponto/services/dia_pago.py:464-495`, `:533-545`; guarda específica antes da conta em `:451-460`. |
+| Motor `ResultadoMes.horas_abono` | Soma previsto/60 de **dias obrigatórios sem trabalho e justificados**; conta dias em `dias_abono`. | Motor recebe conjuntos prontos; camada de fechamento separa por `Ausencia.efeito`, ABONA entra em justificadas, efeito diferente de DESCONTA sai do previsto. `app/ponto/motor_calculo_v2.py:2595-2622`; `app/ponto/services/fechamento.py:693-701`, `:729-740`. |
+| Composição das fatias | Soma `dias_abono` e `horas_abono` das fatias. | Não reclassifica tipos. `app/ponto/services/fechamento.py:96-100`. |
+| Crédito parcial | `creditos_por_dia` soma `a.minutos` por `a.data` de ausência paga e parcial; aplica crédito contra atraso do mesmo dia. | `Ausencia.TIPOS_PAGOS` + `parciais_vigentes` + `cobre_parte_do_dia`. `app/ponto/services/credito_parcial.py:20-29`, `:50-61`; aplicação FM em `app/ponto/services/fechamento.py:994-1001`, DiaPago em `app/ponto/services/dia_pago.py:190-195`. |
+| `efeitos_da_ausencia` | Soma `min_parcial_pagos` e fornece conjuntos justificadas/suprimidas ao espelho/PDF. | Catálogo via `Ausencia.TIPOS_PAGOS`, parciais e `a.efeito`; ABONA/SUPRIME separados. `app/ponto/services/efeito_ausencia.py:31-65`. |
+| PDF, resumo inicial | `horas_abono = resultado.horas_abono + min_parcial_pagos/60`; `dias_abono` vem do motor. | Usa a alimentação de `efeitos_da_ausencia`. `app/relatorios/pdf_espelho.py:332-336`, `:478-479`. O resumo pode ser sobrescrito por totais da folha; `None` não sobrescreve. `app/relatorios/cartao_pela_celula.py:201-211`. |
+| Prontidão, fallback | Abona **o previsto inteiro** de todo dia `'ausencia'`, e realizado soma somente `'trabalho'`. | **Regra própria**, sem catálogo e sem o desconto do realizado que existe em `por_dia_da_grade`. `app/folha/export.py:1095-1111`. |
+
+Autoridade:
+
+- A classificação persistida está em `TipoAusencia.efeito`, com escolhas ABONA/DESCONTA/SUPRIME: `app/ponto/models.py:571-582`.
+- O catálogo lê `TipoAusencia` **ativo**, campos `codigo/efeito/...`; `vigente()` usa esse cadastro, com cache de 60 segundos e semente como alternativa: `app/ponto/catalogo/ausencias.py:240-281`.
+- `efeito_vigente(tipo)` responde o efeito; `abonam_vigentes()` responde a classe ABONA: `app/ponto/catalogo/ausencias.py:293-310`.
+- `TIPOS_ABONAM` é proxy vivo, não lista própria, e `Ausencia.TIPOS_PAGOS` é seu alias: `app/ponto/catalogo/ausencias.py:403-410`, `:455-457`; `app/ponto/models.py:680-684`.
+- `Ausencia.efeito` chama `efeito_vigente(self.tipo)`: `app/ponto/models.py:847-852`.
+- A semente dá SUPRIME aos dois INSS e ABONA a atestado, férias, licenças e outros: `app/ponto/catalogo/ausencias.py:92-104`. Que esses sejam os valores atuais do banco além do dado raspado: **[nao verificado]**.
+
+ESMERIL-SEMÂNTICA:
+
+- Não existe coluna `FechamentoMensal.horas_abono` na declaração do modelo examinada; o campo é `minutos_abonados`, inteiro e anulável, enquanto DiaPago usa float. O motor tem `ResultadoMes.horas_abono` em horas. `app/ponto/models.py:398-445`, `:349`; `app/ponto/motor_calculo_v2.py:292`.
+- A conversão dos leitores é explícita `/60`; por si só, minutos versus horas **não prova erro de unidade**. `app/relatorios/cartao_pela_celula.py:118`, `:186`; `app/folha/export.py:1078`.
+- Há diferença de **universo/significado**: motor abona somente dia sem trabalho; grade abona complemento de ausência mesmo com realizado; fallback da prontidão abona previsto inteiro. `app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/dia_pago.py:393-401`; `app/folha/export.py:1100-1106`.
+- Há diferença documentada de significado do próprio campo: FM descreve minutos de ausência aprovada/cumprimento; DiaPago descreve hora paga sem trabalho. `app/ponto/models.py:436-440`, `:340-346`.
+- Abono da grade usa `dia['data']`; períodos do DiaPago usam mapa da jornada, com alternativa pela data local da entrada; crédito parcial usa `Ausencia.data` e atraso pela data civil local de cada período, sem mapa. Uma ocorrência concreta de divergência por isso no dado: **[nao verificado]**. `app/ponto/services/dia_pago.py:128-132`, `:390-396`; `app/ponto/services/fechamento.py:1217`; `app/ponto/services/credito_parcial.py:27-28`, `:32-46`.
+
+Contraexemplo preservável:
+
+- `atestado` até 15 dias é ABONA na semente; `ferias` e `licenca_maternidade` também. Para jornada prevista sem trabalho, o motor soma seu previsto em horas e a grade soma o previsto em minutos. `app/ponto/catalogo/ausencias.py:95`, `:99-101`; `app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/dia_pago.py:393-396`.
+- Tipo novo criado pelo cadastro com `efeito='abona'` entra no conjunto vivo, sem depender de lista nominal; qualquer inventário/correção que preserve somente os nomes da semente perderia esse contrato. `app/ponto/models.py:565-582`; `app/ponto/catalogo/ausencias.py:249-251`, `:308-310`, `:403-410`.
+
+## 15/11 11:42 · sessao 604d6c003285 · E4C-F1V3 · construtor · origem=Code
+
+Entrega completa: [cura, análise das dez falhas, comandos e LEI-AKITA](chamados/tests/e4c_f1v3_entrega.txt:1).
+
+- [349 testes locais passaram; selo R/V/C zero](chamados/tests/e4c_f1v3_resultados.txt:412).
+- [RED contra a base: sete falhas de asserção](chamados/tests/e4c_f1v3_resultados.txt:78).
+- [15 mutantes novos](chamados/tests/e4c_f1v3_resultados.txt:321) e [15 herdados](chamados/tests/e4c_f1v3_resultados.txt:345) mordidos.
+- [Ruff e py_compile passaram, sem gravar bytecode](chamados/tests/e4c_f1v3_resultados.txt:369).
+
+Certificação pelo Code e opus final: [nao verificado].
 
 ## 15/11 11:36 · sessao 411bd1f6a142 · CONTADOR-ELEGIVEIS-DA-11 · leitura · origem=Code
 
@@ -759,58 +851,4 @@ Item 4 — **MORDE parcialmente; há lacunas procedentes, sem asserção globalm
 
 **Limite da comparação:** esta cópia não tem repositório Git utilizável pelo comando executado; comparação com os commits depende do diff anexado **[não verificado independentemente]**. [nao verificado]
 
-## 15/11 10:34 · sessao ef7e8a8767ea · FATO-DE-AUSENCIA-ACORDA-A-PROJECAO · verificador · origem=Code
-
-1. **Sim, a consulta é válida por análise estática para o Django 5.2.14 declarado.** `values_list` seleciona inclusive a PK da própria `Ausencia`, compatível com `of=('self',)`; o filtro usa a FK diretamente, e `order_by('pk')` substitui o `Meta.ordering` que levaria a `colaborador__nome`. A forma resultante termina em `ORDER BY id ASC FOR UPDATE OF ponto_ausencia`. Compilação e execução reais no Django/Postgres: **[nao verificado]**. (`app/requirements.txt:13`; `app/ponto/services/ausencia.py:1416`; `app/ponto/services/ausencia.py:1419`; `app/ponto/services/ausencia.py:1421`; `app/ponto/models.py:829`.)
-
-   Os bloqueios de linha abrangem as Ausencias **daquele agendamento**, tipo `ferias`, com status diferente de `rejeitada`, em PK crescente. Não abrangem Colaborador, Agendamento ou Periodo por essa consulta. O `UPDATE pk__in` posterior encontra essas linhas já travadas; sua própria ordem de execução não introduz outra aquisição entre elas. (`app/ponto/services/ausencia.py:1420`; `app/ponto/services/ausencia.py:1421`; `app/ponto/services/ausencia.py:1425`.)
-
-   Comparação com os demais usos efetivos de `of=('self',)`:
-
-   - `trava_na_ordem`: também combina PK crescente com `values_list('pk')`, sobre `PerguntaDisputa`. (`app/chamados/models.py:2770`.)
-   - `trocar_plantao`: carrega instâncias e faz `select_related('colaborador')`, mas restringe o bloqueio às Ausencias; ordena por PK. (`app/ponto/portas/celula.py:695`.)
-   - H06: busca uma única Ausencia por PK, remove a ordenação padrão e restringe o bloqueio a `self`. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:138`.)
-
-2. **Não identifiquei ordem cruzada entre essas Ausencias nos fluxos normais examinados.** A rejeição agora segue PK crescente; o backfill e o registro normalmente consumido pela reversão seguem essa mesma ordem. (`app/ponto/services/ausencia.py:1420`; `app/ponto/services/ausencia.py:1608`; `app/ponto/services/ausencia.py:1619`; `app/ponto/services/ausencia.py:1650`.)
-
-   - **Backfill:** trava Agendamentos e respectivos Periodos pelo join, ordenando por PK de Agendamento; depois trava Ausencias de férias sem origem por PK crescente, antes dos updates individuais. (`app/ponto/services/ausencia.py:1601`; `app/ponto/services/ausencia.py:1607`; `app/ponto/services/ausencia.py:1622`.)
-   - **Reversão:** cada `UPDATE` por PK adquire o bloqueio correspondente. Consome a ordem do JSON, sem ordenar novamente; o arquivo produzido pelo apply herda a ordem crescente das Ausencias. (`app/ponto/services/ausencia.py:1537`; `app/ponto/services/ausencia.py:1479`; `app/ponto/services/ausencia.py:1619`; `app/ponto/services/ausencia.py:1650`.)
-   - **Cancelamento admin:** adquire Agendamento → Periodo → Ausencias, chamando esta função depois das duas primeiras travas. (`app/ferias/services.py:636`; `app/ferias/services.py:639`; `app/ferias/services.py:679`; `app/ferias/services.py:683`.)
-   - **Troca de plantão:** pode tecnicamente travar férias recebidas como cartas, pois não filtra tipo; adquire as Ausencias por PK crescente, depois as células por colaborador/data. (`app/ponto/portas/celula.py:695`; `app/ponto/portas/celula.py:711`.)
-   - **H06:** trava uma linha por transação e confere sua identidade, incluindo tipo; divergência impede a edição. As portas genéricas de edição e mudança de estado recusam férias. (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:137`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:142`; `app/ponto/services/ausencia.py:579`; `app/ponto/services/ausencia.py:920`.)
-
-   Há também updates históricos por PK nas migrations, fora deste delta, sem exclusão explícita de férias. (`app/ponto/migrations/0057_a4_backfill_pendente.py:43`; `app/ponto/migrations/0058_a4_relogio_recomeca.py:42`; `app/ponto/migrations/0059_a4_d0_no_primeiro_dia_do_cron.py:36`.)
-
-3. **Os dois asserts mordem a regressão pretendida e nenhum exige um resultado falso.** A execução integral da suíte ORM/Postgres permanece **[nao verificado]**. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:141`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:271`.)
-
-   **Editar:** o resultado legítimo atual é `data_fim=None`: um dia deriva `None`, a edição grava `dias_corridos=1`, e o modelo só recompõe fim vazio quando há mais de um dia. A releitura rejeita o antigo `21/10`. No ensaio dos corpos reais em memória, o código atual passou; retirar o `save()` deixou `21/10` e derrubou o assert. (`app/ponto/services/ausencia.py:164`; `app/ponto/services/ausencia.py:606`; `app/ponto/services/ausencia.py:615`; `app/ponto/models.py:912`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:140`.)
-
-   **Desfazer:** a fixture nasce aprovada; retratar grava `False`; desfazer grava expressamente `True` e limpa `retratada_em`. No ensaio em memória, remover apenas a restauração de `aprovada` preservou `False` e derrubou o assert novo, mesmo limpando a retratação. (`app/ponto/models.py:63`; `app/ponto/registro_batida.py:276`; `app/ponto/services/retratar_humano.py:207`; `app/ponto/registro_batida.py:256`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:271`.)
-
-4. **Nenhum outro defeito funcional identificado no delta fornecido.** A ressalva é o alcance do comentário “nunca”: a ordenação sustenta a aquisição dessas Ausencias, mas não constitui garantia global contra deadlocks envolvendo outras tabelas ou travas previamente adquiridas pelo chamador. (`app/ponto/services/ausencia.py:1418`; `app/ponto/services/ausencia.py:1420`; `app/ferias/services.py:679`.)
-
-   Completude da comparação direta entre `1d806e163` e o hash informado, além do diff anexado: **[nao verificado]**.
-
-## 15/11 10:33 · sessao b0adef3e92f4 · - · - · origem=Ronald (tmux)
-
-Os dois asserts são corretos e mordem a regressão pretendida; a execução da suíte ORM/Postgres permanece **[nao verificado]**. [nao verificado]
-
-- **Editar:** o estado legítimo atual é `data_fim=None`: `derivar_data_fim` retorna `None` para um dia; a edição atribui `dias_corridos=1`, atribui o fim e salva; `Ausencia.save` só recompõe fim vazio quando dias > 1. O assert aceita esse estado e rejeita o antigo `2026-10-21`. (`app/ponto/services/ausencia.py:154`, `app/ponto/services/ausencia.py:606`, `app/ponto/services/ausencia.py:615`, `app/ponto/models.py:903`, `app/ponto/models.py:912`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:141`.)
-
-- **Desfazer:** a fixture nasce aprovada pelo default; retratar grava `aprovada=False`; desfazer manda gravar expressamente `aprovada=True` e `retratada_em=None`; `anotar` persiste ambos com `save(update_fields=...)`. Portanto o novo assert não exige um estado falso para essa fixture. Um teste anterior já cobra a mesma aprovação após desfazer. (`app/ponto/models.py:63`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:256`, `app/ponto/registro_batida.py:276`, `app/ponto/services/retratar_humano.py:207`, `app/ponto/registro_batida.py:254`, `app/ponto/registro_batida.py:256`, `app/ponto/tests/test_porta_retratar_batida.py:138`, `app/ponto/tests/test_porta_retratar_batida.py:142`.)
-
-Executei os corpos reais extraídos por AST, com persistência e dependências simuladas em memória: editar atual → `None`, assert passa; mutante sem `ausencia.save()` → releitura `21/10`, assert falha. Desfazer atual → `True/None`, assert passa; mutante removendo apenas a chave `aprovada` → `False/None`, assert falha. Essa checagem comprova a mordida isolada dos asserts; integração com ORM, signals e banco **[nao verificado]**. (`app/ponto/services/ausencia.py:615`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:140`, `app/ponto/services/retratar_humano.py:207`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:269`.)
-
-## 15/11 10:33 · sessao aa7283c56f82 · - · - · origem=Ronald (tmux)
-
-- **Backfill:** dentro de `atomic`, trava agendamentos e períodos pelo join, ordenando por PK de agendamento; depois trava todas as Ausencias de férias sem origem por PK crescente e atualiza uma a uma nessa ordem (`app/ponto/services/ausencia.py:1599`, `:1601`, `:1607`, `:1622`, `:1624`).
-- **Reversão:** faz `UPDATE` por PK, sem `select_for_update`, na ordem dos pares do registro; o registro produzido pelo apply herda a ordem crescente das Ausencias (`app/ponto/services/ausencia.py:1479`, `:1608`, `:1619`, `:1646`, `:1650`, `:1537`).
-- **Cancelamento administrativo:** trava Agendamento → Periodo antes de chamar a rejeição; a rejeição passa a travar Ausencias por PK crescente (`app/ferias/services.py:636`, `:639`, `:679`, `:683`; `app/ponto/services/ausencia.py:1419`).
-- **Troca de plantão:** pode receber Ausencias de qualquer tipo, pois a consulta não filtra `tipo`; trava as duas cartas por PK crescente, somente `self`, e depois as células por colaborador/data. Não cria inversão entre PKs de Ausencia frente à rejeição (`app/ponto/portas/celula.py:695`, `:696`, `:708`, `:711`).
-- **H06:** trava somente uma Ausencia por transação; sua lista é de atestados/faltas e a identidade inclui tipo, portanto uma linha que virou férias é pulada antes da edição (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:50`, `:67`, `:137`, `:139`, `:142`, `:146`).
-- **Portas genéricas:** edição, mudança de estado, anexo, decisão e reversão da rejeição recusam férias antes da gravação (`app/ponto/services/ausencia.py:579`, `:920`, `:966`, `:1017`, `:1209`; guarda em `:92`).
-- **Migrações históricas:** também contêm updates por PK, sem filtro explícito excluindo férias, seguindo a iteração do queryset; não são consumidores novos do delta (`app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `:43`; `0058_a4_relogio_recomeca.py:37`, `:42`, `:59`, `:63`; `0059_a4_d0_no_primeiro_dia_do_cron.py:32`, `:36`).
-
-**Conclusão restrita ao delta:** não identifiquei ordem cruzada entre as Ausencias da rejeição e os registros normalmente produzidos pelo backfill/reversão; todos seguem PK crescente (`app/ponto/services/ausencia.py:1420`, `:1608`, `:1619`, `:1650`). A frase “nunca se travam em ordem cruzada” não prova ausência global de deadlocks: backfill adquire múltiplos agendamentos e seus períodos por join, enquanto cancelamento adquire um agendamento e depois seu período; eventual ciclo com período compartilhado seria preexistente e anterior à entrada em `rejeitar_ausencias_de_ferias` (`app/ponto/services/ausencia.py:1601`; `app/ferias/services.py:636`, `:639`, `:683`); ocorrência/SQL executado [nao verificado].
-
-_5601 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5604 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
