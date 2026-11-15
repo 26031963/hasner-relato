@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 13:29** · publicado em **15/11/2026 13:33** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:46** · publicado em **15/11/2026 13:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:46 · sessao 8d34801ce890 · E3-RESTO-R3 · construtor · origem=Code
+
+Base: `6fb74c6d285a3f280800a5965c41102ec7121244`. SHA256 do código: `6644768e0fea2a64ee4700a54bd0e01cf44b813decbd474b99c0294a13852a49`. [Manifesto](chamados/tests/e3_r3_c11_auditoria.txt:1)
+
+[Entrega completa — 29 linhas](chamados/tests/e3_r3_c11_entrega.txt:1), com `arquivo::função`, comandos e logs por item:
+
+| Item | RED antes da cura | GREEN |
+|---|---|---|
+| 1 — LU-01 | [FAILED](chamados/tests/e3_r3_c11_red1.txt:26) | [32 OK](chamados/tests/e3_r3_c11_green1.txt:41) |
+| 2 — dia no href e marca | [FAILED](chamados/tests/e3_r3_c11_red2.txt:25) | [4 OK](chamados/tests/e3_r3_c11_green2.txt:10) |
+| 3 — recorte das pautas | [FAILED](chamados/tests/e3_r3_c11_red3.txt:51) | [6 OK](chamados/tests/e3_r3_c11_green3.txt:15) |
+| 4 — relógio | [FAILED](chamados/tests/e3_r3_c11_red4.txt:69) | [3 OK](chamados/tests/e3_r3_c11_green4.txt:9) |
+| 5 — alarme passivo | [FAILED](chamados/tests/e3_r3_c11_red5.txt:16) | [2 OK](chamados/tests/e3_r3_c11_green5.txt:8) |
+| 6 — cor existente | [FAILED](chamados/tests/e3_r3_c11_red6.txt:29) | [2 OK](chamados/tests/e3_r3_c11_green6.txt:9) |
+| 7 — docstrings e drawer | [FAILED](chamados/tests/e3_r3_c11_red7.txt:36) | [3 OK](chamados/tests/e3_r3_c11_green7.txt:9) |
+
+Regressão local: **137 OK**; mutantes c11: **23/23 mortos por asserção**, com controles verdes. [Regressão](chamados/tests/e3_r3_c11_regressao.txt:168), [mutantes](chamados/tests/e3_r3_c11_mutantes.txt:550).
+
+Censo dos cinco leitores e escritores/leitores dos campos constam na [entrega](chamados/tests/e3_r3_c11_entrega.txt:14).
+
+LEI-AKITA: `padrao=Single Source of Truth / Aggregate Root; Clock Injection; CQRS com projecoes reconstruiveis`. [Referências](chamados/tests/e3_r3_c11_entrega.txt:29)
+
+Sem commit: o `git-dir` fica fora de `app`, único diretório autorizado para escrita. [Evidência](chamados/tests/e3_r3_c11_auditoria.txt:2). ORM, produção, renderização Django e certificação final: [nao verificado].
 
 ## 15/11 13:29 · sessao 63adf9493c6c · - · - · origem=Ronald (tmux)
 
@@ -516,45 +540,4 @@ A — achados para consolidação:
 
 4. **NAO PROCEDE quanto a referência material falsa demonstrada em A.** Template, chamada, três status, timer e possibilidade de renderização nas duas bases conferem nos sítios acima (`app/templates/ponto/bater_ponto_v2.html:150-157`, `:322-328`; `app/api/urls_core.py:14`; `app/config/urls_core.py:6`; `app/ponto/tests/test_l030_templates_renderizados.py:15-30`). O offline não anuncia resultado individual: apenas atualiza indicador de conexão (`app/static/pwa.js:182-202`). Censo com N, RED/verde, suite e smoke pedidos são entregas futuras **[nao verificado]**.
 
-## 15/11 12:12 · sessao 3101cef531bc · REVISAO-COMBOIO-PRE-OPUS · verificador · origem=Code
-
-**PROCEDE nas quatro perguntas.** A devolução prevista pelo próprio aval é: `AVAL-DEVOLVIDO: COMBOIO-PRE-OPUS | 1, 2, 3, 4`. (Anexo `comboio_pre_opus.txt:9`.)
-
-Nas referências aos avais, conto as linhas dentro de cada bloco, começando por `aval Ronald`. Nenhum arquivo foi alterado.
-
-1. **PROCEDE — há condição cuja execução literal não se sustenta.**
-
-   - O item 7 pede um histórico das suites de 14/11 e 15/11 “pelos logs da trava”. A trava escreve somente o ocupante atual e a hora, sobrescrevendo esse registro com “livre” ao terminar; o wrapper identifica o chamador como `suite` por padrão, sem transmitir obra ou motivo. Esse código não fornece o histórico solicitado; sua existência em outra fonte é **[nao verificado]**. (`comboio_pre_opus.txt:8`; `bin/trava_teste.sh:21`; `bin/trava_teste.sh:40`; `bin/trava_teste.sh:41`; `bin/suite.sh:317`.)
-   - **Motivo com várias obras:** o script recusa nomes separados por espaços, mas o item 6 já prevê usar a primeira obra e registrar as demais. Isso está coberto. (`bin/suite.sh:236`; `bin/suite.sh:255`; `comboio_pre_opus.txt:7`.)
-   - **Montagem:** `arvore_do_push.sh --montagem` fornece argumentos Docker; o modo normal extrai um commit, e `suite.sh --dir` consome uma cópia previamente preparada. Essas opções não mesclam raias. A ausência dessa automação, sozinha, não demonstra impossibilidade: a regra existente já prevê preparar a cópia combinada. (`bin/arvore_do_push.sh:14`; `bin/arvore_do_push.sh:94`; `bin/arvore_do_push.sh:98`; `bin/suite.sh:284`; `CLAUDE.md:322`.)
-   - **PISTA-2:** está documentada como máquina externa, no servidor GLPI, operada por `ssh pista ...`, inclusive `estado`; o registro diz “nenhum arquivo do repo”. Sua parada atual é **[nao verificado]**. (`app/docs/BACKLOG.md:2006`.)
-   - **Atribuição do vermelho:** o log pode fornecer o teste para cruzamento com os diffs, mas não prova autoria causal; há inclusive falha reconhecida sem nome de teste. O item 3 já prevê separar quando não houver atribuição. (`bin/regua.sh:175`; `bin/regua.sh:205`; `comboio_pre_opus.txt:4`.)
-   - **LOTE 3:** prontidão para suite é **[nao verificado]**. O `! de VINCULO` fornecido restringe expressamente o **pouso**, portanto não prova impedimento anterior à suite. (Anexo `queima_util_tarde.txt:9`.) [nao verificado]
-
-2. **PROCEDE — faltam destinos para resultados negativos.**
-
-   - Depois de retirar uma obra e repetir a suite “UMA vez”, falta dizer o que fazer se essa repetição continuar vermelha com atribuição possível. (`comboio_pre_opus.txt:4`.) [nao verificado]
-   - Depois da reprovação de um opus, manda executar uma suite de pouso das restantes, mas não define o ramo dessa suite vermelha. (`comboio_pre_opus.txt:5`.) [nao verificado]
-   - Depois do verde, falta definir o destino das obras restantes se um pouso falhar no deploy. O deploy pode terminar em erro inclusive após o reload; a sequência do comboio não trata esse resultado. (`comboio_pre_opus.txt:5`; `bin/deploy.sh:92`; `bin/deploy.sh:419`.)
-   - **Conflito de merge tem saída:** essa obra roda sozinha. **Prontidão além de 30 minutos também tem saída:** não esperar mais que isso e rodar sozinha. (`comboio_pre_opus.txt:2`; `comboio_pre_opus.txt:3`.)
-
-3. **PROCEDE — há divergência textual de papéis com aval anterior.**
-
-   QUEIMA-UTIL-TARDE transfere censo, leitura e verificação intermediária ao opus, deixando Codex na final/certificação. COMBOIO exige “verificador Codex do meio fechado” e determina “Codex, papel censo”. O texto anuncia extensão de POUSO-EM-COMBOIO, mas não explicita substituir essa divisão de papéis; a precedência cronológica entre esses blocos é **[nao verificado]**. (Anexos `queima_util_tarde.txt:4`; `comboio_pre_opus.txt:1`; `comboio_pre_opus.txt:3`; `comboio_pre_opus.txt:8`.) [nao verificado]
-
-   As demais acusações precisam destas distinções:
-
-   - Suite conjunta antes dos opus, com finais paralelos, já aparece documentada. Portanto esse formato, isoladamente, não prova colisão com SUITE-ANTES-DO-OPUS. A exigência permanece: verde da árvore examinada antes do final e certificação da árvore que pousará. (`app/docs/RELATO.md:774`; `CLAUDE.md:377`; `app/docs/PISTA.md:113`; `app/docs/PISTA.md:35`.)
-   - A remoção seletiva no vermelho altera expressamente a regra vigente de separar o comboio; é mudança proposta pelo item 3. (`CLAUDE.md:324`; `comboio_pre_opus.txt:4`.)
-   - Os cinco campos do CONTRATO estão no item 6; publicação no RELATO e envio efetivo são **[nao verificado]**. (`comboio_pre_opus.txt:7`; `app/docs/PISTA.md:170`.)
-   - A ordem serial antiga não sustenta colisão vigente sozinha: o BACKLOG registra substituição e construtores disjuntos; PRODUCAO-MAXIMA amplia as vagas novamente. (`app/docs/BACKLOG.md:1836`; `app/docs/BACKLOG.md:1837`; anexo `producao_maxima.txt:1`.)
-   - UI-CAMERA já certificada é **[nao verificado]**. TELA-DIZ já prevê os dois ramos: volta conjunta antes da certificação, ou pouso próprio depois. Sua exclusão do primeiro comboio não contradiz esses ramos. (Anexos `backlog_candidatas.txt:1`; `tela_diz_o_que_o_servidor_disse.txt:7`; `comboio_pre_opus.txt:6`.) [nao verificado]
-
-4. **PROCEDE — as referências e os universos não ficam integralmente comprovados.**
-
-   - O anexo atribui UI-CAMERA ao BACKLOG:1930; nessa linha da cópia está **V2-I2-FILA**. O trecho fornecido da UI termina em “falta o” e não contém as anunciadas linhas de HE-REVOGADA e LOTE 3. (Anexo `backlog_candidatas.txt:1`; `app/docs/BACKLOG.md:1930`.)
-   - POUSO-EM-COMBOIO existe e prevê duas raias; restrição a laterais e teto de três são alterações deste aval. (`app/docs/PISTA.md:29`; `app/docs/PISTA.md:31`; `comboio_pre_opus.txt:1`; `comboio_pre_opus.txt:2`.)
-   - `volta_intermediaria.sh` existe e executa ruff, disjuntor e recorte por `--volta`; isso não fornece o censo histórico pedido. (`bin/volta_intermediaria.sh:7`; `bin/volta_intermediaria.sh:18`; `bin/volta_intermediaria.sh:29`; `bin/volta_intermediaria.sh:32`.)
-   - “Espinha E” aparece expressamente no BACKLOG. A classificação específica de HE/LOTE 3 como laterais, seus diffs disjuntos e sua elegibilidade atual são **[nao verificado]**. (`app/docs/BACKLOG.md:767`; `app/docs/BACKLOG.md:768`.)
-
-_5639 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5640 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
