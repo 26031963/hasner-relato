@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 01:58** · publicado em **15/11/2026 02:02** (UTC-3)
+> Ultima resposta processada: **15/11/2026 02:05** · publicado em **15/11/2026 02:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 02:05 · sessao 7b78b1e3d767 · - · - · origem=Ronald (tmux)
+
+| Arquivo:linha | Achado | Caso reproduzido em memória | Gravidade |
+|---|---|---|---|
+| `app/ponto/tests/test_catraca_abono_do_motor_c11.py:67` | K1 exclui toda chave de dicionário supondo que seja resumo, sem verificar o objeto ou seu uso posterior. | Novo módulo com `nomes={'dias_abono':'Abonos'}; return {k:getattr(resultado,k) for k in nomes}`: `achados=[]` e `fora_da_allowlist={}`. Leitor do motor escapa com nome literal estático; não depende dos limites de nomes construídos em runtime. | bloqueia |
+| `app/ponto/services/fechamento.py:1073`; `app/ponto/tests/test_justificativa_c11_sem_banco.py:81` | Mutante de uma linha `any(...) → all(...)` sobre `_abono_dia` sobrevive aos 102 testes. A fixture sem ata só possui `_abono_dia={D:None}`, conforme a própria asserção em `:90`, deixando sem cobertura o mapa misto. | D sem ata + D2 com W=300/P=480/abono=180. Original: `(previsto,dias,incertos,abono,realizado,carimbo)=(960,2,0,None,None,AGORA)`. Mutante cai no `except` de `fechamento.py:1100`: os seis campos viram `None`, motivos/causa permanecem `VELHO`. | bloqueia |
+| `app/ponto/services/efeito_ausencia.py:75`; `app/ponto/tests/test_justificativa_c10_sem_banco.py:145` | Mutante de uma linha `sem_apuracao.discard(cd) → sem_apuracao.clear()` também sobrevive aos mesmos 102 testes. A ausência inteira só é testada isoladamente em D..D (`:149`). | D com ausência inteira + VIZ justificado sem ata: original conserva `{VIZ}`, PDF/tela saem `None` com `sem_ata`; mutante esvazia o conjunto e retorna PDF `dias_abono=2, horas_abono=16.0`, tela `dias_abono=2`. | bloqueia |
+
+Os sete módulos executados foram `test_justificativa_c11_sem_banco`, `test_catraca_abono_do_motor_c11`, `test_justificativa_c10_sem_banco`, `test_justificativa_c9_sem_banco`, `test_justificativa_c8_sem_banco`, `test_justificativa_soma_sem_banco` e `test_justificativa_periodo_v2_sem_banco`: 102 testes, zero failures/errors para cada sobrevivente. Execução somente em memória com `python3 -B`; catálogos de mutantes não foram executados nesta auditoria [nao verificado quanto ao catálogo]. [nao verificado]
+
+K1 captura as sete formas anunciadas em `test_catraca_abono_do_motor_c11.py:145`, incluindo apelido de variável/import; `resultado.__getattribute__('dias_abono')` também foi captado como `str_arg` pela regra de `:74`. A allowlist declara contagem, papel e motivo em `:34`. `any→all` sobre realizado é morto pelo teste sem ata de `test_justificativa_c11_sem_banco.py:80` (uma falha, zero erros). [nao verificado]
+
+## 15/11 02:05 · sessao 870959463a02 · - · - · origem=Ronald (tmux)
+
+| arquivo:linha | O que está errado | Caso concreto | Gravidade |
+|---|---|---|---|
+| `app/templates/ponto/espelho.html:270`; `app/ponto/services/dia_pago.py:956`; `app/ponto/services/espelho.py:1264` | O rótulo c10 existe no resumo, mas a tela não o renderiza. Seu texto “sem apuração ainda” depende exclusivamente da inexistência de `DiaPago`; qualquer linha existente recebe `lavrada=True`. O PDF consulta o motivo correto em `app/relatorios/pdf_espelho.py:790`. | Dia justificado sem ata, com `DiaPago` existente: resumo recebe `motivo_dias_abono='sem_ata'`, mas a tela não mostra o rótulo exigido. O topo mostra outros campos em `app/templates/ponto/espelho.html:35`. | **bloqueia** |
+| `app/ponto/services/espelho.py:1234`; `app/ponto/services/espelho.py:1264` | O conjunto que decide o rótulo cobre a janela visual, potencialmente anterior à competência, e não é filtrado pela competência. Apenas os furos recebem esse filtro em `app/ponto/services/espelho.py:1258`. | Dia sem ata na competência anterior faz o resumo atual receber abono desconhecido; o fechamento não repõe `dias_abono` nem limpa seu motivo em `app/relatorios/cartao_pela_celula.py:93`. | **bloqueia** |
+| `app/ponto/services/dia_pago.py:395`; `app/ponto/services/dia_pago.py:292`; `app/ponto/services/fechamento.py:1225` | `None` do mesmo mapa significa desconhecido no fechamento e vira zero na lavratura, sem marca no detalhe. Reproduzido executando as funções reais por AST, sem persistência. | Grade `P=480`, abono/realizado `None` → `DiaPago` com abono `0.0`, previsto `480.0`, realizado `0.0`, detalhe `{}`. O fechamento c11 conserva abono/realizado `None` em `app/ponto/services/fechamento.py:1073`. | **bloqueia** |
+| `app/relatorios/cartao_pela_celula.py:214`; `app/ponto/services/efeito_ausencia.py:96` | Uma fonte posterior conhecida não limpa o motivo c10: `None` é descartado também para o campo textual. | Reproduzido: resumo desconhecido + totais `{dias_abono:1, horas_abono:8, motivo_dias_abono:None}` termina com `1`, `8` e motivo `'sem_ata'`. O defeito está no leitor herdado, alimentado pelo novo escritor do motivo. | **fila** |
+| `app/ponto/services/efeito_ausencia.py:75`; `app/folha/export.py:339`; `app/escala/services/leitor_celula.py:479` | A precedência de ausência inteira é aplicada somente no feed do motor. O caminho financeiro da grade lê os períodos crus e recoloca o desconhecido eliminado pelo feed. | Reproduzido com a fixture de `app/ponto/tests/test_justificativa_c10_sem_banco.py:148`: ausência inteira + justificativa + ata ausente → feed sem rótulo; grade e mapas de abono/realizado com `None`. O teste verifica só o primeiro lado em `app/ponto/tests/test_justificativa_c10_sem_banco.py:154`. | **fila** |
+
+Os testes c10 executam somente atribuições e a chamada do rotulador, antes da aplicação final de totais e da renderização; portanto não cobrem os dois primeiros achados nem a retenção do motivo (`app/ponto/tests/test_justificativa_c10_sem_banco.py:47`, `app/ponto/tests/test_justificativa_c10_sem_banco.py:90`). Alcance desses casos em produção: **[nao verificado]**.
+
+## 15/11 02:05 · sessao 8d658e89513a · - · - · origem=Ronald (tmux)
+
+| Arquivo:linha | Erro / caso concreto | Gravidade |
+|---|---|---|
+| `app/ponto/services/fechamento.py:35`, `:539`, `:560`, `:1073`, `:1099`, `:1157`, `:1173` | **Exportada não está genericamente protegida.** A guarda contém somente 09/2026; outras competências exportadas recebem apenas log e seguem para `save/update`. Com dia `sem_ata`, c11 passa a persistir previsto/dias/carimbo onde antes o `except` os anulava, além de atualizar motivos/causa. Caso alcançável: competência 10 exportada, célula de trabalho justificada sem ata. Existência desse caso em produção: **[nao verificado]**. | **bloqueia** |
+| `app/ponto/services/dia_pago.py:395`, `:292`; `app/folha/porta_export.py:453` | **Mesmo desconhecido vira zero e desaparece da conferência.** `por_dia_da_grade` entrega abono/realizado `None`; FM conserva `None`, mas `lavrar` grava zero. Comparador pula integralmente o campo cujo FM é `None`, sem registrar desconhecimento. Caso: P=480 e W sem ata → FM desconhecido, DiaPago=0, contador sem divergência nesse campo. | **bloqueia** |
+| `app/folha/causas.py:85`, `:86`; `app/ponto/services/fechamento.py:1096`; `app/ponto/tests/test_justificativa_c11_sem_banco.py:61` | **Novo caminho ativo grava diagnóstico falso de realizado zero.** Com trabalho, P=480, W=`None`, sem missing/orfas, classificador transforma `None` em zero e devolve `realizado_zero`, evidência “zero minuto realizado”. Reproduzido executando o módulo real em memória, sem escrita. O teste substitui o classificador por resposta constante. | **fila** |
+| `app/relatorios/cartao_pela_celula.py:146`, `:187`, `:208`, `:214`; `app/ponto/services/dia_pago.py:723` | **Lavratura pode desfazer parcialmente o rótulo.** Dia sem ata produz `dias_abono=None`, mas horas vêm da soma numérica de DiaPago, que já perdeu o desconhecido. `aplicar_nos_totais` pode entregar dias desconhecidos ao lado de horas numéricas. Os testes c10 excluem expressamente `folha_manda`: `app/ponto/tests/test_justificativa_c10_sem_banco.py:12`. | **fila** |
+
+O TXT Domínio **não exporta esses três campos de minutos diretamente**: monta eventos em `app/folha/export.py:733`, definidos pelos campos `horas_*` em `:423` e `:442`. Portanto, “exporta zero silenciosamente por causa de `minutos_abonados=None`” não foi encontrado nesse emissor. Entretanto, a participação no TXT consulta motivos por `app/folha/export.py:971`; c11 passa a atualizar esses motivos em `app/ponto/services/fechamento.py:1080`.
+
+A lista lê `prontidao` por colaborador em `app/ponto/services/fechamento_lista.py:85`; abono desconhecido cai na grade e retorna cego/`sem_ata` em `app/folha/export.py:1051` e `:1112`. O custo adicional em produção é **[nao verificado]**.
+
+Há relógio herdado no caminho agora executado para `sem_ata`: `app/ponto/services/fechamento.py:1080` não fornece `hoje`; `app/folha/export.py:1317` encaminha `None` e `:1248` lê `localdate()`, apesar do instante único disponível em `app/ponto/services/fechamento.py:616`. Impacto concreto na virada de dia: **[nao verificado]**.
 
 ## 15/11 01:58 · sessao 556c7ef0bf1e · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
 
@@ -1743,286 +1782,4 @@ As referências abaixo usam a numeração do HEAD. O teste novo, seus RED/GREEN 
 
 7. **Divergências remanescentes:** API usa ±5min, triagem `[agora−5min,agora]`, porta ±60s para mesmo tipo (`app/api/views.py:527-532`, `app/ponto/services/triagem_batida.py:663-669`, `app/ponto/registro_batida.py:106-113`). Na API, dedup usa o tipo solicitado antes da correção pela autoridade; a porta recebe o tipo corrigido (`app/api/views.py:529-532`, `app/api/views.py:570-601`, `app/api/views.py:654-655`). Essas diferenças já existem no HEAD; a cura informada não as altera [nao verificado].
 
-## 15/11 01:32 · sessao 747fd334a147 · - · - · origem=Ronald (tmux)
-
-Censo independente por busca textual e AST dos `.py` da cópia, excluindo testes/migrations: encontrei os mesmos **três sítios de dedup de chão**, antes dos únicos três chamadores com origem `'app'`: `app/api/views.py:529` → `:654`; `app/api/views_core.py:515` → `:645`; `app/ponto/services/triagem_batida.py:664` → `:702`. Quarto sítio estático de chão não encontrado; cobertura de caminhos dinâmicos [nao verificado].
-
-Outros controles antes de criar/reaproveitar batida, sem serem toque de chão:
-
-- Materialização: `_batida_existente_na_janela`, mesmo tipo ±20 min, primeiro timestamp, sem filtro de retratação (`app/chamados/juizes.py:235`, `:243`); guarda de vizinha imediata anterior/posterior até 12h, também crua (`app/chamados/services/materializacao.py:86`, `:95`, `:101`).
-- Regularização externa: chave exata colaborador+timestamp, pula antes da porta (`app/chamados/services/regularizacao_ext.py:71`, `:74`, `:78`).
-- Veredito humano: carga crua, simulação e criação somente das novas propostas pela porta (`app/ponto/services/veredito_celula.py:237`, `:323`).
-- Demais chamadores são autorização humana/justificativa: `app/chamados/services/acoes_chamado.py:44`; `app/ponto/views.py:1818`; `app/ponto/services/justificativa.py:188`, `:361`; materialização com `fato_de_chao=False`: `app/chamados/services/materializacao.py:933`, `:1013`. O comando de ensaio também chama a porta (`app/ponto/management/commands/testar_pwa.py:184`, `:198`, `:219`, `:228`, `:229`).
-
-O AST encontrou criação de Batida apenas dentro da porta: `app/ponto/registro_batida.py:152`, `:157`, `:335`. Escritas via reflexão/SQL dinâmico [nao verificado].
-
-**ID e clientes:** APIs devolvem `dupla.pk` em `ja_registrada` (`app/api/views.py:538`; `app/api/views_core.py:524`), triagem devolve `dupla.id` (`app/ponto/services/triagem_batida.py:671`). No cliente v2 presente, todo HTTP 2xx vira sucesso sem ler corpo/ID (`app/templates/ponto/bater_ponto_v2.html:327`); sincronizador PWA lê JSON e descarta a fila em todo `resp.ok`, ignorando status/ID (`app/static/pwa.js:158`, `:162`). Leitor Android/APK desse ID [nao verificado]. Há consumidor servidor de `batida_id` no upload separado de foto (`app/api/views.py:836`, `:842`; `app/api/views_core.py:820`, `:826`), mas vincular esse consumidor ao ID retornado exige o cliente ausente [nao verificado]. O cliente web antigo envia formulário normal (`app/templates/ponto/bater_ponto.html:237`), e a view repassa a resposta JSON de triagem (`app/ponto/views.py:353`, `:356`).
-
-**Ordem:** triagem no HEAD usa `Meta.ordering = ["colaborador", "timestamp"]` (`app/ponto/models.py:105`) com colaborador fixo (`app/ponto/services/triagem_batida.py:665`), portanto escolhe o menor timestamp. A autoridade também usa timestamp ascendente (`app/ponto/turnos.py:2883`): a troca proposta não muda a escolha entre vivas; elimina candidatas retratadas [nao verificado: diff proposto]. APIs mantêm a maior timestamp (`app/api/views.py:532`; `app/api/views_core.py:518`). A chave única impede empate de timestamp no mesmo colaborador (`app/ponto/models.py:106`).
-
-**Import/uso:** trajeto de topo de `turnos.py` é copy/datetime/namedtuple/timezone/`core.dia_do_turno` (`app/ponto/turnos.py:36`–`:43`); `core.dia_do_turno` só importa datetime/typing e constrói NewType (`app/core/dia_do_turno.py:10`–`:13`). Não há import de retorno para as views/triagem nesse trajeto; execução real do novo import [nao verificado]. `Batida` continua necessário nas buscas de oposta posteriores à porta (`app/api/views.py:674`; `app/api/views_core.py:665`; `app/ponto/services/triagem_batida.py:716`) e na busca de entrada da triagem (`app/ponto/services/triagem_batida.py:257`).
-
-## 15/11 01:28 · sessao d954e76d3e69 · BATIDA-DEDUP-RETRATADA · construtor · origem=Code
-
-Cura nas três cascas e censo registrados na [entrega](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c1_entrega.txt:6).
-
-RED anterior, 9 testes GREEN sem banco e 3 mutantes mortos, com comandos e saídas guardados na [evidência](/home/ronald/wt-codex-batida-dedup-retratada-011759/app/ponto/tests/dedup_retratada_c1_entrega.txt:33). [nao verificado]
-
-Certificação por Code/suite, opus e smoke: pendente [não verificado]. [nao verificado]
-
-## 15/11 01:26 · sessao 4793ac876070 · SILENCIO-VENCIDO · censo · origem=Code
-
-**Dono: não sei para cada um dos 59 pares e para a diferença FIM.** O anexo informa divergências mensais, mas não os dias responsáveis nem os insumos diários necessários ao juiz. Isso não permite afirmar que ESTRUTURA, CADASTRO ou BATIDA tenham contagem zero. [nao verificado — anexo colado]
-
-O juiz encontrado na cópia está em `app/ponto/management/commands/e6_oraculo.py`. Sua entrada é diária; o campo mensal divergente não é argumento da função. [app/ponto/management/commands/e6_oraculo.py:53](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:53)
-
-| Ordem | Predicado que decide | Dono retornado | Fonte |
-|---|---|---|---|
-| 1 | `folga_nao_definida or sem_vinculo_no_dia or sem_vinculo_em_dia_de_trabalho` | CADASTRO | [e6_oraculo.py:98](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:98) |
-| 2 | `batida_fora_de_turno` | BATIDA | [e6_oraculo.py:104](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:104) |
-| 3 | `len(horas_do_dia or ()) % 2` | BATIDA | [e6_oraculo.py:106](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:106) |
-| 4 | `fase_deslocada` | CADASTRO | [e6_oraculo.py:108](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:108) |
-| 5 | `em_cadastro_x_realidade` | CADASTRO se verdadeiro; ESTRUTURA se falso | [e6_oraculo.py:110](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:110) |
-
-O carregador existente reúne esses insumos e chama o juiz para uma `data`; não fornece uma redução de vários dias para um único dono mensal. [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:182)
-
-Para compactar as tabelas: **R**=`minutos_realizados`, **A**=`minutos_abonados`, **P**=`minutos_previstos`, **T**=`horas_trabalhadas`. Esses campos pertencem a `CAMPOS_DIA`. [app/ponto/services/dia_pago.py:34](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/services/dia_pago.py:34)
-
-Cada comparação abaixo está em **minutos, na ordem lavra × fechamento**, exatamente no escopo de `campos_divergentes` do anexo; Q1–Q4, adiante, são a coleta faltante comum aos 59 casos. [nao verificado — anexo colado]
-
-| Empresa | Colab | Comp. | Fechamento | Campo: lavra × fechamento | Dono | Evidência |
-|---|---|---|---|---|---|---|
-| emp2 | col174 | 09/2026 | #4825 | R: 7355 × 7546 | não sei | [nao verificado] |
-| emp2 | col191 | 09/2026 | #4518 | R: 8817 × 8489 | não sei | [nao verificado] |
-| emp2 | col193 | 09/2026 | #4801 | R: 9825 × 5074 | não sei | [nao verificado] |
-| emp2 | col206 | 09/2026 | #4418 | R: 7839 × 7479 | não sei | [nao verificado] |
-| emp2 | col211 | 09/2026 | #4648 | R: 9000 × 8940 | não sei | [nao verificado] |
-| emp2 | col214 | 09/2026 | #4668 | A: 6500 × 0 | não sei | [nao verificado] |
-| emp2 | col231 | 09/2026 | #4699 | R: 9550 × 4996 | não sei | [nao verificado] |
-| emp2 | col242 | 09/2026 | #4503 | T: 8869,20 × 8868,60; R: 5027 × 4797 | não sei | [nao verificado] |
-| emp2 | col252 | 09/2026 | #4796 | R: 10260 × 9797 | não sei | [nao verificado] |
-| emp2 | col269 | 09/2026 | #4569 | R: 9223 × 9226 | não sei | [nao verificado] |
-| emp2 | col272 | 09/2026 | #4828 | A: 1980 × 0 | não sei | [nao verificado] |
-| emp2 | col278 | 09/2026 | #4750 | T: 10659 × 10658,40; R: 4984 × 4939 | não sei | [nao verificado] |
-| emp2 | col292 | 09/2026 | #4671 | A: 5280 × 4800; R: 5538 × 5964 | não sei | [nao verificado] |
-| emp2 | col331 | 09/2026 | #4737 | R: 7562 × 6882 | não sei | [nao verificado] |
-| emp2 | col349 | 09/2026 | #4666 | R: 9259 × 9178 | não sei | [nao verificado] |
-| emp2 | col355 | 09/2026 | #4782 | A: 3960 × 3300 | não sei | [nao verificado] |
-| emp2 | col371 | 09/2026 | #4564 | R: 6929 × 7169 | não sei | [nao verificado] |
-| emp2 | col444 | 09/2026 | #4571 | R: 9877 × 9590 | não sei | [nao verificado] |
-| emp2 | col489 | 09/2026 | #4552 | R: 8999 × 8759 | não sei | [nao verificado] |
-| emp2 | col529 | 09/2026 | #4698 | R: 10989 × 10964 | não sei | [nao verificado] |
-| emp2 | col532 | 09/2026 | #4508 | R: 10556 × 10376 | não sei | [nao verificado] |
-| emp2 | col592 | 09/2026 | #4512 | R: 10205 × 10316 | não sei | [nao verificado] |
-| emp2 | col616 | 09/2026 | #4703 | R: 9225 × 8042 | não sei | [nao verificado] |
-| emp2 | col634 | 09/2026 | #4442 | R: 9373 × 9321 | não sei | [nao verificado] |
-| emp2 | col735 | 09/2026 | #4496 | R: 6348 × 6226 | não sei | [nao verificado] |
-| emp2 | col788 | 09/2026 | #4475 | R: 3092 × 2404 | não sei | [nao verificado] |
-| emp2 | col789 | 09/2026 | #4551 | R: 10807 × 11187 | não sei | [nao verificado] |
-| emp2 | col833 | 09/2026 | #4434 | R: 7162 × 7403 | não sei | [nao verificado] |
-| emp2 | col849 | 09/2026 | #4640 | P: 11340 × 12360 | não sei | [nao verificado] |
-| emp2 | col859 | 09/2026 | #4820 | A: 0 × 420 | não sei | [nao verificado] |
-| emp2 | col865 | 09/2026 | #4694 | R: 8644 × 8914 | não sei | [nao verificado] |
-| emp2 | col872 | 09/2026 | #4744 | R: 9759 × 9663 | não sei | [nao verificado] |
-| emp2 | col885 | 09/2026 | #4702 | R: 9594 × 8987 | não sei | [nao verificado] |
-| emp2 | col915 | 09/2026 | #4759 | R: 8548 × 8499 | não sei | [nao verificado] |
-| emp2 | col923 | 09/2026 | #4642 | R: 5803 × 2414 | não sei | [nao verificado] |
-| emp2 | col941 | 09/2026 | #4436 | R: 2310 × 1998 | não sei | [nao verificado] |
-| emp2 | col945 | 09/2026 | #4608 | R: 1437 × 1766 | não sei | [nao verificado] |
-| emp2 | col301 | 10/2026 | #5308 | T: 10326 × 10325,40 | não sei | [nao verificado] |
-| emp2 | col899 | 10/2026 | #5220 | T: 10192,80 × 10192,20 | não sei | [nao verificado] |
-| emp2 | col191 | 11/2026 | #6074 | T: 8223 × 8223,60 | não sei | [nao verificado] |
-| emp2 | col369 | 11/2026 | #5970 | T: 8800,20 × 8800,80 | não sei | [nao verificado] |
-| emp2 | col415 | 11/2026 | #6054 | T: 8303,40 × 8304 | não sei | [nao verificado] |
-| emp2 | col476 | 11/2026 | #5855 | T: 8959,20 × 8959,80 | não sei | [nao verificado] |
-| emp2 | col788 | 11/2026 | #6139 | T: 6606 × 6606,60 | não sei | [nao verificado] |
-| emp2 | col899 | 11/2026 | #6004 | T: 7587,60 × 7588,20 | não sei | [nao verificado] |
-| emp2 | col961 | 11/2026 | #6018 | T: 8848,80 × 8849,40 | não sei | [nao verificado] |
-| emp3 | col82 | 09/2026 | #4856 | R: 10560 × 10517 | não sei | [nao verificado] |
-| emp3 | col87 | 09/2026 | #4861 | R: 8858 × 8227 | não sei | [nao verificado] |
-| emp3 | col114 | 09/2026 | #4892 | R: 3051 × 2694 | não sei | [nao verificado] |
-| emp3 | col133 | 09/2026 | #4915 | A: 3840 × 0 | não sei | [nao verificado] |
-| emp3 | col145 | 09/2026 | #4926 | R: 1320 × 1267 | não sei | [nao verificado] |
-| emp3 | col165 | 09/2026 | #4946 | R: 2265 × 2597 | não sei | [nao verificado] |
-| emp3 | col502 | 09/2026 | #4887 | R: 7883 × 7409 | não sei | [nao verificado] |
-| emp3 | col638 | 09/2026 | #4839 | P: 10690 × 12040; R: 9632 × 9773 | não sei | [nao verificado] |
-| emp3 | col749 | 09/2026 | #4910 | P: 11440 × 11880; R: 9324 × 9702 | não sei | [nao verificado] |
-| emp3 | col868 | 09/2026 | #4905 | R: 8645 × 8389 | não sei | [nao verificado] |
-| emp3 | col749 | 11/2026 | #5630 | T: 7419,60 × 7420,20 | não sei | [nao verificado] |
-| emp3 | col911 | 11/2026 | #6041 | T: 8576,40 × 8577 | não sei | [nao verificado] |
-| emp4 | col50 | 09/2026 | #4964 | A: 660 × 1320; R: 7799 × 7724 | não sei | [nao verificado] |
-
-O agrupamento **por conjunto exato de campos** conta cada linha uma vez e soma 59. [nao verificado — contagem do anexo colado]
-
-| Campos divergentes | emp2 | emp3 | emp4 | Total | Evidência |
-|---|---:|---:|---:|---:|---|
-| somente R | 29 | 7 | 0 | 36 | [nao verificado] |
-| somente A | 4 | 1 | 0 | 5 | [nao verificado] |
-| somente P | 1 | 0 | 0 | 1 | [nao verificado] |
-| somente T | 9 | 2 | 0 | 11 | [nao verificado] |
-| T + R | 2 | 0 | 0 | 2 | [nao verificado] |
-| A + R | 1 | 0 | 1 | 2 | [nao verificado] |
-| P + R | 0 | 2 | 0 | 2 | [nao verificado] |
-| **Total de linhas; dono não sei** | **46** | **12** | **1** | **59** | [nao verificado] |
-
-Contando cada campo individualmente, são R=42, A=7, P=3 e T=13: **65 ocorrências**, porque seis linhas têm dois campos. [nao verificado — contagem do anexo colado]
-
-DSR não integra esse predicado de erro: `CAMPOS_DIA` contém os campos comparados, enquanto `horas_reflexo_dsr` pertence a `CAMPOS_AJUSTE`. A soma da competência também arredonda cada agregado a duas casas antes de devolvê-lo. [app/ponto/services/dia_pago.py:34](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/services/dia_pago.py:34), [app/ponto/services/dia_pago.py:563](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/services/dia_pago.py:563)
-
-**FIM: diferença de 19 dias; dono não sei.** O campo confrontado é a cardinalidade de `universo`/`total.dias`/`soma_partes.dias` contra `esperado`, não uma rubrica de lavra contra fechamento. [nao verificado — FIM colado]
-
-| Conferência | Resultado | Evidência |
-|---|---:|---|
-| Soma das partes | 12+5+546+599+776+87+124+151+6+8+9 = 2323 | [nao verificado] |
-| Estados | 2307 lavrados + 16 sem lavratura = 2323 | [nao verificado] |
-| Universo contra esperado | 2323−2304 = **19** | [nao verificado] |
-| Universo contra TSV | 2303 coincidentes + 20 fora = 2323 | [nao verificado] |
-| TSV contra universo | 2303 coincidentes + 78 fora = 2381 | [nao verificado] |
-
-Os 20 fora do TSV não podem ser chamados de “19 excedentes do esperado”: faltam as chaves dos conjuntos e a origem do esperado 2304. Também não há vínculo demonstrado entre esses 19 e os 16 dias sem lavratura. [nao verificado — anexo colado]
-
-**Dado faltante e SELECTs de coleta.** Para os 59, faltam: identificação dos dias implicados na diferença mensal; horas atribuídas pelo oráculo; resposta de `batida_fora_de_turno`; flags de cadastro; fase lavrada; publicação CXR com cobertura. Essas são as fontes usadas por `InsumosDoDono`; valores mensais de R/A/P/T não as substituem. [app/ponto/management/commands/e6_oraculo.py:128](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:128), [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:182)
-
-Os SELECTs abaixo são propostas **não executadas**; tabelas físicas e resultados não foram conferidos em banco. `fechamentos` e `colabs` são arrays dos identificadores da tabela acima, sem os prefixos; `ini/fim` devem vir de `janela_fechamento`, respeitando o corte da empresa. [nao verificado], [app/ponto/janelas.py:54](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/janelas.py:54)
-
-**Q1 — linhas diárias, valores e carimbos.** A consulta recuperaria a decomposição atual da lavra; o fechamento mostrado pelo modelo guarda esses valores como totais mensais. [app/ponto/models.py:315](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/models.py:315), [app/ponto/models.py:398](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/models.py:398)
-
-```sql
-SELECT 'emp' || c.empresa_id AS empresa,
-       'col' || f.colaborador_id AS colab,
-       '#' || f.id AS fechamento,
-       f.mes, f.ano, f.derivado_em,
-       '#' || d.id AS dia_pago,
-       d.data, d.tipo, d.versao, d.lavrado_em,
-       d.versao_motor, d.versao_dna, d.evento_origem,
-       d.horas_trabalhadas * 60 AS lavra_trabalhadas_min,
-       d.minutos_abonados AS lavra_abonados_min,
-       d.minutos_previstos AS lavra_previstos_min,
-       d.minutos_realizados AS lavra_realizados_min,
-       f.horas_trabalhadas * 60 AS fechamento_trabalhadas_min,
-       f.minutos_abonados AS fechamento_abonados_min,
-       f.minutos_previstos AS fechamento_previstos_min,
-       f.minutos_realizados AS fechamento_realizados_min
-FROM ponto_fechamentomensal f
-JOIN colaboradores_colaborador c ON c.id = f.colaborador_id
-LEFT JOIN ponto_diapago d
-       ON d.colaborador_id = f.colaborador_id
-      AND d.mes = f.mes AND d.ano = f.ano
-      AND d.versao = 'motor'
-WHERE f.id = ANY(%(fechamentos)s)
-ORDER BY c.empresa_id, f.colaborador_id, f.ano, f.mes, d.data
-```
-
-**Q2 — batidas para alimentar as autoridades existentes.** A seleção do universo apurável pertence a `batidas_apuraveis`; a atribuição e a paridade usadas pelo dono vêm do carregador, e não de contar batidas por data civil em SQL. [app/ponto/turnos.py:2875](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/turnos.py:2875), [app/ponto/management/commands/e6_oraculo.py:150](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:150)
-
-```sql
-SELECT 'col' || b.colaborador_id AS colab,
-       '#' || b.id AS batida,
-       b.timestamp, b.tipo, b.is_intervalo,
-       b.retratada_em
-FROM ponto_batida b
-WHERE b.colaborador_id = ANY(%(colabs)s)
-ORDER BY b.colaborador_id, b.timestamp, b.id
-```
-
-**Q3 — cadastro, geradora e folgas.** Os resultados devem voltar a `cadastro_do_dia`/`cadastro_do_dia_carregado`; os SELECTs não escolhem o vínculo nem derivam os flags. [app/ponto/supra_juiz.py:155](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/supra_juiz.py:155), [app/ponto/supra_juiz.py:179](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/supra_juiz.py:179), [app/escala/models.py:1241](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/escala/models.py:1241)
-
-```sql
-SELECT 'col' || c.id AS colab,
-       'emp' || c.empresa_id AS empresa,
-       c.data_demissao, e.dia_inicio_competencia,
-       '#' || v.id AS vinculo,
-       v.data_inicio, v.data_fim, v.ativa,
-       '#' || v.tipo_escala_id AS template,
-       t.tipo_ciclo, t.folga_dia_semana
-FROM colaboradores_colaborador c
-JOIN colaboradores_empresa e ON e.id = c.empresa_id
-LEFT JOIN escala_escalacolaborador v ON v.colaborador_id = c.id
-LEFT JOIN escala_tipoescala t ON t.id = v.tipo_escala_id
-WHERE c.id = ANY(%(colabs)s)
-ORDER BY c.id, v.id
-```
-
-```sql
-SELECT 'col' || colaborador_id AS colab,
-       '#' || id AS celula, data, trabalha,
-       '#' || escala_geradora_id AS geradora,
-       dna -> 'marcos' AS marcos,
-       ata -> 'tipo_dia' AS tipo_dia,
-       ata -> 'lampadas' AS lampadas,
-       ata -> 'orfas' AS orfas
-FROM escala_celuladia
-WHERE colaborador_id = ANY(%(colabs)s)
-  AND data BETWEEN %(ini)s AND %(fim)s
-ORDER BY colaborador_id, data
-```
-
-```sql
-SELECT 'col' || v.colaborador_id AS colab,
-       '#' || f.id AS folga,
-       '#' || f.escala_colaborador_id AS vinculo,
-       f.data
-FROM escala_folgadia f
-JOIN escala_escalacolaborador v ON v.id = f.escala_colaborador_id
-WHERE v.colaborador_id = ANY(%(colabs)s)
-ORDER BY v.colaborador_id, f.data
-```
-
-**Q4 — lavras de CXR e fase, preservando cobertura.** CXR não coberto retorna `None`, não conjunto vazio; fase é lida pela lavra mais recente que cobriu cada dia. A decisão deve continuar passando por esses leitores e pelo juiz existente. [app/ponto/services/cxr_na_lista.py:165](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/services/cxr_na_lista.py:165), [app/escala/services/fase_12x36.py:117](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/escala/services/fase_12x36.py:117)
-
-```sql
-SELECT '#' || s.id AS snapshot,
-       s.chave, s.escopo, s.escopo_id,
-       s.data_ref, s.calculado_em,
-       s.detalhe -> 'agora' AS agora,
-       s.detalhe -> 'janelas' AS janelas,
-       s.detalhe -> 'cobertos' AS cobertos,
-       (
-         SELECT jsonb_agg(jsonb_build_object(
-                  'colab', 'col' || x.item ->> 'colab',
-                  'empresa', 'emp' || x.item ->> 'empresa',
-                  'data', x.item ->> 'data',
-                  'competencia', x.item ->> 'competencia',
-                  'dono', x.item ->> 'dono'
-                ))
-         FROM jsonb_array_elements(
-           COALESCE(s.detalhe -> 'itens', '[]'::jsonb) ||
-           COALESCE(s.detalhe -> 'itens_reabertos', '[]'::jsonb)
-         ) AS x(item)
-         WHERE (x.item ->> 'colab')::integer = ANY(%(colabs)s)
-       ) AS itens_dos_colabs
-FROM inteligencia_metricasnapshot s
-WHERE s.data_ref <= %(hoje)s
-  AND (
-    (s.chave = 'cxr_do_motor' AND s.escopo = 'frota')
-    OR
-    (s.chave = 'desvio_de_cadastro_12x36'
-     AND s.escopo = 'tenant' AND s.escopo_id = 0)
-  )
-ORDER BY s.data_ref DESC, s.calculado_em DESC
-```
-
-Mesmo com essa coleta, faltaria demonstrar **quais dias explicam a diferença mensal**; aplicar o dono a todos os dias e eleger um deles como dono do mês acrescentaria uma regra ausente da função. [app/ponto/management/commands/e6_oraculo.py:53](/home/ronald/codex_ws/880331a8c8d394724b78217edc84bede94b99cb7/app/ponto/management/commands/e6_oraculo.py:53)
-
-Para o **FIM**, faltam as chaves completas do universo 2323, do TSV 2381 e, principalmente, do conjunto esperado 2304. A sonda colada contém somente a constante `ESPERADO = 2304`; não demonstra onde obter a composição desse conjunto por SELECT. [nao verificado — sonda/anexo colados]
-
-Este SELECT confrontaria os conjuntos **depois de fornecidos**, sem reproduzir a seleção da sonda; não recupera a referência ausente. [nao verificado — proposta não executada]
-
-```sql
-SELECT 'emp' || COALESCE(u.emp, e.emp) AS empresa,
-       'col' || COALESCE(u.colab, e.colab) AS colab,
-       COALESCE(u.mes, e.mes) AS mes,
-       COALESCE(u.ano, e.ano) AS ano,
-       COALESCE(u.dia, e.dia) AS dia,
-       u.dia IS NOT NULL AS no_universo,
-       e.dia IS NOT NULL AS no_esperado
-FROM jsonb_to_recordset(%(universo_json)s::jsonb)
-     AS u(emp integer, colab integer, mes integer, ano integer, dia date)
-FULL JOIN jsonb_to_recordset(%(esperado_json)s::jsonb)
-     AS e(emp integer, colab integer, mes integer, ano integer, dia date)
-USING (emp, colab, mes, ano, dia)
-WHERE u.dia IS NULL OR e.dia IS NULL
-ORDER BY empresa, colab, ano, mes, dia
-```
-
-_5474 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5477 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
