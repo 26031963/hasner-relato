@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 20:34:08.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.0 MB). Acoes na janela: **1785**.
+**Medido em 15/11/2026 20:39:09.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.1 MB). Acoes na janela: **1788**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:38:40 | Monitor | Suite inteira BUG-ENC rc | `cd /home/ronald/saas-hasner; f=logs/ORDEM-VIVA-1511/BUG-ENC/suite_inteira.log; until grep -q '^rc=' $f; do /usr/bin/sleep 15; done; echo "suite inteira BUG-ENC $(grep '^rc=' $f) $(grep -E '^(OK\|FAILED)($\| \()' $f\|tail -1) $(grep -E '^Ran ' $f\|tail -1)"` |
+| 20:38:34 | Bash | Launch full suite pre-opus BUG-ENC | `cd /home/ronald/saas-hasner; L=logs/ORDEM-VIVA-1511/BUG-ENC/suite_inteira.log; setsid nohup bash -c "bash bin/suite.sh --dir /home/ronald/wt-bug-enc-201609 --motivo 'pre-opus BUG-ENC-CELULAS-FORMA' > $L 2>&1; echo rc=\$? >> $L" >/dev/null 2>&1 & /usr/bin/sleep 3; P=$(pgrep -f '^bash bin/suite.sh --dir /home/ronald/wt-bug-enc-201609' \| head -1); echo $P; sed -i "3s/.*/ESPERANDO: suite.sh \| pid=$P ...` |
+| 20:38:31 | Bash | Confirm volta2 and copy clean | `cd /home/ronald/saas-hasner; f=logs/ORDEM-VIVA-1511/BUG-ENC/volta2.log; grep -E '^Ran ' $f\|tail -1; cd /home/ronald/wt-bug-enc-201609; git status --porcelain \| head; ls -la app \| awk '$3=="root"{print $NF}'` |
 | 20:32:24 | Bash | Record F1 B1 opening in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('DESPACHO CONSTRUIR-R3-C17-E-F1-NOVA')][0] L.insert(i+1,'ESTADO 20:3x F1 NOVA B1 CONSTRUCAO (vaga 1, liberada pelo AVAL-DEVOLVIDO do item A): REVISAO-DO-AVAL item B TUDO NAO PROCEDE (logs/E4C/f1nova/revisao/revisao.r; amostra 4/4 conferida: models.py:3559 ...` |
 | 20:32:19 | Agent | Construir F1 nova pouso B1 | `Voce e o CONSTRUTOR do POUSO B1 da obra E4c F1 NOVA (juiz `pergunta_respondida`) no repo /home/ronald/saas-hasner (SaaS de ponto CLT, Django). Trabalhe SO na copia /home/ronald/wt-f1nova-b1-203152 (branch raia/f1nova-b1-203152, base e84a167f4 = HEAD do main). NUNCA edite /home/ronald/saas-hasner (arvore viva = producao por bind-mount). Exporte PYTHONDONTWRITEBYTECODE=1 em todo comando python. LEIA ...` |
 | 20:31:51 | Bash | Create F1 B1 construction worktree | `cd /home/ronald/saas-hasner; git rev-parse --short HEAD; T=$(date +%H%M%S); W=/home/ronald/wt-f1nova-b1-$T; git worktree add -q -b raia/f1nova-b1-$T $W HEAD && git -C $W log --oneline -1; echo $W; ls logs/JUIZ-RESPONDIDA/ \| head; git show-ref refs/guardadas/e4c-f1-c9` |
