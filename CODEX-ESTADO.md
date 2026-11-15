@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 09:59** · publicado em **15/11/2026 09:59** (UTC-3)
+> Ultima resposta processada: **15/11/2026 09:59** · publicado em **15/11/2026 10:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 09:59 · sessao 656d7497dde9 · - · - · origem=Ronald (tmux)
+
+Há duas lacunas semânticas concretas:
+
+1. **Escolha:** VALIDACAO não testemunha materialização. T distingue `validada_sem_efeito` (`chamados/services/tarefa_do_dia.py:169`). O materializador da escolha devolve sucesso sem Batida (`chamados/services/materializacao.py:1069`), depois carimba e lavra (`:1283`), sem registrar DP de materialização. SILENCIO testemunha fechamento humano (`chamados/models.py:1988`); ABSORCAO testemunha ausência vinculada (`chamados/services/materializacao.py:569`). Nenhum deles cobre toda escolha.
+
+   Pergunta: **qual testemunha factual substitui C na materialização de escolha, preservando a distinção entre validação e efeito?** Pausar esse ramo da unidade E.
+
+2. **Retratação auditada antiga:** `_retratada_com_trilha` exige C mais auditoria `retratar_pergunta_obsoleta` (`chamados/juizes.py:291`). RETRATACAO atual significa remoção do motivo, seguida de identidade (`chamados/models.py:2110`, `:2120`, `:2125`). Nenhum escritor produtivo atual desse nome de auditoria apareceu; acervo real [nao verificado].
+
+   Pergunta: **qual fato conserva o fechamento obsoleto auditado e o distingue da remoção do motivo?** A06 pode conservar identidade aplicável; substituir universalmente por RETRATACAO + log não tem equivalência demonstrada. Pausar essa unidade fora de A06.
 
 ## 15/11 09:59 · sessao 656d7497dde9 · - · - · origem=Ronald (tmux)
 
@@ -1127,21 +1139,4 @@ finally:
     emitir("FIM", "ok={}".format(int(erros == 0)))
 ```
 
-## 15/11 08:01 · sessao df4e760110f8 · - · - · origem=Ronald (tmux)
-
-Censo concluído em leitura; listas de referências por campo foram enviadas ao pai.
-
-- O explicador mudou: usa agora `disputa.pode_fechar(perguntas=ps)`; caiu a divergência `not fio_vivo` da triagem. A chave publicada é o resultado real de C7. (`app/chamados/services/explicador.py:139,165`)
-- Seus consumidores são `desenlace.py:63` e `modal_fio.html:435,446`. O desenlace ainda traduz `True` como “Tudo validado e gravado”, expressão mais forte que C7: uma disputa vazia também satisfaz o predicado. (`app/chamados/services/desenlace.py:64`; `app/chamados/models.py:1916-1917`)
-- O cron continua exclusivamente no recorte de beco: `--alarme`, sem escrita; aberta, pai terminal e nenhuma pergunta visível. `--apply` permanece como ação manual. (`app/config/crons.py:663`; `app/chamados/services/becos.py:27-33`; `app/chamados/management/commands/fechar_becos_disputa.py:30,57,67-70`)
-- O relatório sob demanda lê C7, mas separa as vazias antes da consulta; portanto sua categoria `PRONTA_FECHAR` não conta todo o universo aberta+C7. (`app/chamados/relatorios_disputa.py:12-25`; `app/config/crons.py:1463`)
-- O auditor C2 também não é esse contador: conta perguntas por carimbos e veredito da célula, sem C7 e sem filtro de disputa aberta, apesar do rótulo. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1601-1605`)
-- Pergunta não tem `status/estado` persistido: `estado` é propriedade. Abertura da disputa é `fechada_em is None`. Retratação da pergunta usa `via_resolucao` e ato da `DecisaoPergunta`. (`app/chamados/models.py:3117-3131,1871,2580,4001`)
-- Os carimbos são instantes; `data_evento` é dia do turno. A projeção temporal de C6 desconsidera carimbos posteriores a `agora`; a tarefa também corta decisões por instante do ato. (`app/chamados/models.py:2526-2527,3502,1804`; `app/chamados/juizes.py:1378-1396`; `app/chamados/services/tarefa_do_dia.py:232-235,410-420`)
-- A lista de resposta sem veredito hoje aceita carimbo **ou texto**, inclusive carimbo sem texto. CSF usa o mesmo corpo com `ignorar_tranca=True`; C7 conserva a isenção de dia trancado. (`app/chamados/models.py:1900-1909`; `app/ponto/supra_juiz.py:567-574`)
-
-Leitores diretos C7: `relatorios_disputa.py:24`; `reconciliador.py:412,612,1171`; `services/materializacao.py:591,1322`; `becos.py:33,56`; `competencia_trancada.py:178,227`; `explicador.py:139`; `disputa_emissao.py:1278,2098`; `app/ponto/services/entrada_sincronizada.py:59`.
-
-Limite: inventário por leitura estática, incluindo atributos, `getattr`, filtros, projeções SQL, templates e fotografia genérica; execução em produção, estado atual e causas das medições anexas permanecem [não verificado].
-
-_5556 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5557 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
