@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 10:45** · publicado em **15/11/2026 10:47** (UTC-3)
+> Ultima resposta processada: **15/11/2026 11:23** · publicado em **15/11/2026 11:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 11:23 · sessao 05d4cfe8fe27 · E4C-F1V2 · construtor · origem=Code
+
+Recortes AST expandidos para executar a leitura real da F1, com ordenação `(ato_em, pk)`. Produção intocada; asserções anteriores preservadas. [Auditoria](chamados/tests/e4c_f1v2_resultados.txt:646)
+
+Resultados locais: oito regressões novas passam, C7 passa 4/4 e 15 mutantes reconstruídos mordem. A bateria permanece **RED, com 11 falhas de asserção**; o selo zero continua acusando duas leituras residuais. [Resultados](chamados/tests/e4c_f1v2_entrega.txt:107)
+
+O catálogo original `e4c_f1_mutantes.txt` está ausente da base; sua reexecução fica **[nao verificado]**. [Limitação](chamados/tests/e4c_f1v2_entrega.txt:156)
+
+[Entrega completa: arquivos, antes/depois, censo, comandos e LEI-AKITA](chamados/tests/e4c_f1v2_entrega.txt:1). A reprodução confirmou NameError em C7/E4b; no terceiro módulo, confirmou a falha do selo zero. [RED reproduzível](chamados/tests/e4c_f1v2_entrega.txt:145)
 
 ## 15/11 10:45 · sessao 45ccd1a14409 · COMPETENCIA-PAGA-UM-JUIZ · verificador · origem=Code
 
@@ -1058,20 +1068,4 @@ print('FIM ok=1')
 
 - **Desfazer, teste fortalecido:** releitura de `retratada_em` mata falso desfazer que apenas chama recálculo (`teste:263-268`). **Mutante sobrevivente:** retirar `'aprovada': True` do `anotar` em desfazer: o teste segue verificando apenas `retratada_em` e chamada (`app/ponto/services/retratar_humano.py:207-213`; teste:265-268), embora retratar tenha gravado `aprovada=False` (`app/ponto/registro_batida.py:276`). Sobrevivência deduzida [não verificado]. Observação: o universo apurável filtra só `retratada_em`, portanto não afirmar exclusão da apuração por esse mutante (`app/ponto/turnos.py:2876-2883`).
 
-## 15/11 10:26 · sessao f08063655a32 · - · - · origem=Ronald (tmux)
-
-Chamadores e falha:
-
-- Único chamador direto produtivo: `executar_cancelamento_admin`, em `app/ferias/services.py:683`, dentro do `atomic` de `app/ferias/services.py:674`; antes trava agendamento (`app/ferias/services.py:636`) e período (`app/ferias/services.py:639`). A função acrescenta `atomic` interno (`app/ponto/services/ausencia.py:1416`) e trava Ausencias (`app/ponto/services/ausencia.py:1417`).
-- Chamadas diretas em testes: `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:180`, `:191`, `:200`. O arquivo `selo_hj091.py:26` apenas enumera o nome, não chama.
-- Entradas produtivas indiretas: individual (`app/ferias/views.py:396`), correção concluída (`app/ferias/views.py:444`) e lote (`app/ferias/views.py:605`), pelo adaptador `app/ferias/views.py:557–561`. Também existe a simulação do command `listar_ferias_dp`, que chama o service em `app/ferias/management/commands/listar_ferias_dp.py:100`, sob outro `atomic` em `:98`.
-- `evento` usa seu próprio savepoint (`app/core/observ.py:133`), engole falhas (`:105`, `:87–91`) e retorna `None` (`:139`). A nova checagem lança `RuntimeError` dentro do atomic interno (`app/ponto/services/ausencia.py:1428–1434`), desfazendo UPDATE e trilhas já gravadas nessa chamada (`:1423–1434`). A exceção sai sem alcançar invalidação (`:1435`).
-- No chamador produtivo, também desfaz a devolução de saldo já salva (`app/ferias/services.py:680–683`); não chega à gravação de status/obs (`:684–689`) nem ao refresh/retorno (`:690–691`). As três views capturam apenas `AgendamentoNaoCancelavel` (`app/ferias/views.py:397`, `:445`, `:606`), portanto `RuntimeError` escapa; resposta HTTP concreta [não verificado]. No lote, itens anteriores já concluíram seus próprios atomics; o item falho aborta a continuação do loop (`app/ferias/views.py:600–611`; `app/ferias/services.py:674–691`). O command simulado captura a exceção e produz `ERRO:RuntimeError:...`, depois recarrega o agendamento (`app/ferias/management/commands/listar_ferias_dp.py:112–115`).
-
-Travas:
-
-- No fluxo principal, a nova trava respeita a ordem declarada agendamento → período → ausencia (`app/ferias/services.py:629–639`; `app/ponto/services/ausencia.py:1417–1419`). Editar ausência genericamente não é contraparte sobre férias: a guarda recusa esse tipo (`app/ponto/services/ausencia.py:579`, `:92–98`).
-- Há uma inversão plausível **entre linhas de Ausencia** contra a reversão do backfill. O novo SELECT herda ordenação por `-data, colaborador__nome` (`app/ponto/models.py:829`), pois não sobrescreve `order_by` (`app/ponto/services/ausencia.py:1417–1419`). A reversão abre atomic e atualiza uma linha por vez na ordem do arquivo (`app/ponto/services/ausencia.py:1647–1649`, UPDATE em `:1535–1536`), sem travar agendamento/período. O apply monta o arquivo a partir de linhas por PK (`:1605–1606`), preserva essa ordem na classificação (`:1477`, `:1511`) e grava `vincular` (`:1617`). Com A1 de data anterior e A2 posterior: cancelamento pode travar A2 e esperar A1; reversão pode atualizar/travar A1 e esperar A2. A existência do escritor e as ordens estão no código; deadlock efetivamente ocorrido [não verificado].
-- `colaborador__nome` também implica JOIN no SELECT e, sem `of=('self',)`, pode ampliar o conjunto bloqueado ao colaborador: inferência do ORM a partir de `app/ponto/models.py:829` e `app/ponto/services/ausencia.py:1417–1419`; SQL efetivo [não verificado].
-
-_5596 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5597 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
