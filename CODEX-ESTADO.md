@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 04:05** · publicado em **15/11/2026 04:08** (UTC-3)
+> Ultima resposta processada: **15/11/2026 04:21** · publicado em **15/11/2026 04:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 04:21 · sessao 3453bc3dc40d · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
+
+Entrega em [c13_entrega.txt](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c13_entrega.txt:1), com RED/GREEN, comandos, censo e mutantes.
+
+[26 testes OK](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c13_green.txt:30); [13/13 mutantes mortos](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c13_mutantes.txt:341). [nao verificado]
+
+Pendências explícitas: [copy/replace sem origem local ainda escapa](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c13_entrega.txt:15) e [Ruff indisponível](/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/tests/c13_checks.txt:6). Certificação suite/Opus: [nao verificado]. [nao verificado]
 
 ## 15/11 04:05 · sessao 0c663ade5d11 · - · - · origem=Ronald (tmux)
 
@@ -702,49 +710,4 @@ Não encontrei alteração adicional de janela, sequência ou mensagem da dupla 
 
 O helper acrescenta classificação do retorno para suprimir efeitos posteriores em reutilização; não consulta universo nem escreve `Batida`. A mudança de `ignorada_intervalo` na triagem é de identificação da testemunha após a recusa, com a mesma janela e universo da porta; a decisão de recusar continua exclusivamente na porta. (`ponto/services/resposta_batida.py:7`; `ponto/services/resposta_batida.py:14`; `ponto/registro_batida.py:138`; `ponto/registro_batida.py:145`; `ponto/services/triagem_batida.py:713`)
 
-## 15/11 02:18 · sessao 4b4dee27661a · - · - · origem=Ronald (tmux)
-
-Encontrei três mutantes de uma linha que sobrevivem aos **31 testes C1+C2+C3**, inclusive com `builtins.open` adaptado para a paridade ler fontes mutadas. São lacunas da bateria; os defeitos abaixo pertencem aos mutantes, não ao código atual. (`app/ponto/tests/test_dedup_retratada_c2.py:288`; `app/ponto/tests/test_dedup_retratada_c3.py:234`)
-
-| Sítio | Mutante sobrevivente | Caso concreto fora da bateria | Gravidade sugerida |
-|---|---|---|---|
-| `app/ponto/registro_batida.py:161` | `batida.criada_neste_toque = timestamp.second == 0` | Nova S às **18:03:01**, nas três cascas: grava uma linha/SSE, responde `ja_registrada` e pula foto/ordem. Todos os creates da bateria partem de `FATO` com segundo zero; variar microssegundos conserva isso. (`app/ponto/tests/test_dedup_retratada_c1.py:26`; `app/ponto/tests/test_dedup_retratada_c3.py:79`) | **fila**: cobertura insuficiente da marca; não demonstra bug atual. |
-| `app/ponto/services/triagem_batida.py:666` | Acrescentar `sequencia=1` ao `.filter(tipo=tipo)` | Viva S18:00 com sequência 2 + pedido S18:03: original retorna `ja_registrada`; mutante cria segunda batida. As fixtures `anterior()` fixam sequência 1; o selo verifica origem da consulta, sem proibir esse filtro. (`app/ponto/tests/test_dedup_retratada_c1.py:150`; `app/ponto/tests/test_dedup_retratada_c1.py:194`) | **fila**. |
-| `app/ponto/services/triagem_batida.py:716` | Remover `.order_by('-timestamp')` | E18:00 id1 e E18:02 id2, pedido S18:03, janela 300 s: original responde `ignorada_intervalo` id2; mutante id1. O ORM também muda, pois a ordenação padrão é crescente. (`app/ponto/models.py:105`; `app/ponto/tests/test_dedup_retratada_c2.py:252`) | **fila**. |
-
-Reprodução compacta do sobrevivente principal, sem escrita:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import sys, io, unittest
-sys.path.insert(0, 'app')
-from ponto.tests import test_dedup_retratada_c1 as c1
-from ponto.tests import test_dedup_retratada_c2 as c2
-
-p = 'ponto/registro_batida.py'
-antes = '\n    batida.criada_neste_toque = True\n'
-depois = '\n    batida.criada_neste_toque = timestamp.second == 0\n'
-fonte = c2.fonte(p)
-assert fonte.count(antes) == 1
-c1.SOBRESCRITAS[p] = c2.SOBRESCRITAS[p] = fonte.replace(antes, depois)
-
-nomes = ['ponto.tests.test_dedup_retratada_c1',
-         'ponto.tests.test_dedup_retratada_c2',
-         'ponto.tests.test_dedup_retratada_c3']
-unittest.TextTestRunner().run(
-    unittest.defaultTestLoader.loadTestsFromNames(nomes))
-for sitio in c1.SITIOS:
-    resposta, store, _, efeitos, _ = c2.executar(
-        sitio, [], instante=c1.FATO.replace(second=1))
-    print(sitio, resposta['status'], len(store.linhas),
-          efeitos['foto'].call_count, efeitos['ordem'].call_count)
-PY
-```
-
-Resultado observado: `31 testes OK`; nas três cascas, `ja_registrada 1 0 0`. O mecanismo de injeção utilizado é o mesmo `SOBRESCRITAS` da entrega. (`app/ponto/tests/test_dedup_retratada_c3.py:228`)
-
-O tripwire tem mordida real contra queries diretas novas/restauradas e compara contagem **exata**, mas continua uma regex de `Batida|_Bat.objects.filter`; não certifica semântica de filtros, ordenação ou causalidade. (`app/ponto/tests/test_tripwire_bocais_apuracao.py:30`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:37`; `app/ponto/tests/test_dedup_retratada_c2.py:266`; `app/ponto/tests/test_dedup_retratada_c3.py:172`)
-
-A paridade compara AST de funções com nomes presentes nos dois módulos, whitelist vazia; o harness entregue normalmente lê disco via `open()`, sem aplicar `SOBRESCRITAS`. Os sobreviventes acima não alteram APIs, e permaneceram verdes mesmo com essa leitura corrigida em memória. (`app/api/tests/test_contract_paridade_kernels.py:12`; `app/api/tests/test_contract_paridade_kernels.py:19`; `app/api/tests/test_contract_paridade_kernels.py:31`; `app/ponto/tests/test_dedup_retratada_c2.py:288`)
-
-_5504 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5505 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

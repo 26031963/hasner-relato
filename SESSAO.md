@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 04:17:27.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (38.8 MB). Acoes na janela: **1213**.
+**Medido em 15/11/2026 04:22:00.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (38.8 MB). Acoes na janela: **1217**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:21:55 | Bash |  | `cd /home/ronald/saas-hasner; source bin/recursos.sh; WT=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358; docker run --rm $TESTE_DOCKER -v "$WT/app":/w -w /w --entrypoint sh saas-hasner-core:latest -c "ruff check --no-cache --output-format concise ponto/tests/test_catraca_abono_do_motor_c11.py ponto/tests/test_catraca_abono_c13.py ponto/tests/mutantes_catraca_abono_c13.py" 2>&1 \| tail -8 ...` |
+| 04:21:48 | Bash |  | `sed -n 10,30p /home/ronald/saas-hasner/bin/volta_intermediaria.sh` |
+| 04:21:43 | Bash |  | `cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358; sed -n '/PERGUNTAS/,/^[0-9]\. /p' app/ponto/tests/c13_entrega.txt \| head -30; which ruff; ls ruff.toml app/ruff.toml 2>/dev/null; grep -n "ruff" /home/ronald/saas-hasner/bin/volta_intermediaria.sh \| head -5` |
+| 04:21:37 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks/b96ni6o1v.output; cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358; git status --porcelain; head -c 2500 app/ponto/tests/c13_entrega.txt 2>/dev/null` |
 | 04:03:30 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/JUSTIFICATIVA-PAGA/c13/c13.rc ]; do /usr/bin/sleep 30; done; cat logs/JUSTIFICATIVA-PAGA/c13/c13.rc; tail -3 logs/JUSTIFICATIVA-PAGA/c13/c13.log` |
 | 04:03:26 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/BATIDA-DEDUP-RETRATADA/merge_msg.txt <<'EOF' BATIDA-DEDUP-RETRATADA POUSO: o dedup das 3 cascas pergunta a porta (merge de e1dc7b80c) Aval T4-C10-E-DEDUP 15/11 01:2x item 3. Cura L-030 (batida de chao nunca e barrada): os sitios ponto/registro_batida.py::registrar_batida e api/views_core.py::api_bater_ponto (PROTEGE da L-030, LEIS.md:78), api/views.py e pont ...` |
 | 04:03:15 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' s=open(p).read() old='\| c1 Codex em voo \| ABERTA \| 15/11 01:2x \|' assert s.count(old)==1 s=s.replace(old,'\| e1dc7b80c: suite inteira OK 16129, Codex v4 ok, opus APROVADO c/ condicoes (merge cita L-030); PAREI smoke col677 ANTES do deploy (RELATO topo) \| PRONTA, espera Ronald \| 15/11 04:0x \|') row='\| BATIDA-DEDUP-RESIDU ...` |
