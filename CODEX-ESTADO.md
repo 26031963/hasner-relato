@@ -1,7 +1,118 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 21:17** · publicado em **14/11/2026 21:20** (UTC-3)
+> Ultima resposta processada: **14/11/2026 21:28** · publicado em **14/11/2026 21:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 21:28 · sessao 02b676105327 · - · - · origem=Ronald (tmux)
+
+Censo somente leitura concluído. Os números abaixo são consequências do código; execução ORM/frota nesta cópia permanece [nao verificado].
+
+- **K2 continua 0 min/0 dias no motor:** período aberto entra em `resultado.periodos` mesmo com zero minutos (`ponto/motor_calculo_v2.py:2499`, `:2501`); qualquer período normal entra em `datas_trabalho` pelo dia da jornada (`:2581`–`:2584`); esse dia sai de `_abono` (`:2611`–`:2613`) e, sem mapa, não recebe minutos nem dia (`:2628`–`:2634`).
+- **Falta e perda de DSR:** K2 aprovado não gera falta, porque `datas_justificadas` protege o dia (`ponto/motor_calculo_v2.py:2605`–`:2610`). `dsr_ok` não lê `dias_abono`; depende de faltas injustificadas e incrementa semanas OK/perdidas (`:2641`, `:2667`). No ramo legado sem previstas, o período aberto também faz `trabalhou=True` e protege DSR (`:2636`–`:2639`).
+- **Reflexo de DSR:** não lê `dias_abono`. Usa extras e quantidade de datas civis das entradas dos períodos, incluindo aberto na contagem quando há extra semanal (`ponto/motor_calculo_v2.py:2648`–`:2665`). Logo a divergência “há período × minutos realizados zero” pode alterar denominador/reflexo em uma semana com outros períodos extras; efeito numérico em K2 isolado é zero [nao verificado por execução].
+
+Consumidores de `dias_abono`:
+
+| Leitor | Contrato observado |
+|---|---|
+| Fechamento composto | Soma `dias_abono` das fatias (`ponto/services/fechamento.py:99`, `:298`); não há campo `dias_abono` no `FechamentoMensal` (`ponto/models.py:398`; censo textual). Persiste minutos da grade (`ponto/services/fechamento.py:1066`–`:1067`) e DSR separado (`:1106`–`:1108`). |
+| Espelho | Copia quantidade do resultado para resumo (`ponto/services/espelho.py:1256`). |
+| PDF | Copia quantidade do motor (`relatorios/pdf_espelho.py:479`), adiciona parcial apenas às horas (`:480`) e imprime badge (`:787`). |
+| Cartão com fechamento | Substitui horas por `fe.minutos_abonados`, sem substituir dias (`relatorios/cartao_pela_celula.py:93`–`:123`, em especial `:118`). |
+| Cartão sem fechamento/com lavratura | Substitui horas por DiaPago e dias por `dias_com_abono` (`relatorios/cartao_pela_celula.py:186`, `:190`). |
+| TXT/eventos | Não lê `dias_abono`; `eventos_do_fechamento` emite rubricas em `folha/export.py:442`–`:464`. Também não emite horas de reflexo DSR (`:456`–`:463`). |
+| DSR | Não lê `dias_abono`; decisão precede incremento do abono e usa trabalho/justificadas (`ponto/motor_calculo_v2.py:2605`–`:2613`). |
+
+Escritores/leitores e semântica atual:
+
+- `realizado_dos_turnos`: minutos líquidos de **todos os turnos do dia da jornada**; sem turno responde `None`, aberto sem par responde zero (`ponto/turnos.py:719`–`:721`, `:733`–`:771`).
+- Builder atribui esse realizado à linha da grade; converte sem turno para zero **declaradamente** e carrega `realizado_sem_turno` (`escala/utils.py:2065`–`:2079`).
+- Cartório copia realizado/tipo para ata (`ponto/services/cartorio.py:738`–`:740`).
+- Fonte c7 consulta juiz vivo, transforma `None` em zero e escreve `periodo['trabalhado']`/`['minutos']` (`ponto/services/efeito_ausencia.py:125`–`:128`).
+- Feed c7 lê `trabalhado > 0` (`ponto/services/efeito_ausencia.py:48`), remove o mapa sob ausência inteira (`:64`) e retorna mapa/conjuntos (`:67`–`:70`).
+- Transporte feed→motor: fechamento (`ponto/services/fechamento.py:665`–`:667`, `:755`, `:831`), autoridade/espelho (`ponto/services/espelho.py:1071`, `:1137`), PDF (`relatorios/pdf_espelho.py:333`, `:407`), esmeril (`ponto/services/esmeril_espelho.py:166`).
+- Transporte fonte→grade: folha (`folha/export.py:339`–`:341`), espelho (`ponto/services/espelho.py:520`–`:522`) e overlay (`escala/utils.py:1257`, `:1277`).
+- Grade transporta zero pela **presença da chave**, só em trabalho (`escala/services/leitor_celula.py:449`–`:450`). Realizado vem da ata, mas `None` vira zero nesse leitor (`:443`).
+- Financeiro por dia lê ausência como saldo P−W e trabalho pelo mapa truthy (`ponto/services/dia_pago.py:396`–`:399`). Lavratura escreve minutos por dia (`:288`–`:292`, `:345`, `:359`–`:360`).
+- Contador c7 cruza DiaPago positivo com ata atual (`ponto/services/dia_pago.py:700`–`:705`); ausência conta independentemente de W/parcial, trabalho exige W=0.
+- Motor lê mapa como minutos líquidos do saldo; ausência de chave habilita recomposição do previsto inteiro quando o dia não tem período (`ponto/motor_calculo_v2.py:2611`–`:2634`). `datas_trabalho` significa presença de período, não quantidade de minutos (`:2581`–`:2584`).
+
+**Col788 13/09:** o dado não fornece P, então não autoriza saldo numérico. Antes: fonte W=0/saldo=max(0,P), feed vazio; grade W=948 e saldo=max(0,P) se tipo trabalho; contador zero se tipo trabalho. Depois de fonte ler ata: W=948/saldo=max(0,P−948), mapa contém esse saldo, grade conserva W948, contador zero se tipo trabalho. Motor antes/depois depende dos períodos do dia [nao verificado]; eles não constam do dado.
+
+**P8: caminho até `gestao-he/` e limites**
+
+1. Montador só publica pendências com HE ativa e vigência (`ponto/services/espelho.py:724`–`:725`).
+2. Lê primeira entrada/última saída da grade por `_marcar_pontas` (`:730`–`:731`), acrescenta pontas do relato (`:743`–`:745`) e dias sem previsto publicados pelo motor (`:749`–`:752`), gravando `he_fora_da_janela` (`:779`). [nao verificado]
+3. `apurar` processa ativos, chama espelho, conta erros e filtra competência (`ponto/services/he_pendente_lavrado.py:92`–`:100`, `:118`), só retém dia com pendência (`:132`–`:134`).
+4. Comando chama `apurar` e apenas com `--apply` chama `lavrar` (`ponto/management/commands/lavrar_he_pendente.py:62`, `:70`–`:71`).
+5. `lavrar` grava snapshot (`ponto/services/he_pendente_lavrado.py:177`–`:189`); `ler` recupera foto e instante (`:193`–`:206`).
+6. Rota (`ponto/urls.py:17`) lê foto (`ponto/views.py:934`), filtra/enriquece (`:945`–`:946`) e renderiza (`:954`).
+
+Formas em que W>P não implica ponta publicada: [nao verificado]
+
+- Pausa não tirada, sem entrada antecipada nem saída posterior: só pontas externas são elegíveis, os marcos internos são ignorados (`ponto/janela_he.py:194`–`:209`). Exemplo estrutural: pausa por duração sem batida não é subtraída pelo realizado (`ponto/turnos.py:715`), podendo elevar W sem delta exterior.
+- Entrada antecipada dentro do piso: descartada (`ponto/janela_he.py:215`–`:217`; piso inclusivo em `:51`).
+- Extra declarada absorve a antecipação/saída: descartada pela mesma subtração (`ponto/janela_he.py:215`–`:217`).
+- Saída posterior com saída HE desativada: não gera ponta (`ponto/janela_he.py:206`–`:209`).
+- HE desligada, vigência nula ou data anterior: lista vazia (`ponto/services/espelho.py:724`–`:725`).
+- Célula missing: ponta direta descartada (`ponto/janela_he.py:201`–`:202`); relato só a recupera com causa HE, sentido reconhecido, marco correspondente e minutos positivos (`:278`–`:315`).
+- Competência antiga sem foto atual: tela lê foto, sem reapuração viva (`ponto/views.py:934`; `ponto/services/he_pendente_lavrado.py:193`–`:206`). Ciclo conserva atual e anterior ainda não entregue (`:218`–`:224`).
+
+Portanto há diferença estrutural entre saldo diário W>P e ponta fora do marco; quantidade real desse universo continua [nao verificado]. A medida dada de 0/276 fora da vigência elimina só aquele bloqueio observado, não a diferença de universos [nao verificado nesta cópia].
+
+## 14/11 21:28 · sessao 635c47fc4961 · - · - · origem=Ronald (tmux)
+
+A base anterior à primeira volta é **`96aa514071d684bb763d55635078030bee195d2e`**. A primeira obra é `86c1d70efcfdcb1fe22ec6a28247d2df41dd2fe5`; `df5c85cc9` já contém a obra, e `8928f955a~` é c5. Conferido com:
+
+```bash
+git log --first-parent -10 --oneline 8928f955a~
+git show --no-patch --format='%H%n%P%n%s' 86c1d70ef
+```
+
+Tabela da **base 96aa51407**, para ata coerente com P/W e justificativa sem marco; números `minutos/dias`:
+
+| Caso | Motor | Grade financeira | Contador | PDF livre |
+|---|---:|---:|---:|---:|
+| K1 | 480/1 | 0 | 0 | 480/1 |
+| K2 | 0/0 | 0 | 0 | 0/0 |
+| K3 | 0/0 | 0 | 0 | 0/0 |
+| K4 | 0/0 | 0 | 0 | 0/0 |
+| K5 | 480/1 | 480 | 1 | 480/1 |
+| K6 | 0/0 | 240 | 1 | 0/0 |
+| K7 | 0/0 | 240 | 1 | 120/0 |
+
+Referências históricas obtidas por `git show 96aa51407:app/<arquivo> | nl -ba`:
+
+- `ponto/services/efeito_ausencia.py:40`: justificativas entram somente no conjunto de datas; não existe mapa de pagamento.
+- `ponto/services/efeito_ausencia.py:46`: parcial paga soma separadamente.
+- `ponto/motor_calculo_v2.py:2576`: `datas_trabalho` inclui qualquer período.
+- `ponto/motor_calculo_v2.py:2600`: falta/DSR dependem de datas trabalhadas e justificadas.
+- `ponto/motor_calculo_v2.py:2620`: abono inteiro só sem período.
+- `ponto/services/dia_pago.py:395`: grade paga saldo somente em `tipo_dia == 'ausencia'`.
+- `ponto/services/dia_pago.py:687`: contador conta linhas positivas de DiaPago.
+- `folha/export.py:329`: grade do fechamento não fornece mapa de justificativa.
+- `relatorios/pdf_espelho.py:478`: dias vêm do motor.
+- `relatorios/pdf_espelho.py:479`: horas vêm do motor mais parcial.
+
+**K6 e K7 já divergiam antes da obra.** A resposta normativa conjunta precisa voltar como pergunta, conforme pedido; a existência dessas divergências não nasceu na c8. As respostas acima são leitura de código com premissas explícitas, não medição ORM/produtiva.
+
+O PDF final depende da seleção de fonte, tanto na base quanto na cópia:
+
+- Com fechamento: troca horas por `minutos_abonados`, mantendo dias provenientes do motor (`relatorios/cartao_pela_celula.py:93`, `:118`; nenhuma chave `dias_abono` nesse retorno).
+- Sem fechamento e com lavratura: troca horas e dias por DiaPago (`relatorios/cartao_pela_celula.py:186`, `:190`).
+- A escolha ocorre em `relatorios/cartao_pela_celula.py:321`–`:346`; PDF chama essa autoridade ao final (`relatorios/pdf_espelho.py:628` na base).
+
+Censo atual de `dias_abono`:
+
+- Escrito pelo motor: `ponto/motor_calculo_v2.py:2630`.
+- Transportado na composição das fatias: `ponto/services/fechamento.py:98`.
+- Lido pelo espelho: `ponto/services/espelho.py:1256`.
+- Lido pelo PDF e badge: `relatorios/pdf_espelho.py:479`, `:787`.
+- `FechamentoMensal` não recebe esse contador; fechamento escreve minutos de abono da grade (`ponto/services/fechamento.py:1067`).
+- TXT/folha não lê `dias_abono`; prontidão usa `minutos_abonados` (`folha/export.py:1081`).
+- DSR não lê esse contador: usa os conjuntos de datas (`ponto/motor_calculo_v2.py:2605`, `:2610`; override comercial `:3477`, `:3490`).
+
+K2 preserva a divergência proibida de curar no motor: regra **480/1**, motor **0/0**. A data aprovada continua protegida de falta e perda de DSR pelo conjunto `datas_justificadas` (`ponto/motor_calculo_v2.py:2607`, `:2610`).
 
 ## 14/11 21:17 · sessao 6670240d856c · E3-V10-DEGRAU-DONO-E-PORTA · construtor · origem=Code
 
@@ -938,72 +1049,4 @@ Leitores efetivos de `fila`: `o_que_segura` converte a tupla em `chamado` para o
 
 P4: a mensagem exata nasce em `motivo_de` quando o módulo não pertence a `MOTIVOS` nem aos aposentados (`app/chamados/catalogo/modulos.py:208`; `:216`). O caminho de abertura consulta o catálogo, captura esse `KeyError` e registra `abrir_fora_da_lei`; o comentário declara que a emissão continua (`app/chamados/models.py:988`; `:994`; `:995`; `:997`). O módulo concreto e o traceback dessa ocorrência não aparecem no dado dos 55: **[não verificado]**. O relato do diff não lista esses dois arquivos entre as alterações, mas a confirmação histórica de que o código não mudou nesta obra é **[não verificado]** (`app/chamados/tests/e3_lu2_entrega.txt:129`).
 
-## 14/11 20:41 · sessao 1b8bfc9ca4a2 · - · - · origem=Ronald (tmux)
-
-Os **26 ERROR são F no ponto exibido**, pela propagação prevista em M8 (`app/chamados/tests/e3_lu2_entrega.txt:26`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:609`): a produção chama a plural com `agora=self.agora` em `app/chamados/services/tarefa_do_dia.py:589`, e os três dublês antigos rejeitam esse keyword (`app/chamados/tests/test_e3_bloqueantes.py:68`; `app/chamados/tests/test_e3_leitores_c17_chamadores.py:66`; `app/chamados/tests/test_e4_backfill.py:36`). Eventuais falhas após corrigir o dublê: [não verificado].
-
-Formas exatas usadas nas linhas abaixo:
-
-- **B:** `lambda _c, datas, *, agora=None: dict.fromkeys(datas, False)` em `app/chamados/tests/test_e3_bloqueantes.py:68`.
-- **L:** `lambda _c, datas, *, agora=None: dict.fromkeys(datas, False)` em `app/chamados/tests/test_e3_leitores_c17_chamadores.py:66`.
-- **E:** `_juiz(sim)` deve retornar `lambda _colab, datas, *, agora=None: dict.fromkeys(datas, sim)` em `app/chamados/tests/test_e4_backfill.py:36`; o patch herdado está em `app/chamados/tests/test_e4_backfill.py:74`.
-
-| teste | classe | sítio que decide | o que mudar | [nao verificado]
-|---|---|---|---|
-| `BloqueantesE3Test.test_MORDE_8_chamado_TERMINAL_segue_sem_canal` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_bloqueantes.py:195` | Atualizar o dublê para B. |
-| `BloqueantesE3Test.test_MORDE_8_o_vigia_nao_le_o_predicado_cru` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_bloqueantes.py:201` | Atualizar o dublê para B. |
-| `ChamadoresDoC17LeemATarefaTest.test_MORDE_nenhum_chamador_migrado_pergunta_ao_C17` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:184` | Atualizar o dublê para L. |
-| `ChamadoresDoC17LeemATarefaTest.test_RED_dias_sem_fio_nao_inclui_dia_so_fila` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:154` | Atualizar o dublê para L. |
-| `ChamadoresDoC17LeemATarefaTest.test_RED_fora_da_folha_o_dia_vai_ao_grupo_C` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:135` | Atualizar o dublê para L. |
-| `ChamadoresDoC17LeemATarefaTest.test_RED_o_que_segura_chamado_da_celula_sem_tarefa_tem_fio` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:124` | Atualizar o dublê para L. |
-| `ChamadoresDoC17LeemATarefaTest.test_controle_dias_sem_fio_pergunta_na_fila_tem_fio` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:159` | Atualizar o dublê para L. |
-| `ChamadoresDoC17LeemATarefaTest.test_controle_fora_da_folha_pergunta_na_fila_e_grupo_B` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:143` | Atualizar o dublê para L. |
-| `ChamadoresDoC17LeemATarefaTest.test_controle_o_que_segura_pergunta_na_fila_e_colab` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e3_leitores_c17_chamadores.py:131` | Atualizar o dublê para L. |
-| `BackfillE4bTest.test_backfill_2x_mesmo_estado_uma_trilha` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_backfill.py:150` | Atualizar `_juiz` para E. |
-| `BackfillE4bTest.test_backfill_dry_usa_porta_e_nao_persiste` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_backfill.py:119` | Atualizar `_juiz` para E. |
-| `BackfillE4bTest.test_exportada_nao_muda_hash_fm_txt` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_backfill.py:169` | Atualizar `_juiz` para E. |
-| `BackfillE4bTest.test_sem_competencia_so_lista_e_nao_chama_porta` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_backfill.py:137` | Atualizar `_juiz` para E. |
-| `PassivoE4bTest.test_classe_c_passivo_entra_pela_porta_da_E1_e_2x_e_uma_linha` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_passivo.py:57` | Atualizar `_juiz` herdado para E. |
-| `PassivoE4bTest.test_classe_e_viva_sob_terminal_reabre_pela_porta_com_nota` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_passivo.py:72` | Atualizar `_juiz` herdado para E. |
-| `PassivoE4bTest.test_classes_e_universos_nao_somem_para_zerar` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_passivo.py:98` | Atualizar `_juiz` herdado para E. |
-| `PassivoE4bTest.test_mutante_sem_porta_morde_caracterizacao_classe_e` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4_passivo.py:92` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_Ch12_P90_D90_exportada_desfaz` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:446` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_Ch12_P90_D90_fora_da_competencia_K6_false_desfaz` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:346` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_DRY_diff_por_colaborador_le_dinheiro_da_autoridade` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:550` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_callback_desconhecido_nomeado_e_fila_revertida` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:171` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_callback_real_de_retomada_desfaz` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:149` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_escrita_EventoCelula_por_porta_aparece_no_diff` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:202` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_foto_inteira_sob_C_e_reversao_antes_do_primeiro_ato` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:509` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_lote_misto_desfaz_recusado_enquanto_vizinho_pousa` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:349` | Atualizar `_juiz` herdado para E. |
-| `CercaC4ORMTest.test_RED_tabela_nao_fotografada_desfaz` | F | `app/chamados/services/tarefa_do_dia.py:589`; teste `app/chamados/tests/test_e4b_c4_orm.py:189` | Atualizar `_juiz` herdado para E. |
-
-P1:
-
-- As assinaturas novas documentadas são `resolver_dia_oferecido_nas_datas(colaborador, datas, *, agora=None)` (`app/colaboradores/services/calendario.py:117`) e `contexto_calendario(colaborador, GET, *, datas_em_aberto=None, agora=None)` (`app/colaboradores/services/calendario.py:159`); o contrato M8 exige recebimento/reenvio e contexto sem nova leitura de relógio (`app/chamados/tests/e3_lu2_entrega.txt:26`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:575`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:613`).
-- Cadeia principal correta: `CargaDaTarefa.tarefa` envia `self.agora` à plural (`app/chamados/services/tarefa_do_dia.py:589`); plural envia `agora` ao contexto (`app/colaboradores/services/calendario.py:132`); contexto usa o instante recebido, só chama `timezone.now()` quando omitido (`app/colaboradores/services/calendario.py:163`), usa o mesmo instante no desfazer (`app/colaboradores/services/calendario.py:250`) e no D4 (`app/colaboradores/services/calendario.py:606`).
-- Os dois censos agora enviam o instante ao `ListaDoAdmin` (`app/chamados/services/vigia_fio.py:332`; `app/chamados/services/vigia_fio.py:573`); o construtor já aceita `agora` (`app/chamados/services/vigia_fio.py:177`) e `_carregar` repassa à lista (`app/chamados/services/vigia_fio.py:194`), distinção expressa na entrega (`app/chamados/tests/e3_lu2_entrega.txt:52`). O comando abre o relógio em `app/chamados/management/commands/vigiar_fio_morto.py:171`, envia à lista em `:175` e a ambos os censos em `:180`/`:181`.
-- Os demais chamadores do contexto são view (`app/colaboradores/views.py:1949`), drawer (`app/colaboradores/services/drawer.py:121`) e relatório (`app/relatorios/furos.py:160`), todos sem `agora`; a entrega preserva defaults dos demais chamadores (`app/chamados/tests/e3_lu2_entrega.txt:51`).
-- Há omissão concreta de um instante já disponível no relatório: `dataset_furos` recebe `agora` (`app/relatorios/furos.py:103`) e o envia ao D4 (`app/relatorios/furos.py:123`), mas não ao calendário do card (`app/relatorios/furos.py:160`/`:164`), cujo default lê outro relógio (`app/colaboradores/services/calendario.py:163`). Drawer também lê `agora` no início (`app/colaboradores/services/drawer.py:19`) e o omite no calendário (`app/colaboradores/services/drawer.py:121`), além de leituras próprias de data (`app/colaboradores/services/drawer.py:43`; `:111`). Serem regressões introduzidas neste commit: [não verificado sem base/diff].
-- Não há dublê de produção encontrado entre as referências estáticas dos símbolos; os dublês que quebraram estão nos testes citados. Chamada/dublê dinâmico: [não verificado]. [nao verificado]
-
-## 14/11 20:27 · sessao defe70908db2 · E3-V10-DEGRAU-DONO-E-PORTA · construtor · origem=Code
-
-A [entrega completa]( /home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_entrega.txt:1) contém diff por função, matriz M1–M8, leitores dos campos, custo por carga, remoções L-111 e classificação dos 65 métodos do recorte.
-
-Execuções locais:
-
-- **159 testes OK**, sem banco. [Saída](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_suite.txt:167) [nao verificado]
-- **45/45 mutantes mortos**, com controle verde. [Saída e comandos individuais](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_mutantes.txt:1478) [nao verificado]
-- **RED anterior à cura preservado**; M7 foi controle verde. [Saída original](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_red.txt:1) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_lu2_suite
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --todos
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_degrau_mutantes --base
-```
-
-O último comando reproduz os REDs na base e retorna **1 esperado**. [Registro](/home/ronald/wt-codex-e3-v10-degrau-dono-e-porta-192627/app/chamados/tests/e3_lu2_entrega.txt:8)
-
-Suite ORM completa, frota e timeout de 30 segundos: **[não verificado]**. Certificação do Code e opus final: **[não verificado]**. [nao verificado]
-
-_5281 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5283 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
