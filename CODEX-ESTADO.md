@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 14:38** · publicado em **15/11/2026 14:37** (UTC-3)
+> Ultima resposta processada: **15/11/2026 14:46** · publicado em **15/11/2026 14:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 14:46 · sessao 94382d8dd9d9 · - · - · origem=Ronald (tmux)
+
+Censo final: **315 hex literais distintos, 5.899 ocorrências, 283 arquivos CSS/JS/HTML examinados**. Agrupamento ignora caixa, preserva abreviações (`#fff` separado de `#ffffff`). Contagem é de ocorrências, incluindo repetição na mesma linha.
+
+Excluídos `app/static/leaflet/leaflet.js` (minificado de terceiro, identificação :2), `app/static/pdfjs/pdf.min.js` e `pdf.worker.min.js` (terceiros minificados, licença :1). **Incluído** `leaflet.css`, pois não é minificado: acrescenta 31 ocorrências e 6 hex. SVG externos estão fora das extensões solicitadas; SVG inline próprio conta. Nenhum `staticfiles/` entra nas duas raízes. Regex elimina entidades HTML e hashes parciais de IDs. Removidos falsos `#4280` (tickets: `app/templates/ponto/ausencias.html:237`, `app/templates/ponto/partials/painel_ausencia.html:96`) e `#9232` (número de pergunta: `app/templates/chamados/partials/_card_atendimento.html:191`).
+
+Aliases: T=`app/templates`, S=`app/static`, U=`S/css/hasner-ui.css`, H=`S/css/hasner-ponto.css`, I=`S/css/ui-table.css`, L=`S/leaflet/leaflet.css`. B=um dos sete trios históricos incluindo cinza; P=trio petróleo adicional; -=fora desses oito trios. Formato `hex×contagem[marca]@arquivo:linha`.
+
+#000×3-@T/core/onboarding.html:29; #003580×27-@T/chamados/fio_colaborador.html:45; #004085×1-@U:1177; #0055a5×14-@T/chamados/partials/_relatorio_geo.html:33; #005a9e×1-@H:20; #0078a8×1-@L:265; #0078d4×186-@T/base.html:100; #0369a1×26-@T/chamados/partials/_card_atendimento.html:273; #065f46×3-@T/chamados/partials/_lote_preview.html:6; #066×1-@T/chamados/meu_atendimento.html:8
+#075985×8-@T/chamados/partials/_card_atendimento.html:265; #0891b2×9-@T/colaboradores/partials/agenda_modal.html:156; #0a7×9-@T/chamados/fio_colaborador.html:15; #0a7a4a×2-@T/holerite/_lote_progresso.html:49; #0c447c×3-@T/colaboradores/partials/painel_situacional.html:259; #0c4a6e×3-@T/chamados/fio_colaborador.html:238; #0e7490×2-@T/colaboradores/partials/painel_vinculo.html:240; #0ea5e9×7-@T/chamados/partials/modal_fio.html:235; #0f172a×279-@T/base.html:48; #0f5132×1-@I:156
+#0f766e×1P@T/core/_barra_gestao.html:67; #106ebe×1-@H:19; #10b981×11-@T/chamados/detalhe.html:85; #14532d×4-@T/chamados/meu_atendimento.html:222; #15803d×24-@T/chamados/detalhe_local.html:178; #166534×78B@T/chamados/detalhe.html:38; #16a34a×176-@T/chamados/detalhe_local.html:165; #173404×2-@T/core/dashboard_colaborador_v2.html:32; #185fa5×11-@T/colaboradores/partials/painel_vinculo.html:74; #1a1a2e×40-@T/chamados/fio_colaborador.html:14
+#1a3a5c×14-@T/chamados/verificar_pdf.html:10; #1a3a6b×49-@T/base.html:11; #1b6ca8×17-@T/core/landing.html:9; #1d4220×1-@T/comunicados/ciencia_ok.html:6; #1d4ed8×21-@T/chamados/partials/modal_fio.html:41; #1e293b×17-@T/chamados/verificar_pdf.html:8; #1e3a5f×1-@T/core/manual.html:10; #1e3a8a×17-@T/chamados/detalhe_local.html:46; #1e40af×67B@T/chamados/detalhe.html:42; #1f2937×11-@T/chamados/partials/_pergunta_card.html:28
+#1f2a44×2-@T/base.html:99; #1f2d4d×1-@T/comunicados/ciencia.html:6; #1f3a93×1-@U:183; #1f7a4d×2-@T/core/dashboard_colaborador_v2.html:67; #222×2-@T/core/onboarding.html:12; #22c55e×4-@T/colaboradores/partials/painel_colaborador.html:70; #2563eb×48-@T/chamados/partials/_pergunta_card.html:35; #27500a×1-@T/core/dashboard_colaborador.html:148; #27ae60×2-@T/colaboradores/gestao_usuarios.html:70; #2c3a58×1-@T/comunicados/ciencia.html:7
+#2f57a4×3-@T/comunicados/ciencia.html:11; #333×6-@T/chamados/meu_atendimento.html:13; #334155×56-@T/chamados/fio_colaborador.html:156; #334e68×3-@T/relatorios/builder.html:12; #33523a×1-@T/comunicados/ciencia_ok.html:7; #3730a3×6-@T/chamados/partials/_lista_chamados.html:63; #374151×121-@T/chamados/detalhe.html:65; #378add×1-@T/core/_voltar.html:7; #38f×1-@L:268; #3b6d11×10-@T/core/dashboard_colaborador.html:67
+#3b82f6×4-@T/chamados/partials/modal_fio.html:76; #3c3489×1-@T/core/dashboard_colaborador.html:91; #3f6212×2-@T/chamados/partials/_card_atendimento.html:107; #431407×1-@T/relatorios/furos.html:26; #444×5-@T/chamados/meu_atendimento.html:9; #475569×171B@T/chamados/detalhe_local.html:287; #4ade80×6-@T/base.html:68; #4b0082×1-@U:1172; #4b5563×2-@U:349; #4c1d95×3-@T/chamados/detalhe_local.html:226
+#4f46e5×6-@T/escala/minha_escala.html:43; #534ab7×2-@T/core/dashboard_colaborador.html:84; #555×8-@T/core/onboarding.html:19; #585858×1-@L:542; #5872a8×2-@T/comunicados/ciencia.html:5; #5a6679×2-@T/core/dashboard_colaborador.html:189; #5a6a85×4-@T/colaboradores/partials/painel_colaborador.html:100; #5b21b6×1-@T/core/painel_tv.html:71; #5b4a12×2-@T/core/_copiloto.html:419; #5bb8f5×3-@T/core/dashboard_colaborador.html:12
+#60a5fa×3-@T/core/manual.html:29; #6277eb×1-@U:919; #633806×2-@T/core/dashboard_colaborador.html:30; #6366f1×16-@T/base.html:80; #64748b×524-@T/base.html:227; #65a30d×2-@T/ponto/_fech_linha.html:11; #664d03×1-@I:157; #666×14-@T/chamados/fio_colaborador.html:17; #6b7280×28-@T/chamados/detalhe_local.html:237; #6d28d9×20B@T/chamados/detalhe_local.html:223
+#6ee7b7×1-@T/chamados/partials/modal_fio.html:435; #757575×1-@L:536; #777×3-@L:444; #78350f×14-@T/chamados/detalhe_local.html:248; #7a3500×2-@T/core/dashboard_colaborador_v2.html:32; #7a5c00×3-@T/core/_copiloto.html:35; #7aa7ff×1-@I:130; #7c2d12×21-@T/chamados/partials/modal_fio.html:622; #7c3aed×39-@T/chamados/detalhe_local.html:222; #7c93c4×1-@T/comunicados/ciencia.html:4
+#7dd3fc×1-@T/chamados/partials/modal_fio.html:312; #7f1d1d×16-@T/chamados/detalhe_local.html:156; #842029×1-@I:158; #84cc16×1-@T/ponto/_fech_linha.html:10; #854d0e×33-@T/chamados/detalhe.html:40; #854f0b×4-@T/core/dashboard_colaborador.html:31; #86efac×7-@T/chamados/meu_atendimento.html:409; #888×2-@T/core/gate_apk.html:4; #8896ab×30-@T/base.html:107; #8a2318×1-@T/comunicados/console.html:9
+#8a4b09×2-@T/ponto/bater_ponto_v2.html:21; #8a5a12×1-@T/ponto/bater_ponto_v2.html:18; #8b5cf6×2-@T/ponto/espelho.html:117; #8c2e22×1-@T/core/_icone_pauta.html:18; #92400e×123B@T/chamados/detalhe.html:50; #9333ea×1-@T/relatorios/index.html:196; #93c5fd×7-@T/chamados/painel_gestao.html:539; #94a3b8×59-@T/chamados/fio_colaborador.html:50; #97c459×1-@T/core/dashboard_colaborador.html:148; #991b1b×84B@T/chamados/detalhe.html:48
+#997×1-@T/chamados/fio_colaborador.html:54; #999×9-@T/chamados/fio_colaborador.html:19; #99f6e4×1P@T/core/_barra_gestao.html:67; #9a3412×17-@T/chamados/detalhe_local.html:345; #9a4a00×1-@T/ponto/bater_ponto_v2.html:13; #9ca3af×11-@T/chamados/detalhe_local.html:265; #9d174d×6-@T/colaboradores/partials/_lista_tabela.html:27; #9dc49b×1-@T/comunicados/ciencia_ok.html:4; #a08a4a×3-@T/core/_copiloto.html:36; #a16207×3-@T/chamados/partials/modal_fio.html:319
+#a21caf×1-@T/escala/plano_folgas.html:104; #a32d2d×4-@T/core/dashboard_colaborador.html:112; #a5b4fc×1-@U:877; #a5f3fc×1-@T/colaboradores/partials/painel_vinculo.html:240; #a78bfa×1-@T/core/manual.html:31; #a855f7×1-@U:1182; #a8b3c4×1-@T/base.html:108; #aaa×1-@T/colaboradores/gestao_usuarios.html:45; #ad6800×1-@T/ferias/_meu_atendimento_ferias.html:3; #afa9ec×1-@T/core/dashboard_colaborador.html:91
+#b45309×45-@T/chamados/detalhe_local.html:275; #b5d4f4×7-@T/core/_voltar.html:6; #b91c1c×67B@T/chamados/detalhe_local.html:155; #bae6fd×15-@T/chamados/partials/_card_atendimento.html:227; #bbb×2-@T/holerite/comprovante.html:15; #bbf7d0×30B@T/chamados/detalhe_local.html:185; #be185d×1-@T/escala/plano_folgas.html:102; #bfdbfe×36B@T/chamados/fio_colaborador.html:43; #c00×6-@T/chamados/fio_colaborador.html:18; #c0392b×1-@T/holerite/historico_lotes.html:29
+#c2410c×34-@T/chamados/painel_gestao.html:108; #c4b5fd×4-@T/colaboradores/partials/_calendario_grade.html:73; #c7d2fe×2-@T/colaboradores/partials/_calendario_grade.html:132; #c9efdb×1-@T/core/dashboard_colaborador_v2.html:67; #ca8a04×4-@T/colaboradores/partials/_calendario_grade.html:180; #cbd5e1×210-@T/chamados/meu_atendimento.html:46; #ccc×6-@T/chamados/meu_atendimento.html:11; #cce5ff×1-@U:1176; #cdd7e5×1-@T/chamados/fio_colaborador.html:116; #cfe3f7×1-@T/folha/_retrato_o_que_fazer.html:74
+#cffafe×1-@T/escala/plano_folgas.html:103; #d0ecd3×1-@T/core/dashboard_colaborador_v2.html:105; #d1d5db×31-@T/colaboradores/partials/painel_colaborador.html:148; #d1e7dd×1-@I:156; #d1fae5×1-@T/core/onboarding.html:36; #d3e7fb×1-@T/core/dashboard_colaborador_v2.html:57; #d6dde8×1-@T/ponto/bater_ponto_v2.html:59; #d7dee8×3-@T/base.html:98; #d8b4fe×8-@T/chamados/partials/_card_atendimento.html:66; #d97706×61-@T/chamados/partials/_pergunta_card.html:24
+#d9a521×1-@T/core/_icone_pauta.html:13; #d9e2ef×2-@T/comunicados/console.html:47; #db2777×1-@T/inteligencia/index.html:377; #dbeafe×44-@T/base.html:105; #dc2626×209-@T/chamados/detalhe_local.html:154; #dce8f5×16-@T/core/dashboard_colaborador.html:40; #dcecc3×2-@T/core/dashboard_colaborador_v2.html:61; #dcfce7×70-@T/chamados/detalhe.html:38; #ddd×5-@T/chamados/fio_colaborador.html:85; #ddd6fe×3B@T/chamados/painel_gestao.html:78
+#dde×2-@T/colaboradores/partials/vinculos_tabela.html:12; #dde2f2×1-@U:911; #dfefff×1-@I:129; #e08080×1-@T/chamados/regularizacao_editar.html:11; #e08e00×2-@T/chamados/fio_colaborador.html:18; #e0bbff×1-@U:1171; #e0ddfb×1-@T/core/dashboard_colaborador_v2.html:79; #e0e6ef×1-@T/chamados/fio_colaborador.html:12; #e0e7ff×3-@T/chamados/partials/_lista_chamados.html:63; #e0f0ff×9-@T/colaboradores/lista.html:14
+#e0f2fe×4-@T/chamados/fio_colaborador.html:238; #e0f2ff×1-@U:343; #e2d5a8×8-@T/core/_copiloto.html:86; #e2e8f0×480B@T/chamados/detalhe.html:79; #e5533d×4-@T/base.html:293; #e5b4ae×1-@T/comunicados/console.html:9; #e5e7eb×39-@T/chamados/fio_colaborador.html:75; #e5e7ff×1-@U:882; #e6f1fb×2-@T/core/_voltar.html:6; #e6f2fa×3-@T/core/landing.html:8
+#e8edf5×1-@T/chamados/fio_colaborador.html:27; #e8effe×1-@T/login.html:13; #e8f0f8×2-@T/core/painel_tv.html:9; #e8f0fe×6-@T/core/_copiloto.html:186; #e8f4ff×1-@T/login.html:13; #e9d5ff×3-@T/ponto/_fech_linha.html:7; #e9ecef×1-@I:70; #ea580c×20-@T/chamados/partials/modal_fio.html:629; #eab308×7-@T/colaboradores/partials/_calendario_legenda.html:34; #eaf0fb×1-@H:448
+#eaf3de×7-@T/core/dashboard_colaborador.html:66; #eaf3fb×2-@T/escala/folga_calendario_editar.html:98; #ecfccb×1-@T/escala/plano_folgas.html:104; #ecfdf5×4-@T/chamados/partials/modal_fio.html:118; #ecfeff×2-@T/colaboradores/partials/painel_vinculo.html:240; #ede9fe×8-@T/chamados/fio_colaborador.html:180; #eee×4-@T/chamados/regularizacao_editar.html:26; #eeedfe×2-@T/core/dashboard_colaborador.html:83; #eef2f7×13-@T/chamados/fio_colaborador.html:116; #eef2ff×9-@T/chamados/partials/modal_fio.html:387
+#eef3f8×1-@T/core/_copiloto.html:286; #eef3fa×9-@T/core/dashboard_colaborador_v2.html:56; #eef3fb×1-@T/comunicados/ciencia.html:4; #eef4fc×1-@T/login.html:20; #eef5ff×1-@I:44; #eef8ee×1-@T/comunicados/ciencia_ok.html:4; #ef4444×13-@T/base.html:173; #ef9f27×2-@T/core/dashboard_colaborador.html:29; #eff6ff×44B@T/chamados/detalhe_local.html:46; #f0c040×1-@T/chamados/regularizacao_painel.html:7
+#f0e6c8×3-@T/core/_copiloto.html:83; #f0f0f0×1-@T/chamados/fio_colaborador.html:88; #f0f4f8×8-@T/colaboradores/lista.html:7; #f0f4ff×3-@T/base.html:23; #f0f6ff×11-@T/colaboradores/lista.html:13; #f0f7ff×3-@T/colaboradores/partials/painel_colaborador.html:99; #f0f9ff×24-@T/chamados/partials/_card_atendimento.html:227; #f0fdf4×43B@T/chamados/detalhe_local.html:177; #f0fdf8×1-@T/chamados/meu_atendimento.html:7; #f0fdfa×1P@T/core/_barra_gestao.html:67
+#f1f3f4×1-@T/core/_copiloto.html:171; #f1f3f5×1-@I:48; #f1f5f9×193-@T/base.html:52; #f3e8ff×6-@T/colaboradores/partials/_calendario_grade.html:76; #f3f4f6×9-@T/core/config/_ficha_setor.html:34; #f3f4ff×1-@U:876; #f4f4f4×2-@L:307; #f4f6f8×4-@T/core/gate_admin_mobile.html:4; #f4f7fc×3-@T/relatorios/beneficios_consolidado.html:84; #f59e0b×56-@T/chamados/detalhe.html:84
+#f5a623×2-@T/core/dashboard_colaborador.html:193; #f5f3ff×8B@T/chamados/painel_gestao.html:78; #f5f5f5×1-@T/holerite/comprovante.html:16; #f7c94b×1-@T/core/_icone_pauta.html:12; #f7f9fc×2-@T/comunicados/console.html:47; #f87171×2-@T/base.html:70; #f8d7da×1-@I:158; #f8fafc×131B@T/chamados/fio_colaborador.html:42; #f8fbff×26-@T/core/dashboard_colaborador.html:40; #f97316×7-@T/core/_painel_card.html:19
+#f9fafb×10-@T/core/config/_ficha_setor.html:8; #f9fbff×1-@U:620; #facc15×3-@T/core/_icone_barra.html:8; #fae8ff×1-@T/escala/plano_folgas.html:104; #faeeda×3-@T/core/dashboard_colaborador.html:29; #faf5ff×7-@T/chamados/detalhe_local.html:222; #fafafa×6-@T/chamados/partials/modal_fio.html:388; #fafbfc×4-@T/relatorios/historico_chamados.html:137; #fafcff×2-@T/chamados/fio_colaborador.html:12; #fb923c×3-@T/core/painel_tv.html:70
+#fbbf24×4-@T/chamados/detalhe_local.html:335; #fbcfe8×1-@T/colaboradores/vincular.html:83; #fbd0e0×1-@T/core/dashboard_colaborador_v2.html:111; #fbd8d8×1-@T/core/dashboard_colaborador_v2.html:89; #fbfcff×1-@U:912; #fc0×2-@T/colaboradores/beneficio_lote.html:10; #fca5a5×32B@T/chamados/partials/_pergunta_card.html:117; #fcd34d×15-@T/chamados/partials/_card_atendimento.html:88; #fce7f3×6-@T/colaboradores/partials/_lista_tabela.html:27; #fcebeb×2-@T/core/dashboard_colaborador.html:111
+#fcfdff×1-@I:43; #fdba74×13-@T/chamados/partials/modal_fio.html:435; #fde047×3-@T/base.html:69; #fde2c8×1-@T/ponto/bater_ponto_v2.html:21; #fde68a×46B@T/chamados/detalhe_local.html:7; #fdecea×1-@T/comunicados/console.html:9; #fdf2e0×1-@T/ponto/bater_ponto_v2.html:18; #fdf4ff×1-@T/relatorios/index.html:195; #fecaca×50B@T/chamados/fio_colaborador.html:71; #fed7aa×18-@T/chamados/painel_gestao.html:108
+#fee2e2×76B@T/chamados/detalhe.html:48; #fef08a×4-@T/colaboradores/partials/_calendario_grade.html:74; #fef2f2×51B@T/chamados/detalhe_local.html:154; #fef3c7×76-@T/chamados/detalhe.html:50; #fef9c3×28-@T/chamados/detalhe.html:40; #fefce8×14-@T/chamados/partials/_card_atendimento.html:74; #ff6b00×17-@T/base.html:101; #ffb3a7×1-@T/core/_icone_pauta.html:17; #ffd591×1-@T/ferias/_meu_atendimento_ferias.html:2; #ffe0e0×1-@T/chamados/regularizacao_editar.html:11
+#ffe4e6×1-@T/chamados/partials/_lista_chamados.html:40; #ffe6c2×1-@T/core/dashboard_colaborador_v2.html:83; #ffe7ba×1-@T/ferias/_meu_atendimento_ferias.html:5; #ffedd5×9-@T/chamados/painel_gestao.html:108; #fff×217-@T/base.html:98; #fff1f2×2-@T/chamados/partials/_lista_chamados.html:37; #fff3cd×1-@I:157; #fff3e0×8-@T/core/dashboard_colaborador.html:41; #fff3f3×1-@T/core/painel_tv.html:22; #fff5f5×7-@T/colaboradores/editar.html:269
+#fff6e0×1-@T/chamados/regularizacao_painel.html:7; #fff7ed×40-@T/chamados/partials/modal_fio.html:435; #fffbe6×1-@T/ferias/_meu_atendimento_ferias.html:2; #fffbeb×63B@T/chamados/detalhe_local.html:246; #ffffff×24-@T/core/_voltar.html:8
+
+## 15/11 14:46 · sessao 940786801139 · - · - · origem=Ronald (tmux)
+
+Verificação adicional concluída:
+
+- **Trio no mesmo componente:** cyan — app/templates/colaboradores/partials/painel_vinculo.html:240; sky — app/templates/escala/minha_escala.html:90; teal/petroleo — app/templates/core/_barra_gestao.html:67.
+- **Orange no mesmo bloco pai/filho:** fundo/borda no pai, texto no filho — app/templates/ponto/bater_ponto.html:175 e :176; também app/templates/ponto/triagem/turno_confirmar.html:3 e :4.
+- **Gray700, yellow700, indigo600 e purple600:** completos apenas como conjunto de literais dispersos; combinação exata num mesmo componente não verificada. Gray usa 50/200 juntos em app/templates/core/config/_ficha_usuario.html:13, mas 700 está em outro componente, :8. Yellow/indigo/purple nem sequer têm seus três hex num mesmo arquivo. [não verificado]
+- **Gray600 efetivamente compõe cabeçalho:** fundo app/static/css/hasner-ui.css:763; borda :735; texto :768. Porém gray700 existe, app/templates/folha/index.html:121, então não satisfaz o fallback solicitado.
+- **Parciais 2/3, iguais fora7 e fora8:** fuchsia50 `#fdf4ff` — app/templates/relatorios/index.html:195; fuchsia700 `#a21caf` — app/templates/escala/plano_folgas.html:104; falta200 `#f5d0fe` [não verificado]. Pink200 `#fbcfe8` — app/templates/colaboradores/vincular.html:83; pink700 `#be185d` — app/templates/escala/plano_folgas.html:102; falta50 `#fdf2f8` [não verificado].
+- **Neutras restantes:** zinc/neutral só50 `#fafafa` — app/templates/escala/tipos_lista.html:65; stone nenhum dos três [não verificado].
+
+## 15/11 14:45 · sessao 940786801139 · - · - · origem=Ronald (tmux)
+
+Fora dos sete trios históricos, há estas famílias completas no conjunto de literais:
+
+| Família | 50 | 200 | 700 ou 600 |
+|---|---|---|---|
+| **gray — neutra** | `#f9fafb` — app/templates/core/onboarding.html:31 | `#e5e7eb` — mesmo arquivo:31 | `#374151` — app/templates/folha/index.html:121 |
+| orange | `#fff7ed` — app/templates/ponto/bater_ponto.html:175 | `#fed7aa` — mesmo arquivo:175 | `#c2410c` — mesmo arquivo:176 |
+| yellow | `#fefce8` — app/templates/ponto/espelho.html:118 | `#fef08a` — mesmo arquivo:118 | `#a16207` — app/templates/chamados/partials/modal_fio.html:319 |
+| teal | `#f0fdfa` — app/templates/core/_barra_gestao.html:67 | `#99f6e4` — mesmo arquivo:67 | `#0f766e` — mesmo arquivo:67 |
+| cyan | `#ecfeff` — app/templates/colaboradores/partials/painel_vinculo.html:240 | `#a5f3fc` — mesmo arquivo:240 | `#0e7490` — mesmo arquivo:240 |
+| sky | `#f0f9ff` — app/templates/escala/minha_escala.html:90 | `#bae6fd` — mesmo arquivo:90 | `#0369a1` — mesmo arquivo:90 |
+| indigo | `#eef2ff` — app/templates/colaboradores/partials/_calendario_grade.html:132 | `#c7d2fe` — mesmo arquivo:132 | `#4f46e5` (**600**) — app/templates/ponto/espelho.html:59 |
+| purple | `#faf5ff` — app/templates/ponto/_fech_linha.html:7 | `#e9d5ff` — mesmo arquivo:7 | `#9333ea` (**600**) — app/templates/relatorios/index.html:196 |
+
+A barra atual contém também `petroleo`, oitavo trio; excluindo seus três hex, a lista acima perde somente **teal** — app/templates/core/_barra_gestao.html:67.
+
+Os trios são completos como disponibilidade de literais; somente cyan, sky e teal estão demonstrados juntos nas referências acima. Purple usa o par 50/200 junto de **violet600** `#7c3aed`, enquanto purple600 aparece separadamente — app/templates/ponto/_fech_linha.html:7; app/templates/relatorios/index.html:196.
+
+**slate já está ocupada por cinza**: `#f8fafc/#e2e8f0/#475569` = slate50/200/**600**, não 700 — app/templates/core/_barra_gestao.html:67. Slate700 `#334155` também existe — app/templates/folha/_retrato_raiox.html:71.
+
+Ausências apuradas por varredura, sem linha positiva possível: indigo700 `#4338ca` e purple700 `#7e22ce`; zinc tem só50 `#fafafa`, neutral tem só50 `#fafafa`, stone nenhum dos alvos; logo nenhuma dessas três neutras tem 2/3. [não verificado]
+
+## 15/11 14:44 · sessao 3e7ab736fe1a · - · - · origem=Ronald (tmux)
+
+Usados por LED: verde (`entram`), cinza (`modulo_proprio`), amarelo (`admin`), azul (`colab`), roxo (`hoje`), vermelho (`sem_acao_disponivel`), petroleo (`sem_leitura_sistema`); único token sem LED: bloqueio. Fontes: `app/folha/retrato_folha.py:308–324`. Vermelho está explicitamente no LED `sem_acao_disponivel`: `app/folha/retrato_folha.py:313`.
+
+Atenção: **o arquivo atual possui 8 trios**, incluindo `else` cinza; “7 tokens” descreve o conjunto anterior à inclusão de petróleo. Fonte: `app/templates/core/_barra_gestao.html:67`.
+
+Leitores diretos, auditados por AST; cada número abaixo é uma linha individual:
+
+| Arquivo | LED_DA_LINHA | COR_DO_LED | HEX_DO_TOKEN |
+|---|---|---|---|
+| `app/folha/retrato_folha.py` | 316,317,318,1131 | 559,871,874,901,1106 | 559,1106,1130 |
+| `app/folha/tests/test_retrato_folha_quadros.py` | 439,887,891,899,902,927,928,938 | 929,956,972 | 938,959,960,961,972 |
+| `app/folha/tests/test_retrato_folha_drawer.py` | 81 | 73 | 73,83,193 |
+| `app/chamados/tests/test_e3_r3_c4_sem_banco.py` | 74 | 90,91 | — |
+| `app/chamados/tests/test_e3_r3_c6_sem_banco.py` | 375,376 | 372,382 | 374,376,377,386 |
+| `app/chamados/tests/test_e3_r3_c11_sem_banco.py` | — | 242 | 242 |
+| `app/chamados/tests/test_e3_r3_c12_sem_banco.py` | 38,42,43 | 41 | 39,41,43 |
+
+Leitores indiretos de produção: `app/folha/views_retrato.py:280,318,325,394,411,421,494`; `app/colaboradores/views.py:986,988`; renderização em `app/templates/core/_led.html:16`, `app/templates/core/_barra_gestao.html:67`, `app/templates/folha/_retrato_lista.html:47`, `app/templates/folha/_retrato_legenda.html:29`, `app/templates/folha/_retrato_o_que_fazer.html:36,83`, `app/templates/folha/_retrato_raiox.html:67`, `app/templates/folha/_retrato_barra.html:134`.
+
+Para pergunta 5: busca `rg --hidden -i '#0f766e'`, excluindo `.git`, diretórios `tests`, `test_*.py` e os dois arquivos nominados, retornou **zero resultados**. Não existe arquivo:linha para referenciar uma ausência; marcar a conclusão `[não verificado]` se a exigência de fonte for interpretada literalmente. As ocorrências de produção positivas são `app/folha/retrato_folha.py:305,324` e `app/templates/core/_barra_gestao.html:67`.
 
 ## 15/11 14:38 · sessao b0efe9af1207 · - · - · origem=Ronald (tmux)
 
@@ -679,203 +776,4 @@ Cuidado com “efeito exato”: o save direto em `app/chamados/services/disputa_
 
 Recusa de texto novo é mais precisa que “recusa sempre vazio”: `recusa_respondida_sem_texto` chama o predicado com o par solicitado, `app/chamados/services/fio.py:1595-1605`; só lança se o par for `respondida_sem_texto`. O teste cobre instante preenchido e `('', '   ', None)`, `app/chamados/tests/test_e3_10_cura_no_escritor.py:58-69`.
 
-## 15/11 14:04 · sessao 1698f1bfad8f · - · - · origem=Ronald (tmux)
-
-A composição já usada pela casa é `competencia_do_dia_entregue(p.data_evento, p.disputa.colaborador.empresa, memo=...)`, que usa `janela_atual` e `competencia_entregue`; não usa mês civil nem status de FechamentoMensal (`app/chamados/services/vigia_fio.py:843-865`). `janela_atual` respeita o corte da empresa (`app/ponto/janelas.py:36-63`). Exportada significa TXT vigente não invalidado (`app/folha/export.py:580-594`).
-
-O modelo tem `FotoBatida.criado_em`, relacionado pelo episódio `p.batida_origem`, mas não há carimbo específico do último recebimento da foto (`app/chamados/models.py:2518-2519`; `app/ponto/models.py:1036-1041`). O upload posterior usa `update_or_create`, preservando `criado_em` quando já existe registro: portanto só é possível contar **registro de foto criado após V**, não todos os recebimentos posteriores (`app/ponto/registro_batida.py:298-313`). `Batida.sincronizado_em` pertence à batida, não à foto (`app/ponto/models.py:72-79`).
-
-Texto vazio inclui whitespace pelo juiz real `texto_vazio` (`app/chamados/juizes.py:1523-1525`). O envelope já chama shell no tenant `juliani` (`bin/sonda_leitura.sh:239-240`).
-
-Sugestão de script, somente SELECT; os únicos identificadores emitidos são PKs de perguntas:
-
-```python
-# Bases: chamados/juizes.py:1523-1525;
-# chamados/services/vigia_fio.py:843-865;
-# ponto/janelas.py:60-63; ponto/models.py:1036-1041.
-import json
-from collections import defaultdict
-from django.db import connection
-from chamados.models import PerguntaDisputa
-from chamados.juizes import texto_vazio
-from chamados.services.vigia_fio import competencia_do_dia_entregue
-from ponto.janelas import janela_atual
-
-assert connection.schema_name == "juliani", "tenant inesperado"
-
-por_tipo = defaultdict(list)
-por_competencia = defaultdict(list)
-por_tipo_competencia = defaultdict(list)
-foto_por_grupo = defaultdict(list)
-todos = []
-memo = {}
-
-qs = (
-    PerguntaDisputa.objects.filter(validada_em__isnull=False)
-    .select_related(
-        "disputa__colaborador__empresa",
-        "batida_origem__foto_batida",
-    )
-    .order_by("pk")
-)
-
-for p in qs.iterator(chunk_size=500):
-    if not texto_vazio(p.resposta_colab):
-        continue
-    todos.append(p.pk)
-    empresa = p.disputa.colaborador.empresa
-    if p.data_evento is None:
-        competencia = "SEM_DATA"
-        estado = "INDETERMINADA"
-    else:
-        fim = janela_atual(p.data_evento, empresa)[1]
-        competencia = "%04d-%02d" % (fim.year, fim.month)
-        estado = (
-            "exportada"
-            if competencia_do_dia_entregue(
-                p.data_evento, empresa, memo=memo
-            )
-            else "aberta"
-        )
-
-    tipo = p.tipo_resposta
-    chave = (tipo, competencia, estado)
-    por_tipo[tipo].append(p.pk)
-    por_competencia[(competencia, estado)].append(p.pk)
-    por_tipo_competencia[chave].append(p.pk)
-
-    b = p.batida_origem
-    fb = getattr(b, "foto_batida", None) if b is not None else None
-    if b is None:
-        foto_estado = "SEM_EPISODIO"
-    elif fb is None:
-        foto_estado = "SEM_REGISTRO_FOTOBATIDA"
-    elif not fb.foto.name:
-        foto_estado = "REGISTRO_SEM_ARQUIVO"
-    elif fb.criado_em > p.validada_em:
-        foto_estado = "REGISTRO_FOTO_CRIADO_APOS_VALIDACAO"
-    else:
-        foto_estado = "REGISTRO_FOTO_CRIADO_ATE_VALIDACAO"
-    foto_por_grupo[chave + (foto_estado,)].append(p.pk)
-
-def emitir(rotulo, chave, ids):
-    print(json.dumps(
-        {"grupo": rotulo, "chave": chave, "n": len(ids),
-         "pergunta_ids": ids},
-        ensure_ascii=True,
-    ))
-
-emitir("total", [], todos)
-for chave, ids in sorted(por_tipo.items()):
-    emitir("tipo_resposta", [chave], ids)
-for chave, ids in sorted(por_competencia.items()):
-    emitir("competencia", chave, ids)
-for chave, ids in sorted(por_tipo_competencia.items()):
-    emitir("tipo_competencia", chave, ids)
-for chave, ids in sorted(foto_por_grupo.items()):
-    emitir("foto_registro", chave, ids)
-print("FIM")
-```
-
-`SEM_DATA/INDETERMINADA` evita inventar competência; o vigia da casa opta por aberta para a sua própria medida, explicitamente, mas a composição devolve `None` sem dia (`app/chamados/services/vigia_fio.py:823`, `:852-856`). Se desejar seguir literalmente aquele rótulo de medida, pode usar `SEM_DATA/aberta` e explicar a convenção.
-
-## 15/11 14:04 · sessao fef56d00aea9 · - · - · origem=Ronald (tmux)
-
-Porta/transação/rollback, conferidos:
-
-- Linhas do aval não se deslocaram nesta área: `app/chamados/models.py:3186` (`carimbar`); auxiliares em `:3180`, `:3242`, identidade em `:3251`; `save` em `:3522`; `DecisaoPergunta.registrar` em `:4086`.
-- Hoje `carimbar` não abre `atomic`; aplica C/autor/via em memória (`models.py:3212`), aplica R/V só se solicitado e houver texto (`:3213`), consulta C6 (`:3222`), fotografa lavra (`:3230`), eventualmente lavra (`:3233`), salva (`:3235`) e retorna `True` (`:3240`). C6 vivo restaura e retorna `False` (`:3226`); erro restaura e sobe (`:3223`, `:3236`).
-- `save` abre seu próprio `atomic` em `models.py:3532`; DP abre outro em `:4095`, escreve via `bulk_create` (`:4096`) e acorda células (`:4097`). Para ser o mesmo atomic, o bloco comum precisa estar dentro da porta, abrangendo `self.save(...)` e `DecisaoPergunta.registrar(...)`, com o `except` atual fora desse bloco, e `True` só depois do sucesso dos dois — inferência de desenho ancorada nesses pontos.
-- Ordem concreta preferível para preservar a leitura atual: C6 em memória → lavra opcional → `save` → `registrar` → retorno. O C6 e a lavra hoje antecedem `save` (`models.py:3222`, `:3233`, `:3235`); o ato novo não pode nascer no caminho `False` (`:3226`). Contrato do futuro leitor F1 dentro do próprio C6 não verificável nesta cópia; cuidado para não criar dependência circular no ato que ainda vai nascer [não verificado].
-- Atomic comum também mantém callbacks depois do DP: o `post_save` da pergunta agenda fecho de becos em `on_commit` (`app/chamados/signals.py:240`) e emite EventoCelula síncrono (`:259`). Só `save.atomic` permite que o callback rode antes de um `registrar` seguinte em autocommit (`models.py:3532`, `signals.py:240`) — inferência do fluxo.
-- Tanto `save` como `registrar` acordam células (`signals.py:259`, `models.py:4097`). `acordar_celulas` deduplica apenas dentro da própria chamada pelo conjunto local `vistos` (`models.py:3321`, `:3330`); deduplicação global do evento não foi inspecionada [não verificado].
-
-O que a restauração cobre:
-
-- `_desfazer_em_memoria` restaura exatamente `materializada_em`, `materializada_por_id`, `via_resolucao`, `respondida_em`, `validada_em`, `validada_por_id`, e apaga `_pv_memo` (`models.py:3244`).
-- A lavra é restaurada separadamente por `_vl.desfazer_lavra_em_memoria` (`models.py:3237`), que restaura `veredito_lavrado`, `julgado_em`, `janela_expira_em` (`app/chamados/veredito_lavrado.py:284`).
-- Se o DP falhar **depois de um save bem sucedido**, surge lacuna adicional: `save` já atualizou `_par_carregado` (`models.py:3534`); `_desfazer_em_memoria` não o restaura (`:3244`). A instância pode ficar com campos antigos e fotografia do par nova — inferência direta.
-- Não restaura linhas DP nem EventoCelula: isso depende do rollback SQL comum; DP é criado por `bulk_create` e a porta não recebe/atualiza a própria instância da pergunta (`models.py:4094`).
-- Também não invalida prefetch de decisões: `respostas_anteriores` explicitamente usa `self.decisoes.all()` e o cache existente (`models.py:3648`); o helper só apaga `_pv_memo` (`:3249`). Se o novo desenho reutilizar uma instância com decisões prefetched, isso exige consideração.
-- Rollback posterior do atomic do chamador depois de `carimbar=True` também não chama esse helper: a porta já retornou (`models.py:3240`); preservação de memória nesse cenário não é coberta pelo contrato atual [não verificado quanto a testes]. [nao verificado]
-
-Identidade:
-
-- Aceita só `VIAS_DE_IDENTIDADE` (`models.py:3261`), fonte com `admin_decidiu`, `duplicata`, `fato_ocupado`, `paridade_recusada`, `motivo_retratado` (`:2588`). `competencia_trancada` continua legível, mas não é aceita pelo escritor (`:3178`, `:3261`).
-- Grava via + instante + autor; `manter_carimbo=True` preserva instante/autor anteriores se já houver carimbo; pode gravar `recusa_motivo` no mesmo save (`models.py:3265`). Retorna `True` após save (`:3273`), recusa retorno ao fato por identidade inadequada com `False` (`:3263`).
-- Não pergunta ao C6 porque a decisão de identidade é do chamador, e C6 conhece essas vias pela própria identidade (`models.py:3252`). Portanto não é conclusão de materialização da porta `carimbar`; misturar os atos eliminaria a distinção que o código mantém (`:3160`).
-- Chamadores de identidade reais observados: admin (`models.py:3147`), retratação de motivo (`:2125`), paridade (`materializacao.py:930`), fato ocupado (`:1105`), duplicata (`fio.py:1398`). `remover_motivo` já registra RETRATACAO antes da identidade (`models.py:2120`), com motivo descritivo que não é literal `obsoleta` (`:2123`).
-
-Testes existentes, apenas lidos: [nao verificado]
-
-| Cobertura | Prova |
-|---|---|
-| C6 recusa, memória e banco sem carimbo | `app/chamados/tests/test_o261e_f2_porta_carimbo.py:713` |
-| identidade/tranca rejeitadas por `carimbar` | `test_o261e_f2_porta_carimbo.py:733` |
-| via de efeito rejeitada por identidade | `test_o261e_f2_porta_carimbo.py:740` |
-| falha de save restaura memória | `app/chamados/tests/test_o261e_f2_fila.py:187` |
-| falha de lavra restaura memória | `test_o261e_f2_fila.py:198` |
-| falha de save depois da lavra restaura lavra | `test_o261e_f2_fila.py:208` |
-| sucesso grava carimbo/autor/via | `test_o261e_f2_fila.py:224` |
-| admin identidade 2× não move carimbo | `app/chamados/tests/test_porta_pergunta_identidade.py:194` |
-| admin grava autor/via | `test_porta_pergunta_identidade.py:209` |
-| falha do futuro `registrar` após save, rollback conjunto DP/pergunta/outbox, restauração de `_par_carregado` | sem teste encontrado [não verificado] | [nao verificado]
-
-Interseções verificáveis nesta cópia:
-
-- `app/chamados/juizes.py:285` ainda lê trilha obsoleta via log; `app/chamados/services/carga_pergunta_viva.py:110` também carrega `LogAuditoria`. F1 `atos_pergunta.leitura` e diff real da outra worktree não estão verificados [não verificado].
-- `tarefa_do_dia` escolhe a última decisão (`app/chamados/services/tarefa_do_dia.py:147`) e atualmente cai em `ato_desconhecido:<ato>` para conclusão nova (`:176`); portanto recebe impacto funcional direto do DP novo, ainda que E4d não edite o arquivo.
-- `tarefa_do_dia` carrega C6 com `carga_da_vida` e consulta o juiz (`tarefa_do_dia.py:518`, `:521`), logo a migração do leitor precisa conferir também essa carga.
-- `vigia_fio` consome a porta da tarefa (`app/chamados/services/vigia_fio.py:561`, `:649`) e ainda consulta C6 em outros censos (`:776`, `:834`); recebe impacto indireto do novo ato/leitor.
-- Arquivos declarados pelo usuário para obras em voo coincidem com esses pontos; hashes/diffs reais das worktrees E4c F1 e E3-RESTO-R3 não conferidos [não verificado].
-
-## 15/11 14:03 · sessao 05c6694e5160 · - · - · origem=Ronald (tmux)
-
-Leitores e efeitos confirmados no snapshot, todos os caminhos abaixo relativos à raiz:
-
-- `responder_automaticamente` grava diretamente somente `resposta_colab=texto` e `respondida_em=instante`, incluindo conservação das projeções legadas sem linha e registro da nova decisão RESPOSTA no mesmo `atomic`; não modifica diretamente `validada_em`, `validada_por`, `materializada_em`, `materializada_por`, `via_resolucao`, `tipo_resposta` ou disputa. `app/chamados/services/disputa_emissao.py:1671-1679`.
-- A conservação consulta correspondência `(pergunta_id, ato, ato_em)` para RESPOSTA e VALIDACAO; pode adicionar a resposta antiga, mesmo vazia, se havia `respondida_em`, e a validação antiga com `validada_por_id` e texto anterior vazio, se faltavam linhas correspondentes. `app/chamados/models.py:4067-4083`.
-- O registro da nova resposta não fornece `ato_por`; campo nullable. `app/chamados/services/disputa_emissao.py:1677-1678`; `app/chamados/models.py:4017`.
-- `estado`: antes e depois continua VALIDADA se `materializada_em is None`; continua RESOLVIDA se há materialização, pois validação vence antes da leitura da resposta. `app/chamados/models.py:3124-3126`.
-- `.respondida`: muda de False para True se o carimbo anterior era nulo; se já havia carimbo, permanece True, mas troca a data. `app/chamados/models.py:3640-3641`; `app/chamados/services/disputa_emissao.py:1674`.
-- C6 atual lê os campos de projeção: `projecao_temporal_da_pergunta` retorna os campos atuais, com recorte por `agora`; `_pergunta_viva_calc` retorna False imediatamente quando `validada` não é nula, antes de considerar resposta. Assim a nova resposta posterior à validação não desassina nem reabre a pergunta neste snapshot. `app/chamados/juizes.py:1388-1405`.
-- A chave do memo lê `validada_em`, `respondida_em`, `resposta_colab`, `via_resolucao`, `materializada_em`, etc.; a troca do par invalida naturalmente o memo por mudança da chave. `app/chamados/juizes.py:854-862,893-905`.
-- Face SQL `q_vivas` exige `validada_em__isnull=True`, portanto a pergunta validada continua excluída. `app/chamados/models.py:3468-3471`.
-- App: `perguntas_do_app` primeiro filtra por `q_vivas`, depois C6; a pergunta validada fica fora do universo, tanto antes quanto depois. A partição pendente/histórico só opera nas vivas e lê `respondida_em is None` + disputa aberta. `app/chamados/services/pergunta_no_app.py:52-61,76-85`. Portanto não dizer que passa para “histórico do app” neste caso.
-- `respondida_sem_texto`: antes pode ser True se havia carimbo antigo; depois será False para texto automático não vazio. `app/chamados/juizes.py:1523-1531`.
-- `respostas_sem_veredito`: exige validação nula e materialização nula, além de carimbo OU texto; esta pergunta validada não entra antes nem depois. `app/chamados/models.py:1905-1909`.
-- `pode_fechar` exige lista sem veredito vazia E ausência de `fio_vivo`; esta pergunta não bloqueia nenhum desses dois juízos por continuar validada. Outras perguntas podem bloquear, dados não fornecidos. `app/chamados/models.py:1915-1917`; `app/chamados/juizes.py:1404-1405,1507-1516`.
-- Fila a validar usa `q_vivas` e `q_respondida_com_texto`; permanece fora pela validação. `app/chamados/juizes.py:1723-1727`; `app/chamados/models.py:3468`.
-- Validador relê do banco e, com novo `respondida_em` preenchido, retorna `{'ok': False, 'estado': 'ja_validada', ...}` antes de carimbar/materializar. `app/chamados/services/validacao.py:410-423`.
-- Se o materializador geral da disputa for chamado por outra via, seu filtro pega perguntas com `respondida_em` não nulo + `validada_em` não nulo + `materializada_em` nulo. A troca pode inserir a pergunta nesse universo se antes `respondida_em` era nulo; a própria chamada automática seguida da validação recusada não executa esse materializador pelo validador. `app/chamados/services/materializacao.py:1375-1385`; `app/chamados/services/validacao.py:421-423`.
-- `.resposta_display` passa a ler o texto novo, com tradução de dropdown/opções dependendo do tipo; fallback é a resposta literal. Histórico de respostas lê decisões ordenadas e considera anterior a resposta superada por outra. `app/chamados/models.py:3643-3659,3662-3686`.
-
-Cascatas que impedem afirmar “globalmente só dois campos mudam”:
-
-- `PerguntaDisputa.save` executa `super().save()` em atomic, portanto receptores participam do save. `app/chamados/models.py:3522-3534`.
-- Save do par acorda outbox sincronamente: os campos estão em `CAMPOS_QUE_ACORDAM`; receptor chama `acordar_celulas`. `app/chamados/models.py:3303-3305`; `app/chamados/signals.py:252-259`.
-- `DecisaoPergunta.registrar` grava decisões e chama `acordar_celulas` novamente. A função emite um evento por célula encontrada no lote, podendo usar FK ou par colaborador/data; sem célula não emite. `app/chamados/models.py:4094-4099,3314-3332`.
-- Outro receptor agenda `fechar_beco_da_disputa` em `on_commit`. `app/chamados/signals.py:229-240`.
-- Beco lê `respondida_em` para decidir se ainda há pergunta visível; exige chamado pai terminal e `pode_fechar`. Pode passar a ser beco após a gravação caso o carimbo anterior fosse nulo e os demais requisitos fechem. `app/chamados/services/becos.py:25-33`.
-- `fechar_beco_da_disputa` relê do banco e, se FECHÁVEL, chama `fechar_beco`, que resolve perguntas associadas a chamados terminais e fecha disputa quando permitido. Campos adicionais efetivamente alterados dependem do restante do estado, não fornecido. `app/chamados/services/becos.py:66-80,41-59`.
-- O chamador explícito da foto ainda relê disputa e, se aberta, lê `fio_vivo`, apara motivo e fecha quando `pode_fechar`; pode anexar ocorrência no chamado. `app/api/foto_recebida.py:74-87`.
-
-Não há `app/chamados/services/atos_pergunta.py`, `_leitura_conservada` ou `_q_validada_pelo_ato` no código desta cópia (pesquisa por nome e arquivos); só menções documentais em `app/docs/RELATO.md:14,50,90,111,127`. Não usar como implementação vigente.
-
-## 15/11 14:02 · sessao 30b1ff93b5e0 · - · - · origem=Ronald (tmux)
-
-B — evidências no snapshot:
-
-- A função está em `app/chamados/services/disputa_emissao.py:1654-1679`; a faixa citada `1640-1666` começa ainda em `reabrir_para_correcao` e não cobre a escrita automática (`app/chamados/services/disputa_emissao.py:1640-1649`, `:1673-1679`). `app/api/foto_recebida.py:48` permanece correto.
-- A premissa operacional confere: havendo texto prévio retorna `False`; caso contrário grava texto e resposta, sem guarda nem limpeza de `validada_em` (`app/chamados/services/disputa_emissao.py:1663-1679`).
-- O literal universal “só recusa quando já há texto” não confere integralmente: também chama a recusa de resposta sem texto (`app/chamados/services/disputa_emissao.py:1667-1671`), que pode levantar `RespondidaSemTexto` (`app/chamados/services/fio.py:1595-1605`). No chamador citado, o texto constante não vazio elimina esse contracaso (`app/api/foto_recebida.py:25`, `:48`).
-- O chamador ignora o booleano da resposta automática e chama o validador incondicionalmente (`app/api/foto_recebida.py:48-53`). O validador relê o banco e devolve `ok=False, estado='ja_validada'` para validação anterior; portanto não desfaz a resposta já gravada (`app/chamados/services/validacao.py:414-423`; `app/chamados/services/disputa_emissao.py:1675-1678`).
-- O fluxo externo continua: atualiza a disputa, consulta `fio_vivo`, pode aparar motivo e fechar (`app/api/foto_recebida.py:74-87`).
-- Os campos permitem validação com texto vazio: texto tem default vazio e validação é nullable (`app/chamados/models.py:2525-2527`). O total de validadas sem texto na frota é `[nao verificado]`: o anexo fornecido relata um caso, não esse censo `[nao verificado]`.
-- B autoriza registro e censo, não construção: não identifico colisão com QUEIMA/COMPLEMENTO-2 no alcance literal fornecido; referência disponível apenas no anexo virtual `avais_todos.txt`, bloco `cortes_1358.txt`, item B `[nao verificado]`.
-- O registro/censo de B não autoriza executar o escritor automático nem o fechamento descrito acima; efeitos desses caminhos não são efeitos necessários do trabalho B (`app/chamados/services/disputa_emissao.py:1675-1678`; `app/api/foto_recebida.py:74-87`; alcance do anexo `[nao verificado]`).
-- Não há repositório Git acessível nesta cópia; o delta histórico exato contra `4b75cba` é `[nao verificado]`. O deslocamento/inadequação da faixa citada no arquivo atual é verificável como indicado acima (`app/chamados/services/disputa_emissao.py:1640-1679`).
-
-Sugestão ao consolidador: Q1 deve registrar a ressalva literal e o deslocamento; não converter ausência de censo atual em “zero”, nem confundir a guarda extra com correção do risco sobre validação (`app/chamados/services/disputa_emissao.py:1663-1679`; `app/api/foto_recebida.py:25`, `:48`).
-
-_5662 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5666 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
