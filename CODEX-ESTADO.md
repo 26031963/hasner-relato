@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 14:49** · publicado em **15/11/2026 14:54** (UTC-3)
+> Ultima resposta processada: **15/11/2026 14:55** · publicado em **15/11/2026 14:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 14:55 · sessao 304d7d20af13 · E4C-F1V3 · construtor · origem=Code
+
+L2 permanece pendente: conservação mantida, sem backfill; frota [não verificado]. [Relato:1](chamados/tests/e4c_f1v7_entrega.txt:1)
+
+**Entrega parcial, sem GREEN integral.** [Pendências](chamados/tests/e4c_f1v7_entrega.txt:29)
+
+| Classe | Ocorrências |
+|---|---:|
+| A | 13 |
+| B | 30 |
+| C | 0 |
+
+As [43 classificações individuais](chamados/tests/e4c_f1v7_classificacao.txt:6) incluem motivo, sítio-fonte e estado.
+
+- GREEN local por módulo: [resultados e Ran N](chamados/tests/e4c_f1v7_resumo_modulos.txt:1).
+- RED contra c6: **6 falhas, zero erros**. [Evidência](chamados/tests/e4c_f1v7_red.txt:97)
+- Mutantes novos: **11/11 mordidos**, com comandos individuais. [Evidência](chamados/tests/e4c_f1v7_mutantes.txt:12)
+- Permanecem oito falhas no catálogo; ORM não iniciou por ausência de `django.core`. [Catálogo](chamados/tests/e4c_f1v7_catalogo.txt:84), [ORM](chamados/tests/e4c_f1v7_orm.txt:5)
+
+Funções alteradas, escritores/leitores dos campos e comandos estão no [relato de 34 linhas](chamados/tests/e4c_f1v7_entrega.txt:8).
+
+PERGUNTAS: L1 e L2 seguem pendentes. [Relato:33](chamados/tests/e4c_f1v7_entrega.txt:33)  
+LEI-AKITA: padrão **Parallel Change / Expand-Contract**. [Relato:34](chamados/tests/e4c_f1v7_entrega.txt:34)
 
 ## 15/11 14:49 · sessao 337107b7918f · E3-RESTO-R3 · censo · origem=Code
 
@@ -736,68 +760,4 @@ A porta atual não contém atomic abrangendo seu corpo; chama `save` e retorna T
 
 A nomenclatura do ato futuro e o significado de seu `ato_motivo` não estão implementados; o catálogo atual não possui conclusão e `ato_motivo` é texto livre sem choices (`app/chamados/models.py:4000`, `:4019`). A matriz prospectiva pode registrar “conclusão, nome pendente”, conservando a via dentro do ato conforme o aval fornecido; qualquer decisão adicional sobre codificar a via em `ato_motivo` é [não verificado].
 
-## 15/11 14:04 · sessao 5aae7f45bbfd · - · - · origem=Ronald (tmux)
-
-Censo feito por busca textual + AST em memória; nenhuma escrita nem teste executado. O snapshot não contém `atos_pergunta.py`, `_leitura_conservada` ou `instante_materializacao`; o leitor F1 descrito no anexo permanece **[nao verificado] nesta cópia**. [nao verificado]
-
-**Escritores de `DecisaoPergunta`**
-
-Existem 14 chamadas produtivas à porta `registrar`; nenhuma delas usa apelido de import. O escritor físico é `bulk_create`, sob atomic, seguido do evento da célula (`app/chamados/models.py:4095`, `:4096`, `:4097`).
-
-| Função | Chamada / ato |
-|---|---|
-| `ChamadoColaborador.ressuscitar_perguntas` | Preserva RESPOSTA/VALIDACAO sem linha — `app/chamados/models.py:1610` |
-| `DisputaSupervisao.fechar` | SILENCIO após `fechar_por_admin` — `app/chamados/models.py:1985`, `:1988` |
-| `DisputaSupervisao.remover_motivo` | RETRATACAO, motivo textual “motivo … removido”, depois identidade — `app/chamados/models.py:2120`, `:2123`, `:2125` |
-| `PerguntaDisputa._nascer` | Preserva RESPOSTA/VALIDACAO recebidas no nascimento — `app/chamados/models.py:3100`, `:3102` |
-| `responder_pergunta_disputa_core` | RESPOSTA + legado — `app/chamados/services/disputa_emissao.py:1522`, `:1525` |
-| `reabrir_para_correcao` | REABERTURA ou RECUSA, com foto — `app/chamados/services/disputa_emissao.py:1619`, `:1631`, `:1632` |
-| `responder_automaticamente` | RESPOSTA + legado — `app/chamados/services/disputa_emissao.py:1676`, `:1677` |
-| `carimbar_resposta_pela_trilha` | RESPOSTA — `app/chamados/services/disputa_emissao.py:1697`, `:1698` |
-| `_carimbar_validacao` | VALIDACAO + legado — `app/chamados/services/validacao.py:162`, `:164` |
-| `devolver_validacao_recusada` | DEVOLUCAO + legado — `app/chamados/services/validacao.py:227`, `:230` |
-| `_materializar_ausencia_de_resposta` | ABSORCAO se `carimbar` retornou verdadeiro — `app/chamados/services/materializacao.py:567`, `:568`, `:569` |
-| `fechar_o_fio_do_dia` | SILENCIO após `fechar_por_admin` — `app/ponto/services/veredito_celula.py:190`, `:195` |
-| backfill `aplicar` | SILENCIO, relógio `materializada_em` — `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`, `:325` |
-| backfill `_executar_dia` | RESPOSTA/VALIDACAO conservadas — `app/chamados/management/commands/backfill_fio_morto_e4b.py:141` |
-
-Os dicionários de RESPOSTA/VALIDACAO conservadas nascem em `app/chamados/models.py:4076` e `:4080`; não são escrita física. A consulta de correspondência considera exclusivamente esses dois atos (`app/chamados/models.py:4070`).
-
-Fora do fluxo de produção há uma exceção operacional explícita: a máscara da sombra resolve modelos dinamicamente e usa `_base_manager.bulk_update` (`bin/sombra_mascara_pessoal.py:46`, `:51`, `:62`, `:64`), incluindo os campos DP `ato_texto`/`ato_motivo` (`bin/sombra_regras_pessoais.py:142`). Não é chamada a `registrar` nem nascimento de ato.
-
-**Choices**
-
-`ATOS`: `resposta`, `validacao`, `devolucao`, `recusa`, `reabertura`, `silencio`, `retratacao`, `absorcao` (`app/chamados/models.py:4000`, `:4001`, `:4002`).
-
-Não há `ATO_MOTIVO` com choices: `ato_motivo` é `CharField(max_length=240, blank=True, default='')` (`app/chamados/models.py:4019`; também migration histórica `app/chamados/migrations/0051_decisao_pergunta.py:47`). Existe apenas a constante textual `MOTIVO_PROJECAO_SEM_LINHA` (`app/chamados/models.py:4054`).
-
-A conclusão nova falta em `ATOS` (`app/chamados/models.py:4002`). A via ainda não tem campo próprio em DP: campos atuais em `app/chamados/models.py:4014` a `:4026`. Nome do novo ato e convenção para codificar a via em `ato_motivo`: **[nao verificado]**, decisão de desenho ainda não presente no código. ABSORCAO exige ambas as referências, e nenhum outro ato pode recebê-las (`app/chamados/models.py:4035`).
-
-**Leitores e impacto**
-
-| Leitor | Comportamento atual / impacto |
-|---|---|
-| `tarefa_do_dia._pela_decisao` | **Risco concreto:** pega a última linha em `:147`; despacha os oito atos conhecidos em `:148`–`:175`; ato novo cairá em `ato_desconhecido:<valor>, None` em `:176`. Referências: `app/chamados/services/tarefa_do_dia.py:147`, `:176`. |
-| Carga de `tarefa_do_dia` | Carrega todos os atos ordenados por pergunta/instante/PK; guarda os anteriores a `agora`; RETRATACAO posterior tem tratamento específico. Conclusão entrará na sequência normalmente e poderá tornar-se a última. `app/chamados/services/tarefa_do_dia.py:410`, `:412`, `:414`. |
-| `PerguntaDisputa.respostas_anteriores` | Considera só RESPOSTA e `ATOS_COM_FOTO`; conclusão será ignorada, preservando histórico existente. `app/chamados/models.py:3651`, `:3652`, `:3656`. |
-| `disputa_emissao.respostas_anteriores` | Encaminha ao método do modelo; mesmo impacto. `app/chamados/services/disputa_emissao.py:2122`. |
-| `fio.montar_chamados_fio` | Prefetch de todas as decisões, com autores; passa a carregar também a nova linha, consumida pelo leitor anterior. `app/chamados/services/fio.py:261`. |
-| `modal_fio` | Usa `perg.respostas_anteriores`; não passa a exibir conclusão diretamente. `app/templates/chamados/partials/modal_fio.html:205`, `:209`, `:212`. |
-| `linhas_da_projecao_sem_linha` | Só busca RESPOSTA/VALIDACAO com correspondência de instante; conclusão não elimina esse passivo. `app/chamados/models.py:4070`, `:4074`, `:4078`. |
-| `backfill_decisoes_pergunta.admin_decidiu_sem_ato` | Só SILENCIO/VALIDACAO fazem a pergunta sair do conjunto sem ato. Conclusão não será reconhecida por esse filtro. `app/chamados/management/commands/backfill_decisoes_pergunta.py:99`, `:105`. |
-| Rechecagem do apply desse backfill | Repete filtro SILENCIO/VALIDACAO; mesmo limite. `app/chamados/management/commands/backfill_decisoes_pergunta.py:315`. |
-| `foto_e4b` | Fotografa todas as DP do colaborador e todos os campos concretos: a nova conclusão aparecerá no diff como linha criada. `app/chamados/services/foto_e4b.py:250`, `:251`, `:280`. |
-| `atos_pergunta.leitura` | Ausente da cópia; contrato/impacto da árvore F1 fornecido pelo anexo **[nao verificado]**. |
-| Máscara da sombra | Lê e mascara `ato_texto`/`ato_motivo` de todas as linhas, inclusive novas; atenção se via for armazenada em motivo livre. `bin/sombra_regras_pessoais.py:142`, `bin/sombra_mascara_pessoal.py:51`, `:55`. |
-
-Não achei outro leitor direto de DP, alias de DP, relação `decisoes` da pergunta ou SQL direto sobre sua tabela no código produtivo pesquisado; garantia além da análise estática: **[nao verificado]**.
-
-**Provas existentes úteis**
-
-- Escritor único e proibição de atualização/remoção: AST em `app/chamados/tests/test_e1_entradas.py:185`, teste em `:217`; tem mordida de update/delete em `:224`. Não segue aliases genéricos: comparação textual do nome em `:196`, `:201`.
-- Imutabilidade funcional: `app/chamados/tests/test_e1_entradas.py:78`.
-- ABSORCAO exatamente uma linha após duas materializações, referências e relógio iguais ao carimbo: `app/chamados/tests/test_e1_entradas.py:239`, `:242`, `:246`, `:248`, `:250`.
-- DP + EventoCelula no mesmo atomic, inclusive falha do outbox: `app/chamados/tests/test_e4_expand.py:353`, `:375`, `:378`.
-- Teste do ato novo de conclusão: **sem teste**; valor ainda ausente das choices (`app/chamados/models.py:4002`).
-
-_5667 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5668 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
