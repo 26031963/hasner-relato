@@ -1,7 +1,18 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 22:06** · publicado em **14/11/2026 22:08** (UTC-3)
+> Ultima resposta processada: **14/11/2026 22:15** · publicado em **14/11/2026 22:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 22:15 · sessao e70026a4847b · - · - · origem=Ronald (tmux)
+
+Dois achados concretos:
+
+- `retratar_exportada` pode gravar zero sobre desconhecido: recebe os novos `None` de `por_dia_da_grade` em `ponto/services/dia_pago.py:471` e aplica `or 0` em `:484`, `:485`, `:489` e `:491`. Antes a ausência de ata bloqueava o caminho. Cabe uma guarda antes de qualquer escrita, preservando as linhas e devolvendo `sem_ata`.
+- O contador ainda afirma zero quando o dia justificado sem ata também não possui `DiaPago` positivo: o universo consultado vem exclusivamente desses pagamentos (`ponto/services/dia_pago.py:709–714`), e o laço vazio retorna zero (`:727`). O teste novo cobre pagamento já existente (`ponto/tests/test_justificativa_c9_sem_banco.py:125`), sem cobrir hoje/futuro sem lavratura.
+
+O resumo preserva `dias_abono=None` e motivo (`relatorios/cartao_pela_celula.py:191–192`, `:208`), mas a renderização PDF ainda oculta esse desconhecido pelo `or 0` do badge (`relatorios/pdf_espelho.py:787`).
+
+C1 mantém cobertura antes do pareamento e entrega o W final explicitamente à fase financeira (`escala/utils.py:1891`, `:2101`, `:2114`); não identifiquei outra regressão concreta nessa sequência.
 
 ## 14/11 22:06 · sessao 908abe507e39 · - · - · origem=Ronald (tmux)
 
@@ -1235,46 +1246,4 @@ Provas precisas:
 - `app/ponto/tests/test_registrar_batida.py::test_oposto_60s_automatico_recusa` (`:32`), `::test_oposto_60s_humano_cria_e_flaga` (`:45`), `::test_mesmo_tipo_60s_dedup` (`:67`).
 - Prova comportamental especifica de aprovar offline: nenhuma localizada. [nao verificado]
 
-## 14/11 21:45 · sessao 5f8c8ea3ee26 · - · - · origem=Ronald (tmux)
-
-**EventoCelula: censo e transicoes.** Campos operacionais: `processado_em`, `tentativas`, `erro`; tres estados derivados dos predicados: pendente vivo (`NULL`, `<5`), morto (`NULL`, `>=5`), processado (timestamp). Modelo: `app/escala/models.py:1857`; predicados: `app/chamados/reconciliador.py:1250`, `:1256`; escrita de sucesso: `:1402`.
-
-| Transicao | Juiz | Operacao/escritor | Persistencia | Leitores/prova |
-|---|---|---|---|---|
-| inexistente → pendente vivo | Criterio distribuido nas nascentes listadas abaixo; escritor nao guarda/deduplica (`app/ponto/portas/celula.py:945`) | `emitir_evento_celula`, INSERT unico (`app/ponto/portas/celula.py:954`) | IDs da celula e colaborador, data; `criado_em`, `processado_em=NULL`, `tentativas=0`, `erro=''` (`app/escala/models.py:1857`) | `eventos_pendentes` (`app/chamados/reconciliador.py:1247`); prova `app/ponto/tests/test_o_outbox_celula.py::test_lavrar_veredito_com_save_gera_1_evento` (`:56`, assert `:61`) |
-| pendente vivo → pendente vivo com tentativa incrementada | `falhas` nao vazio (`app/chamados/reconciliador.py:1395`), capturado por excecao (`:1389`) ou acumulado pelas operacoes (`:1369`, `:1373`, `:1376`, `:1384`) | `consumir_eventos_celula`, UPDATE (`:1396`) | `tentativas=F+1`, `erro` concatenado e truncado em 500; processado continua NULL (`:1396`) | Prova `app/ponto/tests/test_o_outbox_celula.py::test_MORDE_falha_de_UM_chamado_deixa_os_eventos_do_colab_pendentes` (`:209`, asserts `:238`) |
-| pendente vivo na tentativa 4 → morto na tentativa 5 | Mesmo ramo de falha (`app/chamados/reconciliador.py:1395`); corte 5 (`:1210`, `:1256`) | Mesmo UPDATE (`:1396`) | tentativa 5, erro, NULL; deixa de ser selecionado pelo consumidor (`:1250`) | Prova parcial: `app/ponto/tests/test_o_outbox_celula.py::test_MORDE_evento_morto_conta_a_parte_e_nao_cega_vigia_nem_semeadura` (`:460`); teste monta morto por update (`:467`), nao executa cinco falhas |
-| pendente vivo → processado | Ausencia de falhas e de adiamento (`app/chamados/reconciliador.py:1395`, `:1397`, `:1401`) | `consumir_eventos_celula`, UPDATE (`:1402`) | `processado_em=agora`; nao limpa erro/tentativas anteriores (`:1402`) | Prova `app/ponto/tests/test_o_outbox_celula.py::test_MORDE_consumir_2x_e_1_retratacao_0_duplicata` (`:163`); ordem fabrica antes da marca: `app/chamados/tests/test_e4_c20.py::test_consumidor_chama_fabrica_antes_de_marcar_evento` (`:30`) |
-| processado → linha removida | `processado_em < agora-7 dias` (`app/chamados/reconciliador.py:1409`); constante 7 (`:1211`) | Cleanup ao final de `consumir_eventos_celula`, DELETE (`:1409`) | Remove linha (`:1409`) | Teste especifico nao encontrado [nao verificado] |
-
-**Sem transicao persistida:** adiamento por `_orf['adiadas']>0` deixa pendente sem consumir tentativa (`app/chamados/reconciliador.py:1379`, `:1397`). Prova `app/chamados/tests/test_orfas_pelo_evento.py::test_MORDE_lampada_de_hoje_encerra_amanha_sem_batida_nova` (`:235`, asserts `:247`, `:248`, `:255`).
-
-**Nascentes diretas: 9 sitios em 8 funcoes**, todos chamam o unico INSERT `app/ponto/portas/celula.py:954`:
-
-- `reverter_regeneracao_dia`: `app/ponto/portas/celula.py:838`.
-- `salvar_e_emitir`: `app/ponto/portas/celula.py:965`; juiz intersecao dos campos lavrados com `{veredito,ata}` (`:942`, `:961`, `:964`).
-- `ChamadoColaborador.abrir`: `app/chamados/models.py:1027`; nascimento efetivo, modulo de turno e FK celula (`:1018`, `:1025`).
-- `ChamadoColaborador.criar`: `app/chamados/models.py:1146`; modulo de turno e FK (`:1144`).
-- `PerguntaDisputa.acordar_celulas`: `app/chamados/models.py:3304`; resolve FK/senao par, pula ausente e deduplica celula no lote (`:3295`).
-- `_cartorio_post_save_chamado`: `app/chamados/signals.py:209`; mudanca de estado, nao criado, estado vivo, modulo de turno e FK (`:193`, `:200`, `:203`); INSERT best-effort em savepoint (`:207`).
-- `semear_eventos_celula`: dois sitios `app/chamados/reconciliador.py:1298`, `:1311`; chamado vivo e pergunta orfa respectivamente, sem pendente vivo existente (`:1290`, `:1296`, `:1303`, `:1309`).
-- `_emitir_eventos_dos_turnos_fechados`: `app/ponto/nucleo.py:93`; acionado por `recompute_turnos` quando aberto deixa de existir (`:64`, `:66`), somente celulas existentes (`:92`).
-
-**Nascentes indiretas importantes — citar so sitio:**
-
-- `salvar_e_emitir`: `lavrar_veredito` em `app/ponto/portas/celula.py:1066`, `:1098`; desfazer julgamento futuro `:1167`; `carimbar` `:1201`; `carimbar_precedencia` `:1216`. Ramo de somente status em `:1083` nao emite, pela intersecao em `:961`.
-- `acordar_celulas`: `app/chamados/signals.py:259`; `app/chamados/models.py:1615`, `:3063`, `:4010`; `app/chamados/services/fio.py:934`, `:1046`; `app/chamados/services/disputa_emissao.py:1633`.
-- Command normal consome em `app/chamados/management/commands/consumir_eventos_celula.py:31`; `--semear` somente semeia e retorna (`:28`, `:29`, `:30`). Exclusao de execucao no command (`:19`), nao dentro de `consumir_eventos_celula`; advisory lock em `app/chamados/reconciliador.py:1236`.
-- Cron a cada minuto: `app/config/crons.py:394`.
-
-**Quem consome e quem marca:** `consumir_eventos_celula` seleciona pendentes vivos ordenados por criacao/PK (`app/chamados/reconciliador.py:1344`), chama sete operacoes em sitios `:1365`, `:1366`, `:1369`, `:1373`, `:1376`, `:1384`, `:1388`, e depois marca (`:1393`). Se colaborador nao existe, pula operacoes e pode marcar processado mesmo assim (`:1357`, `:1358`, `:1402`). Lote default 500 (`:1316`), prazo 45 s (`:1212`), eventos ja lidos nao sao repetidos na mesma execucao (`:1344`, `:1347`).
-
-**L1:** nascimento tem criterios distintos nas oito funcoes listadas; sucesso tem composicao `falhas/adiar`, nao um predicado puro central (`app/chamados/reconciliador.py:1395`, `:1397`).
-
-**L2:** nenhum achado em EventoCelula fora de `emitir_evento_celula` e `consumir_eventos_celula`: INSERT `app/ponto/portas/celula.py:954`; UPDATE tentativa `app/chamados/reconciliador.py:1396`; UPDATE consumo `:1402`; DELETE `:1409`. Nao identifiquei selo especifico que proiba outro escritor do proprio EventoCelula [nao verificado].
-
-**L3:** morto e alcancavel pelo incremento (`app/chamados/reconciliador.py:1396`) e nao tem saida de producao encontrada: excluido dos pendentes (`:1250`), retencao so processados (`:1409`). Terminal **declarado** pelo comentario `:1208`. Semear cria outro evento, nao ressuscita o morto; prova `app/ponto/tests/test_o_outbox_celula.py:469`, `:472`.
-
-Nao executei testes [nao verificado]. Nao ha dado de banco/log fornecido para quantidades operacionais desta fila [nao verificado]. [nao verificado]
-
-_5344 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5345 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
