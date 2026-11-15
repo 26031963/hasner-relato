@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:16:20.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.7 MB). Acoes na janela: **1509**.
+**Medido em 15/11/2026 07:21:29.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.7 MB). Acoes na janela: **1511**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:16:32 | Bash | Check JUSTIFICATIVA suite progress | `cd /home/ronald/saas-hasner && date +%H:%M; cat logs/JUSTIFICATIVA-PAGA/c17/inteira.rc 2>/dev/null \|\| echo sem-rc; ps -p 1017257 -o pid,etime --no-headers` |
+| 07:16:27 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 07:16:16 | Bash | Drop the failing .only() on disputas and rerun on sombra | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && python3 - <<'EOF' p='logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/q5_sonda.py' s=open(p).read() a=''' .select_related("colaborador", "chamado__colaborador") .only( "pk", "colaborador__empresa_id", "chamado_id", "chamado__pk", "chamado__contexto_json", "chamado__celula_id", "chamado__colaborador_id", "chamado__colaborador__empresa_id", )  ...` |
 | 07:16:03 | Bash | Run T4 sonda on sombra and show totals | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && rm -rf $D/__pycache__ && timeout 900 bin/sonda_leitura.sh --sombra $D/q5_sonda.py > $D/q5_saida.txt 2>&1; echo rc=$?; grep -E 'TOTAL\|M2_(HOJE\|PRIMEIRO\|ULTIMO)\|PROXIMA_VIRADA\|DIAS_EXPORTADOS\|_DIVERGENTE \|ERRO\|FIM' $D/q5_saida.txt \| head -60` |
 | 07:15:58 | Bash | Spot-check Codex citations and extract sonda script | `sed -n 556,558p folha/export.py; sed -n 60,61p ponto/janelas.py; sed -n 30,31p chamados/catalogo/motor.py; cd .. && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && sed -n '/^```python$/,/^```$/p' $D/q5.r \| sed '1d;$d' > $D/q5_sonda.py && python3 -m py_compile $D/q5_sonda.py && echo compila` |
