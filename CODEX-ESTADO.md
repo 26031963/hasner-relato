@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 11:23** · publicado em **15/11/2026 11:28** (UTC-3)
+> Ultima resposta processada: **15/11/2026 11:34** · publicado em **15/11/2026 11:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 11:34 · sessao 6ad4362f604d · - · - · origem=Ronald (tmux)
+
+- A assinatura é `dono_da_divergencia(horas_do_dia, em_cadastro_x_realidade, folga_nao_definida=False, sem_vinculo_no_dia=False, sem_vinculo_em_dia_de_trabalho=False, batida_fora_de_turno=False, fase_deslocada=False)`. Não recebe colaborador; julga **um dia-colab**, retornando uma string. `app/ponto/management/commands/e6_oraculo.py:53-55`.
+
+- A precedência efetiva é: folga indefinida/sem vínculo → CADASTRO; batida fora de turno → BATIDA; quantidade ímpar → BATIDA; fase deslocada → CADASTRO; pertencimento à lista Cadastro × Realidade → CADASTRO; restante → ESTRUTURA. Essa precedência resolve condições **do mesmo dia**, não conflitos entre dias de um colaborador. `app/ponto/management/commands/e6_oraculo.py:98-110`.
+
+- O leitor existente para montar os insumos é `InsumosDoDono(colaborador, ini, fim, hoje, espelho=None, *, agora, dias_de_fase=None, cadastro=None, sem_motor=False, cxr=None)`; sua API de julgamento é `dono(data)`. Inicializa batidas/oráculo; carrega turnos e fase sob demanda; aceita espelho já obtido para evitar outra chamada ao motor. `app/ponto/management/commands/e6_oraculo.py:128-195`.
+
+- **O E6 não atribui um dono único ao colaborador.** Acrescenta `c.pk` em conjuntos independentes por dono, portanto o mesmo colaborador pode estar em vários conjuntos. Imprime as contagens por dono e a união separadamente. `app/ponto/management/commands/e6_oraculo.py:378-381`, `app/ponto/management/commands/e6_oraculo.py:429-441`. Outro consumidor agrupa pautas por `(dono, colaborador, competência)`, igualmente permitindo mais de um dono por colaborador. `app/ponto/services/pautas_dos_discordantes.py:88-97`, `app/ponto/services/pautas_dos_discordantes.py:134-151`.
+
+- Assim, usar diretamente esses conjuntos para `ESTRUTURA a / CADASTRO b / BATIDA c` não produz partição exclusiva de colaboradores. Uma precedência mensal entre donos, ou eleição de um dia representante, precisaria de regra explícita; regra existente para isso [não verificado]. O próprio E6 soma donos em **dia-colab**, enquanto calcula colaboradores divergentes por união. `app/ponto/management/commands/e6_oraculo.py:425-441`.
+
+- Além disso, o universo original do comando E6 vem de `FechamentoMensal`, por empresa ativa; não aplica ali filtro `Colaborador.situacao='ativo'`. A opção `--so-txt` restringe aos classificados como `entra`; isso não é uma medição de todos os ativos com trabalho. `app/ponto/management/commands/e6_oraculo.py:303-314`.
+
+- Custo: construir `InsumosDoDono` consulta batidas e deriva o oráculo; `dono(data)` usa turnos/fase cacheados, mas pode consultar cadastro por dia e verificar batidas soltas. Sem espelho fornecido, pode pedir `espelho_do_colab` ao resolver Cadastro × Realidade. Reutilizar a instância por colaborador/janela e o espelho existente evita repetição; tempo em produção [não verificado]. `app/ponto/management/commands/e6_oraculo.py:149-195`, `app/ponto/management/commands/e6_oraculo.py:198-212`, `app/ponto/management/commands/e6_oraculo.py:328`.
+
+## 15/11 11:30 · sessao c7ffade3ce53 · - · - · origem=Ronald (tmux)
+
+Classificação das dez falhas herdadas, sem editar arquivos:
+
+| Falhas | Diagnóstico | Cura estreita |
+|---|---|---|
+| C8b ausência, memo e dois ranges: 4 | Fixture ainda representa fechamento somente por `materializada_em`; E4c exige ato aplicável. A expectativa sobre ausência permanece correta. | Acrescentar `SILENCIO` em `ato_em=AGORA` à fixture materializada e fornecer `perguntas=ps` ao acervo. Manter as assertivas. |
+| C8b duas testemunhas: 2 | Fixture conserva texto, mas remove `respondida_em` e não fornece `RESPOSTA`; a leitura retorna texto vazio e o slot desaparece. | Fornecer DP `RESPOSTA` com texto e instante fixos; usar célula `concorde/admin` com marco ainda pendente para chegar ao ramo E. Manter os cinco resultados esperados. |
+| C8b slot noturno: 1 | Mesma ausência de DP `RESPOSTA`. | Acrescentar ato `RESPOSTA '06:00'`; preservar assertiva do slot e testemunha noturna. |
+| C8c via futura: 1 | Candidato a defeito F1: a projeção temporal recorta R/V, mas entrega via crua sem ato aplicável. | Recortar vias não A06 pela testemunha temporal. |
+| E4b via futura: 1 | Mesmo problema da via não A06. | Mesma cura produtiva. |
+| Pós-suite E=True: 1 | Assertiva antiga usa C futuro para invalidar testemunha E que o próprio teste fixa como verdadeira em qualquer instante. | Pela E4c, manter E como fonte e esperar pergunta morta nos dois instantes; acrescentar caso separado de testemunha futura corretamente recortada. | [nao verificado]
+
+Evidências:
+
+- Fixtures C8b: `chamados/tests/e3_c8b_apoio.py:215`; ausência/memo/ranges: `chamados/tests/test_e3_c8b_sem_banco.py:287`, `:301`, `:337`.
+- Texto sem resposta testemunhada: `chamados/tests/test_e3_c8b_sem_banco.py:368`, `:371`, `:390`; consumo do texto lido: `chamados/juizes.py:422`, `:437`, `:451`.
+- Fechamento automático exige terminal: `chamados/juizes.py:755`.
+- Via crua na projeção: `chamados/juizes.py:1454`; expectativas C8c/E4b: `chamados/tests/test_e3_c8c_sem_banco.py:134`, `chamados/tests/test_e4b_classe_e_memoria.py:387`.
+- E=True independente de instante: `chamados/tests/test_e3_pos_suite_sem_banco.py:97`; assertiva antiga: `:98`.
+
+Experimentos exclusivamente em memória confirmaram:
+
+- DP `SILENCIO`: vida=False com ausência tanto com carga quanto avulso; retirar ausência da carga retorna vida=True.
+- DP `RESPOSTA` + célula `concorde/admin`: os cinco casos de testemunhas devolvem exatamente `False/True/True/False/False`, com zero erros registrados.
+
+Comando dos experimentos: `PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY' ... PY`. Saída não foi salva em arquivo; certificação independente [nao verificado].
 
 ## 15/11 11:23 · sessao 05d4cfe8fe27 · E4C-F1V2 · construtor · origem=Code
 
@@ -741,331 +785,4 @@ A completude do delta entre os hashes, além do anexo fornecido, permanece [nao 
 
    Os testes do delta chamam diretamente a rejeição; não verificam esse tratamento nas views nem o rollback conjunto de saldo/agendamento no chamador produtivo (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:180`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:200`).
 
-## 15/11 10:27 · sessao 14cd1bafc151 · FIO-MORTO-CLASSE-D · leitura · origem=Code
-
-**1. O colaborador estar na lista não implica que o dia esteja nela.** `_colabs` contém os colaboradores das linhas; `_dias` contém somente assinaturas com `data`, indexadas por `(colab_id, str(data)[:10])`. Dono ausente ou divergente **não exclui a chave**: ela permanece com valor `None`. [vigia_fio.py:216](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:216), [cadastro_realidade.py:1014](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:1014), [cadastro_realidade.py:1038](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:1038).
-
-Os ramos de exclusão na composição são:
-
-| Camada | Predicado exato / efeito | Função real |
-|---|---|---|
-| Recorte da lista | `vis = {e.pk for e in empresas_visiveis()}`, intersectado com `self.empresas`, quando fornecido | `ListaDoAdmin._carregar`; visíveis são empresas ativas, excluído CNPJ de diagnóstico. [vigia_fio.py:211](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:211), [queries.py:78](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/colaboradores/queries.py:78) |
-| Lista sem conteúdo | `not por_colab and not cad` → `return None` | `cadastro_realidade.lista`. [cadastro_realidade.py:867](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:867) |
-| Colaborador excluído | `v is None or (empresas is not None and v['empresa_id'] not in empresas)` | `lista`, alimentada por `_vinculos`. Esse ramo elimina o colaborador inteiro, portanto não explica sozinho a classe d. [cadastro_realidade.py:743](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:743), [cadastro_realidade.py:878](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:878) |
-| Assinatura A desconhecida | `cod not in ASSINATURAS` → `continue`; linha só é publicada se `linha['assinaturas']` | `lista`. [cadastro_realidade.py:917](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:917) |
-| Assinatura sem dia | `not a.get('data')`: não alimenta `_dias`; assinatura de outra data alimenta outra chave | `dias_na_lista`. Inclui assinaturas agregadas, mesmo quando o detalhe textual menciona dias. [cadastro_realidade.py:1025](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:1025) |
-| C9/C10/C12 não publicaram aquele dia | Ausência de item datado correspondente nas lavras lidas; C12 admite item sem `data` | `_teto_do_dia`, `_fase_deslocada`, `_cxr_do_motor`, respectivamente. [cadastro_realidade.py:344](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:344), [cadastro_realidade.py:386](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:386), [cadastro_realidade.py:360](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:360) |
-| Falha parcial de produtor | Os `except Exception` preservam a lista, mas deixam de acrescentar as assinaturas daquele produtor | `lista`: C2–C12 possuem guardas próprias; C1 é carregada antes delas. [cadastro_realidade.py:781](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:781), [cadastro_realidade.py:785](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:785) |
-| Falha integral da lista | Exceção em `_carregar` deixa `_dias is None`; `dia_na_lista` retorna `None`, não `(False, None)` | `ListaDoAdmin._carregar` / `dia_na_lista`. Portanto essa falha não satisfaz o predicado d. [vigia_fio.py:219](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:219), [vigia_fio.py:230](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:230), [vigia_fio.py:696](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/chamados/services/vigia_fio.py:696) |
-
-Na **C11**, todos os vetos, na ordem real, são:
-
-| Ramo | Predicado exato | Quem responde |
-|---|---|---|
-| Fora das janelas | Empresa fora de `Empresa.objects.filter(ativa=True)`/recorte; competência ausente de `competencias_a_lavrar`; ou fora de `[ini, min(fim, ontem)]`; janela vazia não entra | `_folga_nao_definida_sem_porta`, `competencias_a_lavrar`, `janela_fechamento`. [cadastro_realidade.py:542](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:542), [he_pendente_lavrado.py:209](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/services/he_pendente_lavrado.py:209) |
-| Fora do queryset | Não satisfaz a conjunção `colaborador__empresa=emp`, `colaborador__situacao='ativo'`, `veredito='indefinida'`, `protestos__contains=['PREVISTO_COM_DIA_INDEFINIDO']`, `data__gte=ini`, `data__lte=fim`; `not cels` encerra o lote | Query de `beco_em_lote`. [cadastro_realidade.py:449](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:449) |
-| Sem pergunta viva | `not vivas` | `alimentar_portas(..., agora=agora)['vivas']`, lido por `beco_em_lote`. [cadastro_realidade.py:458](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:458), [cadastro_realidade.py:468](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:468) |
-| Já tem porta | `porta_da_tarefa(tarefas[jan].tarefa(col[cid], d)) is not None` | `carga_da_tarefa` / `porta_da_tarefa`; `not dias` encerra o lote após esses dois vetos. [cadastro_realidade.py:464](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:464) |
-| Sem âncora terminal | `not sorted({a for _p, a in ancs if a and st.get(a) in TERMINAIS})` | Âncora por `chamado_que_lista(p)`; status por query de `ChamadoColaborador`; terminais por `catalogo.motor.TERMINAIS`. Composição em `beco_em_lote`. [cadastro_realidade.py:471](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:471), [cadastro_realidade.py:496](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:496) |
-| Folga não definida falsa | `not cad[(cid, ini)](d)['folga_nao_definida']` | `supra_juiz.cadastro_do_dia` → `vinculo_do_dia` → `_insumos_do_vinculo` → `EscalaColaborador.defeito_folga_nao_definida`. Sem vínculo, o insumo é `False`; com vínculo, é falso se não for 6x1, houver `folga_dia_semana` ou existir `FolgaDia` no mês. [cadastro_realidade.py:492](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:492), [cadastro_realidade.py:499](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:499), [supra_juiz.py:173](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/supra_juiz.py:173), [supra_juiz.py:206](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/supra_juiz.py:206), [models.py:1241](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/models.py:1241) |
-
-**2. O juiz L-099 distribui responsabilidade; não detecta divergência.** Sua assinatura real é esta. [e6_oraculo.py:53](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:53):
-
-```python
-def dono_da_divergencia(
-    horas_do_dia,
-    em_cadastro_x_realidade,
-    folga_nao_definida=False,
-    sem_vinculo_no_dia=False,
-    sem_vinculo_em_dia_de_trabalho=False,
-    batida_fora_de_turno=False,
-    fase_deslocada=False,
-):
-```
-
-Ela não recebe `(colab, dia)` e sempre retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`. Não há retorno especial “sem divergência”: `dono_da_divergencia([], False)` retorna `ESTRUTURA`. [e6_oraculo.py:98](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:98).
-
-A montagem que permite perguntar por colaborador/dia é esta, seguida de `.dono(data)`. [e6_oraculo.py:128](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:128), [e6_oraculo.py:182](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:182):
-
-```python
-InsumosDoDono(
-    colaborador, ini, fim, hoje, espelho=None, *,
-    agora, dias_de_fase=None, cadastro=None,
-    sem_motor=False, cxr=None,
-).dono(data)
-```
-
-`None` com `sem_motor=True` significa **sem resposta por falta de cobertura da lavra**, não `sem_divergencia`. O command E6 verifica a divergência antes de chamar o dono. [e6_oraculo.py:142](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:142), [e6_oraculo.py:189](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:189), [e6_oraculo.py:334](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:334).
-
-**3. Script para o envelope.** O motivo observa o primeiro veto **efetivamente executado** pela C11 durante a montagem original; não força a avaliação dos ramos posteriores. Para `sem_divergencia`, aplica as comparações do E6; dias que o E6 não julga saem como erros nomeados. [cadastro_realidade.py:469](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/escala/services/cadastro_realidade.py:469), [e6_oraculo.py:334](/home/ronald/codex_ws/77dfa94fa85e3403e984a17bdaf625c52e26e3a1/app/ponto/management/commands/e6_oraculo.py:334).
-
-A soma e a distribuição na sombra continuam **[nao verificado]**.
-
-```python
-# FIO-MORTO-CLASSE-D; copia 77dfa94fa85e3403e984a17bdaf625c52e26e3a1.
-from django.utils import timezone as tz
-agora = tz.now()  # unico relogio fisico
-hoje = tz.localdate(agora)
-
-import datetime as dt
-import logging
-import re
-import sys
-from collections import Counter
-from unittest.mock import patch
-from django.db import connection
-from django_tenants.utils import schema_context
-from colaboradores.models import Colaborador
-from chamados.services.vigia_fio import ListaDoAdmin, censo, censo_alcance
-from chamados.juizes import tranca_em_lote
-from escala.services import cadastro_realidade as cr
-from ponto.janelas import janela_fechamento
-from ponto.management.commands.e6_oraculo import (
-    InsumosDoDono, minutos_do_espelho, diferenca_e_a_janela_declarada,
-)
-from ponto.services.espelho import espelho_do_colab
-
-class SQLNaoSelect(Exception): pass
-class ListaSemResposta(Exception): pass
-class ClasseDInconsistente(Exception): pass
-class RastroC11Incompleto(Exception): pass
-class E6SemLinha(Exception): pass
-class E6IsencaoOuAusencia(Exception): pass
-class E6SemLavratura(Exception): pass
-class E6JanelaDeclaradaNaoJulgada(Exception): pass
-class DonoSemResposta(Exception): pass
-class SomaDiferenteDe212(Exception): pass
-class OutrosDiferentesDe36(Exception): pass
-
-def so_select(execute, sql, params, many, context):
-    # Bloqueia DML/DDL e consultas com trava; nao imprime SQL/parametros.
-    if (many or not re.match(r"\s*SELECT\b", sql, re.I)
-            or re.search(r"\bFOR\s+(?:NO\s+KEY\s+UPDATE|KEY\s+SHARE|UPDATE|SHARE)\b",
-                         sql, re.I)):
-        raise SQLNaoSelect()
-    return execute(sql, params, many, context)
-
-# Observa a execucao REAL, sem substituir predicados ou montar outra lista.
-# cadastro_realidade.py:450-455,469-470,496-500,525-556,768-957.
-rastro = {"dados": None, "candidatos": set(), "janelas": None,
-          "vetos": {}, "falhas": Counter()}
-cod_lista = cr.lista.__code__
-cod_beco = cr.beco_em_lote.__code__
-cod_janelas = cr._folga_nao_definida_sem_porta.__code__
-codigos = {cod_lista, cod_beco, cod_janelas}
-
-def observar(frame, event, arg):
-    code = frame.f_code
-    if code not in codigos:
-        return None
-    loc = frame.f_locals
-    n = frame.f_lineno
-    if code is cod_lista:
-        if event == "exception":
-            rastro["falhas"][(n, type(arg[1]).__name__)] += 1
-        elif event == "return" and isinstance(arg, dict):
-            rastro["dados"] = arg
-    elif code is cod_janelas:
-        if event == "return" and "janelas" in loc:
-            rastro["janelas"] = [
-                (emp.pk, ini, fim) for emp, ini, fim in loc["janelas"]]
-    elif event == "line":
-        if n == 455:
-            rastro["candidatos"].update(
-                (cid, d.isoformat()) for cid, d, jan in loc["cels"].values())
-        elif n == 470:
-            k = (loc["cid"], loc["d"].isoformat())
-            rastro["vetos"][k] = (
-                "outro:C11_sem_pergunta_viva" if not loc["vivas"]
-                else "outro:C11_porta_da_tarefa")
-        elif n == 498:
-            rastro["vetos"][
-                (loc["cid"], loc["d"].isoformat())] = "sem_ancora_terminal"
-        elif n == 500:
-            rastro["vetos"][
-                (loc["cid"], loc["d"].isoformat())] = "folga_nao_definida_False"
-    return observar
-
-# Trava o instrumento nas linhas da copia lida.
-import linecache
-fonte = cr.beco_em_lote.__code__.co_filename
-for n, trecho in ((455, "if not cels:"), (470, "continue"),
-                  (498, "continue"), (500, "continue")):
-    assert linecache.getline(fonte, n).strip() == trecho
-
-def motivo_real(cid, data_iso, emp):
-    if rastro["falhas"]:
-        return "erro:" + sorted(rastro["falhas"])[0][1]
-    if (lista.dia_na_lista(cid, data_iso) != (False, None)
-            or not lista.colab_na_lista(cid)):
-        raise ClasseDInconsistente()
-    k = (cid, data_iso)
-    if k in rastro["vetos"]:
-        return rastro["vetos"][k]
-    if k in rastro["candidatos"] or rastro["janelas"] is None:
-        raise RastroC11Incompleto()
-    assinaturas = [
-        a for posto, linhas in (rastro["dados"].get("postos") or ())
-        for v in linhas if v.get("colab_id") == cid
-        for a in (v.get("assinaturas") or ())
-    ]
-    origem = ("somente_outros_dias" if any(a.get("data") for a in assinaturas)
-              else "assinaturas_sem_data")
-    dia = dt.date.fromisoformat(data_iso)
-    na_janela = any(e == emp and ini <= dia <= fim
-                    for e, ini, fim in rastro["janelas"])
-    return "outro:C11_%s+%s" % (
-        "fora_queryset" if na_janela else "fora_janelas", origem)
-
-cols, cargas = {}, {}
-def colaborador(cid):
-    if cid not in cols:
-        try:
-            cols[cid] = Colaborador.objects.select_related("empresa").get(pk=cid)
-        except Exception as exc:
-            cols[cid] = exc
-    c = cols[cid]
-    if isinstance(c, Exception):
-        raise c
-    return c
-
-def dono_real(c, dia, comp):
-    # Mesmo espelho, montagem e gates do command E6:
-    # e6_oraculo.py:304,316-328,334-378.
-    mes, ano = map(int, comp.split("/"))
-    ini, fim = janela_fechamento(mes, ano, c.empresa)
-    chave = (c.pk, ini, fim)
-    if chave not in cargas:
-        try:
-            esp = espelho_do_colab(c, hoje, ini, fim, agora=agora)
-            ins = InsumosDoDono(c, ini, fim, hoje, espelho=esp, agora=agora)
-            cargas[chave] = (
-                {str(x.get("data"))[:10]: x for x in (esp.get("dias") or [])},
-                ins,
-            )
-        except Exception as exc:
-            cargas[chave] = exc
-    carga = cargas[chave]
-    if isinstance(carga, Exception):
-        raise carga
-    dias_esp, ins = carga
-    k = dia.isoformat()
-    de = dias_esp.get(k)
-    if de is None:
-        raise E6SemLinha()
-    if de.get("isencao") or de.get("ausencia") is not None:
-        raise E6IsencaoOuAusencia()
-    m_esp, fonte_esp = minutos_do_espelho(de)
-    if m_esp is None:
-        raise E6SemLavratura()
-    m_e6 = ins.oraculo.minutos.get(k, 0.0)
-    if m_esp == 0 and m_e6 == 0:
-        return "sem_divergencia"
-    if diferenca_e_a_janela_declarada(m_e6 - m_esp, de):
-        raise E6JanelaDeclaradaNaoJulgada()
-    if abs(m_e6 - m_esp) <= 10:
-        return "sem_divergencia"
-    dono = ins.dono(dia)
-    if dono not in {"CADASTRO", "BATIDA", "ESTRUTURA"}:
-        raise DonoSemResposta()
-    return dono
-
-tot, outros, erros = Counter(), Counter(), Counter()
-nivel_log = logging.root.manager.disable
-trace_anterior = sys.gettrace()
-try:
-    # Evita nomes/CPF ou escrita nos handlers de log.
-    # Excecoes dos produtores da lista sao observadas e contadas.
-    logging.disable(logging.CRITICAL)
-    with schema_context("juliani"), \
-            patch.object(tz, "now", return_value=agora), \
-            connection.execute_wrapper(so_select):
-        sys.settrace(observar)
-        try:
-            # Composicao da sonda_mapa_v2.py:31-36 (anexo).
-            lista = ListaDoAdmin(hoje, None, agora=agora)
-            with tranca_em_lote():
-                vant = censo(None, hoje=hoje, limite=10000000, lista=lista)
-                r = censo_alcance(
-                    None, hoje=hoje, limite=10000000, lista=lista, agora=agora)
-            rows = r.get("alcance_dias", [])
-        finally:
-            sys.settrace(trace_anterior)
-        if lista._dias is None or rastro["dados"] is None:
-            raise ListaSemResposta()
-        for x in rows:
-            cel, cid, bruto, comp, rota, causa, det, papel = x[:8]
-            if rota != "sem_porta" or causa not in {"d", "c", "a", "e"}:
-                continue
-            pk = getattr(cel, "pk", cel)
-            data_iso = str(bruto)[:10]
-            emp, c, erro_col = 0, None, None
-            try:
-                c = colaborador(cid)
-                emp = c.empresa_id
-            except Exception as exc:
-                erro_col = "erro:" + type(exc).__name__
-            if causa == "d":
-                try:
-                    motivo = erro_col or motivo_real(cid, data_iso, emp)
-                except Exception as exc:
-                    motivo = "erro:" + type(exc).__name__
-                try:
-                    dono = erro_col or dono_real(
-                        c, dt.date.fromisoformat(data_iso), comp)
-                except Exception as exc:
-                    dono = "erro:" + type(exc).__name__
-                tot[(motivo, dono, comp)] += 1
-                for campo, valor in (("motivo", motivo), ("dono", dono)):
-                    if valor.startswith("erro:"):
-                        erros[(campo, valor)] += 1
-                print("D\tcel%s\tcol%s\t%s\t%s\temp%s\tmotivo=%s\tdono=%s" %
-                      (pk, cid, data_iso, comp, emp, motivo, dono))
-            else:
-                detalhe = erro_col or det or "-"
-                outros[(causa, detalhe, comp)] += 1
-                if erro_col:
-                    erros[("O", erro_col)] += 1
-                print("O\tcel%s\tcol%s\t%s\t%s\temp%s\t%s\t%s" %
-                      (pk, cid, data_iso, comp, emp, causa, detalhe))
-        for (motivo, dono, comp), n in sorted(tot.items()):
-            print("S motivo=%s dono=%s comp=%s n=%d" % (motivo, dono, comp, n))
-        soma = sum(tot.values())
-        print("S soma=%d" % soma)
-        for (causa, detalhe, comp), n in sorted(outros.items()):
-            print("S O causa=%s detalhe=%s comp=%s n=%d" %
-                  (causa, detalhe, comp, n))
-        print("S O soma=%d" % sum(outros.values()))
-        for (campo, tipo), n in sorted(erros.items()):
-            print("S campo=%s %s n=%d" % (campo, tipo, n))
-        for (linha, tipo), n in sorted(rastro["falhas"].items()):
-            print("S produtor=lista linha=%d erro:%s n=%d" % (linha, tipo, n))
-        if soma != 212:
-            raise SomaDiferenteDe212()
-        if sum(outros.values()) != 36:
-            raise OutrosDiferentesDe36()
-finally:
-    sys.settrace(trace_anterior)
-    logging.disable(nivel_log)
-print('FIM ok=1')
-```
-
-**4. Atribuição de obra:
-
-[truncado em 20000 de 24855 caracteres]
-
-## 15/11 10:27 · sessao 5c81ef3d2810 · - · - · origem=Ronald (tmux)
-
-- **Editar alcança a invalidação, por leitura estática.** A fixture cria somente um atestado; `save` deriva 21/10 (`app/ponto/models.py:912-918`; teste:134-137). `atestado` existe no seed ativo (`app/ponto/migrations/0052_seed_tipoausencia.py:17,33-36`) e no fallback (`app/ponto/catalogo/ausencias.py:95,278`). Editar não consulta tranca (`app/ponto/services/ausencia.py:591`), exclui o próprio PK da sobreposição (`:593`; `app/ponto/turnos.py:2827-2835,2851-2853`) e não exige documento nesse caminho (`app/ponto/services/ausencia.py:570-633`). `dias_corridos=1` produz fim nulo (`:154-166`), salva (`:615`) e invalida pelos fatos antigo e novo (`:625-626`). Resultado executado: [não verificado].
-
-- **Patch correto.** `mock.patch('core.observ.evento')` está ativo quando a função faz seu import local `_ev_rej`; alcança o nome efetivamente chamado (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198-200`; `app/ponto/services/ausencia.py:1414,1428`).
-
-- **Editar, mutante sobrevivente:** retirar `ausencia.save()` mantendo alteração em memória e `_acordar_projecao`. O teste verifica somente os carimbos depois da chamada, sem reler/assertar o fato editado (`app/ponto/services/ausencia.py:604-626`; teste:139-141). Sobrevivência deduzida, não executada [não verificado].
-
-- **Rejeitar/trilha, teste fortalecido:** multiconjunto de PKs agora mata cinco trilhas duplicando um ID e omitindo outro, que contagem/status permitiam (`teste:182-187`). **Mutante sobrevivente:** remover `select_for_update`; esse caso só chama sequencialmente (`app/ponto/services/ausencia.py:1417`; teste:175-193). Sobrevivência deduzida [não verificado].
-
-- **Rollback, mutante sobrevivente:** refatorar para um `atomic` por ausência, cada iteração atualizando e trilhando aquela linha. O mock sempre devolve `None`: falha a primeira e nada fica rejeitado, passando; falha apenas na segunda/quinta deixaria anteriores confirmadas. Não se injeta sequência de sucessos e falha nem se confere trilha, carimbo ou timestamp (`teste:169,195-202`; atomic atual: `app/ponto/services/ausencia.py:1416-1434`). Sobrevivência deduzida [não verificado].
-
-- **Desfazer, teste fortalecido:** releitura de `retratada_em` mata falso desfazer que apenas chama recálculo (`teste:263-268`). **Mutante sobrevivente:** retirar `'aprovada': True` do `anotar` em desfazer: o teste segue verificando apenas `retratada_em` e chamada (`app/ponto/services/retratar_humano.py:207-213`; teste:265-268), embora retratar tenha gravado `aprovada=False` (`app/ponto/registro_batida.py:276`). Sobrevivência deduzida [não verificado]. Observação: o universo apurável filtra só `retratada_em`, portanto não afirmar exclusão da apuração por esse mutante (`app/ponto/turnos.py:2876-2883`).
-
-_5597 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5599 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
