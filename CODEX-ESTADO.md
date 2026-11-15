@@ -1,7 +1,158 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 20:12** · publicado em **15/11/2026 20:13** (UTC-3)
+> Ultima resposta processada: **15/11/2026 20:15** · publicado em **15/11/2026 20:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 20:15 · sessao 968c3403316b · CORTE-JUIZ-RESPONDIDA · sonda · origem=Code
+
+universo=50359; total_erros=0; classificadas=50359; fatal=null. (`saída:1`)
+
+Referências `saída:N`: numeração dos objetos JSON fornecidos, começando pelo resumo como linha 1.
+
+**2. Divergências por família**
+
+| Família | Total | Mudança ao adotar `I E T` |
+|---|---:|---|
+| A | 0 | Nenhuma neste universo. (`saída:2`) |
+| B | 9626 | **SIM → NÃO** nos pares `I_sem_T`. (`saída:2,53–64`) |
+| C | 9626 | **SIM → NÃO** nos pares `I_sem_T`. (`saída:2,65–76`) |
+| D_strip | 0 | Nenhuma neste universo. (`saída:2`) |
+| D_cru | 0 | Nenhuma neste universo. (`saída:2`) |
+| D_SQL_sem_trim | 0 | Nenhuma neste universo. (`saída:2`) |
+| A_sem_trim | 0 | Nenhuma neste universo. (`saída:2`) |
+
+A exige instante e texto após trim; B aceita instante **ou** texto; C aceita somente instante. Esses predicados estão, respectivamente, em `app/chamados/juizes.py:1559`, `app/chamados/models.py:1907–1908` e `app/chamados/models.py:3641`.
+
+As divergências de B e C recaem sobre os mesmos **9626** pares; não são estoques distintos a somar. (`saída:53–76`)
+
+**3. Estoque vivo “instante sem texto”**
+
+| Competência | Quantidade | Estado |
+|---|---:|---|
+| ABERTA | **2** | Vivas, não validadas, não materializadas; disputa aberta. (`saída:18`) |
+| ENTREGUE | **141 = 111 + 29 + 1** | Todas vivas e não validadas; 111 não materializadas, 30 materializadas. (`saída:43,47,50`) |
+| Indecidível | **0** | O único grupo de competência indecidível tem `I_T`, portanto não pertence ao estoque. (`saída:52`; quadro completo: `saída:3–52`) |
+
+Total vivo: **143 = 2 + 141**. As contagens batem com o aval registrado: diferença **0 abertas, 0 entregues, 0 no total**. (`saída:18,43,47,50`; `app/docs/LEIS.md:151`)
+
+Os PKs **38251/38252** constam do aval registrado, mas `saída:18` não identifica as perguntas: confirmação desses PKs **nesta execução** é **[nao verificado]**. (`app/docs/LEIS.md:151`)
+
+**4. Pares ilegais “texto sem instante”**
+
+**0** no quadro de estados. Não há ocorrência para discriminar por vida, validação, materialização ou competência: os grupos de `saída:3–52` somam **50359**, fechando o universo de `saída:1`, e nenhum apresenta `sem_I_T`. (`saída:1,3–52`)
+
+## 15/11 20:14 · sessao 43d414010fcc · BUG-ENC-CELULAS-FORMA · censo · origem=Code
+
+**1. O defeito ainda existe, mas a descrição do BACKLOG mistura dois efeitos.** `dias_encerrados` recebe `{(pk, data): célula}` e repassa o argumento original `celulas` ao pareador quando `turnos` não foi fornecido. O pareador espera `{data: célula}`. ([turnos.py:2132](/home/ronald/codex_ws/e84a167f4d704612866e392da6078adaed18f9d0/app/ponto/turnos.py:2132), `app/ponto/turnos.py:2150`, `app/ponto/turnos.py:1854`)
+
+Na segmentação, uma chave `(pk, D)` recebida indevidamente vira `(pk, (pk, D))`; `vinculo_do_dia` procura `(pk, D)`, perde a célula e, portanto, sua geradora. Essa incompatibilidade permanece no HEAD da cópia. (`app/ponto/turnos.py:1956`, `app/ponto/turnos.py:1960`, `app/escala/alimentacao.py:269`)
+
+O sítio antigo `cartorio.py:910` corresponde atualmente a **`:1154`**: continua passando células compostas de `d0..d1`, **sem `turnos`**. Os limites vêm das células do julgamento. ([cartorio.py:1154](/home/ronald/codex_ws/e84a167f4d704612866e392da6078adaed18f9d0/app/ponto/services/cartorio.py:1154), `app/ponto/services/cartorio.py:1131`)
+
+A afirmação “o papel da ata não vê as células por causa da chave composta” não se sustenta: o papel percorre os objetos e entrega cada célula a `periodos_do_dia`, que lê `ata`, `dna` e `celula.data`. Há, entretanto, falta das células externas ao julgamento: o pareador lê `ini−2..fim+1`, e um mapa fornecido suprime sua carga automática. São efeitos distintos. (`app/ponto/turnos.py:1631`, `app/ponto/turnos.py:1633`, `app/ponto/juiz_batida.py:157`, `app/ponto/juiz_batida.py:175`, `app/ponto/turnos.py:1847`, `app/ponto/turnos.py:1884`)
+
+**2. Escritores, leitores e semântica das formas.**
+
+| Sítio | Produção/leitura e forma |
+|---|---|
+| `celulas_do_periodo` | Produz `{(pk,data): célula}`, com intervalo inclusivo. (`app/escala/alimentacao.py:55`, `app/escala/alimentacao.py:73`) |
+| `dias_encerrados` | Recebe composto; mantém esse mapa para o encerramento, mas o repassa indevidamente ao pareador. Retorna `{data: bool}` ou motivos. (`app/ponto/turnos.py:2132`, `app/ponto/turnos.py:2134`, `app/ponto/turnos.py:2147`, `app/ponto/turnos.py:2150`) |
+| `_dias_encerrados_puro` | Agrupa turnos por `data_turno`; entrega composto corretamente ao vínculo e ao fim previsto. (`app/ponto/turnos.py:2162`, `app/ponto/turnos.py:2166`) |
+| `turnos_do_colab` | Espera `{data: célula}` da janela com pad. Quando carrega sozinho, converte composto para data corretamente. (`app/ponto/turnos.py:1854`, `app/ponto/turnos.py:1886`) |
+| Candidatura de vínculos | Lê `celulas.values()` para obter geradoras; esse leitor independe da chave. (`app/ponto/turnos.py:1888`) |
+| Segmentação | Supõe chaves data, acrescenta `pk` e consulta o vínculo diário; é onde o composto indevido perde a geradora. (`app/ponto/turnos.py:1956`, `app/ponto/turnos.py:1960`) |
+| `vinculo_do_dia` | Espera composto. A geradora nomeada vence dentro da vigência, inclusive inativa; sem célula encontrada, usa os vínculos que cobrem a data. (`app/escala/alimentacao.py:269`, `app/escala/alimentacao.py:279`, `app/escala/alimentacao.py:282`, `app/escala/alimentacao.py:285`) |
+| Papel da ata | Percorre células, lê seus objetos e produz mapa por instante local truncado no minuto. Não faz busca por `celulas.get(data)`. (`app/ponto/turnos.py:1631`, `app/ponto/turnos.py:1633`, `app/ponto/turnos.py:904`, `app/ponto/turnos.py:905`) |
+| DNA/fim previsto | `marcos_dna_periodo` e `EscalaColaborador.marcos_do_dia` esperam composto. O primeiro produz mapa por data com os marcos. (`app/escala/utils.py:90`, `app/escala/utils.py:97`, `app/escala/models.py:1120`) |
+| Cartório | Constrói composto tanto para cadastro quanto para encerramento. O cadastro direto alimenta corretamente `vinculo_do_dia`; o encerramento alcança o repasse defeituoso. (`app/ponto/services/cartorio.py:1143`, `app/ponto/services/cartorio.py:1154`, `app/ponto/supra_juiz.py:174`) |
+| Singular | `dia_encerrado` delega a `dia_encerrado_motivo`; este passa `celulas` somente ao pareador. Vínculo e fim previsto não recebem essa alimentação e seguem sua leitura própria. (`app/ponto/turnos.py:2077`, `app/ponto/turnos.py:2098`, `app/ponto/turnos.py:2099`) |
+| Vigia | Produz composto corretamente para `escala_vigente`, mas entrega composto indevidamente à singular, cujo destino é o pareador por data. (`app/ponto/services/vigia_de_hora.py:47`, `app/ponto/services/vigia_de_hora.py:58`, `app/ponto/turnos.py:2098`) |
+| Fechamento | Cliente singular correto: constrói `{data: célula}` recortado pelo pad de cada dia. (`app/ponto/services/fechamento.py:350`, `app/ponto/services/fechamento.py:370`, `app/ponto/services/fechamento.py:377`) |
+| `CargaDaJanela` | Agrupa por colaborador/data; fornece `{data}` ao pareador e composto ao encerramento, usando seus turnos já calculados. (`app/ponto/turnos.py:2983`, `app/ponto/turnos.py:3038`, `app/ponto/turnos.py:3045`) |
+| Motor | Recebe composto; conserva-o para DNA e períodos, convertendo para data ao alimentar o papel. (`app/ponto/motor_calculo_v2.py:473`, `app/ponto/motor_calculo_v2.py:498`, `app/ponto/motor_calculo_v2.py:612`) |
+
+Os outros produtores explícitos para o pareador são a montagem da grade, que entrega `{data}` com ata em memória, e o comando retroativo, que entrega `{data}` carregado de `ini−2..fim+2`. (`app/escala/utils.py:1581`, `app/escala/utils.py:1880`, `app/escala/utils.py:1898`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:86`)
+
+**Data da chave e significado do dia são questões diferentes:** a célula representa o dia do turno; marcos podem alcançar D+1. O pareador consulta o mapa de DNA pela **data civil da batida** para medir distâncias, mas filtra e entrega resultados por **`data_turno`**; o encerramento também agrupa por esse dia. (`app/ponto/turnos.py:2940`, `app/escala/servico_jornada.py:89`, `app/ponto/turnos.py:1231`, `app/ponto/turnos.py:1239`, `app/ponto/turnos.py:1995`, `app/ponto/turnos.py:2162`)
+
+Quanto aos dados persistidos, geração/regeneração e edição manual escrevem trabalho, geradora e DNA; a porta de lavra escreve ata, protestos, veredito, via, instante e status. (`app/ponto/portas/celula.py:289`, `app/ponto/portas/celula.py:306`, `app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:1091`, `app/ponto/portas/celula.py:1096`)
+
+**3. Ref, hunks e histórico.**
+
+A cópia disponível não fornece história Git consultável. Existência dos objetos da ref, os 30 commits mencionados, aplicação limpa dos commits e equivalência por outro hash no main: **[nao verificado]**. O diff cumulativo fornecido também não permite atribuir cada hunk individualmente a `6bedd35d4` ou `a2cd7981d`: **[nao verificado]**.
+
+| Hunk fornecido | Situação frente à cópia |
+|---|---|
+| Alteração de `dias_encerrados` | **Ainda casa textualmente**, deslocada duas linhas: contexto e chamada a remover continuam presentes. Não ficou obsoleto nesse sítio. Aplicação Git efetiva: **[nao verificado]**. (`app/ponto/turnos.py:2147`, `app/ponto/turnos.py:2150`) |
+| Novo `test_bug_enc_celulas_forma.py` | Destino não localizado na cópia; conflito ou aplicação Git: **[nao verificado]**. |
+| Novo `test_e4_carga_paridade.py` | Destino não localizado na cópia; conflito ou aplicação Git: **[nao verificado]**. |
+
+Documentalmente, **E4-CARGA-PARIDADE é obra separada, anterior ao BUG-ENC**; ambas continuam registradas em linhas próprias. Que `78403ab2b` já esteja no main sob outro hash: **[nao verificado]**. (`app/docs/BACKLOG.md:988`, `app/docs/BACKLOG.md:989`)
+
+Há registro posterior confirmando novamente os dois repasses compostos, plural e singular; isso confirma o recenso documental, sem identificar um commit posterior responsável. (`app/docs/RELATO.md:578`)
+
+**4. Conjunto de arquivos, preservados os contratos atuais.**
+
+| Arquivo | Papel no perímetro mínimo |
+|---|---|
+| `app/ponto/turnos.py` | Contém o repasse plural incompatível e a fronteira do pareador onde o tripwire proposto se aplica. (`app/ponto/turnos.py:2150`, `app/ponto/turnos.py:1854`, `app/ponto/turnos.py:1956`) |
+| `app/ponto/services/vigia_de_hora.py` | Contém o produtor composto indevido da via singular; o hunk plural fornecido não o alcança. (`app/ponto/services/vigia_de_hora.py:58`, `app/ponto/turnos.py:2098`) |
+| `app/ponto/tests/test_bug_enc_celulas_forma.py` | Testes propostos de plural, vigia e contrato; conteúdo fornecido no anexo, presença na cópia **[nao verificado]**. |
+| `app/ponto/tests/test_e4_carga_paridade.py` | Dependência da fixture importada pelo teste BUG; obra separada no BACKLOG. Presença na cópia **[nao verificado]**. (`app/docs/BACKLOG.md:989`) |
+
+**O defeito de forma não exige alteração de `cartorio.py`: ele fornece exatamente o composto documentado pela porta plural.** Tampouco foi demonstrada necessidade de alterar `chamados/*` para corrigir esse contrato. Uma exigência adicional de versionamento/alcance no cartório para esta obra é **[nao verificado]**. (`app/ponto/services/cartorio.py:1154`, `app/ponto/turnos.py:2132`)
+
+O teste existente de C1 precisa permanecer como proteção do contrato singular por data e do DNA divergente; ele os documenta e compara explicitamente. Necessidade de editá-lo: **[nao verificado]**. (`app/ponto/tests/test_c1_dias_encerrados.py:54`, `app/ponto/tests/test_c1_dias_encerrados.py:73`)
+
+**5. Consumidores e alcance até dinheiro/exportação.**
+
+| Resultado | Caminho comprovado |
+|---|---|
+| Encerramento → julgamento | Alimenta a impressão `enc=0` e `classificar_dia(turno_encerrado=...)`. (`app/ponto/services/cartorio.py:1397`, `app/ponto/services/cartorio.py:1474`) |
+| Julgamento → persistência | Cartório entrega veredito e ata à mesma lavra; a porta grava ambos e aplica o status. (`app/ponto/services/cartorio.py:1851`, `app/ponto/services/cartorio.py:1853`, `app/ponto/portas/celula.py:1091`, `app/ponto/portas/celula.py:1096`) |
+| Ata/veredito → leitores | Grade reconstrói minutos, órfãs e veredito; prévia lê ata e lâmpadas. (`app/escala/services/leitor_celula.py:413`, `app/escala/services/leitor_celula.py:423`, `app/escala/services/leitor_celula.py:433`, `app/folha/previa.py:83`) |
+| Ata/papel → motor | Fechamento alimenta as células; motor deriva papel e o fornece ao pareador. Outro ramo consulta diretamente `periodos_do_dia`. **Sim, `motor_calculo_v2` consome.** (`app/ponto/services/fechamento.py:750`, `app/ponto/motor_calculo_v2.py:498`, `app/ponto/motor_calculo_v2.py:506`, `app/ponto/motor_calculo_v2.py:616`) |
+| Veredito → TXT | Retenção lê vereditos e protestos; `classificar_export` pode excluir pelo motivo `furo_espelho`. (`app/folha/export.py:1273`, `app/folha/export.py:1286`, `app/folha/export.py:1293`, `app/folha/export.py:968`) |
+| Encerramento → furo financeiro | Fechamento filtra os furos produzidos pelo motor antes da lavra de `DiaPago`; esse cliente fornece corretamente `{data}` com pad. (`app/ponto/services/fechamento.py:377`, `app/ponto/services/fechamento.py:1115`, `app/ponto/services/fechamento.py:1293`) |
+
+Portanto, **há consumidores até cálculo e elegibilidade do TXT**; isso não demonstra alteração monetária causada por este bug em produção. Pessoas atingidas, valores e competência exportada efetivamente alterada: **[nao verificado]**. (`app/ponto/motor_calculo_v2.py:506`, `app/folha/export.py:970`)
+
+“Já exportada” também não constitui bloqueio absoluto no código atual: o recálculo documenta a retirada dessa recusa, preservando trilha e versão anterior do TXT. A lei aplicável inclui L-113, além de L-092 e do horizonte L-124. (`app/ponto/services/fechamento.py:485`, `app/ponto/services/fechamento.py:493`, `app/docs/LEIS.md:155`, `app/docs/LEIS.md:125`, `app/docs/LEIS.md:145`)
+
+**6. Leis e cortes encontrados.**
+
+| Proteção | Referência |
+|---|---|
+| **L-002** — uma autoridade; testemunha lê | `app/docs/LEIS.md:60` |
+| **L-020** — célula e DNA congelado | `app/docs/LEIS.md:71` |
+| **L-025** — universo de batidas apuráveis | `app/docs/LEIS.md:76` |
+| **L-032** — intervalo cadastrado | `app/docs/LEIS.md:80` |
+| **L-061** — consumidor lê célula/ata | `app/docs/LEIS.md:95` |
+| **L-073** — teto por instante/fato encerrado | `app/docs/LEIS.md:100` |
+| **L-085** — jornada pertence ao dia de início | `app/docs/LEIS.md:117` |
+| **L-087** — papel pela ata contra DNA | `app/docs/LEIS.md:119` |
+| **L-102/L-103** — sem par: apresentação e zero declarado no fechamento | `app/docs/LEIS.md:128`, `app/docs/LEIS.md:129` |
+| **L-110** — teste pela regra, sem código antigo como gabarito | `app/docs/LEIS.md:136` |
+| **L-113/L-124** — exportada e horizonte | `app/docs/LEIS.md:155`, `app/docs/LEIS.md:145` |
+
+Os cortes de nascimento/correção de `dia_encerrado` exigem fato encerrado, nunca simplesmente `data < hoje`. O corte do juiz do cálculo protege o motor; o de LAUDOS-[nome] exige ata e motor lendo o mesmo turno, mas pertence a outra obra. (`app/docs/CORTES.md:55`, `app/docs/CORTES.md:62`, `app/docs/CORTES.md:63`, `app/docs/CORTES.md:405`)
+
+Corte nominal específico de BUG-ENC-CELULAS-FORMA ou E4-CARGA-PARIDADE: **[nao verificado]**.
+
+**7. O RED continua discriminante por leitura, com ressalva sobre o artefato raspado.**
+
+Para a fixture lógica X/Y descrita no anexo, a chave aninhada ainda provoca seleção dos marcos do ativo. Em X, a pausa desse ativo absorve S07; em Y, o ativo sem pausa permite fechar na S00. O lote recebe a forma correta e não sofre essa perda da geradora. (`app/ponto/turnos.py:1956`, `app/ponto/turnos.py:1984`, `app/ponto/turnos.py:1356`, `app/ponto/turnos.py:1492`, `app/ponto/turnos.py:3038`)
+
+| Caso às D+1 08h | Previsão por leitura |
+|---|---|
+| X, plural alimentado como cartório | Continua aberto até a expiração: `turno_aberto_relogio`; pelo vínculo correto, já estaria encerrado. (`app/ponto/turnos.py:1356`, `app/ponto/turnos.py:1171`, `app/ponto/turnos.py:2030`, `app/ponto/turnos.py:2116`) |
+| Y, plural alimentado como cartório | Fecha indevidamente na S00; pelo vínculo correto, a saída é de intervalo e a aberta permanece viva até 11h. (`app/ponto/turnos.py:1984`, `app/ponto/turnos.py:1492`, `app/ponto/turnos.py:2030`) |
+| Vigia X/Y | Continua alcançando o mesmo repasse incompatível pela singular. (`app/ponto/services/vigia_de_hora.py:58`, `app/ponto/turnos.py:2098`) |
+| `assertRaises(TypeError)` | Continua discriminante: o contrato é documentado, mas não há validação de chaves; elas seguem até o embrulho silencioso. Exceção observada em execução: **[nao verificado]**. (`app/ponto/turnos.py:1854`, `app/ponto/turnos.py:1884`, `app/ponto/turnos.py:1956`) |
+
+O teste C1 existente não substitui esse cenário: sua célula tem DNA divergente, sem nomear geradora, e compara o plural composto com a singular por data. (`app/ponto/tests/test_c1_dias_encerrados.py:62`, `app/ponto/tests/test_c1_dias_encerrados.py:66`, `app/ponto/tests/test_c1_dias_encerrados.py:73`)
+
+Execução literal do anexo, importação da fixture e resultados efetivos permanecem **[nao verificado]**. Os CPFs raspados não podem ser tratados como os dados originais da fixture: o modelo exige unicidade e normaliza CPF no `save`. (`app/colaboradores/models.py:319`, `app/colaboradores/models.py:418`)
 
 ## 15/11 20:12 · sessao fb73725634cf · - · - · origem=Ronald (tmux)
 
@@ -1159,21 +1310,4 @@ Limites relevantes:
 - A catraca AST declara limites de cobertura, incluindo SQL dinâmico, certas escolhas por min/sorted e escrita via helpers: `app/chamados/tests/test_e1_v7_catracas.py:36-45`.
 - Existência dos testes foi lida; execução e resultados atuais **[não verificado]**. Aplicação efetiva do backfill em produção **[não verificado]**. [nao verificado]
 
-## 15/11 20:05 · sessao 250f79b241c5 · - · - · origem=Ronald (tmux)
-
-**1(a) PROCEDE — a enumeração literal dos cinco estados não confere integralmente.** O topo repete BO-0611-05 em B3 e itens 3–5 presos no apply exportado (`app/docs/RELATO.md:4`), mas o próprio RELATO registra BO-0611-05 **já NO AR** em `fb9269ea9` (`app/docs/RELATO.md:197`, `app/docs/RELATO.md:1350`, `app/docs/RELATO.md:9037`). E4B também **POUSOU em 12/11**, `087fe758a` (`app/docs/BACKLOG.md:2000`); seu apply remanescente espera COMPETENCIA-PAGA (`app/docs/BACKLOG.md:1942`). BO-DISPUTA está efetivamente estacionada, B3 sem rearme (`app/docs/BACKLOG.md:774`, `app/docs/BACKLOG.md:2005`); F1 nova depende de predesenho e aval novo (`app/docs/BACKLOG.md:1945`); demais fatias F2–F9 não constroem antes do pouso F1 (`app/docs/BACKLOG.md:2018`). Ausência de item imediatamente liberado é compatível com esses registros; “os cinco estão nos estados citados” omite pousos comprovados.
-
-**1(b) CONFERE quanto à frase; PROCEDE se ela fundamentar abertura imediata.** “Construtor na 1a vaga após E3, na frente da LASTRO” consta literalmente (`app/docs/BACKLOG.md:1891`, `app/docs/RELATO.md:813`). Entretanto, está **PARADA até corte do desenho**; predesenho entregue, aguardando corte (`app/docs/BACKLOG.md:1891`, `app/docs/RELATO.md:716`). O aval de 12:28 diz **“4a volta NAO abre”**, retira `orfas_instantes` e mantém a trava atrás de **E3, DESLIGADO, FERIADO, O168 e HJ-090** (`app/docs/RELATO.md:717`). Censo de 12/11: ATA 12 chaves, 95 acessos literais em 27 arquivos; DNA nove chaves, 41 acessos em 19 arquivos; orfas HH:MM sem data, DNA instante ISO sem fuso (`app/docs/RELATO.md:808`). Esse censo inicial não substitui o corte ainda pendente (`app/docs/RELATO.md:716`).
-
-**1(d) PROCEDE — a linha ABERTA de 08/11 ficou vencida; há prova documental e código da entrega.** BACKLOG ainda marca ABERTA (`app/docs/BACKLOG.md:1964`), mas RELATO registra **PRONTO FIO-E0-V4-E1 NO AR 22:46**, deploy `a8a692f5`, três cascas/rotas e sondas (`app/docs/RELATO.md:1674`); pouso local de 08/11 21:15 aparece em `app/docs/RELATO.md:1675`. A merge7 certificada, suite 14.536 e sombra invariantes verdes constam em `app/docs/RELATO.md:1706`. Resíduos seguiram para E1-FILA, também pousada (`app/docs/RELATO.md:1679`) e NO AR em 09/11 (`app/docs/RELATO.md:1662`); E1-FILA-V2-2-TRAVA pousou posteriormente em `89df8c52` (`app/docs/RELATO.md:1633`). Na cópia, a migration identifica expressamente E1, sequência `DecisaoPergunta` e chaves (`app/chamados/migrations/0051_decisao_pergunta.py:1`); a classe existe (`app/chamados/models.py:3982`) e a cura de classe v15g/MATRIZ-TODAS-AS-PORTAS está incorporada (`app/chamados/models.py:2373`). Histórico Git efetivo: **[nao verificado]** — a cópia não contém `.git`. Não foi localizada ocorrência exata de E1-ENTRADAS em RELATO-ARQUIVO: **[nao verificado]**; a prova positiva está no RELATO citado.
-
-## 15/11 20:05 · sessao 92d4dd127d30 · - · - · origem=Ronald (tmux)
-
-- **Q2 — PROCEDE, se a nova lista autorizar abertura imediata.** TIPO continua parada por corte de desenho: LU2-03 está **ABERTA**, entre selo do valor e acessor tipado (`app/docs/RELATO.md:63`); a quarta volta “NAO abre” e há travas atrás de E3, DESLIGADO, FERIADO, O168 e HJ-090 (`app/docs/RELATO.md:717`, `app/docs/BACKLOG.md:1891`). Alterar somente a ordem não resolve desenho/B3: outras obras seguem, a obra para e a liberação depende de aval (`CLAUDE.md:274`, `CLAUDE.md:294`).
-- **Q2 — PROCEDE na condição de abertura da F1 nova.** O estado vigente exige **“construcao so por aval novo citando a entrega”** (`app/docs/BACKLOG.md:1945`, `app/docs/RELATO.md:4`). O novo aval condiciona F1 somente à existência do corte e do pré-desenho; se isso valer como autorização automática, falta a exigência vigente. Para R3, a formulação nova conserva o aval posterior exigido; o pré-desenho já está **ENTREGUE**, e c17 continua “so por aval novo” (`app/docs/RELATO.md:22`).
-- **Q3 — PROCEDE: cruzamento com F1 futura não certificável.** A F1 nova ainda está em pré-desenho, com padrão a definir (`app/docs/BACKLOG.md:1945`); portanto a afirmação de ausência de arquivo comum com essa construção futura permanece **[nao verificado]**. A regra vigente mede arquivo em comum, não família/app (`CLAUDE.md:309`).
-- **Q2 — CONFERE quanto às leituras no Codex.** QUEIMA já foi encerrada por POS-REDEFINICAO-1935; voltaram MODO-PADRAO-POS-RESET, teto 2 e DESPACHO (`app/docs/RELATO.md:25`, `app/docs/PROMPTS.md:2362`). A regra vigente atribui leitura/censo ao Codex (`CLAUDE.md:358`).
-- **Q2 — CONFERE quanto ao teto, sem vaga extra para instrumento.** O teto 2 é de construtores, com fila 1, negócio e instrumento nessa precedência (`CLAUDE.md:291`). Instrumento exige contrato de cinco linhas e pouso próprio (`CLAUDE.md:394`, `CLAUDE.md:327`). [nao verificado]
-- **FERIADO — PROCEDE se “termina a medida” implicar obra andável.** A medida já registra ENTREGUE_FORA=1 e manda não construir o ramo (a) (`app/docs/RELATO.md:7`); há AVAL-DEVOLVIDO para itens 1, 2 e 4 da revisão (`app/docs/RELATO.md:8`). A prioridade antiga era “na frente, vaga da TIPO item 3” (`app/docs/BACKLOG.md:729`), mas a nova ordem a modifica expressamente; o impedimento permanece nos termos preservados pelo próprio aval (`app/docs/RELATO.md:7`).
-
-_5767 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5769 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
