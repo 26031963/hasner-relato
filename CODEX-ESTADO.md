@@ -1,7 +1,280 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 19:50** · publicado em **15/11/2026 19:51** (UTC-3)
+> Ultima resposta processada: **15/11/2026 19:56** · publicado em **15/11/2026 19:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 19:56 · sessao 37c3dd6890b3 · - · - · origem=Ronald (tmux)
+
+`trabalha_em_feriado` — censo de referências executáveis de produção:
+
+| Papel | Quem |
+|---|---|
+| Declara/default | `app/escala/models.py:896` (`default=True` em :897). |
+| Decide padrão novo (16/09) | `app/escala/models.py:905`; posto declarado vence em :911-913; comercial 5x2/6x1 em :916-917. |
+| Escreve ao criar vínculo | `app/colaboradores/services/vinculo.py:287`, valor pelo padrão em :296. |
+| Escreve alteração existente | `app/colaboradores/services/vinculo.py:869`, compara/lê :890-892, atribui e salva :893-894. |
+| Lê/copia em novos trechos | `app/colaboradores/services/vinculo.py:974`, :1092, :1113. |
+| Lê para regra feriado | `app/escala/models.py:1390`. |
+| Lê para contador vigentes | `app/escala/models.py:929`. |
+| Lê no comando de sincronização | `app/colaboradores/management/commands/sincronizar_feriado_admin.py:48`, :52; alteração passa pela porta em :56. |
+
+`feriado_vira_folga` — quatro leitores executáveis encontrados; o aval nomeia os três externos e omite o gerador: `app/escala/models.py:1369`; `app/ponto/services/fechamento.py:949`; `app/ponto/precedencia.py:377`; `app/ponto/calculador/alimentacao.py:521`.
+
+Leitores indiretos relevantes da flag pelo fallback `eh_dia_trabalho → eh_dia_trabalho_calculado → feriado_vira_folga`: `app/ponto/motor_calculo_v2.py:2448`, :3449 (previstos semanais BH); `app/ponto/services/fechamento.py:731`; `app/ponto/calculador/alimentacao.py:445`; `app/ponto/precedencia.py:538`. A cadeia está em `app/escala/models.py:1094-1096` e :1369. Portanto, deixar o arquivo do motor intocado não prova que sua saída ficará igual; os leitores mencionados estão no motor (`app/ponto/motor_calculo_v2.py:2448`, :3449).
+
+`CelulaDia` — escritores:
+
+- Porta única declarada: `app/core/portas.py:107-112`.
+- Geração/regeneração, gravações reais: `app/ponto/portas/celula.py:265`, :279, :293, :310, :914, :926; gerador consulta a aritmética em :289 e :911.
+- Edição humana: `app/ponto/portas/celula.py:572`, criação :638 e atualização :647.
+- Reversão de regeneração: `app/ponto/portas/celula.py:779`, atualização :836.
+- Veredito/ata/status: `app/ponto/portas/celula.py:1032-1036`, atribuições :1091-1096 e gravação :1098; método da entidade só delega (`app/escala/models.py:1819-1828`).
+- Carimbo: `app/ponto/portas/celula.py:1181-1201`; precedência na ata :1205; insumos em lote :1237; reset do julgamento futuro :1124.
+- Persistência central comum: `app/ponto/portas/celula.py:957-965`.
+
+`CelulaDia` — leitores centrais para esta revisão:
+
+| Pergunta | Leitor |
+|---|---|
+| Carga da janela | `app/escala/alimentacao.py:54`, query :75. |
+| Vínculo do dia | `app/escala/alimentacao.py:269-286` (geradora e vigência). |
+| Dia previsto | `app/escala/models.py:1069`, query :1092, retorno :1095. |
+| Marcos/DNA e horários | `app/escala/models.py:1122`, :1187, :1232. |
+| Grade/célula | `app/escala/utils.py:1054`, :2138; seleção da geradora :2181, :2191. |
+| Precedência | `app/ponto/precedencia.py:308` (carga); juiz declarado em `app/docs/JUIZES.md:114-115`. |
+| Fechamento | `app/ponto/services/fechamento.py:604-607`. |
+| Motor | `app/ponto/motor_calculo_v2.py:2448`, :3449 por `eh_dia_trabalho`; leitura de célula pelo método em `app/escala/models.py:1089-1095`. |
+| Alimentação do calculador | `app/ponto/calculador/alimentacao.py:445` pelo mesmo método. |
+| Exportação/folha | `app/folha/export.py:949`, :1247; `app/folha/previa.py:50`; `app/folha/validacao_pdf.py:44`; `app/folha/porta_export.py:532`. |
+| Cartório | `app/ponto/services/cartorio.py:390`, :2027. |
+| Turnos/núcleo | `app/ponto/turnos.py:1586`, :2334; `app/ponto/nucleo.py:92`. |
+| Status/veredito | `app/ponto/services/veredito_celula.py:30`, :107, :153; autoridade de status em `app/docs/JUIZES.md:120-121`. |
+| Chamados/porta | `app/chamados/juizes.py:411`, :1286, :1631; `app/chamados/models.py:1287`, :2979, :3325, :3327; `app/chamados/reconciliador.py:693`, :704, :868, :879, :1027, :1295, :1307. |
+| Relatórios/telas | `app/relatorios/cartao_pela_celula.py:286`; `app/relatorios/dia_da_frota.py:34`; `app/core/views.py:396`; `app/pautas/services.py:423`; `app/colaboradores/views.py:2874`; `app/colaboradores/services/calendario.py:411`. |
+
+Há muitos outros leitores diagnósticos/vigias/comandos além desses; tabela acima **não é censo exaustivo de toda consulta a `CelulaDia`**. Exemplos comprovados: `app/ponto/services/vigia_entrada.py:78`, `app/ponto/services/vigia_ausencia_veredito.py:42`, `app/ponto/services/vigia_cadastro_futuro.py:31`, `app/escala/services/cadastro_realidade.py:166`, `app/chamados/services/foto_e4b.py:269`.
+
+Anexo real existente: `app/docs/JUIZES.md:101-134`. Define feriado em :101-102; dia previsto “célula; senão aritmética do VÍNCULO” em :112-113; vínculo do dia em :130-131; cobertura em :132-134. Registro vivo confirma dia previsto/precedência em `app/core/juizes.py:186-192`; porta de escrita da célula em `app/core/portas.py:107-112`.
+
+## 15/11 19:56 · sessao c8cda0f10a4a · DISPUTA-ZUMBI-1110 · sonda · origem=Code
+
+Transcrição do dado fornecido; conferência independente em produção: [nao verificado].
+
+```text
+UNIVERSO abertas=468 pode_fechar_True=0 total_erros=0 HOJE=2026-11-15
+abertas                                 468
+pode_fechar_False                       468
+total_erros=0
+```
+
+**Sim, `total_erros=0`.** Portanto, pelo dado fornecido, a medida conclui **zero disputas abertas com C7=True**, entre 468 abertas, em 2026-11-15. [nao verificado]
+
+Na cópia, C7 retorna True quando não há respostas sem veredito nem fio vivo. (`app/chamados/models.py:1911–1917`) A identidade dessa cópia com o HEAD/hash informado é [nao verificado]: o diretório não contém metadados Git.
+
+**Não há PF_TRUE para classificar individualmente no dado fornecido.** Assim, não há caso que exija apontar campo faltante ou caminho de fechamento omitido. [nao verificado]
+
+| Classe conferida no código da cópia | PF_TRUE no dado fornecido |
+|---|---:|
+| (i) Vazia, com abstenção por ata: o emissor consulta C7 e preserva aberta quando `_absteve_por_ata`. (`app/chamados/services/disputa_emissao.py:1292–1301`) | 0 [nao verificado] |
+| (ii) Pai vivo fora do conjunto encerrável: após C7=True, separa em `disputas_com_pai_vivo_fora`. (`app/chamados/services/competencia_trancada.py:173–183`) | 0 [nao verificado] |
+| (iii) Todas as perguntas em dias trancados: a tranca elimina a vivacidade e exclui essas respostas da lista sem veredito. (`app/chamados/juizes.py:1406–1409`; `app/chamados/models.py:1903–1909`) | 0 [nao verificado] |
+| (iv) Beco FECHAVEL: o classificador consulta C7; a entrada do evento encaminha o FECHAVEL ao fechamento. (`app/chamados/services/becos.py:25–33`, `66–78`) | 0 [nao verificado] |
+| (v) Outro: nenhum PF_TRUE fornecido para identificar caminho omitido. [nao verificado] | 0 [nao verificado] |
+
+**Total distribuído: 0 PF_TRUE.** [nao verificado]
+
+## 15/11 19:56 · sessao 57ad847f7f6f · - · - · origem=Ronald (tmux)
+
+Q3 — a condição é possível sob uma referência específica, mas o literal deixa ambiguidades que precisam ser explicitadas:
+
+- Comparar **antes do lote** com **cura + lote** pode produzir 31/31 iguais: o movimento declarado é produzido pela alteração do flag no fallback, e a candidata (a) pretende neutralizar essa dependência. Comparar **impacto anterior depois do lote** com **impacto curado** exige que col940 mude −6,44→−4,24; nesse referencial, “31/31 iguais” contradiz a estabilização pretendida. A mudança anterior está registrada em `app/docs/RELATO.md:4`; a escolha exata dos lados da nova comparação é **[nao verificado]**.
+- O histórico declara 16 vínculos em 13/11 (`app/docs/RELATO.md:738`; `app/docs/BACKLOG.md:729`), enquanto o impacto atual declara 15 vínculos/31 colab-competência (`app/docs/RELATO.md:4`). A identidade do excluído, o motivo e o universo congelado desde 13/11 são **[nao verificado]**.
+- “Qualquer campo gravado” alcança um efeito adicional da porta: `marcar_trabalha_em_feriado` salva o vínculo (`app/colaboradores/services/vinculo.py:894`); o signal invalida o previsto (`app/escala/signals.py:137`, `app/escala/signals.py:146`); `invalidar_previsto` zera `previsto_em` e altera `atualizado_em` de todos os fechamentos daquele colaborador que tenham `previsto_em`, sem filtro de competência/exportação (`app/ponto/services/fechamento.py:1607`). Existir fechamento entregue nessas condições é **[nao verificado]**. O próprio backlog registra esse efeito como fila (`app/docs/BACKLOG.md:730`).
+- O retorno padrão da sombra cobre apenas 26 campos e omite `motivos_espelho`, `causa_espelho`, `previsto_em` e `atualizado_em`; não basta para provar literalmente “qualquer campo gravado” (`app/ponto/services/fechamento.py:454`, `app/ponto/services/fechamento.py:1128`). Um confronto indiscriminado de carimbos recalculados também inclui valores de relógio: `previsto_em=timezone.now()` (`app/ponto/services/fechamento.py:1086`).
+
+O teste oposto já existe: [nao verificado]
+
+- Teste direto: vínculo com início 01/01, feriado de 21/04, flag False → `eh_dia_trabalho=False`; True → trabalho (`app/escala/tests/test_escala_models.py:255`, `app/escala/tests/test_escala_models.py:268`, `app/escala/tests/test_escala_models.py:275`).
+- Vigência delimitada explicitamente: vínculo 01/01–13/12 (`app/ponto/tests/test_precedencia_vinculo_encerrado.py:43`), feriado em 10/12 (`app/ponto/tests/test_precedencia_vinculo_encerrado.py:36`), flag False suprime previsto (`app/ponto/tests/test_precedencia_vinculo_encerrado.py:68`). Resultado de execução nesta revisão: **[nao verificado]**.
+
+Q4 — não é possível afirmar “nenhuma outra exportada muda” com os dados fornecidos: a população da frota e o impacto depois da cura são **[nao verificado]**. O caminho monetário é comprovável sem editar o motor: o banco pergunta ao vínculo por todos os sete dias da semana, inclusive anteriores ao início da fatia (`app/ponto/motor_calculo_v2.py:3436`, `app/ponto/motor_calculo_v2.py:3449`), usa a quantidade como denominador (`app/ponto/motor_calculo_v2.py:3451`) e grava o saldo resultante (`app/ponto/services/fechamento.py:1104`, `app/ponto/services/fechamento.py:1180`). Portanto, alterar `escala/models.py` pode alterar comportamento monetário do motor sem alterar o arquivo do motor (`app/escala/models.py:1096`, `app/escala/models.py:1369`).
+
+Há também leitores de rubrica: fechamento separa folga de feriado por `feriado_vira_folga` e promove HE100 (`app/ponto/services/fechamento.py:949`, `app/ponto/services/fechamento.py:955`); calculador alimenta a mesma pergunta (`app/ponto/calculador/alimentacao.py:521`) e escolhe a rubrica (`app/ponto/calculador/regras.py:684`). O impacto anterior declara zero mudança dessa rubrica nos 31, sem demonstrar a frota inteira (`app/docs/BACKLOG.md:801`).
+
+O candidato (a), isoladamente, pode ser implementado sem escritor de dados e sem editar `motor_calculo_v2.py`; a implementação concreta ainda é **[nao verificado]**. O lote existente, porém, escreve flag e células pelas portas (`app/colaboradores/services/vinculo.py:894`, `app/colaboradores/services/vinculo.py:904`, `app/colaboradores/services/vinculo.py:910`), além da invalidação de fechamento acima.
+
+## 15/11 19:56 · sessao 7ffdf687cbb2 · FERIADO-USA-A-LEI-DE-1609 · sonda · origem=Code
+
+1. Transcrição do dado raspado; execução não conferida em banco/log. [não verificado]
+
+```text
+UNIVERSO HOJE=2026-11-15 colab_comp_examinados=3809 dia_colab_feriado_examinados=7662 competencias=7+14 (ENTREGUE+ABERTA) candidatos_A=118 dia-colab em 87 colab-comp | POPULACAO ENTREGUE_FORA=1 ENTREGUE_LOTE=1 ABERTA_FORA=6 ABERTA_LOTE=0 | total_erros=0
+A_colab_comp_candidatos               87
+A_dia_colab_candidatos               118
+B_fechamento_lido_chamadas            87
+B_sem_resposta                        12
+competencias_ABERTA                   14
+competencias_ENTREGUE                  7
+lote_vinculos                         15
+total_erros=0
+```
+
+**Sim: o dado informa `total_erros=0`.** Não apresenta traceback; o significado das 12 ocorrências de `B_sem_resposta` depende do script ausente. [não verificado]
+
+2. ACERTOS transcritos. FORA = flag gravada; LOTE = flag da lei em memória, conforme definição fornecida. [não verificado]
+
+| Classe | Modo | Colaborador | Competência | Dia | EC | Leitor | Fonte |
+|---|---|---|---|---|---|---|---|
+| ENTREGUE | LOTE | col940 | 09/2026 | 2026-09-07 | 1208 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ENTREGUE | FORA | col945 | 09/2026 | 2026-09-07 | 1255 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ABERTA | FORA | col985 | 10/2026 | 2026-10-12 | 1418 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ABERTA | FORA | col987 | 10/2026 | 2026-10-12 | 1421 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ABERTA | FORA | col990 | 10/2026 | 2026-10-12 | 1424 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ABERTA | FORA | col1018 | 11/2026 | 2026-11-02 | 1517 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ABERTA | FORA | col1023 | 11/2026 | 2026-11-02 | 1522 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+| ABERTA | FORA | col1024 | 11/2026 | 2026-11-02 | 1523 | ponto/motor_calculo_v2.py:3449 | [não verificado] |
+
+3. O único leitor citado corresponde a **`MotorComercial.calcular_mes`**, na apuração semanal do banco de horas. A classe e o método estão em `app/ponto/motor_calculo_v2.py:3199` e `app/ponto/motor_calculo_v2.py:3308`; a consulta ocorre em `app/ponto/motor_calculo_v2.py:3449`.
+
+**É caminho de motor e fechamento:** `fechamento_lido` chama `recalcular_fechamento_mes(..., somente_leitura=True)`, que passa por `apurar_por_fatia` e chama `motor.calcular_mes`. (`app/ponto/services/fechamento.py:1759`, `app/ponto/services/fechamento.py:754`, `app/ponto/services/fechamento.py:286`)
+
+Sem `CelulaDia`, `eh_dia_trabalho` chama o cálculo aritmético; uma base `True` vira `False` quando `feriado_vira_folga` aceita flag, ciclo e feriado. (`app/escala/models.py:1094`, `app/escala/models.py:1096`, `app/escala/models.py:1369`, `app/escala/models.py:1390`, `app/escala/models.py:1392`, `app/escala/models.py:1395`)
+
+Li os arquivos disponíveis da cópia; sem metadados Git, a correspondência com o HEAD solicitado não pôde ser certificada. [não verificado]
+
+4. **Não foi possível auditar o pré-filtro:** `logs/FERIADO-LEI-1609/g_frota/sonda_populacao.py` não está disponível nesta cópia. Portanto, A ser superconjunto de B permanece **[não verificado]**.
+
+Há uma condição concreta para confrontar com A: o leitor recua até segunda-feira, monta semanas completas e consulta os sete dias; só depois restringe a contagem ao período. Assim, consulta também dias anteriores a `data_ini` e posteriores a `data_fim`. (`app/ponto/motor_calculo_v2.py:3436`, `app/ponto/motor_calculo_v2.py:3440`, `app/ponto/motor_calculo_v2.py:3441`, `app/ponto/motor_calculo_v2.py:3449`, `app/ponto/motor_calculo_v2.py:3450`)
+
+Se A limitar os candidatos às datas da competência/fatia, descartará feriados dessas bordas que B consulta. A existência desse corte em A é **[não verificado]**; sem o script, isso é um contraexemplo condicional, não um defeito confirmado.
+
+5. **ENTREGUE FORA = 1** (`col945`, 09/2026); **ENTREGUE LOTE = 1** (`col940`, 09/2026), conforme o dado raspado. [não verificado]
+
+## 15/11 19:56 · sessao aae31e3519ff · - · - · origem=Ronald (tmux)
+
+Q2: **não identifiquei colisão do desenho (a)**, desde que se limite a “SEM célula e FORA da vigência” e preserve o resultado dentro dela. A célula é soberana e o fallback é aritmético/template — `CLAUDE.md:148-157`, `app/docs/LEIS.md:71`. Sem célula, `vinculo_do_dia` declara usar “a aritmética do vínculo que cobre a data” — `app/escala/alimentacao.py:244-247`; cobertura exige `data_inicio <= data`, fim inclusivo e vigência declarada — `app/escala/alimentacao.py:205-216`. E1 diz literalmente: “a geradora da celula so vale DENTRO da vigencia (...) fora dela a juiza devolve None (...) Vigencia, nao o flag ativo” — `app/escala/alimentacao.py:272-283`. As autoridades únicas estão registradas em `app/docs/CORTES.md:335` e `app/docs/CORTES.md:338`.
+
+A lei de **16/09 sobre o padrão de feriado** trata do nascimento de vínculo NOVO: “O posto que DECLAROU (...) vence”; sem declaração, comerciais 5x2/6x1 folgam, demais trabalham; “Vinculo que ja existe nao passa por aqui — quem muda esses e o DP” — `app/escala/models.py:900-917`. Ela não autoriza ler o flag do vínculo em qualquer data, nem manda regravar vínculos existentes — `app/escala/models.py:906-910`.
+
+**Item 4: PROCEDE como registro de pergunta, sem implementação ou decisão.** L-117 manda levar a pergunta ao topo com números e seguir a fila, sem propor lei nova — `app/docs/LEIS.md:138`, `CLAUDE.md:269-273`. E1 determina quem vale na data; o código do banco semanal, entretanto, consulta o mesmo `_ec` pelos sete dias da semana e usa os dias previstos no denominador — `app/ponto/motor_calculo_v2.py:3433-3453`. Portanto não concluir que o corte (a) resolve a pergunta (b) inteira.
+
+Q4, cautela relevante: uma mudança em `EscalaColaborador.eh_dia_trabalho` pode alterar **indiretamente** o banco do motor sem editar `motor_calculo_v2.py`, porque ele chama esse método em `app/ponto/motor_calculo_v2.py:3449`, calcula a proporção em `:3450-3452` e grava o resultado em `:3455`. Quantos colaboradores/competências mudariam é **[nao verificado]** sem a sonda de frota.
+
+Os limites escritos continuam: mexer no GRAVADO exportado, dado de ESCALA/VÍNCULO ou `motor_calculo_v2.py` exige `!` — `CLAUDE.md:265-268`, `CLAUDE.md:142`; dinheiro não exportado requer reversão prévia, exportada intacta e prova de frota — `CLAUDE.md:406-410`; exportado exige critério e porta própria — `CLAUDE.md:411-417`. **Não assumir proteção automática pela recusa do recalculador:** L-113 documenta que a recusa genérica de exportada caiu, substituída por trilha — `app/docs/LEIS.md:154`.
+
+## 15/11 19:55 · sessao 58dc16a71f83 · - · - · origem=Ronald (tmux)
+
+O único leitor citado, `ponto/motor_calculo_v2.py:3449`, corresponde a `MotorComercial.calcular_mes`: classe em `app/ponto/motor_calculo_v2.py:3199`, método em `app/ponto/motor_calculo_v2.py:3308`.
+
+- **É caminho de motor e fechamento.** `fechamento_lido` chama `recalcular_fechamento_mes` com `somente_leitura=True`; este chama `apurar_por_fatia`, que executa `motor.calcular_mes`. (`app/ponto/services/fechamento.py:1759`, `app/ponto/services/fechamento.py:754`, `app/ponto/services/fechamento.py:286`)
+- **O leitor consulta semanas completas:** recua o cursor até segunda, constrói os sete dias e chama `eh_dia_trabalho` em todos; somente depois conta os dias dentro do período. Pode consultar dias anteriores a `data_ini` e posteriores a `data_fim`. (`app/ponto/motor_calculo_v2.py:3436`, `app/ponto/motor_calculo_v2.py:3441`, `app/ponto/motor_calculo_v2.py:3449`, `app/ponto/motor_calculo_v2.py:3450`)
+- **O vínculo consultado é o da fatia:** o motor recebe `escala_colaborador=esc`, armazena em `self._ec`, recuperado como `_vinc_bh`. (`app/ponto/services/fechamento.py:289`, `app/ponto/motor_calculo_v2.py:2309`, `app/ponto/motor_calculo_v2.py:3433`)
+- **Sem CelulaDia**, `eh_dia_trabalho` usa o cálculo aritmético; quando `base is True`, `feriado_vira_folga` pode devolver folga. O predicado exige flag falsa, ciclo contemplado e feriado no lugar do vínculo; não testa vigência. (`app/escala/models.py:1087`, `app/escala/models.py:1096`, `app/escala/models.py:1369`, `app/escala/models.py:1389`)
+- **Ponto para confrontar com Etapa A:** qualquer pré-filtro limitado à janela da competência/fatia descartaria feriado na borda da semana que o leitor real consulta; isso é um contraexemplo condicional, cuja presença no script depende de sua leitura. (`app/ponto/motor_calculo_v2.py:3436`, `app/ponto/motor_calculo_v2.py:3440`, `app/ponto/motor_calculo_v2.py:3449`)
+
+## 15/11 19:52 · sessao fa73c9ea025e · DISPUTA-ZUMBI-1110 · censo · origem=Code
+
+**1. Existe contador hoje? Sim, em recortes; não localizei um contador global exato de “aberta + C7=True” nos caminhos lidos.** O estado aberto é `fechada_em is None`; C7 consulta perguntas, respostas sem veredito e fio vivo. (`app/chamados/models.py:1871`, `1911–1917`)
+
+| Caminho | O que efetivamente cobre |
+|---|---|
+| `becos` / `fechar_becos_disputa --alarme` | **Conta o estado pedido dentro dos becos:** disputa aberta, pai terminal e nenhuma pergunta considerada visível pelo filtro local. Só depois pergunta C7; imprime fecháveis/barradas e sai com rc 2 se houver fechável. Não há janela de datas. (`app/chamados/services/becos.py:25–33`; `app/chamados/management/commands/fechar_becos_disputa.py:32–44`, `67–70`) |
+| `vigia_carimbo` | Conta **perguntas de hora/data_hora validadas**, com ou sem registro, independentemente de disputa aberta/fechada. Não pergunta C7. (`app/chamados/services/vigia_carimbo.py:95–132`) |
+| `desenlace` | Apresentação por chamado: recebe uma explicação com `pode_fechar` e produz estado/ação. Não varre nem conta disputas. (`app/chamados/services/desenlace.py:44–67`) |
+| `reconciliador` | Pergunta C7 para fechar disputas atingidas pelos atos de reconciliação; não acumula o censo global pedido. O vigia `reconciliar_chamados` conta premissas mortas, perguntas absolvidas, rejunção e outbox. (`app/chamados/reconciliador.py:412–414`, `609–615`, `1158–1173`; `app/chamados/management/commands/reconciliar_chamados.py:89–124`) |
+| `crons_quebrados` | Conta últimas execuções com saída diferente de 0 e 2; seu universo são corridas de cron nas últimas 26 horas, não disputas. (`app/core/services/crons_quebrados.py:16–17`, `24–47`) |
+| `config/crons.py` | Agenda beco às **07:10**, reconciliador a cada **15 minutos** e carimbo como elo após fio morto. Essas entradas não acrescentam um censo global de disputas. (`app/config/crons.py:663`, `395`, `1774–1776`) |
+
+**Outros contadores encontrados:**
+
+- **Relatório de pendências:** percorre todas as abertas e usa C7 para `PRONTA_FECHAR`, mas separa as sem perguntas em `SEM_PERGUNTA` **antes** de chamar C7. Portanto, `PRONTA_FECHAR` não equivale ao total global pedido. É sob demanda, sem saída de alarme. (`app/chamados/relatorios_disputa.py:11–28`, `45–58`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:14–40`; `app/config/crons.py:1463`)
+- **Competência trancada:** conta abertas com C7=True ligadas às perguntas daquela competência, **excluindo pai vivo fora do conjunto que será encerrado**. O comando mostra disputas e uma soma de chamados+perguntas+disputas; `placar_code.sh` recolhe essa soma. Não tem cron próprio nem rc 2 nesse comando. (`app/chamados/services/competencia_trancada.py:119–126`, `173–183`, `346–355`; `app/chamados/management/commands/chamados_em_competencia_trancada.py:12–30`; `bin/placar_code.sh:285–289`; `app/config/crons.py:1295–1297`)
+- **Vigia do fio:** `disputa_vazia()` conta o motivo de fechamento `vazia`; `viva_em_disputa_fechada()` conta perguntas vivas em disputas **fechadas**. Nenhum corresponde ao estado solicitado. (`app/chamados/services/vigia_fio.py:748–780`)
+
+Quantidade atual em produção, execuções efetivamente instaladas e ocorrência concreta desses estados: **[nao verificado]**.
+
+**2. Opções de sítio, preservando C7 e sem alterar `config/crons.py`.**
+
+Considere **N** disputas abertas, **B** abertas que passam pelo filtro de beco e **E** abertas sem perguntas; são universos derivados dos filtros existentes. (`app/chamados/management/commands/fechar_becos_disputa.py:32–43`; `app/chamados/services/becos.py:27–33`; `app/chamados/relatorios_disputa.py:12–14`)
+
+| Opção técnica | Universo e custo de C7 |
+|---|---|
+| **(a) Estender `fechar_becos_disputa --alarme`** | Contador geral sobre N abertas: **N chamadas**, uma por disputa. Hoje são B chamadas. Acrescentar uma passagem global mantendo a classificação atual sem reaproveitamento custaria **N+B**. Já existe execução diária com `--alarme`; a aplicação pode continuar restrita aos becos. (`app/chamados/services/becos.py:25–33`; `app/chamados/management/commands/fechar_becos_disputa.py:30–57`; `app/config/crons.py:663`) |
+| **(b) Acrescentar a outro vigia existente** | No **carimbo**, seriam N chamadas novas, além da classificação atual das perguntas validadas; é necessário carregar as abertas separadamente. No **reconciliador**, seriam N chamadas novas **a cada 15 minutos**, além dos censos atuais. (`app/chamados/services/vigia_carimbo.py:97–116`; `app/chamados/management/commands/reconciliar_chamados.py:57–100`; `app/config/crons.py:395`, `1774–1776`) |
+| **(c) Contador sob demanda / relatório** | Um contador próprio sobre abertas custaria N chamadas. Reaproveitar o relatório atual exige incluir as E vazias: hoje ele chama C7 apenas N−E vezes. O relatório não possui `--alarme` nem agendamento. (`app/chamados/relatorios_disputa.py:12–25`, `45–52`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:11–40`; `app/config/crons.py:1463`) |
+
+**Custo de uma chamada:** C7 materializa a lista inteira de perguntas; avalia respostas sem veredito e, se essa lista estiver vazia, executa `fio_vivo`, que interrompe na primeira pergunta viva. Sem `perguntas=` ou prefetch, há carregamento da relação. (`app/chamados/models.py:1889–1917`; `app/chamados/juizes.py:1507–1516`)
+
+As consultas transitivas variam conforme o caso: tranca da competência e toque administrativo; célula/veredito/ata/lâmpadas; classificação de falta; provas de materialização, incluindo batidas e trilha. Logo **não há número fixo de SQL por disputa**; prefetch e memos alteram o custo. (`app/chamados/juizes.py:977–995`, `1013–1024`, `1402–1488`, `755–800`; `app/chamados/models.py:1905–1909`) Quantidade de queries e duração atuais em produção: **[nao verificado]**.
+
+**Como o rc chega ao placar:**
+
+1. O comando levanta `SystemExit(2)`; o envelope captura a saída, grava `exit` no JSONL e devolve o mesmo rc. Rc 2 também deixa carimbo de conclusão. (`app/chamados/management/commands/fechar_becos_disputa.py:67–70`; `bin/cron_run.sh:11–25`, `38`)
+2. `crons_quebrados.EXITS_DE_ALARME=(0,2)` exclui rc 2 dos quebrados; o envelope também não abre pauta de quebra por esse rc. (`app/core/services/crons_quebrados.py:16`, `46–47`; `bin/cron_run.sh:27–35`)
+3. `pipeline_placar` acumula rc 2 em `alarmes` e pode mostrar a linha como `ALARME`. **Esse estado não entra na lista que determina o rc do próprio pipeline**: entram `ERRO`, `NAO_RODOU` e `DEPENDENCIA_QUEBRADA`. Assim, pode haver linha `ALARME` junto de `A5 OK`. (`app/core/management/commands/pipeline_placar.py:74–80`, `118–137`, `151–163`)
+4. Um comando novo, sem cadastro e executado pelo envelope, aparece como `ORFAO`; isso sozinho não o inclui nos alarmes A5. (`app/core/management/commands/pipeline_placar.py:134–137`, `156–163`)
+
+A opção **(a)** já dispõe de universo inicial, agenda e transporte de rc; porém sua mensagem atual atribui o achado ao **evento de beco**, significado que precisaria distinguir do contador geral. (`app/chamados/management/commands/fechar_becos_disputa.py:32–33`, `68–70`; `app/config/crons.py:663`)
+
+**3. Quem escreve, quem lê e onde a semântica diverge.**
+
+**Escritores de `fechada_em`:**
+
+- `DisputaSupervisao.fechar()` grava instante, autor, resolução e motivo. (`app/chamados/models.py:1996–2000`)
+- `reabrir_admin()` e `reabrir_sistema()` limpam esses campos. (`app/chamados/models.py:2213–2225`, `2237–2241`)
+- `pode_fechar()` é leitura: produz bool; não consulta o próprio `fechada_em`, o pai nem flags de operação em curso. (`app/chamados/models.py:1911–1917`)
+
+**Chamadores diretos de C7 identificados no código:**
+
+| Finalidade | Leitores |
+|---|---|
+| Classificação/apresentação | Relatório e explicador. (`app/chamados/relatorios_disputa.py:24`; `app/chamados/services/explicador.py:139`) |
+| Beco e tranca | Classificar/fechar beco; medir/aplicar encerramento da competência. (`app/chamados/services/becos.py:33`, `56`; `app/chamados/services/competencia_trancada.py:178`, `227`) |
+| Emissão/materialização | Autoencerramento, resolução por chamado e conclusão da materialização. (`app/chamados/services/disputa_emissao.py:1292`, `2112`; `app/chamados/services/materializacao.py:591`, `1322`) |
+| Reconciliação | Fechamento das disputas alcançadas pelos respectivos atos. (`app/chamados/reconciliador.py:412`, `612`, `1171`) |
+| Entrada/foto | Sincronização de entrada e upload de foto. (`app/ponto/services/entrada_sincronizada.py:59`; `app/api/foto_recebida.py:83`) |
+
+**Leitores de `fechada_em` com efeitos ou apresentação relevantes:**
+
+- Signals pedem fechamento do pai, retomam regularizações e materializam pendentes aprovadas. (`app/chamados/signals.py:29–46`, `131–146`, `155–165`)
+- Regularização externa bloqueia qualquer disputa aberta; o helper público também procura qualquer aberta. (`app/chamados/services/regularizacao_ext.py:59–66`; `app/chamados/services/disputa_emissao.py:34–42`)
+- App particiona pendência/histórico; API seleciona abertas; tela conta abertas. (`app/chamados/services/pergunta_no_app.py:76–85`; `app/api/views.py:1016–1035`; `app/chamados/views.py:909–912`)
+- Situação e painel identificam colaborador com disputa aberta. (`app/colaboradores/services/situacional.py:117`; `app/colaboradores/painel_cell.py:31–32`)
+
+**ESMERIL-SEMANTICA — diferenças concretas:**
+
+- C7=True **não significa “tudo validado e gravado”**: aceita disputa vazia e perguntas de dias trancados; `desenlace` usa exatamente aquele texto para `pode_fechar=True`. (`app/chamados/models.py:1903–1917`; `app/chamados/services/desenlace.py:62–65`)
+- O relatório rotula `PRONTA_FECHAR` como **“FALTA MATERIALIZAR”**, embora a classificação venha de C7. (`app/chamados/relatorios_disputa.py:24–25`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:29`)
+- Disputa vazia é fechável pelo C7, mas bloqueia o encerramento do pai no leitor `disputa_viva_do_chamado`. São respostas diferentes em domínios diferentes. (`app/chamados/models.py:1916–1917`; `app/chamados/juizes.py:2440–2446`; `app/chamados/models.py:153–160`)
+- Há leitor legado que aceita **qualquer disputa fechada do colaborador** como prova de regularização de chamado de furo sem dia. (`app/chamados/models.py:187–190`)
+- Rc 2 significa alarme de negócio, não cron quebrado; sua não propagação ao agregado A5 está inclusive fixada por teste. (`app/core/services/crons_quebrados.py:16`, `46`; `app/chamados/tests/test_contract_crons.py:186–208`)
+
+**4. Testes existentes de `fechar_becos_disputa` e impacto.** [nao verificado]
+
+| Teste | Contrato fixado | [nao verificado]
+|---|---|
+| `BecoPeloEventoDaPergunta.test_o_cron_virou_VIGIA_alarme_nao_escreve_e_sai_2` | `--alarme --apply` dá rc **2** e mantém a disputa aberta. (`app/chamados/tests/test_varredura_becos_evento_pergunta.py:97–109`) |
+| `FecharBecosCommandTest.test_command_fecha_beco_pai_resolvido` | Apesar do nome, exige **C7=False e disputa aberta**, pois a pergunta continua viva. (`app/chamados/tests/test_fio_disputa_resolvido.py:149–156`) |
+| `test_command_nao_fecha_pai_aberto` | `--apply` preserva disputa com pai aberto. (`app/chamados/tests/test_fio_disputa_resolvido.py:158–162`) |
+| `test_command_dry_run_nao_fecha` | Execução sem `--apply` preserva aberta. (`app/chamados/tests/test_fio_disputa_resolvido.py:164–168`) |
+| `test_idempotente_e_uma_linha_de_trilha` | Rodar `--apply` após o evento conserva uma trilha de fechamento. (`app/chamados/tests/test_varredura_becos_evento_pergunta.py:83–95`) |
+| `test_o_cron_e_o_receiver_chamam_a_MESMA_porta` | Command delega a `fechar_beco`, sem incorporar o corpo de resolução. (`app/chamados/tests/test_varredura_becos_evento_pergunta.py:111–117`) |
+
+Nos testes encontrados, stdout/stderr são capturados sem comparação textual; o assert explícito de rc é o primeiro acima. (`app/chamados/tests/test_fio_disputa_resolvido.py:152`, `160`, `166`; `app/chamados/tests/test_varredura_becos_evento_pergunta.py:106–109`)
+
+**Se apenas o alarme ganhar o universo geral, preservando `--apply`, nenhum desses asserts precisa necessariamente mudar.** Eles não fixam rc normal nem saída para aberta+C7=True fora do beco; o novo contrato precisaria desses casos. (`app/chamados/tests/test_varredura_becos_evento_pergunta.py:97–117`; `app/chamados/tests/test_fio_disputa_resolvido.py:149–168`) Resultado de execução dos testes: **[nao verificado]**.
+
+**5. Contraexemplos e resposta de C7.**
+
+| Caso | Resposta de C7 e evidência |
+|---|---|
+| **Sem ata, aguardando informação** | **True para disputa vazia**, mas o emissor deliberadamente não fecha quando `_absteve_por_ata`. O teste fixa zero perguntas, disputa aberta e aviso `auto_fecho_disputa`. É um contraexemplo concreto à inferência “C7=True implica fechamento esquecido”. (`app/chamados/models.py:1916–1917`; `app/chamados/juizes.py:1516`; `app/chamados/services/disputa_emissao.py:1292–1301`; `app/chamados/tests/test_hx_disputa_muda_sem_ata.py:51–61`) |
+| **Pai vivo fora da competência encerrável** | **True**, explicitamente: o código passa por C7 e depois conserva a disputa em `disputas_com_pai_vivo_fora`, para evitar encerrar o pai por tabela. (`app/chamados/services/competencia_trancada.py:24–28`, `173–183`) |
+| **Todas as perguntas em dias trancados** | **True**: C6 as considera mortas e a lista sem veredito exclui respostas trancadas. Há testes explícitos, inclusive com resposta do colaborador. Tranca isoladamente não prova que manter aberta seja o destino esperado: também há teste exigindo fechamento pela porta da tranca. (`app/chamados/juizes.py:1406–1409`; `app/chamados/models.py:1903–1909`; `app/chamados/tests/test_c7_red_minimos.py:361–382`, `329–350`) |
+| **Materialização em curso** | C7 **não testa “em voo”**; o S143 pula esse fechamento por guarda anterior. Portanto pode continuar True conforme as perguntas. A flag é ContextVar dentro de transação; observação desse intervalo por um cron externo: **[nao verificado]**. (`app/chamados/models.py:1911–1917`; `app/chamados/services/disputa_emissao.py:2110–2113`; `app/chamados/services/materializacao.py:1137–1161`) |
+| **Pai legitimamente aguardando conversa humana** | Isso não determina sozinho C7 da disputa: o gate do pai admite que a disputa feche enquanto ele permanece humano. Se a própria disputa possui resposta sem veredito, não materializada e fora da tranca, C7 responde **False**. (`app/chamados/models.py:699–712`, `1905–1917`) |
+
+**Os casos acima demonstram que “aberta+C7=True” não equivale automaticamente a “o evento de beco falhou”.** No contador literal solicitado, esses estados entram; uma regra que os dispense de alarmar não está estabelecida pelo material fornecido: **[nao verificado]**. (`app/chamados/services/becos.py:25–33`; `app/chamados/services/disputa_emissao.py:1292–1295`; `app/chamados/services/competencia_trancada.py:178–183`)
 
 ## 15/11 19:50 · sessao 4317c1388896 · - · - · origem=Ronald (tmux)
 
@@ -574,260 +847,4 @@ Para o módulo real `chamados/services/vigia_fio.py`, atenção aos métodos que
 
 - `censo:359` e `censo_alcance:593` chamam o método `CargaDaTarefa.tarefa`; este chama `_ler_vida` e a função local `ler`, além de `resolver_dia_oferecido_nas_datas(...agora=self.agora)` (`chamados/services/tarefa_do_dia.py:574`, `:578`, `:600`, `:613`). A função local chama `alimentar_fila` com instante (`:588`, `:590`). Esses métodos e a função local precisam integrar o limite de saltos.
 
-## 15/11 18:43 · sessao db3018739a90 · - · - · origem=Ronald (tmux)
-
-Complemento para o módulo real `app/chamados/services/vigia_fio.py`; correspondência com o caminho solicitado `folha/vigia_fio.py` [não verificado].
-
-- `censo_alcance` escolhe empresas visíveis, com interseção opcional de IDs; escolhe competências via import local de `competencias_a_lavrar`, não pelo helper do RetratoFolha. Lê dias vivos de `dias_que_seguram` e deduplica por `(colab, data)`, sem consultar RetratoFolha. `app/chamados/services/vigia_fio.py:508-520`, `:534-544`.
-- `competencias_a_lavrar` inclui a atual sempre e a anterior somente se `competencia_entregue` for falso. `app/ponto/services/he_pendente_lavrado.py:218-225`. O juiz considera registro vigente não invalidado da empresa/competência. `app/folha/export.py:580-594`.
-- Contracaso derivável: em 25/10/2026, corte 21, com 10/2026 entregue, `competencias_do_retrato` seleciona 10 e 11; alcance seleciona somente 11. Ocorrência em produção [não verificado]. `app/folha/retrato_folha.py:1377-1383`; `app/ponto/services/he_pendente_lavrado.py:220-224`; cálculo das janelas em `app/ponto/janelas.py:24-33`, `:66-72`.
-- `censo` antigo escolhe chamados com status vivo e célula, sem janela/competência; `empresas=None` não restringe visibilidade, e o recorte opcional aplica somente empresas fornecidas. Depois seleciona células apontadas com veredito acusando. `app/chamados/services/vigia_fio.py:289-293`, `:331-334`.
-- Contracaso derivável: chamado vivo de competência antiga ou empresa oculta pode pertencer ao censo antigo e ficar fora do alcance por janela/visibilidade. Ocorrência em produção [não verificado]. `app/chamados/services/vigia_fio.py:290-292`, `:517-520`, `:534-537`.
-- O universo subsidiário de `ListaDoAdmin` cruza sempre empresas visíveis, inclusive quando o censo antigo recebeu `None`; portanto não coincide necessariamente com as empresas dos chamados contados. `app/chamados/services/vigia_fio.py:189-194`, `:290-292`.
-
-## 15/11 18:42 · sessao db3018739a90 · - · - · origem=Ronald (tmux)
-
-Censo por AST/leitura, somente leitura. Os acessos de produção a `RetratoFolha` encontrados são os abaixo; os imports são diretos, incluindo os locais em funções. Não encontrei acesso via alias de módulo/atributo nem via `retratos_folha`; conclusão da varredura AST [não verificado por arquivo:linha].
-
-1. **Universos escolhidos**
-
-- **Fonte de empresas visíveis:** `ativa=True`, exclui CNPJ com prefixo `11222333`, ordena por razão social. Essa ordem também decide a primeira empresa padrão da tela. `app/colaboradores/queries.py:78-87`.
-- **Lavrador:** importa localmente `empresas_visiveis`, `RetratoFolha`, `competencias_do_retrato`; empresas = visíveis, com interseção opcional por `--empresa`. Se **ambos** `--mes` e `--ano` forem verdadeiros, usa exclusivamente o par explícito; senão usa o helper por empresa. Um só dos dois argumentos é ignorado para escolha de competência. Grava por `(empresa, mes, ano)`. `app/folha/management/commands/lavrar_retrato_folha.py:44-61`, `:77-79`.
-- **Helper compartilhado:** chama `janela_anterior` e `janela_atual`, usa mês/ano da data final e elimina pares repetidos. Import local e funções passadas por variável `_j`: essa chamada indireta consta na AST e na leitura. `app/folha/retrato_folha.py:1369-1383`.
-- **Janelas:** `janela_atual(data, empresa)` usa `periodo_apuracao_atual` e corte da empresa; dia maior/igual ao corte desloca competência para mês seguinte. `janela_anterior` aplica `janela_atual` ao dia imediatamente anterior ao início da atual. Corte recebe objeto ou pk, tem padrão 21 e clamp 2–28. `app/ponto/janelas.py:24-33`, `:36-51`, `:60-72`.
-- **Frescor:** importa localmente empresas e modelos, transforma o `agora` recebido em dia local, percorre **visíveis × helper por empresa**, consulta retrato por par exato e fechamento pelo mesmo par; ausência vira `nunca lavrado`. Não aceita recorte de empresas/competências explícitas. `app/folha/retrato_folha.py:1401-1418`.
-- **Vigia retido:** command passa `None` sem `--empresa`, ou lista de IDs com a flag. `app/folha/management/commands/vigiar_retido_calado.py:30-33`. O censo começa com **todos os retratos**; filtro opcional de IDs não cruza com visíveis. Empresas são construídas **somente a partir dos retratos que existem**; só então consulta helper e separa presentes/ausentes da janela. `app/folha/vigia_retido_calado.py:39-58`. Contadores só percorrem `da_lavra`; `cego` significa nenhuma linha bloqueada ou nenhum retrato escolhido. `:64-89`.
-- **Tela/PDF/raiox:** lista visíveis para opções, mas URL ou preferência não `todas` consulta `Empresa.objects.filter(pk=_eid)` sem exigir visibilidade; empresa inválida/ausente cai na primeira visível. Alvo é a empresa encontrada ou todas as visíveis. `app/folha/views_retrato.py:147-164`.
-- **Competência da tela:** usa atual da empresa escolhida; em `todas`, usa atual da **primeira visível**, depois aplica um único `(mes, ano)` a **todas**. URL sobrepõe mês/ano independentemente; setas fazem ±1 mês. `app/folha/views_retrato.py:179-193`. `mes_ou` aceita 1–12 e `ano_ou` 2000–2100, com fallback recebido. `app/core/sanitiza.py:30-35`.
-- **Aviso de frescor da tela:** chama frescor global, mas retém somente par mostrado e empresas que **já apareceram em `_retratos`**. `app/folha/views_retrato.py:208-212`.
-- **Painel lateral do colaborador:** requer mês e ano válidos na URL, empresa cadastrada no colaborador e permissão; consulta par exato e **exige empresa em visíveis**, ao contrário da seleção de pk da tela principal. Imports locais. `app/colaboradores/views.py:975-984`.
-
-**Divergências concretas deduzidas do código; ocorrência em produção [não verificado]:**
-
-- Empresa visível sem **nenhum** retrato: lavrador/frescor a incluem; frescor produz ausências, mas vigia nunca cria sua entrada nem `competencias_sem_retrato`, porque deriva empresas dos retratos existentes. `app/folha/management/commands/lavrar_retrato_folha.py:51-61`; `app/folha/retrato_folha.py:1410-1418`; `app/folha/vigia_retido_calado.py:46-58`. A fixture vazia só verifica `retratos=[]`, `calados=0`, `cego=1`; não exige competências ausentes. `app/chamados/tests/test_e3_r3_c16_sem_banco.py:111-113`.
-- Empresa inativa/diagnóstico com retrato de janela: `censo(None)` a inclui; lavrador/frescor/tela em `todas` a excluem. `app/colaboradores/queries.py:85-87`; `app/folha/vigia_retido_calado.py:46-56`; `app/folha/views_retrato.py:147-164`.
-- A mesma empresa oculta pode ser aberta por `?empresa=<pk>`/preferência na tela principal, mas seu frescor não vem e seu bloco no painel lateral não encontra retrato. `app/folha/views_retrato.py:153-164`, `:210-212`; `app/folha/retrato_folha.py:1410`; `app/colaboradores/views.py:982-983`.
-- `25/10/2026`, corte 21: automático/helper = competências 10 e 11; lavra explícita 09 pode existir/ser mostrada via URL, mas frescor e vigia não a avaliam. O caso 09 explícita versus 10/11 automáticas está materializado na fixture. `app/chamados/tests/test_e3_r3_c16_sem_banco.py:35-37`, `:86-93`; escolhas em `app/folha/management/commands/lavrar_retrato_folha.py:57-61`, `app/folha/vigia_retido_calado.py:55-58`, `app/folha/views_retrato.py:181-193`.
-- `15/11/2026`, empresa A corte 21, B corte 10: helper A = 10/11; B = 11/12. Se A vier primeiro em `todas`, tela mostra 11 para ambas e não mostra a atual 12 de B. Se B vier primeiro, tela pede 12 também para A, embora automática de A cubra 10/11. É consequência aritmética do código; empresas reais com esses cortes [não verificado]. `app/ponto/janelas.py:24-33`, `:66-72`; `app/folha/retrato_folha.py:1377-1383`; `app/folha/views_retrato.py:179-193`.
-- Empresa visível sem retrato no par mostrado: frescor diz `nunca lavrado`; aviso da tela a elimina porque `_no_recorte` só contém empresas com retratos. `app/folha/retrato_folha.py:1412-1418`; `app/folha/views_retrato.py:209-212`.
-- Lavrador explícito de uma empresa/par não equivale ao universo global do frescor: o filtro `--empresa` e o par explícito pertencem somente ao lavrador, enquanto frescor sempre percorre todas as visíveis e janelas. `app/folha/management/commands/lavrar_retrato_folha.py:51-61`; `app/folha/retrato_folha.py:1410-1412`.
-
-2. **O que os selos de relógio contam**
-
-- **c14 `test_RED_o_que_fazer_sem_hoje_falha_e_nao_le_relogio_proprio`: CHAMADAS interceptadas**, exige zero com `Mock.assert_not_called()`. O mesmo mock substitui `localdate` e `now`; não é contagem de “uma leitura”. `app/chamados/tests/test_e3_r3_c14_sem_banco.py:270-283`.
-- **c14 `test_painel_entrega_o_dia_do_instante_do_ato`: não conta chamadas nem nomes de relógio**; somente verifica que o keyword `hoje` de uma chamada encontrada a `o_que_fazer` tem AST textual `hoje.date()`, apesar da docstring dizer “lido UMA vez”. `app/chamados/tests/test_e3_r3_c14_sem_banco.py:292-299`.
-- **c15 `_le_relogio`: NOMES distintos**. É `sorted({n.func.attr ...})`; dois `.now()` produzem `['now']`. Reconhece atributos `now`, `today` e `localdate` sem argumentos posicionais; não reconhece `localtime()` sem argumentos nem alias direto `now()`. `app/chamados/tests/test_e3_r3_c15_sem_banco.py:159-163`.
-- **c15 `_instante_da_borda`: quantidade de alvos `ast.Name` de `Assign` cujo RHS é atributo `.now()`**, sem deduplicação. Não conta todas as chamadas; um `.now()` solto adicional não entra, e `a = b = tz.now()` produz dois alvos para uma chamada. `app/chamados/tests/test_e3_r3_c15_sem_banco.py:180-184`.
-- **c15 selo recorte:** combina `len(_instante_da_borda)==1` com conjunto de nomes `['now']`, e verifica passagem do instante/dia. Não prova total de chamadas. `app/chamados/tests/test_e3_r3_c15_sem_banco.py:203-211`.
-- **c15 selo calendário:** mesma combinação e limitação. `app/chamados/tests/test_e3_r3_c15_sem_banco.py:213-219`.
-- **c15 leitores sem relógio:** exige conjunto de nomes vazio; qualquer chamada reconhecida torna o conjunto não vazio, mas não segue chamadas transitivas. `app/chamados/tests/test_e3_r3_c15_sem_banco.py:196-201`, `:159-163`.
-- **c15 G1/carimbo único:** usa iterador de instantes e `now=lambda: next(relogio)`; compara **conjunto de `lavrado_em` gravados** com o primeiro instante. Não verifica `call_count`. `app/chamados/tests/test_e3_r3_c15_sem_banco.py:35-44`, `:62-63`, `:97-99`.
-- **c16 drawer:** importa o `_le_relogio` de c15 e usa só `['now']`: **NOMES distintos**, portanto dois `.now()` continuam aprováveis por essa asserção. `app/chamados/tests/test_e3_r3_c16_sem_banco.py:26`, `:149-152`.
-- **c16 relatório:** importa os dois helpers e combina contagem de alvos de atribuição com nomes distintos, mesma limitação dos selos de view c15. `app/chamados/tests/test_e3_r3_c16_sem_banco.py:26`, `:154-159`.
-
-## 15/11 18:36 · sessao 5f5716b33138 · E3-RESTO-R3 · verificador · origem=Code
-
-**Ocorrência dos casos abaixo em produção: [nao verificado]. São contraprovas construídas a partir do código.**
-
-**A. Cura incompleta.**
-
-As curas chegaram aos sítios de produção: seleção das competências, dia do drawer, instante do relatório e documentação de `lavrado_em`. Entretanto, restam falhas de universo, propagação do relógio e documentação, detalhadas em B, D e G. (`app/folha/vigia_retido_calado.py:46–58`; `app/colaboradores/services/drawer.py:21–22`; `app/relatorios/views.py:1519–1543`; `app/folha/models.py:315–321`)
-
-Os oito mutantes registrados do c16 morreram por asserção na execução em memória; eles cobrem V/U/R/N, mas não os contraexemplos abaixo. E5 foi corrigido no instrumento `censo_none_literal`; a API de `dataset_furos` continua aceitando `agora=None`. (`app/chamados/tests/e3_r3_c16_mutantes.py:25–38`; `app/chamados/tests/e3_r3_c15_mutantes.py:65–83`; `app/chamados/tests/test_e3_r3_c16_sem_banco.py:162–185`; `app/relatorios/furos.py:103`)
-
-**B. Dois achados de universo.**
-
-- **Alta — empresa sem nenhum retrato desaparece.** O vigia descobre empresas pelos próprios retratos. Em **25/10/2026**, empresa visível E2, corte 21, sem retratos: deveria nomear `(E2,10,2026)` e `(E2,11,2026)`, mas devolve nenhuma falta para E2. Lavrador e frescor incluem essa empresa. Havendo outra empresa com bloqueados, `cego=0`, ocultando a cobertura ausente. (`app/folha/vigia_retido_calado.py:46–58`; `app/folha/vigia_retido_calado.py:89`; `app/folha/management/commands/lavrar_retrato_folha.py:51–61`; `app/folha/retrato_folha.py:1410–1418`)
-
-- **Média — inclui empresas fora do universo automático.** `censo(None)` inclui retratos de empresas inativas ou de diagnóstico; lavrador e frescor usam `empresas_visiveis()`. Exemplo: E3 inativa, retrato 11/2026, hoje 25/10/2026: o vigia conta esse retrato e declara falta da competência 10; os outros dois excluem E3. (`app/folha/vigia_retido_calado.py:46–58`; `app/colaboradores/queries.py:85–87`; `app/folha/management/commands/lavrar_retrato_folha.py:51`; `app/folha/retrato_folha.py:1410`)
-
-Nos demais casos pedidos, nenhum erro encontrado: em **21/10/2026**, corte 21 produz competências **10/11**, enquanto corte 26 produz **09/10**; competência futura fora dessas duas é excluída. Retrato duplicado por empresa/competência é vedado pela constraint. (`app/ponto/janelas.py:24–33`; `app/ponto/janelas.py:66–72`; `app/folha/retrato_folha.py:1377–1383`; `app/folha/vigia_retido_calado.py:56`; `app/folha/models.py:365–367`)
-
-**C. Escritores, leitores e significado.**
-
-| Campo/lista | Quem escreve | Quem lê |
-|---|---|---|
-| `competencias_sem_retrato` | `censo`, `app/folha/vigia_retido_calado.py:53–61` | `linhas`, no mesmo arquivo:94–97; command imprime em `app/folha/management/commands/vigiar_retido_calado.py:34–35` |
-| Lista de `competencias_do_retrato` | `app/folha/retrato_folha.py:1377–1383` | Lavrador: `app/folha/management/commands/lavrar_retrato_folha.py:61`; frescor: `app/folha/retrato_folha.py:1411`; vigia: `app/folha/vigia_retido_calado.py:55–58` |
-| `RetratoFolha.lavrado_em` | Instante capturado e gravado pelo lavrador: `app/folha/management/commands/lavrar_retrato_folha.py:49–50`, `:77–79` | Frescor/rótulo: `app/folha/retrato_folha.py:1412–1445`; mínimo da tela: `app/folha/views_retrato.py:203`; apresentação: `app/templates/folha/_retrato_barra.html:22` |
-
-As competências significam **mês/ano do fim da janela da empresa**, não mês civil. `lavrado_em` significa **instante do início da rodada**; o vigia deixou de usá-lo para selecionar universo. A divergência encontrada é de empresas abrangidas, conforme B. (`app/ponto/janelas.py:10–21`; `app/folha/retrato_folha.py:1380–1382`; `app/folha/retrato_folha.py:1399`; `app/folha/vigia_retido_calado.py:55–58`)
-
-`competencias_sem_retrato` é publicado, mas não participa do alarme: este consulta apenas `cego`, `calados` e `dias_sem_leitura_sistema`. (`app/folha/management/commands/vigiar_retido_calado.py:16–17`; `app/folha/management/commands/vigiar_retido_calado.py:37–41`)
-
-**D. Dois relógios ainda fora da borda.**
-
-- **Média — relatório.** `furos_espelho` chama `escalas_em_limbo(empresa)`, que lê outro `localdate()`. Caso: borda **15/11 às 23:59:59**; limbo executado em **16/11 às 00:00:01**; células de col7 em 15/16/17 com `trabalha=None,None,True`. Pelo dia da borda, col7 entra no limbo; pelo relógio interno, sai: **1 → 0**. (`app/relatorios/views.py:1554`; `app/relatorios/furos.py:59–68`; `app/escala/models.py:1092–1095`)
-
-- **Média — drawer.** `_vivas_de(disp)` não recebe instante; seu wrapper chama `pergunta_viva(p)` sem `hoje/agora`, permitindo `date.today()` e `_tz.now()`. Caso: pergunta materializada de **20/09/2026**, via `completude_turno`, sem resposta/validação/célula, sem tranca, marco sem fato e falta ainda acusada. Em **20/11**, permanece viva; em **21/11**, sai da janela e é considerada materializada: **1 → 0 perguntas**, embora o calendário ainda receba o instante anterior da borda. (`app/colaboradores/services/drawer.py:79–80`; `app/colaboradores/services/drawer.py:123–124`; `app/chamados/juizes.py:1502–1504`; `app/chamados/juizes.py:595–621`; `app/chamados/juizes.py:696–703`; `app/escala/servico_jornada.py:387`)
-
-**E. `padrao=` dos dois commits: [nao verificado].** [nao verificado]
-
-A cópia não disponibiliza o histórico Git para consultar as mensagens ou o diff do c15b. No delta c16 apresentado, a centralização das competências corresponde a **Single Source of Truth**; a propagação do instante corresponde a **Clock Injection**. Não é possível afirmar se os campos declarados coincidem sem lê-los. (`app/folha/retrato_folha.py:1369–1383`; `app/relatorios/views.py:1519–1543`; `app/docs/GLOSSARIO.md:11`; `app/docs/GLOSSARIO.md:19`; [nao verificado])
-
-**F. Nenhum achado estrutural na migration.**
-
-A 0013 altera somente `help_text`, preservando `DateTimeField(db_index=True)` da definição anterior; não acrescenta coluna, índice nem transformação de dados. Depende expressamente da 0012. Ser esta a última migration de folha no `main`: **[nao verificado]**. (`app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:8–18`; `app/folha/migrations/0011_retratofolha.py:22`)
-
-**G. Dois achados adicionais.**
-
-- **Média — selo de “um relógio” aceita dois.** `_le_relogio` usa um conjunto, eliminando chamadas repetidas pelo nome. Substituir a linha do drawer por `_hoje_da_borda = timezone.localtime(timezone.now()).date()` mantém o teste verde, embora introduza uma segunda leitura. Na virada **20/10 23:59:59 → 21/10 00:00:01**, dia e calendário podem divergir. O mutante registrado só testa a introdução de `localdate()`. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:162–163`; `app/chamados/tests/test_e3_r3_c16_sem_banco.py:149–152`; `app/colaboradores/services/drawer.py:21–22`; `app/chamados/tests/e3_r3_c16_mutantes.py:34`)
-
-- **Baixa — G3 permanece parcialmente incorreto no texto curado.** A docstring ainda afirma que o legado cai em `sem_causa`/sem saldo. Contraexemplos: legado `sem_codigo_dominio` produz **tipo `cadastro`, saldo `cadastro`**; legado `furo_espelho`, `dias=2`, produz **saldo `2a5`**. A referência “letra → fio em `LETRA_DO_FIO`” também está invertida: essa direção é `FIO_DA_LETRA`. (`app/folha/models.py:308–316`; `app/folha/retrato_folha.py:180–181`; `app/folha/retrato_folha.py:388–389`; `app/folha/retrato_folha.py:424–432`; `app/folha/retrato_folha.py:496–513`)
-
-Nenhum segundo juiz ou escritor fora da porta identificado no delta apresentado: a função nova delega às janelas, e a gravação continua no lavrador de `RetratoFolha`. Alteração histórica de asserções e valores reais de TXT/FechamentoMensal/dinheiro: **[nao verificado]**. (`app/folha/retrato_folha.py:1377–1383`; `app/folha/management/commands/lavrar_retrato_folha.py:77–79`)
-
-**VEREDITO: REPROVA.**
-
-## 15/11 18:35 · sessao d251dcf115c8 · - · - · origem=Ronald (tmux)
-
-Achados D/G:
-
-1. **Média — relatório ainda consulta outro relógio.** `furos_espelho` fixa `_agora` em `app/relatorios/views.py:1519`, mas chama `escalas_em_limbo(empresa)` em `:1554`; esta lê `timezone.localdate()` em `app/relatorios/furos.py:59`. Caso sintético: borda em **15/11/2026 23:59:59**, execução do limbo em **16/11 00:00:01**, células de col7 com `trabalha=None,None,True` em 15,16,17/11. O vínculo devolve esses valores diretamente (`app/escala/models.py:1092-1095`): o teste de dois dias incluiria col7 usando 15/16 e exclui usando 16/17 (`app/relatorios/furos.py:67-68`). Instrumento em memória confirmou contagem **1 → 0**; ocorrência em produção [nao verificado].
-
-2. **Média — drawer perde o instante ao consultar perguntas vivas.** `contexto_drawer` chama `_vivas_de(disp)` sem instante (`app/colaboradores/services/drawer.py:79-80`); o wrapper chama `pergunta_viva(p)` sem `agora`/`hoje` (`app/chamados/juizes.py:1502-1504`). A cadeia pode ler `date.today()` (`:595`) e `_tz.now()` (`app/escala/servico_jornada.py:387`).
-
-   Caso sintético executado com os corpos reais do C6 e janelas reais: pergunta de **20/09/2026**, materializada, via `completude_turno`, sem resposta/validação/célula, tranca falsa, marco sem fato e autoridade de falta acusando `orfao_14h`. Com relógio em **20/11**, wrapper retorna **1 pergunta viva**; em **21/11**, retorna **0**. A janela deixa de alcançar 20/09 (`app/chamados/juizes.py:595-621`) e o lastro absolve fora dela (`:696-697`). Assim, uma borda de 20/11 pode produzir calendário de 20/11 e banner de 21/11; ocorrência em produção [nao verificado].
-
-3. **Lacuna dos selos — cadeia não coberta.** Os testes R examinam apenas o AST de `contexto_drawer` e `furos_espelho` (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:149-159`), permitindo os dois caminhos acima. Os mutantes R alteram somente esses corpos (`app/chamados/tests/e3_r3_c16_mutantes.py:34-37`).
-
-As suítes c15+c16 sem banco passaram **19/19**, executadas com `PYTHONDONTWRITEBYTECODE=1`; saída não persistida [nao verificado]. Na cadeia principal do calendário, o instante recebido segue para pergunta viva, folha e D4 (`app/colaboradores/services/calendario.py:506`, `:614`, `:638`); nenhum outro relógio nessa cadeia foi comprovado [nao verificado].
-
-## 15/11 18:34 · sessao e42efb08fe33 · - · - · origem=Ronald (tmux)
-
-- **G/A — média: selo de relógio aceita regressão equivalente.** `_le_relogio` elimina duplicatas com `set`; duas chamadas `now()` aparecem como `['now']` (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:162`). O teste do drawer exige justamente esse resultado (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:149-152`). Mutação em memória de `timezone.localtime(agora).date()` para `timezone.localtime(timezone.now()).date()` em `app/colaboradores/services/drawer.py:22` **sobreviveu** ao teste. Caso: primeiro instante 20/10 23:59:59, segundo 21/10 00:00:01; calendário recebe um instante e os recortes recebem outro dia (`app/colaboradores/services/drawer.py:21-22`, `app/colaboradores/services/drawer.py:132`). O mutante registrado cobre `localdate()`, mas essa leitura duplicada de `now()` escapa (`app/chamados/tests/e3_r3_c16_mutantes.py:34`).
-
-- **F — nenhum problema estrutural encontrado na cópia.** A 0013 apenas altera o `help_text`, preservando `DateTimeField(db_index=True)` (`app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:12-18`); a definição anterior tem o mesmo tipo e índice (`app/folha/migrations/0011_retratofolha.py:22`). Depende expressamente da 0012 (`app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py:8-10`), que altera somente o `help_text` de `linhas` (`app/folha/migrations/0012_retrato_linhas_help_text_o256.py:12-18`). Ser a última migration do **main**: **[nao verificado]**.
-
-- **G — outros escritores/juízes no delta:** nenhum encontrado. A única gravação identificada nos módulos alterados continua sendo `RetratoFolha.objects.update_or_create`, na porta do lavrador (`app/folha/management/commands/lavrar_retrato_folha.py:77-79`). A lista nova delega às autoridades existentes de janela (`app/folha/retrato_folha.py:1378-1384`).
-
-- Os 65 testes sem banco c4/c5/c6/c14/c15 passaram nesta execução; comparação histórica para determinar se alguma asserção foi enfraquecida: **[nao verificado]**. Os testes do vigia documentam a mudança de expectativa para janelas e preservam a verificação do instante entregue à lista (`app/folha/tests/test_vigia_retido_calado.py:131-141`, `app/folha/tests/test_vigia_retido_calado.py:154-190`).
-
-## 15/11 18:33 · sessao 4e252e0981b3 · - · - · origem=Ronald (tmux)
-
-Dois achados concretos:
-
-1. **Alta — empresa sem qualquer retrato desaparece do universo.** `censo` descobre empresas pelos próprios retratos; sem retrato, não chega a calcular nem registrar competências faltantes (`app/folha/vigia_retido_calado.py:46-58`). Em 25/10/2026, empresa visível E2 com corte 21 deveria produzir faltas `(E2,10,2026)` e `(E2,11,2026)`, pois lavrador e frescor percorrem `empresas_visiveis()` (`app/folha/management/commands/lavrar_retrato_folha.py:51-61`; `app/folha/retrato_folha.py:1410-1418`). Se E1 tiver bloqueados, `cego=0`, deixando E2 silenciosa (`app/folha/vigia_retido_calado.py:89`). Os testes de universo vazio não verificam `competencias_sem_retrato` (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:111-113`; `app/folha/tests/test_vigia_retido_calado.py:31-33`).
-
-2. **Média — universo inclui empresas que lavrador/frescor excluem.** `censo(None)` lê todos os retratos, inclusive empresas inativas ou de diagnóstico (`app/folha/vigia_retido_calado.py:46-52`). Os outros dois usam empresas visíveis, que excluem inativas e CNPJ `11222333*` (`app/colaboradores/queries.py:78-87`). Exemplo: empresa inativa E3 com retrato 11/2026 entra no contador em 25/10/2026 e ainda gera falta de 10/2026; não entra na rodada automática nem no frescor (`app/folha/vigia_retido_calado.py:55-58`; `app/folha/retrato_folha.py:1410-1411`).
-
-Demais verificações:
-
-- Cortes diferentes e virada do dia 21 usam corretamente o mesmo derivador. Em 21/10/2026: corte 21 → competências 10/11; corte 26 → 09/10 (`app/ponto/janelas.py:24-33`; `app/folha/retrato_folha.py:1377-1383`).
-- Competência futura fora dessas duas é excluída (`app/folha/vigia_retido_calado.py:56`). Duplicidade por empresa/competência é vedada por constraint (`app/folha/models.py:365-367`; `app/folha/migrations/0011_retratofolha.py:29`).
-- `competencias_sem_retrato`: escritor `censo:53-61`; leitor de produção `linhas:94-97`. O alarme não consulta esse campo (`app/folha/management/commands/vigiar_retido_calado.py:16-17`, `:37-41`).
-- `competencias_do_retrato`: escritor `app/folha/retrato_folha.py:1377-1383`; leitores lavrador `:61`, frescor `:1411`, vigia `:55-58`, nos respectivos arquivos.
-- `lavrado_em`: escritor único encontrado captura o início da rodada e grava esse instante (`app/folha/management/commands/lavrar_retrato_folha.py:49-50`, `:77-79`). Leitores usam comparação de instantes ou apresentação: frescor (`app/folha/retrato_folha.py:1412-1426`), rótulo (`:1441-1445`), mínimo da tela (`app/folha/views_retrato.py:203`) e apresentação (`app/templates/folha/_retrato_barra.html:22`).
-- Executados sem banco e sem escrita de bytecode: 10 testes c16 passaram; 8/8 mutantes morreram por asserção, sem erros. Definições dos testes/mutantes: `app/chamados/tests/test_e3_r3_c16_sem_banco.py:77-185`; `app/chamados/tests/e3_r3_c16_mutantes.py:25-38`. Testes com banco: [nao verificado].
-
-## 15/11 18:18 · sessao 132e7f2bb6ed · E3-RESTO-R3 · verificador · origem=Code
-
-**A. As curas existem, mas G1 permanece incompleto.**
-
-- **G1 — média, procede parcialmente.** O escritor grava o mesmo `_agora` em todos os retratos da execução. Os dois mutantes que restauram `timezone.now()` por retrato morrem por asserção. Porém o vigia continua identificando a rodada pelo **dia civil**, contrariando a cura completa pedida na triagem. Os testes c15 criam apenas uma rodada e não distinguem os dois agrupamentos. (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/management/commands/lavrar_retrato_folha.py:83`, `app/folha/vigia_retido_calado.py:48`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:35`, `app/chamados/tests/e3_r3_c15_mutantes.py:28`)
-
-- **G2 — cura real nos sítios alterados.** O instante chega ao frescor, à retenção e ao informativo; existem mutantes que retiram essa propagação e morrem. Sobram caminhos de produção com relógios divergentes, detalhados em C. (`app/folha/views_retrato.py:210`, `app/folha/fora_da_folha.py:121`, `app/folha/fora_da_folha.py:301`, `app/chamados/tests/e3_r3_c15_mutantes.py:30`)
-
-- **G3 — baixa, cura documental incompleta e sem mordida própria.** Os textos principais foram corrigidos no código, inclusive em `models.py`; portanto não ficaram apenas na entrega. Contudo os testes e mutantes c15 cobrem exclusivamente G1/G2. Reintroduzir os textos antigos em memória conserva os nove testes verdes. Permanecem contradições documentais, listadas em E6. (`app/chamados/services/tarefa_do_dia.py:32`, `app/folha/fora_da_folha.py:77`, `app/folha/retrato_folha.py:474`, `app/folha/models.py:306`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:81`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:185`, `app/chamados/tests/e3_r3_c15_mutantes.py:27`)
-
-Execução local somente em memória: **9 testes c15 OK; 15/15 mutantes mortos**, por asserção e sem erros de infraestrutura. O instrumento rejeita erros como prova de morte. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:81`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:185`, `app/chamados/tests/e3_r3_c15_mutantes.py:80`)
-
-**B. G1 ainda permite universo errado — média.**
-
-Os casos abaixo foram reproduzidos com o `censo` real e os leitores reais do retrato, substituindo apenas dependências externas por dados em memória. A ocorrência desses casos em produção é **[nao verificado]**.
-
-| Caso concreto, horários locais | Resultado |
-|---|---|
-| **Legado:** comp10 em 14/11, 23:59:59, com um bloqueado `ninguem` e um dia sem leitura; comp11 em 15/11, 00:00:01, com um bloqueado `colab` e nenhum dia sem leitura. | Seleciona somente comp11: **calados=0, dias_sem_leitura_sistema=0, cego=0**. Apaga o positivo conhecido da comp10 na seleção anterior à soma. (`app/folha/vigia_retido_calado.py:47`, `app/folha/vigia_retido_calado.py:65`, `app/folha/vigia_retido_calado.py:80`) |
-| **Duas rodadas novas no mesmo dia:** às06h, lavra explícita da comp09 com positivo1; às07h, lavra automática das comp10/11, cada uma com bloqueado `colab` e zero dias sem leitura. | Seleciona **09+10+11**, publicando **calados=1, dias_sem_leitura_sistema=1, cego=0**, embora a rodada completa mais recente tenha zero nesses contadores. A competência explícita é permitida e não é apagada pela execução automática. (`app/folha/management/commands/lavrar_retrato_folha.py:57`, `app/folha/management/commands/lavrar_retrato_folha.py:62`, `app/folha/management/commands/lavrar_retrato_folha.py:81`, `app/folha/vigia_retido_calado.py:49`) |
-
-Uma rodada nova completa que atravessa meia-noite já conserva suas competências juntas. Isso não resolve o legado nem a mistura de rodadas do mesmo dia. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:85`, `app/folha/vigia_retido_calado.py:48`)
-
-O falso positivo acima vem de **outra competência conservada da rodada anterior**. Não há duas versões físicas da mesma chave empresa/competência: existe unicidade e `update_or_create`. (`app/folha/models.py:363`, `app/folha/management/commands/lavrar_retrato_folha.py:81`)
-
-O teste vizinho usado para justificar a conservação do agrupamento cria comp10 em T0 e comp11 em T0+1min e exige ambas como uma lavra. Essa fixture representa o escritor antigo; não demonstra que dia civil identifica corretamente uma rodada após a mudança. (`app/folha/tests/test_vigia_retido_calado.py:42`, `app/folha/tests/test_vigia_retido_calado.py:47`, `app/folha/tests/test_vigia_retido_calado.py:51`)
-
-Leitores de **`RetratoFolha.lavrado_em`**:
-
-| Leitor | Significado assumido |
-|---|---|
-| `vigia_retido_calado.censo` | Dia civil local como identidade da última lavra. (`app/folha/vigia_retido_calado.py:47`) |
-| `frescor_dos_retratos` | Instante comparável ao maior `FechamentoMensal.atualizado_em`; somente `fechamento > lavrado_em` desatualiza. Assume explicitamente início da rodada, conservador para alterações durante sua execução. (`app/folha/retrato_folha.py:1382`, `app/folha/retrato_folha.py:1403`, `app/folha/retrato_folha.py:1408`) |
-| `_rotulo_admin` | Instante apresentado no horário local como “lavrado em”. (`app/folha/retrato_folha.py:1430`) |
-| `_recorte_da_barra` e barra | Mínimo dos carimbos dos retratos exibidos, apresentado como “atualizado HH:MM”. (`app/folha/views_retrato.py:203`, `app/templates/folha/_retrato_barra.html:22`) |
-
-O escritor localizado é `lavrar_retrato_folha`; homônimos como o de `DiaPago` não pertencem a esse campo. (`app/folha/management/commands/lavrar_retrato_folha.py:81`, `app/folha/porta_export.py:283`)
-
-**C. G2: argumentos presentes não garantem instante preservado.**
-
-Censo atual de chamadas de produção, incluindo aliases:
-
-| Função | Chamadas | Sítios |
-|---|---:|---|
-| `frescor_dos_retratos` | 2 | `app/folha/views_retrato.py:210`; `app/folha/retrato_folha.py:1443` |
-| `retratos_desatualizados` | 0 | Definição em `app/folha/retrato_folha.py:1437`; órfão também documentado em `app/docs/BACKLOG.md:1772` |
-| `o_que_segura` | 0 | Definição em `app/folha/fora_da_folha.py:257`; ferramenta humana HAIKU declarada em `app/docs/BACKLOG.md:1772` |
-| `dias_que_seguram` | 2 | `app/folha/fora_da_folha.py:200`; `app/chamados/services/vigia_fio.py:537` |
-| `_dias_que_retem` | 2 | `app/folha/fora_da_folha.py:165`; `app/folha/fora_da_folha.py:275` |
-| `contexto_calendario` | 4 | `app/colaboradores/views.py:1952`; `app/colaboradores/services/calendario.py:157`; `app/colaboradores/services/drawer.py:121`; `app/relatorios/furos.py:160` |
-
-Nenhuma dessas chamadas omite sintaticamente o parâmetro correspondente. Entretanto:
-
-- **Drawer — média:** captura `agora`, depois relê o dia três vezes. Exemplo com corte21: instante inicial **20/11 23:59:59**, leitura posterior em21/11. A janela do drawer passa de **21/09–20/11** para **21/10–20/12**, mas a grade recebe o instante de20/11; o `hoje` devolvido também vem de outro relógio. (`app/colaboradores/services/drawer.py:19`, `app/colaboradores/services/drawer.py:43`, `app/colaboradores/services/drawer.py:111`, `app/colaboradores/services/drawer.py:122`, `app/colaboradores/services/drawer.py:157`, `app/ponto/janelas.py:24`, `app/colaboradores/services/calendario.py:192`)
-
-- **Relatório de furos — média:** a view lê `hoje`, mas não transmite instante ao dataset. O default `None` chega ao D4 e ao calendário, que leem seus relógios. Uma execução atravessando meia-noite pode combinar o recorte do dia anterior com julgamentos de instantes diferentes por colaborador. (`app/relatorios/views.py:1518`, `app/relatorios/views.py:1541`, `app/relatorios/furos.py:103`, `app/relatorios/furos.py:123`, `app/relatorios/furos.py:164`, `app/ponto/status_dia.py:253`, `app/colaboradores/services/calendario.py:192`)
-
-- **Backfill, medição posterior — média:** após os atos, relê o instante mantendo o `hoje` inicial. Se começar em14/11 e medir depois em15/11, entrega dia14 com instante15 ao `censo_alcance`, que não valida essa divergência. O outro `censo` valida. (`app/chamados/management/commands/backfill_fio_morto_e4b.py:218`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:352`, `app/chamados/services/vigia_fio.py:516`, `app/chamados/services/vigia_fio.py:283`)
-
-Esses caminhos não aparecem no delta fornecido; sua situação executável nos hashes anteriores é **[nao verificado]**.
-
-As três bordas nomeadas estão corretas no caminho normal: calendário do perfil, barra e comando do vigia derivam `agora`/`hoje` do mesmo instante. (`app/colaboradores/views.py:1951`, `app/colaboradores/views.py:1965`, `app/folha/views_retrato.py:177`, `app/folha/views_retrato.py:210`, `app/chamados/management/commands/vigiar_fio_morto.py:171`, `app/chamados/management/commands/vigiar_fio_morto.py:181`)
-
-O resíduo financeiro declarado continua existindo: `classificar_export` e `recalcular_fechamento_mes` omitem `hoje`; o wrapper transmite `None` até `_dias_sem_decisao`, que lê `localdate()`. Esses arquivos estão fora do delta fornecido; comparação independente por Git é **[nao verificado]**. (`app/folha/export.py:968`, `app/ponto/services/fechamento.py:1067`, `app/folha/export.py:1307`, `app/folha/export.py:1238`)
-
-**D. `retratos_desatualizados`: zero chamador de produção no hash atual.**
-
-O delta fornecido altera sua assinatura, sem remover chamador. Há registro documental de zero chamador datado de27/10, portanto não cabe atribuir o abandono à c15. A contagem executável nos hashes **57c1c9b94** e **77dfa94fa** permanece **[nao verificado]**. (`app/folha/retrato_folha.py:1437`, `app/docs/BACKLOG.md:1772`)
-
-**E. Checklist.**
-
-**1. Escritores, leitores e unidades pertinentes ao delta:**
-
-| Campo/valor | Origem/escritor | Leitura e significado |
-|---|---|---|
-| Empresa, mês e ano do retrato | Lavrador escolhe competência explícita ou janelas do juiz; persiste pela chave única. (`app/folha/management/commands/lavrar_retrato_folha.py:57`, `app/folha/management/commands/lavrar_retrato_folha.py:62`, `app/folha/management/commands/lavrar_retrato_folha.py:81`) | View filtra pela competência; frescor usa anterior/atual; vigia acrescenta o filtro divergente por dia civil descrito em B. (`app/folha/views_retrato.py:192`, `app/folha/retrato_folha.py:1396`, `app/folha/vigia_retido_calado.py:48`) |
-| `linhas.status/motivo` | Classificação do export, copiada pelo montador e persistida pelo lavrador. (`app/folha/export.py:969`, `app/folha/retrato_folha.py:1224`, `app/folha/retrato_folha.py:1240`, `app/folha/management/commands/lavrar_retrato_folha.py:83`) | `_balde` distingue entram/bloqueado/módulo próprio; fio legado usa status/motivo. (`app/folha/retrato_folha.py:89`, `app/folha/retrato_folha.py:449`) |
-| `dias/datas` | Datas do retentor; contagem e ISO publicados por `fora_da_folha`, copiados pelo montador. (`app/folha/export.py:1261`, `app/folha/fora_da_folha.py:235`, `app/folha/fora_da_folha.py:246`, `app/folha/retrato_folha.py:1242`) | Recorte inclusivo nas duas pontas; balde Hoje usa `data >= hoje`. Datas são dias da célula/turno, não instantes. (`app/folha/retrato_folha.py:1343`, `app/folha/retrato_folha.py:491`, `app/folha/export.py:1180`) |
-| `dono`, `dias_sem_leitura`, `dias_sem_porta` | Projeção da porta e agrupamento dos dias; persistidos no retrato. (`app/folha/fora_da_folha.py:217`, `app/folha/fora_da_folha.py:231`, `app/folha/retrato_folha.py:1244`, `app/folha/retrato_folha.py:1248`) | `dono` guarda **fio**; o balde vem do mapa. Vigia conta pessoas por retrato e dias sem leitura separadamente; template lê datas sem porta. (`app/folha/retrato_folha.py:194`, `app/folha/retrato_folha.py:447`, `app/folha/vigia_retido_calado.py:58`, `app/folha/vigia_retido_calado.py:65`, `app/templates/folha/_retrato_o_que_fazer.html:46`) |
-| `acao/rota/fio/nao_sei` da tarefa | Publicados pelo juiz e projetados pela porta; ações copiadas à linha. (`app/chamados/services/tarefa_do_dia.py:708`, `app/chamados/services/tarefa_do_dia.py:722`, `app/folha/fora_da_folha.py:223`) | Folha lê fio; UI traduz ação em endereço. `resolver_dia` transporta dia do turno. (`app/folha/fora_da_folha.py:86`, `app/folha/retrato_folha.py:1044`, `app/folha/retrato_folha.py:1054`) |
-| `tipo/saldo/informativo` | Montador lê causa gravada, aplica os mapas e copia informativo da autoridade. (`app/folha/retrato_folha.py:1217`, `app/folha/retrato_folha.py:1220`, `app/folha/retrato_folha.py:1250`) | Leitores dos eixos e template; informativo de rescisão não entra em `datas/dias` retentores. (`app/folha/retrato_folha.py:496`, `app/folha/retrato_folha.py:506`, `app/folha/retrato_folha.py:1252`, `app/templates/folha/_retrato_o_que_fazer.html:56`) |
-| `FechamentoMensal.atualizado_em/causa_espelho/motivos_espelho` | Carimbo `auto_now`; recalculador atribui causa/motivos e salva. (`app/ponto/models.py:479`, `app/ponto/services/fechamento.py:1067`, `app/ponto/services/fechamento.py:1080`, `app/ponto/services/fechamento.py:1144`) | Frescor compara carimbos por instante; montador lê causa; export consulta a autoridade de retenção. (`app/folha/retrato_folha.py:1408`, `app/folha/retrato_folha.py:1170`, `app/folha/export.py:968`) |
-| `CelulaDia.veredito/protestos/status_dia` | Porta da célula grava o julgamento e status. (`app/ponto/portas/celula.py:1092`, `app/ponto/portas/celula.py:1096`) | Retentor lê veredito/protestos; calendário lê status pelo D4. (`app/folha/export.py:1273`, `app/folha/export.py:1286`, `app/colaboradores/services/calendario.py:638`, `app/colaboradores/services/calendario.py:695`) |
-
-O retentor percorre `[ini,fim]` inclusivo; ausência de célula passa a reter apenas em `d < hoje`. As conversões locais usam o fuso configurado `America/Sao_Paulo`. A divergência encontrada não é inclusão de extremidade: é **instante versus identidade de rodada/dia civil**. (`app/folha/export.py:1265`, `app/folha/export.py:1271`, `app/config/settings/base.py:93`, `app/folha/vigia_retido_calado.py:48`)
-
-**2. Segundo juiz ou regra manual de status:** nenhum novo identificado no delta. A tarefa continua publicando a porta; calendário consulta D4; a classificação do export permanece na autoridade registrada. O agrupamento errado do vigia é seleção de universo, já apontada em B. (`app/core/juizes.py:299`, `app/core/juizes.py:323`, `app/chamados/services/tarefa_do_dia.py:722`, `app/colaboradores/services/calendario.py:638`)
-
-**3. Segundo escritor:** nenhum introduzido pelo delta identificado para Chamado, Pauta, CelulaDia, DiaPago ou FechamentoMensal. A escrita alterada continua sendo a de RetratoFolha, pelo lavrador. (`app/chamados/services/tarefa_do_dia.py:735`, `app/chamados/services/vigia_fio.py:490`, `app/folha/management/commands/lavrar_retrato_folha.py:81`)
-
-**4. Relógio fora da borda:** procede nos caminhos de C e no resíduo financeiro; não foi eliminado globalmente. (`app/colaboradores/services/drawer.py:111`, `app/relatorios/furos.py:164`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:352`, `app/folha/export.py:1238`)
-
-**5. Selos/asserções:** G1 não protege o agrupamento do leitor; G3 não possui mutante c15. O censo G2 aceita a presença sintática de `agora=None`, e a lista contra relógios próprios não inclui drawer/dataset/backfill. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:35`, `app/chamados/tests/e3_r3_c15_mutantes.py:27`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:140`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:168`)
-
-Nos vizinhos de desligamento há lei explícita para a inversão, gêmeo ativo preservado e asserção do informativo. A medida atual conserva os critérios9/85 e A1=6/B1=82. Enfraquecimento relativo dos arquivos de apoio e testes entre os hashes é **[nao verificado]**. (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:1`, `app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:102`, `app/folha/tests/test_lei_desligado_nao_trava.py:104`, `app/core/tests/test_medida_turno_do_par.py:100`)
-
-**6. Documentação incorreta — baixa:**
-
-- `lavrado_em` ainda é descrito como momento em que a linha foi escrita; agora contém o início da rodada, anterior à montagem daquela competência. (`app/folha/models.py:356`, `app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/management/commands/lavrar_retrato_folha.py:69`)
-- Modelo afirma que linha antiga cai em `ninguem`; `{status:'fora', motivo:'sem_codigo_dominio'}` sem `dono` retorna `admin`. (`app/folha/models.py:315`, `app/folha/retrato_folha.py:449`, `app/folha/retrato_folha.py:374`)
-- Schema documentado omite saldo `cadastro` e grupoE, ambos produzidos pelo código. (`app/folha/models.py:307`, `app/folha/models.py:308`, `app/folha/retrato_folha.py:424`, `app/folha/fora_da_folha.py:112`)
-
-O contrato dos cinco retornos de `_fio_do_dia` foi corrigido e corresponde à projeção atual. (`app/folha/fora_da_folha.py:77`, `app/folha/fora_da_folha.py:89`)
-
-**7. ESMERIL-SEMANTICA:** procede para `lavrado_em`: início da rodada no escritor/frescor, momento da escrita no modelo e dia identificador de rodada no vigia. `dono` guardar fio está explicitamente documentado e possui mapa próprio para o balde; não demonstra outro conflito novo. (`app/folha/management/commands/lavrar_retrato_folha.py:83`, `app/folha/retrato_folha.py:1382`, `app/folha/models.py:356`, `app/folha/vigia_retido_calado.py:48`, `app/folha/retrato_folha.py:170`, `app/folha/retrato_folha.py:194`)
-
-**8. TXT/FechamentoMensal/dinheiro:** nenhuma mudança de cálculo ou escrita financeira identificada no delta fornecido. A alteração persiste o retrato e muda leituras de retenção/apresentação; o caminho financeiro conserva as chamadas sem `hoje`. Igualdade numérica em produção é **[nao verificado]**. (`app/folha/management/commands/lavrar_retrato_folha.py:83`, `app/folha/fora_da_folha.py:121`, `app/folha/export.py:968`, `app/ponto/services/fechamento.py:1067`)
-
-**VEREDITO: REPROVA.**
-
-_5733 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5740 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
