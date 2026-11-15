@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 10:04:44.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (54.9 MB). Acoes na janela: **1518**.
+**Medido em 15/11/2026 10:10:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (54.9 MB). Acoes na janela: **1519**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:09:49 | Bash | Check producers and pista queue | `cd /home/ronald/saas-hasner; cat logs/E4C/f1/rc 2>/dev/null; ps -p 1335781 -o pid,etime; tail -2 logs/E3-RESTO-R3/c9/pista.espera; ssh pista estado 2>&1 \| tail -6; uptime` |
 | 10:03:11 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 10:03:08 | SendMessage |  | `-` |
 | 10:03:01 | ToolSearch |  | `-` |
