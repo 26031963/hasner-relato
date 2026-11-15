@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 13:10** · publicado em **15/11/2026 13:11** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:14** · publicado em **15/11/2026 13:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:14 · sessao e358877bc62b · E4C-F1V3 · construtor · origem=Code
+
+HEAD/base: `02d9bef0062fb7c1d2e872688224790414c503ce` (chamados/tests/e4c_f1v4_mutantes.py:19). **Sem commit:** o índice Git fica fora de `app/`, onde o ambiente proíbe escrita.
+`lei: 0` — reuso restaurado à regra da base `714a92a61` (chamados/juizes.py:1591).
+
+- **1 — L2:** chamados/juizes.py:363→372 conserva carimbo+Log e mantém leitura por ato; retirada no Contract após escritor/backfill E4d. Motivo real de remoção permanece intacto (chamados/models.py:2123).
+- **2 — Vias:** chamados/juizes.py:754→783 recupera carimbo para as seis vias automáticas, preservando a guarda da lei do dia.
+- **3 — Projeção:** chamados/juizes.py:1456→1483 remove E antecipado; `[3]` volta a ser instante/None. E é avaliado dentro da guarda do C6 (:1576).
+- **4 — Custo:** chamados/juizes.py:1612→1636 troca materialização da frota por `Exists/Subquery`; :1836→1856 restaura `q_vivas()` na fila.
+- **5 — Reuso:** chamados/juizes.py:1566→1585 restaura `materializada_em is None or pergunta_viva(p)`.
+- **6–8:** evidência nesta entrega; trilha C8b ligada ao leitor real e instrumentada em `exists()` (chamados/tests/e3_c8b_apoio.py:162/:177; chamados/tests/test_e3_c8b_sem_banco.py:438).
+
+RED **antes da cura:** 7 testes, 14 FAIL. Reprodução final contra c3: 8 testes, 15 FAIL, zero erros externos: [nao verificado]
+`PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v4_mutantes --red-base` (runner:114).
+GREEN: 8 testes novos e **10/10 mutantes mordidos**, zero erros: [nao verificado]
+`PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v4_mutantes --todos` (runner:87/:95).
+Comando individual de cada mutante, expandido pelo laço abaixo (runner:24):
+```bash
+for m in L2_sem_conservacao vias_sem_carimbo projecao_booleano projecao_E_antecipado SQL_frota SQL_empate_perdido SQL_ignora_correspondencia fila_sem_prefiltro reuso_por_E leitor_retratacao_perde_conservacao; do PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v4_mutantes --mutante "$m"; done
+```
+Regressão: **82 testes GREEN**, executados com `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f1_juizes_le_o_ato chamados.tests.test_e3_c8b_sem_banco chamados.tests.test_e3_c8c_sem_banco chamados.tests.test_e3_pos_suite_sem_banco`. [nao verificado]
+Os onze testes originais de pergunta viva passam no recorte sem banco; SQL comparado em 271 cenários × 3 faces (chamados/tests/test_e4c_f1v4_conservacao.py:61; chamados/tests/test_e4c_f1v4_sql.py:84).
+`assertNumQueries(0/1)` para N=1/N=20 preparado; execução ORM e testes Django originais de retratação/bloqueantes: **[não verificado]** (chamados/tests/test_e4c_f1v4_custo.py:113/:120/:123).
+Ruff com `ruff.toml`, `py_compile` em memória nos 11 arquivos e `git diff --check`: rc=0; sem bytecode escrito.
+
+ESMERIL: unidade=pergunta; `ato_motivo` é texto, escrito via registrar/remover_motivo e lido por `leitura` (chamados/models.py:4086/:2123; chamados/services/atos_pergunta.py:54/:59).
+`ato_em` é instante do ato, escrito por registrar, ordenado e recortado pela leitura; UTC fixo nos testes, armazenamento produtivo [não verificado] (chamados/models.py:4086; chamados/services/atos_pergunta.py:42; chamados/tests/test_e4c_f1_juizes_le_o_ato.py:17).
+`materializada_em` é instante do carimbo: escritor `_escrever_carimbo`, leitores conservação, identidade e reuso; não vira ato fabricado (chamados/models.py:3180; chamados/juizes.py:300/:367/:1591).
+
+Quem-mais-lê E: chamados/veredito_lavrado.py:262; chamados/services/explicador.py:69/:93, raiox.py:190, disputa_emissao.py:2001, materializacao.py:1239/:1433, vigia_carimbo.py:106; chamados/management/commands/backfill_veredito_lavrado.py:105, auditar_invariantes_chamados.py:538/:1170; alias chamados/models.py:4226.
+Internos/projeção/reuso: chamados/juizes.py:902/:920/:923/:1494/:1576/:1849; escala/services/cadastro_realidade.py:502; chamados/services/declaracao_texto.py:240/:254.
+`q_vivas`: chamados/services/fio.py:254, janela_colab.py:63, raiox.py:74, vigia_fio.py:706, cobranca.py:237, pergunta_no_app.py:53; ponto/services/veredito_celula.py:181; chamados/juizes.py:1858.
+Filas: chamados/views.py:1420; chamados/services/acoes_disputa.py:97, validacao.py:956; chamados/templatetags/chamados_tags.py:202; chamados/models.py:2282; api/views_mensageria.py:540.
+
+LEI-AKITA: origem=chamados/juizes.py (L1/L2 + vias + projeção + custo), testemunha=DecisaoPergunta via atos_pergunta.leitura, RED=test_e4c_f1v4_conservacao.py:32/:45/:61/:90/:98 + test_e4c_f1v4_custo.py:67/:84, quem-mais-le=censo acima, juizes novos=0, padrao=**Parallel Change / Expand-Contract** (docs/GLOSSARIO.md:18).
+Certificação pelo Code e opus final: **[não verificado]**.
 
 ## 15/11 13:10 · sessao 93b182aaef10 · - · - · origem=Ronald (tmux)
 
@@ -508,18 +545,4 @@ Achados para consolidação:
 
 - **Censo do nativo:** não foram encontrados arquivos `.kt`, `.java`, `.swift` ou `.dart` na cópia; implementação/conduta do cliente nativo [não verificado]. A limitação literal do censo a `templates/` e `static/` não oferece tratamento explícito para eventual sítio fora desses diretórios — texto fornecido, sem arquivo local correspondente [não verificado].
 
-## 15/11 12:04 · sessao fa0797d363c2 · - · - · origem=Ronald (tmux)
-
-**Item 3 PROCEDE:** LU2-08 literal conflita com distinções escritas de ausência parcial/aprovada: `app/docs/CORTES.md:370` manda parcial sem período para CADASTRO; `:385` preserva FATO_EM_AUSENCIA em `nao_sei`. O HEAD afirma que ausência aprovada pode cobrir só parte do dia (`app/ponto/turnos.py:2670`) e que FATO_EM_AUSENCIA **acusa e retém**, para evitar dupla saída (`app/ponto/supra_juiz.py:413`). L-039 não autoriza o apagamento geral: trata de **falta decidida** (`app/docs/LEIS.md:87`; `app/docs/CORTES.md:230`).
-
-**Os 38 precisam de censo e separação de donos**, pois o b2 agrega D23+O14+A1 e inclui 13 sem_divergência, chamados e outras causas; aprovação individual dos38 [nao verificado]. Não podem virar automaticamente ESTRUTURA: só ESTRUTURA é fatia, CADASTRO/BATIDA seguem lista (`CLAUDE.md:179`; `app/docs/LEIS.md:122`).
-
-**“Não abre obra nova” × “vira obra REGISTRADA”** apresenta tensão literal interna; registrar é autorizado como rotina em `CLAUDE.md:285`, mas existência de obra anterior que LU2-08 apenas atualizaria [nao verificado]. L-117, isoladamente, não proíbe registrar cura estrutural amparada por corte literal: proíbe o Code inventar lei (`app/docs/LEIS.md:138`).
-
-**Arquivo comum com E3 exige ordenação:** E3-RESTO-R3 consta em `app/docs/BACKLOG.md:768`, construtor c4 em voo em `app/docs/RELATO.md:7`; o registro de achados inclui mudanças no vigia/dono (`app/docs/RELATO.md:53`). A regra exige convivência por arquivo, não por família (`CLAUDE.md:309`). Diff exato da cópia em voo [nao verificado].
-
-**Item 4 PROCEDE:** b2 afirma “Todos os21 ... têm ausência APROVADA”, enquanto topo/LU2 falam19; “2 sem aprovação” não está individualmente provado [nao verificado]. É contradição entre anexos, não ausência comprovada.
-
-**Guardas relevantes:** função real, rótulo=universo e condição literal (`CLAUDE.md:35`, `:37`); consumidor lê a lâmpada (`:173`); retenção atual lê célula/protestos (`app/folha/export.py:1273`, `:1293`). FERIADO-SO-NA-ESCALA-CERTA não localizado na cópia; estado da obra além do anexo [nao verificado].
-
-_5630 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5631 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
