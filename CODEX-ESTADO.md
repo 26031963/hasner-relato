@@ -1,7 +1,439 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 06:25** · publicado em **15/11/2026 06:27** (UTC-3)
+> Ultima resposta processada: **15/11/2026 07:15** · publicado em **15/11/2026 07:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 07:15 · sessao 60a0a64256ab · CONTRATO-DE-ENTRADA-DO-FIO · sonda · origem=Code
+
+```python
+# Django shell; tenant juliani já ativo no envelope de leitura.
+# Execução/resultados de produção: [nao verificado].
+# Correspondência desta cópia ao HEAD Git: [nao verificado].
+# HASH informado pelo solicitante: 880331a8c8d394724b78217edc84bede94b99cb7.
+#
+# Escritor atual: agora = timezone.now(), depois agora.isoformat():
+# app/api/views.py:497, app/api/views.py:761;
+# app/api/views_core.py:483, app/api/views_core.py:755.
+# Com USE_TZ=True, agora sai aware em UTC: offset +00:00.
+# Configuração: app/config/settings/base.py:93, app/config/settings/base.py:95.
+# Novo escritor solicitado: timezone.localtime(ts_efetivo).isoformat().
+# Esta sonda mede o contrafactual pedido, usando Batida.timestamp;
+# execução futura da alteração em produção: [nao verificado].
+#
+# Leitores reais: app/chamados/juizes.py:87, app/chamados/juizes.py:171.
+# Último degrau lê ultima_batida.timestamp e extrai date() no offset gravado:
+# app/chamados/juizes.py:159, app/chamados/juizes.py:166.
+# O singular consulta o catálogo; o lote lê data_turno diretamente:
+# app/chamados/juizes.py:113, app/chamados/juizes.py:187.
+# Aqui são feitas literalmente as duas chamadas ao LOTE solicitadas.
+#
+# Convenções da sonda:
+# U_CHAMADOS: não terminais com referência a Batida existente.
+# U_DISPUTAS: disputas abertas cujo chamado tem referência a Batida existente;
+# não acrescenta filtro de terminal ao chamado desse segundo universo.
+# Disputas contam por PK de disputa; amostras deduplicam PK de chamado.
+# Empresa da medição/exportação = empresa do colaborador do chamado.
+# Disputa sem chamado é contabilizada na empresa do colaborador da disputa.
+# None não pertence a competência alguma.
+# Contadores são parciais se ERRO > 0. Nenhuma exceção imprime seu conteúdo.
+
+erros = 0
+logging_anterior = None
+
+
+def emitir(chave, valor):
+    print("{} {}".format(chave, valor), flush=True)
+
+
+def erro(etapa, exc, chamado_pk=None):
+    global erros
+    erros += 1
+    emitir(
+        "ERRO_ITEM",
+        "etapa={} chamado_pk={} classe={}".format(
+            etapa,
+            chamado_pk if chamado_pk is not None else "-",
+            type(exc).__name__,
+        ),
+    )
+
+
+try:
+    import logging
+    import re
+    from collections import Counter, defaultdict
+    from contextlib import ExitStack
+    from copy import copy, deepcopy
+    from datetime import timedelta
+
+    from django.conf import settings
+    from django.db import connection, connections
+    from django.utils import timezone
+
+    logging_anterior = logging.root.manager.disable
+    logging.disable(logging.CRITICAL)
+
+    alias_leitura = connection.alias
+
+    def somente_select(execute, sql, params, many, context):
+        if (
+            many
+            or context["connection"].alias != alias_leitura
+            or not re.match(r"\s*SELECT\b", sql, re.I)
+            or ";" in sql
+            or re.search(
+                r"\bFOR\s+(?:(?:NO\s+KEY|KEY)\s+)?(?:UPDATE|SHARE)\b",
+                sql,
+                re.I,
+            )
+        ):
+            raise RuntimeError("consulta_recusada")
+        return execute(sql, params, many, context)
+
+    with ExitStack() as pilha:
+        for alias in connections:
+            pilha.enter_context(
+                connections[alias].execute_wrapper(somente_select)
+            )
+        # Usa o fuso configurado da aplicação:
+        # app/config/settings/base.py:93.
+        pilha.enter_context(timezone.override(timezone.get_default_timezone()))
+
+        # Model/campos: app/colaboradores/models.py:40,
+        # app/colaboradores/models.py:46, app/colaboradores/models.py:321.
+        from colaboradores.models import Empresa
+        # app/ponto/models.py:8, app/ponto/models.py:23.
+        from ponto.models import Batida
+        # Chamado: app/chamados/models.py:27, :38, :47, :50, :52.
+        # Disputa: app/chamados/models.py:1783, :1796, :1804.
+        from chamados.models import ChamadoColaborador, DisputaSupervisao
+        # Terminal = status_local em TERMINAIS; inclui resolvido, fechado,
+        # cancelado e superado: app/chamados/catalogo/motor.py:30,
+        # app/chamados/catalogo/motor.py:31.
+        from chamados.catalogo.motor import TERMINAIS
+        from chamados.juizes import dias_do_fato  # app/chamados/juizes.py:171
+        # Autoridade exportada: app/folha/export.py:556; retorno em :594.
+        from folha.export import competencia_entregue
+        # Autoridade do intervalo/corte da Empresa:
+        # app/ponto/janelas.py:60, app/ponto/janelas.py:36.
+        from ponto.janelas import janela_atual
+        # Importa só a constante; não executa Command.handle:
+        # app/ponto/management/commands/marcar_foto_ausente_retro.py:45.
+        from ponto.management.commands.marcar_foto_ausente_retro import (
+            DIAS_PARA_TRAS,
+        )
+
+        # Sem troca de tenant, transação, SET ou savepoint.
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT current_schema()")
+            if cursor.fetchone()[0] != "juliani":
+                raise RuntimeError("tenant_incorreto")
+
+        if not settings.USE_TZ:
+            raise RuntimeError("use_tz_incompativel")
+
+        empresas = {
+            e.pk: e
+            for e in Empresa.objects.using(alias_leitura).only(
+                "pk", "dia_inicio_competencia"
+            )
+        }
+        agora = timezone.now()
+        local_agora = timezone.localtime(agora)
+        emitir("FUSO_LOCAL", str(timezone.get_current_timezone()))
+        emitir("ESCRITOR_ANTES_OFFSET", agora.isoformat()[-6:])
+        emitir("ESCRITOR_DEPOIS_OFFSET_AGORA", local_agora.isoformat()[-6:])
+
+        cache_exportada = {}
+
+        def exportada_no_dia(empresa_pk, dia):
+            if dia is None:
+                return False
+            # Converte dia em competência pela autoridade, sem copiar o corte:
+            # app/ponto/janelas.py:60.
+            _, fim = janela_atual(dia, empresas[empresa_pk])
+            chave = (empresa_pk, fim.month, fim.year)
+            if chave not in cache_exportada:
+                # Não consulta holerite nem replica vigência/exportação:
+                # app/folha/export.py:580, app/folha/export.py:588.
+                cache_exportada[chave] = bool(competencia_entregue(*chave))
+            return cache_exportada[chave]
+
+        def blocos(queryset):
+            # Paginação por PK; não abre cursor servidor via iterator().
+            ultimo = None
+            while True:
+                pagina = queryset.order_by("pk")
+                if ultimo is not None:
+                    pagina = pagina.filter(pk__gt=ultimo)
+                pagina = list(pagina[:200])
+                if not pagina:
+                    return
+                yield pagina
+                ultimo = pagina[-1].pk
+
+        def referencia_batida(contexto):
+            if not isinstance(contexto, dict):
+                return None
+            ub = contexto.get("ultima_batida")
+            if not isinstance(ub, dict):
+                return None
+            bruto = ub.get("id")
+            if isinstance(bruto, bool):
+                return None
+            if isinstance(bruto, int):
+                return bruto
+            if isinstance(bruto, str) and re.fullmatch(r"[+-]?[0-9]+", bruto):
+                return int(bruto)
+            return None
+
+        metricas = (
+            "CANDIDATOS",
+            "SEM_CHAMADO",
+            "SEM_REFERENCIA_EXISTENTE",
+            "U",
+            "MEDIDOS",
+            "DIVERGENTES",
+            "DIVERGENTES_EXPORTADAS",
+            "DIVERGENTES_EXPORTACAO_INDETERMINADA",
+        )
+
+        def varrer(escopo, queryset, por_empresa, disputas=False):
+            amostrados = set()
+            for pagina in blocos(queryset):
+                preparados = []
+                for item in pagina:
+                    c = None
+                    try:
+                        c = item.chamado if disputas else item
+                        empresa_pk = (
+                            c.colaborador.empresa_id
+                            if c is not None
+                            else item.colaborador.empresa_id
+                        )
+                        cont = por_empresa[empresa_pk]
+                        cont["CANDIDATOS"] += 1
+                        if c is None:
+                            cont["SEM_CHAMADO"] += 1
+                            continue
+                        bid = referencia_batida(c.contexto_json)
+                        if bid is None:
+                            cont["SEM_REFERENCIA_EXISTENTE"] += 1
+                            continue
+                        preparados.append((item, c, empresa_pk, bid))
+                    except BaseException as exc:
+                        erro(escopo + "_preparar", exc, getattr(c, "pk", None))
+
+                batidas = {
+                    b.pk: b
+                    for b in Batida.objects.using(alias_leitura)
+                    .filter(pk__in={r[3] for r in preparados})
+                    .only("pk", "timestamp")
+                }
+
+                for item, c, empresa_pk, bid in preparados:
+                    cont = por_empresa[empresa_pk]
+                    batida = batidas.get(bid)
+                    if batida is None:
+                        cont["SEM_REFERENCIA_EXISTENTE"] += 1
+                        continue
+                    cont["U"] += 1
+                    try:
+                        # Não altera o objeto original nem chama save().
+                        c2 = copy(c)
+                        c2.contexto_json = deepcopy(c.contexto_json)
+                        c2.contexto_json["ultima_batida"]["timestamp"] = (
+                            timezone.localtime(batida.timestamp).isoformat()
+                        )
+                        # Leitor REAL, sem reproduzir qualquer degrau:
+                        # app/chamados/juizes.py:171.
+                        dia_hoje = dias_do_fato([c])[c.pk]
+                        dia_novo = dias_do_fato([c2])[c.pk]
+                        cont["MEDIDOS"] += 1
+                        if dia_hoje == dia_novo:
+                            continue
+                        cont["DIVERGENTES"] += 1
+                        try:
+                            exp_hoje = exportada_no_dia(empresa_pk, dia_hoje)
+                            exp_novo = exportada_no_dia(empresa_pk, dia_novo)
+                        except BaseException:
+                            cont["DIVERGENTES_EXPORTACAO_INDETERMINADA"] += 1
+                            raise
+                        exportada = exp_hoje or exp_novo
+                        cont["DIVERGENTES_EXPORTADAS"] += int(exportada)
+                        if c.pk not in amostrados and len(amostrados) < 20:
+                            amostrados.add(c.pk)
+                            emitir(
+                                escopo + "_DIVERGENTE",
+                                (
+                                    "empresa_pk={} chamado_pk={} colaborador_pk={} "
+                                    "disputa_pk={} dia_hoje={} dia_novo={} exportada={}"
+                                ).format(
+                                    empresa_pk, c.pk, c.colaborador_id,
+                                    item.pk if disputas else "-",
+                                    dia_hoje, dia_novo,
+                                    "s" if exportada else "n",
+                                ),
+                            )
+                    except BaseException as exc:
+                        erro(escopo + "_medir", exc, c.pk)
+
+        chamados = (
+            ChamadoColaborador.objects.using(alias_leitura)
+            .exclude(status_local__in=TERMINAIS)
+            .select_related("colaborador")
+            .only(
+                "pk", "contexto_json", "celula_id", "colaborador_id",
+                "colaborador__empresa_id",
+            )
+        )
+        # Aberta equivale a fechada_em is None:
+        # app/chamados/models.py:1870, app/chamados/models.py:1871.
+        # O leitor recebe d.chamado; não recebe d.contexto:
+        # app/chamados/models.py:1792, app/chamados/models.py:1796;
+        # app/chamados/juizes.py:226.
+        disputas = (
+            DisputaSupervisao.objects.using(alias_leitura)
+            .filter(fechada_em__isnull=True)
+            .select_related("colaborador", "chamado__colaborador")
+            .only(
+                "pk", "colaborador__empresa_id", "chamado_id",
+                "chamado__pk", "chamado__contexto_json",
+                "chamado__celula_id", "chamado__colaborador_id",
+                "chamado__colaborador__empresa_id",
+            )
+        )
+
+        for escopo, queryset, eh_disputa in (
+            ("M1_CHAMADOS", chamados, False),
+            ("M1_DISPUTAS", disputas, True),
+        ):
+            contagens = defaultdict(Counter)
+            try:
+                varrer(escopo, queryset, contagens, disputas=eh_disputa)
+            except BaseException as exc:
+                erro(escopo + "_varredura", exc)
+            totais = Counter()
+            for empresa_pk in sorted(set(empresas) | set(contagens)):
+                cont = contagens[empresa_pk]
+                for chave in metricas:
+                    emitir(
+                        "{}_EMPRESA_{}_{}".format(escopo, empresa_pk, chave),
+                        cont[chave],
+                    )
+                    totais[chave] += cont[chave]
+            for chave in metricas:
+                emitir("{}_TOTAL_{}".format(escopo, chave), totais[chave])
+
+        # Janela real: agora - timedelta(days=DIAS_PARA_TRAS), inclusiva
+        # nas duas pontas; não são apenas três datas civis:
+        # app/ponto/management/commands/marcar_foto_ausente_retro.py:63,
+        # app/ponto/management/commands/marcar_foto_ausente_retro.py:65,
+        # app/ponto/management/commands/marcar_foto_ausente_retro.py:67.
+        desde_local = timezone.localtime(
+            agora - timedelta(days=DIAS_PARA_TRAS)
+        )
+        dias = []
+        dia = desde_local.date()
+        while dia <= local_agora.date():
+            dias.append(dia)
+            dia += timedelta(days=1)
+
+        emitir("M2_HOJE_LOCAL", local_agora.date())
+        emitir("M2_DIAS_PARA_TRAS", DIAS_PARA_TRAS)
+        emitir("M2_INICIO_INCLUSIVO", desde_local.isoformat())
+        emitir("M2_FIM_INCLUSIVO", local_agora.isoformat())
+        emitir("M2_PRIMEIRO_DIA_LOCAL", dias[0])
+        emitir("M2_ULTIMO_DIA_LOCAL", dias[-1])
+        emitir("M2_DATAS_LOCAIS", len(dias))
+
+        totais_dias = Counter()
+        total_classificados = 0
+        total_exportados = 0
+        for empresa_pk, empresa in sorted(empresas.items()):
+            prefixo = "M2_EMPRESA_{}".format(empresa_pk)
+            try:
+                # Início vem da autoridade de Empresa, sem literal de corte:
+                # app/colaboradores/models.py:46, app/ponto/janelas.py:60.
+                ini, fim = janela_atual(local_agora.date(), empresa)
+                ant_ini, ant_fim = janela_atual(
+                    ini - timedelta(days=1), empresa
+                )
+                emitir(prefixo + "_COMPETENCIA_ATUAL", "{}_a_{}".format(ini, fim))
+                emitir(
+                    prefixo + "_COMPETENCIA_ANTERIOR",
+                    "{}_a_{}".format(ant_ini, ant_fim),
+                )
+                # Datas de execução dentro da competência atual.
+                # Consequência da janela retroativa inclusiva, fonte acima.
+                emitir(prefixo + "_PRIMEIRA_DATA_TOCA_ANTERIOR", ini)
+                emitir(
+                    prefixo + "_PRIMEIRA_DATA_DEIXA_DE_TOCAR_ANTERIOR",
+                    ini + timedelta(days=DIAS_PARA_TRAS),
+                )
+                emitir(
+                    prefixo + "_PROXIMA_VIRADA_TOCA_ANTERIOR",
+                    fim + timedelta(days=1),
+                )
+                emitir(
+                    prefixo + "_HOJE_TOCA_ANTERIOR",
+                    int(desde_local.date() <= ant_fim
+                        and local_agora.date() >= ant_ini),
+                )
+            except BaseException as exc:
+                erro(prefixo + "_competencia", exc)
+
+            classificados = exportados = 0
+            for dia in dias:
+                try:
+                    exp = exportada_no_dia(empresa_pk, dia)
+                    emitir(
+                        prefixo + "_DIA",
+                        "{} exportada={}".format(dia, "s" if exp else "n"),
+                    )
+                    classificados += 1
+                    exportados += int(exp)
+                    totais_dias[dia] += int(exp)
+                    total_classificados += 1
+                    total_exportados += int(exp)
+                except BaseException as exc:
+                    erro(prefixo + "_dia_" + dia.isoformat(), exc)
+            emitir(prefixo + "_DIAS_CLASSIFICADOS", classificados)
+            emitir(prefixo + "_DIAS_EXPORTADOS", exportados)
+
+        for dia in dias:
+            emitir(
+                "M2_TOTAL_EMPRESAS_EXPORTADAS_NO_DIA",
+                "{} quantidade={}".format(dia, totais_dias[dia]),
+            )
+        emitir("M2_TOTAL_EMPRESA_DIAS_CLASSIFICADOS", total_classificados)
+        emitir("M2_TOTAL_EMPRESA_DIAS_EXPORTADOS", total_exportados)
+
+except BaseException as exc:
+    erro("sonda", exc)
+finally:
+    try:
+        if logging_anterior is not None:
+            logging.disable(logging_anterior)
+    except BaseException as exc:
+        erro("restaurar_logging", exc)
+    emitir("ERRO", erros)
+    emitir("FIM", "ok={}".format(int(erros == 0)))
+```
+
+## 15/11 07:12 · sessao 1454451ab25f · - · - · origem=Ronald (tmux)
+
+- **Terminal:** importar `TERMINAIS` de `chamados.catalogo.motor` e usar `.exclude(status_local__in=TERMINAIS)`. Definição: `ENCERRADOS = ('resolvido', 'fechado')`; `TERMINAIS = ENCERRADOS + ('cancelado', 'superado')` em `app/chamados/catalogo/motor.py:30` e `app/chamados/catalogo/motor.py:31`. `registrado` é não terminal, conforme `VIVOS` em `app/chamados/catalogo/motor.py:24`.
+
+- **Disputa aberta:** `.filter(fechada_em__isnull=True)`, equivalente à propriedade `DisputaSupervisao.aberta`, que retorna `self.fechada_em is None` em `app/chamados/models.py:1870`. Campo em `app/chamados/models.py:1804`.
+
+- **Ligação ao chamado:** `DisputaSupervisao.chamado` é FK nullable, com reverso `disputa_origem`, em `app/chamados/models.py:1796`. Para universo de disputas, passar `d.chamado` à função real e alterar somente a cópia de `chamado.contexto_json`; `d.contexto` é outro campo, em `app/chamados/models.py:1792`. Por ser FK, a contagem de disputas precisa preservar a multiplicidade de disputas por chamado; convém reportar `SEM_CHAMADO`, já que a FK admite nulo (`app/chamados/models.py:1796`).
+
+- **Leitor exigido:** `dias_do_fato(chamados)` em `app/chamados/juizes.py:171`. Apenas monta dicionários e consulta; chamadas de ORM nas linhas `app/chamados/juizes.py:200` e `app/chamados/juizes.py:210`. O degrau de disputa consulta todas as disputas relacionadas, sem recorte por fechamento, e ignora perguntas `conversa` (`app/chamados/juizes.py:210`, `app/chamados/juizes.py:213`). Não aplicar pré-filtro adicional ao fallback.
+
+- **Último degrau:** lote chama `_dia_do_contexto_fraco(c.contexto_json)` em `app/chamados/juizes.py:226`; singular em `app/chamados/juizes.py:138`. O helper lê `ultima_batida.timestamp` em `app/chamados/juizes.py:159` e executa `datetime.fromisoformat(bruto).date()` em `app/chamados/juizes.py:166`, preservando o dia do offset gravado.
+
+- **Atenção à execução real:** embora a docstring diga “mesmo juiz”, o singular consulta a chave de data do catálogo (`app/chamados/juizes.py:113`), enquanto o lote lê diretamente `data_turno` (`app/chamados/juizes.py:187`). Para satisfazer o pedido, chamar literalmente `dias_do_fato([c])[c.pk]` e `dias_do_fato([c2])[c.pk]`; não substituir pelo singular nem reproduzir a escada.
 
 ## 15/11 06:25 · sessao 7c8db30e6497 · JUSTIFICATIVA-PAGA-O-PERIODO · construtor · origem=Code
 
@@ -456,49 +888,4 @@ Ruff indisponível; integração e certificação pelo Code/opus pendentes ([reg
 
 6. **Mutante plausível vivo confirmado em memória:** remover `motivo='foto_ausente'` somente do filtro legado, permitindo validar NULL de outros motivos. Os dez testes C3 passaram; registro persistido da execução: **[nao verificado]**. As fixtures de upload contêm somente `foto_ausente`, portanto não detectam a ampliação. (`app/api/foto_recebida.py:72`; `app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c3_sem_banco.py:141`; `app/chamados/tests/test_cef_c1_sem_banco.py:208`)
 
-## 15/11 05:37 · sessao ba44442ab92c · - · - · origem=Ronald (tmux)
-
-1. **Os testes C3 mordem os quatro mutantes escolhidos**, exigindo falha de asserção identificada e recusando erro de execução. Há controle verde e falhas registradas para os operadores; isso prova esses cortes, não completude. (`app/chamados/tests/cef_c3_verificar.py:12`; `app/chamados/tests/cef_c3_verificar.py:31`; `app/chamados/tests/cef_c3_mutantes.txt:17`; `app/chamados/tests/cef_c3_mutantes.txt:33`)
-
-2. **Mutante plausível vivo novo:** fazer a recepção antiga vencer quando a nova emissão trouxer `recebida_em` explícita. Substituí somente a fonte em memória de `ctx[k] = {**ctx[k], **v}` por:
-
-   ```python
-   ctx[k] = {
-       **ctx[k], **v,
-       **({'recebida_em': ctx[k]['recebida_em']}
-          if 'recebida_em' in ctx[k] else {}),
-   }
-   ```
-
-   O controle executado passou 10/10 e esse mutante também passou 10/10, com `PYTHONDONTWRITEBYTECODE=1`, sem arquivo de saída. O código correto permite valor novo vencer; o caso chamado “atualiza valor presente” só altera `timestamp`, deixando essa recepção explícita sem testemunha. A integração também apenas omite a recepção ou troca o episódio. (`app/chamados/services/disputa_emissao.py:573`; `app/chamados/tests/test_cef_c3_sem_banco.py:113`; `app/chamados/tests/test_cef_c3_integracao.py:18`)
-
-3. **A2 tem uma lacuna mais grave que os mutantes cobertos:** cada teste sem banco cria uma única NULL e assume sua associação ao `ctx.id=101`. Na integração, a NULL é construída apagando a origem da própria batida que ficou por último no contexto. O caso negativo envia uma terceira batida cujo id diverge do contexto. Nenhum desses casos representa NULL antiga de A, contexto atualizado para B e upload de B; tampouco duas NULL de episódios distintos no mesmo agrupador. (`app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c3_sem_banco.py:153`; `app/chamados/tests/test_cef_c3_integracao.py:32`; `app/chamados/tests/test_cef_c3_integracao.py:60`)
-
-4. **Limites efetivos:** ORM, transação, `save`, validação e vitalidade são doubles no executor sem banco. `_validar_pelo_dono` é substituído por função que simplesmente marca as perguntas selecionadas como mortas. Portanto, o mutante antigo `_validar_pelo_dono -> return 0` permanece invisível nesse executor; a integração tem asserções de `validada_em` e vitalidade que o denunciariam, mas sua execução nesta revisão é **[nao verificado]**. (`app/chamados/tests/test_cef_c3_sem_banco.py:3`; `app/chamados/tests/test_cef_c1_sem_banco.py:219`; `app/chamados/tests/test_cef_c1_sem_banco.py:230`; `app/chamados/tests/test_cef_c3_integracao.py:53`)
-
-5. **Classes de reprovação:**
-   
-   - **Derivação paralela / campo com dois significados: demonstrada em A2.** O leitor toma o último id do agregado como origem de todas as NULL selecionadas. O contrato da coluna documenta precisamente que, depois do nascimento, esse contexto pode apontar outra anomalia e que o acervo não recebe episódio por essa derivação; o acervo só tem chave de dia. (`app/api/foto_recebida.py:70`; `app/api/foto_recebida.py:72`; `app/chamados/models.py:3599`; `app/chamados/services/fio.py:1286`)
-   - **Segundo juiz de vitalidade / segundo escritor de resposta ou validação:** nenhum novo demonstrado no delta; o resolver usa `fio_vivo` e a rotina delega às portas de resposta e validação existentes. O defeito está no universo entregue a essas portas. (`app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/api/foto_recebida.py:82`)
-   - **Relógio fora da borda:** há relógios internos preexistentes para `ultima_em` e resposta automática; C3 não acrescenta outro nesses trechos. (`app/chamados/services/disputa_emissao.py:567`; `app/api/foto_recebida.py:42`)
-   - **Selo sem mordida:** a catraca AST verifica presença estrutural de envelope/id, sem provar valor em execução, domínio do ramo ou correspondência histórica entre pergunta e contexto. Sua mordida não cobre A2. (`app/chamados/tests/test_e1_v5_familia.py:133`; `app/chamados/tests/test_e1_v5_familia.py:170`; `app/chamados/tests/test_e1_v5_familia.py:180`)
-   - **Timestamp com significados recepção antiga/fato novo:** convivência explicitamente preservada, anterior a C3. (`app/chamados/juizes.py:152`; `app/chamados/juizes.py:155`)
-
-6. **Não executei `cef_c3_verificar`: ele escreve `cef_c3_mutantes.txt`**, apesar de não alterar fontes. O ensaio acima carregou e alterou apenas `c1.[nome]` em memória, mecanismo previsto no próprio executor. (`app/chamados/tests/cef_c3_verificar.py:36`; `app/chamados/tests/test_cef_c1_sem_banco.py:23`; `app/chamados/tests/test_cef_c1_sem_banco.py:26`)
-
-## 15/11 05:37 · sessao b8538b8203fa · - · - · origem=Ronald (tmux)
-
-A1 está correta para o defeito sequencial: somente dicionários com `id` conhecido igual fundem; chaves omitidas, inclusive `recebida_em`, sobrevivem; valor explícito novo vence e outro episódio substitui integralmente. (`app/chamados/services/disputa_emissao.py:569`; `app/chamados/services/disputa_emissao.py:573`; `app/chamados/services/disputa_emissao.py:575`)
-
-O censo dos outros escritores dá estes limites:
-
-- **Reuso via nota não apaga recepção já presente.** Escreve `ChamadoColaborador.contexto_json`, enquanto A1 escreve `DisputaSupervisao.contexto`; a nota delega à porta `fundir_contexto`, que trata dicionário como escalar e só o insere se a chave estiver ausente. Também **não acrescenta** recepção nova a `ultima_batida` já presente sem ela: permanece o snapshot antigo. Esse comportamento é preexistente e pode alimentar o fallback de dia pelo timestamp antigo. (`app/chamados/services/disputa_emissao.py:594`; `app/chamados/services/disputa_emissao.py:600`; `app/chamados/services/nota.py:110`; `app/chamados/services/nota.py:123`; `app/chamados/services/contexto.py:144`; `app/chamados/services/contexto.py:155`; `app/chamados/juizes.py:162`)
-- **`contexto.py` não é outro escritor atual de `ultima_batida` da disputa.** Atua em `contexto_json` do chamado; `renovar_contexto` pode substituir qualquer chave recebida, mas os chamadores localizados enviam outras chaves. Exemplos: marcos, batida/data do turno, agrupamento, escape e sugestão. Acesso dinâmico fora do censo textual: **[nao verificado]**. (`app/chamados/services/contexto.py:97`; `app/chamados/services/contexto.py:100`; `app/chamados/services/contexto.py:102`; `app/chamados/management/commands/nomear_marco_por_lampada.py:109`; `app/chamados/management/commands/carimbar_por_batida_coincidente.py:98`; `app/chamados/services/adesao.py:113`; `app/chamados/services/declaracao_texto.py:208`; `app/chamados/services/limbo_folgas.py:68`)
-- **Outras atribuições de `.contexto` preservam `ultima_batida` sequencialmente:** preenchimento de motivo/data parte de cópia; aparar remove a chave do motivo; remover acrescenta `revalidacoes`. A atribuição do envelope no gerador ocorre numa cópia transitória e não grava o agregado. (`app/chamados/services/disputa_emissao.py:291`; `app/chamados/services/disputa_emissao.py:296`; `app/chamados/services/disputa_emissao.py:312`; `app/chamados/models.py:2028`; `app/chamados/models.py:2032`; `app/chamados/models.py:2104`; `app/chamados/models.py:2109`; `app/chamados/models.py:2128`)
-- **Portas genéricas da disputa substituem uma chave, mas os chamadores encontrados escrevem outras:** `supervisao_omissa_escalado`, `incidente_operacional`, `ultimo_alerta_diario`. Não demonstram outro caso sequencial do mesmo apagamento. (`app/chamados/models.py:2164`; `app/chamados/models.py:2182`; `app/chamados/views.py:1343`; `app/ponto/management/commands/escalonar_chamados_supervisao.py:159`; `app/ponto/management/commands/alertar_disputas_pendentes.py:48`)
-
-**Não cabe prometer “nunca perde recepção” para concorrência:** o cron pode carregar a disputa antes da recepção; a emissão salva `recebida_em`; depois `renovar_contexto` grava o JSON inteiro da instância antiga, com outra chave, apagando a recepção recém-conhecida. A porta de renovação não relê nem trava nessa implementação. É risco preexistente, distinto do defeito sequencial curado; ocorrência na sombra **[nao verificado]**. (`app/ponto/management/commands/alertar_disputas_pendentes.py:33`; `app/ponto/management/commands/alertar_disputas_pendentes.py:42`; `app/ponto/management/commands/alertar_disputas_pendentes.py:48`; `app/chamados/models.py:2182`; `app/chamados/models.py:2187`; `app/chamados/services/disputa_emissao.py:539`; `app/chamados/services/disputa_emissao.py:579`)
-
-Escritores dos envelopes: ambas APIs fornecem `id`, `tipo`, timestamp local do fato e recepção; retro fornece os três primeiros e omite recepção. O significado local de recepção não decide o dia no juiz fraco. (`app/api/views.py:761`; `app/api/views_core.py:755`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`; `app/chamados/juizes.py:151`; `app/chamados/juizes.py:169`)
-
-_5532 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5534 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

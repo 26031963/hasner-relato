@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:11:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.6 MB). Acoes na janela: **1501**.
+**Medido em 15/11/2026 07:16:20.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.7 MB). Acoes na janela: **1509**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:16:16 | Bash | Drop the failing .only() on disputas and rerun on sombra | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && python3 - <<'EOF' p='logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/q5_sonda.py' s=open(p).read() a=''' .select_related("colaborador", "chamado__colaborador") .only( "pk", "colaborador__empresa_id", "chamado_id", "chamado__pk", "chamado__contexto_json", "chamado__celula_id", "chamado__colaborador_id", "chamado__colaborador__empresa_id", )  ...` |
+| 07:16:03 | Bash | Run T4 sonda on sombra and show totals | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && rm -rf $D/__pycache__ && timeout 900 bin/sonda_leitura.sh --sombra $D/q5_sonda.py > $D/q5_saida.txt 2>&1; echo rc=$?; grep -E 'TOTAL\|M2_(HOJE\|PRIMEIRO\|ULTIMO)\|PROXIMA_VIRADA\|DIAS_EXPORTADOS\|_DIVERGENTE \|ERRO\|FIM' $D/q5_saida.txt \| head -60` |
+| 07:15:58 | Bash | Spot-check Codex citations and extract sonda script | `sed -n 556,558p folha/export.py; sed -n 60,61p ponto/janelas.py; sed -n 30,31p chamados/catalogo/motor.py; cd .. && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && sed -n '/^```python$/,/^```$/p' $D/q5.r \| sed '1d;$d' > $D/q5_sonda.py && python3 -m py_compile $D/q5_sonda.py && echo compila` |
+| 07:15:52 | Bash | Read Codex sonda result | `cd /home/ronald/saas-hasner/logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && cat q5.fim; tail -5 q5.log; wc -l q5.r; cat q5.r` |
+| 07:11:46 | Bash | Wait for the Codex T4 sonda answer | `F=/home/ronald/saas-hasner/logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/q5.fim; until [ -f $F ]; do /usr/bin/sleep 30; done; cat $F` |
+| 07:11:45 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 07:11:40 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 07:11:35 | Bash | Write T4 real-reader sonda brief and launch Codex | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO && mkdir -p $D/t4 && cat > $D/t4/q5_sonda.md <<'EOF' PAPEL sonda (texto). Devolva UM script Python (Django shell, tenant juliani ja ativo no envelope, SO SELECT, nenhuma escrita, sem nome/CPF: colaborador pelo pk) que a sessao roda na SOMBRA pelo envelope de leitura. Confira no codigo do HEAD cada nome que usar (arquivo:linha no come ...` |
 | 07:11:10 | Bash | Read the real day reader and the retro window | `cd /home/ronald/saas-hasner && W=/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app && sed -n 150,235p $W/chamados/juizes.py; sed -n 35,105p $W/ponto/management/commands/marcar_foto_ausente_retro.py` |
 | 07:11:05 | Bash | Read earlier sonda launcher, brief, and the read envelope | `cd /home/ronald/saas-hasner && cat logs/BATIDA-DEDUP-RETRATADA/q3b_run.sh; echo ----; head -40 logs/BATIDA-DEDUP-RETRATADA/q3a_sonda.md; echo ----; sed -n 1,40p bin/sonda_leitura.sh` |
 | 07:11:03 | Bash | Find how the earlier q3a sonda was launched | `cd /home/ronald/saas-hasner && ls logs/BATIDA-DEDUP-RETRATADA/ \| head -50; grep -rn 'CODEX_SONDA_ENVELOPE' bin/codex_pergunta.sh \| head -5; ls logs/BATIDA-DEDUP-RETRATADA/*.sh 2>/dev/null` |
