@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 18:03** · publicado em **15/11/2026 18:08** (UTC-3)
+> Ultima resposta processada: **15/11/2026 18:13** · publicado em **15/11/2026 18:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 18:13 · sessao e3b4179907c7 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+1. **G3 sem selo que morda a regressão textual — baixa.** O teste c15 contém apenas G1 e G2 (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:81`, `:185`); os 15 mutantes também cobrem exclusivamente essas duas curas (`app/chamados/tests/e3_r3_c15_mutantes.py:27`). Reintroduzi, apenas em memória, textos antigos contraditórios em tarefa_do_dia, fora_da_folha, retrato_folha e models: os nove testes c15 continuam verdes. O selo textual c14 cobre outros sítios explicitamente enumerados (`app/chamados/tests/test_e3_r3_c14_sem_banco.py:409`). A cura documental existe nos arquivos vivos, portanto não foi feita só no teste/texto de entrega; falta a mordida pedida para G3 (`app/chamados/services/tarefa_do_dia.py:32`; `app/folha/fora_da_folha.py:77`; `app/folha/retrato_folha.py:474`; `app/folha/models.py:306`).
+
+2. **Contrato documental de RetratoFolha ainda contraditório — baixa.**
+   - Afirma que linha antiga sem as três chaves cai em fio `ninguem` (`app/folha/models.py:315`), mas `{status:'fora', motivo:'sem_codigo_dominio'}` sem `dono` cai em `admin`: `fio_da_linha` usa `_fio_cru` (`app/folha/retrato_folha.py:449`), que retorna admin para motivo diferente de furo (`:374`).
+   - Enumeração de grupos ainda diz A/B/C/D (`app/folha/models.py:308`), embora `_grupo(['nao_sei'])` retorne E (`app/folha/fora_da_folha.py:112`).
+   - Schema de saldo ainda enumera somente `1|2a5|6mais|None` (`app/folha/models.py:307`), embora motivo cadastral produza `cadastro` (`app/folha/retrato_folha.py:424`).
+
+Resultados executados sem gravação:
+
+- c15: nove testes verdes, quinze mutantes mortos por asserção, sem erro de infraestrutura; o runner rejeita morte por erro (`app/chamados/tests/e3_r3_c15_mutantes.py:80`).
+- c5+c6+nome_indefinido: 34 testes verdes (`app/chamados/tests/test_e3_r3_c5_sem_banco.py:24`; `app/chamados/tests/test_e3_r3_c6_sem_banco.py:87`; `app/chamados/tests/test_e3_r3_c6_nome_indefinido.py:29`).
+- Vizinhos de desligamento têm lei explícita justificando inversão, preservam gêmeo ativo e verificam informativo (`app/escala/tests/test_esemvivab_desligado_nunca_bateu.py:1`, `:102`, `:116`; `app/folha/tests/test_lei_desligado_nao_trava.py:79`, `:103`).
+- Medida mantém números registrados 9/85 e critérios A1=6/B1=82 (`app/core/tests/test_medida_turno_do_par.py:100`); os três sítios novos aparecem na classificação informativa (`:391`, `:415`).
+- Enfraquecimento relativo dos testes entre hashes anteriores: **[nao verificado]**, porque esta cópia não disponibiliza histórico Git acessível. [nao verificado]
+
+## 15/11 18:13 · sessao 091be4eebcf9 · - · - · origem=Ronald (tmux)
+
+- **G1, média: cura parcial.** O escritor grava `_agora` em todos os retratos (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `:83`), mas o vigia ainda identifica rodada por dia civil local (`app/folha/vigia_retido_calado.py:47-50`). O próprio comentário promete ler a última lavra (`:20-25`).
+
+  Casos concretos reproduzidos executando `censo` real com dependências em memória:
+  1. Legado: comp10 carimbada em **14/11 23:59:59**, com um dia sem leitura; comp11 em **15/11 00:00:01**, sem linhas bloqueadas. Retorna apenas comp11, `dias_sem_leitura_sistema=0`, `calados=0`, `cego=1`; o positivo de comp10 desaparece pela seleção em `:48-50`, antes das somas em `:65-80`.
+  2. Duas rodadas novas no mesmo dia: às06h, execução explícita de comp09 grava positivo1; às07h, execução completa grava comp10 e comp11, ambas zero. O vigia retorna **09+10+11 e positivo1**, embora a rodada completa mais recente contenha apenas10/11. Execução explícita é permitida em `lavrar_retrato_folha.py:57-58`; universo automático vem de `:62-69`; competências antigas permanecem porque `update_or_create` só substitui sua própria chave (`:81-83`). Não é versão física antiga da mesma competência: a unicidade está em `app/folha/models.py:363-364`.
+  3. Rodada completa comp10/11 às06h, comp10 positivo1; relavra parcial de comp11 às07h, zero: continuam ambas e positivo1. Isso confirma que o resultado depende da interpretação “união do dia”, não “última rodada” (`vigia_retido_calado.py:47-50`). A entrega assume deliberadamente essa interpretação, apesar da cura pedida na triagem. [nao verificado: ocorrência desses casos em produção]
+
+- **Mordida G1:** os dois mutantes registrados em `app/chamados/tests/e3_r3_c15_mutantes.py:28-29` foram executados e morreram com falha de asserção, sem erro de infraestrutura; sustentam a cura do escritor nos testes `app/chamados/tests/test_e3_r3_c15_sem_banco.py:85-92`. O leitor não é protegido: substituir em memória `vigia_retido_calado.py:48` o dia pelo instante manteve os três testes G1 verdes. A fixture só produz uma rodada (`test_e3_r3_c15_sem_banco.py:35-78`) e não distingue agrupamento por dia de agrupamento por instante. O teste vizinho exige dois carimbos diferentes, T0 e T0+1min, como uma lavra (`app/folha/tests/test_vigia_retido_calado.py:42-52`); essa fixture representa o escritor antigo e não justifica conservar a ambiguidade do leitor após a mudança.
+
+- **Leitores de `RetratoFolha.lavrado_em`:**
+  - Vigia: dia civil local identifica a última lavra (`app/folha/vigia_retido_calado.py:47-50`).
+  - Frescor: instante comparado ao maior `FechamentoMensal.atualizado_em`; fechamento estritamente posterior significa desatualizado, igualdade significa atualizado (`app/folha/retrato_folha.py:1401-1411`). Assume início da rodada, explicitamente conservador (`:1382`).
+  - Rótulo: converte o instante para horário local e apresenta “retrato lavrado em” (`app/folha/retrato_folha.py:1430-1434`).
+  - View: usa o mínimo dos instantes dos retratos exibidos (`app/folha/views_retrato.py:201-203`), repassa como `atualizado` (`:241`, `:319`), e a barra mostra “atualizado HH:MM” (`app/templates/folha/_retrato_barra.html:22`).
+  - Escritor único encontrado: `app/folha/management/commands/lavrar_retrato_folha.py:81-83`. Outros campos homônimos encontrados pertencem a DiaPago/Placar/Pauta, não a RetratoFolha (`app/folha/porta_export.py:283-287`, `app/chamados/views.py:843-848`).
+
+- **G3/semântica, baixa:** o help_text ainda define o campo como “Quando o lavrador escreveu esta linha” (`app/folha/models.py:354-357`), mas ele passou a conter o início da rodada, possivelmente anterior à montagem e à gravação daquela competência (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `:69`, `:83`). Há três sentidos concorrentes: início da rodada, momento da escrita e dia identificador de rodada; os locais acima demonstram a divergência.
+
+**Recomendação do recorte B/G1: REPROVA**, pela seleção incorreta do universo ainda em `app/folha/vigia_retido_calado.py:47-50`.
 
 ## 15/11 18:03 · sessao 6740547b38e3 · JUIZ-RESPONDIDA · censo · origem=Code
 
@@ -948,58 +989,4 @@ PKS RESPONDIDA_SEM_ATO 16943 6 7 8 118 119 120 158 174 175 176 180 181 183 184 1
 PKS ATO_SEM_RESPONDIDA_EM 24 38887 39180 42244 46751 48773 51830 52502 52698 53491 53644 53782 53900 54260 54385 55295 55313 55641 56287 56608 56718 56883 56923 57211 57214
 ```
 
-## 15/11 16:06 · sessao 68f26a1eb8a9 · L2-BACKFILL · verificador · origem=Code
-
-**AVAL-DEVOLVIDO: REEMISSAO-1600, item 3 — perguntas 1 e 3; ressalva de comprovação na 4.** (`avais_1600.txt:4`; `CLAUDE.md:37`)
-
-Nos anexos, conto linhas desde a primeira linha de cada bloco fornecido. [nao verificado]
-
-1. **PROCEDE — o molde citado não fornece o DRY de produção somente leitura.**
-
-   O comando tem DRY default, `--aplicar` e PAREI com lista de exportadas. Porém, **sem `--aplicar`, chama `aplicar()` dentro de uma transação e depois faz rollback**. Portanto, esse DRY tenta executar o caminho escritor; rollback não o transforma em leitura. O envelope configura transações somente leitura. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:425`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:478`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:578`; `bin/sonda_leitura.sh:142`)
-
-   Assim, “item novo no molde” não basta para executar “DRY em prod, leitura pelo envelope”: falta explicitar o caminho L2 que somente seleciona e mede. Sua implementação permanece **[nao verificado]**. O molde também deixa exportadas fora do apply; não oferece passagem específica para ensaiar escrita nelas na sombra. (`avais_1600.txt:4`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:253`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:263`)
-
-   **A porta comporta a linha pedida:** `RETRATACAO` existe; `ato_motivo` é texto sem `choices`, portanto aceita `'obsoleta'`; `ato_em` recebe o datetime fornecido, sem restrição temporal nessa porta. A chamada correta é `registrar([dict(...)])`. (`app/chamados/models.py:4001`; `app/chamados/models.py:4016`; `app/chamados/models.py:4019`; `app/chamados/models.py:4086`; `app/chamados/models.py:4096`)
-
-   “Primeira vaga depois da c14” é condição futura, não prova de vaga disponível; disponibilidade efetiva **[nao verificado]**. Antes de abrir, permanece obrigatório conferir o teto. (`avais_1600.txt:4`; `CLAUDE.md:291`)
-
-2. **NAO PROCEDE — existe “senão” geral.**
-
-   Condição literal que não fecha significa **PAROU com o número**. Isso cobre ausência de vaga, cruzamento de arquivo e resultado insuficiente das provas. Não é necessário repetir um “senão” em cada cláusula. (`CLAUDE.md:37`; `avais_1600.txt:8`)
-
-3. **PROCEDE — há cruzamento concreto com a cópia RELAVRA-11.**
-
-   O comando já diverge nela: o main consulta `competencia_entregue`, enquanto a cópia consulta `competencia_ja_paga`, incluindo o mesmo trecho de classificação usado pelo DRY. Logo, a condição “não cruza arquivo […] nem a cópia da RELAVRA-11” **não fecha agora**; não há autorização para ignorá-la. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:453`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:471`; `/home/ronald/wt-relavra11-113556/app/chamados/management/commands/backfill_decisoes_pergunta.py:456`; `/home/ronald/wt-relavra11-113556/app/chamados/management/commands/backfill_decisoes_pergunta.py:474`; `avais_1600.txt:4`; `app/docs/PISTA.md:44`; `CLAUDE.md:37`)
-
-   Nos diffs R3/F1 examinados, comando e testes diretos `*e1*` não apareceram; a ausência não tem listagem persistida com arquivo:linha: **[nao verificado]**. Há teste relacionado na F1: a catraca examina explicitamente `backfill_decisoes_pergunta::linhas_a_criar`. (`/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:68`; `/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:81`) [nao verificado]
-
-   Não há colisão demonstrada com escritor único ao usar `registrar`. A exceção ao COMPLEMENTO-3 é nominal. L-127 continua sendo vocabulário; a ordem Backfill → leitores tem suporte documental no ADR, que qualifica seu contexto como redação do Code. (`app/chamados/models.py:3989`; `avais_1600.txt:4`; `app/docs/LEIS.md:148`; `app/docs/PLANO-PADROES.md:81`; `app/docs/PLANO-PADROES.md:86`)
-
-4. **NAO PROCEDE quanto às referências principais; exclusão universal e universo permanecem não comprovados.**
-
-   - `_retratada_com_trilha` exige **carimbo + log correlacionado por ação, modelo e PK**. “O mesmo filtro” precisa preservar os três campos do log. (`app/chamados/juizes.py:291`; `app/chamados/juizes.py:294`)
-   - O caminho completo é `chamados/services/carga_pergunta_viva.py`. A linha 111 lê **LogAuditoria**, não DP. Isso não demonstra um leitor já migrado para atos. (`app/chamados/services/carga_pergunta_viva.py:110`)
-   - `remover_motivo` grava **RETRATACAO**, com motivo formatado `"<evento>: motivo <motivo> removido (via antes: <via>)"`, diferente de `'obsoleta'`, e preserva o carimbo existente. (`app/chamados/models.py:2120`; `app/chamados/models.py:2123`; `app/chamados/models.py:2125`)
-   - O selecionador exclui a pergunta **depois de persistida a DP obsoleta**, sustentando idempotência sequencial. `registrar` não deduplica nem há constraint de unicidade desse ato; execução e proteção concorrente L2 são **[nao verificado]**. (`avais_1600.txt:4`; `app/chamados/models.py:4033`; `app/chamados/models.py:4096`)
-   - O seletor **não exclui expressamente quem passou por `remover_motivo`**. Se também houver log obsoleta anterior e faltar DP obsoleta, seus critérios continuam satisfeitos. A existência dessa interseção em produção é **[nao verificado]**. (`avais_1600.txt:4`; `app/chamados/models.py:2120`; `app/chamados/juizes.py:294`)
-   - `disputa_emissao.py:1494–1495` realmente zera validação e autor. (`app/chamados/services/disputa_emissao.py:1494`)
-   - **52/39/13 não são medida primária comprovada aqui**; o aval manda substituí-los pelo DRY futuro. Contagens atuais e efeitos efetivos em FM/TXT são **[nao verificado]**. Registrar DP efetivamente aciona o acordamento de células. (`avais_1600.txt:4`; `app/chamados/models.py:4097`)
-
-## 15/11 16:04 · sessao a43f858a2c0b · - · - · origem=Ronald (tmux)
-
-**Q2 — NAO PROCEDE:** existe “senão” geral: condição literal que não fecha implica PAROU com o número; a abertura também exige conferir teto de dois construtores. (`CLAUDE.md:37`; `CLAUDE.md:291`)
-
-**Q3 — PROCEDE quanto ao cruzamento com a cópia RELAVRA-11.** O comando diverge do main: a cópia usa `competencia_ja_paga`; o main usa `competencia_entregue`. Logo, a condição “não cruza arquivo […] nem a cópia RELAVRA-11” não está satisfeita agora. Isso exige parar essa abertura; o aval não autoriza ignorar a condição. (`/home/ronald/wt-relavra11-113556/app/chamados/management/commands/backfill_decisoes_pergunta.py:456`; mesma cópia `:474`, `:501`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:453`, `:471`, `:498`; `CLAUDE.md:37`; `app/docs/PISTA.md:44`)
-
-Outras verificações:
-
-- A porta `DecisaoPergunta.registrar` respeita o escritor único requerido pelo selo existente; ele recusa construção e escrita ORM fora de `models.py`. (`app/chamados/tests/test_e1_entradas.py:185`; `:196`; `:217`)
-- `test_e4_backfill.py` está alterado nos diffs R3/F1, mas testa **outro comando**, `backfill_fio_morto_e4b`. Não deve ser apresentado como teste direto de `backfill_decisoes_pergunta`. (`/home/ronald/codex_ws/e08db44a694aa355db6abcb54ee5290419168934/app/chamados/tests/test_e4_backfill.py:31`; `:36`)
-- F1 altera um arquivo de catraca que também examina `backfill_decisoes_pergunta::linhas_a_criar`; esse arquivo relacionado não está livre de sobreposição caso L2 precise editá-lo. (`/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e3_catraca_respondedores.py:65`; `:68`; `:81`)
-- Ausência do comando e dos testes diretos `*e1*` nos diffs R3/F1 foi conferida por `git diff --name-only`; não há artefato persistido com arquivo:linha dessa listagem: **[nao verificado]** segundo a exigência estrita de citação. [nao verificado]
-- A ordem Expand → Backfill → leitores → Contract tem suporte documental; o próprio ADR declara que seu contexto é redação do Code. O literal original de `aval_expand_contract.txt` não foi acessado: **[nao verificado]**, além da transcrição fornecida na revisão anterior. (`app/docs/PLANO-PADROES.md:81`; `:86`; `app/docs/BACKLOG.md:1968`)
-- L-127 continua sendo vocabulário; não é, isoladamente, a fonte da ordem. (`app/docs/LEIS.md:148`)
-- “Primeira vaga depois c14” é condição futura; sua disponibilidade efetiva permanece **[nao verificado]**. Há “senão” suficiente para não abrir quando faltar vaga ou houver cruzamento. (`CLAUDE.md:37`; `:291`; `app/docs/PISTA.md:44`)
-
-_5710 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5712 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
