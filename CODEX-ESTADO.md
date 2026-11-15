@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 15:58** · publicado em **15/11/2026 15:58** (UTC-3)
+> Ultima resposta processada: **15/11/2026 16:04** · publicado em **15/11/2026 16:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 16:04 · sessao 9848e5608028 · - · - · origem=Ronald (tmux)
+
+Achados do comando e da porta:
+
+- **PROCEDE quanto ao DRY literal de produção:** o molde atual chama `aplicar()` mesmo sem `--aplicar`, e só desfaz a transação depois. Há escrita tentada e travas; não é execução somente leitura. A porta do envelope usa role sem privilégios de escrita. É necessário definir um DRY L2 realmente leitor, separado desse fluxo; isso não está explicitado no aval. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:578-584`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:217`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`; `bin/sonda_leitura.sh:11-16`; `bin/sonda_leitura.sh:142`)
+
+- O molde **tem** DRY por default, flag `--aplicar` e saída PAREI com lista de PKs exportadas. Entretanto, o apply atual aplica grupos abertos e deixa inteiros de fora os grupos exportados; não para necessariamente o ato inteiro. O teste prende precisamente esse comportamento. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:425-427`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:478-482`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:620-628`; `app/chamados/tests/test_e1_v13d_exportada_fora.py:164-175`)
+
+- **Ensaio exportado na sombra:** o veto existente não contém exceção por ambiente; exclui exportadas antes de planejar/escrever. Portanto, simplesmente acrescentar item no mesmo molde não fornece o caminho para ensaiar escrita nas exportadas. Esse caminho depende de implementação adicional **[nao verificado]**, e o literal não distingue como o ensaio atravessa `exportada = PAREI`. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:253-265`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:302-309`; anexo `avais_1600.txt:4`)
+
+- `registrar` **aceita** `ato=RETRATACAO`, `ato_motivo='obsoleta'` e `ato_em` datetime fornecido. `RETRATACAO` é ato existente; motivo é CharField sem choices; data não tem mecanismo automático nem validação temporal nessa porta. As constraints são de absorção e foto, não restringem esse motivo ou o instante histórico. “Arbitrário” não dispensa o tipo datetime válido. (`app/chamados/models.py:4001`; `app/chamados/models.py:4009`; `app/chamados/models.py:4016`; `app/chamados/models.py:4019`; `app/chamados/models.py:4033-4043`; `app/chamados/models.py:4086-4096`)
+
+- A porta **não deduplica**: faz `bulk_create`. A idempotência de uma segunda execução sequencial pode nascer do antijoin proposto, mas sua implementação/execução L2 e proteção contra concorrência ficam **[nao verificado]**. (`app/chamados/models.py:4094-4098`; anexo `avais_1600.txt:4`)
+
+- Cada chamada que registra DP acorda as células encontradas; emite uma por célula da chamada e pula pergunta sem célula resolvível. `emitir_evento_celula` cria efetivamente `EventoCelula`. Não dá para prometer zero efeito em fechamento/TXT a partir só dessa porta. (`app/chamados/models.py:4097-4098`; `app/chamados/models.py:3314-3331`; `app/ponto/portas/celula.py:945-954`)
+
+- A marca em `LogAuditoria` cabe no schema, que tem ação, objeto, antes/depois e ator. A convenção concreta e a escrita L2 ainda são **[nao verificado]**. Atenção: a API `evento` escreve Log dentro de atomic, mas isso por si não prova que a convenção L2 está implementada. (`app/core/models.py:296-307`; `app/core/observ.py:133-137`)
+
+- Chamar `registrar` respeita o escritor único de DP. Existe catraca que permite escrita do backfill apenas na função de módulo `backfill_decisoes_pergunta.aplicar`; uma nova função escritora em outro ponto quebrará esse selo, salvo alteração deliberada correspondente. (`app/chamados/models.py:3989-3992`; `app/chamados/tests/test_e1_entradas.py:185-222`; `app/chamados/tests/test_e1_v7_catracas.py:253-288`)
+
+- `remover_motivo` grava **RETRATACAO**, mas o motivo é formatado `"<evento>: motivo <motivo> removido (via antes: <via>)"` e não o literal `'obsoleta'`; depois carimba identidade com `VIA_MOTIVO_RETRATADO`, mantendo carimbo anterior quando existe. Isso confirma o MORDE sobre o valor gravado, porém não prova exclusão de uma pergunta que também tenha um log obsoleta anterior. (`app/chamados/models.py:2118-2126`)
+
+## 15/11 16:03 · sessao 7d408a8b92b7 · - · - · origem=Ronald (tmux)
+
+- `_retratada_com_trilha` existe e exige `materializada_em` não nulo, mais `LogAuditoria` com **ação, modelo e objeto**: `acao='retratar_pergunta_obsoleta'`, `modelo='PerguntaDisputa'`, `objeto_id=p.pk`. A expressão resumida do aval precisa preservar a correlação modelo/PK para equivaler ao filtro. (`app/chamados/juizes.py:285`; `app/chamados/juizes.py:291`; `app/chamados/juizes.py:294`)
+- `carga_pergunta_viva.py:111` está em **services**. Lê `LogAuditoria`, não `DecisaoPergunta`, para as PKs de `perguntas`; `retratada()` reaproveita `_retratada_com_trilha` com a trilha carregada. (`app/chamados/services/carga_pergunta_viva.py:110`; `app/chamados/services/carga_pergunta_viva.py:192`)
+- `remover_motivo` grava `ato=RETRATACAO`, instante atual `_agora_ret`, e motivo textual `'%s: motivo %s removido (via antes: %s)'[:240]`; portanto **não grava motivo igual a `'obsoleta'`**. Depois carimba a via `VIA_MOTIVO_RETRATADO`, preservando carimbo existente. (`app/chamados/models.py:2088`; `app/chamados/models.py:2120`; `app/chamados/models.py:2123`; `app/chamados/models.py:2125`; `app/chamados/models.py:3265`)
+- Isso **não prova exclusão universal da pergunta de `remover_motivo`**: o selecionador proposto não exclui essa via nem outras retrações; uma pergunta que também possua log obsoleta e careça da DP obsoleta satisfaz seus critérios. A existência concreta dessa interseção em produção fica **[nao verificado]**. A porta `remover_motivo` por si só não fornece esse log. (`app/chamados/models.py:2088`; `app/chamados/models.py:2118`; `app/chamados/models.py:2120`; `app/chamados/juizes.py:294`)
+- A fórmula é idempotente **para rodadas sequenciais concluídas**, pois a linha criada passa a satisfazer a exclusão. Não há garantia concorrente nessa porta: `registrar` executa `bulk_create` sem deduplicação, e os constraints existentes regulam fotos/absorção, sem unicidade do ato obsoleta. Implementação e ensaio L2 permanecem **[nao verificado]**. (`app/chamados/models.py:4033`; `app/chamados/models.py:4086`; `app/chamados/models.py:4094`)
+- O zeramento de validação está corretamente em `1494–1495`; `1480–1481` conserva decisões anteriores e atribui resposta. (`app/chamados/services/disputa_emissao.py:1480`; `app/chamados/services/disputa_emissao.py:1494`)
+
+## 15/11 15:59 · sessao 1c1728d29871 · TELA-DIZ-O-QUE-O-SERVIDOR-DISSE · verificador · origem=Code
+
+1. **PROCEDE**, no ramo `r.ok`: `ok` mantém o sucesso; `ja_registrada`, `ignorada_intervalo` e outro/ausente/JSON ilegível recebem exatamente os textos previstos. Todos usam o mesmo overlay com `inset:0` e retorno ao dashboard agendado em 3000 ms. Não há cálculo de próximo tipo nem exibição de texto recebido do servidor nesse tratamento. `app/templates/ponto/bater_ponto_v2.html:150`, `app/templates/ponto/bater_ponto_v2.html:156`, `app/templates/ponto/bater_ponto_v2.html:168`.
+
+   Ressalva de alcance: respostas redirecionadas continuam saindo antes de `r.ok`, pelo caminho preexistente. `app/templates/ponto/bater_ponto_v2.html:364`.
+
+2. **NÃO PROCEDE** a falha nos casos examinados: JSON ilegível é contido pelo `try` interno; sucesso exige `d.status === 'ok'`. O `catch` externo continua envolvendo também a apresentação, mas nenhum dos corpos examinados demonstra exceção escapando até ele. `app/templates/ponto/bater_ponto_v2.html:170`, `app/templates/ponto/bater_ponto_v2.html:171`, `app/templates/ponto/bater_ponto_v2.html:365`, `app/templates/ponto/bater_ponto_v2.html:369`.
+
+   **PROCEDE**, pelo diff fornecido, que os ramos não-2xx e offline foram preservados; correspondem aos caminhos atuais em `app/templates/ponto/bater_ponto_v2.html:366`, `app/templates/ponto/bater_ponto_v2.html:370`, `app/templates/ponto/bater_ponto_v2.html:382`. Comparação independente com o commit base: **[não verificado]**.
+
+3. **PROCEDE** o contrato lido pelo cliente:
+
+   | Corpo/valor escrito | Servidor core | Servidor UI / serviço |
+   |---|---|---|
+   | Deduplicação: `status='ja_registrada'` | `app/api/views_core.py:521` | `app/api/views.py:535` |
+   | Colisão: `status='ignorada_intervalo'` | `app/api/views_core.py:673` | `app/api/views.py:682` |
+   | Reutilização: corpo produzido pelo serviço, `status='ja_registrada'` | `app/api/views_core.py:684` | `app/api/views.py:693`; `app/ponto/services/resposta_batida.py:21` |
+   | Criação: `status='ok'` | `app/api/views_core.py:807` | `app/api/views.py:813` |
+   | `aviso`: frase ou string vazia, somente no `ok` | `app/api/views_core.py:805`, `app/api/views_core.py:817` | `app/api/views.py:811`, `app/api/views.py:823`; produtor: `app/ponto/services/aviso_da_batida.py:55` |
+
+   O cliente decodifica o corpo e lê somente `d.status`; não lê `aviso`, `mensagem`, `sucesso` ou `tipo` da resposta. `v2Aviso` é uma função de apresentação de textos locais, não um leitor de `d.aviso`. `app/templates/ponto/bater_ponto_v2.html:163`, `app/templates/ponto/bater_ponto_v2.html:170`, `app/templates/ponto/bater_ponto_v2.html:172`.
+
+   **NÃO PROCEDE** haver outro status nos retornos 2xx dessas funções: os quatro caminhos acima produzem apenas os três valores. `app/api/views_core.py:521`, `app/api/views_core.py:673`, `app/api/views_core.py:686`, `app/api/views_core.py:807`; `app/ponto/services/resposta_batida.py:22`.
+
+   Não há dupla semântica no campo lido: `r.status` é HTTP; `d.status` é resultado da batida. Existe ambiguidade preexistente em `sucesso=True`, inclusive para `ignorada_intervalo`, mas a cura não usa esse campo. `app/templates/ponto/bater_ponto_v2.html:170`, `app/templates/ponto/bater_ponto_v2.html:367`; `app/api/views_core.py:680`, `app/api/views_core.py:814`.
+
+4. **PROCEDE** que o RED morde o texto visível nas duas cascas: elas são enumeradas explicitamente, renderizadas pelo helper, e a sonda lê `innerText` do elemento no centro da janela. `app/ponto/tests/test_camera_alternativa_previa.py:38`, `app/ponto/tests/test_camera_alternativa_previa.py:144`; `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:94`.
+
+   **NÃO PROCEDE** passar com texto vazio: há guarda positiva para `ok`, igualdade com textos não vazios nos demais e exigência de um POST/zero registros offline. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:136`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:143`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:151`.
+
+   **PROCEDE**, por análise, que ambos os mutantes morreriam: sucesso incondicional viola a proibição de “êxito”; JSON sem proteção alcança o registro offline e viola sua contagem zero. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:65`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:136`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:150`; `app/templates/ponto/bater_ponto_v2.html:371`. Execuções e quantidades de falhas relatadas: **[não verificado]**.
+
+   Limites: callback vazio de retorno passaria, porque o teste apenas conta e descarta timers de 3000 ms; “tela cheia” verifica somente `position:fixed`. O código atual contém destino e geometria corretos. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:69`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:96`; `app/templates/ponto/bater_ponto_v2.html:153`, `app/templates/ponto/bater_ponto_v2.html:156`.
+
+5. **NÃO PROCEDE**, no tratamento novo, introdução de segundo juiz, segundo escritor de batida, relógio de negócio ou derivação paralela: ele traduz o status recebido em apresentação. O selo tem mordida para essa tradução e percorre ambas as cascas. `app/templates/ponto/bater_ponto_v2.html:168`; `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:140`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:145`.
+
+   Smoke automatizado não comprova o clique humano: a sonda chama `v2Confirmar` diretamente; a exigência de clique permanece distinta. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:92`; `CLAUDE.md:202`. Smoke iPhone/Android, RED/GREEN e suites efetivamente executados: **[não verificado]**. A aprovação aqui é da pré-verificação do código; esses resultados não ficam certificados.
+
+6. **NÃO PROCEDE** consumidor omitido no censo estático de `templates/`: **N=1**, a própria v2. O outro consumidor encontrado é o sincronizador excluído pelo aval: ele decodifica JSON, ignora `data.status` e remove a pendência por `resp.ok`. `app/templates/ponto/bater_ponto_v2.html:360`; `app/static/pwa.js:153`, `app/static/pwa.js:158`, `app/static/pwa.js:162`.
+
+   A tela antiga envia à própria rota e consome HTML; o service worker não intercepta POST. `app/templates/ponto/bater_ponto.html:237`, `app/templates/ponto/bater_ponto.html:533`, `app/templates/ponto/bater_ponto.html:539`; `app/static/sw.js:36`. Inclusão efetiva da linha proposta no BACKLOG: **[não verificado]**.
+
+VEREDITO: APROVA
 
 ## 15/11 15:58 · sessao 62f3c873c59d · - · - · origem=Ronald (tmux)
 
@@ -449,56 +524,4 @@ Proposta exata enviada e validada em memória: **17 testes OK**, sem editar arqu
 
 Erro do selo: dependência direta de `git` no teste, [linha 132](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v5_tipos_sql.py:132). Não há cura produtiva compatível com teste intocado; alternativa seria fixture versionada dos dois corpos históricos, preservando a asserção FieldError, mediante autorização para alterar esse teste. [nao verificado]
 
-## 15/11 15:09 · sessao ad85d9d28bee · - · - · origem=Ronald (tmux)
-
-- Ressuscitação: **B** nos dois testes; ambos alcançam `ChamadoColaborador.ressuscitar_perguntas`, que conserva V em DP e limpa somente projeções, sem DP de reabertura (`chamados/models.py:1610`, `chamados/models.py:1613`). Chamadores: `chamados/views_arquivar.py:86`, `ponto/services/cartorio.py:1673`.
-- Especificação: dentro do mesmo atomic e após trava, conservar legado, registrar `REABERTURA` por pergunta efetivamente descarimbada, com foto original e instante/autor do ato; depois limpar projeções. A simulação de `_universo_da_ressuscitacao` também deve alimentar o mesmo ato ao juiz, pois limpar campos não supera uma DP V existente (`chamados/models.py:1553`). Campos e ato já existem; **migration não** (`chamados/models.py:4001`, `chamados/models.py:4014`). Escritor único: `DecisaoPergunta.registrar` (`chamados/models.py:4085`). Leitor zera V/R ao ler reabertura (`chamados/services/atos_pergunta.py:52`); juiz mata V vigente (`chamados/juizes.py:1524`).
-- Reprodução sem banco executada com o harness `test_e4c_f1_juizes_le_o_ato`: DP validação + projeções limpas → False; acrescentando DP reabertura → True (`chamados/tests/test_e4c_f1_juizes_le_o_ato.py:82`).
-- Limbo c6/c11 e A6: **A/P5**. A fixture já exige limbo viva (`chamados/tests/test_e4b_c6_orm.py:82`), portanto o gate da competência aberta recusa fechamento sem reata (`chamados/models.py:361`, `chamados/models.py:423`). No ramo limbo, substituir somente expectativas por erro, chamado aberto, perguntas sem C e nenhuma Pauta; preservar ramo sem limbo (`chamados/tests/test_e4b_c6_orm.py:113`).
-- C12 desligamento: **A/P5**, mesma causa. O limbo vivo da aberta segura `encerrar`; não houve evento terminal para gerar Pauta (`chamados/tests/test_e4b_c12_orm.py:136`, `colaboradores/services/desligamento.py:187`). Expectativas do cenário devem ser 0 Pauta, chamado aberto e viva intacta, inclusive repetição; o cenário sem exportada permanece recusado (`chamados/tests/test_e4b_c12_orm.py:155`). Texto literal P5: `chamados/tests/e4c_f1v7_matriz.txt:2`.
-- Não encontrei dois escritores distintos comprovados pelas duas falhas: elas usam o mesmo método; identidade do segundo escritor pretendido **[não verificado]**. `relavra_via.desfazer` expressamente conserva R/V, então introduzir reabertura ali apagaria autoridade que esse escritor promete preservar (`chamados/services/relavra_via.py:206`).
-
-## 15/11 15:08 · sessao 5b459a89e5e0 · - · - · origem=Ronald (tmux)
-
-Todas as seis são **B**: nenhuma propriedade P1–P12 autoriza aumentar os limites; P9 exige custo constante (matriz fornecida, §4/P9).
-
-| Falha | Causa e sítio de cura |
-|---|---|
-| o261 CONSTANTE | A fixture validada paga a chave antes de D0; essa chave consulta atos e efeitos duas vezes por primeira avaliação. Julgar terminais antes da chave preserva o teto8. `chamados/juizes.py:971`, `:1013`, `:1025`; fixture `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:194`. |
-| e3_v4 nove queries | Universo sem prefetch entra no memo mesmo com tranca já alimentada; as nove queries originais aparecem antes das sete novas no anexo. Julgar tranca antes da chave evita carregar atos de perguntas já mortas, preservando nove exatamente. `chamados/services/pergunta_no_app.py:63`, `:75`; `chamados/juizes.py:1251`; teste `chamados/tests/test_e3_v4_orm.py:91`. |
-| modal TETO | Cada repetição da chave consulta Batida e efeitos. O universo já prefetch atos; completar alimentação de plantadas/marco e consumir snapshot sem consultas por pergunta. `chamados/services/fio.py:261`; `chamados/juizes.py:374`, `:954`; teste `chamados/tests/test_selo_teto_modal.py:93`. |
-| memo TETO | `_chave_memo_pv` lê DP, plantadas e agregado a cada repetição: três consultas, duas repetições = seis do anexo. Chave deve comparar somente campos e coleções carregados; aquisição de snapshot ocorre na primeira leitura/universo. `chamados/juizes.py:349`, `:378`, `:386`, `:975`; teste `chamados/tests/test_selo_memo_pergunta_viva.py:178`. |
-| escala F5 | `alimentar_portas` monta perguntas sem prefetch; C6 paga memo avulso por pergunta; beco também chama projeção avulsa por pergunta. Alimentar atos/efeitos no universo e reutilizar leitura alimentada. `chamados/juizes.py:1793`; `escala/services/cadastro_realidade.py:462`, `:498`; teste `escala/tests/test_f3_beco1_folga_na_lista.py:398`. |
-| SNC2 lote | O contador `auth_user` também conta o LEFT JOIN de `_leitura_da_pergunta`, repetido pela chave; o cache do usuário de sistema já existe. Antecipar D0a antes da chave elimina essas consultas de perguntas trancadas. `chamados/juizes.py:350`, `:1013`, `:1346`; detector `chamados/tests/test_snc2_toque_em_lote.py:103`. |
-
-A conservação R/V ainda chama `DecisaoPergunta.linhas_da_projecao_sem_linha([p])` no avulso; esse método reconsulta correspondências quando há resposta/validação, mesmo após prefetch (`chamados/juizes.py:311`; `chamados/models.py:4074`). Para manter juiz único, alimentar sua saída uma vez por universo, como já faz `LeiturasDaVida` (`chamados/services/carga_pergunta_viva.py:82`).
-
-P7 atual exige invalidar por mutação das coleções em memória: resposta/reabertura, plantio e retratação (`chamados/tests/test_e4c_f1_juizes_le_o_ato.py:277`). Detectar mudanças externas no banco sobre a mesma instância sem query exigiria protocolo adicional de atualização do snapshot [não verificado].
-
-Nenhum arquivo editado; GREEN ORM local [não verificado].
-
-## 15/11 14:55 · sessao 304d7d20af13 · E4C-F1V3 · construtor · origem=Code
-
-L2 permanece pendente: conservação mantida, sem backfill; frota [não verificado]. [Relato:1](chamados/tests/e4c_f1v7_entrega.txt:1)
-
-**Entrega parcial, sem GREEN integral.** [Pendências](chamados/tests/e4c_f1v7_entrega.txt:29)
-
-| Classe | Ocorrências |
-|---|---:|
-| A | 13 |
-| B | 30 |
-| C | 0 |
-
-As [43 classificações individuais](chamados/tests/e4c_f1v7_classificacao.txt:6) incluem motivo, sítio-fonte e estado.
-
-- GREEN local por módulo: [resultados e Ran N](chamados/tests/e4c_f1v7_resumo_modulos.txt:1).
-- RED contra c6: **6 falhas, zero erros**. [Evidência](chamados/tests/e4c_f1v7_red.txt:97)
-- Mutantes novos: **11/11 mordidos**, com comandos individuais. [Evidência](chamados/tests/e4c_f1v7_mutantes.txt:12)
-- Permanecem oito falhas no catálogo; ORM não iniciou por ausência de `django.core`. [Catálogo](chamados/tests/e4c_f1v7_catalogo.txt:84), [ORM](chamados/tests/e4c_f1v7_orm.txt:5)
-
-Funções alteradas, escritores/leitores dos campos e comandos estão no [relato de 34 linhas](chamados/tests/e4c_f1v7_entrega.txt:8).
-
-PERGUNTAS: L1 e L2 seguem pendentes. [Relato:33](chamados/tests/e4c_f1v7_entrega.txt:33)  
-LEI-AKITA: padrão **Parallel Change / Expand-Contract**. [Relato:34](chamados/tests/e4c_f1v7_entrega.txt:34)
-
-_5687 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5690 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
