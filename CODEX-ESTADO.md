@@ -1,7 +1,340 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 17:35** · publicado em **15/11/2026 17:35** (UTC-3)
+> Ultima resposta processada: **15/11/2026 17:51** · publicado em **15/11/2026 17:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 17:51 · sessao 24efca2a894e · - · - · origem=Ronald (tmux)
+
+| Sítio escritor | Função / valor | `DecisaoPergunta` e transação |
+|---|---|---|
+| `app/chamados/models.py:3097`, `:3100` | `PerguntaDisputa._nascer`: instancia com `**campos`, salva inserção; recebe o par opcionalmente; defaults `resposta_colab=''`, `respondida_em=NULL` (`:2525`, `:2526`). Recusa instante sem texto antes da escrita (`:2922`). | Mesma transação: `registrar(linhas_da_projecao_sem_linha([p]))` (`:3102`), sob `atomic(savepoint=False)` (`:2924`) e `atomic` de `_sob_contrato` (`:2897`). Atos condicionais `resposta` / `validacao` conforme assinaturas (`:4074`, `:4078`); nascimento pendente produz lista vazia (`:4067`). |
+| `app/chamados/services/disputa_emissao.py:1481`, `:1482`, `:1522` | `responder_pergunta_disputa_core`: texto normalizado por `.strip()` (`:1446`), instante `_tz.now()` (`:1476`); `save(update_fields=_campos)`. | Mesma transação `atomic` (`:1517`): ato `RESPOSTA` em `:1525`; também preserva projeção anterior sem linha (`:1480`, `:1525`). |
+| `app/chamados/services/disputa_emissao.py:1673`, `:1674`, `:1676` | `responder_automaticamente`: `resposta_colab=texto`, `respondida_em=instante`, `save(update_fields=['resposta_colab','respondida_em'])`; guarda texto existente (`:1663`) e recusa par ilegal (`:1671`). | Mesma transação (`:1675`): ato `RESPOSTA` (`:1677`), mais projeção anterior sem linha (`:1672`). Chamador de foto passa literal não vazio definido em `app/api/foto_recebida.py:25`, chamada `:48`. |
+| `app/chamados/services/disputa_emissao.py:1695`, `:1697` | `carimbar_resposta_pela_trilha`: `respondida_em=instante`; apenas com texto e sem instante (`:1691`); `save(update_fields=['respondida_em'])`. | Mesma transação (`:1696`): ato `RESPOSTA` (`:1698`). Instante vem de `nota.criado_em` no comando (`app/chamados/management/commands/curar_perguntas_em_limbo.py:67`). |
+| `app/chamados/models.py:3215`, `:3235` | `PerguntaDisputa.carimbar`: `respondida_em=quando`, somente se `resposta` habilitada, texto não vazio e instante ausente (`:3213`, `:3214`); acrescenta campo à lista salva (`:3216`). `quando` recebido ou `now()` (`:3207`). | A porta não registra ato; `save` abre transação própria (`:3532`). A garantia de decisão depende do chamador — ver linhas seguintes. |
+| `app/chamados/services/materializacao.py:567` | `_materializar_ausencia_de_resposta`: chama `carimbar(..., resposta='validar')`; pode preencher instante de irmã com texto. | Mesma transação (`:563`): ato `ABSORCAO` (`:569`), condicionado ao sucesso do carimbo (`:568`). |
+| `app/chamados/services/materializacao.py:1283` | `_materializar_uma`: chama `carimbar(..., resposta='validar')`; pode preencher instante com texto. | Corpo tem `atomic` (`:1226`) mas não registra decisão própria. Na rota `validar_pergunta`, compartilha transação externa (`app/chamados/services/validacao.py:450`) com ato `VALIDACAO` (`:460` → `:164`) quando unidade chamada em `:488`. O lote posterior é chamado fora desse bloco (`:494`); não há garantia geral de ato nesta escrita. |
+| `app/chamados/services/disputa_emissao.py:2007` | `_resolver_perguntas_por_chamado_resolvido`: `carimbar(..., resposta='validar')`. | Nenhum ato próprio de `DecisaoPergunta` no corpo. Transação garantida pelo wrapper `resolver_perguntas_por_chamado_resolvido` (`:1900`); existência de ato incidental em todo chamador: **[nao verificado]**. |
+| `app/chamados/services/disputa_emissao.py:2081` | Mesma função: `carimbar(..., resposta='responder')`; somente instante com texto pela porta (`models.py:3213`). | Nenhum ato próprio de `DecisaoPergunta` no corpo; escreve evento de auditoria (`:2084`), que não é decisão. Transação do wrapper (`:1900`). |
+| `app/chamados/services/disputa_emissao.py:1609`, `:1648` → `app/chamados/models.py:3363` | `reabrir_para_correcao`: passa `respondida_em=None`, `resposta_colab=''` em `campos`; porta `descarimbar_em_lote` executa `update(..., **outros)` (`models.py:3365`). | Mesma transação (`disputa_emissao.py:1621`): ato parametrizado `ato` (`:1632`), default `reabertura` (`:1576`); `recusa` via `validacao.py:629`. Registra somente linhas das quais retira texto/carimbo/validação/materialização (`:1645`, `:1646`); exclui vias fora do fato na decisão e na escrita (`models.py:3364`). |
+| `app/chamados/models.py:1613` → `:3363` | `ChamadoColaborador.ressuscitar_perguntas`: zera somente `respondida_em` do par; não apaga texto; seleção prévia admite texto NULL ou `''` (`:1533`). | Mesma transação (`:1604`): preserva decisões projetadas ainda sem linha (`:1610`). Atos `resposta`/`validacao` condicionais (`:4074`, `:4078`); não cria ato novo de reabertura, podendo registrar nenhum se não há projeção órfã. |
+| `app/chamados/services/validacao.py:628` | `recusar_pergunta`: delega zeragem do par a `reabrir_para_correcao`, com `ato='recusa'` (`:629`). | Mesma transação externa (`:623`) e interna da porta (`disputa_emissao.py:1621`), ato `recusa` (`:1632`). |
+| `app/chamados/services/materializacao.py:688` | `devolver_absorvidas_da_ausencia_rejeitada`: delega zeragem a `reabrir_para_correcao`. | Mesma transação externa (`:681`), ato default `reabertura` (`disputa_emissao.py:1576`, `:1632`). |
+| `app/chamados/management/commands/curar_perguntas_em_limbo.py:69` | `Command.handle`: delega limpeza de texto sem instante à reabertura; só executa após `--apply` (`:64`). | Mesma transação da porta, ato `reabertura` conforme condição da foto (`disputa_emissao.py:1621`, `:1632`, `:1646`). |
+| `app/chamados/models.py:1555` | `_universo_da_ressuscitacao`: `_q.respondida_em=None` em cópia (`:1541`). | **Só memória**, sem persistência nem ato desta atribuição (`:1556`). |
+| `app/chamados/models.py:3246` | `_desfazer_em_memoria`: restaura `self.respondida_em=respondida` da foto anterior (`:3244`). | **Só memória**, sem persistência; chamado ao recusar ou falhar carimbo (`:3224`, `:3227`, `:3238`). |
+| `bin/sombra_mascara_pessoal.py:57`, `:62`, `:64` | Escritor operacional **da cópia sombra**: `setattr(o,c,novo)` e `_base_manager.bulk_update`; tabela inclui `PerguntaDisputa.resposta_colab` (`bin/sombra_regras_pessoais.py:85`). `novo=texto(v)` (`sombra_mascara_pessoal.py:55`); transformação preserva formatos aceitos ou produz marcador/hash (`sombra_regras_pessoais.py:29`). | Nenhum ato próprio da alteração; transação da máscara (`sombra_mascara_pessoal.py:16`). Banco exigido `sombra` (`:10`); não contar como escritor de produção. |
+
+Observações verificadas: `PerguntaDisputa.descarimbar()` só salva os três campos de materialização, sem tocar o par (`app/chamados/models.py:3293`); o `bulk_update` de lavras salva apenas `veredito_lavrado`, `julgado_em`, `janela_expira_em` (`app/chamados/veredito_lavrado.py:237`, `:250`). `devolver_validacao_recusada` conserva a resposta e salva somente `validada_em`/`validada_por` (`app/chamados/services/validacao.py:204`, `:227`), embora registre ato `devolucao` (`:230`).
+
+Script AST inicial executado via stdin, sem arquivo:
+
+```python
+import ast, pathlib
+fields = {'respondida_em', 'resposta_colab'}
+
+for p in pathlib.Path('.').rglob('*.py'):
+    if 'tests' in p.parts or 'migrations' in p.parts:
+        continue
+    try:
+        t = ast.parse(p.read_text())
+    except (SyntaxError, UnicodeError):
+        continue
+    parent = {c: n for n in ast.walk(t)
+              for c in ast.iter_child_nodes(n)}
+
+    def fn(n):
+        while n in parent:
+            n = parent[n]
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                return n.name
+        return '<module>'
+
+    for n in ast.walk(t):
+        hit = False
+        if isinstance(n, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
+            targets = n.targets if isinstance(n, ast.Assign) else [n.target]
+            hit = any(
+                isinstance(x, ast.Attribute) and x.attr in fields
+                for target in targets for x in ast.walk(target)
+            )
+        if isinstance(n, ast.Call):
+            name = ast.unparse(n.func)
+            if name.endswith((
+                '.update', '.create', '.get_or_create',
+                '.update_or_create', '.bulk_update', '.save'
+            )) or name == 'setattr':
+                hit = any(
+                    isinstance(x, ast.Constant)
+                    and isinstance(x.value, str)
+                    and x.value in fields
+                    for x in ast.walk(n)
+                ) or any(k.arg in fields for k in n.keywords)
+        if hit:
+            print(f'{p}:{n.lineno} {fn(n)} {ast.unparse(n)}')
+```
+
+Foram executados complementos AST para: chamadas com keywords/literais dos campos (achou `dict(...)` e chamada indireta de lote); todas as chamadas `carimbar`, `descarimbar_em_lote`, `reabrir_para_correcao`, `bulk_update`; `setattr`/`getattr` literais e subscripts de escrita; constantes contendo campos e termos SQL de escrita. O primeiro script sozinho **não prova completude**, pois não faz fluxo de dados interprocedural/aliases; a conferência dos sítios indiretos acima foi manual a partir da AST. Nenhum SQL literal de escrita dos campos foi encontrado pelos complementos; SQL gerado dinamicamente arbitrário permanece **[nao verificado]**.
+
+## 15/11 17:51 · sessao dfb8f9bc785a · - · - · origem=Ronald (tmux)
+
+Inventário de testes obtido por AST e conferência das asserções. Os testes não foram executados; resultado em execução: [nao verificado]. [nao verificado]
+
+| Teste / asserção | Predicado efetivamente fixado | Corte/lei citado no próprio teste | [nao verificado]
+|---|---|---|
+| `app/chamados/tests/test_e3_forma_sql_do_juiz.py:91`, `:95` — `test_face_sem_texto_igual_ao_juiz` / `test_face_com_texto_igual_ao_juiz` | As faces SQL equivalem, em `filter`, `exclude` e negação, a **instante E vazio(strip)** / **instante E texto(strip)**; comparação definida em `:69-80`. | `E3-FORMA-SQL-DO-JUIZ`, aval Ronald 12/11 19:1x, itens 1 e 2, em `:1-15`. |
+| `app/chamados/tests/test_e3_forma_sql_do_juiz.py:185`, `:190` | `q_vivas`: instante + brancos não entra pelo degrau da resposta; instante + `' 14:20 '` entra. | Mesma origem `:1-15`; especificação de `q_vivas` em `:160-164`. |
+| `app/chamados/tests/test_e3_forma_sql_do_juiz.py:259`, `:260` | Fila de validar inclui par com texto; exclui instante + espaços. | Mesma origem `:1-15`. |
+| `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:283`, `:287`, `:289` — `test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito` | `irmas_respondidas_sem_consumo`: **instante OU texto**; instante sem texto segura, texto sem instante segura, com validação libera. | Docstring `:276-279`: aval `O168-JUIZ-DO-VEREDITO`, literalmente contrapõe antigo E ao atual OU; medição 13/11. |
+| `app/chamados/tests/test_e3_10_cura_no_escritor.py:132`, `:133`, `:134`, `:140`, `:141`, `:147` | `respostas_sem_veredito` inclui instante + vazio/espaços/par; impede fechamento; `sem_veredito_entre` inclui instante sem texto. | Docstring da classe `:122-124`: `E3-V8-TEXTO-VAZIO`, 14/11 07:4x, “caracterizacao invertida do E3-10 item 2”. O header antigo `:10-12` não descreve essa caracterização atual. |
+| `app/chamados/tests/test_service_validar_puro.py:101`, `:102`, `:103` — `test_05_sem_resposta_nao_valida` | Texto `'17:00'` sem instante é recusado por `validar_pergunta`: `sem_resposta`; fixa necessidade do instante, sem provar sozinho suficiência. Fixture `:49-51`, retirada do instante `:98`. | Header `:1-13`: peça 1 da fatia 2-A, 09/08. Corte específico para esse predicado: [nao verificado]. |
+| `app/chamados/tests/test_pergunta_estado.py:59`, `:60` — `test_reabertura_volta_a_ser_viva` | `.estado`: texto `'19:00'` sem instante resulta `pendente`; junto de `:35-37`, par resulta `respondida`. | Comentário `:57`: reabertura limpa instante/validação e mantém texto; sem corte nomeado nesse teste [nao verificado]. |
+| `app/chamados/tests/test_o261e_f5_alcance.py:194`, `:196`, `:197`, `:199`, `:200` | Instante sem texto sai dos pendentes do app; tarefa preserva `respondida_sem_texto`; vigia mede fio morto causa `b`, sem porta. | Docstring `:185-189`: aval `E3-V10-DEGRAU-DONO-E-PORTA` 14/11 16:16; explicita diferença entre app e crédito. |
+| `app/chamados/tests/test_o261e_f5_alcance.py:378`, `:380`, `:386`, `:388` | Sem resposta: porta app/colab e verbo cobrar; depois de gravar par + decisão (`:381-384`): porta pergunta/admin, validar. | Docstring `:373-374`: `E3 b3`, aval `E3-TRIAGEM-FABLE` 12/11; comentário `:382`: E1. |
+| `app/chamados/tests/test_e4b_c6_orm.py:130`, `:132` — `_provar`, exercitado por `test_RED_limbo_misto_fecha_mortas_orfa_e_entrega_motivo_proprio` `:153-156` | Texto sem instante na irmã morta produz recusa `credor_carrega_limbo`, materializa mortas e conserva fechamento do chamado. Fixture: texto `:77`, instante nulo `:86`; assert de materialização `:115`. | Comentário `:154-155`: F1 e S143; header `:1`: c6, admin fecha, S143 recusa só reabertura. |
+| `app/chamados/tests/test_e4b_c11_orm.py:121-122` — `test_RED_A6_beneficio_rejeitado_limbo` | Repete caracterização de limbo de c6 pelo caminho de benefício rejeitado: herda classe c6 em `:27`, chama `_provar(limbo=...)` em `:99-101`, com asserts efetivos em `test_e4b_c6_orm.py:130-132`. | Header c11 `:1-4`: provas ORM c11, S143 e C6 reais; nomes F1/S143 no comentário herdado c6 `:154-155`. |
+| `test_e4c_f1v6_orm.py` | Arquivo não encontrado na árvore disponibilizada; conteúdo, predicado e origem: **[nao verificado]**. | **[nao verificado]**. |
+| `app/chamados/tests/test_e3_item1b.py:94`, `:108`, `:114` | Relatório: viva com instante sem texto → `AGUARDA_COLAB`; par → `AGUARDA_SUPERVISAO`; sem resposta → `AGUARDA_COLAB`. | Header `:1-12`: E3 item1b, LEI-AKITA 13, casos pela regra. |
+| `app/chamados/tests/test_e3_item1b.py:124`, `:130`, `:136` | Cobrança: instante sem texto conta como calado; par não conta; morta pelo C6 não conta. | Header `:3-10`: LEI-AKITA 13, item 1(c). |
+| `app/chamados/tests/test_e3_item1b.py:154`, `:155`, `:156`, `:162`, `:163`, `:171` | Template do colaborador: instante sem texto não exibe “Resposta enviada”/“Reenviar resposta”; par exibe; contexto derivado pode apagar caixa mesmo com par. | Header `:11-12`: item 1(d); teste de contexto `:165-166`. |
+| `app/chamados/tests/test_e3_leitores_fio_disputa.py:131`, `:136`, `:141`, `:146` | `todas_respondidas`: morta sem resposta não fica devendo; viva sem resposta ou instante sem texto fica devendo; viva com par não fica. | Header `:2-11`: `FIO-E0-V4-E3-LEITORES`, aval `CASO-7445-COMPLEMENTO-E3`; C6, C7, `respondida_sem_texto`. |
+| `app/chamados/tests/test_e3_leitores_fio_disputa.py:161`, `:167` | API: instante sem texto não pode solicitar correção; com par pode. | Mesma origem `:2-11`; comentário `:149`: API lê mesma derivação. |
+| `app/chamados/tests/test_sem_resposta_nao_planta_batida.py:99`, `:104`, `:111`, `:125` | Materialização recusa instante sem texto; par com texto produz batida. Fixação efetiva distingue texto, com os carimbos mantidos nas duas fixtures (`:72-86`). | Aval Ronald 30/09 ~13:3x em `:2`; lei “motor NUNCA fabrica batida” em `:9-10`; medição dos 8.622 carimbos sem texto em `:116-120`. **A frase OU do header `:14-15` diverge dessas asserções.** |
+| `app/chamados/tests/test_o261_resposta_vazia.py:85`, `:95`, `:109`, `:113`, `:149`, `:151`, `:153`, `:155` | Escritor não carimba vazio nem espaços; recusa carimbar texto se C6 o daria vivo; contador conta instante sem texto apenas após marco, espaços equivalem a vazio. | Header `:2-17`: `O261-RESPOSTA-VAZIA-COM-LEITOR-VIVO`, aval 29/10 17:2x; comentário `:97-102`: inversão O261-E-F2, mandato F2 e LEI-AKITA 2. |
+| `app/chamados/tests/test_e3_10_cura_no_escritor.py:63-69`, `:77`, `:106-107`, `:168-170`, `:176-184`, `:205-212` | Guardas de escrita: resposta automática/nascimento/save/lote recusam transição para instante sem texto; par legal passa; legado ilegal pode alterar outros campos (`:186-197`). | Header `:1-13`: E3-10, aval Ronald 12/11 item 2; classe `:152-155`: E3 item1b item 3, LEI-AKITA 7. |
+| `app/chamados/tests/test_reabrir_nao_destroi.py:49-52`, `:58`, `:64`, `:72` | Devolução: zera texto/instante/validação; guarda texto e instante originais na decisão `reabertura`; pendente não fabrica versão; duas devoluções geram uma versão. | Header `:1-5`: `REABRIR-NAO-DESTROI`, aval 21/10 RAIA D, resposta é fato. |
+| `app/chamados/tests/test_e3_porta_A_reabrir.py:41-42`, `:51`, `:62-64`, `:82-83` | Reabertura comum zera par/materialização/via; carimbo sozinho deixa ato `reabertura`; fora do fato conserva par e não gera decisão; recusa comum zera par e gera ato `recusa`. | Header `:1-10`: aval `E3-PORTA-DA-RESPOSTA = (A)`, item 2, Single Writer Principle. |
+| `app/chamados/tests/test_contract_par_resposta.py:90-95`, `:111-113`; `app/chamados/tests/test_contract_texto_com_carimbo.py:119`, `:124`, `:136`, `:138`, `:166-172` | Contratos estáticos de escrita do par; não provam equivalência dos leitores nem atomicidade por execução. | Primeiro `:1-2`: HX-PAR-RESPOSTA, E2 item 2, 03/09; segundo `:1-5`: BUG121, 12/09, ordem “MESMO atomic”. |
+
+Script efetivamente usado para localizar candidatos Python (a interpretação acima foi conferida lendo os corpos e asserções):
+
+```bash
+python3 -B - <<'PY'
+import ast, pathlib
+for p in pathlib.Path('app').rglob('test*.py'):
+    try:
+        t = ast.parse(p.read_text())
+    except (SyntaxError, UnicodeError):
+        continue
+    hits = []
+    for n in ast.walk(t):
+        if isinstance(n, ast.Attribute) and n.attr in {
+            'respondida_em', 'resposta_colab'
+        }:
+            hits.append(n.lineno)
+        if isinstance(n, ast.keyword) and n.arg and any(
+            x in n.arg.split('__')
+            for x in ('respondida_em', 'resposta_colab')
+        ):
+            hits.append(n.lineno)
+        if isinstance(n, ast.Constant) and isinstance(n.value, str) \
+                and n.value.split('__')[-1] in (
+                    'respondida_em', 'resposta_colab'
+                ):
+            hits.append(n.lineno)
+    if hits:
+        print(p, ','.join(map(str, sorted(set(hits)))))
+PY
+```
+
+Script adicional efetivamente usado para localizar testes dos helpers OR, inclusive arquivos sem acesso direto aos campos: [nao verificado]
+
+```bash
+python3 -B - <<'PY'
+import ast, pathlib
+targets = {
+    'sem_veredito_entre',
+    'irmas_respondidas_sem_consumo',
+    'respostas_sem_veredito',
+}
+for p in pathlib.Path('app').rglob('test*.py'):
+    try:
+        t = ast.parse(p.read_text())
+    except (SyntaxError, UnicodeError):
+        continue
+    for n in ast.walk(t):
+        if isinstance(n, (ast.Attribute, ast.Name)) and \
+                getattr(n, 'attr', getattr(n, 'id', '')) in targets:
+            print(p, n.lineno, ast.unparse(n))
+PY
+```
+
+Limite: esses scripts descobrem candidatos e helpers pelo AST; não fazem resolução de tipos/imports nem provam cobertura exaustiva de predicados exercitados indiretamente. O script central do censo deve incorporar a resolução de aliases solicitada pelo usuário; estes são os scripts auxiliares de investigação de testes. [nao verificado]
+
+## 15/11 17:51 · sessao 834316ebacdd · JUIZ-RESPONDIDA · sonda · origem=Code
+
+1. O universo informado não é vazio: **50292** perguntas, **14790** candidatas em `q_vivas` e **899** com ato `RESPOSTA`. A soma fecha: **8192 + 9626 + 0 + 32474 = 50292**. E3 é zero por diferença; não há linha `CONT E3` na saída. [nao verificado]
+
+2. Tabela consolidada do dado fornecido. Nas quatro colunas booleanas, cada célula apresenta **False / True**; os cruzamentos completos estão na transcrição abaixo. [nao verificado]
+
+| Estado | Situação | Total | validada F/T | materializada F/T | viva F/T | ato RESPOSTA F/T | Fonte |
+|---|---|---:|---:|---:|---:|---:|---|
+| E1 instante E texto | ABERTA | 4011 | 1100 / 2911 | 974 / 3037 | 3059 / 952 | 3193 / 818 | [nao verificado] |
+| E1 instante E texto | ENTREGUE | 4181 | 346 / 3835 | 139 / 4042 | 4014 / 167 | 4124 / 57 | [nao verificado] |
+| E2 instante sem texto | ABERTA | 1502 | 214 / 1288 | 2 / 1500 | 1500 / 2 | 1502 / 0 | [nao verificado] |
+| E2 instante sem texto | ENTREGUE | 8124 | 703 / 7421 | 111 / 8013 | 7983 / 141 | 8124 / 0 | [nao verificado] |
+| E3 texto sem instante¹ | ABERTA | 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | [nao verificado] |
+| E3 texto sem instante¹ | ENTREGUE | 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | [nao verificado] |
+| E4 nenhum | ABERTA | 19017 | 19017 / 0 | 7244 / 11773 | 11847 / 7170 | 18993 / 24 | [nao verificado] |
+| E4 nenhum | ENTREGUE | 13457 | 13457 / 0 | 3808 / 9649 | 10652 / 2805 | 13457 / 0 | [nao verificado] |
+
+¹ E3 deduzido por diferença, sem contagem `CONT` explícita. As somas internas da tabela conferem com os totais e marginais fornecidos; o total com ato é **875 + 24 = 899**. [nao verificado]
+
+3. **As expressões exatas usadas pelo script não são verificáveis:** `sonda_quadro.py` não foi localizado na cópia e seu conteúdo não acompanha a saída fornecida. [nao verificado]
+
+A correspondência lógica dos rótulos é a seguinte, tomando `I = p.respondida_em is not None` e `T = not texto_vazio(p.resposta_colab)`; atribuir essas expressões ao script permanece [nao verificado].
+
+| Estado | Expressão lógica do rótulo | Evidência na cópia |
+|---|---|---|
+| E1 | `I and T` | Predicado descrito e face SQL `q_respondida_com_texto()` em [app/chamados/juizes.py:1554](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1554) |
+| E2 | `I and not T` | Predicado em [app/chamados/juizes.py:1531](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1531); face SQL em [app/chamados/juizes.py:1551](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1551) |
+| E3 | `not I and T` | [nao verificado] |
+| E4 | `not I and not T` | [nao verificado] |
+
+O juiz define `texto_vazio(t)` como `not (t or '').strip()`. [app/chamados/juizes.py:1525](/home/ronald/codex_ws/64d09171097ada8e10f851c6358e63ca293d643f/app/chamados/juizes.py:1525)
+
+Sobre E3 ter face no juiz: o enunciado informa que o script declara que não; essa declaração não aparece na saída transcrita, e não foi possível conferir o script. [nao verificado]
+
+4. `PKS_VIVAS_ABERTA`: **E2 = 2**, PKs **38251 e 38252**; **E3 = 0**, lista vazia. Total das duas listas: **2**. [nao verificado]
+
+Transcrição integral da saída fornecida, sem nova execução nem verificação em banco ou logs. [nao verificado]
+
+```text
+sonda_leitura: sonda_quadro.py [8d93c0f8e754674b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO PerguntaDisputa total 50292 | candidatas q_vivas 14790 | com ato RESPOSTA 899
+SOMA_DOS_ESTADOS 50292 TOTAL 50292 FECHA
+CONT E1_instante_E_texto ABERTA 4011
+CONT E1_instante_E_texto ABERTA validada False materializada False viva True ato False 497
+CONT E1_instante_E_texto ABERTA validada False materializada False viva True ato True 428
+CONT E1_instante_E_texto ABERTA validada False materializada True viva False ato False 106
+CONT E1_instante_E_texto ABERTA validada False materializada True viva False ato True 42
+CONT E1_instante_E_texto ABERTA validada False materializada True viva True ato False 24
+CONT E1_instante_E_texto ABERTA validada False materializada True viva True ato True 3
+CONT E1_instante_E_texto ABERTA validada True materializada False viva False ato False 47
+CONT E1_instante_E_texto ABERTA validada True materializada False viva False ato True 2
+CONT E1_instante_E_texto ABERTA validada True materializada True viva False ato False 2519
+CONT E1_instante_E_texto ABERTA validada True materializada True viva False ato True 343
+CONT E1_instante_E_texto ABERTA viva False 3059
+CONT E1_instante_E_texto ABERTA viva True 952
+CONT E1_instante_E_texto ENTREGUE 4181
+CONT E1_instante_E_texto ENTREGUE validada False materializada False viva False ato False 4
+CONT E1_instante_E_texto ENTREGUE validada False materializada False viva True ato False 55
+CONT E1_instante_E_texto ENTREGUE validada False materializada False viva True ato True 30
+CONT E1_instante_E_texto ENTREGUE validada False materializada True viva False ato False 174
+CONT E1_instante_E_texto ENTREGUE validada False materializada True viva False ato True 1
+CONT E1_instante_E_texto ENTREGUE validada False materializada True viva True ato False 82
+CONT E1_instante_E_texto ENTREGUE validada True materializada False viva False ato False 49
+CONT E1_instante_E_texto ENTREGUE validada True materializada False viva False ato True 1
+CONT E1_instante_E_texto ENTREGUE validada True materializada True viva False ato False 3760
+CONT E1_instante_E_texto ENTREGUE validada True materializada True viva False ato True 25
+CONT E1_instante_E_texto ENTREGUE viva False 4014
+CONT E1_instante_E_texto ENTREGUE viva True 167
+CONT E1_instante_E_texto ato_RESPOSTA False 7317
+CONT E1_instante_E_texto ato_RESPOSTA True 875
+CONT E1_instante_E_texto materializada False 1113
+CONT E1_instante_E_texto materializada True 7079
+CONT E1_instante_E_texto validada False 1446
+CONT E1_instante_E_texto validada True 6746
+CONT E1_instante_E_texto viva False 7073
+CONT E1_instante_E_texto viva True 1119
+CONT E1_instante_E_texto 8192
+CONT E2_instante_sem_texto ABERTA 1502
+CONT E2_instante_sem_texto ABERTA validada False materializada False viva True ato False 2
+CONT E2_instante_sem_texto ABERTA validada False materializada True viva False ato False 212
+CONT E2_instante_sem_texto ABERTA validada True materializada True viva False ato False 1288
+CONT E2_instante_sem_texto ABERTA viva False 1500
+CONT E2_instante_sem_texto ABERTA viva True 2
+CONT E2_instante_sem_texto ENTREGUE 8124
+CONT E2_instante_sem_texto ENTREGUE validada False materializada False viva True ato False 111
+CONT E2_instante_sem_texto ENTREGUE validada False materializada True viva False ato False 562
+CONT E2_instante_sem_texto ENTREGUE validada False materializada True viva True ato False 30
+CONT E2_instante_sem_texto ENTREGUE validada True materializada True viva False ato False 7421
+CONT E2_instante_sem_texto ENTREGUE viva False 7983
+CONT E2_instante_sem_texto ENTREGUE viva True 141
+CONT E2_instante_sem_texto ato_RESPOSTA False 9626
+CONT E2_instante_sem_texto materializada False 113
+CONT E2_instante_sem_texto materializada True 9513
+CONT E2_instante_sem_texto validada False 917
+CONT E2_instante_sem_texto validada True 8709
+CONT E2_instante_sem_texto viva False 9483
+CONT E2_instante_sem_texto viva True 143
+CONT E2_instante_sem_texto 9626
+CONT E4_nenhum ABERTA 19017
+CONT E4_nenhum ABERTA validada False materializada False viva False ato False 115
+CONT E4_nenhum ABERTA validada False materializada False viva False ato True 1
+CONT E4_nenhum ABERTA validada False materializada False viva True ato False 7109
+CONT E4_nenhum ABERTA validada False materializada False viva True ato True 19
+CONT E4_nenhum ABERTA validada False materializada True viva False ato False 11727
+CONT E4_nenhum ABERTA validada False materializada True viva False ato True 4
+CONT E4_nenhum ABERTA validada False materializada True viva True ato False 42
+CONT E4_nenhum ABERTA viva False 11847
+CONT E4_nenhum ABERTA viva True 7170
+CONT E4_nenhum ENTREGUE 13457
+CONT E4_nenhum ENTREGUE validada False materializada False viva False ato False 1221
+CONT E4_nenhum ENTREGUE validada False materializada False viva True ato False 2587
+CONT E4_nenhum ENTREGUE validada False materializada True viva False ato False 9431
+CONT E4_nenhum ENTREGUE validada False materializada True viva True ato False 218
+CONT E4_nenhum ENTREGUE viva False 10652
+CONT E4_nenhum ENTREGUE viva True 2805
+CONT E4_nenhum ato_RESPOSTA False 32450
+CONT E4_nenhum ato_RESPOSTA True 24
+CONT E4_nenhum materializada False 11052
+CONT E4_nenhum materializada True 21422
+CONT E4_nenhum validada False 32474
+CONT E4_nenhum viva False 22499
+CONT E4_nenhum viva True 9975
+CONT E4_nenhum 32474
+PKS_VIVAS_ABERTA E2_instante_sem_texto 2 38251 38252
+PKS_VIVAS_ABERTA E3_texto_sem_instante 0 
+pergunta_viva chamada 14790 vezes; segundos 53.1
+```
+
+## 15/11 17:50 · sessao 9f06cb853912 · - · - · origem=Ronald (tmux)
+
+Item (d), pronto para consolidar. Os literais abaixo são trechos exatos; não interpretei qual predicado deveria prevalecer.
+
+| Tema | Literal | Fonte |
+|---|---|---|
+| Lei geral do escritor e trilha | “UM ESCRITOR POR ESTADO, NADA EM BRANCO: campo de estado tem 1 escritor canonico + tripwire; acao critica grava usuario, antes/depois e motivo” | `app/docs/LEIS.md:65` |
+| Divisão documental das portas | “Q1 identidade/via admin = models.py (abrir, fechar_por_admin, reabrir_por_competencia; desde a O261-E-F2 a PORTA UNICA DO CARIMBO carimbar/carimbar_identidade/descarimbar” e “Q2 resposta = services/disputa_emissao.py (responder_pergunta_disputa_core e irmas; absorve api/foto_recebida.py:50)” | `app/docs/DOSSIES.md:46` |
+| Resposta vazia com instante | “(b) respondida_em com resposta vazia” e “(2) escritor de respondida_em sem resposta (p#36272/36273)” | `app/docs/BACKLOG.md:1053` |
+| Predicado sem texto duplicado | “o predicado 'respondida sem resposta' tem copia em `chamados/juizes.py:1020` (dentro do C6) e em `chamados/services/vigia_fio.py::respondida_sem_texto` (:680, o unico do vigia apos o F5) -- um so juiz” | `app/docs/BACKLOG.md:1043` |
+| Texto sem instante | “(3) texto sem respondida_em: o juiz segura (models.py:1900-1901, juizes.py:2035) mas validar/recusar exigem carimbo (validacao.py:416-418), nota models.py:736-738 pede ato impossivel” | `app/docs/BACKLOG.md:1478` |
+| Instante sem texto: tratamento do passivo | “142 passivas NAO reabrem no app, vao a LISTA DO ADMIN "respondida pelo sistema sem o colab" (L-099) sem zerar respondida_em; col331/#22394 fica; cura na porta segue” | `app/docs/BACKLOG.md:2030` |
+| Instante sem texto: encaminhamento | “LU-06 = regra unica = particao_do_app; respondida sem texto e da E3-10-CURA-NO-ESCRITOR” | `app/docs/CORTES.md:438` |
+| Face SQL e vazio com espaços | “face SQL de respondida_sem_texto (trim de texto_vazio) troca a forma inline de models.py q_vivas e os 9 sitios respondida_em__isnull; selo de equivalencia com mutante sem trim; catraca pela forma de USO; os 17 do passivo medidos na sombra antes (app do colab ou supra mudou = PARA)” | `app/docs/BACKLOG.md:2035` |
+| Duas portas dos campos | “PERGUNTA DE DESENHO (2 portas declaradas Q1+Q2 gravam respondida_em)” e “duas portas Q1+Q2, selo AST por campo + mutante 8o sitio” | `app/docs/BACKLOG.md:1978` |
+| Resposta automática sobre validada | “responder_automaticamente (chamados/services/disputa_emissao.py ~1640-1666) so recusa quando ja ha texto; nao olha validada_em; chamador api/foto_recebida.py:48. Sem cura ate o censo” | `app/docs/BACKLOG.md:743` |
+| Preservar resposta na reabertura | “**Lei do fato unico: resposta e FATO, e reabrir nao apaga fato.**” e “Reabrir tem de criar versao nova preservando a anterior consultavel no proprio chamado, e "Cobrar resposta" so vale para pendentes.” | `app/docs/BACKLOG.md:1149` |
+| Zeragem histórica documentada | “o corpo de `disputa_emissao.py:1285-1310` e UM update (`respondida_em=None, validada_em=None, validada_por=None, resposta_colab=''`) e NAO toca `materializada_em`, `recusa_motivo`, `via_resolucao`.” | `app/docs/BACKLOG.md:1149` |
+| Regra de preservação e cobrança | “preservar as respostas e cobrar so a pergunta pendente, com trilha; depois do export” e “PROIBIDO apagar resposta de colaborador; PROIBIDO juiz novo.” | `app/docs/BACKLOG.md:2549` |
+| Devolução e contagem de atos | “D04 = ATOS humanos ocorridos (2 validacoes com devolucao no meio = 2); D05 = contrato publico CONSERVA as fases (app compilado nao muda), exigibilidade = campo NOVO aditivo (Expand-Contract, L-127); aguarda_admin com validacao sem efeito segue aguarda_admin ate o efeito” | `app/docs/BACKLOG.md:2032` |
+| Devolver ao admin com gravação divergente | “PROIBIDO devolver ao admin resposta cuja validacao grava hora/tipo diferente do declarado” | `app/docs/BACKLOG.md:2027` |
+| Instante não representa anuência | “sem o texto do colaborador nao se registra o horario dele, e `respondida_em` nao e anuencia” | `app/docs/BACKLOG.md:1667` |
+| Passivo sem texto: testemunha e escritor | “158 passivos sem texto em que a testemunha diz 'espera' e a escrita planta a hora do marco (testemunha x escritor discordam).” | `app/docs/BACKLOG.md:1939` |
+| Resposta sem veredito protege o pai | “`ponto/supra_juiz.py::pode_executar_csf` passa a PERGUNTAR a ele em vez de ler `respondida_em` cru: pai/destino seguro so com resposta SEM veredito; validada/materializada fecha normal pela Defesa 1.” | `app/docs/CORTES.md:415` |
+| Admin não dá primeira resposta | “LU-18 = nao (admin nao da a primeira resposta pelo colab)” | `app/docs/CORTES.md:450` |
+| Encerramento por desligamento, corte anterior | “a porta desligamento/admin_encerra deixa de carimbar via admin_decidiu em pergunta JA respondida (o carimbo diria uma decisao que nao houve -- L-007)” | `app/docs/CORTES.md:393` |
+| Encerramento por desligamento, fila posterior | “desligamento.py::executar_desligamento fecha tambem a pergunta respondida sem veredito com via propria de desligamento (molde VIA_COMPETENCIA_TRANCADA), lista dia/pergunta/resposta no chamado desligamento_revisao” | `app/docs/BACKLOG.md:732` |
+
+Não localizei texto específico sobre os quatro estados pedidos em `app/docs/LAPIDES.md`; ausência exaustiva de regra nesse documento: **[nao verificado]**. Em `LEIS.md`, o literal diretamente pertinente que encontrei foi a regra geral L-007 acima, sem equação específica entre instante e texto: **[nao verificado]** quanto à inexistência de outra formulação.
+
+Comandos usados, todos somente leitura:
+
+```bash
+rg -n -i \
+'respondida_em|resposta_colab|resposta.{0,35}vazi|texto.{0,30}instante|instante.{0,30}texto|devol.{0,50}resposta|resposta.{0,50}devol|descarimb.{0,50}resposta|JUIZ-RESPONDIDA|E4B-C6|E4B-C11|E4C-F1V6' \
+app/docs/LEIS.md app/docs/CORTES.md app/docs/LAPIDES.md \
+app/docs/BACKLOG.md app/docs/DOSSIES.md
+
+rg -n -i \
+'(devolv|devolu|descarimb|reabri|recus).{0,100}(respost|respondid)|(respost|respondid).{0,100}(devolv|devolu|descarimb|reabri|recus)|texto_vazio|sem.texto|vazi.{0,40}respost|respost.{0,40}vazi' \
+app/docs/LEIS.md app/docs/CORTES.md app/docs/LAPIDES.md \
+app/docs/BACKLOG.md app/docs/DOSSIES.md
+```
+
+Também executei consultas mais amplas por `respost|respondid|devol|descarimb|colab` e li faixas numeradas com `nl -ba ... | sed -n ...`; alguns resultados amplos foram truncados na saída da ferramenta, motivo para não certificar ausência. [nao verificado]
 
 ## 15/11 17:35 · sessao ef5c0b40f83d · E3-RESTO-R3 · verificador · origem=Code
 
@@ -569,94 +902,4 @@ Achados do comando e da porta:
 
 - `remover_motivo` grava **RETRATACAO**, mas o motivo é formatado `"<evento>: motivo <motivo> removido (via antes: <via>)"` e não o literal `'obsoleta'`; depois carimba identidade com `VIA_MOTIVO_RETRATADO`, mantendo carimbo anterior quando existe. Isso confirma o MORDE sobre o valor gravado, porém não prova exclusão de uma pergunta que também tenha um log obsoleta anterior. (`app/chamados/models.py:2118-2126`)
 
-## 15/11 16:03 · sessao 7d408a8b92b7 · - · - · origem=Ronald (tmux)
-
-- `_retratada_com_trilha` existe e exige `materializada_em` não nulo, mais `LogAuditoria` com **ação, modelo e objeto**: `acao='retratar_pergunta_obsoleta'`, `modelo='PerguntaDisputa'`, `objeto_id=p.pk`. A expressão resumida do aval precisa preservar a correlação modelo/PK para equivaler ao filtro. (`app/chamados/juizes.py:285`; `app/chamados/juizes.py:291`; `app/chamados/juizes.py:294`)
-- `carga_pergunta_viva.py:111` está em **services**. Lê `LogAuditoria`, não `DecisaoPergunta`, para as PKs de `perguntas`; `retratada()` reaproveita `_retratada_com_trilha` com a trilha carregada. (`app/chamados/services/carga_pergunta_viva.py:110`; `app/chamados/services/carga_pergunta_viva.py:192`)
-- `remover_motivo` grava `ato=RETRATACAO`, instante atual `_agora_ret`, e motivo textual `'%s: motivo %s removido (via antes: %s)'[:240]`; portanto **não grava motivo igual a `'obsoleta'`**. Depois carimba a via `VIA_MOTIVO_RETRATADO`, preservando carimbo existente. (`app/chamados/models.py:2088`; `app/chamados/models.py:2120`; `app/chamados/models.py:2123`; `app/chamados/models.py:2125`; `app/chamados/models.py:3265`)
-- Isso **não prova exclusão universal da pergunta de `remover_motivo`**: o selecionador proposto não exclui essa via nem outras retrações; uma pergunta que também possua log obsoleta e careça da DP obsoleta satisfaz seus critérios. A existência concreta dessa interseção em produção fica **[nao verificado]**. A porta `remover_motivo` por si só não fornece esse log. (`app/chamados/models.py:2088`; `app/chamados/models.py:2118`; `app/chamados/models.py:2120`; `app/chamados/juizes.py:294`)
-- A fórmula é idempotente **para rodadas sequenciais concluídas**, pois a linha criada passa a satisfazer a exclusão. Não há garantia concorrente nessa porta: `registrar` executa `bulk_create` sem deduplicação, e os constraints existentes regulam fotos/absorção, sem unicidade do ato obsoleta. Implementação e ensaio L2 permanecem **[nao verificado]**. (`app/chamados/models.py:4033`; `app/chamados/models.py:4086`; `app/chamados/models.py:4094`)
-- O zeramento de validação está corretamente em `1494–1495`; `1480–1481` conserva decisões anteriores e atribui resposta. (`app/chamados/services/disputa_emissao.py:1480`; `app/chamados/services/disputa_emissao.py:1494`)
-
-## 15/11 15:59 · sessao 1c1728d29871 · TELA-DIZ-O-QUE-O-SERVIDOR-DISSE · verificador · origem=Code
-
-1. **PROCEDE**, no ramo `r.ok`: `ok` mantém o sucesso; `ja_registrada`, `ignorada_intervalo` e outro/ausente/JSON ilegível recebem exatamente os textos previstos. Todos usam o mesmo overlay com `inset:0` e retorno ao dashboard agendado em 3000 ms. Não há cálculo de próximo tipo nem exibição de texto recebido do servidor nesse tratamento. `app/templates/ponto/bater_ponto_v2.html:150`, `app/templates/ponto/bater_ponto_v2.html:156`, `app/templates/ponto/bater_ponto_v2.html:168`.
-
-   Ressalva de alcance: respostas redirecionadas continuam saindo antes de `r.ok`, pelo caminho preexistente. `app/templates/ponto/bater_ponto_v2.html:364`.
-
-2. **NÃO PROCEDE** a falha nos casos examinados: JSON ilegível é contido pelo `try` interno; sucesso exige `d.status === 'ok'`. O `catch` externo continua envolvendo também a apresentação, mas nenhum dos corpos examinados demonstra exceção escapando até ele. `app/templates/ponto/bater_ponto_v2.html:170`, `app/templates/ponto/bater_ponto_v2.html:171`, `app/templates/ponto/bater_ponto_v2.html:365`, `app/templates/ponto/bater_ponto_v2.html:369`.
-
-   **PROCEDE**, pelo diff fornecido, que os ramos não-2xx e offline foram preservados; correspondem aos caminhos atuais em `app/templates/ponto/bater_ponto_v2.html:366`, `app/templates/ponto/bater_ponto_v2.html:370`, `app/templates/ponto/bater_ponto_v2.html:382`. Comparação independente com o commit base: **[não verificado]**.
-
-3. **PROCEDE** o contrato lido pelo cliente:
-
-   | Corpo/valor escrito | Servidor core | Servidor UI / serviço |
-   |---|---|---|
-   | Deduplicação: `status='ja_registrada'` | `app/api/views_core.py:521` | `app/api/views.py:535` |
-   | Colisão: `status='ignorada_intervalo'` | `app/api/views_core.py:673` | `app/api/views.py:682` |
-   | Reutilização: corpo produzido pelo serviço, `status='ja_registrada'` | `app/api/views_core.py:684` | `app/api/views.py:693`; `app/ponto/services/resposta_batida.py:21` |
-   | Criação: `status='ok'` | `app/api/views_core.py:807` | `app/api/views.py:813` |
-   | `aviso`: frase ou string vazia, somente no `ok` | `app/api/views_core.py:805`, `app/api/views_core.py:817` | `app/api/views.py:811`, `app/api/views.py:823`; produtor: `app/ponto/services/aviso_da_batida.py:55` |
-
-   O cliente decodifica o corpo e lê somente `d.status`; não lê `aviso`, `mensagem`, `sucesso` ou `tipo` da resposta. `v2Aviso` é uma função de apresentação de textos locais, não um leitor de `d.aviso`. `app/templates/ponto/bater_ponto_v2.html:163`, `app/templates/ponto/bater_ponto_v2.html:170`, `app/templates/ponto/bater_ponto_v2.html:172`.
-
-   **NÃO PROCEDE** haver outro status nos retornos 2xx dessas funções: os quatro caminhos acima produzem apenas os três valores. `app/api/views_core.py:521`, `app/api/views_core.py:673`, `app/api/views_core.py:686`, `app/api/views_core.py:807`; `app/ponto/services/resposta_batida.py:22`.
-
-   Não há dupla semântica no campo lido: `r.status` é HTTP; `d.status` é resultado da batida. Existe ambiguidade preexistente em `sucesso=True`, inclusive para `ignorada_intervalo`, mas a cura não usa esse campo. `app/templates/ponto/bater_ponto_v2.html:170`, `app/templates/ponto/bater_ponto_v2.html:367`; `app/api/views_core.py:680`, `app/api/views_core.py:814`.
-
-4. **PROCEDE** que o RED morde o texto visível nas duas cascas: elas são enumeradas explicitamente, renderizadas pelo helper, e a sonda lê `innerText` do elemento no centro da janela. `app/ponto/tests/test_camera_alternativa_previa.py:38`, `app/ponto/tests/test_camera_alternativa_previa.py:144`; `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:94`.
-
-   **NÃO PROCEDE** passar com texto vazio: há guarda positiva para `ok`, igualdade com textos não vazios nos demais e exigência de um POST/zero registros offline. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:136`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:143`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:151`.
-
-   **PROCEDE**, por análise, que ambos os mutantes morreriam: sucesso incondicional viola a proibição de “êxito”; JSON sem proteção alcança o registro offline e viola sua contagem zero. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:65`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:136`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:150`; `app/templates/ponto/bater_ponto_v2.html:371`. Execuções e quantidades de falhas relatadas: **[não verificado]**.
-
-   Limites: callback vazio de retorno passaria, porque o teste apenas conta e descarta timers de 3000 ms; “tela cheia” verifica somente `position:fixed`. O código atual contém destino e geometria corretos. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:69`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:96`; `app/templates/ponto/bater_ponto_v2.html:153`, `app/templates/ponto/bater_ponto_v2.html:156`.
-
-5. **NÃO PROCEDE**, no tratamento novo, introdução de segundo juiz, segundo escritor de batida, relógio de negócio ou derivação paralela: ele traduz o status recebido em apresentação. O selo tem mordida para essa tradução e percorre ambas as cascas. `app/templates/ponto/bater_ponto_v2.html:168`; `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:140`, `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:145`.
-
-   Smoke automatizado não comprova o clique humano: a sonda chama `v2Confirmar` diretamente; a exigência de clique permanece distinta. `app/ponto/tests/test_tela_diz_o_que_o_servidor_disse.py:92`; `CLAUDE.md:202`. Smoke iPhone/Android, RED/GREEN e suites efetivamente executados: **[não verificado]**. A aprovação aqui é da pré-verificação do código; esses resultados não ficam certificados.
-
-6. **NÃO PROCEDE** consumidor omitido no censo estático de `templates/`: **N=1**, a própria v2. O outro consumidor encontrado é o sincronizador excluído pelo aval: ele decodifica JSON, ignora `data.status` e remove a pendência por `resp.ok`. `app/templates/ponto/bater_ponto_v2.html:360`; `app/static/pwa.js:153`, `app/static/pwa.js:158`, `app/static/pwa.js:162`.
-
-   A tela antiga envia à própria rota e consome HTML; o service worker não intercepta POST. `app/templates/ponto/bater_ponto.html:237`, `app/templates/ponto/bater_ponto.html:533`, `app/templates/ponto/bater_ponto.html:539`; `app/static/sw.js:36`. Inclusão efetiva da linha proposta no BACKLOG: **[não verificado]**.
-
-VEREDITO: APROVA
-
-## 15/11 15:58 · sessao 62f3c873c59d · - · - · origem=Ronald (tmux)
-
-6. **NÃO PROCEDE** a hipótese de outro consumidor omitido em `templates/`: o censo estático por endpoint, nome de rota, nomes das funções e valores de status encontrou **N=1**, a v2; envio em `app/templates/ponto/bater_ponto_v2.html:360`, tratamento em `:365`, leitura em `:170`.
-
-- Fora de `templates/`, o consumidor encontrado é `app/static/pwa.js:153`: decide pelo HTTP em `:158`, lê JSON em `:159`, mas ignora `data.status` e remove a pendência em `:162`. Sua interface é o indicador agregado em `:194`; a exclusão do sincronizador está expressa no aval fornecido, anexo `reemissao_1215.txt`, item A [não verificado quanto a arquivo físico].
-- A tela antiga não consome essa resposta: seu formulário não define `action` (`app/templates/ponto/bater_ponto.html:237`) e o fetch envia à própria localização (`:533`), consumindo HTML (`:539`). A rota web é separada: `app/ponto/urls.py:11`, com processamento em `app/ponto/views.py:271` e `:352`.
-- `sw.js` não constitui outro consumidor desse POST: retorna antes de interceptar métodos diferentes de GET (`app/static/sw.js:35`).
-- Rotas API confirmadas: `app/api/urls.py:67` aponta para `views`; `app/api/urls_core.py:14` aponta para `views_core` por importação em `:5`; inclusão dos roteadores em `app/config/urls.py:37` e `app/config/urls_core.py:6`.
-- O template é classe A por exceção nominal: `app/docs/CORTES.md:411` e `:413`. O arquivo raspado `leis_sitios.txt` fornece numeração diferente; nesta cópia, os endereços vivos são 411/413.
-- A linha `PWA-SYNC-NAO-DIZ-STATUS` aparece como proposta no anexo; sua efetiva inclusão no BACKLOG não foi demonstrada [não verificado].
-- Smoke manual iPhone/Android permanece pendente segundo o próprio anexo `entrega.md`; execução real desses cliques [não verificado].
-
-## 15/11 15:58 · sessao 3146cc6c831d · - · - · origem=Ronald (tmux)
-
-Pergunta 3: **PROCEDE** o contrato usado pelo cliente; **NÃO PROCEDE** haver outro `status` 2xx emitido por essas funções. Os retornos são:
-
-| Resultado | `api/views_core.py` | `api/views.py` |
-|---|---|---|
-| Deduplicação: `ja_registrada` | 521–531 | 535–545 |
-| Colisão: `ignorada_intervalo` | 673–683 | 682–692 |
-| Reutilização: `ja_registrada` | 684–686 | 693–695 |
-| Criação: `ok` | 807–818 | 813–824 |
-
-O corpo reutilizado vem de `app/ponto/services/resposta_batida.py:21`, com `status='ja_registrada'` em `:22`; o serviço identifica criação pela marca `criada_neste_toque` em `:14`, escrita nas criações em `app/ponto/registro_batida.py:155` e `:161`.
-
-O cliente lê o corpo por `r.json()` e exclusivamente seu `d.status`; compara estritamente os três valores e usa textos locais. `aviso`, `mensagem`, `tipo` e `sucesso` do JSON não participam dessa decisão. `app/templates/ponto/bater_ponto_v2.html:170`, `:171`, `:172`, `:173`, `:174`.
-
-`aviso` é uma string com frase ou `''`, produzida por `aviso_do_dia`; só aparece no retorno `ok`. `app/ponto/services/aviso_da_batida.py:55`, `:69`, `:79`, `:90`; `app/api/views_core.py:805`, `:817`; `app/api/views.py:811`, `:823`. O payload de reutilização não contém essa chave. `app/ponto/services/resposta_batida.py:21`.
-
-A função cliente `v2Aviso` apresenta textos locais e não lê o campo JSON `aviso`. `app/templates/ponto/bater_ponto_v2.html:163`, `:172`. O aviso inicial da página é outro canal: contexto `aviso_do_dia`, preenchido em `app/ponto/services/triagem_batida.py:764`, `:765` e exibido em `app/templates/ponto/bater_ponto_v2.html:55`, `:56`.
-
-Não aparece dupla semântica nova nos campos lidos: `r.ok` trata HTTP e `d.status` trata resultado da batida. `app/templates/ponto/bater_ponto_v2.html:365`, `:170`. Existe uma ambiguidade preexistente em **`sucesso=True`**, inclusive quando nada novo foi registrado, mas o diff não lê essa chave. `app/api/views_core.py:680`, `:814`; `app/api/views.py:689`, `:820`; `app/templates/ponto/bater_ponto_v2.html:170`.
-
-As duas rotas de código existem: UI inclui `api.urls`, que aponta para `views.api_bater_ponto`; kernel inclui `api.urls_core`, que aponta para `views_core.api_bater_ponto`. `app/config/urls.py:37`; `app/api/urls.py:2`, `:67`; `app/config/urls_core.py:6`; `app/api/urls_core.py:5`, `:14`. Qual delas atende produção: [não verificado].
-
-Correção pontual da entrega: o literal `ignorada_intervalo` está em `app/api/views_core.py:674`; `:675` contém `id`.
-
-_5705 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5709 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
