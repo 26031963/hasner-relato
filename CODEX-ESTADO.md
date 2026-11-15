@@ -1,7 +1,36 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 12:38** · publicado em **15/11/2026 12:39** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:03** · publicado em **15/11/2026 13:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:03 · sessao b739c6c69e07 · - · - · origem=Ronald (tmux)
+
+Criado [test_e4c_f1v4_custo.py](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v4_custo.py:1).
+
+RED contra c3: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v chamados.tests.test_e4c_f1v4_custo` → rc=1, quatro falhas de asserção: três variantes de avaliação precoce da frota (:59) e ausência de pré-filtro (:76).
+
+Casos ORM N=1/N=20 usam `assertNumQueries(0)` na composição e `assertNumQueries(1)` na execução (:94–115); execução ORM [não verificado]. Nenhum arquivo existente alterado.
+
+## 15/11 13:02 · sessao 93b182aaef10 · - · - · origem=Ronald (tmux)
+
+Item 5: restaurar regra da base `714a92a61`: `p.materializada_em is None or pergunta_viva(p)`. C3 usa `pergunta_viva(p) or not _pergunta_materializada_de_fato(p)` e altera reuso de pergunta morta carimbada sem E; L1/L2 fornecida não exige essa alteração. Leitores: `chamados/services/declaracao_texto.py:240/254`, `chamados/juizes.py:1830`; reexport `chamados/models.py:4226`. RED sugerido: morta+C+E=False → não reutilizável; sem C+E=True → reutilizável. [RED ainda não executado]
+
+Censo produtivo:
+
+- L2: `chamados/juizes.py:873/891/894`; reexport `chamados/models.py:4226`.
+- E: `chamados/juizes.py:1456/1553/1566`; `chamados/veredito_lavrado.py:262/263`; `chamados/services/explicador.py:69/93`; `chamados/services/raiox.py:190/191`; `chamados/services/disputa_emissao.py:9/2001`; `chamados/services/materializacao.py:50/1239/1433`; `chamados/services/vigia_carimbo.py:95/106`; `chamados/management/commands/backfill_veredito_lavrado.py:88/105`; `chamados/management/commands/auditar_invariantes_chamados.py:507/538/1155/1170`; reexport `chamados/models.py:4226`.
+- Projeção: `chamados/juizes.py:1469`; `escala/services/cadastro_realidade.py:439/502`.
+- `q_vivas`: sete chamadas externas executáveis: `chamados/services/fio.py:254`, `janela_colab.py:63`, `raiox.py:74`, `vigia_fio.py:706`, `cobranca.py:237`, `pergunta_no_app.py:53`; `ponto/services/veredito_celula.py:181`. Definição `chamados/models.py:3425`.
+- Corrigíveis: `chamados/views.py:1419/1420`, `chamados/services/acoes_disputa.py:96/97`, `chamados/templatetags/chamados_tags.py:198/202`, `chamados/models.py:2282`.
+- Respondidas a validar: `api/views_mensageria.py:539/540`; `chamados/services/validacao.py:953/956`. Base já pré-filtrava por `PerguntaDisputa.q_vivas()` antes do juiz Python (`git show 714a92a61:app/chamados/juizes.py`, função `perguntas_respondidas_a_validar`).
+
+Semântica:
+
+- Escritor único DP: `chamados/models.py:4086/4098`; escritor RETRATAÇÃO atual: `:2121/2123`, motivo textual `evento: motivo X removido (via antes: Y)`, incompatível com igualdade `'obsoleta'` do leitor `chamados/services/atos_pergunta.py:52`.
+- `ato_em`: instante do ato; leitura ordena `(ato_em,pk)` e corta futuro em `chamados/services/atos_pergunta.py:35/36`; resposta/validação em `:40/44`, retratação em `:52`.
+- `ato_motivo`: texto do motivo; lido para recusa e retratação em `chamados/services/atos_pergunta.py:47/52`. Escritas atuais em `chamados/models.py:1990/2123/4077/4082`, `chamados/services/validacao.py:233`, `chamados/services/disputa_emissao.py:1634/1678/1699`, `chamados/management/commands/backfill_decisoes_pergunta.py:327`.
+- `materializada_em`: instante do carimbo da pergunta; atribuição única `chamados/models.py:3180/3182`; porta `carimbar` em `:3186/3212`; materializador chama em `chamados/services/materializacao.py:1283/1437`; identidade `chamados/models.py:3266`. Leitura conservada `chamados/juizes.py:310`, identidade `:338`, reuso `:1566`, demais leitores por E acima. Configuração timezone-aware `config/settings/base.py:93/95`; armazenamento real UTC [não verificado].
+- Termo exato: **`Parallel Change / Expand-Contract`**, `docs/GLOSSARIO.md:18`; conservar caminhos legado/DP realiza a fase de expansão. Nenhuma edição feita.
 
 ## 15/11 12:38 · sessao b5803b7c5092 · LOTE7-POSTMORTEM · censo · origem=Code
 
@@ -497,39 +526,4 @@ LU2-07: **PROCEDE no item 1, pelo alcance literal das mudanças anunciadas**.
 
 A condição dos 22 possui “senão” expresso no aval fornecido; portanto, **não é ela que fundamenta PROCEDE no item 2**. A conferência atual, individual, dos 22 permanece **[nao verificado]**: os anexos fornecem contagens, não nova execução nem tabela individual verificável nesta cópia.
 
-## 15/11 12:02 · sessao d6857b2e201f · - · - · origem=Ronald (tmux)
-
-Achados de código, só leitura:
-
-- O arquivo do anexo `ponto/dia_pago.py` corresponde, nesta cópia, a `app/ponto/services/dia_pago.py`. As linhas **359–360** realmente apagam e recriam DiaPago; **386–396** realmente abonam todo `tipo_dia='ausencia'` sem consultar o catálogo. O catálogo marca os dois INSS como SUPRIME em `app/ponto/catalogo/ausencias.py:92–93`; o motor diferencia ABONA/SUPRIME em `app/ponto/services/fechamento.py:680–701`.
-
-- **Apply restrito é possível:** `--colabs` em `app/ponto/management/commands/recalcular_fechamento.py:96`, parsing em **102** e transmissão em **118–120**. O serviço restringe o universo em `app/ponto/services/fechamento.py:554–557`; o filtro não inclui colaborador já excluído pelo universo (`:511–515`). A lista literal dos 47 não vem na entrega raspada [não verificado].
-
-- **Foto/reversão futura não está demonstrada no HEAD:** `foto` atual só lê rubricas numéricas de FechamentoMensal e transforma valores em float (`app/ponto/management/commands/recalcular_fechamento.py:57–70`); escreve arquivo **depois** do recálculo (`:118–134`) e OSError só avisa (`:136–139`). Não fotografa DiaPago, PK, `lavrado_em`, `derivado_em` ou metadados; a lista de rubricas importada está em `app/ponto/management/commands/aplicar_09_corte_b.py:67–74`. A implementação e o selo futuros do brief permanecem [não verificado].
-
-- A foto atual nem restringe por `--colabs`: sua assinatura só recebe mês/ano/empresa (`app/ponto/management/commands/recalcular_fechamento.py:57`), e ambos os usos mantêm isso (`:106`, `:121`). Logo sua unidade é competência/empresa inteira, ainda que o apply seja restrito. A saída textual limita mudanças a 40 colabs (`:153–159`).
-
-- **DIFF comparável existe como instrumento**, mas não substitui o artefato faltante do z: `app/ponto/services/diff_frota.py:45–46` retorna três mapas `{colaborador_id:{campo:float}}` para mês/ano fornecidos; `:101–125` produz deltas por campo/colaborador, com limiar de 0,01. A entrega raspada não contém esse mapa integral dos 50 [não verificado]. O instrumento parte de FechamentoMensal existentes (`:62–63`, `:76–88`), portanto não se deve afirmar que mede sozinho casos sem FM anterior.
-
-- **“somente_leitura” com lavratura escreve:** `app/ponto/services/fechamento.py:535–538` e **1191–1201**. A sonda do z só é sem escrita porque afirma interceptação no anexo; não basta citar os argumentos. Interceptação real não foi disponibilizada [não verificado].
-
-- As duas versões lavram pela mesma porta: motor em `app/ponto/services/fechamento.py:1200–1237`; oráculo em **1265–1296**. Há exceções capturadas separadamente em **1238–1241**, **1297–1301**, e erro por colab também é capturado e continua em **1303–1307**. `processados` não certifica restauração ou lavratura integral.
-
-- Guarda nominal existe só para **09/2026** em `app/ponto/services/fechamento.py:36–43`; o comando a consulta em `app/ponto/management/commands/recalcular_fechamento.py:123–126`. **Não há proteção equivalente da 10 nesse HEAD** por essa guarda; a proteção futura pela COMPETENCIA-PAGA é [não verificado].
-
-- O brief mistura campos de entidades: `furo_apurado` e `detalhe` pertencem a DiaPago (`app/ponto/models.py:369`, **378**); `lavrado_em` é `auto_now=True` (`:380`). FechamentoMensal começa em **398** e possui `derivado_em` em **464**. Não tratar “FM: furo_apurado, detalhe” como descrição correta do modelo.
-
-- Referências secundárias do z conferem: grade em `app/escala/utils.py:1607`, encadeamento em **1619**, soma em **1635–1639**, autoridade em **2230** e cálculo do span em **2272–2274**. Os valores específicos de col675 só têm suporte no anexo; não são comprováveis pelo código isolado [não verificado].
-
-## 15/11 12:01 · sessao 4b3cd5f46bd3 · - · - · origem=Ronald (tmux)
-
-- **Existe gerador TXT sem gravação/exportação.** `montar_linhas_export` retorna linhas e IDs sem carimbar aprovação nem registrar exportação; aceita `FechamentoMensal` destacado ou lê o gravado. Portanto essa exigência é executável sem passar pela porta HTTP. `app/folha/export.py:690`, `:697`, `:700`, `:711`, `:746`.
-- **A autoridade precisa estar explícita.** Sem `fechamentos=`, o gerador lê o gravado; a porta HTTP atualmente fornece objetos `_fechs_lido`. O comparador existente recusa misturar `gravado` e `lido`. `app/folha/export.py:700`, `:719`; `app/folha/views.py:266`; `app/folha/management/commands/simular_folha.py:182`.
-- **Não usar a porta HTTP para essa prova.** Ela grava auditoria e `ExportacaoDominio`. `app/folha/views.py:288`, `:297`.
-- **TXT igual pode omitir colaboradores.** Só entram os classificados `entra`, com fechamento de status `aberto`/`aprovado`; eventos zero e sem rubrica também não geram linha. Igualdade vazia não demonstra cobertura dos 47. Resultado concreto desses filtros para os 47: **[não verificado]**. `app/folha/export.py:687`, `:716`, `:717`, `:726`, `:733`.
-- **Existe comparação por rubrica**, mas o agregador usa código Domínio preenchido com zeros, não PK `colNN`, e ignora registros 11/datas de faltas; o parser reconhece esses registros. A volta para colaborador exige associação `codigo_dominio`→PK. `app/folha/export.py:310`, `:319`, `:224`, `:253`, `:728`; `app/folha/haiku_export.py:111`.
-- **O comparador de simulação também mede retidos**, além das linhas TXT, e exige mesma empresa/competência/autoridade. `app/folha/management/commands/simular_folha.py:160`, `:182`, `:189`, `:202`, `:205`.
-- **INSS não entra diretamente nos eventos monetários pelo campo `minutos_abonados`.** A lista de eventos lê HE, noturno, intra e pontualidade; `minutos_abonados` participa da prontidão. Isso não prova TXT real dos 47 inalterado. `app/folha/export.py:439`, `:447`, `:451`, `:1078`.
-- **A referência do z a “rubricas 8932/8792” merece restrição.** `tipos_abonados_8932` lê catálogo, mas `montar_linhas_export` aqui emite eventos e bloco de faltas; não chama `datas_abonadas`. Ausência de efeito no TXT dos 47 permanece **[não verificado]** até comparação concreta. `app/folha/export.py:193`, `:201`, `:730`, `:740`, `:746`.
-
-_5626 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5628 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
