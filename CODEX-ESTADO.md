@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 13:46** · publicado em **15/11/2026 13:49** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:50** · publicado em **15/11/2026 13:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:50 · sessao 9051fd3ab9a9 · - · - · origem=Ronald (tmux)
+
+Portões identificados: V1 lê `pergunta_viva` em `chamados/reconciliador.py:399` antes de `.carimbar` em `:406`; V5 lê em `chamados/services/disputa_emissao.py:2069` antes de `.carimbar` em `:2081`.
+
+Para V1, extrair corpo integral com `e4_apoio.funcao`, fornecer `_tem_turno_aberto=False`, motivo permitido, texto vazio, C=None, `carimbar=Mock`, e importar o C6 real do harness. Esperado: retorno False e zero chamadas ao carimbo (`chamados/reconciliador.py:365`).
+
+Para V5, reutilizar `test_e4b_classe_e_memoria.AlcanceTest` e seu `resolver`, que executa o corpo produtivo integral (`chamados/tests/test_e4b_classe_e_memoria.py:382`). Cenário executado sem banco:
+
+```python
+c = E4B.AlcanceTest()
+c.setUp()
+p = c.p
+p.tipo_resposta = 'texto'
+p.data_evento = None
+p.celula = None
+p.chamado_destino = None
+p.chamado_destino_id = None
+c.pai._ancoradas = Mock(return_value=[])
+c.c6.__globals__['_pergunta_materializada_de_fato'] = lambda *a, **k: True
+completar_f1(c.c6.__globals__, '_dia_de_turno_da_pergunta')
+c.resolver(c.pai)
+assert p.carimbar.call_count == 0
+```
+
+Antes da cura: C6=False, carimbar=1, disputas_fechadas=1; captura persistida em arquivo [nao verificado]. A premissa direta `c.c6(p)` exige `E4B.modulos_isolados(c.mods)` (`chamados/tests/test_e4b_classe_e_memoria.py:382`).
+
+Censo AST local: oito chamadas, nos sítios `chamados/reconciliador.py:406`, `:596`; `chamados/models.py:3386`; `chamados/services/materializacao.py:567`, `:1283`, `:1437`; `chamados/services/disputa_emissao.py:2007`, `:2081`. Para P12, comparar `(arquivo, ast.unparse(chamada))`, preservando também argumentos. Nenhum arquivo editado.
+
+## 15/11 13:50 · sessao 633dd4848df6 · - · - · origem=Ronald (tmux)
+
+P9 tem três custos distintos:
+
+- `_leitura_da_pergunta` reconsulta decisões em cada chamada e a conservação consulta novamente: `chamados/juizes.py:329`, `chamados/models.py:4070`.
+- L2 faz `.exists()` por pergunta: `chamados/juizes.py:387`.
+- `_marco_do_efeito` agrega batidas por chamada avulsa: `chamados/juizes.py:362`. O caminho com carga já evita esse memo: `chamados/juizes.py:983`.
+
+Sugestão: carga fornecer decisões integrais agrupadas, linhas conservadas agrupadas e conjunto de IDs com trilha L2; `_leitura_da_pergunta` e `_retratada_com_trilha` recebem `carga` opcional, preservando o avulso e sua invalidação. A conservação canônica pode ser chamada uma vez sobre todas as perguntas, sem editar models: `chamados/models.py:4057`.
+
+Não usar somente `tarefa._dec`: ele já exclui atos futuros, enquanto o slot compara leitura cortada e integral: `chamados/services/tarefa_do_dia.py:421`, `chamados/juizes.py:447`.
+
+Propagar carga pelos leitores em `chamados/juizes.py:778`, `chamados/juizes.py:1451`, `chamados/juizes.py:1479` e pelas quatro chamadas de trilha em `chamados/juizes.py:902`, `chamados/juizes.py:920`, `chamados/juizes.py:923`.
+
+Testes existentes: [nao verificado]
+- N constante com carga e paridade avulsa: `chamados/tests/test_e3_c8b_sem_banco.py:268`.
+- Memo avulso isolado da carga: `chamados/tests/test_e3_c8b_sem_banco.py:302`.
+- Trilha L2 real: `chamados/tests/test_e3_c8b_sem_banco.py:421`.
+- Invalidação por ato, reabertura, plantio e retratação: `chamados/tests/test_e4c_f1_juizes_le_o_ato.py:277`.
+- A contagem ORM atual cobre apenas composição SQL; precisa extensão aos três sítios: `chamados/tests/test_e4c_f1v4_custo.py:107`.
+
+Risco: alterar os testes antigos que exigem exatamente duas leituras requer declarar as leituras adicionais de lote; a expectativa atual está em `chamados/tests/test_e3_c8b_sem_banco.py:279`. O limite documental de nove também precisa refletir a implementação: `chamados/services/carga_pergunta_viva.py:70`.
+
+Nenhum arquivo editado; nenhuma consulta a banco executada.
 
 ## 15/11 13:46 · sessao 8d34801ce890 · E3-RESTO-R3 · construtor · origem=Code
 
@@ -500,44 +553,4 @@ Parte B — achados para consolidação:
    - `furo_apurado`/`detalhe` são DiaPago; `derivado_em` é FM (`app/ponto/models.py:369`, `:378`, `:464`).
    - “Diferença aplicada = MAPA” é conferível quando o artefato integral e as medições existirem; neste dado faltam ambos: **[nao verificado]** (`reemissao_1215.txt:12`, `:14`). [nao verificado]
 
-## 15/11 12:30 · sessao 79bd3fc7c81f · - · - · origem=Ronald (tmux)
-
-Achados de lei e precedência, somente leitura:
-
-- **A e B: há impedimento para abrir construtor novo hoje.** A manda CONSTRUIR e B manda reconstruir, mas `queima_ate_a_redefinicao.txt:10` proíbe “construtor novo”. A reemissão substitui quatro avais nomeados e declara exceção apenas à distribuição de trabalho do QUEIMA-UTIL; não revoga esse bloqueio (`reemissao_1215.txt:1`, `:3`, `:11`, `:20`). Redefinição ocorrida e continuidade por construtor já vivo: **[nao verificado]**.
-
-- **B2 versus PORTÃO: precedência continua preservada.** O item 2 original exige, havendo arquivo comum, empilhar depois do pouso da COMPETENCIA-PAGA (`portao_da_11.txt:5`). A entrega modifica `recalcular_fechamento.py` e `fechamento.py`, sobre base provisória (`entrega_relavra_item2.md:1-2`); B2 determina reconstruir sobre main e rebase se COMPETENCIA-PAGA pousar antes (`reemissao_1215.txt:9`, `:11`). Rebase/cópia não demonstram pouso prévio. O estado efetivo de COMPETENCIA-PAGA: **[nao verificado]**. [nao verificado]
-
-- **B1 corrige a colisão dos carimbos.** O selo explica que carimbo parado após escrita afirma fato falso, e cobra carimbo em `update`/`bulk_update` (`app/ponto/tests/test_carimbo_acompanha_a_escrita.py:2`, `:11`, `:14-21`). O precedente real restaura com `atualizado_em=timezone.now()` e `derivado_em=None` por padrão (`app/ponto/services/fechamento.py:1383-1393`). Atenção: o precedente permite `derivado_em` explicitamente pedido; não é proibição absoluta de restaurar esse campo (`app/ponto/services/fechamento.py:1388-1391`).
-
-- **DINHEIRO 1:** B5 agora exige prova de frota depois, no mesmo marco (`reemissao_1215.txt:14`), alinhada a `CLAUDE.md:406-410`. Permanecem necessários arquivo de reversão em `logs/` antes do apply e hash das exportadas antes/depois; prova na sombra não substitui prova posterior (`CLAUDE.md:407-410`). Cumprimento: **[nao verificado]**.
-
-- **L-110:** igualdade de DIFF/TXT não certifica correção. Referência é regra aplicada ao cadastro/batidas, e DIFF mede impacto (`CLAUDE.md:45-51`; `app/docs/LEIS.md:136`). B3/B4 exigir classe “regra” é compatível em tese; MAPA, fundamento de cada classe e certificação correspondente: **[nao verificado]** (`reemissao_1215.txt:12-14`).
-
-- **Front:** v2 é nominalmente classe A e pede escada inteira (`app/docs/CORTES.md:411`, `:413`). Renderizar duas cascas é obrigatório; clique iPhone/Android não prova sozinho clique nas duas cascas (`CLAUDE.md:202-203`; `reemissao_1215.txt:5`, `:7`). Não declarar colisão automática apenas por smoke no pouso: PRODUÇÃO-MÁXIMA autoriza smoke posterior para obra só de tela (`producao_maxima.txt:1`, item 5).
-
-- **DELETE de FM permanece pergunta material da entrega.** Ela afirma apagar FM nascido depois da foto e pergunta sobre o corte (`entrega_relavra_item2.md:8`, `:16`). No HEAD, a porta de DELETE em massa é exclusiva de ensaio (`app/ponto/services/fechamento.py:1764-1768`), com teste que exige recusa fora dele (`app/folha/tests/test_porta_folha.py:107-112`). B1 responde carimbos; não responde explicitamente esse DELETE (`reemissao_1215.txt:10-14`). Isso impede certificar a entrega descrita; a implementação reconstruída e eventual solução sem essa colisão: **[nao verificado]**.
-
-## 15/11 12:29 · sessao 83b17424df27 · - · - · origem=Ronald (tmux)
-
-A — achados para consolidação:
-
-1. **NAO PROCEDE quanto à executabilidade da mudança.** Hoje `r.ok` anuncia sucesso sem ler JSON; só o caminho não 2xx lê JSON (`app/templates/ponto/bater_ponto_v2.html:327-328`). O literal novo corrige isso, reconhece `'ok'`, elimina o próximo tipo e define saída para status desconhecido/ausente e JSON ilegível (`anexo avais_todos.txt, bloco reemissao_1215.txt:4`).
-
-   - Os três status existem em `Response` sem código HTTP alternativo nos dois kernels: `app/api/views_core.py:521-531`, `:673-683`, `:807-818`; `app/api/views.py:535-545`, `:682-692`, `:813-824`. Testes existentes exigem HTTP 200 com `'ok'`/`'ja_registrada'` (`app/api/tests/test_api_bater_ponto.py:280-283`) e exercitam `'ignorada_intervalo'` (`:638-639`).
-   - O quarto ramo é tratamento defensivo: resposta desse tipo efetivamente emitida pela API/prod **[nao verificado]**. Um RED com fixture HTTP 200 é compatível com a exigência literal (`anexo reemissao_1215.txt:4-5`); não é necessário que o servidor atual emita JSON inválido.
-   - O retorno em 3 s existe e leva ao dashboard (`app/templates/ponto/bater_ponto_v2.html:157`; `app/core/urls.py:17`).
-   - Renderizar o mesmo template nas duas bases reais já tem modelo implementado (`app/ponto/tests/test_l030_templates_renderizados.py:15-30`). RED/verde novos e cliques efetivos **[nao verificado]**.
-
-2. **NAO PROCEDE quanto a “senão” ausente.** O novo literal define fallback para todos os demais status/ausência/JSON ilegível e destina sítios fora de `templates/` ao BACKLOG (`anexo reemissao_1215.txt:4-5`). Condição geral que não fecha também determina PAROU (`CLAUDE.md:37-38`). Não depende mais de próximo tipo nem da cura offline (`anexo reemissao_1215.txt:3-4`).
-
-3. **PROCEDE pela proibição vigente de construtor novo.** A abre CONSTRUIR (`anexo reemissao_1215.txt:3`), enquanto QUEIMA proíbe “construtor novo” (`anexo queima_ate_a_redefinicao.txt:10`). A lista explícita de substituições não inclui QUEIMA; a exceção declarada ao QUEIMA-UTIL-TARDE é somente esta revisão pelo Codex (`anexo reemissao_1215.txt:1`, `:22`). Redefinição ocorrida ou outra revogação **[nao verificado]**.
-
-   Ressalvas sem converter em colisão automática:
-   - “Tela” não dispensa a escada inteira: `bater_ponto_v2.html` é exceção nominal classe A (`app/docs/CORTES.md:409`, `:411`, `:413`).
-   - iPhone e Android identificam plataformas, não comprovam duas cascas; smoke humano nas duas cascas permanece exigido (`CLAUDE.md:202-203`; `app/docs/LEIS.md:99`). A não o revoga (`anexo reemissao_1215.txt:7`).
-   - Pouso próprio depois da UI respeita a precedência declarada (`anexo reemissao_1215.txt:3`; `anexo ui_camera_alternativa.txt:1`). Estado atual/pouso/suite da UI **[nao verificado]**. A menção a `estado_uicam.txt` na revisão antiga não fornece esse arquivo no dado atual. [nao verificado]
-
-4. **NAO PROCEDE quanto a referência material falsa demonstrada em A.** Template, chamada, três status, timer e possibilidade de renderização nas duas bases conferem nos sítios acima (`app/templates/ponto/bater_ponto_v2.html:150-157`, `:322-328`; `app/api/urls_core.py:14`; `app/config/urls_core.py:6`; `app/ponto/tests/test_l030_templates_renderizados.py:15-30`). O offline não anuncia resultado individual: apenas atualiza indicador de conexão (`app/static/pwa.js:182-202`). Censo com N, RED/verde, suite e smoke pedidos são entregas futuras **[nao verificado]**.
-
-_5640 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5642 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

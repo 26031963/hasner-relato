@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=1964226
+ESPERANDO: suite.sh | pid=1964227
 lei: E4c F1 L2 -- 52 perguntas (39 em competencia exportada): backfill de ato ANTES do leitor (brief E4d pela L-127; pede `!` nas 39 exportadas) OU conservar no leitor (verificador_c3:4 aceitou, c4/c5 fazem); logs/E4C/matriz/matriz.md secao 4; a c6 segue nos outros itens
 lei: E4d -- o aval L1 declara materializacao.py escritor unico de materializada_em, mas o campo tem 8 escritores: 1124 escolhas na sombra vieram de outros caminhos (celula_absolveu 1059 reconciliador.py:596, completude_turno 38, chamado_encerrado 27) e chegam a juizes.py:783; quem e o escritor canonico/ato delas quando a dupla escrita morrer? Frota L1 1972 (966 em exportada), L2 52 (39 em exportada). Esteira segue (F1 c4 conserva carimbo nas vias automaticas). logs/ESPINHA-BRIEFS/E4d/brief.md
 MODO-COMUM: LOTE7 achado 2 (postmortem Codex censo, logs/DUAS-PISTAS/postmortem/lote7.r): selo LEI-AKITA ausente em commits de copia (62e427c1d, 93fd8b3d4) e padrao= mudando entre commits da mesma obra -- nenhuma pergunta Codex e nenhuma triagem viu | obra ESTRUTURA LEI-AKITA-POR-COMMIT na frente da fila 1 (BACKLOG), construcao apos a QUEIMA
