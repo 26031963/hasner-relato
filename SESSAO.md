@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 01:13:39.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (25.5 MB). Acoes na janela: **750**.
+**Medido em 15/11/2026 01:19:06.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (25.6 MB). Acoes na janela: **755**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:18:22 | Write |  | `/home/ronald/saas-hasner/logs/BATIDA-DEDUP-RETRATADA/brief_c1.md` |
+| 01:17:59 | Bash | Create dedup worktree and check backlog | `cd /home/ronald/saas-hasner; S=$(date +%H%M%S); W=/home/ronald/wt-codex-batida-dedup-retratada-$S; test -e $W && echo EXISTE; git worktree add -b raia/batida-dedup-retratada-$S $W HEAD 2>&1 \| tail -1; git -C $W log --oneline -1; echo $W > logs/.wt_dedup; mkdir -p logs/BATIDA-DEDUP-RETRATADA/c1; /bin/grep -n "retratada\\|5 min\\|minutes=5" app/ponto/services/triagem_batida.py \| head; /bin/grep -r ...` |
+| 01:17:47 | Bash | Check batidas_apuraveis and ja_registrada logging | `cd /home/ronald/saas-hasner/app; /bin/grep -n "def batidas_apuraveis" -A15 ponto/turnos.py \| head -25; /bin/grep -rn "ja_registrada" --include=*.py . \| /bin/grep -v tests \| head` |
+| 01:17:38 | Bash | Read prior constructor launch recipe | `cd /home/ronald/saas-hasner; cat logs/CONTRATO-DE-ENTRADA-DO-FIO/c1/run.sh; git log --oneline -1; git worktree list \| head -20` |
+| 01:17:31 | Bash | Save aval and read the dedup sites | `cd /home/ronald/saas-hasner; date +%H:%M; cat > logs/AVAIS-1313/t4_c10_e_dedup.txt <<'EOF' aval Ronald: T4-C10-E-DEDUP 15/11 01:2x (responde a lei T4 e a PERGUNTA DE DESENHO da c10; manda curar 1 bug provado por leitura; nenhuma lei nova; motor intocado). (1) T4 CONTRATO-DE-ENTRADA-DO-FIO: SIM. ultima_batida.timestamp passa a carregar o INSTANTE DO FATO (ts_efetivo, o mesmo que vira Batida.timesta ...` |
 | 01:09:12 | Bash | Record E4c wait line in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read() anc='ESTADO 01:08 CONTRATO-DE-ENTRADA-DO-FIO c1 ENTREGUE' assert t.count(anc)==1 t=t.replace(anc,'ESTADO 01:1x VAGA-LIVRE-ABRE: vaga Codex livre, proxima da ordem = E4c; ESPERA por arquivo em comum: F5 muda chamados/services/tarefa_do_dia.py (c6 K7 em voo) e F1 le/F2 muda chamados/juizes.py+models.py (CEF c1 em ...` |
 | 01:09:02 | Bash | Read E4c F1/F2 file scope | `cd /home/ronald/saas-hasner; /bin/grep -n -E '^#\|F1\|F2' logs/CAMINHO-E4C/e4c_reconfere_v2.md \| head -30 \| cut -c1-250` |
 | 01:08:56 | Bash | Check E4c materials and vaga aval | `cd /home/ronald/saas-hasner; ls logs/CAMINHO-E4C/ \| head; cat logs/AVAIS-1313/vaga_livre_abre.txt \| head -20` |
