@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 02:20** · publicado em **15/11/2026 02:21** (UTC-3)
+> Ultima resposta processada: **15/11/2026 02:37** · publicado em **15/11/2026 02:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 02:37 · sessao a9d477f71569 · E3-RESTO-R3 · construtor · origem=Code
+
+Entrega em [e3_r3_c7_entrega.txt](chamados/tests/e3_r3_c7_entrega.txt:1), com curas, REDs, censo e comandos.
+
+[145 testes sem banco passaram](chamados/tests/e3_r3_c7_green_final.txt:174), [9/9 mutantes morreram](chamados/tests/e3_r3_c7_mutantes.txt:206) e [ruff passou](chamados/tests/e3_r3_c7_ruff.txt:1).
+
+Pendente: fio final das duas execuções originais de F2 `[nao verificado]`; certificação pela suite do Code também pendente ([limites](chamados/tests/e3_r3_c7_entrega.txt:40)).
+
+## 15/11 02:37 · sessao f36d7ab685c1 · JUSTIFICATIVA-PAGA-O-PERIODO · leitura · origem=Code
+
+**F-A é fixture incompleta; F-B é expectativa antiga de apresentação.** O código sustenta esses diagnósticos, mas o **primeiro commit responsável por cada valor permanece [não verificado]**: esta cópia não contém histórico Git acessível. Não atribuo um SHA por aproximação. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:213`; `app/ponto/services/efeito_ausencia.py:96`)
+
+**F-A — 635 versus 550**
+
+**(1) Origem atual e commit.** A linha que devolve o saldo é `periodo['minutos'] = max(0, previsto - trabalhado)`. Ela recebe **previsto 635 e realizado zero da ata**; o previsto é lido da ata antes de qualquer fallback. Primeiro commit da série que passou a produzir esse resultado: **[não verificado]**. (`app/ponto/services/efeito_ausencia.py:159`; `app/ponto/services/efeito_ausencia.py:165`; `app/ponto/services/efeito_ausencia.py:170`; `app/escala/services/leitor_celula.py:372`)
+
+**(2) Quem escreve, quem lê e de onde sai 635.**
+
+| Etapa | Escritor → leitor; significado |
+|---|---|
+| Cadastro | `_cadastrar_pausas` grava **10:00–11:25 e 14:00–15:25** no template. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:280`) |
+| Previsto preliminar | `_justificar` consulta o previsto **antes de criar a célula**. Sem célula, o vínculo lê as duas pausas do template: **720−85−85=550 minutos**. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:211`; `app/escala/models.py:1208`; `app/escala/utils.py:2338`; `app/escala/utils.py:2352`) |
+| DNA da fixture | Logo depois, o helper cria a célula copiando somente `hi,hf,hii,hfi`. **Não escreve `hii2/hfi2`**. Grava ainda o previsto preliminar na ata. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:213`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:217`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:220`) |
+| Nova lavra | Criar a justificativa aprovada aciona o cartório. A grade lê os pares presentes no DNA: agora existe **uma pausa**. Soma **07–10 = 180** e **11:25–19 = 455**, totalizando **635 minutos**. (`app/ponto/signals.py:161`; `app/ponto/signals.py:165`; `app/ponto/services/cartorio.py:1175`; `app/escala/utils.py:57`; `app/escala/utils.py:1658`; `app/escala/utils.py:1678`) |
+| Persistência e saldo | A grade publica 635; `ata_do_dia` copia o previsto, a porta grava a ata e a fonte lê esse valor. A única entrada não contém par fechado: realizado zero; saldo **635−0=635**. (`app/escala/utils.py:1852`; `app/ponto/services/cartorio.py:739`; `app/ponto/portas/celula.py:1091`; `app/ponto/turnos.py:733`; `app/ponto/services/efeito_ausencia.py:170`) |
+
+A chave é o **dia da jornada/turno**, inclusive quando atravessa a meia-noite; previsto, realizado e saldo são **minutos**. Ata sem realizado responde `None`, desconhecido; realizado lavrado zero responde zero. Separadamente, `cobre=None` significa cobertura inteira, não desconhecimento. (`app/ponto/turnos.py:708`; `app/ponto/turnos.py:719`; `app/escala/utils.py:2278`; `app/escala/services/leitor_celula.py:354`; `app/escala/services/leitor_celula.py:360`; `app/ponto/services/efeito_ausencia.py:106`)
+
+**(3) Resposta pela regra.** A célula nasce **depois** do cadastro das pausas, durante `_justificar`; a pista de “célula gerada antes” não explica este caso. Porém ela nasce **sem a segunda pausa**. A soberania é da célula congelada, e a grade é fonte única do previsto; uma chave ausente da segunda pausa significa uma pausa só. Portanto **635 corresponde à célula efetivamente montada; 550 corresponde ao caso de duas pausas que o teste pretendia montar**. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:291`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:293`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:213`; `app/docs/LEIS.md:71`; `app/docs/LEIS.md:75`; `app/escala/models.py:1173`; `app/escala/models.py:1177`)
+
+**(4) Julgamento e montagem positiva.** O vermelho não prova perda da segunda pausa pela produção: **a fixture não a colocou no DNA**. Para conservar a prova positiva de 550, cadastrar ambas e criar a célula com **`montar_dna(self.ec, self.d, True)` antes da aprovação**, substituindo a cópia manual da quatro-tupla. Esse produtor lê todas as pausas e escreve o segundo par. O comentário sobre a v2 não comprova a montagem atual. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:217`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:289`; `app/ponto/management/commands/gerar_celulas.py:73`; `app/ponto/management/commands/gerar_celulas.py:91`; `app/ponto/management/commands/gerar_celulas.py:101`)
+
+**F-B — `None` versus 1**
+
+**(1) Origem atual e commit.** O escritor direto é: [nao verificado]
+
+`resumo.update(dias_abono=None, horas_abono=None, motivo_dias_abono='sem_ata')`.
+
+O PDF o chama **depois de copiar o número do motor**. A entrega identifica essa alteração como **c10**; o SHA introdutor exato no `git log` permanece **[não verificado]**. (`app/ponto/services/efeito_ausencia.py:96`; `app/relatorios/pdf_espelho.py:479`; `app/relatorios/pdf_espelho.py:483`; `app/ponto/tests/c10_entrega.txt:16`; `app/ponto/tests/c10_entrega.txt:21`)
+
+**(2) Caminho dos valores.**
+
+| Etapa | Escritor → leitor; significado |
+|---|---|
+| Fixture | Deixa `dia_abono` sem batidas e cria somente a justificativa aprovada, sem montar sua ata. (`app/relatorios/test_espelho_falta.py:45`; `app/relatorios/test_espelho_falta.py:50`; `app/relatorios/test_espelho_falta.py:54`) |
+| Fonte | Seleciona a aprovação por `data_turno`; lê previsto da célula/grade e realizado da ata. Sem realizado lavrado, escreve `minutos=None`, `trabalhado=None`, motivo `sem_ata`. (`app/ponto/services/efeito_ausencia.py:121`; `app/ponto/services/efeito_ausencia.py:139`; `app/ponto/services/efeito_ausencia.py:159`; `app/ponto/services/efeito_ausencia.py:168`) |
+| Alimentação | Mantém o dia em `justificadas`, coloca-o em `abono_sem_apuracao` e o exclui do mapa numérico `min_justificados`. (`app/ponto/services/efeito_ausencia.py:55`; `app/ponto/services/efeito_ausencia.py:56`; `app/ponto/services/efeito_ausencia.py:57`) |
+| Motor | Sem trabalho e com justificativa, entra em `_abono`; fora do mapa parcial, entra em `_abono_inteiro`: soma **1 dia** e **previsto/60 horas**. (`app/ponto/motor_calculo_v2.py:2611`; `app/ponto/motor_calculo_v2.py:2629`; `app/ponto/motor_calculo_v2.py:2630`; `app/ponto/motor_calculo_v2.py:2631`) |
+| Resumo e PDF | O coletor copia os números; o rotulador substitui-os por `None` e escreve `motivo_dias_abono='sem_ata'`. O renderizador lê ambos e imprime **“Abonos — sem apuracao ainda (sem ata)”**. (`app/relatorios/pdf_espelho.py:479`; `app/relatorios/pdf_espelho.py:483`; `app/ponto/services/efeito_ausencia.py:96`; `app/relatorios/pdf_espelho.py:790`) |
+
+Na rota posterior de lavratura, `dias_com_abono` conta dias com crédito e realizado conhecido; realizado ausente também devolve `None`. O cartão escreve `motivo_dias_abono='sem_ata'` e preserva esse `None` ao aplicar os totais. Portanto **dias são contagem; horas/minutos são duração; `None` não é zero**. (`app/ponto/services/dia_pago.py:702`; `app/ponto/services/dia_pago.py:723`; `app/ponto/services/dia_pago.py:737`; `app/relatorios/cartao_pela_celula.py:192`; `app/relatorios/cartao_pela_celula.py:208`)
+
+**(3) Resposta pela regra.** O item 2 do aval fornecido foi incorporado ao contrato: **sem ata e sem batida, entrando em `_abono_inteiro`, vale o previsto por P−0; esse pagamento não é inventado**. Simultaneamente, **tela e PDF permanecem rotulados “sem apuração ainda”**. Assim, neste cadastro, o motor conta o dia inteiro, mas o resumo do PDF deve conter **`dias_abono=None`, `horas_abono=None`, `motivo_dias_abono='sem_ata'`**; o papel mostra o rótulo, não “1”, “0” ou o literal “None”. (`app/ponto/tests/test_catraca_abono_do_motor_c11.py:3`; `app/ponto/tests/test_catraca_abono_do_motor_c11.py:4`; `app/ponto/services/efeito_ausencia.py:96`; `app/relatorios/pdf_espelho.py:790`)
+
+**(4) Julgamento e montagem positiva.** A expectativa `dias_abono=1` está velha **para a apresentação sem ata**. Para conservar o positivo “uma falta e um abono numérico”, manter as batidas e a justificativa, mas fornecer **célula/ata lavrada do `dia_abono`, com previsto correspondente e `minutos_realizados=0`**, deixando `dia_falta` como está. A prova da c10 já declara essa transição: sem ata → ata W=0 → PDF com **1 dia**, sem motivo `sem_ata`. A porta real exige célula existente e é `julgar_celula`. (`app/relatorios/test_espelho_falta.py:58`; `app/ponto/tests/test_justificativa_c10_sem_banco.py:172`; `app/ponto/tests/test_justificativa_c10_sem_banco.py:180`; `app/ponto/tests/test_justificativa_c10_sem_banco.py:181`; `app/ponto/services/cartorio.py:2027`; `app/ponto/services/cartorio.py:2040`)
+
+Execução dessas montagens ajustadas e identificação dos commits introdutores: **[não verificado]**. [nao verificado]
+
+## 15/11 02:36 · sessao 031bbd28fb38 · - · - · origem=Ronald (tmux)
+
+F-A: a célula da fixture é criada **depois** do cadastro das duas pausas, mas nasce com apenas a primeira; a causa é o `zip(('hi','hf','hii','hfi'), marcos)`, que não escreve `hii2/hfi2`. Portanto não é uma célula antiga que antecede o cadastro. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:291`, `:292`, `:293`, `:213`, `:215`, `:217`)
+
+**Caminho dos escritores/leitores**
+
+1. A fixture cria o template 07–19 sem intervalos; `_cadastrar_pausas(duas=True)` declara 10–11:25 e 14–15:25 e salva o template. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:185`, `:187`, `:280`, `:286`)
+
+2. `_bater(07:00,E)` grava a única batida; seu signal chama o cartório, mas o cartório retorna `None` quando não existe célula, sem criá-la. O núcleo também só emite evento para células existentes. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:197`, `:201`; `app/ponto/signals.py:131`, `:135`; `app/ponto/services/cartorio.py:2027`, `:2029`; `app/ponto/nucleo.py:88`, `:93`)
+
+3. `_justificar` mede o previsto **antes** de criar a célula; sem célula, `EscalaColaborador.pausas_do_dia` cai no template, que vê ambas as pausas. A autoridade de previsto desconta todas elas: `720−85−85=550`. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:211`, `:213`; `app/escala/models.py:1208`, `:304`, `:307`; `app/escala/utils.py:2319`, `:2338`, `:2352`, `:2360`)
+
+4. Em seguida o helper cria a célula com somente quatro chaves do DNA: 07,19,10,11:25. A segunda pausa não entra. A ata preliminar recebe o previsto calculado anteriormente (`setdefault`). (`app/ponto/tests/test_justificativa_paga_o_periodo.py:213`, `:217`, `:220`, `:222`)
+
+5. A aprovação aciona novo julgamento, agora com célula existente. O cartório monta a grade; a grade lê as pausas do **DNA**, não completa o DNA com pausas atuais do template. O mapa percorre `PARES_PAUSA_DNA`, mas só acrescenta pares presentes; aqui devolve apenas 10–11:25. (`app/ponto/tests/test_justificativa_paga_o_periodo.py:223`; `app/ponto/signals.py:161`, `:165`; `app/ponto/services/cartorio.py:1175`; `app/escala/utils.py:27`, `:53`, `:61`, `:1658`, `:1661`)
+
+6. A grade soma os segmentos E→S: 07–10 (180) + 11:25–19 (455) = **635 minutos**, publica esse previsto na linha do dia; `ata_do_dia` transporta-o para a ata; a porta `lavrar_veredito` escreve a ata, substituindo o 550 preliminar da fixture. (`app/escala/utils.py:1678`, `:1682`, `:1850`, `:1852`; `app/ponto/services/cartorio.py:739`, `:1851`, `:1853`; `app/ponto/portas/celula.py:1091`)
+
+7. `periodos_justificados` lê primeiro `ata.minutos_previstos`, inclusive zero, e o realizado da mesma ata. A única E não fornece par fechado; o realizado soma zero, conservando `aberto=True`. O saldo final é `max(0,635−0)=635`. (`app/escala/services/leitor_celula.py:372`, `:377`, `:360`, `:362`; `app/ponto/turnos.py:733`, `:739`, `:771`; `app/ponto/services/efeito_ausencia.py:159`, `:170`)
+
+**Regra e diagnóstico**
+
+A lei da casa declara célula soberana, com DNA congelado/irretroativo, e grade como fonte única do previsto; chave ausente significa que aquele dia não declara o marco, não desconhecimento. O leitor de pausas explicita que DNA de uma pausa responde uma pausa, não “não sei”. Logo **635 é coerente com a célula efetivamente montada**, enquanto **550 é coerente com o caso positivo de célula com duas pausas que o teste pretendia montar**. A fixture está incompleta; completar pela leitura do template violaria a autoridade congelada do dia. (`app/docs/LEIS.md:71`, `:75`; `app/escala/models.py:1173`, `:1177`, `:1675`, `:1676`)
+
+Para conservar o caso positivo, cadastrar as duas pausas e depois construir a célula com `montar_dna(self.ec,self.d,True)` antes da aprovação, em vez de copiar a quatro-tupla manualmente. O produtor oficial lê todas as pausas e grava o segundo par `hii2/hfi2`. A célula e a ata desse cenário responderiam 550 pela mesma grade. (`app/ponto/management/commands/gerar_celulas.py:73`, `:89`, `:103`; `app/ponto/tests/test_justificativa_paga_o_periodo.py:213`, `:217`)
+
+**Unidades/datas**
+
+O previsto e o saldo são minutos; o realizado agrega turnos cujo `data_turno` é o dia da jornada, não `timestamp.date()` civil. `None` em realizado significa ata ausente/incompleta; `cobre=None` é outro contrato: cobertura do dia inteiro. (`app/escala/utils.py:2278`; `app/ponto/turnos.py:708`, `:719`; `app/escala/services/leitor_celula.py:354`, `:362`; `app/ponto/services/efeito_ausencia.py:105`, `:112`)
+
+**Histórico**
+
+Não foi possível atribuir o primeiro commit da série: a cópia não contém `.git`; a busca literal por `29460c1d1` nos Markdown da cópia também não retornou registro. Portanto qualquer atribuição de F-A à v2/c8/c9 sem o histórico seria **[não verificado]**.
+
+## 15/11 02:36 · sessao b7d93176c112 · - · - · origem=Ronald (tmux)
+
+F-B: expectativa de `dias_abono=1` no resumo está velha para uma fixture **sem ata**; o motor continua contando o abono inteiro, mas o contrato de apresentação exige `None` com rótulo. [app/ponto/motor_calculo_v2.py:2611](app/ponto/motor_calculo_v2.py:2611), [app/ponto/motor_calculo_v2.py:2628](app/ponto/motor_calculo_v2.py:2628), [app/ponto/services/efeito_ausencia.py:95](app/ponto/services/efeito_ausencia.py:95)
+
+1. **Origem e commit.** A produção escreve os valores finais em `resumo.update(dias_abono=None, horas_abono=None, motivo_dias_abono='sem_ata')`; o PDF chama esse escritor depois de copiar o resultado do motor. O próprio código atribui esse comportamento à **c10**. SHA exato e identificação pelo `git log`: **[não verificado]**, pois a cópia não contém `.git`. [app/ponto/services/efeito_ausencia.py:86](app/ponto/services/efeito_ausencia.py:86), [app/ponto/services/efeito_ausencia.py:95](app/ponto/services/efeito_ausencia.py:95), [app/relatorios/pdf_espelho.py:479](app/relatorios/pdf_espelho.py:479)
+
+2. **Caminho dos valores.**
+   - A fixture deixa os dois últimos dias previstos sem batidas; cria somente a justificativa aprovada para o penúltimo e coleta o PDF, sem chamada de lavra. [app/relatorios/test_espelho_falta.py:43](app/relatorios/test_espelho_falta.py:43), [app/relatorios/test_espelho_falta.py:50](app/relatorios/test_espelho_falta.py:50)
+   - `periodos_justificados` seleciona aprovação por **`data_turno`**, usa essa data como chave e lê previsto da célula/grade; o trabalhado vem da ata. Sem ata ou sem `minutos_realizados`, o leitor devolve `None`, significando **desconhecido**, distinto de W=0. [app/ponto/services/efeito_ausencia.py:121](app/ponto/services/efeito_ausencia.py:121), [app/ponto/services/efeito_ausencia.py:139](app/ponto/services/efeito_ausencia.py:139), [app/ponto/services/efeito_ausencia.py:158](app/ponto/services/efeito_ausencia.py:158), [app/escala/services/leitor_celula.py:354](app/escala/services/leitor_celula.py:354)
+   - O previsto é lido primeiro de `ata.minutos_previstos`, inclusive zero; ausente, consulta S133 `minutos_previstos_do_dia`. São **minutos**, enquanto `dias_abono` é contagem de dias. [app/escala/services/leitor_celula.py:365](app/escala/services/leitor_celula.py:365), [app/ponto/motor_calculo_v2.py:2630](app/ponto/motor_calculo_v2.py:2630)
+   - `efeitos_da_ausencia` mantém o dia em `justificadas`, põe-o em `abono_sem_apuracao` e o exclui de `min_justificados`. O PDF fornece esses mapas ao motor. [app/ponto/services/efeito_ausencia.py:54](app/ponto/services/efeito_ausencia.py:54), [app/relatorios/pdf_espelho.py:333](app/relatorios/pdf_espelho.py:333), [app/relatorios/pdf_espelho.py:394](app/relatorios/pdf_espelho.py:394), [app/relatorios/pdf_espelho.py:407](app/relatorios/pdf_espelho.py:407)
+   - Sem trabalho e com aprovação, o motor inclui o dia em `_abono`; ausente de `_mj`, inclui em `_abono_inteiro`, soma **1 dia** e o previsto dividido por 60 às horas. O PDF copia esse número e depois o rotulador escreve `None` e `sem_ata`. [app/ponto/motor_calculo_v2.py:2611](app/ponto/motor_calculo_v2.py:2611), [app/ponto/motor_calculo_v2.py:2628](app/ponto/motor_calculo_v2.py:2628), [app/relatorios/pdf_espelho.py:479](app/relatorios/pdf_espelho.py:479), [app/ponto/services/efeito_ausencia.py:95](app/ponto/services/efeito_ausencia.py:95)
+   - A renderização lê os dois campos e imprime **“Abonos — sem apuracao ainda (sem ata)”**, sem imprimir 1 ou zero. [app/relatorios/pdf_espelho.py:790](app/relatorios/pdf_espelho.py:790)
+
+3. **Regra.** O item 2 do aval anexado diz expressamente que o dia **sem ata e sem batida**, entrando em `_abono_inteiro`, vale o previsto por **COMPLETA-ATÉ-O-PREVISTO, P−0**; portanto o valor do motor é correto, não “inventado”. O mesmo aval mantém tela/PDF rotulados “sem apuração ainda”. O anexo não existe como arquivo numerado na cópia: **[não verificado: localização arquivo:linha do aval]**. A implementação da apresentação coincide com essa orientação. [app/ponto/motor_calculo_v2.py:2628](app/ponto/motor_calculo_v2.py:2628), [app/ponto/services/efeito_ausencia.py:95](app/ponto/services/efeito_ausencia.py:95), [app/relatorios/pdf_espelho.py:790](app/relatorios/pdf_espelho.py:790)
+
+4. **Montagem que conserva o positivo.** Para continuar provando **falta=1 e abono=1 no PDF**, a fixture deve fornecer **ata lavrada para `dia_abono`, com `minutos_realizados=0` e previsto correspondente**, conservando o dia sem batidas e deixando `dia_falta` como está. O teste da própria c10 demonstra a transição sem ata → ata W=0 → PDF/tela com 1 dia, sem motivo `sem_ata`; há também prova ORM positiva com essa ata. [app/ponto/tests/test_justificativa_c10_sem_banco.py:168](app/ponto/tests/test_justificativa_c10_sem_banco.py:168), [app/ponto/tests/test_justificativa_paga_o_periodo.py:622](app/ponto/tests/test_justificativa_paga_o_periodo.py:622), [app/ponto/tests/test_justificativa_paga_o_periodo.py:644](app/ponto/tests/test_justificativa_paga_o_periodo.py:644)
+
+A porta real de lavra é `julgar_celula`; o teste ORM usa essa porta e verifica o W persistido. Execução da montagem modificada de F-B: **[não verificado]**, não rodei banco nem testes. [app/ponto/services/cartorio.py:2011](app/ponto/services/cartorio.py:2011), [app/ponto/tests/test_justificativa_paga_o_periodo.py:703](app/ponto/tests/test_justificativa_paga_o_periodo.py:703)
 
 ## 15/11 02:20 · sessao 6e535e4da7d0 · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
 
@@ -1039,64 +1151,4 @@ app/ponto/services/fechamento_lista.py:1-131
 app/folha/export.py:315-350,1020-1220
 app/escala/services/leitor_celula.py:350-451
 
-## 15/11 01:55 · sessao d5185e3774e2 · - · - · origem=Ronald (tmux)
-
-Caminho lido: Command.apurar(mes, ano, empresas, hoje, *, agora), seguido de sincronizar(apurado, apply=False), conforme handle em app/ponto/management/commands/pautas_discordantes.py:56, :117-118.
-
-sincronizar só chama escritores dentro de if apply; com False faz consultas e contagens. app/ponto/services/pautas_dos_discordantes.py:155, :165-195.
-
-Dependências auditadas sem escrita encontrada: InsumosDoDono consulta batidas, fase e cadastro; cxr chama espelho_do_colab. app/ponto/management/commands/e6_oraculo.py:128-195. O espelho monta dados, chama autoridade/motor e folha_manda. app/ponto/services/espelho.py:1194-1296. A composição por fatia opera nos resultados em memória. app/ponto/services/fechamento.py:277-321.
-
-A cópia termina handle sem os contadores sem_leitura/retidas; cabe K3 sem_contador_nesta_arvore. app/ponto/management/commands/pautas_discordantes.py:119-129.
-
-Erros internos exigem captura: apurar engole erro de cxr e escreve stderr, removendo o colaborador da apuração. app/ponto/management/commands/pautas_discordantes.py:101-106. calendario registra exceção e segue com oferta desconhecida. app/colaboradores/services/calendario.py:616-624. O switch CCT também registra exceção e segue. app/core/regua_cct.py:442-448. Recomendo handler de logging que imprima apenas tipo e módulo:linha, sem mensagem/traceback, além de stderr do command que marque erro. [não verificado]
-
-## 15/11 01:55 · sessao 4b7a06773022 · - · - · origem=Ronald (tmux)
-
-1. **Paridade continua verde.** O contrato exige AST idêntica para funções de mesmo nome, salvo whitelist, atualmente vazia (`app/api/tests/test_contract_paridade_kernels.py:4`; `:12`; `:26`; `:34`). Reexecutei C1+C2 sem escrita: **20 testes OK**, incluindo contrato real chamado por C2 (`app/ponto/tests/test_dedup_retratada_c2.py:292`; artefato concordante `app/ponto/tests/dedup_retratada_c2_green.txt:18`; `:27`; `:29`). O contrato cobre funções top-level compartilhadas por nome; não compara módulos inteiros (`app/api/tests/test_contract_paridade_kernels.py:20`; `:31`).
-
-2. **V3 curado para as restaurações cruas pedidas.** Tripwire agora cobra igualdade exata UI=2, core=2, triagem=1 e helper=1 (`app/ponto/tests/test_tripwire_bocais_apuracao.py:21`; `:23`; `:25`; `:27`; `:37`). O selo C2 restaura query crua em cada sítio e exige falha do tripwire existente (`app/ponto/tests/test_dedup_retratada_c2.py:271`). C1 também verifica origem da `dupla` e filtros crus com alias antes da porta (`app/ponto/tests/test_dedup_retratada_c1.py:194`; `:197`; `:286`). O tripwire continua regex de contagem para arquivos enumerados; não valida semântica das condições do helper (`app/ponto/tests/test_tripwire_bocais_apuracao.py:14`; `:30`; `:36`).
-
-3. **Mutante “retratada tratada como nova” escolhido pelo construtor morre.** Seu modo `nova` troca a guarda `_resposta_existente` por `False`, portanto deixa passar todo reuso (`app/ponto/tests/test_dedup_retratada_c2.py:329`). O caso específico confere payload do objeto, ausência de criação e de efeitos (`app/ponto/tests/test_dedup_retratada_c2.py:170`; `:180`; `:185`). Artefato registra as falhas do mutante da API (`app/ponto/tests/dedup_retratada_c2_mutantes.txt:286`; `:292`).
-
-4. **Achei e executei mutante de UMA LINHA que passa os 20 testes.** Remover `and batida.retratada_em is None` de `app/ponto/services/resposta_batida.py:24`, apenas via `SOBRESCRITAS` em memória, manteve **20 OK**. A cobertura atual sempre começa com a retratada já presente antes do snapshot, então a condição de PK continua denunciando o reuso; não isola a condição `retratada_em` (`app/ponto/tests/test_dedup_retratada_c2.py:172`; `:185`; `app/ponto/services/resposta_batida.py:23`). Esse mutante erra quando uma mesma chave retratada aparece depois do snapshot, mas antes da porta: sem o filtro removido, vira “nova” (`app/ponto/services/resposta_batida.py:10`; `:23`; `app/ponto/registro_batida.py:120`).
-
-5. **Corrida do código atual reproduzida em memória: reutilizada viva passa como nova.** Injetei somente entre leitura e retorno de `chave_antes_do_toque`: snapshot retorna `None`, outro toque cria viva S na mesma chave, a porta retorna essa viva pelo ramo `mesma` (`app/ponto/services/resposta_batida.py:10`; `app/ponto/registro_batida.py:113`). A guarda aceita `pk != None`, timestamp/tipo iguais e retratação NULL, devolvendo `None` como se tivesse criado (`app/ponto/services/resposta_batida.py:23`).
-
-   Resultado observado nos trechos reais: APIs responderam `status=ok`, rodaram detector, disputa, geofence, foto, ordem e aviso; triagem preencheu contexto de sucesso e rodou disputa, geofence, foto, ordem, autoresolve e aviso. Havia **uma única linha**, criada pelo concorrente injetado. O SSE observado pertence a esse create concorrente, pois o sinal exige `created=True` (`app/ponto/signals.py:40`). Não atribuir segundo SSE à casca; SQL/concorrência real permanecem **[nao verificado]**. O harness permite essa execução por código real da porta e pós-porta com ORM/emissores dublês (`app/ponto/tests/test_dedup_retratada_c2.py:80`; `:113`; `:136`; `:156`).
-
-6. **Limite adicional do ensaio de paridade durante mutações.** `SOBRESCRITAS` alimenta `fonte`, mas o contrato de paridade usa `open(path)` diretamente: a execução de mutantes em memória das APIs não modifica o que esse contrato compara (`app/ponto/tests/test_dedup_retratada_c2.py:22`; `:292`; `app/api/tests/test_contract_paridade_kernels.py:19`). Isso não invalida o verde do delta em disco, mas impede interpretar esse teste como mordida da paridade contra cada mutante em memória.
-
-## 15/11 01:54 · sessao 93e6ff425bc4 · - · - · origem=Ronald (tmux)
-
-1. **Mudança de negócio além da consulta de retratada:** agora qualquer dupla **viva** nos cinco minutos retorna antes de `_bloqueio_horario_clt`; antes a função era chamada primeiro, conforme a própria entrega e o diff fornecido. Portanto uma segunda tentativa fora de horário deixa de criar sinalização/contexto/sessão, mesmo sem envolver retratada. O teste novo exige explicitamente essa supressão (`app/ponto/services/triagem_batida.py:663`; `app/ponto/services/triagem_batida.py:669`; `app/ponto/tests/dedup_retratada_c2_entrega.txt:19`; `app/ponto/tests/test_dedup_retratada_c2.py:229`; `app/ponto/tests/test_dedup_retratada_c2.py:241`).
-
-2. **O que escreve:** `_bloqueio_horario_clt` procura chamado nos últimos 14h; sem um, chama `Chamado.criar` com contexto da tentativa. Também escreve `context['bloqueio_horario']`, sessão e devolve `fora_horario_info`. Este último alimenta `justificativa` e `aprovada=False` enviadas à porta. Seu nome não significa recusa da batida (`app/ponto/services/triagem_batida.py:452`; `app/ponto/services/triagem_batida.py:459`; `app/ponto/services/triagem_batida.py:478`; `app/ponto/services/triagem_batida.py:486`; `app/ponto/services/triagem_batida.py:491`; `app/ponto/services/triagem_batida.py:687`; `app/ponto/services/triagem_batida.py:710`).
-
-3. **Log indireto:** `Chamado.criar` cria o objeto e chama `_trilha_do_nascimento`; esta emite `nascimento_chamado`, com estado e módulo. Assim a mudança também suprime esse nascimento/trilha quando a tentativa viva duplicada teria aberto chamado novo (`app/chamados/models.py:1142`; `app/chamados/models.py:1143`; `app/chamados/models.py:1256`; `app/chamados/models.py:1265`).
-
-4. **Quem lê:** a view restaura o bloqueio da sessão e escolhe tela; o template apresenta horário/diferença/escala e envia tipo/hora/chamado ao pedido de anuência. O ramo de anuência registra nota, renova contexto, escala urgência e envia push. A aprovação lê tipo/hora desse contexto e registra pela porta (`app/ponto/views.py:234`; `app/ponto/views.py:265`; `app/templates/ponto/triagem/fora_horario.html:15`; `app/templates/ponto/triagem/fora_horario.html:23`; `app/ponto/services/triagem_batida.py:319`; `app/ponto/services/triagem_batida.py:351`; `app/ponto/services/triagem_batida.py:369`; `app/ponto/services/triagem_batida.py:372`; `app/chamados/services/acoes_chamado.py:29`; `app/chamados/services/acoes_chamado.py:44`).
-
-5. **Pré-porta ainda emite em recusas:** sem chave exata anterior, `_bloqueio_horario_clt` roda antes de a porta decidir conflito oposto. A recusa posterior não desfaz chamado/sessão; o teste de “sem efeitos” exclui `horario` por padrão. Logo “zero emissão em toda reutilização/recusa” não é garantido (`app/ponto/services/triagem_batida.py:669`; `app/ponto/services/triagem_batida.py:701`; `app/ponto/services/triagem_batida.py:714`; `app/ponto/tests/test_dedup_retratada_c2.py:162`; `app/ponto/tests/test_dedup_retratada_c2.py:164`).
-
-6. **Classes estruturais:** não há segundo escritor de `Batida` no helper: somente SELECT/comparação/payload; o escritor declarado permanece `registro_batida.py`. Há inferência paralela do resultado criação/reuso, pois a porta conhece seus próprios ramos e a casca reconstrói a resposta com snapshot. Entretanto não identifiquei juiz **registrado** específico para “criada neste toque”: o registro vivo de batida lista períodos, cálculo do par, geofence, selfie e GPS. Não equipararia isso automaticamente a clonagem de um desses juízes (`app/ponto/services/resposta_batida.py:10`; `app/ponto/services/resposta_batida.py:23`; `app/core/portas.py:103`; `app/ponto/registro_batida.py:113`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:157`; `app/core/juizes.py:1196`).
-
-A mudança de sinalização para dupla viva merece reprovação por ampliação do comportamento previsto no item 3 do aval, que pede unificar o predicado de retratada e manter as janelas; a regra local exige escopo literal (`CLAUDE.md:37`; `app/ponto/services/triagem_batida.py:663`; `app/ponto/services/triagem_batida.py:669`). Impacto real em produção: **[nao verificado]**.
-
-## 15/11 01:54 · sessao 26f67f1abef5 · - · - · origem=Ronald (tmux)
-
-1. **Payload novo e dupla viva da API têm os mesmos nove campos e formato.** Ambos retornam `status`, `id`, `tipo`, `timestamp`, `sequencia`, `mensagem`, `sucesso`, `em_disputa`, `motivos_disputa`; ambos formatam o timestamp **do objeto**, com `localtime().isoformat()`, e mensagem com HH:MM. Na dupla, `tipo` solicitado coincide com o objeto pelo filtro; no helper, lê diretamente o tipo do objeto (`app/api/views.py:531`, `app/api/views.py:535`, `app/ponto/services/resposta_batida.py:27`, `app/ponto/services/resposta_batida.py:29`).
-
-2. **O timestamp dessa resposta não ganha significado novo:** já era o instante da batida reutilizada na dupla de 5 minutos; no sucesso novo também sai `batida.timestamp`. Não equivale necessariamente ao instante solicitado. O formato local conserva a convenção declarada de UTC no banco e UTC-3 na apresentação; configuração usa São Paulo e `USE_TZ=True` (`app/api/views.py:539`, `app/api/views.py:817`, `CLAUDE.md:146`, `app/config/settings/base.py:93`).
-
-3. **Nenhum dos campos do payload é interpretado pelo PWA online presente.** O template chama `/api/ponto/bater/`, verifica HTTP `r.ok` e chama `v2Sucesso(tipo, false)` com **tipo solicitado**, cujo texto anuncia Entrada/Saída registrada; nem lê JSON. Assim, payload corrigido não garante mensagem correta no PWA para reaproveitamento de outro tipo/retratada (`app/templates/ponto/bater_ponto_v2.html:310`, `app/templates/ponto/bater_ponto_v2.html:322`, `app/templates/ponto/bater_ponto_v2.html:327`, `app/templates/ponto/bater_ponto_v2.html:150`).
-
-4. **Fila offline também não usa os campos.** Lê `resp.json()` para variável `data` sem consumo posterior e remove a pendência pelo HTTP `resp.ok`, usando o ID **local da pendência**, `b.id` (`app/static/pwa.js:158`, `app/static/pwa.js:159`, `app/static/pwa.js:162`).
-
-5. **O template legado não interpreta JSON de triagem:** lê texto da resposta HTTP OK e faz `document.write`. Triagem já tinha resposta JSON mínima na dupla e passa a retornar JSON rico no reaproveitamento pós-porta (`app/templates/ponto/bater_ponto.html:533`, `app/templates/ponto/bater_ponto.html:539`, `app/ponto/services/triagem_batida.py:664`, `app/ponto/services/triagem_batida.py:724`).
-
-6. **Contrato/consumo móvel de cada campo: [nao verificado].** Servidor do upload lê `batida_id` do request e busca batida do colaborador autenticado; isso não prova como o APK obtém aquele ID (`app/api/views.py:840`, `app/api/views.py:846`).
-
-7. **Não há prova de duplicação de um juiz *registrado* para “foi criada neste toque”.** O registro da família batida declara período, cálculo, geofence, selfie e GPS; não essa pergunta. O helper compara identidade e campos e constrói resposta, sem selecionar tipo, criar Batida ou consultar relógio (`app/core/juizes.py:1196`, `app/core/juizes.py:1201`, `app/core/juizes.py:1205`, `app/core/juizes.py:1211`, `app/ponto/services/resposta_batida.py:10`, `app/ponto/services/resposta_batida.py:23`). A inferência de causalidade a partir do snapshot continua sendo derivação da operação de escrita, cuja correção concorrente deve ser examinada pelo responsável pelos ramos da porta (`app/ponto/services/resposta_batida.py:17`, `app/ponto/services/resposta_batida.py:23`).
-
-_5487 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5491 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
