@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 10:10:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (54.9 MB). Acoes na janela: **1519**.
+**Medido em 15/11/2026 10:15:44.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (55.0 MB). Acoes na janela: **1521**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:12:55 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 10:12:50 | Bash | Register LU2-04/05 and wait on HE pista jobs | `cd /home/ronald/saas-hasner; cat >> logs/PREPARA-ESPINHA-2/lista-unica-2/LISTA-UNICA-2.md <<'EOF' LU2-04 \| HE-REVOGADA-NA-PORTA (LOTE 1) \| LEI: clique de HE (decidir_he/recusar_em_lote/ato do periodo) sobre dia com recusa do sistema REVOGADA em competencia EXPORTADA chama recalcular_por_evento, que relavra a competencia: vale L-113 cl.1 (relavra) ou L-092 (`!`, so pela porta REGEN)? \| cura cons ...` |
 | 10:09:49 | Bash | Check producers and pista queue | `cd /home/ronald/saas-hasner; cat logs/E4C/f1/rc 2>/dev/null; ps -p 1335781 -o pid,etime; tail -2 logs/E3-RESTO-R3/c9/pista.espera; ssh pista estado 2>&1 \| tail -6; uptime` |
 | 10:03:11 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 10:03:08 | SendMessage |  | `-` |
