@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: pre-push.sh | pid=2637752
+ESPERANDO: codex_pergunta.sh | pid=2693112
 RESPONDIDA por PRE-DESENHO-F1-D1-J1 17:1x (D1 instante E texto; J1 F1 pousa so, sem _PerguntaParaPlantio) -- E4C-F1V3 item 2 (D1/P5) | base 714a92a61 juizes.py:1420 exigia instante E texto; copia chamados/juizes.py:1572 (conferido) + _leitura_conservada :285-358 so texto -> P5 sem instante fica viva sem saida: _gate_pergunta_viva recusa fechar, C12 sem Pauta (disputa_emissao.py:1863), admin nao valida P5 (validacao.py:418, conferido). Testes C6/C11/C12 intocados. A obra para aqui; logs/E4C/f1v9/entrega.md
 RESPONDIDA por PRE-DESENHO-F1-D1-J1 17:1x (D1 instante E texto; J1 F1 pousa so, sem _PerguntaParaPlantio) -- E4C-F1V3 item 5 (J1) | juiz le o texto do ATO, materializador le a PROJECAO (materializacao.py:431,835,852,876,1001): F1 pousa so ou em comboio F1+F4? evidencia logs/E4C/f1v9/item5_j1.txt
 lei: F6 lei 2 -- contrato do APK com respondida_em/dias_esperando null na P5 (c9 _item_validar devolve None em vez de HTTP 500 no lote; logs/ESPINHA-BRIEFS/F6/matriz.md:33-34)
