@@ -1,7 +1,611 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 01:32** · publicado em **15/11/2026 01:32** (UTC-3)
+> Ultima resposta processada: **15/11/2026 01:35** · publicado em **15/11/2026 01:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 01:35 · sessao 0f4c61a1ae54 · SILENCIO-VENCIDO · sonda · origem=Code
+
+```python
+"""
+SONDA SILENCIO-VENCIDO. Execucao na SOMBRA: [nao verificado].
+
+FechamentoMensal esta em app/ponto/models.py:398; o arquivo pedido,
+app/folha/models.py:310, referencia esse modelo. Os campos solicitados
+sao totais mensais, sem decomposicao diaria:
+app/ponto/models.py:405, :408, :412, :432, :440, :445.
+Por isso, DIA.gravado=null; gravado_competencia informa o total mensal.
+
+Lavra diaria: mesma chamada da m2 colada [nao verificado por arquivo local],
+linhas_do_periodo(colab, ini, fim), ds.get(dia), getattr(dp, campo).
+Contrato: app/ponto/services/dia_pago.py:833 e :855.
+Soma mensal: app/ponto/services/dia_pago.py:550.
+
+InsumosDoDono.dono(data) carrega os insumos e chama dono_da_divergencia:
+app/ponto/management/commands/e6_oraculo.py:182, :190, :195.
+Preparo usado pelo command: mesmo arquivo:316, :328, :378.
+
+Sem gravado diario, percorremos TODOS os dias de janela_fechamento:
+app/ponto/janelas.py:54. O dono e diario; sua responsabilidade pela
+diferenca mensal continua [nao verificado]. Nao elegemos dono mensal.
+
+TOT unidade=dia_campo: empresa x campo individual x dono; conta DIA.
+As incidencias de pares podem se sobrepor entre campos e donos.
+TOT unidade=par: empresa x conjunto exato de campos x conjunto de donos
+encontrados; cada par completo entra uma vez, fechando 59.
+O conjunto de donos e um perfil, nao um novo veredito mensal.
+59 pares e 65 ocorrencias de campos: [nao verificado — anexo colado].
+
+FIM ok=1 indica coleta completa sem excecao, nao divergencia resolvida.
+Bloqueios baseados no anexo m2_sonda.py [nao verificado por arquivo local]
+e em app/chamados/management/commands/diff_e3_sombra.py:30.
+"""
+import sys
+
+_BYTECODE_ANTERIOR = sys.dont_write_bytecode
+sys.dont_write_bytecode = True
+
+import datetime as dt
+import json
+import logging
+import re
+from collections import Counter, defaultdict
+from contextlib import ExitStack, redirect_stdout, redirect_stderr
+from decimal import Decimal, localcontext
+from unittest.mock import patch
+
+# Relogio da m2 colada: [nao verificado por arquivo local].
+AGORA = dt.datetime.fromisoformat("2026-11-15T02:20:00+00:00")
+
+R = "minutos_realizados"
+A = "minutos_abonados"
+P = "minutos_previstos"
+T = "horas_trabalhadas"
+
+# (empresa, colab, mes, ano, #fechamento, campos divergentes).
+# Lista literal do m2_extrato.txt colado: [nao verificado por arquivo local].
+PARES = (
+    (2, 174, 9, 2026, 4825, (R,)),
+    (2, 191, 9, 2026, 4518, (R,)),
+    (2, 193, 9, 2026, 4801, (R,)),
+    (2, 206, 9, 2026, 4418, (R,)),
+    (2, 211, 9, 2026, 4648, (R,)),
+    (2, 214, 9, 2026, 4668, (A,)),
+    (2, 231, 9, 2026, 4699, (R,)),
+    (2, 242, 9, 2026, 4503, (T, R)),
+    (2, 252, 9, 2026, 4796, (R,)),
+    (2, 269, 9, 2026, 4569, (R,)),
+    (2, 272, 9, 2026, 4828, (A,)),
+    (2, 278, 9, 2026, 4750, (T, R)),
+    (2, 292, 9, 2026, 4671, (A, R)),
+    (2, 331, 9, 2026, 4737, (R,)),
+    (2, 349, 9, 2026, 4666, (R,)),
+    (2, 355, 9, 2026, 4782, (A,)),
+    (2, 371, 9, 2026, 4564, (R,)),
+    (2, 444, 9, 2026, 4571, (R,)),
+    (2, 489, 9, 2026, 4552, (R,)),
+    (2, 529, 9, 2026, 4698, (R,)),
+    (2, 532, 9, 2026, 4508, (R,)),
+    (2, 592, 9, 2026, 4512, (R,)),
+    (2, 616, 9, 2026, 4703, (R,)),
+    (2, 634, 9, 2026, 4442, (R,)),
+    (2, 735, 9, 2026, 4496, (R,)),
+    (2, 788, 9, 2026, 4475, (R,)),
+    (2, 789, 9, 2026, 4551, (R,)),
+    (2, 833, 9, 2026, 4434, (R,)),
+    (2, 849, 9, 2026, 4640, (P,)),
+    (2, 859, 9, 2026, 4820, (A,)),
+    (2, 865, 9, 2026, 4694, (R,)),
+    (2, 872, 9, 2026, 4744, (R,)),
+    (2, 885, 9, 2026, 4702, (R,)),
+    (2, 915, 9, 2026, 4759, (R,)),
+    (2, 923, 9, 2026, 4642, (R,)),
+    (2, 941, 9, 2026, 4436, (R,)),
+    (2, 945, 9, 2026, 4608, (R,)),
+    (2, 301, 10, 2026, 5308, (T,)),
+    (2, 899, 10, 2026, 5220, (T,)),
+    (2, 191, 11, 2026, 6074, (T,)),
+    (2, 369, 11, 2026, 5970, (T,)),
+    (2, 415, 11, 2026, 6054, (T,)),
+    (2, 476, 11, 2026, 5855, (T,)),
+    (2, 788, 11, 2026, 6139, (T,)),
+    (2, 899, 11, 2026, 6004, (T,)),
+    (2, 961, 11, 2026, 6018, (T,)),
+    (3, 82, 9, 2026, 4856, (R,)),
+    (3, 87, 9, 2026, 4861, (R,)),
+    (3, 114, 9, 2026, 4892, (R,)),
+    (3, 133, 9, 2026, 4915, (A,)),
+    (3, 145, 9, 2026, 4926, (R,)),
+    (3, 165, 9, 2026, 4946, (R,)),
+    (3, 502, 9, 2026, 4887, (R,)),
+    (3, 638, 9, 2026, 4839, (P, R)),
+    (3, 749, 9, 2026, 4910, (P, R)),
+    (3, 868, 9, 2026, 4905, (R,)),
+    (3, 749, 11, 2026, 5630, (T,)),
+    (3, 911, 11, 2026, 6041, (T,)),
+    (4, 50, 9, 2026, 4964, (A, R)),
+)
+
+
+class EscritaProibida(BaseException):
+    pass
+
+
+class Descartar:
+    def write(self, texto):
+        return len(texto)
+
+    def flush(self):
+        pass
+
+
+def bloquear(*args, **kwargs):
+    raise EscritaProibida()
+
+
+def so_select(execute, sql, params, many, context):
+    s = str(sql).strip()
+    if (
+        many
+        or context["connection"].alias != "default"
+        or not re.match(r"^SELECT\b", s, re.I)
+        or ";" in s
+        or "--" in s
+        or "/*" in s
+        or re.search(
+            r"\b(INSERT|UPDATE|DELETE|MERGE|INTO|CREATE|ALTER|DROP|"
+            r"TRUNCATE|COPY|CALL|DO|SET|RESET|GRANT|REVOKE|"
+            r"NEXTVAL|SETVAL|PG_ADVISORY_LOCK|PG_TRY_ADVISORY_LOCK|"
+            r"PG_ADVISORY_XACT_LOCK|PG_TRY_ADVISORY_XACT_LOCK|"
+            r"LO_IMPORT|LO_EXPORT|PG_TERMINATE_BACKEND|PG_CANCEL_BACKEND|"
+            r"PG_RELOAD_CONF|SET_CONFIG)\b|\bFOR\s+(SHARE|KEY)\b",
+            s, re.I,
+        )
+    ):
+        raise EscritaProibida()
+    return execute(sql, params, many, context)
+
+
+def sonda():
+    saida = sys.stdout
+    erros = 0
+    pars = []
+    totais_dia = Counter()
+    membros = defaultdict(set)
+    totais_par = Counter()
+    dias_par = Counter()
+    linhas_dia = 0
+    etapa = "preparo"
+    contexto = {}
+    nivel = logging.root.manager.disable
+    bytecode = _BYTECODE_ANTERIOR
+
+    def emitir(tipo, **dados):
+        def numero(x):
+            if isinstance(x, Decimal):
+                return format(x, "f")
+            raise TypeError()
+
+        saida.write(tipo + "|" + json.dumps(
+            dados, ensure_ascii=False, sort_keys=True,
+            default=numero, allow_nan=False,
+        ) + "\n")
+
+    def erro(onde, exc, **chaves):
+        nonlocal erros
+        erros += 1
+        # Sem mensagem da excecao, modelo, SQL ou traceback.
+        emitir(
+            "ERRO " + str(erros),
+            etapa=onde,
+            escrita_bloqueada=isinstance(exc, EscritaProibida),
+            **chaves,
+        )
+
+    def exigir(condicao):
+        if not condicao:
+            raise ValueError()
+
+    def minutos(valor, campo):
+        if valor is None:
+            return None
+        n = Decimal(str(valor))
+        exigir(n.is_finite())
+        return n if campo.startswith("minutos_") else n * 60
+
+    try:
+        sys.dont_write_bytecode = True
+        logging.disable(logging.CRITICAL)
+
+        with ExitStack() as stack, localcontext() as ctx:
+            ctx.prec = 50
+            stack.enter_context(redirect_stdout(Descartar()))
+            stack.enter_context(redirect_stderr(Descartar()))
+
+            from django.db import connection, connections
+            from django.db.models import Model
+            from django.db.models.query import QuerySet
+
+            exigir(connection.settings_dict["NAME"] == "sombra")
+            exigir(connection.schema_name == "juliani")
+
+            for alias in connections:
+                stack.enter_context(
+                    connections[alias].execute_wrapper(so_select)
+                )
+
+            for classe, metodos in (
+                (Model, ("save", "delete")),
+                (QuerySet, (
+                    "create", "update", "delete", "_raw_delete",
+                    "bulk_create", "bulk_update", "get_or_create",
+                    "update_or_create",
+                )),
+            ):
+                for metodo in metodos:
+                    stack.enter_context(
+                        patch.object(classe, metodo, bloquear)
+                    )
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT current_database(), current_schema()"
+                )
+                exigir(cursor.fetchone() == ("sombra", "juliani"))
+
+            from freezegun import freeze_time
+            from django.contrib.auth import get_user_model
+            from django.utils import timezone
+            from chamados.juizes import tranca_em_lote
+            from colaboradores.models import Colaborador
+            from ponto.models import FechamentoMensal
+            from ponto.janelas import janela_fechamento
+            from ponto.services.dia_pago import (
+                CAMPOS_DIA, linhas_do_periodo, soma_da_competencia,
+            )
+            from ponto.services.espelho import espelho_do_colab
+            from ponto.management.commands.e6_oraculo import InsumosDoDono
+
+            stack.enter_context(freeze_time(AGORA, tick=False))
+            stack.enter_context(
+                timezone.override("America/Sao_Paulo")
+            )
+            hoje = timezone.localtime(AGORA).date()
+
+            sistema_pk = (
+                get_user_model().objects.filter(username="sistema")
+                .values_list("pk", flat=True).first()
+            )
+            exigir(sistema_pk is not None)
+            stack.enter_context(
+                tranca_em_lote(sistema_pk=sistema_pk)
+            )
+
+            exigir(len(PARES) == len({p[:4] for p in PARES}) == 59)
+            exigir(
+                Counter(p[0] for p in PARES) == {2: 46, 3: 12, 4: 1}
+            )
+            exigir(sum(len(p[5]) for p in PARES) == 65)
+            exigir(all(
+                set(p[5]) <= set(CAMPOS_DIA) for p in PARES
+            ))
+
+            emitir(
+                "META",
+                unidade="minutos",
+                gravado_diario=False,
+                selecao="todos os dias de janela_fechamento",
+                fonte_lavra="app/ponto/services/dia_pago.py:833",
+                fonte_gravado="app/ponto/models.py:398",
+                fonte_dono=(
+                    "app/ponto/management/commands/e6_oraculo.py:182"
+                ),
+                execucao_nesta_resposta="[nao verificado]",
+            )
+
+            for eid, cid, mes, ano, fid, campos in PARES:
+                contexto = dict(
+                    empresa=f"emp{eid}",
+                    colab=f"col{cid}",
+                    comp=f"{mes:02d}/{ano}",
+                )
+                donos = Counter()
+                dias = 0
+                inicio_erros = erros
+                etapa = "preparo_par"
+
+                try:
+                    c = (
+                        Colaborador.objects
+                        .select_related("empresa").get(pk=cid)
+                    )
+                    exigir(c.empresa_id == eid)
+
+                    fm = FechamentoMensal.objects.filter(
+                        colaborador_id=cid, mes=mes, ano=ano,
+                    ).first()
+                    exigir(fm is not None and fm.pk == fid)
+
+                    ini, fim = janela_fechamento(
+                        mes, ano, c.empresa
+                    )
+                    exigir(fim >= ini)
+                    dias = (fim - ini).days + 1
+
+                    # Mesmas chamadas da m2 colada [nao verificado].
+                    # app/ponto/services/dia_pago.py:833 e :550.
+                    ds = linhas_do_periodo(c, ini, fim)
+                    soma_lavra = soma_da_competencia(c, mes, ano)
+
+                    gravado_comp = {
+                        k: minutos(getattr(fm, k), k)
+                        for k in campos
+                    }
+
+                    emitir(
+                        "COMP",
+                        **contexto,
+                        fechamento=f"#{fm.pk}",
+                        ini=ini.isoformat(),
+                        fim=fim.isoformat(),
+                        campos_anexo=list(campos),
+                        gravado_diario=False,
+                        gravado_competencia=gravado_comp,
+                        soma_lavra_competencia=(
+                            None if soma_lavra is None else {
+                                k: minutos(soma_lavra[k], k)
+                                for k in campos
+                            }
+                        ),
+                        campos_divergentes_agora=(
+                            None if soma_lavra is None else [
+                                k for k in CAMPOS_DIA
+                                if getattr(fm, k) is not None
+                                and round(float(getattr(fm, k)), 2)
+                                    != soma_lavra[k]
+                            ]
+                        ),
+                    )
+
+                    # Mesmo preparo do command:
+                    # app/ponto/management/commands/e6_oraculo.py:316/:328.
+                    esp = espelho_do_colab(
+                        c, hoje, ini, fim, agora=AGORA
+                    )
+                    ins = InsumosDoDono(
+                        c, ini, fim, hoje,
+                        espelho=esp, agora=AGORA,
+                    )
+
+                    for offset in range(dias):
+                        dia = ini + dt.timedelta(days=offset)
+                        etapa = "dia"
+
+                        try:
+                            dp = ds.get(dia)
+                            if dp is not None:
+                                exigir(
+                                    (dp.mes, dp.ano) == (mes, ano)
+                                )
+
+                            valores = {
+                                k: (
+                                    None if dp is None
+                                    else minutos(getattr(dp, k), k)
+                                )
+                                for k in campos
+                            }
+
+                            # Carregador E juiz real, sem reproduzir regras:
+                            # e6_oraculo.py:182/:190/:195.
+                            dono = ins.dono(dia)
+                            exigir(dono in (
+                                "ESTRUTURA", "CADASTRO", "BATIDA",
+                            ))
+
+                            registros = [
+                                dict(
+                                    **contexto,
+                                    dia=dia.isoformat(),
+                                    campo=k,
+                                    lavra=valores[k],
+                                    gravado=None,
+                                    dono=dono,
+                                    unidade="minutos",
+                                    gravado_estado=(
+                                        "sem valor diario no fechamento"
+                                    ),
+                                    gravado_competencia=gravado_comp[k],
+                                    dia_pago=(
+                                        None if dp is None
+                                        else f"#{dp.pk}"
+                                    ),
+                                    lavra_estado=(
+                                        "sem lavratura do dia"
+                                        if dp is None else
+                                        "sem valor no campo"
+                                        if valores[k] is None else
+                                        "lavrado"
+                                    ),
+                                    divergencia_diaria_comprovada=False,
+                                )
+                                for k in campos
+                            ]
+
+                            for registro in registros:
+                                emitir("DIA", **registro)
+                                chave = (
+                                    eid, registro["campo"], dono,
+                                )
+                                totais_dia[chave] += 1
+                                membros[chave].add((cid, mes, ano))
+                                linhas_dia += 1
+
+                            # Uma contagem por DIA, mesmo com dois campos.
+                            donos[dono] += 1
+
+                        except Exception as exc:
+                            erro(
+                                "dia", exc, **contexto,
+                                dia=dia.isoformat(),
+                            )
+
+                except Exception as exc:
+                    erro(etapa, exc, **contexto)
+
+                completo = (
+                    erros == inicio_erros
+                    and sum(donos.values()) == dias > 0
+                )
+                par = dict(
+                    **contexto,
+                    campos=list(campos),
+                    donos=dict(sorted(donos.items())),
+                    dias=dias,
+                    dias_julgados=sum(donos.values()),
+                    completo=completo,
+                )
+                pars.append(par)
+                emitir("PAR", **par)
+
+                if completo:
+                    perfil = (
+                        eid,
+                        tuple(sorted(campos)),
+                        tuple(sorted(donos)),
+                    )
+                    totais_par[perfil] += 1
+                    dias_par[perfil] += dias
+
+            etapa, contexto = "conferencia", {}
+            exigir(len(pars) == 59)
+
+            if erros == 0:
+                exigir(all(p["completo"] for p in pars))
+                exigir(sum(totais_par.values()) == 59)
+                exigir(
+                    sum(dias_par.values())
+                    == sum(p["dias"] for p in pars)
+                )
+                exigir(
+                    sum(totais_dia.values()) == linhas_dia
+                )
+                exigir(
+                    linhas_dia == sum(
+                        p["dias"] * len(p["campos"])
+                        for p in pars
+                    )
+                )
+
+    except BaseException as exc:
+        erro(etapa, exc, **contexto)
+
+    finally:
+        logging.disable(nivel)
+        sys.dont_write_bytecode = bytecode
+
+    for (eid, campo, dono), n in sorted(totais_dia.items()):
+        emitir(
+            "TOT",
+            unidade="dia_campo",
+            empresa=f"emp{eid}",
+            campo=campo,
+            dono=dono,
+            dias=n,
+            pares_incidentes=len(membros[(eid, campo, dono)]),
+        )
+
+    for (eid, campos, perfil), n in sorted(totais_par.items()):
+        emitir(
+            "TOT",
+            unidade="par",
+            empresa=f"emp{eid}",
+            campo=list(campos),
+            dono=list(perfil),
+            pares=n,
+            dias=dias_par[(eid, campos, perfil)],
+        )
+
+    saida.write(
+        f"FIM ok={int(erros == 0)} erros={erros}"
+        f" pares={len(pars)}"
+        f" pares_completos={sum(totais_par.values())}"
+        f" esperado=59 linhas_dia_campo={linhas_dia}\n"
+    )
+
+    if erros:
+        raise SystemExit(1)
+
+
+sonda()
+```
+
+## 15/11 01:35 · sessao d3bab7ce6ebf · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
+
+**REPROVADO nesta volta.** Há incoerências nos retornos que a cura passa a alcançar e uma guarda existente que não preserva a remoção do filtro cru (`app/ponto/registro_batida.py:120`; `app/ponto/services/triagem_batida.py:716`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`).
+
+As referências abaixo usam a numeração do HEAD. O teste novo, seus RED/GREEN e mutantes permanecem **[nao verificado]**. [nao verificado]
+
+1. **Campos, significados, ordem e ID**
+
+   | Campo/valor | Quem escreve/define; quem lê; conclusão |
+   |---|---|
+   | `retratada_em` | `retratar_batida` fornece o instante **da retratação**, e `anotar` persiste; desfazer restaura `None` pela mesma porta. A autoridade e o dedup temporal da porta leem apenas NULL/não NULL. Não comparam esse carimbo com a janela do toque (`app/ponto/registro_batida.py:274`; `app/ponto/registro_batida.py:252`; `app/ponto/services/retratar_humano.py:207`; `app/ponto/turnos.py:2876`; `app/ponto/registro_batida.py:109`). |
+   | `timestamp` | As APIs obtêm `ts_efetivo` da autoridade de hora; a triagem captura `agora`; `registrar_batida` grava o argumento recebido. Dedup, chave exata e respostas leem esse instante (`app/api/views.py:507`; `app/api/views_core.py:493`; `app/ponto/services/triagem_batida.py:626`; `app/ponto/registro_batida.py:158`; `app/api/views.py:540`). |
+   | `tipo` | Entra pelo request, mas as APIs podem substituí-lo **depois do dedup**, antes da porta. O campo persistido também pode ser invertido por `flip_tipo`, via `anotar`. Portanto, dedup da casca e porta podem perguntar por tipos diferentes, mesmo após c1 (`app/api/views.py:420`; `app/api/views.py:529`; `app/api/views.py:578`; `app/api/views.py:601`; `app/api/views.py:655`; `app/ponto/services/flip_batida.py:30`). |
+   | Janela | APIs: ±5 minutos do fato; triagem: `[agora−5min, agora]`; porta, mesmo tipo: ±60 segundos. Todos usam limites **inclusivos**, `gte/lte`; continuam sendo perguntas temporalmente diferentes (`app/api/views.py:527`; `app/api/views_core.py:513`; `app/ponto/services/triagem_batida.py:663`; `app/ponto/registro_batida.py:110`; `app/ponto/turnos.py:2878`). |
+   | Fuso/dia | A autoridade não converte os limites em dia nem consulta relógio. A entrada de hora torna timestamps aware; a configuração declara São Paulo e `USE_TZ=True`; apresentação usa `localtime`. Nesse caminho, não encontrei troca de instante por dia causada pela substituição (`app/ponto/turnos.py:2875`; `app/api/hora_do_aparelho.py:116`; `app/config/settings/base.py:93`; `app/config/settings/base.py:95`; `app/api/views.py:535`). |
+
+   **A ordem efetiva da triagem não muda entre candidatas vivas.** Antes, `Meta.ordering=["colaborador","timestamp"]`; depois, a autoridade ordena por `timestamp`. Com colaborador fixo, ambos escolhem o menor instante; a unicidade colaborador/timestamp elimina empate. Antes sai o ID da primeira candidata, inclusive retratada; depois sai o ID da primeira **viva**, ou a execução continua se nenhuma existir (`app/ponto/models.py:105`; `app/ponto/models.py:106`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/services/triagem_batida.py:671`; `app/ponto/turnos.py:2883`).
+
+   Nas APIs continua saindo a candidata de **maior timestamp**, agora dentro do universo vivo proposto; `id`, horário e sequência vêm dessa linha (`app/api/views.py:532`; `app/api/views.py:538`; `app/api/views.py:541`; `app/api/views_core.py:518`; `app/api/views_core.py:524`).
+
+   Quanto ao consumidor: o PWA online presente ignora o corpo e considera `r.ok` sucesso; o sincronizador apaga a pendência em todo `resp.ok`, sem usar o ID retornado. O upload servidor recebe `batida_id`, mas o cliente APK que ligaria esse campo ao retorno está **[nao verificado]** (`app/templates/ponto/bater_ponto_v2.html:327`; `app/static/pwa.js:158`; `app/static/pwa.js:162`; `app/api/views.py:836`; `app/api/views.py:842`).
+
+2. **O que acontece depois que a batida chega à porta**
+
+   | Caso | Resultado da porta |
+   |---|---|
+   | Retratada dentro de 60 s, **instante diferente** | A retratada não satisfaz o dedup. Sem outra viva, chave exata ou colisão impeditiva, cria uma nova viva. Não duplica a chave de banco (`app/ponto/registro_batida.py:109`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:157`; `app/ponto/models.py:106`). |
+   | Chave exata colaborador/timestamp | Devolve a anterior, **inclusive retratada ou de outro tipo**. Não cria nem desfaz a retratação; portanto, pode continuar sem nova batida apurável (`app/ponto/registro_batida.py:116`; `app/ponto/registro_batida.py:120`; `app/ponto/registro_batida.py:122`; `app/ponto/turnos.py:2876`). |
+   | Oposta viva na janela | Usa ±300 s com escala/marcos ou ±60 s sem eles. Salvo correspondência ao marco próprio, retorna `None, conflito` para o automático: **barra a materialização**. As três cascas passam `autoridade_humana=False` (`app/ponto/registro_batida.py:21`; `app/ponto/registro_batida.py:145`; `app/ponto/registro_batida.py:151`; `app/api/views.py:656`; `app/api/views_core.py:647`; `app/ponto/services/triagem_batida.py:704`). |
+
+   **A resposta posterior não é coerente em todos os casos.** A porta não distingue criação de reaproveitamento no retorno. Após chave exata, as APIs anunciam `status=ok`, usando `tipo` e rótulo da variável local, mas timestamp/sequência do objeto devolvido. Se ele for de outro tipo, o payload pode contradizer o registro; se retratado, não informa que continua fora da apuração. A sequência retornada é a antiga, não a recém-calculada (`app/ponto/registro_batida.py:102`; `app/ponto/registro_batida.py:122`; `app/api/views.py:555`; `app/api/views.py:799`; `app/api/views.py:812`; `app/api/views.py:814`; `app/api/views_core.py:806`).
+
+   **Há outro erro concreto na triagem:** após a recusa, ela procura oposta em ±60 s **sem excluir retratadas**. A porta pode ter recusado por uma viva a três minutos; a resposta então pode trazer `id=None`, ou apontar uma retratada próxima que não causou a recusa. As APIs usam a janela da porta e excluem retratadas nesse retorno (`app/ponto/services/triagem_batida.py:716`; `app/ponto/services/triagem_batida.py:723`; `app/ponto/registro_batida.py:31`; `app/ponto/registro_batida.py:141`; `app/api/views.py:672`; `app/api/views_core.py:663`).
+
+   Esses ramos já existem no HEAD; retirar o retorno antecipado por retratada permite que mais chamadas os alcancem. A troca de consulta não garante, sozinha, resposta correta depois da porta (`app/ponto/services/triagem_batida.py:670`; `app/ponto/services/triagem_batida.py:702`; `app/ponto/services/triagem_batida.py:715`; `app/api/views.py:533`; `app/api/views.py:654`).
+
+3. **Pendente de DP, origem e canal**
+
+   `aprovada=False`, origem e canal, isoladamente, **não explicam divergência entre esses dedups**: as consultas antigas não os filtram; a autoridade também não; a porta temporal também não. Pendente de DP continua contando. `aprovada` é crivo do DP, enquanto `retratada_em` determina exclusão da apuração (`app/api/views.py:529`; `app/api/views_core.py:515`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/turnos.py:2859`; `app/ponto/turnos.py:2876`; `app/ponto/registro_batida.py:107`; `app/ponto/models.py:63`).
+
+   Permanecem as diferenças de janela, a possível correção de tipo entre casca e porta e a exceção da chave exata, que aceita até retratada. Não atribuo essas diferenças a um estado de aprovação/canal (`app/api/views.py:527`; `app/api/views.py:578`; `app/ponto/registro_batida.py:106`; `app/ponto/registro_batida.py:120`).
+
+4. **Censo independente e classes estruturais**
+
+   O censo encontrou **três dedups de chão** antes dos três chamadores de origem `app`: API original, API core e triagem. Coincide com os três sítios do T3; quarto sítio estático não encontrado. Caminhos dinâmicos não identificados permanecem **[nao verificado]** (`app/api/views.py:529`; `app/api/views.py:654`; `app/api/views_core.py:515`; `app/api/views_core.py:645`; `app/ponto/services/triagem_batida.py:664`; `app/ponto/services/triagem_batida.py:702`).
+
+   Fora desse conjunto há reaproveitamento de materialização por ±20 minutos, guardas de vizinhas e chave exata de regularização externa. São controles existentes, mas não outro toque de chão (`app/chamados/juizes.py:235`; `app/chamados/juizes.py:243`; `app/chamados/services/materializacao.py:95`; `app/chamados/services/materializacao.py:101`; `app/chamados/services/regularizacao_ext.py:74`).
+
+   A substituição usa uma autoridade existente; ela não acrescenta escritor, relógio ou trava. A criação encontrada permanece na porta, inclusive o bulk de ensaio (`app/ponto/turnos.py:2856`; `app/ponto/turnos.py:2875`; `app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:157`; `app/ponto/registro_batida.py:335`).
+
+   **Derivação paralela está presente no retorno da triagem:** ela tenta reconstruir a causa da recusa com universo e janela diferentes. Também permanece a divergência entre instante do fato e recepção no envelope `ultima_batida.timestamp`, escrito com `agora`; isso pertence ao item T4 distinto, não foi corrigido por c1 (`app/ponto/services/triagem_batida.py:716`; `app/ponto/registro_batida.py:139`; `app/api/views.py:761`; `app/api/views_core.py:755`; `app/chamados/juizes.py:151`).
+
+   Um selo restrito aos `SITIOS` enumerados deixaria um quarto sítio fora da lista sem cobertura, conforme a limitação relatada; implementação e mordida do teste novo **[nao verificado]**. Suite inteira, opus, smoke e eventual pouso antes desses pré-requisitos **[nao verificado]**. [nao verificado]
+
+5. **Import local e uso de `Batida`**
+
+   Não encontrei ciclo no trajeto estático: o topo de `turnos` importa bibliotecas e `core.dia_do_turno`; este último só constrói o tipo com `datetime/typing`. `batidas_apuraveis` apenas monta a consulta. Execução real do novo import **[nao verificado]** (`app/ponto/turnos.py:36`; `app/ponto/turnos.py:41`; `app/core/dia_do_turno.py:10`; `app/core/dia_do_turno.py:13`; `app/ponto/turnos.py:2875`).
+
+   **`Batida` continua usado nos três módulos**, particularmente nas buscas de oposta após a porta; remover seu import seria errado (`app/api/views.py:674`; `app/api/views_core.py:665`; `app/ponto/services/triagem_batida.py:716`).
+
+6. **Selos existentes: distinguir duas situações**
+
+   **B5j não perde copiadores com esta cura.** Seu detector considera funções que alimentam o pareador, não qualquer dedup. A contagem em memória permanece **6 → 6**; os seis estão em `turnos` duas vezes, lastro, piso, meio período e fila por causa. O teto oito já deixa duas posições de folga no HEAD; essa folga não nasceu em c1 (`app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:123`; `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:191`; `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:217`; `app/ponto/turnos.py:1863`; `app/ponto/turnos.py:1901`; `app/ponto/services/lastro.py:261`; `app/ponto/services/piso_intervalo.py:39`; `app/escala/services/meio_periodo.py:158`; `app/chamados/services/fila_por_causa.py:190`).
+
+   **O tripwire de bocais perde uma ocorrência e deveria guardar essa remoção.** No HEAD, sua regex encontra três filtros em `api/views`; com a troca, ficam dois. O teto continua sete, e a asserção usa `<=`: restaurar a consulta removida passa nesse selo. `views_core` e triagem sequer estão nessa allowlist (`app/api/views.py:296`; `app/api/views.py:529`; `app/api/views.py:674`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:13`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:20`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:25`; `app/ponto/tests/test_tripwire_bocais_apuracao.py:31`).
+
+**Veredito final: REPROVADO**, pelos retornos inconsistentes detalhados no item 2 e pela guarda incompleta do item 6. A ordem da triagem e a contagem de pendentes de DP não são defeitos da substituição (`app/ponto/models.py:105`; `app/ponto/turnos.py:2859`; `app/ponto/turnos.py:2883`).
 
 ## 15/11 01:32 · sessao 9e8e05c97134 · - · - · origem=Ronald (tmux)
 
@@ -2142,75 +2746,4 @@ Todos os testes citados abaixo **SEGUEM**, como código lido; resultado de execu
 - B7 “conversa ou recusa” são ramos distintos: gerador conhece episódio mas juiz sem dia → conversa, com dedup de conversa; a recusa do modelo requer conferir a entrada datada (`app/chamados/services/disputa_emissao.py:431-441`; `app/chamados/tests/test_e1_v6_horizonte.py:445`).
 - “SEM PROVA” dos anexos deve ser registrado como **teste específico não demonstrado**, não como inexistência universal de prova **[nao verificado quanto a todos os testes indiretos/dinâmicos]**. [nao verificado]
 
-## 15/11 00:44 · sessao f865e2f688d8 · - · - · origem=Ronald (tmux)
-
-Censo dos escritores da cópia, sem alterações:
-
-| Função | Escrita de datas |
-|---|---|
-| `executar_vinculo` | Reabre `data_fim=None` em `app/colaboradores/services/vinculo.py:277`, persiste em `:283`; cria com `data_inicio` em `:287`/`:291`; fecha vínculos pela porta em `:214` e `:241`. |
-| `fechar_vigencia` | Atualiza `data_fim` em `app/colaboradores/services/vinculo.py:641`, restringindo a `data_inicio <= data_fim`. |
-| `reabrir_vigencia_impossivel` | Atualiza `data_fim` em `app/colaboradores/services/vinculo.py:730`; valida em `:724`. |
-| `encerrar_vinculo` | Atribui e salva `data_fim` em `app/colaboradores/services/vinculo.py:844`/`:845`; valida em `:835`. |
-| `criar_trecho_retroativo` | Cria com ambas as datas em `app/colaboradores/services/vinculo.py:970`/`:972`; valida em `:969`. |
-| `corrigir_vinculo_retroativo` | Atribui e salva `data_fim` em `app/colaboradores/services/vinculo.py:982`/`:983`; valida em `:979`. |
-| `reverter_para_snapshot` | Reescreve ambas as datas em `app/colaboradores/services/vinculo.py:1031`/`:1032`; valida cada par em `:1015`. |
-| `ajustar_vinculo_pelo_sistema` | Fecha pela porta em `app/colaboradores/services/vinculo.py:1087`; cria com início em `:1089`/`:1090`. |
-| `desfazer_ajuste_do_sistema` | Reabre fim nulo em `app/colaboradores/services/vinculo.py:1106`; fecha pela porta em `:1108`; cria com início em `:1110`/`:1111`. |
-| `fechar_vinculos_ativos` | Delega a `fechar_vigencia` em `app/colaboradores/services/vinculo.py:862`; seleciona somente `ativa=True` em `:863`. |
-| `gravar_regua` | Porta genérica aceita `**campos` em `app/colaboradores/services/vinculo.py:1048` e atualiza sem allowlist em `:1070`; seus chamadores atuais passam campos de régua em `app/escala/regua_defesa.py:662`, `:719`, `:742`, `:765`. |
-
-Rotas que chegam a esses escritores:
-
-- Wizard: `app/colaboradores/views.py:423`; chat: `app/colaboradores/services/troca_pelo_chat.py:75`; régua: `app/escala/regua_defesa.py:321`; comando de fase: `app/ponto/management/commands/censo_fase_12x36.py:423`.
-- Desvinculação: `app/escala/views.py:269`; backfill de desligados: `app/colaboradores/management/commands/fechar_vinculo_de_desligado.py:56`; desligamento: `app/colaboradores/services/desligamento.py:148`.
-- Retroativo: `app/colaboradores/management/commands/corrigir_escala_retroativa.py:196` e `:212`; snapshot: `app/chamados/services/acoes_chamado.py:149`.
-- Automático: `app/escala/services/escala_auto_executor.py:103` e `:145`; reparo: `app/escala/management/commands/corrigir_vinculo_vigencia.py:86` e `:107`.
-
-O admin de EC herda `SoLeitura` em `app/escala/admin.py:19`; adição, alteração e exclusão retornam `False` em `app/core/admin.py:59`, `:62`, `:65`. O bootstrap cria Empresa, Setores e User em `app/tenants/bootstrap.py:25`, `:32`, `:34`.
-
-Há escritores de fixtures em testes, por exemplo `app/tenants/tests.py:44`, `app/colaboradores/tests/test_ficha_do_colab.py:88` e `app/colaboradores/tests/test_situacional_pergunta_em_lote.py:62`. A varredura AST contou 829 sítios diretos com keywords dessas datas em 643 arquivos de teste; não existe artefato persistido dessa contagem [não verificado].
-
-A cópia já declara a constraint em `app/escala/models.py:1037` e contém migration com `CHECK ... NOT VALID` em `app/escala/migrations/0041_ec_vigencia_not_valid.py:43`. Aplicação em prod [não verificado].
-
-## 15/11 00:44 · sessao db1f8fd7598c · - · - · origem=Ronald (tmux)
-
-Textos escritos que sustentam casos de especificação, sem usar o código como gabarito: a L-110 exige “cadastro tal, batidas tais” e manda a pergunta sem resposta pela regra para a lista separada (`app/docs/LEIS.md:136`).
-
-| Transição do mapa | Caso escrito pela regra → esperado | Texto da regra |
-|---|---|---|
-| N1 + P1 | Cadastro com intervalo fixo; entrada, retorno do intervalo e saída registrados, saída para intervalo ausente; pergunta inexistente → emitir UMA pergunta do marco apagado, a partir do sinal da célula. | “lampada apagada no miolo passa a gerar UMA pergunta […] nascida do sinal da celula (nunca de varredura)” (`app/docs/CORTES.json:772`). |
-| N1 — selfie | Cadastro de colaborador com batida de aparelho APK sem foto; prazo de 90 minutos vencido → cobrança abre disputa; em PWA, ausência de foto no ato → cobrança abre disputa. | “foto ausente e COBRANCA (abre disputa […]): […] prazo do CANAL (PWA = no ato; APK = 90 min)” (`app/docs/CORTES.md:94`). |
-| P2 — dedup | Mesmo cadastro, dia, marco faltante e pergunta do mesmo fato; sinal repetido → uma pergunta desse fato, sem duplicação. O texto não decide a dona fechada nem autoriza reapontamento arbitrário. | “UMA pergunta” e “dedup pela chave do fato” (`app/docs/CORTES.json:772`). |
-| F1 | Cadastro com dia já resolvido; perguntas do questionário sem viva e nenhuma resposta sem veredito → disputa elegível a fechar; resposta sem veredito → fechamento recusado. | “fecha quando `pergunta_viva(disputa)` esta vazio (C6), e a porta […] recusa resposta sem veredito” (`app/docs/BACKLOG.md:1549`). O motivo persistido `vazia` para zero perguntas não recebe gabarito específico nesse texto. |
-| F1 — recusa por idade | Cadastro e batidas ainda deixando fato sem solução; pergunta muda há 30 dias → idade não absolve nem fecha; pergunta parada vai à lista administrativa. | “silencio de 30 dias e QUALQUER fechamento por idade MORREM como absolvicao — pergunta parada vira lista do admin, nao fechamento” (`app/docs/BACKLOG.md:1549`). |
-| F2 + P10 no desligamento | Cadastro desligado com pergunta já respondida sem veredito → encerrar também essa pergunta por via própria de desligamento e listar dia/pergunta/resposta no chamado de revisão; muda também recebe via própria. | O corte antigo de manter respondida viva foi substituído (`app/docs/PROMPTS.md:2222`); novo conteúdo registrado em `app/docs/BACKLOG.md:732`; “via propria desligamento tambem para as mudas” (`app/docs/CORTES.json:1610`). Não declarar a cura implementada com base nessa regra. |
-| F3 — respondida | Cadastro ativo, pergunta respondida sem decisão do dia; mero encerramento administrativo da disputa → a regra escrita de 28/10 rejeita tratá-la como decisão humana que não ocorreu. A extensão exata da revogação de 13/11 ao `admin_encerra`, fora de desligamento, fica [nao verificado]. | “encerrar a disputa […] nao decide o dia” e proibição de `admin_decidiu` em já respondida (`app/docs/CORTES.json:1258`); o corte sucessor trata desligamento (`app/docs/BACKLOG.md:732`). |
-| F4 / tranca por leitura | Cadastro com dia em competência trancada, sem toque humano posterior → C6 lê a tranca sem novo carimbo; destrancar devolve vitalidade; toque humano posterior exclui aquele colab-dia da tranca. | “C6 LE a tranca […] sem carimbo e sem estado novo; destrancar devolve a pergunta viva” (`app/docs/PROMPTS.md:1338`); exceção do toque humano (`app/docs/PROMPTS.md:1342`). A escolha de fechar a raiz pelo motivo `competencia_trancada` continua sem gabarito específico nessas cláusulas. |
-| R1/R2 — desligado | Cadastro desligado e disputa fechada → não reabrir a disputa do desligado. | “so chamado; disputa de desligado nao reabre” (`app/docs/CORTES.json:1617`). O texto não decide as demais reaberturas. |
-| M2 + P4, por episódio de foto | Cadastro com batida que originou cobrança de foto; foto entregue, inclusive fora do prazo → extinguir a cobrança do episódio identificado por `batida_origem`. | “por episodio via batida_origem” e “foto fora do prazo tambem extingue” (`app/docs/CORTES.json:1596`). O texto não determina a cadeia exata de campos de resposta/validação nem o fechamento de toda raiz. |
-| P3, primeira resposta humana | Cadastro ativo, pergunta sem resposta; admin tenta dar a primeira resposta em nome do colaborador → não permitido. | “admin nao da a primeira resposta pelo colab” (`app/docs/CORTES.json:1659`). Essa cláusula não responde ao caso de nova resposta invalidar validação anterior. |
-| P5 + P9 — intervalo | Cadastro com intervalo fixo faltante, pergunta respondida com hora e validada pelo admin → registrar intervalo e retirar indenização do dia; sem resposta ou recusada → indenizar pela política escrita. | “Resposta validada pelo admin vira o registro do intervalo e a indenizacao do dia sai; sem resposta ou recusada […] Art. 71 par. 4, indeniza” (`app/docs/CORTES.json:772`). Não usar isso como regra genérica de plausibilidade/folga de toda pergunta. |
-| P9 — fato que chega após resposta | Cadastro coerente com escala/posto, pergunta respondida, batida posterior acende o marco: concorda com a resposta pela régua de validação automática → pergunta morre sozinha; discorda → permanece viva para admin. | Corte literal registrado em `app/docs/BACKLOG.md:1731`. |
-| P10 — duplicata com episódio | Mesmo cadastro, batida/dia/motivo comprovadamente iguais; pergunta COM episódio e outra SEM episódio → conservar a COM episódio e retirar a SEM pela via fora do fato, com trilha; sem prova de mesmo fato, conservar ambas. | D8 RAIZ (`app/docs/BACKLOG.md:2016`). Essa regra não responde a todas as outras vias de identidade. |
-| Destino F1 | Cadastro, dia e fato únicos, dois chamados candidatos do mesmo fato com PKs distintos; mesma pergunta reapresentada em ordens diferentes → destino eleito pelo fato, empate pelo menor PK; um escritor. | “escritor unico […] eleitor por fato com empate menor PK” (`app/docs/PROMPTS.md:2085`); L-007: “campo de estado tem 1 escritor canonico + tripwire” (`app/docs/LEIS.md:65`). |
-| T1 — trilha de ação crítica | Mesmo cadastro/batidas; ação crítica muda estado → registrar usuário, antes/depois e motivo. | “acao critica grava usuario, antes/depois e motivo” (`app/docs/LEIS.md:65`). Isso não define sozinho os oito atos nem imutabilidade da sequência. |
-
-A regra da L-033 dá um caso de conservação: cadastro com jornada, entrada e saída presentes e só intervalo faltando → dia pagável e pergunta segue aberta (`app/docs/LEIS.md:81`). Não transformá-la em autorização genérica para fechar a pergunta.
-
-Os invariantes escritos para a matriz são: aberta tem ao menos uma viva; push somente com viva pendente daquele colaborador; eleitor único do destino; fonte única do dia (`app/docs/CORTES.json:1694`). Eles permitem casos positivos/negativos de emissão e push, mas não resolvem a escolha entre agregar à dona fechada, reabrir ou criar outra: essa decisão permanece expressamente a pergunta N5 da F1 (`app/docs/CORTES.json:1708`).
-
-Transições/partes sem resposta normativa específica encontrada nos textos examinados e que devem ir a C, preservando o comportamento atual somente em A:
-
-- N2: critério de agregar motivos/contexto à mesma raiz; N3: motivo/pergunta novo em dona fechada; N1: quando criar raiz vazia e como tratar geração sem pergunta viva — N5 já está preservada no corte (`app/docs/CORTES.json:1708`); escolha normativa adicional [nao verificado].
-- F1: motivo `vazia` versus `veredito` e precisão de exceções; F3: mecanismo das mudas e alcance da revogação; F4: fechamento da raiz por tranca, além de C6 por leitura [nao verificado].
-- R1: teto administrativo 2 e justificativa mínima 20; R2: conjunto de causas sistêmicas além da proibição para desligado; R3: teto colaborador 2 e critérios exatos de corrigibilidade [nao verificado].
-- M1: destino das perguntas na retratação de motivo; M2: campos exatos do automatismo da foto, além da extinção por episódio [nao verificado].
-- P2: troca de célula/destino e conservação da dona; P3: sobrescrita de respondida/validada e invalidação anterior; P4: reparo pela trilha e data do carimbo [nao verificado].
-- P5: demais tipos de resposta, plausibilidade e ramo folga; P6: devolução da validação recusada e reabertura da dona; P7: motivo obrigatório e limpeza da resposta na recusa; P8: limpeza completa na correção/desabsorção [nao verificado].
-- P9: todas as demais vias e condições de carimbo; P10: `admin_decidiu`, `motivo_retratado`, `paridade_recusada`, `fato_ocupado` fora dos recortes normativos acima; P11: condições gerais de descarimbo/ressuscitação; P12/P13: troca de via e relavra [nao verificado].
-- V1/V2: escolha dos três valores e política de falha/backfill; T1: oito atos e imutabilidade; I1: regra do preenchimento histórico de identidade [nao verificado].
-
-Cuidado com cortes curtos sem a pergunta de origem: `LU-20 = nao validavel` e `LU-21 = reinicia` estão escritos, mas o referente completo não está nesses registros; não atribuir escopo inventado (`app/docs/CORTES.json:1673`, `app/docs/CORTES.json:1680`).
-
-_5459 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5461 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
