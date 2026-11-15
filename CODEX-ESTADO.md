@@ -1,7 +1,413 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 00:32** · publicado em **15/11/2026 00:33** (UTC-3)
+> Ultima resposta processada: **15/11/2026 00:35** · publicado em **15/11/2026 00:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 00:35 · sessao 9fef593b873d · A20-E-COMBOIO · leitura · origem=Code
+
+**O par conferido tem fonte histórica no código: `LogAuditoria`.** A existência e a integridade dessa trilha em produção, assim como os números pedidos, estão **[nao verificado]**. O payload é escrito em `app/chamados/services/validacao.py:702-707`.
+
+**(a)** Os campos pertencem a `PerguntaDisputa`: `data_conferida_em` é `DateTimeField` anulável; `data_conferida_por` é FK anulável para `auth.User`, com `SET_NULL` (`app/chamados/models.py:2536-2540`).
+
+O único escritor explícito atual da conferência é `conferir_data_do_fato`: atribui `timezone.now()` e `autor`, salvando somente esses dois campos. O contrato de escritores declara esse mesmo endereço; a view apenas verifica POST/permissão e delega (`app/chamados/services/validacao.py:699-701`; `app/core/tests/test_contract_escritores_estado.py:113-117`; `app/chamados/views.py:1306-1314`). A FK também admite nulificação pela exclusão do usuário, por `SET_NULL` (`app/chamados/models.py:2538`).
+
+A porta exige justificativa, lê o par vigente, recusa concordância e recusa novo carimbo se `data_conferida_em` já estiver preenchida (`app/chamados/services/validacao.py:689-698`). Após salvar, solicita a auditoria com este payload (`app/chamados/services/validacao.py:702-707`):
+
+```python
+acao = 'conferir_data'
+modelo = 'PerguntaDisputa'
+objeto_id = p.pk
+descricao = (
+    'Data do fato conferida: vale %s (o chamado dizia %s). %s'
+    % (ev, turno, just)
+)
+valor_antes = {'data_turno': turno.isoformat() if turno else None}
+valor_depois = {
+    'data_evento': ev.isoformat() if ev else None,
+    'justificativa': just,
+}
+```
+
+Portanto, o par histórico ordenado é **`(valor_depois['data_evento'], valor_antes['data_turno'])`**. Esses JSONs são encaminhados à gravação de `LogAuditoria`; a auditoria é *best-effort*, podendo falhar depois do carimbo (`app/core/auditoria.py:22-29`; `app/core/observ.py:105-139`; `app/chamados/services/validacao.py:701-707`).
+
+`DecisaoPergunta` não possui ato de conferência nem campos dedicados ao par; a porta de conferência não registra decisão nessa sequência (`app/chamados/models.py:4000-4027`; `app/chamados/services/validacao.py:683-710`). Assim, **não cabe afirmar que o par nunca foi registrado**: existe a trilha estruturada acima. Sua cobertura real está **[nao verificado]**.
+
+**(b)** O par vigente é **`(ev, turno)` retornado por `data_do_fato_de(p)`**: `ev = p.data_evento`; `turno = dia_do_fato(chamado_que_lista(p), fortes=True)` (`app/chamados/services/fio.py:77-88`). `data_evento` é campo anulável da pergunta (`app/chamados/models.py:2501-2504`).
+
+O chamado considerado é o destino, com fallback para o chamado da disputa. Seu dia forte prioriza `chamado.celula.data`, depois a chave do catálogo e o fallback `contexto_json['data_turno']`; sem dia forte retorna `None` (`app/chamados/services/fio.py:116-117`; `app/chamados/juizes.py:98-128`). Logo, ler apenas o contexto bruto não reproduz a função real (`app/chamados/services/fio.py:84-88`).
+
+O materializador lê essa função, mas sua liberação atual consulta apenas a presença do carimbo: `_diverge and p.data_conferida_em is None` (`app/chamados/services/materializacao.py:1197-1199`).
+
+**(c)** Cabe usar **`competencia_do_dia_entregue(p.data_evento, empresa, memo)`**: ela compõe `janela_atual` com `competencia_entregue`, usando mês/ano do **fim da janela da empresa**, e retorna `None` sem data (`app/chamados/services/vigia_fio.py:843-865`; `app/ponto/janelas.py:60-63`).
+
+`True` identifica exportada; `False`, aberta pelo critério K6 — exportação vigente e não invalidada. Isso não depende do estado aberto/fechado da disputa (`app/folha/export.py:580-594`). A sonda preserva `sem_data` como terceira parte, conforme o anexo fornecido **[nao verificado]**.
+
+**(d)** Texto proposto, sem execução em produção **[nao verificado]**. A recuperação será conservadora: exige datas ISO completas e um único par histórico distinto; trilhas repetidas com o mesmo par são aceitas. Ausência, payload inválido ou pares conflitantes entram em `NAO_RECUPERAVEL`. A comparação usa a tupla vigente inteira, inclusive eventual componente `None`; não usa o booleano de divergência entre os dois dias atuais. Essas são regras explícitas desta sonda proposta **[nao verificado]**.
+
+```python
+# A20-E-COMBOIO item (1): texto proposto; execucao [nao verificado].
+# Para o mesmo envelope Django/tenant --sombra do anexo.
+#
+# Universo: PerguntaDisputa.data_conferida_em preenchida.
+# Fonte: app/chamados/models.py:2536.
+# Par historico: LogAuditoria conferir_data.
+# Fonte: app/chamados/services/validacao.py:702-707.
+# Par vigente: data_do_fato_de(p), componentes 0 e 2.
+# Fonte: app/chamados/services/fio.py:77-88.
+# Particao: competencia_do_dia_entregue sobre data_evento vigente.
+# Fonte: app/chamados/services/vigia_fio.py:843-865.
+#
+# Unidade: pergunta; nenhuma chamada a portas de escrita.
+# Saida: contagens, #pk e emp; sem descricao/justificativa/datas/pessoas.
+
+import datetime
+import io
+import logging
+import re
+from collections import Counter, defaultdict
+from contextlib import ExitStack, redirect_stdout, redirect_stderr
+from itertools import islice
+
+from django.db import connections
+
+linhas = []
+erros = 0
+bloqueios = 0
+universo = None
+total = 0
+completo = False
+nivel_anterior = logging.root.manager.disable
+
+estados = ('DIFERENTE', 'IGUAL', 'NAO_RECUPERAVEL')
+particoes = ('exportada', 'aberta', 'sem_data')
+parte = Counter()       # (estado, particao) -> perguntas
+por_emp = Counter()     # (empresa_id, estado, particao) -> perguntas
+motivos_nr = Counter()
+exemplos = defaultdict(list)
+memo = {}
+
+
+def somente_select(execute, sql, params, many, context):
+    global bloqueios
+    texto = sql.strip()
+    if (many or not re.match(r"(?is)^SELECT\b", texto) or ";" in texto
+            or re.search(r"(?is)\bINTO\b|\bFOR\s+(UPDATE|SHARE)\b",
+                         texto)):
+        bloqueios += 1
+        raise RuntimeError("SQL bloqueado")
+    return execute(sql, params, many, context)
+
+
+def dia_iso(valor):
+    # Nulo, chave ausente e formato inesperado nao viram data presumida.
+    if not isinstance(valor, str):
+        raise ValueError("dia invalido")
+    dia = datetime.date.fromisoformat(valor)
+    if dia.isoformat() != valor:
+        raise ValueError("dia nao canonico")
+    return dia
+
+
+try:
+    logging.disable(logging.CRITICAL)
+    with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+        with ExitStack() as pilha:
+            for alias in connections:
+                pilha.enter_context(
+                    connections[alias].execute_wrapper(somente_select)
+                )
+
+            from chamados.models import PerguntaDisputa
+            from chamados.services.fio import data_do_fato_de
+            from chamados.services.vigia_fio import (
+                competencia_do_dia_entregue,
+            )
+            from core.models import LogAuditoria
+
+            qs = (
+                PerguntaDisputa.objects
+                .filter(data_conferida_em__isnull=False)
+                .select_related(
+                    'colaborador',
+                    'chamado_destino__celula',
+                    'disputa__chamado__celula',
+                )
+                .order_by('pk')
+            )
+            universo = qs.count()
+            it = qs.iterator(chunk_size=500)
+
+            while True:
+                lote = list(islice(it, 500))
+                if not lote:
+                    break
+
+                ids = [p.pk for p in lote]
+                vistos = Counter()
+                pares = defaultdict(set)
+                invalidos = set()
+
+                # Le somente identificador e os dois componentes JSON.
+                # Nao carrega descricao nem justificativa.
+                logs = (
+                    LogAuditoria.objects
+                    .filter(
+                        acao='conferir_data',
+                        modelo='PerguntaDisputa',
+                        objeto_id__in=ids,
+                    )
+                    .order_by('pk')
+                    .values_list(
+                        'objeto_id',
+                        'valor_antes__data_turno',
+                        'valor_depois__data_evento',
+                    )
+                )
+
+                for pid, turno_antigo, evento_antigo in logs.iterator(
+                        chunk_size=2000):
+                    vistos[pid] += 1
+                    try:
+                        par = (
+                            dia_iso(evento_antigo),
+                            dia_iso(turno_antigo),
+                        )
+                    except (TypeError, ValueError, OverflowError):
+                        invalidos.add(pid)
+                    else:
+                        pares[pid].add(par)
+
+                for p in lote:
+                    ev, _diverge, turno = data_do_fato_de(p)
+                    vigente = (ev, turno)
+                    emp = p.colaborador.empresa_id
+
+                    entregue = competencia_do_dia_entregue(
+                        ev, emp, memo
+                    )
+                    if entregue is True:
+                        k = 'exportada'
+                    elif entregue is False:
+                        k = 'aberta'
+                    elif entregue is None:
+                        k = 'sem_data'
+                    else:
+                        raise RuntimeError("retorno de particao invalido")
+
+                    motivo = None
+                    if vistos[p.pk] == 0:
+                        motivo = 'sem_trilha'
+                    elif p.pk in invalidos:
+                        motivo = 'payload_invalido'
+                    elif len(pares[p.pk]) != 1:
+                        motivo = 'pares_conflitantes'
+
+                    if motivo is not None:
+                        estado = 'NAO_RECUPERAVEL'
+                        motivos_nr[motivo] += 1
+                    else:
+                        conferido = next(iter(pares[p.pk]))
+                        estado = (
+                            'DIFERENTE'
+                            if vigente != conferido
+                            else 'IGUAL'
+                        )
+
+                    parte[(estado, k)] += 1
+                    por_emp[(emp, estado, k)] += 1
+                    chave = (estado, k)
+                    if len(exemplos[chave]) < 10:
+                        exemplos[chave].append(p.pk)
+                    total += 1
+
+            soma_partes = sum(parte.values())
+            soma_empresas = sum(por_emp.values())
+
+            if not (total == universo == soma_partes == soma_empresas):
+                raise RuntimeError("soma do universo nao confere")
+
+            for estado in estados:
+                for k in particoes:
+                    soma_emp = sum(
+                        n for (emp, e, particao), n in por_emp.items()
+                        if e == estado and particao == k
+                    )
+                    if soma_emp != parte[(estado, k)]:
+                        raise RuntimeError("soma por empresa nao confere")
+
+            if sum(motivos_nr.values()) != sum(
+                    parte[('NAO_RECUPERAVEL', k)]
+                    for k in particoes):
+                raise RuntimeError("soma dos motivos nao confere")
+
+            if bloqueios:
+                raise RuntimeError("houve SQL bloqueado")
+
+            linhas.append(
+                f"UNIVERSO|perguntas_com_data_conferida_em={universo}"
+            )
+
+            for estado in estados:
+                for k in particoes:
+                    pks = ','.join(
+                        f"#{pk}" for pk in exemplos[(estado, k)]
+                    )
+                    linhas.append(
+                        f"PARTE|{estado}|{k}"
+                        f"|perguntas={parte[(estado, k)]}"
+                        f"|exemplos={pks}"
+                    )
+
+                n = sum(parte[(estado, k)] for k in particoes)
+                n_emp = sum(
+                    v for (emp, e, k), v in por_emp.items()
+                    if e == estado
+                )
+                linhas.append(
+                    f"TOTAL|{estado}|perguntas={n}"
+                    f"|soma_das_partes={n}"
+                    f"|soma_empresas={n_emp}|bate={n == n_emp}"
+                )
+
+            empresas = sorted({emp for emp, e, k in por_emp})
+            for emp in empresas:
+                for estado in estados:
+                    for k in particoes:
+                        linhas.append(
+                            f"EMPRESA|emp{emp}|{estado}|{k}"
+                            f"|perguntas={por_emp[(emp, estado, k)]}"
+                        )
+
+            nr = sum(
+                parte[('NAO_RECUPERAVEL', k)] for k in particoes
+            )
+            linhas.append(
+                f"NAO_RECUPERAVEL|perguntas={nr}"
+                f"|perguntas_com_data_conferida_em={universo}"
+            )
+            for motivo, n in sorted(motivos_nr.items()):
+                linhas.append(
+                    f"MOTIVO_NR|{motivo}|perguntas={n}"
+                )
+
+            completo = True
+
+except Exception as exc:
+    erros += 1
+    # Nao imprime mensagem da excecao: pode conter dados/SQL/parametros.
+    linhas = [f"ERRO|tipo={type(exc).__name__}"]
+
+finally:
+    logging.disable(nivel_anterior)
+
+soma_partes = sum(parte.values())
+soma_empresas = sum(por_emp.values())
+diferentes = sum(parte[('DIFERENTE', k)] for k in particoes)
+soma_emp_diferentes = sum(
+    n for (emp, estado, k), n in por_emp.items()
+    if estado == 'DIFERENTE'
+)
+nr = sum(parte[('NAO_RECUPERAVEL', k)] for k in particoes)
+
+bate = (
+    completo
+    and erros == 0
+    and bloqueios == 0
+    and universo == total == soma_partes == soma_empresas
+    and diferentes == soma_emp_diferentes
+)
+medicao_integral = bate and nr == 0
+
+for linha in linhas:
+    print(linha)
+
+print(
+    f"FIM|erros={erros + bloqueios}"
+    f"|sql_bloqueados={bloqueios}"
+    f"|completo={completo}"
+    f"|universo={universo}"
+    f"|total={total}"
+    f"|soma_das_partes={soma_partes}"
+    f"|soma_empresas={soma_empresas}"
+    f"|diferentes={diferentes}"
+    f"|soma_empresas_diferentes={soma_emp_diferentes}"
+    f"|nao_recuperavel={nr}"
+    f"|bate={bate}"
+    f"|medicao_integral={medicao_integral}"
+)
+```
+
+Com `NAO_RECUPERAVEL > 0`, `DIFERENTE` informa apenas os casos demonstrados pela trilha recuperada; o total exato pedido permanece **[nao verificado]**.
+
+## 15/11 00:34 · sessao b01514387813 · CAMINHO-ATE-E4C-RELIDO · censo · origem=Code
+
+**(a) O “17 de 57” bate para os arquivos-alvo das F1–F9.** O inventário literal identificável é maior: **87 nomes de arquivos**, incluindo o próprio `preparo.md`; **86 sem essa autorreferência**. São **57 alvos + 30 arquivos auxiliares**, com **23 no cruzamento: 17 alvos + seis auxiliares**. Referências repetidas e caminhos relativos/absolutos do mesmo arquivo foram unificados. `preparo.md:3–23`, `preparo.md:90–557`, `preparo.md:582`, `preparo.md:609–617`; `diff_nomes.txt:1–115`.
+
+A menção abreviada `RELATO/TICKETS` não identifica arquivos inequivocamente; sua expansão e eventual acréscimo ao total/cruzamento ficam **[nao verificado]**. `preparo.md:564`.
+
+Abaixo, **† identifica os 23 arquivos do cruzamento**. Nos agrupamentos, o diretório indicado aplica-se a cada nome enumerado.
+
+- **F1 — 1:** `app/chamados/juizes.py`†. `preparo.md:90–139`.
+- **F2 — 1:** `app/chamados/models.py`†. `preparo.md:140–207`.
+- **F3 — 5:** em `app/chamados/services/`: `validacao.py`†, `verbos.py`, `painel.py`, `acoes_disputa.py`†; mais `app/chamados/veredito_lavrado.py`. `preparo.md:208–261`.
+- **F4 — 5:** em `app/chamados/services/`: `disputa_emissao.py`†, `materializacao.py`†, `relavra_via.py`, `passivo_validado.py`, `fabrica_da_celula.py`. `preparo.md:262–323`.
+- **F5 — 14:** `app/chamados/reconciliador.py`; em `app/chamados/services/`: `fio.py`†, `explicador.py`†, `declaracao_texto.py`, `vigia_fio.py`†, `raiox.py`†, `tarefa_do_dia.py`†, `cobranca.py`†, `pergunta_no_app.py`†, `becos.py`, `furo_sem_canal.py`†, `historico.py`, `competencia_trancada.py`, `vigia_carimbo.py`. `preparo.md:324–391`.
+- **F6 — 7:** `app/api/views.py`†, `app/api/views_mensageria.py`, `app/chamados/views_cobrar.py`, `app/chamados/views.py`, `app/chamados/relatorios_disputa.py`†, `app/chamados/canal.py`, `app/chamados/templatetags/chamados_tags.py`. `preparo.md:392–437`.
+- **F7 — 4:** em `app/templates/chamados/partials/`: `_card_atendimento.html`†, `modal_fio.html`, `_pergunta_card.html`, `_lote_preview.html`. `preparo.md:438–468`.
+- **F8 — 8:** em `app/ponto/services/`: `procedencia_batida.py`, `flip_auto.py`, `cartorio.py`, `veredito_celula.py`, `dia_do_colab.py`; em `app/colaboradores/services/`: `calendario.py`, `ficha.py`; mais `app/folha/previa.py`. `preparo.md:469–502`.
+- **F9 — 12:** em `app/chamados/management/commands/`: `auditar_invariantes_chamados.py`, `reabrir_orfas_enterradas.py`, `backfill_decisoes_pergunta.py`, `encerrar_perguntas_com_fato.py`, `auditar_disputas.py`, `relavrar_via_i6.py`, `curar_perguntas_em_limbo.py`, `migrar_data_evento_dia_do_turno.py`, `dedup_perguntas_fato.py`, `validar_classe_a.py`; em `app/ponto/management/commands/`: `reconciliar_fantasmas.py`, `reconciliar_grade.py`. `preparo.md:503–557`.
+
+Os **30 adicionais** são:
+
+| Quantidade | Arquivos citados | Referência |
+|---:|---|---|
+| 7 | `logs/AVAIS-1313/prepara_a_espinha_com_agentes.txt`; `logs/PREPARACAO/censos/E4c/fatias.md`; `logs/E4C/censo.r`; `logs/E4C/aval_expand_contract.txt`; `logs/AVAIS-1313/sexta_noite_1311.txt`; `app/docs/LEIS.md`†; `app/docs/BACKLOG.md`† | `preparo.md:3–10` |
+| 1 | `manage.py` — caminho exato **[nao verificado]** | `preparo.md:4` |
+| 5 | `censo_ast.py`; `e3/ast.tsv`; `main/ast.tsv`; `unidades.tsv`; `unid_dest.tsv` | `preparo.md:17–19`, `preparo.md:615–617` |
+| 2 | `app/core/juizes.py`†; `app/docs/JUIZES.md`† | `preparo.md:40` |
+| 2 | `logs/E4C/particao_volta1.txt`; `app/chamados/tests/test_e4_escritores.py` | `preparo.md:71` |
+| 1 | `CLAUDE.md` | `preparo.md:81` |
+| 1 | `arquivos_em_voo.txt` | `preparo.md:93` |
+| 2 | `app/chamados/services/atos_pergunta.py`; `logs/FIO-E0-V4-E4-ESCRITORES/volta2/E4A_PARQUE.txt` | `preparo.md:144–145` |
+| 3 | `app/chamados/tests/test_e3_pendentes_app.py`†; `app/templates/chamados/detalhe_local.html`; `app/templates/chamados/meu_atendimento.html` | `preparo.md:441–444` |
+| 3 | `app/ponto/services/efeito_ausencia.py`; `app/escala/services/leitor_celula.py`; `app/ponto/motor_calculo_v2.py` | `preparo.md:472` |
+| 1 | `app/docs/CORTES.md`† | `preparo.md:582` |
+| 1 | `logs/FIO-E0-V4-E4B/remedida.r` | `preparo.md:609` |
+| 1 | `preparo.md`, autorreferência | `preparo.md:614` |
+
+Portanto, **não sobram nem faltam arquivos no conjunto dos 17 alvos assinalados pelo preparo**. Para representar todos os nomes identificáveis citados, faltariam **30 no denominador e seis no numerador**: `core/juizes.py`, `docs/BACKLOG.md`, `docs/CORTES.md`, `docs/JUIZES.md`, `docs/LEIS.md` e `chamados/tests/test_e3_pendentes_app.py`, todos sob `app/`. `preparo.md:20–23`; `diff_nomes.txt:2`, `diff_nomes.txt:46`, `diff_nomes.txt:76–85`, `diff_nomes.txt:113`.
+
+**(b) Tabela do cruzamento.** Os commits abaixo são os relacionados **ao arquivo** no anexo. Atribuir uma alteração de sítio a um commit individual, sem seu diff de conteúdo, permanece **[nao verificado]**. A numeração dos anexos começa na primeira linha de seus respectivos corpos. [nao verificado]
+
+| Fatia | Arquivo | Commit(s) do arquivo | Veredito sobre a fatia | Arquivo:linha na cópia | [nao verificado]
+|---|---|---|---|---|
+| F1 | `app/chamados/juizes.py` | `0a567a225`, `be856fb8b`, `0544c994d`, `ae9989de1`. `diff_commits_por_arquivo.txt:5–8` | **Mantém SEGUE VALIDA:** predicado e faces SQL ainda leem projeção; a fila usa a face SQL, mas ordena pelo carimbo. | `app/chamados/juizes.py:1528`, `app/chamados/juizes.py:1548`, `app/chamados/juizes.py:1556`, `app/chamados/juizes.py:1722`, `app/chamados/juizes.py:1724` |
+| F2 | `app/chamados/models.py` | `32f4192de`, `0a567a225`, `5319676ee`, `0544c994d`, `cb7064355`, `99ed67ff0`, `c70b7511c`, `ae66e55af`, `53712af62`. `diff_commits_por_arquivo.txt:27–35` | **Mantém SEGUE VALIDA** para estado, seleção e apresentação. **Mantém MUDA** para `_nascer`: guarda de entrada do escritor. FE conserva **carimbo OU texto**; conservação E4b continua deliberadamente na projeção. | `app/chamados/models.py:3124`, `app/chamados/models.py:3454`, `app/chamados/models.py:3641`, `app/chamados/models.py:3664`, `app/chamados/models.py:2922`, `app/chamados/models.py:1906–1909`, `app/chamados/models.py:4067` |
+| F3 | `app/chamados/services/validacao.py` | `0a567a225`, `f1fe1d367`. `diff_commits_por_arquivo.txt:88–89` | **Mantém SEGUE VALIDA** para guardas R/V. **Mantém SOME** a pendência de impedir recusa fora do fato: a porta já retorna antes da escrita e reabre com `ato='recusa'`. | `app/chamados/services/validacao.py:602`, `app/chamados/services/validacao.py:605`, `app/chamados/services/validacao.py:609`, `app/chamados/services/validacao.py:613`, `app/chamados/services/validacao.py:628` |
+| F3 | `app/chamados/services/acoes_disputa.py` | `f1fe1d367`. `diff_commits_por_arquivo.txt:39` | **Mantém SEGUE VALIDA** para a guarda crua. **Mantém SOME** o tratamento pendente da recusa fora do fato: já vira informação. `recusa_motivo` continua sendo POST. | `app/chamados/services/acoes_disputa.py:95`, `app/chamados/services/acoes_disputa.py:81`, `app/chamados/services/acoes_disputa.py:85` |
+| F4 | `app/chamados/services/disputa_emissao.py` | `f1fe1d367`, `99ed67ff0`. `diff_commits_por_arquivo.txt:43–44` | **Mantém SEGUE VALIDA** para leitura R/V/C. **Mantém SOME** a unificação pendente da reabertura, já feita pela porta do lote. **Mantém MUDA** o “reconferir depois da cura” do automático: a guarda já existe. | `app/chamados/services/disputa_emissao.py:1621–1623`, `app/chamados/services/disputa_emissao.py:1634`, `app/chamados/services/disputa_emissao.py:1657` |
+| F4 | `app/chamados/services/materializacao.py` | `f1fe1d367`. `diff_commits_por_arquivo.txt:65` | **Mantém SEGUE VALIDA** para o texto da resposta; permanecem os sítios técnicos A18/A06/A20 identificados na volta 1. | `app/chamados/services/materializacao.py:835`, `app/chamados/services/materializacao.py:1095`, `app/chamados/services/materializacao.py:1105`, `app/chamados/services/materializacao.py:1199` |
+| F5 | `app/chamados/services/fio.py` | `cb7064355`, `046d7c085`, `99ed67ff0`, `ae66e55af`, `513ff8077`, `de125d5e1`. `diff_commits_por_arquivo.txt:48–53` | **Mantém SEGUE VALIDA:** espera do texto, guarda do POST e mérito da duplicata ainda leem R. | `app/chamados/services/fio.py:187`, `app/chamados/services/fio.py:698`, `app/chamados/services/fio.py:1271`, `app/chamados/services/fio.py:1283` |
+| F5 | `app/chamados/services/explicador.py` | `ae66e55af`. `diff_commits_por_arquivo.txt:46` | **Mantém SEGUE VALIDA:** apresentação ainda lê R; permanecem pendência, recusa técnica e identidade. | `app/chamados/services/explicador.py:79`, `app/chamados/services/explicador.py:85`, `app/chamados/services/explicador.py:90`, `app/chamados/services/explicador.py:95` |
+| F5 | `app/chamados/services/vigia_fio.py` | `aa0e27c11`, `b4a87aecb`, `52110c313`, `660ee8805`, `0a567a225`, `456f0c6ad`, `be856fb8b`, `2b0739004`, `3c55819f0`, `cb7064355`, `ae9989de1`, `992be9c60`. **Correção:** os dois últimos blocos desta lista pertencem ao histórico? **[nao verificado]** | **Mantém SEGUE VALIDA** para R em `censo_alcance`. **Mantém MUDA** para `respondida_sem_resposta`: mede o par escrito desde um marco; equivalência com contagem de atos vazios **[nao verificado]**. | `app/chamados/services/vigia_fio.py:694`, `app/chamados/services/vigia_fio.py:795–807` |
+| F5 | `app/chamados/services/raiox.py` | `0f2b6dd47`. `diff_commits_por_arquivo.txt:72` | **Mantém SEGUE VALIDA:** crédito ainda lê projeção e distingue carimbo **e** texto. | `app/chamados/services/raiox.py:135–144` |
+| F5 | `app/chamados/services/tarefa_do_dia.py` | `1ee368261`, `b1acb7985`, `aa0e27c11`, `b4a87aecb`, `52110c313`, `660ee8805`, `456f0c6ad`, `be856fb8b`, `2b0739004`, `3c55819f0`, `e01da1d51`, `cdf9ae7ee`, `992be9c60`. `diff_commits_por_arquivo.txt:74–86` | **Mantém MUDA** a referência de T e a porta calculada pela âncora na fila. A06 permanece na leitura da via. | `app/chamados/services/tarefa_do_dia.py:131`, `app/chamados/services/tarefa_do_dia.py:142`, `app/chamados/services/tarefa_do_dia.py:245` |
+| F5 | `app/chamados/services/cobranca.py` | `cb7064355`. `diff_commits_por_arquivo.txt:41` | **Mantém MUDA** o censo indireto: `_pendentes` lê a consulta; `_calados` lê espera do texto **e** P. | `app/chamados/services/cobranca.py:47–48`, `app/chamados/services/cobranca.py:241` |
+| F5 | `app/chamados/services/pergunta_no_app.py` | `1ee368261`, `b1acb7985`, `52110c313`, `be856fb8b`. `diff_commits_por_arquivo.txt:67–70` | **Mantém SOME** o predicado próprio da consulta, cuja função permanece delegando. **Mantém SEGUE VALIDA** a migração da partição e **MUDA** o RED: saídas são `pendentes`/`historico`. | `app/chamados/services/pergunta_no_app.py:64`, `app/chamados/services/pergunta_no_app.py:73`, `app/chamados/services/pergunta_no_app.py:81–85` |
+| F5 | `app/chamados/services/furo_sem_canal.py` | `aa0e27c11`, `b4a87aecb`, `52110c313`, `660ee8805`, `85daa9f14`, `be856fb8b`, `3c55819f0`, `cb7064355`, `ae9989de1`. `diff_commits_por_arquivo.txt:55–63` | **Mantém SOME** o sítio cru. `medir` permanece lendo tarefa e porta publicada; sem canal é ausência dessa porta. | `app/chamados/services/furo_sem_canal.py:43`, `app/chamados/services/furo_sem_canal.py:96–104` |
+| F6 | `app/api/views.py` | `80bf4354a`, `de125d5e1`. `diff_commits_por_arquivo.txt:2–3` | **Mantém SEGUE VALIDA** para apresentação/guardas e `aguarda_admin`. **Mantém SOME** a derivação crua da correção, já delegada. | `app/api/views.py:1159–1161`, `app/api/views.py:1175`, `app/api/views.py:2549`, `app/api/views.py:2557`, `app/api/views.py:2616` |
+| F6 | `app/chamados/relatorios_disputa.py` | `cb7064355`. `diff_commits_por_arquivo.txt:37` | **Mantém SOME** o predicado próprio; `classificar` permanece lendo FE e `aguarda_o_colaborador`. | `app/chamados/relatorios_disputa.py:11`, `app/chamados/relatorios_disputa.py:24–26` |
+| F7 | `app/templates/chamados/partials/_card_atendimento.html` | `cb7064355`. `diff_commits_por_arquivo.txt:404` | **Mantém SEGUE VALIDA** para apresentação R; **SOME** o julgamento cru de envio, já delegado a `resposta_enviada`; **MUDA** a referência da mistura técnica para 189/192. | `app/templates/chamados/partials/_card_atendimento.html:100`, `app/templates/chamados/partials/_card_atendimento.html:106`, `app/templates/chamados/partials/_card_atendimento.html:114`, `app/templates/chamados/partials/_card_atendimento.html:189–192` |
+| F2/D01; F5 — apoio | `app/core/juizes.py` | `0a567a225`, `992be9c60`. `diff_commits_por_arquivo.txt:305–306` | **Mantém SEGUE VALIDA** a distinção C17/C19. Registro mantém ambos; comentário documenta a migração dos chamadores para a porta de T. | `app/core/juizes.py:135–138`, `app/core/juizes.py:159`, `app/core/juizes.py:297–299` |
+| F7 — apoio | `app/chamados/tests/test_e3_pendentes_app.py` | `992be9c60`. `diff_commits_por_arquivo.txt:209` | **Mantém MUDA:** é catraca C17, com um chamador permitido. **SOME** essa referência como prova da alegada catraca E17 de templates. | `app/chamados/tests/test_e3_pendentes_app.py:21`, `app/chamados/tests/test_e3_pendentes_app.py:118`, `app/chamados/tests/test_e3_pendentes_app.py:145–148` |
+| Transversal; F5 — nova leitura | `app/docs/LEIS.md` | `183d3d27a`, `a3145c9ba`. `diff_commits_por_arquivo.txt:328–329` | **SEGUE VALIDA** L-127. **MUDA** o contexto documental do fio: L-129 já está registrada e determina leitura do fio único de T pela Folha. | `app/docs/LEIS.md:148–149` |
+| F3/F6 — nova leitura | `app/docs/BACKLOG.md` | `183d3d27a`, `b12e86556`. `diff_commits_por_arquivo.txt:310–311` | **SEGUE VALIDA** D04/D05: atos humanos, fases conservadas, exigibilidade aditiva e `aguarda_admin` até o efeito. Referência atual é 1999; a ordem mantém censo rerodado. | `app/docs/BACKLOG.md:1999`, `app/docs/BACKLOG.md:9` |
+| F2/D01; F5 — nova leitura | `app/docs/JUIZES.md` | `0a567a225`, `be856fb8b`, `4112a571e`. `diff_commits_por_arquivo.txt:324–326` | **SEGUE VALIDA** T como autoridade por instância/DP. O documento é lookup; D01 não aparece no bloco de chamados do registro lido. | `app/docs/JUIZES.md:7–12`, `app/docs/JUIZES.md:78–87`; `app/core/juizes.py:280–304` |
+| F3/F4/F7 — A20; nova leitura | `app/docs/CORTES.md` | `b12e86556`. `diff_commits_por_arquivo.txt:315` | **MUDA** a afirmação de pergunta A20 ainda sem resposta: LU-08 escolhe que a conferência vale só para o par conferido. BACKLOG conserva a redação antiga. Implementação dessa escolha **[nao verificado]**. | `app/docs/CORTES.md:440`; `app/docs/BACKLOG.md:1975` |
+
+**Correção da célula de commits de `vigia_fio.py`:** a lista fornecida no anexo é exatamente `aa0e27c11`, `b4a87aecb`, `52110c313`, `660ee8805`, `0a567a225`, `456f0c6ad`, `be856fb8b`, `e01da1d51`, `cdf9ae7ee`, `992be9c60`? **[nao verificado]**
+
+**(c) F8 e F9: nenhum arquivo-alvo está no diff — 0/8 e 0/12.** Os comandos alterados em `diff_nomes.txt:3–6` têm nomes diferentes dos comandos enumerados na F9; não entram nela por serem comandos. `preparo.md:469–557`; `diff_nomes.txt:1–115`.
 
 ## 15/11 00:32 · sessao 76caf82e94c3 · - · - · origem=Ronald (tmux)
 
@@ -730,52 +1136,4 @@ Recontagem:
 
 Não há alteração dessas seções a registrar em “MUDOU COM A E3”. (`chamados/models.py:880`, `chamados/models.py:1101`)
 
-## 15/11 00:10 · sessao ed0f087cb41a · - · - · origem=Ronald (tmux)
-
-| Item | C17 | C19 |
-|---|---|---|
-| Pergunta literal do registro | `por onde alguem chega a este dia (porta alcancavel, com o verbo do painel)?` — `app/core/juizes.py:138`. | `quais acoes ainda sao exigiveis para cada instancia de marco do dia, de quem e por quais portas?` — `app/core/juizes.py:159`. |
-| Função | `porta_alcancavel_do_dia(celula_id, *, alimentacao=None)` — `app/chamados/juizes.py:1664`; registrada em `app/core/juizes.py:297`. | `tarefa_do_dia(colab, dia_do_turno, agora, *, carga=None)` — `app/chamados/services/tarefa_do_dia.py:653`; registrada em `app/core/juizes.py:299`. |
-| Pergunta literal da docstring | `Por onde alguem CHEGA a este dia?` — `app/chamados/juizes.py:1665`. | `para o colaborador, o dia do turno e cada INSTANCIA de marco, quais acoes ainda sao exigiveis, de quem e por qual porta.` — `app/chamados/services/tarefa_do_dia.py:654`. |
-| Universo | Uma célula: chamados da célula na fila; perguntas vivas C6 da célula, presentes no app, com âncora na fila e sem o par respondida/texto vazio — `app/chamados/juizes.py:1667`, `app/chamados/juizes.py:1699`, `app/chamados/juizes.py:1703`. | Colaborador × dia do turno × instante `agora`, por instância de marco; perguntas `conversa=False` no intervalo, atos ordenados por `pergunta_id, ato_em, pk` e limitados a `ato_em <= agora` — `app/chamados/services/tarefa_do_dia.py:653`, `app/chamados/services/tarefa_do_dia.py:107`, `app/chamados/services/tarefa_do_dia.py:395`, `app/chamados/services/tarefa_do_dia.py:410`. |
-| Predicado/resultado | Existência de porta por chamado da célula na fila **ou** pergunta elegível sob âncora na fila. Sem ambos: `None`; com porta: rota, fila visível, verbos do painel e fio pela escada dos verbos — `app/chamados/juizes.py:1696`, `app/chamados/juizes.py:1703`, `app/chamados/juizes.py:1705`, `app/chamados/juizes.py:1709`, `app/chamados/juizes.py:1655`. | Exigibilidade por instância, considerando vínculo/isencão/tranca, lâmpada, teto, ausência e última decisão/efeito; devolve razões, ações com responsável/porta e desconhecimento. Pode haver ação exigível com `porta=None` — `app/chamados/services/tarefa_do_dia.py:200`, `app/chamados/services/tarefa_do_dia.py:210`, `app/chamados/services/tarefa_do_dia.py:277`, `app/chamados/services/tarefa_do_dia.py:295`, `app/chamados/services/tarefa_do_dia.py:298`, `app/chamados/services/tarefa_do_dia.py:323`, `app/chamados/services/tarefa_do_dia.py:142`. |
-
-Testes que fixam C17: [nao verificado]
-
-- Fila sem pergunta: `assertEqual({'rota': 'porta_fila', 'fila': (a.pk,), 'verbos': {a.pk: 'decidir'}, 'fio': 'chamado'}, self._juiz())` — `app/chamados/tests/test_o261e_f5b_juiz_porta.py:159`, asserção `:161`.
-- Pergunta respondida sob âncora na fila: `assertEqual({'rota': 'porta_pergunta', 'fila': (), 'verbos': {b.pk: 'validar'}, 'fio': 'admin'}, self._juiz())` — `app/chamados/tests/test_o261e_f5b_juiz_porta.py:193`, asserção `:196`.
-- Chamado `registrado`: `assertIsNone(self._juiz())` — `app/chamados/tests/test_o261e_f5b_juiz_porta.py:200`, asserção `:203`.
-- Pergunta respondida com âncora arquivada: `assertIsNone(self._juiz(), ...)` — `app/chamados/tests/test_o261e_f5b_juiz_porta.py:261`, asserção `:275`.
-- Escada dos verbos: `validar+cobrar → colab`, `validar+decidir → admin`, `decidir → chamado`, `None → chamado` — `app/chamados/tests/test_o261e_f5b_juiz_porta.py:300`, asserções `:304`, `:305`, `:306`, `:307`.
-- Registro: `assertIn('chamados/juizes.py::porta_alcancavel_do_dia', set(juizes.JUIZES['chamado'].values()))` — `app/chamados/tests/test_o261e_f5b_juiz_porta.py:320`, asserção `:322`.
-
-Testes que fixam C19: [nao verificado]
-
-- Instâncias independentes: fixa `inicio/aceso`, `int_ida/sem_pergunta`, `int_volta/aceso`, `fim/sem_pergunta`; as duas apagadas exigem `perguntar/sistema` — `app/chamados/tests/test_e2_tarefa_do_dia.py:151`, asserções `:154`, `:156`, `:157`.
-- Responder uma instância não fecha outra: fixa `int_ida → validar/admin` e `fim → responder/colaborador` — `app/chamados/tests/test_e2_tarefa_do_dia.py:159`, asserções `:165`, `:167`.
-- Teto por marco: fixa `fim → ('nao_venceu', [])` — `app/chamados/tests/test_e2_tarefa_do_dia.py:170`, asserção `:174`.
-- DEVOLUCAO: fixa `('materializacao_recusada', [('validar', 'admin')])` — `app/chamados/tests/test_e2_tarefa_do_dia.py:222`, asserção `:229`.
-- Efeito/lâmpada: fixa `validada_sem_efeito → materializar/sistema`, `efeito_sem_lampada → rejulgar/sistema`, lavra vencida → `('veredito_sem_lavra_vigente', [], True)` — `app/chamados/tests/test_e2_tarefa_do_dia.py:293`, asserções `:301`, `:309`, `:314`.
-- Ação e alcance são separáveis: fixa `responder/colaborador/porta=ch.pk` e, após silenciamento, **a mesma ação** com `porta=None` — `app/chamados/tests/test_e2_tarefa_do_dia.py:396`, asserções `:405`, `:408`.
-- Ordem dos atos: VALIDACAO às 19:50 vence RESPOSTA criada depois, mas retrodatada às 19:10; fixa `validada_sem_efeito/materializar/sistema` — `app/chamados/tests/test_e2_tarefa_do_dia.py:425`, asserção `:432`.
-- Passivo: fixa `('passivo_sem_linha', [], True)` — `app/chamados/tests/test_e2_tarefa_do_dia.py:488`, asserção `:495`.
-
-**Conclusão: duas — C17 julga alcance da porta; C19 julga exigibilidade por instância, inclusive ação com porta ausente.** `app/chamados/juizes.py:1703`; `app/chamados/services/tarefa_do_dia.py:323`; `app/chamados/tests/test_e2_tarefa_do_dia.py:408`.
-
-A documentação registra a migração dos leitores para `porta_da_tarefa` e a permanência de C17 no instrumento de comparação; isso não afirma igualdade dos dois predicados. `app/docs/JUIZES.md:85`; `app/core/juizes.py:135`.
-
-## 15/11 00:10 · sessao 3a93ea19d374 · - · - · origem=Ronald (tmux)
-
-Nenhum trecho das seções 1, portas/juízes/persistência/trilha comum ou 3 exige correção por alteração dos sítios citados. Os arquivos respectivos não têm diff no intervalo; `ChamadoColaborador` permanece igual até o fim da classe. (`chamados/models.py:128`, `chamados/models.py:201`, `chamados/models.py:642`, `chamados/models.py:820`, `chamados/models.py:1652`, `chamados/models.py:1669`)
-
-Recontagem:
-
-- **L1: 12 → 12 pares**, sendo 11 runtime e 1 histórico. As combinações continuam H=8, R=3, E=4, T=3, C=3, total 21; os filtros históricos permanecem iguais. (`chamados/catalogo/motor.py:99`, `chamados/catalogo/motor.py:111`, `chamados/catalogo/motor.py:114`, `chamados/catalogo/motor.py:116`, `chamados/catalogo/motor.py:153`, `chamados/models.py:1677`, `chamados/migrations/0039_a3_via_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:23`)
-- **L2: 4 → 4 sítios persistentes de estado em migrações; 0 → 0 encontrados no runtime.** Nenhuma escrita adicional desses campos aparece nas adições runtime do diff; nascimento e núcleo permanecem iguais. (`chamados/migrations/0038_a3_registrado_backfill.py:10`, `chamados/migrations/0038_a3_registrado_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`, `chamados/models.py:296`, `chamados/models.py:1018`, `chamados/models.py:1142`)
-- **L3: 2 → 2 no runtime; 0 → 0 incluindo migrações e reversas.** `cancelado` e `superado` continuam terminais absolutos no motor, ligados somente pela ida/reversa histórica. (`chamados/catalogo/motor.py:104`, `chamados/catalogo/motor.py:106`, `chamados/catalogo/motor.py:142`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`)
-
-A mudança em `q_vivas` não modifica a descrição do gate de perguntas ancoradas: `_ancoradas` busca diretamente perguntas não validadas, sem `q_vivas`; `_vivas_entre` julga cada pergunta por `pergunta_viva`. O predicado de respostas sem veredito mantém o corpo anterior, embora ganhe comentários e alimentação opcional por `perguntas=`. (`chamados/models.py:344`, `chamados/models.py:368`, `chamados/models.py:1889`, `chamados/models.py:1905`, `chamados/models.py:3454`)
-
-Metadado da seção 4: comparei, em memória, os hashes Git dos **4.352 blobs** de `4b75cba10` com a cópia atual: **0 ausentes e 0 divergentes**. A correspondência foi verificada por comando, sem arquivo de evidência; citação `arquivo:linha` desse resultado: **[nao verificado]**. A frase antiga sobre ausência de Git descreve a consulta anterior; a cópia atual não contém `.git`, mas o histórico está disponível em `/home/ronald/saas-hasner`. **[nao verificado]**
-
-_5427 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5429 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
