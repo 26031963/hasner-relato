@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 05:49:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (43.1 MB). Acoes na janela: **1390**.
+**Medido em 15/11/2026 05:54:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (43.1 MB). Acoes na janela: **1392**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:49:22 | Bash | Fix time label and wait for verifier v3 | `sed -i 's/^ESTADO 05:5x CEF c4 ab86e690f/ESTADO 05:4x CEF c4 ab86e690f/' /home/ronald/saas-hasner/app/docs/RELATO.md; F=/home/ronald/saas-hasner/logs/CONTRATO-DE-ENTRADA-DO-FIO/verif/v3.rc; until [ -f $F ]; do /usr/bin/sleep 20; done; cat $F` |
+| 05:49:19 | Bash | Add CEF c4 state line to RELATO | `cd /home/ronald/saas-hasner; python3 - <<'E' p='app/docs/RELATO.md'; t=open(p,encoding='utf-8').read() anc='ESTADO 05:4x CEF c4 construtor Codex no ar' assert t.count(anc)==1 t=t.replace(anc,'ESTADO 05:5x CEF c4 ab86e690f na copia (Codex construtor rc=0): ramo legado fora de api/foto_recebida.py; conferido pela sessao: ruff OK, cef_c3_verificar.py controle verde + 5 mutantes mortos, integracao inv ...` |
 | 05:49:11 | Bash | Write and launch Codex verifier v3 | `cd /home/ronald/saas-hasner; V=logs/CONTRATO-DE-ENTRADA-DO-FIO/verif; cat > $V/v3.q <<'Q' OBRA CONTRATO-DE-ENTRADA-DO-FIO -- PAPEL verificador, VOLTA 3 (delta da c4, hash ab86e690f). Sua v2 (anexa) reprovou por A2 (ramo legado do upload casava a pergunta NULL pelo contexto sobrescrito). A c4 (c4.diff anexo, por ultimo) tira o ramo: o upload so resolve pergunta foto_ausente com batida_origem = a ba ...` |
 | 05:48:59 | Bash | Commit c4 in copy and save delta diff | `W=/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238; cd $W; git add app/api/foto_recebida.py app/chamados/tests/cef_c3_verificar.py app/chamados/tests/test_cef_c3_integracao.py app/chamados/tests/test_cef_c3_sem_banco.py app/chamados/tests/cef_c4_censo.txt app/chamados/tests/cef_c4_entrega.txt app/chamados/tests/cef_c4_green.txt app/chamados/tests/cef_c4_mutantes.txt app/chamados/tests/cef_c ...` |
 | 05:48:50 | Bash | Check padrao term and v2 verifier pattern | `cd /home/ronald/saas-hasner; sed -n 12p app/docs/GLOSSARIO.md \| cut -c1-200; cat logs/CONTRATO-DE-ENTRADA-DO-FIO/verif/v2.sh; head -30 logs/CONTRATO-DE-ENTRADA-DO-FIO/verif/v2.q` |

@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 05:48** · publicado em **15/11/2026 05:49** (UTC-3)
+> Ultima resposta processada: **15/11/2026 05:52** · publicado em **15/11/2026 05:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 05:52 · sessao 59fa89197d9f · - · - · origem=Ronald (tmux)
+
+1. **NULL não exclui a legada da tela do admin.** Fio e modal chamam `montar_chamados_fio`; no modo admin ele carrega todos os chamados do colaborador, sem janela, e todas as perguntas das disputas abertas, sem filtro de motivo/origem. A pergunta aparece sob `chamado_destino` ou, na falta dele, `disputa.chamado`. (`app/chamados/views.py:677`; `app/chamados/views.py:889`; `app/chamados/services/fio.py:190`; `app/chamados/services/fio.py:204`; `app/chamados/services/fio.py:251`; `app/chamados/services/fio.py:255`; `app/chamados/services/fio.py:117`; `app/chamados/services/fio.py:271`)
+
+2. **Admin vê e cobra a muda; valida depois de resposta.** A legada `foto_ausente` é pergunta de escolha; o colaborador possui formulário de opções e porta de resposta que testa propriedade/vitalidade, sem exigir `batida_origem`. No modal admin, muda mostra “Aguardando resposta” e botão Cobrar; resposta não validada ganha Validar. A seleção da ação usa pergunta e a mesma âncora da listagem; a validação exige resposta, sem exigir origem. (`app/chamados/catalogo/perguntas.py:94`; `app/templates/chamados/partials/_card_atendimento.html:77`; `app/templates/chamados/partials/_card_atendimento.html:110`; `app/chamados/views.py:1239`; `app/chamados/views.py:1242`; `app/templates/chamados/partials/modal_fio.html:319`; `app/templates/chamados/partials/modal_fio.html:349`; `app/templates/chamados/partials/modal_fio.html:281`; `app/chamados/services/fio.py:633`; `app/chamados/services/fio.py:636`; `app/chamados/services/validacao.py:410`; `app/chamados/services/validacao.py:418`)
+
+3. **Não fecha automaticamente enquanto só a legada continuar viva.** `pode_fechar` exige ausência de vivas e de resposta sem veredito; `fechar` recusa viva sem porta de exceção. Regularizar pelo modal também recusa viva sem resposta. Depois de resposta e validação, o ramo escolha resolve sem precisar de batida/origem; pode então permitir o fechamento normal. (`app/chamados/models.py:1917`; `app/chamados/models.py:1961`; `app/chamados/services/fio.py:697`; `app/chamados/services/fio.py:698`; `app/chamados/services/materializacao.py:1077`; `app/chamados/services/materializacao.py:1082`; `app/chamados/services/materializacao.py:1086`)
+
+4. **`admin_encerra` é exceção existente, mas não demonstrada como botão/caminho humano de produção.** O método exige motivo e delega ao fechamento excepcional; o fechamento carimba as vivas antes de salvar a disputa. Busca textual encontrou definição e testes, sem chamador produtivo literal; chamada dinâmica: [nao verificado]. Não convém chamar essa existência isolada de porta de tela. (`app/chamados/models.py:2007`; `app/chamados/models.py:2011`; `app/chamados/models.py:2014`; `app/chamados/models.py:1982`; `app/chamados/models.py:1985`)
+
+5. **C17 tem alcance condicional, não garantia universal.** `fio_vivo` reduz o mesmo C6, sem opinião sobre origem. C17 só aceita `celula_id`; carrega perguntas vivas dessa célula e reconhece chamado da célula na fila, ou pergunta viva no app com âncora na fila. O universo do app não filtra origem NULL. Sem célula, C17 retorna `None`. Silenciamento/status/âncora/célula das perguntas 40112 e 56615: [nao verificado]. (`app/chamados/juizes.py:1516`; `app/chamados/juizes.py:1624`; `app/chamados/juizes.py:1628`; `app/chamados/juizes.py:1699`; `app/chamados/juizes.py:1702`; `app/chamados/juizes.py:1706`; `app/chamados/services/pergunta_no_app.py:52`; `app/chamados/services/pergunta_no_app.py:61`)
+
+6. **Nuance relevante do juiz publicado E3:** ele conserva chamados sem FK de célula pelo dia forte e âncoras na fila; porém pergunta de motivo fora dos marcos, como foto, entra apenas por `expor_admin`, que conserva ações de ADMIN. A muda sem decisões produz RESPONDER/COLAB e não vira instância administrativa. Se a única porta residual tiver verbo `cobrar`, não dá dono e a rota publicada pode ser `None`. Isso permite diferença entre **modal/app visíveis**, **C17 alcançável** e **`porta_da_tarefa` sem porta**, em dia cujo único trabalho seja foto muda. É mecanismo preexistente; ocorrência concreta no acervo fornecido: [nao verificado]. (`app/chamados/services/tarefa_do_dia.py:145`; `app/chamados/services/tarefa_do_dia.py:256`; `app/chamados/services/tarefa_do_dia.py:268`; `app/chamados/services/tarefa_do_dia.py:331`; `app/chamados/services/tarefa_do_dia.py:338`; `app/chamados/services/tarefa_do_dia.py:599`; `app/chamados/services/tarefa_do_dia.py:601`; `app/chamados/services/tarefa_do_dia.py:618`; `app/chamados/services/tarefa_do_dia.py:624`; `app/chamados/services/tarefa_do_dia.py:629`)
+
+7. **Nenhuma prova de fio morto invisível por ser NULL.** A condição NULL não participa dos caminhos de listagem, cobrança ou validação acima. A c4 deixa de quitar a muda pelo upload e mantém o fluxo normal de resposta e decisão; “fica com admin” precisa ser lido como **visível/cobrável e validável após resposta**, sem prometer encerramento unilateral da muda pela tela. (`app/api/foto_recebida.py:71`; `app/chamados/services/fio.py:255`; `app/templates/chamados/partials/modal_fio.html:319`; `app/templates/chamados/partials/modal_fio.html:349`; `app/chamados/services/validacao.py:418`)
+
+## 15/11 05:51 · sessao f18502481a68 · - · - · origem=Ronald (tmux)
+
+1. **Retorno 0:** ambas views continuam respondendo `status='ok'`; muda apenas `disputas_fechadas`, após a foto já ter sido anexada. Não há ramificação por esse contador. (`app/api/views.py:851`; `app/api/views.py:861`; `app/api/views.py:863`; `app/api/views_core.py:835`; `app/api/views_core.py:845`; `app/api/views_core.py:847`)
+
+2. **Contador tem significado preexistente de “disputas tratadas”:** incrementa depois da seleção/validação, ignora quantas perguntas validaram e só depois examina fechamento; pode ser 1 com disputa aberta e legada viva. (`app/api/foto_recebida.py:74`; `app/api/foto_recebida.py:77`; `app/api/foto_recebida.py:78`; `app/api/foto_recebida.py:83`; `app/chamados/tests/test_cef_c3_sem_banco.py:175`)
+
+3. **Log/SSE:** anexar foto continua registrando trilha independentemente do retorno; o publisher de batida retorna quando `created=False`. As escritas de pergunta anteriormente feitas no ramo NULL deixavam eventos de beco/outbox; retirando essa seleção, esses efeitos deixam de nascer desse ramo. (`app/ponto/registro_batida.py:309`; `app/ponto/registro_batida.py:256`; `app/ponto/registro_batida.py:265`; `app/ponto/signals.py:39`; `app/ponto/signals.py:42`; `app/chamados/signals.py:229`; `app/chamados/signals.py:253`)
+
+   Consumidor JS/TS/HTML/Java/Kotlin/Dart desse campo não foi encontrado por busca textual; dependência no APK externo: **[nao verificado]**.
+
+4. **Testes mordem a seleção:** origem exata misturada com NULL, contexto trocado A→B e motivos diferentes têm asserções específicas. Os cinco operadores têm alvo único e o runner exige falha de asserção prevista, sem `ERROR`. (`app/chamados/tests/test_cef_c3_sem_banco.py:175`; `app/chamados/tests/test_cef_c3_sem_banco.py:185`; `app/chamados/tests/test_cef_c3_sem_banco.py:199`; `app/chamados/tests/test_cef_c3_sem_banco.py:209`; `app/chamados/tests/test_cef_c3_sem_banco.py:35`; `app/chamados/tests/cef_c3_verificar.py:33`)
+
+   Executei diretamente os módulos com `PYTHONDONTWRITEBYTECODE=1`: controle 29 testes verde; mutantes morreram com 2/4/8/9/1 falhas, sem erros. Corresponde aos registros fornecidos. (`app/chamados/tests/cef_c4_green.txt:32`; `app/chamados/tests/cef_c4_mutantes.txt:63`; `app/chamados/tests/cef_c4_mutantes.txt:140`; `app/chamados/tests/cef_c4_mutantes.txt:302`; `app/chamados/tests/cef_c4_mutantes.txt:484`; `app/chamados/tests/cef_c4_mutantes.txt:525`)
+
+5. **Mutante plausível vivo:** retirei somente `fechada_em__isnull=True` da seleção, em `c1.[nome]`, mantendo tudo em memória: os 29 testes continuaram verdes. As fixtures só oferecem uma disputa aberta, portanto não demonstram exclusão de disputa fechada. Registro persistido desse ensaio: **[nao verificado]**. (`app/api/foto_recebida.py:66`; `app/chamados/tests/test_cef_c1_sem_banco.py:210`; `app/chamados/tests/test_cef_c1_sem_banco.py:226`; `app/chamados/tests/test_cef_c1_sem_banco.py:27`)
+
+6. **Limite relevante:** `_validar_pelo_dono` é substituído por double que apenas marca `viva=False`; `fio_vivo` e `pode_fechar` também são doubles. A integração C3 prepara foto com `.update()`, chama diretamente o resolver e não exercita upload completo nem porta admin. Execução ORM: **[nao verificado]**. (`app/chamados/tests/test_cef_c1_sem_banco.py:215`; `app/chamados/tests/test_cef_c1_sem_banco.py:219`; `app/chamados/tests/test_cef_c1_sem_banco.py:227`; `app/chamados/tests/test_cef_c1_sem_banco.py:230`; `app/chamados/tests/test_cef_c3_integracao.py:46`; `app/chamados/tests/test_cef_c3_integracao.py:48`)
+
+7. **Classes do delta:** ele conserva os donos de resposta/validação e os juízes de vitalidade/fechamento, removendo a derivação contexto→origem NULL. O relógio interno é preexistente. Não há piora demonstrada dos caminhos A1/`nota.py`/`renovar_contexto` pelo trecho produtivo alterado. (`app/api/foto_recebida.py:42`; `app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/api/foto_recebida.py:71`; `app/api/foto_recebida.py:81`; `app/api/foto_recebida.py:83`)
+
+## 15/11 05:51 · sessao 82681902e4d0 · - · - · origem=Ronald (tmux)
+
+1. **O resolver C4 não entrega NULL ao escritor de resposta/validação.** Seleciona exclusivamente `motivo='foto_ausente', batida_origem=batida`; sem candidata, sai antes das portas e do fechamento. (`app/api/foto_recebida.py:71`; `app/api/foto_recebida.py:72`; `app/api/foto_recebida.py:74`)
+
+2. **Há efeitos genéricos do upload capazes de carimbar/fechar acervo NULL, mas não demonstram o erro A2.** `anexar_foto` chama `anotar`, cujo `save` dispara a reconciliação do colaborador; esta inclui perguntas de qualquer motivo/origem cuja célula absolve e cujo C6 já declara mortas. Carimba `materializada_em/via`, preservando resposta/validação, e fecha a disputa se `pode_fechar`. É alcance genérico pelo C6, não casamento foto↔NULL pelo contexto. (`app/ponto/registro_batida.py:309`; `app/ponto/registro_batida.py:256`; `app/ponto/signals.py:206`; `app/ponto/signals.py:215`; `app/chamados/reconciliador.py:1433`; `app/chamados/reconciliador.py:628`; `app/chamados/reconciliador.py:662`; `app/chamados/reconciliador.py:596`; `app/chamados/reconciliador.py:612`)
+
+   **Contraexemplo de legada viva antes do upload que morra apenas pela presença da foto: [nao verificado].** O C6 pode absolver pela célula; no tipo `escolha`, o lastro lê `materializada_em`, e sem carimbo o ramo final mantém viva. (`app/chamados/juizes.py:1450`; `app/chamados/juizes.py:1465`; `app/chamados/juizes.py:709`; `app/chamados/juizes.py:1479`)
+
+3. **Outra cauda pode materializar irmã NULL previamente respondida e validada.** Validar uma pergunta exata chama o materializador da disputa inteira, que busca todas com ambos os carimbos e sem materialização; não responde/valida uma NULL pendente nesse caminho. (`app/chamados/services/validacao.py:494`; `app/chamados/services/materializacao.py:1375`; `app/chamados/services/materializacao.py:1381`)
+
+4. **Escritores persistidos de `respondida_em`/`validada_em`:**
+   
+   - Resposta humana: escreve resposta/carimbo e desfaz validação anterior. (`app/chamados/services/disputa_emissao.py:1481`; `app/chamados/services/disputa_emissao.py:1494`)
+   - Resposta automática: escreve resposta/carimbo; único chamador produtivo encontrado é o helper da foto. (`app/chamados/services/disputa_emissao.py:1673`; `app/api/foto_recebida.py:48`)
+   - Recuperação pela trilha: preenche carimbo faltante, chamada pelo comando de cura de limbo. (`app/chamados/services/disputa_emissao.py:1691`; `app/chamados/services/disputa_emissao.py:1695`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`)
+   - Validador: grava validação/autoria; devolução recusada pode zerá-las. (`app/chamados/services/validacao.py:159`; `app/chamados/services/validacao.py:224`)
+   - Porta `carimbar`, com texto e opção `resposta`: preenche os carimbos ausentes; chamada pelo materializador e S128. (`app/chamados/models.py:3213`; `app/chamados/models.py:3218`; `app/chamados/services/materializacao.py:1283`; `app/chamados/services/disputa_emissao.py:2007`)
+   - Reabertura e ressuscitação: zeram carimbos pela porta de lote. (`app/chamados/services/disputa_emissao.py:1609`; `app/chamados/services/disputa_emissao.py:1648`; `app/chamados/models.py:1613`; `app/chamados/models.py:3363`)
+   - Nascimento: recebe assinaturas em `**campos`, persiste e registra os atos. (`app/chamados/models.py:3097`; `app/chamados/models.py:3100`; `app/chamados/models.py:3102`)
+
+   As atribuições em cópia de simulação e restauração da memória não constituem escritores persistidos independentes. (`app/chamados/models.py:1541`; `app/chamados/models.py:1554`; `app/chamados/models.py:3242`)
+
+5. **Legada ainda viva impede fechamento normal.** `pode_fechar` exige ausência de resposta sem veredito e de fio vivo; `fechar` recusa vivas sem exceção nomeada. Admin pode encerrar com motivo, carimbando identidade `admin_decidiu`; esse ato não exige origem preenchida e não escreve resposta/validação. (`app/chamados/models.py:1917`; `app/chamados/models.py:1961`; `app/chamados/models.py:1982`; `app/chamados/models.py:2007`; `app/chamados/models.py:3147`)
+
+**Nenhum novo caminho de quitação NULL por contexto da foto foi demonstrado; o caminho incorreto A2 foi retirado.** (`app/api/foto_recebida.py:71`)
 
 ## 15/11 05:48 · sessao aa3076601e72 · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
 
@@ -423,192 +485,4 @@ Há uma nuance: depois da escrita manual, a fixture cria a justificativa aprovad
 
 A prova de execução ORM nesta verificação é **[nao verificado]**.
 
-## 15/11 03:51 · sessao 41ee8830bc04 · BATIDA-DEDUP-RETRATADA · verificador · origem=Code
-
-Referências relativas a `app/`.
-
-1. **PROCEDE o fechamento das três lacunas.** Os mutantes são os mesmos descritos no v3: acrescentar `sequencia=1`, condicionar a marca a `timestamp.second == 0` e remover a ordenação da oposta na triagem. Existem controles verdes separados. Reexecutei C1–C4: **37 testes OK**. (`ponto/tests/test_dedup_retratada_c4.py:47`, `:55`, `:75`, `:83`, `:100`, `:106`)
-
-   Não encontrei passagem vazia: `SITIOS` contém as três cascas; os mapas alterados são lidos ao compilar a porta e os trechos reais das cascas. As mortes ocorreram nas verificações esperadas: porta indevidamente chamada, efeito `ordem` ausente e id1 apresentado em vez de id2. O executor usa ORM e emissores simulados; não certifica HTTP/SQL. (`ponto/tests/test_dedup_retratada_c1.py:20`; `ponto/tests/test_dedup_retratada_c2.py:77`, `:109`, `:132`; `ponto/tests/test_dedup_retratada_c4.py:43`, `:68`, `:97`)
-
-2. **NÃO PROCEDE classificar esse sítio como novo juiz E/S.** A comparação escolhe somente o rótulo usado na mensagem; criação/reuso é decidido pela marca da porta. (`ponto/services/resposta_batida.py:14`, `:20`, `:27`)
-
-   Quem lê a allowlist é `NoRawTipoJudgmentContract`: ela tolera **até uma comparação detectada no arquivo inteiro**, sem vincular a permissão à linha ou conferir se continua sendo exibição. Portanto, a exceção é mais ampla que o comentário. (`ponto/tests/test_contract_no_raw_tipo_judgment.py:24`, `:48`, `:73`)
-
-   Há alternativa sem ampliar a allowlist: `batida.get_tipo_display()`, baseado nas escolhas do campo. Atenção à redação: o catálogo fornece **“Saida”**, enquanto o helper escreve **“Saída”**. (`ponto/models.py:9`, `:24`; `ponto/services/resposta_batida.py:20`)
-
-3. **PROCEDE o registro das linhas atuais; equivalência histórica completa `[nao verificado]`.** O censo reexecutado encontrou precisamente `719` e `713`, ambas na expressão `data_turno=_tzc9.localdate(batida.timestamp).isoformat()`, no ramo de desvio leve. A catraca de linhas passou. (`api/views.py:719`; `api/views_core.py:713`; `core/tests/test_medida_turno_do_par.py:256`, `:549`)
-
-   Isso confirma as ocorrências atuais, mas a catraca não compara expressões históricas nem consulta Git. A prova direta de que são as mesmas derivações de `880331a8c`, com deslocamento líquido de três linhas, permanece **`[nao verificado]`**. (`core/tests/test_medida_turno_do_par.py:17`, `:550`)
-
-4. **NÃO PROCEDE dizer que a corrida SQL desapareceu do relato.** Continua explicitamente registrada como preexistente, “listado sem cura”; os dois `create` permanecem sem captura diante da unicidade colaborador/timestamp. Encaminhamento operacional posterior: **`[nao verificado]`**. (`ponto/tests/dedup_retratada_c3_entrega.txt:163`; `ponto/registro_batida.py:152`, `:158`; `ponto/models.py:106`)
-
-**REPROVADO para seguir ao opus final:** falta comprovar a equivalência histórica solicitada no item 3; os testes atuais não fornecem essa prova. (`core/tests/test_medida_turno_do_par.py:17`, `:550`)
-
-## 15/11 03:39 · sessao 0556b8c85746 · E3-RESTO-R3 · leitura · origem=Code
-
-Os 16 casos se dividem em **2 FIXTURE, 11 EXPECTATIVA QUE CODIFICA UMA REGRA e 3 CONHECIDO**, conforme as cadeias abaixo. Os valores obtidos são os transcritos no `fails.txt` fornecido; reprodução própria da execução e comprovação pela história Git da c6 exata `a5ff3627f`: **[nao verificado]**. A entrega local declara essa base, mas também registra sua identidade Git como não verificada (`app/chamados/tests/e3_r3_c7_entrega.txt:2`).
-
-**Cadeia compartilhada pelos 11 casos de expectativa**
-
-Esses testes afirmam que uma resposta sob âncora **terminal** oferece modal administrativo. Isso é literal em “âncora terminal COM modal”, “inclusive terminal” e “mesmo terminal”; portanto trocar a âncora por uma viva mudaria a prova pretendida (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:79`; `app/chamados/tests/test_e4_passivo.py:8`).
-
-A cadeia aberta é:
-
-- **Identidade e estado:** as fixtures escrevem `chamado_destino`, o chamado container e `status_local`; `chamado_que_lista` lê primeiro o destino, depois o container. `resolvido` e `fechado` pertencem a `TERMINAIS` (`app/chamados/services/fio.py:116`; `app/chamados/catalogo/motor.py:30`).
-- **Resposta → ação exigível:** a carga lê as decisões E1; `_pela_decisao` lê a última resposta textual e escreve a ação `validar/admin`. Se a âncora estiver fora da fila, a ação conserva `porta=None` (`app/chamados/services/tarefa_do_dia.py:419`; `app/chamados/services/tarefa_do_dia.py:150`; `app/chamados/services/tarefa_do_dia.py:160`).
-- **Estado terminal → alimentação:** o construtor lê `status_local`, escreve `_ancoras_terminais`, e `tarefa::ler` transporta o conjunto para `alimentacao['ancoras_terminais']` (`app/chamados/services/tarefa_do_dia.py:448`; `app/chamados/services/tarefa_do_dia.py:449`; `app/chamados/services/tarefa_do_dia.py:589`).
-- **Ação → porta publicada:** `_portas_da_tarefa` exclui a validação por âncora terminal de `admin_alcancavel`. Sem outro dono, escreve `fio='nada'`, `rota=None`, `acao=None`; `porta_da_tarefa` devolve `None` para essa ausência conhecida de porta (`app/chamados/services/tarefa_do_dia.py:652`; `app/chamados/services/tarefa_do_dia.py:656`; `app/chamados/services/tarefa_do_dia.py:667`; `app/chamados/services/tarefa_do_dia.py:696`; `app/chamados/services/tarefa_do_dia.py:708`).
-
-**A c7 participa diretamente nos 11:** hunks de `chamados/services/tarefa_do_dia.py::_carga_da_tarefa_cls` — `__init__` e `tarefa::ler` — e de `::_portas_da_tarefa`, especialmente o filtro de terminais (`app/chamados/services/tarefa_do_dia.py:407`; `app/chamados/services/tarefa_do_dia.py:449`; `app/chamados/services/tarefa_do_dia.py:589`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-O aval LU-03 registrado diz **“acao direta do admin com tela = porta”**; LU-04 diz **“pergunta em marco dispensado, fora de marco ou porta None NAO da dono”**. Nenhuma dessas frases, isoladamente, declara modal sob terminal (`app/docs/CORTES.md:435`; `app/docs/CORTES.md:436`). Já o sítio da costura declara, citando O261-E F1, aval Ronald 30/10 17:3x: **“ancora terminal e fio morto -- o admin nao a ve, o colab a ve”** (`app/chamados/services/fio.py:786`; `app/chamados/services/fio.py:789`). O aval específico que autorizaria a extensão dos testes, “inclusive terminal”, permanece **[nao verificado]**.
-
-1. **`test_v8_R10_ancora_fora_do_fato_sem_acao` — FIXTURE.**
-
-   O traceback inteiro fornecido percorre `unittest/case.py:58` → `:651` → `:606` → teste `:626` → apoio `:150` → `tarefa_do_dia.py:598` → `:589`. A exceção é **`AttributeError: 'CargaDaTarefa' object has no attribute '_ancoras_terminais'`**, originada na leitura de `self._ancoras_terminais` em `app/chamados/services/tarefa_do_dia.py:589`; os fontes externos de `unittest` não foram abertos **[nao verificado]**.
-
-   A chamada falha antes das asserções: esperava-se nenhuma ação nas instâncias e `('porta_fila', (202,), {202: 'decidir'})`; não houve valor de tarefa obtido (`app/chamados/tests/test_e3_portas_tarefa.py:626`; `app/chamados/tests/test_e3_portas_tarefa.py:627`; `app/chamados/tests/test_e3_portas_tarefa.py:628`).
-
-   **Escritor/leitor:** o apoio cria a carga por `cls.__new__`, preenche seus atributos manualmente e chama `obj.tarefa`; assim contorna o construtor que escreve `_ancoras_terminais` (`app/chamados/tests/e3_v8_apoio.py:130`; `app/chamados/tests/e3_v8_apoio.py:132`; `app/chamados/tests/e3_v8_apoio.py:150`; `app/chamados/services/tarefa_do_dia.py:449`). Em produção, `carga_da_tarefa` chama o construtor normal (`app/chamados/services/tarefa_do_dia.py:711`).
-
-   **C7:** participa pelo hunk `CargaDaTarefa.tarefa::ler`, que introduziu a leitura obrigatória (`app/chamados/services/tarefa_do_dia.py:589`). **Cura:** completar a fixture com o conjunto de terminais correspondente ao cenário; aqui, conjunto vazio conserva a prova sobre âncora fora do fato, sem acrescentar terminalidade que o teste não monta. A fixture sintética irmã já recebeu exatamente essa inicialização na c7 (`app/chamados/tests/test_e3_c8b_sem_banco.py:247`).
-
-2. **`test_classe_c_passivo_entra_pela_porta_da_E1_e_2x_e_uma_linha` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_e4_passivo.py:65`: esperado conter **`-> resolvido`**, obtido **`-> segue_sem_porta`**.
-
-   **Escritor/leitor:** a fixture monta resposta sob destino `resolvido`; o comando identifica o passivo sem linha, registra a decisão E1, mede novamente o alcance e escreve `segue_sem_porta` quando o dia permanece sem porta. A impressão do comando lê esse resultado (`app/chamados/tests/test_e4_passivo.py:59`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:98`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:352`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:368`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:378`).
-
-   **Regra literal:** “VALIDAR do admin tem modal na ancora existente, mesmo terminal (LU-03)”. Afirma precisamente **terminal → porta do admin**; o filtro terminal da cadeia comum participa (`app/chamados/tests/test_e4_passivo.py:8`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-3. **`test_MORDE_dry_nao_escreve` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:74`: esperado **`0 pergunta(s) em 0 pai(s)`**, obtido **`1 pergunta(s) em 1 pai(s)`**.
-
-   **Escritor/leitor:** `_beco` monta a âncora terminal; `_pai` escreve pai `aberto`. O leitor C11 admite o dia quando `porta_da_tarefa` é `None`, escreve sua assinatura, e o comando agrupa as perguntas por pai e imprime as contagens (`app/chamados/tests/test_f3_beco1_reata_limbo.py:28`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:38`; `app/escala/services/cadastro_realidade.py:472`; `app/escala/services/cadastro_realidade.py:515`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:68`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:74`).
-
-   **Regra:** terminal COM modal, logo nenhum candidato C11. A falha é na seleção; o comando retorna no ramo DRY antes da escrita de destinos (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:90`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
-
-4. **`test_MORDE_pai_cujo_silencio_ja_venceu_volta_a_fila_e_reata` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:160`: esperado **`com pai LIMBO vivo: 0 pergunta(s)`**, obtido **`1 pergunta(s) em 1 pai(s)`**, seguido de **`{"reatada": 1}`**.
-
-   **Escritor/leitor:** o teste escreve `silenciado_ate` no passado; a fila volta a admitir o pai. O comando lê a assinatura C11, agrupa a pergunta, chama a reata e imprime seu resultado (`app/chamados/tests/test_f3_beco1_reata_limbo.py:158`; `app/chamados/services/painel.py:169`; `app/chamados/services/painel.py:188`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:68`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:118`).
-
-   A reata efetiva passa por `reatar_perguntas_ao_limbo` e pela porta que atribui/salva `chamado_destino` (`app/chamados/services/limbo_folgas.py:239`; `app/chamados/services/limbo_folgas.py:245`; `app/chamados/services/fio.py:964`). Apesar do nome histórico, a asserção atual espera **nenhum candidato**, pela regra terminal COM modal; a c7 participa nessa seleção (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:160`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-5. **`test_MORDE_sem_pai_fica_na_lista_e_nenhum_pai_nasce` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:84`: esperava ausência de **`SEM PAI:`**, obtida presença dessa linha com uma pergunta.
-
-   **Escritor/leitor:** o teste monta o beco sem criar pai; C11 escreve a assinatura sem `pai_limbo`; o comando a coloca em `sem_pai` e imprime a mensagem (`app/chamados/tests/test_f3_beco1_reata_limbo.py:80`; `app/escala/services/cadastro_realidade.py:518`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:71`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:83`).
-
-   **Regra literal:** “a ancora existente oferece o modal”; junto do wrapper terminal, afirma terminal → admin. A presença da mensagem não demonstra nascimento de pai; a asserção que conferiria a contagem de chamados vem depois da falha (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:85`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:87`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
-
-6. **`test_RED_apply_reata_ao_pai_e_o_dia_sai_do_beco` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:55`: esperado **`[]`**, obtida uma assinatura C11 com pergunta `342`, âncora terminal `205` e pai `206`.
-
-   **Escritor/leitor:** `_c11` chama o leitor de produção; este lê a ausência de porta e escreve a assinatura com `pai_limbo`, perguntas e detalhe (`app/chamados/tests/test_f3_beco1_reata_limbo.py:45`; `app/escala/services/cadastro_realidade.py:472`; `app/escala/services/cadastro_realidade.py:515`; `app/escala/services/cadastro_realidade.py:520`).
-
-   **Regra literal:** “a ancora terminal abre o modal; nao seleciona reata”. Afirma terminal → admin. A falha ocorre **antes** da chamada `--apply`; esse traceback não demonstra resultado de reata (`app/chamados/tests/test_f3_beco1_reata_limbo.py:55`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:58`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
-
-7. **`test_RED_pai_silenciado_DEPOIS_da_selecao_nao_recebe_reata` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:146`: esperava ausência de **`pai saiu da fila antes da costura`**, obtida contagem `1` dessa recusa.
-
-   **Escritor/leitor:** o mock escreve silêncio futuro depois de gravar a reversão; o comando consulta novamente a fila sob trava, encontra o pai ausente e escreve a recusa (`app/chamados/tests/test_f3_beco1_reata_limbo.py:139`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:141`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:113`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:115`).
-
-   Há duas regras: a docstring exige **“A fila tem de ser perguntada de novo sob a trava do pai”**; a asserção que falhou exige **“LU-03: nenhum candidato”**, pela premissa terminal COM modal. O dado mostra a recusa prevista pela primeira; a divergência está na segunda, atingida pela c7 (`app/chamados/tests/test_f3_beco1_reata_limbo.py:127`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:146`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:29`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-8. **`test_RED_pai_silenciado_fora_da_fila_nao_recebe_reata` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/chamados/tests/test_f3_beco1_reata_limbo.py:120`: esperava ausência de **`PAI FORA DA FILA:`**, obtida uma linha com pai e uma pergunta.
-
-   **Escritor/leitor:** o teste escreve silêncio futuro; o comando lê a fila, separa a assinatura em `fora_da_fila` e imprime a mensagem (`app/chamados/tests/test_f3_beco1_reata_limbo.py:114`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:59`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:69`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:89`).
-
-   O aval próprio citado é **“reata SO a pai LIMBO vivo NA FILA”**, Ronald 05/11 13:0x; a falha atual exige **nenhuma seleção**, pela outra regra, terminal COM modal. A mensagem observada não prova reata ao pai silenciado (`app/chamados/tests/test_f3_beco1_reata_limbo.py:103`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:120`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:29`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
-
-9. **`test_ancora_terminal_com_modal_NAO_e_C11` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-   Falha em `app/escala/tests/test_f3_beco1_folga_na_lista.py:72`: esperado **`('admin', 'porta_acao', 'validar')`**, obtido **`('nada', None, None)`**.
-
-   **Escritor/leitor:** a fixture escreve destino `resolvido`, resposta textual anterior à leitura, registra E1 e recarimba por último a ata conhecida. O teste chama diretamente `tarefa_do_dia`, antes da leitura da lista C11 (`app/escala/tests/test_f3_beco1_folga_na_lista.py:29`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:36`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:70`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:93`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:97`; `app/escala/tests/test_f3_beco1_folga_na_lista.py:107`).
-
-   **Regra literal:** “COM modal (LU-03), inclusive terminal”. Aqui a expectativa terminal → admin está isolada de qualquer pai ou reata; a c7 a altera diretamente (`app/escala/tests/test_f3_beco1_folga_na_lista.py:79`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-10. **`test_MORDE_ricardo_a_folha_le_o_juiz_e_diz_nada` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-    Falha em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:139`: esperado **`admin`**, obtido **`nada`**.
-
-    **Escritor/leitor:** `_ricardo` escreve destino `fechado`, container `resolvido` e resposta textual com E1. `_fio_da_folha` chama a carga e o leitor reais; a Folha lê a porta publicada e devolve `FIO_SEM_PORTA='nada'` quando ela é `None` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:90`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:97`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:127`; `app/folha/fora_da_folha.py:72`; `app/folha/fora_da_folha.py:89`; `app/chamados/juizes.py:1652`).
-
-    **Regra literal:** “LU-03: a Folha le admin, cuja tela e o modal da ancora existente”. Nessa fixture, “existente” é terminal; portanto afirma terminal → admin, atingido pela c7 (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:137`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-11. **`test_MORDE_ricardo_folha_e_vigia_dizem_a_MESMA_coisa` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-    Falha em `app/chamados/tests/test_o261e_f5b_juiz_porta.py:143`: esperado **`('porta_acao', '')`**, obtido **`('sem_porta', 'c')`**.
-
-    **Escritor/leitor:** usa a mesma fixture terminal de `_ricardo`; o Vigia lê a tarefa/porta e, sem rota, classifica a respondida sob terminal como causa `c`. O teste lê os índices de rota/causa de `alcance_dias` (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:116`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:121`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:142`; `app/chamados/services/vigia_fio.py:587`; `app/chamados/services/vigia_fio.py:631`; `app/chamados/services/vigia_fio.py:655`).
-
-    **Regra literal:** “LU-03: respondida ancorada tem modal”; pela fixture, terminal → admin. A asserção seguinte da Folha não foi alcançada no traceback fornecido (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:143`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:144`). Participa o filtro terminal da c7 (`app/chamados/services/tarefa_do_dia.py:656`).
-
-12. **`test_c_respondida_com_destino_FECHADO` — EXPECTATIVA QUE CODIFICA UMA REGRA.**
-
-    Falha em `app/chamados/tests/test_o261e_f5_alcance.py:217`: esperado **`('porta_acao', 'admin')`**, obtido **`('sem_porta', 'nenhuma porta')`**.
-
-    **Escritor/leitor:** apesar do nome, o corpo escreve destino `resolvido`; o apoio monta resposta com E1 e nega a oferta de Resolver dia. O Vigia publica rota/papel, e `_rota_e_papel` lê os índices 4/7 (`app/chamados/tests/test_o261e_f5_alcance.py:80`; `app/chamados/tests/test_o261e_f5_alcance.py:103`; `app/chamados/tests/test_o261e_f5_alcance.py:113`; `app/chamados/tests/test_o261e_f5_alcance.py:138`; `app/chamados/tests/test_o261e_f5_alcance.py:214`; `app/chamados/services/vigia_fio.py:655`).
-
-    **Regra:** a própria asserção exige porta/admin sob terminal e cita LU-03; participa o filtro terminal da c7 (`app/chamados/tests/test_o261e_f5_alcance.py:217`; `app/chamados/services/tarefa_do_dia.py:656`).
-
-13. **`test_o_dia_que_acusa_diz_o_veredito_e_o_que_DESTRAVA` — FIXTURE.**
-
-    Falha em `app/folha/tests/test_haiku_fora_da_folha.py:95`: esperado grupo **`D`**, obtido **`E`**. As asserções anteriores do mesmo teste exigem e já ultrapassam `veredito='furo'`, `fio='nada'` e texto `SEM PORTA` para **01/09**; a falha é no grupo da pessoa (`app/folha/tests/test_haiku_fora_da_folha.py:91`; `app/folha/tests/test_haiku_fora_da_folha.py:92`; `app/folha/tests/test_haiku_fora_da_folha.py:94`).
-
-    **Escritores:** a fixture cria vínculo desde janeiro e somente duas células explícitas na competência: furo em 01/09, agora com ata conhecida, e trabalhou em 02/09. A janela declarada é 21/08–20/09 (`app/folha/tests/test_haiku_fora_da_folha.py:56`; `app/folha/tests/test_haiku_fora_da_folha.py:58`; `app/folha/tests/test_haiku_fora_da_folha.py:61`; `app/folha/tests/test_haiku_fora_da_folha.py:65`).
-
-    **Leitores e agregação:** o export percorre a janela inteira; dia passado sem célula, havendo vínculo, entra como `sem_celula`. A grade transporta essa ausência; a tarefa escreve `nao_sei`; a Folha lê os fios de **todos** os dias retentores e calcula o grupo (`app/folha/export.py:1264`; `app/folha/export.py:1270`; `app/escala/services/leitor_celula.py:394`; `app/chamados/services/tarefa_do_dia.py:228`; `app/folha/fora_da_folha.py:259`; `app/folha/fora_da_folha.py:283`).
-
-    Pela função `_grupo`, **E** significa que não houve fio de ação e houve pelo menos um `nao_sei`; **D** exige todos `nada`. Isso não contradiz o `nada` já conferido para 01/09. A lista exata dos outros dias dessa execução não veio no dado **[nao verificado]** (`app/folha/fora_da_folha.py:99`; `app/folha/fora_da_folha.py:109`).
-
-    **C7:** participa pelo hunk da fixture `folha/tests/test_haiku_fora_da_folha.py::_ata_conhecida_sem_porta` e `HaikuForaDaFolhaTest.setUpTestData`; a ata foi acrescentada ao furo, mas não completou a competência (`app/folha/tests/test_haiku_fora_da_folha.py:32`; `app/folha/tests/test_haiku_fora_da_folha.py:63`). O selo sem banco calcula `_grupo([fio])` de um único dia, portanto não prova esse agregado mensal (`app/chamados/tests/test_e3_r3_c7_sem_banco.py:99`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:106`).
-
-    **Cura:** montar os demais dias cobertos da competência com estado conhecido e não retentor, mantendo a prova furo/sem porta de 01/09 e trabalhou de 02/09; não trocar o esperado para E nem retirar o desconhecimento do código (`app/folha/tests/test_haiku_fora_da_folha.py:58`; `app/folha/export.py:1270`; `app/folha/fora_da_folha.py:109`).
-
-14. **`test_MORDE_pendente_curado_sai_da_lista` — CONHECIDO.**
-
-    Falha em `app/core/tests/test_contract_juiz_tela.p
-
-[truncado em 20000 de 28149 caracteres]
-
-## 15/11 03:35 · sessao 7683d0944868 · - · - · origem=Ronald (tmux)
-
-Há **6 FAILs** no arquivo de reata e **1 FAIL** no arquivo de escala; os sete são **EXPECTATIVA QUE CODIFICA UMA REGRA**, porque o estado terminal é premissa deliberada e os testes declaram que ele oferece modal, inclusive literalmente “âncora terminal COM modal” e “inclusive terminal”. Não são fixtures incompletas sob a prova que hoje afirmam. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:28`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:76`)
-
-A regra literal que os sete carregam é **“validar sob âncora TERMINAL é porta do admin”**, derivada pelos testes de **LU-03**; LU-03 registrada diz “ação direta do admin com tela = porta”, sem dizer nessa linha que terminal tem tela. LU-04 registrada diz “pergunta em marco dispensado, fora de marco ou porta None NAO da dono”. Portanto o aval específico para a extensão “inclusive terminal” é **[nao verificado]**, e não cabe apagar essa expectativa como mera manutenção de fixture. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:79`, `app/docs/CORTES.md:435`, `app/docs/CORTES.md:436`)
-
-Cadeia comum aberta integralmente:
-
-- A fixture escreve `status_local='resolvido'` no chamado, `chamado_destino=furo`, resposta textual `17:00` com instante anterior, registra a linha E1 e, por último, escreve ata conhecida com entrada acesa e saída apagada. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:28`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:26`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:85`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:91`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:96`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:99`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:105`)
-- `fio.chamado_que_lista` lê destino, senão container; `_pela_decisao` lê a última resposta E1 e produz ação `validar/admin`, com porta inteira somente se a âncora estiver na fila. (`app/chamados/services/fio.py:116`, `app/chamados/services/tarefa_do_dia.py:150`, `app/chamados/services/tarefa_do_dia.py:157`)
-- **C7 participa diretamente**: `CargaDaTarefa.__init__` carrega o container adicional e escreve `_ancoras_terminais` pelos status do catálogo; `CargaDaTarefa.tarefa::ler` publica esse conjunto; `_portas_da_tarefa` exclui `validar` por âncora terminal do conjunto administrativo alcançável. Hunk **`chamados/services/tarefa_do_dia.py::_carga_da_tarefa_cls`** (`__init__`, `tarefa::ler`) e hunk **`::_portas_da_tarefa`**. (`app/chamados/services/tarefa_do_dia.py:407`, `app/chamados/services/tarefa_do_dia.py:443`, `app/chamados/services/tarefa_do_dia.py:449`, `app/chamados/services/tarefa_do_dia.py:589`, `app/chamados/services/tarefa_do_dia.py:652`)
-- O publicador escreve `fio='nada'`, `rota=None`, `acao=None` quando não sobra dono; `porta_da_tarefa` devolve `None` para ausência conhecida de porta. (`app/chamados/services/tarefa_do_dia.py:667`, `app/chamados/services/tarefa_do_dia.py:674`, `app/chamados/services/tarefa_do_dia.py:692`, `app/chamados/services/tarefa_do_dia.py:696`, `app/chamados/services/tarefa_do_dia.py:708`)
-- O sítio C11 lê essa porta e só prossegue se ela for `None`; lê status novamente, exige terminal ou M1 e `folga_nao_definida`, então escreve a assinatura contendo `pai_limbo` e IDs das perguntas sob terminal. (`app/escala/services/cadastro_realidade.py:466`, `app/escala/services/cadastro_realidade.py:472`, `app/escala/services/cadastro_realidade.py:477`, `app/escala/services/cadastro_realidade.py:499`, `app/escala/services/cadastro_realidade.py:503`, `app/escala/services/cadastro_realidade.py:515`)
-- O command lê a assinatura C11; particiona por pai na fila, pai fora da fila ou sem pai, e escreve as mensagens que os testes comparam. A fila lê `status_local ∈ COBRANCA` e exclui silêncio futuro; silêncio passado já voltou. (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:54`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:58`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:67`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:74`, `app/chamados/services/painel.py:169`, `app/chamados/services/painel.py:188`)
-- A escrita efetiva, quando autorizada pelo command, passa por `reatar_perguntas_ao_limbo` → `reapontar_resolvedora`, que atribui e salva `chamado_destino`; o command consulta a fila outra vez sob trava antes dessa escrita. (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:113`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:118`, `app/chamados/services/limbo_folgas.py:239`, `app/chamados/services/limbo_folgas.py:245`, `app/chamados/services/fio.py:964`)
-- A própria costura declara outra regra, O261-E F1, aval Ronald 30/10 17:3x: “pergunta VIVA da competência ABERTA não se costura em chamado TERMINAL”, explicando que “âncora terminal é fio morto — o admin não a vê”. Isso apoia o comportamento escolhido pela c7, mas não é prova de que os testes tenham recebido decisão para alterar sua regra específica. (`app/chamados/services/fio.py:785`)
-
-| Teste | Falha; esperado × obtido do dado anexado | Ramo final da cadeia / regra particular | Cura | [nao verificado]
-|---|---|---|---|
-| `test_RED_apply_reata_ao_pai_e_o_dia_sai_do_beco` | Linha 55: `[]` × assinatura C11 com pai e pergunta; o dado mostra o detalhe “âncoras terminais: 205; reata ao LIMBO-FOLGAS #206 pendente”. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:55`; valores observados: anexo do usuário, localização física **[nao verificado]**) | `_c11` chama diretamente o leitor de produção; a asserção literal é “LU-03: a âncora terminal abre o modal; não seleciona reata”. C11 passa pela ausência de porta e escreve a assinatura. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:45`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:55`, `app/escala/services/cadastro_realidade.py:472`, `app/escala/services/cadastro_realidade.py:515`) | **Nada até decisão** da regra terminal/modal; se a regra dos testes prevalecer, código do publicador; se prevalecer O261-E F1/c7, expectativas e provas de reata precisam ser separadas. (`app/chamados/services/tarefa_do_dia.py:652`, `app/chamados/services/fio.py:786`) |
-| `test_MORDE_dry_nao_escreve` | Linha 74: substring “0 pergunta(s) em 0 pai(s)” × “1 pergunta(s) em 1 pai(s)”. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:74`; observado: anexo, arquivo **[nao verificado]**) | A fixture escreve pai aberto; C11 entrega candidato; o command soma `por_pai` e imprime 1/1, antes do retorno DRY. A falha é na **seleção**, não numa escrita indevida demonstrada. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:33`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:71`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:68`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:73`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:90`) | Nada até decisão; não completar fixture retirando terminal, pois isso elimina a premissa declarada. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:29`) |
-| `test_MORDE_sem_pai_fica_na_lista_e_nenhum_pai_nasce` | Linha 84: ausência de `SEM PAI:` × presença de `SEM PAI: ... 1 pergunta(s)`. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:84`; observado: anexo, arquivo **[nao verificado]**) | Este caso não cria pai; o command lê C11, põe o dia em `sem_pai` e imprime o motivo. A regra imediata da asserção é “LU-03: sem candidato, não inventa pai”, e a asserção posterior explicita “a âncora existente oferece o modal”. A falha não demonstra pai criado. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:80`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:84`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:87`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:71`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:82`) | Nada até decisão. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:87`, `app/chamados/services/tarefa_do_dia.py:628`) |
-| `test_RED_pai_silenciado_fora_da_fila_nao_recebe_reata` | Linha 120: ausência de `PAI FORA DA FILA:` × presença de uma linha com pai e 1 pergunta. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:120`; observado: anexo, arquivo **[nao verificado]**) | O teste escreve silêncio futuro no pai; o command exclui esse pai de `na_fila`, põe a assinatura em `fora_da_fila` e imprime. Além da regra terminal/modal, há aval próprio: “reata SÓ a pai LIMBO vivo NA FILA ... os 13 pais silenciados NÃO”. O comportamento observado da mensagem conserva esse segundo aval; a falha exige que nenhum C11 tivesse sido selecionado. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:103`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:114`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:120`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:69`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:88`) | Nada até decisão terminal/modal; não remover a guarda da fila para curar a expectativa. (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:55`) |
-| `test_RED_pai_silenciado_DEPOIS_da_selecao_nao_recebe_reata` | Linha 146: ausência de “pai saiu da fila antes da costura” × contador 1 dessa recusa. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:146`; observado: anexo, arquivo **[nao verificado]**) | O mock grava reversão e então escreve silêncio futuro no pai; o command rele a fila sob trava, encontra `None` e escreve essa recusa. Docstring literal: “A fila tem de ser perguntada de novo sob a trava do pai”; a falha atual é o comentário posterior “LU-03: nenhum candidato”, não evidência de reata ao pai silenciado. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:125`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:139`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:146`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:113`) | Nada até decisão terminal/modal; preservar prova da concorrência/segunda consulta da fila. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:126`) |
-| `test_MORDE_pai_cujo_silencio_ja_venceu_volta_a_fila_e_reata` | Linha 160: “0 pergunta(s)” × “1 pergunta(s) em 1 pai(s)” e `{"reatada": 1}`. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:160`; observado: anexo, arquivo **[nao verificado]**) | O teste escreve silêncio passado; `qs_na_fila` inclui o pai; o command seleciona a pergunta C11, chama a porta e imprime `reatada`. A expectativa efetiva da linha 160 é **não haver candidato porque terminal teria modal**, apesar do nome histórico do teste falar em reatar. (`app/chamados/tests/test_f3_beco1_reata_limbo.py:156`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:158`, `app/chamados/tests/test_f3_beco1_reata_limbo.py:160`, `app/chamados/services/painel.py:169`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:118`) | Nada até decisão; se reconstituir prova de reata, ela precisa continuar usando candidato C11 legítimo. (`app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:7`) |
-| `test_ancora_terminal_com_modal_NAO_e_C11` | Linha 72: `('admin','porta_acao','validar')` × `('nada',None,None)`. (`app/escala/tests/test_f3_beco1_folga_na_lista.py:72`; observado: anexo, arquivo **[nao verificado]**) | Chamada direta ao juiz, antes da lista C11; o `setUp` fixa oferta Resolver=False. A própria asserção exige modal em terminal, sem depender de pai ou reata. (`app/escala/tests/test_f3_beco1_folga_na_lista.py:58`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:67`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:74`) | Nada até decisão terminal/modal; sítio que mudaria é `_portas_da_tarefa`, não o command C11. (`app/chamados/services/tarefa_do_dia.py:652`) |
-
-Os sete têm participação da c7 na cadeia; vermelho desses mesmos testes em c6 `a5ff3627f` é **[nao verificado]**. A cópia não expõe `.git`; a entrega c7 também declara a base como identidade via git não verificada, e não certifica suite completa. (`app/chamados/tests/e3_r3_c7_entrega.txt:2`, `app/chamados/tests/e3_r3_c7_entrega.txt:4`)
-
-_5517 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5520 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
