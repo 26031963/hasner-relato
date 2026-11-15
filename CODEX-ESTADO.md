@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 05:40** · publicado em **15/11/2026 05:43** (UTC-3)
+> Ultima resposta processada: **15/11/2026 05:48** · publicado em **15/11/2026 05:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 05:48 · sessao aa3076601e72 · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
+
+Cura aplicada: upload seleciona somente a origem exata; legadas ficam com o admin ([foto_recebida.py:60](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/api/foto_recebida.py:60)). [nao verificado]
+
+[Entrega completa](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c4_entrega.txt:53): RED com três falhas, GREEN com 29 testes, cinco mutantes mortos, censo e comandos. [nao verificado]
+
+Ruff indisponível; integração e certificação pelo Code/opus pendentes ([registro](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c4_entrega.txt:164)).
 
 ## 15/11 05:40 · sessao a8ee662a6825 · CONTRATO-DE-ENTRADA-DO-FIO · verificador · origem=Code
 
@@ -603,27 +611,4 @@ Cadeia comum aberta integralmente:
 
 Os sete têm participação da c7 na cadeia; vermelho desses mesmos testes em c6 `a5ff3627f` é **[nao verificado]**. A cópia não expõe `.git`; a entrega c7 também declara a base como identidade via git não verificada, e não certifica suite completa. (`app/chamados/tests/e3_r3_c7_entrega.txt:2`, `app/chamados/tests/e3_r3_c7_entrega.txt:4`)
 
-## 15/11 03:35 · sessao c0289a9b8b79 · - · - · origem=Ronald (tmux)
-
-Os quatro casos classificam-se como **EXPECTATIVA QUE CODIFICA UMA REGRA**: esperam porta administrativa para resposta sob âncora terminal; a c7 participa por `_carga_da_tarefa_cls` (carrega/escreve/transmite terminais) e `_portas_da_tarefa` (exclui essa âncora de `admin_alcancavel`). A regra declarada hoje pelo sítio exige âncora não terminal. (`app/chamados/services/tarefa_do_dia.py:407`, `:443`, `:449`, `:589`, `:628`, `:652`.)
-
-O aval LU-03 citado pelos testes diz literalmente **“acao direta do admin com tela = porta; baldes do vigia leem o juiz”**; não explicita que terminal tem tela. LU-04 diz **“pergunta em marco dispensado, fora de marco ou porta None NAO da dono”**. A afirmação explícita de terminal ter modal está nos testes, enquanto o contrato de produção O261-E F1 diz **“ancora terminal e fio morto -- o admin nao a ve, o colab a ve”**, citando aval Ronald de 30/10 17:3x. (`app/docs/CORTES.md:435`, `:436`; `app/chamados/tests/test_e4_passivo.py:5`; `app/chamados/services/fio.py:786`, `:789`.)
-
-**Cadeia comum aberta**
-
-- A identidade da âncora é escrita nas fixtures como `chamado_destino`/`disputa.chamado`; `chamado_que_lista` lê primeiro destino e depois container. `resolvido` e `fechado` pertencem a `TERMINAIS`. (`app/chamados/tests/test_e4_passivo.py:35`, `:45`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:75`, `:82`, `:86`; `app/chamados/tests/test_o261e_f5_alcance.py:94`, `:105`; `app/chamados/services/fio.py:117`; `app/chamados/catalogo/motor.py:30`.)
-- A carga lê as perguntas e a sequência E1, escreve `_ancoras_terminais` pelo `status_local`, escreve `_fila` pelo juiz `qs_na_fila` e transporta terminais para `_portas`. (`app/chamados/services/tarefa_do_dia.py:404`, `:419`, `:449`, `:450`, `:589`.)
-- `_pela_decisao` lê a última RESPOSTA textual e produz `validar/admin`; a porta da ação fica `None` quando a âncora não está na fila. `_tarefa_pura` copia ação/razão para a instância. (`app/chamados/services/tarefa_do_dia.py:150`, `:151`, `:157`, `:160`, `:330`, `:339`.)
-- A c7 exclui a âncora terminal de `admin_alcancavel`; a projeção escreve `fio='nada'`, `rota=None` quando não há outro dono; `porta_da_tarefa` devolve `None` para ausência conhecida de porta. (`app/chamados/services/tarefa_do_dia.py:652`, `:656`, `:667`, `:674`, `:696`, `:708`.)
-- A Folha lê a tarefa por `_porta`, e `_fio_da_porta(None)` devolve `FIO_SEM_PORTA`, definido como `'nada'`. O Vigia lê a mesma projeção; sem rota, pergunta respondida sob terminal recebe causa `c`, rota `sem_porta`, papel `nenhuma porta`. (`app/folha/fora_da_folha.py:65`, `:72`, `:81`, `:89`; `app/chamados/juizes.py:1652`; `app/chamados/services/vigia_fio.py:587`, `:589`, `:631`, `:655`, `:161`.)
-
-| Teste | Falha: esperado × obtido | Escritor/leituras particulares e regra | [nao verificado]
-|---|---|---|
-| `test_classe_c_passivo_entra_pela_porta_da_E1_e_2x_e_uma_linha` | linha 65 exige `-> resolvido`; dado raspado obtém `-> segue_sem_porta`. (`app/chamados/tests/test_e4_passivo.py:65`; obtido: anexo `fails.txt` fornecido, [nao verificado] por execução própria.) | A fixture escreve destino `resolvido`, resposta `07:00` e carimbo, sem sequência inicial. O comando lê `passivo_sem_linha`, escolhe `registrar_decisao`; chama a porta E1 que escreve a RESPOSTA; mede o alcance depois; escreve `SEGUE` se a célula continua no conjunto sem porta. A linha impressa lê esse resultado. (`app/chamados/tests/test_e4_passivo.py:59`, `:60`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:98`, `:141`, `:352`, `:368`, `:371`, `:378`; `app/chamados/models.py:4074`, `:4077`, `:4096`.) Regra literal: **“VALIDAR do admin tem modal na ancora existente, mesmo terminal (LU-03) -> o dia tem porta_acao”**. É precisamente a expectativa terminal/admin. (`app/chamados/tests/test_e4_passivo.py:8`.) |
-| `test_MORDE_ricardo_a_folha_le_o_juiz_e_diz_nada` | linha 139 exige `admin`; dado obtém `nada`. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:139`; obtido: anexo [nao verificado] por execução própria.) | `_ricardo` escreve destino `fechado`, container `resolvido`, resposta `07:00`; `_pergunta` registra a resposta pela E1, portanto o teste monta sequência. `_fio_da_folha` lê `_carga`/`_fio_do_dia` reais. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`, `:126`, `:127`, `:90`, `:97`.) Regra literal da docstring local: **“LU-03: a Folha le admin, cuja tela e o modal da ancora existente.”** A âncora dessa fixture é terminal; espera, portanto, terminal/admin. A docstring geral ainda descreve o contrário, **“porta None, fio 'nada', vigia sem_porta causa (c)”**. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:137`, `:125`, `:11`.) |
-| `test_MORDE_ricardo_folha_e_vigia_dizem_a_MESMA_coisa` | linha 143 exige `('porta_acao','')`; dado obtém `('sem_porta','c')`. A asserção seguinte da Folha, linha 144, não foi alcançada pelo traceback dado. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:143`, `:144`; obtido: anexo [nao verificado] por execução própria.) | Mesma escrita `_ricardo`; `_vigia` chama `censo_alcance`, seleciona a célula e lê índices 4/5 (`rota`, `causa`) de `alcance_dias`. Regra literal da asserção: **“LU-03: respondida ancorada tem modal”**; pela fixture, ancorada em terminal. (`app/chamados/tests/test_o261e_f5b_juiz_porta.py:142`, `:123`, `:116`, `:119`, `:121`, `:143`.) |
-| `test_c_respondida_com_destino_FECHADO` | linha 217 exige `('porta_acao','admin')`; dado obtém `('sem_porta','nenhuma porta')`. (`app/chamados/tests/test_o261e_f5_alcance.py:217`; obtido: anexo [nao verificado] por execução própria.) | Apesar do nome “FECHADO”, o corpo escreve `status_local='resolvido'`; `_pergunta` escreve resposta/carimbo e registra a E1. O Resolver dia está explicitamente negado na montagem. `_alc` chama o Vigia; `_rota_e_papel` lê índices 4/7. (`app/chamados/tests/test_o261e_f5_alcance.py:214`, `:215`, `:103`, `:106`, `:113`, `:80`, `:116`, `:138`, `:141`.) A própria asserção codifica porta/admin para a resposta sob terminal e cita `LU-03`; a docstring geral só declara medir “dia sem porta viva enderecavel”, não declara modal terminal. (`app/chamados/tests/test_o261e_f5_alcance.py:217`, `:6`.) |
-
-Para os quatro, uma cura que preserve a afirmação atual do teste exige **decisão sobre a regra/tela de terminal**; alterar a âncora para viva apagaria precisamente a prova que eles montam. Se o contrato terminal atual prevalecer, mudam as expectativas; se a decisão instituir modal terminal, muda o código de alcance e a tela correspondente. A autorização literal para essa segunda alternativa não foi encontrada nos avais abertos. (`app/chamados/tests/test_e4_passivo.py:8`; `app/chamados/tests/test_o261e_f5b_juiz_porta.py:125`, `:137`; `app/chamados/tests/test_o261e_f5_alcance.py:214`, `:217`; `app/chamados/services/tarefa_do_dia.py:628`; `app/chamados/services/fio.py:789`; `app/docs/CORTES.md:435`.)
-
-_5516 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5517 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
