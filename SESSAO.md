@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 05:06:10.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (40.0 MB). Acoes na janela: **1257**.
+**Medido em 15/11/2026 05:11:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (40.1 MB). Acoes na janela: **1264**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:08:30 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/JUSTIFICATIVA-PAGA/c14/diff/fim ]; do /usr/bin/sleep 30; done; cat logs/JUSTIFICATIVA-PAGA/c14/diff/fim; tail -3 logs/JUSTIFICATIVA-PAGA/c14/diff/diff.txt` |
+| 05:08:29 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') L[2]='ESPERANDO: suite.sh \| pid=789453' i=next(k for k,l in enumerate(L) if l.startswith('ESTADO 05:0x')) L.insert(i,"ESTADO 05:1x JUSTIFICATIVA-PAGA opus final REPROVADO (d551ea59a): (1) DIFF de frota c8..c13 x main NAO medido (ultimo = c5, condicao FALHA col788 comp10); (2) recalcular_por_evento  ...` |
+| 05:08:16 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/JUSTIFICATIVA-PAGA/c14; mkdir -p $D/diff $D/suite; cp logs/JUSTIFICATIVA-PAGA/diff_frota/{sonda.py,comparar.py} $D/diff/; sed -i 's#^\# DIFF DE FROTA.*#\# DIFF DE FROTA JUSTIFICATIVA-PAGA c14: main 880331a8c x copia d551ea59a, sombra, somente_leitura.#' $D/diff/sonda.py cat > $D/diff/envelope.sh <<'EOF' #!/bin/bash set -uo pipefail R=/home/ronald/saas-hasner; D= ...` |
+| 05:08:06 | Bash |  | `cd /home/ronald/saas-hasner; grep -c "def periodos_justificados" app/ponto/services/efeito_ausencia.py /home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app/ponto/services/efeito_ausencia.py 2>&1; git -C /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 log --oneline -1; git -C /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 status --porcelain \| head; git log --oneline - ...` |
+| 05:07:59 | Bash |  | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/diff_frota; cat envelope.sh; head -40 sonda.py; ls -la log \| head; tail -5 diff_v3.txt` |
+| 05:07:56 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/JUSTIFICATIVA-PAGA/diff_frota/ \| head -30; ls logs/JUSTIFICATIVA-PAGA/c5/artefatos \| head` |
+| 05:07:53 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/JUSTIFICATIVA-PAGA/ \| head -40; ls logs/JUSTIFICATIVA-PAGA/c5* 2>/dev/null \| head; grep -rl "118" logs/JUSTIFICATIVA-PAGA/*/ 2>/dev/null \| head -5; bin/trava_teste.sh --quem` |
 | 05:04:43 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/CONTRATO-DE-ENTRADA-DO-FIO/c2/rc ]; do /usr/bin/sleep 30; done; cat logs/CONTRATO-DE-ENTRADA-DO-FIO/c2/rc` |
 | 05:04:39 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L[2]='ESPERANDO: codex_pergunta.sh \| pid=783282' i=next(k for k,l in enumerate(L) if l.startswith('ESTADO 04:5x')) L.insert(i,"ESTADO 05:0x CONTRATO-DE-ENTRADA-DO-FIO c2 (T4, aval T4-C10-E-DEDUP item 1) construtor Codex lancado (pid 783282, logs/CONTRATO-DE-ENTR ...` |
 | 05:04:33 | Bash |  | `cd /home/ronald/saas-hasner/app; sed -n 1,6p docs/RELATO.md \| cut -c1-250; grep -n "04:5x" docs/RELATO.md \| head -3; date +%H:%M` |
