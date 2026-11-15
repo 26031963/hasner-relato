@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 19:40** · publicado em **15/11/2026 19:40** (UTC-3)
+> Ultima resposta processada: **15/11/2026 19:42** · publicado em **15/11/2026 19:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 19:42 · sessao 0de49a4c7cf5 · E3-RESTO-R3 · leitura · origem=Code
+
+**(a) 4.2 muda a origem das empresas, a cobertura declarada e o alarme estrutural.** Hoje o vigia descobre empresas pelos retratos existentes; lavrador e frescor começam em `empresas_visiveis()`. Portanto, uma empresa visível sem foto desaparece do vigia antes de suas competências serem examinadas (`app/folha/vigia_retido_calado.py:46`, `app/folha/vigia_retido_calado.py:51`, `app/folha/management/commands/lavrar_retrato_folha.py:51`, `app/folha/retrato_folha.py:1410`).
+
+O universo passa a ser **visíveis ∩ recorte recebido × competências por empresa**. A lista nomeada de faltas já existe; falta preenchê-la também para empresas sem nenhuma foto e consumi-la como estrutural. Hoje `ALARMA_SEMPRE` contém somente `cego`, que não acusa cobertura parcial quando existe algum bloqueado (`app/folha/vigia_retido_calado.py:58`, `app/folha/vigia_retido_calado.py:89`, `app/folha/management/commands/vigiar_retido_calado.py:16`).
+
+**Chamadores e testes atingidos** [nao verificado]
+
+| Classe | Sítios |
+|---|---|
+| Produção direta | Command importa e chama `censo`: `app/folha/management/commands/vigiar_retido_calado.py:14`, `app/folha/management/commands/vigiar_retido_calado.py:33`. |
+| Produção indireta | Cron executa com `--alarme`, dependente do lavrador: `app/config/crons.py:1681`, `app/config/crons.py:1683`. |
+| Testes ORM diretos | `app/folha/tests/test_vigia_retido_calado.py:29`, `app/folha/tests/test_vigia_retido_calado.py:90`, `app/folha/tests/test_vigia_retido_calado.py:126`, `app/folha/tests/test_vigia_retido_calado.py:139`, `app/folha/tests/test_vigia_retido_calado.py:140`, `app/folha/tests/test_vigia_retido_calado.py:161`. |
+| Testes ORM pelo command | `app/folha/tests/test_vigia_retido_calado.py:62`, `app/folha/tests/test_vigia_retido_calado.py:65`, `app/folha/tests/test_vigia_retido_calado.py:67`, `app/folha/tests/test_vigia_retido_calado.py:149`; interceptação com função real em `app/folha/tests/test_vigia_retido_calado.py:148`. |
+| Testes sem banco, função real extraída | `app/chamados/tests/test_e3_r3_c4_sem_banco.py:154`, `app/chamados/tests/test_e3_r3_c4_sem_banco.py:157`, `app/chamados/tests/test_e3_r3_c5_sem_banco.py:103`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:253`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:350`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:85`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:74`. |
+| Testes negativos da assinatura | Omissão de `hoje` deve continuar recusada: `app/chamados/tests/test_e3_r3_c5_sem_banco.py:243`, `app/chamados/tests/test_e3_r3_c5_sem_banco.py:245`. |
+| Testes do command com substituto de `censo` | `app/chamados/tests/test_e3_r3_c11_sem_banco.py:275`, `app/chamados/tests/test_e3_r3_c11_sem_banco.py:281`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:317`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:321`. |
+
+Precisam de mudança ou ampliação:
+
+- **Sem foto alguma:** exigir os pares ausentes nomeados, além de `cego=1`; os casos atuais só cobram vazio/calados/cego (`app/folha/tests/test_vigia_retido_calado.py:31`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:111`).
+- **Cobertura parcial estrutural:** o teste atual aceita `--alarme` com apenas a foto 10, faltando 11; esse resultado passa a ser alarme, ou a fixture precisa completar a cobertura (`app/folha/tests/test_vigia_retido_calado.py:64`, `app/folha/tests/test_vigia_retido_calado.py:65`).
+- **Positivo preservado apesar da falta:** acrescentar a prova do alarme ao que já verifica falta nomeada e positivo conhecido (`app/folha/tests/test_vigia_retido_calado.py:186`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:103`).
+- **Visibilidade e recorte:** acrescentar visível sem foto, inativa/diagnóstica com foto, seleção mista e seleção vazia; o selo atual cobre compartilhamento das competências, sem cobrar a origem das empresas (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:127`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:133`).
+- **Infraestrutura sem banco:** adaptar os substitutos acima à consulta de empresas visíveis; na fase leitora eles oferecem essencialmente retratos e serviços auxiliares (`app/chamados/tests/test_e3_r3_c4_sem_banco.py:149`, `app/chamados/tests/test_e3_r3_c5_sem_banco.py:96`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:246`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:341`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:77`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:63`).
+- **Substituto do command:** acrescentar a saída estrutural; hoje o dict c11 só fornece três chaves, enquanto o command acessa `d[k]` (`app/chamados/tests/test_e3_r3_c11_sem_banco.py:275`, `app/folha/management/commands/vigiar_retido_calado.py:38`).
+- **Mutantes:** manter alvos vivos após refatorar o loop; os de seleção/falta dependem das expressões atuais (`app/chamados/tests/e3_r3_c16_mutantes.py:26`, `app/chamados/tests/e3_r3_c16_mutantes.py:28`).
+
+**Campos: quem escreve, quem lê e significado**
+
+4.2 pode conservar as nove chaves existentes: a mudança é de seleção e cobertura; `censo` monta um dict em memória e o devolve (`app/folha/vigia_retido_calado.py:61`, `app/folha/vigia_retido_calado.py:90`).
+
+| Campo/valor | Quem escreve → quem lê; significado |
+|---|---|
+| `--empresa` → `empresas` | Command produz IDs ou `None`; vigia lê o recorte. O lavrador já intersecta sua PK com visíveis; o vigia atual apenas filtra fotos (`app/folha/management/commands/vigiar_retido_calado.py:31`, `app/folha/vigia_retido_calado.py:47`, `app/folha/management/commands/lavrar_retrato_folha.py:53`). |
+| Empresa: `pk`, `ativa`, `cnpj`, `razao_social`, `dia_inicio_competencia` | Cadastro encaminha valores às portas `criar_empresa`/`atualizar_empresa`; elas gravam. Há também normalização de CNPJ. Visibilidade lê ativa/CNPJ e ordena razão social; janelas leem o corte (`app/colaboradores/views.py:521`, `app/colaboradores/views.py:532`, `app/colaboradores/services/estrutura.py:15`, `app/colaboradores/services/estrutura.py:21`, `app/colaboradores/services/estrutura.py:28`, `app/colaboradores/queries.py:85`, `app/ponto/janelas.py:50`). |
+| `hoje` | Command fornece o dia da borda; vigia entrega ao helper de competências, ao balde e à C5 (`app/folha/management/commands/vigiar_retido_calado.py:33`, `app/folha/vigia_retido_calado.py:55`, `app/folha/vigia_retido_calado.py:60`, `app/folha/vigia_retido_calado.py:66`). |
+| `(mes, ano)` esperado | `competencias_do_retrato` produz fins de anterior/atual, sem repetição; lavrador, frescor e vigia consomem. É competência pelo corte empresarial (`app/folha/retrato_folha.py:1380`, `app/folha/retrato_folha.py:1382`, `app/folha/management/commands/lavrar_retrato_folha.py:61`, `app/folha/retrato_folha.py:1411`, `app/folha/vigia_retido_calado.py:55`). |
+| Foto: `empresa/mes/ano/linhas/lavrado_em` | Lavrador grava por trio, com linhas e instante inicial da rodada. Vigia lê par/linhas; frescor lê também o carimbo. `lavrado_em` não seleciona o universo do vigia (`app/folha/management/commands/lavrar_retrato_folha.py:77`, `app/folha/management/commands/lavrar_retrato_folha.py:79`, `app/folha/vigia_retido_calado.py:56`, `app/folha/vigia_retido_calado.py:65`, `app/folha/retrato_folha.py:1413`). |
+| Linha: `colab/status/motivo/datas/dono/dias_sem_leitura` | `montar_linhas` escreve; porta de bloqueados lê status/motivo, dono lê fio/datas, vigia lê colaborador e presença/tamanho dos dias sem leitura. **`dono` gravado significa fio**, depois projetado em balde (`app/folha/retrato_folha.py:1237`, `app/folha/retrato_folha.py:1248`, `app/folha/retrato_folha.py:91`, `app/folha/retrato_folha.py:446`, `app/folha/retrato_folha.py:490`, `app/folha/vigia_retido_calado.py:67`, `app/folha/vigia_retido_calado.py:72`). |
+| C5: conjunto de colaboradores roteados | `colabs_nunca_bateu` produz; vigia cruza com `linha.colab`. Deve receber os IDs **efetivos** do recorte visível: hoje `None` significa todas as empresas no auxiliar. Sua janela continua anterior.início até ontem (`app/escala/services/cadastro_realidade.py:163`, `app/escala/services/cadastro_realidade.py:167`, `app/folha/vigia_retido_calado.py:60`, `app/folha/vigia_retido_calado.py:67`). |
+
+| Saída do dict | Escritor → leitor; efeito |
+|---|---|
+| `retratos` | Vigia acrescenta `(empresa,mes,ano)`; formatador conta e `cego` verifica vazio. Exclui fotos de empresas fora do universo (`app/folha/vigia_retido_calado.py:76`, `app/folha/vigia_retido_calado.py:95`, `app/folha/vigia_retido_calado.py:89`). |
+| `competencias_sem_retrato` | Vigia produz; formatador conta e nomeia. Passa a abranger empresa sem foto alguma e a alimentar o estrutural (`app/folha/vigia_retido_calado.py:58`, `app/folha/vigia_retido_calado.py:61`, `app/folha/vigia_retido_calado.py:95`, `app/folha/vigia_retido_calado.py:96`). |
+| `bloqueados/calados/roteados` | Vigia soma; formatador publica. Command lê `calados` no passivo. Unidade permanece pessoa por retrato/competência (`app/folha/vigia_retido_calado.py:16`, `app/folha/vigia_retido_calado.py:77`, `app/folha/vigia_retido_calado.py:99`, `app/folha/vigia_retido_calado.py:101`, `app/folha/vigia_retido_calado.py:102`, `app/folha/management/commands/vigiar_retido_calado.py:17`). |
+| `dias_sem_leitura_sistema` | Vigia agrega; formatador e alarme passivo leem. Positivo conhecido sobrevive; `None` permanece distinto de zero (`app/folha/vigia_retido_calado.py:88`, `app/folha/vigia_retido_calado.py:103`, `app/folha/management/commands/vigiar_retido_calado.py:17`). |
+| `linhas_sem_campo_leitura` | Vigia soma; formatador publica. Mede legado sem campo, não competência sem foto (`app/folha/vigia_retido_calado.py:74`, `app/folha/vigia_retido_calado.py:80`, `app/folha/vigia_retido_calado.py:104`). |
+| `por_empresa` | Vigia grava mês/ano e contadores; formatador lê mês/ano/bloqueados/calados/roteados. A chave é **`(empresa,ano,mes)`**, ordem diferente das duas listas; testes leem também o aninhado sem leitura (`app/folha/vigia_retido_calado.py:83`, `app/folha/vigia_retido_calado.py:98`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:309`). |
+| `cego` | Vigia calcula “sem fotos ou sem bloqueados”; formatador e estrutural atual leem. Não substitui o contador de pares ausentes (`app/folha/vigia_retido_calado.py:89`, `app/folha/vigia_retido_calado.py:102`, `app/folha/management/commands/vigiar_retido_calado.py:16`). |
+
+**Não há significado uniforme em todos os consumidores.** Frescor usa visíveis; a tela pode selecionar empresa oculta por PK; C5 com `None` usa todas. Competência automática vem da janela, mas lavra explícita e URL podem indicar outro par. O dia civil do carimbo não é o mês da competência (`app/folha/retrato_folha.py:1410`, `app/folha/views_retrato.py:161`, `app/escala/services/cadastro_realidade.py:163`, `app/folha/management/commands/lavrar_retrato_folha.py:57`, `app/folha/views_retrato.py:181`, `app/ponto/janelas.py:11`).
+
+**Destinos das saídas**
+
+| Destino | O que muda |
+|---|---|
+| Cron | Mantém `--alarme`; falta parcial passa a poder produzir rc2. Comentário “só pelo cego” precisa acompanhar o novo estrutural (`app/config/crons.py:1679`, `app/config/crons.py:1681`, `app/folha/management/commands/vigiar_retido_calado.py:41`). |
+| Placar | Não lê o dict VRC: envelope grava `exit`; placar conta `exit==2` como alarme. Muda potencialmente o valor, sem exigir nova chave no placar (`bin/cron_run.sh:13`, `app/core/management/commands/pipeline_placar.py:77`). |
+| Tela | Não consome o dict VRC: consulta fotos e frescor. Seu aviso continua eliminando empresas sem foto; 4.2 sozinho não corrige isso (`app/folha/views_retrato.py:192`, `app/folha/views_retrato.py:209`, `app/folha/views_retrato.py:210`). |
+| RELATO | É registro histórico de universo/medidas, não leitor executável. Números novos de produção: **[nao verificado]** (`app/docs/RELATO.md:4349`, `app/docs/RELATO.md:1644`). |
+| Contador de frescor | `retratos_desatualizados` permanece separado, contando também `nunca lavrado`; não recebe VRC (`app/folha/retrato_folha.py:1454`). |
+
+**Outros universos próprios**
+
+Não consigo certificar a lista **exata dentro do diff `f31a8d09e × base geral`**: comparação **[nao verificado]**. Os artefatos disponíveis identificam bases parciais diferentes, LU3 e c12 (`app/chamados/tests/e3_lu3_entrega.txt:2`, `app/chamados/tests/e3_r3_c12_entrega.txt:1`).
+
+Na cópia, além do vigia retido, permanecem:
+
+| Leitor | Seleção própria |
+|---|---|
+| Recorte de tela/PDF/raiox | PK/preferência pode escapar das visíveis; `todas` aplica a competência atual da primeira empresa; URL e navegação escolhem outros pares (`app/folha/views_retrato.py:161`, `app/folha/views_retrato.py:179`, `app/folha/views_retrato.py:181`, `app/folha/views_retrato.py:189`, `app/folha/views_retrato.py:192`). |
+| Aviso de frescor | Restringe às empresas com foto existente (`app/folha/views_retrato.py:209`, `app/folha/views_retrato.py:211`). |
+| Painel do colaborador | Empresa do colaborador cruzada com visíveis; par exato da URL (`app/colaboradores/views.py:975`, `app/colaboradores/views.py:982`). |
+| Vigia fio, alcance | Visíveis/interseção; atual e anterior somente se não entregue (`app/chamados/services/vigia_fio.py:517`, `app/chamados/services/vigia_fio.py:535`, `app/ponto/services/he_pendente_lavrado.py:223`). |
+| Vigia fio antigo / ListaDoAdmin | Antigo parte de chamados vivos com célula; lista cruza visíveis separadamente (`app/chamados/services/vigia_fio.py:290`, `app/chamados/services/vigia_fio.py:292`, `app/chamados/services/vigia_fio.py:191`). |
+| C5 subsidiária | Todas quando `None`; anterior.início até ontem (`app/escala/services/cadastro_realidade.py:163`, `app/escala/services/cadastro_realidade.py:167`). |
+| Drawer | Recompõe anterior por `janela_atual(início_atual−1 dia)` e aplica piso visual (`app/colaboradores/services/drawer.py:115`, `app/colaboradores/services/drawer.py:116`, `app/colaboradores/services/drawer.py:118`). |
+| Calendário / consulta plural | Modos civil/competência/custom escolhem períodos; consulta plural calcula a atual para excluir dias da oferta (`app/colaboradores/services/calendario.py:194`, `app/colaboradores/services/calendario.py:205`, `app/colaboradores/services/calendario.py:227`, `app/colaboradores/services/calendario.py:143`). |
+| `CargaDaTarefa._ler_exportadas` | Deriva competência de cada dia recebido (`app/chamados/services/tarefa_do_dia.py:471`, `app/chamados/services/tarefa_do_dia.py:482`). |
+| `escalas_em_limbo` | Escalas ativas e foto `FolgaDia` do mês civil; é universo diagnóstico próprio (`app/relatorios/furos.py:60`, `app/relatorios/furos.py:88`). |
+
+Calendário, drawer, vigia fio e dataset constam do diff parcial LU3 documentado; isso não prova a pertença de todos esses sítios ao diff integral solicitado (`app/chamados/tests/e3_lu3_entrega.txt:151`, `app/chamados/tests/e3_lu3_entrega.txt:163`, `app/chamados/tests/e3_lu3_entrega.txt:164`, `app/chamados/tests/e3_lu3_entrega.txt:168`).
+
+**(b) A lista decidida não equivale ao conjunto de relógios no salto 1.**
+
+| Classificação | Sítio e motivo |
+|---|---|
+| Dentro correto | `furos_espelho → escalas_em_limbo`: `localdate()` próprio no salto 1, apesar do instante/dia disponíveis na view (`app/relatorios/views.py:1519`, `app/relatorios/views.py:1520`, `app/relatorios/views.py:1554`, `app/relatorios/furos.py:59`). |
+| Falta no conjunto salto 1, mas fora expresso | PDF → `gerar_pdf_auditavel`: outro `now()`; recorte devolve somente o dia (`app/folha/views_retrato.py:245`, `app/folha/views_retrato.py:441`, `app/relatorios/pdf_base.py:133`). |
+| Falta no conjunto salto 1, mas fora expresso | Raiox → `placar_aceite`: **duas chamadas**, `now()` e `localdate()`, no ramo colab (`app/folha/views_retrato.py:511`, `app/folha/views_retrato.py:513`, `app/chamados/services/verbos.py:286`, `app/chamados/services/verbos.py:287`). |
+| Falta sintática, fallback suprimido | Calendário/drawer → `contexto_calendario`: contém `now()`, mas recebe instante nesses caminhos (`app/colaboradores/views.py:1952`, `app/colaboradores/services/drawer.py:124`, `app/colaboradores/services/calendario.py:192`). |
+| Falta sintática considerando também auxiliares do anexo | `ListaDoAdmin._carregar → lista`: `now()` no salto 1; suprimido quando `self.agora` foi fornecido (`app/chamados/services/vigia_fio.py:179`, `app/chamados/services/vigia_fio.py:194`, `app/escala/services/cadastro_realidade.py:780`). |
+| Sobra **como sítio de relógio salto 1** | `dataset_furos` não chama relógio; repassa `agora`. Seu D4 fica no salto 2. Exigir argumento continua sendo correção de contrato dentro do escopo decidido (`app/relatorios/furos.py:103`, `app/relatorios/furos.py:123`, `app/relatorios/furos.py:164`, `app/ponto/status_dia.py:253`). |
+
+Selo e docstrings não são nós de relógio; não sobram da obra por isso. O defeito do selo é concreto: conjunto de nomes elimina chamadas repetidas, e o outro helper conta alvos de atribuição. A identificação exata do rótulo “docstrings G3” permanece **[nao verificado]** (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:162`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:182`).
+
+Essas faltas descrevem a diferença para o censo; PDF e placar continuam sendo exclusões expressas da decisão recebida **[nao verificado quanto a qualquer ampliação posterior do escopo]**.
+
+**(c) Contrato proposto para c17 — execução e resultados [nao verificado].**
+
+1. Visíveis ∩ `--empresa` governam vigia e C5 → teste da função real com visível/oculta, recorte misto/vazio e IDs entregues à C5 (`app/folha/vigia_retido_calado.py:46`, `app/folha/vigia_retido_calado.py:60`).
+2. Empresa visível sem foto sai com todos os pares faltantes → ampliar o caso vazio para cobrar pares e saída nomeada (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:111`, `app/folha/vigia_retido_calado.py:96`).
+3. Falta parcial é estrutural, positivo permanece → teste real do command exige rc2 sem passivo e conserva contagens conhecidas (`app/folha/tests/test_vigia_retido_calado.py:65`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:103`).
+4. Janela por empresa conserva meia-noite/relavra e exclui competência velha explícita → preservar casos comportamentais e mutantes com alvo vivo (`app/chamados/tests/test_e3_r3_c16_sem_banco.py:78`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:86`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:95`).
+5. Unidades, legado/`None` e ordem dos trios permanecem explícitos → testes de pessoa/competência, dia-colab e positivo entre empresas (`app/folha/vigia_retido_calado.py:76`, `app/folha/vigia_retido_calado.py:83`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:324`).
+6. Limbo usa o dia da borda → teste da função real junto à meia-noite, proibindo relógio interno e verificando o dia recebido (`app/relatorios/views.py:1554`, `app/relatorios/furos.py:59`).
+7. `dataset_furos` exige instante válido → omissão/`None` recusados; teste real verifica transporte ao D4/calendário e atualiza chamadores de teste (`app/relatorios/furos.py:103`, `app/relatorios/furos.py:123`, `app/relatorios/tests/test_e4_8_furos_le_a_lavra.py:92`).
+8. “Um relógio” conta chamadas → selo rejeita dois `now()`, chamada solta e alias; conversões com instante explícito não somam leitura (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:159`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:180`).
+9. Docstrings descrevem o contrato efetivo e suas exclusões → revisão G3 identificada, sem prometer fecho transitivo sem relógios (`app/folha/vigia_retido_calado.py:16`, `app/folha/retrato_folha.py:1372`, `app/relatorios/furos.py:109`).
 
 ## 15/11 19:40 · sessao dd6001c0d496 · - · - · origem=Ronald (tmux)
 
@@ -735,126 +847,4 @@ Resultados executados sem gravação:
 
 **Recomendação do recorte B/G1: REPROVA**, pela seleção incorreta do universo ainda em `app/folha/vigia_retido_calado.py:47-50`.
 
-## 15/11 18:03 · sessao 6740547b38e3 · JUIZ-RESPONDIDA · censo · origem=Code
-
-Há critérios diferentes para perguntas diferentes: a fila global usa **instante E texto**, a retenção sem veredito usa **instante OU texto**, e a entrada de `validar_pergunta` verifica **só instante**. Não escolhi entre eles. (`app/chamados/juizes.py:1725`; `app/chamados/models.py:1907`; `app/chamados/services/validacao.py:418`.)
-
-**Árvore:** examinei a cópia fornecida. Correspondência com `HEAD` de `main` e com o hash informado: **[nao verificado]**, pois não há metadados Git acessíveis. Execução dos testes: **[nao verificado]**; abaixo descrevo suas asserções estaticamente. [nao verificado]
-
-**Convenções do censo:** `I` = instante presente; `T` = texto que sobra de `(texto or '').strip()`. Onde o código usa verdade crua, igualdade com `''`, comparação de conteúdo ou intervalo temporal, isso está explicitado. (`app/chamados/juizes.py:1523`; `app/chamados/juizes.py:1531`.)
-
-Classes: **A** = `instante E texto`; **B** = `instante OU texto`; **C** = `so instante`; **D** = `so texto`; **E** = `outro`, detalhado na célula; **F** = `exibicao (so mostra)`. A classificação considera o uso dos dois campos naquele sítio; os demais filtros continuam indicados.
-
-**(a) Leitores**
-
-Os números R identificam usos separados por função/finalidade, inclusive quando reunidos numa linha. Q identifica a finalidade normalizada para a contagem final. Os delegados explícitos aparecem além do corpo que consultam.
-
-| R | Arquivo:linha — função | Campos | Classe / predicado aplicado | Pergunta/finalidade | [nao verificado]
-|---|---|---|---|---|
-| 1 | `app/api/views.py:1163`, `:1165` — `api_chamados_v2` | I,T | **F** — serializa resposta e data | Q01 Payload do app |
-| 2 | `app/api/views.py:1179` — `api_chamados_v2` | I,T, delegados | **E** — permite correção quando `not aguarda_o_colaborador(...)`, além dos outros limites | Q02 Correção/reenvio |
-| 3 | `app/api/views.py:2561`, `:2563` — `api_disputa_perguntas._item` | I,T | **F** — serialização | Q01 Payload do app |
-| 4 | `app/api/views.py:2577` — `api_disputa_perguntas` | I | **C** — `I` seleciona `respondidas` dentro do histórico | Q03 Partição pendente/histórico |
-| 5 | `app/api/views.py:2620` — `api_disputa_responder` | I | **C** — `ja_respondida = I` | Q02 Correção/reenvio |
-| 6 | `app/api/views.py:2637` — `api_disputa_responder` | I | **F** — devolve instante gravado | Q01 Payload do app |
-| 7 | `app/api/views_mensageria.py:567`, `:569`, `:570` — `_item_validar` | I,T | **F** — resposta, data e dias de espera | Q04 Fila de validação |
-| 8 | `app/chamados/canal.py:65` — `perguntas_mudas_com_resposta` | T | **D** — SQL `resposta_colab=''`, sem trim | Q05 Resposta encontrada no fio |
-| 9 | `app/chamados/juizes.py:351`, `:363` — `_slot_esperado` | I,T | **E** — rejeita resposta posterior ao instante consultado; interpreta `data_hora` ou delega ao plantio | Q06 Slot/materialização |
-| 10 | `app/chamados/juizes.py:855`, `:856` — `_chave_memo_pv` | I,T | **E** — valores integram chave de memo; `getattr` literal | Q07 Cache/invalidação — técnica |
-| 11 | `app/chamados/juizes.py:1359`, `:1371`, `:1376` — `_resposta_concorda_com_a_luz` | T | **E** — parse da hora e concordância classe A com luz do marco | Q08 Vitalidade |
-| 12 | `app/chamados/juizes.py:1388`, `:1393` — `projecao_temporal_da_pergunta` | I,T | **E** — se instante posterior ao teto, projeta localmente `(None, '')` | Q09 Projeção temporal — técnica |
-| 13 | `app/chamados/juizes.py:1403`, `:1420` — `_pergunta_viva_calc` | I,T, via projeção | **A** — degrau da resposta: `I and T`; a vitalidade completa segue os demais degraus | Q08 Vitalidade |
-| 14 | `app/chamados/juizes.py:1531` — `respondida_sem_texto` | I,T | **E** — `I ∧ ¬T` | Q10 Integridade do par — técnica |
-| 15 | `app/chamados/juizes.py:1551` — `q_respondida_sem_texto` | I,T | **E** — face SQL de `I ∧ vazio(strip)`; contempla NULL | Q10 Integridade do par — técnica |
-| 16 | `app/chamados/juizes.py:1559` — `q_respondida_com_texto` | I,T | **A** — instante não nulo e regex de texto após trim | Q10 Integridade do par — técnica |
-| 17 | `app/chamados/juizes.py:1706` — `porta_alcancavel_do_dia` | I,T, delegados | **E** — exclui `respondida_sem_texto`; exige fila e presença no app | Q11 Alcance/porta |
-| 18 | `app/chamados/juizes.py:1718` — `perguntas_corrigiveis` | I | **C** — `I`, mais `pergunta_sem_lastro_ou_viva` | Q02 Correção/reenvio |
-| 19 | `app/chamados/juizes.py:1725`, `:1728` — `perguntas_respondidas_a_validar` | I,T | **A** — `q_respondida_com_texto`, `q_vivas` e confirmação Python de vitalidade | Q04 Fila de validação |
-| 20 | `app/chamados/juizes.py:1753`, `:1756` — `declarou_hora` | T | **E** — texto não vazio que não seja maiúsculo nem `[descartado...` | Q06 Slot/materialização |
-| 21–23 | `app/chamados/juizes.py:1900` — `delta_da_resposta`; `:2004` — `classificar_resposta_validacao`; `:2026` — `motivo_implausivel_validacao` | T | **E**, em cada função — interpreta conteúdo/hora, classe ou plausibilidade | Q12 Classificação da resposta |
-| 24 | `app/chamados/juizes.py:2079` — `irmas_respondidas_sem_consumo` | I,T, delegados | **B** — `sem_veredito_entre(..., ignorar_tranca=True)`; universo do crédito | Q13 Retenção por resposta sem veredito |
-| 25–26 | `app/chamados/management/commands/auditar_invariantes_chamados.py:177` — `_contraprova_i21a`; `:592` — `Command.handle`, I2 | I | **C**, em ambos — falta/presença do instante, com outros filtros | Q14 Auditoria de invariantes |
-| 27 | `app/chamados/management/commands/auditar_invariantes_chamados.py:984` — `Command.handle`, I12 | I,T, delegados | **B** — consulta `irmas_respondidas_sem_consumo` | Q14 Auditoria de invariantes |
-| 28 | `app/chamados/management/commands/auditar_invariantes_chamados.py:1105`, `:1106` — `Command.handle`, I20 | I,T | **E** — instante nulo e SQL `texto != ''`; sem trim | Q14 Auditoria de invariantes |
-| 29 | `app/chamados/management/commands/auditar_invariantes_chamados.py:1572`, `:1575` — `Command.handle`, I21 | I,T | **A** — instante presente e SQL `texto != ''`; sem trim; não validada/materializada | Q14 Auditoria de invariantes |
-| 30 | `app/chamados/management/commands/auditar_invariantes_chamados.py:1603` — `Command.handle`, C2 | I | **C** — instante nulo | Q14 Auditoria de invariantes |
-| 31 | `app/chamados/management/commands/auditar_invariantes_chamados.py:1655` — `Command.handle`, F1 | T | **D** — existência de texto após strip interrompe o ramo | Q14 Auditoria de invariantes |
-| 32 | `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`, `:60` — `linhas_a_criar` | I,T | **E** — `I OU validada_em`; carrega o par por `.only()` e delega reconstrução | Q15 Preservação/recomposição da trilha |
-| 33 | `app/chamados/management/commands/backfill_decisoes_pergunta.py:326` — `aplicar` | T | **E** — copia texto para ato `SILENCIO` | Q15 Preservação/recomposição da trilha |
-| 34 | `app/chamados/management/commands/backfill_decisoes_pergunta.py:504`, `:506` — `Command.handle` | T | **D** — `.only()` fornece texto à eleição de canônica | Q16 Deduplicação/mérito |
-| 35 | `app/chamados/management/commands/curar_perguntas_em_limbo.py:32` — `nota_da_resposta` | T | **E** — procura no followup o conteúdo literal da resposta, após strip | Q17 Diagnóstico/cura de limbo |
-| 36 | `app/chamados/management/commands/curar_perguntas_em_limbo.py:46`, `:69` — `Command.handle` | I,T | **E** — instante nulo e SQL `texto != ''`; limpeza mantém filtro de instante nulo | Q17 Diagnóstico/cura de limbo |
-| 37 | `app/chamados/management/commands/dedup_perguntas_fato.py:75` — `Command.handle` | T | **D** — texto após strip | Q16 Deduplicação/mérito |
-| 38 | `app/chamados/management/commands/validar_classe_a.py:54` — `Command.handle` | I,T, delegados | **B** — `respostas_sem_veredito()` | Q04 Fila de validação |
-| 39 | `app/chamados/management/commands/validar_classe_a.py:80` — `Command.handle` | T | **F** — amostra truncada no relatório do comando | Q20 Exibição da resposta |
-| 40 | `app/chamados/models.py:1533` — `ChamadoColaborador._universo_da_ressuscitacao` | T | **D** — SQL texto NULL ou `''`, sem trim | Q18 Ressuscitação |
-| 41 | `app/chamados/models.py:1610`, `:1611` — `ChamadoColaborador.ressuscitar_perguntas` | I,T | **E** — carrega par por `.only()` para preservar projeções sem linha | Q15 Preservação/recomposição da trilha |
-| 42 | `app/chamados/models.py:1907`, `:1908` — `DisputaSupervisao.sem_veredito_entre` | I,T | **B** — `I or T`; sem validação/materialização; tranca conforme parâmetro | Q13 Retenção por resposta sem veredito |
-| 43–45 | `app/chamados/models.py:1889` — `respostas_sem_veredito`; `:1917` — `pode_fechar`; `:1950` — `fechar` | I,T, delegados | **B**, nos três — consultam a mesma lista; `pode_fechar` também exige ausência de fio vivo | Q13 Retenção por resposta sem veredito |
-| 46 | `app/chamados/models.py:1990` — `DisputaSupervisao.fechar` | T | **E** — copia texto para ato `SILENCIO` | Q15 Preservação/recomposição da trilha |
-| 47 | `app/chamados/models.py:2122` — `DisputaSupervisao.remover_motivo` | T | **E** — copia texto para ato `RETRATACAO` | Q15 Preservação/recomposição da trilha |
-| 48 | `app/chamados/models.py:2922`, `:2923` — `PerguntaDisputa._nascer` | I,T | **E** — recusa nascimento com `I ∧ ¬T` | Q10 Integridade do par — técnica |
-| 49 | `app/chamados/models.py:3128`, `:3131` — `PerguntaDisputa.estado` | I | **C** — pendente/respondida pelo instante, após precedências de validação/vitalidade/materialização | Q19 Estado apresentado |
-| 50 | `app/chamados/models.py:3210`, `:3213`, `:3214` — `PerguntaDisputa.carimbar` | I,T | **E** — guarda foto anterior; só completa instante se houver texto e faltar instante | Q10 Integridade do par — técnica |
-| 51 | `app/chamados/models.py:3343`, `:3351`, `:3354` — `PerguntaDisputa.descarimbar_em_lote` | I,T | **E** — consulta metade não recebida por `.values_list()` e recusa par resultante ilegal | Q10 Integridade do par — técnica |
-| 52 | `app/chamados/models.py:3454`, `:3468` — `PerguntaDisputa.q_vivas` | I,T, delegados | **A** — degrau de resposta usa `q_respondida_com_texto`; queryset completo combina outros degraus | Q08 Vitalidade |
-| 53 | `app/chamados/models.py:3534` — `PerguntaDisputa.save` | I,T | **E** — guarda par carregado depois do save | Q10 Integridade do par — técnica |
-| 54 | `app/chamados/models.py:3555`, `:3557` — `PerguntaDisputa._par_lido` | I,T | **E** — lê par de `__dict__` somente se ambas as colunas estiverem carregadas | Q10 Integridade do par — técnica |
-| 55 | `app/chamados/models.py:3562`, `:3566` — `PerguntaDisputa._recusa_par_ilegal` | I,T | **E** — compara foto e recusa transição para `I ∧ ¬T` | Q10 Integridade do par — técnica |
-| 56 | `app/chamados/models.py:3641` — `PerguntaDisputa.respondida` | I | **C** — `respondida_em is not None` | Q19 Estado apresentado |
-| 57 | `app/chamados/models.py:3664`, `:3669`, `:3677`, `:3684`, `:3686` — `PerguntaDisputa.resposta_display` | T | **F** — resolve rótulo de posto/escala/opção ou devolve texto | Q20 Exibição da resposta |
-| 58 | `app/chamados/models.py:4067`, `:4074`, `:4077` — `DecisaoPergunta.linhas_da_projecao_sem_linha` | I,T | **C** — ato de resposta exige instante; texto é copiado, sem exigir presença; validação tem ramo próprio | Q15 Preservação/recomposição da trilha |
-| 59 | `app/chamados/reconciliador.py:365` — `lavrar_sem_turno_aberto` | T | **D** — texto após strip impede lavratura | Q21 Reconciliação de órfãs |
-| 60 | `app/chamados/reconciliador.py:448` — `retencao_da_retratacao` | I,T, delegados | **B** — irmãs sem consumo | Q13 Retenção por resposta sem veredito |
-| 61 | `app/chamados/reconciliador.py:1083` — `veredito_orfa` | T | **D** — texto após strip impede o ramo | Q21 Reconciliação de órfãs |
-| 62 | `app/chamados/reconciliador.py:1164` — `encerrar_orfas_pela_lampada` | I,T, delegados | **B** — lista sem veredito | Q13 Retenção por resposta sem veredito |
-| 63 | `app/chamados/relatorios_disputa.py:24`, `:26` — `classificar` | I,T, delegados | **E** — C7 primeiro; depois existência de viva com `¬I ∨ ¬T` distingue colaborador/supervisão | Q22 Cobrança/dono da espera |
-| 64 | `app/chamados/services/acoes_disputa.py:95` — `acao_reabrir_disputa` | I | **C** — conta instante nulo | Q02 Correção/reenvio |
-| 65 | `app/chamados/services/acoes_disputa.py:130` — `acao_regularizar_disputa` | I | **C** — alguma viva sem instante impede regularizar | Q23 Entrada da regularização |
-| 66 | `app/chamados/services/acoes_disputa.py:353`, `:359` — `acao_corrigir_resposta` | T | **E** — preserva texto anterior em nota de correção | Q15 Preservação/recomposição da trilha |
-| 67 | `app/chamados/services/becos.py:30` — `classificar` | I | **C** — instante nulo e destino não resolvido | Q21 Reconciliação de órfãs |
-| 68 | `app/chamados/services/cobranca.py:237`, `:241` — `_calados` | I,T, delegados | **E** — viva que espera texto: `¬I ∨ ¬T`; disputa aberta | Q22 Cobrança/dono da espera |
-| 69 | `app/chamados/services/competencia_trancada.py:126` — `medir` | I,T, delegados | **B** — sem veredito ignorando tranca | Q13 Retenção por resposta sem veredito |
-| 70 | `app/chamados/services/declaracao_texto.py:417` — `declarar_hora_colab` | I,T | **E** — instante verdadeiro e texto exatamente igual à hora solicitada | Q06 Slot/materialização |
-| 71 | `app/chamados/services/declaracao_texto.py:419` — `declarar_hora_colab` | I | **C** — `bool(instante)` informa reenvio ao escritor | Q02 Correção/reenvio |
-| 72 | `app/chamados/services/declaracao_texto.py:687` — `aplicar_declaracao` | I | **C** — ausência de instante dispara gravação de resposta | Q23 Entrada da regularização |
-| 73 | `app/chamados/services/disputa_emissao.py:1635`, `:1646` — `reabrir_para_correcao` | I,T | **E** — cria foto se texto OU instante OU validação OU materialização; exclui fora do fato | Q15 Preservação/recomposição da trilha |
-| 74 | `app/chamados/services/disputa_emissao.py:1663` — `responder_automaticamente` | T | **D** — texto após strip já existente impede resposta automática | Q24 Resposta automática |
-| 75 | `app/chamados/services/disputa_emissao.py:1691` — `carimbar_resposta_pela_trilha` | I,T | **E** — só age com `¬I ∧ T` | Q17 Diagnóstico/cura de limbo |
-| 76 | `app/chamados/services/disputa_emissao.py:1734` — `recobrar_questionario` | I | **C** — conta instante nulo | Q22 Cobrança/dono da espera |
-| 77 | `app/chamados/services/disputa_emissao.py:1842` — `reabrir_credor_de_pergunta_viva` | I | **C** — instante presente exclui esta porta; também exige viva | Q11 Alcance/porta |
-| 78 | `app/chamados/services/disputa_emissao.py:1860` — `reabrir_credor_de_pergunta_viva` | I,T | **E** — carga contém limbo se `¬I ∧ T` | Q17 Diagnóstico/cura de limbo |
-| 79 | `app/chamados/services/disputa_emissao.py:2000` — `_resolver_perguntas_por_chamado_resolvido` | I,T | **A** — par com texto não materializado de fato é preservado | Q13 Retenção por resposta sem veredito |
-| 80 | `app/chamados/services/disputa_emissao.py:2030` — mesma função | I,T, delegados | **B** — irmãs sem consumo protegem pai | Q13 Retenção por resposta sem veredito |
-| 81 | `app/chamados/services/disputa_emissao.py:2078` — mesma função | T | **D** — `_tem_resp = bool(strip(texto))` | Q13 Retenção por resposta sem veredito |
-| 82 | `app/chamados/services/disputa_emissao.py:2073`, `:2090` — mesma função | I | **E** — fotos antes/depois para auditoria | Q15 Preservação/recomposição da trilha |
-| 83–84 | `app/chamados/services/explicador.py:32` — `_explicar_validada`; `:79`, `:80` — `explicar_pergunta` | T | **F**, em ambos — texto compõe explicação ao usuário | Q20 Exibição da resposta |
-| 85 | `app/chamados/services/fila_por_causa.py:226` — `_gaveta_de` | I,T, delegados | **B** — existência de resposta sem veredito seleciona gaveta | Q04 Fila de validação |
-| 86 | `app/chamados/services/fio.py:174` — `aguarda_o_colaborador` | I,T, delegados | **E** — existe viva dentro do recorte `¬I ∨ ¬T` | Q22 Cobrança/dono da espera |
-| 87 | `app/chamados/services/fio.py:187` — `espera_o_texto_do_colaborador` | I,T | **E** — `¬I or respondida_sem_texto(p)`, equivalente ao recorte `¬I ∨ ¬T` | Q22 Cobrança/dono da espera |
-| 88 | `app/chamados/services/fio.py:357`, `:378` — `montar_chamados_fio` | I,T, delegados | **E** — deriva `resposta_enviada` e `todas_resp` pelos dois leitores anteriores | Q22 Cobrança/dono da espera |
-| 89 | `app/chamados/services/fio.py:698` — `processar_post_fio` | I | **C** — alguma viva sem instante impede regularização | Q23 Entrada da regularização |
-| 90–91 | `app/chamados/services/fio.py:1271` — `canonica_do_grupo`; `:1283` — `merito_perdedor` | T | **D**, em ambos — texto após strip; segundo também exige via admin | Q16 Deduplicação/mérito |
-| 92 | `app/chamados/services/fio.py:1602` — `recusa_respondida_sem_texto` | I,T | **E** — recusa `I ∧ ¬T` pelo predicado delegado | Q10 Integridade do par — técnica |
-| 93 | `app/chamados/services/foto_e4b.py:179`, `:180` — `nascimentos` | I | **E** — transição antes não nulo/depois nulo em qualquer assinatura listada | Q18 Ressuscitação |
-| 94 | `app/chamados/services/historico.py:99`, `:105`, `:106` — `_eventos_dos_chamados` | I | **C** — `getattr(p, campo)` seleciona evento pelo instante e marco `desde` | Q25 Linha do tempo |
-| 95 | `app/chamados/services/historico.py:109` — mesma função | T | **F** — texto truncado ou “sem resposta” no evento | Q25 Linha do tempo |
-| 96 | `app/chamados/services/janela_colab.py:63` — `chamados_visiveis_colab` | I,T, delegados | **A** — degrau de resposta herdado de `q_vivas`, dentro da consulta abrangente | Q11 Alcance/porta |
-| 97 | `app/chamados/services/materializacao.py:280` — `_tipo_pelo_marco` | T | **E** — converte resposta em minutos para identificar marco/tipo | Q06 Slot/materialização |
-| 98 | `app/chamados/services/materializacao.py:359`, `:373`, `:412` — `_ts_tipo_do_plantio` | T | **E** — escape/default do relógio, régua e parse da hora | Q06 Slot/materialização |
-| 99 | `app/chamados/services/materializacao.py:438` — `estado_aplicacao_pergunta` | T | **D** — exige texto após strip, além de tipo hora | Q06 Slot/materialização |
-| 100 | `app/chamados/services/materializacao.py:474` — `_declarar_ausencia_de_pergunta` | T | **E** — conteúdo da resposta determina ausência/opção | Q26 Escape/ausência/folga |
-| 101 | `app/chamados/services/materializacao.py:571` — `_materializar_ausencia_de_resposta` | T | **E** — copia texto para ato `ABSORCAO` | Q15 Preservação/recomposição da trilha |
-| 102 | `app/chamados/services/materializacao.py:633` — `perguntas_absorvidas_por` | T | **E** — SQL `resposta_colab__in=escapes` | Q26 Escape/ausência/folga |
-| 103 | `app/chamados/services/materializacao.py:674`, `:675` — `devolver_absorvidas_da_ausencia_rejeitada` | I,T | **E** — foto do estado anterior à devolução | Q15 Preservação/recomposição da trilha |
-| 104 | `app/chamados/services/materializacao.py:768` — `_reconciliar_destino_e_clones._fecha` | I,T, delegados | **B** — irmãs sem consumo impedem fecho | Q13 Retenção por resposta sem veredito |
-| 105 | `app/chamados/services/materializacao.py:835` — `_materializar_resposta_hora` | T | **D** — sem texto após strip recusa plantio | Q06 Slot/materialização |
-| 106 | `app/chamados/services/materializacao.py:1001`, `:1010` — `_materializar_resposta_data_hora` | T | **E** — parse de data/hora; conteúdo também entra no erro/auditoria | Q06 Slot/materialização |
-| 107 | `app/chamados/services/materializacao.py:1376` — `materializar_perguntas_validadas_da_disputa` | I | **C** — instante presente, validada e não materializada | Q06 Slot/materialização |
-| 108 | `app/chamados/services/painel.py:67` — `marcador_do_placar` | I | **E** — `Max('respondida_em')` para marcador | Q07 Cache/invalidação — técnica |
-| 109 | `app/chamados/services/passivo_validado.py:66`, `:83` — `_reversao_de` | I | **E** — `getattr` dirigido por `CAMPOS_REVERSAO`, serializado em ISO | Q15 Preservação/recomposição da trilha |
-| 110 | `app/chamados/services/pergunta_no_app.py:53`, `:61` — `perguntas_do_app` | I,T, delegad
-
-[truncado em 20000 de 54902 caracteres]
-
-_5729 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5730 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
