@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 19:12:44.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (93.1 MB). Acoes na janela: **1495**.
+**Medido em 15/11/2026 19:18:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (93.1 MB). Acoes na janela: **1489**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1499,9 +1499,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:24:24 | Bash | Locate JUSTIFICATIVA verifier inputs | `cd /home/ronald/saas-hasner && D=logs/JUSTIFICATIVA-PAGA && ls $D \| tr '\n' ' '; echo; ls $D/c17 $D/opus* 2>/dev/null \| tr '\n' ' '; cd /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 && git log --oneline -8 && git diff --stat a36c12d27 74ec17605 \| tail -3` |
 | 07:24:20 | Bash | Read JUSTIFICATIVA suite verdict and clean mount dirs safely | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17 && cat inteira.rc; grep -E '^(OK\|FAILED)($\| \()' inteira.log \| tail -1; grep '^Ran' inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' inteira.log \| head; W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; for d in logs media staticfiles .hypothesis .mypy_cache .ruff_cache; do [ -d "${W:?}/${d:?}" ] && rmdir "${W:?}/${d:?}";  ...` |
 | 07:22:17 | Bash | Read JUSTIFICATIVA suite verdict and clean mount dirs | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c17 && cat inteira.rc; grep -E '^(OK\|FAILED)($\| \()' inteira.log \| tail -1; grep '^Ran' inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' inteira.log \| head; W=/home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app; for d in logs media staticfiles .hypothesis .mypy_cache .ruff_cache; do [ -d $W/$d ] && rmdir $W/$d 2>&1; done; ls -a $W  ...` |
-| 07:16:32 | Bash | Check JUSTIFICATIVA suite progress | `cd /home/ronald/saas-hasner && date +%H:%M; cat logs/JUSTIFICATIVA-PAGA/c17/inteira.rc 2>/dev/null \|\| echo sem-rc; ps -p 1017257 -o pid,etime --no-headers` |
-| 07:16:27 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 07:16:16 | Bash | Drop the failing .only() on disputas and rerun on sombra | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && python3 - <<'EOF' p='logs/CONTRATO-DE-ENTRADA-DO-FIO/t4/q5_sonda.py' s=open(p).read() a=''' .select_related("colaborador", "chamado__colaborador") .only( "pk", "colaborador__empresa_id", "chamado_id", "chamado__pk", "chamado__contexto_json", "chamado__celula_id", "chamado__colaborador_id", "chamado__colaborador__empresa_id", )  ...` |
-| 07:16:03 | Bash | Run T4 sonda on sombra and show totals | `cd /home/ronald/saas-hasner && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && rm -rf $D/__pycache__ && timeout 900 bin/sonda_leitura.sh --sombra $D/q5_sonda.py > $D/q5_saida.txt 2>&1; echo rc=$?; grep -E 'TOTAL\|M2_(HOJE\|PRIMEIRO\|ULTIMO)\|PROXIMA_VIRADA\|DIAS_EXPORTADOS\|_DIVERGENTE \|ERRO\|FIM' $D/q5_saida.txt \| head -60` |
-| 07:15:58 | Bash | Spot-check Codex citations and extract sonda script | `sed -n 556,558p folha/export.py; sed -n 60,61p ponto/janelas.py; sed -n 30,31p chamados/catalogo/motor.py; cd .. && D=logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && sed -n '/^```python$/,/^```$/p' $D/q5.r \| sed '1d;$d' > $D/q5_sonda.py && python3 -m py_compile $D/q5_sonda.py && echo compila` |
-| 07:15:52 | Bash | Read Codex sonda result | `cd /home/ronald/saas-hasner/logs/CONTRATO-DE-ENTRADA-DO-FIO/t4 && cat q5.fim; tail -5 q5.log; wc -l q5.r; cat q5.r` |
