@@ -1,7 +1,80 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 00:24** · publicado em **15/11/2026 00:25** (UTC-3)
+> Ultima resposta processada: **15/11/2026 00:32** · publicado em **15/11/2026 00:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 00:32 · sessao 76caf82e94c3 · - · - · origem=Ronald (tmux)
+
+(a) O par conferido é recuperável **quando existe a auditoria correspondente**, por dados estruturados; sua existência em produção é [nao verificado]. O escritor fornece ambos os dias ao log em `app/chamados/services/validacao.py:702-707`.
+
+- Modelo: `PerguntaDisputa.data_conferida_em` é `DateTimeField(null=True, blank=True)` em `app/chamados/models.py:2536`; `data_conferida_por` é FK nullable para `auth.User`, com `SET_NULL`, em `app/chamados/models.py:2537-2540`.
+- Único escritor explícito atual dos carimbos: `conferir_data_do_fato`, atribuindo `timezone.now()` e `autor`, e salvando somente esses dois campos, em `app/chamados/services/validacao.py:699-701`. O contrato P13 declara essa unicidade em `app/core/tests/test_contract_escritores_estado.py:113-117`.
+- A view apenas verifica POST/permissão e delega; não constitui outro escritor dos campos: `app/chamados/views.py:1306-1314`.
+- A porta exige justificativa, consulta `data_do_fato_de(p)`, recusa concordância e recusa pergunta já carimbada: `app/chamados/services/validacao.py:689-698`.
+- Junto ao carimbo, solicita `LogAuditoria` com `acao='conferir_data'`, `modelo='PerguntaDisputa'`, `objeto_id=p.pk`; descrição contendo ambos os dias e justificativa; `valor_antes={'data_turno': turno.isoformat() if turno else None}` e `valor_depois={'data_evento': ev.isoformat() if ev else None, 'justificativa': just}`: `app/chamados/services/validacao.py:702-707`.
+- Os JSONs residem em `LogAuditoria.valor_antes/valor_depois`, com `objeto_id`, `usuario` e `criado_em`: `app/core/models.py:295-307`. `registrar_log` encaminha os payloads sem reconstruí-los em `app/core/auditoria.py:22-24`; `evento` os grava em `app/core/observ.py:133-138`.
+- **Carimbo não garante log:** auditoria é best-effort e engole falhas, em `app/core/auditoria.py:25-29` e `app/core/observ.py:105-139`; o save do carimbo ocorre antes da chamada de auditoria, em `app/chamados/services/validacao.py:701-702`.
+- `DecisaoPergunta` não possui ato de conferência nem colunas para esse par: vocabulário em `app/chamados/models.py:4000-4011`, campos em `app/chamados/models.py:4014-4027`. A porta de conferência não chama `DecisaoPergunta.registrar`: seu corpo está em `app/chamados/services/validacao.py:683-710`.
+- Os campos de conferência não entram em `CAMPOS_QUE_ACORDAM`, em `app/chamados/models.py:3303-3305`; por isso o receiver de outbox retorna nesse save específico, conforme `app/chamados/signals.py:257-259`.
+
+Para a sonda, buscar os logs por `(acao='conferir_data', modelo='PerguntaDisputa', objeto_id=p.pk)`, recuperar o par ordenado `(valor_depois['data_evento'], valor_antes['data_turno'])` e comparar com o par vigente. Ausência, payload inválido ou pares conflitantes devem ficar em `NAO_RECUPERAVEL`; escolher arbitrariamente o log mais recente não resolve a ambiguidade [nao verificado]. Não é possível exigir igualdade entre `LogAuditoria.criado_em` e `data_conferida_em`: o primeiro é `auto_now_add` em `app/core/models.py:307`, enquanto o segundo é calculado antes, em `app/chamados/services/validacao.py:699-702`.
+
+## 15/11 00:32 · sessao 831e9043d8e0 · - · - · origem=Ronald (tmux)
+
+O par vigente é **`(ev, turno)` devolvido por `data_do_fato_de(p)`**, e não simplesmente duas colunas da pergunta: `ev = p.data_evento`; `turno = dia_do_fato(chamado_que_lista(p), fortes=True)`; a divergência é `bool(ev and turno and ev != turno)`. (`app/chamados/services/fio.py:77-94`)
+
+- `PerguntaDisputa.data_evento` é `DateField` anulável. (`app/chamados/models.py:2501-2504`)
+- O chamado usado é `p.chamado_destino`, com fallback para `p.disputa.chamado`. (`app/chamados/services/fio.py:116-117`)
+- O dia forte desse chamado vem primeiro de **`chamado.celula.data`**; depois da chave declarada pelo catálogo, com fallback para `contexto_json['data_turno']`. Com `fortes=True`, ausência de dia forte retorna `None`, sem consultar batidas/carimbos. (`app/chamados/juizes.py:98-128`)
+- O materializador lê esse mesmo par, mas libera a divergência verificando somente se `p.data_conferida_em` está preenchida. (`app/chamados/services/materializacao.py:1197-1199`)
+- A porta de conferência lê exatamente esse par e o grava na auditoria: `valor_antes['data_turno'] = turno.isoformat()` e `valor_depois['data_evento'] = ev.isoformat()`, além da justificativa. Portanto existe uma fonte histórica possível; sua presença e integridade em produção estão **[nao verificado]**. (`app/chamados/services/validacao.py:693-707`)
+
+A partição do anexo **cabe neste pedido**: chamar `competencia_do_dia_entregue(p.data_evento, p.colaborador.empresa_id, memo)`. A função retorna `None` sem dia; nos demais casos usa a janela da empresa e o mês/ano do **fim** da janela para consultar K6. (`app/chamados/services/vigia_fio.py:855-865`; `app/chamados/models.py:2511`)
+
+- `True` → `exportada`; `False` → `aberta`; `None` → `sem_data`, preservando a parte própria do anexo. A função retorna esses três estados; o tratamento de `None` pertence ao chamador. (`app/chamados/services/vigia_fio.py:843-865`)
+- `janela_atual` respeita o corte da empresa; aceita também seu PK, consultando `dia_inicio_competencia`. (`app/ponto/janelas.py:42-63`)
+- K6 exige `ExportacaoDominio` vigente e não invalidada. “Aberta”, nessa medição, significa o resultado falso desse juiz, sem depender do estado da disputa. (`app/folha/export.py:580-594`)
+
+## 15/11 00:32 · sessao ee221ef3acda · - · - · origem=Ronald (tmux)
+
+Numeração do anexo, iniciada em `# E4c...` como linha 1:
+
+| Referência | Linha de `preparo.md` |
+|---|---:|
+| F1 | 90 |
+| F2 | 140 |
+| F3 | 208 |
+| F4 | 262 |
+| F5 | 324 |
+| F6 | 392 |
+| F7 | 438 |
+| F8 | 469 |
+| F9 | 503 |
+| `arquivos_em_voo.txt` | 93 |
+| `atos_pergunta.py` | 144 |
+| `E4A_PARQUE.txt` | 145 |
+| `test_e3_pendentes_app.py` | 441 |
+| `detalhe_local.html` | 443 |
+| `meu_atendimento.html` | 444 |
+| `efeito_ausencia.py`, `leitor_celula.py`, `motor_calculo_v2.py` | 472 |
+| `CORTES.md` | 582 |
+| `remedida.r` | 609 |
+| Autorreferência `preparo.md` | 614 |
+| TSV absolutos | 615–617 |
+
+**Correção do censo anterior:** a leitura literal acrescenta `manage.py` (`preparo.md:4`) e `logs/FIO-E0-V4-E4B/remedida.r` (`preparo.md:609`). Portanto são **87 nomes de arquivos citados = 57 alvos + 30 adicionais**, incluindo a autorreferência; **86 sem a autorreferência**. O cruzamento permanece **23**: 17 alvos + seis apoios. `preparo.md:4`, `preparo.md:20`, `preparo.md:609`, `preparo.md:614`; `diff_nomes.txt:1`.
+
+A identidade de `manage.py` é [nao verificado]: a cópia contém `app/manage.py` e `mensageria/manage.py`, e o preparo usa apenas o basename. `RELATO/TICKETS` em `preparo.md:564` não identifica caminhos inequivocamente; não somei arquivos adicionais por essa menção.
+
+## 15/11 00:31 · sessao 14c61e9af45a · E3-RESTO-R3 · construtor · origem=Code
+
+Entrega registrada com a tabela dos 42 casos, censos, RED/GREEN, comandos, mutantes e R5: [e3_r3_c5_entrega.txt](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c5_entrega.txt:1).
+
+Sem banco: **18 + 168 testes verdes; 32/32 mutantes mortos**. Permanecem **quatro falhas de cores**; ORM não foi executado. [Evidências](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c5_entrega.txt:98). [nao verificado]
+
+Autoriza acrescentar somente o token `laranja` no partial da barra? A proposta passou nos 121 testes dos leitores em memória. [Proposta concreta](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c5_entrega.txt:137). [nao verificado]
+
+A confirmação é necessária porque seu pedido proíbe editar templates. Mantive o template e os selos intactos; também preservei `config/crons.py` pela proibição inicial. [Pendências](/home/ronald/wt-codex-e3-resto-r3-231625/app/chamados/tests/e3_r3_c5_entrega.txt:140).
 
 ## 15/11 00:24 · sessao ee221ef3acda · - · - · origem=Ronald (tmux)
 
@@ -705,95 +778,4 @@ A mudança em `q_vivas` não modifica a descrição do gate de perguntas ancorad
 
 Metadado da seção 4: comparei, em memória, os hashes Git dos **4.352 blobs** de `4b75cba10` com a cópia atual: **0 ausentes e 0 divergentes**. A correspondência foi verificada por comando, sem arquivo de evidência; citação `arquivo:linha` desse resultado: **[nao verificado]**. A frase antiga sobre ausência de Git descreve a consulta anterior; a cópia atual não contém `.git`, mas o histórico está disponível em `/home/ronald/saas-hasner`. **[nao verificado]**
 
-## 15/11 00:10 · sessao 2a8a55065f75 · - · - · origem=Ronald (tmux)
-
-Nas seções 2a/2b, somente duas linhas precisam de correção:
-
-```markdown
-| A13 | `api/views.py:1969` — `api_justificativas` | `justificativa_colab` + categoria `justificativa` + VIVOS. |
-| B10 | `api/views.py:2173` — `api_abrir_chamado` | `app_colaborador` -> aberto; modulo em `api/views.py:2182`. |
-```
-
-Antes/depois:
-
-- A13: `a0bf6e78e api/views.py:1966` → `4b75cba10 api/views.py:1969`; comportamento e lookup preservados.
-- B10: `a0bf6e78e api/views.py:2170`, módulo `:2179` → `4b75cba10 api/views.py:2173`, módulo `:2182`; comportamento preservado.
-
-Commit causador: `de125d5e1befa92b8211c66e28832d3cf8728852`. O diff acrescenta uma linha em `api_chamados_v2` e duas no ramo `pode_solicitar_correcao`, deslocando as referências posteriores em três linhas. (`api/views.py:962`, `api/views.py:1171`)
-
-Inventário AST antes/depois: **19 chamadas diretas a `abrir`; 19 operacionais a `criar` mais 1 smoke**, sem nascentes adicionadas/removidas. As chamadas deslocadas são precisamente A13/B10. (`api/views.py:1969`, `api/views.py:2173`, `chamados/management/commands/smoke_chamados.py:124`)
-
-Todos os outros arquivos citados em 2a/2b permanecem sem diff; `disputa_emissao.py` muda apenas após a linha 1557, preservando A15/A16/A17. (`chamados/services/disputa_emissao.py:568`, `chamados/services/disputa_emissao.py:1104`, `chamados/services/disputa_emissao.py:1339`)
-
-Os 26 arquivos contendo as 39 chamadas foram comparados byte a byte: snapshot atual igual a `git show 4b75cba10:<arquivo>`. Resultado da comparação: nenhuma divergência. [nao verificado por arquivo:linha; verificado pela ferramenta]
-
-## 15/11 00:10 · sessao 62620665420e · - · - · origem=Ronald (tmux)
-
-Nas seções 2c e 2d, há **uma linha textual a corrigir**:
-
-Antes:
-
-```markdown
-- **Formularios:** `chamados/views.py:197` -> B17; `chamados/views.py:136` -> B18; ausencia em `ponto/views.py:2579` e `api/views.py:1842` -> A10; regularizacao em `colaboradores/views.py:2987` e `chamados/services/regularizacao_ext.py:319` -> B16.
-```
-
-Depois:
-
-```markdown
-- **Formularios:** `chamados/views.py:197` -> B17; `chamados/views.py:136` -> B18; ausencia em `ponto/views.py:2579` e `api/views.py:1845` -> A10; regularizacao em `colaboradores/views.py:2987` e `chamados/services/regularizacao_ext.py:319` -> B16.
-```
-
-Prova: `a0bf6e78e app/api/views.py:1842` e `4b75cba10 app/api/views.py:1845` contêm a mesma chamada `abrir_chamado_ausencia_colab(ausencia)`. Deslocamento de três linhas provocado por `de125d5e1befa92b8211c66e28832d3cf8728852`, que acrescentou importação em `api_chamados_v2` e ampliou uma expressão de leitura; o diff entre os hashes mostra as inserções em `app/api/views.py:962` e `app/api/views.py:1172`. Não houve alteração da chamada de nascimento.
-
-Registro sugerido para “MUDOU COM A E3”:
-
-```markdown
-- **2c, Formularios:** antes (`a0bf6e78e api/views.py:1842`): ausencia encaminhada a A10 por `abrir_chamado_ausencia_colab(ausencia)`; depois (`4b75cba10 api/views.py:1845`): mesma chamada, deslocada tres linhas. Commit que mudou: `de125d5e1` (insercoes em `api/views.py:962`, `api/views.py:1172`).
-```
-
-Todos os demais arquivos citados em 2c e 2d não apresentam diff entre os hashes, com duas exceções que **não atingem as referências dessas seções**:
-
-- `chamados/models.py`: primeiro hunk em `:1873`; referências dessas seções até `:1268` preservadas.
-- `chamados/services/disputa_emissao.py`: primeiro hunk em `:1562`; referência indireta `:662` preservada.
-
-Conferidos também os commands, `bin/r5_idempotencia_frota.py`, agendamentos em `config/crons.py`, cartório/fábrica/reconciliador/signals, auditoria/histórico/vigia e os cinco testes adicionais: nenhuma outra referência das seções 2c/2d mudou. Não escrevi arquivos nem consultei banco ou logs.
-
-## 15/11 00:10 · sessao b54ccb1c1bc0 · - · - · origem=Ronald (tmux)
-
-Nas seções atribuídas, há **2 linhas do mapa que precisam de correção de referências**:
-
-1. Antes:
-   `acao_resposta_livre` e `processar_post_fio`: destino parametrizado, conferido contra `STATUS_CHOICES`, depois julgado pela porta. (`chamados/services/acoes_chamado.py:322`, `chamados/services/acoes_chamado.py:325`, `chamados/services/fio.py:719`, `chamados/services/fio.py:722`)
-
-   Depois:
-   `acao_resposta_livre` e `processar_post_fio`: destino parametrizado, conferido contra `STATUS_CHOICES`, depois julgado pela porta. (`chamados/services/acoes_chamado.py:322`, `chamados/services/acoes_chamado.py:325`, `chamados/services/fio.py:757`, `chamados/services/fio.py:760`)
-
-   O corpo desta entrada conserva o comportamento; as referências de `fio.py` avançam 38 linhas. Commits cujas inserções anteriores ao sítio somam esse deslocamento: `de125d5e1` (+17), `513ff8077` (+1), `ae66e55af` (+3), `cb7064355` (+17). (`chamados/services/fio.py:746`, `chamados/services/fio.py:757`, `chamados/services/fio.py:760`; histórico `git show --unified=0 <commit> -- app/chamados/services/fio.py`)
-
-2. Antes:
-   Declaracao/validacao do dia: `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:319`.
-
-   Depois:
-   Declaracao/validacao do dia: `ponto/services/declarar_dia.py:206`, `chamados/services/validacao.py:321`.
-
-   A chamada `fechar_o_fio_do_dia(colab, dia, autor)` permanece igual; `f1fe1d367` acrescentou duas linhas a `ESTADOS` antes desse sítio. (`chamados/services/validacao.py:61`, `chamados/services/validacao.py:321`; histórico `git show --unified=0 f1fe1d367 -- app/chamados/services/validacao.py`)
-
-Os sítios R de `materializacao.py` permanecem exatamente em `:588` e `:777`; o diff no arquivo ocorre em `:688-689`, com duas linhas antes/depois, sem deslocar `:777`. (`chamados/services/materializacao.py:588`, `chamados/services/materializacao.py:688`, `chamados/services/materializacao.py:777`)
-
-Nenhum sítio direto novo de encerramento de `ChamadoColaborador` foi acrescentado pelo diff: mantêm-se **R=34, E=4, T=1, C=2, H=8, fechar=1**, total **50**. As nascentes alteradas acima continuam sendo a mesma H e a mesma entrada indireta. (`chamados/services/fio.py:760`, `chamados/services/validacao.py:321`; demais referências da seção “Nascentes diretas da matriz” conferidas contra a lista de arquivos alterados e os hunks de `a0bf6e78e..4b75cba10`)
-
-As demais linhas das seções de nascentes diretas, anteriores, agendamentos e entradas por evento/tela podem ser preservadas palavra por palavra: arquivos citados não mudaram ou seus sítios citados não foram atingidos nem deslocados; especificamente, `api/views.py:791` fica antes do primeiro hunk (`:962`), e os hunks de `materializacao.py` ficam entre suas duas nascentes sem alterar seus números. (`api/views.py:791`, `chamados/services/materializacao.py:588`, `chamados/services/materializacao.py:777`)
-
-## 15/11 00:09 · sessao daa9d57f14c4 · - · - · origem=Ronald (tmux)
-
-Nenhuma das 13 linhas da matriz exige correcao: os sitios citados permanecem nos mesmos numeros e corpos. Em `models.py`, o primeiro hunk esta depois da ultima referencia da matriz; em `juizes.py`, as alteracoes ficam depois do leitor citado. (`chamados/models.py:1686`, `chamados/models.py:1873`, `chamados/juizes.py:779`, `chamados/juizes.py:1531`)
-
-Preservar integralmente as linhas **#1–#13**, inclusive referencias dos testes. Os demais arquivos citados nessas linhas nao apresentam diff entre os hashes. (`chamados/catalogo/motor.py:99`, `chamados/services/competencia_trancada.py:209`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`)
-
-Recontagem:
-
-- **L1: 12 → 12**, sendo 11 pares runtime e 1 historico. (`chamados/catalogo/motor.py:99`, `chamados/catalogo/motor.py:111`, `chamados/catalogo/motor.py:114`, `chamados/catalogo/motor.py:116`, `chamados/models.py:1677`, `chamados/migrations/0039_a3_via_backfill.py:15`)
-- **L2: 4 → 4** sitios persistentes em migracoes; **0 → 0** externos no runtime, conservado o limite declarado pelo selo. (`chamados/migrations/0038_a3_registrado_backfill.py:10`, `chamados/migrations/0038_a3_registrado_backfill.py:15`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`, `chamados/tests/test_selo_status_so_pelas_portas.py:17`)
-- **L3: 2 → 2** sem saida runtime; **0 → 0** incluindo migracoes e reversas. (`chamados/catalogo/motor.py:104`, `chamados/catalogo/motor.py:106`, `chamados/catalogo/motor.py:142`, `chamados/migrations/0039_a3_via_backfill.py:24`, `chamados/migrations/0039_a3_via_backfill.py:33`)
-
-_5423 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5427 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
