@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:37:44.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (47.0 MB). Acoes na janela: **1533**.
+**Medido em 15/11/2026 07:43:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (47.1 MB). Acoes na janela: **1536**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:42:59 | Bash | Record DIFF result in RELATO and drop stale ESPERANDO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='ESPERANDO: envelope2.sh \| pid=1158723\n' assert s.count(a)==1 s=s.replace(a,'') b='ESTADO 07:3x JUSTIFICATIVA-PAGA opus final' assert s.count(b)==1 s=s.replace(b,'ESTADO 08:0x JUSTIFICATIVA-PAGA condicao (1) do opus CUMPRIDA: DIFF de frota c19 na sombra (logs/JUSTIFICATIVA-PAGA/c19diff, rc=0 0 0) main 880 ...` |
+| 07:42:49 | Bash | Check the 8 furos changes match on both sides | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c19diff && cmp <(grep '^DIFF' diff_c14depois_x_c19depois.txt) <(grep '^DIFF' diff_c14antes_x_c19antes.txt) && echo mesmos-8; grep '^DIFF' diff_c14antes_x_c19antes.txt \| cut -c1-200 \| head -3` |
+| 07:42:45 | Bash | Read final DIFF comparison | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c19diff && cat fim2; for f in diff.txt diff_c14depois_x_c19depois.txt diff_c14antes_x_c19antes.txt; do echo "== $f"; grep -vE '^DIFF ' $f; done; cat pycache_novos.txt; ls -a /home/ronald/wt-codex-justificativa-paga-o-periodo-220358/app \| grep -E '^(logs\|media\|staticfiles)$'; cmp <(grep '^DIFF' diff.txt) <(grep '^DIFF' ../c14/diff/diff.txt) &&  ...` |
 | 07:36:41 | Bash | Wait for the depois run to finish | `F=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c19diff/fim2; until [ -f $F ]; do /usr/bin/sleep 60; done; cat $F` |
 | 07:36:39 | Bash | Point RELATO ESPERANDO at envelope2 pid | `P=$(ps -eo pid,args \| grep -v grep \| grep 'envelope2.sh' \| awk '{print $1}' \| head -1); echo $P; cd /home/ronald/saas-hasner && sed -i "s#^ESPERANDO: envelope.sh \| pid=1149605#ESPERANDO: envelope2.sh \| pid=$P#" app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 07:36:32 | Bash | Add staticfiles mount point and relaunch | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c19diff && sed -i 's#mkdir -p "$W/logs" "$W/media"#mkdir -p "$W/logs" "$W/media" "$W/staticfiles"#; s#rmdir "$W/logs" "$W/media"#rmdir "$W/logs" "$W/media" "$W/staticfiles"#' envelope2.sh && grep -n staticfiles envelope2.sh && rm -f fim2 && (setsid nohup ./envelope2.sh > envelope2.log 2>&1 < /dev/null &) ; /usr/bin/sleep 3; ps -ef \| grep -v grep ...` |
