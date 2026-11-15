@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 07:26:53.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (46.8 MB). Acoes na janela: **1518**.
+**Medido em 15/11/2026 07:32:14.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (47.0 MB). Acoes na janela: **1525**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:30:08 | Bash | Wait for the fleet DIFF re-run to finish | `F=/home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c19diff/fim; until [ -f $F ]; do /usr/bin/sleep 60; done; cat $F` |
+| 07:30:04 | Bash | Fix ESPERANDO producer name and recheck hook | `cd /home/ronald/saas-hasner && sed -i 's#^ESPERANDO: c19diff/envelope.sh \| pid=1149605#ESPERANDO: envelope.sh \| pid=1149605#' app/docs/RELATO.md && python3 -c "import sys; sys.path.insert(0,'/home/ronald/saas-hasner/bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 07:30:01 | Bash | Record verdict in RELATO and point ESPERANDO at the DIFF | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='ESPERANDO: verificador opus JUSTIFICATIVA-PAGA (agente da sessao, sem pid) -- suite 1017257 terminou rc=0' assert s.count(a)==1 s=s.replace(a,'ESPERANDO: c19diff/envelope.sh \| pid=1149605') b='ESTADO 07:2x JUSTIFICATIVA-PAGA suite INTEIRA' assert s.count(b)==1 s=s.replace(b,'ESTADO 07:3x JUSTIFICATIVA-PAG ...` |
+| 07:29:53 | Bash | Get envelope pid | `pgrep -f 'c19diff/envelope.sh' \| head -1` |
+| 07:29:52 | Bash | Launch re-run of fleet DIFF on sombra for 74ec17605 | `cd /home/ronald/saas-hasner && R=/home/ronald/saas-hasner; N=$R/logs/JUSTIFICATIVA-PAGA/c19diff; mkdir -p "$N" && cp logs/JUSTIFICATIVA-PAGA/c14/diff/{sonda.py,comparar.py} "$N"/ && sed -i '1s/.*/# DIFF DE FROTA JUSTIFICATIVA-PAGA c19: main 880331a8c x copia 74ec17605 (pos-c17), sombra, somente_leitura./' "$N"/sonda.py && cat > "$N"/envelope.sh <<'EOF' #!/bin/bash set -uo pipefail R=/home/ronald/s ...` |
+| 07:29:42 | Bash | Read c14 DIFF scripts | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c14/diff && cat envelope.sh; echo ---; cat sonda.py; echo ---; cat comparar.py; cat fim` |
+| 07:29:40 | Bash | Inspect how the c14 fleet DIFF was run | `cd /home/ronald/saas-hasner/logs/JUSTIFICATIVA-PAGA/c14 && ls -la . diff \| head -40; cat *.sh 2>/dev/null \| head -60` |
 | 07:24:53 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 07:24:49 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 07:24:41 | Agent | Opus final JUSTIFICATIVA-PAGA c17 | `OBRA JUSTIFICATIVA-PAGA-O-PERIODO -- leitura FINAL de verificador (opus), somente leitura. Voce nao viu a construcao. Copia: /home/ronald/wt-codex-justificativa-paga-o-periodo-220358 (HEAD 74ec17605). Base main 880331a8c. Regra do aval (Ronald, literal): justificativa aprovada paga max(0, previsto - trabalhado do dia); "nenhum dia vira falta nem perde DSR". Competencias exportadas 09 e 10 nao se m ...` |
