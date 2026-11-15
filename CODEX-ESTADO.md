@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 13:21** · publicado em **15/11/2026 13:22** (UTC-3)
+> Ultima resposta processada: **15/11/2026 13:28** · publicado em **15/11/2026 13:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 13:28 · sessao 071afeef32a4 · E4C-F1V3 · construtor · origem=Code
+
+Aplicada a tipagem explícita, sem alterar os predicados: [juizes.py:1652](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:1652), [juizes.py:1674](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:1674). [nao verificado]
+
+- Censo completo: **2 Coalesce, 4 Subquery, 5 Value, 0 Case**, em 89 arquivos Python examinados; todas as 11 expressões receberam tipo. [resultados:30](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:30)
+- Tipos: `ato_texto → TextField`; `ato → CharField(max_length=16)`; PK → `BigAutoField`. [models.py:4015](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/models.py:4015), [apps.py:5](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/apps.py:5)
+- Doubles adaptados para aceitar `output_field`, sem mudar asserções. [teste:460](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1_juizes_le_o_ato.py:460), [teste SQL:88](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v4_sql.py:88) [nao verificado]
+
+O `test_o261` tem causa independente, por leitura: a fixture omite `respondida_em`; a conservação gera somente validação, que não fornece texto de resposta. [fixture:357](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_o261_vigia_fio.py:357), [models.py:4074](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/models.py:4074), [leitura:50](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/services/atos_pergunta.py:50)
+O `except` existente engole o erro de parsing do texto vazio e devolve slot ausente: sem plantio resulta `slot_nao_derivavel`; com plantio ligado resulta `com_registro`. Esse defeito permanece nesta volta. [juizes.py:459](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:459), [juizes.py:862](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/juizes.py:862), [classificador:106](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/services/vigia_carimbo.py:106)
+
+- RED estrutural: `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v5_mutantes --red-base` → 11 falhas, rc=1. [resultados:46](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:46)
+- GREEN/regressão: 49 testes, rc=0, **2 skips ORM**; comando completo registrado. [resultados:157](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:157) [nao verificado]
+- Mutantes: `PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f1v5_mutantes --todos` → 22 detectados; comandos individuais registrados. [resultados:166](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:166)
+- Ruff com `ruff.toml` e `py_compile` em memória: rc=0; comandos registrados. [resultados:249](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:249)
+- **FieldError real ainda não reproduzido aqui:** Django ORM indisponível. Os testes de `str(qs.query)`, com conexão/cursor proibidos, ficaram para Code/suite. [teste:110](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/test_e4c_f1v5_tipos_sql.py:110), [resultados:169](/home/ronald/wt-codex-e4c-f1v3-112729/app/chamados/tests/e4c_f1v5_resultados.txt:169) [nao verificado]
+
+LEI-AKITA: origem=`chamados/juizes.py:1636` (face SQL da conservação); testemunha=`DecisaoPergunta` via `atos_pergunta.leitura:22`; RED=`test_e4c_f1v5_tipos_sql.py:42`; quem-mais-lê=`raiox.py:135`, `fio.py:428`, `juizes.py:1708`, `cadastro_realidade.py:460`; juízes novos=0; padrão=Parallel Change / Expand-Contract (`juizes.py:318`). Certificação permanece com Code/suite e opus final.
 
 ## 15/11 13:21 · sessao 22609382723a · E3-RESTO-R3 · verificador · origem=Code
 
@@ -545,16 +564,4 @@ Achados úteis para pergunta 4:
 - **Espinha E está nomeada:** `app/docs/BACKLOG.md:768` classifica E3-RESTO-R3 como “fila 1, espinha E”. O universo completo “série E” do COMBOIO não está enumerado nessa regra [nao verificado].
 - **POUSO-EM-COMBOIO existe:** âncora e texto em `app/docs/PISTA.md:28-38`; trata outra raia “principal ou wt-bos”, duas obras, e suite de árvore mesclada. Restrição só a laterais e teto três são mudanças propostas pelo novo aval, não conteúdo da regra preexistente.
 
-## 15/11 12:11 · sessao 8275e2f61626 · - · - · origem=Ronald (tmux)
-
-- **Prontidão de HE-REVOGADA e LOTE 3 para suite: [nao verificado].** O anexo BACKLOG fornecido contém somente UI-CAMERA, truncada em “falta o”. O anexo worktrees registra commits das candidatas, mas não apresenta verificador intermediário fechado, resultado de suite ou os diffs necessários ao item 2 [nao verificado]. [nao verificado]
-- **LOTE 3 esperando `!` não prova impedimento à suite.** No literal fornecido, QUEIMA-UTIL-TARDE restringe expressamente o `! de VINCULO` ao pouso; transformá-lo em trava anterior à suite seria hipótese [nao verificado]. [nao verificado]
-- **“UI-CAMERA suite já verde”: [nao verificado].** O trecho BACKLOG fornecido não chega ao resultado da suite; a descrição do commit em worktrees informa triagem, não certificação [nao verificado]. [nao verificado]
-- **Exclusão da UI do primeiro comboio não demonstra colisão com TELA-DIZ.** O literal fornecido de TELA-DIZ já distingue suite certificada — pouso próprio depois — de suite ainda não certificada — volta conjunta; qual ramo aplica à foto fornecida permanece [nao verificado]. [nao verificado]
-- **Há divergência comprovável entre a numeração do anexo e a cópia.** O anexo atribui UI-CAMERA a BACKLOG:1930; nesta cópia, a linha é `V2-I2-FILA`, referente ao motor/folha: `app/docs/BACKLOG.md:1930`. Não citar a linha local como confirmação da UI.
-- **“Espinha E” existe no registro.** E3-V10 e E3-RESTO-R3 estão explicitamente classificados assim em `app/docs/BACKLOG.md:766`, `app/docs/BACKLOG.md:767`, `app/docs/BACKLOG.md:768`. Classificação específica HE/LOTE3 e arquivos comuns com espinha em voo: [nao verificado].
-- **Suite conjunta antes dos opus e opus paralelos já aparecem no RELATO histórico.** `app/docs/RELATO.md:774` registra comboio verde e opus finais abertos em paralelo; `app/docs/RELATO.md:8809` registra suite conjunta antes dos finais. Portanto esse formato, isoladamente, não sustenta acusação de colisão.
-- **Regra existente exige certificar a árvore efetivamente pousada.** `app/docs/PISTA.md:35`–`:38` e pergunta comprovada pelos status em `app/docs/PISTA.md:39`–`:41`.
-- **Motivo com várias obras tem histórico de recusa**, mas o aval já oferece alternativa: `app/docs/RELATO.md:8812` registra recusa de motivo com espaço/+ e relançamento com identificador único.
-
-_5637 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5638 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
