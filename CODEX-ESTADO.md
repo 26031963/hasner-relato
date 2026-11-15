@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **14/11/2026 23:41** · publicado em **14/11/2026 23:42** (UTC-3)
+> Ultima resposta processada: **14/11/2026 23:47** · publicado em **14/11/2026 23:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 14/11 23:47 · sessao 9f9127827fdf · E3-RESTO-R3 · sonda · origem=Code
+
+Pelo recorte explícito `ninguem_fora_hoje` da sonda fornecida: [nao verificado]
+
+| Competência | Linhas para “Sem ação disponível” | Com ações publicadas | Sem ações publicadas | Legado sem `dono` gravado | Fonte | [nao verificado]
+|---|---:|---:|---:|---:|---|
+| 10/2026 | 83 | 0 | 83 | 0 | Sonda fornecida [nao verificado] |
+| 11/2026 | 76 | 0 | 76 | 0 | Sonda fornecida [nao verificado] |
+| **Total** | **159** | **0** | **159** | **0** | Soma da sonda [nao verificado] |
+
+Em novembro, usei diretamente os **76 de `ninguem_fora_hoje`**, sem descontar novamente o `hoje=1`. Todas essas 159 linhas têm `dono` gravado; nenhuma é legado **sem dono**, embora nenhuma tenha ações publicadas no retrato fornecido. [nao verificado] [nao verificado]
+
+O código encaminha `ninguem` para `sem_acao_disponivel` e aplica antes a exceção de `hoje`, quando todas as datas são de hoje em diante. (`app/folha/retrato_folha.py:193`, `app/folha/retrato_folha.py:480`)
+
+**A linha do Retrato não guarda `nao_sei`.** O dicionário construído por `montar_linhas` grava identificação, status, motivo, dias/datas, dono, ações, tipo, saldo e informativo, sem esse campo. (`app/folha/retrato_folha.py:1206`)
+
+O caminho da perda é:
+
+1. **Tarefa:** conserva `nao_sei` como informação própria; por exemplo, marca desconhecimento quando falta célula. (`app/chamados/services/tarefa_do_dia.py:202`, `app/chamados/services/tarefa_do_dia.py:224`)
+2. **Porta:** `porta_da_tarefa` inclui `nao_sei` quando existe rota. Sem rota, devolve `None`; nessa projeção, o desconhecimento deixa de acompanhar a porta, embora permaneça na tarefa. (`app/chamados/services/tarefa_do_dia.py:686`)
+3. **`fora_da_folha`:** lê somente a porta; `None` vira `FIO_SEM_PORTA='nada'`. Ao agregar por pessoa, transporta ações, grupo, datas e contagens, sem transportar `nao_sei`, inclusive quando ele veio numa porta existente. (`app/folha/fora_da_folha.py:70`, `app/folha/fora_da_folha.py:85`, `app/chamados/juizes.py:1652`, `app/folha/fora_da_folha.py:193`, `app/folha/fora_da_folha.py:204`)
+4. **Retrato:** transforma o grupo em fio gravado e copia as ações, sem recuperar a marca perdida. (`app/folha/retrato_folha.py:1215`)
+
+**O leitor que distingue os casos é `o_que_segura`:** mantém a tarefa e a porta em mãos e devolve `nao_sei` da porta quando ela existe, ou da tarefa quando a porta é `None`. (`app/folha/fora_da_folha.py:242`, `app/folha/fora_da_folha.py:256`)
+
+Portanto, **quantas dessas 159 linhas envolvem desconhecimento do dia: [nao verificado]**. O retrato fornecido não permite essa separação. [nao verificado]
+
+“Zero ações publicadas” também não prova zero links de navegação: `portas_da_linha` pode acrescentar portas pelo fio ou pelo tipo. (`app/folha/retrato_folha.py:1027`, `app/folha/retrato_folha.py:1040`)
+
+## 14/11 23:43 · sessao 48c2552776f8 · E3-RESTO-R3 · verificador · origem=Code
+
+1. **ESMERIL-SEMÂNTICA: há leitores incompatíveis com a cura — gravidade média.**
+
+   - O selo ainda exige **5** bloqueados em Admin, mas a fixture real agora produz **4**. Reproduzi a contagem em memória, sem banco; outra asserção do mesmo arquivo já foi atualizada para 4. A suíte contém uma contradição determinística (`app/folha/tests/test_retrato_folha_quadros.py:1250`, `app/folha/tests/test_retrato_folha_quadros.py:710`, `app/folha/retrato_folha.py:193`).
+   - A golden ainda exige Admin=2 para uma população declarada como `{admin:1, ninguem:1}`; com o mapa novo resulta Admin=1 e Sem ação disponível=1. O teste seguinte exige que o balde permaneça igual quando `ninguem` vira `chamado` ou `admin`, contrariando LU-05 (`app/folha/tests/test_haiku_fora_da_folha.py:499`, `app/folha/tests/test_haiku_fora_da_folha.py:516`, `app/folha/tests/test_haiku_fora_da_folha.py:521`, `app/folha/tests/test_haiku_fora_da_folha.py:559`, `app/folha/tests/test_haiku_fora_da_folha.py:580`).
+
+   Inventário dos símbolos, com endereços relativos à raiz:
+
+   | Símbolo | Quem escreve/define | Quem lê |
+   |---|---|---|
+   | `DONOS` | `app/folha/retrato_folha.py:190` | Inversa `:197`; destino do LED `:555`; valores de filtro `:581`; barra, indiretamente, `:901` |
+   | `DONO_DO_FIO` | `app/folha/retrato_folha.py:193` | Inversa `:197`; classificação da linha `:484`; golden externa `app/folha/tests/test_haiku_fora_da_folha.py:499` |
+   | `FIOS_DO_DONO` | Derivada em `app/folha/retrato_folha.py:197` | Tooltip `:72`; selos `app/folha/tests/test_retrato_folha_quadros.py:1273` |
+   | `ROTULO_DO_DONO` | `app/folha/retrato_folha.py:198` | Tabela dos LEDs `:306`; rótulos dos filtros `:588`; drawer `:1092` |
+   | `LED_DA_LINHA` | `app/folha/retrato_folha.py:302` | Estados/cores/rótulos `:311`, `:312`, `:313`; legenda `:1117` |
+   | `dono_da_linha` | Função em `app/folha/retrato_folha.py:460`; devolve balde, sem persistência `:484` | LED `:523`; recorte/agrupamento `:579`; drawer `:1084`; vigia `app/folha/vigia_retido_calado.py:48` |
+   | `censo` | Monta o retorno em `app/folha/vigia_retido_calado.py:45`, `:55`, `:58` | Serializador `:64`, `:67`; command `app/folha/management/commands/vigiar_retido_calado.py:31`, `:36` |
+
+   O campo persistido `dono` continua recebendo **fio**, pelo montador, e é salvo pelo lavrador; o balde permanece uma projeção de leitura (`app/folha/retrato_folha.py:1215`, `app/folha/management/commands/lavrar_retrato_folha.py:78`).
+
+   Os leitores de produção examinados acompanham a projeção: lista, barra, legenda, PDF, Raio-X e drawer (`app/folha/views_retrato.py:280`, `app/folha/views_retrato.py:318`, `app/folha/views_retrato.py:325`, `app/folha/views_retrato.py:411`, `app/folha/views_retrato.py:494`, `app/colaboradores/views.py:986`, `app/colaboradores/views.py:988`). Os contadores gerais continuam contando os três filtros da Folha, sem usar `DONOS` (`app/folha/retrato_folha.py:120`).
+
+   Fora do diff, também há leitores nos selos de drawer, legenda, integração do colaborador e vigia; suas leituras dinâmicas acompanham os mapas, ressalvadas as expectativas antigas apontadas acima (`app/folha/tests/test_retrato_folha_drawer.py:190`, `app/folha/tests/test_retrato_folha_drawer.py:235`, `app/folha/tests/test_retrato_folha_legenda_na_barra.py:107`, `app/colaboradores/tests/test_retrato_no_drawer.py:206`, `app/colaboradores/tests/test_retrato_no_drawer.py:223`, `app/folha/tests/test_vigia_retido_calado.py:29`, `app/folha/tests/test_vigia_retido_calado.py:88`).
+
+   **Mapa próprio:** nenhum segundo mapa de produção identificado nos caminhos examinados; os testes esquecidos conservam a associação antiga por expectativas literais (`app/folha/retrato_folha.py:193`, `app/folha/tests/test_haiku_fora_da_folha.py:516`, `app/folha/tests/test_retrato_folha_quadros.py:1250`).
+
+2. **Vigia: o número mudou de significado; seus textos não acompanharam — gravidade baixa.**
+
+   Antes, selecionava todo bloqueado com fio `ninguem`; depois, seleciona somente o balde `sem_acao_disponivel`. Portanto, linhas cujas datas são todas hoje/futuro deixam **tanto `calados` quanto `roteados`**, permanecendo em `bloqueados` (`diff_c4.patch`, anexo fornecido `[nao verificado: numeração]`; `app/folha/vigia_retido_calado.py:48`, `app/folha/vigia_retido_calado.py:49`, `app/folha/vigia_retido_calado.py:52`, `app/folha/retrato_folha.py:482`).
+
+   O universo continua sendo os retratos do último **dia local de lavra** de cada empresa. A unidade efetiva é **pessoa por retrato/competência**: a mesma pessoa em duas competências conta duas vezes. C5 separa roteados de calados (`app/folha/vigia_retido_calado.py:39`, `app/folha/vigia_retido_calado.py:44`, `app/folha/vigia_retido_calado.py:46`, `app/folha/vigia_retido_calado.py:53`, `app/folha/vigia_retido_calado.py:54`).
+
+   O serializador publica os números por competência e o total; o command usa `calados` no alarme passivo. O cron passa apenas `--alarme`, que cobra `cego`, sem cobrar `calados` (`app/folha/vigia_retido_calado.py:64`, `app/folha/vigia_retido_calado.py:67`, `app/folha/management/commands/vigiar_retido_calado.py:16`, `app/folha/management/commands/vigiar_retido_calado.py:35`, `app/config/crons.py:1680`).
+
+   Entretanto, o help e a definição inicial ainda prometem contar pessoas com fio `ninguem`, omitindo a exclusão temporal nova (`app/folha/management/commands/vigiar_retido_calado.py:21`, `app/folha/vigia_retido_calado.py:4`, `app/config/crons.py:1677`).
+
+   **ESTADO/placar:** não confirmei leitor deste número `[nao verificado]`. O contador de fio mostrado pelo gerador do ESTADO vem de outro vigia, `vigiar_fio_morto`; não comprova consumo de `retidos_calados` (`bin/gerar_estado.py:253`, `bin/gerar_estado.py:260`).
+
+3. **Tela: nenhum erro confirmado de iteração ou tooltip; geometria `[nao verificado]`.**
+
+   A barra percorre os valores publicados, e o partial percorre todos os itens; o vermelho já existe. Não há contagem fixa de três donos nesses loops (`app/folha/retrato_folha.py:898`, `app/folha/retrato_folha.py:901`, `app/templates/core/_barra_gestao.html:63`, `app/templates/core/_barra_gestao.html:67`).
+
+   A legenda percorre todos os LEDs com quebra de linha; lista, Raio-X e drawer recebem os valores prontos. O JavaScript desses caminhos apenas abre o endereço recebido (`app/templates/folha/_retrato_legenda.html:26`, `app/templates/folha/_retrato_legenda.html:28`, `app/templates/folha/_retrato_lista.html:47`, `app/templates/folha/_retrato_raiox.html:67`, `app/templates/folha/_retrato_o_que_fazer.html:33`, `app/templates/folha/_retrato_o_que_fazer.html:73`).
+
+   **Tooltip existe:** deriva `ninguem → D → GRUPOS['D']`; o texto é “tem dia acusando SEM fio nenhum” (`app/folha/retrato_folha.py:197`, `app/folha/retrato_folha.py:71`, `app/folha/fora_da_folha.py:42`).
+
+   Isso não prova geometria: a fileira externa usa `nowrap`, enquanto o smoke conserva exigências de ausência de compressão/transbordo e declara esta volta não verificada (`app/templates/core/_barra_gestao.html:62`, `app/folha/tests/test_retrato_folha_smoke_chromium.py:4`, `app/folha/tests/test_retrato_folha_smoke_chromium.py:448`, `app/folha/tests/test_retrato_folha_smoke_chromium.py:456`). No PDF, o rótulo novo entra como string em coluna fixa de 26 mm; seu encaixe também é `[nao verificado]` (`app/folha/views_retrato.py:413`, `app/folha/views_retrato.py:425`).
+
+4. **LU-05: `ninguem` não equivale estritamente a “dia sem ação disponível”.**
+
+   - **Alta — desconhecimento vira negativa certa.** Falha da autoridade do calendário devolve `None`; a tarefa registra `nao_sei=True`, mas, sem rota, `porta_da_tarefa` retorna apenas `None`. A Folha converte isso em `nada`, grupo D, `ninguem` e finalmente “Sem ação disponível”. Reproduzi essa cadeia em memória: uma falha de conhecimento recebe o mesmo rótulo de ausência comprovada de ação (`app/colaboradores/services/calendario.py:142`, `app/chamados/services/tarefa_do_dia.py:614`, `app/chamados/services/tarefa_do_dia.py:646`, `app/chamados/services/tarefa_do_dia.py:686`, `app/folha/fora_da_folha.py:85`, `app/folha/retrato_folha.py:370`, `app/folha/retrato_folha.py:193`). Ocorrência em produção `[nao verificado]`.
+   - **Média — pessoa no balde novo pode ter ação publicada.** Basta um dia sem porta para o grupo da pessoa ser D; o laço conserva ações dos demais dias. Caso concreto sintético: 12/11 com `resolver_dia`, 13/11 sem porta. O resultado é `ninguem`/“Sem ação disponível” **com botão Resolver dia**. O significado agregado é “há algum dia sem porta” (`app/folha/fora_da_folha.py:93`, `app/folha/fora_da_folha.py:192`, `app/folha/fora_da_folha.py:198`, `app/folha/retrato_folha.py:1215`, `app/folha/retrato_folha.py:1216`, `app/folha/retrato_folha.py:1039`). Ocorrência em produção `[nao verificado]`.
+   - **Média — legado/ausência de dia também recebe a afirmação nova.** Grupo vazio produz `None`, que vira `ninguem`; retrato legado sem fio também usa esse fallback, sem consultar portas (`app/folha/fora_da_folha.py:91`, `app/folha/retrato_folha.py:370`, `app/folha/retrato_folha.py:443`). Quantidade afetada `[nao verificado]`.
+
+   No universo estreito de **dias acusadores de retidos por furo**, uma porta publicada `None` entra como `nada` e força D. Fora desse universo, não existe equivalência global: não bloqueados recebem fio vazio e motivos diferentes de furo recebem `admin`, sem esse julgamento de porta (`app/folha/fora_da_folha.py:194`, `app/folha/fora_da_folha.py:201`, `app/folha/retrato_folha.py:366`, `app/folha/retrato_folha.py:368`).
+
+5. **Classes de reprovação.**
+
+   - **Média — novo caminho de relógio fora da borda no censo avulso.** `censo(hoje=None)` passa `None` para cada linha, que pode ler `localdate()` internamente. Em memória, duas linhas idênticas atravessando a meia-noite produziram um único calado e duas leituras de relógio. O command evita isso ao fornecer uma data fixa; o contrato avulso permanece exposto (`app/folha/vigia_retido_calado.py:28`, `app/folha/vigia_retido_calado.py:48`, `app/folha/retrato_folha.py:457`, `app/folha/management/commands/vigiar_retido_calado.py:31`).
+   - **Mutantes mordem a cura:** executei os seis testes sem banco e os 11 mutantes; todos passaram no controle e os 11 morreram por asserção, sem erros de infraestrutura. Essa prova cobre as mutações enumeradas, mas não os casos de desconhecimento e dias mistos acima (`app/chamados/tests/e3_r3_c4_mutantes.py:19`, `app/chamados/tests/e3_r3_c4_mutantes.py:64`, `app/chamados/tests/e3_r3_c4_mutantes.py:80`, `app/chamados/tests/test_e3_r3_c4_sem_banco.py:104`). Reprodução do RED contra a base `[nao verificado]`.
+   - **Segundo juiz, segundo escritor, alteração de trava ou pouso antecipado:** nenhum acréscimo identificado nos corpos alterados; a mudança funcional é projeção de baldes e seleção do vigia. A persistência continua no lavrador e a dependência do vigia continua depois da lavra (`app/folha/retrato_folha.py:193`, `app/folha/vigia_retido_calado.py:48`, `app/folha/management/commands/lavrar_retrato_folha.py:78`, `app/config/crons.py:1682`). Pouso efetivo `[nao verificado]`.
+
+6. **Docstrings alteradas: nenhum comportamento falso adicional identificado.** Os memos existem, as fontes adicionais da rota são consultadas e `_posicoes` realmente devolve o dicionário da lâmpada (`app/chamados/services/tarefa_do_dia.py:545`, `app/chamados/services/tarefa_do_dia.py:589`, `app/chamados/services/tarefa_do_dia.py:592`, `app/chamados/services/tarefa_do_dia.py:85`). Permanecem as definições antigas do contador apontadas no item 2 (`app/folha/vigia_retido_calado.py:4`, `app/folha/management/commands/vigiar_retido_calado.py:21`).
+
+**VEREDITO: REPROVA.**
 
 ## 14/11 23:41 · sessao 8ccf40c881f4 · - · - · origem=Ronald (tmux)
 
@@ -467,24 +563,4 @@ RESULTADO|BO-0611|13|BATIDA|-|-
 
 RESULTADO|BO-1311-ROTEIRO|05|SEM DIA-COLAB|-|-
 
-## 14/11 23:37 · sessao 0c63fff7741a · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB individualizado para o caso 14.** O registro associa “13+14” a **col407**, mas a data **21/10** aparece explicitamente no texto do **item 13**; atribuí-la ao 14 seria [nao verificado]. (app/docs/RELATO.md:1534)
-
-O BACKLOG preserva os itens 13/14 vinculados a `BUG-PLANTIO-NOTURNO-MAIS-1`, sem informar data. (app/docs/BACKLOG.md:2025)
-
-(4) Dono L-099 do caso 14: [nao verificado]. Sem dia-colab identificado, encerro sem sonda nem atribuição de padrão/obra.
-
-RESULTADO|BO-0611|14|SEM DIA-COLAB|-|-
-
-## 14/11 23:36 · sessao 6da85c384ba5 · GRADE-RESOLVE-67 · censo · origem=Code
-
-(1) **SEM DIA-COLAB.** O registro lista colaboradores, mas não informa data para o caso 03. Pela ordem, seria col1032; essa numeração é expressamente contestável. (app/docs/BACKLOG.md:783; app/docs/RELATO.md:226)
-
-O relato dos casos 01–05 publica apenas contagens agregadas, sem individualizar o dia-colab do caso 03. Portanto, não há par colNNN + data identificável para esta unidade. (app/docs/RELATO.md:222)
-
-(4) Dono L-099, padrão quebrado e obra que fecha: **[nao verificado]**. Encerrado sem sonda, conforme a condição de parada por ausência de dia-colab.
-
-RESULTADO|BO-1311-ROTEIRO|03|SEM DIA-COLAB|-|-
-
-_5395 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5397 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
