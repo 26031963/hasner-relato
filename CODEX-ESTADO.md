@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 05:26** · publicado em **15/11/2026 05:27** (UTC-3)
+> Ultima resposta processada: **15/11/2026 05:38** · publicado em **15/11/2026 05:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 05:38 · sessao 862111608ebb · - · - · origem=Ronald (tmux)
+
+**A2 continua inseguro: o ramo legado confunde contexto agregado com identidade da pergunta.** (`app/api/foto_recebida.py:70`; `app/chamados/models.py:3599`)
+
+1. **Cenário demonstrável:** pergunta A `foto_ausente`, origem NULL, permanece viva; uma nova emissão B reutiliza a disputa e substitui `ultima_batida` por B; chega upload de B. O ramo legado seleciona A porque filtra apenas motivo/NULL na disputa, sem conferir episódio ou dia da pergunta. Isso pode ocorrer mesmo se B nasceu por outra anomalia. (`app/chamados/services/disputa_emissao.py:540`; `app/chamados/services/disputa_emissao.py:575`; `app/api/foto_recebida.py:70`; `app/api/foto_recebida.py:72`)
+
+2. **As portas existentes não corrigem essa seleção.** O helper passa somente pergunta/disputa ao respondedor e validador; nenhuma batida é passada para verificar correspondência. O respondedor grava texto/carimbo; o validador busca por PK/disputa e carimba a validação. (`app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/chamados/services/disputa_emissao.py:1673`; `app/chamados/services/validacao.py:410`; `app/chamados/services/validacao.py:460`; `app/chamados/services/validacao.py:159`)
+
+   `foto_ausente` tem resposta `escolha`; esse ramo reconcilia destino e retorna verdadeiro sem consultar foto/episódio. A exigência posterior de testemunha aplica-se a `hora`/`data_hora`; pergunta validada morre imediatamente pelo juiz. (`app/chamados/catalogo/perguntas.py:94`; `app/chamados/services/materializacao.py:1069`; `app/chamados/services/materializacao.py:1085`; `app/chamados/services/materializacao.py:1238`; `app/chamados/juizes.py:1404`)
+
+3. **Das duas da sombra, quantidade afetada: [nao verificado].** A sonda só observa pergunta viva NULL, disputa aberta e ID presente; não verifica se o ID representa a pergunta, sequer exige `foto_ausente` nos motivos atuais da disputa como o resolver exige. (`app/chamados/tests/cef_c3_sonda.py:23`; `app/chamados/tests/cef_c3_sonda.py:27`; `app/chamados/tests/cef_c3_sonda.py:31`; `app/api/foto_recebida.py:64`)
+
+   Medir para `(40112,5158,118315)` e `(56615,8065,155158)`: elegibilidade completa da disputa/upload, existência e dono da batida do contexto, dia do turno versus dia da pergunta e, principalmente, evidência independente da batida que originou a pergunta. Os pares vêm somente do anexo fornecido: [nao verificado]. Dias diferentes podem revelar incompatibilidade; dias iguais não demonstram igualdade de episódio, pois o acervo tem apenas chave de dia. (`app/chamados/services/fio.py:1286`; `app/chamados/models.py:3599`)
+
+4. **O `|` não explica o defeito lógico.** Os predicados `origem=batida` e `origem IS NULL` são disjuntos e usam o mesmo manager da disputa; o problema é o universo indevido incluído pelo segundo predicado. (`app/api/foto_recebida.py:68`; `app/api/foto_recebida.py:71`)
+
+   SQL real, plano e comportamento efetivo do Django: **[nao verificado]**. Django não está disponível neste ambiente; o double implementa sua própria união sem repetição e os testes declaram não demonstrar SQL. (`app/chamados/tests/test_cef_c1_sem_banco.py:49`; `app/chamados/tests/test_cef_c3_sem_banco.py:3`)
+
+5. **Testes não cobrem deslocamento posterior do contexto.** A fixture sem banco só chama a NULL de “legada de 101”, sem identidade independente; a integração também deixa por último exatamente o episódio convertido em NULL. Não exercita legada A seguida por atualização do contexto para B e upload B. (`app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c3_sem_banco.py:153`; `app/chamados/tests/test_cef_c3_integracao.py:33`; `app/chamados/tests/test_cef_c3_integracao.py:38`)
+
+6. **Mutante plausível vivo confirmado em memória:** remover `motivo='foto_ausente'` somente do filtro legado, permitindo validar NULL de outros motivos. Os dez testes C3 passaram; registro persistido da execução: **[nao verificado]**. As fixtures de upload contêm somente `foto_ausente`, portanto não detectam a ampliação. (`app/api/foto_recebida.py:72`; `app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c3_sem_banco.py:141`; `app/chamados/tests/test_cef_c1_sem_banco.py:208`)
+
+## 15/11 05:37 · sessao ba44442ab92c · - · - · origem=Ronald (tmux)
+
+1. **Os testes C3 mordem os quatro mutantes escolhidos**, exigindo falha de asserção identificada e recusando erro de execução. Há controle verde e falhas registradas para os operadores; isso prova esses cortes, não completude. (`app/chamados/tests/cef_c3_verificar.py:12`; `app/chamados/tests/cef_c3_verificar.py:31`; `app/chamados/tests/cef_c3_mutantes.txt:17`; `app/chamados/tests/cef_c3_mutantes.txt:33`)
+
+2. **Mutante plausível vivo novo:** fazer a recepção antiga vencer quando a nova emissão trouxer `recebida_em` explícita. Substituí somente a fonte em memória de `ctx[k] = {**ctx[k], **v}` por:
+
+   ```python
+   ctx[k] = {
+       **ctx[k], **v,
+       **({'recebida_em': ctx[k]['recebida_em']}
+          if 'recebida_em' in ctx[k] else {}),
+   }
+   ```
+
+   O controle executado passou 10/10 e esse mutante também passou 10/10, com `PYTHONDONTWRITEBYTECODE=1`, sem arquivo de saída. O código correto permite valor novo vencer; o caso chamado “atualiza valor presente” só altera `timestamp`, deixando essa recepção explícita sem testemunha. A integração também apenas omite a recepção ou troca o episódio. (`app/chamados/services/disputa_emissao.py:573`; `app/chamados/tests/test_cef_c3_sem_banco.py:113`; `app/chamados/tests/test_cef_c3_integracao.py:18`)
+
+3. **A2 tem uma lacuna mais grave que os mutantes cobertos:** cada teste sem banco cria uma única NULL e assume sua associação ao `ctx.id=101`. Na integração, a NULL é construída apagando a origem da própria batida que ficou por último no contexto. O caso negativo envia uma terceira batida cujo id diverge do contexto. Nenhum desses casos representa NULL antiga de A, contexto atualizado para B e upload de B; tampouco duas NULL de episódios distintos no mesmo agrupador. (`app/chamados/tests/test_cef_c3_sem_banco.py:140`; `app/chamados/tests/test_cef_c3_sem_banco.py:153`; `app/chamados/tests/test_cef_c3_integracao.py:32`; `app/chamados/tests/test_cef_c3_integracao.py:60`)
+
+4. **Limites efetivos:** ORM, transação, `save`, validação e vitalidade são doubles no executor sem banco. `_validar_pelo_dono` é substituído por função que simplesmente marca as perguntas selecionadas como mortas. Portanto, o mutante antigo `_validar_pelo_dono -> return 0` permanece invisível nesse executor; a integração tem asserções de `validada_em` e vitalidade que o denunciariam, mas sua execução nesta revisão é **[nao verificado]**. (`app/chamados/tests/test_cef_c3_sem_banco.py:3`; `app/chamados/tests/test_cef_c1_sem_banco.py:219`; `app/chamados/tests/test_cef_c1_sem_banco.py:230`; `app/chamados/tests/test_cef_c3_integracao.py:53`)
+
+5. **Classes de reprovação:**
+   
+   - **Derivação paralela / campo com dois significados: demonstrada em A2.** O leitor toma o último id do agregado como origem de todas as NULL selecionadas. O contrato da coluna documenta precisamente que, depois do nascimento, esse contexto pode apontar outra anomalia e que o acervo não recebe episódio por essa derivação; o acervo só tem chave de dia. (`app/api/foto_recebida.py:70`; `app/api/foto_recebida.py:72`; `app/chamados/models.py:3599`; `app/chamados/services/fio.py:1286`)
+   - **Segundo juiz de vitalidade / segundo escritor de resposta ou validação:** nenhum novo demonstrado no delta; o resolver usa `fio_vivo` e a rotina delega às portas de resposta e validação existentes. O defeito está no universo entregue a essas portas. (`app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`; `app/api/foto_recebida.py:82`)
+   - **Relógio fora da borda:** há relógios internos preexistentes para `ultima_em` e resposta automática; C3 não acrescenta outro nesses trechos. (`app/chamados/services/disputa_emissao.py:567`; `app/api/foto_recebida.py:42`)
+   - **Selo sem mordida:** a catraca AST verifica presença estrutural de envelope/id, sem provar valor em execução, domínio do ramo ou correspondência histórica entre pergunta e contexto. Sua mordida não cobre A2. (`app/chamados/tests/test_e1_v5_familia.py:133`; `app/chamados/tests/test_e1_v5_familia.py:170`; `app/chamados/tests/test_e1_v5_familia.py:180`)
+   - **Timestamp com significados recepção antiga/fato novo:** convivência explicitamente preservada, anterior a C3. (`app/chamados/juizes.py:152`; `app/chamados/juizes.py:155`)
+
+6. **Não executei `cef_c3_verificar`: ele escreve `cef_c3_mutantes.txt`**, apesar de não alterar fontes. O ensaio acima carregou e alterou apenas `c1.[nome]` em memória, mecanismo previsto no próprio executor. (`app/chamados/tests/cef_c3_verificar.py:36`; `app/chamados/tests/test_cef_c1_sem_banco.py:23`; `app/chamados/tests/test_cef_c1_sem_banco.py:26`)
+
+## 15/11 05:37 · sessao b8538b8203fa · - · - · origem=Ronald (tmux)
+
+A1 está correta para o defeito sequencial: somente dicionários com `id` conhecido igual fundem; chaves omitidas, inclusive `recebida_em`, sobrevivem; valor explícito novo vence e outro episódio substitui integralmente. (`app/chamados/services/disputa_emissao.py:569`; `app/chamados/services/disputa_emissao.py:573`; `app/chamados/services/disputa_emissao.py:575`)
+
+O censo dos outros escritores dá estes limites:
+
+- **Reuso via nota não apaga recepção já presente.** Escreve `ChamadoColaborador.contexto_json`, enquanto A1 escreve `DisputaSupervisao.contexto`; a nota delega à porta `fundir_contexto`, que trata dicionário como escalar e só o insere se a chave estiver ausente. Também **não acrescenta** recepção nova a `ultima_batida` já presente sem ela: permanece o snapshot antigo. Esse comportamento é preexistente e pode alimentar o fallback de dia pelo timestamp antigo. (`app/chamados/services/disputa_emissao.py:594`; `app/chamados/services/disputa_emissao.py:600`; `app/chamados/services/nota.py:110`; `app/chamados/services/nota.py:123`; `app/chamados/services/contexto.py:144`; `app/chamados/services/contexto.py:155`; `app/chamados/juizes.py:162`)
+- **`contexto.py` não é outro escritor atual de `ultima_batida` da disputa.** Atua em `contexto_json` do chamado; `renovar_contexto` pode substituir qualquer chave recebida, mas os chamadores localizados enviam outras chaves. Exemplos: marcos, batida/data do turno, agrupamento, escape e sugestão. Acesso dinâmico fora do censo textual: **[nao verificado]**. (`app/chamados/services/contexto.py:97`; `app/chamados/services/contexto.py:100`; `app/chamados/services/contexto.py:102`; `app/chamados/management/commands/nomear_marco_por_lampada.py:109`; `app/chamados/management/commands/carimbar_por_batida_coincidente.py:98`; `app/chamados/services/adesao.py:113`; `app/chamados/services/declaracao_texto.py:208`; `app/chamados/services/limbo_folgas.py:68`)
+- **Outras atribuições de `.contexto` preservam `ultima_batida` sequencialmente:** preenchimento de motivo/data parte de cópia; aparar remove a chave do motivo; remover acrescenta `revalidacoes`. A atribuição do envelope no gerador ocorre numa cópia transitória e não grava o agregado. (`app/chamados/services/disputa_emissao.py:291`; `app/chamados/services/disputa_emissao.py:296`; `app/chamados/services/disputa_emissao.py:312`; `app/chamados/models.py:2028`; `app/chamados/models.py:2032`; `app/chamados/models.py:2104`; `app/chamados/models.py:2109`; `app/chamados/models.py:2128`)
+- **Portas genéricas da disputa substituem uma chave, mas os chamadores encontrados escrevem outras:** `supervisao_omissa_escalado`, `incidente_operacional`, `ultimo_alerta_diario`. Não demonstram outro caso sequencial do mesmo apagamento. (`app/chamados/models.py:2164`; `app/chamados/models.py:2182`; `app/chamados/views.py:1343`; `app/ponto/management/commands/escalonar_chamados_supervisao.py:159`; `app/ponto/management/commands/alertar_disputas_pendentes.py:48`)
+
+**Não cabe prometer “nunca perde recepção” para concorrência:** o cron pode carregar a disputa antes da recepção; a emissão salva `recebida_em`; depois `renovar_contexto` grava o JSON inteiro da instância antiga, com outra chave, apagando a recepção recém-conhecida. A porta de renovação não relê nem trava nessa implementação. É risco preexistente, distinto do defeito sequencial curado; ocorrência na sombra **[nao verificado]**. (`app/ponto/management/commands/alertar_disputas_pendentes.py:33`; `app/ponto/management/commands/alertar_disputas_pendentes.py:42`; `app/ponto/management/commands/alertar_disputas_pendentes.py:48`; `app/chamados/models.py:2182`; `app/chamados/models.py:2187`; `app/chamados/services/disputa_emissao.py:539`; `app/chamados/services/disputa_emissao.py:579`)
+
+Escritores dos envelopes: ambas APIs fornecem `id`, `tipo`, timestamp local do fato e recepção; retro fornece os três primeiros e omite recepção. O significado local de recepção não decide o dia no juiz fraco. (`app/api/views.py:761`; `app/api/views_core.py:755`; `app/ponto/management/commands/marcar_foto_ausente_retro.py:98`; `app/chamados/juizes.py:151`; `app/chamados/juizes.py:169`)
+
+## 15/11 05:34 · sessao 61f0f8265324 · CONTRATO-DE-ENTRADA-DO-FIO · construtor · origem=Code
+
+Cura A1/A2 e entrega em [cef_c3_entrega.txt](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c3_entrega.txt:1).
+
+- RED anterior à cura: [6 falhas](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c3_red.txt:87).
+- Verificação sem banco: [37 testes passaram](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c3_verificacao.txt:45). [nao verificado]
+- Quatro mutantes falharam por asserção, com controles verdes: [evidências](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c3_mutantes.txt:1).
+
+Sonda e integração com banco não executadas; comandos e limites constam na [entrega](/home/ronald/wt-codex-contrato-de-entrada-do-fio-005238/app/chamados/tests/cef_c3_entrega.txt:234).
 
 ## 15/11 05:26 · sessao a9a6cd709e27 · JUSTIFICATIVA-PAGA-O-PERIODO · censo · origem=Code
 
@@ -519,116 +596,4 @@ Os três casos são **CONHECIDO** no material da cópia: a entrega da c6 já os 
 | `test_MORDE_o_mmd_commitado_bate_com_o_codigo` | CONHECIDO | comparação de `MAPA.md` em `app/core/management/commands/gerar_diagrama.py:923`–927 | Regenerar/revisar artefatos após acertar a árvore final. [`app/core/management/commands/gerar_diagrama.py:931`–935] |
 | `test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` | CONHECIDO | última chamada do selo em `app/core/tests/test_selo_diagrama_do_codigo.py:97`–98, mesma comparação do MAPA | Mesma cura do MAPA; nenhuma alteração da prova da aresta está sustentada pelo dado. [`app/core/management/commands/gerar_diagrama.py:923`–930] |
 
-## 15/11 02:46 · sessao 2bd3857e8104 · E3-RESTO-R3 · verificador · origem=Code
-
-1. **ESMERIL-SEMÂNTICA: nenhum desvio adicional identificado nos leitores da saída; há um selo antigo incompatível, descrito no item 6.** A mudança pretendida é: validar sob âncora terminal, sem outra porta/oferta, deixa de publicar `admin/porta_acao/validar`. Os leitores continuam distinguindo ausência conhecida de porta e desconhecimento. (`app/chamados/services/tarefa_do_dia.py:652`, `app/chamados/services/tarefa_do_dia.py:667`, `app/chamados/services/tarefa_do_dia.py:708`)
-
-   | Valor | Quem escreve → quem lê |
-   |---|---|
-   | `status_local` | Nascimento em `app/chamados/models.py:1142`; transição canônica em `app/chamados/models.py:228`, persistida em `:296`. Há simulação temporária de pós-estado em `:356`, restaurada em `:371`. A cura somente lê em `app/chamados/services/tarefa_do_dia.py:449`; a costura lê em `app/chamados/services/fio.py:809`; fila/contadores leem em `app/chamados/services/painel.py:155`, `:189`, `:213`. |
-   | `TERMINAIS` | Definido em `app/chamados/catalogo/motor.py:31`; consumido pela carga em `app/chamados/services/tarefa_do_dia.py:449`, costura em `app/chamados/services/fio.py:810` e C11 em `app/escala/services/cadastro_realidade.py:499`. |
-   | FKs da âncora | Destino nasce em `app/chamados/models.py:3097` e é reapontado em `app/chamados/services/fio.py:964`; container é atribuído em `app/chamados/services/disputa_emissao.py:591`. A identidade é lida exclusivamente por `app/chamados/services/fio.py:116`. |
-   | `ancoras` | Conjunto de IDs em `app/chamados/services/tarefa_do_dia.py:444`; mapas pergunta→ID em `:591` e `:617`; leitores em `:639`, `:646`, `:655`. |
-   | `_ancoras_terminais` | Escrito em memória em `app/chamados/services/tarefa_do_dia.py:449`; transportado para `alimentacao['ancoras_terminais']` em `:589`; lido em `:656`. |
-   | `admin_alcancavel` / `com_dono` | Locais escritos em `app/chamados/services/tarefa_do_dia.py:652`, `:658`; consumidos para donos, residuais, portas e ação em `:660`, `:663`, `:670`, `:692`. |
-   | `fio/rota/acao` | Publicados em `app/chamados/services/tarefa_do_dia.py:696`; projetados em `:708`; Folha lê em `app/folha/fora_da_folha.py:84`, agrega ações/grupos/contagens em `:203`. |
-   | Retrato e persistência | Copia fio como `dono` e ações em `app/folha/retrato_folha.py:1228`; persiste em `app/folha/management/commands/lavrar_retrato_folha.py:78`; lê fio/balde em `app/folha/retrato_folha.py:448`, `:485`; monta links em `:1036`. |
-   | Views/templates | Consomem foto, frases e links em `app/colaboradores/views.py:982`, `app/folha/views_retrato.py:318`, `app/templates/folha/_retrato_o_que_fazer.html:33`, `:72` e `app/templates/folha/_retrato_lista.html:47`. |
-   | Contadores | Folha agrega em `app/folha/retrato_folha.py:695`, `:835`; vigia dos retidos conta sem ação/sem leitura em `app/folha/vigia_retido_calado.py:53`, `:57`; alcance lê rota/fio em `app/chamados/services/vigia_fio.py:596`, `:601`; furo sem canal lê ausência de rota em `app/chamados/services/furo_sem_canal.py:98`, `:104`. |
-   | Pauta / Cadastro | Pauta aceita apenas `nada`, separando `nao_sei`, em `app/ponto/services/pautas_dos_discordantes.py:90`, `:95`. Cadastro exige projeção `None`, depois relê status e aplica `TERMINAIS`, em `app/escala/services/cadastro_realidade.py:472`, `:477`, `:499`. |
-
-   O significado permanece coerente: `nada` corresponde a ausência conhecida de porta; no retrato vira `ninguem` e depois `sem_acao_disponivel`. `nao_sei` continua chegando a `sem_leitura_sistema`. Fotos já persistidas precisam de nova lavra para refletir a mudança. (`app/chamados/services/tarefa_do_dia.py:705`, `app/folha/retrato_folha.py:185`, `:193`, `:1228`)
-
-2. **Chamadores: nenhum caminho produtivo encontrado que alcance `_portas_da_tarefa` sem o transporte dos terminais.** (`app/chamados/services/tarefa_do_dia.py:589`, `:591`, `:616`)
-
-   | Chamador produtivo | O que passa |
-   |---|---|
-   | `CargaDaTarefa.tarefa → alimentar_fila` | IDs das células da janela, `self.agora`, `colab_ids`; depois acrescenta `ancoras_terminais`. (`app/chamados/services/tarefa_do_dia.py:586`) |
-   | `alimentar_portas → alimentar_fila` | `_ids`, `agora`; não passa `colab_ids` nem acrescenta terminais. Esse resultado segue para C17, sem chamar `_portas_da_tarefa`. (`app/chamados/juizes.py:1616`, `:1627`) |
-   | Primeira publicação → `_portas_da_tarefa` | `out`, `self._portas`, mapa de âncoras e pendentes do app. (`app/chamados/services/tarefa_do_dia.py:591`) |
-   | Segunda publicação → `_portas_da_tarefa` | A mesma alimentação enriquecida, âncoras, pendentes e oferta de Resolver. (`app/chamados/services/tarefa_do_dia.py:616`) |
-
-   Nos testes diretos, omitir a chave equivale a conjunto terminal vazio: uma âncora existente será aceita. M2 omite; M2b fornece explicitamente `{202}`. Isso limita a prova desses testes, mas não demonstra outro chamador produtivo defeituoso. (`app/chamados/services/tarefa_do_dia.py:656`, `app/chamados/tests/e3_portas_apoio.py:34`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:541`, `:547`)
-
-3. **Status: mesma fonte lógica, sem garantia de mesma fotografia; limitação admissível para leitura.** A carga usa `status_local` e `motor.TERMINAIS`, como a costura. Entretanto, captura os objetos no `select_related` e congela o conjunto; a costura relê o banco e, dentro de transação, adquire a trava. (`app/chamados/services/tarefa_do_dia.py:407`, `:449`; `app/chamados/services/fio.py:794`, `:801`, `:807`, `:809`)
-
-   Janela concreta possível: a consulta inicial vê a âncora viva; ocorre fechamento; a consulta posterior da fila já a exclui. `_pela_decisao` produz `porta=None`, mas o conjunto antigo não contém o terminal e permite `admin/porta_acao`. O inverso pode negar porta após reabertura posterior às leituras. Há também desvio pelo ramo `isinstance(porta, int)`, baseado na fotografia anterior da fila. (`app/chamados/services/tarefa_do_dia.py:450`, `:151`, `:160`, `:654`, `:656`)
-
-   Não classifico isso como corrupção de estado: a carga apenas lê, declara leitura de estado atual sem reconstrução histórica e memoriza a resposta. Não oferece a garantia transacional da costura. Ocorrência e duração dessa janela em produção: **[nao verificado]**. (`app/chamados/services/tarefa_do_dia.py:383`, `:449`, `:598`)
-
-4. **KeyError: nenhum sob integridade válida das FKs.** `chamado_que_lista` retorna somente `chamado_destino_id` ou `disputa.chamado_id`; ambos os objetos entram em `chamados`, e `None` é retirado de `ancoras`. Portanto, todo PK selecionado tem correspondente no dicionário. (`app/chamados/services/fio.py:116`, `app/chamados/services/tarefa_do_dia.py:444`, `:448`, `:449`)
-
-   `PerguntaDisputa.disputa` não admite nulo; os dois chamados admitem nulo com `SET_NULL`, sendo ignorados pelo dicionário quando ausentes. Integridade efetiva do banco: **[nao verificado]**. (`app/chamados/models.py:2494`, `:1796`, `:3494`)
-
-5. **Achado — diagnóstico obrigatório de F2 permanece incompleto. Gravidade: média, lacuna de verificação.** A entrega reconhece que não identificou os dois fios finais originais e deixa esse requisito pendente. Os novos testes controlam Resolver como `False`; isso prova a fixture corrigida sob esse controle, sem determinar a oferta/ata originais. (`app/chamados/tests/e3_r3_c7_entrega.txt:56`, `:58`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:71`, `:246`)
-
-   **Nenhum esperado positivo enfraquecido identificado:** permanecem `nada`/D, golden `sem_acao_disponivel=1`, transição para chamado/admin, `[D1]` e `[(D1,'BATIDA')]` com motor não chamado. (`app/folha/tests/test_haiku_fora_da_folha.py:92`, `:537`, `:595`, `:617`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:79`, `:258`, `:260`)
-
-   Os irmãos têm asserções efetivas de desconhecimento: Folha exige `nao_sei`/E e `sem_leitura_sistema`; Pauta exige `nao_sei=True`, rota `None`, exclusão e contagem em `sem_leitura`. A execução ORM desses irmãos permanece **[nao verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:110`, `:549`, `:555`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:91`, `:93`, `:97`)
-
-   A ata é montada manualmente, sem chamar o produtor/lavra. Passa pelo leitor, instâncias, tarefa e porta reais no teste sem banco; os campos das lâmpadas existem no produtor real. Não encontrei estrutura comprovadamente impossível, mas a combinação completa de veredito acusador e lâmpadas acesas não foi produzida pelo escritor nesses testes **[nao verificado]**. (`app/folha/tests/test_haiku_fora_da_folha.py:32`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:27`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:91`; `app/ponto/services/cartorio.py:711`, `:738`)
-
-6. **Achado — selo antigo conserva precisamente o comportamento proibido pela c7. Gravidade: média, regressão no contrato dos testes.** `test_ancora_terminal_com_modal_NAO_e_C11` desativa Resolver, cria âncora `resolvido` e exige `('admin','porta_acao','validar')`. O filtro novo elimina esse alcance; M2b exige ausência de porta para o mesmo princípio. (`app/escala/tests/test_f3_beco1_folga_na_lista.py:62`, `:70`, `:72`; `app/chamados/services/tarefa_do_dia.py:655`; `app/chamados/tests/test_e3_degrau_dono_e_porta.py:548`)
-
-   O caso antigo possui resposta E1 e ata conhecida, portanto não se resolve classificando-o como passivo ou ausência de lâmpadas. A execução ORM original continua **[nao verificado]**; a incompatibilidade entre as expectativas está no código. O contrato antigo também aparece nos testes de reata e passivo. (`app/escala/tests/test_f3_beco1_folga_na_lista.py:36`, `:99`, `:105`; `app/chamados/tests/test_f3_beco1_reata_limbo.py:29`, `:55`; `app/chamados/tests/test_e4_passivo.py:65`, `:69`)
-
-   **Demais classes: nenhum problema novo identificado no delta.** Não nasce juiz, escritor persistente, relógio interno, trava ou lista terminal paralela: a cura importa a constante existente e acrescenta dados em memória. (`app/chamados/services/tarefa_do_dia.py:447`, `:449`, `:589`, `:652`; `app/chamados/catalogo/motor.py:31`)
-
-   Os nove mutantes têm controle verde e morrem por asserção; o runner recusa erro de infraestrutura como morte. O mutante obrigatório remove exatamente o filtro terminal. O mutante do join verifica presença do argumento, sem medir SQL/N+1 real. (`app/chamados/tests/e3_r3_c7_mutantes.py:17`, `:46`, `:60`; `app/chamados/tests/e3_r3_c7_mutantes.txt:206`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:215`)
-
-7. **Docstrings/comentários do diff: nenhum erro adicional demonstrado.** “Mesmo status_local/TERMINAIS” descreve corretamente campo e constante, sem prometer mesma trava ou instante. Os testes sem banco declaram seus limites de ORM, signals e calendário. A certificação dos casos ORM e C11 completos permanece ausente. (`app/chamados/services/tarefa_do_dia.py:445`; `app/chamados/tests/test_e3_r3_c7_sem_banco.py:1`, `:83`; `app/chamados/tests/e3_r3_c7_entrega.txt:167`)
-
-**VEREDITO: REPROVA.**
-
-## 15/11 02:44 · sessao 2c5a4a7cf2df · - · - · origem=Ronald (tmux)
-
-Achado de gravidade média: selo antigo contradiz a cura c7. `app/escala/tests/test_f3_beco1_folga_na_lista.py:67-74` cria âncora `resolvido` e exige `('admin', 'porta_acao', 'validar')`, enquanto o filtro novo elimina esse dono (`app/chamados/services/tarefa_do_dia.py:655-657`) e M2b exige ausência de porta (`app/chamados/tests/test_e3_degrau_dono_e_porta.py:544-550`).
-
-Executei contraponto sem banco, sem gravar arquivos: corpo real de `_lavra` (`app/escala/tests/test_f3_beco1_folga_na_lista.py:105-111`), leitor real da ata, instâncias/tarefa/publicador reais, teto 08h/17h vencido, pergunta `orfao_14h` com resposta E1, fila vazia, oferta False. c7 produziu `('nada', None, None)` e o corpo antigo falhou na linha 72; removendo apenas o filtro c7 em memória, produziu `('admin', 'porta_acao', 'validar')` e passou. Execução ORM original [nao verificado]. A fixture controla oferta False (`:58-65`) e cria resposta E1 (`:26-36`, `:95-102`).
-
-O mesmo contrato antigo aparece em `app/chamados/tests/test_f3_beco1_reata_limbo.py:28-30`, `:55-67`, `:87`, e em `app/chamados/tests/test_e4_passivo.py:65-69`, `:122-127`; consequências completas desses testes ORM [nao verificado].
-
-Item 3: a fonte lógica é a mesma — campo `status_local` e constante `TERMINAIS` (`app/chamados/services/tarefa_do_dia.py:447-449`; `app/chamados/services/fio.py:794`, `:809-810`). O estado observado pode diferir: carga faz SELECT e congela o conjunto (`tarefa_do_dia.py:404-408`, `:449`), enquanto costura relê banco sob trava (`fio.py:801-808`). Interleaving concreto possível: SELECT vê vivo; fechamento ocorre; fila posterior já exclui o PK (`tarefa_do_dia.py:450-451`); `_pela_decisao` fornece `porta=None` (`:150-160`), mas conjunto antigo permite admin (`:655-657`). Considero limite admissível de leitura sem atomicidade, pois contrato declara estado atual, sem reconstrução histórica (`:383-388`), e a carga não escreve esse estado (`:448-449`). Ocorrência em produção [nao verificado].
-
-Item 4: nenhum KeyError demonstrado sob FKs válidas. `chamado_que_lista` só retorna destino ou chamado da disputa (`app/chamados/services/fio.py:116-117`); ambos entram no dicionário e `None` sai das âncoras (`app/chamados/services/tarefa_do_dia.py:444`, `:448-449`). Pergunta exige disputa (`app/chamados/models.py:2494-2498`); os dois chamados são nullable com SET_NULL (`:1796-1802`, `:3494-3500`). Integridade real do banco [nao verificado].
-
-Item 6: os nove mutantes morreram na execução atual, cada qual com controle verde e falha de asserção; o runner rejeita erros como morte (`app/chamados/tests/e3_r3_c7_mutantes.py:46-63`). Nenhuma lista terminal literal nova em produção: a cura importa a constante única (`app/chamados/services/tarefa_do_dia.py:447-449`; definição `app/chamados/catalogo/motor.py:30-31`). Nenhuma trava ou leitura de relógio acrescentada nesses blocos (`tarefa_do_dia.py:404-449`, `:586-589`, `:652-657`).
-
-## 15/11 02:44 · sessao 3d95f3e4c5cb · - · - · origem=Ronald (tmux)
-
-Não achei falha estática nova nos chamadores ou mudança de significado incompatível nos leitores do mapa publicado; os dois caminhos produtivos passam a mesma alimentação enriquecida com terminais (`app/chamados/services/tarefa_do_dia.py:589`, `app/chamados/services/tarefa_do_dia.py:591`, `app/chamados/services/tarefa_do_dia.py:616`).
-
-- `alimentar_fila`: chamado pela carga com células da janela, `agora` e `colab_ids`; chamado por `alimentar_portas` com células e `agora`, sem `colab_ids` ou terminais. Esse segundo caminho segue para C17, sem passar por `_portas_da_tarefa` (`app/chamados/services/tarefa_do_dia.py:586`, `app/chamados/juizes.py:1616`, `app/chamados/juizes.py:1627`).
-- `_portas_da_tarefa`: os únicos chamadores produtivos são a primeira publicação e a segunda passagem após consultar Resolver; ambos recebem `self._portas`, âncoras por pergunta e pendentes do app, e a segunda acrescenta a oferta (`app/chamados/services/tarefa_do_dia.py:591`, `app/chamados/services/tarefa_do_dia.py:616`).
-- Chamadas de teste podem omitir a chave; `.get(..., ())` então considera qualquer âncora não terminal. M2 usa essa entrada sintética; M2b fornece explicitamente a âncora terminal (`app/chamados/services/tarefa_do_dia.py:656`, `app/chamados/tests/e3_portas_apoio.py:34`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:541`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:547`).
-- O ramo de porta inteira antecede o filtro de terminal. A porta inteira nasce da pertinência à foto da fila; portanto, avaliar esse desvio exige avaliar as fotos tomadas em consultas distintas, e não constitui sozinho contraexemplo estático (`app/chamados/services/tarefa_do_dia.py:151`, `app/chamados/services/tarefa_do_dia.py:654`).
-
-Censo da saída:
-
-| Valor/caminho | Escritor → leitores |
-|---|---|
-| `admin_alcancavel`, `com_dono` | Locais em `app/chamados/services/tarefa_do_dia.py:652` e `app/chamados/services/tarefa_do_dia.py:658`; alimentam donos, residuais e portas vivas em `app/chamados/services/tarefa_do_dia.py:660`, `app/chamados/services/tarefa_do_dia.py:663`, `app/chamados/services/tarefa_do_dia.py:670`. |
-| `fio/rota/acao` | Publicados em `app/chamados/services/tarefa_do_dia.py:696`; projetados sem rejulgar em `app/chamados/services/tarefa_do_dia.py:708`. |
-| Folha | Lê envelope e fio em `app/folha/fora_da_folha.py:84`; agrega grupos, ações e contadores em `app/folha/fora_da_folha.py:203`; ferramenta monta links em `app/folha/fora_da_folha.py:267`. |
-| Retrato | Grava fio como `dono` e copia ações em `app/folha/retrato_folha.py:1228`; persistência em `app/folha/management/commands/lavrar_retrato_folha.py:78`; lê fio e traduz balde em `app/folha/retrato_folha.py:448`, `app/folha/retrato_folha.py:485`; ações viram links em `app/folha/retrato_folha.py:1036`. |
-| Views/templates | Foto→frase/links em `app/colaboradores/views.py:982`; quadros em `app/folha/views_retrato.py:318`; template mostra valores e links prontos em `app/templates/folha/_retrato_o_que_fazer.html:33` e `app/templates/folha/_retrato_o_que_fazer.html:72`; LED pronto em `app/templates/folha/_retrato_lista.html:47`. |
-| Contadores Folha | Partição em `app/folha/retrato_folha.py:695`; pílulas em `app/folha/retrato_folha.py:835`; sem ação e sem leitura em `app/folha/vigia_retido_calado.py:53` e `app/folha/vigia_retido_calado.py:57`. |
-| Pauta | Admite apenas fio `nada`; desconhecido é contado à parte em `app/ponto/services/pautas_dos_discordantes.py:87`, `app/ponto/services/pautas_dos_discordantes.py:90`, `app/ponto/services/pautas_dos_discordantes.py:95`. |
-| Cadastro/C11 | Exige envelope `None`, depois relê status das âncoras e aplica `TERMINAIS` em `app/escala/services/cadastro_realidade.py:472`, `app/escala/services/cadastro_realidade.py:477`, `app/escala/services/cadastro_realidade.py:499`. |
-| Vigia/Furo | Alcance por rota e admin por fio em `app/chamados/services/vigia_fio.py:596` e `app/chamados/services/vigia_fio.py:601`; sem canal por ausência de rota em `app/chamados/services/furo_sem_canal.py:98` e `app/chamados/services/furo_sem_canal.py:104`. |
-
-Para validar sob âncora terminal, sem outra ação ou oferta, a mudança publicada é `admin/porta_acao/validar` → `nada/None/None`; isso conduz Folha para grupo D/sem ação, pode admitir pauta discordante e permite continuar a avaliação C11. São efeitos coerentes com os predicados existentes desses leitores (`app/chamados/services/tarefa_do_dia.py:652`, `app/chamados/services/tarefa_do_dia.py:667`, `app/folha/fora_da_folha.py:109`, `app/folha/retrato_folha.py:193`, `app/ponto/services/pautas_dos_discordantes.py:95`, `app/escala/services/cadastro_realidade.py:472`).
-
-## 15/11 02:43 · sessao 71f85e0dcf2f · - · - · origem=Ronald (tmux)
-
-Itens 5/7 e mutantes:
-
-- **Nenhum positivo enfraquecido encontrado.** Permanecem `nada`/D, golden `sem_acao_disponivel=1`, transição `nada → chamado → admin`, `[D1]` e `[(D1,'BATIDA')]` com motor não chamado: `app/folha/tests/test_haiku_fora_da_folha.py:92`, `:537`, `:584`, `:595`, `:617`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:79`, `:258`, `:260`.
-- **Irmãos desconhecidos têm asserções concretas.** Folha exige `nao_sei`/E e golden exige `sem_leitura_sistema=1`, conferindo ferramenta/tela; pauta exige `nao_sei=True`, rota `None`, exclusão e contagem em `sem_leitura`: `app/folha/tests/test_haiku_fora_da_folha.py:110`, `:545`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:87`.
-- **Ata montada manualmente; leitor real exercitado.** Helpers devolvem dict, sem chamar produtor/lavra: `app/folha/tests/test_haiku_fora_da_folha.py:32`; `app/ponto/tests/test_o320_pauta_dos_discordantes.py:27`. O teste extrai `_celulas_da_ata`, instâncias, tarefa e porta reais: `app/chamados/tests/test_e3_r3_c7_sem_banco.py:91`. O produtor real pode produzir esses valores de lâmpada, embora acrescente outros campos: `app/ponto/services/cartorio.py:711`, `:722`, `:738`. Não há prova de estrutura semanticamente impossível; a combinação completa `furo` + lâmpadas acesas sem batidas reais não foi produzida pela lavra nesses testes [nao verificado].
-- **Mutantes mordem as alterações escolhidas.** Reexecutei os oito testes novos e nove mutantes com `PYTHONDONTWRITEBYTECODE=1`: oito verdes e 9/9 mortos por asserção, sem erros [nao verificado como arquivo de minha execução]. Evidência preservada equivalente: `app/chamados/tests/e3_r3_c7_green_carga.txt:11`; `app/chamados/tests/e3_r3_c7_mutantes.txt:206`. O mutante sem join verifica presença do argumento, sem medir SQL/N+1 real: `app/chamados/tests/test_e3_r3_c7_sem_banco.py:183`, `:215`.
-- **Lacuna declarada de F2:** identificação exata dos dois fios originais continua pendente; entrega não a prova e reconhece isso: `app/chamados/tests/e3_r3_c7_entrega.txt:56`.
-- **Risco posterior ao estado inicial da golden, ainda não confirmado:** criar o chamado em `app/folha/tests/test_haiku_fora_da_folha.py:590` aciona relavra pelo signal genérico em `app/chamados/signals.py:190`, `:210`, `:218`. A fixture não tem batidas; a ata manual pode ser substituída antes da asserção `:595` [nao verificado]. O teste sem banco chamado “preserva … transição” só confere o estado inicial: `app/chamados/tests/test_e3_r3_c7_sem_banco.py:111`, `:119`.
-- **Comentários/docstrings:** nenhum erro concreto adicional encontrado; o alcance limitado sem ORM/paridade completa é explicitado em `app/chamados/tests/test_e3_r3_c7_sem_banco.py:1`, `:83`.
-
-_5511 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5515 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
