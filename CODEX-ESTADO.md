@@ -1,7 +1,131 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 11:44** · publicado em **15/11/2026 11:44** (UTC-3)
+> Ultima resposta processada: **15/11/2026 11:46** · publicado em **15/11/2026 11:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 11:46 · sessao 4bdcc344d986 · ABONO-LE-O-CATALOGO · censo · origem=Code
+
+**O achado está confirmado no código:** o abono persistido nasce de `tipo_dia == 'ausencia'`, sem consultar o efeito do tipo; a grade coloca nesse grupo todo tipo coberto diferente do literal `falta`. A regra alcança, portanto, mais tipos que os dois INSS (`app/ponto/services/dia_pago.py:386-401`; `app/escala/utils.py:1210-1222`).
+
+1. **Escritores e calculadores**
+
+| Sítio | Conta ou gravação | De onde vem a classe |
+|---|---|---|
+| Grade, `_marcar_ausencias` | Produz o insumo: `falta` literal vira falta; demais tipos viram ausência. | Consulta cobertura e catálogo de parciais, mas **não usa o efeito para separar ABONA/SUPRIME/DESCONTA** (`app/escala/utils.py:1174-1191`, `1210-1230`). |
+| Célula/cartório | Ata grava `tipo_dia`, previsto e realizado; não calcula minutos de abono nessa montagem. | Copia a grade; o leitor reconstrói esses campos da ata (`app/ponto/services/cartorio.py:738-740`; `app/escala/services/leitor_celula.py:397-423`). |
+| `por_dia_da_grade` | Abono por data = previsto − `min(realizado, previsto)`, para todo dia ausência. | **Regra própria por `tipo_dia`**, sem catálogo nem `ausencia_tipo` (`app/ponto/services/dia_pago.py:386-401`). |
+| `recalcular_fechamento_mes` → FM | Soma o mapa em `minutos_abonados`; salva aberto e atualiza os demais status. Falha da grade pode produzir `None`. | Herda `por_dia_da_grade`, sem reclassificação nessa conta (`app/ponto/services/fechamento.py:1060-1064`, `1094-1098`, `1137-1144`, `1184`). |
+| `lavrar` → DiaPago, versão motor | Recebe o mapa, copia minutos e substitui as linhas da competência/versão. | Recebe valores prontos, sem decidir tipos (`app/ponto/services/fechamento.py:1200-1217`; `app/ponto/services/dia_pago.py:288-292`, `359-360`). |
+| DiaPago, versão oráculo | Desde 10/2026 recebe **o mesmo mapa de abono**; o calculador fornece outras rubricas. | Mesma classificação herdada da grade (`app/ponto/services/fechamento.py:1265-1294`; `app/ponto/services/dia_pago.py:295-299`). |
+| `retratar_exportada` → DiaPago | Calcula novamente os três campos da grade, cria/atualiza linhas e zera dias ausentes. | Chama a mesma `por_dia_da_grade`, sem catálogo (`app/ponto/services/dia_pago.py:464-495`, `538-545`). |
+| Motor, `ResultadoMes.horas_abono` | Soma previsto/60 dos dias obrigatórios **sem trabalho e justificados**; a composição soma as fatias. | Recebe conjuntos: o fechamento usa `Ausencia.efeito`; ABONA justifica, efeito diferente de DESCONTA suprime. Aqui desconhecido também suprime (`app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/fechamento.py:693-701`, `96-100`, `298-300`). |
+| Crédito parcial | Soma `Ausencia.minutos` por data e abate atraso daquele dia. | `TIPOS_PAGOS`, catálogo de parciais e juiz `cobre_parte_do_dia`; não há lista nominal própria (`app/ponto/services/credito_parcial.py:20-29`, `50-61`; `app/ponto/services/fechamento.py:994-1001`). |
+| Efeito de ausência para espelho/PDF | Calcula minutos parciais pagos e conjuntos justificados/suprimidos. | Usa `TIPOS_PAGOS` e `a.efeito`, separando ABONA de SUPRIME (`app/ponto/services/efeito_ausencia.py:38-65`). |
+| Resumo inicial do PDF | `horas_abono = motor.horas_abono + minutos_parciais/60`. | Herda motor e efeito de ausência; posteriormente pode receber totais substitutos (`app/relatorios/pdf_espelho.py:478-479`, `628`). |
+| Prontidão sem snapshot válido | Soma o **previsto inteiro** de todo dia ausência. | **Segunda regra própria**, sem catálogo; também não desconta realizado do abono (`app/folha/export.py:1095-1111`). |
+| Restauração de FM | Pode gravar `minutos_abonados` recebido em snapshot. | Não classifica nem recalcula; copia campos fornecidos (`app/ponto/services/fechamento.py:1373-1393`; `app/ponto/management/commands/aplicar_09_corte_b.py:67-73`, `265-268`). |
+
+2. **Leitores**
+
+| Leitor | Gravado ou rederivado? |
+|---|---|
+| Tela/app do espelho e cartão/PDF por competência | Havendo FM, verifica sua existência e chama **`fechamento_lido`**, que recalcula em memória, somente leitura. O abono usual desses totais **não vem do FM gravado** (`app/relatorios/cartao_pela_celula.py:69-76`, `118`; `app/ponto/services/fechamento.py:1759-1761`; `app/ponto/services/espelho.py:1283-1284`; `app/relatorios/pdf_espelho.py:628`). |
+| Mesmos leitores, sem totais do FM e com DiaPago | Leem soma gravada do DiaPago: minutos/60 e quantidade de linhas com abono positivo (`app/relatorios/cartao_pela_celula.py:141-144`, `186-190`, `340-346`; `app/ponto/services/dia_pago.py:699`). |
+| PDF em período livre | Permanece motor + parcial, pois a substituição exige período reconhecido como competência (`app/relatorios/pdf_espelho.py:478-479`; `app/relatorios/cartao_pela_celula.py:321-346`). |
+| Prontidão com snapshot válido | Lê o objeto FM recebido: realizado + abonado, dividido pelo previsto, com teto de 100% (`app/folha/export.py:1045`, `1076-1080`). |
+| Prontidão sem snapshot válido | Rederiva pela regra própria de ausência descrita acima (`app/folha/export.py:1095-1113`). |
+| Inteligência | Conta registros de ausência pelo catálogo, não minutos de DP/FM; assiduidade e alertas excluem tipos de `abonam_vigentes()` (`app/inteligencia/resumo.py:39-44`; `app/inteligencia/management/commands/calcular_scores.py:11-16`; `app/inteligencia/management/commands/gerar_alertas.py:53-61`). |
+| Tela de ausências; relatório de atestados/CSV | Reclassificam pelo catálogo vivo; relatório conta dias pela expansão da ausência. O contador INSS tem ramo nominal `atestado_inss` (`app/ponto/views.py:2199-2225`; `app/relatorios/views.py:275-319`). |
+| Extrato parcial | Soma DiaPago, mas as colunas apresentadas nesse caminho não incluem abono (`app/relatorios/views.py:481-487`, `520-537`). |
+| Porta/comparadores | Recalculam pela mesma `por_dia_da_grade` e comparam com FM e soma DiaPago; concordância entre eles não certifica a classificação pelo catálogo (`app/folha/porta_export.py:133-145`, `346-347`). |
+| Holerite | Guarda PDF recebido; download abre esse arquivo e maço concatena suas páginas. Cálculo local de abono e conteúdo das rubricas reais: **[nao verificado]** (`app/holerite/models.py:103-110`; `app/holerite/views.py:1193-1203`, `1453-1458`, `935-938`). |
+
+**TXT Domínio:** a montagem efetiva emite extras, folga trabalhada, adicional noturno, intrajornada, atraso/saída e bloco de faltas; nenhum desses eventos lê `minutos_abonados` ou `horas_abono`. A geração pela tela injeta fechamento rederivado; sem injeção, a montagem consulta FM gravado (`app/folha/export.py:439-461`, `717-745`; `app/folha/views.py:207-212`).
+
+Os helpers de 8932 consultam `abonam_vigentes() − FORA_DO_8932`, mas **não são chamados pela montagem examinada**; não há prova de emissão de 8932 nessa cadeia. Faltas vêm de ausências aprovadas classificadas por `descontam_vigentes()`. O código numérico efetivo da rubrica de cada empresa é cadastro: **[nao verificado]** (`app/folha/export.py:179-206`, `730-745`, `984-991`).
+
+A afirmação dos anexos de que o cartão “mostra horas de abono” exige ressalva: o resumo contém `horas_abono`, mas o renderer encontrado imprime **“Abonos: N dia(s)”**; impressão efetiva das horas: **[nao verificado]** (`app/relatorios/cartao_pela_celula.py:118`, `186`; `app/relatorios/pdf_espelho.py:786`).
+
+3. **Autoridade e ESMERIL-SEMÂNTICA**
+
+A autoridade é o **cadastro ativo `TipoAusencia.efeito`**, acessado por `catalogo.ausencias.vigente()`; `efeito_vigente(tipo)` responde a classe e `abonam_vigentes()` fornece o conjunto ABONA. `Ausencia.efeito` delega a essa função; `Ausencia.TIPOS_PAGOS` aponta para o conjunto vivo, não para lista própria (`app/ponto/models.py:571-582`, `680-684`, `850-852`; `app/ponto/catalogo/ausencias.py:249-251`, `267-281`, `293-310`, `455-457`).
+
+O contrato distingue **ABONA = empresa paga/cumprido**, **SUPRIME = sai do previsto**, **DESCONTA = falta sem abono**. A semente classifica ambos os INSS como SUPRIME; o cadastro atual além do dado raspado é **[nao verificado]** (`app/ponto/catalogo/ausencias.py:9-12`, `92-93`, `278`).
+
+Ignoram essa distinção na conta de abono: a classificação literal da grade, `por_dia_da_grade` e o fallback da prontidão; FM, DiaPago e retrato propagam a primeira conta (`app/escala/utils.py:1210-1222`; `app/ponto/services/dia_pago.py:395-396`, `464`; `app/ponto/services/fechamento.py:1060-1062`; `app/folha/export.py:1100-1101`).
+
+| Dimensão | Divergência comprovada |
+|---|---|
+| Minutos × horas | FM tem `minutos_abonados` inteiro/anulável; DP, float; motor tem `horas_abono`. Leitores dividem explicitamente por 60: **não há erro de unidade demonstrado nessa conversão** (`app/ponto/models.py:349`, `440`; `app/ponto/motor_calculo_v2.py:292`; `app/relatorios/cartao_pela_celula.py:118`, `186`). |
+| Significado | Motor abona dia obrigatório sem trabalho; grade abona complemento mesmo com realizado; prontidão alternativa abona previsto inteiro. São contas diferentes sob o nome abono (`app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/dia_pago.py:393-401`; `app/folha/export.py:1100-1106`). |
+| Dias × horas no resumo | Com FM online, horas são substituídas, mas `dias_abono` permanece do motor; no ramo DP, ambos vêm do DP. Divergência numérica real por isso: **[nao verificado]** (`app/relatorios/cartao_pela_celula.py:93-123`, `186-190`; `app/relatorios/pdf_espelho.py:478`). |
+| Turno × dia civil | Abono da grade usa sua `data`; períodos do DP recebem mapa de jornada, com alternativa pela data local da entrada. Crédito parcial usa `Ausencia.data`, e atraso parcial usa data local da entrada, sem esse mapa. Caso concreto de desencontro: **[nao verificado]** (`app/ponto/services/dia_pago.py:128-132`, `390-396`; `app/ponto/services/fechamento.py:1217`; `app/ponto/services/credito_parcial.py:27-28`, `32-46`). |
+| “Retrato” × insumo atual | O retrato chama `grade_do_fechamento`, que lê célula/ata da janela; não lê uma grade congelada dentro do FM (`app/ponto/services/dia_pago.py:464`; `app/folha/export.py:329-338`). |
+
+4. **Alcance e proteção da 09/2026**
+
+O recalculador regrava competência já lavrada: salva FM aberto, atualiza os demais status e relavra DiaPago. Aprovação não impede essa atualização calculada; a proteção de `FM.save()` é ultrapassada pelo `QuerySet.update()` desse escritor (`app/ponto/services/fechamento.py:1137-1191`; `app/ponto/models.py:492-503`).
+
+| Entrada | Caminho até a regravação |
+|---|---|
+| Botão e CLI | Chamam o recalculador; CLI sem `--apply` retorna antes (`app/ponto/views.py:1255`; `app/ponto/management/commands/recalcular_fechamento.py:110-120`). |
+| Batida criada ou retratada | Acionam evento; ele resolve a competência do fato e recalcula após commit (`app/ponto/registro_batida.py:156-180`, `283`; `app/ponto/services/fechamento.py:1809-1824`). |
+| HE, folga aceita e resposta validada | Chamam a mesma porta por evento (`app/ponto/portas/he.py:202`; `app/chamados/services/validacao.py:386`, `471`). |
+| Regeneração de célula/vínculo | Pode recalcular as competências tocadas; porta explícita de exportada chama recalculador e retrato (`app/ponto/portas/celula.py:483-496`; `app/ponto/portas/regen_exportada.py:184`, `193`). |
+| Backfill | Não exportada: leitura com lavratura de DP; exportada: retrato (`app/ponto/management/commands/lavrar_dias_pagos.py:104-123`). |
+| Comandos de obra | Também passam pelo recalculador; alguns fazem ensaio com rollback (`app/ponto/management/commands/aplicar_09_corte_b.py:212`; `app/ponto/management/commands/celula_veredito_velho.py:149-157`; `app/ponto/management/commands/desvio_o68b.py:93-99`; `app/ponto/management/commands/plano_b_no_dinheiro.py:109-114`). |
+
+**A guarda vigente é específica:** `GUARDA_COMPETENCIA[(9,2026)]`. Quando há escrita, inclusive `somente_leitura=True` com `lavrar_dias_pagos=True`, exclui antes do laço os colaboradores das empresas consideradas exportadas. O retrato tem guarda equivalente antes de calcular (`app/ponto/services/fechamento.py:36-43`, `539-564`; `app/ponto/services/dia_pago.py:449-460`).
+
+“Exportada” vem de `competencia_entregue`, por empresa; não é simplesmente o status do FM. A recusa geral de recalcular qualquer exportada foi retirada, e a tabela específica não contém 10/2026 nem 11/2026 (`app/ponto/services/fechamento.py:1496-1515`, `1537`, `485-498`, `36-43`).
+
+Não há cron regular declarado para recalcular nem para o backfill. Existe caminho indireto: cron `detectar_par_relampago --apply --retratar` → retratação → evento → recalculador. Execução efetiva ou agenda externa: **[nao verificado]** (`app/config/crons.py:1043-1051`, `1148-1155`, `605`; `app/ponto/management/commands/detectar_par_relampago.py:224`; `app/ponto/registro_batida.py:283`).
+
+**Contrafactual solicitado:** mudada a função `por_dia_da_grade`, recalcular propagaria o novo mapa para FM e DP; retratar propagaria para DP. Na 09 das empresas exportadas, ambos são barrados pelas guardas acima; leitura pura continua podendo devolver outro número sem alterar o gravado (`app/ponto/services/fechamento.py:1060-1062`, `1212`, `539-564`, `1759-1761`; `app/ponto/services/dia_pago.py:451-464`).
+
+A proteção **não cobre toda escrita possível**: `restaurar_fechamento` atualiza campos fornecidos sem consultar a guarda, e `lavrar` não a verifica internamente. Restauração copia snapshot; não aplica automaticamente uma regra nova (`app/ponto/services/fechamento.py:1373-1393`; `app/ponto/services/dia_pago.py:288-292`, `359-360`; `app/ponto/management/commands/aplicar_09_corte_b.py:265-268`).
+
+5. **Contraexemplo que deve permanecer abonado**
+
+`atestado` até 15 dias é ABONA na semente, assim como férias e licença-maternidade. Num dia obrigatório sem trabalho, classificado como ABONA pelo catálogo vigente, o motor soma o previsto/60 e a grade soma o previsto em minutos; suprimir esse abono contrariaria a classificação (`app/ponto/catalogo/ausencias.py:95`, `99-101`; `app/ponto/motor_calculo_v2.py:2606-2622`; `app/ponto/services/dia_pago.py:393-396`).
+
+O contraexemplo inclui **tipo criado pelo cadastro com `efeito='abona'`**, mesmo ausente da semente: ele entra em `abonam_vigentes()` pelo campo, não pelo nome (`app/ponto/models.py:565-582`; `app/ponto/catalogo/ausencias.py:249-251`, `308-310`).
+
+## 15/11 11:45 · sessao 965431d7dc99 · - · - · origem=Ronald (tmux)
+
+Q4 — evidências consolidadas, somente código.
+
+- **Guarda efetiva da 09:** `app/ponto/services/fechamento.py:36` declara `(9,2026)` em `GUARDA_COMPETENCIA`. A chamada calcula empresas exportadas somente se houver escrita — `not somente_leitura` **ou** `lavrar_dias_pagos` — em `:539`; exclui colaboradores dessas empresas antes do laço em `:560-564`. Portanto protege FM e DiaPago do recalculador, inclusive leitura com lavratura. Leitura pura não entra nessa condição. `app/ponto/services/fechamento.py:539`, `app/ponto/services/fechamento.py:560`.
+- **“EXPORTADA” é por empresa:** `empresas_exportadas_no_escopo` consulta `marcos_da_competencia` em `app/ponto/services/fechamento.py:1515`, que delega a `competencia_entregue` em `:1537`; juiz usa TXT vigente não revogado. `app/folha/export.py:556`, `app/folha/export.py:588`.
+- **Não há bloqueio geral por exportação, aprovação ou tranca no recalculador:** a recusa geral está declarada como removida em `app/ponto/services/fechamento.py:485`; o ramo aprovado grava por `QuerySet.update`, incluindo abono em `:1184`, enquanto aberto salva em `:1144`. A trava `FM.save()` só olha aprovado→aprovado e é contornada por esse update. `app/ponto/models.py:492`, `app/ponto/services/fechamento.py:1137`, `app/ponto/services/fechamento.py:1160`.
+
+| Caminho | Evidência e efeito |
+|---|---|
+| Botão Recalcular | `app/ponto/views.py:1255` chama o recalculador da competência solicitada. |
+| CLI `recalcular_fechamento --apply` | Sem `--apply` retorna; com ele chama o mesmo escritor. `app/ponto/management/commands/recalcular_fechamento.py:110`, `:118`. |
+| Batida criada | Chama evento após criar, inclusive conflito revisado. `app/ponto/registro_batida.py:156`, `:162`, `:179`. |
+| Batida retratada | Chama o mesmo evento após retratar. `app/ponto/registro_batida.py:283`. |
+| Evento | Resolve competência do fato e chama escritor por colaborador em `app/ponto/services/fechamento.py:1809-1810`; agenda `on_commit` em `:1824`. |
+| Decisão HE | `app/ponto/portas/he.py:202`. |
+| Folga aceita / resposta validada | `app/chamados/services/validacao.py:386`, `:471`. |
+| Regeneração de célula/vínculo com recalculo | Deduplica por competência tocada e chama evento. `app/ponto/portas/celula.py:483-496`. |
+| Regeneração explícita em exportada | Chama recalculador com motivo e depois retrato. `app/ponto/portas/regen_exportada.py:184`, `:193`. |
+| Backfill `lavrar_dias_pagos` | Não exportada: recalculador somente leitura + lavratura; exportada: `retratar_exportada`. `app/ponto/management/commands/lavrar_dias_pagos.py:104-123`. |
+| Retrato | Tem guarda própria da 09 antes de calcular/gravar; retorna barrado. `app/ponto/services/dia_pago.py:449-460`. Fora da guarda usa a mesma `por_dia_da_grade` em `:464` e grava abono por bulk update/create em `:538`, `:545`. |
+| Comandos de obra | Chamam mesmo escritor: `app/ponto/management/commands/aplicar_09_corte_b.py:212`; `celula_veredito_velho.py:149`; `desvio_o68b.py:94`; `folga_que_sumiu.py:70`; `diff_reclassificar_partido.py:161`, `:206`. `aplicar_janela_he_total` delega à CLI em `:145`. Todos esses recalculadores atravessam a guarda. |
+| Ensaios | `plano_b_no_dinheiro` chama dentro de atomic e força rollback. `app/ponto/management/commands/plano_b_no_dinheiro.py:109-114`. `simular_folha --recalcular` exige banco de ensaio antes da chamada. `app/folha/management/commands/simular_folha.py:110`, `:123`. |
+
+**Cron:** não existe entrada de recalcular fechamento no catálogo: ele é explicitamente “por ato” em `app/config/crons.py:1148-1155`. `lavrar_dias_pagos` também está no bloco de ferramentas por ato, sem agenda, em `app/config/crons.py:1043-1051`. Porém há **cron indireto comprovado**: `detectar_par_relampago --dias 2 --apply --retratar`, `app/config/crons.py:605` → `_retratar`, `app/ponto/management/commands/detectar_par_relampago.py:224` → `retratar_batida` → evento (`app/ponto/registro_batida.py:283`) → recalculador/guarda (`app/ponto/services/fechamento.py:1810`).
+
+A frase “cron da 10 roda diariamente” existe no comentário `app/ponto/services/fechamento.py:362`, mas não tem agenda correspondente comprovada na cópia; execução/agenda diária real **[nao verificado]**. O shell histórico é de “cron de 1 disparo”, não diário: `fatias_agendadas/abono-no-ar/esteira.sh:7-8`; invoca backfill 09/10 em `:45-49`.
+
+**Limite da proteção:** a guarda não é universal a toda escrita possível.
+
+- `dia_pago.lavrar` não consulta exportação: recebe mapas e substitui linhas por delete+bulk_create. `app/ponto/services/dia_pago.py:135`, `:288-292`, `:359-360`. Os chamadores de produção encontrados ficam dentro do recalculador em `app/ponto/services/fechamento.py:1201`, `:1277`, portanto chegam depois da guarda.
+- `restaurar_fechamento` aceita campos válidos e atualiza valores fornecidos sem consultar guarda. `app/ponto/services/fechamento.py:1373-1393`. `minutos_abonados` está no snapshot de `aplicar_09_corte_b` (`app/ponto/management/commands/aplicar_09_corte_b.py:72`) e a restauração integral usa esses campos em `:265-268`; `desvio_o68b --reverter` também restaura snapshot em `app/ponto/management/commands/desvio_o68b.py:194-199`. São regravações de valores fornecidos, sem recalcular a regra corrigida.
+- Script legado `bin/relavrar_o120_col221_09.py:74-75` passa `permitir_exportada=True`, ausente da assinatura atual (`app/ponto/services/fechamento.py:448-451`); não é bypass funcional demonstrado, execução **[nao verificado]**.
+
+**Contrafactual pedido:** alterada a regra de `por_dia_da_grade`, o recalculador consumiria o mapa novo para FM (`app/ponto/services/fechamento.py:1060-1062`) e DiaPago (`:1212`), e o retrato também consumiria a função nova (`app/ponto/services/dia_pago.py:464`). Na 09 de empresas exportadas, o primeiro é barrado antes do laço (`app/ponto/services/fechamento.py:560-564`) e o segundo antes da derivação (`app/ponto/services/dia_pago.py:451-460`). Eventos, botão, CLI ou cron indireto não contornam essas guardas pelos caminhos listados.
 
 ## 15/11 11:44 · sessao 7e5d0d7504f0 · - · - · origem=Ronald (tmux)
 
@@ -794,61 +918,4 @@ Item 3:
 - **NÃO PROCEDENTE — declaração tardia de `var` provoca corrida com `abrirCamera`.** A inicialização em `T:251` acontece antes do registro do listener em `T:273`; declarar a função antes não a executa (`T:235`, `T:251`, `T:273`).
 - **NÃO PROCEDENTE — `innerHTML` novo recebe valor não confiável.** `_camNegada` apenas seleciona entre duas strings constantes; nome, conteúdo e nome de arquivo não são concatenados no HTML; a imagem é criada por DOM e recebe URL gerada (`T:242`, `T:256-266`).
 
-## 15/11 10:35 · sessao c0a8833e7ae8 · - · - · origem=Ronald (tmux)
-
-Item 4 — **MORDE parcialmente; há lacunas procedentes, sem asserção globalmente vazia.** A conclusão abaixo é leitura estática da sonda; execução e resultado verde/RED **[não verificado]**. O teste criaria e removeria diretório temporário, e o helper escreveria HTML/symlink/cópia; não foi executado para preservar a regra de somente leitura (`app/ponto/tests/test_camera_alternativa_previa.py:163`, `app/ponto/tests/test_camera_alternativa_previa.py:167`, `app/core/tests/test_smoke_chromium.py:94`, `app/core/tests/test_smoke_chromium.py:100`).
-
-| Asserção | O que alcança; mutante plausível |
-|---|---|
-| `assertIsNotNone(chromium())` | Cobra executável presente, sem skip; não prova que JS executou (`app/ponto/tests/test_camera_alternativa_previa.py:158`, `app/core/tests/test_smoke_chromium.py:76`). |
-| `assertIn('id="v2-cam-fallback"', html)` | Cobra presença literal no HTML renderizado; sozinha aceitaria elemento inutilizável, mas a sonda cobra acesso DOM e change (`app/ponto/tests/test_camera_alternativa_previa.py:162`, `app/ponto/tests/test_camera_alternativa_previa.py:80`, `app/ponto/tests/test_camera_alternativa_previa.py:91`). |
-| `assertIsNotNone(veredito)` | Cobra marcador emitido pela sonda; ausência de JS/veredito falha, sem verde por silêncio (`app/ponto/tests/test_camera_alternativa_previa.py:66`, `app/ponto/tests/test_camera_alternativa_previa.py:168`, `app/core/tests/test_smoke_chromium.py:123`). |
-| `assertNotIn('erro', r)` | Cobra elemento presente, aviso inicial e ausência das exceções capturadas; aviso inicial é somente `textContent`, não visibilidade (`app/ponto/tests/test_camera_alternativa_previa.py:82`, `app/ponto/tests/test_camera_alternativa_previa.py:84`, `app/ponto/tests/test_camera_alternativa_previa.py:125`, `app/ponto/tests/test_camera_alternativa_previa.py:176`). |
-| `aviso=False` | Remove palavras do aviso do texto de todo quadro; trocar somente texto poderia passar esta parcela, mas falharia as parcelas de imagem (`app/ponto/tests/test_camera_alternativa_previa.py:77`, `app/ponto/tests/test_camera_alternativa_previa.py:99`, `app/ponto/tests/test_camera_alternativa_previa.py:131`). |
-| `previa=True` | Exige primeiro `img` do pai de `ph` com URL `blob:`; não exige imagem descendente de `#v2-cam-ph` nem id `v2-cam-previa` (`app/ponto/tests/test_camera_alternativa_previa.py:83`, `app/ponto/tests/test_camera_alternativa_previa.py:94`, `app/ponto/tests/test_camera_alternativa_previa.py:100`). |
-| `decodificada=True` | Exige imagem completa com largura natural 4; mata simples texto e imagem quebrada, mas não compara bytes, pixels nem altura (`app/ponto/tests/test_camera_alternativa_previa.py:89`, `app/ponto/tests/test_camera_alternativa_previa.py:95`, `app/ponto/tests/test_camera_alternativa_previa.py:101`). |
-| `area=True` | Cobra área geométrica positiva; não verifica `visibility`, opacidade ou oclusão da imagem (`app/ponto/tests/test_camera_alternativa_previa.py:102`, `app/ponto/tests/test_camera_alternativa_previa.py:103`). |
-| `toque=True` | Faz hit test real no centro de `ph` e cobra uma chamada ao `inp.click` substituído; mata perda do caminho de clique nesse ponto, mas não exige propriedade `ph.onclick`, nem abertura real da câmera do sistema (`app/ponto/tests/test_camera_alternativa_previa.py:87`, `app/ponto/tests/test_camera_alternativa_previa.py:104`, `app/ponto/tests/test_camera_alternativa_previa.py:108`). |
-| `troca=True` | Exige URL blob diferente na segunda imagem; mata prévia estagnada, mas não prova local DOM ou conteúdo por si só (`app/ponto/tests/test_camera_alternativa_previa.py:109`, `app/ponto/tests/test_camera_alternativa_previa.py:113`). |
-| `revoga=True` | Mata omissão da revogação anterior; não examina ordem relativa à retirada da imagem, nem se a URL nova também foi revogada indevidamente (`app/ponto/tests/test_camera_alternativa_previa.py:85`, `app/ponto/tests/test_camera_alternativa_previa.py:86`, `app/ponto/tests/test_camera_alternativa_previa.py:114`). |
-| `decodificada2=True` | Cobra largura natural 8 e imagem completa; não compara bytes/altura e não mede área nem clique depois da segunda selfie (`app/ponto/tests/test_camera_alternativa_previa.py:110`, `app/ponto/tests/test_camera_alternativa_previa.py:115`). |
-| `aviso2=False` | Cobra ausência textual depois da segunda selfie; novamente não inspeciona chip ou visibilidade (`app/ponto/tests/test_camera_alternativa_previa.py:116`). |
-| `envio=True` | Cobra exatamente um POST anotado, foto presente e igualdade de tamanho/tipo com a segunda selfie; mata ausência de foto/POST e primeira foto com tamanho diferente, mas não compara conteúdo (`app/ponto/tests/test_camera_alternativa_previa.py:60`, `app/ponto/tests/test_camera_alternativa_previa.py:62`, `app/ponto/tests/test_camera_alternativa_previa.py:118`, `app/ponto/tests/test_camera_alternativa_previa.py:120`). |
-| `assertEqual(r, ESPERADO)` | Cobra todos os dez resultados e conjunto exato de chaves; não há passe apenas por ausência do aviso (`app/ponto/tests/test_camera_alternativa_previa.py:131`, `app/ponto/tests/test_camera_alternativa_previa.py:177`). |
-
-**PROCEDENTE — alcance mais amplo anunciado que o efetivamente medido:** uma prévia irmã de `ph`, dentro do quadro e posicionada fora do centro clicado, com `ph` ainda abrindo input, poderia passar; a busca é pelo pai e o clique por um ponto de `ph`, sem verificar descendência ou `onclick` da imagem (`app/ponto/tests/test_camera_alternativa_previa.py:83`, `app/ponto/tests/test_camera_alternativa_previa.py:94`, `app/ponto/tests/test_camera_alternativa_previa.py:106`). O chip também não é consultado pela sonda (`app/ponto/tests/test_camera_alternativa_previa.py:80`, `app/ponto/tests/test_camera_alternativa_previa.py:120`).
-
-**PROCEDENTE — identidade da segunda foto insuficiente:** um mutante que envia outro blob de mesmo tamanho e MIME passa `envio`; não há comparação dos bytes da segunda foto (`app/ponto/tests/test_camera_alternativa_previa.py:120`). O mutante simples “guardar primeira foto e mostrar segunda” é detectado se os PNG gerados tiverem tamanhos diferentes; os tamanhos efetivos nesta execução **[não verificado]** (`app/ponto/tests/test_camera_alternativa_previa.py:70`, `app/ponto/tests/test_camera_alternativa_previa.py:95`, `app/ponto/tests/test_camera_alternativa_previa.py:110`).
-
-**NÃO PROCEDENTE — sonda tentando ler variável privada inexistente:** `_fotoBlob` está no IIFE, mas a sonda chama a função global `window.v2Confirmar`, que usa o fecho, passa por `garantirRequisitos`, cai no fallback de `capturarFrame` quando vídeo não tem quadro e coloca `_fotoBlob` em `FormData`; o fetch interceptado observa esse valor por um leitor válido (`app/templates/ponto/bater_ponto_v2.html:138`, `app/templates/ponto/bater_ponto_v2.html:146`, `app/templates/ponto/bater_ponto_v2.html:278`, `app/templates/ponto/bater_ponto_v2.html:305`, `app/templates/ponto/bater_ponto_v2.html:326`, `app/templates/ponto/bater_ponto_v2.html:339`, `app/ponto/tests/test_camera_alternativa_previa.py:62`).
-
-**NÃO PROCEDENTE — apenas uma casca no código do teste:** percorre `base.html` e `base_app.html`, remapeia o nome `base.html` no loader locmem para o conteúdo da casca escolhida, e renderiza o template que estende esse nome; ambas têm bloco `content`, que inclui o script da página (`app/ponto/tests/test_camera_alternativa_previa.py:38`, `app/ponto/tests/test_camera_alternativa_previa.py:141`, `app/ponto/tests/test_camera_alternativa_previa.py:148`, `app/ponto/tests/test_camera_alternativa_previa.py:172`, `app/templates/ponto/bater_ponto_v2.html:1`, `app/templates/ponto/bater_ponto_v2.html:3`, `app/templates/base.html:336`, `app/templates/base_app.html:94`). A seleção real de casca por sessão/rota não é exercitada: usa renderização direta e `AnonymousUser` (`app/ponto/tests/test_camera_alternativa_previa.py:148`, `app/ponto/tests/test_camera_alternativa_previa.py:150`).
-
-**PROCEDENTE — não há prova de mutação RED neste teste:** o arquivo tem cenário verde esperado, mas não reinjeta cura defeituosa nem exige falha de mutante; o nome `test_MORDE` não acrescenta essa execução (`app/ponto/tests/test_camera_alternativa_previa.py:171`, `app/ponto/tests/test_camera_alternativa_previa.py:177`). Diferentemente, o helper smoke possui outro teste que injeta defeito explicitamente, mas esse teste não é chamado pelo teste da câmera (`app/core/tests/test_smoke_chromium.py:191`, `app/core/tests/test_smoke_chromium.py:212`, `app/ponto/tests/test_camera_alternativa_previa.py:35`).
-
-**PROCEDENTE — caminhos ausentes da cobertura:** a câmera sempre rejeita, rede sempre é marcada online e o POST recebe HTTP 599; logo esse caso não cobre câmera funcionando, offline/fila, sucesso, cancelamento, pageshow/bfcache ou reload (`app/ponto/tests/test_camera_alternativa_previa.py:48`, `app/ponto/tests/test_camera_alternativa_previa.py:57`, `app/ponto/tests/test_camera_alternativa_previa.py:63`, `app/ponto/tests/test_camera_alternativa_previa.py:88`, `app/ponto/tests/test_camera_alternativa_previa.py:118`). Os erros de console retornados pelo helper são descartados (`app/ponto/tests/test_camera_alternativa_previa.py:165`, `app/core/tests/test_smoke_chromium.py:124`).
-
-## 15/11 10:35 · sessao af0477d00d94 · - · - · origem=Ronald (tmux)
-
-**Item 5 — classes da casa**
-
-| Classe | Veredito sobre o diff | Evidência |
-|---|---|---|
-| Segundo juiz registrado | **NÃO PROCEDENTE.** O juiz registrado `selfie_ausente` decide ausência de foto da batida persistida e prazo do canal; o pintor apenas apresenta a selfie local já guardada. | `app/core/juizes.py:1202-1205`; `app/templates/ponto/bater_ponto_v2.html:255-267`. |
-| Segundo escritor fora da porta | **NÃO PROCEDENTE para envio/persistência.** O handler continua atribuindo o arquivo a `_fotoBlob`; o novo pintor lê esse estado, cria a URL e escreve quadro/chip. As portas existentes continuam lendo `_fotoBlob` para FormData e fila. | `app/templates/ponto/bater_ponto_v2.html:254-271`, `:305`, `:339`, `:352`, `:365`; `app/static/pwa.js:107-118`. |
-| Relógio fora da borda | **NÃO PROCEDENTE no diff.** O novo pintor não lê relógio; leituras existentes permanecem em relógio/GPS/retomada/feedback, fora do trecho alterado fornecido. | `app/templates/ponto/bater_ponto_v2.html:252-271`, `:163-170`, `:177-178`, `:311-323`, `:353-368`; comparação com `diff_v1.txt` anexado. |
-| Derivação paralela de fonte única | **NÃO PROCEDENTE como nova fonte de verdade.** A decisão “prévia ou aviso” deriva diretamente de `_fotoBlob`; `_previaUrl` guarda o recurso visual, `_camNegada` seleciona um de dois avisos literais. | `app/templates/ponto/bater_ponto_v2.html:251-267`. |
-| Selo/RED sem mordida | A análise detalhada cabe ao agente do teste; **não há prova de execução RED/GREEN no dado fornecido [não verificado]**. O teste contém verificações de prévia, troca, revogação e envio, portanto a acusação genérica de “só selo textual” não corresponde à implementação. | `app/ponto/tests/test_camera_alternativa_previa.py:99-125`, `:131-134`, `:170-177`. |
-| Campo com dois significados | **NÃO PROCEDENTE como incompatibilidade de contrato.** `#v2-cam-ph` passa de placeholder/aviso para contêiner de prévia; o leitor de captura usa `#v2-cam`, não o conteúdo do quadro. `_fotoBlob` continua sendo o material enviado; File e Blob já são os valores originados pelo fallback e captura. | `app/templates/ponto/bater_ponto_v2.html:89`, `:255-271`, `:275-286`, `:305`, `:339`. |
-
-**Item 6 — dependências externas**
-
-- **NÃO PROCEDENTE: leitores externos dos ids/markup trocado.** A busca textual em `app` por `v2-cam` localizou os ids no próprio template e no teste novo; não localizou leitores executáveis nas outras telas/JS citados. A ausência é delimitada à cópia e à busca literal; dependências por código gerado ou serviços externos **[não verificado]**. Definição/escrita dos ids: `app/templates/ponto/bater_ponto_v2.html:87-90`, `:236-277`; consumo do teste: `app/ponto/tests/test_camera_alternativa_previa.py:80-81`, `:162`.
-- `static/pwa.js` recebe a foto como argumento, grava-a em IndexedDB e depois a põe no FormData; não precisa inspecionar a prévia nem o placeholder. **NÃO PROCEDENTE.** `app/static/pwa.js:107-118`, `:143-156`.
-- `sw.js` seleciona tratamento por método/URL e comunica sincronização por mensagem; a troca interna do quadro não participa desses contratos. **NÃO PROCEDENTE.** `app/static/sw.js:33-85`, `:112-125`; `app/static/pwa.js:16`.
-- `triagem/apto.html` possui seu próprio estado e ids (`camera`, `preview`, `foto-input`, `camera-off`), sem consumir `v2-cam-*`. **NÃO PROCEDENTE.** `app/templates/ponto/triagem/apto.html:138-150`, `:167-186`, `:229-232`, `:242-282`.
-- Ambos os dashboards apenas apontam para a rota `ponto:bater_ponto_v2`; não precisam do markup do quadro. **NÃO PROCEDENTE.** `app/templates/core/dashboard_colaborador.html:39-46`; `app/templates/core/dashboard_colaborador_v2.html:31-38`.
-
-**Limite da comparação:** esta cópia não tem repositório Git utilizável pelo comando executado; comparação com os commits depende do diff anexado **[não verificado independentemente]**. [nao verificado]
-
-_5604 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
