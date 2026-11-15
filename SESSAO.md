@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 10:21:14.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (55.8 MB). Acoes na janela: **1534**.
+**Medido em 15/11/2026 10:26:44.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (56.0 MB). Acoes na janela: **1546**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:26:23 | Edit |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
+| 10:26:18 | Bash | Append PROMPTS line and view BACKLOG table header | `cd /home/ronald/saas-hasner/app/docs; printf '%s\n' '- 15/11 10:3x UI-CAMERA-ALTERNATIVA-DIZ-A-VERDADE (aval Ronald, logs/AVAIS-1515/ui_camera_alternativa.txt): lateral de UI em vaga propria; bater_ponto_v2.html:250-252 selfie alternativa recebida tira o aviso "Camera negada" e mostra previa (toque segue aberto); RED + selo 2 cascas + node_check; pouso smoke iPhone ([nome]) + Android, deploy --s ...` |
+| 10:26:16 | Write |  | `/home/ronald/saas-hasner/logs/AVAIS-1515/ui_camera_alternativa.txt` |
+| 10:26:07 | Bash | List glossary pattern terms | `cd /home/ronald/saas-hasner/app/docs; awk -F'\|' '/^\\| /{print $2"\|"$3}' GLOSSARIO.md \| cut -c1-140 \| head -60; grep -n -i 'tela\\|ui\\|verdade' PLANO-PADROES.md \| head -15` |
+| 10:26:04 | Bash | Read template defect site, glossary terms, docs tails | `cd /home/ronald/saas-hasner; date; mkdir -p logs/UI-CAMERA-ALTERNATIVA; sed -n 235,262p app/templates/ponto/bater_ponto_v2.html; grep -n -i 'tela\\|estado\\|verdade\\|afirma' app/docs/GLOSSARIO.md \| head -30; tail -3 app/docs/PROMPTS.md \| cut -c1-200; grep -n 'COMPETENCIA-PAGA-UM-JUIZ' app/docs/BACKLOG.md \| head -2` |
+| 10:21:35 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 10:21:31 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 10:21:26 | Bash | Show pista state | `timeout 20 ssh pista estado 2>&1 \| head -40` |
+| 10:21:23 | Bash | Show pista job queue | `timeout 20 ssh pista fila 2>&1 \| head -30` |
+| 10:21:20 | Bash | Find how LOTE 1 pista jobs are tracked | `cd /home/ronald/saas-hasner/logs/PRODUCAO-MAXIMA; grep -n -i 'pista\\|ssh' he_revogada_entrega.md \| head -20; pgrep -af 'ssh pista' \| cut -c1-160` |
+| 10:21:17 | Bash | Check LOTE 1 pista suite verdicts | `cd /home/ronald/saas-hasner/logs/PRODUCAO-MAXIMA; ls -la he_* 2>/dev/null; cat he_pista.fim 2>/dev/null; for f in he_*.log; do echo "== $f"; grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep -E '^Ran [0-9]+ tests' $f \| tail -1; done` |
+| 10:21:14 | Bash | Inspect Codex launch log and running wrappers | `cd /home/ronald/saas-hasner/logs/FIO-MORTO-CLASSE-D; cat s1.log; cat lanca1.sh; pgrep -af codex_pergunta \| cut -c1-200` |
 | 10:21:12 | Bash | Check FIO-MORTO-CLASSE-D Codex reading result | `cd /home/ronald/saas-hasner/logs/FIO-MORTO-CLASSE-D; ls -la; cat s1.rc 2>/dev/null; wc -l s1.r 2>/dev/null; head -c 6000 s1.r` |
 | 10:21:09 | Bash | Read finished agents' outputs and status of in-flight jobs | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks; for f in a554eff1a61fbe3fe a71d04c37d64cccd9 a236f860b3612e122; do echo "=== $f"; tail -c 3500 $f.output; done; date; cat /home/ronald/saas-hasner/logs/E4C/f1/rc 2>/dev/null; ps -p 1335781,1372058 -o pid,etime,cmd \| cut -c1-120; cat /home/ronald/saas-hasner/logs/E3-RESTO-R3/c9/pista.espera 2>/dev/null \|  ...` |
 | 10:17:41 | Bash | Update RELATO top and LU2-01 as answered | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md' s=open(p,encoding='utf-8').read() i=s.index('PAREI: DISJUNTOR B3 JUSTIFICATIVA-PAGA-O-PERIODO') j=s.index('\n',i) old=s[i:j] new=('ESTADO 10:2x LIBERA-B3-E-CLASSE-D (aval Ronald, logs/AVAIS-1515/libera_b3_classe_d.txt): B3 JUSTIFICATIVA liberado (DESENHO; o disjuntor registrou LIBERA as 09:59 pela linha que a sessao escreveu --  ...` |
