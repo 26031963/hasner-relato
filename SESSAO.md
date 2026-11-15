@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 14/11/2026 23:25:49.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (14.5 MB). Acoes na janela: **399**.
+**Medido em 14/11/2026 23:31:20.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (14.6 MB). Acoes na janela: **403**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:26:29 | Bash | Put ESPERANDO on RELATO line 3 and check hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('DESPACHO E3-RESTO-R3') and L[4].startswith('ESPERANDO:') desp=L[2]; L[2]='ESPERANDO: codex_pergunta.sh \| pid=19564'; L[4]=desp L.insert(5,'ESTADO 23:27 E3-RESTO-R3 c4: vaga unica de construtor ocupada (Codex construtor pid 19564, wt-codex-e3-resto-r3-231625, brief logs/E3-RE ...` |
+| 23:26:23 | Bash | Check RELATO top and live jobs | `cd /home/ronald/saas-hasner; head -5 app/docs/RELATO.md \| cut -c1-100; kill -0 19564 && echo c4-vivo; kill -0 4167543 && echo push-vivo` |
+| 23:26:10 | Bash | Wait for constructor or push | `cd /home/ronald/saas-hasner; until [ -s logs/E3-RESTO-R3/c4/c4.rc ] \|\| [ -s logs/E3-V10/pousa_verde/push2.rc ]; do /usr/bin/sleep 30; done; cat logs/E3-RESTO-R3/c4/c4.rc logs/E3-V10/pousa_verde/push2.rc 2>/dev/null; ls logs/GRADE-MESTRA/resolve67/*.rc 2>/dev/null \| wc -l` |
+| 23:26:05 | Bash | Check push and grade status | `cd /home/ronald/saas-hasner; tail -2 logs/E3-V10/pousa_verde/push2.out; kill -0 4167543 && echo push-vivo; ls logs/GRADE-MESTRA/resolve67/*.rc 2>/dev/null \| wc -l; tail -2 logs/GRADE-MESTRA/resolve67/disparar.log; uptime` |
 | 23:25:36 | Bash | Clear PAREI and launch the c4 constructor | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='PAREI: censo-E3-RESTO-R3 \| espera Codex\n' assert s.count(a)==1; s=s.replace(a,'') open(p,'w').write(s) EOF D=logs/E3-RESTO-R3/c4; cat > $D/run.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner; D=logs/E3-RESTO-R3/c4 rm -f $D/c4.rc CODEX_OBRA=E3-RESTO-R3 CODEX_PAPEL=construtor bin/codex_pergunta.sh --const ...` |
 | 23:25:28 | Bash | Write census-closed brief and check it | `cd /home/ronald/saas-hasner; cat > logs/E3-RESTO-R3/brief_c4.md <<'EOF' OBRA E3-RESTO-R3 -- PAPEL construtor (L-126), VOLTA c4. Base = HEAD da wt (c5a1bf90c = main 90f3fa66b + lote LU, LU2, LU3 c3). Voce trabalha SO em <wt>/app. PROIBIDO tocar: ponto/motor_calculo_v2.py, qualquer models.py, migrations, core/juizes.py, docs, bin. Nenhum juiz novo, nenhuma regra de negocio fora dos cortes anexos. An ...` |
 | 23:25:00 | Bash | Read LU-05 text and retrato mapping | `cd /home/ronald/saas-hasner; /bin/grep -n "LU-05" logs/AVAIS-1313/lista_unica_cortada.txt logs/PREPARA-ESPINHA/LISTA-UNICA-DE-LEI.md \| cut -c1-700; git show c5a1bf90c:app/folha/retrato_folha.py \| sed -n '185,196p;470,480p'` |
