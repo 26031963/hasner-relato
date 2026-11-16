@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 11:46** · publicado em **16/11/2026 11:48** (UTC-3)
+> Ultima resposta processada: **16/11/2026 12:21** · publicado em **16/11/2026 12:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 12:21 · sessao 7b8a48377983 · CORTES-F2-F9-1611 · leitura · origem=Code
+
+Para A, **NÃO para o contrato completo “instante do ato de materialização, valor conservado”**. Hoje existe um instante persistido, mas o efeito lido é o **campo atual `materializada_em`**: ele pode ser substituído ou apagado. A projeção não o reconstrói de um ato conservado. (`app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1400`, `app/chamados/models.py:3295`, `app/chamados/models.py:3318`, `app/chamados/models.py:3393`.)
+
+As provas abaixo são por **leitura das asserções**; resultados de execução, diferenças históricas por Git e efeitos sobre dados de produção: **[nao verificado]**.
+
+A projeção atual recebe diretamente `validada_em`, `respondida_em`, `resposta_colab`, `materializada_em` e `via_resolucao`. Seu índice `[3]` é `materializada_em`; quando recebe `agora`, apenas oculta carimbos posteriores ao instante consultado. (`app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1396`, `app/chamados/juizes.py:1400`.)
+
+**Os dois leitores pedidos não consomem diretamente essa tupla:**
+
+- `sem_veredito_entre` exige `materializada_em is None`, validação ausente e resposta por instante **ou** texto; aplica também a tranca, salvo dispensa explícita. Portanto qualquer carimbo exclui pela materialização, independentemente da via. (`app/chamados/models.py:1923`, `app/chamados/models.py:1924`, `app/chamados/models.py:1926`.)
+- `estado` retorna `RESOLVIDA` imediatamente para validada com carimbo. Sem validação, consulta primeiro `pergunta_viva`; somente se não estiver viva aceita o carimbo como `RESOLVIDA`. **Sair da lista não garante, sozinho, `RESOLVIDA`.** (`app/chamados/models.py:3151`, `app/chamados/models.py:3153`, `app/chamados/models.py:3154`, `app/chamados/models.py:3156`.)
+
+| Ramo | Quem escreve o valor | Quem lê e o que significa hoje |
+|---|---|---|
+| **Carimbo de identidade** | `carimbar_identidade` escolhe `quando or _tz.now()` e salva. A atribuição comum escreve `materializada_em`, `materializada_por_id` e `via_resolucao`. Com `manter_carimbo=True`, conserva instante e autor anteriores. (`app/chamados/models.py:3292`, `app/chamados/models.py:3295`, `app/chamados/models.py:3300`, `app/chamados/models.py:3209`, `app/chamados/models.py:3210`, `app/chamados/models.py:3211`.) | A projeção lê o instante atual; o C6 combina via e carimbo; lista e estado leem o campo conforme a precedência acima. Não há seleção especial de identidade para formar `[3]`. (`app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1416`, `app/chamados/juizes.py:1444`, `app/chamados/models.py:1923`, `app/chamados/models.py:3153`.) |
+| **`materializada_em` solto, via vazia** | `carimbar` recebe a via, escolhe o instante e repassa ao escritor comum; não há rejeição explícita de `''` nesse trecho. Escritor histórico dos registros soltos: **[nao verificado]**. (`app/chamados/models.py:3228`, `app/chamados/models.py:3234`, `app/chamados/models.py:3239`, `app/chamados/models.py:3209`.) | `[3]` recebe esse instante e a lista exclui a pergunta. Para `estado`, a via vazia não elimina a precedência de `pergunta_viva`; validada com carimbo resolve diretamente. (`app/chamados/juizes.py:1390`, `app/chamados/models.py:1923`, `app/chamados/models.py:3153`, `app/chamados/models.py:3154`.) |
+| **Materialização de fato, sem carimbo** | `_pergunta_materializada_de_fato` fornece uma decisão booleana; o materializador usa essa decisão como guarda, captura o instante depois e chama `carimbar`. A presença do fato e a escrita do carimbo são passos distintos. (`app/chamados/juizes.py:666`, `app/chamados/services/materializacao.py:1239`, `app/chamados/services/materializacao.py:1250`, `app/chamados/services/materializacao.py:1283`.) | Sem carimbo, `[3]` permanece `None`. E sozinho não exclui por materialização nem produz `RESOLVIDA`; ambos os retornos `RESOLVIDA` exigem `materializada_em`. No C6, o degrau sem carimbo retorna viva antes da chamada final a E. (`app/chamados/juizes.py:1390`, `app/chamados/models.py:1923`, `app/chamados/models.py:3153`, `app/chamados/models.py:3156`, `app/chamados/juizes.py:1482`, `app/chamados/juizes.py:1489`.) |
+| **`materializada_conservada_em`** | Não foi localizado esse campo/helper na cópia: **[nao verificado]**. O escritor efetivamente encontrado atribui `materializada_em`. (`app/chamados/models.py:3209`.) | A projeção atual não contém esse ramo: devolve o campo atual, eventualmente recortado por `agora`. (`app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1396`, `app/chamados/juizes.py:1400`.) |
+
+Quanto ao relógio, **a projeção e o filtro de materialização de `sem_veredito_entre` não consultam `today/now`**. (`app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1400`, `app/chamados/models.py:1923`.) Entretanto, **`estado` pode consultar relógio fora da borda**, transitivamente: chama `pergunta_viva(self)` sem instante; o cálculo pode alcançar `date.today()` na janela e `_tz.now()` na classificação da falta. (`app/chamados/models.py:3154`, `app/chamados/juizes.py:898`, `app/chamados/juizes.py:1471`, `app/chamados/juizes.py:596`, `app/chamados/juizes.py:1475`, `app/escala/servico_jornada.py:387`.)
+
+Em `supra_juiz`, os leitores indiretos são as chamadas de `sem_veredito_entre` para **pai** e **destino**, ambas com `ignorar_tranca=True`; `pode_executar_csf` decide pela ausência dessas perguntas. (`app/ponto/supra_juiz.py:573`, `app/ponto/supra_juiz.py:574`, `app/ponto/supra_juiz.py:588`.) Mudança efetiva em competência exportada: **[nao verificado]**.
+
+A parte “instante do ato” tem correspondência operacional: o materializador captura `agora` e o persiste no carimbo. (`app/chamados/services/materializacao.py:1250`, `app/chamados/services/materializacao.py:1283`, `app/chamados/models.py:3262`.) A parte “valor conservado” não está fixada como contrato geral: conservar é opção na identidade; descarimbar apaga o valor; e o catálogo atual de `DecisaoPergunta` não lista ato de materialização. (`app/chamados/models.py:3292`, `app/chamados/models.py:3295`, `app/chamados/models.py:3318`, `app/chamados/models.py:3393`, `app/chamados/models.py:4024`, `app/chamados/models.py:4026`.)
+
+Para B, “BASE mudou?” compara o comportamento atual com a **BASE transcrita no anexo**; confirmação por diff histórico: **[nao verificado]**. As hipóteses sobre leitura conservada da F1 antiga não podem ser transportadas para a projeção atual, que lê os campos diretamente. (`app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1400`.)
+
+| Degrau | Sítio hoje | BASE mudou? | Prova hoje | Nota |
+|---|---|---|---|---|
+| **[DEPENDE-F1] 1 — solto deixa a lista** | `app/chamados/models.py:1923`; projeção em `app/chamados/juizes.py:1390`. | **Não**: qualquer `materializada_em` continua excluindo, como a BASE. | Forma exigida em `app/chamados/tests/test_contract_dedup_status.py:143`; valor materializado via CSF em `app/ponto/tests/test_supra_juiz_executor.py:85`. | O teste T:189 citado no anexo, aplicado à árvore atual: **[nao verificado]**. |
+| **[DEPENDE-F1] 2 — assinatura passiva × face SQL** | A validação atual é lida em `app/chamados/models.py:3151` e `app/chamados/juizes.py:1405`. | **Não nesses leitores**: continuam por campo. `_q_validada_pelo_ato` não localizado: **[nao verificado]**. | Asserção do confronto específico passivo/validação/face citada: **[nao verificado]**. | A paridade existente em `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:81` compara **resposta**, não validação. |
+| **[DEPENDE-F1] 3 — desaparecimento do relógio** | Efeito em `app/chamados/juizes.py:1390`; `estado` chama o C6 em `app/chamados/models.py:3154`. | **Não no efeito por campo**. A conclusão ampla “leitores sem relógio” não vale para `estado`: caminho até `app/chamados/juizes.py:596`. | Asserção específica variando o relógio nesses leitores: **[nao verificado]**. | Não há E formando `[3]` no corpo atual; ainda há relógio transitivo no C6. (`app/chamados/juizes.py:1400`, `app/chamados/juizes.py:1471`.) |
+| **[DEPENDE-F1] 4 — continência de `q_vivas`** | SQL por campo em `app/chamados/models.py:3496`; C6 por campo em `app/chamados/juizes.py:1405`. | O degrau de validação continua por campo; a quebra hipotética por migração para atos não está nesses corpos. | `app/chamados/tests/test_contract_pergunta_viva.py:60`; por degrau em `app/chamados/tests/test_viva_delega_ao_juiz.py:45`. | Cobertura específica com ato divergindo da projeção: **[nao verificado]**. |
+| **[DEPENDE-F1] 5 — guarda `pk None`, N1/M7** | Leitura direta em `app/chamados/juizes.py:1389`; opções em `app/chamados/models.py:3706`. | **Não nesses caminhos**: não passam pela guarda conservada descrita no anexo. | Instâncias não salvas: `app/chamados/tests/test_pergunta_estado.py:47`, `app/chamados/tests/test_valor_rotulo.py:12`, `app/chamados/tests/test_valor_rotulo.py:16`. | São provas da leitura atual por campos, não de `_leitura_conservada`. |
+| **[DEPENDE-F1] 6 — NameError no teste de memória antigo** | Identificação do teste/sítio correspondente hoje: **[nao verificado]**. | **[nao verificado]**. | **[nao verificado]**. | O anexo não fornece arquivo e símbolo suficientes para vincular aquele erro a uma asserção atual: **[nao verificado]**. | [nao verificado]
+
+| Degrau | Sítio hoje | BASE mudou? | Prova hoje — asserção | Nota |
+|---|---|---|---|---|
+| **M1b** | `app/chamados/models.py:3151`, `app/chamados/models.py:3153`. | **Não**: validada com materialização → `RESOLVIDA`. | **Sim:** `app/chamados/tests/test_pergunta_estado.py:47`. | Fixture combina ambos os carimbos em `app/chamados/tests/test_pergunta_estado.py:45`. |
+| **M4** | Queda final em `app/chamados/models.py:3158`. | **Não**: decide por `respondida_em`. | Prova que isole especificamente essa queda: **[nao verificado]**. | Asserções de rótulo existem em `app/chamados/tests/test_pergunta_estado.py:30` e `app/chamados/tests/test_pergunta_estado.py:36`, mas não isolam C6 falso sem validação/materialização. |
+| **M7** | `app/chamados/models.py:3693`, `app/chamados/models.py:3701`, `app/chamados/models.py:3706`. | **Não**: fonte continua `resposta_colab`. | **Sim, opções:** `app/chamados/tests/test_valor_rotulo.py:12` e `app/chamados/tests/test_valor_rotulo.py:16`. | Dropdown posto/escala e texto vindo de ato: **[nao verificado]**. |
+| **M11** | `app/chamados/models.py:1926`. | **Não**: tranca exclui, salvo `ignorar_tranca`. | **Sim:** `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:304`; dispensa da tranca em `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:305`. | A tranca é substituída por `True` em `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:303`. |
+| **M13** | `_ancoradas`, filtro em `app/chamados/models.py:344`. | **Não**: usa `validada_em__isnull=True`. | **Parcial, AST:** `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:284`. | Exige presença dos campos; não distingue `isnull=True` de `False`, pois a extração retém o nome do campo. (`app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:283`.) |
+| **M14** | Filtro e relavra em `app/chamados/models.py:310`, `app/chamados/models.py:312`. | **Não**: relavra não validadas por campo. | **Parcial:** relavra e ordem após salvar em `app/chamados/tests/test_o261e_f1_codex_v5.py:90`, `app/chamados/tests/test_o261e_f1_codex_v5.py:91`. | Asserção que distinga “só não validadas” de incluir também validadas: **[nao verificado]**. |
+| **M15** | SILENCIO e foto em `app/chamados/models.py:2006`, `app/chamados/models.py:2007`. | **Não**: `ato_texto` vem de `resposta_colab`. | **Parcial:** existência/autoria do SILENCIO em `app/chamados/tests/test_e1_entradas.py:125`. | Essa asserção não consulta `ato_texto`; prova da fonte da fotografia: **[nao verificado]**. |
+| **M17** | Conserva R/V em `app/chamados/models.py:1613`; limpa em `app/chamados/models.py:1629`. | **Sim**: agora também zera `resposta_colab=''`. (`app/chamados/models.py:1630`.) | **Sim:** par/carimbo em `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:276`, `:277`, `:278`; ausência de devolução em `:281`; trilha exata em `:285`; fila em `:329`, todos no mesmo arquivo. | Continua sem REABERTURA/RECUSA; conserva atos R/V, não “nenhum ato”. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:281`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:285`.) |
+| **M18** | Cópia e julgamento em `app/chamados/models.py:1541`, `app/chamados/models.py:1557`. | **Sim**: simulação agora zera também texto. (`app/chamados/models.py:1556`.) | **Parcial:** seleção pelo C6 em `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:139`, `:142`, `:149`, `:150`, todos no mesmo arquivo. | Asserção específica da limpeza do texto **na cópia**: **[nao verificado]**. |
+| **M19** | `_leitura_dos_atos` não localizado: **[nao verificado]**. Leitores atuais em `app/chamados/models.py:3665`, `app/chamados/models.py:3688`, `app/chamados/models.py:1923`. | Os leitores encontrados continuam por campo; não mostram a migração c3. | Prova dos ramos prefetch/`pk None`/duplo daquele helper: **[nao verificado]**. | `respostas_anteriores` lê decisões, mas é outro método. (`app/chamados/models.py:3667`, `app/chamados/models.py:3675`.) |
+| **M3** | `app/chamados/models.py:3154`, `app/chamados/models.py:3156`. | **Não**: viva precede carimbo; não viva com carimbo resolve. | **Sim, solto:** `app/chamados/tests/test_pergunta_estado.py:53`, com fixture em `app/chamados/tests/test_pergunta_estado.py:52`. | Prova E-sem-carimbo: **[nao verificado]**; E não fornece o efeito atual. (`app/chamados/juizes.py:1390`.) |
+| **M9** | `app/chamados/models.py:1924`, `app/chamados/models.py:1925`. | **Não**: instante **ou** texto continuam suficientes. | **Sim:** resposta em `app/ponto/tests/test_supra_juiz_executor.py:72`; texto sem instante em `:81`; sem resposta em `:69`, todos no mesmo arquivo. | Alcançam o filtro real pela delegação em `app/ponto/tests/test_supra_juiz_executor.py:46`. |
+| **M10** | `app/chamados/models.py:1923`. | **Não**: qualquer `materializada_em` exclui. | **Sim:** valor via CSF em `app/ponto/tests/test_supra_juiz_executor.py:85`; forma textual em `app/chamados/tests/test_contract_dedup_status.py:143`. | Prova E-sem-carimbo: **[nao verificado]**; esse ramo não compõe `[3]` hoje. (`app/chamados/juizes.py:1400`.) |
+| **M20** | `F2_RESIDUO`/`SeloF2Test` da c3 não localizado: **[nao verificado]**. | Comparação daquele selo: **[nao verificado]**. | Prova equivalente fora de `estado`: **[nao verificado]**. | O selo em `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:233` fiscaliza **escritores do par**; não comprova o selo de leitores pedido. |
+
+## 16/11 12:19 · sessao 371319897e7d · - · - · origem=Ronald (tmux)
+
+| Degrau | Sítio hoje | BASE mudou? | Prova hoje, por leitura | Nota |
+|---|---|---|---|---|
+| M17 | `app/chamados/models.py:1560`, `:1613`, `:1629` | **Sim**: descarimbo agora também zera `resposta_colab=''` (`:1630`). Continua conservando R/V antes de limpar, sem REABERTURA (`:1613`, `:1629`). | `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:276`, `:277`, `:278`, `:281`, `:285`, `:329`. | `:281` proíbe REABERTURA/RECUSA; `:285` exige trilha exata R/V. Não significa “sem ato nenhum”. |
+| M18 | `app/chamados/models.py:1515`, `:1541`, `:1553` | **Sim**: simulação agora zera texto junto dos instantes (`:1554`, `:1555`, `:1556`). Continua cópia em memória consultando `pergunta_viva` (`:1557`). | `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:139`, `:142`, `:149`, `:150`, `:181`, `:184`. | Mordem seleção pelo C6 e célula do julgamento. Asserção específica da nova limpeza de texto **na cópia**: [nao verificado]. |
+| M19 | Helper `_leitura_dos_atos` não localizado [nao verificado]. Leitores atuais: `app/chamados/models.py:3665`, `:3688`, `:1923`. | Leitores encontrados seguem campos; a migração descrita para c3 não é o corpo atual (`:3665`, `:3688`, `:1923`). | Provas dos ramos prefetch/pk None/duplo daquele helper: [nao verificado]. | `respostas_anteriores` é outro leitor, de decisões, em `app/chamados/models.py:3667`, `:3675`. |
+| M3 | `app/chamados/models.py:3154`, `:3156`, `:3158` | **Não**, ante BASE fornecida: viva precede o teste de materialização e o efeito lido é `materializada_em`. | `app/chamados/tests/test_pergunta_estado.py:53`; fixture sem resposta/validação, apenas materialização, em `:52`. | Morde solto via vazia. Caso E-sem-carimbo: [nao verificado]; esse efeito não é critério de RESOLVIDA no corpo atual (`models.py:3156`). |
+| M9 | `app/chamados/models.py:1923`, `:1924`, `:1925` | **Não**: instante **ou** texto continuam suficientes. | `app/ponto/tests/test_supra_juiz_executor.py:72` (resposta), `:81` (texto sem instante), `:69` (sem resposta). Também `app/chamados/tests/test_e3_10_cura_no_escritor.py:132`, `:133`, `:134`. | O teste do CSF delega ao corpo real em `test_supra_juiz_executor.py:46`; só a tranca é substituída em `:58`. |
+| M10 | `app/chamados/models.py:1923` | **Não**: qualquer `materializada_em` exclui. | Valor via CSF: `app/ponto/tests/test_supra_juiz_executor.py:85`. Forma textual: `app/chamados/tests/test_contract_dedup_status.py:143`. | `:85` combina origem validada e pergunta direta materializada; cada universo deve liberar o CSF. E-sem-carimbo: [nao verificado]. |
+| M20 | F2_RESIDUO/SeloF2Test da c3 não localizado [nao verificado]. | Comparação daquele selo com BASE: [nao verificado]. | Prova equivalente cobrindo leitores fora de `estado`: [nao verificado]. | Existe selo de **escrita do par**, outro escopo: `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:233`; usa qualname (`:189`, `:192`) e morde método novo (`:265`, `:266`). Não demonstra o F2_RESIDUO descrito. |
+
+Asserções citadas foram lidas; resultado de execução: [nao verificado].
+
+## 16/11 12:19 · sessao 0c12813eb48b · - · - · origem=Ronald (tmux)
+
+A conclusão é **NÃO** para “já fixa o efeito como instante do ato de materialização, valor conservado”: hoje `[3]` é o campo atual `p.materializada_em`, sem leitura de ato de materialização; as portas podem substituí-lo e apagá-lo. Há conservação pontual opcional do carimbo, mas não o contrato descrito para `be2b8d733`. Fontes: `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1400`, `app/chamados/models.py:3292`, `app/chamados/models.py:3295`, `app/chamados/models.py:3318`, `app/chamados/models.py:3393`.
+
+**Fonte campo a campo e efeito real**
+
+- A projeção recebe `validada_em`, `respondida_em`, `resposta_colab`, `materializada_em`, `via_resolucao` diretamente da pergunta; se houver `agora`, apenas recorta datas posteriores. Não há leitura de `DecisaoPergunta` nesse corpo. `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1391`, `app/chamados/juizes.py:1400`.
+- `materializada_em` é `DateTimeField` anulável, com descrição “Quando pergunta foi processada (batida criada + chamado fechado)”. `materializada_por` é o autor; `via_resolucao` declara via, admitindo vazio por legado. `app/chamados/models.py:3530`, `app/chamados/models.py:3534`, `app/chamados/models.py:2666`.
+- O escritor comum em memória atribui os três: `self.materializada_em = quando`, `self.materializada_por_id = autor_id`, `self.via_resolucao = via`. `app/chamados/models.py:3207`, `app/chamados/models.py:3209`, `app/chamados/models.py:3210`, `app/chamados/models.py:3211`.
+- `sem_veredito_entre` **não chama a projeção temporal**: exclui qualquer `materializada_em is not None`, independentemente da via ou de E; também exige validação ausente e instante de resposta ou texto, com tranca opcional. `app/chamados/models.py:1922`, `app/chamados/models.py:1923`, `app/chamados/models.py:1924`, `app/chamados/models.py:1926`.
+- `estado` **não chama a projeção diretamente**: validada com carimbo → `RESOLVIDA`; sem validação, pergunta viva → `PENDENTE`/`RESPONDIDA`; só depois, não viva com carimbo → `RESOLVIDA`. Portanto ter carimbo exclui da lista, mas não garante `RESOLVIDA` em todos os ramos. `app/chamados/models.py:3151`, `app/chamados/models.py:3153`, `app/chamados/models.py:3154`, `app/chamados/models.py:3156`, `app/chamados/models.py:3158`.
+
+| Ramo | Quem escreve | Quem lê e consequência |
+|---|---|---|
+| Carimbo de identidade | `carimbar_identidade` aceita as vias de identidade, escolhe `quando or _tz.now()` e salva; com `manter_carimbo=True`, reutiliza instante/autor anteriores. A atribuição efetiva é `_escrever_carimbo`. Exemplos: `fechar_por_admin` e recusa por colisão. `app/chamados/models.py:3278`, `app/chamados/models.py:3288`, `app/chamados/models.py:3292`, `app/chamados/models.py:3295`, `app/chamados/models.py:3300`, `app/chamados/models.py:3209`, `app/chamados/models.py:3174`, `app/chamados/services/materializacao.py:1105`. | Projeção lê o campo atual; C6 lê via+carimbo nos degraus anterior à resposta e de identidade; lista lê apenas presença do campo; `estado` segue a precedência acima. `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1416`, `app/chamados/juizes.py:1443`, `app/chamados/juizes.py:1444`, `app/chamados/models.py:1923`, `app/chamados/models.py:3151`. |
+| `materializada_em` solto, via vazia | O campo admite nulo e a via admite `''`; `_escrever_carimbo` é o sítio de atribuição. A porta `carimbar` não rejeita explicitamente `''`; recebe `via` e repassa ao escritor. Origem histórica ou escritor concreto dos registros soltos: **[nao verificado]**. `app/chamados/models.py:3530`, `app/chamados/models.py:2666`, `app/chamados/models.py:3228`, `app/chamados/models.py:3234`, `app/chamados/models.py:3239`, `app/chamados/models.py:3209`. | `[3]` recebe esse instante; `sem_veredito_entre` exclui a pergunta mesmo com via vazia. Em `estado`, validada+carimbo resolve; sem validação, o C6 ainda pode considerá-la viva. `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1400`, `app/chamados/models.py:1923`, `app/chamados/models.py:3153`, `app/chamados/models.py:3154`. |
+| Materialização de fato E sem carimbo | E devolve booleano; não atribui `[3]` nem grava o carimbo. O materializador usa E como guarda e depois chama `carimbar` com instante capturado. A porta de pendentes também testa E e carimba depois. `app/chamados/juizes.py:666`, `app/chamados/juizes.py:763`, `app/chamados/juizes.py:765`, `app/chamados/services/materializacao.py:1239`, `app/chamados/services/materializacao.py:1250`, `app/chamados/services/materializacao.py:1283`, `app/chamados/services/materializacao.py:1422`, `app/chamados/services/materializacao.py:1433`, `app/chamados/services/materializacao.py:1437`. | Sem carimbo, `[3]` continua `None`. E sozinho não exclui da lista nem produz `RESOLVIDA`: a lista exige o carimbo para exclusão por materialização; `estado` exige carimbo para ambos retornos `RESOLVIDA`; C6 retorna viva antes de E quando chega ao degrau `materializada is None`. `app/chamados/juizes.py:1390`, `app/chamados/models.py:1923`, `app/chamados/models.py:3153`, `app/chamados/models.py:3156`, `app/chamados/juizes.py:1482`, `app/chamados/juizes.py:1483`, `app/chamados/juizes.py:1489`. |
+| `materializada_conservada_em` | Não há equivalente desse valor na projeção atual: o valor efetivamente escrito/lido é `materializada_em`. Existência histórica ou fora da cópia: **[nao verificado]**. `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1400`, `app/chamados/models.py:3209`. | Não há ramo conservado nesse corpo; o retorno é o campo atual, eventualmente recortado por `agora`. `app/chamados/juizes.py:1391`, `app/chamados/juizes.py:1396`, `app/chamados/juizes.py:1400`. |
+
+**Relógio fora da borda**
+
+- A projeção e `sem_veredito_entre` não consultam relógio nesses corpos; usam os valores da pergunta e, na projeção, o `agora` recebido. `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1391`, `app/chamados/models.py:1922`.
+- `estado` pode consultar relógio transitivamente: chama `pergunta_viva(self)` sem `hoje/agora`; o cálculo consulta `_dentro_da_janela_viva`, cujo fallback é `date.today()`. A classificação da falta também recebe `agora=None` e pode usar `_tz.now()`. `app/chamados/models.py:3154`, `app/chamados/juizes.py:898`, `app/chamados/juizes.py:1471`, `app/chamados/juizes.py:596`, `app/chamados/juizes.py:1475`, `app/escala/servico_jornada.py:387`.
+- E também pode alcançar `date.today()` pela janela, mas **não é a fonte de `[3]` hoje**. `app/chamados/juizes.py:697`, `app/chamados/juizes.py:790`, `app/chamados/juizes.py:596`, `app/chamados/juizes.py:1390`.
+- `supra_juiz` lê o efeito indiretamente ao chamar `sem_veredito_entre` nos universos pai e destino, ambos com `ignorar_tranca=True`; a decisão do CSF é a ausência dessas perguntas. `app/ponto/supra_juiz.py:573`, `app/ponto/supra_juiz.py:574`, `app/ponto/supra_juiz.py:588`. Mudança efetiva em competência exportada, sem banco/log/diff histórico: **[nao verificado]**.
+
+**Por que NÃO, embora exista instante persistido**
+
+O materializador captura um instante e o persiste pelo carimbo; a leitura atual reutiliza esse campo, sem gerar um novo instante. Isso atende parcialmente à descrição operacional de instante persistido. `app/chamados/services/materializacao.py:1250`, `app/chamados/services/materializacao.py:1283`, `app/chamados/models.py:3209`, `app/chamados/models.py:3262`, `app/chamados/juizes.py:1390`.
+
+Mas o contrato de valor conservado não está fixado: `carimbar_identidade` só conserva mediante opção; caso contrário escreve outro instante. `descarimbar` e a forma em lote apagam o valor. O catálogo de `DecisaoPergunta` contém resposta, validação, devolução, recusa, reabertura, silêncio, retratação e absorção, sem ato de materialização listado. `app/chamados/models.py:3292`, `app/chamados/models.py:3295`, `app/chamados/models.py:3318`, `app/chamados/models.py:3393`, `app/chamados/models.py:4024`, `app/chamados/models.py:4026`.
+
+## 16/11 12:18 · sessao 5cf5a08ff617 · - · - · origem=Ronald (tmux)
+
+Todos os caminhos abaixo seguem a BASE descrita no anexo: os leitores atuais usam os campos da projeção, conforme referências da tabela. Não houve execução de testes; resultado de execução é [nao verificado]. [nao verificado]
+
+| Degrau | Sítio hoje | BASE mudou? | Prova hoje, por leitura | Nota |
+|---|---|---|---|---|
+| M1b | `app/chamados/models.py:3151`, `:3153` | Não: `validada_em != None` com `materializada_em != None` retorna RESOLVIDA (`:3153`). | **SIM**, `app/chamados/tests/test_pergunta_estado.py:47`; fixture com validação e materialização em `:45`. | Instância não salva criada pelo helper em `test_pergunta_estado.py:20`; esta prova morde o ramo atual por campos, não uma leitura pelo ato (`models.py:3153`). |
+| M4 | `app/chamados/models.py:3158` | Não: queda final retorna PENDENTE/RESPONDIDA por `respondida_em` (`:3158`). | **[nao verificado]** para o ramo final específico. | `test_pergunta_estado.py:30`, `:36`, `:59` afirmam os rótulos, mas não isolam `pergunta_viva=False` e ausência de validação/materialização; a precedência está em `models.py:3151`, `:3154`, `:3156`. |
+| M7 | `app/chamados/models.py:3686`; posto `:3693`; escala `:3701`; opções `:3706` | Não: todas as fontes seguem `resposta_colab` (`:3688`, `:3693`, `:3701`, `:3708`). | **SIM, opções**: `app/chamados/tests/test_valor_rotulo.py:12` exige “Falta”; `:16` exige opção string “Confirma”. | Fixture não salva e por campo (`test_valor_rotulo.py:7`). Dropdown posto/escala e resposta oriunda de ato: **[nao verificado]**. |
+| M11 | `app/chamados/models.py:1926` | Não: exclui dia trancado, salvo `ignorar_tranca` (`:1926`). | **SIM**: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:304` exige lista vazia com tranca; patch True em `:303`. Asserção `:305` exerce a retratação que ignora a tranca. | O juiz é chamado por `respostas_sem_veredito` em `models.py:1906`; portanto `:304` alcança o corpo atual. |
+| M13 | `app/chamados/models.py:336`; filtro `:344`; âncora `:345`; carga `:346` | Não: filtro por `validada_em__isnull=True`, com destino/container (`:344`, `:345`). | **PARCIAL, AST**: `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:284` exige presença dos campos `validada_em`, `chamado_destino_id`, `disputa` no filtro; extração em `:283`. | Não prova valor de `isnull` nem retorno do queryset: o scanner usa primeiro segmento do kwarg, conforme contrato em `:193`. `test_e4b_classe_e_memoria.py:443` só exige chamada do método mockado (`:440`), não morde o corpo real. |
+| M14 | `app/chamados/models.py:309`; filtro `:310`; relavra `:312` | Não: relavra somente `validada_em__isnull=True` do destino (`:310`). | **PARCIAL**: `app/chamados/tests/test_o261e_f1_codex_v5.py:90` exige relavra não vazia; `:91` exige estado já salvo; `:101` exige zero relavra quando save falha. | Fixture de `:81` contém pergunta sem validação; essas asserções não distinguem filtro “somente não validadas” de um filtro que também inclua validadas. Prova específica desse recorte: **[nao verificado]**. |
+| M15 | `app/chamados/models.py:2005`; ato SILENCIO `:2006`; foto `:2007` | Não: `ato_texto=_q.resposta_colab or ''` (`:2007`). | **PARCIAL, existência/autoria do SILENCIO**: `app/chamados/tests/test_e1_entradas.py:125` exige `[('silencio', self.dp.pk)]`, após porta em `:124`. | A asserção não consulta `ato_texto` (`:125`); prova específica da fonte da fotografia: **[nao verificado]**. |
+
+Uma ressalva para não superestimar M13: `app/chamados/tests/test_e4b_classe_e_memoria.py:467` afirma que o S128 **inclui** a validada, e não testa o filtro de `_ancoradas`; o caso se chama `test_RED_S128_conserva_validada_pendente_fora_das_ancoradas` em `:463`.
 
 ## 16/11 11:46 · sessao ae3a5fdf0c1e · ROTULO-APLICADA-SEM-BATIDA · censo · origem=Code
 
@@ -834,112 +950,4 @@ Achados confirmados:
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 16/11 11:42 · sessao 3a666dfaf3c9 · - · - · origem=Ronald (tmux)
-
-Q3 — **Há interação; a leitura estática não mostrou conflito de intenção. A atribuição exata dessas linhas ao delta do main fica [não verificado], porque a cópia não contém `.git`.**
-
-- **Travas compartilhadas:** a porta do main chama `PerguntaDisputa.trava_na_ordem(pks)`, usando a autoridade da obra; passa apenas colaboradores, sem travar/escrever perguntas nesse caminho (`app/colaboradores/services/colaborador.py:72`, `:80`). A implementação trava Colaborador, Disputa, Chamado e Pergunta nessa sequência (`app/chamados/models.py:2770`, `:2779`, `:2793`, `:2797`). A ressurreição usa a mesma porta com os quatro conjuntos (`app/chamados/models.py:1612`).
-
-- **`vincular_posto`:** posto e trilha ficam no mesmo `atomic` (`app/colaboradores/views.py:333`); chama `salvar_inteiro` e `registrar_mudanca` (`:334`, `:335`). O save completo guarda `situacao` da linha travada antes de salvar (`app/colaboradores/services/colaborador.py:152`, `:158`). A operação não altera diretamente `PerguntaDisputa`/`DecisaoPergunta`/`CelulaDia` (`app/colaboradores/views.py:311`). A antiga regeneração por troca do posto cadastral está expressamente sepultada: o lugar do dia vem do vínculo (`app/colaboradores/services/colaborador.py:118`).
-
-- **Interação concreta via desligamento:** a cascata usa `respostas_sem_veredito()` para preservar disputas com resposta por julgar, senão chama a porta `fechar` (`app/colaboradores/services/desligamento.py:164`). Essa porta fecha perguntas e registra `DecisaoPergunta.SILENCIO` (`app/chamados/models.py:1999`, `:2005`). `tarefa_do_dia` lê SILENCIO como `silencio_decidido`, sem ação, enquanto REABERTURA devolve ao colaborador (`app/chamados/services/tarefa_do_dia.py:163`, `:176`). Portanto importa preservar a distinção adotada pela B1: ressurreição não chama `reabrir_para_correcao` nem fabrica REABERTURA (`app/chamados/models.py:1622`, `:1629`).
-
-| Entidade/campos | Quem escreve | Quem lê |
-|---|---|---|
-| `PerguntaDisputa.respondida_em/resposta_colab`, validação e materialização | Ressurreição salva a projeção anterior em decisões e zera o par pela porta (`app/chamados/models.py:1613`, `:1629`); correção registra o ato e chama a mesma porta (`app/chamados/services/disputa_emissao.py:1609`, `:1631`, `:1648`); update efetivo em `descarimbar_em_lote` (`app/chamados/models.py:3391`). | Juiz `pergunta_respondida`: instante **E** texto após trim (`app/chamados/juizes.py:1544`, `:1552`), registrado como `_C21` (`app/core/juizes.py:306`). Face SQL `q_respondida_com_texto` (`app/chamados/juizes.py:1575`), lida por `q_vivas` (`app/chamados/models.py:3481`) e fila de validação (`app/chamados/juizes.py:1751`). |
-| `DecisaoPergunta.ato`, instante e texto/foto anterior | Porta `registrar`, via `bulk_create` (`app/chamados/models.py:4110`, `:4120`); chamada pela ressurreição (`:1613`), correção (`app/chamados/services/disputa_emissao.py:1631`) e desligamento pela porta da disputa (`app/chamados/models.py:2005`). | Carga de `tarefa_do_dia` ordena por pergunta/instante/pk e corta pelo `agora` (`app/chamados/services/tarefa_do_dia.py:421`); julgamento em `_pela_decisao` (`:142`). Histórico de respostas: `respostas_anteriores` (`app/chamados/models.py:3668`). |
-| `CelulaDia` | Veredito pela porta `lavrar_veredito`, delegada pelo modelo (`app/escala/models.py:1819`, `:1826`); escrita de veredito/via/instante (`app/ponto/portas/celula.py:1093`). Reabertura/ressurreição acordam células emitindo evento, não escrevem diretamente o veredito (`app/chamados/models.py:3341`, `:3358`). | `q_vivas` lê veredito e ata (`app/chamados/models.py:3488`, `:3493`); `tarefa_do_dia` carrega perguntas com célula (`app/chamados/services/tarefa_do_dia.py:406`). Telas do main também leem células, incluindo `trabalha` (`app/core/views.py:395`, `app/colaboradores/views.py:2900`). |
-| `HistoricoVinculo` | `registrar_mudanca` escreve tipo, antes/depois, data, vigência, posto e autor (`app/colaboradores/services/historico_vinculo.py:7`, `:13`); `registrar_evento_de_vinculo` escreve eventos (`:20`, `:25`). Chamados pelo posto (`app/colaboradores/views.py:335`) e desligamento (`app/colaboradores/services/desligamento.py:138`). | Tela de detalhe lê histórico e contagem (`app/colaboradores/views.py:306`). Nenhuma leitura dessa entidade foi encontrada nas funções da obra citadas; ausência global de leitores [não verificado]. |
-
-Outra interação do main: INSS agora guarda situação e cria ausência dentro do mesmo `atomic` (`app/ponto/views.py:2469`, `:2471`, `:2472`, `:2489`); o signal da ausência chama julgamento das células (`app/ponto/signals.py:143`, `:147`). Isso alcança o domínio que os juízes da obra leem, com Colaborador travado antes da cascata (`app/colaboradores/services/colaborador.py:94`).
-
-`core/auditoria.py` delega a escrita da trilha a `evento`, sem alterar os campos de resposta ou decisões (`app/core/auditoria.py:8`, `:22`). Execução concorrente, suite no hash e efeitos em produção: **[não verificado]**.
-
-## 16/11 11:42 · sessao 61988738bd5d · - · - · origem=Ronald (tmux)
-
-Censo estático: **3 implementações**, todas aceitam **POST**, sem `@authentication_classes` e sem `@csrf_exempt` explícitos nos blocos de decoração:
-
-| Kernel | Endpoint | Implementação | Rota |
-|---|---|---|---|
-| core | `/api/auth/login/` | `app/api/views_core.py:188-190`: `@api_view(['POST'])`, `@permission_classes([AllowAny])` | `app/config/urls_core.py:6` + `app/api/urls_core.py:9` |
-| ui | `/api/auth/login/` | `app/api/views.py:202-204`: `@api_view(['POST'])`, `@permission_classes([AllowAny])` | `app/config/urls.py:37` + `app/api/urls.py:60` |
-| ui | `/api/diag/cam/` | `app/api/views.py:2642-2644`: `@api_view(['POST'])`, `@permission_classes([])` | `app/config/urls.py:37` + `app/api/urls.py:102` |
-
-O padrão contém `JWTComCredencial` primeiro e `SessionAuthentication` depois; permissão padrão `IsAuthenticated`: `app/config/settings/base.py:32-44`.
-
-Exclusões:
-
-- `HasnerTokenRefreshView`: as duas subclasses locais não declaram autenticação, mas herdam de **`TokenRefreshView`**, não diretamente de `APIView`; não basta olhar a classe local para concluir herança de `SessionAuthentication`. Bases importadas em `app/api/views.py:7`, `app/api/views_core.py:8`; subclasses em `app/api/views.py:69-128`, `app/api/views_core.py:125-184`; rotas `app/api/urls.py:63`, `app/api/urls_core.py:12`. Fonte da biblioteca ausente da cópia pesquisada: atributos efetivos da base **[nao verificado]**.
-- `api_app_version`: função Django simples, sem `@api_view`, retorna `JsonResponse`: `app/api/views.py:3042-3054`.
-- Mensageria push: função Django `@csrf_exempt` e `@require_POST`, com guarda de token; fora do universo DRF: `app/api/views_mensageria.py:476-481`.
-- Único DRF localizado fora de `app/api`: `api_pendentes`, apenas GET e `IsAuthenticated`; fora do censo público: `app/comunicados/views.py:83-88`, rota `app/api/urls.py:85`.
-
-A declaração de rotas públicas registra login para as duas cascas e telemetria de câmera anônima: `app/core/rotas_publicas.py:49-62`.
-
-Pesquisa global não localizou ViewSets, outras subclasses DRF, `authentication_classes`, `get_authenticators` ou outro `REST_FRAMEWORK` no código produtivo; a ausência global não possui uma linha única comprobatória **[nao verificado]**.
-
-## 16/11 10:39 · sessao c49bf044a323 · E4C-F1-NOVA-POUSO-B1 · censo · origem=Code
-
-**(e) NÃO PERGUNTADO** — nenhuma `.q` fornecida pede conferir se a frase de nascimento está na fonte `CORTES.json` e sobreviverá à regeneração; as listas incluem apenas classes genéricas próximas. (`codex_verificador_v1.q:23–26`; `codex_verificador_v2.q:5–18`; `codex_verificador_v3.q:4–14`; `codex_verificador_c2_v1.q:6–12`)
-
-Nos anexos colados, numerei a primeira linha após cada delimitador como linha 1, contando linhas vazias.
-
-O bloqueante é a **persistência do corte na fonte**: a frase aparece no Markdown, e o gerador reescreve esse arquivo inteiro a partir do JSON; a ausência no JSON é registrada pelo opus. (`app/docs/CORTES.md:461`; `bin/gerar_cortes.py:23–24`; `bin/gerar_cortes.py:114–116`; `opus_final.md:4–5`)
-
-**Trechos de cada `.q`**
-
-| Pergunta | Trecho exato e relação com o bloqueante |
-|---|---|
-| `codex_verificador_v1.q` | “O que o diff diz fazer: nasce o juiz `chamados/juizes.py::pergunta_respondida`” (`:5`). A lista contém “derivacao paralela de fonte unica; selo/RED sem mordida” (`:24`) e “pouso antes do pre-requisito” (`:25`). **Menciona nascimento e classes genéricas; não pergunta pela inscrição no JSON nem pela sobrevivência à geração.** (`:1–30`) |
-| `codex_verificador_v2.q` | “PAPEL: verificador, VOLTA 2 (so o delta)” (`:1`); “Para cada achado da volta 1 marcado PROCEDENTE na triagem (1, 4, 5, 6, 7): o diff fecha o achado?” (`:6`). **Não menciona diretamente o bloqueante.** (`:5–18`). Eventual inclusão indireta pelos achados anteriores: **[nao verificado]**, pois a resposta anterior e sua triagem não foram transcritas. |
-| `codex_verificador_v3.q` | “PAPEL: verificador, VOLTA 3 (so o delta 1fcb5d0b6..HEAD)” (`:1`); “Os itens 2a, 2b, 2c, 3 e 5 da volta 2: o diff os fecha?” (`:4`). **Não menciona diretamente o bloqueante.** (`:4–14`). Eventual inclusão indireta pelos itens anteriores: **[nao verificado]**. |
-| `codex_verificador_c2_v1.q` | “Proibido na obra: tipo de ato novo, juiz novo, lista paralela, regra em tarefa_do_dia que reconheca ressuscitacao por texto de motivo.” (`:3`). O checklist contém “derivacao paralela de fonte unica; selo/RED sem mordida; ordem de trava; pouso antes do pre-requisito” (`:12`). **Não pergunta pela fonte canônica do corte.** (`:6–12`) | [nao verificado]
-
-**Trechos de cada `.r`**
-
-Das quatro respostas nomeadas, somente `codex_verificador_c2_v1.r` foi transcrita; o conteúdo de `codex_verificador_v1.r`, `codex_verificador_v2.r` e `codex_verificador_v3.r` está **[nao verificado]**. Não é possível fornecer trechos exatos dessas três respostas nem afirmar que omitiram o tema. **[nao verificado]**
-
-Na resposta c2, os trechos mais próximos são:
-
-> “**NAO HA nova no trecho c2:** universo, preservação e integridade reutilizam as respectivas autoridades” — classe “Derivação paralela de fonte única”. (`codex_verificador_c2_v1.r:97`)
-
-> “**NAO HA quanto à volta de REABERTURA:** há proibição direta e comparação com SILENCIO; cobertura integral de fila/trilha permanece insuficiente” — classe “Selo/RED sem mordida”. (`codex_verificador_c2_v1.r:98`)
-
-> “**[nao verificado]:** os anexos estabelecem os pré-requisitos, mas não fornecem sua execução nem prova do pouso.” — classe “Pouso antes do pré-requisito”. (`codex_verificador_c2_v1.r:100`) [nao verificado]
-
-**A resposta c2 não menciona `CORTES.md`, `CORTES.json`, `gerar_cortes.py` ou a perda da frase na regeneração.** (`codex_verificador_c2_v1.r:1–101`)
-
-**Triagem correspondente**
-
-Não há item de triagem correspondente ao bloqueante entre os seis descartes apresentados; eles tratam de campos/leitores, projeção legada, preservação/concorrência, testes, chamadores e relógio. (`entrega.md:47–56`) [nao verificado]
-
-Existe, fora dessa triagem, este alerta exato:
-
-> “Resolucao proposta (nao aplicada): LEIS L-130 = a linha da copia; CORTES = manter as DUAS linhas (conferir o escritor   [nao verificado]
-> canonico CORTES.json/gerar_cortes.py lendo a fonte -- nao rodar). Zero `.py` em conflito.” (`entrega.md:9–10`)
-
-Esse trecho pede uma conferência; não registra a descoberta da entrada ausente nem seu descarte. (`entrega.md:9–10`)
-
-**O tema estava na lista de classes?** **Não como classe específica.** Estava a expressão genérica **“derivacao paralela de fonte unica”**, nas perguntas v1 e c2; não estava a classe “frase de corte de juiz novo somente em arquivo derivado, ausente da fonte geradora”. (`codex_verificador_v1.q:23–26`; `codex_verificador_c2_v1.q:12`)
-
-## 16/11 10:02 · sessao 780bea312735 · CORTES-F2-F9-1611 · construtor · origem=Code
-
-1. **Confirmei inalcançável.** A porta descarta a pergunta não viva e retorna; a segunda guarda consulta a mesma autoridade sem alteração intermediária de `p` ([views.py:1238](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/views.py:1238), [views.py:1257](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/views.py:1257)). A autoridade memoiza por instância e estado ([juizes.py:893](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/juizes.py:893)).
-
-2. Escrito [test_f6_u9b_ramo_inalcancavel.py:23](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:23): verificador AST, `SimpleTestCase`, fonte localizada pelo módulo importado e asserção RED. `test_a_costura_MORDE` cobre o ramo completo e suas duas condições isoladas; há controle positivo da lápide em comentário ([teste:91](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:91), [teste:126](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:126)). [nao verificado]
-
-3. **MUTANTE declarado:** ramo presente ⇒ **FAIL esperado pela asserção**; ramo removido com lápide ⇒ **OK esperado** ([teste:84](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:84)). Comando para ambos os estados: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_f6_u9b_ramo_inalcancavel --settings=config.settings.ci -v 2
-```
-
-Comando dos mutantes sintéticos:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_f6_u9b_ramo_inalcancavel.RamoInalcancavelU9bTest.test_a_costura_MORDE --settings=config.settings.ci -v 2
-```
-
-4. Não executei testes. Resultados RED/OK, importação e setup em execução: **[nao verificado]**. [nao verificado]
-
-_6006 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6010 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
