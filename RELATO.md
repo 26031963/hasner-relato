@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: push.sh | pid=551196
+ESPERANDO: smoke.sh | pid=685179
+ESTADO 13:07 LOTE7 c7 POUSADO: merge 42fd467a0 (--no-ff de a094967ee; arvore == a094967ee salvo TICKETS.md do pos_push cf5347b01, nenhum .py difere) + bin/deploy.sh --sem-migrate rc 0 (3 cascas HUP, rotas 200/302/200, importerror_500=0). PROVA: logs/DUAS-PISTAS/lote7_c7/deploy.log; smoke 10 min de batidas 5xx em curso -> logs/DUAS-PISTAS/lote7_c7/smoke.out
+ESTADO 13:06 push do marco 4e364a414 no remoto (rc=0; pos_push cf5347b01). PROVA: logs/E4C/f1nova/b1/c3/push.log
 ESTADO 13:04 LOTE7 c7 SUITE DE POUSO VERDE: OK (skipped=42, expected failures=41), Ran 16452, rc=0 (logs/DUAS-PISTAS/lote7_c7/suite_pouso.log, arvore a094967ee = c7 + main 4e364a414) -> pouso (merge --no-ff + cmp + commit + deploy + smoke 10 min 5xx 0) logo que o push do marco terminar (nao commitar durante o push)
 ESTADO 12:5x UI-VINCULO-MOSTRA-O-CALENDARIO registrada (BACKLOG + O148-EDITAR itens 2-3 + TIPOESCALA-SEM-TRILHA item 4); REVISAO-DO-AVAL item 1 no Codex verificador (logs/UI-VINCULO-CALENDARIO/revisao.r)
 ESTADO 12:4x O10-D-PERMUTA-RECIPROCA (COMPLEMENTO-1 item 4): A PREPARA no Codex censo (prepara.q -> prepara.r, fim prepara.fim); B so apos A + pouso LOTE7 + REVISAO-DO-AVAL; construtor opus da sessao
