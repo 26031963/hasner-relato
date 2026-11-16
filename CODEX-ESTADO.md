@@ -1,7 +1,168 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 01:57** · publicado em **16/11/2026 01:59** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:09** · publicado em **16/11/2026 02:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:09 · sessao 230d82d6cef2 · - · - · origem=Ronald (tmux)
+
+1. **BLOQUEIA — envelope invalida competências sem mudança de insumo.** `_acordar_projecao` reduz os dias de todas as linhas/ambos lados ao mínimo/máximo e invalida o intervalo contínuo (`app/ponto/services/ausencia.py:174`, `:175`, `:178`). Contraexemplo: falta aprovada diária muda de 10/09 para 10/11; a competência intermediária de outubro é invalidada, embora a linha nunca a ocupe. `competencias_do_fato` efetivamente percorre todo o intervalo (`app/ponto/services/fechamento.py:1595`, `:1599`). Incidência em produção: [nao verificado].
+
+2. **Predicado igual para estado; universo diferente.** `_insumo_da_folha` chama o mesmo `_pelo_efeito(...,'folha')` (`app/ponto/services/ausencia.py:138`) que os leitores principais da folha (`app/ponto/services/fechamento.py:639`, `:683`); o predicado seleciona exclusivamente aprovada (`app/ponto/turnos.py:2528`). O caminho de desconto ainda usa literal `status='aprovada'` equivalente (`app/folha/export.py:88`), chamado pelo fechamento (`app/ponto/services/fechamento.py:873`). Não achei caminho que conte ausência não aprovada nesses consumidores (`app/ponto/turnos.py:2528`, `app/folha/export.py:88`).
+
+   O snapshot não filtra período nem resolve sobreposição; uma aprovada fora da janela ou vencida pelo desempate ainda aparece nele (`app/ponto/services/ausencia.py:138`; `app/ponto/turnos.py:2765`, `:2793`). Portanto “mesmo predicado” não prova “mesmo conjunto que contribui ao número” (`app/ponto/services/ausencia.py:138`; `app/ponto/services/fechamento.py:693`).
+
+3. **Campos lidos pela folha.** Tipo/data/fim/minutos estão cobertos por `CAMPOS_DO_INSUMO` (`app/ponto/services/ausencia.py:119`), e são usados na cobertura, parcial e rateio (`app/ponto/turnos.py:2784`, `:2786`, `:2790`, `:2612`; `app/folha/export.py:117`, `:121`). Hora inicial/final chegam pela grade (`app/escala/utils.py:1234`; `app/ponto/turnos.py:2646`). Outros controles lidos: colaborador seleciona o universo; status decide entrada; PK desempata (`app/ponto/turnos.py:2543`, `:2528`, `:2765`). Status está representado pela presença/ausência no dict, PK é a chave, colaborador vem separado (`app/ponto/services/ausencia.py:138`, `:139`, `:142`). Não achei outro campo de fato de Ausencia lido por esses caminhos; censo global completo: [nao verificado].
+
+4. **Semânticas verificadas.** Data/fim são inclusivos na cobertura e expansão (`app/ponto/turnos.py:2792`, `:2811`); fim NULL só prolonga `TIPOS_EM_ABERTO`, nos outros tipos vale um dia (`app/ponto/turnos.py:2803`). Hora final é inclusiva e, menor que inicial, pertence à madrugada seguinte do turno iniciado em `data` (`app/ponto/turnos.py:2642`, `:2650`, `:2653`). Minutos são duração total do registro para falta, rateada pelos dias (`app/folha/export.py:118`, `:121`), e crédito do próprio dia para parcial (`app/ponto/services/credito_parcial.py:27`, `:28`). São usos distintos explicitados pelo tipo/forma do registro (`app/ponto/turnos.py:2612`).
+
+5. **FILA — divergência herdada no leitor de fato novo.** `houve_fato_novo` só considera ausência de fim NULL no próprio dia inicial (`app/ponto/services/cartorio.py:383`, `:384`); cobertura prolonga afastamento em aberto até o fim perguntado (`app/ponto/turnos.py:2786`, `:2787`). Contraexemplo: afastamento de 01/11 sem fim tem `atualizado_em` movido em 05/11; consulta de fato novo para dia 04/11 não o encontra pelo ramo NULL, embora a cobertura encontre (`app/ponto/services/cartorio.py:384`; `app/ponto/turnos.py:2786`). Ocorrência no dado raspado: [nao verificado].
+
+6. **Inventário de leitores adicional, sem garantia de completude global.**
+   
+   - Status/tipo/data/fim: consultas de período e cobertura (`app/ponto/turnos.py:2543`, `:2566`, `:2765`); precedência (`app/ponto/precedencia.py:273`, `:336`); relatório (`app/relatorios/views.py:197`, `:205`, `:277`, `:292`); inteligência (`app/inteligencia/resumo.py:39`, `:42`, `:43`; `app/inteligencia/views.py:71`, `:239`, `:516`).
+   - Minutos: parcial (`app/ponto/turnos.py:2614`), crédito (`app/ponto/services/credito_parcial.py:28`), desconto (`app/folha/export.py:121`), API (`app/api/views.py:1870`).
+   - Hora_ini/fim: juiz da parcial (`app/ponto/turnos.py:2646`, `:2648`, `:2649`), chamado pela grade (`app/escala/utils.py:1234`).
+   - Tela: espelho lê cobertura cobrança/folha e status aberto (`app/ponto/services/espelho.py:582`, `:588`, `:849`, `:880`); calendário lê tipo/fim (`app/colaboradores/services/calendario.py:516`, `:705`, `:708`); API lê tipo/data/status/minutos (`app/api/views.py:1865`); mensageria lê tipo/status/fim/data (`app/api/views_mensageria.py:744`).
+   - Atualizado_em: escritor automático (`app/ponto/models.py:824`); leitor de fato novo (`app/ponto/services/cartorio.py:385`); comando de reversão/caracterização (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`, `:156`, `:189`).
+
+7. **FechamentoMensal.derivado_em — escritores/leitores encontrados.** Escritores: recalcular ramo save (`app/ponto/services/fechamento.py:1143`), recalcular ramo update (`:1189`), restaurar (`:1391`, `:1393`), invalidar (`:1656`); default nulo do modelo (`app/ponto/models.py:464`). Leitores: filtro de invalidar (`app/ponto/services/fechamento.py:1653`), consulta de vencidas (`:1695`, `:1696`) e contador (`:1702`); command apresenta o mesmo universo (`app/ponto/management/commands/projecoes_vencidas.py:50`, `:64`), cron registra esse contador (`app/config/crons.py:1165`). Campo excluído dos hashes (`app/ponto/portas/regen_exportada.py:38`; `app/ponto/management/commands/carimbo_gravado.py:30`). Semântica consistente de carimbo da projeção nos sítios encontrados (`app/ponto/services/fechamento.py:1679`).
+
+8. **Justificativa.status — alcance confirmado.** Escritores de decisão/reabertura: aprovação e rejeição na porta (`app/ponto/services/justificativa.py:205`, `:283`, `:383`); lote e rejeição na view (`app/ponto/views.py:1799`, `:1878`); regularização (`app/ponto/services/regularizacao.py:99`, `:106`); triagem e entrada sincronizada (`app/ponto/services/triagem_batida.py:608`; `app/ponto/services/entrada_sincronizada.py:41`). Criações adicionais: API (`app/api/views.py:1999`) e cron (`app/ponto/management/commands/processar_alertas_turno.py:394`).
+
+   Leitores confirmados: folha (`app/ponto/services/fechamento.py:662`), grade (`app/escala/utils.py:1197`), efeito da ausência (`app/ponto/services/efeito_ausencia.py:41`), próprias portas (`app/ponto/services/justificativa.py:33`, `:143`, `:165`, `:278`), chamados (`app/chamados/models.py:138`, `:1313`; `app/chamados/reconciliador.py:453`), telas/contadores (`app/ponto/views.py:1739`, `:1740`, `:1783`; `app/chamados/views.py:599`; `app/core/views.py:205`, `:1191`), SLA (`app/ponto/management/commands/alertar_justificativas_sla.py:19`), API (`app/api/views.py:2106`). Censo completo de aliases e templates: [nao verificado].
+
+9. **Kernel efetivamente muda.** API core importa e chama a mesma regularização (`app/api/views_core.py:1150`, `:1179`). Novo ramo: justificativa existente sem saída, antes aprovada, volta pendente e invalida a competência da entrada (`app/ponto/services/regularizacao.py:102`, `:105`, `:115`, `:116`); há SELECT de competências e UPDATE de cada fechamento fresco (`app/ponto/services/fechamento.py:1648`, `:1652`). O import de fechamento é tardio e seu topo importa stdlib, timezone, modelos e janelas (`app/ponto/services/fechamento.py:8`).
+
+   Dias intermediários também atravessam a porta alterada (`app/ponto/services/regularizacao.py:129` → `app/ponto/services/ausencia.py:593`, `:580`): cada ausência recém-criada ganha leitura de snapshot aprovado (`app/ponto/services/ausencia.py:138`); `_acordar_projecao` importa fechamento e lê `localdate` mesmo quando ambos snapshots são vazios (`app/ponto/services/ausencia.py:160`, `:162`, `:165`). Nesse caso não há invalidação (`app/ponto/services/ausencia.py:176`). Impacto de latência/imports em execução: [nao verificado].
+
+## 16/11 02:07 · sessao ee55d94822d2 · - · - · origem=Ronald (tmux)
+
+1. **[fila] Selo tem lacunas demonstráveis.** Só examina funções de topo (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:55`); isenta receptor desconhecido quando a função importa outro modelo de ponto (`:108`); aceita qualquer chamada textual do acordador, inclusive em `if False` (`:75`); isenta receptor atribuído a dict em qualquer ramo (`:59`, `:101`). Contraexemplo executado em memória: `def _m(a): from ponto.models import Batida; a.status="aprovada"; a.save(update_fields=["status"])` retorna `faltam=[]`, embora possa receber Ausencia e alterar insumo (`:108`).
+
+2. **Mutantes fornecidos mordem na análise AST.** Executei os seis métodos do selo em memória, substituindo somente a infraestrutura Django por `unittest.TestCase` e `_monitorados` pelos campos declarados; passaram, com nove escritores identificados. Remoção do acordador e os cinco escritores novos são efetivamente cobrados (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:157`, `:166`). Isso não prova execução Django nem RED contra base: **[nao verificado]**.
+
+3. **Não achei escritor direto externo atual escapando do gate.** Censo real da árvore atribuiu Ausencia apenas à porta; os sites adicionais não atribuídos dentro dela são cobertos pelo novo selo (`app/ponto/services/ausencia.py:1338`, `:1365`, `:1462`, `:1703`). O gate descarta entidade desconhecida (`app/ponto/tests/test_chokepoint_ausencia_gate.py:33`), portanto seu “allowlist vazia” não constitui prova absoluta. `Ausencia.save` também deriva minutos e data_fim (`app/ponto/models.py:887`, `:917`), mas o censo ignora `super().save()` (`app/core/censo_escritas.py:403`). Admin está efetivamente em leitura (`app/ponto/admin.py:38`; `app/core/admin.py:59`).
+
+4. **[bloqueia, se vendido como prova de célula] Teste “rejulga a célula” só prova chamada do signal.** Mocka `_julgar_dias`, impedindo execução de `dias_fn()` e `cartorio.julgar_celula` (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:364`; `app/ponto/signals.py:92`). A asserção só compara IDs enviados ao mock (`teste:366`). Contraprova: `_julgar_dias` quebrado ou lambda errada continua passando; célula inexistente faria o juiz retornar sem julgar (`app/ponto/services/cartorio.py:2027`).
+
+5. **[fila] Teste negativo da Justificativa passa sem reabertura.** Cria Justificativa rejeitada sem conservar referência, chama regularização e verifica apenas `ok` e carimbo (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:349`, `:354`). Remover o bloco que atualiza Justificativa deixaria essas asserções satisfeitas (`app/ponto/services/regularizacao.py:102`). Falta afirmar `status='pendente'`.
+
+6. **[fila] Cobertura de rollback e views é parcial.** `_nada_mudou` verifica somente agendamento não cancelado e ausência não rejeitada; não verifica saldo, observações ou trilhas (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:412`). Existem testes da view individual e do lote (`:417`, `:426`), mas nenhum da nova captura em `corrigir_concluida_admin` (`app/ferias/views.py:452`).
+
+7. **Relógio e fixtures.** Os testes derivados de `_Base` recebem congelamento (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:53`); `FeriasTelaTrilhaTest` herda diretamente `TestCase`, sem congelamento (`:381`), e seu lote atravessa `datetime.now()` (`app/ferias/views.py:608`). Não há chamada direta a `timezone.now()` no arquivo de teste: **[nao verificado por execução Django]**. As fixtures principais não são vazias: espelho exige quantidade igual aos dias (`teste:198`), rejeição exige cinco linhas (`:210`), e espião envolve a função real com `wraps` (`:85`).
+
+## 16/11 02:07 · sessao e20bf62cf793 · - · - · origem=Ronald (tmux)
+
+1. **Cancelamento de férias: sem bloqueador novo encontrado nesse caminho.** O único chamador produtivo encontrado de `rejeitar_ausencias_de_ferias` é `app/ferias/services.py:683`; as três views passam pela casca `app/ferias/views.py:567`. O escritor externo abre atomic em `app/ferias/services.py:674`, trava agendamento em `:636`, período em `:639`, depois Ausências por PK, limitando a trava à própria tabela, em `app/ponto/services/ausencia.py:1452`.
+
+2. **Signals realmente passam por linha.** Cada `save` em `app/ponto/services/ausencia.py:1462` chama o juiz registrado em `app/ponto/signals.py:143`, que executa `_julgar_dias` em `:147`; este chama `cartorio.julgar_celula` em `:93`, sob tratamento best effort em `:88`. O consumidor registrado depois, em `:275`, agenda reconciliação no `on_commit` em `:272`; portanto o teste com mock de `_julgar_dias` prova o despacho ao juiz, sem provar o resultado real da célula (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:364`).
+
+3. **Falha da trilha desfaz o item inteiro.** `evento` usa savepoint próprio em `app/core/observ.py:133` e devolve `None` após falha em `:139`; a rejeição transforma esse retorno em exceção dentro do atomic em `app/ponto/services/ausencia.py:1470`. A exceção atravessa também o atomic externo, que já tinha escrito o saldo em `app/ferias/services.py:682`, e impede o cancelamento posterior em `:689`. Os callbacks registrados via `on_commit` em `app/ponto/signals.py:272` ficam condicionados ao commit.
+
+4. **As três views tratam a exceção nova.** Individual mostra “Nada foi alterado...” em `app/ferias/views.py:398`; correção de concluída mostra a mesma recusa em `:452`; massa registra IDs falhos em `:623` e mostra quantidade e IDs em `:630`. Na massa, os itens bem sucedidos continuam sendo contados e gravados individualmente (`:617`, `:625`); não existe atomic envolvendo o lote inteiro nesse trecho (`:612`).
+
+5. **No sucesso, as Ausências rejeitadas são depois apagadas.** O serviço grava agendamento cancelado em `app/ferias/services.py:689`; o override sincroniza a Ausência em `app/ferias/models.py:448`; `espelhar_ferias` apaga as próprias linhas do agendamento inativo em `app/ponto/services/ausencia.py:1333`. A trilha da rejeição permanece como registro independente com ID numérico, sem FK para Ausência (`app/core/models.py:298`).
+
+6. **[bloqueia] Um ato `decidir` ainda pode invalidar duas vezes.** Contraexemplo: declaração `aguardando_decisao`, aprovada juntamente com período 08:00–12:00. A transição chama o acordador em `app/ponto/services/ausencia.py:971`, via `decidir` em `:1050`; depois o mesmo ato grava o período em `:1069` e chama outro acordador em `:1087`. O comentário “Um ato = uma invalidação” em `:1052` não cobre essa composição. O teste de aprovação usa ausência sem período em `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:306`; o de período começa já aprovada em `:319`.
+
+7. **[fila, herdado] Há ciclo possível de travas no backfill com vários agendamentos do mesmo período.** O backfill trava agendamentos com JOIN do período por PK em `app/ponto/services/ausencia.py:1637`; o cancelamento trava agendamento antes de período em `app/ferias/services.py:636`. Contraexemplo de interleaving: backfill segura G1 e período P; cancelamento segura G2 e espera P; backfill avança para G2 e espera cancelamento. A existência desse arranjo em produção é [nao verificado]; o JOIN e a ordem diferente entre linhas estão nos trechos citados.
+
+8. **Evento de trilha: escritor e leitores.** O escritor nominal do par `rejeitar`/`Ausencia` encontrado é `app/ponto/services/ausencia.py:1463`, passando pelo escritor físico em `app/core/observ.py:134`; `rejeitar` já integra o catálogo em `app/core/models.py:291`. Leitores genéricos que abrangem esse evento: auditoria em `app/core/views.py:705`; fotografia de trilhas de Ausências em `app/chamados/services/foto_e4b.py:311`; proteção de reversão contra qualquer trilha posterior da Ausência em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157`. Leitor especializado desse par: não achei.
+
+9. **`atualizado_em`: significado e lacuna herdada.** O campo é `auto_now` em `app/ponto/models.py:824`; o novo rejeitador o inclui explicitamente em `app/ponto/services/ausencia.py:1462`, e o período também em `:1032`. Saves completos existentes em `:545`, `:642`, `:1716` também passam pelo campo. `mudar_estado` usa lista parcial sem esse campo em `:954`, `:965`, `:967`; a reversão protege-se lendo tanto carimbo quanto trilha em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`. Entretanto `houve_fato_novo` consulta o carimbo, sem consultar essa trilha, em `app/ponto/services/cartorio.py:383`. Contraexemplo: rejeitada com `aprovada_em` antigo → aguardando → aprovada, sem período; a mudança pode não produzir nenhum carimbo novo que esse leitor consulte (`app/ponto/services/ausencia.py:965`; `app/ponto/models.py:882`).
+
+## 16/11 02:07 · sessao 7adcd4b501d2 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+[nao verificado] No dado fornecido, as seis linhas `SOMA` e as duas linhas `ESTRUTURA_DIAS_LINHAS` são `True`. Não há ocorrência de `INCOMPLETO`.
+
+[nao verificado] Transcrição integral da saída fornecida:
+
+```text
+sonda_leitura: script.py [fe38ad6dc95a1ace] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 4 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 96
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 94
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1234, 'bate_ate_10min': 1186, 'esp_zero_e6_trabalho': 6, 'e6_zero_esp_trabalho': 1, 'diverge_10_60': 5, 'diverge_acima_60': 36, 'dia_batida_impar': 55, 'impar_que_BATE': 21, 'impar_que_DIVERGE': 34, 'impar_dentro_da_faixa': 30, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 33, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1276, 'dia_isento_ou_ausencia': 315, 'dia_sem_trabalho_ambos': 18, 'esp_desconta_janela_declarada': 37, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.1% de 1234 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.6 h    3 colabs
+[3] CADASTRO     23 dia-colab     107.6 h    8 colabs
+[3] BATIDA       22 dia-colab     101.2 h   17 colabs
+[4] TOTAL divergentes 48
+[5] colabs com divergencia: 26
+ESTRUTURA_DIA|10/2026|col129|2026-10-12|esp_min=0|e6_min=779|teto_min=779|dif_min=779|classe=esp_zero_e6_trabalho|paridade=par|batidas=17:30 06:30|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col369|2026-10-12|esp_min=476|e6_min=416|teto_min=476|dif_min=-60|classe=diverge_10_60|paridade=par|batidas=07:04 12:47 13:46 15:00|veredito=feriado
+ESTRUTURA_DIA|10/2026|col723|2026-10-08|esp_min=440|e6_min=345|teto_min=500|dif_min=-95|classe=diverge_acima_60|paridade=par|batidas=09:00 10:44 13:20 17:20|veredito=trabalhou
+ESTRUTURA_DIAS_LINHAS 10/2026 3 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.566319135833336|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=23|horas=107.60888681222221|colabs=8
+PARCIAL|10/2026|BATIDA|dias=22|horas=101.15787729194444|colabs=17
+PARCIAL_TOTAL|10/2026|dias=48|horas=224.333083239999986|colabs=26
+ESTIMATIVA processados 100 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 190 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 190 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 983, 'bate_ate_10min': 951, 'esp_zero_e6_trabalho': 7, 'e6_zero_esp_trabalho': 0, 'diverge_10_60': 0, 'diverge_acima_60': 25, 'dia_batida_impar': 50, 'impar_que_BATE': 25, 'impar_que_DIVERGE': 25, 'impar_dentro_da_faixa': 21, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 24, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 376, 'dia_sem_lavratura_no_espelho': 1229, 'dia_isento_ou_ausencia': 264, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 28, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.7% de 983 dias comparados
+[3] ESTRUTURA     1 dia-colab       9.8 h    1 colabs
+[3] CADASTRO      4 dia-colab      17.1 h    3 colabs
+[3] BATIDA       27 dia-colab     160.9 h   14 colabs
+[4] TOTAL divergentes 32
+[5] colabs com divergencia: 16
+ESTRUTURA_DIA|11/2026|col909|2026-11-11|esp_min=831|e6_min=245|teto_min=374|dif_min=-586|classe=diverge_acima_60/FORA|paridade=IMPAR|batidas=07:00 11:04 13:13 23:00|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 11/2026 1 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=1|horas=9.770812222222222|colabs=1
+PARCIAL|11/2026|CADASTRO|dias=4|horas=17.068988648888887|colabs=3
+PARCIAL|11/2026|BATIDA|dias=27|horas=160.93444128833335|colabs=14
+PARCIAL_TOTAL|11/2026|dias=32|horas=187.774242159444459|colabs=16
+TEMPO_SEGUNDOS 165.0
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 239769
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 637
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1276
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6019
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 50
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 1
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 36
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6962
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 8
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 3
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3790
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3790
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 334
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 171
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 1226
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 445946
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 649
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2833
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 186
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12772
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 113
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4030
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 180
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 24689
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3726
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 39600
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 18892
+SOMA 10/2026 48   <- tem de ser igual a soma das classes (48) True
+SOMA 10/2026 HORAS 224.333083239999986 True
+SOMA 10/2026 COLABS_UNIAO 26 True
+SOMA 11/2026 32   <- tem de ser igual a soma das classes (32) True
+SOMA 11/2026 HORAS 187.774242159444459 True
+SOMA 11/2026 COLABS_UNIAO 16 True
+rc_sombra=0
+```
 
 ## 16/11 01:57 · sessao 42ddca326818 · LOTE3-C6 · verificador · origem=Code
 
@@ -1072,100 +1233,4 @@ Nos anexos, conto as linhas a partir de “aval Ronald”, sem contar quebras vi
 
 - **(3) NAO PROCEDE como toque efetivamente demonstrado; alcance real [nao verificado].** O literal exclui dinheiro/exportada/API, proíbe apply e preserva parada por `!`, mas não há causas individualizadas nem diff para conferir o alcance. O filtro de tamanho não substitui PARADA item 2: escala/vínculo, apagar ou voltar arquivo usado em produção, regra fora do pedido, atalhos e motor v2 continuam exigindo `!`; a L-126 também proíbe ao Codex construtor item que peça `!`. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `CLAUDE.md:265–268`; `app/docs/LEIS.md:147`.
 
-## 16/11 01:09 · sessao ee60cda9b763 · - · - · origem=Ronald (tmux)
-
-Achados para consolidar, todos por leitura:
-
-- **Pouso “5 itens ou fim do dia”: PROCEDE no item (3).** A regra escrita manda perguntar por outra raia pronta em até 30 minutos; sem isso roda sozinha, ninguém espera mais de 30 minutos, árvore certificada deve ser a que pousa e nenhum `.py` muda entre veredito e merge (`CLAUDE.md:320–324`; `app/docs/PISTA.md:29–40`). Raia verde pousa antes de abrir fatia nova na fila 1, com merge → commit → deploy no mesmo ato (`CLAUDE.md:325–329`; `app/docs/LEIS.md:131`). Cura commitada com suite verde vai ao ar imediatamente (`CLAUDE.md:425–427`). O anexo propõe outro gatilho de espera, sem nomear alteração dessas regras (`anexo:miudos_na_fila_de_lotes.txt:1`).
-
-- **“Um opus final” para o lote: PROCEDE se substituir as leituras finais por obra.** Toda obra Codex exige opus final sem exceção (`app/docs/LEIS.md:147`), com pré-verificador e suite inteira verde antes dele (`CLAUDE.md:372–378`). O COMBOIO fornecido manda opus final **por obra** e, retirando uma reprovada, nova suite de pouso na árvore restante (`anexo:comboio_pre_opus.txt:5`, contando o cabeçalho como linha 1). O item (3) não explica como seu único opus preserva esse requisito (`anexo:miudos_na_fila_de_lotes.txt:1`).
-
-- **“MIUDO = 1 arquivo de produção + teste” versus docs: ambiguidade, não impossibilidade demonstrada.** Docs entram no mesmo commit do marco; commit só de docs fora de marco não existe, exceto derivado do pós-push (`CLAUDE.md:332–336`; `app/docs/LEIS.md:132`). Se o limite contar todos os caminhos, exclui docs obrigatórios; se medir só produção, pode coexistir. O anexo não declara essa distinção (`anexo:miudos_na_fila_de_lotes.txt:1`). Também não achei regra dizendo que toda cura precisa de **um segundo arquivo separado** de selo: o próprio teste pode cumprir esse papel `[nao verificado]`.
-
-- **“Um commit por item com RED”: NAO PROCEDE como conflito isolado.** RED evidenciado é exigido (`CLAUDE.md:28–29`, `CLAUDE.md:193`), e não achei exigência de commit separado para RED `[nao verificado]`. Permanecem obrigatórios linha LEI-AKITA completa e padrão existente (`CLAUDE.md:62–70`; `bin/molde_fatia/LEIAME:42–50`), citação das leis aplicáveis (`app/docs/LEIS.md:31`) e commit por caminhos declarados (`bin/commit_so_o_declarado.sh:9–18`). O hook julga a mensagem no commit (`bin/commit_msg.sh:2–11`, `bin/commit_msg.sh:29–31`).
-
-- **Retirar reprovado sem segurar outros:** a árvore mudou; precisa nova certificação antes de pousar, conforme regra de árvore (`CLAUDE.md:320–324`) e COMBOIO item 4 (`anexo:comboio_pre_opus.txt:5`). O literal “uma suite inteira” não fecha se significar exatamente uma execução mesmo após retirada (`anexo:miudos_na_fila_de_lotes.txt:1`). [nao verificado]
-
-- **Itens (1) e (2):** estas incompatibilidades de construção/pouso não os bloqueiam; o próprio aval separa a leitura/registro do item (3) (`anexo:miudos_na_fila_de_lotes.txt:1–2`). [nao verificado]
-
-## 16/11 01:09 · sessao 82102c00022d · - · - · origem=Ronald (tmux)
-
-- **Fila de LOTES: regra de entrada não localizada na cópia [nao verificado].** A evidência positiva localizada é de **obras numeradas**: LOTE 7 = FATO-DE-AUSENCIA-ACORDA-A-PROJECAO e LOTE 3 = SITUACAO-DESLIGADO, cada uma com cópia, RED, suíte, opus e condições próprias de pouso (`app/docs/RELATO.md:223`, `app/docs/RELATO.md:224`). O despacho de laterais fala em LOTE 1 e “lotes 2+ aguardam defeitos_por_classe.md final”, sem estabelecer uma fila aberta para novos miúdos (`app/docs/RELATO.md:230`, `app/docs/RELATO.md:232`). A GRADE registra LOTE7 e LOTE3 como obras próprias (`app/docs/GRADE-MESTRA.md:1762`, `app/docs/GRADE-MESTRA.md:1800`).
-- **Não confundir comboio com entrada nessa fila.** A regra geral existente manda perguntar se outra raia ficará pronta em até 30 minutos, juntar em uma árvore certificada ou rodar sozinha, sem esperar mais de 30 minutos (`app/docs/PISTA.md:29`, `app/docs/PISTA.md:31`, `app/docs/PISTA.md:32`, `app/docs/PISTA.md:39`). Ela não define entrada de miúdos em “fila de LOTES” [nao verificado].
-- **Vaga do Codex construtor confirmada.** O contrato escrito nomeia `--construtor` e uma vaga por repositório em `logs/construtor.vaga`, com `flock` (`CLAUDE.md:353`, `CLAUDE.md:355`). O código aceita o argumento (`bin/codex_pergunta.sh:62`), deriva a vaga do `git-common-dir` do repositório vivo (`bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:76`) e recusa ocupação concorrente com `exec 6>>"$VAGA"` / `flock -n 6` (`bin/codex_pergunta.sh:252`, `bin/codex_pergunta.sh:253`). A disponibilidade atual dessa vaga é **[nao verificado]**.
-- **Busca realizada:** padrões relativos a fila/LOTES/entrada/laterais/miúdos em `CLAUDE.md`, `app/docs`, `bin`, `docs`, `.claude`, e busca ampliada em `.md`/`.txt` da cópia. A inexistência universal da fila não pode ser afirmada; seu contrato escrito de entrada permanece **[nao verificado]**.
-
-## 16/11 01:07 · sessao 922017003b6d · - · - · origem=Ronald (tmux)
-
-Q1 — tabela dos nove, com referências atuais do archive:
-
-| Caso | Pessoa/dia escritos | Consequência |
-|---|---|---|
-| HJ-005-U2 | col42, 2026-10-08 — `mapa_hj_sem_nome.tsv:8` | Completo para sonda. |
-| HJ-005-U4 | col42, 2026-10-15 — `mapa_hj_sem_nome.tsv:10` | Completo para sonda. |
-| HJ-030-U1 | col94, 2026-10-16 — `mapa_hj_sem_nome.tsv:50`; `app/docs/CORTES.md:349` | Completo; pergunta nominal #44764, disputa #6984. |
-| BO-ADMIN-2710/1 | col42, 08/15/22-10 — `app/docs/RELATO.md:3625`; `app/docs/CORTES.md:373` | Completo, mas agrega três dias; sobrepõe U2/U4/U5 no nível pessoa+dia. |
-| BO-ADMIN-2710/2 | col789, sete dias; apenas 08/10 e 26/10 explicitados no relato — `app/docs/RELATO.md:3625` | **Falta informação:** lista exata dos sete dias; não inferir dos dias de RT-03. |
-| BO-ADMIN-2710/5 | col247, 2026-10-24 — `app/docs/RELATO.md:3905`; `app/docs/CORTES.md:373` | Completo; pergunta esperada intervalo_volta, não intervalo_saida. |
-| BO-ADMIN-2710/6 | col42/129/789, vários alvos sem dias — `app/docs/RELATO.md:3906`; subcaso col129 25/10 #35101 em `app/docs/CORTES.md:373` | **Falta informação:** dia e pergunta-alvo de cada pessoa para completar a raiz. |
-| BO-ADMIN-2710/7 | col130, 2026-10-05, #28883 — `app/docs/CORTES.md:373`; `app/docs/BACKLOG.md:835` | Completo. |
-| BO-ADMIN-2710/8.1 | col789, **ato de edição** em 2026-10-27 14:33–15:56; vínculos 1221/1472/1473 — `app/docs/CORTES.md:362` | Data do ato escrita; não é julgamento do dia de ponto. **NAO_CONFERIDO:** escritor não deve ser chamado. |
-
-A referência nominal privada da ingestão mora em `logs/hj_0511/fonte` e `logs/hj_0511/mapa.md`, apontados por `app/docs/RELATO.md:8894` e `:8924`; linhas internas desses arquivos **[nao verificado]**.
-
-Juízes e limites para Q4:
-
-- **Cobertura parcial:** `ponto.turnos.periodo_da_parcial_no_dia`, `app/ponto/turnos.py:2628`, retorna `sem_periodo|dentro|fora|nao_sei`. `fora` é a resposta de ausência sem batida dentro do período (`:2632`); não certifica sozinho ausência de outros furos. `grade_da_celula`, `app/escala/services/leitor_celula.py:350`, transporta o julgamento lavrado `periodo_parcial` (`:429`). Horas noturnas exigem deslocamentos da cadeia (`app/ponto/turnos.py:2639`), nunca hora civil improvisada.
-- **HJ-030:** `chamados.juizes.pergunta_viva`, `app/chamados/juizes.py:865`, registrado em `app/core/juizes.py:286`; comparar com `montar_chamados_fio`, `app/chamados/services/fio.py:190`. O fio deve incluir a viva em disputa fechada (`:242`, `:267`). Viva e visível fecha **o defeito de invisibilidade**; viva invisível = ABERTO; morta sozinha não prova resolução.
-- **BO/5:** `_marcos_faltantes`, `app/chamados/services/declaracao_texto.py:86`, devolve `(estado, [(dia,pos,tipo,hora)])`. O esperado nominal é `int_volta`, tipo `E`, conforme `app/docs/CORTES.md:373`. Encontrar isso não prova emissão correta; conservar NAO_CONFERIDO sem conferir a pergunta emitida.
-- **BO/7:** `chamados.services.painel.qs_na_fila(_base=ChamadoColaborador.objects.filter(pk=28883), agora=agora).exists()`; assinatura `app/chamados/services/painel.py:158`, corpo `:188`. Esperado `False` para o sintoma de pendência, pois `registrado` não pede ação (`:174`; catálogo `app/chamados/catalogo/motor.py:24`).
-- **BO/8.1:** `executar_vinculo` é explicitamente executor de escrita (`app/colaboradores/services/vinculo.py:170`). Não chamar. Histórico antigo não é reescrito (`app/docs/RELATO.md:3579`). `vigencia_sem_trilha.medir()` não confere fidelidade do antes/depois; apenas existência de algum registro (`app/escala/services/vigencia_sem_trilha.py:43`).
-
-O lookup não define um fechamento geral: `app/docs/JUIZES.md:109` declara essa pergunta “SEM juiz”. `status_do_dia_lavrado` devolve `status/rotulo/fonte`, sem certificar reparo de fio, geometria ou trilha (`app/ponto/status_dia.py:201`).
-
-Para evitar falso sucesso da sonda, conferir incremento de `core.observ.engolidos()['total']` antes/depois de cada caso (`app/core/observ.py:60`): os leitores podem engolir exceções (`app/chamados/juizes.py:1476`; `app/chamados/services/fio.py:417`). O wrapper SQL também deve contar comandos recusados, além de lançar, para detectar recusa engolida.
-
-## 16/11 01:07 · sessao 3d70cc65d2ed · - · - · origem=Ronald (tmux)
-
-Fontes de origem escritas:
-
-- HJ → Fernando: `app/docs/BACKLOG.md:2233` diz literalmente “casos BO Mauricio / HJ Fernando”.
-- BO-0611 → Mauricio: `app/docs/PROMPTS.md:1914`; versão substitutiva em `app/docs/PROMPTS.md:1925`.
-- BO-1311-ROTEIRO → Mauricio: `app/docs/BACKLOG.md:795` (`BO-[nome]-1311-ROTEIRO`). A correspondência dos números 01–10 segue a ordem do universo, declarada **contestável** em `app/docs/RELATO.md:689`.
-- BO-ADMIN-2710/8.3 → Mauricio: encadeamento explícito do cabeçalho `BO-[nome]-FECHA` em `app/docs/RELATO.md:3894`, item 8.3 em `:3898` e resultado BO-ADMIN em `:3900`/`:3908`.
-
-As referências dos anexos estão defasadas: por exemplo, a descrição BO-0611-V2 está hoje em `RELATO.md:1934`, e os itens BO-ADMIN em `RELATO.md:3901`–`:3908`.
-
-| Caso | Dado faltante comprovável / limite |
-|---|---|
-| HJ-058 | Falta individualizar pessoa, dia e anexo concreto dos quatro casos; a linha já identifica HEIC e datas textuais 30/09 e 06/11, portanto “sem dia” absoluto é excessivo. `BACKLOG.md:2633`; individualização [nao verificado]. |
-| HJ-066 | As telas já são conhecidas: duas dashboards do colaborador. Pessoa/dia não constituem requisito explicitado para essa demanda UI. `BACKLOG.md:2626`; dado externo necessário [nao verificado]. |
-| HJ-068 | Tela já conhecida: fio lateral do admin, encerrados no Histórico e contador acionável. Dado externo faltante [nao verificado]. `BACKLOG.md:2627`. |
-| HJ-071 | Falta **medir se hora_ini/hora_fim está gravada**, não presumir falta de informação do Fernando. Tela: espelho/PDF. `BACKLOG.md:2628`. Pessoa/dia concreto [nao verificado]. |
-| HJ-073 | Falta censo por causa e permissão do supervisor; a linha não pede dado externo específico. `BACKLOG.md:2629`. |
-| HJ-075 | Falta print do app mostrando escala antiga; col1032 já conhecido. `BACKLOG.md:2631`. |
-| HJ-090 | Falta classificação por dono L-099 dos 40 dias de férias com batida; lista individual pessoa/dia nessa linha [nao verificado]. `BACKLOG.md:1932`. |
-| HJ-012-U1 | Pessoa+dia **já fornecidos**: col239, 2026-10-07. Falta resolver discordância das testemunhas, não pedir identidade/dia. `mapa_hj_sem_nome.tsv:18` (anexo). |
-| HJ-031-U1 | Pessoa+dia **já fornecidos**: col247, 2026-10-24. Falta resolver discordância das testemunhas. `mapa_hj_sem_nome.tsv:51` (anexo). |
-| HJ-050-U2 | Pessoa+dia **já fornecidos**: col523, 2026-11-07; o obstáculo era dia futuro na leitura de 05/11. `mapa_hj_sem_nome.tsv:71` (anexo). |
-| BO-0611/02 | Queixa concreta não identificada; col78 já conhecido na versão corrigida. `RELATO.md:1934`; `PROMPTS.md:1925`. Dia [nao verificado]. |
-| BO-0611/03 | Faltam motivos das 40 ocorrências do lote; há problema já identificado no validar-lote. `RELATO.md:1934`; `BACKLOG.md:1924`. |
-| BO-0611/05 | Falta dia do episódio; col456 já corrigido. `RELATO.md:4`; `RELATO.md:1934`; `PROMPTS.md:1925`. |
-| BO-0611/06 | Registro antigo já identifica col950 e cadastro de conta de teste ativa; falta dado atual específico [nao verificado]. `RELATO.md:1996` (quadro depois substituído por `PROMPTS.md:1925`). | [nao verificado]
-| BO-0611/08 | Registro substitutivo identifica col617, atestado aprovado e sem divergência. Dia e reconferência atual [nao verificado]. `RELATO.md:1934`. |
-| BO-0611/09 | col1000 já conhecido; descrito sem porta antes da resposta. Dia/chamado concreto [nao verificado]. `RELATO.md:1934`. |
-| BO-0611/10 | col399 já conhecido; troca sem UI identificada. Dia e troca concreta [nao verificado]. `RELATO.md:1934`. |
-| BO-0611/14 | Grupo 13+14 já associado a col407; texto de turno 21/10 está explicitamente destinado ao item 13. Dia próprio do 14 [nao verificado]. `RELATO.md:1995`; `RELATO.md:1997`. |
-| BO-1311-ROTEIRO/01 | Pela ordem contestável, col1019; falta localizar ficha/dias e declarações ou projeção do retentor correspondentes. `BACKLOG.md:795`; `RELATO.md:689`; necessidade coletiva `RELATO.md:685`; vínculo individual da lacuna [nao verificado]. |
-| BO-1311-ROTEIRO/02 | Mesmo limite, col996 pela ordem contestável. Mesmas fontes. |
-| BO-1311-ROTEIRO/03 | Mesmo limite, col1032 pela ordem contestável. Mesmas fontes. |
-| BO-1311-ROTEIRO/05 | Mesmo limite, col265 pela ordem contestável. Mesmas fontes. |
-| BO-1311-ROTEIRO/06 | Mesmo limite, col982 pela ordem contestável. Mesmas fontes. |
-| BO-1311-ROTEIRO/07 | Mesmo limite, col1004 pela ordem contestável. Mesmas fontes. |
-| BO-1311-ROTEIRO/08 | Mesmo limite, col523 pela ordem contestável. Mesmas fontes. |
-| BO-1311-ROTEIRO/09 | Mesmo limite, col866 pela ordem contestável. Mesmas fontes. |
-| BO-ADMIN-2710/8.3 | col789 e vínculo1473 conhecidos; falta recorte pessoa/dia da consequência denunciada, não identidade. Mecanismo e complemento E4 já registrados. `RELATO.md:3908`; `RELATO.md:3898`. |
-
-Não é sustentável chamar todos esses 27 de “sem pessoa/dia”: três HJ possuem ambos no próprio mapa, diversos BO têm colPK corrigido e vários HJ são demandas de tela ou censo interno. `mapa_hj_sem_nome.tsv:18`, `:51`, `:71`; `RELATO.md:1934`; `BACKLOG.md:2626`–`:2629`.
-
-_5884 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5888 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
