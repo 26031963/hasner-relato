@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 09:59** · publicado em **16/11/2026 10:00** (UTC-3)
+> Ultima resposta processada: **16/11/2026 10:02** · publicado em **16/11/2026 10:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 10:02 · sessao 780bea312735 · CORTES-F2-F9-1611 · construtor · origem=Code
+
+1. **Confirmei inalcançável.** A porta descarta a pergunta não viva e retorna; a segunda guarda consulta a mesma autoridade sem alteração intermediária de `p` ([views.py:1238](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/views.py:1238), [views.py:1257](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/views.py:1257)). A autoridade memoiza por instância e estado ([juizes.py:893](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/juizes.py:893)).
+
+2. Escrito [test_f6_u9b_ramo_inalcancavel.py:23](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:23): verificador AST, `SimpleTestCase`, fonte localizada pelo módulo importado e asserção RED. `test_a_costura_MORDE` cobre o ramo completo e suas duas condições isoladas; há controle positivo da lápide em comentário ([teste:91](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:91), [teste:126](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:126)). [nao verificado]
+
+3. **MUTANTE declarado:** ramo presente ⇒ **FAIL esperado pela asserção**; ramo removido com lápide ⇒ **OK esperado** ([teste:84](/home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py:84)). Comando para ambos os estados: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_f6_u9b_ramo_inalcancavel --settings=config.settings.ci -v 2
+```
+
+Comando dos mutantes sintéticos:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_f6_u9b_ramo_inalcancavel.RamoInalcancavelU9bTest.test_a_costura_MORDE --settings=config.settings.ci -v 2
+```
+
+4. Não executei testes. Resultados RED/OK, importação e setup em execução: **[nao verificado]**. [nao verificado]
 
 ## 16/11 09:59 · sessao 02a95393c9a8 · CORTES-F2-F9-1611 · censo · origem=Code
 
@@ -609,19 +629,4 @@ Ausência de marca na linha **não demonstra independência**: F2 tem dependênc
 
 Portanto, a seleção literal do item9 precisa distinguir coluna BASE/c3, integrais/parciais, dependência da linha/dependência do contrato e os degraus F6 excluídos do escopo. As matrizes fornecem as categorias, mas não uma seleção única inequívoca para “antes do pouso da F1”. (Anexo F2/matriz.md:69, :99-102; F4/matriz.md:104-109; F6/matriz.md:48-49, :94.)
 
-## 16/11 08:54 · sessao 4d65f7eb3223 · - · - · origem=Ronald (tmux)
-
-Não encontrei sobrevivente funcional plausível na família restrita solicitada, por análise estática: o teste exige posto novo durante a trilha, escrita real e, após a exceção, posto antigo, contagem original, HTML antigo e toast exato. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:246-264`).
-
-| Mutante | Por que falha |
-|---|---|
-| Salvar → trilha, sem atomic comum; atomic só na porta; atomic só na trilha após porta | A porta encerra seu bloco próprio e deixa o posto novo; a consulta final exige o antigo. (`app/colaboradores/services/colaborador.py:158-161`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:256-257`). |
-| Trilha → porta, com ou sem atomic somente na trilha | A leitura durante a trilha encontra o antigo; o teste exige o novo. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:247`, `:253`). |
-| Capturar o `RuntimeError` dentro do único atomic sem marcar rollback | As duas escritas permanecem; as consultas finais exigem desfazimento de ambas. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:248-249`, `:256-259`). |
-| Atomic envolvendo somente o tratamento do erro | As escritas anteriores ficam preservadas e violam FK/contagem finais. (`app/colaboradores/services/colaborador.py:158-161`; `app/colaboradores/services/historico_vinculo.py:13-17`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:256-259`). |
-
-A implementação atual confirma atomic comum, porta antes da trilha e `except` fora do bloco. (`app/colaboradores/views.py:333-343`). Execução desses mutantes: **[nao verificado]**.
-
-Limite: este teste sozinho não comprova passagem por `salvar_inteiro`; não há spy nessa função. Substituí-la por `colaborador.save()` dentro do mesmo atomic preservaria os efeitos examinados, mas removeria a guarda. A guarda é exercitada pelo teste separado de desligamento durante a carga. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:211-228`, `:246-264`; `app/colaboradores/services/colaborador.py:158-160`). Esse bypass é um mutante fora da família estrita perguntada. (`app/colaboradores/views.py:334`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:250-264`).
-
-_5986 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5987 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
