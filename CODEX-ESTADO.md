@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 12:48** · publicado em **16/11/2026 12:48** (UTC-3)
+> Ultima resposta processada: **16/11/2026 12:57** · publicado em **16/11/2026 12:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 12:57 · sessao 24f76b5f4000 · UI-VINCULO-MOSTRA-O-CALENDARIO · verificador · origem=Code
+
+1) **NAO PROCEDE a objeção às premissas.**
+
+- A fonte existe, recebe `(cal, ano, mes)` e concentra a escolha entre os dois modos; os resolvedores ficam abaixo dela (`app/escala/folgas.py:43`, `app/escala/folgas.py:54`). Há selo contra chamadas dos resolvedores fora desse módulo (`app/escala/tests/test_foto_folga_continua.py:281`).
+- Leitores diretos encontrados: `divergencia_foto_x_calendario` (`app/escala/folgas.py:99`), `calendario_com_template_vazio_no_mes` (`app/escala/folgas.py:127`), `gerar_foto_folgas` (`app/escala/folgas.py:158`) e `sincronizar_foto_futura_do_calendario` (`app/escala/folgas.py:629`).
+- A rota recebe `cid` inteiro e a view busca `FolgaCalendario.pk=cid` (`app/escala/urls.py:36`, `app/escala/views.py:319`).
+- O bloco e a caixa existem. O texto vazio é **“— usar as folgas da escala (padrão do template) —”**, conforme a descrição do aval; não é literalmente “sem calendario” (`app/templates/colaboradores/partials/painel_vinculo.html:186`, `app/templates/colaboradores/partials/painel_vinculo.html:197`).
+- `painel_vinculo` escolhe o primeiro vínculo ativo, fornece os calendários e renderiza o partial. A opção selecionada compara o calendário com **`escala_ativa.folga_calendario_id`**, não com o padrão do TipoEscala (`app/colaboradores/views.py:268`, `app/colaboradores/views.py:295`, `app/colaboradores/views.py:297`, `app/templates/colaboradores/partials/painel_vinculo.html:199`).
+
+2) **NAO PROCEDE colisão no escopo declarado.**
+
+- Ler essa fonte atende à testemunha que não recalcula e ao juiz único da tela (`app/docs/LEIS.md:60`, `app/docs/LEIS-UI.md:23`).
+- O grep encontrou referências a outro sítio de `colaboradores/views.py`, a `reparentar_folga` e à porta de troca do calendário; nenhuma exige alteração nesta projeção (`app/docs/LEIS.md:64`, `app/docs/CORTES.md:349`, `app/docs/LEIS.md:189`). Outra referência específica impeditiva: `[nao verificado]`.
+- O148-EDITAR permanece **“SO REGISTRAR”**, com edição por versão aguardando corte; abrir a edição existente não implementa esse complemento (`app/docs/CORTES.md:356`, `app/escala/views.py:369`).
+- A exceção nominal do anexo cobre o contexto `.py` diante da restrição geral da raia UI (`CLAUDE.md:312`); registro dessa exceção em arquivo: `[nao verificado]`.
+- Comparação com a lista BUG-PAR fornecida: nenhum arquivo em comum com os dois alvos declarados; confirmação externa dos arquivos efetivamente em voo: `[nao verificado]`.
+
+3) **NAO PROCEDE impedimento literal; há cuidados obrigatórios de implementação.**
+
+- A fonte aceita cada mês separadamente, sem restringir corrente/próximo; a decisão dos dias permanece integralmente nela (`app/escala/folgas.py:43`, `app/escala/folgas.py:55`).
+- **Somente contexto inicial deixaria a projeção velha ao trocar a caixa:** não há atualização no select, o POST usa `hx-swap="none"` e retorna apenas toast (`app/templates/colaboradores/partials/painel_vinculo.html:193`, `app/templates/colaboradores/partials/painel_vinculo.html:195`, `app/colaboradores/views.py:251`). Isso cabe resolver nos alvos autorizados, projetando pela fonte os calendários já fornecidos e alternando sua apresentação no partial (`app/colaboradores/views.py:295`, `app/escala/folgas.py:43`).
+- O RED pode comparar HTML com a fonte real; há precedente de GET e inspeção do painel (`app/colaboradores/tests/test_agenda_14dias.py:39`, `app/colaboradores/tests/test_agenda_14dias.py:44`). Para morder derivação paralela, deve também substituir o retorno da fonte por datas sentinela e exigir sua exibição. Execução desse RED/mutante: `[nao verificado]`.
+- Ajuda por componente e ausência de diálogo nativo continuam exigíveis (`app/docs/LEIS-UI.md:77`, `app/docs/LEIS-UI.md:87`).
+
+4) **NAO PROCEDE alcance adicional necessário.**
+
+A projeção chama um leitor que devolve datas; abrir a edição por GET não entra no ramo de escrita (`app/escala/folgas.py:52`, `app/escala/views.py:320`, `app/escala/views.py:362`). Não exige alterar as portas que trocam vínculo ou materializam folgas (`app/colaboradores/views.py:239`, `app/colaboradores/views.py:245`). O `!` protege mudança do **dado** de escala/vínculo e do gravado de exportada (`CLAUDE.md:265`). Patch, migração, efeitos financeiros e cumprimento posterior desses limites: `[nao verificado]`.
+
+VEREDITO: EXECUTA
+
+## 16/11 12:55 · sessao 01ed894fced5 · - · - · origem=Ronald (tmux)
+
+Não identifiquei impedimento intrínseco no literal; há uma armadilha de atualização que deve entrar no RED.
+
+- A fonte aceita `(cal, ano, mes)` e retorna `set[date]`; resolve os modos internamente e aceita calendário ausente. Pode ser chamada duas vezes, inclusive na virada de ano, sem derivar folgas fora dela (`app/escala/folgas.py:43`, `app/escala/folgas.py:52`, `app/escala/folgas.py:54`).
+- A seleção inicial vem de `escala_ativa.folga_calendario_id`; o vazio já tem o texto “usar as folgas da escala (padrão do template)”. A expressão literal “sem calendario” está na resposta do escritor, não nessa opção (`app/templates/colaboradores/partials/painel_vinculo.html:197`, `app/templates/colaboradores/partials/painel_vinculo.html:199`, `app/colaboradores/views.py:250`).
+- Uma projeção estática ficaria velha ao mudar/salvar: o select não tem atualização e o formulário usa `hx-swap="none"`; o POST HTMX devolve corpo vazio e toast. O carregamento existente só se repete automaticamente após swap da linha (`app/templates/colaboradores/partials/painel_vinculo.html:193`, `app/templates/colaboradores/partials/painel_vinculo.html:195`, `app/colaboradores/views.py:251`, `app/templates/colaboradores/vincular.html:165`).
+- Isso pode ser resolvido nos locais autorizados: a view já disponibiliza todos os calendários; o contexto pode acrescentar os dois retornos da fonte por calendário, e o partial alternar a projeção e o link conforme a seleção, sem calcular folgas. Viabilidade por leitura: `app/colaboradores/views.py:295`, `app/colaboradores/views.py:298`, `app/escala/folgas.py:43`; implementação e desempenho `[nao verificado]`.
+- Para o mutante, apenas comparar datas reais não prova dependência da fonte. Proposta: substituir temporariamente o retorno da fonte por datas sentinela durante o GET e exigir essas datas no HTML e chamadas para os dois meses; execução desse RED `[nao verificado]`. O GET do painel já possui precedente de teste com `Client` e inspeção do HTML/contexto (`app/colaboradores/tests/test_agenda_14dias.py:39`, `app/colaboradores/tests/test_agenda_14dias.py:44`).
+
+## 16/11 12:55 · sessao a627924a613d · - · - · origem=Ronald (tmux)
+
+- **Pergunta 2: NAO PROCEDE, no escopo literal do item 1.** Ler a fonte única segue L-002 (`app/docs/LEIS.md:60`) e L2 de UI (`app/docs/LEIS-UI.md:23`). A regra geral de `wt-ui` limita a templates/static/teste (`CLAUDE.md:309`–313); a exceção nominal para contexto na view consta somente do anexo fornecido `[nao verificado em arquivo]`.
+
+- Busca pelos arquivos/funções em `LEIS.md`/`CORTES.md`: `colaboradores/views.py` aparece por **form_empresa**, outro sítio (`app/docs/LEIS.md:64`); `escala/folgas.py` por **reparentar_folga**, outro predicado (`app/docs/CORTES.md:349`). Não encontrei referências exatas a `painel_vinculo`, `editar_folga_calendario`, `escala/urls.py` ou `vincular_folga` nesses dois documentos `[nao verificado: ausência não possui linha positiva]`.
+
+- **O148-EDITAR não exige implementar versões nesta obra.** Está expressamente em “SO REGISTRAR”, com edição por versão aguardando corte (`app/docs/CORTES.md:356`). Item 1 pode apenas apontar à edição existente: GET busca o calendário e renderiza (`app/escala/views.py:319`, `app/escala/views.py:362`, `app/escala/views.py:369`); a escrita fica no ramo POST (`app/escala/views.py:320`, `app/escala/views.py:356`).
+
+- **Pergunta 4: NAO PROCEDE se restrita a exibição/contexto/link.** `!` protege alteração de **dado** de escala/vínculo e gravado de exportada (`CLAUDE.md:265`–268); L-007 protege escritores e trilha (`app/docs/LEIS.md:65`, `app/docs/LEIS.md:189`). O resolver devolve datas sem persistir (`app/escala/folgas.py:43`–56).
+
+- **Ponto para pergunta 3:** a caixa atual não dispara requisição ao mudar; `selected` compara o calendário **salvo** do vínculo (`app/templates/colaboradores/partials/painel_vinculo.html:195`–201). Apenas contexto inicial acompanha esse calendário salvo; acompanhar seleção ainda não salva exigiria mecanismo adicional `[nao verificado: intenção exata do anexo]`.
+
+- O texto existente para ausência é exatamente “— usar as folgas da escala (padrão do template) —”, não a expressão “sem calendário” (`app/templates/colaboradores/partials/painel_vinculo.html:197`).
 
 ## 16/11 12:48 · sessao 680469d3a22e · O10-D-PERMUTA-RECIPROCA · censo · origem=Code
 
@@ -1080,57 +1135,4 @@ Outras mutações encontradas, sem constituir portas de captura: máscara da som
 
 **Localização do censo e da resposta de 09/11:** o censo_v2 aparece **resumido** em `app/docs/RELATO.md:1630`; seu arquivo integral está **[nao verificado]**. A resposta de **09/11, 12:0x** aparece resumida em `app/docs/PROMPTS.md:2015`, com ponteiro para `logs/O10-D-PERMUTA-NA-TELA/aval_lei_permuta.txt`; esse original na cópia está **[nao verificado]**. A identidade Git do HEAD também está **[nao verificado]**.
 
-## 16/11 11:43 · sessao 297e08cd88ae · - · - · origem=Ronald (tmux)
-
-Leitores e decisão:
-
-| Porta | Leitura/conversão de `accuracy` | Classificação/persistência | Alerta de fora |
-|---|---|---|---|
-| Web | `app/ponto/views.py:3014`, `3045-3048` | chama juiz e mapeia `gps_incerto` para `dentro_geofence=None`: `3052-3057`; grava accuracy original: `3065-3072` | exige atual `is False` e `not from_mock`: `3081`; consulta somente falsos, conta ≥2: `3082-3088`; chamado `ping_geo_fora` e push: `3091-3107` |
-| API completa | `app/api/views.py:2334`, `2401-2404` | juiz/mapeamento: `2408-2413`; grava: `2421-2428` | atual False e não mock; dois últimos não mock em 2h, ambos False: `2437-2449` |
-| API core | `app/api/views_core.py:864`, `931-934` | juiz/mapeamento: `938-943`; grava: `951-958` | equivalente API: `967-979` |
-
-**Confirmada para o ping fora do raio efetivo:** `classificar_posicao` primeiro normaliza o raio (`app/ponto/services/geofence.py:114`), retorna `gps_incerto` se está fora e `accuracy is None` (`115-118`); as três portas gravam `None` e não entram nos gates de alerta citados. O raio padrão é 200 m, usado quando nulo/ilegível/não positivo (`169`, `190-196`).
-
-Ressalvas que evitam afirmação excessiva:
-
-- Sem accuracy **dentro** do raio retorna `dentro`, porque esse ramo vem antes do teste da accuracy (`app/ponto/services/geofence.py:115-118`).
-- “Incerto” é o estado persistido; o retorno HTTP usa `_dentro_resp = _tipo_pos == 'dentro'`, portanto devolve **False**, não None, para o ping incerto fora do raio: web `app/ponto/views.py:3058,3109`; API `app/api/views.py:2414,2454`; core `app/api/views_core.py:944,984`.
-- Intervalo também força `dentro_geofence=None`, independentemente da accuracy: web `app/ponto/views.py:3061-3063`; API `app/api/views.py:2418-2420`; core `app/api/views_core.py:948-950`. Portanto `dentro_None` não prova sozinho “fora com GPS incerto”.
-- Web não exige realmente “consecutivos”: consulta já filtrada por False e sem janela; um None intermediário não dispara, mas também não quebra sua contagem de falsos históricos (`app/ponto/views.py:3081-3088`). API/core examinam os dois últimos não mock em 2h, de modo que None intermediário quebra a condição (`app/api/views.py:2438-2444`; core `968-974`).
-- O painel de presença **não reavalia accuracy**: lê `dentro_geofence is False` e pode retornar verde com pings válidos todos None (`app/ponto/presenca.py:57-62,70-77`). O resumo expõe `p.accuracy`, apenas como dado (`123`); contagem fora usa `is False` (`113`).
-- Não generalizar para batidas: `verificar_geofence` lê `Batida.gps_accuracy` (`app/ponto/services/geofence.py:287-292`) e cria registro `AlertaGeofence(tipo='gps_incerto')` (`301-306`). É fluxo distinto de PingGeo.
-- Reconciliações consultadas são de chamados/alertas ligados a batidas, não releem PingGeo: `app/ponto/management/commands/reconciliar_geofence.py:24-33`, `app/ponto/services/geofence.py:428-432`; `reconciliar_alertas_geofence.py:28-45`.
-
-## 16/11 11:43 · sessao 6cd97d087b6c · - · - · origem=Ronald (tmux)
-
-Q4 — **estrutura coerente; proveniência dos logs e comparação histórica de dados pessoais [não verificado].**
-
-- São **19 entradas acrescentadas**: 10 restauradas (`app/docs/CORTES.json:1725`, `1732`, `1739`, `1746`, `1753`, `1760`, `1767`, `1774`, `1781`, `1788`); 8 avais (`1802`, `1810`, `1818`, `1826`, `1834`, `1842`, `1850`, `1858`); nascimento de `pergunta_respondida` (`1866`). A validação em memória encontrou 255 IDs únicos no JSON inteiro e nenhum campo obrigatório vazio nas 19 entradas; todas as datas são aceitas pela conversão de `x` para `0` do gerador (`bin/gerar_cortes.py:35`).
-
-- As 10 restaurações não têm chave `onde`; registram origem histórica e/ou referências na frase/estado (`app/docs/CORTES.json:1727`, `1729`, `1734`, `1741`, `1748`, `1755`, `1762`, `1769`, `1776`, `1783`, `1790`). As outras 9 têm `onde` apontando para `logs/AVAIS-1515/` (`app/docs/CORTES.json:1806`, `1814`, `1822`, `1830`, `1838`, `1846`, `1854`, `1862`, `1870`). Esses arquivos e o diretório `logs/` estão ausentes da cópia: existência e conteúdo **[não verificado]**; `logs/` é ignorado pelo repositório (`.gitignore:53`).
-
-- As autoridades referidas pelas restaurações existem: `dia_da_pergunta_trancado` (`app/chamados/juizes.py:978`), `dia_sem_trabalho` (`445`), `esta_desligado` (`app/colaboradores/services/desligamento.py:23`), `folga_lancada_do_dia` (`app/ponto/precedencia.py:212`), `motivo_do_veto` (`app/ponto/services/furos_vetados.py:27`), `pauta_cadastro_existente` (`app/chamados/services/fabrica_da_celula.py:317`), `porta_alcancavel_do_dia` (`app/chamados/juizes.py:1693`), `status_do_dia_lavrado` (`app/ponto/status_dia.py:201`), `tarefa_do_dia` (`app/chamados/services/tarefa_do_dia.py:733`), `tem_gps` (`app/ponto/services/geofence.py:126`).
-
-- Há também **13 alterações de estado**, todas atribuindo comprovação ao censo `logs/CORTES-RECEBIDO-FORA-DA-PAUSA/c1.r`; os resultados desse censo ficam **[não verificado]** (`app/docs/CORTES.json:902`, `909`, `916`, `923`, `1021`, `1028`, `1056`, `1063`, `1070`, `1091`, `1098`, `1154`, `1161`).
-
-- Dados pessoais: a restauração associa primeiro nome a `p#34375`, mas essa mesma associação já consta em outros documentos da cópia (`app/docs/CORTES.json:1771`; `app/docs/BACKLOG.md:961`, `963`; `app/docs/RELATO.md:2856`). Os interlocutores nomeados nos novos avais também aparecem em entradas anteriores (`app/docs/CORTES.json:1807`, `1815`, `1831`; anteriores em `1188`, `1223`, `1342`, `1470`). A busca de padrões não encontrou CPF, telefone ou email nas 19 novas entradas; ausência de dado pessoal adicional em relação às árvores anteriores: **[não verificado]**, porque não há histórico Git disponível.
-
-O Markdown é reproduzível integralmente pela função pura `markdown(JSON, agora=2026-11-16 11:38)`; a seção “Todos” coincide independentemente do horário (`bin/gerar_cortes.py:97`, `106`). Isso comprova reprodutibilidade do derivado atual; a execução histórica do gerador permanece **[não verificado]**.
-
-## 16/11 11:43 · sessao b0195f44117c · - · - · origem=Ronald (tmux)
-
-Pergunta 2 — **comparação histórica [não verificado]**. A cópia não contém `.git`; não consegui executar os dois `git diff` pedidos nem comparar o conteúdo histórico dos 56 arquivos do anexo. Os 56 caminhos existem na cópia; isso não prova preservação do merge. [não verificado]
-
-O `RELATO.md` documenta a certificação anterior em `51678cbb2` e um ensaio de merge do comboio, mas não contém os dois diffs solicitados nem prova do delta `be4ebe85b → 99eccedf9`: `app/docs/RELATO.md:18`, `app/docs/RELATO.md:19`, `app/docs/RELATO.md:21`.
-
-Para o arquivo compartilhado, o resultado final preserva a catraca de identidades, quantidades, composição e linhas reais: `app/core/tests/test_medida_turno_do_par.py:100`, `:151`, `:247`, `:541`, `:557`. Há registros correspondentes a ambos os grupos:
-
-- Obra: `_dia_da_batida` e `_dia_do_contexto_fraco` registrados em `app/core/tests/test_medida_turno_do_par.py:258` e `:259`, correspondendo às expressões em `app/chamados/juizes.py:54` e `:170`.
-- Main: `regularizar_retorno` registrado em `app/core/tests/test_medida_turno_do_par.py:339`, correspondendo à expressão em `app/ponto/views.py:3311`.
-
-Executei o teste inteiro em memória, sem Django, banco ou bytecode, conforme o procedimento documentado em `app/core/tests/test_medida_turno_do_par.py:20`: **35 testes passaram, zero falhas/erros**. Isso confirma coerência do retrato final, mas **“preservou as duas intenções do merge” continua [não verificado]** sem as versões históricas.
-
-A intenção funcional explícita do LOTE3 c7 está presente: posto e histórico dentro do mesmo `atomic`, com releitura do gravado após recusa (`app/colaboradores/views.py:331`, `:333`, `:343`); seu teste exercita falha depois da escrita real do histórico e exige rollback dos dois (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:230`, `:253`, `:256`). A intenção B1 c2 também está explícita no resultado: ressuscitar zera o par inteiro, conserva a trilha anterior e evita o ato `REABERTURA` que mudaria o dono da tarefa (`app/chamados/models.py:1613`, `:1622`, `:1629`). Isso comprova presença no código atual, não equivalência com os diffs anteriores.
-
-_6015 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6018 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
