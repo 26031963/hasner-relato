@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 17:02** · publicado em **16/11/2026 17:02** (UTC-3)
+> Ultima resposta processada: **16/11/2026 17:03** · publicado em **16/11/2026 17:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 17:03 · sessao abdee5dbe35b · BUG-PAR-O-PAR · verificador · origem=Code
+
+1. **Q1 — Confere e fecha a delimitação.** Sem `data_evento`, o helper retorna antes de consultar K6; U163 é pulado antes dessa verificação. Portanto, L5 descreve a metade fora163 sem dia, não ausência de consulta a qualquer juiz. Isso corrige a premissa da L5 original sem exigir mudança na ordem da porta. (`app/chamados/services/materializacao.py:780`; `app/chamados/services/materializacao.py:785`; `app/chamados/services/materializacao.py:797`; `app/chamados/services/materializacao.py:801`.)
+
+2. **Q2 — Confere como precedência relativa das linhas da testemunha; a porta tem outra ordem de decisão.** Na testemunha, a guarda K6 antecede F6; F6 antecede declarado × gravado; `aplicavel` vem depois. Existem guardas intermediárias de data, derivação, satisfação e paridade, preservadas pelo “sem mudança”. (`app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:866`; `app/chamados/services/materializacao.py:871`; `app/chamados/services/materializacao.py:874`; `app/chamados/services/materializacao.py:884`; `app/chamados/services/materializacao.py:897`; `app/chamados/services/materializacao.py:908`; `app/chamados/services/materializacao.py:911`.)
+
+   Na **porta**, a sequência é: consulta antecipada da espera → implausibilidade → guarda explícita K6 → carimbo de validação → materialização, onde F6 pode recusar. A consulta antecipada percorre a testemunha, mas extrai **somente** seu estado de espera; não devolve automaticamente os bloqueios K6/F6 encontrados nela. (`app/chamados/services/validacao.py:573`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:645`; `app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`; `app/ponto/registro_batida.py:156`.)
+
+   Assim, uma U163 divergente bloqueada por F6 recebe **L2 na testemunha**, e a consulta antecipada não a devolve como L3. A diferença das ordens não cria colisão residual: o complemento fixa a unidade na testemunha, preserva expressamente a porta e distingue seus retornos. (`app/chamados/services/materializacao.py:886`; `app/chamados/services/materializacao.py:910`; `app/chamados/services/materializacao.py:754`; `complemento3_espinha_bug_par_c4_1611.txt:1`; `complemento3_espinha_bug_par_c4_1611.txt:3`; `complemento3_espinha_bug_par_c4_1611.txt:11`, texto fornecido.)
+
+3. **Q3 — Confere; L5 fora163 já não entrava no contador.** A seleção é exclusivamente U163. Retirar o balde projetado não remove um leitor efetivo de L5 nem altera o universo contado. O balde existente `bug_par_103_sem_dia` trata candidatas U103 carimbadas, outra situação; a lista do comando já inclui fora163 sem dia como linha falante. Isso fecha a correção da L5 original sem deixar balde a decidir pelo construtor. (`app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:331`; `app/chamados/management/commands/bug_par_103.py:71`; `app/chamados/management/commands/bug_par_103.py:75`; `app/chamados/management/commands/bug_par_103.py:77`.)
+
+4. **Q4 — Confere; a fixture é construível com K6 inalterado durante o percurso.** Já existe fixture com K6 estável em falso, `U60=U163={saida}`, respostas coincidentes com os marcos e validação administrativa que grava o par, reduzindo `universo` de 1 para 0. (`app/chamados/tests/test_bug_par_projetado.py:51`; `app/chamados/tests/test_bug_par_projetado.py:80`; `app/chamados/tests/test_bug_par_projetado.py:203`; `app/chamados/tests/test_bug_par_projetado.py:209`; `app/chamados/tests/test_bug_par_projetado.py:211`; `app/chamados/tests/test_bug_par_projetado.py:212`; `app/chamados/tests/test_bug_par_projetado.py:217`.)
+
+   Por inspeção, essa construção permite cobrar `pendentes_aval: 1→0`, `resolvidas: 0→1` e `congelados_no_recorte=1`. L3 continua pendente, portanto zero global não decorre do contrato. O F4 atual ainda obtém zero mudando K6; não prova a exigência corrigida. A execução da nova prova é **[nao verificado]**. (`app/chamados/tests/test_bug_par_projetado.py:47`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:351`; `app/chamados/services/materializacao.py:356`; `app/chamados/tests/test_bug_par_103.py:89`.)
+
+Quanto a exportada, dinheiro e `!`, as quatro respostas não ampliam a autorização original. A validação já agenda recálculo antes do plantio; ausência de batida nova não demonstra ausência de escrita financeira. Tocar gravado exportado continua sujeito ao `!`; efeito produtivo concreto é **[nao verificado]**. (`complemento3_espinha_bug_par_c4_1611.txt:1`, texto fornecido; `app/chamados/services/validacao.py:627`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/fechamento.py:1160`; `CLAUDE.md:265`; `CLAUDE.md:411`.)
+
+VEREDITO: CONFERE
 
 ## 16/11 17:02 · sessao 863272485906 · - · - · origem=Ronald (tmux)
 
@@ -680,39 +700,4 @@ O mapa abaixo identifica consumidores concretos; exaustividade do futuro censo p
 - Corrige-se a chamada para `afastado_hoje(colab, dia=dia_celula, para='cobranca')`? (`app/ponto/turnos.py:2737`.)
 - Quais valores/linhas entram nos hashes dos três modelos e como se isola o efeito novo dos efeitos anteriores e após commit? (`app/ponto/portas/regen_exportada.py:71`; `app/ponto/services/fechamento.py:1610`; `app/ponto/services/fechamento.py:1824`.)
 
-## 16/11 15:47 · sessao d773d8ad8c47 · - · - · origem=Ronald (tmux)
-
-- A porta canônica de `CelulaDia` é `app/ponto/portas/celula.py`, com as operações registradas em `OPERACOES`; chamar esse módulo pelas portas de desligamento/vínculo mantém um escritor, enquanto escrita direta nessas portas contrariaria o registro. (`app/core/portas.py:107-113`; `app/ponto/portas/celula.py:74-84`.)
-
-- **A premissa da operação existente é parcialmente correta.** Fora da vigência, **futuro** (`d > hoje`) exige célula gerada pelo vínculo encerrado, competência fora da lavra e ausência de outro vínculo; grava `trabalha=False`, `escala_geradora=None`, `dna=montar_dna(None,…)`, `dna_anterior`, `regenerada_em` e incremento de `regeneracoes`; depois desfaz o julgamento futuro. (`app/ponto/portas/celula.py:251-271`.) O DNA sem vínculo tem `vinculo_id`, `tipo_escala_id`, `tipo_ciclo`, `marcos`, `minutos_jornada`, `intervalo_livre` e `lampadas` nulos. (`app/ponto/management/commands/gerar_celulas.py:73-84`.)
-
-- Para **hoje/passado** fora da vigência, a operação existente é diferente: exige `trabalha is not False`, conserva a geradora e grava somente `trabalha=False` e `montar_dna(ec,d,False)`; conserva `dna.vinculo_id=ec.id`, sem os três campos de denúncia nesse ramo. Portanto, “usa a operação existente, DNA sem vínculo” precisa explicitar seu alcance futuro ou reconhecer mudança dessa operação para hoje/passado. (`app/ponto/portas/celula.py:272-282`; `app/ponto/management/commands/gerar_celulas.py:104-112`.)
-
-- Os dois ramos não consultam batidas, afastamento ou `competencia_ja_paga`; atualmente a guarda de competência vem de `_competencias_exportadas`, salvo `apesar_da_lavra` preenchido. (`app/ponto/portas/celula.py:218-221`; `app/ponto/portas/celula.py:251-279`.) `_competencias_exportadas` enumera TXT/holerite publicado e consulta `folha.export.competencia_fechada_para_celula`; isso não é a autoridade futura nomeada no contrato. (`app/ponto/management/commands/gerar_celulas.py:155-188`.)
-
-- `executar_desligamento` já chama `fechar_vinculos_ativos`, que chama `fechar_vigencia`; o `update()` de vigência é seguido de `regenerar_futuras_do_cadastro(..., recalculo=False, substitui_dono=True)`. (`app/colaboradores/services/desligamento.py:147-149`; `app/colaboradores/services/vinculo.py:855-865`; `app/colaboradores/services/vinculo.py:641-664`.) Esse suplemento seleciona somente futuras geradas já existentes e chama a porta por dia, sem horizonte estendido. (`app/ponto/services/cadastro_futuro.py:26-45`.) O agendado retorna antes desse caminho; vínculos com início posterior ao fim são recusados e preservados. (`app/colaboradores/services/desligamento.py:107-126`; `app/colaboradores/services/vinculo.py:622`; `app/colaboradores/services/vinculo.py:665-670`.)
-
-- `encerrar_vinculo` já salva `ativa=False/data_fim`; o signal de vigência chama a porta para hoje/passado e o suplemento para futuro. (`app/colaboradores/services/vinculo.py:835-851`; `app/escala/signals.py:54-83`.) Logo, já existe caminho acionável sem segundo escritor, mas reaproveitá-lo sem acrescentar as novas guardas não implementa as condições literais do aval. (`app/core/portas.py:112`; `app/ponto/portas/celula.py:251-279`.)
-
-- `_outro_vinculo_cobre` **mora no command**, sendo importada pela porta; consulta outros vínculos da pessoa e pergunta a `escala.alimentacao.vinculo_cobre_a_data`. (`app/ponto/portas/celula.py:141-143`; `app/ponto/management/commands/gerar_celulas.py:269-287`.) A proteção vale nos dois ramos fora da vigência; geradora diferente também fica preservada. (`app/ponto/portas/celula.py:251-276`.)
-
-- `eh_dia_trabalho` lê `cel.trabalha`; sem célula, volta a `eh_dia_trabalho_calculado`, **não diretamente ao template**. (`app/escala/models.py:1094-1096`.) `marcos_do_dia` usa o template sem célula **e também com célula cujo `dna.marcos` é vazio**; portanto conservar a linha não elimina sozinho todo retorno aos marcos do template. (`app/escala/models.py:1124-1133`.) O comentário documenta esse comportamento inclusive para folga. (`app/escala/models.py:1151-1158`.)
-
-- A operação chama `_marcar_cobrancas_orfas` e registra evento de regeneração quando altera células; a trilha de regeneração é best-effort, com exceção capturada. (`app/ponto/portas/celula.py:327`; `app/ponto/portas/celula.py:369-389`.) O rabo comum pode rejulgar células passadas, recalcular dinheiro por competência e agendar rejunção/reavaliação de falta; `recalculo=False` elimina julgamento/dinheiro, mas não elimina todo o rabo de eventos. (`app/ponto/portas/celula.py:460-496`; `app/ponto/portas/celula.py:501-528`.)
-
-Mapa de campos e consumidores para o censo:
-
-| Campo/função | Quem escreve | Quem lê |
-|---|---|---|
-| `EscalaColaborador.ativa/data_fim` | `fechar_vigencia`, `encerrar_vinculo`. (`app/colaboradores/services/vinculo.py:641`; `app/colaboradores/services/vinculo.py:843-845`.) | Signal compara vigência anterior/atual; `_outro_vinculo_cobre` alimenta juiz de cobertura. (`app/escala/signals.py:25-28`; `app/escala/signals.py:56-68`; `app/ponto/management/commands/gerar_celulas.py:283-287`.) |
-| `CelulaDia.trabalha` | `regenerar_celulas_vinculo`, nos ramos fora da vigência. (`app/ponto/portas/celula.py:259-266`; `app/ponto/portas/celula.py:277-279`.) | `eh_dia_trabalho`; juiz `dia_sem_trabalho`; leitor da grade. (`app/escala/models.py:1094-1096`; `app/chamados/juizes.py:459-460`; `app/escala/services/leitor_celula.py:398-428`.) |
-| `CelulaDia.escala_geradora` | Ramo futuro limpa; ramo comum regenera. (`app/ponto/portas/celula.py:260-266`; `app/ponto/portas/celula.py:306-311`.) | `vinculo_do_dia` lê o carimbo. (`app/escala/alimentacao.py:270`.) |
-| `CelulaDia.dna` | Porta usa produtor `montar_dna`. (`app/ponto/portas/celula.py:261`; `app/ponto/portas/celula.py:278`; `app/ponto/management/commands/gerar_celulas.py:73`.) | `marcos_do_dia`. (`app/escala/models.py:1124-1133`.) |
-| `dna_anterior/regenerada_em/regeneracoes` | Ramo futuro e regeneração comum. (`app/ponto/portas/celula.py:262-266`; `app/ponto/portas/celula.py:307-311`.) | Carregador/juiz de reescrita consulta `regenerada_em`; reversão usa denúncia conforme contrato da função. (`app/escala/services/regeneracao.py:72-105`; `app/ponto/portas/celula.py:247-249`.) |
-| `origem/editada_em/editada_por` | Operação humana declarada `editar_dia`. (`app/ponto/portas/celula.py:14-16`; `app/ponto/portas/celula.py:83-84`.) | Regeneração exige `origem='gerada'`; juiz de reescrita lê `editada_em`. (`app/ponto/portas/celula.py:251`; `app/ponto/portas/celula.py:272`; `app/escala/services/regeneracao.py:84-105`.) |
-| Julgamento futuro (`ata`, `veredito`, `status_*`, carimbos etc.) | `desfazer_julgamento_da_futura` zera lista de campos por `salvar_e_emitir`, preservando veredito via admin com trilha obrigatória. (`app/ponto/portas/celula.py:1112-1113`; `app/ponto/portas/celula.py:1155-1175`.) | A própria operação verifica existência do julgamento e via admin. (`app/ponto/portas/celula.py:1149-1155`.) |
-| `FechamentoMensal` previsto | `invalidar_previsto` é chamado em todo post-save do vínculo, sem filtro de competência no signal. (`app/escala/signals.py:137-146`.) | A leitura seguinte recalcula previsto conforme docstring do signal; comprovação do caminho completo cabe ao censo do fechamento. (`app/escala/signals.py:139-143`.) |
-
-A enumeração acima demonstra consumidores concretos, não exaustividade do futuro censo de leitores/escritores pedido pelo contrato. [nao verificado]
-
-_6105 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6106 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
