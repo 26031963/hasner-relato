@@ -1,7 +1,240 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 13:20** · publicado em **16/11/2026 13:21** (UTC-3)
+> Ultima resposta processada: **16/11/2026 13:25** · publicado em **16/11/2026 13:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 13:25 · sessao 77f8120193e8 · UI-VINCULO-MOSTRA-O-CALENDARIO · leitura · origem=Code
+
+**(a) As duas leituras existem no código:** a foto deve chegar à célula pela geração/regeneração; grade e precedência também leem `FolgaDia` por cima do previsto, sem alterar `CelulaDia.trabalha`. Já `EC.eh_dia_trabalho` devolve o valor da célula existente. Portanto, gravar a foto não garante, por si só, que todos esses leitores responderão igual. (`app/escala/folgas.py:215-218`; `app/escala/utils.py:1147-1153`; `app/ponto/precedencia.py:356-387`; `app/escala/models.py:1087-1096`.)
+
+**Quem escreve `FolgaDia`.** O módulo autorizado é `app/escala/folgas.py`. (`app/core/portas.py:470-473`.)
+
+| Porta | Escrita e entradas |
+|---|---|
+| `gerar_foto_folgas` | Apaga a foto de calendário do mês, preserva manuais, recria as datas e chama a relavratura na mesma transação. Entradas: vínculo individual, aplicação ao tipo, herança do padrão e comando `lavrar_foto_folgas --apply`. (`app/escala/folgas.py:150-218`; `app/colaboradores/views.py:239-246`; `app/escala/views.py:408-412`; `app/colaboradores/services/vinculo.py:151-166`; `app/escala/management/commands/lavrar_foto_folgas.py:159-170`.) |
+| `sincronizar_foto_futura_do_calendario` | Usa o mesmo escritor com recorte de datas futuras e depois regenera futuras. É chamada ao salvar o calendário ou mudar o calendário do vínculo. (`app/escala/folgas.py:597-642`; `app/colaboradores/services/vinculo.py:459-465`.) |
+| `lancar_folga` | `get_or_create` manual seguido de relavratura. Entradas: toggle do Plano e declaração pela supervisão. (`app/escala/folgas.py:329-339`; `app/escala/views_plano_folgas.py:124-132`; `app/ponto/services/declarar_dia.py:179-193`.) |
+| `alterar_folga` | `_foto_do_dia` apaga, cria ou altera `tipo`; depois relavra. Entrada: toggle do Plano. (`app/escala/folgas.py:343-382`; `app/escala/views_plano_folgas.py:134-137`.) |
+| `aplicar_folgas_em_lote` | Usa `_foto_do_dia`, recusa competência anterior à corrente e relavra o intervalo gravado. Entrada: Plano em lote. (`app/escala/folgas.py:401-421`; `app/escala/views_plano_folgas.py:163-185`.) |
+| `reparentar_folga` | Muda o vínculo da folga manual e chama relavratura; calendário é recusado. Na competência passada usa `so_rejulgar`, preservando o DNA. Entradas: signal de criação/vigência e comando de reparentamento. (`app/escala/folgas.py:484-525`; `app/escala/signals.py:185-207`; `app/escala/management/commands/reparentar_folgas.py:22-34`.) |
+
+Há ainda efeitos referenciais declarados: excluir o vínculo apaga suas folgas por `CASCADE`; excluir o calendário deixa `calendario_origem` nulo por `SET_NULL`. (`app/escala/models.py:1585-1591`.)
+
+**Quem escreve `CelulaDia.trabalha`.**
+
+- **Geração:** `gerar_celulas_periodo` calcula `valor = ec.eh_dia_trabalho_calculado(d)` e cria a célula com esse valor e DNA. A data presente na foto do próprio vínculo resulta em `False`. Célula existente editada é preservada; passado existente só pode receber DNA ausente; hoje/futuro existente é pulado nessa função. (`app/ponto/portas/celula.py:911-935`; `app/escala/models.py:1280-1288`; `app/escala/models.py:1309-1317`.)
+- **Command `gerar_celulas`:** antes da geração, possui suplemento que regenera células existentes de **hoje**. Isso não constitui uma atualização geral das futuras existentes. (`app/ponto/management/commands/gerar_celulas.py:303-325`; `app/ponto/management/commands/gerar_celulas.py:345-350`.)
+- **Regeneração:** recalcula pela foto/cadastro; cria ausentes e reescreve existentes divergentes somente com `origem='gerada'`. Guarda DNA anterior, instante e incrementa `regeneracoes`. Também pode desligar células fora da vigência. (`app/ponto/portas/celula.py:229-311`.)
+- **Edição humana:** `editar_dia` escreve `trabalha`, DNA, geradora, `origem='editada'`, autor e instante; não incrementa os campos de regeneração. Troca de plantão delega a essa edição. (`app/ponto/portas/celula.py:575-580`; `app/ponto/portas/celula.py:637-647`; `app/ponto/portas/celula.py:670-715`.)
+- **Reversão:** `reverter_regeneracao_dia` restaura `trabalha` pelo DNA anterior e incrementa os carimbos de regeneração. (`app/ponto/portas/celula.py:817-837`.)
+
+**Quem lê cada fonte.**
+
+| Consumidor | Fonte efetivamente lida |
+|---|---|
+| `EC.eh_dia_trabalho` | Existindo célula, retorna `cel.trabalha`; somente sem célula chama o cálculo que consulta a foto. (`app/escala/models.py:1087-1096`.) |
+| `EC.marcos_do_dia` | Lê `dna.marcos`; sem marcos utilizáveis, retorna os marcos do template. Não aplica a foto nessa leitura. (`app/escala/models.py:1117-1133`.) |
+| Grade/espelho | O overlay consulta `FolgaDia` pelo juiz, põe `tipo_dia='folga'`, limpa as colunas e órfãs **do dicionário da grade**. O espelho obtém seu flag `folga` desse `tipo_dia`. (`app/escala/utils.py:1140-1153`; `app/escala/utils.py:1844`; `app/ponto/services/espelho.py:673-679`; `app/ponto/services/espelho.py:764-771`.) |
+| Precedência | Usa `trabalha` como previsto, mas inclui folga lançada válida mesmo com previsto `True`; folga vence trabalho na ordenação. Calendário vale apenas para o vínculo do dia; manual vale para a pessoa. (`app/ponto/precedencia.py:46`; `app/ponto/precedencia.py:235-239`; `app/ponto/precedencia.py:347-397`.) |
+| Motor | No caminho com vínculo não intermitente, classifica folga trabalhada pela resposta `False` de `EC.eh_dia_trabalho`; os marcos vêm de `EC.marcos_do_dia`, com fallback ao template. (`app/ponto/motor_calculo_v2.py:2445-2469`; `app/ponto/motor_calculo_v2.py:2290-2291`; `app/ponto/motor_calculo_v2.py:1532-1540`.) |
+| Folha | O fechamento monta datas previstas por `EC.eh_dia_trabalho`, alimenta o motor com células e grava os resultados, incluindo FT. O TXT lê os eventos do fechamento. (`app/ponto/services/fechamento.py:724-755`; `app/ponto/services/fechamento.py:918-924`; `app/ponto/services/fechamento.py:965-966`; `app/folha/export.py:439-446`; `app/folha/export.py:725-739`.) |
+
+O dinheiro mostrado no espelho segue outro percurso que seu flag visual de folga: pago/rubricas do dia leem `DiaPago`; totais da competência passam por `folha_manda` e `fechamento_lido`. (`app/ponto/services/espelho.py:805-813`; `app/ponto/services/espelho.py:1283-1284`; `app/relatorios/cartao_pela_celula.py:69-76`; `app/ponto/services/fechamento.py:1759-1761`.)
+
+**Caso das cinco folgas de dezembro.** Para célula já existente, o percurso previsto é:
+
+`gerar_foto_folgas → relavrar_celulas_da_foto → regenerar_futuras_do_cadastro → regenerar_celulas_vinculo → trabalha=False`.
+
+As chamadas estão em `app/escala/folgas.py:215-218`, `app/escala/folgas.py:297-299` e `app/ponto/services/cadastro_futuro.py:43-45`; o cálculo da foto e a escrita estão em `app/escala/models.py:1309-1317` e `app/ponto/portas/celula.py:289-311`.
+
+**O limite concreto encontrado:** a foto solicitada é mensal, mas a relavratura futura seleciona somente células geradas já existentes dentro de `_janela_default(hoje)`, a partir de amanhã, respeitando o vínculo do dia. Essa janela é a união das competências **correntes** das empresas ativas. Não é o mês inteiro pedido a `gerar_foto_folgas`. (`app/escala/folgas.py:180-197`; `app/ponto/services/cadastro_futuro.py:26-45`; `app/ponto/management/commands/gerar_celulas.py:290-300`.)
+
+Logo, datas fora dessa janela não chegam à regeneração por esse percurso. **Que esse filtro tenha excluído precisamente as cinco datas relatadas: `[nao verificado]`.** Data do ato, cortes, origem/geradora das células e bloqueios do caso: `[nao verificado]`. `regeneracoes=0` também não prova ausência de chamada: o incremento ocorre na reescrita divergente, após seleção e guardas. (`app/ponto/portas/celula.py:284-311`.)
+
+**(b) Sim: `gerar_foto_folgas` no mês corrente grava/apaga `FolgaDia` anterior a hoje.** A seleção é pelo mês inteiro; `delete` e `bulk_create` não têm corte por hoje. As manuais são preservadas. (`app/escala/folgas.py:180-197`.)
+
+**A célula passada também pode ser tocada:** a função chama relavratura desde o primeiro dia do mês; o ramo passado encaminha `desde..hoje` à regeneração formal. Essa é precisamente a exceção à irretroatividade prevista na seção 4, sujeita às guardas de vigência, lavra e origem gerada. (`app/escala/folgas.py:212-218`; `app/escala/folgas.py:290-296`; `CLAUDE.md:149-156`; `app/ponto/portas/celula.py:147-162`; `app/ponto/portas/celula.py:284-311`.)
+
+A sincronização **futura** preserva passado, mas as views de vincular/aplicar calendário também chamam depois a geração mensal sem esse recorte. Portanto, a proteção da primeira chamada não protege a segunda. (`app/escala/folgas.py:621-639`; `app/colaboradores/views.py:243-246`; `app/escala/views.py:411-412`.)
+
+**DONO: NAO SEI** — o juiz exige insumos além dos três valores relatados; esses insumos do caso estão `[nao verificado]`. Decisão: `app/ponto/management/commands/e6_oraculo.py:98-110`.
+
+## 16/11 13:24 · sessao 0e5369e6a2cb · UI-VINCULO-MOSTRA-O-CALENDARIO · sonda · origem=Code
+
+# Calendarios de folga em uso com grade vazia (modo dias_mes)
+
+UNIVERSO calendarios dias_mes em uso 72 | com grade vazia 68 | vinculos afetados 77. [nao verificado]
+
+| Calendario (pk) | Vinculos ativos | Grades que faltam | Dias que ja tem (por grade) | Quem usa |
+|---|---:|---|---|---|
+| 69 | 5 | meses de 30; fevereiro | 31: [4, 11, 18, 25] | col390/ec929, col392/ec923, col468/ec402, col575/ec925, col825/ec926 [nao verificado] |
+| 72 | 2 | fevereiro | 31: [1, 8, 15, 22, 25, 29]; 30: [5, 12, 15, 19, 26] | col309/ec1355, col491/ec1271 [nao verificado] |
+| 78 | 2 | meses de 31; fevereiro | 30: [1, 7, 14, 21, 28] | col921/ec1141, col1026/ec1581 [nao verificado] |
+| 87 | 2 | fevereiro | 31: [4, 11, 18, 25]; 30: [1, 8, 15, 22, 29] | col235/ec202, col600/ec944 [nao verificado] |
+| 122 | 2 | meses de 30; fevereiro | 31: [1, 2, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 26, 27, 28, 29, 30] | col346/ec1383, col610/ec1420 [nao verificado] |
+| 138 | 2 | meses de 31; fevereiro | 30: [1, 8, 15, 22, 29] | col476/ec1451, col864/ec1494 [nao verificado] |
+| 39 | 1 | fevereiro | 31: [5, 6, 7, 12, 13, 19, 20, 26, 27]; 30: [5, 6, 7, 12, 13, 19, 20, 26, 27] | col216/ec184 [nao verificado] |
+| 50 | 1 | meses de 31; fevereiro | 30: [30] | col128/ec910 [nao verificado] |
+| 53 | 1 | meses de 30; fevereiro | 31: [3, 11, 17, 25, 31] | col384/ec1347 [nao verificado] |
+| 54 | 1 | meses de 30; fevereiro | 31: [4, 9, 18, 23] | col310/ec1167 [nao verificado] |
+| 55 | 1 | meses de 30; fevereiro | 31: [5, 11, 19, 25] | col204/ec1045 [nao verificado] |
+| 56 | 1 | meses de 30; fevereiro | 31: [4, 13, 18, 27] | col962/ec1303 [nao verificado] |
+| 57 | 1 | meses de 30; fevereiro | 31: [6, 11, 20, 25] | col577/ec491 [nao verificado] |
+| 59 | 1 | meses de 30; fevereiro | 31: [4, 10, 18, 24] | col349/ec307 [nao verificado] |
+| 60 | 1 | meses de 30; fevereiro | 31: [3, 11, 17, 25, 31] | col587/ec500 [nao verificado] |
+| 61 | 1 | meses de 30; fevereiro | 31: [4, 12, 18, 26] | col205/ec1044 [nao verificado] |
+| 62 | 1 | meses de 30; fevereiro | 31: [5, 11, 19, 25] | col214/ec182 [nao verificado] |
+| 64 | 1 | meses de 30; fevereiro | 31: [8, 11, 15, 22, 29] | col919/ec1136 [nao verificado] |
+| 66 | 1 | meses de 31; fevereiro | 30: [2, 9, 16, 22, 23, 30] | col243/ec953 [nao verificado] |
+| 68 | 1 | fevereiro | 31: [6, 13, 18, 20, 27]; 30: [3, 10, 17, 22, 24] | col278/ec1350 [nao verificado] |
+| 70 | 1 | fevereiro | 31: [6, 11, 13, 20, 27]; 30: [3, 8, 10, 17, 24] | col203/ec1409 [nao verificado] |
+| 71 | 1 | meses de 31; fevereiro | 30: [4, 11, 15, 18, 25] | col617/ec1354 [nao verificado] |
+| 73 | 1 | fevereiro | 31: [2, 9, 15, 16, 23, 30]; 30: [6, 13, 15, 20, 27] | col263/ec1526 [nao verificado] |
+| 74 | 1 | fevereiro | 31: [3, 4, 10, 17, 24, 31]; 30: [6, 13, 15, 20, 27] | col922/ec1142 [nao verificado] |
+| 76 | 1 | fevereiro | 31: [6, 8, 13, 20, 27]; 30: [3, 8, 10, 17, 24] | col968/ec1358 [nao verificado] |
+| 77 | 1 | fevereiro | 31: [5, 12, 18, 19, 26]; 30: [2, 8, 9, 16, 23, 30] | col879/ec1359 [nao verificado] |
+| 79 | 1 | fevereiro | 31: [4, 5, 12, 19, 26]; 30: [1, 2, 9, 16, 23, 30] | col327/ec285 [nao verificado] |
+| 81 | 1 | fevereiro | 31: [2, 9, 16, 18, 23, 30]; 30: [6, 13, 15, 20, 27] | col522/ec446 [nao verificado] |
+| 82 | 1 | meses de 30; fevereiro | 31: [3, 10, 17, 24, 25, 31] | col292/ec1267 [nao verificado] |
+| 83 | 1 | fevereiro | 31: [5, 12, 18, 19, 26]; 30: [2, 9, 15, 16, 23, 30] | col917/ec1134 [nao verificado] |
+| 84 | 1 | fevereiro | 31: [6, 13, 20, 25, 27]; 30: [3, 10, 17, 22, 24] | col301/ec265 [nao verificado] |
+| 85 | 1 | fevereiro | 31: [4, 7, 14, 21, 28]; 30: [1, 4, 11, 18, 25] | col849/ec1001 [nao verificado] |
+| 86 | 1 | fevereiro | 31: [1, 4, 8, 15, 22, 29]; 30: [1, 5, 12, 19, 26] | col382/ec1269 [nao verificado] |
+| 89 | 1 | fevereiro | 31: [4, 11, 18, 25]; 30: [1, 8, 15, 22, 29] | col814/ec979 [nao verificado] |
+| 90 | 1 | meses de 30; fevereiro | 31: [4, 7, 14, 20, 26] | col89/ec1039 [nao verificado] |
+| 92 | 1 | meses de 30; fevereiro | 31: [2, 6, 12, 18, 24, 31] | col638/ec1306 [nao verificado] |
+| 94 | 1 | meses de 30; fevereiro | 31: [5, 12, 18, 19, 26] | col81/ec812 [nao verificado] |
+| 95 | 1 | meses de 30; fevereiro | 31: [1, 6, 11, 15, 21, 25, 28] | col900/ec1341 [nao verificado] |
+| 96 | 1 | meses de 31; fevereiro | 30: [4, 8, 14, 20, 26] | col107/ec1203 [nao verificado] |
+| 98 | 1 | meses de 31; fevereiro | 30: [5, 11, 18, 24, 29] | col114/ec1537 [nao verificado] |
+| 101 | 1 | meses de 30; fevereiro | 31: [3, 10, 18, 27] | col829/ec947 [nao verificado] |
+| 106 | 1 | meses de 30; fevereiro | 31: [1, 8, 16, 22, 29] | col749/ec1374 [nao verificado] |
+| 107 | 1 | meses de 30; fevereiro | 31: [8, 15, 18, 23, 29] | col87/ec802 [nao verificado] |
+| 109 | 1 | meses de 30; fevereiro | 31: [6, 13, 20, 27] | col245/ec1381 [nao verificado] |
+| 115 | 1 | fevereiro | 31: [4, 11, 18, 20, 25]; 30: [5, 8, 12, 19, 26] | col822/ec1360 [nao verificado] |
+| 118 | 1 | meses de 30; fevereiro | 31: [4, 10, 18, 24] | col43/ec1411 [nao verificado] |
+| 123 | 1 | meses de 31; fevereiro | 30: [4, 11, 18, 22, 25] | col865/ec1357 [nao verificado] |
+| 124 | 1 | meses de 30; fevereiro | 31: [4, 11, 18, 25] | col826/ec967 [nao verificado] |
+| 127 | 1 | meses de 30; fevereiro | 31: [2, 10, 25, 28, 29] | col950/ec1321 [nao verificado] |
+| 128 | 1 | meses de 30; fevereiro | 31: [2, 9, 11, 16, 23, 30] | col369/ec1313 [nao verificado] |
+| 132 | 1 | meses de 30; fevereiro | 31: [5, 12, 19, 25] | col903/ec1460 [nao verificado] |
+| 133 | 1 | meses de 30; fevereiro | 31: [4, 6, 13, 20, 27] | col129/ec853 [nao verificado] |
+| 134 | 1 | meses de 30; fevereiro | 31: [1, 7, 13, 19, 25] | col789/ec1472 [nao verificado] |
+| 135 | 1 | meses de 30; fevereiro | 31: [4, 10, 16, 22, 28] | col967/ec1316 [nao verificado] |
+| 136 | 1 | meses de 30; fevereiro | 31: [6, 12, 18, 24, 30] | col446/ec384 [nao verificado] |
+| 137 | 1 | meses de 30; fevereiro | 31: [2, 9, 16, 20, 25] | col502/ec1150 [nao verificado] |
+| 140 | 1 | fevereiro | 31: [2, 8, 16, 22, 30]; 30: [2, 8, 16, 22, 30] | col899/ec1512 [nao verificado] |
+| 141 | 1 | meses de 31; fevereiro | 30: [1, 7, 15, 21, 29] | col444/ec1513 [nao verificado] |
+| 143 | 1 | meses de 31; fevereiro | 30: [11] | col1022/ec1521 [nao verificado] |
+| 144 | 1 | meses de 31; fevereiro | 30: [8, 14, 22, 28] | col941/ec1556 [nao verificado] |
+| 145 | 1 | meses de 31; fevereiro | 30: [7, 15, 21, 29] | col945/ec1255 [nao verificado] |
+| 146 | 1 | meses de 31; fevereiro | 30: [1, 7, 15, 21, 29] | col985/ec1418 [nao verificado] |
+| 149 | 1 | fevereiro | 31: [6, 13, 15, 20, 27]; 30: [7, 14, 15, 21, 28] | col191/ec161 [nao verificado] |
+| 150 | 1 | meses de 31; fevereiro | 30: [1, 7, 14, 21, 28] | col933/ec1184 [nao verificado] |
+| 151 | 1 | meses de 31; fevereiro | 30: [1, 5, 12, 19, 26] | col991/ec1425 [nao verificado] |
+| 152 | 1 | meses de 31; fevereiro | 30: [2, 9, 16, 23, 30] | col992/ec1584 [nao verificado] |
+| 153 | 1 | meses de 31; fevereiro | 30: [1, 7, 14, 21, 28] | col474/ec1270 [nao verificado] |
+| 154 | 1 | meses de 30; fevereiro | 31: [1, 10, 15, 24, 29] | col529/ec1038 [nao verificado] |
+
+Leitura em [nao verificado]; nada foi escrito no banco. [nao verificado] Cadastro e do admin (L-099): corrigir pela tela do calendario. [nao verificado]
+
+## 16/11 13:24 · sessao 43aa1fa989b8 · - · - · origem=Ronald (tmux)
+
+- **Célula versus foto:** `EC.eh_dia_trabalho` retorna diretamente `cel.trabalha` se existir célula; consulta cálculo/foto somente sem célula (`app/escala/models.py:1087-1096`). O cálculo puro lê `FolgaDia` do próprio vínculo/mês e responde `False` se a data estiver na foto (`app/escala/models.py:1280-1288`, `app/escala/models.py:1309-1317`). `EC.marcos_do_dia` lê `dna.marcos`; sem marcos, usa template (`app/escala/models.py:1117-1133`).
+
+- **Grade/espelho leem folga por cima:** `_aplicar_folgas_foto` consulta juiz da folga e altera apenas o dicionário da grade: `tipo_dia='folga'`, colunas `None`, órfãs vazias (`app/escala/utils.py:1140-1153`); a grade composta chama esse overlay (`app/escala/utils.py:1844`). O espelho deriva seu flag `folga` desse `tipo_dia` e o publica no dia (`app/ponto/services/espelho.py:673-679`, `app/ponto/services/espelho.py:764-771`).
+
+- **Precedência também sobrepõe:** lê o `trabalha` da célula como `previsto`; mesmo `previsto=True`, uma folga lançada válida entra na lista e vence trabalho pela ordem de precedência (`app/ponto/precedencia.py:347-387`, `app/ponto/precedencia.py:46`). Folga de calendário só vale para o vínculo do dia; manual vale para pessoa (`app/ponto/precedencia.py:235-239`). Espelho carrega esses fatos (`app/ponto/services/espelho.py:646-649`); o compositor responde `FOLGA` quando `tipo_do_dia='folga'` (`app/ponto/services/dia_decidido.py:370-372`).
+
+- **Motor segue célula:** classificação de folga trabalhada pergunta a `EC.eh_dia_trabalho`; só sua resposta `False` aciona FT (`app/ponto/motor_calculo_v2.py:2445-2469`), separado em `periodos_ft` (`app/ponto/motor_calculo_v2.py:2492-2494`). Marcos vêm de EC e DNA, com fallback (`app/ponto/motor_calculo_v2.py:2290-2291`, `app/ponto/motor_calculo_v2.py:1532-1540`; outros consumidores `app/ponto/motor_calculo_v2.py:2686-2691`, `app/ponto/motor_calculo_v2.py:3014-3017`, `app/ponto/motor_calculo_v2.py:3391-3396`). Portanto, célula `True` e folga válida na foto permitem grade/precedência `folga` enquanto esta classificação do motor segue trabalho, pelas condições citadas.
+
+- **Folha:** fechamento monta datas previstas por `esc.eh_dia_trabalho` (`app/ponto/services/fechamento.py:724-733`), alimenta motor com células e chama `apurar_por_fatia` (`app/ponto/services/fechamento.py:748-756`). Horas normais/extras leem resultado (`app/ponto/services/fechamento.py:918-924`); FT lê períodos reconhecidos e publica `horas_folga_trabalhada` (`app/ponto/services/fechamento.py:925-928`, `app/ponto/services/fechamento.py:965-966`). TXT lê fechamentos recebidos ou persistidos (`app/folha/export.py:717-722`) e seus eventos (`app/folha/export.py:725-739`), incluindo `horas_folga_trabalhada` (`app/folha/export.py:439-446`).
+
+- **Totais/pago do espelho:** totais chamam `folha_manda` (`app/ponto/services/espelho.py:1283-1284`), que chama `totais_da_folha` (`app/relatorios/cartao_pela_celula.py:320-323`); esta chama `fechamento_lido` (`app/relatorios/cartao_pela_celula.py:69-76`), a mesma apuração em modo leitura (`app/ponto/services/fechamento.py:1759-1761`). Pago/rubricas do dia leem `DiaPago` (`app/ponto/services/espelho.py:805-813`).
+
+- **Dono individual:** os insumos necessários para executar `dono_da_divergencia` não estão no dado recebido `[nao verificado]`. O juiz distingue cadastro por flags específicas, depois batida, fase e `em_cadastro_x_realidade`; só o resíduo é estrutura (`app/ponto/management/commands/e6_oraculo.py:98-110`). Causa executada e dono individual do relato não se deduzem de `FolgaDia`, `trabalha=True` e `regeneracoes=0` isoladamente `[nao verificado]`.
+
+## 16/11 13:24 · sessao 325eca3c6fbc · - · - · origem=Ronald (tmux)
+
+O módulo escritor de `CelulaDia` é `app/ponto/portas/celula.py`; o registro de portas aponta somente para ele e o selo tem allowlist vazia (`app/core/portas.py:107-113`; `app/ponto/tests/test_chokepoint_celula_gate.py:19-23,48-54`).
+
+- **Geração normal:** `gerar_celulas_periodo` chama `ec.eh_dia_trabalho_calculado(d)` e cria a célula com `trabalha=valor`, geradora e DNA (`app/ponto/portas/celula.py:911-918`). Célula editada fica; passado existente só recebe DNA ausente, sem mudar `trabalha`; hoje/futuro existente é pulado pela função (`app/ponto/portas/celula.py:919-935`). O command possui suplemento próprio que regenera **hoje**, pela porta, antes da geração (`app/ponto/management/commands/gerar_celulas.py:303-325,345-350`).
+- **Regeneração:** lê `eh_dia_trabalho_calculado`, monta DNA e cria ausentes; para existente `origem='gerada'` divergente, altera `trabalha`, geradora e DNA e incrementa `regeneracoes`, guardando DNA anterior e instante (`app/ponto/portas/celula.py:289-311`). Não depende de a data ser futura; é a exceção formal ao passado imutável (`app/ponto/portas/celula.py:112-135`; `CLAUDE.md:149-157`). Recusa vínculo sem vigência declarada e pula competência exportada, salvo ato explícito `apesar_da_lavra` (`app/ponto/portas/celula.py:147-162,218-221,284-288`).
+- **Outras escritas de trabalha:** fora da vigência, a regeneração pode zerar `trabalha`, com ramos distintos para futuro e passado (`app/ponto/portas/celula.py:229-282`); `reverter_regeneracao_dia` restaura pelo DNA anterior e incrementa carimbos (`app/ponto/portas/celula.py:817-837`); `editar_dia` grava True/False, DNA, geradora, `origem='editada'`, autor/data, exigindo autor e motivo (`app/ponto/portas/celula.py:597-602,622-647`). Edição não incrementa os campos de regeneração (`app/ponto/portas/celula.py:575-580`). Troca de plantão delega duas edições ao mesmo escritor, cedente False e substituto True (`app/ponto/portas/celula.py:670-679,706-715`).
+
+**Caminho foto → célula:** foto mensal é gravada e relavrada na mesma transação (`app/escala/folgas.py:150-163,193-218`). `eh_dia_trabalho_calculado` consulta `FolgaDia` do vínculo/mês; data presente na foto dá False (`app/escala/models.py:1280-1288,1296-1317`). A relavra chama a regeneração para o passado e `regenerar_futuras_do_cadastro` para futuro (`app/escala/folgas.py:280-300`). O suplemento futuro seleciona apenas células **geradas já existentes**, a partir de amanhã e dentro de `_janela_default`, respeitando o dono do dia (`app/ponto/services/cadastro_futuro.py:26-45`). Essa janela é a união das competências **correntes** das empresas ativas (`app/ponto/management/commands/gerar_celulas.py:290-300`).
+
+Assim, uma foto de dezembro pode ser gravada sem alcançar células de dezembro que estejam fora daquela janela; o dado fornecido não informa dia do ato, cortes das empresas, origem/geradora das células nem se alguma guarda barrou — o motivo concreto é `[nao verificado]`. `regeneracoes=0` não prova que a função nunca foi chamada: o incremento só ocorre no ramo de reescrita divergente (`app/ponto/portas/celula.py:297-311`).
+
+**Portas de cadastro relevantes:** vínculo criado/atualizado copia calendário padrão e gera foto do mês corrente e seguinte (`app/colaboradores/services/vinculo.py:151-166,283-298`); depois regenera passado e futuras existentes (`app/colaboradores/services/vinculo.py:315-340`). Troca do calendário do vínculo sincroniza foto futura quando o FK muda (`app/colaboradores/services/vinculo.py:450-465`). Salvar calendário sincroniza seus vínculos (`app/escala/folgas.py:571-601`). A sincronização específica poupa passado e seleciona células futuras existentes, reconcilia foto futura mensal e regenera pela porta (`app/escala/folgas.py:605-642`). Mudança de vigência e âncora tem signals separados para passado e futuro (`app/escala/signals.py:54-83,111-134`); edição de template também propaga pela regeneração (`app/escala/services/cadastro_tipo.py:332-366`).
+
+**(b): sim, a chamada mensal `gerar_foto_folgas` alcança passado.** Sem `datas_foto`, seleciona foto de calendário pelo mês inteiro, apaga e recria todas as datas do calendário; não há filtro `>= hoje` (`app/escala/folgas.py:180-197`). Chama relavra desde o primeiro dia do mês (`app/escala/folgas.py:212-218`), e o ramo passado regenera de `desde` até **hoje**, sem `min(ate, hoje)` (`app/escala/folgas.py:290-296`). Portanto células passadas geradas podem ser tocadas pela exceção formal, respeitadas as guardas; não são genericamente protegidas dessa chamada pela irretroatividade (`app/ponto/portas/celula.py:284-311`; `CLAUDE.md:149-157`).
+
+## 16/11 13:24 · sessao 02f6ef787e65 · - · - · origem=Ronald (tmux)
+
+`FolgaDia` tem módulo escritor declarado único em `app/core/portas.py:471`: `app/escala/folgas.py`.
+
+| Porta | Escrita e chamada de célula | Entradas |
+|---|---|---|
+| `gerar_foto_folgas` | Abre transação e chama `_gerar_foto_folgas_no_ato` (`app/escala/folgas.py:150-163`); apaga foto de calendário do mês e recria datas, preservando manual (`app/escala/folgas.py:180-197`); chama relavra (`app/escala/folgas.py:215-218`). | Aplicar calendário ao tipo (`app/escala/views.py:376-412`); vincular folga no colaborador (`app/colaboradores/views.py:212-246`); herdar padrão do template (`app/colaboradores/services/vinculo.py:151-166`, chamadas em `:284` e `:298`); comando `lavrar_foto_folgas --apply` (`app/escala/management/commands/lavrar_foto_folgas.py:159-170`), cron em `app/config/crons.py:425`. |
+| `sincronizar_foto_futura_do_calendario` | Seleciona células após hoje (`app/escala/folgas.py:621-624`), reconcilia somente datas futuras dos meses encontrados (`:634-639`) e regenera futuras (`:640-642`). | Salvar calendário (`app/escala/folgas.py:597-601`); trocar calendário do vínculo quando ID muda (`app/colaboradores/services/vinculo.py:459-465`). |
+| `lancar_folga` | `get_or_create` e relavra no mesmo atomic (`app/escala/folgas.py:329-339`). | Toggle do Plano (`app/escala/views_plano_folgas.py:124-132`); declaração pela supervisão (`app/ponto/services/declarar_dia.py:179-193`). |
+| `alterar_folga` | Chama `_foto_do_dia`, depois relavra (`app/escala/folgas.py:377-382`); o helper apaga, cria ou troca `tipo` (`:343-366`). | Toggle do Plano (`app/escala/views_plano_folgas.py:134-137`). |
+| `aplicar_folgas_em_lote` | Chama mesmo helper e relavra os dias gravados, recusando competência anterior à corrente (`app/escala/folgas.py:401-421`). | Plano em lote (`app/escala/views_plano_folgas.py:163-185`). |
+| `reparentar_folga` | Recusa calendário (`app/escala/folgas.py:484-485`); salva vínculo novo (`:515-516`) e relavra (`:523-525`). Competência passada usa `so_rejulgar`, sem relavrar DNA (`:521-525`). | Signal de nascimento/mudança de vigência (`app/escala/signals.py:185-207`), via `reparentar_folgas_do_colaborador` (`app/escala/folgas.py:529-541`); comando `reparentar_folgas --apply` (`app/escala/management/commands/reparentar_folgas.py:22-34`). |
+
+**Resposta (b): sim, `gerar_foto_folgas` para mês corrente grava/apaga antes de hoje.** Não há corte por hoje na seleção mensal, no `delete` ou no `bulk_create` (`app/escala/folgas.py:180-197`). A célula passada também é encaminhada à regeneração formal: `relavrar_celulas_da_foto` chama `regenerar_celulas_vinculo(ec, desde, hoje, estender_horizonte=False)` (`app/escala/folgas.py:290-296`). Portanto, a irretroatividade não impede toda alteração: a porta é a exceção formal para passado errado por cadastro (`app/ponto/portas/celula.py:112-119`; `CLAUDE.md:149-156`).
+
+As guardas concretas da regeneração são vínculo sem vigência declarada (`app/ponto/portas/celula.py:153-162`), competência exportada (`:218-221`, `:284-288`), e origem humana: atualização normal exige `cel.origem == 'gerada'` (`:297-311`). Futuro alcançado pela relavra passa pelo suplemento que seleciona células geradas já existentes dentro da janela e do dono correto (`app/ponto/services/cadastro_futuro.py:26-45`).
+
+**Atenção à diferença entre portas:** salvar/trocar calendário usa primeiro a sincronização futura, que preserva passado (`app/escala/folgas.py:621-639`; `app/colaboradores/services/vinculo.py:463-465`), mas as views `vincular_folga` e `aplicar_folga_calendario` também chamam depois `gerar_foto_folgas` para mês corrente e próximo, sem esse corte (`app/colaboradores/views.py:243-246`; `app/escala/views.py:411-412`).
+
+No caso dezembro/FolgaDia existente/célula `True`/regenerações zero, o caminho esperado quando a foto chega depois da célula é `gerar_foto_folgas → relavrar_celulas_da_foto → regenerar_futuras_do_cadastro → regenerar_celulas_vinculo` (`app/escala/folgas.py:215-218`, `:297-299`; `app/ponto/services/cadastro_futuro.py:26-45`). O fato de esse caminho ter sido executado, a data da execução, a janela naquele instante, origem da célula, vigência/dono e eventual bloqueio não são demonstrados pelo dado fornecido: `[nao verificado]`. A divergência normal do ramo principal, quando atualizada, incrementa `regeneracoes` (`app/ponto/portas/celula.py:297-311`), portanto zero sozinho não prova que a função nunca foi chamada.
+
+## 16/11 13:22 · sessao 7e002ba200c0 · UI-VINCULO-MOSTRA-O-CALENDARIO · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 1: corrigir a exclusividade da função escritora e fechar o aviso/RED literal; item 2: falta a relação individual raspada.** (`app/escala/folgas.py:659`; `app/templates/core/_dialogo.html:130`; `app/escala/tests/test_folga_cadastro.py:30`; relação individual: [nao verificado]).
+
+**Item 1 — editor**
+
+1. **Premissas: PROCEDE, exceto “única porta = função salvar”.**
+
+   - **PROCEDE:** no modo `dias_mes`, aparece uma grade por vez, começando pela de 31: a view ordena 31/30/28, o JS começa com `idx = 0` e substitui o conteúdo de um único `fc-grade`. (`app/escala/views.py:318`; `app/templates/escala/folga_calendario_editar.html:45`; `app/templates/escala/folga_calendario_editar.html:74`; `app/templates/escala/folga_calendario_editar.html:86`).
+   - **PROCEDE:** salva com outras grades vazias sem confirmação específica: o formulário submete normalmente; campos ausentes viram listas vazias, entregues à gravação. (`app/templates/escala/folga_calendario_editar.html:9`; `app/templates/escala/folga_calendario_editar.html:59`; `app/escala/views.py:342`; `app/escala/views.py:349`; `app/escala/views.py:356`).
+   - **PROCEDE com precisão:** cada `FolgaCalendarioTamanho` guarda **uma** grade; o conjunto comporta 28/30/31, com unicidade por calendário/tamanho. O modelo não exige três registros preenchidos. (`app/escala/models.py:1563`; `app/escala/models.py:1565`; `app/escala/models.py:1570`; `app/escala/models.py:1575`).
+   - **NAO PROCEDE a exclusividade da função:** `salvar_calendario_de_folga` atualiza/cria grades; `criar_calendario_de_folga` também as cria. A porta canônica registrada é o **módulo** `escala/folgas.py`. A função salvar também exclui os tamanhos quando muda para `semana_dia`. (`app/escala/folgas.py:594`; `app/escala/folgas.py:659`; `app/core/portas.py:473`; `app/escala/folgas.py:588`).
+   - **PROCEDE o criador rápido:** o wizard chama `criar_calendario_de_folga`; o descarte `d <= tam` acontece **no servidor**. (`app/escala/views_wizard.py:192`; `app/escala/folgas.py:658`; `app/escala/folgas.py:661`).
+   - **PROCEDE contexto e POST:** `editar_folga_calendario` monta o contexto; o JS serializa os dias selecionados de todos os tamanhos, e a view monta explicitamente as três listas antes de chamar salvar. Grades vazias chegam por ausência de campos, convertida em `[]`. (`app/escala/views.py:362`; `app/escala/views.py:369`; `app/templates/escala/folga_calendario_editar.html:108`; `app/escala/views.py:340`; `app/escala/views.py:356`).
+
+2. **Colisão: NAO PROCEDE bloqueio demonstrado por O148; PROCEDE sobreposição do editor.**
+
+   O O148-EDITAR contempla essa edição, mas consta como **só registrar**, com versionamento aguardando corte; aparece em LEIS entre atos, não como lei vigente. Isso não prova reserva de arquivo em obra ativa. Concorrência efetiva: [nao verificado]. (`app/docs/CORTES.md:101`; `app/docs/CORTES.md:357`; `app/docs/LEIS.md:206`; `app/docs/LEIS.md:313`).
+
+   As leis aplicáveis exigem mesma autoridade para tela/ação, ajuda pelo componente e nenhum diálogo nativo; não demonstram proibição da projeção proposta. (`app/docs/LEIS-UI.md:23`; `app/docs/LEIS-UI.md:77`; `app/docs/LEIS-UI.md:87`).
+
+3. **Condições literais: PROCEDE ressalva.**
+
+   - **Repetir sem `static/js` novo: PROCEDE a viabilidade.** O template já contém JS inline, seleções por tamanho e sincronização dos campos. É possível copiar seleções na tela, filtrando pelo tamanho, e continuar submetendo pela mesma view; implementação concreta: [nao verificado]. (`app/templates/escala/folga_calendario_editar.html:70`; `app/templates/escala/folga_calendario_editar.html:73`; `app/templates/escala/folga_calendario_editar.html:108`).
+   - **Componente da casa: PROCEDE sua existência, mas não o par literal pronto.** É `core/_dialogo.html`, incluído pela base, com `hxConfirmar`. Aceita “Salvar assim mesmo” como verbo; o negativo está fixo em **“Cancelar”**, sem parâmetro para “Voltar”. Fechar esse literal apenas pela API atual não procede; adaptação dentro do escopo ainda é [nao verificado]. (`app/templates/base.html:388`; `app/templates/core/_dialogo.html:172`; `app/templates/core/_dialogo.html:191`; `app/templates/core/_dialogo.html:130`).
+   - **RED do POST: NAO PROCEDE como vermelho da cura visual.** Já existe teste que envia valores distintos nas três grades e confere a persistência; criar e editar usam a mesma view. O teste não observa explicitamente a chamada à porta. Para provar “pela porta”, cabe observar a função real e conferir persistência; isso reforça o contrato existente. O RED da cura deve morder na marca/aviso ausentes, com completo sem aviso. Execução dos testes: [nao verificado]. (`app/escala/tests/test_folga_cadastro.py:18`; `app/escala/tests/test_folga_cadastro.py:30`; `app/escala/urls.py:35`; `app/escala/urls.py:36`; `app/escala/views.py:356`).
+
+4. **Alcance: PROCEDE escrita ao salvar; extrapolação financeira/exportada não demonstrada.**
+
+   Salvar já atualiza as grades, sincroniza fotos futuras dos vínculos e regenera células futuras com `recalculo=False`. Portanto, o ato do admin produz escrita além da definição das grades, pelo caminho existente. (`app/escala/folgas.py:594`; `app/escala/folgas.py:600`; `app/escala/folgas.py:639`; `app/escala/folgas.py:640`).
+
+   O caminho seleciona datas posteriores a hoje. Impacto real em dinheiro/exportada, migração nova ou necessidade de `!` fora do declarado: [nao verificado]. A lei exige `!` para gravado exportado e alterações de escala/vínculo fora da autorização literal. (`app/escala/folgas.py:623`; `app/ponto/services/cadastro_futuro.py:27`; `CLAUDE.md:265`).
+
+**Item 2 — lista de trabalho**
+
+1. **Premissas/dado suficiente: NAO PROCEDE.** O raspado fornecido contém totais e menciona calendários 51/154, mas não entrega a relação calendário → grades → colaboradores → quantidade de usos. A lista completa e sua ordenação não podem ser conferidas ou reconstruídas desse material. [nao verificado].
+
+2. **Colisão com lei/O148: NAO PROCEDE colisão demonstrada.** Listar pendências de cadastro para o admin é compatível com L-099; O148-EDITAR trata edição/versionamento, exclusão e busca. (`CLAUDE.md:179`; `app/docs/CORTES.md:357`).
+
+3. **Condição que não fecha: PROCEDE falta de evidência individual.** A lista existente no código ordena por nome e coleta todos os vínculos, sem filtro de atividade nesses acessos; não comprova a lista pedida “em uso, ordenada por uso”. Falta o resultado raspado individual da sonda. (`app/escala/views.py:286`; `app/escala/views.py:288`; `app/escala/views.py:300`; resultado individual: [nao verificado]).
+
+4. **Alcance: NAO PROCEDE escrita de negócio demonstrada; há escrita operacional no envelope.** O envelope prevê role/grants e arquivo de ambiente, além de acrescentar trilha em log. O wrapper executa a sonda antes do Codex e raspa a saída. Execução específica, grants reais e efeitos desta sonda: [nao verificado]. (`bin/sonda_leitura.sh:28`; `bin/sonda_leitura.sh:248`; `bin/codex_pergunta.sh:328`; `bin/codex_pergunta.sh:334`).
+
+VEREDITO: DEVOLVE <1: perguntas 1 e 3; 2: perguntas 1 e 3>
 
 ## 16/11 13:20 · sessao db8b5d6bc7f1 · - · - · origem=Ronald (tmux)
 
@@ -481,637 +714,4 @@ Todos os caminhos abaixo seguem a BASE descrita no anexo: os leitores atuais usa
 
 Uma ressalva para não superestimar M13: `app/chamados/tests/test_e4b_classe_e_memoria.py:467` afirma que o S128 **inclui** a validada, e não testa o filtro de `_ancoradas`; o caso se chama `test_RED_S128_conserva_validada_pendente_fora_das_ancoradas` em `:463`.
 
-## 16/11 11:46 · sessao ae3a5fdf0c1e · ROTULO-APLICADA-SEM-BATIDA · censo · origem=Code
-
-**O retorno incorreto está confirmado:** havendo resposta em pergunta de hora, `materializada_em` basta para devolver `aplicada`, salvo `paridade_recusada`; esse ramo não verifica batida nem `recusa_motivo`. (`app/chamados/services/materializacao.py:438–448`)
-
-**Total na frota: [não verificado].** O anexo informa três perguntas — 47199, 43643 e 44051 —, mas não fornece censo completo nem permite reconstituir suas transações. [não verificado]
-
-**(a) O que a função devolve**
-
-As condições abaixo estão na ordem de execução; “qualquer” inclui batida criada, inexistente ou posteriormente desfeita. (`app/chamados/services/materializacao.py:438–465`)
-
-| Condição | Retorno | Evidência |
-|---|---|---|
-| Tipo diferente de `hora`, ou resposta vazia após `strip()`; quaisquer carimbos, vias e batidas | `None` | `app/chamados/services/materializacao.py:438–439` |
-| Hora com resposta; materializada; via `paridade_recusada`; com ou sem recusa/batida | `{'estado': 'recusada_paridade', 'detalhe': 'encerrada SEM criar batida: fato de chao prevalece; quem discordar corrige a batida vizinha'}` | `app/chamados/services/materializacao.py:440–447` |
-| Hora com resposta; materializada; **qualquer outra via**, inclusive vazia; com ou sem recusa/batida | `{'estado': 'aplicada', 'detalhe': ''}` | `app/chamados/services/materializacao.py:448` |
-| Hora com resposta; não materializada; derivação não produz timestamp | `invalida`; detalhe = primeiro erro, ou vazio | `app/chamados/services/materializacao.py:449–452` |
-| Não materializada; timestamp derivado; batida encontrada na janela e aprovada | `ja_satisfeita`; detalhe explica que validar só encerra a pendência | `app/chamados/services/materializacao.py:453–457` |
-| Não materializada; sem satisfação anterior; vizinha do mesmo tipo; plantio não preenche furo | `bloqueada_paridade`; detalhe informa o par quebrado | `app/chamados/services/materializacao.py:458–462` |
-| Não materializada; demais casos | `aplicavel`; detalhe anuncia tipo e hora que validar registraria | `app/chamados/services/materializacao.py:463–465` |
-
-`recusa_motivo` não participa dessa decisão. Sem `materializada_em`, a via também não participa; `respondida_em` e `validada_em` não são condições dessa função. (`app/chamados/services/materializacao.py:438–465`)
-
-Além disso, a busca de satisfação usa `Batida.objects` sem excluir retratadas; a guarda de vizinhança também consulta batidas cruas. Portanto, essa previsão não equivale a uma consulta de “batida viva”. (`app/chamados/juizes.py:238–250`; `app/chamados/services/materializacao.py:95–104`)
-
-**(b) Censo dos escritores**
-
-O campo da pergunta nesta cópia é `PerguntaDisputa.materializada_em`. O próprio `help_text` ainda associa processamento a “batida criada + chamado fechado”, embora existam resoluções sem plantio. (`app/chamados/models.py:3502–3505`; `app/chamados/services/materializacao.py:1069–1086`)
-
-A tabela distingue persistência física de chamadores operacionais: estes últimos chegam às portas abaixo. (`app/chamados/models.py:3156–3167`)
-
-| Escritor físico | Forma e comportamento |
-|---|---|
-| `_escrever_carimbo` — `app/chamados/models.py:3180–3184` | Atribui instante, autor e via **em memória**; não cria Batida. |
-| `carimbar` — `app/chamados/models.py:3235` | Persiste por `save(update_fields=campos)`; aplica o carimbo, consulta C6 e recusa se a pergunta continuar viva. Isso não é uma exigência física universal de Batida. (`:3211–3228`) |
-| `carimbar_identidade` — `app/chamados/models.py:3273` | Persiste por `save(update_fields)`; aceita as vias de identidade, sem consultar C6. (`:3251–3273`) |
-| `descarimbar` — `app/chamados/models.py:3291–3295` | Zera os três campos; pode devolver os campos ao chamador sem salvar. |
-| `descarimbar_em_lote` — `app/chamados/models.py:3363–3365` | `QuerySet.update(materializada_em=None, materializada_por=None, via_resolucao='', ...)`; exclui linhas fora do fato. |
-
-`_desfazer_em_memoria` restaura o estado anterior após recusa/exceção, sem persistência própria. (`app/chamados/models.py:3242–3249`)
-
-| Via/função operacional que carimba | Cria Batida? Pode ficar sem correspondente viva? |
-|---|---|
-| `_materializar_ausencia_de_resposta`: `declaracao` ou `ausencia_dia` — `app/chamados/services/materializacao.py:555–567` | Cria **Ausencia**, carimba perguntas irmãs; não cria Batida para elas. Pode resolver sem Batida. (`:527–535`) |
-| `_materializar_resposta_hora`: `paridade_recusada` — `app/chamados/services/materializacao.py:906–931` | Não planta; exige marco aceso e retorna após o carimbo de identidade. O estado de aplicação distingue essa via. (`:444–447`) |
-| `_carimbar_recusa`: `fato_ocupado` — `app/chamados/services/materializacao.py:1095–1109` | Não cria Batida. Só `COLISAO`, com carimbo ainda nulo, gera esse carimbo. Outras recusas gravam somente o motivo; **uma recusa posterior preserva o carimbo anterior**. |
-| `_materializar_uma`: `declaracao` ou `via_pelo_fato`, com fallback `chamado_encerrado` — `app/chamados/services/materializacao.py:1267–1287` | Hora cria ou reutiliza; `data_hora` registra Batida; escolha resolve expressamente sem Batida. (`:865–877`, `:932–940`, `:1012–1025`, `:1069–1086`) |
-| `materializar_pendentes_aprovadas`: `juiz_aprovou` — `app/chamados/services/materializacao.py:1424–1438` | Não cria; consulta lastro e carimba. O juiz admite resoluções sem testemunha física da pergunta. (`app/chamados/juizes.py:682–710`) |
-| `lavrar_sem_turno_aberto`: `sem_turno_aberto` — `app/chamados/reconciliador.py:363–406` | Não cria; pode encerrar sem Batida correspondente. |
-| `retratar_perguntas_absolvidas_por_celula`: `celula_absolveu` — `app/chamados/reconciliador.py:550–596` | Não cria; a absolvição da célula fundamenta o carimbo. Pode terminar sem Batida. |
-| `_resolver_perguntas_por_chamado_resolvido`, ramo destino — `app/chamados/services/disputa_emissao.py:1987–2009` | Não cria; usa `via_pelo_fato` e `resposta='validar'`. A função declara encerramento sem plantio. (`:1907–1913`) |
-| Mesma função, ramo sem credor — `app/chamados/services/disputa_emissao.py:2065–2082` | Não cria; usa `via_pelo_fato` ou `chamado_encerrado`, com `resposta='responder'`. |
-| `fechar_por_admin`: `admin_decidiu` — `app/chamados/models.py:3133–3147` | Não cria. Chamado pelo encerramento administrativo/desligamento da disputa (`app/chamados/models.py:1982–1985`), fechamento do fio do dia (`app/ponto/services/veredito_celula.py:190`) e aceite de folga (`app/chamados/services/validacao.py:314`, `:354`). Pode resolver por folga, sem Batida. |
-| `DisputaSupervisao.remover_motivo`: `motivo_retratado` — `app/chamados/models.py:2118–2126` | Não cria; pode manter instante e autor do carimbo anterior. |
-| `fio.retratar_duplicata`: `duplicata` — `app/chamados/services/fio.py:1384–1401` | Não cria; registra referência à canônica e pode preservar carimbo anterior. |
-| `encerrar_fantasma`: `fantasma` — `app/chamados/models.py:3378–3386` | Não cria; usa `carimbar`/C6. Chamador em `app/chamados/reconciliador.py:1148`. |
-
-`cadastro_folga` não possui uma atribuição literal separada ao carimbo: nasce de `via_pelo_fato`, quando há agrupamento sob limbo/folga e nenhuma batida apurável no dia; o mesmo derivador pode retornar `adesao`, `ausencia_dia`, `completude_turno` ou `chamado_encerrado`. Entra pelos chamadores desse derivador listados acima. (`app/chamados/juizes.py:1772–1816`)
-
-Sobre **plantio desfeito pelo juiz**, o caminho atual de `_materializar_uma` reprova dentro do `atomic`: desfaz o plantio e o carimbo que pertencerem àquela transação. Depois, o `finally` grava a recusa, cuja porta relê e preserva eventual carimbo já existente. Não se pode concluir que um carimbo criado naquele mesmo `atomic` sobreviva ao rollback. (`app/chamados/services/materializacao.py:1224–1249`, `:1281–1303`, `:1095–1109`)
-
-Há também retração posterior: `retratar_batida` grava `aprovada=False` e `retratada_em`; essa escrita não altera diretamente o carimbo da pergunta. Assim, plantio ocorrido e Batida atualmente viva são fatos diferentes. A sequência concreta das perguntas 43643/44051 permanece restrita ao relato do anexo. (`app/ponto/registro_batida.py:269–282`) [não verificado]
-
-Os caminhos de **limpeza** também integram o censo:
-
-| Chamador | Escrita alcançada |
-|---|---|
-| `ressuscitar_perguntas` | Lote em `app/chamados/models.py:1613`. |
-| `reabrir_para_correcao` | Lote em `app/chamados/services/disputa_emissao.py:1648`. |
-| `desfazer_carimbo_sem_lastro` | `descarimbar` em `app/chamados/services/relavra_via.py:242–246`. |
-| `reabrir_fantasma` | `descarimbar` em `app/chamados/models.py:3395–3397`; comando chama em `app/chamados/management/commands/reabrir_orfas_enterradas.py:157`. |
-| `reabrir_por_resposta` | Limpa em memória e devolve campos em `app/chamados/models.py:3412–3414`; escritor da resposta os incorpora em `app/chamados/services/disputa_emissao.py:1499`. |
-| `reabrir_por_competencia` | `descarimbar` em `app/chamados/models.py:3419–3421`; chamador em `app/chamados/services/competencia_trancada.py:279`. |
-
-A limpeza de `_universo_da_ressuscitacao` ocorre apenas numa cópia em memória para julgamento. (`app/chamados/models.py:1541–1556`)
-
-As demais formas pedidas ficaram assim:
-
-- **`bulk_update`:** nenhum escritor operacional adicional do carimbo foi localizado. O detector cobre essa forma, kwargs indiretos, construtores, `update` e `setattr`; a exaustividade para reflexão arbitrária permanece [não verificado], pois o detector declara limites para `__dict__` e nomes externos. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:99–115`, `:174–197`)
-- **Migrations:** `0016` adiciona o campo, sem materialização de dados; `0051` atualiza colaborador/instância, e `0053` consulta colisões. Não foi localizada migration de dados escrevendo esse carimbo. (`app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:21–24`; `app/chamados/migrations/0051_decisao_pergunta.py:25–27`; `app/chamados/migrations/0053_pergunta_unica_por_familia.py:36–46`) [não verificado quanto a escritor dinâmico não identificável]
-- **Passivo:** chama a mesma `_materializar_uma`; `CAMPOS_REVERSAO` é fotografia para saída, não restauração do carimbo nesse serviço. (`app/chamados/services/passivo_validado.py:39`, `:64–83`, `:370`, `:522`)
-- **Vias sem escritor temporal novo:** `competencia_trancada` mantém apenas acervo/leitura; `fato_materializado` só troca a via. (`app/chamados/models.py:3149–3154`, `:3367–3375`)
-- **Homônimo:** `RegularizacaoExterna.materializada_em` pertence a outro modelo; seu escritor é `app/chamados/services/regularizacao_ext.py:199–201`. Pode apenas remover/corrigir Batida, sem criar outra. (`app/chamados/models.py:4128`; `app/chamados/services/regularizacao_ext.py:132–164`)
-- **Testes:** fixtures e mutantes não foram contados como vias operacionais; exemplificam gravação artificial de estados, como a pergunta materializada sem plantio do teste da função. (`app/chamados/tests/test_estado_aplicacao.py:37–39`, `:66–72`)
-
-**(c) Leitores e apresentação**
-
-| Caminho | O que lê/mostra |
-|---|---|
-| Reexportação | `chamados.models` exporta a função real. (`app/chamados/models.py:4231`) |
-| `montar_chamados_fio` | Único chamador operacional localizado: calcula `p.estado_aplicacao`; sem disputa ou em exceção, atribui `None`. (`app/chamados/services/fio.py:373–376`) |
-| Modal administrativo | Monta o fio e renderiza o modal; o fragmento usa o mesmo montador. (`app/chamados/views.py:889`, `:927–931`; `app/chamados/services/fio.py:484`, `:534–535`) |
-| Template consumidor | Exibe detalhe vermelho de `bloqueada_paridade` e azul de `ja_satisfeita`. Não imprime os outros estados nesse bloco. (`app/templates/chamados/partials/modal_fio.html:230–248`) |
-| Precedência visual | `pendencia_admin` mostra pendência e motivo; senão, `validada_em` mostra **“✓ Validada”**. Logo, a legenda literal “aplicada” do relato não está confirmada por esse template. (`app/templates/chamados/partials/modal_fio.html:222–229`) |
-| Meu Atendimento / fio em página inteira | Executam o montador, mas não foi localizado consumo visual desse atributo nos respectivos templates. (`app/chamados/views.py:569`, `:632–635`, `:677`, `:697–703`) [não verificado fora da cópia] |
-| API de perguntas | Publica `p.estado` e `aguarda_admin`, não esse estado de aplicação. (`app/api/views.py:2550–2578`) |
-| Contadores do modal | Derivam de fila de chamados, followups e disputas abertas; não desse retorno. (`app/chamados/views.py:900–912`) |
-| Testes | Exercitam satisfação, paridade, aplicabilidade, aplicação e fora de escopo; há teste próprio da via recusada. (`app/chamados/tests/test_estado_aplicacao.py:44–72`; `app/chamados/tests/test_badge_via_paridade.py:30–32`) |
-
-Não foi localizado contador operacional de `estado='aplicada'` nem outro consumidor desse retorno nas APIs da cópia. [não verificado quanto a clientes externos] [nao verificado]
-
-**(d) Sonda proposta, somente como texto**
-
-Universo: todas as perguntas `hora` de `juliani`, sem restringir empresa, competência, situação do colaborador ou disputa aberta. A função real decide quais são `aplicada`; tipos diferentes ficam fora. Resposta vazia e paridade recusada ficam fora do numerador pela própria função. (`app/chamados/services/materializacao.py:438–448`)
-
-Batida viva usa `batidas_apuraveis`, incluindo pendentes do DP e excluindo retratadas. Ausência de FK sozinha não basta: o acervo anterior pode não ter `pergunta_origem`. A correspondência usa os auxiliares reais de slot, vínculo e janela. (`app/ponto/turnos.py:2868–2895`; `app/ponto/models.py:30–44`; `app/chamados/juizes.py:238–282`, `:344–377`)
-
-Slot não derivável ou falha engolida fica **indeterminado**, separado do total sem correspondente demonstrável. Não uso `_pergunta_materializada_de_fato` como prova física, pois ele pode absolver sem Batida. (`app/chamados/juizes.py:682–708`; `app/core/observ.py:57–82`)
-
-O texto abaixo não foi executado nem validado contra produção. Os comandos de dados são SELECT; `schema_context` pode emitir `SET search_path`, além do controle transacional. [não verificado]
-
-```bash
-PGOPTIONS='-c default_transaction_read_only=on -c default_transaction_isolation=repeatable\ read' \
-PYTHONDONTWRITEBYTECODE=1 python manage.py shell <<'PY'
-from collections import Counter, defaultdict
-from django.db import connection, transaction
-from django_tenants.utils import schema_context
-
-from chamados.models import PerguntaDisputa
-from chamados.services.materializacao import estado_aplicacao_pergunta
-from chamados.juizes import (
-    _slot_esperado,
-    _plantio_na_hora_do_slot,
-    _batida_existente_na_janela,
-)
-from ponto.turnos import batidas_apuraveis
-from core.observ import engolidos
-
-por_via = defaultdict(Counter)
-estados = Counter()
-
-with schema_context("juliani"), transaction.atomic():
-    with connection.cursor() as cur:
-        cur.execute("""
-            SELECT current_schema(),
-                   current_setting('transaction_read_only'),
-                   current_setting('transaction_isolation')
-        """)
-        schema, readonly, isolamento = cur.fetchone()
-
-    assert schema == "juliani", schema
-    assert readonly == "on", readonly
-    assert isolamento == "repeatable read", isolamento
-
-    perguntas = (
-        PerguntaDisputa.objects.filter(tipo_resposta="hora")
-        .select_related("disputa__colaborador", "chamado_destino")
-        .order_by("pk")
-    )
-
-    for p in perguntas.iterator(chunk_size=1000):
-        via = p.via_resolucao or "<vazia>"
-        c = por_via[via]
-        c["universo_hora"] += 1
-
-        # A classificação vem integralmente da função real.
-        r = estado_aplicacao_pergunta(p.disputa, p)
-        estado = r["estado"] if r is not None else "<fora_escopo>"
-        estados[(via, estado)] += 1
-        if estado != "aplicada": [nao verificado]
-            continue
-
-        c["aplicada"] += 1 [nao verificado]
-        vivas = batidas_apuraveis(p.disputa.colaborador)
-        vinculadas = vivas.filter(pergunta_origem_id=p.pk)
-        if not vinculadas.exists():
-            c["sem_vinculo_vivo"] += 1
-
-        antes = engolidos()["total"]
-        ts, tipo = _slot_esperado(p)
-        if engolidos()["total"] != antes or ts is None:
-            c["indeterminada"] += 1
-            continue
-
-        corresponde = (
-            _plantio_na_hora_do_slot(p, ts, vinculadas)
-            or _batida_existente_na_janela(
-                p.disputa.colaborador, ts, tipo, batidas=vivas
-            ) is not None
-        )
-        chave = (
-            "com_correspondente_viva" if corresponde
-            else "sem_correspondente_viva"
-        )
-        c[chave] += 1
-
-    assert not connection.needs_rollback
-    for c in por_via.values():
-        assert c["aplicada"] == ( [nao verificado]
-            c["com_correspondente_viva"]
-            + c["sem_correspondente_viva"]
-            + c["indeterminada"]
-        )
-
-campos = (
-    "universo_hora", "aplicada", "sem_vinculo_vivo", [nao verificado]
-    "com_correspondente_viva", "sem_correspondente_viva",
-    "indeterminada",
-)
-print("via", *campos, sep="\t")
-total = Counter()
-for via, c in sorted(por_via.items()):
-    print(via, *(c[k] for k in campos), sep="\t")
-    total.update(c)
-print("<TOTAL>", *(total[k] for k in campos), sep="\t")
-
-print("via\testado_real\tquantidade")
-for (via, estado), n in sorted(estados.items()):
-    print(via, estado, n, sep="\t")
-PY
-```
-
-`sem_correspondente_viva` será a contagem conforme a correspondência atual do código; `sem_vinculo_vivo` é apenas diagnóstico adicional. Os indeterminados impedem declarar um total físico absoluto sem investigação complementar. (`app/chamados/juizes.py:238–282`, `:344–377`) **Resultado numérico: [não verificado].**
-
-**(e) Encaixe, em uma linha:** **F4 da E4c**, pois o defeito está no leitor do materializador e F4 cobre materialização/passivo; RAIZ-DA-DISPUTA trata agregado, destinos, fechamento e pares. (`app/chamados/services/materializacao.py:431–448`; `app/docs/RELATO.md:254`, `:292`; `app/docs/BACKLOG.md:2031`)
-
-O conteúdo literal de `logs/ESPINHA-BRIEFS/F4` está **[não verificado]**; o brief e a matriz aparecem referidos no registro documental da cópia. (`app/docs/RELATO.md:133`, `:254`)
-
-## 16/11 11:45 · sessao f38ef04e825c · APP-LE-PROXIMA-BATIDA · sonda · origem=Code
-
-**1. A saída fecha aritmeticamente.** Janela fornecida: `2026-11-09T14:42:13.404576+00:00` a `2026-11-16T14:42:13.404576+00:00`. Os valores abaixo são do envelope; execução, consulta e correspondência com a base: **[nao verificado]**.
-
-| origem | provider | total | sem_accuracy | sem_accuracy_dentro_False | sem_accuracy_dentro_None |
-|---|---|---:|---:|---:|---:|
-| apk | - | 11 | 11 | 0 | 2 |
-| sem_provider(pwa?) | - | 20 | 0 | 0 | 0 |
-| **TOTAL calculado** | | **31** | **11** | **0** | **2** |
-
-Conferência sobre o texto: `11 + 20 = 31`, igual ao TOTAL; `11 + 0 = 11` sem accuracy. A saída informa `total_erros 0`; comprovação independente desse contador: **[nao verificado]**.
-
-**2. Existem fontes melhores de contexto, mas nenhuma identifica diretamente a origem de cada PingGeo persistido.** O modelo guarda colaborador, entrada e sinais técnicos; não tem `origem`, `canal`, `device_id` ou vínculo com aparelho. O comentário atribui os campos técnicos ao APK Kotlin e os descreve vazios em PWA. [app/ponto/models.py:1005](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/models.py:1005)
-
-As três portas de criação da aplicação gravam `accuracy` recebido, opcional; ausência pode ficar `NULL`, permitido pelo modelo. [app/ponto/models.py:1017](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/models.py:1017)
-
-| Porta | Quem escreve PingGeo | Leitura → gravação de accuracy |
-|---|---|---|
-| `/api/ping-geo/`, core | [app/api/views_core.py:951](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:951) | [864](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:864) → [957](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:957) |
-| `/api/ping-geo/`, API completa | [app/api/views.py:2421](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2421) | [2334](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2334) → [2427](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2427) |
-| `/ponto/ping-geo/`, web | [app/ponto/views.py:3065](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3065) | [3014](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3014) → [3071](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3071) |
-
-As fontes alternativas têm estes limites:
-
-- **`batida_entrada.canal`** registra `apk`/`pwa`, mas identifica a porta da **batida de entrada**, não a origem dos pings seguintes. [app/ponto/models.py:46](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/models.py:46), [app/ponto/models.py:1010](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/models.py:1010)
-- **`DeviceColaborador.plataforma`** distingue app, APK, iOS e PWA. A API recebe `device_id` para validar a assinatura, mas não o persiste no ping. [app/colaboradores/models.py:868](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/colaboradores/models.py:868), [app/colaboradores/models.py:915](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/colaboradores/models.py:915), [app/api/views_core.py:879](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:879), [app/api/views_core.py:951](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:951)
-- **Cliente declarado na requisição/sessão:** existem `X-Hasner-Client`, `plataforma_sessao` e `cliente_app`; esses valores não são gravados pelos escritores acima. O app também abre sessão Django em WebView, portanto a porta web não comprova PWA. [app/core/middleware.py:117](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/core/middleware.py:117), [app/core/views.py:1280](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/core/views.py:1280)
-- **Assinatura é indício insuficiente:** ausência retorna sucesso com rótulo `pwa_sem_assinatura`; assinatura inválida gera warning e a criação prossegue. [app/api/views_core.py:64](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:64), [app/api/views_core.py:885](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:885)
-
-O PWA desta cópia envia `accuracy: pos.coords.accuracy`, sem provider/assinatura. A origem real dos 31 pings continua **[nao verificado]**; mantenho os rótulos inferidos da sonda. [app/static/pwa.js:404](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/static/pwa.js:404)
-
-Fora das portas de captura, há criação em teste sem accuracy, máscara que altera apenas coordenadas e comando que apaga pings. [app/ponto/tests/test_selo_presenca_lote.py:54](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/tests/test_selo_presenca_lote.py:54), [bin/sombra_regras_pessoais.py:79](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/bin/sombra_regras_pessoais.py:79), [bin/sombra_mascara_pessoal.py:35](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/bin/sombra_mascara_pessoal.py:35), [app/ponto/management/commands/zerar_dados_operacionais.py:98](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/management/commands/zerar_dados_operacionais.py:98)
-
-**3. Confirmada para o alerta de fora gerado pelo próprio ping:** fora do raio efetivo + `accuracy=None` resulta em `gps_incerto`; as portas persistem `dentro_geofence=None` e exigem `is False` para alertar. [app/ponto/services/geofence.py:114](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/services/geofence.py:114)
-
-| Porta | Conversão, juiz e estado persistido | Decisão de alerta |
-|---|---|---|
-| Core | [app/api/views_core.py:931](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:931) | Atual False, não mock, dois últimos não mock em 2h ambos False → `push_dp`. [967](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:967) |
-| API completa | [app/api/views.py:2401](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2401) | Mesma condição → `push_dp`. [2437](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2437) |
-| Web | [app/ponto/views.py:3045](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3045) | Atual False, não mock, ao menos dois falsos no turno → chamado e `push_supervisao`. [3081](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3081) |
-
-Precisões necessárias:
-
-- No web, a consulta filtra os falsos antes de contar: um ping incerto não dispara, mas também não interrompe essa contagem histórica. [app/ponto/views.py:3082](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3082)
-- O HTTP pode responder `dentro_geofence=false` enquanto o registro fica `None`; resposta e estado persistido são distintos nas três portas. [app/api/views_core.py:943](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:943), [app/api/views.py:2413](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2413), [app/ponto/views.py:3057](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/views.py:3057)
-- Os dois `dentro_None` fornecidos não comprovam dois pings fora: intervalo também força `None`. [app/api/views_core.py:948](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:948)
-- “Não alerta” não deve ser generalizado para **batidas**: esse outro fluxo cria `AlertaGeofence(tipo='gps_incerto')`. [app/ponto/services/geofence.py:301](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/ponto/services/geofence.py:301)
-
-## 16/11 11:45 · sessao d83f05d050b7 · E4C-F1-NOVA-POUSO-B1 · verificador · origem=Code
-
-**Veredito: o bloqueante documental está fechado na cópia; a certificação integral do delta fica [não verificado].** A frase agora está na fonte e sobrevive à regeneração (`app/docs/CORTES.json:1871`, `bin/gerar_cortes.py:107`). A cópia disponível não contém histórico Git: os dois diffs e `git log -2 --format=%B 99eccedf9` não puderam ser conferidos **[não verificado]**.
-
-**1) FECHADO — frase na fonte e preservada pelo gerador.**
-
-Quem **escreve** o Markdown é `bin/gerar_cortes.py`: lê `app/docs/CORTES.json`, renderiza todas as entradas e sobrescreve `app/docs/CORTES.md`; também atualiza o RELATO (`bin/gerar_cortes.py:23`, `bin/gerar_cortes.py:31`, `bin/gerar_cortes.py:106`, `bin/gerar_cortes.py:116`, `bin/gerar_cortes.py:136`).
-
-Quem **lê a frase exigida** é o selo: extrai autoridades de `core/juizes.py`, subtrai a base e procura literalmente, sem distinguir maiúsculas, `corte Ronald: juiz <nome> nasce` no Markdown (`bin/tests/test_juiz_novo_tem_corte.sh:28`, `bin/tests/test_juiz_novo_tem_corte.sh:38`, `bin/tests/test_juiz_novo_tem_corte.sh:41`).
-
-A conferência em memória encontrou **83 autoridades extraídas pelo selo, 54 na base e 29 exigindo frase; nenhuma ficaria sem frase após regenerar**. Abaixo estão todas as 29 e a localização da frase na fonte, seguindo a extração e comparação do selo (`bin/tests/test_juiz_novo_tem_corte.sh:28`, `bin/tests/test_juiz_novo_tem_corte.sh:38`).
-
-| Autoridade exigida | Frase no JSON |
-|---|---|
-| `chamados/juizes.py::dia_da_pergunta_trancado` | `app/docs/CORTES.json:1729` |
-| `chamados/juizes.py::dia_sem_trabalho` | `app/docs/CORTES.json:1736` |
-| `chamados/juizes.py::fio_vivo` | `app/docs/CORTES.json:614` — campo `estado` |
-| `chamados/juizes.py::pergunta_respondida` | `app/docs/CORTES.json:1855` e `app/docs/CORTES.json:1871` |
-| `chamados/juizes.py::porta_alcancavel_do_dia` | `app/docs/CORTES.json:1771` |
-| `chamados/models.py::DisputaSupervisao.pode_fechar` | `app/docs/CORTES.json:765` |
-| `chamados/models.py::DisputaSupervisao.respostas_sem_veredito` | `app/docs/CORTES.json:1414` |
-| `chamados/services/fabrica_da_celula.py::pauta_cadastro_existente` | `app/docs/CORTES.json:1764` |
-| `chamados/services/tarefa_do_dia.py::tarefa_do_dia` | `app/docs/CORTES.json:1785` |
-| `colaboradores/services/calendario.py::resolver_dia_oferecido` | `app/docs/CORTES.json:758` |
-| `colaboradores/services/desligamento.py::esta_desligado` | `app/docs/CORTES.json:1743` |
-| `escala/alimentacao.py::vinculo_cobre_a_data` | `app/docs/CORTES.json:875` |
-| `escala/alimentacao.py::vinculo_do_dia` | `app/docs/CORTES.json:854` |
-| `escala/servico_jornada.py::eh_turno_partido` | `app/docs/CORTES.json:477` |
-| `folha/export.py::competencia_entregue` | `app/docs/CORTES.json:786` |
-| `folha/export.py::competencia_fechada_para_celula` | `app/docs/CORTES.json:791` |
-| `ponto/juiz_batida.py::periodos_do_dia` | `app/docs/CORTES.json:469` |
-| `ponto/precedencia.py::folga_lancada_do_dia` | `app/docs/CORTES.json:1750` |
-| `ponto/registro_batida.py::selfie_ausente` | `app/docs/CORTES.json:846` — campo `estado` |
-| `ponto/services/furos_vetados.py::motivo_do_veto` | `app/docs/CORTES.json:1757` |
-| `ponto/services/geofence.py::classificar_posicao` | `app/docs/CORTES.json:841` |
-| `ponto/services/geofence.py::tem_gps` | `app/docs/CORTES.json:1792` |
-| `ponto/status_dia.py::status_do_dia_lavrado` | `app/docs/CORTES.json:1778` |
-| `ponto/supra_juiz.py::pode_executar_csf` | `app/docs/CORTES.json:1407` |
-| `ponto/turnos.py::dia_encerrado` | `app/docs/CORTES.json:533` |
-| `ponto/turnos.py::lembrete_fim_turno` | `app/docs/CORTES.json:868` |
-| `ponto/turnos.py::par_completo` | `app/docs/CORTES.json:541` |
-| `ponto/turnos.py::periodo_da_parcial_no_dia` | `app/docs/CORTES.json:1125` |
-| `ponto/turnos.py::turno_aberto_ha` | `app/docs/CORTES.json:861` |
-
-As duas frases em `estado` também sobrevivem, porque o gerador reproduz esse campo tanto na tabela dos pendentes quanto na tabela completa (`bin/gerar_cortes.py:90`, `bin/gerar_cortes.py:107`).
-
-O Markdown inteiro coincidiu, em memória, com `markdown(JSON, agora=2026-11-16 11:38)`; portanto o conteúdo atual é integralmente reproduzível pelo gerador (`bin/gerar_cortes.py:97`, `app/docs/CORTES.md:3`). O selo shell não foi executado: ele cria e remove um temporário, contrariando a regra desta revisão; sua execução literal fica **[não verificado]** (`bin/tests/test_juiz_novo_tem_corte.sh:57`, `bin/tests/test_juiz_novo_tem_corte.sh:60`).
-
-**2) [NÃO VERIFICADO] — preservação histórica dos `.py` pelo merge.**
-
-Sem os objetos Git, não foi possível comparar, por arquivo de `py_b1.txt`, `ab616d1c7..51678cbb2` contra `f76eee7c6..99eccedf9`. Logo, não certifico que nenhum conteúdo da obra mudou **[não verificado]**. O RELATO registra a certificação antiga e um ensaio do comboio, sem substituir esses diffs (`app/docs/RELATO.md:18`, `app/docs/RELATO.md:19`).
-
-No arquivo compartilhado, o retrato **atual** contém os registros dos sítios da obra e do main: `_dia_da_batida`, `_dia_do_contexto_fraco` e `regularizar_retorno`, com suas linhas correspondentes (`app/core/tests/test_medida_turno_do_par.py:258`, `app/core/tests/test_medida_turno_do_par.py:259`, `app/core/tests/test_medida_turno_do_par.py:339`).
-
-Executei os **35 testes dessa catraca em memória: zero falhas e zero erros**, pelo procedimento documentado, sem banco ou bytecode. Isso verifica a coerência atual de identidades, composição e linhas; não prova equivalência histórica dos dois diffs (`app/core/tests/test_medida_turno_do_par.py:20`, `app/core/tests/test_medida_turno_do_par.py:541`, `app/core/tests/test_medida_turno_do_par.py:557`).
-
-As duas intenções funcionais estão presentes no resultado: posto e histórico no mesmo `atomic`; ressurreição conserva a trilha, zera o par inteiro e evita fabricar REABERTURA (`app/colaboradores/views.py:333`, `app/colaboradores/views.py:335`, `app/chamados/models.py:1613`, `app/chamados/models.py:1622`, `app/chamados/models.py:1629`). **Que o merge preservou exatamente ambas continua [não verificado].**
-
-**3) HÁ INTERAÇÃO — os caminhos examinados são compatíveis na leitura estática.**
-
-Existe compartilhamento explícito da porta de travas: o serviço de colaboradores chama `PerguntaDisputa.trava_na_ordem` para travar colaboradores; a ressurreição usa a mesma autoridade com Colaborador → Disputa → Chamado → Pergunta (`app/colaboradores/services/colaborador.py:72`, `app/colaboradores/services/colaborador.py:80`, `app/chamados/models.py:1612`, `app/chamados/models.py:2770`, `app/chamados/models.py:2779`, `app/chamados/models.py:2793`, `app/chamados/models.py:2797`).
-
-| Entidade/campos | Quem escreve | Quem lê |
-|---|---|---|
-| **Pergunta**: `respondida_em`, `resposta_colab`, validação e materialização | Ressurreição e correção passam por `descarimbar_em_lote`, que efetiva o update (`app/chamados/models.py:1629`, `app/chamados/services/disputa_emissao.py:1648`, `app/chamados/models.py:3391`). | `_C21` aponta para `pergunta_respondida`; a face SQL serve `q_vivas` e a fila de validação (`app/core/juizes.py:306`, `app/chamados/juizes.py:1552`, `app/chamados/juizes.py:1580`, `app/chamados/models.py:3481`, `app/chamados/juizes.py:1751`). |
-| **DecisaoPergunta**: ato, instante e resposta anterior | `registrar` grava as linhas; ressurreição preserva RESPOSTA/VALIDAÇÃO, correção registra seu ato, e fechamento pode registrar SILENCIO (`app/chamados/models.py:4120`, `app/chamados/models.py:1613`, `app/chamados/services/disputa_emissao.py:1631`, `app/chamados/models.py:2005`). | `tarefa_do_dia` carrega a sequência ordenada e julga pelo ato (`app/chamados/services/tarefa_do_dia.py:421`, `app/chamados/services/tarefa_do_dia.py:142`). |
-| **CelulaDia**: veredito, ata e trabalho | A porta `lavrar_veredito` escreve o veredito; reabertura/ressurreição emitem o evento para acordar células (`app/escala/models.py:1826`, `app/ponto/portas/celula.py:1093`, `app/chamados/models.py:3358`). | `q_vivas` lê veredito/ata; `tarefa_do_dia` carrega as células; telas do main também as leem (`app/chamados/models.py:3488`, `app/chamados/models.py:3493`, `app/chamados/services/tarefa_do_dia.py:406`, `app/core/views.py:395`). |
-| **HistoricoVinculo**: antes/depois, vigência, posto e autor | `registrar_mudanca`/`registrar_evento_de_vinculo`, chamados por posto e desligamento (`app/colaboradores/services/historico_vinculo.py:7`, `app/colaboradores/services/historico_vinculo.py:25`, `app/colaboradores/views.py:335`, `app/colaboradores/services/desligamento.py:138`). | A tela de detalhe lê o histórico (`app/colaboradores/views.py:306`). Ausência global de outros leitores **[não verificado]**. |
-
-A interação mais relevante é **desligamento → fechamento → SILENCIO → tarefa**: desligamento preserva disputas com respostas sem veredito; nos demais casos chama `fechar`, que registra SILENCIO. A tarefa distingue esse ato de REABERTURA, que devolve ao colaborador. A B1 conserva essa distinção ao ressuscitar (`app/colaboradores/services/desligamento.py:164`, `app/chamados/models.py:2005`, `app/chamados/services/tarefa_do_dia.py:163`, `app/chamados/services/tarefa_do_dia.py:176`, `app/chamados/models.py:1622`).
-
-`vincular_posto` grava posto e trilha no mesmo `atomic`; o save preserva a situação lida sob trava. A regeneração antiga por simples troca do posto cadastral está explicitamente aposentada nesse serviço (`app/colaboradores/views.py:333`, `app/colaboradores/services/colaborador.py:152`, `app/colaboradores/services/colaborador.py:158`, `app/colaboradores/services/colaborador.py:118`).
-
-Também há caminho indireto por INSS: alteração de situação e criação da ausência dentro do mesmo `atomic`, seguida do signal que solicita julgamento das células (`app/ponto/views.py:2469`, `app/ponto/views.py:2472`, `app/ponto/views.py:2489`, `app/ponto/signals.py:143`). Execução concorrente e efeitos no hash em produção ficam **[não verificado]**.
-
-**4) ESTRUTURA COERENTE; proveniência dos logs e ausência histórica de dado pessoal novo [não verificado].**
-
-O patch fornecido acrescenta **19 entradas**, conferidas na fonte:
-
-| Grupo | Entradas conferidas |
-|---|---|
-| 10 restaurações | `app/docs/CORTES.json:1725`, `1732`, `1739`, `1746`, `1753`, `1760`, `1767`, `1774`, `1781`, `1788` |
-| 8 avais | `app/docs/CORTES.json:1802`, `1810`, `1818`, `1826`, `1834`, `1842`, `1850`, `1858` |
-| Nascimento de `pergunta_respondida` | `app/docs/CORTES.json:1866` |
-
-A validação em memória encontrou **255 IDs únicos**, nenhum campo `id/quando/estado/fatia/frase` vazio nas 19 adições e datas aceitas pela regra do gerador, inclusive minutos com `x` (`app/docs/CORTES.json:1725`, `app/docs/CORTES.json:1871`, `bin/gerar_cortes.py:35`).
-
-Há duas ressalvas de campos:
-
-- As **10 restaurações não têm chave `onde`**; guardam referências históricas em `estado`/`frase`. Portanto, se `onde` for obrigatório em toda entrada, essas dez não atendem. O gerador não exige esse campo (`app/docs/CORTES.json:1725`, `app/docs/CORTES.json:1788`, `bin/gerar_cortes.py:107`).
-- As outras **9 possuem `onde` em `logs/AVAIS-1515/`**. Existência e conteúdo desses anexos ficam **[não verificado]**; `logs/` é ignorado pelo repositório (`app/docs/CORTES.json:1806`, `app/docs/CORTES.json:1814`, `app/docs/CORTES.json:1822`, `app/docs/CORTES.json:1830`, `app/docs/CORTES.json:1838`, `app/docs/CORTES.json:1846`, `app/docs/CORTES.json:1854`, `app/docs/CORTES.json:1862`, `app/docs/CORTES.json:1870`, `.gitignore:53`).
-
-Além das adições, há **13 alterações de estado**, todas citando o censo `logs/CORTES-RECEBIDO-FORA-DA-PAUSA/c1.r`; a comprovação desse censo fica **[não verificado]** (`app/docs/CORTES.json:902`, `909`, `916`, `923`, `1021`, `1028`, `1056`, `1063`, `1070`, `1091`, `1098`, `1154`, `1161`).
-
-Quanto a dados pessoais, a associação de primeiro nome a uma pergunta na restauração já aparece em outros documentos da cópia; os interlocutores nomeados nos avais também têm ocorrências anteriores no JSON (`app/docs/CORTES.json:1771`, `app/docs/BACKLOG.md:961`, `app/docs/RELATO.md:2856`, `app/docs/CORTES.json:1807`, `app/docs/CORTES.json:1188`, `app/docs/CORTES.json:1223`). Não identifiquei CPF, telefone ou email nas 19 adições examinadas; certificar ausência de dado pessoal adicional contra as árvores anteriores fica **[não verificado]**.
-
-**5) PARCIALMENTE VERIFICADO — nenhuma dessas falhas demonstrada no conteúdo atual; histórico dos commits pendente.** [nao verificado]
-
-| Classe de reprovação | Veredito |
-|---|---|
-| Frase só no derivado | **Ausente para as 29 autoridades cobradas:** todas têm lastro no JSON; a da obra está em duas entradas (`app/docs/CORTES.json:1855`, `app/docs/CORTES.json:1871`; tabela da resposta 1). |
-| Segundo juiz duplicando registrado | **Não identificado no caminho examinado:** `_C21` registra `pergunta_respondida`; `q_respondida_com_texto` é sua face SQL, com teste de igualdade por PK. A execução desse teste com banco fica **[não verificado]** (`app/core/juizes.py:306`, `app/chamados/juizes.py:1575`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:73`). |
-| Derivado escrito à mão | **Nenhuma divergência atual:** o Markdown inteiro é reproduzível pelo gerador. Que o commit efetivamente o produziu executando o gerador fica **[não verificado]** (`bin/gerar_cortes.py:97`, `app/docs/CORTES.md:3`). |
-| Hash errado no corpo do commit | **[Não verificado]** — os corpos dos dois commits não estão disponíveis nesta cópia sem Git. | [nao verificado]
-
-A prova das **283 no hash novo**, a suite inteira desse hash e a aprovação opus do delta permanecem **[não verificado]**. A prova registrada no RELATO pertence a `51678cbb2`, enquanto o aval exige repeti-la no hash que pousa (`app/docs/RELATO.md:19`, `app/docs/CORTES.json:1855`).
-
-## 16/11 11:44 · sessao d3ef81fb503c · LOGIN-PUBLICO-HERDA-SESSAO · censo · origem=Code
-
-(a) **Confirmo a premissa no código:** os dois `api_login` são `AllowAny`, aceitam POST e não declaram `authentication_classes`; o padrão contém `JWTComCredencial` seguido de `SessionAuthentication`. Fontes: [views_core.py:188](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:188), [views.py:202](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:202), [base.py:32](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/settings/base.py:32).
-
-O módulo padrão de inicialização é `config.settings.saas`, que importa `base`. O seletor `HASNER_TENANT_URLCONF` muda o **URLconf**, preservando essa cadeia de settings; seu fallback é `config.urls`. Não encontrei sobrescrita de `REST_FRAMEWORK` nessa cadeia. Fontes: [wsgi.py:14](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/wsgi.py:14), [saas.py:10](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/settings/saas.py:10), [saas.py:76](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/settings/saas.py:76).
-
-| Kernel previsto na cópia | URLconf | API |
-|---|---|---|
-| `saas_core` | `config.urls_core`, selecionado pelo ambiente | `api.urls_core` → `views_core`: [urls_core.py:6](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/urls_core.py:6), [api/urls_core.py:5](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls_core.py:5) |
-| `saas_ui` | `config.urls`, fallback | `api.urls` → `views`: [urls.py:37](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/urls.py:37), [api/urls.py:2](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls.py:2) |
-
-Esse desenho também está registrado em [test_rota_pede_sessao.py:50](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/core/tests/test_rota_pede_sessao.py:50). O Caddy encaminha `/api/auth/*` ao core; portanto, no desenho versionado, o login externo chega ao core, embora a UI também tenha implementação: [Caddyfile:8](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/Caddyfile:8).
-
-Os valores **efetivos** de `DJANGO_SETTINGS_MODULE` e `HASNER_TENANT_URLCONF` dos containers são [nao verificado]. O entrypoint usa `setdefault`, e o compose de produção e os arquivos de ambiente são ignorados pelo versionamento: [wsgi.py:14](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/wsgi.py:14), [.gitignore:15](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/.gitignore:15), [.gitignore:40](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/.gitignore:40).
-
-(b) **Censo local: três implementações públicas sem declaração de autenticação.** Nos três blocos, também não há `@authentication_classes` nem `@csrf_exempt` explícito:
-
-| Kernel | Endpoint e método de escrita | Permissão e implementação | Rota |
-|---|---|---|---|
-| core | **POST** `/api/auth/login/` | `AllowAny`: [views_core.py:188](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:188) | [api/urls_core.py:9](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls_core.py:9) |
-| UI | **POST** `/api/auth/login/` | `AllowAny`: [views.py:202](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:202) | [api/urls.py:60](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls.py:60) |
-| UI | **POST** `/api/diag/cam/` | `permission_classes([])`: [views.py:2642](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:2642) | [api/urls.py:102](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls.py:102) |
-
-Há uma ressalva para fechar o universo de classes: os dois `HasnerTokenRefreshView` herdam de `TokenRefreshView` externo. A ausência de atributo **local** não prova que herdem o padrão do projeto. Estão em [views_core.py:125](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:125) e [views.py:69](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:69), roteados em [api/urls_core.py:12](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls_core.py:12) e [api/urls.py:63](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/urls.py:63). Os atributos efetivos da base externa são [nao verificado]; a cópia declara a dependência, mas não traz sua implementação: [requirements.txt:15](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/requirements.txt:15).
-
-Exclusões relevantes:
-
-- `api_app_version` é função Django que retorna `JsonResponse`, sem `@api_view`: [views.py:3042](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:3042).
-- `api_mensageria_push` tem `@csrf_exempt` e `@require_POST`, mas é view Django, fora do censo DRF: [views_mensageria.py:476](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_mensageria.py:476).
-- `comunicados.api_pendentes` é DRF, mas exige `IsAuthenticated` e aceita apenas GET: [comunicados/views.py:83](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/comunicados/views.py:83).
-
-(c) **Para cada uma das três linhas, a previsão é bloqueio por `CSRF Failed`**, supondo sessão reconhecida de usuário ativo, ausência de `Authorization` e verificações CSRF ativas. Isso coincide com o relato fornecido para login; reprodução nesta cópia e ocorrência em `diag/cam` são [nao verificado].
-
-O mecanismo esperado é: autenticação ocorre antes da permissão; sem JWT, `SessionAuthentication` encontra o usuário da sessão e chama `enforce_csrf`; a falta do token interrompe a requisição antes do handler. `AllowAny` e permissões vazias não desligam autenticação. A isenção de CSRF aplicada pelo wrapper DRF tampouco elimina essa checagem interna. **A implementação desse mecanismo não está na cópia; portanto, sua confirmação na versão instalada é [nao verificado].** A inclusão de SessionAuthentication está comprovada em [base.py:39](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/settings/base.py:39); a versão declarada do DRF está em [requirements.txt:14](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/requirements.txt:14).
-
-(d) **Não localizei cobertura da combinação login + sessão válida + CSRF ativo; cobertura global dessa combinação: [nao verificado].** Os testes encontrados deixam lacunas concretas: [nao verificado]
-
-| Teste existente | O que monta | [nao verificado]
-|---|---|
-| [test_api_login.py:58](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/tests/test_api_login.py:58) | `APIClient()` novo por POST, sem estabelecer sessão; verifica sucesso e tokens em `:167`. |
-| [test_login_campos.py:27](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/tests/test_login_campos.py:27) | `Client()` novo, sem ativar checagem CSRF. |
-| [test_contrato_trocar_senha.py:127](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/core/tests/test_contrato_trocar_senha.py:127) | Chamada direta ao login core com `APIRequestFactory`, sem montar sessão. |
-| [test_api_mensageria_push.py:67](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/tests/test_api_mensageria_push.py:67) | Ativa CSRF, mas testa mensageria, sem cookie de sessão. |
-
-A suite ainda usa `config.urls_test`, que concatena core antes da UI. Assim, testar apenas `/api/auth/login/` nessa configuração não cobre as duas implementações: [settings_test.py:9](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/settings_test.py:9), [urls_test.py:11](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/config/urls_test.py:11).
-
-Esboço do RED, **não criado nem executado [nao verificado]**. Fixtures: dois colaboradores ativos distintos, A para a sessão e B para as credenciais:
-
-```python
-for urlconf in ("config.urls_core", "config.urls"):
-    with self.subTest(urlconf=urlconf):
-        with override_settings(ROOT_URLCONF=urlconf):
-            client = APIClient(enforce_csrf_checks=True)
-            client.force_login(usuario_a)
-
-            self.assertIn(settings.SESSION_COOKIE_NAME, client.cookies)
-            self.assertEqual(
-                client.session["_auth_user_id"], str(usuario_a.pk)
-            )
-            client.cookies.pop(settings.CSRF_COOKIE_NAME, None)
-
-            # Sem Authorization, X-CSRFToken ou csrfmiddlewaretoken.
-            response = client.post(
-                "/api/auth/login/",
-                {"username": usuario_b.username, "password": senha_b},
-                format="json",
-                HTTP_HOST="juliani.hasner.com.br",
-            )
-
-            self.assertEqual(response.status_code, 200, response.content)
-            self.assertEqual(
-                response.data["colaborador"]["id"], colaborador_b.pk
-            )
-            self.assertTrue(
-                {"access", "refresh"} <= response.data["tokens"].keys()
-            )
-```
-
-A expectativa de responder pelas credenciais de B acompanha os dois handlers, que consultam `autenticar_colaborador` com os campos do corpo: [views_core.py:195](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views_core.py:195), [views.py:209](/home/ronald/codex_ws/f76eee7c607d244e06e0e9097806c255b868a487/app/api/views.py:209). O RED esperado antes da correção é falhar na exigência de 200 por recusa CSRF; resultado executado: [nao verificado].
-
-## 16/11 11:44 · sessao 55cbce51d5ec · - · - · origem=Ronald (tmux)
-
-Proposta de sonda, **não executada**. [não verificado]
-
-A ausência de `pergunta_origem` não basta: o campo também fica vazio em batidas de chão e plantios anteriores a 06/09 (`app/ponto/models.py:30-44`). A autoridade de batidas vivas é `batidas_apuraveis`, que inclui pendentes do DP e exclui retratadas (`app/ponto/turnos.py:2868-2895`).
-
-Para correspondência, usar os auxiliares reais: `_slot_esperado` delega a derivação ao materializador (`app/chamados/juizes.py:344-377`); `_plantio_na_hora_do_slot` verifica a hora do vínculo preservando o overnight (`app/chamados/juizes.py:253-282`); `_batida_existente_na_janela` aceita QuerySet alimentado (`app/chamados/juizes.py:238-250`). Não usar `_pergunta_materializada_de_fato`: vias sem testemunha podem retornar `True` sem batida (`app/chamados/juizes.py:682-708`).
-
-Universo proposto: todas as perguntas `tipo_resposta='hora'` do schema `juliani`, sem corte de empresa, competência, situação do colaborador ou estado da disputa; cada pergunta passa pela função real. Perguntas de `data_hora`, texto e escolha ficam fora. Resposta vazia e paridade recusada não entram no numerador porque a função retorna respectivamente `None` e `recusada_paridade` (`app/chamados/services/materializacao.py:438-448`). Slot não derivável sem vínculo vivo fica **indeterminado**, evitando transformar falta de informação em inexistência física (`app/ponto/models.py:38-44`; `app/chamados/juizes.py:755-764`).
-
-```bash
-PGOPTIONS='-c default_transaction_read_only=on -c default_transaction_isolation=serializable' \
-PYTHONDONTWRITEBYTECODE=1 python manage.py shell <<'PY'
-from collections import Counter, defaultdict
-
-from django.db import connection, transaction
-from django_tenants.utils import schema_context
-
-from chamados.models import PerguntaDisputa
-from chamados.services.materializacao import estado_aplicacao_pergunta
-from chamados.juizes import (
-    _slot_esperado,
-    _plantio_na_hora_do_slot,
-    _batida_existente_na_janela,
-)
-from ponto.turnos import batidas_apuraveis
-from core.observ import engolidos
-
-contagens = defaultdict(Counter)
-estados = Counter()
-
-with schema_context("juliani"), transaction.atomic():
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT current_schema(),
-                   current_setting('transaction_read_only'),
-                   current_setting('transaction_isolation')
-        """)
-        schema, leitura, isolamento = cursor.fetchone()
-    assert schema == "juliani", schema
-    assert leitura == "on", leitura
-    assert isolamento == "serializable", isolamento
-
-    perguntas = (
-        PerguntaDisputa.objects
-        .filter(tipo_resposta="hora")
-        .select_related("disputa__colaborador", "chamado_destino")
-        .order_by("pk")
-    )
-
-    for p in perguntas.iterator(chunk_size=1000):
-        via = p.via_resolucao or "<vazia>"
-        c = contagens[via]
-        c["universo_hora"] += 1
-
-        resultado = estado_aplicacao_pergunta(p.disputa, p)
-        estado = resultado["estado"] if resultado is not None else "<fora_escopo>"
-        estados[(via, estado)] += 1
-        if estado != "aplicada": [nao verificado]
-            continue
-
-        c["aplicada"] += 1 [nao verificado]
-        vivas = batidas_apuraveis(p.disputa.colaborador)
-        vinculadas = vivas.filter(pergunta_origem_id=p.pk)
-        tem_vinculo = vinculadas.exists()
-        if not tem_vinculo:
-            c["sem_vinculo_vivo"] += 1
-
-        antes = engolidos()["total"]
-        ts, tipo = _slot_esperado(p)
-        if engolidos()["total"] != antes:
-            c["indeterminada"] += 1
-            continue
-
-        if ts is None:
-            # O juiz preserva o vínculo vivo quando o slot não é derivável.
-            if tem_vinculo:
-                c["com_correspondente_viva"] += 1
-            else:
-                c["indeterminada"] += 1
-            continue
-
-        corresponde = (
-            _plantio_na_hora_do_slot(p, ts, vinculadas)
-            or _batida_existente_na_janela(
-                p.disputa.colaborador, ts, tipo, batidas=vivas
-            ) is not None
-        )
-        c[
-            "com_correspondente_viva" if corresponde
-            else "sem_correspondente_viva"
-        ] += 1
-
-    assert not connection.needs_rollback
-    for c in contagens.values():
-        assert c["aplicada"] == ( [nao verificado]
-            c["com_correspondente_viva"]
-            + c["sem_correspondente_viva"]
-            + c["indeterminada"]
-        )
-
-print("schema", schema)
-print("via\tuniverso_hora\taplicada\tsem_vinculo_vivo\t"
-      "com_correspondente_viva\tsem_correspondente_viva\tindeterminada")
-campos = (
-    "universo_hora", "aplicada", "sem_vinculo_vivo", [nao verificado]
-    "com_correspondente_viva", "sem_correspondente_viva", "indeterminada",
-)
-for via, c in sorted(contagens.items()):
-    print(via, *(c[k] for k in campos), sep="\t")
-
-print("via\testado_real\tquantidade")
-for (via, estado), quantidade in sorted(estados.items()):
-    print(via, estado, quantidade, sep="\t")
-PY
-```
-
-`PGOPTIONS` solicita transações somente leitura e snapshot serializable; os `assert`s impedem apresentar resultado se a configuração não tiver sido aplicada. Validação de execução nesse ambiente: [não verificado]. `schema_context` é o mecanismo utilizado pelo próprio projeto, inclusive com default `juliani` (`app/ponto/management/commands/propor_reorganizacao.py:17-23`); ele pode emitir `SET search_path`, comando de controle de conexão, sem DML. O script proposto consulta dados apenas por SELECT; essa execução futura não foi realizada. [não verificado]
-
-O contador de falhas engolidas existe em memória e `registrar_engolido` apenas incrementa o contador e registra logging, sem escrever no banco (`app/core/observ.py:57-82`). Essa verificação evita contar como ausência de batida uma correspondência derivada com erro silencioso. [não verificado]
-
-Limite importante: `sem_correspondente_viva` é a contagem segundo os auxiliares de correspondência atuais; `indeterminada` precisa permanecer separada. O total físico absoluto da frota não é verificável somente pelo anexo. [não verificado]
-
-## 16/11 11:44 · sessao 503e17526781 · - · - · origem=Ronald (tmux)
-
-Censo da árvore ativa concluído só por leitura; não importei Django nem consultei banco.
-
-**Escritores físicos atuais do carimbo de PerguntaDisputa**
-
-| Sítio | Escrita |
-|---|---|
-| `app/chamados/models.py:3180-3184` `_escrever_carimbo` | Única atribuição em memória de `materializada_em`, autor e via. |
-| `app/chamados/models.py:3235` `carimbar` | `save(update_fields=campos)`; lista começa em `:3211`. Antes de persistir aplica carimbo e consulta C6 em `:3222`; se viva restaura em memória e retorna `False` em `:3226-3228`. |
-| `app/chamados/models.py:3273` `carimbar_identidade` | `save(update_fields=campos)`; campos em `:3269`; aceita somente vias de identidade (`:3261-3262`), sem consultar C6. |
-| `app/chamados/models.py:3295` `descarimbar` | `save(update_fields)` zerando os três campos (`:3291-3295`). |
-| `app/chamados/models.py:3363-3365` `descarimbar_em_lote` | Único `QuerySet.update(materializada_em=None, ...)`; exclui vias fora do fato. |
-| `app/chamados/models.py:3245` `_desfazer_em_memoria` | Restaura apenas memória após carimbo recusado/exceção, sem persistência própria. |
-
-Executei apenas Python AST (`python3 -B`), extraindo o detector existente em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:99-202`, sem imports do app. Varri todos `.py` fora `tests`, `test_*`, `logs`, `node_modules`, `__pycache__`, **incluindo migrations**. Resultado: somente `_escrever_carimbo`, `descarimbar_em_lote` e o homônimo de regularização abaixo. Nenhum `bulk_update` do carimbo na árvore ativa. O detector cobre atribuição, `setattr`, construtor/create/update, kwargs indiretos e bulk_update (`:174-197`), com limitações declaradas (`:111-115`).
-
-**Todas as vias/chamadores operacionais que carimbam**
-
-| Função/via | Evidência | Cria Batida? / pode carimbar sem Batida |
-|---|---|---|
-| `_materializar_ausencia_de_resposta`: `declaracao` ou `ausencia_dia` | `materializacao.py:555-567` | Cria **Ausencia** (`:527-535`), sem criar Batida para as irmãs. Pode terminar sem Batida. |
-| `_materializar_resposta_hora`: `paridade_recusada` | `materializacao.py:906-931` | Não cria; exige marco aceso (`:907`), carimba identidade (`:930`) e retorna antes do registrar. |
-| `_carimbar_recusa`: `fato_ocupado` | `materializacao.py:1095-1109` | Não cria; só COLISAO, e só sem carimbo anterior, carimba (`:1099-1106`). Demais recusas atualizam somente motivo (`:1107-1109`); **recusa posterior preserva carimbo anterior**. |
-| `_materializar_uma`: `declaracao` ou `via_pelo_fato`, fallback `chamado_encerrado` | `materializacao.py:1267-1287` | Hora: cria ou reusa (`:865-877`, `:932-940`); data_hora: registrar (`:1012-1025`); escolha: explicitamente sem Batida (`:1069-1086`). Carimbo negado/lastro reprovado causa rollback (`:1238-1249`, `:1281-1287`). |
-| `materializar_pendentes_aprovadas`: `juiz_aprovou` | `materializacao.py:1424-1438` | Não cria; consulta lastro e carimba. Juiz admite resolução sem testemunha para vias próprias (`juizes.py:682-710`), portanto não exige necessariamente Batida da pergunta. |
-| `lavrar_sem_turno_aberto`: `sem_turno_aberto` | `reconciliador.py:363-406` | Não cria; somente sem resposta e sem turno aberto, com C6 morto; pode terminar sem Batida. |
-| `retratar_perguntas_absolvidas_por_celula`: `celula_absolveu` | `reconciliador.py:550-596` | Não cria; absolvição da célula e C6; pode terminar sem Batida. |
-| `_resolver_perguntas_por_chamado_resolvido`, ramo destino | `disputa_emissao.py:1987-2009` | Não cria; `via_pelo_fato`, resposta validar. Função declara SEM criar Batida (`:1907-1913`). |
-| Mesma função, ramo sem credor | `disputa_emissao.py:2065-2082` | Não cria; `via_pelo_fato` ou `chamado_encerrado`, resposta responder. |
-| `PerguntaDisputa.fechar_por_admin`: `admin_decidiu` | `models.py:3133-3147` | Não cria; porta de identidade. Chamadores: `DisputaSupervisao.fechar` desligamento/admin_encerra (`models.py:1982-1985`); `veredito_celula.fechar_o_fio_do_dia` (`ponto/services/veredito_celula.py:190`); aceite folga (`services/validacao.py:314`, `:354`). Esses atos podem resolver por folga/ausência, sem Batida. |
-| `DisputaSupervisao.remover_motivo`: `motivo_retratado` | `models.py:2118-2126` | Não cria; preserva carimbo anterior quando existe (`manter_carimbo=True`). |
-| `fio.retratar_duplicata`: `duplicata` | `services/fio.py:1384-1401` | Não cria; grava recusa apontando canônica; preserva carimbo anterior quando existe. |
-| `PerguntaDisputa.encerrar_fantasma`: `fantasma` | `models.py:3378-3386` | Não cria; carimbar/C6. Chamador `reconciliador.py:1148`. |
-
-`via_pelo_fato` devolve `cadastro_folga` para agrupamento sob pai limbo/folga sem batida apurável no dia (`juizes.py:1772-1798`), senão `adesao` (`:1799`); ausência aprovada → `ausencia_dia` (`:1805-1807`); TM com saída e fora intervalo → `completude_turno` (`:1808-1815`); restante → `chamado_encerrado` (`:1816`). Portanto `cadastro_folga` não tem escritor literal separado: entra pelos chamadores de `via_pelo_fato` listados acima.
-
-`competencia_trancada` **não tem escritor novo**: porta antiga removida, via mantida para acervo e leitura, declarado em `models.py:3149-3154`. `fato_materializado` só troca via de pergunta já carimbada, sem gravar `materializada_em` (`models.py:3367-3375`); `relavra_via.relavrar` também só altera via (não é escritor do campo temporal).
-
-**Todos os limpadores/chamadores**
-
-- `ChamadoColaborador.ressuscitar_perguntas` → lote `models.py:1613`.
-- `_universo_da_ressuscitacao` → `descarimbar(salvar=False)` apenas na cópia para julgar (`models.py:1541-1556`).
-- `disputa_emissao.reabrir_para_correcao` → lote `services/disputa_emissao.py:1648`.
-- `relavra_via.desfazer_carimbo_sem_lastro` → `descarimbar` depois C6 vivo (`services/relavra_via.py:242-246`).
-- `PerguntaDisputa.reabrir_fantasma` → descarimbar (`models.py:3395-3397`); comando chama em `management/commands/reabrir_orfas_enterradas.py:157`.
-- `reabrir_por_resposta` → descarimbar sem salvar (`models.py:3412-3414`); escritor da resposta agrega os campos em `services/disputa_emissao.py:1499`.
-- `reabrir_por_competencia` → descarimbar (`models.py:3419-3421`); chamador `services/competencia_trancada.py:279`.
-
-**Comandos, migrations e homônimos**
-
-- `passivo_validado` é fila da mesma unidade: importa `_materializar_uma` em `services/passivo_validado.py:39` e chama em `:522`; não escritor adicional. `CAMPOS_REVERSAO` (`:64-66`) só lido por `_reversao_de` (`:81-83`) e guardado no resultado (`:370`); nenhuma restauração dinâmica ali.
-- Migrations `0016_s84_pergunta_chamado_destino.py:23` e `0021_regularizacaoexterna_regularizacaoitembatida_and_more.py:26` apenas definem campos. Não achei migration de dado escrevendo `materializada_em`, inclusive fora chamados.
-- Migration de dado com PD: `0051_decisao_pergunta.py:25-27` altera somente colaborador/instância; `0053_pergunta_unica_por_familia.py:36-46` só consulta e recusa colisões.
-- Homônimo **RegularizacaoExterna**, outro modelo (`models.py:4128`): `services/regularizacao_ext.py:199-201` atribui e `save(update_fields)`. Pode apenas remover (`:132-141`) ou corrigir (`:151-164`) sem nova Batida; criação ocorre em `:172-189`. Não é pergunta nem campo equivalente de aplicação da pergunta.
-- `tests/e4b_c6_bases` contém snapshots `.py.txt`, não runtime; nenhum `materializada_em =` nessa subárvore. Fixtures e mutantes dos testes não devem ser misturados com os escritores operacionais; o selo explica esse propósito em `tests/test_o261e_f2_porta_carimbo.py:17-23`, e exclui testes/migrations da própria varredura em `:207-211` (minha AST incluiu migrations).
-- Retração posterior tem porta própria: `ponto/registro_batida.py:269-276` grava `aprovada=False` e `retratada_em`, sem alterar carimbo da Pergunta. Logo existência no momento do plantio não garante Batida viva depois; para atribuir “juiz desfez depois” a IDs concretos, somente o anexo fornecido, **[não verificado na cópia]**.
-
-_6020 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6026 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
