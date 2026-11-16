@@ -1,7 +1,114 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 23:18** · publicado em **15/11/2026 23:20** (UTC-3)
+> Ultima resposta processada: **15/11/2026 23:26** · publicado em **15/11/2026 23:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 23:26 · sessao ba4226c49212 · - · - · origem=Ronald (tmux)
+
+Censo de derivadores e propagadores, com referências atuais:
+
+| Categoria | Escritor / fonte | Pergunta real / leitor |
+|---|---|---|
+| Anomalia, UI | `app/api/views.py:759-771` | Lista local `motivos_anomalia` não vazia; chama criador da disputa, ignora retorno e publica em `:821`. |
+| Anomalia, core | `app/api/views_core.py:753-765` | Mesmo predicado; publica em `:815`. |
+| Perguntas pendentes | `app/api/views.py:2537-2539,2569` | `bool(consulta_do_app(colab)['pendentes'])`; lista publicada em `:2576`. |
+| Disputa aberta | `app/chamados/services/disputa_emissao.py:34-42` | `DisputaSupervisao` do colaborador com `fechada_em IS NULL`; retorno `.first()`. `api/views.py:1336` chama e `:1670` publica booleano. |
+| Constante de dedup | `app/api/views.py:543`; `app/api/views_core.py:529` | Resposta da duplicata: `False`, motivos vazios em `:544` / `:530`. |
+| Constante de colisão oposta | `app/api/views.py:690`; `app/api/views_core.py:681` | Resposta de batida ignorada: `False`, motivos vazios em `:691` / `:682`. |
+| Constante de reuso | `app/ponto/services/resposta_batida.py:7-30` | `False` quando não há marca transiente `criada_neste_toque`; propagadores: `api/views.py:693-695`, `api/views_core.py:684-686`, `ponto/services/triagem_batida.py:723-725`. |
+
+Portanto, **três derivações variáveis** do campo JSON, mais **cinco sítios de constante `False`**; as quatro citações de derivação do aval conferem nas linhas atuais acima. A segunda variável significa pendente, mais restrita que simplesmente “pergunta viva”: `consulta_do_app` chama C6 em `app/chamados/services/pergunta_no_app.py:73`; `particao_do_app` exige ainda `respondida_em is None` e disputa aberta em `:76-85`.
+
+Fonte completa de motivos da anomalia: detector inicial em `app/api/views.py:433-434`; selfie em `:447-453`; mock em `:457-464`; assinatura/liveness em `:465-495`; E/S incompleta em `:604-645`; desvio grave em `:703-707`; ajuste da saída sem turno em `:748-756`. Só chamar `detectar_anomalias(colab)` não reproduz o flag final — os sítios posteriores acrescentam e removem motivos nessas linhas.
+
+A referência da selfie também confere: `app/api/views_core.py:426-427` é comentário do desvio APK/POST separado; a regra executável está em `:433-439` [essas linhas finais precisam conferência do root; equivalentes verificados em `app/api/views.py:447-453`].
+
+Aliases e leitores da derivação “disputa aberta”:
+
+- Reexport compatível: `app/chamados/models.py:4234-4236`.
+- Leitor REST: `app/api/views.py:1335-1336,1670-1672`.
+- Leitor de autorização: `app/colaboradores/mixins.py:304-312`, só POST; isentos passam antes em `:301-303`. Decoradores ativos: `app/holerite/views.py:1144`; `app/colaboradores/views.py:1368,1603,1769,1877`. Decoradores isentos: `app/colaboradores/views.py:1410,1425`; `app/ferias/views.py:287,347,686,773`.
+- Wrapper `motor_bloqueado_por_disputa`: `app/ponto/services/disputa.py:15-31`. Leitores: `app/ponto/views.py:140-144,207` → faixa em `app/templates/ponto/espelho.html:13-18`; PDF `app/relatorios/pdf_espelho.py:1082-1090,1113` → execução dos bloqueios em `app/relatorios/pdf_base.py:129-131`.
+- Variável homônima do painel: `app/colaboradores/painel_cell.py:23` lê conjunto recebido ou `:31-32` calcula `exists(disputa aberta)`; `:68` transforma em LED vermelho. Único chamador de produção encontrado passa sem mapas em `:81`; template lê LED em `app/templates/colaboradores/partials/_ps_linha.html:1,6`.
+- Fonte paralela do LED em lote: `app/colaboradores/services/situacional.py:117` monta conjunto de colaboradores com disputa aberta; `:56-59` lê e `:210` publica LED.
+- `em_disputa_fechada` é outra variável: `app/chamados/services/fio.py:264-268`; consumidor admin em `app/templates/chamados/partials/modal_fio.html:289`; não equivale ao sinal de abertura da tela de perguntas.
+
+Equivalentes de apresentação verificados:
+
+- Autoridade `app/chamados/services/pergunta_no_app.py:88-119`: `questionarios_pendentes = len(pendentes)` em `:101`; `chamados_badge` prioriza pendentes em `:108-113`; sem perguntas usa chamados não lidos calculados em `:102-107`.
+- Propagação `/me`: `app/api/views.py:315-319,359-360`; `app/api/views_core.py:303-307,347-348`.
+- Dashboard web: `app/core/views.py:239,252-253,268`; leitores do link/badge/rótulo em `app/templates/core/dashboard_colaborador_v2.html:78-80`.
+- Painel do colaborador: `app/colaboradores/views.py:940-941` → `app/templates/colaboradores/partials/painel_colaborador.html:39,190-191`.
+- Listagem `/chamados/v2`: consulta em `app/api/views.py:997-998`; pendentes e histórico vivo de disputa aberta em `:1033-1035`; destino vivo ou pai em `:1036-1040`; serialização `perguntas_disputa` em `:1148-1167`.
+
+Não localizei consumidor HTML/JS literal de `em_disputa` ou `motivos_disputa`; consumidor nativo precisa ser sustentado pelo HANDOFF ou marcado `[não verificado]`. Os únicos usos locais de `motivos_disputa` são os payloads citados e a prosa de `app/ponto/services/aviso_da_batida.py:14`; o serviço lê a lista interna para a frase em `:69-71`, chamado em `app/api/views.py:812` / `app/api/views_core.py:806`.
+
+Impedimentos concretos para uma sonda histórica exata:
+
+- `Batida` não guarda flag nem lista de motivos; campos em `app/ponto/models.py:8-95`.
+- `detectar_anomalias(colaborador)` não aceita instante (`app/chamados/detector_anomalias.py:19`), lê escalas ativas atuais em `:58-62`, `timezone.now()` em `:73` e cadastro de posto atual em `:101-111`.
+- A função **pode escrever e enviar push**: chama `bloquear_se_em_ferias` em `app/chamados/detector_anomalias.py:114-121`; este cria chamado em `app/ponto/utils.py:103-125` e envia push em `:127-133`. O detector engole o erro em `contexto['_erro_ferias']`, sem contador `engolidos`, em `detector_anomalias.py:120-121`. Interceptar escritor antes da tentativa é necessário se a sonda chamar esse caminho; barreira SQL somente leitura deve ser adicional.
+- `ultima_batida` guarda episódio corrente em `app/api/views.py:761-765`, mas o agregado substitui outro episódio em `app/chamados/services/disputa_emissao.py:569-575`; não é histórico completo.
+- Canal é dado persistido em `app/ponto/models.py:46-55`: `NULL` anterior a 27/10/2026 ou sem aparelho; o próprio contrato proíbe inferir canal por `timestamp_dispositivo` em `:48`.
+
+## 15/11 23:25 · sessao 24e606ed885e · - · - · origem=Ronald (tmux)
+
+Roteamento e contrato, somente pela cópia:
+
+- `CLAUDE.md:84-89` descreve as cascas; `Caddyfile:8-10` confirma: `/api/ponto/*`, `/api/auth/*`, `/api/me/`, `/api/regularizacao/*`, `/api/ping-geo/`, `/api/registrar-fcm/`, `/health/` → core; restante → UI. O domínio Juliani importa esse bloco em `Caddyfile:32-38`.
+- Core: `app/config/urls_core.py:5-6` inclui `api.urls_core`; `app/api/urls_core.py:5` importa `views_core`; `:13` aponta `/api/me/`, `:14` `/api/ponto/bater/`.
+- UI: `app/config/urls.py:37` inclui `api.urls`; `app/api/urls.py:2` importa `views`; `:81` espelho/v2; `:92` disputa/perguntas; `:93` disputa/responder; `:73` chamados/v2. Seu gêmeo bater (`:67`) existe no URLconf UI, mas o Caddy encaminha essa URL ao core.
+- Configuração aceita a escolha do URLconf por variável em `app/config/settings/saas.py:76-78`; definição real do ambiente/container rodando não foi inspecionada [não verificado].
+
+Equivalentes de apresentação:
+
+| Fonte e escritor | Leitores/serializadores |
+|---|---|
+| `consulta_do_app` retorna partição pendentes/histórico (`app/chamados/services/pergunta_no_app.py:64-85`). Pendente = C6 viva, `respondida_em is None`, disputa aberta (`:73`, `:80-85`). | `/api/disputa/perguntas/`: consulta em `app/api/views.py:2537-2539`; `em_disputa=bool(perguntas)` em `:2569`; `perguntas` em `:2576`; `respondidas` como subconjunto histórico em `:2577`; `historico` em `:2578`. |
+| `projecao_do_app`: `questionarios_pendentes=len(pendentes)` (`app/chamados/services/pergunta_no_app.py:100-101`); badge prioriza pendentes com rótulo “Responder DP”, depois chamados não lidos, depois `None` (`:102-113`). | Core `/me`: recebe em `app/api/views_core.py:303-307`, transmite em `:346-348`; UI gêmeo `app/api/views.py:315-319`, `:358-360`. Android usando esses campos para abrir tela [não verificado]. |
+| Dashboard conta a mesma lista (`app/core/views.py:252-253`) e transmite em `:268`. | `app/templates/core/dashboard_colaborador_v2.html:78-80`: decide sufixo do link `?aba=cham`, badge e rótulo “Responder DP”. |
+| Projeção administrativa (`app/colaboradores/views.py:940-941`). | `app/templates/colaboradores/partials/painel_colaborador.html:39`, `:190-191`: total de mensagens e descrição “No app dele agora”. |
+| Chamados/v2 reutiliza `consulta_do_app`, junta pendentes+histórico, conserva só disputas abertas e ancora em destino vivo ou pai (`app/api/views.py:996-1040`). | Serializa `perguntas_disputa` em `:1148-1168`; `pode_solicitar_correcao` usa `aguarda_o_colaborador` em `:1174-1180`. `pode_responder` em `:1145` diz chamado não terminal, portanto não é autorização individual de PerguntaDisputa. |
+
+Outras chaves que devem ser distinguidas:
+
+- `/me` mantém `regularizacao_obrigatoria=False` e, por isso, `entradas_pendentes=[]` (`app/api/views_core.py:314-341`).
+- `/api/regularizacao/pendente/` lista **RegularizacaoExterna** com `status='aguardando'`, retornando `pendentes`; trata outro modelo/universo (`app/api/views_core.py:1271-1289`; rota `app/api/urls_core.py:15`).
+- `aviso_texto_livre` também consulta as pendentes atuais e retorna orientação para abrir chamado/pergunta, sem novo predicado (`app/chamados/services/aviso_pendencia.py:7-20`).
+
+Contrato e relato:
+
+- `app/docs/HANDOFF.md:1-219` cobre login, ausência, plataforma, troca de senha; não contém contrato de `em_disputa` ou `/api/disputa/perguntas/` [não verificado como contrato existente].
+- `app/api/views_core.py:426-427` e `app/api/views.py:440-441` mencionam em comentário o APK preso em `PerguntasDisputaActivity`. Isso documenta a intenção/comportamento relatado; não demonstra um leitor Android executável.
+- Não foi localizado código Kotlin/Java/Swift/Dart na busca da cópia [não verificado]. Android 3.9.3, a condição executada para abrir a Activity e o texto mostrado no aparelho continuam [não verificado].
+- O texto web “Nenhuma pendência” está condicionado a `not pendencias` em `app/templates/chamados/meu_atendimento.html:117-120`; não prova a tela nativa mencionada no relato.
+
+## 15/11 23:25 · sessao 2f274523329a · - · - · origem=Ronald (tmux)
+
+Candidatos distintos, sem escolher:
+
+1. **Receber ou corrigir resposta pela porta:** `pergunta_viva(p, hoje=None, *, carga=None, agora=None)`, registrado como C6 em `app/core/juizes.py:112` e `app/core/juizes.py:286`; implementação/memo em `app/chamados/juizes.py:865`, predicado em `app/chamados/juizes.py:1402`. A propriedade `.viva` explicita “Pode receber (ou corrigir) resposta” e delega ao juiz (`app/chamados/models.py:3473-3484`). A porta POST efetivamente consulta C6 para a pergunta pertencente ao colaborador, sem exigir disputa aberta nem resposta ausente (`app/api/views.py:2609-2620`).
+
+   Predicado em ordem: validação mata; tranca atual mata; vias terminais materializadas vencem resposta; resposta carimbada com texto mantém viva salvo decisão administrativa e concordância com luz; identidade materializada mata; marco materializado no espelho mata; célula acusadora vive, célula absolutória completa mata; falta na janela viva mantém; sem materialização vive; com materialização depende testemunha externa (`app/chamados/juizes.py:1403-1492`). **Universo:** uma pergunta recebida pelo juiz, podendo ser de conversa e podendo estar em disputa fechada — nenhuma guarda de fechamento consta no corpo (`app/chamados/juizes.py:1402-1492`).
+
+2. **Pergunta pendente que a lista do APK oferece:** `consulta_do_app(colab, *, agora=None)` → `particao_do_app(perguntas_do_app(...))` (`app/chamados/services/pergunta_no_app.py:64-85`). `perguntas_do_app` consulta perguntas de todas as disputas daquele colaborador, pré-filtra pelo generoso `q_vivas`, ordena por id e confirma C6 (`app/chamados/services/pergunta_no_app.py:45-61`). `particao_do_app` considera pendente **C6 viva E `respondida_em is None` E `disputa.fechada_em is None`**; demais vivas vão ao histórico (`app/chamados/services/pergunta_no_app.py:76-85`). GET `/disputa/perguntas/` usa essa lista e escreve `em_disputa=bool(pendentes)` (`app/api/views.py:2537-2539`, `app/api/views.py:2566-2578`). **Diferença:** C6 admite correção de viva já respondida e viva sob disputa fechada; a lista pendente exclui ambas (`app/chamados/models.py:3475`, `app/api/views.py:2612-2620`, `app/chamados/services/pergunta_no_app.py:81-84`).
+
+`fio_vivo(perguntas)` é a redução registrada C15: `any(pergunta_viva(p) for p in perguntas)`; universo é explicitamente do chamador, vazio dá falso; não acrescenta os filtros da lista pendente (`app/core/juizes.py:123-125`, `app/core/juizes.py:295`, `app/chamados/juizes.py:1507-1516`).
+
+C19 `tarefa_do_dia` é outro domínio: ações exigíveis por **instância de marco de um colaborador-dia**, após decisões e conferência de efeitos, com estado `nao_sei`; não substitui a pergunta de alcance geral do questionário (`app/core/juizes.py:299`, `app/docs/JUIZES.md:78-93`, `app/chamados/services/tarefa_do_dia.py:1-26`). Seu `fio=colab` exige ação `responder` de colaborador **e pergunta pendente no app**, delegando a C6 + `particao_do_app` (`app/chamados/services/tarefa_do_dia.py:37-50`). C17 exige âncora na fila e pergunta sobre porta do dia/painel, não disponibilidade geral de responder (`app/chamados/juizes.py:1667-1696`, `app/chamados/juizes.py:1704-1713`).
+
+**Tempo passado: aceita parâmetro, mas não replay integral.** `agora` chega ao C6 e muda o dia da janela (`app/chamados/juizes.py:875-890`); a projeção apenas oculta validação/resposta/materialização posteriores e conserva identidade atual (`app/chamados/juizes.py:1381-1399`). Permanecem:
+
+- Pré-filtro `q_vivas` do estado atual, anterior ao C6 (`app/chamados/services/pergunta_no_app.py:52-61`).
+- Partição lê `respondida_em` e `fechada_em` atuais, sem projeção (`app/chamados/services/pergunta_no_app.py:73-85`).
+- Tranca não recebe `agora`; lê `periodo_trancado` atual e toques posteriores ao fechamento atual (`app/chamados/juizes.py:977-995`, `app/chamados/juizes.py:1065-1082`).
+- C6 lê `celula.veredito/veredito_via` atuais (`app/chamados/juizes.py:1417-1419`, `app/chamados/juizes.py:1450-1466`).
+
+Portanto rotular `consulta_do_app(colab, agora=batida.criado_em)` como “pergunta existente e respondível no instante da batida” seria incorreto pelas próprias leituras acima. A sonda pode entregar **aproximação explicitamente atual**: detector de anomalia da batida chamado agora × ausência de pendentes atuais do colaborador, e em paralelo ausência de C6 vivas atuais; resultado contemporâneo exato continua `[nao verificado]` sem reconstrução histórica integral. Se preferir projeção parcial, rotulá-la literalmente como tal e conservar os dois resultados separados (`app/chamados/services/pergunta_no_app.py:45-85`, `app/chamados/juizes.py:1381-1399`).
+
+Para sonda sem escrita: leitores do app retornam listas sem `.save()` (`app/chamados/services/pergunta_no_app.py:45-85`); C6 apenas memoiza na instância (`app/chamados/juizes.py:893-905`), embora erros possam ser engolidos nos degraus inferiores (`app/chamados/juizes.py:1476-1492`). `engolidos()` fornece fotografia cumulativa, não zerar (`app/core/observ.py:60-70`); `registrar_engolido` incrementa contador e emite logging (`app/core/observ.py:73-82`). Assim comparar contador antes/depois da função e desabilitar logging como no molde; exceção ou incremento torna classificação indecidível (`app/core/observ.py:60-82`).
+
+O helper terceira derivação é só existência de disputa aberta, sem perguntas: `colaborador_em_disputa(colaborador)` retorna primeira `DisputaSupervisao` com `fechada_em__isnull=True` (`app/chamados/services/disputa_emissao.py:34-42`).
 
 ## 15/11 23:18 · sessao bcbcdfa003d8 · E4C-F1NOVA-B1 · verificador · origem=Code
 
@@ -749,77 +856,4 @@ O diff preserva a resposta nos três. `reabrir_fantasma` e `reabrir_por_competen
 
 [truncado em 20000 de 23637 caracteres]
 
-## 15/11 22:28 · sessao a9b4abcfaf19 · - · - · origem=Ronald (tmux)
-
-Achados confirmados:
-
-- **Médio — classe A ainda sem juiz:** `espera_o_texto_do_colaborador` conserva `respondida_em is None or respondida_sem_texto(p)`, complemento exato de “instante E texto após trim”; deveria apenas perguntar ao novo juiz. Afeta cobrança e cartão por delegação. `app/chamados/services/fio.py:177`, `app/chamados/services/fio.py:186`, `app/chamados/services/fio.py:174`.
-- **Médio — B1 muda predicado de I21:** o diff substitui `resposta_colab != ''` por trim. Instante com resposta somente espaços deixava entrar e agora fica fora; portanto a afirmação “nenhum leitor muda de predicado” não vale literalmente. Existência desses registros em produção: **[não verificado]**. `app/chamados/management/commands/auditar_invariantes_chamados.py:1572`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1575`.
-- **Menor — lookup desatualizado:** `JUIZES.md` exige acompanhar o código no mesmo commit, mas sua tabela de chamados não contém `pergunta_respondida`. O registro vivo contém. `app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:59`, `app/core/juizes.py:306`.
-
-Conferido:
-
-- Juiz Python usa instante presente E texto após `strip`; face SQL usa o conjunto de espaços do próprio Python. `app/chamados/juizes.py:1526`, `app/chamados/juizes.py:1552`, `app/chamados/juizes.py:1560`, `app/chamados/juizes.py:1580`.
-- Não há significado único ainda em todos os consumidores: retenção conserva **instante OU texto**, property conserva **instante apenas**, conforme migração B2 declarada. `app/chamados/models.py:1914`, `app/chamados/models.py:3660`, `app/chamados/juizes.py:1550`.
-- Campos temporais são instantes (`DateTimeField`), com comparações temporais no C6. Conversão para dia em placar é derivação de apresentação, sem regravação. `app/chamados/models.py:2544`, `app/chamados/models.py:2545`, `app/chamados/models.py:3521`, `app/chamados/juizes.py:1392`, `app/chamados/services/verbos.py:345`.
-- Classificador existente continua encontrando **21 sítios** de carimbo cru; são a dívida B2. Também existe instrumento fora de `app/`: `bin/censo_folha.py:28`, `bin/censo_folha.py:29`.
-- Atos já são lidos pela tarefa: nova REABERTURA passa a produzir `RESPONDER`; não basta equivalência do juiz para demonstrar zero efeito sobre fila após futuras ressuscitações. Prova sombra não consta do dado recebido. `app/chamados/services/tarefa_do_dia.py:148`, `app/chamados/services/tarefa_do_dia.py:152`, `app/chamados/models.py:1621`.
-
-Inventários completos de leitores dos três outros campos, atos e listas de regras próprias foram enviados ao agente principal por mensagens, com funções e linhas.
-
-## 15/11 22:27 · sessao 3e2bfb3b1490 · - · - · origem=Ronald (tmux)
-
-ACHADOS:
-
-- **Médio — contrato estático enfraquece a garantia pela “guarda”.** Qualquer leitura da outra metade em qualquer `if` absolve a função, sem exigir condição correta, domínio do ramo ou mesma instância. Os mutantes `if not p.resposta_colab: qs.update(respondida_em=I)` e `if p.resposta_colab: pass; qs.update(respondida_em=I)` passam. Espaços também passam na guarda truthy. Prova em memória: detector real retornou `None` para os três; contrato atual ficou verde, 2 testes. Referências: `app/chamados/tests/test_contract_par_resposta.py:58`, `:78`, `:129`.
-
-- **Médio — save valida memória, não o par efetivamente persistido por `update_fields`.** Carregado `(None, '')`, alterar memória para `(I, 'bati')` e salvar só `resposta_colab` passa, gravando `(None, 'bati')`; salvar só `respondida_em` passa, gravando `(I, '')`. Provei usando AST dos corpos reais, sem banco ou arquivos. Falha preexistente para uma direção, ampliada para texto sem instante; chamador concreto de produção com essa sequência **[não verificado]**. Referências: `app/chamados/models.py:3548`, `:3552`, `:3578`. Teste novo não cobre discrepância entre memória e campos persistidos: `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:108`.
-
-- **Médio — fixture muda o sujeito no teste de disputa mista.** Antes eram duas perguntas com texto sem instante; agora uma nasce muda e a restante nasce respondida, sem veredito. Os asserts permanecem sobre quantidade materializada e disputa aberta, cobrindo uma causa diferente de retenção. Referências: `app/chamados/tests/test_fio_disputa_resolvido.py:56`, `:79`, `:84`, `:87`. O próprio comentário documenta a mudança: `:81`.
-
-- **Menor — lookup JUIZES não acompanha juiz novo.** O arquivo exige atualização no mesmo commit, mas sua tabela CHAMADO continua sem `pergunta_respondida`; o registro vivo inclui o novo juiz. Referências: `app/docs/JUIZES.md:14`, `:59`, `app/core/juizes.py:306`.
-
-CONFORME:
-
-- **O teste novo morde mutantes do juiz.** Executei apenas a tabela verdade extraída, em memória: real = 0 falhas; só instante = 3; só texto = 1; sem trim = 1; constante falsa = 2. Portanto não procede acusar ausência de mordida só porque não existe runner explícito de mutação no arquivo. Referência: `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:26`.
-
-- Ressuscitação passa pelo escritor existente; conserva ordem inicial das travas e registra REABERTURA antes do lote. Referências: `app/chamados/models.py:1611`, `:1622`, `app/chamados/services/disputa_emissao.py:1631`, `:1648`.
-
-- O teste de ressuscitação confere instante original, validação original, texto e motivo no ato; também confere idempotência. Referências: `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:214`, `:226`, `:230`. Não acusaria cegueira por remover o reset de texto nesse cenário: o universo seleciona texto `''`/NULL, portanto o mutante seria equivalente nessa fixture. Referência: `app/chamados/models.py:1533`.
-
-- Frase exigida para nascimento do juiz e registro foram incluídos. Referências: `CLAUDE.md:74`, `app/docs/CORTES.md:460`, `app/core/juizes.py:306`.
-
-Prova de sombra B1 com zero mudanças e execução da suíte de banco no hash: **[não verificado]**; `logs/` não está disponível nesta cópia. [nao verificado]
-
-## 15/11 22:27 · sessao a5ce278cd6e7 · - · - · origem=Ronald (tmux)
-
-Auditoria dos escritores, somente leitura:
-
-- **Não identifiquei escritor concreto de produção que passe a falhar pela nova recusa.** Resposta web/API normaliza e recusa vazio antes de atribuir o par completo (`app/chamados/services/disputa_emissao.py:1446`, `:1481`, `:1522`); automática recusa o par antes da escrita (`:1672`, `:1677`), com texto constante e instante não nulo do chamador (`app/api/foto_recebida.py:25`, `:42`, `:48`).
-- **Materializador permanece compatível:** chama `carimbar(..., resposta='validar')` (`app/chamados/services/materializacao.py:1283`); essa porta só acrescenta `respondida_em` quando há texto (`app/chamados/models.py:3231`), e inclui o campo no save (`:3234`, `:3253`). Absorção segue a mesma porta (`app/chamados/services/materializacao.py:567`).
-- **Carimbo pela trilha continua legal:** exige texto e ausência de instante (`app/chamados/services/disputa_emissao.py:1692`), atribui instante e salva essa metade (`:1696`, `:1698`).
-- **Validação/devolução não alteram o par:** salvam somente validação/autoria (`app/chamados/services/validacao.py:159`, `:162`, `:224`, `:227`); a recusa retorna imediatamente quando `update_fields` não toca o par (`app/chamados/models.py:3579`).
-- **Ressuscitação delega à reabertura única** (`app/chamados/models.py:1622`); esta prepara instante/texto vazios (`app/chamados/services/disputa_emissao.py:1609`), registra a foto anterior (`:1631`) e chama o executor (`:1648`). A simulação também zera os dois (`app/chamados/models.py:1555`).
-- **Reabrir fantasma, competência e resposta preservam o par:** delegam a descarimbar (`app/chamados/models.py:3416`, `:3440`, `:3433`), que zera materialização, autoria e via (`:3309`), sem mexer na resposta.
-- **Bypass físico encontrado:** `PerguntaDisputa.descarimbar_em_lote` faz `QuerySet.update` (`app/chamados/models.py:3382`), mas confere as duas metades fornecidas, ou combina a metade fornecida com a existente, antes (`:3361`). Nenhum outro bypass do par foi identificado na varredura; completude absoluta [não verificado].
-- **Migrations:** as de dados identificadas para PD só preenchem identidade (`app/chamados/migrations/0051_decisao_pergunta.py:25`); não alteram o par. Aplicação real de migrations [não verificado].
-
-**Furo de contrato herdado, confirmado por leitura:** `save(update_fields=...)` valida o par inteiro em memória (`app/chamados/models.py:3581`), mas não monta o par efetivamente persistido. Uma instância pendente com ambas as metades atribuídas pode passar na recusa e salvar só texto, deixando o banco ilegal. A linha carregada também recebe as duas metades em memória após um save parcial (`:3553`). Não identifiquei chamador atual que realize essa combinação; incidência em produção [não verificado].
-
-**Escritores dos campos:**
-
-| Campo | Escritores |
-|---|---|
-| `resposta_colab` | resposta core `app/chamados/services/disputa_emissao.py:1481`; automática `:1674`; reabertura via lote `:1609`, `:1648`; nascimento `app/chamados/models.py:2939`; save genérico `:3541` |
-| `respondida_em` | os anteriores; carimbo condicionado a texto `app/chamados/models.py:3233`; trilha `app/chamados/services/disputa_emissao.py:1696` |
-| `validada_em` | validação `app/chamados/services/validacao.py:159`; devolução `:224`; resposta nova `app/chamados/services/disputa_emissao.py:1494`; reabertura `:1609`; carimbo condicionado `app/chamados/models.py:3236`; nascimento/save genérico |
-| `materializada_em` | atribuidor único em memória `app/chamados/models.py:3200`, usado por carimbar/identidade/descarimbar; lote `:3384`; nascimento/save genérico |
-| `via_resolucao` | atribuidor `app/chamados/models.py:3202`; encerrar por fato `:3393`; relavra `app/chamados/services/relavra_via.py:125`; lote `app/chamados/models.py:3384`; nascimento/save genérico |
-
-**Atos `DecisaoPergunta`:** escrita física única em `app/chamados/models.py:4115`; chamadores em nascimento (`:3120`), ressuscitação (`:1612`), fechamento (`:1996`), retratação (`:2128`), resposta/reabertura/automática/trilha (`app/chamados/services/disputa_emissao.py:1525`, `:1631`, `:1678`, `:1699`), validação/devolução (`app/chamados/services/validacao.py:164`, `:230`), absorção (`app/chamados/services/materializacao.py:569`) e silêncio administrativo (`app/ponto/services/veredito_celula.py:195`). Existem ainda comandos antigos de preenchimento (`app/chamados/management/commands/backfill_decisoes_pergunta.py:324`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:141`), sem alteração no diff anexado.
-
-**Nota documental menor:** comentário novo diz que a resposta automática recebe “instante da foto” (`app/chamados/services/disputa_emissao.py:1671`), mas o chamador passa relógio do processamento (`app/api/foto_recebida.py:42`, `:48`).
-
-**Leitor fora de app:** `bin/censo_folha.py:28`/`:29` ainda calcula pendência e resposta somente pelo instante; migração/classe no censo ausente [não verificado].
-
-_5842 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5845 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
