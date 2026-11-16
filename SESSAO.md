@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 06:39:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1182**.
+**Medido em 16/11/2026 06:44:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1175**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1185,10 +1185,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:09:10 | Bash | Extract failures from pista log | `ssh pista log 1115183117_bb158f00 400 2>&1 \| grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" \| head -30` |
 | 19:09:06 | Bash | Check ESPERANDO, censo and pista state | `cd /home/ronald/saas-hasner && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; ls -la logs/E3-RESTO-R3/c16/censo_fronteira.r 2>&1; tail -2 logs/E3-RESTO-R3/c16/censo_fronteira.log; ssh pista estado \| grep bb158` |
 | 19:08:58 | Bash | Confirm the aval was already received and delivered | `cd /home/ronald/saas-hasner && ls -la logs/JUIZ-RESPONDIDA/censo.md logs/JUIZ-RESPONDIDA/quadro.out; grep -n "JUIZ-RESPONDIDA-CENSO" app/docs/PROMPTS.md \| head -3; grep -rn "prompts_repetidos" bin app/core 2>/dev/null \| grep -v tests \| head -3` |
-| 18:39:41 | Bash | Confirm ESPERANDO points at live producer | `cd /home/ronald/saas-hasner && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 18:39:40 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 18:39:37 | Bash | Check whether frontier censo finished | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3/c16 && tail -3 censo_fronteira.log; wc -c censo_fronteira.r 2>&1; pgrep -f censo_fronteira.q` |
-| 18:39:34 | Bash | Commit RELATO design question and check ESPERANDO | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md && git commit -q -F - <<'EOF' REGISTRO 18:4x: PERGUNTA DE DESENHO E3-RESTO-R3 (5 voltas, v5 REPROVA com 6 PROCEDE, duas classes que nao convergem); obra parada sem v6, censo Codex da fronteira rodando LEI-AKITA: origem=app/docs/RELATO.md (topo), testemunha=logs/E3-RESTO-R3/vfinal/v5.r + logs/E3-RESTO-R3/c16/triagem_v5.md, RED=n/a (registro) ...` |
-| 18:39:25 | Bash | Locate O169-FECHADA work state | `cd /home/ronald/saas-hasner && ls -d logs/O169* logs/o169* 2>/dev/null; ls -t logs/O169-FECHADA 2>/dev/null \| head; git worktree list \| grep -i 169; grep -n "O169" app/docs/RELATO.md \| cut -c1-300 \| head -5` |
-| 18:39:21 | Bash | Read the O169-FECHADA row tail | `cd /home/ronald/saas-hasner && sed -n 2114p app/docs/BACKLOG.md \| cut -c590-1400` |
-| 18:39:18 | Bash | Find O169/O168/LASTRO row states | `cd /home/ronald/saas-hasner && grep -n "^\| O169\\|^\| O168\\|^\| LASTRO\\|^\| CONTRATO-20-LASTRO" app/docs/BACKLOG.md \| cut -c1-600` |
