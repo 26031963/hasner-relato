@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 09:06:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (138.2 MB). Acoes na janela: **940**.
+**Medido em 16/11/2026 09:11:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (138.2 MB). Acoes na janela: **937**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -947,6 +947,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:27:11 | Bash | Inspect comment and F1 agent output | `cd /home/ronald/wt-bug-enc-201609; git status --porcelain \| head; grep -n "C8\\|BUG-ENC" app/ponto/tests/test_selo_chokepoint_escrita.py \| head -20; tail -c 2500 /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks/acc80d405d7f1496a.output` |
 | 21:27:01 | Bash | Read verif2 answer | `cat /home/ronald/saas-hasner/logs/ORDEM-VIVA-1511/BUG-ENC/verif2.r` |
 | 21:26:59 | Bash | Check verif2 status | `cd /home/ronald/saas-hasner; D=logs/ORDEM-VIVA-1511/BUG-ENC; ls -la $D/verif2.*; tail -3 $D/verif2.log; pgrep -af 'codex_pergunta.sh.*verif2' \| cut -c1-100; date +%H:%M` |
-| 21:07:00 | Bash | Point ESPERANDO at codex pid | `cd /home/ronald/saas-hasner; sed -i "3s/.*/ESPERANDO: codex_pergunta.sh \| pid=$(pgrep -f 'codex_pergunta.sh.*verif2' \| head -1)/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 21:06:57 | Monitor | Codex verif2 BUG-ENC | `cd /home/ronald/saas-hasner; f=logs/ORDEM-VIVA-1511/BUG-ENC/verif2.r; until [ -s $f ] && ! pgrep -f "codex_pergunta.sh.*verif2" >/dev/null; do /usr/bin/sleep 10; if ! pgrep -f "codex_pergunta.sh.*verif2" >/dev/null && [ ! -s $f ]; then echo "verif2 morreu sem resposta: $(tail -2 logs/ORDEM-VIVA-1511/BUG-ENC/verif2.log)"; exit; fi; done; echo "verif2 $(grep -m1 VEREDITO $f)"` |
-| 21:06:52 | Bash | Launch Codex delta verifier | `cd /home/ronald/saas-hasner; D=logs/ORDEM-VIVA-1511/BUG-ENC; git -C /home/ronald/wt-bug-enc-201609 diff 7976ab462 f7716c311 > $D/diff_delta2.txt; wc -l $D/diff_delta2.txt; cat > $D/verif2.q <<'EOF' Volta 2 do pre-verificador (delta), papel verificador, obra BUG-ENC-CELULAS-FORMA. Anexo: diff 7976ab462..f7716c311 (so testes). Contexto: a cura (ja verificada na volta 1) faz ponto/turnos.py::dias_enc ...` |
