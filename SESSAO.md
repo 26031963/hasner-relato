@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 05:33:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1354**.
+**Medido em 16/11/2026 05:38:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1346**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1356,11 +1356,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:46:23 | Bash | Read juiz faces and wrapper sonda options | `cd /home/ronald/saas-hasner; git show HEAD:app/chamados/juizes.py \| sed -n 1540,1566p; git show HEAD:app/chamados/juizes.py \| sed -n 865,875p; git show HEAD:app/chamados/models.py \| sed -n 3420,3432p; git grep -n "class PerguntaDisputa\\|validada_em = \\|materializada_em = " -- app/chamados/models.py \| head; grep -n "sonda" bin/codex_pergunta.sh \| head -20` |
 | 17:46:20 | Bash | Find sonda invocation form and juiz faces on HEAD | `cd /home/ronald/saas-hasner; head -5 logs/E4C/f1v10/sonda.wrap.log; head -c 600 logs/E4C/f1v10/sonda.q; echo; git grep -n "def q_respondida\\|def pergunta_viva\\|def irmas_respondidas_sem_consumo\\|def q_viva\\|def q_vivas" -- app/chamados/ \| head; git grep -n "competencia_ja_paga\\|competencia_entregue" -- app/core/juizes.py \| head -5; git grep -n "def sem_veredito_entre" -- app/chamados/models ...` |
 | 17:46:16 | Bash | Read previous F1 sonda script and launcher | `cd /home/ronald/saas-hasner; cat logs/E4C/f1v10/sonda_ato_x_projecao.py; ls logs/E4C/f1v10/; grep -n "sonda" logs/E4C/f1v10/*.sh 2>/dev/null \| head` |
-| 17:36:34 | Bash | Check push progress and ESPERANDO proof | `cd /home/ronald/saas-hasner; tail -2 logs/push_1730.log \| cut -c1-200; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 17:36:32 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 17:36:27 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 17:36:23 | SendMessage |  | `-` |
-| 17:36:17 | SendMessage |  | `-` |
-| 17:36:10 | Bash | Write triagem of v3 findings | `cd /home/ronald/saas-hasner; cat > logs/E3-RESTO-R3/c14/triagem_v3.md <<'EOF' TRIAGEM pre-verificador v3 (logs/E3-RESTO-R3/vfinal/v3.r, hash 57c1c9b94) -- REPROVA; amostra conferida na copia. G1 PROCEDE (achado 1, media): lavrar_retrato_folha.py:80 grava `lavrado_em=timezone.now()` por retrato, enquanto :49 fixou `_agora`; vigia_retido_calado.py:44-46 agrupa por DIA CIVIL de lavrado_em -> rodada q ...` |
-| 17:35:54 | Bash | Spot-check Codex v3 findings in copy | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 45,82p folha/management/commands/lavrar_retrato_folha.py; echo ----; sed -n 38,50p folha/vigia_retido_calado.py; echo ----; sed -n 174,178p folha/views_retrato.py; sed -n 205,210p folha/views_retrato.py; echo ---; sed -n 186,194p folha/fora_da_folha.py; sed -n 112,118p folha/fora_da_folha.py; sed -n 28,34p chamados/services/tarefa_do_dia.py;  ...` |
-| 17:35:47 | Bash | Read v3 verificador answer | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3/vfinal; cat v3.rc; tail -3 v3.log; wc -c v3.r; cat v3.r` |
