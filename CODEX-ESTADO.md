@@ -1,7 +1,199 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 18:02** · publicado em **16/11/2026 18:05** (UTC-3)
+> Ultima resposta processada: **16/11/2026 18:21** · publicado em **16/11/2026 18:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 18:21 · sessao 6d4997316df6 · - · - · origem=Ronald (tmux)
+
+Execução adicional concluída, sem escrita:
+
+- `python3 -B -m unittest chamados.tests.test_bug_par_sem_banco`: **RC 0, 7 testes OK**; testes em `app/chamados/tests/test_bug_par_sem_banco.py:24-185`.
+- `python3 -B -m chamados.tests.bug_par_mutantes --mutante todos`: **RC 0, 17 controles verdes e 17 mutantes mortos por asserção, todos com erros=0**; critério em `app/chamados/tests/bug_par_mutantes.py:185-215`.
+- Os cinco `c4_*`, `fundir_a_em_b`, `fundir_a_em_b_porta` e `f6_esconde` continuam **[nao verificado] em integração**: sem `--django`, o harness exclui os nomes de integração (`app/chamados/tests/bug_par_mutantes.py:139-143,178-181`).
+
+Probe AST executado confirmou que `c4_fundir_l1_em_l2` muda o retorno do helper para `bloqueada_competencia`, porém a porta continua devolvendo `bloqueada_competencia_entregue`: `_recusa_da_entrega` só distingue L5 e converte todo o restante em L1 (`app/chamados/services/validacao.py:228-230`). Portanto esse mutante tem mordida na **testemunha**, pela asserção de `app/chamados/tests/test_bug_par_volta.py:229`; a fusão efetiva na porta é coberta pelo mutante separado `fundir_a_em_b_porta`, cuja execução continua [nao verificado] (`app/chamados/tests/bug_par_mutantes.py:103-106`; `app/chamados/tests/test_bug_par_volta.py:233`).
+
+Os 17 mortos executados foram `dxg_frota`, `dxg_desligado`, `dia_civil`, `k6_so_comando`, `k6_omitido`, `unidade_sem_k6`, `marca_ignorada`, `hash_ignorado`, `bool_inteiro`, `chaves_ignoradas`, `repeticao_aceita`, `intersecao_aceita`, `selecionar_recusa`, `nova_nota`, `recalcular_f2`, `eixo_civil` e `eixo_pela_hora` (`app/chamados/tests/bug_par_mutantes.py:26-62,110-115`).
+
+## 16/11 18:20 · sessao 7bdab0342751 · UI-EDITOR-CAL-REPETIR-CONFIRMA · verificador · origem=Code
+
+**Devolvo por lacunas nos testes e pela prosa nova fora do mapa exigido pela L7.** Os casos preenchidos cobrem somente 30 dias; a sonda responde apenas pelos botões; a explicação nova está literal no template. (app/escala/tests/test_smoke_clique_folga_calendario.py:310, :324, :332, :153; app/templates/escala/folga_calendario_editar.html:131; app/docs/LEIS-UI.md:78)
+
+Execução da suíte, execução dos mutantes, histórico `71e9576bf..HEAD` e resultado em produção: **[nao verificado]**. As conclusões abaixo são de leitura do código e do patch fornecido.
+
+1) **O comportamento principal atende ao item 3; a quebra do Salvar já está implementada na cópia.**
+
+Os dois botões recebem o tamanho e chamam a mesma `fcRepetir`. Alvo vazio copia imediatamente; alvo preenchido chama `hxConfirmar`; somente resposta verdadeira executa a cópia, filtrada pelo tamanho do destino. (app/templates/escala/folga_calendario_editar.html:50, :124; app/escala/views.py:318)
+
+O Salvar já fornece `\n`, e o componente já possui `white-space:pre-line`. Portanto, nessa parte, o patch acrescenta verificação da quebra existente; não acrescenta uma correção de apresentação ao Salvar. (app/templates/escala/folga_calendario_editar.html:153; app/templates/core/_dialogo.html:122; app/escala/tests/test_smoke_clique_folga_calendario.py:294)
+
+A nova ação altera estado local e campos do formulário; a persistência continua dependendo de Salvar, pela view e pela porta existente. (app/templates/escala/folga_calendario_editar.html:127; app/escala/views.py:320, :356; app/escala/folgas.py:571)
+
+2) **Quem escreve e quem lê.**
+
+| Elemento ou dado | Quem escreve → quem lê |
+|---|---|
+| Dias persistidos por tamanho | `salvar_calendario_de_folga` grava `dias` por `update_or_create` → a view lê `cal.tamanhos` para montar o editor. (app/escala/folgas.py:594; app/escala/views.py:362) |
+| `tamanho`, `rotulo`, `n`, `marcados` do seed | A view fornece catálogo e marcações → o template escreve `#fc-seed` → o JS faz `JSON.parse` e inicializa `sel`. (app/escala/views.py:318, :363; app/templates/escala/folga_calendario_editar.html:74, :78) |
+| Estado vivo `sel[tam]` | Seed inicializa; `fcTog` altera; `copia` substitui → decisão de confirmar, texto dos dias, renderização e campos enviados leem esse estado. (app/templates/escala/folga_calendario_editar.html:79, :119, :127, :130, :131, :86, :113) |
+| Botões Repetir e parâmetro `tam` | O laço do template escreve `onclick` para 30 e 28 → clique chama `fcRepetir`; a sonda também localiza o botão por esse atributo. (app/templates/escala/folga_calendario_editar.html:50; app/escala/tests/test_smoke_clique_folga_calendario.py:144) |
+| Grade: células, número, azul e evento | `renderGrade` escreve HTML e estilos a partir de `sel` → clique chama `fcTog`; a sonda lê número, visibilidade e fundo azul. (app/templates/escala/folga_calendario_editar.html:87; app/escala/tests/test_smoke_clique_folga_calendario.py:135) |
+| Contador, marca “Vazia”, `data-fc-vazia` | Template fornece estado inicial; `renderGrade` atualiza texto, classe `hidden` e atributo → sonda lê contador; a decisão de Repetir consulta `sel`, sem reler essas marcas. (app/templates/escala/folga_calendario_editar.html:41, :95, :130; app/escala/tests/test_smoke_clique_folga_calendario.py:133) |
+| Chips e canônico | `renderGrade` escreve ambos; `nomeBase` lê o nome para o canônico → o × do chip chama `fcTog`. (app/templates/escala/folga_calendario_editar.html:80, :99, :106) |
+| Campos `dias_<tam>` em `#fc-hidden` | `syncHidden` escreve checkboxes marcados com nome e valor; `fcModo` os limpa no modo semana/dia → sonda lê valores; submissão serializa; view lê `getlist` e entrega à porta. (app/templates/escala/folga_calendario_editar.html:110, :189; app/escala/tests/test_smoke_clique_folga_calendario.py:129, :63; app/escala/views.py:342, :356) |
+| Texto dos modais | Editor compõe mensagem com rótulos/dias e frases literais → `hxConfirmar` escreve `txt.textContent` → sonda lê `textContent` e `innerText`, considerando CSS. (app/templates/escala/folga_calendario_editar.html:131, :153; app/templates/core/_dialogo.html:190; app/escala/tests/test_smoke_clique_folga_calendario.py:114, :150) |
+| Rótulos e respostas | Editor passa “Substituir”; componente escreve o botão positivo; markup fornece “Cancelar” → sonda lê e clica; handlers resolvem `true`/`false`; editor copia somente com `ok`. (app/templates/escala/folga_calendario_editar.html:132; app/templates/core/_dialogo.html:130, :157, :191; app/escala/tests/test_smoke_clique_folga_calendario.py:151) |
+| Modal aberto, promessa e foco | Markup inicia `hidden`; `hxConfirmar` guarda foco/resolver e abre; `fechar` limpa pendência, esconde e restaura foco → handlers consultam a pendência; sonda consulta `.hidden`. (app/templates/core/_dialogo.html:119, :149, :189; app/escala/tests/test_smoke_clique_folga_calendario.py:148, :156) |
+| Escape e clique fora | Handlers do componente chamam `fechar(false)` → promessa entrega falso ao editor, que preserva a grade. (app/templates/core/_dialogo.html:159; app/templates/escala/folga_calendario_editar.html:133) |
+| Autorização do Salvar | Callback escreve `confirmado` apenas durante o reenvio; listener do submit lê a flag e o modo, e calcula grades vazias usando `sel`. (app/templates/escala/folga_calendario_editar.html:145, :159) |
+| Dados e testemunhas dos testes | Fixture escreve usuário/calendários, incluindo 30 dias com `[8]`; sonda escreve `antes/logo/depois/conta/grade/modal/aberto` em `HX-CLIQUE`; Python extrai e desserializa para asserções. (app/escala/tests/test_smoke_clique_folga_calendario.py:243, :143, :156, :229) |
+
+A leitura da marca visual também inclui as seções visíveis pelo atributo `data-fc-tamanho`; esse resultado é escrito em `HX-CLIQUE-VIS` e conferido contra `[28,30,31]`. (app/escala/tests/test_smoke_clique_folga_calendario.py:68, :215, :288)
+
+3) **Os testes mordem parcialmente. As passagens abaixo são deduções estáticas; execução: [nao verificado].** [nao verificado]
+
+| Mutante | Resultado deduzido |
+|---|---|
+| Copiar antes de perguntar | **Cai no cenário preenchido de 30 dias:** `logo` precisa continuar `[8]` antes da resposta. (app/escala/tests/test_smoke_clique_folga_calendario.py:313) |
+| Cancelar também copia | **Cai em 30 dias:** exige preservação dos campos, contador e grade desenhada. (app/escala/tests/test_smoke_clique_folga_calendario.py:318) |
+| Confirmar somente no Repetir de 30 | **Passa pelos cenários presentes.** Trocar a guarda por `tam === 28 || sel[tam].size === 0` dispensa confirmação em fevereiro preenchido; nenhum teste prepara esse estado. (app/templates/escala/folga_calendario_editar.html:130; app/escala/tests/test_smoke_clique_folga_calendario.py:310, :324, :332) |
+| Escape/clique fora confirmam | **Não é exercitado pela sonda.** Ela aciona somente o ID de resposta; os handlers atuais estão corretos, mas essas saídas não têm testemunha neste smoke. (app/escala/tests/test_smoke_clique_folga_calendario.py:153, :189; app/templates/core/_dialogo.html:159) |
+| Modal inteiro com `opacity:0` | **Cai:** a sonda examina opacidade do texto e ancestrais; retorna uma linha `SEM-CAIXA`, contra a exigência de duas. (app/escala/tests/test_smoke_clique_folga_calendario.py:107, :116, :294, :317) |
+| Modal inteiro com `visibility:hidden` herdado | **Cai pelo mesmo mecanismo:** verifica a visibilidade computada do texto. (app/escala/tests/test_smoke_clique_folga_calendario.py:108, :116) |
+| Somente botões invisíveis por CSS | **Escapa dessa medição:** os botões têm apenas `textContent` lido e recebem `.click()` programático; não passam por `visivel`. (app/escala/tests/test_smoke_clique_folga_calendario.py:150) |
+
+Logo, a v3 fecha os dois mutantes CSS integrais apontados, mas não fecha a cobertura dos dois Repetir nem das duas saídas alternativas do modal. (app/escala/tests/test_smoke_clique_folga_calendario.py:107, :310, :332, :153)
+
+4) **Classes de reprovação.**
+
+- **Diálogo nativo:** não aparece no novo caminho; usa `hxConfirmar`. Há guarda global contra os formatos nativos enumerados. (app/templates/escala/folga_calendario_editar.html:131; app/core/tests/test_contract_l8_dialogo.py:42, :56, :91)
+- **L7:** a mensagem é dinâmica e chega ao componente, mas a explicação “Repetir troca esses dias…” nasce literal no template, sem mapa compartilhado com a decisão. Isso não satisfaz integralmente a L7. A prosa antiga já enfileirada permanece assunto separado. (app/templates/escala/folga_calendario_editar.html:130; app/docs/LEIS-UI.md:78; app/docs/BACKLOG.md:822)
+- **Tocar `core/_dialogo.html`:** não há hunk desse arquivo no patch fornecido; integridade histórica do intervalo Git: **[nao verificado]**. A quebra já disponível está em app/templates/core/_dialogo.html:122.
+- **Selo sem mordida:** não é inteiramente vazio — confere formulário, contador, grade desenhada e texto renderizado —, mas deixa os mutantes identificados acima. (app/escala/tests/test_smoke_clique_folga_calendario.py:313, :317, :318, :329)
+- **Relógio solto:** os novos cenários usam dias numéricos fixos e GET; os timers têm orçamento virtual de 4000 ms. Não há dependência do “hoje” nessas novas asserções; passagem na régua temporal: **[nao verificado]**. (app/escala/tests/test_smoke_clique_folga_calendario.py:199, :302, :310, :324)
+- **Só uma casca:** o editor estende literalmente `base.html`; não há segunda casca selecionada nesse template. Ambas as cascas incluem o componente comum, com contrato existente. Portanto, não identifico meia correção entre cascas nesta alteração local. (app/templates/escala/folga_calendario_editar.html:1; app/templates/base.html:388; app/templates/base_app.html:145; app/core/tests/test_contract_l8_dialogo.py:146)
+
+5) **`padrao=fonte unica`: compatível com o estado; incompleto para a mensagem.**
+
+O termo existe no glossário. A nova decisão, os dias nomeados e a cópia consultam a mesma fonte viva `sel`; o modal continua delegado ao componente único. Nesse sentido restrito, o diff mantém a fonte única, embora não introduza uma centralização nova. (app/docs/GLOSSARIO.md:11; app/templates/escala/folga_calendario_editar.html:127, :130, :131)
+
+O texto explicativo continua fora de um mapa compartilhado com a decisão, portanto o rótulo não resolve a pendência da L7. A mensagem efetiva do commit: **[nao verificado]**. (app/templates/escala/folga_calendario_editar.html:132; app/docs/LEIS-UI.md:78)
+
+VEREDITO: DEVOLVE -- fevereiro preenchido sem cobertura (app/escala/tests/test_smoke_clique_folga_calendario.py:332); Escape/clique fora sem cobertura (app/escala/tests/test_smoke_clique_folga_calendario.py:153); explicação nova fora do mapa exigido pela L7 (app/templates/escala/folga_calendario_editar.html:132; app/docs/LEIS-UI.md:78).
+
+## 16/11 18:20 · sessao b1ac6c67cd5d · - · - · origem=Ronald (tmux)
+
+Mapa dos leitores/escritores, sem achado novo de compatibilidade nos consumidores:
+
+1. **Estados K6 / retornos.** `_k6_que_barra` produz `None | (estado, texto)`, distinguindo ausência de dia e entrega, e conserva o desvio das 163 (`app/chamados/services/materializacao.py:792`, `:800`, `:804`, `:806`). `entrega_que_barra_a_validacao` apenas compõe essa consulta para pergunta + irmã (`app/chamados/services/validacao.py:209`, `:221`). Seus leitores encontrados são a testemunha, que separa `[0]`/`[1]`, e as duas guardas da porta, que usam `_recusa_da_entrega` (`app/chamados/services/materializacao.py:880`; `app/chamados/services/validacao.py:648`, `:685`, `:224`). **Não encontrei leitor esperando `str` da entrega** nesses usos (`app/chamados/services/materializacao.py:882`; `app/chamados/services/validacao.py:228`, `:230`).
+
+   `_competencia_que_barra` **continua devolvendo texto**, por contrato e implementação: extrai `_k6[1]`, ou compõe F6, ou devolve `''` (`app/chamados/services/materializacao.py:812`, `:821`, `:828`, `:829`). Seus leitores continuam corretamente textuais: detalhe da testemunha no par/avulso e erro da unidade (`app/chamados/services/materializacao.py:903`, `:905`, `:927`, `:929`, `:1794`, `:1796`). O mock textual remanescente do teste é legítimo porque mira esse helper, não a entrega (`app/chamados/tests/test_bug_par_sem_banco.py:152`).
+
+2. **Tela e adaptadores.** O card consulta a testemunha por filtro e decide pelos estados; os dois novos estados mostram detalhe e tiram Validar (`app/chamados/templatetags/chamados_tags.py:131`, `:136`, `:139`; `app/templates/chamados/partials/_pergunta_card.html:43`, `:44`, `:47`). `fio.py` publica `estado_aplicacao` e converte ausência/falha em indisponível (`app/chamados/services/fio.py:373`, `:375`, `:378`). O modal mostra o detalhe pelos estados e suprime Validar pelos estados (`app/templates/chamados/partials/modal_fio.html:230`, `:252`, `:274`). A casca da ação usa `estado`, `ok`, `msg` e erros; estados K6 desconhecidos individualmente caem corretamente no `ok=False` (`app/chamados/services/acoes_disputa.py:23`, `:32`, `:50`).
+
+   **Não encontrei decisão da tela pelo texto de `detalhe`** nos leitores acima; os helpers de espera também conferem primeiro o estado e só então devolvem o detalhe (`app/chamados/services/materializacao.py:757`, `:758`, `:772`, `:773`). O explicador consulta os estados de recusa terminais e a mesma espera; perguntas simplesmente respondidas continuam no caminho genérico “aguarda validação” (`app/chamados/services/explicador.py:100`, `:124`, `:125`, `:131`, `:133`).
+
+3. **Contextvar / sentinela.** A contextvar nasce com `default=None`; a única instalação está em `_validar_o_par`; a lista recebe apenas conflitos traduzidos como `COMPETENCIA_APROVADA`; a leitura pós-rollback e o reset ficam na porta (`app/chamados/services/materializacao.py:1759`, `:1446`, `:1448`, `:1449`; `app/chamados/services/validacao.py:545`, `:555`, `:563`). A sentinela é criada, devolvida e testada por identidade apenas nesse fluxo; seu leitor evita rodar a metade sozinha (`app/chamados/services/validacao.py:519`, `:560`, `:680`, `:682`).
+
+4. **`recusa_motivo`.** O escritor usado pelo delta continua `_carimbar_recusa`: relê banco, limita 240, classifica pelo catálogo, grava motivo e chama a porta de nota; só colisão carimba identidade (`app/chamados/services/materializacao.py:1619`, `:1625`, `:1626`, `:1627`, `:1629`, `:1635`, `:1638`, `:1643`). Os demais caminhos existentes são: pendência de marco no materializador; recusa humana na validação; escape da resposta; duplicata via porta de identidade (`app/chamados/services/materializacao.py:1326`; `app/chamados/services/validacao.py:823`; `app/chamados/services/disputa_emissao.py:1511`; `app/chamados/services/fio.py:1404`; `app/chamados/models.py:3297`).
+
+   Leitores relevantes: devolução decide por motivo preenchido e copia-o no ato; contador de paridade lê tradução; modal/card de atendimento exibem motivo; explicador o exibe em pendência; comando o fotografa (`app/chamados/services/validacao.py:262`, `:278`; `app/chamados/services/materializacao.py:300`; `app/templates/chamados/partials/modal_fio.html:226`; `app/templates/chamados/partials/_card_atendimento.html:192`; `app/chamados/services/explicador.py:113`; `app/chamados/management/commands/bug_par_103.py:69`). Fora do delta existe leitor textual por regex em `flip_auto`, mas restrito à via de paridade terminal, não aos novos estados/detalhe (`app/ponto/services/flip_auto.py:128`, `:132`).
+
+5. **`validada_em`.** A assinatura do admin é escrita por `_carimbar_validacao`, com ato VALIDACAO no mesmo instante; a devolução limpa a assinatura e registra DEVOLUCAO com o motivo persistido (`app/chamados/services/validacao.py:161`, `:168`, `:171`, `:173`, `:269`, `:272`, `:275`, `:278`). A devolução das 103 também limpa; resposta nova e reabertura limpam pelos caminhos preexistentes (`app/chamados/services/validacao.py:345`; `app/chamados/services/disputa_emissao.py:1494`, `:1609`). O modelo ainda oferece a assinatura opcional no carimbo com `resposta='validar'`, restauração em memória e limpeza em lote da ressuscitação; não nasceram no delta (`app/chamados/models.py:3244`, `:3245`, `:3274`, `:1629`).
+
+   Leitores que importam aqui: porta evita revalidar, card/modal distinguem assinatura, juiz de vida considera assinatura, laço exige assinatura e relê após trava; passivo fotografa-a na reversão (`app/chamados/services/validacao.py:806`, `:971`; `app/templates/chamados/partials/_pergunta_card.html:20`, `:42`; `app/templates/chamados/partials/modal_fio.html:228`; `app/chamados/juizes.py:1389`; `app/chamados/services/materializacao.py:2029`, `:2046`; `app/chamados/services/passivo_validado.py:66`). Outros leitores existentes incluem estado projetado, estatísticas do painel e verbos (`app/chamados/models.py:3151`; `app/chamados/services/painel.py:270`; `app/chamados/services/verbos.py:264`).
+
+6. **`materializada_em`.** A atribuição canônica permanece `_escrever_carimbo`; `carimbar`, `carimbar_identidade`, `descarimbar` e lote administram o ato conjunto instante/autor/via; o delta usa essas portas (`app/chamados/models.py:3183`, `:3207`, `:3209`, `:3239`, `:3293`, `:3391`). O estado da pergunta/testemunha lê carimbo + via, não presume que qualquer carimbo significa batida gravada (`app/chamados/models.py:3153`; `app/chamados/services/materializacao.py:856`, `:862`, `:865`).
+
+   No laço, seleção exige carimbo nulo e a releitura após trava evita executar a irmã já gravada; no passivo, o universo vem do juiz de lastro, contradiz carimbo falso, e a releitura também evita replantio pela irmã (`app/chamados/services/materializacao.py:2030`, `:2039`, `:2040`, `:2043`; `app/chamados/services/passivo_validado.py:4`, `:534`, `:535`, `:537`). A guarda de espera da escrita usa o derivador sem o atalho do carimbo justamente para o passivo (`app/chamados/services/materializacao.py:761`, `:764`, `:772`).
+
+7. **Nota e atos.** O delta chama `_carimbar_recusa`, que chama `nota.anexar_ocorrencia` com `objeto_ref=pergunta:código`; a porta de notas produz chave por chamado/tipo/ref/autor e faz create/get em duplicação (`app/chamados/services/materializacao.py:1643`; `app/chamados/services/nota.py:62`, `:75`, `:95`, `:100`, `:103`, `:107`, `:109`). O fio carrega followups e os templates mostram conteúdo; não encontrei novo escritor direto da nota (`app/chamados/services/fio.py:202`, `:206`; `app/templates/chamados/partials/modal_fio.html:500`; `app/templates/chamados/partials/_card_atendimento.html:53`).
+
+   A porta única de escrita dos atos continua `DecisaoPergunta.registrar`, com `bulk_create`; os atos VALIDACAO/DEVOLUCAO continuam chamados pelos escritores canônicos da validação (`app/chamados/models.py:4110`, `:4120`; `app/chamados/services/validacao.py:173`, `:275`). Leitores fora diff: histórico de respostas; rótulo das 103; tarefa do dia com a última decisão e horizonte; backfills/foto de auditoria (`app/chamados/models.py:3667`, `:3675`; `app/chamados/services/materializacao.py:275`; `app/chamados/services/tarefa_do_dia.py:158`, `:165`, `:167`, `:421`, `:430`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`; `app/chamados/services/foto_e4b.py:280`).
+
+8. **Contador e comando.** O contador conserva U163 por PK, distribui estados não previstos em `outras`, conserva espera somando em pendentes, e separa as 103 sem dia/entregues pelo retorno de `competencia_do_fato` (`app/chamados/services/materializacao.py:321`, `:330`, `:331`, `:333`, `:339`, `:344`, `:347`, `:351`, `:356`). O comando usa a mesma composição de competência, lista fora163 sem dia/entregue e produz linha falante; não consome o retorno alterado da entrega (`app/chamados/management/commands/bug_par_103.py:58`, `:59`, `:62`, `:71`, `:74`, `:75`, `:77`).
+
+**Classificação textual existente, distinta de decisão da tela:** `traduzir_recusa` classifica texto por marcas; c4 chama esse catálogo, sem criar classificador paralelo; o passivo primeiro lê mudança de via e só depois traduz o erro (`app/chamados/catalogo/recusa.py:96`, `:100`, `:101`; `app/chamados/services/materializacao.py:1448`; `app/chamados/services/passivo_validado.py:140`, `:143`, `:144`).
+
+## 16/11 18:20 · sessao 6d4997316df6 · - · - · origem=Ronald (tmux)
+
+1. **Bloqueia: prova de integração executada ausente [nao verificado].** Os cinco `c4_*`, `fundir_a_em_b`, `fundir_a_em_b_porta` e `f6_esconde` exigem `--django` (`app/chamados/tests/bug_par_mutantes.py:139-143,172-181`); não executei porque o runner abre banco e cria diretórios (`app/config/settings/ci.py:6-18,26-33`). Não declarar esses mutantes mortos por asserção sem a execução autorizada e sua evidência [nao verificado].
+
+2. **Âncoras conferidas em memória; nenhum erro de alvo encontrado.** Todos os nove alvos têm exatamente uma ocorrência no arquivo e na função declarada; o código mutado compila e o teste alvo existe: `app/chamados/tests/bug_par_mutantes.py:33-34,94-106,123-137`. Correspondências:
+   
+   | Mutante | Ponto efetivamente alterado | Asserção que deve matá-lo; integração ainda [nao verificado] |
+   |---|---|---|
+   | `c4_fundir_l1_em_l2` | `materializacao.py:806` | `test_bug_par_volta.py:229` |
+   | `c4_motivo_l2_paridade` | `materializacao.py:1447` desativa registro da recusa | `test_bug_par_volta.py:258` |
+   | `c4_desligar_portao_l3` | `materializacao.py:742` elimina pertencimento das divergências | `test_bug_par_volta.py:281` |
+   | `c4_barrar_l4` | `materializacao.py:919`, ramo aplicável do **par** | `test_bug_par_volta.py:293` |
+   | `c4_fundir_l5_em_l1` | `materializacao.py:804` | `test_bug_par_volta.py:307` |
+   | `fundir_a_em_b` | `materializacao.py:882` | `test_bug_par_volta.py:229` |
+   | `fundir_a_em_b_porta` | `validacao.py:230` | `test_bug_par_volta.py:233` |
+   | `k6_omitido` | `materializacao.py:805` | **EXECUTADO: AssertionError**, `test_bug_par_sem_banco.py:143`; controle verde, mutante falhas=1/erros=0 | [nao verificado]
+   | `f6_esconde` | `materializacao.py:904-905`, F6 do par | `test_bug_par_volta.py:247` |
+
+   O harness muta fontes e `__code__` somente em memória, restaura ambos e exige `failures` sem `errors`/`skipped`; erro não conta como morte (`app/chamados/tests/bug_par_mutantes.py:192-217`).
+
+3. **Fila: L4 não cobra os atos na própria linha da matriz.** O teste cobra retorno, batidas, carimbos e via, mas seu helper não verifica `DecisaoPergunta`; remover os atos poderia passar essa linha (`app/chamados/tests/test_bug_par_volta.py:288-297`; `app/chamados/tests/test_bug_par_projetado.py:103-110`). Acrescentar asserção de `VALIDACAO` nas duas metades; existe cobertura semelhante em outro teste, fora da linha L4 (`app/chamados/tests/test_bug_par_projetado.py:144-146`).
+
+4. **Fila: L3 pode passar com a espera sem texto na tela.** O helper calcula “mostra detalhe”, porém L3 descarta esse terceiro resultado e cobra apenas botão/atributo de espera (`app/chamados/tests/test_bug_par_volta.py:207-209,280-282`). Cobrar também o detalhe nos dois HTMLs.
+
+5. **Fila: L5 não prova “K6 não consultado”.** O teste cobra estado, detalhe, ocultação e persistência, mas não verifica chamadas ao juiz (`app/chamados/tests/test_bug_par_volta.py:303-313`). Consultar K6 indevidamente antes de devolver L5 poderia passar; limpar o mock e acrescentar `assert_not_called()` nesse cenário (`app/chamados/tests/test_bug_par_volta.py:28-30`).
+
+6. **Fila: F4 prova zero do recorte, mas a invariância real de entrega fica limitada pelo mock.** A sequência pendentes 1→0, resolvidas 0→1 e conservação do recorte está cobrada (`app/chamados/tests/test_bug_par_volta.py:396-407`); porém `competencia_entregue` é substituído por retorno fixo `False` na fixture ancestral (`app/chamados/tests/test_bug_par_projetado.py:46-53`). A igualdade antes/depois comprova o resultado simulado; alteração do estado real de entrega permanece [nao verificado]. Para prova mais forte, usar a autoridade real com fixture de entrega controlada.
+
+7. **Sem achado adicional na estrutura das linhas L1/L2/L5.** L1 e L5 cobram estado da testemunha, estado próprio da porta, detalhe nos dois HTMLs, ausência de Validar da pergunta examinada e fotografia persistida; L2 cobra testemunha `bloqueada_competencia`, porta `nao_gravou`, motivo/nota/DEVOLUCAO `COMPETENCIA_APROVADA`, atos `VALIDACAO→DEVOLUCAO`, ausência de carimbos/batidas e irmã preservada (`app/chamados/tests/test_bug_par_volta.py:203-215,222-273,299-313`). A fotografia das notas contém apenas PKs, portanto alteração do conteúdo de nota existente escaparia dessa fotografia (`app/chamados/tests/test_bug_par_volta.py:212-215`).
+
+8. **Precedência cobrada parcialmente de forma explícita.** A testemunha é testada para F6 sobre divergência U163, depois K6 entregue e sem dia sobre F6; a porta é cobrada para F6 sobre divergência (`app/chamados/tests/test_bug_par_volta.py:315-338`). Ordem invertida de clique/retry está testada para sucesso, mas L2 novo só executa saída primeiro, irmã inicialmente não validada (`app/chamados/tests/test_bug_par_volta.py:44-66,244-273`). As variantes L2 com volta primeiro, irmã já validada/gravada, retry, passivo e laço não ficam demonstradas por esses testes [nao verificado].
+
+## 16/11 18:19 · sessao 01b191d47538 · - · - · origem=Ronald (tmux)
+
+Mapa de escritores/leitores:
+
+| Dado/DOM | Escritor | Leitor |
+|---|---|---|
+| Dias persistidos por tamanho | `salvar_calendario_de_folga` usa `update_or_create`, `app/escala/folgas.py:594` | View lê `cal.tamanhos`, `app/escala/views.py:362`; modelo define `tamanho_mes/dias`, `app/escala/models.py:1569` |
+| Tamanho, rótulo e dias iniciais | View cria `tamanhos`, `app/escala/views.py:363`; catálogo local `TAMS`, `app/escala/views.py:318` | Template cria `#fc-seed`, `app/templates/escala/folga_calendario_editar.html:74` |
+| Estado vivo `sel[tam]` | Inicialização do seed, `app/templates/escala/folga_calendario_editar.html:79`; clique altera em `:119`; cópia substitui em `:127` | Decisão de perguntar em `:130`; dias do texto em `:131`; renderização em `:86`; inputs enviados em `:113` |
+| Grade: células, dias, azul, eventos | `renderGrade`, `app/templates/escala/folga_calendario_editar.html:87` | Clique chama `fcTog`, `:89`; sonda lê células/CSS/dias, `app/escala/tests/test_smoke_clique_folga_calendario.py:135` |
+| Contador, marca vazia e atributo `data-fc-vazia` | Template inicial em `app/templates/escala/folga_calendario_editar.html:41`; atualizados por `renderGrade`, `:95` | Sonda lê contador, `app/escala/tests/test_smoke_clique_folga_calendario.py:133`; guarda do Repetir **lê `sel`**, `app/templates/escala/folga_calendario_editar.html:130` |
+| Chips e canônico | `renderGrade`, `app/templates/escala/folga_calendario_editar.html:99` | Chip chama `fcTog`, `:102`; nome alimenta canônico por `nomeBase`, `:80` |
+| Checkboxes ocultos `dias_<tam>` | `syncHidden`, `app/templates/escala/folga_calendario_editar.html:110` | Sonda lê em `app/escala/tests/test_smoke_clique_folga_calendario.py:129`; POST lido pela view em `app/escala/views.py:342`, enviado à porta em `:356` |
+| Mensagem do Repetir | Chamador concatena rótulo, dias ordenados e duas frases, `app/templates/escala/folga_calendario_editar.html:131` | `hxConfirmar` escreve `txt.textContent`, `app/templates/core/_dialogo.html:190`; sonda lê `textContent/innerText`, `app/escala/tests/test_smoke_clique_folga_calendario.py:150` |
+| Verbo “Substituir” | Chamador, `app/templates/escala/folga_calendario_editar.html:132`; componente escreve `sim.textContent`, `app/templates/core/_dialogo.html:191` | Sonda lê, `app/escala/tests/test_smoke_clique_folga_calendario.py:151`; clique resolve verdadeiro em `app/templates/core/_dialogo.html:157` |
+| “Cancelar” | Markup, `app/templates/core/_dialogo.html:130` | Sonda lê, `app/escala/tests/test_smoke_clique_folga_calendario.py:152`; clique resolve falso em `app/templates/core/_dialogo.html:158` |
+| Estado aberto/fechado | Markup inicia `hidden`, `app/templates/core/_dialogo.html:119`; abertura em `:193`; fechamento em `:152` | Sonda lê `.hidden`, `app/escala/tests/test_smoke_clique_folga_calendario.py:148`, `:156` |
+| Promessa pendente e foco | `hxConfirmar` captura foco e resolver, `app/templates/core/_dialogo.html:189`, `:194` | `fechar` limpa pendência/restaura foco/resolve, `:149`; Escape resolve falso em `:161`; fundo resolve falso em `:159`; chamador copia só se `ok`, `app/templates/escala/folga_calendario_editar.html:133` |
+
+Conclusões:
+
+- Os dois botões usam a mesma função parametrizada: template omite apenas tamanho 31, `app/templates/escala/folga_calendario_editar.html:50`; entradas 30 e 28 vêm da view, `app/escala/views.py:318`. A implementação pergunta sobre alvo preenchido e só copia depois do verdadeiro, `app/templates/escala/folga_calendario_editar.html:126`.
+- A quebra do componente **já existe** por `white-space:pre-line`, `app/templates/core/_dialogo.html:122`. O novo texto fornece LF, `app/templates/escala/folga_calendario_editar.html:131`; o Salvar já fornecia LF, `:153`. Portanto o diff acrescenta medição da quebra anterior do Salvar, e usa o mecanismo anterior no Repetir; não muda CSS do componente, conforme o diff fornecido [não verificado quanto ao histórico Git].
+- Não aparece diálogo nativo no novo caminho: chama `hxConfirmar`, `app/templates/escala/folga_calendario_editar.html:131`; L8 está em `app/docs/LEIS-UI.md:87`.
+- Sobre L7: o texto é dinâmico e aparece no componente, porém contém frases literais no template, `app/templates/escala/folga_calendario_editar.html:131`; não sai de mapa compartilhado com a decisão, como exige `app/docs/LEIS-UI.md:78`. A prosa persistente da marca vazia (`:48`) e instrução dos chips (`:105`) são anteriores ao diff fornecido [não verificado quanto ao histórico Git].
+- A tela usa somente `base.html` por declaração fixa, `app/templates/escala/folga_calendario_editar.html:1`; não usa `base_tpl`. O componente é compartilhado pelas duas cascas, `app/templates/base.html:388`, `app/templates/base_app.html:145`, mas não é modificado no diff fornecido [não verificado quanto ao histórico Git]. Não há segundo caminho efetivo deste editor para `base_app.html`, `app/templates/escala/folga_calendario_editar.html:1`.
+- `fonte unica` é alias válido do glossário, `app/docs/GLOSSARIO.md:11`. O diff **preserva** a fonte viva `sel` e reutiliza o componente; sua mudança concreta é acrescentar confirmação antes de substituir, `app/templates/escala/folga_calendario_editar.html:124`. Não há extração/centralização de fontes duplicadas nesse trecho. A correspondência do termo com o compromisso descrito pelo commit é [não verificado], pois não foi fornecida mensagem do commit.
+
+## 16/11 18:18 · sessao 18fde6552d64 · - · - · origem=Ronald (tmux)
+
+- **Lacuna bloqueante: confirmação só em um Repetir passa por inspeção estática.** Os únicos alvos preenchidos testados são de 30 dias, tanto servidor quanto clique; fevereiro só aparece vazio. Mutante `if (tam === 28 || sel[tam].size === 0) { copia(); return; }` preserva os cenários exercitados e dispensa indevidamente a confirmação em fevereiro. (`app/escala/tests/test_smoke_clique_folga_calendario.py:309`, `:324`, `:332`; `app/templates/escala/folga_calendario_editar.html:130`)
+
+- **Perguntar depois de copiar e Cancelar que copia são mordidos em 30 dias.** O teste exige `[8]` antes, logo após o clique e depois de Cancelar, além da contagem e grade pintada. (`app/escala/tests/test_smoke_clique_folga_calendario.py:311`, `:313`, `:318`, `:319`, `:320`)
+
+- **Escape/clique fora: implementação correta, teste específico ausente.** O componente resolve `false` nessas duas saídas; a sonda só aciona os botões por ID. Mutar esses handlers para resolver `true` não é exercitado pelo smoke desta obra. (`app/templates/core/_dialogo.html:159`, `:161`; `app/escala/tests/test_smoke_clique_folga_calendario.py:153`, `:189`)
+
+- **V3 fecha modal integralmente invisível por `opacity:0` ou `visibility:hidden`.** `visivel` verifica caixa, visibility calculada do texto e opacity de todos os ancestrais; a falha produz uma linha `SEM-CAIXA`, contra a exigência de duas linhas. (`app/escala/tests/test_smoke_clique_folga_calendario.py:107`, `:116`, `:294`, `:317`)
+
+- **Limite de visibilidade:** esconder só os botões ainda escapa: a sonda lê `textContent` e executa `.click()` programático sem verificar caixa dos botões. `color:transparent`/recorte também não entram no predicado de visibilidade. (`app/escala/tests/test_smoke_clique_folga_calendario.py:108`, `:110`, `:151`, `:153`)
+
+- **Relógio:** espera assíncrona usa timers de 200 ms com orçamento virtual de 4000 ms; os novos testes de Repetir fazem GET e não reenviam POST. Não há dependência temporal de calendário nessas novas asserções. (`app/escala/tests/test_smoke_clique_folga_calendario.py:147`, `:158`, `:199`, `:302`)
+
+- **Uma casca é adequada ao editor:** o template estende literalmente `base.html`; a view não escolhe `base_app.html`. As duas cascas incluem o componente comum, defendidas pelo contrato existente. (`app/templates/escala/folga_calendario_editar.html:1`; `app/escala/views.py:369`; `app/core/tests/test_contract_l8_dialogo.py:146`)
+
+- **Diálogo nativo:** a chamada nova usa `hxConfirmar`; existe guarda global sobre templates/JS contra `confirm`, `alert`, `prompt` e `hx-confirm`. (`app/templates/escala/folga_calendario_editar.html:131`; `app/core/tests/test_contract_l8_dialogo.py:42`, `:56`, `:91`)
+
+Execução dos testes e dos mutantes: **[não verificado]**; análise exclusivamente estática, sem criar, editar ou apagar arquivos. [nao verificado]
 
 ## 16/11 18:02 · sessao fbc0b0495986 · UI-EDITOR-CAL-REPETIR-CONFIRMA · verificador · origem=Code
 
@@ -602,157 +794,4 @@ Testes com predicados que a B2 revê: [nao verificado]
 
 Execução e aprovação dos testes neste hash: **[nao verificado]**. [nao verificado]
 
-## 16/11 17:11 · sessao bc6d28a885cf · - · - · origem=Ronald (tmux)
-
-Mapa estático dos efeitos; quantidades em aberta/ENTREGUE, confirmação dos PK 38251/38252 e prova de “0 em ENTREGUE”: **[nao verificado]**.
-
-| Leitor atual → caminho | Efeito que a sombra precisa observar |
-|---|---|
-| `sem_veredito_entre`: `I OU T` (`app/chamados/models.py:1922`) → `pode_fechar` (`:1934`) / `fechar` (`:1967`) | Ao liberar a porta, grava `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` (`app/chamados/models.py:2013`); signal tenta reconciliar o pai e escreve nota somente se fechar (`app/chamados/signals.py:43`). |
-| Mesma lista → irmãs (`app/chamados/juizes.py:2105`) → retenção (`app/chamados/reconciliador.py:448`) | Pode deixar de reter `_retratar`, que chama transição para resolvido (`app/chamados/reconciliador.py:519`, `:524`); também pode liberar encerramento forçado (`:493`, `:497`). |
-| Mesma lista → irmãs → materialização (`app/chamados/services/materializacao.py:768`) | Pode liberar reconciliação de destino/clones (`app/chamados/services/materializacao.py:777`). |
-| Mesma lista → CSF (`app/ponto/supra_juiz.py:573`, `:574`, `:588`) → gate do pai (`app/chamados/models.py:719`) | Pode retirar recusa `conversa_exige_decisao_humana` e a nota “Chamado mantido aberto” (`app/chamados/models.py:723`, `:735`). Este é um leitor transitivo adicional à enumeração explícita do censo. |
-| Mesma lista → desligamento (`app/colaboradores/services/desligamento.py:165`) | Pode liberar fechamento da disputa (`:167`); o encerramento dos chamados passa ainda por outra porta/gate (`:187`). |
-| Mesma lista ignorando tranca → medição (`app/chamados/services/competencia_trancada.py:126`) | Muda IDs `perguntas_com_resposta_sem_veredito`/`decidir_pelo_dp` (`:137`); esses IDs alimentam Pauta DP (`:232`, `:246`, `:256`); fecho da disputa consulta novamente `pode_fechar` (`:227`). |
-| D em `veredito_orfa` (`app/chamados/reconciliador.py:1083`) → consumidor | Pode alterar elegibilidade de `encerrar_fantasma` (`:1148`); a disputa resultante volta a consultar lista sem veredito e fechamento (`:1164`, `:1171`). |
-| D em `lavrar_sem_turno_aberto` (`app/chamados/reconciliador.py:365`) | Pode alterar elegibilidade de carimbo (`:406`), seguido de fechamento da disputa (`:412`). |
-| C em beco (`app/chamados/services/becos.py:30`) | Muda classificação (`:33`); quando fechável, executa resolver (`:54`) e fecho (`:56`, `:57`). O evento da pergunta agenda isso em `on_commit` (`app/chamados/signals.py:240`). |
-| C no lote materializável (`app/chamados/services/materializacao.py:1376`) | Muda seleção para `_materializar_uma` (`:1382`), seguida do juiz de fechamento (`:1384`). D no plantio hora (`:835`) hoje recusa sem texto, carimbando recusa (`:842`). |
-| C na regularização (`app/chamados/services/acoes_disputa.py:130`; `app/chamados/services/fio.py:698`) | Controla entrada em materialização (`:139`; `:708`) e nos pushes Web/FCM (`acoes_disputa.py:150`, `:156`; `fio.py:719`, `:726`). Os pushes precedem o retorno “nenhuma pergunta validada” (`acoes_disputa.py:160`; `fio.py:731`). |
-| C na recusa (`app/chamados/services/validacao.py:605`) | Controla acesso à zeragem com ato `recusa` (`:628`), nota (`:633`), auditoria (`:637`) e push (`:648`). |
-| C nas corrigíveis → reabertura (`app/chamados/services/acoes_disputa.py:97`) | Executa zeragem (`:103`), nota (`:106`), push (`:109`). |
-| C na recobrança (`app/chamados/services/disputa_emissao.py:1735`) | O predicado determina o contador; prazo (`:1740`) e push (`:1750`) são executados independentemente do contador. Trocar esse filtro, isoladamente, não demonstra variação na quantidade de pushes. |
-
-B1 já mudou o leitor A da vassoura para o juiz: `_resolver_perguntas_por_chamado_resolvido` pergunta `pergunta_respondida` em `app/chamados/services/disputa_emissao.py:2002`; a retenção B ainda usa OU em `app/chamados/models.py:1924`.
-
-Crons relevantes neste hash: consumidor de eventos a cada minuto (`app/config/crons.py:394`), reconciliador em `--alarme` a cada 15 minutos (`:395`), supra com `--executar` (`:599`), beco em `--alarme` (`:663`). Não atribuir escrita ao simples fato de o cron consultar esses leitores; os dois últimos modos de vigia citados estão expressos nesses argumentos.
-
-**PERGUNTA DE DESENHO:** qual classe recebe pergunta sem dia na tabela sombra? O compositor retorna `None` sem dia e documenta que a medida o agrega em “aberta”, enquanto a fronteira o deixa fora (`app/chamados/services/vigia_fio.py:794`, `:797`); o gate aceita exclusivamente `is False` (`app/chamados/models.py:364`).
-
-A separação aberta/ENTREGUE usa janela da empresa e `competencia_entregue`, não mês civil (`app/chamados/services/vigia_fio.py:785`, `:799`, `:801`, `:804`). A Pauta de tranca não fica automaticamente neutra porque a pergunta é entregue: recebe a lista sem veredito com `ignorar_tranca=True` (`app/chamados/services/competencia_trancada.py:126`, `:137`, `:232`).
-
-Arquivos do mapa que estão no anexo BUGPAR e têm leitores B2 diretos:
-
-- `app/chamados/services/acoes_disputa.py` — `:95`, `:130`.
-- `app/chamados/services/fio.py` — `:698`, `:1271`, `:1283`.
-- `app/chamados/services/materializacao.py` — `:438`, `:835`, `:1376`.
-- `app/chamados/services/validacao.py` — `:418`, `:605`.
-
-`app/config/crons.py` e `app/chamados/signals.py` são pontos de observação dos efeitos descritos; necessidade de editá-los para B2: **[nao verificado]**.
-
-## 16/11 17:11 · sessao fbbaa93b88bd · - · - · origem=Ronald (tmux)
-
-Os leitores atuais de `models.py` continuam por campos da projeção: `estado` em `app/chamados/models.py:3151`, `sem_veredito_entre` em `app/chamados/models.py:1922`, `q_vivas` em `app/chamados/models.py:3496`, `respondida` em `app/chamados/models.py:3664` e `resposta_display` em `app/chamados/models.py:3686`. A projeção temporal também lê os campos atuais; apenas corta carimbos posteriores a `agora`, quando informado (`app/chamados/juizes.py:1389`). Não sustentar o comportamento da c3 antiga como comportamento desta cópia (`app/chamados/models.py:3151`; `app/chamados/models.py:3496`).
-
-| Situação conferida | Decisão atual |
-|---|---|
-| Validação preenchida | C6 morta antes de qualquer outra guarda (`app/chamados/juizes.py:1405`); `estado` retorna `resolvida` havendo `materializada_em`, senão `validada` (`app/chamados/models.py:3151`); excluída de `sem_veredito_entre` (`app/chamados/models.py:1923`) e de `q_vivas` (`app/chamados/models.py:3496`). |
-| Instante de resposta sem texto | `pergunta_respondida=False` pelo I E T (`app/chamados/juizes.py:1552`); property `respondida=True` (`app/chamados/models.py:3665`); sem validação/materialização e sem tranca, entra em `sem_veredito_entre` (`app/chamados/models.py:1923`); `estado=respondida` mesmo se C6 morta (`app/chamados/models.py:3155`; `app/chamados/models.py:3158`). |
-| Texto sem instante | `pergunta_respondida=False` (`app/chamados/juizes.py:1552`); property `respondida=False` (`app/chamados/models.py:3665`); sem validação/materialização e sem tranca, entra em `sem_veredito_entre` pelo texto (`app/chamados/models.py:1925`); `estado=pendente` mesmo se C6 morta (`app/chamados/models.py:3155`; `app/chamados/models.py:3158`). |
-| Dia trancado por leitura, sem carimbo | C6 morta antes da resposta (`app/chamados/juizes.py:1409`); lista sem veredito a exclui, salvo `ignorar_tranca=True` (`app/chamados/models.py:1926`); `estado` ainda retorna pendente/respondida segundo instante (`app/chamados/models.py:3158`). |
-| Via `competencia_trancada`, `duplicata` ou `motivo_retratado`, carimbada | C6 morta antes da resposta (`app/chamados/juizes.py:1416`; conjunto em `app/chamados/models.py:2629`); `q_vivas` exclui antes do ramo de resposta (`app/chamados/models.py:3485`; `app/chamados/models.py:3496`); estado resolvido sem validação, pois carimbo presente (`app/chamados/models.py:3156`). |
-| Resposta com instante e texto | Depois das guardas anteriores, continua viva quando admin não decidiu a célula e resposta não concorda comprovadamente com luz/classe A/dia não acusador (`app/chamados/juizes.py:1423`; `app/chamados/juizes.py:1431`; `app/chamados/juizes.py:1435`; concordância em `app/chamados/juizes.py:1346`). |
-| Identidade carimbada sem resposta vencedora | C6 morta (`app/chamados/juizes.py:1444`); conjunto = `VIAS_DE_IDENTIDADE` mais competência trancada (`app/chamados/models.py:3202`), identidade definida em `app/chamados/models.py:2615`. |
-| Marco próprio aceso e carimbo | C6 morta antes do veredito do restante do dia (`app/chamados/juizes.py:1450`). |
-| Célula acusa, alcançado esse degrau | C6 viva antes de consultar testemunha (`app/chamados/juizes.py:1456`). |
-| Célula não acusa | C6 morta se não há marcos pendentes ou marco próprio já acendeu; caso contrário continua para as guardas seguintes (`app/chamados/juizes.py:1467`). |
-| Lei acusa dentro da janela viva | C6 viva antes do teste final do carimbo (`app/chamados/juizes.py:1471`). |
-| Sem carimbo, alcançado esse degrau | C6 viva (`app/chamados/juizes.py:1482`); a condição antiga c3 de “E sem carimbo” não é alcançada por este ramo (`app/chamados/juizes.py:1482`; `app/chamados/juizes.py:1489`). |
-| Carimbo sem absolvição anterior | C6 devolve inverso da testemunha; exceção da testemunha termina em morta (`app/chamados/juizes.py:1489`; `app/chamados/juizes.py:1492`); `estado` respeita essa vida antes de declarar `resolvida` pelo carimbo (`app/chamados/models.py:3154`). |
-| Ressuscitação atual | Universo simula o par inteiro zerado, incluindo `resposta_colab=''` (`app/chamados/models.py:1553`); registra linhas legadas de resposta/validação antes de limpar campos (`app/chamados/models.py:1613`); descarimba e zera validação, instante e texto (`app/chamados/models.py:1629`); deliberadamente não escreve REABERTURA porque esse ato mudaria o dono para colaborador (`app/chamados/models.py:1622`). |
-
-Precedência completa do C6: projeção (`app/chamados/juizes.py:1404`) → validação (`app/chamados/juizes.py:1405`) → tranca viva (`app/chamados/juizes.py:1409`) → via terminal carimbada (`app/chamados/juizes.py:1416`) → resposta I E T, exceção admin e concordância (`app/chamados/juizes.py:1423`; `app/chamados/juizes.py:1431`; `app/chamados/juizes.py:1435`) → identidade carimbada (`app/chamados/juizes.py:1444`) → marco aceso carimbado (`app/chamados/juizes.py:1450`) → célula acusa (`app/chamados/juizes.py:1456`) → célula absolve/pêndencia (`app/chamados/juizes.py:1468`) → lei/janela (`app/chamados/juizes.py:1471`) → ausência de carimbo (`app/chamados/juizes.py:1482`) → testemunha (`app/chamados/juizes.py:1489`) → exceção morta (`app/chamados/juizes.py:1492`).
-
-`estado` tem outra ordem de tradução: validação → C6 → carimbo → resposta por instante (`app/chamados/models.py:3151`). `sem_veredito_entre` testa validação → materialização → instante OU texto → tranca (`app/chamados/models.py:1922`). `fechar` testa porta válida → disputa já fechada/idempotência → usuário → respostas sem veredito → perguntas vivas → exceção nomeada → escrita (`app/chamados/models.py:1957`; `app/chamados/models.py:1960`; `app/chamados/models.py:1965`; `app/chamados/models.py:1967`; `app/chamados/models.py:1977`; `app/chamados/models.py:1999`).
-
-Possíveis perguntas para a consolidação:
-
-- PERGUNTA DE DESENHO: Para instante sem texto, “respondida” deve continuar verdadeiro na property e falso no juiz I E T, enquanto a retenção trata o instante como suficiente? | `app/chamados/models.py:3665` x `app/chamados/juizes.py:1552` (retenção: `app/chamados/models.py:1924`).
-- PERGUNTA DE DESENHO: Para texto sem instante, a retenção deve continuar cobrando veredito embora o juiz e a property neguem “respondida”? | `app/chamados/models.py:1925` x `app/chamados/juizes.py:1552`.
-- PERGUNTA DE DESENHO: Na pergunta morta por tranca sem carimbo, o estado pendente/respondida descreve o mesmo estado que a porta considera morto? | `app/chamados/models.py:3158` x `app/chamados/juizes.py:1409`.
-- PERGUNTA DE DESENHO: A ressuscitação deve devolver ao colaborador quando a última decisão conservada é SILENCIO, ou preservar `silencio_decidido` apesar da projeção novamente pendente/viva? O próprio código declara essa lei não decidida. | `app/chamados/models.py:1622` x `app/chamados/services/tarefa_do_dia.py:176`.
-- PERGUNTA DE DESENHO: Qual ato conserva o efeito após descarimbar, se a projeção temporal lê apenas o campo atual e os tipos de DP não incluem materialização? | `app/chamados/models.py:3318` x `app/chamados/juizes.py:1389` (atos em `app/chamados/models.py:4024`).
-
-Observações úteis: `q_vivas` declara ser pré-filtro generoso, com contrato de continência, não igualdade com C6; isso não constitui sozinho divergência de desenho (`app/chamados/models.py:3464`; `app/chamados/models.py:3509`). A janela já pode ler `date.today()` quando não recebe `hoje`; não atribuir isso a uma migração F2 que esta cópia não mostra (`app/chamados/juizes.py:596`; `app/chamados/juizes.py:1471`). O memo C6 só escreve `_pv_memo` na instância, não persiste estado de domínio (`app/chamados/juizes.py:905`).
-
-## 16/11 17:11 · sessao 61e3b2e8e524 · E4C-F1-B2 · verificador · origem=Code
-
-AVAL-DEVOLVIDO — item 1(c): o escopo B/C/D inclui um leitor em `app/chamados/services/validacao.py:418`, também listado no anexo BUG-PAR; o cruzamento zero não está demonstrado pelo diff efetivo. [nao verificado]
-
-1. **As premissas técnicas conferem; a migração ainda falta.** O juiz existe em `app/chamados/juizes.py:1544`: exige instante **e** texto após trim (`app/chamados/juizes.py:1552`), tem face SQL em `app/chamados/juizes.py:1575` e registro em `app/core/juizes.py:306`. B2 significa migrar B/C/D — retenção, leitores por instante e leitores só por texto — incluindo a property; E/F permanecem fora (`app/chamados/juizes.py:1550`, `app/docs/JUIZES.md:103`). Neste código, `respondida` ainda testa somente o instante (`app/chamados/models.py:3664`), e retenção ainda usa instante **ou** texto (`app/chamados/models.py:1922`). Portanto, “property delega” descreve a entrega pretendida, não o estado atual (`app/chamados/models.py:3665`).
-
-2. **Não identifico colisão necessária de prioridade.** O registro anterior põe o complemento de vínculo depois do editor; a regra geral dá precedência à espinha (`app/docs/RELATO.md:21`, `app/docs/RELATO.md:33`). A nova ordem expressa de reservar a vaga 2 à B2 pode alterar essa sequência; sua efetivação está [nao verificado]. O registro disponível mostra editor aprovado, com pouso ainda por realizar; não prova vaga liberada (`app/docs/RELATO.md:5`, `app/docs/RELATO.md:11`).
-
-   No anexo de origem, a medida na sombra é exigida **antes de pousar**, enquanto (a)–(d) condicionam **abrir o construtor**. São momentos distintos; o item 1 precisa conservar o requisito anterior. Tabela de efeitos sobre chamados fechados, perguntas retratadas/materializadas, pautas e pushes, separada entre aberta e ENTREGUE, com zero em ENTREGUE: [nao verificado]. [nao verificado]
-
-3. **As condições não podem ser declaradas fechadas.**
-
-   - **(a)** “Censo fechado” tem forma definida: seção `CENSO`, leitores e escritores com arquivo:linha, `DECISOES` listadas e linha literal única `perguntas de lei: N` (`bin/disjuntor.py:1493`, `bin/disjuntor.py:1565`). O parser admite perguntas cortadas quando N>0; o item anexado exige especificamente zero. Brief B2 com esse conteúdo: [nao verificado]. Passar pelo parser comprova a forma, sem demonstrar a completude do levantamento (`bin/disjuntor.py:1522`, `bin/disjuntor.py:1577`).
-   - **(b)** Tabela B2 com situação → juiz → ação da porta → persistência → estado → tela, retirada deste código: [nao verificado]. Os leitores atuais divergem, portanto uma tabela reduzida à verdade do juiz não representa sozinha as portas existentes (`app/chamados/models.py:1924`, `app/chamados/models.py:3665`, `app/chamados/services/validacao.py:418`).
-   - **(c)** A medida pedida é a interseção entre **todos os caminhos de arquivos do diff BUG-PAR** e **todos os arquivos previstos para alteração pela B2**, incluindo testes e documentação; comparação por função ou por trecho não demonstra “zero arquivo”. Conjunto completo B2 e diff BUG-PAR conferido contra sua base: [nao verificado]. Há um cruzamento concreto a resolver: o censo registrado classifica `validar_pergunta` como C (`app/docs/RELATO.md:225`), e sua guarda continua por instante (`app/chamados/services/validacao.py:418`); esse caminho consta da lista fornecida. Excluir esse leitor do conjunto exigiria justificar como a B2 integral o migra; solução demonstrada: [nao verificado].
-   - **(d)** Prioridade reservada não comprova disponibilidade: o registro ainda descreve o pouso do editor como próximo passo (`app/docs/RELATO.md:5`). Vaga efetivamente livre e teto respeitado: [nao verificado].
-
-4. **O alcance potencial inclui persistência e dinheiro; efeito real além do declarado está [nao verificado].** A validação carimba a pergunta, chama recálculo do fechamento e materialização (`app/chamados/services/validacao.py:460`, `app/chamados/services/validacao.py:471`, `app/chamados/services/validacao.py:494`). A retenção participa da autorização de fechar disputas (`app/chamados/models.py:1934`). Isso sustenta manter a medida de efeitos anterior ao pouso.
-
-   As duas abertas 38251/38252 pertencem à obra, com retorno a pendente e trilha; as 141 entregues exigem `!` próprio, preservando validadas/materializadas (`app/docs/LEIS.md:151`). O anexo de origem ainda preserva as 30 materializadas e manda publicar a lista das 111 restantes; lista publicada, confirmação dos dois pk no RED e trilha efetiva da correção: [nao verificado]. A ressalva nominal às 141 não comprova zero efeito indireto em ENTREGUE após mudar leitores; essa medida permanece [nao verificado].
-
-VEREDITO: AVAL-DEVOLVIDO -- item 1(c): leitor C em app/chamados/services/validacao.py:418, identificado em app/docs/RELATO.md:225 e listado na BUG-PAR; cruzamento zero nao demonstrado.
-
-## 16/11 17:10 · sessao a8341253e558 · - · - · origem=Ronald (tmux)
-
-Leitores e telas conferidos nesta cópia:
-
-| Situação | O que aparece |
-|---|---|
-| Estado da pergunta | `estado` lê `validada_em`, depois `pergunta_viva`, depois `materializada_em` e `respondida_em`; continua lendo projeção, sem consultar diretamente decisões. `app/chamados/models.py:3151-3158` |
-| Pergunta respondida | A propriedade aceita qualquer `respondida_em`, inclusive texto vazio; o juiz `pergunta_respondida` exige instante **e** texto após trim. `app/chamados/models.py:3664-3665` × `app/chamados/juizes.py:1544-1552` |
-| Texto apresentado | `resposta_display` usa `resposta_colab`: vazio → `''`; posto → nome; escala → tipo; opções → rótulo; fallback → texto atual. `app/chamados/models.py:3688-3710` |
-| API do app | Publica `estado`, `aguarda_admin = estado == RESPONDIDA`, texto, display e instante atuais. A lista `respondidas` também julga somente pelo instante. `app/api/views.py:2550-2563`, `app/api/views.py:2577` |
-| Card colaborador, pergunta viva | Oferece formulário; mostra “Resposta enviada” e “Reenviar resposta” apenas quando `resposta_enviada`; esse valor exige instante com texto. `app/templates/chamados/partials/_card_atendimento.html:77-107`, `app/templates/chamados/partials/_card_atendimento.html:160-161`, `app/chamados/services/fio.py:357`, `app/chamados/services/fio.py:177-187` |
-| Card colaborador, pergunta morta | Pendência administrativa vence o rótulo; sem pendência, `estado == resolvida` mostra “Encerrado”, demais estados mostram “Validado pela supervisão”; depois apresenta motivo pela via. `app/templates/chamados/partials/_card_atendimento.html:179-192` |
-| Card administrativo | Cabeçalho: `validada_em` → “validada”; senão `respondida_em` → “aguardando validação”; senão “aguardando colaborador”. Botões dependem de instante de resposta e ausência de validação. `app/templates/chamados/partials/_pergunta_card.html:20-25`, `app/templates/chamados/partials/_pergunta_card.html:29-42` |
-| Modal administrativo | Primeiro exige `respondida_em`; depois pendência administrativa → “Pendência do admin”; senão validação → “Validada”; senão oferece validação. Sem instante, mostra “Aguardando resposta do colaborador”. `app/templates/chamados/partials/modal_fio.html:217-250`, `app/templates/chamados/partials/modal_fio.html:318-319` |
-| Explicador | PENDENTE → colaborador; RESPONDIDA → admin; depois pendência administrativa; depois juiz factual: verdadeiro → resolvida, falso → validada sem gravar, com dono cadastro/sistema. `app/chamados/services/explicador.py:72-104` |
-| Fechamento na explicação | O resumo obedece `pode_fechar`; os itens ainda carregam as explicações individuais, e o template mostra todos os itens cujo estado explicativo não é `resolvida`. `app/chamados/services/explicador.py:133-165`, `app/templates/chamados/partials/modal_fio.html:435-446` |
-| Disputa fechada no fio administrativo | SQL `q_vivas` primeiro; depois `pergunta_viva` elimina as mortas. Não é igualdade SQL/juiz: o contrato documentado é continência. `app/chamados/services/fio.py:254-269`, `app/chamados/models.py:3464-3470` |
-| App: pendente ou histórico | Primeiro `q_vivas`, depois `pergunta_viva`; dentre as vivas, instante de resposta ausente **e** disputa aberta → pendentes, demais → histórico. `app/chamados/services/pergunta_no_app.py:52-61`, `app/chamados/services/pergunta_no_app.py:76-85` |
-| Vigia, folga validada | Ausência aberta vence; depois `p.estado == VALIDADA` com aceite de folga → escala não descreve o dia; depois dia do admin → fio do admin. `app/chamados/services/vigia_fio.py:256-263` |
-
-Divergências concretas para considerar na consolidação:
-
-1. **Instante com resposta vazia/brancos:** propriedade `respondida` é verdadeira e API pode dizer `aguarda_admin`, enquanto card colaborador oferece “Enviar resposta”, e tarefa exige responder pelo colaborador. `app/chamados/models.py:3664-3665`, `app/chamados/models.py:3154-3158`, `app/api/views.py:2550-2553` × `app/chamados/services/fio.py:177-187`, `app/templates/chamados/partials/_card_atendimento.html:160-161`, `app/chamados/services/tarefa_do_dia.py:159-161`.
-
-2. **Validada + materializada, sem testemunha factual atual:** `estado`/API dizem RESOLVIDA e card colaborador “Encerrado”, mas explicador pode dizer “validada_sem_gravar”, exibido como “O sistema não conseguiu gravar”. `app/chamados/models.py:3151-3153`, `app/api/views.py:2550-2552`, `app/templates/chamados/partials/_card_atendimento.html:189` × `app/chamados/services/explicador.py:92-104`, `app/templates/chamados/partials/modal_fio.html:442`.
-
-3. **Materializada, sem validação/resposta, morta pelo juiz:** `estado` retorna RESOLVIDA, mas cabeçalho do card administrativo diz “aguardando colaborador”. A exibição efetiva dessa combinação numa tela específica depende de ela entrar no universo do chamador. `app/chamados/models.py:3154-3157` × `app/templates/chamados/partials/_pergunta_card.html:23-25`; presença concreta em produção [nao verificado].
-
-4. **DEVOLUÇÃO/RECUSA/REABERTURA com projeção divergente:** tarefa interpreta o último ato, enquanto estado e cabeçalhos administrativos continuam nos campos. DEVOLUÇÃO exige validar/admin; RECUSA e REABERTURA exigem responder/colaborador. `app/chamados/services/tarefa_do_dia.py:158-166` × `app/chamados/models.py:3151-3158`, `app/templates/chamados/partials/_pergunta_card.html:23-25`.
-
-O corpo de `sem_veredito_entre` conserva explicitamente instante **OU** texto e exclui validada/materializada antes de consultar tranca; `pode_fechar` avalia essa lista antes de `fio_vivo`, por curto circuito. `app/chamados/models.py:1922-1926`, `app/chamados/models.py:1934`.
-
-## 16/11 17:10 · sessao 34f49298ed2f · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-- “Brief com censo fechado” tem definição literal: seção `CENSO`, leitores e escritores com `arquivo:linha`, `DECISOES` listadas e linha única `perguntas de lei: N`; quantidade de perguntas deve fechar e, para N>0, cada uma exige corte nomeado. A função verifica forma; a completude do censo exige conferência adicional. O item 1(a) exige especificamente N=0. Referências: `bin/disjuntor.py:1493`, `bin/disjuntor.py:1522`, `bin/disjuntor.py:1565`.
-- B2 ainda é descrita como por construir; abrange leitores B/C/D e estoque das duas vivas. A propriedade `respondida` e retenção migram na B2; E/F nunca. Referências: `app/docs/LEIS.md:151`, `app/docs/JUIZES.md:99`, `app/docs/JUIZES.md:103`.
-- A prioridade B2 após o editor pode substituir a ordem anterior dos complementos de tela sem contradizer a prioridade geral “espinha passa na frente de lateral”. A ordem anterior está em `app/docs/RELATO.md:19`, `app/docs/RELATO.md:21`, `app/docs/RELATO.md:24`; prioridade geral em `app/docs/RELATO.md:33`.
-- O registro disponível apresenta o editor aprovado e ainda com pouso por realizar; vaga efetivamente liberada não está provada. Referências: `app/docs/RELATO.md:5`, `app/docs/RELATO.md:11`, `app/docs/RELATO.md:13`; vaga atual [não verificado].
-- B1 está documentada como no ar, e B2 esperava esse pouso. Referências: `app/docs/RELATO.md:105`, `app/docs/RELATO.md:163`, `app/docs/RELATO.md:174`.
-- O POUSO B2 do anexo exige medida na sombra antes do pouso, não antes da abertura do construtor. Portanto não há contradição automática entre permitir construir condicionalmente e preservar aquele gate; tabela real de efeitos e 0 em ENTREGUE [não verificado]. [nao verificado]
-- As duas abertas 38251/38252 com trilha pertencem à obra; 141 entregues exigem `!` próprio, e validadas/materializadas ficam. Referência: `app/docs/LEIS.md:151`. O anexo de origem ainda distingue 30 materializadas preservadas e lista futura das 111; confirmação atual dos pks em RED e execução da trilha [não verificado].
-- Codex construtor está proibido de tocar competência exportada ou item que pede `!`. Referência: `app/docs/LEIS.md:147`.
-- Não há `logs/` nesta cópia; brief B2, tabela de estados, lista efetiva de arquivos B2, censo de origem completo e medida de sombra não puderam ser examinados [não verificado].
-
-## 16/11 17:10 · sessao 11f23f124cfd · - · - · origem=Ronald (tmux)
-
-- O juiz existe em `app/chamados/juizes.py:1544`, retorna instante **E** texto após trim em `:1552`, tem face SQL em `:1575-1580` e registro em `app/core/juizes.py:306`. O próprio código reserva classes B/C/D — retenção, property e leitores só texto — para B2 (`app/chamados/juizes.py:1550-1551`).
-- A property ainda usa apenas instante (`app/chamados/models.py:3663-3665`). A retenção ainda usa instante **OU** texto (`app/chamados/models.py:1922-1926`); sua lista bloqueia `pode_fechar` (`:1928-1934`) e a porta `fechar` (`:1967-1969`). A retração de irmãs consulta esse mesmo corpo (`app/chamados/juizes.py:2092-2105`).
-- Leitor C confirmado: `validar_pergunta` aceita pelo carimbo (`app/chamados/services/validacao.py:418-420`); o censo registrado nomeia esse leitor como classe C (`app/docs/RELATO.md:225`). Esse arquivo consta da lista BUG-PAR fornecida [não verificado por arquivo local]. Logo, o conjunto natural da migração B2 já tem candidato direto de cruzamento; conjunto efetivamente autorizado pelo brief e total exato [não verificado].
-- A mesma porta carimba validação (`app/chamados/services/validacao.py:460`), recalcula fechamento por evento (`:469-472`) e chama materialização (`:486-494`). O materializador seleciona instante + validação (`app/chamados/services/materializacao.py:1375-1379`) e descreve criação de batidas/ausências e fechamento de destinos (`:1344-1362`). Isso sustenta exigir medida de efeitos; efeito real em produção [não verificado].
-- Outros pontos nos arquivos da lista BUG-PAR a classificar no censo: carimbo cru nos templates `app/templates/chamados/partials/_pergunta_card.html:24`, `:29`, e `app/templates/chamados/partials/modal_fio.html:185`, `:217`; `app/chamados/services/fio.py:187`, `:698`. Não assumir que todos pertencem B/C/D sem classificar finalidade; conjunto exato [não verificado].
-- Outros leitores C presentes: partição do app em `app/chamados/services/pergunta_no_app.py:76-81`; API `ja_respondida` em `app/api/views.py:2620-2627`.
-- A guarda só texto do materializador é explicitamente de anuência (`app/chamados/services/materializacao.py:828-835`); classificá-la como D migrável, em vez de finalidade E/F preservada, exige censo/brief [não verificado].
-- O registro vigente mantém B2 por construir, duas abertas na obra, 141 entregues só com `!`, validadas/materializadas preservadas (`app/docs/LEIS.md:151`). A identificação atual dos pk 38251/38252, RED e trilha da correção não foram comprovados nesta leitura [não verificado].
-
-_6126 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6132 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
