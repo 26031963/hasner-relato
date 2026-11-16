@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: smoke.sh | pid=685179
+ESTADO 13:12 BUG-PAR-O-PAR VOLTA ABERTA (aval ESPINHA-ABRE-A-VOLTA-BUG-PAR 13:1x): 4 condicoes do PREPARA fecham -- lei 0 (bloco d RESPONDIDO por CORTE-BUG-PAR-FORA163), REVISAO 3x NAO PROCEDE (volta/revisao.r), cruzamento 0 (B1 e R3 pousadas; REDs F2 so testes novos, 0 em comum), vaga Codex construtor livre (reds rc 0 12:36). Ensaio refeito no main 42fd467a0: merge-tree 0 conflito, 4 arquivos dos dois lados (fio.py, test_s139.py, crons.py, test_medida_turno_do_par.py). Copia /home/ronald/wt-codex-bug-par-o-par-131207 @6d3a9ae10 (main + raia 6e2fc9133); Codex construtor -> logs/BUG-PAR-O-PAR/volta/volta.r. Pouso: depois de RED/suite/verificador/opus
 ESTADO 13:07 LOTE7 c7 POUSADO: merge 42fd467a0 (--no-ff de a094967ee; arvore == a094967ee salvo TICKETS.md do pos_push cf5347b01, nenhum .py difere) + bin/deploy.sh --sem-migrate rc 0 (3 cascas HUP, rotas 200/302/200, importerror_500=0). PROVA: logs/DUAS-PISTAS/lote7_c7/deploy.log; smoke 10 min de batidas 5xx em curso -> logs/DUAS-PISTAS/lote7_c7/smoke.out
 ESTADO 13:06 push do marco 4e364a414 no remoto (rc=0; pos_push cf5347b01). PROVA: logs/E4C/f1nova/b1/c3/push.log
 ESTADO 13:04 LOTE7 c7 SUITE DE POUSO VERDE: OK (skipped=42, expected failures=41), Ran 16452, rc=0 (logs/DUAS-PISTAS/lote7_c7/suite_pouso.log, arvore a094967ee = c7 + main 4e364a414) -> pouso (merge --no-ff + cmp + commit + deploy + smoke 10 min 5xx 0) logo que o push do marco terminar (nao commitar durante o push)
