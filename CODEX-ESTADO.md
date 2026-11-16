@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:44** · publicado em **16/11/2026 02:46** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:49** · publicado em **16/11/2026 02:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:49 · sessao 21a26ee77c6f · - · - · origem=Ronald (tmux)
+
+O anexo permite identificar assinaturas, mas não escolher univocamente a causa do espelho: `minutos_do_espelho` usa `minutos_realizados` e, se ausente, `pago_h`; o campo fonte não consta no anexo (`app/ponto/management/commands/e6_oraculo.py:263-268`).
+
+- **col252, 12 linhas:** padrão compatível com espelho descontando janela fixa de 60 min enquanto o E6 desconta pausa batida de aproximadamente 12–15 min; o piso de 15 min elimina a pausa curta e libera o desconto declarado (`app/ponto/turnos.py:545-546`, `app/ponto/turnos.py:756-764`). Não constitui prova única sem fonte do espelho, turnos, pausas marcadas, `livre` e intervalo efetivo da célula (`app/ponto/services/espelho.py:286-294`). Esses dados não constam.
+- **Feriados col369/col864/col114:** veredito `feriado` não explica sozinho espelho bruto; o cálculo realizado não recebe feriado e decide por turnos, pausas e janela declarada (`app/ponto/turnos.py:707-771`). Faltam fonte, turnos, marcas de pausa, modo e intervalo da célula.
+- **Longas pausas col723/col746/col841 e col114 08/11:** números são compatíveis com desconto declarado menor que o intervalo visível, mas a aplicação depende de pausas reconhecidas e modo fixo (`app/ponto/turnos.py:756-766`). Mesmos dados decisórios não constam.
+- **Dias sem batidas no anexo:** não provam transferência de jornada. A lista exibida usa `dia_das_batidas`, enquanto o realizado consulta os turnos e a fonte alternativa pode vir do pago (`app/ponto/services/espelho.py:450-451`, `app/ponto/services/espelho.py:574-577`, `app/ponto/services/espelho.py:675-676`, `app/ponto/management/commands/e6_oraculo.py:266-268`). Pedir fonte, turnos com entrada/saída/data_turno e batidas completas das datas vizinhas.
+- **Noturnos, zeros e grandes excessos:** HH:MM sem tipo, ATA e marcos não distingue absorção de pausa, inversão de papel, turno incompleto e atribuição à véspera; a ATA pode prevalecer sobre o tipo, a absorção depende de marcas/marcos e o dia depende do envelope (`app/ponto/turnos.py:1195-1204`, `app/ponto/turnos.py:1326-1376`, `app/ponto/turnos.py:1382`, `app/ponto/turnos.py:285-309`). Esses dados não constam.
+- **Destino existente geral:** `R1-ESTRUTURA-91` registra expressamente assinaturas −60, −180, −240, +46 e +660, exigindo separar ponto cego do oráculo de bug, um caso por assinatura e cenário pela regra antes da cura (`app/docs/BACKLOG.md:1822`). Isso autoriza destino de apuração; não comprova cura específica do dia.
+- **Bateria:** cenário novo de produção deve entrar na bateria (`app/docs/BACKLOG.md:1271`); cenário com dúvida entra sem número inventado e com pergunta escrita (`app/docs/BACKLOG.md:1623`).
+
+## 16/11 02:48 · sessao 2ab7c8a330fd · - · - · origem=Ronald (tmux)
+
+Destinos existentes e escopo comprovado:
+
+| Destino | Referência | Aplicação e limite |
+|---|---|---|
+| ATA-X-TURNO-PAUSA | app/docs/BACKLOG.md:1785 | Cita especificamente col841, 20/10, pausa 21:44–22:41 e conflito ata × juiz do par; ainda exige confirmar a causa atual pelo código e pelo dado permitido. |
+| MOTOR-PASSA-O-TURNO-A-VOLTA | app/docs/BACKLOG.md:868 | Cura pergunta de cumprimento da volta feita por período em vez de turno. |
+| MOTOR-LE-O-TURNO | app/docs/BACKLOG.md:1960 | Absorve divergências motor × juiz no par e no dia; inclui volta de intervalo, turno aberto e atribuição noturna. Exige demonstrar essa divergência no dia. |
+| ESPELHO-VERDADE-FECHO-V2 | app/docs/BACKLOG.md:2230 | Abrange E1 sem previsão e E3 turno aberto; ausência de batidas no anexo, isoladamente, não demonstra essas condições. |
+| V3-BATERIA-DE-CASOS-PELA-REGRA | app/docs/BACKLOG.md:1623 | Destino para cenário com cadastro, batidas e esperado derivados da regra; dúvidas entram sem número inventado. |
+| V3-BATERIA-O-RESTO-DOS-38 | app/docs/BACKLOG.md:1722 | Inclui virada de competência, intervalo em folga, atestado em folga e igualdade entre leitores. |
+| R1-ESTRUTURA-91 | app/docs/BACKLOG.md:1822 | Exige separar ponto cego do oráculo — inclusive 12x36 com pausa e corte de 14h — de bug do sistema. |
+
+Não usar estes IDs como cura automática:
+
+- `INTERVALO-MINIMO-SEM-LEITOR` trata do campo de CCT sem leitor, não demonstra por si a causa dos deltas +45…+48. app/docs/BACKLOG.md:1707
+- `FERIADO-DIA-CHAVE` trata de chave de dia e predicado em cruzamento da meia-noite, não explica automaticamente pausa ignorada em feriado diurno. app/docs/BACKLOG.md:1589
+- `ESPELHO-FERIADO-DOBRA` corrigiu a testemunha `espelho_x_dia_pago`, e não a comparação E6 de pausas. app/docs/BACKLOG.md:1588
+- `R1-A-i-FILTRO-DATA-CIVIL` cita col218 15/10 e parcial 105, mas consta fechada; sua causa histórica depende de cauda e célula ausentes do anexo. app/docs/BACKLOG.md:1756
+- `R1-FLIP-NAO-VIROU` terminou com os pares estudados atribuídos a BATIDA/CADASTRO, sem ESTRUTURA; não serve de explicação genérica para os feriados presentes. app/docs/BACKLOG.md:1804
+
+## 16/11 02:48 · sessao 66f612b8d92f · - · - · origem=Ronald (tmux)
+
+O dono é decidido sem consultar `classe`: primeiro CADASTRO se folga indefinida ou vínculo ausente; depois BATIDA se há batida real fora de turno ou quantidade ímpar de `horas_do_dia`; depois CADASTRO se fase deslocada; por fim CADASTRO se consta em cadastro × realidade, senão ESTRUTURA. [app/ponto/management/commands/e6_oraculo.py:98-110]
+
+Isso vale igualmente para todas as classes do anexo: `esp_zero_e6_trabalho`, `e6_zero_esp_trabalho`, `diverge_10_60`, `diverge_acima_60`, `e6_zero_esp_trabalho/FORA` e `diverge_acima_60/FORA`; as classes são calculadas antes e não são argumento de `dono_da_divergencia`. [app/ponto/management/commands/e6_oraculo.py:370-400]
+
+Zero batidas significa quantidade par: não aciona o ramo BATIDA por paridade. [app/ponto/management/commands/e6_oraculo.py:106-110]
+
+`IMPAR` marca pelo menos um turno cortado com contagem ímpar, enquanto o dono testa a quantidade total de horas atribuídas ao dia; assim dois ou quatro horários no anexo podem coexistir com `IMPAR` e ESTRUTURA. [app/ponto/calculador/nucleo.py:238-245; app/ponto/management/commands/e6_oraculo.py:106-110]
+
+`FORA` significa espelho fora do intervalo `[e6 − 10, teto + 10]`; não escolhe o dono nem prova sozinho erro do espelho. [app/ponto/management/commands/e6_oraculo.py:395-404]
+
+Diagnósticos individuais demonstráveis:
+
+| Linha | Causa demonstrável |
+|---|---|
+| col1021, 11/2026, 2026-11-06, −841 | O oráculo corta 05:55→19:56 porque supera 14 horas, produzindo dois turnos unitários sem par fechado; por isso `e6=teto=0` e marca IMPAR, embora o conjunto do dia seja par. [app/ponto/calculador/nucleo.py:215-247] |
+| col909, 11/2026, 2026-11-11, −586 | Ao receber 23:00, o oráculo corta o turno iniciado 07:00 porque seu vão supera 14 horas: soma 07:00→11:04, deixa 13:13 solta e abre outro turno unitário às 23:00; o segundo par exibido pelo espelho deixa de entrar na soma do oráculo. [app/ponto/calculador/nucleo.py:215-247] |
+
+Os minutos do oráculo e o teto usam os instantes completos em segundos; os horários exibidos são truncados para `%H:%M`, e os quatro números da saída são arredondados separadamente. Assim diferenças de um minuto e `dif_min=-10` com classe `diverge_10_60` não provam erro de limiar: a classificação usa a diferença não arredondada. [app/ponto/calculador/nucleo.py:238-247; app/ponto/management/commands/e6_oraculo.py:362-372; app/ponto/management/commands/e6_oraculo.py:401]
+
+`esp_min` pode vir de `minutos_realizados` ou, se ausente, de `pago_h × 60`; o anexo não informa a fonte. [app/ponto/management/commands/e6_oraculo.py:263-269]
+
+O oráculo não lê célula, tipo/marco das batidas ou ausências; lê o universo apurável e soma pares por sequência e dia de início dos turnos que ele próprio corta. Portanto coincidências como col130 ter diferença próxima do primeiro segmento noturno não demonstram qual ramo do espelho deixou esse segmento fora: faltam fonte do minuto, pares/períodos com `data_turno`, célula e ausências pertinentes. [app/ponto/management/commands/e6_oraculo.py:150-154; app/ponto/calculador/nucleo.py:173-176; app/ponto/calculador/nucleo.py:236-247]
+
+A obra histórica `E6-CAUDA-2` está fechada e redirecionada para PLACAR-ESTRUTURAL: não representa cura futura autorizada desses cortes. [app/docs/BACKLOG.md:1231]
 
 ## 16/11 02:44 · sessao 3f63e80f5938 · LOTE3-C6 · verificador · origem=Code
 
@@ -828,208 +889,4 @@ Não executei Django nem banco; a verificação acima foi leitura e censo AST em
 
 - **Mocks acrescentados não substituem os caminhos positivos centrais:** o espião do cartório chama a função real; o mock da trilha injeta especificamente o `None` de falha e delega os demais eventos à função real. Execução Django, RED contra a base e incidência produtiva: **[nao verificado]**. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:412`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:464`)
 
-## 16/11 02:25 · sessao 5df2cbed0eec · - · - · origem=Ronald (tmux)
-
-- **10/2026:** `10 + 5 + 3 + 3 + 3 + 2 = 26` linhas `ESTRUTURA_DIA`. [nao verificado]
-- **11/2026:** `10 + 3 + 6 + 1 + 8 + 3 = 31` linhas `ESTRUTURA_DIA`. [nao verificado]
-- **Horas por dia:** “nao consta na saida”. As linhas apresentam `esp_min`, `e6_min`, `teto_min`, `dif_min`, `classe`, `paridade`, `batidas` e `veredito`; não permitem transcrever horas exatas por dia. [nao verificado]
-- **Causa/rótulo:** transcrever os campos efetivamente presentes, especialmente `classe`, `paridade` e `veredito`; campos literalmente chamados `causa` ou `rotulo`: “nao consta na saida”. [nao verificado]
-- **ESPELHO-VERDADE:** itens identificados dessa categoria: “nao consta na saida”. [nao verificado]
-- **Comparação de identidades com 06/11:** `agrega.r` não identifica nenhum colab-dia. Assim, dias retirados e acrescentados: “nao consta na saida”; não é possível listar diferenças de conjuntos. A igualdade de 26 dias em outubro não demonstra igualdade das identidades. [nao verificado]
-- **Preservar literalmente:** col114 em 08/11 tem `dif_min=-10` e `classe=diverge_10_60`; col1021 em 06/11 tem `/FORA`, `paridade=IMPAR` e duas batidas exibidas; col909 em 11/11 também tem `/FORA` e `paridade=IMPAR`. [nao verificado]
-
-## 16/11 02:21 · sessao 3e76d0e2347d · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-As 6 linhas `SOMA` e as 2 linhas `ESTRUTURA_DIAS_LINHAS` estão `True`. Não há ocorrência de `INCOMPLETO` no trecho fornecido. [nao verificado]
-
-Transcrição integral da saída fornecida: [nao verificado]
-
-```text
-sonda_leitura: script.py [8c43808dcc19372c] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 6 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 100
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 99
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 199 minutos_total 2.6 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1298, 'bate_ate_10min': 1258, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 32, 'dia_batida_impar': 54, 'impar_que_BATE': 26, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 277, 'dia_sem_trabalho_ambos': 11, 'esp_desconta_janela_declarada': 18, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.9% de 1298 dias comparados
-[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
-[3] CADASTRO      8 dia-colab      40.5 h    2 colabs
-[3] BATIDA       30 dia-colab     127.8 h   17 colabs
-[4] TOTAL divergentes 40
-[5] colabs com divergencia: 20
-ESTRUTURA_DIA|10/2026|col515|2026-10-09|esp_min=244|e6_min=0|teto_min=0|dif_min=-244|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col515|2026-10-11|esp_min=245|e6_min=0|teto_min=0|dif_min=-245|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 10/2026 2 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
-PARCIAL|10/2026|CADASTRO|dias=8|horas=40.4628|colabs=2
-PARCIAL|10/2026|BATIDA|dias=30|horas=127.75368121722221|colabs=17
-PARCIAL_TOTAL|10/2026|dias=40|horas=176.36648121722221|colabs=20
-ESTIMATIVA processados 100 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 125 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1111, 'bate_ate_10min': 1070, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 2, 'diverge_acima_60': 33, 'dia_batida_impar': 60, 'impar_que_BATE': 30, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 29, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1257, 'dia_isento_ou_ausencia': 268, 'dia_sem_trabalho_ambos': 23, 'esp_desconta_janela_declarada': 14, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.3% de 1111 dias comparados
-[3] ESTRUTURA     3 dia-colab      10.6 h    2 colabs
-[3] CADASTRO      6 dia-colab      52.8 h    5 colabs
-[3] BATIDA       32 dia-colab     161.9 h   21 colabs
-[4] TOTAL divergentes 41
-[5] colabs com divergencia: 25
-ESTRUTURA_DIA|11/2026|col113|2026-10-30|esp_min=242|e6_min=0|teto_min=0|dif_min=-242|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col113|2026-11-01|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col989|2026-10-23|esp_min=721|e6_min=567|teto_min=567|dif_min=-154|classe=diverge_acima_60|paridade=par|batidas=08:32 17:59|veredito=trabalhou
-ESTRUTURA_DIAS_LINHAS 11/2026 3 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=3|horas=10.610499166666667|colabs=2
-PARCIAL|11/2026|CADASTRO|dias=6|horas=52.750124444444445|colabs=5
-PARCIAL|11/2026|BATIDA|dias=32|horas=161.85087350722222|colabs=21
-PARCIAL_TOTAL|11/2026|dias=41|horas=225.211497118333332|colabs=25
-TEMPO_SEGUNDOS 163.9
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 237235
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 116
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1375
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4633
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 58
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 10
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6500
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3762
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3762
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 602
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 180
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 448020
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 559
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2890
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 180
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12704
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 94
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4254
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 189
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 21328
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4340
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 38829
-TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 17052
-SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
-SOMA 10/2026 HORAS 176.36648121722221 True
-SOMA 10/2026 COLABS_UNIAO 20 True
-SOMA 11/2026 41   <- tem de ser igual a soma das classes (41) True
-SOMA 11/2026 HORAS 225.211497118333332 True
-SOMA 11/2026 COLABS_UNIAO 25 True
-rc_sombra=0
-```
-
-## 16/11 02:17 · sessao ddbab1bf47b0 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-As seis linhas `SOMA` e as duas linhas `ESTRUTURA_DIAS_LINHAS` apresentam `True`. Não há `INCOMPLETO` no dado fornecido. [nao verificado]
-
-Transcrição integral do dado fornecido para a parte 5 de 6: [nao verificado]
-
-```text
-sonda_leitura: script.py [740d3ddca1d2e7ae] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 5 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 107
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 102
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 209 minutos_total 3.0 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1285, 'bate_ate_10min': 1215, 'esp_zero_e6_trabalho': 9, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 55, 'dia_batida_impar': 78, 'impar_que_BATE': 29, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 42, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 49, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1533, 'dia_isento_ou_ausencia': 275, 'dia_sem_trabalho_ambos': 45, 'esp_desconta_janela_declarada': 72, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.6% de 1285 dias comparados
-[3] ESTRUTURA     3 dia-colab      29.2 h    3 colabs
-[3] CADASTRO     19 dia-colab      52.3 h    8 colabs
-[3] BATIDA       48 dia-colab     197.3 h   26 colabs
-[4] TOTAL divergentes 70
-[5] colabs com divergencia: 29
-ESTRUTURA_DIA|10/2026|col382|2026-09-30|esp_min=364|e6_min=0|teto_min=0|dif_min=-364|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col478|2026-09-25|esp_min=719|e6_min=8|teto_min=8|dif_min=-711|classe=diverge_acima_60|paridade=par|batidas=18:57 19:04|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col868|2026-09-22|esp_min=0|e6_min=679|teto_min=733|dif_min=679|classe=esp_zero_e6_trabalho|paridade=par|batidas=18:48 02:02 02:57 07:01|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 10/2026 3 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=3|horas=29.23270916666667|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=19|horas=52.325450786111105|colabs=8
-PARCIAL|10/2026|BATIDA|dias=48|horas=197.29829774694443|colabs=26
-PARCIAL_TOTAL|10/2026|dias=70|horas=278.856457699722205|colabs=29
-ESTIMATIVA processados 125 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1128, 'bate_ate_10min': 1045, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 6, 'diverge_acima_60': 68, 'dia_batida_impar': 88, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 55, 'impar_dentro_da_faixa': 46, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 55, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 408, 'dia_sem_lavratura_no_espelho': 1292, 'dia_isento_ou_ausencia': 214, 'dia_sem_trabalho_ambos': 40, 'esp_desconta_janela_declarada': 80, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 92.6% de 1128 dias comparados
-[3] ESTRUTURA     8 dia-colab      54.2 h    6 colabs
-[3] CADASTRO     29 dia-colab      98.7 h   10 colabs
-[3] BATIDA       46 dia-colab     239.2 h   25 colabs
-[4] TOTAL divergentes 83
-[5] colabs com divergencia: 34
-ESTRUTURA_DIA|11/2026|col112|2026-10-21|esp_min=546|e6_min=838|teto_min=838|dif_min=292|classe=diverge_acima_60|paridade=par|batidas=17:03 07:01|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col112|2026-10-22|esp_min=541|e6_min=835|teto_min=835|dif_min=294|classe=diverge_acima_60|paridade=par|batidas=17:02 06:56|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col130|2026-10-29|esp_min=335|e6_min=672|teto_min=730|dif_min=337|classe=diverge_acima_60|paridade=par|batidas=18:56 00:33 01:31 07:06|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col220|2026-11-10|esp_min=337|e6_min=430|teto_min=486|dif_min=93|classe=diverge_acima_60|paridade=par|batidas=21:54 03:35 04:31 06:00|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col382|2026-11-10|esp_min=418|e6_min=0|teto_min=0|dif_min=-418|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col874|2026-10-22|esp_min=667|e6_min=383|teto_min=383|dif_min=-284|classe=diverge_acima_60|paridade=par|batidas=15:45 22:07|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col922|2026-11-01|esp_min=1382|e6_min=68|teto_min=68|dif_min=-1314|classe=diverge_acima_60|paridade=par|batidas=22:01 23:09|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col922|2026-11-04|esp_min=676|e6_min=458|teto_min=458|dif_min=-218|classe=diverge_acima_60|paridade=par|batidas=23:11 06:49|veredito=trabalhou
-ESTRUTURA_DIAS_LINHAS 11/2026 8 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=8|horas=54.16690254361111|colabs=6
-PARCIAL|11/2026|CADASTRO|dias=29|horas=98.72113534194445|colabs=10
-PARCIAL|11/2026|BATIDA|dias=46|horas=239.22640724611108|colabs=25
-PARCIAL_TOTAL|11/2026|dias=83|horas=392.11444513166664|colabs=34
-TEMPO_SEGUNDOS 188.1
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 273687
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 46
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1924
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 7806
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 80
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 14
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 7884
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 5649
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 5649
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 340
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 192
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 498705
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 855
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3248
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 215
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 14074
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 174
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4284
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 198
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 28387
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3745
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 44131
-TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 2
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 21131
-SOMA 10/2026 70   <- tem de ser igual a soma das classes (70) True
-SOMA 10/2026 HORAS 278.856457699722205 True
-SOMA 10/2026 COLABS_UNIAO 29 True
-SOMA 11/2026 83   <- tem de ser igual a soma das classes (83) True
-SOMA 11/2026 HORAS 392.11444513166664 True
-SOMA 11/2026 COLABS_UNIAO 34 True
-rc_sombra=0
-```
-
-_5909 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5912 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
