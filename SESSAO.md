@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 01:27:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (129.0 MB). Acoes na janela: **1714**.
+**Medido em 16/11/2026 01:32:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (129.1 MB). Acoes na janela: **1721**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:27:49 | Bash | Check sombra progress | `cd /home/ronald/saas-hasner; tail -2 logs/E3-RESTO-R3/c17/sombra_pouso_1611.log; ps -p 3478640 -o etime=` |
+| 01:27:46 | Bash | Check triagem mention of REABERTURA | `cd /home/ronald/saas-hasner; grep -n 'REABERTURA\\|ressusc' logs/E4C/f1nova/b1/triagem_v1.txt` |
+| 01:27:44 | Bash | Update BACKLOG MIUDOS state and RELATO top lines | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() old=" (1)(2) EM VOO 01:1x (esperam p2 do C1 e causas.md da V0); (3) AVAL-DEVOLVIDO 01:1x (logs/MIUDOS/rev.r: sem regra escrita de entrada; 5 itens x 30 min; opus por obra)" new=" (1)(2) parte C1 PRONTA 01:2x (logs/MIUDOS/quadro.md: 8 causas, 3 MIUDO, 0 sem cruzar e sem dinheiro); parte V0 espera causas.md; (3) ...` |
+| 01:27:34 | Bash | Get time and MIUDOS state cell | `cd /home/ronald/saas-hasner/app; date +%H:%M; sed -n '2235p' docs/BACKLOG.md \| awk -F'\|' '{print $4}'` |
+| 01:27:32 | Bash | View RELATO top and MIUDOS backlog line | `cd /home/ronald/saas-hasner/app; head -c 3000 docs/RELATO.md \| cut -c1-300; grep -n 'MIUDOS' docs/BACKLOG.md \| head -3 \| cut -c1-400` |
+| 01:27:30 | Write |  | `/home/ronald/saas-hasner/logs/MIUDOS/quadro.md` |
+| 01:27:15 | Bash | Spot-check two Codex citations | `cd /home/ronald/saas-hasner; git show 2982c7903:app/colaboradores/views.py \| sed -n '322,330p'; echo ---; git show 2982c7903:app/chamados/services/declaracao_texto.py \| sed -n '128,140p'` |
 | 01:27:12 | Bash | Read Codex MIUDOS c1 result | `cd /home/ronald/saas-hasner; D=logs/MIUDOS; tail -1 $D/c1.log; wc -c $D/c1.r; cat $D/c1.r` |
 | 01:27:08 | Bash | Read Codex postmortem result | `cd /home/ronald/saas-hasner; D=logs/E4C/f1nova/b1; tail -1 $D/postmortem.log; wc -c $D/postmortem.r; head -c 5000 $D/postmortem.r` |
 | 01:20:22 | Bash | Confirm sombra pid alive and hook proof | `cd /home/ronald/saas-hasner; ps -p 3478640 -o pid,etime,cmd \| tail -1; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
