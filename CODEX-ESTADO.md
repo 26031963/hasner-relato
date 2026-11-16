@@ -1,7 +1,168 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 15:50** · publicado em **16/11/2026 15:50** (UTC-3)
+> Ultima resposta processada: **16/11/2026 15:54** · publicado em **16/11/2026 15:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 15:54 · sessao faf0dcc58538 · BUG-PAR-O-PAR · verificador · origem=Code
+
+**DEVOLVE: a separação K6/F6 foi implementada, mas o estado novo ainda reúne “entregue” e “sem dia para consultar K6”; além disso, a prova executada não cobre a matriz nem os mutantes de integração exigidos.** (`app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:800`, `app/chamados/services/materializacao.py:863`, `app/chamados/tests/bug_par_mutantes.py:123`, `app/chamados/tests/bug_par_mutantes.py:164`.)
+
+A identidade Git de HEAD/base e a aplicação histórica do delta sobre `b8b951978` ficam **[nao verificado]**; o exame abaixo confronta a cópia com o diff e os anexos fornecidos.
+
+**1. Escritores, leitores e significados**
+
+| Campo ou retorno | Quem escreve/produz | Quem lê; significado |
+|---|---|---|
+| `bloqueada_competencia` e `detalhe` | Testemunha produz pelo impedimento F6, na metade ou no par. (`app/chamados/services/materializacao.py:884`, `app/chamados/services/materializacao.py:908`.) | Card e modal exibem o detalhe e conservam Validar; contador classifica em `outras`. (`app/templates/chamados/partials/_pergunta_card.html:44`, `app/templates/chamados/partials/_pergunta_card.html:100`, `app/templates/chamados/partials/modal_fio.html:274`, `app/chamados/services/materializacao.py:347`.) |
+| `bloqueada_competencia_entregue` e `detalhe` | Testemunha converte qualquer impedimento de `entrega_que_barra_a_validacao` nesse estado; porta faz o mesmo antes da validação e na reconsulta com rollback. A porta usa `msg`, não a chave `detalhe`. (`app/chamados/services/materializacao.py:861`, `app/chamados/services/validacao.py:614`, `app/chamados/services/validacao.py:649`.) | Card/modal escondem Validar; `fio.py` e filtro transportam o dict; casca da ação usa `ok/msg`. (`app/templates/chamados/partials/_pergunta_card.html:47`, `app/templates/chamados/partials/modal_fio.html:274`, `app/chamados/services/fio.py:374`, `app/chamados/templatetags/chamados_tags.py:136`, `app/chamados/services/acoes_disputa.py:50`.) |
+| `irma_da_validacao` | Retorna `None` para resposta fora do crivo HORA; caso contrário consulta `metade_irma_do_intervalo`. Esta exige irmã única, respondida, não materializada, da mesma disputa/data e motivo complementar. (`app/chamados/services/validacao.py:197`, `app/chamados/services/materializacao.py:140`.) | Porta usa a identidade para travar destinos/clones; composição K6 consulta pergunta e irmã. Encontrar a irmã não garante que o par será gravável: o julgamento posterior tem outros impedimentos. (`app/chamados/services/validacao.py:600`, `app/chamados/services/validacao.py:217`, `app/chamados/services/materializacao.py:197`, `app/chamados/services/materializacao.py:225`.) |
+| `entrega_que_barra_a_validacao` | Compõe a guarda existente com pergunta e irmã, `somente_entregue=True`; retorna texto impeditivo ou `''`. (`app/chamados/services/validacao.py:206`, `app/chamados/services/validacao.py:217`.) | Testemunha e duas consultas da porta usam a verdade do retorno. **O retorno também contém falta de dia, sem entrega comprovada.** (`app/chamados/services/materializacao.py:800`, `app/chamados/services/materializacao.py:861`, `app/chamados/services/validacao.py:614`, `app/chamados/services/validacao.py:649`.) |
+| `competencia_do_fato` | Produz `None` sem `data_evento`; com data, retorna `(mes, ano, bool(K6))`, delegando à janela e ao juiz da entrega. (`app/chamados/services/materializacao.py:772`, `app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:784`.) | Guarda, contador, devolução U103 e comando consomem esse contrato. (`app/chamados/services/materializacao.py:799`, `app/chamados/services/materializacao.py:330`, `app/chamados/services/validacao.py:321`, `app/chamados/management/commands/bug_par_103.py:58`.) |
+| `data_evento` | Atribuição central em `gravar_dia_do_fato`; os chamadores persistem no ato correspondente. (`app/chamados/services/fio.py:835`, `app/chamados/services/fio.py:845`.) | K6 toma a competência desse dia do fato; a guarda posicional usa célula explícita, depois esse dia; sem pergunta usa dia civil do instante. (`app/chamados/services/materializacao.py:784`, `app/chamados/services/materializacao.py:421`.) |
+
+**Há dois significados no estado novo — reproduzido em memória pelas funções da cópia:** `data_evento=None` → `competencia_do_fato=None` → texto “sem dia do fato para consultar K6” → `bloqueada_competencia_entregue`. A porta devolve o mesmo rótulo, embora o juiz K6 nem tenha sido consultado; ocorrência dessa entrada em produção: **[nao verificado]**. (`app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:800`, `app/chamados/services/materializacao.py:863`, `app/chamados/services/validacao.py:616`.)
+
+| Chave do contador | Escritor e significado | Leitores encontrados |
+|---|---|---|
+| `pendentes_aval` | `universo + len(b103)`: não materializadas mais U103 atualmente devolvíveis. (`app/chamados/services/materializacao.py:351`, `app/chamados/services/materializacao.py:356`.) | Comando e testes. (`app/chamados/management/commands/bug_par_103.py:82`, `app/chamados/tests/test_bug_par_103.py:88`.) |
+| `congelados_no_recorte` | `len(qs)`, após seleção U163 e filtro de disputas. (`app/chamados/services/materializacao.py:321`, `app/chamados/services/materializacao.py:324`, `app/chamados/services/materializacao.py:356`.) | Comando e testes migrados. (`app/chamados/management/commands/bug_par_103.py:83`, `app/chamados/tests/test_bug_par_volta.py:88`, `app/chamados/tests/test_bug_par_projetado.py:533`.) |
+| `resolvidas` | Incrementa para carimbada que não atende mais ao predicado U103; não significa necessariamente validação exitosa. (`app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:328`.) | Soma da partição no teste novo. (`app/chamados/tests/test_bug_par_103.py:94`.) |
+| `bug_par_103_pauta_dp` | Candidatas carimbadas com K6 verdadeiro, como `(pk, 'MM/AAAA')`. (`app/chamados/services/materializacao.py:330`, `app/chamados/services/materializacao.py:334`.) | Teste novo; o comando monta sua pauta diretamente da seleção congelada. (`app/chamados/tests/test_bug_par_103.py:93`, `app/chamados/management/commands/bug_par_103.py:57`.) |
+| `bug_par_103_sem_dia` | Candidatas carimbadas cujo helper retorna `None`. (`app/chamados/services/materializacao.py:331`, `app/chamados/services/materializacao.py:355`.) | Soma da partição no teste. (`app/chamados/tests/test_bug_par_103.py:95`.) |
+| `total_aval`, removida | Não integra mais o retorno. (`app/chamados/services/materializacao.py:352`.) | Os consumidores encontrados foram migrados; resta o literal na asserção de ausência no stdout. Consumidores externos à cópia: **[nao verificado]**. (`app/chamados/tests/test_bug_par_c2_sem_banco.py:63`, `app/chamados/tests/test_bug_par_projetado.py:548`, `app/chamados/tests/test_bug_par_103.py:99`.) |
+
+A linha publicada passa a ser `BUG-PAR-103 MODO elegiveis=N exportadas=N pendentes_aval=N congelados_no_recorte=N`; os dois últimos números vêm do contador com o mesmo recorte empresarial. `elegiveis` continua contando todas as U103 presentes, enquanto `bug_par_103` do contador agora conta somente candidatas devolvíveis — são medidas diferentes. Leitores externos desse stdout: **[nao verificado]**. (`app/chamados/management/commands/bug_par_103.py:53`, `app/chamados/management/commands/bug_par_103.py:79`, `app/chamados/services/materializacao.py:327`.)
+
+No eixo temporal, os escritores locais de `slots/marcas` extraem `hora`, `luz` acesa e `orfas` da ata; o cartório produz essas lâmpadas e horas. `eixo_do_turno` normaliza slots/marcas; `_hora` usa a **data real** do plantio menos `cel.data`, por `hora_no_eixo`; `plantio_preenche_furo` lê tudo como minutos no mesmo eixo. (`app/chamados/services/materializacao.py:435`, `app/ponto/services/cartorio.py:711`, `app/ponto/services/cartorio.py:738`, `app/chamados/services/materializacao.py:443`, `app/ponto/propositor.py:87`, `app/ponto/propositor.py:104`, `app/ponto/propositor.py:265`.)
+
+Isso não torna todas as unidades temporais iguais: K6 usa competência do fato; F6 usa a data local do instante; ausência de pergunta conserva a consulta civil; o corte U103 é estritamente anterior a 18/10 00:00 no fuso configurado. As janelas incluem o dia do corte inicial e vão até o dia anterior ao próximo corte; a tolerância de atribuição é de 240 minutos. (`app/chamados/services/materializacao.py:784`, `app/ponto/janelas.py:84`, `app/chamados/services/materializacao.py:422`, `app/chamados/services/materializacao.py:258`, `app/chamados/services/materializacao.py:262`, `app/ponto/janelas.py:10`, `app/ponto/propositor.py:78`.)
+
+Há leitor produtivo fora do diff: `flip_auto` continua usando `atribuir_global_turno`, agora delegado à função extraída; a regra de normalização foi preservada nessa extração. (`app/ponto/services/flip_auto.py:233`, `app/ponto/propositor.py:101`, `app/ponto/propositor.py:110`.)
+
+**2. F1..F5: origem, caso e pendências**
+
+| Achado anterior | Julgamento da c3 |
+|---|---|
+| **F1** | Corrige a origem da divergência K6/F6: testemunha e porta compartilham a composição, e ambos os HTMLs conservam o toque F6. **Permanece a duplicidade “entregue/sem dia” no estado novo.** (`app/chamados/services/materializacao.py:861`, `app/chamados/services/validacao.py:614`, `app/templates/chamados/partials/_pergunta_card.html:47`, `app/templates/chamados/partials/modal_fio.html:274`, `app/chamados/services/materializacao.py:800`.) |
+| **F2** | Corrige a origem temporal, sem especializar por PK: célula dona e plantio entram no eixo do turno. O esperado agora é `True` literal; `dia_civil`, `eixo_civil`, `eixo_pela_hora` e a supressão adicional da absolvição falharam por asserção. Execução sobre o retrato real de produção: **[nao verificado]**. (`app/chamados/services/materializacao.py:439`, `app/chamados/tests/test_bug_par_sem_banco.py:50`, `app/chamados/tests/test_bug_par_sem_banco.py:51`, `app/chamados/tests/test_bug_par_sem_banco.py:83`.) |
+| **F3** | Cura a lacuna do teste: o mutante restaura exatamente `de outro(s) dia(s)` e morreu pela `assertNotRegex`. (`app/chamados/tests/bug_par_c2_mutantes.py:26`, `app/chamados/tests/test_bug_par_c2_sem_banco.py:102`.) |
+| **F4** | Corrige a origem do rótulo/recorte e separa pendência de pertencimento. **A prova nova não demonstra zeramento pela validação:** zera trocando K6 para entregue, com `resolvidas=0`. (`app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:356`, `app/chamados/management/commands/bug_par_103.py:79`, `app/chamados/tests/test_bug_par_103.py:86`, `app/chamados/tests/test_bug_par_103.py:89`.) |
+| **F5** | Corrige a origem comum da ausência de data: comando publica linha falante para U103 e fora163; devolução retorna antes de escrever. Falta cobertura da testemunha/validação fora163 sem dia, justamente onde aparece o estado ambíguo. (`app/chamados/services/materializacao.py:780`, `app/chamados/management/commands/bug_par_103.py:62`, `app/chamados/management/commands/bug_par_103.py:75`, `app/chamados/services/validacao.py:322`, `app/chamados/tests/test_bug_par_103.py:111`, `app/chamados/tests/test_bug_par_103.py:119`.) |
+
+**3. Autoridades, escritores, relógio e universo**
+
+Não identifiquei segundo juiz no delta: competência do fato compõe janela existente e K6; bloqueio F6 continua no juiz registrado; irmã e entrega da validação extraem a composição da porta. (`app/chamados/services/materializacao.py:784`, `app/core/juizes.py:343`, `app/core/juizes.py:315`, `app/chamados/services/validacao.py:197`, `app/chamados/services/validacao.py:206`.)
+
+Não identifiquei segundo escritor de batida/carimbo nem nova leitura produtiva do relógio introduzida pelo delta: permanecem `registrar_batida`, as portas de carimbo e os instantes dos atos existentes. (`app/chamados/services/materializacao.py:1409`, `app/chamados/models.py:3207`, `app/chamados/services/validacao.py:165`, `app/chamados/services/validacao.py:338`.)
+
+As listas novas são partições da consulta U163, não outro universo de pertencimento; o pertencimento continua exclusivamente por PK no arquivo congelado. O problema de “campo com dois significados” existe no estado entregue, conforme demonstrado acima. (`app/chamados/services/materializacao.py:321`, `app/chamados/services/materializacao.py:331`, `app/chamados/services/universo_bug_par.py:35`, `app/chamados/services/materializacao.py:800`, `app/chamados/services/materializacao.py:863`.)
+
+**4. Mordida dos testes** [nao verificado]
+
+Executei **15 testes sem banco verdes**, **17 mutantes não integrados mortos** e **seis mutantes c2 mortos**; os runners exigem falhas por asserção, sem erros/skips, e aplicam as alterações em memória. (`app/chamados/tests/e4_apoio.py:8`, `app/chamados/tests/bug_par_mutantes.py:178`, `app/chamados/tests/bug_par_mutantes.py:196`, `app/chamados/tests/bug_par_c2_mutantes.py:64`, `app/chamados/tests/bug_par_c2_mutantes.py:67`.)
+
+| Grupo | Resultado por mutante |
+|---|---|
+| Principal sem integração | Mortos: `dxg_frota`, `dxg_desligado`, `dia_civil`, `k6_so_comando`, `k6_omitido`, `unidade_sem_k6`, `marca_ignorada`, `hash_ignorado`, `bool_inteiro`, `chaves_ignoradas`, `repeticao_aceita`, `intersecao_aceita`, `selecionar_recusa`, `nova_nota`, `recalcular_f2`, `eixo_civil`, `eixo_pela_hora`. (`app/chamados/tests/bug_par_mutantes.py:26`, `app/chamados/tests/bug_par_mutantes.py:110`, `app/chamados/tests/bug_par_mutantes.py:196`.) |
+| Runner c2 | Mortos: `c2_contador_alias`, `c2_103_alias`, `c2_aviso`, `c3_aviso_base`, `c2_vocabulario`, `c2_fixture_recusa`. (`app/chamados/tests/bug_par_c2_mutantes.py:16`, `app/chamados/tests/bug_par_c2_mutantes.py:67`.) |
+| Integração | **[nao verificado]** para `par_parcial`, `par_ordem_volta`, `retry_reativa`, `contador_recusa`, `s139_digitada`, `command_txt`, `103_k6_constante`, `103_troca_ato`, `103_retry`, `card_libera`, `f6_esconde`, `f1_testemunha_sem_irma`, `f4_pauta_no_pendente`, `f5_sem_dia_calado`, `fundir_a_em_b`, `fundir_a_em_b_porta`. Sem `--django`, até `todos` exclui os 16. (`app/chamados/tests/bug_par_mutantes.py:123`, `app/chamados/tests/bug_par_mutantes.py:161`.) |
+
+F2 deixou de calcular o esperado pelo próprio propositor; os testes matriciais têm asserções sobre estado, HTML e persistência. Entretanto, o teste F4 não exercita a validação prometida, e a busca por Validar no modal considera **qualquer formulário**, sem restringi-lo à pergunta examinada. (`app/chamados/tests/test_bug_par_sem_banco.py:50`, `app/chamados/tests/test_bug_par_volta.py:213`, `app/chamados/tests/test_bug_par_volta.py:218`, `app/chamados/tests/test_bug_par_103.py:89`, `app/chamados/tests/test_bug_par_volta.py:203`.)
+
+A execução Django original dos vizinhos e dos testes matriciais fica **[nao verificado]**; a tentativa de importação encontrou ausência de `django.test`. (`app/ponto/tests/test_f2_eixo_turno.py:4`, `app/core/tests/test_medida_turno_do_par.py:95`.)
+
+**5. Escopo protegido e avais**
+
+O delta fornecido não altera diretamente `motor_calculo_v2.py`, fórmulas financeiras, escala/vínculo ou o JSON congelado; confronto Git independente: **[nao verificado]**. A normalização extrai o algoritmo existente, e o carregador mantém hash/cardinalidade/conjuntos congelados. (`app/ponto/propositor.py:101`, `app/ponto/propositor.py:104`, `app/chamados/services/universo_bug_par.py:15`, `app/chamados/services/universo_bug_par.py:20`.)
+
+Há efeito potencial sobre dinheiro pela mudança da absolvição e consequente criação de batidas, que dispara recálculo pela porta existente; não é alteração apenas visual. Entregue fora163 e devolução U103 mantêm K6 antes da escrita. (`app/chamados/services/materializacao.py:448`, `app/chamados/services/materializacao.py:1409`, `app/ponto/registro_batida.py:180`, `app/chamados/services/materializacao.py:1761`, `app/chamados/services/validacao.py:321`.)
+
+O código do caminho `--apply` também foi alterado para consumir o helper, mas sua execução nesta verificação fica **[nao verificado]**; o caminho continua chamando a porta de devolução. (`app/chamados/management/commands/bug_par_103.py:106`, `app/chamados/management/commands/bug_par_103.py:116`.)
+
+A contradição de desenho remanescente é chamar de “entregue” uma competência não consultada; a exigência documental de zeramento pela validação ganhou implementação compatível, mas não ganhou a prova específica desse percurso. (`app/chamados/services/materializacao.py:800`, `app/chamados/services/materializacao.py:863`, `app/docs/PROMPTS.md:2235`, `app/chamados/tests/test_bug_par_103.py:89`.)
+
+**6. Matriz COMPLEMENTO-1**
+
+A persistência abaixo descreve a porta administrativa `validar_pergunta`; os resultados executados dessa matriz permanecem **[nao verificado]**. (`app/chamados/tests/test_bug_par_volta.py:207`, `app/chamados/tests/test_bug_par_volta.py:220`, `app/chamados/tests/test_bug_par_volta.py:234`, `app/chamados/tests/test_bug_par_volta.py:245`.)
+
+| Linha | Juiz e operação da porta | Persistido | Testemunha, card e modal | Prova e mutante |
+|---|---|---|---|---|
+| **L1 — entregue fora163** | K6 decide a entrega; composição usa competência do fato; porta recusa antes de carimbar. (`app/folha/export.py:556`, `app/chamados/services/materializacao.py:784`, `app/chamados/services/validacao.py:614`.) | **Nada:** retorna antes da escrita. (`app/chamados/services/validacao.py:616`.) | `bloqueada_competencia_entregue`; card e modal exibem detalhe e escondem Validar. (`app/chamados/services/materializacao.py:863`, `app/templates/chamados/partials/_pergunta_card.html:44`, `app/templates/chamados/partials/_pergunta_card.html:47`, `app/templates/chamados/partials/modal_fio.html:252`, `app/templates/chamados/partials/modal_fio.html:274`.) | Teste L1 cobra estado, ambos HTMLs, nenhuma batida e fotografia inalterada. Mutantes de fusão na testemunha/porta declarados; mortes **[nao verificado]**. (`app/chamados/tests/test_bug_par_volta.py:207`, `app/chamados/tests/bug_par_mutantes.py:99`, `app/chamados/tests/bug_par_mutantes.py:103`.) |
+| **L2 — F6, não entregue** | F6 decide; porta recebe o toque; `registrar_batida` recusa plantio institucional em competência fechada. (`app/ponto/janelas.py:75`, `app/chamados/services/validacao.py:617`, `app/ponto/registro_batida.py:156`.) | **Atos VALIDACAO e DEVOLUCAO**, motivo de recusa; validação final removida, sem batida/carimbo final de materialização. (`app/chamados/services/validacao.py:170`, `app/chamados/services/validacao.py:256`, `app/chamados/services/validacao.py:262`, `app/chamados/services/materializacao.py:1610`, `app/ponto/registro_batida.py:161`.) | `bloqueada_competencia`; ambos mostram detalhe e conservam Validar. (`app/chamados/services/materializacao.py:886`, `app/chamados/services/materializacao.py:910`, `app/templates/chamados/partials/_pergunta_card.html:44`, `app/templates/chamados/partials/_pergunta_card.html:100`, `app/templates/chamados/partials/modal_fio.html:254`, `app/templates/chamados/partials/modal_fio.html:306`.) | Teste L2 cobra tela, `nao_gravou/devolvida` e nenhuma batida; não fotografa os atos descritos. `f6_esconde` declarado; morte **[nao verificado]**. (`app/chamados/tests/test_bug_par_volta.py:220`, `app/chamados/tests/test_bug_par_volta.py:231`, `app/chamados/tests/bug_par_mutantes.py:94`.) |
+| **L3 — U163 divergente** | Gate compara declarado/derivado e consulta pertencimento congelado; porta retorna espera antes da validação. (`app/chamados/services/materializacao.py:720`, `app/chamados/services/materializacao.py:738`, `app/chamados/services/validacao.py:571`.) | **Nada pela porta administrativa:** retorno antes do carimbo. (`app/chamados/services/validacao.py:575`, `app/chamados/services/validacao.py:617`.) | `espera_declarado_x_gravado`; card/modal mostram espera e escondem Validar. (`app/chamados/services/materializacao.py:741`, `app/templates/chamados/partials/_pergunta_card.html:49`, `app/templates/chamados/partials/modal_fio.html:264`, `app/templates/chamados/partials/modal_fio.html
+
+[truncado em 20000 de 23235 caracteres]
+
+## 16/11 15:52 · sessao b4dfeca660fc · - · - · origem=Ronald (tmux)
+
+Auditoria somente leitura dos testes: [nao verificado]
+
+- Executei **15 testes verdes**, cobrindo `test_bug_par_sem_banco`, `test_bug_par_c2_sem_banco` e `test_universo_bug_par`; usam funções reais extraídas por AST e sobreposição somente em memória. (`app/chamados/tests/e4_apoio.py:8`, `app/chamados/tests/e4_catracas.py:5`.)
+- Executei os **17 mutantes sem integração** do catálogo principal: todos morreram por falha, sem erro/skip; executei os **6 c2**, também todos mortos. A condição de morte está em `app/chamados/tests/bug_par_mutantes.py:196` e `app/chamados/tests/bug_par_c2_mutantes.py:67`.
+- **Os 16 mutantes de integração continuam [nao verificado]**: `todos` sem `--django` os elimina explicitamente. Os dez pedidos no COMPLEMENTO-1 estão nesse conjunto. (`app/chamados/tests/bug_par_mutantes.py:123`, `app/chamados/tests/bug_par_mutantes.py:161`.)
+- Todos os 33 alvos textuais do catálogo principal aparecem exatamente uma vez na cópia; a cobrança de unicidade está em `app/chamados/tests/bug_par_mutantes.py:176`.
+
+**F2 está curado na origem do teste e da conversão:** o esperado agora é `True` literal; `dia_civil` e `eixo_civil` morrem na asserção da linha 51; `eixo_pela_hora` morre na linha 83. Um mutante adicional `if False` na absolvição também morreu na linha 51, com duas falhas. Portanto a lacuna concreta de c2 não permanece. (`app/chamados/tests/test_bug_par_sem_banco.py:50`, `app/chamados/tests/test_bug_par_sem_banco.py:51`, `app/chamados/tests/test_bug_par_sem_banco.py:83`, `app/chamados/services/materializacao.py:443`.)
+
+**F3 está curado:** `c3_aviso_base` restaura exatamente `de outro(s) dia(s)` e morreu pela `assertNotRegex`; não morreu por import/erro. (`app/chamados/tests/bug_par_c2_mutantes.py:26`, `app/chamados/tests/test_bug_par_c2_sem_banco.py:102`.)
+
+Lacunas de prova:
+
+1. O novo teste F4 chega a zero alterando K6 de aberto para entregue, **não executando validação**; `resolvidas` permanece zero na fixture. Não prova o prometido zeramento pela validação nem protege contra `pendentes_aval += resolvidas`. (`app/chamados/tests/test_bug_par_103.py:87`, `app/chamados/tests/test_bug_par_103.py:89`, `app/chamados/tests/test_bug_par_103.py:94`.)
+2. Não há mutante de **template** declarado. `fundir_a_em_b` e `fundir_a_em_b_porta` alteram testemunha e porta; `f6_esconde` também altera testemunha. A morte da fusão nos templates fica **[nao verificado]**. (`app/chamados/tests/bug_par_mutantes.py:94`, `app/chamados/tests/bug_par_mutantes.py:99`, `app/chamados/tests/bug_par_mutantes.py:103`.)
+3. O teste matricial L3 cita `dxg_desligado`, mas o catálogo aponta esse mutante para o teste puro, **não para o teste matricial**; a morte de L3/HTML por esse mutante não foi executada. (`app/chamados/tests/test_bug_par_volta.py:234`, `app/chamados/tests/bug_par_mutantes.py:27`.)
+4. L4 é declarado controle e não tem mutante próprio associado no catálogo. (`app/chamados/tests/test_bug_par_volta.py:245`, `app/chamados/tests/bug_par_mutantes.py:25`.)
+5. A comparação HTML da matriz procura **qualquer formulário Validar no modal**, sem restringir à pergunta; a espera é restringida pela PK. Na fixture comum as duas perguntas recebem os mesmos bloqueios, mas esse assert pode ocultar divergência por pergunta em cenários mistos. (`app/chamados/tests/test_bug_par_volta.py:201`, `app/chamados/tests/test_bug_par_volta.py:203`, `app/chamados/tests/test_bug_par_volta.py:204`.)
+
+`command_txt` **não deve ser chamado sobrevivente por leitura estática**: o teste verifica `col%s`, que nessa fixture aparece na PAUTA; retirar `exp` elimina essa linha, pois só a saída é respondida em `_preparar`. Morte efetiva continua **[nao verificado]**. (`app/chamados/tests/test_bug_par_103.py:73`, `app/chamados/tests/test_bug_par_projetado.py:521`, `app/chamados/management/commands/bug_par_103.py:62`.)
+
+Os quatro testes vizinhos de eixo passaram substituindo somente `django.test.SimpleTestCase` por `unittest.TestCase` em memória; o algoritmo propositor permaneceu real. Não contam como suíte Django executada. (`app/ponto/tests/test_f2_eixo_turno.py:10`, `app/ponto/tests/test_f2_eixo_turno.py:18`, `app/ponto/tests/test_f2_eixo_turno.py:23`, `app/ponto/tests/test_f2_eixo_turno.py:29`.)
+
+## 16/11 15:52 · sessao c86d117e9ca7 · - · - · origem=Ronald (tmux)
+
+Achado concreto: o estado novo tem dois significados. Sem `data_evento`, `competencia_do_fato` retorna `None`; a guarda produz impedimento por falta de dia; testemunha e porta rotulam esse impedimento como **`bloqueada_competencia_entregue`**, embora K6 nem seja consultado. Reproduzido pelas funções reais extraídas em memória, sem banco nem escrita. (`app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:800`, `app/chamados/services/materializacao.py:861`, `app/chamados/services/validacao.py:614`.)
+
+| Linha | Juiz e operação | Persistência | Testemunha e HTMLs | Prova declarada |
+|---|---|---|---|---|
+| L1 entregue fora163 | K6: `app/folha/export.py:556`; composição pelo fato: `app/chamados/services/materializacao.py:772`; porta recusa antes do carimbo: `app/chamados/services/validacao.py:614`. | Nada: retorno em `app/chamados/services/validacao.py:616`. | Estado entregue: `app/chamados/services/materializacao.py:863`; card mostra detalhe/esconde Validar: `app/templates/chamados/partials/_pergunta_card.html:44`; modal idem: `app/templates/chamados/partials/modal_fio.html:252`, `app/templates/chamados/partials/modal_fio.html:274`. | Teste: `app/chamados/tests/test_bug_par_volta.py:207`; mutantes testemunha/porta: `app/chamados/tests/bug_par_mutantes.py:99`, `app/chamados/tests/bug_par_mutantes.py:103`; execução [nao verificado]. |
+| L2 F6 sem entrega | F6: `app/ponto/janelas.py:75`; toque entra: `app/chamados/services/validacao.py:617`; chokepoint recusa batida: `app/ponto/registro_batida.py:156`. | Atos VALIDACAO e DEVOLUCAO: `app/chamados/services/validacao.py:170`, `app/chamados/services/validacao.py:262`; validação final nula: `app/chamados/services/validacao.py:256`; motivo: `app/chamados/services/materializacao.py:1610`; sem batida. | `bloqueada_competencia`: `app/chamados/services/materializacao.py:886`, `app/chamados/services/materializacao.py:910`; card conserva formulário: `app/templates/chamados/partials/_pergunta_card.html:100`; modal conserva: `app/templates/chamados/partials/modal_fio.html:306`. | Teste: `app/chamados/tests/test_bug_par_volta.py:220`; mutante `f6_esconde`: `app/chamados/tests/bug_par_mutantes.py:94`; execução [nao verificado]. |
+| L3 U163 divergente | Comparação: `app/chamados/services/materializacao.py:720`; gate: `app/chamados/services/materializacao.py:732`; porta retorna antes de escrever: `app/chamados/services/validacao.py:571`. | Nada: `app/chamados/services/validacao.py:575`; materializador também retorna antes do bloco de escrita: `app/chamados/services/materializacao.py:1808`. | Espera: `app/chamados/services/materializacao.py:741`; card mostra espera e esconde Validar: `app/templates/chamados/partials/_pergunta_card.html:49`; modal idem: `app/templates/chamados/partials/modal_fio.html:264`, `app/templates/chamados/partials/modal_fio.html:274`. | Teste matriz: `app/chamados/tests/test_bug_par_volta.py:234`; **`dxg_desligado` aponta ao teste sem banco, não à matriz**: `app/chamados/tests/bug_par_mutantes.py:27`; morte da matriz [nao verificado]. |
+| L4 nada barra | Derivador: `app/chamados/services/materializacao.py:900`, `app/chamados/services/materializacao.py:914`; porta valida/materializa: `app/chamados/services/validacao.py:617`, `app/chamados/services/validacao.py:645`. | Batidas: `app/ponto/registro_batida.py:176`; carimbos: `app/chamados/services/materializacao.py:1875`; atos: `app/chamados/services/validacao.py:170`. | `aplicavel`: `app/chamados/services/materializacao.py:900`; ambos mostram Validar: `app/templates/chamados/partials/_pergunta_card.html:100`, `app/templates/chamados/partials/modal_fio.html:306`. | Teste: `app/chamados/tests/test_bug_par_volta.py:245`; assert persistência: `app/chamados/tests/test_bug_par_projetado.py:103`; mutantes de par apontam outros testes: `app/chamados/tests/bug_par_mutantes.py:63`; execução [nao verificado]. |
+
+`fio.py` e o filtro do card transportam o dict sem fundir os estados; só adaptam ausência/exceção para indisponível. (`app/chamados/services/fio.py:373`, `app/chamados/templatetags/chamados_tags.py:134`.) Os HTMLs decidem pelo estado e exibem o detalhe, sem interpretar seu texto. (`app/templates/chamados/partials/_pergunta_card.html:44`, `app/templates/chamados/partials/modal_fio.html:252`.)
+
+A fusão no template não tem mutante declarado; os mutantes existentes atingem testemunha e porta. O runner modifica funções Python, sem mecanismo de mutação de template. (`app/chamados/tests/bug_par_mutantes.py:99`, `app/chamados/tests/bug_par_mutantes.py:182`.) As asserções de tela da L1 deveriam detectar a fusão que reofereça Validar, mas sua morte aplicada permanece [nao verificado]. (`app/chamados/tests/test_bug_par_volta.py:214`.)
+
+O teste F5 não cobre essa duplicidade semântica: verifica comando e devolução U103, sem chamar testemunha ou `validar_pergunta` para a pergunta fora163 sem dia. (`app/chamados/tests/test_bug_par_103.py:101`.)
+
+## 16/11 15:51 · sessao 3efa062c8f48 · - · - · origem=Ronald (tmux)
+
+F4 foi corrigido na origem do rótulo e do recorte: o contador separa pendência, pertencimento congelado, resolvidas, entregues e sem dia; o comando pede o mesmo recorte por empresa e imprime os dois números do próprio contador. (`app/chamados/services/materializacao.py:321`, `app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:354`, `app/chamados/management/commands/bug_par_103.py:79`.)
+
+| Valor | Escritor | Leitores/semântica |
+|---|---|---|
+| `pendentes_aval` | `universo + len(b103)` | Comando e teste; trabalho ainda não carimbado, mais U103 atualmente devolvível. (`app/chamados/services/materializacao.py:356`, `app/chamados/management/commands/bug_par_103.py:82`, `app/chamados/tests/test_bug_par_103.py:88`.) |
+| `congelados_no_recorte` | `len(qs)` após filtro de disputas | Comando e testes; pertencimento U163 presente no recorte, independentemente do efeito. (`app/chamados/services/materializacao.py:321`, `app/chamados/services/materializacao.py:324`, `app/chamados/services/materializacao.py:356`, `app/chamados/management/commands/bug_par_103.py:83`.) |
+| `resolvidas` | Incremento para carimbadas que já não atendem `paridade_absolvida_bug_par_103` | Só encontrei leitura na soma de partição do teste novo; significa “não é mais caso”, incluindo causas diversas, não necessariamente validação exitosa. (`app/chamados/services/materializacao.py:327`, `app/chamados/services/materializacao.py:355`, `app/chamados/tests/test_bug_par_103.py:94`.) |
+| `bug_par_103_pauta_dp` | Lista de candidatas atuais cujo K6 é verdadeiro | Só encontrei leitura no teste; `(pk, 'MM/AAAA')`. (`app/chamados/services/materializacao.py:330`, `app/chamados/services/materializacao.py:334`, `app/chamados/tests/test_bug_par_103.py:93`.) |
+| `bug_par_103_sem_dia` | Lista de candidatas atuais cujo helper retorna `None` | Só encontrei leitura na soma de partição do teste. (`app/chamados/services/materializacao.py:331`, `app/chamados/services/materializacao.py:355`, `app/chamados/tests/test_bug_par_103.py:95`.) |
+| `total_aval`, removida | Não há escritor atual | O único literal restante encontrado é a asserção de ausência no stdout; os consumidores encontrados foram migrados. (`app/chamados/tests/test_bug_par_103.py:99`, `app/chamados/tests/test_bug_par_c2_sem_banco.py:63`, `app/chamados/tests/test_bug_par_projetado.py:533`, `app/chamados/tests/test_bug_par_volta.py:88`.) |
+
+A prova nova de F4 **não demonstra zeramento pela validação**: mede `(1,1)`, muda o mock K6 para entregue e mede `(0,1)`; não valida nem devolve entre essas duas medições. O mutante declarado só ataca a classificação da entregue. Um acréscimo indevido de `resolvidas` a `pendentes_aval` não seria observado nessa fixture, porque ela mantém `resolvidas=0`. (`app/chamados/tests/test_bug_par_103.py:86`, `app/chamados/tests/test_bug_par_103.py:89`, `app/chamados/tests/test_bug_par_103.py:91`, `app/chamados/tests/bug_par_mutantes.py:116`.)
+
+O código permite cair pela validação: pergunta carimbada deixa o ramo não materializado e entra em `resolvidas` quando não é mais caso U103; a verificação desse percurso pelo contador após validar permanece ausente no teste novo. (`app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:328`, `app/chamados/tests/test_bug_par_projetado.py:556`, `app/chamados/tests/test_bug_par_projetado.py:560`.)
+
+F5 foi corrigido na origem comum: `competencia_do_fato` devolve `None` antes de consultar K6 quando falta `data_evento`; com data, delega à janela existente e ao juiz K6 existente. Guarda, contador, devolução e comando consomem esse mesmo contrato. (`app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:784`, `app/chamados/services/materializacao.py:799`, `app/chamados/services/materializacao.py:330`, `app/chamados/services/validacao.py:321`, `app/chamados/management/commands/bug_par_103.py:58`.)
+
+O comando publica a linha sem dia tanto para U103 quanto para fora163, e a devolução retorna sem descarimbar, desvalidar ou registrar DEVOLUÇÃO; o teste prepara ambas as perguntas sem data e exige as duas linhas e fotografia inalterada. (`app/chamados/management/commands/bug_par_103.py:62`, `app/chamados/management/commands/bug_par_103.py:75`, `app/chamados/services/validacao.py:322`, `app/chamados/services/validacao.py:329`, `app/chamados/tests/test_bug_par_103.py:107`, `app/chamados/tests/test_bug_par_103.py:116`, `app/chamados/tests/test_bug_par_103.py:123`.)
+
+Há **ambiguidade residual do estado entregue**: falta de dia fora163 também produz texto impeditivo, que `entrega_que_barra_a_validacao` propaga; a testemunha e a porta o rotulam `bloqueada_competencia_entregue`, embora K6 sequer tenha sido consultado. Portanto esse estado significa tanto “entregue” quanto “não sei a competência por ausência de dia”. (`app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:800`, `app/chamados/services/validacao.py:218`, `app/chamados/services/materializacao.py:863`, `app/chamados/services/validacao.py:616`.)
+
+A seleção do stdout `elegiveis` continua sendo todas as PKs U103 presentes no recorte, enquanto a chave `bug_par_103` agora seleciona apenas candidatas atuais devolvíveis; os dois números não são equivalentes. (`app/chamados/management/commands/bug_par_103.py:53`, `app/chamados/services/materializacao.py:327`, `app/chamados/services/materializacao.py:335`.)
+
+As listas novas particionam a consulta U163 congelada; não reconstroem seu pertencimento por recusa, lâmpada ou K6. O carregador continua validando hash, cardinalidade e conjuntos imutáveis. (`app/chamados/services/materializacao.py:320`, `app/chamados/services/materializacao.py:321`, `app/chamados/services/universo_bug_par.py:14`, `app/chamados/services/universo_bug_par.py:20`, `app/chamados/services/universo_bug_par.py:30`.)
+
+Execução dos testes de integração e mortes dos mutantes F4/F5: **[nao verificado]**; não acessei banco nem logs. [nao verificado]
 
 ## 16/11 15:50 · sessao de3443daed46 · O50-CELULA-APOS-DESLIGAMENTO · verificador · origem=Code
 
@@ -530,657 +691,4 @@ A ajuda adicional é prosa fixa em `<div>`, fora de tooltip/componente/mapa: `ap
 
 3. **Dias com ERRO:** nenhum registrado no `TOTAL` fornecido (`erro=0`); arquivo:linha desse registro **[nao verificado]**. Portanto, não há dia listado para invalidar por ERRO nessa parte; arquivo:linha **[nao verificado]**.
 
-## 16/11 14:38 · sessao af08e3068de7 · PRIORIDADE-EV-ITEM1 · sonda · origem=Code
-
-1. **TOTAL da parte:** `N=19 | ok=19 | erro=0 | rc_sombra=0`, conforme os registros finais fornecidos; arquivo:linha desses registros **[nao verificado]**. **Tripwire:** disparo **[nao verificado]**; não há resultado explícito dele na saída.
-
-2. Na tabela, **minutos do espelho = `minutos_realizados`** e **classe = `STATUS.veredito`**, conforme as referências da sonda: `app/ponto/services/espelho.py:783-819,764-895`. As categorias abaixo descrevem os mecanismos apresentados, sem atribuir dono definitivo **[nao verificado]**.
-
-| Código | Data | Espelho: minutos; classe | e6 do universo | Categoria/causa apontada |
-|---|---|---|---:|---|
-| col129 | 2026-10-12 | 0; `em_aberto` | 779 | **Pareamento diferente:** juiz recebeu duas saídas sem entrada; e6 pareou a saída de 17:30 com a saída de 06:30 do dia seguinte. `estrutura_dias.txt:1`; `app/ponto/turnos.py:502-567,719`; `app/ponto/calculador/nucleo.py:224-247`. |
-| col218 | 2026-10-15 | 105; `em_aberto` | 0 | **Atribuição do turno noturno:** falta entrada das 21h; espelho conta o par 03:15–05:00 do dia 16 no dia 15; e6 não apresenta turno no dia 15. `estrutura_dias.txt:2`; `app/ponto/services/espelho.py:764-895`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-09-23 | 548; `trabalhou` | 594 | **Desconto de intervalo:** realizado desconta 60 min declarados; pausa de 13,3619 min fica abaixo do piso reconhecido; e6 desconta essa pausa. `estrutura_dias.txt:3`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-09-24 | 552; `trabalhou` | 598 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 13,569383 min é descontada pelo e6. `estrutura_dias.txt:4`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-09-25 | 556; `trabalhou` | 604 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 12,438 min é descontada pelo e6. `estrutura_dias.txt:5`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-09-28 | 535; `trabalhou` | 581 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 14,634152 min é descontada pelo e6. `estrutura_dias.txt:6`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-10-01 | 545; `trabalhou` | 590 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 14,443733 min é descontada pelo e6. `estrutura_dias.txt:7`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-10-02 | 545; `trabalhou` | 593 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 13,069783 min é descontada pelo e6. `estrutura_dias.txt:8`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-10-06 | 551; `trabalhou` | 597 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 14,038883 min é descontada pelo e6. `estrutura_dias.txt:9`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col252 | 2026-10-09 | 544; `trabalhou` | 592 | **Desconto de intervalo:** realizado desconta 60 min; pausa abaixo do piso de 11,989283 min é descontada pelo e6. `estrutura_dias.txt:10`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col369 | 2026-10-12 | 476; `feriado` | 416 | **Intervalo não reconhecido no realizado:** célula de folga sem marcos; batidas internas E–S, nenhuma pausa reconhecida e nenhum desconto. e6 desconta 59,582783 min entre as batidas internas. `estrutura_dias.txt:11`; `app/escala/models.py:1652-1701`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col37 | 2026-10-05 | 241; `em_aberto` | 0 | **Atribuição do turno noturno:** falta entrada das 19h; juiz tem saída isolada às 02h e par 03:00–07:01 do dia 6 atribuído ao dia 5; e6 não apresenta turno no dia 5. `estrutura_dias.txt:12`; `app/ponto/services/espelho.py:764-895`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col37 | 2026-10-09 | 241; `em_aberto` | 0 | **Atribuição do turno noturno:** falta entrada das 19h; saída isolada às 02h e par 03:00–07:01 do dia 10 atribuído ao dia 9; e6 não apresenta turno no dia 9. `estrutura_dias.txt:13`; `app/ponto/services/espelho.py:764-895`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col382 | 2026-09-30 | 364; `trabalhou` | 0 | **Atribuição do turno noturno com pausa reconhecida:** espelho atribui 01:01–07:50 do dia 1 ao dia 30 e calcula 409−45=364 min; e6 não apresenta turno no dia 30. `estrutura_dias.txt:14`; `app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col451 | 2026-09-23 | 707; `em_aberto` | 718 | **Pareamento diferente:** espelho conta 18:58–06:45 do dia seguinte; e6 pareia a saída isolada de 07h com a entrada de 18:58 e corta antes da saída seguinte. `estrutura_dias.txt:15`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:215-247`. |
-| col451 | 2026-09-25 | 705; `em_aberto` | 718 | **Pareamento diferente:** espelho conta 19:00–06:45 do dia seguinte; e6 pareia a saída isolada de 07:02 com a entrada de 19h e corta antes da saída seguinte. `estrutura_dias.txt:16`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:215-247`. |
-| col478 | 2026-09-25 | 719; `trabalhou` | 8 | **Entrada adicional e corte do e6:** espelho usa 18:57–06:56, com a entrada de 19:04 marcada `X`; e6 pareia as duas entradas, obtém 7,766517 min e corta antes da saída. `estrutura_dias.txt:17`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:215-247`. |
-| col515 | 2026-10-09 | 244; `em_aberto` | 0 | **Atribuição do turno noturno:** falta entrada das 19h; saída isolada às 02h e par 02:59–07:03 do dia 10 atribuído ao dia 9; e6 não apresenta turno no dia 9. `estrutura_dias.txt:18`; `app/ponto/services/espelho.py:764-895`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-254`. |
-| col515 | 2026-10-11 | 245; `em_aberto` | 0 | **Atribuição do turno noturno:** falta entrada das 19h; saída isolada às 01:50 e par 03:00–07:05 do dia 12 atribuído ao dia 11; e6 não apresenta turno no dia 11. `estrutura_dias.txt:19`; `app/ponto/services/espelho.py:764-895`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-254`. |
-
-3. **Dias com ERRO: nenhum**, conforme `TOTAL|parte=1/3|dias=19|ok=19|erro=0`; arquivo:linha desse registro **[nao verificado]**. Portanto, nenhuma exclusão de número por ERRO foi indicada nessa parte; arquivo:linha **[nao verificado]**.
-
-## 16/11 14:36 · sessao a12a65a6e084 · PRIORIDADE-EV-ITEM6 · sonda · origem=Code
-
-[nao verificado]
-```text
-PEND|col373|2026-08-04|08/2026|emp2
-PEND|col60|2026-06-23|07/2026|emp3
-PEND|col152|2026-06-23|07/2026|emp3
-PEND|col152|2026-06-29|07/2026|emp3
-PEND|col888|2026-08-28|09/2026|emp2
-PEND|col920|2026-09-02|09/2026|emp2
-PEND|col616|2026-09-05|09/2026|emp2
-PEND|col920|2026-09-04|09/2026|emp2
-PEND|col727|2026-09-04|09/2026|emp2
-PEND|col439|2026-09-03|09/2026|emp2
-PEND|col212|2026-08-26|09/2026|emp2
-PEND|col112|2026-09-06|09/2026|emp3
-PEND|col920|2026-09-06|09/2026|emp2
-PEND|col926|2026-09-07|09/2026|emp2
-PEND|col152|2026-09-07|09/2026|emp3
-PEND|col236|2026-09-07|09/2026|emp2
-PEND|col363|2026-09-07|09/2026|emp2
-PEND|col358|2026-09-07|09/2026|emp2
-PEND|col928|2026-09-07|09/2026|emp2
-PEND|col878|2026-09-07|09/2026|emp2
-PEND|col507|2026-09-07|09/2026|emp2
-PEND|col49|2026-09-07|09/2026|emp3
-PEND|col112|2026-09-08|09/2026|emp3
-PEND|col920|2026-09-08|09/2026|emp2
-PEND|col616|2026-09-07|09/2026|emp2
-PEND|col148|2026-09-10|09/2026|emp3
-PEND|col112|2026-09-10|09/2026|emp3
-PEND|col920|2026-09-10|09/2026|emp2
-PEND|col616|2026-09-09|09/2026|emp2
-PEND|col920|2026-09-12|09/2026|emp2
-PEND|col616|2026-09-11|09/2026|emp2
-PEND|col862|2026-09-13|09/2026|emp2
-PEND|col242|2026-09-13|09/2026|emp2
-PEND|col901|2026-09-14|09/2026|emp2
-PEND|col920|2026-08-27|09/2026|emp2
-PEND|col920|2026-08-29|09/2026|emp2
-PEND|col920|2026-08-31|09/2026|emp2
-PEND|col207|2026-09-05|09/2026|emp2
-PEND|col869|2026-09-06|09/2026|emp2
-PEND|col869|2026-09-13|09/2026|emp2
-PEND|col899|2026-09-05|09/2026|emp2
-PEND|col903|2026-09-14|09/2026|emp2
-PEND|col129|2026-08-30|09/2026|emp3
-PEND|col129|2026-09-08|09/2026|emp3
-PEND|col129|2026-09-13|09/2026|emp3
-PEND|col129|2026-09-15|09/2026|emp3
-PEND|col382|2026-09-03|09/2026|emp2
-PEND|col491|2026-08-27|09/2026|emp2
-PEND|col382|2026-09-10|09/2026|emp2
-PEND|col382|2026-09-17|09/2026|emp2
-PEND|col616|2026-09-17|09/2026|emp2
-PEND|col901|2026-09-17|09/2026|emp2
-PEND|col572|2026-09-18|09/2026|emp2
-PEND|col648|2026-09-15|09/2026|emp2
-PEND|col148|2026-09-13|09/2026|emp3
-PEND|col902|2026-09-13|09/2026|emp2
-PEND|col824|2026-09-15|09/2026|emp2
-PEND|col824|2026-09-19|09/2026|emp2
-PEND|col902|2026-09-19|09/2026|emp2
-PEND|col499|2026-09-19|09/2026|emp2
-PEND|col148|2026-09-19|09/2026|emp3
-PEND|col822|2026-09-20|09/2026|emp2
-PEND|col572|2026-09-20|09/2026|emp2
-PEND|col491|2026-09-20|09/2026|emp2
-PEND|col902|2026-09-20|09/2026|emp2
-PEND|col148|2026-09-20|09/2026|emp3
-PEND|col491|2026-09-21|10/2026|emp2
-PEND|col616|2026-09-21|10/2026|emp2
-PEND|col824|2026-09-21|10/2026|emp2
-PEND|col903|2026-09-21|10/2026|emp2
-PEND|col704|2026-09-21|10/2026|emp2
-PEND|col857|2026-09-22|10/2026|emp4
-PEND|col418|2026-09-22|10/2026|emp2
-PEND|col245|2026-09-22|10/2026|emp2
-PEND|col203|2026-09-22|10/2026|emp2
-PEND|col616|2026-09-23|10/2026|emp2
-PEND|col824|2026-09-23|10/2026|emp2
-PEND|col859|2026-09-23|10/2026|emp2
-PEND|col951|2026-09-24|10/2026|emp2
-PEND|col616|2026-09-25|10/2026|emp2
-PEND|col824|2026-09-05|09/2026|emp2
-PEND|col824|2026-09-25|10/2026|emp2
-PEND|col369|2026-09-25|10/2026|emp2
-PEND|col885|2026-09-26|10/2026|emp2
-PEND|col616|2026-09-27|10/2026|emp2
-PEND|col242|2026-09-27|10/2026|emp2
-PEND|col457|2026-09-27|10/2026|emp2
-PEND|col155|2026-09-27|10/2026|emp3
-PEND|col373|2026-09-27|10/2026|emp2
-PEND|col666|2026-09-27|10/2026|emp2
-PEND|col859|2026-09-02|09/2026|emp2
-PEND|col859|2026-09-16|09/2026|emp2
-PEND|col784|2026-09-28|10/2026|emp2
-PEND|col857|2026-09-29|10/2026|emp4
-PEND|col373|2026-09-29|10/2026|emp2
-PEND|col89|2026-09-30|10/2026|emp3
-PEND|col202|2026-10-02|10/2026|emp2
-PEND|col876|2026-10-03|10/2026|emp3
-PEND|col373|2026-10-06|10/2026|emp2
-PEND|col131|2026-10-08|10/2026|emp3
-PEND|col974|2026-10-10|10/2026|emp2
-PEND|col155|2026-10-11|10/2026|emp3
-PEND|col924|2026-10-10|10/2026|emp2
-```
-
-| Competência | Linhas PEND |
-|---|---:|
-| 07/2026 | 3 [nao verificado] |
-| 08/2026 | 1 [nao verificado] |
-| 09/2026 | 65 [nao verificado] |
-| 10/2026 | 34 [nao verificado] |
-| 11/2026 | 0 [nao verificado] |
-
-[nao verificado]
-```text
-TOTAL_DIAS 253 TOTAL_PENDENTE 103 ERROS 0
-FIM
-```
-
-## 16/11 14:34 · sessao 34889e7d5722 · PRIORIDADE-EV-ITEM6 · sonda · origem=Code
-
-Referência: somente o bloco colado; sem arquivo:linha disponível, os resultados levam [nao verificado].
-
-1. **Marcadores presentes:** `READ_ONLY on`, `ERROS 0` e `FIM`. Todas as linhas O199 têm `erro=0`; a saída passa pelo critério solicitado de integridade. [nao verificado]
-
-2. **Conferência dos valores:** [nao verificado]
-
-| competencia | empresa | exportada | dias | ja_folga | pendente | colabs_pendentes | referência |
-|---|---:|:---:|---:|---:|---:|---:|---|
-| 07/2026 | 3 | s | 3 | 0 | 3 | 2 | [nao verificado] |
-| 08/2026 | 2 | s | 6 | 5 | 1 | 1 | [nao verificado] |
-| 09/2026 | 2 | s | 91 | 39 | 52 | 29 | [nao verificado] |
-| 09/2026 | 3 | s | 19 | 6 | 13 | 5 | [nao verificado] |
-| 10/2026 | 2 | n | 74 | 47 | 27 | 20 | [nao verificado] |
-| 10/2026 | 3 | n | 17 | 12 | 5 | 4 | [nao verificado] |
-| 10/2026 | 4 | n | 3 | 1 | 2 | 1 | [nao verificado] |
-| 11/2026 | 1 | n | 1 | 1 | 0 | 0 | [nao verificado] |
-| 11/2026 | 2 | n | 29 | 29 | 0 | 0 | [nao verificado] |
-| 11/2026 | 3 | n | 8 | 8 | 0 | 0 | [nao verificado] |
-| 11/2026 | 4 | n | 2 | 2 | 0 | 0 | [nao verificado] |
-| **TOTAL** | — | — | **253** | **150** | **103** | **62** | [nao verificado] |
-
-**Os totais fecham:** soma de `dias=253`, soma de `pendente=103` e `150+103=253`. Em todas as linhas, `dias=ja_folga+pendente`. Os 62 são a soma de `colabs_pendentes` das linhas; quantidade de colaboradores únicos não está demonstrada. [nao verificado]
-
-3. **Pendências e Corte C:** [nao verificado]
-
-- **Exportadas (`s`): 69 dias pendentes**, destinados à lista do DP pelo critério solicitado. [nao verificado]
-- **Abertas pelo flag (`n`): 34 dias pendentes**, todos em **10/2026**. [nao verificado]
-- **11/2026: zero pendentes O199**; portanto, o recorte autorizado do Corte C apresenta **zero dias O199 para apply**, que continua condicionado ao `!` de escala. [nao verificado]
-
-**Divergência:** o anexo chama 10 de competência paga, enquanto a saída marca 10 como `exportada=n`. Os 34 dias de outubro não podem ser considerados autorizados para apply pelo Corte C, limitado à 11. A saída também não apresenta medição identificável de `SEM-CELULA-11-DEVE-TER-CELULA (col305)`. [nao verificado]
-
-## 16/11 14:33 · sessao fbd083b15a88 · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
-
-A função é `espelho_do_colab`: a tela a chama diretamente e o PDF consome seus dias (`app/ponto/views.py:160-162`; `app/relatorios/pdf_espelho.py:596-603`). O patch abaixo intercepta somente as atribuições ao cache do catálogo, preservando sua leitura e os turnos reais (`app/ponto/catalogo/ausencias.py:275-281`).
-
-```python
-# OBRA: ESPELHO-VERDADE-FECHO-V0 — R3
-# Arvore solicitada: 3580b35e028267d85318cb75fd5b3d0c40e04a00
-# Texto para o envelope JA inicializado em SOMBRA/juliani.
-# Execucao, desempenho e compatibilidade do script: [nao verificado].
-# Auxiliares deste script, biblioteca padrao, sqlparse e implementacoes
-# internas do Django fora da copia: [nao verificado].
-#
-# PARTE recorta estrutura_dias.txt:1-57 na ordem recebida: 19/19/19.
-PARTE = 1
-
-import sys
-sys.dont_write_bytecode = True
-
-import datetime as dt
-import decimal
-import json
-import logging
-import re
-from contextlib import ExitStack, redirect_stderr, redirect_stdout
-from unittest.mock import patch
-
-NV = "[nao verificado]"
-SAIDA = sys.stdout
-
-# Mesma data civil do R1 recebido; instante/snapshot original: [nao verificado].
-# O instante AGORA sera real, unico por execucao e publicado. [nao verificado]
-HOJE = dt.date(2026, 11, 16)
-
-# Transcricao dos campos identificadores e numeros de estrutura_dias.txt:1-57.
-# Inclui col1021 e col909: o universo aqui e 57, nao os 55 do R2.
-DADO = """col129|10/2026|2026-10-12|0|779
-col218|10/2026|2026-10-15|105|0
-col252|10/2026|2026-09-23|548|594
-col252|10/2026|2026-09-24|552|598
-col252|10/2026|2026-09-25|556|604
-col252|10/2026|2026-09-28|535|581
-col252|10/2026|2026-10-01|545|590
-col252|10/2026|2026-10-02|545|593
-col252|10/2026|2026-10-06|551|597
-col252|10/2026|2026-10-09|544|592
-col369|10/2026|2026-10-12|476|416
-col37|10/2026|2026-10-05|241|0
-col37|10/2026|2026-10-09|241|0
-col382|10/2026|2026-09-30|364|0
-col451|10/2026|2026-09-23|707|718
-col451|10/2026|2026-09-25|705|718
-col478|10/2026|2026-09-25|719|8
-col515|10/2026|2026-10-09|244|0
-col515|10/2026|2026-10-11|245|0
-col723|10/2026|2026-10-08|440|345
-col746|10/2026|2026-09-24|289|193
-col841|10/2026|2026-10-20|681|522
-col854|10/2026|2026-10-04|718|7
-col864|10/2026|2026-10-12|509|449
-col868|10/2026|2026-09-22|0|679
-col876|10/2026|2026-09-21|550|665
-col1021|11/2026|2026-11-06|841|0
-col110|11/2026|2026-11-12|241|0
-col112|11/2026|2026-10-21|546|838
-col112|11/2026|2026-10-22|541|835
-col113|11/2026|2026-10-30|242|0
-col113|11/2026|2026-11-01|241|0
-col114|11/2026|2026-11-08|439|429
-col114|11/2026|2026-11-15|499|440
-col130|11/2026|2026-10-29|335|672
-col200|11/2026|2026-10-29|180|0
-col200|11/2026|2026-11-02|180|0
-col218|11/2026|2026-11-14|103|0
-col220|11/2026|2026-11-10|337|430
-col252|11/2026|2026-11-09|551|597
-col252|11/2026|2026-11-10|551|598
-col252|11/2026|2026-11-11|550|598
-col252|11/2026|2026-11-13|551|597
-col296|11/2026|2026-11-02|345|0
-col37|11/2026|2026-11-14|241|0
-col382|11/2026|2026-11-10|418|0
-col516|11/2026|2026-10-23|361|0
-col516|11/2026|2026-10-28|372|0
-col727|11/2026|2026-11-10|307|0
-col874|11/2026|2026-10-22|667|383
-col884|11/2026|2026-11-08|679|699
-col909|11/2026|2026-11-11|831|245
-col922|11/2026|2026-11-01|1382|68
-col922|11/2026|2026-11-04|676|458
-col989|11/2026|2026-10-23|721|567
-col996|11/2026|2026-10-28|0|580
-col996|11/2026|2026-11-10|443|1026"""
-
-TODOS = []
-for numero, texto in enumerate(DADO.splitlines(), 1):
-    codigo, competencia, data, esp_min, e6_min = texto.split("|")
-    TODOS.append((numero, codigo, competencia, data, int(esp_min), int(e6_min)))
-
-if PARTE not in (1, 2, 3):
-    raise ValueError("ParteInvalida")
-if len(TODOS) != 57 or len({r[1:4] for r in TODOS}) != 57:
-    raise RuntimeError("UniversoIncompativel")
-UNIVERSO = TODOS[(PARTE - 1) * 19:PARTE * 19]
-N = len(UNIVERSO)
-if N != 19:
-    raise RuntimeError("FatiaIncompativel")
-
-
-def imprimir(*partes):
-    print(*partes, file=SAIDA, flush=True)
-
-
-class Descartar:
-    def write(self, texto):
-        return len(texto)
-
-    def flush(self):
-        return None
-
-
-class escrita_nao_interceptada(RuntimeError):
-    pass
-
-
-class CacheSomenteLeitura:
-    """Proxy de escrita; a leitura vem INTEGRALMENTE do objeto original."""
-
-    def __init__(self, original):
-        self.original = original
-        self.suprimidas = 0
-
-    def __getitem__(self, chave):
-        return self.original[chave]
-
-    def __setitem__(self, chave, valor):
-        if chave not in ("v", "t"):
-            raise RuntimeError("EscritorDeCacheIncompativel")
-        self.suprimidas += 1
-        # SOMENTE as atribuicoes sao absorvidas; nenhum valor e inventado.
-        # Escritor nominal: ponto.catalogo.ausencias._CACHE.__setitem__
-        # nos sitios app/ponto/catalogo/ausencias.py:279-280.
-        # vigente() ainda calcula v pela fonte real (:278) e retorna v (:281).
-
-
-def classe_segura(exc):
-    nome = type(exc).__name__
-    return nome if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,79}", nome) else "Excecao"
-
-
-def sonda():
-    ok = erro = 0
-    feitos = set()
-    guarda = None
-
-    try:
-        with (
-            patch.object(logging.Logger, "handle", lambda *a, **k: None),
-            redirect_stdout(Descartar()),
-            redirect_stderr(Descartar()),
-        ):
-            from django.apps import apps
-            from django.conf import settings
-            from django.db import connection, connections, transaction
-            from django.db.models import Q
-            from django.utils import timezone
-            import sqlparse
-            from sqlparse import tokens as SQLTOK
-
-            # Mesmo molde de ambiente do anexo r2_script_p1.py.
-            # Configuracao: app/config/settings/sombra.py:49-50,65.
-            # Envelope efetivo: verificado apenas quando este texto executar.
-            if (
-                not apps.ready
-                or settings.SETTINGS_MODULE != "config.settings.sombra"
-                or not settings.BANCO_DE_ENSAIO
-                or connection.settings_dict["NAME"] != "sombra"
-                or connection.schema_name != "juliani"
-                or connection.in_atomic_block
-                or not connection.get_autocommit()
-            ):
-                raise RuntimeError("AmbienteIncompativel")
-
-            class GuardaSQL:
-                def __init__(self):
-                    self.tentou = False
-                    self.permite_set_inicial = True
-
-                def bloquear(self):
-                    self.tentou = True
-                    raise escrita_nao_interceptada()
-
-                def __call__(self, execute, sql, params, many, context):
-                    # execute_wrapper / sqlparse: implementacoes [nao verificado].
-                    # O flag e aderente ao dia: except Exception internos nao
-                    # podem converter uma tentativa de escrita em dia "ok".
-                    # Exemplo de captura interna:
-                    # app/ponto/catalogo/ausencias.py:246-254.
-                    if context["connection"].alias != "default":
-                        self.bloquear()
-
-                    comandos = [
-                        s for s in sqlparse.parse(str(sql))
-                        if str(s).strip()
-                    ]
-                    if len(comandos) != 1:
-                        self.bloquear()
-
-                    partes = []
-                    for token in comandos[0].flatten():
-                        if token.is_whitespace:
-                            continue
-                        if token.ttype in SQLTOK.Comment:
-                            continue
-                        if token.ttype in SQLTOK.Literal.String:
-                            continue
-                        # Identificador entre aspas nao e comando.
-                        if token.value.startswith('"'):
-                            continue
-                        partes.append(token.value)
-                    plano = " ".join(partes).upper().strip().rstrip(";").strip()
-
-                    # Inclui DML dentro de WITH e SELECT ... FOR UPDATE/SHARE.
-                    # TRUNCATE/DDL/COPY/CALL tambem nao sao leitura autorizada.
-                    if re.search(
-                        r"\b(INSERT|UPDATE|DELETE|LOCK|MERGE|TRUNCATE|"
-                        r"CREATE|ALTER|DROP|GRANT|REVOKE|COPY|CALL|DO|"
-                        r"VACUUM|ANALYZE|REFRESH|REINDEX|CLUSTER|SHARE)\b",
-                        plano,
-                    ):
-                        self.bloquear()
-                    if re.search(r"\bPG_(?:TRY_)?ADVISORY_", plano):
-                        self.bloquear()
-
-                    if plano == "SET TRANSACTION READ ONLY":
-                        if not self.permite_set_inicial:
-                            self.bloquear()
-                    elif not re.match(
-                        r"^(SELECT|WITH|SHOW|SAVEPOINT|RELEASE|ROLLBACK)\b",
-                        plano,
-                    ):
-                        self.bloquear()
-
-                    return execute(sql, params, many, context)
-
-            guarda = GuardaSQL()
-
-            def serializar(valor):
-                if isinstance(valor, dt.datetime):
-                    # Mesmo uso local do E6:
-                    # app/ponto/management/commands/e6_oraculo.py:152.
-                    return timezone.localtime(valor).isoformat()
-                if isinstance(valor, (dt.date, dt.time)):
-                    return valor.isoformat()
-                if isinstance(valor, decimal.Decimal):
-                    return float(valor)
-                # Nunca str(modelo), repr(modelo), nome ou texto de excecao.
-                raise TypeError("TipoDeSaidaNaoAutorizado")
-
-            def local(valor):
-                return None if valor is None else timezone.localtime(valor).isoformat()
-
-            def hora(valor):
-                if valor is None or isinstance(valor, dt.time):
-                    return valor
-                if isinstance(valor, str) and re.fullmatch(
-                    r"\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?", valor
-                ):
-                    return dt.time.fromisoformat(valor).isoformat()
-                return NV
-
-            def batida(b):
-                if b is None:
-                    return None
-                # Campos: app/ponto/models.py:23-26,67.
-                # Papeis em memoria: app/ponto/turnos.py:890-909.
-                return {
-                    "id": b.pk,
-                    "hora_local": local(b.timestamp),
-                    "tipo": b.tipo,
-                    "is_intervalo": b.is_intervalo,
-                    "retratada_em": local(b.retratada_em),
-                    "papel_ata": b.__dict__.get("_papel_ata", NV),
-                    "intra_ata": b.__dict__.get("_intra_ata", NV),
-                    "intra_dur": b.__dict__.get("_intra_dur", NV),
-                    "intra_declarado": b.__dict__.get("_intra_declarado", NV),
-                    "eco_flush": b.__dict__.get("_eco_flush", NV),
-                }
-
-            def alertas_sem_nomes(alertas):
-                # Publica categorias e numeros, nunca o texto livre.
-                # Campo real: app/ponto/motor_calculo_v2.py:253.
-                # Exemplos de produtores:
-                # :1484-1486,2144-2147,2220-2231,2485-2490,
-                # :2561-2563,2754,2779-2782,2814-2828,3188-3190.
-                prefixos = (
-                    ("DIA SEM JORNADA PREVISTA", "dia_sem_previsto"),
-                    ("Entrada ", "horario_deslocado"),
-                    ("Atraso:", "atraso"),
-                    ("Saída antecipada:", "saida_antecipada"),
-                    ("FOLGA TRABALHADA", "folga_trabalhada"),
-                    ("Turno aberto", "turno_aberto"),
-                    ("Período aberto", "periodo_aberto"),
-                    ("Periodo aberto", "periodo_aberto"),
-                    ("Intrajornada suprimida", "intra_suprimida"),
-                    ("Feriado em", "feriado"),
-                    ("HE semanal:", "he_semanal"),
-                )
-                saida = []
-                for texto in alertas or ():
-                    if not isinstance(texto, str):
-                        raise TypeError("AlertaIncompativel")
-                    codigo = next(
-                        (cod for inicio, cod in prefixos if texto.startswith(inicio)),
-                        "texto_livre_suprimido",
-                    )
-                    saida.append({
-                        "codigo": codigo,
-                        "numeros_do_texto": re.findall(
-                            r"\d+(?:[.,:/]\d+)*", texto
-                        ),
-                    })
-                return saida
-
-            with ExitStack() as pilha:
-                # Tripwire instalado antes dos imports de codigo da aplicacao.
-                pilha.enter_context(connection.execute_wrapper(guarda))
-                for alias in connections:
-                    if alias != "default":
-                        pilha.enter_context(connections[alias].execute_wrapper(guarda))
-
-                with transaction.atomic():
-                    with connection.cursor() as cursor:
-                        cursor.execute("SET TRANSACTION READ ONLY")
-                        guarda.permite_set_inicial = False
-                        cursor.execute(
-                            "SELECT current_database(), current_user, "
-                            "current_schema(), "
-                            "current_setting('transaction_read_only')"
-                        )
-                        if cursor.fetchone() != ("sombra", "leitor", "juliani", "on"):
-                            raise RuntimeError("BancoPapelOuTenantIncompativel")
-
-                    from ponto.catalogo import ausencias as catalogo
-                    from ponto.services import espelho as esp
-                    from ponto import turnos as geometria
-                    from ponto.management.commands.e6_oraculo import (
-                        minutos_do_espelho,
-                        minutos_do_oraculo,
-                    )
-                    from ponto.janelas import janela_fechamento
-                    from escala.alimentacao import (
-                        q_vinculo_cobre_a_data,
-                        vinculo_cobre_a_data,
-                    )
-
-                    # Modelos: app/colaboradores/models.py:283;
-                    # app/escala/models.py:871,1635;
-                    # app/ponto/models.py:115,660.
-                    Colaborador = apps.get_model("colaboradores", "Colaborador")
-                    CelulaDia = apps.get_model("escala", "CelulaDia")
-                    EC = apps.get_model("escala", "EscalaColaborador")
-                    Ausencia = apps.get_model("ponto", "Ausencia")
-                    Justificativa = apps.get_model("ponto", "Justificativa")
-
-                    # Falha explicitamente se os sitios usados pelo observador
-                    # deixarem de corresponder ao codigo desta copia.
-                    for funcao, linha in (
-                        (esp.espelho_do_colab, 1194),
-                        (esp._realizado_do_dia_tela, 267),
-                        (geometria.realizado_do_dia, 774),
-                        (geometria.realizado_dos_turnos, 707),
-                        (minutos_do_oraculo, 42),
-                    ):
-                        if funcao.__code__.co_firstlineno != linha:
-                            raise RuntimeError("SitioDaArvoreIncompativel")
-
-                    # Patch NOMINAL apenas do destino das atribuicoes :279-280.
-                    # _CACHE original continua sendo a fonte de todos os reads.
-                    # Nao troca vigente(), _do_banco(), catalogo ou turnos.
-                    cache = CacheSomenteLeitura(catalogo._CACHE)
-                    pilha.enter_context(patch.object(catalogo, "_CACHE", cache))
-
-                    # Os append de :1163,1906,1917 sao listas LOCAIS Python.
-                    # Fontes: SELECT agregado e leitor de marcos; nao precisam
-                    # GRANT e nao sao removidos:
-                    # app/ponto/turnos.py:1154-1164,1901-1918.
-
-                    AGORA = timezone.now()
-                    if guarda.tentou:
-                        raise escrita_nao_interceptada()
-
-                    def ler_dia(registro):
-                        numero, codigo, comp, texto_dia, esp_r1, e6_r1 = registro
-                        cid = int(codigo[3:])
-                        dia = dt.date.fromisoformat(texto_dia)
-                        mes, ano = map(int, comp.split("/"))
-                        chave = dia.isoformat()
-                        linhas = []
-                        inicio_cache = cache.suprimidas
-
-                        def fato(nome, ref, **campos):
-                            campos["ref"] = ref
-                            linhas.append(
-                                "DET|%s|%s|%s|%s" % (
-                                    codigo, texto_dia, nome,
-                                    json.dumps(
-                                        campos, default=serializar,
-                                        ensure_ascii=True, allow_nan=False,
-                                        separators=(",", ":"),
-                                    ),
-                                )
-                            )
-
-                        c = Colaborador.objects.select_related("empresa").get(pk=cid)
-                        # Funcao real: app/ponto/janelas.py:54-57.
-                        ini, fim = janela_fechamento(mes, ano, c.empresa)
-                        if not ini <= dia <= fim or dia > HOJE:
-                            raise RuntimeError("DiaForaDaJanela")
-
-                        captura = {
-                            "raizes": [],
-                            "corpos": [],
-                            "descontos": [],
-                            "oraculos": [],
-                            "cortes_e6": [],
-                            "pares_e6": [],
-                        }
-                        lendo_e6 = False
-
-                        # Observacao de frames: nao altera argumentos, retornos,
-                        # regras, pareamento ou objetos da aplicacao.
-                        def observar_raiz(frame, evento, retorno):
-                            if evento == "return" and retorno is not None:
-                                L = frame.f_locals
-                                captura["raizes"].append({
-                                    "resultado": retorno,
-                                    "ec": L.get("ec"),
-                                    "celulas": L["celulas"],
-                                    "turnos": tuple(
-                                        t for t in L["turnos_juiz"]
-                                        if t.data_turno == dia
-                                    ),
-                                })
-                            return observar_raiz
-
-                        def observar_corpo(frame, evento, retorno):
-                            L = frame.f_locals
-                            # Le pausas/bruto/fim JA decididos pelo corpo real,
-                            # imediatamente antes de liquido = bruto - pausas:
-                            # app/ponto/turnos.py:756-767.
-                            if evento == "line" and frame.f_lineno == 767:
-                                captura["descontos"].append({
-                                    "modo": "turno",
-                                    "entrada": L["t"].entrada.timestamp,
-                                    "fim_contado": L["fim"].timestamp,
-                                    "bruto_min": L["bruto"],
-                                    "pausa_descontada_min": L["pausas"],
-                                    "intervalos_reconhecidos": tuple(L["_itv_t"]),
-                                })
-                            if evento == "return" and retorno is not None:
-                                captura["corpos"].append({
-                                    "resultado": retorno,
-                                    "livre": L["livre"],
-                                    "intervalo"
-
-[truncado em 20000 de 54344 caracteres]
-
-_6087 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6091 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
