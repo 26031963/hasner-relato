@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 13:27:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (151.5 MB). Acoes na janela: **686**.
+**Medido em 16/11/2026 13:32:45.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (151.5 MB). Acoes na janela: **680**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -690,9 +690,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:35:38 | Bash | Check doc overlap, dirty state, push/test lock | `cd /home/ronald/saas-hasner; mb=3580b35e0; git diff --name-only $mb 690fde88b -- app/docs/ ; echo ---; git status --porcelain \| grep -v '^??'; ls .git/MERGE_HEAD 2>/dev/null; bash bin/trava_teste.sh --quem 2>/dev/null \| head -2; ls logs/ \| grep -i push \| head` |
 | 01:35:32 | Bash | Find R3 certification and main drift since base | `cd /home/ronald/saas-hasner; grep -n 'R3 c17' app/docs/RELATO.md \| head -8 \| cut -c1-400; git log --oneline -1 690fde88b; mb=$(git merge-base 690fde88b HEAD); echo mb=$mb; git diff --name-only $mb HEAD \| grep -v '^app/docs/' \| head` |
 | 01:35:25 | Bash | Read sombra result codes | `cd /home/ronald/saas-hasner; grep '^rc_' logs/E3-RESTO-R3/c17/sombra_pouso_1611.log; tail -12 logs/E3-RESTO-R3/c17/sombra_pouso_1611.log \| cut -c1-250` |
-| 01:27:49 | Bash | Check sombra progress | `cd /home/ronald/saas-hasner; tail -2 logs/E3-RESTO-R3/c17/sombra_pouso_1611.log; ps -p 3478640 -o etime=` |
-| 01:27:46 | Bash | Check triagem mention of REABERTURA | `cd /home/ronald/saas-hasner; grep -n 'REABERTURA\\|ressusc' logs/E4C/f1nova/b1/triagem_v1.txt` |
-| 01:27:44 | Bash | Update BACKLOG MIUDOS state and RELATO top lines | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/BACKLOG.md'; s=open(p).read() old=" (1)(2) EM VOO 01:1x (esperam p2 do C1 e causas.md da V0); (3) AVAL-DEVOLVIDO 01:1x (logs/MIUDOS/rev.r: sem regra escrita de entrada; 5 itens x 30 min; opus por obra)" new=" (1)(2) parte C1 PRONTA 01:2x (logs/MIUDOS/quadro.md: 8 causas, 3 MIUDO, 0 sem cruzar e sem dinheiro); parte V0 espera causas.md; (3) ...` |
-| 01:27:34 | Bash | Get time and MIUDOS state cell | `cd /home/ronald/saas-hasner/app; date +%H:%M; sed -n '2235p' docs/BACKLOG.md \| awk -F'\|' '{print $4}'` |
-| 01:27:32 | Bash | View RELATO top and MIUDOS backlog line | `cd /home/ronald/saas-hasner/app; head -c 3000 docs/RELATO.md \| cut -c1-300; grep -n 'MIUDOS' docs/BACKLOG.md \| head -3 \| cut -c1-400` |
-| 01:27:30 | Write |  | `/home/ronald/saas-hasner/logs/MIUDOS/quadro.md` |
