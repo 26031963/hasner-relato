@@ -15,17 +15,17 @@
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
 | LATERAL-ESTRUTURA | 154 | 154 |
-| INSTRUMENTO | 178 | 178 |
+| INSTRUMENTO | 179 | 179 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **456** | **455** |
+| **total** | **457** | **456** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 387; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 388; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
 fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 301 com a coluna
 
-resolve preenchido 12/456
+resolve preenchido 12/457
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -461,6 +461,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | SOMBRA-COM-TETO | INSTRUMENTO | Limita a memória usada pelas sondas na sombra. | - | contrato; pouso próprio | ......... | REGISTRADA | BACKLOG:2098 |
 | SOMBRA-LEITURA-V3 | INSTRUMENTO | Permite leituras concorrentes com isolamento e prova corretos. | - | corrigir falhas do instrumento | ..+..+... | REGISTRADA (v1/v2 reprovadas) | BACKLOG:2101 |
 | ROTA-DA-PISTA-NO-SUITE | INSTRUMENTO | Manda a suite que nao e de pouso para a pista e deixa a trava da VM para espinha, pouso e push. | - | aval novo para construir | ......... | REGISTRADA | BACKLOG:2086 |
+| PISTA-CERTIFICA-POUSO | INSTRUMENTO | Deixa a pista certificar pouso com imagem por digest, fila com teto e paridade conferida no inicio do job. | - | censo, depois aval novo | ......... | REGISTRADA | BACKLOG:2087 |
 
 ## UI (39)
 
