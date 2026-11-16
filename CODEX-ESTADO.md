@@ -1,7 +1,183 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 09:25** · publicado em **16/11/2026 09:27** (UTC-3)
+> Ultima resposta processada: **16/11/2026 09:33** · publicado em **16/11/2026 09:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 09:33 · sessao 009e5360b3eb · COMPLEMENTO-1-CORTES-F2-F9-1611 · sonda · origem=Code
+
+(1) **Total de linhas: 53. Total_erros: 0. Col237 está entre as linhas: sim.** [nao verificado]
+
+(2) Empresa corresponde a `empresa_id`. “Sem historico” indica `troca_no_historico_para_o_cadastro: null`, sem afirmar ausência de outros registros históricos. [nao verificado]
+
+| Col | Empresa (ID) | Posto do cadastro (ID — nome) | Posto do vínculo (ID — nome) | Início do vínculo | Troca no histórico para o cadastro | Referência |
+|---|---:|---|---|---|---|---|
+| col50 | 4 | 487 — ARAGUARI - PORTARIA — J.A Juliani Eireli | 459 — SHOPPING BOULEVARD - PORTARIA — J.A Juliani Eireli | 2026-08-01 | 2026-10-06 | [nao verificado] |
+| col51 | 4 | 529 — PALHANO BUSINESS - TORRE 2 - ASG — R. A. de [nome] [nome] - G3 Force | 455 — PALHANO BUSINESS - SERVIÇOS GERAIS — J.A Juliani Eireli | 2026-09-20 | 2026-07-10 | [nao verificado] |
+| col55 | 2 | 516 — APOENA - VIGIA — R. A. de [nome] [nome] - G3 Force | 2 — APOENA - VIGIA — J.A Juliani Eireli | 2026-07-21 | 2026-07-09 | [nao verificado] |
+| col69 | 3 | 644 — NORTE SHOPPING VGT — Juliani Segurança Patrimonial | 11 — CONDOMINIO GOLDEN PARK II — Juliani Segurança Patrimonial | 2026-10-29 | 2026-10-29 | [nao verificado] |
+| col112 | 3 | 8 — ARTESANO - VIGILANTE — Juliani Segurança Patrimonial | 474 — FURGÕES IBIPORÃ - CONTROLADOR DE ACESSO — J.A Juliani Eireli | 2026-11-09 | 2026-11-10 | [nao verificado] |
+| col128 | 3 | 651 — BASE RANGEL PESTANA — Juliani Segurança Patrimonial | 448 — J.A BASE - SUPERVISOR DE VIGILANTE — J.A Juliani Eireli | 2026-07-21 | 2026-10-22 | [nao verificado] |
+| col142 | 4 | 651 — BASE RANGEL PESTANA — Juliani Segurança Patrimonial | 22 — JULIANI SEGURANCA PATRIMONIAL LTDA — Juliani Segurança Patrimonial | 2026-06-01 | 2026-10-22 | [nao verificado] |
+| col154 | 3 | 527 — BASE OPERACIONAL - J.A — J.A Juliani Eireli | 3 — CASA VISCARDI S/A COM E IMP (MTZ) — Juliani Segurança Patrimonial | 2026-06-24 | 2026-07-10 | [nao verificado] |
+| col174 | 2 | null — null | 612 — ARCOS DOURADO LAT — J.A Juliani Eireli | 2026-08-26 | sem historico | [nao verificado] |
+| col191 | 2 | 582 — ARCOS DOURADOS JSP — J.A Juliani Eireli | 590 — ARCOS DOURADOS JSO — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col216 | 2 | 536 — BASE OPERACIONAL — Juliani Segurança Patrimonial | 431 — VISCARDI QUINTINO-SERVIÇOS GERAIS — J.A Juliani Eireli | 2026-07-21 | 2026-11-09 | [nao verificado] |
+| col220 | 2 | 602 — ARCOS DOURADOS MOV — J.A Juliani Eireli | 599 — ARCOS DOURADOS DCA — J.A Juliani Eireli | 2026-11-10 | 2026-11-15 | [nao verificado] |
+| col225 | 2 | 651 — BASE RANGEL PESTANA — Juliani Segurança Patrimonial | 448 — J.A BASE - SUPERVISOR DE VIGILANTE — J.A Juliani Eireli | 2026-07-21 | 2026-10-22 | [nao verificado] |
+| col236 | 2 | 642 — FUNDACAO COPEL MARINGA — J.A Juliani Eireli | 1 — A definir — Confiance Force Ltda | 2026-07-21 | 2026-07-31 | [nao verificado] |
+| col237 | 2 | 444 — CONDOMINIO VILLE CAMPESTRE - PORTEIRO — J.A Juliani Eireli | 487 — ARAGUARI - PORTARIA — J.A Juliani Eireli | 2026-07-21 | 2026-10-22 | [nao verificado] |
+| col263 | 2 | 593 — ARCOS DOURADOS FZD — J.A Juliani Eireli | 586 — ARCOS DOURADO RXV — J.A Juliani Eireli | 2026-11-04 | 2026-11-05 | [nao verificado] |
+| col303 | 2 | 414 — PALHANO BUSINESS - TORRE 1 — J.A Juliani Eireli | 412 — LONDRINA NORTE SHOPPING - PORTEIRO — R. A. de [nome] [nome] - G3 Force | 2026-07-21 | 2026-08-28 | [nao verificado] |
+| col306 | 2 | 414 — PALHANO BUSINESS - TORRE 1 — J.A Juliani Eireli | 24 — BASE ADMINISTRATIVA — J.A Juliani Eireli | 2026-07-21 | 2026-09-11 | [nao verificado] |
+| col341 | 2 | 487 — ARAGUARI - PORTARIA — J.A Juliani Eireli | 457 — SOLAR ALTA VISTA - PORTEIRO — J.A Juliani Eireli | 2026-07-21 | 2026-10-22 | [nao verificado] |
+| col358 | 2 | 642 — FUNDACAO COPEL MARINGA — J.A Juliani Eireli | 446 — FUNDAÇÃO COPEL - SERVIÇOS GERAIS — J.A Juliani Eireli | 2026-07-21 | 2026-07-31 | [nao verificado] |
+| col389 | 2 | 415 — PALHANO BUSINESS - TORRE 2 - VIGIA — R. A. de [nome] [nome] - G3 Force | 457 — SOLAR ALTA VISTA - PORTEIRO — J.A Juliani Eireli | 2026-07-21 | 2026-11-10 | [nao verificado] |
+| col398 | 2 | 495 — CONCENTRIX CURITIBA MURICY — J.A Juliani Eireli | 493 — CONCENTRIX  CURITIBA JL3 — J.A Juliani Eireli | 2026-07-21 | 2026-07-13 | [nao verificado] |
+| col442 | 2 | 469 — LEON - MRV — J.A Juliani Eireli | 466 — LE MONDE - MRV — J.A Juliani Eireli | 2026-07-21 | 2026-09-07 | [nao verificado] |
+| col464 | 2 | 589 — LA ROCHE - MRV — J.A Juliani Eireli | 467 — LANCELOT - MRV — J.A Juliani Eireli | 2026-07-21 | 2026-08-05 | [nao verificado] |
+| col468 | 2 | 622 — CONCENTRIX RENDICAO ALMOÇO — J.A Juliani Eireli | 495 — CONCENTRIX CURITIBA MURICY — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col511 | 2 | null — null | 444 — CONDOMINIO VILLE CAMPESTRE - PORTEIRO — J.A Juliani Eireli | 2026-08-05 | sem historico | [nao verificado] |
+| col556 | 2 | 495 — CONCENTRIX CURITIBA MURICY — J.A Juliani Eireli | 493 — CONCENTRIX  CURITIBA JL3 — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col584 | 2 | 626 — ARCOS DOURADOS ANG — J.A Juliani Eireli | 590 — ARCOS DOURADOS JSO — J.A Juliani Eireli | 2026-08-28 | 2026-11-10 | [nao verificado] |
+| col607 | 2 | 429 — VISCARDI DUQUE DE CAXIAS- SERVIÇOS GERAIS — J.A Juliani Eireli | 430 — VISCARDI GUARANIS — J.A Juliani Eireli | 2026-07-21 | 2026-07-10 | [nao verificado] |
+| col608 | 2 | 413 — NORTE SHOPPING J.A - BOMBEIROS — J.A Juliani Eireli | 6 — LONDRINA NORTE ADMINISTRADORA DE SHOPPING - JSP — Juliani Segurança Patrimonial | 2026-07-21 | 2026-07-10 | [nao verificado] |
+| col626 | 2 | 595 — SOLAR DI MILANO  PORTARIA — J.A Juliani Eireli | 509 — ASSOCIAÇÃO ARTESANO LONDRINA - PORTARIA — J.A Juliani Eireli | 2026-07-21 | 2026-08-17 | [nao verificado] |
+| col627 | 2 | 11 — CONDOMINIO GOLDEN PARK II — Juliani Segurança Patrimonial | 439 — GOLDEN PARK 2 - VIGIA — J.A Juliani Eireli | 2026-07-21 | 2026-07-10 | [nao verificado] |
+| col634 | 2 | 591 — ARCOS DOURADOS DPI — J.A Juliani Eireli | 424 — ARCOS DOURADOS CAB — J.A Juliani Eireli | 2026-07-21 | 2026-07-16 | [nao verificado] |
+| col642 | 3 | 651 — BASE RANGEL PESTANA — Juliani Segurança Patrimonial | 24 — BASE ADMINISTRATIVA — J.A Juliani Eireli | 2026-10-05 | 2026-10-22 | [nao verificado] |
+| col647 | 2 | null — null | 444 — CONDOMINIO VILLE CAMPESTRE - PORTEIRO — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col673 | 2 | 615 — CONCENTRIX M2 — J.A Juliani Eireli | 493 — CONCENTRIX  CURITIBA JL3 — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col717 | 2 | 583 — ARCOS DOURADOS DVH — J.A Juliani Eireli | 582 — ARCOS DOURADOS JSP — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col719 | 2 | 614 — CONCENTRIX M3 — J.A Juliani Eireli | 617 — CONCENTRIX JL2 — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col787 | 2 | 555 — CONDOMINIO VILLE CAMPESTRE - MULTI FUNCAO — J.A Juliani Eireli | 444 — CONDOMINIO VILLE CAMPESTRE - PORTEIRO — J.A Juliani Eireli | 2026-07-21 | 2026-07-02 | [nao verificado] |
+| col849 | 2 | 637 — ARCOS DOURADOS FOLGUISTA — J.A Juliani Eireli | 549 — ARCOS DOURADOS  MC . CBV — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col859 | 2 | 659 — SALGADOMAC — J.A Juliani Eireli | 415 — PALHANO BUSINESS - TORRE 2 - VIGIA — R. A. de [nome] [nome] - G3 Force | 2026-10-07 | 2026-11-13 | [nao verificado] |
+| col861 | 2 | 650 — TUO - EMPREENDIMENTOS — J.A Juliani Eireli | 424 — ARCOS DOURADOS CAB — J.A Juliani Eireli | 2026-07-21 | sem historico | [nao verificado] |
+| col865 | 2 | 637 — ARCOS DOURADOS FOLGUISTA — J.A Juliani Eireli | 424 — ARCOS DOURADOS CAB — J.A Juliani Eireli | 2026-10-01 | 2026-10-16 | [nao verificado] |
+| col917 | 2 | 421 — ARCOS DOURADOS - ARC — J.A Juliani Eireli | 609 — ARCOS DOURADO MC — J.A Juliani Eireli | 2026-08-18 | 2026-10-02 | [nao verificado] |
+| col920 | 2 | 585 — ARCOS DOURADOS CWB — J.A Juliani Eireli | 424 — ARCOS DOURADOS CAB — J.A Juliani Eireli | 2026-09-01 | 2026-11-06 | [nao verificado] |
+| col932 | 2 | 656 — Sunset Dream Residence — J.A Juliani Eireli | 459 — SHOPPING BOULEVARD - PORTARIA — J.A Juliani Eireli | 2026-09-13 | 2026-11-09 | [nao verificado] |
+| col933 | 2 | 637 — ARCOS DOURADOS FOLGUISTA — J.A Juliani Eireli | 421 — ARCOS DOURADOS - ARC — J.A Juliani Eireli | 2026-09-04 | 2026-11-13 | [nao verificado] |
+| col961 | 2 | 433 — VISCARDI ALPHAVILLE — J.A Juliani Eireli | 456 — SOLAR ALTA VISTA - SERVIÇOS GERAIS — J.A Juliani Eireli | 2026-10-29 | 2026-11-04 | [nao verificado] |
+| col962 | 2 | 431 — VISCARDI QUINTINO-SERVIÇOS GERAIS — J.A Juliani Eireli | 652 — CASA VISCARDI CD — J.A Juliani Eireli | 2026-09-25 | 2026-11-10 | [nao verificado] |
+| col988 | 2 | 586 — ARCOS DOURADO RXV — J.A Juliani Eireli | 637 — ARCOS DOURADOS FOLGUISTA — J.A Juliani Eireli | 2026-11-04 | 2026-11-10 | [nao verificado] |
+| col990 | 2 | 430 — VISCARDI GUARANIS — J.A Juliani Eireli | 431 — VISCARDI QUINTINO-SERVIÇOS GERAIS — J.A Juliani Eireli | 2026-10-14 | 2026-11-09 | [nao verificado] |
+| col999 | 2 | 659 — SALGADOMAC — J.A Juliani Eireli | 656 — Sunset Dream Residence — J.A Juliani Eireli | 2026-11-09 | 2026-11-12 | [nao verificado] |
+| col1021 | 3 | 16 — PACAEMBU CAMPAGNOLE — Juliani Segurança Patrimonial | 531 — PACAEMBU - HAROLDO — Juliani Segurança Patrimonial | 2026-11-03 | 2026-11-12 | [nao verificado] |
+
+(3) **42 têm data de troca para o posto do cadastro; 11 não têm essa data.** [nao verificado]
+
+(4) A saída não responde:
+
+- Qual posto deveria prevalecer nem a causa ou o responsável pela divergência. [nao verificado]
+- A data efetiva da alteração do cadastro ou do vínculo; a data apresentada é a informada pelo campo de histórico. [nao verificado]
+- O histórico completo ou a inexistência de registros além dos exibidos. [nao verificado]
+- O nome da empresa correspondente a cada `empresa_id`. [nao verificado]
+- A situação fora do recorte informado ou após o dump de 2026-11-16. [nao verificado]
+
+## 16/11 09:28 · sessao 152e2fd156c8 · E4C-F1-NOVA-POUSO-B1 · verificador · origem=Code
+
+**A comparação c2 × main `ab616d1c7`, as 283 linhas da sonda, `total_erros=0` e a execução da suíte estão [nao verificado].** O código elimina a produção de `REABERTURA` pela ressuscitação, mas os testes não certificam todos os estados nem toda a saída publicada da tarefa (`app/chamados/models.py:1629`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:311`).
+
+Referências abaixo relativas a `app/`.
+
+**1. PROCEDE — os leitores não atribuem todos o mesmo significado aos campos.**
+
+A ressuscitação entrega os valores novos à porta; quem efetivamente grava é `descarimbar_em_lote`, enquanto as atribuições em `_universo_da_ressuscitacao` são simulação em memória (`chamados/models.py:1553`; `chamados/models.py:1629`; `chamados/models.py:3391`).
+
+| Campo | Quem escreve | Quem lê e significado |
+|---|---|---|
+| `respondida_em` | Resposta normal/automática e recuperação pela trilha; `carimbar` pode completar o instante; ressuscitar o limpa pela porta (`chamados/services/disputa_emissao.py:1482`, `chamados/services/disputa_emissao.py:1675`, `chamados/services/disputa_emissao.py:1696`, `chamados/models.py:3242`, `chamados/models.py:1629`). | **PROCEDE:** C6 exige instante **e texto**; `estado`, propriedade `respondida`, partição do app e seleção de corrigíveis ainda usam o instante isoladamente (`chamados/juizes.py:1423`; `chamados/models.py:3155`; `chamados/models.py:3664`; `chamados/services/pergunta_no_app.py:81`; `chamados/juizes.py:1739`). |
+| `resposta_colab` | Resposta normal/automática; reabertura e ressuscitação zeram pelo lote (`chamados/services/disputa_emissao.py:1481`; `chamados/services/disputa_emissao.py:1674`; `chamados/services/disputa_emissao.py:1609`; `chamados/models.py:1630`). | **NAO HA** conflito no significado de texto atual para C6, materializador e apresentação; entretanto, a sequência pode continuar contendo a resposta que a projeção apagou (`chamados/juizes.py:1423`; `chamados/services/materializacao.py:835`; `chamados/models.py:3688`; `chamados/models.py:4101`). |
+| `validada_em` | Validação carimba, devolução/nova resposta desfazem, `carimbar` pode completar e ressuscitar limpa (`chamados/services/validacao.py:159`; `chamados/services/validacao.py:224`; `chamados/services/disputa_emissao.py:1494`; `chamados/models.py:3245`; `chamados/models.py:1629`). | **PROCEDE:** C6/estado/materialização leem validação atual; painel e placar contam o mesmo campo apagável como atividade humana histórica (`chamados/juizes.py:1405`; `chamados/models.py:3151`; `chamados/services/materializacao.py:1377`; `chamados/services/painel.py:256`; `chamados/services/verbos.py:263`). |
+| `validada_por` | Acompanha os escritores da validação e sua limpeza (`chamados/services/validacao.py:160`; `chamados/services/validacao.py:225`; `chamados/services/disputa_emissao.py:1495`; `chamados/models.py:3246`; `chamados/models.py:1629`). | **PROCEDE:** o auxiliar preserva o autor como assinatura histórica somente havendo `validada_em`; painel/placar e procedência da batida consultam a assinatura atual, que ressuscitar apaga (`chamados/models.py:4102`; `chamados/services/painel.py:261`; `chamados/services/verbos.py:263`; `ponto/services/procedencia_batida.py:72`). |
+| `materializada_em` | Atribuição central em `_escrever_carimbo`, usada pelas portas; volta em lote em `descarimbar_em_lote` (`chamados/models.py:3209`; `chamados/models.py:3239`; `chamados/models.py:3318`; `chamados/models.py:3393`). | **PROCEDE:** C6, estado e materializador leem carimbo atual; procedência e marcos da lavra também usam esse instante como informação histórica/de mudança, que pode desaparecer (`chamados/juizes.py:1450`; `chamados/models.py:3153`; `chamados/services/materializacao.py:1378`; `ponto/services/procedencia_batida.py:74`; `chamados/veredito_lavrado.py:202`). |
+| `materializada_por` | Mesmo escritor central e porta do lote (`chamados/models.py:3210`; `chamados/models.py:3393`). | **PROCEDE:** limpar o autor é coerente com retirar o carimbo atual, mas a procedência da batida procura nesse campo a autoria histórica; C6 não o inclui entre seus insumos mutáveis (`ponto/services/procedencia_batida.py:72`; `chamados/juizes.py:855`). |
+| `via_resolucao` | Escritor central, lote, encerramento por fato e relavra (`chamados/models.py:3211`; `chamados/models.py:3393`; `chamados/models.py:3402`; `chamados/services/relavra_via.py:125`). | **NAO HA** significado novo introduzido pela c2: universo/C6/SQL leem via de encerramento ou identidade, e descarimbar retira a via junto do carimbo (`chamados/models.py:1535`; `chamados/juizes.py:1416`; `chamados/juizes.py:1444`; `chamados/models.py:3483`). |
+| Linhas de `DecisaoPergunta` | Ressuscitar chama o auxiliar e entrega suas linhas ao escritor `registrar`, que insere por `bulk_create` (`chamados/models.py:1613`; `chamados/models.py:4100`; `chamados/models.py:4104`; `chamados/models.py:4120`). | **PROCEDE:** a tarefa lê as linhas como decisões que determinam a próxima ação; o histórico considera uma RESPOSTA vigente até outra resposta ou REABERTURA/RECUSA, mesmo depois de a ressuscitação apagar sua projeção (`chamados/services/tarefa_do_dia.py:148`; `chamados/models.py:3674`). |
+
+A abertura também aceita projeção inicial por `**campos` e registra suas linhas de resposta/validação; o `save` verifica a integridade do par (`chamados/models.py:3124`; `chamados/models.py:3129`; `chamados/models.py:3558`).
+
+**2. PROCEDE — o universo alcançável é maior que as duas classes novas dos testes.** [nao verificado]
+
+O filtro exige vínculo ao chamado, materialização presente, texto exatamente vazio — ou SQL `NULL` — e via fora de `VIAS_FORA_DO_FATO`; depois exige marco não provadamente aceso e C6 vivo na cópia limpa (`chamados/models.py:1530`; `chamados/models.py:1548`; `chamados/models.py:1550`; `chamados/models.py:1557`).
+
+| `respondida_em` anterior | `validada_em` anterior | Entrada admitida, satisfeitos os demais guardas |
+|---|---|---|
+| Nulo | Nulo | Sim: carimbo sem resposta/validação (`chamados/models.py:1530`). |
+| Preenchido | Nulo | Sim: legado instante sem texto (`chamados/models.py:1533`; `chamados/models.py:1555`). |
+| Nulo | Preenchido | Sim: validação sem instante de resposta (`chamados/models.py:1530`; `chamados/models.py:1554`). |
+| Preenchido | Preenchido | Sim: ambos são retirados da cópia antes do C6 (`chamados/models.py:1554`). |
+
+Autores, sequência anterior, disputa aberta/fechada e `conversa` não recebem filtro próprio nesse universo; texto apenas com espaços não entra, e `NULL` está contemplado no filtro embora o campo atual não tenha `null=True` (`chamados/models.py:1530`; `chamados/models.py:2552`).
+
+**NAO HA — produção de novo ato de devolução pela ressuscitação c2:** ela preserva projeções sem linha e chama diretamente a porta do lote (`chamados/models.py:1613`; `chamados/models.py:1629`).
+
+Depois da operação:
+
+| Leitor | Resultado |
+|---|---|
+| `tarefa_do_dia` | Sem decisão: `aguarda_resposta`; RESPOSTA vazia: `respondida_sem_texto`; RESPOSTA com texto: `aguarda_validacao`; RECUSA/REABERTURA anterior: `devolvida_ao_colaborador`; SILENCIO: nenhuma ação (`chamados/services/tarefa_do_dia.py:145`). |
+| `tarefa_do_dia`, demais decisões | VALIDACAO depende da lavra/efeito; ABSORCAO depende do estado da ausência; a carga só considera decisões até `agora` (`chamados/services/tarefa_do_dia.py:156`; `chamados/services/tarefa_do_dia.py:167`; `chamados/services/tarefa_do_dia.py:412`). |
+| `pergunta_viva` | Sob os mesmos insumos usados na seleção, devolve vivo; isso não é garantia incondicional após concorrência ou quando a célula projetada do julgamento difere da persistida (`chamados/models.py:1548`; `chamados/models.py:1557`; `chamados/juizes.py:415`; `chamados/juizes.py:1403`). |
+| `perguntas_do_app` | Inclui a pergunta se passar pelo SQL e C6, independentemente de SILENCIO na sequência; com resposta nula e disputa aberta, a partição a chama de pendente (`chamados/services/pergunta_no_app.py:52`; `chamados/services/pergunta_no_app.py:61`; `chamados/services/pergunta_no_app.py:81`). |
+| `medir` | Usa os destinos de todas as vivas como `no_app`, retirando sua causa de retenção; não mede a ausência de ação determinada por SILENCIO na tarefa (`chamados/services/pergunta_no_app.py:208`; `chamados/services/pergunta_no_app.py:141`; `chamados/services/tarefa_do_dia.py:165`). |
+
+**PROCEDE — antes/depois não é invariância geral:** uma projeção legada sem linha pode sair de `passivo_sem_linha` para uma ação derivada da RESPOSTA/VALIDACAO que a operação acabou de registrar (`chamados/services/tarefa_do_dia.py:143`; `chamados/services/tarefa_do_dia.py:419`; `chamados/models.py:1613`).
+
+**Comparação com main:** na entrada estável admitida pelo esquema atual, limpar `resposta_colab` regrava texto já vazio; igualdade das demais operações e inexistência de qualquer divergência com `ab616d1c7` permanecem **[nao verificado]** (`chamados/models.py:1533`; `chamados/models.py:1630`).
+
+**3. PROCEDE — há preservação condicional da resposta, mas não uma foto completa de tudo que é retirado.**
+
+- **NAO HA perda demonstrada do anterior quando existe instante sem linha correspondente:** RESPOSTA conserva instante/texto, e VALIDACAO conserva instante/texto/autor, antes da limpeza e no mesmo `atomic` (`chamados/models.py:1607`; `chamados/models.py:1613`; `chamados/models.py:4098`).
+- **PROCEDE — entrada sem ambos os instantes não produz decisão:** o auxiliar retorna vazio, mas o lote apaga materialização, autor e via; a auditoria posterior guarda IDs e rótulos de estado, sem os valores anteriores desses carimbos (`chamados/models.py:4091`; `chamados/models.py:3393`; `chamados/models.py:1653`).
+- **PROCEDE — autor órfão de validação também pode sumir sem foto:** o universo não o recusa, o auxiliar só o registra quando existe `validada_em`, e o lote o limpa (`chamados/models.py:1530`; `chamados/models.py:4102`; `chamados/models.py:1629`).
+- **PROCEDE — a garantia depende da coerência anterior da sequência:** correspondência significa apenas pergunta+tipo+instante, sem conferir texto ou autor; uma linha correspondente com conteúdo divergente impede nova preservação (`chamados/models.py:4094`; `chamados/models.py:4098`; `chamados/models.py:4102`).
+- **PROCEDE — na corrida com resposta chegando antes da trava, a trilha bruta pode conservar o texto sem apresentá-lo como anterior:** a c2 limpa a projeção, mas o leitor da tela só encerra a resposta vigente diante de outra RESPOSTA ou ato com foto (`chamados/models.py:1613`; `chamados/models.py:1629`; `chamados/models.py:3674`).
+
+A ocorrência desses estados em produção está **[nao verificado]**; no estado sem resposta/validação, o texto anterior já é vazio, portanto a falta de foto dos carimbos não demonstra, por si, perda de texto exigido pela L-130 (`chamados/models.py:1533`; `docs/LEIS.md:151`).
+
+**4. NAO HA — a porta do lote não adquire as travas; ela exige a trava do colaborador.**
+
+- Recusa kwargs que tentem controlar os próprios campos do carimbo e recusa par **futuro** ilegal; os `outros` desta chamada, `(None, '')`, formam par legal mesmo sobre legado ilegal (`chamados/models.py:3365`; `chamados/models.py:3370`; `chamados/services/fio.py:1605`; `chamados/models.py:1629`).
+- Exige colaboradores das disputas registrados como travados, exclui vias fora do fato e executa o `update`; não repete C6 nem o guarda do marco (`chamados/models.py:3385`; `chamados/models.py:3391`).
+- A ordem é universo/disputas antes do `atomic`, depois trava global, preservação/`registrar`, captura do evento, limpeza, evento e reabertura das disputas fechadas (`chamados/models.py:1593`; `chamados/models.py:1607`; `chamados/models.py:1612`; `chamados/models.py:1613`; `chamados/models.py:1628`; `chamados/models.py:1638`).
+- A trava global segue Colaborador → Disputa → Chamado → Pergunta, por PK; `registrar` insere e emite evento sem adquirir essa ordem por conta própria (`chamados/models.py:2771`; `chamados/models.py:2780`; `chamados/models.py:2793`; `chamados/models.py:2797`; `chamados/models.py:4119`).
+
+**5. PROCEDE — os testes mordem a volta de REABERTURA, com limites claros.** [nao verificado]
+
+Abaixo, “pega” é avaliação estática das asserções; execução efetiva dos mutantes está **[nao verificado]**.
+
+| Teste novo/alterado | Mutante que pega | Mutante que não pega | [nao verificado]
+|---|---|---|
+| `test_RED_ressuscitar_zera_o_par_com_o_anterior_na_trilha_sem_REABERTURA` | Reintroduzir REABERTURA ou retirar o registro do legado contraria as asserções de atos/trilha (`chamados/tests/test_f1nova_b1_juiz_respondida.py:281`). | Fazer o auxiliar sempre gravar `ato_texto=''`, perdendo texto chegado na corrida: a fixture e a expectativa já são vazias (`chamados/tests/test_f1nova_b1_juiz_respondida.py:264`; `chamados/tests/test_f1nova_b1_juiz_respondida.py:285`). |
+| `test_RED_ressuscitar_sem_decisao_nao_muda_a_tarefa_do_dia` | Recolocar `reabrir_para_correcao` muda a razão para devolução (`chamados/tests/test_f1nova_b1_juiz_respondida.py:331`; `chamados/services/tarefa_do_dia.py:152`). | Deixar de limpar `respondida_em` de legado: nesta fixture ele já é nulo (`chamados/tests/test_f1nova_b1_juiz_respondida.py:304`). |
+| `test_RED_ressuscitar_com_SILENCIO_nao_devolve_ao_colaborador` | Reintroduzir REABERTURA substitui a leitura de SILENCIO pela devolução (`chamados/tests/test_f1nova_b1_juiz_respondida.py:334`; `chamados/services/tarefa_do_dia.py:152`; `chamados/services/tarefa_do_dia.py:165`). | Omitir o evento posterior à limpeza: as asserções comparam estado e leitura direta, não entrega do evento (`chamados/tests/test_f1nova_b1_juiz_respondida.py:325`). |
+| `test_MORDE_2a_chamada_nao_dobra_o_ato` | Remover o filtro de materialização permite nova ressuscitação na segunda chamada (`chamados/models.py:1531`; `chamados/tests/test_f1nova_b1_juiz_respondida.py:342`). | Criar REABERTURA somente na primeira chamada: a quantidade inicial é capturada livremente em `n1` (`chamados/tests/test_f1nova_b1_juiz_respondida.py:341`). |
+| `test_a_arvore_real_tem_sitio_relacionado_e_o_reu_entre_eles` | Trocar a porta por `alvo.update(...)` perde a chamada exigida e reintroduz escrita relacionada (`core/tests/test_censo_escritas.py:206`; `core/tests/test_censo_escritas.py:217`). | Deixar chamada à porta em ramo morto e escrever diretamente por `PerguntaDisputa.objects...update`: o teste verifica presença sintática, sem fluxo de execução (`core/tests/test_censo_escritas.py:216`; `core/tests/test_censo_escritas.py:220`). |
+| `test_MORDE_a_arvore_real_ainda_atribui_o_update_pelo_gerente_reverso` | Retirar `resposta_colab=''` da chamada faz desaparecer a âncora literal (`core/tests/test_censo_escritas.py:241`). | Inserir REABERTURA mantendo a chamada literal: suas verificações continuam limitadas à âncora e à inferência do varredor (`core/tests/test_censo_escritas.py:243`; `core/tests/test_censo_escritas.py:251`). |
+
+**PROCEDE — a comparação chamada “fila” é parcial:** ela retorna somente razão/ações de uma instância, enquanto `fio`, `rota`, `fila` e `verbos` são calculados separadamente e dependem também das pendentes do app (`chamados/tests/test_f1nova_b1_juiz_respondida.py:311`; `chamados/services/tarefa_do_dia.py:610`; `chamados/services/tarefa_do_dia.py:635`).
+
+**6. PROCEDE — existem chamadores e leitores externos ao diff afetados pelo protocolo de escrita.**
+
+- Reabrir chamado, desarquivar e cartório chamam diretamente a porta; recebem a ressuscitação sem o ato REABERTURA da B1 anterior (`chamados/models.py:1498`; `chamados/views_arquivar.py:86`; `ponto/services/cartorio.py:1673`; `chamados/models.py:1623`).
+- O cartório usa o retorno para contar ressuscitações e pedir rejulgamento; a c2 conserva esse protocolo de retorno (`ponto/services/cartorio.py:1692`; `chamados/models.py:1667`).
+- O histórico da tela depende dos atos com foto e muda quando eles deixam de existir; esse efeito é particularmente relevante para resposta chegada na corrida (`chamados/models.py:3680`; `chamados/services/disputa_emissao.py:2119`).
+- Materialização, validações históricas, procedência e marcos da lavra dependem dos campos apagados; atribuir essas consequências exclusivamente à c2, frente ao main, está **[nao verificado]** (`chamados/services/materializacao.py:1375`; `chamados/services/painel.py:261`; `ponto/services/procedencia_batida.py:72`; `chamados/veredito_lavrado.py:202`).
+
+**7. Checklist das classes.**
+
+| Classe | Achado |
+|---|---|
+| Segundo juiz duplicando registrado | **NAO HA no trecho c2:** seleção delega ao C6 e integridade delega aos predicados únicos (`chamados/models.py:1557`; `chamados/models.py:3372`; `chamados/services/fio.py:1603`). |
+| Segundo escritor fora da porta | **NAO HA no trecho c2:** ressuscitar entrega a limpeza à porta do lote (`chamados/models.py:1629`; `chamados/models.py:3391`). |
+| Relógio fora da borda | **PROCEDE, preexistente no caminho:** o universo chama C6 sem instante, e o fallback da janela lê `date.today()` internamente (`chamados/models.py:1557`; `chamados/juizes.py:1471`; `chamados/juizes.py:596`). |
+| Derivação paralela de fonte única | **NAO HA nova no trecho c2:** universo, preservação e integridade reutilizam as respectivas autoridades (`chamados/models.py:1593`; `chamados/models.py:1613`; `chamados/models.py:3372`). |
+| Selo/RED sem mordida | **NAO HA quanto à volta de REABERTURA:** há proibição direta e comparação com SILENCIO; cobertura integral de fila/trilha permanece insuficiente (`chamados/tests/test_f1nova_b1_juiz_respondida.py:281`; `chamados/tests/test_f1nova_b1_juiz_respondida.py:334`; `chamados/tests/test_f1nova_b1_juiz_respondida.py:311`). |
+| Ordem de trava | **NAO HA inversão nova demonstrada:** a ordem global antecede preservação e limpeza (`chamados/models.py:1612`; `chamados/models.py:1613`; `chamados/models.py:1629`). |
+| Pouso antes do pré-requisito | **[nao verificado]:** os anexos estabelecem os pré-requisitos, mas não fornecem sua execução nem prova do pouso. | [nao verificado]
+| Campo com dois significados | **PROCEDE, preexistente:** instante isolado ainda significa “respondida” em alguns leitores, enquanto C6 exige instante+texto; adicionalmente, a sequência pode tratar como vigente a resposta já retirada da projeção (`chamados/models.py:3664`; `chamados/juizes.py:1423`; `chamados/models.py:3674`; `chamados/models.py:1629`). |
 
 ## 16/11 09:25 · sessao cf0625b825b4 · - · - · origem=Ronald (tmux)
 
@@ -429,72 +605,4 @@ Auditoria estática, sem execução de testes ou mutação; resultados executado
 
 - **`obs` é efetivamente lido como metadado por substring.** A existência da dívida está demonstrada; sua idade e gestão em fila `[nao verificado]`. (`app/ferias/management/commands/listar_ferias_dp.py:27`, `:28`, `:30`)
 
-## 16/11 08:52 · sessao 02b77040be5f · - · - · origem=Ronald (tmux)
-
-- O descarte de “levantar antes de tentar escrever” **só se sustenta para `raise` incondicional**. O positivo chama o serviço sem mock e exige retorno 5, cinco trilhas, invalidação e idempotência; uma exceção incondicional escaparia. Ele não exige a ordem escrita→auditoria nem tentativa de escrita quando a auditoria falha. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:211`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:216`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:227`)
-
-- **Mutante sobrevivente plausível:** mover `_ev_rej(...)` para antes de `a.save`; se retornar `None`, levantar `TrilhaDaRejeicaoNaoGravada`; caso contrário, salvar. O positivo continua observando cinco rejeições/trilhas; o negativo encontra exatamente o retrato anterior e a exceção esperada, sem nenhuma tentativa de salvar ausência. Os mocks negativos falham já na primeira auditoria de rejeição. Mutação executada `[nao verificado]`. (`app/ponto/services/ausencia.py:1494`; `app/ponto/services/ausencia.py:1498`; `app/ponto/services/ausencia.py:1499`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:243`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:252`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:531`)
-
-- Variante mais forte: além dessa inversão, retirar o `atomic` local da rejeição. Falha na segunda trilha de uma chamada direta poderia deixar a primeira rejeição persistida, mas os negativos falham na primeira; o positivo não injeta falha. No cancelamento, o `atomic` externo ainda protegeria o ato. A sobrevivência é inferência estática; execução `[nao verificado]`. (`app/ponto/services/ausencia.py:1484`; `app/ponto/services/ausencia.py:1494`; `app/ferias/services.py:674`; `app/ferias/services.py:683`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:243`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:531`)
-
-- Os retratos novos fecham alterações/exclusões nos **campos enumerados**, não na linha inteira. Permanecem fora, por exemplo, `Ausencia.hora_ini/hora_fim/aprovado_por/aprovada_em/atualizado_em`, `AgendamentoFerias.confirmacao/confirmado_em/aviso_emitido` e `LogAuditoria.usuario/ip/ator/criado_em`. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:238`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`; `app/ponto/models.py:768`; `app/ponto/models.py:815`; `app/ponto/models.py:824`; `app/ferias/models.py:315`; `app/ferias/models.py:324`; `app/core/models.py:295`; `app/core/models.py:302`)
-
-- O descarte de trilha nova é coerente com o contrato explicitamente escolhido: comparar somente PKs antigas. Porém o teste permite **qualquer** trilha nova, sem conferir que seja recusa. Os handlers de falha consultados apenas retornam mensagem; não criam explicitamente auditoria de recusa. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:517`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:546`; `app/ferias/views.py:398`; `app/ferias/views.py:452`; `app/ferias/views.py:621`)
-
-- Os descartes de adesão e conteúdo do julgamento delimitam escopo, mas não eliminam as lacunas: a fixture percorre o ramo `nunca_bateu`, que carimba e retorna antes do ramo normal; os asserts conferem contador, carimbo e FK, sem veredito/ata. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:454`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:460`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`; `app/ponto/services/cartorio.py:1314`; `app/ponto/services/cartorio.py:1318`)
-
-- D/E continuam presentes: `engolir` não abre savepoint; a invalidação captura falha e retorna zero; repetição com insumos iguais não invalida; o contador olha apenas `derivado_em=NULL`. Classificá-los como fora desta volta é decisão de escopo; antiguidade independente dos anexos `[nao verificado]`. (`app/ponto/signals.py:88`; `app/core/observ.py:85`; `app/ponto/services/fechamento.py:1661`; `app/ponto/services/ausencia.py:184`; `app/ponto/services/fechamento.py:1696`)
-
-- O selo continua apenas estrutural quanto à chamada: detecta uma chamada viva ao acordador, não valida seus argumentos. Os testes comportamentais positivos matam silenciar **todos** os acordamentos, mas não demonstram cobertura de todo ramo/contexto. Os “18 FAIL” executados permanecem `[nao verificado]`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:222`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:224`)
-
-- O leitor de `obs` realmente infere origem por substrings. A árvore também confirma que regularização grava Justificativa; a formulação atual da entrega, restringindo “só SELECT” aos acréscimos dos ganchos, corrige a ambiguidade anterior. Igualdade byte a byte com a base e logs de execução `[nao verificado]`. (`app/ferias/management/commands/listar_ferias_dp.py:26`; `app/ponto/services/regularizacao.py:102`; `app/ponto/services/regularizacao.py:106`)
-
-## 16/11 08:51 · sessao 46d141e5339f · COMPLEMENTO-LAUDO-[nome]-1611 · sonda · origem=Code
-
-Os números abaixo são transcritos do anexo. Uso **[nao verificado]** porque a saída foi fornecida na mensagem, sem arquivo:linha para citação ou confirmação independente.
-
-**1. Frota e empresas**
-
-Em cada coluna, a ordem é **colaboradores no recorte / colaboradores divergentes / vínculos divergentes**. A unidade principal declarada é colaborador distinto; divergência significa algum vínculo do recorte com posto diferente do cadastro. [nao verificado]
-
-| Empresa | `flags_ativos` | `flags_ativos_e_vigencia_hoje` | Evidência |
-|---|---:|---:|---|
-| 1 | 2 / 0 / 0 | 2 / 0 / 0 | [nao verificado] |
-| 2 | 419 / 44 / 44 | 419 / 44 / 44 | [nao verificado] |
-| 3 | 100 / 6 / 6 | 100 / 6 / 6 | [nao verificado] |
-| 4 | 19 / 3 / 3 | 19 / 3 / 3 | [nao verificado] |
-| 20 | 0 / 0 / 0 | 0 / 0 / 0 | [nao verificado] |
-| 21 | 0 / 0 / 0 | 0 / 0 / 0 | [nao verificado] |
-| 29 | 0 / 0 / 0 | 0 / 0 / 0 | [nao verificado] |
-| **Total da frota** | **540 / 53 / 53** | **540 / 53 / 53** | [nao verificado] |
-
-A saída declara schema `juliani`, consulta em `2026-11-16 11:50:25.864495+00:00` e `hoje=2026-11-16`. [nao verificado]
-
-**2. Estado de `col237`**
-
-| Campo | Valor exibido | Evidência |
-|---|---|---|
-| Cadastro | `pk=237`, empresa `2`, situação `ativo` | [nao verificado] |
-| Posto do cadastro | `444` | [nao verificado] |
-| Vínculos exibidos | Um, com `ec_pk=204` | [nao verificado] |
-| Posto do vínculo | `487` | [nao verificado] |
-| Tipo de escala | `tipo_escala_id=177` | [nao verificado] |
-| Flag do vínculo | `ativa=true` | [nao verificado] |
-| Datas do vínculo | `data_inicio=2026-07-21`; `data_fim=null` | [nao verificado] |
-| Divergência | `diverge_do_cadastro=true` | [nao verificado] |
-| Inclusão nos recortes | `entra_recorte_flags=true`; `entra_recorte_vigencia_hoje=true` | [nao verificado] |
-
-**3. Erros e linhas ausentes**
-
-- O trecho termina com `rc_sombra=0` e não exibe mensagem de erro ou traceback. [nao verificado]
-- Há sete linhas por empresa e uma de total em cada recorte, além do cabeçalho e do detalhe de `col237`; as somas por empresa coincidem com os totais apresentados. [nao verificado]
-- Não há lacuna aparente nessa estrutura; a existência de outras linhas obrigatórias segundo a seção 4 ou o código exato da sonda permanece [nao verificado].
-
-**4. O que a saída não responde**
-
-- Qual posto a geofence ou a apuração de feriado efetivamente usaram em dias passados, inclusive para `col237`. [nao verificado]
-- Quando surgiu a divergência, quem a causou ou qual posto deveria prevalecer; `data_inicio` é a data exibida do vínculo, sem histórico de alterações anexado. [nao verificado]
-- Quais são os demais colaboradores divergentes, seus vínculos, ou os nomes e características dos postos `444` e `487`. [nao verificado]
-- Se houve impacto em batidas, feriados, pagamentos ou alertas, e qual é o estado posterior à consulta. [nao verificado]
-
-_5978 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5980 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
