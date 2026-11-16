@@ -1,7 +1,221 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 01:09** · publicado em **16/11/2026 01:10** (UTC-3)
+> Ultima resposta processada: **16/11/2026 01:15** · publicado em **16/11/2026 01:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 01:15 · sessao bf44a775e492 · RESPOSTAS-BO-1611 · censo · origem=Code
+
+**A partição v1 soma 131, mas não está demonstrada como partição exclusiva de pessoa+dia.** Os anexos individualizam 126 IDs canônicos; há sobreposições entre raízes e casos classificados como “sem dia-colab” que já têm ambos. (app/docs/RELATO.md:429; anexo estrutura18.tsv:1–18; anexo final67.tsv:2–38; anexo mapa_hj_sem_nome.tsv:1–80)
+
+Uso a numeração dos anexos contando sua primeira linha de conteúdo como linha 1; no código, cito a numeração desta cópia. Identidade Git do HEAD: **[nao verificado]**.
+
+**0 — Conferência da partição**
+
+| Conferência | Resultado e prova |
+|---|---|
+| ESTRUTURA histórica | Os 18 estão discriminados: nove NO AR, sete com obra pendente e dois sem cobertura comprovada. (anexo resolve.tsv:2–19) |
+| Triagem dos 37 | 27 SEM DIA-COLAB, quatro BATIDA, quatro CADASTRO, dois ESTRUTURA. (anexo final67.tsv:2–38) |
+| Ingestão | 80 unidades = seis ESTRUTURA + três CADASTRO + cinco BATIDA + 33 sem divergência histórica + 33 indeterminadas. (app/docs/RELATO.md:8916–8921) |
+| IDs individualizados | `80 + 18 + 37 − 6 − 3 = 126`: seis ESTRUTURA já pertencem à ingestão; três indeterminados reaparecem em final67. (anexo estrutura18.tsv:1–6; anexo final67.tsv:12–14; anexo mapa_hj_sem_nome.tsv:1–80) |
+| Diferença para 131 | O p0 declara sete CADASTRO e seis BATIDA; o mapa individualiza três e cinco. Faltam, portanto, individualizar **quatro CADASTRO e um BATIDA** para demonstrar o total declarado. Identidades desses cinco no p0: **[nao verificado]**. (app/docs/RELATO.md:429; app/docs/RELATO.md:8917–8918) |
+
+As sobreposições encontradas são estas:
+
+| Pessoa+dia | Raízes/baldes envolvidos | Prova |
+|---|---|---|
+| col42, 08/10 e 15/10 | BO-ADMIN-2710/1 e HJ-005-U2/U4: duas raízes dentro de “não reconferido”. | app/docs/RELATO.md:3625; anexo mapa_hj_sem_nome.tsv:8,10 |
+| col42, 22/10 | BO-ADMIN-2710/1 em “não reconferido”; HJ-005-U5 em BATIDA. | app/docs/RELATO.md:3625; anexo mapa_hj_sem_nome.tsv:11 |
+| col247, 24/10 | BO-ADMIN-2710/5 em “não reconferido”; HJ-031-U1 em “falta informação”. | app/docs/RELATO.md:3905; anexo final67.tsv:13; anexo mapa_hj_sem_nome.tsv:51 |
+| col130, 05/10 | BO-ADMIN-2710/7 em “não reconferido”; HJ-018-U1 nos 33 históricos sem divergência. | app/docs/BACKLOG.md:835; anexo mapa_hj_sem_nome.tsv:33 |
+| col789, 11/10 | Nominal RT-04 da BO-ADMIN-2710/3, com obra; HJ-004-U1 nos 33 históricos sem divergência. | app/docs/BACKLOG.md:1956; anexo mapa_hj_sem_nome.tsv:5 |
+
+Essas raízes podem denunciar sintomas diferentes, mas **não formam unidades pessoa+dia exclusivas**. Não as fundi automaticamente. (app/docs/CORTES.md:373; app/docs/RELATO.md:3905; app/docs/BACKLOG.md:1956)
+
+Também há três classificações “SEM DIA-COLAB” materialmente incorretas:
+
+- HJ-012-U1: col239, 2026-10-07; discordância das testemunhas. (anexo final67.tsv:12; anexo mapa_hj_sem_nome.tsv:18)
+- HJ-031-U1: col247, 2026-10-24; discordância das testemunhas. (anexo final67.tsv:13; anexo mapa_hj_sem_nome.tsv:51)
+- HJ-050-U2: col523, 2026-11-07; era futuro na leitura de 05/11. (anexo final67.tsv:14; anexo mapa_hj_sem_nome.tsv:72; app/docs/RELATO.md:8920)
+
+Portanto, não certifico um quadro corrigido exclusivo de 131: faltam os cinco IDs do p0 e a definição de tratamento das sobreposições. Os 33 permanecem como medida histórica, sem reconferência nova nesta resposta. (app/docs/RELATO.md:429; app/docs/RELATO.md:8919; app/docs/RELATO.md:8924)
+
+**1 — Os nove “não reconferidos”**
+
+A referência nominal privada da ingestão está em `logs/hj_0511/fonte` e `logs/hj_0511/mapa.md`; esses destinos são apontados no RELATO. Linhas internas contendo o casamento por CPF/nome: **[nao verificado]**. (app/docs/RELATO.md:8894; app/docs/RELATO.md:8924)
+
+O lookup não oferece um juiz genérico de “caso fechado”: declara essa pergunta SEM juiz. Abaixo, FECHADO refere-se ao defeito indicado, com os limites escritos. (app/docs/JUIZES.md:109)
+
+| Caso | Pessoa e dia escritos | Juiz real e esperado para FECHADO |
+|---|---|---|
+| HJ-005-U2 | col42, 2026-10-08. (anexo mapa_hj_sem_nome.tsv:8) | `ponto.turnos.periodo_da_parcial_no_dia`: esperado `fora`; `sem_periodo`/`nao_sei` não conferem. Para afirmar o que a tela mostra, consultar também `ponto.status_dia.status_do_dia_lavrado`. Cobertura no lookup: JUIZES:55–56; implementação: turnos.py:2628–2655; status: JUIZES:120; status_dia.py:201. |
+| HJ-005-U4 | col42, 2026-10-15. (anexo mapa_hj_sem_nome.tsv:10) | Mesmo juiz e esperado do anterior. (app/ponto/turnos.py:2628–2655; app/docs/JUIZES.md:55–56,120) |
+| HJ-030-U1 | col94, 2026-10-16; pergunta 44764, disputa 6984. (anexo mapa_hj_sem_nome.tsv:50; app/docs/RELATO.md:3964) | `chamados.juizes.pergunta_viva` + `chamados.services.fio.montar_chamados_fio`: se viva, deve aparecer no fio do admin. Viva e invisível = ABERTO; morta, isoladamente, não prova desfecho. O lookup só aponta o localizador de disputa; o registro vivo nomeia C6. (app/docs/JUIZES.md:40; app/core/juizes.py:286; app/chamados/juizes.py:865; app/chamados/services/fio.py:242–275) |
+| BO-ADMIN-2710/1 | col42, 2026-10-08, 15 e 22. (app/docs/RELATO.md:3625) | Mesmo juiz de cobertura parcial; esperado `fora`, sem certificar outros furos ou dinheiro. (app/docs/JUIZES.md:55–56; app/ponto/turnos.py:2632–2637) |
+| BO-ADMIN-2710/2 | col789; sete dias, somente 08/10 e 26/10 explicitados. **Mover para falta informação: lista exata dos sete dias.** (app/docs/RELATO.md:3625) | Geometria: `ponto.turnos.parear_turnos`/`turnos_do_colab`, lookup JUIZES:20. O nominal exige entrada reconhecida, pontualidade e HE correspondentes; um valor escalar de FECHADO para a raiz: **[nao verificado]**. (app/docs/CORTES.md:364; app/docs/JUIZES.md:20) |
+| BO-ADMIN-2710/5 | col247, 2026-10-24. (app/docs/RELATO.md:3905) | Leitor real `_marcos_faltantes`: esperado nominal `int_volta`, tipo `E`, em vez de `int_ida/S`. Isso ainda exige conferir emissão e efeito; não basta fechar chamado. Não há linha específica desse leitor no lookup. (app/chamados/services/declaracao_texto.py:86–143; app/docs/CORTES.md:373; lookup específico **[nao verificado]**) |
+| BO-ADMIN-2710/6 | col42/129/789, alvos sem todos os dias. Subcaso escrito: col129, 2026-10-25, chamado 35101. **Mover a raiz para falta informação:** dias/perguntas restantes e tela/perfil do supervisor. (app/docs/RELATO.md:3906; app/docs/CORTES.md:373–374) | C6 `pergunta_viva` e fio para invisibilidade; `qs_na_fila` para a fila. O subcaso depende expressamente da identificação da tela/perfil. (app/core/juizes.py:286; app/chamados/services/fio.py:242; app/chamados/services/painel.py:158; app/docs/CORTES.md:374) |
+| BO-ADMIN-2710/7 | col130, 2026-10-05, chamado 28883. (app/docs/BACKLOG.md:835) | `chamados.services.painel.qs_na_fila(...).exists()`: esperado **False** para a pendência nominal. `registrado` não pede ação. Lookup: JUIZES:59–60,82; implementação painel.py:158–190. |
+| BO-ADMIN-2710/8.1 | col789; ato de edição em 2026-10-27, 14:33–15:56; vínculos 1221/1472/1473. (app/docs/CORTES.md:362) | `colaboradores.services.vinculo.executar_vinculo` é escritor: **NAO_CONFERIDO, não chamar**. Juiz leitor que certifique fidelidade histórica de ação/antes/depois: **[nao verificado]**. A cura não reescreve a trilha histórica. (app/colaboradores/services/vinculo.py:170; app/docs/RELATO.md:3579) |
+
+**2 — Os 57 rótulos originais “falta informação”**
+
+“De quem” abaixo identifica a **fonte do relato**; não transfere ao relator medições internas. A origem HJ/Fernando está escrita no BACKLOG; BO-0611/Mauricio no PROMPTS; BO-1311/Mauricio na própria obra. (app/docs/BACKLOG.md:2233; app/docs/PROMPTS.md:1914; app/docs/BACKLOG.md:795)
+
+| Caso | Dado que falta ou correção do rótulo | De quem — prova da origem |
+|---|---|---|
+| HJ-058 | Individualizar pessoa/dia/anexo entre quatro episódios HEIC; há datas textuais, não ausência absoluta de dia. (app/docs/BACKLOG.md:2633) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-066 | Dado externo necessário **[nao verificado]**; as duas dashboards já estão identificadas. (app/docs/BACKLOG.md:2626) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-068 | Dado externo necessário **[nao verificado]**; fio lateral, Histórico e contador já estão especificados. (app/docs/BACKLOG.md:2627) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-071 | Medir internamente se `hora_ini/hora_fim` estão gravadas; telas espelho/PDF conhecidas. (app/docs/BACKLOG.md:2628) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-073 | Censo interno por causa × permissão do supervisor. (app/docs/BACKLOG.md:2629) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-075 | Print do app mostrando escala antiga; col1032 conhecido. (app/docs/BACKLOG.md:2631) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-090 | Classificação interna L-099 dos 40 dias de férias com batida; individualização nessa linha **[nao verificado]**. (app/docs/BACKLOG.md:1932) | Fernando — app/docs/BACKLOG.md:2233 |
+| HJ-INGESTAO-0511/HJ-012-U1 | Pessoa/dia presentes: col239, 07/10; falta resolver discordância das testemunhas. (anexo mapa_hj_sem_nome.tsv:18) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-INGESTAO-0511/HJ-031-U1 | Pessoa/dia presentes: col247, 24/10; falta resolver discordância das testemunhas. (anexo mapa_hj_sem_nome.tsv:51) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-INGESTAO-0511/HJ-050-U2 | Pessoa/dia presentes: col523, 07/11; precisa reconferência após a leitura que o considerava futuro. (anexo mapa_hj_sem_nome.tsv:72) | Fernando — app/docs/BACKLOG.md:1883 |
+| BO-0611/02 | Qual é a queixa concreta; col78 já corrigido. Dia necessário **[nao verificado]**. (app/docs/RELATO.md:1934; app/docs/PROMPTS.md:1925) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/03 | Motivos das 40 ocorrências do lote. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/05 | Dia do episódio; col456 conhecido. (app/docs/RELATO.md:4; app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/06 | Lacuna atual **[nao verificado]**; quadro antigo dizia conta de teste ativa, mas foi substituído. (app/docs/RELATO.md:1996; app/docs/PROMPTS.md:1925) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/08 | Dia/prova atual **[nao verificado]**; registro substitutivo já diz col617, atestado aprovado, sem divergência. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/09 | Dia/chamado individual **[nao verificado]**; col1000 e falta de porta antes da resposta conhecidos. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/10 | Dia e troca individual **[nao verificado]**; col399 e ausência de UI conhecidos. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-0611/14 | Dia próprio do item 14 **[nao verificado]**; o turno 21/10 foi explicitamente destinado ao item 13. (app/docs/RELATO.md:1997) | Mauricio — app/docs/PROMPTS.md:1914 |
+| BO-1311-ROTEIRO/01 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/02 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/03 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/05 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/06 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/07 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/08 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-1311-ROTEIRO/09 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
+| BO-ADMIN-2710/8.3 | Recorte dos dias afetados; pessoa/vínculo conhecidos, mecanismo já descrito. (app/docs/RELATO.md:3908) | Mauricio — app/docs/RELATO.md:3894,3898 |
+| HJ-004-U2 | Dia; col789 presente. (anexo mapa_hj_sem_nome.tsv:6) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-007-U1 | Dia; col253 presente. (anexo mapa_hj_sem_nome.tsv:13) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-008-U1 | Dia; col283 presente. (anexo mapa_hj_sem_nome.tsv:14) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-017-U2 | Dia; col923 presente. (anexo mapa_hj_sem_nome.tsv:32) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-025-U1 | Dia; col270 presente. (anexo mapa_hj_sem_nome.tsv:42) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-026-U1 | Dia; col129 presente. (anexo mapa_hj_sem_nome.tsv:43) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-032-U1 | Dia; col163 presente. (anexo mapa_hj_sem_nome.tsv:52) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-033-U1 | Dia; col960 presente. (anexo mapa_hj_sem_nome.tsv:53) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-035-U1 | Dia; col949 presente. (anexo mapa_hj_sem_nome.tsv:56) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-036-U1 | Dia; col207 presente. (anexo mapa_hj_sem_nome.tsv:57) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-037-U1 | Dia; col332 presente. (anexo mapa_hj_sem_nome.tsv:58) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-038-U1 | Dia; col446 presente. (anexo mapa_hj_sem_nome.tsv:59) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-039-U1 | Dia; col89 presente. (anexo mapa_hj_sem_nome.tsv:60) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-040-U1 | Dia; col92 presente. (anexo mapa_hj_sem_nome.tsv:61) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-041-U1 | Dia; col231 presente. (anexo mapa_hj_sem_nome.tsv:62) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-042-U1 | Dia; col214 presente. (anexo mapa_hj_sem_nome.tsv:63) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-043-U1 | Dia; col235 presente. (anexo mapa_hj_sem_nome.tsv:64) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-044-U1 | Dia; col246 presente. (anexo mapa_hj_sem_nome.tsv:65) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-045-U1 | Dia; col250 presente. (anexo mapa_hj_sem_nome.tsv:66) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-046-U1 | Dia; col673 presente. (anexo mapa_hj_sem_nome.tsv:67) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-047-U1 | Dia; col194 presente. (anexo mapa_hj_sem_nome.tsv:68) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-048-U1 | Dia; col219 presente. (anexo mapa_hj_sem_nome.tsv:69) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-051-U1 | Dia; col123 presente. (anexo mapa_hj_sem_nome.tsv:73) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-052-U1 | Dia; col1023 presente. (anexo mapa_hj_sem_nome.tsv:74) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-052-U2 | Dia; col78 presente. (anexo mapa_hj_sem_nome.tsv:75) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-053-U1 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:76) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-054-U1 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:77) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-055-U1 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:78) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-056-U1 | Dia; col270 presente. (anexo mapa_hj_sem_nome.tsv:79) | Fernando — app/docs/BACKLOG.md:1883 |
+| HJ-056-U2 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:80) | Fernando — app/docs/BACKLOG.md:1883 |
+
+Agrupamento dos **57 rótulos originais**, sem fingir que todos são pedidos externos:
+
+| Tipo | Quantidade | Lastro |
+|---|---:|---|
+| Dia ausente, pessoa presente | 26 | anexo mapa_hj_sem_nome.tsv:6–80 |
+| Pessoa e dia ausentes | 4 | anexo mapa_hj_sem_nome.tsv:76–78,80 |
+| Individualizar episódio/anexo HEIC | 1 | app/docs/BACKLOG.md:2633 |
+| Demanda de tela já descrita; lacuna externa não demonstrada | 2 | app/docs/BACKLOG.md:2626–2627 |
+| Medição/classificação interna | 3 | app/docs/BACKLOG.md:2628–2629,1932 |
+| Print | 1 | app/docs/BACKLOG.md:2631 |
+| Pessoa+dia presentes; discordância/reconferência | 3 | anexo mapa_hj_sem_nome.tsv:18,51,72 |
+| Queixa/motivos do lote | 2 | app/docs/RELATO.md:1934 |
+| Episódio/dia/prova individual não demonstrados | 5 | app/docs/RELATO.md:4,1934,1997 |
+| Lacuna atual não determinada após substituição do quadro | 1 | app/docs/RELATO.md:1996; app/docs/PROMPTS.md:1925 |
+| Correspondência e lacuna individual do roteiro não demonstradas | 8 | app/docs/RELATO.md:685,689 |
+| Dias afetados pela desativação | 1 | app/docs/RELATO.md:3908 |
+| **Soma** | **57** | anexo final67.tsv:2–38; anexo mapa_hj_sem_nome.tsv:1–80 |
+
+BO-ADMIN-2710/2 e /6 acrescentam duas raízes incompletas aos pendentes; não foram inseridas artificialmente nas 57 linhas acima. (app/docs/RELATO.md:3625,3906; app/docs/CORTES.md:374)
+
+**3 — Oito com obra e dois sem obra**
+
+“Hoje” nesta tabela significa o estado documental da cópia; execução ou conclusão atual em produção: **[nao verificado]**.
+
+| Caso | Obra | GRADE / BACKLOG | O que destrava |
+|---|---|---|---|
+| BO-ADMIN-2710/3 | JUSTIFICATIVA-PAGA-O-PERIODO | GRADE principal INTERROMPIDA; lista posterior PARADA, aguarda juiz. BACKLOG preserva dependência. (app/docs/GRADE-MESTRA.md:270,1758; app/docs/BACKLOG.md:1956) | Pouso de COMPETENCIA-PAGA-UM-JUIZ; certificar árvore/condições do opus, consumo do parcial e DIFF novo. (app/docs/GRADE-MESTRA.md:1758; app/docs/BACKLOG.md:1956) |
+| HJ-017-U1 | O232 | REGISTRADA; A/B no ar, complemento da ata pendente. (app/docs/GRADE-MESTRA.md:854; app/docs/BACKLOG.md:1253) | Migrar terceiro leitor, RED das quatro batidas e impacto de frota; colisão documental com JUSTIFICATIVA. (app/docs/BACKLOG.md:1253; app/docs/GRADE-MESTRA.md:854) |
+| BO2910-ESTRUTURA/01 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo da classe de duas portas de posto/empresa e exceção engolida. (app/docs/BACKLOG.md:1116) |
+| BO2910-ESTRUTURA/02 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo da classe de chamado de texto livre sem leitor da célula. (app/docs/BACKLOG.md:1116) |
+| BO2910-ESTRUTURA/05 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo; tela precisa exigir período na aprovação/edição da parcial. (app/docs/BACKLOG.md:1116) |
+| BO2910-ESTRUTURA/06 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo da vigência no desligamento e reabertura na reativação. (app/docs/BACKLOG.md:1116) |
+| BO2910-ESTRUTURA/08 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo do veredito admin que sobrevive à regeneração com marcos novos. (app/docs/BACKLOG.md:1116) |
+| HJ-074 | FERIADO-ESCALA → FERIADO-USA-A-LEI-DE-1609 | GRADE EM VOO, escopo anterior superado; lista posterior PAREI 3(ii). BACKLOG PARADA no desenho G. (app/docs/GRADE-MESTRA.md:127,1798; app/docs/BACKLOG.md:729) | Corte `! FERIADO-G item 3(ii)`; construção permanece parada pela condição medida. (app/docs/GRADE-MESTRA.md:1798; app/docs/RELATO.md:48) |
+
+| Sem obra | Descrição e complemento cabível |
+|---|---|
+| HJ-005-U1 | col42, 01/10: ingestão acusa irregularidade e retenção por fato em ausência/furo/indefinição. (anexo mapa_hj_sem_nome.tsv:7) Cabe **complemento de censo em BO-ADMIN-2710**, aberta “medindo”, para reconciliar dono e destino; cobertura causal por COBERTURA-PARCIAL não está demonstrada para 01/10. Há ainda destino histórico “decisão do admin” para o recorte 01/09-10, que precisa ser reconciliado. (app/docs/BACKLOG.md:832,841; app/docs/CORTES.md:373) |
+| HJ-012-U2 | col239, 12/10: ingestão acusa `espelho_cobrado`. (anexo mapa_hj_sem_nome.tsv:19) Cabe **complemento de
+
+[truncado em 20000 de 31904 caracteres]
+
+## 16/11 01:11 · sessao ced55a2548b4 · MIUDOS-NA-FILA-DE-LOTES · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: item (3). Itens (1) e (2) seguem separados**, conforme a cláusula de devolução do próprio aval. Motivos: premissa da fila sem regra localizada e condições de pouso incompatíveis com as regras escritas. Referências detalhadas abaixo. — `anexo:miudos_na_fila_de_lotes.txt:1–2`; `CLAUDE.md:320–329`. [nao verificado]
+
+Nos anexos, conto as linhas a partir de “aval Ronald”, sem contar quebras visuais da interface.
+
+**1. As premissas conferem?**
+
+- **(1) NAO PROCEDE quanto à existência dos insumos previstos nos avais.** Existe o item (3) do COMPLEMENTO-1: relacionar os oito casos com obra e caracterizar/registrar os dois sem obra. Existe também a determinação de produzir `V0/causas.md`, por causa com `arquivo:linha` e destino. — `anexo:complemento1_respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
+
+  **A entrega desses insumos permanece [nao verificado].** O registro da cópia apresenta os baldes 8/2/9, mas ainda põe `causas.md` depois da medição R1. Os nove só entram no universo pretendido quando reconferidos e classificados como nossos; não são nove causas nossas já demonstradas. — `app/docs/RELATO.md:4`; `app/docs/RELATO.md:9`; `anexo:miudos_na_fila_de_lotes.txt:1`.
+
+- **(2) NAO PROCEDE.** O quadro por causa é uma entrega solicitada, não uma premissa de arquivo já existente. A correspondência concreta entre casos BO/HJ, dias ESTRUTURA e uma mesma causa está **[nao verificado]**. — `anexo:miudos_na_fila_de_lotes.txt:1`.
+
+- **(3) PROCEDE quanto à premissa da fila.** Não localizei na cópia uma regra escrita da **“fila de LOTES das laterais de 15/11”** que determine quem entra, quando anda e como pousa: **[nao verificado]**. A evidência positiva encontrada são obras numeradas: **LOTE 7 = FATO-DE-AUSENCIA-ACORDA-A-PROJECAO** e **LOTE 3 = SITUACAO-DESLIGADO**, com condições próprias. Isso não demonstra uma fila geral aberta a novos miúdos. — `app/docs/RELATO.md:223–224`.
+
+  **A vaga do Codex construtor existe por escrito e no código:** `--construtor`, uma vaga por repositório em `logs/construtor.vaga`, protegida por `flock`. Sua ocupação atual está **[nao verificado]**. — `CLAUDE.md:353–356`; `bin/codex_pergunta.sh:72–76`; `bin/codex_pergunta.sh:248–253`.
+
+  Portanto, aplica-se a própria salvaguarda do aval: sem regra escrita de entrada identificada, **o item (3) para e registra a pergunta**. Isso não permite concluir que a fila inexiste fora da cópia. — `anexo:miudos_na_fila_de_lotes.txt:1`.
+
+**2. Colide com aval vigente?**
+
+- **(1) NAO PROCEDE.** Acrescentar classificação às leituras não exige construtor nem cura. É compatível com a leitura paralela sem vaga da CAUDA e com as proibições dos dois insumos. — `anexo:miudos_na_fila_de_lotes.txt:1`; `anexo:cauda_da_madrugada_1611.txt:1`; `anexo:complemento1_respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
+
+- **(2) NAO PROCEDE.** Consolidar o quadro é registro; não autoriza curar dentro de RESPOSTAS-BO ou da V0. Permanecem as proibições de cura dessas obras. — `anexo:miudos_na_fila_de_lotes.txt:1`; `anexo:respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
+
+- **(3) PROCEDE quanto ao encaixe na ordem vigente.** “Vaga ociosa e nenhuma volta esperando” não define a posição dos miúdos diante de F1 B2, LOTE 7 e LOTE 3. A CAUDA enumera essa ordem e determina somente leitura quando a lista se esgotar; o PREPARA também fixa prioridades. O próprio MIUDOS declara que não altera a ordem vigente. Falta a regra de fila que compatibilize essas cláusulas; um furo de fila efetivamente ocorrido está **[nao verificado]**. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `anexo:cauda_da_madrugada_1611.txt:1`; `anexo:prepara_volta_bug_par.txt:4`.
+
+  **NAO PROCEDE quanto ao teto:** um Codex construtor e um miúdo aberto não aumentam o teto de um Codex mais até cinco opus. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `anexo:producao_maxima.txt:1`.
+
+  **NAO PROCEDE como colisão automática com as proibições dos insumos.** MIUDOS contém uma autorização própria, condicional, de construção; isso não transforma RESPOSTAS-BO nem V0 em obras de cura. Uma cura concreta invadindo esses escopos está **[nao verificado]**. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `anexo:respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
+
+**3. Alguma condição não fecha no literal?**
+
+- **(1) NAO PROCEDE como contradição demonstrada.** “Um arquivo de produção + teste” não diz “somente dois caminhos no commit”. Docs obrigatórios podem coexistir com uma classificação por tamanho do código; a inclusão ou exclusão deles nessa contagem não está definida. Docs devem entrar no mesmo commit do marco. — `anexo:miudos_na_fila_de_lotes.txt:1`; `CLAUDE.md:332–336`. Uma exigência de **outro arquivo separado de selo em toda cura**, além do teste, está **[nao verificado]**. [nao verificado]
+
+- **(2) NAO PROCEDE.** Consolidar por causa é compatível com a regra de curar a classe, em vez do caso. A classificação concreta continua dependente dos insumos. — `anexo:miudos_na_fila_de_lotes.txt:1`; `CLAUDE.md:65–70`.
+
+- **(3) PROCEDE.** O gatilho **“cinco itens ou fim do dia”** permite espera além dos 30 minutos admitidos para formar comboio. A regra manda rodar sozinho quando não houver outra raia pronta nessa janela; raia verde pousa antes de abrir nova fatia da fila 1, e cura commitada com suíte verde vai ao ar imediatamente. — `anexo:miudos_na_fila_de_lotes.txt:1`; `CLAUDE.md:320–329`; `CLAUDE.md:425–427`. [nao verificado]
+
+  **A retirada de reprovado também não fecha com a promessa irrestrita de “uma suíte inteira”.** A árvore restante precisa ser certificada: a suíte anterior não certifica uma árvore modificada. O COMBOIO prevê expressamente nova suíte de pouso após retirar obra reprovada. — `CLAUDE.md:320–324`; `anexo:comboio_pre_opus.txt:5`; `anexo:miudos_na_fila_de_lotes.txt:1`. [nao verificado]
+
+  **“Um opus final” não dispensa opus por obra.** O COMBOIO exige final por obra, e toda obra construída pelo Codex passa por ele. O aval não define se os cinco itens constituem uma obra única ou várias; essa equivalência está **[nao verificado]**. — `anexo:comboio_pre_opus.txt:5`; `app/docs/LEIS.md:147`; `anexo:miudos_na_fila_de_lotes.txt:1`.
+
+  **NAO PROCEDE quanto a “um commit por item com RED”, isoladamente.** RED evidenciado é obrigatório; não foi localizada exigência de commit separado para o RED **[nao verificado]**. Continuam obrigatórios docs do marco, mensagem LEI-AKITA completa e caminhos declarados. — `CLAUDE.md:28–29`; `CLAUDE.md:193`; `CLAUDE.md:332–336`; `bin/molde_fatia/LEIAME:42–50`; `bin/commit_so_o_declarado.sh:9–18`.
+
+**4. Toca exportada, dinheiro ou `!` fora do declarado?**
+
+- **(1) NAO PROCEDE como toque demonstrado.** O item pede leitura e sinalização desses alcances, sem cura ou apply. — `anexo:miudos_na_fila_de_lotes.txt:1,3`.
+
+- **(2) NAO PROCEDE como toque demonstrado.** A entrega declarada é um quadro Markdown; não há alteração de produção descrita nesse item. — `anexo:miudos_na_fila_de_lotes.txt:1`.
+
+- **(3) NAO PROCEDE como toque efetivamente demonstrado; alcance real [nao verificado].** O literal exclui dinheiro/exportada/API, proíbe apply e preserva parada por `!`, mas não há causas individualizadas nem diff para conferir o alcance. O filtro de tamanho não substitui PARADA item 2: escala/vínculo, apagar ou voltar arquivo usado em produção, regra fora do pedido, atalhos e motor v2 continuam exigindo `!`; a L-126 também proíbe ao Codex construtor item que peça `!`. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `CLAUDE.md:265–268`; `app/docs/LEIS.md:147`.
 
 ## 16/11 01:09 · sessao ee60cda9b763 · - · - · origem=Ronald (tmux)
 
@@ -756,54 +970,4 @@ rc_sombra=125
 - **ESTRUTURA_DIAS_LINHAS é True:** [nao verificado]; a linha não consta do dado fornecido.
 - **Há INCOMPLETO na parte:** [nao verificado]; o marcador não aparece no trecho fornecido.
 
-## 15/11 23:48 · sessao 9bc987ad1fda · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-A parte 1 de 6 não consta do dado fornecido; segue todo o trecho recebido, sem resumir. [nao verificado]
-
-```text
-sonda_leitura: script.py [4e9a5641d912b65d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-docker: Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "tmpfs" to rootfs at "/app/logs": create mountpoint for /app/logs mount: make mountpoint "/app/logs": mkdirat /var/lib/docker/rootfs/overlayfs/81c87712d91a033ef84050839a7038dfca63323d1bce2600137f8590821b7e6e/app/logs: read-only file system
-
-Run 'docker run --help' for more information
-rc_sombra=125
-```
-
-- **SOMA=True:** não confirmável; a linha está ausente. [nao verificado]
-- **ESTRUTURA_DIAS_LINHAS=True:** não confirmável; a linha está ausente. [nao verificado]
-- **INCOMPLETO:** o marcador literal não aparece no trecho; há erro do Docker e `rc_sombra=125`. O estado da parte 1 de 6 é [nao verificado].
-
-## 15/11 23:48 · sessao 228d59997109 · - · - · origem=Ronald (tmux)
-
-**Item 2: PROCEDE contraexemplo concorrente; não achei contraexemplo sequencial com `update_fields` por keyword e valores concretos.** A guarda lê o banco sem trava, compara e só depois chama `super().save`; há uma janela entre validação e escrita. (`app/chamados/models.py:3548`; `app/chamados/models.py:3552`; `app/chamados/models.py:3570`; `app/chamados/models.py:3576`)
-
-Contraexemplo:
-
-1. Banco e instância A: `(I, 'bati')`.
-2. A chama `save(update_fields=['respondida_em'])`; sua leitura retorna `(I, 'bati')` e a igualdade dispensa a recusa.
-3. Antes do UPDATE de A, B grava `(None, '')` e confirma.
-4. A grava somente `respondida_em=I`; resultado `(I, '')`, ilegal segundo o juiz. B pode adquirir a trava regulamentar; A nunca a adquiriu. (`app/chamados/models.py:3572`; `app/chamados/models.py:3574`; `app/chamados/models.py:3576`; `app/chamados/models.py:3552`; `app/chamados/models.py:2727`; `app/chamados/juizes.py:1534`)
-
-Ocorrência em produção, isolamento efetivo e execução SQL: **[não verificado]**. A configuração `prod` declara PostgreSQL. (`app/config/settings/prod.py:9`)
-
-**Outro problema: `update_fields` posicional.** A guarda consulta apenas `kwargs`, mas encaminha `*args` intactos ao Django. (`app/chamados/models.py:3549`; `app/chamados/models.py:3552`)
-
-```python
-# banco (None, ''), memória (I, 'bati')
-p.save(False, False, None, ['respondida_em'])
-```
-
-A guarda interpreta save completo, aprova memória legal e o Django escreveria só instante, produzindo `(I, '')`. Também pode recusar legado intocado: banco `(None,'legado')`, memória `(None,'outro')`, `p.save(False, False, None, ['pergunta'])`; a guarda recusa texto sem instante apesar de o save excluir ambas as metades. A aceitação desses argumentos pelo Django instalado é **[não verificado]**: a cópia fixa Django 5.2.14, mas o pacote não está instalado neste ambiente. (`app/chamados/models.py:3549`; `app/chamados/models.py:3574`; `app/chamados/services/fio.py:1610`; `app/requirements.txt:13`)
-
-Os casos sequenciais pedidos:
-
-- **Create:** valida ambas as metades da memória; não consulta linha existente com `_state.adding=True`. (`app/chamados/models.py:3569`; `app/chamados/models.py:3574`)
-- **`only/defer`, sem `update_fields`:** a guarda acessa ambas as metades antes do `super`; campos diferidos são carregados. O comportamento exato do `update_fields` automático do Django permanece **[não verificado]**. (`app/chamados/models.py:3574`; `app/chamados/models.py:3552`)
-- **Refresh integral/parcial:** a guarda não usa fotografia própria; consulta novamente antes de compor o par. (`app/chamados/models.py:3572`)
-- **PK explícito com `adding=False`:** linha existente segue comparação normal; linha ausente deixa `_banco=None` e valida ambas as metades da memória. (`app/chamados/models.py:3569`; `app/chamados/models.py:3574`)
-- **Linha apagada antes da guarda:** nenhuma absolvição por igualdade ocorre; nascimento ilegal é recusado. O eventual fallback de UPDATE para INSERT do Django é **[não verificado]**. (`app/chamados/models.py:3573`; `app/chamados/models.py:3576`; `app/chamados/models.py:3579`)
-- **Rollback externo:** próximo save relê o estado revertido; fecha os três exemplos antigos de cache. Os testes novos cobrem 2a e 2c expressamente. (`app/chamados/models.py:3572`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:146`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:159`)
-- **`QuerySet.update` fora do save:** a fixture cria legado assim; isso não demonstra que ESTE save o gravou. Pode fornecer a escrita B da corrida. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:62`)
-- **Gerador em `update_fields`:** `set(update_fields)` consome o iterador, que é encaminhado esgotado ao `super`; resultado exato — no-op ou erro no Django — **[não verificado]**. (`app/chamados/models.py:3565`; `app/chamados/models.py:3552`)
-
-_5868 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5870 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
