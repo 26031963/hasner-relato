@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 21:04:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.2 MB). Acoes na janela: **1794**.
+**Medido em 15/11/2026 21:09:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (106.2 MB). Acoes na janela: **1797**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:07:00 | Bash | Point ESPERANDO at codex pid | `cd /home/ronald/saas-hasner; sed -i "3s/.*/ESPERANDO: codex_pergunta.sh \| pid=$(pgrep -f 'codex_pergunta.sh.*verif2' \| head -1)/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
+| 21:06:57 | Monitor | Codex verif2 BUG-ENC | `cd /home/ronald/saas-hasner; f=logs/ORDEM-VIVA-1511/BUG-ENC/verif2.r; until [ -s $f ] && ! pgrep -f "codex_pergunta.sh.*verif2" >/dev/null; do /usr/bin/sleep 10; if ! pgrep -f "codex_pergunta.sh.*verif2" >/dev/null && [ ! -s $f ]; then echo "verif2 morreu sem resposta: $(tail -2 logs/ORDEM-VIVA-1511/BUG-ENC/verif2.log)"; exit; fi; done; echo "verif2 $(grep -m1 VEREDITO $f)"` |
+| 21:06:52 | Bash | Launch Codex delta verifier | `cd /home/ronald/saas-hasner; D=logs/ORDEM-VIVA-1511/BUG-ENC; git -C /home/ronald/wt-bug-enc-201609 diff 7976ab462 f7716c311 > $D/diff_delta2.txt; wc -l $D/diff_delta2.txt; cat > $D/verif2.q <<'EOF' Volta 2 do pre-verificador (delta), papel verificador, obra BUG-ENC-CELULAS-FORMA. Anexo: diff 7976ab462..f7716c311 (so testes). Contexto: a cura (ja verificada na volta 1) faz ponto/turnos.py::dias_enc ...` |
 | 20:49:48 | Bash | Write impact reading and RELATO line | `cd /home/ronald/saas-hasner; cat > logs/ORDEM-VIVA-1511/BUG-ENC/impacto_v2_leitura.md <<'EOF' # BUG-ENC impacto v2 -- leitura caso a caso (sessao, 15/11 20:4x) Fonte: logs/BUG-ENC-IMPACTO-V2-1511.out (29.370 dia x instante, D+1 03h/08h, total_erros 0) e logs/BUG-ENC-CASOS-1511.out (batidas em hora local). Valor = motivo de NAO encerrado; None = encerrado. HOJE = cartorio com celulas compostas (bug ...` |
 | 20:49:25 | Bash | Read per-case detail | `cd /home/ronald/saas-hasner; grep -v 'objects imported' logs/BUG-ENC-CASOS-1511.out \| cut -c1-260 \| head -90` |
 | 20:48:57 | Monitor | BUG-ENC casos sombra rc | `cd /home/ronald/saas-hasner; until grep -q '^rc=' logs/ORDEM-VIVA-1511/BUG-ENC/casos_rodar.log; do /usr/bin/sleep 5; done; echo "casos $(grep '^rc=' logs/ORDEM-VIVA-1511/BUG-ENC/casos_rodar.log) $(grep total_erros logs/BUG-ENC-CASOS-1511.out 2>/dev/null)"` |

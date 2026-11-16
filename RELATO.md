@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=2968451
+ESPERANDO: codex_pergunta.sh | pid=3042551
 AVAL-DEVOLVIDO CONSTRUIR-R3-C17-E-F1-NOVA ITEM A (REVISAO-DO-AVAL Codex verificador @f31a8d09e, logs/E3-RESTO-R3/c17/revisao/revisao.r, PROCEDE em 1, conferido pela sessao): a especificacao logs/E3-RESTO-R3/c17/predesenho.md:24-25 diz que o substituto do censo em c14:317-321 e "dict de 3 chaves"; no arquivo, test_e3_r3_c14_sem_banco.py:315-317 roda o censo REAL por vigia_censo (test_e3_r3_c6_sem_banco.py:253-254) e devolve as 9 chaves (vigia_retido_calado.py:61-62/:89) -- so o c11:275 e dict de 3. Perguntas 2-4 NAO PROCEDE. Correcao proposta da linha 25: "substituto c11:275-281 dict de 3 chaves; c14:315-321 censo real de 9 chaves por vigia_censo". Item A NAO abre construtor; item B segue (revisao em voo) e pega a vaga 1.
 DESPACHO BUG-ENC-CONSTRUCAO 20:19: pre-verificacao do diff 7976ab462 -> Codex verificador (logs/ORDEM-VIVA-1511/BUG-ENC/verif1.q) | impacto do veredito do cartorio e do vigia -> sombra (logs/sombra/bug_enc_impacto.py, motivo do desvio: medicao de pareador por frota vai na sombra, --sonda do Codex so tem envelope de PROD) | volta intermediaria -> suite.sh --volta | opus final depois da suite inteira verde.
 DESPACHO CONSTRUIR-R3-C17-E-F1-NOVA 20:2x: REVISAO-DO-AVAL item A -> Codex verificador @f31a8d09e (logs/E3-RESTO-R3/c17/revisao/revisao.q) | item B -> Codex verificador @e84a167f4 (logs/E4C/f1nova/revisao/revisao.q) | construtor A abre na vaga 1 so com TUDO NAO PROCEDE; B espera vaga (BUG-ENC na 2).
