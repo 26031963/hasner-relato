@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 05:44:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1346**.
+**Medido em 16/11/2026 05:49:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1332**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1342,17 +1342,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:56:16 | Bash | Find live census wrapper pids | `cd /home/ronald/saas-hasner; pgrep -f "codex_pergunta.sh.*JUIZ-RESPONDIDA\|codex_pergunta.sh .*censo.q" -a \| head; pgrep -af "bash logs/JUIZ-RESPONDIDA/rodar.sh"` |
 | 17:56:12 | Bash | Show local and remote heads | `cd /home/ronald/saas-hasner; git rev-parse --short HEAD; git rev-parse --short origin/main; git status --porcelain app/docs \| head` |
 | 17:56:09 | Bash | Read push verdict and confirm remote | `cd /home/ronald/saas-hasner; tail -4 logs/push_1730.log; git fetch -q origin; git rev-parse --short HEAD origin/main` |
-| 17:48:35 | Bash | Add PROMPTS line for JUIZ-RESPONDIDA aval | `cd /home/ronald/saas-hasner; ls logs/AVAIS-1515/ \| grep -i -E 'juiz\|respond'; sed -i '0,/^- 15\/11 17:1x PRE-DESENHO-F1-D1-J1/s//- 15\/11 17:5x JUIZ-RESPONDIDA-CENSO (aval Ronald): retira D1\/J1, F1 parada ate o corte; item A censo Codex AST no HEAD 64d091710 -> logs\/JUIZ-RESPONDIDA\/censo.md; item B sonda leitura -> logs\/JUIZ-RESPONDIDA\/quadro.out; item C uma linha lei: no topo substituindo  ...` |
-| 17:48:31 | Bash | See PROMPTS tail format | `cd /home/ronald/saas-hasner; tail -3 app/docs/PROMPTS.md \| cut -c1-300` |
-| 17:48:30 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 17:48:26 | Bash | Read memory and locate RELATO lines | `cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/nao-commitar-durante-o-push.md; cd /home/ronald/saas-hasner; grep -n "PERGUNTA DE DESENHO: E4C-F1V3" app/docs/RELATO.md \| head; head -12 app/docs/RELATO.md \| cut -c1-200` |
-| 17:48:19 | Bash | Check TELA-DIZ pista request status | `ssh pista estado 2>&1 \| grep -v 'rc=130' \| tail -8; ssh pista log 1115172620_9be27edd 5 2>&1 \| tail -5` |
-| 17:48:15 | Bash | Check push log and pista state | `cd /home/ronald/saas-hasner; tail -5 logs/push_1730.log; echo ---; ls logs/DUAS-PISTAS/vereditos/ 2>/dev/null \| tail -3; ssh pista estado 2>&1 \| tail -5` |
-| 17:48:14 | Bash | Launch Codex census and read-only sonda in parallel | `cd /home/ronald/saas-hasner; bash logs/JUIZ-RESPONDIDA/rodar.sh` |
-| 17:47:17 | Bash | Write census and sonda questions and launcher | `cd /home/ronald/saas-hasner; D=logs/JUIZ-RESPONDIDA; H=$(git rev-parse --short=9 HEAD); echo $H cat > $D/censo.q <<'EOF' CENSO por AST (somente leitura), arvore = HEAD do main. Obra JUIZ-RESPONDIDA. Entidade: chamados.models.PerguntaDisputa, campos `respondida_em` e `resposta_colab`. Pergunta de negocio de fundo: "esta pergunta foi respondida?". NAO julgue qual predicado e o certo; so descreva o q ...` |
-| 17:46:59 | Bash | Check read envelope CPU placement | `cd /home/ronald/saas-hasner; grep -n "cpuset\\|docker run\\|docker exec\\|timeout" bin/sonda_leitura.sh \| head` |
-| 17:46:56 | Bash | Write item B sonda script and check load | `mkdir -p /home/ronald/saas-hasner/logs/JUIZ-RESPONDIDA; cat > /home/ronald/saas-hasner/logs/JUIZ-RESPONDIDA/sonda_quadro.py <<'EOF' # JUIZ-RESPONDIDA-CENSO item B: quadro das PerguntaDisputa pelos 4 estados de resposta x validada, materializada, # viva (juiz pergunta_viva), ato RESPOSTA, competencia aberta x entregue (juiz folha/export.py::competencia_entregue). # Leitura pura. Sem try/except. Sem ...` |
-| 17:46:33 | Bash | Read q_vivas body | `cd /home/ronald/saas-hasner; git show HEAD:app/chamados/models.py \| sed -n 3432,3500p; git show HEAD:app/chamados/models.py \| sed -n 3500,3506p` |
-| 17:46:23 | Bash | Read juiz faces and wrapper sonda options | `cd /home/ronald/saas-hasner; git show HEAD:app/chamados/juizes.py \| sed -n 1540,1566p; git show HEAD:app/chamados/juizes.py \| sed -n 865,875p; git show HEAD:app/chamados/models.py \| sed -n 3420,3432p; git grep -n "class PerguntaDisputa\\|validada_em = \\|materializada_em = " -- app/chamados/models.py \| head; grep -n "sonda" bin/codex_pergunta.sh \| head -20` |
-| 17:46:20 | Bash | Find sonda invocation form and juiz faces on HEAD | `cd /home/ronald/saas-hasner; head -5 logs/E4C/f1v10/sonda.wrap.log; head -c 600 logs/E4C/f1v10/sonda.q; echo; git grep -n "def q_respondida\\|def pergunta_viva\\|def irmas_respondidas_sem_consumo\\|def q_viva\\|def q_vivas" -- app/chamados/ \| head; git grep -n "competencia_ja_paga\\|competencia_entregue" -- app/core/juizes.py \| head -5; git grep -n "def sem_veredito_entre" -- app/chamados/models ...` |
-| 17:46:16 | Bash | Read previous F1 sonda script and launcher | `cd /home/ronald/saas-hasner; cat logs/E4C/f1v10/sonda_ato_x_projecao.py; ls logs/E4C/f1v10/; grep -n "sonda" logs/E4C/f1v10/*.sh 2>/dev/null \| head` |
