@@ -1,13 +1,13 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 16/11/2026 15:40 @2687a2792
+medido em 16/11/2026 15:45 @2687a2792
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
 | ESPINHA-E | 75 | 0 | 0 | 15 | 60 | 26.9 |
 | 20/20 | 5 | 1 | 1 | 1 | 2 | 32.2 |
 | LATERAL-ESTRUTURA | 154 | 0 | 3 | 22 | 129 | 19.8 |
-| INSTRUMENTO | 178 | 0 | 0 | 17 | 161 | 15.2 |
+| INSTRUMENTO | 179 | 0 | 0 | 17 | 162 | 15.1 |
 | UI | 39 | 0 | 0 | 9 | 30 | 20.5 |
 | CEREJA | 1 | 0 | 0 | 0 | 1 | 11.1 |
 | ? | 4 | 0 | 0 | 0 | 4 | 13.9 |
@@ -26,7 +26,7 @@ medido em 16/11/2026 15:40 @2687a2792
 | ATA-NAO-DISPENSA-JUSTIFICADA | 67 | Acesso para aplicar o acervo da 10 |
 | H12H06-SEPARA-E-CRONTAB | 67 | censo de trava; desenho da parte B |
 
-resolve preenchido 12/456
+resolve preenchido 12/457
 
 casos ESTRUTURA sem obra: 2 (logs/GRADE-MESTRA/resolve/quadro.md)
 
@@ -43,6 +43,6 @@ fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PAR
 
 casas cheias na frota: cen 234, lei 320, con 75, R/G 33, mut 3, ver 14, opus 9, pou 43, ar 37
 
-obras lidas: 456
+obras lidas: 457
 
 nao lidas: 0
