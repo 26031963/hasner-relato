@@ -1,7 +1,133 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 17:16** · publicado em **16/11/2026 17:18** (UTC-3)
+> Ultima resposta processada: **16/11/2026 17:38** · publicado em **16/11/2026 17:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 17:38 · sessao 7ee2c785a88a · UI-EDITOR-CAL-REPETIR-CONFIRMA · verificador · origem=Code
+
+**Não identifiquei bloqueio comprovado no fluxo normal; há achados de fila na concorrência entre ações e na força dos testes.** A cópia atual sincroniza seleção, desenho e campos após confirmar; a view respeita o modo escolhido. (`app/templates/escala/folga_calendario_editar.html:127`; `app/escala/views.py:327`.)
+
+Comparação integral dos hashes, execução dos testes e comportamento em produção: **[não verificado]**. Não executei o runner: ele cria/remove arquivos e grava registros, contrariando a restrição de leitura. (`app/escala/tests/test_smoke_clique_folga_calendario.py:178`; `app/escala/tests/test_smoke_clique_folga_calendario.py:187`; `app/escala/tests/test_smoke_clique_folga_calendario.py:259`.)
+
+**1. Escritores, leitores e significado**
+
+| Estado/valor | Quem escreve e quem lê |
+|---|---|
+| `sel[tam]`, incluindo `sel[31]` | A view fornece `marcados`; o template inicializa os `Set`. Escrevem `fcTog` e `copia`. Leem ordenação, desenho, contador, marca de vazia, chips, canônico, campos do formulário e os guardas de Repetir/Salvar. (`app/escala/views.py:362`; `app/templates/escala/folga_calendario_editar.html:79`; `app/templates/escala/folga_calendario_editar.html:82`; `app/templates/escala/folga_calendario_editar.html:119`; `app/templates/escala/folga_calendario_editar.html:127`; `app/templates/escala/folga_calendario_editar.html:149`.) |
+| `dias_<tam>` em `#fc-hidden` | São **checkboxes marcados dentro de um div escondido**, não inputs `type="hidden"`. `syncHidden` recria todos a partir de `sel`; `fcModo` também pode apagar o conteúdo. Leem o formulário, as sondas e a view por `getlist`. (`app/templates/escala/folga_calendario_editar.html:62`; `app/templates/escala/folga_calendario_editar.html:110`; `app/templates/escala/folga_calendario_editar.html:114`; `app/templates/escala/folga_calendario_editar.html:189`; `app/escala/tests/test_smoke_clique_folga_calendario.py:120`; `app/escala/views.py:342`.) |
+| `#fc-conta-<tam>` | O template escreve a quantidade inicial; `renderGrade` substitui pelo comprimento dos dias ordenados de `sel`. A sonda lê seu texto; a persistência lê `dias_*`, não o contador. (`app/templates/escala/folga_calendario_editar.html:46`; `app/templates/escala/folga_calendario_editar.html:95`; `app/escala/tests/test_smoke_clique_folga_calendario.py:123`; `app/escala/views.py:342`.) |
+| Promise de `hxConfirmar` / `pendente` | `hxConfirmar` cria a Promise e guarda seu resolver em `pendente`. `fechar` retira o resolver, zera o estado, esconde o modal e resolve. Sim fornece `true`; Cancelar, Escape e fundo fornecem `false`. Outra confirmação cancela a anterior. `hxPerguntar` compartilha esse mesmo estado. Os `.then` do editor leem a resposta. (`app/templates/core/_dialogo.html:146`; `app/templates/core/_dialogo.html:149`; `app/templates/core/_dialogo.html:157`; `app/templates/core/_dialogo.html:187`; `app/templates/core/_dialogo.html:194`; `app/templates/core/_dialogo.html:202`; `app/templates/escala/folga_calendario_editar.html:133`; `app/templates/escala/folga_calendario_editar.html:156`.) |
+| Texto do modal | Repetir monta a mensagem com rótulo e dias atuais do alvo; Salvar monta com os rótulos das grades vazias. O componente escreve por `textContent`; as sondas leem `textContent` e `innerText`. Uma chamada posterior substitui a mensagem anterior. (`app/templates/escala/folga_calendario_editar.html:131`; `app/templates/escala/folga_calendario_editar.html:153`; `app/templates/core/_dialogo.html:190`; `app/escala/tests/test_smoke_clique_folga_calendario.py:83`; `app/escala/tests/test_smoke_clique_folga_calendario.py:134`.) |
+
+No servidor, campo ausente vira lista vazia; valores não inteiros ou fora de `1..tam` são descartados. A porta grava listas ordenadas e sem duplicatas. Não existe preenchimento automático pela grade de 31 nesse caminho. Em `semana_dia`, a view ignora `dias_*` e a porta apaga os tamanhos. (`app/escala/views.py:327`; `app/escala/views.py:340`; `app/escala/views.py:347`; `app/escala/folgas.py:584`; `app/escala/folgas.py:588`; `app/escala/folgas.py:593`.)
+
+Há uma diferença de definição: a tela mede vazio pelo **conjunto bruto**; o vigia mede ausência de **datas válidas produzidas no mês**. Exemplo condicional: um seed de 30 dias contendo apenas `31` pareceria preenchido na tela, mas produziria zero folgas e seria descartado no POST. Existência desse dado em produção: **[não verificado]**. (`app/escala/views.py:362`; `app/templates/escala/folga_calendario_editar.html:149`; `app/escala/folgas.py:15`; `app/escala/folgas.py:127`; `app/escala/views.py:347`.)
+
+Para dados válidos, tamanho ausente e lista vazia significam nenhuma folga; fevereiro bissexto consulta a grade de 28. O defeito operacional de folga, por sua vez, consulta a foto `FolgaDia`, podendo considerar folgas manuais: é outro estado, não um leitor de `sel`. (`app/escala/folgas.py:13`; `app/escala/folgas.py:14`; `app/escala/models.py:1247`; `app/escala/models.py:1249`.)
+
+**2. Sequências**
+
+| Sequência | Resultado pelo código |
+|---|---|
+| Alvo marcado → Cancelar | Não altera seleção, campos ou desenho; fecha o modal. (`app/templates/core/_dialogo.html:158`; `app/templates/escala/folga_calendario_editar.html:133`.) |
+| Alvo marcado → Substituir | Substitui pelos dias da seleção **atual** de 31 que cabem no alvo e sincroniza tudo. Não há snapshot da origem. Origem vazia também esvazia o alvo. (`app/templates/escala/folga_calendario_editar.html:126`; `app/templates/escala/folga_calendario_editar.html:127`.) |
+| Escape / clique no fundo | Equivalem a Cancelar. Clique dentro da caixa não satisfaz `e.target === fundo`. (`app/templates/core/_dialogo.html:159`; `app/templates/core/_dialogo.html:161`.) |
+| Repetir aberto → Salvar, havendo vazias | A confirmação de Salvar cancela a Promise de Repetir. “Salvar assim mesmo” salva o estado anterior do alvo, sem executar a cópia cancelada. (`app/templates/escala/folga_calendario_editar.html:149`; `app/templates/escala/folga_calendario_editar.html:155`; `app/templates/core/_dialogo.html:187`.) |
+| Repetir aberto → Salvar, sem vazias | O submit segue sem nova confirmação e sem encerrar explicitamente a repetição pendente; naquele momento o alvo ainda contém os dias anteriores. (`app/templates/escala/folga_calendario_editar.html:151`; `app/templates/escala/folga_calendario_editar.html:133`.) |
+| Dois Repetir seguidos | Segundo alvo preenchido: a segunda pergunta cancela a primeira. Segundo alvo vazio: copia imediatamente e mantém a primeira pergunta pendente. (`app/templates/core/_dialogo.html:187`; `app/templates/escala/folga_calendario_editar.html:130`.) |
+| Troca de modo com Repetir aberto | `fcModo` não cancela a Promise. Indo para `semana_dia`, apaga os campos; confirmar depois recria `dias_*` pela sincronização incondicional. A view os ignora nesse modo. (`app/templates/escala/folga_calendario_editar.html:128`; `app/templates/escala/folga_calendario_editar.html:185`; `app/templates/escala/folga_calendario_editar.html:189`; `app/escala/views.py:327`.) |
+| Alvo marcado pelo servidor | Entra no mesmo `Set` e recebe a mesma confirmação; o teste novo cobre Cancelar com seed `[8]`. (`app/templates/escala/folga_calendario_editar.html:79`; `app/templates/escala/folga_calendario_editar.html:130`; `app/escala/tests/test_smoke_clique_folga_calendario.py:235`; `app/escala/tests/test_smoke_clique_folga_calendario.py:293`.) |
+
+O overlay intercepta o mouse, mas o componente não implementa confinamento de Tab nem `inert`; apenas declara `aria-modal` e focaliza o Sim. Portanto, as sequências concorrentes precisam distinguir chamada programática/teclado de clique através do fundo. Reprodução por teclado nesta auditoria: **[não verificado]**. (`app/templates/core/_dialogo.html:112`; `app/templates/core/_dialogo.html:120`; `app/templates/core/_dialogo.html:160`; `app/templates/core/_dialogo.html:195`.)
+
+**3. Quebra de linha**
+
+O `'\n'` do JavaScript produz LF; `hxConfirmar` o insere por `textContent`. O CSS aplicável ao texto é inline: **`white-space:pre-line`**, que preserva essa quebra. A caixa tem `max-width:420px`, podendo acrescentar quebras por largura. (`app/templates/escala/folga_calendario_editar.html:153`; `app/templates/core/_dialogo.html:190`; `app/templates/core/_dialogo.html:117`; `app/templates/core/_dialogo.html:122`; `app/templates/core/_dialogo.html:123`.)
+
+Barra+ene literais (`\\n`) passados diretamente à API não viram LF; os adaptadores de atributos fazem essa conversão expressamente. Com `white-space:normal/nowrap`, o LF seria colapsado; sem renderização da caixa, nenhuma quebra seria desenhada. O estilo presente na cópia já é `pre-line`; o texto de Salvar também já contém LF. (`app/templates/core/_dialogo.html:240`; `app/templates/core/_dialogo.html:259`; `app/templates/core/_dialogo.html:123`; `app/templates/escala/folga_calendario_editar.html:153`.)
+
+**4. O que os testes medem** [nao verificado]
+
+São testes com Chromium executando o JavaScript da página, cliques DOM e leitura do DOM resultante; não são apenas buscas no texto-fonte. Entretanto, os três novos casos de Repetir conferem campos e contador, sem POST nem inspeção da seleção visual/chips/canônico após a cópia. (`app/escala/tests/test_smoke_clique_folga_calendario.py:128`; `app/escala/tests/test_smoke_clique_folga_calendario.py:140`; `app/escala/tests/test_smoke_clique_folga_calendario.py:181`; `app/escala/tests/test_smoke_clique_folga_calendario.py:293`; `app/escala/tests/test_smoke_clique_folga_calendario.py:306`; `app/escala/tests/test_smoke_clique_folga_calendario.py:313`.)
+
+Mutantes que as asserções deixam escapar, por inspeção — execução dos mutantes **[não verificado]**:
+
+- Trocar `renderGrade(tam)` na cópia por atualização apenas do contador, mantendo `syncHidden`: os campos e a contagem ficam certos, mas a grade desenhada permanece antiga. (`app/templates/escala/folga_calendario_editar.html:128`; `app/escala/tests/test_smoke_clique_folga_calendario.py:120`; `app/escala/tests/test_smoke_clique_folga_calendario.py:140`.)
+- Trocar o verbo por “Apagar”: o teste só rejeita vazio, “Confirmar” e “OK”. (`app/escala/tests/test_smoke_clique_folga_calendario.py:299`.)
+- Esconder o texto por CSS: a sonda verifica `fundo.hidden`, não a visibilidade do texto; `.click()` também não exige que o botão esteja visível. (`app/escala/tests/test_smoke_clique_folga_calendario.py:132`; `app/escala/tests/test_smoke_clique_folga_calendario.py:137`.)
+
+`innerText.split('\n')` distingue LF preservado de LF colapsado **quando o texto está renderizado**, mas não conta as quebras automáticas por largura. Em elemento sem renderização, `innerText` pode devolver o texto-fonte. Logo, “duas entradas” não prova “duas linhas desenhadas”; faltam geometria e visibilidade. (`app/escala/tests/test_smoke_clique_folga_calendario.py:107`; `app/escala/tests/test_smoke_clique_folga_calendario.py:278`; `app/escala/tests/test_smoke_clique_folga_calendario.py:301`.)
+
+Os timers amostram após 200 ms, com orçamento virtual de 4000 ms e timeout real de 120 s. Hoje a abertura é síncrona e a resposta roda por Promise; **não há corrida concreta demonstrada por esses 200 ms**. Existe fragilidade a futuras esperas, pois não se aguarda uma condição. Não identifiquei dependência entre a ordem dos métodos: usam `TestCase` e um processo Chromium por chamada. (`app/escala/tests/test_smoke_clique_folga_calendario.py:131`; `app/escala/tests/test_smoke_clique_folga_calendario.py:139`; `app/escala/tests/test_smoke_clique_folga_calendario.py:183`; `app/escala/tests/test_smoke_clique_folga_calendario.py:224`; `app/templates/core/_dialogo.html:188`.)
+
+**5. L7, L8 e componente único**
+
+O editor chama `hxConfirmar`; não introduz diálogo nativo nem outra caixa. O componente vem da base e é compartilhado com o guarda de Salvar. (`app/templates/escala/folga_calendario_editar.html:131`; `app/templates/escala/folga_calendario_editar.html:155`; `app/templates/base.html:388`.)
+
+Há mensagem nova hardcoded no template, dentro do componente. Portanto, usar o componente atende L8, mas sozinho não demonstra o requisito de origem em mapa de L7. O repositório já registra como **fila, não bloqueante**, a questão equivalente dos textos fixos de vazio/Salvar; classifico a mensagem nova no mesmo ponto limítrofe, sem presumir uma exceção nova. (`app/templates/escala/folga_calendario_editar.html:131`; `app/docs/LEIS-UI.md:78`; `app/docs/LEIS-UI.md:88`; `app/docs/BACKLOG.md:822`.)
+
+**6. Outros chamadores**
+
+O censo encontrou a definição e os botões do editor, além dos testes; nenhum chamador funcional externo apareceu na cópia. O smoke anterior repete em 30 e 28 inicialmente vazios, preservando a cópia imediata; o teste estrutural exige os botões, sem exigir sobrescrita silenciosa. (`app/templates/escala/folga_calendario_editar.html:51`; `app/templates/escala/folga_calendario_editar.html:124`; `app/escala/tests/test_smoke_clique_folga_calendario.py:154`; `app/escala/tests/test_editor_calendario_tres_grades.py:114`.)
+
+**Achados consolidados**
+
+- **Fila — confirmação pendente sobrevive à troca de modo e repõe `dias_*` em `semana_dia`.** Inconsistência do formulário; gravação errada não demonstrada porque a view ignora esses campos. (`app/templates/escala/folga_calendario_editar.html:128`; `app/templates/escala/folga_calendario_editar.html:189`; `app/escala/views.py:327`.)
+- **Fila — testes não certificam desenho nem visibilidade; “linhas desenhadas” superafirma a medida.** (`app/escala/tests/test_smoke_clique_folga_calendario.py:107`; `app/escala/tests/test_smoke_clique_folga_calendario.py:140`; `app/escala/tests/test_smoke_clique_folga_calendario.py:278`.)
+- **Fila — faltam casos de Escape, fundo, concorrência e troca de modo nos novos testes.** Os novos casos cobrem Cancelar com seed, Substituir e alvo vazio. (`app/escala/tests/test_smoke_clique_folga_calendario.py:293`; `app/escala/tests/test_smoke_clique_folga_calendario.py:306`; `app/escala/tests/test_smoke_clique_folga_calendario.py:313`.)
+- **Fila — texto fixo/L7**, conforme classificação já registrada para essa classe de mensagem. (`app/templates/escala/folga_calendario_editar.html:131`; `app/docs/BACKLOG.md:822`.)
+
+## 16/11 17:36 · sessao 406f60771e63 · - · - · origem=Ronald (tmux)
+
+- `hxConfirmar` é único: cria uma Promise e guarda seu resolver em `pendente`; ao receber outra confirmação, resolve a anterior com `false`. `fechar` zera `pendente`, esconde o fundo, restaura foco e resolve a Promise. Também `hxPerguntar` compartilha esse estado. Referências: `app/templates/core/_dialogo.html:146`, `:149`, `:187`, `:188`, `:194`, `:202`, `:210`.
+
+- Cancelar, Escape e clique exatamente no fundo resolvem `false`; portanto não executam `copia`. Substituir resolve `true`, copia a seleção **atual** da grade de 31 e sincroniza seleção, desenho e inputs. Referências: `app/templates/core/_dialogo.html:157`, `:158`, `:159`, `:161`; `app/templates/escala/folga_calendario_editar.html:126`, `:127`, `:128`, `:133`.
+
+- Repetir seguido de Salvar: havendo grades vazias, o guarda chama novamente `hxConfirmar`, cancela a repetição anterior e mostra a confirmação de salvar; sem grades vazias, o submit segue sem cancelar a repetição pendente. Referências: `app/templates/escala/folga_calendario_editar.html:149`, `:151`, `:155`; `app/templates/core/_dialogo.html:187`.
+
+- Dois repetir: se o segundo alvo estiver preenchido, a segunda pergunta cancela a primeira; se estiver vazio, copia imediatamente e mantém a primeira promessa pendente. Referências: `app/templates/escala/folga_calendario_editar.html:130`, `:131`; `app/templates/core/_dialogo.html:187`.
+
+- Essas sequências não são cliques comuns através do modal: o fundo ocupa a janela com `z-index:100000`. Contudo, o componente declara `aria-modal`, focaliza o Sim e trata Escape, sem implementar bloqueio por `inert` ou confinamento de Tab; alcançar controles ao fundo por teclado é inferência do código, não reproduzida no navegador. Referências: `app/templates/core/_dialogo.html:112`, `:120`, `:160`, `:195`; reprodução: **[não verificado]**.
+
+- **Fila:** `fcModo` com repetição pendente não cancela a promessa. Mudar para `semana_dia` limpa `#fc-hidden`; confirmar Substituir depois repõe `dias_*`, pois `copia` chama `syncHidden` incondicionalmente. A view ignora esses campos no ramo `semana_dia`, portanto isso demonstra inconsistência dos inputs, sem demonstrar gravação errada. Referências: `app/templates/escala/folga_calendario_editar.html:128`, `:185`, `:189`; `app/escala/views.py:327`, `:339`, `:342`.
+
+- O LF produzido pelo `'\n'` JavaScript é inserido por `textContent` e respeitado pelo `white-space:pre-line` inline de `#hx-confirma-texto`. A caixa ainda pode produzir quebras adicionais por largura, pois tem `max-width:420px; width:100%`. Uma sequência literal barra+ene recebida diretamente por `hxConfirmar` não é convertida; os adaptadores fazem essa conversão explicitamente. Referências: `app/templates/escala/folga_calendario_editar.html:131`, `:153`; `app/templates/core/_dialogo.html:116`, `:122`, `:123`, `:190`, `:239`, `:240`, `:259`.
+
+- Mutante relevante: esconder **somente** `#hx-confirma-caixa` por CSS preservaria `fundo.hidden === false`; as sondas continuam clicando por `.click()` e não medem a visibilidade da caixa. `innerText` de elemento sem renderização pode devolver o texto-fonte, invalidando a alegação de “linhas desenhadas”. Referências da insuficiência: `app/escala/tests/test_smoke_clique_folga_calendario.py:107`, `:128`, `:132`, `:134`, `:137`, `:140`; execução do mutante: **[não verificado]**.
+
+- O censo por `fcRepetir` encontrou a definição e os botões do próprio editor, mais testes de estrutura e smoke; nenhum chamador funcional externo apareceu. Referências: `app/templates/escala/folga_calendario_editar.html:51`, `:124`; `app/escala/tests/test_editor_calendario_tres_grades.py:117`, `:119`; `app/escala/tests/test_smoke_clique_folga_calendario.py:128`, `:156`, `:157`.
+
+## 16/11 17:36 · sessao 0a6149363538 · - · - · origem=Ronald (tmux)
+
+- **Fila — os testes exercitam navegador, mas não conferem a grade desenhada após repetir.** Chromium executa a página; a sonda clica e lê inputs escondidos/contador. Os novos casos não reenviam POST. Mutante que passaria: substituir `renderGrade(tam)` em `copia()` por atualização apenas do contador, mantendo `syncHidden()`; chips, seleção visual, aviso de vazia e canônico ficariam antigos. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:119`, `:128`, `:140`, `:176`, `:293`, `:306`, `:313`; `app/templates/escala/folga_calendario_editar.html:93`, `:95`, `:104`, `:106`, `:128`. Mutante não executado: [não verificado].
+
+- **Fila — “linhas desenhadas” é uma descrição excessiva.** A medida divide `innerText` por LF; não mede retângulos de texto nem quebra automática por largura. Para elemento renderizado, distingue LF preservado de LF colapsado pelo CSS; não demonstra quantidade de linhas visuais nem visibilidade efetiva. A sonda verifica somente `fundo.hidden`; asserções exigem duas entradas. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:102`, `:107`, `:132`, `:278`, `:301`. Sem execução de navegador nesta auditoria: [não verificado].
+
+- **Fila — verbo incorreto passa.** Trocar `Substituir` por `Apagar` satisfaria a asserção, que apenas rejeita vazio, `Confirmar` e `OK`; o caso positivo não exige o verbo. Referências: `app/templates/escala/folga_calendario_editar.html:132`; `app/escala/tests/test_smoke_clique_folga_calendario.py:299`, `:306`. Mutante não executado: [não verificado].
+
+- **Timing:** a sonda amostra após 200 ms e novamente após outros 200 ms; Chromium recebe orçamento virtual de 4000 ms e timeout real de 120 s. Não espera condição de conclusão. Na implementação atual a abertura é síncrona e a atualização vem da promessa; corrida concreta causada pelos 200 ms não foi demonstrada. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:131`, `:139`, `:183`, `:185`; `app/templates/escala/folga_calendario_editar.html:131`, `:133`; `app/templates/core/_dialogo.html:188`, `:193`, `:194`.
+
+- **Cobertura ausente nos novos casos:** Escape, fundo, dois pedidos concorrentes, Salvar durante Repetir e mudança de modo durante o modal. Os três casos novos cobrem Cancelar com seed, aceitar sobre alvo clicado e copiar sobre alvo vazio. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:293`, `:306`, `:313`.
+
+- **Não executei os testes:** o próprio runner cria/remove arquivos e os casos criam registros; isso contraria a restrição de somente leitura. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:178`, `:180`, `:187`, `:227`, `:259`.
+
+## 16/11 17:36 · sessao ecf376ec9c03 · - · - · origem=Ronald (tmux)
+
+- **Estado cliente:** `sel[tam]` e `sel[31]` nascem dos `marcados` entregues pela view; a inicialização deduplica com `Set`. Escrevem `fcTog` e `copia`; leem `ordenados`, `renderGrade`, `syncHidden`, o teste de alvo vazio e o guarda de submit. `sel[31]` continua sendo a origem lida **no momento da confirmação**, sem snapshot. (`app/escala/views.py:362`; `app/templates/escala/folga_calendario_editar.html:74`, `:79`, `:82`, `:86`, `:113`, `:119`, `:127`, `:130`, `:149`.)
+
+- **Inputs:** `#fc-hidden` é um `div` escondido; os campos gerados são `input type="checkbox" checked`, não `type="hidden"`. `syncHidden` recria todos com base em `sel`; `renderTudo`, `fcTog`, `copia` e `fcModo` chamam a sincronização. `fcModo` em semana/dia esvazia o DOM, mas conserva `sel`. (`app/templates/escala/folga_calendario_editar.html:62`, `:109`, `:110`, `:114`, `:117`, `:119`, `:128`, `:185`, `:189`.)
+
+- **Contador:** o servidor escreve inicialmente `t.marcados|length`; o JS substitui pela quantidade de `ordenados(tam)`. Não há consumidor de domínio lendo `fc-conta`; os novos testes leem o texto como testemunha. (`app/templates/escala/folga_calendario_editar.html:46`, `:94`, `:95`; `app/escala/tests/test_smoke_clique_folga_calendario.py:123`, `:303`, `:311`.)
+
+- **POST e persistência:** em `dias_mes`, a view lê cada `dias_<tam>` por `getlist`, descarta valor não inteiro ou fora de `1..tam` e sempre monta os três tamanhos; ausência de input vira lista vazia. A porta salva listas ordenadas sem duplicatas por `update_or_create`. Não existe preenchimento automático pela grade de 31 nesse fluxo. Em semana/dia a view ignora todos os `dias_*`, e a porta apaga os tamanhos. (`app/escala/views.py:327`, `:340`, `:342`, `:347`, `:349`, `:356`; `app/escala/folgas.py:584`, `:588`, `:593`, `:595`.)
+
+- **“Vazia” fora do diff:** o resolver trata tamanho ausente e lista vazia igualmente: nenhuma folga; fevereiro de 29 dias consulta a grade de 28. O vigia mede “vazio” por nenhuma **data válida produzida no mês**, não por tamanho do conjunto bruto. Portanto a definição coincide para os dias válidos produzidos pela UI, mas diverge teoricamente se o servidor contiver dias inválidos: a view entrega `set(t.dias)` sem filtrar, enquanto POST e resolver filtram. Existência de dados inválidos no dado fornecido: **[não verificado]**. (`app/escala/folgas.py:12`, `:14`, `:15`, `:127`; `app/escala/views.py:347`, `:362`; `app/escala/models.py:1570`.)
+
+- **Outros leitores:** `FolgaCalendario.dias_por_tamanho` entrega os valores persistidos ao resolver; a listagem exibe somente os tamanhos existentes. A projeção do vínculo, a foto, a divergência e o vigia leem `datas_que_o_calendario_manda`, que escolhe o modo e o resolver. (`app/escala/models.py:1558`; `app/escala/views.py:292`; `app/escala/folgas.py:43`, `:54`, `:56`, `:99`, `:127`, `:158`, `:629`; `app/colaboradores/views.py:304`.)
+
+- **Chamadores de `fcRepetir`:** a busca global encontrou o botão do próprio template, sua definição e referências de testes; nenhum outro chamador de aplicação foi encontrado na cópia. Os testes antigos de smoke chamam 30 e 28 sobre alvos inicialmente vazios, preservando a cópia imediata; o contrato estático só exige existência dos botões. (`app/templates/escala/folga_calendario_editar.html:51`, `:124`; `app/escala/tests/test_smoke_clique_folga_calendario.py:154`, `:156`, `:157`; `app/escala/tests/test_editor_calendario_tres_grades.py:114`.)
+
+- **L7/L8:** o novo texto é literal no template e passa ao componente da casa; não há chamada nativa nem novo componente no editor. L7 exige simultaneamente ajuda em tooltip/componente e origem no mesmo mapa do juiz; não há mapa introduzido pelo diff. Tratar a mensagem de confirmação como “texto de ajuda” e bloquear por L7 requer interpretação: o aval dado exige explicitamente confirmação pelo componente. (`app/templates/escala/folga_calendario_editar.html:131`, `:132`, `:155`; `app/docs/LEIS-UI.md:77`, `:78`, `:87`.)
 
 ## 16/11 17:16 · sessao 8bdc7eb4e863 · E4C-F1-B2 · censo · origem=Code
 
@@ -689,164 +815,4 @@ O formulário valida o tipo sem escrever o registro; o Django Admin de Ausencia 
 
 **Anexo:** [app/docs/JUIZES.md](/home/ronald/codex_ws/ebc7af1a97d9b6ed91910127b1d9a1541551f90b/app/docs/JUIZES.md:1). O documento aponta cobertura e `ABERTAS`, explicita que `pendente` não é status e declara primazia do código vivo; o registro distingue efeito do tipo, cobertura, estado inicial e aberta/decidida. `app/docs/JUIZES.md:7`, `app/docs/JUIZES.md:14`, `app/docs/JUIZES.md:55`, `app/core/juizes.py:260`
 
-## 16/11 16:36 · sessao b937b08b7800 · - · - · origem=Ronald (tmux)
-
-Mapa confirmado dos demais leitores:
-
-| Leitor | O que exibe | O status interfere? | Referências |
-|---|---|---|---|
-| Grade/calendário: chip | Ícone e rótulo pelo tipo; cor de falta por `a.efeito == DESCONTA`. | A construção do chip não testa status, mas recebe cobertura `para='cobranca'`, que exclui rejeitadas e inclui abertas. | `app/colaboradores/services/calendario.py:516`, `:705`, `:706`; `app/ponto/turnos.py:2531`; `app/templates/colaboradores/partials/_calendario_grade.html:97` |
-| Grade/calendário: palavra | Palavra/cor/veredito por `do_dia`, cobertura de folha e decisões do período. | Sim: a decisão inclui rejeitadas; `veredito_do_tipo` devolve `REJEITADO` antes de consultar efeito. | `app/colaboradores/services/calendario.py:564`, `:565`, `:747`; `app/ponto/services/dia_decidido.py:461`, `:550`, `:561`; `app/templates/colaboradores/partials/_calendario_grade.html:98` |
-| Espelho PWA | Chip com `get_tipo_display` truncado e ícone; não possui coluna Efeito. | Rejeitada é excluída pela cobertura de cobrança. Aberta permanece; marca visual procura apenas o literal legado `pendente`. | `app/templates/ponto/espelho.html:191`; `app/ponto/services/espelho.py:582`; `app/ponto/turnos.py:2531` |
-| Cartão PDF | Coluna Obs imprime `dia['palavra_dia']`. | Sim: passa pela mesma montagem `aplicar_palavra_do_dia → do_dia`; não lê `a.efeito` diretamente no desenho. | `app/relatorios/pdf_espelho.py:636`, `:638`, `:923`; `app/ponto/services/espelho.py:340`; `app/ponto/services/dia_decidido.py:461` |
-| App: API do espelho | Copia `veredito_dia`, `palavra_dia`, `cor_dia` do espelho; acrescenta `ausencia_pendente`. | Sim: recebe palavra já julgada; pendência usa `ABERTAS` sobre cobertura de cobrança. Renderização efetiva no cliente móvel: [não verificado]. | `app/api/views.py:1361`, `:1387`, `:1393`, `:1567`, `:1574`, `:1578`, `:1601`, `:1619` |
-| App: GET `/api/ausencias/` | Nome do tipo, status e `status_display` separados; **não envia campo efeito**. O nome vivo pode conter “com abono”. | Status não modifica nome do tipo; rejeitada continua no histórico retornado. | `app/api/urls.py:82`; `app/api/views.py:1853`, `:1859`, `:1865`, `:1867`; `app/ponto/catalogo/ausencias.py:250`, `:303`, `:95` |
-| PWA: solicitar ausência | Grupos “COM ABONO - nao desconta”/“SEM ABONO - desconta ou suprime”; opções com `data-pago`. | É escolha de tipo para novo pedido, sem status de registro nessa montagem. | `app/ponto/views.py:2631`; `app/templates/ponto/submeter_ausencia.html:24`, `:27`; `app/ponto/catalogo/ausencias.py:313`, `:320`, `:322` |
-| Relatório Absenteísmo + CSV | Tipo cru, ocorrências e dias. Não exibe badge de efeito. | Só aprovadas entram. | `app/relatorios/views.py:197`, `:209`, `:222`, `:228`; `app/templates/relatorios/absenteismo.html:41` |
-| Relatório Atestados acumulados + CSV | Dias empresa por pertencimento a `abonam_vigentes`; dias INSS para `atestado_inss`. | Só aprovadas médicas entram. | `app/relatorios/views.py:276`, `:277`, `:283`, `:302`, `:304`, `:313`; `app/templates/relatorios/atestados.html:40`, `:47` |
-| Histórico anual de atestados | `get_tipo_display`, dias; cartões “Empresa paga” e “INSS assume”. | Só aprovadas médicas entram; abono usa conjunto vivo de tipos. | `app/ponto/views.py:2916`, `:2921`, `:2951`, `:2957`; `app/templates/ponto/historico_atestados.html:23`, `:27`, `:40` |
-| Relatório de atestados em lote | Reutiliza `linha_do_tempo`; filtra depois por tipo/status. | Sim: linha do tempo usa `veredito_do_lancamento`, que trata abertas como pendentes, e rejeitada prevalece no juiz visual. | `app/ponto/services/atestados_lote.py:54`, `:57`, `:62`; `app/ponto/services/dia_decidido.py:610`, `:613`, `:448`, `:461` |
-| Exportação folha | Tipos que descontam alimentam faltas; tipos que abonam, descontado `FORA_DO_8932`, alimentam ausência justificada. | Só aprovadas entram em `ausencias_na_janela`. | `app/folha/export.py:88`, `:138`, `:140`, `:180`, `:197`, `:198`, `:204` |
-
-A autoridade visual já existente é `veredito_do_lancamento` para o estado do pedido (`app/ponto/services/dia_decidido.py:439`), `veredito_de` para ausência decidida (`:476`) e `rotulo_de` para sua palavra (`:484`). O núcleo testa rejeição antes do efeito do tipo (`:461`) e consulta o catálogo vivo (`:468`).
-
-Os efeitos numéricos compartilhados por espelho/PDF vêm de `efeitos_da_ausencia`: ausências `para='folha'`, abono integral, supressão e crédito parcial (`app/ponto/services/efeito_ausencia.py:47`, `:53`, `:55`, `:59`, `:61`, `:63`); ambos consumidores estão em `app/ponto/services/espelho.py:1048` e `app/relatorios/pdf_espelho.py:332`.
-
-## 16/11 16:36 · sessao 74d3dd04992b · - · - · origem=Ronald (tmux)
-
-- **Vocabulário atual:** `aguardando_documento`, `aguardando_decisao`, `aprovada`, `rejeitada`; default `aguardando_decisao`. Não há `cancelada` nos choices de **Ausencia**. `pendente` é histórico, convertido por migração, e continua como agrupamento de tela. `app/ponto/models.py:690`, `app/ponto/models.py:809`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/ponto/views.py:2212`.
-- **“Cancelar ausência” grava `rejeitada`:** individual em `app/ponto/views.py:2797` e chamada em `app/ponto/views.py:2811`; lote em `app/ponto/views.py:2357` e `app/ponto/views.py:2378`. “Cancelada” aparece em mensagens, descrição e motivo, mas o valor persistido pedido é `rejeitada`. `app/ponto/views.py:2812`, `app/ponto/views.py:2818`, `app/ponto/views.py:2389`.
-- **`cancelada` em outro modelo:** é status de `OrdemSubstituicao`, não Ausencia. `app/ponto/models.py:1051`, `app/ponto/models.py:1057`.
-- **Máquina de estados:** abertas → decisão/rejeição; aprovada → rejeitada; rejeitada → aprovada ou uma das abertas. `ABERTAS=('aguardando_documento','aguardando_decisao')`. `app/ponto/services/ausencia.py:912`, `app/ponto/services/ausencia.py:914`.
-- **Autoridade que considera status para efeito:** `_pelo_efeito(qs, para)` aceita **folha somente `aprovada`**; **cobrança todas exceto `rejeitada`**. É usada por `ausencia_cobre`, `ausencias_do_periodo`, `cobertura_ausencia_periodo`. `app/ponto/turnos.py:2523`, `app/ponto/turnos.py:2535`, `app/ponto/turnos.py:2550`, `app/ponto/turnos.py:2747`.
-- **Não confundir efeito do tipo com efeito aplicado:** `Ausencia.efeito` apenas chama `efeito_vigente(self.tipo)`; este lê a posição do efeito no catálogo vigente, sem status. Catálogo consulta `TipoAusencia` ativo, com fallback para catálogo estático. `app/ponto/models.py:850`, `app/ponto/catalogo/ausencias.py:293`, `app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:278`. O catálogo estático declara atestado como ABONA; o cadastro vigente de produção não consta no dado fornecido [não verificado]. `app/ponto/catalogo/ausencias.py:95`.
-- **Função existente que entrega os efeitos ao cálculo:** `efeitos_da_ausencia(colaborador, ini, fim)` devolve `justificadas`, `suprimidas`, `min_parcial_pagos`, `dia_inteiro`; seleciona com `para='folha'` tanto na coleção de parciais quanto na cobertura. ABONA acrescenta dia justificado, SUPRIME acrescenta dia suprimido, DESCONTA deixa o dia previsto. Parcial paga gera crédito em minutos e não abona o dia inteiro. Não é booleano por registro; entrega agregados por período. `app/ponto/services/efeito_ausencia.py:28`, `app/ponto/services/efeito_ausencia.py:47`, `app/ponto/services/efeito_ausencia.py:53`, `app/ponto/services/efeito_ausencia.py:55`, `app/ponto/services/efeito_ausencia.py:63`.
-- **Motor:** recebe conjuntos já preparados pela aplicação; encontra faltas nos dias previstos que não foram trabalhados nem justificados, e conta abono nos dias previstos sem trabalho mas justificados. `app/ponto/motor_calculo_v2.py:2581`, `app/ponto/motor_calculo_v2.py:2595`, `app/ponto/motor_calculo_v2.py:2606`, `app/ponto/motor_calculo_v2.py:2620`.
-- **Alimentação no espelho:** chama `efeitos_da_ausencia`, retira suprimidas do previsto e injeta justificadas e dias de ausência inteira no motor. `app/ponto/services/espelho.py:1068`, `app/ponto/services/espelho.py:1111`, `app/ponto/services/espelho.py:1133`. PDF também chama a função. `app/relatorios/pdf_espelho.py:332`.
-- **Alimentação da folha:** usa cobertura `para='folha'`, depois lê `a.efeito`, separa justificadas e suprimidas, passa ao motor; o ramo de tipo desconhecido é próprio desse leitor (`!= DESCONTA` suprime), diferente da igualdade `SUPRIME` na função extraída. `app/ponto/services/fechamento.py:683`, `app/ponto/services/fechamento.py:693`, `app/ponto/services/fechamento.py:700`, `app/ponto/services/fechamento.py:731`, `app/ponto/services/fechamento.py:739`.
-- **Grade:** já seleciona cobertura de folha, portanto rejeitada e ambas abertas não entram; depois lê tipo/label, marca `falta_aprovada` para falta, ou `ausencia_tipo`, `ausencia_label`, `ausencia_id`, `cobertura_parcial` para demais. `app/escala/utils.py:1188`, `app/escala/utils.py:1213`, `app/escala/utils.py:1220`, `app/escala/utils.py:1230`.
-- **Célula não equivale a efeito financeiro:** o cartório consulta `ausencia_cobre(...,para='cobranca')` e carimba essa ausência na célula; esse campo está declarado sombra, com allowlist de leitores vazia no contrato. `app/ponto/services/cartorio.py:1356`, `app/ponto/services/cartorio.py:1873`, `app/escala/models.py:1788`, `app/escala/tests/test_contract_sombra_celula_ausencia.py:28`.
-- **Estado do dia lavrado é outra pergunta:** `CelulaDia.status_dia/status_rotulo` são escritos por `lavrar_veredito` com `status_da_lavra`; a documentação aponta `status_do_dia_lavrado`, sem declarar que seja o efeito de uma Ausencia individual. `app/escala/models.py:1807`, `app/docs/JUIZES.md:125`.
-- **Juiz de extensão:** `cobre_parte_do_dia` verifica tipo que aceita horas, um dia e minutos entre 0 e 480; `ausencia_explica_o_dia_inteiro` compõe tipo diferente de falta com ausência não parcial; `dias_com_ausencia_de_dia_inteiro` exige adicionalmente efeito ABONA e recebe cobertura da folha. `app/ponto/turnos.py:2597`, `app/ponto/turnos.py:2682`, `app/ponto/turnos.py:2692`.
-
-Leitores backend adicionais para o mapa (d):
-
-| Leitor | Leitura e consequência | Fonte |
-|---|---|---|
-| Precedência `fatos_do_periodo` | Exclui rejeitadas; lê tipo e período para decidir fato vencedor do calendário. Abertas podem entrar nesse domínio. | `app/ponto/precedencia.py:273`, `app/ponto/precedencia.py:408` |
-| Cartório | Cobertura por cobrança, carimba ausência na célula. | `app/ponto/services/cartorio.py:1356`, `app/ponto/services/cartorio.py:1873` |
-| Silêncio de cobrança | Lê `ABERTAS` para suspender cobrança; aprovada pode encerrar após checar premissa; usa tipo na trilha. | `app/chamados/services/silencio_ausencia.py:66`, `app/chamados/services/silencio_ausencia.py:78`, `app/chamados/services/silencio_ausencia.py:94` |
-| Emissão da jornada | Consulta ausências `para='cobranca'`, lê tipo/minutos/datas. | `app/escala/servico_jornada.py:347` |
-| Signals | Save/delete de Ausencia acorda cartório; lê tipo e intervalo para determinar dias atingidos. | `app/ponto/signals.py:115`, `app/ponto/signals.py:143`, `app/ponto/signals.py:150` |
-| Alertas médicos | Cobertura `para='folha'` e tipos médicos do cadastro; conta registros/dias. | `app/ponto/services/alertas_ausencia.py:48` |
-| Vigia de ausência | Exclui rejeitadas no universo vivo; lê tipo para cobertura/catálogo; conta aguardando decisão, aprovada sem documento ou decisor. | `app/ponto/services/vigia_ausencia.py:59`, `app/ponto/services/vigia_ausencia.py:84`, `app/ponto/services/vigia_ausencia.py:108`, `app/ponto/services/vigia_ausencia.py:116`, `app/ponto/services/vigia_ausencia.py:121` |
-| Vigia ausência × veredito | Lê aprovação, parcialidade e tipo para contar divergências. | `app/ponto/services/vigia_ausencia_veredito.py:46`, `app/ponto/services/vigia_ausencia_veredito.py:54` |
-| Contador sem efeito na célula | Usa cobertura de folha; exclui DESCONTA e parciais da classe “sem efeito”. | `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:44`, `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:49` |
-| Consistência férias | Lê tipo férias/status/origem e compara agendamento; cobertura financeira passa por `_pelo_efeito(...,'folha')`. | `app/ferias/services.py:147`, `app/ferias/services.py:155` |
-
-**Anexo/registro:** `app/docs/JUIZES.md:7` declara documento como lookup e `app/docs/JUIZES.md:14` dá primazia ao código vivo; `app/docs/JUIZES.md:55` aponta cobertura e ABERTAS e explicita que `pendente` não é status; `app/docs/JUIZES.md:121` repete os juízes de cobertura. O registro vivo distingue efeito do tipo (`efeito_vigente`), dias ocupados (`cobertura_ausencia_periodo`), documento (`estado_inicial`) e aberta/decidida (`ABERTAS`). `app/core/juizes.py:260`.
-
-## 16/11 16:35 · sessao 174a99204d3a · - · - · origem=Ronald (tmux)
-
-Mapa de escritores vivos, sem consultar banco ou executar aplicação:
-
-| Operação | Chamador | Escrita efetiva |
-|---|---|---|
-| Criar ausência | `app/ponto/services/ausencia.py:262` | `tipo` e `status` montados em `app/ponto/services/ausencia.py:483`; instância em `:529`; gravação em `:562`. |
-| Determinar estado inicial | `app/ponto/services/ausencia.py:475` | `estado_inicial` usa tipo/anexo: `app/ponto/services/ausencia.py:926`, retornos em `:938`. |
-| Editar tipo | Tela: `app/ponto/views.py:2873` | Atribuição em `app/ponto/services/ausencia.py:648`, gravação em `:659`; tipo alterado chama rejulgamento em `:674`. |
-| Rejulgar estado pelo tipo | `app/ponto/services/ausencia.py:680` | Somente estados de `ABERTAS`, preservando decisões: `:687`; usa `estado_inicial` em `:689` e `mudar_estado` em `:692`. |
-| Mudar status | `app/ponto/services/ausencia.py:955` | Valida transição em `:972`, atribui em `:976`, grava em `:988`. |
-| Aprovar/rejeitar | `app/ponto/services/ausencia.py:1057` | Aceita somente `aprovada`/`rejeitada` em `:1065`; delega a `mudar_estado` em `:1088`. |
-| Anexar documento | Web `app/ponto/views.py:2159`; API `app/api/views.py:3117`; reenvio API `:1845` | `aguardando_documento → aguardando_decisao` em `app/ponto/services/ausencia.py:1033`. |
-| Reverter rejeição | `app/ponto/views.py:2655` | `app/ponto/services/ausencia.py:1281` chama `_reabrir`; estado pelo tipo/anexo em `:1298`; escrita pela porta em `:1320`. |
-| Prazo de documento vencido | Comando `app/ponto/management/commands/escalonar_documentos_ausencia.py:25` | `aguardando_decisao`, pela porta, em `app/ponto/services/ausencia.py:1180`. |
-| Rejulgar passivo pelo tipo | `app/ponto/management/commands/rejulgar_status_por_tipo.py:35` | `rejulgar_status_pelo_tipo → mudar_estado`, `app/ponto/services/ausencia.py:692`. |
-| Cancelar férias | `app/ferias/services.py:683` | **Exceção explícita à porta geral**: `rejeitar_ausencias_de_ferias` atribui diretamente `rejeitada` em `app/ponto/services/ausencia.py:1496` e grava em `:1498`, com trilha em `:1499`. |
-
-Chamadores de criação:
-
-- Admin lança `aprovada`: `app/ponto/views.py:2472`, status em `:2477`.
-- Colaborador web: `app/ponto/views.py:2607`; status determinado pelo serviço, conforme chamada sem parâmetro em `:2611`.
-- App/API: `app/api/views.py:1812`; serviço determina estado inicial em `:1815`.
-- Copiloto: `app/core/views_ia.py:985 → app/ponto/services/checar_ausencia.py:46`, com `aprovada` em `:47`.
-- Veredito da célula: `app/ponto/services/veredito_celula.py:337`, com `aprovada` em `:338`.
-- Disputa validada: `app/chamados/services/materializacao.py:491`, deixando estado inicial ao serviço em `:493`.
-- Resposta da disputa: `app/chamados/services/materializacao.py:527`, passa tipo/status em `:528` e `:532`; contrato falta confessada aprovada/atestado pelo estado inicial em `:505`.
-- Regularização: `app/ponto/services/regularizacao.py:118`, tipo `falta` em `:119`, estado pelo serviço em `:121`.
-- Abandono provisório: `app/ponto/management/commands/marcar_abandono_provisorio.py:76`, tipo `falta` em `:79`, estado pelo serviço em `:82`.
-- Férias: `app/ferias/models.py:394` e `:449` chamam sincronização; criação `ferias/aprovada` em `app/ponto/services/ausencia.py:1389`.
-
-Decisões pelas views usam o adaptador `_a4_decidir → decidir`: `app/ponto/views.py:85`, `:88`. Chamadores: aprovar lote `:2302`; rejeitar lote `:2338`; cancelar lote `:2378`; aprovar individual `:2714`; rejeitar individual `:2775`; cancelar individual `:2811`; edição de período aprovado `:2747`.
-
-“Cancelar” grava **`rejeitada`**, inclusive em lote; “cancelada pelo admin” aparece como motivo/descrição, não novo status: `app/ponto/views.py:2378`, `:2379`, `:2811`, `:2812`. Vocabulário do modelo: `aguardando_documento`, `aguardando_decisao`, `aprovada`, `rejeitada`: `app/ponto/models.py:701`. Default: `aguardando_decisao`: `:809`. Transições em `app/ponto/services/ausencia.py:914`.
-
-O Django Admin é leitor: `AusenciaAdmin(SoLeitura, ...)` em `app/ponto/admin.py:38`, apresenta/filtra tipo e status em `:44`; bloqueios de adição/alteração/exclusão em `app/core/admin.py:59`. O formulário valida tipo, mas é `forms.Form`, sem escrita própria: `app/ponto/forms.py:41`, `:60`.
-
-`Ausencia.save` lê status/tipo para carimbo, minutos e período, sem atribuir status/tipo no corpo inspecionado: `app/ponto/models.py:878`, `:882`, `:887`, `:912`, `:918`.
-
-A busca encontrou criação/atribuições diretas do fato somente no serviço acima; a garantia absoluta contra formas dinâmicas de escrita é [não verificado]. Há contratos estáticos dedicados à porta única em `app/ponto/tests/test_contract_porta_ausencia.py:68` e `app/ponto/tests/test_contract_um_produtor_de_ausencia.py:88`; não foram executados.
-
-## 16/11 16:10 · sessao a83cfe3ea860 · BUG-PAR-O-PAR · verificador · origem=Code
-
-**As decisões 1(1) e 1(2) procedem como correções de origem; a abertura 1(3) precisa devolver as condições literais de L5, do contador/F4 e da precedência L2/L3.** A ambiguidade do estado e a perda do motivo estão no código; os pontos devolvidos abaixo exigem delimitação do contrato. (`app/chamados/services/materializacao.py:801`; `app/chamados/services/materializacao.py:863`; `app/chamados/services/validacao.py:527`; `app/chamados/services/materializacao.py:356`.)
-
-1. **Premissas, origem e leitores**
-
-O caso atual nasce assim: `competencia_do_fato` retorna `None` quando falta `data_evento`, antes de chamar K6; `_competencia_que_barra` transforma isso em texto impeditivo; testemunha e validação convertem qualquer impedimento desse helper em `bloqueada_competencia_entregue`. Portanto, hoje “entregue” também significa “faltou dia para consultar entrega”. (`app/chamados/services/materializacao.py:780`; `app/chamados/services/materializacao.py:785`; `app/chamados/services/materializacao.py:799`; `app/chamados/services/materializacao.py:863`; `app/chamados/services/validacao.py:614`.)
-
-Há uma delimitação importante: esse ramo **pula U163 antes de conferir a data**. Dentro de U163, o derivador aceita data do contexto; sem data também no contexto, a testemunha pode devolver `invalida`. Logo, separar o retorno ambíguo existente não equivale automaticamente a instituir L5 para todas as perguntas sem `data_evento`. (`app/chamados/services/materializacao.py:797`; `app/chamados/services/materializacao.py:613`; `app/chamados/services/materializacao.py:618`; `app/chamados/services/materializacao.py:871`.)
-
-| Leitor | Comportamento atual |
-|---|---|
-| Card | Mostra detalhe de competência e suprime Validar pelo estado entregue; F6 conserva o botão. (`app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/_pergunta_card.html:100`.) |
-| Modal | Mostra detalhe e suprime Validar por comparação do estado. (`app/templates/chamados/partials/modal_fio.html:252`; `app/templates/chamados/partials/modal_fio.html:274`.) |
-| `fio.py` | Transporta o dict da testemunha; ausência/falha vira `indisponivel`. (`app/chamados/services/fio.py:374`; `app/chamados/services/fio.py:377`; `app/chamados/services/fio.py:382`.) |
-| Filtro | Consulta a testemunha e adapta ausência/falha para indisponibilidade. (`app/chamados/templatetags/chamados_tags.py:136`; `app/chamados/templatetags/chamados_tags.py:139`.) |
-| Contador | Lê o estado das não carimbadas; estados sem ramo específico caem em `outras`. (`app/chamados/services/materializacao.py:339`; `app/chamados/services/materializacao.py:347`.) |
-| Comando | Consulta `competencia_do_fato` diretamente; já lista ausência de dia separadamente da entrega. (`app/chamados/management/commands/bug_par_103.py:58`; `app/chamados/management/commands/bug_par_103.py:62`; `app/chamados/management/commands/bug_par_103.py:74`.) |
-| Casca da ação | Para recusas não especializadas, apresenta `msg` conforme `ok=False`. (`app/chamados/services/acoes_disputa.py:50`.) |
-
-Um estado próprio **não exige juiz novo**: `ESTADOS` é vocabulário de retorno, cobrado pelo selo AST; ausência de data já é distinguida pelo helper existente, e K6/F6 já possuem autoridades registradas. Entretanto, acrescentar somente o nome à tupla não ensina os HTMLs a mostrar o detalhe e esconder Validar: suas comparações também precisam reconhecer o estado. (`app/chamados/services/validacao.py:51`; `app/chamados/tests/test_porta_validacao_pergunta.py:164`; `app/chamados/services/materializacao.py:780`; `app/core/juizes.py:315`; `app/core/juizes.py:343`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/modal_fio.html:274`.)
-
-2. **L2: motivo perdido, persistência e O44**
-
-No caminho do par, a validação da pergunta principal ocorre antes de `_validar_o_par`. O savepoint valida a irmã e tenta materializar; se não houver duas perguntas materializadas, levanta `_ParDesfeito`. O tratamento recarrega a principal e retorna `None`, sem transportar `e_par/r_par`, que somente seriam incorporados no sucesso. O chamador então executa a metade sozinha. (`app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:519`; `app/chamados/services/validacao.py:525`; `app/chamados/services/validacao.py:527`; `app/chamados/services/validacao.py:531`; `app/chamados/services/validacao.py:645`.)
-
-Na tentativa interna, F6 pode recusar o plantio da irmã; o savepoint descarta suas escritas. Na repetição isolada, a irmã novamente sem validação impede o par, e a principal cai na recusa de paridade. Portanto, nesse percurso, o motivo final pode ser **PARIDADE**, apesar da causa impeditiva encontrada na tentativa conjunta ser a competência. Esse diagnóstico não se estende a toda L2: um plantio direto pode conservar corretamente a recusa F6. (`app/ponto/registro_batida.py:156`; `app/chamados/services/materializacao.py:1662`; `app/chamados/services/materializacao.py:199`; `app/chamados/services/materializacao.py:1353`; `app/chamados/services/materializacao.py:1388`; `app/chamados/services/materializacao.py:1897`.)
-
-O resultado desse caminho recusado é:
-
-- Ato **VALIDACAO** da principal preservado e ato **DEVOLUCAO** acrescentado; `validada_em/validada_por` voltam a nulo. (`app/chamados/services/validacao.py:170`; `app/chamados/services/validacao.py:256`; `app/chamados/services/validacao.py:262`.)
-- `recusa_motivo` contém texto técnico da recusa, classificado pelo catálogo; a devolução copia esse motivo para seu ato. No percurso descrito, prevalece a classificação PARIDADE. (`app/chamados/services/materializacao.py:1598`; `app/chamados/services/materializacao.py:1610`; `app/chamados/catalogo/recusa.py:45`; `app/chamados/services/validacao.py:265`.)
-- Havendo chamado de destino e mudança de motivo, anexa ocorrência “Ponto NAO gravado no espelho [código]…”. A ausência de carimbo de materialização é condição para devolver a validação. (`app/chamados/services/materializacao.py:1612`; `app/chamados/services/materializacao.py:1615`; `app/chamados/services/validacao.py:247`.)
-
-**Corrigir o motivo cabe no O44**, preservando o toque: O44 conserva o ato administrativo, enquanto F6 continua recusando o plantio institucional; o próprio catálogo declara que `COMPETENCIA_APROVADA` sobrevive ao O44. Manter o motivo verdadeiro nas portas existentes é compatível com L-007, sem criar outro escritor. (`app/chamados/services/validacao.py:562`; `app/ponto/registro_batida.py:156`; `app/chamados/catalogo/recusa.py:16`; `app/docs/LEIS.md:65`; `app/chamados/services/materializacao.py:1591`.)
-
-3. **Condições que precisam fechar no literal**
-
-- **Q1 — L5 significa “K6 não consultado” ou realmente “nenhum juiz consultado”, e cobre qual universo?** A porta chama a espera declarado × gravado e o juiz de implausibilidade antes da guarda explícita de entrega. A composição também usa `declarou_hora` para procurar a irmã. “Nenhum juiz” exige mudar essa ordem; “K6 não consultado por falta de dia” descreve o helper atual. Além disso, U163 é pulado nesse ramo, conforme apontado acima. (`app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:190`; `app/chamados/services/validacao.py:201`; `app/chamados/services/materializacao.py:797`.)
-
-- **Q2 — Qual precedência vale quando as condições se sobrepõem?** A chamada antecipada de declarado × gravado consulta a testemunha; nela, entrega vem primeiro, seguida de outras guardas, e F6 antecede o portão DXG. Assim, uma pergunta U163 divergente e também bloqueada por F6 pode sair como `bloqueada_competencia`, não como L3. F6 usa a competência da **data local do plantio**; K6 usa a competência do **dia do fato**. A matriz precisa preservar expressamente essa precedência ou declarar a alteração pretendida. (`app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:884`; `app/chamados/services/materializacao.py:897`; `app/chamados/services/materializacao.py:908`; `app/chamados/services/materializacao.py:911`; `app/ponto/janelas.py:84`; `app/chamados/services/materializacao.py:784`.)
-
-- **Q3 — “Balde próprio” de qual contador?** O contador seleciona exclusivamente U163. Já existe `bug_par_103_sem_dia` para candidatas U103 carimbadas; não carimbadas com estado diferente caem em `outras` e continuam somando em `pendentes_aval`. Fora163 aparece na lista separada do comando. Criar uma partição sem dia dentro de U163 é compatível com o universo atual; incluir fora163 nessa conta altera seu universo, contrariando a equivalência exigida pela LEI-AKITA 8 se o rótulo continuar prometendo U163. (`app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:331`; `app/chamados/services/materializacao.py:347`; `app/chamados/services/materializacao.py:356`; `app/chamados/management/commands/bug_par_103.py:71`; `CLAUDE.md:35`.)
-
-- **Q4 — F4 exige zero num cenário resolvível ou zero global?** Um teste com validação efetiva, K6 estável e pertencimento constante é viável: materializadas que deixam de atender ao predicado U103 passam a `resolvidas`. O teste atual apenas muda K6 para verdadeiro. Porém, L3 continua somando pendência; o zeramento global não decorre da matriz, e sua possibilidade em produção é **[nao verificado]**. O contrato deve nomear `pendentes_aval` e o recorte testado; `congelados_no_recorte` permanece constante. (`app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:356`; `app/chamados/tests/test_bug_par_103.py:89`; `app/docs/PROMPTS.md:2235`.)
-
-Os estados da testemunha e da porta também precisam permanecer identificados na prova: hoje L2 mostra `bloqueada_competencia`, mas a validação devolve `nao_gravou`; L4 mostra `aplicavel`, mas a porta devolve `validada`. Exigir literalmente o mesmo estado das duas seria alteração adicional. (`app/chamados/services/materializacao.py:886`; `app/chamados/services/validacao.py:687`; `app/chamados/services/materializacao.py:900`; `app/chamados/services/validacao.py:705`.)
-
-O runner **aceita `--django` hoje**, configura o ambiente CI e utiliza o runner Django. Sem essa opção, exclui os mutantes integrados; a morte exige falha por asserção, sem erros/skips. Sua execução efetiva para a c4 é **[nao verificado]**, não uma impossibilidade do argumento. A correção da busca HTML também procede: o helper atual procura qualquer formulário de validação, sem restringir `pergunta_id`. (`app/chamados/tests/bug_par_mutantes.py:129`; `app/chamados/tests/bug_par_mutantes.py:150`; `app/chamados/tests/bug_par_mutantes.py:155`; `app/chamados/tests/bug_par_mutantes.py:164`; `app/chamados/tests/bug_par_mutantes.py:196`; `app/chamados/tests/test_bug_par_volta.py:202`.)
-
-4. **Universo protegido, dinheiro e `!`**
-
-O pertencimento permanece exclusivamente por PK, com hash, cardinalidades, disjunção e serialização conferidos pelo carregador. Alterar estado ou motivo não exige descongelar o JSON; a fixture já permite representar conjuntos sintéticos em memória. O corte fora163 exige preservar integralmente entregue nos três caminhos e listar para DP. (`app/chamados/services/universo_bug_par.py:15`; `app/chamados/services/universo_bug_par.py:20`; `app/chamados/services/universo_bug_par.py:26`; `app/chamados/services/universo_bug_par.py:35`; `app/chamados/tests/test_bug_par_volta.py:24`; `app/docs/BACKLOG.md:2066`.)
-
-**Não cabe certificar “sem dinheiro” pela ausência de batida nova.** A validação agenda recálculo antes do plantio; ele roda após commit e chama o escritor de fechamento, inclusive com persistência dos campos calculados em fechamento não aberto. Esse efeito já existe; resultado financeiro concreto ou toque produtivo em exportada nesta obra é **[nao verificado]**. A matriz de persistência L2 precisa ser entendida como persistência da pergunta/atos, não prova de ausência de outras escritas. (`app/chamados/services/validacao.py:627`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/fechamento.py:1160`.)
-
-A correção restrita de estado/motivo não requer, por si, tocar gravado exportado; qualquer execução que o faça continua sujeita ao `!` e às provas previstas. Não há liberação adicional pelo simples fato de o plantio ter sido recusado. (`CLAUDE.md:265`; `CLAUDE.md:406`; `CLAUDE.md:411`; `app/ponto/registro_batida.py:161`.)
-
-A quantidade de perguntas vivas de intervalo sem `data_evento`, exigida em 3.e, é **[nao verificado]**: o material fornecido não contém essa medição produtiva. A lista atual do comando não substitui esse censo, pois suas seleções não aplicam o predicado de pergunta viva. (`app/chamados/management/commands/bug_par_103.py:53`; `app/chamados/management/commands/bug_par_103.py:71`.)
-
-VEREDITO: AVAL-DEVOLVIDO — L5 dispensa somente K6 e cobre qual universo? Qual precedência vale entre L2/L3/L5? O balde sem dia permanece restrito a U163? F4 exige zero de `pendentes_aval` em cenário resolvível ou zero global?
-
-_6116 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6120 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
