@@ -1,6 +1,15 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: smoke.sh | pid=685179
+ESPERANDO: codex_pergunta.sh | pid=691058
+ESTADO 13:3x COMPLEMENTO-1 UI-VINCULO (13:2x) registrado: item 1 editor 3 grades NA FRENTE do painel (REVISAO-DO-AVAL itens 1-2 no Codex verificador, revisao_c1.r); item 3 leitura FolgaDia x celula no Codex (leitura_folga_celula.r); item 2 lista depois da revisao; item 4 so registro. Teto 2 construtores cheio (volta BUG-PAR + agente do painel): o editor entra na vaga do agente de tela -- termina o painel ja em curso? nao: o agente recebe o editor primeiro quando a revisao disser EXECUTA (decisao tecnica: mesma raia de tela, arquivos disjuntos)
+ESTADO 13:2x UI-VINCULO-MOSTRA-O-CALENDARIO: REVISAO-DO-AVAL VEREDITO EXECUTA (4x NAO PROCEDE, logs/UI-VINCULO-CALENDARIO/revisao.r); construcao aberta (agente opus, copia propria; 2o construtor com a volta BUG-PAR). PROPOSTA (5 linhas):
+  1. Onde: painel_vinculo.html, bloco Vincular Escala-Folgas, logo abaixo do select e acima do botao Salvar folgas.
+  2. O que: "Folgas que este calendario manda" com mes corrente e proximo (dd/mm por mes), datas vindas so de escala/folgas.py::datas_que_o_calendario_manda; link "abrir este calendario" -> escala:editar_folga_calendario do pk.
+  3. Sem calendario (opcao padrao do template): o texto existente, sem dias e sem link.
+  4. Troca no select: a projecao acompanha o calendario escolhido (contexto por calendario oferecido, alternado no partial, sem static/js novo) -- achado 3 da revisao: hoje o POST e hx-swap none.
+  5. Componentes da casa (LEIS-UI.md:77/87): ajuda por componente, zero dialogo nativo, zero title cru; sem CSS novo fora do padrao.
+DESPACHO UI-VINCULO-MOSTRA-O-CALENDARIO: construir -> opus (agente) | pre-verificacao -> Codex verificador | suite --only pela trava -> agente
+ESTADO 13:17 LOTE7 c7 NO AR, condicao COMPLEMENTO-2 item 2 FECHADA: smoke de prod 16:07:44Z-16:17:16Z (10 min) core 99 linhas, POST /api/ponto 29, 5xx 0, Traceback 0. PROVA: logs/DUAS-PISTAS/lote7_c7/smoke.out
 ESTADO 13:12 BUG-PAR-O-PAR VOLTA ABERTA (aval ESPINHA-ABRE-A-VOLTA-BUG-PAR 13:1x): 4 condicoes do PREPARA fecham -- lei 0 (bloco d RESPONDIDO por CORTE-BUG-PAR-FORA163), REVISAO 3x NAO PROCEDE (volta/revisao.r), cruzamento 0 (B1 e R3 pousadas; REDs F2 so testes novos, 0 em comum), vaga Codex construtor livre (reds rc 0 12:36). Ensaio refeito no main 42fd467a0: merge-tree 0 conflito, 4 arquivos dos dois lados (fio.py, test_s139.py, crons.py, test_medida_turno_do_par.py). Copia /home/ronald/wt-codex-bug-par-o-par-131207 @6d3a9ae10 (main + raia 6e2fc9133); Codex construtor -> logs/BUG-PAR-O-PAR/volta/volta.r. Pouso: depois de RED/suite/verificador/opus
 ESTADO 13:07 LOTE7 c7 POUSADO: merge 42fd467a0 (--no-ff de a094967ee; arvore == a094967ee salvo TICKETS.md do pos_push cf5347b01, nenhum .py difere) + bin/deploy.sh --sem-migrate rc 0 (3 cascas HUP, rotas 200/302/200, importerror_500=0). PROVA: logs/DUAS-PISTAS/lote7_c7/deploy.log; smoke 10 min de batidas 5xx em curso -> logs/DUAS-PISTAS/lote7_c7/smoke.out
 ESTADO 13:06 push do marco 4e364a414 no remoto (rc=0; pos_push cf5347b01). PROVA: logs/E4C/f1nova/b1/c3/push.log

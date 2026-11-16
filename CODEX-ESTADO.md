@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 12:57** · publicado em **16/11/2026 12:59** (UTC-3)
+> Ultima resposta processada: **16/11/2026 13:20** · publicado em **16/11/2026 13:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 13:20 · sessao db8b5d6bc7f1 · - · - · origem=Ronald (tmux)
+
+- **“Salvar é a única função escritora” — NÃO PROCEDE.** `salvar_calendario_de_folga` faz `update_or_create` das grades e as apaga ao trocar para `semana_dia`; `criar_calendario_de_folga` também cria as grades. A porta canônica declarada é o **módulo** `escala/folgas.py`, não exclusivamente a função salvar (`app/escala/folgas.py:588`, `app/escala/folgas.py:594`, `app/escala/folgas.py:645`, `app/escala/folgas.py:659`, `app/core/portas.py:473`).
+
+- **Criador rápido — PROCEDE; corte no servidor.** `wizard_calendario_criar` recebe dias, valida `1..31` e chama `criar_calendario_de_folga`; esta percorre `(31,30,28)` e grava somente `d <= tam` (`app/escala/views_wizard.py:140`, `app/escala/views_wizard.py:179`, `app/escala/views_wizard.py:188`, `app/escala/views_wizard.py:192`, `app/escala/folgas.py:658`, `app/escala/folgas.py:661`).
+
+- **Fonte — PROCEDE com precisão:** cada registro de `FolgaCalendarioTamanho` guarda uma grade; o calendário pode ter registros de 28,30,31, exclusivos por calendário/tamanho; não existe exigência de que os três estejam presentes ou preenchidos (`app/escala/models.py:1563`, `app/escala/models.py:1565`, `app/escala/models.py:1570`, `app/escala/models.py:1575`). `dias_por_tamanho()` lê as linhas existentes, sem completar grades ausentes (`app/escala/models.py:1558`).
+
+- **Contexto e POST — PROCEDE.** A view define 31,30,28, lê os marcados, monta os três elementos e entrega o contexto ao editor (`app/escala/views.py:318`, `app/escala/views.py:362`, `app/escala/views.py:369`). No POST `dias_mes`, percorre os três tamanhos, transforma campos ausentes em listas vazias, valida o intervalo e passa o dicionário completo à porta (`app/escala/views.py:340`, `app/escala/views.py:342`, `app/escala/views.py:349`, `app/escala/views.py:356`).
+
+- **Censo de leitores diretos:** `dias_por_tamanho()` é consumido em produção por `datas_que_o_calendario_manda`, que delega a `folgas_do_mes`; este escolhe o tamanho real, usando 28 para fevereiro bissexto, e devolve vazio quando a grade falta/está vazia (`app/escala/folgas.py:56`, `app/escala/folgas.py:12`, `app/escala/folgas.py:14`). A função de datas alimenta divergência, vigia, geração de foto e sincronização futura (`app/escala/folgas.py:99`, `app/escala/folgas.py:127`, `app/escala/folgas.py:158`, `app/escala/folgas.py:629`). Lista e editor também leem diretamente `cal.tamanhos` (`app/escala/views.py:292`, `app/escala/views.py:362`).
+
+- **RED do POST: a obrigação já existe no código e em teste.** `test_post_cria_calendario_e_3_tamanhos` envia valores distintos nos três campos e confere o dicionário persistido; criar e editar usam a mesma view (`app/escala/tests/test_folga_cadastro.py:18`, `app/escala/tests/test_folga_cadastro.py:30`, `app/escala/urls.py:35`, `app/escala/urls.py:36`). O teste de porta também confere as três grades e idempotência (`app/escala/tests/test_porta_escala.py:95`). Logo um teste apenas dessa condição **não evidencia RED da mudança visual**, por inspeção desses caminhos; resultado de execução é [nao verificado]. Para testemunhar “pela porta”, uma verificação adicional precisaria observar a chamada da função real sem substituir a persistência; seria reforço de contrato, não o RED visual (`app/escala/views.py:354`, `app/escala/views.py:356`, `app/escala/folgas.py:594`).
+
+- **Outros escritores em testes, separados de produção:** preparações com `objects.create` em `app/colaboradores/tests/test_vincular_folga_view.py:31`, `app/colaboradores/tests/test_vincular_folga_view.py:35`, `app/colaboradores/tests/test_vinculo_folga_padrao.py:25`, `app/escala/tests/test_folga_semana_dia.py:65`, `app/escala/tests/test_torneira_folgas.py:99`, `app/escala/tests/test_folga_models.py:11`, `app/escala/tests/test_gerador_folgas.py:32`, `app/escala/tests/test_gerador_folgas.py:34`, `app/escala/tests/test_smoke_clique_folga_calendario.py:112`, `app/escala/tests/test_editor_folga_modo.py:29`, `app/escala/tests/test_folga_aplicar.py:37`, `app/escala/tests/test_foto_folga_continua.py:64`, `app/escala/tests/test_selo_foto_folgas_relavra.py:46`; alteração por instância em `app/escala/tests/test_foto_folga_continua.py:145` e `app/escala/tests/test_foto_folga_continua.py:146`. A migração encontrada cria o esquema, sem carga de dados (`app/escala/migrations/0015_folgacalendario_folgacalendariotamanho.py:29`). A guarda de arquitetura proíbe escritores de produção fora da porta, com allowlist vazia (`app/escala/tests/test_chokepoint_escala_gate.py:27`, `app/escala/tests/test_chokepoint_escala_gate.py:55`).
+
+## 16/11 13:20 · sessao 099ae93ca4b9 · - · - · origem=Ronald (tmux)
+
+- **PROCEDE — item 1 alcança o editor previsto na O148.** O complemento histórico nomeia `editar_folga_calendario` como “EDITAR-NAO-PUBLICA”; O148-EDITAR contempla edição com uso por versão. Referências: `app/docs/O148-COMPLEMENTO.md:15`, `app/docs/CORTES.md:357`.
+
+- **NAO PROCEDE — afirmar que versionamento já seja lei vigente ou que exista reserva de arquivo em obra ativa.** Os registros dizem “só registrar”, “não constrói agora” e “edição por versão espera corte de lei”. O148-EDITAR aparece na seção “CORTES que são ATO, não lei”. Referências: `app/docs/CORTES.md:101`, `app/docs/CORTES.md:357`, `app/docs/BACKLOG.md:819`, `app/docs/LEIS.md:206`, `app/docs/LEIS.md:313`. Concorrência efetiva no mesmo arquivo: **[nao verificado]**.
+
+- **NAO PROCEDE — conflito necessário com leis de UI.** O aviso pode seguir componente da casa, sem diálogo nativo, e consumir o mesmo estado usado pela ação; essas são as exigências aplicáveis. Referências: `app/docs/LEIS-UI.md:23`, `app/docs/LEIS-UI.md:77`, `app/docs/LEIS-UI.md:87`. A raia normalmente permite templates/static/testes; a exceção nominal da view consta apenas no anexo fornecido **[nao verificado na cópia]**; regra geral: `CLAUDE.md:312`.
+
+- **Achado material — a porta declarada não é o único escritor.** `criar_calendario_de_folga` também cria `FolgaCalendarioTamanho`; o descarte acima do tamanho ocorre no servidor. Referências: `app/escala/folgas.py:645`, `app/escala/folgas.py:658`, `app/escala/folgas.py:661`.
+
+- **Achado material — salvar já produz efeitos além da definição das grades.** A porta sincroniza fotos futuras dos vínculos e chama regeneração futura pela porta da célula. A descrição histórica “grava e redireciona sem rematerializar” está superada nesse ponto. Referências: `app/escala/folgas.py:600`, `app/escala/folgas.py:639`, `app/escala/folgas.py:640`; descrição histórica: `app/docs/O148-COMPLEMENTO.md:15`.
 
 ## 16/11 12:57 · sessao 24f76b5f4000 · UI-VINCULO-MOSTRA-O-CALENDARIO · verificador · origem=Code
 
@@ -1086,53 +1114,4 @@ Executei apenas Python AST (`python3 -B`), extraindo o detector existente em `ap
 - `tests/e4b_c6_bases` contém snapshots `.py.txt`, não runtime; nenhum `materializada_em =` nessa subárvore. Fixtures e mutantes dos testes não devem ser misturados com os escritores operacionais; o selo explica esse propósito em `tests/test_o261e_f2_porta_carimbo.py:17-23`, e exclui testes/migrations da própria varredura em `:207-211` (minha AST incluiu migrations).
 - Retração posterior tem porta própria: `ponto/registro_batida.py:269-276` grava `aprovada=False` e `retratada_em`, sem alterar carimbo da Pergunta. Logo existência no momento do plantio não garante Batida viva depois; para atribuir “juiz desfez depois” a IDs concretos, somente o anexo fornecido, **[não verificado na cópia]**.
 
-## 16/11 11:44 · sessao b51331eb1607 · - · - · origem=Ronald (tmux)
-
-Censo das portas que **criam PingGeo** no código:
-
-| Porta | Escritor | Accuracy |
-|---|---|---|
-| `/ponto/ping-geo/` | rota `app/ponto/urls.py:78`; `app/ponto/views.py:3065` | Lê opcional em `:3014`; grava em `:3071` |
-| `/api/ping-geo/`, kernel core | `app/api/urls_core.py:5,17`; `app/api/views_core.py:951` | Lê opcional em `:864`; grava em `:957` |
-| `/api/ping-geo/`, kernel UI | `app/api/urls.py:2,98`; `app/api/views.py:2421` | Lê opcional em `:2334`; grava em `:2427` |
-
-Todas gravam o valor recebido; ausência vira `None`, permitido pelo modelo (`app/ponto/models.py:1017`). As três criações persistem os mesmos campos anti-manipulação, sem guardar origem, canal, device, header ou resultado da validação da assinatura (`app/ponto/views.py:3065-3078`; `app/api/views_core.py:951-964`; `app/api/views.py:2421-2434`).
-
-**Há sinais melhores no instante da request, mas nenhum vínculo persistido por ping para resolver retrospectivamente a origem:**
-
-- `DeviceColaborador.plataforma` distingue `app`, `apk`, `ios`, `pwa-android`, `pwa-ios`, com `device_id` (`app/colaboradores/models.py:868-878,915`). A API lê `device_id` para validar assinatura (`app/api/views_core.py:879-885`) e não o grava em `PingGeo` (`:951-964`). O modelo do ping tampouco tem FK para o device (`app/ponto/models.py:1005-1025`).
-- `X-Hasner-Client` é um sinal declarado da request (`app/core/middleware.py:117-119`). O bridge grava plataforma/cliente no token e depois na sessão (`app/core/models.py:335-347`; `app/core/views.py:1281-1288`); os escritores do ping não leem nem persistem esses valores (`app/ponto/views.py:3012-3019,3065-3078`; `app/api/views_core.py:862-885,951-964`).
-- `Batida.canal` é persistido como `apk`/`pwa`, mas descreve **a batida**, não o ping (`app/ponto/models.py:46-55`); o ping apenas se liga à entrada ativa (`app/ponto/models.py:1010-1013`; `app/ponto/views.py:3067`). Usá-lo como origem do ping seria inferência.
-- A porta web também pode receber sessão aberta pelo app em WebView (`app/core/models.py:323-326`; `app/core/views.py:1280-1288`); portanto URL web não prova PWA.
-- Sem assinatura, o validador simplesmente devolve sucesso com `pwa_sem_assinatura=True` (`app/api/views_core.py:64-67`); assinatura inválida apenas produz warning e a criação segue (`:885-890,951`). Logo presença/ausência da assinatura é heurística, não origem autenticada persistida.
-
-O PWA da cópia envia `latitude`, `longitude` e `accuracy`, sem provider/assinatura (`app/static/pwa.js:404-411`). A atribuição Kotlin está no comentário do modelo (`app/ponto/models.py:1020-1024`); código Kotlin/Swift nesta cópia: **[nao verificado]**.
-
-Outras mutações encontradas, sem constituir portas de captura: máscara da sombra zera latitude/longitude (`bin/sombra_regras_pessoais.py:79`; `bin/sombra_mascara_pessoal.py:35-36`); comando de zeramento apaga pings (`app/ponto/management/commands/zerar_dados_operacionais.py:98`); fixture de teste cria ping sem accuracy (`app/ponto/tests/test_selo_presenca_lote.py:54-58`).
-
-## 16/11 11:44 · sessao f62eab06339f · REGISTROS-E-O10D-1611 · verificador · origem=Code
-
-**Parecer: AVAL-DEVOLVIDO — REGISTROS-E-O10D-1611, somente item 4.** Qualquer PROCEDE impede executar esse item; os itens 1–3 seguem, conforme o anexo `registros_e_o10d_1611.txt:6`. As referências aos anexos abaixo contam as linhas textuais fornecidas.
-
-1. **PROCEDE — execução literal sem referência reproduzível.** “Re-rodar o censo_v2” pressupõe identificar seu conteúdo e sua base. A cópia registra `censo_v2 rc 0` e resume suas conclusões, mas isso não fornece o instrumento nem o relatório integral (`app/docs/RELATO.md:1630`). O artefato original e sua reprodução no HEAD atual estão **[nao verificado]**. Portanto, não há suporte para declarar agora “perguntas de lei: 0”; o registro histórico apenas afirma que censo e lei estavam prontos (`app/docs/RELATO.md:1592`).
-
-2. **PROCEDE — faltam destinos para resultados inconclusivos.** O item prevê `N>0 → topo/não construir` e `cruzou → espera`, mas não explicita o tratamento de censo indisponível, cruzamento não mensurável ou RED sem mordida (`anexo registros_e_o10d_1611.txt:5`). O molde determina registrar **qual condição não fechou** e seguir a fila (`anexo prepara_volta_bug_par.txt:4`). Há precedente de devolução justamente por faltar o destino de RED sem mordida (`app/docs/RELATO.md:16`). É necessário distinguir “não medido” de zero antes de liberar construção.
-
-3. **PROCEDE — compatibilidade do construtor precisa ser resolvida; colisão física da O10-D permanece [nao verificado].** O item manda Codex construir uma obra cujo pouso pede `!` (`anexo registros_e_o10d_1611.txt:5`), enquanto L-126 proíbe ao construtor “item que pede `!`”, além de `ponto/portas/celula.py` (`app/docs/LEIS.md:147`). O brief precisa delimitar a etapa permitida e compatibilizar essa restrição; o wrapper também anuncia a proibição desse arquivo (`bin/codex_pergunta.sh:346`).
-
-   Quanto às obras em voo:
-
-   - **F1 B1/B2, BUG-PAR e F2/F4:** BUG-PAR × B1 tem arquivos comuns documentados; B2 e F2/F4 aguardam B1 (`app/docs/RELATO.md:36`, `app/docs/RELATO.md:51`, `app/docs/RELATO.md:6`). Isso **não comprova** cruzamento com O10-D, cuja lista atual de alterações está **[nao verificado]**.
-   - **LOTE7:** inclui `ponto/services/ausencia.py` e está em PAREI (`app/docs/RELATO.md:50`, `app/docs/RELATO.md:5`). Ele deve entrar expressamente na medição; “atrás do LOTE7” não documenta interseção de arquivos (`anexo registros_e_o10d_1611.txt:5`).
-   - **Alcance funcional:** a troca chama `editar_dia`, marca cobranças órfãs e agenda rejunção de chamados; isso demonstra dependência, não alteração física compartilhada (`app/ponto/portas/celula.py:713`, `app/ponto/portas/celula.py:663`, `app/ponto/portas/celula.py:534`).
-
-4. **PROCEDE — referência errada e comprovação parcial.**
-
-   - `BACKLOG:2159` é **SOMBRA-HOJE-NA-BORDA**; O10-D está em **`app/docs/BACKLOG.md:2172`**.
-   - Quatro células, duas chamadas no mesmo `atomic`, rollback, recusa falante e um RED por regra 1–6 constam nessa linha; os RED ainda eram listados como faltantes (`app/docs/BACKLOG.md:2172`, `app/docs/RELATO.md:1592`).
-   - O molde PREPARA existe como registro, inclusive com construção bloqueada por cruzamento (`app/docs/RELATO.md:70`).
-   - **O10-C INTERROMPIDA confere** (`app/docs/BACKLOG.md:2219`).
-
-**Localização do censo e da resposta de 09/11:** o censo_v2 aparece **resumido** em `app/docs/RELATO.md:1630`; seu arquivo integral está **[nao verificado]**. A resposta de **09/11, 12:0x** aparece resumida em `app/docs/PROMPTS.md:2015`, com ponteiro para `logs/O10-D-PERMUTA-NA-TELA/aval_lei_permuta.txt`; esse original na cópia está **[nao verificado]**. A identidade Git do HEAD também está **[nao verificado]**.
-
-_6018 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6020 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
