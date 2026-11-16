@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 18:47** · publicado em **16/11/2026 18:48** (UTC-3)
+> Ultima resposta processada: **16/11/2026 18:53** · publicado em **16/11/2026 18:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 18:53 · sessao dbc9a9749f8d · ESPINHA-F2 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO em 2d e 9a:** o par ilegal não determina sozinho o dono da tarefa, e `_escrever_carimbo` não é escritor exclusivo dos três campos (`app/chamados/services/tarefa_do_dia.py:165`; `app/chamados/models.py:3393`).
+
+As referências aos anexos usam suas linhas fornecidas, incluindo vazias; correspondência independente da cópia com o HEAD/hash informado: [nao verificado].
+
+**2a — Fecha no ramo declarado.** Última RESPOSTA com `ato_texto` vazio retorna `respondida_sem_texto`, com RESPONDER do COLABORADOR; o juiz exige instante e texto não vazio (`app/chamados/services/tarefa_do_dia.py:159`; `app/chamados/services/tarefa_do_dia.py:161`; `app/chamados/juizes.py:1552`). A coerência quanto ao vazio confere, mas são fontes distintas: texto do último ato e texto projetado (`app/chamados/services/tarefa_do_dia.py:160`; `app/chamados/juizes.py:1552`).
+
+Conservar essa fonte na F2 é compatível com conservar a exigibilidade e deixar a lei sobre devolução pendente; não revoga os destinos específicos de F5/F6 (`respostas_f2_estados_1611.txt:5`; `app/docs/RELATO.md:131`; `app/docs/CORTES.md:487`). Não autoriza mudança de tarefa nem intervenção em exportada (`complemento1_respostas_f2_estados_1611.txt:11`; `app/docs/CORTES.md:487`).
+
+**2b — Fecha o defeito anterior de desenho; a prova efetiva continua pendente.** A API realmente calcula `aguarda_admin` por `estado == RESPONDIDA`; conservar essa fonte elimina a mudança adicional em pares legais que surgiria ao trocar estado por dono (`app/api/views.py:2550`; `app/api/views.py:2553`; `app/chamados/services/tarefa_do_dia.py:176`).
+
+Isso é compatível com a prova que admite somente diferenças dos pares ilegais: essas diferenças são permitidas, não obrigatórias (`respostas_registradas.md:5`). Portanto, **essa alteração proposta já não introduz a diferença não admitida apontada anteriormente**; comprovar que nenhuma outra diferença existe exige a comparação por pk, cujo resultado é [nao verificado] (`respostas_registradas.md:5`). A conservação vale na F2; o destino pelo dono previsto para F6 continua registrado (`app/docs/CORTES.md:487`). Não há autorização adicional sobre exportada/dinheiro/`!` (`app/docs/CORTES.md:487`).
+
+**2c — Fecha.** Ressuscitar não grava REABERTURA nesse caminho, e o código declara expressamente que devolver ao colaborador permanece lei não decidida; a porta efetiva zera a projeção pelo descarimbo em lote (`app/chamados/models.py:1622`; `app/chamados/models.py:1626`; `app/chamados/models.py:1629`).
+
+Manter a discussão fora da F2 é compatível com a resposta 8 vigente e com o registro da lei; “ressuscitada sem ação” permanece restrito ao caso de último SILENCIO, não universal (`respostas_f2_estados_1611.txt:12`; `app/docs/RELATO.md:131`; `app/chamados/services/tarefa_do_dia.py:156`; `app/chamados/services/tarefa_do_dia.py:176`). A eventual obra futura depende do corte declarado, sem autorizar agora alteração de fila ou de exportadas (`complemento1_respostas_f2_estados_1611.txt:5`; `app/docs/LEIS.md:151`).
+
+**2d — Não fecha como afirmação universal.** Pergunta viva com instante e sem texto realmente resulta em `estado=RESPONDIDA`, pois esse ramo lê `respondida_em` cru (`app/chamados/models.py:3154`; `app/chamados/models.py:3155`). Porém isso **não implica que a tarefa mande o colaborador responder**: a tarefa consulta o último ato; RESPOSTA vazia manda responder, DEVOLUCAO manda o admin validar e SILENCIO não exige ação (`app/chamados/services/tarefa_do_dia.py:158`; `app/chamados/services/tarefa_do_dia.py:161`; `app/chamados/services/tarefa_do_dia.py:165`; `app/chamados/services/tarefa_do_dia.py:176`).
+
+A medição precisa separar o par projetado, o último ato e o resultado efetivo da tarefa; a conclusão sobre colaborador deve ficar condicionada ao ramo correspondente (`app/chamados/services/tarefa_do_dia.py:159`). Quantidade atual e ocorrência desses contraexemplos em produção: [nao verificado]. O encaminhamento de leitores de instante cru à B2 confere com o escopo documentado, mas não autoriza cura pela F2; estoque entregue continua exigindo `!` próprio (`app/chamados/juizes.py:1551`; `app/docs/LEIS.md:151`).
+
+**9a — Não fecha a premissa nem demonstra o literal.** O comentário chama o trio de “UM ato”, e `_escrever_carimbo` atribui os três campos em memória; isso não equivale a escritor exclusivo de qualquer deles (`app/chamados/models.py:3184`; `app/chamados/models.py:3207`).
+
+| Outro escritor/mecanismo | Escrita comprovada |
+|---|---|
+| `descarimbar_em_lote` | `update()` direto de instante, autor e via (`app/chamados/models.py:3391`; `app/chamados/models.py:3393`). |
+| `encerrar_por_fato_no_espelho` | Atribui e salva somente a via (`app/chamados/models.py:3402`; `app/chamados/models.py:3403`). |
+| `relavra_via.relavrar` | Atribui e salva somente a via, junto da lavra (`app/chamados/services/relavra_via.py:125`; `app/chamados/services/relavra_via.py:127`). |
+| Exclusão do autor | A FK permite zerar `materializada_por` por `SET_NULL` (`app/chamados/models.py:3534`; `app/chamados/models.py:3536`). |
+
+Os dois escritores exclusivos de via têm chamadores em comandos, e o próprio selo admite expressamente essas exceções (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:68`; `app/chamados/management/commands/relavrar_via_i6.py:102`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:44`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:51`). Incluindo testes, também existem `update()` diretos; nas migrações citadas há adição de campos de esquema, sem que isso sustente exclusividade do helper (`app/chamados/tests/test_e1_volta2.py:204`; `app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:21`; `app/chamados/migrations/0033_perguntadisputa_via_resolucao.py:13`). Inexistência absoluta de outros mecanismos dinâmicos: [nao verificado]; o scanner declara limites para `__dict__` e nomes externos (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:111`).
+
+O corte exige literalmente **“efeito = o ato de materializacao, valor conservado”** (`app/docs/CORTES.md:487`). A cópia registra F2 L1 como **RESIDUAL, não MOOT**, precisamente porque descarimbar apaga e a projeção lê o campo atual (`app/docs/RELATO.md:109`). O código confirma essa perda: o descarimbo elimina o instante, e a projeção temporal parte do valor atual, sem reconstruí-lo após apagado (`app/chamados/models.py:3318`; `app/chamados/juizes.py:1390`; `app/chamados/juizes.py:1396`). Portanto, “ler o campo é ler o ato” não fornece a fonte do instante anterior nem resolve o residual registrado (`app/docs/RELATO.md:109`).
+
+**9b — Fecha como conservação do resultado presente; não sana 9a.** O descarimbo grava instante e autor como `None`, via como `''`, e salva esses campos quando solicitado (`app/chamados/models.py:3318`; `app/chamados/models.py:3320`; `app/chamados/models.py:3322`). Conservar esse resultado é compatível com a prova exigida, mas a execução comparativa antes/depois é [nao verificado] (`respostas_registradas.md:5`). Conservar `None` no presente não recupera o instante anterior referido pelo residual (`app/chamados/juizes.py:1390`; `app/docs/RELATO.md:109`). Não amplia autorização de intervenção em exportada (`app/docs/CORTES.md:487`).
+
+**9c — Fecha como registro lateral; não sana 9a.** Os tipos de `DecisaoPergunta` não incluem materialização (`app/chamados/models.py:4024`; `app/chamados/models.py:4026`; `app/chamados/models.py:4035`). Retirar a remessa de F2 L1 à E4d elimina o desvio anterior; o item 3 do corte destina explicitamente à E4d o ato de absorção, enquanto o item 1 mantém o destino próprio do residual F2 L1 (`app/docs/CORTES.md:487`). Registrar a ausência de materialização não autoriza construir esse ato nem comprova o fechamento de 9a (`complemento1_respostas_f2_estados_1611.txt:10`; `complemento1_respostas_f2_estados_1611.txt:11`; `app/docs/RELATO.md:109`).
+
+Quanto ao alcance material, existe ligação concreta com o CSF: ele consome `sem_veredito_entre` para pai e destino e decide sua permissão pelo resultado (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:574`; `app/ponto/supra_juiz.py:588`). Assim, as exceções da prova não dispensam a restrição de exportadas: mudança exige `PAREI !` com tabela (`app/docs/CORTES.md:487`). Alteração efetiva de exportadas ou dinheiro pelo complemento: [nao verificado].
+
+VEREDITO: AVAL-DEVOLVIDO em 2d, 9a -- 2d deduz dono apenas do par projetado, embora a tarefa dependa do último ato (`app/chamados/services/tarefa_do_dia.py:165`); 9a afirma escritor exclusivo inexistente e não resolve a fonte do instante apagado (`app/chamados/models.py:3393`; `app/docs/RELATO.md:109`; `app/docs/CORTES.md:487`).
+
+## 16/11 18:52 · sessao 080c94e20fc7 · - · - · origem=Ronald (tmux)
+
+A alegação literal de `_escrever_carimbo` como único escritor de qualquer dos três campos é **falsa**; o próprio selo permite quatro funções de escrita em `PerguntaDisputa` (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:43-58`):
+
+- `_escrever_carimbo`: atribui os três campos em memória (`app/chamados/models.py:3207-3211`).
+- `descarimbar_em_lote`: executa `UPDATE` direto dos três campos, sem chamar `_escrever_carimbo` (`app/chamados/models.py:3391-3393`).
+- `encerrar_por_fato_no_espelho`: atribui e salva somente `via_resolucao`, preservando instante e autor (`app/chamados/models.py:3395-3403`).
+- `relavra_via.relavrar`: atribui e salva somente `via_resolucao`, juntamente com a lavra (`app/chamados/services/relavra_via.py:118-128`). A documentação distingue expressamente “escritor único da re-lavra” de escritor único **do campo** (`app/chamados/services/relavra_via.py:58-64`).
+
+Essas exceções têm chamadores de comando: `encerrar_perguntas_com_fato` chama a porta que troca somente a via; `relavrar_via_i6 --apply` chama `relavrar` (`app/chamados/management/commands/encerrar_perguntas_com_fato.py:65-76`; `app/chamados/management/commands/relavrar_via_i6.py:96-102`).
+
+Há ainda a zeragem declarativa de `materializada_por` por exclusão de usuário, porque a FK usa `SET_NULL`; o próprio selo registra que esse mecanismo fica fora de seu alcance (`app/chamados/models.py:3534-3537`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:113-115`).
+
+Em testes há escritas diretas por `UPDATE`, inclusive dos três campos simultaneamente; portanto “em todo o repo” também não fecha se incluir testes (`app/chamados/tests/test_e1_volta2.py:204-206`; `app/ponto/tests/test_o261e_f1c4_ressuscita_pergunta_ao_c6.py:169-170`).
+
+As migrações encontradas para esses campos adicionam/alteram esquema: a 0016 adiciona instante e autor nulos, e a 0033 adiciona via com `default=''`; execução efetiva dessas migrações nesta base: [nao verificado] (`app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:21-29`; `app/chamados/migrations/0033_perguntadisputa_via_resolucao.py:13-16`).
+
+A simulação da ressuscitação chama `descarimbar(salvar=False)` em cópia; a ressuscitação efetiva chama `descarimbar_em_lote` (`app/chamados/models.py:1544-1557`; `app/chamados/models.py:1628-1630`). O homônimo de `RegularizacaoExterna` também recebe instante e autor, mas pertence a outro modelo (`app/chamados/services/regularizacao_ext.py:198-201`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:47-49`).
+
+O levantamento por AST incluindo migrações, com tratamento de aliases/dicionários conforme o scanner existente, encontrou os quatro escritores de `PerguntaDisputa` acima; inexistência absoluta de outros mecanismos dinâmicos fora do alcance do scanner: [nao verificado] (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:99-115`). A identidade Git HEAD/hash não pôde ser confirmada porque a cópia não contém repositório Git: [nao verificado].
+
+## 16/11 18:51 · sessao 2e39e403ec2d · - · - · origem=Ronald (tmux)
+
+**9a — Não fecha a premissa nem o literal.** O comentário realmente chama os três campos de “UM ato”, mas `_escrever_carimbo` não é escritor exclusivo: `descarimbar_em_lote` executa `update()` direto dos três; `encerrar_por_fato_no_espelho` escreve apenas `via_resolucao`; o selo declara ainda `relavra_via.relavrar` como escritor da via (`app/chamados/models.py:3184`; `app/chamados/models.py:3391`; `app/chamados/models.py:3393`; `app/chamados/models.py:3402`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:44`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:51`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:57`).
+
+O corte manda, se residual, **“efeito = o ato de materializacao, valor conservado”**; o registro da re-medição declara precisamente F2 L1 **RESIDUAL, não MOOT**, porque descarimbar apaga e a projeção consulta o campo atual (`app/docs/CORTES.md:487`; `app/docs/RELATO.md:109`). O código confirma: descarimbo apaga o instante; a projeção temporal começa pelo valor atual, apenas escondendo valores posteriores a `agora`, sem reconstruir um carimbo apagado (`app/chamados/models.py:3318`; `app/chamados/juizes.py:1390`; `app/chamados/juizes.py:1396`). “Ler o campo é ler o ato” não demonstra a fonte do instante anterior que permanece residual (`app/docs/RELATO.md:109`).
+
+**9b — Fecha como conservação do resultado atual, não como resolução de 9a.** Descarimbar grava `None` para instante e autor, e `''` para via; portanto dizer genericamente “os três gravam None” seria inexato (`app/chamados/models.py:3318`; `app/chamados/models.py:3322`). Preservar esse resultado presente não fornece o instante apagado referido pela re-medição (`app/chamados/juizes.py:1390`; `app/docs/RELATO.md:109`).
+
+**9c — A premissa confere; o registro lateral não sana 9a.** Os oito tipos de `DecisaoPergunta` não incluem materialização, e a remessa explícita do item 3 do corte é do predicado novo de absorção para E4d (`app/chamados/models.py:4024`; `app/chamados/models.py:4035`; `app/docs/CORTES.md:487`). Retirar a remessa de F2 L1 evita aquele desvio, mas não comprova cumprimento do destino residual do item 1 (`app/docs/CORTES.md:487`; `app/docs/RELATO.md:109`).
+
+**Exportada/dinheiro/`!`:** o corte exige que `supra_juiz` em competência exportada não mude; eventual DIFF divergente exige `PAREI !` com tabela (`app/docs/CORTES.md:487`). Existe alcance indireto concreto: CSF lê `sem_veredito_entre` para pai e destino e decide a permissão de execução pelo resultado (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:574`; `app/ponto/supra_juiz.py:588`). Invariância efetiva de frota e efeito monetário: [nao verificado].
+
+## 16/11 18:51 · sessao 3618618bcf91 · - · - · origem=Ronald (tmux)
+
+**2a — confere, no ramo declarado.** Última RESPOSTA com `ato_texto` vazio retorna `respondida_sem_texto` e RESPONDER do COLABORADOR; o juiz exige instante e texto não vazio na projeção. São leituras distintas, coerentes quanto ao vazio, sem equivalência garantida entre ato e projeção (`app/chamados/services/tarefa_do_dia.py:159`; `app/chamados/services/tarefa_do_dia.py:161`; `app/chamados/juizes.py:1546`; `app/chamados/juizes.py:1552`).
+
+**2b — fecha o defeito anterior da conservação da API.** A API calcula `aguarda_admin` exclusivamente de `_estado == RESPONDIDA`; conservar essa expressão elimina a mudança adicional em pares legais que decorreria de consultar o dono (`app/api/views.py:2550`; `app/api/views.py:2553`; `app/chamados/services/tarefa_do_dia.py:176`). A prova efetiva main/cópia, por pk, continua [nao verificado]. O corte F6 trata do dono em F6; o corte F5 mantém resposta vazia fora do app e registra a pergunta de lei, permitindo delimitar a conservação proposta à F2 (`app/docs/CORTES.md:487`; `app/chamados/services/pergunta_no_app.py:81`).
+
+**2c — confere.** Ressuscitar preserva a fila existente e não grava REABERTURA nesse caminho; a lei sobre devolver ao colaborador continua registrada e não decidida, inclusive junto da pergunta sobre resposta vazia (`app/chamados/models.py:1622`; `app/chamados/models.py:1626`; `app/chamados/models.py:1629`; `app/docs/RELATO.md:131`; `app/docs/LEIS.md:151`). Não autoriza correção nova na F2; eventual nova decisão e DIFF são futuro declarado no anexo [nao verificado].
+
+**2d — não fecha como afirmação universal.** Viva com instante e texto vazio satisfaz o predicado ilegal e resulta em `estado=RESPONDIDA`, porque C6 viva exclui validação e o estado usa o instante cru (`app/chamados/juizes.py:1531`; `app/chamados/juizes.py:1534`; `app/chamados/juizes.py:1405`; `app/chamados/models.py:3151`; `app/chamados/models.py:3155`). Porém esse par projetado **não garante** RESPONDER do colaborador: a tarefa lê o último ato; RESPOSTA vazia produz colaborador, DEVOLUCAO produz admin, SILENCIO produz nenhuma ação (`app/chamados/services/tarefa_do_dia.py:158`; `app/chamados/services/tarefa_do_dia.py:161`; `app/chamados/services/tarefa_do_dia.py:165`; `app/chamados/services/tarefa_do_dia.py:176`). Ainda existem guardas anteriores e exposição administrativa específica (`app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:306`; `app/chamados/services/tarefa_do_dia.py:309`; `app/chamados/services/tarefa_do_dia.py:267`).
+
+Correção necessária: medir o conjunto I-sem-T e discriminar último ato/resultado real da tarefa; afirmar colaborador apenas no ramo correspondente (`app/chamados/services/tarefa_do_dia.py:159`). Quantidade atual e ocorrência dos contraexemplos: [nao verificado]. Destinar leitores de instante cru ao complemento da B2 corresponde ao escopo documentado B/C/D; mudar a tarefa não corresponde à B2 (`app/chamados/juizes.py:1550`; `app/chamados/juizes.py:1551`; `app/docs/LEIS.md:151`).
+
+O dado fornecido não traz a saída dessa medição; os números históricos dos documentos não certificam a população atual [nao verificado]. `git rev-parse HEAD` falhou porque esta cópia não contém repositório Git; correspondência independente do HEAD com o hash fornecido: [nao verificado].
 
 ## 16/11 18:47 · sessao be76af41eae5 · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
 
@@ -645,148 +735,4 @@ Leitores adicionais: histórico, painel, fotografia, raio X, procedência da bat
 
 5. **Cobertura insuficiente para os casos acima.** A matriz L2 nova parte de ambas sem validação e valida somente SAÍDA (`test_bug_par_volta.py:244`; `test_bug_par_volta.py:251`; `test_bug_par_volta.py:268`). Os testes das duas ordens exercitam sucesso/retry, sem F6 (`test_bug_par_volta.py:44`; `test_bug_par_volta.py:60`). O teste anterior de rollback no laço fecha somente a saída e verifica apenas o motivo dela (`app/chamados/tests/test_bug_par_projetado.py:710`; `test_bug_par_projetado.py:722`). **Mudar:** acrescentar L2 nas duas ordens, irmã previamente validada, ambas sob F6, laço e passivo; medir motivo da pergunta, nota e atos nos respectivos contratos.
 
-## 16/11 18:21 · sessao 6d4997316df6 · - · - · origem=Ronald (tmux)
-
-Execução adicional concluída, sem escrita:
-
-- `python3 -B -m unittest chamados.tests.test_bug_par_sem_banco`: **RC 0, 7 testes OK**; testes em `app/chamados/tests/test_bug_par_sem_banco.py:24-185`.
-- `python3 -B -m chamados.tests.bug_par_mutantes --mutante todos`: **RC 0, 17 controles verdes e 17 mutantes mortos por asserção, todos com erros=0**; critério em `app/chamados/tests/bug_par_mutantes.py:185-215`.
-- Os cinco `c4_*`, `fundir_a_em_b`, `fundir_a_em_b_porta` e `f6_esconde` continuam **[nao verificado] em integração**: sem `--django`, o harness exclui os nomes de integração (`app/chamados/tests/bug_par_mutantes.py:139-143,178-181`).
-
-Probe AST executado confirmou que `c4_fundir_l1_em_l2` muda o retorno do helper para `bloqueada_competencia`, porém a porta continua devolvendo `bloqueada_competencia_entregue`: `_recusa_da_entrega` só distingue L5 e converte todo o restante em L1 (`app/chamados/services/validacao.py:228-230`). Portanto esse mutante tem mordida na **testemunha**, pela asserção de `app/chamados/tests/test_bug_par_volta.py:229`; a fusão efetiva na porta é coberta pelo mutante separado `fundir_a_em_b_porta`, cuja execução continua [nao verificado] (`app/chamados/tests/bug_par_mutantes.py:103-106`; `app/chamados/tests/test_bug_par_volta.py:233`).
-
-Os 17 mortos executados foram `dxg_frota`, `dxg_desligado`, `dia_civil`, `k6_so_comando`, `k6_omitido`, `unidade_sem_k6`, `marca_ignorada`, `hash_ignorado`, `bool_inteiro`, `chaves_ignoradas`, `repeticao_aceita`, `intersecao_aceita`, `selecionar_recusa`, `nova_nota`, `recalcular_f2`, `eixo_civil` e `eixo_pela_hora` (`app/chamados/tests/bug_par_mutantes.py:26-62,110-115`).
-
-## 16/11 18:20 · sessao 7bdab0342751 · UI-EDITOR-CAL-REPETIR-CONFIRMA · verificador · origem=Code
-
-**Devolvo por lacunas nos testes e pela prosa nova fora do mapa exigido pela L7.** Os casos preenchidos cobrem somente 30 dias; a sonda responde apenas pelos botões; a explicação nova está literal no template. (app/escala/tests/test_smoke_clique_folga_calendario.py:310, :324, :332, :153; app/templates/escala/folga_calendario_editar.html:131; app/docs/LEIS-UI.md:78)
-
-Execução da suíte, execução dos mutantes, histórico `71e9576bf..HEAD` e resultado em produção: **[nao verificado]**. As conclusões abaixo são de leitura do código e do patch fornecido.
-
-1) **O comportamento principal atende ao item 3; a quebra do Salvar já está implementada na cópia.**
-
-Os dois botões recebem o tamanho e chamam a mesma `fcRepetir`. Alvo vazio copia imediatamente; alvo preenchido chama `hxConfirmar`; somente resposta verdadeira executa a cópia, filtrada pelo tamanho do destino. (app/templates/escala/folga_calendario_editar.html:50, :124; app/escala/views.py:318)
-
-O Salvar já fornece `\n`, e o componente já possui `white-space:pre-line`. Portanto, nessa parte, o patch acrescenta verificação da quebra existente; não acrescenta uma correção de apresentação ao Salvar. (app/templates/escala/folga_calendario_editar.html:153; app/templates/core/_dialogo.html:122; app/escala/tests/test_smoke_clique_folga_calendario.py:294)
-
-A nova ação altera estado local e campos do formulário; a persistência continua dependendo de Salvar, pela view e pela porta existente. (app/templates/escala/folga_calendario_editar.html:127; app/escala/views.py:320, :356; app/escala/folgas.py:571)
-
-2) **Quem escreve e quem lê.**
-
-| Elemento ou dado | Quem escreve → quem lê |
-|---|---|
-| Dias persistidos por tamanho | `salvar_calendario_de_folga` grava `dias` por `update_or_create` → a view lê `cal.tamanhos` para montar o editor. (app/escala/folgas.py:594; app/escala/views.py:362) |
-| `tamanho`, `rotulo`, `n`, `marcados` do seed | A view fornece catálogo e marcações → o template escreve `#fc-seed` → o JS faz `JSON.parse` e inicializa `sel`. (app/escala/views.py:318, :363; app/templates/escala/folga_calendario_editar.html:74, :78) |
-| Estado vivo `sel[tam]` | Seed inicializa; `fcTog` altera; `copia` substitui → decisão de confirmar, texto dos dias, renderização e campos enviados leem esse estado. (app/templates/escala/folga_calendario_editar.html:79, :119, :127, :130, :131, :86, :113) |
-| Botões Repetir e parâmetro `tam` | O laço do template escreve `onclick` para 30 e 28 → clique chama `fcRepetir`; a sonda também localiza o botão por esse atributo. (app/templates/escala/folga_calendario_editar.html:50; app/escala/tests/test_smoke_clique_folga_calendario.py:144) |
-| Grade: células, número, azul e evento | `renderGrade` escreve HTML e estilos a partir de `sel` → clique chama `fcTog`; a sonda lê número, visibilidade e fundo azul. (app/templates/escala/folga_calendario_editar.html:87; app/escala/tests/test_smoke_clique_folga_calendario.py:135) |
-| Contador, marca “Vazia”, `data-fc-vazia` | Template fornece estado inicial; `renderGrade` atualiza texto, classe `hidden` e atributo → sonda lê contador; a decisão de Repetir consulta `sel`, sem reler essas marcas. (app/templates/escala/folga_calendario_editar.html:41, :95, :130; app/escala/tests/test_smoke_clique_folga_calendario.py:133) |
-| Chips e canônico | `renderGrade` escreve ambos; `nomeBase` lê o nome para o canônico → o × do chip chama `fcTog`. (app/templates/escala/folga_calendario_editar.html:80, :99, :106) |
-| Campos `dias_<tam>` em `#fc-hidden` | `syncHidden` escreve checkboxes marcados com nome e valor; `fcModo` os limpa no modo semana/dia → sonda lê valores; submissão serializa; view lê `getlist` e entrega à porta. (app/templates/escala/folga_calendario_editar.html:110, :189; app/escala/tests/test_smoke_clique_folga_calendario.py:129, :63; app/escala/views.py:342, :356) |
-| Texto dos modais | Editor compõe mensagem com rótulos/dias e frases literais → `hxConfirmar` escreve `txt.textContent` → sonda lê `textContent` e `innerText`, considerando CSS. (app/templates/escala/folga_calendario_editar.html:131, :153; app/templates/core/_dialogo.html:190; app/escala/tests/test_smoke_clique_folga_calendario.py:114, :150) |
-| Rótulos e respostas | Editor passa “Substituir”; componente escreve o botão positivo; markup fornece “Cancelar” → sonda lê e clica; handlers resolvem `true`/`false`; editor copia somente com `ok`. (app/templates/escala/folga_calendario_editar.html:132; app/templates/core/_dialogo.html:130, :157, :191; app/escala/tests/test_smoke_clique_folga_calendario.py:151) |
-| Modal aberto, promessa e foco | Markup inicia `hidden`; `hxConfirmar` guarda foco/resolver e abre; `fechar` limpa pendência, esconde e restaura foco → handlers consultam a pendência; sonda consulta `.hidden`. (app/templates/core/_dialogo.html:119, :149, :189; app/escala/tests/test_smoke_clique_folga_calendario.py:148, :156) |
-| Escape e clique fora | Handlers do componente chamam `fechar(false)` → promessa entrega falso ao editor, que preserva a grade. (app/templates/core/_dialogo.html:159; app/templates/escala/folga_calendario_editar.html:133) |
-| Autorização do Salvar | Callback escreve `confirmado` apenas durante o reenvio; listener do submit lê a flag e o modo, e calcula grades vazias usando `sel`. (app/templates/escala/folga_calendario_editar.html:145, :159) |
-| Dados e testemunhas dos testes | Fixture escreve usuário/calendários, incluindo 30 dias com `[8]`; sonda escreve `antes/logo/depois/conta/grade/modal/aberto` em `HX-CLIQUE`; Python extrai e desserializa para asserções. (app/escala/tests/test_smoke_clique_folga_calendario.py:243, :143, :156, :229) |
-
-A leitura da marca visual também inclui as seções visíveis pelo atributo `data-fc-tamanho`; esse resultado é escrito em `HX-CLIQUE-VIS` e conferido contra `[28,30,31]`. (app/escala/tests/test_smoke_clique_folga_calendario.py:68, :215, :288)
-
-3) **Os testes mordem parcialmente. As passagens abaixo são deduções estáticas; execução: [nao verificado].** [nao verificado]
-
-| Mutante | Resultado deduzido |
-|---|---|
-| Copiar antes de perguntar | **Cai no cenário preenchido de 30 dias:** `logo` precisa continuar `[8]` antes da resposta. (app/escala/tests/test_smoke_clique_folga_calendario.py:313) |
-| Cancelar também copia | **Cai em 30 dias:** exige preservação dos campos, contador e grade desenhada. (app/escala/tests/test_smoke_clique_folga_calendario.py:318) |
-| Confirmar somente no Repetir de 30 | **Passa pelos cenários presentes.** Trocar a guarda por `tam === 28 || sel[tam].size === 0` dispensa confirmação em fevereiro preenchido; nenhum teste prepara esse estado. (app/templates/escala/folga_calendario_editar.html:130; app/escala/tests/test_smoke_clique_folga_calendario.py:310, :324, :332) |
-| Escape/clique fora confirmam | **Não é exercitado pela sonda.** Ela aciona somente o ID de resposta; os handlers atuais estão corretos, mas essas saídas não têm testemunha neste smoke. (app/escala/tests/test_smoke_clique_folga_calendario.py:153, :189; app/templates/core/_dialogo.html:159) |
-| Modal inteiro com `opacity:0` | **Cai:** a sonda examina opacidade do texto e ancestrais; retorna uma linha `SEM-CAIXA`, contra a exigência de duas. (app/escala/tests/test_smoke_clique_folga_calendario.py:107, :116, :294, :317) |
-| Modal inteiro com `visibility:hidden` herdado | **Cai pelo mesmo mecanismo:** verifica a visibilidade computada do texto. (app/escala/tests/test_smoke_clique_folga_calendario.py:108, :116) |
-| Somente botões invisíveis por CSS | **Escapa dessa medição:** os botões têm apenas `textContent` lido e recebem `.click()` programático; não passam por `visivel`. (app/escala/tests/test_smoke_clique_folga_calendario.py:150) |
-
-Logo, a v3 fecha os dois mutantes CSS integrais apontados, mas não fecha a cobertura dos dois Repetir nem das duas saídas alternativas do modal. (app/escala/tests/test_smoke_clique_folga_calendario.py:107, :310, :332, :153)
-
-4) **Classes de reprovação.**
-
-- **Diálogo nativo:** não aparece no novo caminho; usa `hxConfirmar`. Há guarda global contra os formatos nativos enumerados. (app/templates/escala/folga_calendario_editar.html:131; app/core/tests/test_contract_l8_dialogo.py:42, :56, :91)
-- **L7:** a mensagem é dinâmica e chega ao componente, mas a explicação “Repetir troca esses dias…” nasce literal no template, sem mapa compartilhado com a decisão. Isso não satisfaz integralmente a L7. A prosa antiga já enfileirada permanece assunto separado. (app/templates/escala/folga_calendario_editar.html:130; app/docs/LEIS-UI.md:78; app/docs/BACKLOG.md:822)
-- **Tocar `core/_dialogo.html`:** não há hunk desse arquivo no patch fornecido; integridade histórica do intervalo Git: **[nao verificado]**. A quebra já disponível está em app/templates/core/_dialogo.html:122.
-- **Selo sem mordida:** não é inteiramente vazio — confere formulário, contador, grade desenhada e texto renderizado —, mas deixa os mutantes identificados acima. (app/escala/tests/test_smoke_clique_folga_calendario.py:313, :317, :318, :329)
-- **Relógio solto:** os novos cenários usam dias numéricos fixos e GET; os timers têm orçamento virtual de 4000 ms. Não há dependência do “hoje” nessas novas asserções; passagem na régua temporal: **[nao verificado]**. (app/escala/tests/test_smoke_clique_folga_calendario.py:199, :302, :310, :324)
-- **Só uma casca:** o editor estende literalmente `base.html`; não há segunda casca selecionada nesse template. Ambas as cascas incluem o componente comum, com contrato existente. Portanto, não identifico meia correção entre cascas nesta alteração local. (app/templates/escala/folga_calendario_editar.html:1; app/templates/base.html:388; app/templates/base_app.html:145; app/core/tests/test_contract_l8_dialogo.py:146)
-
-5) **`padrao=fonte unica`: compatível com o estado; incompleto para a mensagem.**
-
-O termo existe no glossário. A nova decisão, os dias nomeados e a cópia consultam a mesma fonte viva `sel`; o modal continua delegado ao componente único. Nesse sentido restrito, o diff mantém a fonte única, embora não introduza uma centralização nova. (app/docs/GLOSSARIO.md:11; app/templates/escala/folga_calendario_editar.html:127, :130, :131)
-
-O texto explicativo continua fora de um mapa compartilhado com a decisão, portanto o rótulo não resolve a pendência da L7. A mensagem efetiva do commit: **[nao verificado]**. (app/templates/escala/folga_calendario_editar.html:132; app/docs/LEIS-UI.md:78)
-
-VEREDITO: DEVOLVE -- fevereiro preenchido sem cobertura (app/escala/tests/test_smoke_clique_folga_calendario.py:332); Escape/clique fora sem cobertura (app/escala/tests/test_smoke_clique_folga_calendario.py:153); explicação nova fora do mapa exigido pela L7 (app/templates/escala/folga_calendario_editar.html:132; app/docs/LEIS-UI.md:78).
-
-## 16/11 18:20 · sessao b1ac6c67cd5d · - · - · origem=Ronald (tmux)
-
-Mapa dos leitores/escritores, sem achado novo de compatibilidade nos consumidores:
-
-1. **Estados K6 / retornos.** `_k6_que_barra` produz `None | (estado, texto)`, distinguindo ausência de dia e entrega, e conserva o desvio das 163 (`app/chamados/services/materializacao.py:792`, `:800`, `:804`, `:806`). `entrega_que_barra_a_validacao` apenas compõe essa consulta para pergunta + irmã (`app/chamados/services/validacao.py:209`, `:221`). Seus leitores encontrados são a testemunha, que separa `[0]`/`[1]`, e as duas guardas da porta, que usam `_recusa_da_entrega` (`app/chamados/services/materializacao.py:880`; `app/chamados/services/validacao.py:648`, `:685`, `:224`). **Não encontrei leitor esperando `str` da entrega** nesses usos (`app/chamados/services/materializacao.py:882`; `app/chamados/services/validacao.py:228`, `:230`).
-
-   `_competencia_que_barra` **continua devolvendo texto**, por contrato e implementação: extrai `_k6[1]`, ou compõe F6, ou devolve `''` (`app/chamados/services/materializacao.py:812`, `:821`, `:828`, `:829`). Seus leitores continuam corretamente textuais: detalhe da testemunha no par/avulso e erro da unidade (`app/chamados/services/materializacao.py:903`, `:905`, `:927`, `:929`, `:1794`, `:1796`). O mock textual remanescente do teste é legítimo porque mira esse helper, não a entrega (`app/chamados/tests/test_bug_par_sem_banco.py:152`).
-
-2. **Tela e adaptadores.** O card consulta a testemunha por filtro e decide pelos estados; os dois novos estados mostram detalhe e tiram Validar (`app/chamados/templatetags/chamados_tags.py:131`, `:136`, `:139`; `app/templates/chamados/partials/_pergunta_card.html:43`, `:44`, `:47`). `fio.py` publica `estado_aplicacao` e converte ausência/falha em indisponível (`app/chamados/services/fio.py:373`, `:375`, `:378`). O modal mostra o detalhe pelos estados e suprime Validar pelos estados (`app/templates/chamados/partials/modal_fio.html:230`, `:252`, `:274`). A casca da ação usa `estado`, `ok`, `msg` e erros; estados K6 desconhecidos individualmente caem corretamente no `ok=False` (`app/chamados/services/acoes_disputa.py:23`, `:32`, `:50`).
-
-   **Não encontrei decisão da tela pelo texto de `detalhe`** nos leitores acima; os helpers de espera também conferem primeiro o estado e só então devolvem o detalhe (`app/chamados/services/materializacao.py:757`, `:758`, `:772`, `:773`). O explicador consulta os estados de recusa terminais e a mesma espera; perguntas simplesmente respondidas continuam no caminho genérico “aguarda validação” (`app/chamados/services/explicador.py:100`, `:124`, `:125`, `:131`, `:133`).
-
-3. **Contextvar / sentinela.** A contextvar nasce com `default=None`; a única instalação está em `_validar_o_par`; a lista recebe apenas conflitos traduzidos como `COMPETENCIA_APROVADA`; a leitura pós-rollback e o reset ficam na porta (`app/chamados/services/materializacao.py:1759`, `:1446`, `:1448`, `:1449`; `app/chamados/services/validacao.py:545`, `:555`, `:563`). A sentinela é criada, devolvida e testada por identidade apenas nesse fluxo; seu leitor evita rodar a metade sozinha (`app/chamados/services/validacao.py:519`, `:560`, `:680`, `:682`).
-
-4. **`recusa_motivo`.** O escritor usado pelo delta continua `_carimbar_recusa`: relê banco, limita 240, classifica pelo catálogo, grava motivo e chama a porta de nota; só colisão carimba identidade (`app/chamados/services/materializacao.py:1619`, `:1625`, `:1626`, `:1627`, `:1629`, `:1635`, `:1638`, `:1643`). Os demais caminhos existentes são: pendência de marco no materializador; recusa humana na validação; escape da resposta; duplicata via porta de identidade (`app/chamados/services/materializacao.py:1326`; `app/chamados/services/validacao.py:823`; `app/chamados/services/disputa_emissao.py:1511`; `app/chamados/services/fio.py:1404`; `app/chamados/models.py:3297`).
-
-   Leitores relevantes: devolução decide por motivo preenchido e copia-o no ato; contador de paridade lê tradução; modal/card de atendimento exibem motivo; explicador o exibe em pendência; comando o fotografa (`app/chamados/services/validacao.py:262`, `:278`; `app/chamados/services/materializacao.py:300`; `app/templates/chamados/partials/modal_fio.html:226`; `app/templates/chamados/partials/_card_atendimento.html:192`; `app/chamados/services/explicador.py:113`; `app/chamados/management/commands/bug_par_103.py:69`). Fora do delta existe leitor textual por regex em `flip_auto`, mas restrito à via de paridade terminal, não aos novos estados/detalhe (`app/ponto/services/flip_auto.py:128`, `:132`).
-
-5. **`validada_em`.** A assinatura do admin é escrita por `_carimbar_validacao`, com ato VALIDACAO no mesmo instante; a devolução limpa a assinatura e registra DEVOLUCAO com o motivo persistido (`app/chamados/services/validacao.py:161`, `:168`, `:171`, `:173`, `:269`, `:272`, `:275`, `:278`). A devolução das 103 também limpa; resposta nova e reabertura limpam pelos caminhos preexistentes (`app/chamados/services/validacao.py:345`; `app/chamados/services/disputa_emissao.py:1494`, `:1609`). O modelo ainda oferece a assinatura opcional no carimbo com `resposta='validar'`, restauração em memória e limpeza em lote da ressuscitação; não nasceram no delta (`app/chamados/models.py:3244`, `:3245`, `:3274`, `:1629`).
-
-   Leitores que importam aqui: porta evita revalidar, card/modal distinguem assinatura, juiz de vida considera assinatura, laço exige assinatura e relê após trava; passivo fotografa-a na reversão (`app/chamados/services/validacao.py:806`, `:971`; `app/templates/chamados/partials/_pergunta_card.html:20`, `:42`; `app/templates/chamados/partials/modal_fio.html:228`; `app/chamados/juizes.py:1389`; `app/chamados/services/materializacao.py:2029`, `:2046`; `app/chamados/services/passivo_validado.py:66`). Outros leitores existentes incluem estado projetado, estatísticas do painel e verbos (`app/chamados/models.py:3151`; `app/chamados/services/painel.py:270`; `app/chamados/services/verbos.py:264`).
-
-6. **`materializada_em`.** A atribuição canônica permanece `_escrever_carimbo`; `carimbar`, `carimbar_identidade`, `descarimbar` e lote administram o ato conjunto instante/autor/via; o delta usa essas portas (`app/chamados/models.py:3183`, `:3207`, `:3209`, `:3239`, `:3293`, `:3391`). O estado da pergunta/testemunha lê carimbo + via, não presume que qualquer carimbo significa batida gravada (`app/chamados/models.py:3153`; `app/chamados/services/materializacao.py:856`, `:862`, `:865`).
-
-   No laço, seleção exige carimbo nulo e a releitura após trava evita executar a irmã já gravada; no passivo, o universo vem do juiz de lastro, contradiz carimbo falso, e a releitura também evita replantio pela irmã (`app/chamados/services/materializacao.py:2030`, `:2039`, `:2040`, `:2043`; `app/chamados/services/passivo_validado.py:4`, `:534`, `:535`, `:537`). A guarda de espera da escrita usa o derivador sem o atalho do carimbo justamente para o passivo (`app/chamados/services/materializacao.py:761`, `:764`, `:772`).
-
-7. **Nota e atos.** O delta chama `_carimbar_recusa`, que chama `nota.anexar_ocorrencia` com `objeto_ref=pergunta:código`; a porta de notas produz chave por chamado/tipo/ref/autor e faz create/get em duplicação (`app/chamados/services/materializacao.py:1643`; `app/chamados/services/nota.py:62`, `:75`, `:95`, `:100`, `:103`, `:107`, `:109`). O fio carrega followups e os templates mostram conteúdo; não encontrei novo escritor direto da nota (`app/chamados/services/fio.py:202`, `:206`; `app/templates/chamados/partials/modal_fio.html:500`; `app/templates/chamados/partials/_card_atendimento.html:53`).
-
-   A porta única de escrita dos atos continua `DecisaoPergunta.registrar`, com `bulk_create`; os atos VALIDACAO/DEVOLUCAO continuam chamados pelos escritores canônicos da validação (`app/chamados/models.py:4110`, `:4120`; `app/chamados/services/validacao.py:173`, `:275`). Leitores fora diff: histórico de respostas; rótulo das 103; tarefa do dia com a última decisão e horizonte; backfills/foto de auditoria (`app/chamados/models.py:3667`, `:3675`; `app/chamados/services/materializacao.py:275`; `app/chamados/services/tarefa_do_dia.py:158`, `:165`, `:167`, `:421`, `:430`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`; `app/chamados/services/foto_e4b.py:280`).
-
-8. **Contador e comando.** O contador conserva U163 por PK, distribui estados não previstos em `outras`, conserva espera somando em pendentes, e separa as 103 sem dia/entregues pelo retorno de `competencia_do_fato` (`app/chamados/services/materializacao.py:321`, `:330`, `:331`, `:333`, `:339`, `:344`, `:347`, `:351`, `:356`). O comando usa a mesma composição de competência, lista fora163 sem dia/entregue e produz linha falante; não consome o retorno alterado da entrega (`app/chamados/management/commands/bug_par_103.py:58`, `:59`, `:62`, `:71`, `:74`, `:75`, `:77`).
-
-**Classificação textual existente, distinta de decisão da tela:** `traduzir_recusa` classifica texto por marcas; c4 chama esse catálogo, sem criar classificador paralelo; o passivo primeiro lê mudança de via e só depois traduz o erro (`app/chamados/catalogo/recusa.py:96`, `:100`, `:101`; `app/chamados/services/materializacao.py:1448`; `app/chamados/services/passivo_validado.py:140`, `:143`, `:144`).
-
-## 16/11 18:20 · sessao 6d4997316df6 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia: prova de integração executada ausente [nao verificado].** Os cinco `c4_*`, `fundir_a_em_b`, `fundir_a_em_b_porta` e `f6_esconde` exigem `--django` (`app/chamados/tests/bug_par_mutantes.py:139-143,172-181`); não executei porque o runner abre banco e cria diretórios (`app/config/settings/ci.py:6-18,26-33`). Não declarar esses mutantes mortos por asserção sem a execução autorizada e sua evidência [nao verificado].
-
-2. **Âncoras conferidas em memória; nenhum erro de alvo encontrado.** Todos os nove alvos têm exatamente uma ocorrência no arquivo e na função declarada; o código mutado compila e o teste alvo existe: `app/chamados/tests/bug_par_mutantes.py:33-34,94-106,123-137`. Correspondências:
-   
-   | Mutante | Ponto efetivamente alterado | Asserção que deve matá-lo; integração ainda [nao verificado] |
-   |---|---|---|
-   | `c4_fundir_l1_em_l2` | `materializacao.py:806` | `test_bug_par_volta.py:229` |
-   | `c4_motivo_l2_paridade` | `materializacao.py:1447` desativa registro da recusa | `test_bug_par_volta.py:258` |
-   | `c4_desligar_portao_l3` | `materializacao.py:742` elimina pertencimento das divergências | `test_bug_par_volta.py:281` |
-   | `c4_barrar_l4` | `materializacao.py:919`, ramo aplicável do **par** | `test_bug_par_volta.py:293` |
-   | `c4_fundir_l5_em_l1` | `materializacao.py:804` | `test_bug_par_volta.py:307` |
-   | `fundir_a_em_b` | `materializacao.py:882` | `test_bug_par_volta.py:229` |
-   | `fundir_a_em_b_porta` | `validacao.py:230` | `test_bug_par_volta.py:233` |
-   | `k6_omitido` | `materializacao.py:805` | **EXECUTADO: AssertionError**, `test_bug_par_sem_banco.py:143`; controle verde, mutante falhas=1/erros=0 | [nao verificado]
-   | `f6_esconde` | `materializacao.py:904-905`, F6 do par | `test_bug_par_volta.py:247` |
-
-   O harness muta fontes e `__code__` somente em memória, restaura ambos e exige `failures` sem `errors`/`skipped`; erro não conta como morte (`app/chamados/tests/bug_par_mutantes.py:192-217`).
-
-3. **Fila: L4 não cobra os atos na própria linha da matriz.** O teste cobra retorno, batidas, carimbos e via, mas seu helper não verifica `DecisaoPergunta`; remover os atos poderia passar essa linha (`app/chamados/tests/test_bug_par_volta.py:288-297`; `app/chamados/tests/test_bug_par_projetado.py:103-110`). Acrescentar asserção de `VALIDACAO` nas duas metades; existe cobertura semelhante em outro teste, fora da linha L4 (`app/chamados/tests/test_bug_par_projetado.py:144-146`).
-
-4. **Fila: L3 pode passar com a espera sem texto na tela.** O helper calcula “mostra detalhe”, porém L3 descarta esse terceiro resultado e cobra apenas botão/atributo de espera (`app/chamados/tests/test_bug_par_volta.py:207-209,280-282`). Cobrar também o detalhe nos dois HTMLs.
-
-5. **Fila: L5 não prova “K6 não consultado”.** O teste cobra estado, detalhe, ocultação e persistência, mas não verifica chamadas ao juiz (`app/chamados/tests/test_bug_par_volta.py:303-313`). Consultar K6 indevidamente antes de devolver L5 poderia passar; limpar o mock e acrescentar `assert_not_called()` nesse cenário (`app/chamados/tests/test_bug_par_volta.py:28-30`).
-
-6. **Fila: F4 prova zero do recorte, mas a invariância real de entrega fica limitada pelo mock.** A sequência pendentes 1→0, resolvidas 0→1 e conservação do recorte está cobrada (`app/chamados/tests/test_bug_par_volta.py:396-407`); porém `competencia_entregue` é substituído por retorno fixo `False` na fixture ancestral (`app/chamados/tests/test_bug_par_projetado.py:46-53`). A igualdade antes/depois comprova o resultado simulado; alteração do estado real de entrega permanece [nao verificado]. Para prova mais forte, usar a autoridade real com fixture de entrega controlada.
-
-7. **Sem achado adicional na estrutura das linhas L1/L2/L5.** L1 e L5 cobram estado da testemunha, estado próprio da porta, detalhe nos dois HTMLs, ausência de Validar da pergunta examinada e fotografia persistida; L2 cobra testemunha `bloqueada_competencia`, porta `nao_gravou`, motivo/nota/DEVOLUCAO `COMPETENCIA_APROVADA`, atos `VALIDACAO→DEVOLUCAO`, ausência de carimbos/batidas e irmã preservada (`app/chamados/tests/test_bug_par_volta.py:203-215,222-273,299-313`). A fotografia das notas contém apenas PKs, portanto alteração do conteúdo de nota existente escaparia dessa fotografia (`app/chamados/tests/test_bug_par_volta.py:212-215`).
-
-8. **Precedência cobrada parcialmente de forma explícita.** A testemunha é testada para F6 sobre divergência U163, depois K6 entregue e sem dia sobre F6; a porta é cobrada para F6 sobre divergência (`app/chamados/tests/test_bug_par_volta.py:315-338`). Ordem invertida de clique/retry está testada para sucesso, mas L2 novo só executa saída primeiro, irmã inicialmente não validada (`app/chamados/tests/test_bug_par_volta.py:44-66,244-273`). As variantes L2 com volta primeiro, irmã já validada/gravada, retry, passivo e laço não ficam demonstradas por esses testes [nao verificado].
-
-_6148 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6152 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
