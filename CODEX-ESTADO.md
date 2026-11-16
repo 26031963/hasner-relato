@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 16:38** · publicado em **16/11/2026 16:40** (UTC-3)
+> Ultima resposta processada: **16/11/2026 17:02** · publicado em **16/11/2026 17:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 17:02 · sessao 863272485906 · - · - · origem=Ronald (tmux)
+
+**CONFERE, explicitando a diferença das ordens.** A unidade fixada no complemento3 é o estado da testemunha; nessa unidade, a precedência relativa informada confere: K6, F6, DXG, aplicável, preservadas as guardas intermediárias. (`app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:884`; `app/chamados/services/materializacao.py:897`; `app/chamados/services/materializacao.py:908`; `app/chamados/services/materializacao.py:911`; `app/chamados/services/materializacao.py:914`.)
+
+A porta consulta DXG antes, depois implausibilidade, K6 explícito e materialização/F6; Q1 preserva expressamente essa ordem, e a NOTA separa os retornos. Portanto, a diferença deve constar no relatório, mas não constitui colisão residual que exija devolver o aval. (`app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:645`; `app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`.)
+
+## 16/11 17:01 · sessao 863272485906 · - · - · origem=Ronald (tmux)
+
+- **Q1 confere quanto à premissa e ao universo.** `_competencia_que_barra` pula U163 antes de consultar a data; fora163 sem dia gera o impedimento atual. `competencia_do_fato` retorna `None` antes de chamar K6. Assim, “K6 não consultado por falta de dia” corrige o “nenhum juiz consultado” de L5 sem exigir mudança do helper. (`app/chamados/services/materializacao.py:797`; `app/chamados/services/materializacao.py:799`; `app/chamados/services/materializacao.py:800`; `app/chamados/services/materializacao.py:780`; `app/chamados/services/materializacao.py:785`.)
+
+- **Q1 não garante que a porta devolva L5 em qualquer sobreposição.** A porta consulta a testemunha para extrair exclusivamente DXG; se a testemunha disser o atual impedimento por falta de dia, essa consulta devolve vazio. A porta ainda pode retornar `implausivel` antes da guarda explícita de K6. Portanto, Q1 preserva corretamente a ordem atual, mas uma promessa em Q2 de “K6/L5 primeiro também na porta” conflita com essa ordem. (`app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`; `app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:863`; `app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`.)
+
+- **Q3 confere: L5 fora163 já não entrava no contador.** O queryset é exclusivamente U163; retirar o balde projetado preserva o universo e não elimina um leitor efetivo de L5. O balde existente `bug_par_103_sem_dia` pertence às candidatas U103 já carimbadas, portanto não representa a L5 fora163. (`app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:331`; `app/chamados/services/materializacao.py:332`.)
+
+- **A lista do comando já cobre fora163 sem dia.** Ela exclui U163, consulta `competencia_do_fato` e acrescenta `None` à pauta falante. Não depende do contador para listar essa situação. (`app/chamados/management/commands/bug_par_103.py:71`; `app/chamados/management/commands/bug_par_103.py:72`; `app/chamados/management/commands/bug_par_103.py:74`; `app/chamados/management/commands/bug_par_103.py:75`; `app/chamados/management/commands/bug_par_103.py:77`.)
+
+- **Leitores de tela precisam reconhecer o estado novo**, como já autorizado pela matriz: hoje o card e o modal mostram detalhe/escondem Validar pela comparação com `bloqueada_competencia_entregue`; apenas trocar o vocabulário deixa essas comparações sem o novo nome. (`app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/modal_fio.html:252`; `app/templates/chamados/partials/modal_fio.html:274`.)
+
+- **Q1/Q3 não oferecem autorização adicional para exportada ou dinheiro.** A validação existente chama recálculo por evento depois de carimbar; ausência de nova batida não prova ausência de outras escritas. Tocar gravado exportado continua exigindo `!`; efeito produtivo concreto é [nao verificado]. (`app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:627`; `app/chamados/services/validacao.py:628`; `CLAUDE.md:265`; `CLAUDE.md:411`.)
+
+## 16/11 17:01 · sessao ef3aaae5c3ee · - · - · origem=Ronald (tmux)
+
+Q4 é construível por inspeção, sem alterar K6: a fixture mantém `competencia_entregue=False`, declara `U60=U163={saida}` e oferece as horas coincidentes com os marcos. (`app/chamados/tests/test_bug_par_projetado.py:51`; `app/chamados/tests/test_bug_par_projetado.py:79`; `app/chamados/tests/test_bug_par_projetado.py:203`; `app/chamados/tests/test_bug_par_projetado.py:209`.)
+
+A construção existente já mostra contador com `universo=1`, seguida de validação administrativa da volta, gravação das duas metades e `universo=0`. A asserção de gravação exige `materializada_em` presente e `VIA_DECLARACAO` nas duas. (`app/chamados/tests/test_bug_par_projetado.py:211`; `app/chamados/tests/test_bug_par_projetado.py:212`; `app/chamados/tests/test_bug_par_projetado.py:215`; `app/chamados/tests/test_bug_par_projetado.py:217`; `app/chamados/tests/test_bug_par_projetado.py:103`.)
+
+Por consequência estática, essa fixture permite exigir `pendentes_aval: 1→0`, `resolvidas: 0→1` e `congelados_no_recorte=1`: U103 está vazio na fixture, perguntas materializadas não elegíveis ao predicado U103 vão a `resolvidas`, e o total congelado depende da seleção por PK, não do estado. (`app/chamados/tests/test_bug_par_projetado.py:47`; `app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:356`.)
+
+Q4 fecha a distinção entre recorte resolvível e zero global e preserva a contabilização de L3: `espera_declarado` entra em `universo`, que soma em `pendentes_aval`. A identificação literal da métrica na prova deve ser `pendentes_aval`, pois `congelados_no_recorte` permanece constante. (`app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:351`; `app/chamados/services/materializacao.py:356`.)
+
+O teste F4 atual ainda não prova a nova exigência: ele obtém zero mudando K6 para verdadeiro, encaminhando a pergunta a Pauta DP. (`app/chamados/tests/test_bug_par_103.py:89`; `app/chamados/tests/test_bug_par_103.py:93`.) A execução da fixture com as novas asserções é [nao verificado].
 
 ## 16/11 16:38 · sessao 055290d9de8e · AUSENCIA-EFEITO-PELO-ESTADO · sonda · origem=Code
 
@@ -683,93 +715,4 @@ Mapa de campos e consumidores para o censo:
 
 A enumeração acima demonstra consumidores concretos, não exaustividade do futuro censo de leitores/escritores pedido pelo contrato. [nao verificado]
 
-## 16/11 15:47 · sessao 73548f0a5ded · - · - · origem=Ronald (tmux)
-
-- **(4) há erro literal de argumento:** assinatura é `afastado_hoje(colab, dia=None, *, para)`; `para='cobranca'` existe, mas `data=` não existe. A forma executável é `afastado_hoje(colab, dia=dia_celula, para='cobranca')`; retorna `Ausencia` ou `None`, não booleano estrito. (`app/ponto/turnos.py:2737`; `app/ponto/turnos.py:2743`.)
-
-- **O efeito cobrança é suportado:** exclui apenas ausência `status='rejeitada'`; folha aceita somente aprovada. Afastamento é restrito a `TIPOS_AFASTADO=('afastamento_inss',)`, com cobertura por data única, intervalo fechado ou aberto nos tipos autorizados; vence maior data e maior pk. (`app/ponto/turnos.py:2523`; `app/ponto/turnos.py:2528`; `app/ponto/turnos.py:2716`; `app/ponto/turnos.py:2727`; `app/ponto/turnos.py:2730`; `app/ponto/turnos.py:2743`.)
-
-- **(3) o dia do turno vivo já tem autoridade:** `turnos_do_colab` carrega dois dias anteriores e um posterior, pareia por vínculos/ata e devolve turnos com `data_turno` no intervalo; `batidas_do_dia_turno` coleta os pks desses turnos. Isso contempla saída no dia seguinte. (`app/ponto/turnos.py:1834`; `app/ponto/turnos.py:1847`; `app/ponto/turnos.py:1850`; `app/ponto/turnos.py:1997`; `app/ponto/turnos.py:2000`; `app/ponto/turnos.py:3115`.)
-
-- **O dia civil é `data_local(timestamp)`, usando `timezone.localtime(...).date()`.** O juiz `dia_das_batidas` atribui primeiro o dia do turno por pk e somente às não reclamadas atribui o civil; sua saída não fornece a união turno **e** civil exigida pela cláusula “OU”. A união deve ser explícita: a mesma saída de madrugada pode proteger as duas células. (`app/ponto/turnos.py:45`; `app/ponto/turnos.py:48`; `app/ponto/turnos.py:2957`; `app/ponto/turnos.py:2965`; `app/ponto/turnos.py:2967`.)
-
-- **Retratada permanece uma lacuna do desenho literal:** `batidas_apuraveis`, `turnos_do_colab` e `dia_das_batidas` excluem `retratada_em`; `dia_do_turno_da_batida` declara `None` para retratada. Portanto, ler o cru pelo civil não prova proteção da véspera à qual uma retratada noturna pertencia. O contrato precisa nomear como obter essa associação sem clonar juiz. (`app/ponto/turnos.py:2888`; `app/ponto/turnos.py:1868`; `app/ponto/turnos.py:1869`; `app/ponto/turnos.py:2927`; `app/ponto/turnos.py:2939`; `app/ponto/turnos.py:2942`.)
-
-- **Não confundir com `turnos_de_batidas`:** aceita lista carregada e chama o pareador, mas alimenta marcos do template, enquanto `turnos_do_colab` consulta vínculo do dia e papel da ata. Sua equivalência para retratadas não está demonstrada. (`app/ponto/turnos.py:1517`; `app/ponto/turnos.py:1533`; `app/ponto/turnos.py:1535`; `app/ponto/turnos.py:1932`; `app/ponto/turnos.py:1944`; `app/ponto/turnos.py:1965`.)
-
-- **`competencia_ja_paga`:** nenhuma ocorrência em `app/**/*.py` na busca desta cópia; implementação disponível: **[nao verificado]**. A obra e a definição “exportação vigente OU paga fora por cadastro com trilha” estão no BACKLOG; seu pouso continua condicionado à espinha no registro. (`app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:495`.)
-
-Mapeamento de campos e funções destas condições:
-
-| Dado/função lido | Quem escreve | Quem lê |
-|---|---|---|
-| `Batida.colaborador`, `timestamp`, `tipo` | `registrar_batida`, nos dois `create` (`app/ponto/registro_batida.py:152`; `app/ponto/registro_batida.py:158`) | `turnos_do_colab` (`app/ponto/turnos.py:1868`), `dia_das_batidas` (`app/ponto/turnos.py:2927`), `batidas_apuraveis` (`app/ponto/turnos.py:2888`) |
-| `Batida.retratada_em`, `aprovada=False` | `retratar_batida` chama `anotar` (`app/ponto/registro_batida.py:269`; `app/ponto/registro_batida.py:276`) | Os filtros anteriores; significado registrado no modelo (`app/ponto/models.py:64`; `app/ponto/models.py:67`) |
-| `Turno.data_turno` | `_mk` chama `_data_do_turno`, construindo o `namedtuple`, sem campo persistido em `Batida` (`app/ponto/turnos.py:43`; `app/ponto/turnos.py:318`; `app/ponto/turnos.py:323`) | `batidas_do_dia_turno` e `_dia_das_batidas_puro` (`app/ponto/turnos.py:3117`; `app/ponto/turnos.py:2965`) |
-| `Ausencia.tipo`, `data`, `data_fim` | criação por `criar_ausencia` e `save`; edição em `editar_ausencia_registro` (`app/ponto/services/ausencia.py:262`; `app/ponto/services/ausencia.py:562`; `app/ponto/services/ausencia.py:648`; `app/ponto/services/ausencia.py:659`) | `afastamentos_no_dia` (`app/ponto/turnos.py:2727`; `app/ponto/turnos.py:2730`) |
-| `Ausencia.status` | `mudar_estado`, que grava status e campos derivados (`app/ponto/services/ausencia.py:955`; `app/ponto/services/ausencia.py:976`; `app/ponto/services/ausencia.py:988`) | `_pelo_efeito`, usado pelo afastamento (`app/ponto/turnos.py:2528`; `app/ponto/turnos.py:2530`; `app/ponto/turnos.py:2727`) |
-| `afastado_hoje` | função leitora, sem escrita no corpo (`app/ponto/turnos.py:2737`; `app/ponto/turnos.py:2743`) | situação exibida e aviso de batida (`app/colaboradores/services/situacao_exibida.py:63`; `app/ponto/services/afastado_avisa.py:39`) |
-| `competencia_ja_paga` | escritor do futuro cadastro: **[nao verificado]** | migração dos leitores é obrigação da obra registrada (`app/docs/BACKLOG.md:1978`) |
-
-O chokepoint registrado de `Batida` é `ponto/registro_batida.py`; não haveria motivo para a O50 escrever esses campos ao apenas protegê-los. (`app/core/portas.py:99`; `app/core/portas.py:103`.)
-
-## 16/11 15:47 · sessao 8fec5aad9b26 · - · - · origem=Ronald (tmux)
-
-- **Correção de referência:** o texto disponível da LU-13 não diz “remover”; define direção, “futuras = após D”, protegendo exportada/editada/com batida e exigindo medição antes e `!` para apply retroativo. “Remover com trilha” aparece na **LU-14**. Conservar a linha atende às exclusões da LU-13, mas sua equivalência literal a “remover” da LU-14 não está estabelecida; deve subir a pergunta prevista pelo próprio complemento, sem presumir revogação. (`app/docs/CORTES.md:470`; `app/docs/CORTES.md:471`.)
-
-- **A operação não é uniforme para todo dia após `data_fim`:** no futuro civil (`d > hoje`), a porta grava `trabalha=False`, `escala_geradora=None`, `dna=montar_dna(None,...)`, `dna_anterior`, `regenerada_em` e `regeneracoes`, e desfaz o julgamento anterior. No dia corrente/passado, grava apenas `trabalha=False` e DNA com `ec`, conservando a geradora e sem os três campos de denúncia. Logo, a premissa genérica “operação existente = DNA sem vínculo” só confere para o ramo futuro. (`app/ponto/portas/celula.py:251`; `app/ponto/portas/celula.py:259`; `app/ponto/portas/celula.py:265`; `app/ponto/portas/celula.py:267`; `app/ponto/portas/celula.py:272`; `app/ponto/portas/celula.py:277`.)
-
-- **Risco literal ainda aberto:** um novo encerramento informado com `data_fim` passada pode produzir dias novos da obra que também são passados civis; excluir o “passivo já existente” não fixa expressamente esse limite. O ramo existente não fornece a denúncia que a seção 4 exige para reescrita de passado. O contrato precisa restringir a atuação nova a `dia > hoje` ou explicar a autorização e a denúncia para o outro ramo. (`app/ponto/portas/celula.py:272`; `app/ponto/portas/celula.py:279`; `CLAUDE.md:149`; `CLAUDE.md:152`; `app/docs/CORTES.md:470`.)
-
-- **Trilha atual não é garantia suficiente de sucesso:** existe chamada de auditoria ao final da regeneração, mas ela está em `try/except`, e sua falha é apenas registrada no logger; portanto, “com trilha obrigatória e atômica” não decorre dessa implementação. (`app/ponto/portas/celula.py:369`; `app/ponto/portas/celula.py:372`; `app/ponto/portas/celula.py:388`.)
-
-- **Exportada e dinheiro:** a consolidação vigente mantém `!` para paga/vínculo ou escala retroativo; dinheiro não exportado tem preaprovação condicionada à reversão anterior, hash de exportada intacta e prova de frota no mesmo marco. Exportada que muda o gravado exige `!`, DIFF, reversão e porta própria. O novo contrato pode ser mais restritivo e excluir paga/exportada, mas não deve apresentar L-092 isolada como regra não alterada: L-113 revogou antigas recusas, enquanto a regra consolidada delimita os caminhos e aprovações atuais. (`CLAUDE.md:404`; `CLAUDE.md:406`; `CLAUDE.md:407`; `CLAUDE.md:411`; `CLAUDE.md:413`; `app/docs/LEIS.md:155`.)
-
-- **Hash existente não cobre a condição (5) inteira:** `hash_do_gravado` consulta apenas `FechamentoMensal`, derivando campos concretos com uma lista de exclusões; entre os excluídos estão `previsto_em` e `derivado_em`. Não cobre `CelulaDia` nem `DiaPago`. Portanto, reaproveitá-lo sozinho não prova a condição conjunta do complemento; o futuro brief precisa nomear os campos, identidades e existência das linhas comparadas, além de isolar o efeito novo do efeito anterior do encerramento. (`app/ponto/portas/regen_exportada.py:37`; `app/ponto/portas/regen_exportada.py:56`; `app/ponto/portas/regen_exportada.py:62`; `app/ponto/portas/regen_exportada.py:71`.)
-
-- **L-099:** proibir resolver cadastro/vínculo futuro por código e mandar os casos para administração está alinhado à separação ESTRUTURA/CADASTRO/BATIDA; alterar esse alcance exigiria outra autorização. (`app/docs/LEIS.md:122`; `CLAUDE.md:179`.)
-
-- **Dependência de pagamento:** o cadastro “paga fora do sistema” e a migração conjunta dos leitores estão descritos na obra ainda registrada; o corte exige pouso atrás da espinha e medição na sombra. Não há base nesses registros para afirmar que já pousou. (`app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:495`.)
-
-## 16/11 15:33 · sessao bdfad5118ce7 · UI-EDITOR-CALENDARIO-TRES-GRADES · verificador · origem=Code
-
-1. **PROCEDE — curas do item 3; NÃO PROCEDE — cura completa do item 5.**
-
-O `finally` cobre o reenvio síncrono por `requestSubmit()`: o guarda encontra `confirmado=true`, e a autorização é zerada ao retornar, inclusive se o `required` impedir o evento ou ocorrer exceção. Também cobre o retorno de `form.submit()`; esse fallback dispensa validação e evento `submit`, mas só é chamado após resposta afirmativa. Não identifiquei novo caminho do editor que envie grade vazia em `dias_mes` sem pergunta. (`app/templates/escala/folga_calendario_editar.html:138`, `app/templates/escala/folga_calendario_editar.html:143`, `app/templates/escala/folga_calendario_editar.html:147`, `app/templates/escala/folga_calendario_editar.html:151`)
-
-Editar o nome agora apenas redesenha, sem repor `dias_*` após `fcModo()` esvaziá-los. (`app/templates/escala/folga_calendario_editar.html:128`, `app/templates/escala/folga_calendario_editar.html:180`)
-
-**Resta uma lacuna no selo das grades:** ele verifica somente a abertura das `section`, sem medir sua visibilidade após o JS. Contraexemplo por inspeção: acrescentar ao final da inicialização a ocultação de `fc-tam-30` e `fc-tam-28` preservaria as asserções estáticas; os cliques programáticos do smoke continuariam alcançando seus dias. O delta protege `hidden/display:none` diretamente na seção inicial, mas ainda não protege integralmente “três grades visíveis ao mesmo tempo”. (`app/escala/tests/test_editor_calendario_tres_grades.py:37`, `app/escala/tests/test_editor_calendario_tres_grades.py:89`, `app/escala/tests/test_editor_calendario_tres_grades.py:92`, `app/escala/tests/test_smoke_clique_folga_calendario.py:51`)
-
-Execução desse mutante: **[não verificado]**.
-
-2. **PROCEDE — leitores e escritores depois do delta.**
-
-| Valor | Quem escreve | Quem lê |
-|---|---|---|
-| `confirmado` | Inicialização em falso; resposta afirmativa põe verdadeiro; `finally` limpa. (`app/templates/escala/folga_calendario_editar.html:136`, `:150`, `:151`) | Guarda de `submit`. (`app/templates/escala/folga_calendario_editar.html:138`) |
-| `dias_<tam>` no formulário | `syncHidden()` serializa `sel`; inicialização, alternar dia, repetir e voltar a `dias_mes` o acionam. `fcModo()` limpa em `semana_dia`. (`app/templates/escala/folga_calendario_editar.html:109`, `:110`, `:119`, `:125`, `:180`, `:181`) | Navegador/sonda serializam; view lê, filtra e entrega à porta; porta persiste `dias`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:56`; `app/escala/views.py:342`, `:347`, `:356`; `app/escala/folgas.py:594`) |
-| Canônico do editor | `renderGrade()` usa seleção ordenada e nome atual; input do nome chama esse redesenho. (`app/templates/escala/folga_calendario_editar.html:80`, `:94`, `:106`, `:128`) | Exibição em `fc-canonico-*`; não é campo enviado à view. (`app/templates/escala/folga_calendario_editar.html:57`, `:106`; `app/escala/views.py:321`, `:342`) |
-| Canônico da lista | View monta a partir de nome, tamanho e dias persistidos. (`app/escala/views.py:293`, `:297`) | Template da lista imprime `t.canonico`. (`app/templates/escala/folga_calendarios_lista.html:22`) |
-
-3. **PROCEDE — o novo teste morde a autorização velha, por inspeção.** [nao verificado]
-
-A sonda apaga o nome antes do primeiro Sim e restaura antes do segundo Salvar. Sem a limpeza no `finally`, o primeiro reenvio barrado pelo `required` deixa a autorização verdadeira; o segundo clique passa sem perguntar, faltando `modal2` e aparecendo POST. As duas asserções pertinentes exigem segundo modal e `SEM-POST`. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:151`; `app/escala/tests/test_smoke_clique_folga_calendario.py:209`, `:210`, `:212`, `:213`)
-
-**NÃO PROCEDE — reabrir os descartes como bloqueadores:**
-
-- Trocar para `semana_dia` enquanto o modal está pendente não demonstra envio indevido em `dias_mes`. Contudo, a justificativa “é overlay” não garante bloqueio do teclado: o componente foca o Sim, mas não implementa contenção de foco. (`app/templates/escala/folga_calendario_editar.html:139`; `app/templates/core/_dialogo.html:160`, `:195`)
-- A contagem sem `_reenvia()` continua redundante; `SEM-POST` é a asserção efetiva. (`app/escala/tests/test_smoke_clique_folga_calendario.py:175`, `:192`, `:199`, `:200`)
-- O smoke contém leitura real do modal no Chromium, além da regex; resultado efetivamente executado não foi fornecido. (`app/escala/tests/test_smoke_clique_folga_calendario.py:69`, `:71`, `:124`, `:187`)
-
-GREEN, RED e mutante executados: **[não verificado]**.
-
-4. **NÃO PROCEDE — nova infração identificada de LEIS-UI ou dos selos estruturais.**
-
-A ajuda apontada na volta 1 foi removida, curando aquele item 6; o trecho agora entra diretamente no laço das grades. O delta mantém `hxConfirmar` e não introduz novo markup nas alterações do guarda. (`app/docs/LEIS-UI.md:77`; `app/templates/escala/folga_calendario_editar.html:39`, `:127`, `:146`, `:151`)
-
-Execução dos selos de template: **[não verificado]**.
-
-**VEREDITO: DEVOLVE 5.**
-
-_6102 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6105 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
