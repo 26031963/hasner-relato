@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 16:05** · publicado em **16/11/2026 16:07** (UTC-3)
+> Ultima resposta processada: **16/11/2026 16:10** · publicado em **16/11/2026 16:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 16:10 · sessao a83cfe3ea860 · BUG-PAR-O-PAR · verificador · origem=Code
+
+**As decisões 1(1) e 1(2) procedem como correções de origem; a abertura 1(3) precisa devolver as condições literais de L5, do contador/F4 e da precedência L2/L3.** A ambiguidade do estado e a perda do motivo estão no código; os pontos devolvidos abaixo exigem delimitação do contrato. (`app/chamados/services/materializacao.py:801`; `app/chamados/services/materializacao.py:863`; `app/chamados/services/validacao.py:527`; `app/chamados/services/materializacao.py:356`.)
+
+1. **Premissas, origem e leitores**
+
+O caso atual nasce assim: `competencia_do_fato` retorna `None` quando falta `data_evento`, antes de chamar K6; `_competencia_que_barra` transforma isso em texto impeditivo; testemunha e validação convertem qualquer impedimento desse helper em `bloqueada_competencia_entregue`. Portanto, hoje “entregue” também significa “faltou dia para consultar entrega”. (`app/chamados/services/materializacao.py:780`; `app/chamados/services/materializacao.py:785`; `app/chamados/services/materializacao.py:799`; `app/chamados/services/materializacao.py:863`; `app/chamados/services/validacao.py:614`.)
+
+Há uma delimitação importante: esse ramo **pula U163 antes de conferir a data**. Dentro de U163, o derivador aceita data do contexto; sem data também no contexto, a testemunha pode devolver `invalida`. Logo, separar o retorno ambíguo existente não equivale automaticamente a instituir L5 para todas as perguntas sem `data_evento`. (`app/chamados/services/materializacao.py:797`; `app/chamados/services/materializacao.py:613`; `app/chamados/services/materializacao.py:618`; `app/chamados/services/materializacao.py:871`.)
+
+| Leitor | Comportamento atual |
+|---|---|
+| Card | Mostra detalhe de competência e suprime Validar pelo estado entregue; F6 conserva o botão. (`app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/_pergunta_card.html:100`.) |
+| Modal | Mostra detalhe e suprime Validar por comparação do estado. (`app/templates/chamados/partials/modal_fio.html:252`; `app/templates/chamados/partials/modal_fio.html:274`.) |
+| `fio.py` | Transporta o dict da testemunha; ausência/falha vira `indisponivel`. (`app/chamados/services/fio.py:374`; `app/chamados/services/fio.py:377`; `app/chamados/services/fio.py:382`.) |
+| Filtro | Consulta a testemunha e adapta ausência/falha para indisponibilidade. (`app/chamados/templatetags/chamados_tags.py:136`; `app/chamados/templatetags/chamados_tags.py:139`.) |
+| Contador | Lê o estado das não carimbadas; estados sem ramo específico caem em `outras`. (`app/chamados/services/materializacao.py:339`; `app/chamados/services/materializacao.py:347`.) |
+| Comando | Consulta `competencia_do_fato` diretamente; já lista ausência de dia separadamente da entrega. (`app/chamados/management/commands/bug_par_103.py:58`; `app/chamados/management/commands/bug_par_103.py:62`; `app/chamados/management/commands/bug_par_103.py:74`.) |
+| Casca da ação | Para recusas não especializadas, apresenta `msg` conforme `ok=False`. (`app/chamados/services/acoes_disputa.py:50`.) |
+
+Um estado próprio **não exige juiz novo**: `ESTADOS` é vocabulário de retorno, cobrado pelo selo AST; ausência de data já é distinguida pelo helper existente, e K6/F6 já possuem autoridades registradas. Entretanto, acrescentar somente o nome à tupla não ensina os HTMLs a mostrar o detalhe e esconder Validar: suas comparações também precisam reconhecer o estado. (`app/chamados/services/validacao.py:51`; `app/chamados/tests/test_porta_validacao_pergunta.py:164`; `app/chamados/services/materializacao.py:780`; `app/core/juizes.py:315`; `app/core/juizes.py:343`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/modal_fio.html:274`.)
+
+2. **L2: motivo perdido, persistência e O44**
+
+No caminho do par, a validação da pergunta principal ocorre antes de `_validar_o_par`. O savepoint valida a irmã e tenta materializar; se não houver duas perguntas materializadas, levanta `_ParDesfeito`. O tratamento recarrega a principal e retorna `None`, sem transportar `e_par/r_par`, que somente seriam incorporados no sucesso. O chamador então executa a metade sozinha. (`app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:519`; `app/chamados/services/validacao.py:525`; `app/chamados/services/validacao.py:527`; `app/chamados/services/validacao.py:531`; `app/chamados/services/validacao.py:645`.)
+
+Na tentativa interna, F6 pode recusar o plantio da irmã; o savepoint descarta suas escritas. Na repetição isolada, a irmã novamente sem validação impede o par, e a principal cai na recusa de paridade. Portanto, nesse percurso, o motivo final pode ser **PARIDADE**, apesar da causa impeditiva encontrada na tentativa conjunta ser a competência. Esse diagnóstico não se estende a toda L2: um plantio direto pode conservar corretamente a recusa F6. (`app/ponto/registro_batida.py:156`; `app/chamados/services/materializacao.py:1662`; `app/chamados/services/materializacao.py:199`; `app/chamados/services/materializacao.py:1353`; `app/chamados/services/materializacao.py:1388`; `app/chamados/services/materializacao.py:1897`.)
+
+O resultado desse caminho recusado é:
+
+- Ato **VALIDACAO** da principal preservado e ato **DEVOLUCAO** acrescentado; `validada_em/validada_por` voltam a nulo. (`app/chamados/services/validacao.py:170`; `app/chamados/services/validacao.py:256`; `app/chamados/services/validacao.py:262`.)
+- `recusa_motivo` contém texto técnico da recusa, classificado pelo catálogo; a devolução copia esse motivo para seu ato. No percurso descrito, prevalece a classificação PARIDADE. (`app/chamados/services/materializacao.py:1598`; `app/chamados/services/materializacao.py:1610`; `app/chamados/catalogo/recusa.py:45`; `app/chamados/services/validacao.py:265`.)
+- Havendo chamado de destino e mudança de motivo, anexa ocorrência “Ponto NAO gravado no espelho [código]…”. A ausência de carimbo de materialização é condição para devolver a validação. (`app/chamados/services/materializacao.py:1612`; `app/chamados/services/materializacao.py:1615`; `app/chamados/services/validacao.py:247`.)
+
+**Corrigir o motivo cabe no O44**, preservando o toque: O44 conserva o ato administrativo, enquanto F6 continua recusando o plantio institucional; o próprio catálogo declara que `COMPETENCIA_APROVADA` sobrevive ao O44. Manter o motivo verdadeiro nas portas existentes é compatível com L-007, sem criar outro escritor. (`app/chamados/services/validacao.py:562`; `app/ponto/registro_batida.py:156`; `app/chamados/catalogo/recusa.py:16`; `app/docs/LEIS.md:65`; `app/chamados/services/materializacao.py:1591`.)
+
+3. **Condições que precisam fechar no literal**
+
+- **Q1 — L5 significa “K6 não consultado” ou realmente “nenhum juiz consultado”, e cobre qual universo?** A porta chama a espera declarado × gravado e o juiz de implausibilidade antes da guarda explícita de entrega. A composição também usa `declarou_hora` para procurar a irmã. “Nenhum juiz” exige mudar essa ordem; “K6 não consultado por falta de dia” descreve o helper atual. Além disso, U163 é pulado nesse ramo, conforme apontado acima. (`app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:190`; `app/chamados/services/validacao.py:201`; `app/chamados/services/materializacao.py:797`.)
+
+- **Q2 — Qual precedência vale quando as condições se sobrepõem?** A chamada antecipada de declarado × gravado consulta a testemunha; nela, entrega vem primeiro, seguida de outras guardas, e F6 antecede o portão DXG. Assim, uma pergunta U163 divergente e também bloqueada por F6 pode sair como `bloqueada_competencia`, não como L3. F6 usa a competência da **data local do plantio**; K6 usa a competência do **dia do fato**. A matriz precisa preservar expressamente essa precedência ou declarar a alteração pretendida. (`app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:884`; `app/chamados/services/materializacao.py:897`; `app/chamados/services/materializacao.py:908`; `app/chamados/services/materializacao.py:911`; `app/ponto/janelas.py:84`; `app/chamados/services/materializacao.py:784`.)
+
+- **Q3 — “Balde próprio” de qual contador?** O contador seleciona exclusivamente U163. Já existe `bug_par_103_sem_dia` para candidatas U103 carimbadas; não carimbadas com estado diferente caem em `outras` e continuam somando em `pendentes_aval`. Fora163 aparece na lista separada do comando. Criar uma partição sem dia dentro de U163 é compatível com o universo atual; incluir fora163 nessa conta altera seu universo, contrariando a equivalência exigida pela LEI-AKITA 8 se o rótulo continuar prometendo U163. (`app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:331`; `app/chamados/services/materializacao.py:347`; `app/chamados/services/materializacao.py:356`; `app/chamados/management/commands/bug_par_103.py:71`; `CLAUDE.md:35`.)
+
+- **Q4 — F4 exige zero num cenário resolvível ou zero global?** Um teste com validação efetiva, K6 estável e pertencimento constante é viável: materializadas que deixam de atender ao predicado U103 passam a `resolvidas`. O teste atual apenas muda K6 para verdadeiro. Porém, L3 continua somando pendência; o zeramento global não decorre da matriz, e sua possibilidade em produção é **[nao verificado]**. O contrato deve nomear `pendentes_aval` e o recorte testado; `congelados_no_recorte` permanece constante. (`app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:356`; `app/chamados/tests/test_bug_par_103.py:89`; `app/docs/PROMPTS.md:2235`.)
+
+Os estados da testemunha e da porta também precisam permanecer identificados na prova: hoje L2 mostra `bloqueada_competencia`, mas a validação devolve `nao_gravou`; L4 mostra `aplicavel`, mas a porta devolve `validada`. Exigir literalmente o mesmo estado das duas seria alteração adicional. (`app/chamados/services/materializacao.py:886`; `app/chamados/services/validacao.py:687`; `app/chamados/services/materializacao.py:900`; `app/chamados/services/validacao.py:705`.)
+
+O runner **aceita `--django` hoje**, configura o ambiente CI e utiliza o runner Django. Sem essa opção, exclui os mutantes integrados; a morte exige falha por asserção, sem erros/skips. Sua execução efetiva para a c4 é **[nao verificado]**, não uma impossibilidade do argumento. A correção da busca HTML também procede: o helper atual procura qualquer formulário de validação, sem restringir `pergunta_id`. (`app/chamados/tests/bug_par_mutantes.py:129`; `app/chamados/tests/bug_par_mutantes.py:150`; `app/chamados/tests/bug_par_mutantes.py:155`; `app/chamados/tests/bug_par_mutantes.py:164`; `app/chamados/tests/bug_par_mutantes.py:196`; `app/chamados/tests/test_bug_par_volta.py:202`.)
+
+4. **Universo protegido, dinheiro e `!`**
+
+O pertencimento permanece exclusivamente por PK, com hash, cardinalidades, disjunção e serialização conferidos pelo carregador. Alterar estado ou motivo não exige descongelar o JSON; a fixture já permite representar conjuntos sintéticos em memória. O corte fora163 exige preservar integralmente entregue nos três caminhos e listar para DP. (`app/chamados/services/universo_bug_par.py:15`; `app/chamados/services/universo_bug_par.py:20`; `app/chamados/services/universo_bug_par.py:26`; `app/chamados/services/universo_bug_par.py:35`; `app/chamados/tests/test_bug_par_volta.py:24`; `app/docs/BACKLOG.md:2066`.)
+
+**Não cabe certificar “sem dinheiro” pela ausência de batida nova.** A validação agenda recálculo antes do plantio; ele roda após commit e chama o escritor de fechamento, inclusive com persistência dos campos calculados em fechamento não aberto. Esse efeito já existe; resultado financeiro concreto ou toque produtivo em exportada nesta obra é **[nao verificado]**. A matriz de persistência L2 precisa ser entendida como persistência da pergunta/atos, não prova de ausência de outras escritas. (`app/chamados/services/validacao.py:627`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/fechamento.py:1160`.)
+
+A correção restrita de estado/motivo não requer, por si, tocar gravado exportado; qualquer execução que o faça continua sujeita ao `!` e às provas previstas. Não há liberação adicional pelo simples fato de o plantio ter sido recusado. (`CLAUDE.md:265`; `CLAUDE.md:406`; `CLAUDE.md:411`; `app/ponto/registro_batida.py:161`.)
+
+A quantidade de perguntas vivas de intervalo sem `data_evento`, exigida em 3.e, é **[nao verificado]**: o material fornecido não contém essa medição produtiva. A lista atual do comando não substitui esse censo, pois suas seleções não aplicam o predicado de pergunta viva. (`app/chamados/management/commands/bug_par_103.py:53`; `app/chamados/management/commands/bug_par_103.py:71`.)
+
+VEREDITO: AVAL-DEVOLVIDO — L5 dispensa somente K6 e cobre qual universo? Qual precedência vale entre L2/L3/L5? O balde sem dia permanece restrito a U163? F4 exige zero de `pendentes_aval` em cenário resolvível ou zero global?
+
+## 16/11 16:08 · sessao 0aa3a2dd9f8b · - · - · origem=Ronald (tmux)
+
+1. **Estado próprio não exige juiz novo.** `ESTADOS` é vocabulário de retorno, conferido por AST; o selo exige que os estados devolvidos pertençam à tupla, sem registrar autoridade nova (`app/chamados/services/validacao.py:51`, `app/chamados/services/validacao.py:57`, `app/chamados/tests/test_porta_validacao_pergunta.py:140`, `app/chamados/tests/test_porta_validacao_pergunta.py:164`). K6 e F6 já têm autoridades registradas (`app/core/juizes.py:315`, `app/core/juizes.py:343`). A composição existente declara que não é juiz novo (`app/chamados/services/materializacao.py:773`, `app/chamados/services/validacao.py:206`).
+
+2. **A ambiguidade sem dia está confirmada:** `competencia_do_fato` retorna `None` sem consultar K6 quando `data_evento=None`; a composição converte isso em texto impeditivo; testemunha e porta traduzem qualquer texto em `bloqueada_competencia_entregue` (`app/chamados/services/materializacao.py:780`, `app/chamados/services/materializacao.py:799`, `app/chamados/services/materializacao.py:863`, `app/chamados/services/validacao.py:614`).
+
+3. **L5 precisa precisar seu universo.** A composição ignora U163 antes de verificar ausência de data; o estado ambíguo desse ramo nasce para metades fora163 (`app/chamados/services/materializacao.py:797`). Dentro de U163, o derivador admite a data do contexto na ausência de `data_evento`; sem ambas, produz erro e a testemunha retorna `invalida` (`app/chamados/services/materializacao.py:613`, `app/chamados/services/materializacao.py:618`, `app/chamados/services/materializacao.py:871`). Portanto L5 universal “sem dia do fato” não corresponde somente à separação localizada do retorno atualmente ambíguo (`app/chamados/services/materializacao.py:797`, `app/chamados/services/materializacao.py:613`).
+
+4. **L5 “nenhum juiz consultado” não fecha literalmente na ordem atual.** Antes da guarda explícita de entrega, a porta chama a espera declarado × gravado e o juiz de implausibilidade; a espera consulta a testemunha, que por sua vez passa pela composição de entrega (`app/chamados/services/validacao.py:571`, `app/chamados/services/validacao.py:577`, `app/chamados/services/validacao.py:614`, `app/chamados/services/materializacao.py:753`, `app/chamados/services/materializacao.py:861`). A própria composição encontra a irmã usando `_resposta_de_hora`, que consulta `declarou_hora`; portanto “K6 não consultado por ausência de competência” é uma condição distinta e demonstrável (`app/chamados/services/validacao.py:190`, `app/chamados/services/validacao.py:201`, `app/chamados/services/validacao.py:215`, `app/chamados/services/materializacao.py:780`).
+
+5. **Leitores exigidos pelo aval estão presentes.** Card mostra detalhe e elimina Validar para o estado entregue; modal faz o mesmo por comparação de estado (`app/templates/chamados/partials/_pergunta_card.html:44`, `app/templates/chamados/partials/_pergunta_card.html:47`, `app/templates/chamados/partials/modal_fio.html:252`, `app/templates/chamados/partials/modal_fio.html:274`). `fio.py` transporta o dict da testemunha e converte ausência/falha em indisponibilidade; filtro faz adaptação equivalente (`app/chamados/services/fio.py:374`, `app/chamados/services/fio.py:377`, `app/chamados/services/fio.py:382`, `app/chamados/templatetags/chamados_tags.py:136`, `app/chamados/templatetags/chamados_tags.py:140`). Um estado novo sem atualizar as comparações dos HTMLs não ganha automaticamente detalhe e supressão de Validar (`app/templates/chamados/partials/_pergunta_card.html:44`, `app/templates/chamados/partials/_pergunta_card.html:100`, `app/templates/chamados/partials/modal_fio.html:274`, `app/templates/chamados/partials/modal_fio.html:306`).
+
+6. **“Contador põe em balde próprio” precisa nomear população e rótulo.** O contador consulta exclusivamente U163; o balde atual `bug_par_103_sem_dia` trata somente candidatas U103 carimbadas sem data; perguntas não carimbadas com outros estados caem em `outras`; fora163 não participa dessa conta (`app/chamados/services/materializacao.py:321`, `app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:331`, `app/chamados/services/materializacao.py:347`). LEI-AKITA 8 exige rótulo correspondente à conta e contador igual ao universo (`CLAUDE.md:35`). Criar um balde para estado sem dia entre as não carimbadas é compatível com uma partição de U163; incluir fora163 mudaria o universo atual (`app/chamados/services/materializacao.py:321`, `app/chamados/services/materializacao.py:351`, `app/chamados/services/materializacao.py:356`).
+
+7. **Comando já publica linha falante, mas sua lista não é censo de perguntas vivas.** Ele lista U103 por pertencimento e fora163 com resposta/texto/hora e entrega ou ausência de data; não aplica nessa seleção um filtro explícito de pergunta viva (`app/chamados/management/commands/bug_par_103.py:53`, `app/chamados/management/commands/bug_par_103.py:62`, `app/chamados/management/commands/bug_par_103.py:71`, `app/chamados/management/commands/bug_par_103.py:75`). A quantidade produtiva solicitada no item 3.e não consta no dado fornecido: **[nao verificado]**.
+
+8. **F4 pode provar zero de pendência com K6 estável, sem alterar pertencimento; o teste atual não o faz.** O teste existente zera mudando K6 para verdadeiro, sem chamar validação do admin (`app/chamados/tests/test_bug_par_103.py:89`, `app/chamados/tests/test_bug_par_103.py:91`). O contador separa `pendentes_aval` de `congelados_no_recorte`; carimbadas que deixam de atender ao predicado U103 vão para `resolvidas`, preservando U163 (`app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:328`, `app/chamados/services/materializacao.py:356`). O predicado exige via paridade e carimbo anterior a 18/10; uma recusa nova também pode deixar de atendê-lo, portanto zero isolado não prova plantio correto (`app/chamados/services/materializacao.py:259`, `app/chamados/services/materializacao.py:262`). A origem documental exige “esperado 0 pela validação do admin” (`app/docs/PROMPTS.md:2235`). Zero global de produção, incluindo esperas L3 e sem dia L5 ainda pendentes, permanece **[nao verificado]**; tais estados continuam somados no universo não carimbado (`app/chamados/services/materializacao.py:339`, `app/chamados/services/materializacao.py:351`, `app/chamados/services/materializacao.py:356`).
+
+9. **O runner aceita `--django` hoje.** O argumento existe, configura `config.settings.ci`, executa `django.setup()` e utiliza o runner Django; sem a opção, remove os mutantes de integração ou rejeita um nome integrado solicitado individualmente (`app/chamados/tests/bug_par_mutantes.py:129`, `app/chamados/tests/bug_par_mutantes.py:150`, `app/chamados/tests/bug_par_mutantes.py:155`, `app/chamados/tests/bug_par_mutantes.py:161`). A morte exige falha por asserção, sem erros nem skips (`app/chamados/tests/bug_par_mutantes.py:196`). Execução efetiva dos mutantes de integração nesta revisão: **[nao verificado]**.
+
+10. **A correção do escopo HTML pedida pelo contrato é necessária.** O helper atual procura qualquer formulário contendo a ação de validação, sem limitar `pergunta_id`, enquanto o modal é renderizado com todo o contexto do fio (`app/chamados/tests/test_bug_par_volta.py:197`, `app/chamados/tests/test_bug_par_volta.py:202`, `app/chamados/tests/test_bug_par_volta.py:203`).
+
+## 16/11 16:07 · sessao 47b3c4c134ed · - · - · origem=Ronald (tmux)
+
+- **Mudar somente o motivo da L2 cabe no O44**, preservando o toque: a porta admite o ato do admin antes do plantio e não deve barrá-lo pela tranca; a exigência de registrar o motivo verdadeiro está na L-007. (`app/chamados/services/validacao.py:562-566`; `app/chamados/services/materializacao.py:1813-1815`; `app/docs/LEIS.md:65`; `CLAUDE.md:32-34`.)
+- **Estado novo não implica juiz novo** se nomear a falta de insumo já retornada por `competencia_do_fato`; K6 e F6 já possuem autoridades registradas. A ausência de data retorna antes de K6. (`app/chamados/services/materializacao.py:778-785`; `app/core/juizes.py:315`; `app/core/juizes.py:343`.)
+- O literal disponível do **CORTE-BUG-PAR-FORA163** exige K6 nos três caminhos fora163 antes do plantio, preservação integral em entregue e lista para DP; não autoriza alterar o universo congelado. (`app/docs/BACKLOG.md:2066`; `app/docs/PROMPTS.md:2382`.)
+- **U163 é pertencimento por PK**, independente de recusa/lâmpada/devolução; carregador verifica hash, 60+103, disjunção e serialização. O SHA256 atual confere com a constante. (`app/chamados/services/universo_bug_par.py:7-35`; `app/chamados/data/bug_par_163_2026_11_13.json:1`.)
+- **O “balde próprio” precisa explicitar o universo**: o contador consulta apenas U163; carimbadas U103 elegíveis sem data já têm `bug_par_103_sem_dia`, enquanto não carimbadas com outro estado vão para `outras` e continuam em `pendentes_aval`. Fora163 sem data aparece na pauta do comando, mas não nesse contador. (`app/chamados/services/materializacao.py:320-356`; `app/chamados/management/commands/bug_par_103.py:71-85`.)
+- A **LEI-AKITA 8** obriga rótulo e universo compatíveis; ampliar esse contador para todas as perguntas vivas alteraria o universo hoje declarado. A medição de produção do contrato 3e não está fornecida: **[nao verificado]**. (`CLAUDE.md:35-36`; `app/chamados/services/materializacao.py:321`; anexo do usuário, sem arquivo local: **[nao verificado]**.)
+- **O teste atual F4 não prova validação**: troca K6 para `True` e observa migração para pauta, com `resolvidas` sem avanço. Uma prova nova pode manter K6 e conjunto sintético fixos durante a validação sem editar JSON: a fixture já substitui o carregador em memória. (`app/chamados/tests/test_bug_par_103.py:78-95`; `app/chamados/tests/test_bug_par_volta.py:24-30`.)
+- **Dinheiro é efeito possível da validação/materialização**, pois a validação chama recálculo por evento e criar batida dispara o fechamento; corrigir apenas estado/motivo não acrescenta essa chamada. Resultado financeiro concreto: **[nao verificado]**. (`app/chamados/services/validacao.py:617-629`; `app/ponto/registro_batida.py:176-180`.)
+- Tocar gravado exportado exige `!`; dinheiro em competência aberta exige reversão, hash da exportada intacto e prova de frota. A abertura restrita a estado/motivo não autoriza apply ou movimentação adicional. (`CLAUDE.md:265-268`; `CLAUDE.md:406-416`; `app/docs/PROMPTS.md:2242`.)
 
 ## 16/11 16:05 · sessao 5da8ba141dd0 · UI-VINCULO-MOSTRA-O-CALENDARIO · verificador · origem=Code
 
@@ -566,122 +662,4 @@ Achados para consolidar, só item 1:
 
 Perguntas mais fortes para AVAL-DEVOLVIDO: dependência do juiz paga; manutenção da exclusão editada e do limite direção/futuro; universo de batida e dia do turno; data/efeito do veto afastado. (`app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:470`; `CLAUDE.md:149-167`; `app/ponto/turnos.py:2523-2532`, `:2716-2744`, `:2868-2895`.)
 
-## 16/11 15:16 · sessao ed7650d71c30 · UI-EDITOR-CALENDARIO-TRES-GRADES · verificador · origem=Code
-
-Análise por leitura da cópia e do diff. Execução da suíte, navegador e mutantes: **[não verificado]**. Os números de produção citados nos comentários não têm demonstração no dado fornecido. (`app/escala/tests/test_editor_calendario_tres_grades.py:6`)
-
-1. **PROCEDE — leitores e escritores identificados.**
-
-| Campo/valor | Quem escreve | Quem lê |
-|---|---|---|
-| `dias_<tam>` | `syncHidden()` serializa `sel` em inputs. (`app/templates/escala/folga_calendario_editar.html:113`) | A view lê, filtra `1..tam` e entrega à porta; a porta persiste. (`app/escala/views.py:342`, `app/escala/views.py:347`, `app/escala/views.py:356`, `app/escala/folgas.py:594`) |
-| `data-fc-vazia` | HTML inicial usa `t.marcados`; JS atualiza pela seleção atual. (`app/templates/escala/folga_calendario_editar.html:44`, `app/templates/escala/folga_calendario_editar.html:100`) | `_vazia()` nos testes. O guarda consulta diretamente `sel.size`. (`app/escala/tests/test_editor_calendario_tres_grades.py:44`, `app/templates/escala/folga_calendario_editar.html:140`) |
-| `fc-marca-vazia` | Template cria o texto e a classe; `renderGrade()` atualiza a visibilidade. (`app/templates/escala/folga_calendario_editar.html:50`, `app/templates/escala/folga_calendario_editar.html:99`) | Usuário recebe o texto; teste procura o span fora dos scripts. (`app/templates/escala/folga_calendario_editar.html:51`, `app/escala/tests/test_editor_calendario_tres_grades.py:51`) |
-| `sel[tam]` | Inicialização pelo seed, `fcTog()` e `fcRepetir()`. (`app/templates/escala/folga_calendario_editar.html:82`, `app/templates/escala/folga_calendario_editar.html:122`, `app/templates/escala/folga_calendario_editar.html:127`) | Grade, contagem, marca, chips, inputs, repetir e confirmação. (`app/templates/escala/folga_calendario_editar.html:89`, `:97`, `:116`, `:127`, `:140`) |
-| `modo` | Radios; contexto vindo do calendário; persistência pela porta. (`app/templates/escala/folga_calendario_editar.html:20`, `app/escala/views.py:370`, `app/escala/folgas.py:585`, `app/escala/folgas.py:590`) | View, porta, guarda e alternância visual. (`app/escala/views.py:325`, `app/escala/folgas.py:584`, `app/templates/escala/folga_calendario_editar.html:139`, `:175`) |
-| `t.marcados` | View projeta `cal.tamanhos.all()`/`t.dias`; ausência vira conjunto vazio. (`app/escala/views.py:362`, `app/escala/views.py:366`) | Estado inicial, contagem, marca e seed do JS. (`app/templates/escala/folga_calendario_editar.html:44`, `:49`, `:50`, `:77`) |
-
-A origem persistida também pode nascer pelo minicadastro já existente; ele permanece em `folgas.py`. Isso não foi criado pelo diff. (`app/escala/folgas.py:645`, `app/escala/folgas.py:659`)
-
-2. **NÃO PROCEDE — segundo escritor, juiz novo ou diálogo nativo.**
-
-A view continua chamando `salvar_calendario_de_folga`; a gravação permanece nessa porta. As duas entidades têm `escala/folgas.py` como arquivo autorizado de escrita. (`app/escala/views.py:354`, `app/escala/folgas.py:594`, `app/core/portas.py:472`)
-
-A seleção editável produz tanto a apresentação quanto os campos enviados e a pergunta sobre vazio; não surgiu outra derivação das datas efetivas de folga. Essa derivação continua em `datas_que_o_calendario_manda()`. (`app/templates/escala/folga_calendario_editar.html:97`, `:116`, `:140`; `app/escala/folgas.py:43`)
-
-O diálogo utilizado é `hxConfirmar`, sem `confirm/alert/prompt/hx-confirm`. O próprio selo distingue essas chamadas. (`app/templates/escala/folga_calendario_editar.html:146`, `app/core/tests/test_contract_l8_dialogo.py:41`)
-
-3. **PROCEDE COM RESSALVA — existe confirmação que pode ficar latente.**
-
-No fluxo normal, clique, Enter e `requestSubmit()` encontram o guarda do formulário. Em `dias_mes`, grade vazia executa `preventDefault()` antes de chamar o modal; Cancelar não reenvia. (`app/templates/escala/folga_calendario_editar.html:137`, `:139`, `:143`, `:146`, `:147`)
-
-Modal indisponível não libera esse envio: o cancelamento já aconteceu; quando o componente consegue responder à falta de elementos, devolve falso sem `naoBloquear`. (`app/templates/escala/folga_calendario_editar.html:143`, `:146`; `app/templates/core/_dialogo.html:184`)
-
-**Contraexemplo por inspeção:** abrir a pergunta com nome válido, apagar o nome enquanto ela está pendente e confirmar. O `requestSubmit()` pode ser impedido pelo `required`, deixando `confirmado=true`; preencher novamente e salvar consome essa autorização antiga sem perguntar novamente. O booleano só é limpo no próximo evento `submit`. Reprodução em navegador: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:148`, `:149`; `app/templates/core/_dialogo.html:160`, `:195`)
-
-Em `semana_dia`, uma nova submissão não abre o modal. Entretanto, uma pergunta aberta anteriormente em `dias_mes` não é fechada por `fcModo()` e pode permanecer após uma troca de modo pelo teclado. Reprodução: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`; `app/templates/core/_dialogo.html:193`)
-
-Há outra inconsistência na sequência **trocar para semana → editar nome**: `fcModo()` limpa `dias_*`, mas o input do nome chama `renderTudo()` e os repõe. A view ignora esses campos em `semana_dia`; isso não demonstra gravação indevida. (`app/templates/escala/folga_calendario_editar.html:112`, `:130`, `:178`; `app/escala/views.py:327`)
-
-4. **NÃO PROCEDE — repetir fora do tamanho pelo fluxo normal.**
-
-Os dias clicáveis nascem em `1..t.n`; repetir conserva somente `d <= t.n`, exatamente o corte do criador. (`app/templates/escala/folga_calendario_editar.html:90`, `:127`; `app/escala/folgas.py:661`)
-
-O corte não valida o limite inferior, e a leitura do legado não saneia os dias. Portanto, garantia absoluta para calendários previamente malformados não está demonstrada; existência desses registros: **[não verificado]**. (`app/escala/views.py:362`, `app/templates/escala/folga_calendario_editar.html:127`)
-
-5. **PROCEDE — os quatro mutantes indicados têm mordida identificável, mas há lacunas.**
-
-As falhas abaixo são previstas pela leitura; não são resultados de execução. **[não verificado]**
-
-| Mutante | Asserção que deve falhar |
-|---|---|
-| Tirar a marca | Contagem de marcas vazias; se todas ficarem visíveis, contraponto do calendário completo. (`app/escala/tests/test_editor_calendario_tres_grades.py:99`, `:109`) |
-| Tirar o guarda de submit | Exigência de modal e de `SEM-POST` ao cancelar. (`app/escala/tests/test_smoke_clique_folga_calendario.py:174`, `:183`, `:186`) |
-| Repetir sem corte | Comparação dos campos capturados **antes** da filtragem da view. (`app/escala/tests/test_smoke_clique_folga_calendario.py:195`, `:196`) |
-| Sonda em captura | Cancelar encontrará POST capturado em vez de `SEM-POST`. A sonda atual respeita `defaultPrevented` em bolha. (`app/escala/tests/test_smoke_clique_folga_calendario.py:51`, `:57`, `:186`) |
-
-**Lacuna relevante:** esconder as seções 30/28 pode manter os testes verdes. O teste das três grades verifica seções/IDs; a marca “visível” considera apenas `hidden` no próprio span; o smoke usa `.click()` programático sem medir visibilidade. Assim, a promessa “três grades ao mesmo tempo” não está protegida contra ocultação. (`app/escala/tests/test_editor_calendario_tres_grades.py:82`, `:48`; `app/escala/tests/test_smoke_clique_folga_calendario.py:50`)
-
-Há vacuidade **local** na contagem de registros antes/depois de Cancelar: esse teste nunca chama `_reenvia()`, que realiza o POST Django. A asserção `SEM-POST` continua útil. (`app/escala/tests/test_smoke_clique_folga_calendario.py:162`, `:179`, `:186`, `:187`)
-
-A regex de `hxConfirmar` não prova execução; o `wraps` prova uma chamada real no cadastro, mas não exclui um segundo update redundante nem cobre esse spy na edição. (`app/escala/tests/test_editor_calendario_tres_grades.py:118`, `app/escala/tests/test_folga_cadastro.py:19`, `:43`, `:45`)
-
-6. **PROCEDE — infração à L7.**
-
-A ajuda adicional “Cada tamanho de mês...” está hardcoded em um `<div>`, fora de tooltip/componente e de mapa compartilhado. Isso confronta diretamente a L7. A marca visível exigida pelo aval é questão distinta. (`app/templates/escala/folga_calendario_editar.html:40`, `app/docs/LEIS-UI.md:77`)
-
-**NÃO PROCEDE — infração identificada aos selos estruturais examinados.** Não há diálogo nativo ou `title` cru novo; não identifiquei atributo inválido, fonte Python ou comentário vazando. Resultado executado dos selos: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:50`, `:146`; `app/core/tests/test_contract_l8_dialogo.py:42`, `app/core/tests/test_contract_template_bem_formado.py:162`, `:169`, `:174`)
-
-7. **NÃO PROCEDE — relógio novo fora da borda ou dois significados para vazio.**
-
-`t.marcados` é a seleção carregada; `sel[tam]`, sua versão editável. Marca e atributo significam “seleção vazia” e acompanham o mesmo conjunto. Não significam “a pessoa não terá nenhuma outra origem de folga”. (`app/escala/views.py:362`, `app/templates/escala/folga_calendario_editar.html:51`, `:82`, `:97`, `:100`, `:145`)
-
-O relógio civil permanece na porta e é repassado aos consumidores. A classe “selo sem mordida” procede parcialmente pelas lacunas descritas no item 5. (`app/escala/folgas.py:599`, `app/escala/folgas.py:601`; `app/escala/tests/test_editor_calendario_tres_grades.py:82`)
-
-**VEREDITO: DEVOLVE 3, 5, 6.**
-
-## 16/11 15:15 · sessao 5db8ccbd2ba6 · - · - · origem=Ronald (tmux)
-
-Auditoria por leitura; testes não executados. [não verificado] [nao verificado]
-
-**5 — PROCEDE: os quatro mutantes indicados têm mordida identificável.**
-
-| Mutante | Teste que fica vermelho | [nao verificado]
-|---|---|
-| Retirar a marca | `app/escala/tests/test_editor_calendario_tres_grades.py:99`; remover apenas condição e deixar todas visíveis falha em `:109`. |
-| Retirar guarda do submit | Smoke exige modal em `app/escala/tests/test_smoke_clique_folga_calendario.py:174` e `:183`; Cancelar exige `SEM-POST` em `:186`. A regex isolada `test_editor_calendario_tres_grades.py:121` sobreviveria se a chamada continuasse em código morto. |
-| Repetir sem corte | FormData anterior à view precisa conter dias exatos em `app/escala/tests/test_smoke_clique_folga_calendario.py:195` e `:196`; a persistência isolada esconderia esse defeito, conforme `:193`. |
-| Sonda em captura | Registraria o evento antes do guarda; Cancelar encontraria JSON em vez de `SEM-POST`, falhando em `app/escala/tests/test_smoke_clique_folga_calendario.py:186`. Ordem atual: listener de documento em bolha e respeito a `defaultPrevented` em `:51–57`; guarda no form em `app/templates/escala/folga_calendario_editar.html:137`. |
-
-**PROCEDE: existem limites e afirmações excessivas nos selos.**
-
-- A contagem antes/depois em Cancelar é vacuamente verdadeira quanto à persistência: esse teste não chama `_reenvia`, único ponto que POSTa ao Django; `app/escala/tests/test_smoke_clique_folga_calendario.py:162`, `:179`, `:187`. O `SEM-POST` continua sendo uma asserção útil, `:186`.
-- “Três grades ao mesmo tempo” não está protegido contra ocultação: teste verifica seções/IDs, `app/escala/tests/test_editor_calendario_tres_grades.py:82`; `_marcas_visiveis` considera apenas `hidden` do próprio span, `:48`. Esconder seções 30/28 com CSS pode sobreviver, pois smoke usa `.click()` programático sem medir visibilidade, `app/escala/tests/test_smoke_clique_folga_calendario.py:50`.
-- `wraps` e `call_count` provam chamada real e resultado do cadastro, não ausência universal de outros escritores: um segundo update com valores iguais sobreviveria; `app/escala/tests/test_folga_cadastro.py:43`, `:45`, `:49`. Edição não passa por esse spy, `:19`.
-
-**6 — PROCEDE: L7 merece devolução.**
-
-A ajuda adicional é prosa fixa em `<div>`, fora de tooltip/componente/mapa: `app/templates/escala/folga_calendario_editar.html:40`; L7 proíbe ajuda hardcoded por tela em `app/docs/LEIS-UI.md:77`. O texto de confirmação usa o componente autorizado, mas continua fixo no template sem mapa compartilhado: `app/templates/escala/folga_calendario_editar.html:144`. Não conte o texto visível da marca como infração por ser visível: foi exigido expressamente pelo usuário; sua implementação está em `:50`.
-
-**NÃO PROCEDE: diálogo nativo/title cru novos.** A chamada é `hxConfirmar`, `app/templates/escala/folga_calendario_editar.html:146`; o varredor distingue essa chamada de `confirm/alert/prompt/hx-confirm`, `app/core/tests/test_contract_l8_dialogo.py:41`. A marca tem texto e não usa `title`, `app/templates/escala/folga_calendario_editar.html:50`.
-
-**NÃO PROCEDE: violação estrutural identificada nos varredores examinados.** Novos elementos não trazem atributos inválidos, fonte Python ou comentário vazando; critérios em `app/core/tests/test_contract_template_bem_formado.py:162`, `:169`, `:174`. A regex real de interpolação crua não encontrou correspondência neste template, critério `:123` e teste `:180`; verificação feita em memória, sem arquivo. A confirmação resolve `hxConfirmar` no handler, `app/templates/escala/folga_calendario_editar.html:146`, sem captura no load proibida por `app/core/tests/test_hx_nao_se_captura_no_load.py:21`.
-
-**7 — NÃO PROCEDE: relógio fora da borda introduzido.** `setTimeout(200)` serve à sonda, `app/escala/tests/test_smoke_clique_folga_calendario.py:67`; não lê data/hora civil, alvo do selo em `app/core/tests/test_selo_teste_sem_relogio.py:32`.
-
-## 16/11 15:15 · sessao 3c88f6c0f911 · - · - · origem=Ronald (tmux)
-
-**Q3 — NÃO PROCEDE no fluxo normal; há duas ressalvas de estado.**
-
-- Clique, Enter e `requestSubmit()` encontram o guarda instalado no formulário; grade vazia em `dias_mes` cancela o envio antes de chamar `hxConfirmar`. (`app/templates/escala/folga_calendario_editar.html:137`, `:139`, `:140`, `:143`, `:146`)
-- Cancelar não reenvia; o único `form.submit()` local fica depois da resposta positiva. (`app/templates/escala/folga_calendario_editar.html:147`, `:149`)
-- Modal ausente não libera envio: `preventDefault()` já aconteceu; o componente retorna falso quando faltam seus elementos e `naoBloquear` não foi passado. Se a função inteira estiver indisponível, a exceção também acontece depois do cancelamento. (`app/templates/escala/folga_calendario_editar.html:143`, `:146`; `app/templates/core/_dialogo.html:184`)
-- Submeter em `semana_dia` não abre confirmação. Voltar para `dias_mes` reconstitui os campos da seleção. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`, `:178`, `:179`)
-
-**Ressalva 1 — PROCEDE: confirmação pode ficar latente.** `confirmado=true` só é consumido pelo próximo evento `submit`. Se o `requestSubmit()` não produzir esse evento por validação inválida, a autorização fica para uma tentativa posterior. Contraexemplo por inspeção: abrir o modal com nome válido, alcançar o nome pelo teclado e apagá-lo enquanto a promessa está pendente, confirmar, preencher novamente e salvar; não haverá nova pergunta. O componente não prende o foco nem torna o formulário inerte. Esse caminho já passou por uma confirmação anterior; não equivale a “nunca chamou `hxConfirmar`”. Execução em navegador: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:148`, `:149`; `app/templates/core/_dialogo.html:119`, `:160`, `:195`)
-
-**Ressalva 2 — PROCEDE: trocar modo e depois editar nome repõe `dias_*`.** `fcModo()` limpa os campos em `semana_dia`, mas editar o nome chama `renderTudo()` → `syncHidden()` sem conferir o modo. A view ignora esses dias ao processar `semana_dia`, portanto isso não prova gravação indevida. (`app/templates/escala/folga_calendario_editar.html:112`, `:117`, `:130`, `:178`; `app/escala/views.py:327`, `:339`)
-
-**Modal visível depois da troca para `semana_dia`:** pode permanecer um modal aberto anteriormente em `dias_mes`, pois `fcModo()` não o fecha; nova submissão em `semana_dia` não o abre. Reprodução por teclado: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`; `app/templates/core/_dialogo.html:193`)
-
-_6094 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6097 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
