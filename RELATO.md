@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=767868
+ESPERANDO: codex_pergunta.sh | pid=789359
+ESTADO 13:5x BUG-PAR volta c1 VERMELHA no recorte: FAILED (failures=12, errors=1), Ran 5163, rc=1 -- 11 por universo congelado vazio nas fixtures antigas (contador universo 0), 1 teste novo do proprio c1, 1 estado bloqueada_competencia fora do vocabulario. Volta c2 no Codex construtor com as 13 por causa/classe. RED na base caiu por MaybeEncodingError do pool (sem veredito): refazer com --parallel 1. PROVA: logs/BUG-PAR-O-PAR/volta/verde_c1_falhas.txt
 ESTADO 13:4x push do marco 06ef652b6 no remoto (rc=0 13:45:33; pos_push a57656471). PROVA: logs/DUAS-PISTAS/lote7_c7/push.log
 ESTADO 13:4x O10-D PREPARA FECHADA (COMPLEMENTO-1 item 4): perguntas de lei 0; d1=d2 aceito (censo supunha distintas); cruzamento so fecha com a lista de arquivos do construtor. PROVA: logs/O10-D-PERMUTA-NA-TELA/prepara_1611.md
 ESTADO 13:4x F2 REDs (CORTES-F2-F9 item 9) revisados pela sessao (m4, m13, m14, m15, m18; M19/M20 ALVO-INDETERMINADO); base e copia de mutantes pela trava atras da BUG-PAR. PROVA: logs/ESPINHA-BRIEFS/F2/reds.md (red_base.log, mutantes_base.log)
