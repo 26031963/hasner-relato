@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 15:54** · publicado em **16/11/2026 15:56** (UTC-3)
+> Ultima resposta processada: **16/11/2026 16:05** · publicado em **16/11/2026 16:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 16:05 · sessao 5da8ba141dd0 · UI-VINCULO-MOSTRA-O-CALENDARIO · verificador · origem=Code
+
+**ITEM 2 — AVAL-DEVOLVIDO para esclarecer o literal do MORDE:** hoje “sem dias e sem link” significa ausência **visível**; dias e links dos demais calendários continuam no HTML, ocultos. (`app/templates/colaboradores/partials/painel_vinculo.html:204–208`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:130–137`)
+
+1. **As premissas conferem, com uma distinção na caixa vazia.**
+
+   Hoje não há título geral acima dos dias: aparecem apenas os rótulos mensais “Folgas Mês/Ano:” e o link “abrir este calendario”. A opção vazia diz “usar as folgas da escala (padrão do template)”; escolhê-la oculta todos os blocos. Na abertura, a visibilidade acompanha a FK do vínculo. (`app/templates/colaboradores/partials/painel_vinculo.html:195–207`)
+
+   O contexto contém `escala_ativa`, seu `tipo_escala`, todos os calendários e `folgas_projecao`, organizada por calendário, mês e dias. São o mês corrente e o próximo, incluindo a virada de dezembro para janeiro; o calendário selecionado vem de `escala_ativa.folga_calendario_id`. (`app/colaboradores/views.py:268`; `app/colaboradores/views.py:300–311`; `app/templates/colaboradores/partials/painel_vinculo.html:200`)
+
+   **Salvar vazio tem dois resultados:** havendo `tipo_escala.folga_calendario_padrao`, grava esse `FolgaCalendario`; sem padrão, grava `NULL`. Quem resolve o padrão é `vincular_folga`; quem atribui e persiste a FK é `trocar_calendario_de_folga`. A docstring desta porta diz “None = padrão”, mas seu corpo não procura padrão: salva exatamente o argumento recebido. (`app/colaboradores/views.py:230–239`; `app/colaboradores/services/vinculo.py:450–462`)
+
+   Há também herança do padrão na criação/reutilização do vínculo, preservando calendário já escolhido. Leitores relevantes incluem o painel, a geração da foto, a comparação foto/calendário e o vigia de calendário vazio; a previsão lê as `FolgaDia` materializadas e o ciclo/âncora. Portanto, FK nula não significa pessoa sem folgas. (`app/colaboradores/services/vinculo.py:151–161`; `app/colaboradores/services/vinculo.py:284–298`; `app/templates/colaboradores/partials/painel_vinculo.html:200`; `app/escala/folgas.py:99`; `app/escala/folgas.py:127`; `app/escala/folgas.py:157–158`; `app/escala/models.py:1280–1295`)
+
+   A assinatura é `datas_que_o_calendario_manda(cal, ano, mes) -> set[date]`: `None` retorna vazio; os modos usam células semana/dia ou dias por tamanho do mês. Seu universo é **aquele calendário naquele mês**, sem pessoa, vigência, folgas manuais ou precedência. O contexto já contém a projeção de todos os calendários e a identificação do padrão pelo tipo; basta reutilizá-la, sem nova chave obrigatória nem derivação paralela. (`app/escala/folgas.py:43–56`; `app/escala/models.py:89–93`; `app/colaboradores/views.py:300–311`)
+
+2. **Não identifiquei colisão necessária com as regras consultadas.**
+
+   Ler essa fonte mantém tela e escritor na mesma derivação, como exige L2; o título delimita corretamente o calendário, enquanto as folgas efetivas dependem de outros fatos e do vínculo do dia. (`app/docs/LEIS-UI.md:23–25`; `app/escala/folgas.py:158`; `app/docs/JUIZES.md:119–135`)
+
+   O link já existe, aponta para `escala:editar_folga_calendario` e depende de `editar_escalas`, a mesma ação exigida no destino. O complemento pode preservá-lo sem construir edição/versionamento. (`app/templates/colaboradores/partials/painel_vinculo.html:207`; `app/colaboradores/views.py:309`; `app/escala/views.py:315`)
+
+   O148-EDITAR continua registrado, aguardando corte para versionamento de calendário usado; o editor de três grades tem precedência sobre o painel, na mesma raia de tela. A projeção proposta não exige invadir essas obras. Conclusão atual do editor em execução: **[não verificado]**. (`app/docs/CORTES.md:357`; `app/docs/BACKLOG.md:820`; `app/docs/RELATO.md:61`)
+
+3. **O encaixe técnico fecha; o MORDE precisa de precisão textual.**
+
+   “Contexto já existente” é suficiente: calendário padrão, calendários oferecidos, meses e dias já são alcançáveis pelos dados existentes. CSS novo também é dispensável: `.font-semibold` já está definido. O título é rótulo; não exige acrescentar prosa de ajuda nem diálogo nativo. (`app/colaboradores/views.py:300–311`; `app/escala/models.py:89`; `app/static/css/hasner-ponto.css:514`; `app/docs/LEIS-UI.md:77–89`)
+
+   A ressalva literal é dupla: vínculo sem FK explícita pode ter padrão no template; e ausência visual não equivale a ausência no HTML. O teste atual mantém outros calendários na fixture e verifica que nenhum bloco está visível. Exigir ausência absoluta de dias/links no HTML mudaria esse contrato existente de alternância. (`app/colaboradores/views.py:236`; `app/templates/colaboradores/partials/painel_vinculo.html:196–207`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:120–137`)
+
+   O conteúdo integral do “censo do brief original”, citado pelo aval fornecido, permanece **[não verificado]**.
+
+4. **A projeção pode ficar fora de exportada, dinheiro e novo `!`.**
+
+   O trecho da GET consulta a fonte e monta contexto. Já o POST existente grava a FK, sincroniza fotos futuras e materializa os dois meses; alterar esses caminhos ultrapassaria a apresentação examinada e alcançaria dado de vínculo/escala, protegido por `!`. (`app/colaboradores/views.py:300–306`; `app/colaboradores/views.py:239–246`; `app/colaboradores/services/vinculo.py:461–465`; `CLAUDE.md:265–268`)
+
+VEREDITO: AVAL-DEVOLVIDO — No MORDE, “sem calendário nenhum” significa seleção vazia **e template sem padrão**, e “sem dias e sem link” significa **sem projeção/link visíveis**, preservando os blocos ocultos dos outros calendários? (`app/colaboradores/views.py:236`; `app/templates/colaboradores/partials/painel_vinculo.html:204–208`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:130–137`)
+
+## 16/11 16:04 · sessao 4fb58aa99879 · - · - · origem=Ronald (tmux)
+
+- Não há colisão necessária com LEIS-UI: a fonte única já existe, é usada pela leitura e pelo escritor; manter a projeção nela atende L2 e LEI-AKITA 2. O título é rótulo, enquanto L7 disciplina texto de ajuda. (`app/escala/folgas.py:43`, `app/escala/folgas.py:158`, `app/docs/LEIS-UI.md:24`, `app/docs/LEIS-UI.md:78`, `CLAUDE.md:20`)
+
+- O148-EDITAR permanece **só registro**: versionamento de calendário usado espera corte; o item 2 deve ficar na apresentação e preservar a porta de escrita. O editor de três grades está antes do complemento do painel, na mesma raia/agente. (`app/docs/CORTES.md:357`, `app/docs/BACKLOG.md:820`, `app/docs/RELATO.md:61`)
+
+- O link atual é **“abrir este calendario”**, condicionado por `pode_abrir_calendario`, obtido de `tem_acao(..., 'editar_escalas')`; o destino usa a mesma ação. Ele não é novo neste complemento. (`app/templates/colaboradores/partials/painel_vinculo.html:207`, `app/colaboradores/views.py:309`, `app/escala/views.py:315`)
+
+- A projeção do calendário não equivale ao julgamento das folgas efetivas da pessoa: estas dependem do vínculo do dia e da precedência. O título específico “Folgas que este calendário manda” respeita essa distinção. (`app/escala/folgas.py:44`, `app/docs/JUIZES.md:119`, `app/docs/JUIZES.md:127`, `app/docs/JUIZES.md:135`)
+
+- **CSS novo é dispensável:** a classe `.font-semibold` já existe e a folha é carregada na base. (`app/static/css/hasner-ponto.css:514`, `app/templates/base.html:17`)
+
+- Alterar apenas a projeção não requer tocar o gravado exportado, dinheiro nem dado de escala/vínculo; essas escritas continuam fora do alcance e exigiriam `!`. O GET do painel monta contexto; a edição persistente é outra porta, em POST, que atualiza calendário e sincroniza fotos futuras. (`app/colaboradores/views.py:262`, `app/colaboradores/views.py:304`, `app/colaboradores/views.py:306`, `CLAUDE.md:265`, `app/escala/views.py:320`, `app/escala/folgas.py:571`, `app/escala/folgas.py:600`)
+
+- O brief/censo bruto citado em `logs/` não está disponível nesta cópia; a enumeração dos seus leitores permanece **[não verificado]**. O RELATO conserva a proposta original e registra expressamente a ausência do título, além de pôr a caixa vazia na D1. (`app/docs/RELATO.md:4`, `app/docs/RELATO.md:63`, `app/docs/RELATO.md:65`)
+
+## 16/11 16:04 · sessao 17f5ba206479 · - · - · origem=Ronald (tmux)
+
+- **Caixa vazia grava o padrão quando há; grava nulo quando não há.** O POST resolve vazio para `ec.tipo_escala.folga_calendario_padrao` ou `None`, e chama a porta; a porta atribui exatamente esse objeto/nulo e salva o campo (`app/colaboradores/views.py:230`, `app/colaboradores/views.py:236`, `app/colaboradores/views.py:239`; `app/colaboradores/services/vinculo.py:459`, `app/colaboradores/services/vinculo.py:461`). O campo admite nulo e usa `SET_NULL` (`app/escala/models.py:890`).
+
+- **A documentação da porta é imprecisa:** diz `None = padrao do template`, mas o corpo não resolve padrão: grava `None`; quem resolve o padrão nesta ação é a view (`app/colaboradores/services/vinculo.py:451`, `app/colaboradores/services/vinculo.py:461`; `app/colaboradores/views.py:236`).
+
+- **O teste existente confirma as duas ramificações no código de teste:** vazio com padrão exige a FK padrão; vazio sem padrão exige FK nula, foto de calendário removida e manual preservada. Não executei testes (`app/colaboradores/tests/test_vincular_folga_view.py:74`, `app/colaboradores/tests/test_vincular_folga_view.py:81`, `app/colaboradores/tests/test_vincular_folga_view.py:83`, `app/colaboradores/tests/test_vincular_folga_view.py:95`, `app/colaboradores/tests/test_vincular_folga_view.py:99`).
+
+- **Na tela atual, vazio só oculta a projeção:** a opção diz “usar as folgas da escala (padrão do template)”; `onchange` oculta todo bloco cujo PK difira do valor vazio; os blocos iniciais seguem a FK explícita do vínculo (`app/templates/colaboradores/partials/painel_vinculo.html:196`, `app/templates/colaboradores/partials/painel_vinculo.html:198`, `app/templates/colaboradores/partials/painel_vinculo.html:205`). Não há título geral “Folgas que este calendario manda”; há rótulos mensais `Folgas M/Y:` e link “abrir este calendario” (`app/templates/colaboradores/partials/painel_vinculo.html:206`, `app/templates/colaboradores/partials/painel_vinculo.html:207`).
+
+- **“Sem dias e sem link” precisa significar sem dias/link visíveis naquele bloco.** Todos os calendários oferecidos têm projeção renderizada, ainda que oculta; o link sai nos blocos se `pode_abrir_calendario` for verdadeiro. O teste atual verifica ausência de blocos **visíveis**, não ausência de dias/link do HTML (`app/templates/colaboradores/partials/painel_vinculo.html:204`, `app/templates/colaboradores/partials/painel_vinculo.html:205`, `app/templates/colaboradores/partials/painel_vinculo.html:207`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:130`, `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:135`).
+
+- **O contexto existente basta como insumo.** Ele já tem `escala_ativa` com `tipo_escala`, todos os calendários e suas projeções do mês atual e próximo; a FK padrão pertence ao tipo. Pode-se selecionar/reutilizar a projeção do padrão sem nova derivação de datas nem nova fonte; a view já pergunta a fonte para todos os calendários (`app/colaboradores/views.py:268`, `app/colaboradores/views.py:300`, `app/colaboradores/views.py:301`, `app/colaboradores/views.py:302`, `app/colaboradores/views.py:304`, `app/colaboradores/views.py:307`, `app/colaboradores/views.py:311`; `app/escala/models.py:89`). Uma implementação que acrescente chave ao contexto teria de ser julgada contra o literal do aval; ela não é tecnicamente necessária para disponibilizar calendário/dias/mês, pois já estão nessas estruturas (`app/colaboradores/views.py:304`, `app/colaboradores/views.py:308`, `app/colaboradores/views.py:311`).
+
+- **A fonte é `datas_que_o_calendario_manda(cal, ano, mes) -> set[date]`.** `None` devolve conjunto vazio; modo `semana_dia` usa células; demais usam os dias por tamanho. Ela não recebe pessoa/vínculo, não filtra vigência e não calcula todas as folgas efetivas da pessoa: interpreta o calendário no mês (`app/escala/folgas.py:43`, `app/escala/folgas.py:52`, `app/escala/folgas.py:54`, `app/escala/folgas.py:56`). O universo de vínculos ativos cuja vigência alcança o mês pertence à função separada `vinculos_com_calendario_no_mes`, não à fonte (`app/escala/folgas.py:59`, `app/escala/folgas.py:74`, `app/escala/folgas.py:78`).
+
+- **Escritores/leitores relevantes:** a herança na criação/reutilização copia o padrão somente se houver e se o vínculo ainda não tiver calendário; a ação da tela e a aplicação em lote usam `trocar_calendario_de_folga`; ajustes automáticos copiam a FK ao novo vínculo (`app/colaboradores/services/vinculo.py:151`, `app/colaboradores/services/vinculo.py:157`, `app/colaboradores/services/vinculo.py:161`, `app/colaboradores/services/vinculo.py:284`, `app/colaboradores/services/vinculo.py:298`; `app/colaboradores/views.py:239`; `app/escala/views.py:408`; `app/colaboradores/services/vinculo.py:1092`, `app/colaboradores/services/vinculo.py:1113`). Leem a FK o painel, a geração da foto, a divergência, os vigias e a sincronização futura (`app/templates/colaboradores/partials/painel_vinculo.html:200`, `app/escala/folgas.py:99`, `app/escala/folgas.py:127`, `app/escala/folgas.py:157`, `app/escala/folgas.py:627`).
+
+- **Sem calendário não significa pessoa sem folgas.** A geração passa `None` à fonte e reconcilia a foto de calendário, preservando manual; a previsão de trabalho lê as `FolgaDia` e, sem foto, calcula pelo ciclo/âncora, podendo ainda aplicar feriado (`app/escala/folgas.py:153`, `app/escala/folgas.py:157`, `app/escala/folgas.py:180`, `app/escala/folgas.py:187`; `app/escala/models.py:1286`, `app/escala/models.py:1289`, `app/escala/models.py:1365`, `app/escala/models.py:1369`). Portanto, o título proposto delimita corretamente “o que o calendário manda”, mas não prova uma previsão total das folgas da pessoa (`app/escala/folgas.py:43`; `app/escala/models.py:1296`, `app/escala/models.py:1319`).
+
+- **O POST existente tem efeitos reais além da FK:** a porta sincroniza foto futura quando o calendário muda, e a view gera fotos do mês atual e próximo. A leitura/projeção da GET usa somente a fonte e não chama esses escritores (`app/colaboradores/services/vinculo.py:463`, `app/colaboradores/services/vinculo.py:465`; `app/colaboradores/views.py:245`; `app/colaboradores/views.py:304`). A sincronização futura chama regeneração sem recálculo (`app/escala/folgas.py:640`). A mudança visual pode ficar isolada disso mantendo o POST, mas efeitos de eventual implementação ainda são [não verificado].
 
 ## 16/11 15:54 · sessao faf0dcc58538 · BUG-PAR-O-PAR · verificador · origem=Code
 
@@ -608,87 +684,4 @@ A ajuda adicional é prosa fixa em `<div>`, fora de tooltip/componente/mapa: `ap
 
 **Modal visível depois da troca para `semana_dia`:** pode permanecer um modal aberto anteriormente em `dias_mes`, pois `fcModo()` não o fecha; nova submissão em `semana_dia` não o abre. Reprodução por teclado: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`; `app/templates/core/_dialogo.html:193`)
 
-## 16/11 15:14 · sessao c243c82dc789 · - · - · origem=Ronald (tmux)
-
-1. **NÃO PROCEDE — duplicidade de autoridade nos campos.**
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `dias_<tam>` | `syncHidden`, a partir de `sel[tam]`: `app/templates/escala/folga_calendario_editar.html:113` e `:117` | View lê POST em `app/escala/views.py:342`, valida em `:347`, repassa à porta em `:356`; porta persiste em `app/escala/folgas.py:593` |
-| `data-fc-vazia` | SSR com `t.marcados`: template `:44`; atualização por `arr.length`: `:100` | Teste `_vazia`: `app/escala/tests/test_editor_calendario_tres_grades.py:44`; confirmação não consulta esse atributo, consulta `sel.size`: template `:140` |
-| `fc-marca-vazia` | Elemento/classe no SSR: template `:50`; visibilidade atualizada por `arr.length`: `:99` | Leitura do HTML pelo teste: `app/escala/tests/test_editor_calendario_tres_grades.py:51`; usuário recebe texto em template `:51` |
-| `sel[tam]` | Inicialização do seed: template `:82`; interação: `:122`; repetir: `:127` | Grade `:89`, ordenação `:85`, campos POST `:116`, confirmação `:140`, origem do repetir `:127` |
-| `modo` | Radios template `:20`; persistência na porta `app/escala/folgas.py:585` e `:590`; contexto view `:370` | View POST `:325`; guarda JS template `:139`; troca visual `:175`; porta `app/escala/folgas.py:584` |
-| `t.marcados` | View projeta `cal.tamanhos.all()` em `app/escala/views.py:362` e `:366`; origem persistida `app/escala/folgas.py:595` | SSR template `:44`, `:49`, `:50`; seed `:77`, posteriormente convertido em `sel`: `:82` |
-
-2. **NÃO PROCEDE — segundo escritor persistente, juiz novo ou derivação decisória paralela.** A view continua entrando pela porta em `app/escala/views.py:354`; escrita fica em `app/escala/folgas.py:571` e `:594`. `data-fc-vazia`, marca e contagem são projeções do mesmo conjunto em template `:97`–`:100`; o guarda consulta esse conjunto em `:140`. A distinção entre lookup e registro vivo consta em `app/docs/JUIZES.md:7` e `:11`.
-
-4. **NÃO PROCEDE — repetir sem corte no fluxo normal da UI.** Dias clicáveis nascem em `1..t.n`, template `:90`; o repetir filtra `d <= t.n`, `:127`, igual ao criador em `app/escala/folgas.py:661`. Ambos deixam de validar o limite inferior nesse corte; seed legado é carregado sem saneamento em `app/escala/views.py:362`. Existência de legado com dia zero/negativo: **[não verificado]**.
-
-7. **NÃO PROCEDE — campo com dois significados ou relógio novo.** `t.marcados` representa a seleção carregada, `sel[tam]` a seleção editável; atributo, marca e contagem acompanham sua cardinalidade em template `:82`, `:97`–`:100`. O relógio existente permanece na porta em `app/escala/folgas.py:599`, repassado em `:601`.
-
-**Observação de L7:** a nova ajuda hardcoded em `app/templates/escala/folga_calendario_editar.html:41` confronta a exigência de ajuda em componente/mapa de `app/docs/LEIS-UI.md:77`–`:85`; isso é distinto da marca visível explicitamente solicitada.
-
-## 16/11 14:45 · sessao 427f2c880889 · PRIORIDADE-EV-ITEM1 · sonda · origem=Code
-
-1. A saída informa **`TOTAL|parte=3/3|dias=19|ok=19|erro=0`** e **`rc_sombra=0`**. A linha desses registros no arquivo não foi fornecida: [nao verificado]. **Disparo de tripwire: [nao verificado]**; não há resultado explícito desse controle no trecho apresentado.
-
-2. Na tabela, **espelho = `minutos_realizados` e classe = `STATUS.veredito`**; o E6 é o inteiro da linha do universo, confirmado por `confere_e6_arquivo=true`. (`app/ponto/services/espelho.py:783-819,764-895`; `app/ponto/management/commands/e6_oraculo.py:263-269,401`)
-
-| Código | Data | Espelho: minutos; classe | E6 universo | Categoria/causa apontada pelos detalhes |
-|---|---|---|---:|---|
-| col220 | 2026-11-10 | 337; `trabalhou` | 430 | **Pareamento e desconto diferentes:** espelho usa turno até 04:31 e desconta 60 min; E6 inclui 06:00 e forma dois pares, com pausa de 55,643 min. (`estrutura_dias.txt:39`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col252 | 2026-11-09 | 551; `trabalhou` | 597 | **Pausa abaixo do piso:** espelho não reconhece a pausa curta e desconta 60 min declarados; E6 desconta 13,556 min entre batidas. (`estrutura_dias.txt:40`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col252 | 2026-11-10 | 551; `trabalhou` | 598 | **Pausa abaixo do piso:** desconto de 60 min no espelho versus 13,463 min no E6. (`estrutura_dias.txt:41`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col252 | 2026-11-11 | 550; `trabalhou` | 598 | **Pausa abaixo do piso:** desconto de 60 min no espelho versus 12,814 min no E6. (`estrutura_dias.txt:42`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col252 | 2026-11-13 | 551; `trabalhou` | 597 | **Pausa abaixo do piso:** desconto de 60 min no espelho versus 13,942 min no E6. (`estrutura_dias.txt:43`; `app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col296 | 2026-11-02 | 345; `trabalhou` | 0 | **Associação ao dia divergente:** espelho atribui ao dia 02 um turno de 03/11, 00:15–07:00, calculando 405−60; E6 tem zero turnos no dia 02. (`estrutura_dias.txt:44`; `app/ponto/services/espelho.py:267-294`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col37 | 2026-11-14 | 241; `trabalhou` | 0 | **Associação ao dia divergente:** espelho atribui ao dia 14 um turno de 15/11, 02:00–07:01, calculando 301−60; E6 tem zero turnos no dia 14. (`estrutura_dias.txt:45`; `app/ponto/services/espelho.py:267-294`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col382 | 2026-11-10 | 418; `trabalhou` | 0 | **Associação ao dia divergente:** espelho usa turno de 11/11, 00:02–07:51, com pausa reconhecida de 51 min: 469−51; E6 tem zero turnos no dia 10. (`estrutura_dias.txt:46`; `app/ponto/services/espelho.py:267-294`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col516 | 2026-10-23 | 361; `folga` | 0 | **Folga com trabalho apurado:** espelho conta 01:00–07:01, sem desconto; célula registra `fato_sem_previsao` e há alerta `folga_trabalhada`. E6 tem zero turnos nesse dia; causa completa desse zero: [nao verificado]. (`estrutura_dias.txt:47`; `app/ponto/turnos.py:725-767`; `app/escala/models.py:1652-1701`; `app/ponto/services/espelho.py:450-460,767`) |
-| col516 | 2026-10-28 | 372; `trabalhou` | 0 | **Associação ao dia divergente:** espelho atribui ao dia 28 o turno de 29/10, 00:43–06:55, sem desconto; E6 tem zero turnos no dia 28. (`estrutura_dias.txt:48`; `app/ponto/services/espelho.py:267-294`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col727 | 2026-11-10 | 307; `em_aberto` | 0 | **Associação ao dia e classificação divergentes:** espelho atribui ao dia 10 o turno fechado de 11/11, 01:00–07:07, calculando 367−60; mantém classe `em_aberto`. E6 tem zero turnos no dia 10; o motor também aponta `dia_sem_previsto`/`folga_trabalhada`. (`estrutura_dias.txt:49`; `app/ponto/services/espelho.py:764-895,450-460`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col874 | 2026-10-22 | 667; `trabalhou` | 383 | **Corte e pareamento diferentes:** espelho conta 10:00–22:07 menos 60 min; no E6, 10:00 fecha fragmento iniciado em 21/10, e o dia 22 recebe somente 15:45–22:07. (`estrutura_dias.txt:50`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col884 | 2026-11-08 | 679; `rejeitado` | 699 | **Desconto e estado de ausência:** espelho desconta 60 min sem pausa reconhecida; E6 desconta 39,546 min posicionais. Há atestado `rejeitada` cobrindo o dia. (`estrutura_dias.txt:51`; `app/ponto/turnos.py:725-767,2798-2814`; `app/ponto/calculador/nucleo.py:224-247`; `app/ponto/models.py:690-705,743-754`) |
-| col909 | 2026-11-11 | 831; `em_aberto` | 245 | **Borda posicional versus cortes:** realizado usa 07:00–23:00 menos 129 min, embora haja um turno fechado e outro aberto. E6 conta apenas 07:00–11:04 e registra `impar=true`, `corte_que_orfanou=true`. (`estrutura_dias.txt:52`; `app/ponto/turnos.py:598-601,707-767`; `app/ponto/calculador/nucleo.py:215-254`) |
-| col922 | 2026-11-01 | 1382; `trabalhou` | 68 | **Turnos e pares diferentes:** realizado soma 901+481 min, sem desconto; espelho exibe apenas o turno noturno. E6 atribui ao dia somente o par 22:01–23:09, entre uma saída e uma entrada. (`estrutura_dias.txt:53`; `app/ponto/turnos.py:725-767`; `app/ponto/services/espelho.py:450-460,767`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col922 | 2026-11-04 | 676; `trabalhou` | 458 | **Turno adicional no realizado:** soma 218 min da madrugada e 458 min do turno noturno; espelho exibe só o noturno. E6 mantém a madrugada no fragmento iniciado em 03/11 e atribui ao dia 04 apenas o noturno. (`estrutura_dias.txt:54`; `app/ponto/turnos.py:725-767`; `app/ponto/services/espelho.py:450-460,767`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col989 | 2026-10-23 | 721; `trabalhou` | 567 | **Pareamento deslocado:** espelho conta entrada 17:59 até saída 06:00 seguinte, sem desconto; E6 pareia a saída 08:32 com a entrada 17:59 e corta antes de 06:00. (`estrutura_dias.txt:55`; `app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col996 | 2026-10-28 | 0; `folga` | 580 | **Saída órfã versus par posicional:** juiz apresenta apenas saída às 21:18, sem entrada, e o espelho não exibe turno; E6 pareia essa saída com a entrada de 29/10 às 06:57. (`estrutura_dias.txt:56`; `app/ponto/services/espelho.py:267-294,450-460`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col996 | 2026-11-10 | 443; `em_aberto` | 1026 | **Par adicional no E6:** realizado conta o turno diurno, 533−90; mantém saída órfã às 21:16. E6 acrescenta o par dessa saída com a entrada de 11/11 às 06:59. (`estrutura_dias.txt:57`; `app/ponto/turnos.py:725-767`; `app/ponto/services/espelho.py:267-294`; `app/ponto/calculador/nucleo.py:224-247`) |
-
-3. **Dias com `ERRO`: nenhum segundo o TOTAL informado (`erro=0`); portanto, nenhuma exclusão numérica por ERRO nesta parte.** Arquivo:linha do registro TOTAL: [nao verificado].
-
-## 16/11 14:41 · sessao c91636553c1d · PRIORIDADE-EV-ITEM1 · sonda · origem=Code
-
-1. **TOTAL da parte:** `N=19; ok=19; erro=0; rc_sombra=0`, conforme as linhas finais fornecidas; localização dessas linhas em arquivo:linha **[nao verificado]**. **Tripwire:** disparo em algum dia **[nao verificado]**; `rc_sombra=0` não fornece, sozinho, esse resultado.
-
-2. A classe abaixo é `STATUS.veredito`; os minutos do espelho são `minutos_realizados`. (`app/ponto/services/espelho.py:764-819`) A coluna e6 usa o inteiro conferido contra a linha do universo indicada em cada registro. (`app/ponto/management/commands/e6_oraculo.py:263-269,401`)
-
-| Código, data | Espelho: minutos / classe | e6 do universo | Categoria/causa evidenciada na saída |
-|---|---:|---:|---|
-| col723, 2026-10-08 | 440 / trabalhou | 345 (`estrutura_dias.txt:20`) | **Desconto de intervalo diferente:** realizado desconta 60 min declarados, sem pausa reconhecida; e6 desconta 155,277 min entre os dois pares posicionais. (`app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col746, 2026-09-24 | 289 / trabalhou | 193 (`estrutura_dias.txt:21`) | **Desconto de intervalo diferente:** realizado desconta 60 min declarados; e6 desconta 156,819 min entre os pares. (`app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col841, 2026-10-20 | 681 / em_aberto | 522 (`estrutura_dias.txt:22`) | **Agrupamento e pareamento diferentes:** juiz mantém uma saída isolada às 11:00 e o turno 18:46–07:04, com desconto de 57 min; e6 pareia 11:00–18:46 e 21:44–22:41, cortando antes da saída das 07:04. (`app/ponto/turnos.py:502-567,725-767`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col854, 2026-10-04 | 718 / trabalhou | 7 (`estrutura_dias.txt:23`) | **Corte do e6:** realizado conta 18:54–06:52, sem desconto; e6 pareia somente 18:54–19:01 e corta antes das 06:52, após um gap de 711,349 min. (`app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col864, 2026-10-12 | 509 / feriado | 449 (`estrutura_dias.txt:24`) | **Intervalo sem desconto no realizado:** nenhuma pausa reconhecida e nenhuma janela declarada usada; e6 desconta 59,804 min. A célula consta como folga, sem marcos. (`app/ponto/turnos.py:707-771`; `app/ponto/calculador/nucleo.py:224-254`; `app/escala/models.py:1652-1701,1718-1724`) |
-| col868, 2026-09-22 | 0 / em_aberto | 679 (`estrutura_dias.txt:25`) | **Formação de turno diferente:** juiz tem apenas saída sem entrada e nenhum turno exibido; e6 agrupa quatro batidas entre 18:48 e 07:01 do dia seguinte. O cadastro mostrado prevê jornada diurna 6x1; dono dessa divergência **[nao verificado]**. (`app/ponto/turnos.py:502-567,719`; `app/ponto/services/espelho.py:450-460,767`; `app/ponto/calculador/nucleo.py:224-247`; `app/escala/models.py:103-138,170-175`) |
-| col876, 2026-09-21 | 550 / em_aberto | 665 (`estrutura_dias.txt:26`) | **Conjunto de batidas diferente:** realizado conta 18:29–04:39 menos 60 min e mantém a saída das 06:31 sem entrada; e6 também usa 05:36 e conta o segundo par até 06:31. Motivo de 05:36 não aparecer no turno do juiz **[nao verificado]**. (`app/ponto/turnos.py:502-567,725-771`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col1021, 2026-11-06 | 841 / folga | 0 (`estrutura_dias.txt:27`) | **Corte que orfanou no e6:** realizado mantém 05:55–19:56, sem desconto; e6 separa as duas batidas em fragmentos unitários, com `impar=true` e `corte_que_orfanou=true`. (`app/ponto/turnos.py:725-767`; `app/ponto/calculador/nucleo.py:215-254`) |
-| col110, 2026-11-12 | 241 / em_aberto | 0 (`estrutura_dias.txt:28`) | **Atribuição ao dia:** juiz atribui a 12/11 o trecho 01:59–07:00 de 13/11 e desconta 60 min; e6 não tem turno atribuído a 12/11. Destino dessas batidas no e6 **[nao verificado]**. (`app/ponto/turnos.py:502-567,719,725-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col112, 2026-10-21 | 546 / trabalhou | 838 (`estrutura_dias.txt:29`) | **Pareamento noturno no e6:** realizado conta 06:57–17:03 menos 60 min; e6 pareia a saída das 17:03 com a entrada das 07:01 de 22/10. A entrada das 06:57 aparece no fragmento anterior. (`app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col112, 2026-10-22 | 541 / trabalhou | 835 (`estrutura_dias.txt:30`) | **Pareamento noturno no e6:** realizado conta 07:01–17:02 menos 60 min; e6 pareia 17:02 com 06:56 de 23/10. A entrada das 07:01 aparece no fragmento anterior. (`app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:215-247`) |
-| col113, 2026-10-30 | 242 / em_aberto | 0 (`estrutura_dias.txt:31`) | **Atribuição ao dia:** juiz mantém saída isolada às 02:00 e conta 03:00–07:02 de 31/10 em 30/10, sem desconto; e6 não tem turno em 30/10. Destino no e6 **[nao verificado]**. (`app/ponto/turnos.py:502-567,719,725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col113, 2026-11-01 | 241 / em_aberto | 0 (`estrutura_dias.txt:32`) | **Atribuição ao dia:** juiz mantém saída isolada às 02:01 e conta 03:00–07:01 de 02/11 em 01/11, sem desconto; e6 não tem turno em 01/11. Destino no e6 **[nao verificado]**. (`app/ponto/turnos.py:502-567,719,725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col114, 2026-11-08 | 439 / trabalhou | 429 (`estrutura_dias.txt:33`) | **Desconto de intervalo diferente:** realizado desconta 60 min declarados, sem pausa reconhecida; e6 desconta 70,666 min entre os pares. (`app/ponto/turnos.py:725-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col114, 2026-11-15 | 499 / feriado | 440 (`estrutura_dias.txt:34`) | **Intervalo sem desconto no realizado:** realizado conta o envelope sem pausa reconhecida ou janela declarada; e6 desconta 59,538 min. (`app/ponto/turnos.py:707-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col130, 2026-10-29 | 335 / trabalhou | 672 (`estrutura_dias.txt:35`) | **Conjunto e pareamento diferentes:** juiz encerra às 01:31 e desconta 60 min; e6 inclui 07:06 e forma os pares 18:56–00:33 e 01:31–07:06. Motivo da exclusão de 07:06 pelo juiz **[nao verificado]**. (`app/ponto/turnos.py:502-567,725-771`; `app/ponto/calculador/nucleo.py:224-247`) |
-| col200, 2026-10-29 | 180 / em_aberto | 0 (`estrutura_dias.txt:36`) | **Atribuição ao dia:** juiz conta 02:00–06:00 de 30/10 em 29/10 e desconta 60 min; e6 não tem turno em 29/10. Destino no e6 **[nao verificado]**. (`app/ponto/turnos.py:502-567,719,725-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col200, 2026-11-02 | 180 / em_aberto | 0 (`estrutura_dias.txt:37`) | **Atribuição ao dia:** juiz mantém uma saída isolada e conta 02:00–06:00 de 03/11 em 02/11, menos 60 min; e6 não tem turno em 02/11. Destino no e6 **[nao verificado]**. (`app/ponto/turnos.py:502-567,719,725-771`; `app/ponto/calculador/nucleo.py:224-254`) |
-| col218, 2026-11-14 | 103 / em_aberto | 0 (`estrutura_dias.txt:38`) | **Atribuição ao dia:** juiz mantém saída isolada às 02:17 e conta 03:17–05:00 de 15/11 em 14/11, sem desconto; e6 não tem turno em 14/11. Destino no e6 **[nao verificado]**. (`app/ponto/turnos.py:502-567,719,725-767`; `app/ponto/calculador/nucleo.py:224-254`) |
-
-**Dono ORACULO/SISTEMA/CADASTRO por causa:** **[nao verificado]**; os mecanismos acima não bastam para atribuir responsabilidade definitiva.
-
-3. **Dias com ERRO:** nenhum registrado no `TOTAL` fornecido (`erro=0`); arquivo:linha desse registro **[nao verificado]**. Portanto, não há dia listado para invalidar por ERRO nessa parte; arquivo:linha **[nao verificado]**.
-
-_6091 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6094 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
