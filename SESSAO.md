@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 15/11/2026 22:49:32.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (117.3 MB). Acoes na janela: **1791**.
+**Medido em 15/11/2026 22:54:41.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (117.3 MB). Acoes na janela: **1775**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1785,19 +1785,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:55:16 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '^## \\|^# ' logs/PRODUCAO-MAXIMA/defeitos_por_classe.md \| cut -c1-120` |
 | 10:55:12 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='ESTADO 10:5x HE-REVOGADA RED' add=("ESTADO 11:0x OITO-LEITORES (d2) frota LOTE5/LOTE6 (logs/OITO-LEITORES/d2-lotes-5-6/entrega.md, sombra 15/11 03:30): LOTE5 C1-C4 seguem abertos no codigo; frota rext remover/corrigir 0 (universo 96), mesma_chave->retratada 0, pergunta_origem em batida de chao 198 linhas/107 ...` |
 | 10:54:51 | Agent | Leitor e: lavra comp 11 parada | `Leia primeiro /home/ronald/saas-hasner/logs/OITO-LEITORES/preambulo.md e siga-o inteiro. Seu dir: logs/OITO-LEITORES/e-lavra-comp11-parada/. CONTEXTO: o leitor b1 (logs/OITO-LEITORES/b1-classe-d-sem-lavra/entrega.md, ver :40-46 e :75 e as sondas sonda_b1*.py e .out no dir dele) viu que a lavratura de DiaPago da competencia 11/2026 de parte de 17 colabs esta PARADA desde 29/10 (`ult_lav_dia=10-29`) ...` |
-| 10:54:39 | Bash |  | `cd /home/ronald/saas-hasner; cat >> logs/PREPARA-ESPINHA-2/lista-unica-2/LISTA-UNICA-2.md <<'EOF' LU2-06 \| COMPETENCIA-PAGA-UM-JUIZ \| DESENHO (leitor opus a, logs/OITO-LEITORES/a-competencia-paga/entrega.md :96-107): P1 `empresas_exportadas_no_escopo` (lavrar_dias_pagos.py:104) declarada pela obra como "o TXT saiu" -- e a pergunta paga ou outra?; P2 `competencia_do_dia_entregue` (vigia_fio.py:84 ...` |
-| 10:54:26 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 60,80p logs/OITO-LEITORES/b1-classe-d-sem-lavra/entrega.md \| cut -c1-400; grep -n '^P[123]\\|^- P[123]\\|^### P\\|P1 \\|P2 \\|P3 ' logs/OITO-LEITORES/a-competencia-paga/entrega.md \| head -8 \| cut -c1-400` |
-| 10:54:23 | SendMessage |  | `-` |
-| 10:54:17 | Bash |  | `cd /home/ronald/saas-hasner; grep -n -i 'pergunta\\|29/10' logs/OITO-LEITORES/b1-classe-d-sem-lavra/entrega.md \| head -12 \| cut -c1-300` |
-| 10:52:20 | Bash |  | `cd /home/ronald/saas-hasner; nohup setsid bash -c 'ssh pista espera 1115101028_019e5157 >/dev/null 2>&1; ssh pista log 1115101028_019e5157 400 > logs/PRODUCAO-MAXIMA/he_revogada_suite.log 2>&1; echo fim > logs/PRODUCAO-MAXIMA/he_revogada_suite.fim' >/dev/null 2>&1 & echo ok` |
-| 10:52:18 | TaskStop |  | `-` |
-| 10:52:17 | ToolSearch |  | `-` |
-| 10:52:11 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 10:52:08 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 10:49:49 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '3s/^ESPERANDO: suite-vm-lote7 \| pid=1435925$/ESPERANDO: trava_teste.sh \| pid=1435925/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 10:49:45 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 620,640p bin/hook_stop_fila1.py` |
-| 10:49:43 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A20 bin/hook_stop_fila1.py \| grep -n "casa\\|in \\|cmdline" \| head` |
-| 10:49:40 | Bash |  | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-400` |
-| 10:49:38 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 789,850p bin/hook_stop_fila1.py; tail -5 logs/pisos.log 2>/dev/null; ls -t logs \| grep -i hook \| head` |
-| 10:49:36 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO\\|_SO_BANG\\|def main\\|vaga de construtor" bin/hook_stop_fila1.py \| head -30` |
-| 10:49:34 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/aval_ordem_pos_e4a2_1110.txt \| head -30; grep -n 'vaga' bin/hook_stop_fila1.py \| head -20` |
