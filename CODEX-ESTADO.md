@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 22:42** · publicado em **15/11/2026 22:44** (UTC-3)
+> Ultima resposta processada: **15/11/2026 23:04** · publicado em **15/11/2026 23:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 23:04 · sessao 74fa07eb48eb · - · - · origem=Ronald (tmux)
+
+**NAO PROCEDE como defeito do aval:** a condição é prospectiva e tem saída expressa quando não fecha: registrar e seguir a fila (`prepara_volta_bug_par.txt`, item 3).
+
+O cruzamento histórico não certifica o atual (`app/docs/RELATO.md:65`). A presença dos dois arquivos na nova volta e a interseção atual permanecem **[nao verificado]**; isso impede declarar a condição satisfeita, sem provar contradição do aval.
+
+A exceção para construir em cópia própria e a alteração da ordem são nominais; o pouso continua após R3 (`prepara_volta_bug_par.txt`, item 3). Não cabe devolver o item apenas por contrariar a regra geral que ele expressamente excepciona. [nao verificado]
+
+## 15/11 23:03 · sessao c1095e21ab69 · - · - · origem=Ronald (tmux)
+
+Inventário do HEAD fornecido, para o bloco (g):
+
+| Campo/insumo | Quem escreve | Quem lê / autoridade |
+|---|---|---|
+| `PerguntaDisputa.pk` no universo congelado | Lista nova do brief, derivada exclusivamente de `u163.py:1-2`; não há selecionador dessa lista no código examinado `[nao verificado]` | Leitor novo proposto deve consumir apenas PK e conferir hash; não usar `recusa_motivo` (`cortes_lote7_e_bug_par.txt:1`, item 2). |
+| `motivo`, `colaborador_id`, `instancia_marco`, `conversa` | Identidade escrita no nascimento; contrato está em `app/chamados/models.py:2505-2510` | Derivação do plantio lê motivo, resposta e dia em `app/chamados/services/materializacao.py:274-285`; a fonte dos marcos é `grade_da_celula`, nessa mesma passagem. |
+| `data_evento` | Porta `gravar_dia_do_fato`, atribuição em `app/chamados/services/fio.py:829-840` | `data_do_fato_de`, `app/chamados/services/fio.py:40`; materializador prioriza o campo em `app/chamados/services/materializacao.py:347-352`. |
+| `resposta_colab`, `respondida_em` | Resposta humana: `app/chamados/services/disputa_emissao.py:1481-1483`; automática: `:1673-1678`; carimbo pela trilha: `:1695-1701`; reabertura prepara limpeza em `:1609`, pela porta `descarimbar_em_lote` (`:1600-1605`) | Validação: `app/chamados/services/validacao.py:418-423`; seleção do laço: `app/chamados/services/materializacao.py:1375-1382`; C6: `app/chamados/juizes.py:1388-1389`; C7: `app/chamados/models.py:1906-1908`. |
+| `validada_em`, `validada_por` | Ato de validar: `_carimbar_validacao`, `app/chamados/services/validacao.py:152-166`; devolução: `:213-233`; resposta nova desfaz: `app/chamados/services/disputa_emissao.py:1494-1496`; simetria do carimbo pode preencher nulos: `app/chamados/models.py:3213-3220` | Validação: `app/chamados/services/validacao.py:421`; materialização: `app/chamados/services/materializacao.py:1375-1378`; C6: `app/chamados/juizes.py:1388`; C7: `app/chamados/models.py:1906`. |
+| `materializada_em`, `materializada_por`, `via_resolucao` | Atribuição agrupada: `_escrever_carimbo`, `app/chamados/models.py:3180-3184`; identidade: `:3251-3273`; descarimbar: `:3286-3295`; lote: `:3364-3365`; relavra também escreve via: `app/chamados/services/relavra_via.py:125-128` | Testemunha da aplicação: `app/chamados/services/materializacao.py:440-448`; laço: `:1378`; C6: `app/chamados/juizes.py:1388-1389`; lastro: `:682-710`; explicador: `app/chamados/services/explicador.py:95`. |
+| `pendencia_admin`, `recusa_motivo` | Pendência conjunta: `app/chamados/services/materializacao.py:856-857`; recusa/identidade: `:1105-1113`; recusa humana: `app/chamados/services/validacao.py:619-629`; escape: `app/chamados/services/disputa_emissao.py:1511`; duplicata: `app/chamados/services/fio.py:1399` | Devolução lê motivo e materialização: `app/chamados/services/validacao.py:213-233`; explicação: `app/chamados/services/explicador.py:90`; universo novo não deve lê-los (`cortes_lote7_e_bug_par.txt:1`, item 2). |
+| `Batida.timestamp`, `tipo`, `origem`, aprovação/autoria | `registrar_batida`, `app/ponto/registro_batida.py:94`, criação em `:152-161`; materializador fornece valores e `fato_de_chao=False` em `app/chamados/services/materializacao.py:933-939` | Derivação do plantio: `app/chamados/services/materializacao.py:346-379`; dedup/colisão/competência: `app/ponto/registro_batida.py:107-150`. |
+| `Batida.pergunta_origem` | Materializador chama `anotar`: `app/chamados/services/materializacao.py:952-956` | Juiz do lastro declara consumo do vínculo: `app/chamados/juizes.py:726-728`. |
+| `Batida.criada_neste_toque` | `registrar_batida` marca a criação em `app/ponto/registro_batida.py:155` e `:161` | Leitor informado no anexo: `ponto/services/resposta_batida.py:14` (`MATRIZ-C7-BUGPAR/entrega.md:105`, numeração exata do anexo `[nao verificado]`). |
+| `DecisaoPergunta` — `ato`, `ato_em`, `ato_por`, `ato_texto`, `ato_motivo` | Porta única `registrar`, `app/chamados/models.py:4085-4099`; validação chama em `app/chamados/services/validacao.py:164-166`; devolução em `:230-233` | Tela: `PerguntaDisputa.respostas_anteriores`, `app/chamados/models.py:3644-3657`; contrato de imutabilidade/fato: `:3982-3998`. |
+| `LogAuditoria` — ação, objeto, antes/depois, autor | Porta `core.observ.evento`, `app/core/observ.py:94-138`; `registrar_log` delega em `app/core/auditoria.py:22-24` | Exemplo de leitor por ação: `app/chamados/models.py:401-405`; trilha de recusa humana produzida em `app/chamados/services/validacao.py:637-642`. |
+| `ExportacaoDominio.empresa_id`, `mes`, `ano`, `gerado_em`, `hash_sha256` | `ExportacaoDominio.registrar`, `app/folha/models.py:174-187`; chamado da view em `app/folha/views.py:297` | Juiz registrado `folha/export.py::competencia_entregue`, registro `app/core/juizes.py:337`, implementação `app/folha/export.py:556-594`. |
+| `ExportacaoDominio.invalidada_em`, `invalidada_motivo`, `substituida_por` | Porta `invalidar`, `app/folha/models.py:143-170` | Juiz K6 usa vigência + não invalidada: `app/folha/export.py:588-594`; vigência: `app/folha/models.py:192-225`. |
+
+**Correção necessária em `JUIZES.md`:** a tabela diz “escritor único de `validada_em`” (`app/docs/JUIZES.md:38-39`), mas o serviço distingue expressamente escritor único do **ato** de validar de múltiplos escritores do **campo** (`app/chamados/services/validacao.py:19-26`), demonstrados acima. O próprio lookup manda corrigir divergência no mesmo commit (`app/docs/JUIZES.md:14`). A volta deve tornar essa descrição precisa, sem inventar autoridade. (`app/docs/JUIZES.md:10-14`.)
+
+**Ausências no main examinado:** a busca literal em `app/chamados` não encontrou `bug_par_103`, `devolver_paridade_bug_par_103`, `no_universo_163`, `par_do_intervalo` nem `espera_na_escrita`; a ausência não dispõe de `arquivo:linha`, portanto a certificação dessas peças nesta cópia fica `[nao verificado]`. Os endereços antigos devem ser citados com o prefixo `6e2fc9133:` conforme `predesenho/entrega.md:5`.
+
+## 15/11 23:02 · sessao 89c4371234f4 · - · - · origem=Ronald (tmux)
+
+Não há juiz existente que garanta zero plantio nas 75 metades fora163 em competência exportada: o chokepoint pergunta F6, que lê `FechamentoMensal.status`; a condição exportada do contrato é K6, que lê `ExportacaoDominio` vigente não invalidada. O código não estabelece K6 ⇒ F6. (`app/ponto/registro_batida.py:132-137`; `app/ponto/janelas.py:84-89`; `app/folha/export.py:588-594`; registros em `app/core/juizes.py:309` e `:337`.)
+
+Caminhos atuais:
+
+- Admin: `app/chamados/services/acoes_disputa.py:13-22` → `validacao.py:398` → unidade `:486-488` → laço `:494`.
+- Lote: `validacao.py:730`, `:747`, `:781` → mesma casca e mesma validação.
+- Laço: `materializacao.py:1375-1383` → `_materializar_uma` (`:1164`, `:1227-1232`) → ramo hora `:790` → `registrar_batida` (`:932-940`, `fato_de_chao=False` em `:936`) → F6 (`registro_batida.py:132-137`).
+- Outros chamadores do laço: `fio.py:701-708`, `acoes_disputa.py:139`, `backfill_fio_morto_e4b.py:144-147`.
+- Passivo: `_esta_exportada` apenas classifica (`passivo_validado.py:358`), `_trabalhar_o_par` planta antes de examinar o ramo exportado (`:433-435`), `_plantar_o_dia` chama a mesma unidade (`:522`). Depois pode seguir a regeneração exportada e Pauta (`:442-449`).
+- Irmã: `_gravar_irma_do_par` não existe na cópia HEAD fornecida; está testemunhada somente na árvore antiga pelos anexos (`predesenho/entrega.md:119-122`; matriz C7, seção 1). Linha atual [nao verificado].
+- O próprio materializador declara que a porta admin não tem portão de competência por O44 (`materializacao.py:1172-1174`; `validacao.py:424-428`).
+
+Pergunta de lei sugerida: “Como preservar o proibido de nenhuma metade fora163 em competência entregue plantar depois da volta, se restaurar o caminho do main as entrega a F6 e O44 permite o toque administrativo? Autoriza-se uma restrição específica pelo K6 nos caminhos alcançados, ou qual outra solução deve vigorar?” Não afirmar que substituir F6 por K6 já está autorizado.
+
+C7 permanece fora da cura desta volta: a decisão registrada manda manter seu predicado e atribui a classe à RAIZ-DA-DISPUTA F1 (`app/docs/RELATO.md:80`). Hoje, V sem A continua excluída de `sem_veredito_entre` (`models.py:1905-1909`) e `pode_fechar` segue `!respostas_sem_veredito && !fio_vivo` (`:1911-1917`). `fechar` lê pendências/vivas antes da trava (`:1950`, `:1959-1960`, `:1969-1974`), e S127 só consulta fio/vazio (`juizes.py:2432-2446`). Registrar as limitações da matriz e corrigir a prosa falsa; não incluir alteração desses predicados sob este aval.
+
+## 15/11 23:02 · sessao 74fa07eb48eb · - · - · origem=Ronald (tmux)
+
+Achados somente por leitura:
+
+- O cruzamento dos dois arquivos é **histórico**: `main...6e2fc9133` contra R3 `e08db44a6` e F1 `be2b8d733`; a F1 carregava os mesmos commits da R3. Isso está documentado em `app/docs/RELATO.md:65` e `app/docs/BACKLOG.md:2046`. Não demonstra cruzamento da nova volta contra F1 B1/R3 c17 **[nao verificado]**.
+- As cópias atuais são distintas das históricas: F1 B1 `wt-f1nova-b1-203152` consta em `app/docs/RELATO.md:22`; R3 c17 `wt-codex-e3-resto-r3-221106`, em `app/docs/RELATO.md:6`. O relato afirma zero arquivo comum entre essas duas cópias, sem medir ali o delta da BUG-PAR (`app/docs/RELATO.md:6`).
+- `test_medida_turno_do_par.py` é uma catraca de identidade e posições AST: exige atualizar o registro no mesmo commit quando as linhas mudam (`app/core/tests/test_medida_turno_do_par.py:9`, `:17`, `:549`). Registra funções de `materializacao.py` e `passivo_validado.py`, inclusive suas linhas (`:174`, `:175`, `:271`, `:272`). Isso explica por que uma mudança nesses módulos pode exigir atualizar o teste; que a nova volta efetivamente o alterará **[nao verificado]**.
+- `crons.py` é a fonte do crontab, com comandos e seus contratos (`app/config/crons.py:1`, `:10`). A razão concreta para estar no delta histórico, e sua presença na lista da nova volta, permanecem **[nao verificado]**. A entrega fornecida declara o passivo manual fora de `config/crons.py` (`entrega.md:116`, conforme numeração fornecida pelo usuário; conferir contagem).
+- A regra de cruzamento é arquivo em comum, sem exceção por ser teste (`CLAUDE.md:309`). A política das laterais exige comparar o diff da raia às obras E em voo (`app/docs/BACKLOG.md:2049`). Portanto não cabe reutilizar automaticamente a interseção histórica.
+- A nova exceção é nominal e limitada à construção, preservando o pouso após R3; sua colisão com a regra geral não procede pelo próprio literal de `prepara_volta_bug_par.txt`, item 3. A regra geral está em `app/docs/BACKLOG.md:2049` e `CLAUDE.md:309`.
+- A ordem antiga é R3 → LOTE7 → LOTE3 (`app/docs/BACKLOG.md:1952`, `app/docs/RELATO.md:13`). O novo aval declara expressamente alterar essa ordem no item 3, preservando precedência das voltas R3/F1; não há colisão meramente por inserir BUG-PAR.
+- Os cortes 2 e 3 permanecem registrados: lista congelada, F1*∪F2 somente conferência, 19 abertas, 84 entregues preservadas e listadas (`app/docs/RELATO.md:47`).
+- A ocupação corrente da vaga é **[nao verificado]**: há registros de abertura de R3 e F1, mas eles não certificam disponibilidade atual (`app/docs/RELATO.md:6`, `:22`).
+
+## 15/11 23:01 · sessao 947bd4e0266e · - · - · origem=Ronald (tmux)
+
+- **Juiz existente confirmado:** `competencia_entregue` está em `app/folha/export.py:556`; devolve existência de TXT vigente não invalidado em `app/folha/export.py:588-594`. Registro: pergunta `_K6 = 'a competencia ja foi entregue (lavrada)?'` em `app/core/juizes.py:181`, vinculada a `folha/export.py::competencia_entregue` em `app/core/juizes.py:337`.
+
+- **Não confundir com competência fechada:** `competencia_fechada` consulta `FechamentoMensal` com status `aprovado`/`exportado`, em `app/ponto/janelas.py:75-89`. O plantio consulta essa guarda em `app/ponto/registro_batida.py:130-137`; isso não certifica impedir plantio em toda competência entregue por TXT. O próprio passivo distingue expressamente os dois fatos em `app/chamados/services/passivo_validado.py:116-127`.
+
+- **Existe também juiz composto:** `competencia_fechada_para_celula` combina `competencia_entregue` e holerite publicado em `app/folha/export.py:597-628`; registro `_K9` em `app/core/juizes.py:347`. Seu uso como bloqueio nos caminhos da volta é `[nao verificado]`.
+
+- **Caminho com alcance monetário potencial:** passivo planta em `app/chamados/services/passivo_validado.py:433-434`; havendo plantio e competência exportada, chama `regenerar_em_exportada` em `app/chamados/services/passivo_validado.py:435-445` e gera Pauta em `app/chamados/services/passivo_validado.py:448-459`. Quantas das 75 seriam barradas e alteração monetária concreta: `[nao verificado]`.
+
+- **Lei do gravado exportado:** `CLAUDE.md:411-417` exige `!`, DIFF antecipado, reversão, prova posterior e porta REGEN-EM-EXPORTADA.
+
+- **Atenção à diferença entre árvore e anexos:** não encontrei nesta cópia `app/chamados/management/commands/bug_par_103.py`, `_espera_do_aval_163`, `espera_na_escrita` nem `devolver_paridade_bug_par_103`; presença desses elementos no HEAD alegado: `[nao verificado]`. O materializador atual escreve diretamente pelos ramos em `app/chamados/services/materializacao.py:1224-1232`, com declaração de ausência de portão de competência do admin em `app/chamados/services/materializacao.py:1168-1174`. As linhas da entrega que citam tais elementos pertencem explicitamente à árvore histórica `6e2fc9133`, segundo `entrega.md:5`.
 
 ## 15/11 22:42 · sessao 13487bd579d9 · E3-RESTO-R3 · verificador · origem=Code
 
@@ -613,244 +692,4 @@ Leitores e destinos rastreados, somente por leitura estática:
 
 - **Cartório/supra para sobras fora da janela de atribuição:** dia-trabalho previsto com realizado zero e órfãs publica `BATIDA_ORFA_FORA_TOLERANCIA` (“batida existe e nao foi pareada”) (`app/ponto/supra_juiz.py:527-537`). Folga com fato, encerrada e sem previsto publica `FATO_SEM_PREVISAO`, sem acusação de falta (`:392-393`, `:423-428`). Isso descreve classificação; pergunta efetivamente emitida deve ser confirmada na cadeia do cartório **[não verificado]**.
 
-## 15/11 22:06 · sessao c2e5795c5eb3 · RESCALDO-CORTE-1511 · censo · origem=Code
-
-`*` marca a BASE; os demais itens ficam como referências. As citações de `paradas49.txt` numeram as entradas fornecidas de 1 a 49; `emvoo.txt:1–2` identifica seus dois blocos; numeração física dos anexos [nao verificado]. Os materiais foram limitados à listagem fornecida; conteúdo dos logs [nao verificado].
-
-LASTRO-FOLGA foi incorporada à LASTRO-FAIXA pela absorção expressa no topo (app/docs/RELATO.md:4). O item conjunto QUARENTENA/SVV foi contabilizado somente em QUARENTENA; essa atribuição contábil é uma convenção [nao verificado]. EM VOO conserva o rótulo do anexo mesmo nas cópias retidas (emvoo.txt:1).
-
-| obra | ESTADO | DESTRAVA | DONO | MATERIAL | PROXIMA ACAO | itens do quadro |
-|---|---|---|---|---|---|---|
-| CODEX-CONTEXTO-DA-CASA | PARADA — briefs pendentes | nada | Code | ref CODEX-CONTEXTO-DA-CASA@4435ec647; brief: BACKLOG:1095 | Conferir a entrega dos briefs com PERGUNTA antes de certificar o pouso (app/docs/BACKLOG.md:1095). | CODEX-CONTEXTO-DA-CASA* (paradas49.txt:1) |
-| JUSTIFICATIVA-PAGA-O-PERIODO | PARADA — aguarda juiz | pouso de COMPETENCIA-PAGA-UM-JUIZ | Code | logs/JUSTIFICATIVA-PAGA/c17/brief.md; logs/JUSTIFICATIVA-PAGA-O-PERIODO/brief_construtor.md; ref wt-codex-justificativa-paga-o-periodo-220358@74ec17605 | Após o juiz, certificar a árvore de pouso e cumprir as condições preservadas do opus (app/docs/BACKLOG.md:1948; app/docs/RELATO.md:210). | wt-codex-justificativa-paga-o-periodo-220358*; ref JUSTIFICATIVA-PAGA-O-PERIODO; ref wt-justif-red-095036 (paradas49.txt:2,4,38) |
-| DATA-EVENTO-CRU | PARADA — matriz obrigatória | desenho | Claude-desenho | logs/DATA-EVENTO-CRU/censo_v2.r; ref wt-catraca-dec-151606@3e86f61fe | Fechar a matriz dos três bloqueantes usando a v4 documentada, pois a precedência cronológica de 70dfbc62a é [nao verificado] (app/docs/RELATO.md:1059; app/docs/RELATO.md:9123). | wt-catraca-dec-151606*; ref wt-dec-sobre-main-205403 (paradas49.txt:3,32) |
-| CODEX-2-RAIAS | PARADA — quatro procedentes | nada | Code | logs/CODEX-2-RAIAS/matriz.r; logs/codex_2_raias/construtor_v1_brief.txt; ref wt-codex2raias-090624@e381017bf | Curar os quatro procedentes e concluir a volta 3 com certificação e opus (app/docs/RELATO.md:1488; app/docs/RELATO.md:1503). | wt-codex2raias-090624* (paradas49.txt:5) |
-| FRAC5-MINIMO-5 | PARADA — cura guardada | ! novo corte FRAC5-MINIMO-5 | Ronald | ref wt-frac5-cura-100047@b7d6b6aed; brief: BACKLOG:788 | Dar o novo corte de pouso considerando as pendências preservadas da cura (app/docs/BACKLOG.md:788). | wt-frac5-cura-100047*; ref wt-frac5-100005 (paradas49.txt:6,36) |
-| FATO-DE-AUSENCIA-ACORDA-A-PROJECAO / LOTE7 | PARADA — c6 anunciada | desenho | Claude-desenho | logs/ESPINHA-BRIEFS/MATRIZ-LOTE7/entrega.md; ref wt-lote7-ausencia-100250@22677d0db | Resolver o acordador pela matriz e conferir a liberação anunciada para c6 após R3 c17, cujo teor permanece [nao verificado] (app/docs/RELATO.md:59; emvoo.txt:2). | wt-lote7-ausencia-100250* (paradas49.txt:7) |
-| COBPARC-FILA-RELOGIO | PARADA — provas pendentes | nada | Code | ref COBPARC-FILA-RELOGIO@ab828ddcf; brief: BACKLOG:916 | Concluir mutantes_v4, suíte e opus com o padrão já admitido (app/docs/BACKLOG.md:916; app/docs/RELATO.md:582). | COBPARC-FILA-RELOGIO* (paradas49.txt:8) |
-| LASTRO-DEGRAU-2 | PARADA — cura anterior | nada | Code | ref LASTRO-DEGRAU-2@de6097212; brief: BACKLOG:1814 | Curar o construtor e migrar o casamento ao juiz conforme o censo posterior (app/docs/BACKLOG.md:1814; app/docs/RELATO.md:582). | LASTRO-DEGRAU-2* (paradas49.txt:9) |
-| O10-C | PARADA — UI incompleta | nada | Code | ref O10-C@a40577fba; brief: BACKLOG:2196 | Construir a lista do admin e a porta alcançável da troca, preservando o ! separado do apply na 09 (app/docs/RELATO.md:1987; app/docs/RELATO.md:1992). | O10-C* (paradas49.txt:10) |
-| O275 / SDF-FERIADO-E-DIA | PARADA — formas divergentes | lei FORMA A x FORMA B | Ronald | logs/o275/censo.md; ref O275@32c8c259e | Cortar FORMA A/B antes de atualizar a construção (app/docs/RELATO.md:582). | O275* (paradas49.txt:11) |
-| OTIMIZA-1 | PARADA — aguarda instrumento | pouso de SUITE-POR-IMPACTO | Code | ref OTIMIZA-1@2d91d5905; brief: BACKLOG:2197 | Após SUITE-POR-IMPACTO, concluir suíte, replay, verificação e pouso próprio (app/docs/BACKLOG.md:2197). | OTIMIZA-1* (paradas49.txt:12) |
-| PADRAO-DE-CIMA | PARADA — harness aberto | desenho | Claude-desenho | ref PADRAO-DE-CIMA@7635c1c8a; brief: BACKLOG:892 | Resolver como o harness identifica a causa da morte do mutante antes de retomar (app/docs/RELATO.md:2494). | PADRAO-DE-CIMA* (paradas49.txt:13) |
-| QUARENTENA-DO-COLAB | PARADA — RED não rodado | desenho | Claude-desenho | logs/QUARENTENA-REABRE/censo.r; ref wt-quarentena-svv-151703@c9a2a3846 | Resolver 16 versus 15 janelas e preparar a retomada após o pouso E3-RESTO-R3 (app/docs/RELATO.md:840; app/docs/BACKLOG.md:2586). | wt-quarentena-svv-151703*; ref QUARENTENA-DO-COLAB (paradas49.txt:14,41) |
-| SILENCIO-VENCIDO-VOLTA | PARADA — retomada conjunta | pouso de QUARENTENA-DO-COLAB | Code | logs/QUARENTENA-REABRE/censo.r; ref SILENCIO-VENCIDO-VOLTA@7e8648704 | Retomar junto da QUARENTENA usando o censo compartilhado e a cópia conjunta documentada (app/docs/BACKLOG.md:838; app/docs/RELATO.md:839). | SILENCIO-VENCIDO-VOLTA* (paradas49.txt:15) |
-| SUITE-POR-IMPACTO | PARADA — PRONTO 5 incompleto | ! aval PRONTO-5 | Ronald | ref SUITE-POR-IMPACTO@2d91d5905; brief: BACKLOG:1093 | Resolver o aval do PRONTO 5, preservando a entrada após E3 e o corte separado do gate pela classe (app/docs/RELATO.md:556; app/docs/BACKLOG.md:1093). | SUITE-POR-IMPACTO* (paradas49.txt:16) |
-| V3-E1 | PARADA — lotes não validados | lei V3-E1 C06/C16/24x48 | Ronald | ref V3-E1@2430fcc5b; brief: BACKLOG:2195 | Cortar as questões C06/C16/24x48 antes da validação e integração dos lotes (app/docs/RELATO.md:556; app/docs/RELATO.md:2714). | V3-E1* (paradas49.txt:17) |
-| V3-RETOMA-FILA | PARADA — migração pendente | pouso de V3 | Code | ref V3-RETOMA-FILA@0448d88f1; brief: BACKLOG:1033 | Demonstrar o pouso exigido e então migrar o instrumento e resolver CCT pelo dia (app/docs/BACKLOG.md:1033). | V3-RETOMA-FILA* (paradas49.txt:18) |
-| V3-RETOMA-PERIODOS-DA-CELULA | PARADA — P4 incompleto | lei período não guardado na célula | Ronald | ref V3-RETOMA-PERIODOS-DA-CELULA@c71b1038b; brief: BACKLOG:1021 | Resolver o período ausente e concluir P4, considerando P5 já pousada isoladamente (app/docs/BACKLOG.md:1021; app/docs/RELATO.md:8395). | V3-RETOMA-PERIODOS-DA-CELULA* (paradas49.txt:19) |
-| LASTRO-FAIXA-SEM-DEFAULT | PARADA — inclui LASTRO-FOLGA | pouso de TIPO-NA-FONTE | Code | logs/LASTRO-FAIXA/redesenho/predesenho.r; logs/LASTRO-FAIXA-SEM-DEFAULT/brief_c3.md; ref wt-codex-lastro-redesenho-164050@f3ebd821b | Construir sobre o acessor tipado usando a base escolhida e o RED que absorveu LASTRO-FOLGA (app/docs/BACKLOG.md:1895; app/docs/RELATO.md:4). | wt-codex-lastro-redesenho-164050*; ref mut-lastro-c3-210250; ref red-lastro-c3-210250; ref wt-lastro-folga-133123 (paradas49.txt:20,22,26,39) |
-| NÃO IDENTIFICADA — recon_onprem | PARADA — identificação pendente | nada | Code | ref recon_onprem@612be166a; brief: BACKLOG:[nao verificado] | Identificar as obras pelo diff integral antes de selecionar uma base de retomada (app/docs/RELATO.md:328; conteúdo integral [nao verificado]). | recon_onprem* (paradas49.txt:21) |
-| BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | PARADA — leis do predesenho | lei PRE-DESENHO-BUG-PAR-VOLTA | Ronald | logs/ESPINHA-BRIEFS/MATRIZ-C7-BUGPAR/entrega.md; logs/BUG-PAR-O-PAR/predesenho/entrega.md; logs/BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS/brief.md; ref wt-bugpar-main-095024@6e2fc9133 | Cortar a regra do universo 163 e o alcance exportado, mantendo a volta condicionada ao pouso R3 e a novo aval (app/docs/RELATO.md:18). | wt-bugpar-main-095024* (paradas49.txt:23) |
-| BO-DISPUTA-SEM-PERGUNTA | PARADA — c25 estacionada | desenho | Claude-desenho | logs/BO-DISPUTA-SEM-PERGUNTA/matriz/m1.r; logs/BO-DISPUTA-SEM-PERGUNTA/brief_construtor.md; ref wt-codex-bo-disputa-sem-pergunta-183316@cabdb0b4c | Fechar nascimento, destino e dia na RAIZ-DA-DISPUTA antes de nova implementação (app/docs/CORTES.md:457). | wt-codex-bo-disputa-sem-pergunta-183316*; ref wt-c22-red-152256; ref wt-red-bodisputa-175220 (paradas49.txt:24,25,42) |
-| PAR-NAO-ADJACENTE | PARADA — v5 por construir | nada | Code | logs/par_nao_adjacente/censo.r; ref wt-par-rebase-060915@84a400e1c | Implementar a v5 já determinada pela LEI-PAR-ANINHADO, com externa prevalecendo e interna absorvida (app/docs/RELATO.md:1599; app/docs/RELATO.md:1601). | wt-par-rebase-060915*; ref wt-codex-par-nao-adjacente-031500 (paradas49.txt:27,40) |
-| PAUTA-SEM-TURNO-PREFIXO-RESERVADO | PARADA — quatro furos | desenho | Claude-desenho | logs/PAUTA-SEM-TURNO-PREFIXO-RESERVADO/brief_construtor.md; ref wt-codex-pauta-sem-turno-prefixo-reservado-030404@b054a6d69 | Resolver os quatro furos de identidade textual antes de autorizar outra volta (app/docs/BACKLOG.md:2123). | wt-codex-pauta-sem-turno-prefixo-reservado-030404* (paradas49.txt:28) |
-| TIPO-NA-FONTE — item 3 | PARADA — alternativa aberta | desenho | Claude-desenho | logs/TIPO-NA-FONTE/brief_item3.md; logs/TIPO-NA-FONTE/item3/predesenho/matriz_v5c.txt; logs/TIPO-NA-FONTE/item3/predesenho/predesenho.r; ref wt-codex-tipo-na-fonte-184856@12e424d5f | Escolher entre selo do valor e acessor tipado antes de curar leitores e escritor (app/docs/BACKLOG.md:1891; app/docs/RELATO.md:716). | wt-codex-tipo-na-fonte-184856* (paradas49.txt:29) |
-| TRIAGEM-OFFLINE-RED-HEADLESS | PARADA — apenas RED | nada | Code | logs/TRIAGEM-OFFLINE-SEM-CAMERA/censo_v1.r; ref wt-codex-triagem-offline-red-headless-101137@d680518b0 | Curar o SW e provar clique offline e reload nas duas cascas pela classe A (app/docs/RELATO.md:962). | wt-codex-triagem-offline-red-headless-101137* (paradas49.txt:30) |
-| COMPETENCIA-PAGA-UM-JUIZ | PARADA — corte da 10 paga | ! corte LU2-06 sobre competência 10 paga | Ronald | logs/COMPETENCIA-PAGA/censo.md; ref wt-comp-paga-101739@1ec224519 | Resolver o alcance com a competência 10 marcada paga e concluir as provas finais (app/docs/RELATO.md:69; app/docs/RELATO.md:97). | wt-comp-paga-101739* (paradas49.txt:31) |
-| DEPLOY-EXCLUSAO-ENVELOPE | PARADA — volta 3 pendente | nada | Code | logs/deploy_exclusao/censo_v1.r; ref wt-deploy-exclusao-061631@f11329237 | Curar Q1–Q5 e certificar a exclusão compartilhada entre cron e deploy (app/docs/RELATO.md:1592). | wt-deploy-exclusao-061631* (paradas49.txt:33) |
-| E4C-F2 | PARADA — matriz e leis | lei F2 L1/L2 | Ronald | logs/ESPINHA-BRIEFS/F2/matriz.md; ref wt-e4c-f2-103933@8c6577245 | Cortar efeito e face SQL, preservando o pouso prévio da F1 e o corte próprio para exportadas (app/docs/RELATO.md:17; app/docs/RELATO.md:100). | wt-e4c-f2-103933* (paradas49.txt:34) |
-| COERENCIA-PELO-EFEITO | PARADA — ensaio incompleto | nada | Code | ref wt-ensaio-coerencia-100453@f7510b95a; brief: BACKLOG:753 | Conferir o diff integral do ensaio e determinar a entrega restante pelo censo (app/docs/BACKLOG.md:753; diff integral [nao verificado]). | wt-ensaio-coerencia-100453* (paradas49.txt:35) |
-| CORTE-DAS-TRAVAS | PARADA — v5 sem certificação | nada | Code | ref wt-instr-travas-002004@b05de7432; brief: BACKLOG:754 | Curar B1–B4 e certificar a versão corrigida com suíte e opus (app/docs/RELATO.md:484). | wt-instr-travas-002004* (paradas49.txt:37) |
-| RELAVRA-11-DOS-50 | PARADA — foto e reversão | pouso de COMPETENCIA-PAGA-UM-JUIZ | Code | ref wt-relavra11-113556@d36594345; brief: BACKLOG:1941 | Após COMPETENCIA-PAGA, concluir foto anterior ao delete, reversão e fechamento das contas exigidas (app/docs/BACKLOG.md:1941). | wt-relavra11-113556* (paradas49.txt:43) |
-| SAIDA-NOTURNA-NO-DIA-CERTO | PARADA — D1/D3 pendentes | nada | Code | logs/SAIDA-NOTURNA/censo.r; ref wt-saida-noturna-135512@6fd676c84 | Concluir D1/D3 e certificar a obra, considerando o pouso já registrado da E3 anterior (app/docs/RELATO.md:893; app/docs/RELATO.md:333). | wt-saida-noturna-135512* (paradas49.txt:44) |
-| SELO-ESPERA-PROCESSO-CEGO-A-FIXTURE | PARADA — sem v2 | ! novo aval SELO-ESPERA-ESTACIONA | Ronald | ref wt-selo-espera-084620@23af328bc; brief: BACKLOG:2575 | Dar novo aval de retomada antes de corrigir o filtro de RAIZ (app/docs/BACKLOG.md:2575). | wt-selo-espera-084620* (paradas49.txt:45) |
-| SELOS-CANON-I3 | PARADA — matriz pendente | desenho | Claude-desenho | logs/SELOS-CANON-I3/brief.md; logs/SELOS-CANON-I3/matriz.q; ref wt-selos-canon-i3-113049@4561d76e6 | Concluir a matriz e preparar a volta 4, preservando a dependência de CODEX-2-RAIAS (app/docs/RELATO.md:1489; app/docs/RELATO.md:1507). | wt-selos-canon-i3-113049* (paradas49.txt:46) |
-| SONDA-SEM-GRANT | PARADA — volta 8 pendente | pouso de CODEX-2-RAIAS | Code | ref wt-sonda-sem-grant-075803@c5e7df309; brief: BACKLOG:2131 | Após CODEX-2-RAIAS, executar a volta 8, rebase e certificações previstas (app/docs/RELATO.md:1515). | wt-sonda-sem-grant-075803* (paradas49.txt:47) |
-| NÃO IDENTIFICADA — wt-ui | PARADA — resto documental | nada | Code | ref wt-ui@6bd163b34; brief: BACKLOG:[nao verificado] | Identificar a obra e conferir o sujo integral antes de atribuir entrega de comportamento (paradas49.txt:48; vínculo com obra [nao verificado]). | wt-ui* (paradas49.txt:48) |
-| O280 / V3-BATERIA-DE-CASOS-PELA-REGRA | PARADA — cópia RED | ! troca do motor V3 | Ronald | logs/o280/matriz_recebida.md; logs/v3_bateria/matriz_recebida.md; ref wt-v3@bb3a588d6 | Conferir os testes sujos e demonstrar o fechamento atual do portão antes do ! da troca (app/docs/BACKLOG.md:1620; conteúdo sujo [nao verificado]). | wt-v3* (paradas49.txt:49) |
-| BUG-ENC-CELULAS-FORMA | EM VOO — opus final | nada | Code | logs/ORDEM-VIVA-1511/BUG-ENC/censo.r; ref wt-bug-enc-201609@380d20c27 | Aguardar o opus final preservando a cópia em voo (emvoo.txt:1). | — (emvoo.txt:1) |
-| E3-RESTO-R3 | EM VOO — c17 retida | ! novo aval R3 c17 | Ronald | logs/E3-RESTO-R3/c16/censo_fronteira.r; logs/E3-RESTO-R3/c17/predesenho.md; logs/E3-RESTO-R3/matriz/matriz.md; ref wt-codex-e3-resto-r3-093851@f31a8d09e | Obter aval novo citando o predesenho antes de construir c17 (app/docs/RELATO.md:22). | — (emvoo.txt:1) |
-| E4C-F1-NOVA-JUIZ-RESPONDIDA | EM VOO — B1 no anexo | ! novo aval F1 nova | Ronald | logs/E4C/f1nova/predesenho.md; logs/JUIZ-RESPONDIDA/censo.md; ref wt-f1nova-b1-203152@[nao verificado] | Obter aval novo citando a entrega do predesenho após o corte JUIZ-RESPONDIDA (app/docs/BACKLOG.md:1945). | — (emvoo.txt:1) |
-| FERIADO-USA-A-LEI-DE-1609 / FERIADO-G | EM VOO — PAREI 3(ii) | ! FERIADO-G item 3(ii) | Ronald | ref wt-feriado1609-110424@adb3f954c; brief: BACKLOG:729 | Resolver a condição 3(ii), que mantém a construção parada (app/docs/RELATO.md:7; app/docs/RELATO.md:8). | — (emvoo.txt:1) |
-| HE-REVOGADA-NA-PORTA | EM VOO — pre-opus | nada | Code | logs/RETOMA-HE-LOTE3/pv_he.r; ref wt-he-revogada-095943@019e5157a | Aguardar a suíte pre-opus e o opus final, preservando o escopo da 11 aberta (app/docs/RELATO.md:171; app/docs/RELATO.md:186). | — (emvoo.txt:1) |
-| SITUACAO-DESLIGADO / LOTE 3 desligado | EM VOO — c6 na fila | ! VINCULO | Ronald | logs/RETOMA-HE-LOTE3/pv_lote3.r; ref wt-lote3-desligado-100246@874fb76d1 — c5 documentada; head c6 [nao verificado] | Concluir os dois procedentes anunciados da c6 e obter o ! de VINCULO para pousar (emvoo.txt:1; app/docs/RELATO.md:82). | — (emvoo.txt:1) |
-| E4C-F3 | PARADA — matriz entregue | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Code | logs/ESPINHA-BRIEFS/F3/matriz.md; logs/ESPINHA-BRIEFS/F3/brief.md; ref [nao verificado]@[nao verificado] | Retomar a fatia após o pouso da F1 usando a matriz entregue (app/docs/RELATO.md:33). | — (emvoo.txt:2) |
-| E4C-F4 | PARADA — duas leis abertas | lei F4 absorção e guardas do limbo | Ronald | logs/ESPINHA-BRIEFS/F4/matriz.md; logs/ESPINHA-BRIEFS/F4/brief.md; ref [nao verificado]@[nao verificado] | Cortar absorção pelo ato e guardas do limbo, preservando a construção após F1 (app/docs/RELATO.md:17). | — (emvoo.txt:2) |
-| E4C-F5 | PARADA — lei respondida | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Code | logs/ESPINHA-BRIEFS/F5/matriz.md; logs/ESPINHA-BRIEFS/F5/brief.md; ref [nao verificado]@[nao verificado] | Adequar a fatia ao corte JUIZ-RESPONDIDA e construir após F1 (app/docs/RELATO.md:13; app/docs/RELATO.md:17). | — (emvoo.txt:2) |
-| E4C-F6 | PARADA — lei residual | lei F6 aguarda_admin nos estados de absorção | Ronald | logs/ESPINHA-BRIEFS/F6/matriz.md; logs/ESPINHA-BRIEFS/F6/brief.md; ref [nao verificado]@[nao verificado] | Resolver a lei residual de aguarda_admin antes da construção posterior à F1 (app/docs/RELATO.md:17). | — (emvoo.txt:2) |
-| E4C-F7 | PARADA — matriz entregue | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Code | logs/ESPINHA-BRIEFS/F7/matriz.md; logs/ESPINHA-BRIEFS/F7/brief.md; ref [nao verificado]@[nao verificado] | Preparar a fatia pela matriz e preservar as dependências de F1, F2 e BUG-PAR (app/docs/RELATO.md:33; app/docs/RELATO.md:149). | — (emvoo.txt:2) |
-| E4C-F8 | PARADA — lei residual | lei F8 V legada com R sintética posterior | Ronald | logs/ESPINHA-BRIEFS/F8/matriz.md; logs/ESPINHA-BRIEFS/F8/brief.md; ref [nao verificado]@[nao verificado] | Cortar a validade da V legada após R sintética e construir somente após F1 (app/docs/RELATO.md:17). | — (emvoo.txt:2) |
-| E4C-F9 | PARADA — matriz entregue | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Code | logs/ESPINHA-BRIEFS/F9/matriz.md; logs/ESPINHA-BRIEFS/F9/brief.md; ref [nao verificado]@[nao verificado] | Preparar a retomada da fatia após o pouso da F1 (app/docs/RELATO.md:17; app/docs/RELATO.md:33). | — (emvoo.txt:2) |
-| PAR-CONFIRMADO-PELO-SUPERVISOR | PARADA — só registrada | lei PAR-CONFIRMADO perfil e juiz | Ronald | logs/PAR-CONFIRMADO/censo.md; ref [nao verificado]@[nao verificado] | Cortar o perfil que confirma e o nascimento do juiz antes de construir (app/docs/RELATO.md:39). | — (emvoo.txt:2) |
-
-**TOTAL PARADA: 46 entradas consolidadas**, incluindo duas de obra ainda não identificada; **TOTAL EM VOO: 6**; **total da tabela: 52** (paradas49.txt:1–49; emvoo.txt:1–2; identificação das duas obras [nao verificado]).
-
-**Prova dos 49 itens:** 31 grupos com 1 item + 4 com 2 + 2 com 3 + 1 com 4 = **31 + 8 + 6 + 4 = 49**, distribuídos em **38 grupos**; os outros 14 registros não acrescentam itens ao quadro original (paradas49.txt:1–49; emvoo.txt:1–2).
-
-DESTRAVA alterado em relação ao quadro:
-
-- **FRAC5-MINIMO-5:** unificado em `! novo corte FRAC5-MINIMO-5`; a cópia RED dizia `lei`, mas a cura está guardada e depende de novo corte de pouso (app/docs/BACKLOG.md:788).
-- **BUG-PAR:** de `desenho e pouso de E3-RESTO-R3` para `lei PRE-DESENHO-BUG-PAR-VOLTA`; o pouso R3 e o novo aval continuam exigidos na próxima ação (app/docs/RELATO.md:18).
-- **PAR-NAO-ADJACENTE:** de `desenho` para `nada`; a lei foi respondida e a próxima construção já está especificada (app/docs/RELATO.md:1599; app/docs/RELATO.md:1601).
-
-## 15/11 22:01 · sessao 49155812141f · - · - · origem=Ronald (tmux)
-
-Conferências principais:
-
-- **BUG-PAR**: mudar `desenho` para `lei PRE-DESENHO-BUG-PAR-VOLTA`, dono Ronald. Permanecem duas perguntas não decididas; construção exige aval novo após pouso R3. **app/docs/RELATO.md:18**. [nao verificado]
-- **PAR-NAO-ADJACENTE**: proponho mudar `desenho` para `nada`, dono Code: lei respondida; falta implementar v5 já especificada. **app/docs/RELATO.md:1599**, **app/docs/RELATO.md:1601**, **app/docs/BACKLOG.md:1247**.
-- **COMPETENCIA-PAGA**: manter `! corte LU2-06 sobre competência 10 paga`; P2 respondida não elimina corte sobre a 10 paga. **app/docs/RELATO.md:62**, **app/docs/RELATO.md:69**.
-- **F2**: L1/L2 ainda aparecem abertas, além de corte exportado LU2-13. Manter lei F2 como quadro, mencionando demais condições na ação. **app/docs/RELATO.md:17**, **app/docs/RELATO.md:64**, **app/docs/RELATO.md:100**.
-
-Bases:
-
-- **LASTRO-FAIXA**: escolha explícita `wt-codex-lastro-redesenho-164050@f3ebd821b`. **app/docs/BACKLOG.md:1895**.
-- **BO-DISPUTA**: `wt-codex-bo-disputa-sem-pergunta-183316@cabdb0b4c`, c25 guardada. **app/docs/RELATO.md:371**.
-- **PAR-NAO-ADJACENTE**: `wt-par-rebase-060915@84a400e1c`, reaplicação posterior. **app/docs/RELATO.md:1605**, **app/docs/RELATO.md:1606**.
-- **DATA-EVENTO-CRU**: `3e86f61fe` é a base documentada da catraca; cronologia de `70dfbc62a` não aparece nos quatro documentos pesquisados **[nao verificado]**. **app/docs/RELATO.md:9123**, **app/docs/RELATO.md:1067**.
-
-Demais destravas preservadas:
-
-| obra | destrava | fonte |
-|---|---|---|
-| BO-DISPUTA-SEM-PERGUNTA | desenho | app/docs/CORTES.md:457 |
-| LASTRO-FAIXA-SEM-DEFAULT | pouso de TIPO-NA-FONTE | app/docs/BACKLOG.md:1895 |
-| PAUTA-SEM-TURNO-PREFIXO-RESERVADO | desenho | app/docs/BACKLOG.md:2123 |
-| TIPO-NA-FONTE | desenho | app/docs/BACKLOG.md:1891 |
-| TRIAGEM-OFFLINE-RED-HEADLESS | nada | app/docs/RELATO.md:962 |
-| DATA-EVENTO-CRU | desenho | app/docs/RELATO.md:1059 |
-| DEPLOY-EXCLUSAO-ENVELOPE | nada | app/docs/RELATO.md:1592 |
-| COERENCIA-PELO-EFEITO | nada | app/docs/BACKLOG.md:753 |
-| FRAC5-MINIMO-5 | ! novo corte de pouso FRAC5-MINIMO-5 | app/docs/BACKLOG.md:788 |
-| CORTE-DAS-TRAVAS | nada | app/docs/RELATO.md:484 |
-| JUSTIFICATIVA-PAGA-O-PERIODO | pouso de COMPETENCIA-PAGA-UM-JUIZ | app/docs/BACKLOG.md:1948 |
-| LASTRO-FOLGA-FORA-DO-CATALOGO | pouso de TIPO-NA-FONTE | app/docs/RELATO.md:4; app/docs/BACKLOG.md:1895 |
-| QUARENTENA-DO-COLAB | desenho | app/docs/RELATO.md:840 |
-| RELAVRA-11-DOS-50 | pouso de COMPETENCIA-PAGA-UM-JUIZ | app/docs/BACKLOG.md:1941 |
-| SAIDA-NOTURNA-NO-DIA-CERTO | nada | app/docs/RELATO.md:839; app/docs/RELATO.md:333 |
-| SELO-ESPERA-PROCESSO-CEGO-A-FIXTURE | ! novo aval SELO-ESPERA-ESTACIONA | app/docs/BACKLOG.md:2575 |
-| SELOS-CANON-I3 | desenho | app/docs/RELATO.md:1489 |
-| SONDA-SEM-GRANT | pouso de CODEX-2-RAIAS | app/docs/RELATO.md:1515 |
-| O280 / V3-BATERIA | ! troca do motor V3 | app/docs/BACKLOG.md:1620 |
-
-**Contagem do item conjunto:** `wt-quarentena-svv-151703` é cópia conjunta WIP, comprovada em **app/docs/RELATO.md:839**. Para não duplicar os 49 itens, atribuí-lo uma vez à QUARENTENA; a linha SVV conserva seu item nominal e referencia a cópia conjunta apenas como referência. Essa atribuição contábil é convenção **[nao verificado]**. SVV permanece obra própria e pousa junto da QUARENTENA. **app/docs/BACKLOG.md:838**.
-
-**Absorção:** LASTRO-FOLGA está expressamente absorvida pelo RED pk5356 da LASTRO no topo, embora conserve entrada própria no BACKLOG. **app/docs/RELATO.md:4**, **app/docs/BACKLOG.md:1890**.
-
-## 15/11 22:01 · sessao 7d68143a5daf · RESCALDO-CORTE-1511 · verificador · origem=Code
-
-**(1) PROCEDE.** Dois itens de SAI são SPEC explícita de obras vivas:
-
-| Item → obra viva | Prova |
-|---|---|
-| `wt-codex-lastro-faixa-sem-default-215253` → LASTRO-FAIXA-SEM-DEFAULT | “vira SPEC (…) nao base”; c13–c19 permanecem SPEC, enquanto a base nova recebe c3–c12. A obra está ABERTA. (`app/docs/RELATO.md:820`; `app/docs/RELATO.md:822`; `app/docs/BACKLOG.md:1895`) |
-| `wt-silencio-2810-0915` → QUARENTENA-DO-COLAB + SILENCIO-VENCIDO-VOLTA | A célula nomeia essa cópia; a retomada manda “reaplica a copia antiga como SPEC em copia nova do HEAD”. A sucessora documentada contém somente RED não rodado. (`app/docs/BACKLOG.md:839`; `app/docs/BACKLOG.md:2586`; `app/docs/RELATO.md:839`) |
-
-Isso exige preservar e nomear o material nas sucessoras; **não demonstra necessidade de conservar as worktrees**, pois D permite expressamente SPEC como ref nomeada. (`aval.txt:1`, D)
-
-Não confundi ancestralidade com base atual: E3 antiga foi reaplicada e já tem sucessora c16b/c17; LASTRO c3–c12 foi transportada à base nova. (`app/docs/RELATO.md:320`; `app/docs/RELATO.md:12`; `app/docs/RELATO.md:823`)
-
-A F1 c9 também tem guarda expressa em `refs/guardadas/e4c-f1-c9`; seu uso como base/SPEC da construção nova é **[nao verificado]**. (`app/docs/RELATO.md:4`; `app/docs/BACKLOG.md:1945`)
-
-**(2) PROCEDE quanto às lacunas que impedem liberar integralmente SAI.** Existência de commit útil exclusivo ou perda efetiva: **[nao verificado]**; faltam histórico Git e os diffs integrais indicados abaixo. (`censo_1a4.r`, preâmbulos e ITEMs respectivos) [nao verificado]
-
-**Nenhum dos 29 NO-MAIN apresenta prova exclusivamente documental**: todos citam código; portanto há **0** casos “só doc/RELATO” nesse grupo. Isso comprova os comportamentos indicados, sem comprovar todo conteúdo sujo. (`censo_1a4.r`, 29 ITEMs NO-MAIN)
-
-| Item a suspender do SAI | Lacuna |
-|---|---|
-| `wt-codex-bo-disputa-sem-pergunta-221357` | Produção/testes/entrega c22 omitidos; sucessora c25 não comprova absorção desse sujo específico. (`censo_1a4.r`, ITEM correspondente; `app/docs/CORTES.md:455`) |
-| `wt-codex-lastro-faixa-sem-default-215253` | Produção/teste c20 omitidos; c20 terminou sem commit, com parcial guardada. (`censo_1a4.r`, ITEM correspondente; `app/docs/RELATO.md:820`) |
-| `wt-feriado-092818` | Produção/testes omitidos; “SUPERADA” decide a substituição, sem comparar integralmente o sujo. (`censo_1a4.r`, ITEM correspondente; `app/docs/RELATO.md:739`) |
-| `wt-e4b-pouso-065207` | Produção/backfill com equivalência integral expressamente não verificada. O comportamento citado existe no main. (`censo_1a4.r`, ITEM correspondente; `app/chamados/services/fecho_runtime.py:146`) |
-| `wt-merge-e4b-214239` | Integração de produção/testes c10 com inventário incompleto; há identificação da integração e pouso posterior, sem comparação integral apresentada. (`censo_1a4.r`, ITEM correspondente; `app/docs/RELATO.md:1053`; `app/docs/RELATO.md:998`) |
-| `wt-hj090-v6m-204526` | Cura em command/services/views parcialmente cortada. O transporte de `hoje` existe, mas o restante permanece desconhecido. (`censo_1a4.r`, ITEM correspondente; `app/ferias/management/commands/realinhar_concedidos_ferias.py:114`; `app/ferias/services.py:220`) |
-| `wt-e3-mig-171026` | “Restante do diff cortado”: falta identificar seu conteúdo; não há prova de que seja produção adicional. (`censo_1a4.r`, ITEM correspondente) |
-| `wt-e3-mesclada-121238` | Identidade de todos os deltas cortados não demonstrada; pouso posterior da E3 não resolve sozinho essa lacuna. (`censo_1a4.r`, ITEM correspondente; `app/docs/RELATO.md:545`; `app/docs/RELATO.md:333`) |
-
-As mutações de `ens-dupla-mut-212030` e `ens-orfao-mut-210938` estão identificadas como ensaio; não são produção desconhecida. Entretanto, o relato apenas promete incorporar os testes, e registra o ramo S111 do ÓRFÃO como não exercitado. Incorporação integral desses REDs em sucessora: **[nao verificado]**; devem entrar nominalmente na guarda C. (`app/docs/RELATO.md:1046`; `app/docs/RELATO.md:1056`; `app/docs/RELATO.md:1058`; `aval.txt:1`, C)
-
-**(3) NAO PROCEDE quanto a contradição demonstrável no material disponível.** O cotejo integral com os cinco avais nomeados é **[nao verificado]**: faltam os textos de `logs/AVAIS-1515/`; não há como citar literalmente os dois lados de uma contradição com esses documentos ausentes. **[nao verificado]**
-
-Os pares literais acessíveis são compatíveis:
-
-| Aval proposto | Texto vigente disponível |
-|---|---|
-| “NAO mexe na ORDEM-VIVA-1511-NOITE nem no teto 2”. (`aval.txt:1`) | “teto 2 construtores e DESPACHO valem como escritos”. (`app/docs/RELATO.md:25`) |
-| “instrumento por ultimo com pouso proprio”. (`aval.txt:1`, B) | “produto pousa primeiro, instrumento em pouso proprio”. (`app/docs/CORTES.md:289`) |
-| “SO REGISTRAR, nao construir”. (`aval.txt:1`, F) | Não concede pouso à FRAC5; permanece a determinação “NAO pousam: ficam guardadas com ref”. (`app/docs/CORTES.md:426`; `aval.txt:1`, D) |
-
-O topo antigo que exige novo aval para R3 c17/F1 não prova conflito com `CONSTRUIR-R3-C17-E-F1-NOVA`, cujo texto posterior não foi fornecido. (`app/docs/RELATO.md:4`; conteúdo e alcance do aval posterior **[nao verificado]**)
-
-**(4) PROCEDE na mistura de unidades; os totais originais por classe fecham.**
-
-| Conferência | Conta e conclusão |
-|---|---|
-| Classes das quatro faixas | NO-MAIN: `7+8+8+6=29`; MORTA: `12+6+7+10=35`; PARADA: `10+14+13+12=49`; total `113`. (`censo_1a4.r`, subtotais das quatro faixas) |
-| Destinos originais | `7 POUSA +42 GUARDA +64 SAI=113`; `29+35=64`. (`quadro.md`, resumo e tabela) |
-| Após triagem | `5 POUSA +44 GUARDA +64 SAI=113`: correto **por linhas**. Esses cinco registros representam **quatro obras**, pois JUSTIFICATIVA aparece duas vezes. (`quadro.md`, triagem final) |
-| Em voo | **7 registros =6 cópias +1 célula**, representando **6 obras**; BUG-ENC aparece como worktree e como célula. (`quadro.md`, EM VOO) |
-| Universo | `80+25+15=120` registros; `113+7=120`. Não são 120 worktrees: a decomposição fornecida corresponde a **105 cópias +15 células**, sendo **99 cópias +14 células no censo**. (`quadro.md`, universo e EM VOO; `bin/raias_estado.py:132`; `bin/interrompidas_estado.py:134`) |
-| 49 PARADA | Há **35 cópias +14 células**. Agrupando os nomes das obras, resultam **37 obras identificadas +2 registros sem obra identificada** (`wt-ui`, `recon_onprem`); não “49 obras”. (`quadro.md`, 49 ITEMs PARADA) |
-
-LASTRO-FOLGA conserva ID próprio ABERTA no BACKLOG, embora o RELATO registre absorção pela LASTRO-FAIXA; uni-las reduziria as 37 identificadas para 36, mas essa consolidação precisa ficar explícita. O total real de obras contidas nas duas cópias não identificadas permanece **[nao verificado]**. (`app/docs/BACKLOG.md:1890`; `app/docs/RELATO.md:4`; `quadro.md`, ITEMs `wt-ui` e `recon_onprem`)
-
-`wt-ui` e `wt-v3` permanecem worktrees guardadas. `recon_onprem` tem material GUARDA, mas o aval manda retirar sua worktree: é **uma remoção adicional**, fora dos 64 SAI. As três declarações são **três arquivos**, sem equivaler a três remoções de worktree; o medidor lê essas declarações separadamente. (`aval.txt:1`, D; `quadro.md`, declarações; `bin/raias_estado.py:51`; `bin/raias_estado.py:120`)
-
-A contagem de refs deve usar o inventário nominal das **99 cópias do censo**, distinguindo células que remetem às mesmas cópias; quantidade de tars depende de quais cópias estão sujas, não de 113/120 registros. A quantidade exata necessária de tars é **[nao verificado]**. (`aval.txt:1`, C; `quadro.md`, universo e ITEMs)
-
-**Lista final — tirar do SAI imediato, até resolver as lacunas da pergunta 2:** os oito itens da tabela daquela pergunta, pelos motivos ali documentados. Isso deixa **56 candidatos a SAI**, com **8 em guarda por revisão**; não altera suas classes originais. (`censo_1a4.r`, oito ITEMs; `aval.txt:1`, D)
-
-**Correções numéricas:** `64−8=56` SAI; após a triagem e essa suspensão, `56 SAI +52 GUARDA +5 POUSA=113` registros. POUSA significa **5 registros/4 obras**; em voo significa **7 registros/6 obras**; PARADA significa **49 registros**, não 49 obras. As duas SPEC exigem vínculo nominal nas sucessoras; sua retirada física continua condicionada à guarda C, sem obrigação demonstrada de conservar as worktrees. (`quadro.md`, triagem final e EM VOO; `aval.txt:1`, C–D; `app/docs/RELATO.md:820`; `app/docs/BACKLOG.md:2586`)
-
-## 15/11 22:01 · sessao e88de9ae1a7b · - · - · origem=Ronald (tmux)
-
-Consolidação das obras de `emvoo.txt` e material da tarde; sobreposições com o quadro: E4C-F2, LOTE7/FATO-DE-AUSENCIA-ACORDA-A-PROJECAO e BUG-PAR devem conservar uma única linha por obra. As duas primeiras correspondências são explícitas no dado; BUG-PAR é associado à obra longa por `app/docs/RELATO.md:35-36`.
-
-| obra | estado sugerido | DESTRAVA | fonte e próxima ação | ref disponível | material permitido |
-|---|---|---|---|---|---|
-| BUG-ENC-CELULAS-FORMA | EM VOO — opus final | nada | Aguardar o opus final sem tocar a cópia; estado vem do anexo [nao verificado]. A interrupção antiga está defasada segundo o anexo; histórico em `app/docs/BACKLOG.md:988`. | `wt-bug-enc-201609@380d20c27` — anexo [nao verificado] | `logs/ORDEM-VIVA-1511/BUG-ENC/censo.r` |
-| E3-RESTO-R3 | EM VOO — c17 retida | ! novo aval R3 c17 | Obter aval novo citando a entrega do predesenho antes da c17 (`app/docs/RELATO.md:4`, `app/docs/RELATO.md:23`). | `wt-codex-e3-resto-r3-093851@f31a8d09e` — `app/docs/RELATO.md:23` + anexo [nao verificado] | `logs/E3-RESTO-R3/c17/predesenho.md`; `logs/E3-RESTO-R3/c16/censo_fronteira.r`; `logs/E3-RESTO-R3/matriz/matriz.md` |
-| E4C-F1-NOVA-JUIZ-RESPONDIDA | EM VOO — B1 no anexo | ! novo aval F1 nova | Obter aval novo citando o predesenho; lei JUIZ-RESPONDIDA já cortada (`app/docs/BACKLOG.md:1945`; `app/docs/RELATO.md:4`). | Commit da nova `wt-f1nova-b1-203152` [nao verificado]; `d36ecbddd` pertence à c9 guardada, não provar head da nova (`app/docs/RELATO.md:4`). | `logs/E4C/f1nova/predesenho.md`; `logs/JUIZ-RESPONDIDA/censo.md`; `logs/E4C/matriz/matriz.md` |
-| FERIADO-USA-A-LEI-DE-1609 / FERIADO-G | EM VOO — PAREI 3(ii) | ! FERIADO-G item 3(ii) | Aguardar Ronald para a condição 3(ii), que manda não construir (`app/docs/RELATO.md:7-8`). | `wt-feriado1609-110424@adb3f954c` (`app/docs/BACKLOG.md:729`). | `logs/FERIADO-ESCALA/censo/censo.r` é censo do escopo anterior; **não há matriz/predesenho/censo/brief da lei 1609 na lista**. Melhor usar só ref e `brief: BACKLOG:729`. |
-| HE-REVOGADA-NA-PORTA | EM VOO — pre-opus | nada | Aguardar suite pre-opus e opus final; pouso na 11 aberta não espera LU2-04 (`app/docs/RELATO.md:171`). | `wt-he-revogada-095943@019e5157a` (`app/docs/RELATO.md:186`). | Nenhum matriz/predesenho/censo/brief listado para esta retomada; os `.r` disponíveis são preverificações. Usar ref + brief BACKLOG com linha ainda a localizar [nao verificado]. |
-| SITUACAO-DESLIGADO / LOTE 3 desligado | EM VOO — c6 na fila | ! VINCULO | Concluir os dois procedentes da c6 e obter ! de VINCULO para o pouso; c6/procedentes no anexo [nao verificado], ! em `app/docs/RELATO.md:82`, `app/docs/RELATO.md:180`. | Commit c6 [nao verificado]; último explícito na documentação é c5 `874fb76d1` (`app/docs/RELATO.md:82`). | Nenhum matriz/predesenho/censo/brief listado para a retomada; `logs/RETOMA-HE-LOTE3/pv_lote3.r` existe, mas é preverificação. |
-| E4C-F2 | PARADA — matriz entregue | lei F2 L1/L2 | Cortar efeito/face SQL e retomar após F1; a matriz mantém duas perguntas abertas (`app/docs/RELATO.md:17`, `app/docs/RELATO.md:33`). | Base do quadro `wt-e4c-f2-103933@8c6577245` (`app/docs/RELATO.md:89`). | `logs/ESPINHA-BRIEFS/F2/matriz.md` |
-| E4C-F3 | PARADA — matriz entregue | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Retomar a fatia após o pouso da F1 (`app/docs/RELATO.md:17`, `app/docs/RELATO.md:33`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F3/matriz.md`; `logs/ESPINHA-BRIEFS/F3/brief.md` |
-| E4C-F4 | PARADA — duas leis | lei F4 absorção e guardas de limbo | Cortar absorção pelo ato e guardas de limbo antes da construção após F1 (`app/docs/RELATO.md:17`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F4/matriz.md`; `logs/ESPINHA-BRIEFS/F4/brief.md` |
-| E4C-F5 | PARADA — lei respondida | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Readequar a fatia ao corte JUIZ-RESPONDIDA após o pouso da F1 (`app/docs/RELATO.md:13`, `app/docs/RELATO.md:17`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F5/matriz.md`; `logs/ESPINHA-BRIEFS/F5/brief.md` |
-| E4C-F6 | PARADA — lei residual | lei F6 aguarda_admin nos estados de absorção | Resolver a lei residual e construir após F1; a segunda lei foi respondida (`app/docs/RELATO.md:17`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F6/matriz.md`; `logs/ESPINHA-BRIEFS/F6/brief.md` |
-| E4C-F7 | PARADA — matriz entregue | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Retomar após F1, respeitando também F2 e BUG-PAR e o smoke de pouso (`app/docs/RELATO.md:33`, `app/docs/RELATO.md:149`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F7/matriz.md`; `logs/ESPINHA-BRIEFS/F7/brief.md` |
-| E4C-F8 | PARADA — lei residual | lei F8 V legada com R sintética posterior | Cortar se V legada permanece válida após R sintética e construir após F1 (`app/docs/RELATO.md:17`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F8/matriz.md`; `logs/ESPINHA-BRIEFS/F8/brief.md` |
-| E4C-F9 | PARADA — matriz entregue | pouso de E4C-F1-NOVA-JUIZ-RESPONDIDA | Retomar após o pouso da F1 (`app/docs/RELATO.md:17`, `app/docs/RELATO.md:33`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/ESPINHA-BRIEFS/F9/matriz.md`; `logs/ESPINHA-BRIEFS/F9/brief.md` |
-| FATO-DE-AUSENCIA-ACORDA-A-PROJECAO / LOTE7 | PARADA — c6 anunciada | desenho | Conferir a liberação “B3 LOTE7 DESENHO” indicada no anexo antes da c6; o código só registra pergunta aberta da c5 (`app/docs/RELATO.md:59`, `app/docs/RELATO.md:159`); teor da liberação [nao verificado]. | Base do quadro `wt-lote7-ausencia-100250@22677d0db` (`app/docs/RELATO.md:116`, `app/docs/RELATO.md:134`); commit c6 [nao verificado]. | `logs/ESPINHA-BRIEFS/MATRIZ-LOTE7/entrega.md` |
-| BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | PARADA — predesenho entregue | lei PRE-DESENHO-BUG-PAR-VOLTA | Cortar a regra do universo 163 e o alcance exportado; volta somente por aval novo depois de R3 (`app/docs/RELATO.md:18`). | `wt-bugpar-main-095024@6e2fc9133` — quadro [nao verificado]; commit/documentação em `app/docs/RELATO.md:85`. | `logs/ESPINHA-BRIEFS/MATRIZ-C7-BUGPAR/entrega.md`; `logs/BUG-PAR-O-PAR/predesenho/entrega.md`; `logs/BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS/brief.md` |
-| PAR-CONFIRMADO-PELO-SUPERVISOR | PARADA — só registrada | lei PAR-CONFIRMADO perfil e juiz | Cortar perfil e juiz novo antes de construir (`app/docs/RELATO.md:39`; `app/docs/BACKLOG.md:744`). | Nenhuma cópia/item/commit fornecido [nao verificado]. | `logs/PAR-CONFIRMADO/censo.md` |
-
-Pontos para a consolidação final:
-
-- As seis cópias explicitamente listadas sob “EM VOO” devem permanecer distintas das obras que só têm material entregue; classificá-las EM VOO preserva o anexo, com a retenção na nota [nao verificado].
-- Para novas obras sem cópia-base, a exigência `ref <item>@<commit>` não pode ser satisfeita literalmente sem marcar os campos ausentes `[nao verificado]`. [nao verificado]
-- Mudança segura em relação ao quadro: **BUG-PAR**, de “desenho e pouso R3” para **lei PRE-DESENHO-BUG-PAR-VOLTA**, preservando em próxima ação o pouso R3 e novo aval (`app/docs/RELATO.md:18`).
-- Em **LOTE7**, não encontrei no código o teor de “libera B3 LOTE7 DESENHO”; tratar isso como liberação já concedida e mudar para `nada` exige inferência `[nao verificado]`.
-
-## 15/11 22:01 · sessao 813940632a06 · - · - · origem=Ronald (tmux)
-
-Conferência das primeiras 22 linhas, somente leitura:
-
-| obra | destrava recomendado | evidência / observação |
-|---|---|---|
-| CODEX-CONTEXTO-DA-CASA | nada | Briefs pendentes; censo registra zero lei — app/docs/BACKLOG.md:1095; app/docs/RELATO.md:578. |
-| JUSTIFICATIVA-PAGA-O-PERIODO | pouso de COMPETENCIA-PAGA-UM-JUIZ | app/docs/BACKLOG.md:1948; base `74ec17605`, suíte inteira registrada — app/docs/RELATO.md:211. |
-| DATA-EVENTO-CRU | desenho | Matriz obrigatória após opus — app/docs/RELATO.md:1059. Base `wt-catraca-dec-151606@3e86f61fe`, cura v4 — app/docs/RELATO.md:1067; app/docs/RELATO.md:9123. Próximo verificador também exige rearme Ronald — app/docs/RELATO.md:1067. |
-| CODEX-2-RAIAS | nada | Construção/provas restantes — app/docs/RELATO.md:1488; app/docs/RELATO.md:1503. |
-| FRAC5-MINIMO-5 | ! novo corte FRAC5-MINIMO-5 | Pouso somente por corte novo — app/docs/BACKLOG.md:788. Normaliza a cópia RED que dizia `lei`; base `wt-frac5-cura-100047@b7d6b6aed` — app/docs/BACKLOG.md:788. |
-| FATO-DE-AUSENCIA-ACORDA-A-PROJECAO / LOTE7 | desenho | Quadro fornecido; substituição efetiva por c6 [nao verificado]. |
-| COBPARC-FILA-RELOGIO | nada | Censo posterior: lei zero, padrão L-128; construção/provas pendentes — app/docs/RELATO.md:582; app/docs/BACKLOG.md:916. |
-| LASTRO-DEGRAU-2 | nada | Dependência histórica JUIZ-DO-PAR consta pousada — app/docs/RELATO.md:3345; censo lei zero — app/docs/RELATO.md:582. Cura do construtor permanece — app/docs/BACKLOG.md:1814. |
-| O10-C | nada | Desenho da UI decidido — app/docs/RELATO.md:1987. `!` da competência 09 aplica-se ao apply posterior — app/docs/RELATO.md:1991; app/docs/RELATO.md:1992. |
-| O275 | lei FORMA A x FORMA B | app/docs/BACKLOG.md:1615; app/docs/RELATO.md:582. |
-| OTIMIZA-1 | pouso de SUITE-POR-IMPACTO | app/docs/BACKLOG.md:2197. |
-| PADRAO-DE-CIMA | desenho | app/docs/RELATO.md:2494; app/docs/RELATO.md:578. |
-| QUARENTENA-DO-COLAB | desenho | 16x15 janelas; reabre depois do pouso E3 — app/docs/BACKLOG.md:2586. Base `c9a2a3846` explicitada ali. |
-| SILENCIO-VENCIDO-VOLTA | pouso de QUARENTENA-DO-COLAB | Obra própria, pouso conjunto — app/docs/BACKLOG.md:838. Não duplicar o item conjunto `wt-quarentena-svv-151703` na soma [nao verificado: regra de atribuição a decidir na consolidação]. |
-| SUITE-POR-IMPACTO | ! aval PRONTO-5 | Mantém a trava do quadro: rc2 é aval, não lei — app/docs/RELATO.md:556. Há também corte pendente do gate pela classe e entrada após E3 — app/docs/BACKLOG.md:1093; app/docs/RELATO.md:665. |
-| V3-E1 | lei V3-E1 C06/C16/24x48 | app/docs/RELATO.md:556; pergunta DP em app/docs/BACKLOG.md:953. |
-| V3-RETOMA-FILA | pouso de V3 | app/docs/BACKLOG.md:1033. |
-| V3-RETOMA-PERIODOS-DA-CELULA | lei período não guardado na célula | app/docs/BACKLOG.md:1021; app/docs/RELATO.md:2497. |
-| LASTRO-FAIXA-SEM-DEFAULT | pouso de TIPO-NA-FONTE | Base escolhida explicitamente `wt-codex-lastro-redesenho-164050@f3ebd821b` — app/docs/BACKLOG.md:1895. |
-| obra não identificada — recon_onprem | nada | Trava não identificada [nao verificado]; árvore anterior à LEI-AKITA e inadequada ao pouso — app/docs/RELATO.md:328. |
-
-A cópia não possui `.git`; comparação direta das datas dos commits não foi possível [nao verificado]. Usei as bases explicitadas nos documentos; `70dfbc62a` não apareceu na busca em BACKLOG/RELATO [nao verificado].
-
-_5831 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5836 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
