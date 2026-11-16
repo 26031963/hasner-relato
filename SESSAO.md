@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 10:38:56.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (143.7 MB). Acoes na janela: **807**.
+**Medido em 16/11/2026 10:44:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (143.7 MB). Acoes na janela: **809**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:39:47 | Bash | Record postmortem and save memory | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() o='Postmortem: classificacao Codex censo em voo.'; assert s.count(o)==1 s=s.replace(o,'Postmortem (Codex censo, logs/E4C/f1nova/b1/c2/postmortem_c2.r): (e) NAO PERGUNTADO -- nenhuma das 4 .q pediu conferir a frase do juiz novo na FONTE CORTES.json; falha de quem perguntou (a sessao), falha Codex 0.',1) open(p,' ...` |
+| 10:39:36 | Bash | Read Codex postmortem result | `cd /home/ronald/saas-hasner; D=logs/E4C/f1nova/b1/c2; tail -3 $D/postmortem_c2.out; wc -c $D/postmortem_c2.r; head -c 3000 $D/postmortem_c2.r` |
 | 10:32:38 | Bash | Set ESPERANDO on suite pid | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() anc='# RELATO — esteira saas-hasner\n\n'; assert s.count(anc)==1 s=s.replace(anc,anc+'ESPERANDO: suite.sh \| pid=320787\n',1); open(p,'w').write(s) EOF python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"` |
 | 10:32:35 | Bash | Find suite process pid | `cd /home/ronald/saas-hasner; ps -eo pid,args \| grep 'bin/suite.sh' \| grep -v grep \| head -3` |
 | 10:32:33 | Bash | Run Codex postmortem classification | `cd /home/ronald/saas-hasner; D=logs/E4C/f1nova/b1/c2; grep -n 'entrega\\|triagem\\|descart' $D/entrega.md \| head -5 \| cut -c1-150; cat > $D/postmortem_c2.q <<'EOF' POSTMORTEM da reprovacao do opus final (CODEX_PAPEL=censo, obra E4C-F1-NOVA-POUSO-B1 volta c2). O opus final reprovou com 1 bloqueante (anexo opus_final.md, item 1). Anexos: o achado do opus, TODAS as perguntas (.q) e respostas (.r) C ...` |

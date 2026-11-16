@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 10:02** · publicado em **16/11/2026 10:06** (UTC-3)
+> Ultima resposta processada: **16/11/2026 10:39** · publicado em **16/11/2026 10:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 10:39 · sessao c49bf044a323 · E4C-F1-NOVA-POUSO-B1 · censo · origem=Code
+
+**(e) NÃO PERGUNTADO** — nenhuma `.q` fornecida pede conferir se a frase de nascimento está na fonte `CORTES.json` e sobreviverá à regeneração; as listas incluem apenas classes genéricas próximas. (`codex_verificador_v1.q:23–26`; `codex_verificador_v2.q:5–18`; `codex_verificador_v3.q:4–14`; `codex_verificador_c2_v1.q:6–12`)
+
+Nos anexos colados, numerei a primeira linha após cada delimitador como linha 1, contando linhas vazias.
+
+O bloqueante é a **persistência do corte na fonte**: a frase aparece no Markdown, e o gerador reescreve esse arquivo inteiro a partir do JSON; a ausência no JSON é registrada pelo opus. (`app/docs/CORTES.md:461`; `bin/gerar_cortes.py:23–24`; `bin/gerar_cortes.py:114–116`; `opus_final.md:4–5`)
+
+**Trechos de cada `.q`**
+
+| Pergunta | Trecho exato e relação com o bloqueante |
+|---|---|
+| `codex_verificador_v1.q` | “O que o diff diz fazer: nasce o juiz `chamados/juizes.py::pergunta_respondida`” (`:5`). A lista contém “derivacao paralela de fonte unica; selo/RED sem mordida” (`:24`) e “pouso antes do pre-requisito” (`:25`). **Menciona nascimento e classes genéricas; não pergunta pela inscrição no JSON nem pela sobrevivência à geração.** (`:1–30`) |
+| `codex_verificador_v2.q` | “PAPEL: verificador, VOLTA 2 (so o delta)” (`:1`); “Para cada achado da volta 1 marcado PROCEDENTE na triagem (1, 4, 5, 6, 7): o diff fecha o achado?” (`:6`). **Não menciona diretamente o bloqueante.** (`:5–18`). Eventual inclusão indireta pelos achados anteriores: **[nao verificado]**, pois a resposta anterior e sua triagem não foram transcritas. |
+| `codex_verificador_v3.q` | “PAPEL: verificador, VOLTA 3 (so o delta 1fcb5d0b6..HEAD)” (`:1`); “Os itens 2a, 2b, 2c, 3 e 5 da volta 2: o diff os fecha?” (`:4`). **Não menciona diretamente o bloqueante.** (`:4–14`). Eventual inclusão indireta pelos itens anteriores: **[nao verificado]**. |
+| `codex_verificador_c2_v1.q` | “Proibido na obra: tipo de ato novo, juiz novo, lista paralela, regra em tarefa_do_dia que reconheca ressuscitacao por texto de motivo.” (`:3`). O checklist contém “derivacao paralela de fonte unica; selo/RED sem mordida; ordem de trava; pouso antes do pre-requisito” (`:12`). **Não pergunta pela fonte canônica do corte.** (`:6–12`) | [nao verificado]
+
+**Trechos de cada `.r`**
+
+Das quatro respostas nomeadas, somente `codex_verificador_c2_v1.r` foi transcrita; o conteúdo de `codex_verificador_v1.r`, `codex_verificador_v2.r` e `codex_verificador_v3.r` está **[nao verificado]**. Não é possível fornecer trechos exatos dessas três respostas nem afirmar que omitiram o tema. **[nao verificado]**
+
+Na resposta c2, os trechos mais próximos são:
+
+> “**NAO HA nova no trecho c2:** universo, preservação e integridade reutilizam as respectivas autoridades” — classe “Derivação paralela de fonte única”. (`codex_verificador_c2_v1.r:97`)
+
+> “**NAO HA quanto à volta de REABERTURA:** há proibição direta e comparação com SILENCIO; cobertura integral de fila/trilha permanece insuficiente” — classe “Selo/RED sem mordida”. (`codex_verificador_c2_v1.r:98`)
+
+> “**[nao verificado]:** os anexos estabelecem os pré-requisitos, mas não fornecem sua execução nem prova do pouso.” — classe “Pouso antes do pré-requisito”. (`codex_verificador_c2_v1.r:100`) [nao verificado]
+
+**A resposta c2 não menciona `CORTES.md`, `CORTES.json`, `gerar_cortes.py` ou a perda da frase na regeneração.** (`codex_verificador_c2_v1.r:1–101`)
+
+**Triagem correspondente**
+
+Não há item de triagem correspondente ao bloqueante entre os seis descartes apresentados; eles tratam de campos/leitores, projeção legada, preservação/concorrência, testes, chamadores e relógio. (`entrega.md:47–56`) [nao verificado]
+
+Existe, fora dessa triagem, este alerta exato:
+
+> “Resolucao proposta (nao aplicada): LEIS L-130 = a linha da copia; CORTES = manter as DUAS linhas (conferir o escritor   [nao verificado]
+> canonico CORTES.json/gerar_cortes.py lendo a fonte -- nao rodar). Zero `.py` em conflito.” (`entrega.md:9–10`)
+
+Esse trecho pede uma conferência; não registra a descoberta da entrada ausente nem seu descarte. (`entrega.md:9–10`)
+
+**O tema estava na lista de classes?** **Não como classe específica.** Estava a expressão genérica **“derivacao paralela de fonte unica”**, nas perguntas v1 e c2; não estava a classe “frase de corte de juiz novo somente em arquivo derivado, ausente da fonte geradora”. (`codex_verificador_v1.q:23–26`; `codex_verificador_c2_v1.q:12`)
 
 ## 16/11 10:02 · sessao 780bea312735 · CORTES-F2-F9-1611 · construtor · origem=Code
 
@@ -608,25 +652,4 @@ Os demais itens têm fundamento no código:
 
 **Para o contrato “falha excepcional da trilha desfaz posto e trilha”, nenhum desses itens demonstra bloqueio funcional do pouso atual.** (`app/colaboradores/views.py:333-343`). O aval integral está apenas referenciado no código; conformidade com exigências além do escopo descrito no anexo, preexistência dos passivos e resultados alegados dos logs: **[nao verificado]**. (`app/colaboradores/views.py:331`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:231`).
 
-## 16/11 08:55 · sessao 7519f15333fc · - · - · origem=Ronald (tmux)
-
-Contando somente a marca `[DEPENDE-F1]` explícita na linha de cada degrau:
-
-| Matriz | PROVA=NENHUM | Com marca | Sem marca |
-|---|---:|---:|---:|
-| F2, integrais na coluna c3 | 10 | 0 | **10** |
-| F2, incluindo parciais | 14 | 0 | **14** |
-| F4 | 21 | 3 | **18** |
-| F6 | 11 | 8 | **3** |
-
-Fontes: anexo F2/matriz.md:100-102; F4/matriz.md:126 e :130; F6/matriz.md:94 e respectivas linhas dos degraus abaixo. Numeração começa no primeiro `#` de cada anexo e inclui linhas vazias.
-
-- **F2 integrais:** M1b (:37), M4 (:40), M7 (:43), M11 (:47), M13 (:49), M14 (:50), M15 (:51), M17 (:53), M18 (:54), M19 (:55). Parciais adicionais: M3 (:39), M9 (:45), M10 (:46), M20 (:56). A seção final distingue explicitamente “nenhuma mordida” de “algum ramo sem mordida” (:101); a coluna BASE é outro universo (:102).
-- **F4 sem marca:** M1, M2, M13, M16, M17, M19, M23, M24; E4, E5, E7, E17, E18, E19, E20; X1, X2; J2. Os três NENHUM marcados são M9b (:42), E9 (:71) e J1 (:90). A lista completa dos21 aparece em :126.
-- **F6 sem marca:** U9b (:44), S1 (:48), S2 (:49). S1/S2 trazem “SOME do escopo F6”; excluí-los daria **1**, mas o item9 não determina essa exclusão. A lista declarada dos11 inclui ambos (:94).
-
-Ausência de marca na linha **não demonstra independência**: F2 tem dependências numa seção separada (:69-77), abrangendo M1-M4, M8-M10 e N1/M7; F4 marca dependência no contrato (:104-109), inclusive para M1/M2/M13/M16/M17 e M23, que não receberam a marca na própria linha.
-
-Portanto, a seleção literal do item9 precisa distinguir coluna BASE/c3, integrais/parciais, dependência da linha/dependência do contrato e os degraus F6 excluídos do escopo. As matrizes fornecem as categorias, mas não uma seleção única inequívoca para “antes do pouso da F1”. (Anexo F2/matriz.md:69, :99-102; F4/matriz.md:104-109; F6/matriz.md:48-49, :94.)
-
-_5987 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5988 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
