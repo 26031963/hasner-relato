@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 22:39** · publicado em **15/11/2026 22:39** (UTC-3)
+> Ultima resposta processada: **15/11/2026 22:42** · publicado em **15/11/2026 22:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 22:42 · sessao 13487bd579d9 · E3-RESTO-R3 · verificador · origem=Code
+
+A correção fecha os caminhos **diretos** de injeção de relógio e amplia a cobertura estrutural do vigia. Ela não fecha todos os relógios alcançáveis pelo lavrador: há um resíduo declarado no caminho de `classificar_export`. (`app/relatorios/furos.py:103`, `app/folha/vigia_retido_calado.py:54`, `app/folha/fora_da_folha.py:137`.)
+
+A comparação abaixo usa o diff fornecido e os arquivos da cópia. Identidade Git do HEAD, ancestralidade, RED histórico e ocorrências em produção: **[nao verificado]**.
+
+**1. Quem escreve, quem lê e assinaturas**
+
+| Campo, parâmetro ou função | Quem fornece/escreve | Quem lê |
+|---|---|---|
+| `agora` e `hoje` do lavrador | `handle` lê `now()` uma vez e deriva o dia local. | `competencias_do_retrato`; `montar_linhas`, que encaminha instante ao fio e dia ao informativo. (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `app/folha/management/commands/lavrar_retrato_folha.py:61`, `app/folha/management/commands/lavrar_retrato_folha.py:65`, `app/folha/retrato_folha.py:1214`, `app/folha/retrato_folha.py:1220`.) |
+| `competencias_do_retrato(hoje, empresa)` | Constrói pares pelo fim de `janela_anterior` e `janela_atual`, eliminando repetição. | Lavrador automático, frescor e vigia. A seleção explícita `--mes/--ano` do lavrador continua separada. (`app/folha/retrato_folha.py:1378`, `app/folha/management/commands/lavrar_retrato_folha.py:57`, `app/folha/management/commands/lavrar_retrato_folha.py:61`, `app/folha/retrato_folha.py:1412`, `app/folha/vigia_retido_calado.py:66`.) |
+| `RetratoFolha.empresa/mes/ano/linhas/lavrado_em` | Escritor de produção encontrado: `lavrar_retrato_folha`, por `update_or_create`, somente com `--apply`; `lavrado_em` recebe o início da rodada. | Tela/PDF/Raio-X pelo recorte; drawer do colaborador; frescor; vigia. Há unicidade por empresa e competência. (`app/folha/management/commands/lavrar_retrato_folha.py:72`, `app/folha/management/commands/lavrar_retrato_folha.py:77`, `app/folha/models.py:365`, `app/folha/views_retrato.py:194`, `app/colaboradores/views.py:982`, `app/folha/retrato_folha.py:1413`, `app/folha/vigia_retido_calado.py:59`.) |
+| `agora`/`hoje` do recorte | `_recorte_da_barra` lê o instante uma vez e deriva o dia local. | Instante alimenta frescor; dia alimenta recorte, LED, barra, PDF e Raio-X. O envelope devolve `hoje`, mas não devolve `agora`. (`app/folha/views_retrato.py:179`, `app/folha/views_retrato.py:212`, `app/folha/views_retrato.py:232`, `app/folha/views_retrato.py:247`, `app/folha/views_retrato.py:286`, `app/folha/views_retrato.py:325`, `app/folha/views_retrato.py:418`, `app/folha/views_retrato.py:501`.) |
+| `frescor_dos_retratos(*, agora)` | Produz o diagnóstico comparando a lavra com o maior carimbo do fechamento. | Recorte da tela e `retratos_desatualizados`; este último apenas conta diagnósticos atrasados/ausentes. (`app/folha/retrato_folha.py:1415`, `app/folha/retrato_folha.py:1424`, `app/folha/views_retrato.py:212`, `app/folha/retrato_folha.py:1455`.) |
+| `censo(empresas=None, *, hoje)` | Command fornece IDs e um `localdate()` da borda; `censo` constrói o resultado em memória. | `linhas` formata; command consulta as chaves de alarme. (`app/folha/management/commands/vigiar_retido_calado.py:31`, `app/folha/vigia_retido_calado.py:73`, `app/folha/vigia_retido_calado.py:105`, `app/folha/management/commands/vigiar_retido_calado.py:38`.) |
+| `escalas_em_limbo(empresa=None, *, hoje)` | `furos_espelho` fornece o dia do instante da borda. | Consulta `eh_dia_trabalho` para hoje/amanhã e a existência da foto mensal de `FolgaDia`; resultado entra no contexto da tela. (`app/relatorios/views.py:1519`, `app/relatorios/views.py:1554`, `app/relatorios/furos.py:67`, `app/relatorios/furos.py:86`, `app/relatorios/views.py:1558`.) |
+| `dataset_furos(..., *, agora)` | `furos_espelho` fornece `_agora`; dataset recusa omissão, `None` e valores que não sejam `datetime`. | Encaminha o mesmo instante ao D4 e ao calendário; cards alimentam HTML e PDF de furos. (`app/relatorios/views.py:1543`, `app/relatorios/furos.py:113`, `app/relatorios/furos.py:127`, `app/relatorios/furos.py:168`, `app/relatorios/views.py:1552`, `app/relatorios/views.py:1564`.) |
+
+O envelope persistido das linhas é montado em um lugar: `colab/codigo/status/motivo`, `dias/datas`, `dias_sem_leitura/dias_sem_porta`, `dono/acoes/tipo/saldo/informativo`. Os leitores principais são: identificação e apresentação na tela; classificação pelos acessores do módulo; período por `no_periodo`; ações por `portas_da_linha`; testemunhos no vigia e no drawer. (`app/folha/retrato_folha.py:1237`, `app/folha/views_retrato.py:278`, `app/folha/retrato_folha.py:446`, `app/folha/retrato_folha.py:500`, `app/folha/retrato_folha.py:510`, `app/folha/retrato_folha.py:1338`, `app/folha/retrato_folha.py:1044`, `app/folha/vigia_retido_calado.py:84`, `app/templates/folha/_retrato_o_que_fazer.html:46`, `app/templates/folha/_retrato_o_que_fazer.html:56`.)
+
+No envelope do recorte, `_recorte_da_barra` escreve empresa/competência/navegação, retratos/linhas/carimbo, frescor/filtros/universo/grupos/visíveis, URLs e `hoje`; os três consumidores são tela, PDF e Raio-X. (`app/folha/views_retrato.py:240`, `app/folha/views_retrato.py:260`, `app/folha/views_retrato.py:388`, `app/folha/views_retrato.py:489`.)
+
+As nove chaves do censo têm estes escritores e leitores:
+
+| Chaves | Escrita e leitura |
+|---|---|
+| `retratos`, `competencias_sem_retrato` | `censo` produz trios **empresa,mês,ano**, ordenados por empresa/ano/mês; `linhas` conta/exibe; command também consulta faltantes para alarmar. (`app/folha/vigia_retido_calado.py:69`, `app/folha/vigia_retido_calado.py:88`, `app/folha/vigia_retido_calado.py:106`, `app/folha/management/commands/vigiar_retido_calado.py:16`.) |
+| `bloqueados`, `calados`, `roteados` | Acumulados por pessoa/retrato/competência; formatador exibe; command consulta `calados` no alarme passivo e usa `bloqueados` indiretamente por `cego`. (`app/folha/vigia_retido_calado.py:77`, `app/folha/vigia_retido_calado.py:89`, `app/folha/vigia_retido_calado.py:101`, `app/folha/vigia_retido_calado.py:111`, `app/folha/management/commands/vigiar_retido_calado.py:17`.) |
+| `dias_sem_leitura_sistema`, `linhas_sem_campo_leitura` | Somados das linhas bloqueadas; formatador exibe; command consulta dias no alarme passivo. (`app/folha/vigia_retido_calado.py:84`, `app/folha/vigia_retido_calado.py:92`, `app/folha/vigia_retido_calado.py:100`, `app/folha/vigia_retido_calado.py:115`, `app/folha/management/commands/vigiar_retido_calado.py:17`.) |
+| `por_empresa` | `censo` escreve chaves **empresa,ano,mês**; `linhas` desempacota nessa mesma ordem. (`app/folha/vigia_retido_calado.py:95`, `app/folha/vigia_retido_calado.py:110`.) |
+| `cego` | Calculado por ausência de retratos ou bloqueados; formatador exibe e command alarma. (`app/folha/vigia_retido_calado.py:101`, `app/folha/vigia_retido_calado.py:114`, `app/folha/management/commands/vigiar_retido_calado.py:16`.) |
+
+Não encontrei chamador de produção com a assinatura antiga dos dois alvos alterados: a view fornece `hoje=` ao limbo e `agora=` ao dataset. Os testes funcionais também foram ajustados; o teste fora do diff em `ponto` já fornece `agora=`. (`app/relatorios/views.py:1543`, `app/relatorios/views.py:1554`, `app/relatorios/tests/test_selo_ancora_do_vinculo.py:45`, `app/relatorios/tests/test_e4_8_furos_le_a_lavra.py:94`, `app/ponto/tests/test_cobparc_v4_procedentes.py:288`.)
+
+Os demais consumidores de teste incluem vigia com banco; fixtures sem banco de c4/c5/c6/c14/c15/c16; command em c11; e contratos novos c17. As chamadas sem `hoje` de c5 são negativas deliberadas, esperando `TypeError`. (`app/folha/tests/test_vigia_retido_calado.py:29`, `app/chamados/tests/test_e3_r3_c4_sem_banco.py:158`, `app/chamados/tests/test_e3_r3_c5_sem_banco.py:245`, `app/chamados/tests/test_e3_r3_c6_sem_banco.py:231`, `app/chamados/tests/test_e3_r3_c14_sem_banco.py:306`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:53`, `app/chamados/tests/test_e3_r3_c16_sem_banco.py:43`, `app/chamados/tests/test_e3_r3_c11_sem_banco.py:273`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:65`.)
+
+O cron aciona o lavrador com `--apply` e o vigia com `--alarme`, dependendo da lavra; não chama diretamente as funções que mudaram de assinatura. (`app/config/crons.py:1650`, `app/config/crons.py:1681`.)
+
+**2. Significado de `hoje`, `agora`, fuso e limites**
+
+Nos caminhos diretos examinados, `agora` é instante e `hoje` é seu **dia civil local**. Lavrador, recorte, frescor e relatório usam `localtime(agora).date()`; D4 e folha usam `localdate(agora)`, conversão equivalente para o mesmo instante aware no mesmo fuso ativo. O padrão configurado é `America/Sao_Paulo`, com `USE_TZ=True`. (`app/folha/management/commands/lavrar_retrato_folha.py:50`, `app/folha/views_retrato.py:180`, `app/folha/retrato_folha.py:1409`, `app/relatorios/views.py:1520`, `app/ponto/status_dia.py:254`, `app/folha/fora_da_folha.py:200`, `app/config/settings/base.py:93`.)
+
+O drawer chama sua variável local `hoje`, mas ela contém um **datetime local**; entrega `hoje.date()` ao leitor do retrato. Há diferença de tipo/nome, sem diferença de dia demonstrada nesse transporte. (`app/colaboradores/views.py:930`, `app/colaboradores/views.py:986`.)
+
+O **dia do turno** permanece separado: D4 consulta turnos por `data_turno`, e as ações publicadas transportam `dia_do_turno` ao link. O balde Hoje compara as datas gravadas com o dia civil recebido e não declara encerramento do turno. (`app/ponto/status_dia.py:273`, `app/folha/retrato_folha.py:1055`, `app/folha/retrato_folha.py:480`.)
+
+Os limites são coerentes com cada pergunta:
+
+- Janela de folha: corte até corte−1; no dia do corte começa a próxima competência. (`app/ponto/janelas.py:16`, `app/ponto/janelas.py:27`.)
+- Dataset e recorte de dias: ambas as pontas inclusivas. (`app/relatorios/furos.py:126`, `app/folha/retrato_folha.py:1344`.)
+- Balde Hoje: mínimo das datas `>= hoje`; C5 consulta somente até ontem. (`app/folha/retrato_folha.py:491`, `app/escala/services/cadastro_realidade.py:162`, `app/escala/services/cadastro_realidade.py:167`.)
+
+A resposta global a “todos usam o mesmo relógio?” é **não**: o caminho do export ainda pode consultar outro dia, e o placar de aceite mantém relógios próprios. (`app/folha/export.py:968`, `app/folha/export.py:1238`, `app/chamados/services/verbos.py:286`.)
+
+**3. Classes que já reprovaram obra e mordida dos selos**
+
+Não encontrei segundo juiz **novo** nos alvos: competências delegam a `ponto/janelas`; limbo consulta `eh_dia_trabalho`; dataset consulta D4 e lê os marcos apagados da ata. A pendência antiga do limbo continua registrada, apenas com a âncora de assinatura atualizada. (`app/folha/retrato_folha.py:1378`, `app/relatorios/furos.py:67`, `app/relatorios/furos.py:127`, `app/relatorios/furos.py:136`, `app/core/juizes.py:794`.)
+
+Não encontrei segundo escritor de `RetratoFolha` nos caminhos de produção examinados. O recorte grava uma preferência por `PreferenciaUI.set_pref`; o PDF auditável grava outra entidade, `RegistroPDFAuditavel`. Nenhum desses atos regrava o retrato. (`app/folha/management/commands/lavrar_retrato_folha.py:77`, `app/folha/views_retrato.py:157`, `app/relatorios/pdf_base.py:152`.)
+
+Não há nova derivação paralela das competências anterior/atual entre lavrador, frescor e vigia. Permanecem aritméticas distintas fora desse contrato: navegação mês anterior/seguinte na barra e normalização de intervalo inválido do relatório para o início do mês. Esta última tela aceita período livre; isso, sozinho, não demonstra substituição indevida da competência. (`app/folha/retrato_folha.py:1380`, `app/folha/views_retrato.py:191`, `app/relatorios/views.py:1540`, `app/relatorios/tests/test_relatorio_janela_da_empresa.py:52`.)
+
+Os testes novos **não são só texto**: [nao verificado]
+
+- 01–05 executam o censo real e verificam interseção, empresas sem foto, alarme parcial, competências, unidades e legado. (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:65`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:97`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:142`.)
+- 06 executa o limbo e verifica dia, amanhã, mês da foto e ausência de consulta ao relógio substituído. (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:182`.)
+- 07 executa o dataset, recusa parâmetros inválidos e verifica identidade de instante/carga nos fornecedores. D4 e calendário são mocks: prova transporte, não julgamento transitivo. (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:200`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:212`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:219`.)
+- 08 exercita chamadas repetidas, soltas, aliases e conversões; 09 cobra **somente substrings de docstrings**. (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:231`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:252`.)
+
+O detector melhorou, mas continua sintático: trata `localtime(variavel)` como conversão sem provar que a variável não será `None`. Portanto não certifica fechamento transitivo nem rejeição de `None` em runtime. (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:169`, `app/chamados/tests/test_e3_r3_c15_sem_banco.py:184`.)
+
+**4. As duas exclusões**
+
+`gerar_pdf_auditavel` é alcançada pelo PDF do retrato **depois** de `_recorte_da_barra`. Recebe a história fechada sobre `_rec` e os filtros, mas não recebe seu instante; lê `timezone.now()` para a geração e usa esse carimbo nas duas passagens do rodapé. Não volta a selecionar as linhas. (`app/folha/views_retrato.py:388`, `app/folha/views_retrato.py:417`, `app/folha/views_retrato.py:443`, `app/relatorios/pdf_base.py:133`, `app/relatorios/pdf_base.py:139`, `app/relatorios/pdf_base.py:170`.)
+
+`placar_aceite` é alcançada pelo Raio-X quando Dono=Colab. Recebe **somente empresa**, sem instante, competência, praça, pessoas ou período do recorte; lê `now()` e `localdate()` separadamente e calcula suas janelas hoje/7d. (`app/folha/views_retrato.py:489`, `app/folha/views_retrato.py:513`, `app/chamados/services/verbos.py:277`, `app/chamados/services/verbos.py:286`, `app/chamados/services/verbos.py:299`.)
+
+Contraexemplo possível por código: recorte às 23:59:59 e placar após 00:00 usam dias diferentes; dentro do próprio placar, `now()` antes e `localdate()` depois da virada também podem divergir. Ocorrência em produção: **[nao verificado]**. (`app/folha/views_retrato.py:179`, `app/chamados/services/verbos.py:286`.)
+
+A exclusão é coerente com a promessa **direta, sem fecho transitivo**, e o reuso do placar foi ordenado no corte O256. Ela não sustenta uma afirmação de relógio único para todos os componentes da tela. O PDF de furos, por sua vez, usa `gerar_pdf_furos_bytes`, sem passar por essas duas funções. (`app/folha/views_retrato.py:146`, `app/docs/CORTES.md:309`, `app/relatorios/views.py:1563`.)
+
+**5. Vigia: papel e universo**
+
+Continua contador e alarme: consulta retratos e C5, soma resultados e retorna; o command escreve stdout e eventualmente sai com código 2. Não há transição nem escrita de estado nesses corpos. (`app/folha/vigia_retido_calado.py:59`, `app/folha/vigia_retido_calado.py:72`, `app/folha/vigia_retido_calado.py:89`, `app/folha/vigia_retido_calado.py:102`, `app/folha/management/commands/vigiar_retido_calado.py:35`, `app/folha/management/commands/vigiar_retido_calado.py:42`.)
+
+O universo mudou em três pontos:
+
+- Parte das empresas visíveis, intersectadas com o recorte; inclui empresas sem foto. Visibilidade exclui inativas e empresas de diagnóstico. (`app/folha/vigia_retido_calado.py:54`, `app/folha/vigia_retido_calado.py:61`, `app/colaboradores/queries.py:85`.)
+- Nomeia todos os pares de competência faltantes; C5 recebe sempre os IDs efetivos, inclusive `[]`. (`app/folha/vigia_retido_calado.py:69`, `app/folha/vigia_retido_calado.py:72`.)
+- Ausência parcial de retrato tornou-se alarme estrutural. Calados e dias continuam esperado zero, mas só participam do alarme com `--alarme-passivo`. (`app/folha/management/commands/vigiar_retido_calado.py:16`, `app/folha/management/commands/vigiar_retido_calado.py:37`.)
+
+A unidade não foi confundida: calados/roteados/bloqueados são pessoa por competência; dias sem leitura são dia-colab. Campo ausente marca legado desconhecido; campo presente `None` soma zero; positivo conhecido sobrevive ao desconhecido. (`app/folha/vigia_retido_calado.py:44`, `app/folha/vigia_retido_calado.py:84`, `app/folha/vigia_retido_calado.py:100`.)
+
+**6. Leis e cortes**
+
+A implementação direta respeita leitura da autoridade, escritor único e papel do vigia. As competências continuam saindo do corte por empresa. A foto mensal civil de `FolgaDia` é diagnóstico de cadastro, não outra competência de folha. (`app/docs/LEIS.md:60`, `CLAUDE.md:172`, `CLAUDE.md:178`, `app/ponto/janelas.py:63`, `app/relatorios/furos.py:56`, `app/relatorios/furos.py:86`.)
+
+O resíduo de relógio abaixo impede certificar a regra “uma leitura na borda até o julgamento” para o caminho completo do lavrador; a própria cópia já o declara. (`app/docs/PLANO-PADROES.md:92`, `app/folha/fora_da_folha.py:137`.)
+
+**VEREDITO**
+
+**PROCEDENTE — resíduo verificável, sem atribuição de regressão ao c17:**
+
+- **P1 — relógio interno ainda alcançado pelo lavrador.** Caminho: lavrador → `montar_linhas` → `fora_da_folha` → `dias_que_seguram` → `classificar_export` → `motivos_retencao_espelho` sem `hoje` → `_dias_sem_decisao`, que chama `localdate()`. (`app/folha/management/commands/lavrar_retrato_folha.py:65`, `app/folha/retrato_folha.py:1214`, `app/folha/fora_da_folha.py:200`, `app/folha/fora_da_folha.py:147`, `app/folha/export.py:968`, `app/folha/export.py:1307`, `app/folha/export.py:1238`.)
+
+  Contraexemplo: rodada inicia em 14/11 às 23:59:59; ao classificar após a virada, uma célula de 14/11 com `veredito=None` e `trabalha=True` passa em `d < hoje` e pode produzir retenção. A enumeração seguinte recebe o dia injetado 14/11 e não inclui essa mesma célula. Assim, “quem é retido” e “quais dias retêm” podem discordar. É a classe vedada pela injeção de relógio, já reconhecida no resíduo do código; ocorrência real **[nao verificado]**. (`app/folha/export.py:1295`, `app/folha/fora_da_folha.py:165`, `app/folha/fora_da_folha.py:137`, `app/docs/PLANO-PADROES.md:94`.)
+
+**Observações:**
+
+- Comentário do cron ficou incorreto: diz alarme “só pelo cego”. Contraexemplo já coberto pelo teste: uma competência presente, outra ausente, `cego=0`, mas saída 2 por falta parcial. (`app/config/crons.py:1679`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:119`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:123`.)
+- `frescor_dos_retratos(agora=None)` ainda permite relógio interno via `localtime(None)`; nenhum chamador real fornecendo esse valor foi demonstrado. (`app/folha/retrato_folha.py:1387`, `app/folha/retrato_folha.py:1409`.)
+- Dataset aceita `datetime` naive na guarda, embora downstream espere instante aware; nenhum chamador real naive foi demonstrado. (`app/relatorios/furos.py:113`, `app/ponto/status_dia.py:254`, `app/ponto/turnos.py:2071`.)
+- As exclusões são explícitas e limitadas; o item 09 prova sua documentação, não sua segurança transitiva. (`app/folha/views_retrato.py:146`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:268`.)
+- **Não demonstrada regressão nova de assinatura, segundo escritor ou segundo juiz criada pelo c17** nos caminhos inventariados. (`app/relatorios/views.py:1543`, `app/relatorios/views.py:1554`, `app/folha/management/commands/lavrar_retrato_folha.py:77`, `app/folha/retrato_folha.py:1378`, `app/relatorios/furos.py:127`.)
 
 ## 15/11 22:39 · sessao d907d4904e3b · - · - · origem=Ronald (tmux)
 
@@ -737,33 +853,4 @@ Conferência das primeiras 22 linhas, somente leitura:
 
 A cópia não possui `.git`; comparação direta das datas dos commits não foi possível [nao verificado]. Usei as bases explicitadas nos documentos; `70dfbc62a` não apareceu na busca em BACKLOG/RELATO [nao verificado].
 
-## 15/11 22:00 · sessao 23881c6d2de5 · - · - · origem=Ronald (tmux)
-
-**Q2: PROCEDE quanto à insuficiência de prova para liberar integralmente o SAI; existência de perda definitiva ou de commit útil exclusivo é [nao verificado].** O censo informa sujeiras integrais omitidas; a cópia local não contém `.git`, portanto ancestralidade/identidade dos commits não foi verificável. [nao verificado]
-
-**Nenhum dos 29 NO-MAIN tem prova exclusivamente documental:** todos citam código. A distribuição é 5 CADASTRO + 3 PERGUNTA-DUPLA + 3 ÓRFÃO + 1 FIO-E3 + 3 E4B + 2 UI + 1 DESLIGADO + 1 E3-MIG + 4 HJ090 + 1 HJ091 + 2 O168 + O320 + PLACAR + RÉGUA = 29 (anexo `censo_1a4.r`, respectivos ITEMs). Isso comprova apenas os comportamentos citados, não equivalência integral dos sujos.
-
-**Itens com produção suja integralmente não demonstrada, a suspender do SAI até identificação:**
-
-| ITEM | Lacuna e evidência disponível |
-|---|---|
-| `wt-codex-bo-disputa-sem-pergunta-221357` | Sujo produção/testes/entrega c22, conteúdo integral omitido. Sucessora c25 documentada, sem prova de absorção desse sujo específico (`censo_1a4.r:ITEM=...`; `app/docs/CORTES.md:455`, `app/docs/RELATO.md:371`). |
-| `wt-codex-lastro-faixa-sem-default-215253` | Sujo produção/teste c20 omitido. Main registra c20 **sem commit**, parcial guardada; c13–c19 são SPEC, enquanto apenas c3–c12 foram reaplicadas (`app/docs/RELATO.md:820`, `:822`, `:823`; anexo ITEM). |
-| `wt-feriado-092818` | Produção/testes omitidos. SUPERADA é decisão expressa, não comparação integral do sujo (`app/docs/RELATO.md:739`; anexo ITEM). |
-| `wt-e4b-pouso-065207` | Produção/backfill com equivalência integral expressamente não verificada no anexo ITEM. O main contém a porta/backfill (`app/chamados/services/fecho_runtime.py:146`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:133`). |
-| `wt-merge-e4b-214239` | Integração de produção/testes c10, inventário integral omitido. Identificação da árvore intermediária em `app/docs/RELATO.md:1053`; pouso posterior em `:998`; porta comum em `app/chamados/services/fecho_runtime.py:146`. |
-| `wt-hj090-v6m-204526` | Cura produção command/services/views, restante cortado. Main confirma transporte do relógio (`app/ferias/management/commands/realinhar_concedidos_ferias.py:114`, `:132`; `app/ferias/services.py:220`), sem comprovar todo o sujo (anexo ITEM). |
-
-`wt-e3-mig-171026` também exige esclarecimento do “restante do diff cortado”; o dado identifica adaptações de testes/mutantes, mas não permite afirmar que o restante seja produção. O comportamento citado existe (`app/chamados/services/tarefa_do_dia.py:596`, `:613`; anexo ITEM).
-
-**REDs com preservação/absorção não demonstrada:**
-
-- Três PERGUNTA-DUPLA: `ens-dupla-head-212030`, `ens-dupla-mut-212030`, `wt-codex-pergunta-dupla-211041`. Main confirma dia do turno sem +1 (`app/chamados/services/disputa_emissao.py:433`, `:460`); mutação identificada em `app/docs/RELATO.md:1046`. O mesmo trecho apenas promete pouso futuro dos testes.
-- Três ÓRFÃO: `ens-orfao-head-210938`, `ens-orfao-mut-210938`, `wt-codex-bug-orfao-com-par-210341`. A guarda existe (`app/api/views_core.py:628`), mas o próprio relato diz “INCOMPLETO: ramo S111 [...] nao exercitado pelo ensaio” (`app/docs/RELATO.md:1056`). Testes prometidos no comboio em `:1046`; incorporação em sucessora [nao verificado].
-- Busca `rg --files` não encontrou os dois testes nominais nas localizações citadas no RELATO; conteúdo em sucessora [nao verificado]. Isso não demonstra regressão no main. [nao verificado]
-
-**Não classificar como produção desconhecida:** as mutações de `ens-dupla-mut-212030` e `ens-orfao-mut-210938` são intencionais e identificadas (`app/docs/RELATO.md:1046`, `:1058`). `wt-codex2raias-v3-151541` tem descarte expressamente autorizado, parcial guardada e proibição de servir de base (`app/docs/RELATO.md:1501`). `wt-placar-grade-210341` é instrumento identificado, cujo comportamento está no main (`bin/placar_grade.py:173`, `:198`; `bin/relato.sh:101`, `:128`; `app/docs/RELATO.md:589`).
-
-A guarda C do aval preserva material, mas não transforma ausência de comparação em prova de absorção (`aval.txt:1`, cláusula C; comparação dos sujos [nao verificado]).
-
-_5830 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5831 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
