@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 18:53** · publicado em **16/11/2026 18:53** (UTC-3)
+> Ultima resposta processada: **16/11/2026 19:32** · publicado em **16/11/2026 19:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 19:32 · sessao cc701b003112 · - · - · origem=Ronald (tmux)
+
+**MAPA:** `CORES` existe em `app/ponto/services/dia_decidido.py:45-58`; `PALAVRA` existe em `app/ponto/services/dia_decidido.py:67-71`, mas este contém apenas `EM_ABERTO`, `FOLGA` e `FERIADO`, não os quatro vereditos de ausência.
+
+- `PALAVRA` é lida por `palavra_do_dia` (`app/ponto/services/dia_decidido.py:211-213`).
+- `CORES` é lida por `do_dia`, `cartao_do_dia` e `linha_do_tempo` (`app/ponto/services/dia_decidido.py:425`; `app/ponto/services/dia_decidido.py:429`; `app/ponto/services/dia_decidido.py:436`; `app/ponto/services/dia_decidido.py:518`; `app/ponto/services/dia_decidido.py:613`).
+- Os consumidores externos de produção leem funções/resultados: calendário (`app/colaboradores/services/calendario.py:737`; `app/colaboradores/services/calendario.py:747-756`), espelho (`app/ponto/services/espelho.py:328`; `app/ponto/services/espelho.py:340-345`), histórico (`app/ponto/views.py:2017-2018`) e lote (`app/ponto/services/atestados_lote.py:54-57`). PDF consome `palavra_dia`; API publica palavra/cor/veredito (`app/relatorios/pdf_espelho.py:923-924`; `app/api/views.py:1541-1543`).
+
+**Texto literal:** são exatamente `ABONA` / `Nao desconta` — **sem acento em `Nao`** —, `DESCONTA` / `Desconta na folha`, `SUPRIME` / `Suprime a jornada`. Não há correção de acentuação a fazer na citação literal (`app/templates/ponto/ausencias.html:158`).
+
+**“?” e ANEXO!:** o desconhecido aparece no `else` da própria célula Efeito, como `<span class="hx-muted">?</span>`; ANEXO! é outro `span`, depois do ramo completo do efeito, no mesmo `td` (`app/templates/ponto/ausencias.html:158`).
+
+**Outro mapa:** a busca exata pelas quatro variantes/frases encontrou as ajudas dos chips, a célula e um comentário financeiro sem apresentação de ausência (`app/templates/ponto/ausencias.html:65-67`; `app/templates/ponto/ausencias.html:158`; `app/ponto/calculador/alimentacao.py:63`). Não apareceu outro dicionário com essas frases; a evidência positiva da duplicação atual é apenas a ajuda dos chips, explicitamente excluída do complemento (`app/templates/ponto/ausencias.html:65-67`).
+
+**Juiz único:** o novo dicionário proposto apresenta uma resposta já decidida; não precisa julgar tipo/status. A autoridade atual retorna primeiro `REJEITADO` quando o status é rejeitada, depois consulta efeito, retornando `DESCONTADO`, `SUPRIMIDO` ou `ABONADO`; `veredito_de` somente delega (`app/ponto/services/dia_decidido.py:461-481`). Isso é compatível com “testemunha lê, não recalcula” e com ajuda fora do template (`CLAUDE.md:20-22`; `app/docs/LEIS-UI.md:77-80`).
+
+**Selo das quatro chaves:** as constantes de ausência são exatamente `ABONADO='abonado'`, `DESCONTADO='descontado'`, `SUPRIMIDO='suprimido'`, `REJEITADO='rejeitado'` (`app/ponto/services/dia_decidido.py:26`). `PENDENTE` existe separadamente e pertence à pergunta de estado do lançamento; `veredito_do_lancamento` pode devolvê-lo, enquanto `veredito_de` retorna pelo núcleo dos quatro (`app/ponto/services/dia_decidido.py:37-41`; `app/ponto/services/dia_decidido.py:439-450`; `app/ponto/services/dia_decidido.py:461-481`).
+
+**M4:** para matar texto hardcoded, o selo precisa comprovar que a célula recebe o texto do mapa; igualdade textual contra os valores fixos do mapa, sozinha, também passa com hardcode idêntico. O alvo atual é precisamente o texto escrito nos três ramos da célula (`app/templates/ponto/ausencias.html:158`). Mutante executado e morto: **[não verificado]**.
+
+## 16/11 19:32 · sessao e665bb4a60cd · - · - · origem=Ronald (tmux)
+
+**Escopo financeiro e `!`: não há exigência adicional demonstrada no desenho proposto, desde que a mudança permaneça em apresentação/seleção e preserve os escritores e os leitores atuais.** O corpo de `lista_ausencias` consulta, materializa e renderiza; não grava status nem fechamento. A tela, porém, oferece POSTs, de modo que não cabe qualificá-la inteira como somente leitura. (`app/ponto/views.py:2165-2270`; `app/ponto/views.py:2248`; `app/ponto/views.py:2254`; `app/templates/ponto/ausencias.html:249`; `app/templates/ponto/ausencias.html:278-282`; `app/templates/ponto/ausencias.html:308-312`.)
+
+- **ANEXO! permanece independente:** o selo consulta `a.contradiz_documento` depois do badge de efeito; o modelo delega ao juiz documental, que exige documento e compara `efeito_vigente(tipo)` com DESCONTA, sem consultar status. Preservá-lo como prescrito mantém uma pergunta diferente daquela respondida pelo veredito visual. (`app/templates/ponto/ausencias.html:158`; `app/ponto/models.py:867-869`; `app/ponto/services/ausencia.py:745-759`.)
+- **Calendário não admite rejeitada nessa alimentação:** chama cobertura com `para='cobranca'`; a cobertura aplica `_pelo_efeito`, que exclui rejeitada, antes do uso de `_a.efeito`. (`app/colaboradores/services/calendario.py:516`; `app/ponto/turnos.py:2765-2766`; `app/ponto/turnos.py:2530-2531`; `app/colaboradores/services/calendario.py:705`.)
+- **Fechamento e coletor financeiro recebem somente aprovadas:** ambos solicitam cobertura `para='folha'`, cujo filtro é `status='aprovada'`; depois leem `.efeito`. A seleção da exportação citada também exige aprovada. (`app/ponto/services/fechamento.py:683-697`; `app/ponto/services/efeito_ausencia.py:53-58`; `app/ponto/turnos.py:2528-2529`; `app/folha/export.py:87-91`.)
+- **A propriedade preservada continua sem status:** `Ausencia.efeito` chama apenas `efeito_vigente(self.tipo)`. O helper de dias inteiros lê essa propriedade sobre a cobertura financeira recebida; os chamadores financeiros já entregam a cobertura de folha. (`app/ponto/models.py:849-852`; `app/ponto/turnos.py:2692-2709`; `app/ponto/services/fechamento.py:683-687`; `app/ponto/services/efeito_ausencia.py:53-65`.)
+- **Alterar escritores ultrapassaria essa avaliação:** `mudar_estado` grava e pode acordar a projeção do fechamento. Tocar gravado de competência exportada ou regra fora do pedido exige `!` pela regra local. (`app/ponto/services/ausencia.py:987-994`; `CLAUDE.md:265-268`.)
+
+**Leis aplicáveis:** transportar a resposta do juiz é coerente com “testemunha lê, não recalcula”; um mapa puramente apresentacional não acrescenta predicado de veredito. L7 exige ajuda no mapa, e L-123 admite o padrão “juiz unico”. (`CLAUDE.md:20-22`; `app/docs/LEIS-UI.md:77-84`; `CLAUDE.md:65-70`; `app/docs/PLANO-PADROES.md:55-59`; `app/ponto/services/dia_decidido.py:453-481`.)
+
+Execução da proposta, impacto real em produção, dados exportados, RED, mutantes, suite e smoke: **[não verificado]**. [nao verificado]
 
 ## 16/11 18:53 · sessao dbc9a9749f8d · ESPINHA-F2 · verificador · origem=Code
 
@@ -623,116 +657,4 @@ Leitores adicionais: histórico, painel, fotografia, raio X, procedência da bat
 
 - **F4 permanece sob mock K6 fixo `False`:** o teste compara antes/depois e cobra pendentes 1→0, mas herda o patch da fixture (`app/chamados/tests/test_bug_par_volta.py:461`, `:463`, `:468`, `:471`; `app/chamados/tests/test_bug_par_projetado.py:51`). A invariância com autoridade real continua **[nao verificado]**.
 
-## 16/11 18:25 · sessao 2eb499a6ce30 · BUG-PAR-O-PAR · verificador · origem=Code
-
-**DEVOLVIDA — bloqueia.** A cura L2 não alcança o par executado pelo laço/passivo; há também um caminho em que a precedência depende da ordem das metades. A execução exigida dos mutantes `c4_*` com `--django` permanece **[nao verificado]** (`app/chamados/services/materializacao.py:2048`; `app/chamados/services/passivo_validado.py:537`; `app/chamados/services/materializacao.py:1424`; `app/chamados/tests/bug_par_mutantes.py:139`).
-
-1. **Escritores e leitores — sem achado de incompatibilidade entre tupla e texto.**
-
-   | Valor | Quem produz/escreve | Quem lê |
-   |---|---|---|
-   | `bloqueada_sem_dia_do_fato` / `bloqueada_competencia_entregue` | Constantes e guarda K6; a guarda conserva a exclusão das 163 (`app/chamados/services/materializacao.py:705`, `:706`, `:800`, `:804`, `:806`). | Testemunha e retorno da porta; ambos separam estado e mensagem (`app/chamados/services/materializacao.py:882`; `app/chamados/services/validacao.py:228`, `:230`). |
-   | `entrega_que_barra_a_validacao` | Compõe pergunta + irmã e devolve `None | (estado, texto)` (`app/chamados/services/validacao.py:215`, `:221`). | Testemunha e duas guardas da validação; nenhum desses leitores continua esperando `str` (`app/chamados/services/materializacao.py:880`, `:882`; `app/chamados/services/validacao.py:648`, `:650`, `:685`, `:688`). |
-   | `_competencia_que_barra` | **Continua textual**: extrai `_k6[1]`, compõe F6 ou retorna `''` (`app/chamados/services/materializacao.py:812`, `:821`, `:828`, `:829`). | Detalhes da testemunha e erro da unidade; esses usos de texto continuam corretos (`app/chamados/services/materializacao.py:903`, `:905`, `:927`, `:929`, `:1794`, `:1796`). |
-   | `_RECUSA_COMPETENCIA_NO_PAR` | Declarada com `None`; instalada pelo wrapper do admin; recebe conflitos classificados pelo catálogo como `COMPETENCIA_APROVADA` (`app/chamados/services/materializacao.py:1759`, `:1446`, `:1449`, `:1450`; `app/chamados/services/validacao.py:545`). | Wrapper após rollback, com restauração pelo token (`app/chamados/services/validacao.py:555`, `:563`). |
-   | `_PAR_RECUSADO_PELA_COMPETENCIA` | Criada e devolvida exclusivamente pelo wrapper (`app/chamados/services/validacao.py:519`, `:560`). | Comparação por identidade que impede a tentativa isolada (`app/chamados/services/validacao.py:680`, `:682`). |
-   | `recusa_motivo` | O delta reutiliza `_carimbar_recusa`; permanecem os escritores anteriores de pendência, recusa humana, escape e duplicata (`app/chamados/services/validacao.py:558`; `app/chamados/services/materializacao.py:1326`, `:1638`; `app/chamados/services/validacao.py:823`; `app/chamados/services/disputa_emissao.py:1511`; `app/chamados/services/fio.py:1405`; `app/chamados/models.py:3298`). | Devolução, explicador, templates e fotografia do comando (`app/chamados/services/validacao.py:262`, `:278`; `app/chamados/services/explicador.py:113`; `app/templates/chamados/partials/modal_fio.html:226`; `app/templates/chamados/partials/_card_atendimento.html:192`; `app/chamados/management/commands/bug_par_103.py:69`). |
-   | `validada_em` | Assinatura e devolução canônicas; continuam os caminhos anteriores de descarimbo, reabertura e simetria do modelo (`app/chamados/services/validacao.py:168`, `:269`, `:345`; `app/chamados/services/disputa_emissao.py:1494`, `:1609`; `app/chamados/models.py:1629`, `:3245`, `:3274`). | Porta, estado do modelo, juiz de vida, telas, painel, verbos, vigia e seleção/releitura do laço (`app/chamados/services/validacao.py:593`; `app/chamados/models.py:3151`; `app/chamados/juizes.py:1389`; `app/templates/chamados/partials/_pergunta_card.html:42`; `app/templates/chamados/partials/modal_fio.html:228`; `app/chamados/services/painel.py:270`; `app/chamados/services/verbos.py:264`; `app/chamados/services/vigia_carimbo.py:98`; `app/chamados/services/materializacao.py:2029`, `:2046`). |
-   | `materializada_em` | Atribuição em `_escrever_carimbo`, administrada pelas portas de carimbo/descarimbo; o delta não cria atribuição paralela (`app/chamados/models.py:3207`, `:3209`, `:3239`, `:3295`, `:3391`). | Testemunha lê carimbo **e via**; laço relê após trava; passivo usa lastro e também relê para evitar repetir a irmã (`app/chamados/services/materializacao.py:856`, `:865`, `:2040`, `:2043`; `app/chamados/services/passivo_validado.py:534`, `:535`, `:537`). |
-   | Nota do fio | `_carimbar_recusa` chama `nota.anexar_ocorrencia`, mantendo chave por pergunta/código/autor (`app/chamados/services/materializacao.py:1643`; `app/chamados/services/nota.py:62`, `:95`, `:100`, `:107`). | Carregamento dos followups e apresentação no fio/card (`app/chamados/services/fio.py:202`, `:206`; `app/templates/chamados/partials/modal_fio.html:500`; `app/templates/chamados/partials/_card_atendimento.html:53`). |
-   | `DecisaoPergunta` | `registrar` continua sendo a porta; VALIDACAO e DEVOLUCAO continuam nos escritores da validação (`app/chamados/models.py:4110`, `:4120`; `app/chamados/services/validacao.py:173`, `:275`). | Histórico, fio, rótulo das 103, tarefa do dia, fotografia e backfill (`app/chamados/models.py:3676`; `app/chamados/services/fio.py:261`; `app/chamados/services/materializacao.py:275`; `app/chamados/services/tarefa_do_dia.py:421`, `:430`; `app/chamados/services/foto_e4b.py:280`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`). |
-
-   Card e modal decidem pelo **estado**, sem comparar o texto de `detalhe`; fio e filtro publicam a mesma testemunha. Os helpers de espera também verificam o estado antes de devolver o detalhe (`app/templates/chamados/partials/_pergunta_card.html:44`, `:47`, `:49`; `app/templates/chamados/partials/modal_fio.html:252`, `:274`; `app/chamados/services/fio.py:373`, `:378`; `app/chamados/templatetags/chamados_tags.py:131`, `:139`; `app/chamados/services/materializacao.py:758`, `:773`).
-
-   O explicador conserva sua escada por estado/lastro/espera; contador e comando consultam as autoridades compartilhadas. O contador permanece nas 163, sem novo balde L5 fora delas; a lista do comando dá saída falante à ausência de dia (`app/chamados/services/explicador.py:100`, `:116`, `:124`, `:131`; `app/chamados/services/materializacao.py:321`, `:339`, `:347`, `:356`; `app/chamados/management/commands/bug_par_103.py:74`, `:75`, `:77`).
-
-   Há classificação **textual de recusa**, pelo catálogo existente, inclusive no delta e no passivo; isso é distinto de decidir a tela pelo detalhe. Há também regex anterior em `flip_auto`, restrita à via de paridade terminal (`app/chamados/catalogo/recusa.py:96`, `:101`; `app/chamados/services/materializacao.py:1448`; `app/chamados/services/passivo_validado.py:140`, `:144`; `app/ponto/services/flip_auto.py:128`, `:132`).
-
-2. **Matriz e precedência — bloqueia: a precedência L2/L3 depende da ordem.**
-
-   A estrutura das cinco linhas está implementada e os testes distinguem estado da testemunha, retorno da porta e apresentação, com as limitações abaixo; sua execução Django nesta verificação é **[nao verificado]** (`app/chamados/tests/test_bug_par_volta.py:222`, `:237`, `:275`, `:288`, `:299`).
-
-   | Linha | Resultado conferido no código/teste | [nao verificado]
-   |---|---|
-   | L1 | Guarda entregue antes do carimbo; estado próprio, detalhe e ausência de Validar; fotografia de perguntas/atos/notas e ausência de batidas (`app/chamados/services/validacao.py:648`, `:651`; `app/chamados/tests/test_bug_par_volta.py:229`, `:231`, `:233`, `:235`). |
-   | L2 | F6 conserva Validar; no cenário testado, exige `nao_gravou`, VALIDACAO→DEVOLUCAO, motivo/nota de competência e irmã preservada (`app/chamados/tests/test_bug_par_volta.py:247`, `:249`, `:252`, `:258`, `:261`, `:267`, `:273`). |
-   | L3 | Espera restrita ao pertencimento congelado; porta espera sem persistir (`app/chamados/services/materializacao.py:742`, `:745`; `app/chamados/tests/test_bug_par_volta.py:281`, `:284`, `:286`). |
-   | L4 | Aplicável, Validar e par gravado; o helper cobra batidas, carimbos e via (`app/chamados/tests/test_bug_par_volta.py:293`, `:296`, `:297`; `app/chamados/tests/test_bug_par_projetado.py:103`, `:109`). |
-   | L5 | Fora163 sem dia devolve estado próprio antes do carimbo, sem consultar K6 nesse helper; tela oculta Validar (`app/chamados/services/materializacao.py:784`, `:800`, `:804`; `app/chamados/tests/test_bug_par_volta.py:307`, `:309`, `:311`, `:313`). |
-
-   **Contraexemplo bloqueante:** saída U163 divergente, volta fora163, F6 aprovado, **VOLTA primeiro**. A testemunha anuncia L2; na escrita, a irmã alcança a espera tardia antes de `registrar_batida`. A espera desfaz o par sem preencher o registro de competência; o wrapper retorna `None`, e a tentativa isolada termina em PARIDADE. Portanto a precedência declarada não se realiza nessa ordem (`app/chamados/services/materializacao.py:903`, `:905`, `:1424`, `:1428`, `:1685`, `:1688`; `app/chamados/services/validacao.py:551`, `:561`, `:682`; `app/chamados/services/materializacao.py:1373`).
-
-   O teste de precedência só valida **SAÍDA primeiro**; os testes das duas ordens exercitam sucesso sem F6. **Mudar:** corrigir a composição compartilhada para conservar a precedência nas duas ordens, sem antecipar globalmente outra guarda da porta, e acrescentar o contraexemplo (`app/chamados/tests/test_bug_par_volta.py:334`, `:44`, `:60`, `:64`).
-
-   **Bloqueia a prova completa da matriz:** L3 descarta justamente a verificação de detalhe visível; L4 não cobra atos; L5 não verifica ausência de chamadas ao K6. Assim esses testes podem passar, respectivamente, com espera sem texto, validação sem atos e consulta indevida ao K6. **Mudar:** cobrar esses efeitos na própria linha da matriz (`app/chamados/tests/test_bug_par_volta.py:207`, `:209`, `:282`, `:297`, `:303`, `:313`; `app/chamados/tests/test_bug_par_projetado.py:103`).
-
-   **Fila — F4:** cobra corretamente pendentes 1→0 num recorte resolvível, mas compara entrega sob mock fixo `False`. Fortalecer a invariância usando fixture da autoridade real (`app/chamados/tests/test_bug_par_volta.py:396`, `:401`, `:404`, `:407`; `app/chamados/tests/test_bug_par_projetado.py:51`).
-
-3. **L2 — bloqueia: o motivo aprovado ainda se perde no par compartilhado pelo laço/passivo.**
-
-   A lista só é instalada por `_validar_o_par`. Laço e passivo chegam diretamente à unidade, com a contextvar em `None`. Quando a irmã já validada é recusada por F6, seu savepoint desfaz a recusa; o impedimento retorna composto em texto, e a metade externa escreve “guarda de paridade”. O catálogo encontra PARIDADE antes da marca de competência (`app/chamados/services/validacao.py:545`; `app/chamados/services/materializacao.py:1759`, `:2048`, `:1690`, `:1693`, `:1373`, `:1930`; `app/chamados/services/passivo_validado.py:537`; `app/chamados/catalogo/recusa.py:45`, `:54`).
-
-   Esse caminho é alcançável pelo passivo: sua seleção admite validadas sem carimbo e classifica ausência de plantio. **Mudar:** transportar a causa canônica também no par compartilhado; não ampliar automaticamente os atos/devoluções do lote para fazer essa correção (`app/chamados/services/vigia_carimbo.py:97`, `:98`, `:116`; `app/chamados/services/passivo_validado.py:537`).
-
-   Os dois contraexemplos foram reproduzidos nesta sessão por funções reais extraídas por AST, com transação/ORM/insumos dublados: resultaram em PARIDADE e contextvar restaurada. Isso sustenta o caminho lógico; reprodução com Django permanece **[nao verificado]** (`app/chamados/services/materializacao.py:1373`, `:1693`; `app/chamados/services/validacao.py:563`).
-
-   **Sem achado de vazamento no wrapper:** o token é restaurado em `finally`, inclusive no retorno da sentinela; esta impede o fallback. A irmã previamente validada não recebe nova assinatura dentro do savepoint; irmã materializada ou com batida existente não forma esse par (`app/chamados/services/validacao.py:548`, `:560`, `:563`, `:680`; `app/chamados/services/materializacao.py:148`, `:229`).
-
-   No cenário L2 coberto, a trilha é coerente: rollback da tentativa da irmã, recusa canônica da pergunta examinada, preservação de sua VALIDACAO e DEVOLUCAO com o motivo persistido. As variantes com irmã previamente validada, retry recusado, laço e passivo não estão demonstradas pelo teste novo. **Acrescentar esses cenários**, cobrando pergunta, nota e atos conforme o contrato de cada entrada (`app/chamados/services/validacao.py:547`, `:558`, `:689`, `:275`; `app/chamados/tests/test_bug_par_volta.py:251`, `:268`, `:273`).
-
-4. **Mutantes — bloqueia a entrega: integração executada permanece [nao verificado].**
-
-   As nove âncoras foram conferidas em memória: ocorrência única, função correspondente, código mutado compilável e teste existente. O harness exige falha por asserção sem erros ou skips e restaura o código; erro não conta como morte (`app/chamados/tests/bug_par_mutantes.py:193`, `:204`, `:207`, `:210`, `:213`, `:217`).
-
-   | Mutante | Alteração efetiva | Situação |
-   |---|---|---|
-   | `c4_fundir_l1_em_l2` | Troca estado do helper K6 (`app/chamados/services/materializacao.py:806`). | Asserção-alvo da testemunha em `app/chamados/tests/test_bug_par_volta.py:229`; execução Django **[nao verificado]**. |
-   | `c4_motivo_l2_paridade` | Desliga a coleta que preserva o motivo (`app/chamados/services/materializacao.py:1447`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:258`; execução **[nao verificado]**. |
-   | `c4_desligar_portao_l3` | Elimina pertencimento nas divergências (`app/chamados/services/materializacao.py:742`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:281`; execução **[nao verificado]**. |
-   | `c4_barrar_l4` | Barra o ramo aplicável **do par** (`app/chamados/services/materializacao.py:919`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:293`; execução **[nao verificado]**. |
-   | `c4_fundir_l5_em_l1` | Troca o estado sem dia por entregue (`app/chamados/services/materializacao.py:804`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:307`; execução **[nao verificado]**. |
-   | `fundir_a_em_b` | Funde estados na testemunha (`app/chamados/services/materializacao.py:882`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:229`; execução **[nao verificado]**. |
-   | `fundir_a_em_b_porta` | Funde estados na porta (`app/chamados/services/validacao.py:230`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:233`; execução **[nao verificado]**. |
-   | `k6_omitido` | Desliga o ramo entregue (`app/chamados/services/materializacao.py:805`). | **Executado: morto por AssertionError, erros=0**, em `app/chamados/tests/test_bug_par_sem_banco.py:143`. |
-   | `f6_esconde` | Troca F6 pelo estado que oculta Validar (`app/chamados/services/materializacao.py:905`). | Asserção-alvo em `app/chamados/tests/test_bug_par_volta.py:247`; execução **[nao verificado]**. |
-
-   Ressalva de alcance: `c4_fundir_l1_em_l2` não funde efetivamente a porta, pois `_recusa_da_entrega` converte todo estado diferente de L5 em L1; quem exerce a fusão na porta é o mutante separado. Isso limita a prova desse mutante, sem constituir falha do contrato atual de dois estados (`app/chamados/services/validacao.py:228`, `:230`; `app/chamados/tests/bug_par_mutantes.py:103`, `:124`).
-
-   Nesta sessão, os **7 testes sem banco passaram** e os **17 mutantes selecionados sem `--django` morreram por asserção, sem erros**. Esse modo exclui os mutantes de integração; não satisfaz o item 3d do aval. **Mudar na entrega:** executar e anexar a prova `--django` em ambiente autorizado para escrita de teste; não chamar o resultado sem Django de prova dos `c4_*` (`app/chamados/tests/test_bug_par_sem_banco.py:20`; `app/chamados/tests/bug_par_mutantes.py:178`, `:181`, `:213`). Não executei essa integração porque a configuração cria diretórios e usa banco; seu resultado permanece **[nao verificado]** (`app/config/settings/ci.py:6`, `:26`, `:29`, `:33`).
-
-5. **Classes de reprovação — conferência do delta.**
-
-   | Classe | Conclusão e mudança necessária |
-   |---|---|
-   | Segundo juiz | Sem achado novo: K6 chama o juiz registrado; F6 e catálogo continuam compartilhados (`app/core/juizes.py:343`; `app/chamados/services/materializacao.py:786`, `:789`, `:824`, `:1448`). |
-   | Segundo escritor de motivo/nota/atos | Sem achado novo: o delta chama as portas existentes (`app/chamados/services/validacao.py:558`; `app/chamados/services/materializacao.py:1638`, `:1643`; `app/chamados/models.py:4110`). |
-   | Relógio fora da borda | Nenhuma leitura nova de relógio identificada no trecho acrescentado; os carimbos continuam nos escritores anteriores (`app/chamados/services/validacao.py:545`, `:558`; `app/chamados/services/materializacao.py:1446`; `app/chamados/services/validacao.py:168`, `:275`). |
-   | Derivação paralela | Sem achado novo: testemunha/porta compartilham K6; a guarda textual extrai seu detalhe (`app/chamados/services/validacao.py:221`; `app/chamados/services/materializacao.py:819`, `:821`, `:880`). |
-   | Selo/RED sem mordida | **Bloqueia a prova** pelas lacunas da matriz e integração não executada, descritas nos itens 2 e 4 (`app/chamados/tests/test_bug_par_volta.py:282`, `:297`; `app/chamados/tests/bug_par_mutantes.py:178`). |
-   | Ordem de trava | Sem deslocamento identificado no delta: trava anterior ao carimbo e à recusa nova; laço/passivo compartilham a trava do plantio (`app/chamados/services/validacao.py:643`, `:651`; `app/chamados/services/materializacao.py:1992`, `:2039`). |
-   | Pouso antes do pré-requisito | Pouso, ancestralidade e execução da suíte inteira: **[nao verificado]**. | [nao verificado]
-   | ESMERIL-SEMANTICA | A separação L1/L5 corrige a sobreposição; tupla e texto têm contratos distintos e leitores compatíveis. **Permanece bloqueante a causa real F6 apresentada como PARIDADE** nos caminhos dos itens 2 e 3 (`app/chamados/services/materializacao.py:804`, `:806`, `:821`, `:882`, `:1373`). |
-
-   A sequência externa da porta continua com espera/implausibilidade antes da guarda K6 transacional; a prioridade interna da testemunha é K6, depois F6, depois espera onde seria aplicável. Não confundir isso com uma nova ordenação global da porta (`app/chamados/services/validacao.py:605`, `:611`, `:648`; `app/chamados/services/materializacao.py:880`, `:903`, `:916`).
-
-   Universo do contador, exclusão das 163 na guarda e fonte JSON permanecem definidos nos mesmos pontos; o carregador valida hash, cardinalidade e pertencimento por PK. Comparação histórica independente com `c8b3ad99e`: **[nao verificado]** (`app/chamados/services/materializacao.py:321`, `:800`; `app/chamados/services/universo_bug_par.py:8`, `:15`, `:20`, `:35`).
-
-6. **Escopo — sem excesso identificado no diff fornecido.**
-
-   As alterações de produção apresentadas realizam a separação C3-A, seus leitores e o transporte do motivo L2; os demais acréscimos são testes/mutantes. Não identifiquei no diff fornecido alteração de motor, JSON, contador, comando/apply ou juiz de entrega (`app/chamados/services/materializacao.py:792`, `:1446`; `app/chamados/services/validacao.py:224`, `:545`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/modal_fio.html:274`).
-
-   “Nenhum toque em competência exportada” não pode ser afirmado globalmente: as 163 continuam pulando essa guarda, conforme Q1, e o delta não altera esse ramo. Efeitos efetivos em produção e quantidade de perguntas vivas sem `data_evento` são **[nao verificado]**; o dado anexado não fornece essa medição (`app/chamados/services/materializacao.py:800`; `app/chamados/services/universo_bug_par.py:35`).
-
-## 16/11 18:23 · sessao cb52556b7368 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia — cura L2 incompleta no laço/passivo; defeito herdado que permanece.** O registro só nasce em `_validar_o_par` (`app/chamados/services/validacao.py:545`); laço e passivo chamam diretamente `_materializar_uma` (`app/chamados/services/materializacao.py:2048`; `app/chamados/services/passivo_validado.py:537`). Com ambas validadas, irmã recusada pelo chokepoint F6: o savepoint desfaz sua recusa (`materializacao.py:1690`), o wrapper devolve impedimento textual (`materializacao.py:1693`), e a metade externa escreve primeiro “guarda de paridade” (`materializacao.py:1373`; `materializacao.py:1930`), classificado PARIDADE antes de COMPETENCIA_APROVADA (`app/chamados/catalogo/recusa.py:45`; `recusa.py:54`). O passivo efetivamente admite perguntas sem carimbo de materialização (`app/chamados/services/vigia_carimbo.py:97`; `vigia_carimbo.py:116`). **Mudar:** transportar a causa canônica também no par compartilhado; preservar motivo sem ampliar automaticamente devolução/atos dos lotes. A execução Django deste cenário é [nao verificado]; probe AST em memória com helpers reais e transação/ORM/chokepoint simulados devolveu `False`, motivo externo `PARIDADE`, recusa da irmã desfeita e contextvar `None`.
-
-2. **Bloqueia — precedência L2 versus L3 depende da ordem das metades.** Com saída U163 divergente, volta fora163 e F6 aprovado, a testemunha da volta diz L2 (`materializacao.py:903`). Validando VOLTA primeiro, a irmã SAÍDA alcança a espera tardia antes do chokepoint (`materializacao.py:1424`; `materializacao.py:1428`); a espera atravessa o wrapper da irmã (`materializacao.py:1685`), deixando o registro de competência vazio. `_validar_o_par` desfaz e retorna `None` (`validacao.py:551`; `validacao.py:561`), e o fallback isolado (`validacao.py:682`) escreve PARIDADE (`materializacao.py:1373`). A irmã pode inicialmente aparecer bloqueada por paridade porque a metade externa em voo é excluída (`materializacao.py:149`); isso ainda faz `espera_na_escrita` retornar vazio (`materializacao.py:773`). **Mudar:** resolver a precedência na composição compartilhada e testar as duas ordens; não antecipar globalmente nova guarda da porta. O teste novo só valida SAÍDA primeiro (`app/chamados/tests/test_bug_par_volta.py:334`). Execução Django é [nao verificado]; probe AST com helpers reais e insumos simulados produziu wrapper `None`, zero chamadas ao chokepoint, motivo final PARIDADE e contextvar restaurada.
-
-3. **Sem achado novo no ciclo de vida da contextvar/sentinela.** Há `reset(token)` em `finally`, inclusive no retorno da sentinela (`validacao.py:560`; `validacao.py:562`); o chamador reconhece identidade e evita a tentativa isolada (`validacao.py:680`). Irmã previamente validada passa pelo mesmo wrapper, sem novo carimbo (`validacao.py:548`); irmã materializada é excluída da seleção (`materializacao.py:148`), e irmã com batida existente impede formar o par (`materializacao.py:229`). Vazamento sob integração Django é [nao verificado].
-
-4. **Sem segundo escritor/juiz ou relógio novo identificado no toque L2.** O novo caminho chama `_carimbar_recusa` (`validacao.py:558`), que conserva escrita do motivo e nota pela porta canônica (`materializacao.py:1638`; `materializacao.py:1643`; `app/chamados/services/nota.py:75`). VALIDACAO e DEVOLUCAO continuam nos escritores existentes (`validacao.py:173`; `validacao.py:275`), após a trava existente (`validacao.py:643`). O catálogo é reutilizado para classificar o retorno do chokepoint (`materializacao.py:1448`); não há derivação própria de competência nesse trecho (`materializacao.py:1449`).
-
-5. **Cobertura insuficiente para os casos acima.** A matriz L2 nova parte de ambas sem validação e valida somente SAÍDA (`test_bug_par_volta.py:244`; `test_bug_par_volta.py:251`; `test_bug_par_volta.py:268`). Os testes das duas ordens exercitam sucesso/retry, sem F6 (`test_bug_par_volta.py:44`; `test_bug_par_volta.py:60`). O teste anterior de rollback no laço fecha somente a saída e verifica apenas o motivo dela (`app/chamados/tests/test_bug_par_projetado.py:710`; `test_bug_par_projetado.py:722`). **Mudar:** acrescentar L2 nas duas ordens, irmã previamente validada, ambas sob F6, laço e passivo; medir motivo da pergunta, nota e atos nos respectivos contratos.
-
-_6152 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
