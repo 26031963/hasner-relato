@@ -1,7 +1,126 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 08:12** · publicado em **16/11/2026 08:12** (UTC-3)
+> Ultima resposta processada: **16/11/2026 08:18** · publicado em **16/11/2026 08:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 08:18 · sessao f0b9a79b79d4 · - · - · origem=Ronald (tmux)
+
+Causa candidata dos **dois dias col112: borda mensal deslocando a fase do pareamento sequencial**. A leitura mensal começa em 20/10 às 12h, excluindo a entrada de 06:55 desse dia; o oráculo recebe apenas timestamps e pareia por posição, sem considerar E/S (`app/ponto/management/commands/e6_oraculo.py:149-153`; `app/ponto/calculador/nucleo.py:245-247`).
+
+Reprodução em memória apenas com as batidas fornecidas:
+
+| Dia | Par produzido no subconjunto mensal | Minutos |
+|---|---|---:|
+| 21/10 | S 21/10 17:03:39.947643 → E 22/10 07:01:34.438467 | 837.9081804 |
+| 22/10 | S 22/10 17:02:17.198077 → E 23/10 06:56:52.572410 | 834.5895722166666 |
+
+Os valores reproduzem exatamente os E6 mensais fornecidos; o mecanismo está no recorte de leitura e na soma por posição (`app/ponto/management/commands/e6_oraculo.py:149-153`; `app/ponto/calculador/nucleo.py:245-247`). Incluindo a manhã de 20/10, a mesma função produz 605.7907565833334 e 600.7126601666666, os E6_JANELA informados (`app/ponto/calculador/nucleo.py:216-247`).
+
+O gap noturno inferior a 14h com uma batida acumulada não corta; o vão maior que 14h corta depois do par invertido. Como a contagem acumulada nesse corte é par, `corte_que_orfanou` fica falso (`app/ponto/calculador/nucleo.py:216-225`). A soma é atribuída à data da primeira batida do turno (`app/ponto/calculador/nucleo.py:236-247`).
+
+O juiz classifica zero batidas como contagem par: sem outros indicadores, cai no resíduo ESTRUTURA. Isso explica por que dias sem turno iniciado no dia podem continuar nessa classe; não comprova a causa específica de cada divergência (`app/ponto/management/commands/e6_oraculo.py:98-110`).
+
+A quantidade de batidas ímpar na janela de três dias não equivale ao `impar` do dia-alvo: o primeiro é contagem do universo; o segundo depende dos turnos atribuídos à data de início (`app/ponto/calculador/nucleo.py:235-244`).
+
+Minutos do espelho, pausa reconhecida e efeito efetivamente aplicado permanecem [nao verificado]. [nao verificado]
+
+## 16/11 08:17 · sessao dbabf29f7de9 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+1. O `TOTAL` fornecido tem **dias=19, ok=19, erro=0**; portanto, **ok+erro=19**. Não há registros `ERRO`, classes de erro registradas nem marcador `INCOMPLETO` no trecho. Isso descreve a execução da sonda; concordância entre E6 e espelho permanece **[nao verificado]**.
+
+Os minutos e a fonte do espelho permanecem **[nao verificado]**: o anexo informa `nao lido: grava`. O leitor exige `minutos_realizados` ou `pago_h`; sem ambos, retorna ausência de lavratura, não zero (`app/ponto/management/commands/e6_oraculo.py:263-269`).
+
+2. Na tabela, os campos de produção são transcrições do anexo, todos **[nao verificado]** por arquivo:linha. Os minutos estão arredondados a seis casas. `T/O` significa quantidade de turnos da janela / `corte_que_orfanou`; marcos seguem `hi/hii/hfi/hf`; `A` mostra ausências confirmadas/candidatas; `J` mostra justificativas. **[nao verificado]**
+
+As causas são hipóteses: sua aplicação efetiva pelo espelho permanece **[nao verificado]**. As referências sustentam os mecanismos descritos.
+
+| Colaborador | Dia | E6 mensal / E6_JANELA, minutos | T/O | Batidas da janela; E6.impar | Célula: existe / trabalha / tipo_ata; marcos | Ausências e justificativas | CAUSA CANDIDATA ou fato faltante |
+|---|---|---:|---|---|---|---|---|
+| col129 | 2026-10-12 | 779,158268 / 659,427085 | 3/não | 5, ímpar; não | sim/sim/trabalho; 21:30/—/—/05:42; intervalo livre | A=0/3: atestado_medico aguardando_decisao; folga_compensatoria aprovada; folga rejeitada. J=0. **[nao verificado]** | **Não nomeada.** Falta a composição dos turnos **mensais** que produziu o valor diferente da janela. O agrupamento depende do acumulador e dos cortes (`app/ponto/calculador/nucleo.py:186-228,236-247`). |
+| col218 | 2026-10-15 | 0 / 0 | 3/não | 7, ímpar; não | sim/sim/trabalho; 21:00/02:00/03:00/05:00 | A=0/30: ferias aprovadas. J=0. **[nao verificado]** | **D — atribuição do dia:** turnos E6 começam em 14 ou 16/10; o realizado pode atribuir madrugada à véspera (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). |
+| col252 | 2026-09-23 | 594,347367 / 594,347367 | 3/não | 12, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/2: atestado aguardando_decisao; declaracao aprovada. J=0. **[nao verificado]** | **P — pausa E6 de 13,361900 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-09-24 | 597,758567 / 597,758567 | 3/não | 12, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/2: atestado aguardando_decisao; declaracao aprovada. J=0. **[nao verificado]** | **P — pausa E6 de 13,569383 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-09-25 | 603,521650 / 603,521650 | 2/não | 8, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/2: atestado aguardando_decisao; declaracao aprovada. J=0. **[nao verificado]** | **P — pausa E6 de 12,438000 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-09-28 | 580,809029 / 580,809029 | 2/não | 6, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/2: atestado aguardando_decisao; declaracao aprovada. J=0. **[nao verificado]** | **P — pausa E6 de 14,634152 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-10-01 | 590,132750 / 590,132750 | 2/não | 8, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/3: atestado aguardando_decisao; declaracao aprovada; atestado aprovado. J=0. **[nao verificado]** | **P — pausa E6 de 14,443733 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-10-02 | 592,629317 / 592,629317 | 2/não | 8, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/3: atestado aguardando_decisao; declaracao aprovada; atestado aprovado. J=0. **[nao verificado]** | **P — pausa E6 de 13,069783 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-10-06 | 597,051900 / 597,051900 | 2/não | 8, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/4: atestado aguardando_decisao; declaracao aprovada; dois atestados aprovados. J=0. **[nao verificado]** | **P — pausa E6 de 14,038883 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col252 | 2026-10-09 | 591,991200 / 591,991200 | 2/não | 8, par; não | sim/sim/trabalho; 07:00/12:38/13:38/17:00 | A=0/4: atestado aguardando_decisao; declaracao aprovada; dois atestados aprovados. J=0. **[nao verificado]** | **P — pausa E6 de 11,989283 min abaixo do piso**, com possível desconto da janela declarada (`app/ponto/turnos.py:542-546,756-764`). |
+| col369 | 2026-10-12 | 416,214867 / 416,214867 | 2/não | 8, par; não | sim/não/folga; marcos ausentes | A=0/32: 30 ferias aprovadas; folga_abonada aprovada; declaracao aprovada. J=0. **[nao verificado]** | **Não nomeada.** Nas quatro batidas do alvo, tipos E,E,S,S; faltam papéis efetivos da ATA, turnos do juiz e fonte do espelho. E6 soma posições; o pareador consulta papéis (`app/ponto/calculador/nucleo.py:245-253`; `app/ponto/turnos.py:1310-1325,1382`). |
+| col37 | 2026-10-05 | 0 / 0 | 2/não | 6, par; não | sim/sim/trabalho; 19:00/02:00/03:00/07:00 | A=0/30: ferias aprovadas. J=0. **[nao verificado]** | **D — atribuição do dia:** turnos E6 começam em 04 e 06/10; madrugada pode pertencer à véspera (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). |
+| col37 | 2026-10-09 | 0 / 0 | 2/não | 6, par; não | sim/sim/trabalho; 19:00/02:00/03:00/07:00 | A=0/30: ferias aprovadas. J=0. **[nao verificado]** | **D — atribuição do dia:** turnos E6 começam em 08 e 10/10; madrugada pode pertencer à véspera (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). |
+| col382 | 2026-09-30 | 0 / 0 | 3/não | 9, ímpar; não | sim/sim/trabalho; 23:50/03:50/04:50/07:50 | A=0/0. J=0. **[nao verificado]** | **D — atribuição do dia:** turnos E6 começam em 29/09 ou 01/10; há segmento atravessando meia-noite (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). |
+| col451 | 2026-09-23 | 718,211750 / 718,211750 | 3/não | 4, par; não | sim/sim/trabalho; 19:00/—/—/07:00; intervalo livre | A=0/0. J=0. **[nao verificado]** | **O — pareamento por posição versus papel:** E6 conta S 07:00→E 18:58; a S da madrugada seguinte fica em outro turno E6 (`app/ponto/calculador/nucleo.py:216-247`; `app/ponto/turnos.py:1382,1402-1419,1491-1498`). |
+| col451 | 2026-09-25 | 718,302517 / 718,302517 | 3/não | 4, par; não | sim/sim/trabalho; 19:00/—/—/07:00; intervalo livre | A=0/0. J=0. **[nao verificado]** | **O — pareamento por posição versus papel:** E6 conta S 07:02→E 19:00; a S da madrugada seguinte fica em outro turno E6 (`app/ponto/calculador/nucleo.py:216-247`; `app/ponto/turnos.py:1382,1402-1419,1491-1498`). |
+| col478 | 2026-09-25 | 7,766517 / 7,766517 | 3/não | 4, par; não | sim/sim/trabalho; 19:00/—/—/07:00; intervalo livre | A=0/1: atestado aguardando_decisao. J=1: esqueci_saida rejeitada. **[nao verificado]** | **O — pareamento por posição versus papel:** E6 conta E 18:57→E 19:04; a S seguinte fica separada (`app/ponto/calculador/nucleo.py:216-247`; `app/ponto/turnos.py:1382,1417-1419`). |
+| col515 | 2026-10-09 | 0 / 0 | 2/não | 6, par; não | sim/sim/trabalho; 19:00/02:00/03:00/07:00 | A=0/4: faltas aprovadas. J=0. **[nao verificado]** | **D — atribuição do dia:** turnos E6 começam em 08 e 10/10; madrugada pode pertencer à véspera (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). |
+| col515 | 2026-10-11 | 0 / 0 | 2/não | 6, par; não | sim/sim/trabalho; 19:00/02:00/03:00/07:00 | A=0/4: faltas aprovadas. J=0. **[nao verificado]** | **D — atribuição do dia:** turnos E6 começam em 10 e 12/10; madrugada pode pertencer à véspera (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). |
+
+**Zero ausências confirmadas não significa ausência comprovada de cobertura** nos casos com candidatas: a cobertura dessas candidatas permanece **[nao verificado]**. Sem data final, a regra depende do conjunto vigente de tipos em aberto (`app/ponto/turnos.py:2798-2814`; `app/ponto/catalogo/ausencias.py:430-435`).
+
+A quantidade ímpar de batidas **da janela** não determina a paridade do **dia atribuído pelo E6**: este agrupa por turno e registra a paridade na data da primeira batida (`app/ponto/calculador/nucleo.py:236-245`). Tampouco `corte_que_orfanou=false` no alvo exclui cortes órfãos atribuídos a datas vizinhas (`app/ponto/calculador/nucleo.py:216-223`).
+
+3. Agrupamento dos 19 dias, com contagens derivadas do anexo **[nao verificado]**:
+
+| Causa candidata | Dias | Contagem |
+|---|---|---:|
+| **P — pausa abaixo do piso e possível desconto da janela declarada.** E6 mede a pausa cronológica; o realizado filtra intervalos abaixo de 15 minutos e pode usar a janela declarada (`app/ponto/calculador/nucleo.py:245-253`; `app/ponto/turnos.py:499,542-546,756-764`). | col252: 23, 24, 25 e 28/09; 01, 02, 06 e 09/10. **[nao verificado]** | **8 [nao verificado]** |
+| **D — data inicial do turno E6 versus atribuição da madrugada à jornada da véspera** (`app/ponto/calculador/nucleo.py:236-247`; `app/ponto/turnos.py:285-309`). | col218: 15/10; col37: 05 e 09/10; col382: 30/09; col515: 09 e 11/10. **[nao verificado]** | **6 [nao verificado]** |
+| **O — pares cronológicos versus papéis/tipos do pareador** (`app/ponto/calculador/nucleo.py:245-247`; `app/ponto/turnos.py:1382,1417-1419,1491-1498`). | col451: 23 e 25/09; col478: 25/09. **[nao verificado]** | **3 [nao verificado]** |
+| **Não nomeada:** faltam turnos E6 mensais em col129; papéis/turnos efetivos e fonte do espelho em col369. **[nao verificado]** | col129 e col369: 12/10. **[nao verificado]** | **2 [nao verificado]** |
+| Total | **8+6+3+2 [nao verificado]** | **19 [nao verificado]** |
+
+Em col369, a célula de folga isoladamente não explica a divergência: o realizado seleciona turnos por `data_turno`, sem excluir folga nesse filtro (`app/ponto/turnos.py:719-732`). Em col478, E/E isoladamente não autoriza trocar o dono para BATIDA: esse caminho exige realizado aberto e entrada real solta (`app/ponto/management/commands/e6_oraculo.py:198-212`).
+
+## 16/11 08:15 · sessao 0c083aab5ae1 · - · - · origem=Ronald (tmux)
+
+Causas candidatas para os 10 dias examinados; todas dependem de confirmação do caminho efetivamente usado pelo espelho, cujos minutos permanecem [nao verificado].
+
+| Grupo | Dias | Mecanismo e evidência de código | Fato faltante |
+|---|---|---|---|
+| Atribuição do dia: calendário E6 versus jornada noturna | **6**: col218 15/10; col37 05 e 09/10; col382 30/09; col515 09 e 11/10 | E6 usa a data da primeira batida do turno (`app/ponto/calculador/nucleo.py:236-247`). A autoridade dos turnos pode atribuir entradas/saídas da madrugada à véspera, conforme o DNA (`app/ponto/turnos.py:285-309,312-324,1253-1302`). | `data_turno`, papel e turnos efetivos do espelho [nao verificado]. |
+| Pareamento por posição versus tipos/papéis | **3**: col451 23 e 25/09; col478 25/09 | E6 soma posições consecutivas sem consultar o tipo (`app/ponto/calculador/nucleo.py:236-247`). No dado, col451 reúne S matinal com E vespertina; col478 reúne duas E próximas, separando a S da madrugada seguinte [nao verificado: apenas dado fornecido]. O pareador real usa papel da ATA ou tipo e distingue E que abre e S que fecha (`app/ponto/turnos.py:1377-1419,1491-1498`). | Papéis efetivos, estado aberto e pareamento produzido [nao verificado]. |
+| Dependência do contexto da leitura E6 | **1**: col129 12/10 | O acumulador `cur` atravessa os instantes até ocorrer corte; composição e paridade dependem das batidas anteriores (`app/ponto/calculador/nucleo.py:157,186-228`). Mensal 779,1582679 versus janela 659,4270846666666 no dado [nao verificado: apenas dado fornecido]. | Turnos E6 produzidos na leitura mensal; sem eles, o deslocamento exato não pode ser explicado [nao verificado]. |
+
+`corte_que_orfanou=false` para o alvo não afirma que todos os turnos vizinhos sejam pares: o marcador usa a data inicial do turno cortado (`app/ponto/calculador/nucleo.py:216-223`).
+
+E/E não autoriza reclassificar col478 como BATIDA: o juiz precisa de `realizado.aberto` e entrada real solta no turno do dia (`app/ponto/management/commands/e6_oraculo.py:198-212`). A classificação ESTRUTURA continua sendo a premissa fornecida [nao verificado: apenas dado fornecido].
+
+Nenhum AGENTS.md apareceu na busca da árvore nem nos ancestrais consultados [nao verificado: resultado da inspeção, sem arquivo citável].
+
+## 16/11 08:15 · sessao 892fac3ba71d · - · - · origem=Ronald (tmux)
+
+Para **col252 (8 dias)**, causa candidata sustentada: **pausa cronológica abaixo de 15 minutos no E6 versus piso de intervalo e possível desconto da janela declarada no realizado**.
+
+- E6 soma pares sequenciais e mede o vão entre eles sem piso: `app/ponto/calculador/nucleo.py:245-253`.
+- O realizado reconhece apenas intervalos marcados de pelo menos 15 minutos: `app/ponto/turnos.py:499,542-546`.
+- Sem intervalo reconhecido, se `livre=False`, pode descontar a interseção da janela declarada com o turno: `app/ponto/turnos.py:756-764`.
+- O espelho fornece `livre` e o intervalo do dia ao realizado: `app/ponto/services/espelho.py:286-294`.
+- Nos oito dias fornecidos, as pausas E6 são inferiores a 15 minutos e a janela declarada é 12:38–13:38; execução desse ramo e desconto efetivo permanecem **[nao verificado]**.
+
+Para **col369 em 12/10**, **folga não constitui causa suficiente**:
+
+- O realizado filtra por `data_turno`, sem eliminar dias de folga: `app/ponto/turnos.py:719-732`.
+- Célula existente sem marcos declara ausência de pausa: `app/escala/models.py:1189-1207`.
+- E6 soma pela posição cronológica, enquanto o pareador consulta papel da ata e depois o tipo gravado: `app/ponto/calculador/nucleo.py:245-253`; `app/ponto/turnos.py:1310-1325,1377-1382`.
+- Candidata ampla: **pareamento cronológico versus pareamento por papel/tipo**. Para uma causa específica, usar **“não nomeada: faltam os papéis efetivos da ata, os turnos do juiz e a fonte real do número do espelho”**. O leitor prioriza `minutos_realizados` e depois `pago_h`: `app/ponto/management/commands/e6_oraculo.py:263-269`.
+
+Nenhuma regra encontrada exige atribuir divergência ao fato isolado de a célula ser folga ou ter sido regenerada; essa atribuição permanece **[nao verificado]**.
+
+## 16/11 08:13 · sessao 0f7a28ff15fc · RESPOSTAS-DA-MANHA-1611 · verificador · origem=Code
+
+| item | pergunta | PROCEDE/NAO PROCEDE | arquivo:linha | motivo |
+|---|---|---|---|---|
+| 1 | 1 — Executável no literal? | **PROCEDE** | anexo:respostas_da_manha_1611.txt:2; anexo:ressusc_diff.txt:466-474; app/docs/RELATO.md:3 | A comprovação literal não fecha: o anexo é uma **saída de diff**, sem instrumento executável, hashes das árvores ou identificação do retrato. Mostra 97 mudanças de ação/dono, 105 somente de rótulo e 81 iguais na saída `>`; não evidencia `total_erros=0`, vitalidade ou retenção. Refazer B1 sobre o HEAD atual não fixa automaticamente a referência da comparação. Qual main produziu esse diff e se continua sendo a referência: **[nao verificado]**. Isso não demonstra impossibilidade da cura. |
+| 1 | 2 — Falta “senão”? | **NAO PROCEDE** | app/docs/LEIS.md:62; anexo:cauda_da_madrugada_1611.txt:1; anexo:respostas_da_manha_1611.txt:2 | Existe saída escrita: condição não satisfeita = parar com o número; registrar motivo e o que destrava, seguindo para o próximo item. Se não alcançar 283 iguais dentro das proibições, B1 não pousa. A autorização não permite reduzir a meta nem criar decisão ou juiz para contorná-la. |
+| 1 | 3 — Colisão com lei, aval ou obra em voo? | **NAO PROCEDE** | anexo:construir_r3_c17_e_f1_nova.txt:1; anexo:producao_maxima.txt:1; anexo:retoma_he_revogada_e_lote3.txt:1; anexo:prepara_volta_bug_par.txt:4; anexo:cauda_da_madrugada_1611.txt:1 | A preservação de fila já integra B1. Os avais posteriores mantêm teto **2 de construtores**; o teto **3** do RETOMA é da pista, e PRODUCAO-MAXIMA é anterior. Voltas de R3/F1 conservam precedência; BUG-PAR continua condicionada e B2 depende do pouso B1. Colisão efetiva de arquivos entre as três cópias ausentes, seus HEADs e ocupação atual das vagas: **[nao verificado]**; não há liberação comprovada por ausência de cruzamento. | [nao verificado]
+| 1 | 4 — Referências, unidade e universo conferem? | **PROCEDE** | app/chamados/models.py:1610-1622; app/chamados/services/tarefa_do_dia.py:152-177; app/docs/RELATO.md:7; anexo:ressusc_diff.txt:466-474 | No archive, `models.py:1621` percorre disputas fechadas; não registra `REABERTURA`. `tarefa_do_dia.py:152` chama `chamado_que_lista`; a devolução por `REABERTURA` está em **163-164**, e silêncio sem ação em **176-177**. O RELATO atribui as referências à cópia B1: conferência nela **[nao verificado]**. A unidade pergunta e os agregados 97/105/283 aparecem no diff, mas ele não contém a lista completa das 283 nem prova individualmente as 81 omitidas. |
+| 2 | 1 — Executável no literal? | **NAO PROCEDE** | anexo:respostas_da_manha_1611.txt:3; anexo:opus_final.md:3; app/colaboradores/views.py:324-332 | O laudo identifica exatamente `test_lote3_c6_recusa_nada_gravado.py:230-239`, com o teste `test_MUTANTE_gravou_e_a_trilha_falhou_linha_mostra_o_novo`. Segundo ele, o teste atual **exige o defeito**; fazê-lo morder exige inverter a expectativa para posto antigo no banco **e na linha** após falha da trilha, junto do `atomic` comum. O código disponível confirma as gravações separadas. |
+| 2 | 2 — Falta “senão”? | **NAO PROCEDE** | app/docs/LEIS.md:62; anexo:cauda_da_madrugada_1611.txt:1; anexo:respostas_da_manha_1611.txt:3 | Se a cura ou o teste não satisfizerem o contrato, a obra para com motivo e condição de desbloqueio, e a fila segue. Mesmo com a cura aprovada, o pouso continua esperando o `!` de vínculo. |
+| 2 | 3 — Colisão com lei, aval ou obra em voo? | **NAO PROCEDE** | anexo:retoma_he_revogada_e_lote3.txt:1; anexo:respostas_da_manha_1611.txt:3; anexo:opus_final.md:3; anexo:cauda_da_madrugada_1611.txt:1; app/docs/LEIS.md:65 | RETOMA dizia literalmente achado procedente **do pre-verificador**; o aval novo aceita expressamente o achado do **opus final** para esta volta. Essa autorização específica cobre o bloqueio de atomicidade/trilha e conserva o `!`; “entra” não altera expressamente a ordem LOTE7 antes de LOTE3. Arquivos comuns e possibilidade de execução simultânea nas cópias B1/c7/c6: **[nao verificado]**. |
+| 2 | 4 — Referências, unidade e universo conferem? | **NAO PROCEDE** | anexo:respostas_da_manha_1611.txt:1,3; anexo:opus_final.md:1,3; app/colaboradores/views.py:329-332,1387-1403; app/colaboradores/services/historico_vinculo.py:7-17 | A unidade obra confere. `vincular_posto:329-332` corresponde às duas gravações sem bloco comum; `registrar_mudanca` cria `HistoricoVinculo`. `transferir_posto` já engloba escrita e histórico no `atomic` iniciado em **1387**; **1400-1403** são argumentos/final da chamada dentro dele. Arquivo, linhas e nome do teste conferem **no laudo**. Sua presença e conteúdo na cópia c6, e o resultado futuro da c7: **[nao verificado]**. |
+
+**AVAL-DEVOLVIDO: RESPOSTAS-DA-MANHA-1611 | item 1**, pelos PROCEDE acima, conforme anexo:revisao_do_aval.txt:6.
 
 ## 16/11 08:12 · sessao 77d4b90b75c4 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
 
@@ -913,212 +1032,4 @@ Há ainda **falso positivo latente introduzido pelo descarte de corpos aninhados
 
 Execução da suíte Django, acesso a banco/log e incidência produtiva dos contraexemplos: **[nao verificado]**. [nao verificado]
 
-## 16/11 02:39 · sessao a02a7cbd1c80 · - · - · origem=Ronald (tmux)
-
-Inventário completo por AST: há **um chamador produtivo direto** de `ponto.services.ausencia.decidir`, o wrapper `_a4_decidir`; ele apenas repassa argumentos e relança `TransicaoInvalida`. (`app/ponto/views.py:85`, `app/ponto/views.py:88`, `app/ponto/views.py:90`)
-
-| Chamador do wrapper | Efeito do novo `atomic` |
-|---|---|
-| `aprovar_ausencia_lote` | Transação por item; `ok += 1` vem depois do retorno. Captura apenas `DoesNotExist` e `AusenciaInvalida`; erro inesperado aborta a requisição, preservando itens anteriores já concluídos. (`app/ponto/views.py:2292`, `app/ponto/views.py:2302`, `app/ponto/views.py:2304`, `app/ponto/views.py:2305`) |
-| `rejeitar_ausencia_lote` | Mesmo comportamento por item; contador não sobe quando a porta levanta. (`app/ponto/views.py:2333`, `app/ponto/views.py:2338`, `app/ponto/views.py:2342`, `app/ponto/views.py:2343`) |
-| `cancelar_ausencia_lote` | Transação por item; log adicional de cancelamento fica depois, fora da transação da porta. (`app/ponto/views.py:2370`, `app/ponto/views.py:2378`, `app/ponto/views.py:2387`, `app/ponto/views.py:2390`) |
-| `aprovar_ausencia` | Já envolve todos os irmãos em `atomic`; agora cada chamada abre savepoint interno. Exceção sai do bloco coletivo antes do tratamento e desfaz todos os irmãos; pushes vêm depois. (`app/ponto/views.py:2674`, `app/ponto/views.py:2676`, `app/ponto/views.py:2679`, `app/ponto/views.py:2694`) |
-| `editar_periodo_ausencia` | Período, trilha e invalidação passam a compor a transação da porta. Captura `AusenciaInvalida`, `ValueError` e `DoesNotExist`; demais erros sobem. (`app/ponto/views.py:2709`, `app/ponto/views.py:2710`) |
-| `rejeitar_ausencia` | Cada irmão ganha transação própria, mas continua sem transação coletiva; erro posterior conserva irmãos anteriores. O tratamento amplo devolve mensagem de erro. (`app/ponto/views.py:2735`, `app/ponto/views.py:2737`, `app/ponto/views.py:2755`) |
-| `cancelar_ausencia` | Decisão fica atômica; log adicional permanece fora da porta. Captura somente ausência inexistente e `AusenciaInvalida`. (`app/ponto/views.py:2773`, `app/ponto/views.py:2778`, `app/ponto/views.py:2784`, `app/ponto/views.py:2787`) |
-
-Não encontrei chamador produtivo na API da cópia. `saas_core` corresponde às rotas `config.urls_core → api.urls_core → views_core`, cuja lista não contém decisão de ausência. (`app/config/urls_core.py:6`, `app/api/urls_core.py:5`, `app/api/urls_core.py:7`, `app/api/views_core.py:1`)
-
-Há **29 chamadas diretas em testes**, distribuídas nestes arquivos: `app/ponto/tests/test_porta_ausencia_ferias.py:113,114`; `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:168`; `app/ponto/tests/test_a4_estados_com_porta.py:171,180,259,269,328,345,357`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:186,306,315,320,330,335,346,380,400`; `app/escala/tests/test_cobertura_parcial_periodo.py:164,180,189,193,198,227`; `app/api/tests/test_atestado_por_minutos.py:114`; `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:69,137`; `app/chamados/tests/test_s4_pendente_suspende_cobranca.py:87`.
-
-Pontos relevantes para consolidar:
-
-- A exceção que **escapa** depois da transição agora desfaz transição, carimbos, período e demais escritas participantes; o bloco cobre todo `_decidir_no_ato`, inclusive acordador final. (`app/ponto/services/ausencia.py:1079`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:1104`, `app/ponto/services/ausencia.py:1122`)
-- `post_save` continua síncrono: o cartório roda no primeiro save e novamente no segundo, quando existente. `atomic` adia os callbacks `on_commit`, sem adiar os receivers. (`app/ponto/services/ausencia.py:988`, `app/ponto/services/ausencia.py:1104`, `app/ponto/signals.py:143`, `app/ponto/signals.py:147`, `app/ponto/signals.py:272`)
-- Os dois saves continuam registrando dois callbacks, sem deduplicação. Ambos capturam a mesma instância; agora observam seus valores finais ao executar depois do commit. Rollback descarta callbacks registrados no trecho desfeito. (`app/ponto/signals.py:252`, `app/ponto/signals.py:254`, `app/ponto/signals.py:272`, `app/ponto/signals.py:275`, `app/chamados/services/trava_do_colaborador.py:12`)
-- Rollback não restaura os atributos Python atribuídos antes dos saves; o teste novo recarrega o objeto antes de conferir o estado. (`app/ponto/services/ausencia.py:976`, `app/ponto/services/ausencia.py:1091`, `app/ponto/services/ausencia.py:1102`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:402`)
-- O `registrar_log` real engole erros, e `evento` protege sua escrita com savepoint próprio. O teste novo injeta uma exceção no mock de `registrar_log`, portanto demonstra rollback diante de exceção propagada, não falha real da auditoria propagando. (`app/core/auditoria.py:25`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:394`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:398`)
-- `invalidar_fechamento` ainda engole falhas com savepoints próprios e retorna zero: continua possível concluir a decisão com fechamento carimbado se a invalidação falhar; ocorrência produtiva **[nao verificado]**. (`app/ponto/services/fechamento.py:1648`, `app/ponto/services/fechamento.py:1651`, `app/ponto/services/fechamento.py:1661`, `app/ponto/services/fechamento.py:1665`)
-- `_julgar_dias` engole sem savepoint explícito, mas não confirmei retorno silencioso de `decidir` com rollback: depois dos saves há obrigatoriamente consulta ao banco pelo snapshot final, que expõe conexão abortada antes do incremento de sucesso. (`app/ponto/signals.py:85`, `app/ponto/signals.py:88`, `app/core/observ.py:90`, `app/ponto/services/ausencia.py:1122`, `app/ponto/services/ausencia.py:138`, `app/ponto/views.py:2304`)
-
-Execução Django e incidência produtiva: **[nao verificado]**.
-
-## 16/11 02:39 · sessao 6339b5894009 · LOTE3-C6 · verificador · origem=Code
-
-**O achado da volta 1 está parcialmente fechado: resta 1 PROCEDENTE na reabertura, antes de `criar_ausencia` devolver o objeto.** (`app/ponto/services/ausencia.py:350`, `app/ponto/services/ausencia.py:1200`, `app/ponto/views.py:2492`)
-
-Execução dos testes, ocorrências em produção e estado efetivo do storage: **[não verificado]**. [nao verificado]
-
-**1. Fronteira de rollback e limpeza**
-
-O caso originalmente testado está coberto: depois que `criar_ausencia` retorna, uma falha em `_gravar_colab` sai do `atomic`; a limpeza compara o nome mantido no objeto com o documento da mesma PK relida após o rollback. Isso contempla linha nova e reabertura já devolvida. (`app/ponto/views.py:2465`, `app/ponto/views.py:2468`, `app/ponto/views.py:2485`, `app/ponto/views.py:2496`)
-
-**PROCEDENTE — falha intermediária em `_reabrir` deixa o upload órfão.** O caminho é:
-
-1. `criar_ausencia` encontra uma rejeitada e delega a `_reabrir`. (`app/ponto/services/ausencia.py:315`, `app/ponto/services/ausencia.py:350`)
-2. `_reabrir` salva o documento novo; depois ainda pode salvar a descrição e mudar o estado, com outro `save`. (`app/ponto/services/ausencia.py:1200`, `app/ponto/services/ausencia.py:1210`, `app/ponto/services/ausencia.py:1211`, `app/ponto/services/ausencia.py:900`)
-3. Se uma dessas escritas posteriores falhar, o `atomic` da view desfaz a troca do documento, mas a atribuição `ausencia = criar_ausencia(...)` não terminou: `ausencia` continua `None`. (`app/ponto/views.py:2462`, `app/ponto/views.py:2465`, `app/ponto/views.py:2468`)
-4. A limpeza externa é pulada; a interna só cobre exceção do próprio `save` do documento. O banco volta ao documento anterior e o arquivo novo permanece no storage. (`app/ponto/views.py:2492`, `app/ponto/services/ausencia.py:1199`, `app/ponto/services/ausencia.py:1202`)
-
-Quanto a **apagar arquivo ainda referenciado**, a comparação pós-rollback preserva o documento restaurado da mesma linha; não há consulta global por outras linhas com o mesmo nome. Compartilhamento real desses nomes entre linhas: **[não verificado]**. (`app/ponto/views.py:2496`, `app/ponto/services/ausencia.py:169`)
-
-A limpeza também não oferece garantia diante de falha da consulta pós-rollback ou da exclusão física: a consulta antecede o helper, e o helper captura falha de `delete` e retorna `False`. Ocorrência efetiva: **[não verificado]**. (`app/ponto/views.py:2496`, `app/ponto/services/ausencia.py:172`, `app/ponto/services/ausencia.py:174`)
-
-**2. Censo dos outros chamadores com `atomic` externo**
-
-| Chamador e fronteira | Escrita/falha possível depois | Upload novo órfão neste ato? |
-|---|---|---|
-| `regularizar_turno_orfao`: `app/ponto/services/regularizacao.py:89` → `garantir_ausencia`:118 | Analisar chamado e anexar nota:137,139 | Não passa documento:118. |
-| Abandono provisório: `app/ponto/management/commands/marcar_abandono_provisorio.py:22` → `garantir_ausencia`:76 | Próximas iterações:70; rollback explícito:98 | Não passa documento:76. |
-| Veredito da célula: `app/ponto/services/veredito_celula.py:224` → `criar_ausencia`:337 | Fechar fio:347; lavrar:352 | Não passa documento:337. |
-| Materialização: `app/chamados/services/materializacao.py:1226` → escolha:1232 → declaração:1084 → criação:491 | Reconciliar:1085; carimbar ou levantar recusa:1283,1285 | Não passa documento:491. |
-| Espelho de férias: `app/ferias/models.py:449` → sincronização:394 → `app/ponto/services/ausencia.py:1275` | Outros dias:1270; exclusões:1287; pauta:1290 | Não passa documento:1275. |
-
-`garantir_ausencia` também pode alcançar `_reabrir`, mas nesses chamadores o documento continua `None`; a escrita de upload da reabertura exige `if documento`. Portanto podem desfazer linhas ou reaberturas, mas não deixam arquivo **escrito neste ato** por esses caminhos. (`app/ponto/services/ausencia.py:180`, `app/ponto/services/ausencia.py:350`, `app/ponto/services/ausencia.py:523`, `app/ponto/services/ausencia.py:1191`)
-
-As fronteiras transitivas do espelho de férias são:
-
-| Operação | `atomic` | Ato que dispara o espelho | Escrita posterior |
-|---|---|---|---|
-| Agendar com abono | `app/ferias/services.py:297` | :306 | :316 |
-| Gozo histórico | `app/ferias/services.py:519` | :547 | :551 |
-| Executar agendamento | `app/ferias/services.py:567` | :581 | :587 |
-| Trocar janela | `app/ferias/services.py:706` | :729 | :731 |
-| Aprovar solicitação | `app/ferias/services.py:755`, :774 | :786 | :789 |
-| Corrigir datas pela tela | `app/ferias/views.py:524` | :531 | :533 |
-| Alinhar status pela data | `app/ferias/services.py:951` | :956 | Continuação do espelho: `app/ponto/services/ausencia.py:1284` |
-
-Os demais pontos de upload identificados não abrem `atomic` externo envolvendo a chamada: criação pela API/PWA, reenvio pela API e anexações administrativa/API. A reversão humana também não abre essa fronteira e não passa upload. (`app/api/views.py:1812`, `app/api/views.py:1845`, `app/api/views.py:3117`, `app/ponto/views.py:2603`, `app/ponto/views.py:2159`, `app/ponto/views.py:2651`)
-
-**3. Quem escreve e quem lê**
-
-**Escritores do campo:** `criar_ausencia`, `anexar_documento` e `_reabrir`; o destino físico declarado é `ausencias/documentos/`. (`app/ponto/services/ausencia.py:410`, `app/ponto/services/ausencia.py:479`, `app/ponto/services/ausencia.py:923`, `app/ponto/services/ausencia.py:925`, `app/ponto/services/ausencia.py:1198`, `app/ponto/services/ausencia.py:1200`, `app/ponto/models.py:777`)
-
-A normalização muda o nome do upload antes do armazenamento; a exclusão física identificada está em `_apagar_anexo_escrito_agora`. O admin de Ausencia está configurado somente para leitura. (`app/ponto/services/ausencia.py:658`, `app/ponto/services/ausencia.py:172`, `app/ponto/admin.py:38`, `app/core/admin.py:62`)
-
-**Leitores físicos dos arquivos:**
-
-- Identificação do tipo real: `app/ponto/models.py:861`.
-- Entrega HTTP, seguindo `documento_referencia`: `app/ponto/views.py:2122`, `app/ponto/views.py:2129`.
-- Exportação ZIP: `app/ponto/services/atestados_lote.py:157`, `app/ponto/services/atestados_lote.py:158`.
-
-**Leitores do campo, nome ou presença:**
-
-| Uso | Referências |
-|---|---|
-| Limpeza e captura do nome anterior | `app/ponto/services/ausencia.py:167`, :476, :922, :1197; `app/ponto/views.py:2496` |
-| Estado, gates e reabertura | `app/ponto/services/ausencia.py:606`, :671, :691, :1190 |
-| Chamado e trilha | `app/ponto/services/ausencia.py:713`, :730, :739, :938 |
-| API | `app/api/views.py:1061`, :1843 |
-| Cartas de troca | `app/ponto/portas/celula.py:702`, :722 |
-| Dia e histórico | `app/ponto/services/dia_decidido.py:424`, :497, :609, :623, :641 |
-| Contadores e rejuízo | `app/ponto/services/vigia_ausencia.py:115`, :215; `app/ponto/management/commands/rejulgar_status_por_tipo.py:28`, :37 |
-| Lote, nome exportado e CSV | `app/ponto/services/atestados_lote.py:76`, :96, :129, :148 |
-| Templates | `app/templates/ponto/ausencias.html:168`, :170; `app/templates/ponto/partials/painel_ausencia.html:71`, :72, :93, :205 |
-
-O import externo do helper está em `app/ponto/views.py:2494`; os outros usos identificados dele são internos ao serviço. Há precedente de importar função privada de outro módulo na própria view, como `_is_gestor` e `_rotulo_da_escala`. Isso, isoladamente, é **observação**. (`app/ponto/services/ausencia.py:481`, :927, :1202; `app/ponto/views.py:121`, :2062)
-
-**4. Os testes mordem?** [nao verificado]
-
-**Sim, no fluxo atual:** o teste de falha envia upload, força erro em `gravar` e exige mensagem, ausência desfeita, situação preservada e inventário de arquivos igual. O caminho feliz exige nome, arquivo adicional, existência física e situação afastado; outro teste confere o storage isolado. Resultado executado: **[não verificado]**. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:151`, :158, :166, :168, :169, :171, :179, :182, :183)
-
-**Limite:** o teste de falha, isoladamente, não afirma positivamente que o arquivo já existia quando o mock lançou. Uma antecipação da chamada a `gravar` poderia fazê-lo passar sem escrever upload. Os novos casos também não preparam ausência rejeitada nem provocam falha intermediária de `_reabrir`. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:164`, :166, :176; `app/ponto/services/ausencia.py:1200`, :1211)
-
-A asserção nova de sobreposição elimina a passagem vazia por uma recusa anterior sem a mensagem esperada: exige “já existe”, além da contagem e situação preservadas. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:112`, :116, :117, :118)
-
-O registro `3307` aponta à expressão atual de `regularizar_retorno`, e a catraca congela a localização. A alteração do registro é de linha; a explicação histórica integral do deslocamento `3273 → 3307` é **[não verificado]**. (`app/core/tests/test_medida_turno_do_par.py:339`, :557; `app/ponto/views.py:3307`)
-
-**5. Checklist**
-
-- **Segundo juiz:** a guarda de desligamento reutiliza `_guarda_da_linha` e `esta_desligado`. Como observação fora da cura, o PWA conserva veto próprio de sobreposição antes do produtor, enquanto este aplica `linha_que_veta`. (`app/colaboradores/services/colaborador.py:102`, :62; `app/ponto/views.py:2592`, :2593; `app/ponto/services/ausencia.py:382`)
-- **Segundo escritor fora da porta:** os escritores identificados de documento estão no serviço; a escrita de situação da view passa por `gravar`. (`app/ponto/services/ausencia.py:410`, :923, :1198; `app/ponto/views.py:2485`)
-- **Relógio fora da borda:** persistem leituras internas para prazo e carimbo; a limpeza nova não acrescenta relógio. (`app/ponto/services/ausencia.py:398`, :408, :1216; `app/ponto/models.py:883`; `app/ponto/views.py:2486`)
-- **Derivação paralela:** a view continua derivando `afastado` pelo tipo lançado; existe também a autoridade de cobertura `afastado_hoje` e o reversor que escreve pela porta. É observação preexistente. (`app/ponto/views.py:2461`, :2485; `app/ponto/turnos.py:2737`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`)
-- **Ordem de trava:** no INSS, Colaborador é travado antes da Ausencia; `gravar` repete a mesma guarda. A ordem global implementada começa por Colaborador. (`app/ponto/views.py:2467`, :2468; `app/colaboradores/services/colaborador.py:90`, :133; `app/chamados/models.py:2744`, :2753)
-- **`documento.name` com dois significados:** no serviço, a comparação usa o nome anterior ao save; na limpeza externa, usa o nome persistido depois do rollback. A distinção protege o documento restaurado, mas depende de a instância ter sido devolvida — justamente a lacuna PROCEDENTE. (`app/ponto/services/ausencia.py:476`, :1197, :169; `app/ponto/views.py:2492`, :2496`)
-
-**Lista final de achados:**
-
-- **PROCEDENTE — 1:** upload salvo por `_reabrir`, seguido de falha antes do retorno, escapa da limpeza externa após rollback. (`app/ponto/services/ausencia.py:1200`, :1211; `app/ponto/views.py:2468`, :2492`)
-- **Observações:** cobertura incompleta dos testes para reabertura; limpeza sujeita a falhas operacionais e sem verificação global de referências; demais pontos do checklist descritos acima. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:166`; `app/ponto/services/ausencia.py:169`, :174; `app/ponto/views.py:2496`)
-
-## 16/11 02:38 · sessao ac4dd33f978d · - · - · origem=Ronald (tmux)
-
-O selo passa no fonte atual: o replay encontrou nove escritores e `faltam=[]`; a checagem de `_acorda=False` também devolveu `[]`. Executei em memória os 11 testes estruturais com `unittest.TestCase`, substituindo apenas a infraestrutura Django e lendo `CAMPOS_DO_INSUMO` por AST: zero falhas/erros. Isso verifica os testes AST, sem verificar a execução Django. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:221`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:274`, `app/ponto/services/ausencia.py:119`)
-
-Os exemplos antigos do parecer são cobertos pelos novos mutantes e passaram nesse replay. Porém, estes escapes novos também passam:
-
-1. **`parametro_vale` esquece o valor recebido pelo parâmetro.**
-
-```python
-def _m(tipo_ausencia, x):
-    from ponto.models import TipoAusencia
-    if x:
-        tipo_ausencia = TipoAusencia.objects.get(pk=x)
-    tipo_ausencia.save()
-```
-
-Com `x=False` e `tipo_ausencia` sendo uma `Ausencia`, executa a escrita sem acordador. O replay não inclui `_m` como escritor. `_de_outro_modelo(..., parametro_vale=True)` considera somente as reatribuições encontradas, todas de `TipoAusencia`, e não considera o caminho que preserva o argumento inicial. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:138`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:247`)
-
-2. **A correção de fábrica parâmetro falha com alias global.**
-
-```python
-from ponto.models import TipoAusencia as TA
-
-def _m(TA):
-    t = TA()
-    t.save()
-```
-
-Chamar `_m(lambda: ausencia)` salva a ausência sem acordar. O censo atribui a construção à entidade canônica `TipoAusencia`; a regra procura esse nome nos parâmetros, mas o parâmetro chama-se `TA`. O `save` posterior é suprimido porque a construção já contou. O replay não inclui `_m` como escritor. (`app/core/censo_escritas.py:285`, `app/core/censo_escritas.py:372`, `app/core/censo_escritas.py:409`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:243`)
-
-3. **O selo novo não examina `_acorda` dentro de `**kwargs`.**
-
-```python
-def _m(a):
-    mudar_estado(a, 'rejeitada', **{'_acorda': False})
-```
-
-O replay retorna `cala_sem_acordador=[]`. A regra exige `k.arg == '_acorda'`; nesse formato, `k.arg` é `None`. A função também não escreve diretamente, portanto o selo de escritores não a cobra. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:213`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:214`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:235`)
-
-4. **A análise de fluxo ainda aceita acordador inexequível.**
-
-```python
-def _m(a):
-    a.save()
-    if True:
-        return a
-    _acordar_projecao(a.colaborador, {}, {}, motivo='x')
-```
-
-O replay enumera `_m`, mas devolve `faltam=[]`. `_vivos` interrompe somente o bloco que contém diretamente `return`; o retorno do ramo não interrompe a visita aos comandos seguintes do bloco externo. `False and _acordar_projecao(...)` também passa, pois não há tratamento do curto-circuito de `BoolOp`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:161`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:178`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:189`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:191`)
-
-Não encontrei falso positivo no fonte atual. Há um **latente** introduzido pelo descarte indiscriminado de função interna: `a.save(); def _f(): _acordar_projecao(...); _f()` recebe `faltam=['_m']`, embora execute o acordador. O controle `while True: break; else: _acordar_projecao(...)` recebe corretamente `faltam=['_m']`, porque o `else` não executa nesse caminho. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:176`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:185`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`)
-
-## 16/11 02:38 · sessao eb3e46a667e9 · - · - · origem=Ronald (tmux)
-
-**O teto fecha o contraexemplo futuro da volta 2, em uma leitura estável da mesma empresa/corte.** Busca a maior competência carimbada por `(ano, mes)` e alcança o fim dela; as janelas são ordenadas cronologicamente, e a linha aberta cobre continuamente de `data` ao teto. (`app/ponto/services/ausencia.py:147`, `app/ponto/services/ausencia.py:151`, `app/ponto/janelas.py:15`, `app/ponto/turnos.py:2803`, `app/ponto/turnos.py:2811`)
-
-- **Mesmo significado de competência:** o escritor importa `janela_fechamento` e calcula `mes/ano` como mês/ano do fim da janela; grava exatamente os parâmetros usados nessa janela. O teto pergunta o fim da janela pelos mesmos `mes/ano`. (`app/ponto/services/fechamento.py:15`, `app/ponto/services/fechamento.py:621`, `app/ponto/services/fechamento.py:898`, `app/ponto/services/ausencia.py:151`, `app/ponto/janelas.py:11`)
-- **Mesma empresa:** escritor usa `colab.empresa`, teto usa `colaborador.empresa`, invalidante passa essa empresa para `competencias_do_intervalo`, que usa `janela_atual`. Não há uso da empresa histórica do vínculo ou do posto nesse cálculo de janela. (`app/ponto/services/fechamento.py:619`, `app/ponto/services/fechamento.py:621`, `app/ponto/services/ausencia.py:151`, `app/ponto/services/fechamento.py:1599`, `app/ponto/services/dia_pago.py:716`)
-- **Sem competência intermediária indevida:** cada lado manda apenas seu trecho; o invalidante enumera as competências efetivamente tocadas e altera somente registros carimbados. Tipos sem fim que não pertencem a `TIPOS_EM_ABERTO` continuam ocupando apenas `data`, apesar da consulta do teto. (`app/ponto/services/ausencia.py:186`, `app/ponto/services/ausencia.py:192`, `app/ponto/services/ausencia.py:195`, `app/ponto/services/dia_pago.py:715`, `app/ponto/services/fechamento.py:1653`, `app/ponto/turnos.py:2805`)
-- **Leitor real da folha:** consulta ausências com a janela daquele colaborador; range aberto entra quando `data <= fim`; a cobertura por dia usa a mesma janela. (`app/ponto/services/fechamento.py:639`, `app/ponto/services/fechamento.py:683`, `app/ponto/turnos.py:2543`, `app/ponto/turnos.py:2546`)
-- **Outros escritores:** os carimbos explícitos não nulos encontrados ficam nos dois ramos do escritor canônico. A porta de restauração não altera `mes/ano/colaborador_id` e derruba o carimbo por padrão. (`app/ponto/services/fechamento.py:1143`, `app/ponto/services/fechamento.py:1189`, `app/ponto/services/fechamento.py:1380`, `app/ponto/services/fechamento.py:1391`)
-
-**Ressalva histórica, sem evidência produtiva:** `FechamentoMensal` não guarda empresa/corte da derivação; a transferência pode trocar a empresa atual do colaborador. Portanto não se pode afirmar que a empresa atual seja a mesma usada para produzir um fechamento antigo. (`app/ponto/models.py:405`, `app/ponto/models.py:408`, `app/ponto/models.py:485`, `app/colaboradores/views.py:1389`)
-
-Exemplo condicional dessa ressalva: empresa antiga corte 28, afastamento aberto iniciado em 25/10, fechamento de outubro carimbado; depois transferência para empresa corte 21 e rejeição. Outubro antigo abrangia 28/09–27/10; com a empresa atual outubro acaba em 20/10, e o trecho iniciado em 25/10 só invalida novembro em diante. A incidência e existência desse cadastro/carimbo são **[nao verificado]**. A derivação das datas e do caminho decorre de `app/ponto/janelas.py:15`, `app/ponto/janelas.py:27`, `app/ponto/services/ausencia.py:192`, `app/ponto/services/fechamento.py:1599`; a transferência é permitida em `app/colaboradores/views.py:1389`.
-
-## 16/11 02:37 · sessao 6c4f3b8174ea · - · - · origem=Ronald (tmux)
-
-- **Testes novos mordem o caso declarado por inspeção.** O teste de falha envia upload real, força `gravar` a falhar e exige mensagem, ausência desfeita, situação preservada e inventário de arquivos igual ao anterior (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:151`, `:162`). O caminho feliz exige linha, nome, arquivo adicional, existência física e situação afastado (`:173`). O teste separado confere que o storage usa o diretório isolado (`:158`). Execução e resultado efetivo: **[não verificado]**.
-
-- **A asserção de sobreposição elimina a passagem vazia por recusa anterior ao produtor.** Ela exige o texto produzido pela recusa de sobreposição, além de preservar uma única ausência e situação ativo (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:112`, `:116`; mensagem em `app/ponto/services/ausencia.py:385`). Isoladamente, o teste de rollback do anexo ainda não prova que o upload chegou a ser escrito antes da falha; o caminho feliz verifica a entrega do documento no fluxo normal (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:166`, `:178`).
-
-- **Lacuna relevante: reabertura falhando antes do retorno.** Os novos casos criam colaborador sem ausência anterior e injetam falha somente em `gravar` (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:164`, `:166`, `:176`). Não cobrem `_reabrir` salvar o documento (`app/ponto/services/ausencia.py:1200`) e falhar depois no save da descrição (`:1210`) ou do estado (`:1211`, `:900`). Nesse caso `criar_ausencia` não retorna (`:350`), a variável da view continua `None` (`app/ponto/views.py:2462`, `:2468`) e a limpeza externa é pulada (`:2492`): **PROCEDENTE**, conforme identificado pelo pai.
-
-- **Registro 3273 → 3307:** o registro atual aponta para a mesma ocorrência `regularizar_retorno`, cuja expressão está em `app/ponto/views.py:3307`; a catraca compara somente o inventário de linhas (`app/core/tests/test_medida_turno_do_par.py:339`, `:557`). Contudo, o anexo fornecido mostra saldo de **+14** linhas em views, enquanto o registro muda **+34**; o histórico que explica as outras vinte linhas é **[não verificado]**.
-
-- **Checklist:** a guarda usa o mesmo juiz, sem predicado novo (`app/colaboradores/services/colaborador.py:62`, `:94`; `app/colaboradores/services/desligamento.py:23`). A trava do Colaborador precede `criar_ausencia`, e o `gravar` repete a mesma trava (`app/ponto/views.py:2465`, `:2485`; `app/colaboradores/services/colaborador.py:90`, `:133`); a ordem global está implementada em `app/chamados/models.py:2744`, `:2753`, `:2766`, `:2770`. A escrita de situação passa pela porta, mas a derivação por tipo continua paralela à autoridade de cobertura (`app/ponto/views.py:2461`, `:2485`; `app/ponto/turnos.py:2737`). Relógios internos preexistentes continuam em `app/ponto/services/ausencia.py:398`, `:408`, `:1216` e `app/ponto/models.py:883`; a cura não acrescenta leitura de relógio (`app/ponto/views.py:2462`). Cron instalado e contagens citadas nos comentários: **[não verificado]**.
-
-_5920 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5925 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
