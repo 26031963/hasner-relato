@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 01:43:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (130.5 MB). Acoes na janela: **1761**.
+**Medido em 16/11/2026 01:48:49.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (130.5 MB). Acoes na janela: **1758**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1768,6 +1768,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:48:57 | Bash | Read c11 delivery | `cd /home/ronald/saas-hasner; cat logs/E3-RESTO-R3/c11/c11.r; git -C /home/ronald/wt-codex-e3-resto-r3-093851 status --porcelain \| sed -n '21,40p'; git -C /home/ronald/wt-codex-e3-resto-r3-093851 diff --stat \| tail -1` |
 | 13:48:53 | Bash | Check R3 c11 result | `cd /home/ronald/saas-hasner; cat logs/E3-RESTO-R3/c11/rc; tail -3 logs/E3-RESTO-R3/c11/run.log; wc -c logs/E3-RESTO-R3/c11/c11.r; git -C /home/ronald/wt-codex-e3-resto-r3-093851 status --porcelain \| head -20` |
 | 13:48:49 | Bash | Launch c6 waiter, update RELATO | `cd /home/ronald/saas-hasner; setsid nohup logs/E4C/f1v6/run.sh >/dev/null 2>&1 < /dev/null & sleep 1; ps -eo pid,cmd \| grep -E 'f1v6/run.sh\|c11/run.sh\|codex_pergunta' \| grep -v grep \| cut -c1-90 python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() s=s.replace('ESPERANDO: suite.sh \| pid=1946457','ESPERANDO: codex_pergunta.sh \| pid=1929636',1) b=[l for l in s.split('\n') if l.startswith ...` |
-| 13:48:43 | Bash | Write c6 brief and waiter launcher | `cd /home/ronald/saas-hasner; D=logs/E4C/f1v6; mkdir -p $D; echo /home/ronald/wt-codex-e4c-f1v3-112729 > $D/wt.txt cat > $D/brief.md <<'EOF' OBRA E4C-F1V3, VOLTA c6 (continuidade na MESMA copia, COMPLEMENTO-2 item 1). Papel CONSTRUTOR. Base d777cd395 (c5). REGRA DO AVAL MATRIZ-ANTES-DA-C6 (anexo matriz_antes_da_c6.txt): esta volta NAO sai de lista de achados. O BRIEF E A MATRIZ (anexo matriz.md): s ...` |
-| 13:48:25 | Bash | Check recorte verdict | `cd /home/ronald/saas-hasner; ps -p 1946457 -o etime \| tail -1; L=logs/E4C/f1v5/recorte_chamados.log; grep -c FieldError $L; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; grep -E '^(FAIL\|ERROR):' $L \| sort \| uniq -c \| head -20` |
-| 13:48:21 | Bash | Record matrix and lei line in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() b=[l for l in s.split('\n') if l.startswith('ESTADO 14:0x E4c F1 c5 Codex rc 0')]; assert len(b)==1 s=s.replace(b[0], b[0]+'\nESTADO 14:0x MATRIZ-ANTES-DA-C6 entregue (logs/E4C/matriz/matriz.md, BASE x c4 por git show): FieldError da c4 = curado na c5 d777cd395; D5 "sem carimbo -> VIVE" sumiu na c4 sem aval e d ...` |

@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 01:27** · publicado em **16/11/2026 01:27** (UTC-3)
+> Ultima resposta processada: **16/11/2026 01:45** · publicado em **16/11/2026 01:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 01:45 · sessao 8fe86b15dd7e · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+Na parte 1 fornecida, as seis linhas SOMA e as duas ESTRUTURA_DIAS_LINHAS são `True`. Não há ocorrência de `INCOMPLETO` nesse trecho. [nao verificado]
+
+Transcrição integral do dado fornecido, sem verificação externa. [nao verificado]
+
+```text
+sonda_leitura: script.py [4e9a5641d912b65d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 1 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 110
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1180, 'bate_ate_10min': 1140, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 11, 'diverge_acima_60': 25, 'dia_batida_impar': 33, 'impar_que_BATE': 15, 'impar_que_DIVERGE': 18, 'impar_dentro_da_faixa': 15, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 18, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1727, 'dia_isento_ou_ausencia': 316, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 43, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.6% de 1180 dias comparados
+[3] ESTRUTURA    10 dia-colab       9.1 h    3 colabs
+[3] CADASTRO     10 dia-colab      38.4 h    3 colabs
+[3] BATIDA       20 dia-colab     110.2 h   13 colabs
+[4] TOTAL divergentes 40
+[5] colabs com divergencia: 17
+ESTRUTURA_DIA|10/2026|col252|2026-09-23|esp_min=548|e6_min=594|teto_min=608|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:56 12:35 12:49 17:04|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-09-24|esp_min=552|e6_min=598|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:51 17:03|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-09-25|esp_min=556|e6_min=604|teto_min=616|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:50 17:07|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-09-28|esp_min=535|e6_min=581|teto_min=595|dif_min=46|classe=diverge_10_60|paridade=par|batidas=07:12 12:38 12:53 17:07|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-01|esp_min=545|e6_min=590|teto_min=605|dif_min=45|classe=diverge_10_60|paridade=par|batidas=07:00 12:37 12:51 17:05|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-02|esp_min=545|e6_min=593|teto_min=606|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:59 12:40 12:53 17:04|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-06|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:58 12:38 12:52 17:09|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-09|esp_min=544|e6_min=592|teto_min=604|dif_min=48|classe=diverge_10_60|paridade=par|batidas=07:06 12:48 13:00 17:10|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col864|2026-10-12|esp_min=509|e6_min=449|teto_min=509|dif_min=-60|classe=diverge_10_60|paridade=par|batidas=15:01 18:10 19:10 23:30|veredito=feriado
+ESTRUTURA_DIA|10/2026|col876|2026-09-21|esp_min=550|e6_min=665|teto_min=722|dif_min=115|classe=diverge_acima_60|paridade=par|batidas=18:29 04:39 05:36 06:31|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 10/2026 10 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=10|horas=9.116283817777775|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=10|horas=38.355213611111104|colabs=3
+PARCIAL|10/2026|BATIDA|dias=20|horas=110.21011656222223|colabs=13
+PARCIAL_TOTAL|10/2026|dias=40|horas=157.681613991111109|colabs=17
+ESTIMATIVA processados 125 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1008, 'bate_ate_10min': 946, 'esp_zero_e6_trabalho': 14, 'e6_zero_esp_trabalho': 7, 'diverge_10_60': 8, 'diverge_acima_60': 33, 'dia_batida_impar': 49, 'impar_que_BATE': 18, 'impar_que_DIVERGE': 31, 'impar_dentro_da_faixa': 21, 'impar_FORA_da_faixa': 10, 'impar_no_conjunto_do_dia': 31, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1354, 'dia_isento_ou_ausencia': 233, 'dia_sem_trabalho_ambos': 44, 'esp_desconta_janela_declarada': 34, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 93.8% de 1008 dias comparados
+[3] ESTRUTURA    10 dia-colab      35.9 h    4 colabs
+[3] CADASTRO     22 dia-colab     118.5 h    6 colabs
+[3] BATIDA       30 dia-colab     174.6 h   15 colabs
+[4] TOTAL divergentes 62
+[5] colabs com divergencia: 20
+ESTRUTURA_DIA|11/2026|col114|2026-11-08|esp_min=439|e6_min=429|teto_min=499|dif_min=-10|classe=diverge_10_60|paridade=par|batidas=09:59 14:50 16:00 18:18|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col114|2026-11-15|esp_min=499|e6_min=440|teto_min=499|dif_min=-59|classe=diverge_10_60|paridade=par|batidas=09:58 15:05 16:05 18:17|veredito=feriado
+ESTRUTURA_DIA|11/2026|col252|2026-11-09|esp_min=551|e6_min=597|teto_min=610|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:53 12:38 12:52 17:04|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-10|esp_min=551|e6_min=598|teto_min=611|dif_min=47|classe=diverge_10_60|paridade=par|batidas=06:56 12:39 12:52 17:07|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-11|esp_min=550|e6_min=598|teto_min=611|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:54 12:39 12:52 17:04|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-13|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:52 12:35 12:49 17:03|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col516|2026-10-23|esp_min=361|e6_min=0|teto_min=0|dif_min=-361|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=folga
+ESTRUTURA_DIA|11/2026|col516|2026-10-28|esp_min=372|e6_min=0|teto_min=0|dif_min=-372|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col996|2026-10-28|esp_min=0|e6_min=580|teto_min=580|dif_min=580|classe=esp_zero_e6_trabalho|paridade=par|batidas=21:18 06:57|veredito=folga
+ESTRUTURA_DIA|11/2026|col996|2026-11-10|esp_min=443|e6_min=1026|teto_min=1116|dif_min=583|classe=diverge_acima_60|paridade=par|batidas=06:57 13:00 14:30 15:50 21:16 06:59|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 11/2026 10 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=10|horas=35.86154078361111|colabs=4
+PARCIAL|11/2026|CADASTRO|dias=22|horas=118.50376287222223|colabs=6
+PARCIAL|11/2026|BATIDA|dias=30|horas=174.57531034805555|colabs=15
+PARCIAL_TOTAL|11/2026|dias=62|horas=328.94061400388889|colabs=20
+TEMPO_SEGUNDOS 164.5
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 253166
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 98
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1130
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6304
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 52
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6216
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 3
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3677
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3677
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 594
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 181
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 468158
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 610
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2829
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 172
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12196
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 130
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4055
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 5
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 23417
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4604
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 37849
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 16
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 16836
+SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
+SOMA 10/2026 HORAS 157.681613991111109 True
+SOMA 10/2026 COLABS_UNIAO 17 True
+SOMA 11/2026 62   <- tem de ser igual a soma das classes (62) True
+SOMA 11/2026 HORAS 328.94061400388889 True
+SOMA 11/2026 COLABS_UNIAO 20 True
+rc_sombra=0
+```
 
 ## 16/11 01:27 · sessao ed760e71db82 · E4C-F1-NOVA-B1 · censo · origem=Code
 
@@ -1113,39 +1223,4 @@ rc_sombra=0
 - `ESTRUTURA_DIAS_LINHAS`: as duas linhas apresentam `True` — `10/2026 10 True` e `11/2026 9 True`. [nao verificado]
 - `INCOMPLETO`: não aparece no texto fornecido desta parte 1 de 6. [nao verificado]
 
-## 15/11 23:52 · sessao 323261a980c3 · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
-
-Estados existentes: `FEITO`, `EM_CURSO`, `FALTA` e `ESPERA='ESPERA_RONALD'` no espelho; `FECHADO`, `PARCIAL` e `PENDENTE` no estrutural. Contei os estados declarados: `EM_CURSO`/`ESPERA_RONALD` e todo resultado diferente de `FECHADO`. (app/core/espelho_verdade.py:35; app/core/placar_estrutural.py:45)
-
-Na coluna de obra, **“sem obra” significa sem vínculo comprovado de fechamento da pendência atual**. Registrei também obras relacionadas, sem afirmar que encerram os casos atuais quando isso está [nao verificado]. O54 é o programa geral; R1-REMEDE fechou a medição, distinguindo cinco itens medidos e quatro fora de alcance. (app/docs/BACKLOG.md:1395; app/docs/BACKLOG.md:1854)
-
-| fonte arquivo:linha | id do item | estado literal | obra que fecha ou “sem obra” | estado da obra | o que destrava | dono — origem |
-|---|---|---|---|---|---|---|
-| app/core/espelho_verdade.py:49 | E1-passivo-53 | `EM_CURSO` | **O50** — app/docs/GRADE-MESTRA.md:862 | `PARADA (passivo espera !)` — app/docs/GRADE-MESTRA.md:862 | O passivo depende do `!` caso a caso: a prova distingue 43 congelados e 10 livres ao propositor. (app/core/espelho_verdade.py:57–58) | **Ronald**, para o `!`; executor: **nao nomeado**. (app/docs/BACKLOG.md:1388) |
-| app/core/espelho_verdade.py:61 | E1-sem-previsao | `EM_CURSO` | **sem obra de fecho específico comprovada**; O54 inclui expressamente censo e tratamento das células sem previsão, mas vínculo de fechamento dos 35/28 atuais [nao verificado]. (app/docs/BACKLOG.md:1395; app/core/espelho_verdade.py:61) | **nao nomeado** para fecho específico; O54: `E0 em curso`. (app/docs/BACKLOG.md:1395) | Zerar dia de colaborador ativo sem previsão ou com previsão de vínculo inválido é a porta declarada. (app/core/espelho_verdade.py:40–41) | **nao nomeado** na medição atual. (app/core/espelho_verdade.py:61) |
-| app/core/espelho_verdade.py:94 | E3-turno-aberto | `EM_CURSO` | **sem obra de fecho comprovada**; O86 investiga turnos abertos, mas sua correspondência com os atuais 347/262 dias [nao verificado]. (app/docs/BACKLOG.md:1427; app/core/espelho_verdade.py:94) | **nao nomeado** para fecho atual; O86: `REGISTRADA (guarda com DIFF zero; investigação residual)`. (app/docs/GRADE-MESTRA.md:881) | **nao nomeado**: a prova atual mede dias ímpares e casos fora da faixa, sem declarar qual ato encerra a pendência. (app/core/espelho_verdade.py:94) | **nao nomeado** para os casos atuais. (app/core/espelho_verdade.py:94) |
-| app/core/espelho_verdade.py:96 | E3-separados-30 | `ESPERA_RONALD` — constante `ESPERA` em app/core/espelho_verdade.py:35 | **CORTE-B-30** — app/docs/GRADE-MESTRA.md:845 | `PARADA (congelada)` — app/docs/GRADE-MESTRA.md:845 | Descongelamento e corte do lote B são as dependências registradas. (app/docs/GRADE-MESTRA.md:845) | **outro — Gabriel**, segundo a prova; Ronald aparece no estado literal de espera. (app/core/espelho_verdade.py:96) |
-| app/core/espelho_verdade.py:143 | E4-rotulo-do-desenho | `EM_CURSO` | **sem obra** de execução nomeada; ESPELHO-VERDADE-REMEDIDO registra a tarefa, mas sua entrega é atualizar provas. (app/docs/BACKLOG.md:1579; app/docs/GRADE-MESTRA.md:89) | **nao nomeado** para execução. (app/docs/BACKLOG.md:1579) | Falta a pílula de `templates/escala/tipos_lista.html:42` ler `desenho_do_turno`, na fila 2. (app/core/espelho_verdade.py:143) | **nao nomeado**. (app/core/espelho_verdade.py:143) |
-| app/core/espelho_verdade.py:151 | E5-le-da-celula | `EM_CURSO` | **O48** — app/docs/GRADE-MESTRA.md:860; complemento **STATUS-ENCERRADO-DA-COMPETENCIA-NAO-EXISTE** — app/docs/BACKLOG.md:2578 | O48: `REGISTRADA (passos no ar; status e exportação pendentes)` — app/docs/GRADE-MESTRA.md:860 | Falta o status `encerrado`; escrever esse estado nas linhas da 10 exige DIFF e `!`, enquanto migration e censo não pedem aval. (app/core/espelho_verdade.py:151; app/docs/BACKLOG.md:2578) | **Ronald**, para autorizar a escrita; execução: **nao nomeado**. (app/docs/BACKLOG.md:2578) |
-| app/core/espelho_verdade.py:181 | E6-sistema-bate | `EM_CURSO` | **sem obra de fecho atual comprovada**; R1-ESTRUTURA-91 existe, mas causa/destino dos atuais E26/E9 não foram medidos. (app/docs/GRADE-MESTRA.md:102; app/core/placar_estrutural.py:130) | **nao nomeado** para fecho atual; R1-ESTRUTURA-91: `REGISTRADA (restante pendente)`. (app/docs/GRADE-MESTRA.md:102) | Com batidas completas, espelho e oráculo precisam bater; a divergência é declarada “bug nosso”. (app/core/espelho_verdade.py:180) | **ESTRUTURA**, explicitamente medida na prova. (app/core/espelho_verdade.py:181) |
-| app/core/espelho_verdade.py:185 | E6-exportavel | `EM_CURSO` | **sem obra de fecho atual comprovada**; O54 contém a certificação geral e O125 trata destino administrativo, mas fechamento dos casos atuais [nao verificado]. (app/docs/BACKLOG.md:1395; app/docs/GRADE-MESTRA.md:894) | **nao nomeado** para fecho atual; O125: `REGISTRADA`. (app/docs/GRADE-MESTRA.md:894) | Certificação pelo oráculo é a condição do item; a entrada efetiva dos divergentes na lista do admin não foi medida. (app/core/espelho_verdade.py:184–185) | **ESTRUTURA / CADASTRO / BATIDA**: fila 1 para ESTRUTURA e lista do admin para os demais. (app/core/espelho_verdade.py:185) |
-| app/core/espelho_verdade.py:191 | E6-piso-185 | `EM_CURSO` | **sem obra de fecho atual comprovada**; O83 registra classes anteriores, mas causa/destino dos atuais E26/E9 não estão nomeados. (app/docs/BACKLOG.md:1438; app/core/espelho_verdade.py:191; app/core/placar_estrutural.py:130) | **nao nomeado** para fecho atual; O83: `REGISTRADA (curso atual deste id não demonstrado)`. (app/docs/GRADE-MESTRA.md:879) | Falta nomear a causa por colaborador, incluindo os 26+9 dias de ESTRUTURA cuja causa a prova não nomeia. (app/core/espelho_verdade.py:190–191) | **ESTRUTURA / CADASTRO / BATIDA**, na decomposição dos divergentes; causa dos casos ESTRUTURA: **nao nomeado**. (app/core/placar_estrutural.py:118; app/core/espelho_verdade.py:191) |
-| app/core/placar_estrutural.py:74 | BATERIA | `PARCIAL` | **sem obra** comprovada para a meta integral; BATERIA-QUEIXAS-ADMIN cobre quatro queixas, sem declarar fechamento de todas as famílias. (app/docs/BACKLOG.md:1867; app/core/placar_estrutural.py:79–100) | **nao nomeado** para meta integral; BATERIA-QUEIXAS-ADMIN: `REGISTRADA`. (app/docs/GRADE-MESTRA.md:103) | Todas as famílias precisam ter bateria declarada e verde, sem allowlist, e nenhum dia ESTRUTURA novo pode ficar sem destino. (app/core/placar_estrutural.py:79–80) | **nao nomeado** para execução integral. (app/core/placar_estrutural.py:74–111) |
-| app/core/placar_estrutural.py:146 | R3 | `PARCIAL` | **PLACAR-ESTRUTURAL** — app/docs/GRADE-MESTRA.md:62; O130 já consta no ar. (app/docs/BACKLOG.md:1280) | `PARADA (resultados parciais; espera autorização)` — app/docs/GRADE-MESTRA.md:62 | A grade precisa alcançar os mesmos 48/48 dias de cartão/tela/API; o corte manda manter R3 aberto por divergência de leitor. (app/docs/BACKLOG.md:338–342) | **ESTRUTURA**, nomeado no corte. (app/docs/BACKLOG.md:341) |
-| app/core/placar_estrutural.py:211 | R4 | `PARCIAL` | **PLACAR-ESTRUTURAL** — app/docs/GRADE-MESTRA.md:62; **O269** cobre a relavra da 09, sem comprovação de fechamento integral do R4. (app/docs/BACKLOG.md:1611) | PLACAR-ESTRUTURAL: `PARADA (resultados parciais; espera autorização)`; O269: `PORTAO DE DATA: apply so apos 14/10 18h`. (app/docs/GRADE-MESTRA.md:62; app/docs/BACKLOG.md:1611) | A meta é ZERO em cada par; há registros distintos de Pauta DP sem tocar a 09 e de relavra posterior condicionada na O269. (app/core/placar_estrutural.py:215; app/docs/BACKLOG.md:334–337; app/docs/BACKLOG.md:1611) | **ESTRUTURA** para os seis casos novos; **Ronald** para os cortes sobre a 09. (app/core/placar_estrutural.py:291–292; app/docs/BACKLOG.md:334–337,1611) |
-| app/core/placar_estrutural.py:433 | R6 | `PARCIAL` | **PLACAR-ESTRUTURAL**, incluindo lote do R6 — app/docs/GRADE-MESTRA.md:62; **O35**, para contratos — app/docs/GRADE-MESTRA.md:896 | PLACAR-ESTRUTURAL: `PARADA (resultados parciais; espera autorização)`; O35: `REGISTRADA (partes construídas; contratos incompletos)`. (app/docs/GRADE-MESTRA.md:62,896) | Chegar a 20/20 contratos e zero passo manual; o registro declara que resta o lote. (app/core/placar_estrutural.py:434–440) | **nao nomeado** como responsável global. (app/docs/GRADE-MESTRA.md:62,896) |
-
-**Contagem do recorte:** 8 `EM_CURSO`, 1 `ESPERA_RONALD` e 4 `PARCIAL`: **13 linhas**. Pela definição conservadora acima, **7 ficaram “sem obra” de fechamento comprovado**: E1-sem-previsao, E3-turno-aberto, E4-rotulo-do-desenho, E6-sistema-bate, E6-exportavel, E6-piso-185 e BATERIA. (app/core/espelho_verdade.py:49,61,94,96,143,151,181,185,191; app/core/placar_estrutural.py:74,146,211,433; vínculos documentais na tabela)
-
-**Espera Ronald:**
-
-- **E1-passivo-53:** `!` caso a caso para os dez livres; O50 mantém o passivo esperando autorização. (app/core/espelho_verdade.py:58; app/docs/BACKLOG.md:1388)
-- **E5-le-da-celula:** `!` para escrever `encerrado` nas linhas da 10 após export; migration e censo estão dispensados desse aval. (app/docs/BACKLOG.md:2578)
-- **R4:** a linha do programa ainda registra espera de `!`, e as portas de demissão/encerramento de vínculo também o exigem; há cortes separados para Pauta DP e para O269, sem prova aqui de satisfação integral dessas condições. (app/docs/BACKLOG.md:1230; app/core/placar_estrutural.py:389–390; app/docs/BACKLOG.md:334–337,1611)
-- **E3-separados-30 — ressalva:** consta literalmente `ESPERA_RONALD`, mas a prova diz “09 está com o Gabriel”; a decisão concreta ainda exigida de Ronald é **nao nomeado** nessa prova. (app/core/espelho_verdade.py:96; app/docs/BACKLOG.md:1579)
-
-R3 tem resposta registrada: permanece aberto pela divergência da grade, com dono ESTRUTURA; a redação antiga sobre não carimbar a própria meta não demonstra uma espera atual de Ronald. (app/docs/BACKLOG.md:338–342; app/core/placar_estrutural.py:185–188)
-
-**perguntas de lei: 0**, no recorte acima. As antigas perguntas referidas pelo R6 têm respostas posteriores registradas; a pergunta sobre dia aberto bloquear a folha consta fechada pela L-118, e “SEM juiz” na tabela de consulta não constitui, por si, lei faltante. (app/core/placar_estrutural.py:593; app/docs/BACKLOG.md:1538,1546,1742; app/docs/JUIZES.md:7–12,105,109)
-
-_5877 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5878 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
