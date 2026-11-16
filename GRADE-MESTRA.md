@@ -105,7 +105,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | MOTOR-LE-O-TURNO | ESPINHA-E | Faz cálculo e pagamento usarem o mesmo turno oficial. | - | E2; E3; DIFF; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1879 [+3 compl.] | ? | ? |
 | FIO-E0-V4-E1-ENTRADAS | ESPINHA-E | Faz as perguntas nascerem ligadas ao fato correto. | - | desenho; suite; sombra; opus | ++.+.+... | PARADA (último estado escrito) | BACKLOG:1888 [+16 compl.] | ? | ? |
 | FIO-E0-V4-E4-ESCRITORES | ESPINHA-E | Substitui estados paralelos por atos registrados da pergunta. | - | E4B; E4C; E4D | ++.+.++++ | REGISTRADA (E4a-1 no ar; restante pendente) | BACKLOG:1915 [+24 compl.] | ? | ? |
-| RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA | BACKLOG:1934 [+15 compl.] | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) |
+| RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA | BACKLOG:1934 [+16 compl.] | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) |
 | LAVRA-PREMATURA-CONCORDE | ESPINHA-E | Define quando o dia pode ser confirmado antes do turno terminar. | - | decisão de desenho | ...+.+... | PARADA (construção vedada) | BACKLOG:1981 | ? | ? |
 | RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA | BACKLOG:2039 | ? | ? |
 | JV1-MERGE-FILA | ESPINHA-E | Trata lacunas de janela e alimentação dos feriados. | - | medir dinheiro antes | ......... | REGISTRADA | BACKLOG:2061 | ? | ? |
@@ -1010,7 +1010,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 |---|---|---|---|---|---|---|---|
 | GATE10-ESTRUTURA-EM-4-RUBRICAS-DA-10 | ESPINHA-E | Corrige diferenças entre quatro verbas calculadas e a regra aplicável. | - | corte de predicado; autorização se alcançar motor v2 | ++....... | PARADA (predicado depende de corte) | app/docs/BACKLOG.md:1082 |
 
-### RAIZ-DA-DISPUTA (15)
+### RAIZ-DA-DISPUTA (16)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
 | BO-DISPUTA-MATRIZ-ANTES-DO-OPUS | ESPINHA-E | Confere os caminhos de nascimento antes da revisão final. | - | matriz; BO-DISPUTA-SEM-PERGUNTA | ~+....... | REGISTRADA | BACKLOG:1929 |
@@ -1028,6 +1028,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | PUSH-DISPUTA-SEM-PERGUNTA | LATERAL-ESTRUTURA | Evita convidar a responder pergunta que não foi criada. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1853 |
 | RAIZ-DA-DISPUTA-F0F1 | ESPINHA-E | Define origem e destino únicos para as disputas. | - | E3; E4B c4; F2 | ++...+... | REGISTRADA | BACKLOG:1912 |
 | REGULARIZAR-TRAVA-PELO-DIA | LATERAL-ESTRUTURA | Evita uma disputa de outro dia bloquear a regularização. | - | RAIZ F1; UI-REGULARIZAR item 4 | .+....... | REGISTRADA | BACKLOG:1935 |
+| EM-DISPUTA-TRES-DERIVACOES | ESPINHA-E | Faz a resposta da batida ao app dizer "em disputa" pela mesma fonte que lista as perguntas. | - | leitura Codex logs/EM-DISPUTA/censo.md; RAIZ F1 | +........ | REGISTRADA | BACKLOG:2020 |
 
 ### REABRIR-PERGUNTA-A-PREMISSA (3)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
@@ -1190,7 +1191,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 ### O230 (2)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
-| SONDA-MATRIZ-DE-TRANSICOES | INSTRUMENTO | Expõe transições e permissões antes de retomar a sonda. | - | CODEX-2-RAIAS | +........ | REGISTRADA | BACKLOG:2021 |
+| SONDA-MATRIZ-DE-TRANSICOES | INSTRUMENTO | Expõe transições e permissões antes de retomar a sonda. | - | CODEX-2-RAIAS | +........ | REGISTRADA | BACKLOG:2020 |
 | SONDA-SEM-GRANT | INSTRUMENTO | Faz a leitura consultar sem alterar permissões. | - | próxima vaga | ......... | REGISTRADA | BACKLOG:2020 |
 
 ### O245 (1)

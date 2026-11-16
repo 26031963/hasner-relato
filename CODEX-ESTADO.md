@@ -1,7 +1,152 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 23:15** · publicado em **15/11/2026 23:15** (UTC-3)
+> Ultima resposta processada: **15/11/2026 23:18** · publicado em **15/11/2026 23:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 23:18 · sessao bcbcdfa003d8 · E4C-F1NOVA-B1 · verificador · origem=Code
+
+**Persistem dois problemas: cache desatualizado na guarda do `save` e falsa absolvição no contrato AST.** (`app/chamados/models.py:3588`; `app/chamados/tests/test_contract_par_resposta.py:92`)
+
+Identidade independente do HEAD, comparação Git e execução com Django/banco: **[não verificado]**. Os contraexemplos abaixo decorrem da cópia; os helpers foram executados isoladamente em memória, sem banco. (`app/chamados/models.py:3592`; `app/chamados/tests/test_contract_par_resposta.py:101`)
+
+**1. Fechamento dos achados procedentes da volta 1**
+
+| Achado | Veredito sobre o fechamento |
+|---|---|
+| **1 — par persistido** | **NÃO PROCEDE o fechamento integral.** Fecha o exemplo original: a metade excluída de `update_fields` passa a vir de `_par_do_banco`. Entretanto, esse método pode devolver cache desatualizado; contraexemplos no item 2. (`app/chamados/models.py:3601`; `app/chamados/models.py:3602`; `app/chamados/models.py:3588`) |
+| **4 — guarda do contrato** | **NÃO PROCEDE o fechamento integral.** Os dois exemplos antigos agora são acusados, mas basta um `if` com saída antecipada em linha anterior, mesmo num caminho que não será executado. (`app/chamados/tests/test_contract_par_resposta.py:156`; `app/chamados/tests/test_contract_par_resposta.py:157`; `app/chamados/tests/test_contract_par_resposta.py:92`) |
+| **5 — fixture mista** | **PROCEDE.** O teste adicional recria ambas com texto, retira os instantes por `update` e verifica uma materialização, nenhuma resolução adicional, nenhum fechamento e disputa aberta. Identidade histórica dos asserts com `e84a167f4`: **[não verificado]**. (`app/chamados/tests/test_fio_disputa_resolvido.py:62`; `app/chamados/tests/test_fio_disputa_resolvido.py:100`; `app/chamados/tests/test_fio_disputa_resolvido.py:103`; `app/chamados/tests/test_fio_disputa_resolvido.py:105`; `app/chamados/tests/test_fio_disputa_resolvido.py:108`) |
+| **6 — JUIZES.md** | **PROCEDE.** A tabela registra o juiz, sua face SQL e o escopo B1/B2/E-F, acompanhando o registro vivo. (`app/docs/JUIZES.md:99`; `app/docs/JUIZES.md:103`; `app/core/juizes.py:306`) |
+| **7 — instante automático** | **PROCEDE.** O comentário agora diz PROCESSAMENTO, conforme o relógio usado pelo chamador. (`app/chamados/services/disputa_emissao.py:1671`; `app/api/foto_recebida.py:42`; `app/api/foto_recebida.py:48`) |
+
+**2. Sequências que quebram a garantia — PROCEDE**
+
+**a) Duas instâncias, sem concorrência nem escrita crua.** Usando `_cria` da fixture existente e `I` como instante válido: (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:58`)
+
+```python
+p = self._cria(respondida_em=I, resposta_colab='bati')
+q = PD.objects.get(pk=p.pk)
+
+q.respondida_em, q.resposta_colab = None, ''
+q.save(update_fields=['respondida_em', 'resposta_colab'])
+
+p.save(update_fields=['respondida_em'])
+```
+
+Após salvar `q`, o banco contém `(None, '')`, mas o cache de `p` continua `(I, 'bati')`. No último save, `_par_gravado` calcula `(I, 'bati')`; a comparação com o mesmo cache dispensa a recusa. Só o instante é escrito: o banco fica **`(I, '')`, ilegal**. (`app/chamados/models.py:3554`; `app/chamados/models.py:3588`; `app/chamados/models.py:3601`; `app/chamados/models.py:3608`)
+
+**b) Rollback externo seguido de save repetido.** Partindo de `(None, '')`, salvar `(I, 'bati')` dentro de um `atomic` externo atualiza `_par_carregado`; se esse `atomic` depois falhar, o atributo não é restaurado. Repetir `save(update_fields=['respondida_em'])` produz a mesma divergência do exemplo anterior. O `atomic` interno não adia a atualização do cache até o commit externo. (`app/chamados/models.py:3552`; `app/chamados/models.py:3554`; `app/chamados/models.py:3608`)
+
+**c) Legado ilegal intocado passa a ser recusado.** A fixture `_legado` fornece o estado inicial: (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:62`)
+
+```python
+p = self._legado(resposta_colab='legado')  # banco: (None, 'legado')
+
+try:
+    with transaction.atomic():
+        p.respondida_em = I
+        p.save()                        # cache: (I, 'legado')
+        raise RuntimeError()
+except RuntimeError:
+    pass
+
+p.respondida_em = None                  # memória igual ao banco novamente
+p.pergunta = 'outro enunciado'
+p.save()
+```
+
+O último save compara `(None, 'legado')` com o cache `(I, 'legado')`, considera uma transição e levanta `TextoSemCarimbo`, embora o par gravado permaneça intocado. Isso viola a decisão (1) expressa no teste. (`app/chamados/models.py:3608`; `app/chamados/models.py:3611`; `app/chamados/services/fio.py:1610`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:5`)
+
+O refresh integral recompõe o cache a partir dos campos carregados; refresh parcial que toca o par o torna desconhecido. Essas medidas cobrem o caso diferido acrescentado no RED, mas não invalidam outras instâncias nem revertem o cache após rollback externo. (`app/chamados/models.py:3573`; `app/chamados/models.py:3577`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:137`; `app/chamados/models.py:3554`)
+
+**3. `_par_carregado` — NÃO PROCEDE que represente sempre “banco agora”**
+
+| Acesso | Local |
+|---|---|
+| Escreve após save | `app/chamados/models.py:3554` |
+| Escreve no `from_db` | `app/chamados/models.py:3566` |
+| Escreve após refresh integral | `app/chamados/models.py:3573` |
+| Escreve `None` após refresh parcial do par | `app/chamados/models.py:3577` |
+| Lê em `_par_do_banco` | `app/chamados/models.py:3587` |
+| Lê em `_par_gravado`, quando nenhum campo do par será salvo | `app/chamados/models.py:3600` |
+
+**NÃO PROCEDE que algum desses leitores interprete `None` como par vazio.** `_par_do_banco` trata como desconhecido e consulta a linha existente; `_par_gravado` apenas propaga o desconhecido no caminho que não escreve o par. Porém, valor conhecido significa efetivamente uma fotografia carregada, não necessariamente o banco atual. (`app/chamados/models.py:3588`; `app/chamados/models.py:3590`; `app/chamados/models.py:3600`)
+
+**4. Custo — PROCEDE, condicionado ao estado do cache**
+
+Contagem de consultas feitas especificamente por `_par_do_banco`, para instância existente: (`app/chamados/models.py:3585`)
+
+| Estado e save | SELECTs |
+|---|---:|
+| Cache conhecido | **0** — retorna o cache. (`app/chamados/models.py:3588`) |
+| Cache desconhecido; `update_fields` sem o par | **0** — ambos os caminhos dispensam consulta. (`app/chamados/models.py:3600`; `app/chamados/models.py:3606`) |
+| Cache desconhecido; ambas as metades em `update_fields`, ou save sem `update_fields` | **1** — comparação da recusa. (`app/chamados/models.py:3608`) |
+| Cache desconhecido; somente uma metade em `update_fields` | **2** — composição e comparação; a primeira leitura não é memorizada. (`app/chamados/models.py:3601`; `app/chamados/models.py:3608`; `app/chamados/models.py:3590`) |
+
+Sem `update_fields`, carregar atributos ainda diferidos pode acrescentar consultas próprias antes da comparação. A contagem real com Django/banco é **[não verificado]**. (`app/chamados/models.py:3597`; `app/chamados/models.py:3577`)
+
+Nos fluxos de produção localizados após refresh parcial:
+
+- `devolver_validacao_recusada` atualiza parcialmente `resposta_colab`, invalidando o cache, mas salva só validação: **zero SELECTs do par**. (`app/chamados/services/validacao.py:213`; `app/chamados/services/validacao.py:227`; `app/chamados/models.py:3606`)
+- `_carimbar_recusa` atualiza parcialmente campos fora do par e salva recusa ou carimbo de identidade: **zero SELECTs do par**. (`app/chamados/services/materializacao.py:1095`; `app/chamados/services/materializacao.py:1105`; `app/chamados/services/materializacao.py:1109`; `app/chamados/models.py:3291`)
+- `_aceitar_a_folga` pode repetir a operação após refresh dos campos de validação; as escritas correspondentes excluem o par. (`app/chamados/services/validacao.py:370`; `app/chamados/services/validacao.py:374`; `app/chamados/services/validacao.py:162`; `app/chamados/models.py:3291`)
+
+Não localizei fluxo `only/defer → save` que efetivamente introduza essas consultas. Os `only` relevantes alimentam atos, contadores ou caminhos DRY; frequência real em produção e completude contra chamadas dinâmicas: **[não verificado]**. (`app/chamados/models.py:1613`; `app/chamados/services/fio.py:1235`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:60`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:504`)
+
+**5. Contrato — PROCEDE falsa absolvição; NÃO PROCEDE acusar os dois escritores citados**
+
+Este contraexemplo é absolvido pelo helper real: (`app/chamados/tests/test_contract_par_resposta.py:92`; `app/chamados/tests/test_contract_par_resposta.py:108`)
+
+```python
+def f(p, qs, habilitado):
+    if habilitado:
+        if not p.resposta_colab:
+            return
+    qs.update(respondida_em=agora)
+```
+
+Com `habilitado=False` e a pergunta vazia, a guarda nem executa. A absolvição ocorre porque o `return` está numa linha anterior à escrita, sem comprovação do caminho de controle. **É uma falha adicional à polaridade expressamente excluída do selo.** A leitura da outra metade também não exige identidade entre as instâncias. (`app/chamados/tests/test_contract_par_resposta.py:92`; `app/chamados/tests/test_contract_par_resposta.py:22`; `app/chamados/tests/test_contract_par_resposta.py:76`)
+
+As duas absolvições de produção examinadas são corretas pela forma:
+
+- `PerguntaDisputa.carimbar` escreve o instante dentro da guarda de texto após trim e inclui o campo no save. (`app/chamados/models.py:3231`; `app/chamados/models.py:3233`; `app/chamados/models.py:3234`; `app/chamados/models.py:3253`)
+- `carimbar_resposta_pela_trilha` retorna antes da escrita quando já existe instante ou falta texto após trim; depois salva o instante. (`app/chamados/services/disputa_emissao.py:1692`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/services/disputa_emissao.py:1698`)
+
+**6. Descartes 2 e 3 — PROCEDEM sob as classificações declaradas na triagem; conferência nas fontes originais [não verificado]**
+
+- **2, I21:** a regra documentada permite à classe A nomear o juiz no B1; o código reconhece explicitamente a mudança de predicado para trim. A classificação específica de I21 no censo, a exceção no predesenho e “brancos = 0” constam da triagem fornecida, mas sua confirmação nos documentos originais é **[não verificado]**. (`app/docs/JUIZES.md:102`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1572`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1575`)
+- **3, espera pelo texto:** a regra documentada exclui E/F da migração, portanto o descarte é coerente **se** a função é classe E, como informa a triagem. Essa classificação nominal no censo é **[não verificado]**. O complemento continua no código; sua existência, isoladamente, não demonstra violação desse escopo. (`app/docs/JUIZES.md:103`; `app/chamados/services/fio.py:187`; `app/chamados/juizes.py:1552`)
+
+## 15/11 23:16 · sessao d9a18c11cd9b · - · - · origem=Ronald (tmux)
+
+Item 3:
+
+- Escrevem `_par_carregado`: `save` (`app/chamados/models.py:3554`), `from_db` (`:3566`), `refresh_from_db` integral (`:3573`) e parcial que toca o par (`:3577`).
+- Leem diretamente: `_par_do_banco` (`:3587`) e `_par_gravado` quando nenhum campo do par vai ao UPDATE (`:3600`).
+- `None` significa desconhecido: `_par_do_banco` consulta a linha existente (`:3588-3590`); `_par_gravado` apenas o propaga no caminho sem escrita do par (`:3599-3600`). Nenhum desses leitores transforma `None` em `(None, '')`.
+- O significado “banco agora” depende de o cache continuar válido; `save` o atualiza antes de eventual rollback de transação externa, sem mecanismo de reversão do atributo (`:3552-3554`).
+
+Item 4:
+
+| Estado/caminho | SELECTs de `_par_do_banco` |
+|---|---|
+| Cache conhecido | 0 (`app/chamados/models.py:3587-3589`) |
+| Cache desconhecido, `update_fields` sem par | 0 (`:3599-3600`, `:3606-3607`) |
+| Cache desconhecido, ambas as metades ou `save()` | 1 na comparação (`:3608`, `:3590`) |
+| Cache desconhecido, somente uma metade | **2**, pois há chamadas em `:3601` e `:3608`, sem memorizar o resultado em `:3590` |
+
+Sem `update_fields`, o acesso às duas metades acontece antes da comparação (`app/chamados/models.py:3596-3597`); cargas diferidas podem somar consultas próprias, além do SELECT acima. Execução com Django/banco: [não verificado].
+
+Não identifiquei chamador de produção atual que efetivamente acrescente essas consultas:
+
+- `only` com **ambas** as metades: ressuscitação usa instâncias apenas para construir atos (`app/chamados/models.py:1612-1613`); DRY do backfill também inclui ambas (`app/chamados/management/commands/backfill_decisoes_pergunta.py:60`).
+- `only` **sem ambas**: contador de destino (`app/chamados/services/fio.py:1235-1244`) e DRY de colisões (`app/chamados/management/commands/backfill_decisoes_pergunta.py:504-510`); não salvam essas instâncias nesses fluxos.
+- `devolver_validacao_recusada` invalida o cache ao atualizar só `resposta_colab` do par (`app/chamados/services/validacao.py:213-214`), mas salva apenas validação (`:227`): **0** consultas do par. Depois, o materializador usa novas instâncias de um queryset (`:494`; `app/chamados/services/materializacao.py:1375-1382`).
+- `_carimbar_recusa` faz refresh parcial sem o par (`app/chamados/services/materializacao.py:1095`) e salva recusa (`:1109`) ou carimbo de identidade (`:1105`; `app/chamados/models.py:3287-3291`): **0** consultas do par.
+- `_aceitar_a_folga` faz refresh de validação (`app/chamados/services/validacao.py:370`) e pode repetir a operação (`:374`); saves seguem sem o par (`:162`; `app/chamados/models.py:3165`, `:3291`).
+- Outros refreshs parciais terminam em leitura/retorno: validação (`app/chamados/services/validacao.py:497`) e classificação do passivo (`app/chamados/services/passivo_validado.py:140-145`).
+
+Quantidade/frequência real de consultas em produção: [não verificado].
 
 ## 15/11 23:15 · sessao a574bcd3a4b2 · - · - · origem=Ronald (tmux)
 
@@ -677,60 +822,4 @@ Auditoria dos escritores, somente leitura:
 
 **Leitor fora de app:** `bin/censo_folha.py:28`/`:29` ainda calcula pendência e resposta somente pelo instante; migração/classe no censo ausente [não verificado].
 
-## 15/11 22:24 · sessao 24507f4b97fb · E3-RESTO-R3 · construtor · origem=Code
-
-Cura e provas preparadas; execução de RED/GREEN e morte dos mutantes: **[nao verificado]**.
-`T` = [chamados/tests/test_e3_r3_c17_sem_banco.py::Contrato](/home/ronald/wt-codex-e3-resto-r3-221106/app/chamados/tests/test_e3_r3_c17_sem_banco.py:96). Instrumento e mutantes: [e3_r3_c17_mutantes.py](/home/ronald/wt-codex-e3-resto-r3-221106/app/chamados/tests/e3_r3_c17_mutantes.py:27).
-
-Comandos para a sessão, dentro de `app/` ([instrumento:97](/home/ronald/wt-codex-e3-resto-r3-221106/app/chamados/tests/e3_r3_c17_mutantes.py:97)):
-
-```bash
-R(){ PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c17_mutantes --red-base "$@"; }
-G(){ PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c17_mutantes --green "$@"; }
-M(){ PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c17_mutantes "$@"; }
-```
-
-| Item | Teste RED — T::teste | Cura — arquivo::função | Mutantes | RED / GREEN / mutantes | [nao verificado]
-|---|---|---|---|---|
-| 1 | `test_01_visiveis_intersecao_e_ids_efetivos_na_C5` | [folha/vigia_retido_calado.py::censo](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/vigia_retido_calado.py:41) | `sem_intersecao`, `C5_recebe_recorte_bruto` | `R 01` / `G 01` / `M 01` |
-| 2 | `test_02_sem_foto_nomeia_todos_os_pares_e_saida` | [folha/vigia_retido_calado.py::censo](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/vigia_retido_calado.py:61) | `empresa_sem_foto_some` | `R 02` / `G 02` / `M 02` |
-| 3 | `test_03_command_real_alarma_parcial_sem_passivo_e_preserva_positivo` | [folha/management/commands/vigiar_retido_calado.py::Command.handle](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/management/commands/vigiar_retido_calado.py:37) | `parcial_nao_alarma` | `R 03` / `G 03` / `M 03` |
-| 4 | `test_04_janela_por_empresa_meia_noite_relavra_e_velha_fora` | [folha/vigia_retido_calado.py::censo — preservada](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/vigia_retido_calado.py:65) | `inclui_velha`, `dia_civil`, `relavra_apaga_outra`, `corte_unico` | `R 04` / `G 04` / `M 04` |
-| 5 | `test_05_unidades_legado_none_positivo_e_ordem_dos_trios` | [folha/vigia_retido_calado.py::censo — preservada e documentada](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/vigia_retido_calado.py:44) | `perde_pessoa_competencia`, `legado_apaga_positivo`, `trio_invertido` | `R 05` / `G 05` / `M 05` |
-| 6 | `test_06_limbo_recebe_dia_da_borda_perto_da_meia_noite` | [relatorios/furos.py::escalas_em_limbo](/home/ronald/wt-codex-e3-resto-r3-221106/app/relatorios/furos.py:51), [relatorios/views.py::furos_espelho](/home/ronald/wt-codex-e3-resto-r3-221106/app/relatorios/views.py:1554) | `limbo_relogio_proprio`, `view_omite_dia` | `R 06` / `G 06` / `M 06` |
-| 7 | `test_07_dataset_exige_instante_e_transporta_identico_ao_D4_e_calendario` | [relatorios/furos.py::dataset_furos](/home/ronald/wt-codex-e3-resto-r3-221106/app/relatorios/furos.py:103) | `agora_opcional`, `aceita_none`, `D4_sem_instante`, `calendario_sem_instante` | `R 07` / `G 07` / `M 07` |
-| 8 | `test_08_selo_conta_chamadas_soltas_repetidas_apelidos_e_conversoes` | [chamados/tests/test_e3_r3_c15_sem_banco.py::_chamadas_relogio, _le_relogio, _instante_da_borda](/home/ronald/wt-codex-e3-resto-r3-221106/app/chamados/tests/test_e3_r3_c15_sem_banco.py:166) | `nomes_distintos`, `ignora_chamada_solta`, `ignora_alias`, `conversao_conta`, `alvos_contam` | `R 08` / `G 08` / `M 08` |
-| 9 | `test_09_docstrings_G3_nomeiam_contratos_e_exclusoes_sem_fecho_transitivo` | [folha/retrato_folha.py::competencias_do_retrato](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/retrato_folha.py:1369), [folha/views_retrato.py::_recorte_da_barra](/home/ronald/wt-codex-e3-resto-r3-221106/app/folha/views_retrato.py:145), `censo` e `dataset_furos` acima | `G3_omite_exclusoes` | `R 09` / `G 09` / `M 09` |
-
-Arquivos tocados: os nove arquivos identificados acima, mais `chamados/tests/test_e3_r3_c4_sem_banco.py:135`, `test_e3_r3_c5_sem_banco.py:87`, `test_e3_r3_c6_sem_banco.py:231`, `test_e3_r3_c11_sem_banco.py:275`, `test_e3_r3_c14_sem_banco.py:329`, `test_e3_r3_c16_sem_banco.py:63`, `e3_r3_c16_mutantes.py:28`; `folha/tests/test_vigia_retido_calado.py:65`; `relatorios/tests/test_e4_8_furos_le_a_lavra.py:58`, `relatorios/tests/test_selo_ancora_do_vinculo.py:23`.
-
-Escritor/leitores de `empresas/ids`: command `handle` (`folha/management/commands/vigiar_retido_calado.py:31`) → interseção em `folha/vigia_retido_calado.py:54` → consulta de retratos `:59` e C5 `:72`; C5 lê IDs em `escala/services/cadastro_realidade.py:163`.
-Escritor/leitores de `competencias_sem_retrato`: `folha/vigia_retido_calado.py:69` → formatador `:108` e alarme em `folha/management/commands/vigiar_retido_calado.py:38`; envelope de nove chaves descrito em `folha/vigia_retido_calado.py:44`.
-Escritor/leitor de `hoje`: `relatorios/views.py:1520` → chamada `:1554` → `relatorios/furos.py:65` e filtro mensal `:88`.
-Escritor/leitores de `agora`: `relatorios/views.py:1519` → chamada `:1543` → validação `relatorios/furos.py:113`, D4 `:127` e calendário `:168`.
-Escritor/leitor de `_imports_relogio`: `chamados/tests/test_e3_r3_c15_sem_banco.py:162` → `:172`; contagem por chamada em `:193`, consumida pelos selos em `:242` e `chamados/tests/test_e3_r3_c16_sem_banco.py:152`.
-
-Pergunta aberta: `gerar_pdf_auditavel` e `placar_aceite` recebem exceção nomeada em RELOGIO-FORA-DA-BORDA ou permanecem sem linha? Exclusão documentada em `folha/views_retrato.py:145`.
-Pergunta aberta: quem ajustará a assinatura antiga registrada em `core/juizes.py:794`, diante de `relatorios/furos.py:51`? Impacto na suite: **[nao verificado]**.
-
-## 15/11 22:20 · sessao efe4fe89bdcb · RETOMA-HE-LOTE3 · sonda · origem=Code
-
-Referências `saída:Lx`: contando `sonda_leitura: ...` como L1, a linha vazia como L2 e `AGORA ...` como L3.
-
-1. **0 linhas de ExportacaoDominio** para 2026 com mês ≥ 10. — `saída:L4`: `ED 2026 mes>=10 linhas 0`.
-
-2. **K6 por empresa e competência:**
-
-   | Empresa | 10/2026 | 11/2026 | Fonte |
-   |---|---|---|---|
-   | 2 | False | False | `saída:L5` |
-   | 3 | False | False | `saída:L6` |
-   | 4 | False | False | `saída:L7` |
-
-3. **58 DecisaoHE não vigentes**, com **data mínima 2026-09-22**. — `saída:L8`: `NAO_VIGENTES 58 data_min 2026-09-22`.
-
-4. **Nas seis combinações empresa/competência consultadas, nenhuma decisão pode coincidir com K6 True**, pois todos os seis resultados são False. — `saída:L5–L7`.
-
-   **Para o conjunto completo das 58 decisões, a existência de alguma em competência com K6 True está [não verificado].** A contagem e a data mínima não fornecem o cruzamento individual por empresa/competência nem o K6 de setembro/2026. — `saída:L5–L8`.
-
-_5840 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5842 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
