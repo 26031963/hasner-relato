@@ -2230,6 +2230,7 @@
 | ESPELHO-VERDADE-FECHO-V2 | V2 PREVISAO-E-PAR, fecho do O54 (mesmo aval): itens E1 sem previsao e E3 turno aberto. PORTA: 0 de dono ESTRUTURA nos dois | REGISTRADA, sem ordem ate a V0 fechar, atras da lista viva | 15/11 23:4x |
 | ESPELHO-VERDADE-FECHO-V3 | V3 FECHAMENTO-LIDO, fecho do O54 (mesmo aval): O48 -> O252, O254, O257. PORTA: fechamento e leitura | REGISTRADA, sem ordem ate a V0 fechar, atras da lista viva | 15/11 23:4x |
 | ESPELHO-VERDADE-FECHO-V4 | V4 CERTIFICADO, fecho do O54 (mesmo aval). PORTA = PORTAO-DE-FATURAMENTO de 24/10 | REGISTRADA, sem ordem ate a V0 fechar, atras da lista viva | 15/11 23:4x |
+| RESPOSTAS-BO-1611 | LEITURA (aval 16/11 00:4x, logs/AVAIS-1515/respostas_bo_1611.txt; padrao=n/a (leitura)): obras NO AR desde 14/11 -> casos BO Mauricio / HJ Fernando, conferidos em prod por sonda_leitura; 3 rascunhos em logs/RESPOSTAS-BO-1611/, nada enviado | EM VOO: Codex p1 censo lancado 00:4x | 16/11 00:4x |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
