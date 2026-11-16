@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 20:16** · publicado em **16/11/2026 20:15** (UTC-3)
+> Ultima resposta processada: **16/11/2026 20:17** · publicado em **16/11/2026 20:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 20:17 · sessao 7afc540c893c · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
+
+**AVAL-DEVOLVIDO no item 2:** preservar a base corrige a perda de parâmetros, mas não garante “número do chip == tamanho da lista” para qualquer requisição: os links mantêm o filtro da outra dimensão, enquanto os contadores ignoram status e efeito. (`app/ponto/views.py:2201-2226`; `app/templates/ponto/ausencias.html:48-67`.)
+
+Identidade da cópia com o hash informado: **[não verificado]**.
+
+**1. Premissas e parâmetros de `_base`**
+
+A composição real é esta; a referência a `2186-2192` não abrange os filtros posteriores de colaborador e tipo. (`app/ponto/views.py:2186-2201`.)
+
+| Parâmetro | Participação em `_base` | Links dos chips hoje |
+|---|---|---|
+| `mes`, `ano` | Sanitizados; fornecem as bordas padrão do período. | Levam ambos. |
+| `de`, `ate` | Cada data válida substitui sua respectiva borda padrão. | Omitem ambos. |
+| `registro` | Quando reconhecido como número, substitui a consulta de vigência por consulta ao `pk`. | Omitem. |
+| `colaborador`, `tipo` | Filtram a consulta resultante, inclusive depois da substituição por `pk`. | Levam quando preenchidos. |
+
+Fontes da tabela: `app/ponto/views.py:2171-2196`; `app/templates/ponto/ausencias.html:48-67`.
+
+**Não há outro parâmetro GET que altere `_base` nesse corpo de função.** `status` e `efeito` filtram depois dos contadores; os chips de status preservam efeito e os de efeito preservam status. (`app/ponto/views.py:2171-2226`; `app/templates/ponto/ausencias.html:48-67`.)
+
+`voltar` também se perde no clique, mas serve ao retorno de navegação, sem participar de `_base`. (`app/templates/ponto/ausencias.html:31`; `app/templates/ponto/ausencias.html:48-67`; `app/ponto/views.py:2171-2201`.)
+
+**2. Compatibilidade e quem mais usa os links**
+
+O item 1 do C2 é compatível com preservar o universo e corrige uma perda relevante para L1. Entretanto, o item 2 universaliza a igualdade justamente sobre o cruzamento efeito × status excluído pelo C1 fornecido: os links preservam esse cruzamento, e os contadores continuam anteriores a ele. (`app/docs/LEIS-UI.md:12-15`; `app/ponto/views.py:2201-2226`; `app/templates/ponto/ausencias.html:48-67`.)
+
+Para manter o restante do C1, a promessa precisa conservar sua condição: **mesma base, somente o chip considerado ligado** — efeito sem status; rejeitada sem efeito. Garantir a igualdade para qualquer combinação exigiria mudar também a navegação ou os contadores, ultrapassando a mera inclusão de `de/ate/registro`. (`app/ponto/views.py:2201-2226`; `app/templates/ponto/ausencias.html:48-67`.)
+
+Consumidores e produtores relevantes:
+
+- Calendário gera `registro` e acrescenta `voltar`; chamados redirecionam por `registro`; o serviço de ausência produz esse endereço para notificação. (`app/templates/colaboradores/partials/_calendario_grade.html:97`; `app/chamados/views.py:1512-1519`; `app/ponto/services/ausencia.py:826-828`.)
+- O JavaScript da lista lê `registro` para abrir automaticamente o painel. (`app/templates/ponto/ausencias.html:200-205`.)
+- Cadastro de realidade monta `colaborador/tipo`; a vigia monta URLs com status ou tipo. (`app/escala/services/cadastro_realidade.py:18`; `app/ponto/services/vigia_ausencia.py:46-47`; `app/ponto/services/vigia_ausencia.py:166-195`.)
+- Na própria tela, setas mensais e “Limpar” reconstruem URLs; o formulário GET envia período, registro, colaborador, tipo e eventualmente status, sem campos para efeito, mês ou ano. (`app/templates/ponto/ausencias.html:38-40`; `app/templates/ponto/ausencias.html:71-93`.)
+- A paginação trabalha no DOM, com 50 linhas por padrão; a busca local oculta linhas. A view entrega `list(qs)` integralmente. Portanto, a igualdade deve contar registros da resposta inteira. (`app/static/js/hasner-table.js:282-325`; `app/static/js/hasner-filter.js:43-51`; `app/ponto/views.py:2248-2255`.)
+- Não há ramo de exportação na view nem controle de exportação no template da lista. (`app/ponto/views.py:2165-2270`; `app/templates/ponto/ausencias.html:31-197`.)
+
+Os testes existentes conferem período, registro e status pelos registros do contexto; outro exige `registro` no redirecionamento do chamado. Não demonstram a igualdade após clicar nos chips. (`app/ponto/tests/test_lista_ausencias.py:19-31`; `app/ponto/tests/test_chamado_ausencia_botao.py:40-45`.) Teste que fixe literalmente o `href` dos chips: **[não verificado; não localizado na busca]**.
+
+**3. Condições literais**
+
+**Registro preservado:** sem o filtro da outra dimensão, conservar um `registro` válido mantém a mesma base de zero ou um registro; aplicar o predicado correspondente ao contador permite a igualdade. O registro substitui somente a vigência: colaborador e tipo continuam aplicáveis, e status/efeito continuam podendo excluir a linha. (`app/ponto/views.py:2190-2226`.)
+
+**Contraexemplo estático ao item 2:** suponha um registro aprovado cujo veredito seja `suprimido`, consultado com `registro=<pk>&status=rejeitada`. `_base` contém esse registro e o chip Suprime conta 1; clicar Suprime mantendo registro **também mantém `status=rejeitada`**, produzindo lista vazia. Isso permanece verdadeiro com a classificação pelo juiz prevista no aval. É um cenário derivado do código, sem ocorrência de produção demonstrada. (`app/ponto/views.py:2190-2226`; `app/templates/ponto/ausencias.html:67`; `app/ponto/services/dia_decidido.py:461-473`.)
+
+**Datas e mês/ano:** a view sanitiza mês/ano e executa `_d` separadamente para cada borda. Data válida prevalece sobre a borda mensal; ausente, vazia ou inválida resulta em `None` e usa a borda correspondente do mês. Uma borda válida pode coexistir com outra mensal; não existe validação ou reordenação de `de > ate` nesse trecho. (`app/core/sanitiza.py:11-35`; `app/ponto/views.py:2171-2189`.)
+
+Assim, **`?de=&ate=` literalmente vazio não recorta o período**: usa o mês inteiro. Para o RED demonstrar perda de recorte, precisa fornecer datas válidas que efetivamente alterem a janela; usar `registro` válido nesse RED retiraria a dependência do período. (`app/ponto/views.py:2181-2192`.)
+
+**Trecho compartilhado:** ele ainda não existe na cópia; os links continuam montados individualmente e o contexto entrega `de/ate`, sem o fragmento proposto. Portanto, sua implementação repetir ou compartilhar a leitura é **[não verificado]**. Para cumprir o desenho, deve consumir os valores já lidos, respeitando a mesma normalização, sem uma segunda interpretação das datas. (`app/ponto/views.py:2254-2270`; `app/templates/ponto/ausencias.html:48-67`.)
+
+**4. Exportada, dinheiro ou `!`**
+
+No escopo declarado de transportar parâmetros nos links, não aparece escrita em competência exportada nem cálculo financeiro: a função consulta, prepara a lista e renderiza. Há inclusive selo existente que exige que ela permaneça sem leitura de fechamento. (`app/ponto/views.py:2165-2270`; `app/ponto/tests/test_k8_tela_abre_na_competencia.py:272-295`.)
+
+As ações POST da tela são outro caminho; transições de ausência podem salvar dados e acordar a projeção da folha. Alterá-las extrapolaria este complemento. Nenhum `!` adicional está demonstrado para a mudança restrita dos links. (`app/templates/ponto/ausencias.html:278-282`; `app/templates/ponto/ausencias.html:308-312`; `app/ponto/services/ausencia.py:987-994`; `CLAUDE.md:265-268`.)
+
+Implementação, RED executado, M5 morto, suíte, deploy, smoke e efeito concreto em produção: **[não verificado]**. [nao verificado]
+
+VEREDITO: PROCEDE (item 2 — preservar de/ate/registro não garante igualdade para qualquer R, pois os links mantêm o filtro cruzado: app/templates/ponto/ausencias.html:48-67; app/ponto/views.py:2201-2226; RED literalmente vazio não recorta período: app/ponto/views.py:2181-2187).
 
 ## 16/11 20:16 · sessao 472e469899ff · - · - · origem=Ronald (tmux)
 
@@ -645,89 +707,4 @@ A view fornece rótulos e dados das grades, mas seu contexto não fornece a expl
 
 **VEREDITO: DEVOLVE -- a prosa do Repetir continua hardcoded fora do mapa exigido pela L7; adicionalmente, o mutante de clique interno fechando permanece sem cobertura nos testes novos.** (`app/docs/LEIS-UI.md:78`, `app/templates/escala/folga_calendario_editar.html:131`, `app/templates/core/_dialogo.html:159`, `app/escala/tests/test_smoke_clique_folga_calendario.py:333`)
 
-## 16/11 18:39 · sessao b66e40145c17 · BUG-PAR-O-PAR · verificador · origem=Code
-
-**DEVOLVIDA por prova de integração incompleta.** Os três achados procedentes receberam correção no código e asserções específicas; a execução dos testes e mutantes **c4b com Django** permanece **[nao verificado]**. O harness exclui esses mutantes quando roda sem `--django`; portanto o resultado sem banco não completa essa entrega. (`app/chamados/tests/test_bug_par_volta.py:282`, `:296`, `:316`, `:364`, `:378`, `:391`; `app/chamados/tests/bug_par_mutantes.py:150`, `:189-192`)
-
-1. **Quem escreve e quem lê**
-
-   | Valor | Escritores/produtores | Leitores e significado |
-   |---|---|---|
-   | `_RECUSA_COMPETENCIA_NO_PAR` | Declarada com `None`; `_validar_o_par` instala a lista externa; `_materializar_resposta_hora` instala temporariamente a lista da irmã. O conflito só é acrescentado depois de classificado como `COMPETENCIA_APROVADA`. (`app/chamados/services/materializacao.py:1780`, `:1363`, `:1467-1471`; `app/chamados/services/validacao.py:545-546`) | O materializador consulta a lista restaurada para repassar os registros; o wrapper consulta a sua lista depois do rollback. O conteúdo é **`(pk, conflito original)` filtrado pela categoria**, não o texto composto de paridade. (`app/chamados/services/materializacao.py:1368-1370`, `:1777-1779`; `app/chamados/services/validacao.py:554-560`) |
-   | Lista local `_comp_da_irma` | Nasce vazia por chamada; a materialização da irmã acrescenta o conflito pelo contexto instalado. (`app/chamados/services/materializacao.py:1361-1365`, `:1471`) | É repassada à lista superior e consultada antes do ramo de paridade; o primeiro registro produz o motivo da metade externa. (`app/chamados/services/materializacao.py:1370`, `:1379-1384`) |
-   | `motivo_do_par_recusado_pela_competencia` | Produz um texto preservando o conflito original, sem acrescentar marcas de paridade. (`app/chamados/services/materializacao.py:1783-1789`) | Chamado pelo materializador compartilhado e por `_validar_o_par`; o resultado chega ao escritor canônico de recusa. (`app/chamados/services/materializacao.py:1383`, `:1960`; `app/chamados/services/validacao.py:557-559`) |
-   | `recusa_motivo` | Permanecem os escritores de pendência, recusa de materialização, recusa humana, escape e duplicata. O c4b usa `_carimbar_recusa`. (`app/chamados/services/materializacao.py:1326`, `:1659`; `app/chamados/services/validacao.py:823`; `app/chamados/services/disputa_emissao.py:1511`; `app/chamados/services/fio.py:1405`; `app/chamados/models.py:3298`) | Devolução, fotografia da validação, explicador, modal, card, fotografia do comando, auditorias e regex de `flip_auto`. Esta última só interpreta motivos de perguntas com via terminal de paridade. (`app/chamados/services/validacao.py:181`, `:262`, `:278`; `app/chamados/services/explicador.py:113`; `app/templates/chamados/partials/modal_fio.html:226`; `app/templates/chamados/partials/_card_atendimento.html:192`; `app/chamados/management/commands/bug_par_103.py:69`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1075`, `:1112`; `app/ponto/services/flip_auto.py:128-132`) |
-   | `materializada_em` e `via_resolucao` | O carimbo conjunto continua em `_escrever_carimbo`, chamado pelas portas de carimbo, identidade e descarimbo; há descarimbo em lote e escritores específicos de reclassificação da via. (`app/chamados/models.py:3207-3211`, `:3239`, `:3293-3295`, `:3318`, `:3393`, `:3402`; `app/chamados/services/relavra_via.py:125`) | Testemunha distingue conclusão com batida de recusa terminal; laço relê carimbo; passivo relê carimbo/via e classifica a recusa. (`app/chamados/services/materializacao.py:856-866`, `:2070-2078`; `app/chamados/services/passivo_validado.py:140-145`, `:534-545`) |
-   | Nota do fio | `_carimbar_recusa` produz código/texto/ação pelo catálogo e chama `nota.anexar_ocorrencia`, com referência `pk:codigo`. A chave inclui chamado, tipo, referência e autor; colisão recupera a nota existente. (`app/chamados/services/materializacao.py:1648`, `:1664`; `app/chamados/services/nota.py:62-65`, `:95-109`) | Fio carrega os followups; modal e card apresentam seu conteúdo. (`app/chamados/services/fio.py:202`, `:206`; `app/templates/chamados/partials/modal_fio.html:488`; `app/templates/chamados/partials/_card_atendimento.html:43`) |
-   | Retorno de `_competencia_que_barra` na espera tardia | Compõe o detalhe K6 e a resposta F6; nessa chamada, `perguntas=()` deixa K6 sem perguntas e consulta F6 pelo instante. (`app/chamados/services/materializacao.py:812-829`, `:1444`) | A espera tardia lê somente sua presença: havendo impedimento, pula a espera e deixa o chokepoint decidir a escrita. A mesma composição já alimenta a testemunha; a unidade também a usa na guarda somente de entrega. (`app/chamados/services/materializacao.py:903`, `:927`, `:1444-1449`, `:1824`) |
-
-   **Leitores fora do diff:** carimbo/via também alimentam modelo e juízes, reconciliação, endpoint de apresentação, tarefa do dia, fábrica da célula, veredito, histórico, painel, fotografia, raio X, procedência da batida, silêncio da célula e cartório. (`app/chamados/models.py:3202-3205`; `app/chamados/juizes.py:683-696`; `app/chamados/reconciliador.py:367`, `:630`; `app/chamados/views.py:1257`; `app/chamados/services/tarefa_do_dia.py:256`; `app/chamados/services/fabrica_da_celula.py:149`, `:171`; `app/chamados/veredito_lavrado.py:203-204`; `app/chamados/services/historico.py:103`; `app/chamados/services/painel.py:67`, `:270`; `app/chamados/services/foto_e4b.py:180`; `app/chamados/services/raiox.py:135`, `:182`; `app/ponto/services/procedencia_batida.py:74`; `app/ponto/services/veredito_celula.py:196`; `app/ponto/services/cartorio.py:1650`)
-
-   Os comandos também selecionam, fotografam ou auditam esses campos para backfill, reabertura, reclassificação e reconciliação; não são consumidores novos do registro c4b. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:101`, `:325`, `:398`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:67`, `:129`; `app/chamados/management/commands/relavrar_via_i6.py:58`, `:68`; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:32-33`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70`, `:147`; `app/chamados/management/commands/auditar_disputas.py:71`, `:150`; `app/ponto/management/commands/reconciliar_fantasmas.py:213`)
-
-   **ESMERIL-SEMANTICA:** o ponto perigoso continua sendo classificar texto composto: o catálogo procura PARIDADE antes de competência. O texto novo evita essas marcas e conserva a mensagem F6; os leitores não exigem que ela esteja no começo. Não encontrei incompatibilidade nova nesse transporte. (`app/chamados/catalogo/recusa.py:40-54`, `:96-102`; `app/chamados/services/materializacao.py:1788-1789`)
-
-   `materializada_em` continua significando conclusão, inclusive recusa terminal, e exige leitura conjunta da via para afirmar gravação. Testemunha e explicador fazem essa distinção; seleção administrativa e seleção do passivo têm contratos diferentes, expressamente separados. (`app/chamados/services/materializacao.py:856-866`, `:1807-1813`; `app/chamados/services/explicador.py:116-126`)
-
-2. **Cura dos procedentes e entradas alternativas**
-
-   | Achado da volta 1 | Código e cobrança atual |
-   |---|---|
-   | **VOLTA primeiro: L2 vencendo L3** | A espera tardia consulta F6 antes da divergência. O teste valida VOLTA primeiro e exige `nao_gravou`, devolução, motivo/nota de competência, ausência de carimbo terminal e irmã sem validação. Repor a espera antiga alcança as asserções desse contraexemplo. (`app/chamados/services/materializacao.py:1444-1447`; `app/chamados/tests/test_bug_par_volta.py:348-376`) |
-   | **L2 no laço e passivo** | A coleta está no par compartilhado; havendo conflito F6 da irmã, retorna antes da paridade. Os testes exigem competência nas duas metades; o laço não cria atos novos, e o passivo contabiliza duas recusas de competência. (`app/chamados/services/materializacao.py:1361-1384`; `app/chamados/tests/test_bug_par_volta.py:378-403`) |
-   | **Matriz L3/L4/L5** | L3 agora exige detalhe visível nos dois HTMLs; L4 exige VALIDACAO nas duas metades; L5 exige K6 não consultado e fotografia persistida inalterada. (`app/chamados/tests/test_bug_par_volta.py:282-283`, `:296-302`, `:316-321`) |
-
-   **Cura demonstrada por inspeção e asserções existentes; execução Django desses testes: [nao verificado].** Os três mutantes c4b apontam precisamente para a ordem da espera e para o desvio que conserva o motivo no laço/passivo. (`app/chamados/tests/bug_par_mutantes.py:139-148`)
-
-   Sobre as outras entradas:
-
-   - **Duas metades barradas por F6:** a irmã recusada fornece o registro; a externa retorna antes da paridade. No laço/passivo, a segunda iteração recebe lista nova. Esse cenário está cobrado nos testes novos. (`app/chamados/services/materializacao.py:1361`, `:1379-1384`, `:1470-1471`; `app/chamados/tests/test_bug_par_volta.py:378-403`)
-   - **Somente a externa barrada por F6:** se a irmã gravou, o conflito da externa levanta `_Reprovada`, desfazendo o ato com a irmã; o texto mantém F6. No wrapper, o registro permite refazer a recusa após seu rollback. Teste específico dessa combinação: **[nao verificado]**. (`app/chamados/services/materializacao.py:1467-1472`, `:1490-1492`, `:1946-1960`; `app/chamados/services/validacao.py:554-560`)
-   - **Retry de recusa F6:** o motivo anterior não impede por si só a formação do par; as guardas relevantes são pendência, validação, data e geometria. A recusa idêntica não gera outra nota pelo mesmo gesto. Teste específico do retry F6: **[nao verificado]**. (`app/chamados/services/materializacao.py:197-235`, `:1649-1664`; `app/chamados/services/nota.py:100-109`)
-   - **Irmã já carimbada ou já presente no espelho:** fica fora da composição do par. A externa pode continuar recusada por PARIDADE se a vizinhança continuar inválida; nesse ramo a testemunha também anuncia paridade, antes de alcançar F6. Isso não demonstra perda de uma recusa efetivamente produzida pelo chokepoint. (`app/chamados/services/materializacao.py:148`, `:229-230`, `:901-925`, `:1385-1436`)
-   - **Irmã passa a reutilizar batida durante o ato:** reuso antecede paridade/espera; somente batidas criadas no toque entram no conjunto a desfazer. Teste específico combinado com F6: **[nao verificado]**. (`app/chamados/services/materializacao.py:1335-1347`, `:1458-1461`, `:1683-1685`)
-   - **Pergunta já terminal por paridade no passivo:** a seleção normal não a replanta: o juiz aceita essa identidade como materializada, o vigia classifica `com_registro` e o passivo pula essa classe. Não encontrei nesse caminho carimbo terminal de paridade recebendo causa F6. (`app/chamados/models.py:2615`, `:3902`; `app/chamados/juizes.py:683-696`; `app/chamados/services/vigia_carimbo.py:105-108`; `app/chamados/services/passivo_validado.py:327-331`)
-
-3. **Espera tardia, comportamento fora do par e contadores**
-
-   **Sim, muda uma U163 sozinha:** sendo divergente, sem reuso nem bloqueio de paridade e com F6 ativo, a espera tardia agora deixa chegar ao chokepoint e escrever a recusa. A testemunha já dizia L2 para essa mesma pergunta, e a espera inicial já deixava passar esse estado. A mudança alinha a escrita tardia à precedência da testemunha. (`app/chamados/services/materializacao.py:772-773`, `:927-932`, `:1444-1449`, `:1871-1875`, `:1959-1964`)
-
-   **Pergunta não intervalo:** a espera já retorna `None`, pois filtra motivo de intervalo e pertencimento U163; F6 continua aplicado pelo chokepoint. **Competência apenas fechada:** o predicado real só barra `aprovado` ou `exportado`; outro status não ganha essa dispensa da espera. (`app/chamados/services/materializacao.py:741-744`, `:1444`; `app/ponto/registro_batida.py:157-159`; `app/ponto/janelas.py:87-89`)
-
-   **A ordem externa de `validar_pergunta` permanece:** espera compartilhada → implausibilidade → trava → K6 → VALIDACAO → materialização → releitura K6 → devolução. A mudança está dentro da criação tardia. (`app/chamados/services/validacao.py:605`, `:611`, `:643`, `:648`, `:651`, `:677`, `:685`, `:689`; `app/chamados/services/materializacao.py:1444`)
-
-   **Não entra pela primeira vez no contador das 163.** A seleção atual é por PK congelada, sem filtro por motivo; uma pergunta não materializada com L2 já integra `outras`. Escrever F6 não altera sua participação nem reduz `pendentes_aval`. Os comentários que ainda dizem que a recusa escrita determina pertencimento estão desatualizados em relação à seleção efetiva. (`app/chamados/services/materializacao.py:321`, `:339-356`, `:1672-1673`, `:1868-1870`; `app/chamados/services/universo_bug_par.py:33-35`)
-
-   **Há efeitos em outras filas/contagens:** na porta administrativa, motivo antes vazio impedia a devolução; agora F6 permite limpar `validada_em` e registrar DEVOLUCAO. A pergunta pode voltar a aguardar validação e sair das seleções de validadas do vigia/passivo; escrever motivo também a retira do I18 de recusa ausente. Isso muda o estado participante, sem mudar a definição dessas consultas. (`app/chamados/services/validacao.py:262-278`; `app/chamados/services/explicador.py:100-103`; `app/chamados/services/vigia_carimbo.py:97-98`; `app/chamados/services/painel.py:270`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1074-1076`)
-
-4. **Registro aninhado**
-
-   **Sem duplicação ou vazamento identificado no caminho normal:** cada chamada cria uma lista; a irmã acrescenta seu conflito original uma vez; a externa repassa a lista uma vez e, quando ela explica a falha do par, retorna antes de produzir conflito próprio. O wrapper lê o registro, sem acrescentá-lo novamente. (`app/chamados/services/materializacao.py:1361-1384`, `:1471`; `app/chamados/services/validacao.py:556-560`)
-
-   **O token novo é restaurado inclusive por exceção:** a chamada da irmã está imediatamente protegida por `try/finally`; o wrapper também restaura seu token em `finally`. Se a exceção interromper o repasse, pode impedir esse repasse, mas não deixa o contexto instalado para a próxima pergunta. O laço chama novamente a unidade por pergunta. (`app/chamados/services/materializacao.py:1363-1370`, `:2078`; `app/chamados/services/validacao.py:546-563`)
-
-5. **Classes de reprovação**
-
-   | Classe | Resultado |
-   |---|---|
-   | Segundo juiz | Não identificado: a leitura nova usa a composição existente, que consulta o mesmo F6 do chokepoint. (`app/chamados/services/materializacao.py:824-828`, `:1444`; `app/ponto/registro_batida.py:157-159`) |
-   | Segundo escritor fora da porta | Não identificado: o motivo composto segue para `_carimbar_recusa`; o carimbo permanece nas portas do modelo. (`app/chamados/services/materializacao.py:1383`, `:1960`; `app/chamados/services/validacao.py:558`; `app/chamados/models.py:3207-3211`) |
-   | Relógio fora da borda | O trecho novo não acrescenta leitura de relógio; utiliza `ts` já derivado. As leituras existentes de carimbo permanecem nos pontos anteriores. (`app/chamados/services/materializacao.py:1361-1384`, `:1444-1455`; `app/chamados/services/validacao.py:557-558`) |
-   | Derivação paralela | Não: é leitura da mesma composição da testemunha; ela apenas escolhe consultar a espera, e o chokepoint continua decidindo a escrita. (`app/chamados/services/materializacao.py:903`, `:927`, `:1444-1449`) |
-   | Ordem de trava | Preservada nos caminhos examinados: porta trava antes do carimbo; laço trava e relê antes da unidade; a trava compartilhada inclui a irmã. (`app/chamados/services/validacao.py:643-651`; `app/chamados/services/materializacao.py:2005-2022`, `:2068-2078`) |
-   | Campo com dois significados | O registro novo tem um contrato; carimbo/via conservam a distinção entre encerramento e gravação. Permanecem comentários antigos incorretos sobre pertencimento por recusa, sem correspondência no contador atual. (`app/chamados/services/materializacao.py:1777-1789`, `:856-866`, `:321`, `:1868-1870`) |
-   | Selo/RED sem mordida | Há asserções adequadas e harness que exige controle verde e falha por asserção, sem erros/skips. A morte **executada** dos c4b com Django continua **[nao verificado]**. (`app/chamados/tests/bug_par_mutantes.py:196-200`, `:218-228`) |
-
-   Na execução sem escrita desta verificação, passaram os **7 testes sem banco** e morreram por asserção os **17 mutantes selecionados sem Django**, com erros zero; esse modo exclui os c4b de integração. (`app/chamados/tests/test_bug_par_sem_banco.py:20`; `app/chamados/tests/bug_par_mutantes.py:189-192`, `:224-225`)
-
-6. **Escopo e bloqueio final**
-
-   Os pontos de produção do c4b correspondem ao transporte L2 e à precedência reclamada na volta 1; os demais toques fornecidos reforçam testes/mutantes. A definição do contador e o pertencimento por PK continuam nos mesmos mecanismos. (`app/chamados/services/materializacao.py:1361-1384`, `:1444`, `:1783-1789`, `:321-356`; `app/chamados/services/validacao.py:557`; `app/chamados/tests/test_bug_par_volta.py:282-403`; `app/chamados/services/universo_bug_par.py:33-35`)
-
-   Não há toque em motor, JSON, contador ou comando/apply no **diff fornecido**; correspondência histórica independente entre esse diff e os commits declarados: **[nao verificado]**, pois a cópia não oferece repositório Git. **[nao verificado]** [nao verificado]
-
-   Não muda o predicado nem escreve competência exportada. Há, contudo, efeito sobre perguntas U163 em status `exportado`: a nova precedência também pode trocar espera tardia por recusa F6 nesse status. O salto das 163 na guarda K6 permanece. (`app/ponto/janelas.py:87-89`; `app/chamados/services/materializacao.py:800`, `:1444`)
-
-   **Bloqueia a aprovação a prova executada de integração dos c4b e dos reforços da matriz, exigida pelo COMPLEMENTO-2, item 3d.** A triagem afirma uma execução anterior, mas o resumo citado não integra o material localizado; resultado, controles verdes e mortes por asserção com Django permanecem **[nao verificado]**. Não identifiquei novo bloqueio funcional demonstrado no código examinado; a entrega ainda não tem essa prova verificável. (`app/chamados/tests/bug_par_mutantes.py:139-150`, `:196-228`; execução Django **[nao verificado]**)
-
-_6159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6160 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
