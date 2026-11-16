@@ -1,7 +1,32 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 19:37** · publicado em **16/11/2026 19:37** (UTC-3)
+> Ultima resposta processada: **16/11/2026 20:16** · publicado em **16/11/2026 20:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 20:16 · sessao 472e469899ff · - · - · origem=Ronald (tmux)
+
+Censo de produtores/leitores da URL:
+
+- O calendário gera `?registro=<id>` e acrescenta `voltar` com a URL de origem. A lista usa `voltar` somente para o retorno; seu JavaScript lê `registro` para abrir o painel automaticamente. (`app/templates/colaboradores/partials/_calendario_grade.html:97`; `app/templates/ponto/ausencias.html:31`; `app/templates/ponto/ausencias.html:200-205`.)
+- Chamados redirecionam para `?registro=<id>`; o serviço de ausência também produz esse endereço. Há teste que exige `registro` no redirecionamento do chamado, sem fixar href de chip. (`app/chamados/views.py:1512-1519`; `app/ponto/services/ausencia.py:828`; `app/ponto/tests/test_chamado_ausencia_botao.py:40-45`.)
+- O cadastro de realidade produz `?colaborador=<id>&tipo=afastamento_inss`. A vigia produz URLs com `status` ou `tipo`. (`app/escala/services/cadastro_realidade.py:18`; `app/ponto/services/vigia_ausencia.py:46-47`; `app/ponto/services/vigia_ausencia.py:166`; `app/ponto/services/vigia_ausencia.py:179-195`.)
+- O menu, os retornos de lançamento e o histórico de atestados apontam para a lista sem query string. (`app/templates/base.html:246`; `app/templates/ponto/lancar_ausencia.html:4`; `app/templates/ponto/lancar_ausencia.html:89`; `app/templates/ponto/historico_atestados.html:52`.)
+- A própria tela reconstrói URLs nos chips, nas setas mensais e em “Limpar”. O formulário GET envia `de/ate/registro/colaborador/tipo` e eventualmente `status`; não contém campo de `efeito`, `mes`, `ano` ou `voltar`. Isso é comportamento anterior ao complemento. (`app/templates/ponto/ausencias.html:38-40`; `app/templates/ponto/ausencias.html:48-67`; `app/templates/ponto/ausencias.html:71-93`.)
+
+Paginação, busca e export:
+
+- A view materializa integralmente `list(qs)`; o template percorre todos os registros. A paginação acontece no DOM, com 50 linhas por página por padrão, sem URL de página. A busca também oculta linhas no navegador. Assim, cardinalidade precisa significar registros da resposta integral. (`app/ponto/views.py:2248`; `app/templates/ponto/ausencias.html:142-185`; `app/static/js/hasner-table.js:282-325`; `app/static/js/hasner-filter.js:43-51`.)
+- Não há controle de exportação no template da lista nem ramo de exportação no corpo da view; consumidor externo desses hrefs em produção: [não verificado]. (`app/templates/ponto/ausencias.html:31-197`; `app/ponto/views.py:2165-2270`.)
+
+Testes: [nao verificado]
+
+- Os testes da lista conferem vigência por `de/ate`, busca por `registro` e filtro por status mediante pks no contexto; não clicam chips nem verificam igualdade de seus contadores com a resposta de destino. (`app/ponto/tests/test_lista_ausencias.py:19-31`.)
+- Há teste de GET inválido para `mes=13&ano=lixo`; ele exige apenas resposta inferior a 500. (`app/ponto/tests/test_get_sanitizado_ponto.py:31-34`; `app/ponto/tests/test_get_sanitizado_ponto.py:44-46`.)
+- Não encontrei teste que fixe literalmente o href dos chips na busca por `lista_ausencias`, `ausencias.html`, `chip-efeito` e URLs de status/efeito; exaustividade semântica dessa busca: [não verificado]. [nao verificado]
+
+Risco literal principal:
+
+- Adicionar os três parâmetros não resolve a promessa “qualquer chip a partir de qualquer R”: chips de status preservam `efeito`, chips de efeito preservam `status`, enquanto todos os contadores vêm de `_base` antes de ambos. Esse cruzamento continua anterior/excluído pelo C1 e conflita com a generalização literal do C2. (`app/templates/ponto/ausencias.html:48-67`; `app/ponto/views.py:2201-2226`; anexo COMPLEMENTO-1: [não verificado — sem numeração de arquivo].)
 
 ## 16/11 19:37 · sessao 7901657f82ee · BUG-PAR-O-PAR · sonda · origem=Code
 
@@ -705,24 +730,4 @@ A view fornece rótulos e dados das grades, mas seu contexto não fornece a expl
 
    **Bloqueia a aprovação a prova executada de integração dos c4b e dos reforços da matriz, exigida pelo COMPLEMENTO-2, item 3d.** A triagem afirma uma execução anterior, mas o resumo citado não integra o material localizado; resultado, controles verdes e mortes por asserção com Django permanecem **[nao verificado]**. Não identifiquei novo bloqueio funcional demonstrado no código examinado; a entrega ainda não tem essa prova verificável. (`app/chamados/tests/bug_par_mutantes.py:139-150`, `:196-228`; execução Django **[nao verificado]**)
 
-## 16/11 18:39 · sessao 9fed026fbfc8 · - · - · origem=Ronald (tmux)
-
-Análise estática; execução e mutantes efetivamente rodados: [não verificado].
-
-| Teste novo | Mutante que derruba por leitura do código | Mutante que passa | [nao verificado]
-|---|---|---|
-| `test_MORDE_Escape_vale_Cancelar_no_repetir` | Escape `fechar(true)`: alvo 30 `[8]` viraria `[3,10,20]`; falha no trio depois/grade/conta. Escape sem efeito: falha em `aberto`. Guarda somente para 28: falha em `modal`. | Guarda somente para 30; fundo resolvendo verdadeiro; clique interno fechando. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:334`, `:335`, `:336`, `:337`, `:340`; `app/templates/escala/folga_calendario_editar.html:127`, `:133`. |
-| `test_MORDE_clique_fora_da_caixa_vale_Cancelar_no_repetir` | Fundo `fechar(true)`: mesma troca indevida e falha no trio. Fundo sem efeito: falha em `aberto`. Guarda somente para 28: falha em `modal`. | Guarda somente para 30; Escape resolvendo verdadeiro; clique interno fechando. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:334`, `:335`, `:336`, `:337`, `:343`; `app/templates/core/_dialogo.html:159`. |
-| `test_MORDE_repetir_sobre_fevereiro_preenchido_tambem_pergunta` | Guarda somente para 30: fevereiro `[9]` vira `[5]` sem modal; falham presença e preservação. Cancelar verdadeiro: depois/grade viram `[5]`, falhando. Cópia antecipada: falha em `logo`. | Guarda somente para 28; Escape verdadeiro; fundo verdadeiro; clique interno fechando; Cancelar que preserva dias mas deixa modal aberto ou contador errado. Referências: `app/escala/tests/test_smoke_clique_folga_calendario.py:348`, `:349`, `:350`, `:352`; captura dos campos em `:156`. |
-
-Os novos testes, em conjunto, barram guarda exclusiva de um dos tamanhos; fevereiro cobre 28 e os testes das saídas cobrem 30. Os testes antigos já cobriam Cancelar e Sim em 30. (`app/escala/tests/test_smoke_clique_folga_calendario.py:320`, `:334`, `:348`, `:355`.)
-
-O mutante “qualquer clique no fundo borbulhado fecha”, removendo `if(e.target === fundo)`, passa: nenhum novo teste clica caixa/texto; botões resolvem primeiro, zeram `pendente`, e a segunda chamada a `fechar` retorna. (`app/templates/core/_dialogo.html:149`, `:151`, `:157`, `:158`, `:159`; `app/escala/tests/test_smoke_clique_folga_calendario.py:227`, `:228`, `:153`.)
-
-Escape é despachado em `document`, exatamente onde está o listener; não há erro de alvo na cópia. Se a sonda disparasse em alvo não ouvido, o modal permaneceria aberto e `assertFalse(res['aberto'])` reprovaria. Mover o listener para `body` também reprovaria o Escape sintético atual, embora o evento real vindo do botão focado tenha outro caminho: isso limita a equivalência do teste com teclado humano. (`app/escala/tests/test_smoke_clique_folga_calendario.py:227`, `:336`; `app/templates/core/_dialogo.html:160`, `:161`, `:195`.)
-
-Não há `subTest` nos três métodos: chamam o helper diretamente e as asserções propagam. Há timers fixos de 200 ms, mas Chromium recebe orçamento de tempo virtual de 4000 ms; o timeout externo é 120 s. Assim, não são sleeps de relógio físico solto, mas uma janela de observação fixa: alteração posterior à captura pode escapar. (`app/escala/tests/test_smoke_clique_folga_calendario.py:147`, `:155`, `:158`, `:159`, `:199`, `:201`, `:340`, `:343`, `:346`.)
-
-As asserções principais têm mordida: fixture alvo `[8]` difere da origem `[3,10,20]`, e fevereiro alvo `[9]` difere da origem filtrada `[5]`; além disso `_repete` exige resultado `dict`, evitando aprovação quando a sonda não rodou. O teste de fevereiro deixa sem asserção `aberto` e `conta`; os dois testes de saída não afirmam `antes` nem `logo`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:260`, `:261`, `:316`, `:334`, `:337`, `:348`, `:352`; `app/templates/escala/folga_calendario_editar.html:127`.)
-
-_6158 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6159 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
