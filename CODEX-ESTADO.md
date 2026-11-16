@@ -1,7 +1,45 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 17:54** · publicado em **16/11/2026 17:55** (UTC-3)
+> Ultima resposta processada: **16/11/2026 17:55** · publicado em **16/11/2026 18:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 17:55 · sessao 7dcf95b49d87 · E4C-F2 · verificador · origem=Code
+
+Nos anexos, `arquivo:linha` indica a contagem do texto fornecido, incluindo linhas vazias; arquivos físicos desses anexos: [nao verificado]. Ocorrências em produção, resultados de sombra e efeitos monetários: [nao verificado].
+
+1. **Fecha.** A premissa confere: `estado` traduz os campos, enquanto a exigibilidade distingue RECUSA/REABERTURA para colaborador e DEVOLUCAO para admin (`app/chamados/models.py:3151`; `app/chamados/models.py:3158`; `app/chamados/services/tarefa_do_dia.py:163`; `app/chamados/services/tarefa_do_dia.py:165`). Conservar cada significado e contar a divergência responde à pergunta, sem escolher vencedor novo (`estados.md:48`; `respostas_f2_estados_1611.txt:5`). Não colide isoladamente com a conservação; a mudança adicional da API está no problema do item 2 (`respostas_f2_estados_1611.txt:6`; `respostas_f2_estados_1611.txt:15`). Não determina intervenção em exportada, dinheiro ou `!` (`respostas_f2_estados_1611.txt:1`; `respostas_f2_estados_1611.txt:5`).
+
+2. **Não fecha.** A premissa confere: a propriedade atual aceita somente instante; a API deriva `aguarda_admin` de `estado`; o juiz exige instante **e** texto (`app/chamados/models.py:3665`; `app/api/views.py:2553`; `app/chamados/juizes.py:1552`; `estados.md:50`).
+
+   O corte exige dono admin, mas a fonte única escolhida pelo aval ainda atribui ao colaborador a última RESPOSTA com texto vazio; falta destinar essa correção na própria fonte (`app/docs/CORTES.md:487`; `app/chamados/services/tarefa_do_dia.py:159`; `app/chamados/services/tarefa_do_dia.py:161`; `respostas_f2_estados_1611.txt:3`; `respostas_f2_estados_1611.txt:6`).
+
+   Além disso, trocar `aguarda_admin` para o dono pode mudar **pares legais**, além das exceções admitidas. Exemplo condicional: instante e texto presentes, sem validação/materialização, último SILENCIO; `estado` pode ser RESPONDIDA e a API atual retornar True, enquanto SILENCIO fornece nenhuma ação e a regra nova retornaria False (`app/chamados/models.py:3155`; `app/api/views.py:2553`; `app/chamados/services/tarefa_do_dia.py:176`; `app/docs/CORTES.md:487`). Isso colide com “sem mudar tela” e com a prova limitada aos pares ilegais; ocorrência desse caso em produção: [nao verificado] (`respostas_f2_estados_1611.txt:5`; `respostas_f2_estados_1611.txt:15`).
+
+   Ficar fora dos pendentes do app está sustentado; mudar a partição para “não respondida = pendente” contrariaria esse corte (`app/chamados/services/pergunta_no_app.py:81`; `app/chamados/tests/test_o261e_f5_alcance.py:194`; `app/docs/CORTES.md:487`). Não há autorização para corrigir estoque entregue sem `!`; eventual impacto em exportada/dinheiro: [nao verificado] (`corte_juiz_respondida.txt:1`).
+
+3. **Fecha, subordinado à proteção de exportadas.** A retenção atual aceita instante **OU** texto; o juiz nega texto sem instante. Logo, esse par sair da retenção é exatamente uma diferença admitida pela prova, mesmo conservando `estado=pendente` (`app/chamados/models.py:1924`; `app/chamados/models.py:1925`; `app/chamados/juizes.py:1552`; `app/chamados/models.py:3158`; `estados.md:52`; `respostas_f2_estados_1611.txt:15`). O contador e a devolução se houver ocorrência dão destino ao residual, sem autorizar cura de dados (`respostas_f2_estados_1611.txt:7`; `respostas_f2_estados_1611.txt:1`).
+
+   Há alcance indireto no CSF, que consome a mesma lista; portanto, a exceção da prova não dispensa `PAREI !` se mudar resultado em exportada. Essa condição preserva a compatibilidade com a resposta 7; ocorrência e efeito monetário: [nao verificado] (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:574`; `app/docs/CORTES.md:487`; `respostas_f2_estados_1611.txt:11`).
+
+4. **Fecha.** Validação mais materialização produz `resolvida` sem testemunha nesse ramo; o card pode dizer “Encerrado”, enquanto o explicador consulta o efeito e pode retornar `validada_sem_gravar` (`app/chamados/models.py:3153`; `app/templates/chamados/partials/_card_atendimento.html:189`; `app/chamados/services/explicador.py:93`; `app/chamados/services/explicador.py:102`; `estados.md:54`). Conservar ambas as apresentações responde à pergunta; exigir testemunha fica expressamente como registro para E4d, sem colisão com a conservação nem autorização de intervenção em exportada/dinheiro/`!` (`respostas_f2_estados_1611.txt:8`; `respostas_f2_estados_1611.txt:15`; `respostas_f2_estados_1611.txt:1`).
+
+5. **Fecha.** Tranca mata C6; sem validação/materialização, o estado ainda depende do instante, e o ramo morto pode mostrar “Validado pela supervisão” (`app/chamados/juizes.py:1409`; `app/chamados/models.py:3158`; `app/templates/chamados/partials/_card_atendimento.html:189`; `estados.md:56`). A resposta conserva essa discrepância e registra o achado de tela: dá destino sem prometer correção na F2, sem colisão ou ampliação de intervenção em exportada/dinheiro/`!` (`respostas_f2_estados_1611.txt:9`; `respostas_f2_estados_1611.txt:1`).
+
+6. **Fecha como conservação na F2 e encaminhamento à F6.** Materializada e morta resulta em `resolvida`; sem validação nem instante, o cabeçalho administrativo mostra “aguardando colaborador” (`app/chamados/models.py:3157`; `app/templates/chamados/partials/_pergunta_card.html:25`; `estados.md:58`). “Lê o dono” precisa ser entendido como destino futuro registrado: o cabeçalho atual lê os campos, não `tarefa_do_dia` (`respostas_f2_estados_1611.txt:10`; `app/templates/chamados/partials/_pergunta_card.html:23`; `app/templates/chamados/partials/_pergunta_card.html:24`). Assim interpretado, não colide com F6 L1 nem altera a tela na F2; não amplia exportada/dinheiro/`!` (`app/docs/CORTES.md:487`; `respostas_f2_estados_1611.txt:10`; `respostas_f2_estados_1611.txt:1`).
+
+7. **Fecha quanto ao resultado conservado.** Qualquer carimbo exclui da retenção, embora C6 possa continuar considerando a pergunta viva; conservar essa divergência não afirma equivalência factual entre carimbo e efeito (`app/chamados/models.py:1923`; `app/chamados/juizes.py:1456`; `app/chamados/juizes.py:1489`; `estados.md:60`; `respostas_f2_estados_1611.txt:11`). O CSF herda a exclusão, tornando material a restrição de exportada: mudança exige `PAREI !` com tabela, não autorização implícita; invariância efetiva e efeito monetário: [nao verificado] (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:588`; `app/docs/CORTES.md:487`). A falta da fonte por ato permanece no item 9 (`app/docs/RELATO.md:109`).
+
+8. **Fecha no caso perguntado: último SILENCIO.** Ressuscitar zera instante e texto sem escrever REABERTURA; SILENCIO continua sem ações, e devolver ao colaborador permanece decisão pendente (`app/chamados/models.py:1622`; `app/chamados/models.py:1625`; `app/chamados/models.py:1629`; `app/chamados/services/tarefa_do_dia.py:176`; `estados.md:62`). Isso conserva a B1 e cumpre a zeragem integral do corte, sem autorizar nova intervenção em exportada/dinheiro/`!` (`respostas_f2_estados_1611.txt:12`; `corte_juiz_respondida.txt:1`).
+
+   “Ressuscitada segue sem ação” não vale universalmente: sem decisões, o leitor atribui resposta ao colaborador. A conclusão acima fica restrita ao SILENCIO da pergunta correspondente (`app/chamados/services/tarefa_do_dia.py:156`; `app/chamados/services/tarefa_do_dia.py:157`; `estados.md:62`).
+
+9. **Não fecha.** A premissa confere: os tipos não incluem materialização; descarimbar apaga o campo; a projeção temporal lê o valor atual (`app/chamados/models.py:4024`; `app/chamados/models.py:4035`; `app/chamados/models.py:3318`; `app/chamados/juizes.py:1390`; `estados.md:64`). Continuar lendo o campo não fornece o instante anterior após descarimbar; a própria cópia registra F2 L1 como **RESIDUAL, não MOOT**, após a F1 (`app/docs/RELATO.md:109`).
+
+   O corte manda, se residual, “efeito = o ato de materialização, valor conservado”; sua remissão à E4d trata da absorção. Transferir também F2 L1 à E4d não fecha esse literal e deixa a pergunta sem fonte definida (`app/docs/CORTES.md:487`; `respostas_f2_estados_1611.txt:13`). A resposta não autoriza construção nem `!`, e a proteção de exportadas continua obrigatória; impacto monetário: [nao verificado] (`respostas_f2_estados_1611.txt:1`; `app/docs/CORTES.md:487`).
+
+AVAL-DEVOLVIDO 2: falta destinar a correção do dono na fonte única e resolver mudanças de `aguarda_admin` em pares legais, excluídas da prova (`app/chamados/services/tarefa_do_dia.py:161`; `app/api/views.py:2553`; `respostas_f2_estados_1611.txt:15`).
+AVAL-DEVOLVIDO 9: remeter F2 L1 à E4d deixa sem fonte o instante após descarimbo e contraria o destino do residual (`app/chamados/models.py:3318`; `app/chamados/juizes.py:1390`; `app/docs/RELATO.md:109`; `app/docs/CORTES.md:487`).
+VEREDITO: AVAL-DEVOLVIDO em 2, 9
 
 ## 16/11 17:54 · sessao 3a58eec350c9 · - · - · origem=Ronald (tmux)
 
@@ -701,18 +739,4 @@ VEREDITO: CONFERE
 
 A porta consulta DXG antes, depois implausibilidade, K6 explícito e materialização/F6; Q1 preserva expressamente essa ordem, e a NOTA separa os retornos. Portanto, a diferença deve constar no relatório, mas não constitui colisão residual que exija devolver o aval. (`app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:645`; `app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`.)
 
-## 16/11 17:01 · sessao 863272485906 · - · - · origem=Ronald (tmux)
-
-- **Q1 confere quanto à premissa e ao universo.** `_competencia_que_barra` pula U163 antes de consultar a data; fora163 sem dia gera o impedimento atual. `competencia_do_fato` retorna `None` antes de chamar K6. Assim, “K6 não consultado por falta de dia” corrige o “nenhum juiz consultado” de L5 sem exigir mudança do helper. (`app/chamados/services/materializacao.py:797`; `app/chamados/services/materializacao.py:799`; `app/chamados/services/materializacao.py:800`; `app/chamados/services/materializacao.py:780`; `app/chamados/services/materializacao.py:785`.)
-
-- **Q1 não garante que a porta devolva L5 em qualquer sobreposição.** A porta consulta a testemunha para extrair exclusivamente DXG; se a testemunha disser o atual impedimento por falta de dia, essa consulta devolve vazio. A porta ainda pode retornar `implausivel` antes da guarda explícita de K6. Portanto, Q1 preserva corretamente a ordem atual, mas uma promessa em Q2 de “K6/L5 primeiro também na porta” conflita com essa ordem. (`app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`; `app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:863`; `app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`.)
-
-- **Q3 confere: L5 fora163 já não entrava no contador.** O queryset é exclusivamente U163; retirar o balde projetado preserva o universo e não elimina um leitor efetivo de L5. O balde existente `bug_par_103_sem_dia` pertence às candidatas U103 já carimbadas, portanto não representa a L5 fora163. (`app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:331`; `app/chamados/services/materializacao.py:332`.)
-
-- **A lista do comando já cobre fora163 sem dia.** Ela exclui U163, consulta `competencia_do_fato` e acrescenta `None` à pauta falante. Não depende do contador para listar essa situação. (`app/chamados/management/commands/bug_par_103.py:71`; `app/chamados/management/commands/bug_par_103.py:72`; `app/chamados/management/commands/bug_par_103.py:74`; `app/chamados/management/commands/bug_par_103.py:75`; `app/chamados/management/commands/bug_par_103.py:77`.)
-
-- **Leitores de tela precisam reconhecer o estado novo**, como já autorizado pela matriz: hoje o card e o modal mostram detalhe/escondem Validar pela comparação com `bloqueada_competencia_entregue`; apenas trocar o vocabulário deixa essas comparações sem o novo nome. (`app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/_pergunta_card.html:47`; `app/templates/chamados/partials/modal_fio.html:252`; `app/templates/chamados/partials/modal_fio.html:274`.)
-
-- **Q1/Q3 não oferecem autorização adicional para exportada ou dinheiro.** A validação existente chama recálculo por evento depois de carimbar; ausência de nova batida não prova ausência de outras escritas. Tocar gravado exportado continua exigindo `!`; efeito produtivo concreto é [nao verificado]. (`app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:627`; `app/chamados/services/validacao.py:628`; `CLAUDE.md:265`; `CLAUDE.md:411`.)
-
-_6123 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6124 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
