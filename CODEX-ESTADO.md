@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 09:00** · publicado em **16/11/2026 09:00** (UTC-3)
+> Ultima resposta processada: **16/11/2026 09:25** · publicado em **16/11/2026 09:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 09:25 · sessao cf0625b825b4 · - · - · origem=Ronald (tmux)
+
+Auditoria estática concluída e enviada com referências.
+
+- A porta valida o par futuro, exige colaborador travado e escreve sem adquirir novas travas; o chamador trava antes de registrar e zerar. `app/chamados/models.py:1612`, `app/chamados/models.py:3370`, `app/chamados/models.py:3385`.
+- Os testes detectam a volta de REABERTURA, mas não provam preservação de texto na corrida; todas as fixtures alteradas têm texto vazio. `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:264`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:285`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:304`.
+- O teste do censo exige a chamada literal; inserir REABERTURA mantendo essa chamada escapa dele individualmente. `app/core/tests/test_censo_escritas.py:241`, `app/core/tests/test_censo_escritas.py:252`.
+- Execução dos testes, sonda comparativa e pré-requisitos do pouso: [nao verificado]. [nao verificado]
+
+## 16/11 09:25 · sessao cd853badbde5 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+- **PROCEDE — histórico da tela fica sem ato de retirada.** `respostas_anteriores()` considera uma RESPOSTA vigente até outra RESPOSTA ou ato REABERTURA/RECUSA; VALIDACAO não a encerra. Portanto, numa corrida com resposta chegando antes da trava e sendo apagada pela ressuscitação, a linha RESPOSTA permanece na trilha bruta, mas não aparece como resposta anterior na tela. `app/chamados/models.py:3674`, `app/chamados/models.py:3680`; delegação em `app/chamados/services/disputa_emissao.py:2119` e carregamento em `app/chamados/services/fio.py:258`.
+
+- **PROCEDE — há limpeza sem registro dos valores anteriores por pergunta.** Entrada com `materializada_em != None`, texto vazio e ambos os instantes de resposta/validação nulos passa pelo filtro inicial; o helper devolve `[]`, e a porta apaga instante, autor e via da materialização. A auditoria final registra somente IDs e rótulos de estado. `app/chamados/models.py:1530`, `app/chamados/models.py:4091`, `app/chamados/models.py:3391`, `app/chamados/models.py:1653`. Isso comprova perda da foto do carimbo; nessa entrada o texto anterior já é vazio. `app/chamados/models.py:1533`.
+
+- **PROCEDE — leitor histórico de atividade usa projeção apagável.** Painel chama `validada_em/validada_por` de atividade humana e conta pela projeção; `verbos` também conta validações e respostas pelos campos atuais, e procedência da batida usa esses autores/instantes. Ressuscitar pode apagar esses fatos dos respectivos resultados apesar de conservar linhas R/V. `app/chamados/services/painel.py:256`, `app/chamados/services/verbos.py:263`, `app/chamados/services/verbos.py:333`, `app/ponto/services/procedencia_batida.py:70`; limpeza em `app/chamados/models.py:1629` e `app/chamados/models.py:3393`. Exclusividade dessa consequência em relação ao main: [nao verificado].
+
+- **PROCEDE — significados de “respondida” ainda coexistem nos leitores.** C6 exige instante **e** texto; `estado`, propriedade `respondida` e partição do app usam apenas instante. O helper histórico também produz RESPOSTA com texto vazio quando há instante, e tarefa distingue isso como `respondida_sem_texto`. `app/chamados/juizes.py:1421`, `app/chamados/models.py:3154`, `app/chamados/models.py:3664`, `app/chamados/services/pergunta_no_app.py:81`, `app/chamados/models.py:4098`, `app/chamados/services/tarefa_do_dia.py:148`.
+
+Mapa dos escritores efetivos:
+
+| Campo | Escritores na cópia |
+|---|---|
+| `respondida_em` | resposta normal, automática e recuperação pela trilha: `app/chamados/services/disputa_emissao.py:1482`, `:1675`, `:1696`; carimbo/restauro: `app/chamados/models.py:3242`, `:3273`; limpeza pelo lote: `app/chamados/models.py:1629`, `:3393`. |
+| `resposta_colab` | resposta normal/automática: `app/chamados/services/disputa_emissao.py:1481`, `:1674`; reabertura/lote: `app/chamados/services/disputa_emissao.py:1609`, `app/chamados/models.py:1630`, `:3393`. |
+| `validada_em`, `validada_por` | validação/devolução: `app/chamados/services/validacao.py:159`, `:224`; nova resposta desfaz: `app/chamados/services/disputa_emissao.py:1494`; carimbo/restauro: `app/chamados/models.py:3245`, `:3274`; limpeza do lote: `app/chamados/models.py:1629`, `:3393`. |
+| `materializada_em`, `materializada_por` | atribuição central: `app/chamados/models.py:3209`; portas que a chamam: `:3239`, `:3293`, `:3318`; lote: `:3393`. |
+| `via_resolucao` | trio central e lote acima; alteração isolada por fato no espelho: `app/chamados/models.py:3402`; relavra: `app/chamados/services/relavra_via.py:125`. |
+| `DecisaoPergunta` | escritor `registrar`, inserção em `app/chamados/models.py:4120`; ressuscitar entrega as linhas em `:1613`; helper preenche ato/instante/texto/autor em `:4100` e `:4104`. |
+
+Inserção por `PerguntaDisputa.abrir(**campos)` também recebe projeção inicial e registra R/V; o `save` aplica a recusa do par. `app/chamados/models.py:3124`, `app/chamados/models.py:3129`, `app/chamados/models.py:3558`.
+
+Outros leitores relevantes:
+
+- C6 lê validação, par e carimbo/via como estado atual: `app/chamados/juizes.py:1389`, `:1405`, `:1416`, `:1423`, `:1444`, `:1450`.
+- App seleciona por C6 e depois separa pendentes pelo instante/disputa aberta: `app/chamados/services/pergunta_no_app.py:52`, `:61`, `:81`; `medir` usa os destinos das vivas: `:208`.
+- Tarefa lê sequência por `ato_em,pk`, passivo pelo helper e efeitos pela lavra: `app/chamados/services/tarefa_do_dia.py:410`, `:419`, `:424`; RESPOSTA pede validação, REABERTURA/RECUSA devolvem ao colaborador, SILENCIO encerra: `:148`, `:152`, `:165`.
+- Materializador seleciona instantes de resposta/validação com materialização nula: `app/chamados/services/materializacao.py:1376`; usa texto como anuência: `:835`.
+- Cache da lavra usa máximos dos carimbos da pergunta como marcos de mudança: `app/chamados/veredito_lavrado.py:202`.
+- Respostas corrigíveis selecionam pelo instante de resposta: `app/chamados/juizes.py:1739`; fila global de validar usa par com texto e C6: `:1746`.
+
+Chamadores fora do diff: reabertura do chamado em `app/chamados/models.py:1498`, desarquivamento em `app/chamados/views_arquivar.py:86` e cartório em `app/ponto/services/cartorio.py:1673`.
+
+## 16/11 09:24 · sessao d3593eac2ade · - · - · origem=Ronald (tmux)
+
+2. **PROCEDE — universo mais amplo que as duas fixtures novas.** A seleção exige pergunta que resolve o chamado, `materializada_em != None`, texto SQL `''` ou `NULL`, via diferente de `duplicata`/`motivo_retratado`; depois pula marco provadamente aceso e exige C6 vivo na cópia descarimbada. Não restringe `respondida_em`, `validada_em`, autores, última decisão, `conversa` nem disputa fechada. Portanto os eixos de entrada são resposta com/sem instante × validação com/sem instante × qualquer sequência/último ato × disputa aberta/fechada, desde que passem os dois guardas. `resposta_colab` não admite NULL no esquema corrente, embora o filtro o contemple. (`app/chamados/models.py:1530`, `:1548`, `:1550`, `:1553`, `:1557`, `:2498`, `:2552`.)
+
+2. **NAO HA — ato novo de devolução no caminho c2.** Ressuscitar registra apenas projeções ainda sem linha e chama diretamente a porta que zera o par, validação e carimbo; não chama `reabrir_para_correcao`. (`app/chamados/models.py:1612`, `:1613`, `:1628`, `:1629`.)
+
+2. **PROCEDE — resultado da tarefa depende da sequência anterior.** Sem decisão: `aguarda_resposta`/responder-colaborador; RESPOSTA vazia: `respondida_sem_texto`/responder-colaborador; RESPOSTA com texto: `aguarda_validacao`/validar-admin; RECUSA/REABERTURA prévia: `devolvida_ao_colaborador`; SILENCIO: `silencio_decidido`/nenhuma ação; VALIDACAO: resultado depende da lavra/efeito; ABSORCAO: depende do status da ausência. A sequência é cortada por `ato_em <= agora`. (`app/chamados/services/tarefa_do_dia.py:143`, `:145`, `:148`, `:152`, `:156`, `:165`, `:167`, `:410`.)
+
+2. **PROCEDE — antes/depois não é invariância geral desta porta.** Projeção legada com instante e sem linha é `passivo_sem_linha` antes; a porta cria RESPOSTA/VALIDACAO, apaga a projeção e pode passar a outra razão depois. A mudança pode ocorrer mesmo sem REABERTURA. (`app/chamados/services/tarefa_do_dia.py:143`, `:419`; `app/chamados/models.py:4091`, `:4098`, `:4102`, `:1613`, `:1629`.) Isto é comparação antes/depois na c2; igualdade/diferença factual com `ab616d1c7` permanece **[nao verificado]**, porque a árvore não contém histórico Git nem cópia identificada desse main.
+
+2. **PROCEDE — app e medidor ignoram a decisão de SILENCIO.** `perguntas_do_app` usa `q_vivas` seguido de C6; `particao_do_app` chama de pendente a viva com `respondida_em=None` e disputa aberta; `medir` transforma todas as vivas em destinos `no_app`, e esses destinos não recebem causa de retenção. Portanto SILENCIO pode continuar sem ação na tarefa e a pergunta constar viva/pendente no app. (`app/chamados/services/pergunta_no_app.py:52`, `:61`, `:81`, `:141`, `:208`, `:209`; `app/chamados/services/tarefa_do_dia.py:165`.)
+
+2. **PROCEDE — C6 pós não é garantido sem congelar os insumos externos.** A seleção pergunta ao C6 sobre a célula projetada do julgamento; a leitura posterior ordinária pode usar a célula persistida anterior à lavra. O cartório explicitamente pede novo julgamento depois da ressuscitação. Sob os mesmos insumos da cópia, par/carimbo/validação zerados levam ao resultado vivo aprovado pela própria seleção. (`app/chamados/models.py:1548`, `:1553`, `:1557`; `app/chamados/juizes.py:415`, `:428`, `:1405`, `:1454`, `:1482`; `app/ponto/services/cartorio.py:1693`.)
+
+5. **PROCEDE — comparação dos testes novos não cobre o dono publicado inteiro.** `_portas_da_tarefa` só dá porta de colaborador quando há RESPONDER e a pergunta está no conjunto de pendentes do app; calcula depois `fio`/`rota`. Uma fixture legada com instante pode conservar a razão/ação mas alterar essa disponibilidade depois que o instante é zerado. Os testes novos verificam apenas a razão e ações de uma instância, omitindo `fio`, `rota`, `fila`, `verbos`. (`app/chamados/services/tarefa_do_dia.py:610`, `:616`, `:622`, `:635`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:320`.)
+
+6. **PROCEDE — três chamadas diretas de produção fora do trecho alterado.** `ChamadoColaborador.reabrir` ressuscita depois de gravar o estado do chamado; desarquivar pela tranca chama novamente depois de escrever o toque humano; o cartório ressuscita e conta/pede rejulgamento quando houve mudança. Todos passam a receber o protocolo c2 sem REABERTURA, em lugar do protocolo B1 anterior mostrado no anexo. (`app/chamados/models.py:1489`, `:1498`; `app/chamados/views_arquivar.py:77`, `:86`; `app/ponto/services/cartorio.py:1673`, `:1692`.)
+
+6. **NAO HA — novos filtros paralelos nos consumidores enumerados.** A carga de reabrir usa `perguntas_a_ressuscitar`; o comando de órfãs também usa essa porta para recusar ressuscitação de irmãs. O universo efetivo continua centralizado em `_universo_da_ressuscitacao`. (`app/chamados/services/disputa_emissao.py:1820`; `app/chamados/management/commands/reabrir_orfas_enterradas.py:107`; `app/chamados/models.py:1507`.)
 
 ## 16/11 09:00 · sessao 8b0372b78864 · CORTES-F2-F9-1611 · verificador · origem=Code
 
@@ -432,78 +497,4 @@ A saída declara schema `juliani`, consulta em `2026-11-16 11:50:25.864495+00:00
 - Quais são os demais colaboradores divergentes, seus vínculos, ou os nomes e características dos postos `444` e `487`. [nao verificado]
 - Se houve impacto em batidas, feriados, pagamentos ou alertas, e qual é o estado posterior à consulta. [nao verificado]
 
-## 16/11 08:50 · sessao 848fdbb6ac2d · LOTE3-C7 · verificador · origem=Code
-
-**O delta distingue as três versões pedidas, por análise estática. Ainda há mutante plausível sobrevivente e uma justificativa incorreta na triagem: o teste c6 citado também não prova a releitura do banco.** (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:216-260`; `app/colaboradores/views.py:333-343`).
-
-**1. Poder de distinção do teste** [nao verificado]
-
-| Versão | Resultado esperado pelo código |
-|---|---|
-| **(a) Sem atomic comum, ordem salvar → trilha** | Falha na FK: a porta encerra seu atomic próprio; o substituto escreve histórico e levanta depois. O posto novo permanece visível, contrariando a exigência do antigo. (`app/colaboradores/services/colaborador.py:158-161`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-253`). |
-| **(b) Trilha → salvar, sem atomic comum** | Falha na contagem: a trilha real insere, depois o substituto levanta; a porta não é alcançada, mas o histórico permanece. (`app/colaboradores/services/historico_vinculo.py:13-17`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-255`). |
-| **(c) Atomic comum atual** | As duas escritas são desfeitas antes do `except`; posto antigo, contagem anterior, HTML antigo e toast esperado são compatíveis com as asserções. (`app/colaboradores/views.py:333-358`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:249-260`). |
-
-**Mutante sobrevivente:** colocar a trilha primeiro, envolver **somente ela** em atomic e deixar `salvar_inteiro` depois, fora desse bloco. A exceção injetada desfaz o histórico e impede alcançar a porta; todas as verificações desse teste ficam satisfeitas. Em um caminho sem essa exceção, as duas operações continuariam sem atomic comum. O teste não exige passagem pela porta nem sua ordem relativa à trilha. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-260`; chamadas atuais em `app/colaboradores/views.py:334-336`). Execução desse mutante: **[nao verificado]**.
-
-Logo, o teste fortaleceu a prova dos **efeitos dessa falha**, mas a existência do atomic comum continua demonstrada também pela inspeção da view. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:249-260`; `app/colaboradores/views.py:333-336`).
-
-**2. Possível verde por motivo errado** [nao verificado]
-
-- **Asserção engolida pela view: não ocorre neste substituto.** Ele apenas chama a função real, guarda o retorno e levanta `RuntimeError`. Todas as asserções executam depois do POST, fora do alcance do `except Exception` da view. Se a função real levantar antes de retornar, o `append` não termina e falha `len(escritas) == 1`; se retornar `None`, falha a asserção seguinte. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-260`; `app/colaboradores/views.py:337-359`).
-- **Contagem na mesma transação: não mascara os mutantes simples.** O teste herda de `TestCase` e consulta novamente FK e contagem depois do POST; escritas próprias não desfeitas permanecem visíveis nessa conexão. Portanto, a transação envolvente do teste não torna automaticamente verde a ausência do atomic da view. A evidência é de rollback observado localmente; commit real, outra conexão e concorrência ficam **[nao verificado]**. (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:248-255`).
-- **Toast:** agora exige o objeto `showToast` completo, com mensagem e tipo exatos. Não exige que esse seja o único evento no cabeçalho. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:259-260`).
-
-**3. Triagem dos descartes**
-
-**Há uma correção necessária na entrega:** o teste c6 citado também aceita substituir a releitura por `colaborador.posto = _posto_antes`. Seu gancho altera somente situação, data e motivo de desligamento; o posto permanece antigo. As verificações de FK, nomes no HTML e histórico vazio continuam satisfeitas pela restauração em memória. A implementação atual efetivamente relê o banco, mas esses testes não distinguem as duas soluções. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:40-43`, `:216-228`, `:252-258`; `app/colaboradores/views.py:343`).
-
-Os demais itens descartados têm fundamento no código:
-
-| Descarte | Evidência |
-|---|---|
-| Homônimos podem trocar FK sem histórico | A comparação é textual; `Posto.__str__` contém nome e empresa. (`app/colaboradores/services/historico_vinculo.py:10-11`; `app/colaboradores/models.py:276-277`). |
-| Anterior potencialmente obsoleto | `_posto_antes` é capturado antes da trava; a guarda relê situação, sem renovar esse anterior. Possibilidade por inferência estática. (`app/colaboradores/views.py:326`, `:334-335`; `app/colaboradores/services/colaborador.py:89-91`, `:65-66`). |
-| Derivação repetida de `sem_posto` | Existe nos dois ramos e no painel; há pendência registrada. (`app/colaboradores/views.py:346`, `:365`; `app/templates/colaboradores/partials/painel_vinculo.html:34`; `app/core/juizes.py:931-932`). |
-| Datas com significados distintos | Recebem dia da execução, início da escala e data de demissão agendada. (`app/colaboradores/views.py:335`; `app/colaboradores/services/vinculo.py:354`; `app/colaboradores/services/desligamento.py:113-116`). |
-| Trava adicional por matrícula ausente | O override trava também a linha da maior matrícula. (`app/colaboradores/models.py:427-438`). |
-
-**Para o contrato restrito “falha excepcional da trilha desfaz posto e trilha”, nenhum desses descartes demonstra bloqueio funcional da cura atual:** as duas chamadas estão no mesmo atomic e o `except` está fora. A alegação de cobertura da releitura precisa ser corrigida. (`app/colaboradores/views.py:333-343`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:216-228`).
-
-O teor integral do aval e do laudo original não foi apresentado; há referências a eles no código. Conformidade com exigências adicionais desses documentos: **[nao verificado]**. (`app/colaboradores/views.py:331`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:231`).
-
-**4. Escritores e leitores dos valores examinados**
-
-| Valor | Quem escreve | Quem lê |
-|---|---|---|
-| `HX-Trigger` | A view serializa mensagem da exceção e `tipo='erro'`. (`app/colaboradores/views.py:358`). | Teste decodifica e compara `showToast`; navegador decodifica e chama o toast, usando `textContent`. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:259-260`; `app/templates/core/_dialogo.html:79-85`, `:37`). |
-| `HistoricoVinculo` | A view fornece os campos; `registrar_mudanca` executa `create`. O substituto chama essa função real. Existe também o escritor `registrar_evento_de_vinculo`. (`app/colaboradores/views.py:335-336`; `app/colaboradores/services/historico_vinculo.py:13-17`, `:20-27`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:245`). | Teste conta antes/depois e verifica retorno. Painel consulta e mostra histórico; cadastro e fio também exibem. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:240`, `:249-255`; `app/colaboradores/views.py:306-307`; `app/templates/colaboradores/partials/painel_vinculo.html:60-64`; `app/templates/colaboradores/editar.html:187`; `app/templates/chamados/fio_colaborador.html:89-91`). |
-| `Colaborador.posto_id` | Fixture grava o antigo; POST informa o novo; view atribui a relação e a porta salva. (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:54-55`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:207-209`; `app/colaboradores/views.py:322-327`; `app/colaboradores/services/colaborador.py:160`). | Teste consulta a FK diretamente. View relê o banco e fornece o posto ao template, que mostra nome/praça; teste verifica os nomes. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:252-258`; `app/colaboradores/views.py:343`, `:350`; `app/templates/colaboradores/partials/vinculo_row.html:16-21`). |
-
-Resultados RED/verde/mutantes/ruff alegados nos anexos, identidade Git e ocorrência dos passivos em PROD: **[nao verificado]**. [nao verificado]
-
-## 16/11 08:50 · sessao de75e71aae41 · - · - · origem=Ronald (tmux)
-
-1. Por análise estática, o delta distingue as três versões citadas: sem atomic externo e ordem save→trilha, a FK nova permanece visível e falha a asserção de posto antigo; com trilha→save sem atomic comum, o INSERT real permanece visível e falha a contagem; com o atomic atual, ambas as escritas são desfeitas. A porta tem atomic próprio, e o substituto levanta somente depois de retornar do create real. (`app/colaboradores/views.py:333-337`; `app/colaboradores/services/colaborador.py:152-161`; `app/colaboradores/services/historico_vinculo.py:13-17`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-255`). Execução independente dessas variantes: [nao verificado].
-
-2. **Mutante plausível sobrevivente:** mover a trilha para antes da porta, envolver **somente a trilha** em atomic e deixar `salvar_inteiro` depois, fora dele. O substituto insere e levanta dentro desse atomic; ele desfaz o histórico; a porta jamais é alcançada; posto antigo, histórico inalterado, HTML antigo e toast esperado satisfazem o teste. Portanto, o delta demonstra os efeitos exigidos nesse erro, mas não exige que a porta tenha sido alcançada nem prova estruturalmente atomic comum. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-260`; `app/colaboradores/views.py:334-336`). Execução do mutante: [nao verificado]. Remover a chamada à porta também sobrevive a esse teste isolado pelo mesmo motivo. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:249-260`).
-
-3. **Não há asserção do teste executada dentro do substituto.** Ele só chama a função real, registra retorno e levanta `RuntimeError`; todas as asserções, inclusive JSON, executam depois do POST. Logo, o `except Exception` da view não engole essas asserções. Se a função real levantar antes de retornar, `append` não termina e `len(escritas)==1` falha; se retornar `None`, falha `assertIsNotNone`. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:244-260`; `app/colaboradores/views.py:337-359`).
-
-4. A leitura na mesma transação do `TestCase` não mascara os dois mutantes simples: as queries posteriores consultam o banco novamente, e escritas próprias não desfeitas continuam visíveis nessa conexão. O encerramento do teste ocorre depois dessas asserções. Isso verifica rollback local, sem demonstrar commit real, outra conexão, concorrência ou callbacks de commit. (`app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:248-255`). Comportamento em execução independente/PROD: [nao verificado].
-
-5. **A justificativa de um descarte da entrega é incorreta:** `test_MORDE_desligado_no_meio_linha_mostra_o_posto_gravado` também não distingue substituir releitura por `colaborador.posto = _posto_antes`. Seu gancho muda situação/data/motivo, sem mudar posto; suas asserções exigem somente FK antiga, nomes antigo/novo no HTML e histórico vazio. A restauração em memória satisfaz isso. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:40-43`, `:216-228`). O template não mostra situação/data/motivo de desligamento, portanto não expõe o objeto desatualizado nesse cenário. (`app/templates/colaboradores/partials/vinculo_row.html:1-48`). Isso pede correção da alegação de cobertura da entrega; a implementação atual efetivamente relê o banco. (`app/colaboradores/views.py:343`). Execução do mutante: [nao verificado].
-
-## 16/11 08:49 · sessao b1facf76be2c · - · - · origem=Ronald (tmux)
-
-| Valor | Quem escreve | Quem lê |
-|---|---|---|
-| `HX-Trigger` | Recusa da view serializa `{'showToast': {'msg': f'Erro: {e}', 'tipo': 'erro'}}`. `app/colaboradores/views.py:337`, `:358`. | Teste faz `json.loads` e compara o objeto integral. `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:259-260`. Produção lê cabeçalho/JSON e passa mensagem/tipo ao toast; mensagem vai para `textContent`. `app/templates/core/_dialogo.html:79-85`, `:37`. |
-| `HistoricoVinculo` | View fornece os campos do ato; serviço faz `objects.create`. `app/colaboradores/views.py:335-336`; `app/colaboradores/services/historico_vinculo.py:13-17`. Substituto chama a função real e depois levanta. `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:241-246`. | Teste conta antes/depois e exige um retorno não nulo do escritor. `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:240`, `:249-255`. Painel consulta linhas/contagem e exibe os campos. `app/colaboradores/views.py:306-307`; `app/templates/colaboradores/partials/painel_vinculo.html:60-64`. Cadastro e fio também exibem histórico. `app/templates/colaboradores/editar.html:179`, `:187`; `app/inteligencia/resumo.py:51-52`; `app/templates/chamados/fio_colaborador.html:89-91`. |
-| `Colaborador.posto_id` | Fixture grava o posto antigo; POST fornece o novo. `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:54-55`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:201`, `:207-209`. View atribui a relação e porta executa `save()`. `app/colaboradores/views.py:322-327`; `app/colaboradores/services/colaborador.py:158-160`; `app/colaboradores/models.py:439`. | Teste consulta diretamente o FK no banco. `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:252-253`. View relê banco e fornece relação ao template; HTML mostra nome/praça, conferidos pelo teste. `app/colaboradores/views.py:343`, `:350`; `app/templates/colaboradores/partials/vinculo_row.html:16-21`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:256-258`. |
-
-Há outro escritor de histórico, `registrar_evento_de_vinculo`, também com `objects.create`; portanto “escritor único = registrar_mudanca” só é adequado se restrito ao caminho examinado. `app/colaboradores/services/historico_vinculo.py:20-27`.
-
-O formulário HTMX recebe a resposta substituindo a linha inteira. `app/templates/colaboradores/partials/painel_vinculo.html:112-115`.
-
-_5975 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5978 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
