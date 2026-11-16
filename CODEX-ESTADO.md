@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 23:52** · publicado em **15/11/2026 23:53** (UTC-3)
+> Ultima resposta processada: **16/11/2026 00:08** · publicado em **16/11/2026 00:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 00:08 · sessao 50ce300f7dae · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+Transcrição integral do dado fornecido, sem verificação independente. [nao verificado]
+
+```text
+sonda_leitura: script.py [4e9a5641d912b65d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 1 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 110
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 209 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1180, 'bate_ate_10min': 1140, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 11, 'diverge_acima_60': 25, 'dia_batida_impar': 33, 'impar_que_BATE': 15, 'impar_que_DIVERGE': 18, 'impar_dentro_da_faixa': 15, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 18, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1727, 'dia_isento_ou_ausencia': 316, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 43, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.6% de 1180 dias comparados
+[3] ESTRUTURA    10 dia-colab       9.1 h    3 colabs
+[3] CADASTRO     10 dia-colab      38.4 h    3 colabs
+[3] BATIDA       20 dia-colab     110.2 h   13 colabs
+[4] TOTAL divergentes 40
+[5] colabs com divergencia: 17
+ESTRUTURA_DIA|10/2026|col252|2026-09-23|esp_min=548|e6_min=594|teto_min=608|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:56 12:35 12:49 17:04|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-09-24|esp_min=552|e6_min=598|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:51 17:03|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-09-25|esp_min=556|e6_min=604|teto_min=616|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:50 17:07|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-09-28|esp_min=535|e6_min=581|teto_min=595|dif_min=46|classe=diverge_10_60|paridade=par|batidas=07:12 12:38 12:53 17:07|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-01|esp_min=545|e6_min=590|teto_min=605|dif_min=45|classe=diverge_10_60|paridade=par|batidas=07:00 12:37 12:51 17:05|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-02|esp_min=545|e6_min=593|teto_min=606|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:59 12:40 12:53 17:04|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-06|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:58 12:38 12:52 17:09|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col252|2026-10-09|esp_min=544|e6_min=592|teto_min=604|dif_min=48|classe=diverge_10_60|paridade=par|batidas=07:06 12:48 13:00 17:10|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col864|2026-10-12|esp_min=509|e6_min=449|teto_min=509|dif_min=-60|classe=diverge_10_60|paridade=par|batidas=15:01 18:10 19:10 23:30|veredito=feriado
+ESTRUTURA_DIA|10/2026|col876|2026-09-21|esp_min=550|e6_min=665|teto_min=722|dif_min=115|classe=diverge_acima_60|paridade=par|batidas=18:29 04:39 05:36 06:31|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 10/2026 10 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=10|horas=9.116283817777775|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=10|horas=38.355213611111104|colabs=3
+PARCIAL|10/2026|BATIDA|dias=20|horas=110.21011656222223|colabs=13
+PARCIAL_TOTAL|10/2026|dias=40|horas=157.681613991111109|colabs=17
+ESTIMATIVA processados 125 universo 209 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 979, 'bate_ate_10min': 922, 'esp_zero_e6_trabalho': 13, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 7, 'diverge_acima_60': 31, 'dia_batida_impar': 47, 'impar_que_BATE': 17, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 20, 'impar_FORA_da_faixa': 10, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1391, 'dia_isento_ou_ausencia': 232, 'dia_sem_trabalho_ambos': 38, 'esp_desconta_janela_declarada': 33, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.2% de 979 dias comparados
+[3] ESTRUTURA     9 dia-colab      34.9 h    4 colabs
+[3] CADASTRO     20 dia-colab     115.4 h    6 colabs
+[3] BATIDA       28 dia-colab     157.3 h   15 colabs
+[4] TOTAL divergentes 57
+[5] colabs com divergencia: 20
+ESTRUTURA_DIA|11/2026|col114|2026-11-08|esp_min=439|e6_min=429|teto_min=499|dif_min=-10|classe=diverge_10_60|paridade=par|batidas=09:59 14:50 16:00 18:18|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-09|esp_min=551|e6_min=597|teto_min=610|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:53 12:38 12:52 17:04|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-10|esp_min=551|e6_min=598|teto_min=611|dif_min=47|classe=diverge_10_60|paridade=par|batidas=06:56 12:39 12:52 17:07|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-11|esp_min=550|e6_min=598|teto_min=611|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:54 12:39 12:52 17:04|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col252|2026-11-13|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:52 12:35 12:49 17:03|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col516|2026-10-23|esp_min=361|e6_min=0|teto_min=0|dif_min=-361|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=folga
+ESTRUTURA_DIA|11/2026|col516|2026-10-28|esp_min=372|e6_min=0|teto_min=0|dif_min=-372|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col996|2026-10-28|esp_min=0|e6_min=580|teto_min=580|dif_min=580|classe=esp_zero_e6_trabalho|paridade=par|batidas=21:18 06:57|veredito=folga
+ESTRUTURA_DIA|11/2026|col996|2026-11-10|esp_min=443|e6_min=1026|teto_min=1116|dif_min=583|classe=diverge_acima_60|paridade=par|batidas=06:57 13:00 14:30 15:50 21:16 06:59|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 11/2026 9 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=9|horas=34.87566822027778|colabs=4
+PARCIAL|11/2026|CADASTRO|dias=20|horas=115.41531537222224|colabs=6
+PARCIAL|11/2026|BATIDA|dias=28|horas=157.27115423694445|colabs=15
+PARCIAL_TOTAL|11/2026|dias=57|horas=307.56213782944447|colabs=20
+TEMPO_SEGUNDOS 192.2
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 252870
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 98
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1130
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6152
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 52
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6181
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 3
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3658
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3658
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 591
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 181
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 466420
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 596
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2826
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 172
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12084
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 121
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3994
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 5
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 23094
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4574
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 37388
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 16
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 16723
+SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
+SOMA 10/2026 HORAS 157.681613991111109 True
+SOMA 10/2026 COLABS_UNIAO 17 True
+SOMA 11/2026 57   <- tem de ser igual a soma das classes (57) True
+SOMA 11/2026 HORAS 307.56213782944447 True
+SOMA 11/2026 COLABS_UNIAO 20 True
+rc_sombra=0
+```
+
+- `SOMA`: as seis linhas apresentam `True` no dado fornecido. [nao verificado]
+- `ESTRUTURA_DIAS_LINHAS`: as duas linhas apresentam `True` — `10/2026 10 True` e `11/2026 9 True`. [nao verificado]
+- `INCOMPLETO`: não aparece no texto fornecido desta parte 1 de 6. [nao verificado]
 
 ## 15/11 23:52 · sessao 323261a980c3 · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
 
@@ -987,20 +1099,4 @@ Também são absolvidos: guarda numa função interna nunca chamada; guarda que 
 - `PerguntaDisputa.carimbar`: só atribui instante sob guarda de texto não vazio após trim; inclui `respondida_em` nos campos salvos. A absolvição é correta. (`app/chamados/models.py:3231`; `app/chamados/models.py:3233`; `app/chamados/models.py:3234`; `app/chamados/models.py:3253`)
 - `carimbar_resposta_pela_trilha`: retorna antes da escrita se já tem instante ou não tem texto após trim; depois atribui e salva somente o instante. A absolvição é correta. (`app/chamados/services/disputa_emissao.py:1692`; `app/chamados/services/disputa_emissao.py:1693`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/services/disputa_emissao.py:1698`)
 
-## 15/11 23:15 · sessao ff3804764101 · - · - · origem=Ronald (tmux)
-
-Achados 5, 6 e 7: **fechados pelo delta**.
-
-- **5:** o teste novo recria duas perguntas com texto pelo helper, que fornece texto e instante, e depois zera os instantes de ambas por `update`; conserva os asserts de uma materialização, zero novas resoluções, zero fechamentos e disputa aberta. (`app/chamados/tests/test_fio_disputa_resolvido.py:56`, `:62`, `:94`, `:100`, `:103`, `:105`, `:106`, `:108`). Igualdade com os asserts históricos de `e84a167f4`: **[não verificado]**, pois não há Git na cópia.
-- **6:** a tabela agora registra `pergunta_respondida`, a face SQL, a recusa simétrica e o escopo B1/B2/E-F; corresponde ao registro `_C21`. (`app/docs/JUIZES.md:99`, `:100`, `:101`, `:102`, `:103`; `app/core/juizes.py:306`).
-- **7:** o comentário agora diz instante do **PROCESSAMENTO**, conferindo com `agora = _tz.now()` passado pelo chamador. (`app/chamados/services/disputa_emissao.py:1671`; `app/api/foto_recebida.py:42`, `:48`).
-
-Descartes 2 e 3: **conferência documental específica [não verificado]**. Os arquivos `logs/JUIZ-RESPONDIDA/censo.md`, predesenho e aval citados não foram encontrados na cópia; portanto não é possível confirmar independentemente “I21 = linha 29/classe A”, “espera = linha 87/classe E”, a exceção “I21 sem trim”, ou a medição de brancos zero. **[não verificado]**
-
-O que a cópia confirma:
-
-- I21 usa a face SQL com trim, e o comentário reconhece expressamente a diferença em relação ao predicado anterior. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1572`, `:1573`, `:1575`).
-- `espera_o_texto_do_colaborador` continua calculando o complemento do juiz por instante ausente ou instante sem texto. (`app/chamados/services/fio.py:187`; `app/chamados/juizes.py:1534`, `:1552`).
-- A regra geral registrada para B1 é migrar classe A, postergar B/C/D e conservar E/F; isso corrobora a lógica dos descartes se as classificações nominais da triagem estiverem corretas, mas não prova essas classificações. (`app/docs/JUIZES.md:102`, `:103`; `app/chamados/juizes.py:1550`, `:1551`).
-
-_5858 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5859 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

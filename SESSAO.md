@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 00:04:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (122.7 MB). Acoes na janela: **1749**.
+**Medido em 16/11/2026 00:09:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (122.7 MB). Acoes na janela: **1747**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1757,5 +1757,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:20:05 | Read |  | `/home/ronald/saas-hasner/logs/PREPARA-ESPINHA-2/lista-unica-2/LISTA-UNICA-2.md` |
 | 12:09:54 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/PROMPTS.md'; s=open(p).read() a='- 15/11 12:0x TELA-DIZ-O-QUE-O-SERVIDOR-DISSE' assert s.count(a)==1 i=s.index(a); j=s.index('\n',i) s=s[:j+1]+'- 15/11 12:1x COMBOIO-PRE-OPUS (aval Ronald, logs/AVAIS-1515/comboio_pre_opus.txt): regra de pista, suite pre-opus em comboio de laterais (teto 3, 30 min); REVISAO-DO-AVAL Codex verificador pid 174 ...` |
 | 12:09:47 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/COMBOIO-PRE-OPUS; mkdir -p $D; cat > logs/AVAIS-1515/comboio_pre_opus.txt <<'EOF' aval Ronald: COMBOIO-PRE-OPUS (regra de pista, extensao da POUSO-EM-COMBOIO de PISTA.md; nenhuma lei de negocio, nenhuma lei nova). UNIDADE: suite inteira por arvore. Vale so para obra LATERAL; a espinha (serie E) fica fora. 1) REGRA. Lateral pronta para a suite pre-opus PERGUNTA ( ...` |
-| 12:04:34 | Bash |  | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/PROMPTS.md'; s=open(p).read() a='- 15/11 12:0x CORTES-LU2-07-08-10' assert s.count(a)==1 i=s.index(a); j=s.index('\n',i) s=s[:j+1]+'- 15/11 12:0x TELA-DIZ-O-QUE-O-SERVIDOR-DISSE (aval Ronald, logs/AVAIS-1515/tela_diz_o_que_o_servidor_disse.txt): tela le status do POST de batida (ja_registrada/ignorada_intervalo); complemento da UI-CAMERA;  ...` |
-| 12:04:27 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/TELA-DIZ-O-QUE-O-SERVIDOR-DISSE; mkdir -p $D; cat > logs/AVAIS-1515/tela_diz_o_que_o_servidor_disse.txt <<'EOF' aval Ronald: TELA-DIZ-O-QUE-O-SERVIDOR-DISSE (CONSTRUIR, tela, COMPLEMENTO da UI-CAMERA-ALTERNATIVA por arquivo comum). UNIDADE: resposta do POST de batida na tela do colab. Nenhuma lei nova: LEI-AKITA 2 (testemunha le, nao deduz). FONTE: laudo Fernand ...` |
