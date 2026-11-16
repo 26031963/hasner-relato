@@ -1,7 +1,148 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:26** · publicado em **16/11/2026 02:25** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:28** · publicado em **16/11/2026 02:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:28 · sessao b7d26c2d3ecb · LOTE7-C6 · verificador · origem=Code
+
+**O delta fecha os dois contraexemplos funcionais originais, mas ainda deixa uma transição gravada sem acordar em caso de falha intermediária e mantém escapes no selo.** (`app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1094`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`)
+
+1. **Fechamento dos achados 1–6 da volta 1**
+
+   | Achado | O delta fecha? |
+   |---|---|
+   | **1 — aprovação com período invalidava duas vezes** | **Fecha o caso original:** captura antes da transição, suprime o acordador interno e acorda no fim. Contudo, introduz a janela de exceção descrita no item 3 abaixo. (`app/ponto/services/ausencia.py:1059`, `app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1094`) |
+   | **2 — competência intermediária indevida** | **Fecha setembro→novembro:** cada lado fornece seu trecho, sem construir o envelope entre eles. Permanece a limitação para competências futuras de linha aberta, descrita abaixo. (`app/ponto/services/ausencia.py:171`, `app/ponto/services/ausencia.py:177`, `app/ponto/services/ausencia.py:180`) |
+   | **3 — escapes do selo** | **Parcial:** os exemplos literais antigos ganharam tratamento e mutantes, mas há variantes aceitas sem acordador executável. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:102`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:247`) |
+   | **4 — julgamento substituído por mock** | **Fecha essa substituição:** agora chama o juiz real com células existentes. A asserção ainda não prova o resultado do julgamento. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:408`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:413`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:418`) |
+   | **5 — provas menores que os nomes** | **Parcial:** verifica Justificativa pendente, saldo e correção de concluída; ainda não compara observações, trilhas anteriores e conjunto completo das ausências. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:392`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:499`) |
+   | **6 — relógio interno/solto** | **Parcial:** congela a classe de férias e evita ler o relógio para snapshots iguais; continua lendo `localdate()` internamente quando um lado alterado tem fim nulo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:433`, `app/ponto/services/ausencia.py:169`, `app/ponto/services/ausencia.py:175`) |
+
+2. **Cobertura de `_acordar_projecao`**
+
+   Entrada e saída estão cobertas porque percorre a união das PKs e considera cada lado existente; mudança de range considera ambos; mudança apenas de tipo/minutos/horas também entra porque compara a tupla inteira antes de extrair as datas. Trechos idênticos são deduplicados. (`app/ponto/services/ausencia.py:119`, `app/ponto/services/ausencia.py:139`, `app/ponto/services/ausencia.py:168`, `app/ponto/services/ausencia.py:178`)
+
+   Para ranges válidos fechados e dias únicos, não encontrei competência omitida nem competência intermediária acrescentada pelo novo algoritmo: `dias_da_ausencia` produz dias contíguos inclusivos, e cada intervalo enviado corresponde a um dos lados. (`app/ponto/turnos.py:2798`, `app/ponto/turnos.py:2803`, `app/ponto/turnos.py:2811`, `app/ponto/services/ausencia.py:180`)
+
+   **Existe omissão condicional para linha aberta:** empresa com corte 21; hoje 05/11/2026; afastamento aprovado desde 15/10, sem fim; fechamento de dezembro já carimbado; chamada `decidir(a, 'rejeitada')`. O leitor da folha inclui essa ausência em dezembro, mas o acordador expande o lado antigo somente até 05/11 e não invalida dezembro. O código permite pedir recalculação de outro mês e gravar seu carimbo; portanto “competência futura não tem projeção” não está garantido por essa porta. A existência desse cadastro/fechamento em produção é **[nao verificado]**. (`app/ponto/turnos.py:2543`, `app/ponto/turnos.py:2546`, `app/ponto/services/ausencia.py:177`, `app/ponto/views.py:1240`, `app/ponto/views.py:1255`, `app/ponto/services/fechamento.py:898`, `app/ponto/services/fechamento.py:1143`)
+
+   A deduplicação é por **trecho**, não por competência: mover 03/11→04/11 chama o invalidante duas vezes para a mesma competência. Sem recálculo intercalado, a segunda chamada atualiza zero porque exige `derivado_em` preenchido; portanto o retorno não duplica o fechamento, embora haja duas chamadas. (`app/ponto/services/ausencia.py:178`, `app/ponto/services/ausencia.py:180`, `app/ponto/services/fechamento.py:1653`)
+
+3. **`decidir` com `_acorda=False`**
+
+   **Há caminho sem acordar:** transição gravada no primeiro `save`; segundo `save` dos carimbos falha; acordador final não é alcançado. `decidir` não envolve a composição em transação própria nem recupera essa exceção. A aprovação em lote fornece `decisor`, obrigando a segunda escrita, e não abre `atomic` próprio. Em autocommit, uma falha nessa segunda escrita deixa a aprovação persistida e o fechamento carimbado; ocorrência produtiva é **[nao verificado]**. (`app/ponto/services/ausencia.py:972`, `app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1062`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1094`, `app/ponto/views.py:2292`, `app/ponto/views.py:2302`)
+
+   A aprovação individual mostrada protege essa composição com `atomic`, deixando a exceção sair do bloco antes do tratamento externo. (`app/ponto/views.py:2674`, `app/ponto/views.py:2676`, `app/ponto/views.py:2694`)
+
+   Período todo `None` apenas pula sua aplicação; continua até o acordador. O retorno de `mudar_estado` por estado já igual também devolve o controle a `decidir`, que prossegue. Período inválido e transição inválida são recusados antes da escrita da transição. (`app/ponto/services/ausencia.py:954`, `app/ponto/services/ausencia.py:956`, `app/ponto/services/ausencia.py:1051`, `app/ponto/services/ausencia.py:1053`, `app/ponto/services/ausencia.py:1094`)
+
+   Os chamadores produtivos encontrados são:
+
+   | Chamador | kwargs |
+   |---|---|
+   | `rejulgar_status_pelo_tipo` | `por`, `request`, `motivo`; default `_acorda=True`. (`app/ponto/services/ausencia.py:677`, `app/ponto/services/ausencia.py:940`) |
+   | `anexar_documento` | `por`, `motivo`, `request`; default `True`. (`app/ponto/services/ausencia.py:1018`, `app/ponto/services/ausencia.py:940`) |
+   | `decidir` | `por`, `motivo`, `request`, **`_acorda=False`**. (`app/ponto/services/ausencia.py:1060`) |
+   | `escalonar_aguardando_documento` | somente `motivo`; default `True`. (`app/ponto/services/ausencia.py:1151`, `app/ponto/services/ausencia.py:940`) |
+   | `_reabrir` | `por`, `request`, `motivo`; default `True`. (`app/ponto/services/ausencia.py:1291`, `app/ponto/services/ausencia.py:940`) |
+
+   As chamadas diretas restantes encontradas são testes, sem `_acorda`: usam `por`, e uma usa também `motivo`. (`app/ponto/tests/test_ausencia_tipo_rejulga.py:56`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:224`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:225`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:185`, `app/ponto/tests/test_varredura_classe_b_ausencia.py:115`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:177`)
+
+4. **Selo: escapes, falso positivo e mutantes**
+
+   Ainda passam estes escritores sintéticos acrescentados à porta:
+
+   - **`_so_dict`:** `a = {}` seguido de `match items: case [a]: a.save(update_fields=["status"])`. Com `items=[ausencia]`, grava Ausencia; capturas de `match` não entram em `_atribuicoes`, então a isenção continua vendo apenas `{}`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:77`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:102`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:171`)
+   - **`_de_outro_modelo`:** `def _m(TipoAusencia): t = TipoAusencia(); t.save()`. Chamar com `lambda: ausencia` grava Ausencia; a regra confia no nome lexical da fábrica e só verifica se **o receptor `t`** é parâmetro. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:107`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:120`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:179`)
+   - **Atribuição por ramos:** `if x: t=TipoAusencia.objects.get(...); else: t=a; t.save()`. O censo fixa a primeira origem reconhecida; a isenção `ent != Ausencia` descarta a escrita antes da nova checagem de todas as atribuições. (`app/core/censo_escritas.py:339`, `app/core/censo_escritas.py:347`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:166`)
+   - **Fluxo:** acordador em `if not True`, depois de `return`, ou dentro de função interna nunca chamada ainda satisfaz o selo. Métodos de classes aninhadas também ficam fora da enumeração. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:64`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:131`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:145`)
+
+   Não encontrei falso positivo no fonte atual: o replay AST reconheceu nove escritores e nenhum faltante. Há falso positivo latente em `while False: pass; else: _acordar_projecao(...)`: o analisador descarta inclusive o `else`, que executaria. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:141`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:193`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:205`)
+
+   Os mutantes fornecidos mordem pela razão estrutural esperada: exigem exatamente o escritor acrescentado ou aquele cujo acordador foi retirado; os controles verificam isenções. Não cobrem os escapes acima nem provam execução do acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:233`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:269`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:282`)
+
+5. **Renomeação de `gravar_tipo_ausencia`**
+
+   Não encontrei chamador em `app/` usando o antigo `tipo=`. A edição produtiva passa o objeto posicionalmente; criação usa `codigo`/`campos`; os testes encontrados seguem essas formas. A renomeação não quebra esses chamadores. (`app/ponto/views_tipos_ausencia.py:86`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/tests/test_porta_ausencia_ferias.py:149`, `app/ponto/tests/test_porta_ausencia_ferias.py:150`, `app/ponto/tests/test_porta_ausencia_ferias.py:151`, `app/ponto/services/ausencia.py:1732`)
+
+6. **Testes novos e regressões que ainda passariam** [nao verificado]
+
+   - **Mordida correta dos dois casos centrais:** aprovação com período conta chamadas da invalidação real via `wraps`; setembro→novembro exige outubro ainda carimbado. Os testes H12 de competências adjacentes, isoladamente, passariam com o envelope antigo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:91`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:338`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:353`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:275`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:292`)
+   - **Julgamento real, resultado insuficientemente exigido:** o espião chama a função real, mas aceita qualquer retorno não nulo. Retirar `julgar_colab` e conservar `return out` continuaria satisfazendo essa asserção; não há conferência do veredito/carimbo final das células. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:413`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:418`, `app/ponto/services/cartorio.py:2039`, `app/ponto/services/cartorio.py:2040`, `app/ponto/services/cartorio.py:2054`)
+   - **Relógio dos testes congelado; regressão da leitura antecipada não detectada:** `_Base`, férias de tela e H12 têm congelamento. Restaurar `localdate()` antes da comparação dos snapshots passaria pelas asserções atuais de idempotência, que observam chamadas/carimbo, não leitura do relógio. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:59`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:319`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:333`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:433`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:36`)
+   - **“Nada mudou” ainda admite alteração lateral:** preservar saldo, impedir `cancelado` e não deixar ausências rejeitadas basta para o helper passar mesmo com observações ou trilhas anteriores alteradas. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`)
+
+Execução Django, RED contra a base e incidência dos contraexemplos na produção: **[nao verificado]**.
+
+## 16/11 02:28 · sessao 5df2cbed0eec · - · - · origem=Ronald (tmux)
+
+P1 a P4 conferidos independentemente: **846173; 909946; 874751; 817688** ocorrências. [nao verificado]
+
+A soma dos seis totais informados pelo agente principal confere: **5179168**; a soma das linhas confere: **161**. A transcrição independente de P5/P6 ficou inconclusiva, portanto não fornece segunda confirmação desses dois totais. [nao verificado]
+
+## 16/11 02:26 · sessao d8400d8ce927 · - · - · origem=Ronald (tmux)
+
+O selo fecha os contraexemplos literais da volta 1, mas continua sendo prova de presença sintática, sem garantir que toda escrita execute o acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:61`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:182`)
+
+Reproduzi em memória os oito testes do selo, com `unittest.TestCase` no lugar de `SimpleTestCase` e `_monitorados` lendo a constante por AST: oito passaram; o fonte atual apresentou nove escritores, sem faltantes. Isso verifica a análise AST; execução Django permanece **[nao verificado]**. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:193`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:200`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:227`)
+
+Escapes novos confirmados:
+
+- **`_so_dict` ignora capturas de `match`.** O trecho abaixo é aceito sem escritor, embora `_m([ausencia])` grave `Ausencia`: `_atribuicoes` não registra `MatchAs`, e `_so_dict` enxerga somente o literal `{}`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:77`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:102`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:171`)
+
+  ```python
+  def _m(items):
+      a = {}
+      match items:
+          case [a]:
+              a.save(update_fields=["status"])
+  ```
+
+- **`_de_outro_modelo` confia no nome lexical da fábrica.** O trecho abaixo também passa; `_m(lambda: ausencia)` grava a ausência. A regra verifica se `t` é parâmetro, mas não se `TipoAusencia` é parâmetro ou foi redefinido. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:107`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:120`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:179`)
+
+  ```python
+  def _m(TipoAusencia):
+      t = TipoAusencia()
+      t.save()
+  ```
+
+- **A checagem de ramo morto ainda aceita `if not True`, acordador depois de `return` e acordador dentro de função interna nunca chamada.** Ela só interpreta constantes diretamente e percorre os demais descendentes indiscriminadamente. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:131`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:138`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:145`)
+
+- **Classes aninhadas continuam fora da lista de funções.** `_funcoes` inclui somente métodos diretamente pertencentes a classes do módulo. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:64`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:68`)
+
+- **A isenção anterior ao novo helper ainda permite atribuição mista por ramo.** Em `if x: t = TipoAusencia.objects.get(...); else: t = a; t.save()`, o censo fixa a primeira origem, e o selo descarta `ent != Ausencia` antes de consultar `_de_outro_modelo`. Replay aceitou o trecho. (`app/core/censo_escritas.py:339`, `app/core/censo_escritas.py:347`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:166`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:179`)
+
+Não encontrei falso positivo no código atual: o teste de isentos passou no replay e nenhum escritor ficou faltante. Existe falso positivo latente em `while False: pass; else: _acordar_projecao(...)`: o `else` executa, mas o analisador retorna `False` para o `while` inteiro. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:141`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:205`)
+
+Os mutantes existentes mordem pela escrita acrescentada ou pela remoção do acordador: exigem precisamente `['_m']`, `['_K.m']` ou `[nome]`, e os controles não mordem. Eles não cobrem os escapes acima nem demonstram execução do acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:233`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:269`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:276`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:282`)
+
+## 16/11 02:26 · sessao 8f0b10d0c8bd · - · - · origem=Ronald (tmux)
+
+A pergunta 3 tem um novo caminho sem acordar: `decidir` suprime o acordador da transição, grava os carimbos numa segunda escrita e só depois invalida; não possui `atomic`, `try/finally` nem recuperação entre essas operações. Se a segunda escrita falhar, a transição já ocorreu, mas o acordador final não é alcançado. (`app/ponto/services/ausencia.py:1041`, `app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1094`, `app/ponto/services/ausencia.py:972`)
+
+Há chamador produtivo exposto a essa composição: `aprovar_ausencia_lote` chama `decidir` via `_a4_decidir`, fornece `decisor` e não abre transação própria; esse argumento exige o segundo `save`. Incidência de falha real em produção: `[nao verificado]`. (`app/ponto/views.py:2278`, `app/ponto/views.py:2292`, `app/ponto/views.py:2302`, `app/ponto/views.py:85`, `app/ponto/services/ausencia.py:1062`, `app/ponto/services/ausencia.py:1075`)
+
+A aprovação individual de irmãos protege essa janela com `atomic`: a exceção atravessa o bloco e chega ao tratamento exterior. (`app/ponto/views.py:2673`, `app/ponto/views.py:2676`, `app/ponto/views.py:2694`)
+
+`hora_ini=hora_fim=None` não causa retorno antecipado: apenas pula validação/aplicação de período; o acordador final continua obrigatório. O retorno “estado já igual” de `mudar_estado` também retorna ao corpo de `decidir`, que prossegue até o acordador. Transição inválida e período inválido são recusados antes da gravação da transição. (`app/ponto/services/ausencia.py:1051`, `app/ponto/services/ausencia.py:1073`, `app/ponto/services/ausencia.py:1094`, `app/ponto/services/ausencia.py:954`, `app/ponto/services/ausencia.py:956`, `app/ponto/services/ausencia.py:1053`)
+
+O log normal de `mudar_estado` não fornece, por si, a exceção intermediária: `registrar_log` captura `Exception`. (`app/ponto/services/ausencia.py:979`, `app/core/auditoria.py:17`, `app/core/auditoria.py:25`)
+
+Chamadores produtivos de `mudar_estado`, por grep e AST de todos os `.py` em `app/`:
+
+| Chamador | kwargs |
+|---|---|
+| `rejulgar_status_pelo_tipo` | `por`, `request`, `motivo`; `_acorda` usa default `True`. (`app/ponto/services/ausencia.py:677`, `app/ponto/services/ausencia.py:940`) |
+| `anexar_documento` | `por`, `motivo`, `request`; default `True`. (`app/ponto/services/ausencia.py:1018`, `app/ponto/services/ausencia.py:940`) |
+| `decidir` | `por`, `motivo`, `request`, **`_acorda=False`**. (`app/ponto/services/ausencia.py:1060`) |
+| `escalonar_aguardando_documento` | somente `motivo`; default `True`. (`app/ponto/services/ausencia.py:1151`, `app/ponto/services/ausencia.py:940`) |
+| `_reabrir` | `por`, `request`, `motivo`; default `True`. (`app/ponto/services/ausencia.py:1291`, `app/ponto/services/ausencia.py:940`) |
+
+As chamadas diretas restantes encontradas são testes, todos sem `_acorda`: `por` em `test_ausencia_tipo_rejulga.py:56`, `test_h12h06b_rederivar_minutos.py:224`/`:225`, `test_lote7_fato_de_ausencia_acorda_projecao.py:185`, `test_varredura_classe_b_ausencia.py:115`; `por,motivo` em `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:177`. (`app/ponto/tests/test_ausencia_tipo_rejulga.py:56`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:224`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:225`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:185`, `app/ponto/tests/test_varredura_classe_b_ausencia.py:115`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:177`)
+
+Na pergunta 5, **não encontrei quebra por keyword no código de `app/`**: a edição produtiva passa o objeto posicionalmente; a criação passa apenas `codigo`/`campos`. Os testes seguem as mesmas formas; nenhum chamador encontrado usa o antigo `tipo=`. (`app/ponto/views_tipos_ausencia.py:86`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/tests/test_porta_ausencia_ferias.py:149`, `app/ponto/tests/test_porta_ausencia_ferias.py:150`, `app/ponto/tests/test_porta_ausencia_ferias.py:151`, `app/ponto/services/ausencia.py:1732`)
+
+Não executei Django nem banco; a verificação acima foi leitura e censo AST em memória, sem gravar arquivos. `[nao verificado]` [nao verificado]
 
 ## 16/11 02:26 · sessao 98fc73d71901 · - · - · origem=Ronald (tmux)
 
@@ -941,346 +1082,4 @@ SOMA 11/2026 COLABS_UNIAO 20 True
 rc_sombra=0
 ```
 
-## 16/11 01:27 · sessao ed760e71db82 · E4C-F1-NOVA-B1 · censo · origem=Code
-
-Numeração abaixo: primeira linha do conteúdo de cada anexo = 1, contando linhas em branco.
-
-**1. Ressuscitação / REABERTURA alterando fila — (b): viu; a triagem não respondeu.** (`codex_verificador_v1.r:109`; `opus_final.r:2`)
-
-Pergunta literal — `codex_verificador_v1.q:11-13`:
-
-> 1. Para cada campo que o diff le ou grava (`respondida_em`, `resposta_colab`, `validada_em`, `materializada_em`,
->    `via_resolucao`, atos DecisaoPergunta), liste QUEM ESCREVE e QUEM LE no codigo de producao (fora de tests/), e diga
->    se todos supoem o MESMO significado (instante x dia, texto vazio x so espacos, "respondida" = I e T).
-
-O checklist também pergunta literalmente “pouso antes do pre-requisito”. (`codex_verificador_v1.q:25`) [nao verificado]
-
-Resposta literal — `codex_verificador_v1.r:109`:
-
-> Pouso e sombra com zero mudanças: **[não verificado]**. A nova REABERTURA é lida pela tarefa como `RESPONDER`; equivalência booleana do juiz, sozinha, não prova zero efeito de fila. [nao verificado]
-
-**Triagem: ausente** para esse alerta; o opus registra literalmente “triagem_v1.txt nao responde”. (`triagem_v1.txt:1-67`; `opus_final.r:2`)
-
-A execução e o resultado da medição nas 283 ressuscitáveis constituem a parcela **(c), fora do alcance**; resultado: **[não verificado]**. O risco de código já estava apontado. (`opus_final.r:2`; `codex_verificador_v1.r:3,109`)
-
-**2. Cópias de `texto_sem_carimbo` — (a): não viu as cópias, com o tema presente na pergunta.** (`opus_final.r:3`; `codex_verificador_v1.q:23-24`; `codex_verificador_v1.r:103,106`)
-
-Pergunta literal — `codex_verificador_v1.q:23-24`:
-
-> 6. Classes que ja reprovaram obra nesta casa -- diga se ha cada uma no diff: 2o juiz que duplica juiz registrado;
->    2o escritor fora da porta; relogio lido fora da borda; derivacao paralela de fonte unica; selo/RED sem mordida
-
-Resposta literal — `codex_verificador_v1.r:103`:
-
-> O novo juiz está registrado; os dois predicados de ilegalidade têm pergunta distinta. Resta a derivação paralela apontada no achado 3.
-
-Esse “achado 3” da resposta trata de `espera_o_texto_do_colaborador`; as quatro cópias enumeradas pelo opus não foram apontadas como duplicação. (`codex_verificador_v1.r:13,106`; `opus_final.r:3`)
-
-**Triagem: ausente** para esse conjunto de cópias. O descarte sobre `espera_o_texto_do_colaborador` responde ao outro apontamento. (`triagem_v1.txt:1-67`, especialmente `:13-14`)
-
-**3. Concorrência, `update_fields` posicional e contrato p × q — (b): vistos; receberam limite, descarte ou fila na triagem.** (`codex_verificador_v3.r:15,48,64`; `triagem_v1.txt:46-57`)
-
-Para **concorrência e `update_fields`**, pergunta literal — `codex_verificador_v3.q:6-7`:
-
-> 2. `PerguntaDisputa._recusa_par_ilegal` (chamados/models.py) agora le o par no banco dentro do atomic do save, sem trava.
->    Existe sequencia (create; only/defer; refresh_from_db com e sem fields; save com e sem update_fields; instancia
-
-Resposta sobre concorrência — `codex_verificador_v3.r:15`:
-
-> 2. **PROCEDE existir contraexemplo concorrente; NÃO PROCEDE considerar a leitura dentro do `atomic` suficiente.**
-
-Triagem literal — `triagem_v1.txt:46`:
-
-> 2. CONCORRENCIA (A le (I,'bati'), B zera e confirma, A grava so o instante -> (I,'')): PROCEDENTE como fato, NAO CURADO
-
-A triagem declara o limite e encaminha a decisão ao opus. (`triagem_v1.txt:48-49`)
-
-Resposta sobre a forma posicional — `codex_verificador_v3.r:48`:
-
-> Se o Django aceitar `p.save(False, False, None, ['respondida_em'])`, banco `(None, '')` e memória `(I, 'bati')` passam pela guarda completa, mas gravam somente o instante. Aceitação posicional nessa instalação: **[não verificado]**.
-
-Triagem literal — `triagem_v1.txt:50-51`:
-
-> update_fields POSICIONAL (save(False,False,None,[...])): PRE-EXISTENTE (e84a167f4 ja lia kwargs), Django 5.2.14 o trata
->    como deprecado (some no 6.0). DESCARTADO para B1 com motivo; anexo ao opus.
-
-Para **contrato p × q**, pergunta literal — `codex_verificador_v3.q:15`:
-
-> 5. O contrato test_contract_par_resposta.py::_governada: absolve algo que devia acusar? acusa escritor legitimo?
-
-Resposta literal — `codex_verificador_v3.r:64`:
-
-> A guarda pode ler `p`, enquanto o update escreve outra pergunta `q`: com texto em `p` e par vazio em `q`, carimba `q` sem texto.
-
-Triagem literal — `triagem_v1.txt:54`:
-
-> 5. Contrato: (a) falsa absolvicao p x q (guarda le p, escreve q) PROCEDENTE no instrumento, ofensores de producao 0;
-
-O encaminhamento à fila está explícito em `triagem_v1.txt:56`:
-
-> volta (limite de voltas); anexo ao opus: fila CONTRATO-PAR-POLARIDADE ganha "vincular a linha lida a escrita" e
-
-## 16/11 01:26 · sessao 945f8a1d683f · MIUDOS-NA-FILA-DE-LOTES · leitura · origem=Code
-
-**Há 8 causas localizadas; outras 8 entradas não têm causa atual comprovada.** BO2910-ESTRUTURA/01 contém dois defeitos distintos, por isso aparece em duas linhas. Não há identidade causal comprovada entre IDs diferentes. (`app/colaboradores/views.py:325–353`; demais provas abaixo; identidade entre IDs: **[nao verificado]**.)
-
-A numeração dos anexos começa na primeira linha do conteúdo. Em **(b)**, “n nos sítios” limita-se aos arquivos identificados; cruzamento do restante de uma obra sem manifesto completo fica **[nao verificado]**. Os inventários usados estão reproduzidos depois da tabela. (`b1_arquivos.txt:1–62`; `r3_arquivos.txt:1–203`; anexo `brief.md`, bloco “arquivos da volta”:1–18.)
-
-| IDs | (0) Causa e sítio produtor | (a) Tamanho e motivo | (b) Cruza espinha/BUG-PAR? | (c) Dinheiro, exportada ou API? | (d) Mesma causa de outro item |
-|---|---|---|---|---|---|
-| **BO-ADMIN-2710/3** | Justificativa aprovada vira conjunto de datas inteiras; o parcial soma apenas Ausência, enquanto o motor abona dias sem trabalho. (`app/ponto/services/efeito_ausencia.py:40–50`; `app/ponto/services/fechamento.py:660–665`; `app/ponto/motor_calculo_v2.py:2606–2622`.) | **OBRA:** fonte e consumidores em arquivos diferentes; o escopo registrado exige motor/folha consumindo o parcial. (`app/docs/BACKLOG.md:1956`.) | **n nos sítios citados**; demais arquivos da obra **[nao verificado]**. (`b1_arquivos.txt:1–62`; `r3_arquivos.txt:1–203`; manifesto BUG-PAR:1–18.) | **s — dinheiro:** horas de falta/abono. (`app/ponto/motor_calculo_v2.py:2618–2622`.) | **[nao verificado]** |
-| **HJ-017-U1** | **Causa atual [nao verificado].** O produtor histórico já tem tratamento posicional; a reconciliação da ata também está na cópia, embora o BACKLOG ainda registre pendência. (`app/ponto/turnos.py:1067–1100`; `app/escala/utils.py:1945–2040`; `app/docs/BACKLOG.md:1253`.) | — | — | — | — |
-| **BO2910-ESTRUTURA/01 — empresa** | `vincular_posto` troca o posto conservando a empresa anterior; a outra porta escreve ambos. (`app/colaboradores/views.py:325–329,1388–1389`; `app/colaboradores/services/colaborador.py:73–76`.) | **MIUDO:** divergência nas atribuições de um arquivo; ambos os campos já existem e são escritos pela outra porta nesse arquivo. (`app/colaboradores/models.py:321–322`; `app/colaboradores/views.py:1388–1391`.) | **s — R3:** `app/colaboradores/views.py`. (`r3_arquivos.txt:166`.) | **s — dinheiro/TXT:** empresa seleciona os fechamentos da exportação. (`app/folha/export.py:719–722,783–788`.) | Identidade com o defeito de exceção abaixo: **[nao verificado]**. |
-| **BO2910-ESTRUTURA/01 — exceção** | A exceção da vinculação retorna HTML/toast sem registrar a falha nesse ramo. (`app/colaboradores/views.py:333–353`.) | **MIUDO:** tratamento local de erro em um arquivo de produção, sem alteração de modelo ou autoridade nesse ramo. (`app/colaboradores/views.py:333–353`.) | **s — R3:** `app/colaboradores/views.py`. (`r3_arquivos.txt:166`.) | **n no ramo produtor:** consultas, renderização, cabeçalho e retorno. (`app/colaboradores/views.py:333–353`.) | Identidade com o defeito de empresa acima: **[nao verificado]**. |
-| **BO2910-ESTRUTURA/02** | A retratação pela célula seleciona somente três módulos de turno e deixa texto livre fora da seleção. (`app/chamados/reconciliador.py:337–338,997–999`; vínculo com o caso: `app/docs/RELATO.md:3328`.) | **[nao verificado]:** a exclusão está localizada, mas falta demonstrar identidade/dia suficiente para a classe; sem dia, o leitor se abstém. (`app/chamados/reconciliador.py:1024–1026`.) | **n nos sítios citados**; envelope completo **[nao verificado]**. (`b1_arquivos.txt:1–62`; `r3_arquivos.txt:1–203`; manifesto BUG-PAR:1–18.) | **[nao verificado]** para o envelope completo; o ramo conhecido chama a retratação. (`app/chamados/reconciliador.py:1001–1010`.) | **[nao verificado]** |
-| **BO2910-ESTRUTURA/05** | A aprovação de parcial aceita omitir as duas horas: formulário opcional, view passa `None` e a porta só valida período quando alguma hora é fornecida. (`app/templates/ponto/partials/painel_ausencia.html:325–330`; `app/ponto/views.py:2661–2676`; `app/ponto/services/ausencia.py:973–978`.) | **[nao verificado]:** três sítios participam; isso não demonstra quantos arquivos bastam. A edição específica do período já exige ambas as horas. (`app/templates/ponto/partials/painel_ausencia.html:310–316`.) | **s — R3:** `app/ponto/views.py`. (`r3_arquivos.txt:195`.) | **s — dinheiro:** a decisão invalida fechamento do intervalo. (`app/ponto/services/ausencia.py:1002–1015`.) | Ligação causal com HJ-005-U2/U4 e BO-ADMIN-2710/1: **[nao verificado]**. |
-| **BO2910-ESTRUTURA/06** | A reativação restaura cadastro/acesso sem reabrir vínculo. (`app/colaboradores/services/desligamento.py:235–258`; registro do defeito: `app/docs/BACKLOG.md:1116`.) | **[nao verificado]:** o executor está localizado, mas o alcance da reabertura não está demonstrado; o próprio contrato atual manda o admin revincular. (`app/colaboradores/services/desligamento.py:236–238`.) | **n no executor citado**; envelope completo **[nao verificado]**. (`b1_arquivos.txt:1–62`; `r3_arquivos.txt:1–203`; manifesto BUG-PAR:1–18.) | **[nao verificado]** para a reabertura; o executor atual escreve situação, acesso e histórico. (`app/colaboradores/services/desligamento.py:242–257`.) | **[nao verificado]** |
-| **BO2910-ESTRUTURA/08** | A regeneração troca o DNA, conserva decisão humana e exclui humanos do rejulgamento automático. (`app/ponto/portas/celula.py:297–315,460–470,1060–1067`.) | **[nao verificado]:** os produtores estão num arquivo, mas conservar o veredito humano é regra explícita; não há alcance demonstrado que permita certificar MIUDO. (`app/ponto/portas/celula.py:973–980`.) | **n no arquivo citado**; envelope completo **[nao verificado]**. (`b1_arquivos.txt:1–62`; `r3_arquivos.txt:1–203`; manifesto BUG-PAR:1–18.) | **s — dinheiro:** o caminho recalcula fechamento por competência. (`app/ponto/portas/celula.py:483–496`.) | **[nao verificado]** |
-| **HJ-074** | **Produtor causal atual [nao verificado].** O campo ainda tem default `True`, mas o nascimento atual consulta o juiz de 16/09; o dado não mostra quem gravou a flag nominal. (`app/escala/models.py:896–917`; `app/colaboradores/services/vinculo.py:287–296`; nominal: `app/docs/BACKLOG.md:2632`.) | — | — | — | — |
-| **HJ-005-U1** | **Causa [nao verificado].** O registro pede censo e declara que COBERTURA-PARCIAL não foi demonstrada para 01/10. (`app/docs/BACKLOG.md:832`.) | — | — | — | — |
-| **HJ-012-U2** | **Causa [nao verificado].** Há conflito entre a ingestão e a classificação documental como cobrança legítima, ainda por reconciliar. (`app/docs/BACKLOG.md:1555`; `app/docs/RELATO.md:5527`.) | — | — | — | — |
-| **BO-ADMIN-2710/5** | `_marcos_faltantes` descarta a célula não missing sem ler `tipo_real`; o leitor já fornece ambos, e o registro liga isso à volta de intervalo que não nasce no nominal. (`app/chamados/services/declaracao_texto.py:130–139`; `app/escala/services/leitor_celula.py:122–133`; `app/docs/RELATO.md:3908`.) | **MIUDO no leitor localizado:** um arquivo de produção já recebe os dados; existe teste desse leitor. (`app/chamados/services/declaracao_texto.py:130–139`; `app/chamados/tests/test_hx_marcos_faltantes_celula.py:42–64`.) | **n:** produtor e teste não constam dos três manifestos. (`b1_arquivos.txt:1–62`; `r3_arquivos.txt:1–203`; manifesto BUG-PAR:1–18.) | **s — dinheiro:** o nominal inclui uma hora de intrajornada indenizada no DIFF. (`app/docs/BACKLOG.md:831`.) | **[nao verificado]** |
-| **HJ-005-U2** | **Produtor nosso [nao verificado].** A sonda mostra `sem_periodo`, resposta prevista quando falta alguma hora; não mostra a origem da omissão. (Anexo `quadro.md:14`; `app/ponto/turnos.py:2646–2647`.) | — | — | — | — |
-| **HJ-005-U4** | **Produtor nosso [nao verificado].** Mesmo limite: `sem_periodo` não identifica a porta que originou o cadastro incompleto. (Anexo `quadro.md:14`; `app/ponto/turnos.py:2646–2647`.) | — | — | — | — |
-| **BO-ADMIN-2710/1** | **Produtor atual [nao verificado].** A causa histórica era o leitor cru da cobertura; a cópia já distingue `sem_periodo`, e a sonda não demonstra defeito novo nesse leitor. (`app/docs/RELATO.md:3904`; `app/ponto/supra_juiz.py:395,453`; anexo `quadro.md:14`.) | — | — | — | — |
-| **BO-ADMIN-2710/8.1** | **Defeito atual [nao verificado].** A cópia fotografa o antes e distingue edição com antes/depois de criação; a falta de juiz leitor no dado não comprova persistência do defeito escritor. (`app/colaboradores/services/vinculo.py:187–188,368–383`; `app/colaboradores/views.py:247–249`; anexo `quadro.md:14`.) | — | — | — | — |
-
-A alegação adicional de /06, “desligamento grava fim sem conferir vigência”, não ficou comprovada nesta cópia: o desligamento chama a porta, que restringe o fechamento pela data inicial do vínculo. (`app/colaboradores/services/desligamento.py:147–149`; `app/colaboradores/services/vinculo.py:622,638–641,862–864`.)
-
-Para /5, a ligação documental com o produtor existe; comprovar que a divergência atual se esgota nesse mecanismo permanece **[nao verificado]**, pois o dado não contém a célula crua atual. (`app/docs/RELATO.md:3908`; anexo `quadro.md:14`.)
-
-Os arquivos em voo abaixo são os **nomes dos anexos**; conferência contra objetos Git nesta cópia: **[nao verificado]**. A notação `{a,b}` enumera exatamente os sufixos indicados.
-
-<details>
-<summary>F1 B1 — 62 arquivos (b1_arquivos.txt:1–62)</summary>
-
-```text
-app/chamados/juizes.py
-app/chamados/management/commands/auditar_invariantes_chamados.py
-app/chamados/models.py
-app/chamados/services/{disputa_emissao,fio,raiox}.py
-
-app/chamados/tests/
-  e3_c8b_apoio.py
-  e3_v8_apoio.py
-  e4b_c12_ast.py
-  test_a27_recusa_com_dono.py
-  test_contract_par_resposta.py
-  test_contract_via_sem_declaracao.py
-  test_creditos_perguntas_invariantes.py
-  test_defesa1_grade.py
-  test_e1_v{13,15b,15c,15f}.py
-  test_e1_v5_{chave_familia,portas_backfill}.py
-  test_e3_10_cura_no_escritor.py
-  test_e3_catraca_respondedores.py
-  test_e3_item1b.py
-  test_e3_porta_A_escritor_do_par.py
-  test_e3_tarefa_admin_sem_banco.py
-  test_e3_validar_inline.py
-  test_e4_expand.py
-  test_e4b_{c12_orm,c6_orm,classe_e_memoria}.py
-  test_f1nova_b1_juiz_respondida.py
-  test_fechar_disputa_materializada.py
-  test_fio_disputa_resolvido.py
-  test_h06_falta_pela_grade.py
-  test_hx_{crivo_relogio,tipo_pelo_marco,via_ausencia_dia}.py
-  test_materializar_carimba_respondida.py
-  test_o168_{custo_da_guarda_constante,pai_com_conversa_no_gate}.py
-  test_o261_vigia_fio.py
-  test_o261e_f2_fila.py
-  test_paridade_fio_modal.py
-  test_pep_reentrada.py
-  test_porta_{pergunta_identidade,reapontamento_pergunta,resposta_pergunta}.py
-  test_reconciliar_pergunta_orfa.py
-  test_s122.py
-  test_s139.py
-  test_selo_escape_nao_e_declaracao.py
-  test_selo_i4b_um_chamado_por_turno.py
-  test_selo_juizes_orfaos.py
-
-app/core/juizes.py
-app/core/tests/{test_censo_escritas,test_medida_turno_do_par}.py
-app/docs/ARQUITETURA.mmd
-app/docs/{CORTES,JUIZES,LEIS,MAPA-JUIZES,MAPA}.md
-```
-
-</details>
-
-<details>
-<summary>R3 c17 — 203 arquivos (r3_arquivos.txt:1–203)</summary>
-
-```text
-app/chamados/juizes.py
-app/chamados/management/commands/
-  diff_e3_sombra.py
-  lavrar_furo_sem_canal.py
-  reatar_beco_folga_ao_limbo.py
-  vigiar_fio_morto.py
-app/chamados/services/{furo_sem_canal,tarefa_do_dia,vigia_fio}.py
-
-app/chamados/tests/
-  e3_degrau_mutantes.py
-  e3_lu2_{auditoria,base,censo,entrega,green,mutantes,red,regressao,suite}.txt [nao verificado]
-  e3_lu2_suite.py
-  e3_lu3_apoio.py
-  e3_lu3_{auditoria,base_red,censo,entrega,green,identidade_red,mutantes,red,suite}.txt [nao verificado]
-  e3_mutantes.py
-  e3_portas_apoio.py
-  e3_portas_v6_mutantes.py
-  e3_r3_c11_{auditoria,c6_mutantes,c7_mutantes,entrega}.txt
-  e3_r3_c11_green{1,2,3,4,5,6,7}.txt
-  e3_r3_c11_mutantes.py
-  e3_r3_c11_mutantes.txt
-  e3_r3_c11_red{1,2,2b,3,4,4b,5,6,7}.txt
-  e3_r3_c11_regressao.txt
-  e3_r3_c12_{auditoria,c11_mutantes,c6_mutantes,classificacao,degrau_green,entrega,integrais,locais,matriz_green,modulos,mutantes,red_base,ruff,v6_mutantes}.txt
-  e3_r3_c12_{mutantes,verificar}.py
-  e3_r3_c{14,15,16,17,4}_mutantes.py
-  e3_r3_c5_{a_green,a_red,auditoria,b_green,b_red,c11_green,c11_red,c4_mutantes,c4_primeira,cor_proposta_memoria,entrega}.txt
-  e3_r3_c5_geometria.py
-  e3_r3_c5_leitores.py
-  e3_r3_c5_{leitores,leitores_primeira,memoria,memoria_primeira}.txt
-  e3_r3_c5_mutantes.py
-  e3_r3_c5_mutantes.txt
-  e3_r3_c5_r1_{censo_bruto,green,red,simbolos}.txt
-  e3_r3_c5_r2_{chamadores,green,red}.txt
-  e3_r3_c5_r5.txt
-  e3_r3_c5_r6_{calendario_red,green,red}.txt
-  e3_r3_c6_{c4_mutantes,c5_mutantes,entrega,green,green_f821,green_final,leitores,medida_turno,mutantes,red,red_f821,red_head}.txt
-  e3_r3_c6_mutantes.py
-  e3_r3_c7_{compile,entrega,green,green_carga,green_final,mutantes,red,ruff,sonda_f2}.txt
-  e3_r3_c7_mutantes.py
-  e3_v8_apoio.py
-  e3_volta7_{apoio,mutantes}.py
-  e3r3_c9_mutantes.py
-  test_e3_bloqueantes.py
-  test_e3_c8b_sem_banco.py
-  test_e3_degrau_dono_e_porta.py
-  test_e3_diff_sombra.py
-  test_e3_leitores_c17_chamadores.py
-  test_e3_portas_tarefa.py
-  test_e3_portas_v6_sem_banco.py
-  test_e3_r3_c{11,12,14,15,16,17,4,5}_sem_banco.py
-  test_e3_r3_c6_nome_indefinido.py
-  test_e3_r3_c{6,7}_sem_banco.py
-  test_e3_tarefa_admin_sem_banco.py
-  test_e3_volta7_sem_banco.py
-  test_e4_{backfill,passivo}.py
-  test_f3_beco1_reata_limbo.py
-  test_n1_{alimentacao_unica,perguntas_do_app}.py
-  test_o261_vigia_fio.py
-  test_o261e_f5_alcance.py
-  test_o261e_f5b_juiz_porta.py
-  test_o66_furo_sem_canal.py
-  test_sombra_c1_resolver_em_lote.py
-
-app/colaboradores/services/{calendario,drawer}.py
-app/colaboradores/views.py
-app/config/crons.py
-app/core/juizes.py
-app/core/tests/test_medida_turno_do_par.py
-app/core/tests/testes_sem_relogio.txt
-app/escala/services/cadastro_realidade.py
-app/escala/tests/test_esemvivab_desligado_nunca_bateu.py
-app/escala/tests/test_f3_beco1_folga_na_lista.py
-app/folha/fora_da_folha.py
-app/folha/management/commands/{lavrar_retrato_folha,vigiar_retido_calado}.py
-app/folha/migrations/0013_retrato_lavrado_em_help_text_e3r3.py
-app/folha/{models,retrato_folha}.py
-app/folha/tests/
-  test_haiku_fora_da_folha.py
-  test_l129_fora_da_folha_so_le_a_tarefa.py
-  test_lei_desligado_nao_trava.py
-  test_retrato_folha_{dono_sao_tres,drawer,quadros,smoke_chromium,tela2}.py
-  test_vigia_retido_calado.py
-app/folha/{views_retrato,vigia_retido_calado}.py
-app/ponto/management/commands/pautas_discordantes.py
-app/ponto/services/pautas_dos_discordantes.py
-app/ponto/tests/{test_cxr_tela_le_o_motor,test_o320_pauta_dos_discordantes}.py
-app/ponto/views.py
-app/relatorios/{cartao_pela_celula,furos}.py
-app/relatorios/tests/{test_e4_8_furos_le_a_lavra,test_selo_ancora_do_vinculo}.py
-app/relatorios/views.py
-app/templates/colaboradores/calendario_partial.html
-app/templates/core/_barra_gestao.html
-app/templates/folha/_retrato_o_que_fazer.html
-```
-
-</details>
-
-<details>
-<summary>BUG-PAR — manifesto adicional do brief (bloco “arquivos da volta”:1–18)</summary>
-
-```text
-app/chamados/data/bug_par_163_2026_11_13.json
-app/chamados/services/
-  universo_bug_par.py
-  materializacao.py
-  validacao.py
-  explicador.py
-  fio.py
-app/chamados/templatetags/chamados_tags.py
-app/chamados/management/commands/bug_par_103.py
-app/templates/chamados/partials/{_pergunta_card,modal_fio}.html
-app/chamados/tests/{test_universo_bug_par,test_bug_par_projetado,test_bug_par_103,test_s139}.py
-app/config/crons.py
-app/core/tests/test_medida_turno_do_par.py
-app/docs/{JUIZES,RELATO}.md
-```
-
-</details>
-
-**Contagem por (a), entre as 8 causas localizadas:** **3 MIUDO**, **1 OBRA**, **4 com tamanho [nao verificado]**. As outras **8 entradas** ficaram sem produtor causal atual comprovado e não entram como causas classificadas. (Produtores e limites: `app/colaboradores/views.py:325–353`; `app/chamados/services/declaracao_texto.py:130–139`; `app/docs/BACKLOG.md:1956`; demais linhas da tabela.)
-
-**MIUDO com (b)=n e (c)=n: 0 demonstrados.** Os dois de /01 cruzam R3; /5 envolve dinheiro. O total absoluto do universo permanece **[nao verificado]** enquanto houver causas e tamanhos não comprovados. (`r3_arquivos.txt:166`; `app/docs/BACKLOG.md:831`.)
-
-## 16/11 01:22 · sessao a95a624efdbf · - · - · origem=Ronald (tmux)
-
-Achado 1: **(b)** quanto ao risco estático, já apontado em `codex_verificador_v1.r:109`; triagem: **ausente** para REABERTURA alterar fila. Apenas a medida real nas 283 ressuscitáveis fica em **(c)**. Perguntas pertinentes: `codex_verificador_v1.q:11-13` (atos, escritores/leitores e significado), `:23-26` (classes de reprovação e pouso antes do pré-requisito), `:29` (escrita no estoque). [nao verificado]
-
-Achado 3: **(b)**, com tratamento explícito pela triagem:
-
-- Concorrência: `triagem_v1.txt:42`, `:46-49`: reconhecida como fato, mantida como limite, encaminhada ao Opus.
-- Posicional: `triagem_v1.txt:50-51`: descartado para B1.
-- Contrato p×q: `triagem_v1.txt:54-57`: reconhecido, não curado nessa volta e enfileirado.
-
-Trechos literais úteis:
-
-`codex_verificador_v3.q:6`:
-
-> 2. `PerguntaDisputa._recusa_par_ilegal` (chamados/models.py) agora le o par no banco dentro do atomic do save, sem trava.
-
-`codex_verificador_v3.q:15`:
-
-> 5. O contrato test_contract_par_resposta.py::_governada: absolve algo que devia acusar? acusa escritor legitimo?
-
-`triagem_v1.txt:46`:
-
-> 2. CONCORRENCIA (A le (I,'bati'), B zera e confirma, A grava so o instante -> (I,'')): PROCEDENTE como fato, NAO CURADO
-
-`triagem_v1.txt:51`:
-
->    como deprecado (some no 6.0). DESCARTADO para B1 com motivo; anexo ao opus.
-
-`triagem_v1.txt:54`:
-
-> 5. Contrato: (a) falsa absolvicao p x q (guarda le p, escreve q) PROCEDENTE no instrumento, ofensores de producao 0;
-
-Contagem manual de `codex_verificador_v3.r`, a confirmar pelo consolidador: concorrência `:15`, ressalva posicional `:48`, falsa absolvição p×q `:64`, exemplo `:66-71`.
-
-## 16/11 01:22 · sessao 623ed99f3d5a · - · - · origem=Ronald (tmux)
-
-| Causa/IDs | Sítio produtor confirmado | Tamanho: limite comprovado | Cruzamento | Dinheiro/exportada/API |
-|---|---|---|---|---|
-| BO2910-ESTRUTURA/01 — troca de posto conserva a empresa anterior. | `app/colaboradores/views.py:325-329`; a outra porta grava posto e empresa em `:1388-1389`; `salvar_inteiro` apenas chama `save()` em `app/colaboradores/services/colaborador.py:73-76`. | Defeito localizado em um arquivo de produção; envelope suficiente para certificar **MIUDO [nao verificado]**. | **s — R3**, `app/colaboradores/views.py` no anexo `r3_arquivos.txt`; linhas produtoras `:325-329`. | **s** — empresa participa da seleção dos fechamentos exportados em `app/folha/export.py:719-722` e `:783-788`; a consequência cross-CNPJ também está documentada em `app/colaboradores/views.py:1383-1389`. |
-| BO2910-ESTRUTURA/01 — a exceção da vinculação retorna HTML/toast com HTTP padrão, sem registro da falha nesse ramo. | `app/colaboradores/views.py:333-353`. | Causa local em um arquivo de produção; **MIUDO** como dimensão desse ramo, sem alteração de modelo indicada pelo próprio ramo (`app/colaboradores/views.py:333-353`); implementação/teste futuros **[nao verificado]**. | **s — R3**, mesmo arquivo no anexo `r3_arquivos.txt`; produtor `app/colaboradores/views.py:333-353`. | **n** no ramo produtor: consultas, renderização, cabeçalho/toast e retorno (`app/colaboradores/views.py:333-353`). |
-| BO2910-ESTRUTURA/02 — a retratação por célula seleciona apenas três módulos de turno, deixando texto livre fora dessa seleção. | `app/chamados/reconciliador.py:337-338` e `:997-999`; classe desconhecida conserva a premissa em `app/chamados/catalogo/premissa.py:123-125`. | **[nao verificado]**: o código mostra a exclusão, mas não demonstra identidade/dia suficiente para toda a classe; o leitor retorna sem decisão quando não encontra dia (`app/chamados/reconciliador.py:1024-1026`). Não há prova de que exigiria juiz novo. | **n** para os sítios comprovados, ausentes das três listas anexas; produtor `app/chamados/reconciliador.py:337-338`. | **[nao verificado]** para o envelope completo; o ramo conhecido retrata chamado pela porta em `app/chamados/reconciliador.py:1001-1010`. |
-| BO2910-ESTRUTURA/05 — a aprovação de parcial aceita omitir ambas as horas do período. | Inputs opcionais em `app/templates/ponto/partials/painel_ausencia.html:325-330`; view conserva `None` e aprova em `app/ponto/views.py:2661-2676`; porta só valida período quando ao menos uma hora vem preenchida em `app/ponto/services/ausencia.py:973-978`. | **[nao verificado]**: três sítios participam do comportamento, mas isso não prova quantos precisam mudar. A edição específica da aprovada já tem campos obrigatórios (`app/templates/ponto/partials/painel_ausencia.html:310-316`). | **s — R3** para `app/ponto/views.py`, listado no anexo `r3_arquivos.txt`; sítio `:2661-2676`. Template e serviço não constam das listas. | **s** — a decisão invalida o fechamento do intervalo em `app/ponto/services/ausencia.py:1002-1015`. |
-| BO2910-ESTRUTURA/06 — reativação restaura cadastro/acesso e não reabre vínculo. | Executor inteiro em `app/colaboradores/services/desligamento.py:235-258`; a própria descrição diz que a escala não é reativada automaticamente em `:236-238`. | **[nao verificado]**: a ausência está localizada, mas não há envelope suficiente demonstrando uma alteração em só um arquivo sem decisão adicional (`app/colaboradores/services/desligamento.py:235-258`). | **n** para o executor comprovado, ausente das listas anexas; produtor `app/colaboradores/services/desligamento.py:235-258`. | **[nao verificado]** para eventual reabertura; o executor atual grava situação/acesso/histórico (`app/colaboradores/services/desligamento.py:242-257`). |
-| BO2910-ESTRUTURA/08 — regeneração altera DNA enquanto decisão humana permanece e impede novo julgamento automático. | Regeneração escreve DNA sem apagar veredito em `app/ponto/portas/celula.py:297-315`; humanos são excluídos do rejulgamento em `:460-470`; a lavra do cartório conserva veredito admin em `:1060-1067`. | Sítios estão em **um arquivo de produção**; certificar **MIUDO [nao verificado]**, porque a conservação humana é regra explícita em `app/ponto/portas/celula.py:973-980`, e o envelope/lei da alteração não está demonstrado. | **n** para esse arquivo, ausente das listas anexas; produtores `app/ponto/portas/celula.py:297-315`, `:460-470`, `:1060-1067`. | **s** — o caminho de regeneração chama `recalcular_por_evento` por competência em `app/ponto/portas/celula.py:483-496`. |
-
-A outra alegação de BO2910-ESTRUTURA/06, “desligamento grava fim sem conferir vigência”, está **[nao verificado]** como defeito atual: o desligamento chama a porta de fechamento em `app/colaboradores/services/desligamento.py:147-149`; ela delega em `app/colaboradores/services/vinculo.py:862-864`, identifica recusados em `:622` e escreve somente vínculos cujo início não supera o fim em `:638-641`.
-
-Os dois defeitos de /01 não têm causa única demonstrada: atribuições incompletas em `app/colaboradores/views.py:325-329` e tratamento de exceção em `:333-353` são sítios distintos. Mesma causa entre os demais IDs: **[nao verificado]**. Em particular, `sem_periodo` dos nominais col42 não prova que nasceram pelo formulário opcional de /05; essa ligação é **[nao verificado]**, embora o formulário permita a omissão (`app/templates/ponto/partials/painel_ausencia.html:325-330`).
-
-_5893 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5897 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
