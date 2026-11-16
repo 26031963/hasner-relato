@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 09:00:45.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (137.4 MB). Acoes na janela: **934**.
+**Medido em 16/11/2026 09:06:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (138.2 MB). Acoes na janela: **940**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:01:39 | Bash | Record LOTE7 c7 estado | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p,encoding='utf-8').read() anc="ESTADO 08:59 VAGA-DA-ESPINHA-1611"; assert t.count(anc)==1 t=t.replace(anc,"ESTADO 09:03 LOTE7 c7 CONSTRUIDA (copia wt-lote7-c6-014230 @f6d9468a3): J1 FORA (regularizacao.py == f8ee770a5, kernel com 0 invalidacao), achado A RED pela assercao (red_base_c7c.log FAILED f=19 Ran 2 ...` |
+| 09:01:34 | Bash | Run full suite on LOTE7 c7 copy | `cd /home/ronald/saas-hasner; bash bin/suite.sh --dir /home/ronald/wt-lote7-c6-014230 --motivo "pre-opus LOTE7-C7" > logs/DUAS-PISTAS/lote7_c7/suite.log 2>&1; echo "rc=$? $(date +%H:%M)" >> logs/DUAS-PISTAS/lote7_c7/suite.log` |
+| 09:01:30 | Bash | Confer LOTE7 c7 copy and suite wait flag | `cd /home/ronald/wt-lote7-c6-014230; git log --oneline -1; git status --porcelain \| head; git diff f8ee770a5 HEAD --stat -- app/ponto/services/regularizacao.py \| tail -1; grep -c 'LEI-AKITA' <(git log 0d495fd12..HEAD --format=%B); cd /home/ronald/saas-hasner; grep -n 'espera' bin/suite.sh \| head -5` |
+| 09:01:06 | Bash | Record AVAL-DEVOLVIDO item 9 in RELATO and BACKLOG | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p,encoding='utf-8').read() anc="ESTADO 08:59 VAGA-DA-ESPINHA-1611"; assert t.count(anc)==1 lin=("AVAL-DEVOLVIDO: CORTES-F2-F9-1611 \| item 9 (RED-DOS-DEGRAUS-SEM-PROVA) \| REVISAO-DO-AVAL 09:00 (logs/CORTES-F2-F9-1611/rev.r), PROCEDE em 2 e 4, amostra 3/3 conferida: " "(2) o item nao diz o destino de RED que ...` |
+| 09:00:53 | Bash | Confer citations from revisao | `cd /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS; sed -n '57p;107p' F4/matriz.md \| cut -c1-200; sed -n '48,49p;94p' F6/matriz.md \| cut -c1-200; sed -n '100,102p' F2/matriz.md \| cut -c1-250` |
+| 09:00:49 | Bash | Read item 9 revisao result | `cd /home/ronald/saas-hasner; tail -1 logs/CORTES-F2-F9-1611/rev.log; cat logs/CORTES-F2-F9-1611/rev.r \| cut -c1-600` |
 | 08:59:39 | Bash | Repoint ESPERANDO to suite pid | `cd /home/ronald/saas-hasner; sed -i 's/^ESPERANDO: suite.sh \| pid=91577$/ESPERANDO: suite.sh \| pid=91578/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
 | 08:59:36 | Bash | Find right pid for suite producer | `cd /home/ronald/saas-hasner; pgrep -fa 'bin/suite.sh' \| cut -c1-100; pgrep -f codex_pergunta.sh` |
 | 08:59:32 | Bash | Update BACKLOG estado and repoint ESPERANDO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; t=open(p,encoding='utf-8').read() L=[l for l in t.split('\n') if l.startswith('\| E4C-F1-NOVA-JUIZ-RESPONDIDA \|')]; assert len(L)==1 c=L[0].split('\|'); print(len(c)); print(c[3][:300]) c[3]=' B1 c2 ABERTA 16/11 08:58 (3o construtor nominal, aval VAGA-DA-ESPINHA-1611): cura da REABERTURA na ressuscitacao, prova 283 por pk mai ...` |
