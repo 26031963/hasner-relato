@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 05:55:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1332**.
+**Medido em 16/11/2026 06:00:44.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1326**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1336,9 +1336,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:03:57 | Read |  | `/home/ronald/saas-hasner/logs/JUIZ-RESPONDIDA/censo.md` |
 | 18:03:55 | Read |  | `/home/ronald/saas-hasner/logs/JUIZ-RESPONDIDA/censo.md` |
 | 18:03:54 | Bash | Check census completion | `cd /home/ronald/saas-hasner; tail -2 logs/JUIZ-RESPONDIDA/censo.wrap.log; wc -l logs/JUIZ-RESPONDIDA/censo.md` |
-| 17:56:23 | Read |  | `/home/ronald/saas-hasner/logs/JUIZ-RESPONDIDA/quadro.out` |
-| 17:56:23 | Bash | Fix ESPERANDO producer to one word | `cd /home/ronald/saas-hasner; sed -i '3s/.*/ESPERANDO: codex_pergunta.sh \| pid=2693112/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 17:56:19 | Bash | Repoint ESPERANDO and check sonda result | `cd /home/ronald/saas-hasner; sed -i 's/^ESPERANDO: pre-push.sh \| pid=2637752$/ESPERANDO: codex_pergunta.sh censo JUIZ-RESPONDIDA \| pid=2693112/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; tail -3 logs/JUIZ-RESPONDIDA/quadro.wrap.log; ls -la logs/JUIZ-RESPONDIDA/` |
-| 17:56:16 | Bash | Find live census wrapper pids | `cd /home/ronald/saas-hasner; pgrep -f "codex_pergunta.sh.*JUIZ-RESPONDIDA\|codex_pergunta.sh .*censo.q" -a \| head; pgrep -af "bash logs/JUIZ-RESPONDIDA/rodar.sh"` |
-| 17:56:12 | Bash | Show local and remote heads | `cd /home/ronald/saas-hasner; git rev-parse --short HEAD; git rev-parse --short origin/main; git status --porcelain app/docs \| head` |
-| 17:56:09 | Bash | Read push verdict and confirm remote | `cd /home/ronald/saas-hasner; tail -4 logs/push_1730.log; git fetch -q origin; git rev-parse --short HEAD origin/main` |
