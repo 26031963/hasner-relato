@@ -1,6 +1,6 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 15/11/2026 23:48 @3580b35e0
+medido em 15/11/2026 23:53 @fdb3b13c6
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
@@ -30,7 +30,7 @@ resolve preenchido 12/457
 
 casos ESTRUTURA sem obra: 2 (logs/GRADE-MESTRA/resolve/quadro.md)
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 298 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 303 com a coluna
 
 | obra | fecha BO | portao | estado |
 |---|---|---|---|
