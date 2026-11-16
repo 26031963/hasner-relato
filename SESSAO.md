@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 06:17:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1279**.
+**Medido em 16/11/2026 06:22:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1262**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1272,20 +1272,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:24:30 | Bash | Check push progress and remote head | `cd /home/ronald/saas-hasner; tail -5 logs/push_1805.log; ps -p 2718894 -o pid,etime,cmd \| tail -1; git log --oneline -1 origin/main` |
 | 18:23:37 | Write |  | `/home/ronald/wt-codex-e3-resto-r3-093851/app/chamados/tests/test_e3_r3_c16_sem_banco.py` |
 | 18:23:00 | Bash | Find furos view name and rest of censo | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; awk 'NR<=1518 && /^def /{n=$0; l=NR} END{}; NR==1518{print l": "n}' relatorios/views.py; sed -n 1500,1512p relatorios/views.py \| grep -n "def \\|@"; grep -n "def censo" folha/vigia_retido_calado.py; sed -n 60,100p folha/vigia_retido_calado.py` |
-| 18:22:39 | Bash | Read c15 mutants instrument | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 1,95p chamados/tests/e3_r3_c15_mutantes.py \| cut -c1-220` |
-| 18:22:30 | Bash | Read c15 test helpers and G1 tests | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 1,118p chamados/tests/test_e3_r3_c15_sem_banco.py` |
-| 18:22:27 | Bash | Find how c15 ran tests | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3; head -5 c15/red.txt; grep -rn "docker run\\|pista pede\\|suite.sh" c15/ c14/entrega.md c14/brief.md 2>/dev/null \| head -8` |
-| 18:22:15 | Bash | Read c15 G2 seal tests | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 120,244p chamados/tests/test_e3_r3_c15_sem_banco.py` |
-| 18:22:12 | Bash | Read exact lines to patch | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 15,22p colaboradores/services/drawer.py; sed -n 38,46p colaboradores/services/drawer.py; sed -n 108,118p colaboradores/services/drawer.py; sed -n 154,158p colaboradores/services/drawer.py; echo ----; sed -n 1514,1520p relatorios/views.py; sed -n 1538,1542p relatorios/views.py` |
-| 18:22:08 | Bash | Locate clock reads in drawer and furos | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; grep -n "agora\\|localdate\\|timezone.now\\|hoje" colaboradores/services/drawer.py \| head -30; echo ---; sed -n 1510,1545p relatorios/views.py \| grep -n "hoje\\|agora\\|dataset_furos\\|localdate"; grep -n "agora\\|localdate\\|now()" relatorios/furos.py \| head` |
-| 18:22:03 | Bash | Show obra diffs on drawer and furos | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; git diff 77dfa94fa e4dd18c48 -- colaboradores/services/drawer.py relatorios/furos.py; sed -n 180,196p colaboradores/services/calendario.py` |
-| 18:22:00 | Bash | Check whether drawer/furos changed in this obra | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; git diff --stat 77dfa94fa e4dd18c48 -- colaboradores/services/drawer.py relatorios/furos.py relatorios/views.py colaboradores/services/calendario.py; git diff 77dfa94fa e4dd18c48 -- colaboradores/services/calendario.py \| head -60` |
-| 18:21:52 | Bash | Read roteado tests | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 76,135p folha/tests/test_vigia_retido_calado.py` |
-| 18:21:48 | Bash | Check test fixtures for vigia censo | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 1,29p folha/tests/test_vigia_retido_calado.py; grep -n "lavrado_em\\|_censo\\|hoje=" folha/tests/test_vigia_retido_calado.py \| sed -n 1,60p; git grep -ln "vigia_retido_calado" -- '*/tests/*'` |
-| 18:21:43 | Bash | Read existing comps derivation sites | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 1320,1345p folha/retrato_folha.py; sed -n 1376,1412p folha/retrato_folha.py; sed -n 55,75p ponto/janelas.py` |
-| 18:21:40 | Bash | Find vigia corte and existing comps helpers | `cd /home/ronald/saas-hasner/app; git grep -n -i "retido.calado" -- docs/CORTES.json docs/PISTA.md docs/ESTRUTURAL.md docs/JUIZES.md \| cut -c1-300 \| head; git grep -n "def janela_anterior\\|def janela_atual\\|def competencias_\\|janela_anterior(.*janela_atual\\|for _j in (janela_anterior" -- '*.py' ':!*/tests/*' \| head; sed -n 1388,1402p folha/retrato_folha.py` |
-| 18:21:36 | Bash | Grep law/corte text for retido calado vigia universe | `cd /home/ronald/saas-hasner/app/docs; grep -n "retido_calado\\|RETIDO-CALADO\\|retido calado" CORTES.md LEIS.md \| cut -c1-400 \| head -20; cat ../../logs/E3-RESTO-R3/vfinal/leis_sitios_v4.txt \| grep -i -A3 "vigia_retido" \| cut -c1-300` |
-| 18:19:28 | Bash | Read lavrador competencia selection | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 40,90p folha/management/commands/lavrar_retrato_folha.py; git grep -n "vigia_retido_calado\\|censo(" -- 'folha/management/commands/vigiar_retido_calado.py' \| head` |
-| 18:19:20 | Bash | Read vigia censo and neighbor test | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 1,60p folha/vigia_retido_calado.py; echo ----; sed -n 30,70p folha/tests/test_vigia_retido_calado.py` |
-| 18:19:09 | Read |  | `/home/ronald/saas-hasner/logs/E3-RESTO-R3/vfinal/v4.r` |
-| 18:19:07 | Bash | Read v4 rc and verdict | `cd /home/ronald/saas-hasner; cat logs/E3-RESTO-R3/vfinal/v4.rc; tail -3 logs/E3-RESTO-R3/vfinal/v4.log; ps -p 2718894 -o pid=; grep -n "VEREDITO" logs/E3-RESTO-R3/vfinal/v4.r` |
