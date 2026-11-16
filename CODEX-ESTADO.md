@@ -1,7 +1,146 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 14:45** · publicado em **16/11/2026 14:46** (UTC-3)
+> Ultima resposta processada: **16/11/2026 15:16** · publicado em **16/11/2026 15:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 15:16 · sessao ed7650d71c30 · UI-EDITOR-CALENDARIO-TRES-GRADES · verificador · origem=Code
+
+Análise por leitura da cópia e do diff. Execução da suíte, navegador e mutantes: **[não verificado]**. Os números de produção citados nos comentários não têm demonstração no dado fornecido. (`app/escala/tests/test_editor_calendario_tres_grades.py:6`)
+
+1. **PROCEDE — leitores e escritores identificados.**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| `dias_<tam>` | `syncHidden()` serializa `sel` em inputs. (`app/templates/escala/folga_calendario_editar.html:113`) | A view lê, filtra `1..tam` e entrega à porta; a porta persiste. (`app/escala/views.py:342`, `app/escala/views.py:347`, `app/escala/views.py:356`, `app/escala/folgas.py:594`) |
+| `data-fc-vazia` | HTML inicial usa `t.marcados`; JS atualiza pela seleção atual. (`app/templates/escala/folga_calendario_editar.html:44`, `app/templates/escala/folga_calendario_editar.html:100`) | `_vazia()` nos testes. O guarda consulta diretamente `sel.size`. (`app/escala/tests/test_editor_calendario_tres_grades.py:44`, `app/templates/escala/folga_calendario_editar.html:140`) |
+| `fc-marca-vazia` | Template cria o texto e a classe; `renderGrade()` atualiza a visibilidade. (`app/templates/escala/folga_calendario_editar.html:50`, `app/templates/escala/folga_calendario_editar.html:99`) | Usuário recebe o texto; teste procura o span fora dos scripts. (`app/templates/escala/folga_calendario_editar.html:51`, `app/escala/tests/test_editor_calendario_tres_grades.py:51`) |
+| `sel[tam]` | Inicialização pelo seed, `fcTog()` e `fcRepetir()`. (`app/templates/escala/folga_calendario_editar.html:82`, `app/templates/escala/folga_calendario_editar.html:122`, `app/templates/escala/folga_calendario_editar.html:127`) | Grade, contagem, marca, chips, inputs, repetir e confirmação. (`app/templates/escala/folga_calendario_editar.html:89`, `:97`, `:116`, `:127`, `:140`) |
+| `modo` | Radios; contexto vindo do calendário; persistência pela porta. (`app/templates/escala/folga_calendario_editar.html:20`, `app/escala/views.py:370`, `app/escala/folgas.py:585`, `app/escala/folgas.py:590`) | View, porta, guarda e alternância visual. (`app/escala/views.py:325`, `app/escala/folgas.py:584`, `app/templates/escala/folga_calendario_editar.html:139`, `:175`) |
+| `t.marcados` | View projeta `cal.tamanhos.all()`/`t.dias`; ausência vira conjunto vazio. (`app/escala/views.py:362`, `app/escala/views.py:366`) | Estado inicial, contagem, marca e seed do JS. (`app/templates/escala/folga_calendario_editar.html:44`, `:49`, `:50`, `:77`) |
+
+A origem persistida também pode nascer pelo minicadastro já existente; ele permanece em `folgas.py`. Isso não foi criado pelo diff. (`app/escala/folgas.py:645`, `app/escala/folgas.py:659`)
+
+2. **NÃO PROCEDE — segundo escritor, juiz novo ou diálogo nativo.**
+
+A view continua chamando `salvar_calendario_de_folga`; a gravação permanece nessa porta. As duas entidades têm `escala/folgas.py` como arquivo autorizado de escrita. (`app/escala/views.py:354`, `app/escala/folgas.py:594`, `app/core/portas.py:472`)
+
+A seleção editável produz tanto a apresentação quanto os campos enviados e a pergunta sobre vazio; não surgiu outra derivação das datas efetivas de folga. Essa derivação continua em `datas_que_o_calendario_manda()`. (`app/templates/escala/folga_calendario_editar.html:97`, `:116`, `:140`; `app/escala/folgas.py:43`)
+
+O diálogo utilizado é `hxConfirmar`, sem `confirm/alert/prompt/hx-confirm`. O próprio selo distingue essas chamadas. (`app/templates/escala/folga_calendario_editar.html:146`, `app/core/tests/test_contract_l8_dialogo.py:41`)
+
+3. **PROCEDE COM RESSALVA — existe confirmação que pode ficar latente.**
+
+No fluxo normal, clique, Enter e `requestSubmit()` encontram o guarda do formulário. Em `dias_mes`, grade vazia executa `preventDefault()` antes de chamar o modal; Cancelar não reenvia. (`app/templates/escala/folga_calendario_editar.html:137`, `:139`, `:143`, `:146`, `:147`)
+
+Modal indisponível não libera esse envio: o cancelamento já aconteceu; quando o componente consegue responder à falta de elementos, devolve falso sem `naoBloquear`. (`app/templates/escala/folga_calendario_editar.html:143`, `:146`; `app/templates/core/_dialogo.html:184`)
+
+**Contraexemplo por inspeção:** abrir a pergunta com nome válido, apagar o nome enquanto ela está pendente e confirmar. O `requestSubmit()` pode ser impedido pelo `required`, deixando `confirmado=true`; preencher novamente e salvar consome essa autorização antiga sem perguntar novamente. O booleano só é limpo no próximo evento `submit`. Reprodução em navegador: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:148`, `:149`; `app/templates/core/_dialogo.html:160`, `:195`)
+
+Em `semana_dia`, uma nova submissão não abre o modal. Entretanto, uma pergunta aberta anteriormente em `dias_mes` não é fechada por `fcModo()` e pode permanecer após uma troca de modo pelo teclado. Reprodução: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`; `app/templates/core/_dialogo.html:193`)
+
+Há outra inconsistência na sequência **trocar para semana → editar nome**: `fcModo()` limpa `dias_*`, mas o input do nome chama `renderTudo()` e os repõe. A view ignora esses campos em `semana_dia`; isso não demonstra gravação indevida. (`app/templates/escala/folga_calendario_editar.html:112`, `:130`, `:178`; `app/escala/views.py:327`)
+
+4. **NÃO PROCEDE — repetir fora do tamanho pelo fluxo normal.**
+
+Os dias clicáveis nascem em `1..t.n`; repetir conserva somente `d <= t.n`, exatamente o corte do criador. (`app/templates/escala/folga_calendario_editar.html:90`, `:127`; `app/escala/folgas.py:661`)
+
+O corte não valida o limite inferior, e a leitura do legado não saneia os dias. Portanto, garantia absoluta para calendários previamente malformados não está demonstrada; existência desses registros: **[não verificado]**. (`app/escala/views.py:362`, `app/templates/escala/folga_calendario_editar.html:127`)
+
+5. **PROCEDE — os quatro mutantes indicados têm mordida identificável, mas há lacunas.**
+
+As falhas abaixo são previstas pela leitura; não são resultados de execução. **[não verificado]**
+
+| Mutante | Asserção que deve falhar |
+|---|---|
+| Tirar a marca | Contagem de marcas vazias; se todas ficarem visíveis, contraponto do calendário completo. (`app/escala/tests/test_editor_calendario_tres_grades.py:99`, `:109`) |
+| Tirar o guarda de submit | Exigência de modal e de `SEM-POST` ao cancelar. (`app/escala/tests/test_smoke_clique_folga_calendario.py:174`, `:183`, `:186`) |
+| Repetir sem corte | Comparação dos campos capturados **antes** da filtragem da view. (`app/escala/tests/test_smoke_clique_folga_calendario.py:195`, `:196`) |
+| Sonda em captura | Cancelar encontrará POST capturado em vez de `SEM-POST`. A sonda atual respeita `defaultPrevented` em bolha. (`app/escala/tests/test_smoke_clique_folga_calendario.py:51`, `:57`, `:186`) |
+
+**Lacuna relevante:** esconder as seções 30/28 pode manter os testes verdes. O teste das três grades verifica seções/IDs; a marca “visível” considera apenas `hidden` no próprio span; o smoke usa `.click()` programático sem medir visibilidade. Assim, a promessa “três grades ao mesmo tempo” não está protegida contra ocultação. (`app/escala/tests/test_editor_calendario_tres_grades.py:82`, `:48`; `app/escala/tests/test_smoke_clique_folga_calendario.py:50`)
+
+Há vacuidade **local** na contagem de registros antes/depois de Cancelar: esse teste nunca chama `_reenvia()`, que realiza o POST Django. A asserção `SEM-POST` continua útil. (`app/escala/tests/test_smoke_clique_folga_calendario.py:162`, `:179`, `:186`, `:187`)
+
+A regex de `hxConfirmar` não prova execução; o `wraps` prova uma chamada real no cadastro, mas não exclui um segundo update redundante nem cobre esse spy na edição. (`app/escala/tests/test_editor_calendario_tres_grades.py:118`, `app/escala/tests/test_folga_cadastro.py:19`, `:43`, `:45`)
+
+6. **PROCEDE — infração à L7.**
+
+A ajuda adicional “Cada tamanho de mês...” está hardcoded em um `<div>`, fora de tooltip/componente e de mapa compartilhado. Isso confronta diretamente a L7. A marca visível exigida pelo aval é questão distinta. (`app/templates/escala/folga_calendario_editar.html:40`, `app/docs/LEIS-UI.md:77`)
+
+**NÃO PROCEDE — infração identificada aos selos estruturais examinados.** Não há diálogo nativo ou `title` cru novo; não identifiquei atributo inválido, fonte Python ou comentário vazando. Resultado executado dos selos: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:50`, `:146`; `app/core/tests/test_contract_l8_dialogo.py:42`, `app/core/tests/test_contract_template_bem_formado.py:162`, `:169`, `:174`)
+
+7. **NÃO PROCEDE — relógio novo fora da borda ou dois significados para vazio.**
+
+`t.marcados` é a seleção carregada; `sel[tam]`, sua versão editável. Marca e atributo significam “seleção vazia” e acompanham o mesmo conjunto. Não significam “a pessoa não terá nenhuma outra origem de folga”. (`app/escala/views.py:362`, `app/templates/escala/folga_calendario_editar.html:51`, `:82`, `:97`, `:100`, `:145`)
+
+O relógio civil permanece na porta e é repassado aos consumidores. A classe “selo sem mordida” procede parcialmente pelas lacunas descritas no item 5. (`app/escala/folgas.py:599`, `app/escala/folgas.py:601`; `app/escala/tests/test_editor_calendario_tres_grades.py:82`)
+
+**VEREDITO: DEVOLVE 3, 5, 6.**
+
+## 16/11 15:15 · sessao 5db8ccbd2ba6 · - · - · origem=Ronald (tmux)
+
+Auditoria por leitura; testes não executados. [não verificado] [nao verificado]
+
+**5 — PROCEDE: os quatro mutantes indicados têm mordida identificável.**
+
+| Mutante | Teste que fica vermelho | [nao verificado]
+|---|---|
+| Retirar a marca | `app/escala/tests/test_editor_calendario_tres_grades.py:99`; remover apenas condição e deixar todas visíveis falha em `:109`. |
+| Retirar guarda do submit | Smoke exige modal em `app/escala/tests/test_smoke_clique_folga_calendario.py:174` e `:183`; Cancelar exige `SEM-POST` em `:186`. A regex isolada `test_editor_calendario_tres_grades.py:121` sobreviveria se a chamada continuasse em código morto. |
+| Repetir sem corte | FormData anterior à view precisa conter dias exatos em `app/escala/tests/test_smoke_clique_folga_calendario.py:195` e `:196`; a persistência isolada esconderia esse defeito, conforme `:193`. |
+| Sonda em captura | Registraria o evento antes do guarda; Cancelar encontraria JSON em vez de `SEM-POST`, falhando em `app/escala/tests/test_smoke_clique_folga_calendario.py:186`. Ordem atual: listener de documento em bolha e respeito a `defaultPrevented` em `:51–57`; guarda no form em `app/templates/escala/folga_calendario_editar.html:137`. |
+
+**PROCEDE: existem limites e afirmações excessivas nos selos.**
+
+- A contagem antes/depois em Cancelar é vacuamente verdadeira quanto à persistência: esse teste não chama `_reenvia`, único ponto que POSTa ao Django; `app/escala/tests/test_smoke_clique_folga_calendario.py:162`, `:179`, `:187`. O `SEM-POST` continua sendo uma asserção útil, `:186`.
+- “Três grades ao mesmo tempo” não está protegido contra ocultação: teste verifica seções/IDs, `app/escala/tests/test_editor_calendario_tres_grades.py:82`; `_marcas_visiveis` considera apenas `hidden` do próprio span, `:48`. Esconder seções 30/28 com CSS pode sobreviver, pois smoke usa `.click()` programático sem medir visibilidade, `app/escala/tests/test_smoke_clique_folga_calendario.py:50`.
+- `wraps` e `call_count` provam chamada real e resultado do cadastro, não ausência universal de outros escritores: um segundo update com valores iguais sobreviveria; `app/escala/tests/test_folga_cadastro.py:43`, `:45`, `:49`. Edição não passa por esse spy, `:19`.
+
+**6 — PROCEDE: L7 merece devolução.**
+
+A ajuda adicional é prosa fixa em `<div>`, fora de tooltip/componente/mapa: `app/templates/escala/folga_calendario_editar.html:40`; L7 proíbe ajuda hardcoded por tela em `app/docs/LEIS-UI.md:77`. O texto de confirmação usa o componente autorizado, mas continua fixo no template sem mapa compartilhado: `app/templates/escala/folga_calendario_editar.html:144`. Não conte o texto visível da marca como infração por ser visível: foi exigido expressamente pelo usuário; sua implementação está em `:50`.
+
+**NÃO PROCEDE: diálogo nativo/title cru novos.** A chamada é `hxConfirmar`, `app/templates/escala/folga_calendario_editar.html:146`; o varredor distingue essa chamada de `confirm/alert/prompt/hx-confirm`, `app/core/tests/test_contract_l8_dialogo.py:41`. A marca tem texto e não usa `title`, `app/templates/escala/folga_calendario_editar.html:50`.
+
+**NÃO PROCEDE: violação estrutural identificada nos varredores examinados.** Novos elementos não trazem atributos inválidos, fonte Python ou comentário vazando; critérios em `app/core/tests/test_contract_template_bem_formado.py:162`, `:169`, `:174`. A regex real de interpolação crua não encontrou correspondência neste template, critério `:123` e teste `:180`; verificação feita em memória, sem arquivo. A confirmação resolve `hxConfirmar` no handler, `app/templates/escala/folga_calendario_editar.html:146`, sem captura no load proibida por `app/core/tests/test_hx_nao_se_captura_no_load.py:21`.
+
+**7 — NÃO PROCEDE: relógio fora da borda introduzido.** `setTimeout(200)` serve à sonda, `app/escala/tests/test_smoke_clique_folga_calendario.py:67`; não lê data/hora civil, alvo do selo em `app/core/tests/test_selo_teste_sem_relogio.py:32`.
+
+## 16/11 15:15 · sessao 3c88f6c0f911 · - · - · origem=Ronald (tmux)
+
+**Q3 — NÃO PROCEDE no fluxo normal; há duas ressalvas de estado.**
+
+- Clique, Enter e `requestSubmit()` encontram o guarda instalado no formulário; grade vazia em `dias_mes` cancela o envio antes de chamar `hxConfirmar`. (`app/templates/escala/folga_calendario_editar.html:137`, `:139`, `:140`, `:143`, `:146`)
+- Cancelar não reenvia; o único `form.submit()` local fica depois da resposta positiva. (`app/templates/escala/folga_calendario_editar.html:147`, `:149`)
+- Modal ausente não libera envio: `preventDefault()` já aconteceu; o componente retorna falso quando faltam seus elementos e `naoBloquear` não foi passado. Se a função inteira estiver indisponível, a exceção também acontece depois do cancelamento. (`app/templates/escala/folga_calendario_editar.html:143`, `:146`; `app/templates/core/_dialogo.html:184`)
+- Submeter em `semana_dia` não abre confirmação. Voltar para `dias_mes` reconstitui os campos da seleção. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`, `:178`, `:179`)
+
+**Ressalva 1 — PROCEDE: confirmação pode ficar latente.** `confirmado=true` só é consumido pelo próximo evento `submit`. Se o `requestSubmit()` não produzir esse evento por validação inválida, a autorização fica para uma tentativa posterior. Contraexemplo por inspeção: abrir o modal com nome válido, alcançar o nome pelo teclado e apagá-lo enquanto a promessa está pendente, confirmar, preencher novamente e salvar; não haverá nova pergunta. O componente não prende o foco nem torna o formulário inerte. Esse caminho já passou por uma confirmação anterior; não equivale a “nunca chamou `hxConfirmar`”. Execução em navegador: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:148`, `:149`; `app/templates/core/_dialogo.html:119`, `:160`, `:195`)
+
+**Ressalva 2 — PROCEDE: trocar modo e depois editar nome repõe `dias_*`.** `fcModo()` limpa os campos em `semana_dia`, mas editar o nome chama `renderTudo()` → `syncHidden()` sem conferir o modo. A view ignora esses dias ao processar `semana_dia`, portanto isso não prova gravação indevida. (`app/templates/escala/folga_calendario_editar.html:112`, `:117`, `:130`, `:178`; `app/escala/views.py:327`, `:339`)
+
+**Modal visível depois da troca para `semana_dia`:** pode permanecer um modal aberto anteriormente em `dias_mes`, pois `fcModo()` não o fecha; nova submissão em `semana_dia` não o abre. Reprodução por teclado: **[não verificado]**. (`app/templates/escala/folga_calendario_editar.html:139`, `:174`; `app/templates/core/_dialogo.html:193`)
+
+## 16/11 15:14 · sessao c243c82dc789 · - · - · origem=Ronald (tmux)
+
+1. **NÃO PROCEDE — duplicidade de autoridade nos campos.**
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `dias_<tam>` | `syncHidden`, a partir de `sel[tam]`: `app/templates/escala/folga_calendario_editar.html:113` e `:117` | View lê POST em `app/escala/views.py:342`, valida em `:347`, repassa à porta em `:356`; porta persiste em `app/escala/folgas.py:593` |
+| `data-fc-vazia` | SSR com `t.marcados`: template `:44`; atualização por `arr.length`: `:100` | Teste `_vazia`: `app/escala/tests/test_editor_calendario_tres_grades.py:44`; confirmação não consulta esse atributo, consulta `sel.size`: template `:140` |
+| `fc-marca-vazia` | Elemento/classe no SSR: template `:50`; visibilidade atualizada por `arr.length`: `:99` | Leitura do HTML pelo teste: `app/escala/tests/test_editor_calendario_tres_grades.py:51`; usuário recebe texto em template `:51` |
+| `sel[tam]` | Inicialização do seed: template `:82`; interação: `:122`; repetir: `:127` | Grade `:89`, ordenação `:85`, campos POST `:116`, confirmação `:140`, origem do repetir `:127` |
+| `modo` | Radios template `:20`; persistência na porta `app/escala/folgas.py:585` e `:590`; contexto view `:370` | View POST `:325`; guarda JS template `:139`; troca visual `:175`; porta `app/escala/folgas.py:584` |
+| `t.marcados` | View projeta `cal.tamanhos.all()` em `app/escala/views.py:362` e `:366`; origem persistida `app/escala/folgas.py:595` | SSR template `:44`, `:49`, `:50`; seed `:77`, posteriormente convertido em `sel`: `:82` |
+
+2. **NÃO PROCEDE — segundo escritor persistente, juiz novo ou derivação decisória paralela.** A view continua entrando pela porta em `app/escala/views.py:354`; escrita fica em `app/escala/folgas.py:571` e `:594`. `data-fc-vazia`, marca e contagem são projeções do mesmo conjunto em template `:97`–`:100`; o guarda consulta esse conjunto em `:140`. A distinção entre lookup e registro vivo consta em `app/docs/JUIZES.md:7` e `:11`.
+
+4. **NÃO PROCEDE — repetir sem corte no fluxo normal da UI.** Dias clicáveis nascem em `1..t.n`, template `:90`; o repetir filtra `d <= t.n`, `:127`, igual ao criador em `app/escala/folgas.py:661`. Ambos deixam de validar o limite inferior nesse corte; seed legado é carregado sem saneamento em `app/escala/views.py:362`. Existência de legado com dia zero/negativo: **[não verificado]**.
+
+7. **NÃO PROCEDE — campo com dois significados ou relógio novo.** `t.marcados` representa a seleção carregada, `sel[tam]` a seleção editável; atributo, marca e contagem acompanham sua cardinalidade em template `:82`, `:97`–`:100`. O relógio existente permanece na porta em `app/escala/folgas.py:599`, repassado em `:601`.
+
+**Observação de L7:** a nova ajuda hardcoded em `app/templates/escala/folga_calendario_editar.html:41` confronta a exigência de ajuda em componente/mapa de `app/docs/LEIS-UI.md:77`–`:85`; isso é distinto da marca visível explicitamente solicitada.
 
 ## 16/11 14:45 · sessao 427f2c880889 · PRIORIDADE-EV-ITEM1 · sonda · origem=Code
 
@@ -1608,73 +1747,4 @@ Porta para eventual apply por dia: `ponto.portas.celula.regenerar_celulas_dia` �
 
 Sutileza: com célula existente, `vinculo_do_dia` pode devolver geradora inativa sem fim (:279-284), enquanto `vinculo_cobre_a_data` a recusa (:214-216). Exibir essas respostas sem presumir equivalência.
 
-## 16/11 14:25 · sessao 3ac856a91cc7 · - · - · origem=Ronald (tmux)
-
-- **Portas da HE:** prefixo `/ponto/` em `app/config/urls.py:29`. `ponto:gestao_he` = `/ponto/gestao-he/`, view `gestao_he` em `app/ponto/views.py:887`; `ponto:decidir_he` = `/ponto/gestao-he/decidir/`, view em `app/ponto/views.py:499`; `ponto:recusar_he_em_lote` = `/ponto/gestao-he/recusar-lote/`, view em `app/ponto/views.py:549`; `ponto:gestao_he_pdf` = `/ponto/gestao-he/pdf/`, view em `app/ponto/views.py:772`. Rotas em `app/ponto/urls.py:17-27`.
-
-- **GET listagem:** lê snapshot em `app/ponto/views.py:932-946` e renderiza em `app/ponto/views.py:954-966`; não escreve trilha de abertura nessa view. Portanto número de aberturas não é obtido desse caminho no banco. O snapshot disponível não significa que a tela foi aberta: seu escritor é `lavrar`, `app/ponto/services/he_pendente_lavrado.py:177-189`.
-
-- **Uso de decisão:** escritor único `_gravar` cria/atualiza `DecisaoHE` em `app/ponto/portas/he.py:66-86` e solicita `LogAuditoria(acao='decidir_he', modelo='DecisaoHE', objeto_id=pk, valor_antes, valor_depois)` em `app/ponto/portas/he.py:94-99`, chamado pela porta em `app/ponto/portas/he.py:206-208`. Modelo/campos `DecisaoHE`: `colaborador`, `data`, `estado`, `minutos_na_decisao`, `origem`, `decidida_em`, `atualizada_em` em `app/ponto/models.py:1300-1317`. Modelo/campos auditoria: `acao`, `modelo`, `objeto_id`, JSONs, `criado_em` em `app/core/models.py:295-307`; escritor efetivo em `app/core/observ.py:133-138`.
-
-- **Não há atribuição inequívoca ao endpoint:** lote chama `decidir_he` por dia em `app/ponto/portas/he.py:263-266`, e autorização por período também chama a mesma porta em `app/ponto/portas/he.py:595-596`. A trilha não guarda URL/rota entre os campos escritos em `app/core/observ.py:134-137`. Assim, contar `acao='decidir_he'` mede alterações por dia da porta compartilhada; não mede POSTs individuais, lotes ou cliques separadamente. Repetição idempotente retorna sem trilha em `app/ponto/portas/he.py:197-204`.
-
-- **“Não” gravado é decisão de negócio:** estado `'nao'` em `DecisaoHE` é ciência, não erro, segundo `app/ponto/models.py:1283-1288`. O estado atual não conserva cada troca; a porta atualiza a mesma linha em `app/ponto/portas/he.py:75-86`. Para histórico por instante usar `LogAuditoria.criado_em` e `valor_depois.estado`, cujos escritores estão em `app/ponto/portas/he.py:94-99`.
-
-- **Recusa da porta:** validações levantam `DecisaoHERecusada` em `app/ponto/portas/he.py:175-193`; a view individual converte em resposta em `app/ponto/views.py:535-537`. Lote conserva recusas apenas em lista de retorno em `app/ponto/portas/he.py:267-268`, exibida em `app/ponto/views.py:621-629`. Esses caminhos não persistem a recusa nem um indicador “indevida”. Não contar tais recusas como zero a partir da ausência de trilha. Critério persistido que distingue recusa indevida de devida nesses caminhos: **[nao verificado]**.
-
-- **Erro persistido do retrato:** `apurar` incrementa `erros` quando falha `espelho_do_colab` em `app/ponto/services/he_pendente_lavrado.py:94-100`, devolve `detalhe['erros']` em `app/ponto/services/he_pendente_lavrado.py:169-174`, e grava por `MetricaSnapshot.objects.update_or_create(... detalhe=retrato)` em `app/ponto/services/he_pendente_lavrado.py:177-189`. Campos `MetricaSnapshot.detalhe` e `calculado_em` em `app/inteligencia/models.py:95-96`. É foto atual por empresa/competência, sobrescrita; não soma histórica de erros HTTP desde deploy nem evidência de abertura da tela. Se reportar, usar tipo explícito como `apuracao_snapshot_atual`.
-
-- **Falha de trilha:** `evento` é best effort, envolve criação em `engolir` em `app/core/observ.py:105-138`; erro vira contador de processo e logging em `app/core/observ.py:73-82`, não outra linha de banco. `registrar_log` também captura e chama `logger.exception` em `app/core/auditoria.py:26-30`. Portanto ausência de auditoria pode ser falha da própria auditoria, além de ausência de uso.
-
-- **Relavratura:** depois da decisão, `recalcular_por_evento` é chamado em `app/ponto/portas/he.py:229-230`; agenda `on_commit` em `app/ponto/services/fechamento.py:1823-1827`; falha de execução apenas gera warning em `app/ponto/services/fechamento.py:1818-1821`. Decisão gravada não prova relavratura bem-sucedida.
-
-- **PDF:** grava `RegistroPDFAuditavel` pelo pipeline em `app/relatorios/pdf_base.py:152-166`, chamado com `tipo='outro'`, `colaborador=None` e filtros empresa/mes/ano/q/praca/posto/estado em `app/ponto/views.py:870-878`. Campos de registro em `app/relatorios/models.py:30-57`; não há título/rota persistido nessa criação. `tipo='outro'` e formato dos filtros não bastam para identificação inequívoca da porta HE. Registro nasce antes da segunda montagem do PDF em `app/relatorios/pdf_base.py:168-178`, portanto também não prova resposta HTTP entregue.
-
-- **500 histórico da atomicidade:** explicação e correção visíveis em `app/ponto/portas/he.py:151-159`; `@transaction.atomic` está na porta em `app/ponto/portas/he.py:158`, antes do `select_for_update` em `app/ponto/portas/he.py:195`. Dados de erros reais posteriores ao pouso não estão na cópia **[nao verificado]**. Contexto de access log vai em cabeçalhos para Gunicorn, não em modelo, conforme `app/core/middleware.py:96-105` e `app/core/middleware.py:111-128`.
-
-## 16/11 14:25 · sessao 37406318bec5 · - · - · origem=Ronald (tmux)
-
-O bloqueio do R2 foi baseado em escrita Python em memória, não em escrita no banco:
-
-- `vigente()` consulta `TipoAusencia` e escreve somente o dicionário global `_CACHE`; retorna o catálogo real calculado. `app/ponto/catalogo/ausencias.py:240-254,257,267-281`.
-- `_ult_cache.append(...)`, `_ub_cache.append(...)` e `_mpd_cache.append(...)` são listas locais. As fontes são valor calculado, `SELECT aggregate(Max(...))` e `marcos_dna_periodo(...)`. Impedir esses `append` quebra seus retornos indexados. `app/ponto/turnos.py:1154-1164,1901-1918`.
-- `fechamento_lido()` chama o escritor real com `somente_leitura=True, retornar_objeto=True`; o ramo devolve o objeto sem salvá-lo e o ramo de lavratura fica excluído. `app/ponto/services/fechamento.py:1128-1144,1191-1194,1735-1761`.
-
-Para cumprir o patch nominal exigido, a interceptação mínima pode substituir **somente o objeto `ponto.catalogo.ausencias._CACHE`** por um proxy que:
-
-1. Delega `__getitem__` ao `_CACHE` original.
-2. Intercepta `__setitem__` exclusivamente das chaves `"v"` e `"t"`, contabilizando e descartando as escritas.
-3. Não inventa catálogo, não troca `vigente()` e não troca turnos.
-
-Esse patch intercepta precisamente `app/ponto/catalogo/ausencias.py:279-280`. Em falta de cache, a função continua calculando `v` pelo leitor real e retornando-o; apenas deixa de memoizá-lo. `app/ponto/catalogo/ausencias.py:275-281`.
-
-O tripwire precisa guardar uma **flag persistente por dia**: `_do_banco()` captura `Exception` e pode engolir sua exceção, retornando fallback. Após a chamada/dia, a flag deve obrigar `ERRO|escrita_nao_interceptada`, mesmo que a função tenha retornado. `app/ponto/catalogo/ausencias.py:246-254`.
-
-Não encontrei chamadas a cache persistente nos arquivos investigados; cobertura completa de todos os caminhos transitivos: [nao verificado].
-
-## 16/11 14:25 · sessao a0cb305f5b49 · - · - · origem=Ronald (tmux)
-
-O199 tem duas perguntas distintas:
-
-- **Já está decidida como folga?** A porta usa `o_dia_ja_e_folga(colaborador, data)`, em `app/ponto/services/declarar_dia.py:78-95`; o aceite real a consulta em `app/chamados/services/validacao.py:305`. Ela delega ao juiz registrado em `app/docs/JUIZES.md:127` e `app/core/juizes.py:213`: `folga_lancada_do_dia`, corpo puro em `app/ponto/precedencia.py:212-219`, predicado em `:222-239`, alimentado por todas as folgas da pessoa em `:194-209`. Folga à mão sobrevive à troca; calendário exige vínculo do dia, `app/ponto/precedencia.py:225-239`.
-- **Pode declarar agora?** `checar_declaracao`, `app/ponto/services/declarar_dia.py:126-150`. Não equivale à primeira pergunta: `o_dia_ja_e_folga` distingue “não precisa” de “não posso”, conforme `:84-93`.
-
-Universo correto: perguntas cuja resposta, após `strip`, seja `RESPOSTA_DE_FOLGA`, conforme `app/chamados/services/validacao.py:259-261` e constante `:79`; aceite gravado em `validada_em`, conforme escritor `:152-166`; colaborador e dia usados pelo ato são `perg.disputa.colaborador` e `perg.data_evento`, `:293-294`. Campos em `app/chamados/models.py:2521-2538,2552-2554`. Deduplicar por colaborador-dia, porque o próprio ato trata quatro perguntas do mesmo dia, `app/chamados/services/validacao.py:301-305`.
-
-**Restrição para o script:** `checar_declaracao` chega a cache de catálogo: `declarar_dia.py:147,120` → `precedencia.py:461` → `turnos.py:2843-2847` (`Ausencia.TIPOS_EM_ABERTO`) → `catalogo/ausencias.py:406-407,430-435` → `vigente`, que escreve `_CACHE` em `:279-280`. `fatos_do_dia` também alcança o catálogo por `precedencia.py:256,273-278`. Se o molde proíbe inclusive essas escritas de cache, não chamar nem fabricar resultado equivalente.
-
-O juiz de status é `status_do_dia_lavrado`, registrado em `app/docs/JUIZES.md:125`; avulso `app/ponto/status_dia.py:201-218` delega ao lote `:221`, que carrega turnos e pode consultar a natureza pela precedência (`:230-235`). Ler coluna atual de `CelulaDia` pode ser apresentado como snapshot gravado, mas não como resultado desse juiz.
-
-Porta de apply O199: `ponto.services.declarar_dia.declarar_dia`, `app/ponto/services/declarar_dia.py:153`; ramo folga chama `_escrever_folga` em `:167-168`, que passa por `escala.folgas.lancar_folga` em `:179-193` e fecha o fio em `:205-209`.
-
-## 16/11 14:25 · sessao a67016e6deab · - · - · origem=Ronald (tmux)
-
-| entrada | item O54 | cadeia (arquivo:linha) | confiança |
-|---|---|---|---|
-| BO2910/01-a | - | A porta atribui `posto`, salva e registra histórico (`app/colaboradores/views.py:325-336`); a outra porta também atribui `empresa` (`app/colaboradores/views.py:1404-1407`). O TXT filtra pela empresa (`app/folha/export.py:719-722`), mas falta demonstrar que corrigir esse destino reduziria algum número O54; o termômetro compara minutos (`app/ponto/management/commands/e6_oraculo.py:342-379`). | [nao verificado] |
-| BO2910/01-b | - | O ramo relê o colaborador e responde com linha/toast de erro (`app/colaboradores/views.py:337-361`); não há cadeia demonstrada desse tratamento de erro até medida de item O54. | [nao verificado] |
-| BO2910/02 | - | A célula e seus marcos servem de predicado para retratar o chamado (`app/chamados/reconciliador.py:1024-1032` → `app/chamados/reconciliador.py:1001-1011`); falta cadeia demonstrada dessa retratação até redução de número O54. | [nao verificado] |
-
-Complementos úteis: a troca de posto cadastral deixou de mudar o lugar do dia e regenerar células (`app/colaboradores/services/colaborador.py:118-123`). O item `R6` usa contratos declarados e reatividade (`app/core/placar_estrutural.py:433-449,623-625`); a matriz declara sete famílias sem família própria de colaborador/posto (`app/core/contratos_estruturais.py:45-53`), portanto contar portas de posto por semelhança com “um escritor” também não demonstra redução desse item.
-
-_6073 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6077 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
