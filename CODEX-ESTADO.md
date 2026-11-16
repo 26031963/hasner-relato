@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 01:06** · publicado em **16/11/2026 01:05** (UTC-3)
+> Ultima resposta processada: **16/11/2026 01:09** · publicado em **16/11/2026 01:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 01:09 · sessao ee60cda9b763 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos por leitura:
+
+- **Pouso “5 itens ou fim do dia”: PROCEDE no item (3).** A regra escrita manda perguntar por outra raia pronta em até 30 minutos; sem isso roda sozinha, ninguém espera mais de 30 minutos, árvore certificada deve ser a que pousa e nenhum `.py` muda entre veredito e merge (`CLAUDE.md:320–324`; `app/docs/PISTA.md:29–40`). Raia verde pousa antes de abrir fatia nova na fila 1, com merge → commit → deploy no mesmo ato (`CLAUDE.md:325–329`; `app/docs/LEIS.md:131`). Cura commitada com suite verde vai ao ar imediatamente (`CLAUDE.md:425–427`). O anexo propõe outro gatilho de espera, sem nomear alteração dessas regras (`anexo:miudos_na_fila_de_lotes.txt:1`).
+
+- **“Um opus final” para o lote: PROCEDE se substituir as leituras finais por obra.** Toda obra Codex exige opus final sem exceção (`app/docs/LEIS.md:147`), com pré-verificador e suite inteira verde antes dele (`CLAUDE.md:372–378`). O COMBOIO fornecido manda opus final **por obra** e, retirando uma reprovada, nova suite de pouso na árvore restante (`anexo:comboio_pre_opus.txt:5`, contando o cabeçalho como linha 1). O item (3) não explica como seu único opus preserva esse requisito (`anexo:miudos_na_fila_de_lotes.txt:1`).
+
+- **“MIUDO = 1 arquivo de produção + teste” versus docs: ambiguidade, não impossibilidade demonstrada.** Docs entram no mesmo commit do marco; commit só de docs fora de marco não existe, exceto derivado do pós-push (`CLAUDE.md:332–336`; `app/docs/LEIS.md:132`). Se o limite contar todos os caminhos, exclui docs obrigatórios; se medir só produção, pode coexistir. O anexo não declara essa distinção (`anexo:miudos_na_fila_de_lotes.txt:1`). Também não achei regra dizendo que toda cura precisa de **um segundo arquivo separado** de selo: o próprio teste pode cumprir esse papel `[nao verificado]`.
+
+- **“Um commit por item com RED”: NAO PROCEDE como conflito isolado.** RED evidenciado é exigido (`CLAUDE.md:28–29`, `CLAUDE.md:193`), e não achei exigência de commit separado para RED `[nao verificado]`. Permanecem obrigatórios linha LEI-AKITA completa e padrão existente (`CLAUDE.md:62–70`; `bin/molde_fatia/LEIAME:42–50`), citação das leis aplicáveis (`app/docs/LEIS.md:31`) e commit por caminhos declarados (`bin/commit_so_o_declarado.sh:9–18`). O hook julga a mensagem no commit (`bin/commit_msg.sh:2–11`, `bin/commit_msg.sh:29–31`).
+
+- **Retirar reprovado sem segurar outros:** a árvore mudou; precisa nova certificação antes de pousar, conforme regra de árvore (`CLAUDE.md:320–324`) e COMBOIO item 4 (`anexo:comboio_pre_opus.txt:5`). O literal “uma suite inteira” não fecha se significar exatamente uma execução mesmo após retirada (`anexo:miudos_na_fila_de_lotes.txt:1`). [nao verificado]
+
+- **Itens (1) e (2):** estas incompatibilidades de construção/pouso não os bloqueiam; o próprio aval separa a leitura/registro do item (3) (`anexo:miudos_na_fila_de_lotes.txt:1–2`). [nao verificado]
+
+## 16/11 01:09 · sessao 82102c00022d · - · - · origem=Ronald (tmux)
+
+- **Fila de LOTES: regra de entrada não localizada na cópia [nao verificado].** A evidência positiva localizada é de **obras numeradas**: LOTE 7 = FATO-DE-AUSENCIA-ACORDA-A-PROJECAO e LOTE 3 = SITUACAO-DESLIGADO, cada uma com cópia, RED, suíte, opus e condições próprias de pouso (`app/docs/RELATO.md:223`, `app/docs/RELATO.md:224`). O despacho de laterais fala em LOTE 1 e “lotes 2+ aguardam defeitos_por_classe.md final”, sem estabelecer uma fila aberta para novos miúdos (`app/docs/RELATO.md:230`, `app/docs/RELATO.md:232`). A GRADE registra LOTE7 e LOTE3 como obras próprias (`app/docs/GRADE-MESTRA.md:1762`, `app/docs/GRADE-MESTRA.md:1800`).
+- **Não confundir comboio com entrada nessa fila.** A regra geral existente manda perguntar se outra raia ficará pronta em até 30 minutos, juntar em uma árvore certificada ou rodar sozinha, sem esperar mais de 30 minutos (`app/docs/PISTA.md:29`, `app/docs/PISTA.md:31`, `app/docs/PISTA.md:32`, `app/docs/PISTA.md:39`). Ela não define entrada de miúdos em “fila de LOTES” [nao verificado].
+- **Vaga do Codex construtor confirmada.** O contrato escrito nomeia `--construtor` e uma vaga por repositório em `logs/construtor.vaga`, com `flock` (`CLAUDE.md:353`, `CLAUDE.md:355`). O código aceita o argumento (`bin/codex_pergunta.sh:62`), deriva a vaga do `git-common-dir` do repositório vivo (`bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:76`) e recusa ocupação concorrente com `exec 6>>"$VAGA"` / `flock -n 6` (`bin/codex_pergunta.sh:252`, `bin/codex_pergunta.sh:253`). A disponibilidade atual dessa vaga é **[nao verificado]**.
+- **Busca realizada:** padrões relativos a fila/LOTES/entrada/laterais/miúdos em `CLAUDE.md`, `app/docs`, `bin`, `docs`, `.claude`, e busca ampliada em `.md`/`.txt` da cópia. A inexistência universal da fila não pode ser afirmada; seu contrato escrito de entrada permanece **[nao verificado]**.
+
+## 16/11 01:07 · sessao 922017003b6d · - · - · origem=Ronald (tmux)
+
+Q1 — tabela dos nove, com referências atuais do archive:
+
+| Caso | Pessoa/dia escritos | Consequência |
+|---|---|---|
+| HJ-005-U2 | col42, 2026-10-08 — `mapa_hj_sem_nome.tsv:8` | Completo para sonda. |
+| HJ-005-U4 | col42, 2026-10-15 — `mapa_hj_sem_nome.tsv:10` | Completo para sonda. |
+| HJ-030-U1 | col94, 2026-10-16 — `mapa_hj_sem_nome.tsv:50`; `app/docs/CORTES.md:349` | Completo; pergunta nominal #44764, disputa #6984. |
+| BO-ADMIN-2710/1 | col42, 08/15/22-10 — `app/docs/RELATO.md:3625`; `app/docs/CORTES.md:373` | Completo, mas agrega três dias; sobrepõe U2/U4/U5 no nível pessoa+dia. |
+| BO-ADMIN-2710/2 | col789, sete dias; apenas 08/10 e 26/10 explicitados no relato — `app/docs/RELATO.md:3625` | **Falta informação:** lista exata dos sete dias; não inferir dos dias de RT-03. |
+| BO-ADMIN-2710/5 | col247, 2026-10-24 — `app/docs/RELATO.md:3905`; `app/docs/CORTES.md:373` | Completo; pergunta esperada intervalo_volta, não intervalo_saida. |
+| BO-ADMIN-2710/6 | col42/129/789, vários alvos sem dias — `app/docs/RELATO.md:3906`; subcaso col129 25/10 #35101 em `app/docs/CORTES.md:373` | **Falta informação:** dia e pergunta-alvo de cada pessoa para completar a raiz. |
+| BO-ADMIN-2710/7 | col130, 2026-10-05, #28883 — `app/docs/CORTES.md:373`; `app/docs/BACKLOG.md:835` | Completo. |
+| BO-ADMIN-2710/8.1 | col789, **ato de edição** em 2026-10-27 14:33–15:56; vínculos 1221/1472/1473 — `app/docs/CORTES.md:362` | Data do ato escrita; não é julgamento do dia de ponto. **NAO_CONFERIDO:** escritor não deve ser chamado. |
+
+A referência nominal privada da ingestão mora em `logs/hj_0511/fonte` e `logs/hj_0511/mapa.md`, apontados por `app/docs/RELATO.md:8894` e `:8924`; linhas internas desses arquivos **[nao verificado]**.
+
+Juízes e limites para Q4:
+
+- **Cobertura parcial:** `ponto.turnos.periodo_da_parcial_no_dia`, `app/ponto/turnos.py:2628`, retorna `sem_periodo|dentro|fora|nao_sei`. `fora` é a resposta de ausência sem batida dentro do período (`:2632`); não certifica sozinho ausência de outros furos. `grade_da_celula`, `app/escala/services/leitor_celula.py:350`, transporta o julgamento lavrado `periodo_parcial` (`:429`). Horas noturnas exigem deslocamentos da cadeia (`app/ponto/turnos.py:2639`), nunca hora civil improvisada.
+- **HJ-030:** `chamados.juizes.pergunta_viva`, `app/chamados/juizes.py:865`, registrado em `app/core/juizes.py:286`; comparar com `montar_chamados_fio`, `app/chamados/services/fio.py:190`. O fio deve incluir a viva em disputa fechada (`:242`, `:267`). Viva e visível fecha **o defeito de invisibilidade**; viva invisível = ABERTO; morta sozinha não prova resolução.
+- **BO/5:** `_marcos_faltantes`, `app/chamados/services/declaracao_texto.py:86`, devolve `(estado, [(dia,pos,tipo,hora)])`. O esperado nominal é `int_volta`, tipo `E`, conforme `app/docs/CORTES.md:373`. Encontrar isso não prova emissão correta; conservar NAO_CONFERIDO sem conferir a pergunta emitida.
+- **BO/7:** `chamados.services.painel.qs_na_fila(_base=ChamadoColaborador.objects.filter(pk=28883), agora=agora).exists()`; assinatura `app/chamados/services/painel.py:158`, corpo `:188`. Esperado `False` para o sintoma de pendência, pois `registrado` não pede ação (`:174`; catálogo `app/chamados/catalogo/motor.py:24`).
+- **BO/8.1:** `executar_vinculo` é explicitamente executor de escrita (`app/colaboradores/services/vinculo.py:170`). Não chamar. Histórico antigo não é reescrito (`app/docs/RELATO.md:3579`). `vigencia_sem_trilha.medir()` não confere fidelidade do antes/depois; apenas existência de algum registro (`app/escala/services/vigencia_sem_trilha.py:43`).
+
+O lookup não define um fechamento geral: `app/docs/JUIZES.md:109` declara essa pergunta “SEM juiz”. `status_do_dia_lavrado` devolve `status/rotulo/fonte`, sem certificar reparo de fio, geometria ou trilha (`app/ponto/status_dia.py:201`).
+
+Para evitar falso sucesso da sonda, conferir incremento de `core.observ.engolidos()['total']` antes/depois de cada caso (`app/core/observ.py:60`): os leitores podem engolir exceções (`app/chamados/juizes.py:1476`; `app/chamados/services/fio.py:417`). O wrapper SQL também deve contar comandos recusados, além de lançar, para detectar recusa engolida.
+
+## 16/11 01:07 · sessao 3d70cc65d2ed · - · - · origem=Ronald (tmux)
+
+Fontes de origem escritas:
+
+- HJ → Fernando: `app/docs/BACKLOG.md:2233` diz literalmente “casos BO Mauricio / HJ Fernando”.
+- BO-0611 → Mauricio: `app/docs/PROMPTS.md:1914`; versão substitutiva em `app/docs/PROMPTS.md:1925`.
+- BO-1311-ROTEIRO → Mauricio: `app/docs/BACKLOG.md:795` (`BO-[nome]-1311-ROTEIRO`). A correspondência dos números 01–10 segue a ordem do universo, declarada **contestável** em `app/docs/RELATO.md:689`.
+- BO-ADMIN-2710/8.3 → Mauricio: encadeamento explícito do cabeçalho `BO-[nome]-FECHA` em `app/docs/RELATO.md:3894`, item 8.3 em `:3898` e resultado BO-ADMIN em `:3900`/`:3908`.
+
+As referências dos anexos estão defasadas: por exemplo, a descrição BO-0611-V2 está hoje em `RELATO.md:1934`, e os itens BO-ADMIN em `RELATO.md:3901`–`:3908`.
+
+| Caso | Dado faltante comprovável / limite |
+|---|---|
+| HJ-058 | Falta individualizar pessoa, dia e anexo concreto dos quatro casos; a linha já identifica HEIC e datas textuais 30/09 e 06/11, portanto “sem dia” absoluto é excessivo. `BACKLOG.md:2633`; individualização [nao verificado]. |
+| HJ-066 | As telas já são conhecidas: duas dashboards do colaborador. Pessoa/dia não constituem requisito explicitado para essa demanda UI. `BACKLOG.md:2626`; dado externo necessário [nao verificado]. |
+| HJ-068 | Tela já conhecida: fio lateral do admin, encerrados no Histórico e contador acionável. Dado externo faltante [nao verificado]. `BACKLOG.md:2627`. |
+| HJ-071 | Falta **medir se hora_ini/hora_fim está gravada**, não presumir falta de informação do Fernando. Tela: espelho/PDF. `BACKLOG.md:2628`. Pessoa/dia concreto [nao verificado]. |
+| HJ-073 | Falta censo por causa e permissão do supervisor; a linha não pede dado externo específico. `BACKLOG.md:2629`. |
+| HJ-075 | Falta print do app mostrando escala antiga; col1032 já conhecido. `BACKLOG.md:2631`. |
+| HJ-090 | Falta classificação por dono L-099 dos 40 dias de férias com batida; lista individual pessoa/dia nessa linha [nao verificado]. `BACKLOG.md:1932`. |
+| HJ-012-U1 | Pessoa+dia **já fornecidos**: col239, 2026-10-07. Falta resolver discordância das testemunhas, não pedir identidade/dia. `mapa_hj_sem_nome.tsv:18` (anexo). |
+| HJ-031-U1 | Pessoa+dia **já fornecidos**: col247, 2026-10-24. Falta resolver discordância das testemunhas. `mapa_hj_sem_nome.tsv:51` (anexo). |
+| HJ-050-U2 | Pessoa+dia **já fornecidos**: col523, 2026-11-07; o obstáculo era dia futuro na leitura de 05/11. `mapa_hj_sem_nome.tsv:71` (anexo). |
+| BO-0611/02 | Queixa concreta não identificada; col78 já conhecido na versão corrigida. `RELATO.md:1934`; `PROMPTS.md:1925`. Dia [nao verificado]. |
+| BO-0611/03 | Faltam motivos das 40 ocorrências do lote; há problema já identificado no validar-lote. `RELATO.md:1934`; `BACKLOG.md:1924`. |
+| BO-0611/05 | Falta dia do episódio; col456 já corrigido. `RELATO.md:4`; `RELATO.md:1934`; `PROMPTS.md:1925`. |
+| BO-0611/06 | Registro antigo já identifica col950 e cadastro de conta de teste ativa; falta dado atual específico [nao verificado]. `RELATO.md:1996` (quadro depois substituído por `PROMPTS.md:1925`). | [nao verificado]
+| BO-0611/08 | Registro substitutivo identifica col617, atestado aprovado e sem divergência. Dia e reconferência atual [nao verificado]. `RELATO.md:1934`. |
+| BO-0611/09 | col1000 já conhecido; descrito sem porta antes da resposta. Dia/chamado concreto [nao verificado]. `RELATO.md:1934`. |
+| BO-0611/10 | col399 já conhecido; troca sem UI identificada. Dia e troca concreta [nao verificado]. `RELATO.md:1934`. |
+| BO-0611/14 | Grupo 13+14 já associado a col407; texto de turno 21/10 está explicitamente destinado ao item 13. Dia próprio do 14 [nao verificado]. `RELATO.md:1995`; `RELATO.md:1997`. |
+| BO-1311-ROTEIRO/01 | Pela ordem contestável, col1019; falta localizar ficha/dias e declarações ou projeção do retentor correspondentes. `BACKLOG.md:795`; `RELATO.md:689`; necessidade coletiva `RELATO.md:685`; vínculo individual da lacuna [nao verificado]. |
+| BO-1311-ROTEIRO/02 | Mesmo limite, col996 pela ordem contestável. Mesmas fontes. |
+| BO-1311-ROTEIRO/03 | Mesmo limite, col1032 pela ordem contestável. Mesmas fontes. |
+| BO-1311-ROTEIRO/05 | Mesmo limite, col265 pela ordem contestável. Mesmas fontes. |
+| BO-1311-ROTEIRO/06 | Mesmo limite, col982 pela ordem contestável. Mesmas fontes. |
+| BO-1311-ROTEIRO/07 | Mesmo limite, col1004 pela ordem contestável. Mesmas fontes. |
+| BO-1311-ROTEIRO/08 | Mesmo limite, col523 pela ordem contestável. Mesmas fontes. |
+| BO-1311-ROTEIRO/09 | Mesmo limite, col866 pela ordem contestável. Mesmas fontes. |
+| BO-ADMIN-2710/8.3 | col789 e vínculo1473 conhecidos; falta recorte pessoa/dia da consequência denunciada, não identidade. Mecanismo e complemento E4 já registrados. `RELATO.md:3908`; `RELATO.md:3898`. |
+
+Não é sustentável chamar todos esses 27 de “sem pessoa/dia”: três HJ possuem ambos no próprio mapa, diversos BO têm colPK corrigido e vários HJ são demandas de tela ou censo interno. `mapa_hj_sem_nome.tsv:18`, `:51`, `:71`; `RELATO.md:1934`; `BACKLOG.md:2626`–`:2629`.
 
 ## 16/11 01:06 · sessao b388a9727363 · - · - · origem=Ronald (tmux)
 
@@ -710,472 +806,4 @@ Os casos sequenciais pedidos:
 - **`QuerySet.update` fora do save:** a fixture cria legado assim; isso não demonstra que ESTE save o gravou. Pode fornecer a escrita B da corrida. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:62`)
 - **Gerador em `update_fields`:** `set(update_fields)` consome o iterador, que é encaminhado esgotado ao `super`; resultado exato — no-op ou erro no Django — **[não verificado]**. (`app/chamados/models.py:3565`; `app/chamados/models.py:3552`)
 
-## 15/11 23:46 · sessao 6c8eada32dad · - · - · origem=Ronald (tmux)
-
-**3 — PROCEDE o fechamento da dependência do cache.** `rg -n --hidden '_par_carregado|_par_lido' .` encontrou somente relato histórico em `app/docs/RELATO.md:9163`; nenhum leitor/escritor executável ou teste. A implementação atual usa apenas leitura do banco e variáveis locais (`app/chamados/models.py:3561`, `app/chamados/models.py:3572`, `app/chamados/models.py:3574`). Grep de `\bfrom_db\b` em Python encontrou apenas o catálogo genérico em `app/core/management/commands/describe.py:68`; nenhum override de `from_db`/`refresh_from_db` em models.py. Chamadas normais continuam, por exemplo a fixture legada em `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:66`; isso exige a operação herdada, sem dependência demonstrada do override removido. Dependências dinâmicas não detectáveis por esse grep: **[não verificado]**.
-
-**4 — PROCEDE o respeito à lei e à catraca A.** A lei reserva `select_for_update` à `trava_na_ordem` e permite releitura simples após obter as travas (`app/chamados/models.py:2727`, `app/chamados/models.py:2734`); a nova consulta é simples (`app/chamados/models.py:3572`). A catraca procura atributos `select_for_update`, referências via `getattr` e SQL literal de trava (`app/chamados/tests/test_e1_v7_catracas.py:116`, `app/chamados/tests/test_e1_v7_catracas.py:133`, `app/chamados/tests/test_e1_v7_catracas.py:137`).
-
-Executei isoladamente, somente em memória, as funções AST reais: **766 fontes de produção, `varrer_travas=[]`**. O percurso e a agregação estão em `app/chamados/tests/test_e1_v7_catracas.py:57` e `app/chamados/tests/test_e1_v7_catracas.py:158`; o teste exige essa lista vazia (`app/chamados/tests/test_e1_v7_catracas.py:387`). Não executei Django/banco: **[não verificado]**.
-
-**NÃO PROCEDE haver teste localizado com `assertNumQueries` envolvendo um save de PerguntaDisputa que toque o par.** Examinei por AST todos os blocos no diretório de testes de chamados. Os dois candidatos de resposta automática medem o **segundo chamado/no-op** (`app/chamados/tests/test_porta_chamado_e3.py:46`, `app/chamados/tests/test_porta_chamado_e3.py:47`; `app/chamados/tests/test_e3_10_cura_no_escritor.py:83`, `app/chamados/tests/test_e3_10_cura_no_escritor.py:84`): retornam antes do save pela existência de texto (`app/chamados/services/disputa_emissao.py:1663`), cujo caminho de escrita está em `app/chamados/services/disputa_emissao.py:1677`. Os testes de nove consultas chamam o leitor `consulta_do_app` (`app/chamados/tests/test_e3_v4_orm.py:91`, `app/chamados/tests/test_e3_v4_orm.py:98`; composição do leitor em `app/chamados/services/pergunta_no_app.py:73`). Contagem real e cobertura contra chamadas dinâmicas: **[não verificado]**.
-
-**Custo estático:** `_recusa_par_ilegal` faz uma consulta simples para instância existente quando `update_fields` toca o par ou é `None`; faz zero se a lista exclui o par ou `_state.adding=True` (`app/chamados/models.py:3565`, `app/chamados/models.py:3569`, `app/chamados/models.py:3572`). Acessar atributos diferidos pode acrescentar consultas, além da leitura explícita (`app/chamados/models.py:3574`).
-
-## 15/11 23:46 · sessao 98c609aa8e2a · - · - · origem=Ronald (tmux)
-
-**Item 5 — PROCEDE falsa absolvição e PROCEDE falso positivo.** O caso antigo do `return` aninhado foi fechado, mas a restrição a `fn.body` recusa também uma guarda aninhada que efetivamente governa a escrita. (`app/chamados/tests/test_contract_par_resposta.py:87-97`)
-
-Executei os helpers extraídos por AST, somente em memória, com `python3 -B`: [nao verificado]
-
-```python
-# ACUSA: meia_par -> 'respondida_em'
-def f(p, qs, habilitado):
-    if habilitado:
-        if not p.resposta_colab:
-            return
-        qs.update(respondida_em=agora)
-```
-
-Tomando `qs` como a linha de `p` e texto válido quando não vazio, esse escritor é legítimo: toda execução do update passa pela guarda. `_governada` não reconhece o `if` interno como saída antecipada porque examina apenas instruções diretamente em `fn.body`; o `if habilitado` externo não lê a outra metade. (`app/chamados/tests/test_contract_par_resposta.py:88`; `app/chamados/tests/test_contract_par_resposta.py:93-96`)
-
-```python
-# ABSOLVE: meia_par -> None
-def f(p, qs):
-    if not p.resposta_colab:
-        return
-    qs.update(respondida_em=agora)
-```
-
-Se `p` tem texto e `qs` seleciona outra pergunta vazia, grava instante sem texto. `_le` aceita qualquer atributo com nome `resposta_colab`, sem vincular objeto/linha ao escritor; `_governada` aceita essa saída antecipada. Isso independe da polaridade, expressamente excluída do selo. (`app/chamados/tests/test_contract_par_resposta.py:75-76`; `app/chamados/tests/test_contract_par_resposta.py:93-96`; `app/chamados/tests/test_contract_par_resposta.py:21-24`)
-
-O contraexemplo antigo (`update` depois do `if habilitado`, fora dele) agora retorna `'respondida_em'`, conforme o caso acrescentado no teste. (`app/chamados/tests/test_contract_par_resposta.py:162`)
-
-A varredura `_ofensores()` executada sobre a cópia retornou `[]`: nenhum escritor atual é acusado pelo contrato; o falso positivo acima é uma regressão de capacidade, não um ofensor atual encontrado. (`app/chamados/tests/test_contract_par_resposta.py:116-136`)
-
-## 15/11 23:31 · sessao 0a3fd6325a9e · EM-DISPUTA-TRES-DERIVACOES · leitura · origem=Code
-
-**(a) Censo.** O aval confere: há **três derivações variáveis de `em_disputa`**, com perguntas e fontes diferentes; também há **cinco escritores de `False` constante** nos retornos de duplicata, colisão e reuso. (`app/api/views_core.py:753-765`; `app/api/views.py:759-771`; `app/api/views.py:2569`; `app/api/views.py:1336`; `app/ponto/services/resposta_batida.py:29`.)
-
-| Derivação | Escritor e fonte | Pergunta efetivamente respondida | Leitor/publicação |
-|---|---|---|---|
-| Anomalia, core | Lista local `motivos_anomalia`; se não vazia, chama emissão da disputa e atribui `True`. | “Este processamento da batida terminou com algum motivo de anomalia?” Não consulta existência de pergunta. | Atribuição: `app/api/views_core.py:753-765`; JSON: `app/api/views_core.py:815-816`. |
-| Anomalia, UI | Mesmo procedimento no gêmeo. | Mesma pergunta. | Atribuição: `app/api/views.py:759-771`; JSON: `app/api/views.py:821-822`. |
-| Pendência no app | `bool(consulta_do_app(colab)['pendentes'])`. | “A consulta atual oferece alguma pergunta pendente?” | Consulta: `app/api/views.py:2537-2539`; flag/lista: `app/api/views.py:2569-2578`. |
-| Disputa aberta | `colaborador_em_disputa`: primeira disputa do colaborador com `fechada_em IS NULL`. | “O colaborador tem disputa aberta?” Não consulta perguntas. | Autoridade: `app/chamados/services/disputa_emissao.py:34-42`; chamada: `app/api/views.py:1336`; JSON: `app/api/views.py:1670`. |
-
-A lista de anomalias **não vem apenas de `detectar_anomalias`**: recebe contribuições de selfie, mock, assinatura/liveness, entrada/saída incompleta e desvio grave; pode perder o motivo de saída sem turno. A fonte do flag é a lista **final**, depois desses passos. (`app/api/views.py:433-495`; `app/api/views.py:604-645`; `app/api/views.py:703-707`; `app/api/views.py:748-771`.)
-
-| Escritores constantes/propagadores | Significado |
-|---|---|
-| `app/api/views_core.py:529`; `app/api/views.py:543` | Duplicata: `em_disputa=False`, motivos vazios. |
-| `app/api/views_core.py:681`; `app/api/views.py:690` | Colisão oposta ignorada: `False`, motivos vazios. |
-| `app/ponto/services/resposta_batida.py:7-30` | Reuso sem marca transitória `criada_neste_toque`: `False`, motivos vazios. |
-| `app/api/views_core.py:684-686`; `app/api/views.py:693-695`; `app/ponto/services/triagem_batida.py:723-725` | Propagam o retorno do serviço de reuso. |
-
-O comentário da selfie permanece exatamente em `app/api/views_core.py:426-427`; a regra executável está em `app/api/views_core.py:433-439`: consulta `selfie_ausente`, com canal derivado do `device_id` e tempo decorrido zero. Portanto, aquela referência trata a contribuição **selfie** para os motivos; não estabelece equivalência entre anomalia e pergunta disponível. (`app/ponto/registro_batida.py:53-61`; `app/ponto/registro_batida.py:80-91`.)
-
-O roteamento das cascas é este:
-
-| Casca | Caminho verificado na cópia |
-|---|---|
-| Caddy | Encaminha `/api/ponto/*`, `/api/auth/*`, `/api/me/`, `/api/regularizacao/*`, `/api/ping-geo/`, `/api/registrar-fcm/` e `/health/` ao core; restante à UI. Juliani importa esse bloco. (`Caddyfile:8-10`; `Caddyfile:32-38`.) |
-| Core | `config/urls_core.py` inclui `api.urls_core`, que importa `views_core`; `/me/` e `/ponto/bater/` usam esse módulo. (`app/config/urls_core.py:5-6`; `app/api/urls_core.py:5`; `app/api/urls_core.py:13-14`.) |
-| UI | Inclui `api.urls`; oferece espelho/v2, chamados/v2, perguntas e resposta. O gêmeo `/ponto/bater/` existe nesse URLconf, mas a regra do Caddy encaminha essa URL ao core. (`app/config/urls.py:37`; `app/api/urls.py:67-93`; `Caddyfile:8-10`.) |
-
-Essa divisão coincide com a seção 2 do primer; o ambiente efetivamente carregado em produção permanece [nao verificado]. (`CLAUDE.md:84-90`; seleção por variável em `app/config/settings/saas.py:76-78`.)
-
-Os equivalentes de apresentação e seus leitores são:
-
-| Chave/valor | Quem calcula | Quem lê/propaga |
-|---|---|---|
-| `pendentes`, `historico` | `consulta_do_app` aplica C6 e separa as vivas; pendente exige ainda resposta ausente e disputa aberta. (`app/chamados/services/pergunta_no_app.py:45-85`.) | GET perguntas: `em_disputa`, `perguntas`, `respondidas`, `historico`; `disputa_id` e `chamado_id` ancoram as pendentes. (`app/api/views.py:2566-2578`.) |
-| `questionarios_pendentes` | Comprimento de `pendentes`. (`app/chamados/services/pergunta_no_app.py:100-101`.) | `/me/` core e UI; dashboard; painel administrativo do colaborador. (`app/api/views_core.py:303-307`; `app/api/views_core.py:346-348`; `app/api/views.py:315-319`; `app/api/views.py:358-360`; `app/core/views.py:252-268`; `app/colaboradores/views.py:940-941`.) |
-| `chamados_badge` | Prioriza pendentes com “Responder DP”; depois chamados com nota não lida; senão `None`. (`app/chamados/services/pergunta_no_app.py:102-118`.) | Propagado pelos dois `/me/`. (`app/api/views_core.py:348`; `app/api/views.py:360`.) |
-| Link, badge e rótulo web | Leem `questionarios_pendentes`. | Decidem `?aba=cham`, badge e “Responder DP”. (`app/templates/core/dashboard_colaborador_v2.html:78-80`.) |
-| Apresentação “No app dele agora” | Lê a projeção central. | Total e descrição no painel administrativo. (`app/templates/colaboradores/partials/painel_colaborador.html:39`; `app/templates/colaboradores/partials/painel_colaborador.html:190-191`.) |
-| `perguntas_disputa` em chamados/v2 | Reutiliza pendentes + histórico vivo, exclui disputa fechada e ancora no destino vivo ou pai. | Serialização em cada chamado. (`app/api/views.py:996-1040`; `app/api/views.py:1148-1168`.) |
-| `pode_solicitar_correcao` | Exige perguntas, nenhuma aguardando colaborador e limite de reaberturas. | Payload de chamados/v2. (`app/api/views.py:1174-1180`.) |
-| Aviso de pergunta pendente | `aviso_texto_livre` lê a mesma lista pendente. | Orienta abrir o chamado da pergunta; não interpreta mensagem como resposta. (`app/chamados/services/aviso_pendencia.py:7-20`.) |
-| Push de disputa | Emissor envia URL `/meu-atendimento/` e FCM `tipo='disputa'`; recobrança também envia esse tipo. | Tratamento nativo desses sinais [nao verificado]. (`app/chamados/services/disputa_emissao.py:1747-1752`; `app/chamados/services/disputa_emissao.py:1778-1806`; `app/chamados/fcm_utils.py:75-79`.) |
-
-Há leitores adicionais da derivação **disputa aberta**, fora da abertura do questionário:
-
-- O reexport em `chamados.models` alimenta `gate_disputa`, que lê a disputa para recusar POST; GET e operações isentas passam antes. (`app/chamados/models.py:4234-4236`; `app/colaboradores/mixins.py:291-313`.)
-- Os decoradores não isentos aparecem em holerite e operações de colaboradores. (`app/holerite/views.py:1144`; `app/colaboradores/views.py:1368`; `app/colaboradores/views.py:1603`; `app/colaboradores/views.py:1769`; `app/colaboradores/views.py:1877`.)
-- `motor_bloqueado_por_disputa` delega ao mesmo helper; o espelho o lê e publica `disputa_aberta`, consumida pela faixa do template. (`app/ponto/services/disputa.py:15-31`; `app/ponto/views.py:140-144`; `app/ponto/views.py:207`; `app/templates/ponto/espelho.html:13-18`.)
-- O PDF lê o wrapper para bloquear emissão. (`app/relatorios/pdf_espelho.py:1082-1090`; `app/relatorios/pdf_espelho.py:1113`.)
-- O painel tem derivadores próprios do mesmo predicado: `exists(disputa aberta)` ou pertencimento ao conjunto recebido; o leitor transforma isso em LED vermelho. O lote monta seu próprio conjunto de disputas abertas. (`app/colaboradores/painel_cell.py:20-32`; `app/colaboradores/painel_cell.py:68`; `app/colaboradores/services/situacional.py:56-59`; `app/colaboradores/services/situacional.py:117`; `app/colaboradores/services/situacional.py:210`.)
-
-Esses homônimos não devem ser confundidos: `em_disputa_fechada` controla ações administrativas; `pode_responder` de chamados/v2 testa chamado não terminal; a regularização externa lista outro modelo. (`app/chamados/services/fio.py:264-268`; `app/templates/chamados/partials/modal_fio.html:289`; `app/api/views.py:1145`; `app/api/views_core.py:1271-1289`.)
-
-O `HANDOFF.md` anuncia contratos do app, mas suas seções tratam login, ausência, plataforma e senha: não documenta o contrato de `em_disputa`/perguntas. A condição executada pelo Android 3.9.3 para abrir a Activity, o campo que ele efetivamente lê e a ocorrência relatada permanecem **[nao verificado]**; o comentário da selfie não substitui esse leitor. (`app/docs/HANDOFF.md:1-219`; `app/api/views_core.py:426-427`.)
-
-**(b) Sonda.** A contagem histórica exata pedida está **[nao verificado]**. `Batida` não conserva o flag/lista daquele retorno; `ultima_batida` é contexto corrente que pode ser substituído. Além disso, o detector inicial não recebe instante e lê cadastro atual. (`app/ponto/models.py:8-95`; `app/api/views_core.py:753-765`; `app/chamados/services/disputa_emissao.py:569-575`; `app/chamados/detector_anomalias.py:19-123`.)
-
-Os juízes aceitam `agora` em parte do caminho, mas não reconstituem todo o estado passado: a projeção preserva identidade atual, a tranca e o veredito são atuais, e a partição lê os carimbos atuais. Passar o instante da batida não produziria uma contagem contemporânea exata. (`app/chamados/juizes.py:1381-1419`; `app/chamados/juizes.py:1450-1466`; `app/chamados/services/pergunta_no_app.py:52-85`.)
-
-O script abaixo, **somente texto e não executado**, deixa a métrica histórica como `None` e entrega duas aproximações separadas: detector inicial atual e desvio grave recalculado. São as funções reais chamadas pelo escritor; não representam seu flag final. Cada uma é cruzada com os dois candidatos de (c), no estado atual. (`app/api/views_core.py:419-420`; `app/api/views_core.py:694-698`; `app/api/views_core.py:753-765`.)
-
-O canal é o gravado; `NULL` permanece desconhecido, inclusive no trecho anterior ao nascimento do campo, sem inferência por timestamp do aparelho. (`app/ponto/models.py:46-55`.)
-
-```python
-# SOMENTE TEXTO. Para shell Django ja selecionado no tenant juliani.
-# Nao executado nesta leitura.
-#
-# Fontes:
-# app/api/views_core.py:419-420       detector inicial do escritor
-# app/api/views_core.py:694-698       componente desvio grave
-# app/api/views_core.py:753-765       flag usa motivos FINAIS, nao so estes componentes
-# app/chamados/detector_anomalias.py:19-123  detector atual, sem instante passado
-# app/ponto/utils.py:103-133         escrita/push interceptados antes da tentativa
-# app/chamados/juizes.py:865,1402-1492       C6 real
-# app/chamados/services/pergunta_no_app.py:45-85  pendencia atual do app
-# app/core/observ.py:60-82           contador de erros engolidos
-# app/ponto/models.py:23,45-55,67,79 universo, canal e carimbos
-#
-# APROXIMACAO:
-# unidade = Batida persistida, timestamp nos ultimos 30 dias corridos;
-# elegibilidade = origem ATUAL == "app", sem afirmar qual endpoint a recebeu;
-# inclui retratadas: nao e universo de apuracao nem contagem de requests/retries;
-# sinais = dois componentes reais, recalculados separadamente no snapshot atual;
-# portas = C6 atual e pendentes atuais do app, sem escolher entre eles;
-# NAO reconstitui em_disputa historico nem pergunta disponivel naquele instante.
-#
-# Cada componente soma o mesmo universo elegivel, inclusive indecidiveis.
-# Resultados por batida: um colaborador com varias batidas pesa varias vezes.
-# Nenhum nome, CPF, resposta, contexto ou texto de excecao vai para a saida.
-
-import io
-import json
-import logging
-from collections import Counter, defaultdict
-from contextlib import redirect_stdout, redirect_stderr
-from datetime import timedelta
-from types import SimpleNamespace
-from unittest.mock import patch
-
-from django.db import connection, transaction
-from django.utils import timezone
-
-universo = None
-processadas = 0
-elegiveis = 0
-janela = None
-fatal = None
-erros = []
-interceptadas = Counter()
-canais = defaultdict(Counter)
-contagens = defaultdict(Counter)
-memo_base = {}
-memo_portas = {}
-nivel_logging = logging.root.manager.disable
-
-
-def emitir(obj):
-    print(json.dumps(obj, ensure_ascii=False, sort_keys=True))
-
-
-def canal_gravado(b):
-    if b.canal in ("apk", "pwa"):
-        return b.canal
-    if b.canal is None:
-        return "NULL_desconhecido"
-    return "fora_das_choices"
-
-
-def interceptar_criacao(*args, **kwargs):
-    # bloquear_se_em_ferias usa somente pk no push e devolve o objeto. [nao verificado]
-    # O detector usa o booleano; seu contexto nao e emitido nem medido.
-    interceptadas["ChamadoColaborador.criar"] += 1
-    return SimpleNamespace(pk=0)
-
-
-def interceptar_push(*args, **kwargs):
-    interceptadas["push_dp"] += 1 [nao verificado]
-    return None
-
-
-class ErroInternoDoDetector(Exception):
-    pass
-
-
-def medir(etapa, func, *args, pessoa=None, batida=None, **kwargs):
-    antes = engolidos()["total"]
-    valor = None
-    falha = None
-    try:
-        # Savepoint permite continuar se uma tentativa incidental de SQL
-        # proibido for recusada pela transacao READ ONLY.
-        with transaction.atomic():
-            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-                valor = func(*args, **kwargs)
-    except Exception as exc:
-        falha = type(exc).__name__
-
-    delta = engolidos()["total"] - antes
-    if falha is not None or delta:
-        erro = {
-            "etapa": etapa,
-            "erro": falha or "erro_engolido",
-            "engolidos": delta,
-        }
-        if pessoa is not None:
-            erro["pessoa"] = pessoa
-        if batida is not None:
-            erro["batida"] = batida
-        erros.append(erro)
-        return None
-    return valor
-
-
-def ler_base(colab):
-    motivos, contexto = detectar_anomalias(colab)
-    # Estes erros sao capturados pelo detector sem passar por engolidos().
-    # Nunca interpretar resultado parcial como ausencia de anomalia.
-    if any(str(k).startswith("_erro") for k in contexto):
-        raise ErroInternoDoDetector()
-    return bool(motivos)
-
-
-def ler_grave(b):
-    estado, _contexto = detectar_batida_fora_escala(
-        b.colaborador, b.timestamp, b.tipo
-    )
-    if estado not in ("ok", "leve", "grave", "informativa"):
-        raise ErroInternoDoDetector()
-    return estado == "grave"
-
-
-def ler_portas(colab, agora):
-    # Universo C6 completo do colaborador, sem substituir C6 por q_vivas.
-    qs = (
-        PerguntaDisputa.objects
-        .filter(disputa__colaborador=colab)
-        .select_related("disputa", "celula", "chamado_destino")
-        .order_by("pk")
-    )
-    perguntas = list(
-        um_colaborador_por_identidade(qs, {colab.pk: colab})
-    )
-    with tranca_da_consulta(perguntas):
-        n_c6 = sum(
-            1 for p in perguntas if pergunta_viva(p, agora=agora)
-        )
-
-    # Le a particao real; nao reproduz seus filtros na sonda.
-    consulta = consulta_do_app(colab, agora=agora)
-    return n_c6, len(consulta["pendentes"])
-
-
-def contabilizar(canal, componente, sinal, portas):
-    c = contagens[(canal, componente)]
-    c["universo_elegivel"] += 1
-
-    if sinal is None:
-        c["sinal_indecidivel"] += 1
-        return
-    if not sinal:
-        c["sinal_ausente"] += 1
-        return
-
-    c["sinal_presente"] += 1
-    if portas is None:
-        c["sinal_presente_portas_indecidiveis"] += 1
-        return
-
-    n_c6, n_pendentes = portas
-    c["sinal_presente_portas_decididas"] += 1
-    if n_c6 == 0:
-        c["sinal_presente_sem_C6_viva_no_snapshot"] += 1
-    if n_pendentes == 0:
-        c["sinal_presente_sem_pendente_no_snapshot"] += 1
-
-
-try:
-    logging.disable(logging.CRITICAL)
-
-    from chamados.models import ChamadoColaborador, PerguntaDisputa
-    from chamados.detector_anomalias import (
-        detectar_anomalias,
-        detectar_batida_fora_escala,
-    )
-    from chamados.juizes import (
-        pergunta_viva,
-        tranca_da_consulta,
-        um_colaborador_por_identidade,
-    )
-    from chamados.services.pergunta_no_app import consulta_do_app
-    from core.observ import engolidos
-    from ponto.models import Batida
-
-    if connection.vendor != "postgresql":
-        fatal = "exige_postgresql"
-    elif connection.in_atomic_block:
-        fatal = "iniciar_fora_de_atomic"
-    elif getattr(connection, "schema_name", None) != "juliani":
-        fatal = "exige_tenant_juliani"
-
-    if fatal is None:
-        with transaction.atomic():
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-                )
-
-            agora = timezone.now()
-            inicio = agora - timedelta(days=30)
-            janela = {
-                "inicio_inclusivo": timezone.localtime(inicio).isoformat(),
-                "fim_exclusivo": timezone.localtime(agora).isoformat(),
-                "campo_do_recorte": "Batida.timestamp",
-                "instante_das_portas": timezone.localtime(agora).isoformat(),
-            }
-
-            qs = (
-                Batida.objects
-                .filter(timestamp__gte=inicio, timestamp__lt=agora)
-                .select_related(
-                    "colaborador__empresa",
-                    "colaborador__posto",
-                )
-                .order_by("colaborador_id", "pk")
-            )
-            universo = qs.count()
-
-            # Intercepta os efeitos conhecidos ANTES de chamar o detector.
-            # Nao chama views, emissao de disputa nem endpoints HTTP.
-            with patch.object(
-                ChamadoColaborador,
-                "criar",
-                side_effect=interceptar_criacao,
-            ), patch(
-                "chamados.push_utils.push_dp", [nao verificado]
-                side_effect=interceptar_push,
-            ):
-                for b in qs.iterator(chunk_size=500):
-                    canal = canal_gravado(b)
-                    canais[canal]["universo"] += 1
-                    processadas += 1
-
-                    if b.retratada_em is not None:
-                        canais[canal]["retratadas_no_snapshot"] += 1
-
-                    if b.origem != "app":
-                        canais[canal]["outras_origens_atuais"] += 1
-                        continue
-
-                    elegiveis += 1
-                    canais[canal]["origem_app_atual"] += 1
-                    cid = b.colaborador_id
-                    pessoa = f"col{cid:03d}"
-
-                    if cid not in memo_base:
-                        memo_base[cid] = medir(
-                            "detector_inicial_atual",
-                            ler_base,
-                            b.colaborador,
-                            pessoa=pessoa,
-                        )
-                    if cid not in memo_portas:
-                        memo_portas[cid] = medir(
-                            "portas_atuais",
-                            ler_portas,
-                            b.colaborador,
-                            agora,
-                            pessoa=pessoa,
-                        )
-
-                    grave = medir(
-                        "desvio_grave_recalculado",
-                        ler_grave,
-                        b,
-                        pessoa=pessoa,
-                        batida=b.pk,
-                    )
-                    portas = memo_portas[cid]
-                    contabilizar(
-                        canal, "detector_inicial_atual",
-                        memo_base[cid], portas,
-                    )
-                    contabilizar(
-                        canal, "desvio_grave_recalculado",
-                        grave, portas,
-                    )
-
-        if processadas != universo:
-            fatal = "universo_incompleto"
-
-except Exception as exc:
-    fatal = fatal or type(exc).__name__
-finally:
-    logging.disable(nivel_logging)
-
-if fatal is not None:
-    erros.append({"etapa": "fatal", "erro": fatal})
-
-componentes = (
-    "detector_inicial_atual",
-    "desvio_grave_recalculado",
-)
-campos = (
-    "universo_elegivel",
-    "sinal_indecidivel",
-    "sinal_ausente",
-    "sinal_presente",
-    "sinal_presente_portas_indecidiveis",
-    "sinal_presente_portas_decididas",
-    "sinal_presente_sem_C6_viva_no_snapshot",
-    "sinal_prese
-
-[truncado em 20000 de 25241 caracteres]
-
-## 15/11 23:26 · sessao ba4226c49212 · - · - · origem=Ronald (tmux)
-
-Censo de derivadores e propagadores, com referências atuais:
-
-| Categoria | Escritor / fonte | Pergunta real / leitor |
-|---|---|---|
-| Anomalia, UI | `app/api/views.py:759-771` | Lista local `motivos_anomalia` não vazia; chama criador da disputa, ignora retorno e publica em `:821`. |
-| Anomalia, core | `app/api/views_core.py:753-765` | Mesmo predicado; publica em `:815`. |
-| Perguntas pendentes | `app/api/views.py:2537-2539,2569` | `bool(consulta_do_app(colab)['pendentes'])`; lista publicada em `:2576`. |
-| Disputa aberta | `app/chamados/services/disputa_emissao.py:34-42` | `DisputaSupervisao` do colaborador com `fechada_em IS NULL`; retorno `.first()`. `api/views.py:1336` chama e `:1670` publica booleano. |
-| Constante de dedup | `app/api/views.py:543`; `app/api/views_core.py:529` | Resposta da duplicata: `False`, motivos vazios em `:544` / `:530`. |
-| Constante de colisão oposta | `app/api/views.py:690`; `app/api/views_core.py:681` | Resposta de batida ignorada: `False`, motivos vazios em `:691` / `:682`. |
-| Constante de reuso | `app/ponto/services/resposta_batida.py:7-30` | `False` quando não há marca transiente `criada_neste_toque`; propagadores: `api/views.py:693-695`, `api/views_core.py:684-686`, `ponto/services/triagem_batida.py:723-725`. |
-
-Portanto, **três derivações variáveis** do campo JSON, mais **cinco sítios de constante `False`**; as quatro citações de derivação do aval conferem nas linhas atuais acima. A segunda variável significa pendente, mais restrita que simplesmente “pergunta viva”: `consulta_do_app` chama C6 em `app/chamados/services/pergunta_no_app.py:73`; `particao_do_app` exige ainda `respondida_em is None` e disputa aberta em `:76-85`.
-
-Fonte completa de motivos da anomalia: detector inicial em `app/api/views.py:433-434`; selfie em `:447-453`; mock em `:457-464`; assinatura/liveness em `:465-495`; E/S incompleta em `:604-645`; desvio grave em `:703-707`; ajuste da saída sem turno em `:748-756`. Só chamar `detectar_anomalias(colab)` não reproduz o flag final — os sítios posteriores acrescentam e removem motivos nessas linhas.
-
-A referência da selfie também confere: `app/api/views_core.py:426-427` é comentário do desvio APK/POST separado; a regra executável está em `:433-439` [essas linhas finais precisam conferência do root; equivalentes verificados em `app/api/views.py:447-453`].
-
-Aliases e leitores da derivação “disputa aberta”:
-
-- Reexport compatível: `app/chamados/models.py:4234-4236`.
-- Leitor REST: `app/api/views.py:1335-1336,1670-1672`.
-- Leitor de autorização: `app/colaboradores/mixins.py:304-312`, só POST; isentos passam antes em `:301-303`. Decoradores ativos: `app/holerite/views.py:1144`; `app/colaboradores/views.py:1368,1603,1769,1877`. Decoradores isentos: `app/colaboradores/views.py:1410,1425`; `app/ferias/views.py:287,347,686,773`.
-- Wrapper `motor_bloqueado_por_disputa`: `app/ponto/services/disputa.py:15-31`. Leitores: `app/ponto/views.py:140-144,207` → faixa em `app/templates/ponto/espelho.html:13-18`; PDF `app/relatorios/pdf_espelho.py:1082-1090,1113` → execução dos bloqueios em `app/relatorios/pdf_base.py:129-131`.
-- Variável homônima do painel: `app/colaboradores/painel_cell.py:23` lê conjunto recebido ou `:31-32` calcula `exists(disputa aberta)`; `:68` transforma em LED vermelho. Único chamador de produção encontrado passa sem mapas em `:81`; template lê LED em `app/templates/colaboradores/partials/_ps_linha.html:1,6`.
-- Fonte paralela do LED em lote: `app/colaboradores/services/situacional.py:117` monta conjunto de colaboradores com disputa aberta; `:56-59` lê e `:210` publica LED.
-- `em_disputa_fechada` é outra variável: `app/chamados/services/fio.py:264-268`; consumidor admin em `app/templates/chamados/partials/modal_fio.html:289`; não equivale ao sinal de abertura da tela de perguntas.
-
-Equivalentes de apresentação verificados:
-
-- Autoridade `app/chamados/services/pergunta_no_app.py:88-119`: `questionarios_pendentes = len(pendentes)` em `:101`; `chamados_badge` prioriza pendentes em `:108-113`; sem perguntas usa chamados não lidos calculados em `:102-107`.
-- Propagação `/me`: `app/api/views.py:315-319,359-360`; `app/api/views_core.py:303-307,347-348`.
-- Dashboard web: `app/core/views.py:239,252-253,268`; leitores do link/badge/rótulo em `app/templates/core/dashboard_colaborador_v2.html:78-80`.
-- Painel do colaborador: `app/colaboradores/views.py:940-941` → `app/templates/colaboradores/partials/painel_colaborador.html:39,190-191`.
-- Listagem `/chamados/v2`: consulta em `app/api/views.py:997-998`; pendentes e histórico vivo de disputa aberta em `:1033-1035`; destino vivo ou pai em `:1036-1040`; serialização `perguntas_disputa` em `:1148-1167`.
-
-Não localizei consumidor HTML/JS literal de `em_disputa` ou `motivos_disputa`; consumidor nativo precisa ser sustentado pelo HANDOFF ou marcado `[não verificado]`. Os únicos usos locais de `motivos_disputa` são os payloads citados e a prosa de `app/ponto/services/aviso_da_batida.py:14`; o serviço lê a lista interna para a frase em `:69-71`, chamado em `app/api/views.py:812` / `app/api/views_core.py:806`.
-
-Impedimentos concretos para uma sonda histórica exata:
-
-- `Batida` não guarda flag nem lista de motivos; campos em `app/ponto/models.py:8-95`.
-- `detectar_anomalias(colaborador)` não aceita instante (`app/chamados/detector_anomalias.py:19`), lê escalas ativas atuais em `:58-62`, `timezone.now()` em `:73` e cadastro de posto atual em `:101-111`.
-- A função **pode escrever e enviar push**: chama `bloquear_se_em_ferias` em `app/chamados/detector_anomalias.py:114-121`; este cria chamado em `app/ponto/utils.py:103-125` e envia push em `:127-133`. O detector engole o erro em `contexto['_erro_ferias']`, sem contador `engolidos`, em `detector_anomalias.py:120-121`. Interceptar escritor antes da tentativa é necessário se a sonda chamar esse caminho; barreira SQL somente leitura deve ser adicional.
-- `ultima_batida` guarda episódio corrente em `app/api/views.py:761-765`, mas o agregado substitui outro episódio em `app/chamados/services/disputa_emissao.py:569-575`; não é histórico completo.
-- Canal é dado persistido em `app/ponto/models.py:46-55`: `NULL` anterior a 27/10/2026 ou sem aparelho; o próprio contrato proíbe inferir canal por `timestamp_dispositivo` em `:48`.
-
-_5864 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5868 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
