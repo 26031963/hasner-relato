@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:14** · publicado em **16/11/2026 02:14** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:17** · publicado em **16/11/2026 02:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:17 · sessao ddbab1bf47b0 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+As seis linhas `SOMA` e as duas linhas `ESTRUTURA_DIAS_LINHAS` apresentam `True`. Não há `INCOMPLETO` no dado fornecido. [nao verificado]
+
+Transcrição integral do dado fornecido para a parte 5 de 6: [nao verificado]
+
+```text
+sonda_leitura: script.py [740d3ddca1d2e7ae] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 5 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 107
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 102
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 209 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1285, 'bate_ate_10min': 1215, 'esp_zero_e6_trabalho': 9, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 55, 'dia_batida_impar': 78, 'impar_que_BATE': 29, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 42, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 49, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1533, 'dia_isento_ou_ausencia': 275, 'dia_sem_trabalho_ambos': 45, 'esp_desconta_janela_declarada': 72, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1285 dias comparados
+[3] ESTRUTURA     3 dia-colab      29.2 h    3 colabs
+[3] CADASTRO     19 dia-colab      52.3 h    8 colabs
+[3] BATIDA       48 dia-colab     197.3 h   26 colabs
+[4] TOTAL divergentes 70
+[5] colabs com divergencia: 29
+ESTRUTURA_DIA|10/2026|col382|2026-09-30|esp_min=364|e6_min=0|teto_min=0|dif_min=-364|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col478|2026-09-25|esp_min=719|e6_min=8|teto_min=8|dif_min=-711|classe=diverge_acima_60|paridade=par|batidas=18:57 19:04|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col868|2026-09-22|esp_min=0|e6_min=679|teto_min=733|dif_min=679|classe=esp_zero_e6_trabalho|paridade=par|batidas=18:48 02:02 02:57 07:01|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 10/2026 3 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=29.23270916666667|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=19|horas=52.325450786111105|colabs=8
+PARCIAL|10/2026|BATIDA|dias=48|horas=197.29829774694443|colabs=26
+PARCIAL_TOTAL|10/2026|dias=70|horas=278.856457699722205|colabs=29
+ESTIMATIVA processados 125 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1128, 'bate_ate_10min': 1045, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 6, 'diverge_acima_60': 68, 'dia_batida_impar': 88, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 55, 'impar_dentro_da_faixa': 46, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 55, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 408, 'dia_sem_lavratura_no_espelho': 1292, 'dia_isento_ou_ausencia': 214, 'dia_sem_trabalho_ambos': 40, 'esp_desconta_janela_declarada': 80, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 92.6% de 1128 dias comparados
+[3] ESTRUTURA     8 dia-colab      54.2 h    6 colabs
+[3] CADASTRO     29 dia-colab      98.7 h   10 colabs
+[3] BATIDA       46 dia-colab     239.2 h   25 colabs
+[4] TOTAL divergentes 83
+[5] colabs com divergencia: 34
+ESTRUTURA_DIA|11/2026|col112|2026-10-21|esp_min=546|e6_min=838|teto_min=838|dif_min=292|classe=diverge_acima_60|paridade=par|batidas=17:03 07:01|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col112|2026-10-22|esp_min=541|e6_min=835|teto_min=835|dif_min=294|classe=diverge_acima_60|paridade=par|batidas=17:02 06:56|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col130|2026-10-29|esp_min=335|e6_min=672|teto_min=730|dif_min=337|classe=diverge_acima_60|paridade=par|batidas=18:56 00:33 01:31 07:06|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col220|2026-11-10|esp_min=337|e6_min=430|teto_min=486|dif_min=93|classe=diverge_acima_60|paridade=par|batidas=21:54 03:35 04:31 06:00|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col382|2026-11-10|esp_min=418|e6_min=0|teto_min=0|dif_min=-418|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col874|2026-10-22|esp_min=667|e6_min=383|teto_min=383|dif_min=-284|classe=diverge_acima_60|paridade=par|batidas=15:45 22:07|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col922|2026-11-01|esp_min=1382|e6_min=68|teto_min=68|dif_min=-1314|classe=diverge_acima_60|paridade=par|batidas=22:01 23:09|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col922|2026-11-04|esp_min=676|e6_min=458|teto_min=458|dif_min=-218|classe=diverge_acima_60|paridade=par|batidas=23:11 06:49|veredito=trabalhou
+ESTRUTURA_DIAS_LINHAS 11/2026 8 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=8|horas=54.16690254361111|colabs=6
+PARCIAL|11/2026|CADASTRO|dias=29|horas=98.72113534194445|colabs=10
+PARCIAL|11/2026|BATIDA|dias=46|horas=239.22640724611108|colabs=25
+PARCIAL_TOTAL|11/2026|dias=83|horas=392.11444513166664|colabs=34
+TEMPO_SEGUNDOS 188.1
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 273687
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 46
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1924
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 7806
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 80
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 14
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 7884
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 5649
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 5649
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 340
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 192
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 498705
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 855
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3248
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 215
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 14074
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 174
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4284
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 198
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 28387
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3745
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 44131
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 2
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 21131
+SOMA 10/2026 70   <- tem de ser igual a soma das classes (70) True
+SOMA 10/2026 HORAS 278.856457699722205 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 83   <- tem de ser igual a soma das classes (83) True
+SOMA 11/2026 HORAS 392.11444513166664 True
+SOMA 11/2026 COLABS_UNIAO 34 True
+rc_sombra=0
+```
 
 ## 16/11 02:14 · sessao 63a47c44631b · LOTE7-C6 · verificador · origem=Code
 
@@ -1105,164 +1205,4 @@ Na cópia, os locais correspondentes estão em `disputa_emissao.py:1860`, `curar
 
 Ressalva para BO /5: o dado novo informa apenas a saída de `_marcos_faltantes`; a célula crua atual não foi fornecida. A associação documental do nominal ao produtor existe (`BACKLOG.md:831`; `RELATO.md:3908`), mas comprovar que toda discrepância atual se esgota nesse único mecanismo permanece **[nao verificado]**.
 
-## 16/11 01:15 · sessao bf44a775e492 · RESPOSTAS-BO-1611 · censo · origem=Code
-
-**A partição v1 soma 131, mas não está demonstrada como partição exclusiva de pessoa+dia.** Os anexos individualizam 126 IDs canônicos; há sobreposições entre raízes e casos classificados como “sem dia-colab” que já têm ambos. (app/docs/RELATO.md:429; anexo estrutura18.tsv:1–18; anexo final67.tsv:2–38; anexo mapa_hj_sem_nome.tsv:1–80)
-
-Uso a numeração dos anexos contando sua primeira linha de conteúdo como linha 1; no código, cito a numeração desta cópia. Identidade Git do HEAD: **[nao verificado]**.
-
-**0 — Conferência da partição**
-
-| Conferência | Resultado e prova |
-|---|---|
-| ESTRUTURA histórica | Os 18 estão discriminados: nove NO AR, sete com obra pendente e dois sem cobertura comprovada. (anexo resolve.tsv:2–19) |
-| Triagem dos 37 | 27 SEM DIA-COLAB, quatro BATIDA, quatro CADASTRO, dois ESTRUTURA. (anexo final67.tsv:2–38) |
-| Ingestão | 80 unidades = seis ESTRUTURA + três CADASTRO + cinco BATIDA + 33 sem divergência histórica + 33 indeterminadas. (app/docs/RELATO.md:8916–8921) |
-| IDs individualizados | `80 + 18 + 37 − 6 − 3 = 126`: seis ESTRUTURA já pertencem à ingestão; três indeterminados reaparecem em final67. (anexo estrutura18.tsv:1–6; anexo final67.tsv:12–14; anexo mapa_hj_sem_nome.tsv:1–80) |
-| Diferença para 131 | O p0 declara sete CADASTRO e seis BATIDA; o mapa individualiza três e cinco. Faltam, portanto, individualizar **quatro CADASTRO e um BATIDA** para demonstrar o total declarado. Identidades desses cinco no p0: **[nao verificado]**. (app/docs/RELATO.md:429; app/docs/RELATO.md:8917–8918) |
-
-As sobreposições encontradas são estas:
-
-| Pessoa+dia | Raízes/baldes envolvidos | Prova |
-|---|---|---|
-| col42, 08/10 e 15/10 | BO-ADMIN-2710/1 e HJ-005-U2/U4: duas raízes dentro de “não reconferido”. | app/docs/RELATO.md:3625; anexo mapa_hj_sem_nome.tsv:8,10 |
-| col42, 22/10 | BO-ADMIN-2710/1 em “não reconferido”; HJ-005-U5 em BATIDA. | app/docs/RELATO.md:3625; anexo mapa_hj_sem_nome.tsv:11 |
-| col247, 24/10 | BO-ADMIN-2710/5 em “não reconferido”; HJ-031-U1 em “falta informação”. | app/docs/RELATO.md:3905; anexo final67.tsv:13; anexo mapa_hj_sem_nome.tsv:51 |
-| col130, 05/10 | BO-ADMIN-2710/7 em “não reconferido”; HJ-018-U1 nos 33 históricos sem divergência. | app/docs/BACKLOG.md:835; anexo mapa_hj_sem_nome.tsv:33 |
-| col789, 11/10 | Nominal RT-04 da BO-ADMIN-2710/3, com obra; HJ-004-U1 nos 33 históricos sem divergência. | app/docs/BACKLOG.md:1956; anexo mapa_hj_sem_nome.tsv:5 |
-
-Essas raízes podem denunciar sintomas diferentes, mas **não formam unidades pessoa+dia exclusivas**. Não as fundi automaticamente. (app/docs/CORTES.md:373; app/docs/RELATO.md:3905; app/docs/BACKLOG.md:1956)
-
-Também há três classificações “SEM DIA-COLAB” materialmente incorretas:
-
-- HJ-012-U1: col239, 2026-10-07; discordância das testemunhas. (anexo final67.tsv:12; anexo mapa_hj_sem_nome.tsv:18)
-- HJ-031-U1: col247, 2026-10-24; discordância das testemunhas. (anexo final67.tsv:13; anexo mapa_hj_sem_nome.tsv:51)
-- HJ-050-U2: col523, 2026-11-07; era futuro na leitura de 05/11. (anexo final67.tsv:14; anexo mapa_hj_sem_nome.tsv:72; app/docs/RELATO.md:8920)
-
-Portanto, não certifico um quadro corrigido exclusivo de 131: faltam os cinco IDs do p0 e a definição de tratamento das sobreposições. Os 33 permanecem como medida histórica, sem reconferência nova nesta resposta. (app/docs/RELATO.md:429; app/docs/RELATO.md:8919; app/docs/RELATO.md:8924)
-
-**1 — Os nove “não reconferidos”**
-
-A referência nominal privada da ingestão está em `logs/hj_0511/fonte` e `logs/hj_0511/mapa.md`; esses destinos são apontados no RELATO. Linhas internas contendo o casamento por CPF/nome: **[nao verificado]**. (app/docs/RELATO.md:8894; app/docs/RELATO.md:8924)
-
-O lookup não oferece um juiz genérico de “caso fechado”: declara essa pergunta SEM juiz. Abaixo, FECHADO refere-se ao defeito indicado, com os limites escritos. (app/docs/JUIZES.md:109)
-
-| Caso | Pessoa e dia escritos | Juiz real e esperado para FECHADO |
-|---|---|---|
-| HJ-005-U2 | col42, 2026-10-08. (anexo mapa_hj_sem_nome.tsv:8) | `ponto.turnos.periodo_da_parcial_no_dia`: esperado `fora`; `sem_periodo`/`nao_sei` não conferem. Para afirmar o que a tela mostra, consultar também `ponto.status_dia.status_do_dia_lavrado`. Cobertura no lookup: JUIZES:55–56; implementação: turnos.py:2628–2655; status: JUIZES:120; status_dia.py:201. |
-| HJ-005-U4 | col42, 2026-10-15. (anexo mapa_hj_sem_nome.tsv:10) | Mesmo juiz e esperado do anterior. (app/ponto/turnos.py:2628–2655; app/docs/JUIZES.md:55–56,120) |
-| HJ-030-U1 | col94, 2026-10-16; pergunta 44764, disputa 6984. (anexo mapa_hj_sem_nome.tsv:50; app/docs/RELATO.md:3964) | `chamados.juizes.pergunta_viva` + `chamados.services.fio.montar_chamados_fio`: se viva, deve aparecer no fio do admin. Viva e invisível = ABERTO; morta, isoladamente, não prova desfecho. O lookup só aponta o localizador de disputa; o registro vivo nomeia C6. (app/docs/JUIZES.md:40; app/core/juizes.py:286; app/chamados/juizes.py:865; app/chamados/services/fio.py:242–275) |
-| BO-ADMIN-2710/1 | col42, 2026-10-08, 15 e 22. (app/docs/RELATO.md:3625) | Mesmo juiz de cobertura parcial; esperado `fora`, sem certificar outros furos ou dinheiro. (app/docs/JUIZES.md:55–56; app/ponto/turnos.py:2632–2637) |
-| BO-ADMIN-2710/2 | col789; sete dias, somente 08/10 e 26/10 explicitados. **Mover para falta informação: lista exata dos sete dias.** (app/docs/RELATO.md:3625) | Geometria: `ponto.turnos.parear_turnos`/`turnos_do_colab`, lookup JUIZES:20. O nominal exige entrada reconhecida, pontualidade e HE correspondentes; um valor escalar de FECHADO para a raiz: **[nao verificado]**. (app/docs/CORTES.md:364; app/docs/JUIZES.md:20) |
-| BO-ADMIN-2710/5 | col247, 2026-10-24. (app/docs/RELATO.md:3905) | Leitor real `_marcos_faltantes`: esperado nominal `int_volta`, tipo `E`, em vez de `int_ida/S`. Isso ainda exige conferir emissão e efeito; não basta fechar chamado. Não há linha específica desse leitor no lookup. (app/chamados/services/declaracao_texto.py:86–143; app/docs/CORTES.md:373; lookup específico **[nao verificado]**) |
-| BO-ADMIN-2710/6 | col42/129/789, alvos sem todos os dias. Subcaso escrito: col129, 2026-10-25, chamado 35101. **Mover a raiz para falta informação:** dias/perguntas restantes e tela/perfil do supervisor. (app/docs/RELATO.md:3906; app/docs/CORTES.md:373–374) | C6 `pergunta_viva` e fio para invisibilidade; `qs_na_fila` para a fila. O subcaso depende expressamente da identificação da tela/perfil. (app/core/juizes.py:286; app/chamados/services/fio.py:242; app/chamados/services/painel.py:158; app/docs/CORTES.md:374) |
-| BO-ADMIN-2710/7 | col130, 2026-10-05, chamado 28883. (app/docs/BACKLOG.md:835) | `chamados.services.painel.qs_na_fila(...).exists()`: esperado **False** para a pendência nominal. `registrado` não pede ação. Lookup: JUIZES:59–60,82; implementação painel.py:158–190. |
-| BO-ADMIN-2710/8.1 | col789; ato de edição em 2026-10-27, 14:33–15:56; vínculos 1221/1472/1473. (app/docs/CORTES.md:362) | `colaboradores.services.vinculo.executar_vinculo` é escritor: **NAO_CONFERIDO, não chamar**. Juiz leitor que certifique fidelidade histórica de ação/antes/depois: **[nao verificado]**. A cura não reescreve a trilha histórica. (app/colaboradores/services/vinculo.py:170; app/docs/RELATO.md:3579) |
-
-**2 — Os 57 rótulos originais “falta informação”**
-
-“De quem” abaixo identifica a **fonte do relato**; não transfere ao relator medições internas. A origem HJ/Fernando está escrita no BACKLOG; BO-0611/Mauricio no PROMPTS; BO-1311/Mauricio na própria obra. (app/docs/BACKLOG.md:2233; app/docs/PROMPTS.md:1914; app/docs/BACKLOG.md:795)
-
-| Caso | Dado que falta ou correção do rótulo | De quem — prova da origem |
-|---|---|---|
-| HJ-058 | Individualizar pessoa/dia/anexo entre quatro episódios HEIC; há datas textuais, não ausência absoluta de dia. (app/docs/BACKLOG.md:2633) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-066 | Dado externo necessário **[nao verificado]**; as duas dashboards já estão identificadas. (app/docs/BACKLOG.md:2626) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-068 | Dado externo necessário **[nao verificado]**; fio lateral, Histórico e contador já estão especificados. (app/docs/BACKLOG.md:2627) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-071 | Medir internamente se `hora_ini/hora_fim` estão gravadas; telas espelho/PDF conhecidas. (app/docs/BACKLOG.md:2628) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-073 | Censo interno por causa × permissão do supervisor. (app/docs/BACKLOG.md:2629) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-075 | Print do app mostrando escala antiga; col1032 conhecido. (app/docs/BACKLOG.md:2631) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-090 | Classificação interna L-099 dos 40 dias de férias com batida; individualização nessa linha **[nao verificado]**. (app/docs/BACKLOG.md:1932) | Fernando — app/docs/BACKLOG.md:2233 |
-| HJ-INGESTAO-0511/HJ-012-U1 | Pessoa/dia presentes: col239, 07/10; falta resolver discordância das testemunhas. (anexo mapa_hj_sem_nome.tsv:18) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-INGESTAO-0511/HJ-031-U1 | Pessoa/dia presentes: col247, 24/10; falta resolver discordância das testemunhas. (anexo mapa_hj_sem_nome.tsv:51) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-INGESTAO-0511/HJ-050-U2 | Pessoa/dia presentes: col523, 07/11; precisa reconferência após a leitura que o considerava futuro. (anexo mapa_hj_sem_nome.tsv:72) | Fernando — app/docs/BACKLOG.md:1883 |
-| BO-0611/02 | Qual é a queixa concreta; col78 já corrigido. Dia necessário **[nao verificado]**. (app/docs/RELATO.md:1934; app/docs/PROMPTS.md:1925) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/03 | Motivos das 40 ocorrências do lote. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/05 | Dia do episódio; col456 conhecido. (app/docs/RELATO.md:4; app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/06 | Lacuna atual **[nao verificado]**; quadro antigo dizia conta de teste ativa, mas foi substituído. (app/docs/RELATO.md:1996; app/docs/PROMPTS.md:1925) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/08 | Dia/prova atual **[nao verificado]**; registro substitutivo já diz col617, atestado aprovado, sem divergência. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/09 | Dia/chamado individual **[nao verificado]**; col1000 e falta de porta antes da resposta conhecidos. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/10 | Dia e troca individual **[nao verificado]**; col399 e ausência de UI conhecidos. (app/docs/RELATO.md:1934) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-0611/14 | Dia próprio do item 14 **[nao verificado]**; o turno 21/10 foi explicitamente destinado ao item 13. (app/docs/RELATO.md:1997) | Mauricio — app/docs/PROMPTS.md:1914 |
-| BO-1311-ROTEIRO/01 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/02 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/03 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/05 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/06 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/07 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/08 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-1311-ROTEIRO/09 | Confirmar ficha↔número; lacuna individual de dia/declaração/retentor **[nao verificado]**. (app/docs/RELATO.md:685,689) | Mauricio — app/docs/BACKLOG.md:795 |
-| BO-ADMIN-2710/8.3 | Recorte dos dias afetados; pessoa/vínculo conhecidos, mecanismo já descrito. (app/docs/RELATO.md:3908) | Mauricio — app/docs/RELATO.md:3894,3898 |
-| HJ-004-U2 | Dia; col789 presente. (anexo mapa_hj_sem_nome.tsv:6) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-007-U1 | Dia; col253 presente. (anexo mapa_hj_sem_nome.tsv:13) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-008-U1 | Dia; col283 presente. (anexo mapa_hj_sem_nome.tsv:14) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-017-U2 | Dia; col923 presente. (anexo mapa_hj_sem_nome.tsv:32) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-025-U1 | Dia; col270 presente. (anexo mapa_hj_sem_nome.tsv:42) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-026-U1 | Dia; col129 presente. (anexo mapa_hj_sem_nome.tsv:43) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-032-U1 | Dia; col163 presente. (anexo mapa_hj_sem_nome.tsv:52) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-033-U1 | Dia; col960 presente. (anexo mapa_hj_sem_nome.tsv:53) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-035-U1 | Dia; col949 presente. (anexo mapa_hj_sem_nome.tsv:56) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-036-U1 | Dia; col207 presente. (anexo mapa_hj_sem_nome.tsv:57) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-037-U1 | Dia; col332 presente. (anexo mapa_hj_sem_nome.tsv:58) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-038-U1 | Dia; col446 presente. (anexo mapa_hj_sem_nome.tsv:59) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-039-U1 | Dia; col89 presente. (anexo mapa_hj_sem_nome.tsv:60) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-040-U1 | Dia; col92 presente. (anexo mapa_hj_sem_nome.tsv:61) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-041-U1 | Dia; col231 presente. (anexo mapa_hj_sem_nome.tsv:62) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-042-U1 | Dia; col214 presente. (anexo mapa_hj_sem_nome.tsv:63) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-043-U1 | Dia; col235 presente. (anexo mapa_hj_sem_nome.tsv:64) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-044-U1 | Dia; col246 presente. (anexo mapa_hj_sem_nome.tsv:65) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-045-U1 | Dia; col250 presente. (anexo mapa_hj_sem_nome.tsv:66) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-046-U1 | Dia; col673 presente. (anexo mapa_hj_sem_nome.tsv:67) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-047-U1 | Dia; col194 presente. (anexo mapa_hj_sem_nome.tsv:68) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-048-U1 | Dia; col219 presente. (anexo mapa_hj_sem_nome.tsv:69) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-051-U1 | Dia; col123 presente. (anexo mapa_hj_sem_nome.tsv:73) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-052-U1 | Dia; col1023 presente. (anexo mapa_hj_sem_nome.tsv:74) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-052-U2 | Dia; col78 presente. (anexo mapa_hj_sem_nome.tsv:75) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-053-U1 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:76) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-054-U1 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:77) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-055-U1 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:78) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-056-U1 | Dia; col270 presente. (anexo mapa_hj_sem_nome.tsv:79) | Fernando — app/docs/BACKLOG.md:1883 |
-| HJ-056-U2 | Pessoa e dia. (anexo mapa_hj_sem_nome.tsv:80) | Fernando — app/docs/BACKLOG.md:1883 |
-
-Agrupamento dos **57 rótulos originais**, sem fingir que todos são pedidos externos:
-
-| Tipo | Quantidade | Lastro |
-|---|---:|---|
-| Dia ausente, pessoa presente | 26 | anexo mapa_hj_sem_nome.tsv:6–80 |
-| Pessoa e dia ausentes | 4 | anexo mapa_hj_sem_nome.tsv:76–78,80 |
-| Individualizar episódio/anexo HEIC | 1 | app/docs/BACKLOG.md:2633 |
-| Demanda de tela já descrita; lacuna externa não demonstrada | 2 | app/docs/BACKLOG.md:2626–2627 |
-| Medição/classificação interna | 3 | app/docs/BACKLOG.md:2628–2629,1932 |
-| Print | 1 | app/docs/BACKLOG.md:2631 |
-| Pessoa+dia presentes; discordância/reconferência | 3 | anexo mapa_hj_sem_nome.tsv:18,51,72 |
-| Queixa/motivos do lote | 2 | app/docs/RELATO.md:1934 |
-| Episódio/dia/prova individual não demonstrados | 5 | app/docs/RELATO.md:4,1934,1997 |
-| Lacuna atual não determinada após substituição do quadro | 1 | app/docs/RELATO.md:1996; app/docs/PROMPTS.md:1925 |
-| Correspondência e lacuna individual do roteiro não demonstradas | 8 | app/docs/RELATO.md:685,689 |
-| Dias afetados pela desativação | 1 | app/docs/RELATO.md:3908 |
-| **Soma** | **57** | anexo final67.tsv:2–38; anexo mapa_hj_sem_nome.tsv:1–80 |
-
-BO-ADMIN-2710/2 e /6 acrescentam duas raízes incompletas aos pendentes; não foram inseridas artificialmente nas 57 linhas acima. (app/docs/RELATO.md:3625,3906; app/docs/CORTES.md:374)
-
-**3 — Oito com obra e dois sem obra**
-
-“Hoje” nesta tabela significa o estado documental da cópia; execução ou conclusão atual em produção: **[nao verificado]**.
-
-| Caso | Obra | GRADE / BACKLOG | O que destrava |
-|---|---|---|---|
-| BO-ADMIN-2710/3 | JUSTIFICATIVA-PAGA-O-PERIODO | GRADE principal INTERROMPIDA; lista posterior PARADA, aguarda juiz. BACKLOG preserva dependência. (app/docs/GRADE-MESTRA.md:270,1758; app/docs/BACKLOG.md:1956) | Pouso de COMPETENCIA-PAGA-UM-JUIZ; certificar árvore/condições do opus, consumo do parcial e DIFF novo. (app/docs/GRADE-MESTRA.md:1758; app/docs/BACKLOG.md:1956) |
-| HJ-017-U1 | O232 | REGISTRADA; A/B no ar, complemento da ata pendente. (app/docs/GRADE-MESTRA.md:854; app/docs/BACKLOG.md:1253) | Migrar terceiro leitor, RED das quatro batidas e impacto de frota; colisão documental com JUSTIFICATIVA. (app/docs/BACKLOG.md:1253; app/docs/GRADE-MESTRA.md:854) |
-| BO2910-ESTRUTURA/01 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo da classe de duas portas de posto/empresa e exceção engolida. (app/docs/BACKLOG.md:1116) |
-| BO2910-ESTRUTURA/02 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo da classe de chamado de texto livre sem leitor da célula. (app/docs/BACKLOG.md:1116) |
-| BO2910-ESTRUTURA/05 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo; tela precisa exigir período na aprovação/edição da parcial. (app/docs/BACKLOG.md:1116) |
-| BO2910-ESTRUTURA/06 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo da vigência no desligamento e reabertura na reativação. (app/docs/BACKLOG.md:1116) |
-| BO2910-ESTRUTURA/08 | BO2910-ESTRUTURA | REGISTRADA, censo não fechado. (app/docs/GRADE-MESTRA.md:170,7; app/docs/BACKLOG.md:1116) | Censo do veredito admin que sobrevive à regeneração com marcos novos. (app/docs/BACKLOG.md:1116) |
-| HJ-074 | FERIADO-ESCALA → FERIADO-USA-A-LEI-DE-1609 | GRADE EM VOO, escopo anterior superado; lista posterior PAREI 3(ii). BACKLOG PARADA no desenho G. (app/docs/GRADE-MESTRA.md:127,1798; app/docs/BACKLOG.md:729) | Corte `! FERIADO-G item 3(ii)`; construção permanece parada pela condição medida. (app/docs/GRADE-MESTRA.md:1798; app/docs/RELATO.md:48) |
-
-| Sem obra | Descrição e complemento cabível |
-|---|---|
-| HJ-005-U1 | col42, 01/10: ingestão acusa irregularidade e retenção por fato em ausência/furo/indefinição. (anexo mapa_hj_sem_nome.tsv:7) Cabe **complemento de censo em BO-ADMIN-2710**, aberta “medindo”, para reconciliar dono e destino; cobertura causal por COBERTURA-PARCIAL não está demonstrada para 01/10. Há ainda destino histórico “decisão do admin” para o recorte 01/09-10, que precisa ser reconciliado. (app/docs/BACKLOG.md:832,841; app/docs/CORTES.md:373) |
-| HJ-012-U2 | col239, 12/10: ingestão acusa `espelho_cobrado`. (anexo mapa_hj_sem_nome.tsv:19) Cabe **complemento de
-
-[truncado em 20000 de 31904 caracteres]
-
-_5889 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5890 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
