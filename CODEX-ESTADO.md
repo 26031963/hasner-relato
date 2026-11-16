@@ -1,7 +1,229 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:28** · publicado em **16/11/2026 02:30** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:32** · publicado em **16/11/2026 02:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:32 · sessao 57ff070fbbff · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
+
+Em **16/11**, o consolidado fecha em **306 dias divergentes na 10/2026** e **329 na 11/2026**. O BATE é, respectivamente, **95,920543927476336%** e **94,823788546255507%**. [nao verificado]
+
+As contas abaixo usam exclusivamente os anexos colados, na ordem **P1 + P2 + P3 + P4 + P5 + P6**, preservando os decimais de `PARCIAL` e `PARCIAL_TOTAL`. As referências ao código identificam a cópia consultada; os resultados dos anexos levam `[nao verificado]`. [nao verificado]
+
+Para **10/2026**, cada chave de `[1]` soma: [nao verificado]
+
+| Chave | Conta por parte = total | Referência |
+|---|---|---|
+| dias_comparados | 1180 + 1268 + 1236 + 1234 + 1285 + 1298 = **7501** | [nao verificado] |
+| bate_ate_10min | 1140 + 1227 + 1169 + 1186 + 1215 + 1258 = **7195** | [nao verificado] |
+| esp_zero_e6_trabalho | 1 + 2 + 12 + 6 + 9 + 5 = **35** | [nao verificado] |
+| e6_zero_esp_trabalho | 3 + 4 + 6 + 1 + 3 + 2 = **19** | [nao verificado] |
+| diverge_10_60 | 11 + 7 + 2 + 5 + 3 + 1 = **29** | [nao verificado] |
+| diverge_acima_60 | 25 + 28 + 47 + 36 + 55 + 32 = **223** | [nao verificado] |
+| dia_batida_impar | 33 + 63 + 65 + 55 + 78 + 54 = **348** | [nao verificado] |
+| impar_que_BATE | 15 + 33 + 23 + 21 + 29 + 26 = **147** | [nao verificado] |
+| impar_que_DIVERGE | 18 + 30 + 42 + 34 + 49 + 28 = **201** | [nao verificado] |
+| impar_dentro_da_faixa | 15 + 24 + 33 + 30 + 42 + 25 = **169** | [nao verificado] |
+| impar_FORA_da_faixa | 3 + 6 + 9 + 4 + 7 + 3 = **32** | [nao verificado] |
+| impar_no_conjunto_do_dia | 18 + 30 + 42 + 33 + 49 + 28 = **200** | [nao verificado] |
+| impar_SO_POR_CORTE_do_oraculo | 0 + 0 + 0 + 1 + 0 + 0 = **1** | [nao verificado] |
+| dia_sem_linha_no_espelho | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
+| dia_sem_lavratura_no_espelho | 1727 + 1563 + 1422 + 1276 + 1533 + 1396 = **8917** | [nao verificado] |
+| dia_isento_ou_ausencia | 316 + 353 + 342 + 315 + 275 + 277 = **1878** | [nao verificado] |
+| dia_sem_trabalho_ambos | 34 + 24 + 22 + 18 + 45 + 11 = **154** | [nao verificado] |
+| esp_desconta_janela_declarada | 43 + 62 + 38 + 37 + 72 + 18 = **270** | [nao verificado] |
+| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
+
+Para **11/2026**, cada chave de `[1]` soma: [nao verificado]
+
+| Chave | Conta por parte = total | Referência |
+|---|---|---|
+| dias_comparados | 1008 + 1067 + 1059 + 983 + 1128 + 1111 = **6356** | [nao verificado] |
+| bate_ate_10min | 946 + 1011 + 1004 + 951 + 1045 + 1070 = **6027** | [nao verificado] |
+| esp_zero_e6_trabalho | 14 + 1 + 8 + 7 + 5 + 2 = **37** | [nao verificado] |
+| e6_zero_esp_trabalho | 7 + 3 + 7 + 0 + 4 + 4 = **25** | [nao verificado] |
+| diverge_10_60 | 8 + 3 + 2 + 0 + 6 + 2 = **21** | [nao verificado] |
+| diverge_acima_60 | 33 + 49 + 38 + 25 + 68 + 33 = **246** | [nao verificado] |
+| dia_batida_impar | 49 + 69 + 51 + 50 + 88 + 60 = **367** | [nao verificado] |
+| impar_que_BATE | 18 + 20 + 16 + 25 + 33 + 30 = **142** | [nao verificado] |
+| impar_que_DIVERGE | 31 + 49 + 35 + 25 + 55 + 30 = **225** | [nao verificado] |
+| impar_dentro_da_faixa | 21 + 45 + 28 + 21 + 46 + 25 = **186** | [nao verificado] |
+| impar_FORA_da_faixa | 10 + 4 + 7 + 4 + 9 + 5 = **39** | [nao verificado] |
+| impar_no_conjunto_do_dia | 31 + 48 + 33 + 24 + 55 + 29 = **220** | [nao verificado] |
+| impar_SO_POR_CORTE_do_oraculo | 0 + 1 + 2 + 1 + 0 + 1 = **5** | [nao verificado] |
+| dia_sem_linha_no_espelho | 396 + 408 + 396 + 376 + 408 + 396 = **2380** | [nao verificado] |
+| dia_sem_lavratura_no_espelho | 1354 + 1404 + 1334 + 1229 + 1292 + 1257 = **7870** | [nao verificado] |
+| dia_isento_ou_ausencia | 233 + 201 + 205 + 264 + 214 + 268 = **1385** | [nao verificado] |
+| dia_sem_trabalho_ambos | 44 + 28 + 26 + 34 + 40 + 23 = **195** | [nao verificado] |
+| esp_desconta_janela_declarada | 34 + 54 + 49 + 28 + 80 + 14 = **259** | [nao verificado] |
+| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
+
+As contas dos donos de **10/2026**, usando as horas de `PARCIAL`, são: [nao verificado]
+
+| Dono | Medida | Conta por parte = total | Referência |
+|---|---|---|---|
+| ESTRUTURA | dia-colab | 10 + 5 + 3 + 3 + 3 + 2 = **26** | [nao verificado] |
+| ESTRUTURA | horas | 9.116283817777775 + 11.084600277777778 + 15.209666666666665 + 15.566319135833336 + 29.23270916666667 + 8.15 = **88.359579064722224** | [nao verificado] |
+| ESTRUTURA | colabs | 3 + 3 + 3 + 3 + 3 + 1 = **16** | [nao verificado] |
+| CADASTRO | dia-colab | 10 + 8 + 7 + 23 + 19 + 8 = **75** | [nao verificado] |
+| CADASTRO | horas | 38.355213611111104 + 20.397520712222224 + 35.88209174 + 107.60888681222221 + 52.325450786111105 + 40.4628 = **295.031963661666643** | [nao verificado] |
+| CADASTRO | colabs | 3 + 6 + 4 + 8 + 8 + 2 = **31** | [nao verificado] |
+| BATIDA | dia-colab | 20 + 28 + 57 + 22 + 48 + 30 = **205** | [nao verificado] |
+| BATIDA | horas | 110.21011656222223 + 136.0465618775 + 297.66026132194446 + 101.15787729194444 + 197.29829774694443 + 127.75368121722221 = **970.12679601777777** | [nao verificado] |
+| BATIDA | colabs | 13 + 18 + 24 + 17 + 26 + 17 = **115** | [nao verificado] |
+| TOTAL | dia-colab | 40 + 41 + 67 + 48 + 70 + 40 = **306** | [nao verificado] |
+| TOTAL | horas | 157.681613991111109 + 167.528682867500002 + 348.752019728611125 + 224.333083239999986 + 278.856457699722205 + 176.36648121722221 = **1353.518338744166637** | [nao verificado] |
+| TOTAL | colabs | 17 + 23 + 29 + 26 + 29 + 20 = **144** | [nao verificado] |
+
+As contas dos donos de **11/2026** são: [nao verificado]
+
+| Dono | Medida | Conta por parte = total | Referência |
+|---|---|---|---|
+| ESTRUTURA | dia-colab | 10 + 3 + 6 + 1 + 8 + 3 = **31** | [nao verificado] |
+| ESTRUTURA | horas | 35.86154078361111 + 23.15 + 17.8227 + 9.770812222222222 + 54.16690254361111 + 10.610499166666667 = **151.382454716111109** | [nao verificado] |
+| ESTRUTURA | colabs | 4 + 3 + 5 + 1 + 6 + 2 = **21** | [nao verificado] |
+| CADASTRO | dia-colab | 22 + 15 + 9 + 4 + 29 + 6 = **85** | [nao verificado] |
+| CADASTRO | horas | 118.50376287222223 + 38.47013154777778 + 32.931705 + 17.068988648888887 + 98.72113534194445 + 52.750124444444445 = **358.445847855277792** | [nao verificado] |
+| CADASTRO | colabs | 6 + 6 + 6 + 3 + 10 + 5 = **36** | [nao verificado] |
+| BATIDA | dia-colab | 30 + 38 + 40 + 27 + 46 + 32 = **213** | [nao verificado] |
+| BATIDA | horas | 174.57531034805555 + 178.25105356722221 + 194.35440025833333 + 160.93444128833335 + 239.22640724611108 + 161.85087350722222 = **1109.19248621527774** | [nao verificado] |
+| BATIDA | colabs | 15 + 21 + 21 + 14 + 25 + 21 = **117** | [nao verificado] |
+| TOTAL | dia-colab | 62 + 56 + 55 + 32 + 83 + 41 = **329** | [nao verificado] |
+| TOTAL | horas | 328.94061400388889 + 239.87118511499999 + 245.10880525833333 + 187.774242159444459 + 392.11444513166664 + 225.211497118333332 = **1619.020788786666641** | [nao verificado] |
+| TOTAL | colabs | 20 + 28 + 27 + 16 + 34 + 25 = **150** | [nao verificado] |
+
+`TOTAL colabs` soma as uniões informadas por parte, considerando a disjunção declarada no pedido. [nao verificado]
+
+As conferências agregadas ficam: [nao verificado]
+
+| Conferência | 10/2026 | 11/2026 | Referência |
+|---|---|---|---|
+| UNIVERSO_PARTE × UNIVERSO | 110 + 109 + 102 + 96 + 107 + 100 = **624**, igual a **624** | 99 + 102 + 99 + 94 + 102 + 99 = **595**, igual a **595** | [nao verificado] |
+| Janela | 2026-09-21 a 2026-10-20 | 2026-10-21 a 2026-11-20 | [nao verificado] |
+| BATE % | 7195 ÷ 7501 × 100 ≈ **95,920543927476336%** | 6027 ÷ 6356 × 100 ≈ **94,823788546255507%** | [nao verificado] |
+| Comparados − BATE | 7501 − 7195 = **306** | 6356 − 6027 = **329** | [nao verificado] |
+| Classes divergentes | 35 + 19 + 29 + 223 = **306** | 37 + 25 + 21 + 246 = **329** | [nao verificado] |
+| Dias dos donos | 26 + 75 + 205 = **306** | 31 + 85 + 213 = **329** | [nao verificado] |
+| Horas dos donos | 88.359579064722224 + 295.031963661666643 + 970.12679601777777 = **1353.518338744166637** | 151.382454716111109 + 358.445847855277792 + 1109.19248621527774 = **1619.020788786666641** | [nao verificado] |
+
+Os diagnósticos por parte abrangem as duas competências. “INCOMPLETO: não” abaixo significa ausência do marcador no texto fornecido. [nao verificado]
+
+| Parte | rc_sombra | INCOMPLETO | Linhas TRATADA_LOCAL | Ocorrências TRATADA_LOCAL somadas | Erros que atravessaram frame | erros_no_espelho 10 / 11 | SOMA True / False | Referência |
+|---|---:|---|---:|---:|---|---|---|---|
+| P1 | 0 | não, marcador ausente | 27 | **846173** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
+| P2 | 0 | não, marcador ausente | 27 | **909946** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
+| P3 | 0 | não, marcador ausente | 28 | **874751** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
+| P4 | 0 | não, marcador ausente | 27 | **817688** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
+| P5 | 0 | não, marcador ausente | 26 | **922428** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
+| P6 | 0 | não, marcador ausente | 26 | **808182** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
+
+A abertura completa de `TRATADA_LOCAL`, preservando os endereços e tipos impressos, é: [nao verificado]
+
+| Endereço impresso | Tipo | P1 | P2 | P3 | P4 | P5 | P6 | Referência |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| app/escala/alimentacao.py:279 | GeneratorExit | 253166 | 273276 | 257813 | 239769 | 273687 | 237235 | [nao verificado] |
+| app/escala/models.py:1282 | GeneratorExit | 98 | 61 | 296 | 637 | 46 | 116 | [nao verificado] |
+| app/escala/services/fase_12x36.py:114 | GeneratorExit | 1130 | 1558 | 1707 | 1276 | 1924 | 1375 | [nao verificado] |
+| app/escala/services/leitor_celula.py:25 | ValueError | 6304 | 6837 | 5857 | 6019 | 7806 | 4633 | [nao verificado] |
+| app/escala/services/leitor_celula.py:81 | GeneratorExit | 52 | 61 | 41 | 50 | 80 | 58 | [nao verificado] |
+| app/escala/utils.py:1500 | GeneratorExit | 2 | 4 | 4 | 1 | 2 | 2 | [nao verificado] |
+| app/escala/utils.py:1687 | GeneratorExit | nao consta na saida | 6 | 2 | 36 | 14 | 10 | [nao verificado] |
+| app/escala/utils.py:1991 | GeneratorExit | 6216 | 6781 | 6880 | 6962 | 7884 | 6500 | [nao verificado] |
+| app/escala/utils.py:2033 | GeneratorExit | 3 | 2 | 4 | 8 | nao consta na saida | nao consta na saida | [nao verificado] |
+| app/escala/utils.py:452 | GeneratorExit | 4 | 6 | 6 | 3 | 6 | 4 | [nao verificado] |
+| app/escala/utils.py:524 | GeneratorExit | 3677 | 4986 | 4644 | 3790 | 5649 | 3762 | [nao verificado] |
+| app/escala/utils.py:525 | GeneratorExit | 3677 | 4986 | 4644 | 3790 | 5649 | 3762 | [nao verificado] |
+| app/escala/utils.py:888 | GeneratorExit | 594 | 593 | 602 | 334 | 340 | 602 | [nao verificado] |
+| app/folha/causas.py:58 | GeneratorExit | 181 | 187 | 182 | 171 | 192 | 180 | [nao verificado] |
+| app/ponto/juiz_batida.py:191 | GeneratorExit | nao consta na saida | nao consta na saida | 17 | 1226 | nao consta na saida | nao consta na saida | [nao verificado] |
+| app/ponto/juiz_batida.py:75 | ValueError | 468158 | 495937 | 482764 | 445946 | 498705 | 448020 | [nao verificado] |
+| app/ponto/motor_calculo_v2.py:1131 | GeneratorExit | 610 | 618 | 595 | 649 | 855 | 559 | [nao verificado] |
+| app/ponto/motor_calculo_v2.py:2604 | GeneratorExit | 2829 | 3000 | 3064 | 2833 | 3248 | 2890 | [nao verificado] |
+| app/ponto/motor_calculo_v2.py:677 | GeneratorExit | 172 | 219 | 174 | 186 | 215 | 180 | [nao verificado] |
+| app/ponto/services/dia_pago.py:892 | GeneratorExit | 12196 | 13372 | 12978 | 12772 | 14074 | 12704 | [nao verificado] |
+| app/ponto/services/espelho.py:473 | GeneratorExit | 130 | 108 | 117 | 113 | 174 | 94 | [nao verificado] |
+| app/ponto/services/espelho.py:657 | GeneratorExit | 4055 | 3977 | 4228 | 4030 | 4284 | 4254 | [nao verificado] |
+| app/ponto/services/fechamento.py:1044 | GeneratorExit | 192 | 200 | 192 | 180 | 198 | 189 | [nao verificado] |
+| app/ponto/services/fechamento.py:1045 | _GradeSemCelula | 5 | 2 | 4 | nao consta na saida | nao consta na saida | 4 | [nao verificado] |
+| app/ponto/turnos.py:1295 | GeneratorExit | 23417 | 26387 | 24546 | 24689 | 28387 | 21328 | [nao verificado] |
+| app/ponto/turnos.py:1656 | GeneratorExit | 4604 | 5880 | 4783 | 3726 | 3745 | 3840 | [nao verificado] |
+| app/ponto/turnos.py:1699 | GeneratorExit | 37849 | 41086 | 40289 | 39600 | 44131 | 38829 | [nao verificado] |
+| app/ponto/turnos.py:2653 | GeneratorExit | 16 | nao consta na saida | nao consta na saida | nao consta na saida | 2 | nao consta na saida | [nao verificado] |
+| app/ponto/turnos.py:679 | GeneratorExit | 16836 | 19816 | 18318 | 18892 | 21131 | 17052 | [nao verificado] |
+
+Somando somente as linhas exibidas: **27 + 27 + 28 + 27 + 26 + 26 = 161 linhas**; **846173 + 909946 + 874751 + 817688 + 922428 + 808182 = 5179168 ocorrências TRATADA_LOCAL**. [nao verificado]
+
+As linhas `SOMA` atuais ficam transcritas abaixo: [nao verificado]
+
+| Parte | Competência | SOMA dias | SOMA HORAS | SOMA COLABS_UNIAO | Referência |
+|---|---|---|---|---|---|
+| P1 | 10/2026 | 40 — True | 157.681613991111109 — True | 17 — True | [nao verificado] |
+| P1 | 11/2026 | 62 — True | 328.94061400388889 — True | 20 — True | [nao verificado] |
+| P2 | 10/2026 | 41 — True | 167.528682867500002 — True | 23 — True | [nao verificado] |
+| P2 | 11/2026 | 56 — True | 239.87118511499999 — True | 28 — True | [nao verificado] |
+| P3 | 10/2026 | 67 — True | 348.752019728611125 — True | 29 — True | [nao verificado] |
+| P3 | 11/2026 | 55 — True | 245.10880525833333 — True | 27 — True | [nao verificado] |
+| P4 | 10/2026 | 48 — True | 224.333083239999986 — True | 26 — True | [nao verificado] |
+| P4 | 11/2026 | 32 — True | 187.774242159444459 — True | 16 — True | [nao verificado] |
+| P5 | 10/2026 | 70 — True | 278.856457699722205 — True | 29 — True | [nao verificado] |
+| P5 | 11/2026 | 83 — True | 392.11444513166664 — True | 34 — True | [nao verificado] |
+| P6 | 10/2026 | 40 — True | 176.36648121722221 — True | 20 — True | [nao verificado] |
+| P6 | 11/2026 | 41 — True | 225.211497118333332 — True | 25 — True | [nao verificado] |
+
+São **36 SOMA True e 0 SOMA False**; por competência, **18 True e 0 False**. As conferências `ESTRUTURA_DIAS_LINHAS` também exibem `True` nas seis partes: na 10, **10 + 5 + 3 + 3 + 3 + 2 = 26**; na 11, **10 + 3 + 6 + 1 + 8 + 3 = 31**. [nao verificado]
+
+As linhas de ESTRUTURA vêm agregadas a seguir. **Horas por dia: nao consta na saida**, em todas elas. Campos literalmente chamados `causa` ou `rotulo`: **nao consta na saida**; estão preservados os campos existentes `classe`, `paridade` e `veredito`. [nao verificado]
+
+O código acumula `abs(df)` antes de arredondar os minutos da linha individual; por isso os minutos impressos não fornecem as horas exatas de cada dia. `app/ponto/management/commands/e6_oraculo.py:380`, `app/ponto/management/commands/e6_oraculo.py:401`
+
+Para **10/2026**, todas as 26 linhas são: [nao verificado]
+
+| Parte | Colab | Dia | esp_min | e6_min | teto_min | dif_min | classe | paridade | batidas | veredito | Referência |
+|---|---|---|---:|---:|---:|---:|---|---|---|---|---|
+| P1 | col252 | 2026-09-23 | 548 | 594 | 608 | 46 | diverge_10_60 | par | 06:56 12:35 12:49 17:04 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-09-24 | 552 | 598 | 611 | 46 | diverge_10_60 | par | 06:51 12:37 12:51 17:03 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-09-25 | 556 | 604 | 616 | 48 | diverge_10_60 | par | 06:51 12:37 12:50 17:07 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-09-28 | 535 | 581 | 595 | 46 | diverge_10_60 | par | 07:12 12:38 12:53 17:07 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-10-01 | 545 | 590 | 605 | 45 | diverge_10_60 | par | 07:00 12:37 12:51 17:05 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-10-02 | 545 | 593 | 606 | 48 | diverge_10_60 | par | 06:59 12:40 12:53 17:04 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-10-06 | 551 | 597 | 611 | 46 | diverge_10_60 | par | 06:58 12:38 12:52 17:09 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-10-09 | 544 | 592 | 604 | 48 | diverge_10_60 | par | 07:06 12:48 13:00 17:10 | trabalhou | [nao verificado] |
+| P1 | col864 | 2026-10-12 | 509 | 449 | 509 | -60 | diverge_10_60 | par | 15:01 18:10 19:10 23:30 | feriado | [nao verificado] |
+| P1 | col876 | 2026-09-21 | 550 | 665 | 722 | 115 | diverge_acima_60 | par | 18:29 04:39 05:36 06:31 | em_aberto | [nao verificado] |
+| P2 | col37 | 2026-10-05 | 241 | 0 | 0 | -241 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
+| P2 | col37 | 2026-10-09 | 241 | 0 | 0 | -241 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
+| P2 | col451 | 2026-09-23 | 707 | 718 | 718 | 11 | diverge_10_60 | par | 07:00 18:58 | em_aberto | [nao verificado] |
+| P2 | col451 | 2026-09-25 | 705 | 718 | 718 | 13 | diverge_10_60 | par | 07:02 19:00 | em_aberto | [nao verificado] |
+| P2 | col841 | 2026-10-20 | 681 | 522 | 701 | -159 | diverge_acima_60 | par | 11:00 18:46 21:44 22:41 | em_aberto | [nao verificado] |
+| P3 | col218 | 2026-10-15 | 105 | 0 | 0 | -105 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
+| P3 | col746 | 2026-09-24 | 289 | 193 | 350 | -96 | diverge_acima_60 | par | 11:00 13:02 15:39 16:49 | trabalhou | [nao verificado] |
+| P3 | col854 | 2026-10-04 | 718 | 7 | 7 | -711 | diverge_acima_60 | par | 18:54 19:01 | trabalhou | [nao verificado] |
+| P4 | col129 | 2026-10-12 | 0 | 779 | 779 | 779 | esp_zero_e6_trabalho | par | 17:30 06:30 | em_aberto | [nao verificado] |
+| P4 | col369 | 2026-10-12 | 476 | 416 | 476 | -60 | diverge_10_60 | par | 07:04 12:47 13:46 15:00 | feriado | [nao verificado] |
+| P4 | col723 | 2026-10-08 | 440 | 345 | 500 | -95 | diverge_acima_60 | par | 09:00 10:44 13:20 17:20 | trabalhou | [nao verificado] |
+| P5 | col382 | 2026-09-30 | 364 | 0 | 0 | -364 | e6_zero_esp_trabalho | par | vazio | trabalhou | [nao verificado] |
+| P5 | col478 | 2026-09-25 | 719 | 8 | 8 | -711 | diverge_acima_60 | par | 18:57 19:04 | trabalhou | [nao verificado] |
+| P5 | col868 | 2026-09-22 | 0 | 679 | 733 | 679 | esp_zero_e6_trabalho | par | 18:48 02:02 02:57 07:01 | em_aberto | [nao verificado] |
+| P6 | col515 | 2026-10-09 | 244 | 0 | 0 | -244 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
+| P6 | col515 | 2026-10-11 | 245 | 0 | 0 | -245 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
+
+Para **11/2026**, todas as 31 linhas são: [nao verificado]
+
+| Parte | Colab | Dia | esp_min | e6_min | teto_min | dif_min | classe | paridade | batidas | veredito | Referência |
+|---|---|---|---:|---:|---:|---:|---|---|---|---|---|
+| P1 | col114 | 2026-11-08 | 439 | 429 | 499 | -10 | diverge_10_60 | par | 09:59 14:50 16:00 18:18 | trabalhou | [nao verificado] |
+| P1 | col114 | 2026-11-15 | 499 | 440 | 499 | -59 | diverge_10_60 | par | 09:58 15:05 16:05 18:17 | feriado | [nao verificado] |
+| P1 | col252 | 2026-11-09 | 551 | 597 | 610 | 46 | diverge_10_60 | par | 06:53 12:38 12:52 17:04 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-11-10 | 551 | 598 | 611 | 47 | diverge_10_60 | par | 06:56 12:39 12:52 17:07 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-11-11 | 550 | 598 | 611 | 48 | diverge_10_60 | par | 06:54 12:39 12:52 17:04 | trabalhou | [nao verificado] |
+| P1 | col252 | 2026-11-13 | 551 | 597 | 611 | 46 | diverge_10_60 | par | 06:52 12:35 12:49 17:03 | trabalhou | [nao verificado] |
+| P1 | col516 | 2026-10-23 | 361 | 0 | 0 | -361 | e6_zero_esp_trabalho | par | vazio | folga | [nao verificado] |
+| P1 | col516 | 2026-10-28 | 372 | 0 | 0 | -372 | e6_zero_esp_trabalho | par | vazio | trabalhou | [nao verificado] |
+| P1 | col996 | 2026-10-28 | 0 | 580 | 580 | 580 | esp_zero_e6_trabalho | par | 21:18 06:57 | folga | [nao verificado] |
+| P1 | col996 | 2026-11-10 | 443 | 1026 | 1116 | 583 | diverge_acima_60 | par | 06:57 13:00 14:30 15:50 21:16 06:59 | em_aberto | [nao verificado] |
+| P2 | col37 | 2026-11-14 | 241 | 0 | 0 | -241 | e6_zero_esp_trabalho | par | vazio | trabalhou | [nao verificado] |
+| P
+
+[truncado em 20000 de 28677 caracteres]
 
 ## 16/11 02:28 · sessao b7d26c2d3ecb · LOTE7-C6 · verificador · origem=Code
 
@@ -972,114 +1194,4 @@ rc_sombra=0
 - **ESTRUTURA_DIAS_LINHAS:** ambas exibem `True`: `10/2026 5 True` e `11/2026 3 True`. [nao verificado]
 - **INCOMPLETO:** não aparece na saída fornecida desta parte. [nao verificado]
 
-## 16/11 01:45 · sessao 8fe86b15dd7e · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-Na parte 1 fornecida, as seis linhas SOMA e as duas ESTRUTURA_DIAS_LINHAS são `True`. Não há ocorrência de `INCOMPLETO` nesse trecho. [nao verificado]
-
-Transcrição integral do dado fornecido, sem verificação externa. [nao verificado]
-
-```text
-sonda_leitura: script.py [4e9a5641d912b65d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 1 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 110
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 99
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1180, 'bate_ate_10min': 1140, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 11, 'diverge_acima_60': 25, 'dia_batida_impar': 33, 'impar_que_BATE': 15, 'impar_que_DIVERGE': 18, 'impar_dentro_da_faixa': 15, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 18, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1727, 'dia_isento_ou_ausencia': 316, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 43, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.6% de 1180 dias comparados
-[3] ESTRUTURA    10 dia-colab       9.1 h    3 colabs
-[3] CADASTRO     10 dia-colab      38.4 h    3 colabs
-[3] BATIDA       20 dia-colab     110.2 h   13 colabs
-[4] TOTAL divergentes 40
-[5] colabs com divergencia: 17
-ESTRUTURA_DIA|10/2026|col252|2026-09-23|esp_min=548|e6_min=594|teto_min=608|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:56 12:35 12:49 17:04|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-09-24|esp_min=552|e6_min=598|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:51 17:03|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-09-25|esp_min=556|e6_min=604|teto_min=616|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:50 17:07|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-09-28|esp_min=535|e6_min=581|teto_min=595|dif_min=46|classe=diverge_10_60|paridade=par|batidas=07:12 12:38 12:53 17:07|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-01|esp_min=545|e6_min=590|teto_min=605|dif_min=45|classe=diverge_10_60|paridade=par|batidas=07:00 12:37 12:51 17:05|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-02|esp_min=545|e6_min=593|teto_min=606|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:59 12:40 12:53 17:04|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-06|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:58 12:38 12:52 17:09|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-09|esp_min=544|e6_min=592|teto_min=604|dif_min=48|classe=diverge_10_60|paridade=par|batidas=07:06 12:48 13:00 17:10|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col864|2026-10-12|esp_min=509|e6_min=449|teto_min=509|dif_min=-60|classe=diverge_10_60|paridade=par|batidas=15:01 18:10 19:10 23:30|veredito=feriado
-ESTRUTURA_DIA|10/2026|col876|2026-09-21|esp_min=550|e6_min=665|teto_min=722|dif_min=115|classe=diverge_acima_60|paridade=par|batidas=18:29 04:39 05:36 06:31|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 10/2026 10 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=10|horas=9.116283817777775|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=10|horas=38.355213611111104|colabs=3
-PARCIAL|10/2026|BATIDA|dias=20|horas=110.21011656222223|colabs=13
-PARCIAL_TOTAL|10/2026|dias=40|horas=157.681613991111109|colabs=17
-ESTIMATIVA processados 125 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1008, 'bate_ate_10min': 946, 'esp_zero_e6_trabalho': 14, 'e6_zero_esp_trabalho': 7, 'diverge_10_60': 8, 'diverge_acima_60': 33, 'dia_batida_impar': 49, 'impar_que_BATE': 18, 'impar_que_DIVERGE': 31, 'impar_dentro_da_faixa': 21, 'impar_FORA_da_faixa': 10, 'impar_no_conjunto_do_dia': 31, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1354, 'dia_isento_ou_ausencia': 233, 'dia_sem_trabalho_ambos': 44, 'esp_desconta_janela_declarada': 34, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 93.8% de 1008 dias comparados
-[3] ESTRUTURA    10 dia-colab      35.9 h    4 colabs
-[3] CADASTRO     22 dia-colab     118.5 h    6 colabs
-[3] BATIDA       30 dia-colab     174.6 h   15 colabs
-[4] TOTAL divergentes 62
-[5] colabs com divergencia: 20
-ESTRUTURA_DIA|11/2026|col114|2026-11-08|esp_min=439|e6_min=429|teto_min=499|dif_min=-10|classe=diverge_10_60|paridade=par|batidas=09:59 14:50 16:00 18:18|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col114|2026-11-15|esp_min=499|e6_min=440|teto_min=499|dif_min=-59|classe=diverge_10_60|paridade=par|batidas=09:58 15:05 16:05 18:17|veredito=feriado
-ESTRUTURA_DIA|11/2026|col252|2026-11-09|esp_min=551|e6_min=597|teto_min=610|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:53 12:38 12:52 17:04|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-10|esp_min=551|e6_min=598|teto_min=611|dif_min=47|classe=diverge_10_60|paridade=par|batidas=06:56 12:39 12:52 17:07|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-11|esp_min=550|e6_min=598|teto_min=611|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:54 12:39 12:52 17:04|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-13|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:52 12:35 12:49 17:03|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col516|2026-10-23|esp_min=361|e6_min=0|teto_min=0|dif_min=-361|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=folga
-ESTRUTURA_DIA|11/2026|col516|2026-10-28|esp_min=372|e6_min=0|teto_min=0|dif_min=-372|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col996|2026-10-28|esp_min=0|e6_min=580|teto_min=580|dif_min=580|classe=esp_zero_e6_trabalho|paridade=par|batidas=21:18 06:57|veredito=folga
-ESTRUTURA_DIA|11/2026|col996|2026-11-10|esp_min=443|e6_min=1026|teto_min=1116|dif_min=583|classe=diverge_acima_60|paridade=par|batidas=06:57 13:00 14:30 15:50 21:16 06:59|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 11/2026 10 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=10|horas=35.86154078361111|colabs=4
-PARCIAL|11/2026|CADASTRO|dias=22|horas=118.50376287222223|colabs=6
-PARCIAL|11/2026|BATIDA|dias=30|horas=174.57531034805555|colabs=15
-PARCIAL_TOTAL|11/2026|dias=62|horas=328.94061400388889|colabs=20
-TEMPO_SEGUNDOS 164.5
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 253166
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 98
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1130
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6304
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 52
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6216
-TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 3
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3677
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3677
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 594
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 181
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 468158
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 610
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2829
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 172
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12196
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 130
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4055
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 5
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 23417
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4604
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 37849
-TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 16
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 16836
-SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
-SOMA 10/2026 HORAS 157.681613991111109 True
-SOMA 10/2026 COLABS_UNIAO 17 True
-SOMA 11/2026 62   <- tem de ser igual a soma das classes (62) True
-SOMA 11/2026 HORAS 328.94061400388889 True
-SOMA 11/2026 COLABS_UNIAO 20 True
-rc_sombra=0
-```
-
-_5897 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5898 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
