@@ -2231,6 +2231,7 @@
 | ESPELHO-VERDADE-FECHO-V3 | V3 FECHAMENTO-LIDO, fecho do O54 (mesmo aval): O48 -> O252, O254, O257. PORTA: fechamento e leitura | REGISTRADA, sem ordem ate a V0 fechar, atras da lista viva | 15/11 23:4x |
 | ESPELHO-VERDADE-FECHO-V4 | V4 CERTIFICADO, fecho do O54 (mesmo aval). PORTA = PORTAO-DE-FATURAMENTO de 24/10 | REGISTRADA, sem ordem ate a V0 fechar, atras da lista viva | 15/11 23:4x |
 | RESPOSTAS-BO-1611 | LEITURA (aval 16/11 00:4x, logs/AVAIS-1515/respostas_bo_1611.txt; padrao=n/a (leitura)): obras NO AR desde 14/11 -> casos BO Mauricio / HJ Fernando, conferidos em prod por sonda_leitura; 3 rascunhos em logs/RESPOSTAS-BO-1611/, nada enviado | RASCUNHOS PRONTOS 00:5x, esperam leitura do Ronald: quadro 131 (ja OK 33, com obra 8, sem obra 2, cad 11, bat 10, admin 1, falta info 57, nao reconf 9); 2 casos ligados | 16/11 00:4x |
+| RESPOSTAS-BO-1611-C1 | COMPLEMENTO-1 (aval 16/11 01:0x, logs/AVAIS-1515/complemento1_respostas_bo_1611.txt; padrao=n/a (medida)): reconferir em prod 33 ja OK + 9 nao reconferido; 57 falta informacao -> pedidos.md; 8+2 nosso -> destrava e registro; quadro refeito | EM VOO 01:0x | 16/11 01:0x |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
