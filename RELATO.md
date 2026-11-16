@@ -1,6 +1,16 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: lanca_verif_c2.sh | pid=850690
+ESPERANDO: suite.sh | pid=875557
+ESTADO 14:2x RETOMA-POS-COMPACT conferido pelo arquivo, 0 relancado: (1) BUG-PAR verif_c2 DEVOLVE F1..F5 (sessao conferiu F3 test_bug_par_c2_sem_banco.py:100 e F5 bug_par_103.py:68); >3 voltas Codex -> c3 com construtor opus (brief c3/brief.md); (2) painel entregue 513f508e4, suite inteira em voo; (3) editor: agente opus aberto (brief UI-EDITOR-CALENDARIO); (4) 4 Codex PRIORIDADE-EV vivos; (5) F2 REDs fechados, construcao atras da BUG-PAR. PROVA: logs/BUG-PAR-O-PAR/volta/verif_c2.r
+ESTADO 14:3x PRIORIDADE-EV item 3 FEITO: quadro MIUDOS ganhou a coluna "item O54", 16/16 "-" (nenhuma cadeia causa -> medida demonstrada); o corte de ordem nao reordena nada hoje. PROVA: logs/PRIORIDADE-EV/o54/quadro.r
+DESPACHO PRIORIDADE-EV: item 1 R3 escreve script -> Codex leitura, sondas na sombra -> Codex sonda | item 3 coluna O54 -> Codex leitura | item 4 portas e sonda de prod -> Codex leitura e sonda | item 6 remedir 11 -> Codex leitura e sonda sombra | itens 2 e 5 registro -> sessao
+ESTADO 14:2x PRIORIDADE-EV item 5 FEITO (CORTE B): O99 e BUG-ANCORA-NAO-REGENERA FECHADAS com ponteiro, 3 linhas na lista do admin dono CADASTRO, ANCORA-COL824-E-COL899 respondida no JSON; nenhum vinculo tocado. PROVA: logs/PRIORIDADE-EV/lista_admin_cadastro.md
+ESTADO 14:2x PRIORIDADE-EV item 2(a): R1 remedido 02:46 (agrega.r) sai do placar no proximo marco de instrumento; decisao do Code, sem marco hoje. PROVA: logs/ESPELHO-VERDADE-FECHO/V0/mapa.md
+ESPERA E1-passivo-53: o `!` caso a caso dos dez livres (O50) -- pergunta fechada: estes dez saem do passivo? PROVA: logs/ESPELHO-VERDADE-FECHO/V0/mapa.md
+ESPERA E5-le-da-celula: o `!` para escrever `encerrado` nas linhas da 10 -- pergunta fechada: escreve? PROVA: logs/ESPELHO-VERDADE-FECHO/V0/mapa.md
+ESPERA R4: o `!` das portas de demissao/encerramento -- pergunta fechada: abre as duas portas? PROVA: logs/ESPELHO-VERDADE-FECHO/V0/mapa.md
+ESPERA E3-separados-30: a 09 esta com o Gabriel -- pergunta fechada: a decisao dos 30 e sua ou do Gabriel? PROVA: logs/ESPELHO-VERDADE-FECHO/V0/mapa.md
+PEDIDO Fernando BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR: smoke -- enviar um atestado pelo app Android e dizer se ainda da erro (hora e tela). PROVA: logs/AVAIS-1515/prioridade_espelho_verdade_tres_cortes_1611.txt
 ESTADO 14:1x BUG-PAR c2: fatia FAILED (errors=1) Ran 5168, as 12 falhas da c1 a 0; o erro era da fixture do teste do contador (2a pergunta do mesmo marco no mesmo dia, UniqueViolation pergunta_unica_por_marco). Cura c2b b8b951978 (pergunta fora163 em D1), modulo Ran 9 OK. Codex verificador em curso. PROVA: logs/BUG-PAR-O-PAR/volta/verde_c2.log:1435, verde_c2b_modulo.log
 ESTADO 14:2x BUG-PAR RED c2 na base 6d3a9ae10 (--parallel 1): Ran 36, FAILED failures=17 errors=3, rc=1; 17 por assercao (espera_declarado_x_gravado onde a cura da aplicavel/bloqueada_competencia), 2 RuntimeError da testemunha (o defeito mordido), 1 TypeError da assinatura nova de _competencia_que_barra (ressalva: morde pela interface, nao pela assercao); 0 ImportError. PROVA: logs/BUG-PAR-O-PAR/volta/red_c2.log
 ESTADO 14:2x MIUDOS-REABRE-O-ITEM-3 item 1 feito: 16 entradas -> 6 MIUDO, 1 OBRA, 1 tamanho nao verificado, 8 sem causa atual; MIUDO ELEGIVEL 0 (todo MIUDO tem dinheiro, !/lei ou cruza o painel). Amostra 3/3. Item 3 nao constroi. PROVA: logs/MIUDOS/quadro_1611.md
