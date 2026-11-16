@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: push.sh | pid=551196
+ESTADO 13:04 LOTE7 c7 SUITE DE POUSO VERDE: OK (skipped=42, expected failures=41), Ran 16452, rc=0 (logs/DUAS-PISTAS/lote7_c7/suite_pouso.log, arvore a094967ee = c7 + main 4e364a414) -> pouso (merge --no-ff + cmp + commit + deploy + smoke 10 min 5xx 0) logo que o push do marco terminar (nao commitar durante o push)
 ESTADO 12:5x UI-VINCULO-MOSTRA-O-CALENDARIO registrada (BACKLOG + O148-EDITAR itens 2-3 + TIPOESCALA-SEM-TRILHA item 4); REVISAO-DO-AVAL item 1 no Codex verificador (logs/UI-VINCULO-CALENDARIO/revisao.r)
 ESTADO 12:4x O10-D-PERMUTA-RECIPROCA (COMPLEMENTO-1 item 4): A PREPARA no Codex censo (prepara.q -> prepara.r, fim prepara.fim); B so apos A + pouso LOTE7 + REVISAO-DO-AVAL; construtor opus da sessao
 ESTADO 12:26 F2 L1 RE-MEDIDA POS-F1: RESIDUAL, nao MOOT (Codex rel.r @4e364a414, amostra 4/4: valor nao conservado, descarimbar apaga chamados/models.py:3314-3320; projecao le o campo atual chamados/juizes.py:1389-1400; premissa F1=be2b8d733 da matriz CAIU) -> logs/ESPINHA-BRIEFS/F2/matriz.md secao RE-MEDIDA POS-F1
