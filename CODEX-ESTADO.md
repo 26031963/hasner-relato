@@ -1,7 +1,124 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 12:36** · publicado em **16/11/2026 12:38** (UTC-3)
+> Ultima resposta processada: **16/11/2026 12:42** · publicado em **16/11/2026 12:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 12:42 · sessao 174dfb4261cd · - · - · origem=Ronald (tmux)
+
+Todas as referências de `censo_v2.r` a `app/ponto/portas/celula.py` permanecem semanticamente compatíveis com a afirmação associada e **MOVEU +38 linhas**; nenhuma delas SUMIU. Conferência abaixo refere-se à semântica descrita no anexo, pois o arquivo histórico integral não está disponível nesta cópia. [nao verificado: identidade textual com 3803e6623]
+
+| Afirmação do censo | Referências antigas → atuais | Resultado |
+|---|---|---|
+| Recusa capturada pela porta; `atomic` termina antes do `except` | `celula.py:652→690`, `694→732` (retorno em `737`) | MOVEU; a porta continua devolvendo `'recusada'`; `ValueError` de autor/motivo e `RuntimeError` de trilha continuam propagando (`celula.py:684`, `686`, `730`). |
+| Cartas travadas por pk, somente `Ausencia` | `657→695` | MOVEU; `.select_for_update(of=('self',))`, `.order_by('pk')` (`celula.py:695`). |
+| Ordem das células por colaborador/data, por chamada | `673→711` | MOVEU; o `sorted` recebe somente cedente/substituto dessa chamada (`celula.py:711`). |
+| Trava individual dentro de editar | `593→631` | MOVEU; `CelulaDia.select_for_update()` (`celula.py:631`). |
+| Risco de ordem composta A/d1 B/d1 A/d2 B/d2 | `657→695`, `673→711` | MOVEU; dedução estática ainda cabível; ocorrência concreta de deadlock [nao verificado]. |
+| Teste concorrente citado é inspeção AST | `test_o10b_editar_dia_troca.py:314→314` | IGUAL; inspeciona chamadas `select_for_update` e `atomic`, sem executar concorrência (`test_o10b_editar_dia_troca.py:319`, `322`). | [nao verificado]
+| Empresa atual e competências consultadas em cada edição, antes de igual | `513→551`, `568→606`, `594→632`, `676→714` | MOVEU; empresa consultada em `605`, competências em `607`, igualdade em `632`; bypass em `606`. |
+| Não há pré-validação das quatro; chamada seguinte depois da anterior | `675→713` | MOVEU; edição ocorre dentro do laço, antes de avaliar o próximo lado (`celula.py:711`, `713`, `714`). |
+| Carimbo/autor individual e quatro trilhas editar + duas trocar, se quatro mudanças | `598→636`, `611→649`, `686→724` | MOVEU; `timezone.now` por edição e evento individual/par (`celula.py:636`, `649`, `724`). |
+| Deduplicação por competência local à execução | `450→488`, `458→496`, `627→665` | MOVEU; dicionário é local ao helper e `editar_dia` passa conjunto unitário (`celula.py:488`, `494`, `496`, `665`). |
+| Rejunção e reavaliação em callback por alteração | `490→528`, `502→540` | MOVEU; callback reúne as duas, `on_commit` por chamada ao helper (`celula.py:531`, `536`, `539`, `540`). |
+| Rejulgamento síncrono; pula futuro/humano, captura falhas | `427→465`, `434→472`, `437→475`, `627→665` | MOVEU; filtro humanos, teste futuro, chamada síncrona, tratamento (`celula.py:465`, `469`, `472`, `475`, `665`). | [nao verificado]
+| Marca cobrança órfã na transação | `625→663` | MOVEU; import em `663`, chamada em `664`, dentro do `atomic` iniciado em `630` (`celula.py:630`, `663`). |
+| Reler cartas/colaboradores; argumentos só pk | `656→694`, `657→695`, `593→631` | MOVEU; leitura nova da carta com colaborador e célula com trava (`celula.py:694`, `695`, `631`). |
+| Um lado igual não impede outro; igual somente ambos | `594→632`, `596→634`, `673→711`, `679→717`, `690→728` | MOVEU; retorno individual antes da escrita, visita ambos e trilha com resultados (`celula.py:632`, `634`, `711`, `717`, `728`). |
+| Igualdade não inclui pedido/cartas/motivo/autor; inversão pode reescrever | `594→632`, `675→713` | MOVEU; igualdade contém origem/trabalha/dna/escala e cada papel passa booleano oposto (`celula.py:632`, `711`, `713`). |
+| Rollback exterior precisa ser provocado pelo compositor para evitar primeira confirmada | `652→690`, `694→732` | MOVEU; recusa é consumida depois do `atomic` interno (`celula.py:690`, `732`, `737`). |
+| Rollback exterior inclui marca/síncrono; callbacks dependem de commit | `625→663`, `434→472`, `502→540` | MOVEU para chamadas da porta (`celula.py:630`, `663`, `472`, `540`); propriedades de Django/transações e outras fontes devem ser consolidadas pelo leitor dessas fontes. | [nao verificado]
+| Permissão, 11h e colisão não são guardas da porta | `559→597`, `568→606`, `646→684`, `675→713` | MOVEU; valida autor/motivo/booleano e lavra/vínculo em editar; em trocar, autor/motivo/cartas/colaboradores/documento (`celula.py:597`, `599`, `601`, `606`, `622`, `684`, `691`, `698`, `700`, `702`). |
+| Trocar não recebe ID próprio; trilha objeto carta e JSON lados | `632→670`, `682→720`, `686→724` | MOVEU; assinatura e JSON não possuem ID de permuta (`celula.py:670`, `720`, `724`, `728`). |
+| Coordenadas vêm das cartas relidas | `659→697`, `673→711` | MOVEU; papéis/colaborador/data lidos da nova instância (`celula.py:697`, `711`, `713`). |
+| Quatro registros para quatro coordenadas distintas | `659→697`, `673→711` | MOVEU, condicional a coordenadas distintas (`celula.py:697`, `711`). |
+| Ausências presentes/encontradas, colaboradores distintos, documentos preenchidos | `653→691`, `660→698`, `662→700`, `664→702` | MOVEU; nenhuma comparação/abertura dos arquivos no caminho (`celula.py:691`, `698`, `700`, `702`, `722`). |
+| Nome do documento apenas na trilha | `684→722` | MOVEU (`celula.py:722`). |
+| Sem consumo/exclusividade global; sem exigir datas iguais dentro da chamada | `656→694`, `673→711` | MOVEU; seleção pelos IDs e edição pelas datas próprias, sem marca de consumo (`celula.py:694`, `695`, `711`, `713`). |
+| Tipo/status/período/pedido não integram elegibilidade documental | `664→702`, `675→713`, `568→606`, `584→622` | MOVEU; documento é único campo documental testado; lavra/vínculo separados (`celula.py:702`, `713`, `606`, `622`). |
+
+Mapa integral de linhas de `celula.py` citadas no censo, para completar referências de linhas/afirmações agrupadas:
+
+```text
+427→465 434→472 437→475 450→488 458→496
+490→528 502→540 513→551 559→597 568→606
+584→622 593→631 594→632 596→634 598→636
+611→649 625→663 627→665 632→670 646→684
+652→690 653→691 656→694 657→695 659→697
+660→698 662→700 664→702 673→711 675→713
+676→714 679→717 682→720 684→722 686→724
+690→728 694→732
+```
+
+Sobre o contrato do construtor:
+
+- **Rollback:** a obrigação de o compositor abortar o `atomic` externo quando receber `'recusada'` permanece; a porta captura `_TrocaRecusada`, embora outras exceções possam propagar (`app/ponto/portas/celula.py:690`, `app/ponto/portas/celula.py:732`, `app/ponto/portas/celula.py:737`, `app/ponto/portas/celula.py:731`).
+- **Ordem das quatro:** ordenar quatro células continua requisito do compositor/desenho; a porta ordena somente dois lados e também adquire cartas antes das células (`app/ponto/portas/celula.py:695`, `app/ponto/portas/celula.py:711`). A ordem global deve considerar também as cartas para não adquirir cartas de pares opostos antes de tentar as restantes; ocorrência concreta de deadlock [nao verificado].
+- **d1=d2:** a porta não proíbe datas iguais e não conhece `d1/d2` de uma composição; a lei fornecida permite expressamente `d1=d2` (`aval_lei_permuta.txt:1`, anexo; `app/ponto/portas/celula.py:711`). Portanto, a frase final do censo “quatro células — que exige duas datas distintas” **MUDOU frente à lei**, e não deve virar validação impeditiva (`aval_lei_permuta.txt:1`, anexo).
+- **Limite material da composição no mesmo dia:** `editar_dia` monta DNA a partir do vínculo do próprio colaborador e de um booleano; não recebe turno do outro (`app/ponto/portas/celula.py:622`, `app/ponto/portas/celula.py:629`, `app/ponto/portas/celula.py:572`). Duas trocas inversas no mesmo dia reescrevem as mesmas duas coordenadas com booleanos opostos; a segunda não representa quatro células distintas (`app/ponto/portas/celula.py:711`, `app/ponto/portas/celula.py:713`). A representação da troca de turnos distintos no mesmo dia no esquema atual exige investigação/desenho técnico; não é uma nova regra de negócio dada a permissão explícita do aval (`aval_lei_permuta.txt:1`, anexo).
+
+## 16/11 12:41 · sessao 7cdb8c89aa6e · - · - · origem=Ronald (tmux)
+
+| Afirmação/referência do censo | Sítio hoje | Veredito |
+|---|---|---|
+| Recálculo posterior por `on_commit`: `fechamento.py:1824`; rollback externo condiciona callback: `:1802` | `app/ponto/services/fechamento.py:1824` registra `_rodar`; `:1802` declara dependência do commit; `_rodar` recalcula uma competência em `:1809`–`:1810`. | **IGUAL** nos sítios citados. |
+| Rejunção só alcança FK nula: `rejuncao.py:60` | `app/chamados/rejuncao.py:60` filtra vivos; `:62` exige `celula__isnull=True`; escritor em `:98`, contador condicionado à escrita em `:107`. | **IGUAL**. |
+| Reavaliação recorta dias/chamados vivos: `feriado_reavaliar.py:17/:76` | `app/chamados/services/feriado_reavaliar.py:18` filtra vivos; `:77`–`:80` recortam datas e colaborador; `:84` confirma dia e executa encerramento. | **IGUAL**; referências antigas `:17/:76` eram linhas adjacentes às expressões relevantes e continuam existentes. |
+| Consulta das competências exportadas sem lock: `gerar_celulas.py:161` | `app/ponto/management/commands/gerar_celulas.py:170` consulta `ExportacaoDominio.objects.filter(...).order_by().values_list(...).distinct()`; juiz chamado em `:182`; a função está em `:135`. | **MOVEU**: consulta `161 → 170` (+9). Não há `select_for_update` nesse corpo (`:135`–`:189`). |
+| Marca órfã consulta carimbos recentes: `gerar_celulas.py:241` | `app/ponto/management/commands/gerar_celulas.py:250` chama `carimbos_de_reescrita`; filtro colaborador/vivos em `:252`–`:254`; juiz em `:257`. | **MOVEU**: `241 → 250` (+9). |
+| Marcador atualiza contexto: `gerar_celulas.py:255` | `app/ponto/management/commands/gerar_celulas.py:264` chama `renovar_contexto(..., orfa_regeneracao=...)`; docstring “só marca” em `:235`. | **MOVEU**: `255 → 264` (+9). |
+| Cartório relê célula: `cartorio.py:1976` | `app/ponto/services/cartorio.py:2027` consulta `CelulaDia.objects.filter(colaborador=..., data=...).first()`. | **MOVEU**: `1976 → 2027` (+51). |
+| Rejulgamento pode alcançar abertura de cobrança: `cartorio.py:1740` | `app/ponto/services/cartorio.py:1791` chama `emissor._abrir_chamado`, condicionado a `apply_`, à regra de lista e à âncora (`:1776`, `:1790`). | **MOVEU**: `1740 → 1791` (+51). |
+| Abertura pode enviar push imediato: `detectar_ausencias.py:778` | `app/ponto/management/commands/detectar_ausencias.py:778` guarda `not _flexivel`; chamada síncrona `push_supervisao` em `:779`; falha capturada em `:785`. | **IGUAL**. |
+| Push alcança envio externo: `push_utils.py:40` | `app/chamados/push_utils.py:40` chama `webpush(...)` diretamente. | **IGUAL**. Envio concreto durante permuta permanece **[nao verificado]**. |
+| Recarregamento de vínculos: `alimentacao.py:355` | `app/escala/alimentacao.py:355` carrega células; `:357` carrega escalas; `:358` chama juiz do vínculo por par. | **IGUAL**. |
+| Identity map limitado às instâncias recebidas e restaurado: `alimentacao.py:43/:47` | `app/escala/alimentacao.py:43` salva atributo anterior, `:44` instala mapa; `:47`–`:51` restauram/removem atributo. | **IGUAL**. |
+| Savepoint da auditoria não é commit independente: `observ.py:133` | `app/core/observ.py:133` abre `transaction.atomic()` interno; `:134`–`:137` criam auditoria. | **IGUAL** no código; rollback externo alcança essa escrita transacional, como dedução estática do atomic aninhado (`app/core/observ.py:133`). |
+| TOCTOU documentado e pergunta sobre `folga_trabalhada`: `BACKLOG.md:1876` | Fila O10-B em `app/docs/BACKLOG.md:2176`, com TOCTOU e pergunta histórica de FT. | **MOVEU**: conteúdo da fila hoje em `:2176`. A linha física `:1876` agora trata CODEX-CONSTRUTOR-NEGOCIO (`app/docs/BACKLOG.md:1876`). |
+| “BACKLOG.md:1879 trata BO-0511-G2-TRIAGEM” | BO está em `app/docs/BACKLOG.md:2181`; `:1879` agora trata H12-DEMISSAO-NA-JANELA. A obra O10-D está em `:2177`. | **MUDOU** a afirmação sobre o sítio físico; BO **MOVEU** para `:2181`. A referência correta da obra passou a existir em `:2177`. |
+| Pergunta histórica FT aberta em `RELATO.md:449` | Pergunta histórica em `app/docs/RELATO.md:2120`; `:449` agora registra estado E3. Resposta específica da permuta formal registrada em `app/docs/RELATO.md:1640` e lei fornecida pelo usuário. | **MOVEU** o registro histórico para `:2120`; **MUDOU** a conclusão “continua não respondida” para O10-D, porque `:1640` registra as 6+4 respondidas. |
+
+O contrato documental atual reafirma expressamente: porta retorna `'recusada'` sem raise, compositor deve levantar para rollback; ordenar as quatro células; `d1=d2` é permitido e o censo supunha datas distintas (`app/docs/RELATO.md:1640`). A obra também consta no BACKLOG com composição de duas trocas, pré-validação das quatro, rollback integral e identificação própria na trilha (`app/docs/BACKLOG.md:2177`).
+
+Nos efeitos transitivos examinados, o limite material do rollback permanece: a abertura chama push sincronicamente e este alcança `webpush`, portanto rollback SQL não desfaz envio já realizado; ocorrência concreta nessa composição **[nao verificado]** (`app/ponto/services/cartorio.py:1791`; `app/ponto/management/commands/detectar_ausencias.py:779`; `app/chamados/push_utils.py:40`).
+
+## 16/11 12:41 · sessao 262d1a369f1a · - · - · origem=Ronald (tmux)
+
+Seções 2 e 3 conferidas somente por leitura; nenhuma execução Django/teste ou escrita. [nao verificado]
+
+| Afirmação do censo | Referência antiga → atual | Situação |
+|---|---|---|
+| Helper de cobertura declara que não valida 11h | `app/ponto/utils.py:152` → `:152` (item explícito em `:153`) | **IGUAL**. |
+| `marcos_turno` dá datetimes crescentes e trata meia-noite | `app/escala/servico_jornada.py:61` → `:69` (laço `:88-93`) | **MOVEU**, sentido preservado. |
+| `fim_turno` fornece término | `app/escala/servico_jornada.py:89` → `:97` (retorno `:101`) | **MOVEU**, sentido preservado. |
+| `tem_acao` verifica ações sem gravar | `app/colaboradores/mixins.py:322` → `:322` (corpo `:326-332`) | **IGUAL**. |
+| `pode_agir_chamado` verifica departamento dono | `app/chamados/utils.py:68` → `:68` (delegação `:72`) | **IGUAL**. |
+| Lavra é juiz separado, bool/fontes | `app/folha/export.py:589` → `:597` (fontes/retorno `:622-634`) | **MOVEU**, sentido preservado. |
+| Registro K9 aponta para esse juiz | `app/core/juizes.py:322` → `:353` | **MOVEU**, sentido preservado. |
+| `_competencias_exportadas` enumera janelas candidatas e consulta juiz | `app/ponto/management/commands/gerar_celulas.py:126` → `:135` (consulta `:184`, janela `:187`) | **MOVEU**, sentido preservado. |
+| `autoridade_da_lavra` compõe frase sem gravação | `app/ponto/management/commands/gerar_celulas.py:208` → `:217` (corpo `:225-229`) | **MOVEU**, sentido preservado. |
+| `ausencias_sobrepostas` julga períodos de Ausencia, não colisão horária de plantões | `app/ponto/turnos.py:2795` → `:2817` (consulta `:2839-2848`) | **MOVEU**, sentido preservado. |
+| `evento` não tem argumento correlação/lote/grupo; aceita antes/depois | `app/core/observ.py:94` → `:94` | **IGUAL**. |
+| JSONs de auditoria persistem antes/depois | `app/core/observ.py:133` → `:133` (campos em `:136`) | **IGUAL**. |
+| `LogAuditoria` tem objeto_id inteiro e JSONs | `app/core/models.py:298`, `:300` → mesmas linhas (`valor_depois :301`) | **IGUAL**. |
+| `evento_kw` só encaminha campos conhecidos | `app/core/observ.py:142` → `:142` (encaminhamento `:146-148`) | **IGUAL**. |
+| Precedente `lote='arquivar_lote'` é rótulo fixo | `app/chamados/views_arquivar.py:146` → `:146` | **IGUAL**. |
+| Metadado extra é incorporado no JSON | `app/chamados/services/arquivo.py:133` → `:133` (incorporação `:134`, evento `:137-138`) | **IGUAL**. |
+| `Ausencia.chamado_origem` pode referir pedido/chamado | `app/ponto/models.py:786` → `:786` | **IGUAL**; FK é especificamente para `ChamadoColaborador` (`:787-789`). |
+
+**Limite dos controles prontos:** ausência de juiz completo de 11h/colisão pronto continua **[nao verificado]**; o helper declara explicitamente não validar 11h (`app/ponto/utils.py:152-153`), e os helpers geométricos só produzem marcos/término (`app/escala/servico_jornada.py:69`, `:97`). Busca textual por `11h|interjornada|permuta|permutar_plantoes` em `app/ponto`, `app/escala` e registro não localizou compositor/validador específico; isso não prova inexistência sob outro nome **[nao verificado]**.
+
+**Escopo:** o censo fornecido enumera sítios existentes e insumos; não contém uma lista explícita “arquivos a modificar”. Lista fechada de mudanças de produção/teste **[nao verificado]**. Não converter todos os arquivos referenciados em arquivos que a obra muda. [nao verificado]
+
+**Documentos atuais úteis para consolidação:**
+
+- `app/docs/BACKLOG.md:2177`: contrato `permutar_plantoes(A,d1,B,d2)`, duas portas no atomic, pré-validação das quatro, rollback integral, recusa falante, ID/trilha e escala-base intocada; registra compositor levantar e ordenação das quatro.
+- `app/docs/RELATO.md:1640`: declara respondidas as seis perguntas v1 e quatro residuais v2, mantém rollback por raise do compositor, ordenação das quatro e corrige a suposição do censo: **d1=d2 permitido**.
+- `app/docs/PROMPTS.md:2015`: resumo das seis respostas da lei, inclusive mesma empresa, carta ato aprovado, compensação e guarda DSR.
+- `app/docs/RELATO.md:1602`: “sem copia de construcao”; faltam construtor, selos RED 1–6 e etapas seguintes.
+- `app/docs/RELATO.md:1645`: referência histórica ao BACKLOG:1879 reescrito; a linha atual da obra é `app/docs/BACKLOG.md:2177`.
+- `app/docs/RELATO.md:5`: censo físico vive em logs não disponíveis na cópia e papel PREPARA foi objeto de revisão; portanto linhas físicas dos anexos apenas colados devem ter convenção explícita ou **[nao verificado]**.
+
+As quatro perguntas finais do censo são expressamente tratadas como respondidas pela documentação atual (`app/docs/RELATO.md:1640`); correspondência semântica com a lei fornecida: turnos previstos anterior/seguinte (§1), empresa/vínculo/tipo (§3), cartas (§5), compensação sem folga_trabalhada (§6). Fonte física da lei anexa **[nao verificado]**.
 
 ## 16/11 12:36 · sessao 929ffb0f1659 · CORTES-F2-F9-1611 · construtor · origem=Code
 
@@ -915,72 +1032,4 @@ Corroboração documental, sem substituir leitura do código: `app/docs/RELATO.m
 
 O diretório `logs/ESPINHA-BRIEFS/F4` não está disponível nesta cópia; seu conteúdo literal é `[não verificado]`. Há descrição documental do brief em `app/docs/RELATO.md:254`, sem acesso à matriz referida.
 
-## 16/11 11:42 · sessao a62ff595dc63 · - · - · origem=Ronald (tmux)
-
-Não localizei teste existente de **login DRF com cookie de sessão válido e CSRF ativado**; os testes examinados não montam essa combinação: `app/api/tests/test_api_login.py:58-63`, `app/api/tests/test_login_campos.py:27-32`, `app/api/tests/test_login_app_sem_colaborador.py:25-30`, `app/core/tests/test_contrato_trocar_senha.py:127-142`.
-
-| Cobertura existente | Evidência e limite |
-|---|---|
-| Login bem-sucedido, erros e tokens | `app/api/tests/test_api_login.py:58-63` cria `APIClient()` novo por requisição, sem sessão; `:167-180` verifica 200 e payload. |
-| Campos alternativos e JSON/form | `app/api/tests/test_login_campos.py:27-32` cria `Client()` novo, sem `enforce_csrf_checks`; casos em `:34-51`. |
-| Login app/gestão | `app/api/tests/test_login_app_sem_colaborador.py:25-30` usa `self.client`, sem estabelecimento prévio de sessão; sucesso em `:38-46`. |
-| Login core e flag de senha | `app/core/tests/test_contrato_trocar_senha.py:127-142` chama apenas `api.views_core.api_login` diretamente com `APIRequestFactory()`, sem passagem pelos middlewares. |
-| Paridade dos dois kernels | `app/api/tests/test_r15_token_por_credencial.py:149-169` testa emissão de tokens e fonte de refresh; não faz login HTTP com sessão. |
-| CSRF ativo existente próximo | `app/api/tests/test_api_mensageria_push.py:67-78` usa `Client(enforce_csrf_checks=True)`, mas POSTa mensageria sem cookie de sessão; não cobre login. |
-
-**Armadilha de cobertura:** a suite configura `config.urls_test` em `app/config/settings_test.py:9`; esse URLconf concatena API core antes da UI em `app/config/urls_test.py:8-15`. Assim, `/api/auth/login/` nessa configuração escolhe core primeiro (`app/api/urls_core.py:9`), embora a docstring diga `api.views.api_login` (`app/api/tests/test_api_login.py:2`). Para testar UI é necessário selecionar explicitamente seu URLconf, cuja inclusão está em `app/config/urls.py:37` e rota em `app/api/urls.py:60`.
-
-Esboço RED proposto, **não criado nem executado [nao verificado]**:
-
-```python
-# Fixture: usuario_sessao ativo; outro colaborador ativo com credenciais válidas.
-# Repetir com ROOT_URLCONF="config.urls_core" e "config.urls".
-with override_settings(ROOT_URLCONF=urlconf):
-    client = APIClient(enforce_csrf_checks=True)
-    client.force_login(usuario_sessao)
-
-    assert settings.SESSION_COOKIE_NAME in client.cookies
-    client.cookies.pop(settings.CSRF_COOKIE_NAME, None)
-    # Não enviar Authorization, X-CSRFToken nem csrfmiddlewaretoken.
-
-    response = client.post(
-        "/api/auth/login/",
-        {"username": usuario_login.username, "password": senha_login},
-        format="json",
-        HTTP_HOST="juliani.hasner.com.br",
-    )
-
-    assert response.status_code == 200, response.content
-    assert response.data["colaborador"]["id"] == colaborador_login.pk
-    assert {"access", "refresh"} <= response.data["tokens"].keys()
-```
-
-Usar usuários distintos verifica também que o login responde pelas credenciais do corpo, conforme os handlers consultam `autenticar_colaborador` em `app/api/views_core.py:195-198` e `app/api/views.py:209-212`. O resultado RED esperado antes de correção é o bloqueio CSRF descrito no anexo; execução e mensagem exata nesta cópia **[nao verificado]**.
-
-## 16/11 11:42 · sessao be3cf7792cd1 · - · - · origem=Ronald (tmux)
-
-- **Referência incorreta:** `BACKLOG:2159` identifica SOMBRA-HOJE-NA-BORDA; O10-D-PERMUTA-RECIPROCA está em `app/docs/BACKLOG.md:2172`.
-- **Contrato O10-D:** quatro células; duas chamadas a `trocar_plantao` num atomic; validar 11h/sobreposição/permissão/exportada antes da primeira escrita; rollback integral; recusa falante; correlação; seis RED e confirmação DP 1/3/6 — `app/docs/BACKLOG.md:2172`.
-- **Cruzamento físico O10-D com obras em voo:** [nao verificado]. O registro disponível declara ausência de cópia de construção — `app/docs/RELATO.md:1592`. Não há conjunto de alterações O10-D para comparar.
-- **B1/B2 e BUG-PAR:** cruzamento entre BUG-PAR e B1 está documentado em `fio.py`, `test_s139.py`, `test_medida_turno_do_par.py` — `app/docs/RELATO.md:36`; medida anterior inclui `JUIZES.md` — `app/docs/RELATO.md:70`. BUG-PAR não constrói e B2 espera pouso B1 — `app/docs/RELATO.md:51`. F2/F4 também esperam B1 — `app/docs/RELATO.md:6`.
-- **LOTE7:** conjunto documentado abrange `ponto/services/ausencia.py`, `regularizacao.py`, `retratar_humano.py`, `ferias/views.py` — `app/docs/RELATO.md:50`; pouso está em PAREI — `app/docs/RELATO.md:5`. Cruzamento físico O10-D nesses arquivos: [nao verificado].
-- **Alcance transitivo real de O10-D:** `trocar_plantao` chama `editar_dia` — `app/ponto/portas/celula.py:713`; esta marca cobranças órfãs e chama `_o_chao_do_dia_mudou` — `app/ponto/portas/celula.py:663`; o fluxo rejulga célula — `app/ponto/portas/celula.py:463`, recalcula fechamento — `app/ponto/portas/celula.py:496` e agenda rejunção/reavaliação de chamados — `app/ponto/portas/celula.py:531`. Isso prova alcance em chamados, sem provar arquivos alterados em comum.
-- **Interface ausência/BUG-PAR:** materialização importa e chama `criar_ausencia` — `app/chamados/services/materializacao.py:472`, `app/chamados/services/materializacao.py:491`, `app/chamados/services/materializacao.py:519`, `app/chamados/services/materializacao.py:527`. Alteração de `ausencia.py` pela O10-D: [nao verificado].
-
-Para Q3, distinguir **colisão demonstrada** de **dependência que exige medição**: as provas disponíveis mostram a segunda para O10-D; o próprio item 4 manda esperar quando houver cruzamento [nao verificado — anexo fornecido sem numeração].
-
-## 16/11 11:42 · sessao 9acbf789d5c7 · - · - · origem=Ronald (tmux)
-
-Achados confirmados:
-
-- **Citação errada:** `app/docs/BACKLOG.md:2159` é SOMBRA-HOJE-NA-BORDA; O10-D está em `app/docs/BACKLOG.md:2172`.
-- **Contrato O10-D existente:** quatro células, duas chamadas a `trocar_plantao` no mesmo `atomic`, validação prévia, rollback integral, recusa falante e correlação da trilha constam em `app/docs/BACKLOG.md:2172`.
-- **Lei de 09/11:** a linha da O10-D registra LEI-O10-D-PERMUTA 12:0x, seis perguntas mais quatro residuais, caminho `logs/O10-D-PERMUTA-NA-TELA/aval_lei_permuta.txt` e RED por regras 1–6; o texto integral dessa resposta não foi conferido. `app/docs/BACKLOG.md:2172`.
-- **Censo_v2:** o RELATO registra conclusão e resultado `rc 0`, com ressalvas de rollback, ordenação das quatro células e datas iguais permitidas. `app/docs/RELATO.md:1630`. O RELATO também afirma que censo e lei estão prontos, enquanto os RED 1–6 ainda faltam. `app/docs/RELATO.md:1592`.
-- **O10-C:** a condição INTERROMPIDA está comprovada em `app/docs/BACKLOG.md:2219`; a tabela também a classifica PARADA em `app/docs/RELATO.md:975`.
-- **Molde PREPARA:** há despacho e resultado documentados, com construção bloqueada pelo cruzamento de arquivos, espera pelos pousos da F1 B1/R3 e continuidade da fila. `app/docs/RELATO.md:70`, `app/docs/RELATO.md:71`.
-- **Ordem:** o registro anterior proíbe lateral por iniciativa, mas o aval fornecido é decisão nominal de Ronald; a entrada O10-D, isoladamente, não demonstra colisão. `app/docs/BACKLOG.md:9`. A precedência da espinha consta em `app/docs/RELATO.md:293`.
-- **Pista:** lateral usa PISTA como pré-filtro; o pouso continua certificado pela VM. Esse requisito precisa permanecer no brief. `app/docs/RELATO.md:27`, `app/docs/BACKLOG.md:830`.
-- **Restrição do construtor:** L-126 proíbe ao Codex `ponto/portas/celula.py`, `core/juizes.py`, competência exportada e item que pede `!`; o brief precisará esclarecer arquivos/atos permitidos, sem presumir que o `!` futuro autoriza essas escritas. `app/docs/LEIS.md:147`.
-
-_6011 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6014 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

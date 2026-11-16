@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: push.sh | pid=551196
+ESTADO 12:4x O10-D-PERMUTA-RECIPROCA (COMPLEMENTO-1 item 4): A PREPARA no Codex censo (prepara.q -> prepara.r, fim prepara.fim); B so apos A + pouso LOTE7 + REVISAO-DO-AVAL; construtor opus da sessao
 ESTADO 12:26 F2 L1 RE-MEDIDA POS-F1: RESIDUAL, nao MOOT (Codex rel.r @4e364a414, amostra 4/4: valor nao conservado, descarimbar apaga chamados/models.py:3314-3320; projecao le o campo atual chamados/juizes.py:1389-1400; premissa F1=be2b8d733 da matriz CAIU) -> logs/ESPINHA-BRIEFS/F2/matriz.md secao RE-MEDIDA POS-F1
 DESPACHO F2-REDS: M4,M13,M14,M15,M18 (+M19/M20 se alvo sem helper c3) -> Codex construtor de teste wt-codex-cortes-f2-f9-1611-122527 (logs/CORTES-F2-F9-1611/f2_pos_f1/reds.q -> reds.r, fim reds.fim); revisao da sessao antes de brief
 ESTADO 12:2x CORTE-LU2-06-PAGA REGISTRADO (CORTES.json + LU2-06 P1 cortado + BACKLOG); COMPETENCIA-PAGA atras da espinha (models.py:364, fio.py:815), tela + medida sombra como lateral; JUSTIFICATIVA-PAGA reabre pelo censo como lateral
