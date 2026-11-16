@@ -1,7 +1,89 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 00:08** · publicado em **16/11/2026 00:09** (UTC-3)
+> Ultima resposta processada: **16/11/2026 00:50** · publicado em **16/11/2026 00:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 00:50 · sessao 86940fe41689 · - · - · origem=Ronald (tmux)
+
+**E3 e R3:** não achei ligação documental suficiente para afirmar fechamento de um caso do p0 por E3 `90f3fa66b` ou R3 c17. **[nao verificado]**
+
+- `app/docs/RELATO.md:477` mede `col996 30/10` e `col399 30/09`, mas pertence à **E3-FIO-PELA-ESCADA/RESTO-R2 expressamente não pousada**. É mudança de fio, sem certificação de fechamento.
+- `app/docs/BACKLOG.md:2010` liga o caso BO-1311/04 (`col246 01/11`) à E4B e escreve **“NAO se cura na E3”**.
+- `app/docs/RELATO.md:875` e `:928` mencionam perguntas de `col789` na E3-10, mas não identificam dias/IDs que permitam casar com BO-ADMIN-2710/6. Fechamento desse caso por essa passagem: **[nao verificado]**.
+- R3 separada: escopo LU-01..07 e achados em `app/docs/BACKLOG.md:770`; pendências de origem da medição, relógio e universo em `app/docs/RELATO.md:51`; contrato c17 de nove itens em `:61`. Casos p0 que fecharia nominalmente: **[nao verificado]**. Não contar no total.
+
+**HJ-091 tem ligação explícita:**
+
+| Evidência | Referência |
+|---|---|
+| HJ-091 → HJ-091-LISTA NO AR | `app/docs/RELATO.md:343` |
+| Merge `8376da7aa`; origem preservada nas rejeitadas; 60 casos na lista DP | `app/docs/BACKLOG.md:750`; `app/docs/RELATO.md:483` |
+| Subcasos documentados: `col127 02/10`, agendamento 114; `col344 07/11`, agendamento 103 | `app/docs/RELATO.md:749` |
+| `col344` nos três dias 05–07/11; rejeitadas 3977/3995/3985; abono 5592 preservado; erro observado era nascerem férias aprovadas novas em 06–07/11 | `app/docs/RELATO.md:489`; preservação após pouso em `:483` |
+| Tela do admin lê `origem_de_ferias(a)` | `app/ponto/views.py:2091–2093` |
+| Serviço retorna agendamento, período, dias, status, dia consultado | `app/ponto/services/ausencia.py:101–112` |
+| Template mostra origem/período/dia; não oferece edição genérica para derivada | `app/templates/ponto/partials/painel_ausencia.html:131–145` |
+
+**Juízes reais e leitura segura HJ-091:**
+
+- `ponto.turnos.cobertura_ausencia_periodo(colab, ini, fim, para='folha')`, registrado em `app/core/juizes.py:257`, corpo somente consulta em `app/ponto/turnos.py:2747–2766`; retorna `{date: Ausencia}`.
+- `ponto.turnos.ausencia_cobre(colab, dia, para='folha')`, registrado em `app/docs/JUIZES.md:52–54`, corpo somente consulta em `app/ponto/turnos.py:2550–2571`; retorna uma ausência aprovada ou `None`, por `_pelo_efeito` em `:2523–2532`.
+- `ferias.services.em_gozo_hoje(hoje=dia, colaborador=colab)` está registrado em `app/core/juizes.py:266`; somente consulta em `app/ferias/services.py:59–70`. Responde se o agendamento cobre a data, **não** se as ausências derivadas têm origem correta.
+- O contador específico **`ferias.services.ferias_espelho_x_agendamento()`**, explicitamente **SO LEITURA e esperado zero nos dois sentidos**, está em `app/ferias/services.py:135–165`. Retorna PKs de ausências sem origem válida e pares `(agendamento_pk, data)` sem ausência aprovada própria. **Não encontrei seu registro em JUIZES/core: [nao verificado].**
+- Para o caso inteiro HJ-091, a resposta de um juiz de cobertura isoladamente não certifica a origem FK nem preservação das rejeitadas. O script deve consultar a cobertura e os objetos específicos sem chamar espelhamento/backfill; se exigir um único juiz registrado que certifique tudo, resultado **NAO_CONFERIDO**, motivo “juiz suficiente para origem e preservação dos vetos [nao verificado]”. As funções que espelham/gravam ficam fora.
+
+**Proveniência escrita:**
+
+- HJ: **“56 HJ do Fernando”** em `app/docs/BACKLOG.md:1883`; **“56 TXT do Fernando”** em `app/docs/PROMPTS.md:1888`.
+- BO-0611: **“BO-[nome]-0611 (14 itens)”** em `app/docs/PROMPTS.md:1914`; denominação também em `app/docs/BACKLOG.md:1926–1927`.
+- BO-1311: **BO-[nome]-1311-ROTEIRO**, dez casos e ordem das pessoas (`col1019`, `col996`, `col1032`, `col246`, `col265`, `col982`, `col1004`, `col523`, `col866`, `col859`) em `app/docs/BACKLOG.md:795`.
+- BO-ADMIN-2710: associação a **BO-[nome]** está nas linhas de suas obras: `app/docs/BACKLOG.md:833`, `:835`, `:841`; a nomeação formal A/B/C é explicada em `app/docs/CORTES.md:366`.
+- BO2910-ESTRUTURA: `app/docs/BACKLOG.md:1116` a chama “triagem BO-ADMIN-2910”; autoria Mauricio/Fernando nessa passagem: **[nao verificado]**.
+
+## 16/11 00:49 · sessao 80b7cbd5c09c · - · - · origem=Ronald (tmux)
+
+**BATIDA-DEDUP-RETRATADA → BO-0611/05, pela ponte de sítio explicitamente permitida pelo usuário.** A ficha complementar desse caso nomeia `triagem_batida.py:662` e a janela de duplicidade; a obra nomeia exatamente esse sítio. Provas: `app/docs/BACKLOG.md:2074` + `app/docs/BACKLOG.md:2083`. Essa ligação é ao complemento da classe; não prova o encerramento da queixa original de GPS. A queixa original aparece como barreira GPS em `app/docs/RELATO.md:1929`.
+
+- Identidade: **col456**, `app/docs/RELATO.md:1929` e `app/docs/BACKLOG.md:1927`. Dia do fato: **[nao verificado]**.
+- A função que a obra efetivamente consulta é `ponto.turnos.batidas_apuraveis(colab, ini=None, fim=None)`, somente queryset: `app/ponto/turnos.py:2868`, filtros em `:2887–2895`. A casca atual a chama em `app/ponto/services/triagem_batida.py:664–668` e `app/api/views_core.py:514–517`.
+- Não encontrei essa função literalmente em `JUIZES.md` ou `core/juizes.py`: registro exigido pelo pedido **[nao verificado]**. Não apresentar `tem_gps` como juiz da dedup.
+- O efetivo escritor `ponto.registro_batida.registrar_batida` está em `app/ponto/registro_batida.py:94` e executa `objects.create` em `:152` e `:158`, mais efeitos de fechamento em `:156`/`:162`: **não chamar na sonda**.
+- Para comprovar FECHADO nesse caso faltam o instante do toque e batidas concretas antes/depois **[nao verificado]**. Sonda deve imprimir **NAO_CONFERIDO**, com motivo dia/instante não individualizado e impossibilidade de exercitar escritor.
+- Leitor admin comprovado para a queixa GPS do mesmo caso: view `app/ponto/views.py:437`, queryset de pendentes em `:444–449`, contador pelo `tem_gps` em `:488`; template `app/templates/ponto/batidas_offline_pendentes.html:95–100`. Feed também chama o filtro em `app/templates/core/_d2_feed.html:16–18`. O espelho aceita gestor `?colab=<pk>` em `app/ponto/views.py:117–123`, exibindo timestamp cru em `app/templates/ponto/espelho.html:246`.
+
+**CONTRATO-DE-ENTRADA-DO-FIO: nenhum caso do p0 ligado com segurança.** A ligação nominal é **HJ-095**, ausente do universo p0 fornecido: `app/docs/BACKLOG.md:2224` e `app/docs/GRADE-MESTRA.md:688`. A grade traz “1 (roteiro … / mapa HJ)” mas não individualiza ficha, pessoa ou dia: não usar esse 1 como caso identificado (`app/docs/GRADE-MESTRA.md:688`). O smoke col677 é da obra, mas não identifica caso p0 (`app/docs/RELATO.md:233`).
+
+**TELA-DIZ-O-QUE-O-SERVIDOR-DISSE: nenhum caso p0 ligado com segurança.** A obra nomeia `bater_ponto_v2.html:327` e laudo novo de 15/11 (`app/docs/BACKLOG.md:1939`); o complementar BO05 cita a fila `pwa.js:158` (`app/docs/BACKLOG.md:2074`), porém a própria fila registra que **pwa.js está fora do aval C** (`app/docs/BACKLOG.md:2029`). Compartilhar o arquivo `bater_ponto_v2.html` com a barreira GPS de BO05 (`app/docs/BACKLOG.md:2011`) não comprova que esta obra fecha aquela queixa. A tela atual lê `data.status`, distinguindo ok/ja_registrada/ignorada_intervalo em `app/templates/ponto/bater_ponto_v2.html:168–174`, acionada no 2xx em `:365`; isso documenta comportamento, não ligação ao caso p0.
+
+**Fontes/donos escritos:** BO-0611 é explicitamente **BO-[nome]-0611** (`app/docs/BACKLOG.md:1926–1927`); BO1311 é **BO-[nome]-1311-ROTEIRO**, com ordem col1019, col996, col1032, col246, col265, col982, col1004, col523, col866, col859 (`app/docs/BACKLOG.md:795`). Isso confirma os rótulos sem precisar escrever nome ou CPF de colaborador.
+
+## 16/11 00:49 · sessao 552b54e251f3 · - · - · origem=Ronald (tmux)
+
+HE-REVOGADA-NA-PORTA: **nenhum caso do universo documentalmente ligado [nao verificado]**. As linhas da obra tratam das quatro portas e da competência 11 aberta, sem nomear caso BO/HJ, pessoa ou dia do universo: app/docs/RELATO.md:225; app/docs/BACKLOG.md:1951. O pouso consta em app/docs/RELATO.md:17.
+
+BUG-ENC-CELULAS-FORMA: **nenhum caso do universo documentalmente ligado [nao verificado]**. A linha da obra nomeia `dias_encerrados`, `turnos_do_colab`, cartório e geradora, sem caso do universo: app/docs/BACKLOG.md:988. Os sítios atingidos constam em app/docs/RELATO.md:8292. O impacto nomeia col174, 25/10, em app/docs/RELATO.md:33; esse nominal pertence a `CELULA-CONCORDE-NO-MEIO-DO-TURNO`, obra fora do universo dado, em app/docs/BACKLOG.md:1759. Não transportar por semelhança. O pouso consta em app/docs/RELATO.md:14.
+
+Para eventual referência técnica, sem adicionar casos:
+
+- `ponto.models.DecisaoHEQuerySet.vigentes`: leitura pura, retorna `filter(revogada_em__isnull=True)` — app/ponto/models.py:1265–1267. Não achei registro em `core/juizes.py` ou `JUIZES.md` **[nao verificado]**; declaração escrita existente em app/docs/CORTES.md:461.
+- `ponto.portas.he.decidir_he` é escritor, proibido para sonda — app/ponto/portas/he.py:158–160.
+- `ponto.turnos.dia_encerrado` é juiz registrado em app/core/juizes.py:239; assinatura/corpo em app/ponto/turnos.py:2050 e :2083. `dias_encerrados` é carregador, expressamente “não juiz” — app/ponto/turnos.py:2142.
+
+Fontes e destinatários:
+
+- **BO-0611 → Mauricio**, frase “quadro único soma=14 + texto ao Mauricio por item” — app/docs/PROMPTS.md:1914.
+- **BO-1311-ROTEIRO → BO-[nome]**, identificador e rol dos dez colabs — app/docs/BACKLOG.md:795; aval — app/docs/PROMPTS.md:2247. Frase separada dizendo autor do relato **[nao verificado]**.
+- **HJ → Fernando**, frase “56 HJ do Fernando → unidades pessoa+dia” — app/docs/BACKLOG.md:1883.
+- **BO-ADMIN-2710**: associação escrita a BO-[nome] para 8.1, 7, 1/3 e C — app/docs/BACKLOG.md:833, :835, :841, :849. Fonte inteira explicitamente atribuída ao Mauricio **[nao verificado]**.
+- **BO2910-ESTRUTURA**: remete à triagem BO-ADMIN-2910 — app/docs/BACKLOG.md:1116; aval diz somente “8 BOs do admin” — app/docs/PROMPTS.md:1620. Atribuição ao Mauricio **[nao verificado]**.
+- Cuidado com inferência pelo rótulo: `LAUDO-[nome]-2610` está escrito como “laudo do Fernando” — app/docs/PROMPTS.md:1490; `BO-[nome]-0511-CENSO` também usa relatório do Fernando — app/docs/PROMPTS.md:1880.
+
+Linhas atualizadas do universo úteis para consolidação:
+
+- BO2910 02/05/06/08 — app/docs/RELATO.md:3320, :3322, :3323, :3325; inventário das cinco classes — app/docs/BACKLOG.md:1116.
+- BO-ADMIN-2710 1–8.3 — app/docs/RELATO.md:3895–3903.
+- BO-0611 V2 — app/docs/RELATO.md:1929; rol antigo substituído — app/docs/RELATO.md:1991.
+- BO-1311 ficha→col, ordem contestável — app/docs/BACKLOG.md:795; app/docs/RELATO.md:684. Dados recuperáveis 06–10 e dias col859 07/11 e 09/11 — app/docs/RELATO.md:680.
 
 ## 16/11 00:08 · sessao 50ce300f7dae · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
 
@@ -931,172 +1013,4 @@ Para sonda sem escrita: leitores do app retornam listas sem `.save()` (`app/cham
 
 O helper terceira derivação é só existência de disputa aberta, sem perguntas: `colaborador_em_disputa(colaborador)` retorna primeira `DisputaSupervisao` com `fechada_em__isnull=True` (`app/chamados/services/disputa_emissao.py:34-42`).
 
-## 15/11 23:18 · sessao bcbcdfa003d8 · E4C-F1NOVA-B1 · verificador · origem=Code
-
-**Persistem dois problemas: cache desatualizado na guarda do `save` e falsa absolvição no contrato AST.** (`app/chamados/models.py:3588`; `app/chamados/tests/test_contract_par_resposta.py:92`)
-
-Identidade independente do HEAD, comparação Git e execução com Django/banco: **[não verificado]**. Os contraexemplos abaixo decorrem da cópia; os helpers foram executados isoladamente em memória, sem banco. (`app/chamados/models.py:3592`; `app/chamados/tests/test_contract_par_resposta.py:101`)
-
-**1. Fechamento dos achados procedentes da volta 1**
-
-| Achado | Veredito sobre o fechamento |
-|---|---|
-| **1 — par persistido** | **NÃO PROCEDE o fechamento integral.** Fecha o exemplo original: a metade excluída de `update_fields` passa a vir de `_par_do_banco`. Entretanto, esse método pode devolver cache desatualizado; contraexemplos no item 2. (`app/chamados/models.py:3601`; `app/chamados/models.py:3602`; `app/chamados/models.py:3588`) |
-| **4 — guarda do contrato** | **NÃO PROCEDE o fechamento integral.** Os dois exemplos antigos agora são acusados, mas basta um `if` com saída antecipada em linha anterior, mesmo num caminho que não será executado. (`app/chamados/tests/test_contract_par_resposta.py:156`; `app/chamados/tests/test_contract_par_resposta.py:157`; `app/chamados/tests/test_contract_par_resposta.py:92`) |
-| **5 — fixture mista** | **PROCEDE.** O teste adicional recria ambas com texto, retira os instantes por `update` e verifica uma materialização, nenhuma resolução adicional, nenhum fechamento e disputa aberta. Identidade histórica dos asserts com `e84a167f4`: **[não verificado]**. (`app/chamados/tests/test_fio_disputa_resolvido.py:62`; `app/chamados/tests/test_fio_disputa_resolvido.py:100`; `app/chamados/tests/test_fio_disputa_resolvido.py:103`; `app/chamados/tests/test_fio_disputa_resolvido.py:105`; `app/chamados/tests/test_fio_disputa_resolvido.py:108`) |
-| **6 — JUIZES.md** | **PROCEDE.** A tabela registra o juiz, sua face SQL e o escopo B1/B2/E-F, acompanhando o registro vivo. (`app/docs/JUIZES.md:99`; `app/docs/JUIZES.md:103`; `app/core/juizes.py:306`) |
-| **7 — instante automático** | **PROCEDE.** O comentário agora diz PROCESSAMENTO, conforme o relógio usado pelo chamador. (`app/chamados/services/disputa_emissao.py:1671`; `app/api/foto_recebida.py:42`; `app/api/foto_recebida.py:48`) |
-
-**2. Sequências que quebram a garantia — PROCEDE**
-
-**a) Duas instâncias, sem concorrência nem escrita crua.** Usando `_cria` da fixture existente e `I` como instante válido: (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:58`)
-
-```python
-p = self._cria(respondida_em=I, resposta_colab='bati')
-q = PD.objects.get(pk=p.pk)
-
-q.respondida_em, q.resposta_colab = None, ''
-q.save(update_fields=['respondida_em', 'resposta_colab'])
-
-p.save(update_fields=['respondida_em'])
-```
-
-Após salvar `q`, o banco contém `(None, '')`, mas o cache de `p` continua `(I, 'bati')`. No último save, `_par_gravado` calcula `(I, 'bati')`; a comparação com o mesmo cache dispensa a recusa. Só o instante é escrito: o banco fica **`(I, '')`, ilegal**. (`app/chamados/models.py:3554`; `app/chamados/models.py:3588`; `app/chamados/models.py:3601`; `app/chamados/models.py:3608`)
-
-**b) Rollback externo seguido de save repetido.** Partindo de `(None, '')`, salvar `(I, 'bati')` dentro de um `atomic` externo atualiza `_par_carregado`; se esse `atomic` depois falhar, o atributo não é restaurado. Repetir `save(update_fields=['respondida_em'])` produz a mesma divergência do exemplo anterior. O `atomic` interno não adia a atualização do cache até o commit externo. (`app/chamados/models.py:3552`; `app/chamados/models.py:3554`; `app/chamados/models.py:3608`)
-
-**c) Legado ilegal intocado passa a ser recusado.** A fixture `_legado` fornece o estado inicial: (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:62`)
-
-```python
-p = self._legado(resposta_colab='legado')  # banco: (None, 'legado')
-
-try:
-    with transaction.atomic():
-        p.respondida_em = I
-        p.save()                        # cache: (I, 'legado')
-        raise RuntimeError()
-except RuntimeError:
-    pass
-
-p.respondida_em = None                  # memória igual ao banco novamente
-p.pergunta = 'outro enunciado'
-p.save()
-```
-
-O último save compara `(None, 'legado')` com o cache `(I, 'legado')`, considera uma transição e levanta `TextoSemCarimbo`, embora o par gravado permaneça intocado. Isso viola a decisão (1) expressa no teste. (`app/chamados/models.py:3608`; `app/chamados/models.py:3611`; `app/chamados/services/fio.py:1610`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:5`)
-
-O refresh integral recompõe o cache a partir dos campos carregados; refresh parcial que toca o par o torna desconhecido. Essas medidas cobrem o caso diferido acrescentado no RED, mas não invalidam outras instâncias nem revertem o cache após rollback externo. (`app/chamados/models.py:3573`; `app/chamados/models.py:3577`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:137`; `app/chamados/models.py:3554`)
-
-**3. `_par_carregado` — NÃO PROCEDE que represente sempre “banco agora”**
-
-| Acesso | Local |
-|---|---|
-| Escreve após save | `app/chamados/models.py:3554` |
-| Escreve no `from_db` | `app/chamados/models.py:3566` |
-| Escreve após refresh integral | `app/chamados/models.py:3573` |
-| Escreve `None` após refresh parcial do par | `app/chamados/models.py:3577` |
-| Lê em `_par_do_banco` | `app/chamados/models.py:3587` |
-| Lê em `_par_gravado`, quando nenhum campo do par será salvo | `app/chamados/models.py:3600` |
-
-**NÃO PROCEDE que algum desses leitores interprete `None` como par vazio.** `_par_do_banco` trata como desconhecido e consulta a linha existente; `_par_gravado` apenas propaga o desconhecido no caminho que não escreve o par. Porém, valor conhecido significa efetivamente uma fotografia carregada, não necessariamente o banco atual. (`app/chamados/models.py:3588`; `app/chamados/models.py:3590`; `app/chamados/models.py:3600`)
-
-**4. Custo — PROCEDE, condicionado ao estado do cache**
-
-Contagem de consultas feitas especificamente por `_par_do_banco`, para instância existente: (`app/chamados/models.py:3585`)
-
-| Estado e save | SELECTs |
-|---|---:|
-| Cache conhecido | **0** — retorna o cache. (`app/chamados/models.py:3588`) |
-| Cache desconhecido; `update_fields` sem o par | **0** — ambos os caminhos dispensam consulta. (`app/chamados/models.py:3600`; `app/chamados/models.py:3606`) |
-| Cache desconhecido; ambas as metades em `update_fields`, ou save sem `update_fields` | **1** — comparação da recusa. (`app/chamados/models.py:3608`) |
-| Cache desconhecido; somente uma metade em `update_fields` | **2** — composição e comparação; a primeira leitura não é memorizada. (`app/chamados/models.py:3601`; `app/chamados/models.py:3608`; `app/chamados/models.py:3590`) |
-
-Sem `update_fields`, carregar atributos ainda diferidos pode acrescentar consultas próprias antes da comparação. A contagem real com Django/banco é **[não verificado]**. (`app/chamados/models.py:3597`; `app/chamados/models.py:3577`)
-
-Nos fluxos de produção localizados após refresh parcial:
-
-- `devolver_validacao_recusada` atualiza parcialmente `resposta_colab`, invalidando o cache, mas salva só validação: **zero SELECTs do par**. (`app/chamados/services/validacao.py:213`; `app/chamados/services/validacao.py:227`; `app/chamados/models.py:3606`)
-- `_carimbar_recusa` atualiza parcialmente campos fora do par e salva recusa ou carimbo de identidade: **zero SELECTs do par**. (`app/chamados/services/materializacao.py:1095`; `app/chamados/services/materializacao.py:1105`; `app/chamados/services/materializacao.py:1109`; `app/chamados/models.py:3291`)
-- `_aceitar_a_folga` pode repetir a operação após refresh dos campos de validação; as escritas correspondentes excluem o par. (`app/chamados/services/validacao.py:370`; `app/chamados/services/validacao.py:374`; `app/chamados/services/validacao.py:162`; `app/chamados/models.py:3291`)
-
-Não localizei fluxo `only/defer → save` que efetivamente introduza essas consultas. Os `only` relevantes alimentam atos, contadores ou caminhos DRY; frequência real em produção e completude contra chamadas dinâmicas: **[não verificado]**. (`app/chamados/models.py:1613`; `app/chamados/services/fio.py:1235`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:60`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:504`)
-
-**5. Contrato — PROCEDE falsa absolvição; NÃO PROCEDE acusar os dois escritores citados**
-
-Este contraexemplo é absolvido pelo helper real: (`app/chamados/tests/test_contract_par_resposta.py:92`; `app/chamados/tests/test_contract_par_resposta.py:108`)
-
-```python
-def f(p, qs, habilitado):
-    if habilitado:
-        if not p.resposta_colab:
-            return
-    qs.update(respondida_em=agora)
-```
-
-Com `habilitado=False` e a pergunta vazia, a guarda nem executa. A absolvição ocorre porque o `return` está numa linha anterior à escrita, sem comprovação do caminho de controle. **É uma falha adicional à polaridade expressamente excluída do selo.** A leitura da outra metade também não exige identidade entre as instâncias. (`app/chamados/tests/test_contract_par_resposta.py:92`; `app/chamados/tests/test_contract_par_resposta.py:22`; `app/chamados/tests/test_contract_par_resposta.py:76`)
-
-As duas absolvições de produção examinadas são corretas pela forma:
-
-- `PerguntaDisputa.carimbar` escreve o instante dentro da guarda de texto após trim e inclui o campo no save. (`app/chamados/models.py:3231`; `app/chamados/models.py:3233`; `app/chamados/models.py:3234`; `app/chamados/models.py:3253`)
-- `carimbar_resposta_pela_trilha` retorna antes da escrita quando já existe instante ou falta texto após trim; depois salva o instante. (`app/chamados/services/disputa_emissao.py:1692`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/services/disputa_emissao.py:1698`)
-
-**6. Descartes 2 e 3 — PROCEDEM sob as classificações declaradas na triagem; conferência nas fontes originais [não verificado]**
-
-- **2, I21:** a regra documentada permite à classe A nomear o juiz no B1; o código reconhece explicitamente a mudança de predicado para trim. A classificação específica de I21 no censo, a exceção no predesenho e “brancos = 0” constam da triagem fornecida, mas sua confirmação nos documentos originais é **[não verificado]**. (`app/docs/JUIZES.md:102`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1572`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1575`)
-- **3, espera pelo texto:** a regra documentada exclui E/F da migração, portanto o descarte é coerente **se** a função é classe E, como informa a triagem. Essa classificação nominal no censo é **[não verificado]**. O complemento continua no código; sua existência, isoladamente, não demonstra violação desse escopo. (`app/docs/JUIZES.md:103`; `app/chamados/services/fio.py:187`; `app/chamados/juizes.py:1552`)
-
-## 15/11 23:16 · sessao d9a18c11cd9b · - · - · origem=Ronald (tmux)
-
-Item 3:
-
-- Escrevem `_par_carregado`: `save` (`app/chamados/models.py:3554`), `from_db` (`:3566`), `refresh_from_db` integral (`:3573`) e parcial que toca o par (`:3577`).
-- Leem diretamente: `_par_do_banco` (`:3587`) e `_par_gravado` quando nenhum campo do par vai ao UPDATE (`:3600`).
-- `None` significa desconhecido: `_par_do_banco` consulta a linha existente (`:3588-3590`); `_par_gravado` apenas o propaga no caminho sem escrita do par (`:3599-3600`). Nenhum desses leitores transforma `None` em `(None, '')`.
-- O significado “banco agora” depende de o cache continuar válido; `save` o atualiza antes de eventual rollback de transação externa, sem mecanismo de reversão do atributo (`:3552-3554`).
-
-Item 4:
-
-| Estado/caminho | SELECTs de `_par_do_banco` |
-|---|---|
-| Cache conhecido | 0 (`app/chamados/models.py:3587-3589`) |
-| Cache desconhecido, `update_fields` sem par | 0 (`:3599-3600`, `:3606-3607`) |
-| Cache desconhecido, ambas as metades ou `save()` | 1 na comparação (`:3608`, `:3590`) |
-| Cache desconhecido, somente uma metade | **2**, pois há chamadas em `:3601` e `:3608`, sem memorizar o resultado em `:3590` |
-
-Sem `update_fields`, o acesso às duas metades acontece antes da comparação (`app/chamados/models.py:3596-3597`); cargas diferidas podem somar consultas próprias, além do SELECT acima. Execução com Django/banco: [não verificado].
-
-Não identifiquei chamador de produção atual que efetivamente acrescente essas consultas:
-
-- `only` com **ambas** as metades: ressuscitação usa instâncias apenas para construir atos (`app/chamados/models.py:1612-1613`); DRY do backfill também inclui ambas (`app/chamados/management/commands/backfill_decisoes_pergunta.py:60`).
-- `only` **sem ambas**: contador de destino (`app/chamados/services/fio.py:1235-1244`) e DRY de colisões (`app/chamados/management/commands/backfill_decisoes_pergunta.py:504-510`); não salvam essas instâncias nesses fluxos.
-- `devolver_validacao_recusada` invalida o cache ao atualizar só `resposta_colab` do par (`app/chamados/services/validacao.py:213-214`), mas salva apenas validação (`:227`): **0** consultas do par. Depois, o materializador usa novas instâncias de um queryset (`:494`; `app/chamados/services/materializacao.py:1375-1382`).
-- `_carimbar_recusa` faz refresh parcial sem o par (`app/chamados/services/materializacao.py:1095`) e salva recusa (`:1109`) ou carimbo de identidade (`:1105`; `app/chamados/models.py:3287-3291`): **0** consultas do par.
-- `_aceitar_a_folga` faz refresh de validação (`app/chamados/services/validacao.py:370`) e pode repetir a operação (`:374`); saves seguem sem o par (`:162`; `app/chamados/models.py:3165`, `:3291`).
-- Outros refreshs parciais terminam em leitura/retorno: validação (`app/chamados/services/validacao.py:497`) e classificação do passivo (`app/chamados/services/passivo_validado.py:140-145`).
-
-Quantidade/frequência real de consultas em produção: [não verificado].
-
-## 15/11 23:15 · sessao a574bcd3a4b2 · - · - · origem=Ronald (tmux)
-
-**Achado 4: PROCEDE; o delta fecha os exemplos antigos, mas não fecha a exigência “guarda governa a escrita”.** Os novos mutantes cobrem `if` solto e escrita anterior à guarda; `_governada` ainda absolve qualquer guarda com `return`/`raise` cuja linha preceda a escrita, sem verificar bloco, caminho de execução ou escopo. (`app/chamados/tests/test_contract_par_resposta.py:156`; `app/chamados/tests/test_contract_par_resposta.py:157`; `app/chamados/tests/test_contract_par_resposta.py:86`; `app/chamados/tests/test_contract_par_resposta.py:92`)
-
-Contraexemplo absolvido pelo helper real (`meia_par` retorna `None`), executado em memória com `python3 -B`:
-
-```python
-def f(p, qs, habilitado):
-    if habilitado:
-        if not p.resposta_colab:
-            return
-    qs.update(respondida_em=agora)
-```
-
-Com `habilitado=False`, `p` e `qs` apontando para uma pergunta `(None, '')`, grava `(agora, '')`. A guarda não foi executada; a absolvição decorre exclusivamente de `_sai_cedo(g)` e `g.lineno < escrita.lineno`. Não é o limite declarado de polaridade. (`app/chamados/tests/test_contract_par_resposta.py:79`; `app/chamados/tests/test_contract_par_resposta.py:92`; `app/chamados/tests/test_contract_par_resposta.py:22`)
-
-Também são absolvidos: guarda numa função interna nunca chamada; guarda que lê `q.resposta_colab` enquanto escreve `p.respondida_em`. A busca usa `ast.walk(fn)` e `_le` compara somente o nome do atributo. (`app/chamados/tests/test_contract_par_resposta.py:75`; `app/chamados/tests/test_contract_par_resposta.py:86`)
-
-**Item 5: PROCEDE quanto a falsos negativos; NÃO PROCEDE quanto a acusação dos dois escritores legítimos citados.** A varredura real extraída por AST retornou `[]`; ambos foram absolvidos. A implementação da varredura está em `app/chamados/tests/test_contract_par_resposta.py:113`; evidência persistida dessa execução: **[não verificado]**.
-
-- `PerguntaDisputa.carimbar`: só atribui instante sob guarda de texto não vazio após trim; inclui `respondida_em` nos campos salvos. A absolvição é correta. (`app/chamados/models.py:3231`; `app/chamados/models.py:3233`; `app/chamados/models.py:3234`; `app/chamados/models.py:3253`)
-- `carimbar_resposta_pela_trilha`: retorna antes da escrita se já tem instante ou não tem texto após trim; depois atribui e salva somente o instante. A absolvição é correta. (`app/chamados/services/disputa_emissao.py:1692`; `app/chamados/services/disputa_emissao.py:1693`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/services/disputa_emissao.py:1698`)
-
-_5859 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5862 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
