@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 03:17:23.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.8 MB). Acoes na janela: **1618**.
+**Medido em 16/11/2026 03:22:30.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1620**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:17:50 | Bash | Record V0 causas in RELATO; check hook | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1]; p='app/docs/RELATO.md'; s=open(p).read() i=s.index("\nESTADO ")+1 l=("ESTADO %s V0 (b) causas.md ESCRITO (logs/ESPELHO-VERDADE-FECHO/V0/causas.md): 57 dias ESTRUTURA = 2 causas nomeadas (corte do ORACULO por vao > 14 h, ponto/calculador/nucleo.py:215-225, amostra 2/2 conferida; destino BATERIA) + 55 nao ...` |
+| 03:17:42 | Bash | Prepare 55-day list and ask Codex for sonda script | `cd /home/ronald/saas-hasner; D=logs/ESPELHO-VERDADE-FECHO/V0/r2; mkdir -p $D; grep '^\| col' logs/ESPELHO-VERDADE-FECHO/V0/causas.r \| grep 'nao nomeada' \| awk -F'\|' '{gsub(/ /,"",$2);gsub(/ /,"",$3);gsub(/ /,"",$4);print $2"\|"$3"\|"$4}' > $D/dias55.txt; wc -l < $D/dias55.txt; head -2 $D/dias55.txt cat > $D/escreve.q <<'EOF' Leitura (CODEX_PAPEL=leitura, obra ESPELHO-VERDADE-FECHO-V0, item (b), ...` |
 | 03:17:22 | Bash | Read cadeia.sh and sonda question form | `cd /home/ronald/saas-hasner/logs/ESPELHO-VERDADE-FECHO/V0/r1; cat cadeia.sh \| head -30; head -c 1500 p1/s.q` |
 | 03:17:16 | Bash | Read how ESTRUTURA rows are built and the envelope | `cd /home/ronald/saas-hasner/logs/ESPELHO-VERDADE-FECHO/V0/r1; sed -n '400,455p' p1/script.py; cat p1/envelope.sh \| head -30; diff p1/script.py p2/script.py \| head` |
 | 03:17:14 | Bash | Fill MIUDOS V0 part; inspect R1 script | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='logs/MIUDOS/quadro.md'; s=open(p).read() a="Parte V0 (`logs/ESPELHO-VERDADE-FECHO/V0/causas.md`): entra quando a V0 entregar." assert s.count(a)==1 s=s.replace(a,"Parte V0 (`logs/ESPELHO-VERDADE-FECHO/V0/causas.md`, 16/11 03:2x): 57 dias ESTRUTURA = 2 causas nomeadas (corte do ORACULO por vao > 14 h, `ponto/calculador/nucleo.py:215-225`, destino BA ...` |

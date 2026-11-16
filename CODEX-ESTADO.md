@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:52** · publicado em **16/11/2026 02:56** (UTC-3)
+> Ultima resposta processada: **16/11/2026 03:21** · publicado em **16/11/2026 03:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 03:21 · sessao 0f8d2d7e0419 · - · - · origem=Ronald (tmux)
+
+Sob interpretação literal incluindo caches locais, pule a cadeia de turnos do espelho: `turnos_do_colab` preenche `_ub_cache` e `_mpd_cache` (`app/ponto/turnos.py:1906`, `app/ponto/turnos.py:1917`); seu pareador chama `_fechar_aberto_na_pausa_sem_volta`, que preenche `_ult_cache` (`app/ponto/turnos.py:1502`, `app/ponto/turnos.py:1163`).
+
+Emita `PAUSA_RECONHECIDA|nao lido: grava` e `INTERVALO_EFETIVO_ESPELHO|nao lido: grava`. Pode complementar com o intervalo **declarado**, chamando `vinculo_do_dia` (`app/escala/alimentacao.py:228`) e `ec.intervalo_do_dia(data, celulas=...)` (`app/escala/models.py:1135`); isso não demonstra o desconto aplicado (`app/ponto/turnos.py:756-771`).
+
+`_realizado_do_dia_tela` pode receber turnos já julgados sem chamar seu carregador (`app/ponto/services/espelho.py:267-294`), mas não há fonte equivalente sem a cadeia encontrada: equivalência de turnos E6 ou objetos montados pela sonda é `[nao verificado]`.
+
+## 16/11 03:19 · sessao df82b3e41f69 · - · - · origem=Ronald (tmux)
+
+Funções reais seguras para leitura:
+
+- `minutos_do_espelho(de)` retorna `(minutos, fonte)` exatamente pela precedência solicitada; não grava. `app/ponto/management/commands/e6_oraculo.py:242`, decisão em `:263-269`.
+- `InsumosDoDono(c, ini, fim, hoje, agora=agora)` calcula o E6 com o universo mensal real: `[ini − 12h, fim + 1d + 14h]`, convertendo timestamps por `timezone.localtime`. O construtor somente lê e preenche a instância; acessar `.oraculo` não dispara outras funções. `app/ponto/management/commands/e6_oraculo.py:128-154`.
+- O número comparado pelo comando é `ins.oraculo.minutos.get(str(dia), 0.0)`. `app/ponto/management/commands/e6_oraculo.py:350`.
+- A competência usa `janela_fechamento(mes, ano, c.empresa)`. `app/ponto/management/commands/e6_oraculo.py:304`; implementação em `app/ponto/janelas.py:54-57`.
+- `minutos_do_oraculo(ts)` é a derivação real, sem escrita externa, importando somente biblioteca padrão. `app/ponto/calculador/nucleo.py:22-25`, `:42-254`.
+
+Para mostrar os turnos efetivamente montados, sem copiar regra, capture `frame.f_locals["turnos"]` no evento `return` de um `sys.setprofile` temporário, restringindo por `frame.f_code is minutos_do_oraculo.__code__`, durante a construção de `InsumosDoDono`; restaure o profiler anterior em `finally`. A variável real recebe os turnos em `app/ponto/calculador/nucleo.py:157`, `:224`, `:228`; não integra o retorno `Veredito`, cujo contrato está em `:28-37`.
+
+Distinga:
+
+- `corte_apos=True` em cada turno capturado exceto o último: os anteriores foram adicionados pelo ramo de corte; o último pelo fechamento da leitura. `app/ponto/calculador/nucleo.py:216-228`.
+- `.cortes` significa especificamente corte que deixou batida órfã por contagem ímpar, e não qualquer corte. `app/ponto/calculador/nucleo.py:222-223`.
+
+`batidas_apuraveis(c, ini, fim)` somente monta `QuerySet` ordenado, com limites inclusivos e exclusão de retratadas. `app/ponto/turnos.py:2868-2895`. Para três dias civis completos, o limite superior deve ser `dia+2 à meia-noite − 1 microssegundo`, pois usa `timestamp__lte`. `app/ponto/turnos.py:2891-2892`.
+
+`Batida` possui `tipo`, `is_intervalo` e `retratada_em`, mas não campo persistido `data_turno` ou `papel`. `app/ponto/models.py:8-79`. O papel `_papel_ata` surge somente como atributo efêmero do pareador; não equivale automaticamente ao `tipo`. `app/ponto/turnos.py:1310-1315`.
+
+## 16/11 03:19 · sessao 0f8d2d7e0419 · - · - · origem=Ronald (tmux)
+
+- Espelho completo proibido pela regra literal de cache: `espelho_do_colab` chama `autoridade_do_periodo` em [app/ponto/services/espelho.py:1227](/home/ronald/codex_ws/3580b35e028267d85318cb75fd5b3d0c40e04a00/app/ponto/services/espelho.py:1227); esta chama `efeitos_da_ausencia` em `app/ponto/services/espelho.py:1068`; ela chama `CAT.parciais_vigentes()` em `app/ponto/services/efeito_ausencia.py:38`; esta lê `vigente()` em `app/ponto/catalogo/ausencias.py:357`, que escreve `_CACHE` em `app/ponto/catalogo/ausencias.py:279-280`.
+- Não há equivalente armazenado comprovado para a linha escolhida pelo E6: `minutos_realizados` é produzido pelo montador em `app/ponto/services/espelho.py:783`; `pago_h` é produzido em `app/ponto/services/espelho.py:811-812`. Ler apenas DiaPago não prova a fonte que a função E6 escolheria, pois ela prioriza `minutos_realizados` (`app/ponto/management/commands/e6_oraculo.py:263-269`).
+- Para o fato ESPELHO, emitir `nao lido: grava`, número/fonte `[nao verificado]`, sem chamar `espelho_do_colab` nem passar um dict fabricado a `minutos_do_espelho`; dict vazio resultaria falsamente em “sem lavratura” (`app/ponto/management/commands/e6_oraculo.py:263-269`).
+- Diagnóstico seguro de pausa com função real: `_realizado_do_dia_tela(colaborador, d, turnos_juiz, escalas_periodo, celulas)` (`app/ponto/services/espelho.py:267-294`); ela usa `vinculo_do_dia`, puro (`app/escala/alimentacao.py:228-286`), `_intervalo_livre`, puro (`app/escala/models.py:243-250`), `intervalo_do_dia`/`pausas_do_dia`, leitores (`app/escala/models.py:1135-1190`), e `realizado_do_dia` com argumentos completos (`app/ponto/turnos.py:774-795`), que encaminha à função pura `realizado_dos_turnos` (`app/ponto/turnos.py:707-771`).
+- `RealizadoDoDia` publica `minutos`, `sem_turno`, `aberto`, `longo`, `janela_descontada`, `borda_posicional` (`app/ponto/turnos.py:596-601`). O desconto declarado aplicado é publicado em `janela_descontada` (`app/ponto/turnos.py:760-771`); o espelho o publica como `realizado_janela_descontada` (`app/ponto/services/espelho.py:817-819`).
+- Pausas reconhecidas por turno: `intervalos_do_turno(turno)` é leitor puro que aplica o piso aos pares já marcados (`app/ponto/turnos.py:502-546`); pausa por borda posicional é decisão separada, acessível pela função pura `_borda_posicional(turnos_do_dia)` (`app/ponto/turnos.py:638-704`).
+- Contexto precisa ficar explícito: o espelho carrega seus turnos para toda a janela visual (`app/ponto/services/espelho.py:614`); resultado de pausa obtido usando turnos de `dia-1..dia+1` deve ser rotulado diagnóstico da janela da sonda. Igualdade com desconto efetivamente publicado pelo espelho completo é `[nao verificado]`.
+
+## 16/11 03:18 · sessao c8b4644a799e · - · - · origem=Ronald (tmux)
+
+Auditoria dos seis itens, sem forçar classes que os anexos não sustentam:
+
+1. **Visto pelo Codex; descarte pela triagem não explícito.** `.q`: `pv_c6.q`, pergunta 1: “há caminho em que a recusa ainda deixa algo gravado”; pergunta 4: “pouso antes do pre-requisito”. `.r`: `pv_c6.r`, seção Posto: “Falha do histórico após gravação continua deixando o posto novo persistido”; teste 5 “Caracteriza a gravação consumada”. `entrega.md` registra “mutantes (2) verdes nos dois lados, por desenho”, mas não identifica isso como descarte da atomicidade posto+histórico. **(b) somente se qualificado: visto e não curado; descarte formal [nao verificado].** [nao verificado]
+
+2. **Núcleo visto, aceito e mantido aberto; causa adicional não vista.** `.q`: `pv_c6_v2.q`, pergunta 1: “Ausencia (nova ou reaberta por _reabrir) ... arquivo ... fica no storage”; `pv_c6_v3.q`, pergunta 2: “que caminhos ainda deixam arquivo ... (inclusive _reabrir)?”. `.r`: `pv_c6_v2.r` e `pv_c6_v3.r` declaram PROCEDENTE exatamente a falha intermediária. `entrega.md`, Residual: “ABERTO ... Cura na ORIGEM ... arquivo da obra LOTE 7, proibido aqui”. Isso **não é descarte** e não é ausência de acesso a RED/suite/prod. A rota específica `post_save` → `engolir` → transação envenenada não aparece nas respostas; esse componente admite **(a)**, com tema perguntado também em `pv_c6.q`, perguntas 1–2, incluindo efeitos/post_save. Item composto exige separar núcleo e caminho extra. [nao verificado]
+
+3. **(b), inequívoco.** `.q`: `pv_c6.q`, pergunta 2, sequência global e `select_for_update` fora da porta. `.r`: `pv_c6.r`, “Observação — ordem global composta”. `entrega.md`, v1: “DESCARTADO como cura: já existia dentro do atomic de a.save() ... vai ANEXO ao opus”.
+
+4. **(b), inequívoco.** `.q`: `pv_c6.q`, pergunta 4 inclui “derivação paralela de fonte única” e pergunta 5 confronto com JUIZES. `.r`: `pv_c6.r`, lista final: “Observação — comentário desatualizado: ‘lei em aberto’ diverge da autorização já registrada no vivo”. `entrega.md`, v1: “descartado: texto pre-existente movido, não reescrito; fila”.
+
+5. **(e).** Nenhuma das três `.q` pergunta se o padrão declarado nos commits corresponde ao padrão efetivamente realizado. Os checklists não incluem essa verificação. `entrega.md` declara o padrão, mas isso não torna o tema perguntado. Não inventar trecho positivo em `.r`; registrar ausência nos três questionários/respostas. [nao verificado]
+
+6. **Visto pelo Codex; descarte pela triagem [nao verificado].** `.q`: `pv_c6_v3.q`, pergunta 4: “2o escritor”; também `pv_c6.q`, pergunta 5, escritores de `Colaborador.situacao`. `.r`: `pv_c6_v3.r`, checklist: “permanece o reversor, que seleciona antes de chamar gravar, sem revalidar a cobertura sob a trava. É uma corrida possível na cópia”. `entrega.md` não traz descarte específico desse reversor. Não cabe (a), (d), (e); tampouco (c) para o defeito estático, cuja ocorrência em produção apenas fica não verificada.
+
+A taxonomia literal é incompleta para “viu e manteve aberto” e “viu, mas a triagem não registra destino”. Recomendo declarar isso em vez de atribuir descarte inexistente aos itens 1, 2 e 6.
 
 ## 16/11 02:52 · sessao 38680d8215aa · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
 
@@ -817,145 +874,4 @@ Para **11/2026**, todas as 31 linhas são: [nao verificado]
 
 [truncado em 20000 de 28677 caracteres]
 
-## 16/11 02:28 · sessao b7d26c2d3ecb · LOTE7-C6 · verificador · origem=Code
-
-**O delta fecha os dois contraexemplos funcionais originais, mas ainda deixa uma transição gravada sem acordar em caso de falha intermediária e mantém escapes no selo.** (`app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1094`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`)
-
-1. **Fechamento dos achados 1–6 da volta 1**
-
-   | Achado | O delta fecha? |
-   |---|---|
-   | **1 — aprovação com período invalidava duas vezes** | **Fecha o caso original:** captura antes da transição, suprime o acordador interno e acorda no fim. Contudo, introduz a janela de exceção descrita no item 3 abaixo. (`app/ponto/services/ausencia.py:1059`, `app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1094`) |
-   | **2 — competência intermediária indevida** | **Fecha setembro→novembro:** cada lado fornece seu trecho, sem construir o envelope entre eles. Permanece a limitação para competências futuras de linha aberta, descrita abaixo. (`app/ponto/services/ausencia.py:171`, `app/ponto/services/ausencia.py:177`, `app/ponto/services/ausencia.py:180`) |
-   | **3 — escapes do selo** | **Parcial:** os exemplos literais antigos ganharam tratamento e mutantes, mas há variantes aceitas sem acordador executável. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:102`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:247`) |
-   | **4 — julgamento substituído por mock** | **Fecha essa substituição:** agora chama o juiz real com células existentes. A asserção ainda não prova o resultado do julgamento. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:408`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:413`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:418`) |
-   | **5 — provas menores que os nomes** | **Parcial:** verifica Justificativa pendente, saldo e correção de concluída; ainda não compara observações, trilhas anteriores e conjunto completo das ausências. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:392`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:499`) |
-   | **6 — relógio interno/solto** | **Parcial:** congela a classe de férias e evita ler o relógio para snapshots iguais; continua lendo `localdate()` internamente quando um lado alterado tem fim nulo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:433`, `app/ponto/services/ausencia.py:169`, `app/ponto/services/ausencia.py:175`) |
-
-2. **Cobertura de `_acordar_projecao`**
-
-   Entrada e saída estão cobertas porque percorre a união das PKs e considera cada lado existente; mudança de range considera ambos; mudança apenas de tipo/minutos/horas também entra porque compara a tupla inteira antes de extrair as datas. Trechos idênticos são deduplicados. (`app/ponto/services/ausencia.py:119`, `app/ponto/services/ausencia.py:139`, `app/ponto/services/ausencia.py:168`, `app/ponto/services/ausencia.py:178`)
-
-   Para ranges válidos fechados e dias únicos, não encontrei competência omitida nem competência intermediária acrescentada pelo novo algoritmo: `dias_da_ausencia` produz dias contíguos inclusivos, e cada intervalo enviado corresponde a um dos lados. (`app/ponto/turnos.py:2798`, `app/ponto/turnos.py:2803`, `app/ponto/turnos.py:2811`, `app/ponto/services/ausencia.py:180`)
-
-   **Existe omissão condicional para linha aberta:** empresa com corte 21; hoje 05/11/2026; afastamento aprovado desde 15/10, sem fim; fechamento de dezembro já carimbado; chamada `decidir(a, 'rejeitada')`. O leitor da folha inclui essa ausência em dezembro, mas o acordador expande o lado antigo somente até 05/11 e não invalida dezembro. O código permite pedir recalculação de outro mês e gravar seu carimbo; portanto “competência futura não tem projeção” não está garantido por essa porta. A existência desse cadastro/fechamento em produção é **[nao verificado]**. (`app/ponto/turnos.py:2543`, `app/ponto/turnos.py:2546`, `app/ponto/services/ausencia.py:177`, `app/ponto/views.py:1240`, `app/ponto/views.py:1255`, `app/ponto/services/fechamento.py:898`, `app/ponto/services/fechamento.py:1143`)
-
-   A deduplicação é por **trecho**, não por competência: mover 03/11→04/11 chama o invalidante duas vezes para a mesma competência. Sem recálculo intercalado, a segunda chamada atualiza zero porque exige `derivado_em` preenchido; portanto o retorno não duplica o fechamento, embora haja duas chamadas. (`app/ponto/services/ausencia.py:178`, `app/ponto/services/ausencia.py:180`, `app/ponto/services/fechamento.py:1653`)
-
-3. **`decidir` com `_acorda=False`**
-
-   **Há caminho sem acordar:** transição gravada no primeiro `save`; segundo `save` dos carimbos falha; acordador final não é alcançado. `decidir` não envolve a composição em transação própria nem recupera essa exceção. A aprovação em lote fornece `decisor`, obrigando a segunda escrita, e não abre `atomic` próprio. Em autocommit, uma falha nessa segunda escrita deixa a aprovação persistida e o fechamento carimbado; ocorrência produtiva é **[nao verificado]**. (`app/ponto/services/ausencia.py:972`, `app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1062`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1094`, `app/ponto/views.py:2292`, `app/ponto/views.py:2302`)
-
-   A aprovação individual mostrada protege essa composição com `atomic`, deixando a exceção sair do bloco antes do tratamento externo. (`app/ponto/views.py:2674`, `app/ponto/views.py:2676`, `app/ponto/views.py:2694`)
-
-   Período todo `None` apenas pula sua aplicação; continua até o acordador. O retorno de `mudar_estado` por estado já igual também devolve o controle a `decidir`, que prossegue. Período inválido e transição inválida são recusados antes da escrita da transição. (`app/ponto/services/ausencia.py:954`, `app/ponto/services/ausencia.py:956`, `app/ponto/services/ausencia.py:1051`, `app/ponto/services/ausencia.py:1053`, `app/ponto/services/ausencia.py:1094`)
-
-   Os chamadores produtivos encontrados são:
-
-   | Chamador | kwargs |
-   |---|---|
-   | `rejulgar_status_pelo_tipo` | `por`, `request`, `motivo`; default `_acorda=True`. (`app/ponto/services/ausencia.py:677`, `app/ponto/services/ausencia.py:940`) |
-   | `anexar_documento` | `por`, `motivo`, `request`; default `True`. (`app/ponto/services/ausencia.py:1018`, `app/ponto/services/ausencia.py:940`) |
-   | `decidir` | `por`, `motivo`, `request`, **`_acorda=False`**. (`app/ponto/services/ausencia.py:1060`) |
-   | `escalonar_aguardando_documento` | somente `motivo`; default `True`. (`app/ponto/services/ausencia.py:1151`, `app/ponto/services/ausencia.py:940`) |
-   | `_reabrir` | `por`, `request`, `motivo`; default `True`. (`app/ponto/services/ausencia.py:1291`, `app/ponto/services/ausencia.py:940`) |
-
-   As chamadas diretas restantes encontradas são testes, sem `_acorda`: usam `por`, e uma usa também `motivo`. (`app/ponto/tests/test_ausencia_tipo_rejulga.py:56`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:224`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:225`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:185`, `app/ponto/tests/test_varredura_classe_b_ausencia.py:115`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:177`)
-
-4. **Selo: escapes, falso positivo e mutantes**
-
-   Ainda passam estes escritores sintéticos acrescentados à porta:
-
-   - **`_so_dict`:** `a = {}` seguido de `match items: case [a]: a.save(update_fields=["status"])`. Com `items=[ausencia]`, grava Ausencia; capturas de `match` não entram em `_atribuicoes`, então a isenção continua vendo apenas `{}`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:77`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:102`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:171`)
-   - **`_de_outro_modelo`:** `def _m(TipoAusencia): t = TipoAusencia(); t.save()`. Chamar com `lambda: ausencia` grava Ausencia; a regra confia no nome lexical da fábrica e só verifica se **o receptor `t`** é parâmetro. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:107`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:120`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:179`)
-   - **Atribuição por ramos:** `if x: t=TipoAusencia.objects.get(...); else: t=a; t.save()`. O censo fixa a primeira origem reconhecida; a isenção `ent != Ausencia` descarta a escrita antes da nova checagem de todas as atribuições. (`app/core/censo_escritas.py:339`, `app/core/censo_escritas.py:347`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:166`)
-   - **Fluxo:** acordador em `if not True`, depois de `return`, ou dentro de função interna nunca chamada ainda satisfaz o selo. Métodos de classes aninhadas também ficam fora da enumeração. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:64`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:131`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:145`)
-
-   Não encontrei falso positivo no fonte atual: o replay AST reconheceu nove escritores e nenhum faltante. Há falso positivo latente em `while False: pass; else: _acordar_projecao(...)`: o analisador descarta inclusive o `else`, que executaria. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:141`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:193`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:205`)
-
-   Os mutantes fornecidos mordem pela razão estrutural esperada: exigem exatamente o escritor acrescentado ou aquele cujo acordador foi retirado; os controles verificam isenções. Não cobrem os escapes acima nem provam execução do acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:233`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:269`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:282`)
-
-5. **Renomeação de `gravar_tipo_ausencia`**
-
-   Não encontrei chamador em `app/` usando o antigo `tipo=`. A edição produtiva passa o objeto posicionalmente; criação usa `codigo`/`campos`; os testes encontrados seguem essas formas. A renomeação não quebra esses chamadores. (`app/ponto/views_tipos_ausencia.py:86`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/tests/test_porta_ausencia_ferias.py:149`, `app/ponto/tests/test_porta_ausencia_ferias.py:150`, `app/ponto/tests/test_porta_ausencia_ferias.py:151`, `app/ponto/services/ausencia.py:1732`)
-
-6. **Testes novos e regressões que ainda passariam** [nao verificado]
-
-   - **Mordida correta dos dois casos centrais:** aprovação com período conta chamadas da invalidação real via `wraps`; setembro→novembro exige outubro ainda carimbado. Os testes H12 de competências adjacentes, isoladamente, passariam com o envelope antigo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:91`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:338`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:353`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:275`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:292`)
-   - **Julgamento real, resultado insuficientemente exigido:** o espião chama a função real, mas aceita qualquer retorno não nulo. Retirar `julgar_colab` e conservar `return out` continuaria satisfazendo essa asserção; não há conferência do veredito/carimbo final das células. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:413`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:418`, `app/ponto/services/cartorio.py:2039`, `app/ponto/services/cartorio.py:2040`, `app/ponto/services/cartorio.py:2054`)
-   - **Relógio dos testes congelado; regressão da leitura antecipada não detectada:** `_Base`, férias de tela e H12 têm congelamento. Restaurar `localdate()` antes da comparação dos snapshots passaria pelas asserções atuais de idempotência, que observam chamadas/carimbo, não leitura do relógio. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:59`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:319`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:333`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:433`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:36`)
-   - **“Nada mudou” ainda admite alteração lateral:** preservar saldo, impedir `cancelado` e não deixar ausências rejeitadas basta para o helper passar mesmo com observações ou trilhas anteriores alteradas. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`)
-
-Execução Django, RED contra a base e incidência dos contraexemplos na produção: **[nao verificado]**.
-
-## 16/11 02:28 · sessao 5df2cbed0eec · - · - · origem=Ronald (tmux)
-
-P1 a P4 conferidos independentemente: **846173; 909946; 874751; 817688** ocorrências. [nao verificado]
-
-A soma dos seis totais informados pelo agente principal confere: **5179168**; a soma das linhas confere: **161**. A transcrição independente de P5/P6 ficou inconclusiva, portanto não fornece segunda confirmação desses dois totais. [nao verificado]
-
-## 16/11 02:26 · sessao d8400d8ce927 · - · - · origem=Ronald (tmux)
-
-O selo fecha os contraexemplos literais da volta 1, mas continua sendo prova de presença sintática, sem garantir que toda escrita execute o acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:61`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:182`)
-
-Reproduzi em memória os oito testes do selo, com `unittest.TestCase` no lugar de `SimpleTestCase` e `_monitorados` lendo a constante por AST: oito passaram; o fonte atual apresentou nove escritores, sem faltantes. Isso verifica a análise AST; execução Django permanece **[nao verificado]**. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:193`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:200`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:227`)
-
-Escapes novos confirmados:
-
-- **`_so_dict` ignora capturas de `match`.** O trecho abaixo é aceito sem escritor, embora `_m([ausencia])` grave `Ausencia`: `_atribuicoes` não registra `MatchAs`, e `_so_dict` enxerga somente o literal `{}`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:77`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:102`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:171`)
-
-  ```python
-  def _m(items):
-      a = {}
-      match items:
-          case [a]:
-              a.save(update_fields=["status"])
-  ```
-
-- **`_de_outro_modelo` confia no nome lexical da fábrica.** O trecho abaixo também passa; `_m(lambda: ausencia)` grava a ausência. A regra verifica se `t` é parâmetro, mas não se `TipoAusencia` é parâmetro ou foi redefinido. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:107`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:120`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:179`)
-
-  ```python
-  def _m(TipoAusencia):
-      t = TipoAusencia()
-      t.save()
-  ```
-
-- **A checagem de ramo morto ainda aceita `if not True`, acordador depois de `return` e acordador dentro de função interna nunca chamada.** Ela só interpreta constantes diretamente e percorre os demais descendentes indiscriminadamente. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:131`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:138`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:145`)
-
-- **Classes aninhadas continuam fora da lista de funções.** `_funcoes` inclui somente métodos diretamente pertencentes a classes do módulo. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:64`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:68`)
-
-- **A isenção anterior ao novo helper ainda permite atribuição mista por ramo.** Em `if x: t = TipoAusencia.objects.get(...); else: t = a; t.save()`, o censo fixa a primeira origem, e o selo descarta `ent != Ausencia` antes de consultar `_de_outro_modelo`. Replay aceitou o trecho. (`app/core/censo_escritas.py:339`, `app/core/censo_escritas.py:347`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:166`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:179`)
-
-Não encontrei falso positivo no código atual: o teste de isentos passou no replay e nenhum escritor ficou faltante. Existe falso positivo latente em `while False: pass; else: _acordar_projecao(...)`: o `else` executa, mas o analisador retorna `False` para o `while` inteiro. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:141`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:205`)
-
-Os mutantes existentes mordem pela escrita acrescentada ou pela remoção do acordador: exigem precisamente `['_m']`, `['_K.m']` ou `[nome]`, e os controles não mordem. Eles não cobrem os escapes acima nem demonstram execução do acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:233`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:269`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:276`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:282`)
-
-## 16/11 02:26 · sessao 8f0b10d0c8bd · - · - · origem=Ronald (tmux)
-
-A pergunta 3 tem um novo caminho sem acordar: `decidir` suprime o acordador da transição, grava os carimbos numa segunda escrita e só depois invalida; não possui `atomic`, `try/finally` nem recuperação entre essas operações. Se a segunda escrita falhar, a transição já ocorreu, mas o acordador final não é alcançado. (`app/ponto/services/ausencia.py:1041`, `app/ponto/services/ausencia.py:1060`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1094`, `app/ponto/services/ausencia.py:972`)
-
-Há chamador produtivo exposto a essa composição: `aprovar_ausencia_lote` chama `decidir` via `_a4_decidir`, fornece `decisor` e não abre transação própria; esse argumento exige o segundo `save`. Incidência de falha real em produção: `[nao verificado]`. (`app/ponto/views.py:2278`, `app/ponto/views.py:2292`, `app/ponto/views.py:2302`, `app/ponto/views.py:85`, `app/ponto/services/ausencia.py:1062`, `app/ponto/services/ausencia.py:1075`)
-
-A aprovação individual de irmãos protege essa janela com `atomic`: a exceção atravessa o bloco e chega ao tratamento exterior. (`app/ponto/views.py:2673`, `app/ponto/views.py:2676`, `app/ponto/views.py:2694`)
-
-`hora_ini=hora_fim=None` não causa retorno antecipado: apenas pula validação/aplicação de período; o acordador final continua obrigatório. O retorno “estado já igual” de `mudar_estado` também retorna ao corpo de `decidir`, que prossegue até o acordador. Transição inválida e período inválido são recusados antes da gravação da transição. (`app/ponto/services/ausencia.py:1051`, `app/ponto/services/ausencia.py:1073`, `app/ponto/services/ausencia.py:1094`, `app/ponto/services/ausencia.py:954`, `app/ponto/services/ausencia.py:956`, `app/ponto/services/ausencia.py:1053`)
-
-O log normal de `mudar_estado` não fornece, por si, a exceção intermediária: `registrar_log` captura `Exception`. (`app/ponto/services/ausencia.py:979`, `app/core/auditoria.py:17`, `app/core/auditoria.py:25`)
-
-Chamadores produtivos de `mudar_estado`, por grep e AST de todos os `.py` em `app/`:
-
-| Chamador | kwargs |
-|---|---|
-| `rejulgar_status_pelo_tipo` | `por`, `request`, `motivo`; `_acorda` usa default `True`. (`app/ponto/services/ausencia.py:677`, `app/ponto/services/ausencia.py:940`) |
-| `anexar_documento` | `por`, `motivo`, `request`; default `True`. (`app/ponto/services/ausencia.py:1018`, `app/ponto/services/ausencia.py:940`) |
-| `decidir` | `por`, `motivo`, `request`, **`_acorda=False`**. (`app/ponto/services/ausencia.py:1060`) |
-| `escalonar_aguardando_documento` | somente `motivo`; default `True`. (`app/ponto/services/ausencia.py:1151`, `app/ponto/services/ausencia.py:940`) |
-| `_reabrir` | `por`, `request`, `motivo`; default `True`. (`app/ponto/services/ausencia.py:1291`, `app/ponto/services/ausencia.py:940`) |
-
-As chamadas diretas restantes encontradas são testes, todos sem `_acorda`: `por` em `test_ausencia_tipo_rejulga.py:56`, `test_h12h06b_rederivar_minutos.py:224`/`:225`, `test_lote7_fato_de_ausencia_acorda_projecao.py:185`, `test_varredura_classe_b_ausencia.py:115`; `por,motivo` em `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:177`. (`app/ponto/tests/test_ausencia_tipo_rejulga.py:56`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:224`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:225`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:185`, `app/ponto/tests/test_varredura_classe_b_ausencia.py:115`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:177`)
-
-Na pergunta 5, **não encontrei quebra por keyword no código de `app/`**: a edição produtiva passa o objeto posicionalmente; a criação passa apenas `codigo`/`campos`. Os testes seguem as mesmas formas; nenhum chamador encontrado usa o antigo `tipo=`. (`app/ponto/views_tipos_ausencia.py:86`, `app/ponto/views_tipos_ausencia.py:94`, `app/ponto/tests/test_porta_ausencia_ferias.py:149`, `app/ponto/tests/test_porta_ausencia_ferias.py:150`, `app/ponto/tests/test_porta_ausencia_ferias.py:151`, `app/ponto/services/ausencia.py:1732`)
-
-Não executei Django nem banco; a verificação acima foi leitura e censo AST em memória, sem gravar arquivos. `[nao verificado]` [nao verificado]
-
-_5913 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5917 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
