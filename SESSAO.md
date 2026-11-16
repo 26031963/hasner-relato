@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 11:22:21.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (143.9 MB). Acoes na janela: **724**.
+**Medido em 16/11/2026 11:27:22.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (143.9 MB). Acoes na janela: **725**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:27:16 | Bash | Verify push result on remote | `cd /home/ronald/saas-hasner; tail -5 logs/RETOMA-HE-LOTE3/c7/push.log; git fetch -q origin; git log --oneline -1 origin/main; git log --oneline origin/main..main \| wc -l; git status --porcelain \| grep -v '^??'` |
 | 10:59:13 | Bash | Set ESPERANDO on push pid | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() anc='# RELATO — esteira saas-hasner\n\n'; assert s.count(anc)==1 s=s.replace(anc,anc+'ESPERANDO: push.sh \| pid=385677\n',1); open(p,'w').write(s) EOF python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova()[0])"` |
 | 10:59:04 | Bash | Find push pid | `/usr/bin/sleep 3; ps -eo pid,args \| grep -E 'bash bin/push.sh$' \| grep -v grep` |
 | 10:59:03 | Bash | Push marco via bin/push.sh | `cd /home/ronald/saas-hasner; bash bin/push.sh > logs/RETOMA-HE-LOTE3/c7/push.log 2>&1; echo "rc=$? $(date +%H:%M:%S)" >> logs/RETOMA-HE-LOTE3/c7/push.log` |
