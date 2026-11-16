@@ -1,7 +1,393 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:32** · publicado em **16/11/2026 02:35** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:41** · publicado em **16/11/2026 02:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:41 · sessao 3c73764e38f1 · LOTE7-C6 · verificador · origem=Code
+
+**Os contraexemplos específicos dos itens 2 e 3 foram corrigidos; o item 4 continua parcial.** O teto alcança competências futuras carimbadas, e uma exceção que escape da composição de `decidir` desfaz suas escritas. Ainda passam variantes do selo e falhas de invalidação que a própria função engole. (`app/ponto/services/ausencia.py:147`, `app/ponto/services/ausencia.py:1079`, `app/ponto/services/fechamento.py:1661`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:243`)
+
+**1. Fechamento dos itens da volta 2**
+
+| Item | Veredito |
+|---|---|
+| **2 — cobertura das competências** | Fecha o exemplo de dezembro futuro: o teto considera o fim da maior competência carimbada. Cada lado continua fornecendo seu próprio trecho, preservando a correção setembro→novembro. A conclusão pressupõe empresa/corte estáveis; há ressalva histórica abaixo. (`app/ponto/services/ausencia.py:147`, `app/ponto/services/ausencia.py:186`, `app/ponto/services/ausencia.py:192`) |
+| **3 — transição persistida após falha intermediária** | Fecha a exceção propagada entre a transição e o acordador: todo `_decidir_no_ato` está dentro do `atomic`. Não transforma falhas engolidas em falhas do ato. (`app/ponto/services/ausencia.py:1079`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:1122`, `app/ponto/services/fechamento.py:1661`) |
+| **4 — selo** | Os exemplos antigos receberam mutantes específicos, mas continuam existindo escritores e silenciadores aceitos sem acordador executável, demonstrados no item 4 abaixo. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:348`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:213`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:247`) |
+
+Um caso concreto ainda permitido é: **a atualização do carimbo falha dentro de `invalidar_fechamento`**. O savepoint desfaz aquela atualização, o `except` retorna zero, `_decidir_no_ato` ignora esse resultado e a decisão pode confirmar com projeção ainda carimbada. Isso é diferente da exceção intermediária corrigida; ocorrência produtiva **[nao verificado]**. (`app/ponto/services/fechamento.py:1651`, `app/ponto/services/fechamento.py:1656`, `app/ponto/services/fechamento.py:1661`, `app/ponto/services/ausencia.py:1122`)
+
+**2. Quem chama `decidir` e o efeito do `atomic`**
+
+O único chamador produtivo direto encontrado em `app/` é `_a4_decidir`, que repassa os argumentos e relança `TransicaoInvalida`. São sete pontos de chamada desse wrapper. (`app/ponto/views.py:85`, `app/ponto/views.py:88`, `app/ponto/views.py:90`)
+
+| Chamador | O que muda |
+|---|---|
+| `aprovar_ausencia_lote` | Cada item ganha sua transação. O contador sobe após o retorno; captura apenas ausência inexistente e `AusenciaInvalida`. Erro inesperado interrompe a requisição, conservando itens anteriores concluídos. (`app/ponto/views.py:2292`, `app/ponto/views.py:2302`, `app/ponto/views.py:2304`, `app/ponto/views.py:2305`) |
+| `rejeitar_ausencia_lote` | Mesma atomicidade por item e mesmos limites do tratamento; não ganha transação coletiva. (`app/ponto/views.py:2333`, `app/ponto/views.py:2338`, `app/ponto/views.py:2342`, `app/ponto/views.py:2343`) |
+| `cancelar_ausencia_lote` | Atomicidade por item. A trilha adicional de cancelamento permanece depois da porta, fora do `atomic` dela; `ok` sobe depois dessa chamada de trilha. (`app/ponto/views.py:2378`, `app/ponto/views.py:2384`, `app/ponto/views.py:2387`, `app/ponto/views.py:2390`) |
+| `aprovar_ausencia` | Já possui `atomic` envolvendo todos os irmãos; cada `decidir` passa a abrir savepoint interno. Exceção propagada sai do bloco coletivo antes do tratamento e desfaz os irmãos anteriores. Pushes vêm depois do bloco. (`app/ponto/views.py:2674`, `app/ponto/views.py:2676`, `app/ponto/views.py:2679`, `app/ponto/views.py:2694`) |
+| `editar_periodo_ausencia` | A escrita do período e o restante da porta ficam juntos. Captura `AusenciaInvalida`, `ValueError` e ausência inexistente; outras exceções sobem. (`app/ponto/views.py:2709`, `app/ponto/views.py:2710`) |
+| `rejeitar_ausencia` | Cada irmão fica atômico, mas não existe atomicidade coletiva. O tratamento amplo pode devolver erro após irmãos anteriores já confirmados; antes, também podia conservar a transição parcial do próprio irmão que falhou. (`app/ponto/views.py:2735`, `app/ponto/views.py:2737`, `app/ponto/views.py:2755`, `app/ponto/services/ausencia.py:1079`) |
+| `cancelar_ausencia` | A decisão fica atômica; a trilha adicional continua fora da porta. Captura ausência inexistente e `AusenciaInvalida`, sem tratamento amplo dos demais erros. (`app/ponto/views.py:2773`, `app/ponto/views.py:2778`, `app/ponto/views.py:2784`, `app/ponto/views.py:2787`) |
+
+**Não encontrei chamador produtivo adicional em `api/` ou no caminho `saas_core`.** Este último encaminha para `api.urls_core`/`views_core`; suas rotas não incluem decisão de ausência. A porta de anexo da API chama `anexar_documento`, não `decidir`. (`app/config/urls_core.py:6`, `app/api/urls_core.py:5`, `app/api/urls_core.py:7`, `app/api/views.py:3115`, `app/api/views.py:3117`)
+
+As chamadas diretas restantes são testes nestes oito arquivos; recebem a mesma transação interna, eventualmente aninhada na transação do teste. (`app/ponto/services/ausencia.py:1079`)
+
+- `app/ponto/tests/test_porta_ausencia_ferias.py:113`, `app/ponto/tests/test_porta_ausencia_ferias.py:114`.
+- `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:168`.
+- `app/ponto/tests/test_a4_estados_com_porta.py:171`, `app/ponto/tests/test_a4_estados_com_porta.py:180`, `app/ponto/tests/test_a4_estados_com_porta.py:259`, `app/ponto/tests/test_a4_estados_com_porta.py:269`, `app/ponto/tests/test_a4_estados_com_porta.py:328`, `app/ponto/tests/test_a4_estados_com_porta.py:345`, `app/ponto/tests/test_a4_estados_com_porta.py:357`.
+- `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:186`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:306`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:315`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:320`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:330`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:335`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:346`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:380`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:400`.
+- `app/escala/tests/test_cobertura_parcial_periodo.py:164`, `app/escala/tests/test_cobertura_parcial_periodo.py:180`, `app/escala/tests/test_cobertura_parcial_periodo.py:189`, `app/escala/tests/test_cobertura_parcial_periodo.py:193`, `app/escala/tests/test_cobertura_parcial_periodo.py:198`, `app/escala/tests/test_cobertura_parcial_periodo.py:227`.
+- `app/api/tests/test_atestado_por_minutos.py:114`.
+- `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:69`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:137`.
+- `app/chamados/tests/test_s4_pendente_suspende_cobranca.py:87`.
+
+Os efeitos transversais são:
+
+- **Signals continuam síncronos.** O primeiro `save` e o segundo, quando necessário, continuam acionando o cartório; `atomic` não os adia nem os deduplica. Suas escritas participantes ficam sujeitas ao rollback de uma exceção posterior. (`app/ponto/services/ausencia.py:988`, `app/ponto/services/ausencia.py:1104`, `app/ponto/signals.py:143`, `app/ponto/signals.py:147`)
+- **`on_commit` passa a esperar a confirmação da porta**, ou a transação externa da aprovação individual. Antes, em autocommit, executava após cada escrita. Continuam podendo existir dois callbacks; ambos capturam a mesma instância e agora observam seus valores finais. Rollback descarta os callbacks do trecho desfeito. (`app/ponto/signals.py:252`, `app/ponto/signals.py:254`, `app/ponto/signals.py:272`, `app/ponto/views.py:2674`)
+- **A instância Python não é restaurada pelo rollback.** Status, decisor e período foram atribuídos antes; o teste novo precisa fazer `refresh_from_db()` para conferir o estado persistido. (`app/ponto/services/ausencia.py:976`, `app/ponto/services/ausencia.py:1091`, `app/ponto/services/ausencia.py:1102`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:402`)
+- **Auditoria real continua sendo best effort.** `registrar_log` engole exceções e `evento` possui savepoint próprio. O teste novo injeta uma exceção no mock de `registrar_log`; prova rollback de exceção propagada, não que uma falha real da trilha seja obrigatoriamente propagada. (`app/core/auditoria.py:25`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:394`)
+
+**3. Teto, competência e empresa**
+
+**Com empresa/corte estáveis e invalidações bem-sucedidas, não encontrei omissão nem competência acrescentada indevidamente pelo teto.** O escritor calcula a janela com `colab.empresa` e grava os mesmos `mes/ano`; o teto reconstrói essa janela com `colaborador.empresa`. Competência significa mês/ano do **fim** da janela nos dois lados. (`app/ponto/services/fechamento.py:621`, `app/ponto/services/fechamento.py:898`, `app/ponto/services/ausencia.py:151`, `app/ponto/janelas.py:11`)
+
+A maior competência por `(ano, mes)` também tem o maior fim, pois o corte é o mesmo. A linha aberta ocupa continuamente de `data` até esse teto; o invalidante enumera as janelas tocadas e atualiza somente fechamentos carimbados. Uma linha sem fim de tipo fora de `TIPOS_EM_ABERTO` continua ocupando apenas seu dia. (`app/ponto/services/ausencia.py:147`, `app/ponto/janelas.py:15`, `app/ponto/turnos.py:2803`, `app/ponto/turnos.py:2808`, `app/ponto/services/dia_pago.py:715`, `app/ponto/services/fechamento.py:1653`)
+
+**A equivalência histórica não está garantida:** `FechamentoMensal` não guarda a empresa/corte usados na derivação. O cadastro permite alterar o corte, e a transferência permite trocar a empresa do colaborador. (`app/ponto/models.py:405`, `app/ponto/models.py:408`, `app/ponto/models.py:464`, `app/colaboradores/views.py:523`, `app/colaboradores/views.py:1389`)
+
+Contraexemplo condicional, derivado dessas regras:
+
+- Corte **28**, ausência aberta desde **25/10**, outubro carimbado: a janela usada na derivação é **28/09–27/10**, portanto conta a linha. Depois, alterar o corte para **21** e rejeitar a ausência: outubro passa a terminar em **20/10**; o trecho iniciado em 25/10 invalida novembro em diante, deixando o antigo outubro carimbado. (`app/ponto/janelas.py:15`, `app/ponto/services/fechamento.py:639`, `app/colaboradores/services/estrutura.py:18`, `app/ponto/services/ausencia.py:192`, `app/ponto/services/dia_pago.py:716`)
+- No sentido inverso, outubro derivado com corte **21** não contava essa linha de 25/10; mudar para **28** faz a invalidação alcançar outubro, embora a projeção originalmente gravada não a contivesse. (`app/ponto/janelas.py:15`, `app/ponto/turnos.py:2543`, `app/ponto/services/ausencia.py:192`, `app/ponto/services/dia_pago.py:716`)
+
+Esses casos dizem respeito à **janela que produziu o gravado**. O leitor atual da folha acompanha o corte atual, assim como o teto; existência dessas mudanças e desses carimbos em produção **[nao verificado]**. (`app/ponto/services/fechamento.py:621`, `app/ponto/services/ausencia.py:151`)
+
+**4. Selo: resultado atual e escapes restantes**
+
+No replay AST em memória, o fonte atual apresentou nove escritores, `faltam=[]` e nenhum apontamento de `_acorda_falso_sem_acordador`; não encontrei falso positivo atual. Os mutantes fornecidos e o controle de `while False … else` passaram nesse replay. Isso verifica a análise estrutural, não a execução Django. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:221`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:279`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:348`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:374`)
+
+**Continuam passando estes casos concretos:**
+
+**a) `parametro_vale` considera reatribuições, mas esquece a origem inicial do parâmetro.** Com `x=False` e uma `Ausencia` como argumento, este escritor não é enumerado pelo selo. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:138`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:247`)
+
+```python
+def _m(tipo_ausencia, x):
+    from ponto.models import TipoAusencia
+    if x:
+        tipo_ausencia = TipoAusencia.objects.get(pk=x)
+    tipo_ausencia.save()
+```
+
+**b) Fábrica parâmetro com alias global.** `_m(lambda: ausencia)` salva a ausência, mas o censo produz entidade canônica `TipoAusencia`; a regra procura esse nome nos parâmetros, onde existe apenas `TA`. O `save` posterior é suprimido porque a construção já contou. (`app/core/censo_escritas.py:285`, `app/core/censo_escritas.py:372`, `app/core/censo_escritas.py:409`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:243`)
+
+```python
+from ponto.models import TipoAusencia as TA
+
+def _m(TA):
+    t = TA()
+    t.save()
+```
+
+**c) `_acorda=False` dentro de `**kwargs`.** A regra exige `k.arg == '_acorda'`; nesse formato, `k.arg` é `None`. O replay aceita a função sem acordador. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:213`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:214`)
+
+```python
+def _m(a):
+    mudar_estado(a, 'rejeitada', **{'_acorda': False})
+```
+
+**d) Saída de ramo não propagada ao bloco externo.** O replay aceita este acordador inalcançável: `_vivos` corta somente o bloco que contém diretamente o `return`. Também aceita `False and _acordar_projecao(...)`, pois a visita não trata curto-circuito. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:161`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:178`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:189`)
+
+```python
+def _m(a):
+    a.save()
+    if True:
+        return a
+    _acordar_projecao(a.colaborador, {}, {}, motivo='x')
+```
+
+Há ainda **falso positivo latente introduzido pelo descarte de corpos aninhados**: uma função que salva, define `_f` contendo o acordador e efetivamente chama `_f()` recebe `faltam=['_m']`. A regra descarta o corpo sem verificar essa chamada. Não encontrei esse padrão no fonte atual. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:176`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`)
+
+Execução da suíte Django, acesso a banco/log e incidência produtiva dos contraexemplos: **[nao verificado]**. [nao verificado]
+
+## 16/11 02:39 · sessao a02a7cbd1c80 · - · - · origem=Ronald (tmux)
+
+Inventário completo por AST: há **um chamador produtivo direto** de `ponto.services.ausencia.decidir`, o wrapper `_a4_decidir`; ele apenas repassa argumentos e relança `TransicaoInvalida`. (`app/ponto/views.py:85`, `app/ponto/views.py:88`, `app/ponto/views.py:90`)
+
+| Chamador do wrapper | Efeito do novo `atomic` |
+|---|---|
+| `aprovar_ausencia_lote` | Transação por item; `ok += 1` vem depois do retorno. Captura apenas `DoesNotExist` e `AusenciaInvalida`; erro inesperado aborta a requisição, preservando itens anteriores já concluídos. (`app/ponto/views.py:2292`, `app/ponto/views.py:2302`, `app/ponto/views.py:2304`, `app/ponto/views.py:2305`) |
+| `rejeitar_ausencia_lote` | Mesmo comportamento por item; contador não sobe quando a porta levanta. (`app/ponto/views.py:2333`, `app/ponto/views.py:2338`, `app/ponto/views.py:2342`, `app/ponto/views.py:2343`) |
+| `cancelar_ausencia_lote` | Transação por item; log adicional de cancelamento fica depois, fora da transação da porta. (`app/ponto/views.py:2370`, `app/ponto/views.py:2378`, `app/ponto/views.py:2387`, `app/ponto/views.py:2390`) |
+| `aprovar_ausencia` | Já envolve todos os irmãos em `atomic`; agora cada chamada abre savepoint interno. Exceção sai do bloco coletivo antes do tratamento e desfaz todos os irmãos; pushes vêm depois. (`app/ponto/views.py:2674`, `app/ponto/views.py:2676`, `app/ponto/views.py:2679`, `app/ponto/views.py:2694`) |
+| `editar_periodo_ausencia` | Período, trilha e invalidação passam a compor a transação da porta. Captura `AusenciaInvalida`, `ValueError` e `DoesNotExist`; demais erros sobem. (`app/ponto/views.py:2709`, `app/ponto/views.py:2710`) |
+| `rejeitar_ausencia` | Cada irmão ganha transação própria, mas continua sem transação coletiva; erro posterior conserva irmãos anteriores. O tratamento amplo devolve mensagem de erro. (`app/ponto/views.py:2735`, `app/ponto/views.py:2737`, `app/ponto/views.py:2755`) |
+| `cancelar_ausencia` | Decisão fica atômica; log adicional permanece fora da porta. Captura somente ausência inexistente e `AusenciaInvalida`. (`app/ponto/views.py:2773`, `app/ponto/views.py:2778`, `app/ponto/views.py:2784`, `app/ponto/views.py:2787`) |
+
+Não encontrei chamador produtivo na API da cópia. `saas_core` corresponde às rotas `config.urls_core → api.urls_core → views_core`, cuja lista não contém decisão de ausência. (`app/config/urls_core.py:6`, `app/api/urls_core.py:5`, `app/api/urls_core.py:7`, `app/api/views_core.py:1`)
+
+Há **29 chamadas diretas em testes**, distribuídas nestes arquivos: `app/ponto/tests/test_porta_ausencia_ferias.py:113,114`; `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:168`; `app/ponto/tests/test_a4_estados_com_porta.py:171,180,259,269,328,345,357`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:186,306,315,320,330,335,346,380,400`; `app/escala/tests/test_cobertura_parcial_periodo.py:164,180,189,193,198,227`; `app/api/tests/test_atestado_por_minutos.py:114`; `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:69,137`; `app/chamados/tests/test_s4_pendente_suspende_cobranca.py:87`.
+
+Pontos relevantes para consolidar:
+
+- A exceção que **escapa** depois da transição agora desfaz transição, carimbos, período e demais escritas participantes; o bloco cobre todo `_decidir_no_ato`, inclusive acordador final. (`app/ponto/services/ausencia.py:1079`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:1104`, `app/ponto/services/ausencia.py:1122`)
+- `post_save` continua síncrono: o cartório roda no primeiro save e novamente no segundo, quando existente. `atomic` adia os callbacks `on_commit`, sem adiar os receivers. (`app/ponto/services/ausencia.py:988`, `app/ponto/services/ausencia.py:1104`, `app/ponto/signals.py:143`, `app/ponto/signals.py:147`, `app/ponto/signals.py:272`)
+- Os dois saves continuam registrando dois callbacks, sem deduplicação. Ambos capturam a mesma instância; agora observam seus valores finais ao executar depois do commit. Rollback descarta callbacks registrados no trecho desfeito. (`app/ponto/signals.py:252`, `app/ponto/signals.py:254`, `app/ponto/signals.py:272`, `app/ponto/signals.py:275`, `app/chamados/services/trava_do_colaborador.py:12`)
+- Rollback não restaura os atributos Python atribuídos antes dos saves; o teste novo recarrega o objeto antes de conferir o estado. (`app/ponto/services/ausencia.py:976`, `app/ponto/services/ausencia.py:1091`, `app/ponto/services/ausencia.py:1102`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:402`)
+- O `registrar_log` real engole erros, e `evento` protege sua escrita com savepoint próprio. O teste novo injeta uma exceção no mock de `registrar_log`, portanto demonstra rollback diante de exceção propagada, não falha real da auditoria propagando. (`app/core/auditoria.py:25`, `app/core/observ.py:105`, `app/core/observ.py:133`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:394`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:398`)
+- `invalidar_fechamento` ainda engole falhas com savepoints próprios e retorna zero: continua possível concluir a decisão com fechamento carimbado se a invalidação falhar; ocorrência produtiva **[nao verificado]**. (`app/ponto/services/fechamento.py:1648`, `app/ponto/services/fechamento.py:1651`, `app/ponto/services/fechamento.py:1661`, `app/ponto/services/fechamento.py:1665`)
+- `_julgar_dias` engole sem savepoint explícito, mas não confirmei retorno silencioso de `decidir` com rollback: depois dos saves há obrigatoriamente consulta ao banco pelo snapshot final, que expõe conexão abortada antes do incremento de sucesso. (`app/ponto/signals.py:85`, `app/ponto/signals.py:88`, `app/core/observ.py:90`, `app/ponto/services/ausencia.py:1122`, `app/ponto/services/ausencia.py:138`, `app/ponto/views.py:2304`)
+
+Execução Django e incidência produtiva: **[nao verificado]**.
+
+## 16/11 02:39 · sessao 6339b5894009 · LOTE3-C6 · verificador · origem=Code
+
+**O achado da volta 1 está parcialmente fechado: resta 1 PROCEDENTE na reabertura, antes de `criar_ausencia` devolver o objeto.** (`app/ponto/services/ausencia.py:350`, `app/ponto/services/ausencia.py:1200`, `app/ponto/views.py:2492`)
+
+Execução dos testes, ocorrências em produção e estado efetivo do storage: **[não verificado]**. [nao verificado]
+
+**1. Fronteira de rollback e limpeza**
+
+O caso originalmente testado está coberto: depois que `criar_ausencia` retorna, uma falha em `_gravar_colab` sai do `atomic`; a limpeza compara o nome mantido no objeto com o documento da mesma PK relida após o rollback. Isso contempla linha nova e reabertura já devolvida. (`app/ponto/views.py:2465`, `app/ponto/views.py:2468`, `app/ponto/views.py:2485`, `app/ponto/views.py:2496`)
+
+**PROCEDENTE — falha intermediária em `_reabrir` deixa o upload órfão.** O caminho é:
+
+1. `criar_ausencia` encontra uma rejeitada e delega a `_reabrir`. (`app/ponto/services/ausencia.py:315`, `app/ponto/services/ausencia.py:350`)
+2. `_reabrir` salva o documento novo; depois ainda pode salvar a descrição e mudar o estado, com outro `save`. (`app/ponto/services/ausencia.py:1200`, `app/ponto/services/ausencia.py:1210`, `app/ponto/services/ausencia.py:1211`, `app/ponto/services/ausencia.py:900`)
+3. Se uma dessas escritas posteriores falhar, o `atomic` da view desfaz a troca do documento, mas a atribuição `ausencia = criar_ausencia(...)` não terminou: `ausencia` continua `None`. (`app/ponto/views.py:2462`, `app/ponto/views.py:2465`, `app/ponto/views.py:2468`)
+4. A limpeza externa é pulada; a interna só cobre exceção do próprio `save` do documento. O banco volta ao documento anterior e o arquivo novo permanece no storage. (`app/ponto/views.py:2492`, `app/ponto/services/ausencia.py:1199`, `app/ponto/services/ausencia.py:1202`)
+
+Quanto a **apagar arquivo ainda referenciado**, a comparação pós-rollback preserva o documento restaurado da mesma linha; não há consulta global por outras linhas com o mesmo nome. Compartilhamento real desses nomes entre linhas: **[não verificado]**. (`app/ponto/views.py:2496`, `app/ponto/services/ausencia.py:169`)
+
+A limpeza também não oferece garantia diante de falha da consulta pós-rollback ou da exclusão física: a consulta antecede o helper, e o helper captura falha de `delete` e retorna `False`. Ocorrência efetiva: **[não verificado]**. (`app/ponto/views.py:2496`, `app/ponto/services/ausencia.py:172`, `app/ponto/services/ausencia.py:174`)
+
+**2. Censo dos outros chamadores com `atomic` externo**
+
+| Chamador e fronteira | Escrita/falha possível depois | Upload novo órfão neste ato? |
+|---|---|---|
+| `regularizar_turno_orfao`: `app/ponto/services/regularizacao.py:89` → `garantir_ausencia`:118 | Analisar chamado e anexar nota:137,139 | Não passa documento:118. |
+| Abandono provisório: `app/ponto/management/commands/marcar_abandono_provisorio.py:22` → `garantir_ausencia`:76 | Próximas iterações:70; rollback explícito:98 | Não passa documento:76. |
+| Veredito da célula: `app/ponto/services/veredito_celula.py:224` → `criar_ausencia`:337 | Fechar fio:347; lavrar:352 | Não passa documento:337. |
+| Materialização: `app/chamados/services/materializacao.py:1226` → escolha:1232 → declaração:1084 → criação:491 | Reconciliar:1085; carimbar ou levantar recusa:1283,1285 | Não passa documento:491. |
+| Espelho de férias: `app/ferias/models.py:449` → sincronização:394 → `app/ponto/services/ausencia.py:1275` | Outros dias:1270; exclusões:1287; pauta:1290 | Não passa documento:1275. |
+
+`garantir_ausencia` também pode alcançar `_reabrir`, mas nesses chamadores o documento continua `None`; a escrita de upload da reabertura exige `if documento`. Portanto podem desfazer linhas ou reaberturas, mas não deixam arquivo **escrito neste ato** por esses caminhos. (`app/ponto/services/ausencia.py:180`, `app/ponto/services/ausencia.py:350`, `app/ponto/services/ausencia.py:523`, `app/ponto/services/ausencia.py:1191`)
+
+As fronteiras transitivas do espelho de férias são:
+
+| Operação | `atomic` | Ato que dispara o espelho | Escrita posterior |
+|---|---|---|---|
+| Agendar com abono | `app/ferias/services.py:297` | :306 | :316 |
+| Gozo histórico | `app/ferias/services.py:519` | :547 | :551 |
+| Executar agendamento | `app/ferias/services.py:567` | :581 | :587 |
+| Trocar janela | `app/ferias/services.py:706` | :729 | :731 |
+| Aprovar solicitação | `app/ferias/services.py:755`, :774 | :786 | :789 |
+| Corrigir datas pela tela | `app/ferias/views.py:524` | :531 | :533 |
+| Alinhar status pela data | `app/ferias/services.py:951` | :956 | Continuação do espelho: `app/ponto/services/ausencia.py:1284` |
+
+Os demais pontos de upload identificados não abrem `atomic` externo envolvendo a chamada: criação pela API/PWA, reenvio pela API e anexações administrativa/API. A reversão humana também não abre essa fronteira e não passa upload. (`app/api/views.py:1812`, `app/api/views.py:1845`, `app/api/views.py:3117`, `app/ponto/views.py:2603`, `app/ponto/views.py:2159`, `app/ponto/views.py:2651`)
+
+**3. Quem escreve e quem lê**
+
+**Escritores do campo:** `criar_ausencia`, `anexar_documento` e `_reabrir`; o destino físico declarado é `ausencias/documentos/`. (`app/ponto/services/ausencia.py:410`, `app/ponto/services/ausencia.py:479`, `app/ponto/services/ausencia.py:923`, `app/ponto/services/ausencia.py:925`, `app/ponto/services/ausencia.py:1198`, `app/ponto/services/ausencia.py:1200`, `app/ponto/models.py:777`)
+
+A normalização muda o nome do upload antes do armazenamento; a exclusão física identificada está em `_apagar_anexo_escrito_agora`. O admin de Ausencia está configurado somente para leitura. (`app/ponto/services/ausencia.py:658`, `app/ponto/services/ausencia.py:172`, `app/ponto/admin.py:38`, `app/core/admin.py:62`)
+
+**Leitores físicos dos arquivos:**
+
+- Identificação do tipo real: `app/ponto/models.py:861`.
+- Entrega HTTP, seguindo `documento_referencia`: `app/ponto/views.py:2122`, `app/ponto/views.py:2129`.
+- Exportação ZIP: `app/ponto/services/atestados_lote.py:157`, `app/ponto/services/atestados_lote.py:158`.
+
+**Leitores do campo, nome ou presença:**
+
+| Uso | Referências |
+|---|---|
+| Limpeza e captura do nome anterior | `app/ponto/services/ausencia.py:167`, :476, :922, :1197; `app/ponto/views.py:2496` |
+| Estado, gates e reabertura | `app/ponto/services/ausencia.py:606`, :671, :691, :1190 |
+| Chamado e trilha | `app/ponto/services/ausencia.py:713`, :730, :739, :938 |
+| API | `app/api/views.py:1061`, :1843 |
+| Cartas de troca | `app/ponto/portas/celula.py:702`, :722 |
+| Dia e histórico | `app/ponto/services/dia_decidido.py:424`, :497, :609, :623, :641 |
+| Contadores e rejuízo | `app/ponto/services/vigia_ausencia.py:115`, :215; `app/ponto/management/commands/rejulgar_status_por_tipo.py:28`, :37 |
+| Lote, nome exportado e CSV | `app/ponto/services/atestados_lote.py:76`, :96, :129, :148 |
+| Templates | `app/templates/ponto/ausencias.html:168`, :170; `app/templates/ponto/partials/painel_ausencia.html:71`, :72, :93, :205 |
+
+O import externo do helper está em `app/ponto/views.py:2494`; os outros usos identificados dele são internos ao serviço. Há precedente de importar função privada de outro módulo na própria view, como `_is_gestor` e `_rotulo_da_escala`. Isso, isoladamente, é **observação**. (`app/ponto/services/ausencia.py:481`, :927, :1202; `app/ponto/views.py:121`, :2062)
+
+**4. Os testes mordem?** [nao verificado]
+
+**Sim, no fluxo atual:** o teste de falha envia upload, força erro em `gravar` e exige mensagem, ausência desfeita, situação preservada e inventário de arquivos igual. O caminho feliz exige nome, arquivo adicional, existência física e situação afastado; outro teste confere o storage isolado. Resultado executado: **[não verificado]**. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:151`, :158, :166, :168, :169, :171, :179, :182, :183)
+
+**Limite:** o teste de falha, isoladamente, não afirma positivamente que o arquivo já existia quando o mock lançou. Uma antecipação da chamada a `gravar` poderia fazê-lo passar sem escrever upload. Os novos casos também não preparam ausência rejeitada nem provocam falha intermediária de `_reabrir`. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:164`, :166, :176; `app/ponto/services/ausencia.py:1200`, :1211)
+
+A asserção nova de sobreposição elimina a passagem vazia por uma recusa anterior sem a mensagem esperada: exige “já existe”, além da contagem e situação preservadas. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:112`, :116, :117, :118)
+
+O registro `3307` aponta à expressão atual de `regularizar_retorno`, e a catraca congela a localização. A alteração do registro é de linha; a explicação histórica integral do deslocamento `3273 → 3307` é **[não verificado]**. (`app/core/tests/test_medida_turno_do_par.py:339`, :557; `app/ponto/views.py:3307`)
+
+**5. Checklist**
+
+- **Segundo juiz:** a guarda de desligamento reutiliza `_guarda_da_linha` e `esta_desligado`. Como observação fora da cura, o PWA conserva veto próprio de sobreposição antes do produtor, enquanto este aplica `linha_que_veta`. (`app/colaboradores/services/colaborador.py:102`, :62; `app/ponto/views.py:2592`, :2593; `app/ponto/services/ausencia.py:382`)
+- **Segundo escritor fora da porta:** os escritores identificados de documento estão no serviço; a escrita de situação da view passa por `gravar`. (`app/ponto/services/ausencia.py:410`, :923, :1198; `app/ponto/views.py:2485`)
+- **Relógio fora da borda:** persistem leituras internas para prazo e carimbo; a limpeza nova não acrescenta relógio. (`app/ponto/services/ausencia.py:398`, :408, :1216; `app/ponto/models.py:883`; `app/ponto/views.py:2486`)
+- **Derivação paralela:** a view continua derivando `afastado` pelo tipo lançado; existe também a autoridade de cobertura `afastado_hoje` e o reversor que escreve pela porta. É observação preexistente. (`app/ponto/views.py:2461`, :2485; `app/ponto/turnos.py:2737`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`)
+- **Ordem de trava:** no INSS, Colaborador é travado antes da Ausencia; `gravar` repete a mesma guarda. A ordem global implementada começa por Colaborador. (`app/ponto/views.py:2467`, :2468; `app/colaboradores/services/colaborador.py:90`, :133; `app/chamados/models.py:2744`, :2753)
+- **`documento.name` com dois significados:** no serviço, a comparação usa o nome anterior ao save; na limpeza externa, usa o nome persistido depois do rollback. A distinção protege o documento restaurado, mas depende de a instância ter sido devolvida — justamente a lacuna PROCEDENTE. (`app/ponto/services/ausencia.py:476`, :1197, :169; `app/ponto/views.py:2492`, :2496`)
+
+**Lista final de achados:**
+
+- **PROCEDENTE — 1:** upload salvo por `_reabrir`, seguido de falha antes do retorno, escapa da limpeza externa após rollback. (`app/ponto/services/ausencia.py:1200`, :1211; `app/ponto/views.py:2468`, :2492`)
+- **Observações:** cobertura incompleta dos testes para reabertura; limpeza sujeita a falhas operacionais e sem verificação global de referências; demais pontos do checklist descritos acima. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:166`; `app/ponto/services/ausencia.py:169`, :174; `app/ponto/views.py:2496`)
+
+## 16/11 02:38 · sessao ac4dd33f978d · - · - · origem=Ronald (tmux)
+
+O selo passa no fonte atual: o replay encontrou nove escritores e `faltam=[]`; a checagem de `_acorda=False` também devolveu `[]`. Executei em memória os 11 testes estruturais com `unittest.TestCase`, substituindo apenas a infraestrutura Django e lendo `CAMPOS_DO_INSUMO` por AST: zero falhas/erros. Isso verifica os testes AST, sem verificar a execução Django. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:221`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:274`, `app/ponto/services/ausencia.py:119`)
+
+Os exemplos antigos do parecer são cobertos pelos novos mutantes e passaram nesse replay. Porém, estes escapes novos também passam:
+
+1. **`parametro_vale` esquece o valor recebido pelo parâmetro.**
+
+```python
+def _m(tipo_ausencia, x):
+    from ponto.models import TipoAusencia
+    if x:
+        tipo_ausencia = TipoAusencia.objects.get(pk=x)
+    tipo_ausencia.save()
+```
+
+Com `x=False` e `tipo_ausencia` sendo uma `Ausencia`, executa a escrita sem acordador. O replay não inclui `_m` como escritor. `_de_outro_modelo(..., parametro_vale=True)` considera somente as reatribuições encontradas, todas de `TipoAusencia`, e não considera o caminho que preserva o argumento inicial. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:135`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:138`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:247`)
+
+2. **A correção de fábrica parâmetro falha com alias global.**
+
+```python
+from ponto.models import TipoAusencia as TA
+
+def _m(TA):
+    t = TA()
+    t.save()
+```
+
+Chamar `_m(lambda: ausencia)` salva a ausência sem acordar. O censo atribui a construção à entidade canônica `TipoAusencia`; a regra procura esse nome nos parâmetros, mas o parâmetro chama-se `TA`. O `save` posterior é suprimido porque a construção já contou. O replay não inclui `_m` como escritor. (`app/core/censo_escritas.py:285`, `app/core/censo_escritas.py:372`, `app/core/censo_escritas.py:409`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:243`)
+
+3. **O selo novo não examina `_acorda` dentro de `**kwargs`.**
+
+```python
+def _m(a):
+    mudar_estado(a, 'rejeitada', **{'_acorda': False})
+```
+
+O replay retorna `cala_sem_acordador=[]`. A regra exige `k.arg == '_acorda'`; nesse formato, `k.arg` é `None`. A função também não escreve diretamente, portanto o selo de escritores não a cobra. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:213`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:214`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:235`)
+
+4. **A análise de fluxo ainda aceita acordador inexequível.**
+
+```python
+def _m(a):
+    a.save()
+    if True:
+        return a
+    _acordar_projecao(a.colaborador, {}, {}, motivo='x')
+```
+
+O replay enumera `_m`, mas devolve `faltam=[]`. `_vivos` interrompe somente o bloco que contém diretamente `return`; o retorno do ramo não interrompe a visita aos comandos seguintes do bloco externo. `False and _acordar_projecao(...)` também passa, pois não há tratamento do curto-circuito de `BoolOp`. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:161`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:178`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:189`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:191`)
+
+Não encontrei falso positivo no fonte atual. Há um **latente** introduzido pelo descarte indiscriminado de função interna: `a.save(); def _f(): _acordar_projecao(...); _f()` recebe `faltam=['_m']`, embora execute o acordador. O controle `while True: break; else: _acordar_projecao(...)` recebe corretamente `faltam=['_m']`, porque o `else` não executa nesse caminho. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:176`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:185`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:263`)
+
+## 16/11 02:38 · sessao eb3e46a667e9 · - · - · origem=Ronald (tmux)
+
+**O teto fecha o contraexemplo futuro da volta 2, em uma leitura estável da mesma empresa/corte.** Busca a maior competência carimbada por `(ano, mes)` e alcança o fim dela; as janelas são ordenadas cronologicamente, e a linha aberta cobre continuamente de `data` ao teto. (`app/ponto/services/ausencia.py:147`, `app/ponto/services/ausencia.py:151`, `app/ponto/janelas.py:15`, `app/ponto/turnos.py:2803`, `app/ponto/turnos.py:2811`)
+
+- **Mesmo significado de competência:** o escritor importa `janela_fechamento` e calcula `mes/ano` como mês/ano do fim da janela; grava exatamente os parâmetros usados nessa janela. O teto pergunta o fim da janela pelos mesmos `mes/ano`. (`app/ponto/services/fechamento.py:15`, `app/ponto/services/fechamento.py:621`, `app/ponto/services/fechamento.py:898`, `app/ponto/services/ausencia.py:151`, `app/ponto/janelas.py:11`)
+- **Mesma empresa:** escritor usa `colab.empresa`, teto usa `colaborador.empresa`, invalidante passa essa empresa para `competencias_do_intervalo`, que usa `janela_atual`. Não há uso da empresa histórica do vínculo ou do posto nesse cálculo de janela. (`app/ponto/services/fechamento.py:619`, `app/ponto/services/fechamento.py:621`, `app/ponto/services/ausencia.py:151`, `app/ponto/services/fechamento.py:1599`, `app/ponto/services/dia_pago.py:716`)
+- **Sem competência intermediária indevida:** cada lado manda apenas seu trecho; o invalidante enumera as competências efetivamente tocadas e altera somente registros carimbados. Tipos sem fim que não pertencem a `TIPOS_EM_ABERTO` continuam ocupando apenas `data`, apesar da consulta do teto. (`app/ponto/services/ausencia.py:186`, `app/ponto/services/ausencia.py:192`, `app/ponto/services/ausencia.py:195`, `app/ponto/services/dia_pago.py:715`, `app/ponto/services/fechamento.py:1653`, `app/ponto/turnos.py:2805`)
+- **Leitor real da folha:** consulta ausências com a janela daquele colaborador; range aberto entra quando `data <= fim`; a cobertura por dia usa a mesma janela. (`app/ponto/services/fechamento.py:639`, `app/ponto/services/fechamento.py:683`, `app/ponto/turnos.py:2543`, `app/ponto/turnos.py:2546`)
+- **Outros escritores:** os carimbos explícitos não nulos encontrados ficam nos dois ramos do escritor canônico. A porta de restauração não altera `mes/ano/colaborador_id` e derruba o carimbo por padrão. (`app/ponto/services/fechamento.py:1143`, `app/ponto/services/fechamento.py:1189`, `app/ponto/services/fechamento.py:1380`, `app/ponto/services/fechamento.py:1391`)
+
+**Ressalva histórica, sem evidência produtiva:** `FechamentoMensal` não guarda empresa/corte da derivação; a transferência pode trocar a empresa atual do colaborador. Portanto não se pode afirmar que a empresa atual seja a mesma usada para produzir um fechamento antigo. (`app/ponto/models.py:405`, `app/ponto/models.py:408`, `app/ponto/models.py:485`, `app/colaboradores/views.py:1389`)
+
+Exemplo condicional dessa ressalva: empresa antiga corte 28, afastamento aberto iniciado em 25/10, fechamento de outubro carimbado; depois transferência para empresa corte 21 e rejeição. Outubro antigo abrangia 28/09–27/10; com a empresa atual outubro acaba em 20/10, e o trecho iniciado em 25/10 só invalida novembro em diante. A incidência e existência desse cadastro/carimbo são **[nao verificado]**. A derivação das datas e do caminho decorre de `app/ponto/janelas.py:15`, `app/ponto/janelas.py:27`, `app/ponto/services/ausencia.py:192`, `app/ponto/services/fechamento.py:1599`; a transferência é permitida em `app/colaboradores/views.py:1389`.
+
+## 16/11 02:37 · sessao 6c4f3b8174ea · - · - · origem=Ronald (tmux)
+
+- **Testes novos mordem o caso declarado por inspeção.** O teste de falha envia upload real, força `gravar` a falhar e exige mensagem, ausência desfeita, situação preservada e inventário de arquivos igual ao anterior (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:151`, `:162`). O caminho feliz exige linha, nome, arquivo adicional, existência física e situação afastado (`:173`). O teste separado confere que o storage usa o diretório isolado (`:158`). Execução e resultado efetivo: **[não verificado]**.
+
+- **A asserção de sobreposição elimina a passagem vazia por recusa anterior ao produtor.** Ela exige o texto produzido pela recusa de sobreposição, além de preservar uma única ausência e situação ativo (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:112`, `:116`; mensagem em `app/ponto/services/ausencia.py:385`). Isoladamente, o teste de rollback do anexo ainda não prova que o upload chegou a ser escrito antes da falha; o caminho feliz verifica a entrega do documento no fluxo normal (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:166`, `:178`).
+
+- **Lacuna relevante: reabertura falhando antes do retorno.** Os novos casos criam colaborador sem ausência anterior e injetam falha somente em `gravar` (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:164`, `:166`, `:176`). Não cobrem `_reabrir` salvar o documento (`app/ponto/services/ausencia.py:1200`) e falhar depois no save da descrição (`:1210`) ou do estado (`:1211`, `:900`). Nesse caso `criar_ausencia` não retorna (`:350`), a variável da view continua `None` (`app/ponto/views.py:2462`, `:2468`) e a limpeza externa é pulada (`:2492`): **PROCEDENTE**, conforme identificado pelo pai.
+
+- **Registro 3273 → 3307:** o registro atual aponta para a mesma ocorrência `regularizar_retorno`, cuja expressão está em `app/ponto/views.py:3307`; a catraca compara somente o inventário de linhas (`app/core/tests/test_medida_turno_do_par.py:339`, `:557`). Contudo, o anexo fornecido mostra saldo de **+14** linhas em views, enquanto o registro muda **+34**; o histórico que explica as outras vinte linhas é **[não verificado]**.
+
+- **Checklist:** a guarda usa o mesmo juiz, sem predicado novo (`app/colaboradores/services/colaborador.py:62`, `:94`; `app/colaboradores/services/desligamento.py:23`). A trava do Colaborador precede `criar_ausencia`, e o `gravar` repete a mesma trava (`app/ponto/views.py:2465`, `:2485`; `app/colaboradores/services/colaborador.py:90`, `:133`); a ordem global está implementada em `app/chamados/models.py:2744`, `:2753`, `:2766`, `:2770`. A escrita de situação passa pela porta, mas a derivação por tipo continua paralela à autoridade de cobertura (`app/ponto/views.py:2461`, `:2485`; `app/ponto/turnos.py:2737`). Relógios internos preexistentes continuam em `app/ponto/services/ausencia.py:398`, `:408`, `:1216` e `app/ponto/models.py:883`; a cura não acrescenta leitura de relógio (`app/ponto/views.py:2462`). Cron instalado e contagens citadas nos comentários: **[não verificado]**.
+
+## 16/11 02:36 · sessao 370f0f9ef572 · - · - · origem=Ronald (tmux)
+
+Censo estático, somente leitura; execução e produção [não verificado].
+
+| Chamador/encadeamento com `atomic` externo | Escrita/falha depois da chamada | Anexo órfão neste ato? |
+|---|---|---|
+| `regularizar_turno_orfao`: `app/ponto/services/regularizacao.py:89` → `garantir_ausencia`:118 | `ch.analisar`:137, nota:139, auditoria:150 | Não escreve arquivo: chamada omite `documento` em :118–122; padrão `None` em `app/ponto/services/ausencia.py:180`. |
+| `marcar_abandono_provisorio.handle`: `app/ponto/management/commands/marcar_abandono_provisorio.py:22` → `garantir_ausencia`:76 | Próximas iterações:70; saída:88; rollback explícito do dry run:98 | Não escreve arquivo: argumentos :76–84 omitem documento; padrão em `app/ponto/services/ausencia.py:180`. |
+| `veredito_celula`: `app/ponto/services/veredito_celula.py:224` → `criar_ausencia`:337 | Fechar fio:347, lavrar:352, auditoria:356 | Não escreve arquivo: argumentos :337–339 omitem documento. |
+| `_materializar_uma`: `app/chamados/services/materializacao.py:1226` → ramo escolha:1232 → `_materializar_resposta_escolha`:1084 → `_declarar_ausencia_de_pergunta` → `criar_ausencia`:491 | Reconciliar:1085; carimbar:1283; recusa levanta:1285 | Não escreve arquivo: argumentos :491–499 omitem documento. |
+| Espelho de férias: `app/ferias/models.py:449` → `_sync_ausencia`:394 → `espelhar_ferias` → `criar_ausencia`: `app/ponto/services/ausencia.py:1275` | Próximos dias:1270, exclusões:1287, pauta:1290 | Não escreve arquivo: argumentos :1275–1280 omitem documento. |
+
+`garantir_ausencia` delega para `criar_ausencia` em `app/ponto/services/ausencia.py:523`; este pode delegar para `_reabrir` em :350. Nos chamadores acima, a reabertura recebe `documento=None`; a escrita de arquivo de `_reabrir` depende de `if documento` em :1191. Logo podem desfazer a reabertura, mas não deixam **upload novo** órfão nesses atos (`app/ponto/services/ausencia.py:350`, :1191–1200).
+
+Os principais `atomic` externos transitivos do espelho de férias são:
+
+- `registrar_gozo_historico`: `app/ferias/services.py:519`; `ag.save`:547; escrita do período depois:551.
+- `executar_agendamento`: `app/ferias/services.py:567`; criação:581; escrita do período depois:587.
+- `agendar_ferias_com_abono`: `app/ferias/services.py:297`; execução:306; escrita do abono depois:316.
+- `_trocar_janela`: `app/ferias/services.py:706`; `ag.save`:729; escrita do período depois:731.
+- `aprovar_solicitacao`: `app/ferias/services.py:755` e :774; `ag.save`:786; escrita do período depois:789.
+- Correção administrativa: `app/ferias/views.py:524`; correção:531; trilha depois:533.
+- `alinhar_status_por_data`: `app/ferias/services.py:951`; save que pode reconstruir ausências faltantes:956; o espelho ainda executa seu laço e exclusões após cada criação (`app/ponto/services/ausencia.py:1270`, :1284–1290).
+
+Fora desse formato:
+
+- API cria com documento em `app/api/views.py:1812–1819`, anexa no reenvio em :1845 e recebe anexo em :3117; esses corpos não abrem `atomic` externo envolvendo essas chamadas.
+- PWA cria com documento em `app/ponto/views.py:2603–2609`; anexação administrativa em :2159; reversão em :2651–2652; esses corpos também não abrem `atomic` externo envolvendo as chamadas.
+- `_materializar_ausencia_de_resposta` chama `criar_ausencia` **sem documento** em `app/chamados/services/materializacao.py:527–535`. Seu chamador é `app/chamados/services/disputa_emissao.py:1555`, depois de sair do `atomic` :1517–1526. O `atomic` próprio das absorções começa posteriormente, em `app/chamados/services/materializacao.py:563`.
+- O copiloto chama sua porta em `app/core/views_ia.py:985`; ela chama `criar_ausencia` sem documento em `app/ponto/services/checar_ausencia.py:46–48`.
+
+A referência a `materializar_pergunta_confirmada`, `_materializar_nota` ou documento-string vindo do chamado não corresponde aos trechos desta cópia: a chamada efetiva de :527–535 não passa documento (`app/chamados/services/materializacao.py:527`). A existência desses outros caminhos nesta versão fica [não verificado].
+
+**Resultado deste censo:** os outros chamadores identificados que efetivamente envolvem a chamada em `atomic` externo omitem o documento; não reproduzem o órfão de upload novo do achado original (`app/ponto/services/regularizacao.py:118`, `app/ponto/management/commands/marcar_abandono_provisorio.py:76`, `app/ponto/services/veredito_celula.py:337`, `app/chamados/services/materializacao.py:491`, `app/ponto/services/ausencia.py:1275`).
+
+## 16/11 02:36 · sessao c7d6f48750be · - · - · origem=Ronald (tmux)
+
+Censo somente leitura:
+
+- **Escritores de `Ausencia.documento`:** `criar_ausencia` passa o arquivo ao modelo e salva em `app/ponto/services/ausencia.py:409`, `:446`, `:479`; `anexar_documento` atribui e salva em `:923`, `:925`; `_reabrir` atribui e salva em `:1198`, `:1200`. O destino é `ausencias/documentos/` (`app/ponto/models.py:777`). Os uploads chegam pelas views web `app/ponto/views.py:2159`, `:2471`, `:2605` e API `app/api/views.py:1814`, `:1845`, `:3117`.
+- **Escrita de nome antes do storage:** `normalizar_nome_documento` altera a extensão do upload em `app/ponto/services/ausencia.py:658`. A configuração SaaS usa `FileSystemStorage` (`app/config/settings/saas.py:109`).
+- **Deleção física:** `_apagar_anexo_escrito_agora` executa `doc.delete(save=False)` em `app/ponto/services/ausencia.py:172`; chamadas internas em `:481`, `:927`, `:1202`, e externa em `app/ponto/views.py:2495`.
+- **Importação privada:** o único import externo encontrado dessa função é `app/ponto/views.py:2494`. Há precedentes de importar funções privadas de outros módulos no mesmo arquivo: `_is_gestor` (`app/ponto/views.py:121`) e `_rotulo_da_escala` (`:2062`). Isso, isoladamente, é observação, não defeito.
+
+**Leitores físicos dos arquivos:**
+
+- Tipo real do anexo: `app/ponto/models.py:857`, `:861`.
+- Endpoint que abre/serve o documento, incluindo raiz de `documento_referencia`: `app/ponto/views.py:2122`, `:2125`, `:2129`.
+- ZIP abre e lê: `app/ponto/services/atestados_lote.py:157`, `:158`; nome do arquivo exportado em `:96`.
+
+**Leitores do campo/nome/presença:**
+
+- Serviço de ausência: limpeza `app/ponto/services/ausencia.py:167`; captura anterior `:476`, `:922`, `:1197`; rejuízo pelo tipo `:606`; gates `:671`, `:691`; chamado `:713`, `:730`, `:739`; trilha `:938`; reabertura `:1190`.
+- API: `app/api/views.py:1061` e `:1843`.
+- Cartas de troca: `app/ponto/portas/celula.py:702`, `:722`.
+- Apresentação do dia e histórico: `app/ponto/services/dia_decidido.py:424`, `:497`, `:609`, `:623`, `:641`.
+- Contadores: `app/ponto/services/vigia_ausencia.py:115`, `:215`.
+- Comando: `app/ponto/management/commands/rejulgar_status_por_tipo.py:28`, `:37`.
+- Lote/CSV: `app/ponto/services/atestados_lote.py:76`, `:77`, `:129`, `:148`.
+- Templates: `app/templates/ponto/ausencias.html:168`; `app/templates/ponto/partials/painel_ausencia.html:71`, `:93`, `:205`.
+- Admin registrado como somente leitura: `app/ponto/admin.py:38`; bloqueios de escrita em `app/core/admin.py:59`, `:62`, `:65`; leitura genérica dos campos em `:68`.
+
+**PROCEDENTE — reabertura pode escrever anexo e falhar antes de devolver a instância.** `criar_ausencia` retorna diretamente `_reabrir` (`app/ponto/services/ausencia.py:350`). `_reabrir` salva o documento em `:1200`, mas depois ainda salva descrição em `:1210` e muda estado em `:1211`, cujo `save` ocorre em `:900`. Uma falha nesses passos sai sem retorno. Na view, `ausencia` permanece `None` (`app/ponto/views.py:2462`, `:2468`), e a guarda `:2492` pula a limpeza após o rollback. Portanto o novo arquivo pode ficar órfão enquanto o banco volta ao documento anterior; a limpeza interna cobre somente falha do `save` do próprio documento (`app/ponto/services/ausencia.py:1199`).
+
+**Observação — segurança da limpeza é comparação local de nome.** O helper preserva nome igual ao recebido em `nome_antes` (`app/ponto/services/ausencia.py:169`); a view passa o nome da mesma PK relida após rollback (`app/ponto/views.py:2496`). Não há busca global por outras linhas que referenciem aquele nome no helper (`app/ponto/services/ausencia.py:167`). Existência real de nomes compartilhados em produção: [não verificado].
+
+**Observação — falha de storage deixa arquivo.** A exclusão pode falhar; o helper registra a exceção e retorna `False` (`app/ponto/services/ausencia.py:174`). Ocorrência em produção: [não verificado].
 
 ## 16/11 02:32 · sessao 57ff070fbbff · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
 
@@ -718,480 +1104,4 @@ rc_sombra=0
 
 7. **Relógio e fixtures.** Os testes derivados de `_Base` recebem congelamento (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:53`); `FeriasTelaTrilhaTest` herda diretamente `TestCase`, sem congelamento (`:381`), e seu lote atravessa `datetime.now()` (`app/ferias/views.py:608`). Não há chamada direta a `timezone.now()` no arquivo de teste: **[nao verificado por execução Django]**. As fixtures principais não são vazias: espelho exige quantidade igual aos dias (`teste:198`), rejeição exige cinco linhas (`:210`), e espião envolve a função real com `wraps` (`:85`).
 
-## 16/11 02:07 · sessao e20bf62cf793 · - · - · origem=Ronald (tmux)
-
-1. **Cancelamento de férias: sem bloqueador novo encontrado nesse caminho.** O único chamador produtivo encontrado de `rejeitar_ausencias_de_ferias` é `app/ferias/services.py:683`; as três views passam pela casca `app/ferias/views.py:567`. O escritor externo abre atomic em `app/ferias/services.py:674`, trava agendamento em `:636`, período em `:639`, depois Ausências por PK, limitando a trava à própria tabela, em `app/ponto/services/ausencia.py:1452`.
-
-2. **Signals realmente passam por linha.** Cada `save` em `app/ponto/services/ausencia.py:1462` chama o juiz registrado em `app/ponto/signals.py:143`, que executa `_julgar_dias` em `:147`; este chama `cartorio.julgar_celula` em `:93`, sob tratamento best effort em `:88`. O consumidor registrado depois, em `:275`, agenda reconciliação no `on_commit` em `:272`; portanto o teste com mock de `_julgar_dias` prova o despacho ao juiz, sem provar o resultado real da célula (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:364`).
-
-3. **Falha da trilha desfaz o item inteiro.** `evento` usa savepoint próprio em `app/core/observ.py:133` e devolve `None` após falha em `:139`; a rejeição transforma esse retorno em exceção dentro do atomic em `app/ponto/services/ausencia.py:1470`. A exceção atravessa também o atomic externo, que já tinha escrito o saldo em `app/ferias/services.py:682`, e impede o cancelamento posterior em `:689`. Os callbacks registrados via `on_commit` em `app/ponto/signals.py:272` ficam condicionados ao commit.
-
-4. **As três views tratam a exceção nova.** Individual mostra “Nada foi alterado...” em `app/ferias/views.py:398`; correção de concluída mostra a mesma recusa em `:452`; massa registra IDs falhos em `:623` e mostra quantidade e IDs em `:630`. Na massa, os itens bem sucedidos continuam sendo contados e gravados individualmente (`:617`, `:625`); não existe atomic envolvendo o lote inteiro nesse trecho (`:612`).
-
-5. **No sucesso, as Ausências rejeitadas são depois apagadas.** O serviço grava agendamento cancelado em `app/ferias/services.py:689`; o override sincroniza a Ausência em `app/ferias/models.py:448`; `espelhar_ferias` apaga as próprias linhas do agendamento inativo em `app/ponto/services/ausencia.py:1333`. A trilha da rejeição permanece como registro independente com ID numérico, sem FK para Ausência (`app/core/models.py:298`).
-
-6. **[bloqueia] Um ato `decidir` ainda pode invalidar duas vezes.** Contraexemplo: declaração `aguardando_decisao`, aprovada juntamente com período 08:00–12:00. A transição chama o acordador em `app/ponto/services/ausencia.py:971`, via `decidir` em `:1050`; depois o mesmo ato grava o período em `:1069` e chama outro acordador em `:1087`. O comentário “Um ato = uma invalidação” em `:1052` não cobre essa composição. O teste de aprovação usa ausência sem período em `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:306`; o de período começa já aprovada em `:319`.
-
-7. **[fila, herdado] Há ciclo possível de travas no backfill com vários agendamentos do mesmo período.** O backfill trava agendamentos com JOIN do período por PK em `app/ponto/services/ausencia.py:1637`; o cancelamento trava agendamento antes de período em `app/ferias/services.py:636`. Contraexemplo de interleaving: backfill segura G1 e período P; cancelamento segura G2 e espera P; backfill avança para G2 e espera cancelamento. A existência desse arranjo em produção é [nao verificado]; o JOIN e a ordem diferente entre linhas estão nos trechos citados.
-
-8. **Evento de trilha: escritor e leitores.** O escritor nominal do par `rejeitar`/`Ausencia` encontrado é `app/ponto/services/ausencia.py:1463`, passando pelo escritor físico em `app/core/observ.py:134`; `rejeitar` já integra o catálogo em `app/core/models.py:291`. Leitores genéricos que abrangem esse evento: auditoria em `app/core/views.py:705`; fotografia de trilhas de Ausências em `app/chamados/services/foto_e4b.py:311`; proteção de reversão contra qualquer trilha posterior da Ausência em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:157`. Leitor especializado desse par: não achei.
-
-9. **`atualizado_em`: significado e lacuna herdada.** O campo é `auto_now` em `app/ponto/models.py:824`; o novo rejeitador o inclui explicitamente em `app/ponto/services/ausencia.py:1462`, e o período também em `:1032`. Saves completos existentes em `:545`, `:642`, `:1716` também passam pelo campo. `mudar_estado` usa lista parcial sem esse campo em `:954`, `:965`, `:967`; a reversão protege-se lendo tanto carimbo quanto trilha em `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`. Entretanto `houve_fato_novo` consulta o carimbo, sem consultar essa trilha, em `app/ponto/services/cartorio.py:383`. Contraexemplo: rejeitada com `aprovada_em` antigo → aguardando → aprovada, sem período; a mudança pode não produzir nenhum carimbo novo que esse leitor consulte (`app/ponto/services/ausencia.py:965`; `app/ponto/models.py:882`).
-
-## 16/11 02:07 · sessao 7adcd4b501d2 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-[nao verificado] No dado fornecido, as seis linhas `SOMA` e as duas linhas `ESTRUTURA_DIAS_LINHAS` são `True`. Não há ocorrência de `INCOMPLETO`.
-
-[nao verificado] Transcrição integral da saída fornecida:
-
-```text
-sonda_leitura: script.py [fe38ad6dc95a1ace] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 4 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 96
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 94
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1234, 'bate_ate_10min': 1186, 'esp_zero_e6_trabalho': 6, 'e6_zero_esp_trabalho': 1, 'diverge_10_60': 5, 'diverge_acima_60': 36, 'dia_batida_impar': 55, 'impar_que_BATE': 21, 'impar_que_DIVERGE': 34, 'impar_dentro_da_faixa': 30, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 33, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1276, 'dia_isento_ou_ausencia': 315, 'dia_sem_trabalho_ambos': 18, 'esp_desconta_janela_declarada': 37, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.1% de 1234 dias comparados
-[3] ESTRUTURA     3 dia-colab      15.6 h    3 colabs
-[3] CADASTRO     23 dia-colab     107.6 h    8 colabs
-[3] BATIDA       22 dia-colab     101.2 h   17 colabs
-[4] TOTAL divergentes 48
-[5] colabs com divergencia: 26
-ESTRUTURA_DIA|10/2026|col129|2026-10-12|esp_min=0|e6_min=779|teto_min=779|dif_min=779|classe=esp_zero_e6_trabalho|paridade=par|batidas=17:30 06:30|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col369|2026-10-12|esp_min=476|e6_min=416|teto_min=476|dif_min=-60|classe=diverge_10_60|paridade=par|batidas=07:04 12:47 13:46 15:00|veredito=feriado
-ESTRUTURA_DIA|10/2026|col723|2026-10-08|esp_min=440|e6_min=345|teto_min=500|dif_min=-95|classe=diverge_acima_60|paridade=par|batidas=09:00 10:44 13:20 17:20|veredito=trabalhou
-ESTRUTURA_DIAS_LINHAS 10/2026 3 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.566319135833336|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=23|horas=107.60888681222221|colabs=8
-PARCIAL|10/2026|BATIDA|dias=22|horas=101.15787729194444|colabs=17
-PARCIAL_TOTAL|10/2026|dias=48|horas=224.333083239999986|colabs=26
-ESTIMATIVA processados 100 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 125 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 190 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 190 minutos_total 2.8 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 983, 'bate_ate_10min': 951, 'esp_zero_e6_trabalho': 7, 'e6_zero_esp_trabalho': 0, 'diverge_10_60': 0, 'diverge_acima_60': 25, 'dia_batida_impar': 50, 'impar_que_BATE': 25, 'impar_que_DIVERGE': 25, 'impar_dentro_da_faixa': 21, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 24, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 376, 'dia_sem_lavratura_no_espelho': 1229, 'dia_isento_ou_ausencia': 264, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 28, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.7% de 983 dias comparados
-[3] ESTRUTURA     1 dia-colab       9.8 h    1 colabs
-[3] CADASTRO      4 dia-colab      17.1 h    3 colabs
-[3] BATIDA       27 dia-colab     160.9 h   14 colabs
-[4] TOTAL divergentes 32
-[5] colabs com divergencia: 16
-ESTRUTURA_DIA|11/2026|col909|2026-11-11|esp_min=831|e6_min=245|teto_min=374|dif_min=-586|classe=diverge_acima_60/FORA|paridade=IMPAR|batidas=07:00 11:04 13:13 23:00|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 11/2026 1 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=1|horas=9.770812222222222|colabs=1
-PARCIAL|11/2026|CADASTRO|dias=4|horas=17.068988648888887|colabs=3
-PARCIAL|11/2026|BATIDA|dias=27|horas=160.93444128833335|colabs=14
-PARCIAL_TOTAL|11/2026|dias=32|horas=187.774242159444459|colabs=16
-TEMPO_SEGUNDOS 165.0
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 239769
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 637
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1276
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6019
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 50
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 1
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 36
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6962
-TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 8
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 3
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3790
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3790
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 334
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 171
-TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 1226
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 445946
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 649
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2833
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 186
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12772
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 113
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4030
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 180
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 24689
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3726
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 39600
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 18892
-SOMA 10/2026 48   <- tem de ser igual a soma das classes (48) True
-SOMA 10/2026 HORAS 224.333083239999986 True
-SOMA 10/2026 COLABS_UNIAO 26 True
-SOMA 11/2026 32   <- tem de ser igual a soma das classes (32) True
-SOMA 11/2026 HORAS 187.774242159444459 True
-SOMA 11/2026 COLABS_UNIAO 16 True
-rc_sombra=0
-```
-
-## 16/11 01:57 · sessao 42ddca326818 · LOTE3-C6 · verificador · origem=Code
-
-Os dois achados anteriores estão fechados para a corrida descrita: a guarda INSS antecede a ausência, e a recusa HTMX de posto relê o banco. Entretanto, a nova transação deixa uma lacuna na limpeza do `documento` quando ocorre falha depois de `criar_ausencia` retornar. (`app/ponto/views.py:2463`; `app/ponto/views.py:2465`; `app/colaboradores/views.py:339`; `app/ponto/services/ausencia.py:480`.)
-
-Parecer por leitura estática. Execução dos testes, RED/GREEN informado, implantação e ocorrências em produção: **[nao verificado]**. [nao verificado]
-
-**1. Fechamento dos dois achados**
-
-**Ausência INSS:** a pré-conferência trava o colaborador e consulta sua situação gravada antes de chamar `criar_ausencia`. Se encontrar desligado, levanta `DesligadoSemReadmissao` antes da primeira escrita da ausência; a resposta específica fica fora do `atomic`. (`app/colaboradores/services/colaborador.py:84`; `app/colaboradores/services/colaborador.py:94`; `app/colaboradores/services/colaborador.py:65`; `app/ponto/views.py:2465`; `app/ponto/views.py:2486`.)
-
-Nessa recusa inicial:
-
-| Efeito perguntado | Resultado pelo código |
-|---|---|
-| Ausência | Não chega ao serviço nem ao `save`. (`app/ponto/views.py:2465`; `app/ponto/views.py:2466`.) |
-| `documento` definitivo | Não chega ao `FileField.save`; a normalização anterior apenas ajusta o nome do upload. (`app/ponto/services/ausencia.py:650`; `app/ponto/services/ausencia.py:461`.) |
-| `LogAuditoria` da ausência | Não alcança a chamada de criação da trilha. (`app/ponto/services/ausencia.py:502`.) |
-| Chamado/pergunta decorrentes do `post_save` | O sinal não é disparado, pois não houve `save` da ausência. (`app/ponto/services/ausencia.py:479`; `app/ponto/signals.py:143`.) |
-| Consumidor `on_commit` da ausência | Não chega ao agendamento; o registro da trava pertence à transação desfeita. (`app/ponto/signals.py:272`; `app/chamados/services/trava_do_colaborador.py:12`.) |
-
-**A garantia não cobre todo erro posterior.** Com documento: `a.save()` pode terminar com sucesso, o serviço retornar e o `_gravar_colab` falhar. O `atomic` externo desfaz ausência e escritas relacionadas no banco, mas não reentra no `except` que limpa o arquivo. Esse é o achado novo detalhado ao fim; ocorrência concreta em produção permanece **[nao verificado]**. (`app/ponto/services/ausencia.py:476`; `app/ponto/services/ausencia.py:480`; `app/ponto/services/ausencia.py:512`; `app/ponto/views.py:2483`.)
-
-Também continuam possíveis respostas genéricas de erro **depois do commit**, por exemplo na consulta dos alertas: essas falhas não equivalem à recusa da guarda e não desfazem o lançamento já confirmado. (`app/ponto/views.py:2497`; `app/ponto/views.py:2499`; `app/ponto/views.py:2511`.)
-
-**Posto:** a guarda de `salvar_inteiro` recusa antes do `save`; o histórico só é chamado depois. Na exceção HTMX, o contexto recebe o colaborador relido, e o template apresenta seu posto. O objeto alterado anteriormente em memória deixou de alimentar essa resposta. (`app/colaboradores/services/colaborador.py:158`; `app/colaboradores/views.py:329`; `app/colaboradores/views.py:331`; `app/colaboradores/views.py:339`; `app/templates/colaboradores/partials/vinculo_row.html:16`.)
-
-Falha do histórico após gravação continua deixando o posto novo persistido; agora a linha mostra corretamente esse posto. Esse cenário já existia e é explicitamente caracterizado pelo quinto teste, não sendo uma recusa `DesligadoSemReadmissao`. (`app/colaboradores/views.py:329`; `app/colaboradores/views.py:331`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:154`.)
-
-**2. Sequência de travas e sinais**
-
-A sequência depende dos dias, células e chamados existentes; não há uma lista única de queries válida para todo lançamento. O encadeamento verificável é este. (`app/ponto/signals.py:92`; `app/ponto/services/cartorio.py:2027`; `app/ponto/services/cartorio.py:1000`; `app/ponto/services/cartorio.py:1029`.)
-
-1. **Antes do novo bloco:** carga filtrada do colaborador e leitura da data do POST, sem trava da linha nessa carga. (`app/ponto/views.py:2442`; `app/ponto/views.py:2445`.)
-2. **Primeira query de trava, para INSS:** `Colaborador FOR UPDATE`, pela porta global; registro do colaborador travado; depois leitura simples da situação gravada para a guarda. A chamada inicial não solicita Disputa, Chamado ou Pergunta. (`app/colaboradores/services/colaborador.py:90`; `app/chamados/models.py:2744`; `app/chamados/models.py:2746`; `app/colaboradores/services/colaborador.py:65`.)
-3. **Serviço:** consultas de tipo/sobreposição/precedência e validação; construção da ausência; `a.save()` em `atomic` interno, agora um savepoint do externo. Se houver rejeitada correspondente, existe também o ramo de reabertura da linha existente. (`app/ponto/services/ausencia.py:309`; `app/ponto/services/ausencia.py:350`; `app/ponto/services/ausencia.py:368`; `app/ponto/services/ausencia.py:438`; `app/ponto/services/ausencia.py:448`; `app/ponto/services/ausencia.py:478`.)
-4. **`post_save` síncrono:** cartório calcula os dias, consulta as células e julga. Pode escrever célula e `EventoCelula`, reconciliar chamados/perguntas e fabricar disputa/perguntas. Essas escritas continuam dentro da transação externa. (`app/ponto/signals.py:115`; `app/ponto/signals.py:147`; `app/ponto/services/cartorio.py:2027`; `app/ponto/services/cartorio.py:1006`; `app/ponto/services/cartorio.py:1045`; `app/ponto/portas/celula.py:962`.)
-5. **Travas C/D/CH/P desses ramos:** são adquiridas pela porta global, que ordena cada chamada como Colaborador → Disputa → Chamado → Pergunta, por PK; Pergunta usa `of=('self',)`. (`app/chamados/models.py:2744`; `app/chamados/models.py:2753`; `app/chamados/models.py:2766`; `app/chamados/models.py:2770`.)
-6. **Outras travas condicionais:** fechamento com entrega de recusas ao DP pode adquirir `ContadorPauta FOR UPDATE` e travas consultivas de competência. Portanto, **há `select_for_update` fora da porta global no caminho ampliado**, sobre outra entidade; isso não constitui escritor alternativo de trava C/D/CH/P. (`app/ponto/services/cartorio.py:1011`; `app/chamados/services/fecho_runtime.py:168`; `app/chamados/services/fecho_runtime.py:131`; `app/pautas/services.py:351`; `app/chamados/services/fecho_runtime.py:92`.)
-7. **Após o savepoint da ausência:** criação da auditoria; guarda final de situação, que reencontra o mesmo Colaborador já travado; atribuição e `UPDATE` de `afastado`; saída do `atomic` externo. (`app/ponto/services/ausencia.py:502`; `app/ponto/views.py:2483`; `app/colaboradores/services/colaborador.py:133`; `app/colaboradores/services/colaborador.py:136`.)
-8. **Depois do commit:** execução dos callbacks agendados, incluindo consumidor da ausência e, condicionalmente, callbacks decorrentes de Pergunta e Colaborador isento. Esses callbacks não executam sob a trava original já liberada. (`app/ponto/signals.py:272`; `app/chamados/signals.py:240`; `app/chamados/signals.py:281`; `app/chamados/services/trava_do_colaborador.py:12`.)
-
-**Ressalva sobre a ordem global:** cada chamada da porta ordena suas tabelas, mas o ato inteiro pode voltar a adquirir outras linhas depois de já ter adquirido Pergunta. Exemplo: desfazer carimbo trava C/D/P; em seguida, a fábrica pode chamar a emissão de disputa, que trava o universo C/D/CH. Essa composição já existia dentro do `atomic` de `a.save()`. O c6 garante C primeiro e torna sua aquisição final reentrante; não demonstra uma aquisição única e monotônica de todo o universo D/CH/P. Deadlock novo: **[nao verificado]**. (`app/chamados/services/relavra_via.py:230`; `app/chamados/services/fabrica_da_celula.py:169`; `app/chamados/services/fabrica_da_celula.py:172`; `app/chamados/services/disputa_emissao.py:539`; `app/ponto/services/ausencia.py:478`.)
-
-**3. O que mudou para os leitores durante o ato**
-
-| Leitor/momento | Resultado |
-|---|---|
-| Cartório síncrono | Continua recebendo `instance.colaborador` antes da atribuição de `afastado`. A pré-conferência não atualiza esse objeto em memória. (`app/ponto/signals.py:147`; `app/colaboradores/services/colaborador.py:102`; `app/ponto/views.py:2483`.) |
-| `afastado_na_batida` no cartório | Continua consultando primeiro a ausência por `afastado_hoje`; só depois consulta o campo como divergência. A ausência inserida está disponível à própria transação. (`app/ponto/services/cartorio.py:1351`; `app/ponto/services/afastado_avisa.py:38`; `app/ponto/services/afastado_avisa.py:41`.) |
-| Banco antes do `gravar` final | A situação ainda não recebeu o `afastado` deste lançamento; a nova guarda apenas trava e lê. (`app/colaboradores/services/colaborador.py:84`; `app/ponto/views.py:2483`.) |
-| Consumidor `on_commit` | Antes podia executar ao sair do `atomic` interno, antes da escrita de situação e da auditoria de criação. Agora executa depois de ambas; relê o colaborador do banco. (`app/ponto/services/ausencia.py:478`; `app/ponto/services/ausencia.py:502`; `app/ponto/signals.py:267`; `app/ponto/signals.py:272`; `app/ponto/views.py:2483`.) |
-
-**Não-INSS também mudou:** o `atomic` externo é incondicional. Não há pré-guarda nem escrita de situação nesse ramo, mas a auditoria de criação passa a integrar a transação do nascimento e anteceder o consumidor `on_commit`. A reabertura também passa a ficar envolvida pelo novo bloco. Portanto, não cabe afirmar comportamento transacional idêntico para os demais tipos. (`app/ponto/views.py:2463`; `app/ponto/views.py:2464`; `app/ponto/services/ausencia.py:350`; `app/ponto/services/ausencia.py:502`.)
-
-**4. Checklist das classes e dos cinco testes** [nao verificado]
-
-| Classe | Avaliação |
-|---|---|
-| Segundo juiz | Não identificado: a função nova reutiliza `_guarda_da_linha`, que consulta `esta_desligado`, registrado no vivo. (`app/colaboradores/services/colaborador.py:102`; `app/colaboradores/services/colaborador.py:62`; `app/core/juizes.py:271`.) |
-| Segundo escritor fora da porta | Não introduzido: situação continua em `gravar`; posto continua em `salvar_inteiro`. (`app/ponto/views.py:2483`; `app/colaboradores/views.py:329`.) |
-| Relógio fora da borda | O código acrescentado não lê relógio. Permanecem leituras profundas já existentes, inclusive no cartório e em `afastado_hoje`; não houve unificação temporal nesta volta. (`app/colaboradores/services/colaborador.py:94`; `app/ponto/services/cartorio.py:2016`; `app/ponto/services/cartorio.py:2040`; `app/ponto/turnos.py:2742`.) |
-| Derivação paralela | Não nasceu nova derivação de afastamento. O registro vivo já declara legítima a escrita pela porta, condicionando leitores ao vigia. (`app/core/juizes.py:455`.) |
-| Pouso antes do pré-requisito | Na corrida INSS, a guarda agora precede ausência e sinais. No posto, o histórico continua posterior à gravação, com a limitação descrita acima. (`app/ponto/views.py:2465`; `app/colaboradores/views.py:331`.) |
-| Campo com dois significados | O c6 não acrescenta significado a `situacao`; conserva a coexistência entre estado cadastral e afastamento derivado, já tratada pelo registro vivo e pelo detector de divergência. (`app/core/juizes.py:455`; `app/ponto/services/afastado_avisa.py:39`.) |
-
-| Teste | Mordida e limite | [nao verificado]
-|---|---|
-| 1 — desligamento durante lançamento | Exige recusa dita, ausência zero e situação desligado; morde o achado original. Não verifica documento, auditoria ou callbacks. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:77`.) |
-| 2 — trava antes do INSERT | Exige existência de FOR UPDATE/INSERT/UPDATE e compara trava antes do INSERT. Não compara a posição do UPDATE nem o commit. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:92`.) |
-| 3 — sobreposição | **Pode passar vazio quanto à recusa específica:** a preparação já deixa uma ausência e situação ativa; uma saída antecipada diferente de 500 preserva todos os resultados exigidos. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:104`.) |
-| 4 — posto recusado | Exige posto antigo no banco e HTML, ausência do novo nome e histórico zero; morde o segundo achado. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:135`.) |
-| 5 — histórico falha depois | Caracteriza a gravação consumada e impede restaurar cegamente o posto antigo. Não precisa reprovar o comportamento anterior. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:154`.) |
-
-Os dois ganchos representam janelas reais de objeto carregado antes da trava: parse da data após carregar o colaborador; retorno de `get_object_or_404` antes da porta do posto. Entretanto, usam UPDATE na mesma conexão de `TestCase`; não demonstram concorrência entre conexões, duração da trava até commit nem execução dos consumidores pós-commit. (`app/ponto/views.py:2442`; `app/ponto/views.py:2445`; `app/colaboradores/views.py:319`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:37`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:140`; `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`.)
-
-**5. Quem escreve e quem lê — caminho afetado**
-
-| Campo/valor | Escritor | Leitores relevantes |
-|---|---|---|
-| `Colaborador.situacao` | View solicita; `gravar` atribui/salva. Desligamento, readmissão e reversor têm seus atos/portas. (`app/ponto/views.py:2483`; `app/colaboradores/services/colaborador.py:126`; `app/colaboradores/services/desligamento.py:128`; `app/colaboradores/services/desligamento.py:241`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`.) | Lista, guarda da linha gravada, consumidor, aviso de batida e badges. (`app/ponto/views.py:2405`; `app/colaboradores/services/colaborador.py:65`; `app/ponto/signals.py:267`; `app/ponto/services/afastado_avisa.py:41`; `app/colaboradores/services/situacao_exibida.py:50`.) |
-| `Colaborador.posto` | View atribui; porta salva. (`app/colaboradores/views.py:327`; `app/colaboradores/services/colaborador.py:152`.) | Histórico, releitura da recusa e template. (`app/colaboradores/views.py:326`; `app/colaboradores/views.py:339`; `app/templates/colaboradores/partials/vinculo_row.html:16`.) |
-| Ausência | Serviço constrói/salva; pode reabrir rejeitada pela mesma família de portas. (`app/ponto/services/ausencia.py:446`; `app/ponto/services/ausencia.py:479`; `app/ponto/services/ausencia.py:350`.) | Cartório, consumidor e autoridades de cobertura/afastamento. (`app/ponto/signals.py:143`; `app/ponto/signals.py:275`; `app/ponto/turnos.py:2719`; `app/ponto/turnos.py:2747`.) |
-| Auditoria da ausência | Serviço chama `evento`; escritor material é `core.observ`. (`app/ponto/services/ausencia.py:502`; `app/core/observ.py:134`.) | Tela de auditoria e proteção de reversão por trilha posterior. (`app/core/views.py:705`; `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:152`.) |
-| Registro de colaboradores travados | `trava_na_ordem` chama `_registrar_travados`, que acrescenta sentinela à fila da conexão. (`app/chamados/models.py:2746`; `app/chamados/services/trava_do_colaborador.py:37`.) | `colaboradores_travados` e selo `exigir_colaboradores_travados`. (`app/chamados/services/trava_do_colaborador.py:29`; `app/chamados/services/trava_do_colaborador.py:55`.) |
-
-`JUIZES.md` é lookup e manda prevalecer o registro vivo: cobertura permanece em `turnos`, estado aberto em `ABERTAS`, desligamento em `esta_desligado`. O número histórico de 104 leitores não constitui contagem atual revalidada nesta análise. (`app/docs/JUIZES.md:10`; `app/docs/JUIZES.md:55`; `app/core/juizes.py:271`; `app/core/juizes.py:470`.)
-
-Lista final de achados:
-
-- **PROCEDENTE — documento fora da nova fronteira de rollback.** Falha posterior ao retorno de `criar_ausencia`, especialmente na gravação final do colaborador, desfaz o banco sem executar a limpeza do arquivo. A limpeza protege somente o bloco interno do save; falta cobertura da transação ampliada. (`app/ponto/services/ausencia.py:476`; `app/ponto/services/ausencia.py:480`; `app/ponto/views.py:2483`.)
-- **Observação — selos incompletos:** terceiro teste admite saída vazia; segundo não prova retenção até commit; os cinco não demonstram limpeza do anexo nem efeitos pós-commit. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:77`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:92`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:104`.)
-- **Observação — ordem global composta:** aquisição por chamada respeita a porta; monotonicidade de todas as aquisições da transação inteira não está demonstrada, e existem travas adicionais de contador/competência. (`app/chamados/services/relavra_via.py:230`; `app/chamados/services/disputa_emissao.py:539`; `app/chamados/services/fecho_runtime.py:131`.)
-- **Observação — comentário desatualizado:** “lei em aberto” diverge da autorização já registrada no vivo. (`app/ponto/views.py:2474`; `app/core/juizes.py:455`.)
-- **Observação — dos dois achados anteriores, 0 procedente remanescente na corrida descrita.** (`app/ponto/views.py:2465`; `app/colaboradores/views.py:339`.)
-
-## 16/11 01:54 · sessao 6e6d5efb54dc · - · - · origem=Ronald (tmux)
-
-Evidências para consolidar, por leitura estática; execução, deadlock real e estado de produção [nao verificado].
-
-- A primeira query de trava do novo bloco INSS é `Colaborador ... FOR UPDATE`, via `conferir_situacao_antes_do_ato → _guarda_da_linha → _travar → PerguntaDisputa.trava_na_ordem`. Depois registra o sentinela e lê a situação gravada; a pré-conferência não atualiza o objeto `colab` em memória. (`app/ponto/views.py:2463`, `app/colaboradores/services/colaborador.py:84`, `app/colaboradores/services/colaborador.py:94`, `app/chamados/models.py:2744`, `app/chamados/models.py:2746`, `app/colaboradores/services/colaborador.py:65`.)
-
-- Seguem validações de `criar_ausencia`, criação da instância e `a.save()` em savepoint; esse save dispara cartório síncrono, que recebe `instance.colaborador`. Logo, o cartório ainda recebe o objeto carregado antes da trava, e roda antes de `situacao='afastado'` ser atribuída ou gravada pela porta final. Isso já era assim no caminho anterior; a pré-guarda nova não muda esse valor em memória. (`app/ponto/services/ausencia.py:446`, `app/ponto/services/ausencia.py:478`, `app/ponto/signals.py:143`, `app/ponto/signals.py:147`, `app/ponto/views.py:2483`, `app/colaboradores/services/colaborador.py:134`.)
-
-- O cartório seleciona dias, consulta a célula e julga. Pode escrever `CelulaDia` e `EventoCelula`; reconciliar chamados/perguntas; abrir chamado; espelhar marcos; e fabricar disputa/perguntas. Portanto não existe uma sequência fixa de SQL igual para todos os lançamentos. (`app/ponto/signals.py:115`, `app/ponto/signals.py:122`, `app/ponto/signals.py:127`, `app/ponto/services/cartorio.py:2027`, `app/ponto/services/cartorio.py:2040`, `app/ponto/portas/celula.py:962`, `app/ponto/services/cartorio.py:1006`, `app/ponto/services/cartorio.py:1011`, `app/ponto/services/cartorio.py:1045`, `app/ponto/services/cartorio.py:1791`, `app/ponto/services/cartorio.py:1840`.)
-
-- As travas explícitas das quatro classes ficam na porta global: C por PK; D por PK; CH por PK; P por PK, usando `of=('self',)` para P. O final `_gravar_colab` volta à guarda C, mas a linha C já está retida pelo atomic externo, portanto essa aquisição é reentrante. (`app/chamados/models.py:2744`, `app/chamados/models.py:2753`, `app/chamados/models.py:2766`, `app/chamados/models.py:2770`, `app/ponto/views.py:2483`, `app/colaboradores/services/colaborador.py:133`.)
-
-- **Ressalva sobre “ordem global”**: a pré-conferência trava somente C; não reúne antecipadamente todas as D/CH/P dos dias da ausência. O cartório percorre dias e ramos, cujas portas podem repetir aquisições. Por exemplo, `desfazer_carimbo_sem_lastro` trava C/D/P, e a fábrica pode em seguida chamar a porta da disputa, que trava o universo C/D/CH. Não é justificável declarar uma única sequência monotônica C→D→CH→P para toda a transação sem distinguir aquisição nova e reentrância. C retida serializa os escritores que seguem o contrato; um ciclo real permanece [nao verificado]. Essa composição já existia dentro do atomic de `a.save()`, antes do c6. (`app/ponto/signals.py:92`, `app/chamados/services/fabrica_da_celula.py:208`, `app/chamados/services/fabrica_da_celula.py:219`, `app/chamados/services/relavra_via.py:230`, `app/chamados/services/fabrica_da_celula.py:169`, `app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/disputa_emissao.py:539`, `app/ponto/services/ausencia.py:478`.)
-
-- Há também travas **implícitas** por escrita em Ausência, célula, evento, log e eventualmente Pauta/ContadorPauta. Nos arquivos percorridos não encontrei `select_for_update` executado fora da porta global para C/D/CH/P. Os `select_for_update` de `CelulaDia` e `Ausencia` em edição/troca de plantão pertencem a outras operações, não chamadas pelo fluxo de lançamento examinado. (`app/ponto/services/ausencia.py:479`, `app/ponto/portas/celula.py:963`, `app/ponto/portas/celula.py:954`, `app/core/observ.py:134`, `app/chamados/services/fabrica_da_celula.py:369`, `app/pautas/services.py:365`, `app/ponto/portas/celula.py:631`, `app/ponto/portas/celula.py:695`.)
-
-- O consumidor da Ausência **não roda dentro do novo atomic**: o `post_save` agenda `_depois` por `on_commit`. Antes, sem transação envolvente, ele rodava ao sair do atomic interno de `a.save()`, antes do evento `criar/Ausencia` e antes da escrita de situação. Agora roda depois de ambos, ao confirmar o atomic externo. Ele relê Colaborador do banco, então no INSS feliz passa a receber `afastado`. (`app/ponto/signals.py:250`, `app/ponto/signals.py:267`, `app/ponto/signals.py:269`, `app/ponto/signals.py:272`, `app/ponto/services/ausencia.py:478`, `app/ponto/services/ausencia.py:502`, `app/ponto/views.py:2463`, `app/ponto/views.py:2483`.)
-
-- **Também muda para não-INSS**: o atomic externo é incondicional. Seu log `criar/Ausencia` agora integra a transação do nascimento e precede o consumidor; antes, o consumidor rodava antes desse log. Não identifiquei leitor desse log de criação no consumidor percorrido: ele consulta cobertura de Ausência e veredito da célula. A trilha consultada pelo C6 é de `retratar_pergunta_obsoleta/PerguntaDisputa`, outro universo. (`app/ponto/views.py:2463`, `app/ponto/services/ausencia.py:502`, `app/ponto/signals.py:272`, `app/chamados/services/silencio_ausencia.py:66`, `app/chamados/services/silencio_ausencia.py:41`, `app/chamados/juizes.py:294`.)
-
-- `afastado_na_batida(c)` durante o cartório continua vendo o valor antigo de `c.situacao`, mas primeiro consulta a ausência recém-inserida por `afastado_hoje`; só usa o cadastro como divergência quando o juiz não encontra cobertura de hoje. A chamada continua antes da escrita final de situação. (`app/ponto/services/cartorio.py:1351`, `app/ponto/services/afastado_avisa.py:38`, `app/ponto/services/afastado_avisa.py:41`, `app/ponto/views.py:2483`.)
-
-- **Observação de anexo para investigação do pai:** a limpeza do arquivo cobre somente exceções que saem do bloco de `a.save()`. Depois que `criar_ausencia` retorna, uma falha no `_gravar_colab` desfaz a transação externa, mas não reentra nessa limpeza. O log é best effort e normalmente não propaga falha. Na corrida específica de desligamento, a recusa inicial antecede `criar_ausencia`, portanto não chega à gravação do documento. (`app/ponto/services/ausencia.py:476`, `app/ponto/services/ausencia.py:480`, `app/ponto/services/ausencia.py:512`, `app/ponto/views.py:2465`, `app/ponto/views.py:2483`, `app/core/observ.py:105`, `app/core/observ.py:133`.)
-
-Nenhum defeito novo de ordem de trava demonstrado neste levantamento; a afirmação irrestrita de sequência global única merece a ressalva acima. (`app/ponto/views.py:2465`, `app/chamados/services/relavra_via.py:230`, `app/chamados/services/disputa_emissao.py:539`.)
-
-## 16/11 01:53 · sessao a24bd99dd2b1 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-Transcrição integral do dado fornecido, sem verificação independente. [nao verificado]
-
-```text
-sonda_leitura: script.py [82c88c2988af3846] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 3 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 102
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 99
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 201 minutos_total 3.3 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 201 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 201 minutos_total 2.8 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1236, 'bate_ate_10min': 1169, 'esp_zero_e6_trabalho': 12, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 2, 'diverge_acima_60': 47, 'dia_batida_impar': 65, 'impar_que_BATE': 23, 'impar_que_DIVERGE': 42, 'impar_dentro_da_faixa': 33, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 42, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1422, 'dia_isento_ou_ausencia': 342, 'dia_sem_trabalho_ambos': 22, 'esp_desconta_janela_declarada': 38, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.6% de 1236 dias comparados
-[3] ESTRUTURA     3 dia-colab      15.2 h    3 colabs
-[3] CADASTRO      7 dia-colab      35.9 h    4 colabs
-[3] BATIDA       57 dia-colab     297.7 h   24 colabs
-[4] TOTAL divergentes 67
-[5] colabs com divergencia: 29
-ESTRUTURA_DIA|10/2026|col218|2026-10-15|esp_min=105|e6_min=0|teto_min=0|dif_min=-105|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col746|2026-09-24|esp_min=289|e6_min=193|teto_min=350|dif_min=-96|classe=diverge_acima_60|paridade=par|batidas=11:00 13:02 15:39 16:49|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col854|2026-10-04|esp_min=718|e6_min=7|teto_min=7|dif_min=-711|classe=diverge_acima_60|paridade=par|batidas=18:54 19:01|veredito=trabalhou
-ESTRUTURA_DIAS_LINHAS 10/2026 3 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.209666666666665|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=7|horas=35.88209174|colabs=4
-PARCIAL|10/2026|BATIDA|dias=57|horas=297.66026132194446|colabs=24
-PARCIAL_TOTAL|10/2026|dias=67|horas=348.752019728611125|colabs=29
-ESTIMATIVA processados 125 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 201 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1059, 'bate_ate_10min': 1004, 'esp_zero_e6_trabalho': 8, 'e6_zero_esp_trabalho': 7, 'diverge_10_60': 2, 'diverge_acima_60': 38, 'dia_batida_impar': 51, 'impar_que_BATE': 16, 'impar_que_DIVERGE': 35, 'impar_dentro_da_faixa': 28, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 33, 'impar_SO_POR_CORTE_do_oraculo': 2, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1334, 'dia_isento_ou_ausencia': 205, 'dia_sem_trabalho_ambos': 26, 'esp_desconta_janela_declarada': 49, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.8% de 1059 dias comparados
-[3] ESTRUTURA     6 dia-colab      17.8 h    5 colabs
-[3] CADASTRO      9 dia-colab      32.9 h    6 colabs
-[3] BATIDA       40 dia-colab     194.4 h   21 colabs
-[4] TOTAL divergentes 55
-[5] colabs com divergencia: 27
-ESTRUTURA_DIA|11/2026|col110|2026-11-12|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col200|2026-10-29|esp_min=180|e6_min=0|teto_min=0|dif_min=-180|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col200|2026-11-02|esp_min=180|e6_min=0|teto_min=0|dif_min=-180|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col218|2026-11-14|esp_min=103|e6_min=0|teto_min=0|dif_min=-103|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col296|2026-11-02|esp_min=345|e6_min=0|teto_min=0|dif_min=-345|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col884|2026-11-08|esp_min=679|e6_min=699|teto_min=739|dif_min=20|classe=diverge_10_60|paridade=par|batidas=07:42 13:05 13:45 20:01|veredito=rejeitado
-ESTRUTURA_DIAS_LINHAS 11/2026 6 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=6|horas=17.8227|colabs=5
-PARCIAL|11/2026|CADASTRO|dias=9|horas=32.931705|colabs=6
-PARCIAL|11/2026|BATIDA|dias=40|horas=194.35440025833333|colabs=21
-PARCIAL_TOTAL|11/2026|dias=55|horas=245.10880525833333|colabs=27
-TEMPO_SEGUNDOS 174.3
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 257813
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 296
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1707
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 5857
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 41
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6880
-TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4644
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4644
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 602
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 182
-TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 17
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 482764
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 595
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3064
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 174
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12978
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 117
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4228
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 24546
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4783
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 40289
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 18318
-SOMA 10/2026 67   <- tem de ser igual a soma das classes (67) True
-SOMA 10/2026 HORAS 348.752019728611125 True
-SOMA 10/2026 COLABS_UNIAO 29 True
-SOMA 11/2026 55   <- tem de ser igual a soma das classes (55) True
-SOMA 11/2026 HORAS 245.10880525833333 True
-SOMA 11/2026 COLABS_UNIAO 27 True
-rc_sombra=0
-```
-
-- **SOMA:** as seis linhas fornecidas apresentam `True`. [nao verificado]
-- **ESTRUTURA_DIAS_LINHAS:** ambas apresentam `True`: `10/2026 3 True` e `11/2026 6 True`. [nao verificado]
-- **INCOMPLETO:** não há ocorrência desse marcador no dado fornecido. [nao verificado]
-
-## 16/11 01:53 · sessao 1416237d4c62 · - · - · origem=Ronald (tmux)
-
-Mapa direcionado entregue ao agente principal; referências centrais:
-
-| Valor | Quem escreve | Quem lê |
-|---|---|---|
-| `Colaborador.situacao` | `lancar_ausencia` chama a porta; `gravar` atribui e salva (`app/ponto/views.py:2483`; `app/colaboradores/services/colaborador.py:126`). Desligamento/readmissão e reversor usam portas próprias (`app/colaboradores/services/desligamento.py:128`; `app/colaboradores/services/desligamento.py:241`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`). | Lista da tela (`app/ponto/views.py:2405`), guarda da linha gravada (`app/colaboradores/services/colaborador.py:65`), consumidor após commit (`app/ponto/signals.py:267`), aviso de batida (`app/ponto/services/afastado_avisa.py:38`), badges (`app/colaboradores/services/situacao_exibida.py:50`). |
-| `Colaborador.posto` | View atribui; porta salva inteiro (`app/colaboradores/views.py:327`; `app/colaboradores/services/colaborador.py:152`). | Anterior para histórico (`app/colaboradores/views.py:326`); recusa relê banco e monta contexto (`app/colaboradores/views.py:339`); template mostra esse contexto (`app/templates/colaboradores/partials/vinculo_row.html:16`). |
-| Ausência criada | Serviço constrói e salva (`app/ponto/services/ausencia.py:400`; `app/ponto/services/ausencia.py:446`; `app/ponto/services/ausencia.py:478`). | Cartório e consumidor (`app/ponto/signals.py:143`; `app/ponto/signals.py:275`); juiz de cobertura/afastamento (`app/ponto/turnos.py:2719`). |
-| Auditoria da Ausência | Serviço chama `evento`; escritor material é `LogAuditoria.objects.create` (`app/ponto/services/ausencia.py:501`; `app/core/observ.py:133`). | Tela de auditoria (`app/core/views.py:686`); proteção de reversão por trilha posterior (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:152`). |
-| Registro de colaboradores travados | Somente `trava_na_ordem` chama `_registrar_travados`, que acrescenta sentinela à fila da conexão (`app/chamados/models.py:2744`; `app/chamados/services/trava_do_colaborador.py:37`). | `colaboradores_travados`; selo `exigir_colaboradores_travados` (`app/chamados/services/trava_do_colaborador.py:29`; `app/chamados/services/trava_do_colaborador.py:55`). |
-
-O registro vivo autoriza explicitamente a escrita de `afastado` pela porta e mantém os leitores do campo condicionados ao vigia; o comentário da view ainda fala em lei aberta (`app/core/juizes.py:455`; `app/ponto/views.py:2474`). O censo histórico dos 104 leitores está documentado, mas sua contagem atual não foi revalidada (`app/docs/TICKETS.md:220`; `app/docs/RELATO-ARQUIVO.md:29301`).
-
-A recusa inicial de desligado ocorre antes do serviço e do armazenamento do anexo (`app/ponto/views.py:2465`; `app/ponto/views.py:2466`). Existe borda distinta: a limpeza do arquivo protege somente a falha do `a.save()` interno; falha posterior no `gravar` ou no commit externo desfaz o banco sem passar por essa limpeza (`app/ponto/services/ausencia.py:476`; `app/ponto/services/ausencia.py:480`; `app/ponto/views.py:2483`). Ocorrência real dessa falha: [nao verificado].
-
-## 16/11 01:53 · sessao 9ef94304cda7 · - · - · origem=Ronald (tmux)
-
-- **Achado anterior 2 fechado:** recusa de `salvar_inteiro` ocorre antes do `save`; o histórico só vem depois; na exceção HTMX a view relê o colaborador e fornece o posto relido ao template. (`app/colaboradores/services/colaborador.py:158-160`; `app/colaboradores/views.py:329-353`; `app/templates/colaboradores/partials/vinculo_row.html:16-21`.)
-
-- **Observação — erro após gravação continua podendo deixar alteração:** falha em `registrar_mudanca` deixa o posto novo gravado, porque o `atomic` da porta terminou antes da chamada do histórico. O quinto teste caracteriza exatamente esse cenário e exige que a tela mostre o novo posto; isso não é recusa `DesligadoSemReadmissao`. (`app/colaboradores/services/colaborador.py:158-161`; `app/colaboradores/views.py:329-339`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:154-163`.)
-
-- **Não há juiz duplicado no pré-verificador:** `conferir_situacao_antes_do_ato` apenas exige `atomic` aberto e reutiliza `_guarda_da_linha`; esta trava e chama `_recusar_volta_de_desligado`, que consulta `esta_desligado` para destino e linha gravada. A autoridade está registrada no registro vivo. (`app/colaboradores/services/colaborador.py:55-69`; `app/colaboradores/services/colaborador.py:84-102`; `app/core/juizes.py:267-271`.)
-
-- **Observação — comentário de lei desatualizado:** o comentário preservado afirma que a legitimidade da escrita de afastado segue em aberto, mas o registro vivo já declara a escrita via `gravar` legítima e condiciona leitores do campo ao vigia de divergência; a tabela de consulta manda prevalecer o registro vivo. (`app/ponto/views.py:2474-2483`; `app/core/juizes.py:455-473`; `app/docs/JUIZES.md:10-15`.)
-
-- **Mordida estática dos testes:** o primeiro exige recusa dita, ausência zero e situação desligado; o segundo exige presença das três classes de SQL, trava anterior ao INSERT, registro da trava e resultado feliz; o quarto exige posto antigo no banco e HTML, ausência do posto recusado no HTML e histórico zero. Esses três contêm verificações pertinentes aos dois defeitos originais. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:77-102`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:135-152`.)
-
-- **Observação — terceiro teste pode passar vazio quanto à sobreposição:** sua preparação já deixa exatamente uma ausência e situação ativa, que são os resultados finais exigidos; a resposta só precisa ser diferente de 500. Uma saída antecipada do endpoint que não lance ausência também satisfaz essas verificações. Falta exigir a recusa específica ou evidência de que o lançamento foi tentado. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:104-114`.)
-
-- **Observação — quinto teste é caracterização e guarda contra cura errada:** ele não precisa reprovar o código anterior, pois este já mantinha em memória o posto novo após falha do histórico. O teste impede substituir a releitura por restauração incondicional do posto antigo. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:154-163`; diff fornecido de `app/colaboradores/views.py`, hunk `@@ -333,6 +333,10 @@`.)
-
-- **Ganchos reproduzem uma janela real de objeto velho:** no lançamento, a carga filtrada ocorre antes do parse da data e da trava; o patch desliga no parse. Na vinculação, o patch desliga depois de carregar o objeto e antes da porta. Ambos reproduzem desligamento concluído antes da primeira trava da operação. (`app/ponto/views.py:2442-2465`; `app/colaboradores/views.py:319-329`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:43-52`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:140-146`.)
-
-- **Limite desses ganchos:** usam UPDATE direto na mesma conexão de `TestCase`; não demonstram bloqueio real entre conexões nem corrida após a aquisição da primeira trava. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:37-40`; `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`.)
-
-- **Limite do segundo teste:** verifica `FOR UPDATE < INSERT`, mas não compara posição do UPDATE nem limites de commit; o registro consultado depois da requisição continua sob o `atomic` externo de `TestCase`. Assim, não prova sozinho a duração da trava até o commit da operação em produção. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:92-102`; `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`; `app/chamados/services/trava_do_colaborador.py:29-34`.)
-
-Execução dos testes e RED do commit informado: **[nao verificado]**. [nao verificado]
-
-## 16/11 01:49 · sessao 9b8a39057952 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-Transcrição integral do dado fornecido [nao verificado]:
-
-```text
-sonda_leitura: script.py [23c7f47877c9a3fd] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 2 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 109
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 102
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 211 minutos_total 2.8 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1268, 'bate_ate_10min': 1227, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 7, 'diverge_acima_60': 28, 'dia_batida_impar': 63, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 24, 'impar_FORA_da_faixa': 6, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1563, 'dia_isento_ou_ausencia': 353, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 62, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.8% de 1268 dias comparados
-[3] ESTRUTURA     5 dia-colab      11.1 h    3 colabs
-[3] CADASTRO      8 dia-colab      20.4 h    6 colabs
-[3] BATIDA       28 dia-colab     136.0 h   18 colabs
-[4] TOTAL divergentes 41
-[5] colabs com divergencia: 23
-ESTRUTURA_DIA|10/2026|col37|2026-10-05|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col37|2026-10-09|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col451|2026-09-23|esp_min=707|e6_min=718|teto_min=718|dif_min=11|classe=diverge_10_60|paridade=par|batidas=07:00 18:58|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col451|2026-09-25|esp_min=705|e6_min=718|teto_min=718|dif_min=13|classe=diverge_10_60|paridade=par|batidas=07:02 19:00|veredito=em_aberto
-ESTRUTURA_DIA|10/2026|col841|2026-10-20|esp_min=681|e6_min=522|teto_min=701|dif_min=-159|classe=diverge_acima_60|paridade=par|batidas=11:00 18:46 21:44 22:41|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 10/2026 5 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=5|horas=11.084600277777778|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=8|horas=20.397520712222224|colabs=6
-PARCIAL|10/2026|BATIDA|dias=28|horas=136.0465618775|colabs=18
-PARCIAL_TOTAL|10/2026|dias=41|horas=167.528682867500002|colabs=23
-ESTIMATIVA processados 125 universo 211 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1067, 'bate_ate_10min': 1011, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 49, 'dia_batida_impar': 69, 'impar_que_BATE': 20, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 45, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 48, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 408, 'dia_sem_lavratura_no_espelho': 1404, 'dia_isento_ou_ausencia': 201, 'dia_sem_trabalho_ambos': 28, 'esp_desconta_janela_declarada': 54, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.8% de 1067 dias comparados
-[3] ESTRUTURA     3 dia-colab      23.1 h    3 colabs
-[3] CADASTRO     15 dia-colab      38.5 h    6 colabs
-[3] BATIDA       38 dia-colab     178.3 h   21 colabs
-[4] TOTAL divergentes 56
-[5] colabs com divergencia: 28
-ESTRUTURA_DIA|11/2026|col37|2026-11-14|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col727|2026-11-10|esp_min=307|e6_min=0|teto_min=0|dif_min=-307|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
-ESTRUTURA_DIA|11/2026|col1021|2026-11-06|esp_min=841|e6_min=0|teto_min=0|dif_min=-841|classe=e6_zero_esp_trabalho/FORA|paridade=IMPAR|batidas=05:55 19:56|veredito=folga
-ESTRUTURA_DIAS_LINHAS 11/2026 3 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=3|horas=23.15|colabs=3
-PARCIAL|11/2026|CADASTRO|dias=15|horas=38.47013154777778|colabs=6
-PARCIAL|11/2026|BATIDA|dias=38|horas=178.25105356722221|colabs=21
-PARCIAL_TOTAL|11/2026|dias=56|horas=239.87118511499999|colabs=28
-TEMPO_SEGUNDOS 177.5
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 273276
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 61
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1558
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6837
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 61
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6781
-TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4986
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4986
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 593
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 187
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 495937
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 618
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3000
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 219
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13372
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 108
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3977
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 200
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 2
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 26387
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 5880
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41086
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 19816
-SOMA 10/2026 41   <- tem de ser igual a soma das classes (41) True
-SOMA 10/2026 HORAS 167.528682867500002 True
-SOMA 10/2026 COLABS_UNIAO 23 True
-SOMA 11/2026 56   <- tem de ser igual a soma das classes (56) True
-SOMA 11/2026 HORAS 239.87118511499999 True
-SOMA 11/2026 COLABS_UNIAO 28 True
-rc_sombra=0
-```
-
-- **SOMA:** as seis linhas exibem `True` no dado fornecido. [nao verificado]
-- **ESTRUTURA_DIAS_LINHAS:** ambas exibem `True`: `10/2026 5 True` e `11/2026 3 True`. [nao verificado]
-- **INCOMPLETO:** não aparece na saída fornecida desta parte. [nao verificado]
-
-_5898 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5906 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
