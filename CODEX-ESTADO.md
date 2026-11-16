@@ -1,7 +1,248 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 14:04** · publicado em **16/11/2026 14:04** (UTC-3)
+> Ultima resposta processada: **16/11/2026 14:09** · publicado em **16/11/2026 14:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 14:09 · sessao 34d827b27435 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · censo · origem=Code
+
+O código sustenta o corte: o evento de cadastro seleciona futuras existentes somente até o fim de `_janela_default(hoje)`; o gerador diário pula as futuras já existentes. Porém, o efeito visual varia: Minha Escala segue `trabalha=True`, enquanto o calendário pode mostrar folga pela precedência. (`app/ponto/services/cadastro_futuro.py:26-45`; `app/ponto/portas/celula.py:930-935`; `app/escala/views.py:40-54`; `app/ponto/status_dia.py:296-319`)
+
+O anexo informa 436 folgas além da competência, 37 contradições, 18 colaboradores; passado 274 e futuro dentro da competência 22, ambos sem contradições; EC 1038 com cinco folgas e cinco células `True`. São números fornecidos, sem reprodução das sondas; deduplicação por colaborador×dia, origem individual das células e efeito financeiro: **[não verificado]**.
+
+**(a) Chamadores por AST**
+
+Denomino **J** a janela retornada por `_janela_default(hoje)`: menor início e maior fim das competências correntes de **todas as empresas ativas**. Portanto, o corte herdado não é necessariamente o fim da competência da empresa do vínculo. (`app/ponto/management/commands/gerar_celulas.py:290-300`)
+
+Todos os chamadores abaixo herdam J: o suplemento restringe a seleção a amanhã em diante, `origem='gerada'`, células existentes e `data__range=(ini,fim)`; `desde` eleva o início e `datas` restringe as datas. Cada dia segue à porta com `estender_horizonte=False`. (`app/ponto/services/cadastro_futuro.py:26-45`)
+
+| Chamador de `regenerar_futuras_do_cadastro` | Evento representado | Herda corte |
+|---|---|---|
+| `relavrar_celulas_da_foto` | Foto de folgas materializada; alcança geração mensal, lançamento manual, alteração/remoção, lote e reparentamento. | Sim, J. (`app/escala/folgas.py:215-218`, `:298-299`, `:337`, `:380-382`, `:418-421`, `:523`) |
+| `sincronizar_foto_futura_do_calendario` | Troca do calendário do vínculo ou alteração da definição do calendário. | Sim; também seleciona suas próprias datas dentro de J. (`app/colaboradores/services/vinculo.py:450-465`; `app/escala/folgas.py:599-601`, `:619-642`) |
+| `_ec_vigencia_regenera_celulas` | Alteração de início/fim de vínculo existente por `save`; ignora criação/raw e vigência inalterada. Declara `substitui_dono=True`. | Sim, J. (`app/escala/signals.py:54-83`) |
+| `_ec_ancora_regenera_celulas` | Âncora alterada para valor não nulo, em vínculo existente. | Sim, J. (`app/escala/signals.py:111-134`) |
+| `_propagar_futuras_template` | Edição do TipoEscala, inclusive pelo admin; percorre vínculos daquele tipo. | Sim, J. (`app/escala/services/cadastro_tipo.py:328`, `:370-388`) |
+| `executar_vinculo` | Criação, atualização ou reativação do vínculo salvo; desde `data_inicio`, com substituição de dono. | Sim, J. (`app/colaboradores/services/vinculo.py:259-299`, `:335-340`) |
+| `fechar_vigencia` | Fechamento/alteração do fim por `update`; começa após o menor fim anterior/novo; substitui dono. | Sim, J. (`app/colaboradores/services/vinculo.py:641`, `:652-664`) |
+| `reabrir_vigencia_impossivel` | Reparo que reativa vínculo com vigência impossível; substitui dono. | Sim, J. (`app/colaboradores/services/vinculo.py:730`, `:744-752`) |
+| `marcar_trabalha_em_feriado` | Mudança da opção de trabalhar em feriado. | Sim, J. (`app/colaboradores/services/vinculo.py:890-913`) |
+| `reavaliar_pela_troca_de_municipio` | Município do posto alterado; percorre vínculos do posto. | Sim, J. (`app/colaboradores/services/vinculo.py:953-963`) |
+| `reverter_para_snapshot` | Restauração dos vínculos do snapshot; substitui dono. | Sim, J. (`app/colaboradores/services/vinculo.py:1029-1035`) |
+| `corrigir_escala_retroativa.Command._aplicar` | Correção retroativa, com suplemento futuro desde o piso solicitado; substitui dono. | Sim, J. (`app/colaboradores/management/commands/corrigir_escala_retroativa.py:225-245`) |
+| `regenerar_futuras_por_feriado` | Criação/edição/exclusão de feriado; alteração considera data antiga e nova. | Sim; corta as datas em J antes de chamar o suplemento. (`app/core/signals.py:28-43`; `app/ponto/services/cadastro_futuro.py:57-78`) |
+
+Sem `substitui_dono`, o suplemento preserva dias cujo vínculo responsável é outro; com ele, declara a intenção de substituir o responsável na linha do tempo. Isso não amplia J. (`app/ponto/services/cadastro_futuro.py:9-15`, `:37-45`)
+
+| Chamador direto de `_janela_default` | Uso e consequência |
+|---|---|
+| `regenerar_futuras_do_cadastro`, linha 26 | Define o teto das relavras futuras dos eventos acima. (`app/ponto/services/cadastro_futuro.py:26-32`) |
+| `regenerar_futuras_por_feriado`, linha 57 | Descarta eventos de feriado fora de J antes da seleção das células. (`app/ponto/services/cadastro_futuro.py:57-64`) |
+| `sincronizar_foto_futura_do_calendario`, linha 619 | Seleciona células futuras em J; a foto mensal pode avançar até o último dia dos meses envolvidos. (`app/escala/folgas.py:619-642`) |
+| `meses_da_janela`, linhas 75 e 76 | Consulta J de hoje e novamente no dia posterior ao seu fim; inclui corrente e seguinte para a foto. (`app/escala/management/commands/lavrar_foto_folgas.py:74-82`) |
+| `gerar_celulas.Command.handle`, linha 344 | Usa J quando não recebe o par explícito `--ini/--fim`. (`app/ponto/management/commands/gerar_celulas.py:337-350`) |
+
+Também aparecem chamadas em testes: contrato de DNA; janela corrente+seguinte; fechamento/reabertura/geradora sem vigência; relógio obrigatório, mutante e wrapper `real_futuro`. Não representam eventos adicionais de produção, e parte usa serviços carregados dinamicamente ou código mutado. (`app/escala/tests/test_celula_dia.py:165`; `app/escala/tests/test_foto_folga_continua.py:116-117`; `app/ponto/tests/test_cadastro_futuro_c4.py:58`, `:126`, `:191`; `app/ponto/tests/test_cadastro_futuro_c5d.py:121`, `:127`, `:135`, `:145`; `app/ponto/tests/test_cadastro_futuro_c5e.py:46-53`)
+
+**(b) Até onde cria células**
+
+Sem argumentos, `gerar_celulas` cria ausentes até o **maior fim das competências correntes das empresas ativas**. A data concreta depende desses cadastros: **[não verificado]**. Se todos os cortes fossem 21, em 16/11/2026 o fim seria 20/11/2026; isso é hipótese, não identificação do corte de produção. (`app/ponto/management/commands/gerar_celulas.py:299-300`, `:337-350`; `app/ponto/janelas.py:10-33`)
+
+Os pontos de criação de produção encontrados estão na porta da célula:
+
+| Criador | Alcance |
+|---|---|
+| `regenerar_celulas_vinculo` | Cria ausentes em `[desde,ate]`; a extensão automática só aumenta `ate` até o fim corrente, nunca reduz um fim solicitado mais distante. (`app/ponto/portas/celula.py:178-199`, `:289-294`) |
+| `editar_dia` | Cria célula humana na data solicitada, sujeito a vínculo responsável e guardas; não impõe teto na competência corrente. (`app/ponto/portas/celula.py:597-639`) |
+| `gerar_celulas_periodo` | Cria ausentes no intervalo recebido, respeitando cobertura do vínculo e a seleção adicional dos inativos. (`app/ponto/portas/celula.py:883-917`) |
+
+Há caminhos concretos para criar além da competência: a CLI aceita intervalo explícito; ESCALA-AUTO começa normalmente na próxima competência e regenera pelo menos seu primeiro dia, podendo ir até a última célula existente. Isso demonstra possibilidades de origem, sem atribuir a elas as células da sonda. (`app/ponto/management/commands/gerar_celulas.py:333-344`; `app/escala/services/escala_auto_executor.py:24-31`, `:52-58`, `:99-108`; origem da sonda **[não verificado]**)
+
+O próprio comentário do gerador registra um algoritmo anterior que podia cobrir duas competências em janeiro; sua participação no resíduo fornecido é **[não verificado]**. (`app/ponto/management/commands/gerar_celulas.py:293-295`)
+
+**(c) Relavra na virada de competência**
+
+**Não existe relavra geral de futuras existentes disparada pela simples virada**, no fluxo agendado examinado: o gerador diário seleciona somente `data=hoje` para regeneração; depois, a geração pula células existentes de hoje em diante. Entrar na nova janela não remove esse bloqueio. (`app/config/crons.py:425-426`; `app/ponto/management/commands/gerar_celulas.py:303-325`; `app/ponto/portas/celula.py:919-935`)
+
+Há relavra futura **condicionada a outro evento**: o cron de foto pode gravar uma foto faltante, cuja escrita chama a relavra. Quando a foto já está completa, ele pula o vínculo-mês; portanto esse caminho não constitui revisão do acervo contraditório existente. (`app/escala/management/commands/lavrar_foto_folgas.py:123-129`, `:163-170`; `app/escala/folgas.py:215-218`, `:298-299`)
+
+A correção “na manhã do próprio dia” é uma tentativa condicionada a célula gerada e vínculo responsável encontrado; o código não permite garantir o resultado dos 37 casos fornecidos. (`app/ponto/management/commands/gerar_celulas.py:316-325`; resultado individual **[não verificado]**)
+
+**(d) Corrente + seguinte na foto**
+
+O motivo registrado é antecipar a foto e a identificação de calendário vazio: com apenas a corrente, novembro ficava invisível durante parte de outubro, justamente quando ainda havia tempo para cadastrar. A rotina consulta a janela duas vezes e cobre os meses civis envolvidos. (`app/escala/management/commands/lavrar_foto_folgas.py:59-82`)
+
+A ordem configurada é foto às 05:47, depois geração às 05:50, dependente da foto: a intenção declarada é a folga chegar antes da célula. Execução efetiva desses horários em produção: **[não verificado]**. (`app/config/crons.py:425-426`; `app/escala/management/commands/lavrar_foto_folgas.py:24-29`)
+
+Em `cadastro_futuro`, o impedimento técnico é o próprio seletor: consulta somente J de hoje, filtra existentes nessa janela e desliga extensão do horizonte na porta. Não há nesses corpos uma recusa genérica de competência seguinte pela porta inferior, que aceita fim mais distante; eventual proibição normativa adicional: **[não verificado]**. (`app/ponto/services/cadastro_futuro.py:26-45`; `app/ponto/portas/celula.py:178-199`)
+
+Há ainda alcance diferente dentro da sincronização: seleciona células apenas em J, mas materializa FolgaDia até o fim dos meses civis envolvidos, porque uma folga posterior pode definir a fase de um dia anterior. A relavra final continua restrita às datas selecionadas. (`app/escala/folgas.py:619-642`)
+
+**(e) Leitores e decisões com `True` em dia de FolgaDia**
+
+A distinção central é esta: `EC.eh_dia_trabalho` devolve imediatamente o booleano da célula; já a precedência pode conservar `era_dia_previsto=True` e fazer uma FolgaDia válida vencer como fato. Folga de calendário precisa pertencer ao vínculo do dia; manual vale para a pessoa. (`app/escala/models.py:1092-1096`; `app/ponto/precedencia.py:235-239`, `:356-363`, `:379-407`)
+
+Nos resultados abaixo que dependem da precedência, “folga” pressupõe FolgaDia válida e ausência de fato de prioridade superior. (`app/ponto/precedencia.py:379-407`)
+
+| Leitor | O que mostra ou decide |
+|---|---|
+| **Minha Escala HTML**, hoje +13 dias | `True` mostra previsão de trabalho e horários do DNA, quando presentes. (`app/escala/views.py:38-60`; `app/escala/models.py:1124-1133`; `app/templates/escala/minha_escala.html:66-81`) |
+| **API escala/v2**, hoje +13 dias | Publica `trabalho=True`; os horários vêm do **template**, por `te.marcos_do_dia`. Renderização do aplicativo nativo: **[não verificado]**. (`app/api/views.py:918-945`) |
+| **API espelho/v2**, mês solicitado | No ramo sem card/batida, pode publicar status de folga pelo D4 e, simultaneamente, horários previstos preenchidos pelo template porque a célula diz `True`. (`app/api/views.py:1587-1618`; `app/ponto/status_dia.py:296-319`) |
+| **Calendário de ponto do colaborador no admin**, inclusive janela futura | Lê status do D4; no ramo sem batida/lavra aplicável, mostra folga pela precedência, apesar do booleano `True`. (`app/colaboradores/services/calendario.py:227-239`, `:634-639`, `:694-696`; `app/ponto/status_dia.py:286-319`) |
+| **Painel do vínculo e modal da agenda** | Seguem `eh_dia_trabalho` e marcos do vínculo: `True` entrega trabalho/horários. AgendaDia, quando presente, tem prioridade visual. O modal aceita semana navegável. (`app/colaboradores/views.py:280-294`, `:2239-2268`; `app/templates/colaboradores/partials/painel_vinculo.html:218-230`; `app/templates/colaboradores/partials/agenda_modal.html:97-133`) |
+| **Plano de Folgas** | A FolgaDia gravada ganha antes da consulta à célula; mostra seu tipo de folga. (`app/escala/views_plano_folgas.py:60-82`) |
+| **Disponibilidade / retorno de folga**, próximos sete dias | Se hoje é `False`, o primeiro futuro `True` vira data de retorno, sem consultar FolgaDia nessa decisão. (`app/colaboradores/views.py:2903-2921`) |
+| **Semana do posto** | Mantém `previsto=True`; sem batida, consulta precedência e pode registrar `explicado_por='folga'`, sem contar buraco. (`app/escala/services/semana_do_posto.py:132-158`) |
+| **Prévia de fase** | Antes de `desde`, lê a célula do vínculo atual; depois, projeta pelo template proposto. Portanto o trecho anterior à troca pode publicar plantão para uma célula `True`. (`app/escala/services/fase_na_tela.py:179-201`) |
+
+A grade também aplica FolgaDia válida como overlay: muda `tipo_dia` para folga e limpa marcos e órfãs, mesmo após a montagem inicial baseada na célula. (`app/escala/utils.py:1128-1153`, `:1844`)
+
+Algumas telas não alcançam normalmente a unidade pedida: o drawer termina no fim da corrente; o espelho normal termina em hoje, embora seu cabeçalho possa ler o restante da semana; o PDF chama o espelho com ontem e recorta as linhas impressas. (`app/colaboradores/services/drawer.py:115-123`; `app/ponto/services/espelho.py:222-229`, `:1225-1227`, `:1262`; `app/relatorios/pdf_espelho.py:598-603`)
+
+Para perguntas e cobranças:
+
+| Leitor/porta | Decisão |
+|---|---|
+| **Fábrica de perguntas** | Recusa `cel.data > hoje`; `True` sozinho não cria pergunta futura. Também consulta dispensa e vencimento dos marcos. (`app/chamados/services/fabrica_da_celula.py:110-121`) |
+| **Cartório avulso** | Recusa data futura; hoje, sem teto por marco, pode esperar o fim do turno. (`app/ponto/services/cartorio.py:2025-2038`) |
+| **`dia_sem_trabalho`** | Não consulta FolgaDia diretamente: dispensa com célula `False` ou ata preenchida de outro tipo, ressalvada ausência parcial. `True` sem essa ata não dispensa. (`app/chamados/juizes.py:445-460`) |
+| **Gate `celula_veta_cobranca`** | Consulta booleano e veredito; `False` veta como folga. FolgaDia isolada não integra esse gate. (`app/ponto/marcos.py:154-163`) |
+| **Perguntas no app / cobrança manual** | O app lê perguntas existentes filtradas por `pergunta_viva`; cobrança usa essa mesma lista pendente e o prazo dos pais. Não deriva pendência diretamente de `trabalha=True`. (`app/chamados/services/pergunta_no_app.py:59-85`; `app/chamados/services/cobranca.py:45-48`, `:82-94`) |
+| **Pergunta futura preexistente** | Não há garantia de invisibilidade: o C6 pode devolver viva quando não materializada. Existência disso no dado fornecido: **[não verificado]**. (`app/chamados/juizes.py:1482-1491`) |
+
+Há critérios diferentes no caminho da cobrança: o contador de faltas de hoje exclui fatos classificados como folga pela precedência; o trecho do funil emissor consulta precedência para veto de feriado e depois o gate da célula. Isso não prova emissão futura, diante das guardas temporais anteriores. (`app/ponto/services/faltas_de_hoje.py:39-62`; `app/ponto/management/commands/detectar_ausencias.py:607-634`; `app/chamados/services/fabrica_da_celula.py:114-115`)
+
+Quanto aos crons e instrumentos:
+
+| Leitor | Alcance e efeito |
+|---|---|
+| **Vigia de cadastro futuro**, dentro de `gerar_celulas` | Mede futuras existentes apenas em J; compara booleano/DNA com cadastro do vínculo do dia. Além de J fica fora dessa medição padrão; não relavra células. (`app/ponto/management/commands/gerar_celulas.py:344-353`; `app/ponto/services/vigia_cadastro_futuro.py:31`, `:52-80`, `:99-108`) |
+| **`tripwire_celulas`**, configurado às 06:05 | Mede geradas existentes até hoje+45. Compara com vínculo **ativo de colaborador ativo**; `True` contra cálculo `False` acusa STALE. Apenas imprime. (`app/config/crons.py:429`; `app/ponto/management/commands/tripwire_celulas.py:17-33`, `:357-370`) |
+| **Auditor C5**, configurado às 07:18 | Percorre FolgaDia sem teto de data, cruza pessoa+data com célula, acusa `trabalha is True` e exclui exportadas. Alcança o resíduo além da corrente. (`app/config/crons.py:542-543`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1536-1554`) |
+| **`celulas_contra_o_template`**, chamado pelo placar | Pode ler todo o acervo gerado `True`; compara com template do vínculo ativo, sem consultar FolgaDia. Só acusa esse conflito se o template também responder folga. (`app/escala/management/commands/celulas_contra_o_template.py:25-40`; `bin/placar_code.sh:261-263`) |
+| **`previsto_cego` / censo 12x36** | Leem previsão até o fim corrente da empresa; não cobrem o acervo posterior por suas janelas padrão. (`app/escala/services/previsto_cego.py:94-110`, `:137-141`; `app/ponto/management/commands/censo_fase_12x36.py:88-89`, `:151-179`) |
+| **Cartório diário, detector de ausências, vigia de hora** | Respectivamente: passado; hoje/ontem; células `True` de hoje/ontem com marco vencido. Não julgam antecipadamente as células-dia futuras da unidade pedida. (`app/ponto/management/commands/processar_cartorio.py:49-65`; `app/ponto/management/commands/detectar_ausencias.py:137-145`; `app/ponto/services/vigia_de_hora.py:20-23`, `:126-134`) |
+| **Vigia de perguntas / furos sem cobrança / reconciliar grade** | Trabalham sobre passado: perguntas com `data<hoje`, furos até ontem e grade descartando hoje/futuro antes da avaliação. (`app/chamados/management/commands/disparar_perguntas_competencia.py:177-189`; `app/ponto/services/furos_sem_cobranca.py:53-63`; `app/ponto/management/commands/reconciliar_grade.py:118-135`) |
+
+O C5 existente **não equivale ao contador descrito no anexo**: não aplica piso na competência corrente nem filtro explícito de vínculo ativo; exclui exportadas, aceita qualquer origem de célula e conta ocorrências de FolgaDia. Seu total usa `len(lista)`, sem deduplicar colaborador×dia. Resultados e execução efetiva desses instrumentos em produção: **[não verificado]**. (`app/chamados/management/commands/auditar_invariantes_chamados.py:560-567`, `:1536-1554`)
+
+**Script AST usado**
+
+O script abaixo faz leitura sintática, resolve imports locais, imports com apelido, atributos e aliases simples por atribuição; separa referências nominais/dinâmicas. Identidade de chamadas produzidas por reflexão ou `exec`: **[não verificado]**.
+
+```python
+import ast
+from pathlib import Path
+T = {'ponto.services.cadastro_futuro.regenerar_futuras_do_cadastro',
+     'ponto.management.commands.gerar_celulas._janela_default'}
+S = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)
+rows, errors = [], []
+def name(n):
+    if isinstance(n, ast.Name): return n.id
+    if isinstance(n, ast.Attribute):
+        return (name(n.value) or '<dinamico>') + '.' + n.attr
+    if isinstance(n, ast.Subscript) and isinstance(n.slice, ast.Constant):
+        return '<indice>.' + str(n.slice.value)
+def resolve(n, env):
+    s = name(n)
+    if s:
+        h, *r = s.split('.')
+        return '.'.join([env.get(h, h), *r])
+def scan(node, outer, mod, path, owner='<module>'):
+    nodes, children = [], []
+    def collect(n):
+        if isinstance(n, S): children.append(n); return
+        nodes.append(n)
+        for c in ast.iter_child_nodes(n): collect(c)
+    for c in ast.iter_child_nodes(node): collect(c)
+    env = dict(outer)
+    for n in nodes:
+        if isinstance(n, ast.Import):
+            for a in n.names:
+                env[a.asname or a.name.split('.')[0]] = a.name if a.asname else a.name.split('.')[0]
+        if isinstance(n, ast.ImportFrom):
+            base = n.module or ''
+            if n.level: base = '.'.join(mod.split('.')[:-n.level] + ([base] if base else []))
+            for a in n.names: env[a.asname or a.name] = base + '.' + a.name
+    for c in children:
+        
+
+[truncado em 20000 de 23948 caracteres]
+
+## 16/11 14:05 · sessao 2675e78cc9e0 · - · - · origem=Ronald (tmux)
+
+Complemento dos leitores futuros:
+
+| Leitor | Alcance real e decisão atual |
+|---|---|
+| `tripwire_celulas` | **Lê além da competência:** padrão hoje até hoje+45 dias (`app/ponto/management/commands/tripwire_celulas.py:357-362`), células existentes `origem='gerada'`; compara `trabalha` e DNA com o **vínculo ativo de colaborador ativo**, usando `eh_dia_trabalho_calculado` (`:17-33`). `True` quando o cadastro calcula `False` vira `STALE`, apenas impresso; não relavra (`:365-370`). Cron 06:05 (`app/config/crons.py:429`). |
+| Auditor `C5` | **Lê todo o acervo, inclusive além da competência:** percorre todas FolgaDia, sem filtro de data; aceita a do vínculo que cobre ou se outro vínculo cobre; cruza pessoa+data com CelulaDia; registra a que tem `trabalha is True`, excluindo competências exportadas (`app/chamados/management/commands/auditar_invariantes_chamados.py:1536-1554`). Cron 07:18 `--html` (`app/config/crons.py:542-543`). |
+| `celulas_contra_o_template` | **Lê todo o acervo, inclusive além da competência**, salvo `--desde` opcional: células geradas `True` de pessoas com vínculo ativo; acusa quando o **template do vínculo ativo** responde `False` (`app/escala/management/commands/celulas_contra_o_template.py:25-40`). Não lê FolgaDia; `True`+FolgaDia só acusa se template também disser folga (`:27-37`). Chamado por `bin/placar_code.sh:261-263`; cadastro o declara sem cron próprio (`app/config/crons.py:1156-1163`). |
+| `fase_conflitante` | **Não lê CelulaDia**; conta dias dos últimos 60 dias até hoje, comparando foto FolgaDia com âncora (`app/escala/services/fase_conflitante.py:65-83`). Porém carrega **todas as FolgaDia do vínculo ativo**, inclusive futuras, e a foto mais próxima influencia a resposta de cada dia contado (`:51-58`, `:71-80`). Escreve somente snapshot no comando (`app/escala/management/commands/lavrar_fase_conflitante.py:30-38`); cron 07:14 (`app/config/crons.py:498-499`). |
+| `previsto_cego` | **Limita-se à competência corrente de cada empresa**, não ao acervo além dela (`app/escala/services/previsto_cego.py:137-141`). Percorre dias até fim e lê `eh_dia_trabalho`; no primeiro dia com minutos previstos positivos deixa de considerar o colaborador cego (`:94-110`). Unidade é colaborador com ao menos duas batidas, não conflito célula/FolgaDia (`:165-175`, `:193-205`). Cron 07:33 (`app/config/crons.py:514-515`). |
+| `fase_na_tela` | Não é cron. O calendário admite mês/ano informado, inclusive futuro; antes de `desde` lê `ec_atual.eh_dia_trabalho`, depois de `desde` usa o template proposto; publica `plantao` e `futuro` (`app/escala/services/fase_na_tela.py:179-201`). Portanto `True` pode marcar plantão no trecho “antes da troca”, mesmo com FolgaDia; o trecho proposto vem do template (`:193-201`). Contagem de furos antes/depois fica nos últimos 28 dias até ontem (`:181-189`). |
+| `reconciliar_grade` | Padrão termina hoje; lê grade e lâmpadas DNA da janela, mas **descarta hoje e futuro** antes de avaliar (`app/ponto/management/commands/reconciliar_grade.py:78-80`, `:118-135`). Cron 06:20 sem `--apply` (`app/config/crons.py:460-462`). |
+| `censo_fase_12x36` | Padrão anterior+atual por empresa (`app/ponto/management/commands/censo_fase_12x36.py:88-89`), carrega células até fim (`:151-157`); lê `eh_dia_trabalho` em todos esses dias (`:178-179`), mas furos e folgas trabalhadas contam **antes de ontem** (`:185-192`). Cron `--min-plantoes 6 --lavrar`, sem `--curar` (`app/config/crons.py:638-639`). |
+| `vigia_b5_ausencia` | Exige célula já julgada e `data__lte=hoje`; exclui futuro (`app/ponto/management/commands/vigia_b5_ausencia.py:53-55`). |
+| `vigiar_motor_autoridade` | Janela hoje−31 até hoje, motor calcula apenas esse intervalo (`app/ponto/management/commands/vigiar_motor_autoridade.py:32-43`, `:57-59`); não mede resíduo futuro além corrente. |
+| `tripwire_vinculo_orfao` | Não lê CelulaDia nem FolgaDia; consulta vínculo ativo de pessoa não ativa (`app/colaboradores/management/commands/tripwire_vinculo_orfao.py:44-51`). |
+| `mapa_divergencia` | Janela da competência indicada por `--mes/--ano`; compara renders e separa futuro de passado nas contagens (`app/ponto/management/commands/mapa_divergencia.py:30-32`, `:93-98`, `:158-164`). Não é contador específico True×FolgaDia; separa divergências futuras por serem diferenças de apresentação, segundo comentário (`:83-87`). |
+
+**Diferenças relevantes para as DECISÕES:**
+
+- **Já existe um detector C5 de FolgaDia×célula True**, mas não tem o contrato do contador solicitado no anexo: não limita `data >= início da competência corrente`, não exige vínculo ativo, não distingue origem, exclui exportadas e percorre uma linha por FolgaDia (`app/chamados/management/commands/auditar_invariantes_chamados.py:1536-1554`). Seu total é `len(lista)`, podendo repetir pessoa+data quando houver duas FolgaDia nessa chave (`:560-567`); a possibilidade de duas fotos por pessoa/data é reconhecida pelo carregador (`app/ponto/precedencia.py:201-202`).
+- **Dois vigias alcançam horizontes diferentes:** vigia de cadastro futuro do gerador mede apenas sua janela corrente (`app/ponto/management/commands/gerar_celulas.py:344-346`; `app/ponto/services/vigia_cadastro_futuro.py:31`), enquanto `tripwire_celulas` mede as geradas existentes até hoje+45 (`app/ponto/management/commands/tripwire_celulas.py:357-362`, `:21-33`).
+- **Vínculos de comparação diferem:** vigia cadastro futuro consulta o vínculo do dia com a geradora da célula (`app/ponto/services/vigia_cadastro_futuro.py:52-59`); tripwire e contador contra template escolhem o ativo da pessoa (`app/ponto/management/commands/tripwire_celulas.py:17-27`; `app/escala/management/commands/celulas_contra_o_template.py:28-36`).
+- **Ausência de célula além corrente não é defeito para `medir_ausentes`:** ele pode carregar datas até hoje+45, mas só acusa se `ec.data_inicio <= d <= fim_da_competência` (`app/ponto/management/commands/tripwire_celulas.py:49-68`); já célula **existente** divergente além corrente entra em `medir_stale` (`:21-33`).
+- Execução efetiva, resultados e alarmes desses crons em produção: `[não verificado]`; o levantamento acima prova configuração e código, não sua execução.
+
+## 16/11 14:05 · sessao 79ab2edd0d65 · UI-VINCULO-MOSTRA-O-CALENDARIO · verificador · origem=Code
+
+**VEREDITO: REPROVA.** Existe carregador real pelo drawer que o teste de exclusividade não encontra. Isso invalida a premissa usada para limitar o smoke a `vincular.html`. (`app/folha/retrato_folha.py:1004`, `app/templates/folha/_retrato_o_que_fazer.html:73`, `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:278`)
+
+1. **Carregador real: sim; cobertura completa da interação: não.**
+
+   A sonda chama `carregarPainel(cid)`, entrega pelo stub o HTML obtido da view e percorre a implementação real de inserção do fragmento. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:83`, `:203`, `:216`; `app/templates/colaboradores/vincular.html:143`)
+
+   Ainda permitem verde com funcionalidade quebrada: [nao verificado]
+
+   - **Clique na linha quebrado:** a chamada direta pula o `onclick` e `abrirPainelVinculo`, inclusive a escrita de `_painelAtualCid`. (`app/templates/colaboradores/partials/vinculo_row.html:4`; `app/templates/colaboradores/vincular.html:136`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:216`)
+   - **HTMX sem processar o formulário:** a alternância depende do `onchange` nativo; o smoke não envia o formulário. Retirar `htmx.process(p)` pode preservar o resultado observado e comprometer as ações HTMX. (`app/templates/colaboradores/vincular.html:161`; `app/templates/colaboradores/partials/painel_vinculo.html:192`, `:196`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:221`)
+   - **Conteúdo invisível com área positiva:** a medição não exige `visibility:visible` nem opacidade positiva; essas regressões podem conservar o veredito. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:209`)
+
+   **O MORDE morde a ausência do `onchange`, por inspeção:** remove exatamente uma ocorrência e exige o calendário inicial nas três medições, incompatível com a expectativa principal de alternância. Sua execução efetiva está **[não verificado]**. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:243`, `:261`, `:265`)
+
+2. **A busca não cobre todas as formas, e omite um caminho existente.**
+
+   Só examina `.html`/`.js` em `templates` e `static`. A regex reconhece uma concatenação específica e o nome terminado em aspa simples; não cobre `reverse()` em Python, nome com aspas duplas ou todas as strings montadas. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:276`, `:278`)
+
+   O caminho omitido é concreto:
+
+   - `PORTA_DO_TIPO` oferece `colaboradores:painel_vinculo` para `escala`, `folga` e `sem_escala`. (`app/folha/retrato_folha.py:1004`)
+   - `portas_da_linha` resolve a rota por `reverse()` e publica `href`. (`app/folha/retrato_folha.py:1066`, `:1071`, `:1075`)
+   - A view entrega `retrato_portas`; o painel inclui o bloco que chama `abrirDrawer(..., p.href, ...)`. (`app/colaboradores/views.py:1006`, `:1016`; `app/templates/colaboradores/partials/painel_colaborador.html:26`; `app/templates/folha/_retrato_o_que_fazer.html:73`)
+   - O drawer faz `fetch(url)`, injeta o HTML e processa HTMX. (`app/templates/core/_drawer_generico.html:19`, `:26`, `:33`)
+
+   As duas cascas incluem esse drawer; um fluxo de produto efetivamente alcançável na `base_app`, com permissões e registros suficientes, está **[não verificado]**. (`app/templates/base.html:399`; `app/templates/base_app.html:154`)
+
+3. **A sentinela distingue descarte e troca de datas, mas não comprova a associação ao mês exibido.**
+
+   O teste exige as quatro chamadas exatas, incluindo multiplicidade, e a sequência esperada de datas dentro de cada calendário. Assim, descartar os retornos e mostrar as datas normais, inverter os retornos mensais ou trocar calendários com sentinelas distintas viola as asserções. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:154`, `:159`, `:163`)
+
+   A lacuna é que `_DIA.findall(corpo)` achata todos os `<time>` do calendário. Trocar os títulos dos meses ou colocar ambos os retornos sob um único título pode preservar essa sequência: o teste não verifica cada par **rótulo do mês → retorno**. A distinção entre calendários também usa `pk % 12`, sem garantir unicidade para IDs arbitrários. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:38`, `:154`, `:163`; `app/templates/colaboradores/partials/painel_vinculo.html:206`)
+
+4. **Escritores e leitores dos valores auditados:**
+
+   | Valor | Quem escreve | Quem lê |
+   |---|---|---|
+   | Fragmento e resposta do fetch stub | `_html` obtém a resposta real; `_mede` serializa; a sonda instala o stub e devolve `FRAG`. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:86`, `:250`, `:199`, `:201`) | `carregarPainel` chama fetch, lê `.text()` e insere o HTML. (`app/templates/colaboradores/vincular.html:147`, `:148`, `:152`) |
+   | `data-folgas-cal` e `hidden` | O template escreve o PK e a ocultação inicial; o `onchange` atualiza `hidden`. (`app/templates/colaboradores/partials/painel_vinculo.html:205`, `:196`) | O mesmo handler compara o atributo ao valor selecionado; a sonda lê atributo, estilo e geometria. (`app/templates/colaboradores/partials/painel_vinculo.html:196`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:209`) |
+   | `folga_calendario_id` no select | O template escreve opções/seleção; a sonda atribui outro PK e vazio. (`app/templates/colaboradores/partials/painel_vinculo.html:198`, `:200`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:222`, `:224`) | O handler lê `this.value`; a view lê o campo no POST. O smoke não faz esse POST. (`app/templates/colaboradores/partials/painel_vinculo.html:196`; `app/colaboradores/views.py:230`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:221`) |
+   | Calendário persistido do vínculo | Fixture: criação do vínculo. Produção: cópia do padrão, troca explícita e cópia em vínculos derivados. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:80`; `app/colaboradores/services/vinculo.py:161`, `:461`, `:1092`, `:1113`) | A view busca a escala ativa; o template usa seu ID para seleção e ocultação inicial. (`app/colaboradores/views.py:268`; `app/templates/colaboradores/partials/painel_vinculo.html:200`, `:205`) |
+   | Datas projetadas / sentinelas | A fonte produz as datas; o mutante substitui seu retorno. (`app/escala/folgas.py:43`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:153`) | A view monta a projeção; o template renderiza; o teste compara os `<time>`. (`app/colaboradores/views.py:304`; `app/templates/colaboradores/partials/painel_vinculo.html:206`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:163`) |
+   | `erros` | `abre` coleta somente linhas de stderr contendo `:ERROR:CONSOLE`. (`app/core/tests/test_smoke_chromium.py:124`) | O teste principal exige lista vazia; o MORDE descarta essa lista. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:263`, `:266`) |
+
+Execução dos testes e estado de produção: **[não verificado]**. [nao verificado]
 
 ## 16/11 14:04 · sessao 8d94586da715 · BUG-PAR-O-PAR · construtor · origem=Code
 
@@ -583,115 +824,4 @@ A sincronização **futura** preserva passado, mas as views de vincular/aplicar 
 
 **DONO: NAO SEI** — o juiz exige insumos além dos três valores relatados; esses insumos do caso estão `[nao verificado]`. Decisão: `app/ponto/management/commands/e6_oraculo.py:98-110`.
 
-## 16/11 13:24 · sessao 0e5369e6a2cb · UI-VINCULO-MOSTRA-O-CALENDARIO · sonda · origem=Code
-
-# Calendarios de folga em uso com grade vazia (modo dias_mes)
-
-UNIVERSO calendarios dias_mes em uso 72 | com grade vazia 68 | vinculos afetados 77. [nao verificado]
-
-| Calendario (pk) | Vinculos ativos | Grades que faltam | Dias que ja tem (por grade) | Quem usa |
-|---|---:|---|---|---|
-| 69 | 5 | meses de 30; fevereiro | 31: [4, 11, 18, 25] | col390/ec929, col392/ec923, col468/ec402, col575/ec925, col825/ec926 [nao verificado] |
-| 72 | 2 | fevereiro | 31: [1, 8, 15, 22, 25, 29]; 30: [5, 12, 15, 19, 26] | col309/ec1355, col491/ec1271 [nao verificado] |
-| 78 | 2 | meses de 31; fevereiro | 30: [1, 7, 14, 21, 28] | col921/ec1141, col1026/ec1581 [nao verificado] |
-| 87 | 2 | fevereiro | 31: [4, 11, 18, 25]; 30: [1, 8, 15, 22, 29] | col235/ec202, col600/ec944 [nao verificado] |
-| 122 | 2 | meses de 30; fevereiro | 31: [1, 2, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 26, 27, 28, 29, 30] | col346/ec1383, col610/ec1420 [nao verificado] |
-| 138 | 2 | meses de 31; fevereiro | 30: [1, 8, 15, 22, 29] | col476/ec1451, col864/ec1494 [nao verificado] |
-| 39 | 1 | fevereiro | 31: [5, 6, 7, 12, 13, 19, 20, 26, 27]; 30: [5, 6, 7, 12, 13, 19, 20, 26, 27] | col216/ec184 [nao verificado] |
-| 50 | 1 | meses de 31; fevereiro | 30: [30] | col128/ec910 [nao verificado] |
-| 53 | 1 | meses de 30; fevereiro | 31: [3, 11, 17, 25, 31] | col384/ec1347 [nao verificado] |
-| 54 | 1 | meses de 30; fevereiro | 31: [4, 9, 18, 23] | col310/ec1167 [nao verificado] |
-| 55 | 1 | meses de 30; fevereiro | 31: [5, 11, 19, 25] | col204/ec1045 [nao verificado] |
-| 56 | 1 | meses de 30; fevereiro | 31: [4, 13, 18, 27] | col962/ec1303 [nao verificado] |
-| 57 | 1 | meses de 30; fevereiro | 31: [6, 11, 20, 25] | col577/ec491 [nao verificado] |
-| 59 | 1 | meses de 30; fevereiro | 31: [4, 10, 18, 24] | col349/ec307 [nao verificado] |
-| 60 | 1 | meses de 30; fevereiro | 31: [3, 11, 17, 25, 31] | col587/ec500 [nao verificado] |
-| 61 | 1 | meses de 30; fevereiro | 31: [4, 12, 18, 26] | col205/ec1044 [nao verificado] |
-| 62 | 1 | meses de 30; fevereiro | 31: [5, 11, 19, 25] | col214/ec182 [nao verificado] |
-| 64 | 1 | meses de 30; fevereiro | 31: [8, 11, 15, 22, 29] | col919/ec1136 [nao verificado] |
-| 66 | 1 | meses de 31; fevereiro | 30: [2, 9, 16, 22, 23, 30] | col243/ec953 [nao verificado] |
-| 68 | 1 | fevereiro | 31: [6, 13, 18, 20, 27]; 30: [3, 10, 17, 22, 24] | col278/ec1350 [nao verificado] |
-| 70 | 1 | fevereiro | 31: [6, 11, 13, 20, 27]; 30: [3, 8, 10, 17, 24] | col203/ec1409 [nao verificado] |
-| 71 | 1 | meses de 31; fevereiro | 30: [4, 11, 15, 18, 25] | col617/ec1354 [nao verificado] |
-| 73 | 1 | fevereiro | 31: [2, 9, 15, 16, 23, 30]; 30: [6, 13, 15, 20, 27] | col263/ec1526 [nao verificado] |
-| 74 | 1 | fevereiro | 31: [3, 4, 10, 17, 24, 31]; 30: [6, 13, 15, 20, 27] | col922/ec1142 [nao verificado] |
-| 76 | 1 | fevereiro | 31: [6, 8, 13, 20, 27]; 30: [3, 8, 10, 17, 24] | col968/ec1358 [nao verificado] |
-| 77 | 1 | fevereiro | 31: [5, 12, 18, 19, 26]; 30: [2, 8, 9, 16, 23, 30] | col879/ec1359 [nao verificado] |
-| 79 | 1 | fevereiro | 31: [4, 5, 12, 19, 26]; 30: [1, 2, 9, 16, 23, 30] | col327/ec285 [nao verificado] |
-| 81 | 1 | fevereiro | 31: [2, 9, 16, 18, 23, 30]; 30: [6, 13, 15, 20, 27] | col522/ec446 [nao verificado] |
-| 82 | 1 | meses de 30; fevereiro | 31: [3, 10, 17, 24, 25, 31] | col292/ec1267 [nao verificado] |
-| 83 | 1 | fevereiro | 31: [5, 12, 18, 19, 26]; 30: [2, 9, 15, 16, 23, 30] | col917/ec1134 [nao verificado] |
-| 84 | 1 | fevereiro | 31: [6, 13, 20, 25, 27]; 30: [3, 10, 17, 22, 24] | col301/ec265 [nao verificado] |
-| 85 | 1 | fevereiro | 31: [4, 7, 14, 21, 28]; 30: [1, 4, 11, 18, 25] | col849/ec1001 [nao verificado] |
-| 86 | 1 | fevereiro | 31: [1, 4, 8, 15, 22, 29]; 30: [1, 5, 12, 19, 26] | col382/ec1269 [nao verificado] |
-| 89 | 1 | fevereiro | 31: [4, 11, 18, 25]; 30: [1, 8, 15, 22, 29] | col814/ec979 [nao verificado] |
-| 90 | 1 | meses de 30; fevereiro | 31: [4, 7, 14, 20, 26] | col89/ec1039 [nao verificado] |
-| 92 | 1 | meses de 30; fevereiro | 31: [2, 6, 12, 18, 24, 31] | col638/ec1306 [nao verificado] |
-| 94 | 1 | meses de 30; fevereiro | 31: [5, 12, 18, 19, 26] | col81/ec812 [nao verificado] |
-| 95 | 1 | meses de 30; fevereiro | 31: [1, 6, 11, 15, 21, 25, 28] | col900/ec1341 [nao verificado] |
-| 96 | 1 | meses de 31; fevereiro | 30: [4, 8, 14, 20, 26] | col107/ec1203 [nao verificado] |
-| 98 | 1 | meses de 31; fevereiro | 30: [5, 11, 18, 24, 29] | col114/ec1537 [nao verificado] |
-| 101 | 1 | meses de 30; fevereiro | 31: [3, 10, 18, 27] | col829/ec947 [nao verificado] |
-| 106 | 1 | meses de 30; fevereiro | 31: [1, 8, 16, 22, 29] | col749/ec1374 [nao verificado] |
-| 107 | 1 | meses de 30; fevereiro | 31: [8, 15, 18, 23, 29] | col87/ec802 [nao verificado] |
-| 109 | 1 | meses de 30; fevereiro | 31: [6, 13, 20, 27] | col245/ec1381 [nao verificado] |
-| 115 | 1 | fevereiro | 31: [4, 11, 18, 20, 25]; 30: [5, 8, 12, 19, 26] | col822/ec1360 [nao verificado] |
-| 118 | 1 | meses de 30; fevereiro | 31: [4, 10, 18, 24] | col43/ec1411 [nao verificado] |
-| 123 | 1 | meses de 31; fevereiro | 30: [4, 11, 18, 22, 25] | col865/ec1357 [nao verificado] |
-| 124 | 1 | meses de 30; fevereiro | 31: [4, 11, 18, 25] | col826/ec967 [nao verificado] |
-| 127 | 1 | meses de 30; fevereiro | 31: [2, 10, 25, 28, 29] | col950/ec1321 [nao verificado] |
-| 128 | 1 | meses de 30; fevereiro | 31: [2, 9, 11, 16, 23, 30] | col369/ec1313 [nao verificado] |
-| 132 | 1 | meses de 30; fevereiro | 31: [5, 12, 19, 25] | col903/ec1460 [nao verificado] |
-| 133 | 1 | meses de 30; fevereiro | 31: [4, 6, 13, 20, 27] | col129/ec853 [nao verificado] |
-| 134 | 1 | meses de 30; fevereiro | 31: [1, 7, 13, 19, 25] | col789/ec1472 [nao verificado] |
-| 135 | 1 | meses de 30; fevereiro | 31: [4, 10, 16, 22, 28] | col967/ec1316 [nao verificado] |
-| 136 | 1 | meses de 30; fevereiro | 31: [6, 12, 18, 24, 30] | col446/ec384 [nao verificado] |
-| 137 | 1 | meses de 30; fevereiro | 31: [2, 9, 16, 20, 25] | col502/ec1150 [nao verificado] |
-| 140 | 1 | fevereiro | 31: [2, 8, 16, 22, 30]; 30: [2, 8, 16, 22, 30] | col899/ec1512 [nao verificado] |
-| 141 | 1 | meses de 31; fevereiro | 30: [1, 7, 15, 21, 29] | col444/ec1513 [nao verificado] |
-| 143 | 1 | meses de 31; fevereiro | 30: [11] | col1022/ec1521 [nao verificado] |
-| 144 | 1 | meses de 31; fevereiro | 30: [8, 14, 22, 28] | col941/ec1556 [nao verificado] |
-| 145 | 1 | meses de 31; fevereiro | 30: [7, 15, 21, 29] | col945/ec1255 [nao verificado] |
-| 146 | 1 | meses de 31; fevereiro | 30: [1, 7, 15, 21, 29] | col985/ec1418 [nao verificado] |
-| 149 | 1 | fevereiro | 31: [6, 13, 15, 20, 27]; 30: [7, 14, 15, 21, 28] | col191/ec161 [nao verificado] |
-| 150 | 1 | meses de 31; fevereiro | 30: [1, 7, 14, 21, 28] | col933/ec1184 [nao verificado] |
-| 151 | 1 | meses de 31; fevereiro | 30: [1, 5, 12, 19, 26] | col991/ec1425 [nao verificado] |
-| 152 | 1 | meses de 31; fevereiro | 30: [2, 9, 16, 23, 30] | col992/ec1584 [nao verificado] |
-| 153 | 1 | meses de 31; fevereiro | 30: [1, 7, 14, 21, 28] | col474/ec1270 [nao verificado] |
-| 154 | 1 | meses de 30; fevereiro | 31: [1, 10, 15, 24, 29] | col529/ec1038 [nao verificado] |
-
-Leitura em [nao verificado]; nada foi escrito no banco. [nao verificado] Cadastro e do admin (L-099): corrigir pela tela do calendario. [nao verificado]
-
-## 16/11 13:24 · sessao 43aa1fa989b8 · - · - · origem=Ronald (tmux)
-
-- **Célula versus foto:** `EC.eh_dia_trabalho` retorna diretamente `cel.trabalha` se existir célula; consulta cálculo/foto somente sem célula (`app/escala/models.py:1087-1096`). O cálculo puro lê `FolgaDia` do próprio vínculo/mês e responde `False` se a data estiver na foto (`app/escala/models.py:1280-1288`, `app/escala/models.py:1309-1317`). `EC.marcos_do_dia` lê `dna.marcos`; sem marcos, usa template (`app/escala/models.py:1117-1133`).
-
-- **Grade/espelho leem folga por cima:** `_aplicar_folgas_foto` consulta juiz da folga e altera apenas o dicionário da grade: `tipo_dia='folga'`, colunas `None`, órfãs vazias (`app/escala/utils.py:1140-1153`); a grade composta chama esse overlay (`app/escala/utils.py:1844`). O espelho deriva seu flag `folga` desse `tipo_dia` e o publica no dia (`app/ponto/services/espelho.py:673-679`, `app/ponto/services/espelho.py:764-771`).
-
-- **Precedência também sobrepõe:** lê o `trabalha` da célula como `previsto`; mesmo `previsto=True`, uma folga lançada válida entra na lista e vence trabalho pela ordem de precedência (`app/ponto/precedencia.py:347-387`, `app/ponto/precedencia.py:46`). Folga de calendário só vale para o vínculo do dia; manual vale para pessoa (`app/ponto/precedencia.py:235-239`). Espelho carrega esses fatos (`app/ponto/services/espelho.py:646-649`); o compositor responde `FOLGA` quando `tipo_do_dia='folga'` (`app/ponto/services/dia_decidido.py:370-372`).
-
-- **Motor segue célula:** classificação de folga trabalhada pergunta a `EC.eh_dia_trabalho`; só sua resposta `False` aciona FT (`app/ponto/motor_calculo_v2.py:2445-2469`), separado em `periodos_ft` (`app/ponto/motor_calculo_v2.py:2492-2494`). Marcos vêm de EC e DNA, com fallback (`app/ponto/motor_calculo_v2.py:2290-2291`, `app/ponto/motor_calculo_v2.py:1532-1540`; outros consumidores `app/ponto/motor_calculo_v2.py:2686-2691`, `app/ponto/motor_calculo_v2.py:3014-3017`, `app/ponto/motor_calculo_v2.py:3391-3396`). Portanto, célula `True` e folga válida na foto permitem grade/precedência `folga` enquanto esta classificação do motor segue trabalho, pelas condições citadas.
-
-- **Folha:** fechamento monta datas previstas por `esc.eh_dia_trabalho` (`app/ponto/services/fechamento.py:724-733`), alimenta motor com células e chama `apurar_por_fatia` (`app/ponto/services/fechamento.py:748-756`). Horas normais/extras leem resultado (`app/ponto/services/fechamento.py:918-924`); FT lê períodos reconhecidos e publica `horas_folga_trabalhada` (`app/ponto/services/fechamento.py:925-928`, `app/ponto/services/fechamento.py:965-966`). TXT lê fechamentos recebidos ou persistidos (`app/folha/export.py:717-722`) e seus eventos (`app/folha/export.py:725-739`), incluindo `horas_folga_trabalhada` (`app/folha/export.py:439-446`).
-
-- **Totais/pago do espelho:** totais chamam `folha_manda` (`app/ponto/services/espelho.py:1283-1284`), que chama `totais_da_folha` (`app/relatorios/cartao_pela_celula.py:320-323`); esta chama `fechamento_lido` (`app/relatorios/cartao_pela_celula.py:69-76`), a mesma apuração em modo leitura (`app/ponto/services/fechamento.py:1759-1761`). Pago/rubricas do dia leem `DiaPago` (`app/ponto/services/espelho.py:805-813`).
-
-- **Dono individual:** os insumos necessários para executar `dono_da_divergencia` não estão no dado recebido `[nao verificado]`. O juiz distingue cadastro por flags específicas, depois batida, fase e `em_cadastro_x_realidade`; só o resíduo é estrutura (`app/ponto/management/commands/e6_oraculo.py:98-110`). Causa executada e dono individual do relato não se deduzem de `FolgaDia`, `trabalha=True` e `regeneracoes=0` isoladamente `[nao verificado]`.
-
-## 16/11 13:24 · sessao 325eca3c6fbc · - · - · origem=Ronald (tmux)
-
-O módulo escritor de `CelulaDia` é `app/ponto/portas/celula.py`; o registro de portas aponta somente para ele e o selo tem allowlist vazia (`app/core/portas.py:107-113`; `app/ponto/tests/test_chokepoint_celula_gate.py:19-23,48-54`).
-
-- **Geração normal:** `gerar_celulas_periodo` chama `ec.eh_dia_trabalho_calculado(d)` e cria a célula com `trabalha=valor`, geradora e DNA (`app/ponto/portas/celula.py:911-918`). Célula editada fica; passado existente só recebe DNA ausente, sem mudar `trabalha`; hoje/futuro existente é pulado pela função (`app/ponto/portas/celula.py:919-935`). O command possui suplemento próprio que regenera **hoje**, pela porta, antes da geração (`app/ponto/management/commands/gerar_celulas.py:303-325,345-350`).
-- **Regeneração:** lê `eh_dia_trabalho_calculado`, monta DNA e cria ausentes; para existente `origem='gerada'` divergente, altera `trabalha`, geradora e DNA e incrementa `regeneracoes`, guardando DNA anterior e instante (`app/ponto/portas/celula.py:289-311`). Não depende de a data ser futura; é a exceção formal ao passado imutável (`app/ponto/portas/celula.py:112-135`; `CLAUDE.md:149-157`). Recusa vínculo sem vigência declarada e pula competência exportada, salvo ato explícito `apesar_da_lavra` (`app/ponto/portas/celula.py:147-162,218-221,284-288`).
-- **Outras escritas de trabalha:** fora da vigência, a regeneração pode zerar `trabalha`, com ramos distintos para futuro e passado (`app/ponto/portas/celula.py:229-282`); `reverter_regeneracao_dia` restaura pelo DNA anterior e incrementa carimbos (`app/ponto/portas/celula.py:817-837`); `editar_dia` grava True/False, DNA, geradora, `origem='editada'`, autor/data, exigindo autor e motivo (`app/ponto/portas/celula.py:597-602,622-647`). Edição não incrementa os campos de regeneração (`app/ponto/portas/celula.py:575-580`). Troca de plantão delega duas edições ao mesmo escritor, cedente False e substituto True (`app/ponto/portas/celula.py:670-679,706-715`).
-
-**Caminho foto → célula:** foto mensal é gravada e relavrada na mesma transação (`app/escala/folgas.py:150-163,193-218`). `eh_dia_trabalho_calculado` consulta `FolgaDia` do vínculo/mês; data presente na foto dá False (`app/escala/models.py:1280-1288,1296-1317`). A relavra chama a regeneração para o passado e `regenerar_futuras_do_cadastro` para futuro (`app/escala/folgas.py:280-300`). O suplemento futuro seleciona apenas células **geradas já existentes**, a partir de amanhã e dentro de `_janela_default`, respeitando o dono do dia (`app/ponto/services/cadastro_futuro.py:26-45`). Essa janela é a união das competências **correntes** das empresas ativas (`app/ponto/management/commands/gerar_celulas.py:290-300`).
-
-Assim, uma foto de dezembro pode ser gravada sem alcançar células de dezembro que estejam fora daquela janela; o dado fornecido não informa dia do ato, cortes das empresas, origem/geradora das células nem se alguma guarda barrou — o motivo concreto é `[nao verificado]`. `regeneracoes=0` não prova que a função nunca foi chamada: o incremento só ocorre no ramo de reescrita divergente (`app/ponto/portas/celula.py:297-311`).
-
-**Portas de cadastro relevantes:** vínculo criado/atualizado copia calendário padrão e gera foto do mês corrente e seguinte (`app/colaboradores/services/vinculo.py:151-166,283-298`); depois regenera passado e futuras existentes (`app/colaboradores/services/vinculo.py:315-340`). Troca do calendário do vínculo sincroniza foto futura quando o FK muda (`app/colaboradores/services/vinculo.py:450-465`). Salvar calendário sincroniza seus vínculos (`app/escala/folgas.py:571-601`). A sincronização específica poupa passado e seleciona células futuras existentes, reconcilia foto futura mensal e regenera pela porta (`app/escala/folgas.py:605-642`). Mudança de vigência e âncora tem signals separados para passado e futuro (`app/escala/signals.py:54-83,111-134`); edição de template também propaga pela regeneração (`app/escala/services/cadastro_tipo.py:332-366`).
-
-**(b): sim, a chamada mensal `gerar_foto_folgas` alcança passado.** Sem `datas_foto`, seleciona foto de calendário pelo mês inteiro, apaga e recria todas as datas do calendário; não há filtro `>= hoje` (`app/escala/folgas.py:180-197`). Chama relavra desde o primeiro dia do mês (`app/escala/folgas.py:212-218`), e o ramo passado regenera de `desde` até **hoje**, sem `min(ate, hoje)` (`app/escala/folgas.py:290-296`). Portanto células passadas geradas podem ser tocadas pela exceção formal, respeitadas as guardas; não são genericamente protegidas dessa chamada pela irretroatividade (`app/ponto/portas/celula.py:284-311`; `CLAUDE.md:149-157`).
-
-_6042 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6045 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
