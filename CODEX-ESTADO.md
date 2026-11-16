@@ -1,7 +1,49 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 17:55** · publicado em **16/11/2026 18:00** (UTC-3)
+> Ultima resposta processada: **16/11/2026 18:02** · publicado em **16/11/2026 18:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 18:02 · sessao fbc0b0495986 · UI-EDITOR-CAL-REPETIR-CONFIRMA · verificador · origem=Code
+
+Os três achados não estão integralmente fechados: o verbo foi fechado; as provas de grade e texto desenhados continuam parciais. (`app/escala/tests/test_smoke_clique_folga_calendario.py:307`, `app/escala/tests/test_smoke_clique_folga_calendario.py:127`, `app/escala/tests/test_smoke_clique_folga_calendario.py:108`.) Execução dos mutantes: `[nao verificado]`; abaixo, conclusões por inspeção.
+
+1. **Bloqueia o fechamento dos achados de teste — duas lacunas persistem.** [nao verificado]
+
+   - **Grade desenhada: parcial.** Agora há comparação dos dias azuis depois de Cancelar, Substituir e copiar para grade vazia. Porém, `acesos()` só lê `backgroundColor`. Mutante no template: acrescentar `visibility:hidden` ao contêiner da grade. As cores permanecem computadas, os cliques programáticos continuam acionando os handlers e a medição anterior verifica apenas a `section`. Esse mutante escaparia por inspeção. (`app/templates/escala/folga_calendario_editar.html:55`; `app/escala/tests/test_smoke_clique_folga_calendario.py:68`, `app/escala/tests/test_smoke_clique_folga_calendario.py:119`, `app/escala/tests/test_smoke_clique_folga_calendario.py:127`, `app/escala/tests/test_smoke_clique_folga_calendario.py:312`, `app/escala/tests/test_smoke_clique_folga_calendario.py:321`, `app/escala/tests/test_smoke_clique_folga_calendario.py:329`.)
+
+   - **Verbo frouxo: fechado no cenário coberto.** A asserção exige exatamente `Substituir`; o salvar já exige `Salvar assim mesmo`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:307`, `app/escala/tests/test_smoke_clique_folga_calendario.py:281`.)
+
+   - **`innerText` sem caixa: fechado para ausência de retângulos e `visibility:hidden`, mas insuficiente para afirmar texto desenhado.** Mutante concreto, inserido no bloco `content` do template: `<style>#hx-confirma-texto{opacity:0}</style>`. Ele preserva caixa, `visibility` e as duas linhas de `innerText`, deixando o aviso transparente. Escaparia das verificações tanto do Repetir quanto do Salvar. (`app/templates/escala/folga_calendario_editar.html:3`; `app/templates/core/_dialogo.html:122`; `app/escala/tests/test_smoke_clique_folga_calendario.py:108`, `app/escala/tests/test_smoke_clique_folga_calendario.py:286`, `app/escala/tests/test_smoke_clique_folga_calendario.py:309`.)
+
+2. **Quem escreve a cor; colisões.** `renderGrade()` consulta `s.has(d)`, escreve fundo `#0078d4` para marcado e `#fff` para desmarcado, depois instala as células com `innerHTML`. Nesse produtor não há terceiro estado de seleção com o mesmo azul. (`app/templates/escala/folga_calendario_editar.html:88`, `app/templates/escala/folga_calendario_editar.html:91`, `app/templates/escala/folga_calendario_editar.html:93`.)
+
+   **O falso positivo é de visibilidade:** uma célula marcada escondida conserva o azul e entra em `acesos()`. Existe inclusive ocultação da grade inteira ao trocar para `semana_dia`, sem apagar seu DOM; a sonda de repetição não exercita esse caminho. Falso negativo por colisão entre estados atuais: `[nao verificado]`. (`app/templates/escala/folga_calendario_editar.html:188`; `app/escala/tests/test_smoke_clique_folga_calendario.py:128`.)
+
+3. **`getClientRects()`/`visibility` não bastam.** O mutante de opacidade acima já demonstra a lacuna: a guarda não consulta opacidade nem recorte. Além disso, “modal aberto” na sonda significa somente `!fundo.hidden`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:108`, `app/escala/tests/test_smoke_clique_folga_calendario.py:81`, `app/escala/tests/test_smoke_clique_folga_calendario.py:140`.)
+
+   **Sim, pode retornar `SEM-CAIXA` com o fundo visível:** basta esconder somente `#hx-confirma-texto` com `display:none` ou `visibility:hidden`. Abrir o componente remove `hidden` do fundo, sem restaurar essas propriedades do texto. Nesse caso, `['SEM-CAIXA']` tem comprimento 1 e reprova a exigência de duas linhas. (`app/templates/core/_dialogo.html:190`, `app/templates/core/_dialogo.html:193`; `app/escala/tests/test_smoke_clique_folga_calendario.py:108`, `app/escala/tests/test_smoke_clique_folga_calendario.py:286`, `app/escala/tests/test_smoke_clique_folga_calendario.py:309`.)
+
+4. **Fila — nova dependência da ordem do DOM.** `acesos()` preserva a ordem dos elementos, enquanto `dias()` ordena numericamente; portanto, `[5,29]` agora pressupõe células nessa ordem. O produtor atual satisfaz isso pelo laço crescente de dias. (`app/escala/tests/test_smoke_clique_folga_calendario.py:123`, `app/escala/tests/test_smoke_clique_folga_calendario.py:128`, `app/escala/tests/test_smoke_clique_folga_calendario.py:321`; `app/templates/escala/folga_calendario_editar.html:87`.)
+
+   O delta não acrescenta relógio, requisição de rede ou temporizador. As novas leituras usam os atrasos existentes de 200 ms e o orçamento virtual existente de 4000 ms; os recursos são preparados localmente pelo helper. (`app/escala/tests/test_smoke_clique_folga_calendario.py:147`, `app/escala/tests/test_smoke_clique_folga_calendario.py:151`, `app/escala/tests/test_smoke_clique_folga_calendario.py:191`; `app/core/tests/test_smoke_chromium.py:93`.)
+
+## 16/11 18:02 · sessao fe5242fb0794 · - · - · origem=Ronald (tmux)
+
+Inspeção estática; execução dos mutantes `[nao verificado]`.
+
+- **Fila — “grade desenhada” fechado parcialmente.** Os três casos agora conferem a lista azul, mas `acesos()` lê somente `backgroundColor`, sem conferir caixa, visibilidade ou opacidade. Mutante: acrescentar `visibility:hidden` ao contêiner `fc-grade` preserva a cor computada e os cliques programáticos; as asserções visuais continuariam satisfeitas por inferência. A medição anterior só verifica a visibilidade da `section`, não da grade filha. (`app/escala/tests/test_smoke_clique_folga_calendario.py:127`, `:119`, `:312`, `:321`, `:329`, `:68`; `app/templates/escala/folga_calendario_editar.html:55`.)
+
+- **Verbo frouxo fechado no cenário coberto:** o teste passou a exigir exatamente `Substituir`. O modal do salvar já exige `Salvar assim mesmo`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:307`, `:281`.)
+
+- **Fila — “innerText sem caixa” fechado parcialmente.** A guarda rejeita ausência de retângulos e `visibility:hidden`; entretanto, o mutante local `#hx-confirma-texto{opacity:0}` mantém retângulos, `visibility` e `innerText`, embora esconda o aviso. Passaria pelas verificações de linhas dos dois modais, por inferência. (`app/escala/tests/test_smoke_clique_folga_calendario.py:108`, `:109`, `:286`, `:309`; `app/templates/core/_dialogo.html:122`.)
+
+- **Autor da cor:** `renderGrade()` consulta `s.has(d)` e escreve fundo `#0078d4` quando marcado e branco quando desmarcado; depois instala as células via `innerHTML`. Nesse produtor não existe terceiro estado de célula com o mesmo fundo azul. Azul de botão, texto canônico e chips fica fora do seletor `#fc-grade-… > div`. Uma célula marcada escondida conserva a cor computada e pode produzir falso positivo de “desenhada”. (`app/templates/escala/folga_calendario_editar.html:88`, `:91`, `:93`, `:57`, `:66`, `:100`; `app/escala/tests/test_smoke_clique_folga_calendario.py:128`.)
+
+- **`SEM-CAIXA` com modal aberto é possível:** texto `display:none`, ancestral intermediário `display:none` ou texto `visibility:hidden` dispara a guarda mesmo com fundo aberto. A sonda chama “aberto” apenas de `!fundo.hidden`; o componente abre removendo esse atributo. (`app/escala/tests/test_smoke_clique_folga_calendario.py:108`, `:81`, `:140`; `app/templates/core/_dialogo.html:193`.)
+
+- **Relógio/rede:** o delta não acrescenta acesso a data, rede ou temporizadores; usa os atrasos existentes de 200 ms e orçamento virtual de 4000 ms. **Ordem:** acrescenta dependência da ordem DOM das células, pois `acesos()` não ordena o resultado, diferentemente de `dias()`. O produtor atual gera dias crescentes. Dependência nova entre testes `[nao verificado]`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:123`, `:128`, `:130`, `:150`, `:151`, `:191`; `app/templates/escala/folga_calendario_editar.html:87`.)
+
+O checkout não contém `.git`; confirmação independente do intervalo histórico `[nao verificado]`.
 
 ## 16/11 17:55 · sessao 7dcf95b49d87 · E4C-F2 · verificador · origem=Code
 
@@ -713,30 +755,4 @@ Achados para consolidar:
 - A guarda só texto do materializador é explicitamente de anuência (`app/chamados/services/materializacao.py:828-835`); classificá-la como D migrável, em vez de finalidade E/F preservada, exige censo/brief [não verificado].
 - O registro vigente mantém B2 por construir, duas abertas na obra, 141 entregues só com `!`, validadas/materializadas preservadas (`app/docs/LEIS.md:151`). A identificação atual dos pk 38251/38252, RED e trilha da correção não foram comprovados nesta leitura [não verificado].
 
-## 16/11 17:03 · sessao abdee5dbe35b · BUG-PAR-O-PAR · verificador · origem=Code
-
-1. **Q1 — Confere e fecha a delimitação.** Sem `data_evento`, o helper retorna antes de consultar K6; U163 é pulado antes dessa verificação. Portanto, L5 descreve a metade fora163 sem dia, não ausência de consulta a qualquer juiz. Isso corrige a premissa da L5 original sem exigir mudança na ordem da porta. (`app/chamados/services/materializacao.py:780`; `app/chamados/services/materializacao.py:785`; `app/chamados/services/materializacao.py:797`; `app/chamados/services/materializacao.py:801`.)
-
-2. **Q2 — Confere como precedência relativa das linhas da testemunha; a porta tem outra ordem de decisão.** Na testemunha, a guarda K6 antecede F6; F6 antecede declarado × gravado; `aplicavel` vem depois. Existem guardas intermediárias de data, derivação, satisfação e paridade, preservadas pelo “sem mudança”. (`app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:866`; `app/chamados/services/materializacao.py:871`; `app/chamados/services/materializacao.py:874`; `app/chamados/services/materializacao.py:884`; `app/chamados/services/materializacao.py:897`; `app/chamados/services/materializacao.py:908`; `app/chamados/services/materializacao.py:911`.)
-
-   Na **porta**, a sequência é: consulta antecipada da espera → implausibilidade → guarda explícita K6 → carimbo de validação → materialização, onde F6 pode recusar. A consulta antecipada percorre a testemunha, mas extrai **somente** seu estado de espera; não devolve automaticamente os bloqueios K6/F6 encontrados nela. (`app/chamados/services/validacao.py:573`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:617`; `app/chamados/services/validacao.py:645`; `app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`; `app/ponto/registro_batida.py:156`.)
-
-   Assim, uma U163 divergente bloqueada por F6 recebe **L2 na testemunha**, e a consulta antecipada não a devolve como L3. A diferença das ordens não cria colisão residual: o complemento fixa a unidade na testemunha, preserva expressamente a porta e distingue seus retornos. (`app/chamados/services/materializacao.py:886`; `app/chamados/services/materializacao.py:910`; `app/chamados/services/materializacao.py:754`; `complemento3_espinha_bug_par_c4_1611.txt:1`; `complemento3_espinha_bug_par_c4_1611.txt:3`; `complemento3_espinha_bug_par_c4_1611.txt:11`, texto fornecido.)
-
-3. **Q3 — Confere; L5 fora163 já não entrava no contador.** A seleção é exclusivamente U163. Retirar o balde projetado não remove um leitor efetivo de L5 nem altera o universo contado. O balde existente `bug_par_103_sem_dia` trata candidatas U103 carimbadas, outra situação; a lista do comando já inclui fora163 sem dia como linha falante. Isso fecha a correção da L5 original sem deixar balde a decidir pelo construtor. (`app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:331`; `app/chamados/management/commands/bug_par_103.py:71`; `app/chamados/management/commands/bug_par_103.py:75`; `app/chamados/management/commands/bug_par_103.py:77`.)
-
-4. **Q4 — Confere; a fixture é construível com K6 inalterado durante o percurso.** Já existe fixture com K6 estável em falso, `U60=U163={saida}`, respostas coincidentes com os marcos e validação administrativa que grava o par, reduzindo `universo` de 1 para 0. (`app/chamados/tests/test_bug_par_projetado.py:51`; `app/chamados/tests/test_bug_par_projetado.py:80`; `app/chamados/tests/test_bug_par_projetado.py:203`; `app/chamados/tests/test_bug_par_projetado.py:209`; `app/chamados/tests/test_bug_par_projetado.py:211`; `app/chamados/tests/test_bug_par_projetado.py:212`; `app/chamados/tests/test_bug_par_projetado.py:217`.)
-
-   Por inspeção, essa construção permite cobrar `pendentes_aval: 1→0`, `resolvidas: 0→1` e `congelados_no_recorte=1`. L3 continua pendente, portanto zero global não decorre do contrato. O F4 atual ainda obtém zero mudando K6; não prova a exigência corrigida. A execução da nova prova é **[nao verificado]**. (`app/chamados/tests/test_bug_par_projetado.py:47`; `app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:344`; `app/chamados/services/materializacao.py:351`; `app/chamados/services/materializacao.py:356`; `app/chamados/tests/test_bug_par_103.py:89`.)
-
-Quanto a exportada, dinheiro e `!`, as quatro respostas não ampliam a autorização original. A validação já agenda recálculo antes do plantio; ausência de batida nova não demonstra ausência de escrita financeira. Tocar gravado exportado continua sujeito ao `!`; efeito produtivo concreto é **[nao verificado]**. (`complemento3_espinha_bug_par_c4_1611.txt:1`, texto fornecido; `app/chamados/services/validacao.py:627`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/fechamento.py:1160`; `CLAUDE.md:265`; `CLAUDE.md:411`.)
-
-VEREDITO: CONFERE
-
-## 16/11 17:02 · sessao 863272485906 · - · - · origem=Ronald (tmux)
-
-**CONFERE, explicitando a diferença das ordens.** A unidade fixada no complemento3 é o estado da testemunha; nessa unidade, a precedência relativa informada confere: K6, F6, DXG, aplicável, preservadas as guardas intermediárias. (`app/chamados/services/materializacao.py:861`; `app/chamados/services/materializacao.py:884`; `app/chamados/services/materializacao.py:897`; `app/chamados/services/materializacao.py:908`; `app/chamados/services/materializacao.py:911`; `app/chamados/services/materializacao.py:914`.)
-
-A porta consulta DXG antes, depois implausibilidade, K6 explícito e materialização/F6; Q1 preserva expressamente essa ordem, e a NOTA separa os retornos. Portanto, a diferença deve constar no relatório, mas não constitui colisão residual que exija devolver o aval. (`app/chamados/services/validacao.py:571`; `app/chamados/services/validacao.py:577`; `app/chamados/services/validacao.py:614`; `app/chamados/services/validacao.py:645`; `app/chamados/services/materializacao.py:753`; `app/chamados/services/materializacao.py:754`.)
-
-_6124 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6126 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
