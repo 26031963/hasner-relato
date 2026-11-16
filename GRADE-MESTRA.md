@@ -14,18 +14,18 @@
 |---|---|---|
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
-| LATERAL-ESTRUTURA | 156 | 156 |
+| LATERAL-ESTRUTURA | 155 | 155 |
 | INSTRUMENTO | 177 | 177 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **457** | **456** |
+| **total** | **456** | **455** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 59; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 58; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 303 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 302 com a coluna
 
-resolve preenchido 12/457
+resolve preenchido 12/456
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -120,13 +120,13 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 | ? | ? |
 | E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) | BACKLOG:2016 | ? | ? |
 
-## LATERAL-ESTRUTURA (156)
+## LATERAL-ESTRUTURA (155)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
 | FERIADO-ESCALA | LATERAL-ESTRUTURA | Corrige o trabalho em feriados conforme a regra vigente. | HJ-074 | FERIADO-USA-A-LEI-DE-1609 | +++~.~... | EM VOO (escopo anterior superado) | BACKLOG:728; app/docs/RELATO.md:134 [+3 compl.] | ? | ? |
 | HJ-092 | LATERAL-ESTRUTURA | Encaminha ao admin as batidas que exigem decisão humana. | HJ-092 | decisão do admin | ++....... | REGISTRADA (fechada como BATIDA; deploy não comprovado) | BACKLOG:741 | ? | ? |
-| LANCAR-AUSENCIA-AFASTA-DESLIGADO | LATERAL-ESTRUTURA | Impede que lançar ausência transforme um desligado em afastado. | - | corte para ampliar o escopo | .+....... | REGISTRADA | BACKLOG:745 | ? | ? |
+| LANCAR-AUSENCIA-AFASTA-DESLIGADO | LATERAL-ESTRUTURA | Impede que lançar ausência transforme um desligado em afastado. | - | decisao de desenho registrada (bug: POST recusa desligado); censo no brief; atras do espelho-verdade | .+....... | REGISTRADA | BACKLOG:745 | ? | ? |
 | PILHA-DA-BATIDA-RECALCULO-INLINE | LATERAL-ESTRUTURA | Reduz o cálculo feito durante o registro da batida. | - | medir latência; O-OUTBOX | +........ | REGISTRADA | BACKLOG:753 | ? | ? |
 | O-BITEMPORAL-2 | LATERAL-ESTRUTURA | Preserva quando vínculos e regras valeram e foram registrados. | - | contratos_estruturais 20/20 | .+....... | REGISTRADA | BACKLOG:758 | ? | ? |
 | IA-DOMINIO-POR-FERRAMENTA | LATERAL-ESTRUTURA | Limita respostas da mensageria aos dados permitidos ao usuário. | - | 20/20 | .+....... | REGISTRADA | BACKLOG:759 | ? | ? |
@@ -174,13 +174,13 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | JUSTIFICATIVA-ENCERRA-ORIGEM | LATERAL-ESTRUTURA | Encerra a cobrança de origem quando a justificativa é aprovada. | - | grupo (1), sítio 1; irmã para cinco casos | + + + . . . . . + | REGISTRADA (parte no ar; cinco casos retidos) | app/docs/BACKLOG.md:1074 [+1 compl.] | ? | ? |
 | BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR | LATERAL-ESTRUTURA | Permite enviar atestado e explica corretamente os erros de reenvio. | - | smoke de reenvio | + + + + . . . . + | REGISTRADA (parte no ar; falta smoke) | app/docs/BACKLOG.md:1091 [+1 compl.] | ? | ? |
 | REABRIR-NAO-DESTROI | LATERAL-ESTRUTURA | Preserva respostas anteriores quando uma pergunta é reaberta. | - | smoke de clique | + + + . . . . . + | REGISTRADA (no ar desde 25/10; falta smoke) | app/docs/BACKLOG.md:1094 | ? | ? |
-| HE-DE-14H-NUM-DIA (col945 12/09) | LATERAL-ESTRUTURA | Apura por que um dia recebeu quase quinze horas extras. | - | corte; medição da causa | + . . . . . . . . | PARADA (aguarda corte para entrar na fila) | app/docs/BACKLOG.md:1103 | ? | ? |
+| HE-DE-14H-NUM-DIA (col945 12/09) | LATERAL-ESTRUTURA | Apura por que um dia recebeu quase quinze horas extras. | - | leitura da causa nas brechas (LATERAIS-1611 item 1) | + . . . . . . . . | PARADA (leitura liberada; nada constroi) | app/docs/BACKLOG.md:1103 | ? | ? |
 | BUG-ANCORA-NAO-REGENERA | LATERAL-ESTRUTURA | Faz a correção da fase de trabalho chegar aos dias afetados. | - | decisão sobre col824 e col899 | + + + + . . . . . | PARADA (cura fechada; decisões de cadastro pendentes) | app/docs/BACKLOG.md:1118 | ? | ? |
 | O-HAIKU-INVESTIGA | LATERAL-ESTRUTURA | Dá ao assistente consultas para investigar escalas e preparar propostas. | - | O-DIA-PAGO S4; VINCULO-LINHA-DO-TEMPO | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1130 [+4 compl.] | ? | ? |
 | O-JANELA-HE | LATERAL-ESTRUTURA | Conta hora extra fora da jornada conforme a regra ou autorização. | - | smoke dos treze passos | + + + . . . . + + | REGISTRADA (no ar desde 01/10; falta smoke) | app/docs/BACKLOG.md:1134 [+8 compl.] | ? | ? |
 | CHAMADO-NASCE-EM-EXPORTADA | LATERAL-ESTRUTURA | Investiga cobranças novas abertas para competências já pagas. | - | censo dos emissores; decisão de desenho | + + . . . . . . . | REGISTRADA (não construir) | app/docs/BACKLOG.md:1137 | ? | ? |
 | COL369-TRES-RESTANTES | LATERAL-ESTRUTURA | Apura três diferenças de intervalo, pagamento e vínculo do colaborador. | - | smoke da Gestão de HE; autorização para vínculo | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1156 | ? | ? |
-| O-GEO-DECISAO | LATERAL-ESTRUTURA | Registra decisões de localização e avisa quando um turno fica sem sinal. | - | corte das etapas 1-2; O198 antes do complemento | . + . . . . . . . | PARADA (etapas congeladas; complemento registrado) | app/docs/BACKLOG.md:1165 | ? | ? |
+| O-GEO-DECISAO | LATERAL-ESTRUTURA | Registra decisões de localização e avisa quando um turno fica sem sinal. | - | portao: fecho do ESPELHO-VERDADE (LATERAIS-1611 item 4); O198 antes do complemento | . + . . . . . . . | PARADA (CONGELADA ate o fecho do ESPELHO-VERDADE) | app/docs/BACKLOG.md:1165 | ? | ? |
 | O146 | LATERAL-ESTRUTURA | Paga a extra declarada na escala sem aumentar a jornada devida. | - | linha do copiloto | + + + + . . . . + | REGISTRADA (no ar; falta linha do copiloto) | app/docs/BACKLOG.md:1171 | ? | ? |
 | O236 | LATERAL-ESTRUTURA | Identifica por que colaboradores ficam fora do arquivo da folha. | - | medição por motivo; autorização se tocar exportada | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1203 | ? | ? |
 | O121 | LATERAL-ESTRUTURA | Permite corrigir vínculo passado pela tela com regeneração e trilha. | - | remedição; O65; seis testes antigos | + + + + . . . . . | REGISTRADA (A1 construído; suíte com seis falhas) | app/docs/BACKLOG.md:1228 [+1 compl.] | ? | ? |
@@ -193,7 +193,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | LOTE-1-PENDENTES | LATERAL-ESTRUTURA | Entrega censos, diferenças e pautas dos cinco grupos de pendências. | - | autorização da troca; decisões dos itens 2 e 5; cadastro do item 3 | + + . . . . . . . | PARADA (item 1 feito; restante espera autorização) | app/docs/BACKLOG.md:1279 | ? | ? |
 | LOTE-ATRASO-ADMITIDO | LATERAL-ESTRUTURA | Permite validar em lote os atrasos admitidos pelo colaborador. | - | S5b; UI-RESPOSTA-DIZ-O-QUE-E com smoke; autorização | . . . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1284 | ? | ? |
 | O19 | LATERAL-ESTRUTURA | Explica falhas e permite enviar documento de ausência pelo aplicativo. | - | autorização e retomada do APP | + . + . . . . . + | PARADA (servidor no ar; APP espera autorização) | app/docs/BACKLOG.md:1298 | ? | ? |
-| O28 | LATERAL-ESTRUTURA | Desconta a saída antecipada conforme o catálogo e explica o desconto. | - | DIFF de dinheiro; ! | + + . . . . . . . | PARADA (espera !) | app/docs/BACKLOG.md:1309 | ? | ? |
+| O28 | LATERAL-ESTRUTURA | Desconta a saída antecipada conforme o catálogo e explica o desconto. | - | DIFF so na competencia aberta (corte C 16/11), paga vai ao DP; ! dele depois do numero | + + . . . . . . . | PARADA (espera !) | app/docs/BACKLOG.md:1309 | ? | ? |
 | O38 | LATERAL-ESTRUTURA | Explica por que uma resposta validada não virou marcação de ponto. | - | O39 para item a; smoke | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1319 | ? | ? |
 | O43 | LATERAL-ESTRUTURA | Registra atos e perdas de sessão do administrador para auditoria. | - | O47; esteira seca | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1324 | ? | ? |
 | O58 | LATERAL-ESTRUTURA | Registra a emissão do espelho e permite auditoria por período livre. | - | parecer jurídico para hash; Card 4 | + + . . . . . . . | PARADA (hash espera parecer; registro pode avançar) | app/docs/BACKLOG.md:1342 | ? | ? |
@@ -202,7 +202,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | O147 | LATERAL-ESTRUTURA | Mede o efeito financeiro dos atrasos lançados na competência 09. | - | !; REGEN-EM-EXPORTADA | . + . . . . . . . | PARADA (competência exportada) | app/docs/BACKLOG.md:1401 | ? | ? |
 | O151 | LATERAL-ESTRUTURA | Julga chamados do rejulgamento forçado e retrata os sem lastro. | - | porta de retratação; trilha | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1405 | ? | ? |
 | O157 | LATERAL-ESTRUTURA | Conta os tipos corretos de ausência ao projetar férias. | - | DIFF por colaborador; catálogo | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1410 | ? | ? |
-| O175 | LATERAL-ESTRUTURA | Evita reconstruir turnos em competências já exportadas. | - | Teto de competência aberta ou corte sobre o cache | ++....... | PARADA (espera corte) | BACKLOG:1430 | ? | ? |
+| O175 | LATERAL-ESTRUTURA | Evita reconstruir turnos em competências já exportadas. | - | corte registrado (recusa exportada ou paga; ! nominal); construcao nas brechas com censo | ++....... | PARADA (defeito remedido 16/11: 998 linhas em 09 exportada) | BACKLOG:1430 | ? | ? |
 | O199 | LATERAL-ESTRUTURA | Faz o aceite da folga decidir o dia e encerrar a cobrança. | - | ! para estoque antigo; O246 | +++....++ | REGISTRADA (ato publicado; estoque pendente) | BACKLOG:1454 [+1 compl.] | ? | ? |
 | O202 | LATERAL-ESTRUTURA | Faz pings consultarem a mesma avaliação oficial de localização. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1457 | ? | ? |
 | O204 | LATERAL-ESTRUTURA | Preserva a hora enviada pelo aparelho e registra descartes. | - | Linha do placar em pouso próprio | ++++...++ | REGISTRADA (produto publicado; placar pendente) | BACKLOG:1459 [+1 compl.] | ? | ? |
@@ -212,7 +212,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | INTERVALO-DECLARADO | LATERAL-ESTRUTURA | Pergunta sobre intervalo incompleto e registra a resposta aprovada. | - | BOs em curso; sinal da célula; validação | ++....... | REGISTRADA | BACKLOG:1503 | ? | ? |
 | REGEN-EXPORTADA-SEM-EFEITO | LATERAL-ESTRUTURA | Permite corrigir células exportadas sem outros efeitos medidos. | - | Seis condições; reversão; janela de autorização | ++....... | REGISTRADA (validade atual da janela ?) | BACKLOG:1512 | ? | ? |
 | INTERMITENTE-BATIDA-SOLTA | LATERAL-ESTRUTURA | Investiga batida isolada de intermitente mostrada como dia correto. | - | Censo de frota; juiz de turno aberto | ++....... | REGISTRADA | BACKLOG:1526 | ? | ? |
-| INTERMITENTE-K-FORA-DO-DNA | LATERAL-ESTRUTURA | Preserva o desenho histórico do intervalo do intermitente. | - | Medição e decisão | +........ | REGISTRADA | BACKLOG:1527 | ? | ? |
+| INTERMITENTE-K-FORA-DO-DNA | LATERAL-ESTRUTURA | Preserva o desenho histórico do intervalo do intermitente. | - | decisao de desenho registrada (medir antes de desenhar); atras do espelho-verdade | +........ | REGISTRADA | BACKLOG:1527 | ? | ? |
 | INTERMITENTE-CONVOCACAO-CADASTRO | LATERAL-ESTRUTURA | Registra a convocação que define o trabalho do intermitente. | - | Cadastro; leitor na porta da célula | .+....... | REGISTRADA | BACKLOG:1528 [+1 compl.] | ? | ? |
 | O269 | LATERAL-ESTRUTURA | Atualiza setembro preservando o arquivo pago e nomeando diferenças. | - | Prova do retrato; DIFF; reversão; Pauta DP | .+....... | REGISTRADA | BACKLOG:1554 [+1 compl.] | ? | ? |
 | O270 | LATERAL-ESTRUTURA | Calcula indenização de intervalo nas jornadas de quatro a seis horas. | - | O263-FT; conferência de CCT; DIFF | ++....... | REGISTRADA | BACKLOG:1555 | ? | ? |
@@ -223,12 +223,11 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | O281 | LATERAL-ESTRUTURA | Mede quatro suspeitas antes de decidir as correções. | - | Medição do bloco A | .+....... | REGISTRADA (leitura antiga) | BACKLOG:1567 | ? | ? |
 | O282 | LATERAL-ESTRUTURA | Atualiza estados que ficaram antigos após mudanças nos fatos. | - | O281, bloco A item 3 | .+....... | REGISTRADA | BACKLOG:1568 | ? | ? |
 | O314 | LATERAL-ESTRUTURA | Verifica se a falta do mesmo dia é descontada duas vezes. | - | Medir 28 linhas | .+....... | REGISTRADA | BACKLOG:1600 | ? | ? |
-| CARIMBO-POR-ORIGEM | LATERAL-ESTRUTURA | Mantém corretos os horários de atualização das gravações. | - | Autorização de desenho | ++....... | PARADA | BACKLOG:1604 | ? | ? |
-| EMPATES-SEM-VIGENCIA | LATERAL-ESTRUTURA | Evita anunciar empate com convenção fora da vigência. | - | Decisão da competência de referência | ++....... | PARADA | BACKLOG:1607 | ? | ? |
+| CARIMBO-POR-ORIGEM | LATERAL-ESTRUTURA | Mantém corretos os horários de atualização das gravações. | - | decisao de desenho registrada (origem: save/QuerySet nos modelos com auto_now); censo no brief; atras do espelho-verdade | ++....... | PARADA | BACKLOG:1604 | ? | ? |
+| EMPATES-SEM-VIGENCIA | LATERAL-ESTRUTURA | Evita anunciar empate com convenção fora da vigência. | - | decisao de desenho registrada (mesmo predicado de vigencia do juiz); censo no brief; atras do espelho-verdade | ++....... | PARADA | BACKLOG:1607 | ? | ? |
 | EXPIRA-EM-ANDA-COM-HOJE | LATERAL-ESTRUTURA | Guarda a expiração real sem avançá-la diariamente. | - | Censo dos leitores | ++....... | REGISTRADA | BACKLOG:1609 | ? | ? |
 | FIO-MORTO-NASCE-NO-DIA-21 | LATERAL-ESTRUTURA | Mede a perda de caminhos de resolução no início da competência. | - | Censo por data da competência | ++....... | REGISTRADA (não construir) | BACKLOG:1611 | ? | ? |
-| A2-SO-CHEGA-PELA-UNIDADE | LATERAL-ESTRUTURA | Define quem registra mudanças de precedência no julgamento em lote. | - | Decisão entre lote e unidade | ++....... | PARADA | BACKLOG:1619 | ? | ? |
-| GRAVADO-NAO-CARIMBA-A-REGUA | LATERAL-ESTRUTURA | Registra qual régua calculou cada competência. | - | Decisão do local e obrigação do carimbo | ++....... | PARADA | BACKLOG:1630 [+4 compl.] | ? | ? |
+| GRAVADO-NAO-CARIMBA-A-REGUA | LATERAL-ESTRUTURA | Registra qual régua calculou cada competência. | - | decisao de desenho registrada (carimbo no ato da lavra); censo no brief; atras do espelho-verdade | ++....... | PARADA | BACKLOG:1630 [+4 compl.] | ? | ? |
 | ESCREVER-CORTA-PAUTA-EM-SILENCIO | LATERAL-ESTRUTURA | Impede perder orientação ao gravar uma pauta longa. | - | Censo dos 22 chamadores | ++....... | REGISTRADA | BACKLOG:1636 [+1 compl.] | ? | ? |
 | COL30-FORA-DOS-TRES-CONJUNTOS-DA-FOLHA | LATERAL-ESTRUTURA | Investiga colaborador ausente das categorias da prévia da folha. | - | Localizar a causa antes da relavratura | ++....... | REGISTRADA | BACKLOG:1644 | ? | ? |
 | ABRANGENCIA-DOS-QUATRO-INSTRUMENTOS-SEM-PDF | LATERAL-ESTRUTURA | Confere o enquadramento territorial pelos documentos das convenções. | - | Chegada dos PDFs | ++....... | PARADA | BACKLOG:1645 | ? | ? |
@@ -279,7 +278,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | CICLO-C-CEL-TEMPLATE | LATERAL-ESTRUTURA | Trata possível espera circular entre cadastro e célula. | - | reproduzir e medir | ......... | REGISTRADA | BACKLOG:2077 | ? | ? |
 | EFEITO-SEM-FALLBACK-CATALOGO | LATERAL-ESTRUTURA | Evita voltar silenciosamente ao efeito antigo quando a leitura falha. | - | medir alcance | ......... | REGISTRADA | BACKLOG:2079 | ? | ? |
 | TRANCA-VIVAS-08-FILA | LATERAL-ESTRUTURA | Alinha o significado do resgate e mede seus efeitos. | - | medir universo e impacto | ......... | REGISTRADA | BACKLOG:2095 | ? | ? |
-| SETNULL-ORFA-DNA | LATERAL-ESTRUTURA | Trata célula futura com vínculo apagado ainda no DNA. | - | corte de desenho | +........ | PARADA (pergunta de desenho) | BACKLOG:2099 | ? | ? |
+| SETNULL-ORFA-DNA | LATERAL-ESTRUTURA | Trata célula futura com vínculo apagado ainda no DNA. | - | decisao de desenho registrada (delecao de EC pela porta da celula); censo no brief; atras do espelho-verdade | +........ | PARADA (decisao de desenho registrada) | BACKLOG:2099 | ? | ? |
 
 ## INSTRUMENTO (177)
 
@@ -1557,10 +1556,11 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 |---|---|---|---|---|---|---|---|
 | O59 | UI | Monta o dossiê de rescisão com documentos já emitidos. | - | O58; UI-RESCISAO | .+....... | REGISTRADA (absorvida em 13/11 pela UI-RESCISAO) | app/docs/BACKLOG.md:1343 |
 
-## OBSOLETAS (passada 2, 139; listadas a parte, baixa decidida no chat)
+## OBSOLETAS (passada 2, 139 + 1 fechada 16/11; listadas a parte, baixa decidida no chat)
 
 | obsoleta | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
+| A2-SO-CHEGA-PELA-UNIDADE | LATERAL-ESTRUTURA | Define quem registra mudanças de precedência no julgamento em lote. | - | reabre se nascer leitor de producao da chave | ++....... | FECHADA 16/11 sem construir (LATERAIS-1611 item 3): 0 leitor, logs/LATERAIS-1611/remede.md | BACKLOG:1619 |
 | API-CHAMADOS-V2-SERVE-PERGUNTA-SEM-A-LEI | LATERAL-ESTRUTURA | Faz a API entregar perguntas reconhecidas como vivas. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1621 |
 | AUTORIDADE-DE-FOTO-AUSENTE | ESPINHA-E | Centraliza a decisão sobre ausência de foto. | - | Autoridade de foto antes de retirar o julgador | .+....... | REGISTRADA | BACKLOG:1542 |
 | BO-0511-G2-TRIAGEM | INSTRUMENTO | Classifica os casos do BO e indica seus destinos. | - | ? (precedência não indicada) | +........ | REGISTRADA (medida pronta) | BACKLOG:2042 |
