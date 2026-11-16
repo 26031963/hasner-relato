@@ -15,17 +15,17 @@
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
 | LATERAL-ESTRUTURA | 154 | 154 |
-| INSTRUMENTO | 177 | 177 |
+| INSTRUMENTO | 178 | 178 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **455** | **454** |
+| **total** | **456** | **455** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 387; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
 fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 301 com a coluna
 
-resolve preenchido 12/455
+resolve preenchido 12/456
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -460,6 +460,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | NAO-LAVRADA-PASSADO | INSTRUMENTO | Mostra dias passados que ainda não receberam ata. | - | pouso TIPO item 3; medir dono | .+....... | REGISTRADA | BACKLOG:2096 |
 | SOMBRA-COM-TETO | INSTRUMENTO | Limita a memória usada pelas sondas na sombra. | - | contrato; pouso próprio | ......... | REGISTRADA | BACKLOG:2098 |
 | SOMBRA-LEITURA-V3 | INSTRUMENTO | Permite leituras concorrentes com isolamento e prova corretos. | - | corrigir falhas do instrumento | ..+..+... | REGISTRADA (v1/v2 reprovadas) | BACKLOG:2101 |
+| ROTA-DA-PISTA-NO-SUITE | INSTRUMENTO | Manda a suite que nao e de pouso para a pista e deixa a trava da VM para espinha, pouso e push. | - | aval novo para construir | ......... | REGISTRADA | BACKLOG:2086 |
 
 ## UI (39)
 
@@ -858,7 +859,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | O48 | ESPINHA-E | Faz o fechamento ler o dia atual em vez de cálculo envelhecido. | - | status encerrado; migration; ! do passo 5 | ++~....++ | REGISTRADA (passos no ar; status e exportação pendentes) | app/docs/BACKLOG.md:1329 | ? | ? |
 | O49 | ESPINHA-E | Impede pagar o intervalo cadastrado como hora extra indevida. | - | E2; DIFF; ! | ++....... | PARADA (espera !) | app/docs/BACKLOG.md:1330 | ? | ? |
 | O50 | ESPINHA-E | Impede vínculos com fim anterior ao início e encaminha o passivo. | - | saneamento dos 62; !; constraint | +++...... | PARADA (passivo espera !) | app/docs/BACKLOG.md:1331 | ? | ? |
-| O50-CELULA-APOS-DESLIGAMENTO | ESPINHA-E | Impede gerar trabalho previsto após o desligamento. | - | depois do dia 20 (PREPARA lateral); apply do passivo = ! proprio | ++....... | REGISTRADA (R4 SIM 16/11: PREPARA depois do dia 20; revisao do aval no Codex) | logs/AVAIS-1515/respostas_r4_e1porta_1611.txt; app/docs/BACKLOG.md:1410 | ? | ? |
+| O50-CELULA-APOS-DESLIGAMENTO | ESPINHA-E | Impede gerar trabalho previsto após o desligamento. | - | depois do dia 20 (PREPARA lateral); apply do passivo = ! proprio | ++....... | REGISTRADA (R4 SIM 16/11; revisao do aval DEVOLVEU 5 condicoes, no topo do RELATO; PREPARA depois do dia 20) | logs/AVAIS-1515/respostas_r4_e1porta_1611.txt; app/docs/BACKLOG.md:1410 | ? | ? |
 | O50-COMPLEMENTO-LAUDO-1311 | ESPINHA-E | Preserva trabalho anterior e elimina previsões futuras indevidas ao desligar. | - | O50-DESLIGAR-ENCERRA-TUDO; ! retroativo | ++....... | REGISTRADA (absorvida pela variante da O50) | app/docs/BACKLOG.md:1334; app/docs/BACKLOG.md:1332 | ? | ? |
 | O50-DESLIGAR-ENCERRA-TUDO | ESPINHA-E | Faz o desligamento encerrar vínculos, previsões futuras e pendências pela porta. | - | LEI-DESLIGADO; vaga serial; ! retroativo | ++....... | REGISTRADA (censo concluído; construção na próxima vaga) | app/docs/BACKLOG.md:1332 | ? | ? |
 | O51b | ESPINHA-E | Mostra atraso e saída antecipada com os valores da folha. | - | O68; antes do envio de 09 | ++....... | REGISTRADA | app/docs/BACKLOG.md:1355 | ? | ? |

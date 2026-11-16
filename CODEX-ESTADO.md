@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 15:28** · publicado em **16/11/2026 15:29** (UTC-3)
+> Ultima resposta processada: **16/11/2026 15:33** · publicado em **16/11/2026 15:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 15:33 · sessao bdfad5118ce7 · UI-EDITOR-CALENDARIO-TRES-GRADES · verificador · origem=Code
+
+1. **PROCEDE — curas do item 3; NÃO PROCEDE — cura completa do item 5.**
+
+O `finally` cobre o reenvio síncrono por `requestSubmit()`: o guarda encontra `confirmado=true`, e a autorização é zerada ao retornar, inclusive se o `required` impedir o evento ou ocorrer exceção. Também cobre o retorno de `form.submit()`; esse fallback dispensa validação e evento `submit`, mas só é chamado após resposta afirmativa. Não identifiquei novo caminho do editor que envie grade vazia em `dias_mes` sem pergunta. (`app/templates/escala/folga_calendario_editar.html:138`, `app/templates/escala/folga_calendario_editar.html:143`, `app/templates/escala/folga_calendario_editar.html:147`, `app/templates/escala/folga_calendario_editar.html:151`)
+
+Editar o nome agora apenas redesenha, sem repor `dias_*` após `fcModo()` esvaziá-los. (`app/templates/escala/folga_calendario_editar.html:128`, `app/templates/escala/folga_calendario_editar.html:180`)
+
+**Resta uma lacuna no selo das grades:** ele verifica somente a abertura das `section`, sem medir sua visibilidade após o JS. Contraexemplo por inspeção: acrescentar ao final da inicialização a ocultação de `fc-tam-30` e `fc-tam-28` preservaria as asserções estáticas; os cliques programáticos do smoke continuariam alcançando seus dias. O delta protege `hidden/display:none` diretamente na seção inicial, mas ainda não protege integralmente “três grades visíveis ao mesmo tempo”. (`app/escala/tests/test_editor_calendario_tres_grades.py:37`, `app/escala/tests/test_editor_calendario_tres_grades.py:89`, `app/escala/tests/test_editor_calendario_tres_grades.py:92`, `app/escala/tests/test_smoke_clique_folga_calendario.py:51`)
+
+Execução desse mutante: **[não verificado]**.
+
+2. **PROCEDE — leitores e escritores depois do delta.**
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| `confirmado` | Inicialização em falso; resposta afirmativa põe verdadeiro; `finally` limpa. (`app/templates/escala/folga_calendario_editar.html:136`, `:150`, `:151`) | Guarda de `submit`. (`app/templates/escala/folga_calendario_editar.html:138`) |
+| `dias_<tam>` no formulário | `syncHidden()` serializa `sel`; inicialização, alternar dia, repetir e voltar a `dias_mes` o acionam. `fcModo()` limpa em `semana_dia`. (`app/templates/escala/folga_calendario_editar.html:109`, `:110`, `:119`, `:125`, `:180`, `:181`) | Navegador/sonda serializam; view lê, filtra e entrega à porta; porta persiste `dias`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:56`; `app/escala/views.py:342`, `:347`, `:356`; `app/escala/folgas.py:594`) |
+| Canônico do editor | `renderGrade()` usa seleção ordenada e nome atual; input do nome chama esse redesenho. (`app/templates/escala/folga_calendario_editar.html:80`, `:94`, `:106`, `:128`) | Exibição em `fc-canonico-*`; não é campo enviado à view. (`app/templates/escala/folga_calendario_editar.html:57`, `:106`; `app/escala/views.py:321`, `:342`) |
+| Canônico da lista | View monta a partir de nome, tamanho e dias persistidos. (`app/escala/views.py:293`, `:297`) | Template da lista imprime `t.canonico`. (`app/templates/escala/folga_calendarios_lista.html:22`) |
+
+3. **PROCEDE — o novo teste morde a autorização velha, por inspeção.** [nao verificado]
+
+A sonda apaga o nome antes do primeiro Sim e restaura antes do segundo Salvar. Sem a limpeza no `finally`, o primeiro reenvio barrado pelo `required` deixa a autorização verdadeira; o segundo clique passa sem perguntar, faltando `modal2` e aparecendo POST. As duas asserções pertinentes exigem segundo modal e `SEM-POST`. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:151`; `app/escala/tests/test_smoke_clique_folga_calendario.py:209`, `:210`, `:212`, `:213`)
+
+**NÃO PROCEDE — reabrir os descartes como bloqueadores:**
+
+- Trocar para `semana_dia` enquanto o modal está pendente não demonstra envio indevido em `dias_mes`. Contudo, a justificativa “é overlay” não garante bloqueio do teclado: o componente foca o Sim, mas não implementa contenção de foco. (`app/templates/escala/folga_calendario_editar.html:139`; `app/templates/core/_dialogo.html:160`, `:195`)
+- A contagem sem `_reenvia()` continua redundante; `SEM-POST` é a asserção efetiva. (`app/escala/tests/test_smoke_clique_folga_calendario.py:175`, `:192`, `:199`, `:200`)
+- O smoke contém leitura real do modal no Chromium, além da regex; resultado efetivamente executado não foi fornecido. (`app/escala/tests/test_smoke_clique_folga_calendario.py:69`, `:71`, `:124`, `:187`)
+
+GREEN, RED e mutante executados: **[não verificado]**.
+
+4. **NÃO PROCEDE — nova infração identificada de LEIS-UI ou dos selos estruturais.**
+
+A ajuda apontada na volta 1 foi removida, curando aquele item 6; o trecho agora entra diretamente no laço das grades. O delta mantém `hxConfirmar` e não introduz novo markup nas alterações do guarda. (`app/docs/LEIS-UI.md:77`; `app/templates/escala/folga_calendario_editar.html:39`, `:127`, `:146`, `:151`)
+
+Execução dos selos de template: **[não verificado]**.
+
+**VEREDITO: DEVOLVE 5.**
+
+## 16/11 15:31 · sessao 20b59d9b1e2c · - · - · origem=Ronald (tmux)
+
+**PROCEDE — cura da autorização.** `confirmado=true` agora vale apenas durante o reenvio e o `finally` o limpa mesmo quando `requestSubmit()` retorna sem gerar `submit` por causa do `required`, ou quando a chamada lança exceção. O guarda síncrono do reenvio encontra `true`. (`app/templates/escala/folga_calendario_editar.html:138`, `:150`, `:151`)
+
+**PROCEDE, com limite explícito — fallback.** O `finally` também limpa após `form.submit()`. Esse fallback não passa pelo evento `submit` nem pela validação HTML, mas só é alcançado depois de `ok=true`; portanto não cria POST sem pergunta. A garantia de bloqueio pelo `required` não se aplica a esse fallback. (`app/templates/escala/folga_calendario_editar.html:146`, `:147`, `:151`)
+
+**NÃO PROCEDE — novo caminho demonstrado de POST vazio sem pergunta em `dias_mes`.** No fluxo do formulário, o guarda consulta o modo, identifica seleção vazia e cancela antes de abrir a pergunta; Cancelar retorna sem reenvio. (`app/templates/escala/folga_calendario_editar.html:139`, `:140`, `:143`, `:146`, `:147`)
+
+**PROCEDE — novo teste tem mordida por inspeção.** A sonda apaga o nome antes do primeiro Sim e o restaura antes de clicar novamente. Sem o `finally` — inclusive restaurando o código anterior que limpava somente no evento `submit` — o primeiro `requestSubmit()` é barrado pelo `required`, a autorização sobra, o segundo clique passa sem modal e a sonda registra POST. Assim falham `modal2` e/ou `SEM-POST`. (`app/templates/escala/folga_calendario_editar.html:14`, `:138`, `:151`; `app/escala/tests/test_smoke_clique_folga_calendario.py:209`, `:210`, `:212`, `:213`, `:52`, `:57`) Execução efetiva e mutante executado: **[não verificado]**.
+
+**NÃO PROCEDE — descarte do modal/troca de modo como bloqueador desta obra.** O overlay existe, mas o componente não implementa contenção de foco; só trata Escape e Enter no campo do próprio modal. A possibilidade de troca por teclado não está eliminada. Contudo, confirmar e reenviar em `semana_dia` segue a regra desse modo, enquanto voltar a `dias_mes` e submeter normalmente encontra o guarda. (`app/templates/core/_dialogo.html:112`, `:160`, `:163`, `:195`; `app/templates/escala/folga_calendario_editar.html:139`, `:176`) Reprodução humana: **[não verificado]**.
+
+**NÃO PROCEDE — contagem redundante como defeito bloqueador.** A comparação antes/depois não demonstra ausência de gravação HTTP: o POST Django só ocorre em `_reenvia()`, ausente nesse teste. A asserção efetiva é `SEM-POST`, alimentada pela sonda que respeita `defaultPrevented`. (`app/escala/tests/test_smoke_clique_folga_calendario.py:53`, `:165`, `:175`, `:192`, `:199`, `:200`)
+
+**PROCEDE — smoke vai além da regex de `hxConfirmar`.** O código do smoke lê texto e botões do modal aberto no DOM do Chromium e exige sua presença; isso protege comportamento quando executado. Não há, no dado recebido, relatório de execução que permita afirmar GREEN/RED observado. (`app/escala/tests/test_smoke_clique_folga_calendario.py:69`, `:71`, `:124`, `:187`, `:188`) Execução observada: **[não verificado]**.
+
+## 16/11 15:31 · sessao fa2574325564 · - · - · origem=Ronald (tmux)
+
+**Pergunta 4 — NÃO PROCEDE: nova infração de LEIS-UI ou dos selos estruturais não identificada no delta.** A ajuda questionada desapareceu; o trecho agora passa diretamente do contêiner ao laço de grades. A L7 está em `app/docs/LEIS-UI.md:77`; trecho atual em `app/templates/escala/folga_calendario_editar.html:39`. As adições restantes são comentários e JS, sem diálogo nativo ou novo markup interpolado (`app/templates/escala/folga_calendario_editar.html:127`, `app/templates/escala/folga_calendario_editar.html:146`, `app/templates/escala/folga_calendario_editar.html:151`). Os selos examinam diálogo nativo, atributos inválidos, fonte Python, comentários vazados e interpolação crua (`app/core/tests/test_contract_l8_dialogo.py:42`; `app/core/tests/test_contract_template_bem_formado.py:162`, `:169`, `:174`, `:180`). Execução desses selos: **[não verificado]**.
+
+**Cura das grades ocultas — PROCEDE para o mutante declarado.** `_secoes()` devolve somente a tag de abertura de cada seção, portanto a regex nova não acusa a classe `hidden` legítima dos spans internos; acusa `hidden` ou `display:none` na própria seção (`app/escala/tests/test_editor_calendario_tres_grades.py:37`, `:40`, `:92`; `app/templates/escala/folga_calendario_editar.html:47`).
+
+A prova continua limitada: o selo não mede visibilidade calculada, ancestrais, CSS por seletor ou o próprio `fc-grade` escondido; verifica apenas ID da grade e atributos da seção. O smoke também usa `.click()` programático (`app/escala/tests/test_editor_calendario_tres_grades.py:89`, `:92`; `app/escala/tests/test_smoke_clique_folga_calendario.py:51`). Contraexemplo estático: adicionar `hidden` ao `div#fc-grade-*` preservaria essas asserções; execução do mutante: **[não verificado]**.
 
 ## 16/11 15:28 · sessao a6729505dd53 · O50-CELULA-APOS-DESLIGAMENTO · verificador · origem=Code
 
@@ -1716,80 +1781,4 @@ sonda()
 
 3. **Portas do eventual apply:** O199 → `declarar_dia` (`app/ponto/services/declarar_dia.py:153`); SC11 por dia → `regenerar_celulas_dia`, que delega a `regenerar_celulas_vinculo` sem estender horizonte (`app/ponto/portas/celula.py:741`, `app/ponto/portas/celula.py:773`). Números atuais de produção: `[nao verificado]`.
 
-## 16/11 14:26 · sessao 7ac5cdb58d24 · PRIORIDADE-EV-ITEM3 · leitura · origem=Code
-
-| entrada | item O54 | cadeia (arquivo:linha) | confianca |
-|---|---|---|---|
-| BO-ADMIN-2710/3 | - | Justificativa limpa marcos faltantes (`app/escala/utils.py:1254-1259`) → resposta “dia já estava completo” (`app/ponto/services/veredito_celula.py:242-247`). E6 compara minutos realizados/pagos (`app/ponto/management/commands/e6_oraculo.py:263-268,362-381`); falta demonstrar que essa cura reduziria os divergentes de `E6-sistema-bate` (`app/core/espelho_verdade.py:180-181`). | [nao verificado] |
-| BO2910/01-a | - | Troca de posto e histórico (`app/colaboradores/views.py:325-336`) → possível mudança de destino empresarial do TXT, cujo leitor filtra empresa (`app/folha/export.py:719-722`). Redução de número O54 por corrigir esse destino não demonstrada. | [nao verificado] |
-| BO2910/01-b | - | O ramo relê o banco e devolve linha/toast de erro (`app/colaboradores/views.py:337-361`); falta ligação demonstrada desse tratamento de falha até uma medida O54. | [nao verificado] |
-| BO2910/02 | - | Célula e marcos absolvem o dia (`app/chamados/reconciliador.py:1024-1032`) → retratação do chamado (`app/chamados/reconciliador.py:1001-1011`). Falta demonstrar que ampliar essa retratação reduziria algum número O54. | [nao verificado] |
-| BO2910/05 | - | Validação condicionada ao envio de hora (`app/ponto/services/ausencia.py:1068-1070`) → atualização/invalidação da projeção (`app/ponto/services/ausencia.py:1101-1124`). `E5-le-da-celula` espera status `encerrado` (`app/core/espelho_verdade.py:150-151`), e E6 exclui dias com ausência (`app/ponto/management/commands/e6_oraculo.py:339-341`); redução não demonstrada. | [nao verificado] |
-| BO2910/06 | - | Desligamento chama fechamento dos vínculos (`app/colaboradores/services/desligamento.py:147-149`); reativação exige revínculo administrativo (`app/colaboradores/services/desligamento.py:235-247`). A menção às portas em `R4` (`app/core/placar_estrutural.py:389-390`) não demonstra redução sem identificar vínculo/início e a divergência correspondente. | [nao verificado] |
-| BO2910/08 | - | Regeneração futura chama desfazimento (`app/ponto/portas/celula.py:297-315`), que conserva decisão administrativa (`app/ponto/portas/celula.py:1155-1164`). Falta ligar essa conservação a um divergente efetivamente contado pelo E6 (`app/ponto/management/commands/e6_oraculo.py:362-381`). | [nao verificado] |
-| BO-ADMIN-2710/5 | - | Leitura de `missing` identifica marco a cobrar (`app/chamados/services/declaracao_texto.py:130-139`). `R3` obtém a frase diretamente dos marcos da grade (`app/ponto/services/dia_decidido.py:74-87`); fazer nascer a pergunta não demonstra redução desse item (`app/core/placar_estrutural.py:146-153`). | [nao verificado] |
-| HJ-017-U1 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| HJ-074 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| HJ-005-U1 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| HJ-012-U2 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| HJ-005-U2 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| HJ-005-U4 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| BO-ADMIN-2710/1 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-| BO-ADMIN-2710/8.1 | - | Causa atual não comprovada no quadro fornecido; falta o ponto inicial da cadeia causa → medida. [nao verificado] | [nao verificado] |
-
-## 16/11 14:26 · sessao 24490930eb08 · - · - · origem=Ronald (tmux)
-
-- O pouso de O-JANELA-HE nomeia quatro rotas: `gestao_he`, `decidir_he`, `recusar_he_em_lote`, `gestao_he_pdf`; os “13 passos” estão referidos, sem roteiro enumerado encontrado. `app/docs/RELATO-ARQUIVO.md:28278-28285`, `app/docs/RELATO-ARQUIVO.md:19705`.
-
-- Central original: `relatorios:index`, `/relatorios/`, `relatorios.views.index`; lê contador, renderiza sem trilha de uso; falha do contador chama `logger.exception`, não grava contador de erro no banco. `app/relatorios/urls.py:9`, `app/relatorios/views.py:22-51`. O painel de chamados também lê esse contador; seu `except` apenas esconde o atalho. `app/chamados/urls.py:9`, `app/chamados/views.py:759-767`.
-
-- Listagem: `ponto:gestao_he`, `/ponto/gestao-he/`, view `ponto.views.gestao_he`; corpo lê e renderiza, sem escrita de uso. `app/ponto/urls.py:17`, `app/ponto/views.py:887-966`.
-
-- PDF: `ponto:gestao_he_pdf`, `/ponto/gestao-he/pdf/`, view `ponto.views.gestao_he_pdf`; chama pipeline auditável com `tipo='outro'` e filtros `{empresa, mes, ano, q, praca, posto, estado}`. `app/ponto/urls.py:27`, `app/ponto/views.py:772`, `app/ponto/views.py:870-878`. Escritor `RegistroPDFAuditavel.objects.create`, campos `tipo`, `gerado_em`, `filtros_json`, `total_registros`; não há campo título/URL. `app/relatorios/pdf_base.py:152-166`, `app/relatorios/models.py:36-55`. Registro nasce antes da segunda passagem do PDF, portanto registro não prova resposta HTTP concluída. `app/relatorios/pdf_base.py:168-180`.
-
-- Assinatura de filtros do PDF HE pode fornecer contagem candidata: demais produtores `tipo='outro'` encontrados usam filtros distintos — RetratoFolha `{empresa,mes,ano,recorte,n,total}` e férias `{empresa_id,situacao}`. Isso é inferência sobre a cópia atual, sem garantia de atribuição histórica da rota. `app/ponto/views.py:872-876`, `app/folha/views_retrato.py:443-449`, `app/relatorios/services.py:338-346`.
-
-- Portas laterais, caso incluídas no escopo: `ponto:espelho` → `/ponto/espelho/` → `espelho_ponto`; `colaboradores:calendario_ponto` → `/colaboradores/<cid>/calendario/` → `calendario_ponto`; `folha:exportar` → `/folha/exportar/` → `tela_exportar_dominio`; `folha:gerar_txt` → `/folha/exportar/gerar/` → `gerar_dominio_txt`. `app/ponto/urls.py:10`, `app/ponto/views.py:97`, `app/colaboradores/urls.py:24`, `app/colaboradores/views.py:1965`, `app/folha/urls.py:13-14`, `app/folha/views.py:83`, `app/folha/views.py:102`. Prefixos em `app/config/urls.py:26-34`. Inclusão dessas portas nos 13 passos específicos: `[nao verificado]`.
-
-- Export TXT: sucesso grava `LogAuditoria(acao='export_txt', modelo='ExportacaoDominio', valor_depois={empresa,mes,ano,colabs,linhas,retidos,arquivo})`; recusa do portão apenas retorna mensagem. `app/folha/views.py:128-133`, `app/folha/views.py:285-300`. `MetricaSnapshot` do portão guarda falhas e pendências, sem registrar chamada ao export ou recusa ocorrida. `app/folha/porta_export.py:772-796`, `app/folha/porta_export.py:800-814`, `app/folha/porta_export.py:851-867`.
-
-- Data de REABRIR mais precisa na cópia: deploy com migrate em **25/10 07:49**, sem segundos; isso permanece relato histórico, não medição desta leitura. `app/docs/RELATO.md:4766`, `app/docs/RELATO.md:4775`.
-
-## 16/11 14:26 · sessao 98d2e0d17bff · - · - · origem=Ronald (tmux)
-
-REABRIR-NAO-DESTROI — achados para consolidação:
-
-- `RespostaAnterior` foi renomeada para `DecisaoPergunta`; `versao_reaberta_em` virou `ato_em` e os registros antigos recebem `ato='reabertura'`. A sonda da cópia deve consultar o modelo atual. `app/chamados/migrations/0051_decisao_pergunta.py:41-61`
-- Campos consultáveis: `pergunta`, `ato`, `ato_em`, `ato_por`, `ato_texto`, `ato_motivo`, fotos da resposta/validação. Escritor único: `registrar()`, cujo INSERT ocorre em `bulk_create`. `app/chamados/models.py:4038-4051`; `app/chamados/models.py:4110-4122`
-- Reabrir gera uma linha por pergunta que perdeu texto, resposta, validação ou carimbo; não gera linha para pendente limpa. Logo, número de linhas não é número de cliques. `app/chamados/services/disputa_emissao.py:1631-1648`
-- Modelo de auditoria não guarda URL, request ID nem status HTTP. Portanto não permite separar rotas que compartilham a mesma ação. `app/core/models.py:295-307`
-
-| Porta/fluxo | Rota e view | Evidência de uso / escritor |
-|---|---|---|
-| Reabrir supervisão | `chamados:reabrir_disputa_supervisao`, `/chamados/local/<id>/reabrir-disputa/`; view `views.py:1372` — `urls.py:20`, prefixo `config/urls.py:28` | `DecisaoPergunta(ato='reabertura', ato_em)` pelo escritor acima; `LogAuditoria(acao='reabrir_disputa', modelo='DisputaSupervisao')` em `views.py:1456` |
-| Reabrir pelo fio/modal | `chamados:fio_colaborador`, `/chamados/colaborador/<id>/`, view `views.py:659`; `chamados:modal_fio`, `/chamados/modal/<id>/`, view `views.py:869` — `urls.py:21,39` | POST delegado em `views.py:667-674,951-954`; ação `reabrir_disputa` em `services/fio.py:679-682`; mesmo LogAuditoria acima em `services/acoes_disputa.py:113-114`, portanto indistinguível da rota própria |
-| Colaborador pede correção HTML | `chamados:solicitar_correcao_disputa`, `/chamados/disputa/<pk>/solicitar-correcao/`, view `views.py:1317` — `urls.py:19` | Chama `reabrir_por_colab` em `views.py:1334`; snapshot e contador em `models.py:2318-2321`; nota com prefixo `[Solicitacao de correcao - ` em `models.py:2325` |
-| Colaborador pede correção API | `api_solicitar_correcao_disputa`, `/api/disputa/<pk>/solicitar-correcao/`, view `api/views.py:2670` — `api/urls.py:94`, prefixo `config/urls.py:37` | Mesmo método em `api/views.py:2686`; indistinguível do HTML no fato persistido |
-| Corrigir resposta | POST `chamados:modal_fio`, `acao=corrigir_resposta`; botão `templates/chamados/partials/modal_fio.html:301-312` | `LogAuditoria(acao='corrigir_resposta_admin', modelo='PerguntaDisputa')` em `services/acoes_disputa.py:375-378`; é escrito antes da validação, que pode recusar em `:379-383` |
-| Cobrar resposta | `chamados:cobrar_chamado`, `/chamados/cobrar/<cid>/`, view `views_cobrar.py:24` — `urls.py:25`; botão `modal_fio.html:349-351` | `FollowupChamado.conteudo` começa `[COBRANCA]`, `criado_em`; chamada escritora em `views_cobrar.py:54-56`; INSERT em `services/nota.py:103,107`; campos em `models.py:1732-1738` |
-| Encerrar/regularizar | POST `chamados:modal_fio`, `acao=regularizar_disputa`; botão `modal_fio.html:353-359`; também fio e `chamados:detalhe_local` (`urls.py:14`) | `LogAuditoria(acao='regularizar_disputa_granular', modelo='DisputaSupervisao')`; descrição `Mat=N Pend=N Fechada=B Erros=N` em `services/fio.py:713-714` e `services/acoes_disputa.py:144-145` |
-
-Filtros indicados, sempre com `criado_em__gte=corte` para auditoria/followup e `ato_em__gte=corte` para decisões:
-
-- Reaberturas por pergunta: `DecisaoPergunta.objects.filter(ato="reabertura", ato_em__gte=corte).count()`. `app/chamados/models.py:4025,4039-4040`
-- Reabertura supervisão/fio conjunta: auditoria `acao="reabrir_disputa", modelo="DisputaSupervisao"`. `app/chamados/views.py:1456`; `app/chamados/services/acoes_disputa.py:113`
-- Correção administrativa: auditoria `acao="corrigir_resposta_admin", modelo="PerguntaDisputa"`. `app/chamados/services/acoes_disputa.py:375`
-- Cobrança: followup `conteudo__startswith="[COBRANCA]"`; não usar `tipo`, que não é coluna de FollowupChamado. `app/chamados/views_cobrar.py:36-39,55`; `app/chamados/models.py:1732-1755`
-- Regularização conjunta: auditoria `acao="regularizar_disputa_granular", modelo="DisputaSupervisao"`; contar tentativas com erro pelo `Erros=N` persistido, sem equiparar erro a indevido. `app/chamados/services/fio.py:713-714`
-- Recusa humana de resposta: `DecisaoPergunta(ato="recusa")`; preferível à auditoria `recusar_pergunta`, gravada duas vezes pelo mesmo caminho. `app/chamados/services/validacao.py:628-629,637-645`
-- Recusa de materialização: auditoria `acao="val_perg_nao_gravou", modelo="PerguntaDisputa"`; compartilhada entre validações, sem atribuição segura à correção/modal. `app/chamados/services/validacao.py:517-521`
-
-As recusas por limite, disputa fechada ou ausência de resposta apenas retornam estado; não geram fato de recusa nesse método. `app/chamados/models.py:2304-2312` As recusas de cobrança por permissão, área, throttle ou push são respostas HTTP anteriores à nota. `app/chamados/views_cobrar.py:25-53` As guardas da regularização também retornam sem a auditoria posterior. `app/chamados/services/fio.py:685-699`
-
-`recusa_motivo` representa estado atual e pode ser sobrescrito; notas de materialização são deduplicadas por pergunta/código, portanto não contam tentativas. `app/chamados/services/materializacao.py:1095-1113` Não há nesses registros um critério que classifique a recusa como indevida. [nao verificado]
-
-A abertura do modal chama `marcar_lidas`, escrevendo no banco; a sonda deve ler modelos diretamente e não chamar a view. `app/chamados/views.py:877-880`; `app/chamados/services/nota.py:126-133` O histórico é renderizado pelo template, mas sua existência no banco não prova que foi mostrado corretamente. `app/templates/chamados/partials/modal_fio.html:204-205`; `app/chamados/models.py:3667-3683`
-
-Falhas de auditoria/best-effort vão para logging e contador de memória, sem registro adicional no banco. `app/core/observ.py:73-82,105,134-139` A cobertura de logs da VM desde 04/11 13:22 veio apenas do dado fornecido. [nao verificado]
-
-_6080 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6083 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
