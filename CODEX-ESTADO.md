@@ -1,7 +1,275 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 01:45** · publicado em **16/11/2026 01:48** (UTC-3)
+> Ultima resposta processada: **16/11/2026 01:54** · publicado em **16/11/2026 01:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 01:54 · sessao 6e6d5efb54dc · - · - · origem=Ronald (tmux)
+
+Evidências para consolidar, por leitura estática; execução, deadlock real e estado de produção [nao verificado].
+
+- A primeira query de trava do novo bloco INSS é `Colaborador ... FOR UPDATE`, via `conferir_situacao_antes_do_ato → _guarda_da_linha → _travar → PerguntaDisputa.trava_na_ordem`. Depois registra o sentinela e lê a situação gravada; a pré-conferência não atualiza o objeto `colab` em memória. (`app/ponto/views.py:2463`, `app/colaboradores/services/colaborador.py:84`, `app/colaboradores/services/colaborador.py:94`, `app/chamados/models.py:2744`, `app/chamados/models.py:2746`, `app/colaboradores/services/colaborador.py:65`.)
+
+- Seguem validações de `criar_ausencia`, criação da instância e `a.save()` em savepoint; esse save dispara cartório síncrono, que recebe `instance.colaborador`. Logo, o cartório ainda recebe o objeto carregado antes da trava, e roda antes de `situacao='afastado'` ser atribuída ou gravada pela porta final. Isso já era assim no caminho anterior; a pré-guarda nova não muda esse valor em memória. (`app/ponto/services/ausencia.py:446`, `app/ponto/services/ausencia.py:478`, `app/ponto/signals.py:143`, `app/ponto/signals.py:147`, `app/ponto/views.py:2483`, `app/colaboradores/services/colaborador.py:134`.)
+
+- O cartório seleciona dias, consulta a célula e julga. Pode escrever `CelulaDia` e `EventoCelula`; reconciliar chamados/perguntas; abrir chamado; espelhar marcos; e fabricar disputa/perguntas. Portanto não existe uma sequência fixa de SQL igual para todos os lançamentos. (`app/ponto/signals.py:115`, `app/ponto/signals.py:122`, `app/ponto/signals.py:127`, `app/ponto/services/cartorio.py:2027`, `app/ponto/services/cartorio.py:2040`, `app/ponto/portas/celula.py:962`, `app/ponto/services/cartorio.py:1006`, `app/ponto/services/cartorio.py:1011`, `app/ponto/services/cartorio.py:1045`, `app/ponto/services/cartorio.py:1791`, `app/ponto/services/cartorio.py:1840`.)
+
+- As travas explícitas das quatro classes ficam na porta global: C por PK; D por PK; CH por PK; P por PK, usando `of=('self',)` para P. O final `_gravar_colab` volta à guarda C, mas a linha C já está retida pelo atomic externo, portanto essa aquisição é reentrante. (`app/chamados/models.py:2744`, `app/chamados/models.py:2753`, `app/chamados/models.py:2766`, `app/chamados/models.py:2770`, `app/ponto/views.py:2483`, `app/colaboradores/services/colaborador.py:133`.)
+
+- **Ressalva sobre “ordem global”**: a pré-conferência trava somente C; não reúne antecipadamente todas as D/CH/P dos dias da ausência. O cartório percorre dias e ramos, cujas portas podem repetir aquisições. Por exemplo, `desfazer_carimbo_sem_lastro` trava C/D/P, e a fábrica pode em seguida chamar a porta da disputa, que trava o universo C/D/CH. Não é justificável declarar uma única sequência monotônica C→D→CH→P para toda a transação sem distinguir aquisição nova e reentrância. C retida serializa os escritores que seguem o contrato; um ciclo real permanece [nao verificado]. Essa composição já existia dentro do atomic de `a.save()`, antes do c6. (`app/ponto/signals.py:92`, `app/chamados/services/fabrica_da_celula.py:208`, `app/chamados/services/fabrica_da_celula.py:219`, `app/chamados/services/relavra_via.py:230`, `app/chamados/services/fabrica_da_celula.py:169`, `app/chamados/services/fabrica_da_celula.py:172`, `app/chamados/services/disputa_emissao.py:539`, `app/ponto/services/ausencia.py:478`.)
+
+- Há também travas **implícitas** por escrita em Ausência, célula, evento, log e eventualmente Pauta/ContadorPauta. Nos arquivos percorridos não encontrei `select_for_update` executado fora da porta global para C/D/CH/P. Os `select_for_update` de `CelulaDia` e `Ausencia` em edição/troca de plantão pertencem a outras operações, não chamadas pelo fluxo de lançamento examinado. (`app/ponto/services/ausencia.py:479`, `app/ponto/portas/celula.py:963`, `app/ponto/portas/celula.py:954`, `app/core/observ.py:134`, `app/chamados/services/fabrica_da_celula.py:369`, `app/pautas/services.py:365`, `app/ponto/portas/celula.py:631`, `app/ponto/portas/celula.py:695`.)
+
+- O consumidor da Ausência **não roda dentro do novo atomic**: o `post_save` agenda `_depois` por `on_commit`. Antes, sem transação envolvente, ele rodava ao sair do atomic interno de `a.save()`, antes do evento `criar/Ausencia` e antes da escrita de situação. Agora roda depois de ambos, ao confirmar o atomic externo. Ele relê Colaborador do banco, então no INSS feliz passa a receber `afastado`. (`app/ponto/signals.py:250`, `app/ponto/signals.py:267`, `app/ponto/signals.py:269`, `app/ponto/signals.py:272`, `app/ponto/services/ausencia.py:478`, `app/ponto/services/ausencia.py:502`, `app/ponto/views.py:2463`, `app/ponto/views.py:2483`.)
+
+- **Também muda para não-INSS**: o atomic externo é incondicional. Seu log `criar/Ausencia` agora integra a transação do nascimento e precede o consumidor; antes, o consumidor rodava antes desse log. Não identifiquei leitor desse log de criação no consumidor percorrido: ele consulta cobertura de Ausência e veredito da célula. A trilha consultada pelo C6 é de `retratar_pergunta_obsoleta/PerguntaDisputa`, outro universo. (`app/ponto/views.py:2463`, `app/ponto/services/ausencia.py:502`, `app/ponto/signals.py:272`, `app/chamados/services/silencio_ausencia.py:66`, `app/chamados/services/silencio_ausencia.py:41`, `app/chamados/juizes.py:294`.)
+
+- `afastado_na_batida(c)` durante o cartório continua vendo o valor antigo de `c.situacao`, mas primeiro consulta a ausência recém-inserida por `afastado_hoje`; só usa o cadastro como divergência quando o juiz não encontra cobertura de hoje. A chamada continua antes da escrita final de situação. (`app/ponto/services/cartorio.py:1351`, `app/ponto/services/afastado_avisa.py:38`, `app/ponto/services/afastado_avisa.py:41`, `app/ponto/views.py:2483`.)
+
+- **Observação de anexo para investigação do pai:** a limpeza do arquivo cobre somente exceções que saem do bloco de `a.save()`. Depois que `criar_ausencia` retorna, uma falha no `_gravar_colab` desfaz a transação externa, mas não reentra nessa limpeza. O log é best effort e normalmente não propaga falha. Na corrida específica de desligamento, a recusa inicial antecede `criar_ausencia`, portanto não chega à gravação do documento. (`app/ponto/services/ausencia.py:476`, `app/ponto/services/ausencia.py:480`, `app/ponto/services/ausencia.py:512`, `app/ponto/views.py:2465`, `app/ponto/views.py:2483`, `app/core/observ.py:105`, `app/core/observ.py:133`.)
+
+Nenhum defeito novo de ordem de trava demonstrado neste levantamento; a afirmação irrestrita de sequência global única merece a ressalva acima. (`app/ponto/views.py:2465`, `app/chamados/services/relavra_via.py:230`, `app/chamados/services/disputa_emissao.py:539`.)
+
+## 16/11 01:53 · sessao a24bd99dd2b1 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+Transcrição integral do dado fornecido, sem verificação independente. [nao verificado]
+
+```text
+sonda_leitura: script.py [82c88c2988af3846] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 3 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 102
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 201 minutos_total 3.3 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 201 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 201 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1236, 'bate_ate_10min': 1169, 'esp_zero_e6_trabalho': 12, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 2, 'diverge_acima_60': 47, 'dia_batida_impar': 65, 'impar_que_BATE': 23, 'impar_que_DIVERGE': 42, 'impar_dentro_da_faixa': 33, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 42, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1422, 'dia_isento_ou_ausencia': 342, 'dia_sem_trabalho_ambos': 22, 'esp_desconta_janela_declarada': 38, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1236 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.2 h    3 colabs
+[3] CADASTRO      7 dia-colab      35.9 h    4 colabs
+[3] BATIDA       57 dia-colab     297.7 h   24 colabs
+[4] TOTAL divergentes 67
+[5] colabs com divergencia: 29
+ESTRUTURA_DIA|10/2026|col218|2026-10-15|esp_min=105|e6_min=0|teto_min=0|dif_min=-105|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col746|2026-09-24|esp_min=289|e6_min=193|teto_min=350|dif_min=-96|classe=diverge_acima_60|paridade=par|batidas=11:00 13:02 15:39 16:49|veredito=trabalhou
+ESTRUTURA_DIA|10/2026|col854|2026-10-04|esp_min=718|e6_min=7|teto_min=7|dif_min=-711|classe=diverge_acima_60|paridade=par|batidas=18:54 19:01|veredito=trabalhou
+ESTRUTURA_DIAS_LINHAS 10/2026 3 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.209666666666665|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=7|horas=35.88209174|colabs=4
+PARCIAL|10/2026|BATIDA|dias=57|horas=297.66026132194446|colabs=24
+PARCIAL_TOTAL|10/2026|dias=67|horas=348.752019728611125|colabs=29
+ESTIMATIVA processados 125 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 201 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 201 minutos_total 2.9 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1059, 'bate_ate_10min': 1004, 'esp_zero_e6_trabalho': 8, 'e6_zero_esp_trabalho': 7, 'diverge_10_60': 2, 'diverge_acima_60': 38, 'dia_batida_impar': 51, 'impar_que_BATE': 16, 'impar_que_DIVERGE': 35, 'impar_dentro_da_faixa': 28, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 33, 'impar_SO_POR_CORTE_do_oraculo': 2, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1334, 'dia_isento_ou_ausencia': 205, 'dia_sem_trabalho_ambos': 26, 'esp_desconta_janela_declarada': 49, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.8% de 1059 dias comparados
+[3] ESTRUTURA     6 dia-colab      17.8 h    5 colabs
+[3] CADASTRO      9 dia-colab      32.9 h    6 colabs
+[3] BATIDA       40 dia-colab     194.4 h   21 colabs
+[4] TOTAL divergentes 55
+[5] colabs com divergencia: 27
+ESTRUTURA_DIA|11/2026|col110|2026-11-12|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col200|2026-10-29|esp_min=180|e6_min=0|teto_min=0|dif_min=-180|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col200|2026-11-02|esp_min=180|e6_min=0|teto_min=0|dif_min=-180|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col218|2026-11-14|esp_min=103|e6_min=0|teto_min=0|dif_min=-103|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col296|2026-11-02|esp_min=345|e6_min=0|teto_min=0|dif_min=-345|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col884|2026-11-08|esp_min=679|e6_min=699|teto_min=739|dif_min=20|classe=diverge_10_60|paridade=par|batidas=07:42 13:05 13:45 20:01|veredito=rejeitado
+ESTRUTURA_DIAS_LINHAS 11/2026 6 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=6|horas=17.8227|colabs=5
+PARCIAL|11/2026|CADASTRO|dias=9|horas=32.931705|colabs=6
+PARCIAL|11/2026|BATIDA|dias=40|horas=194.35440025833333|colabs=21
+PARCIAL_TOTAL|11/2026|dias=55|horas=245.10880525833333|colabs=27
+TEMPO_SEGUNDOS 174.3
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 257813
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 296
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1707
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 5857
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 41
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6880
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4644
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4644
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 602
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 182
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 17
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 482764
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 595
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3064
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 174
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12978
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 117
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4228
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 24546
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4783
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 40289
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 18318
+SOMA 10/2026 67   <- tem de ser igual a soma das classes (67) True
+SOMA 10/2026 HORAS 348.752019728611125 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 55   <- tem de ser igual a soma das classes (55) True
+SOMA 11/2026 HORAS 245.10880525833333 True
+SOMA 11/2026 COLABS_UNIAO 27 True
+rc_sombra=0
+```
+
+- **SOMA:** as seis linhas fornecidas apresentam `True`. [nao verificado]
+- **ESTRUTURA_DIAS_LINHAS:** ambas apresentam `True`: `10/2026 3 True` e `11/2026 6 True`. [nao verificado]
+- **INCOMPLETO:** não há ocorrência desse marcador no dado fornecido. [nao verificado]
+
+## 16/11 01:53 · sessao 1416237d4c62 · - · - · origem=Ronald (tmux)
+
+Mapa direcionado entregue ao agente principal; referências centrais:
+
+| Valor | Quem escreve | Quem lê |
+|---|---|---|
+| `Colaborador.situacao` | `lancar_ausencia` chama a porta; `gravar` atribui e salva (`app/ponto/views.py:2483`; `app/colaboradores/services/colaborador.py:126`). Desligamento/readmissão e reversor usam portas próprias (`app/colaboradores/services/desligamento.py:128`; `app/colaboradores/services/desligamento.py:241`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`). | Lista da tela (`app/ponto/views.py:2405`), guarda da linha gravada (`app/colaboradores/services/colaborador.py:65`), consumidor após commit (`app/ponto/signals.py:267`), aviso de batida (`app/ponto/services/afastado_avisa.py:38`), badges (`app/colaboradores/services/situacao_exibida.py:50`). |
+| `Colaborador.posto` | View atribui; porta salva inteiro (`app/colaboradores/views.py:327`; `app/colaboradores/services/colaborador.py:152`). | Anterior para histórico (`app/colaboradores/views.py:326`); recusa relê banco e monta contexto (`app/colaboradores/views.py:339`); template mostra esse contexto (`app/templates/colaboradores/partials/vinculo_row.html:16`). |
+| Ausência criada | Serviço constrói e salva (`app/ponto/services/ausencia.py:400`; `app/ponto/services/ausencia.py:446`; `app/ponto/services/ausencia.py:478`). | Cartório e consumidor (`app/ponto/signals.py:143`; `app/ponto/signals.py:275`); juiz de cobertura/afastamento (`app/ponto/turnos.py:2719`). |
+| Auditoria da Ausência | Serviço chama `evento`; escritor material é `LogAuditoria.objects.create` (`app/ponto/services/ausencia.py:501`; `app/core/observ.py:133`). | Tela de auditoria (`app/core/views.py:686`); proteção de reversão por trilha posterior (`app/ponto/management/commands/rederivar_minutos_h06_comp11.py:152`). |
+| Registro de colaboradores travados | Somente `trava_na_ordem` chama `_registrar_travados`, que acrescenta sentinela à fila da conexão (`app/chamados/models.py:2744`; `app/chamados/services/trava_do_colaborador.py:37`). | `colaboradores_travados`; selo `exigir_colaboradores_travados` (`app/chamados/services/trava_do_colaborador.py:29`; `app/chamados/services/trava_do_colaborador.py:55`). |
+
+O registro vivo autoriza explicitamente a escrita de `afastado` pela porta e mantém os leitores do campo condicionados ao vigia; o comentário da view ainda fala em lei aberta (`app/core/juizes.py:455`; `app/ponto/views.py:2474`). O censo histórico dos 104 leitores está documentado, mas sua contagem atual não foi revalidada (`app/docs/TICKETS.md:220`; `app/docs/RELATO-ARQUIVO.md:29301`).
+
+A recusa inicial de desligado ocorre antes do serviço e do armazenamento do anexo (`app/ponto/views.py:2465`; `app/ponto/views.py:2466`). Existe borda distinta: a limpeza do arquivo protege somente a falha do `a.save()` interno; falha posterior no `gravar` ou no commit externo desfaz o banco sem passar por essa limpeza (`app/ponto/services/ausencia.py:476`; `app/ponto/services/ausencia.py:480`; `app/ponto/views.py:2483`). Ocorrência real dessa falha: [nao verificado].
+
+## 16/11 01:53 · sessao 9ef94304cda7 · - · - · origem=Ronald (tmux)
+
+- **Achado anterior 2 fechado:** recusa de `salvar_inteiro` ocorre antes do `save`; o histórico só vem depois; na exceção HTMX a view relê o colaborador e fornece o posto relido ao template. (`app/colaboradores/services/colaborador.py:158-160`; `app/colaboradores/views.py:329-353`; `app/templates/colaboradores/partials/vinculo_row.html:16-21`.)
+
+- **Observação — erro após gravação continua podendo deixar alteração:** falha em `registrar_mudanca` deixa o posto novo gravado, porque o `atomic` da porta terminou antes da chamada do histórico. O quinto teste caracteriza exatamente esse cenário e exige que a tela mostre o novo posto; isso não é recusa `DesligadoSemReadmissao`. (`app/colaboradores/services/colaborador.py:158-161`; `app/colaboradores/views.py:329-339`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:154-163`.)
+
+- **Não há juiz duplicado no pré-verificador:** `conferir_situacao_antes_do_ato` apenas exige `atomic` aberto e reutiliza `_guarda_da_linha`; esta trava e chama `_recusar_volta_de_desligado`, que consulta `esta_desligado` para destino e linha gravada. A autoridade está registrada no registro vivo. (`app/colaboradores/services/colaborador.py:55-69`; `app/colaboradores/services/colaborador.py:84-102`; `app/core/juizes.py:267-271`.)
+
+- **Observação — comentário de lei desatualizado:** o comentário preservado afirma que a legitimidade da escrita de afastado segue em aberto, mas o registro vivo já declara a escrita via `gravar` legítima e condiciona leitores do campo ao vigia de divergência; a tabela de consulta manda prevalecer o registro vivo. (`app/ponto/views.py:2474-2483`; `app/core/juizes.py:455-473`; `app/docs/JUIZES.md:10-15`.)
+
+- **Mordida estática dos testes:** o primeiro exige recusa dita, ausência zero e situação desligado; o segundo exige presença das três classes de SQL, trava anterior ao INSERT, registro da trava e resultado feliz; o quarto exige posto antigo no banco e HTML, ausência do posto recusado no HTML e histórico zero. Esses três contêm verificações pertinentes aos dois defeitos originais. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:77-102`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:135-152`.)
+
+- **Observação — terceiro teste pode passar vazio quanto à sobreposição:** sua preparação já deixa exatamente uma ausência e situação ativa, que são os resultados finais exigidos; a resposta só precisa ser diferente de 500. Uma saída antecipada do endpoint que não lance ausência também satisfaz essas verificações. Falta exigir a recusa específica ou evidência de que o lançamento foi tentado. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:104-114`.)
+
+- **Observação — quinto teste é caracterização e guarda contra cura errada:** ele não precisa reprovar o código anterior, pois este já mantinha em memória o posto novo após falha do histórico. O teste impede substituir a releitura por restauração incondicional do posto antigo. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:154-163`; diff fornecido de `app/colaboradores/views.py`, hunk `@@ -333,6 +333,10 @@`.)
+
+- **Ganchos reproduzem uma janela real de objeto velho:** no lançamento, a carga filtrada ocorre antes do parse da data e da trava; o patch desliga no parse. Na vinculação, o patch desliga depois de carregar o objeto e antes da porta. Ambos reproduzem desligamento concluído antes da primeira trava da operação. (`app/ponto/views.py:2442-2465`; `app/colaboradores/views.py:319-329`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:43-52`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:140-146`.)
+
+- **Limite desses ganchos:** usam UPDATE direto na mesma conexão de `TestCase`; não demonstram bloqueio real entre conexões nem corrida após a aquisição da primeira trava. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:37-40`; `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`.)
+
+- **Limite do segundo teste:** verifica `FOR UPDATE < INSERT`, mas não compara posição do UPDATE nem limites de commit; o registro consultado depois da requisição continua sob o `atomic` externo de `TestCase`. Assim, não prova sozinho a duração da trava até o commit da operação em produção. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:92-102`; `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:43`; `app/chamados/services/trava_do_colaborador.py:29-34`.)
+
+Execução dos testes e RED do commit informado: **[nao verificado]**. [nao verificado]
+
+## 16/11 01:49 · sessao 9b8a39057952 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+Transcrição integral do dado fornecido [nao verificado]:
+
+```text
+sonda_leitura: script.py [23c7f47877c9a3fd] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 2 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 109
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 102
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 211 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1268, 'bate_ate_10min': 1227, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 7, 'diverge_acima_60': 28, 'dia_batida_impar': 63, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 24, 'impar_FORA_da_faixa': 6, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1563, 'dia_isento_ou_ausencia': 353, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 62, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.8% de 1268 dias comparados
+[3] ESTRUTURA     5 dia-colab      11.1 h    3 colabs
+[3] CADASTRO      8 dia-colab      20.4 h    6 colabs
+[3] BATIDA       28 dia-colab     136.0 h   18 colabs
+[4] TOTAL divergentes 41
+[5] colabs com divergencia: 23
+ESTRUTURA_DIA|10/2026|col37|2026-10-05|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col37|2026-10-09|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col451|2026-09-23|esp_min=707|e6_min=718|teto_min=718|dif_min=11|classe=diverge_10_60|paridade=par|batidas=07:00 18:58|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col451|2026-09-25|esp_min=705|e6_min=718|teto_min=718|dif_min=13|classe=diverge_10_60|paridade=par|batidas=07:02 19:00|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col841|2026-10-20|esp_min=681|e6_min=522|teto_min=701|dif_min=-159|classe=diverge_acima_60|paridade=par|batidas=11:00 18:46 21:44 22:41|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 10/2026 5 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=5|horas=11.084600277777778|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=8|horas=20.397520712222224|colabs=6
+PARCIAL|10/2026|BATIDA|dias=28|horas=136.0465618775|colabs=18
+PARCIAL_TOTAL|10/2026|dias=41|horas=167.528682867500002|colabs=23
+ESTIMATIVA processados 125 universo 211 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1067, 'bate_ate_10min': 1011, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 49, 'dia_batida_impar': 69, 'impar_que_BATE': 20, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 45, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 48, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 408, 'dia_sem_lavratura_no_espelho': 1404, 'dia_isento_ou_ausencia': 201, 'dia_sem_trabalho_ambos': 28, 'esp_desconta_janela_declarada': 54, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.8% de 1067 dias comparados
+[3] ESTRUTURA     3 dia-colab      23.1 h    3 colabs
+[3] CADASTRO     15 dia-colab      38.5 h    6 colabs
+[3] BATIDA       38 dia-colab     178.3 h   21 colabs
+[4] TOTAL divergentes 56
+[5] colabs com divergencia: 28
+ESTRUTURA_DIA|11/2026|col37|2026-11-14|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
+ESTRUTURA_DIA|11/2026|col727|2026-11-10|esp_min=307|e6_min=0|teto_min=0|dif_min=-307|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col1021|2026-11-06|esp_min=841|e6_min=0|teto_min=0|dif_min=-841|classe=e6_zero_esp_trabalho/FORA|paridade=IMPAR|batidas=05:55 19:56|veredito=folga
+ESTRUTURA_DIAS_LINHAS 11/2026 3 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=23.15|colabs=3
+PARCIAL|11/2026|CADASTRO|dias=15|horas=38.47013154777778|colabs=6
+PARCIAL|11/2026|BATIDA|dias=38|horas=178.25105356722221|colabs=21
+PARCIAL_TOTAL|11/2026|dias=56|horas=239.87118511499999|colabs=28
+TEMPO_SEGUNDOS 177.5
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 273276
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 61
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1558
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6837
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 61
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6781
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4986
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4986
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 593
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 187
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 495937
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 618
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3000
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 219
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13372
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 108
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3977
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 200
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 2
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 26387
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 5880
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41086
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 19816
+SOMA 10/2026 41   <- tem de ser igual a soma das classes (41) True
+SOMA 10/2026 HORAS 167.528682867500002 True
+SOMA 10/2026 COLABS_UNIAO 23 True
+SOMA 11/2026 56   <- tem de ser igual a soma das classes (56) True
+SOMA 11/2026 HORAS 239.87118511499999 True
+SOMA 11/2026 COLABS_UNIAO 28 True
+rc_sombra=0
+```
+
+- **SOMA:** as seis linhas exibem `True` no dado fornecido. [nao verificado]
+- **ESTRUTURA_DIAS_LINHAS:** ambas exibem `True`: `10/2026 5 True` e `11/2026 3 True`. [nao verificado]
+- **INCOMPLETO:** não aparece na saída fornecida desta parte. [nao verificado]
 
 ## 16/11 01:45 · sessao 8fe86b15dd7e · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
 
@@ -827,400 +1095,4 @@ Os dois sem obra:
 
 Observação para consolidação: linhas antigas anexadas deslocaram-se no HEAD: JUSTIFICATIVA `1918→1956`; BO2910 `1102→1116`; O232 `1239→1253`; BO-ADMIN `820→832`. Conteúdo verificado nas linhas atuais citadas.
 
-## 16/11 00:54 · sessao bf1dd93cfcb9 · RESPOSTAS-BO-1611 · censo · origem=Code
-
-**(A) Obra → casos ligados**
-
-**Há 2 IDs do p0 com ligação recuperável; fechamento atual em prod: [nao verificado].** A ligação de BO-0611/05 alcança um complemento da classe, sem certificar o encerramento da queixa de GPS. (app/docs/RELATO.md:343; app/docs/BACKLOG.md:2074; app/docs/BACKLOG.md:2083; app/docs/RELATO.md:1929)
-
-| Obra | Caso e linha que liga |
-|---|---|
-| E3 — `90f3fa66b` | **Não ligado: [nao verificado].** A grade publica “2” sem individualizar os casos. BO-1311/04 está expressamente destinado à E4B, com “NAO se cura na E3”. (app/docs/GRADE-MESTRA.md:119; app/docs/BACKLOG.md:2010) |
-| HJ-091 — `8376da7aa` | **HJ-091** → HJ-091-LISTA, explicitamente escrito como NO AR. O registro do pouso documenta preservação das rejeitadas e uma lista de 60 para o DP. (app/docs/RELATO.md:343; app/docs/BACKLOG.md:750; app/docs/RELATO.md:483) |
-| BATIDA-DEDUP-RETRATADA — `b6d268dfd` | **BO-0611/05**, pela ponte exata de sítio: o complemento nomeia a janela de duplicidade em `triagem_batida.py:662`; a obra nomeia esse mesmo sítio. É ligação ao complemento, não prova de fechamento integral do item. (app/docs/BACKLOG.md:2074; app/docs/BACKLOG.md:2083) |
-| CONTRATO-DE-ENTRADA-DO-FIO — `77dfa94fa` | **Não ligado ao p0: [nao verificado].** O caso nomeado é HJ-095, ausente do rol fornecido; a indicação “1” do roteiro não individualiza uma ficha. (app/docs/BACKLOG.md:2224; app/docs/GRADE-MESTRA.md:688; p0_universo.r, anexo, seção B) |
-| TELA-DIZ-O-QUE-O-SERVIDOR-DISSE — `fac43f42a` | **Não ligado: [nao verificado].** O registro identifica um laudo de 15/11. A possível ponte de BO05 por `pwa.js:158` fica fora do aval dessa obra. (app/docs/BACKLOG.md:1939; app/docs/BACKLOG.md:2074; app/docs/BACKLOG.md:2029) |
-| HE-REVOGADA-NA-PORTA — `271ecba2e` | **Não ligado: [nao verificado].** Os registros descrevem portas e competência, sem individualizar caso do p0. (app/docs/RELATO.md:225; app/docs/BACKLOG.md:1951) |
-| BUG-ENC-CELULAS-FORMA — `7825fec5b` | **Não ligado: [nao verificado].** A linha descreve a forma de `celulas`; o nominal do impacto é col174, 25/10, ligado a outra obra. (app/docs/BACKLOG.md:988; app/docs/RELATO.md:33; app/docs/BACKLOG.md:1759) |
-
-A atribuição escrita das fontes é esta:
-
-| Fonte | Atribuição comprovada |
-|---|---|
-| BO-0611 | Mauricio como destinatário: “texto ao Mauricio por item”. (app/docs/PROMPTS.md:1914) |
-| BO-1311-ROTEIRO | Denominação **BO-[nome]-1311-ROTEIRO**; autoria do relato, além desse rótulo: **[nao verificado]**. (app/docs/BACKLOG.md:795) |
-| HJ | Fernando: “56 HJ do Fernando → unidades pessoa+dia”. (app/docs/BACKLOG.md:1883) |
-| BO-ADMIN-2710 | Há associação explícita de itens a BO-[nome]; atribuição escrita da fonte inteira: **[nao verificado]**. (app/docs/BACKLOG.md:833; app/docs/BACKLOG.md:835; app/docs/BACKLOG.md:841) |
-| BO2910-ESTRUTURA | Identificada como triagem BO-ADMIN-2910; atribuição a Mauricio ou Fernando: **[nao verificado]**. (app/docs/BACKLOG.md:1116) |
-
-**R3 (se pousar)**
-
-Casos individualizados do p0 que a c17 fecharia: **[nao verificado]**. O escopo publicado reúne LU-01..07 e achados retirados do pouso da E3; o predesenho trata do universo dos retratos, alarme `cego`, C5 e relógio. Isso não fornece uma ligação individual de fechamento aos casos do p0. **Fora do total.** (app/docs/BACKLOG.md:770; app/docs/RELATO.md:61)
-
-**(B) Conferência dos casos ligados**
-
-| Caso; pessoa registrada; dia/competência | Perguntar a quem e o quê | Juiz real; esperado para FECHADO | O que o admin lê |
-|---|---|---|---|
-| **BO-0611/05 — col456**. Identificação: app/docs/RELATO.md:1929. Dia/competência: **[nao verificado]**. | Ao admin responsável pelo relato: identificar o dia e instante da tentativa, distinguindo a queixa de GPS do complemento de duplicidade. Responsável nominal: **[nao verificado]**. A V2 registra barreira GPS; o complemento registra deduplicação. (app/docs/RELATO.md:1929; app/docs/BACKLOG.md:2074) | A deduplicação consulta **`ponto.turnos.batidas_apuraveis`**, leitura em app/ponto/turnos.py:2868 e app/ponto/turnos.py:2888. Registro dessa função em JUIZES/core: **[nao verificado]**. Valor suficiente para FECHADO: **[nao verificado]**. **Não chamar `registrar_batida`**: cria batida e dispara fechamento. (app/ponto/registro_batida.py:152; app/ponto/registro_batida.py:156; app/ponto/registro_batida.py:158) | O DP lê pendências offline na view e o template apresenta o resultado de `tem_gps`, inclusive “Sem GPS”. Isso mostra a situação das marcações existentes, sem comprovar uma tentativa sem dia identificado. (app/ponto/views.py:437; app/ponto/views.py:444; app/templates/ponto/batidas_offline_pendentes.html:96) |
-| **HJ-091 — col127 — 02/10/2026**, agendamento 114. Identificação e dia: app/docs/RELATO.md:749. Competência: **[nao verificado]**. | Ao **DP**: conferir o dia de agendamento sem ausência aprovada e decidir o passivo pela tela. O passivo é destinado à lista do DP. (app/docs/RELATO.md:749; app/ferias/services.py:136) | **`ponto.turnos.ausencia_cobre(..., para='folha')`**, registrado em app/docs/JUIZES.md:52; implementação em app/ponto/turnos.py:2550. Retorna ausência aprovada ou `None`. Valor suficiente para fechar este passivo: **[nao verificado]**; cobertura isolada não certifica a origem. O contador específico trata separadamente origem e dia sem ausência. (app/ponto/turnos.py:2528; app/ferias/services.py:135) | A view lê **`origem_de_ferias`**, que entrega agendamento, período e dia consultado; o template mostra esses dados e o caminho da Gestão de Férias. (app/ponto/views.py:2093; app/ponto/services/ausencia.py:101; app/templates/ponto/partials/painel_ausencia.html:135) |
-| **HJ-091 — col344 — 05, 06 e 07/11/2026**, agendamento 103. Identificação/dias: app/docs/RELATO.md:489. Competência 11 aberta naquele registro. (app/docs/RELATO.md:489) | Ao **DP**: conferir a origem 103 das três rejeitadas, a preservação do abono 5592 e a ausência de novas férias aprovadas que contornem os vetos. Ao **Fernando**, homologar o caso; o registro reserva a ele o encerramento. (app/docs/RELATO.md:483; app/docs/RELATO.md:489; app/docs/RELATO.md:8919) | Mesmo juiz de cobertura: **`ponto.turnos.ausencia_cobre`**. Esperado estrutural documentado: rejeitadas preservadas com origem 103, abono 5592 intacto e sem novas férias aprovadas contornando os vetos. **Um juiz registrado cuja resposta certifique esse conjunto: [nao verificado].** (app/docs/JUIZES.md:52; app/docs/RELATO.md:483; app/docs/RELATO.md:489) | Mesmo painel de origem. A edição genérica some para férias derivadas; o painel encaminha à Gestão de Férias. (app/templates/ponto/partials/painel_ausencia.html:131; app/templates/ponto/partials/painel_ausencia.html:140; app/templates/ponto/partials/painel_ausencia.html:145) |
-
-O contador **`ferias.services.ferias_espelho_x_agendamento`** é explicitamente somente leitura, com esperado zero nos dois sentidos; seu registro em JUIZES/core é **[nao verificado]**. Além disso, o pouso mantém passivo para decisão do DP. Portanto, não o substituo por um juiz suficiente para declarar o caso inteiro FECHADO. (app/ferias/services.py:135; app/ferias/services.py:143; app/docs/RELATO.md:483)
-
-**(C) Universo não ligado às sete obras — contagem por fonte**
-
-Contagem sobre as **68 linhas individualizadas do p0 fornecido**, descontando HJ-091 e BO-0611/05. O universo integral continua **[nao verificado]**: a ingestão declara 80 unidades e remete o mapa individual ao arquivo privado. (p0_universo.r, anexo, seções B–C; app/docs/RELATO.md:8907; app/docs/RELATO.md:8919)
-
-| Fonte | Não ligados | Referência |
-|---|---:|---|
-| BACKLOG-HJ, por raiz | 10 | p0_universo.r, seção B; ligação descontada em app/docs/RELATO.md:343 |
-| HJ-INGESTAO, IDs recuperáveis | 17 | p0_universo.r, seção B; app/docs/RELATO.md:8911; app/docs/RELATO.md:8912; app/docs/RELATO.md:8913; app/docs/RELATO.md:8915 |
-| BO-0611 | 13 | app/docs/BACKLOG.md:1926; ligação descontada em app/docs/BACKLOG.md:2074 e app/docs/BACKLOG.md:2083 |
-| BO-1311-ROTEIRO | 10 | app/docs/BACKLOG.md:795 |
-| BO2910-ESTRUTURA | 5 | app/docs/BACKLOG.md:1116 |
-| BO-ADMIN-2710 | 11 | p0_universo.r, seção C; app/docs/RELATO.md:3895; app/docs/RELATO.md:3903 |
-| **Total documental** | **66** | Soma das linhas acima; completude integral **[nao verificado]** |
-
-**(D) Script**
-
-A sonda preserva os IDs do p0 e emite uma linha por pessoa+dia recuperável; HJ-091, contado como uma raiz no p0, possui os quatro pares abaixo documentados. Ela informa a cobertura, mas mantém **NAO_CONFERIDO** onde falta um juiz suficiente ou a identificação do fato. (p0_universo.r, seção B; app/docs/RELATO.md:749; app/docs/RELATO.md:489; app/docs/RELATO.md:1929)
-
-```python
-# SONDA RESPOSTAS-BO-1611
-import sys
-sys.dont_write_bytecode = True
-
-import json
-import re
-from datetime import date
-
-from django.db import connection
-from django.utils import timezone
-from django_tenants.utils import schema_context
-
-# Identidades/dias:
-# app/docs/RELATO.md:1929, :749, :489.
-CASOS = [
-    ("BO-0611/05", 456, None, "ponto.turnos.batidas_apuraveis"),
-    ("HJ-091", 127, date(2026, 10, 2), "ponto.turnos.ausencia_cobre"),
-    ("HJ-091", 344, date(2026, 11, 5), "ponto.turnos.ausencia_cobre"),
-    ("HJ-091", 344, date(2026, 11, 6), "ponto.turnos.ausencia_cobre"),
-    ("HJ-091", 344, date(2026, 11, 7), "ponto.turnos.ausencia_cobre"),
-]
-
-
-def somente_select(execute, sql, params, many, context):
-    texto = sql.strip()
-    if (
-        not re.match(r"(?is)^SELECT\b", texto)
-        or re.search(r"(?is)\bFOR\s+(UPDATE|SHARE)\b|\bINTO\b", texto)
-        or ";" in texto
-    ):
-        raise RuntimeError("SQL bloqueado pela guarda de leitura")
-    return execute(sql, params, many, context)
-
-
-total_erros = 0
-total_nao_conferidos = 0
-
-for caso_id, pessoa_pk, dia, juiz in CASOS:
-    resposta = None
-    estado = "NAO_CONFERIDO"
-    motivo = ""
-    dia_saida = dia.isoformat() if dia else "[nao_verificado]"
-
-    try:
-        with schema_context("juliani"):
-            with connection.execute_wrapper(somente_select):
-                if connection.schema_name != "juliani":
-                    raise RuntimeError("Tenant diferente do solicitado")
-
-                from colaboradores.models import Colaborador
-
-                # Busca exclusivamente por PK; não serializar o objeto.
-                pessoa = Colaborador.objects.only("pk").get(pk=pessoa_pk)
-
-                if dia is None:
-                    # app/docs/RELATO.md:1929; app/docs/BACKLOG.md:2074.
-                    # Não chamar registrar_batida: grava em
-                    # app/ponto/registro_batida.py:152 e :158.
-                    motivo = (
-                        "dia_instante_e_batidas_do_fato=[nao_verificado];"
-                        "registro_do_juiz_da_dedup=[nao_verificado];"
-                        "escritor_nao_chamado;"
-                        "fonte=app/docs/RELATO.md:1929"
-                    )
-                else:
-                    from ponto.turnos import ausencia_cobre
-                    from ponto.services.ausencia import origem_de_ferias
-
-                    # Data civil do fato é literal; instante da consulta é local.
-                    agora_local = timezone.localtime()
-                    hoje_local = timezone.localdate(agora_local)
-
-                    # Juiz registrado: app/docs/JUIZES.md:52.
-                    # Leitura: app/ponto/turnos.py:2550 e :2566.
-                    ausencia = ausencia_cobre(pessoa, dia, para="folha")
-
-                    if ausencia is None:
-                        cobertura = None
-                        origem = None
-                    else:
-                        cobertura = {
-                            "ausencia_pk": ausencia.pk,
-                            "tipo": ausencia.tipo,
-                            "status": ausencia.status,
-                        }
-                        # Mesmo montador do painel:
-                        # app/ponto/views.py:2093;
-                        # app/ponto/services/ausencia.py:101.
-                        painel = origem_de_ferias(ausencia)
-                        origem = None if painel is None else {
-                            "agendamento_pk": painel["agendamento"],
-                            "dia": painel["dia"].isoformat(),
-                        }
-
-                    resposta = {
-                        "cobertura_folha": cobertura,
-                        "origem_no_painel": origem,
-                        "consulta_em": agora_local.isoformat(),
-                        "hoje_local": hoje_local.isoformat(),
-                    }
-
-                    # Não promover cobertura a fechamento do conjunto:
-                    # origem/vetos/passivo: app/docs/RELATO.md:483 e :489.
-                    motivo = (
-                        "cobertura_consultada;"
-                        "juiz_registrado_suficiente_para_origem_vetos"
-                        "_e_passivo=[nao_verificado];"
-                        "conferencia_DP_e_homologacao_pendentes;"
-                        "fontes=app/docs/RELATO.md:483,"
-                        "app/docs/RELATO.md:8919"
-                    )
-
-    except Exception as erro:
-        total_erros += 1
-        causa = getattr(erro, "__cause__", None)
-        sqlstate = (
-            getattr(causa, "sqlstate", None)
-            or getattr(causa, "pgcode", None)
-        )
-        # Imprime o erro por classe/SQLSTATE; a mensagem arbitrária pode
-        # conter dados pessoais ou parâmetros SQL.
-        resposta = {
-            "erro": type(erro).__name__,
-            "sqlstate": sqlstate,
-        }
-        estado = "NAO_CONFERIDO"
-        motivo = "erro_impresso_por_classe_e_sqlstate;nao_convertido_em_zero"
-
-    if estado == "NAO_CONFERIDO":
-        total_nao_conferidos += 1
-
-    valor = json.dumps(
-        resposta, ensure_ascii=True, separators=(",", ":")
-    )
-    print(
-        f"CASO {caso_id} col{pessoa_pk} {dia_saida} "
-        f"juiz={juiz} resposta={valor} -> {estado} motivo={motivo}"
-    )
-
-print(f"total_erros={total_erros}")
-print(f"total_nao_conferidos={total_nao_conferidos}")
-```
-
-## 16/11 00:50 · sessao 86940fe41689 · - · - · origem=Ronald (tmux)
-
-**E3 e R3:** não achei ligação documental suficiente para afirmar fechamento de um caso do p0 por E3 `90f3fa66b` ou R3 c17. **[nao verificado]**
-
-- `app/docs/RELATO.md:477` mede `col996 30/10` e `col399 30/09`, mas pertence à **E3-FIO-PELA-ESCADA/RESTO-R2 expressamente não pousada**. É mudança de fio, sem certificação de fechamento.
-- `app/docs/BACKLOG.md:2010` liga o caso BO-1311/04 (`col246 01/11`) à E4B e escreve **“NAO se cura na E3”**.
-- `app/docs/RELATO.md:875` e `:928` mencionam perguntas de `col789` na E3-10, mas não identificam dias/IDs que permitam casar com BO-ADMIN-2710/6. Fechamento desse caso por essa passagem: **[nao verificado]**.
-- R3 separada: escopo LU-01..07 e achados em `app/docs/BACKLOG.md:770`; pendências de origem da medição, relógio e universo em `app/docs/RELATO.md:51`; contrato c17 de nove itens em `:61`. Casos p0 que fecharia nominalmente: **[nao verificado]**. Não contar no total.
-
-**HJ-091 tem ligação explícita:**
-
-| Evidência | Referência |
-|---|---|
-| HJ-091 → HJ-091-LISTA NO AR | `app/docs/RELATO.md:343` |
-| Merge `8376da7aa`; origem preservada nas rejeitadas; 60 casos na lista DP | `app/docs/BACKLOG.md:750`; `app/docs/RELATO.md:483` |
-| Subcasos documentados: `col127 02/10`, agendamento 114; `col344 07/11`, agendamento 103 | `app/docs/RELATO.md:749` |
-| `col344` nos três dias 05–07/11; rejeitadas 3977/3995/3985; abono 5592 preservado; erro observado era nascerem férias aprovadas novas em 06–07/11 | `app/docs/RELATO.md:489`; preservação após pouso em `:483` |
-| Tela do admin lê `origem_de_ferias(a)` | `app/ponto/views.py:2091–2093` |
-| Serviço retorna agendamento, período, dias, status, dia consultado | `app/ponto/services/ausencia.py:101–112` |
-| Template mostra origem/período/dia; não oferece edição genérica para derivada | `app/templates/ponto/partials/painel_ausencia.html:131–145` |
-
-**Juízes reais e leitura segura HJ-091:**
-
-- `ponto.turnos.cobertura_ausencia_periodo(colab, ini, fim, para='folha')`, registrado em `app/core/juizes.py:257`, corpo somente consulta em `app/ponto/turnos.py:2747–2766`; retorna `{date: Ausencia}`.
-- `ponto.turnos.ausencia_cobre(colab, dia, para='folha')`, registrado em `app/docs/JUIZES.md:52–54`, corpo somente consulta em `app/ponto/turnos.py:2550–2571`; retorna uma ausência aprovada ou `None`, por `_pelo_efeito` em `:2523–2532`.
-- `ferias.services.em_gozo_hoje(hoje=dia, colaborador=colab)` está registrado em `app/core/juizes.py:266`; somente consulta em `app/ferias/services.py:59–70`. Responde se o agendamento cobre a data, **não** se as ausências derivadas têm origem correta.
-- O contador específico **`ferias.services.ferias_espelho_x_agendamento()`**, explicitamente **SO LEITURA e esperado zero nos dois sentidos**, está em `app/ferias/services.py:135–165`. Retorna PKs de ausências sem origem válida e pares `(agendamento_pk, data)` sem ausência aprovada própria. **Não encontrei seu registro em JUIZES/core: [nao verificado].**
-- Para o caso inteiro HJ-091, a resposta de um juiz de cobertura isoladamente não certifica a origem FK nem preservação das rejeitadas. O script deve consultar a cobertura e os objetos específicos sem chamar espelhamento/backfill; se exigir um único juiz registrado que certifique tudo, resultado **NAO_CONFERIDO**, motivo “juiz suficiente para origem e preservação dos vetos [nao verificado]”. As funções que espelham/gravam ficam fora.
-
-**Proveniência escrita:**
-
-- HJ: **“56 HJ do Fernando”** em `app/docs/BACKLOG.md:1883`; **“56 TXT do Fernando”** em `app/docs/PROMPTS.md:1888`.
-- BO-0611: **“BO-[nome]-0611 (14 itens)”** em `app/docs/PROMPTS.md:1914`; denominação também em `app/docs/BACKLOG.md:1926–1927`.
-- BO-1311: **BO-[nome]-1311-ROTEIRO**, dez casos e ordem das pessoas (`col1019`, `col996`, `col1032`, `col246`, `col265`, `col982`, `col1004`, `col523`, `col866`, `col859`) em `app/docs/BACKLOG.md:795`.
-- BO-ADMIN-2710: associação a **BO-[nome]** está nas linhas de suas obras: `app/docs/BACKLOG.md:833`, `:835`, `:841`; a nomeação formal A/B/C é explicada em `app/docs/CORTES.md:366`.
-- BO2910-ESTRUTURA: `app/docs/BACKLOG.md:1116` a chama “triagem BO-ADMIN-2910”; autoria Mauricio/Fernando nessa passagem: **[nao verificado]**.
-
-## 16/11 00:49 · sessao 80b7cbd5c09c · - · - · origem=Ronald (tmux)
-
-**BATIDA-DEDUP-RETRATADA → BO-0611/05, pela ponte de sítio explicitamente permitida pelo usuário.** A ficha complementar desse caso nomeia `triagem_batida.py:662` e a janela de duplicidade; a obra nomeia exatamente esse sítio. Provas: `app/docs/BACKLOG.md:2074` + `app/docs/BACKLOG.md:2083`. Essa ligação é ao complemento da classe; não prova o encerramento da queixa original de GPS. A queixa original aparece como barreira GPS em `app/docs/RELATO.md:1929`.
-
-- Identidade: **col456**, `app/docs/RELATO.md:1929` e `app/docs/BACKLOG.md:1927`. Dia do fato: **[nao verificado]**.
-- A função que a obra efetivamente consulta é `ponto.turnos.batidas_apuraveis(colab, ini=None, fim=None)`, somente queryset: `app/ponto/turnos.py:2868`, filtros em `:2887–2895`. A casca atual a chama em `app/ponto/services/triagem_batida.py:664–668` e `app/api/views_core.py:514–517`.
-- Não encontrei essa função literalmente em `JUIZES.md` ou `core/juizes.py`: registro exigido pelo pedido **[nao verificado]**. Não apresentar `tem_gps` como juiz da dedup.
-- O efetivo escritor `ponto.registro_batida.registrar_batida` está em `app/ponto/registro_batida.py:94` e executa `objects.create` em `:152` e `:158`, mais efeitos de fechamento em `:156`/`:162`: **não chamar na sonda**.
-- Para comprovar FECHADO nesse caso faltam o instante do toque e batidas concretas antes/depois **[nao verificado]**. Sonda deve imprimir **NAO_CONFERIDO**, com motivo dia/instante não individualizado e impossibilidade de exercitar escritor.
-- Leitor admin comprovado para a queixa GPS do mesmo caso: view `app/ponto/views.py:437`, queryset de pendentes em `:444–449`, contador pelo `tem_gps` em `:488`; template `app/templates/ponto/batidas_offline_pendentes.html:95–100`. Feed também chama o filtro em `app/templates/core/_d2_feed.html:16–18`. O espelho aceita gestor `?colab=<pk>` em `app/ponto/views.py:117–123`, exibindo timestamp cru em `app/templates/ponto/espelho.html:246`.
-
-**CONTRATO-DE-ENTRADA-DO-FIO: nenhum caso do p0 ligado com segurança.** A ligação nominal é **HJ-095**, ausente do universo p0 fornecido: `app/docs/BACKLOG.md:2224` e `app/docs/GRADE-MESTRA.md:688`. A grade traz “1 (roteiro … / mapa HJ)” mas não individualiza ficha, pessoa ou dia: não usar esse 1 como caso identificado (`app/docs/GRADE-MESTRA.md:688`). O smoke col677 é da obra, mas não identifica caso p0 (`app/docs/RELATO.md:233`).
-
-**TELA-DIZ-O-QUE-O-SERVIDOR-DISSE: nenhum caso p0 ligado com segurança.** A obra nomeia `bater_ponto_v2.html:327` e laudo novo de 15/11 (`app/docs/BACKLOG.md:1939`); o complementar BO05 cita a fila `pwa.js:158` (`app/docs/BACKLOG.md:2074`), porém a própria fila registra que **pwa.js está fora do aval C** (`app/docs/BACKLOG.md:2029`). Compartilhar o arquivo `bater_ponto_v2.html` com a barreira GPS de BO05 (`app/docs/BACKLOG.md:2011`) não comprova que esta obra fecha aquela queixa. A tela atual lê `data.status`, distinguindo ok/ja_registrada/ignorada_intervalo em `app/templates/ponto/bater_ponto_v2.html:168–174`, acionada no 2xx em `:365`; isso documenta comportamento, não ligação ao caso p0.
-
-**Fontes/donos escritos:** BO-0611 é explicitamente **BO-[nome]-0611** (`app/docs/BACKLOG.md:1926–1927`); BO1311 é **BO-[nome]-1311-ROTEIRO**, com ordem col1019, col996, col1032, col246, col265, col982, col1004, col523, col866, col859 (`app/docs/BACKLOG.md:795`). Isso confirma os rótulos sem precisar escrever nome ou CPF de colaborador.
-
-## 16/11 00:49 · sessao 552b54e251f3 · - · - · origem=Ronald (tmux)
-
-HE-REVOGADA-NA-PORTA: **nenhum caso do universo documentalmente ligado [nao verificado]**. As linhas da obra tratam das quatro portas e da competência 11 aberta, sem nomear caso BO/HJ, pessoa ou dia do universo: app/docs/RELATO.md:225; app/docs/BACKLOG.md:1951. O pouso consta em app/docs/RELATO.md:17.
-
-BUG-ENC-CELULAS-FORMA: **nenhum caso do universo documentalmente ligado [nao verificado]**. A linha da obra nomeia `dias_encerrados`, `turnos_do_colab`, cartório e geradora, sem caso do universo: app/docs/BACKLOG.md:988. Os sítios atingidos constam em app/docs/RELATO.md:8292. O impacto nomeia col174, 25/10, em app/docs/RELATO.md:33; esse nominal pertence a `CELULA-CONCORDE-NO-MEIO-DO-TURNO`, obra fora do universo dado, em app/docs/BACKLOG.md:1759. Não transportar por semelhança. O pouso consta em app/docs/RELATO.md:14.
-
-Para eventual referência técnica, sem adicionar casos:
-
-- `ponto.models.DecisaoHEQuerySet.vigentes`: leitura pura, retorna `filter(revogada_em__isnull=True)` — app/ponto/models.py:1265–1267. Não achei registro em `core/juizes.py` ou `JUIZES.md` **[nao verificado]**; declaração escrita existente em app/docs/CORTES.md:461.
-- `ponto.portas.he.decidir_he` é escritor, proibido para sonda — app/ponto/portas/he.py:158–160.
-- `ponto.turnos.dia_encerrado` é juiz registrado em app/core/juizes.py:239; assinatura/corpo em app/ponto/turnos.py:2050 e :2083. `dias_encerrados` é carregador, expressamente “não juiz” — app/ponto/turnos.py:2142.
-
-Fontes e destinatários:
-
-- **BO-0611 → Mauricio**, frase “quadro único soma=14 + texto ao Mauricio por item” — app/docs/PROMPTS.md:1914.
-- **BO-1311-ROTEIRO → BO-[nome]**, identificador e rol dos dez colabs — app/docs/BACKLOG.md:795; aval — app/docs/PROMPTS.md:2247. Frase separada dizendo autor do relato **[nao verificado]**.
-- **HJ → Fernando**, frase “56 HJ do Fernando → unidades pessoa+dia” — app/docs/BACKLOG.md:1883.
-- **BO-ADMIN-2710**: associação escrita a BO-[nome] para 8.1, 7, 1/3 e C — app/docs/BACKLOG.md:833, :835, :841, :849. Fonte inteira explicitamente atribuída ao Mauricio **[nao verificado]**.
-- **BO2910-ESTRUTURA**: remete à triagem BO-ADMIN-2910 — app/docs/BACKLOG.md:1116; aval diz somente “8 BOs do admin” — app/docs/PROMPTS.md:1620. Atribuição ao Mauricio **[nao verificado]**.
-- Cuidado com inferência pelo rótulo: `LAUDO-[nome]-2610` está escrito como “laudo do Fernando” — app/docs/PROMPTS.md:1490; `BO-[nome]-0511-CENSO` também usa relatório do Fernando — app/docs/PROMPTS.md:1880.
-
-Linhas atualizadas do universo úteis para consolidação:
-
-- BO2910 02/05/06/08 — app/docs/RELATO.md:3320, :3322, :3323, :3325; inventário das cinco classes — app/docs/BACKLOG.md:1116.
-- BO-ADMIN-2710 1–8.3 — app/docs/RELATO.md:3895–3903.
-- BO-0611 V2 — app/docs/RELATO.md:1929; rol antigo substituído — app/docs/RELATO.md:1991.
-- BO-1311 ficha→col, ordem contestável — app/docs/BACKLOG.md:795; app/docs/RELATO.md:684. Dados recuperáveis 06–10 e dias col859 07/11 e 09/11 — app/docs/RELATO.md:680.
-
-## 16/11 00:08 · sessao 50ce300f7dae · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
-
-Transcrição integral do dado fornecido, sem verificação independente. [nao verificado]
-
-```text
-sonda_leitura: script.py [4e9a5641d912b65d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
-
-PARTE 1 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 110
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 595
-UNIVERSO_PARTE 11/2026 99
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 209 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1180, 'bate_ate_10min': 1140, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 11, 'diverge_acima_60': 25, 'dia_batida_impar': 33, 'impar_que_BATE': 15, 'impar_que_DIVERGE': 18, 'impar_dentro_da_faixa': 15, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 18, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1727, 'dia_isento_ou_ausencia': 316, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 43, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.6% de 1180 dias comparados
-[3] ESTRUTURA    10 dia-colab       9.1 h    3 colabs
-[3] CADASTRO     10 dia-colab      38.4 h    3 colabs
-[3] BATIDA       20 dia-colab     110.2 h   13 colabs
-[4] TOTAL divergentes 40
-[5] colabs com divergencia: 17
-ESTRUTURA_DIA|10/2026|col252|2026-09-23|esp_min=548|e6_min=594|teto_min=608|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:56 12:35 12:49 17:04|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-09-24|esp_min=552|e6_min=598|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:51 17:03|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-09-25|esp_min=556|e6_min=604|teto_min=616|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:51 12:37 12:50 17:07|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-09-28|esp_min=535|e6_min=581|teto_min=595|dif_min=46|classe=diverge_10_60|paridade=par|batidas=07:12 12:38 12:53 17:07|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-01|esp_min=545|e6_min=590|teto_min=605|dif_min=45|classe=diverge_10_60|paridade=par|batidas=07:00 12:37 12:51 17:05|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-02|esp_min=545|e6_min=593|teto_min=606|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:59 12:40 12:53 17:04|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-06|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:58 12:38 12:52 17:09|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col252|2026-10-09|esp_min=544|e6_min=592|teto_min=604|dif_min=48|classe=diverge_10_60|paridade=par|batidas=07:06 12:48 13:00 17:10|veredito=trabalhou
-ESTRUTURA_DIA|10/2026|col864|2026-10-12|esp_min=509|e6_min=449|teto_min=509|dif_min=-60|classe=diverge_10_60|paridade=par|batidas=15:01 18:10 19:10 23:30|veredito=feriado
-ESTRUTURA_DIA|10/2026|col876|2026-09-21|esp_min=550|e6_min=665|teto_min=722|dif_min=115|classe=diverge_acima_60|paridade=par|batidas=18:29 04:39 05:36 06:31|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 10/2026 10 True
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=10|horas=9.116283817777775|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=10|horas=38.355213611111104|colabs=3
-PARCIAL|10/2026|BATIDA|dias=20|horas=110.21011656222223|colabs=13
-PARCIAL_TOTAL|10/2026|dias=40|horas=157.681613991111109|colabs=17
-ESTIMATIVA processados 125 universo 209 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 209 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 209 minutos_total 3.2 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 979, 'bate_ate_10min': 922, 'esp_zero_e6_trabalho': 13, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 7, 'diverge_acima_60': 31, 'dia_batida_impar': 47, 'impar_que_BATE': 17, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 20, 'impar_FORA_da_faixa': 10, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1391, 'dia_isento_ou_ausencia': 232, 'dia_sem_trabalho_ambos': 38, 'esp_desconta_janela_declarada': 33, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.2% de 979 dias comparados
-[3] ESTRUTURA     9 dia-colab      34.9 h    4 colabs
-[3] CADASTRO     20 dia-colab     115.4 h    6 colabs
-[3] BATIDA       28 dia-colab     157.3 h   15 colabs
-[4] TOTAL divergentes 57
-[5] colabs com divergencia: 20
-ESTRUTURA_DIA|11/2026|col114|2026-11-08|esp_min=439|e6_min=429|teto_min=499|dif_min=-10|classe=diverge_10_60|paridade=par|batidas=09:59 14:50 16:00 18:18|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-09|esp_min=551|e6_min=597|teto_min=610|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:53 12:38 12:52 17:04|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-10|esp_min=551|e6_min=598|teto_min=611|dif_min=47|classe=diverge_10_60|paridade=par|batidas=06:56 12:39 12:52 17:07|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-11|esp_min=550|e6_min=598|teto_min=611|dif_min=48|classe=diverge_10_60|paridade=par|batidas=06:54 12:39 12:52 17:04|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col252|2026-11-13|esp_min=551|e6_min=597|teto_min=611|dif_min=46|classe=diverge_10_60|paridade=par|batidas=06:52 12:35 12:49 17:03|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col516|2026-10-23|esp_min=361|e6_min=0|teto_min=0|dif_min=-361|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=folga
-ESTRUTURA_DIA|11/2026|col516|2026-10-28|esp_min=372|e6_min=0|teto_min=0|dif_min=-372|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=trabalhou
-ESTRUTURA_DIA|11/2026|col996|2026-10-28|esp_min=0|e6_min=580|teto_min=580|dif_min=580|classe=esp_zero_e6_trabalho|paridade=par|batidas=21:18 06:57|veredito=folga
-ESTRUTURA_DIA|11/2026|col996|2026-11-10|esp_min=443|e6_min=1026|teto_min=1116|dif_min=583|classe=diverge_acima_60|paridade=par|batidas=06:57 13:00 14:30 15:50 21:16 06:59|veredito=em_aberto
-ESTRUTURA_DIAS_LINHAS 11/2026 9 True
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=9|horas=34.87566822027778|colabs=4
-PARCIAL|11/2026|CADASTRO|dias=20|horas=115.41531537222224|colabs=6
-PARCIAL|11/2026|BATIDA|dias=28|horas=157.27115423694445|colabs=15
-PARCIAL_TOTAL|11/2026|dias=57|horas=307.56213782944447|colabs=20
-TEMPO_SEGUNDOS 192.2
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 252870
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 98
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1130
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6152
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 52
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6181
-TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 3
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3658
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3658
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 591
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 181
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 466420
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 596
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2826
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 172
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12084
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 121
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 3994
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 5
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 23094
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4574
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 37388
-TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 16
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 16723
-SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
-SOMA 10/2026 HORAS 157.681613991111109 True
-SOMA 10/2026 COLABS_UNIAO 17 True
-SOMA 11/2026 57   <- tem de ser igual a soma das classes (57) True
-SOMA 11/2026 HORAS 307.56213782944447 True
-SOMA 11/2026 COLABS_UNIAO 20 True
-rc_sombra=0
-```
-
-- `SOMA`: as seis linhas apresentam `True` no dado fornecido. [nao verificado]
-- `ESTRUTURA_DIAS_LINHAS`: as duas linhas apresentam `True` — `10/2026 10 True` e `11/2026 9 True`. [nao verificado]
-- `INCOMPLETO`: não aparece no texto fornecido desta parte 1 de 6. [nao verificado]
-
-_5878 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5883 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
