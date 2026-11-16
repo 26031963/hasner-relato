@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 11:54:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (145.5 MB). Acoes na janela: **713**.
+**Medido em 16/11/2026 11:59:46.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (145.5 MB). Acoes na janela: **709**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -719,7 +719,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:03:54 | Bash | Read the prova script fully | `cd /home/ronald/saas-hasner; sed -n 1,130p logs/sombra/f1nova_b1_prova.py` |
 | 00:03:52 | Bash | Inspect prova script for writes; find pista launcher | `cd /home/ronald/saas-hasner; wc -l logs/sombra/f1nova_b1_prova.py; grep -nE '\.save\(\|\.create\(\|update\(\|delete\(\|atomic\|raise\|set_rollback' logs/sombra/f1nova_b1_prova.py \| head -20; ls logs/E3-RESTO-R3/c17/ \| grep -i pista \| head; grep -l 'pista' bin/*.sh \| head` |
 | 00:03:47 | Bash | Check copy state, suite flags, trava, prova script writes | `cd /home/ronald/wt-f1nova-b1-203152; git log --oneline -1 \| cat; git status --porcelain \| head; cd /home/ronald/saas-hasner; grep -nE '^\s*--(dir\|espera\|motivo\|parallel)\)' bin/suite.sh \| head; bin/trava_teste.sh --quem; head -30 logs/sombra/f1nova_b1_prova.py \| grep -nE 'save\|create\|update\|delete\|atomic\|raise' \| head` |
-| 23:54:33 | Bash | Record mapa result in RELATO, check hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') k=[i for i,l in enumerate(L) if l.startswith('ESTADO 23:5x ESPELHO-VERDADE-FECHO V0 EM VOO')]; assert len(k)==1 L[k[0]]=L[k[0]].replace('(c) mapa -> Codex leitura V0/mapa.q;','(c) FEITA 23:5x: logs/ESPELHO-VERDADE-FECHO/V0/mapa.md -- 13 itens (8 EM_CURSO + 1 ESPERA_RONALD de espelho_verdade + 4 PARC ...` |
-| 23:54:26 | Bash | Write mapa.md with sample check header | `cd /home/ronald/saas-hasner/logs/ESPELHO-VERDADE-FECHO/V0; { cat <<'EOF' # V0 (c) mapa.md -- ESPELHO-VERDADE-FECHO, HEAD 3580b35e0 Fonte: Codex leitura (mapa.q -> mapa.r, 15/11 23:52). Conferido pela sessao em AMOSTRA de 12 citacoes no hash (espelho_verdade.py:35,49,96,151,181; GRADE-MESTRA.md:845,860,862; placar_estrutural.py:74,146,211,433): 12/12 conferem. Universo conferido por contagem no has ...` |
-| 23:54:20 | Bash | Count states to confirm universe | `cd /home/ronald/saas-hasner; git show 3580b35e0:app/core/placar_estrutural.py \| grep -nE "'estado': *[A-Z_]+" \| awk -F"'estado': *" '{split($2,a,/[,} ]/); print a[1]}' \| sort \| uniq -c; git show 3580b35e0:app/core/espelho_verdade.py \| grep -oE "'estado': *[A-Z_]+" \| sort \| uniq -c` |
-| 23:54:16 | Bash | Sample-check Codex citations at hash | `cd /home/ronald/saas-hasner; H=3580b35e0; git show $H:app/core/espelho_verdade.py \| awk 'NR==35\|\|NR==49\|\|NR==96\|\|NR==151\|\|NR==181{print NR": "substr($0,1,160)}'; git show $H:app/docs/GRADE-MESTRA.md \| awk 'NR==845\|\|NR==860\|\|NR==862{print NR": "substr($0,1,140)}'; git show $H:app/core/placar_estrutural.py \| awk 'NR==74\|\|NR==146\|\|NR==211\|\|NR==433{print NR": "substr($0,1,140)}';  ...` |
