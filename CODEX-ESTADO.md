@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 00:54** · publicado em **16/11/2026 00:55** (UTC-3)
+> Ultima resposta processada: **16/11/2026 01:06** · publicado em **16/11/2026 01:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 01:06 · sessao b388a9727363 · - · - · origem=Ronald (tmux)
+
+Q3 — linhas do HEAD da cópia, sem confirmação em produção:
+
+| Caso | Obra | Estado na GRADE / BACKLOG | O que destrava |
+|---|---|---|---|
+| BO-ADMIN-2710/3 | JUSTIFICATIVA-PAGA-O-PERIODO | GRADE registra INTERROMPIDA; quadro posterior registra PARADA aguardando juiz. BACKLOG registra retorno à ordem viva, preservando a dependência do juiz. `app/docs/GRADE-MESTRA.md:270`, `:1758`; `app/docs/BACKLOG.md:1956`. | Pouso de COMPETENCIA-PAGA-UM-JUIZ; depois certificar árvore e condições do opus, consumo do parcial por motor/folha e DIFF novo. `app/docs/GRADE-MESTRA.md:1758`; `app/docs/BACKLOG.md:1956`. |
+| HJ-017-U1 | O232 | REGISTRADA; A/B no ar, complemento da ata pendente. `app/docs/GRADE-MESTRA.md:854`; `app/docs/BACKLOG.md:1253`. | Migrar o terceiro leitor, a ata; RED com quatro batidas e impacto de frota antes. Colisão documental com JUSTIFICATIVA consta da GRADE. `app/docs/BACKLOG.md:1253`; `app/docs/GRADE-MESTRA.md:854`. |
+| BO2910-ESTRUTURA/01 | BO2910-ESTRUTURA | REGISTRADA; `.+.......`, portanto censo falta conforme legenda. `app/docs/GRADE-MESTRA.md:170`, `:7`; `app/docs/BACKLOG.md:1116`. | Censo; classe: duas portas de vínculo/posto, exceção engolida e posto alterado sem empresa. `app/docs/GRADE-MESTRA.md:170`, `:7`; `app/docs/BACKLOG.md:1116`. |
+| BO2910-ESTRUTURA/02 | BO2910-ESTRUTURA | REGISTRADA; censo falta. `app/docs/GRADE-MESTRA.md:170`, `:7`; `app/docs/BACKLOG.md:1116`. | Censo; classe: chamado de texto livre sem leitor da célula. `app/docs/BACKLOG.md:1116`; `app/docs/GRADE-MESTRA.md:170`, `:7`. |
+| BO2910-ESTRUTURA/05 | BO2910-ESTRUTURA | REGISTRADA; censo falta. `app/docs/GRADE-MESTRA.md:170`, `:7`; `app/docs/BACKLOG.md:1116`. | Censo; classe: parcial aprovada pela tela sem período; período obrigatório na aprovação/edição. `app/docs/BACKLOG.md:1116`; `app/docs/GRADE-MESTRA.md:170`, `:7`. |
+| BO2910-ESTRUTURA/06 | BO2910-ESTRUTURA | REGISTRADA; censo falta. `app/docs/GRADE-MESTRA.md:170`, `:7`; `app/docs/BACKLOG.md:1116`. | Censo; classe: desligamento escreve fim sem conferir vigência e reativação não reabre vínculo. `app/docs/BACKLOG.md:1116`; `app/docs/GRADE-MESTRA.md:170`, `:7`. |
+| BO2910-ESTRUTURA/08 | BO2910-ESTRUTURA | REGISTRADA; censo falta. `app/docs/GRADE-MESTRA.md:170`, `:7`; `app/docs/BACKLOG.md:1116`. | Censo; classe: veredito admin sobrevive à regeneração com novos marcos. `app/docs/BACKLOG.md:1116`; `app/docs/GRADE-MESTRA.md:170`, `:7`. |
+| HJ-074 | FERIADO-ESCALA, escopo substituído por FERIADO-USA-A-LEI-DE-1609 | GRADE principal EM VOO, escopo anterior superado; quadro posterior EM VOO—PAREI 3(ii). BACKLOG SUPERADA e PARADA no desenho G. `app/docs/GRADE-MESTRA.md:127`, `:1798`; `app/docs/BACKLOG.md:729`. | Corte `! FERIADO-G item 3(ii)`; RELATO diz ENTREGUE FORA DO LOTE=1, col945, e construção (a) não abre. `app/docs/GRADE-MESTRA.md:1798`; `app/docs/RELATO.md:48`. |
+
+Os dois sem obra:
+
+- **HJ-005-U1:** col42, 01/10, irregular, retendo por `espelho_fato_em_ausencia`, `espelho_furo`, `espelho_indefinida` — anexo `mapa_hj_sem_nome.tsv:7`. O HEAD conserva “candidata sem prova” (`app/docs/RELATO.md:429`). Cabe **complemento de censo** em **BO-ADMIN-2710**, aberta “medindo”, que exige número+dono+destino por item (`app/docs/BACKLOG.md:832`). Vínculo causal específico do dia 01/10 com seus achados: **[nao verificado]**. Não afirmar cobertura da COBERTURA-PARCIAL-UM-JUIZ: sua linha só nomeia col42 em 08/15/22-10 (`app/docs/BACKLOG.md:841`).
+- **HJ-012-U2:** col239, 12/10, irregular e retendo por `espelho_cobrado` — anexo `mapa_hj_sem_nome.tsv:19`. Cabe **complemento de reconciliação do censo** em **BUG-RETRATO-VELHO-NA-TELA**, obra aberta com partes “em cópia” e “depois do 20/20”; seu item (d) trata especificamente feriado 12/10 e registra col239 como cobrança legítima, destino DP (`app/docs/BACKLOG.md:1555`). O relato confirma `trabalha=True` e destino DP (`app/docs/RELATO.md:5524`). Isso conflita com ESTRUTURA na ingestão histórica (`app/docs/RELATO.md:8916`); causa e classificação atuais **[nao verificado]**.
+
+Observação para consolidação: linhas antigas anexadas deslocaram-se no HEAD: JUSTIFICATIVA `1918→1956`; BO2910 `1102→1116`; O232 `1239→1253`; BO-ADMIN `820→832`. Conteúdo verificado nas linhas atuais citadas.
 
 ## 16/11 00:54 · sessao bf1dd93cfcb9 · RESPOSTAS-BO-1611 · censo · origem=Code
 
@@ -1156,36 +1178,4 @@ Impedimentos concretos para uma sonda histórica exata:
 - `ultima_batida` guarda episódio corrente em `app/api/views.py:761-765`, mas o agregado substitui outro episódio em `app/chamados/services/disputa_emissao.py:569-575`; não é histórico completo.
 - Canal é dado persistido em `app/ponto/models.py:46-55`: `NULL` anterior a 27/10/2026 ou sem aparelho; o próprio contrato proíbe inferir canal por `timestamp_dispositivo` em `:48`.
 
-## 15/11 23:25 · sessao 24e606ed885e · - · - · origem=Ronald (tmux)
-
-Roteamento e contrato, somente pela cópia:
-
-- `CLAUDE.md:84-89` descreve as cascas; `Caddyfile:8-10` confirma: `/api/ponto/*`, `/api/auth/*`, `/api/me/`, `/api/regularizacao/*`, `/api/ping-geo/`, `/api/registrar-fcm/`, `/health/` → core; restante → UI. O domínio Juliani importa esse bloco em `Caddyfile:32-38`.
-- Core: `app/config/urls_core.py:5-6` inclui `api.urls_core`; `app/api/urls_core.py:5` importa `views_core`; `:13` aponta `/api/me/`, `:14` `/api/ponto/bater/`.
-- UI: `app/config/urls.py:37` inclui `api.urls`; `app/api/urls.py:2` importa `views`; `:81` espelho/v2; `:92` disputa/perguntas; `:93` disputa/responder; `:73` chamados/v2. Seu gêmeo bater (`:67`) existe no URLconf UI, mas o Caddy encaminha essa URL ao core.
-- Configuração aceita a escolha do URLconf por variável em `app/config/settings/saas.py:76-78`; definição real do ambiente/container rodando não foi inspecionada [não verificado].
-
-Equivalentes de apresentação:
-
-| Fonte e escritor | Leitores/serializadores |
-|---|---|
-| `consulta_do_app` retorna partição pendentes/histórico (`app/chamados/services/pergunta_no_app.py:64-85`). Pendente = C6 viva, `respondida_em is None`, disputa aberta (`:73`, `:80-85`). | `/api/disputa/perguntas/`: consulta em `app/api/views.py:2537-2539`; `em_disputa=bool(perguntas)` em `:2569`; `perguntas` em `:2576`; `respondidas` como subconjunto histórico em `:2577`; `historico` em `:2578`. |
-| `projecao_do_app`: `questionarios_pendentes=len(pendentes)` (`app/chamados/services/pergunta_no_app.py:100-101`); badge prioriza pendentes com rótulo “Responder DP”, depois chamados não lidos, depois `None` (`:102-113`). | Core `/me`: recebe em `app/api/views_core.py:303-307`, transmite em `:346-348`; UI gêmeo `app/api/views.py:315-319`, `:358-360`. Android usando esses campos para abrir tela [não verificado]. |
-| Dashboard conta a mesma lista (`app/core/views.py:252-253`) e transmite em `:268`. | `app/templates/core/dashboard_colaborador_v2.html:78-80`: decide sufixo do link `?aba=cham`, badge e rótulo “Responder DP”. |
-| Projeção administrativa (`app/colaboradores/views.py:940-941`). | `app/templates/colaboradores/partials/painel_colaborador.html:39`, `:190-191`: total de mensagens e descrição “No app dele agora”. |
-| Chamados/v2 reutiliza `consulta_do_app`, junta pendentes+histórico, conserva só disputas abertas e ancora em destino vivo ou pai (`app/api/views.py:996-1040`). | Serializa `perguntas_disputa` em `:1148-1168`; `pode_solicitar_correcao` usa `aguarda_o_colaborador` em `:1174-1180`. `pode_responder` em `:1145` diz chamado não terminal, portanto não é autorização individual de PerguntaDisputa. |
-
-Outras chaves que devem ser distinguidas:
-
-- `/me` mantém `regularizacao_obrigatoria=False` e, por isso, `entradas_pendentes=[]` (`app/api/views_core.py:314-341`).
-- `/api/regularizacao/pendente/` lista **RegularizacaoExterna** com `status='aguardando'`, retornando `pendentes`; trata outro modelo/universo (`app/api/views_core.py:1271-1289`; rota `app/api/urls_core.py:15`).
-- `aviso_texto_livre` também consulta as pendentes atuais e retorna orientação para abrir chamado/pergunta, sem novo predicado (`app/chamados/services/aviso_pendencia.py:7-20`).
-
-Contrato e relato:
-
-- `app/docs/HANDOFF.md:1-219` cobre login, ausência, plataforma, troca de senha; não contém contrato de `em_disputa` ou `/api/disputa/perguntas/` [não verificado como contrato existente].
-- `app/api/views_core.py:426-427` e `app/api/views.py:440-441` mencionam em comentário o APK preso em `PerguntasDisputaActivity`. Isso documenta a intenção/comportamento relatado; não demonstra um leitor Android executável.
-- Não foi localizado código Kotlin/Java/Swift/Dart na busca da cópia [não verificado]. Android 3.9.3, a condição executada para abrir a Activity e o texto mostrado no aparelho continuam [não verificado].
-- O texto web “Nenhuma pendência” está condicionado a `not pendencias` em `app/templates/chamados/meu_atendimento.html:117-120`; não prova a tela nativa mencionada no relato.
-
-_5863 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5864 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
