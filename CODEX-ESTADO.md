@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 13:25** · publicado em **16/11/2026 13:27** (UTC-3)
+> Ultima resposta processada: **16/11/2026 13:43** · publicado em **16/11/2026 13:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 13:43 · sessao 8c89640a4b0e · BUG-PAR-O-PAR · construtor · origem=Code
+
+**Entrega incompleta: faltam os arrays U60/U103 do anexo `u163.py`.** O JSON não foi inventado; seu teste termina com `FileNotFoundError`. [RELATO.md:5](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:5) [nao verificado]
+
+A cura escrita limita DXG aos PKs congelados, consulta K6 antes das escritas e usa a célula dona na guarda. [materializacao.py:703](/home/ronald/wt-codex-bug-par-o-par-131207/app/chamados/services/materializacao.py:703), [validacao.py:289](/home/ronald/wt-codex-bug-par-o-par-131207/app/chamados/services/validacao.py:289), [materializacao.py:402](/home/ronald/wt-codex-bug-par-o-par-131207/app/chamados/services/materializacao.py:402)
+
+Arquivos tocados, relativos a `app/`:
+
+```text
+chamados/services/universo_bug_par.py
+chamados/services/materializacao.py
+chamados/services/validacao.py
+chamados/services/fio.py
+chamados/management/commands/bug_par_103.py
+chamados/templatetags/chamados_tags.py
+templates/chamados/partials/_pergunta_card.html
+templates/chamados/partials/modal_fio.html
+chamados/tests/test_universo_bug_par.py
+chamados/tests/test_bug_par_volta.py
+chamados/tests/test_bug_par_103.py
+chamados/tests/test_bug_par_sem_banco.py
+chamados/tests/test_bug_par_projetado.py
+chamados/tests/test_s139.py
+chamados/tests/bug_par_mutantes.py
+core/tests/test_medida_turno_do_par.py
+docs/JUIZES.md
+docs/RELATO.md
+```
+
+A entrega detalhada está registrada com referências:
+
+- **Cada RED, `arquivo::teste`, afirmação e mutante:** [RELATO.md:21](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:21). [nao verificado]
+- **Comando de cada mutante:** [RELATO.md:46](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:46).
+- **Quem escreve e quem lê cada campo/função:** [RELATO.md:64](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:64).
+- **Lookup reconciliado:** [JUIZES.md:38](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/JUIZES.md:38).
+
+Medição local, sem certificação: **8 testes OK, 15 mutantes mortos por asserção e 35 testes da catraca OK**. Integração Django, vizinhos O261/O317, dez mutantes de integração e reprodução de 84/19+75 permanecem **[nao verificado]**. [RELATO.md:48](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:48) [nao verificado]
+
+Comandos para a sessão, após fornecer o JSON exato:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_universo_bug_par chamados.tests.test_bug_par_sem_banco chamados.tests.test_bug_par_volta chamados.tests.test_bug_par_103 chamados.tests.test_bug_par_projetado chamados.tests.test_s139 --settings=config.settings.ci
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_o261_vespera_nao_absolve chamados.tests.test_o317_passivo_pela_porta chamados.tests.test_o261_paridade_respeita_a_lampada core.tests.test_medida_turno_do_par chamados.tests.test_e2_tarefa_do_dia chamados.tests.test_e3_portas_tarefa --settings=config.settings.ci
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.bug_par_mutantes --django --mutante todos
+```
+
+LEI-AKITA: origem=universo congelado pendente do anexo + portão da materialização, testemunha=estado_aplicacao_pergunta e competencia_entregue, RED=blocos (a)-(c) + fora163 + 5644, quem-mais-le=docs/RELATO.md:64, juizes novos=0, padrao=Single Writer Principle.
 
 ## 16/11 13:25 · sessao 77f8120193e8 · UI-VINCULO-MOSTRA-O-CALENDARIO · leitura · origem=Code
 
@@ -698,20 +748,4 @@ O materializador captura um instante e o persiste pelo carimbo; a leitura atual 
 
 Mas o contrato de valor conservado não está fixado: `carimbar_identidade` só conserva mediante opção; caso contrário escreve outro instante. `descarimbar` e a forma em lote apagam o valor. O catálogo de `DecisaoPergunta` contém resposta, validação, devolução, recusa, reabertura, silêncio, retratação e absorção, sem ato de materialização listado. `app/chamados/models.py:3292`, `app/chamados/models.py:3295`, `app/chamados/models.py:3318`, `app/chamados/models.py:3393`, `app/chamados/models.py:4024`, `app/chamados/models.py:4026`.
 
-## 16/11 12:18 · sessao 5cf5a08ff617 · - · - · origem=Ronald (tmux)
-
-Todos os caminhos abaixo seguem a BASE descrita no anexo: os leitores atuais usam os campos da projeção, conforme referências da tabela. Não houve execução de testes; resultado de execução é [nao verificado]. [nao verificado]
-
-| Degrau | Sítio hoje | BASE mudou? | Prova hoje, por leitura | Nota |
-|---|---|---|---|---|
-| M1b | `app/chamados/models.py:3151`, `:3153` | Não: `validada_em != None` com `materializada_em != None` retorna RESOLVIDA (`:3153`). | **SIM**, `app/chamados/tests/test_pergunta_estado.py:47`; fixture com validação e materialização em `:45`. | Instância não salva criada pelo helper em `test_pergunta_estado.py:20`; esta prova morde o ramo atual por campos, não uma leitura pelo ato (`models.py:3153`). |
-| M4 | `app/chamados/models.py:3158` | Não: queda final retorna PENDENTE/RESPONDIDA por `respondida_em` (`:3158`). | **[nao verificado]** para o ramo final específico. | `test_pergunta_estado.py:30`, `:36`, `:59` afirmam os rótulos, mas não isolam `pergunta_viva=False` e ausência de validação/materialização; a precedência está em `models.py:3151`, `:3154`, `:3156`. |
-| M7 | `app/chamados/models.py:3686`; posto `:3693`; escala `:3701`; opções `:3706` | Não: todas as fontes seguem `resposta_colab` (`:3688`, `:3693`, `:3701`, `:3708`). | **SIM, opções**: `app/chamados/tests/test_valor_rotulo.py:12` exige “Falta”; `:16` exige opção string “Confirma”. | Fixture não salva e por campo (`test_valor_rotulo.py:7`). Dropdown posto/escala e resposta oriunda de ato: **[nao verificado]**. |
-| M11 | `app/chamados/models.py:1926` | Não: exclui dia trancado, salvo `ignorar_tranca` (`:1926`). | **SIM**: `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:304` exige lista vazia com tranca; patch True em `:303`. Asserção `:305` exerce a retratação que ignora a tranca. | O juiz é chamado por `respostas_sem_veredito` em `models.py:1906`; portanto `:304` alcança o corpo atual. |
-| M13 | `app/chamados/models.py:336`; filtro `:344`; âncora `:345`; carga `:346` | Não: filtro por `validada_em__isnull=True`, com destino/container (`:344`, `:345`). | **PARCIAL, AST**: `app/ponto/tests/test_lastro_parte3_fecho_na_pergunta.py:284` exige presença dos campos `validada_em`, `chamado_destino_id`, `disputa` no filtro; extração em `:283`. | Não prova valor de `isnull` nem retorno do queryset: o scanner usa primeiro segmento do kwarg, conforme contrato em `:193`. `test_e4b_classe_e_memoria.py:443` só exige chamada do método mockado (`:440`), não morde o corpo real. |
-| M14 | `app/chamados/models.py:309`; filtro `:310`; relavra `:312` | Não: relavra somente `validada_em__isnull=True` do destino (`:310`). | **PARCIAL**: `app/chamados/tests/test_o261e_f1_codex_v5.py:90` exige relavra não vazia; `:91` exige estado já salvo; `:101` exige zero relavra quando save falha. | Fixture de `:81` contém pergunta sem validação; essas asserções não distinguem filtro “somente não validadas” de um filtro que também inclua validadas. Prova específica desse recorte: **[nao verificado]**. |
-| M15 | `app/chamados/models.py:2005`; ato SILENCIO `:2006`; foto `:2007` | Não: `ato_texto=_q.resposta_colab or ''` (`:2007`). | **PARCIAL, existência/autoria do SILENCIO**: `app/chamados/tests/test_e1_entradas.py:125` exige `[('silencio', self.dp.pk)]`, após porta em `:124`. | A asserção não consulta `ato_texto` (`:125`); prova específica da fonte da fotografia: **[nao verificado]**. |
-
-Uma ressalva para não superestimar M13: `app/chamados/tests/test_e4b_classe_e_memoria.py:467` afirma que o S128 **inclui** a validada, e não testa o filtro de `_ancoradas`; o caso se chama `test_RED_S128_conserva_validada_pendente_fora_das_ancoradas` em `:463`.
-
-_6026 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6027 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
