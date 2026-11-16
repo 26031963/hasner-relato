@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 06:06:13.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1305**.
+**Medido em 16/11/2026 06:11:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (131.9 MB). Acoes na janela: **1279**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1289,29 +1289,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:19:20 | Bash | Read vigia censo and neighbor test | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 1,60p folha/vigia_retido_calado.py; echo ----; sed -n 30,70p folha/tests/test_vigia_retido_calado.py` |
 | 18:19:09 | Read |  | `/home/ronald/saas-hasner/logs/E3-RESTO-R3/vfinal/v4.r` |
 | 18:19:07 | Bash | Read v4 rc and verdict | `cd /home/ronald/saas-hasner; cat logs/E3-RESTO-R3/vfinal/v4.rc; tail -3 logs/E3-RESTO-R3/vfinal/v4.log; ps -p 2718894 -o pid=; grep -n "VEREDITO" logs/E3-RESTO-R3/vfinal/v4.r` |
-| 18:11:07 | Bash | Confirm ESPERANDO line is proven | `cd /home/ronald/saas-hasner && python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 18:11:04 | Bash | Wait for v4 verdict or push end | `cd /home/ronald/saas-hasner; until [ -f logs/E3-RESTO-R3/vfinal/v4.rc ] \|\| grep -q '^rc=' logs/push_1805.log; do /usr/bin/sleep 20; done; cat logs/E3-RESTO-R3/vfinal/v4.rc 2>/dev/null; grep '^rc=' logs/push_1805.log` |
-| 18:10:59 | Bash | Check push and v4 status | `cd /home/ronald/saas-hasner; tail -4 logs/push_1805.log; ps -p 2718894 -o pid=,etime=; cat logs/E3-RESTO-R3/vfinal/v4.rc 2>/dev/null; tail -3 logs/E3-RESTO-R3/vfinal/v4.log` |
-| 18:10:54 | Bash | Launch pre-verifier v4 in background | `cd /home/ronald/saas-hasner; D=logs/E3-RESTO-R3/vfinal; cat > $D/v4.sh <<'EOF' cd /home/ronald/saas-hasner; D=logs/E3-RESTO-R3/vfinal CODEX_OBRA=E3-RESTO-R3 CODEX_PAPEL=verificador bin/codex_pergunta.sh --anexo app/docs/JUIZES.md --anexo $D/leis_sitios_v4.txt --anexo logs/E3-RESTO-R3/c14/triagem_v3.md --anexo logs/E3-RESTO-R3/c15/entrega.md --anexo $D/diff_delta_c14_c15.patch e4dd18c48 $D/v4.q $D/ ...` |
-| 18:10:49 | Write |  | `/home/ronald/saas-hasner/logs/E3-RESTO-R3/vfinal/v4.q` |
-| 18:10:35 | Bash | Build v4 delta patch and laws-of-sites file | `cd /home/ronald/wt-codex-e3-resto-r3-093851 && D=/home/ronald/saas-hasner/logs/E3-RESTO-R3/vfinal && git diff --stat 57c1c9b94 e4dd18c48 \| tail -25 && git diff 57c1c9b94 e4dd18c48 -- . ':!*/tests/*' > $D/diff_delta_c14_c15.patch && wc -c $D/diff_delta_c14_c15.patch && cd /home/ronald/saas-hasner/app/docs && for f in $(git -C /home/ronald/wt-codex-e3-resto-r3-093851 diff --name-only 57c1c9b94 e4dd ...` |
-| 18:10:25 | Bash | Read v3 triage and c15 delivery | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3 && cat c14/triagem_v3.md; echo -----; cat c15/entrega.md \| head -80` |
-| 18:10:23 | Bash | Read v3 question and verdict tail | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3 && cat vfinal/v3.q; echo ----; ls c15 c14; tail -40 vfinal/v3.r` |
-| 18:10:20 | Bash | List vfinal artifacts and v3 script | `cd /home/ronald/saas-hasner/logs/E3-RESTO-R3 && ls vfinal/ c15/ \| head -40; cat vfinal/v3.sh` |
-| 18:10:18 | Bash | Commit docstring fix in copy with valid padrao | `cd /home/ronald/wt-codex-e3-resto-r3-093851 && git add app/folha/models.py && git commit -q -F - <<'EOF' E3-RESTO-R3 c15b: G3 docstring do retrato velho diz o balde que a tela le (sem_acao_disponivel), nao Admin FIO 'nao_sei' entra na lista dos gravados (retrato_folha.py:178). Linha velha sem `dono`: fio_da_linha (retrato_folha.py:446-449) -> _fio_cru ou 'ninguem' -> DONO_DO_FIO (:194) -> sem_acao ...` |
-| 18:10:13 | Bash | Read glossary head | `sed -n 1,30p docs/GLOSSARIO.md \| cut -c1-140` |
-| 18:10:11 | Bash | List glossary pattern terms | `grep -o "^\| *\*\*[^*]*\*\*\\|^## [^\n]*\\|^- \*\*[^*]*\*\*" docs/GLOSSARIO.md \| head -40` |
-| 18:10:08 | Bash | Get padrao used by c15 commit | `cd /home/ronald/wt-codex-e3-resto-r3-093851 && git log -1 --format=%B 96d16af7d \| grep LEI-AKITA` |
-| 18:10:05 | Bash | Commit in copy; check push status | `cd /home/ronald/wt-codex-e3-resto-r3-093851 && git add app/folha/models.py && git commit -q -F - <<'EOF' E3-RESTO-R3 c15b: G3 docstring do retrato velho diz o balde que a tela le (sem_acao_disponivel), nao Admin FIO 'nao_sei' entra na lista dos gravados (retrato_folha.py:178). Linha velha sem `dono`: fio_da_linha (retrato_folha.py:446-449) -> _fio_cru ou 'ninguem' -> DONO_DO_FIO (:194) -> sem_acao ...` |
-| 18:09:59 | Bash | Apply docstring fix in copy, find function name | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app && python3 - <<'EOF' p='folha/models.py'; s=open(p).read() a="`{'dono': <FIO: 'admin'\|'colab'\|'chamado'\|'ninguem'>," b="`{'dono': <FIO: 'admin'\|'colab'\|'chamado'\|'ninguem'\|'nao_sei'>," c=""" lavrar uma vez logo depois de publicar, senao a tela abre com os tres quadros novos mandando TODOS para o balde **Admin** -- desde o corte RETRATO-DONO-SA ...` |
-| 18:09:51 | Bash | Read dono default path | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; sed -n 440,456p folha/retrato_folha.py` |
-| 18:09:49 | Bash | Check default for missing dono key | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; git grep -n "get('dono'" -- folha \| head; sed -n 188,200p folha/retrato_folha.py` |
-| 18:09:46 | Bash | Verify fio/dono mapping before editing docstring | `cd /home/ronald/wt-codex-e3-resto-r3-093851/app; git grep -n "DONO_DO_FIO\\|'nao_sei'" -- folha \| head -20` |
-| 18:09:44 | Read |  | `/home/ronald/wt-codex-e3-resto-r3-093851/app/folha/models.py` |
-| 18:09:02 | Bash | Inspect folha/models.py docstring in copy | `W=/home/ronald/wt-codex-e3-resto-r3-093851; git -C $W status --porcelain \| head; git -C $W log --oneline -1; sed -n 300,326p $W/app/folha/models.py` |
-| 18:08:56 | Bash | Read c15 entrega and vfinal dir | `cd /home/ronald/saas-hasner; cat logs/E3-RESTO-R3/c15/entrega.md; ls logs/E3-RESTO-R3/vfinal/` |
-| 18:08:25 | Bash | Add TELA-DIZ estado line to RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L[:40]) if l.startswith('ESTADO 17:4x E3-RESTO-R3')]; assert len(i)==1 L.insert(i[0],"ESTADO 18:1x TELA-DIZ-O-QUE-O-SERVIDOR-DISSE 9be27edd7: suite inteira VERDE na pista (1115172620_9be27edd, Ran 16182 OK) -> opus final APROVA (logs/TELA-DIZ-O-QUE-O-SERVIDOR-DISSE/opus_fin ...` |
-| 18:08:19 | Bash | Add fila line for verifier finding 1 | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PWA-SYNC-NAO-DIZ-STATUS \|')]; assert len(i)==1 nova=("\| TELA-DIZ-TIPO-DO-TOQUE \| achado do opus final TELA-DIZ 15/11 (logs/TELA-DIZ-O-QUE-O-SERVIDOR-DISSE/opus_final.r item 1): " "bater_ponto_v2.html:158-160 tira 'Entrada/Saida registrada' do toqu ...` |
-| 18:08:14 | Bash | See BACKLOG line format for fila | `cd /home/ronald/saas-hasner; grep -n "PWA-SYNC-NAO-DIZ-STATUS" app/docs/BACKLOG.md \| head -3; sed -n 2020p app/docs/BACKLOG.md \| cut -c1-400` |
-| 18:08:11 | Bash | Spot-check verifier finding 1 | `W=/home/ronald/wt-ui-tela-servidor-153803; sed -n 155,160p $W/app/templates/ponto/bater_ponto_v2.html \| cut -c1-180; sed -n 555,563p $W/app/api/views_core.py; sed -n 808,812p $W/app/api/views_core.py` |
-| 18:08:08 | Write |  | `/home/ronald/saas-hasner/logs/TELA-DIZ-O-QUE-O-SERVIDOR-DISSE/opus_final.r` |
