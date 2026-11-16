@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 09:33** · publicado em **16/11/2026 09:33** (UTC-3)
+> Ultima resposta processada: **16/11/2026 09:37** · publicado em **16/11/2026 09:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 09:37 · sessao d8971b8baaa8 · CORTES-F2-F9-1611 · verificador · origem=Code
+
+Referências **F2**, **F4** e **F6** abaixo designam os respectivos anexos `matriz.md`, com linhas contadas desde a primeira linha de cada conteúdo.
+
+1) **NAO PROCEDE.** “Integrais” e “parciais” já classificam a prova existente; não dependem do resultado dos testes novos. “Ramo sem mordida” corresponde às lacunas dos quatro parciais; U9b é um degrau identificado. (`F2:100–101`; `F6:44`) [nao verificado]
+
+A seleção anterior ao primeiro teste é executável pela regra **mais restritiva**: F2 tem marca no contrato coletivo do núcleo; F4 tem marca no próprio título do contrato de entrada. Aplicar (b) literalmente faz esses candidatos esperarem. O complemento não manda liberar um degrau mediante uma cláusula mais estreita quando o contrato coletivo está marcado. (`complemento1_cortes_f2_f9_1611.txt:2`; `F2:21–29`; `F4:20`) [nao verificado]
+
+2) **NAO PROCEDE.** Marca somente na linha, somente no contrato ou nos dois lugares produz o mesmo encaminhamento: espera F1. Sem mordida no mutante novo, registra “NAO MORDE”, mutante tentado e fila da fatia. Se morder, segue para revisão antes do brief. Nos parciais, os ramos já cobertos ficam fora da tentativa; os ramos sem prova seguem esses mesmos dois encaminhamentos. (`complemento1_cortes_f2_f9_1611.txt:2`; `cortes_f2_f9_1611.txt:10`; `F2:100–101`)
+
+3) **NAO PROCEDE — nenhuma colisão demonstrada.** Registrar uma tentativa sem mordida não a credita como prova nem a admite no brief. A autorização continua limitada a testes próprios e revisados, como permite a regra escrita. (`complemento1_cortes_f2_f9_1611.txt:2`; `cortes_f2_f9_1611.txt:10`; `CLAUDE.md:349–350`; `app/docs/PISTA.md:143–145`)
+
+A ordem “dez integrais antes dos quatro parciais” continua aplicável **depois da espera determinada por (b)**; ela não exige executar dez antes da F1. A exclusão de S1/S2 coincide com a retirada desses degraus do escopo F6. (`complemento1_cortes_f2_f9_1611.txt:2`; `F2:101`; `F6:48–49`)
+
+4) **NAO PROCEDE.** A contagem literal, considerando também as marcas dos contratos coletivos, fica:
+
+| Fatia | Entram na seleção antes da F1 | Esperam F1 | Fora do escopo | Fundamento |
+|---|---:|---:|---:|---|
+| F2 | **0** | **14** | 0 | `F2:21–29`, `:100–101`; complemento:2 |
+| F4 | **0** | **21** | 0 | `F4:20`, `:126–127`; complemento:2 |
+| F6 | **1** | **8** | **2** | `F6:33–49`, `:94`; complemento:2 |
+
+**F2 — todos esperam**, preservando a ordem posterior:
+
+- Dez integrais: **M1b** (`F2:37`), **M4** (`F2:40`), **M7** (`F2:43`), **M11** (`F2:47`), **M13** (`F2:49`), **M14** (`F2:50`), **M15** (`F2:51`), **M17** (`F2:53`), **M18** (`F2:54`), **M19** (`F2:55`).
+- Depois, quatro parciais, somente nos ramos sem prova: **M3** (`F2:39`), **M9** (`F2:45`), **M10** (`F2:46`), **M20** (`F2:56`). A classificação dez/quatro está expressa em `F2:101`.
+
+**F4 — todos os 21 esperam**, pela marca do contrato de entrada, inclusive os que não repetem a marca na linha. (`F4:20`; `complemento1_cortes_f2_f9_1611.txt:2`)
+
+- **M1** (`F4:34`), **M2** (`F4:35`), **M9b** (`F4:43`), **M13** (`F4:47`), **M16** (`F4:50`), **M17** (`F4:51`), **M19** (`F4:53`), **M23** (`F4:57`), **M24** (`F4:58`).
+- **E4** (`F4:67`), **E5** (`F4:68`), **E7** (`F4:70`), **E9** (`F4:72`), **E17** (`F4:80`), **E18** (`F4:81`), **E19** (`F4:82`), **E20** (`F4:83`).
+- **X1** (`F4:89`), **X2** (`F4:90`), **J1** (`F4:91`), **J2** (`F4:92`).
+
+**F6:**
+
+- Entra agora: **U9b** (`F6:44`).
+- Esperam: **U1b** (`F6:33`), **U1c** (`F6:34`), **U2** (`F6:35`), **U3** (`F6:36`), **U6** (`F6:39`), **U8** (`F6:42`), **U9a** (`F6:43`), **U12** (`F6:47`).
+- Fora, sem contar como espera: **S1** (`F6:48`) e **S2** (`F6:49`; `complemento1_cortes_f2_f9_1611.txt:2`).
+
+A elegibilidade de U9b pela marca não comprova ausência de cruzamento com arquivos das obras em voo: **[nao verificado]**. As esperas por cruzamento e pela vaga continuam expressas no item 9. (`cortes_f2_f9_1611.txt:10`)
+
+VEREDITO: todos NAO PROCEDE
+
+## 16/11 09:36 · sessao e0de1a397847 · - · - · origem=Ronald (tmux)
+
+A leitura **F2=0, F4=0, F6=1 agora** é defensável como aplicação literal mais restritiva, sem inventar regra nova. Minha objeção anterior deu peso excessivo à seleção específica por cláusula. (`complemento1_cortes_f2_f9_1611.txt:2`)
+
+**A favor da leitura global:** F2 nomeia expressamente um “Contrato lido pelos degraus (núcleo)” e inclui nele uma marca `[DEPENDE-F1]`; F4 marca o próprio título do “CONTRATO DE ENTRADA”. Como (b) determina esperar quando marcado em qualquer dos dois lugares, não exige provar independência efetiva nem procurar uma cláusula mais estreita para liberar testes. (`anexo F2/matriz.md:21`, `:27–29`; `anexo F4/matriz.md:20`; `complemento1_cortes_f2_f9_1611.txt:2`)
+
+**Contra a leitura global:** F2 separa BASE, c3 e F1 dentro do núcleo, e F4 também enumera dependências por cláusula e por ID; isso permite uma leitura operacional mais específica. Porém, essa leitura liberaria degraus apesar da marca existente no contrato coletivo, contrariando a opção explicitamente mais restritiva. A existência de uma leitura menos restritiva não basta para tornar inexequível a regra que manda escolher a outra. (`anexo F2/matriz.md:22–29`, `:69–77`; `anexo F4/matriz.md:105–110`; `complemento1_cortes_f2_f9_1611.txt:2`)
+
+**Conclusão independente:** eu não sustentaria PROCEDE apenas nessa ambiguidade. Declararia no cabeçalho a aplicação global dos contratos marcados: **F2 espera os 14 candidatos; F4 espera os 21; F6 entra somente U9b, espera oito e exclui S1/S2**. Depois da F1, F2 mantém dez integrais antes dos quatro parciais, estes somente nos ramos sem prova; isso não conflita com a espera anterior. (`anexo F2/matriz.md:100–101`; `anexo F4/matriz.md:126–127`; `anexo F6/matriz.md:33–49`, `:94`; `complemento1_cortes_f2_f9_1611.txt:2`)
+
+## 16/11 09:34 · sessao e0de1a397847 · - · - · origem=Ronald (tmux)
+
+F2, por vínculos expressos dos IDs às marcas:
+
+- Agora: **7 integrais** — M11:47, M13:49, M14:50, M15:51, M17:53, M18:54, M19:55 — depois **M20 parcial:56**, só fora de `estado`. (`anexo F2/matriz.md:101`)
+- Esperam: **3 integrais** — M1b:37, M4:40, M7:43 — e **3 parciais** — M3:39, M9:45, M10:46. Os contratos vinculam M1–M4/M8–M10 à dependência e mencionam M7 expressamente. (`anexo F2/matriz.md:74`, `:76`)
+
+F4, por cláusulas específicas e aplicação restritiva da cláusula 3:
+
+- Agora: **11** — M19:53, M24:58, E4:67, E5:68, E7:70, E17:80, E18:81, E19:82, E20:83, X1:89, X2:90. (`anexo F4/matriz.md`, linhas individuais)
+- Esperam: **10** — M1:34, M2:35, M9b:43, M13:47, M16:50, M17:51, M23:57, E9:72, J1:91, J2:92. M1/M2/M9b/M13/M16/M17 estão no contrato marcado; M23 também; E9/J1 têm marca na linha; J2 aparece na cláusula marcada que o manda entrar junto ou virar fila. (`anexo F4/matriz.md:105–110`, `:72`, `:91`)
+- Se a marca da cláusula 3 for limitada ao trecho anterior ao ponto e vírgula, J2 fica sem dependência: **12 agora/9 esperam**. (`anexo F4/matriz.md:109–110`)
+
+F6:
+
+- Agora: **U9b:44**, total **1**.
+- Esperam: **8** — U1b:33, U1c:34, U2:35, U3:36, U6:39, U8:42, U9a:43, U12:47.
+- Fora: **S1:48, S2:49**. (`anexo F6/matriz.md`, linhas individuais; `complemento1_cortes_f2_f9_1611.txt:2`)
+
+A ambiguidade concreta restante é o alcance de **CONTRATO**: F4 tem o próprio título do contrato de entrada marcado, antes das cláusulas específicas; F2 tem núcleo contratual marcado sem uma lista fechada de IDs. Aplicar esses contratos globalmente faria **todos os respectivos candidatos esperarem**, produzindo seleção diferente. A operação “linha OU contrato” está definida; a associação de cada contrato aos degraus não está inteiramente fechada. (`anexo F4/matriz.md:20`, `:105–110`; `anexo F2/matriz.md:21–29`; `complemento1_cortes_f2_f9_1611.txt:2`)
+
+Não há motivo para reprovar “integrais”, “parciais” ou “ramo sem mordida”: a matriz já define essas classes antes dos novos testes; o resultado futuro do RED não é necessário para classificá-las. A resposta (a) encaminha qualquer tentativa nova que não mate o mutante, incluindo tentativa num parcial. (`anexo F2/matriz.md:100–101`; `complemento1_cortes_f2_f9_1611.txt:2`)
 
 ## 16/11 09:33 · sessao 009e5360b3eb · COMPLEMENTO-1-CORTES-F2-F9-1611 · sonda · origem=Code
 
@@ -551,58 +627,4 @@ O aval integral `RESPOSTAS-DA-MANHA-1611` não foi encontrado na cópia; o códi
 
 Preexistência/ancestralidade dos passivos e resultados alegados de testes, mutantes, ruff e logs: **[nao verificado]**; a cópia não oferece metadados Git utilizáveis, e nenhum teste foi executado. **[nao verificado]** [nao verificado]
 
-## 16/11 08:54 · sessao 452fd522f259 · - · - · origem=Ronald (tmux)
-
-**1) PROCEDE.** A escrita excepcional de RED em cópia própria existe na regra, sob CONTRATO-DE-INSTRUMENTO e revisão pelo Code (`CLAUDE.md:349-350`; `app/docs/PISTA.md:143-145`). Entretanto, **não existe modo/flag do wrapper que a execute fora do papel construtor**: parser aceita apenas `--sonda`, `--anexo`, `--construtor` (`bin/codex_pergunta.sh:58-66`), e o próprio cabeçalho declara que o RED excepcional “não passa por aqui” (`bin/codex_pergunta.sh:30-33`).
-
-O único caminho com escrita é `CODEX_PAPEL=construtor` combinado com `--construtor <wt>`; combinações divergentes são recusadas (`bin/codex_pergunta.sh:197-200`). Esse caminho exige `logs/construtor.vaga`, com `flock -n`, e recusa vaga ocupada (`bin/codex_pergunta.sh:248-253`). Os demais papéis recebem ordem explícita de não criar/editar/apagar e executam em sandbox `read-only` (`bin/codex_pergunta.sh:348-350`; `bin/codex_pergunta.sh:424-426`).
-
-Assim, “se o wrapper exigir a vaga, entra atrás da espinha” resolve a espera, mas não torna executável a escrita **fora do papel construtor** prescrita no item 9 (`cortes_f2_f9_1611.txt:10`, numerando o anexo a partir de “aval Ronald”).
-
-Se houver criação/adaptação de instrumento para suprir esse caminho, o contrato de cinco linhas e sua revisão precisam anteceder o código; o contrato específico desta obra não foi fornecido **[nao verificado]** (`CLAUDE.md:394`; `app/docs/PISTA.md:170-175`).
-
-## 16/11 08:52 · sessao 0bf595a634d6 · - · - · origem=Ronald (tmux)
-
-Mapa limitado aos caminhos de criação/edição, espelho/cancelamento e consumidores conferidos; censo exaustivo do repositório `[nao verificado]`.
-
-| Campo | Escritores conferidos | Leitores e significado; concordância do teste | [nao verificado]
-|---|---|---|
-| `Ausencia.tipo` | `criar_ausencia` prepara tipo; edição troca; espelho escreve `'ferias'`. (`app/ponto/services/ausencia.py:484`; `app/ponto/services/ausencia.py:648`; `app/ponto/services/ausencia.py:1390`) | `_insumo_da_folha` fotografa tipo; juiz usa tipo para decidir extensão sem fim; folha usa tipos pagos. Comparar igualdade antes/depois protege a classificação existente, sem provar que ela era correta. (`app/ponto/services/ausencia.py:127`; `app/ponto/services/ausencia.py:139`; `app/ponto/turnos.py:2805`; `app/ponto/services/fechamento.py:694`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `Ausencia.data_fim` | Criação recebe; edição deriva e atribui; `Ausencia.save` deriva de `dias_corridos` quando aplicável. (`app/ponto/services/ausencia.py:485`; `app/ponto/services/ausencia.py:627`; `app/ponto/services/ausencia.py:650`; `app/ponto/models.py:912`; `app/ponto/models.py:917`) | Cobertura usa range fechado, ou tipo em aberto até horizonte, ou dia único. Snapshot concorda ao exigir preservação, sem interpretar `NULL` como universalmente aberto. O help text isolado é mais amplo que o juiz real. (`app/ponto/turnos.py:2798`; `app/ponto/turnos.py:2803`; `app/ponto/models.py:753`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `Ausencia.minutos` | Criação recebe; edição zera/recebe minutos; `save` deriva falta aprovada sem minutos pelo previsto; espelho de férias fornece zero. (`app/ponto/services/ausencia.py:485`; `app/ponto/services/ausencia.py:658`; `app/ponto/models.py:887`; `app/ponto/models.py:895`; `app/ponto/models.py:897`; `app/ponto/services/ausencia.py:1391`) | `_insumo_da_folha` inclui minutos; `horas` divide por 60; export distribui `a.minutos` entre dias. Igualdade no teste significa “não alterar a duração gravada”; zero em férias não significa ausência de cobertura. (`app/ponto/services/ausencia.py:127`; `app/ponto/models.py:876`; `app/folha/export.py:117`; `app/folha/export.py:121`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`; `app/ponto/services/ausencia.py:1391`) |
-| `Ausencia.descricao` | Criação recebe; edição substitui se não vazia; reabertura concatena; espelho grava `Ferias agendamento #N`. (`app/ponto/services/ausencia.py:486`; `app/ponto/services/ausencia.py:652`; `app/ponto/services/ausencia.py:1316`; `app/ponto/services/ausencia.py:1393`) | Painel exibe texto; backfill também interpreta a marca `#N`. Portanto não é somente texto ornamental; snapshot protege inclusive esse metadado legado. (`app/templates/ponto/partials/painel_ausencia.html:56`; `app/templates/ponto/partials/painel_ausencia.html:57`; `app/ponto/services/ausencia.py:1552`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `AgendamentoFerias.data_inicio/data_fim/dias` | Agendamento calcula fim inclusivo e grava dias; gozo histórico calcula dias inclusivos; `_trocar_janela` atribui e persiste os três. (`app/ferias/services.py:565`; `app/ferias/services.py:582`; `app/ferias/services.py:584`; `app/ferias/services.py:523`; `app/ferias/services.py:524`; `app/ferias/services.py:716`; `app/ferias/services.py:729`) | Modelo valida `dias == fim-início+1`; espelho enumera datas inclusivas; cancelamento subtrai `vivo.dias` do concedido. Snapshot tem o mesmo significado: preservar janela e quantidade em recusa, sem recalculá-las. (`app/ferias/models.py:382`; `app/ferias/models.py:383`; `app/ponto/services/ausencia.py:1380`; `app/ponto/services/ausencia.py:1381`; `app/ferias/services.py:680`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`) |
-| `LogAuditoria.descricao` | `core.observ.evento` recebe e cria campo; rejeição fornece texto com dia e agendamento. (`app/core/observ.py:94`; `app/core/observ.py:134`; `app/core/observ.py:136`; `app/ponto/services/ausencia.py:1500`) | Busca filtra descrição e tela exibe; snapshot exige texto antigo idêntico. Não valida conteúdo/descrição das novas trilhas: `_nada_mudou` restringe comparação às PKs anteriores. (`app/core/views.py:714`; `app/templates/core/log_auditoria.html:73`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:523`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:546`) |
-| `CelulaDia.julgada_em` | Porta `carimbar` atribui `agora`, salvo quando idempotência evita save; `desfazer_julgamento_da_futura` também pode limpar os campos de julgamento. (`app/ponto/portas/celula.py:1190`; `app/ponto/portas/celula.py:1194`; `app/ponto/portas/celula.py:1201`; `app/ponto/portas/celula.py:1165`) | Cartório exige carimbo + impressão + veredito para frescor; consumidores de parcial usam julgamento anterior. Delta interpreta como carimbo recente, mas `>= instante` não demonstra avanço entre dois atos sob relógio congelado. (`app/ponto/services/cartorio.py:1260`; `app/ponto/services/cartorio.py:1409`; `app/ponto/services/cartorio.py:417`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:60`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:463`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`) |
-
-Campos novos existem, sem ocorrência de campo inexistente nestas comparações. (`app/ponto/models.py:749`; `app/ponto/models.py:751`; `app/ponto/models.py:755`; `app/ponto/models.py:776`; `app/ferias/models.py:312`; `app/ferias/models.py:313`; `app/ferias/models.py:314`; `app/core/models.py:299`; `app/escala/models.py:1745`)
-
-Não há comparação nova dependente de ordem indefinida: ausências são `sorted` por tuplas cuja primeira coluna é PK única; trilhas são dicionário por PK; a consulta residual de células é comparada ao vazio. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:239`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:240`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:521`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:523`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:472`)
-
-O comentário corrigido em `:1119` passa a concordar com `_teto_da_linha_aberta`, mas ficou comentário contraditório em `editar_ausencia_registro`: ainda diz que futuras não são alcançadas, apesar de chamar o mesmo acordador que calcula teto das competências carimbadas. Isso é remanescente, não nova mudança de código demonstrada pelo patch. (`app/ponto/services/ausencia.py:1119`; `app/ponto/services/ausencia.py:147`; `app/ponto/services/ausencia.py:151`; `app/ponto/services/ausencia.py:665`; `app/ponto/services/ausencia.py:666`; `app/ponto/services/ausencia.py:669`; `app/ponto/services/ausencia.py:190`; `app/ponto/services/ausencia.py:191`)
-
-A docstring de `_retrato` ficou desatualizada: enumera somente status/obs e pk/status/data, enquanto código compara também os campos acrescentados. “INTEIRO” continua sendo somente o retrato enumerado, não linha completa. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:515`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:516`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:524`)
-
-## 16/11 08:52 · sessao f5d22736a7d3 · - · - · origem=Ronald (tmux)
-
-Auditoria estática, sem execução de testes ou mutação; resultados executados `[nao verificado]`. [nao verificado]
-
-- **`julgada_em >= instante` tem mordida, mas não prova frescor temporal adicional.** A fixture cria células sem `julgada_em`, cujo campo permite NULL, então omitir o carimbo faz a contagem falhar. Entretanto, o relógio congelado faz `gerada_em` e `instante` coincidirem: um mutante de `carimbar` que grave `cel.julgada_em = cel.gerada_em`, mantendo os demais efeitos, passa. A asserção não distingue julgamento atual de um carimbo anterior no mesmo instante congelado. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:56`, `:60`, `:191`, `:439`, `:454`, `:463`, `:470`; `app/escala/models.py:1702`, `:1745`; `app/ponto/portas/celula.py:1194`)
-
-- **Não identifiquei dependência de ordem indeterminada nas comparações novas.** Ausências usam `sorted` com PK como primeiro componente; trilhas são dicionários indexados por PK; carimbo usa contagem. A comparação com lista vazia independe de ordenação. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:239`, `:470`, `:472`, `:521`, `:523`)
-
-- **Os campos novos existem.** Ausência: `tipo`, `data_fim`, `minutos`, `descricao`; agendamento: início, fim, dias; auditoria: descrição; célula: julgamento. (`app/ponto/models.py:749`, `:751`, `:755`, `:776`; `app/ferias/models.py:312`, `:313`, `:314`; `app/core/models.py:299`; `app/escala/models.py:1745`)
-
-- **O comentário de produção corrigido concorda com o código.** O teto é o máximo entre hoje e o fim da última competência carimbada, e o botão aceita mês/ano do POST. (`app/ponto/services/ausencia.py:1119`, `:147`, `:151`, `:190`; `app/ponto/views.py:1240`, `:1241`, `:1255`)
-
-- **“Linha INTEIRA” continua exagerado.** O retrato ampliado omite `dias_corridos`, `hora_ini`, `hora_fim` e outros campos existentes. O delta fecha os campos enumerados, sem provar preservação integral da linha. A docstring de `_retrato` também continua enumerando o retrato antigo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:239`, `:250`, `:515`, `:520`; `app/ponto/models.py:761`, `:768`, `:770`)
-
-- **Descartes periféricos:** “trilha nova pode nascer” corresponde expressamente ao contrato implementado, mas o teste permite qualquer inserção nova, sem validar que seja trilha legítima de recusa. Ramo sem adesão retorna antes do normal, portanto a lacuna do ramo com adesão é real; classificá-la fora do escopo não equivale a demonstrar cobertura. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:517`, `:546`, `:460`; `app/ponto/services/cartorio.py:1317`, `:1318`)
-
-- **D/E e relógio permanecem na árvore.** `engolir` não abre savepoint; o signal envolve o julgamento nesse wrapper; o acordador lê `localdate()` para linha mudada sem fim; a invalidação captura exceção e retorna zero; o contador só encontra carimbo NULL. Origem histórica em c6, fila efetiva e providências externas `[nao verificado]`. (`app/core/observ.py:86`, `:88`, `:90`; `app/ponto/signals.py:88`, `:93`; `app/ponto/services/ausencia.py:184`, `:190`; `app/ponto/services/fechamento.py:1661`, `:1665`, `:1696`)
-
-- **Selo como piso é descrição correta; “18 FAIL” não prova suficiência.** O selo verifica presença de chamada viva e não o conteúdo dos mapas; o comportamento com mapa vazio global é observado por testes que exigem invalidação, mas sobrevivência de mutantes condicionais não fica eliminada por essa contagem relatada. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:35`, `:222`, `:224`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:224`; execução dos 18 FAIL `[nao verificado]`)
-
-- **`obs` é efetivamente lido como metadado por substring.** A existência da dívida está demonstrada; sua idade e gestão em fila `[nao verificado]`. (`app/ferias/management/commands/listar_ferias_dp.py:27`, `:28`, `:30`)
-
-_5980 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5983 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
