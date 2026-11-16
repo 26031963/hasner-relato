@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 23:31** · publicado em **15/11/2026 23:31** (UTC-3)
+> Ultima resposta processada: **15/11/2026 23:48** · publicado em **15/11/2026 23:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 23:48 · sessao 9bc987ad1fda · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+A parte 1 de 6 não consta do dado fornecido; segue todo o trecho recebido, sem resumir. [nao verificado]
+
+```text
+sonda_leitura: script.py [4e9a5641d912b65d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+docker: Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "tmpfs" to rootfs at "/app/logs": create mountpoint for /app/logs mount: make mountpoint "/app/logs": mkdirat /var/lib/docker/rootfs/overlayfs/81c87712d91a033ef84050839a7038dfca63323d1bce2600137f8590821b7e6e/app/logs: read-only file system
+
+Run 'docker run --help' for more information
+rc_sombra=125
+```
+
+- **SOMA=True:** não confirmável; a linha está ausente. [nao verificado]
+- **ESTRUTURA_DIAS_LINHAS=True:** não confirmável; a linha está ausente. [nao verificado]
+- **INCOMPLETO:** o marcador literal não aparece no trecho; há erro do Docker e `rc_sombra=125`. O estado da parte 1 de 6 é [nao verificado].
+
+## 15/11 23:48 · sessao 228d59997109 · - · - · origem=Ronald (tmux)
+
+**Item 2: PROCEDE contraexemplo concorrente; não achei contraexemplo sequencial com `update_fields` por keyword e valores concretos.** A guarda lê o banco sem trava, compara e só depois chama `super().save`; há uma janela entre validação e escrita. (`app/chamados/models.py:3548`; `app/chamados/models.py:3552`; `app/chamados/models.py:3570`; `app/chamados/models.py:3576`)
+
+Contraexemplo:
+
+1. Banco e instância A: `(I, 'bati')`.
+2. A chama `save(update_fields=['respondida_em'])`; sua leitura retorna `(I, 'bati')` e a igualdade dispensa a recusa.
+3. Antes do UPDATE de A, B grava `(None, '')` e confirma.
+4. A grava somente `respondida_em=I`; resultado `(I, '')`, ilegal segundo o juiz. B pode adquirir a trava regulamentar; A nunca a adquiriu. (`app/chamados/models.py:3572`; `app/chamados/models.py:3574`; `app/chamados/models.py:3576`; `app/chamados/models.py:3552`; `app/chamados/models.py:2727`; `app/chamados/juizes.py:1534`)
+
+Ocorrência em produção, isolamento efetivo e execução SQL: **[não verificado]**. A configuração `prod` declara PostgreSQL. (`app/config/settings/prod.py:9`)
+
+**Outro problema: `update_fields` posicional.** A guarda consulta apenas `kwargs`, mas encaminha `*args` intactos ao Django. (`app/chamados/models.py:3549`; `app/chamados/models.py:3552`)
+
+```python
+# banco (None, ''), memória (I, 'bati')
+p.save(False, False, None, ['respondida_em'])
+```
+
+A guarda interpreta save completo, aprova memória legal e o Django escreveria só instante, produzindo `(I, '')`. Também pode recusar legado intocado: banco `(None,'legado')`, memória `(None,'outro')`, `p.save(False, False, None, ['pergunta'])`; a guarda recusa texto sem instante apesar de o save excluir ambas as metades. A aceitação desses argumentos pelo Django instalado é **[não verificado]**: a cópia fixa Django 5.2.14, mas o pacote não está instalado neste ambiente. (`app/chamados/models.py:3549`; `app/chamados/models.py:3574`; `app/chamados/services/fio.py:1610`; `app/requirements.txt:13`)
+
+Os casos sequenciais pedidos:
+
+- **Create:** valida ambas as metades da memória; não consulta linha existente com `_state.adding=True`. (`app/chamados/models.py:3569`; `app/chamados/models.py:3574`)
+- **`only/defer`, sem `update_fields`:** a guarda acessa ambas as metades antes do `super`; campos diferidos são carregados. O comportamento exato do `update_fields` automático do Django permanece **[não verificado]**. (`app/chamados/models.py:3574`; `app/chamados/models.py:3552`)
+- **Refresh integral/parcial:** a guarda não usa fotografia própria; consulta novamente antes de compor o par. (`app/chamados/models.py:3572`)
+- **PK explícito com `adding=False`:** linha existente segue comparação normal; linha ausente deixa `_banco=None` e valida ambas as metades da memória. (`app/chamados/models.py:3569`; `app/chamados/models.py:3574`)
+- **Linha apagada antes da guarda:** nenhuma absolvição por igualdade ocorre; nascimento ilegal é recusado. O eventual fallback de UPDATE para INSERT do Django é **[não verificado]**. (`app/chamados/models.py:3573`; `app/chamados/models.py:3576`; `app/chamados/models.py:3579`)
+- **Rollback externo:** próximo save relê o estado revertido; fecha os três exemplos antigos de cache. Os testes novos cobrem 2a e 2c expressamente. (`app/chamados/models.py:3572`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:146`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:159`)
+- **`QuerySet.update` fora do save:** a fixture cria legado assim; isso não demonstra que ESTE save o gravou. Pode fornecer a escrita B da corrida. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:62`)
+- **Gerador em `update_fields`:** `set(update_fields)` consome o iterador, que é encaminhado esgotado ao `super`; resultado exato — no-op ou erro no Django — **[não verificado]**. (`app/chamados/models.py:3565`; `app/chamados/models.py:3552`)
+
+## 15/11 23:46 · sessao 6c8eada32dad · - · - · origem=Ronald (tmux)
+
+**3 — PROCEDE o fechamento da dependência do cache.** `rg -n --hidden '_par_carregado|_par_lido' .` encontrou somente relato histórico em `app/docs/RELATO.md:9163`; nenhum leitor/escritor executável ou teste. A implementação atual usa apenas leitura do banco e variáveis locais (`app/chamados/models.py:3561`, `app/chamados/models.py:3572`, `app/chamados/models.py:3574`). Grep de `\bfrom_db\b` em Python encontrou apenas o catálogo genérico em `app/core/management/commands/describe.py:68`; nenhum override de `from_db`/`refresh_from_db` em models.py. Chamadas normais continuam, por exemplo a fixture legada em `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:66`; isso exige a operação herdada, sem dependência demonstrada do override removido. Dependências dinâmicas não detectáveis por esse grep: **[não verificado]**.
+
+**4 — PROCEDE o respeito à lei e à catraca A.** A lei reserva `select_for_update` à `trava_na_ordem` e permite releitura simples após obter as travas (`app/chamados/models.py:2727`, `app/chamados/models.py:2734`); a nova consulta é simples (`app/chamados/models.py:3572`). A catraca procura atributos `select_for_update`, referências via `getattr` e SQL literal de trava (`app/chamados/tests/test_e1_v7_catracas.py:116`, `app/chamados/tests/test_e1_v7_catracas.py:133`, `app/chamados/tests/test_e1_v7_catracas.py:137`).
+
+Executei isoladamente, somente em memória, as funções AST reais: **766 fontes de produção, `varrer_travas=[]`**. O percurso e a agregação estão em `app/chamados/tests/test_e1_v7_catracas.py:57` e `app/chamados/tests/test_e1_v7_catracas.py:158`; o teste exige essa lista vazia (`app/chamados/tests/test_e1_v7_catracas.py:387`). Não executei Django/banco: **[não verificado]**.
+
+**NÃO PROCEDE haver teste localizado com `assertNumQueries` envolvendo um save de PerguntaDisputa que toque o par.** Examinei por AST todos os blocos no diretório de testes de chamados. Os dois candidatos de resposta automática medem o **segundo chamado/no-op** (`app/chamados/tests/test_porta_chamado_e3.py:46`, `app/chamados/tests/test_porta_chamado_e3.py:47`; `app/chamados/tests/test_e3_10_cura_no_escritor.py:83`, `app/chamados/tests/test_e3_10_cura_no_escritor.py:84`): retornam antes do save pela existência de texto (`app/chamados/services/disputa_emissao.py:1663`), cujo caminho de escrita está em `app/chamados/services/disputa_emissao.py:1677`. Os testes de nove consultas chamam o leitor `consulta_do_app` (`app/chamados/tests/test_e3_v4_orm.py:91`, `app/chamados/tests/test_e3_v4_orm.py:98`; composição do leitor em `app/chamados/services/pergunta_no_app.py:73`). Contagem real e cobertura contra chamadas dinâmicas: **[não verificado]**.
+
+**Custo estático:** `_recusa_par_ilegal` faz uma consulta simples para instância existente quando `update_fields` toca o par ou é `None`; faz zero se a lista exclui o par ou `_state.adding=True` (`app/chamados/models.py:3565`, `app/chamados/models.py:3569`, `app/chamados/models.py:3572`). Acessar atributos diferidos pode acrescentar consultas, além da leitura explícita (`app/chamados/models.py:3574`).
+
+## 15/11 23:46 · sessao 98c609aa8e2a · - · - · origem=Ronald (tmux)
+
+**Item 5 — PROCEDE falsa absolvição e PROCEDE falso positivo.** O caso antigo do `return` aninhado foi fechado, mas a restrição a `fn.body` recusa também uma guarda aninhada que efetivamente governa a escrita. (`app/chamados/tests/test_contract_par_resposta.py:87-97`)
+
+Executei os helpers extraídos por AST, somente em memória, com `python3 -B`: [nao verificado]
+
+```python
+# ACUSA: meia_par -> 'respondida_em'
+def f(p, qs, habilitado):
+    if habilitado:
+        if not p.resposta_colab:
+            return
+        qs.update(respondida_em=agora)
+```
+
+Tomando `qs` como a linha de `p` e texto válido quando não vazio, esse escritor é legítimo: toda execução do update passa pela guarda. `_governada` não reconhece o `if` interno como saída antecipada porque examina apenas instruções diretamente em `fn.body`; o `if habilitado` externo não lê a outra metade. (`app/chamados/tests/test_contract_par_resposta.py:88`; `app/chamados/tests/test_contract_par_resposta.py:93-96`)
+
+```python
+# ABSOLVE: meia_par -> None
+def f(p, qs):
+    if not p.resposta_colab:
+        return
+    qs.update(respondida_em=agora)
+```
+
+Se `p` tem texto e `qs` seleciona outra pergunta vazia, grava instante sem texto. `_le` aceita qualquer atributo com nome `resposta_colab`, sem vincular objeto/linha ao escritor; `_governada` aceita essa saída antecipada. Isso independe da polaridade, expressamente excluída do selo. (`app/chamados/tests/test_contract_par_resposta.py:75-76`; `app/chamados/tests/test_contract_par_resposta.py:93-96`; `app/chamados/tests/test_contract_par_resposta.py:21-24`)
+
+O contraexemplo antigo (`update` depois do `if habilitado`, fora dele) agora retorna `'respondida_em'`, conforme o caso acrescentado no teste. (`app/chamados/tests/test_contract_par_resposta.py:162`)
+
+A varredura `_ofensores()` executada sobre a cópia retornou `[]`: nenhum escritor atual é acusado pelo contrato; o falso positivo acima é uma regressão de capacidade, não um ofensor atual encontrado. (`app/chamados/tests/test_contract_par_resposta.py:116-136`)
 
 ## 15/11 23:31 · sessao 0a3fd6325a9e · EM-DISPUTA-TRES-DERIVACOES · leitura · origem=Code
 
@@ -1033,94 +1126,4 @@ O resíduo de relógio abaixo impede certificar a regra “uma leitura na borda 
 - As exclusões são explícitas e limitadas; o item 09 prova sua documentação, não sua segurança transitiva. (`app/folha/views_retrato.py:146`, `app/chamados/tests/test_e3_r3_c17_sem_banco.py:268`.)
 - **Não demonstrada regressão nova de assinatura, segundo escritor ou segundo juiz criada pelo c17** nos caminhos inventariados. (`app/relatorios/views.py:1543`, `app/relatorios/views.py:1554`, `app/folha/management/commands/lavrar_retrato_folha.py:77`, `app/folha/retrato_folha.py:1378`, `app/relatorios/furos.py:127`.)
 
-## 15/11 22:39 · sessao d907d4904e3b · - · - · origem=Ronald (tmux)
-
-Classificaria `app/relatorios/views.py:1540-1541` como **observação**, sem violação demonstrada de L-090: a tela aceita período livre, e o contrato distingue competência default de datas explícitas. O contraexemplo prova a normalização para mês civil, mas não que esse resultado seja apresentado como competência. As datas efetivas aparecem nos campos e nos cards. (`app/relatorios/tests/test_relatorio_janela_da_empresa.py:44-60`; `app/templates/relatorios/furos.html:12-13`; `:41`.)
-
-Não encontrei relógio adicional ativo nos caminhos examinados com `agora` válido: o calendário recebe o instante, usa-o no desfazer e no D4; `NAO_PERGUNTADO` pula o ramo que consultaria `autoridade_do_periodo`/`folha_manda`. (`app/relatorios/furos.py:168`; `app/colaboradores/services/calendario.py:192-193`; `:279-283`; `:594-600`; `:638`.)
-
-O `localdate()` sem argumento de `flip_batida.py:38` pertence ao escritor `flip_tipo`, não à leitura `flips_de` usada pelo calendário; esta apenas converte carimbo explícito. (`app/ponto/services/flip_batida.py:10`; `:38`; `:56`; `:77`; `app/colaboradores/services/calendario.py:644`.)
-
-## 15/11 22:39 · sessao 58f3c671885b · - · - · origem=Ronald (tmux)
-
-Auditoria dos selos e leis, só leitura:
-
-- **Testes c17 têm mordida comportamental.** `funcao` extrai e compila o corpo real, substituindo infraestrutura (`app/chamados/tests/e4_apoio.py:8`); os casos 01–05 verificam universo visível/interseção, ausência de foto, alarme estrutural parcial, exclusão de competências antigas e unidades/legado/ordenação (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:97`, `:107`, `:116`, `:129`, `:142`). Os casos 06–07 verificam dia obrigatório do limbo e transporte idêntico de instante/carga ao D4 e calendário, inclusive recusa de omissão/None/tipos inválidos (`:167`, `:193`, `:219`). O caso 08 exercita o detector de chamadas repetidas, soltas e aliases (`:225`).
-- **Caso 09 é documental somente.** Ele verifica substrings de docstrings; não demonstra por si mesmo que exclusões, universo ou relógios estejam corretos (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:252`–`:269`). Isso não torna os outros oito casos vazios.
-- Executei os nove testes c17 com `PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ... -v`: todos passaram. Execução RED na base e ordem histórica “testes antes das curas” continuam **[nao verificado]**; são afirmações do docstring (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:3`). Cópia local não tem `.git`; `git show f31a8d09e` falhou **[nao verificado por arquivo:linha]**.
-- **Limite real do selo de relógio:** `_chamadas_relogio` considera `localdate(valor)`/`localtime(valor)` conversões sempre que o argumento não seja o literal `None`, mesmo quando `valor` possa ser `None` em runtime (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:184`). Contraexemplo: `frescor_dos_retratos(agora=None)` satisfaz a assinatura obrigatória e chama `timezone.localtime(None)`, permitindo novo relógio (`app/folha/retrato_folha.py:1387`, `:1409`); o selo exige só ausência de chamadas sintáticas diretas e ausência de default (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:231`). **Observação de fragilidade preexistente ao c17 segundo o diff fornecido**, sem chamador real que forneça None demonstrado.
-- **Dataset valida datetime, não awareness.** `dataset_furos(..., agora=datetime.datetime(2026,11,15))` passa pela guarda de tipo (`app/relatorios/furos.py:113`), mas downstream `timezone.localdate(agora)` exige instante aware (`app/ponto/status_dia.py:254`). Teste 07 não exercita instante naive (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:213`). **Observação de contrato incompleto**, não ocorrência em chamador real demonstrada.
-- **Teste 07 não prova significado transitivo de “hoje”.** Seus HOJE e AGORA são propositalmente datas diferentes, com D4/calendário substituídos por mocks; ele prova identidade de transporte (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:25`, `:200`, `:219`). O próprio selo declara “sem fecho transitivo” (`app/chamados/tests/test_e3_r3_c15_sem_banco.py:169`).
-- **C5 não alarga []:** `colabs_nunca_bateu([], hoje)` usa `Empresa.objects.filter(pk__in=[])` (`app/escala/services/cadastro_realidade.py:163`). Tem fallback próprio `hoje=None -> localdate()` (`:137`, `:161`), mas o vigia injeta hoje explicitamente (`app/folha/vigia_retido_calado.py:72`), sem acioná-lo no caminho normal.
-- **Teste c5 R2 não ficou stale:** ele espera TypeError por ausência de `hoje`, antes de qualquer import/ORM; o mock já possui `.filter` (`app/chamados/tests/test_e3_r3_c5_sem_banco.py:232`, `:236`, `:245`).
-- **Limbo segue pendência antiga registrada**, não juiz novo criado por c17: `core/juizes.py` mantém o sítio e apenas atualiza a assinatura (`app/core/juizes.py:794`). Limbo consulta `eh_dia_trabalho(hoje)` e amanhã (`app/relatorios/furos.py:67`); `FolgaDia` mensal é diagnóstico de foto civil, não decisão de competência (`:86`, doc `:56`), portanto não é automaticamente violação L-090.
-
-Leis relevantes para consolidar:
-
-- Testemunha lê autoridade única: `app/docs/LEIS.md:60`; consumidor lê lâmpada: `:95`.
-- Competência por corte da empresa, não calendário civil: `app/docs/LEIS.md:123`.
-- Relógio uma vez na borda e parâmetro até julgamento: `app/docs/GLOSSARIO.md:19`, `app/docs/PLANO-PADROES.md:92`; default None/fallback interno é armadilha explicitada em `:94`.
-- Vigia somente alarma, contador esperado zero: `CLAUDE.md:172`; um juiz e um escritor por domínio: `CLAUDE.md:178`.
-- UTC no banco/apresentação local: `CLAUDE.md:146`; configuração `America/Sao_Paulo`, `USE_TZ=True`: `app/config/settings/base.py:93`, `:95`.
-- Corte de publicação do Retrato não prova pré-requisitos de deploy pela inspeção desta cópia: `app/docs/CORTES.md:78`; ocorrência/deploy **[nao verificado]**.
-
-Nenhum **PROCEDENTE novo de c17** demonstrado nesta fatia de selos/leis; as fragilidades de None/naive e a prova documental do caso 09 devem constar como observações com os limites acima.
-
-## 15/11 22:38 · sessao 31006ac546a5 · - · - · origem=Ronald (tmux)
-
-Inventário e conclusões do vigia:
-
-- **Escritor persistente do retrato:** `lavrar_retrato_folha.handle` grava `empresa/mes/ano`, `linhas` e `lavrado_em` por `update_or_create`, somente com `--apply`; lê um único `_agora=timezone.now()`, deriva `_hoje=timezone.localtime(_agora).date()`, passa ambos a `montar_linhas`, e conserva `_agora` como início da rodada (`app/folha/management/commands/lavrar_retrato_folha.py:49`, `:50`, `:65`, `:72`, `:77`). Há constraint por empresa/competência (`app/folha/models.py:365`). Nos sítios de produção que nomeiam `RetratoFolha`, não encontrei segundo escritor; os demais usos são consultas (`app/folha/views_retrato.py:194`, `app/folha/retrato_folha.py:1413`, `app/colaboradores/views.py:982`, `app/folha/vigia_retido_calado.py:59`).
-
-- **Competências:** escritor da lista = `competencias_do_retrato`; lê `janela_anterior` e `janela_atual`, extrai mês/ano do fim e elimina repetição (`app/folha/retrato_folha.py:1369`, `:1378`, `:1380`, `:1382`). Leitores de produção = lavrador automático, frescor e vigia (`app/folha/management/commands/lavrar_retrato_folha.py:61`; `app/folha/retrato_folha.py:1412`; `app/folha/vigia_retido_calado.py:66`). `--mes/--ano` é seleção explícita do lavrador, não derivação concorrente (`app/folha/management/commands/lavrar_retrato_folha.py:57`). O juiz respeita corte por empresa e datas inclusivas corte→corte−1 (`app/ponto/janelas.py:10`, `:16`, `:20`, `:60`, `:66`).
-
-- **Universo mudou:** agora parte de todas as `empresas_visiveis`, inclusive sem nenhuma foto, intersecta IDs pedidos e consulta retratos só desses IDs (`app/folha/vigia_retido_calado.py:54`, `:55`, `:58`, `:59`, `:61`). `empresas_visiveis` exclui inativas e CNPJ diagnóstico `11222333*` (`app/colaboradores/queries.py:78`, `:85`). Antes, segundo o diff anexado, partia das empresas encontradas em retratos e C5 recebia recorte original apenas havendo foto; comparação independente via Git [nao verificado] porque a cópia não tem repositório Git. Agora pares faltantes saem até para empresa sem foto, ordenados empresa/ano/mês; C5 recebe sempre IDs efetivos (`app/folha/vigia_retido_calado.py:65`, `:69`, `:72`).
-
-- **Quem escreve/lê o envelope de nove chaves:** só `censo` constrói e acumula `retratos`, `competencias_sem_retrato`, `bloqueados`, `calados`, `roteados`, `dias_sem_leitura_sistema`, `linhas_sem_campo_leitura`, `por_empresa` e `cego` (`app/folha/vigia_retido_calado.py:73`, `:88`, `:95`, `:100`, `:101`). `linhas` lê o envelope e emite texto; `handle` lê as chaves de alarme (`app/folha/vigia_retido_calado.py:105`; `app/folha/management/commands/vigiar_retido_calado.py:34`, `:38`). Trios das listas são `(empresa,mes,ano)`; chaves de `por_empresa` são `(empresa,ano,mes)`, distintos e coerentes no consumidor (`app/folha/vigia_retido_calado.py:88`, `:95`, `:108`, `:110`).
-
-- **Unidades e desconhecimento:** bloqueados/calados/roteados contam pessoa por retrato/competência; dias sem leitura somam listas das linhas bloqueadas; chave ausente marca legado desconhecido, chave presente `None` soma zero; positivo conhecido sobrevive ao legado (`app/folha/vigia_retido_calado.py:77`, `:79`, `:80`, `:84`, `:85`, `:87`, `:100`). Tests efetivos desses contratos: `app/chamados/tests/test_e3_r3_c17_sem_banco.py:97`, `:107`, `:116`, `:129`, `:142`. Incluem interseção, empresa sem foto, alarme parcial, preservação do positivo, unidade repetida por competência e virada do ano (`:103`, `:110`, `:123`, `:150`, `:162`).
-
-- **Relógio do vigia:** único chamador de produção encontrado é o command, que fornece `hoje=timezone.localdate()` uma vez; `censo` exige keyword `hoje` e o repassa a competência, dono e C5 (`app/folha/management/commands/vigiar_retido_calado.py:33`; `app/folha/vigia_retido_calado.py:41`, `:66`, `:72`, `:78`). `dono_da_linha` compara datas gravadas com o dia civil local, inclusive `>=hoje` para o balde Hoje; não decide fim de turno (`app/folha/retrato_folha.py:474`, `:480`, `:491`). Frescor e lavrador usam a mesma conversão local (`app/folha/retrato_folha.py:1409`; `app/folha/management/commands/lavrar_retrato_folha.py:50`). Drawer também usa instante convertido localmente antes de `.date()` (`app/colaboradores/views.py:930`, `:986`).
-
-- **Fallbacks existentes, não acionados pelo caminho normal:** `colabs_nunca_bateu(hoje=None)` lê relógio internamente (`app/escala/services/cadastro_realidade.py:137`, `:161`), mas vigia fornece o dia (`app/folha/vigia_retido_calado.py:72`). `montar_linhas(hoje=None)`→`_informativo_rescisao`→`informativo_rescisao`→`_dias_sem_decisao` pode ler relógio no interior; dívida expressamente declarada (`app/folha/retrato_folha.py:1174`, `:1220`, `:1271`; `app/folha/export.py:1216`, `:1238`). Lavrador fornece dia e evita fallback (`app/folha/management/commands/lavrar_retrato_folha.py:65`).
-
-- **Continua vigia:** sem escrita ORM nem transição no `censo`; só contagem e retorno; command apenas stdout e `SystemExit(2)` (`app/folha/vigia_retido_calado.py:59`, `:77`, `:102`; `app/folha/management/commands/vigiar_retido_calado.py:35`, `:42`). Cron chama com `--alarme`, depois do retrato, declarado papel vigia (`app/config/crons.py:1681`, `:1683`, `:2260`). `calados` e dias continuam esperado zero, mas só entram no alarme com `--alarme-passivo`; alarme estrutural inclui agora cego e competência sem foto (`app/folha/management/commands/vigiar_retido_calado.py:16`, `:17`, `:37`). Coerente com L-060/CLAUDE 4a (`app/docs/LEIS.md:94`; `CLAUDE.md:172`).
-
-**Observação concreta:** comentário do cron ficou velho: diz `--alarme` “só pelo cego”, mas falta parcial de retrato também produz rc2 no command (`app/config/crons.py:1679`; `app/folha/management/commands/vigiar_retido_calado.py:16`, `:38`, `:42`). Contraexemplo já construído pelo teste: foto só de uma das duas competências, bloqueados positivos e cego zero, mesmo assim alarma `competencias_sem_retrato` (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:117`, `:119`, `:123`).
-
-**PROCEDENTES de comportamento neste subconjunto:** nenhum identificado. Não há evidência disponível de número real de produção nem de execução dos testes com banco [nao verificado]. [nao verificado]
-
-## 15/11 22:38 · sessao d907d4904e3b · - · - · origem=Ronald (tmux)
-
-Inventário dos alvos:
-
-| Alvo | Quem fornece / quem lê | Assinatura antiga |
-|---|---|---|
-| `escalas_em_limbo(empresa=None, *, hoje)` | Produção: `furos_espelho` fornece `hoje` em `app/relatorios/views.py:1554`; a borda lê `now()` uma vez e converte com `localtime(...).date()` em `:1519-1520`. A função pergunta ao juiz `ec.eh_dia_trabalho` para hoje e amanhã em `app/relatorios/furos.py:67` e usa o mês civil da foto `FolgaDia` em `:86-89`. | Não identificada. Teste atualizado em `app/relatorios/tests/test_selo_ancora_do_vinculo.py:45`, com dia fixo em `:23`. |
-| `dataset_furos(..., *, agora)` | Produção: `app/relatorios/views.py:1543` fornece `_agora`; dataset envia o mesmo objeto ao D4 em `app/relatorios/furos.py:127` e ao calendário em `:168`. | Não identificada. Testes em `app/relatorios/tests/test_e4_8_furos_le_a_lavra.py:94` e `app/ponto/tests/test_cobparc_v4_procedentes.py:288` fornecem instante. |
-
-O D4 deriva o dia com `timezone.localdate(agora)`; o calendário deriva com `timezone.localtime(_agora).date()`. Ambos usam o fuso ativo; a configuração padrão é `America/Sao_Paulo`, `USE_TZ=True`. São conversões equivalentes para um instante aware no mesmo contexto. (`app/ponto/status_dia.py:252-254`; `app/colaboradores/services/calendario.py:192-193`; `app/config/settings/base.py:93-95`.)
-
-Os intervalos do dataset são inclusivos nas duas pontas; o julgamento de encerramento compara `agora >= fim` e usa `data_turno` como dia do turno. Portanto dia civil e dia do turno são insumos distintos, sem evidência de confusão nova neste caminho. (`app/relatorios/furos.py:126`; `app/ponto/status_dia.py:273-274`; `app/ponto/turnos.py:2111`; `app/ponto/turnos.py:2124`.)
-
-As exclusões têm caminhos reais:
-
-- PDF do retrato: `retrato_pdf` chama `_recorte_da_barra` e depois `gerar_pdf_auditavel`, sem transmitir o instante do recorte. A função auditável lê `timezone.now()` e usa esse valor nos rodapés das duas passagens; também grava um `RegistroPDFAuditavel`. Isso não altera a seleção das linhas, já capturada em `_rec`. (`app/folha/views_retrato.py:388`; `:443`; `app/relatorios/pdf_base.py:133`; `:139`; `:152`; `:170`.)
-- Aceite: `retrato_raiox` chama `_recorte_da_barra`, mas transmite somente `empresa_id` ao placar quando Dono=Colab. `placar_aceite` lê `now()` e `localdate()` separadamente, permitindo atravessar meia-noite entre as leituras. Ele usa janelas próprias hoje/7d e não recebe competência, praça, pessoas ou intervalo do recorte. (`app/folha/views_retrato.py:489`; `:513-515`; `app/chamados/services/verbos.py:277-288`; `:295-301`.)
-- O PDF da auditoria de espelhos passa os cards a `gerar_pdf_furos_bytes`; não usa nenhuma dessas duas funções excluídas. (`app/relatorios/views.py:1562-1564`; `app/relatorios/furos_pdf.py:73-103`.)
-
-A exclusão é coerente com a promessa limitada de transporte direto, expressamente “sem fecho transitivo”; não permite afirmar relógio único em toda a tela e seus componentes. O reuso do placar no Raio-X é ordem expressa do corte O256. (`app/folha/views_retrato.py:146-147`; `app/relatorios/furos.py:111`; `app/docs/CORTES.md:309`.)
-
-Não confundir o mês civil da foto `FolgaDia` com competência de folha: a função diagnostica cadastro e consulta `eh_dia_trabalho`, sem construir competência. A leitura da foto é nominalmente permitida na catraca, e o registro FABRICANTE explica que substituir por `janela_atual` contrariaria o contrato da foto. (`app/relatorios/furos.py:67`; `:86-89`; `app/ponto/tests/test_catraca_folga_lancada_um_juiz.py:169`; `app/docs/FABRICANTE.md:63`.)
-
-Os testes C17 do limbo e dataset exercitam comportamento: conferem o dia recebido, o mês da consulta, ausência de leitura do mock de relógio, obrigatoriedade do parâmetro, recusa dos tipos inválidos e identidade do instante nos dois fornecedores. Já o item 09 cobra somente termos dos docstrings. (`app/chamados/tests/test_e3_r3_c17_sem_banco.py:183-191`; `:212-223`; `:252-269`.)
-
-Observações:
-
-- A validação de `dataset_furos` aceita qualquer `datetime`, inclusive naive. Os leitores seguintes exigem conversão local de instante aware; o contrato do juiz também documenta aware. Nenhum chamador real passando naive foi identificado, portanto isso é limite de validação, não regressão demonstrada. (`app/relatorios/furos.py:113-114`; `app/ponto/status_dia.py:254`; `app/ponto/turnos.py:2071`.)
-- D4 e calendário conservam fallback de relógio com `agora=None`, mas o caminho atualizado do dataset transmite instante obrigatório e não aciona esses fallbacks. (`app/ponto/status_dia.py:252-254`; `app/colaboradores/services/calendario.py:192`; `app/relatorios/furos.py:103`; `:127`; `:168`.)
-- `escalas_em_limbo` permanece registrado em PENDENTES; o diff ajusta sua âncora à assinatura nova. O critério atual já consulta o juiz, e a leitura de vínculos abertos é declarada como diagnóstico de cadastro. (`app/core/juizes.py:794`; `app/relatorios/furos.py:67`; `app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:207-208`.)
-
-Achados PROCEDENTES novos de execução nesses dois alvos: nenhum demonstrado pela leitura acima; ocorrência em produção [nao verificado].
-
-_5846 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5850 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

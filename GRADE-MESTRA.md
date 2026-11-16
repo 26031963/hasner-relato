@@ -23,7 +23,7 @@
 
 Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 59; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 298 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 303 com a coluna
 
 resolve preenchido 12/457
 <!-- placar_grade:cabecalho fim -->
@@ -69,7 +69,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | O117 | ESPINHA-E | Resolve a divergência sobre o previsto de células sem marcos. | - | corte se ainda desejado | + + . . . . . . . | PARADA (zero casos na frota; corte pendente) | app/docs/BACKLOG.md:1234 | ? | ? |
 | O105 | ESPINHA-E | Faz o arquivo da folha refletir de forma estável o valor gravado. | - | decidir substituição ou autópsia de datas_falta | + + . . . . . . . | PARADA (PAREI por divergência no TXT) | app/docs/BACKLOG.md:1246 [+1 compl.] | ? | ? |
 | O44 | ESPINHA-E | Permite retomar um dia antigo sem destrancar outros dias. | - | smoke do caso 1; critérios do item | + + + + . . . + . | REGISTRADA (pousada; marco sem data explícita) | app/docs/BACKLOG.md:1325 [+3 compl.] | ? | ? |
-| O54 | ESPINHA-E | Faz previsão, cálculo, telas e fechamento concordarem sobre cada dia. | - | portas E0→E6 provadas em sequência | + + ~ . . . . . . | REGISTRADA (programa parcial pelas fontes vivas 15/11 23:2x: placar core/espelho_verdade.py E1 2/4, E3 8/10, E4 4/5, E5 1/2, E6 5/8 = 20/29; E6 oraculo 27/09 91,5% dos dias batem; R1-REMEDE 06/11 FECHADA, BACKLOG:1854; fecho: ESPELHO-VERDADE-FECHO V0-V4) | app/docs/BACKLOG.md:1338 [+46 compl.] | ? | ? |
+| O54 | ESPINHA-E | Faz previsão, cálculo, telas e fechamento concordarem sobre cada dia. | - | portas E0→E6 provadas em sequência | + + ~ . . . . . . | REGISTRADA (programa parcial pelas fontes vivas 15/11 23:2x: placar core/espelho_verdade.py E1 2/4, E3 8/10, E4 4/5, E5 1/2, E6 5/8 = 20/29; E6 oraculo 27/09 91,5% dos dias batem; R1-REMEDE 06/11 FECHADA, BACKLOG:1854; fecho: ESPELHO-VERDADE-FECHO V0-V4) | app/docs/BACKLOG.md:1338 [+51 compl.] | ? | ? |
 | O95 | ESPINHA-E | Impede absorver saída real como pausa sem prova de retorno. | - | censo; DIFF de frota | + . . . . . . . . | PARADA (cura candidata revertida; espera censo) | app/docs/BACKLOG.md:1371 | ? | ? |
 | O92 | ESPINHA-E | Alimenta a previsão em lote para evitar consultas repetidas por dia. | - | quatro leitores; DIFF da cópia inline | + + ~ . . . . . . | REGISTRADA (chamador da tela fechado; demais pendentes) | app/docs/BACKLOG.md:1375 | ? | ? |
 | O136 | ESPINHA-E | Faz a escolha do motor reconhecer turno partido nos dois sentidos. | - | O134 item 5; DIFF; ! do motor | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1389 | ? | ? |
@@ -836,7 +836,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | O40 | ESPINHA-E | Usa a competência correta para decidir se um dia está trancado. | - | fronteira FM/PeriodoFechado; O44 | ++~+....+ | REGISTRADA (tripwire no ar; fronteira pendente) | app/docs/BACKLOG.md:1321 |
 | QUARENTENA-DO-COLAB | LATERAL-ESTRUTURA | Isola cobranças por período e permite seu retorno. | - | reaplicar SPEC; DIFF; E3 | .+++..~.. | INTERROMPIDA | BACKLOG:784; anexo:interrompidas.txt:3 |
 
-### O54 (46)
+### O54 (51)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
 | BO-354 | LATERAL-ESTRUTURA | Evita perguntas de saída erradas quando as batidas têm tipos invertidos. | - | descongelamento pela L-096 | ++....... | PARADA (congelada) | app/docs/BACKLOG.md:1161 | ? | ? |
@@ -885,6 +885,11 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | O94 | ESPINHA-E | Submete à decisão o pagamento antigo de turnos sem saída. | - | ! sobre o gravado | +++.....+ | PARADA (código no ar; gravado espera !) | app/docs/BACKLOG.md:1373 | ? | ? |
 | POSICAO-PORTA-POR-MOTIVO | LATERAL-ESTRUTURA | Oferece o acesso correto para resolver cada impedimento. | - | fonte de URL e pergunta | .+....... | REGISTRADA | BACKLOG:1052 | ? | ? |
 | SITUACAO-LEITOR-CRU | LATERAL-ESTRUTURA | Unifica como o sistema reconhece um desligamento. | - | O50 | .+....... | REGISTRADA | BACKLOG:735 | ? | ? |
+| ESPELHO-VERDADE-FECHO-V0 | ESPINHA-E | Mede de novo a divergência e dá destino a cada dia de estrutura. | - | suites da espinha (sombra atras delas) | +........ | EM VOO | BACKLOG:2228 | ? | ? |
+| ESPELHO-VERDADE-FECHO-V1 | ESPINHA-E | Recolhe os cortes que a medida pedir. | - | V0 | ......... | REGISTRADA | BACKLOG:2229 | ? | ? |
+| ESPELHO-VERDADE-FECHO-V2 | ESPINHA-E | Zera os dias de estrutura sem previsão e com turno aberto. | - | V0; V1 | ......... | REGISTRADA | BACKLOG:2230 | ? | ? |
+| ESPELHO-VERDADE-FECHO-V3 | ESPINHA-E | Faz o fechamento ler o mesmo dia que a tela. | - | V0; O48 | ......... | REGISTRADA | BACKLOG:2231 | ? | ? |
+| ESPELHO-VERDADE-FECHO-V4 | ESPINHA-E | Certifica o espelho para faturar. | - | V0..V3; PORTAO-DE-FATURAMENTO | ......... | REGISTRADA | BACKLOG:2232 | ? | ? |
 
 ### PLACAR-ESTRUTURAL (5)
 | complemento | balde | entrega | resolve | depende de | grade | estado | fonte |
