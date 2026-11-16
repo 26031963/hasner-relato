@@ -1,7 +1,673 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 14:31** · publicado em **16/11/2026 14:31** (UTC-3)
+> Ultima resposta processada: **16/11/2026 14:36** · publicado em **16/11/2026 14:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 14:36 · sessao a12a65a6e084 · PRIORIDADE-EV-ITEM6 · sonda · origem=Code
+
+[nao verificado]
+```text
+PEND|col373|2026-08-04|08/2026|emp2
+PEND|col60|2026-06-23|07/2026|emp3
+PEND|col152|2026-06-23|07/2026|emp3
+PEND|col152|2026-06-29|07/2026|emp3
+PEND|col888|2026-08-28|09/2026|emp2
+PEND|col920|2026-09-02|09/2026|emp2
+PEND|col616|2026-09-05|09/2026|emp2
+PEND|col920|2026-09-04|09/2026|emp2
+PEND|col727|2026-09-04|09/2026|emp2
+PEND|col439|2026-09-03|09/2026|emp2
+PEND|col212|2026-08-26|09/2026|emp2
+PEND|col112|2026-09-06|09/2026|emp3
+PEND|col920|2026-09-06|09/2026|emp2
+PEND|col926|2026-09-07|09/2026|emp2
+PEND|col152|2026-09-07|09/2026|emp3
+PEND|col236|2026-09-07|09/2026|emp2
+PEND|col363|2026-09-07|09/2026|emp2
+PEND|col358|2026-09-07|09/2026|emp2
+PEND|col928|2026-09-07|09/2026|emp2
+PEND|col878|2026-09-07|09/2026|emp2
+PEND|col507|2026-09-07|09/2026|emp2
+PEND|col49|2026-09-07|09/2026|emp3
+PEND|col112|2026-09-08|09/2026|emp3
+PEND|col920|2026-09-08|09/2026|emp2
+PEND|col616|2026-09-07|09/2026|emp2
+PEND|col148|2026-09-10|09/2026|emp3
+PEND|col112|2026-09-10|09/2026|emp3
+PEND|col920|2026-09-10|09/2026|emp2
+PEND|col616|2026-09-09|09/2026|emp2
+PEND|col920|2026-09-12|09/2026|emp2
+PEND|col616|2026-09-11|09/2026|emp2
+PEND|col862|2026-09-13|09/2026|emp2
+PEND|col242|2026-09-13|09/2026|emp2
+PEND|col901|2026-09-14|09/2026|emp2
+PEND|col920|2026-08-27|09/2026|emp2
+PEND|col920|2026-08-29|09/2026|emp2
+PEND|col920|2026-08-31|09/2026|emp2
+PEND|col207|2026-09-05|09/2026|emp2
+PEND|col869|2026-09-06|09/2026|emp2
+PEND|col869|2026-09-13|09/2026|emp2
+PEND|col899|2026-09-05|09/2026|emp2
+PEND|col903|2026-09-14|09/2026|emp2
+PEND|col129|2026-08-30|09/2026|emp3
+PEND|col129|2026-09-08|09/2026|emp3
+PEND|col129|2026-09-13|09/2026|emp3
+PEND|col129|2026-09-15|09/2026|emp3
+PEND|col382|2026-09-03|09/2026|emp2
+PEND|col491|2026-08-27|09/2026|emp2
+PEND|col382|2026-09-10|09/2026|emp2
+PEND|col382|2026-09-17|09/2026|emp2
+PEND|col616|2026-09-17|09/2026|emp2
+PEND|col901|2026-09-17|09/2026|emp2
+PEND|col572|2026-09-18|09/2026|emp2
+PEND|col648|2026-09-15|09/2026|emp2
+PEND|col148|2026-09-13|09/2026|emp3
+PEND|col902|2026-09-13|09/2026|emp2
+PEND|col824|2026-09-15|09/2026|emp2
+PEND|col824|2026-09-19|09/2026|emp2
+PEND|col902|2026-09-19|09/2026|emp2
+PEND|col499|2026-09-19|09/2026|emp2
+PEND|col148|2026-09-19|09/2026|emp3
+PEND|col822|2026-09-20|09/2026|emp2
+PEND|col572|2026-09-20|09/2026|emp2
+PEND|col491|2026-09-20|09/2026|emp2
+PEND|col902|2026-09-20|09/2026|emp2
+PEND|col148|2026-09-20|09/2026|emp3
+PEND|col491|2026-09-21|10/2026|emp2
+PEND|col616|2026-09-21|10/2026|emp2
+PEND|col824|2026-09-21|10/2026|emp2
+PEND|col903|2026-09-21|10/2026|emp2
+PEND|col704|2026-09-21|10/2026|emp2
+PEND|col857|2026-09-22|10/2026|emp4
+PEND|col418|2026-09-22|10/2026|emp2
+PEND|col245|2026-09-22|10/2026|emp2
+PEND|col203|2026-09-22|10/2026|emp2
+PEND|col616|2026-09-23|10/2026|emp2
+PEND|col824|2026-09-23|10/2026|emp2
+PEND|col859|2026-09-23|10/2026|emp2
+PEND|col951|2026-09-24|10/2026|emp2
+PEND|col616|2026-09-25|10/2026|emp2
+PEND|col824|2026-09-05|09/2026|emp2
+PEND|col824|2026-09-25|10/2026|emp2
+PEND|col369|2026-09-25|10/2026|emp2
+PEND|col885|2026-09-26|10/2026|emp2
+PEND|col616|2026-09-27|10/2026|emp2
+PEND|col242|2026-09-27|10/2026|emp2
+PEND|col457|2026-09-27|10/2026|emp2
+PEND|col155|2026-09-27|10/2026|emp3
+PEND|col373|2026-09-27|10/2026|emp2
+PEND|col666|2026-09-27|10/2026|emp2
+PEND|col859|2026-09-02|09/2026|emp2
+PEND|col859|2026-09-16|09/2026|emp2
+PEND|col784|2026-09-28|10/2026|emp2
+PEND|col857|2026-09-29|10/2026|emp4
+PEND|col373|2026-09-29|10/2026|emp2
+PEND|col89|2026-09-30|10/2026|emp3
+PEND|col202|2026-10-02|10/2026|emp2
+PEND|col876|2026-10-03|10/2026|emp3
+PEND|col373|2026-10-06|10/2026|emp2
+PEND|col131|2026-10-08|10/2026|emp3
+PEND|col974|2026-10-10|10/2026|emp2
+PEND|col155|2026-10-11|10/2026|emp3
+PEND|col924|2026-10-10|10/2026|emp2
+```
+
+| Competência | Linhas PEND |
+|---|---:|
+| 07/2026 | 3 [nao verificado] |
+| 08/2026 | 1 [nao verificado] |
+| 09/2026 | 65 [nao verificado] |
+| 10/2026 | 34 [nao verificado] |
+| 11/2026 | 0 [nao verificado] |
+
+[nao verificado]
+```text
+TOTAL_DIAS 253 TOTAL_PENDENTE 103 ERROS 0
+FIM
+```
+
+## 16/11 14:34 · sessao 34889e7d5722 · PRIORIDADE-EV-ITEM6 · sonda · origem=Code
+
+Referência: somente o bloco colado; sem arquivo:linha disponível, os resultados levam [nao verificado].
+
+1. **Marcadores presentes:** `READ_ONLY on`, `ERROS 0` e `FIM`. Todas as linhas O199 têm `erro=0`; a saída passa pelo critério solicitado de integridade. [nao verificado]
+
+2. **Conferência dos valores:** [nao verificado]
+
+| competencia | empresa | exportada | dias | ja_folga | pendente | colabs_pendentes | referência |
+|---|---:|:---:|---:|---:|---:|---:|---|
+| 07/2026 | 3 | s | 3 | 0 | 3 | 2 | [nao verificado] |
+| 08/2026 | 2 | s | 6 | 5 | 1 | 1 | [nao verificado] |
+| 09/2026 | 2 | s | 91 | 39 | 52 | 29 | [nao verificado] |
+| 09/2026 | 3 | s | 19 | 6 | 13 | 5 | [nao verificado] |
+| 10/2026 | 2 | n | 74 | 47 | 27 | 20 | [nao verificado] |
+| 10/2026 | 3 | n | 17 | 12 | 5 | 4 | [nao verificado] |
+| 10/2026 | 4 | n | 3 | 1 | 2 | 1 | [nao verificado] |
+| 11/2026 | 1 | n | 1 | 1 | 0 | 0 | [nao verificado] |
+| 11/2026 | 2 | n | 29 | 29 | 0 | 0 | [nao verificado] |
+| 11/2026 | 3 | n | 8 | 8 | 0 | 0 | [nao verificado] |
+| 11/2026 | 4 | n | 2 | 2 | 0 | 0 | [nao verificado] |
+| **TOTAL** | — | — | **253** | **150** | **103** | **62** | [nao verificado] |
+
+**Os totais fecham:** soma de `dias=253`, soma de `pendente=103` e `150+103=253`. Em todas as linhas, `dias=ja_folga+pendente`. Os 62 são a soma de `colabs_pendentes` das linhas; quantidade de colaboradores únicos não está demonstrada. [nao verificado]
+
+3. **Pendências e Corte C:** [nao verificado]
+
+- **Exportadas (`s`): 69 dias pendentes**, destinados à lista do DP pelo critério solicitado. [nao verificado]
+- **Abertas pelo flag (`n`): 34 dias pendentes**, todos em **10/2026**. [nao verificado]
+- **11/2026: zero pendentes O199**; portanto, o recorte autorizado do Corte C apresenta **zero dias O199 para apply**, que continua condicionado ao `!` de escala. [nao verificado]
+
+**Divergência:** o anexo chama 10 de competência paga, enquanto a saída marca 10 como `exportada=n`. Os 34 dias de outubro não podem ser considerados autorizados para apply pelo Corte C, limitado à 11. A saída também não apresenta medição identificável de `SEM-CELULA-11-DEVE-TER-CELULA (col305)`. [nao verificado]
+
+## 16/11 14:33 · sessao fbd083b15a88 · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
+
+A função é `espelho_do_colab`: a tela a chama diretamente e o PDF consome seus dias (`app/ponto/views.py:160-162`; `app/relatorios/pdf_espelho.py:596-603`). O patch abaixo intercepta somente as atribuições ao cache do catálogo, preservando sua leitura e os turnos reais (`app/ponto/catalogo/ausencias.py:275-281`).
+
+```python
+# OBRA: ESPELHO-VERDADE-FECHO-V0 — R3
+# Arvore solicitada: 3580b35e028267d85318cb75fd5b3d0c40e04a00
+# Texto para o envelope JA inicializado em SOMBRA/juliani.
+# Execucao, desempenho e compatibilidade do script: [nao verificado].
+# Auxiliares deste script, biblioteca padrao, sqlparse e implementacoes
+# internas do Django fora da copia: [nao verificado].
+#
+# PARTE recorta estrutura_dias.txt:1-57 na ordem recebida: 19/19/19.
+PARTE = 1
+
+import sys
+sys.dont_write_bytecode = True
+
+import datetime as dt
+import decimal
+import json
+import logging
+import re
+from contextlib import ExitStack, redirect_stderr, redirect_stdout
+from unittest.mock import patch
+
+NV = "[nao verificado]"
+SAIDA = sys.stdout
+
+# Mesma data civil do R1 recebido; instante/snapshot original: [nao verificado].
+# O instante AGORA sera real, unico por execucao e publicado. [nao verificado]
+HOJE = dt.date(2026, 11, 16)
+
+# Transcricao dos campos identificadores e numeros de estrutura_dias.txt:1-57.
+# Inclui col1021 e col909: o universo aqui e 57, nao os 55 do R2.
+DADO = """col129|10/2026|2026-10-12|0|779
+col218|10/2026|2026-10-15|105|0
+col252|10/2026|2026-09-23|548|594
+col252|10/2026|2026-09-24|552|598
+col252|10/2026|2026-09-25|556|604
+col252|10/2026|2026-09-28|535|581
+col252|10/2026|2026-10-01|545|590
+col252|10/2026|2026-10-02|545|593
+col252|10/2026|2026-10-06|551|597
+col252|10/2026|2026-10-09|544|592
+col369|10/2026|2026-10-12|476|416
+col37|10/2026|2026-10-05|241|0
+col37|10/2026|2026-10-09|241|0
+col382|10/2026|2026-09-30|364|0
+col451|10/2026|2026-09-23|707|718
+col451|10/2026|2026-09-25|705|718
+col478|10/2026|2026-09-25|719|8
+col515|10/2026|2026-10-09|244|0
+col515|10/2026|2026-10-11|245|0
+col723|10/2026|2026-10-08|440|345
+col746|10/2026|2026-09-24|289|193
+col841|10/2026|2026-10-20|681|522
+col854|10/2026|2026-10-04|718|7
+col864|10/2026|2026-10-12|509|449
+col868|10/2026|2026-09-22|0|679
+col876|10/2026|2026-09-21|550|665
+col1021|11/2026|2026-11-06|841|0
+col110|11/2026|2026-11-12|241|0
+col112|11/2026|2026-10-21|546|838
+col112|11/2026|2026-10-22|541|835
+col113|11/2026|2026-10-30|242|0
+col113|11/2026|2026-11-01|241|0
+col114|11/2026|2026-11-08|439|429
+col114|11/2026|2026-11-15|499|440
+col130|11/2026|2026-10-29|335|672
+col200|11/2026|2026-10-29|180|0
+col200|11/2026|2026-11-02|180|0
+col218|11/2026|2026-11-14|103|0
+col220|11/2026|2026-11-10|337|430
+col252|11/2026|2026-11-09|551|597
+col252|11/2026|2026-11-10|551|598
+col252|11/2026|2026-11-11|550|598
+col252|11/2026|2026-11-13|551|597
+col296|11/2026|2026-11-02|345|0
+col37|11/2026|2026-11-14|241|0
+col382|11/2026|2026-11-10|418|0
+col516|11/2026|2026-10-23|361|0
+col516|11/2026|2026-10-28|372|0
+col727|11/2026|2026-11-10|307|0
+col874|11/2026|2026-10-22|667|383
+col884|11/2026|2026-11-08|679|699
+col909|11/2026|2026-11-11|831|245
+col922|11/2026|2026-11-01|1382|68
+col922|11/2026|2026-11-04|676|458
+col989|11/2026|2026-10-23|721|567
+col996|11/2026|2026-10-28|0|580
+col996|11/2026|2026-11-10|443|1026"""
+
+TODOS = []
+for numero, texto in enumerate(DADO.splitlines(), 1):
+    codigo, competencia, data, esp_min, e6_min = texto.split("|")
+    TODOS.append((numero, codigo, competencia, data, int(esp_min), int(e6_min)))
+
+if PARTE not in (1, 2, 3):
+    raise ValueError("ParteInvalida")
+if len(TODOS) != 57 or len({r[1:4] for r in TODOS}) != 57:
+    raise RuntimeError("UniversoIncompativel")
+UNIVERSO = TODOS[(PARTE - 1) * 19:PARTE * 19]
+N = len(UNIVERSO)
+if N != 19:
+    raise RuntimeError("FatiaIncompativel")
+
+
+def imprimir(*partes):
+    print(*partes, file=SAIDA, flush=True)
+
+
+class Descartar:
+    def write(self, texto):
+        return len(texto)
+
+    def flush(self):
+        return None
+
+
+class escrita_nao_interceptada(RuntimeError):
+    pass
+
+
+class CacheSomenteLeitura:
+    """Proxy de escrita; a leitura vem INTEGRALMENTE do objeto original."""
+
+    def __init__(self, original):
+        self.original = original
+        self.suprimidas = 0
+
+    def __getitem__(self, chave):
+        return self.original[chave]
+
+    def __setitem__(self, chave, valor):
+        if chave not in ("v", "t"):
+            raise RuntimeError("EscritorDeCacheIncompativel")
+        self.suprimidas += 1
+        # SOMENTE as atribuicoes sao absorvidas; nenhum valor e inventado.
+        # Escritor nominal: ponto.catalogo.ausencias._CACHE.__setitem__
+        # nos sitios app/ponto/catalogo/ausencias.py:279-280.
+        # vigente() ainda calcula v pela fonte real (:278) e retorna v (:281).
+
+
+def classe_segura(exc):
+    nome = type(exc).__name__
+    return nome if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,79}", nome) else "Excecao"
+
+
+def sonda():
+    ok = erro = 0
+    feitos = set()
+    guarda = None
+
+    try:
+        with (
+            patch.object(logging.Logger, "handle", lambda *a, **k: None),
+            redirect_stdout(Descartar()),
+            redirect_stderr(Descartar()),
+        ):
+            from django.apps import apps
+            from django.conf import settings
+            from django.db import connection, connections, transaction
+            from django.db.models import Q
+            from django.utils import timezone
+            import sqlparse
+            from sqlparse import tokens as SQLTOK
+
+            # Mesmo molde de ambiente do anexo r2_script_p1.py.
+            # Configuracao: app/config/settings/sombra.py:49-50,65.
+            # Envelope efetivo: verificado apenas quando este texto executar.
+            if (
+                not apps.ready
+                or settings.SETTINGS_MODULE != "config.settings.sombra"
+                or not settings.BANCO_DE_ENSAIO
+                or connection.settings_dict["NAME"] != "sombra"
+                or connection.schema_name != "juliani"
+                or connection.in_atomic_block
+                or not connection.get_autocommit()
+            ):
+                raise RuntimeError("AmbienteIncompativel")
+
+            class GuardaSQL:
+                def __init__(self):
+                    self.tentou = False
+                    self.permite_set_inicial = True
+
+                def bloquear(self):
+                    self.tentou = True
+                    raise escrita_nao_interceptada()
+
+                def __call__(self, execute, sql, params, many, context):
+                    # execute_wrapper / sqlparse: implementacoes [nao verificado].
+                    # O flag e aderente ao dia: except Exception internos nao
+                    # podem converter uma tentativa de escrita em dia "ok".
+                    # Exemplo de captura interna:
+                    # app/ponto/catalogo/ausencias.py:246-254.
+                    if context["connection"].alias != "default":
+                        self.bloquear()
+
+                    comandos = [
+                        s for s in sqlparse.parse(str(sql))
+                        if str(s).strip()
+                    ]
+                    if len(comandos) != 1:
+                        self.bloquear()
+
+                    partes = []
+                    for token in comandos[0].flatten():
+                        if token.is_whitespace:
+                            continue
+                        if token.ttype in SQLTOK.Comment:
+                            continue
+                        if token.ttype in SQLTOK.Literal.String:
+                            continue
+                        # Identificador entre aspas nao e comando.
+                        if token.value.startswith('"'):
+                            continue
+                        partes.append(token.value)
+                    plano = " ".join(partes).upper().strip().rstrip(";").strip()
+
+                    # Inclui DML dentro de WITH e SELECT ... FOR UPDATE/SHARE.
+                    # TRUNCATE/DDL/COPY/CALL tambem nao sao leitura autorizada.
+                    if re.search(
+                        r"\b(INSERT|UPDATE|DELETE|LOCK|MERGE|TRUNCATE|"
+                        r"CREATE|ALTER|DROP|GRANT|REVOKE|COPY|CALL|DO|"
+                        r"VACUUM|ANALYZE|REFRESH|REINDEX|CLUSTER|SHARE)\b",
+                        plano,
+                    ):
+                        self.bloquear()
+                    if re.search(r"\bPG_(?:TRY_)?ADVISORY_", plano):
+                        self.bloquear()
+
+                    if plano == "SET TRANSACTION READ ONLY":
+                        if not self.permite_set_inicial:
+                            self.bloquear()
+                    elif not re.match(
+                        r"^(SELECT|WITH|SHOW|SAVEPOINT|RELEASE|ROLLBACK)\b",
+                        plano,
+                    ):
+                        self.bloquear()
+
+                    return execute(sql, params, many, context)
+
+            guarda = GuardaSQL()
+
+            def serializar(valor):
+                if isinstance(valor, dt.datetime):
+                    # Mesmo uso local do E6:
+                    # app/ponto/management/commands/e6_oraculo.py:152.
+                    return timezone.localtime(valor).isoformat()
+                if isinstance(valor, (dt.date, dt.time)):
+                    return valor.isoformat()
+                if isinstance(valor, decimal.Decimal):
+                    return float(valor)
+                # Nunca str(modelo), repr(modelo), nome ou texto de excecao.
+                raise TypeError("TipoDeSaidaNaoAutorizado")
+
+            def local(valor):
+                return None if valor is None else timezone.localtime(valor).isoformat()
+
+            def hora(valor):
+                if valor is None or isinstance(valor, dt.time):
+                    return valor
+                if isinstance(valor, str) and re.fullmatch(
+                    r"\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?", valor
+                ):
+                    return dt.time.fromisoformat(valor).isoformat()
+                return NV
+
+            def batida(b):
+                if b is None:
+                    return None
+                # Campos: app/ponto/models.py:23-26,67.
+                # Papeis em memoria: app/ponto/turnos.py:890-909.
+                return {
+                    "id": b.pk,
+                    "hora_local": local(b.timestamp),
+                    "tipo": b.tipo,
+                    "is_intervalo": b.is_intervalo,
+                    "retratada_em": local(b.retratada_em),
+                    "papel_ata": b.__dict__.get("_papel_ata", NV),
+                    "intra_ata": b.__dict__.get("_intra_ata", NV),
+                    "intra_dur": b.__dict__.get("_intra_dur", NV),
+                    "intra_declarado": b.__dict__.get("_intra_declarado", NV),
+                    "eco_flush": b.__dict__.get("_eco_flush", NV),
+                }
+
+            def alertas_sem_nomes(alertas):
+                # Publica categorias e numeros, nunca o texto livre.
+                # Campo real: app/ponto/motor_calculo_v2.py:253.
+                # Exemplos de produtores:
+                # :1484-1486,2144-2147,2220-2231,2485-2490,
+                # :2561-2563,2754,2779-2782,2814-2828,3188-3190.
+                prefixos = (
+                    ("DIA SEM JORNADA PREVISTA", "dia_sem_previsto"),
+                    ("Entrada ", "horario_deslocado"),
+                    ("Atraso:", "atraso"),
+                    ("Saída antecipada:", "saida_antecipada"),
+                    ("FOLGA TRABALHADA", "folga_trabalhada"),
+                    ("Turno aberto", "turno_aberto"),
+                    ("Período aberto", "periodo_aberto"),
+                    ("Periodo aberto", "periodo_aberto"),
+                    ("Intrajornada suprimida", "intra_suprimida"),
+                    ("Feriado em", "feriado"),
+                    ("HE semanal:", "he_semanal"),
+                )
+                saida = []
+                for texto in alertas or ():
+                    if not isinstance(texto, str):
+                        raise TypeError("AlertaIncompativel")
+                    codigo = next(
+                        (cod for inicio, cod in prefixos if texto.startswith(inicio)),
+                        "texto_livre_suprimido",
+                    )
+                    saida.append({
+                        "codigo": codigo,
+                        "numeros_do_texto": re.findall(
+                            r"\d+(?:[.,:/]\d+)*", texto
+                        ),
+                    })
+                return saida
+
+            with ExitStack() as pilha:
+                # Tripwire instalado antes dos imports de codigo da aplicacao.
+                pilha.enter_context(connection.execute_wrapper(guarda))
+                for alias in connections:
+                    if alias != "default":
+                        pilha.enter_context(connections[alias].execute_wrapper(guarda))
+
+                with transaction.atomic():
+                    with connection.cursor() as cursor:
+                        cursor.execute("SET TRANSACTION READ ONLY")
+                        guarda.permite_set_inicial = False
+                        cursor.execute(
+                            "SELECT current_database(), current_user, "
+                            "current_schema(), "
+                            "current_setting('transaction_read_only')"
+                        )
+                        if cursor.fetchone() != ("sombra", "leitor", "juliani", "on"):
+                            raise RuntimeError("BancoPapelOuTenantIncompativel")
+
+                    from ponto.catalogo import ausencias as catalogo
+                    from ponto.services import espelho as esp
+                    from ponto import turnos as geometria
+                    from ponto.management.commands.e6_oraculo import (
+                        minutos_do_espelho,
+                        minutos_do_oraculo,
+                    )
+                    from ponto.janelas import janela_fechamento
+                    from escala.alimentacao import (
+                        q_vinculo_cobre_a_data,
+                        vinculo_cobre_a_data,
+                    )
+
+                    # Modelos: app/colaboradores/models.py:283;
+                    # app/escala/models.py:871,1635;
+                    # app/ponto/models.py:115,660.
+                    Colaborador = apps.get_model("colaboradores", "Colaborador")
+                    CelulaDia = apps.get_model("escala", "CelulaDia")
+                    EC = apps.get_model("escala", "EscalaColaborador")
+                    Ausencia = apps.get_model("ponto", "Ausencia")
+                    Justificativa = apps.get_model("ponto", "Justificativa")
+
+                    # Falha explicitamente se os sitios usados pelo observador
+                    # deixarem de corresponder ao codigo desta copia.
+                    for funcao, linha in (
+                        (esp.espelho_do_colab, 1194),
+                        (esp._realizado_do_dia_tela, 267),
+                        (geometria.realizado_do_dia, 774),
+                        (geometria.realizado_dos_turnos, 707),
+                        (minutos_do_oraculo, 42),
+                    ):
+                        if funcao.__code__.co_firstlineno != linha:
+                            raise RuntimeError("SitioDaArvoreIncompativel")
+
+                    # Patch NOMINAL apenas do destino das atribuicoes :279-280.
+                    # _CACHE original continua sendo a fonte de todos os reads.
+                    # Nao troca vigente(), _do_banco(), catalogo ou turnos.
+                    cache = CacheSomenteLeitura(catalogo._CACHE)
+                    pilha.enter_context(patch.object(catalogo, "_CACHE", cache))
+
+                    # Os append de :1163,1906,1917 sao listas LOCAIS Python.
+                    # Fontes: SELECT agregado e leitor de marcos; nao precisam
+                    # GRANT e nao sao removidos:
+                    # app/ponto/turnos.py:1154-1164,1901-1918.
+
+                    AGORA = timezone.now()
+                    if guarda.tentou:
+                        raise escrita_nao_interceptada()
+
+                    def ler_dia(registro):
+                        numero, codigo, comp, texto_dia, esp_r1, e6_r1 = registro
+                        cid = int(codigo[3:])
+                        dia = dt.date.fromisoformat(texto_dia)
+                        mes, ano = map(int, comp.split("/"))
+                        chave = dia.isoformat()
+                        linhas = []
+                        inicio_cache = cache.suprimidas
+
+                        def fato(nome, ref, **campos):
+                            campos["ref"] = ref
+                            linhas.append(
+                                "DET|%s|%s|%s|%s" % (
+                                    codigo, texto_dia, nome,
+                                    json.dumps(
+                                        campos, default=serializar,
+                                        ensure_ascii=True, allow_nan=False,
+                                        separators=(",", ":"),
+                                    ),
+                                )
+                            )
+
+                        c = Colaborador.objects.select_related("empresa").get(pk=cid)
+                        # Funcao real: app/ponto/janelas.py:54-57.
+                        ini, fim = janela_fechamento(mes, ano, c.empresa)
+                        if not ini <= dia <= fim or dia > HOJE:
+                            raise RuntimeError("DiaForaDaJanela")
+
+                        captura = {
+                            "raizes": [],
+                            "corpos": [],
+                            "descontos": [],
+                            "oraculos": [],
+                            "cortes_e6": [],
+                            "pares_e6": [],
+                        }
+                        lendo_e6 = False
+
+                        # Observacao de frames: nao altera argumentos, retornos,
+                        # regras, pareamento ou objetos da aplicacao.
+                        def observar_raiz(frame, evento, retorno):
+                            if evento == "return" and retorno is not None:
+                                L = frame.f_locals
+                                captura["raizes"].append({
+                                    "resultado": retorno,
+                                    "ec": L.get("ec"),
+                                    "celulas": L["celulas"],
+                                    "turnos": tuple(
+                                        t for t in L["turnos_juiz"]
+                                        if t.data_turno == dia
+                                    ),
+                                })
+                            return observar_raiz
+
+                        def observar_corpo(frame, evento, retorno):
+                            L = frame.f_locals
+                            # Le pausas/bruto/fim JA decididos pelo corpo real,
+                            # imediatamente antes de liquido = bruto - pausas:
+                            # app/ponto/turnos.py:756-767.
+                            if evento == "line" and frame.f_lineno == 767:
+                                captura["descontos"].append({
+                                    "modo": "turno",
+                                    "entrada": L["t"].entrada.timestamp,
+                                    "fim_contado": L["fim"].timestamp,
+                                    "bruto_min": L["bruto"],
+                                    "pausa_descontada_min": L["pausas"],
+                                    "intervalos_reconhecidos": tuple(L["_itv_t"]),
+                                })
+                            if evento == "return" and retorno is not None:
+                                captura["corpos"].append({
+                                    "resultado": retorno,
+                                    "livre": L["livre"],
+                                    "intervalo"
+
+[truncado em 20000 de 54344 caracteres]
+
+## 16/11 14:31 · sessao b6bb56501dae · PRIORIDADE-EV-ITEM4 · sonda · origem=Code
+
+Os números abaixo são os da saída fornecida; os ponteiros são os nela indicados. **Fatos persistidos compartilhados não demonstram quantidade de chamadas de cada endpoint.** (`app/ponto/portas/he.py:94-99`; `app/chamados/models.py:2325`)
+
+- **TOTAL:** informado **55**, contado **55**: 26 `USO`, 19 `ERRO`, 8 `RECUSA`, 2 `EVIDENCIA`. Fecha na transcrição; correspondência com a execução integral: [nao verificado].
+- **ERRO da própria sonda:** [nao verificado]. As 19 linhas `ERRO` apresentadas descrevem cobertura ou métricas: 17 de `5xx_traceback` desconhecidos e duas contagens restritas de zero; não comprovam falha de execução da sonda. (`app/config/settings/saas.py:173-181`; `app/ponto/services/he_pendente_lavrado.py:94-100,177-189`; `app/chamados/services/fio.py:713-714`)
+- **rc:** [nao verificado]. Porta invalidada por erro da própria sonda: [nao verificado].
+
+Na tabela, **L** significa: atribuição HTTP, 5xx/traceback e quantidade de recusas indevidas **[nao verificado]**. Os zeros persistidos abaixo têm cobertura restrita e não demonstram zero erros HTTP. (`app/config/settings/saas.py:173-181`)
+
+| Obra | Porta | Uso n | Erro/recusa persistidos n | O que a sonda não prova |
+|---|---|---:|---|---|
+| O-JANELA-HE | `relatorios:index` — `app/relatorios/views.py:33-51` | [nao verificado] | [nao verificado] | L |
+| O-JANELA-HE | `ponto:gestao_he` — `app/ponto/views.py:932-966` | [nao verificado] | **0**, somente apuração nas fotos atuais — `app/ponto/services/he_pendente_lavrado.py:94-100,177-189` | L; fotos sobrescritas não constituem histórico HTTP |
+| O-JANELA-HE | `ponto:decidir_he` — `app/ponto/portas/he.py:94-99` | [nao verificado] | [nao verificado]; recusa do POST não persistida — `app/ponto/views.py:535-537,621-629` | L; separação do domínio compartilhado |
+| O-JANELA-HE | `ponto:recusar_he_em_lote` — `app/ponto/portas/he.py:263-268` | [nao verificado] | [nao verificado]; recusa do POST não persistida — `app/ponto/views.py:535-537,621-629` | L; separação do domínio compartilhado |
+| O-JANELA-HE | `ponto:gestao_he_pdf` — `app/ponto/views.py:870-878` | [nao verificado] | [nao verificado] | L; **16** evidências candidatas por assinatura não provam chamadas HTTP |
+| BO-HE-RECUSAR-LOTE-500 | `ponto:gestao_he` — `app/ponto/views.py:932-966` | [nao verificado] | [nao verificado] | L |
+| BO-HE-RECUSAR-LOTE-500 | `ponto:decidir_he` — `app/ponto/portas/he.py:94-99` | [nao verificado] | [nao verificado]; recusa do POST não persistida — `app/ponto/views.py:535-537,621-629` | L; separação do domínio compartilhado |
+| BO-HE-RECUSAR-LOTE-500 | `ponto:recusar_he_em_lote` — `app/ponto/portas/he.py:263-268` | [nao verificado] | [nao verificado]; recusa do POST não persistida — `app/ponto/views.py:535-537,621-629` | L; separação do domínio compartilhado |
+| REABRIR-NAO-DESTROI | `chamados:reabrir_disputa_supervisao` — `app/chamados/views.py:1435-1456` | [nao verificado] | [nao verificado] | L |
+| REABRIR-NAO-DESTROI | `chamados:fio_colaborador` — `app/chamados/views.py:667-674` | [nao verificado] | [nao verificado] | L |
+| REABRIR-NAO-DESTROI | `chamados:modal_fio` — `app/chamados/views.py:877-880` | [nao verificado] | [nao verificado] | L; **1.630** notas marcadas lidas não são exclusivas do modal — `app/chamados/services/nota.py:126-133` |
+| REABRIR-NAO-DESTROI | `chamados:modal_fio@corrigir_resposta` — `app/chamados/services/acoes_disputa.py:375-383` | [nao verificado] | [nao verificado] | L |
+| REABRIR-NAO-DESTROI | `chamados:modal_fio@regularizar_disputa` — `app/chamados/services/fio.py:713-714` | [nao verificado] | [nao verificado] por endpoint | L |
+| REABRIR-NAO-DESTROI | `chamados:detalhe_local` — `app/chamados/views.py:469-475` | [nao verificado] | [nao verificado] | L |
+| REABRIR-NAO-DESTROI | `chamados:solicitar_correcao_disputa` — `app/chamados/models.py:2318-2325` | [nao verificado] | [nao verificado] | L; separação HTML/API |
+| REABRIR-NAO-DESTROI | `api:api_solicitar_correcao_disputa` — `app/api/views.py:2686` | [nao verificado] | [nao verificado] | L; separação HTML/API |
+| REABRIR-NAO-DESTROI | `chamados:cobrar_chamado` — `app/chamados/views_cobrar.py:54-56` | [nao verificado] | [nao verificado] | L; atribuição exclusiva das notas |
+| O-JANELA-HE | `dominio:decidir_he[compartilhada]` — `app/ponto/portas/he.py:94-99` | **72 fatos** | **10 decisões “não”**; erro/recusa indevida [nao verificado] | L; distribuição entre endpoints |
+| BO-HE-RECUSAR-LOTE-500 | `dominio:decidir_he[compartilhada]` — `app/ponto/portas/he.py:94-99` | **71 fatos** | **10 decisões “não”**; erro/recusa indevida [nao verificado] | L; distribuição entre endpoints |
+| REABRIR-NAO-DESTROI | `dominio:reabrir_para_correcao` — `app/chamados/services/disputa_emissao.py:1631-1648` | **471 perguntas afetadas** | [nao verificado] | L; número de chamadas e atribuição por endpoint |
+| REABRIR-NAO-DESTROI | `dominio:recusar_pergunta` — `app/chamados/services/validacao.py:628-629` | [nao verificado] | **9 recusas humanas de resposta**; caráter indevido [nao verificado] | L; essas recusas não demonstram falhas técnicas |
+| REABRIR-NAO-DESTROI | `dominio:reabrir_disputa` — `app/chamados/views.py:1456`; `app/chamados/services/acoes_disputa.py:113` | **8 atos** | [nao verificado] | L; URL de origem |
+| REABRIR-NAO-DESTROI | `dominio:corrigir_resposta_admin` — `app/chamados/services/acoes_disputa.py:375-383` | **42 atos** | [nao verificado] | L; URL de origem |
+| REABRIR-NAO-DESTROI | `dominio:regularizar_disputa_granular` — `app/chamados/services/fio.py:713-714`; `app/chamados/services/acoes_disputa.py:144-145` | **7 atos** | **0 erros retornados de materialização**; classificação indevida [nao verificado] | L; URL de origem e erros fora dessa materialização |
+| REABRIR-NAO-DESTROI | `dominio:recobrar_questionario` — `app/chamados/services/disputa_emissao.py:1755-1759` | **17 atos** | [nao verificado] | L; URL de origem |
+| REABRIR-NAO-DESTROI | `dominio:cobranca` — `app/chamados/views_cobrar.py:54-56` | **13 notas** | [nao verificado] | L; distribuição entre endpoints |
+| REABRIR-NAO-DESTROI | `dominio:solicitacao_correcao[HTML_API]` — `app/chamados/models.py:2325` | **38 notas** | [nao verificado] | L; separação HTML/API |
+| REABRIR-NAO-DESTROI | `dominio:validar_pergunta` — `app/chamados/services/validacao.py:513-521` | [nao verificado] | **138 recusas em validações compartilhadas**; caráter indevido [nao verificado] | L; atribuição por endpoint |
+
+**Smoke pelo ITEM 4: [nao verificado] nas três obras.** Há fatos persistidos positivos, mas “uso da porta > 0 e erros = 0”, incluindo 5xx/traceback e recusa indevida, não está demonstrado pelos dados apresentados. (`app/config/settings/saas.py:173-181`; referências e limites por porta na tabela)
 
 ## 16/11 14:31 · sessao 920e00533953 · PRIORIDADE-EV-ITEM6 · sonda · origem=Code
 
@@ -1005,89 +1671,4 @@ PROCEDE — O RED 5644 não comprova a absolvição pedida: aceita `False` como 
 
 Na hipótese p dentro163/q fora163 entregue, não identifiquei escrita indevida em q: a unidade retorna antes de qualquer escrita (`app/chamados/services/materializacao.py:1714-1718`) e a tentativa da irmã desfaz seu savepoint quando ela não grava (`app/chamados/services/materializacao.py:1616-1619`).
 
-## 16/11 14:19 · sessao 792b7f1bfe41 · - · - · origem=Ronald (tmux)
-
-- `recusa_motivo`: escritores existentes em `app/chamados/services/materializacao.py:1261`, `:1561`, `:1564`; `app/chamados/services/validacao.py:760`; `app/chamados/services/disputa_emissao.py:1511`; `app/chamados/services/fio.py:1404`; atribuição pelo carimbo em `app/chamados/models.py:3297`. O campo continua sendo consumido como motivo/auditoria pelo explicador, modal e invariantes I18/I19; deixou de identificar pertencimento ao universo. (`app/chamados/services/explicador.py:108-113`; `app/templates/chamados/partials/modal_fio.html:226`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1074-1075`, `:1111-1112`; `app/chamados/services/universo_bug_par.py:33-35`.)
-
-- Universo: escritor material é o JSON congelado; carregador valida hash, estrutura e interseção e devolve `frozenset`; pertencimento só lê PK. Seus leitores são DXG, K6, elegibilidade U103, contador e comando. (`app/chamados/services/universo_bug_par.py:7-35`; `app/chamados/services/materializacao.py:259`, `:313`, `:710`, `:755`; `app/chamados/management/commands/bug_par_103.py:46`, `:50`, `:69`.)
-
-- `bloqueada_competencia`: vocabulário escrito em `validacao.ESTADOS`; retornos novos em validação; apresentação da casca lê `ok=False`, e os dois HTMLs leem o estado. A própria testemunha já usava o mesmo rótulo para F6 e passa também a usá-lo para K6. (`app/chamados/services/validacao.py:57-58`, `:589`, `:625`; `app/chamados/services/acoes_disputa.py:50-51`; `app/templates/chamados/partials/_pergunta_card.html:46`; `app/templates/chamados/partials/modal_fio.html:274`; `app/chamados/services/materializacao.py:817`, `:840`, `:864`.) Não há confusão entre os juízes nos argumentos: K6 recebe competência do `data_evento`, F6 recebe instante local; são perguntas diferentes, compostas explicitamente. (`app/chamados/services/materializacao.py:751-769`; `app/chamados/services/passivo_validado.py:86-95`; `app/ponto/janelas.py:84-88`.)
-
-- `aviso_das_irmas`: conta PKs distintos de donos dos erros, não dias nem referências internas a outras perguntas; seu leitor produtivo é a casca de validação. A remoção de “outro(s) dia(s)” corresponde ao contrato real. (`app/chamados/services/validacao.py:685-700`; `app/chamados/services/acoes_disputa.py:58-63`.)
-
-**Achado de sentido:** `total_aval` tem dois recortes no código: contador retorna PKs existentes no recorte de disputas, enquanto comando imprime sempre 163, mesmo com `--empresa`. Além disso, o contrato documental ainda promete que o contador cai a zero por validação, mas o contador novo preserva todas as materializadas no total. (`app/chamados/services/materializacao.py:310-338`; `app/chamados/management/commands/bug_par_103.py:48-50`, `:76-77`; `app/docs/PROMPTS.md:2235`.) Consequência: após a validação o indicador não pode demonstrar zeramento; com empresa recortada os dois números denominados `total_aval` podem divergir. (`app/chamados/services/materializacao.py:318-321`, `:338`; `app/chamados/management/commands/bug_par_103.py:77`.)
-
-**Achado condicional do comando:** a nova varredura fora163 aceita `data_evento=None`, campo permitido pelo modelo, e o entrega sem tratamento a `_competencia`; `janela_atual` acaba acessando `None.day`, abortando o DRY inteiro antes de publicar a lista. (`app/chamados/models.py:2528-2530`; `app/chamados/management/commands/bug_par_103.py:68-79`; `app/chamados/services/passivo_validado.py:93-95`; `app/ponto/janelas.py:27`.) A guarda de produção trata esse mesmo caso explicitamente como impedimento falante. (`app/chamados/services/materializacao.py:757-758`.) Existência desse registro no retrato: `[nao verificado]`.
-
-**Possível excesso na LISTA:** a nova seleção fora163 não exige ausência de materialização, nem exclui linha fora do fato; perguntas já aplicadas e respondidas também satisfazem a consulta e entram na Pauta DP. (`app/chamados/management/commands/bug_par_103.py:68-74`.) A quantidade e a presença dessas linhas no retrato: `[nao verificado]`.
-
-## 16/11 14:14 · sessao 05339093263a · MIUDOS-REABRE-O-ITEM-3 · leitura · origem=Code
-
-| Entrada | (0) Causa nesta cópia | (1) Classe e alcance de produção | (2) Dinheiro | (3) Pede `!` | (4) Lei aberta? | (5) Cruza obra em voo¹ |
-|---|---|---|---|---|---|---|
-| **BO-ADMIN-2710/3** | Persiste: justificativas aprovadas viram datas inteiras; o crédito parcial soma Ausência; motor conta abono pelo previsto dos dias. `app/ponto/services/efeito_ausencia.py:40–50`; `app/ponto/services/fechamento.py:660–665`; `app/ponto/motor_calculo_v2.py:2606–2622`. | **OBRA**: produtores e consumidores em arquivos distintos, incluindo motor; não cabe no limite de um arquivo sem motor. Mesmos sítios. | **s** — falta, abono e DSR. `app/ponto/motor_calculo_v2.py:2600–2630`. | **s** — motor é zona inviolável. `CLAUDE.md:142`. | **n para a regra desta causa**: pagamento completa o previsto descontando trabalho do dia; pergunta já respondida. `app/docs/RELATO.md:491`. | **n** nos sítios localizados, frente ao manifesto declarado. `anexo em_voo_1611.txt:2–43`. |
-| **BO2910/01-a** | Persiste: `vincular_posto` atribui posto e salva sem acompanhar empresa; a transferência escreve ambos. `app/colaboradores/views.py:325–336,1405–1407`. | **MIUDO — 1 arquivo**, `app/colaboradores/views.py`: as duas portas e as atribuições correspondentes estão nele; não exige modelo, migration ou juiz novo. `:325–336,1405–1407`. | **s** — empresa seleciona fechamentos do TXT. `app/folha/export.py:719–722`. | **n no mecanismo localizado** — trata cadastro posto/empresa; a alteração do posto cadastral não muda o vínculo que responde pelo dia. `app/colaboradores/services/colaborador.py:118–123`; `app/colaboradores/views.py:1405–1407`. | **n** — comportamento já estabelecido pela outra porta. `app/colaboradores/views.py:1397–1407`. | **s — painel do vínculo**, `app/colaboradores/views.py`. O pouso da R3 não elimina este cruzamento atual. `anexo em_voo_1611.txt:37–40`. |
-| **BO2910/01-b** | Persiste a ausência de registro da exceção; **mudou o ramo**: agora relê o banco antes de devolver linha/toast, mas continua sem registrar a falha. `app/colaboradores/views.py:337–361`. | **MIUDO — 1 arquivo**, `app/colaboradores/views.py`: tratamento de exceção local, sem alteração de modelo, motor ou autoridade. `:337–361`. | **n no ramo causal** — releitura, renderização e resposta de erro. `app/colaboradores/views.py:337–361`. | **n** — o ramo causal não altera escala, vínculo, motor ou gravado de exportada. `app/colaboradores/views.py:337–361`. | **n** — falta de registro já identificada como defeito, sem decisão de negócio pendente nesta causa. `app/docs/BACKLOG.md:1133`. | **s — painel do vínculo**, `app/colaboradores/views.py`, apesar do pouso da R3. `anexo em_voo_1611.txt:37–40`. |
-| **BO2910/02** | Persiste: a retratação pela célula filtra somente os três módulos de turno e exclui texto livre. `app/chamados/reconciliador.py:337–338,997–999`. | **MIUDO no mecanismo localizado — 1 arquivo**, `app/chamados/reconciliador.py`: seleção, predicado e retratação estão nele; já usa a autoridade de dia e abstém sem dia, sem exigir juiz novo. `:997–1032`. Alcance sobre nominal sem dia/célula: **[nao verificado]**; `app/docs/RELATO.md:3404`. | **n no mecanismo** — retrata chamado/perguntas e rejeita apenas justificativa pendente; disputa/chamado não determina a elegibilidade do cálculo. `app/chamados/reconciliador.py:523–541`; `app/ponto/services/fechamento.py:576–579`. | **s** — ampliar o universo altera limite de negócio expressamente mantido até corte do Ronald. `app/chamados/reconciliador.py:977–981`. | **s** — quais chamados de texto livre têm o dia como premissa suficiente para absolvição? O código mantém os demais fora até corte. `app/chamados/reconciliador.py:977–981`. | **n** no arquivo causal necessário localizado. `anexo em_voo_1611.txt:2–43`. |
-| **BO2910/05** | Persiste, com linhas deslocadas: formulário permite omitir ambas as horas; view passa `None`; serviço só valida quando alguma hora veio. `app/templates/ponto/partials/painel_ausencia.html:325–330`; `app/ponto/views.py:2700–2715`; `app/ponto/services/ausencia.py:1068–1070`. | **MIUDO quanto à aceitação indevida — 1 arquivo**, `app/ponto/services/ausencia.py`: concentra decisão e validador já existente; template e view participarem do caminho não exige alterar os três para impedir a aceitação. `:1039–1048,1057–1081`. | **s** — decisão/período alimentam folha e invalidam a projeção. `app/ponto/services/ausencia.py:1112–1124`. | **n no escopo registrado** — obrigatoriedade na aprovação já está escrita; não exige regra nova, motor ou alteração de vínculo. `app/docs/BACKLOG.md:1133`; `app/ponto/services/ausencia.py:1039–1081`. | **n para novas aprovações** — período obrigatório já registrado; tratamento de estoque sem período também existe. `app/docs/BACKLOG.md:1133`; `app/templates/ponto/partials/painel_ausencia.html:310–317`. | **n no arquivo causal mínimo**, `app/ponto/services/ausencia.py`. `anexo em_voo_1611.txt:2–43`. |
-| **BO2910/06** | Persiste a não reabertura, mas ela é também contrato explícito atual: reativação restaura cadastro/acesso e manda o admin revincular. `app/colaboradores/services/desligamento.py:235–259`. | **Tamanho [nao verificado]**. Há **1 produtor localizado**, `desligamento.py`, mas o número **exigido** depende da escolha de vínculo/início; a autoridade existente já consegue reativar vínculo pela mesma data inicial, portanto não há prova de dois arquivos obrigatórios. `app/colaboradores/services/vinculo.py:100–124,259–283`. | **s pelo encadeamento existente de vínculo → regeneração → fechamento**; impacto nominal **[nao verificado]**. `app/colaboradores/services/vinculo.py:315–348`; `app/ponto/portas/celula.py:483–496`. | **s** — dado de vínculo e mudança do automatismo explícito “admin revincula”. `app/colaboradores/services/desligamento.py:237–238`. | **s** — reabrir qual vínculo, com qual início, preservando ou preenchendo o intervalo desligado? Contrato atual não define reabertura automática. `app/colaboradores/services/desligamento.py:235–238`; escolha por início: `app/colaboradores/services/vinculo.py:100–124`. | **n nos produtores localizados** (`desligamento.py`/`vinculo.py`); envelope final **[nao verificado]**. `anexo em_voo_1611.txt:2–43`. |
-| **BO2910/08** | Persiste para decisão humana; **mudou para futuras automáticas**: DNA reescrito já desfaz julgamento futuro, mas conserva expressamente o administrativo e exclui humanos do rejulgamento. `app/ponto/portas/celula.py:297–315,465–470,1135–1139,1155–1164`. | **MIUDO técnico — 1 arquivo**, `app/ponto/portas/celula.py`: reescrita, preservação e autoridade de veredito estão nele, com cartório existente; não exige juiz novo. `:297–315,462–472,970–987,1060–1067`. | **s** — recalcula fechamento por competência. `app/ponto/portas/celula.py:483–496`. | **s** — DNA de escala, inclusive passado, e alteração da preservação administrativa explícita. `CLAUDE.md:149–154`; `app/ponto/portas/celula.py:973–980`. | **s** — quando DNA novo invalida decisão humana, hoje expressamente preservada? `app/ponto/portas/celula.py:973–980,1135–1139`. | **n** no arquivo causal localizado. `anexo em_voo_1611.txt:2–43`. |
-| **BO-ADMIN-2710/5** | Persiste: `_marcos_faltantes` pula célula não `missing` sem confrontar `tipo_real`, que o leitor já entrega. `app/chamados/services/declaracao_texto.py:130–139`; `app/escala/services/leitor_celula.py:122–133`. | **MIUDO — 1 arquivo**, `app/chamados/services/declaracao_texto.py`: dados necessários já chegam ao leitor; há teste próprio desse leitor. `:130–139`; `app/chamados/tests/test_hx_marcos_faltantes_celula.py:42–64`. | **s** — registro causal do intervalo e exigência de medir a hora de intrajornada indenizada no DIFF. `app/docs/RELATO.md:3984`; `app/docs/BACKLOG.md:848`. | **n no leitor localizado** — não altera escala/vínculo, motor ou gravado de exportada; consome dados já fornecidos. `app/chamados/services/declaracao_texto.py:100–139`; `app/escala/services/leitor_celula.py:122–133`. | **n na causa localizada** — defeito de leitura já identificado, sem escolha nova de negócio demonstrada. `app/docs/RELATO.md:3984`. | **n** no produtor e teste citados. `anexo em_voo_1611.txt:2–43`. |
-| **HJ-017-U1** | Causa atual **[nao verificado]**: código já trata saída por posição e reconciliação da ata; pendência documental não prova defeito remanescente. `app/ponto/turnos.py:1067–1100`; `app/escala/utils.py:1945–2040`; `app/docs/BACKLOG.md:1270`. | — | — | — | — | — |
-| **HJ-074** | Produtor atual **[nao verificado]**: default continua verdadeiro, mas nascimento consulta o juiz; nominal não identifica quem gravou a flag. `app/escala/models.py:896–917`; `app/colaboradores/services/vinculo.py:287–296`; `app/docs/BACKLOG.md:2652`. | — | — | — | — | — |
-| **HJ-005-U1** | Causa **[nao verificado]**: registro ainda exige censo e declara cobertura parcial não demonstrada para o dia. `app/docs/BACKLOG.md:849`. | — | — | — | — | — |
-| **HJ-012-U2** | Causa **[nao verificado]**: classificação da ingestão e medição anterior como cobrança legítima seguem sem reconciliação demonstrada. `app/docs/BACKLOG.md:1572`; `app/docs/RELATO.md:5603`. | — | — | — | — | — |
-| **HJ-005-U2** | Produtor **[nao verificado]**: `sem_periodo` demonstra falta de hora, sem identificar sua porta de origem. `app/ponto/turnos.py:2632–2637,2646–2647`. | — | — | — | — | — |
-| **HJ-005-U4** | Produtor **[nao verificado]**: mesmo limite; resposta `sem_periodo` não comprova escritor defeituoso. `app/ponto/turnos.py:2646–2647`. | — | — | — | — | — |
-| **BO-ADMIN-2710/1** | Produtor atual **[nao verificado]**: causa histórica era cobertura crua; leitor atual distingue `sem_periodo` e classifica cadastro. `app/docs/RELATO.md:3980`; `app/ponto/supra_juiz.py:395–402,453–455`. | — | — | — | — | — |
-| **BO-ADMIN-2710/8.1** | Defeito atual **[nao verificado]**: escritor já fotografa antes, distingue editar/criar e registra diferenças; view delega à porta. `app/colaboradores/services/vinculo.py:187–188,368–383`; `app/colaboradores/views.py:247–249`. | — | — | — | — | — |
-
-¹ Cruzamentos restritos às listas fornecidas de BUG-PAR, painel e editor. **O10-D nao verificavel**, pois não tem lista declarada; portanto os `n` dessa coluna não certificam ausência de cruzamento com O10-D. (`anexo em_voo_1611.txt:2–44`.)
-
-**Contagem por classe:**
-
-- **6 MIUDO:** /01-a, /01-b, /02, /05, /08 e BO-ADMIN-2710/5. São os seis mecanismos concentrados em um arquivo identificados acima. (`app/colaboradores/views.py:325–361`; `app/chamados/reconciliador.py:997–1032`; `app/ponto/services/ausencia.py:1039–1081`; `app/ponto/portas/celula.py:297–315,970–987`; `app/chamados/services/declaracao_texto.py:130–139`.)
-- **1 OBRA:** BO-ADMIN-2710/3. (`app/ponto/services/efeito_ausencia.py:40–50`; `app/ponto/services/fechamento.py:660–665`; `app/ponto/motor_calculo_v2.py:2606–2622`.)
-- **1 tamanho [nao verificado]:** /06. Das quatro pendências, /02, /05 e /08 fecham em **1 arquivo de produção cada**; /06 não permite afirmar número exigido sem decidir vínculo/início. A porta existente impede concluir que dois arquivos sejam obrigatórios. (`app/colaboradores/services/desligamento.py:235–259`; `app/colaboradores/services/vinculo.py:100–124,259–283`.)
-- **8 sem causa atual comprovada**, sem classificação posterior: as oito últimas linhas, com os limites de prova nelas citados.
-
-**ELEGÍVEL pela regra literal: nenhuma entrada demonstrada.** Os seis MIUDO têm dinheiro, `!`/lei aberta ou cruzamento declarado; O10-D também permanece não verificável. (`app/folha/export.py:719–722`; `app/chamados/reconciliador.py:977–981`; `app/ponto/services/ausencia.py:1112–1124`; `app/ponto/portas/celula.py:483–496,973–980`; `app/docs/BACKLOG.md:848`; `anexo em_voo_1611.txt:39,44`.)
-
-Motivo por não elegível, uma linha por entrada:
-
-- **BO-ADMIN-2710/3:** OBRA, dinheiro e motor sujeito a `!`. (`app/ponto/motor_calculo_v2.py:2606–2622`; `CLAUDE.md:142`.)
-- **BO2910/01-a:** dinheiro/TXT e cruzamento com painel em `app/colaboradores/views.py`. (`app/folha/export.py:719–722`; `anexo em_voo_1611.txt:39`.)
-- **BO2910/01-b:** cruza painel em `app/colaboradores/views.py`; o pouso da R3 não o libera deste cruzamento. (`anexo em_voo_1611.txt:37–40`.)
-- **BO2910/02:** ampliação do universo depende de corte de negócio, portanto `!` e pergunta de lei. (`app/chamados/reconciliador.py:977–981`.)
-- **BO2910/05:** toca insumo e projeção de fechamento. (`app/ponto/services/ausencia.py:1112–1124`.)
-- **BO2910/06:** tamanho não demonstrado, vínculo sujeito a `!` e decisão de reabertura ausente. (`app/colaboradores/services/desligamento.py:235–259`; `app/colaboradores/services/vinculo.py:100–124`.)
-- **BO2910/08:** dinheiro, DNA de escala e mudança de regra explícita sobre decisão humana. (`app/ponto/portas/celula.py:483–496,973–980,1135–1139`.)
-- **BO-ADMIN-2710/5:** envolve intrajornada indenizada no DIFF. (`app/docs/BACKLOG.md:848`; causa: `app/docs/RELATO.md:3984`.)
-- **HJ-017-U1:** causa atual **[nao verificado]**, diante dos tratamentos já presentes. (`app/ponto/turnos.py:1067–1100`; `app/escala/utils.py:1945–2040`.)
-- **HJ-074:** escritor causal da flag **[nao verificado]**. (`app/colaboradores/services/vinculo.py:287–296`; `app/docs/BACKLOG.md:2652`.)
-- **HJ-005-U1:** causa **[nao verificado]**; censo ainda requerido. (`app/docs/BACKLOG.md:849`.)
-- **HJ-012-U2:** causa **[nao verificado]**; classificações documentais não reconciliadas. (`app/docs/BACKLOG.md:1572`; `app/docs/RELATO.md:5603`.)
-- **HJ-005-U2:** origem da omissão **[nao verificado]**. (`app/ponto/turnos.py:2646–2647`.)
-- **HJ-005-U4:** origem da omissão **[nao verificado]**. (`app/ponto/turnos.py:2646–2647`.)
-- **BO-ADMIN-2710/1:** defeito atual **[nao verificado]**; leitor já distingue cadastro sem período. (`app/ponto/supra_juiz.py:395–402,453–455`.)
-- **BO-ADMIN-2710/8.1:** persistência atual do defeito **[nao verificado]**; escritor já registra edição e diferenças. (`app/colaboradores/services/vinculo.py:368–383`.)
-
-## 16/11 14:11 · sessao 8d2c783a5f2e · - · - · origem=Ronald (tmux)
-
-| Entrada | Resultado da leitura |
-|---|---|
-| **BO2910/06** | A reativação continua restaurando cadastro/acesso sem escala; isso também é o contrato explícito atual: “admin revincula” (`app/colaboradores/services/desligamento.py:235-259`). **Não há prova de OBRA ≥2 arquivos**: o juiz existente identifica vínculo pela data inicial (`app/colaboradores/services/vinculo.py:100-124`) e o executor já reativa a mesma linha (`app/colaboradores/services/vinculo.py:259-283`). **Um arquivo de produção pode bastar por composição**, mas a escolha de vínculo/data/âncora não está definida pelo dado; número exigido e certificação de MIUDO ficam **[nao verificado]**. **! s**, por vínculo e mudança do automatismo contratual (`app/colaboradores/services/desligamento.py:237-238`). **Lei s**: reabrir a vigência original, incluindo intervalo desligado, ou iniciar novo trecho; qual vínculo/data? **[nao verificado]**. Dinheiro da reabertura **s**, se passar pela autoridade existente que regenera células e provoca recálculo (`app/colaboradores/services/vinculo.py:315-348`; `app/ponto/portas/celula.py:483-496`); alcance nominal **[nao verificado]**. Cruzamento direto de `desligamento.py`/`vinculo.py` com manifestos declarados: **n** (`em_voo_1611.txt:1-44`, anexo fornecido); **O10-D nao verificavel**. |
-| **BO2910/08** | A troca do DNA permanece e agora apaga julgamento automático de futuras, conservando admin; a causa humana permanece (`app/ponto/portas/celula.py:297-315,1135-1138,1155-1163`). **MIUDO técnico: 1 arquivo de produção**, `celula.py`, que contém a reescrita e a autoridade que conserva/escreve o veredito; não exige juiz novo, porque o cartório atual já é chamado nesse caminho (`app/ponto/portas/celula.py:462-472,970-986,1060-1067`). A exclusão em `pos_vinculo.py` lê o estado gravado, sem obrigatoriedade demonstrada de editar esse consumidor (`app/colaboradores/services/pos_vinculo.py:62-73`). **Dinheiro s**, recalcula por competência (`app/ponto/portas/celula.py:483-496`). **! s / lei s**: substituir a preservação de decisão humana diante de DNA novo altera a regra explícita “admin decidiu vence o cartório” (`app/ponto/portas/celula.py:973-980,1135-1138`). Cruzamento direto do produtor com manifestos declarados: **n** (`em_voo_1611.txt:1-44`, anexo fornecido); **O10-D nao verificavel**. |
-
-**Cuidado com as citações do manifesto:** não conferi sua numeração linha a linha; use a contagem que o agente principal atribuir ao anexo. **[nao verificado]**
-
-## 16/11 14:11 · sessao 8bc91becb95e · - · - · origem=Ronald (tmux)
-
-| Entrada | Causa atual | Tamanho / arquivos de produção necessários | Dinheiro | ! / lei | Cruzamento |
-|---|---|---|---|---|---|
-| BO2910/02 | O universo da retratação pela célula continua limitado aos três módulos de turno, excluindo texto livre (`app/chamados/reconciliador.py:337-338`, `:997-999`). | **MIUDO quanto ao mecanismo localizado: 1 produção**, `app/chamados/reconciliador.py`; seleção, predicado e chamada de retratação estão nele (`:997-1032`). **Não exige juiz novo para chamados datados:** já importa `dia_do_fato` (`:45`), cuja leitura genérica suporta célula, contexto, batida e disputa (`app/chamados/juizes.py:88-139`). O alcance sobre o nominal sem data/célula permanece **[nao verificado]** (`app/docs/RELATO.md:3404`). | **n no mecanismo localizado:** retrata chamado/perguntas e rejeita apenas justificativa ainda pendente (`app/chamados/reconciliador.py:523-541`); chamado/disputa não determina elegibilidade do cálculo (`app/ponto/services/fechamento.py:576-579`). | **s / pergunta aberta:** a exclusão dos outros módulos é declarada “até Ronald cortar”, pois neles o dia não é a premissa inteira (`app/chamados/reconciliador.py:977-981`). Pergunta: qual subconjunto de texto livre a célula absolve? | **n nos arquivos necessários localizados**, comparando `app/chamados/reconciliador.py` com o manifesto fornecido; referência numerada do anexo **[nao verificado]**. **O10-D nao verificavel.** |
-| BO2910/05 | Ambas as horas podem faltar no formulário; a view conserva `None`, e `decidir` só valida período se alguma hora vier (`app/templates/ponto/partials/painel_ausencia.html:325-330`; `app/ponto/views.py:2700-2715`; `app/ponto/services/ausencia.py:1068-1070`). | **MIUDO quanto à causa de aprovação indevida: 1 produção**, `app/ponto/services/ausencia.py`, escritor único da decisão, com validador de período já existente (`:1039-1048`, `:1057-1081`). A presença de template, view e serviço não prova necessidade de alterar os três; a view já encaminha a omissão à autoridade (`app/ponto/views.py:2700-2715`). Exigir também alteração visual do formulário seria escopo adicional da fila UI registrada em `app/docs/BACKLOG.md:1133`; sua necessidade técnica para impedir a aprovação não está demonstrada. | **s:** decisão e período são insumos da folha e acordam a projeção do fechamento (`app/ponto/services/ausencia.py:1112-1124`). | **Não chamar automaticamente de lei aberta:** o corte de 27/10 admite falta de período com destino ao DP (`app/docs/CORTES.md:385`), enquanto o registro posterior de 29/10 pede período obrigatório na tela (`app/docs/BACKLOG.md:1133`). Se o segundo registro for tomado como escopo decidido, a obrigação já está escrita; sua autoridade como alteração do corte anterior é **[nao verificado]**. | **n no arquivo causal mínimo**, `app/ponto/services/ausencia.py`; os arquivos do manifesto fornecido não o incluem; referência numerada do anexo **[nao verificado]**. **O10-D nao verificavel.** |
-
-Para `/02`, não confundir **tamanho físico localizado de um arquivo** com autorização para ampliar o universo: há autoridade de dia reutilizável, mas o limite semântico foi preservado expressamente (`app/chamados/juizes.py:88-139`; `app/chamados/reconciliador.py:977-981`).
-
-_6066 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6070 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

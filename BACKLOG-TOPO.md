@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**325 obras abertas.**
+**324 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -207,7 +207,6 @@ lista — ela e o que esta EM PE._
 | **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS, E A CASA JA TINHA ESCRITO ISSO | **registrado, nao construido** -- a orde |
 | **O197** | FUTURO-NAO-E-EM-ABERTO | espera `!` |
 | **O198** | FALTA-EM-DIA-SEM-JORNADA | **CENSO PUBLICADO 20/10 10:3x, PARADO pe |
-| **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | **NO AR 10/10 (neste commit)**, pela L-1 |
 | **O200** | PINO-GEO-LE-O-JUIZ | **NO AR** (pouso + deploy 08/10 23:1x).  |
 | **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
 | **O202** | O TERCEIRO CALCULO DE GEO -- OS PINGS | **fila 2**. O aval dos 4 BOs o declarou  |
