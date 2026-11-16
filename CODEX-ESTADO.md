@@ -1,7 +1,527 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 03:21** · publicado em **16/11/2026 03:22** (UTC-3)
+> Ultima resposta processada: **16/11/2026 03:25** · publicado em **16/11/2026 03:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 03:25 · sessao 9f08f9b53053 · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
+
+```python
+# OBRA: ESPELHO-VERDADE-FECHO-V0
+# Arvore solicitada: 3580b35e028267d85318cb75fd5b3d0c40e04a00.
+# Texto para o envelope ja inicializado em SOMBRA/juliani, como o anexo.
+# Execucao, desempenho e compatibilidade deste script: [nao verificado].
+# Funcoes auxiliares deste script, biblioteca padrao e implementacoes internas
+# do Django fora da copia: [nao verificado].
+#
+# Restricao relevante:
+# espelho_do_colab -> autoridade_do_periodo -> efeitos_da_ausencia ->
+# parciais_vigentes -> vigente escreve cache:
+# app/ponto/services/espelho.py:1227
+# app/ponto/services/espelho.py:1068
+# app/ponto/services/efeito_ausencia.py:38
+# app/ponto/catalogo/ausencias.py:357
+# app/ponto/catalogo/ausencias.py:279-280
+#
+# Portanto, NAO chamar espelho_do_colab. Tambem NAO fabricar o dict que
+# minutos_do_espelho receberia: {} significaria indevidamente "sem lavratura".
+# Leitor real, puro, mas sem entrada real disponivel por caminho autorizado:
+# app/ponto/management/commands/e6_oraculo.py:242-269
+#
+# A pausa efetivamente descontada tambem fica bloqueada:
+# seu carregador de turnos preenche caches locais:
+# app/ponto/turnos.py:1906
+# app/ponto/turnos.py:1917
+# app/ponto/turnos.py:1163
+# Funcao real do espelho que dependeria desses turnos:
+# app/ponto/services/espelho.py:267-294
+# Nao substituir esses turnos pelos do E6.
+#
+# "ok" conta dias processados sem excecao; fatos bloqueados continuam
+# explicitamente "nao lido: grava" / [nao verificado].
+
+import sys
+
+sys.dont_write_bytecode = True
+
+import datetime as dt
+import json
+import logging
+import re
+from contextlib import redirect_stderr, redirect_stdout
+from unittest.mock import patch
+
+DADO = """col129|10/2026|2026-10-12
+col218|10/2026|2026-10-15
+col252|10/2026|2026-09-23
+col252|10/2026|2026-09-24
+col252|10/2026|2026-09-25
+col252|10/2026|2026-09-28
+col252|10/2026|2026-10-01
+col252|10/2026|2026-10-02
+col252|10/2026|2026-10-06
+col252|10/2026|2026-10-09
+col369|10/2026|2026-10-12
+col37|10/2026|2026-10-05
+col37|10/2026|2026-10-09
+col382|10/2026|2026-09-30
+col451|10/2026|2026-09-23
+col451|10/2026|2026-09-25
+col478|10/2026|2026-09-25
+col515|10/2026|2026-10-09
+col515|10/2026|2026-10-11
+col723|10/2026|2026-10-08
+col746|10/2026|2026-09-24
+col841|10/2026|2026-10-20
+col854|10/2026|2026-10-04
+col864|10/2026|2026-10-12
+col868|10/2026|2026-09-22
+col876|10/2026|2026-09-21
+col110|11/2026|2026-11-12
+col112|11/2026|2026-10-21
+col112|11/2026|2026-10-22
+col113|11/2026|2026-10-30
+col113|11/2026|2026-11-01
+col114|11/2026|2026-11-08
+col114|11/2026|2026-11-15
+col130|11/2026|2026-10-29
+col200|11/2026|2026-10-29
+col200|11/2026|2026-11-02
+col218|11/2026|2026-11-14
+col220|11/2026|2026-11-10
+col252|11/2026|2026-11-09
+col252|11/2026|2026-11-10
+col252|11/2026|2026-11-11
+col252|11/2026|2026-11-13
+col296|11/2026|2026-11-02
+col37|11/2026|2026-11-14
+col382|11/2026|2026-11-10
+col516|11/2026|2026-10-23
+col516|11/2026|2026-10-28
+col727|11/2026|2026-11-10
+col874|11/2026|2026-10-22
+col884|11/2026|2026-11-08
+col922|11/2026|2026-11-01
+col922|11/2026|2026-11-04
+col989|11/2026|2026-10-23
+col996|11/2026|2026-10-28
+col996|11/2026|2026-11-10"""
+
+NV = "[nao verificado]"
+UNIVERSO = [tuple(linha.split("|")) for linha in DADO.splitlines()]
+if len(UNIVERSO) != 55 or len(set(UNIVERSO)) != 55:
+    raise RuntimeError("UniversoIncompativel")
+
+SAIDA = sys.stdout
+
+
+def imprimir(*partes):
+    print(*partes, file=SAIDA, flush=True)
+
+
+class Descartar:
+    def write(self, texto):
+        return len(texto)
+
+    def flush(self):
+        return None
+
+
+def consumir(qs):
+    # Iterator evita preencher o cache de resultados do QuerySet.
+    # Implementacao Django: [nao verificado].
+    it = qs.iterator(chunk_size=128)
+    try:
+        return list(it)
+    finally:
+        it.close()
+
+
+def unico(qs):
+    objetos = consumir(qs)
+    if len(objetos) != 1:
+        raise LookupError("QuantidadeIncompativel")
+    return objetos[0]
+
+
+def classe_segura(exc):
+    nome = type(exc).__name__
+    return nome if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,79}", nome) else "Excecao"
+
+
+def sonda():
+    ok = erro = 0
+    feitos = set()
+
+    try:
+        with (
+            patch.object(logging.Logger, "handle", lambda *a, **k: None),
+            redirect_stdout(Descartar()),
+            redirect_stderr(Descartar()),
+        ):
+            from django.apps import apps
+            from django.conf import settings
+            from django.db import connection, transaction
+            from django.db.models import Q
+            from django.utils import timezone
+
+            if (
+                not apps.ready
+                or settings.SETTINGS_MODULE != "config.settings.sombra"
+                or not settings.BANCO_DE_ENSAIO
+                or connection.settings_dict["NAME"] != "sombra"
+                or connection.schema_name != "juliani"
+            ):
+                raise RuntimeError("AmbienteIncompativel")
+
+            # Configuracao SOMBRA: app/config/settings/sombra.py:49-50,65.
+            # Envelope/tenant/papel real nesta execucao: [nao verificado].
+            from ponto.janelas import janela_fechamento
+            from ponto.management.commands.e6_oraculo import minutos_do_oraculo
+            from ponto.turnos import batidas_apuraveis, dias_da_ausencia
+
+            # Modelos consultados; nenhum __str__ e chamado:
+            # app/colaboradores/models.py:283
+            # app/colaboradores/models.py:40
+            # app/escala/models.py:1635
+            # app/escala/models.py:871
+            # app/ponto/models.py:660
+            # app/ponto/models.py:115
+            Colaborador = apps.get_model("colaboradores", "Colaborador")
+            Empresa = apps.get_model("colaboradores", "Empresa")
+            CelulaDia = apps.get_model("escala", "CelulaDia")
+            EscalaColaborador = apps.get_model("escala", "EscalaColaborador")
+            Ausencia = apps.get_model("ponto", "Ausencia")
+            Justificativa = apps.get_model("ponto", "Justificativa")
+
+            def local(valor):
+                # timezone.localtime: implementacao Django [nao verificado].
+                # Mesmo uso do E6:
+                # app/ponto/management/commands/e6_oraculo.py:152.
+                return None if valor is None else timezone.localtime(valor).isoformat()
+
+            def meia_noite(data):
+                # Mesmo timezone/make_aware do carregamento E6:
+                # app/ponto/management/commands/e6_oraculo.py:149-151.
+                return timezone.make_aware(
+                    dt.datetime.combine(data, dt.time.min),
+                    timezone.get_current_timezone(),
+                )
+
+            def oraculo_com_turnos(instantes):
+                if sys.getprofile() is not None:
+                    raise RuntimeError("PerfilPreexistente")
+                capturados = []
+
+                def observar(frame, evento, arg):
+                    if (
+                        evento == "return"
+                        and frame.f_code is minutos_do_oraculo.__code__
+                        and arg is not None
+                    ):
+                        # Le a variavel REAL; nao replica o corte/pareamento.
+                        # app/ponto/calculador/nucleo.py:157,224,228.
+                        capturados.append(
+                            tuple(tuple(t) for t in frame.f_locals["turnos"])
+                        )
+
+                sys.setprofile(observar)
+                try:
+                    # Alias real do comando:
+                    # app/ponto/management/commands/e6_oraculo.py:42.
+                    # Funcao real, sem pares/envelopes:
+                    # app/ponto/calculador/nucleo.py:42-254.
+                    resultado = minutos_do_oraculo(instantes)
+                finally:
+                    sys.setprofile(None)
+
+                if len(capturados) != 1:
+                    raise RuntimeError("TurnosDoOraculoNaoCapturados")
+                return resultado, capturados[0]
+
+            def ler_dia(codigo, competencia, texto_dia):
+                cid = int(codigo[3:])
+                dia = dt.date.fromisoformat(texto_dia)
+                mes, ano = map(int, competencia.split("/"))
+                linhas = []
+
+                def fato(nome, ref, **campos):
+                    campos["ref"] = ref
+                    linhas.append(
+                        "DET|%s|%s|%s|%s" % (
+                            codigo, texto_dia, nome,
+                            json.dumps(
+                                campos, ensure_ascii=True, allow_nan=False,
+                                separators=(",", ":"),
+                            ),
+                        )
+                    )
+
+                c = unico(
+                    Colaborador.objects.filter(pk=cid).only("pk", "empresa_id")
+                )
+                empresa = unico(
+                    Empresa.objects.filter(pk=c.empresa_id).only(
+                        "pk", "dia_inicio_competencia"
+                    )
+                )
+
+                # Funcao real: app/ponto/janelas.py:54-57.
+                ini, fim = janela_fechamento(mes, ano, empresa)
+                if not ini <= dia <= fim:
+                    raise RuntimeError("DiaForaDaCompetencia")
+
+                # Mesma alimentacao mensal do E6, inclusive os limites:
+                # app/ponto/management/commands/e6_oraculo.py:149-153.
+                tz = timezone.get_current_timezone()
+                lo = timezone.make_aware(
+                    dt.datetime.combine(ini, dt.time.min)
+                    - dt.timedelta(hours=12), tz,
+                )
+                hi = timezone.make_aware(
+                    dt.datetime.combine(fim + dt.timedelta(days=1), dt.time.min)
+                    + dt.timedelta(hours=14), tz,
+                )
+
+                # Funcao real: app/ponto/turnos.py:2868-2895.
+                ts_mes = [
+                    timezone.localtime(ts)
+                    for ts in consumir(
+                        batidas_apuraveis(c, lo, hi).values_list(
+                            "timestamp", flat=True
+                        )
+                    )
+                ]
+                mensal, _turnos_mensais = oraculo_com_turnos(ts_mes)
+                chave = dia.isoformat()
+                fato(
+                    "E6",
+                    "app/ponto/calculador/nucleo.py:42-254;"
+                    "app/ponto/management/commands/e6_oraculo.py:149-153,350",
+                    competencia=competencia,
+                    minutos=mensal.minutos.get(chave, 0.0),
+                    envelope_min=mensal.envelope.get(chave, 0.0),
+                    pausa_min=mensal.pausas.get(chave, 0.0),
+                    impar=chave in mensal.impares,
+                    corte_que_orfanou=chave in mensal.cortes,
+                    leitura_ini=local(lo),
+                    leitura_fim_inclusivo=local(hi),
+                )
+
+                # Tres dias civis completos, no horario local.
+                anterior = dia - dt.timedelta(days=1)
+                seguinte = dia + dt.timedelta(days=1)
+                a = meia_noite(anterior)
+                z = meia_noite(dia + dt.timedelta(days=2))
+                # batidas_apuraveis usa <= no limite superior:
+                # app/ponto/turnos.py:2891-2892.
+                batidas = consumir(
+                    batidas_apuraveis(c, a, z - dt.timedelta(microseconds=1))
+                )
+                janela, turnos = oraculo_com_turnos(
+                    [timezone.localtime(b.timestamp) for b in batidas]
+                )
+                fato(
+                    "E6_JANELA",
+                    "app/ponto/calculador/nucleo.py:216-254",
+                    janela_ini=anterior.isoformat(),
+                    janela_fim=seguinte.isoformat(),
+                    minutos=janela.minutos.get(chave, 0.0),
+                    turnos=len(turnos),
+                    cortes=max(0, len(turnos) - 1),
+                    corte_que_orfanou=chave in janela.cortes,
+                    contexto="tres_dias; numero_mensal_publicado_em_E6",
+                )
+                for i, turno in enumerate(turnos):
+                    fato(
+                        "E6_TURNO",
+                        "app/ponto/calculador/nucleo.py:216-228,236-247",
+                        indice=i,
+                        data_inicio=turno[0].date().isoformat(),
+                        batidas=[local(ts) for ts in turno],
+                        # Append intermediario e corte; ultimo append fecha
+                        # apenas a leitura: nucleo.py:224,228.
+                        corte_apos=i < len(turnos) - 1,
+                    )
+
+                fato(
+                    "BATIDAS_RESUMO",
+                    "app/ponto/turnos.py:2868-2895",
+                    quantidade=len(batidas),
+                    janela_ini=local(a),
+                    janela_fim_exclusivo=local(z),
+                )
+                for b in batidas:
+                    fato(
+                        "BATIDA",
+                        "app/ponto/models.py:8-79;"
+                        "app/ponto/turnos.py:1310-1315",
+                        id=b.pk,
+                        hora_local=local(b.timestamp),
+                        tipo=b.tipo,
+                        is_intervalo_gravado=b.is_intervalo,
+                        # Esses atributos nao sao colunas de Batida.
+                        # Nao inventar papel a partir de tipo/is_intervalo.
+                        papel=b.__dict__.get("_papel_ata", NV),
+                        data_turno=(
+                            b.__dict__["data_turno"].isoformat()
+                            if b.__dict__.get("data_turno") is not None
+                            else NV
+                        ),
+                        retratada_em=local(b.retratada_em),
+                    )
+
+                celulas = consumir(
+                    CelulaDia.objects.filter(colaborador_id=cid, data=dia)
+                )
+                if len(celulas) > 1:
+                    raise RuntimeError("CelulaDuplicada")
+                cel = celulas[0] if celulas else None
+
+                if cel is None:
+                    fato(
+                        "CELULA",
+                        "app/escala/models.py:1681-1688",
+                        existe=False,
+                    )
+                else:
+                    dna = cel.dna or {}
+                    ata = cel.ata or {}
+                    marcos = dna.get("marcos")
+                    # Somente horarios do vocabulario da entidade;
+                    # nao imprimir o JSON inteiro nem textos livres.
+                    # Funcao real:
+                    # app/escala/models.py:1659-1669.
+                    chaves = [k for _tipo, k in CelulaDia.chaves_do_turno()]
+                    m = (
+                        None if marcos is None else {
+                            k: (
+                                None if marcos[k] is None
+                                else dt.time.fromisoformat(marcos[k]).isoformat()
+                            )
+                            for k in chaves if k in marcos
+                        }
+                    )
+                    fato(
+                        "CELULA",
+                        "app/escala/models.py:1681-1691,1697-1701,1718,1778;"
+                        "app/ponto/management/commands/gerar_celulas.py:104-111",
+                        existe=True,
+                        id=cel.pk,
+                        trabalha=cel.trabalha,
+                        tipo_ata=ata.get("tipo_dia", NV),
+                        tipo_ciclo_dna=dna.get("tipo_ciclo", NV),
+                        tipo_escala_id_dna=dna.get("tipo_escala_id", NV),
+                        marcos=m,
+                        janela_intervalo_dna=(
+                            None if m is None else {
+                                "%s/%s" % (s, e): [m.get(s), m.get(e)]
+                                for s, e in CelulaDia.PARES_PAUSA_DNA
+                                if s in m or e in m
+                            }
+                        ),
+                        intervalo_livre_dna=dna.get("intervalo_livre", NV),
+                        origem=cel.origem,
+                        regenerada_em=local(cel.regenerada_em),
+                    )
+
+                    if cel.escala_geradora_id is not None:
+                        ec = unico(
+                            EscalaColaborador.objects.filter(
+                                pk=cel.escala_geradora_id,
+                                colaborador_id=cid,
+                            )
+                        )
+                        # Funcao REAL com celula fornecida: nao cai na leitura
+                        # do template nem em _celulas_do_ato_para.
+                        # app/escala/models.py:1135-1164,1182-1207.
+                        declarado = ec.intervalo_do_dia(
+                            dia, celulas={(cid, dia): cel}
+                        )
+                        fato(
+                            "INTERVALO_DECLARADO_FUNCAO_REAL",
+                            "app/escala/models.py:1135-1164,1182-1207",
+                            inicio=(
+                                declarado[0].isoformat()
+                                if declarado[0] is not None else None
+                            ),
+                            fim=(
+                                declarado[1].isoformat()
+                                if declarado[1] is not None else None
+                            ),
+                            desconto_efetivo_espelho=NV,
+                        )
+
+                fato(
+                    "ESPELHO",
+                    "app/ponto/management/commands/e6_oraculo.py:242-269;"
+                    "app/ponto/services/espelho.py:1227,1068;"
+                    "app/ponto/services/efeito_ausencia.py:38;"
+                    "app/ponto/catalogo/ausencias.py:357,279-280",
+                    estado="nao lido: grava",
+                    minutos=NV,
+                    fonte=NV,
+                    funcao_bloqueada="espelho_do_colab",
+                    leitor_nao_chamado_por_falta_de_linha_real="minutos_do_espelho",
+                )
+                fato(
+                    "PAUSA_RECONHECIDA",
+                    "app/ponto/turnos.py:1906,1917,1163;"
+                    "app/ponto/services/espelho.py:267-294",
+                    estado="nao lido: grava",
+                    pausas=NV,
+                )
+                fato(
+                    "INTERVALO_EFETIVO_ESPELHO",
+                    "app/ponto/services/espelho.py:817-819;"
+                    "app/ponto/turnos.py:756-771,1906,1917,1163",
+                    estado="nao lido: grava",
+                    minutos=NV,
+                )
+
+                # Nao chamar ausencias_sobrepostas/_q_cobertura:
+                # o conjunto TIPOS_EM_ABERTO consulta vigente(), que grava.
+                # app/ponto/turnos.py:2773-2774,2843-2847
+                # app/ponto/catalogo/ausencias.py:403-407,430-435,279-280.
+                candidatas = consumir(
+                    Ausencia.objects.filter(
+                        colaborador_id=cid, data__lte=dia,
+                    ).filter(
+                        Q(data_fim__gte=dia) | Q(data_fim__isnull=True)
+                    ).order_by("data", "pk")
+                )
+                confirmadas = pendentes = 0
+                for ausencia in candidatas:
+                    if ausencia.data_fim is not None:
+                        # Funcao REAL; neste ramo nao consulta o catalogo:
+                        # app/ponto/turnos.py:2798-2814, especificamente :2803-2804.
+                        cobre = dia in dias_da_ausencia(
+                            ausencia.tipo, ausencia.data, ausencia.data_fim,
+                            dia, dia,
+                        )
+                    elif ausencia.data == dia:
+                        # O dia inicial pertence ao intervalo em ambos os
+                        # ramos sem data_fim: turnos.py:2805-2809.
+                        cobre = True
+       
+
+[truncado em 20000 de 24347 caracteres]
+
+## 16/11 03:23 · sessao 9f5d91a62d6d · LOTE3-C6 · censo · origem=Code
+
+Referências `arquivo:linha` dos anexos contam as linhas do texto colado, incluindo linhas vazias, sem contar o cabeçalho `== anexo: ... ==`.
+
+**As classes fornecidas não cobrem todos os estados documentados:** há achado visto e mantido aberto, além de achados vistos sem descarte documentado. Por isso, não atribuo **(b)** automaticamente a tudo que ficou sem cura. (`pv_c6.r:25`; `pv_c6_v3.r:23`; `entrega.md:37`.)
+
+No item **2**, separo o residual já identificado do caminho adicional via `engolir`: o primeiro foi visto; o segundo não aparece nas explicações das respostas, embora rollback e `post_save` estivessem perguntados. (`pv_c6.q:6-7`; `pv_c6_v2.r:9-14`; `pv_c6_v3.r:7-10`.)
+
+| achado | classe | trecho .q | trecho .r |
+|---|---|---|---|
+| **1 — Posto gravado sem histórico; teste conserva o defeito** | **Visto; (b) não comprovada.** A triagem registra “mutantes (2) verdes nos dois lados, por desenho”, mas o descarte específico da atomicidade posto+histórico é **[nao verificado]**. (`entrega.md:24`.) | “ha caminho em que a recusa ainda deixa algo gravado”; “selo/RED sem mordida”; “pouso antes do pre-requisito”. (`pv_c6.q:6`; `pv_c6.q:9`.) | “Falha do histórico após gravação continua deixando o posto novo persistido”; teste 5 “Caracteriza a gravação consumada” e “Não precisa reprovar o comportamento anterior”. O Codex viu e aceitou essa caracterização. (`pv_c6.r:25`; `pv_c6.r:70`.) | [nao verificado]
+| **2 — `_reabrir` deixa anexo órfão; caminho extra pelo cartório/`engolir`** | **Residual principal: visto e mantido aberto — sem classe correspondente. Caminho extra: (a).** A triagem diz “ABERTO” e remete a cura ao LOTE 7; isso documenta limite de intervenção, sem tornar o diagnóstico estático fora do alcance. (`entrega.md:37`; `pv_c6_v3.q:1`.) | “Ausencia (nova ou reaberta por _reabrir) e o arquivo escrito neste ato fica no storage”; “que caminhos ainda deixam arquivo […] (inclusive _reabrir)”; inclui efeitos do `post_save`. (`pv_c6_v2.q:3`; `pv_c6_v3.q:4`; `pv_c6.q:6-7`.) | “PROCEDENTE — falha intermediária em `_reabrir` deixa o upload órfão”; “Permanece 1 PROCEDENTE”. A explicação cobre documento → descrição/status → rollback, sem identificar a rota de envenenamento via `engolir`. (`pv_c6_v2.r:9-14`; `pv_c6_v3.r:1`; `pv_c6_v3.r:7-10`.) |
+| **3 — Ordem global composta / ContadorPauta** | **(b).** Descarte explícito: “DESCARTADO como cura: ja existia dentro do atomic de `a.save()` […] vai ANEXO ao opus”. (`entrega.md:31`.) | “Ela respeita a ordem global […]? Ha select_for_update fora dessa porta no caminho?” (`pv_c6.q:7`.) | “Observação — ordem global composta”; “existem travas adicionais de contador/competência”. (`pv_c6.r:90`.) |
+| **4 — Comentário velho versus `_A14 CURADO`** | **(b).** Descarte explícito: “texto pre-existente movido, nao reescrito; fila”. (`entrega.md:31`.) | Checklist de “derivacao paralela de fonte unica” e confronto com `JUIZES.md`: o tema da autoridade registrada estava presente, embora o comentário não fosse nomeado. (`pv_c6.q:9-10`.) | “Observação — comentário desatualizado: ‘lei em aberto’ diverge da autorização já registrada no vivo.” (`pv_c6.r:91`.) |
+| **5 — Rótulo do padrão nos commits / L-123** | **(e) NAO PERGUNTADO.** Os questionários não solicitam conferir o padrão declarado nos commits contra o realizado pela cura. (`pv_c6.q:6-11`; `pv_c6_v2.q:3-8`; `pv_c6_v3.q:3-7`.) | Não há trecho correspondente; os checklists enumerados não incluem essa conferência. (`pv_c6.q:9`; `pv_c6_v2.q:7`; `pv_c6_v3.q:6`.) | Avaliação específica desse rótulo: **[nao verificado]**. A declaração “c6 = Policy Enforcement Point” pertence à entrega, não comprova que tenha sido perguntada ou verificada. (`entrega.md:41`.) | [nao verificado]
+| **6 — Reversor sem reperguntar cobertura sob trava** | **Visto; descarte pela triagem [nao verificado].** Não cabe classificá-lo como omissão do Codex: a corrida está explicitamente descrita na resposta. (`pv_c6_v3.r:23`.) | “Checklist: […] 2o escritor”; também “QUEM ESCREVE […] Colaborador.situacao”. (`pv_c6_v3.q:6`; `pv_c6.q:10`.) | “permanece o reversor, que seleciona antes de chamar `gravar`, sem revalidar a cobertura sob a trava. É uma corrida possível na cópia”. Ocorrência em produção permanece **[nao verificado]**. (`pv_c6_v3.r:23`.) |
 
 ## 16/11 03:21 · sessao 0f8d2d7e0419 · - · - · origem=Ronald (tmux)
 
@@ -619,259 +1139,4 @@ A referência a `materializar_pergunta_confirmada`, `_materializar_nota` ou docu
 
 **Resultado deste censo:** os outros chamadores identificados que efetivamente envolvem a chamada em `atomic` externo omitem o documento; não reproduzem o órfão de upload novo do achado original (`app/ponto/services/regularizacao.py:118`, `app/ponto/management/commands/marcar_abandono_provisorio.py:76`, `app/ponto/services/veredito_celula.py:337`, `app/chamados/services/materializacao.py:491`, `app/ponto/services/ausencia.py:1275`).
 
-## 16/11 02:36 · sessao c7d6f48750be · - · - · origem=Ronald (tmux)
-
-Censo somente leitura:
-
-- **Escritores de `Ausencia.documento`:** `criar_ausencia` passa o arquivo ao modelo e salva em `app/ponto/services/ausencia.py:409`, `:446`, `:479`; `anexar_documento` atribui e salva em `:923`, `:925`; `_reabrir` atribui e salva em `:1198`, `:1200`. O destino é `ausencias/documentos/` (`app/ponto/models.py:777`). Os uploads chegam pelas views web `app/ponto/views.py:2159`, `:2471`, `:2605` e API `app/api/views.py:1814`, `:1845`, `:3117`.
-- **Escrita de nome antes do storage:** `normalizar_nome_documento` altera a extensão do upload em `app/ponto/services/ausencia.py:658`. A configuração SaaS usa `FileSystemStorage` (`app/config/settings/saas.py:109`).
-- **Deleção física:** `_apagar_anexo_escrito_agora` executa `doc.delete(save=False)` em `app/ponto/services/ausencia.py:172`; chamadas internas em `:481`, `:927`, `:1202`, e externa em `app/ponto/views.py:2495`.
-- **Importação privada:** o único import externo encontrado dessa função é `app/ponto/views.py:2494`. Há precedentes de importar funções privadas de outros módulos no mesmo arquivo: `_is_gestor` (`app/ponto/views.py:121`) e `_rotulo_da_escala` (`:2062`). Isso, isoladamente, é observação, não defeito.
-
-**Leitores físicos dos arquivos:**
-
-- Tipo real do anexo: `app/ponto/models.py:857`, `:861`.
-- Endpoint que abre/serve o documento, incluindo raiz de `documento_referencia`: `app/ponto/views.py:2122`, `:2125`, `:2129`.
-- ZIP abre e lê: `app/ponto/services/atestados_lote.py:157`, `:158`; nome do arquivo exportado em `:96`.
-
-**Leitores do campo/nome/presença:**
-
-- Serviço de ausência: limpeza `app/ponto/services/ausencia.py:167`; captura anterior `:476`, `:922`, `:1197`; rejuízo pelo tipo `:606`; gates `:671`, `:691`; chamado `:713`, `:730`, `:739`; trilha `:938`; reabertura `:1190`.
-- API: `app/api/views.py:1061` e `:1843`.
-- Cartas de troca: `app/ponto/portas/celula.py:702`, `:722`.
-- Apresentação do dia e histórico: `app/ponto/services/dia_decidido.py:424`, `:497`, `:609`, `:623`, `:641`.
-- Contadores: `app/ponto/services/vigia_ausencia.py:115`, `:215`.
-- Comando: `app/ponto/management/commands/rejulgar_status_por_tipo.py:28`, `:37`.
-- Lote/CSV: `app/ponto/services/atestados_lote.py:76`, `:77`, `:129`, `:148`.
-- Templates: `app/templates/ponto/ausencias.html:168`; `app/templates/ponto/partials/painel_ausencia.html:71`, `:93`, `:205`.
-- Admin registrado como somente leitura: `app/ponto/admin.py:38`; bloqueios de escrita em `app/core/admin.py:59`, `:62`, `:65`; leitura genérica dos campos em `:68`.
-
-**PROCEDENTE — reabertura pode escrever anexo e falhar antes de devolver a instância.** `criar_ausencia` retorna diretamente `_reabrir` (`app/ponto/services/ausencia.py:350`). `_reabrir` salva o documento em `:1200`, mas depois ainda salva descrição em `:1210` e muda estado em `:1211`, cujo `save` ocorre em `:900`. Uma falha nesses passos sai sem retorno. Na view, `ausencia` permanece `None` (`app/ponto/views.py:2462`, `:2468`), e a guarda `:2492` pula a limpeza após o rollback. Portanto o novo arquivo pode ficar órfão enquanto o banco volta ao documento anterior; a limpeza interna cobre somente falha do `save` do próprio documento (`app/ponto/services/ausencia.py:1199`).
-
-**Observação — segurança da limpeza é comparação local de nome.** O helper preserva nome igual ao recebido em `nome_antes` (`app/ponto/services/ausencia.py:169`); a view passa o nome da mesma PK relida após rollback (`app/ponto/views.py:2496`). Não há busca global por outras linhas que referenciem aquele nome no helper (`app/ponto/services/ausencia.py:167`). Existência real de nomes compartilhados em produção: [não verificado].
-
-**Observação — falha de storage deixa arquivo.** A exclusão pode falhar; o helper registra a exceção e retorna `False` (`app/ponto/services/ausencia.py:174`). Ocorrência em produção: [não verificado].
-
-## 16/11 02:32 · sessao 57ff070fbbff · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
-
-Em **16/11**, o consolidado fecha em **306 dias divergentes na 10/2026** e **329 na 11/2026**. O BATE é, respectivamente, **95,920543927476336%** e **94,823788546255507%**. [nao verificado]
-
-As contas abaixo usam exclusivamente os anexos colados, na ordem **P1 + P2 + P3 + P4 + P5 + P6**, preservando os decimais de `PARCIAL` e `PARCIAL_TOTAL`. As referências ao código identificam a cópia consultada; os resultados dos anexos levam `[nao verificado]`. [nao verificado]
-
-Para **10/2026**, cada chave de `[1]` soma: [nao verificado]
-
-| Chave | Conta por parte = total | Referência |
-|---|---|---|
-| dias_comparados | 1180 + 1268 + 1236 + 1234 + 1285 + 1298 = **7501** | [nao verificado] |
-| bate_ate_10min | 1140 + 1227 + 1169 + 1186 + 1215 + 1258 = **7195** | [nao verificado] |
-| esp_zero_e6_trabalho | 1 + 2 + 12 + 6 + 9 + 5 = **35** | [nao verificado] |
-| e6_zero_esp_trabalho | 3 + 4 + 6 + 1 + 3 + 2 = **19** | [nao verificado] |
-| diverge_10_60 | 11 + 7 + 2 + 5 + 3 + 1 = **29** | [nao verificado] |
-| diverge_acima_60 | 25 + 28 + 47 + 36 + 55 + 32 = **223** | [nao verificado] |
-| dia_batida_impar | 33 + 63 + 65 + 55 + 78 + 54 = **348** | [nao verificado] |
-| impar_que_BATE | 15 + 33 + 23 + 21 + 29 + 26 = **147** | [nao verificado] |
-| impar_que_DIVERGE | 18 + 30 + 42 + 34 + 49 + 28 = **201** | [nao verificado] |
-| impar_dentro_da_faixa | 15 + 24 + 33 + 30 + 42 + 25 = **169** | [nao verificado] |
-| impar_FORA_da_faixa | 3 + 6 + 9 + 4 + 7 + 3 = **32** | [nao verificado] |
-| impar_no_conjunto_do_dia | 18 + 30 + 42 + 33 + 49 + 28 = **200** | [nao verificado] |
-| impar_SO_POR_CORTE_do_oraculo | 0 + 0 + 0 + 1 + 0 + 0 = **1** | [nao verificado] |
-| dia_sem_linha_no_espelho | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
-| dia_sem_lavratura_no_espelho | 1727 + 1563 + 1422 + 1276 + 1533 + 1396 = **8917** | [nao verificado] |
-| dia_isento_ou_ausencia | 316 + 353 + 342 + 315 + 275 + 277 = **1878** | [nao verificado] |
-| dia_sem_trabalho_ambos | 34 + 24 + 22 + 18 + 45 + 11 = **154** | [nao verificado] |
-| esp_desconta_janela_declarada | 43 + 62 + 38 + 37 + 72 + 18 = **270** | [nao verificado] |
-| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
-
-Para **11/2026**, cada chave de `[1]` soma: [nao verificado]
-
-| Chave | Conta por parte = total | Referência |
-|---|---|---|
-| dias_comparados | 1008 + 1067 + 1059 + 983 + 1128 + 1111 = **6356** | [nao verificado] |
-| bate_ate_10min | 946 + 1011 + 1004 + 951 + 1045 + 1070 = **6027** | [nao verificado] |
-| esp_zero_e6_trabalho | 14 + 1 + 8 + 7 + 5 + 2 = **37** | [nao verificado] |
-| e6_zero_esp_trabalho | 7 + 3 + 7 + 0 + 4 + 4 = **25** | [nao verificado] |
-| diverge_10_60 | 8 + 3 + 2 + 0 + 6 + 2 = **21** | [nao verificado] |
-| diverge_acima_60 | 33 + 49 + 38 + 25 + 68 + 33 = **246** | [nao verificado] |
-| dia_batida_impar | 49 + 69 + 51 + 50 + 88 + 60 = **367** | [nao verificado] |
-| impar_que_BATE | 18 + 20 + 16 + 25 + 33 + 30 = **142** | [nao verificado] |
-| impar_que_DIVERGE | 31 + 49 + 35 + 25 + 55 + 30 = **225** | [nao verificado] |
-| impar_dentro_da_faixa | 21 + 45 + 28 + 21 + 46 + 25 = **186** | [nao verificado] |
-| impar_FORA_da_faixa | 10 + 4 + 7 + 4 + 9 + 5 = **39** | [nao verificado] |
-| impar_no_conjunto_do_dia | 31 + 48 + 33 + 24 + 55 + 29 = **220** | [nao verificado] |
-| impar_SO_POR_CORTE_do_oraculo | 0 + 1 + 2 + 1 + 0 + 1 = **5** | [nao verificado] |
-| dia_sem_linha_no_espelho | 396 + 408 + 396 + 376 + 408 + 396 = **2380** | [nao verificado] |
-| dia_sem_lavratura_no_espelho | 1354 + 1404 + 1334 + 1229 + 1292 + 1257 = **7870** | [nao verificado] |
-| dia_isento_ou_ausencia | 233 + 201 + 205 + 264 + 214 + 268 = **1385** | [nao verificado] |
-| dia_sem_trabalho_ambos | 44 + 28 + 26 + 34 + 40 + 23 = **195** | [nao verificado] |
-| esp_desconta_janela_declarada | 34 + 54 + 49 + 28 + 80 + 14 = **259** | [nao verificado] |
-| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 = **0** | [nao verificado] |
-
-As contas dos donos de **10/2026**, usando as horas de `PARCIAL`, são: [nao verificado]
-
-| Dono | Medida | Conta por parte = total | Referência |
-|---|---|---|---|
-| ESTRUTURA | dia-colab | 10 + 5 + 3 + 3 + 3 + 2 = **26** | [nao verificado] |
-| ESTRUTURA | horas | 9.116283817777775 + 11.084600277777778 + 15.209666666666665 + 15.566319135833336 + 29.23270916666667 + 8.15 = **88.359579064722224** | [nao verificado] |
-| ESTRUTURA | colabs | 3 + 3 + 3 + 3 + 3 + 1 = **16** | [nao verificado] |
-| CADASTRO | dia-colab | 10 + 8 + 7 + 23 + 19 + 8 = **75** | [nao verificado] |
-| CADASTRO | horas | 38.355213611111104 + 20.397520712222224 + 35.88209174 + 107.60888681222221 + 52.325450786111105 + 40.4628 = **295.031963661666643** | [nao verificado] |
-| CADASTRO | colabs | 3 + 6 + 4 + 8 + 8 + 2 = **31** | [nao verificado] |
-| BATIDA | dia-colab | 20 + 28 + 57 + 22 + 48 + 30 = **205** | [nao verificado] |
-| BATIDA | horas | 110.21011656222223 + 136.0465618775 + 297.66026132194446 + 101.15787729194444 + 197.29829774694443 + 127.75368121722221 = **970.12679601777777** | [nao verificado] |
-| BATIDA | colabs | 13 + 18 + 24 + 17 + 26 + 17 = **115** | [nao verificado] |
-| TOTAL | dia-colab | 40 + 41 + 67 + 48 + 70 + 40 = **306** | [nao verificado] |
-| TOTAL | horas | 157.681613991111109 + 167.528682867500002 + 348.752019728611125 + 224.333083239999986 + 278.856457699722205 + 176.36648121722221 = **1353.518338744166637** | [nao verificado] |
-| TOTAL | colabs | 17 + 23 + 29 + 26 + 29 + 20 = **144** | [nao verificado] |
-
-As contas dos donos de **11/2026** são: [nao verificado]
-
-| Dono | Medida | Conta por parte = total | Referência |
-|---|---|---|---|
-| ESTRUTURA | dia-colab | 10 + 3 + 6 + 1 + 8 + 3 = **31** | [nao verificado] |
-| ESTRUTURA | horas | 35.86154078361111 + 23.15 + 17.8227 + 9.770812222222222 + 54.16690254361111 + 10.610499166666667 = **151.382454716111109** | [nao verificado] |
-| ESTRUTURA | colabs | 4 + 3 + 5 + 1 + 6 + 2 = **21** | [nao verificado] |
-| CADASTRO | dia-colab | 22 + 15 + 9 + 4 + 29 + 6 = **85** | [nao verificado] |
-| CADASTRO | horas | 118.50376287222223 + 38.47013154777778 + 32.931705 + 17.068988648888887 + 98.72113534194445 + 52.750124444444445 = **358.445847855277792** | [nao verificado] |
-| CADASTRO | colabs | 6 + 6 + 6 + 3 + 10 + 5 = **36** | [nao verificado] |
-| BATIDA | dia-colab | 30 + 38 + 40 + 27 + 46 + 32 = **213** | [nao verificado] |
-| BATIDA | horas | 174.57531034805555 + 178.25105356722221 + 194.35440025833333 + 160.93444128833335 + 239.22640724611108 + 161.85087350722222 = **1109.19248621527774** | [nao verificado] |
-| BATIDA | colabs | 15 + 21 + 21 + 14 + 25 + 21 = **117** | [nao verificado] |
-| TOTAL | dia-colab | 62 + 56 + 55 + 32 + 83 + 41 = **329** | [nao verificado] |
-| TOTAL | horas | 328.94061400388889 + 239.87118511499999 + 245.10880525833333 + 187.774242159444459 + 392.11444513166664 + 225.211497118333332 = **1619.020788786666641** | [nao verificado] |
-| TOTAL | colabs | 20 + 28 + 27 + 16 + 34 + 25 = **150** | [nao verificado] |
-
-`TOTAL colabs` soma as uniões informadas por parte, considerando a disjunção declarada no pedido. [nao verificado]
-
-As conferências agregadas ficam: [nao verificado]
-
-| Conferência | 10/2026 | 11/2026 | Referência |
-|---|---|---|---|
-| UNIVERSO_PARTE × UNIVERSO | 110 + 109 + 102 + 96 + 107 + 100 = **624**, igual a **624** | 99 + 102 + 99 + 94 + 102 + 99 = **595**, igual a **595** | [nao verificado] |
-| Janela | 2026-09-21 a 2026-10-20 | 2026-10-21 a 2026-11-20 | [nao verificado] |
-| BATE % | 7195 ÷ 7501 × 100 ≈ **95,920543927476336%** | 6027 ÷ 6356 × 100 ≈ **94,823788546255507%** | [nao verificado] |
-| Comparados − BATE | 7501 − 7195 = **306** | 6356 − 6027 = **329** | [nao verificado] |
-| Classes divergentes | 35 + 19 + 29 + 223 = **306** | 37 + 25 + 21 + 246 = **329** | [nao verificado] |
-| Dias dos donos | 26 + 75 + 205 = **306** | 31 + 85 + 213 = **329** | [nao verificado] |
-| Horas dos donos | 88.359579064722224 + 295.031963661666643 + 970.12679601777777 = **1353.518338744166637** | 151.382454716111109 + 358.445847855277792 + 1109.19248621527774 = **1619.020788786666641** | [nao verificado] |
-
-Os diagnósticos por parte abrangem as duas competências. “INCOMPLETO: não” abaixo significa ausência do marcador no texto fornecido. [nao verificado]
-
-| Parte | rc_sombra | INCOMPLETO | Linhas TRATADA_LOCAL | Ocorrências TRATADA_LOCAL somadas | Erros que atravessaram frame | erros_no_espelho 10 / 11 | SOMA True / False | Referência |
-|---|---:|---|---:|---:|---|---|---|---|
-| P1 | 0 | não, marcador ausente | 27 | **846173** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
-| P2 | 0 | não, marcador ausente | 27 | **909946** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
-| P3 | 0 | não, marcador ausente | 28 | **874751** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
-| P4 | 0 | não, marcador ausente | 27 | **817688** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
-| P5 | 0 | não, marcador ausente | 26 | **922428** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
-| P6 | 0 | não, marcador ausente | 26 | **808182** | nao consta na saida | 0 / 0 | 6 / 0 | [nao verificado] |
-
-A abertura completa de `TRATADA_LOCAL`, preservando os endereços e tipos impressos, é: [nao verificado]
-
-| Endereço impresso | Tipo | P1 | P2 | P3 | P4 | P5 | P6 | Referência |
-|---|---|---:|---:|---:|---:|---:|---:|---|
-| app/escala/alimentacao.py:279 | GeneratorExit | 253166 | 273276 | 257813 | 239769 | 273687 | 237235 | [nao verificado] |
-| app/escala/models.py:1282 | GeneratorExit | 98 | 61 | 296 | 637 | 46 | 116 | [nao verificado] |
-| app/escala/services/fase_12x36.py:114 | GeneratorExit | 1130 | 1558 | 1707 | 1276 | 1924 | 1375 | [nao verificado] |
-| app/escala/services/leitor_celula.py:25 | ValueError | 6304 | 6837 | 5857 | 6019 | 7806 | 4633 | [nao verificado] |
-| app/escala/services/leitor_celula.py:81 | GeneratorExit | 52 | 61 | 41 | 50 | 80 | 58 | [nao verificado] |
-| app/escala/utils.py:1500 | GeneratorExit | 2 | 4 | 4 | 1 | 2 | 2 | [nao verificado] |
-| app/escala/utils.py:1687 | GeneratorExit | nao consta na saida | 6 | 2 | 36 | 14 | 10 | [nao verificado] |
-| app/escala/utils.py:1991 | GeneratorExit | 6216 | 6781 | 6880 | 6962 | 7884 | 6500 | [nao verificado] |
-| app/escala/utils.py:2033 | GeneratorExit | 3 | 2 | 4 | 8 | nao consta na saida | nao consta na saida | [nao verificado] |
-| app/escala/utils.py:452 | GeneratorExit | 4 | 6 | 6 | 3 | 6 | 4 | [nao verificado] |
-| app/escala/utils.py:524 | GeneratorExit | 3677 | 4986 | 4644 | 3790 | 5649 | 3762 | [nao verificado] |
-| app/escala/utils.py:525 | GeneratorExit | 3677 | 4986 | 4644 | 3790 | 5649 | 3762 | [nao verificado] |
-| app/escala/utils.py:888 | GeneratorExit | 594 | 593 | 602 | 334 | 340 | 602 | [nao verificado] |
-| app/folha/causas.py:58 | GeneratorExit | 181 | 187 | 182 | 171 | 192 | 180 | [nao verificado] |
-| app/ponto/juiz_batida.py:191 | GeneratorExit | nao consta na saida | nao consta na saida | 17 | 1226 | nao consta na saida | nao consta na saida | [nao verificado] |
-| app/ponto/juiz_batida.py:75 | ValueError | 468158 | 495937 | 482764 | 445946 | 498705 | 448020 | [nao verificado] |
-| app/ponto/motor_calculo_v2.py:1131 | GeneratorExit | 610 | 618 | 595 | 649 | 855 | 559 | [nao verificado] |
-| app/ponto/motor_calculo_v2.py:2604 | GeneratorExit | 2829 | 3000 | 3064 | 2833 | 3248 | 2890 | [nao verificado] |
-| app/ponto/motor_calculo_v2.py:677 | GeneratorExit | 172 | 219 | 174 | 186 | 215 | 180 | [nao verificado] |
-| app/ponto/services/dia_pago.py:892 | GeneratorExit | 12196 | 13372 | 12978 | 12772 | 14074 | 12704 | [nao verificado] |
-| app/ponto/services/espelho.py:473 | GeneratorExit | 130 | 108 | 117 | 113 | 174 | 94 | [nao verificado] |
-| app/ponto/services/espelho.py:657 | GeneratorExit | 4055 | 3977 | 4228 | 4030 | 4284 | 4254 | [nao verificado] |
-| app/ponto/services/fechamento.py:1044 | GeneratorExit | 192 | 200 | 192 | 180 | 198 | 189 | [nao verificado] |
-| app/ponto/services/fechamento.py:1045 | _GradeSemCelula | 5 | 2 | 4 | nao consta na saida | nao consta na saida | 4 | [nao verificado] |
-| app/ponto/turnos.py:1295 | GeneratorExit | 23417 | 26387 | 24546 | 24689 | 28387 | 21328 | [nao verificado] |
-| app/ponto/turnos.py:1656 | GeneratorExit | 4604 | 5880 | 4783 | 3726 | 3745 | 3840 | [nao verificado] |
-| app/ponto/turnos.py:1699 | GeneratorExit | 37849 | 41086 | 40289 | 39600 | 44131 | 38829 | [nao verificado] |
-| app/ponto/turnos.py:2653 | GeneratorExit | 16 | nao consta na saida | nao consta na saida | nao consta na saida | 2 | nao consta na saida | [nao verificado] |
-| app/ponto/turnos.py:679 | GeneratorExit | 16836 | 19816 | 18318 | 18892 | 21131 | 17052 | [nao verificado] |
-
-Somando somente as linhas exibidas: **27 + 27 + 28 + 27 + 26 + 26 = 161 linhas**; **846173 + 909946 + 874751 + 817688 + 922428 + 808182 = 5179168 ocorrências TRATADA_LOCAL**. [nao verificado]
-
-As linhas `SOMA` atuais ficam transcritas abaixo: [nao verificado]
-
-| Parte | Competência | SOMA dias | SOMA HORAS | SOMA COLABS_UNIAO | Referência |
-|---|---|---|---|---|---|
-| P1 | 10/2026 | 40 — True | 157.681613991111109 — True | 17 — True | [nao verificado] |
-| P1 | 11/2026 | 62 — True | 328.94061400388889 — True | 20 — True | [nao verificado] |
-| P2 | 10/2026 | 41 — True | 167.528682867500002 — True | 23 — True | [nao verificado] |
-| P2 | 11/2026 | 56 — True | 239.87118511499999 — True | 28 — True | [nao verificado] |
-| P3 | 10/2026 | 67 — True | 348.752019728611125 — True | 29 — True | [nao verificado] |
-| P3 | 11/2026 | 55 — True | 245.10880525833333 — True | 27 — True | [nao verificado] |
-| P4 | 10/2026 | 48 — True | 224.333083239999986 — True | 26 — True | [nao verificado] |
-| P4 | 11/2026 | 32 — True | 187.774242159444459 — True | 16 — True | [nao verificado] |
-| P5 | 10/2026 | 70 — True | 278.856457699722205 — True | 29 — True | [nao verificado] |
-| P5 | 11/2026 | 83 — True | 392.11444513166664 — True | 34 — True | [nao verificado] |
-| P6 | 10/2026 | 40 — True | 176.36648121722221 — True | 20 — True | [nao verificado] |
-| P6 | 11/2026 | 41 — True | 225.211497118333332 — True | 25 — True | [nao verificado] |
-
-São **36 SOMA True e 0 SOMA False**; por competência, **18 True e 0 False**. As conferências `ESTRUTURA_DIAS_LINHAS` também exibem `True` nas seis partes: na 10, **10 + 5 + 3 + 3 + 3 + 2 = 26**; na 11, **10 + 3 + 6 + 1 + 8 + 3 = 31**. [nao verificado]
-
-As linhas de ESTRUTURA vêm agregadas a seguir. **Horas por dia: nao consta na saida**, em todas elas. Campos literalmente chamados `causa` ou `rotulo`: **nao consta na saida**; estão preservados os campos existentes `classe`, `paridade` e `veredito`. [nao verificado]
-
-O código acumula `abs(df)` antes de arredondar os minutos da linha individual; por isso os minutos impressos não fornecem as horas exatas de cada dia. `app/ponto/management/commands/e6_oraculo.py:380`, `app/ponto/management/commands/e6_oraculo.py:401`
-
-Para **10/2026**, todas as 26 linhas são: [nao verificado]
-
-| Parte | Colab | Dia | esp_min | e6_min | teto_min | dif_min | classe | paridade | batidas | veredito | Referência |
-|---|---|---|---:|---:|---:|---:|---|---|---|---|---|
-| P1 | col252 | 2026-09-23 | 548 | 594 | 608 | 46 | diverge_10_60 | par | 06:56 12:35 12:49 17:04 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-09-24 | 552 | 598 | 611 | 46 | diverge_10_60 | par | 06:51 12:37 12:51 17:03 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-09-25 | 556 | 604 | 616 | 48 | diverge_10_60 | par | 06:51 12:37 12:50 17:07 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-09-28 | 535 | 581 | 595 | 46 | diverge_10_60 | par | 07:12 12:38 12:53 17:07 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-10-01 | 545 | 590 | 605 | 45 | diverge_10_60 | par | 07:00 12:37 12:51 17:05 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-10-02 | 545 | 593 | 606 | 48 | diverge_10_60 | par | 06:59 12:40 12:53 17:04 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-10-06 | 551 | 597 | 611 | 46 | diverge_10_60 | par | 06:58 12:38 12:52 17:09 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-10-09 | 544 | 592 | 604 | 48 | diverge_10_60 | par | 07:06 12:48 13:00 17:10 | trabalhou | [nao verificado] |
-| P1 | col864 | 2026-10-12 | 509 | 449 | 509 | -60 | diverge_10_60 | par | 15:01 18:10 19:10 23:30 | feriado | [nao verificado] |
-| P1 | col876 | 2026-09-21 | 550 | 665 | 722 | 115 | diverge_acima_60 | par | 18:29 04:39 05:36 06:31 | em_aberto | [nao verificado] |
-| P2 | col37 | 2026-10-05 | 241 | 0 | 0 | -241 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
-| P2 | col37 | 2026-10-09 | 241 | 0 | 0 | -241 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
-| P2 | col451 | 2026-09-23 | 707 | 718 | 718 | 11 | diverge_10_60 | par | 07:00 18:58 | em_aberto | [nao verificado] |
-| P2 | col451 | 2026-09-25 | 705 | 718 | 718 | 13 | diverge_10_60 | par | 07:02 19:00 | em_aberto | [nao verificado] |
-| P2 | col841 | 2026-10-20 | 681 | 522 | 701 | -159 | diverge_acima_60 | par | 11:00 18:46 21:44 22:41 | em_aberto | [nao verificado] |
-| P3 | col218 | 2026-10-15 | 105 | 0 | 0 | -105 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
-| P3 | col746 | 2026-09-24 | 289 | 193 | 350 | -96 | diverge_acima_60 | par | 11:00 13:02 15:39 16:49 | trabalhou | [nao verificado] |
-| P3 | col854 | 2026-10-04 | 718 | 7 | 7 | -711 | diverge_acima_60 | par | 18:54 19:01 | trabalhou | [nao verificado] |
-| P4 | col129 | 2026-10-12 | 0 | 779 | 779 | 779 | esp_zero_e6_trabalho | par | 17:30 06:30 | em_aberto | [nao verificado] |
-| P4 | col369 | 2026-10-12 | 476 | 416 | 476 | -60 | diverge_10_60 | par | 07:04 12:47 13:46 15:00 | feriado | [nao verificado] |
-| P4 | col723 | 2026-10-08 | 440 | 345 | 500 | -95 | diverge_acima_60 | par | 09:00 10:44 13:20 17:20 | trabalhou | [nao verificado] |
-| P5 | col382 | 2026-09-30 | 364 | 0 | 0 | -364 | e6_zero_esp_trabalho | par | vazio | trabalhou | [nao verificado] |
-| P5 | col478 | 2026-09-25 | 719 | 8 | 8 | -711 | diverge_acima_60 | par | 18:57 19:04 | trabalhou | [nao verificado] |
-| P5 | col868 | 2026-09-22 | 0 | 679 | 733 | 679 | esp_zero_e6_trabalho | par | 18:48 02:02 02:57 07:01 | em_aberto | [nao verificado] |
-| P6 | col515 | 2026-10-09 | 244 | 0 | 0 | -244 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
-| P6 | col515 | 2026-10-11 | 245 | 0 | 0 | -245 | e6_zero_esp_trabalho | par | vazio | em_aberto | [nao verificado] |
-
-Para **11/2026**, todas as 31 linhas são: [nao verificado]
-
-| Parte | Colab | Dia | esp_min | e6_min | teto_min | dif_min | classe | paridade | batidas | veredito | Referência |
-|---|---|---|---:|---:|---:|---:|---|---|---|---|---|
-| P1 | col114 | 2026-11-08 | 439 | 429 | 499 | -10 | diverge_10_60 | par | 09:59 14:50 16:00 18:18 | trabalhou | [nao verificado] |
-| P1 | col114 | 2026-11-15 | 499 | 440 | 499 | -59 | diverge_10_60 | par | 09:58 15:05 16:05 18:17 | feriado | [nao verificado] |
-| P1 | col252 | 2026-11-09 | 551 | 597 | 610 | 46 | diverge_10_60 | par | 06:53 12:38 12:52 17:04 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-11-10 | 551 | 598 | 611 | 47 | diverge_10_60 | par | 06:56 12:39 12:52 17:07 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-11-11 | 550 | 598 | 611 | 48 | diverge_10_60 | par | 06:54 12:39 12:52 17:04 | trabalhou | [nao verificado] |
-| P1 | col252 | 2026-11-13 | 551 | 597 | 611 | 46 | diverge_10_60 | par | 06:52 12:35 12:49 17:03 | trabalhou | [nao verificado] |
-| P1 | col516 | 2026-10-23 | 361 | 0 | 0 | -361 | e6_zero_esp_trabalho | par | vazio | folga | [nao verificado] |
-| P1 | col516 | 2026-10-28 | 372 | 0 | 0 | -372 | e6_zero_esp_trabalho | par | vazio | trabalhou | [nao verificado] |
-| P1 | col996 | 2026-10-28 | 0 | 580 | 580 | 580 | esp_zero_e6_trabalho | par | 21:18 06:57 | folga | [nao verificado] |
-| P1 | col996 | 2026-11-10 | 443 | 1026 | 1116 | 583 | diverge_acima_60 | par | 06:57 13:00 14:30 15:50 21:16 06:59 | em_aberto | [nao verificado] |
-| P2 | col37 | 2026-11-14 | 241 | 0 | 0 | -241 | e6_zero_esp_trabalho | par | vazio | trabalhou | [nao verificado] |
-| P
-
-[truncado em 20000 de 28677 caracteres]
-
-_5917 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5919 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
