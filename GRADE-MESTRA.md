@@ -14,18 +14,18 @@
 |---|---|---|
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
-| LATERAL-ESTRUTURA | 155 | 155 |
+| LATERAL-ESTRUTURA | 154 | 154 |
 | INSTRUMENTO | 177 | 177 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **456** | **455** |
+| **total** | **455** | **454** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 58; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 386; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 302 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 301 com a coluna
 
-resolve preenchido 12/456
+resolve preenchido 12/455
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -172,7 +172,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | PAUTAS-PREFILTRO-REPETIDO | LATERAL-ESTRUTURA | Retira a repetição do filtro que decide chamar o motor. | - | pouso COL129 | ......... | REGISTRADA | BACKLOG:1070 | ? | ? |
 | OUTBOX-EVENTO-DUPLO | LATERAL-ESTRUTURA | Mede e evita emissão repetida do mesmo evento pelo chamador. | - | pesquisa e medição | .+....... | REGISTRADA | BACKLOG:1071 | ? | ? |
 | JUSTIFICATIVA-ENCERRA-ORIGEM | LATERAL-ESTRUTURA | Encerra a cobrança de origem quando a justificativa é aprovada. | - | grupo (1), sítio 1; irmã para cinco casos | + + + . . . . . + | REGISTRADA (parte no ar; cinco casos retidos) | app/docs/BACKLOG.md:1074 [+1 compl.] | ? | ? |
-| BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR | LATERAL-ESTRUTURA | Permite enviar atestado e explica corretamente os erros de reenvio. | - | smoke de reenvio | + + + + . . . . + | REGISTRADA (parte no ar; falta smoke) | app/docs/BACKLOG.md:1091 [+1 compl.] | ? | ? |
+| BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR | LATERAL-ESTRUTURA | Permite enviar atestado e explica corretamente os erros de reenvio. | - | smoke de reenvio | + + + + . . . . + | REGISTRADA (parte no ar; complemento REENVIO-SILENCIOSO lido 16/11, construcao so com aval novo, atras do espelho-verdade) | app/docs/BACKLOG.md:1091 [+1 compl.] | ? | ? |
 | REABRIR-NAO-DESTROI | LATERAL-ESTRUTURA | Preserva respostas anteriores quando uma pergunta é reaberta. | - | smoke de clique | + + + . . . . . + | REGISTRADA (no ar desde 25/10; falta smoke) | app/docs/BACKLOG.md:1094 | ? | ? |
 | HE-DE-14H-NUM-DIA (col945 12/09) | LATERAL-ESTRUTURA | Apura por que um dia recebeu quase quinze horas extras. | - | ! REGEN-EM-EXPORTADA para o gravado velho da 09 (causa lida, LATERAIS-1611 item 1) | + . . . . . . . . | PARADA (causa lida 16/11: par mal formado, dono CADASTRO/BATIDA; HEAD ja le certo) | app/docs/BACKLOG.md:1103 | ? | ? |
 | BUG-ANCORA-NAO-REGENERA | LATERAL-ESTRUTURA | Faz a correção da fase de trabalho chegar aos dias afetados. | - | decisão sobre col824 e col899 | + + + + . . . . . | PARADA (cura fechada; decisões de cadastro pendentes) | app/docs/BACKLOG.md:1118 | ? | ? |
@@ -192,7 +192,6 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | HE-OCORRENCIA-COMO-LINHA | LATERAL-ESTRUTURA | Guarda cada ocorrência de hora extra e sua história numa linha consultável. | - | autorização da troca S5b | . + . . . . . . . | REGISTRADA (desenho publicado; nenhuma migration) | app/docs/BACKLOG.md:1271 | ? | ? |
 | LOTE-1-PENDENTES | LATERAL-ESTRUTURA | Entrega censos, diferenças e pautas dos cinco grupos de pendências. | - | autorização da troca; decisões dos itens 2 e 5; cadastro do item 3 | + + . . . . . . . | PARADA (item 1 feito; restante espera autorização) | app/docs/BACKLOG.md:1279 | ? | ? |
 | LOTE-ATRASO-ADMITIDO | LATERAL-ESTRUTURA | Permite validar em lote os atrasos admitidos pelo colaborador. | - | S5b; UI-RESPOSTA-DIZ-O-QUE-E com smoke; autorização | . . . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1284 | ? | ? |
-| O19 | LATERAL-ESTRUTURA | Explica falhas e permite enviar documento de ausência pelo aplicativo. | - | autorização e retomada do APP | + . + . . . . . + | PARADA (servidor no ar; APP espera autorização) | app/docs/BACKLOG.md:1298 | ? | ? |
 | O28 | LATERAL-ESTRUTURA | Desconta a saída antecipada conforme o catálogo e explica o desconto. | - | DIFF so na competencia aberta (corte C 16/11), paga vai ao DP; ! dele depois do numero | + + . . . . . . . | PARADA (espera !) | app/docs/BACKLOG.md:1309 | ? | ? |
 | O38 | LATERAL-ESTRUTURA | Explica por que uma resposta validada não virou marcação de ponto. | - | O39 para item a; smoke | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1319 | ? | ? |
 | O43 | LATERAL-ESTRUTURA | Registra atos e perdas de sessão do administrador para auditoria. | - | O47; esteira seca | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1324 | ? | ? |
@@ -1556,11 +1555,12 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 |---|---|---|---|---|---|---|---|
 | O59 | UI | Monta o dossiê de rescisão com documentos já emitidos. | - | O58; UI-RESCISAO | .+....... | REGISTRADA (absorvida em 13/11 pela UI-RESCISAO) | app/docs/BACKLOG.md:1343 |
 
-## OBSOLETAS (passada 2, 139 + 1 fechada 16/11; listadas a parte, baixa decidida no chat)
+## OBSOLETAS (passada 2, 139 + 2 fechadas 16/11; listadas a parte, baixa decidida no chat)
 
 | obsoleta | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
 | A2-SO-CHEGA-PELA-UNIDADE | LATERAL-ESTRUTURA | Define quem registra mudanças de precedência no julgamento em lote. | - | reabre se nascer leitor de producao da chave | ++....... | FECHADA 16/11 sem construir (LATERAIS-1611 item 3): 0 leitor, logs/LATERAIS-1611/remede.md | BACKLOG:1619 |
+| O19 | LATERAL-ESTRUTURA | Explica falhas e permite enviar documento de ausência pelo aplicativo. | - | reabre se o erro com foto da camera voltar | + . + . . . . . + | FECHADA 16/11 SUPERADA (SMOKE-ATESTADO-[nome]-1611): POST 14:59:45 chegou 200, 2,3 MB; prova de 1 aparelho, modelo e versao nao informados | logs/BO-ATESTADO-ANDROID/reenvio_silencioso_1611.md |
 | API-CHAMADOS-V2-SERVE-PERGUNTA-SEM-A-LEI | LATERAL-ESTRUTURA | Faz a API entregar perguntas reconhecidas como vivas. | - | ? (não indicada) | ++....... | REGISTRADA | BACKLOG:1621 |
 | AUTORIDADE-DE-FOTO-AUSENTE | ESPINHA-E | Centraliza a decisão sobre ausência de foto. | - | Autoridade de foto antes de retirar o julgador | .+....... | REGISTRADA | BACKLOG:1542 |
 | BO-0511-G2-TRIAGEM | INSTRUMENTO | Classifica os casos do BO e indica seus destinos. | - | ? (precedência não indicada) | +........ | REGISTRADA (medida pronta) | BACKLOG:2042 |
