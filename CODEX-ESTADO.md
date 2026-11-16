@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 15:16** · publicado em **16/11/2026 15:18** (UTC-3)
+> Ultima resposta processada: **16/11/2026 15:28** · publicado em **16/11/2026 15:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 15:28 · sessao a6729505dd53 · O50-CELULA-APOS-DESLIGAMENTO · verificador · origem=Code
+
+**O item 1 precisa voltar para fechar condições literais**, principalmente pagamento, células editadas e universo de batidas; aval condicional não autoriza completar essas condições por inferência. (`app/docs/LEIS.md:61`; `app/docs/CORTES.md:470`.)
+
+Revisão estática da cópia. Identidade Git do HASH, comportamento em execução e impacto em produção: [nao verificado].
+
+1. **As portas existem, mas não fazem hoje a remoção proposta.**
+
+   `executar_desligamento` grava situação, data e motivo da demissão, bloqueia acesso, registra histórico e chama `fechar_vinculos_ativos`; também executa a cascata de chamados/disputas e cria o chamado de auditoria ao DP. O ramo agendado grava a intenção e retorna antes dessa cascata. (`app/colaboradores/services/desligamento.py:107`; `app/colaboradores/services/desligamento.py:128`; `app/colaboradores/services/desligamento.py:147`; `app/colaboradores/services/desligamento.py:164`; `app/colaboradores/services/desligamento.py:195`.)
+
+   O desligamento fecha apenas vínculos ativos cujo início não seja posterior ao fim informado; vínculos futuros recusados permanecem. Esse caminho usa `update()` e regenera somente células futuras, com `recalculo=False`. Portanto, não equivale à proposta de remover células e atualizar os valores do fechamento. (`app/colaboradores/services/vinculo.py:641`; `app/colaboradores/services/vinculo.py:652`; `app/colaboradores/services/vinculo.py:662`; `app/colaboradores/services/vinculo.py:855`.)
+
+   `encerrar_vinculo` valida a vigência, grava `ativa=False` e `data_fim` por `save()` e registra antes/depois. Esse `save()` dispara regeneração de células passadas e futuras, além da invalidação do previsto do fechamento. **Já há efeito indireto sobre célula e fechamento nessa porta.** (`app/colaboradores/services/vinculo.py:835`; `app/colaboradores/services/vinculo.py:842`; `app/escala/signals.py:72`; `app/escala/signals.py:80`; `app/escala/signals.py:145`.)
+
+   A **porta da célula** é `ponto/portas/celula.py`, registrada para `CelulaDia`; gerar, regenerar, editar, lavrar e carimbar pertencem a esse módulo. `gerar_celulas.py` reexporta as funções, sem constituir outro escritor. Não há operação declarada de remoção de `CelulaDia`; fora da vigência, o código conserva a linha e altera trabalho/DNA. (`app/core/portas.py:107`; `app/ponto/portas/celula.py:74`; `app/ponto/management/commands/gerar_celulas.py:10`; `app/ponto/portas/celula.py:239`; `app/ponto/portas/celula.py:251`; `app/ponto/portas/celula.py:272`.)
+
+   “Ninguém remove” seria absoluto demais: excluir o colaborador tem cascata sobre células; excluir o vínculo apenas anula sua geradora. (`app/escala/models.py:1681`; `app/escala/models.py:1692`.)
+
+   A **porta do fechamento** é `ponto/services/fechamento.py`. `recalcular_por_evento` agenda, após commit, `recalcular_fechamento_mes` para o colaborador e a competência do fato; esta grava `FechamentoMensal` e também lavra `DiaPago`. Apenas invalidar carimbos não equivale a atualizar seus valores. (`app/ponto/services/fechamento.py:1315`; `app/ponto/services/fechamento.py:1798`; `app/ponto/services/fechamento.py:1810`; `app/ponto/services/fechamento.py:1824`; `app/ponto/services/fechamento.py:1144`; `app/ponto/services/fechamento.py:1191`; `app/ponto/services/fechamento.py:1652`.)
+
+2. **A direção da obra é compatível, mas precisa conservar restrições vigentes.**
+
+   A célula é dado congelado; a exceção formal para passado errado por cadastro exige denúncia da reescrita. LU-13/LU-14 autorizam a direção de remover com trilha, preservando **exportada, editada e com batida**, com medição prévia e `!` próprio para retroativo. O item 1 fornecido não repete a exceção “editada”; revogação dessa proteção: [nao verificado]. (`CLAUDE.md:149`; `app/docs/CORTES.md:470`; `app/docs/CORTES.md:471`.)
+
+   DESLIGADO-NAO-TRAVA já faz o desligado retornar sem motivos de retenção e entrega os dias como informativo ao DP. Isso não depende de apagar células; a O50 não deve ser apresentada como condição para aquela liberação. (`app/folha/export.py:1197`; `app/folha/export.py:1207`; `app/folha/export.py:1216`.)
+
+   A cura nas portas é coerente com L-099; usar código para escolher cadastro correto, apagar batida ou resolver vínculo futuro extrapolaria a separação entre ESTRUTURA e CADASTRO/BATIDA. (`app/docs/LEIS.md:122`; `app/colaboradores/services/vinculo.py:855`.)
+
+   L-113 alterou as recusas históricas de L-092, mas o texto consolidado mantém alteração genérica de exportada fora da preaprovação, com porta e `!` específicos. Portanto, a rotina genérica de recálculo não pode servir como garantia automática de “exportada intacta”. (`app/docs/LEIS.md:155`; `CLAUDE.md:411`; `app/ponto/portas/celula.py:436`.)
+
+3. **Há condições que ainda não fecham no literal.**
+
+   **“Não paga”:** `competencia_entregue` reconhece TXT vigente; `competencia_fechada_para_celula` acrescenta holerite publicado da pessoa; `marcos_da_competencia['paga']` também consulta holerite publicado. Isso não comprova ausência de pagamento externo. A obra do juiz `competencia_ja_paga`, incluindo cadastro de pagamento externo, está registrada com pouso condicionado à espinha. (`app/folha/export.py:588`; `app/folha/export.py:618`; `app/folha/export.py:622`; `app/ponto/services/fechamento.py:1539`; `app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:495`.)
+
+   **“Tenha batida”:** o universo apurável exclui retratadas, enquanto a regra distingue apuração de exibição crua. A associação ao dia também distingue batida reclamada pelo turno de órfã no dia civil. A proibição de remover precisa escolher explicitamente o universo e proteger a passagem da meia-noite. (`CLAUDE.md:158`; `CLAUDE.md:167`; `app/ponto/turnos.py:2888`; `app/ponto/turnos.py:2898`.)
+
+   **“Afastado”:** há juiz registrado, `afastado_hoje`, com data e argumento obrigatório `para`; cobrança considera ausência não rejeitada, folha considera aprovada. Consultar apenas `situacao='afastado'` não representa esse contrato. Falta definir data e efeito do veto. (`app/core/juizes.py:272`; `app/ponto/turnos.py:2737`; `app/colaboradores/services/situacao_exibida.py:18`; `app/colaboradores/models.py:444`.)
+
+   **“Posterior ao fim”:** a célula pertence à pessoa/dia, com geradora opcional; pode existir sucessor ou readmissão. A própria regeneração atual preserva dia coberto por outro vínculo. Remover indiscriminadamente toda célula após o fim de um vínculo perderia essa proteção. (`app/escala/models.py:1681`; `app/escala/models.py:1685`; `app/escala/models.py:1692`; `app/ponto/portas/celula.py:254`; `app/docs/BACKLOG.md:1411`.)
+
+4. **Dinheiro está no escopo; seus efeitos ainda precisam ser delimitados.**
+
+   Atualizar `FechamentoMensal` toca valores financeiros e pode alcançar a competência inteira e `DiaPago`. Valor efetivamente alterado ou garantia de nenhuma falta nova: [nao verificado]. A preaprovação exige reversão anterior, exportada intacta comprovada por hash e prova de frota no mesmo marco; paga e vínculo/escala retroativo continuam sujeitos a `!`. (`app/ponto/services/fechamento.py:902`; `app/ponto/services/fechamento.py:1160`; `app/ponto/services/fechamento.py:1191`; `CLAUDE.md:404`; `CLAUDE.md:406`.)
+
+   A remoção também anula referências de chamados e perguntas; ausência da célula faz leitores recorrerem ao cálculo/template. Logo, “a linha sumiu” não prova sozinho que previsto, cobrança e dinheiro ficaram coerentes. (`app/chamados/models.py:50`; `app/chamados/models.py:2519`; `app/escala/models.py:1094`; `app/escala/models.py:1098`.)
+
+**VEREDITO: AVAL-DEVOLVIDO**
+
+- A execução aguardará `competencia_ja_paga` ou qual autoridade provará ausência de pagamento externo? (`app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:495`.)
+- Permanecem excluídas células editadas, dias de sucessor/readmissão e todo passivo reservado ao `!`? (`app/docs/CORTES.md:470`; `app/docs/BACKLOG.md:1411`.)
+- “Tenha batida” inclui retratada e órfã, com associação ao dia por qual autoridade? (`CLAUDE.md:158`; `CLAUDE.md:167`; `app/ponto/turnos.py:2898`.)
+- “Afastado” será consultado em qual data e com qual `para`? (`app/ponto/turnos.py:2737`; `app/colaboradores/services/situacao_exibida.py:18`.)
+- “Exportada → nada muda” vale para todo o ato ou apenas para o efeito novo da O50, considerando que o `save()` atual invalida previsto sem filtro de competência? (`app/escala/signals.py:145`; `app/ponto/services/fechamento.py:1607`.)
+
+## 16/11 15:27 · sessao 982166043b41 · - · - · origem=Ronald (tmux)
+
+- A porta canônica é `app/ponto/portas/celula.py`, registrada para `CelulaDia` em `app/core/portas.py:112`; declara gerar, lavrar, carimbar e editar, sem operação de remover célula (`app/ponto/portas/celula.py:74`).
+- O censo estático real `core.censo_escritas.varrer_arvore` encontrou 10 escritas atribuídas a `CelulaDia`, todas nessa porta, sem `delete`; o instrumento declara limite para operações não atribuíveis (`app/core/censo_escritas.py:43`). Os sítios são `app/ponto/portas/celula.py:265`, `:279`, `:293`, `:310`, `:638`, `:647`, `:836`, `:914`, `:926`, `:1237`.
+- Fora da vigência, hoje a célula permanece: futuro zera previsto, limpa geradora, guarda DNA anterior e desfaz julgamento (`app/ponto/portas/celula.py:251`); passado grava `trabalha=False` e DNA sem marcos (`app/ponto/portas/celula.py:272`). O comentário explicita “A celula NAO se apaga” porque há perguntas apontando para ela (`app/ponto/portas/celula.py:239`).
+- O `delete` da porta remove `FuroDiario`, não `CelulaDia` (`app/ponto/portas/celula.py:1253`, `:1266`).
+- A guarda vigente da célula é `competencia_fechada_para_celula`: TXT vigente entregue OU holerite com lote publicado da pessoa; não representa pagamento externo declarado (`app/folha/export.py:597`, `:618`, `:622`). O atual `marcos_da_competencia()['paga']` também só consulta holerite com lote publicado (`app/ponto/services/fechamento.py:1539`). O corte COMPETENCIA-PAGA consta “construindo”, condicionado à espinha (`app/docs/CORTES.md:495`).
+- “Tenha batida” não fecha por inferência: o universo apurável exclui retratadas (`app/ponto/turnos.py:2868`, `:2888`); associação ao dia distingue batida reclamada por turno e órfã no dia civil (`app/ponto/turnos.py:2898`, `:2957`). É preciso dizer se a proibição inclui retratadas e como protege órfãs e turnos que cruzam meia-noite; o literal do anexo não decide isso [nao verificado].
+- Excluir a célula anula referências de chamados e perguntas (`app/chamados/models.py:50`, `:2519`). Excluir o colaborador causa cascata para células (`app/escala/models.py:1681`); excluir vínculo apenas anula `escala_geradora` (`app/escala/models.py:1692`). A restauração de snapshot apaga ECs e protege células editadas contra essa anulação (`app/colaboradores/services/vinculo.py:1022`).
+- A seleção deve preservar dia de sucessor: o gerador trabalha por vínculo vigente e, se a célula não existe, cria uma (`app/ponto/portas/celula.py:906`, `:914`); a regeneração também cria célula ausente no dia coberto (`app/ponto/portas/celula.py:289`). A célula pertence à pessoa e ao dia, enquanto a geradora é proveniência opcional (`app/escala/models.py:1681`, `:1685`, `:1692`).
+- Remoção precisa conferir leitores: sem célula, `eh_dia_trabalho` recai no cálculo do vínculo (`app/escala/models.py:1094`); `marcos_do_dia` declara retorno ao template vivo quando falta célula/DNA (`app/escala/models.py:1098`). Ausência da linha não prova ausência de previsto.
+- O dinheiro deve ser acionado pelo ato, não por sinal de `CelulaDia` (`app/ponto/portas/celula.py:432`). A própria porta registra que o caminho ordinário hoje pode recalcular exportada, após L-113 (`app/ponto/portas/celula.py:436`); O50 necessita guarda explícita do seu alcance antes de chamar esse caminho.
+
+## 16/11 15:27 · sessao c81e9bf48af4 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, só item 1:
+
+- **Restrição omitida no aval novo:** LU-13 manda O50 “só DIREÇÃO”, define futuras como após D e exclui **exportada/editada/com batida**, exige medir frota antes e `!` próprio para retroativo. A condição **editada** precisa continuar explícita; o item 1 fornecido não a nomeia. (`app/docs/CORTES.md:470`; cláusula do anexo novo sem arquivo local: [nao verificado].)
+- **Irretroatividade não se resolve só por “posterior ao fim”:** célula é dado congelado e passado só se reescreve pela exceção formal de cadastro com denúncia; “posterior ao fim” pode alcançar datas já passadas. Precisa separar evento futuro, célula futura já existente e passivo reservado ao `!`, sem autorizar por inferência a remoção de passado. (`CLAUDE.md:149-156`; `app/docs/BACKLOG.md:1410-1411`; `app/docs/CORTES.md:470`.)
+- **Paga é dependência real, sem juiz pousado nesta cópia:** a obra `COMPETENCIA-PAGA-UM-JUIZ` declara o futuro `competencia_ja_paga`, cuja definição é entregue/exportação vigente OU cadastro “paga fora do sistema”, e proíbe meia migração; ainda está registrada/construindo, com pouso depois da espinha. (`app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:495`.) A busca em Python de produção não achou `competencia_ja_paga`, `CompetenciaPaga`, `paga_fora` ou `competencia_paga`: ausência absoluta além desses nomes [nao verificado].
+- **Exportação tem juiz, pagamento não pode ser inferido dele:** `competencia_entregue` pergunta por TXT vigente não invalidado; `competencia_fechada_para_celula` compõe essa resposta com holerite publicado do próprio colaborador. Nenhum desses contratos diz representar pagamento externo. (`app/folha/export.py:556-594`, especialmente `:564-578`; `:597-628`; `app/core/juizes.py:343-353`.)
+- **Afastado exige pergunta mais precisa:** `situacao='afastado'` permanece nas choices, mas o modelo declara que afastamento deixou de ser valor de cadastro e é lido do juiz. (`app/colaboradores/models.py:295-299`; `:444-449`.) O juiz registrado é `afastado_hoje`, que aceita data e exige `para`; tipos atualmente estreitados a `afastamento_inss`. (`app/core/juizes.py:272`; `app/ponto/turnos.py:2716-2744`.) `para='folha'` significa aprovada, `para='cobranca'` não rejeitada. (`app/ponto/turnos.py:2523-2532`.) Logo falta dizer se “tocar afastado” veta pela data do ato ou da célula e qual efeito/status; a apresentação dá precedência ao desligado, portanto não basta consultá-la depois de demitir. (`app/colaboradores/services/situacao_exibida.py:18-25`; `:56-63`.)
+- **DESLIGADO-NAO-TRAVA é retentor, não licença de remoção:** hoje retorna vazio para desligado em qualquer dia da competência; informativo da rescisão só lê e declara proibido mexer em célula/batida e lançar falta automática naquela lei. O item 1 novo é autorização específica futura, não deve ser descrito como reparo de trava ainda vigente. (`app/folha/export.py:1197-1213`; `:1216-1228`; `app/docs/CORTES.md:440`.) O juiz do desligado lê só estado gravado e exclui agendado/afastado. (`app/colaboradores/services/desligamento.py:23-32`; `app/core/juizes.py:273-276`.)
+- **Dinheiro está expressamente no escopo:** atualizar `FechamentoMensal` não é operação neutra. Regra consolidada exige `!` para paga e vínculo/escala retroativo; competência não exportada tem preaprovação condicionada a reversão antes, exportada intacta com hash e prova de frota no mesmo marco. Exportada só porta REGEN-EM-EXPORTADA com `!`, DIFF e trilha. (`CLAUDE.md:404-417`.) L-113 alterou as recusas históricas da L-092, mas não autoriza ignorar o item 1 que restringe expressamente exportada/paga; o texto consolidado atual é o acima. (`app/docs/LEIS.md:155`; `CLAUDE.md:411-422`.)
+- **L-099 favorece cura na origem e lista para dado:** separar ESTRUTURA de CADASTRO/BATIDA está literalmente na lei; células com batida não viram caso especial de código. (`app/docs/LEIS.md:122`.)
+- **Universo da guarda “tenha batida” continua ambíguo:** apuração canônica exclui retratadas, exibição usa cru. `batidas_apuraveis` confirma que pendente de DP conta, retratada não. Qual desses universos governa a proibição de apagar célula precisa ser fechado; não é lícito assumir que a lei de apuração responde pergunta de preservação de dado. (`CLAUDE.md:158-167`; `app/ponto/turnos.py:2868-2895`.)
+- **Registro anterior de escopo maior:** O50-DESLIGAR-ENCERRA-TUDO absorve O50-CELULA e inclui encerrar vínculos vigentes/futuros; não transportar automaticamente esse escopo maior para esta revisão do item 1. (`app/docs/BACKLOG.md:1409`.) A preservação de último dia, turno noturno e readmissão já está declarada no complemento O50 e deve orientar os cenários do PREPARA. (`app/docs/BACKLOG.md:1411`.)
+
+Perguntas mais fortes para AVAL-DEVOLVIDO: dependência do juiz paga; manutenção da exclusão editada e do limite direção/futuro; universo de batida e dia do turno; data/efeito do veto afastado. (`app/docs/BACKLOG.md:1978`; `app/docs/CORTES.md:470`; `CLAUDE.md:149-167`; `app/ponto/turnos.py:2523-2532`, `:2716-2744`, `:2868-2895`.)
 
 ## 16/11 15:16 · sessao ed7650d71c30 · UI-EDITOR-CALENDARIO-TRES-GRADES · verificador · origem=Code
 
@@ -1708,43 +1792,4 @@ A abertura do modal chama `marcar_lidas`, escrevendo no banco; a sonda deve ler 
 
 Falhas de auditoria/best-effort vão para logging e contador de memória, sem registro adicional no banco. `app/core/observ.py:73-82,105,134-139` A cobertura de logs da VM desde 04/11 13:22 veio apenas do dado fornecido. [nao verificado]
 
-## 16/11 14:26 · sessao 6a1bdea30721 · - · - · origem=Ronald (tmux)
-
-| entrada | item O54 | cadeia / motivo | confiança |
-|---|---|---|---|
-| BO-ADMIN-2710/3 | - | `app/escala/utils.py:1254-1259` apaga os marcos faltantes por justificativa → `app/ponto/services/veredito_celula.py:242-247` declara o dia completo. Não se demonstrou redução do número E6: ele lê realizado/pago (`app/ponto/management/commands/e6_oraculo.py:263-268,342-373`), enquanto o abono prometido é outra medida (`app/docs/BACKLOG.md:1976`; `app/ponto/motor_calculo_v2.py:2606-2622`). | [nao verificado] |
-| BO2910/06 | - | O desligamento atual chama `fechar_vinculos_ativos` (`app/colaboradores/services/desligamento.py:147-149`), cuja porta já recusa fim anterior ao início (`app/colaboradores/services/vinculo.py:855-864`); a reativação exige revínculo pelo admin (`app/colaboradores/services/desligamento.py:235-247`). Sem definir vínculo/início da cura, não se demonstra redução de R4; sua referência às portas (`app/core/placar_estrutural.py:389-390`) não fecha essa cadeia. | [nao verificado] |
-| HJ-017-U1, HJ-074, HJ-005-U1, HJ-012-U2, HJ-005-U2, HJ-005-U4, BO-ADMIN-2710/1, BO-ADMIN-2710/8.1 | - | O quadro fornecido não comprova produtor atual; substituir essa lacuna por causas históricas não demonstra a cadeia da entrada atual. [nao verificado] | [nao verificado] |
-
-O placar registra expressamente que a causa dos 26+9 dias ESTRUTURA não foi nomeada (`app/core/espelho_verdade.py:190-191`; `app/core/placar_estrutural.py:130`). Portanto, compartilhar motor, célula ou cadastro com o medidor não comprova participação nesses números.
-
-## 16/11 14:26 · sessao c5a20957395e · - · - · origem=Ronald (tmux)
-
-| entrada | item O54 | cadeia (arquivo:linha) | confianca |
-|---|---|---|---|
-| BO2910/05 | - | Período opcional na decisão (`app/ponto/services/ausencia.py:1068-1070`) → invalidação da projeção (`app/ponto/services/ausencia.py:1123-1124`); não demonstra redução de item: `E5-le-da-celula` espera especificamente status encerrado (`app/core/espelho_verdade.py:150-151`). Além disso, o espelho publica a ausência (`app/ponto/services/espelho.py:582,845`) e o medidor E6 exclui dias com ausência (`app/ponto/management/commands/e6_oraculo.py:339-341`). | [nao verificado] |
-| BO2910/08 | - | Regeneração de futura chama desfazimento (`app/ponto/portas/celula.py:312-315`), que conserva expressamente decisão administrativa (`app/ponto/portas/celula.py:1155-1164`); não há vínculo demonstrado entre essa conservação e um divergente contado no E6 (`app/ponto/management/commands/e6_oraculo.py:362-381`). | [nao verificado] |
-| BO-ADMIN-2710/5 | - | `_marcos_faltantes` lê `missing` para identificar marco a cobrar (`app/chamados/services/declaracao_texto.py:130-139`); R3 compõe sua frase diretamente dos marcos faltantes (`app/ponto/services/dia_decidido.py:74-87,102-127`), e E6 compara minutos (`app/ponto/management/commands/e6_oraculo.py:350-381`). Fazer nascer a pergunta não demonstra alteração desses números. | [nao verificado] |
-
-## 16/11 14:26 · sessao 67deb7deb439 · - · - · origem=Ronald (tmux)
-
-SC11 tem duas autoridades registradas:
-
-- Cobertura: `vinculo_cobre_a_data(ec,dia)` — `app/escala/alimentacao.py:205-216`; registro `app/core/juizes.py:1322-1323`, tabela `app/docs/JUIZES.md:137-138`.
-- Vínculo do dia: `vinculo_do_dia(cid,dia,escalas,celulas=...)` — `app/escala/alimentacao.py:228-286`; tabela `app/docs/JUIZES.md:135-136`. Carregador completo disponível em `vinculo_do_dia_carregado`:289-317.
-
-Universo de existência: dias cobertos por vínculo, sem filtro por situação pessoal; lei e delegação estão em `app/ponto/portas/celula.py:870-880,906`. Sem célula e sem cobertura não é pendência desse gerador; contador existente confirma em `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:51-57`.
-
-Não localizei juiz geral puro registrado que diga “esta célula está errada” em toda a competência: `[nao verificado]`. Cuidado com substitutos:
-
-- `EscalaColaborador.eh_dia_trabalho` lê a própria `cel.trabalha` quando existe; compará-los seria tautologia — `app/escala/models.py:1069-1096`.
-- Divergência do cadastro tem medidor real `ponto.services.vigia_cadastro_futuro.medir(ini,fim,*,hoje,colaborador_id=None)` — `app/ponto/services/vigia_cadastro_futuro.py:24-87`. A jurisdição é **futuro**, e os baldes são **geradas**:31,49-50. Ele mede cobertura, cadastro/DNA e selos. Pode ser chamado por dia para obter casos sem copiar o predicado: `medir(d,d,hoje=hoje,colaborador_id=305)`. Não chamar `lavrar`:99-108.
-- Comparar template vivo com todo passado contraria o próprio tripwire: passado divergente pode ser irretroatividade — `app/ponto/management/commands/tripwire_celulas.py:4-6`.
-- `supra_juiz.classificar_dia` é puro, mas sua docstring diz que detecta contradições e **não decide quem está certo** — `app/ponto/supra_juiz.py:217-224`.
-- `celula_veredito_velho` não serve: chama julgamento com escrita — `app/ponto/management/commands/celula_veredito_velho.py:19-21,144-145`.
-
-Porta para eventual apply por dia: `ponto.portas.celula.regenerar_celulas_dia` — `app/ponto/portas/celula.py:741-776`; delega ao escritor `regenerar_celulas_vinculo`:112, com horizonte desligado:773-776. Cria ausente e corrige gerada em :289-310. Não chamá-la na leitura: até recusa de vínculo sem vigência grava evento — :147-162.
-
-Sutileza: com célula existente, `vinculo_do_dia` pode devolver geradora inativa sem fim (:279-284), enquanto `vinculo_cobre_a_data` a recusa (:214-216). Exibir essas respostas sem presumir equivalência.
-
-_6077 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6080 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
