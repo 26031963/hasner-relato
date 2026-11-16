@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: codex_pergunta.sh | pid=789359
+ESTADO 14:0x RESIDUO-ALEM-DA-COMPETENCIA registrado (itens 1 e 3 so registro: BACKLOG BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO e CONTADOR-FOLGA-COM-CELULA-TRABALHO, contador espera corte); item 2 censo Codex em curso -> logs/BUG-CADASTRO-FUTURO/residuo_alem_da_competencia.r. Sondas copiadas sem nome no arquivo. PROVA: logs/BUG-CADASTRO-FUTURO/sonda_folga_x_celula.out
 ESTADO 13:5x BUG-PAR volta c1 VERMELHA no recorte: FAILED (failures=12, errors=1), Ran 5163, rc=1 -- 11 por universo congelado vazio nas fixtures antigas (contador universo 0), 1 teste novo do proprio c1, 1 estado bloqueada_competencia fora do vocabulario. Volta c2 no Codex construtor com as 13 por causa/classe. RED na base caiu por MaybeEncodingError do pool (sem veredito): refazer com --parallel 1. PROVA: logs/BUG-PAR-O-PAR/volta/verde_c1_falhas.txt
 ESTADO 13:4x push do marco 06ef652b6 no remoto (rc=0 13:45:33; pos_push a57656471). PROVA: logs/DUAS-PISTAS/lote7_c7/push.log
 ESTADO 13:4x O10-D PREPARA FECHADA (COMPLEMENTO-1 item 4): perguntas de lei 0; d1=d2 aceito (censo supunha distintas); cruzamento so fecha com a lista de arquivos do construtor. PROVA: logs/O10-D-PERMUTA-NA-TELA/prepara_1611.md
