@@ -1,7 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: lanca_verde_c2.sh | pid=822507
-ESTADO 14:1x MIUDOS-REABRE-O-ITEM-3: item 1 Codex leitura em curso (fora do teto) sobre a57656471, com a lista de arquivos em voo; item 3 nao constroi. PROVA: logs/MIUDOS/em_voo_1611.txt
+ESTADO 14:2x MIUDOS-REABRE-O-ITEM-3 item 1 feito: 16 entradas -> 6 MIUDO, 1 OBRA, 1 tamanho nao verificado, 8 sem causa atual; MIUDO ELEGIVEL 0 (todo MIUDO tem dinheiro, !/lei ou cruza o painel). Amostra 3/3. Item 3 nao constroi. PROVA: logs/MIUDOS/quadro_1611.md
 ESTADO BUG-PAR volta c2: 13/13 falhas da c1 = defeito da cura (binding capturado do carregador do universo; vocabulario; aviso). Commit copia 3782134a4. Fatia re-rodando (fila da trava atras da suite do painel). PROVA: logs/BUG-PAR-O-PAR/volta/volta_c2.r
 ESTADO 14:0x RESIDUO-ALEM-DA-COMPETENCIA registrado (itens 1 e 3 so registro: BACKLOG BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO e CONTADOR-FOLGA-COM-CELULA-TRABALHO, contador espera corte); item 2 censo Codex em curso -> logs/BUG-CADASTRO-FUTURO/residuo_alem_da_competencia.r. Sondas copiadas sem nome no arquivo. PROVA: logs/BUG-CADASTRO-FUTURO/sonda_folga_x_celula.out
 ESTADO 13:5x BUG-PAR volta c1 VERMELHA no recorte: FAILED (failures=12, errors=1), Ran 5163, rc=1 -- 11 por universo congelado vazio nas fixtures antigas (contador universo 0), 1 teste novo do proprio c1, 1 estado bloqueada_competencia fora do vocabulario. Volta c2 no Codex construtor com as 13 por causa/classe. RED na base caiu por MaybeEncodingError do pool (sem veredito): refazer com --parallel 1. PROVA: logs/BUG-PAR-O-PAR/volta/verde_c1_falhas.txt

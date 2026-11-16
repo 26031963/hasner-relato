@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 14:09** · publicado em **16/11/2026 14:10** (UTC-3)
+> Ultima resposta processada: **16/11/2026 14:14** · publicado em **16/11/2026 14:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 14:14 · sessao 05339093263a · MIUDOS-REABRE-O-ITEM-3 · leitura · origem=Code
+
+| Entrada | (0) Causa nesta cópia | (1) Classe e alcance de produção | (2) Dinheiro | (3) Pede `!` | (4) Lei aberta? | (5) Cruza obra em voo¹ |
+|---|---|---|---|---|---|---|
+| **BO-ADMIN-2710/3** | Persiste: justificativas aprovadas viram datas inteiras; o crédito parcial soma Ausência; motor conta abono pelo previsto dos dias. `app/ponto/services/efeito_ausencia.py:40–50`; `app/ponto/services/fechamento.py:660–665`; `app/ponto/motor_calculo_v2.py:2606–2622`. | **OBRA**: produtores e consumidores em arquivos distintos, incluindo motor; não cabe no limite de um arquivo sem motor. Mesmos sítios. | **s** — falta, abono e DSR. `app/ponto/motor_calculo_v2.py:2600–2630`. | **s** — motor é zona inviolável. `CLAUDE.md:142`. | **n para a regra desta causa**: pagamento completa o previsto descontando trabalho do dia; pergunta já respondida. `app/docs/RELATO.md:491`. | **n** nos sítios localizados, frente ao manifesto declarado. `anexo em_voo_1611.txt:2–43`. |
+| **BO2910/01-a** | Persiste: `vincular_posto` atribui posto e salva sem acompanhar empresa; a transferência escreve ambos. `app/colaboradores/views.py:325–336,1405–1407`. | **MIUDO — 1 arquivo**, `app/colaboradores/views.py`: as duas portas e as atribuições correspondentes estão nele; não exige modelo, migration ou juiz novo. `:325–336,1405–1407`. | **s** — empresa seleciona fechamentos do TXT. `app/folha/export.py:719–722`. | **n no mecanismo localizado** — trata cadastro posto/empresa; a alteração do posto cadastral não muda o vínculo que responde pelo dia. `app/colaboradores/services/colaborador.py:118–123`; `app/colaboradores/views.py:1405–1407`. | **n** — comportamento já estabelecido pela outra porta. `app/colaboradores/views.py:1397–1407`. | **s — painel do vínculo**, `app/colaboradores/views.py`. O pouso da R3 não elimina este cruzamento atual. `anexo em_voo_1611.txt:37–40`. |
+| **BO2910/01-b** | Persiste a ausência de registro da exceção; **mudou o ramo**: agora relê o banco antes de devolver linha/toast, mas continua sem registrar a falha. `app/colaboradores/views.py:337–361`. | **MIUDO — 1 arquivo**, `app/colaboradores/views.py`: tratamento de exceção local, sem alteração de modelo, motor ou autoridade. `:337–361`. | **n no ramo causal** — releitura, renderização e resposta de erro. `app/colaboradores/views.py:337–361`. | **n** — o ramo causal não altera escala, vínculo, motor ou gravado de exportada. `app/colaboradores/views.py:337–361`. | **n** — falta de registro já identificada como defeito, sem decisão de negócio pendente nesta causa. `app/docs/BACKLOG.md:1133`. | **s — painel do vínculo**, `app/colaboradores/views.py`, apesar do pouso da R3. `anexo em_voo_1611.txt:37–40`. |
+| **BO2910/02** | Persiste: a retratação pela célula filtra somente os três módulos de turno e exclui texto livre. `app/chamados/reconciliador.py:337–338,997–999`. | **MIUDO no mecanismo localizado — 1 arquivo**, `app/chamados/reconciliador.py`: seleção, predicado e retratação estão nele; já usa a autoridade de dia e abstém sem dia, sem exigir juiz novo. `:997–1032`. Alcance sobre nominal sem dia/célula: **[nao verificado]**; `app/docs/RELATO.md:3404`. | **n no mecanismo** — retrata chamado/perguntas e rejeita apenas justificativa pendente; disputa/chamado não determina a elegibilidade do cálculo. `app/chamados/reconciliador.py:523–541`; `app/ponto/services/fechamento.py:576–579`. | **s** — ampliar o universo altera limite de negócio expressamente mantido até corte do Ronald. `app/chamados/reconciliador.py:977–981`. | **s** — quais chamados de texto livre têm o dia como premissa suficiente para absolvição? O código mantém os demais fora até corte. `app/chamados/reconciliador.py:977–981`. | **n** no arquivo causal necessário localizado. `anexo em_voo_1611.txt:2–43`. |
+| **BO2910/05** | Persiste, com linhas deslocadas: formulário permite omitir ambas as horas; view passa `None`; serviço só valida quando alguma hora veio. `app/templates/ponto/partials/painel_ausencia.html:325–330`; `app/ponto/views.py:2700–2715`; `app/ponto/services/ausencia.py:1068–1070`. | **MIUDO quanto à aceitação indevida — 1 arquivo**, `app/ponto/services/ausencia.py`: concentra decisão e validador já existente; template e view participarem do caminho não exige alterar os três para impedir a aceitação. `:1039–1048,1057–1081`. | **s** — decisão/período alimentam folha e invalidam a projeção. `app/ponto/services/ausencia.py:1112–1124`. | **n no escopo registrado** — obrigatoriedade na aprovação já está escrita; não exige regra nova, motor ou alteração de vínculo. `app/docs/BACKLOG.md:1133`; `app/ponto/services/ausencia.py:1039–1081`. | **n para novas aprovações** — período obrigatório já registrado; tratamento de estoque sem período também existe. `app/docs/BACKLOG.md:1133`; `app/templates/ponto/partials/painel_ausencia.html:310–317`. | **n no arquivo causal mínimo**, `app/ponto/services/ausencia.py`. `anexo em_voo_1611.txt:2–43`. |
+| **BO2910/06** | Persiste a não reabertura, mas ela é também contrato explícito atual: reativação restaura cadastro/acesso e manda o admin revincular. `app/colaboradores/services/desligamento.py:235–259`. | **Tamanho [nao verificado]**. Há **1 produtor localizado**, `desligamento.py`, mas o número **exigido** depende da escolha de vínculo/início; a autoridade existente já consegue reativar vínculo pela mesma data inicial, portanto não há prova de dois arquivos obrigatórios. `app/colaboradores/services/vinculo.py:100–124,259–283`. | **s pelo encadeamento existente de vínculo → regeneração → fechamento**; impacto nominal **[nao verificado]**. `app/colaboradores/services/vinculo.py:315–348`; `app/ponto/portas/celula.py:483–496`. | **s** — dado de vínculo e mudança do automatismo explícito “admin revincula”. `app/colaboradores/services/desligamento.py:237–238`. | **s** — reabrir qual vínculo, com qual início, preservando ou preenchendo o intervalo desligado? Contrato atual não define reabertura automática. `app/colaboradores/services/desligamento.py:235–238`; escolha por início: `app/colaboradores/services/vinculo.py:100–124`. | **n nos produtores localizados** (`desligamento.py`/`vinculo.py`); envelope final **[nao verificado]**. `anexo em_voo_1611.txt:2–43`. |
+| **BO2910/08** | Persiste para decisão humana; **mudou para futuras automáticas**: DNA reescrito já desfaz julgamento futuro, mas conserva expressamente o administrativo e exclui humanos do rejulgamento. `app/ponto/portas/celula.py:297–315,465–470,1135–1139,1155–1164`. | **MIUDO técnico — 1 arquivo**, `app/ponto/portas/celula.py`: reescrita, preservação e autoridade de veredito estão nele, com cartório existente; não exige juiz novo. `:297–315,462–472,970–987,1060–1067`. | **s** — recalcula fechamento por competência. `app/ponto/portas/celula.py:483–496`. | **s** — DNA de escala, inclusive passado, e alteração da preservação administrativa explícita. `CLAUDE.md:149–154`; `app/ponto/portas/celula.py:973–980`. | **s** — quando DNA novo invalida decisão humana, hoje expressamente preservada? `app/ponto/portas/celula.py:973–980,1135–1139`. | **n** no arquivo causal localizado. `anexo em_voo_1611.txt:2–43`. |
+| **BO-ADMIN-2710/5** | Persiste: `_marcos_faltantes` pula célula não `missing` sem confrontar `tipo_real`, que o leitor já entrega. `app/chamados/services/declaracao_texto.py:130–139`; `app/escala/services/leitor_celula.py:122–133`. | **MIUDO — 1 arquivo**, `app/chamados/services/declaracao_texto.py`: dados necessários já chegam ao leitor; há teste próprio desse leitor. `:130–139`; `app/chamados/tests/test_hx_marcos_faltantes_celula.py:42–64`. | **s** — registro causal do intervalo e exigência de medir a hora de intrajornada indenizada no DIFF. `app/docs/RELATO.md:3984`; `app/docs/BACKLOG.md:848`. | **n no leitor localizado** — não altera escala/vínculo, motor ou gravado de exportada; consome dados já fornecidos. `app/chamados/services/declaracao_texto.py:100–139`; `app/escala/services/leitor_celula.py:122–133`. | **n na causa localizada** — defeito de leitura já identificado, sem escolha nova de negócio demonstrada. `app/docs/RELATO.md:3984`. | **n** no produtor e teste citados. `anexo em_voo_1611.txt:2–43`. |
+| **HJ-017-U1** | Causa atual **[nao verificado]**: código já trata saída por posição e reconciliação da ata; pendência documental não prova defeito remanescente. `app/ponto/turnos.py:1067–1100`; `app/escala/utils.py:1945–2040`; `app/docs/BACKLOG.md:1270`. | — | — | — | — | — |
+| **HJ-074** | Produtor atual **[nao verificado]**: default continua verdadeiro, mas nascimento consulta o juiz; nominal não identifica quem gravou a flag. `app/escala/models.py:896–917`; `app/colaboradores/services/vinculo.py:287–296`; `app/docs/BACKLOG.md:2652`. | — | — | — | — | — |
+| **HJ-005-U1** | Causa **[nao verificado]**: registro ainda exige censo e declara cobertura parcial não demonstrada para o dia. `app/docs/BACKLOG.md:849`. | — | — | — | — | — |
+| **HJ-012-U2** | Causa **[nao verificado]**: classificação da ingestão e medição anterior como cobrança legítima seguem sem reconciliação demonstrada. `app/docs/BACKLOG.md:1572`; `app/docs/RELATO.md:5603`. | — | — | — | — | — |
+| **HJ-005-U2** | Produtor **[nao verificado]**: `sem_periodo` demonstra falta de hora, sem identificar sua porta de origem. `app/ponto/turnos.py:2632–2637,2646–2647`. | — | — | — | — | — |
+| **HJ-005-U4** | Produtor **[nao verificado]**: mesmo limite; resposta `sem_periodo` não comprova escritor defeituoso. `app/ponto/turnos.py:2646–2647`. | — | — | — | — | — |
+| **BO-ADMIN-2710/1** | Produtor atual **[nao verificado]**: causa histórica era cobertura crua; leitor atual distingue `sem_periodo` e classifica cadastro. `app/docs/RELATO.md:3980`; `app/ponto/supra_juiz.py:395–402,453–455`. | — | — | — | — | — |
+| **BO-ADMIN-2710/8.1** | Defeito atual **[nao verificado]**: escritor já fotografa antes, distingue editar/criar e registra diferenças; view delega à porta. `app/colaboradores/services/vinculo.py:187–188,368–383`; `app/colaboradores/views.py:247–249`. | — | — | — | — | — |
+
+¹ Cruzamentos restritos às listas fornecidas de BUG-PAR, painel e editor. **O10-D nao verificavel**, pois não tem lista declarada; portanto os `n` dessa coluna não certificam ausência de cruzamento com O10-D. (`anexo em_voo_1611.txt:2–44`.)
+
+**Contagem por classe:**
+
+- **6 MIUDO:** /01-a, /01-b, /02, /05, /08 e BO-ADMIN-2710/5. São os seis mecanismos concentrados em um arquivo identificados acima. (`app/colaboradores/views.py:325–361`; `app/chamados/reconciliador.py:997–1032`; `app/ponto/services/ausencia.py:1039–1081`; `app/ponto/portas/celula.py:297–315,970–987`; `app/chamados/services/declaracao_texto.py:130–139`.)
+- **1 OBRA:** BO-ADMIN-2710/3. (`app/ponto/services/efeito_ausencia.py:40–50`; `app/ponto/services/fechamento.py:660–665`; `app/ponto/motor_calculo_v2.py:2606–2622`.)
+- **1 tamanho [nao verificado]:** /06. Das quatro pendências, /02, /05 e /08 fecham em **1 arquivo de produção cada**; /06 não permite afirmar número exigido sem decidir vínculo/início. A porta existente impede concluir que dois arquivos sejam obrigatórios. (`app/colaboradores/services/desligamento.py:235–259`; `app/colaboradores/services/vinculo.py:100–124,259–283`.)
+- **8 sem causa atual comprovada**, sem classificação posterior: as oito últimas linhas, com os limites de prova nelas citados.
+
+**ELEGÍVEL pela regra literal: nenhuma entrada demonstrada.** Os seis MIUDO têm dinheiro, `!`/lei aberta ou cruzamento declarado; O10-D também permanece não verificável. (`app/folha/export.py:719–722`; `app/chamados/reconciliador.py:977–981`; `app/ponto/services/ausencia.py:1112–1124`; `app/ponto/portas/celula.py:483–496,973–980`; `app/docs/BACKLOG.md:848`; `anexo em_voo_1611.txt:39,44`.)
+
+Motivo por não elegível, uma linha por entrada:
+
+- **BO-ADMIN-2710/3:** OBRA, dinheiro e motor sujeito a `!`. (`app/ponto/motor_calculo_v2.py:2606–2622`; `CLAUDE.md:142`.)
+- **BO2910/01-a:** dinheiro/TXT e cruzamento com painel em `app/colaboradores/views.py`. (`app/folha/export.py:719–722`; `anexo em_voo_1611.txt:39`.)
+- **BO2910/01-b:** cruza painel em `app/colaboradores/views.py`; o pouso da R3 não o libera deste cruzamento. (`anexo em_voo_1611.txt:37–40`.)
+- **BO2910/02:** ampliação do universo depende de corte de negócio, portanto `!` e pergunta de lei. (`app/chamados/reconciliador.py:977–981`.)
+- **BO2910/05:** toca insumo e projeção de fechamento. (`app/ponto/services/ausencia.py:1112–1124`.)
+- **BO2910/06:** tamanho não demonstrado, vínculo sujeito a `!` e decisão de reabertura ausente. (`app/colaboradores/services/desligamento.py:235–259`; `app/colaboradores/services/vinculo.py:100–124`.)
+- **BO2910/08:** dinheiro, DNA de escala e mudança de regra explícita sobre decisão humana. (`app/ponto/portas/celula.py:483–496,973–980,1135–1139`.)
+- **BO-ADMIN-2710/5:** envolve intrajornada indenizada no DIFF. (`app/docs/BACKLOG.md:848`; causa: `app/docs/RELATO.md:3984`.)
+- **HJ-017-U1:** causa atual **[nao verificado]**, diante dos tratamentos já presentes. (`app/ponto/turnos.py:1067–1100`; `app/escala/utils.py:1945–2040`.)
+- **HJ-074:** escritor causal da flag **[nao verificado]**. (`app/colaboradores/services/vinculo.py:287–296`; `app/docs/BACKLOG.md:2652`.)
+- **HJ-005-U1:** causa **[nao verificado]**; censo ainda requerido. (`app/docs/BACKLOG.md:849`.)
+- **HJ-012-U2:** causa **[nao verificado]**; classificações documentais não reconciliadas. (`app/docs/BACKLOG.md:1572`; `app/docs/RELATO.md:5603`.)
+- **HJ-005-U2:** origem da omissão **[nao verificado]**. (`app/ponto/turnos.py:2646–2647`.)
+- **HJ-005-U4:** origem da omissão **[nao verificado]**. (`app/ponto/turnos.py:2646–2647`.)
+- **BO-ADMIN-2710/1:** defeito atual **[nao verificado]**; leitor já distingue cadastro sem período. (`app/ponto/supra_juiz.py:395–402,453–455`.)
+- **BO-ADMIN-2710/8.1:** persistência atual do defeito **[nao verificado]**; escritor já registra edição e diferenças. (`app/colaboradores/services/vinculo.py:368–383`.)
+
+## 16/11 14:11 · sessao 8d2c783a5f2e · - · - · origem=Ronald (tmux)
+
+| Entrada | Resultado da leitura |
+|---|---|
+| **BO2910/06** | A reativação continua restaurando cadastro/acesso sem escala; isso também é o contrato explícito atual: “admin revincula” (`app/colaboradores/services/desligamento.py:235-259`). **Não há prova de OBRA ≥2 arquivos**: o juiz existente identifica vínculo pela data inicial (`app/colaboradores/services/vinculo.py:100-124`) e o executor já reativa a mesma linha (`app/colaboradores/services/vinculo.py:259-283`). **Um arquivo de produção pode bastar por composição**, mas a escolha de vínculo/data/âncora não está definida pelo dado; número exigido e certificação de MIUDO ficam **[nao verificado]**. **! s**, por vínculo e mudança do automatismo contratual (`app/colaboradores/services/desligamento.py:237-238`). **Lei s**: reabrir a vigência original, incluindo intervalo desligado, ou iniciar novo trecho; qual vínculo/data? **[nao verificado]**. Dinheiro da reabertura **s**, se passar pela autoridade existente que regenera células e provoca recálculo (`app/colaboradores/services/vinculo.py:315-348`; `app/ponto/portas/celula.py:483-496`); alcance nominal **[nao verificado]**. Cruzamento direto de `desligamento.py`/`vinculo.py` com manifestos declarados: **n** (`em_voo_1611.txt:1-44`, anexo fornecido); **O10-D nao verificavel**. |
+| **BO2910/08** | A troca do DNA permanece e agora apaga julgamento automático de futuras, conservando admin; a causa humana permanece (`app/ponto/portas/celula.py:297-315,1135-1138,1155-1163`). **MIUDO técnico: 1 arquivo de produção**, `celula.py`, que contém a reescrita e a autoridade que conserva/escreve o veredito; não exige juiz novo, porque o cartório atual já é chamado nesse caminho (`app/ponto/portas/celula.py:462-472,970-986,1060-1067`). A exclusão em `pos_vinculo.py` lê o estado gravado, sem obrigatoriedade demonstrada de editar esse consumidor (`app/colaboradores/services/pos_vinculo.py:62-73`). **Dinheiro s**, recalcula por competência (`app/ponto/portas/celula.py:483-496`). **! s / lei s**: substituir a preservação de decisão humana diante de DNA novo altera a regra explícita “admin decidiu vence o cartório” (`app/ponto/portas/celula.py:973-980,1135-1138`). Cruzamento direto do produtor com manifestos declarados: **n** (`em_voo_1611.txt:1-44`, anexo fornecido); **O10-D nao verificavel**. |
+
+**Cuidado com as citações do manifesto:** não conferi sua numeração linha a linha; use a contagem que o agente principal atribuir ao anexo. **[nao verificado]**
+
+## 16/11 14:11 · sessao 8bc91becb95e · - · - · origem=Ronald (tmux)
+
+| Entrada | Causa atual | Tamanho / arquivos de produção necessários | Dinheiro | ! / lei | Cruzamento |
+|---|---|---|---|---|---|
+| BO2910/02 | O universo da retratação pela célula continua limitado aos três módulos de turno, excluindo texto livre (`app/chamados/reconciliador.py:337-338`, `:997-999`). | **MIUDO quanto ao mecanismo localizado: 1 produção**, `app/chamados/reconciliador.py`; seleção, predicado e chamada de retratação estão nele (`:997-1032`). **Não exige juiz novo para chamados datados:** já importa `dia_do_fato` (`:45`), cuja leitura genérica suporta célula, contexto, batida e disputa (`app/chamados/juizes.py:88-139`). O alcance sobre o nominal sem data/célula permanece **[nao verificado]** (`app/docs/RELATO.md:3404`). | **n no mecanismo localizado:** retrata chamado/perguntas e rejeita apenas justificativa ainda pendente (`app/chamados/reconciliador.py:523-541`); chamado/disputa não determina elegibilidade do cálculo (`app/ponto/services/fechamento.py:576-579`). | **s / pergunta aberta:** a exclusão dos outros módulos é declarada “até Ronald cortar”, pois neles o dia não é a premissa inteira (`app/chamados/reconciliador.py:977-981`). Pergunta: qual subconjunto de texto livre a célula absolve? | **n nos arquivos necessários localizados**, comparando `app/chamados/reconciliador.py` com o manifesto fornecido; referência numerada do anexo **[nao verificado]**. **O10-D nao verificavel.** |
+| BO2910/05 | Ambas as horas podem faltar no formulário; a view conserva `None`, e `decidir` só valida período se alguma hora vier (`app/templates/ponto/partials/painel_ausencia.html:325-330`; `app/ponto/views.py:2700-2715`; `app/ponto/services/ausencia.py:1068-1070`). | **MIUDO quanto à causa de aprovação indevida: 1 produção**, `app/ponto/services/ausencia.py`, escritor único da decisão, com validador de período já existente (`:1039-1048`, `:1057-1081`). A presença de template, view e serviço não prova necessidade de alterar os três; a view já encaminha a omissão à autoridade (`app/ponto/views.py:2700-2715`). Exigir também alteração visual do formulário seria escopo adicional da fila UI registrada em `app/docs/BACKLOG.md:1133`; sua necessidade técnica para impedir a aprovação não está demonstrada. | **s:** decisão e período são insumos da folha e acordam a projeção do fechamento (`app/ponto/services/ausencia.py:1112-1124`). | **Não chamar automaticamente de lei aberta:** o corte de 27/10 admite falta de período com destino ao DP (`app/docs/CORTES.md:385`), enquanto o registro posterior de 29/10 pede período obrigatório na tela (`app/docs/BACKLOG.md:1133`). Se o segundo registro for tomado como escopo decidido, a obrigação já está escrita; sua autoridade como alteração do corte anterior é **[nao verificado]**. | **n no arquivo causal mínimo**, `app/ponto/services/ausencia.py`; os arquivos do manifesto fornecido não o incluem; referência numerada do anexo **[nao verificado]**. **O10-D nao verificavel.** |
+
+Para `/02`, não confundir **tamanho físico localizado de um arquivo** com autorização para ampliar o universo: há autoridade de dia reutilizável, mas o limite semântico foi preservado expressamente (`app/chamados/juizes.py:88-139`; `app/chamados/reconciliador.py:977-981`).
+
+## 16/11 14:10 · sessao 765252e3b7ae · - · - · origem=Ronald (tmux)
+
+| Entrada | (0) Causa atual e limite da prova | (1)–(5) |
+|---|---|---|
+| HJ-017-U1 | **[nao verificado]**: o produtor histórico já trata a saída pela posição e fecha o par; a ata também reconcilia as bordas. Não há dado atual que demonstre defeito remanescente. (`app/ponto/turnos.py:1067-1100`; `app/escala/utils.py:1945-2040`; pendência documental: `app/docs/BACKLOG.md:1270`.) | — |
+| HJ-074 | **[nao verificado]**: o campo conserva default `True`, mas o nascimento pela porta consulta o juiz do tipo/posto; o nominal não demonstra qual escritor gravou sua flag. (`app/escala/models.py:896-917`; `app/colaboradores/services/vinculo.py:287-296`; nominal: `app/docs/BACKLOG.md:2652`.) | — |
+| HJ-005-U1 | **[nao verificado]**: o registro ainda pede censo para reconciliar dono/destino e declara COBERTURA-PARCIAL não demonstrada em 01/10. (`app/docs/BACKLOG.md:849`.) | — |
+| HJ-012-U2 | **[nao verificado]**: o registro contrapõe ingestão ESTRUTURA à medição anterior como cobrança legítima, sem reconciliação demonstrada. (`app/docs/BACKLOG.md:1572`; `app/docs/RELATO.md:5603`.) | — |
+| HJ-005-U2 | **[nao verificado]**: `sem_periodo` é a resposta prevista quando falta alguma hora; isso não identifica a porta que originou a omissão. (`app/ponto/turnos.py:2632-2637`; `app/ponto/turnos.py:2646-2647`.) | — |
+| HJ-005-U4 | **[nao verificado]**: mesmo limite de U2; `sem_periodo` não comprova escritor defeituoso. (`app/ponto/turnos.py:2646-2647`.) | — |
+| BO-ADMIN-2710/1 | **[nao verificado]**: a causa histórica era cobertura lida sem período; o leitor atual possui os ramos de `sem_periodo` que classificam o cadastro. (`app/docs/RELATO.md:3980`; `app/ponto/supra_juiz.py:395-402`; `app/ponto/supra_juiz.py:453-455`.) | — |
+| BO-ADMIN-2710/8.1 | **[nao verificado]** como defeito atual: o escritor já fotografa o antes, distingue edição/criação e registra antes/depois; a view delega a trilha à porta. (`app/colaboradores/services/vinculo.py:187-188`; `app/colaboradores/services/vinculo.py:368-383`; `app/colaboradores/views.py:247-249`.) | — |
+
+Não elegíveis: cada uma das oito entradas carece de causa atual comprovada, pelos limites documentados nas respectivas linhas; demais critérios não classificados.
 
 ## 16/11 14:09 · sessao 34d827b27435 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO · censo · origem=Code
 
@@ -678,150 +762,4 @@ Execução dos testes, smoke, números efetivos de queries e confirmação Git d
 - Constante em número de consultas de calendário para `K>0`; CPU/memória/HTML crescem com `K`, pois há `2K` chamadas à fonte e um bloco por calendário (`app/colaboradores/views.py:304`, `app/templates/colaboradores/partials/painel_vinculo.html:204`).
 - **Número total medido por request: [nao verificado]**. Não confundir a constância relativa a `K` com custo total fixo: a agenda existente chama `eh_dia_trabalho` até 14 vezes e `marcos_do_dia` nos dias de trabalho, cujos caminhos consultam células e, no fallback, fotos (`app/colaboradores/views.py:287`, `app/colaboradores/views.py:289`, `app/colaboradores/views.py:292`, `app/escala/models.py:1092`, `app/escala/models.py:1122`, `app/escala/models.py:1286`).
 
-## 16/11 13:45 · sessao 8e6f7eb5845c · - · - · origem=Ronald (tmux)
-
-3. Caminhos de atualização:
-
-- **Trocar a caixa sem salvar:** o `onchange` mostra imediatamente o bloco do valor escolhido e esconde os demais. Portanto mostra a prévia do candidato, embora o vínculo persistido continue sendo o anterior até o POST; isso corresponde ao requisito “SELECIONADO”. (`app/templates/colaboradores/partials/painel_vinculo.html:195-207`; `app/colaboradores/views.py:230-239`)
-- **Salvar calendário explícito:** o POST chama a porta de escrita; a resposta HTMX só dispara toast, enquanto o formulário usa `hx-swap="none"`. A projeção selecionada permanece aquela calculada no GET. Sem alteração concorrente de definição ou virada de mês, ela continua representando o calendário escolhido; esses eventos concretos em produção são [nao verificado]. (`app/colaboradores/views.py:238-256`; `app/templates/colaboradores/partials/painel_vinculo.html:191-207`)
-- **Salvar vazio com padrão não nulo:** há divergência demonstrável pelo código. Vazio oculta todos os blocos, mas o POST transforma vazio em `ec.tipo_escala.folga_calendario_padrao` e grava esse calendário. Como a resposta não repõe o HTML, o admin continua vendo a opção vazia, sem projeção/link, embora o vínculo agora tenha calendário. Novo GET selecionará esse padrão e mostrará seu bloco. (`app/templates/colaboradores/partials/painel_vinculo.html:193-205`; `app/colaboradores/views.py:235-239`; `app/colaboradores/views.py:251-256`; `app/templates/colaboradores/partials/painel_vinculo.html:200`)
-- **Salvar vazio sem padrão:** fica sem calendário e sem bloco visível; nesse caso a seleção exibida corresponde ao valor persistido. (`app/colaboradores/views.py:235-239`; `app/templates/colaboradores/partials/painel_vinculo.html:196-205`)
-- **Sem escala ativa:** o GET ainda calcula projeções de todos os calendários, mas nenhum bloco é selecionado; o bloco do formulário aparece esmaecido, com “vincule a escala primeiro” e `pointer-events:none`. Não há `disabled` nos controles; bloqueio efetivo por teclado é [nao verificado]. Um POST nessa condição retorna 400 “sem vinculo de escala ativo”. (`app/colaboradores/views.py:268`; `app/colaboradores/views.py:301-305`; `app/templates/colaboradores/partials/painel_vinculo.html:184-211`; `app/colaboradores/views.py:226-229`)
-- **Calendário editado depois do GET:** os dias são uma fotografia no HTML, calculada naquele GET; alternar a caixa só alterna blocos existentes, sem consultar a fonte novamente. O editor grava pela porta e redireciona à lista; um novo GET do painel recalcula, enquanto um painel ainda aberto conserva o HTML anterior. Comportamento de voltar pelo histórico/cache do navegador é [nao verificado]. (`app/colaboradores/views.py:301-306`; `app/templates/colaboradores/partials/painel_vinculo.html:196`; `app/escala/views.py:354-361`; `app/escala/folgas.py:571-601`)
-- **Virada de mês com painel aberto:** os dois meses ficam aqueles calculados no GET; o `onchange` não avança meses nem recalcula datas. (`app/colaboradores/views.py:280`; `app/colaboradores/views.py:302-305`; `app/templates/colaboradores/partials/painel_vinculo.html:196`)
-
-4. Cascas e carregadores:
-
-- O painel é **fragmento AJAX**, sem `extends`; a view devolve diretamente esse partial. Não há render de uma casca no endpoint. (`app/templates/colaboradores/partials/painel_vinculo.html:1`; `app/colaboradores/views.py:306`)
-- O caminho direto confirmado é a página `vincular.html`, que estende `base.html`. A linha chama `abrirPainelVinculo`, que chama `carregarPainel`; este faz `fetch('/colaboradores/vincular/' + cid + '/painel/')`, injeta o HTML e executa `htmx.process(p)`. A URL parte da raiz do host, não do caminho atual. (`app/templates/colaboradores/vincular.html:1`; `app/templates/colaboradores/partials/vinculo_row.html:4`; `app/templates/colaboradores/vincular.html:136-161`)
-- A montagem de rotas confirma `/colaboradores/` + `vincular/<cid>/painel/`. (`app/config/urls.py:26`; `app/colaboradores/urls.py:12`)
-- Há também porta dinâmica: `PORTA_DO_TIPO` aponta escala/folga/sem_escala para `colaboradores:painel_vinculo`; `portas_da_linha` resolve a URL; o bloco “o que fazer” chama `window.abrirDrawer` com esse endereço. Esse bloco é incluído condicionalmente pelo painel do colaborador. (`app/folha/retrato_folha.py:1003-1006`; `app/folha/retrato_folha.py:1066-1075`; `app/templates/folha/_retrato_o_que_fazer.html:66-74`; `app/templates/colaboradores/partials/painel_colaborador.html:26`)
-- O carregador compartilhado `abrirDrawer` faz `fetch(url)`, injeta por `innerHTML` e processa HTMX. Ele existe nas duas cascas por include de `core/_drawer_generico.html`. Isso prova disponibilidade da infraestrutura nas duas raízes; não prova que uma sessão real de `base_app.html` ofereça a porta ou consiga passar pelas permissões. (`app/templates/core/_drawer_generico.html:11-33`; `app/templates/base.html:399`; `app/templates/base_app.html:154`; `app/colaboradores/views.py:264-265`)
-- O teste antigo de duas cascas verifica grafo/includes e presença da função, explicitamente sem renderizar uma página inteira. Render/click real do painel novo nas duas cascas: [nao verificado]. (`app/colaboradores/tests/test_retrato_no_drawer.py:259-277`)
-
-## 16/11 13:45 · sessao cb5f0c45d200 · - · - · origem=Ronald (tmux)
-
-5. No trecho novo, não há diálogo nativo, `title`, ícone/emoji ou ajuda explicativa; o JavaScript busca `data-folgas-cal` dentro de `this.form`, sem posição no DOM. Portanto não identifiquei violação nova de L7/L8/L10/L11 ou JS por posição nesse bloco. O `title` cru da agenda já está fora do diff. (app/templates/colaboradores/partials/painel_vinculo.html:195-209; app/templates/colaboradores/partials/painel_vinculo.html:226; app/docs/LEIS-UI.md:77-89; app/core/selo_js.py:3-7)
-
-O link respeita L4 e usa o mesmo juiz de permissão do destino: contexto chama `tem_acao('editar_escalas')`; `acao_required` também chama `tem_acao`, e o destino exige essa ação. (app/colaboradores/views.py:309; app/colaboradores/mixins.py:322-342; app/escala/views.py:314-316; app/docs/LEIS-UI.md:39-49)
-
-O selo novo não renderiza ambas as cascas nem prova o grafo delas: faz GET apenas do partial. Isso não satisfaz a conduta explícita de selo de front nas duas raízes. Smoke de clique do Ronald e RED/GREEN executados: [nao verificado]. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:78-83; CLAUDE.md:202-203; app/docs/CONDUTAS.md:50-68)
-
-6. O teste tem mordidas úteis, mas cobertura incompleta: [nao verificado]
-
-- **Fonte:** a sentinela não vazia precisa aparecer na saída e o dia antigo precisa desaparecer; isso detecta derivação própria ignorando o retorno da fonte. Entretanto não confere argumentos/quantidade das chamadas, separação por mês ou duplicação: `_dias` converte em conjunto e `_fonte` une os meses. Um código que trocasse os rótulos dos meses ou repetisse datas poderia continuar passando. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:32-42; app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:90-91; app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:143-150)
-- **Alternância:** confere o estado inicial e a presença de um `onchange` contendo `data-folgas-cal`; nunca executa o handler. Um handler com esse texto e comportamento quebrado pode passar. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:112-120)
-- **Sem calendário:** impede vacuidade pela ausência completa de blocos, pois exige blocos oferecidos e nenhum visível; não exige ausência literal de links no HTML, apenas blocos ocultos. A fixture possui escala ativa e tipo sem calendário padrão; não cobre vínculo sem ativa nem opção vazia resolvendo um padrão não nulo. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:52-75; app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:123-129)
-- **Sem ação:** preserva dias não vazios e exige ausência da URL; existe teste positivo da URL, então o conjunto não se sustenta só em ausência. É teste do contexto com juiz mockado, não teste de uma conta real sem permissão navegando ao destino. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:101-103; app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:131-140)
-- **Custo:** compara número de queries entre 2 e 7 calendários, mas não verifica status das duas respostas, presença de projeções ou aumento dos blocos. Pode passar em duas respostas iguais de erro/redirect sem projeção. Também não fixa teto absoluto nem prova tempo/memória constantes. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:153-167)
-- **Relógio:** a classe inteira congela 10/12/2026 às 15h; não há relógio solto nesses testes. A constante `HOJE` é declarada, mas a expectativa usa `MESES` e literais. Resultado efetivo da execução: [nao verificado]. (app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:30-31; app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:45; app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:90-108)
-
-8. Neste diff não aparece segundo juiz de datas, segundo escritor persistente ou nova leitura de relógio: a view reutiliza `hoje` já lido na borda e chama a fonte única, ordenando o retorno; o template apenas formata datas. Há lacuna real na força do selo de front/custo descrita acima; evidência histórica de RED e smoke é [nao verificado]. (app/colaboradores/views.py:280; app/colaboradores/views.py:300-309; app/templates/colaboradores/partials/painel_vinculo.html:204-207; app/escala/folgas.py:43-56; CLAUDE.md:193-194; CLAUDE.md:202-203)
-
-## 16/11 13:43 · sessao 8c89640a4b0e · BUG-PAR-O-PAR · construtor · origem=Code
-
-**Entrega incompleta: faltam os arrays U60/U103 do anexo `u163.py`.** O JSON não foi inventado; seu teste termina com `FileNotFoundError`. [RELATO.md:5](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:5) [nao verificado]
-
-A cura escrita limita DXG aos PKs congelados, consulta K6 antes das escritas e usa a célula dona na guarda. [materializacao.py:703](/home/ronald/wt-codex-bug-par-o-par-131207/app/chamados/services/materializacao.py:703), [validacao.py:289](/home/ronald/wt-codex-bug-par-o-par-131207/app/chamados/services/validacao.py:289), [materializacao.py:402](/home/ronald/wt-codex-bug-par-o-par-131207/app/chamados/services/materializacao.py:402)
-
-Arquivos tocados, relativos a `app/`:
-
-```text
-chamados/services/universo_bug_par.py
-chamados/services/materializacao.py
-chamados/services/validacao.py
-chamados/services/fio.py
-chamados/management/commands/bug_par_103.py
-chamados/templatetags/chamados_tags.py
-templates/chamados/partials/_pergunta_card.html
-templates/chamados/partials/modal_fio.html
-chamados/tests/test_universo_bug_par.py
-chamados/tests/test_bug_par_volta.py
-chamados/tests/test_bug_par_103.py
-chamados/tests/test_bug_par_sem_banco.py
-chamados/tests/test_bug_par_projetado.py
-chamados/tests/test_s139.py
-chamados/tests/bug_par_mutantes.py
-core/tests/test_medida_turno_do_par.py
-docs/JUIZES.md
-docs/RELATO.md
-```
-
-A entrega detalhada está registrada com referências:
-
-- **Cada RED, `arquivo::teste`, afirmação e mutante:** [RELATO.md:21](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:21). [nao verificado]
-- **Comando de cada mutante:** [RELATO.md:46](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:46).
-- **Quem escreve e quem lê cada campo/função:** [RELATO.md:64](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:64).
-- **Lookup reconciliado:** [JUIZES.md:38](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/JUIZES.md:38).
-
-Medição local, sem certificação: **8 testes OK, 15 mutantes mortos por asserção e 35 testes da catraca OK**. Integração Django, vizinhos O261/O317, dez mutantes de integração e reprodução de 84/19+75 permanecem **[nao verificado]**. [RELATO.md:48](/home/ronald/wt-codex-bug-par-o-par-131207/app/docs/RELATO.md:48) [nao verificado]
-
-Comandos para a sessão, após fornecer o JSON exato:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_universo_bug_par chamados.tests.test_bug_par_sem_banco chamados.tests.test_bug_par_volta chamados.tests.test_bug_par_103 chamados.tests.test_bug_par_projetado chamados.tests.test_s139 --settings=config.settings.ci
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test chamados.tests.test_o261_vespera_nao_absolve chamados.tests.test_o317_passivo_pela_porta chamados.tests.test_o261_paridade_respeita_a_lampada core.tests.test_medida_turno_do_par chamados.tests.test_e2_tarefa_do_dia chamados.tests.test_e3_portas_tarefa --settings=config.settings.ci
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.bug_par_mutantes --django --mutante todos
-```
-
-LEI-AKITA: origem=universo congelado pendente do anexo + portão da materialização, testemunha=estado_aplicacao_pergunta e competencia_entregue, RED=blocos (a)-(c) + fora163 + 5644, quem-mais-le=docs/RELATO.md:64, juizes novos=0, padrao=Single Writer Principle.
-
-## 16/11 13:25 · sessao 77f8120193e8 · UI-VINCULO-MOSTRA-O-CALENDARIO · leitura · origem=Code
-
-**(a) As duas leituras existem no código:** a foto deve chegar à célula pela geração/regeneração; grade e precedência também leem `FolgaDia` por cima do previsto, sem alterar `CelulaDia.trabalha`. Já `EC.eh_dia_trabalho` devolve o valor da célula existente. Portanto, gravar a foto não garante, por si só, que todos esses leitores responderão igual. (`app/escala/folgas.py:215-218`; `app/escala/utils.py:1147-1153`; `app/ponto/precedencia.py:356-387`; `app/escala/models.py:1087-1096`.)
-
-**Quem escreve `FolgaDia`.** O módulo autorizado é `app/escala/folgas.py`. (`app/core/portas.py:470-473`.)
-
-| Porta | Escrita e entradas |
-|---|---|
-| `gerar_foto_folgas` | Apaga a foto de calendário do mês, preserva manuais, recria as datas e chama a relavratura na mesma transação. Entradas: vínculo individual, aplicação ao tipo, herança do padrão e comando `lavrar_foto_folgas --apply`. (`app/escala/folgas.py:150-218`; `app/colaboradores/views.py:239-246`; `app/escala/views.py:408-412`; `app/colaboradores/services/vinculo.py:151-166`; `app/escala/management/commands/lavrar_foto_folgas.py:159-170`.) |
-| `sincronizar_foto_futura_do_calendario` | Usa o mesmo escritor com recorte de datas futuras e depois regenera futuras. É chamada ao salvar o calendário ou mudar o calendário do vínculo. (`app/escala/folgas.py:597-642`; `app/colaboradores/services/vinculo.py:459-465`.) |
-| `lancar_folga` | `get_or_create` manual seguido de relavratura. Entradas: toggle do Plano e declaração pela supervisão. (`app/escala/folgas.py:329-339`; `app/escala/views_plano_folgas.py:124-132`; `app/ponto/services/declarar_dia.py:179-193`.) |
-| `alterar_folga` | `_foto_do_dia` apaga, cria ou altera `tipo`; depois relavra. Entrada: toggle do Plano. (`app/escala/folgas.py:343-382`; `app/escala/views_plano_folgas.py:134-137`.) |
-| `aplicar_folgas_em_lote` | Usa `_foto_do_dia`, recusa competência anterior à corrente e relavra o intervalo gravado. Entrada: Plano em lote. (`app/escala/folgas.py:401-421`; `app/escala/views_plano_folgas.py:163-185`.) |
-| `reparentar_folga` | Muda o vínculo da folga manual e chama relavratura; calendário é recusado. Na competência passada usa `so_rejulgar`, preservando o DNA. Entradas: signal de criação/vigência e comando de reparentamento. (`app/escala/folgas.py:484-525`; `app/escala/signals.py:185-207`; `app/escala/management/commands/reparentar_folgas.py:22-34`.) |
-
-Há ainda efeitos referenciais declarados: excluir o vínculo apaga suas folgas por `CASCADE`; excluir o calendário deixa `calendario_origem` nulo por `SET_NULL`. (`app/escala/models.py:1585-1591`.)
-
-**Quem escreve `CelulaDia.trabalha`.**
-
-- **Geração:** `gerar_celulas_periodo` calcula `valor = ec.eh_dia_trabalho_calculado(d)` e cria a célula com esse valor e DNA. A data presente na foto do próprio vínculo resulta em `False`. Célula existente editada é preservada; passado existente só pode receber DNA ausente; hoje/futuro existente é pulado nessa função. (`app/ponto/portas/celula.py:911-935`; `app/escala/models.py:1280-1288`; `app/escala/models.py:1309-1317`.)
-- **Command `gerar_celulas`:** antes da geração, possui suplemento que regenera células existentes de **hoje**. Isso não constitui uma atualização geral das futuras existentes. (`app/ponto/management/commands/gerar_celulas.py:303-325`; `app/ponto/management/commands/gerar_celulas.py:345-350`.)
-- **Regeneração:** recalcula pela foto/cadastro; cria ausentes e reescreve existentes divergentes somente com `origem='gerada'`. Guarda DNA anterior, instante e incrementa `regeneracoes`. Também pode desligar células fora da vigência. (`app/ponto/portas/celula.py:229-311`.)
-- **Edição humana:** `editar_dia` escreve `trabalha`, DNA, geradora, `origem='editada'`, autor e instante; não incrementa os campos de regeneração. Troca de plantão delega a essa edição. (`app/ponto/portas/celula.py:575-580`; `app/ponto/portas/celula.py:637-647`; `app/ponto/portas/celula.py:670-715`.)
-- **Reversão:** `reverter_regeneracao_dia` restaura `trabalha` pelo DNA anterior e incrementa os carimbos de regeneração. (`app/ponto/portas/celula.py:817-837`.)
-
-**Quem lê cada fonte.**
-
-| Consumidor | Fonte efetivamente lida |
-|---|---|
-| `EC.eh_dia_trabalho` | Existindo célula, retorna `cel.trabalha`; somente sem célula chama o cálculo que consulta a foto. (`app/escala/models.py:1087-1096`.) |
-| `EC.marcos_do_dia` | Lê `dna.marcos`; sem marcos utilizáveis, retorna os marcos do template. Não aplica a foto nessa leitura. (`app/escala/models.py:1117-1133`.) |
-| Grade/espelho | O overlay consulta `FolgaDia` pelo juiz, põe `tipo_dia='folga'`, limpa as colunas e órfãs **do dicionário da grade**. O espelho obtém seu flag `folga` desse `tipo_dia`. (`app/escala/utils.py:1140-1153`; `app/escala/utils.py:1844`; `app/ponto/services/espelho.py:673-679`; `app/ponto/services/espelho.py:764-771`.) |
-| Precedência | Usa `trabalha` como previsto, mas inclui folga lançada válida mesmo com previsto `True`; folga vence trabalho na ordenação. Calendário vale apenas para o vínculo do dia; manual vale para a pessoa. (`app/ponto/precedencia.py:46`; `app/ponto/precedencia.py:235-239`; `app/ponto/precedencia.py:347-397`.) |
-| Motor | No caminho com vínculo não intermitente, classifica folga trabalhada pela resposta `False` de `EC.eh_dia_trabalho`; os marcos vêm de `EC.marcos_do_dia`, com fallback ao template. (`app/ponto/motor_calculo_v2.py:2445-2469`; `app/ponto/motor_calculo_v2.py:2290-2291`; `app/ponto/motor_calculo_v2.py:1532-1540`.) |
-| Folha | O fechamento monta datas previstas por `EC.eh_dia_trabalho`, alimenta o motor com células e grava os resultados, incluindo FT. O TXT lê os eventos do fechamento. (`app/ponto/services/fechamento.py:724-755`; `app/ponto/services/fechamento.py:918-924`; `app/ponto/services/fechamento.py:965-966`; `app/folha/export.py:439-446`; `app/folha/export.py:725-739`.) |
-
-O dinheiro mostrado no espelho segue outro percurso que seu flag visual de folga: pago/rubricas do dia leem `DiaPago`; totais da competência passam por `folha_manda` e `fechamento_lido`. (`app/ponto/services/espelho.py:805-813`; `app/ponto/services/espelho.py:1283-1284`; `app/relatorios/cartao_pela_celula.py:69-76`; `app/ponto/services/fechamento.py:1759-1761`.)
-
-**Caso das cinco folgas de dezembro.** Para célula já existente, o percurso previsto é:
-
-`gerar_foto_folgas → relavrar_celulas_da_foto → regenerar_futuras_do_cadastro → regenerar_celulas_vinculo → trabalha=False`.
-
-As chamadas estão em `app/escala/folgas.py:215-218`, `app/escala/folgas.py:297-299` e `app/ponto/services/cadastro_futuro.py:43-45`; o cálculo da foto e a escrita estão em `app/escala/models.py:1309-1317` e `app/ponto/portas/celula.py:289-311`.
-
-**O limite concreto encontrado:** a foto solicitada é mensal, mas a relavratura futura seleciona somente células geradas já existentes dentro de `_janela_default(hoje)`, a partir de amanhã, respeitando o vínculo do dia. Essa janela é a união das competências **correntes** das empresas ativas. Não é o mês inteiro pedido a `gerar_foto_folgas`. (`app/escala/folgas.py:180-197`; `app/ponto/services/cadastro_futuro.py:26-45`; `app/ponto/management/commands/gerar_celulas.py:290-300`.)
-
-Logo, datas fora dessa janela não chegam à regeneração por esse percurso. **Que esse filtro tenha excluído precisamente as cinco datas relatadas: `[nao verificado]`.** Data do ato, cortes, origem/geradora das células e bloqueios do caso: `[nao verificado]`. `regeneracoes=0` também não prova ausência de chamada: o incremento ocorre na reescrita divergente, após seleção e guardas. (`app/ponto/portas/celula.py:284-311`.)
-
-**(b) Sim: `gerar_foto_folgas` no mês corrente grava/apaga `FolgaDia` anterior a hoje.** A seleção é pelo mês inteiro; `delete` e `bulk_create` não têm corte por hoje. As manuais são preservadas. (`app/escala/folgas.py:180-197`.)
-
-**A célula passada também pode ser tocada:** a função chama relavratura desde o primeiro dia do mês; o ramo passado encaminha `desde..hoje` à regeneração formal. Essa é precisamente a exceção à irretroatividade prevista na seção 4, sujeita às guardas de vigência, lavra e origem gerada. (`app/escala/folgas.py:212-218`; `app/escala/folgas.py:290-296`; `CLAUDE.md:149-156`; `app/ponto/portas/celula.py:147-162`; `app/ponto/portas/celula.py:284-311`.)
-
-A sincronização **futura** preserva passado, mas as views de vincular/aplicar calendário também chamam depois a geração mensal sem esse recorte. Portanto, a proteção da primeira chamada não protege a segunda. (`app/escala/folgas.py:621-639`; `app/colaboradores/views.py:243-246`; `app/escala/views.py:411-412`.)
-
-**DONO: NAO SEI** — o juiz exige insumos além dos três valores relatados; esses insumos do caso estão `[nao verificado]`. Decisão: `app/ponto/management/commands/e6_oraculo.py:98-110`.
-
-_6045 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6049 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
