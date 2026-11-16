@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 20:30:58.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (174.3 MB). Acoes na janela: **1192**.
+**Medido em 16/11/2026 20:36:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (174.3 MB). Acoes na janela: **1196**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:31:15 | Bash | Fix ESPERANDO pid and test the hook | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old='ESPERANDO: suite.sh \| pid=1774859\n'; assert s.count(old)==1 s=s.replace(old,'ESPERANDO: suite.sh \| pid=1774864\n'); open(p,'w').write(s) EOF python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md >/dev/null; echo rc=$?; echo '{}' \| python3 bin/hook_stop_fila1.py; echo hook_rc=$?` |
+| 20:31:11 | Bash | Check why landing suite pid is gone | `cd /home/ronald/saas-hasner; cat logs/UI-VINCULO-CALENDARIO/suite_pouso_c34.fim 2>&1; tail -5 logs/UI-VINCULO-CALENDARIO/suite_pouso_c34.log; ps -eo pid,args \| /bin/grep "[w]t-pouso-uvc" \| cut -c1-120` |
+| 20:31:09 | Bash | Check pid and hook ESPERANDO rule | `cd /home/ronald/saas-hasner; ps -o pid,args -p 1774859 \| cut -c1-120; /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
+| 20:31:01 | Bash | Wait for UI-VINCULO suite or c4c delivery | `cd /home/ronald/saas-hasner; for i in $(seq 1 240); do [ -e logs/UI-VINCULO-CALENDARIO/suite_pouso_c34.fim ] && { echo FIM uvc; exit 0; }; [ -e logs/BUG-PAR-O-PAR/volta/c4/entrega_c4c.md ] && { echo FIM c4c; exit 0; }; /usr/bin/sleep 15; done; echo timeout` |
 | 20:30:53 | Bash | Launch UI-VINCULO landing suite and record | `cd /home/ronald/saas-hasner; D=logs/UI-VINCULO-CALENDARIO; cat > $D/lanca_pouso_c34.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner bash bin/suite.sh --dir /home/ronald/wt-pouso-uvc-203046 --espera 3600 --motivo "pouso UI-VINCULO-MOSTRA-O-CALENDARIO-c34" > logs/UI-VINCULO-CALENDARIO/suite_pouso_c34.log 2>&1; echo "rc=$?" > logs/UI-VINCULO-CALENDARIO/suite_pouso_c34.fim EOF setsid bash $D/lanca_ ...` |
 | 20:30:46 | Bash | Spot-check projection and build landing copy | `cd /home/ronald/saas-hasner; sed -n 298,306p app/colaboradores/views.py; T=$(git merge-tree --write-tree HEAD d4b66e793) && echo tree=$T; W=/home/ronald/wt-pouso-uvc-$(date +%H%M%S); mkdir $W && git archive $T \| tar -x -C $W && echo $W > logs/UI-VINCULO-CALENDARIO/copia_pouso.txt; cat logs/UI-VINCULO-CALENDARIO/copia_pouso.txt; cat logs/UI-EDITOR-CAL-REPETIR/lanca_pouso.sh` |
 | 20:30:43 | Bash | Read verifier ressalvas | `cd /home/ronald/saas-hasner; sed -n 1,40p logs/UI-VINCULO-CALENDARIO/verif_c34_v1.r \| cut -c1-900` |
