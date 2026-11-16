@@ -1,7 +1,24 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 03:25** · publicado em **16/11/2026 03:27** (UTC-3)
+> Ultima resposta processada: **16/11/2026 08:12** · publicado em **16/11/2026 08:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 08:12 · sessao 77d4b90b75c4 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+A saída integral da **ESPELHO-VERDADE-FECHO V0 r2**, com os 55 dias ESTRUTURA, não está disponível no material recebido; não consigo repassá-la sem inventar linhas. [nao verificado]
+
+O trecho fornecido contém registros `DET|...` e termina em `DET|col252|2026-11-10|BATIDA|...`, sem apresentar a linha `TOTAL` nem os resultados `OK`/`ERRO` da r2. [nao verificado]
+
+| Conferência solicitada | Resultado |
+|---|---|
+| `TOTAL` tem `dias=55`? | [nao verificado] |
+| `ok+erro=55`? | [nao verificado] |
+| Quantos `ERRO` por classe? | [nao verificado] |
+| Há marcador `INCOMPLETO` na saída integral? | [nao verificado] |
+
+Os campos `"estado":"nao lido: grava"` e `"[nao verificado]"` dos registros recebidos não permitem determinar o resultado da r2. [nao verificado]
+
+Falta fornecer a saída da r2 até seu encerramento, incluindo os 55 resultados, os erros e a linha `TOTAL`. [nao verificado]
 
 ## 16/11 03:25 · sessao 9f08f9b53053 · ESPELHO-VERDADE-FECHO-V0 · leitura · origem=Code
 
@@ -1104,39 +1121,4 @@ Exemplo condicional dessa ressalva: empresa antiga corte 28, afastamento aberto 
 
 - **Checklist:** a guarda usa o mesmo juiz, sem predicado novo (`app/colaboradores/services/colaborador.py:62`, `:94`; `app/colaboradores/services/desligamento.py:23`). A trava do Colaborador precede `criar_ausencia`, e o `gravar` repete a mesma trava (`app/ponto/views.py:2465`, `:2485`; `app/colaboradores/services/colaborador.py:90`, `:133`); a ordem global está implementada em `app/chamados/models.py:2744`, `:2753`, `:2766`, `:2770`. A escrita de situação passa pela porta, mas a derivação por tipo continua paralela à autoridade de cobertura (`app/ponto/views.py:2461`, `:2485`; `app/ponto/turnos.py:2737`). Relógios internos preexistentes continuam em `app/ponto/services/ausencia.py:398`, `:408`, `:1216` e `app/ponto/models.py:883`; a cura não acrescenta leitura de relógio (`app/ponto/views.py:2462`). Cron instalado e contagens citadas nos comentários: **[não verificado]**.
 
-## 16/11 02:36 · sessao 370f0f9ef572 · - · - · origem=Ronald (tmux)
-
-Censo estático, somente leitura; execução e produção [não verificado].
-
-| Chamador/encadeamento com `atomic` externo | Escrita/falha depois da chamada | Anexo órfão neste ato? |
-|---|---|---|
-| `regularizar_turno_orfao`: `app/ponto/services/regularizacao.py:89` → `garantir_ausencia`:118 | `ch.analisar`:137, nota:139, auditoria:150 | Não escreve arquivo: chamada omite `documento` em :118–122; padrão `None` em `app/ponto/services/ausencia.py:180`. |
-| `marcar_abandono_provisorio.handle`: `app/ponto/management/commands/marcar_abandono_provisorio.py:22` → `garantir_ausencia`:76 | Próximas iterações:70; saída:88; rollback explícito do dry run:98 | Não escreve arquivo: argumentos :76–84 omitem documento; padrão em `app/ponto/services/ausencia.py:180`. |
-| `veredito_celula`: `app/ponto/services/veredito_celula.py:224` → `criar_ausencia`:337 | Fechar fio:347, lavrar:352, auditoria:356 | Não escreve arquivo: argumentos :337–339 omitem documento. |
-| `_materializar_uma`: `app/chamados/services/materializacao.py:1226` → ramo escolha:1232 → `_materializar_resposta_escolha`:1084 → `_declarar_ausencia_de_pergunta` → `criar_ausencia`:491 | Reconciliar:1085; carimbar:1283; recusa levanta:1285 | Não escreve arquivo: argumentos :491–499 omitem documento. |
-| Espelho de férias: `app/ferias/models.py:449` → `_sync_ausencia`:394 → `espelhar_ferias` → `criar_ausencia`: `app/ponto/services/ausencia.py:1275` | Próximos dias:1270, exclusões:1287, pauta:1290 | Não escreve arquivo: argumentos :1275–1280 omitem documento. |
-
-`garantir_ausencia` delega para `criar_ausencia` em `app/ponto/services/ausencia.py:523`; este pode delegar para `_reabrir` em :350. Nos chamadores acima, a reabertura recebe `documento=None`; a escrita de arquivo de `_reabrir` depende de `if documento` em :1191. Logo podem desfazer a reabertura, mas não deixam **upload novo** órfão nesses atos (`app/ponto/services/ausencia.py:350`, :1191–1200).
-
-Os principais `atomic` externos transitivos do espelho de férias são:
-
-- `registrar_gozo_historico`: `app/ferias/services.py:519`; `ag.save`:547; escrita do período depois:551.
-- `executar_agendamento`: `app/ferias/services.py:567`; criação:581; escrita do período depois:587.
-- `agendar_ferias_com_abono`: `app/ferias/services.py:297`; execução:306; escrita do abono depois:316.
-- `_trocar_janela`: `app/ferias/services.py:706`; `ag.save`:729; escrita do período depois:731.
-- `aprovar_solicitacao`: `app/ferias/services.py:755` e :774; `ag.save`:786; escrita do período depois:789.
-- Correção administrativa: `app/ferias/views.py:524`; correção:531; trilha depois:533.
-- `alinhar_status_por_data`: `app/ferias/services.py:951`; save que pode reconstruir ausências faltantes:956; o espelho ainda executa seu laço e exclusões após cada criação (`app/ponto/services/ausencia.py:1270`, :1284–1290).
-
-Fora desse formato:
-
-- API cria com documento em `app/api/views.py:1812–1819`, anexa no reenvio em :1845 e recebe anexo em :3117; esses corpos não abrem `atomic` externo envolvendo essas chamadas.
-- PWA cria com documento em `app/ponto/views.py:2603–2609`; anexação administrativa em :2159; reversão em :2651–2652; esses corpos também não abrem `atomic` externo envolvendo as chamadas.
-- `_materializar_ausencia_de_resposta` chama `criar_ausencia` **sem documento** em `app/chamados/services/materializacao.py:527–535`. Seu chamador é `app/chamados/services/disputa_emissao.py:1555`, depois de sair do `atomic` :1517–1526. O `atomic` próprio das absorções começa posteriormente, em `app/chamados/services/materializacao.py:563`.
-- O copiloto chama sua porta em `app/core/views_ia.py:985`; ela chama `criar_ausencia` sem documento em `app/ponto/services/checar_ausencia.py:46–48`.
-
-A referência a `materializar_pergunta_confirmada`, `_materializar_nota` ou documento-string vindo do chamado não corresponde aos trechos desta cópia: a chamada efetiva de :527–535 não passa documento (`app/chamados/services/materializacao.py:527`). A existência desses outros caminhos nesta versão fica [não verificado].
-
-**Resultado deste censo:** os outros chamadores identificados que efetivamente envolvem a chamada em `atomic` externo omitem o documento; não reproduzem o órfão de upload novo do achado original (`app/ponto/services/regularizacao.py:118`, `app/ponto/management/commands/marcar_abandono_provisorio.py:76`, `app/ponto/services/veredito_celula.py:337`, `app/chamados/services/materializacao.py:491`, `app/ponto/services/ausencia.py:1275`).
-
-_5919 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5920 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
