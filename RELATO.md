@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=1027764
+ESPERANDO: suite.sh | pid=1035248
+ESTADO 15:2x COMPLEMENTO-1 ESPINHA-ABRE-A-VOLTA-BUG-PAR registrado e repassado ao construtor c3 (resposta antecipada do F1, matriz como anexo do verificador c3 e do opus final, 10 mutantes de integracao com --django antes do opus); brief c3 inalterado, c3 devolvida nao abre c4. PROVA: ../logs/AVAIS-1515/complemento1_espinha_abre_volta_bug_par_1611.txt
 ESTADO 15:2x SMOKE-ATESTADO item 1 O19 lado APP FECHADA SUPERADA: os 3 POSTs (14:59:45, 15:01:22, 15:03:15) chegaram ao saas_ui (/api/ausencias/ e da casca UI) com 200, ua okhttp; o 1o tem corpo 2.298.887 B; prova de 1 aparelho, modelo e versao nao informados. PROVA: logs/BO-ATESTADO-ANDROID/reenvio_silencioso_1611.md + app/logs/ponto.log:7240-7241
 ESTADO 15:2x SMOKE-ATESTADO item 2 REENVIO-SILENCIOSO (complemento do BO-ATESTADO): (a) duplicidade tipo+data devolve 200 {"status":"ja_recebido","id":N} sem mensagem (api/views.py:1840-1846, ponto/services/ausencia.py:384-390); (b) o arquivo novo e DESCARTADO sem gravar nem trilha, porque a ausencia ja tinha documento (api/views.py:1843); em media/ausencias so o arquivo de 2.297.866 B, nenhum de 3.837.826 B; (c) nao verificado: repo do app fora de alcance. Construcao so com aval novo. PROVA: logs/BO-ATESTADO-ANDROID/reenvio_silencioso_1611.md
 ESTADO 15:2x SMOKE-ATESTADO item 3: #5618 e o proximo atestado de teste ficam para Ronald cancelar pela tela; nada por shell nem pelo Code. PROVA: logs/AVAIS-1515/smoke_atestado_fernando_1611.txt
