@@ -1,7 +1,209 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 00:50** · publicado em **16/11/2026 00:50** (UTC-3)
+> Ultima resposta processada: **16/11/2026 00:54** · publicado em **16/11/2026 00:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 00:54 · sessao bf1dd93cfcb9 · RESPOSTAS-BO-1611 · censo · origem=Code
+
+**(A) Obra → casos ligados**
+
+**Há 2 IDs do p0 com ligação recuperável; fechamento atual em prod: [nao verificado].** A ligação de BO-0611/05 alcança um complemento da classe, sem certificar o encerramento da queixa de GPS. (app/docs/RELATO.md:343; app/docs/BACKLOG.md:2074; app/docs/BACKLOG.md:2083; app/docs/RELATO.md:1929)
+
+| Obra | Caso e linha que liga |
+|---|---|
+| E3 — `90f3fa66b` | **Não ligado: [nao verificado].** A grade publica “2” sem individualizar os casos. BO-1311/04 está expressamente destinado à E4B, com “NAO se cura na E3”. (app/docs/GRADE-MESTRA.md:119; app/docs/BACKLOG.md:2010) |
+| HJ-091 — `8376da7aa` | **HJ-091** → HJ-091-LISTA, explicitamente escrito como NO AR. O registro do pouso documenta preservação das rejeitadas e uma lista de 60 para o DP. (app/docs/RELATO.md:343; app/docs/BACKLOG.md:750; app/docs/RELATO.md:483) |
+| BATIDA-DEDUP-RETRATADA — `b6d268dfd` | **BO-0611/05**, pela ponte exata de sítio: o complemento nomeia a janela de duplicidade em `triagem_batida.py:662`; a obra nomeia esse mesmo sítio. É ligação ao complemento, não prova de fechamento integral do item. (app/docs/BACKLOG.md:2074; app/docs/BACKLOG.md:2083) |
+| CONTRATO-DE-ENTRADA-DO-FIO — `77dfa94fa` | **Não ligado ao p0: [nao verificado].** O caso nomeado é HJ-095, ausente do rol fornecido; a indicação “1” do roteiro não individualiza uma ficha. (app/docs/BACKLOG.md:2224; app/docs/GRADE-MESTRA.md:688; p0_universo.r, anexo, seção B) |
+| TELA-DIZ-O-QUE-O-SERVIDOR-DISSE — `fac43f42a` | **Não ligado: [nao verificado].** O registro identifica um laudo de 15/11. A possível ponte de BO05 por `pwa.js:158` fica fora do aval dessa obra. (app/docs/BACKLOG.md:1939; app/docs/BACKLOG.md:2074; app/docs/BACKLOG.md:2029) |
+| HE-REVOGADA-NA-PORTA — `271ecba2e` | **Não ligado: [nao verificado].** Os registros descrevem portas e competência, sem individualizar caso do p0. (app/docs/RELATO.md:225; app/docs/BACKLOG.md:1951) |
+| BUG-ENC-CELULAS-FORMA — `7825fec5b` | **Não ligado: [nao verificado].** A linha descreve a forma de `celulas`; o nominal do impacto é col174, 25/10, ligado a outra obra. (app/docs/BACKLOG.md:988; app/docs/RELATO.md:33; app/docs/BACKLOG.md:1759) |
+
+A atribuição escrita das fontes é esta:
+
+| Fonte | Atribuição comprovada |
+|---|---|
+| BO-0611 | Mauricio como destinatário: “texto ao Mauricio por item”. (app/docs/PROMPTS.md:1914) |
+| BO-1311-ROTEIRO | Denominação **BO-[nome]-1311-ROTEIRO**; autoria do relato, além desse rótulo: **[nao verificado]**. (app/docs/BACKLOG.md:795) |
+| HJ | Fernando: “56 HJ do Fernando → unidades pessoa+dia”. (app/docs/BACKLOG.md:1883) |
+| BO-ADMIN-2710 | Há associação explícita de itens a BO-[nome]; atribuição escrita da fonte inteira: **[nao verificado]**. (app/docs/BACKLOG.md:833; app/docs/BACKLOG.md:835; app/docs/BACKLOG.md:841) |
+| BO2910-ESTRUTURA | Identificada como triagem BO-ADMIN-2910; atribuição a Mauricio ou Fernando: **[nao verificado]**. (app/docs/BACKLOG.md:1116) |
+
+**R3 (se pousar)**
+
+Casos individualizados do p0 que a c17 fecharia: **[nao verificado]**. O escopo publicado reúne LU-01..07 e achados retirados do pouso da E3; o predesenho trata do universo dos retratos, alarme `cego`, C5 e relógio. Isso não fornece uma ligação individual de fechamento aos casos do p0. **Fora do total.** (app/docs/BACKLOG.md:770; app/docs/RELATO.md:61)
+
+**(B) Conferência dos casos ligados**
+
+| Caso; pessoa registrada; dia/competência | Perguntar a quem e o quê | Juiz real; esperado para FECHADO | O que o admin lê |
+|---|---|---|---|
+| **BO-0611/05 — col456**. Identificação: app/docs/RELATO.md:1929. Dia/competência: **[nao verificado]**. | Ao admin responsável pelo relato: identificar o dia e instante da tentativa, distinguindo a queixa de GPS do complemento de duplicidade. Responsável nominal: **[nao verificado]**. A V2 registra barreira GPS; o complemento registra deduplicação. (app/docs/RELATO.md:1929; app/docs/BACKLOG.md:2074) | A deduplicação consulta **`ponto.turnos.batidas_apuraveis`**, leitura em app/ponto/turnos.py:2868 e app/ponto/turnos.py:2888. Registro dessa função em JUIZES/core: **[nao verificado]**. Valor suficiente para FECHADO: **[nao verificado]**. **Não chamar `registrar_batida`**: cria batida e dispara fechamento. (app/ponto/registro_batida.py:152; app/ponto/registro_batida.py:156; app/ponto/registro_batida.py:158) | O DP lê pendências offline na view e o template apresenta o resultado de `tem_gps`, inclusive “Sem GPS”. Isso mostra a situação das marcações existentes, sem comprovar uma tentativa sem dia identificado. (app/ponto/views.py:437; app/ponto/views.py:444; app/templates/ponto/batidas_offline_pendentes.html:96) |
+| **HJ-091 — col127 — 02/10/2026**, agendamento 114. Identificação e dia: app/docs/RELATO.md:749. Competência: **[nao verificado]**. | Ao **DP**: conferir o dia de agendamento sem ausência aprovada e decidir o passivo pela tela. O passivo é destinado à lista do DP. (app/docs/RELATO.md:749; app/ferias/services.py:136) | **`ponto.turnos.ausencia_cobre(..., para='folha')`**, registrado em app/docs/JUIZES.md:52; implementação em app/ponto/turnos.py:2550. Retorna ausência aprovada ou `None`. Valor suficiente para fechar este passivo: **[nao verificado]**; cobertura isolada não certifica a origem. O contador específico trata separadamente origem e dia sem ausência. (app/ponto/turnos.py:2528; app/ferias/services.py:135) | A view lê **`origem_de_ferias`**, que entrega agendamento, período e dia consultado; o template mostra esses dados e o caminho da Gestão de Férias. (app/ponto/views.py:2093; app/ponto/services/ausencia.py:101; app/templates/ponto/partials/painel_ausencia.html:135) |
+| **HJ-091 — col344 — 05, 06 e 07/11/2026**, agendamento 103. Identificação/dias: app/docs/RELATO.md:489. Competência 11 aberta naquele registro. (app/docs/RELATO.md:489) | Ao **DP**: conferir a origem 103 das três rejeitadas, a preservação do abono 5592 e a ausência de novas férias aprovadas que contornem os vetos. Ao **Fernando**, homologar o caso; o registro reserva a ele o encerramento. (app/docs/RELATO.md:483; app/docs/RELATO.md:489; app/docs/RELATO.md:8919) | Mesmo juiz de cobertura: **`ponto.turnos.ausencia_cobre`**. Esperado estrutural documentado: rejeitadas preservadas com origem 103, abono 5592 intacto e sem novas férias aprovadas contornando os vetos. **Um juiz registrado cuja resposta certifique esse conjunto: [nao verificado].** (app/docs/JUIZES.md:52; app/docs/RELATO.md:483; app/docs/RELATO.md:489) | Mesmo painel de origem. A edição genérica some para férias derivadas; o painel encaminha à Gestão de Férias. (app/templates/ponto/partials/painel_ausencia.html:131; app/templates/ponto/partials/painel_ausencia.html:140; app/templates/ponto/partials/painel_ausencia.html:145) |
+
+O contador **`ferias.services.ferias_espelho_x_agendamento`** é explicitamente somente leitura, com esperado zero nos dois sentidos; seu registro em JUIZES/core é **[nao verificado]**. Além disso, o pouso mantém passivo para decisão do DP. Portanto, não o substituo por um juiz suficiente para declarar o caso inteiro FECHADO. (app/ferias/services.py:135; app/ferias/services.py:143; app/docs/RELATO.md:483)
+
+**(C) Universo não ligado às sete obras — contagem por fonte**
+
+Contagem sobre as **68 linhas individualizadas do p0 fornecido**, descontando HJ-091 e BO-0611/05. O universo integral continua **[nao verificado]**: a ingestão declara 80 unidades e remete o mapa individual ao arquivo privado. (p0_universo.r, anexo, seções B–C; app/docs/RELATO.md:8907; app/docs/RELATO.md:8919)
+
+| Fonte | Não ligados | Referência |
+|---|---:|---|
+| BACKLOG-HJ, por raiz | 10 | p0_universo.r, seção B; ligação descontada em app/docs/RELATO.md:343 |
+| HJ-INGESTAO, IDs recuperáveis | 17 | p0_universo.r, seção B; app/docs/RELATO.md:8911; app/docs/RELATO.md:8912; app/docs/RELATO.md:8913; app/docs/RELATO.md:8915 |
+| BO-0611 | 13 | app/docs/BACKLOG.md:1926; ligação descontada em app/docs/BACKLOG.md:2074 e app/docs/BACKLOG.md:2083 |
+| BO-1311-ROTEIRO | 10 | app/docs/BACKLOG.md:795 |
+| BO2910-ESTRUTURA | 5 | app/docs/BACKLOG.md:1116 |
+| BO-ADMIN-2710 | 11 | p0_universo.r, seção C; app/docs/RELATO.md:3895; app/docs/RELATO.md:3903 |
+| **Total documental** | **66** | Soma das linhas acima; completude integral **[nao verificado]** |
+
+**(D) Script**
+
+A sonda preserva os IDs do p0 e emite uma linha por pessoa+dia recuperável; HJ-091, contado como uma raiz no p0, possui os quatro pares abaixo documentados. Ela informa a cobertura, mas mantém **NAO_CONFERIDO** onde falta um juiz suficiente ou a identificação do fato. (p0_universo.r, seção B; app/docs/RELATO.md:749; app/docs/RELATO.md:489; app/docs/RELATO.md:1929)
+
+```python
+# SONDA RESPOSTAS-BO-1611
+import sys
+sys.dont_write_bytecode = True
+
+import json
+import re
+from datetime import date
+
+from django.db import connection
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+# Identidades/dias:
+# app/docs/RELATO.md:1929, :749, :489.
+CASOS = [
+    ("BO-0611/05", 456, None, "ponto.turnos.batidas_apuraveis"),
+    ("HJ-091", 127, date(2026, 10, 2), "ponto.turnos.ausencia_cobre"),
+    ("HJ-091", 344, date(2026, 11, 5), "ponto.turnos.ausencia_cobre"),
+    ("HJ-091", 344, date(2026, 11, 6), "ponto.turnos.ausencia_cobre"),
+    ("HJ-091", 344, date(2026, 11, 7), "ponto.turnos.ausencia_cobre"),
+]
+
+
+def somente_select(execute, sql, params, many, context):
+    texto = sql.strip()
+    if (
+        not re.match(r"(?is)^SELECT\b", texto)
+        or re.search(r"(?is)\bFOR\s+(UPDATE|SHARE)\b|\bINTO\b", texto)
+        or ";" in texto
+    ):
+        raise RuntimeError("SQL bloqueado pela guarda de leitura")
+    return execute(sql, params, many, context)
+
+
+total_erros = 0
+total_nao_conferidos = 0
+
+for caso_id, pessoa_pk, dia, juiz in CASOS:
+    resposta = None
+    estado = "NAO_CONFERIDO"
+    motivo = ""
+    dia_saida = dia.isoformat() if dia else "[nao_verificado]"
+
+    try:
+        with schema_context("juliani"):
+            with connection.execute_wrapper(somente_select):
+                if connection.schema_name != "juliani":
+                    raise RuntimeError("Tenant diferente do solicitado")
+
+                from colaboradores.models import Colaborador
+
+                # Busca exclusivamente por PK; não serializar o objeto.
+                pessoa = Colaborador.objects.only("pk").get(pk=pessoa_pk)
+
+                if dia is None:
+                    # app/docs/RELATO.md:1929; app/docs/BACKLOG.md:2074.
+                    # Não chamar registrar_batida: grava em
+                    # app/ponto/registro_batida.py:152 e :158.
+                    motivo = (
+                        "dia_instante_e_batidas_do_fato=[nao_verificado];"
+                        "registro_do_juiz_da_dedup=[nao_verificado];"
+                        "escritor_nao_chamado;"
+                        "fonte=app/docs/RELATO.md:1929"
+                    )
+                else:
+                    from ponto.turnos import ausencia_cobre
+                    from ponto.services.ausencia import origem_de_ferias
+
+                    # Data civil do fato é literal; instante da consulta é local.
+                    agora_local = timezone.localtime()
+                    hoje_local = timezone.localdate(agora_local)
+
+                    # Juiz registrado: app/docs/JUIZES.md:52.
+                    # Leitura: app/ponto/turnos.py:2550 e :2566.
+                    ausencia = ausencia_cobre(pessoa, dia, para="folha")
+
+                    if ausencia is None:
+                        cobertura = None
+                        origem = None
+                    else:
+                        cobertura = {
+                            "ausencia_pk": ausencia.pk,
+                            "tipo": ausencia.tipo,
+                            "status": ausencia.status,
+                        }
+                        # Mesmo montador do painel:
+                        # app/ponto/views.py:2093;
+                        # app/ponto/services/ausencia.py:101.
+                        painel = origem_de_ferias(ausencia)
+                        origem = None if painel is None else {
+                            "agendamento_pk": painel["agendamento"],
+                            "dia": painel["dia"].isoformat(),
+                        }
+
+                    resposta = {
+                        "cobertura_folha": cobertura,
+                        "origem_no_painel": origem,
+                        "consulta_em": agora_local.isoformat(),
+                        "hoje_local": hoje_local.isoformat(),
+                    }
+
+                    # Não promover cobertura a fechamento do conjunto:
+                    # origem/vetos/passivo: app/docs/RELATO.md:483 e :489.
+                    motivo = (
+                        "cobertura_consultada;"
+                        "juiz_registrado_suficiente_para_origem_vetos"
+                        "_e_passivo=[nao_verificado];"
+                        "conferencia_DP_e_homologacao_pendentes;"
+                        "fontes=app/docs/RELATO.md:483,"
+                        "app/docs/RELATO.md:8919"
+                    )
+
+    except Exception as erro:
+        total_erros += 1
+        causa = getattr(erro, "__cause__", None)
+        sqlstate = (
+            getattr(causa, "sqlstate", None)
+            or getattr(causa, "pgcode", None)
+        )
+        # Imprime o erro por classe/SQLSTATE; a mensagem arbitrária pode
+        # conter dados pessoais ou parâmetros SQL.
+        resposta = {
+            "erro": type(erro).__name__,
+            "sqlstate": sqlstate,
+        }
+        estado = "NAO_CONFERIDO"
+        motivo = "erro_impresso_por_classe_e_sqlstate;nao_convertido_em_zero"
+
+    if estado == "NAO_CONFERIDO":
+        total_nao_conferidos += 1
+
+    valor = json.dumps(
+        resposta, ensure_ascii=True, separators=(",", ":")
+    )
+    print(
+        f"CASO {caso_id} col{pessoa_pk} {dia_saida} "
+        f"juiz={juiz} resposta={valor} -> {estado} motivo={motivo}"
+    )
+
+print(f"total_erros={total_erros}")
+print(f"total_nao_conferidos={total_nao_conferidos}")
+```
 
 ## 16/11 00:50 · sessao 86940fe41689 · - · - · origem=Ronald (tmux)
 
@@ -986,31 +1188,4 @@ Contrato e relato:
 - Não foi localizado código Kotlin/Java/Swift/Dart na busca da cópia [não verificado]. Android 3.9.3, a condição executada para abrir a Activity e o texto mostrado no aparelho continuam [não verificado].
 - O texto web “Nenhuma pendência” está condicionado a `not pendencias` em `app/templates/chamados/meu_atendimento.html:117-120`; não prova a tela nativa mencionada no relato.
 
-## 15/11 23:25 · sessao 2f274523329a · - · - · origem=Ronald (tmux)
-
-Candidatos distintos, sem escolher:
-
-1. **Receber ou corrigir resposta pela porta:** `pergunta_viva(p, hoje=None, *, carga=None, agora=None)`, registrado como C6 em `app/core/juizes.py:112` e `app/core/juizes.py:286`; implementação/memo em `app/chamados/juizes.py:865`, predicado em `app/chamados/juizes.py:1402`. A propriedade `.viva` explicita “Pode receber (ou corrigir) resposta” e delega ao juiz (`app/chamados/models.py:3473-3484`). A porta POST efetivamente consulta C6 para a pergunta pertencente ao colaborador, sem exigir disputa aberta nem resposta ausente (`app/api/views.py:2609-2620`).
-
-   Predicado em ordem: validação mata; tranca atual mata; vias terminais materializadas vencem resposta; resposta carimbada com texto mantém viva salvo decisão administrativa e concordância com luz; identidade materializada mata; marco materializado no espelho mata; célula acusadora vive, célula absolutória completa mata; falta na janela viva mantém; sem materialização vive; com materialização depende testemunha externa (`app/chamados/juizes.py:1403-1492`). **Universo:** uma pergunta recebida pelo juiz, podendo ser de conversa e podendo estar em disputa fechada — nenhuma guarda de fechamento consta no corpo (`app/chamados/juizes.py:1402-1492`).
-
-2. **Pergunta pendente que a lista do APK oferece:** `consulta_do_app(colab, *, agora=None)` → `particao_do_app(perguntas_do_app(...))` (`app/chamados/services/pergunta_no_app.py:64-85`). `perguntas_do_app` consulta perguntas de todas as disputas daquele colaborador, pré-filtra pelo generoso `q_vivas`, ordena por id e confirma C6 (`app/chamados/services/pergunta_no_app.py:45-61`). `particao_do_app` considera pendente **C6 viva E `respondida_em is None` E `disputa.fechada_em is None`**; demais vivas vão ao histórico (`app/chamados/services/pergunta_no_app.py:76-85`). GET `/disputa/perguntas/` usa essa lista e escreve `em_disputa=bool(pendentes)` (`app/api/views.py:2537-2539`, `app/api/views.py:2566-2578`). **Diferença:** C6 admite correção de viva já respondida e viva sob disputa fechada; a lista pendente exclui ambas (`app/chamados/models.py:3475`, `app/api/views.py:2612-2620`, `app/chamados/services/pergunta_no_app.py:81-84`).
-
-`fio_vivo(perguntas)` é a redução registrada C15: `any(pergunta_viva(p) for p in perguntas)`; universo é explicitamente do chamador, vazio dá falso; não acrescenta os filtros da lista pendente (`app/core/juizes.py:123-125`, `app/core/juizes.py:295`, `app/chamados/juizes.py:1507-1516`).
-
-C19 `tarefa_do_dia` é outro domínio: ações exigíveis por **instância de marco de um colaborador-dia**, após decisões e conferência de efeitos, com estado `nao_sei`; não substitui a pergunta de alcance geral do questionário (`app/core/juizes.py:299`, `app/docs/JUIZES.md:78-93`, `app/chamados/services/tarefa_do_dia.py:1-26`). Seu `fio=colab` exige ação `responder` de colaborador **e pergunta pendente no app**, delegando a C6 + `particao_do_app` (`app/chamados/services/tarefa_do_dia.py:37-50`). C17 exige âncora na fila e pergunta sobre porta do dia/painel, não disponibilidade geral de responder (`app/chamados/juizes.py:1667-1696`, `app/chamados/juizes.py:1704-1713`).
-
-**Tempo passado: aceita parâmetro, mas não replay integral.** `agora` chega ao C6 e muda o dia da janela (`app/chamados/juizes.py:875-890`); a projeção apenas oculta validação/resposta/materialização posteriores e conserva identidade atual (`app/chamados/juizes.py:1381-1399`). Permanecem:
-
-- Pré-filtro `q_vivas` do estado atual, anterior ao C6 (`app/chamados/services/pergunta_no_app.py:52-61`).
-- Partição lê `respondida_em` e `fechada_em` atuais, sem projeção (`app/chamados/services/pergunta_no_app.py:73-85`).
-- Tranca não recebe `agora`; lê `periodo_trancado` atual e toques posteriores ao fechamento atual (`app/chamados/juizes.py:977-995`, `app/chamados/juizes.py:1065-1082`).
-- C6 lê `celula.veredito/veredito_via` atuais (`app/chamados/juizes.py:1417-1419`, `app/chamados/juizes.py:1450-1466`).
-
-Portanto rotular `consulta_do_app(colab, agora=batida.criado_em)` como “pergunta existente e respondível no instante da batida” seria incorreto pelas próprias leituras acima. A sonda pode entregar **aproximação explicitamente atual**: detector de anomalia da batida chamado agora × ausência de pendentes atuais do colaborador, e em paralelo ausência de C6 vivas atuais; resultado contemporâneo exato continua `[nao verificado]` sem reconstrução histórica integral. Se preferir projeção parcial, rotulá-la literalmente como tal e conservar os dois resultados separados (`app/chamados/services/pergunta_no_app.py:45-85`, `app/chamados/juizes.py:1381-1399`).
-
-Para sonda sem escrita: leitores do app retornam listas sem `.save()` (`app/chamados/services/pergunta_no_app.py:45-85`); C6 apenas memoiza na instância (`app/chamados/juizes.py:893-905`), embora erros possam ser engolidos nos degraus inferiores (`app/chamados/juizes.py:1476-1492`). `engolidos()` fornece fotografia cumulativa, não zerar (`app/core/observ.py:60-70`); `registrar_engolido` incrementa contador e emite logging (`app/core/observ.py:73-82`). Assim comparar contador antes/depois da função e desabilitar logging como no molde; exceção ou incremento torna classificação indecidível (`app/core/observ.py:60-82`).
-
-O helper terceira derivação é só existência de disputa aberta, sem perguntas: `colaborador_em_disputa(colaborador)` retorna primeira `DisputaSupervisao` com `fechada_em__isnull=True` (`app/chamados/services/disputa_emissao.py:34-42`).
-
-_5862 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5863 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
