@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 5
+# AVAIS NA MESA — 6
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -11,10 +11,11 @@
 | 3 | `SMOKE-DO-REENVIO-DO-ATESTADO-DEPOIS-DA-CURA` | **smoke** | 2026-10-20 | 4 POSTs de 18/10 07:06 deram 500 por `IntegrityError` na `uniq_ausencia_viva_por_tipo_e_dia`, 0 Ausencia criada, 4 anexos orfaos. Depois do deploy das 15:36: 0 requisicao em `POST /api/ausencias/` na janela medida, entao | `smoke do reenvio OK -- o atestado entrou (ou apareceu a recusa falada dizendo que ja existe atestado no dia), nenhum "erro ao enviar"   OU   AINDA FALHA: <o que a tela disse>, e ai o BO reabre com a mensagem nova como evidencia` |
 | 4 | `SMOKE-DA-DECISAO-DE-HE-DEPOIS-DA-CURA` | **smoke** | 2026-10-22 | 2 ocorrencias de 500 medidas no errors.log em `/ponto/gestao-he/recusar-lote/` (as duas em 22/10 07:37:57) e 0 tentativa em `/decidir/` na janela medida; 11.550 testes verdes nao viram o defeito porque `TestCase` roda de | `smoke da HE OK -- autorizei (ou recusei) 1 dia pela tela e o lote tambem respondeu, sem 500 e sem "erro inesperado"   OU   AINDA FALHA: <o que a tela disse>, e ai o BO reabre com a mensagem nova como evidencia` |
 | 5 | `SMOKE-FIO-LE-O-JUIZ-MODAL` | **smoke** | 2026-10-27T22:45 | **FIO-LE-O-JUIZ (BO-[nome] C) pronto na copia `wt-fio-2710-1835` @ 5d86c33b** (suite inteira 1fcc61e0 OK Ran 12403; prova do POST 17 OK). FRONT SEM SMOKE NAO SOBE: `templates/chamados/partials/modal_fio.html` mudou. Cl | `aval Ronald: SMOKE-FIO-LE-O-JUIZ-MODAL ok` |
+| 6 | `SMOKE-UI-VINCULO-MOSTRA-O-CALENDARIO` | **smoke** | 2026-11-16T15:00 | UI-VINCULO-MOSTRA-O-CALENDARIO NO AR (pouso 7849ee7d2, suite inteira 16462 OK, opus APROVA). Clique: Colaboradores > vincular > painel do vinculo, e tambem pelo retrato da folha (drawer, casca app); na caixa Calendario d | `aval Ronald: SMOKE-UI-VINCULO-MOSTRA-O-CALENDARIO ok` |
 
 ---
 
-Total no JSON: **270** · aberto **5** · respondido **105** · sem-motivo **160**.
+Total no JSON: **271** · aberto **6** · respondido **105** · sem-motivo **160**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
