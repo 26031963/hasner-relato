@@ -1,7 +1,125 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:17** · publicado em **16/11/2026 02:20** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:26** · publicado em **16/11/2026 02:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:26 · sessao 98fc73d71901 · - · - · origem=Ronald (tmux)
+
+- **Achado 4: fecha o defeito específico do mock.** O teste cria cinco células, chama o `julgar_celula` real dentro do espião e exige retorno diferente de `None` nos cinco dias; trocar os `save()` por `update()` silencioso volta a retirar essas chamadas. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:405`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:413`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:418`, `app/ponto/signals.py:143`, `app/ponto/services/ausencia.py:1469`)
+
+- **Limite residual desse teste:** só verifica `r is not None`, sem recarregar/verificar a célula ou os contadores; remover a chamada a `julgar_colab` de `julgar_celula`, conservando `return out`, continuaria satisfazendo essa condição. Além disso, a fixture não cria batidas, exercitando o ramo `adesao is None`, que retorna antes do ramo normal com adesão. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:62`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:193`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:414`, `app/ponto/services/cartorio.py:1203`, `app/ponto/services/cartorio.py:1211`, `app/ponto/services/cartorio.py:1318`, `app/ponto/services/cartorio.py:2040`, `app/ponto/services/cartorio.py:2054`)
+
+- **Achado 5: parcialmente fechado.** A Justificativa agora é consultada novamente e seu status `pendente` é exigido; o saldo do período é recarregado/conferido; a terceira tela, correção de concluída, ganhou teste com recusa e status final `concluido`. Porém `_nada_mudou` ainda não compara observações nem trilhas anteriores, e tampouco exige igualdade exata do conjunto de ausências/status originais. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:392`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:499`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:513`)
+
+- **Achado 6: congela os testes, mas não elimina o relógio interno.** `_Base` e `FeriasTelaTrilhaTest` estão congelados; o teste H12 também está. O acordador continua lendo `localdate()` quando encontra lado alterado sem fim. Não há asserção de ausência de leitura do relógio: os testes de idempotência observam invalidação/carimbo, portanto recolocar a leitura antecipada antiga passaria por essas asserções. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:59`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:433`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:36`, `app/ponto/services/ausencia.py:175`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:319`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:333`)
+
+- **Os testes centrais novos atacam os defeitos certos:** aprovação com período conta chamadas da invalidação real via `wraps`; movimento setembro→novembro exige que outubro permaneça carimbado. Os testes H12 de movimento entre competências adjacentes, isoladamente, continuariam passando com o envelope antigo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:87`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:338`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:353`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:275`, `app/ponto/tests/test_h12h06b_rederivar_minutos.py:292`)
+
+- **Mocks acrescentados não substituem os caminhos positivos centrais:** o espião do cartório chama a função real; o mock da trilha injeta especificamente o `None` de falha e delega os demais eventos à função real. Execução Django, RED contra a base e incidência produtiva: **[nao verificado]**. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:412`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:464`)
+
+## 16/11 02:25 · sessao 5df2cbed0eec · - · - · origem=Ronald (tmux)
+
+- **10/2026:** `10 + 5 + 3 + 3 + 3 + 2 = 26` linhas `ESTRUTURA_DIA`. [nao verificado]
+- **11/2026:** `10 + 3 + 6 + 1 + 8 + 3 = 31` linhas `ESTRUTURA_DIA`. [nao verificado]
+- **Horas por dia:** “nao consta na saida”. As linhas apresentam `esp_min`, `e6_min`, `teto_min`, `dif_min`, `classe`, `paridade`, `batidas` e `veredito`; não permitem transcrever horas exatas por dia. [nao verificado]
+- **Causa/rótulo:** transcrever os campos efetivamente presentes, especialmente `classe`, `paridade` e `veredito`; campos literalmente chamados `causa` ou `rotulo`: “nao consta na saida”. [nao verificado]
+- **ESPELHO-VERDADE:** itens identificados dessa categoria: “nao consta na saida”. [nao verificado]
+- **Comparação de identidades com 06/11:** `agrega.r` não identifica nenhum colab-dia. Assim, dias retirados e acrescentados: “nao consta na saida”; não é possível listar diferenças de conjuntos. A igualdade de 26 dias em outubro não demonstra igualdade das identidades. [nao verificado]
+- **Preservar literalmente:** col114 em 08/11 tem `dif_min=-10` e `classe=diverge_10_60`; col1021 em 06/11 tem `/FORA`, `paridade=IMPAR` e duas batidas exibidas; col909 em 11/11 também tem `/FORA` e `paridade=IMPAR`. [nao verificado]
+
+## 16/11 02:21 · sessao 3e76d0e2347d · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
+
+As 6 linhas `SOMA` e as 2 linhas `ESTRUTURA_DIAS_LINHAS` estão `True`. Não há ocorrência de `INCOMPLETO` no trecho fornecido. [nao verificado]
+
+Transcrição integral da saída fornecida: [nao verificado]
+
+```text
+sonda_leitura: script.py [8c43808dcc19372c] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+PARTE 6 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 100
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 595
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 199 minutos_total 2.6 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1298, 'bate_ate_10min': 1258, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 32, 'dia_batida_impar': 54, 'impar_que_BATE': 26, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 277, 'dia_sem_trabalho_ambos': 11, 'esp_desconta_janela_declarada': 18, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.9% de 1298 dias comparados
+[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
+[3] CADASTRO      8 dia-colab      40.5 h    2 colabs
+[3] BATIDA       30 dia-colab     127.8 h   17 colabs
+[4] TOTAL divergentes 40
+[5] colabs com divergencia: 20
+ESTRUTURA_DIA|10/2026|col515|2026-10-09|esp_min=244|e6_min=0|teto_min=0|dif_min=-244|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|10/2026|col515|2026-10-11|esp_min=245|e6_min=0|teto_min=0|dif_min=-245|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIAS_LINHAS 10/2026 2 True
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
+PARCIAL|10/2026|CADASTRO|dias=8|horas=40.4628|colabs=2
+PARCIAL|10/2026|BATIDA|dias=30|horas=127.75368121722221|colabs=17
+PARCIAL_TOTAL|10/2026|dias=40|horas=176.36648121722221|colabs=20
+ESTIMATIVA processados 100 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1111, 'bate_ate_10min': 1070, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 2, 'diverge_acima_60': 33, 'dia_batida_impar': 60, 'impar_que_BATE': 30, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 29, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 396, 'dia_sem_lavratura_no_espelho': 1257, 'dia_isento_ou_ausencia': 268, 'dia_sem_trabalho_ambos': 23, 'esp_desconta_janela_declarada': 14, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.3% de 1111 dias comparados
+[3] ESTRUTURA     3 dia-colab      10.6 h    2 colabs
+[3] CADASTRO      6 dia-colab      52.8 h    5 colabs
+[3] BATIDA       32 dia-colab     161.9 h   21 colabs
+[4] TOTAL divergentes 41
+[5] colabs com divergencia: 25
+ESTRUTURA_DIA|11/2026|col113|2026-10-30|esp_min=242|e6_min=0|teto_min=0|dif_min=-242|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col113|2026-11-01|esp_min=241|e6_min=0|teto_min=0|dif_min=-241|classe=e6_zero_esp_trabalho|paridade=par|batidas=|veredito=em_aberto
+ESTRUTURA_DIA|11/2026|col989|2026-10-23|esp_min=721|e6_min=567|teto_min=567|dif_min=-154|classe=diverge_acima_60|paridade=par|batidas=08:32 17:59|veredito=trabalhou
+ESTRUTURA_DIAS_LINHAS 11/2026 3 True
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=10.610499166666667|colabs=2
+PARCIAL|11/2026|CADASTRO|dias=6|horas=52.750124444444445|colabs=5
+PARCIAL|11/2026|BATIDA|dias=32|horas=161.85087350722222|colabs=21
+PARCIAL_TOTAL|11/2026|dias=41|horas=225.211497118333332|colabs=25
+TEMPO_SEGUNDOS 163.9
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 237235
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 116
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1375
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4633
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 58
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 10
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6500
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3762
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3762
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 602
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 180
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 448020
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 559
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 2890
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 180
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12704
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 94
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4254
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 189
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 21328
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4340
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 38829
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 17052
+SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
+SOMA 10/2026 HORAS 176.36648121722221 True
+SOMA 10/2026 COLABS_UNIAO 20 True
+SOMA 11/2026 41   <- tem de ser igual a soma das classes (41) True
+SOMA 11/2026 HORAS 225.211497118333332 True
+SOMA 11/2026 COLABS_UNIAO 25 True
+rc_sombra=0
+```
 
 ## 16/11 02:17 · sessao ddbab1bf47b0 · ESPELHO-VERDADE-FECHO-V0 · sonda · origem=Code
 
@@ -1165,44 +1283,4 @@ A outra alegação de BO2910-ESTRUTURA/06, “desligamento grava fim sem conferi
 
 Os dois defeitos de /01 não têm causa única demonstrada: atribuições incompletas em `app/colaboradores/views.py:325-329` e tratamento de exceção em `:333-353` são sítios distintos. Mesma causa entre os demais IDs: **[nao verificado]**. Em particular, `sem_periodo` dos nominais col42 não prova que nasceram pelo formulário opcional de /05; essa ligação é **[nao verificado]**, embora o formulário permita a omissão (`app/templates/ponto/partials/painel_ausencia.html:325-330`).
 
-## 16/11 01:21 · sessao d983759200f5 · - · - · origem=Ronald (tmux)
-
-| ID | Causa / sítio produtor | (a) | (b) | (c) | (d) |
-|---|---|---|---|---|---|
-| BO-ADMIN-2710/3 | Justificativa aprovada entra como data inteira; minutos parciais só vêm de Ausência, e o motor abona apenas dia sem trabalho. `app/ponto/services/efeito_ausencia.py:40-50`; `app/ponto/services/fechamento.py:660-665`; `app/ponto/motor_calculo_v2.py:2606-2622`. | **OBRA**: fonte e consumidor estão em arquivos distintos; documentação exige consumo pelo motor e folha. `app/docs/BACKLOG.md:1956`. | Esses sítios não constam nos manifestos fornecidos. Cruzamento adicional do delta ainda não construído: **[nao verificado]**. | **s, dinheiro**: calcula `horas_falta`/`horas_abono`; PDF soma parcial separadamente. `app/ponto/motor_calculo_v2.py:2618-2622`; `app/relatorios/pdf_espelho.py:479`. | Igualdade causal com outros IDs do universo: **[nao verificado]**. |
-| HJ-017-U1 | **Sítio produtor atual [nao verificado]**. A origem histórica pela batida `E` possui tratamento em `app/ponto/turnos.py:1067-1100`; a pendência documental do terceiro leitor (`app/docs/BACKLOG.md:1253`) possui reconciliação cross-meia-noite em `app/escala/utils.py:1945-2040` e teste nominal em `app/escala/tests/test_saida_valida_cross_meia_noite.py:5-13`. | — | — | — | — |
-| HJ-074 | Campo admite `trabalha_em_feriado=True` por default; esse valor impede a folga no leitor. `app/escala/models.py:896-898`; `:1390-1395`. **Sítio que efetivamente gravou o valor de col148 [nao verificado]**: a porta atual já consulta o juiz de 16/09, `app/colaboradores/services/vinculo.py:287-296`. | — | — | — | — |
-
-Para HJ-074, caso a consolidação aceite o default como produtor histórico já comprovado pelo anexo: o envelope documental é **OBRA**, pois inclui alteração de modelo e comando próprio (`app/docs/RELATO.md:786`); **dinheiro=s**, pois a porta altera a flag, regenera células e recalcula fechamento (`app/colaboradores/services/vinculo.py:886-908`). Isso não comprova a origem individual da flag de col148. **[nao verificado]**
-
-## 16/11 01:21 · sessao c27123f1aeb8 · - · - · origem=Ronald (tmux)
-
-Achado 2 → **(a): tema presente na pergunta, cópias específicas não apontadas na resposta.** Base: `codex_verificador_v1.q:23-24`:
-
-> 6. Classes que ja reprovaram obra nesta casa -- diga se ha cada uma no diff: 2o juiz que duplica juiz registrado;  
->    2o escritor fora da porta; relogio lido fora da borda; derivacao paralela de fonte unica; selo/RED sem mordida
-
-Na resposta, a derivação apontada corresponde a `fio.py`, sem identificar as quatro cópias relacionadas pelo opus (`codex_verificador_v1.r`, tabela da pergunta 6):
-
-> | Segundo juiz registrado | O novo juiz está registrado; os dois predicados de ilegalidade têm pergunta distinta. Resta a derivação paralela apontada no achado 3. (`app/core/juizes.py:306`; `app/chamados/juizes.py:1531`; `app/chamados/juizes.py:1537`; `app/chamados/services/fio.py:187`) |
-
-> | Derivação paralela | **Presente:** achado 3. (`app/chamados/services/fio.py:187`) |
-
-Essas linhas são **103 e 106**, respectivamente, se a linha “Pouso antes do pré-requisito” é 109, conforme referência expressa em `opus_final.r:2`; contagem independente do `.r` completo: **[não verificado]**. [nao verificado]
-
-Triagem do achado específico **ausente**; os descartes relativos a I21 e `espera_o_texto_do_colaborador` tratam outros apontamentos (`triagem_v1.txt`, itens 2 e 3 da seção v1).
-
-Na cópia, os locais correspondentes estão em `disputa_emissao.py:1860`, `curar_perguntas_em_limbo.py:46`, `auditar_invariantes_chamados.py:1105-1106` e `disputa_emissao.py:1691`, diferindo da numeração mencionada pelo opus.
-
-## 16/11 01:21 · sessao f307ae9f5253 · - · - · origem=Ronald (tmux)
-
-| ID | Causa / prova do produtor | Classificação sustentada |
-|---|---|---|
-| BO-ADMIN-2710/5 | `_marcos_faltantes` ignora `tipo_real`: descarta célula com `missing=False`, mesmo quando a batida tem tipo diferente do marco (`app/chamados/services/declaracao_texto.py:130-139`). O leitor fornece separadamente `tipo_real` e `missing=not acesa` (`app/escala/services/leitor_celula.py:122-133`). O registro liga explicitamente esse mecanismo à E23 ocupada por S00 do col247 (`app/docs/RELATO.md:3908`); o nominal “cobra saída22 com S00 presente; certo volta” também consta em `app/docs/BACKLOG.md:831`. | **MIUDO como avaliação estática do defeito nesse leitor**: decisão inteira em um produtor, que já recebe os dados necessários (`declaracao_texto.py:130-139`; `leitor_celula.py:128-133`); teste existente do mesmo leitor em `app/chamados/tests/test_hx_marcos_faltantes_celula.py:42-64`. **(b)=n** para esse arquivo e teste: ausentes dos manifestos fornecidos (anexos `b1_arquivos.txt:1-62`, `r3_arquivos.txt:1-215` e `brief.md`, bloco “arquivos da volta”; conferir numeração dos anexos ao consolidar). **(c)=s, dinheiro**: o nominal inclui 1h de intrajornada indenizada no DIFF (`app/docs/BACKLOG.md:831`). Igualdade causal com outros IDs do universo: **[nao verificado]**. |
-| BO-ADMIN-2710/8.1 | Defeito atual produtor: **[nao verificado]**. A cópia já fotografa o antes (`app/colaboradores/services/vinculo.py:187-188`) e distingue `editar` com antes/depois de `criar` (`:368-383`); a view documenta a retirada da linha nula e delega à porta (`app/colaboradores/views.py:238-249`). | Não classificar (a)–(d). A falta de juiz leitor no dado não demonstra defeito atual do escritor. O histórico documental anuncia a alteração em `app/docs/RELATO.md:3557`; os testes caracterizam a troca e os valores em `app/colaboradores/tests/test_trilha_do_vinculo.py:84-97`, `:141-153` — execução nesta leitura: **[nao verificado]**. |
-| HJ-005-U1 | Causa produtora: **[nao verificado]**. O registro pede censo e diz explicitamente que COBERTURA-PARCIAL não está demonstrada para 01/10 (`app/docs/BACKLOG.md:832`); a ingestão registra dono, sem fechar sua obra (`app/docs/RELATO.md:8919`, `:8929`). | Não classificar (a)–(d), nem fundir com HJ-005-U2/U4 ou BO /1. |
-| HJ-012-U2 | Causa produtora: **[nao verificado]**. Há conflito entre ingestão ESTRUTURA (`app/docs/RELATO.md:8919`) e medição documental de cobrança legítima do col239 (`app/docs/RELATO.md:5527`); o complemento manda reconciliar ambos (`app/docs/BACKLOG.md:1555`). | Não classificar (a)–(d). |
-
-Ressalva para BO /5: o dado novo informa apenas a saída de `_marcos_faltantes`; a célula crua atual não foi fornecida. A associação documental do nominal ao produtor existe (`BACKLOG.md:831`; `RELATO.md:3908`), mas comprovar que toda discrepância atual se esgota nesse único mecanismo permanece **[nao verificado]**.
-
-_5890 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5893 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

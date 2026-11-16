@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: cadeia.sh | pid=3592976
+ESPERANDO: lanca_agrega.sh | pid=3688735
 ESTADO 01:43 CAUDA (5): LOTE7 c6 e LOTE3 c6 ABERTOS em agentes construtores proprios (briefs logs/DUAS-PISTAS/lote7_c6/brief.md e logs/RETOMA-HE-LOTE3/c6/brief.md; arquivos sem cruzamento entre si: LOTE7 services/ausencia+regularizacao+retratar_humano+ferias/views, LOTE3 colaboradores+ponto/views+core). Opus construtores vivos: 2 de 5. LOTE3 pouso espera o ! de vinculo.
 ESTADO 01:43 CAUDA (3) BUG-PAR NAO CONSTROI: condicao 3 do PREPARA-VOLTA (cruzamento = so crons.py e test_medida_turno_do_par.py) nao fecha -- a copia F1 B1 (parada na pergunta acima) segue cruzando chamados/services/fio.py, chamados/tests/test_s139.py, docs/JUIZES.md (logs/BUG-PAR-O-PAR/volta/cruzamento.txt). Destrava: resposta da B1 (pouso ou descarte da copia). (4) F1 B2 espera o pouso da B1.
 ESTADO 01:43 CAUDA (6) V0 R1 relancada 01:41 (arvore fixa 3580b35e0; o pouso da R3 nao muda a medicao), partes p1..p6 na sombra; causas.md depois.
