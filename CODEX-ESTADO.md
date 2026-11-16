@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **15/11/2026 23:10** · publicado em **15/11/2026 23:10** (UTC-3)
+> Ultima resposta processada: **15/11/2026 23:15** · publicado em **15/11/2026 23:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 15/11 23:15 · sessao a574bcd3a4b2 · - · - · origem=Ronald (tmux)
+
+**Achado 4: PROCEDE; o delta fecha os exemplos antigos, mas não fecha a exigência “guarda governa a escrita”.** Os novos mutantes cobrem `if` solto e escrita anterior à guarda; `_governada` ainda absolve qualquer guarda com `return`/`raise` cuja linha preceda a escrita, sem verificar bloco, caminho de execução ou escopo. (`app/chamados/tests/test_contract_par_resposta.py:156`; `app/chamados/tests/test_contract_par_resposta.py:157`; `app/chamados/tests/test_contract_par_resposta.py:86`; `app/chamados/tests/test_contract_par_resposta.py:92`)
+
+Contraexemplo absolvido pelo helper real (`meia_par` retorna `None`), executado em memória com `python3 -B`:
+
+```python
+def f(p, qs, habilitado):
+    if habilitado:
+        if not p.resposta_colab:
+            return
+    qs.update(respondida_em=agora)
+```
+
+Com `habilitado=False`, `p` e `qs` apontando para uma pergunta `(None, '')`, grava `(agora, '')`. A guarda não foi executada; a absolvição decorre exclusivamente de `_sai_cedo(g)` e `g.lineno < escrita.lineno`. Não é o limite declarado de polaridade. (`app/chamados/tests/test_contract_par_resposta.py:79`; `app/chamados/tests/test_contract_par_resposta.py:92`; `app/chamados/tests/test_contract_par_resposta.py:22`)
+
+Também são absolvidos: guarda numa função interna nunca chamada; guarda que lê `q.resposta_colab` enquanto escreve `p.respondida_em`. A busca usa `ast.walk(fn)` e `_le` compara somente o nome do atributo. (`app/chamados/tests/test_contract_par_resposta.py:75`; `app/chamados/tests/test_contract_par_resposta.py:86`)
+
+**Item 5: PROCEDE quanto a falsos negativos; NÃO PROCEDE quanto a acusação dos dois escritores legítimos citados.** A varredura real extraída por AST retornou `[]`; ambos foram absolvidos. A implementação da varredura está em `app/chamados/tests/test_contract_par_resposta.py:113`; evidência persistida dessa execução: **[não verificado]**.
+
+- `PerguntaDisputa.carimbar`: só atribui instante sob guarda de texto não vazio após trim; inclui `respondida_em` nos campos salvos. A absolvição é correta. (`app/chamados/models.py:3231`; `app/chamados/models.py:3233`; `app/chamados/models.py:3234`; `app/chamados/models.py:3253`)
+- `carimbar_resposta_pela_trilha`: retorna antes da escrita se já tem instante ou não tem texto após trim; depois atribui e salva somente o instante. A absolvição é correta. (`app/chamados/services/disputa_emissao.py:1692`; `app/chamados/services/disputa_emissao.py:1693`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/services/disputa_emissao.py:1698`)
+
+## 15/11 23:15 · sessao ff3804764101 · - · - · origem=Ronald (tmux)
+
+Achados 5, 6 e 7: **fechados pelo delta**.
+
+- **5:** o teste novo recria duas perguntas com texto pelo helper, que fornece texto e instante, e depois zera os instantes de ambas por `update`; conserva os asserts de uma materialização, zero novas resoluções, zero fechamentos e disputa aberta. (`app/chamados/tests/test_fio_disputa_resolvido.py:56`, `:62`, `:94`, `:100`, `:103`, `:105`, `:106`, `:108`). Igualdade com os asserts históricos de `e84a167f4`: **[não verificado]**, pois não há Git na cópia.
+- **6:** a tabela agora registra `pergunta_respondida`, a face SQL, a recusa simétrica e o escopo B1/B2/E-F; corresponde ao registro `_C21`. (`app/docs/JUIZES.md:99`, `:100`, `:101`, `:102`, `:103`; `app/core/juizes.py:306`).
+- **7:** o comentário agora diz instante do **PROCESSAMENTO**, conferindo com `agora = _tz.now()` passado pelo chamador. (`app/chamados/services/disputa_emissao.py:1671`; `app/api/foto_recebida.py:42`, `:48`).
+
+Descartes 2 e 3: **conferência documental específica [não verificado]**. Os arquivos `logs/JUIZ-RESPONDIDA/censo.md`, predesenho e aval citados não foram encontrados na cópia; portanto não é possível confirmar independentemente “I21 = linha 29/classe A”, “espera = linha 87/classe E”, a exceção “I21 sem trim”, ou a medição de brancos zero. **[não verificado]**
+
+O que a cópia confirma:
+
+- I21 usa a face SQL com trim, e o comentário reconhece expressamente a diferença em relação ao predicado anterior. (`app/chamados/management/commands/auditar_invariantes_chamados.py:1572`, `:1573`, `:1575`).
+- `espera_o_texto_do_colaborador` continua calculando o complemento do juiz por instante ausente ou instante sem texto. (`app/chamados/services/fio.py:187`; `app/chamados/juizes.py:1534`, `:1552`).
+- A regra geral registrada para B1 é migrar classe A, postergar B/C/D e conservar E/F; isso corrobora a lógica dos descartes se as classificações nominais da triagem estiverem corretas, mas não prova essas classificações. (`app/docs/JUIZES.md:102`, `:103`; `app/chamados/juizes.py:1550`, `:1551`).
 
 ## 15/11 23:10 · sessao 8edb157097ed · BUG-PAR-O-PAR · leitura · origem=Code
 
@@ -694,104 +733,4 @@ Referências `saída:Lx`: contando `sonda_leitura: ...` como L1, a linha vazia c
 
    **Para o conjunto completo das 58 decisões, a existência de alguma em competência com K6 True está [não verificado].** A contagem e a data mínima não fornecem o cruzamento individual por empresa/competência nem o K6 de setembro/2026. — `saída:L5–L8`.
 
-## 15/11 22:19 · sessao 26ef99325962 · JORNADA-FORA-DA-ESCALA · leitura · origem=Code
-
-**Hoje, “formou turno” e “está em turno agora” têm respostas diferentes.** `parear_turnos` forma o turno; `turno_aberto_de` consulta essa geometria e aplica a expiração; `proximo_tipo_de` sugere E/S a partir do turno **vivo**. Por isso, uma E pode formar um turno aberto e, imediatamente, receber sugestão de outra E. (`app/ponto/turnos.py:1417`, `app/ponto/turnos.py:2278`, `app/ponto/turnos.py:2283`, `app/ponto/turnos.py:2474`)
-
-Abaixo, os resultados para E avulsa pressupõem ausência de carimbo de intervalo, papel substituto da ata ou outras batidas que mudem o pareamento. Esses tratamentos antecedem o ramo normal de E. (`app/ponto/turnos.py:1310`, `app/ponto/turnos.py:1326`, `app/ponto/turnos.py:1382`, `app/ponto/turnos.py:1398`) O histórico completo e o estado persistido do caso nominal não foram consultados em banco. **[não verificado]**
-
-**1. Quem responde em cada caso**
-
-| Caso | Formação do turno | Presença e próximo tipo |
-|---|---|---|
-| **(a) E gravada depois da expiração da aberta do próprio dia** | `parear_turnos` conserva a anterior aberta, caso exista, e inicia outra com a nova E. Não consulta a expiração nesse ramo. (`app/ponto/turnos.py:1417–1420`) | `expiracao_da_aberta` devolve **fim previsto da `data_turno` + 4h**. `turno_aberto_vivo` devolve `None` quando `agora > expiração`; a nova entrada não recebe um prazo contado da sua chegada. `proximo_tipo_de` então devolve **`'E'`**. (`app/ponto/turnos.py:2009–2030`, `app/ponto/turnos.py:2474–2476`) |
-| **(b) E em FOLGA da escala/célula** | O ramo normal de E também abre turno: não consulta `trabalha`. A folga continua sendo folga para o previsto. (`app/ponto/turnos.py:1402–1420`, `app/escala/models.py:1094–1096`) | Folga não veta diretamente o turno vivo. A expiração consulta os marcos do **tipo**, que não decide trabalho/folga. Assim, numa folga com tipo 08–17, a E pode estar viva até 21h e sugerir **S**; depois disso, retorna `None` e sugere **E**. Sem tipo ou fim previsto, essa expiração devolve `None`. (`app/ponto/turnos.py:2024–2030`, `app/ponto/selecao_periodo.py:151–169`, `app/escala/models.py:326–345`, `app/ponto/turnos.py:2474–2478`) |
-| **(c) E fora da janela num dia de trabalho** | Não existe veto horário no ramo normal de abertura: a E abre turno geométrico. (`app/ponto/turnos.py:1402–1420`) | “Fora da janela” sozinho não determina a sugestão. No exemplo **08–17 / E 21:36**, o limite é 21h: turno vivo **`None`**, próximo tipo **E**. Uma E depois das 17h, mas ainda antes da expiração, pode permanecer viva e sugerir **S**. (`app/ponto/turnos.py:2010–2030`, `app/ponto/turnos.py:2474–2478`) |
-
-A comparação de expiração é estritamente `>`: no instante exato do limite ela ainda não elimina a aberta. A função apenas deixa de devolvê-la como viva; não fecha nem apaga o turno formado. (`app/ponto/turnos.py:2006–2013`)
-
-**2. O que os leitores mostram**
-
-| Leitor | (a) Após expiração / (c) exemplo 21:36 | (b) Folga |
-|---|---|---|
-| **Espelho do colaborador e espelho do admin** | Usam a mesma fonte. O aberto geométrico alimenta `realizado_aberto`; a tela mostra **“EM ABERTO”**, eventual frase dos marcos faltantes e “parcial provado” quando houver minutos. A expiração da presença não elimina esse badge. (`app/ponto/views.py:117–125`, `app/ponto/views.py:160–161`, `app/ponto/services/espelho.py:783–794`, `app/templates/ponto/espelho.html:187`) | A mesma geometria pode produzir o badge aberto. Na grade de folga não há marcos de trabalho; as batidas sobrantes são conservadas como órfãs, exibidas pela tela. (`app/escala/utils.py:1801–1803`, `app/escala/utils.py:1814–1834`, `app/templates/ponto/espelho.html:240–248`) |
-| **Calendário do admin** | Consulta `dias_encerrados`: enquanto houver aberta viva, mostra aberto; depois da expiração pode mostrar **o status lavrado**, ou **`sem_certidao`** se houver batida sem lavra. Portanto, não é garantido que continue dizendo “aberto” como o badge geométrico do espelho. (`app/ponto/status_dia.py:273–294`) | Depois da precedência de andamento, uma folga lavrada com batida recebe **`folga_trabalhada`**. Esse status não prova que existam horas pagas. (`app/ponto/status_dia.py:157–158`, `app/ponto/status_dia.py:280–289`, `app/colaboradores/services/calendario.py:651–665`) |
-| **Pendências do admin** | A aba lê disputas e perguntas existentes; não decide novamente se a E abre turno. Distribui entre validar, materializar, cobrar colaborador e disputa sem pergunta. A ocorrência concreta depende da emissão e do estado dessas entidades. (`app/colaboradores/views.py:2998–3013`, `app/chamados/relatorios_disputa.py:11–28`) | A disputa imediata da API e a cobrança posterior por marcos seguem caminhos distintos, detalhados abaixo. (`app/api/views.py:702–770`, `app/chamados/services/fabrica_da_celula.py:110–113`) |
-| **App — resposta do servidor** | `/me/` publica `turno_aberto=false`, `hora_entrada=null` e `proxima_batida='E'` quando o juiz não encontra aberta viva. Ao gravar, responde **“Entrada registrada às …”** com o tipo efetivo. (`app/api/views.py:306–309`, `app/api/views.py:354–356`, `app/api/views.py:803–823`) | Antes da expiração pode publicar aberta e sugerir S; depois, E, pela mesma autoridade. (`app/api/views.py:306–309`, `app/ponto/turnos.py:2474–2478`) |
-| **PWA — sugestão e confirmação** | A triagem consulta o juiz; a V2 envia `tipo_sugerido`. A confirmação de **nova entrada com turno aberto** exige `context.turno_aberto`; após expiração esse ramo não é acionado. (`app/ponto/services/triagem_batida.py:198–204`, `app/templates/ponto/bater_ponto_v2.html:104`, `app/ponto/views.py:319–333`) | Se houver aberta viva e o usuário enviar E, esse ramo pode perguntar: **“Entrada às … sem saída. Registrar nova entrada mesmo assim?”** (`app/ponto/views.py:319–333`, `app/templates/ponto/triagem/turno_confirmar.html:6`) |
-
-O espelho também mostra o registro cru nas últimas batidas e, havendo disputa, o aviso **“Em revisão pela supervisão”**, mantendo os cálculos visíveis. (`app/templates/ponto/espelho.html:13–21`, `app/templates/ponto/espelho.html:72–80`) A interface nativa efetivamente instalada, incluindo sua confirmação visual, não foi inspecionada; acima está o contrato do servidor. **[não verificado]**
-
-**3. Fechamento, HE, autorização e Pauta**
-
-- **Uma E sem S não vira HE só por estar fora da escala.** No comercial, `calcular_periodo(entrada, None)` marca `turno_aberto`, acrescenta “saída não registrada” e retorna **antes** da janela de HE e do cálculo da duração. Para duas E isoladas, o realizado é zero, mas com `sem_turno=False` e `aberto=True`: existem turnos, faltam saídas. (`app/ponto/motor_calculo_v2.py:3215–3226`, `app/ponto/turnos.py:719–739`, `app/ponto/turnos.py:771`)
-
-- **Nos casos (a)/(c), em dia de trabalho**, batidas não casadas com realizado zero podem gerar `BATIDA_ORFA_FORA_TOLERANCIA`; marcos faltantes também podem gerar `FURO_PARCIAL`. Se a célula ficar acusadora e não alcançar uma isenção, o export a retém como pendência do espelho. Não é possível afirmar o motivo final do colaborador nominal sem sua célula e demais decisões. (`app/ponto/supra_juiz.py:450–463`, `app/ponto/supra_juiz.py:527–537`, `app/folha/export.py:1273–1294`, `app/folha/export.py:968–973`) **Estado nominal: [não verificado].**
-
-- **Na folga**, havendo realizado **ou órfãs**, dia encerrado e previsto zero, o suprajuiz pode lavrar `FATO_SEM_PREVISAO`, que não está entre os vereditos acusadores. Isso não cria horas a partir da E avulsa. (`app/ponto/supra_juiz.py:392–393`, `app/ponto/supra_juiz.py:423–428`, `app/escala/models.py:1767–1768`, `app/ponto/motor_calculo_v2.py:3217–3220`)
-
-- **Folga com par fechado é outra figura:** com janela empresarial aplicável, previsto zero e sem autorização, `_dia_sem_previsto_fora_da_janela` pode bloquear todos os minutos e publicá-los como pendência na Gestão de HE. Existe exceção para folga sem escala certa. O espelho mostra essa pendência como “dia sem jornada prevista”. (`app/ponto/motor_calculo_v2.py:1440–1488`, `app/ponto/services/espelho.py:743–749`, `app/templates/ponto/espelho.html:189`)
-
-- **A aprovação tem um crivo adicional:** fechamento com `turnos_abertos > 0` recebe a trava `turno_aberto`, independentemente de a consulta de presença já ter expirado aquela entrada. (`app/ponto/services/fechamento.py:1005`, `app/folha/export.py:819–834`)
-
-- **Não há Pauta DP automática demonstrada apenas por E 21:36.** Na porta de autorização de HE, a Pauta exige competência exportada e autorização com efeito. A existência de outra Pauta para o caso nominal não foi verificada. (`app/ponto/services/autorizacao_he_periodo.py:290–302`) **[não verificado]**
-
-A L-084 exige **as duas pontas** a mais de três horas dos marcos para tratar o turno inteiro como Cadastro × Realidade. A E 21:36 isolada não basta para aplicar essa figura; a L-097, por sua vez, disciplina os minutos fora dos marcos e sua autorização. (`app/docs/LEIS.md:115–116`)
-
-**4. Quais perguntas chegam ao colaborador**
-
-- **(a), e (c) no exemplo 5x2:** não há pergunta específica “por que entrou depois da expiração?”. O PWA pula o controle de janela para `5x2`, `6x1` e `personalizado`; a API pula o detector horário quando `tipo_base='comercial'`, embora continue verificando folga antes. Ter ciclo 5x2 e ter tipo-base comercial são condições diferentes no código. (`app/ponto/services/triagem_batida.py:403–407`, `app/chamados/detector_anomalias.py:170–189`)
-
-- **Depois, pela célula**, podem surgir perguntas dos **marcos previstos apagados e vencidos**: “Confirme o horário da entrada no dia…” e “Confirme o horário da saída no dia…”, além das de intervalo. Portanto, o sistema pode perguntar pelos marcos 08h/17h mesmo existindo a batida 21:36. A emissão depende de ativo, veredito acusador, vencimento, demais guardas e deduplicação; essa fábrica silencia o push. (`app/chamados/services/fabrica_da_celula.py:52–74`, `app/chamados/services/fabrica_da_celula.py:105–157`, `app/chamados/services/fabrica_da_celula.py:217–219`, `app/chamados/services/declaracao_texto.py:42–46`, `app/chamados/catalogo/perguntas.py:48–61`)
-
-- **(b), folga pela API:** a batida é gravada; depois o detector retorna `grave`, contexto `batida_em_folga`, e a API encaminha `batida_fora_escala_grave` à disputa. O texto catalogado é **“Confirme o posto e o horário da batida”**, opções **“Confirma” / “Está diferente”**. É pergunta posterior ao registro, não autorização prévia de HE. (`app/api/views.py:654`, `app/chamados/detector_anomalias.py:170–177`, `app/api/views.py:702–707`, `app/api/views.py:758–770`, `app/chamados/services/disputa_emissao.py:683–696`, `app/chamados/catalogo/perguntas.py:82–85`)
-
-- **Folga pelo PWA 5x2:** aquele controle de janela é pulado; a fábrica posterior por célula também não pergunta entrada/saída de dia sem trabalho. Assim, não há equivalência entre os dois canais nesse tratamento imediato. (`app/ponto/services/triagem_batida.py:403–407`, `app/chamados/services/fabrica_da_celula.py:110–113`, `app/chamados/juizes.py:444–459`)
-
-- **Fora da janela em outros tipos:** o PWA pode registrar para revisão e oferecer “Motivo — por que está fora do horário?”. Na API, uma batida sem marco correspondente pode retornar apenas `informativa`; o chamador mostrado trata `grave` e `leve`, sem abrir essa pergunta pela informação. (`app/ponto/services/triagem_batida.py:428–496`, `app/ponto/services/triagem_batida.py:685–710`, `app/templates/ponto/triagem/fora_horario.html:26`, `app/chamados/detector_anomalias.py:212–224`, `app/api/views.py:705–741`)
-
-**5. Segunda entrada: E 21:36 / E 21:49, escala 08–17**
-
-Para a sequência isolada informada, a cadeia produz:
-
-1. Às **21:36**, abre turno geométrico, mas a consulta de vivo já o considera expirado pelo limite das 21h; sugere **E** novamente. (`app/ponto/turnos.py:1419`, `app/ponto/turnos.py:2010–2030`, `app/ponto/turnos.py:2474–2476`)
-2. Às **21:49**, a API ao vivo também escolhe E pelo juiz, mesmo se o cliente enviar outro tipo. Os 13 minutos ultrapassam a deduplicação de cinco minutos. (`app/api/views.py:529–531`, `app/api/views.py:569–577`)
-3. O pareador conserva **dois turnos abertos**, sem formar um par de 13 minutos. A grade não elimina a segunda pelo dedupe de menos de dez minutos; o eco de flush exige distância dos eventos de pelo menos trinta minutos. (`app/ponto/turnos.py:1417–1420`, `app/ponto/turnos.py:1497–1498`, `app/escala/utils.py:1324–1339`, `app/ponto/turnos.py:366–372`)
-4. O realizado dessas duas entradas isoladas é **zero, com turno existente e aberto**; o próximo tipo continua E depois delas. (`app/ponto/turnos.py:733–739`, `app/ponto/turnos.py:771`, `app/ponto/turnos.py:2474–2476`)
-
-Antes da expiração, inclusive numa folga, a situação é diferente: uma primeira E viva normalmente faz o juiz sugerir S, e a API ao vivo pode converter a segunda tentativa em S. Se **duas E realmente persistirem**, o ramo normal conserva dois abertos; tentativas muito próximas ainda podem ser reutilizadas pela deduplicação. (`app/ponto/turnos.py:2474–2478`, `app/api/views.py:529–545`, `app/api/views.py:569–577`, `app/ponto/turnos.py:1417–1420`)
-
-**Ata/cartório não corrigem automaticamente essa dupla E isolada.** O mapa de papel da ata ignora dia aberto ou sem entrada e saída reconhecidas; a reconciliação pela célula pula turnos abertos. O cartório pode lavrar novamente, mas essas guardas continuam presentes. (`app/ponto/turnos.py:1682–1683`, `app/escala/utils.py:1945–1948`, `app/ponto/signals.py:79–93`, `app/ponto/services/cartorio.py:730–762`)
-
-Há correções posicionais para outras figuras, especialmente depois de pausa fechada; não se aplicam automaticamente a duas E isoladas. A própria L-115 preserva a última E solta sem pausa fechada anterior. (`app/ponto/turnos.py:1004–1007`, `app/docs/LEIS.md:153`) Se o dia real tiver batidas anteriores, o resultado completo precisa desse histórico. **[não verificado]**
-
-**perguntas de lei: 6**
-
-Não localizei decisão expressa em `LEIS.md`/`CORTES.md` para os seis recortes abaixo; a ausência de decisão é **[não verificado]**. As referências identificam o comportamento escolhido pelo código e as normas próximas.
-
-1. **Entrada nova já expirada:** a E gravada após o limite do próprio dia deve nascer imediatamente sem turno vivo, apesar de abrir turno geométrico? Hoje o limite é absoluto, fim previsto + 4h. (`app/ponto/turnos.py:2010–2030`, `app/ponto/turnos.py:1419`) **Decisão expressa: [não verificado].**
-2. **Abertura na folga:** uma E na folga deve abrir turno e ter sua vitalidade limitada pelos horários do tipo de trabalho? Hoje isso acontece; o previsto continua folga. (`app/ponto/turnos.py:1402–1420`, `app/ponto/turnos.py:2027`, `app/escala/models.py:1094–1095`, `app/escala/models.py:326–345`) **Decisão expressa: [não verificado].**
-3. **Abertura fora da janela em dia útil:** basta a E para abrir geometria, sem uma decisão específica sobre a jornada excepcional? Hoje o ramo E aceita; L-097 trata dinheiro e L-084 exige duas pontas. (`app/ponto/turnos.py:1417–1420`, `app/docs/LEIS.md:115–116`, `app/docs/CORTES.md:405`) **Decisão expressa: [não verificado].**
-4. **Repetição depois da expiração:** a segunda E deve acumular outro aberto e continuar sugerindo E? Hoje é esse o resultado para 21:36/21:49 isoladas. A L-115 preserva E solta, mas não explicita esse ciclo de sugestão. (`app/ponto/turnos.py:1417–1420`, `app/ponto/turnos.py:2474–2476`, `app/docs/LEIS.md:153`) **Decisão expressa: [não verificado].**
-5. **Fonte da expiração:** deve valer o template vivo ou o DNA congelado do dia? Hoje a geometria pode ler DNA, mas a expiração chama a janela sem `ec` e usa o tipo. (`app/ponto/turnos.py:2250–2257`, `app/ponto/turnos.py:2026–2027`, `app/ponto/selecao_periodo.py:151–169`) **Decisão expressa: [não verificado].**
-6. **Diferença de canal:** a mesma folga/deslocamento deve produzir pergunta imediata pela API e não pelo PWA 5x2, com isenções diferentes por ciclo e tipo-base? Hoje os caminhos fazem essas escolhas. (`app/chamados/detector_anomalias.py:170–189`, `app/ponto/services/triagem_batida.py:403–407`, `app/api/views.py:702–770`) **Decisão expressa: [não verificado].**
-
-## 15/11 22:16 · sessao 0b63094086b7 · - · - · origem=Ronald (tmux)
-
-Rastreio app/PWA e perguntas concluído, somente leitura.
-
-- **Juiz da próxima batida:** `proximo_tipo_de` consulta `_turno_aberto_calc`; sem turno vivo retorna `'E'`, aberto fora de intervalo retorna `'S'` (`app/ponto/turnos.py:2450`, `app/ponto/turnos.py:2474`). `_turno_aberto_puro` pareia com ata e marcos e passa ao `turno_aberto_vivo` (`app/ponto/turnos.py:2272`, `app/ponto/turnos.py:2278`). Expiração usa fim previsto +4h e `agora > expiração`, independentemente da hora da nova E (`app/ponto/turnos.py:2009`, `app/ponto/turnos.py:2011`, `app/ponto/turnos.py:2026`, `app/ponto/turnos.py:2030`).
-- **08–17, E21:36/E21:49:** ambas ocorrem após21h; portanto juiz vivo retorna `None` e próximo tipo continua `'E'` após cada entrada, por dedução desses ramos (`app/ponto/turnos.py:2011`, `app/ponto/turnos.py:2030`, `app/ponto/turnos.py:2475`). API ao vivo substitui o tipo enviado pelo sugerido (`app/api/views.py:569`, `app/api/views.py:577`). Intervalo13min ultrapassa dedup5min (`app/api/views.py:529`, `app/api/views.py:531`).
-- **Payload app:** `/me/` publica `turno_aberto`, `hora_entrada` e `proxima_batida` (`app/api/views.py:354`). Após gravação responde `Entrada registrada às ...`, tipo efetivamente gravado, sucesso e motivos de disputa (`app/api/views.py:803`, `app/api/views.py:813`). Interface nativa e seu texto exato de confirmação: **[não verificado]**.
-- **PWA:** triagem consulta vivo e sugestão (`app/ponto/services/triagem_batida.py:198`). V2 usa `tipo_sugerido` (`app/templates/ponto/bater_ponto_v2.html:104`); PWA antigo usa somente `turno_aberto` para E/S (`app/templates/ponto/triagem/apto.html:88`). Nova E pede confirmação apenas se `context.turno_aberto` estiver presente (`app/ponto/views.py:319`). Após expiração não entra nesse ramo; a pergunta daquele ramo seria “Entrada às ... sem saída. Registrar nova entrada mesmo assim?” (`app/templates/ponto/triagem/turno_confirmar.html:6`).
-- **5x2 fora do horário em dia útil:** PWA pula explicitamente controle de janela para5x2/6x1/personalizado (`app/ponto/services/triagem_batida.py:403`). API pula detector por horário quando `tipo_base == 'comercial'`, depois de verificar folga (`app/chamados/detector_anomalias.py:170`, `app/chamados/detector_anomalias.py:188`). Assim não nasce pergunta por desvio dessa causa; outros motivos dependem do cadastro e evidências da batida **[não verificado]**.
-- **Rígida fora da janela:** PWA considera janela hoje/ontem com tolerância10min; cria chamado `batida_fora_horario`, mas registra (`app/ponto/services/triagem_batida.py:412`, `app/ponto/services/triagem_batida.py:428`, `app/ponto/services/triagem_batida.py:459`, `app/ponto/services/triagem_batida.py:487`). Marca `aprovada=False` (`app/ponto/services/triagem_batida.py:685`, `app/ponto/services/triagem_batida.py:710`); pergunta “Motivo — por que está fora do horário?” (`app/templates/ponto/triagem/fora_horario.html:26`). API rígida sem marco correspondente retorna `informativa`, e seu chamador trata somente grave/leve: não emite pergunta dessa informação (`app/chamados/detector_anomalias.py:212`, `app/chamados/detector_anomalias.py:216`, `app/api/views.py:705`).
-- **Folga API:** grava primeiro (`app/api/views.py:654`), depois detector devolve `grave`, `tipo=batida_em_folga` (`app/chamados/detector_anomalias.py:170`). Adiciona motivo `batida_fora_escala_grave` (`app/api/views.py:704`), cria/atualiza disputa depois da gravação (`app/api/views.py:758`), cuja fábrica gera a pergunta (`app/chamados/services/disputa_emissao.py:683`, `app/chamados/services/disputa_emissao.py:696`): “Confirme o posto e o horário da batida”, opções “Confirma”/“Está diferente” (`app/chamados/catalogo/perguntas.py:82`). Não é autorização prévia: a batida já foi gravada antes desse detector (`app/api/views.py:654`, `app/api/views.py:704`).
-- **Perguntas posteriores por célula:** cartório chama `perguntar_pela_celula` após julgar (`app/ponto/services/cartorio.py:1030`, `app/ponto/services/cartorio.py:1045`). Fábrica usa marcos apagados e vencidos (`app/chamados/services/fabrica_da_celula.py:52`, `app/chamados/services/fabrica_da_celula.py:68`). Mapeamento: inícioE→`saida_sem_entrada`; fimS→`orfao_14h`; intervalos→`intervalo_saida`/`intervalo_volta` (`app/chamados/services/declaracao_texto.py:42`). Textos pedem horário da entrada, saída ou intervalo do dia (`app/chamados/catalogo/perguntas.py:48`, `app/chamados/catalogo/perguntas.py:56`, `app/chamados/catalogo/perguntas.py:124`, `app/chamados/catalogo/perguntas.py:132`).
-- **E avulsa longe em dia útil:** se houver marco apagado, encerramento e demais condições, suprajuiz acusa `FURO_PARCIAL` mesmo sem par fechado (`app/ponto/supra_juiz.py:450`), além de `BATIDA_ORFA_FORA_TOLERANCIA` (`app/ponto/supra_juiz.py:528`). Cartório emite chamado dos marcos faltantes (`app/ponto/services/cartorio.py:1813`, `app/ponto/services/cartorio.py:1828`). A pergunta posterior pode cobrar08h/17h e intervalos apagados, não “por que21:36”, conforme mapeamento (`app/chamados/services/declaracao_texto.py:42`). Emissão efetiva depende dos gates: ativo, não futuro, veredito acusador, parcial fora da lista e dedup (`app/chamados/services/fabrica_da_celula.py:105`, `app/chamados/services/fabrica_da_celula.py:112`, `app/chamados/services/fabrica_da_celula.py:120`, `app/chamados/services/fabrica_da_celula.py:123`, `app/chamados/services/fabrica_da_celula.py:157`). Push dessa fábrica é silenciado (`app/chamados/services/fabrica_da_celula.py:217`).
-- **Folga posteriormente:** `classificar_falta` devolve `(None,None,None)` quando célula diz `trabalha=False` (`app/escala/servico_jornada.py:308`). Fábrica não pergunta marcos de dia sem trabalho (`app/chamados/services/fabrica_da_celula.py:112`; `app/chamados/juizes.py:459`); leitor de faltantes também pula folga (`app/chamados/services/declaracao_texto.py:119`). Havendo realizado **ou órfãs**, dia encerrado e previsto0 pode lavrar `FATO_SEM_PREVISAO` (`app/ponto/supra_juiz.py:392`, `app/ponto/supra_juiz.py:423`), que não acusa (`app/ponto/supra_juiz.py:424`). Isso difere da pergunta imediata de batida fora da escala da API (`app/api/views.py:704`).
-- **Órfã envelhecida:** detector paralelo de órfãs lê geometria sem expiração, lista abertas com idade>0,5h (`app/ponto/utils_turno_orfao.py:31`), aplica faixa14≤idade<96h (`app/ponto/services/triagem_batida.py:25`) e pode produzir motivo `orfao_14h` (`app/chamados/detector_anomalias.py:31`). Essa pergunta posterior depende também da lei e dos gates da fábrica (`app/chamados/services/disputa_emissao.py:287`).
-
-Pontos candidatos para perguntas de lei: expirar E recém-gravada pelo relógio previsto; repetir sugestãoE indefinidamente após expiração; caminhos API/PWA distintos para folga/desvio; dispensar ciclos5x2 de janela PWA e comercial do detector API; aceitar `informativa` sem pergunta imediata; coexistência da expiração viva e da lista geométrica de órfãs. Ausência de decisão expressa em LEIS/CORTES sobre cada item: **[não verificado]**.
-
-_5838 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5840 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
