@@ -80,6 +80,7 @@ esperam migrar -- a lista so encolhe).
 | o aviso de 30 dias foi dado (art.135)? | `ferias/situacao.py::DIAS_AVISO_PREVIO` |
 | o colaborador esta afastado hoje? | `ponto/turnos.py::afastado_hoje` |
 | o colaborador esta de ferias hoje? | `ferias/services.py::em_gozo_hoje` |
+| o colaborador esta desligado? | `colaboradores/services/desligamento.py::esta_desligado` |
 | o fracionamento e valido (art.134)? | `ferias/models.py::AgendamentoFerias.clean` |
 | o lancamento colide com outro fato (recusar)? | `ponto/precedencia.py::veto_de_lancamento` |
 | o periodo venceu ou esta vencendo (art.137)? | `ferias/models.py::status_de_periodo` |
@@ -98,6 +99,7 @@ esperam migrar -- a lista so encolhe).
 | a disputa pode fechar? | `chamados/models.py::DisputaSupervisao.pode_fechar` |
 | a fabrica de perguntas alcanca o chamado (e se nao, por que)? | `chamados/services/disputa_emissao.py::motivo_fora_da_fabrica` |
 | a pergunta da disputa esta viva? | `chamados/juizes.py::pergunta_viva` |
+| a pergunta esta respondida (instante E texto nao vazio apos o trim)? | `chamados/juizes.py::pergunta_respondida` |
 | a premissa do chamado morreu (pode fechar)? | `chamados/catalogo/premissa.py::premissa_morta` |
 | alguma pergunta desta colecao esta viva? | `chamados/juizes.py::fio_vivo` |
 | este dia veta o nascimento/reabertura automatica de chamado de turno? | `ponto/services/furos_vetados.py::motivo_do_veto` |
@@ -186,10 +188,10 @@ esperam migrar -- a lista so encolhe).
 | `turno/marcos` | 15 | 0 | 0 |
 | `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
-| `ausencia/ferias` | 15 | 0 | 0 |
-| `chamado` | 23 | 0 | 0 |
+| `ausencia/ferias` | 16 | 0 | 0 |
+| `chamado` | 24 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
 | `feriado/prazo` | 6 | 2 | 12 |
 | `tela` | 11 | 1 | 109 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **97** | **5** | **245** |
+| **total** | **99** | **5** | **245** |
