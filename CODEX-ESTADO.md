@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 12:21** · publicado em **16/11/2026 12:21** (UTC-3)
+> Ultima resposta processada: **16/11/2026 12:36** · publicado em **16/11/2026 12:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 12:36 · sessao 929ffb0f1659 · CORTES-F2-F9-1611 · construtor · origem=Code
+
+Entregues quatro **TESTE-RED** e uma **CARACTERIZACAO**, com fixtures salvas copiadas do [teste vizinho](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:49), reunidas no [apoio novo](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/cortes_f2_f9_apoio.py:37). [nao verificado]
+
+| Degrau | Decisão e resposta-alvo após F2 | Arquivo escrito e mutante |
+|---|---|---|
+| **M4** | **TESTE-RED**. Sem viva/validação/efeito, RESPOSTA no ato → `RESPONDIDA`, mesmo com projeção vazia. Hoje a queda lê `respondida_em` (`app/chamados/models.py:3158`); RESPOSTA já significa aguardar validação (`app/chamados/services/tarefa_do_dia.py:159`). | [M4](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/test_cortes_f2_f9_m4.py:51). Mutante `m4_pendente`: força a queda para `PENDENTE`. |
+| **M13** | **TESTE-RED**. `_ancoradas` exclui a pergunta validada pelo ato e conserva a pendente. Hoje filtra pelo campo (`app/chamados/models.py:344`); VALIDACAO é decisão existente (`app/chamados/services/tarefa_do_dia.py:167`). | [M13](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/test_cortes_f2_f9_m13.py:38). Mutante `m13_inclui_validadas`: retira o filtro de validação. |
+| **M14** | **TESTE-RED**. Relavra a pendente e preserva `julgado_em` das validadas, inclusive só no ato. Hoje a seleção usa `validada_em` (`app/chamados/models.py:310`); a lavra real altera o instante (`app/chamados/veredito_lavrado.py:272`). | [M14](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/test_cortes_f2_f9_m14.py:41). Mutante `m14_relavra_validadas`: inclui validadas na relavra. |
+| **M15** | **TESTE-RED**. Após REABERTURA, SILENCIO fotografa resposta vigente `''`, preservando a anterior no histórico. A porta zera a resposta (`app/chamados/services/disputa_emissao.py:1609`); hoje SILENCIO fotografa os brancos residuais da projeção (`app/chamados/models.py:2007`). | [M15](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/test_cortes_f2_f9_m15.py:40). Mutante `m15_resposta_anterior`: fotografa `'07:13'`. |
+| **M18** | **CARACTERIZACAO da cópia**. O C6 real recebe cópia com resposta/carimbos zerados; original e banco ficam intactos. Mesmo alvo antes/depois, conforme o trecho não migrado (`app/chamados/models.py:1541`, `app/chamados/models.py:1553`). | [M18](/home/ronald/wt-codex-cortes-f2-f9-1611-122527/app/chamados/tests/test_cortes_f2_f9_m18.py:41). Mutante `m18_texto_residual`: injeta texto na cópia. |
+
+**M19 — ALVO-INDETERMINADO.** Qual API existente deve responder pelo contrato dos ramos prefetch, `pk=None` e duplo, sem pressupor `_leitura_dos_atos` da c3? Correspondência desse helper no main: **[nao verificado]**.
+
+**M20 — ALVO-INDETERMINADO.** Qual lista de leituras residuais permitidas, identificada por `Classe.metodo`, define o oráculo do selo nesta base? Aplicabilidade de `F2_RESIDUO` da c3: **[nao verificado]**.
+
+Comandos individuais, a partir de `app/`, também registrados nas docstrings dos arquivos:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m4 --settings=config.settings.ci
+CORTES_F2_MUTANTE=m4_pendente PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m4 --settings=config.settings.ci
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m13 --settings=config.settings.ci
+CORTES_F2_MUTANTE=m13_inclui_validadas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m13 --settings=config.settings.ci
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m14 --settings=config.settings.ci
+CORTES_F2_MUTANTE=m14_relavra_validadas PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m14 --settings=config.settings.ci
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m15 --settings=config.settings.ci
+CORTES_F2_MUTANTE=m15_resposta_anterior PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m15 --settings=config.settings.ci
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m18 --settings=config.settings.ci
+CORTES_F2_MUTANTE=m18_texto_residual PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_cortes_f2_f9_m18 --settings=config.settings.ci
+```
+
+Em **cada degrau**, falha/verde efetivos, ausência de erro de setup e mordida dos mutantes: **[nao verificado]**. Testes e mutantes não foram executados. Conservação integral da materialização e invariância do `supra_juiz` em competência exportada: **[nao verificado]**. [nao verificado]
 
 ## 16/11 12:21 · sessao 7b8a48377983 · CORTES-F2-F9-1611 · leitura · origem=Code
 
@@ -946,8 +983,4 @@ Achados confirmados:
 - **Pista:** lateral usa PISTA como pré-filtro; o pouso continua certificado pela VM. Esse requisito precisa permanecer no brief. `app/docs/RELATO.md:27`, `app/docs/BACKLOG.md:830`.
 - **Restrição do construtor:** L-126 proíbe ao Codex `ponto/portas/celula.py`, `core/juizes.py`, competência exportada e item que pede `!`; o brief precisará esclarecer arquivos/atos permitidos, sem presumir que o `!` futuro autoriza essas escritas. `app/docs/LEIS.md:147`.
 
-## 16/11 11:42 · sessao 9134330fae03 · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_6010 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6011 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
