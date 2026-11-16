@@ -1,7 +1,87 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 09:37** · publicado em **16/11/2026 09:38** (UTC-3)
+> Ultima resposta processada: **16/11/2026 09:59** · publicado em **16/11/2026 10:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 09:59 · sessao 02a95393c9a8 · CORTES-F2-F9-1611 · censo · origem=Code
+
+**U9b é inalcançável no fluxo normal desta cópia:** a porta anterior exige `pergunta_viva(p) == True`, e nada entre as duas chamadas altera a instância ou invalida seu memo. (`app/chamados/views.py:1238–1257`; `app/chamados/juizes.py:893–905`)
+
+Correspondência da cópia com o hash informado `ab616d1c7dbb1bfda30e6accb10caeb6331071db`: [não verificado].
+
+1. **LEITORES**
+
+   - Na view, a primeira porta importa `chamados.models.pergunta_viva` como `_viva_porta`, consulta a pergunta e descarta aquela que não está viva; o retorno anterior usa “Pergunta nao encontrada ou disputa ja regularizada.” (`app/chamados/views.py:1238–1246`)
+   - U9b importa a mesma função como `_viva` e lê `p.materializada_em`; pelo curto-circuito de `and`, só chama `_viva(p)` quando há carimbo. Sua mensagem está nas duas linhas seguintes indicadas. (`app/chamados/views.py:1256–1262`)
+   - `chamados.models.pergunta_viva` é reexportação de `chamados.juizes.pergunta_viva`; o juiz também lê `materializada_em`, tanto na chave do memo quanto na projeção usada pelo cálculo. (`app/chamados/models.py:4224–4226`; `app/chamados/juizes.py:857,1389,1403`)
+   - Há **citação explícita do ramo** na allowlist: `materializada AND not pergunta_viva`. Portanto, “ninguém cita o ramo” não corresponde à cópia. (`app/chamados/tests/test_contract_leitores_vitalidade.py:225`)
+   - A função irmã `pergunta_sem_lastro_ou_viva` menciona a guarda da porta e lê os mesmos insumos pela expressão inversa: `materializada_em is None or pergunta_viva(p)`. (`app/chamados/juizes.py:1495–1499`)
+   - Os dois formulários do template apontam para a view e ficam sob `p.viva`; essa propriedade delega ao juiz. (`app/templates/chamados/partials/_card_atendimento.html:77–78,169`; `app/chamados/models.py:3474–3484`)
+   - A rota e os inventários citam a **view**, sem fixar U9b ou sua mensagem. (`app/chamados/urls.py:17`; `app/core/juizes.py:1065`; `app/docs/CENSO_PORTAS.md:23,180`; `app/docs/BACKLOG.md:2387`)
+   - Não localizei outra ocorrência literal da mensagem fora da própria view. [não verificado]
+
+2. **ESCRITORES — portas de `PerguntaDisputa.materializada_em`**
+
+   | Porta | Escrita e persistência |
+   |---|---|
+   | `carimbar` | Aplica o carimbo, consulta o juiz, desfaz se viva e salva se aceito. `app/chamados/models.py:3212,3222–3228,3235` |
+   | `carimbar_identidade` | Preserva ou atribui o instante e salva. `app/chamados/models.py:3265–3273` |
+   | `descarimbar` | Zera instante, autor e via; salva por padrão, admitindo `salvar=False`. `app/chamados/models.py:3286–3295` |
+   | `descarimbar_em_lote` | Zera os três campos por `update`. `app/chamados/models.py:3363–3365` |
+
+   As portas de instância atribuem pelo helper `_escrever_carimbo`; `_desfazer_em_memoria` também o usa para restaurar valores, sem persistir nessa função. (`app/chamados/models.py:3180–3184,3242–3249`)
+
+   O selo AST declara os dois sítios diretos da pergunta — helper e limpeza em lote — e verifica escritores fora dessa lista. A atribuição em `regularizacao_ext.py` pertence ao modelo homônimo de regularização externa. (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:43–50,226–236`; `app/chamados/services/regularizacao_ext.py:199–201`)
+
+3. **ALCANÇABILIDADE e mudança entre chamadas**
+
+   - Se a primeira chamada retorna `False`, a view faz `p = None` e retorna antes de U9b. Logo, chegar a U9b implica que a primeira chamada retornou `True`. (`app/chamados/views.py:1242–1246`)
+   - Entre essa porta e U9b há comentários e outro import; não há escrita, recarga da pergunta ou chamada a outra porta. As duas avaliações recebem o mesmo `p`, sem argumentos temporais ou carga. (`app/chamados/views.py:1242–1257`)
+   - O juiz guarda **a chave posterior ao cálculo** e reutiliza o resultado quando ela coincide. A segunda chamada, nesse trecho, retorna o `True` memoizado; assim, `not _viva(p)` é falso. Uma alteração concorrente no banco não provoca nova consulta do cálculo nesse caminho. (`app/chamados/juizes.py:893–905`)
+   - **Em geral, o resultado pode mudar:** mutações nos campos da chave invalidam o memo. Há testes de mudança por `validada_em`, carimbo/via e mutação sem `save`; essas mutações não aparecem entre as portas da view. (`app/chamados/juizes.py:854–861`; `app/chamados/tests/test_selo_memo_pergunta_viva.py:123–126,152–167`; `app/chamados/views.py:1242–1257`)
+
+4. **TESTES EXISTENTES** [nao verificado]
+
+   - A allowlist **cita**, mas não fixa a existência do ramo: a asserção só exige ausência de ofensores fora da lista. Remover U9b não viola essa exigência. (`app/chamados/tests/test_contract_leitores_vitalidade.py:225,319–322`)
+   - `test_z1_pergunta_materializada_resposta_bloqueada` verifica preservação de texto/carimbo, mas envia para `/disputa/pergunta/<pk>/responder/`; a rota cadastrada é `/disputa/responder/<pk>/`. O caso não afirma status nem mensagem, portanto não comprova U9b. (`app/chamados/tests/test_chamados_views_s109.py:86–112`; `app/chamados/urls.py:17`)
+   - O teste da função irmã fixa o predicado para materializada viva e morta, sem chamar a view. O contrato do template fixa o gate `p.viva`, também sem exigir U9b. (`app/chamados/tests/test_selo_juizes_orfaos.py:62–81`; `app/chamados/tests/test_contract_pergunta_viva.py:88–104`)
+   - Não identifiquei teste existente cuja asserção fixe a mensagem ou exija o próprio ramo U9b. [não verificado] [nao verificado]
+
+perguntas de lei: 0
+
+## 16/11 09:58 · sessao 2e110cfbe865 · - · - · origem=Ronald (tmux)
+
+Escrita de `PerguntaDisputa.materializada_em` concentrada em dois sítios: atribuição de instância em `app/chamados/models.py:3182` (`_escrever_carimbo`) e limpeza via `update` em `app/chamados/models.py:3363`/`:3365` (`descarimbar_em_lote`). O selo AST declara exatamente esses sítios para a pergunta e verifica escrita fora da lista em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:43` e `:226`.
+
+Portas que persistem o campo:
+
+- `carimbar`: aplica carimbo, consulta `pergunta_viva`, desfaz se viva e salva quando morta (`app/chamados/models.py:3212`, `:3222`, `:3226`, `:3235`).
+- `carimbar_identidade`: preserva ou atribui instante e salva (`app/chamados/models.py:3265`, `:3268`, `:3273`).
+- `descarimbar`: limpa os três campos e, por padrão, salva; admite `salvar=False` (`app/chamados/models.py:3286`, `:3291`, `:3294`).
+- `descarimbar_em_lote`: limpa instante, autor e via conjuntamente (`app/chamados/models.py:3335`, `:3363`).
+
+Chamadores diretos de produção encontrados:
+
+| Porta | Chamadores |
+|---|---|
+| `carimbar` | `lavrar_sem_turno_aberto` (`app/chamados/reconciliador.py:406`); `retratar_perguntas_absolvidas_por_celula` (`app/chamados/reconciliador.py:596`); `encerrar_fantasma` (`app/chamados/models.py:3386`); `_materializar_ausencia_de_resposta` (`app/chamados/services/materializacao.py:567`); `_materializar_uma` (`app/chamados/services/materializacao.py:1283`); `materializar_pendentes_aprovadas` (`app/chamados/services/materializacao.py:1437`); `_resolver_perguntas_por_chamado_resolvido` (`app/chamados/services/disputa_emissao.py:2007`, `:2081`). |
+| `carimbar_identidade` | `remover_motivo` (`app/chamados/models.py:2125`); `fechar_por_admin` (`app/chamados/models.py:3147`); `_materializar_resposta_hora` (`app/chamados/services/materializacao.py:930`); `_carimbar_recusa` (`app/chamados/services/materializacao.py:1105`); `retratar_duplicata` (`app/chamados/services/fio.py:1398`). |
+| `descarimbar` | `_universo_da_ressuscitacao`, em memória (`app/chamados/models.py:1553`); `reabrir_fantasma` (`app/chamados/models.py:3397`); `reabrir_por_resposta`, sem salvar (`app/chamados/models.py:3414`); `reabrir_por_competencia` (`app/chamados/models.py:3421`); `desfazer_carimbo_sem_lastro` (`app/chamados/services/relavra_via.py:246`). |
+| `descarimbar_em_lote` | `ressuscitar_perguntas` (`app/chamados/models.py:1613`); `reabrir_para_correcao` (`app/chamados/services/disputa_emissao.py:1648`). |
+
+O campo homônimo escrito em `app/chamados/services/regularizacao_ext.py:199` pertence à regularização externa, excluída explicitamente do censo da pergunta pelo selo (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:47`). A migração cria o campo anulável, sem carga de dados (`app/chamados/migrations/0016_s84_pergunta_chamado_destino.py:21`).
+
+Executei apenas em memória o scanner AST existente; retornou os dois sítios acima para a pergunta. Seu alcance exclui `__dict__` e nomes trazidos de outro módulo/atributo, conforme declaração explícita (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:111`). Nenhuma execução Django/banco foi feita [não verificado].
+
+## 16/11 09:58 · sessao b46d93639d17 · - · - · origem=Ronald (tmux)
+
+- A mensagem inteira está em `app/chamados/views.py:1261` e `:1262`; não encontrei outra ocorrência literal nas fontes `.py/.html/.md` pesquisadas. [não verificado]
+- Há **citação explícita do ramo** na allowlist de `app/chamados/tests/test_contract_leitores_vitalidade.py:225`. Esse teste detecta comparações cruas de carimbo (`:307-314`) e só reprova ofensores **fora** da allowlist (`:319-322`); portanto não exige a existência do ramo, nem sua execução, nem a mensagem (`:225`, `:319-322`).
+- Há regra irmã em `app/chamados/juizes.py:1495-1499`: `pergunta_sem_lastro_ou_viva(p)` devolve `materializada_em is None or pergunta_viva(p)`, com docstring remetendo à porta. O teste `app/chamados/tests/test_selo_juizes_orfaos.py:62-81` fixa essa função irmã para materializada viva e materializada morta; não chama a view (`:68-81`).
+- `app/chamados/tests/test_chamados_views_s109.py:86-112` declara testar bloqueio da resposta materializada e verifica preservação do texto/carimbo (`:107-112`), mas o POST usa `/chamados/disputa/pergunta/<pk>/responder/` (`:102`), enquanto a rota real é `/chamados/disputa/responder/<pk>/` (`app/chamados/urls.py:17`). Não há asserção de status ou mensagem no caso (`test_chamados_views_s109.py:99-112`); logo ele não comprova U9b. O próprio `test_hx_simetria_toque.py:58-63` registra a correção desse problema de URL manual e impede 404 no seu helper.
+- Outros testes da view: `test_hx_simetria_toque.py:66-92` fixa toque/reenvio/escape; `test_responder_web_falta.py:33-42` fixa materialização de falta pelo caminho web; `test_smoke.py:170`, `:181-185` fixa somente resolução de URL. Nenhum desses fixa a mensagem U9b nas asserções citadas. [nao verificado]
+- Templates: formulários da rota em `app/templates/chamados/partials/_card_atendimento.html:78` e `:169`, dentro do gate `p.viva` aberto em `:77`; o contrato de template verifica esse gate e sua ordem em `app/chamados/tests/test_contract_pergunta_viva.py:88-104`.
+- Outros registros da **view**, sem fixar U9b: inventário em `app/core/juizes.py:1065`; documentação em `app/docs/BACKLOG.md:2387`, `app/docs/CENSO_PORTAS.md:23` e `:180`.
 
 ## 16/11 09:37 · sessao d8971b8baaa8 · CORTES-F2-F9-1611 · verificador · origem=Code
 
@@ -544,87 +624,4 @@ A implementação atual confirma atomic comum, porta antes da trilha e `except` 
 
 Limite: este teste sozinho não comprova passagem por `salvar_inteiro`; não há spy nessa função. Substituí-la por `colaborador.save()` dentro do mesmo atomic preservaria os efeitos examinados, mas removeria a guarda. A guarda é exercitada pelo teste separado de desligamento durante a carga. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:211-228`, `:246-264`; `app/colaboradores/services/colaborador.py:158-160`). Esse bypass é um mutante fora da família estrita perguntada. (`app/colaboradores/views.py:334`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:250-264`).
 
-## 16/11 08:54 · sessao eb897fb79a41 · - · - · origem=Ronald (tmux)
-
-Parecer sobre a pergunta 3: **não há colisão substantiva demonstrada pelo material disponível**; a lacuna operacional do wrapper deve ser tratada na pergunta 1. A lei permite expressamente testes RED em cópia própria fora do papel construtor, sob contrato e revisão (`CLAUDE.md:349-350`; `app/docs/PISTA.md:143-145`).
-
-- O critério de colisão é **arquivo**, inclusive arquivo de teste; o item 9 já manda esperar quando cruzar F1/R3/BUG-PAR (`CLAUDE.md:309-310`; anexo `cortes_f2_f9_1611.txt`, item 9). [nao verificado]
-- O registro disponível confirma cruzamentos da BUG-PAR com F1 em `fio.py`, `test_s139.py`, `test_medida_turno_do_par.py` e `JUIZES.md`; a construção da volta aguardava o pouso da B1 (`app/docs/RELATO.md:14`, `:25`, `:33`). O anexo COMPLEMENTO-2 preserva essa espera e autoriza apenas ensaio de leitura.
-- **Não certificar ausência de cruzamento com LOTE7 c7/LOTE3 c7**: o registro da cópia descreve c6 e seus arquivos, enquanto o usuário informa c7; os deltas atuais das cópias não foram fornecidos (`app/docs/RELATO.md:4`, `:7`, `:12-13`; estado c7 **[nao verificado]**).
-- A lei vigente **L-130 substituiu JUIZ-RESPONDIDA e F5/F6(2)**: “respondida” exige instante **e** texto; pares parciais são ilegais (`app/docs/LEIS.md:151`). Portanto, matrizes históricas com P5/texto sem instante precisam ser lidas à luz dessa lei. Não é prova de colisão de um teste ainda não escrito: um caso ilegal pode ser entrada válida para testar a recusa.
-- Há uma precondição normativa ausente do item 9: RED em cópia própria exige contrato **antes do primeiro uso**, com cinco linhas e revisão do instrumento (`app/docs/PISTA.md:144-145`, `:170-175`; `CLAUDE.md:394`). Existência de contrato anterior: **[nao verificado]**.
-
-Não atribuir ao veto antigo das matrizes uma colisão automática: o novo aval autoriza especificamente construir **só testes**, preservando a espera por dependências e cruzamentos (anexo `cortes_f2_f9_1611.txt`, item 9). [nao verificado]
-
-## 16/11 08:54 · sessao 8cece979ddda · LOTE7-C7 · verificador · origem=Code
-
-**O c7b fecha a preservação dos campos acrescentados, mas não demonstra rollback após tentativa de escrita nem frescor temporal “neste ato”.** O descarte do mutante que levanta antes de escrever precisa ser restringido; o teste positivo não elimina sua variante condicional. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:252`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:243`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`)
-
-Resultados executados de testes/mutantes, logs, igualdade com árvores anteriores e estado de produção: `[nao verificado]`. As conclusões abaixo são estáticas, sobre a cópia e o delta fornecido. [nao verificado]
-
-Nos achados marcados **PROCEDENTES**, o fechamento é o seguinte:
-
-| Achado da v1 | O delta fecha? |
-|---|---|
-| Item 1: apagar ausências ou alterar outros campos e levantar a exceção esperada | **Sim, para o conjunto e os campos enumerados.** O teste fotografa PK, tipo, status, data, fim, minutos e descrição antes da chamada e exige igualdade depois. “Linha INTEIRA” continua excessivo: ficam fora, por exemplo, `dias_corridos`, `hora_ini` e `hora_fim`. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:238`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:252`; `app/ponto/models.py:761`; `app/ponto/models.py:768`; `app/ponto/models.py:770`) |
-| Item 4: campos omitidos em `_retrato` | **Sim, para os campos acrescentados.** Agendamento passa a incluir início/fim/dias; ausências incluem tipo/fim/minutos/descrição; trilhas antigas incluem descrição. A comparação continua limitada às PKs antigas da auditoria. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:523`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:546`) |
-| Item 4: timestamp incorreto, porém não nulo | **Parcialmente.** O filtro agora rejeita valores anteriores a `instante`, mas o relógio congelado permite usar o instante da criação da célula e ainda passar; detalhes abaixo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:60`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:454`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:463`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`) |
-| Item 7: comentário sobre competência futura | **Fecha o trecho alterado.** O comentário passa a concordar com o teto que considera a última competência carimbada. Entretanto, permanece a afirmação contrária no comentário da edição. (`app/ponto/services/ausencia.py:1119`; `app/ponto/services/ausencia.py:147`; `app/ponto/services/ausencia.py:151`; `app/ponto/services/ausencia.py:665`) |
-| Item 3: “regularização, só leitura” | A formulação corrigida no anexo é compatível se qualificar somente o acréscimo dos ganchos. O serviço grava Justificativa e pode criar ausências; não é integralmente de leitura. (`app/ponto/services/regularizacao.py:106`; `app/ponto/services/regularizacao.py:118`; `app/ponto/services/ausencia.py:597`) |
-
-**Mutante sobrevivente principal:** mover `_ev_rej(...)` para antes de `a.save(...)`, mantendo a exceção quando a auditoria retorna `None`. No sucesso, continua salvando as cinco rejeições e criando as trilhas; na falha, levanta sem tentar salvar a ausência. Os negativos fornecidos fazem a primeira auditoria de rejeição falhar e não exigem tentativa nem ordem de escrita. Portanto, o positivo e os testes alterados não distinguem esse mutante do código atual. Sobrevivência inferida; execução `[nao verificado]`. (`app/ponto/services/ausencia.py:1498`; `app/ponto/services/ausencia.py:1499`; `app/ponto/services/ausencia.py:1506`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:216`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:243`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:531`)
-
-Uma variante mais grave também fica sem testemunha nesses testes: inverter auditoria/save **e retirar o `atomic` local**. A falha na segunda auditoria poderia deixar a primeira rejeição persistida numa chamada direta, enquanto os negativos atuais falham na primeira. O cancelamento ainda teria sua transação externa. Sobrevivência inferida; execução `[nao verificado]`. (`app/ponto/services/ausencia.py:1484`; `app/ponto/services/ausencia.py:1494`; `app/ferias/services.py:674`; `app/ferias/services.py:683`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:243`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:532`)
-
-Para os **DESCARTADOS**, os motivos se sustentam nestes limites:
-
-| Descarte | Verificação |
-|---|---|
-| “Levantar antes de escrever é morto pelo positivo” | **Somente para `raise` incondicional.** O mutante condicional acima sobrevive por leitura. Além disso, o positivo citado exige retorno `5` e cinco trilhas, mas não conta diretamente cinco ausências rejeitadas; essa contagem está no teste da célula. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:217`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:219`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:468`) |
-| Trilha nova indevida permitida deliberadamente | **Coerente com o contrato escrito**, que preserva apenas as antigas. Contudo, o teste permite qualquer inserção nova, sem verificar que represente recusa legítima. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:517`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:546`) |
-| Ramo com adesão fora do escopo | É uma delimitação de escopo; a lacuna permanece. A fixture percorre `nunca_bateu`, cujo ramo retorna antes do processamento normal. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:460`; `app/ponto/services/cartorio.py:1317`; `app/ponto/services/cartorio.py:1318`) |
-| Veredito/ata fora do escopo | Também delimita escopo, sem demonstrar esses conteúdos. Os asserts verificam atividade, status, carimbo e FK, não veredito ou ata. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:466`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:472`) |
-| Relógio, D e falha de invalidação sem retentativa estão em fila | Os mecanismos continuam presentes: leitura interna de relógio, julgamento sob `engolir` sem savepoint nesse wrapper, invalidação que retorna zero após erro e repetição que ignora insumos iguais. Antiguidade histórica e gestão efetiva da fila: `[nao verificado]`. (`app/ponto/services/ausencia.py:184`; `app/ponto/services/ausencia.py:191`; `app/ponto/signals.py:88`; `app/core/observ.py:86`; `app/ponto/services/fechamento.py:1661`) |
-| Selo é apenas piso; testes comportamentais cobrem mapas vazios | **Sustenta-se para silenciar globalmente a invalidação.** O positivo exige fechamento invalidado. Isso não prova cobertura de todos os ramos; o selo verifica presença de chamada viva, sem validar seus argumentos. Os “18 FAIL” executados: `[nao verificado]`. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:224`; `app/ponto/tests/test_lote7_selo_escritor_acorda.py:222`) |
-| `obs` interpretado como metadado é dívida anterior | A interpretação por substrings existe. Sua antiguidade e tratamento em fila: `[nao verificado]`. (`app/ferias/management/commands/listar_ferias_dp.py:27`; `app/ferias/management/commands/listar_ferias_dp.py:28`; `app/ferias/management/commands/listar_ferias_dp.py:30`) |
-| Histórico/base/logs foram conferidos por outro verificador | Isso não substitui verificação nesta cópia. Igualdade byte a byte com a base e execuções relatadas: `[nao verificado]`. A ausência do bloco J1 é compatível com a passagem direta da atualização da Justificativa para o passo 5b. (`app/ponto/services/regularizacao.py:102`; `app/ponto/services/regularizacao.py:108`) |
-
-Quanto às armadilhas novas do delta:
-
-- **Não identifiquei asserção universalmente incapaz de falhar.** Em particular, o filtro por timestamp falha se `julgada_em` continuar nulo: a fixture não o preenche e o modelo permite `NULL`. Entretanto, o acréscimo temporal não prova avanço entre atos. Sob o congelamento, um mutante que grave `cel.julgada_em = cel.gerada_em`, conservando os demais efeitos, satisfaz `>= instante`. Sobrevivência inferida; execução `[nao verificado]`. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:60`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:454`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`; `app/escala/models.py:1702`; `app/escala/models.py:1745`; `app/ponto/portas/celula.py:1194`)
-- **Não há dependência de ordem indeterminada nas comparações acrescentadas.** Ausências são ordenadas por tuplas começando pela PK; auditorias são dicionários por PK; células usam contagem ou comparação com vazio. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:239`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:472`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:523`)
-- **Todos os campos acrescentados existem.** (`app/ponto/models.py:749`; `app/ponto/models.py:751`; `app/ponto/models.py:755`; `app/ponto/models.py:776`; `app/ferias/models.py:312`; `app/ferias/models.py:314`; `app/core/models.py:299`; `app/escala/models.py:1745`)
-- **Há imprecisão documental:** o novo comentário “linha INTEIRA” excede o retrato implementado; a docstring de `_retrato` continua enumerando os campos antigos. O comentário corrigido sobre futuro está correto, mas permanece outro contraditório em `editar_ausencia_registro`. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:250`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:515`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`; `app/ponto/services/ausencia.py:1119`; `app/ponto/services/ausencia.py:665`; `app/ponto/services/ausencia.py:669`)
-
-O mapa de escritores/leitores abaixo cobre os caminhos conferidos; censo exaustivo do repositório: `[nao verificado]`.
-
-| Campo | Quem escreve | Quem lê e concordância com o teste | [nao verificado]
-|---|---|---|
-| `Ausencia.tipo` | Criação, edição e espelho de férias. (`app/ponto/services/ausencia.py:484`; `app/ponto/services/ausencia.py:648`; `app/ponto/services/ausencia.py:1390`) | O insumo da folha inclui tipo; o juiz o usa para interpretar ausência sem fim. A igualdade protege a classificação anterior, sem validar sua correção. (`app/ponto/services/ausencia.py:127`; `app/ponto/turnos.py:2805`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `Ausencia.data_fim` | Criação recebe; edição deriva/atribui; `save` pode derivar de `dias_corridos`. (`app/ponto/services/ausencia.py:485`; `app/ponto/services/ausencia.py:627`; `app/ponto/services/ausencia.py:650`; `app/ponto/models.py:917`) | O juiz interpreta fim inclusivo; `NULL` prolonga somente tipos em aberto, senão representa dia único. O snapshot preserva o valor sem impor interpretação divergente. (`app/ponto/turnos.py:2798`; `app/ponto/turnos.py:2803`; `app/ponto/turnos.py:2808`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `Ausencia.minutos` | Criação/edição; `save` deriva falta aprovada sem minutos; férias fornece zero. (`app/ponto/services/ausencia.py:485`; `app/ponto/services/ausencia.py:658`; `app/ponto/models.py:887`; `app/ponto/models.py:897`; `app/ponto/services/ausencia.py:1391`) | Insumo da folha e propriedade `horas` leem duração. O teste exige preservação; zero em férias não significa inexistência da cobertura, que é criada por dia. (`app/ponto/services/ausencia.py:127`; `app/ponto/models.py:876`; `app/ponto/services/ausencia.py:1390`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `Ausencia.descricao` | Criação, edição, reabertura e espelho; este grava `Ferias agendamento #N`. (`app/ponto/services/ausencia.py:486`; `app/ponto/services/ausencia.py:653`; `app/ponto/services/ausencia.py:1316`; `app/ponto/services/ausencia.py:1393`) | Painel exibe; backfill interpreta a marca `#N`. Preservar a descrição protege também esse metadado. (`app/templates/ponto/partials/painel_ausencia.html:56`; `app/ponto/services/ausencia.py:1552`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:522`) |
-| `AgendamentoFerias.data_inicio` | Criação e troca de janela. (`app/ferias/services.py:582`; `app/ferias/services.py:716`; `app/ferias/services.py:729`) | O espelho inicia a enumeração nessa data; snapshot exige a mesma janela após recusa. Significado concordante. (`app/ponto/services/ausencia.py:1380`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`) |
-| `AgendamentoFerias.data_fim` | Criação calcula fim; troca de janela atribui/persiste. (`app/ferias/services.py:565`; `app/ferias/services.py:584`; `app/ferias/services.py:716`; `app/ferias/services.py:729`) | O espelho inclui o último dia. A comparação preserva esse limite inclusivo. (`app/ponto/services/ausencia.py:1381`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`) |
-| `AgendamentoFerias.dias` | Criação e troca de janela. (`app/ferias/services.py:584`; `app/ferias/services.py:716`) | Modelo confere quantidade inclusiva; cancelamento subtrai `vivo.dias` dos concedidos. O teste preserva quantidade e janela, sem recalculá-las. (`app/ferias/models.py:382`; `app/ferias/services.py:680`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:520`) |
-| `LogAuditoria.descricao` | `evento` persiste o argumento; rejeição fornece dia/agendamento. (`app/core/observ.py:136`; `app/ponto/services/ausencia.py:1500`) | Busca e tela leem texto. O teste preserva descrições antigas; não valida a descrição das trilhas novas. (`app/core/views.py:714`; `app/templates/core/log_auditoria.html:73`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:523`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:546`) |
-| `CelulaDia.julgada_em` | `carimbar` grava `agora`, salvo retorno por idempotência; desfazer julgamento futuro pode limpar. (`app/ponto/portas/celula.py:1190`; `app/ponto/portas/celula.py:1194`; `app/ponto/portas/celula.py:1165`) | Cartório combina carimbo, impressão e veredito para frescor. O delta usa apenas o limite temporal para afirmar “neste ato”; sob congelamento, essa afirmação é mais forte que a evidência. (`app/ponto/services/cartorio.py:1260`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:463`; `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:470`) |
-
-## 16/11 08:54 · sessao 6c1c5237105b · - · - · origem=Ronald (tmux)
-
-A triagem atualizada procede no limite do contrato mostrado no código: `salvar_inteiro` e `registrar_mudanca` estão no mesmo `atomic`, e o `except` fica depois da saída desse bloco. Nenhum dos passivos abaixo demonstra quebra desse rollback excepcional na implementação atual. (`app/colaboradores/views.py:331-343`)
-
-| Item | Conferência |
-|---|---|
-| Releitura sem teste que a distinga da restauração em memória | A correção da entrega é adequada: o gancho de desligamento só altera situação/data/motivo, preservando posto; suas asserções continuam compatíveis com restaurar `_posto_antes`. A leitura nova ocorre durante a trilha e não testa a origem do objeto usado no `except`. (`app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:40-43`, `:216-228`, `:247-253`; `app/colaboradores/views.py:343`) |
-| Homônimos | `de == para` retorna sem histórico; a view passa representações textuais, e `Posto.__str__` contém nome e empresa. Dois postos com essa mesma representação podem trocar FK sem trilha, por inferência estática. (`app/colaboradores/services/historico_vinculo.py:10-17`; `app/colaboradores/views.py:326-336`; `app/colaboradores/models.py:276-277`) |
-| Anterior potencialmente obsoleto | `_posto_antes` é obtido antes da trava da porta; a guarda trava e relê situação, sem atualizar esse anterior. Corrida real: **[nao verificado]**. (`app/colaboradores/views.py:326-334`; `app/colaboradores/services/colaborador.py:65-66`, `:89-91`, `:158-160`) |
-| `sem_posto` repetido | Está nos dois ramos e no painel, com pendência explícita registrada. (`app/colaboradores/views.py:346`, `:365`; `app/templates/colaboradores/partials/painel_vinculo.html:34`; `app/core/juizes.py:931-932`) |
-| Datas distintas | A view usa dia atual; vínculo usa `data_inicio`; desligamento agendado usa `data_demissao`. (`app/colaboradores/views.py:335`; `app/colaboradores/services/vinculo.py:354`; `app/colaboradores/services/desligamento.py:107-116`) |
-| Trava adicional na matrícula | O `save` pode travar a linha da maior matrícula quando a matrícula estiver ausente. (`app/colaboradores/models.py:427-438`) |
-
-O aval integral `RESPOSTAS-DA-MANHA-1611` não foi encontrado na cópia; o código apenas o referencia. Portanto, dizer que esses itens estão “fora do aval literal” depende do resumo da entrega; conformidade com o aval integral e autorização final de pouso: **[nao verificado]**. (`app/colaboradores/views.py:331`; `app/colaboradores/tests/test_lote3_c6_recusa_nada_gravado.py:231`)
-
-Preexistência/ancestralidade dos passivos e resultados alegados de testes, mutantes, ruff e logs: **[nao verificado]**; a cópia não oferece metadados Git utilizáveis, e nenhum teste foi executado. **[nao verificado]** [nao verificado]
-
-_5983 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5986 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
