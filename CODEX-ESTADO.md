@@ -1,7 +1,93 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 02:09** · publicado em **16/11/2026 02:09** (UTC-3)
+> Ultima resposta processada: **16/11/2026 02:14** · publicado em **16/11/2026 02:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 02:14 · sessao 63a47c44631b · LOTE7-C6 · verificador · origem=Code
+
+1. **BLOQUEIA — `decidir` ainda invalida duas vezes num único ato.** Contraexemplo: declaração de 240 minutos em `aguardando_decisao`, aprovada com período 08:00–12:00. `mudar_estado` grava a aprovação e invalida; depois `decidir` grava as horas e invalida novamente. O “antes” do ato foi dividido em dois snapshots, contrariando o comentário “Um ato = uma invalidacao”. (`app/ponto/services/ausencia.py:966`, `app/ponto/services/ausencia.py:971`, `app/ponto/services/ausencia.py:1050`, `app/ponto/services/ausencia.py:1053`, `app/ponto/services/ausencia.py:1069`, `app/ponto/services/ausencia.py:1087`)
+
+   Os testes separam justamente essa composição: aprovação **sem período** e alteração de período numa linha **já aprovada**. Nenhum desses dois casos detecta a duplicação acima. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:305`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:309`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:320`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:324`)
+
+2. **BLOQUEIA — o acordador invalida competências que nenhum dos lados ocupa.** Ele transforma a união de dias de antes/depois em um intervalo contínuo, usando apenas mínimo e máximo. Contraexemplo, empresa com corte 21: mover uma falta diária aprovada de 10/09 para 10/11 também invalida outubro, embora a ausência nunca tenha ocupado essa competência. Isso mantém a divergência “contador maior que universo alterado”. (`app/ponto/services/ausencia.py:174`, `app/ponto/services/ausencia.py:175`, `app/ponto/services/ausencia.py:178`, `app/ponto/services/fechamento.py:1595`, `app/ponto/services/fechamento.py:1599`, `app/ponto/services/fechamento.py:1653`, `app/ponto/services/fechamento.py:1656`)
+
+3. **BLOQUEIA — o selo permite escrita de insumo por uma isenção.** Se o censo não atribuir o receptor e a função importar outro modelo de `ponto.models`, a escrita é descartada. Contraexemplo aceito pela regra: função que importa `Batida`, recebe uma `Ausencia` em `a` e executa `a.save(update_fields=['status'])`. O campo é monitorado, mas a isenção posterior libera a função. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:89`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:105`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:108`)
+
+   Existem outras passagens: métodos de classe não entram na varredura; uma chamada do acordador dentro de `if False` satisfaz o selo; atribuir o mesmo receptor a um dict em qualquer ramo permite descartá-lo. Portanto, presença textual do acordador não prova execução nem cobertura de todos os escritores. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:55`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:59`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:75`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:101`)
+
+   Os mutantes fornecidos têm mordida na análise AST: retiram o acordador dos escritores reconhecidos e acrescentam cinco formas de escrita. Eles não abrangem as passagens acima. Execução Django e RED contra `f8ee770a5`: **[nao verificado]**. (`app/ponto/tests/test_lote7_selo_escritor_acorda.py:157`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:166`)
+
+4. **BLOQUEIA — o teste “rejulga a célula” não executa o julgamento.** Ele substitui `_julgar_dias` por mock e compara somente os IDs recebidos. Assim não executa nem a função que calcula os dias nem `cartorio.julgar_celula`. Contraexemplo: quebrar o corpo do julgador mantém esse teste passando; ele também não exige que exista uma célula julgável. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:364`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:366`, `app/ponto/signals.py:92`, `app/ponto/signals.py:93`, `app/ponto/services/cartorio.py:2027`)
+
+5. **FILA — outras provas novas têm alcance menor que o nome.**
+
+   - O teste de Justificativa rejeitada→pendente não conserva/recarrega a Justificativa nem verifica seu status final. Remover a atualização de Justificativa ainda satisfaz suas duas asserções: retorno `ok` e fechamento preservado. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:349`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:354`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:355`, `app/ponto/services/regularizacao.py:102`)
+   - `_nada_mudou` verifica apenas agendamento não cancelado e ausência não rejeitada; não prova saldo, observações e trilhas anteriores preservados. Os testes novos exercitam cancelamento individual e massa; a captura em `corrigir_concluida_admin` não tem caso correspondente nesse arquivo. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:412`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:417`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:426`, `app/ferias/views.py:452`)
+   - As fixtures principais possuem proteção contra vazio: o espelho exige quantidade igual aos dias, a rejeição exige cinco linhas, e o espião de invalidação usa `wraps` da função real. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:198`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:210`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:85`)
+
+6. **FILA — relógio continua sendo lido dentro do acordador.** `_acordar_projecao` não recebe `hoje/agora`; lê `localdate()` internamente, inclusive antes de descobrir que os snapshots são iguais. Contraexemplo: os mesmos snapshots de afastamento aberto produzem alcance diferente conforme a data da execução. (`app/ponto/services/ausencia.py:142`, `app/ponto/services/ausencia.py:162`, `app/ponto/services/ausencia.py:165`, `app/ponto/services/ausencia.py:171`)
+
+   Os casos derivados de `_Base` têm congelamento; `FeriasTelaTrilhaTest` herda diretamente de `TestCase`, sem esse congelamento, e seu caso de massa atravessa `datetime.now()`. Não achei chamada direta a `timezone.now()` no arquivo novo; há chamadas indiretas nos serviços/modelo exercitados. (`app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:53`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:381`, `app/ferias/views.py:608`, `app/ponto/services/regularizacao.py:85`, `app/ponto/models.py:883`)
+
+7. **FILA — conferência dos snapshots por escritor.** A leitura do banco protege `mudar_estado` mesmo sendo feita depois da atribuição em memória de `status`; a gravação ainda não ocorreu nesse ponto. A exceção de composição é `decidir`, descrita no achado 1. (`app/ponto/services/ausencia.py:131`, `app/ponto/services/ausencia.py:955`, `app/ponto/services/ausencia.py:966`, `app/ponto/services/ausencia.py:967`)
+
+   | Função | Antes / última escrita / depois |
+   |---|---|
+   | `criar_ausencia` | Antes vazio para nascimento; `save` em `app/ponto/services/ausencia.py:545`; snapshot/acordador em `app/ponto/services/ausencia.py:580`. Retornos de linha existente saem antes, em `app/ponto/services/ausencia.py:373`, `app/ponto/services/ausencia.py:426`, `app/ponto/services/ausencia.py:439`. |
+   | `editar_ausencia_registro` | Antes em `app/ponto/services/ausencia.py:630`, antes das atribuições; escrita em `app/ponto/services/ausencia.py:642`; depois em `app/ponto/services/ausencia.py:652`. O rejulgamento posterior só mexe em estados abertos, fora da folha. (`app/ponto/services/ausencia.py:658`, `app/ponto/services/ausencia.py:670`) |
+   | `mudar_estado` | Antes em `app/ponto/services/ausencia.py:966`; escrita com derivações em `app/ponto/services/ausencia.py:967`; depois em `app/ponto/services/ausencia.py:971`. |
+   | `decidir` | Transição já gravada/invalidação em `app/ponto/services/ausencia.py:1050`; segundo antes em `app/ponto/services/ausencia.py:1053`; carimbos/período em `app/ponto/services/ausencia.py:1069`; segundo depois em `app/ponto/services/ausencia.py:1087`. |
+   | `_reabrir` | Anexo e descrição são gravados antes; mudança de status delegada em `app/ponto/services/ausencia.py:1284`; prazo posterior fica fora do insumo. (`app/ponto/services/ausencia.py:1273`, `app/ponto/services/ausencia.py:1283`, `app/ponto/services/ausencia.py:1291`) |
+   | `rejulgar_status_pelo_tipo` | Só estados abertos; delega a transição e depois pode gravar prazo. (`app/ponto/services/ausencia.py:670`, `app/ponto/services/ausencia.py:675`, `app/ponto/services/ausencia.py:681`) |
+   | `escalonar_aguardando_documento` | Não grava Ausencia diretamente; chama `mudar_estado` para aguardando_documento→aguardando_decisao. (`app/ponto/services/ausencia.py:1132`, `app/ponto/services/ausencia.py:1144`) |
+   | `anexar_documento` | Grava anexo e delega eventual transição entre estados fora da folha. (`app/ponto/services/ausencia.py:997`, `app/ponto/services/ausencia.py:1011`, `app/ponto/services/ausencia.py:1012`) |
+   | `espelhar_ferias` | Captura antes dos deletes nos dois ramos; criações passam pela porta. (`app/ponto/services/ausencia.py:1336`, `app/ponto/services/ausencia.py:1338`, `app/ponto/services/ausencia.py:1340`, `app/ponto/services/ausencia.py:1353`, `app/ponto/services/ausencia.py:1363`, `app/ponto/services/ausencia.py:1367`) |
+   | `apagar_ausencias_de_ferias` | Antes em `app/ponto/services/ausencia.py:1424`; delete em `app/ponto/services/ausencia.py:1425`; depois vazio em `app/ponto/services/ausencia.py:1427`. |
+   | `rejeitar_ausencias_de_ferias` | Linhas travadas; antes em `app/ponto/services/ausencia.py:1457`; saves em `app/ponto/services/ausencia.py:1462`; depois em `app/ponto/services/ausencia.py:1473`. |
+   | `apagar_ausencias_em_ensaio` | Captura por colaborador em `app/ponto/services/ausencia.py:1702`; delete em `app/ponto/services/ausencia.py:1703`; depois vazio em `app/ponto/services/ausencia.py:1705`. |
+   | `rederivar_fim` | Antes em `app/ponto/services/ausencia.py:1715`; save/refresh em `app/ponto/services/ausencia.py:1716`; depois em `app/ponto/services/ausencia.py:1720`. |
+
+   Há outra chamada com múltiplas invalidações: espelhar cinco dias novos de férias chama cinco vezes `criar_ausencia`, cada uma chamando o acordador. Não existe agregação por competência nesse nascimento. (`app/ponto/services/ausencia.py:1348`, `app/ponto/services/ausencia.py:1353`, `app/ponto/services/ausencia.py:580`)
+
+8. **FILA — o predicado de estado é o mesmo; o universo completo não é.** `_insumo_da_folha` reutiliza exatamente `_pelo_efeito(...,'folha')`, como os leitores principais do fechamento. Esse predicado exige `aprovada`. O desconto passa também por `folha.export`, cujo literal é igualmente `aprovada`; não achei caminho nesses consumidores que conte uma não aprovada. (`app/ponto/services/ausencia.py:138`, `app/ponto/services/fechamento.py:639`, `app/ponto/services/fechamento.py:683`, `app/ponto/turnos.py:2528`, `app/folha/export.py:88`, `app/ponto/services/fechamento.py:873`)
+
+   O contrário existe no sentido de seleção: `_insumo_da_folha` recebe PKs sem recorte temporal, enquanto o fechamento recorta a janela e a cobertura desempata por data/PK. Contraexemplo: uma aprovada de setembro aparece no snapshot solicitado pelo PK, mas não participa do fechamento de novembro. Isso não é divergência do filtro de status. (`app/ponto/services/ausencia.py:138`, `app/ponto/turnos.py:2543`, `app/ponto/turnos.py:2765`, `app/ponto/turnos.py:2793`)
+
+   **Campos adicionais efetivamente lidos:** `status`, `colaborador` e `pk` não estão em `CAMPOS_DO_INSUMO`; são representados, respectivamente, pela presença no dict, pelo argumento separado do acordador e pela chave do dict. `efeito` deriva de `tipo`. Não achei outro campo de fato faltando nos caminhos de cálculo examinados. (`app/ponto/services/ausencia.py:119`, `app/ponto/services/ausencia.py:138`, `app/ponto/services/ausencia.py:139`, `app/ponto/services/ausencia.py:142`, `app/ponto/models.py:850`)
+
+9. **FILA — escritores e leitores de Ausencia confirmados; os significados não são uniformes em todos os consumidores.**
+
+   | Campo | Escritores confirmados | Leitores confirmados |
+   |---|---|---|
+   | `status` | Nascimento: `app/ponto/services/ausencia.py:469`; transição: `app/ponto/services/ausencia.py:955`; rejeição de férias: `app/ponto/services/ausencia.py:1460`. | Propriedades/derivação: `app/ponto/models.py:720`, `app/ponto/models.py:741`, `app/ponto/models.py:882`, `app/ponto/models.py:887`; folha/cobrança: `app/ponto/turnos.py:2529`, `app/ponto/turnos.py:2531`; portas: `app/ponto/services/ausencia.py:670`, `app/ponto/services/ausencia.py:948`, `app/ponto/services/ausencia.py:1011`, `app/ponto/services/ausencia.py:1240`; consumidores: `app/chamados/services/tarefa_do_dia.py:310`, `app/chamados/services/silencio_ausencia.py:78`, `app/chamados/services/materializacao.py:662`; API: `app/api/views.py:1061`, `app/api/views.py:1869`. |
+   | `tipo` | Nascimento: `app/ponto/services/ausencia.py:467`; edição: `app/ponto/services/ausencia.py:631`. | Efeito/documento/derivação: `app/ponto/models.py:729`, `app/ponto/models.py:852`, `app/ponto/models.py:887`, `app/ponto/models.py:912`; cobertura: `app/ponto/turnos.py:2546`, `app/ponto/turnos.py:2612`, `app/ponto/turnos.py:2786`; fechamento: `app/ponto/services/fechamento.py:694`; crédito: `app/ponto/services/credito_parcial.py:27`; precedência: `app/ponto/precedencia.py:127`, `app/ponto/precedencia.py:339`; apresentação: `app/ponto/services/dia_decidido.py:481`, `app/colaboradores/services/calendario.py:706`. |
+   | `data` | Nascimento: `app/ponto/services/ausencia.py:467`; edição: `app/ponto/services/ausencia.py:632`. | Cobertura/vigência/sobreposição: `app/ponto/turnos.py:2543`, `app/ponto/turnos.py:2567`, `app/ponto/turnos.py:2790`, `app/ponto/turnos.py:2844`, `app/ponto/turnos.py:3170`; rateio: `app/folha/export.py:118`; crédito: `app/ponto/services/credito_parcial.py:28`; fato novo: `app/ponto/services/cartorio.py:383`; linha do tempo: `app/ponto/services/dia_decidido.py:548`, `app/ponto/services/dia_decidido.py:619`. |
+   | `data_fim` | Porta/edição: `app/ponto/services/ausencia.py:468`, `app/ponto/services/ausencia.py:633`; derivação do modelo: `app/ponto/models.py:917`. | Cobertura/parcial: `app/ponto/turnos.py:2545`, `app/ponto/turnos.py:2613`, `app/ponto/turnos.py:2784`; rateio: `app/folha/export.py:117`; fato novo: `app/ponto/services/cartorio.py:384`; calendário: `app/colaboradores/services/calendario.py:708`; apresentação: `app/ponto/services/dia_decidido.py:558`, `app/ponto/services/dia_decidido.py:620`. |
+   | `minutos` | Nascimento: `app/ponto/services/ausencia.py:468`; edição: `app/ponto/services/ausencia.py:641`; derivação: `app/ponto/models.py:897`. | Parcial: `app/ponto/turnos.py:2614`; desconto: `app/folha/export.py:121`; crédito: `app/ponto/services/credito_parcial.py:28`; efeito: `app/ponto/services/efeito_ausencia.py:50`; apresentação/API: `app/ponto/services/dia_decidido.py:493`, `app/ponto/services/dia_decidido.py:520`, `app/api/views.py:1870`. |
+   | `hora_ini`, `hora_fim` | Atribuição em `app/ponto/services/ausencia.py:1031`, persistida por `app/ponto/services/ausencia.py:1069`. | Snapshot: `app/ponto/services/ausencia.py:139`; comparação/trilha: `app/ponto/services/ausencia.py:1048`; juiz: `app/ponto/turnos.py:2646`; grade chama esse juiz em `app/escala/utils.py:1234`; formulário: `app/templates/ponto/partials/painel_ausencia.html:314`, `app/templates/ponto/partials/painel_ausencia.html:316`. |
+   | `atualizado_em` | `auto_now`: `app/ponto/models.py:824`; saves completos em `app/ponto/services/ausencia.py:545`, `app/ponto/services/ausencia.py:642`, `app/ponto/services/ausencia.py:1716`; período: `app/ponto/services/ausencia.py:1032`; rejeição de férias: `app/ponto/services/ausencia.py:1462`. | Fato novo: `app/ponto/services/cartorio.py:385`; proteção/registro de reversão: `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:123`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:154`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:189`. |
+
+   Outros leitores confirmados de tipo/data/fim/status estão em relatório, inteligência, vigias, histórico, precedência e telas; portanto o alcance não se limita à folha. (`app/relatorios/views.py:197`, `app/relatorios/views.py:205`, `app/relatorios/views.py:277`, `app/relatorios/views.py:292`, `app/inteligencia/resumo.py:39`, `app/inteligencia/views.py:71`, `app/inteligencia/views.py:239`, `app/inteligencia/views.py:516`, `app/ponto/services/vigia_ausencia.py:92`, `app/ponto/services/vigia_ausencia_veredito.py:54`, `app/chamados/services/historico.py:132`, `app/templates/ponto/ausencias.html:150`, `app/templates/ponto/ausencias.html:177`)
+
+   **Não afirmo que esse inventário feche todos os aliases, leitores indiretos e templates da árvore: exaustividade global [nao verificado].**
+
+10. **FILA — há incompatibilidades concretas de significado nos leitores existentes.**
+
+    - **Status:** a API de chamados ainda exige `Ausencia.status == 'pendente'` para oferecer anexo, embora os estados válidos sejam `aguardando_documento/aguardando_decisao/aprovada/rejeitada`. Contraexemplo: ausência aguardando documento não recebe esse bloco de anexo. (`app/api/views.py:1061`, `app/ponto/models.py:701`)
+    - **Fim NULL:** cobertura prolonga somente `TIPOS_EM_ABERTO`; `houve_fato_novo` aceita NULL apenas no dia inicial; `decididos_do_periodo` também expande NULL como dia único. Contraexemplo: afastamento desde 01/11 sem fim cobre 04/11, mas esses dois últimos leitores não tratam 04/11 como parte do mesmo range. (`app/ponto/turnos.py:2786`, `app/ponto/services/cartorio.py:384`, `app/ponto/services/dia_decidido.py:558`)
+    - **Carimbo de mudança:** `mudar_estado` não inclui `atualizado_em` em `update_fields`. Contraexemplo: rejeitada com `aprovada_em` antigo→aguardando→aprovada, sem novo período/carimbo fornecido; pode mudar o status sem produzir carimbo novo consultado por `houve_fato_novo`. (`app/ponto/services/ausencia.py:954`, `app/ponto/services/ausencia.py:965`, `app/ponto/models.py:882`, `app/ponto/services/cartorio.py:385`)
+    - **Minutos:** a unidade é minuto; para falta de range, o valor é total do registro e o exportador divide pelos dias. O modelo calcula minutos antes de derivar um fim ausente. Contraexemplo já caracterizado pelo teste: três dias previstos de 480 minutos terminam com total 480, depois rateado pelos três dias. O teste registra esse comportamento, não sua correção. (`app/ponto/models.py:892`, `app/ponto/models.py:897`, `app/ponto/models.py:917`, `app/folha/export.py:118`, `app/folha/export.py:121`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:451`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:455`)
+
+    Nos juízes examinados, datas são inclusivas; o período horário também é inclusivo, e fim menor que início significa madrugada seguinte do turno iniciado em `data`. Isso concorda com a validação da porta; não achei inversão dia civil/dia do turno nesse caminho específico. (`app/ponto/turnos.py:2811`, `app/ponto/turnos.py:2642`, `app/ponto/turnos.py:2653`, `app/ponto/services/ausencia.py:1018`)
+
+11. **FILA — inventário de `derivado_em`, trilha e `Justificativa.status`.**
+
+    | Campo/valor | Escritores | Leitores |
+    |---|---|---|
+    | `FechamentoMensal.derivado_em` | Default NULL: `app/ponto/models.py:464`; recalcular: `app/ponto/services/fechamento.py:1143`, `app/ponto/services/fechamento.py:1189`; restaurar: `app/ponto/services/fechamento.py:1391`; invalidar: `app/ponto/services/fechamento.py:1656`. | Filtro de invalidação: `app/ponto/services/fechamento.py:1653`; vencidas: `app/ponto/services/fechamento.py:1695`, `app/ponto/services/fechamento.py:1696`; contador: `app/ponto/services/fechamento.py:1702`; command: `app/ponto/management/commands/projecoes_vencidas.py:50`; excluído dos hashes em `app/ponto/portas/regen_exportada.py:38` e `app/ponto/management/commands/carimbo_gravado.py:30`. |
+    | Evento `rejeitar`/`Ausencia` | Escritor nominal encontrado: `app/ponto/services/ausencia.py:1463`; escritor físico: `app/core/observ.py:134`. Ator/IP vêm 
+
+[truncado em 20000 de 27337 caracteres]
 
 ## 16/11 02:09 · sessao 230d82d6cef2 · - · - · origem=Ronald (tmux)
 
@@ -1179,58 +1265,4 @@ BO-ADMIN-2710/2 e /6 acrescentam duas raízes incompletas aos pendentes; não fo
 
 [truncado em 20000 de 31904 caracteres]
 
-## 16/11 01:11 · sessao ced55a2548b4 · MIUDOS-NA-FILA-DE-LOTES · verificador · origem=Code
-
-**AVAL-DEVOLVIDO: item (3). Itens (1) e (2) seguem separados**, conforme a cláusula de devolução do próprio aval. Motivos: premissa da fila sem regra localizada e condições de pouso incompatíveis com as regras escritas. Referências detalhadas abaixo. — `anexo:miudos_na_fila_de_lotes.txt:1–2`; `CLAUDE.md:320–329`. [nao verificado]
-
-Nos anexos, conto as linhas a partir de “aval Ronald”, sem contar quebras visuais da interface.
-
-**1. As premissas conferem?**
-
-- **(1) NAO PROCEDE quanto à existência dos insumos previstos nos avais.** Existe o item (3) do COMPLEMENTO-1: relacionar os oito casos com obra e caracterizar/registrar os dois sem obra. Existe também a determinação de produzir `V0/causas.md`, por causa com `arquivo:linha` e destino. — `anexo:complemento1_respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
-
-  **A entrega desses insumos permanece [nao verificado].** O registro da cópia apresenta os baldes 8/2/9, mas ainda põe `causas.md` depois da medição R1. Os nove só entram no universo pretendido quando reconferidos e classificados como nossos; não são nove causas nossas já demonstradas. — `app/docs/RELATO.md:4`; `app/docs/RELATO.md:9`; `anexo:miudos_na_fila_de_lotes.txt:1`.
-
-- **(2) NAO PROCEDE.** O quadro por causa é uma entrega solicitada, não uma premissa de arquivo já existente. A correspondência concreta entre casos BO/HJ, dias ESTRUTURA e uma mesma causa está **[nao verificado]**. — `anexo:miudos_na_fila_de_lotes.txt:1`.
-
-- **(3) PROCEDE quanto à premissa da fila.** Não localizei na cópia uma regra escrita da **“fila de LOTES das laterais de 15/11”** que determine quem entra, quando anda e como pousa: **[nao verificado]**. A evidência positiva encontrada são obras numeradas: **LOTE 7 = FATO-DE-AUSENCIA-ACORDA-A-PROJECAO** e **LOTE 3 = SITUACAO-DESLIGADO**, com condições próprias. Isso não demonstra uma fila geral aberta a novos miúdos. — `app/docs/RELATO.md:223–224`.
-
-  **A vaga do Codex construtor existe por escrito e no código:** `--construtor`, uma vaga por repositório em `logs/construtor.vaga`, protegida por `flock`. Sua ocupação atual está **[nao verificado]**. — `CLAUDE.md:353–356`; `bin/codex_pergunta.sh:72–76`; `bin/codex_pergunta.sh:248–253`.
-
-  Portanto, aplica-se a própria salvaguarda do aval: sem regra escrita de entrada identificada, **o item (3) para e registra a pergunta**. Isso não permite concluir que a fila inexiste fora da cópia. — `anexo:miudos_na_fila_de_lotes.txt:1`.
-
-**2. Colide com aval vigente?**
-
-- **(1) NAO PROCEDE.** Acrescentar classificação às leituras não exige construtor nem cura. É compatível com a leitura paralela sem vaga da CAUDA e com as proibições dos dois insumos. — `anexo:miudos_na_fila_de_lotes.txt:1`; `anexo:cauda_da_madrugada_1611.txt:1`; `anexo:complemento1_respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
-
-- **(2) NAO PROCEDE.** Consolidar o quadro é registro; não autoriza curar dentro de RESPOSTAS-BO ou da V0. Permanecem as proibições de cura dessas obras. — `anexo:miudos_na_fila_de_lotes.txt:1`; `anexo:respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
-
-- **(3) PROCEDE quanto ao encaixe na ordem vigente.** “Vaga ociosa e nenhuma volta esperando” não define a posição dos miúdos diante de F1 B2, LOTE 7 e LOTE 3. A CAUDA enumera essa ordem e determina somente leitura quando a lista se esgotar; o PREPARA também fixa prioridades. O próprio MIUDOS declara que não altera a ordem vigente. Falta a regra de fila que compatibilize essas cláusulas; um furo de fila efetivamente ocorrido está **[nao verificado]**. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `anexo:cauda_da_madrugada_1611.txt:1`; `anexo:prepara_volta_bug_par.txt:4`.
-
-  **NAO PROCEDE quanto ao teto:** um Codex construtor e um miúdo aberto não aumentam o teto de um Codex mais até cinco opus. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `anexo:producao_maxima.txt:1`.
-
-  **NAO PROCEDE como colisão automática com as proibições dos insumos.** MIUDOS contém uma autorização própria, condicional, de construção; isso não transforma RESPOSTAS-BO nem V0 em obras de cura. Uma cura concreta invadindo esses escopos está **[nao verificado]**. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `anexo:respostas_bo_1611.txt:1`; `anexo:espelho_verdade_fecho_v0.txt:1`.
-
-**3. Alguma condição não fecha no literal?**
-
-- **(1) NAO PROCEDE como contradição demonstrada.** “Um arquivo de produção + teste” não diz “somente dois caminhos no commit”. Docs obrigatórios podem coexistir com uma classificação por tamanho do código; a inclusão ou exclusão deles nessa contagem não está definida. Docs devem entrar no mesmo commit do marco. — `anexo:miudos_na_fila_de_lotes.txt:1`; `CLAUDE.md:332–336`. Uma exigência de **outro arquivo separado de selo em toda cura**, além do teste, está **[nao verificado]**. [nao verificado]
-
-- **(2) NAO PROCEDE.** Consolidar por causa é compatível com a regra de curar a classe, em vez do caso. A classificação concreta continua dependente dos insumos. — `anexo:miudos_na_fila_de_lotes.txt:1`; `CLAUDE.md:65–70`.
-
-- **(3) PROCEDE.** O gatilho **“cinco itens ou fim do dia”** permite espera além dos 30 minutos admitidos para formar comboio. A regra manda rodar sozinho quando não houver outra raia pronta nessa janela; raia verde pousa antes de abrir nova fatia da fila 1, e cura commitada com suíte verde vai ao ar imediatamente. — `anexo:miudos_na_fila_de_lotes.txt:1`; `CLAUDE.md:320–329`; `CLAUDE.md:425–427`. [nao verificado]
-
-  **A retirada de reprovado também não fecha com a promessa irrestrita de “uma suíte inteira”.** A árvore restante precisa ser certificada: a suíte anterior não certifica uma árvore modificada. O COMBOIO prevê expressamente nova suíte de pouso após retirar obra reprovada. — `CLAUDE.md:320–324`; `anexo:comboio_pre_opus.txt:5`; `anexo:miudos_na_fila_de_lotes.txt:1`. [nao verificado]
-
-  **“Um opus final” não dispensa opus por obra.** O COMBOIO exige final por obra, e toda obra construída pelo Codex passa por ele. O aval não define se os cinco itens constituem uma obra única ou várias; essa equivalência está **[nao verificado]**. — `anexo:comboio_pre_opus.txt:5`; `app/docs/LEIS.md:147`; `anexo:miudos_na_fila_de_lotes.txt:1`.
-
-  **NAO PROCEDE quanto a “um commit por item com RED”, isoladamente.** RED evidenciado é obrigatório; não foi localizada exigência de commit separado para o RED **[nao verificado]**. Continuam obrigatórios docs do marco, mensagem LEI-AKITA completa e caminhos declarados. — `CLAUDE.md:28–29`; `CLAUDE.md:193`; `CLAUDE.md:332–336`; `bin/molde_fatia/LEIAME:42–50`; `bin/commit_so_o_declarado.sh:9–18`.
-
-**4. Toca exportada, dinheiro ou `!` fora do declarado?**
-
-- **(1) NAO PROCEDE como toque demonstrado.** O item pede leitura e sinalização desses alcances, sem cura ou apply. — `anexo:miudos_na_fila_de_lotes.txt:1,3`.
-
-- **(2) NAO PROCEDE como toque demonstrado.** A entrega declarada é um quadro Markdown; não há alteração de produção descrita nesse item. — `anexo:miudos_na_fila_de_lotes.txt:1`.
-
-- **(3) NAO PROCEDE como toque efetivamente demonstrado; alcance real [nao verificado].** O literal exclui dinheiro/exportada/API, proíbe apply e preserva parada por `!`, mas não há causas individualizadas nem diff para conferir o alcance. O filtro de tamanho não substitui PARADA item 2: escala/vínculo, apagar ou voltar arquivo usado em produção, regra fora do pedido, atalhos e motor v2 continuam exigindo `!`; a L-126 também proíbe ao Codex construtor item que peça `!`. — `anexo:miudos_na_fila_de_lotes.txt:1,3`; `CLAUDE.md:265–268`; `app/docs/LEIS.md:147`.
-
-_5888 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_5889 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
