@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 10:24:45.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (203.5 MB). Acoes na janela: **537**.
+**Medido em 17/11/2026 10:30:18.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (203.6 MB). Acoes na janela: **546**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:27:59 | Bash | Record aval in PROMPTS, BACKLOG, RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/PROMPTS.md'; s=open(p).read() s=s.rstrip('\n')+'\n- 17/11 10:3x (recebido 10:2x) CORTE-F2-RESSUSCITAR-GRAVA-ATO: opcao (a), ressuscitar grava ato que desfaz validacao e resposta; fila nao muda; pre-desenho Codex; constroi so com lei 0; libera B3 E4C-F2 classe DESENHO. Texto logs/AVAIS-1515/corte_f2_ressuscitar_grava_ato_1711.txt\n' open(p, ...` |
+| 10:27:48 | Bash | Find F2 row in BACKLOG | `cd /home/ronald/saas-hasner; /bin/grep -n '^\| F2\\|ESPINHA.*F2\\|\| E4C-F' app/docs/BACKLOG.md \| cut -c1-200 \| head -6` |
+| 10:27:45 | Bash | Get time and F2 backlog rows | `cd /home/ronald/saas-hasner; date '+%H:%M'; /bin/grep -n 'E4C-F2' app/docs/BACKLOG.md \| cut -c1-160 \| head -5` |
+| 10:27:43 | Bash | See PROMPTS format and F2 backlog row | `cd /home/ronald/saas-hasner; tail -n 2 app/docs/PROMPTS.md \| cut -c1-300; /bin/grep -n '^\| E4C-F2\\|^\| E4C-F2 ' app/docs/BACKLOG.md \| cut -c1-200 \| head -3` |
+| 10:27:39 | Bash | Check both Codex jobs started | `cd /home/ronald/saas-hasner; for f in logs/F2-RESSUSCITAR/rev/out logs/F2-RESSUSCITAR/pre/out; do echo "== $f"; tail -n 3 $f; done` |
+| 10:27:31 | Bash | Launch Codex aval review and pre-design jobs | `cd /home/ronald/saas-hasner; A=logs/AVAIS-1515/corte_f2_ressuscitar_grava_ato_1711.txt; O=logs/F2-RESSUSCITAR; mkdir -p $O/rev $O/pre; C=logs/ESPINHA-BRIEFS/F2 cat > $O/rev/q.q <<'EOF' Papel verificador, REVISAO-DO-AVAL CORTE-F2-RESSUSCITAR-GRAVA-ATO (anexo), itens 1, 2 e 4, contra a copia 4d0d81b64 (obra E4C-F2). Anexos: o aval, a reprovacao do opus final (opus_final.md), os avals vigentes da F2  ...` |
+| 10:27:16 | Write |  | `/home/ronald/saas-hasner/logs/AVAIS-1515/corte_f2_ressuscitar_grava_ato_1711.txt` |
+| 10:27:05 | Bash | Find F2 brief file | `cd /home/ronald/saas-hasner; ls logs/ESPINHA-BRIEFS/F2/construtor/ \| /bin/grep -i brief; ls logs/ESPINHA-BRIEFS/F2/construtor/ \| wc -l; ls logs/ESPINHA-BRIEFS/ \| head -30` |
+| 10:27:03 | Bash | Locate F2 avals and brief files | `cd /home/ronald/saas-hasner; A=logs/AVAIS-1515/corte_f2_ressuscitar_grava_ato_1711.txt; test -e $A && echo EXISTS; ls logs/AVAIS-1515/ \| /bin/grep -i 'f2\\|mantem\\|fila' ; /bin/grep -l 'mantem a fila' logs/AVAIS-1515/* 2>/dev/null \| head; ls logs/ESPINHA-BRIEFS/F2/construtor/ \| head -40` |
 | 10:19:06 | Bash | Confirm Codex census job started | `cd /home/ronald/saas-hasner; sleep 5; cat logs/ESPINHA-BRIEFS/F2/construtor/codex/censo_reprova.out \| head -5; du -ch logs/ESPINHA-BRIEFS/F2/construtor/codex/v*.[qr] logs/ESPINHA-BRIEFS/F2/construtor/entrega.md \| tail -1` |
 | 10:19:00 | Bash | Publish B3 DESENHO line; launch Codex postmortem census | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() i=s.index('PERGUNTA DE DESENHO E4C-F2 (nao segura a obra)'); j=s.index('\n',i)+1 new=('DESENHO E4C-F2: lei=celula soberana pergunta=opus final REPROVA @4d0d81b64 (logs/ESPINHA-BRIEFS/F2/construtor/opus_final.md): com a F2 a validada ressuscitada le VALIDADA pelo ato enquanto o C6 pergunta_viva a da por viva (ap ...` |
 | 10:18:47 | Bash | Save opus F2 review to file | `cd /home/ronald/saas-hasner; wc -l app/chamados/juizes.py app/ponto/services/cartorio.py app/chamados/services/fio.py \| head -3; F=logs/ESPINHA-BRIEFS/F2/construtor/opus_final.md; cat > $F <<'EOF' Opus final E4C-F2 @4d0d81b64 (17/11) -- texto devolvido pelo verificador (so leitura), gravado pela sessao. 1. F2 piora o ressuscitar: validada ressuscitada le VALIDADA em leitura, estado (models.py:317 ...` |

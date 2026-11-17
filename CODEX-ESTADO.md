@@ -1,7 +1,120 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 10:24** · publicado em **17/11/2026 10:24** (UTC-3)
+> Ultima resposta processada: **17/11/2026 10:30** · publicado em **17/11/2026 10:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 10:30 · sessao eed7ba59b0a8 · - · - · origem=Ronald (tmux)
+
+A fila precisa ignorar o ato compensatório **antes de escolher a última decisão aplicável**: hoje `_pela_decisao` lê `decisoes[-1]`; F1 desconhecido cai em `ato_desconhecido`/`None`, e F2 `REABERTURA` cai em `devolvida_ao_colaborador`/`RESPONDER`. (`app/chamados/services/tarefa_do_dia.py:156–187`)
+
+O filtro pode ficar no carregamento único da sequência da tarefa, preservando o horizonte `ato_em <= agora` e a decisão anterior; isso também evita encobrir `RETRATACAO`, que `_tarefa_pura` verifica pela última linha. Para F1 filtra o tipo novo; para F2 filtra apenas a `REABERTURA` identificada explicitamente como a ressuscitação automática. (`app/chamados/services/tarefa_do_dia.py:259–261`, `:421–426`)
+
+| Última decisão aplicável anterior | Comportamento a conservar na tarefa |
+|---|---|
+| `VALIDACAO` | Sem lavra vigente: `nao_sei`; lavra `nao`: materializar/sistema; lavra `sim` com efeito: rejulgar/sistema; `sim` sem efeito: encerrada. (`app/chamados/services/tarefa_do_dia.py:167–175`) |
+| `RESPOSTA` | Texto vazio: responder/colaborador; texto não vazio: validar/admin. (`app/chamados/services/tarefa_do_dia.py:159–162`) |
+| `SILENCIO` | `silencio_decidido`, ações vazias. (`app/chamados/services/tarefa_do_dia.py:176–177`) |
+| Nenhuma | `aguarda_resposta`, responder/colaborador. (`app/chamados/services/tarefa_do_dia.py:156–157`) |
+
+A resposta legal — instante **e** texto — fica fora do universo normal de ressuscitar: há `materializada_em != NULL` e filtro `q_nao_respondida`; texto sem instante/validação também fica fora. Portanto a linha “respondida sem validação” exige separar resposta legal, que é **NO-OP**, do legado instante sem texto, que pode entrar. (`app/chamados/models.py:1542–1559`)
+
+`DecisaoPergunta` não tem campo `origem`; há `ato_por` e `ato_motivo`. F2 precisa tornar concreta a distinção técnica escolhida, sem pressupor que `ato_por` humano significa evento humano; o código documenta automatismo herdando usuário de request em outro fluxo. (`app/chamados/models.py:4110–4123`; `app/chamados/juizes.py:1251–1253`)
+
+Provas já existentes:
+
+- `test_f1nova_b1_juiz_respondida.py:311–329` mede somente razão/ações da instância; `:331–335` compara antes/depois para sem decisão e `SILENCIO`; `:352–358` verifica segunda chamada sem duplicar atos. Não prova igualdade integral de `tarefa_do_dia` nas 2.025 unidades. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:311–358`)
+- Controle de `REABERTURA` comum: continua devolvendo para responder/colaborador. (`app/chamados/tests/test_e2_tarefa_do_dia.py:849–865`)
+- Teto de consultas constante entre lote pequeno e maior já tem selo. (`app/chamados/tests/test_e2_tarefa_do_dia.py:913–938`)
+- A caracterização de validada ressuscitada afirma expressamente a divergência atual: projeção limpa; leitura mantém validação; estado `VALIDADA`; sai de `q_vivas`. O teste precisa virar RED da compensação, preservando também controle não ressuscitado. (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:413–428`)
+
+Executei apenas uma sonda em memória, `python3 -B`, extraindo AST de `_pela_decisao` e substituindo seus três imports por objetos simples: confirmou os ramos acima nos quatro casos, sem arquivos nem banco. Sua abrangência é local à função; igualdade de integração/main permanece `[nao verificado]`. (`app/chamados/services/tarefa_do_dia.py:142–187`)
+
+A cópia não oferece `.git`; `git branch --all` falhou. Comparação real com main e sombra das 2.025 medidas: `[nao verificado]`.
+
+## 17/11 10:29 · sessao c8e40a3bbf61 · - · - · origem=Ronald (tmux)
+
+Achados de escritores e matriz:
+
+- `ressuscitar_perguntas` grava somente o passivo R/V antes de limpar a projeção; não grava ato compensatório. O próprio código explica que evitou `REABERTURA` porque a fila a interpreta como devolução ao colaborador. `app/chamados/models.py:1633`, `app/chamados/models.py:1644`, `app/chamados/models.py:1651`.
+- Respondida legal — instante E texto — sem validação não entra no universo normal: exige `q_nao_respondida()`. Validada com resposta legal também fica fora; validada sem resposta pode entrar. A resposta que chega entre a seleção do universo e a trava é corrida explicitamente reconhecida no comentário. `app/chamados/models.py:1542`, `app/chamados/models.py:1545`, `app/chamados/models.py:1642`.
+- “Sem ato” não equivale a qualquer pendente: precisa de `materializada_em` preenchida, passar pelos filtros de via, marco apagado e C6 na cópia limpa. `app/chamados/models.py:1543`, `app/chamados/models.py:1547`, `app/chamados/models.py:1569`, `app/chamados/models.py:1572`.
+
+**Armadilha decisiva de F2:** já existe uma `REABERTURA` automática por usuário sistema que deliberadamente devolve ao colaborador: ausência rejeitada. O motivo diz “voltam ao colaborador”, e a escrita passa `por=get_user_sistema()`. Portanto, ignorar toda `REABERTURA` cujo autor seja sistema quebra comportamento existente. `app/chamados/services/materializacao.py:1158`, `app/chamados/services/materializacao.py:1167`.
+
+`DecisaoPergunta` não possui campo `origem`; tem `ato_por` e `ato_motivo`. Autor nulo também já é aceito em reabertura legítima: command de cura chama `reabrir_para_correcao` sem `por`. Assim, F2 exige identificação nominal inequívoca da ressuscitação; autor sistema/nulo isoladamente não basta. `app/chamados/models.py:4110`, `app/chamados/models.py:4113`, `app/chamados/models.py:4115`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:69`.
+
+Escritores automáticos encontrados:
+
+| Escritor | Ato/autoria |
+|---|---|
+| `responder_automaticamente` | `RESPOSTA`, sem autor, motivo fixo “resposta automatica…”; chamado no upload de foto e seguido de validação pelo dono. `app/chamados/services/disputa_emissao.py:1678`; `app/api/foto_recebida.py:48`; `app/api/foto_recebida.py:51`. |
+| `carimbar_resposta_pela_trilha` | `RESPOSTA`, sem autor, motivo “pela trilha…”, instante testemunhado pela nota; command de cura chama essa porta. `app/chamados/services/disputa_emissao.py:1683`; `app/chamados/services/disputa_emissao.py:1699`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`. |
+| `linhas_da_projecao_sem_linha` | Reconstitui `RESPOSTA` sem autor e `VALIDACAO` preservando `validada_por_id`; motivo fixo de passivo. `app/chamados/models.py:4175`; `app/chamados/models.py:4179`. |
+| Nascimento / ressuscitação / backfill fio morto | Registram as linhas da porta de passivo. `app/chamados/models.py:3160`; `app/chamados/models.py:1633`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:141`. |
+| Fechar disputa por desligamento/admin | `SILENCIO`, autor recebido pelo fechamento; usa resposta vigente da sequência. `app/chamados/models.py:2029`; `app/chamados/models.py:2036`. |
+| Fechar fio do dia | `SILENCIO`, autor herdado do ato de decidir o dia. `app/ponto/services/veredito_celula.py:190`; `app/ponto/services/veredito_celula.py:195`. |
+| Backfill de admin decidiu | `SILENCIO`, instante e autor originais do carimbo, motivo identificando backfill. `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`. |
+| Remover motivo | `RETRATACAO`, autor recebido, texto vigente; carimba identidade retratada. `app/chamados/models.py:2166`; `app/chamados/models.py:2168`; `app/chamados/models.py:2173`. |
+| Absorver irmãs pela ausência | `ABSORCAO`, autor herdado da declaração; liga escape e ausência. `app/chamados/services/materializacao.py:1046`; `app/chamados/services/materializacao.py:1048`. |
+| Devolver validação recusada pela materialização | `DEVOLUCAO`, preserva resposta, autor herdado da chamada e motivo da recusa. `app/chamados/services/validacao.py:269`; `app/chamados/services/validacao.py:279`. |
+| Ausência rejeitada | `REABERTURA`, usuário sistema, com finalidade explícita de devolver ao colaborador. `app/chamados/services/materializacao.py:1158`; `app/chamados/services/materializacao.py:1167`; `app/chamados/services/disputa_emissao.py:1631`. |
+| Command `validar_classe_a` | Usa o mesmo dono de `VALIDACAO`, com autor nominal passado por argumento. `app/chamados/management/commands/validar_classe_a.py:89`; `app/chamados/management/commands/validar_classe_a.py:100`; `app/chamados/services/validacao.py:173`. |
+
+Confusão humano/sistema:
+
+- A fila não lê autoria: qualquer `RECUSA`/`REABERTURA` última é `devolvida_ao_colaborador`; qualquer `DEVOLUCAO` última é materialização recusada para admin. `app/chamados/services/tarefa_do_dia.py:163`, `app/chamados/services/tarefa_do_dia.py:165`.
+- `leitura` e a face SQL distinguem resposta humana por `ato_motivo` vazio, não por autoria. Automáticas e passivo usam motivo não vazio. `app/chamados/models.py:4195`, `app/chamados/models.py:4205`, `app/chamados/models.py:3500`.
+- O histórico exibe o rótulo do ato, autor quando presente e motivo quando presente; uma `REABERTURA` automática continua com o rótulo genérico “Reaberta para correcao”. `app/templates/chamados/partials/modal_fio.html:212`, `app/chamados/models.py:4103`.
+- O juiz de toque humano na tranca consulta `LogAuditoria`, não `DecisaoPergunta`; além da autoria, exige assinatura de ação humana no caso de resolver dia. O ato novo isolado não é toque humano nesse leitor. `app/chamados/juizes.py:1241`, `app/chamados/juizes.py:1250`, `app/chamados/juizes.py:1263`.
+
+Provas existentes aproveitáveis:
+
+- Defeito validada ressuscitada já tem caracterização que afirma projeção limpa, leitura ainda validada e exclusão de `q_vivas`; deve inverter como RED do novo corte. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:413`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:423`.
+- Controle atual de instante sem texto ressuscitado verifica projeção limpa, não respondida pelo ato, pendente e presente no SQL largo e nas ancoradas. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:388`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:399`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:410`.
+- Comparação da fila antes/depois existe para sem decisão e último `SILENCIO`, com relógio fixado; compara razão e ações. `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:311`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:331`.
+- O teste antigo também proíbe `REABERTURA`/`RECUSA` e exige somente fotos R/V; esse contrato de teste precisará ser alinhado à exceção nominal do novo aval, se F2 for escolhida. `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:270`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:280`.
+
+## 17/11 10:29 · sessao cec9f1117055 · - · - · origem=Ronald (tmux)
+
+Achados só por leitura:
+
+- A coexistência “não validada pelo ato E viva pelo C6” com fila conservada é possível como desenho: C6 lê a projeção (`app/chamados/juizes.py:1389`, `:1404`), enquanto tarefa lê a última decisão (`app/chamados/services/tarefa_do_dia.py:158`). A porta já inclui somente perguntas que C6 considera vivas numa cópia com V/R/T zerados e carimbo retirado (`app/chamados/models.py:1567`, `:1572`, `:1576`).
+- Nenhuma forma existente implementa essa conservação genericamente: REABERTURA/RECUSA manda responder o colaborador (`app/chamados/services/tarefa_do_dia.py:163`); DEVOLUCAO manda validar o admin (`:165`); tipo novo cai em `ato_desconhecido`/`None` (`:187`). A carga lê todos os atos, sem filtro por origem (`:421`–`:424`).
+- Portanto, “REABERTURA de origem sistema que o leitor distingue” demanda alteração desse leitor: atualmente ele não olha ator/motivo ao decidir REABERTURA (`app/chamados/services/tarefa_do_dia.py:158`, `:163`). Não existe campo próprio de origem; existem ator e motivo (`app/chamados/models.py:4113`, `:4115`).
+- Há tensão literal com a proibição de mudar `tarefa_do_dia` do COMPLEMENTO-1 fornecido: o novo item 4 explicita exceção somente para ato novo [nao verificado]. Para preservar fila com o novo ato, a exceção relativa ao leitor deveria ser explicitada; nenhuma implementação pronta disso está na cópia (`app/chamados/services/tarefa_do_dia.py:163`, `:187`, `:421`).
+- “Respondida sem validação” precisa separar resposta legal dos pares ilegais: resposta legal fica fora do universo por `q_nao_respondida` (`app/chamados/models.py:1542`, `:1545`); texto sem instante e sem validação também é excluído (`:1558`). O caso instante sem texto é exercitado pelo controle existente (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:388`, `:396`).
+- Os testes existentes de fila comparam antes/depois da execução real de ressuscitar para sem decisão e SILENCIO (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319`, `:326`, `:329`, `:331`, `:334`). Esse é o formato necessário para provar o evento. Comparar main/árvore sobre registros ainda não ressuscitados pode dar diff zero sem exercitar o ato novo; não demonstra, sozinho, conservação após a transição [nao verificado].
+- A caracterização de validada ressuscitada confirma V projetada nula, V do ato preservada e exclusão de `q_vivas` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:423`, `:425`, `:426`, `:428`). A própria anotação “0 ressuscitáveis com validação” do teste não é medida comprovada por esse código (`:417`–`:418`).
+- `fio.py:255` declara literalmente a continência e usa `q_vivas` antes de C6 nas disputas fechadas (`app/chamados/services/fio.py:255`, `:256`, `:269`). A implementação de `q_vivas` exige não validada pelo ato (`app/chamados/models.py:3562`), enquanto C6 usa V projetada (`app/chamados/juizes.py:1404`–`:1406`).
+
+## 17/11 10:29 · sessao 7d69f8e67677 · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, só leitura:
+
+- Premissa central confirmada: ressuscitar registra apenas fotos de R/V e limpa V/R/texto na projeção, sem limpador na sequência (`app/chamados/models.py:1633`, `app/chamados/models.py:1651`). A leitura conserva a VALIDACAO até ato que a limpe (`app/chamados/models.py:4191`, `app/chamados/models.py:4233`). O teste caracteriza exatamente projeção nula, leitura validada e exclusão de q_vivas (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:423`).
+- Vigência real citável: L-130 documenta par inteiro zerado, trilha anterior, ausência de devolução e lei RESSUSCITAR-DEVOLVE-AO-COLABORADOR pendente (`app/docs/LEIS.md:151`). “MANTEM A FILA DE HOJE” está escrito no código, com motivo para evitar REABERTURA comum (`app/chamados/models.py:1644`). O número 97 ali é relato em comentário, sem medida independente disponível [nao verificado].
+- A exceção **nominal** do item 4 do anexo fornecido resolve explicitamente a proibição anterior de ato novo; essa autorização é texto recebido no prompt, não arquivo localizado [nao verificado]. Não resolve automaticamente a conservação de todos os leitores nem a guarda exportada: `app/docs/CORTES.md:487`.
+- “Não validada pelo ato E viva pelo C6” não contradiz, por si só, ausência de ação: a tarefa admite SILENCIO → `[]`, independentemente de V/R da leitura (`app/chamados/services/tarefa_do_dia.py:176`); vida C6 lê a projeção (`app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1404`). Para conservar todas as saídas da tarefa, ato novo desconhecido não serve sem adaptação: cai em `ato_desconhecido`, enquanto REABERTURA comum devolve ao colaborador (`app/chamados/services/tarefa_do_dia.py:163`, `app/chamados/services/tarefa_do_dia.py:187`).
+- Conservação da fila envolve mais que ignorar o novo ato em `_pela_decisao`: a carga da tarefa também obtém pendentes do app e afirma depender da continência q_vivas/C6 (`app/chamados/services/tarefa_do_dia.py:524`). A análise do outro explorer deverá fechar esse contraexemplo.
+- Impactos operacionais existem: a face filtra `_ancoradas` em qualquer competência (`app/chamados/models.py:343`, `app/chamados/models.py:357`); a leitura filtra respostas sem veredito (`app/chamados/models.py:1952`) que alimentam CSF (`app/ponto/supra_juiz.py:573`). Registrar acorda células (`app/chamados/models.py:4259`) emitindo EventoCelula (`app/chamados/models.py:3393`), embora ressuscitar já acordasse antes (`app/chamados/models.py:1653`). Dinheiro/exportada mudarem com o futuro ato: [nao verificado]; dinheiro/exportada permanecerem neutros com o futuro ato: [nao verificado].
+- Guarda vigente explícita: supra_juiz em exportada não muda; diferença exige PAREI ! com tabela (`app/docs/CORTES.md:487`). Os zeros da entrega anterior não medem código futuro [nao verificado].
+- Não encontrei os complementos RESPOSTAS-F2 como arquivos nesta cópia; não atribuir a eles números de linha fabricados [nao verificado].
+
+## 17/11 10:29 · sessao 3cd7c9dcfe11 · - · - · origem=Ronald (tmux)
+
+- **Limpeza e falta do ato compensatório conferem.** O escritor registra fotos RESPOSTA/VALIDACAO antes da limpeza (`app/chamados/models.py:1633`); limpa `validada_em`, `validada_por`, `respondida_em`, `resposta_colab` (`app/chamados/models.py:1651`); a porta também limpa o carimbo de materialização (`app/chamados/models.py:3397`). Não é literalmente “sem trilha”: existe auditoria genérica `perguntas_ressuscitadas`, mas sem ato de desfazimento em `DecisaoPergunta` (`app/chamados/models.py:1675`). As fotos preservam texto e validação históricos (`app/chamados/models.py:4175`, `app/chamados/models.py:4179`).
+
+- **A validação fantasma é demonstrada pelo código.** `DecisaoPergunta.leitura` reconstitui VALIDACAO e só limpa quando encontra os atos declarados (`app/chamados/models.py:4233`, `app/chamados/models.py:4235`); os limpadores vigentes são DEVOLUCAO/RECUSA/REABERTURA, com RESPOSTA humana adicional para validação (`app/chamados/models.py:4191`, `app/chamados/models.py:4205`). A caracterização existente ressuscita uma validada, verifica projeção nula e leitura ainda validada, estado VALIDADA e exclusão de `q_vivas` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:421`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:425`).
+
+- **C6 lê projeção, e o universo inclui validada sem resposta.** O universo exige materialização e `q_nao_respondida`, não ausência de validação (`app/chamados/models.py:1542`); a face negada cobre ausência de instante ou instante sem texto (`app/chamados/juizes.py:1583`). A seleção copia a pergunta, limpa carimbo/V/R/texto e exige `pergunta_viva` nessa cópia (`app/chamados/models.py:1572`). O C6 lê V/R/texto projetados (`app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1404`) e mata primeiro pela validação projetada (`app/chamados/juizes.py:1405`).
+
+- **A premissa da continência é literal.** `fio.py:255` declara `q_vivas` como pré-filtro contendo toda viva; a documentação do próprio filtro repete que contrato é continência, nunca igualdade (`app/chamados/services/fio.py:255`, `app/chamados/models.py:3531`). Contudo, o filtro passou a excluir validada pelo ato (`app/chamados/models.py:3562`), enquanto o C6 continua lendo a projeção (`app/chamados/juizes.py:1404`).
+
+- **Há caminho real de produção, sem depender da medição.** Cartório chama a porta (`app/ponto/services/cartorio.py:1674`), reabrir chamado também (`app/chamados/models.py:1510`), e resgate pela tranca repete a chamada após auditoria (`app/chamados/views_arquivar.py:86`).
+
+- **“2025 medidas” é dado fornecido, não medição reproduzida nesta cópia.** O anexo `opus_final.md`, item 3, atribui 2.025 a `r2/f2.r:14` e contrapõe inicialização de `Counter` em `remedida.md:455`; esses arquivos não estão nesta cópia [nao verificado]. O número de validadas dentro das 2.025 não foi dado [nao verificado]. A docstring do teste ainda afirma “0 ressuscitáveis com validação” citando a entrega, sem executar medição (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:417`); portanto isso é uma alegação documental, não prova de frota.
+
+- **Ponto literal importante para item 4:** o universo atual exclui respostas legais completas pela face negada do juiz (`app/chamados/models.py:1545`, `app/chamados/juizes.py:1552`). A matriz de pré-desenho “respondida sem validação” precisa distinguir resposta legal completa — não ressuscitável pela porta atual — de instante sem texto ou estado só no ato (`app/chamados/juizes.py:1534`, `app/chamados/juizes.py:1552`).
 
 ## 17/11 10:24 · sessao 962e33240ae4 · E4C-F2 · censo · origem=Code
 
@@ -571,100 +684,4 @@ Dois mutantes adicionais sobreviveram a todos os casos em memória:
 1. Trocar `v = c['em_curso']` por `v = _em_curso(c, reg['fins'])`: reintroduz avaliação duplicada, mas os PIDs estáveis não revelam a consulta adicional. M8 testa rótulo errado, não unicidade. (`bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`, `bin/codex_limite_estado.py:207`; `bin/tests/test_codex_ociosidade.sh:214`)
 2. Trocar `b >= 1` por `b >= 0`: equivalente sob os invariantes atuais, pois `b=0` implica idade `None`, barrada por `s is not None`. M2 atual usa `b > 1`, que é diferente desse relaxamento. (`bin/codex_limite_estado.py:232`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:251`, `bin/codex_limite_estado.py:296`; `bin/tests/test_codex_ociosidade.sh:208`)
 
-## 17/11 09:47 · sessao a37b28740f37 · - · - · origem=Ronald (tmux)
-
-Achados confirmados no código e por simulação somente em memória:
-
-- **O caminho completo ainda pode derrubar o ESTADO.** JSON de sessão válido com `payload: [1]`, `rate_limits: [1]` ou raiz `["rate_limits"]` produz `AttributeError`; `ler_semanal()` captura somente `ValueError` do parsing, enquanto `ler()` captura somente `OSError` dessa leitura. A chamada em `gerar_estado.py` não protege leitura nem composição. (`bin/codex_limite_estado.py:325`, `bin/codex_limite_estado.py:326`, `bin/codex_limite_estado.py:328`, `bin/codex_limite_estado.py:87`, `bin/gerar_estado.py:270`)
-- **Também há queda na composição.** `used_percent: "lixo"` passa pelo leitor e produz `ValueError` em `float(...)`; não há guarda na composição da frase. (`bin/codex_limite_estado.py:331`, `bin/codex_limite_estado.py:448`, `bin/codex_limite_estado.py:453`, `bin/gerar_estado.py:270`)
-- **Entrada malformada ainda pode virar zero/ok.** Uma linha `fim` com `rc=lixo` e `dur=lixo`, mas quantidade suficiente de campos, é aceita sem incrementar descartadas. Ela encerra a chamada pelo simples casamento da chave; com fila legível sem ABERTO, obtém-se `em_curso=0`, `estado=ok`, além de `rc=lixo` publicado em últimas chamadas. Reprodução em memória confirmou esses valores. (`bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:205`, `bin/codex_limite_estado.py:273`, `bin/codex_limite_estado.py:296`, `bin/codex_limite_estado.py:178`)
-- **Ausência do log ainda se apresenta como zeros nas seções auxiliares.** `_registro()` devolve registro vazio, `ler_chamadas()` devolve todos os papéis zero e `ultimas_chamadas()` devolve lista vazia; a ociosidade, corretamente, continua SEM DADO. (`bin/codex_limite_estado.py:115`, `bin/codex_limite_estado.py:161`, `bin/codex_limite_estado.py:174`, `bin/codex_limite_estado.py:270`)
-
-Reparos de v1 efetivos:
-
-- O segundo juiz de últimas chamadas foi removido no caminho `ler()`: a mesma foto alimenta papéis, últimas e ociosidade; `_em_curso` é carimbado e seu valor é consumido por últimas. (`bin/codex_limite_estado.py:93`, `bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`)
-- A janela do módulo passou a uma função única `(agora−24h, agora]`, usada por limite, papéis e contexto por hora. (`bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:164`, `bin/codex_limite_estado.py:283`)
-- `30min59s` agora acusa; a idade está em segundos, comparada a 1800. (`bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:296`)
-- `rc` e `situacao` agora ocupam posições distintas e o consumidor foi adaptado, embora `rc` de entrada não seja validado. (`bin/codex_limite_estado.py:178`, `bin/codex_limite_estado.py:179`, `bin/codex_limite_estado.py:486`, `bin/codex_limite_estado.py:139`)
-
-Classes ainda presentes:
-
-- **Relógio fora da borda:** o disjuntor chama `ler_chamadas(raiz)` sem transmitir seu `agora`; a função captura outro relógio. (`bin/disjuntor.py:2036`, `bin/codex_limite_estado.py:159`)
-- **Derivação paralela:** o censo mantém janela inclusiva nas duas bordas, diferente da função única do módulo, e usa `_linhas_chamadas()`, que descarta os contadores de linhas inválidas/futuras do registro. (`bin/disjuntor.py:2132`, `bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:145`, `bin/codex_limite_estado.py:146`)
-
-Ocorrência desses casos em produção: [nao verificado].
-
-## 17/11 09:46 · sessao 0a302ad15775 · - · - · origem=Ronald (tmux)
-
-- **`chamadas.log/ini`**: `bin/codex_pergunta.sh:308` grava hora local sem offset, obra, papel, hash de 12 caracteres, PID `$$`, tipo `ini` e pergunta raspada; a pergunta é reduzida a uma linha em `bin/codex_pergunta.sh:295`. O registro precede a espera por slot em `bin/codex_pergunta.sh:364`; portanto, conta tentativa/espera do wrapper, sem provar execução do Codex (`bin/disjuntor.py:2073`). `_registro` lê hora/obra/papel/hash/PID/tipo, ignora conteúdo da pergunta e usa `(obra,hash,pid)` como chave (`bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:128`, `bin/codex_limite_estado.py:135`, `bin/codex_limite_estado.py:137`).
-
-- **`chamadas.log/fim`**: `_saida`, via trap EXIT, grava hora, mesma chave, papel, sessão ou `-`, código de saída e duração em segundos de epoch (`bin/codex_pergunta.sh:265`, `bin/codex_pergunta.sh:269`, `bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:282`). O parser valida timestamp e quantidade de campos, mas **descarta a hora do fim** e guarda sessão/rc/duração como strings sem validação de domínio (`bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`). `_em_curso` considera qualquer `fim` da chave suficiente para encerrar, sem testar se ocorreu depois do `ini` (`bin/codex_limite_estado.py:205`).
-
-- **Consumidores de `ini/fim`**: contagem por papel (`bin/codex_limite_estado.py:157`), últimas chamadas (`bin/codex_limite_estado.py:169`), ociosidade (`bin/codex_limite_estado.py:273`), origem de sessões (`bin/codex_limite_estado.py:304`, `bin/gerar_codex_estado.py:176`), tokens por papel (`bin/codex_limite_estado.py:399`) e censo do disjuntor (`bin/disjuntor.py:2126`). Não encontrei consumidor da duração além de seu armazenamento; consumidor externo: [nao verificado].
-
-- **`fila.md`**: escritor demonstrado somente na fixture, que grava o argumento `fila` (`bin/tests/test_codex_ociosidade.sh:39`). Produtor real, responsável pela transição para ABERTO e garantia do carimbo no nascimento: [nao verificado]. O leitor exige prefixo de estado conhecido e carimbo `AAAA-MM-DD HH:MM` para ABERTO, calcula idade em segundos inteiros e devolve quantidade/idade/erro (`bin/codex_limite_estado.py:53`, `bin/codex_limite_estado.py:54`, `bin/codex_limite_estado.py:227`, `bin/codex_limite_estado.py:235`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:251`). Ociosidade consome esses resultados (`bin/codex_limite_estado.py:287`).
-
-- **`limite.log`**: wrapper escreve hora, obra e primeira mensagem de erro reconhecida como limite/indisponibilidade, com tabs/newlines removidos da mensagem (`bin/codex_pergunta.sh:451`, `bin/codex_pergunta.sh:452`, `bin/codex_pergunta.sh:454`, `bin/codex_pergunta.sh:456`). `ler()` lê os três campos, valida somente hora/quantidade mínima, conta linhas e publica total/janela/última hora; não usa obra nem mensagem para classificar o evento (`bin/codex_limite_estado.py:73`, `bin/codex_limite_estado.py:75`, `bin/codex_limite_estado.py:81`, `bin/codex_limite_estado.py:97`). A fonte de escrita pode ser alterada por `CODEX_LOGD`, enquanto o leitor usa `<raiz>/logs/codex` (`bin/codex_pergunta.sh:101`, `bin/codex_limite_estado.py:45`, `bin/codex_limite_estado.py:64`); configuração real alinhada: [nao verificado].
-
-- **Tupla `ultimas_chamadas`**: escritor agora produz `(hora,obra,papel,rc,situacao)`, com `rc=None` sem fim e situação separada (`bin/codex_limite_estado.py:175`, `bin/codex_limite_estado.py:177`, `bin/codex_limite_estado.py:179`). `ler()` fornece a mesma `_foto` para as últimas e a contagem, eliminando a duplicação do predicado nessa composição (`bin/codex_limite_estado.py:93`, `bin/codex_limite_estado.py:94`, `bin/codex_limite_estado.py:101`, `bin/codex_limite_estado.py:153`). O renderizador desempacota cinco campos corretamente (`bin/codex_limite_estado.py:486`); testes consultam a situação no índice 4 e rc no índice 3 (`bin/tests/test_codex_ociosidade.sh:67`, `bin/tests/test_codex_ociosidade.sh:71`). Entretanto, rc inválido do log continua sendo aceito e publicado, inclusive texto sintético se vier na entrada (`bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:178`, `bin/codex_limite_estado.py:486`).
-
-- **Bordas ainda diferentes entre consumidores**: módulo usa `(agora−24h,agora]` para limite, papéis e contexto horário (`bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:164`, `bin/codex_limite_estado.py:283`), mas censo do disjuntor mantém ambas as bordas inclusivas (`bin/disjuntor.py:2132`). Além disso, disjuntor chama `ler_chamadas(raiz)` sem passar seu relógio (`bin/disjuntor.py:2036`), fazendo o leitor capturar outro `now` (`bin/codex_limite_estado.py:159`). Portanto, as classes **derivação paralela** e **relógio fora da borda** permanecem demonstradas nesses consumidores (`bin/disjuntor.py:2036`, `bin/disjuntor.py:2132`).
-
-- **Fuso e precisão**: gravações de hora usam `date` sem offset, leitores usam `strptime` ingênuo e `datetime.now()` local (`bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:308`, `bin/codex_pergunta.sh:456`, `bin/codex_limite_estado.py:63`, `bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:235`). Igualdade efetiva entre os ambientes produtores/leitores: [nao verificado]. A correção resolve 30min59s, mas ainda trunca frações de segundo: `30min00.500s` vira 1800 e não acusa, embora a comparação final seja `s > 1800` (`bin/codex_limite_estado.py:51`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:296`).
-
-## 17/11 09:32 · sessao daeb5df7e465 · E4C-F2 · verificador · origem=Code
-
-1. **[nota] O mutador preserva exatamente a âncora atual.** A conferência AST em memória mostrou apenas a retirada de `q_nao_validada_pelo_ato()`: permanecem o OR da âncora, `pk__in`, relacionamentos e ordenação. Não há atributo com `'validad'` nos argumentos atuais da âncora; ali aparece `self.pk` (`app/chamados/models.py:355–359`; `app/chamados/tests/test_cortes_f2_f9_m13.py:28–43`).
-
-   Para a forma antiga documentada, `validada_em__isnull=True`, a regra também remove somente esse keyword (`app/chamados/tests/test_cortes_f2_f9_m13.py:5`, `:39`). Aplicação ao código exato de **708162b15**: **[nao verificado]**; a sondagem dessa forma sintética não comprova a revisão histórica.
-
-2. **[fila] AncoradasCustoTest distingue validação só no ATO, mas deixa sobreviver uma dependência indevida da projeção.** Agora exige excluir `so_no_ato`, mesmo com `validada_em=None` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:487–494`). Contudo, este mutante no filtro externo ainda satisfaz custo e M13, por leitura das fixtures (`app/chamados/models.py:357`; `app/chamados/tests/test_cortes_f2_f9_m13.py:49–64`):
-
-   ```python
-   PerguntaDisputa.objects.filter(
-       PerguntaDisputa.q_nao_validada_pelo_ato() & Q(validada_em__isnull=True),
-       pk__in=_ancora,
-   )
-   ```
-
-   Falta a divergência inversa: carimbo residual, VALIDACAO em T1 e RECUSA em T2; a pergunta deveria entrar, mas esse mutante a excluiria. O caso existe contra leitura/face, sem chamar `_ancoradas` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:51–55`, `:105–109`). O seletor M13 ainda retiraria um único argumento composto e produziria a mordida esperada por PK (`app/chamados/tests/test_cortes_f2_f9_m13.py:33–43`, `:54–56`). Execução desse mutante: **[nao verificado]**.
-
-3. **[fila] Há também um mutante sobrevivente da âncora:** reduzir o OR a `Q(chamado_destino_id=self.pk)`. Todas as perguntas desses dois testes usam `destino=ch`, deixando sem cobertura o ramo “sem destino, pelo chamado da disputa” (`app/chamados/models.py:355–356`; `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:484–488`; `app/chamados/tests/test_cortes_f2_f9_m13.py:49–62`). Esse ramo é exigido pelo juiz da âncora (`app/chamados/services/fio.py:100–102`, `:117`). Sobrevivência deduzida por leitura; execução **[nao verificado]**.
-
-4. **[nota] No delta fornecido, não muda lógica produtiva além da docstring, nem se deslocam linhas de produção.** A substituição ocupa a mesma linha (`app/chamados/models.py:346`). O c12 inclui linhas na identidade, mas exclui arquivos de testes, onde ocorreram os acréscimos (`app/chamados/tests/e4b_c12_ast.py:17–27`, `:32–39`, `:222–223`). Executei, sem banco e sem escrita de bytecode, os dois testes do censo e corpo nominal: **2 passaram** (`app/chamados/tests/test_e4b_c12_selo.py:22`, `:34`). Suíte completa e efeito em produção: **[nao verificado]**.
-
-## 17/11 09:31 · sessao db4eb04e80f0 · - · - · origem=Ronald (tmux)
-
-[ fila ] Confirmado por leitura: o mutante abaixo em `app/chamados/models.py:357` passa nos dois testes normais:
-
-```python
-PerguntaDisputa.objects.filter(
-    PerguntaDisputa.q_nao_validada_pelo_ato() & Q(validada_em__isnull=True),
-    pk__in=_ancora,
-)
-```
-
-As pendentes têm projeção nula; as validadas já saem pela face. Referências: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:485-494`; `app/chamados/tests/test_cortes_f2_f9_m13.py:50-55,60-64`.
-
-Com o seletor M13, `_incluir_validadas` remove o argumento posicional composto inteiro ao encontrar `q_nao_validada_pelo_ato`; conta uma retirada e conserva `pk__in`. Assim, continua produzindo a mordida esperada por PK. Referências: `app/chamados/tests/test_cortes_f2_f9_m13.py:33-43,54-56`.
-
-O caso ausente é a **divergência inversa**: projeção `validada_em=T1`, VALIDACAO em T1 e RECUSA em T2. A pergunta deve entrar em `_ancoradas`, mas o mutante a exclui pelo carimbo residual. Esse caso existe somente contra leitura e face: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:105-109,51-55`.
-
-Adversarial mínimo: repetir esse caso com `destino=ch` e exigir seu PK em `ch._ancoradas()`. Execução [nao verificado].
-
-## 17/11 09:30 · sessao db4eb04e80f0 · - · - · origem=Ronald (tmux)
-
-1. [nota] **Sim, o teste agora distingue validação só no ato.** `so_no_ato` nasce com projeção vazia, recebe RESPOSTA e VALIDACAO, continua com `validada_em=None` e deve sair de `_ancoradas` junto com a validada alinhada. Referências: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:487-494`; `app/chamados/tests/cortes_f2_f9_apoio.py:66-74`.
-
-2. [fila] **A âncora ainda tem mutante sobrevivente nos dois testes.** Em `app/chamados/models.py:355-356`, substituir o filtro por:
-
-   ```python
-   _ancora = PerguntaDisputa.objects.filter(
-       Q(chamado_destino_id=self.pk)).values('pk')
-   ```
-
-   preserva a subquery, o `pk__in`, a face e uma query (`app/chamados/models.py:357-359`). Todas as perguntas desses testes têm `destino=ch`, logo o mutante conserva seus resultados esperados: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:484-494`; `app/chamados/tests/test_cortes_f2_f9_m13.py:49-55,59-64`. Entretanto, perde perguntas sem destino ancoradas pelo chamado da disputa, contrariando `app/chamados/services/fio.py:100-102,116-117`. Sobrevivência deduzida por leitura; execução [nao verificado].
-
-   Para fechar essa lacuna, incluir pergunta sem destino com `disputa.chamado=ch`, além de pergunta destinada a outro chamado. A fixture atual cria a disputa sem preencher `chamado`: `app/chamados/tests/cortes_f2_f9_apoio.py:58-64`.
-
-_6458 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6463 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
