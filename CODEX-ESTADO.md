@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 15:44** · publicado em **17/11/2026 15:46** (UTC-3)
+> Ultima resposta processada: **17/11/2026 15:51** · publicado em **17/11/2026 15:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 15:51 · sessao 01c6432fa93c · - · - · origem=Ronald (tmux)
+
+Censo e ressalvas enviados ao agente principal, com referências aos escritores, leitores, migração e chamadas que adquirem trava antes de reabrir.
+
+## 17/11 15:51 · sessao 7b584747ec0a · - · - · origem=Ronald (tmux)
+
+Achados e referências enviados ao agente principal. A cópia não contém metadados Git, então a comparação com P1 e main ficou limitada ao diff fornecido e ao código presente. [não verificado]
 
 ## 17/11 15:44 · sessao 663bc85bf2f6 · E4C-F1-B2 · leitura · origem=Code
 
@@ -1237,91 +1245,4 @@ O deploy migra em `bin/deploy.sh:317` e envia HUP em `bin/deploy.sh:360`; seus c
 
 Ressalva relevante ao laudo: `curar_perguntas_em_limbo` está listado como cura que roda “UMA VEZ” e exige ato do Ronald em `app/config/crons.py:1476–1477`; `:1482` identifica outro comando. Seu agendamento efetivo como cron é **[nao verificado]**. A ancestralidade dos hashes também é **[nao verificado]**, pois a cópia não contém repositório Git acessível.
 
-## 17/11 15:13 · sessao 515c143223d7 · - · - · origem=Ronald (tmux)
-
-- **L-130 desatualizada na cópia:** texto literal `SEM ato de devolucao` e ``RESSUSCITAR-DEVOLVE-AO-COLABORADOR` e lei NAO decidida` em `app/docs/LEIS.md:151`.
-- A busca literal por `RESSUSCITAR-GRAVA-ATO` e `RESPOSTAS-1711-1050` retornou zero ocorrências em `app/docs/CORTES.md` e `app/docs/CORTES.json`; os arquivos terminam em `:497` e `:1888`, respectivamente. A afirmação sobre a árvore **c8f58df30** continua [nao verificado]; esta é a cópia main fornecida.
-- Nas respostas v1/v2/v3/v5 fornecidas, não há análise da pendência documental da L-130, ausência desses cortes ou condição 2 do opus anterior. A existência de perguntas sobre isso é [nao verificado].
-- `triagem_v1.txt`, item 6, menciona `CORTE-F2-RESSUSCITAR-GRAVA-ATO` como justificativa funcional; isso não demonstra pergunta ao Codex sobre o registro documental. Linha física do anexo [nao verificado].
-- **Classe sugerida: (e), provisória — ausência do tema nas respostas; sem as .q, impossível distinguir (a) de (e).** Não há fundamento para afirmar categoricamente “não perguntado”. [nao verificado]
-
-## 17/11 15:12 · sessao 7aa33ea3be7b · E4C-F2 · censo · origem=Code
-
-**Os quatro montadores de RESPOSTA encontrados coincidem com a 0055 nos valores que produzem; essa equivalência não é uma obrigação do modelo.** A porta aceita as duas discordâncias, demonstradas nos testes. (`app/chamados/services/disputa_emissao.py:1532`, `app/chamados/services/disputa_emissao.py:1686`, `app/chamados/services/disputa_emissao.py:1708`, `app/chamados/models.py:4251`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:136`)
-
-O censo histórico exato do **pai da obra** permanece `[nao verificado]`: o material disponível não fornece sua fonte integral. O teste que menciona a main `fbc5c76ce` contém uma comparação com resultado salvo, não a árvore daquele commit. (`app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:2`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:10`)
-
-1. **Quem escreve o campo nesta árvore**
-
-   | Montador de RESPOSTA | Valor e regra | Evidência |
-   |---|---|---|
-   | `responder_pergunta_disputa_core` | `False`; resposta humana nova desfaz a validação anterior. Omite `ato_motivo`, cujo default é `''`. | `app/chamados/services/disputa_emissao.py:1494`, `app/chamados/services/disputa_emissao.py:1532`, `app/chamados/models.py:4162` |
-   | `responder_automaticamente` | `True`; grava texto/instante sem zerar validação. Motivo fixo: `resposta automatica (fato entregue por outro caminho)`. | `app/chamados/services/disputa_emissao.py:1685`, `app/chamados/services/disputa_emissao.py:1686` |
-   | `carimbar_resposta_pela_trilha` | `True`; carimba uma resposta cujo texto já existe, sem zerar validação. Motivo sempre prefixado por `pela trilha: `. | `app/chamados/services/disputa_emissao.py:1701`, `app/chamados/services/disputa_emissao.py:1707`, `app/chamados/services/disputa_emissao.py:1708` |
-   | `linhas_da_projecao_sem_linha` | `True` na foto RESPOSTA: existe `respondida_em`, mas falta linha correspondente ao mesmo instante. Usa `MOTIVO_PROJECAO_SEM_LINHA`. | `app/chamados/models.py:4224`, `app/chamados/models.py:4249`, `app/chamados/models.py:4251` |
-
-   A escrita física comum é `registrar`: constrói `cls(**ln)` e executa `bulk_create`; não calcula o booleano pelo motivo. Campo omitido recebe `default=False`; INSERT que omite a coluna recebe `db_default=False`. (`app/chamados/models.py:4328`, `app/chamados/models.py:4185`)
-
-   Os sítios que persistem as fotos produzidas pelo helper são: nascimento; ressuscitação; resposta humana e automática; validação; devolução; devolução BUG-PAR; tratamento do estoque L130; backfill E4b. (`app/chamados/models.py:3207`, `app/chamados/models.py:1650`, `app/chamados/services/disputa_emissao.py:1532`, `app/chamados/services/disputa_emissao.py:1686`, `app/chamados/services/validacao.py:173`, `app/chamados/services/validacao.py:279`, `app/chamados/services/validacao.py:354`, `app/chamados/services/validacao.py:439`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:141`)
-
-   Os demais atos omitem o campo e recebem `False`: REABERTURA compensadora; SILENCIO; RETRATACAO; REABERTURA/RECUSA; VALIDACAO; DEVOLUCAO; ABSORCAO; SILENCIO do backfill e do veredito da célula. (`app/chamados/models.py:1691`, `app/chamados/models.py:2083`, `app/chamados/models.py:2215`, `app/chamados/services/disputa_emissao.py:1639`, `app/chamados/services/validacao.py:173`, `app/chamados/services/validacao.py:279`, `app/chamados/services/validacao.py:354`, `app/chamados/services/materializacao.py:1048`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`, `app/ponto/services/veredito_celula.py:195`, `app/chamados/models.py:4185`)
-
-   `save()` permite inserir uma instância nova, mas recusa regravar instância com PK; `update()` e `bulk_update()` do manager vivo também recusam. Não há nesses métodos uma regra adicional baseada em `ato_motivo`. (`app/chamados/models.py:4216`, `app/chamados/models.py:4115`, `app/chamados/models.py:4121`)
-
-   A **0055** adiciona a coluna com `False` e faz o único UPDATE específico encontrado: `ato='resposta' AND ato_motivo!='' → True`, pelo modelo histórico de migrations. A **0054** adiciona apenas `da_ressuscitacao`; a **0051** atribui `ato='reabertura'` ao acervo renomeado. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:11`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:26`, `app/chamados/migrations/0054_decisao_da_ressuscitacao.py:17`, `app/chamados/migrations/0051_decisao_pergunta.py:49`)
-
-2. **Equivalência com o backfill**
-
-   **Não são regras idênticas, linha a linha:** os escritores declaram o efeito da sua operação; a 0055 classifica pelo conteúdo de `ato_motivo`. Entretanto, os quatro montadores atuais produzem valores coincidentes: humana = motivo vazio/False; automática, trilha e projeção = motivo não vazio/True. Isso inclui expressamente `MOTIVO_PROJECAO_SEM_LINHA` e “resposta automatica”. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`, `app/chamados/services/disputa_emissao.py:1532`, `app/chamados/services/disputa_emissao.py:1686`, `app/chamados/services/disputa_emissao.py:1708`, `app/chamados/models.py:4251`)
-
-   **Nos quatro montadores de produção encontrados, nenhum grava o contrário do predicado. Pela porta genérica, ambas as discordâncias são permitidas:** a constraint só proíbe `True` fora de RESPOSTA. Os testes gravam motivo preenchido/False e motivo vazio/True, e exigem que o leitor siga o campo. (`app/chamados/models.py:4205`, `app/chamados/models.py:4328`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:143`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:150`)
-
-   Logo, a 0055 mudaria o primeiro caso para `True`; deixaria o segundo `True`, pois ela não zera as linhas fora do filtro. A ocorrência desses casos em produção é `[nao verificado]`. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`)
-
-3. **Quem lê; derivação versus persistência; momento**
-
-   Os dois leitores diretos de decisão são `q_validada_pelo_ato`, que devolve um filtro SQL, e `_resposta_desfaz_validacao`, consumido por `leitura`. O `validada = None` dentro de `leitura` altera uma variável local; o resultado é `LeituraDoAto`, sem salvar a pergunta. (`app/chamados/models.py:3547`, `app/chamados/models.py:3557`, `app/chamados/models.py:4281`, `app/chamados/models.py:4299`, `app/chamados/models.py:4312`, `app/chamados/models.py:4315`)
-
-   | Consumidor | Resultado |
-   |---|---|
-   | `estado`, `respondida`, `resposta_display` | Derivam rótulo, booleano e texto. (`app/chamados/models.py:3231`, `app/chamados/models.py:3782`, `app/chamados/models.py:3806`) |
-   | `sem_veredito_entre` / `pode_fechar` | Derivam lista e autorização para fechar. (`app/chamados/models.py:2000`, `app/chamados/models.py:2011`) |
-   | `_ancoradas`, `q_vivas` | Selecionam perguntas usando a face SQL. (`app/chamados/models.py:357`, `app/chamados/models.py:3609`) |
-   | `_gravar_estado` | Usa a face para selecionar perguntas e chamar a lavra persistida. (`app/chamados/models.py:317`, `app/chamados/models.py:319`, `app/chamados/veredito_lavrado.py:275`) |
-   | `ressuscitar_perguntas` | Lê a foto, grava REABERTURA, limpa resposta/validação/carimbo, emite evento e reabre disputa. (`app/chamados/models.py:1684`, `app/chamados/models.py:1696`, `app/chamados/models.py:1698`, `app/chamados/models.py:1701`, `app/chamados/models.py:1708`) |
-   | `fechar` | Usa a leitura na foto do SILENCIO, grava fechamento e evento. (`app/chamados/models.py:2085`, `app/chamados/models.py:2095`, `app/chamados/models.py:2096`) |
-   | `remover_motivo` | Usa o texto lido na RETRATACAO, carimba identidade e salva a disputa. (`app/chamados/models.py:2217`, `app/chamados/models.py:2220`, `app/chamados/models.py:2224`) |
-
-   Há também leitura genérica para fotografia de todos os campos das decisões, sem decidir validação pelo booleano. (`app/chamados/services/foto_e4b.py:247`, `app/chamados/services/foto_e4b.py:280`)
-
-   A cadeia roda em **request** — upload consulta `pode_fechar` e fecha; desarquivar chama ressuscitação —, em **signal** — `post_save` da pergunta agenda fechamento de beco no commit — e em **cron configurado** — consumidor de eventos, por minuto, alcança consultas e fechamentos de disputas. Execução efetiva desses caminhos em produção: `[nao verificado]`. (`app/api/foto_recebida.py:83`, `app/chamados/views_arquivar.py:86`, `app/chamados/signals.py:229`, `app/chamados/signals.py:240`, `app/chamados/services/becos.py:34`, `app/chamados/services/becos.py:58`, `app/config/crons.py:394`, `app/chamados/reconciliador.py:1368`, `app/chamados/reconciliador.py:613`)
-
-   **C6 Python não lê esse booleano:** lê a projeção da pergunta. Seu filtro SQL `q_vivas`, nesta árvore, usa a validação pela sequência. (`app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1404`, `app/chamados/models.py:3609`)
-
-4. **Escritores no main anterior**
-
-   **Censo certificado do pai: `[nao verificado]`.** Na árvore disponível, os produtores de RESPOSTA com motivo não vazio são os três da tabela: automática, trilha e foto da projeção. Atribuí-los integralmente ao pai seria extrapolar a evidência. (`app/chamados/services/disputa_emissao.py:1686`, `app/chamados/services/disputa_emissao.py:1708`, `app/chamados/models.py:4251`)
-
-   Os caminhos atuais comprovados são:
-
-   - **Automática:** request de upload → kernel da foto → `responder_automaticamente`. (`app/api/views.py:860`, `app/api/views_core.py:844`, `app/api/foto_recebida.py:74`, `app/api/foto_recebida.py:48`)
-   - **Trilha:** comando `curar_perguntas_em_limbo --apply`; o cadastro o classifica como cura de execução única, não rotina. (`app/chamados/management/commands/curar_perguntas_em_limbo.py:64`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`, `app/config/crons.py:1482`)
-   - **Projeção sem linha:** os sítios enumerados na pergunta 1; entre as entradas comprovadas estão request de desarquivamento e ressuscitação pelo cartório. A cadeia histórica completa request/signal/cron no pai permanece `[nao verificado]`. (`app/chamados/views_arquivar.py:86`, `app/ponto/services/cartorio.py:1674`)
-
-5. **Divisão P1/P2**
-
-   **Para o booleano, os quatro montadores atuais não apresentam incompatibilidade com o predicado do backfill.** A 0055 não tem corte por data, PK ou origem: respostas escritas entre P1 e P2, presentes na execução e com motivo não vazio, entram no UPDATE; respostas humanas ficam corretamente em `False`. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`, `app/chamados/services/disputa_emissao.py:1532`, `app/chamados/services/disputa_emissao.py:1686`, `app/chamados/services/disputa_emissao.py:1708`, `app/chamados/models.py:4251`)
-
-   A omissão das colunas por código antigo tem `db_default=False`; existe teste que simula esse INSERT. Isso não prova execução em produção nem todas as compatibilidades do pai `[nao verificado]`. (`app/chamados/migrations/0054_decisao_da_ressuscitacao.py:19`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:26`, `app/chamados/tests/test_f2_db_default_das_colunas_novas.py:25`)
-
-   **Para a obra inteira, há uma dependência que impede declarar “leitor velho” genericamente seguro:** o escritor novo grava REABERTURA compensadora; a carga nova precisa ignorá-la antes de escolher o último ato. Se P1 conservar um leitor que entregue essa linha a `_pela_decisao`, ela vira `devolvida_ao_colaborador`. Essa consequência é inferida dos ramos presentes; a implementação exata do leitor no pai é `[nao verificado]`. O filtro da tarefa precisa acompanhar esse escritor no P1 para conservar esse comportamento. (`app/chamados/models.py:1691`, `app/chamados/services/tarefa_do_dia.py:426`, `app/chamados/services/tarefa_do_dia.py:158`, `app/chamados/services/tarefa_do_dia.py:163`)
-
-   Hoje AddField e backfill estão na mesma 0055; a divisão proposta exige separar essas operações. A cobertura acima vale para linhas presentes na execução do UPDATE, não demonstra o comportamento de um pouso concorrente efetivamente realizado `[nao verificado]`. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:22`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:28`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`)
-
-1 — Quatro montadores de RESPOSTA; persistência por `registrar/bulk_create`; defaults False e UPDATE da 0055. (`app/chamados/models.py:4328`, `app/chamados/models.py:4185`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`)  
-2 — Coincidem nos valores emitidos atualmente; equivalência universal não existe no contrato. (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:136`)  
-3 — Leitores centrais derivam; consumidores também persistem, em requests, signals e consumidor cronificado. (`app/chamados/models.py:4315`, `app/chamados/models.py:1698`, `app/chamados/signals.py:240`, `app/config/crons.py:394`)  
-4 — Censo exato dos escritores e caminhos do pai da obra: `[nao verificado]`.  
-5 — O intervalo não é excluído pelo backfill; o escritor da REABERTURA exige o filtro correspondente da tarefa no P1. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`, `app/chamados/services/tarefa_do_dia.py:426`)
-
-_6627 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6629 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
