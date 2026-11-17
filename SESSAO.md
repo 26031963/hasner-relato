@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 23:42:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (182.0 MB). Acoes na janela: **1051**.
+**Medido em 16/11/2026 23:47:46.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (182.0 MB). Acoes na janela: **1043**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1053,11 +1053,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:05:17 | Bash | Check prior proof files and copy state | `cd /home/ronald/saas-hasner; ls logs/E4C/f1nova/b1/c2/ \| head -30; head -5 logs/E4C/f1nova/b1/c2/ressusc_c2.out; tail -2 logs/E4C/f1nova/b1/c2/ressusc_c2.out; git -C /home/ronald/wt-f1nova-b1-203152 log --oneline -3; git -C /home/ronald/wt-f1nova-b1-203152 status --porcelain \| head` |
 | 12:05:10 | Bash | Read Codex verifier response | `cd /home/ronald/saas-hasner/logs/E4C/f1nova/b1/c3; wc -l codex_verif_c3.r; cat codex_verif_c3.r \| cut -c1-400` |
 | 12:05:07 | Bash | Read suite verdict and verifier status | `cd /home/ronald/saas-hasner/logs/E4C/f1nova/b1/c3; L=suite_pouso.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; ls; cat codex_verif_c3.log 2>/dev/null \| tail -2; git -C /home/ronald/wt-f1nova-b1-203152 status --porcelain \| head` |
-| 11:44:34 | Bash | Fix timestamp | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read(); a='ESTADO 12:00 LOTE7 c7'; assert s.count(a)==1; open(p,'w').write(s.replace(a,'ESTADO 11:44 LOTE7 c7')) EOF` |
-| 11:44:32 | Bash | Record LOTE7 measurement result in RELATO | `cd /home/ronald/saas-hasner/app; date +%H:%M; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: suite.sh') L.insert(3,'ESTADO 12:00 LOTE7 c7 condicao (b) do COMPLEMENTO-2 item 2 FECHOU (logs/DUAS-PISTAS/lote7_c7/kernel_medida.md): sombra atomic+raise, rota real POST /api/ponto/regularizar/ (urls_core -> views_core.api_regularizar_turno -> regular ...` |
-| 11:44:26 | Bash | Diff non-query lines main vs c7 | `cd /home/ronald/saas-hasner/logs/DUAS-PISTAS/lote7_c7; diff <(grep -vE 'queries=\|^#\|arvore\|sha\|janela' kernel_main.out) <(grep -vE 'queries=\|^#\|arvore\|sha\|janela' kernel_c7.out) \| head; grep -ciE 'insert\|update\|escrita' kernel_c7.out` |
-| 11:44:22 | Bash | Spot-check LOTE7 measurement outputs | `cd /home/ronald/saas-hasner/logs/DUAS-PISTAS/lote7_c7; for f in kernel_main.out kernel_c7.out; do echo "== $f"; grep -iE 'invalidar\|total_erros\|status\|arvore\|hash' $f \| head -14; done` |
-| 11:42:40 | Bash | Fix ESPERANDO producer, rerun hook | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read(); a='ESPERANDO: suite inteira F1 B1 c3 @99eccedf9 (COMPLEMENTO-2 item 1, na frente da trava) \| pid=465403' assert s.count(a)==1; open(p,'w').write(s.replace(a,'ESPERANDO: suite.sh \| pid=465403')) EOF cd ..; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| cut -c1-400; echo rc=$?` |
-| 11:42:36 | Bash | Read ESPERANDO proof logic, run hook | `cd /home/ronald/saas-hasner; sed -n 812,850p bin/hook_stop_fila1.py; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| cut -c1-600` |
-| 11:42:34 | Bash | Check hook ESPERANDO parsing | `cd /home/ronald/saas-hasner; grep -n 'ESPERANDO' bin/hook_stop_fila1.py \| head -20; ps -p 465403 -o pid,cmd \| tail -1` |
-| 11:42:17 | Bash | Add ESPERANDO line with suite pid | `cd /home/ronald/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESTADO 11:39 F1 B1 c3') L.insert(2,'ESPERANDO: suite inteira F1 B1 c3 @99eccedf9 (COMPLEMENTO-2 item 1, na frente da trava) \| pid=465403') open(p,'w').write('\n'.join(L)) EOF sed -n 3p docs/RELATO.md` |

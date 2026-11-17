@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 23:31** · publicado em **16/11/2026 23:31** (UTC-3)
+> Ultima resposta processada: **16/11/2026 23:47** · publicado em **16/11/2026 23:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 23:47 · sessao 0e37165938ec · - · - · origem=Ronald (tmux)
+
+Achado remanescente: há decisão própria de produção fora de C21, embora equivalente no resultado. `espera_o_texto_do_colaborador()` retorna `p.respondida_em is None or respondida_sem_texto(p)`, em vez de delegar a `not pergunta_respondida(p)`. Alimenta `resposta_enviada`, aviso/correção do cartão e `_calados`, que alimenta pauta da supervisão. Deve migrar por unicidade; não é exposição do cru. (`app/chamados/services/fio.py:177`, `app/chamados/services/fio.py:187`, `app/chamados/services/fio.py:359`, `app/chamados/services/fio.py:386`, `app/chamados/services/cobranca.py:227`, `app/chamados/services/cobranca.py:241`.)
+
+Classificação dos demais usos diretos encontrados:
+
+| Sítio | Classificação |
+|---|---|
+| `app/api/views.py:1165`, `app/api/views.py:2563`; `app/api/views_mensageria.py:569` | Serialização do instante, legítima; não decide respondida. |
+| `app/chamados/veredito_lavrado.py:207`; `app/chamados/services/painel.py:67`; `app/chamados/services/verbos.py:344`; `app/chamados/services/validacao.py:1256` | Tempo, Max, idade e ordenação: legítimos. |
+| `app/chamados/models.py:4095`, `app/chamados/models.py:4102`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`; `app/chamados/services/historico.py:99` | Trilha/projeção de ato ocorrido, legítima; não substituir pela situação atual C21. |
+| `app/chamados/models.py:3241`, `app/chamados/models.py:3242`; `app/chamados/models.py:3371`; `app/chamados/models.py:3586` | Porta de escrita, construção/conferência do par: legítimos. |
+| `app/chamados/services/disputa_emissao.py:1663` | Preservação do texto existente na resposta automática: legítima proteção de conteúdo, inclusive legado; não transformar em C21 e permitir sobrescrever texto sem I. |
+| `app/chamados/services/disputa_emissao.py:1692`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:46` | Cura histórica do meio-par e conferência da lista fixa: legítima pergunta de integridade/trilha. |
+| `app/chamados/services/disputa_emissao.py:1861` | Detecta limbo para impedir reabertura e preservar texto; legítima integridade, embora possa chamar `texto_sem_carimbo`. |
+| `app/chamados/services/disputa_emissao.py:2079` | Texto para relato do ato e porta que carimba resposta: legítimo contexto de escritor. |
+| `app/chamados/management/commands/auditar_invariantes_chamados.py:1106` | Alarme legado de meio-par: não é decisão respondida. Contudo usa `!= ''`, sem trim; também conta espaço/NBSP sem I como “preenchida”, divergindo da integridade L130. |
+| `app/chamados/services/vigia_fio.py:747`, `app/chamados/services/vigia_fio.py:750` | Censo de integridade I sem T, com `texto_vazio` real: legítimo. |
+| `app/chamados/models.py:3692`; `app/templates/chamados/partials/_card_atendimento.html:141`, `app/templates/chamados/partials/_card_atendimento.html:182`; seletores em `:114` e `:154` | Renderização/seleção do conteúdo cru: legítimos para esse propósito. As frases “Você respondeu”/“Sua resposta” ainda aparecem por texto truthy, independentemente de I. |
+| `app/chamados/services/fio.py:377`; `app/chamados/templatetags/chamados_tags.py:139` | Guarda conservadora de indisponibilidade da testemunha de aplicação, não classificação geral de respondida: legítima. |
+| `app/chamados/templatetags/chamados_tags.py:166`; `app/chamados/services/materializacao.py:770` | Atalho por ausência de conteúdo para análise/parsing da hora: legítimo; não afirmar C21 por ele. |
+| `app/chamados/services/validacao.py:467`, `:1183`, `:1194`; `app/chamados/services/materializacao.py:625`, `:953`, `:1562` | Interpretação do valor (folga, escape, hora/data), legítima. |
+| `app/chamados/services/acoes_disputa.py:357`; `app/ponto/services/dia_do_colab.py:70` | Foto/texto exibido ou conservado: legítimos. |
+
+Os templates que decidem estado por `.respondida` passam pela property delegadora (`app/templates/chamados/partials/modal_fio.html:217`; `app/templates/chamados/partials/_pergunta_card.html:24`; `app/chamados/models.py:3664`). Não encontrei `~q_respondida_com_texto()` executável nos leitores pesquisados; há menção proibitiva na docstring (`app/chamados/juizes.py:1585`). A varredura global dos campos não encontrou usos executáveis adicionais em folha/escala/ferias fora das famílias catalogadas; isso é alcance de busca, não prova dinâmica. [não verificado]
+
+NBSP está contemplado no código: Python usa `.strip()`; SQL constrói a classe completa a partir de `str.isspace()`, em vez de `\s` do banco. As faces positiva e negativa empregam essa mesma classe (`app/chamados/juizes.py:1528`, `app/chamados/juizes.py:1552`, `app/chamados/juizes.py:1560`, `app/chamados/juizes.py:1580`, `app/chamados/juizes.py:1590`). Há teste pk a pk da face negativa com `' \xa0 '` e testes da face positiva/ilegais, mas não executei testes de banco (`app/chamados/tests/test_f1nova_b2_leitores.py:137`; `app/chamados/tests/test_e3_forma_sql_do_juiz.py:89`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:34`). Execução SQL nesta cópia: [não verificado].
+
+O selo de respondedores tem ponto cego concreto: conta apenas decisões sobre `respondida_em`, considera `PAR` qualquer expressão que também leia texto, e o teste explicitamente preserva `espera_o_texto_do_colaborador` nessa classe. Logo zero não significa “todos delegam ao juiz”; um clone de I∧T continua verde (`app/chamados/tests/test_e3_catraca_respondedores.py:51`, `:356`, `:381`, `:505`, `:512`). A mudança de `PAROU_EM` para zero não fortaleceu esse contrato (`app/chamados/tests/test_e3_catraca_respondedores.py:54`).
+
+Executei o módulo sem banco e sem bytecode: 17 testes, OK, rc=0. O resultado da execução não tem artefato porque a tarefa proíbe criar arquivos. [não verificado] [nao verificado]
 
 ## 16/11 23:31 · sessao 68ac2e2d6427 · ESPELHO-VERDADE-NA-BRECHA · leitura · origem=Code
 
@@ -1993,133 +2025,4 @@ Diretos: `app/templates/chamados/partials/_pergunta_card.html:42`, `app/template
 
 Autoridades/escritores do censo ampliado também listados pelo anexo B2: `app/api/views.py:2627`, `app/chamados/canal.py:65`, `app/chamados/reconciliador.py:631`, `app/chamados/services/acoes_disputa.py:105`, `app/chamados/services/becos.py:30`, `app/chamados/services/declaracao_texto.py:419`, `app/chamados/services/disputa_emissao.py:1481`, `app/chamados/services/materializacao.py:852`, `app/chamados/services/pergunta_no_app.py:81`, `app/chamados/services/validacao.py:161`, `app/chamados/services/verbos.py:264`, `app/chamados/services/vigia_fio.py:636`, commands de auditoria `:1075`, backfill `:67`, dedup `:75`, `app/colaboradores/services/calendario.py:504`, `app/colaboradores/services/ficha.py:171`, `app/folha/previa.py:142`, `app/ponto/services/cartorio.py:1641`, `app/ponto/management/commands/reconciliar_grade.py:461`. O fato de estarem em voo vem exclusivamente do anexo, não há árvore B2 disponível: [nao verificado].
 
-## 16/11 23:08 · sessao 0642cf92186e · - · - · origem=Ronald (tmux)
-
-Leitura concluída sem alteração. O censo anexo foi reproduzido em memória com `python3`; nenhum acesso a banco/teste Django foi feito. O vínculo desta cópia ao hash é o fornecido pelo usuário; não existe `.git` para confirmar o HEAD [nao verificado]. [nao verificado]
-
-**Resultado dos quatro templates:** o regex do anexo produz 126 ocorrências: `_card_atendimento.html` 35, `_lote_preview.html` 1, `modal_fio.html` 75, `_pergunta_card.html` 15. No anexo eram respectivamente 35, 1, 33 e 8: +49 ocorrências, sem saída das 22 linhas R/V antigas. Os novos pontos estão nos estados de aplicação, não em migração das leituras R/V. (`app/templates/chamados/partials/_card_atendimento.html:106`; `_lote_preview.html:24`; `modal_fio.html:230`; `_pergunta_card.html:43`.)
-
-### Censo exato reproduzido
-
-Abreviações: `I=respondida_em`, `V=validada_em`, `R=resposta_colab`; cada linha abaixo pertence ao arquivo indicado.
-
-**`app/templates/chamados/partials/_card_atendimento.html` —35, igual ao anexo:**
-
-- `77 p.viva IF`
-- `100 p.resposta_enviada IF`
-- `106 p.resposta_display SHOW; p.resposta_colab SHOW; p.respondida_em SHOW`
-- `114 p.resposta_colab IF`
-- `141 p.resposta_colab IF`
-- `143 p.resposta_display SHOW; p.resposta_colab SHOW; p.resposta_enviada IF; p.respondida_em SHOW`
-- `148 p.resposta_colab SHOW`
-- `154 p.resposta_colab IF`
-- `161 p.resposta_enviada IF`
-- `182 p.resposta_colab IF`
-- `183 p.resposta_display SHOW; p.resposta_colab SHOW`
-- `189 p.pendencia_admin IF; p.estado IF`
-- `192 p.via_resolucao IF ×10; p.recusa_motivo IF; p.recusa_motivo SHOW`
-- `390 pj.resposta_enviada IF`
-- `391 pj.resposta_display SHOW; pj.resposta_colab SHOW; pj.respondida_em SHOW`
-
-**`app/templates/chamados/partials/_lote_preview.html` —1, igual ao anexo:** `24 pergunta.resposta_colab SHOW`; a expressão real é `x.pergunta.resposta_colab`, cuja raiz `x` o regex omite (`app/templates/chamados/partials/_lote_preview.html:24`).
-
-**`app/templates/chamados/partials/_pergunta_card.html` —15:**
-
-- `20 perg.validada_em IF`
-- `23 perg.validada_em IF; perg.validada_em SHOW`
-- `24 perg.respondida_em IF`
-- `29 perg.respondida_em IF`
-- `31 perg.resposta_display SHOW`
-- `32 perg.respondida_em SHOW`
-- `42 perg.validada_em IF`
-- **NOVO:** `44 ap.estado IF ×3; 45 ap.estado IF; 47 ap.estado IF ×2; 49 ap.estado IF`
-
-**`app/templates/chamados/partials/modal_fio.html` —75:**
-
-- `119 desenlace.estado SHOW`
-- `170 perg.data_conferida_em IF`
-- `171 perg.data_conferida_em SHOW; perg.data_conferida_por IF; perg.data_conferida_por SHOW ×2`
-- `185 perg.respondida_em IF`
-- `217 perg.respondida_em IF`
-- `219 perg.resposta_colab SHOW`
-- `220 perg.respondida_em SHOW`
-- `222 perg.pendencia_admin IF`
-- `226 perg.recusa_motivo IF; perg.recusa_motivo SHOW`
-- `228 perg.validada_em IF`
-- `230 perg.estado_aplicacao IF ×10`
-- `232 perg.estado_aplicacao SHOW`
-- `234 perg.estado_aplicacao IF ×2`
-- `236 perg.estado_aplicacao SHOW`
-- `238 perg.estado_aplicacao IF ×2`
-- `240 perg.estado_aplicacao SHOW`
-- `242 perg.estado_aplicacao IF ×2`
-- `244 perg.estado_aplicacao SHOW`
-- `246 perg.estado_aplicacao IF ×2`
-- `248 perg.estado_aplicacao SHOW`
-- `252 perg.estado_aplicacao IF ×10`
-- `254 perg.estado_aplicacao SHOW`
-- `256 perg.estado_aplicacao IF ×2`
-- `258 perg.estado_aplicacao SHOW`
-- `260 perg.estado_aplicacao IF ×2`
-- `262 perg.estado_aplicacao SHOW`
-- `264 perg.estado_aplicacao IF ×2`
-- `266 perg.estado_aplicacao SHOW`
-- `268 perg.estado_aplicacao IF ×2`
-- `270 perg.estado_aplicacao SHOW`
-- `274 perg.estado_aplicacao IF ×8`
-- `361 chamado.todas_respondidas IF`
-- `406 disputa_obj.fechada_em IF; disputa_obj.fechada_em SHOW`
-- `464 it.estado IF; 467 it.estado IF; 468 it.estado IF; 469 it.estado IF`
-
-No modal, as leituras antigas R/V continuam em 185/217/219/220/228. O bloco `estado_aplicacao` foi ampliado em 230–274; os leitores posteriores deslocaram +27: 334→361,379→406,437→464,440→467,441→468,442→469. (`app/templates/chamados/partials/modal_fio.html:185`; `:217`; `:228`; `:230`; `:274`; `:361`; `:406`; `:464`.)
-
-### BUG-PAR e Validar
-
-- O card mantém o gate exterior cru `{% if not perg.validada_em and pode_agir %}` na linha42 e o gate cru `respondida_em` na29. O filtro novo `aplicacao_da_resposta` em43 chama a função real `estado_aplicacao_pergunta(perg.disputa,perg)` e, se não obtiver estado para resposta hora não vazia, devolve indisponível. Ele próprio lê `resposta_colab` em139. (`app/templates/chamados/partials/_pergunta_card.html:29`; `:42`; `:43`; `app/chamados/templatetags/chamados_tags.py:132`; `:136`; `:139`.)
-- Card44 exibe detalhe para `bloqueada_competencia`, `bloqueada_competencia_entregue`, `bloqueada_sem_dia_do_fato`; card45/47/49 retiram Validar para indisponível, entregue, sem dia e espera declarado x gravado. `bloqueada_competencia` conserva Validar. Botões de validação estão81 e105; Rejeitar125 permanece fora desse condicional de aplicação, mas dentro dos gates I/V. (`app/templates/chamados/partials/_pergunta_card.html:44`; `:45`; `:47`; `:49`; `:81`; `:105`; `:125`.)
-- Modal mantém “✓ Validada” condicionado a V228. Os estados entregue e sem dia aparecem no ramo validada230 e no não validada252. O gate274 retira Validar para espera, indisponível, entregue e sem dia; conserva o toque para competência apenas fechada. Validar implausível296, normal311. Rejeitar325 e Corrigir330 dependem de `not perg.em_disputa_fechada`316. (`app/templates/chamados/partials/modal_fio.html:228`; `:230`; `:252`; `:274`; `:296`; `:311`; `:316`; `:325`; `:330`.)
-
-### Provas existentes novas e antigas
-
-- `app/chamados/tests/test_bug_par_volta.py::test_f6_sem_k6_conserva_validar_k6_esconde_nos_dois_htmls` (125): os dois HTMLs mantêm Validar sob F6 e o retiram sob K6; asserção143.
-- `...::test_matriz_linha1_entregue_fora163_recusa_estado_proprio_esconde_validar` (222): estado entregue, detalhe e ausência do botão nos dois HTMLs231; porta retorna entregue233, não altera foto persistida235.
-- `...::test_matriz_linha2_fechada_nao_entregue_conserva_o_toque_e_o_motivo` (237): contrato F6 conserva toque, validação+devolução, motivo competência aprovada240.
-- `...::test_matriz_linha5_fora163_sem_dia_do_fato_estado_proprio` (304): detalhe sem dia, botão ausente nos dois HTMLs314, porta concorda318, K6 não chamado319, foto persistida igual321.
-- `app/chamados/tests/test_bug_par_projetado.py::test_RED_modal_mostra_o_rotulo_e_nao_o_botao_de_validar` (1287): ausência de Validar para as duas metades1296–1297.
-- `...::test_RED_card_da_pagina_mostra_o_rotulo_e_nao_o_botao_de_validar` (1299): frase, botão ausente1304–1305; resposta igual volta a exibir1308.
-- `...::test_RED_testemunha_que_falha_no_modal_nao_oferece_validar` (1155): asserções1166–1167.
-- `app/chamados/tests/test_ui_resposta_diz_o_que_e.py::test_o_cartao_da_PAGINA_RENDERIZA_a_frase_e_o_rotulo` (229): render do fragmento226, afirma frase/data de referência238–242; não prova texto/data da leitura dos atos.
-- `app/chamados/tests/test_selo_teto_modal.py::test_TETO_do_modal_prod_like` (88): GET real85 e teto93, ainda existente.
-
-Esses testes foram lidos, não executados [nao verificado]. [nao verificado]
-
-### Grafo/contexto reconfirmado
-
-| Parcial | Raiz/contexto atual | Prova |
-|---|---|---|
-| card | `meu_atendimento`: `montar_chamados_fio(colaborador,so_janela=True)`; includes em127/144; casca dinâmica | `app/chamados/views.py:569`; `app/templates/chamados/meu_atendimento.html:1`; `:127`; `:144`; `app/core/context_processors.py:210` |
-| pergunta | detalhe inclui310; lista ORM sem prefetch352 e filtrada `pergunta_viva`358; casca base fixa1 | `app/templates/chamados/detalhe_local.html:1`; `:310`; `app/chamados/services/acoes_chamado.py:352`; `:358` |
-| pergunta htmx | ORM só `select_related('disputa__colaborador')`; contexto só perg/pode_agir | `app/chamados/views.py:399`; `:404`; `:405` |
-| modal | Prefetch decisões já existe; `estado_aplicacao` anexado com função real e fallback indisponível; contexto parcial monta com explicação | `app/chamados/services/fio.py:263`; `:376`; `:377`; `:384`; `:483`; `:492`; `:542`; `app/chamados/views.py:927`; `:1399` |
-| lote | função real fila; usa por_classe LOTE_A | `app/chamados/views_cobrar.py:361`; `:363` |
-
-**NÃO há include `_pergunta_resposta_lida` nos quatro arquivos BASE.** Só o modal possui includes: cabeçalho13 e relatório geo525; os demais três não possuem include. O cabeçalho lê ficha.cabecalho, sem projeção de pergunta (`app/templates/colaboradores/partials/_cabecalho_ficha.html:7`; `:8`; `:9`); o relatório atual não contém os campos R/V pesquisados [nao verificado para leituras transitivas Python].
-
-### Limites do censo
-
-- Perde filtros `perg|leitura_da_resposta` card43/modal274 e `perg|aplicacao_da_resposta` card43: não há `.campo` no chamador, mas os filtros leem a projeção em tags166 e139 e chamam juízes reais171/136. (`app/templates/chamados/partials/_pergunta_card.html:43`; `app/templates/chamados/partials/modal_fio.html:274`; `app/chamados/templatetags/chamados_tags.py:139`; `:166`; `:171`; `:136`.)
-- Perde `perg.respostas_anteriores` modal205 e leituras `v.ato_texto`, `v.ato_em`, originais e autores em210/212: nomes ausentes de CAMPOS do anexo. (`app/templates/chamados/partials/modal_fio.html:205`; `:210`; `:212`.)
-- Não segue includes, nem resolve alias; em lote24 reporta `pergunta.resposta_colab` e perde a raiz `x`; identifica prefixo `perg.estado_aplicacao`, sem registrar separadamente `.estado`/`.detalhe`. (`app/templates/chamados/partials/_lote_preview.html:24`; `app/templates/chamados/partials/modal_fio.html:230`; `:232`.)
-- Classifica qualquer `{% %}` como IF, inclusive atribuição `{% with %}`; o parser Django é necessário para a classificação semântica. (`app/templates/chamados/partials/modal_fio.html:274`.)
-- Mascara comentários HTML, embora Django processe tags dentro de HTML comments; **nos quatro arquivos atuais nenhum bloco `<!-- -->` contém `{{` ou `{%`**, conforme varredura em memória. Portanto há risco no algoritmo, mas nenhum leitor vivo atual perdido dessa maneira [nao verificado por parser Django].
-
-### Todos os filtros encontrados
-
-- Card: `date`5,6,50,61,90,106,143,170,391,436; `rotulo`17; `default`17,50,106,143,148,183,391; `truncatechars`17,39; `length`33; `stringformat`154; `lower`192; `slice`241×3,306; `make_list`306; `yesno`412. (`app/templates/chamados/partials/_card_atendimento.html`, linhas indicadas.)
-- Lote: `length`7,9; `default`18,24; `date`24; `truncatechars`24. (`app/templates/chamados/partials/_lote_preview.html`, linhas indicadas.)
-- Pergunta: `date`23,32; `join`38; `leitura_da_resposta`43; `aplicacao_da_resposta`43. (`app/templates/chamados/partials/_pergunta_card.html`, linhas indicadas.)
-- Modal: `pluralize`16×2,18,19×2,46×2,399; `default`44,83,171,210,212,495,514×2,515×2,556; `date`86,130,167,168,171,183,210,212×2,220,406,482,498,516; `espera`102; `upper`119; `get_dict`123,527,574,590,622,633,635,663,679,705; `data_do_fato`162; `data_do_rotulo_antigo`162; `data_do_fato_diverge`163; `pergunta_cega`185; `lower`212; `leitura_da_resposta`274; `respostas_que_o_reabrir_apaga`394; `truncatechars`466,482,483,495,497; `par_tem_gps`508; `unlocalize`512×2,513×2,514×2,532,543,554,556. (`app/templates/chamados/partials/modal_fio.html`, linhas indicadas.)
-
-`pergunta_cega` lê apenas motivo/pergunta (`app/chamados/templatetags/chamados_extras.py:8`; `:11`). Filtros data delegam à função do fio (`:15`; `:30`; `:37`; `:50`). `respostas_que_o_reabrir_apaga` delega a `perguntas_corrigiveis` (`app/chamados/templatetags/chamados_tags.py:222`; `:226`).
-
-_6224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6225 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
