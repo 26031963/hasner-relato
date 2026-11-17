@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 12:11:18.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (213.6 MB). Acoes na janela: **642**.
+**Medido em 17/11/2026 12:16:49.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (213.7 MB). Acoes na janela: **644**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:16:44 | Bash | Publish COMPLEMENTO-2 results to RELATO and BACKLOG | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: ')]; assert len(i)==1 L[i[0]+1:i[0]+1]=[ 'ENTREGA COMPLEMENTO-2 item 6: /tmp/auditaveis20_v2.zip (20 espelhos auditaveis com marcacao, empresa e posto mascarados como empN/postoN, sem os colchetes da Convencao; conferi: 0 nome de empresa ou po ...` |
+| 12:16:29 | Bash | Verify zip contents and masking | `cd /home/ronald/saas-hasner; unzip -l /tmp/auditaveis20_v2.zip \| tail -3; D=$(mktemp -d); unzip -q /tmp/auditaveis20_v2.zip -d $D; ls -l logs/ENSAIO-FOLHA-11/NOMES-FROTA-PRIVADA.txt \| cut -c1-10; echo nomes=$(/bin/grep -rFi -f logs/ENSAIO-FOLHA-11/NOMES-FROTA-PRIVADA.txt $D \| wc -l); echo colchete=$(/bin/grep -rE '\[[^]]*[\|=][^]]*\]' $D \| wc -l); /bin/grep -rh 'Convenc' $D \| sort \| uniq -c  ...` |
 | 12:05:20 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 12:05:16 | Bash | Check if the sombra probe is alive | `ps -o pid,etimes,args -p 950 \| cut -c1-100` |
 | 12:04:55 | Bash | Point wait line at running suite | `cd /home/ronald/saas-hasner; sed -i -E "0,/^ESPERANDO: sombra \\| pid=950$/s//ESPERANDO: suite.sh \| pid=2001/" app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py \| cut -c1-120` |
