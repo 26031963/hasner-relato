@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 18:07** · publicado em **17/11/2026 18:06** (UTC-3)
+> Ultima resposta processada: **17/11/2026 18:10** · publicado em **17/11/2026 18:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 18:10 · sessao 9a0ae00e996c · [nome]-NAO-DESFAZ-O-PAPEL · construtor · origem=Code
+
+**Contrato de entrada do contador**
+
+A procedência pode ser capturada **sem juiz novo**, identificando o ponto que emite cada órfã. Ela precisa ser preservada na emissão: a lista final contém horas, e o classificador existente atribui classe, não produtor. Recuperar o produtor depois apenas dessa lista não está demonstrado. [escala/utils.py:621](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:621), [escala/utils.py:799](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:799), [escala/orfa_classe.py:53](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/orfa_classe.py:53)
+
+| Produtor | Fonte e universo | Unidade | Exclusões |
+|---|---|---|---|
+| P1 | Órfãs devolvidas por `_match_marcos`, tanto pelo papel quanto pela DP. [escala/utils.py:621](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:621), [escala/utils.py:662](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:662) | Uma ocorrência de batida órfã no resultado do casador. | Sobras acrescentadas posteriormente por P2 ou P3. |
+| P2 | Batidas não consumidas no builder de um vínculo, atribuídas pela data civil, inclusive em folga. [escala/utils.py:760](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:760), [escala/utils.py:790](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:790) | Uma ocorrência de batida acrescentada à lista do dia. | Consumidas e sobras cuja data não pertence ao período montado. [escala/utils.py:793](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:793) |
+| P3 | No builder por turno: ponta de override sem coluna, excedente aos slots `I` e sobra não consumida sem slot `I` disponível ou sem indicação de intervalo. [escala/utils.py:1713](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:1713), [escala/utils.py:1731](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:1731), [escala/utils.py:1817](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:1817) | Uma ocorrência de batida acrescentada em um desses sítios. | Sobras consumidas, fora do período ou acomodadas em slot `I`. [escala/utils.py:1818](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:1818) |
+
+O recorte do placar pedido é órfã a até 90 minutos de marco vazio em dia de trabalho, aberto por classe e produtor; o esperado zero desta obra se limita a P1. A definição executável que identifica especificamente a classe dos 37 dias, distinta das classes já expostas por `classificar_orfas`, está **[não verificado]**. [escala/orfa_classe.py:53](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/orfa_classe.py:53)
+
+**RED**
+
+Escrevi somente [test_cirineu_nao_desfaz_o_papel.py](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:1). A sequência do intervalo curto é construída: o brief não fornece seus horários completos; isso está declarado no teste. [escala/tests/test_cirineu_nao_desfaz_o_papel.py:63](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:63) [nao verificado]
+
+O comando completo foi tentado, mas não executou os testes: falta `django.core` no ambiente. **Resultado integral dos testes: [não verificado].** [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cirineu_nao_desfaz_o_papel --noinput
+```
+
+Uma execução auxiliar das funções extraídas do código, com dependências substituídas, observou os resultados abaixo; ela não substitui a execução Django nem certifica a entrega. [escala/utils.py:502](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:502), [escala/utils.py:585](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:585)
+
+- **11:31:** falha hoje porque a guarda remove o casamento quando outra batida ocupa o marco mais próximo. [escala/utils.py:580](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:580), [escala/utils.py:650](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/utils.py:650)
+- **11:29:** passa hoje no ensaio auxiliar, como controle. [escala/tests/test_cirineu_nao_desfaz_o_papel.py:38](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:38)
+- **Rajada:** o ensaio auxiliar mostrou duas órfãs, não três; o controle foi ajustado para exigir que `19:04` e `19:05` continuem órfãs. Sua execução após o ajuste está **[não verificado]**. [escala/tests/test_cirineu_nao_desfaz_o_papel.py:48](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:48)
+- **Intervalo curto:** falha hoje pelas mesmas guardas; o assert identifica o mutante sem a condição dos 90 minutos. A execução desse mutante após uma cura está **[não verificado]**. [escala/tests/test_cirineu_nao_desfaz_o_papel.py:63](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:63)
+
+Nenhuma cura ou mutante foi escrito nesta volta. [escala/tests/test_cirineu_nao_desfaz_o_papel.py:1](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-180739/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:1)
 
 ## 17/11 18:07 · sessao 1f4870b152da · DIA-SEM-TRABALHO-PORTA · leitura · origem=Code
 
@@ -963,8 +996,4 @@ Hoje a porta agrega motivos de vários briefs numa única negativa, mas o juiz r
 
 **PROCEDE — volta ao Ronald** para fechar o alcance efetivo do portão, a forma mínima validada das duas linhas e a condição de saída do bloqueio antes do opus. ([bin/disjuntor.py:1701](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1701), [CLAUDE.md:375](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:375))
 
-## 17/11 17:23 · sessao 940ab2b8f888 · - · - · origem=Ronald (tmux)
-
-Auditoria de [nome] enviada ao agente principal, com referências aos sítios vivos, comandos de varredura e evidência do caminho de gravação em competências exportadas.
-
-_6669 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
