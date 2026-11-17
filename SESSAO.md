@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 12:05:49.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (213.6 MB). Acoes na janela: **648**.
+**Medido em 17/11/2026 12:11:18.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (213.6 MB). Acoes na janela: **642**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -652,9 +652,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:06:32 | Bash | Read wrapper call log for pid 2218451 | `cd /home/ronald/saas-hasner; /bin/grep 2218451 logs/codex/chamadas.log \| cut -c1-300` |
 | 01:06:30 | Bash | Count f2 sonda attempts from wrapper logs | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/PREPARA-1611/r2; cat $R/f2.fim $R/f2.r.id; ls -la --time-style=+%H:%M:%S logs/codex/ \| /bin/grep 'PREPARA-F2-F4-F7_20261116_23\\|PREPARA-F2-F4-F7_20261117\\|2218451'; /bin/grep -rln 2218451 logs/codex/*.log 2>/dev/null \| head; head -c 600 $R/f2.r` |
 | 01:06:26 | Bash | Save aval, check c2prep verdict and f2 sonda log | `cd /home/ronald/saas-hasner; A=logs/AVAIS-1515; cat > $A/complemento3_prepara_1711.txt <<'EOF' aval Ronald: COMPLEMENTO-3 PREPARA-ANTECIPADA-F2-F4-F7 (17/11 01:0x) -- UNIDADE: fatia da E4c. Nenhuma lei nova. REGISTRAR + LEITURA, nao constroi. 1 SOLTA: o item 3 do COMPLEMENTO-2 deixa de esperar a volta 2. As cinco leituras de F3, F5, F6, F8 e F9 partem agora (revisao_c2prep CONFERE), na base = HEAD ...` |
-| 00:06:51 | Bash | Check push, review, and hook proof | `cd /home/ronald/saas-hasner; tail -1 logs/PUSH-1611/push_en7b.log \| cut -c1-150; cat logs/AVAIS-1515/revisao_c2prep/r.fim 2>/dev/null; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 00:06:47 | Bash | Write F3-F9 questions and gated launcher | `cd /home/ronald/saas-hasner; P=logs/ESPINHA-BRIEFS/PREPARA-1711; mkdir -p $P; for f in F3 F5 F6 F8 F9; do l=$(echo $f \| tr A-Z a-z); cat > $P/$l.q <<EOF PREPARA ANTECIPADA da fatia $f da espinha E4c (aval anexo complemento2_prepara_f3_f5_f6_f8_f9_1711.txt, que estende a forma do PREPARA F2/F4/F7). Brief e matriz da $f (anexos) foram escritos em 15/11, contra uma F1 e uma BUG-PAR que nao sao as qu ...` |
-| 00:06:30 | Bash | Measure attachment sizes | `cd /home/ronald/saas-hasner; E=logs/ESPINHA-BRIEFS; for f in F3 F5 F6 F8 F9; do wc -c $E/$f/brief.md $E/$f/matriz.md \| head -2 \| tr '\n' ' '; echo; done; wc -c $E/F2/remedida.md $E/PREPARA-1611/f4.r $E/PREPARA-1611/f7.r $E/b2_arquivos_vs_520d.txt; head -5 $E/F2/remedida.md; ls $E/F4 $E/F7 \| /bin/grep remedida` |
-| 00:06:21 | Bash | Read r1 question and launchers to reuse | `cd /home/ronald/saas-hasner; P=logs/ESPINHA-BRIEFS/PREPARA-1611; cat $P/f4.q; echo ====; cat $P/lanca.sh; echo ===; cat $P/r2/lanca.sh` |
-| 00:06:18 | Bash | See PREPARA r1 layout and r2 producer | `cd /home/ronald/saas-hasner; ls logs/ESPINHA-BRIEFS/PREPARA-1611/; ls logs/ESPINHA-BRIEFS/F2/ \| head -30; ps -o pid,etime,args -p 2218451 \| cut -c1-200` |
-| 00:06:15 | Bash | Save aval, launch its review, check PREPARA r2 and brief dirs | `cd /home/ronald/saas-hasner; A=logs/AVAIS-1515; cat > $A/complemento2_prepara_f3_f5_f6_f8_f9_1711.txt <<'EOF' aval Ronald: COMPLEMENTO-2 PREPARA-ANTECIPADA-F2-F4-F7 (17/11 00:0x) -- UNIDADE: fatia da E4c. Nenhuma lei nova. REGISTRAR + LEITURA, nao constroi. 1 ESCOPO: a preparacao antecipada se estende as fatias F3, F5, F6, F8 e F9, com as mesmas partes e a mesma forma de entrega da F2/F4/F7: logs/ ...` |
