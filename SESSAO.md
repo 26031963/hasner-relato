@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 22:02:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (179.2 MB). Acoes na janela: **1119**.
+**Medido em 16/11/2026 22:07:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (179.2 MB). Acoes na janela: **1115**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1125,7 +1125,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:12:59 | Bash | Inspect CORTES.json and PROMPTS format | `cd /home/ronald/saas-hasner; python3 -c " import json; d=json.load(open('app/docs/CORTES.json')); print(type(d)); x=d if isinstance(d,list) else d.get('cortes',d); import itertools last=x[-1] if isinstance(x,list) else list(x.items())[-1]; print(json.dumps(last,ensure_ascii=False)[:800])"; tail -3 app/docs/PROMPTS.md \| cut -c1-300` |
 | 10:12:41 | Bash | List main changes since copy base | `cd /home/ronald/saas-hasner; B=$(git merge-base main 2e79fdc30); git log --oneline -1 $B; git diff --name-only $B main \| grep -v '^app/docs/' ; echo "---docs:"; git diff --name-only $B main \| grep -c '^app/docs/'; echo "--- interseccao com a copia:"; comm -12 <(git diff --name-only $B main \| sort) <(git diff --name-only $B 2e79fdc30 \| sort)` |
 | 10:12:37 | Bash | Save aval and check LOTE3 c7 landing tree | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/pousos_condicionais_1611.txt <<'EOF' aval Ronald: POUSOS-CONDICIONAIS-1611 (16/11 10:1x) -- UNIDADE: pouso. Nenhuma lei nova. Respondo ADIANTADO as tres paradas de pouso; cada condicao e LITERAL (LEI-AKITA 9): nao fechou = PAREI com o numero, nao pousa. 1 F1 B1 c2: "libera B3" e POUSA se os tres juntos -- suite inteira do hash certificado VERDE; o ...` |
-| 10:02:50 | Bash | Confirm RED run queued behind lock | `/usr/bin/sleep 15; cd /home/ronald/saas-hasner; tail -3 logs/COMPLEMENTO-1-CORTES-F2-F9-1611/u9b_red_base.log; bin/trava_teste.sh --quem 2>&1 \| head -3` |
-| 10:02:46 | Bash | Run U9b RED then lapide mutant (queued) | `cd /home/ronald/saas-hasner; D=logs/COMPLEMENTO-1-CORTES-F2-F9-1611; $D/roda_u9b_red.sh` |
-| 10:02:44 | Bash | Prepare scratch worktree and RED/mutant runner | `cd /home/ronald/saas-hasner; D=logs/COMPLEMENTO-1-CORTES-F2-F9-1611; T=$(date +%H%M%S); S=/home/ronald/wt-u9b-red-$T; git worktree add --detach $S HEAD >/dev/null 2>&1; git -C $S log --oneline -1; cp /home/ronald/wt-codex-cortes-f2-f9-1611-095601/app/chamados/tests/test_f6_u9b_ramo_inalcancavel.py $S/app/chamados/tests/; echo $S > $D/wt_u9b_red.txt cat > $D/mutante_lapide.py <<'EOF' import sys p=s ...` |
-| 10:02:26 | Bash | Check single-module run option | `cd /home/ronald/saas-hasner; grep -n 'only\\|--labels\\|LABELS_RUN\\|modulo' bin/suite.sh \| head -30; ls app/config/settings/ \| head` |
