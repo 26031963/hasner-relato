@@ -1,7 +1,370 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 11:25** · publicado em **17/11/2026 11:29** (UTC-3)
+> Ultima resposta processada: **17/11/2026 11:39** · publicado em **17/11/2026 11:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 11:39 · sessao 6423bcf443b1 · CORTE-FOLHA-ESPELHO · verificador · origem=Code
+
+**AVAL-DEVOLVIDO nos itens 1 e 3:** faltam fechar, respectivamente, o universo dos fatos da disputa e o significado de competência aberta. O item 2 confere como efeito proposto para o pré-desenho. (`app/chamados/juizes.py:75`; `app/chamados/models.py:2528`; `app/ponto/services/fechamento.py:1523`; anexo textual sem arquivo:linha [nao verificado])
+
+**Item 1 — CORTE**
+
+1. **As premissas conferem? Parcialmente.** Hoje são perguntas diferentes: o export consulta células da janela e suas exceções; o PDF consulta qualquer disputa da pessoa com `fechada_em=NULL`, sem competência nem data do fato. O wrapper do export ignora os três primeiros argumentos e delega à retenção por célula. (`app/folha/export.py:1247`; `app/folha/export.py:1273`; `app/folha/export.py:1301`; `app/chamados/services/disputa_emissao.py:40`; `app/relatorios/pdf_espelho.py:1085`)
+
+   A janela pertence a `janela_fechamento → periodo_apuracao`, usando o corte da empresa, limitado a 2–28; as bordas são inclusivas. Não é mês civil nem necessariamente corte 21. (`app/ponto/janelas.py:10`; `app/ponto/janelas.py:36`; `app/ponto/janelas.py:54`; `app/folha/export.py:1265`)
+
+   **Não há um dia escalar próprio da disputa:** ela reúne perguntas, cada uma podendo ter `data_evento`. Para pergunta de fato, esse campo representa o dia do turno; conversa grava o dia civil da conversa. A atribuição canônica passa por `gravar_dia_do_fato`, após resolução pelo juiz do turno. (`app/chamados/models.py:2521`; `app/chamados/models.py:2888`; `app/chamados/models.py:2900`; `app/chamados/services/fio.py:837`; `app/chamados/services/fio.py:1698`)
+
+2. **Colide com lei ou aval?** Unificar os leitores concorda com LEI-AKITA 2. Entretanto, o SIM não pode ser simplesmente “aberta + algum dia dentro”: a L-033 mantém pagável o dia com entrada e saída batidas, faltando somente intervalo, com pergunta aberta. Hoje essa exceção existe no retentor da célula, mediante protestos exatamente `{'FURO_PARCIAL'}` e conferência da ata pelo juiz de marcos; não está no bloqueador global do PDF. (`CLAUDE.md:20`; `app/docs/LEIS.md:81`; `app/folha/export.py:1150`; `app/folha/export.py:1173`; `app/folha/export.py:1293`; `app/chamados/services/disputa_emissao.py:40`)
+
+   Os juízes registrados para pergunta viva, fechamento da disputa, tarefa e respostas sem veredito respondem perguntas distintas. O helper global existente tampouco responde ao novo recorte temporal. Acrescentar janela e exceção muda predicado e universo; não cabe apresentá-lo como mera declaração de autoridade já existente com comportamento idêntico. (`app/core/juizes.py:291`; `app/core/juizes.py:304`; `app/core/juizes.py:308`; `app/core/juizes.py:329`; `CLAUDE.md:279`)
+
+3. **O literal fecha? Não.** Precisam ficar determinados:
+
+   - **Vários fatos, dentro e fora:** o resolvedor do chamado-pai devolve o **menor** dia das perguntas de fato. Usá-lo para perguntar “há algum dentro?” pode esconder outro fato dentro da janela. (`app/chamados/juizes.py:75`; `app/chamados/juizes.py:85`)
+   - **Quais perguntas contam:** todas da disputa aberta, somente vivas ou somente sem decisão? “Disputa aberta” hoje testa apenas `fechada_em`; C7 consulta separadamente perguntas vivas e respostas sem veredito. (`app/chamados/models.py:1888`; `app/chamados/models.py:1928`)
+   - **Sem dia resolvível:** o campo permite NULL e o resolvedor pode retornar `None`; conversa não fornece dia de fato. O destino desses casos não foi decidido pelo dado fornecido. (`app/chamados/models.py:2528`; `app/chamados/juizes.py:79`; `app/chamados/juizes.py:85`; [nao verificado])
+   - **Exceção L-033:** “preservada” precisa compor a resposta única; deixá-la somente no antigo ramo da célula permite que o novo bloqueio a contorne. (`app/folha/export.py:1173`; `app/folha/export.py:1293`)
+
+4. **Toca exportada, dinheiro ou `!` fora do declarado?** Construído, o corte muda quem pode produzir linhas financeiras, pois o montador só admite os classificados como ENTRA. Isso está no efeito pretendido; não autoriza alterar valores, batidas ou o gravado de exportadas. Trocar o helper global também alcançaria leitores além dos dois declarados, como API e permissão de edição. (`app/folha/export.py:716`; `app/folha/export.py:726`; `CLAUDE.md:265`; `app/api/views.py:1336`; `app/colaboradores/mixins.py:307`)
+
+**Item 2 — EFEITO**
+
+1. **As premissas conferem?** O mecanismo existente permite excluir a pessoa pelo resultado `status='fora'` com motivo e detalhe; o montador omite suas linhas. No PDF, o bloqueio auditável provoca erro; o lote captura a falha e tenta o informacional. O efeito proposto é novo, mas esses caminhos existem. (`app/folha/export.py:837`; `app/folha/export.py:970`; `app/folha/export.py:726`; `app/relatorios/pdf_espelho.py:1087`; `app/relatorios/services.py:244`; `app/relatorios/services.py:250`)
+
+2. **Colide com lei ou aval?** Não identifiquei colisão própria do efeito, desde que o SIM respeite a L-033 e o limite de competência definido no item 3. A exclusão deve continuar passando por `classificar_export`, autoridade registrada de quem entra no TXT. (`app/docs/LEIS.md:81`; `app/core/juizes.py:329`; `app/folha/export.py:716`)
+
+3. **O literal fecha?** Fecha como direção para o pré-desenho, com duas ressalvas:
+
+   - “Com NÃO, vale só o veredito da célula” **não descreve literalmente toda a classificação atual**: existem rescisão, código Domínio, férias com batida, cadastro e homologação, além da porta global. A leitura compatível com “como hoje” é: NÃO remove apenas este novo impedimento por disputa, preservando os demais crivos. (`app/folha/export.py:866`; `app/folha/export.py:872`; `app/folha/export.py:877`; `app/folha/export.py:959`; `app/folha/export.py:974`; `app/folha/views.py:128`)
+   - Chave, texto e orientação do motivo novo ainda não estão especificados no anexo [nao verificado]. São entregas do pré-desenho; precisam alcançar apresentação e encaminhamento: hoje motivo diferente de `furo_espelho` recebe dono `admin`, e motivo sem mapeamento de tipo cai em `sem_causa`. Isso pode orientar mal uma disputa que espera resposta do colaborador. (`app/folha/retrato_folha.py:374`; `app/folha/retrato_folha.py:388`; `app/folha/fora_da_folha.py:50`)
+
+   NÃO também não garante PDF auditável: o lote cai no informacional por qualquer exceção da tentativa auditável. (`app/relatorios/services.py:244`)
+
+4. **Toca exportada, dinheiro ou `!` fora do declarado?** Excluir do TXT muda os eventos enviados e pode mudar o conjunto que recebe aprovação automática. Não significa zerar rubricas nem reescrever o fechamento. Esses efeitos precisam constar do pré-desenho, preservando a proteção do gravado exportado. (`app/folha/export.py:726`; `app/folha/views.py:215`; `app/folha/views.py:246`; `CLAUDE.md:411`)
+
+**Item 3 — COMPETÊNCIA ENTREGUE / ABERTA**
+
+1. **As premissas conferem?** ENTREGUE tem autoridade precisa: K6, existência de `ExportacaoDominio` vigente e não invalidada para empresa, mês e ano. Não equivale a `FechamentoMensal.status='exportado'`, aprovação, tranca ou holerite; TXT vigente invalidado sem substituta deixa de entregar. K9, separado, compõe K6 com holerite publicado para proteger a célula. (`app/folha/export.py:556`; `app/folha/export.py:591`; `app/folha/export.py:597`; `app/docs/CORTES.md:342`; `app/docs/CORTES.md:343`)
+
+2. **Colide com lei ou aval?** Preservar o gravado exportado concorda com a L-092 consolidada. Porém, “nada muda” deve limitar **esta obra**, sem proibir correções pelas portas vigentes: a L-113 alterou a L-092, permitindo recalcular e refazer exportação com as garantias exigidas; a regra consolidada mantém `!` e porta específica para mover o gravado exportado. (`app/docs/LEIS.md:125`; `app/docs/LEIS.md:155`; `CLAUDE.md:411`; `CLAUDE.md:418`)
+
+3. **O literal fecha? Não.** “Competência aberta” admite recortes diferentes no código:
+
+   | Recorte | Significado atual |
+   |---|---|
+   | Marco `aberta` | Nenhum marco aprovada/exportada/trancada/paga verdadeiro. (`app/ponto/services/fechamento.py:1523`; `app/ponto/services/fechamento.py:1543`) |
+   | Não entregue por K6 | Ausência de TXT vigente não invalidado. (`app/folha/export.py:591`) |
+   | Não trancada | Ausência da tranca vigente; aprovação e exportação são outros marcos. (`app/ponto/services/fechamento.py:1473`) |
+   | Escrita permitida por F6 | Não haver fechamento aprovado/exportado da pessoa na competência do dia. (`app/ponto/janelas.py:85`; `app/ponto/janelas.py:87`) |
+
+   Falta escolher explicitamente o alcance para aprovada sem TXT, trancada sem K6, paga só por holerite, competência antiga sem entrega e TXT invalidado sem substituta. O anexo não fornece essa escolha [nao verificado].
+
+4. **Toca exportada, dinheiro ou `!` fora do declarado?** O limite proposto evita movimento do gravado, mas isso sozinho não protege o comportamento dos leitores históricos: a geração recalcula objetos em leitura, e o PDF consulta a disputa atual. É necessário aplicar o recorte também nessas leituras; nenhum `save` financeiro precisa ocorrer para uma nova regra mudar quem entra num TXT regenerado ou qual modalidade de PDF é emitida. (`app/folha/views.py:207`; `app/folha/views.py:212`; `app/folha/views.py:268`; `app/relatorios/pdf_espelho.py:1085`)
+
+**Escritores e leitores dos campos determinantes**
+
+| Campo/valor | Quem escreve | Quem lê neste corte |
+|---|---|---|
+| Disputa: `colaborador`, `chamado`, `motivos`, `contexto` | Emissão cria e agrega; há também nascimentos por órfãos e âncora. (`app/chamados/services/disputa_emissao.py:550`; `app/chamados/services/disputa_emissao.py:576`; `app/chamados/services/disputa_emissao.py:601`; `app/chamados/services/disputa_emissao.py:1137`; `app/chamados/services/disputa_emissao.py:1372`) | Helper global lê colaborador; resolução do dia do chamado pode consultar contexto e perguntas. (`app/chamados/services/disputa_emissao.py:40`; `app/chamados/juizes.py:101`; `app/chamados/juizes.py:134`) |
+| Disputa: `aberta_em` | ORM, `auto_now_add`. (`app/chamados/models.py:1820`) | Não integra o predicado atual do PDF nem o retentor do export. (`app/chamados/services/disputa_emissao.py:40`; `app/folha/export.py:1273`) |
+| Disputa: `fechada_em` / aberta | `fechar` preenche; reaberturas admin e sistema zeram. (`app/chamados/models.py:2013`; `app/chamados/models.py:2230`; `app/chamados/models.py:2254`) | Property `aberta` e helper usado pelo PDF. (`app/chamados/models.py:1888`; `app/chamados/services/disputa_emissao.py:41`) |
+| Pergunta: `data_evento` | Atribuição em `gravar_dia_do_fato`; nascimento, costura e re-chaveamento persistem. (`app/chamados/services/fio.py:837`; `app/chamados/models.py:3123`; `app/chamados/services/fio.py:926`; `app/chamados/services/fio.py:1090`) | Resolvedor do dia e juiz do turno da linha; os bloqueadores atuais de export/PDF não o consultam diretamente. (`app/chamados/juizes.py:81`; `app/chamados/services/fio.py:1698`; `app/folha/export.py:1273`; `app/chamados/services/disputa_emissao.py:40`) |
+| Pergunta: `conversa`, `celula` | Portas de abertura distinguem fato/conversa; nascimento e re-chaveamento vinculam célula. (`app/chamados/models.py:2894`; `app/chamados/models.py:2906`; `app/chamados/models.py:3124`; `app/chamados/services/fio.py:1085`) | Resolvedor exclui conversa e usa célula como alternativa ao dia ausente. (`app/chamados/juizes.py:79`; `app/chamados/juizes.py:83`) |
+| Empresa: `dia_inicio_competencia`; janela resultante | Formulário alimenta portas de criar/atualizar empresa; janela é derivada. (`app/colaboradores/views.py:515`; `app/colaboradores/views.py:542`; `app/colaboradores/views.py:557`; `app/colaboradores/services/estrutura.py:13`) | `corte_da_empresa`, `janela_fechamento`, export e lote PDF. (`app/ponto/janelas.py:50`; `app/ponto/janelas.py:57`; `app/folha/export.py:1306`; `app/relatorios/services.py:214`) |
+| Célula: `veredito`, `protestos`, `ata`; isenção L-033 | Porta `lavrar_veredito`; isenção é derivada, sem reescrever a célula. (`app/ponto/portas/celula.py:1032`; `app/ponto/portas/celula.py:1090`; `app/folha/export.py:1173`) | Retentor e juiz de marcos usado na exceção. (`app/folha/export.py:1273`; `app/folha/export.py:1286`; `app/folha/export.py:1150`) |
+| Nova resposta única SIM/NÃO | Escritor/derivador e endereço ainda não definidos no anexo [nao verificado]. | Leitores pretendidos: export e espelho PDF; leitores atuais seguem distintos. (`app/folha/export.py:968`; `app/relatorios/pdf_espelho.py:1085`) |
+| Export: `status`, `motivo`, `detalhe`, `travas_aprovacao` | `classificar_export`. (`app/folha/export.py:837`; `app/folha/export.py:968`) | Montador, aprovação automática e painel. (`app/folha/export.py:716`; `app/folha/views.py:244`; `app/folha/views.py:330`) |
+| Rótulo e orientação; retrato `dono`, `acoes`, `tipo`, `saldo`, `dias`, `datas` | Rótulos em `MOTIVO_RH`; ações vêm da tarefa; `montar_linhas` monta projeção, e comando grava retrato. (`app/folha/views.py:14`; `app/folha/fora_da_folha.py:217`; `app/folha/retrato_folha.py:1237`; `app/folha/management/commands/lavrar_retrato_folha.py:77`) | Tela lê retrato; PDF de retidos lê itens e rótulos. A orientação nova ainda não tem texto definido [nao verificado]. (`app/folha/views_retrato.py:278`; `app/folha/views.py:859`) |
+| Modalidade do espelho e registro auditável | Bloqueio decide admissão; lote escolhe tentativa informacional; gerador auditável grava registro/hash. (`app/relatorios/pdf_espelho.py:1113`; `app/relatorios/services.py:244`; `app/relatorios/pdf_base.py:152`) | Lote agrega bytes; informacional segue seu gerador próprio. (`app/relatorios/services.py:241`; `app/relatorios/services.py:250`) |
+| Exportação: empresa/mês/ano, conteúdo, hash, autoria e instante | `ExportacaoDominio.registrar`, chamado pelo gerador; instante pelo ORM. (`app/folha/models.py:80`; `app/folha/models.py:182`; `app/folha/views.py:297`) | K6 lê tripla e vigência; desempate usa instante e PK. (`app/folha/export.py:581`; `app/folha/export.py:588`; `app/folha/models.py:220`) |
+| Exportação: invalidação, substituta, vigência e ENTREGUE | `invalidar` grava invalidação/substituta; `anotar_vigencia` e K6 derivam resultados. (`app/folha/models.py:158`; `app/folha/models.py:162`; `app/folha/models.py:224`; `app/folha/export.py:591`) | K6 e `marcos_da_competencia`. (`app/folha/export.py:591`; `app/ponto/services/fechamento.py:1537`) |
+| Fechamento: status; tranca/reabertura; marco aberta | Portas de aprovar/reabrir e trancar/reabrir período; marco é derivado. (`app/ponto/services/fechamento.py:1335`; `app/ponto/services/fechamento.py:1349`; `app/ponto/services/fechamento.py:1400`; `app/ponto/services/fechamento.py:1432`; `app/ponto/services/fechamento.py:1543`) | F6, K4/K7 e marcos; não substituem K6. (`app/ponto/janelas.py:87`; `app/ponto/services/fechamento.py:1470`; `app/ponto/services/fechamento.py:1480`; `app/folha/export.py:591`) |
+
+Os quantitativos individuais, causas dos dias irresolvíveis, valores financeiros e distribuição por empresa não podem ser recuperados do resumo raspado fornecido; não atribuo essas características aos 49 ou aos 58 [nao verificado].
+
+VEREDITO por item: 1 PROCEDE; 2 CONFERE; 3 PROCEDE
+
+## 17/11 11:38 · sessao 0e5cc5138206 · - · - · origem=Ronald (tmux)
+
+Censo dos indiretos, agrupado pela pergunta herdada. **Estes locais hoje perguntam “entra/retém pela célula”; não perguntam existência de disputa aberta.** O novo juiz de disputa só os alcançará se compuser `classificar_export`; migrá-los individualmente duplicaria a pergunta. (`app/folha/export.py:968`, `app/folha/export.py:1307`)
+
+| Leitor/callsite | Efeito da resposta atual |
+|---|---|
+| `app/folha/export.py:714` | Montador usa `status=entra`; ignora pessoas fora. (`app/folha/export.py:716`, `app/folha/export.py:726`) |
+| `app/folha/views.py:212` | Gerar TXT classifica os objetos recalculados em memória; admissão no TXT e aprovação automática têm respostas separadas. (`app/folha/views.py:215`, `app/folha/views.py:244`) |
+| `app/folha/views.py:331` | Preview conta entram/fora, agrupa todos motivos e mostra detalhe; K6 gera apenas aviso de exportação anterior. (`app/folha/views.py:332`, `app/folha/views.py:340`, `app/folha/views.py:354`, `app/folha/views.py:403`) |
+| `app/folha/views.py:589` | Raio X separa furo, férias, rescisão e complemento de outros motivos. (`app/folha/views.py:591`, `app/folha/views.py:600`) |
+| `app/folha/views.py:858` | `retidos_pdf` entrega PDF dos classificados fora. (`app/folha/views.py:840`) |
+| `app/folha/validacao_pdf.py:65` | PDF de validação monta o mesmo TXT com esses itens e o traduz. (`app/folha/validacao_pdf.py:66`, `app/folha/validacao_pdf.py:68`) |
+| `app/folha/porta_export.py:469` | Medição da porta usa apenas ENTRA como universo das comparações espelho/fechamento; não é um bloqueio de disputa próprio. (`app/folha/porta_export.py:470`, `app/folha/porta_export.py:476`) |
+| `app/folha/services/vigia_txt.py:231` | Vigia compara TXT vigente gravado com TXT que seria montado hoje; invalidado sem substituto vira INCOMPARÁVEL. (`app/folha/services/vigia_txt.py:220`, `app/folha/services/vigia_txt.py:232`, `app/folha/services/vigia_txt.py:244`, `app/folha/services/vigia_txt.py:254`) |
+| `app/folha/fora_da_folha.py:147` | Conta entram e fora por motivo; só `furo_espelho` ganha carga de dias/tarefa. (`app/folha/fora_da_folha.py:151`, `app/folha/fora_da_folha.py:156`, `app/folha/fora_da_folha.py:165`) |
+| `app/folha/fora_da_folha.py:273` | `o_que_segura` retorna situação/motivo do export e lista diária enriquecida. (`app/folha/fora_da_folha.py:275`, `app/folha/fora_da_folha.py:302`) |
+| `app/folha/previa.py:43` | Prévia de proposta cruza veredito com células/perguntas da janela. (`app/folha/previa.py:50`, `app/folha/previa.py:64`) |
+| `app/ponto/services/fechamento_lista.py:73` | Lista de fechamento lê tique de entrada e travas de aprovação; é alias `_classificar`. (`app/ponto/services/fechamento_lista.py:100`, `app/ponto/services/fechamento_lista.py:102`) |
+| `app/ponto/views.py:1299` | Aprovação em lote lê somente `travas_aprovacao`, aplica seleção e decide quais aprovar; disputa não é veto atual. (`app/ponto/views.py:1301`, `app/ponto/views.py:1311`, `app/ponto/views.py:1328`) |
+| `app/ponto/views.py:1412` | Localiza aprovados com trava `conta_vazia` para reabertura. (`app/ponto/views.py:1413`, `app/ponto/views.py:1426`) |
+| `app/ponto/views.py:1509` | Aprovação individual lê apenas travas do objeto recalculado e recusa ou aprova. (`app/ponto/views.py:1511`, `app/ponto/views.py:1513`, `app/ponto/views.py:1518`) |
+| `app/ponto/services/dias_em_aberto.py:104` | Lista dias em aberto somente de quem entra no TXT. (`app/ponto/services/dias_em_aberto.py:107`, `app/ponto/services/dias_em_aberto.py:112`) |
+| `app/relatorios/views.py:1660` | Ranking de furos publica coluna Folha APTO/motivo, inclusive PDF. (`app/relatorios/views.py:1668`, `app/relatorios/views.py:1671`, `app/relatorios/views.py:1677`) |
+| `app/relatorios/views_pend.py:58` | Pendências de cadastro selecionam só FORA por motivos de cadastro conhecidos; hoje apenas sem código Domínio. (`app/relatorios/views_pend.py:48`, `app/relatorios/views_pend.py:59`, `app/relatorios/views_pend.py:68`) |
+| `app/api/views_mensageria.py:283` | API devolve total, entram, retidos e agrupamento por motivo com exemplos; pode servir snapshot em ramo anterior. (`app/api/views_mensageria.py:270`, `app/api/views_mensageria.py:288`, `app/api/views_mensageria.py:299`) |
+| `app/inteligencia/calculadores.py:210` | Métrica da competência anterior conta bloqueios e exemplos por motivo. (`app/inteligencia/calculadores.py:206`, `app/inteligencia/calculadores.py:217`) |
+| `app/inteligencia/calculadores.py:271` | Métrica da competência atual conta entram/total e bloqueios. (`app/inteligencia/calculadores.py:267`, `app/inteligencia/calculadores.py:277`, `app/inteligencia/calculadores.py:281`) |
+| `app/folha/management/commands/simular_folha.py:133` | Fotografia de TXT, hash, fora por motivo e retidos; pode usar lido ou gravado. (`app/folha/management/commands/simular_folha.py:134`, `app/folha/management/commands/simular_folha.py:146`, `app/folha/management/commands/simular_folha.py:155`) |
+| `app/relatorios/management/commands/cartao_x_txt_divergentes.py:53` | ENTRA define universo de comparação cartão/TXT e contador de dias em aberto. (`app/relatorios/management/commands/cartao_x_txt_divergentes.py:57`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:64`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:68`) |
+| `app/relatorios/management/commands/pdf_x_espelho_divergentes.py:58` | ENTRA define universo da comparação de conteúdo PDF/espelho, via coletores, não geração auditável. (`app/relatorios/management/commands/pdf_x_espelho_divergentes.py:61`, `app/relatorios/management/commands/pdf_x_espelho_divergentes.py:73`) |
+| `app/ponto/management/commands/e6_oraculo.py:309` | Com `--so-txt`, restringe universo aos ENTRA. (`app/ponto/management/commands/e6_oraculo.py:307`, `app/ponto/management/commands/e6_oraculo.py:313`) |
+| `app/ponto/management/commands/folga_que_sumiu.py:82` | Marca casos/valor de folga sumida que chegam ao TXT. (`app/ponto/management/commands/folga_que_sumiu.py:84`, `app/ponto/management/commands/folga_que_sumiu.py:96`) |
+| `app/ponto/management/commands/aplicar_09_corte_b.py:190`, `app/ponto/management/commands/aplicar_09_corte_b.py:273` | Fotografa status/motivo antes/depois do corte de cálculo. |
+| `app/ponto/management/commands/desvio_o68b.py:191`, `app/ponto/management/commands/desvio_o68b.py:217` | Fotografa status/motivo e reporta mudança após reversão. (`app/ponto/management/commands/desvio_o68b.py:218`) |
+| `app/ponto/management/commands/celula_veredito_velho.py:82`, `app/ponto/management/commands/celula_veredito_velho.py:152` | Fotografa classificação antes/depois de recalcular células/fechamentos. |
+| `app/ponto/management/commands/diff_reclassificar_partido.py:153`, `app/ponto/management/commands/diff_reclassificar_partido.py:209` | Fotografa classificação antes/depois da reclassificação/recalculo de escala. |
+
+Leitores diretos da retenção da célula, além do export:
+
+| Callsite | Efeito |
+|---|---|
+| `app/folha/fora_da_folha.py:121` | `_dias_que_retem`: motivos e dias para agrupamento, retrato e orientação. (`app/folha/fora_da_folha.py:165`) |
+| `app/folha/previa.py:170` | Decide se os dias propostos cobrem **todos** os dias que retêm; preserva L-033/data passada/admissão/demissão herdados. (`app/folha/previa.py:171`) |
+| `app/folha/services/vigia_pausa.py:125` | Conta barrados, retidos só por pausa e livres com dia só de pausa, conferindo exceção L-033. (`app/folha/services/vigia_pausa.py:127`, `app/folha/services/vigia_pausa.py:128`, `app/folha/services/vigia_pausa.py:133`) |
+| `app/ponto/services/fechamento.py:1067` | Alias `_mre`: materializa `FechamentoMensal.motivos_espelho`; não é critério novo de disputa. (`app/ponto/services/fechamento.py:1066`) |
+
+Cascas do PDF, todas herdando a pergunta global atual da geração auditável:
+
+- Service `app/relatorios/services.py:70` → gera bytes/registro e eventualmente anexa ao chamado. (`app/relatorios/services.py:74`, `app/relatorios/services.py:88`)
+- Lote `app/relatorios/services.py:237` → auditável; exceção → informacional. (`app/relatorios/services.py:244`, `app/relatorios/services.py:250`)
+- Job `app/relatorios/lote_espelho.py:205` → chama lote e conta informacionais para o resultado do job. (`app/relatorios/lote_espelho.py:227`)
+- Anexar ao chamado `app/relatorios/views.py:1003` → erro e redirect em disputa. (`app/relatorios/views.py:1007`)
+- Avulso competência `app/relatorios/views.py:1127` → formulário com erro em disputa. (`app/relatorios/views.py:1131`)
+- Avulso período livre `app/relatorios/views.py:1098` → sempre informacional, não faz essa pergunta. (`app/relatorios/views.py:1064`)
+
+Interação isento/desligado:
+
+- O retentor da célula sai com lista vazia para `isento_ponto(colab)` ou `esta_desligado(colab)` antes de percorrer a janela. (`app/folha/export.py:1205`, `app/folha/export.py:1207`, `app/folha/export.py:1211`)
+- Desligado sem decisão aparece pelo ramo `informativo_rescisao`, explicitamente sem retenção; a lei no código diz “não retém ... em NENHUM dia da competência”. (`app/folha/export.py:1197`, `app/folha/export.py:1216`, `app/folha/export.py:1225`)
+- Rescisão do export vem antes e pode retirar a pessoa por módulo próprio, independente de disputa. (`app/folha/export.py:866`)
+- Portanto um novo bloqueio de disputa que só preserve L-033, mas pule as exclusões isento/desligado, exige esclarecer a interação com essas leis existentes; não assumir revogação implícita [nao verificado].
+
+## 17/11 11:37 · sessao 7d012196cc1a · - · - · origem=Ronald (tmux)
+
+**Item 2: CONFERE.** O efeito SIM constitui a nova política submetida; chave, texto do motivo e orientação são pendências do pré-desenho, não contradições que exijam devolução [nao verificado — literal fornecido].
+
+Leia o NÃO como ausência **deste impedimento por disputa**, preservando os demais crivos atuais; “só célula” não descreve literalmente toda a classificação existente. (`app/folha/export.py:837`, `app/folha/export.py:968`, `app/folha/export.py:716`)
+
+## 17/11 11:37 · sessao b82be6056e62 · - · - · origem=Ronald (tmux)
+
+Censo de apresentação/API e eventos, com `A = DisputaSupervisao.fechada_em IS NULL`; `aberta` é exatamente isso, sem olhar estado do chamado (`app/chamados/models.py:1886-1888`).
+
+| Leitor | Predicado/data | Uso da resposta |
+|---|---|---|
+| Helper público | `colaborador=... AND A`, `.first()`, sem datas (`app/chamados/services/disputa_emissao.py:34-42`) | Retorna disputa ou `None`; reexportado por `chamados.models` (`app/chamados/models.py:4260`). |
+| Helper do ponto | Mesmo helper; colaborador `None` retorna `None` (`app/ponto/services/disputa.py:18-31`) | Nome sugere bloqueio, execução só retorna disputa (`app/ponto/services/disputa.py:29-31`). |
+| Espelho HTML | Helper, somente quando colaborador e modo não gestor; sem recorte da competência (`app/ponto/views.py:140-144`) | Mostra banner e continua exibindo cálculos (`app/ponto/views.py:180-183`; `app/templates/ponto/espelho.html:13-18`). |
+| API espelho | Helper; sem data (`app/api/views.py:1333-1336`) | Só sinaliza `em_disputa`, ID e abertura; calcula normalmente (`app/api/views.py:1333-1334`, `app/api/views.py:1670-1672`). |
+| Gate cadastro/benefício | POST + colaborador + helper; isento passa; sem data (`app/colaboradores/mixins.py:300-312`) | Recusa com mensagem e redirecionamento (`app/colaboradores/mixins.py:308-312`). Afeta transferência de posto, conta bancária, lançamento e cancelamento de benefício (`app/colaboradores/views.py:1394`, `app/colaboradores/views.py:1641`, `app/colaboradores/views.py:1807`, `app/colaboradores/views.py:1915`). Reativar e desligar são explicitamente isentos (`app/colaboradores/views.py:1442`, `app/colaboradores/views.py:1463`). |
+| Painel situacional lote | `A AND colaborador_id IN IDs`; sem datas (`app/colaboradores/services/situacional.py:117`) | LED vermelho por existência (`app/colaboradores/services/situacional.py:56-62`, `app/colaboradores/services/situacional.py:210`). Contador “em turno” usa juiz próprio e não a cor (`app/colaboradores/services/situacional.py:208-214`). |
+| Painel live-cell | Colaborador + A, `.exists()`, sem datas (`app/colaboradores/painel_cell.py:31-32`) | Mesmo LED vermelho (`app/colaboradores/painel_cell.py:68-70`). |
+| Drawer operacional | Colaborador + A, mais recente por `-aberta_em`; sem janela (`app/colaboradores/services/drawer.py:71-73`) | Banner dos motivos das perguntas vivas e link do pai (`app/colaboradores/services/drawer.py:76-87`, `app/colaboradores/services/drawer.py:127-132`). |
+| Relatório de pendências | Todas A, sem datas (`app/chamados/relatorios_disputa.py:45-50`) | Separa sem pergunta, pronta fechar por C7, aguarda colaborador e aguarda supervisão (`app/chamados/relatorios_disputa.py:11-28`). Tela e command usam mesmo coletor (`app/colaboradores/views.py:3040-3053`; `app/chamados/management/commands/relatorio_pendencias_disputa.py:15`). |
+| Contador modal fio | Colaborador + A, `.count()`, sem datas; mensagens ao lado têm janela (`app/chamados/views.py:903-912`) | Contador mostrado como “disputa(s) aberta(s)” (`app/chamados/views.py:947`; `app/templates/chamados/partials/modal_fio.html:19`). |
+| Detalhe chamado | `chamado=... AND A`, `.first()`, sem datas (`app/chamados/services/acoes_chamado.py:345-347`) | Carrega perguntas C6 para tela e habilita bloco de regularização (`app/chamados/services/acoes_chamado.py:350-358`, `app/chamados/services/acoes_chamado.py:417-419`; `app/templates/chamados/detalhe_local.html:296-326`). Texto da tela ainda promete “motor não calcula ... fechamento mensal pula” (`app/templates/chamados/detalhe_local.html:304`), contrariando execução atual documentada pela própria view (`app/ponto/views.py:181-183`). |
+| Ação regularizar | Chamado + A; sem datas (`app/chamados/views.py:470-475`) | Recusa se não existe, senão delega ação (`app/chamados/views.py:473-475`). |
+| Validar/recusar/corrigir pergunta | PK pergunta + disputa A, depois `chamado_que_lista` igual ao chamado; sem janela (`app/chamados/views.py:493-501`, `app/chamados/views.py:510-518`, `app/chamados/views.py:528-536`) | Autoriza verbo administrativo ou recusa pergunta inválida nas mesmas linhas. |
+| Validar inline | Busca A por pai; fallback colaborador + pergunta destinada ao chamado; sem data (`app/chamados/views_cobrar.py:160-167`) | Trabalha perguntas vivas respondidas; se não encontra retorna erro (`app/chamados/views_cobrar.py:166-176`). |
+| Solicitar correção web/API | PK disputa + próprio colaborador + A; sem datas (`app/chamados/views.py:1328-1334`; `app/api/views.py:2677-2686`) | Recusa fechada/inexistente; chama `reabrir_por_colab` nas mesmas linhas. |
+| API chamados | Todas A do colaborador, sem data na consulta de disputas (`app/api/views.py:1016-1022`) | Associa perguntas do app aos destinos vivos ou ao pai; pula disputa fechada (`app/api/views.py:1033-1040`). |
+| API perguntas | **Outro predicado:** perguntas C6 vivas particionadas em `respondida_em IS NULL AND disputa.fechada_em IS NULL`, sem janela própria (`app/chamados/services/pergunta_no_app.py:52-61`, `app/chamados/services/pergunta_no_app.py:76-85`) | `em_disputa` é `bool(pendentes)`, não “existe disputa aberta” (`app/api/views.py:2537-2539`, `app/api/views.py:2567-2578`). |
+| Badge API e dashboard | Mesma partição do app (`app/chamados/services/pergunta_no_app.py:100-119`) | API principal, kernel core, painel colaborador e dashboard contam pendentes (`app/api/views.py:315-319`; `app/api/views_core.py:303-307`; `app/colaboradores/views.py:959-960`; `app/core/views.py:252-253`). |
+| Aviso após texto livre | Mesmas pendentes do app (`app/chamados/services/aviso_pendencia.py:7-20`) | Avisa que texto livre não respondeu questionário; leitores web/API (`app/chamados/views.py:1119`; `app/api/views.py:987`; `app/api/views.py:2211`). |
+| Aparência e botões modal | Property `.aberta` sem data (`app/chamados/models.py:1886-1888`) | Cores abertas/fechadas e ações administrativas (`app/templates/chamados/partials/modal_fio.html:76`, `app/templates/chamados/partials/modal_fio.html:353`, `app/templates/chamados/partials/modal_fio.html:406`; `app/chamados/templatetags/chamados_tags.py:105`). |
+| Reativar posto | A + posto + motivo `posto_desativado`; sem data (`app/colaboradores/signals.py:71-75`) | Remove motivo pela porta (`app/colaboradores/signals.py:76-82`). |
+| Preencher âncora | A + colaborador + motivo `ancora_ausente`; sem data (`app/escala/signals.py:168-172`) | Remove motivo pela porta (`app/escala/signals.py:173-182`). |
+| Receber foto | A + colaborador + `foto_ausente`; depois pergunta do episódio `batida_origem=batida`; sem janela (`app/api/foto_recebida.py:65-74`) | Valida, poda motivo e tenta fechar por C7 (`app/api/foto_recebida.py:75-87`). |
+| Desligar | Todas A do colaborador, sem data (`app/colaboradores/services/desligamento.py:164`) | Fecha pela porta de desligamento (`app/colaboradores/services/desligamento.py:167`). |
+| Regularização externa | Colaborador + A, `.first()`, sem data (`app/chamados/services/regularizacao_ext.py:59-61`) | Bloqueia materialização externa e retorna orientação (`app/chamados/services/regularizacao_ext.py:62-66`). |
+| Utilitário censo folha | Pergunta do colaborador + resposta NULL + disputa A; sem data nesse contador (`bin/censo_folha.py:28`) | Acrescenta agravante `PERG_VIVAS` e grava CSV se executado (`bin/censo_folha.py:37`, `bin/censo_folha.py:44-47`). Não foi executado [nao verificado]. |
+
+Alertas e escalonamento encontrados, para complementar o censo do pai: alerta diário seleciona todas A sem data do fato (`app/ponto/management/commands/alertar_disputas_pendentes.py:33-35`), envia push/agrupa empresa e mede idade por abertura (`app/ponto/management/commands/alertar_disputas_pendentes.py:48-74`); escalonador exige disputa A por chamado, sem data, para evitar órfão e marcar incidente (`app/ponto/management/commands/escalonar_chamados_supervisao.py:57-60`, `app/ponto/management/commands/escalonar_chamados_supervisao.py:148-163`).
+
+Ponto de atenção: `lancar_beneficio` fornece ao gate `POST['colaborador_id']`, mas o corpo lê `POST['colaborador']`; o alcance efetivo do gate para esse formulário depende do payload, não demonstrado no dado (`app/colaboradores/views.py:1807`, `app/colaboradores/views.py:1813`).
+
+## 17/11 11:37 · sessao f42d81e1bbd4 · - · - · origem=Ronald (tmux)
+
+**Juiz mais próximo e ausência do predicado completo**
+
+- `colaborador_em_disputa(colaborador)` retorna `.first()` de `DisputaSupervisao` por `colaborador` e `fechada_em__isnull=True`; não considera datas, motivos, perguntas, janela ou competência. É o corpo mais próximo da pergunta simples “tem disputa aberta?”. (`app/chamados/services/disputa_emissao.py:34`, `app/chamados/services/disputa_emissao.py:40`)
+- Estado aberto também existe como propriedade `DisputaSupervisao.aberta`: `self.fechada_em is None`. (`app/chamados/models.py:1886`)
+- `disputa_viva_do_chamado` responde outra pergunta: busca disputa aberta do chamado e a retorna somente se não houver perguntas ou se `fio_vivo(perguntas)`; serve à trava do encerramento do pai, sem janela. (`app/chamados/juizes.py:2458`, `app/chamados/juizes.py:2466`)
+- O registro vivo contém C6=`pergunta_viva`, C7=`pode_fechar`, K2=`classificar_export`, K6=`competencia_entregue`; não encontrei autoridade registrada para “disputa aberta com fato dentro da janela”. A ausência em toda combinação dinâmica possível permanece [nao verificado]. (`app/core/juizes.py:291`, `app/core/juizes.py:292`, `app/core/juizes.py:330`, `app/core/juizes.py:343`)
+- Há leitores de perguntas datadas na janela, porém não são o predicado novo: prévia busca `data_evento__range=(ini,fim)` sem filtrar disputa aberta; pauta de competência trancada também busca datas e depois julga perguntas, sem exigir recipiente aberto. (`app/folha/previa.py:64`, `app/chamados/services/competencia_trancada.py:119`)
+
+**Janela e K6**
+
+- `janela_fechamento(mes,ano,empresa)` chama `periodo_apuracao(mes,ano,corte_da_empresa(empresa))`. (`app/ponto/janelas.py:54`)
+- `corte_da_empresa` lê `Empresa.dia_inicio_competencia`, admite empresa ou PK, usa padrão 21 e limita a 2–28. (`app/ponto/janelas.py:36`, `app/ponto/janelas.py:49`, `app/ponto/janelas.py:50`)
+- A janela começa no dia do corte do mês anterior e termina no corte−1 do mês da competência, inclusive os dois limites. (`app/ponto/janelas.py:10`, `app/ponto/janelas.py:15`)
+- `janela_atual(dia,empresa)` encontra a competência que contém o dia, usando o mesmo corte; não equivale ao mês civil. (`app/ponto/janelas.py:24`, `app/ponto/janelas.py:60`)
+- K6 é `competencia_entregue`: existe `ExportacaoDominio` vigente para empresa/mês/ano e o vigente não está invalidado; mais recente desempata por `(gerado_em,pk)`. Não equivale a `FechamentoMensal.status='aprovado'` nem ao juiz F6. (`app/folha/export.py:556`, `app/folha/export.py:588`, `app/folha/export.py:591`, `app/folha/models.py:217`, `app/ponto/janelas.py:75`)
+- A composição existente `competencia_do_dia_entregue` faz dia→`janela_atual`→K6 e devolve `None` sem dia. (`app/chamados/services/vigia_fio.py:785`, `app/chamados/services/vigia_fio.py:797`)
+
+**De onde vem o fato**
+
+- A disputa não tem campo próprio `data_fato`; os campos temporais do recipiente são `aberta_em` e `fechada_em`. O campo factual das perguntas é `PerguntaDisputa.data_evento`, nullable. (`app/chamados/models.py:1820`, `app/chamados/models.py:2528`)
+- Uma disputa acumula perguntas de vários dias; `contexto[motivo]['data']` guarda uma data, a última, e não representa o conjunto. (`app/chamados/services/disputa_emissao.py:174`)
+- `data_evento` deve ser lido com `conversa`: conversa grava o dia civil de criação, embora não tenha fato de turno; usar simplesmente `data_evento` não nulo classificaria conversa como fato. (`app/chamados/models.py:2540`, `app/chamados/models.py:2899`, `app/chamados/models.py:2906`)
+- No nascimento datado, emissão deriva dia da grade, contexto do motivo, origem da batida e/ou chamado de destino e passa-o a `PerguntaDisputa.abrir`; hora sem dia não nasce, demais perguntas sem fato vão a `abrir_conversa`. (`app/chamados/services/disputa_emissao.py:359`, `app/chamados/services/disputa_emissao.py:380`, `app/chamados/services/disputa_emissao.py:396`, `app/chamados/services/disputa_emissao.py:419`, `app/chamados/services/disputa_emissao.py:433`, `app/chamados/services/disputa_emissao.py:448`, `app/chamados/services/disputa_emissao.py:453`)
+- A porta recalcula o dia pelo juiz `fio.dia_do_turno_da_linha`, antes de gravar. Com episódio, consulta `ponto.turnos.dia_do_turno_da_batida`; com marco, dia da célula; legado sem marco/episódio pode depender da ponte A2; pode faltar resposta ou haver recusa por alcançar vários dias. (`app/chamados/models.py:2985`, `app/chamados/services/fio.py:1676`, `app/chamados/services/fio.py:1699`)
+- `chamados.juizes.dia_do_fato(chamado)` é outra autoridade, sobre chamado: célula→chave de catálogo/data_turno→origens fracas. `fortes=True` para antes dos degraus fracos. Seu fallback `_dia_da_disputa` retorna **a menor** data das perguntas não conversa, não o conjunto necessário ao corte. (`app/chamados/juizes.py:88`, `app/chamados/juizes.py:128`, `app/chamados/juizes.py:57`, `app/chamados/juizes.py:75`)
+
+**Escritores e leitores dos insumos**
+
+| Campo | Escritor | Leitores/observações |
+|---|---|---|
+| Disputa `colaborador`, `motivos`, `contexto`, `chamado` | Nascimento central: `_abrir_ou_agregar_disputa`; outro nascimento de agrupamento manual de órfãos. (`app/chamados/services/disputa_emissao.py:601`, `app/chamados/services/disputa_emissao.py:1137`) | Helper lê colaborador; agregador reutiliza aberta, agrega motivos e funde contexto. (`app/chamados/services/disputa_emissao.py:40`, `app/chamados/services/disputa_emissao.py:540`, `app/chamados/services/disputa_emissao.py:550`, `app/chamados/services/disputa_emissao.py:576`) |
+| `aberta_em` | ORM `auto_now_add`. (`app/chamados/models.py:1820`) | Ordenação padrão `-aberta_em`; helper `.first()` herda essa ordenação, não significa fato mais recente. (`app/chamados/models.py:1868`, `app/chamados/services/disputa_emissao.py:42`) |
+| `fechada_em` | `fechar` grava agora; `reabrir_admin` e `reabrir_sistema` zeram. (`app/chamados/models.py:2013`, `app/chamados/models.py:2230`, `app/chamados/models.py:2254`) | `.aberta`, helper público e `disputa_viva_do_chamado`. (`app/chamados/models.py:1888`, `app/chamados/services/disputa_emissao.py:41`, `app/chamados/juizes.py:2466`) |
+| Pergunta `data_evento` | **Atribuição única** `fio.gravar_dia_do_fato`; salva no nascimento, na costura que data e no rechaveamento. (`app/chamados/services/fio.py:837`, `app/chamados/services/fio.py:847`, `app/chamados/models.py:3126`, `app/chamados/models.py:3127`, `app/chamados/services/fio.py:926`, `app/chamados/services/fio.py:974`, `app/chamados/services/fio.py:1084`, `app/chamados/services/fio.py:1090`) | Prévia por janela; dia do chamado como fallback; materialização e K6 do dia. (`app/folha/previa.py:65`, `app/chamados/juizes.py:81`, `app/chamados/services/materializacao.py:550`, `app/chamados/services/vigia_fio.py:779`) |
+| Pergunta `conversa` | `abrir` passa False; `abrir_conversa` passa True; `_nascer` insere. (`app/chamados/models.py:2894`, `app/chamados/models.py:2906`, `app/chamados/models.py:3124`) | `_dia_da_disputa` exclui; juiz de dia distingue civil e turno. (`app/chamados/juizes.py:79`, `app/chamados/services/fio.py:1699`) |
+| `celula`, `batida_origem`, `instancia_marco` | `_nascer` deriva origem e consulta juiz; rechaveamento muda célula junto ao dia. (`app/chamados/models.py:2976`, `app/chamados/models.py:2984`, `app/chamados/models.py:3124`, `app/chamados/services/fio.py:1085`) | `dia_do_turno_da_linha`/`_dia_do_fato` usam episódio ou marco para resolver dia. (`app/chamados/services/fio.py:1534`, `app/chamados/services/fio.py:1542`, `app/chamados/services/fio.py:1701`) |
+| Empresa `dia_inicio_competencia` | Form recebe e limita; portas estrutura criam/atualizam. (`app/colaboradores/views.py:515`, `app/colaboradores/views.py:542`, `app/colaboradores/views.py:557`, `app/colaboradores/services/estrutura.py:13`, `app/colaboradores/services/estrutura.py:18`) | `corte_da_empresa` e as janelas. (`app/ponto/janelas.py:50`, `app/ponto/janelas.py:57`) |
+| ED `empresa`, `mes`, `ano`, `gerado_em`, `conteudo`, hash | `ExportacaoDominio.registrar`, ORM grava data. (`app/folha/models.py:80`, `app/folha/models.py:174`, `app/folha/models.py:182`) | K6 e anotação de vigência. (`app/folha/export.py:588`, `app/folha/models.py:203`) |
+| ED `invalidada_em`, `substituida_por` | `ExportacaoDominio.invalidar`. (`app/folha/models.py:143`, `app/folha/models.py:158`) | K6 descarta vigente invalidada. (`app/folha/export.py:591`) |
+
+**Duas decisões que o literal parece não encerrar**
+
+1. “Quando não sabemos de que dia é o problema, a pessoa entra ou fica fora e o PDF pode ser auditável?” O anexo manda medir sem decidir o destino; nenhuma resposta deve ser presumida. [nao verificado — anexo item 5]
+2. “Se a disputa continua aberta por problema de outro mês, mas guarda uma pergunta deste mês já resolvida, essa pergunta antiga ainda tira a pessoa da folha?” O literal não define se o conjunto usado contém todas as perguntas ou somente os fatos ainda pendentes; essa diferença existe porque recipiente aberto e pergunta viva têm juízes separados. (`app/chamados/models.py:1888`, `app/core/juizes.py:291`; alcance do aval [nao verificado])
+
+Mistura de vários dias com **ao menos um fato efetivamente em disputa dentro da janela** é o existencial do corte; selecionar apenas a menor data, a última do contexto ou a data de abertura perderia casos. (`app/chamados/services/disputa_emissao.py:174`, `app/chamados/juizes.py:85`; interpretação do corte [nao verificado])
+
+## 17/11 11:37 · sessao 0e5cc5138206 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, somente da cópia:
+
+1. **Export atual**: `classificar_export` inicia `entra` e segue prioridade rescisão → código → férias com batida → cadastro zero → célula → homologação; disputa aberta não é um ramo. O retentor efetivo lê `CelulaDia` na janela, não disputa: acusação retém salvo protestos não cobráveis/L-033; ausência de célula/veredito tem regras próprias. (`app/folha/export.py:768`, `app/folha/export.py:841`, `app/folha/export.py:866`, `app/folha/export.py:968`, `app/folha/export.py:1247`, `app/folha/export.py:1273`, `app/folha/export.py:1293`, `app/folha/export.py:1295`)
+
+2. `motivos_retencao_espelho` ignora os três primeiros argumentos e delega à célula com `janela_competencia`; esta delega a `janela_fechamento`. (`app/folha/export.py:1301`, `app/folha/export.py:1306`, `app/folha/export.py:47`)
+
+3. O TXT recalcula em memória, classifica e monta com os mesmos objetos; só `entra` chega à montagem, há filtro `STATUS_NO_TXT=('aberto','aprovado')`, zeros não geram rubricas. O painel prévio e o retrato usam fechamento gravado, dívida reconhecida no próprio código. (`app/folha/views.py:207`, `app/folha/views.py:212`, `app/folha/views.py:268`, `app/folha/export.py:687`, `app/folha/export.py:716`, `app/folha/export.py:726`, `app/folha/export.py:733`, `app/folha/views.py:198`)
+
+4. **PDF atual**: `gerar_pdf_espelho_bytes` chama `motor_bloqueado_por_disputa(colab)` sem competência e levanta `ValueError`; o bloqueio é passado à geração auditável. (`app/relatorios/pdf_espelho.py:1082`, `app/relatorios/pdf_espelho.py:1085`, `app/relatorios/pdf_espelho.py:1087`, `app/relatorios/pdf_espelho.py:1113`)
+
+5. **Importante: PDF informacional não acontece em toda porta.** Lote tenta auditável e, em qualquer exceção, cai no informacional da janela; competência avulsa devolve formulário com erro; anexo ao chamado devolve erro/redirect. Período livre já gera sempre informacional, independentemente de disputa. (`app/relatorios/services.py:214`, `app/relatorios/services.py:237`, `app/relatorios/services.py:244`, `app/relatorios/services.py:250`, `app/relatorios/views.py:1126`, `app/relatorios/views.py:1131`, `app/relatorios/views.py:1002`, `app/relatorios/views.py:1007`, `app/relatorios/views.py:1064`, `app/relatorios/views.py:1098`)
+
+6. **K6 não é status do fechamento.** É existência de exportação vigente não invalidada para empresa/mês/ano; `registro=True` devolve o registro. A seleção usa anotação de vigência; comentários documentam desempate por `(gerado_em,pk)`. (`app/folha/export.py:556`, `app/folha/export.py:564`, `app/folha/export.py:588`, `app/folha/export.py:591`)
+   
+   O preview consulta K6 só para aviso “Já exportado”; gerar TXT permite reexportação, grava outro registro e avisa depois. Logo não presumir que K6 hoje congela a classificação ou a geração. (`app/folha/views.py:354`, `app/folha/views.py:361`, `app/folha/views.py:295`, `app/folha/views.py:306`, `app/folha/models.py:178`, `app/folha/models.py:182`)
+   
+   Cada geração grava cópia fiel em `ExportacaoDominio.conteudo` e hash; invalidar altera campos de invalidação e preserva conteúdo/hash. (`app/folha/models.py:86`, `app/folha/models.py:143`, `app/folha/models.py:158`, `app/folha/models.py:182`)
+
+7. **Retrato/admin — risco concreto do motivo próprio**:
+   - `fora_da_folha` conta todos motivos, mas só enriquece pessoas retidas por `furo_espelho` com dias/fio/ações. (`app/folha/fora_da_folha.py:147`, `app/folha/fora_da_folha.py:156`, `app/folha/fora_da_folha.py:210`, `app/folha/fora_da_folha.py:234`)
+   - `montar_linhas` copia status/motivo dos itens; dias/datas vêm dos enriquecidos por furo ou férias com batida. Novo motivo de disputa, sozinho, terá `dias=None`, `datas=None`, `acoes=[]`. (`app/folha/retrato_folha.py:1214`, `app/folha/retrato_folha.py:1227`, `app/folha/retrato_folha.py:1232`, `app/folha/retrato_folha.py:1237`, `app/folha/retrato_folha.py:1249`)
+   - Qualquer motivo diferente de `furo_espelho` cai em fio `admin`, mesmo se disputa depender de resposta do colaborador. Tipo novo não mapeado vira `sem_causa`; saldo sem dia fica vazio. (`app/folha/retrato_folha.py:374`, `app/folha/retrato_folha.py:388`, `app/folha/retrato_folha.py:214`, `app/folha/retrato_folha.py:426`)
+   - O lavrador único grava `linhas` e `lavrado_em` por `update_or_create`, sem consulta K6 nesse laço. (`app/folha/management/commands/lavrar_retrato_folha.py:65`, `app/folha/management/commands/lavrar_retrato_folha.py:77`)
+   - Tela admin lê os retratos gravados pelo accessor e o painel do colaborador lê a mesma linha para “o que fazer”/portas; não recalcula disputa. (`app/folha/views_retrato.py:194`, `app/folha/views_retrato.py:200`, `app/colaboradores/views.py:1001`, `app/colaboradores/views.py:1005`)
+   - “O que fazer” lê motivo, dono, destrava, tipo e saldo das chaves do retrato; links vêm de `acoes` ou fallback do fio/tipo. (`app/folha/retrato_folha.py:1044`, `app/folha/retrato_folha.py:1066`, `app/folha/retrato_folha.py:1112`, `app/folha/retrato_folha.py:1119`)
+   - Preview agrupa todo motivo desconhecido e exibe chave crua + aviso de falta de rótulo, portanto pessoa não some, mas orientação/rótulo precisam chegar. Seu contador “dias” conta férias ou motivos, não novos dias da disputa. (`app/folha/views.py:339`, `app/folha/views.py:389`, `app/folha/views.py:398`)
+   - Toast de retenção e contador no log do gerar TXT atualmente só agregam `furo_espelho`; motivo novo ficaria fora desse aviso. (`app/folha/views.py:257`, `app/folha/views.py:259`, `app/folha/views.py:293`, `app/folha/views.py:302`)
+
+8. **L-033 existente**: exceção é `set(c.protestos or ()) == {'FURO_PARCIAL'} and _furo_so_da_pausa(c)`; esta lê `periodos_do_dia`, exige sem desalinhamento/abertura/desconhecimento e todas lâmpadas apagadas pertencendo aos pares de pausa. Dia misto continua retendo. (`app/folha/export.py:1150`, `app/folha/export.py:1151`, `app/folha/export.py:1153`, `app/folha/export.py:1155`, `app/folha/export.py:1173`, `app/folha/export.py:1293`)
+   
+   Há testes concretos de só intervalo, volta faltante, ponta faltante, misto e sem ata; eles cobrem o retentor da célula, não o novo bloqueio compartilhado com PDF. (`app/folha/tests/test_furo_so_intervalo_nao_retem.py:83`, `app/folha/tests/test_furo_so_intervalo_nao_retem.py:88`, `app/folha/tests/test_furo_so_intervalo_nao_retem.py:94`, `app/folha/tests/test_furo_so_intervalo_nao_retem.py:111`, `app/folha/tests/test_furo_so_intervalo_nao_retem.py:117`)
+
+REDs propostos, sem construção nem execução:
+
+- Disputa aberta, dia na janela, célula concorde/nenhuma retenção: hoje export entra e lote PDF é informacional; depois motivo próprio exclui TXT e PDF segue informacional. Morde falta de ramo em `classificar_export`. (`app/folha/export.py:968`; `app/relatorios/pdf_espelho.py:1085`)
+- Disputa aberta só fora da janela, célula limpa: hoje PDF recusa; depois juiz responde NÃO e auditável pode seguir. Morde helper sem competência. (`app/relatorios/pdf_espelho.py:1085`)
+- Dia do fato em novembro e `aberta_em` em setembro: mesmo resultado do primeiro caso; fronteiras `ini` e `fim` inclusive, véspera e dia seguinte excluídos. O caso col193 consta apenas no anexo [nao verificado]; implementação da janela deve vir do juiz existente. (`app/folha/export.py:47`)
+- Vários dias: um dentro e outro fora → SIM; todos fora → NÃO; todos fechados → NÃO pela disputa, mas célula acusando continua retendo. Predicado existencial e fechamento devem ser testados junto ao juiz; sem isso troca pode consultar só primeiro dia [nao verificado].
+- L-033 com disputa aberta do mesmo furo só de intervalo: hoje export não retém mas PDF recusa; depois juiz comum preserva exceção nos dois leitores. Ponta faltante/motivo adicional devem continuar SIM. (`app/folha/export.py:1173`, `app/relatorios/pdf_espelho.py:1085`)
+- K6 verdadeiro + disputa nova dentro da janela: manter TXT gravado/hash/linhas, classificação/retrato preservados conforme alcance do aval; hoje adicionar condição só em export sem guarda mudaria novas classificações e lavratura. K6 invalidado sem substituto não equivale entregue. (`app/folha/export.py:591`, `app/folha/models.py:86`, `app/folha/management/commands/lavrar_retrato_folha.py:77`)
+- Avulso e anexo de competência com SIM: hoje erro, depois informacional se “espelho sai informacional” abrange essas portas. (`app/relatorios/views.py:1007`, `app/relatorios/views.py:1131`)
+- Motivo próprio chega ao preview, retidos PDF, contagem/log/toast, retrato e drawer com dia/ação e rótulo; teste aguardar colaborador vs aguardar admin morde falso Admin automático e ausência de dias/ações. (`app/folha/views.py:259`, `app/folha/views.py:389`, `app/folha/retrato_folha.py:374`, `app/folha/retrato_folha.py:1232`, `app/folha/retrato_folha.py:1249`)
+- Catraca de autoridade: export/PDF devem ler exatamente a mesma resposta; leitores globais de disputa para outras finalidades não podem receber competência por acidente [nao verificado].
+- Dias vazios: medir sem atribuir destino; RED comportamental fica pendente da decisão de lei, não inventar “fora da janela” ou “sem disputa” [nao verificado].
+
+Teste atual do PDF cria disputa sem pergunta/data e exige bloqueio; ele deverá ser revisto com a decisão dos sem dia, não simplesmente reescrito para liberar. (`app/relatorios/tests/test_relatorios.py:84`, `app/relatorios/tests/test_relatorios.py:86`, `app/relatorios/tests/test_relatorios.py:90`)
+
+## 17/11 11:36 · sessao 7d012196cc1a · - · - · origem=Ronald (tmux)
+
+Achados de lei e alcance para a consolidação:
+
+- **L-033 vigente:** entrada e saída batidas, faltando somente intervalo, é pagável e a pergunta segue aberta sem bloquear. O campo “NENHUM” na coluna antiga está superado pelo rodapé da própria lei, que declara a isenção implementada; não usar a coluna isoladamente. (`app/docs/LEIS.md:81`, `app/docs/LEIS.md:194`)
+- **Aplicação atual da L-033:** `nao_retem_pela_pausa(c)` exige protestos exatamente `{'FURO_PARCIAL'}` e `_furo_so_da_pausa(c)`; este consulta `periodos_do_dia`, recusa desalinhamento, turno aberto e desconhecimento e exige ao menos uma lâmpada apagada, todas de pausa. O retentor consulta essa função no ramo de célula acusadora. (`app/folha/export.py:1150`, `app/folha/export.py:1155`, `app/folha/export.py:1173`, `app/folha/export.py:1287`, `app/folha/export.py:1293`)
+- A segunda cláusula da L-033, pergunta aberta, não foi alterada nessa aplicação; segue sem selo de ponta a ponta, conforme documentação expressa. (`app/core/juizes.py:1280`, `app/docs/LEIS.md:81`)
+
+**Item 1:** há risco literal de colisão com L-033: o SIM existencial por qualquer disputa aberta na janela também encontra uma disputa que só pergunta intervalo. “Preservada a L-033” precisa determinar como a exceção entra antes da resposta única; o código atual aplica a exceção sobre célula/ata/protestos, não sobre uma disputa inteira. (`app/folha/export.py:1173`, `app/folha/export.py:1287`; literal do novo aval fornecido [nao verificado])
+
+**Juízes existentes:** o registro vivo declara C6 `pergunta_viva`, C7 `pode_fechar`, C15 `fio_vivo`, C19 `tarefa_do_dia`, C20 `dia_da_pergunta_trancado` e `respostas_sem_veredito`. São perguntas distintas de “disputa aberta impede a folha desta competência”; K1/K2 continuam em `classificar_export`. (`app/core/juizes.py:285`, `app/core/juizes.py:291`, `app/core/juizes.py:300`, `app/core/juizes.py:304`, `app/core/juizes.py:308`, `app/core/juizes.py:329`)
+O helper atual `colaborador_em_disputa` retorna a primeira disputa com `fechada_em IS NULL`, sem janela, pergunta ou data de fato. (`app/chamados/services/disputa_emissao.py:34`, `app/chamados/services/disputa_emissao.py:40`)
+A autoridade nova demanda corte de nascimento; a declaração autônoma de função existente exige mesmo predicado e mesmo universo, condições que não se demonstram ao acrescentar janela/exceção. (`app/docs/LEIS.md:69`, `CLAUDE.md:279`)
+
+**Item 3 / K6:** ENTREGUE é existir `ExportacaoDominio` vigente e não invalidada para empresa+competência. O último TXT revogado sem substituta não entrega. Não equivale a status do `FechamentoMensal`, tranca ou holerite publicado. (`app/folha/export.py:556`, `app/folha/export.py:565`, `app/folha/export.py:587`, `app/folha/export.py:590`; `app/docs/CORTES.md:342`; `app/core/juizes.py:343`)
+K9 responde outra pergunta: fechamento da célula = K6 OU holerite do colaborador com lote publicado. (`app/folha/export.py:598`, `app/folha/export.py:618`, `app/folha/export.py:621`; `app/docs/CORTES.md:343`)
+
+**“Competência aberta” não está fechada no literal.** Há sentidos distintos no código:
+
+- `marco='aberta'`: nenhum dos marcos aprovada/exportada/trancada/paga está verdadeiro. (`app/ponto/services/fechamento.py:1523`, `app/ponto/services/fechamento.py:1543`)
+- F6 permite ajuste por pessoa quando não há FM aprovado/exportado da competência do dia. (`app/ponto/janelas.py:75`, `app/ponto/janelas.py:85`, `app/ponto/janelas.py:87`)
+- K4 diz fechada = trancada; aprovada/exportada/paga são marcos. (`app/ponto/services/fechamento.py:1473`, `app/ponto/services/fechamento.py:1476`)
+- K6 responde entrega por TXT vigente. (`app/folha/export.py:556`)
+
+Assim, item 3 precisa dizer o destino de aprovada não exportada, trancada sem K6, paga somente por holerite, competência anterior sem entrega e TXT invalidado sem substituta; a escolha pretendida não consta do anexo [nao verificado].
+
+**L-092 e dinheiro:** L-092 protege o gravado da competência exportada; a regra consolidada exige `!`, porta REGEN-EM-EXPORTADA, DIFF anterior, reversão e trilha para esse movimento. (`app/docs/LEIS.md:125`, `CLAUDE.md:411`)
+L-113 alterou a L-092: recalcular/exportar de novo deixou de ser genericamente proibido; permanecem versão anterior intacta, trilha e DIFF de impacto antes de ato de frota. Não interpretar “nada muda no gravado” deste novo corte como revogação das outras portas já autorizadas. (`app/docs/LEIS.md:155`, `CLAUDE.md:417`)
+O aval fornecido só autoriza registrar, pré-desenhar e medir, e exige aval posterior de construção; implementação/apply não estão autorizados nele [nao verificado — literal fornecido].
+
+**Escritores/leitores K6:**
+
+| Campo/valor | Escreve | Lê |
+|---|---|---|
+| ED `empresa`, `mes`, `ano`, `conteudo`, `hash_sha256`, `gerado_por`, `reexportacao` | `ExportacaoDominio.registrar`, chamado pela geração TXT. (`app/folha/models.py:174`, `app/folha/models.py:182`; `app/folha/views.py:297`) | K6 filtra tripla e recebe vigência; comparação TXT/gravado lê registro do K6. (`app/folha/export.py:582`, `app/folha/export.py:587`, `app/folha/export.py:655`) |
+| ED `gerado_em` | ORM `auto_now_add`. (`app/folha/models.py:80`) | Desempate da vigência por `gerado_em,pk`. (`app/folha/models.py:136`) |
+| ED `invalidada_em`, `invalidada_motivo`, `substituida_por` | Porta `invalidar`, exige motivo e preserva conteúdo/hash. (`app/folha/models.py:143`, `app/folha/models.py:151`, `app/folha/models.py:158`, `app/folha/models.py:162`) | K6 recusa vigente invalidado. (`app/folha/export.py:590`) |
+| `vigente`, `_vigente_anotado` | Derivação em memória por `anotar_vigencia`. (`app/folha/models.py:203`, `app/folha/models.py:224`) | `e_vigente`, `so_vigentes`, K6. (`app/folha/models.py:123`, `app/folha/models.py:192`; `app/folha/export.py:587`) |
+| Marco `exportada` | Resultado derivado por `marcos_da_competencia`; não grava. (`app/ponto/services/fechamento.py:1537`) | `empresas_exportadas_no_escopo`. (`app/ponto/services/fechamento.py:1515`) |
+
+A documentação lookup manda consultar o registro vivo quando houver divergência. (`app/docs/JUIZES.md:10`, `app/docs/JUIZES.md:14`)
+
+## 17/11 11:36 · sessao a5addc8e4de4 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar, todos apenas por leitura:
+
+| Campo/pergunta | Quem escreve | Quem lê / alcance |
+|---|---|---|
+| Disputa `colaborador`, `motivos`, `contexto`, `chamado` | `criar_ou_atualizar_disputa`: `app/chamados/services/disputa_emissao.py:601`; agrupador de órfãos: `:1137`; âncora: `:1372`; agregação posterior: `:550`, `:576`, `:1145`, `:1380` | `colaborador_em_disputa` consulta somente pessoa e `fechada_em IS NULL`, sem data nem perguntas: `app/chamados/services/disputa_emissao.py:40`. |
+| Disputa `aberta_em` | ORM `auto_now_add`: `app/chamados/models.py:1820` | Não integra o predicado de disputa aberta: `app/chamados/services/disputa_emissao.py:40`. |
+| Disputa `fechada_em` | Fechamento: `app/chamados/models.py:2013`; reabertura admin: `:2230`; reabertura sistema: `:2254` | Property `aberta`: `:1888`; helper usado pelo PDF: `app/chamados/services/disputa_emissao.py:41`. |
+| Pergunta `data_evento` | Atribuição única em `fio.gravar_dia_do_fato`: `app/chamados/services/fio.py:837`, `:847`. Persistem nascimento: `app/chamados/models.py:3123`; costura de nulo: `app/chamados/services/fio.py:914`, `:926`; re-chaveamento: `:1084`, `:1090` | Juiz do dia do chamado lê perguntas da disputa: `app/chamados/juizes.py:75`; portas de identidade leem pelo juiz do turno: `app/chamados/services/fio.py:1676`, `:1698`. |
+| Pergunta `conversa` | Porta datada passa False: `app/chamados/models.py:2894`; `abrir_conversa` passa True e data civil atual: `:2906` | O dia da disputa ignora conversas: `app/chamados/juizes.py:79`; o juiz do escritor conserva o dia civil quando conversa: `app/chamados/services/fio.py:1699`. |
+| Pergunta `celula` | Nascimento: `app/chamados/models.py:3124`; re-chaveamento: `app/chamados/services/fio.py:1085` | É fallback quando `data_evento` falta no dia da disputa: `app/chamados/juizes.py:83`; célula do chamado precede todos os demais degraus: `:99`. |
+
+**Dia do fato não é um campo escalar de `DisputaSupervisao`.** A disputa tem uma relação 1:N com perguntas, cujos `data_evento` são nullable; o agrupador explicitamente reúne vários chamados numa disputa. (`app/chamados/models.py:2521`, `:2528`; `app/chamados/services/disputa_emissao.py:1127`, `:1130`, `:1137`)
+
+**Há dois alcances que não devem ser confundidos:**
+
+- `dia_do_fato(chamado)` retorna um dia do chamado: célula, contexto do catálogo/`data_turno`, batida, disputa, contexto fraco. O degrau da disputa ignora conversa, coleta `data_evento` ou data da célula de todas as perguntas e retorna **o mínimo**. Portanto, aplicar esse escalar para decidir “tem algum fato dentro da janela” perde um fato dentro quando outro mais antigo cai fora. (`app/chamados/juizes.py:75`, `:85`, `:99`, `:114`, `:130`, `:134`)
+- Para a identidade e escrita da pergunta, o dia é o **dia do turno**: episódio usa `_T1`; marco usa `dia_do_turno_da_celula`; linha sem marco/instante pode passar pela ponte A2; dois dias alcançados causam recusa. Conversa usa dia civil e não representa fato. (`app/chamados/services/fio.py:1516`, `:1534`, `:1542`, `:1698`, `:1710`, `:1715`; `app/chamados/models.py:2898`)
+
+`data_do_chamado` sozinho não resolve `disputa_supervisao`: esses módulos deixam `chave_data=None` de propósito, pois o dia vem da batida/disputa; `data_do_chamado` retorna None sem chave declarada. (`app/chamados/catalogo/modulos.py:49`, `:219`, `:223`)
+
+**Vazio continua possível na representação de legado**, embora a porta atual datada recuse None e o contrato de saída exija dia não nulo. Dia da disputa sem pergunta de fato datada/com célula retorna None; usar a data civil de conversa como substituto inventaria um fato. (`app/chamados/models.py:2528`, `:2892`, `:2915`; `app/chamados/juizes.py:79`, `:85`)
+
+**O literal novo precisa dizer qual universo de fatos interessa:** todas as perguntas da disputa ainda aberta ou apenas as vivas/sem decisão. Hoje “disputa aberta” é somente `fechada_em=None`; o juiz de fechamento C7 consulta separadamente perguntas vivas e respostas sem veredito. Uma disputa pode agregar perguntas antigas já julgadas e outras pendentes. (`app/chamados/models.py:1888`, `:1928`, `:1933`; `app/chamados/services/disputa_emissao.py:544`, `:1145`)
+
+**L-033:** entrada e saída batidas, faltando só intervalo, é pagável; pergunta continua aberta sem bloquear. A lei está marcada PELA-METADE porque falta selo ponta a ponta da pergunta, enquanto a isenção de retenção está aplicada. (`app/docs/LEIS.md:81`, `:194`)
+
+A implementação atual exige `protestos == {'FURO_PARCIAL'}` e `_furo_so_da_pausa`: lê `periodos_do_dia`, recusa desalinhamento, turno aberto ou desconhecimento e exige ao menos uma lâmpada apagada, todas de pausa. A retenção consulta isso antes de reter a célula. (`app/folha/export.py:1150`, `:1151`, `:1155`, `:1173`, `:1293`)
+
+O vigia usa o mesmo predicado, sem reimplementá-lo. (`app/folha/services/vigia_pausa.py:48`, `:62`, `:127`, `:157`)
+
+Há caminho explícito de disputa para intervalo ausente: o agrupador trata essa categoria e cria pergunta por marco de intervalo. Assim, um SIM automático por “disputa aberta + dia dentro” pode contornar a L-033 se a exceção só continuar no ramo antigo de célula. (`app/chamados/services/disputa_emissao.py:1149`; `app/folha/export.py:1293`)
+
+Para o item 1, recomendo **PROCEDE** por literal incompleto no domínio dos dias/múltiplos fatos, nulos e conversas; a preservação declarada da L-033 precisa compor o juiz do SIM. Isso é inferência dos alcances divergentes demonstrados acima. (`app/chamados/juizes.py:85`; `app/chamados/models.py:2528`, `:2906`; `app/folha/export.py:1293`)
 
 ## 17/11 11:25 · sessao 26b2f5915fe9 · PERSPECTIVA-ESPINHA · censo · origem=Code
 
@@ -459,156 +822,4 @@ TIPO-NA-FONTE | GRADE-MESTRA.md:104 | PENDENTE REAL | Falta corte LU2-03 entre s
 
 Notas para consolidação: foram pesquisados também RELATO-ARQUIVO.md e TICKETS.md, sem referência nominal às 14 obras. A atribuição dos grupos acima é inferência temática; principalmente “outras” versus O54 e “contrato 20” para TIPO/REABRIR deve seguir a convenção do consolidador. Ausência de censo fechado significa ausência de prova localizada, não prova de inexistência. A referência do rejulgamento em DIA-DA-BATIDA deve ser preferencialmente app/docs/RELATO.md:4263–4266 após conferência; não consegui fixar a linha individual no último recorte.
 
-## 17/11 11:22 · sessao 5b2926384334 · - · - · origem=Ronald (tmux)
-
-MOTOR-LE-O-TURNO | GRADE-MESTRA.md:105 | PENDENTE REAL | Faltam migrações PAR/DIA, RED, DIFF por dono e certificação DP (app/docs/BACKLOG.md:1997); herança própria de dia permanece (app/ponto/motor_calculo_v2.py:2407); censo medido com pontos cegos, fechamento não comprovado (app/docs/RELATO.md:2070) | outras | lei_ou_bang=N | censo=N
-FIO-E0-V4-E1-ENTRADAS | GRADE-MESTRA.md:106 | FEITA | FECHADA expressamente: núcleo a8a692f55 e E1-FILA pousados; 16 complementos seguem em linhas próprias (app/docs/BACKLOG.md:2008; app/docs/RELATO.md:284) | - | lei_ou_bang=N | censo=N
-FIO-E0-V4-E4-ESCRITORES | GRADE-MESTRA.md:107 | PENDENTE REAL | E4a/E4b pousadas, faltam leitores E4c e Contract E4d (app/docs/BACKLOG.md:2035; app/docs/BACKLOG.md:2044); B2 em construção (app/docs/RELATO.md:30); apply exportado espera ! (app/docs/RELATO.md:285); censo inicial confirmado, fecho global não comprovado (app/docs/RELATO.md:1838) | E4c | lei_ou_bang=S | censo=N
-RAIZ-DA-DISPUTA | GRADE-MESTRA.md:108 | PENDENTE REAL | Programa F0–F7 continua aberto, incluindo F5 com E4d (app/docs/BACKLOG.md:2055); F0/F1 prontos (app/docs/BACKLOG.md:2032), mas BO-DISPUTA estacionada exige matriz conferida e aval (app/docs/BACKLOG.md:2049); censo integral fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
-LAVRA-PREMATURA-CONCORDE | GRADE-MESTRA.md:109 | PENDENTE REAL | Falta decisão de desenho sobre concorde com marco vencido faltando durante turno em curso; construção vedada (app/docs/BACKLOG.md:2141); censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
-RETRATO-POR-EVENTO | GRADE-MESTRA.md:110 | PENDENTE REAL | Faltam construtor, suite, preverificação, opus e pouso (app/docs/RELATO.md:1774); faltam evento empresa×competência, consumidor e frescor por evento (app/docs/BACKLOG.md:2199); censo entregue, fechamento não expresso (app/docs/RELATO.md:1812) | folha-online (O48) | lei_ou_bang=N | censo=N
-JV1-MERGE-FILA | GRADE-MESTRA.md:111 | PENDENTE REAL | Faltam RED da janela nos leitores, alimentação além do envelope, contador do corte 21 e alimentação dos feriados em espelho/PDF (app/docs/BACKLOG.md:2221; app/docs/RELATO.md:2477); chamada PDF segue sem celulas= (app/relatorios/pdf_espelho.py:298); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
-O168 | GRADE-MESTRA.md:117 | FEITA | Pouso 89a5b0d85 registrado (app/docs/BACKLOG.md:1513); NO AR d33c0a899 (app/docs/RELATO.md:890); guarda comum no gate do pai (app/chamados/models.py:718); achados restantes têm linha própria (app/docs/BACKLOG.md:1514) | - | lei_ou_bang=N | censo=N
-O169 | GRADE-MESTRA.md:118 | FEITA | Cura C20-O169 FECHADA (app/docs/BACKLOG.md:1913), pouso bede09aa mantido (app/docs/RELATO.md:2403); fecho lê lastro do próprio dia independentemente da idade (app/ponto/services/cluster_espurio.py:53); carimbo persistente é pendência distinta O169-FECHADA (app/docs/RELATO.md:284) | - | lei_ou_bang=N | censo=N
-FIO-E0-V4-E3-LEITORES | GRADE-MESTRA.md:119 | FEITA | Escopo recortado autorizado: resto vira obra própria (app/docs/BACKLOG.md:742); merge 90f3fa66b (app/docs/RELATO.md:614), deploy e smoke (app/docs/RELATO.md:597); R2 separado (app/docs/BACKLOG.md:761), R3 pousado f8ee770a5 (app/docs/BACKLOG.md:770); censo fechado (app/docs/RELATO.md:2001) | - | lei_ou_bang=N | censo=S
-E3-CADASTRO-ADMIN | GRADE-MESTRA.md:120 | PENDENTE REAL | Falta correção administrativa dos cadastros listados; documento afirma que não se cura por código (app/docs/BACKLOG.md:2028); lista quantificada sem declaração de censo fechado (app/docs/BACKLOG.md:2028) | rabos da E3 | lei_ou_bang=N | censo=N
-E3-ENTRADA-ORFA-SEM-TURNO | GRADE-MESTRA.md:121 | PENDENTE REAL | Falta lei para dia sem turno COM batida, fora da lei de passado sem marcos (app/docs/BACKLOG.md:2176); emissor permanece (app/chamados/services/disputa_emissao.py:257); censo fechado [nao verificado] | rabos da E3 | lei_ou_bang=S | censo=N
-
-## 17/11 11:22 · sessao 5a7c2c88111a · - · - · origem=Ronald (tmux)
-
-Item 3 — evidências e limites para consolidação:
-
-- **Premissas:** o HEAD tem carimbo e recusa por mensagem, sem os quatro estados da proposta: `lavrar` grava em `MetricaSnapshot` (`app/folha/porta_export.py:768`); `conferir` lê hoje/empresa, compara competência e distingue valor negativo, positivo e zero (`app/folha/porta_export.py:807`, `:815`, `:818`, `:821`, `:867`); a view devolve a mensagem ao usuário (`app/folha/views.py:128`). A frase atual é “discordam em N ponto(s)” (`app/folha/porta_export.py:865`).
-- **N conta divergências, não colaboradores únicos:** soma listas heterogêneas e dias HE (`app/folha/porta_export.py:687`), depois soma `falhas_proprias + cartao_x_txt` (`:762`). Portanto a retirada de “colaborador(es)” fecha com a unidade atual; a redução descritiva a “entre espelho e folha” cobre também PDF, builder, calendário, rubricas e HE apenas por interpretação, não por identidade literal (`:693`, `:725`).
-- **Colisão:** o anexo fornecido autoriza substituir a frase e acrescentar FALHOU/R7; confronto dessa autorização com documento versionado local é [não verificado]. O código conserva “só zero libera” (`app/folha/porta_export.py:818`, `:821`, `:867`).
-- **“Processo morreu”:** a porta atual não possui identidade de job, PID nem leitor de vitalidade; o snapshot só possui campos genéricos, detalhe e horário (`app/inteligencia/models.py:87`). Existe padrão concreto da casa: `disparar` cria subprocesso e grava PID/início (`app/relatorios/lote_espelho.py:117`, `:138`); `job_morreu` lê PID/início e usa `os.kill(pid,0)` (`app/relatorios/models.py:140`); `vigiar` grava ERRO e libera a deduplicação (`app/relatorios/lote_espelho.py:66`, `:93`); a tela chama esse vigia antes de apresentar estado (`app/relatorios/views.py:1270`). Sua ligação à medição do export ainda é [não verificado].
-- **Quem escreve/lê estado, erro, PID e arquivo no padrão existente:** o serviço `disparar` escreve PID/início e cria `media/cartoes_lote/<id>.log` (`app/relatorios/lote_espelho.py:124`, `:138`); `job_morreu` lê o PID (`app/relatorios/models.py:151`); `vigiar` escreve ERRO, limpa PID, grava conclusão e erro (`app/relatorios/lote_espelho.py:75`); `_tela_lote_espelho` lê estado e placar (`app/relatorios/views.py:1276`). Esses são campos do lote de cartões, não um registro já existente da porta (`app/relatorios/models.py:106`, `:118`).
-- **Logger:** há `logging.getLogger(__name__)`, portanto `folha.porta_export`, mas as chamadas existentes são WARNING (`app/folha/porta_export.py:83`, `:97`). O command usa stdout e `SystemExit(2)`, sem linha CRITICAL (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:89`, `:179`). A configuração SaaS fornece rota concreta possível via root → `appconsole`/`errfile`, sendo arquivo `/app/logs/errors.log` (`app/config/settings/saas.py:136`, `:183`). Quem emitirá CRITICAL e quem o lerá para que “suporte foi avisado” seja verdadeiro é [não verificado].
-- **Outros detalhes que precisam fechar:** o command aceita somente mês/ano e percorre todas as empresas ativas, carimbando uma antes de passar à seguinte (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27`, `:86`). Não se pode equiparar automaticamente seu código de saída à falha da empresa solicitada: pode existir carimbo zero de uma empresa antes de falha em outra (`:88`, `:92`, `:94`). O erro `erro_cartao_x_txt` nasce na medição (`app/folha/porta_export.py:665`, `:737`), mas `lavrar` não o inclui no detalhe, embora `conferir` tente lê-lo (`:776`, `:820`).
-- **Exportada/dinheiro/!:** a mudança declarada cabe em apresentação e controle do job; o escritor mostrado grava snapshot (`app/folha/porta_export.py:772`). A medição já lê e separa divergências de exportada (`:339`, `:705`); não há autorização para mudar valores, cálculo ou TXT nos anexos fornecidos [não verificado]. A garantia da implementação futura e qualquer ocorrência real em produção são [não verificado].
-
-## 17/11 11:21 · sessao 5ba3a53a7bea · - · - · origem=Ronald (tmux)
-
-MODO-COMUM-OUT-DO-LOTE | GRADE-MESTRA.md:51 | FEITA | Pouso fc62165a e prova posterior do cartório em app/docs/RELATO.md:8939; portão cumprido, 0 decisão do ato lendo chave do lote em app/docs/BACKLOG.md:1036; selo atual em app/ponto/tests/test_out_do_lote.py:223 | - | lei_ou_bang=N | censo=N
-BACKFILL-UNICO | GRADE-MESTRA.md:52 | PENDENTE REAL | Falta construir porta única, lista com dono, tratamento dos dormentes e decidir alcance sobre exportada; somente registrada em app/docs/BACKLOG.md:1037; espera atual de lei/! e fecho do censo [nao verificado] | outras | lei_ou_bang=N | censo=N
-ISENTO-PONTO-JUIZ-REGISTRADO | GRADE-MESTRA.md:53 | PENDENTE REAL | Falta registrar autoridade e comparar predicado/universo antes da frase no CORTES, app/docs/BACKLOG.md:1045; função segue em app/core/constants.py:13 e leituras cruas em app/ponto/services/cartorio.py:1272; espera atual de lei/! e fecho do censo [nao verificado] | outras | lei_ou_bang=N | censo=N
-RESPONDIDA-SEM-TEXTO-DUAS-COPIAS | GRADE-MESTRA.md:54 | FEITA | Cura #10 usando juiz em app/docs/RELATO.md:1109, merge E3 90f3fa66b em app/docs/RELATO.md:614 e deploy em app/docs/RELATO.md:597; predicado central em app/chamados/juizes.py:1531 e importado pelo vigia em app/chamados/services/vigia_fio.py:734 | - | lei_ou_bang=N | censo=N
-DIA-DA-PERGUNTA-E-O-TURNO | GRADE-MESTRA.md:55 | PENDENTE REAL | Falta escritor único de data_evento/célula/dedup pelo data_turno; cópia anterior reprovada e medição em app/docs/BACKLOG.md:1115; censo dos três escritores em app/docs/RELATO.md:3309; espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
-O261-VETO-NA-PORTA | GRADE-MESTRA.md:56 | PENDENTE REAL | A no ar cdc7d8e2, mas faltam comparação posterior e lotes B/C, app/docs/BACKLOG.md:1116; faltam também mostra/trilha do ato humano em app/docs/BACKLOG.md:1106; censo em app/docs/RELATO.md:3338; espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
-EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | GRADE-MESTRA.md:57 | PENDENTE REAL | Falta substituir cópia da expiração pelo juiz e guarda AST de janela_turno_de, app/docs/BACKLOG.md:1166; cálculo inline persiste em app/ponto/selecao_periodo.py:288 e app/ponto/selecao_periodo.py:290; espera atual de lei/! e fecho do censo [nao verificado] | outras | lei_ou_bang=N | censo=N
-JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | GRADE-MESTRA.md:58 | PENDENTE REAL | Cura 2db04de4 e deploy 4be784ff provados em app/docs/RELATO.md:3821 e app/docs/RELATO.md:3822, mas passivo de 9 disputas, cache na materialização e prova RED/trilha seguem incompletos em app/docs/RELATO.md:3823; complemento registrado em app/docs/BACKLOG.md:1168; censo das 9/106 na mesma linha; espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
-JUIZ-DE-DONO-DO-DIA | GRADE-MESTRA.md:59 | PENDENTE REAL | Falta predicado autorizado para dono do dia da pergunta; sem predicado novo agora, 787 perguntas/394 dias-colab em app/docs/BACKLOG.md:1170; PAROU aceito em app/docs/RELATO.md:3842; fecho do censo [nao verificado] | outras | lei_ou_bang=S | censo=N
-VINCULO-LINHA-DO-TEMPO | GRADE-MESTRA.md:60 | PENDENTE REAL | Falta migrar leitores B ao vinculo_do_dia, medir passivo atual e instalar tripwire/EXCLUDE; censo entregue aponta ~55 sítios B, ausência da constraint e 11 selos ainda [nao verificado], app/docs/RELATO.md:283; porta já absorve posteriores, contrariando descrição antiga de app/docs/BACKLOG.md:1217; fecho integral do censo e espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=N
-O-DIA-PAGO | GRADE-MESTRA.md:61 | SUPERADA/ABSORVIDA | Estado delegado explicitamente às obras S3/S4/S5/S5b em app/docs/BACKLOG.md:1221 e app/docs/RELATO-ARQUIVO.md:19697; S3/S4 fechadas em app/docs/RELATO-ARQUIVO.md:19673 e app/docs/RELATO-ARQUIVO.md:19693; escrita S5b fechada mas troca ainda pede ! em app/docs/BACKLOG.md:1231 e app/docs/BACKLOG.md:1378 | - | lei_ou_bang=N | censo=N
-PLACAR-ESTRUTURAL | GRADE-MESTRA.md:62 | PENDENTE REAL | Faltam resultados R3/R4/R6 e autorização dos casos pagos/exportados do R4 em app/docs/BACKLOG.md:1263; código mantém BATERIA parcial (6/7 famílias sem bateria) em app/core/placar_estrutural.py:99 e R4 parcial em app/core/placar_estrutural.py:211; fecho do censo global [nao verificado] | outras | lei_ou_bang=S | censo=N
-L111-ORFAOS-DO-MOTOR | GRADE-MESTRA.md:63 | PENDENTE REAL | Falta conferir O275/O277 e remover com lápide os dois sítios sem chamador; fila sem construção e censo explicitamente fechado dos 202 nomes em app/docs/BACKLOG.md:1271, confirmado em app/docs/RELATO-ARQUIVO.md:1579; definições persistem em app/ponto/calculador/regras.py:302 e app/ponto/motor_calculo_v2.py:334; espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
-
-Consolidação deste trecho: FEITA=2, PENDENTE=10, SUPERADA=1, SEM_PROVA=0, TOTAL=13.
-
-Ressalvas para consolidação: li as quatro fontes pedidas; TICKETS:244 também registra PLACAR parcial, mas está mais antigo que o código e o RELATO. O encadeamento de RESPONDIDA usa o marco E3; não há atualização nominal da linha antiga. VINCULO tem censo entregue, porém o fecho integral não está provado — por isso censo=N. A data atual dos passivos citados não foi remedida. Git log indisponível nesta cópia, conforme verificação do agente principal.
-
-## 17/11 11:21 · sessao 887a9672f19a · - · - · origem=Ronald (tmux)
-
-PERGUNTA-SEM-SELO | GRADE-MESTRA.md:37 | PENDENTE REAL | Faltam classes do censo além dos pousos parciais (app/docs/BACKLOG.md:806; app/docs/RELATO.md:4129); C7 tem censo FECHADO de 201 sítios e lei=0, mas só dessa classe (app/docs/RELATO.md:2015); lei/! atual e censo fechado integral [nao verificado] | outras | lei_ou_bang=N | censo=N
-JUIZ-DO-PAR-DUAS-ENTRADAS | GRADE-MESTRA.md:38 | SUPERADA/ABSORVIDA | ABSORVIDA-POR JUIZ-DO-PAR-CURA-NA-FONTE (app/docs/RELATO.md:1142); cura na fonte presente em app/escala/utils.py:590 | - | lei_ou_bang=N | censo=N
-COBERTURA-PARCIAL-UM-JUIZ | GRADE-MESTRA.md:39 | FEITA | FECHADA/NO AR 97bcb01c, prova de frota posterior à reabertura (app/docs/RELATO.md:8908; app/docs/TICKETS.md:156); autoridade parcial_so_lista em app/ponto/services/cartorio.py:398 | - | lei_ou_bang=N | censo=N
-FIO-LE-O-JUIZ | GRADE-MESTRA.md:40 | FEITA | Pouso 7c9e4c27 (app/docs/RELATO.md:3835); push posteriormente FEITO 9185652e (app/docs/RELATO.md:3741); leitores atuais consultam pergunta_viva (app/chamados/services/fio.py:244; app/chamados/services/disputa_emissao.py:1988) | - | lei_ou_bang=N | censo=N
-CXR-TELA-LE-O-MOTOR | GRADE-MESTRA.md:41 | FEITA | Pouso 94d41ea5 autorizado com filas separadas (app/docs/RELATO.md:2031; app/docs/RELATO.md:2038; app/docs/RELATO.md:2039); tela lê lavra do motor (app/escala/services/cadastro_realidade.py:129); confirmação posterior da primeira lavra [nao verificado] | - | lei_ou_bang=N | censo=N
-C6-TETO-MARCO-PENDENTE | GRADE-MESTRA.md:42 | PENDENTE REAL | Falta cura do juiz para marco pendente e discordância com a lâmpada (app/docs/BACKLOG.md:906; app/docs/RELATO.md:3380); código ainda retorna viva pelo veredito acusador (app/chamados/juizes.py:1456); lei/! atual e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
-PASSIVO-VALIDADO-K6 | GRADE-MESTRA.md:43 | PENDENTE REAL | Falta substituir cópia do predicado pelo juiz K6 (app/docs/BACKLOG.md:907); cópia permanece em app/chamados/services/passivo_validado.py:127; lei/! atual e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
-PROGRAMA-CELULA-E-O-DIA | GRADE-MESTRA.md:44 | PENDENTE REAL | Programa inclui E1 e pista V3 (app/docs/BACKLOG.md:909; app/docs/BACKLOG.md:910); catraca de status já zerou (app/core/medida_leitor_do_dia.py:340), mas lei C16/C06 segue aberta (app/docs/RELATO.md:837); fecho global e censo fechado integral [nao verificado] | outras | lei_ou_bang=S | censo=N
-GRADE-FOLGA-JUIZ | GRADE-MESTRA.md:45 | FEITA | Pouso 6f583cbc NO AR após opus aprovado e prova de frota (app/docs/RELATO.md:8803; app/docs/RELATO.md:8804); leitores consultam juiz único (app/ponto/services/declarar_dia.py:73) | - | lei_ou_bang=N | censo=N
-A2-RAISE-NO-FUROS | GRADE-MESTRA.md:46 | PENDENTE REAL | Falta tratar recusa A2 na tela de furos (app/docs/BACKLOG.md:971); chamada sem tratamento local em app/relatorios/furos.py:198 e raise em app/escala/services/leitor_celula.py:288; lei/! atual e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
-O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | GRADE-MESTRA.md:47 | PENDENTE REAL | Falta registrar juiz do clique morto com corte exigido pela TRAVA JUIZ-NOVO (app/docs/BACKLOG.md:984); função existe em app/chamados/services/raiox.py:160, registro atual da família em app/core/juizes.py:285; censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
-E1-PERGUNTA-AO-DP-CONTADOR | GRADE-MESTRA.md:48 | PENDENTE REAL | Faltam respostas DP/contador aos casos legais (app/docs/BACKLOG.md:986; app/docs/RELATO.md:2985); C16/C06 ainda constam entre leis abertas (app/docs/RELATO.md:837); censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
-V-FASE-AS-OF-CADASTRO-SEM-LINHA | GRADE-MESTRA.md:49 | PENDENTE REAL | Falta listar ao admin dia passado com dono CADASTRO após relavra (app/docs/BACKLOG.md:991); C10 ainda limita leitura às janelas correntes da lavra (app/escala/services/cadastro_realidade.py:390); lei/! atual e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
-BUG-ENC-CELULAS-FORMA | GRADE-MESTRA.md:50 | FEITA | Pouso 7825fec5b NO AR 15/11, árvore certificada 2b80dcdca (app/docs/RELATO.md:256; app/docs/TICKETS.md:1325); forma corrigida em app/ponto/turnos.py:2155 e tripwire singular em app/ponto/turnos.py:1866 | - | lei_ou_bang=N | censo=N
-
-Conferidos os quatro documentos solicitados; RELATO-ARQUIVO não trouxe menções nominais adicionais para essas 14 obras. Git/HEAD verificável por histórico local indisponível nesta cópia sem `.git` [nao verificado].
-
-Dúvidas para consolidação: CXR foi classificada FEITA pelo pouso explicitamente autorizado com resíduos transferidos a obras próprias; caso a unidade inclua tais resíduos, usar PENDENTE REAL e citar RELATO:2038-2039. PROGRAMA ficou PENDENTE por E1/V3, embora o instrumento diga que o programa termina em zero (app/core/medida_leitor_do_dia.py:4) e DECLARADOS esteja vazio (:340); fecho global nominal não localizado [nao verificado].
-
-## 17/11 11:21 · sessao 38203a7fb05c · - · - · origem=Ronald (tmux)
-
-**Lei: nenhuma** para a regra geral “disputa aberta cujo fato está na janela retém a pessoa”. Os textos candidatos tratam de assuntos próximos, sem transformar esse estado, sozinho, em condição de retenção [nao verificado — conclusão negativa da busca nos três documentos].
-
-- **L-033:** resolve um subconjunto em sentido contrário: entrada e saída batidas, faltando apenas intervalo, é pagável; a pergunta permanece aberta sem bloquear. Logo, “toda disputa aberta retém” colidiria com essa exceção. `app/docs/LEIS.md:81`.
-- **L-095:** determina que o valor seja lavrado e lido pelos consumidores; não estabelece retenção pelo estado da disputa. `app/docs/LEIS.md:113`.
-- **L-099:** exige coerência do sistema e separa ESTRUTURA de CADASTRO/BATIDA, estes destinados à lista do admin. `app/docs/LEIS.md:122`.
-- **L-113:** manda calcular o que existe e permite refazer exportação; não estabelece retenção por disputa. `app/docs/LEIS.md:155`.
-- **L-129:** decide o dono do dia quando o colaborador deve resposta; a retenção continua vindo de outra leitura. `app/docs/LEIS.md:149`; `app/docs/CORTES.md:456`; `app/folha/fora_da_folha.py:18`; `app/folha/fora_da_folha.py:115`.
-- O crivo escrito é o `entra` de `classificar_export`; “aprovado” é carimbo, gerar TXT não tranca e TXT/recalculo não consultam tranca. `app/docs/DOSSIES.md:120`; `app/docs/DOSSIES.md:122`.
-- **Turno aberto** continua barrando o carimbo: o corte excluiu apenas `conta_vazia`. Esse corte não fala em **disputa aberta**. `app/docs/CORTES.md:317`.
-
-Pergunta de lei proposta, **uma**: “Disputa aberta cujo fato pertence à janela deve, por si só, reter a pessoa, preservada a exceção já escrita da L-033?” [nao verificado — decisão ainda necessária].
-
-## 17/11 11:21 · sessao 1811a98d7545 · - · - · origem=Ronald (tmux)
-
-DOSSIES-DAS-CELULAS | GRADE-MESTRA.md:77 | SEM PROVA | BACKLOG mantém seis itens EM CURSO (app/docs/BACKLOG.md:1487); famílias verdes não comprovam fechamento integral, inclusive dieta de prosa (app/core/contratos_estruturais.py:168, app/core/contratos_estruturais.py:447); falta prova agregada | - | lei_ou_bang=N | censo=N
-O142 | GRADE-MESTRA.md:78 | PENDENTE REAL | Cura pousada d1689254 (app/docs/RELATO-ARQUIVO.md:37752), mas falta comprovar invariância dos seis dias da borda direita e destino dos três rejulgamentos ainda nomeados como FALTA; censo fechado não comprovado (app/docs/TICKETS.md:209) | outras | lei_ou_bang=N | censo=N
-O177 | GRADE-MESTRA.md:79 | SUPERADA/ABSORVIDA | O119 já soma pausas cadastradas e batidas nos dois sítios (app/ponto/juiz_batida.py:119, app/ponto/juiz_batida.py:271); NO AR 801253ed (app/docs/BACKLOG.md:1316), com DIFF de frota, reversão e 09 intacta (app/docs/RELATO-ARQUIVO.md:24025, app/docs/RELATO-ARQUIVO.md:24030) | - | lei_ou_bang=N | censo=N
-O178 | GRADE-MESTRA.md:80 | PENDENTE REAL | Dar prazo e dono à pauta e publicar contador de pauta sem leitura; registro permanece ABERTA, sem prova de censo fechado (app/docs/BACKLOG.md:1524); prazo e leitura continuam campos opcionais (app/pautas/models.py:90) | outras | lei_ou_bang=N | censo=N
-O179 | GRADE-MESTRA.md:81 | PENDENTE REAL | Medir horas reais dos três colaboradores no espelho e decidir dono ESTRUTURA/BATIDA pela L-099; causa ainda não medida e censo fechado não comprovado (app/docs/BACKLOG.md:1525) | outras | lei_ou_bang=N | censo=N
-O180 | GRADE-MESTRA.md:82 | PENDENTE REAL | Entregar lista dos 102 colaboradores e obter ! para regenerar células do passado; registro de censo existe, fechamento não declarado (app/docs/BACKLOG.md:1526) | outras | lei_ou_bang=S | censo=N
-O183 | GRADE-MESTRA.md:83 | PENDENTE REAL | Guarda existe (app/chamados/models.py:1132), mas falta prova do DIFF e tratamento do estoque de 494; censo de quatro escritores explicitamente fechado por AST (app/docs/BACKLOG.md:1529); família pousou pela O221 (app/docs/TICKETS.md:223) | outras | lei_ou_bang=N | censo=S
-O229 | GRADE-MESTRA.md:84 | PENDENTE REAL | Nove achados aguardam cura/prova por classe; itens 1, 2 e 6 ainda pedem censo próprio (app/docs/BACKLOG.md:1557); filtro só de chegada permanece no código (app/ponto/services/espelho.py:1261) | outras | lei_ou_bang=N | censo=N
-O216 | GRADE-MESTRA.md:85 | PENDENTE REAL | Remedir pela função real os três números da entrada da O191 após O195 e republicar; dívida explicitamente ABERTA e pré-aprovada, sem censo fechado comprovado (app/docs/BACKLOG.md:1559) | outras | lei_ou_bang=N | censo=N
-SOBRA-NA-BORDA-O-QUE-FICOU | GRADE-MESTRA.md:86 | PENDENTE REAL | Item a exige obra para rejulgar passado quando mudam batidas; tentativa não certificada, cinco demais achados guardados e nada construído; censo fechado não comprovado (app/docs/BACKLOG.md:1584) | outras | lei_ou_bang=N | censo=N
-ATA-NAO-DISPENSA-JUSTIFICADA | GRADE-MESTRA.md:87 | FEITA | Cura NO AR 44e268a8 (app/docs/RELATO.md:5397); acervo da 10 explicitamente APLICADO, reversão e 09 intacta (app/docs/RELATO.md:5360); resumo posterior repete bloqueio antigo de 79 células e contradiz aplicação detalhada (app/docs/RELATO.md:838) | - | lei_ou_bang=N | censo=N
-CONCORDE-PREVISTO-ZERO | GRADE-MESTRA.md:88 | PENDENTE REAL | Investigar causa dos 730 dias concorde com previsto zero; foram excluídos sem investigação, censo fechado não comprovado (app/docs/BACKLOG.md:1608) | espelho-verdade (O54) | lei_ou_bang=N | censo=N
-ESPELHO-VERDADE-REMEDIDO | GRADE-MESTRA.md:89 | FEITA | Atualizações pedidas aparecem em app/core/espelho_verdade.py:117, app/core/espelho_verdade.py:141, app/core/espelho_verdade.py:183 e app/core/espelho_verdade.py:187; termômetro publicado no POUSO R1-PUBLICA a16637ca (app/docs/RELATO.md:3128, app/docs/RELATO.md:3132) | - | lei_ou_bang=N | censo=N
-C5-LISTA-DE-FROTA | GRADE-MESTRA.md:90 | SUPERADA/ABSORVIDA | Mesmo universo de 27 dias/18 colaboradores de 24/10 (app/docs/BACKLOG.md:1620) foi incorporado à C5-FALTA-MAIOR-QUE-PREVISTO, que exige remedida após pousos de 26–27/10 e dono L-099 por caso (app/docs/BACKLOG.md:1816) | - | lei_ou_bang=N | censo=N
-
-## 17/11 11:21 · sessao 5ec202cd60b0 · - · - · origem=Ronald (tmux)
-
-Achados:
-
-1. **fila — N+1 restante no modal admin de disputa fechada.** `fio.py:348-349` chama o explicador sem perguntas pré-carregadas quando a disputa está fechada; `explicador.py:159-160` consulta perguntas sem `decisoes`; o laço `:171` lê `p.estado` em `:95`, que consulta `p.decisoes.all()` (`models.py:4267`). O prefetch de `pode_fechar` só vem depois do laço (`explicador.py:177`; `models.py:1976-1980`). O teto do app não cobre esse caminho (`api/tests/test_f2_teto_consultas_app.py:47-60`). A cadeia já existe no pai da complementação; custo executado [nao verificado].
-
-2. **fila — N+1 restante no vigia.** `vigia_fio.py:570-572` carrega `perg_todas` sem decisões; `:615-616` passa-as a `dono_fora_do_fio`, cujo `:259` lê `p.estado` para cada pergunta até o `any` satisfazer. A leitura alcança `models.py:4267`. Já herdado da F2 anterior; contagem executada [nao verificado].
-
-3. **fila / possível bloqueia pelo corte — outro DONO apresentado muda.** O compensador faz a validada ressuscitada tornar-se `PENDENTE` (`models.py:1673-1681`, `:3213-3222`). `explicador.py:95-99` traduz isso para `dono='colaborador'` e “Cobrar o colaborador”. Sem compensador, o ato VALIDACAO mantinha `VALIDADA` e o explicador chegava a dono cadastro/sistema (`explicador.py:137-143`, `:43`). O resumo agrupa esse dono (`:182-203`) e o modal mostra “Aguardando o COLABORADOR responder” (`templates/chamados/partials/modal_fio.html:467`). O próprio explicador declara que é descrição, sem decidir fechamento (`explicador.py:174`); a tarefa oficial ignora a marca (`tarefa_do_dia.py:426-427`). Portanto há mudança concreta do dono apresentado; efeito na fila oficial por essa descrição [nao verificado].
-
-Censo para consolidação:
-
-| Leitor | REABERTURA marcada / efeito |
-|---|---|
-| `DecisaoPergunta.leitura` | Não distingue marca; limpa validação, instante e texto (`models.py:4267-4284`). |
-| `estado`, `respondida`, `resposta_display` | Herdam a leitura: pendente, não respondida, display vazio conforme os demais estados (`models.py:3213-3222`, `:3764`, `:3788`). |
-| SQL validação / `q_vivas` | A REABERTURA conta como limpeza posterior; ressuscitada pode voltar ao SQL largo (`models.py:3529-3537`, `:3591-3594`). |
-| `CargaDaTarefa` | Descarta somente marcada antes da escolha do último ato; comum continua devolvendo ao colaborador (`tarefa_do_dia.py:421-430`, `:163-164`). |
-| CSF | `sem_veredito_entre` lê sequência com prefetch e exige resposta vigente sem validação/materialização (`models.py:1976-1985`); `perguntas_que_seguram_csf` aplica-o a pai e destino (`ponto/supra_juiz.py:573-575`). Mudança real na frota/exportada [nao verificado]. |
-| Fio | Pré-carrega decisões e autores, inclusive foto; caminho principal não paga consulta de sequência por pergunta (`fio.py:257-264`). |
-| Histórico | Toda REABERTURA entra em `ATOS_COM_FOTO` e em respostas anteriores (`models.py:4137`, `:3779-3782`); mostra texto, instante anterior, autor da validação, autor/motivo do ato (`modal_fio.html:212`). |
-| Materialização | Rótulo BUG-PAR só reconhece DEVOLUCAO com prefixo próprio: não reconhece compensador (`materializacao.py:275-278`). Ausência rejeitada grava REABERTURA comum por outra porta, devolvendo ao colaborador (`:1158-1168`). |
-| Backfill | Correspondência só de RESPOSTA/VALIDACAO; REABERTURA não impede fotos faltantes (`models.py:4216-4229`). `admin_decidiu_sem_ato` só considera SILENCIO/VALIDACAO e exige via/materialização que ressuscitar limpa (`backfill_decisoes_pergunta.py:99-105`, `:314-327`). |
-| Cura de limbo | Não lê decisões: universo por projeção, conjunto nominal fechado; reabre pela porta comum (`curar_perguntas_em_limbo.py:46-52`, `:69`). |
-| Auditor de invariantes | I18 e I20 leem projeção; nenhuma classificação da marca (`auditar_invariantes_chamados.py:1075-1078`, `:1106-1108`). |
-| Foto E4b | Captura todas as decisões, incluindo linha e campo novos (`foto_e4b.py:280-281`). |
-
-Correções de premissa:
-
-- Não há compensador para toda ressuscitada: pergunta sem validação, instante e texto na leitura é explicitamente pulada (`models.py:1668-1669`). Isso inclui pendente sem atos e SILENCIO sem par vigente; número afetado [nao verificado].
-- `ato_instante` não integra a declaração do modelo; o instante persistido é `ato_em` (`models.py:4139-4152`). `ato_instante` pedido pelo usuário [nao verificado].
-- Contadores de reaberturas são campos de `DisputaSupervisao`, incrementados nas portas próprias (`models.py:1873-1877`, `:2294`, `:2380`); o compensador apenas acrescenta decisão (`:1672-1678`).
-- CSF pode mudar **contra o pai F2**: resposta só no ato, projeção vazia/materializada antes, deixa de ser resposta após compensação; sem compensador, depois da limpeza passaria a segurar CSF (`models.py:1982-1984`, `:4283-4284`). O golden compara uma main anterior à F2; conservação de toda a frota [nao verificado].
-
-## 17/11 11:21 · sessao a6104a0a2331 · - · - · origem=Ronald (tmux)
-
-1. **bloqueia — compensador não desfaz atos futuros já existentes.** O escritor fixa `ato_em=timezone.now()` e ignora o maior instante da sequência (`app/chamados/models.py:1662`, `:1673`). A leitura ordena todos os atos por instante/pk, sem cortar futuro (`:4264`, `:4269`, `:4273`); a face SQL usa a mesma ordem (`:3530`). Uma `VALIDACAO` anterior na escrita, mas com instante futuro, fica depois da compensadora e continua válida (`:4279`). Prova isolada, sem banco ou escrita: executei os métodos reais extraídos por AST com validação às 13h e compensador às 12h; retornou `validada_em=13h`. Ocorrência em produção: [nao verificado].
-
-2. **bloqueia — significado duplo de `ato_motivo` continua.** O campo segue controlando se `RESPOSTA` desfaz validação: vazio desfaz, preenchido conserva (`app/chamados/models.py:4241`, `:4251`). SQL repete o discriminador (`:3529`). A porta humana omite motivo (`app/chamados/services/disputa_emissao.py:1525`); escritores automáticos gravam textos (`:1678`, `:1699`). O teste novo compara apenas duas `REABERTURAS` com motivos iguais; não testa a semântica problemática de `RESPOSTA` (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:345`).
-
-3. **bloqueia — cópia diverge do diff fornecido e da premissa “toda ressuscitada recebe compensador”.** Na cópia, leitura sem resposta nem validação executa `continue` (`app/chamados/models.py:1668`). Portanto pergunta materializada, sem resposta/validação, inclusive último `SILENCIO`, perde materialização sem nova `DecisaoPergunta` (`:1543`, `:1680`, `:3457`). O diff anexado não contém essa condição. A porta comum de reabertura considera expressamente a materialização retirada como motivo para registrar ato (`app/chamados/services/disputa_emissao.py:1638`, `:1646`).
-
-4. **fila — foto pode atribuir validação ao autor errado em empate de instante.** `_vpor` escolhe a primeira validação com aquele instante (`app/chamados/models.py:1670`); a ordem padrão é crescente por instante/pk (`:4165`), enquanto a leitura deixa prevalecer a última (`:4273`, `:4279`). Duas validações no mesmo instante, autores A/B, resultam em validação vigente B e foto com A. O modal apresenta esse autor (`app/templates/chamados/partials/modal_fio.html:212`). Não há unicidade desse trio nas constraints (`app/chamados/models.py:4166`). Estoque desse caso: [nao verificado].
-
-5. **Atomicidade/travas corretas no trecho examinado.** Fotos, compensador e limpeza estão sob o mesmo `atomic`, com a trava antes das escritas (`app/chamados/models.py:1629`, `:1634`, `:1635`, `:1678`, `:1680`). A implementação trava Colaborador→Disputa→Chamado→Pergunta (`:2830`, `:2840`, `:2853`, `:2857`). O log de ressuscitação fica depois da transação (`:1694`, `:1704`), mas a linha compensadora e a projeção não ficam separadas por isso.
-
-6. **Idempotência sequencial preservada para esse escritor.** A seleção exige materialização (`app/chamados/models.py:1543`), a limpeza a remove (`:3457`) e a segunda chamada retorna zero antes das escritas (`:1616`). Seleção antes da trava permanece existente (`:1615`, `:1634`); execução concorrente sobre atos futuros continua vulnerável pelo achado 1: [nao verificado].
-
-7. **Marca não duplica juiz de estado.** `es_da_ressuscitacao` verifica apenas tipo e campo persistido (`app/chamados/models.py:4183`); `CargaDaTarefa` exclui essas linhas antes de escolher a última decisão (`app/chamados/services/tarefa_do_dia.py:426`). O escritor nominal encontrado é `ressuscitar_perguntas` (`app/chamados/models.py:1677`). A constraint garante somente “marca implica reabertura”, não autenticidade da porta (`:4178`); `registrar` recebe dicionários genéricos (`:4288`, `:4298`). Nenhum segundo escritor atual encontrado; futuro escritor dinâmico: [nao verificado].
-
-8. **`ato_instante` não está definido nesse modelo.** O conjunto de campos contém `ato_em`, autor, texto, motivo, fotos, ligações e marca (`app/chamados/models.py:4139`). Seu significado fora disso: [nao verificado]. A foto de conservação captura todos os campos concretos e todas as decisões, incluindo a nova marca (`app/chamados/services/foto_e4b.py:209`, `:280`).
-
-_6506 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
