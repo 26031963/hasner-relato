@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 03:26** · publicado em **17/11/2026 03:29** (UTC-3)
+> Ultima resposta processada: **17/11/2026 03:37** · publicado em **17/11/2026 03:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 03:37 · sessao 466bb7bb03cb · - · - · origem=Ronald (tmux)
+
+Achado adicional decisivo: o delta v3 mantém inversão contra **desligamento**, mesmo com células existentes. `executar_desligamento` segura Colaborador pelo `salvar_inteiro`, fecha vínculos e trava células futuras na mesma transação. A permuta/troca agora segura essas células antes de pedir Colaborador. Interleaving: P segura célula futura; D segura Colaborador; D espera célula; P espera Colaborador. (`app/colaboradores/services/desligamento.py:128`, `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/desligamento.py:148`; `app/colaboradores/services/colaborador.py:90`, `app/colaboradores/services/colaborador.py:158`; `app/colaboradores/services/vinculo.py:640`, `app/colaboradores/services/vinculo.py:662`; `app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:31`; `delta_v3.patch:+997`, `delta_v3.patch:+1009`.)
+
+O command também compõe outra ordem: regenera A/hoje, podendo reter Colaborador A pelo marcador; depois regenera B/hoje. P pode segurar A/futuro e B/hoje, esperando Colaborador A, enquanto G espera B/hoje. Bloqueia antes das barreiras da permuta. O mesmo padrão existe no salvamento de template em atomic envolvendo vários colaboradores. (`app/ponto/management/commands/gerar_celulas.py:319`, `app/ponto/management/commands/gerar_celulas.py:323`, `app/ponto/management/commands/gerar_celulas.py:345`; `app/ponto/portas/celula.py:311`, `app/ponto/portas/celula.py:328`; `app/escala/services/cadastro_tipo.py:140`, `app/escala/services/cadastro_tipo.py:323`, `app/escala/services/cadastro_tipo.py:339`, `app/escala/services/cadastro_tipo.py:353`.)
+
+Inventário adicional de caminhos:
+
+| Caminho | Sequência observada |
+|---|---|
+| `regenerar_futuras_do_cadastro` | Células futuras geradas por data → regeneração de cada dia → Colaborador/Chamado se marcador elegível. (`app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:36`, `app/ponto/services/cadastro_futuro.py:44`; `app/ponto/portas/celula.py:328`.) |
+| `sincronizar_foto_futura_do_calendario` | Células futuras → FolgaDia → serviço anterior. (`app/escala/folgas.py:620`, `app/escala/folgas.py:621`, `app/escala/folgas.py:639`, `app/escala/folgas.py:640`.) |
+| `reverter_para_snapshot` | EscalaColaborador por PK → células referenciando vínculos removidos → DELETE/UPDATE vínculos → futuras. No chamador, nota/transição do Chamado ainda dentro do atomic externo. (`app/colaboradores/services/vinculo.py:1017`, `app/colaboradores/services/vinculo.py:1020`, `app/colaboradores/services/vinculo.py:1025`, `app/colaboradores/services/vinculo.py:1035`; `app/chamados/services/acoes_chamado.py:142`, `app/chamados/services/acoes_chamado.py:149`, `app/chamados/services/acoes_chamado.py:153`, `app/chamados/services/acoes_chamado.py:155`.) |
+| `reverter_regeneracao_dia` | UPDATE célula sem releitura sob trava → evento; rabo após atomic próprio, ainda sob transação externa quando houver. (`app/ponto/portas/celula.py:1121`, `app/ponto/portas/celula.py:1130`, `app/ponto/portas/celula.py:1140`, `app/ponto/portas/celula.py:1162`.) |
+| `salvar_e_emitir` | UPDATE célula → INSERT EventoCelula no atomic. (`app/ponto/portas/celula.py:1266`, `app/ponto/portas/celula.py:1267`, `app/ponto/portas/celula.py:1269`.) |
+| Lançamento INSS | Colaborador → criação/reabertura Ausencia → post_save/cartório → atualização situação, mesmo atomic. (`app/ponto/views.py:2544`, `app/ponto/views.py:2546`, `app/ponto/views.py:2547`, `app/ponto/views.py:2564`.) |
+
+Para célula ausente há também ciclo **condicionado à FK efetiva**: G insere X; P não vê INSERT não confirmado, trava Colaborador e tenta inserir X, esperando a UNIQUE; G valida FK no INSERT/commit e pede chave compartilhada no Colaborador, esperando P. Modelo declara FK e UNIQUE, backend declarado é PostgreSQL; DDL vivo e momento efetivo da validação **[nao verificado]**. Não afirmar que todo INSERT trava Colaborador imediatamente. (`app/escala/models.py:1681`, `app/escala/models.py:1833`; `app/ponto/portas/celula.py:645`, `app/ponto/portas/celula.py:294`, `app/ponto/portas/celula.py:1218`; `app/config/settings/prod.py:11`.)
+
+Entre apenas duas permutas/trocas, com conjuntos de donos/cartas/células estáveis, **não achei** ciclo novo: prefixos ordenados e trava comum antecedem criação; isso não permite concluir ordem global segura diante dos caminhos acima. (`delta_v3.patch:+749`, `delta_v3.patch:+1003`; `app/chamados/models.py:2771`.)
+
+## 17/11 03:36 · sessao 90e72400e96b · - · - · origem=Ronald (tmux)
+
+Achados para consolidação, todos por leitura; concorrência executada/produção: **[nao verificado]**.
+
+| Caminho | Ordem efetiva e limites |
+|---|---|
+| `decidir` | `atomic` → UPDATE Ausencia → `post_save` síncrono → cartório. (`app/ponto/services/ausencia.py:1079`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`, `app/ponto/signals.py:93`.) |
+| `mudar_estado` direto | Não abre atomic próprio: sobreposição da trava de Ausencia com as seguintes exige atomic externo. (`app/ponto/services/ausencia.py:955`, `app/ponto/services/ausencia.py:988`, `app/ponto/services/ausencia.py:1002`.) |
+| Cartório, ramo emissor | Pode adquirir Colaborador/Chamado antes de escrever CelulaDia: emissão em `cartorio.py:1791` → `detectar_ausencias.py:694` → `models.py:949`, `models.py:952`; carimbo posterior em `cartorio.py:1873` → `celula.py:1505`, `celula.py:1267`. |
+| Cartório, outros ramos | Sem adesão, escreve célula e retorna, sem emissão. Já a primeira passada pode escrever célula e a reconciliação seguinte pedir Colaborador. Portanto não há ordem universal “Ausencia→célula→Colaborador”. (`app/ponto/services/cartorio.py:1292`, `app/ponto/services/cartorio.py:1314`, `app/ponto/services/cartorio.py:1318`, `app/ponto/services/cartorio.py:1007`, `app/ponto/services/cartorio.py:1011`.) |
+| Consumidor de Ausencia | É `on_commit`; suas travas não pertencem ao atomic original. Não confundir com o cartório síncrono. (`app/ponto/signals.py:250`, `app/ponto/signals.py:272`.) |
+| INSS pela view | Colaborador → criação/reabertura de Ausencia → cartório/célula → situação `afastado`, no mesmo atomic. (`app/ponto/views.py:2544`, `app/ponto/views.py:2546`, `app/ponto/views.py:2547`, `app/ponto/views.py:2564`; `app/colaboradores/services/colaborador.py:90`, `app/colaboradores/services/colaborador.py:81`.) |
+| Desligamento | Colaborador → UPDATE vínculo → células futuras geradas por data, no mesmo atomic. (`app/colaboradores/services/desligamento.py:128`, `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/desligamento.py:148`; `app/colaboradores/services/vinculo.py:862`, `app/colaboradores/services/vinculo.py:641`, `app/colaboradores/services/vinculo.py:662`; `app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:31`, `app/ponto/services/cadastro_futuro.py:36`.) |
+| Cadastro futuro | Trava células existentes por data e chama regeneração mantendo as travas. (`app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:36`, `app/ponto/services/cadastro_futuro.py:44`.) |
+| Cancelamento de férias | Ausencias por PK → saves síncronos → cartório, dentro do atomic; pode ter os mesmos sufixos anteriores. (`app/ponto/services/ausencia.py:1484`, `app/ponto/services/ausencia.py:1488`, `app/ponto/services/ausencia.py:1498`.) |
+| Backfill origem férias | AgendamentoFerias (+ período pelo `select_related`) → Ausencias por PK → UPDATE origem; Colaborador explícito posterior não achei. (`app/ponto/services/ausencia.py:1671`, `app/ponto/services/ausencia.py:1673`, `app/ponto/services/ausencia.py:1679`, `app/ponto/services/ausencia.py:1696`.) |
+
+**Ciclo preservado pela volta 3:** permuta/troca segura célula X, antes da nova trava de Colaborador; uma decisão de **outra Ausencia** do mesmo colaborador consegue segurar Colaborador durante emissão, depois pede X para carimbar; a permuta pede Colaborador: ciclo X↔Colaborador. Se for exatamente a mesma carta, o pedido inicial de carta da permuta a faz esperar antes de possuir X; esse interleaving simples fica serializado. (`delta_v3.patch:+754`, `delta_v3.patch:+1013`; `app/ponto/services/cartorio.py:1791`, `app/ponto/services/cartorio.py:1873`; `app/chamados/models.py:952`.)
+
+**Outro ciclo concreto:** P segura célula futura gerada X e pede Colaborador; desligamento segura Colaborador e pede X pelo suplemento futuro. A ordem célula→Colaborador já era alcançável na base pelo marcador de órfãs; o delta antecipa o ponto dessa espera, sem eliminar o ciclo. (`delta_v3.patch:+1013`; `app/ponto/portas/celula.py:672`; `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/desligamento.py:148`; `app/ponto/services/cadastro_futuro.py:31`.)
+
+| Campo | Escritores e leitores |
+|---|---|
+| `Ausencia.colaborador` | Criação escreve em `ausencia.py:484`, persiste em `ausencia.py:562`; edição normal altera tipo/data/minutos, sem dono em `ausencia.py:648`, `ausencia.py:659`. **Escritor de produção que transfere dono: não achei.** Leitores de cobertura e sobreposição usam esse FK como pessoa ausente: `turnos.py:2543`, `turnos.py:2839`. |
+| `Ausencia.documento` | Criação: `ausencia.py:492`; anexar: `ausencia.py:1017`, `ausencia.py:1019`; reabrir: `ausencia.py:1307`, `ausencia.py:1309`. Modelo define comprovante, preenchido só no primeiro dia do intervalo: `models.py:777`, `models.py:780`. Leitores: estado inicial `ausencia.py:938`; gate de aprovação `ausencia.py:754`, `ausencia.py:774`; aviso `ausencia.py:796`, `ausencia.py:813`. |
+| `Ausencia.status` | Criação deriva estado: `ausencia.py:475`, `ausencia.py:486`; transição: `ausencia.py:976`, `ausencia.py:988`; cancelamento férias: `ausencia.py:1496`, `ausencia.py:1498`. Folha exige aprovada, cobrança aceita todas não rejeitadas: `turnos.py:2528`, `turnos.py:2531`; sobreposição exclui rejeitadas: `turnos.py:2839`. |
+| `Colaborador.situacao` | Portas guardadas: `colaborador.py:126`, `colaborador.py:140`, `colaborador.py:152`, `colaborador.py:164`; desligar: `desligamento.py:129`, `desligamento.py:133`; reativar: `desligamento.py:242`, `desligamento.py:247`; INSS: `ponto/views.py:2564`. `esta_desligado` significa somente estado `desligado`; agendamento futuro e afastamento não satisfazem: `desligamento.py:23`, `desligamento.py:29`, `desligamento.py:32`. Choices incluem ativo, afastado, férias, desligado: `colaboradores/models.py:295`. |
+| `CelulaDia` no cartório | Cartório lê célula existente: `cartorio.py:2027`; futura/inexistente retorna: `cartorio.py:2025`, `cartorio.py:2028`; escreve veredito/ata/carimbos pela porta: `cartorio.py:1853`, `cartorio.py:1873`, `celula.py:1505`, `celula.py:1267`. |
+
+**Divergência semântica que continua:** não rejeitada não significa aprovada; documento presente normalmente coloca a linha em `aguardando_decisao`. As cartas aceitas na permuta continuam sendo fatos de ausência para cobrança e, quando aprovadas, para folha. Não desligado também não significa ativo. (`app/ponto/services/ausencia.py:938`, `app/ponto/services/ausencia.py:912`; `app/ponto/turnos.py:2528`, `app/ponto/turnos.py:2531`; `app/colaboradores/services/desligamento.py:32`; `app/colaboradores/models.py:295`.)
+
+## 17/11 03:35 · sessao 4aabe714545d · - · - · origem=Ronald (tmux)
+
+Auditoria dos testes por leitura; execução e concorrência real: **[nao verificado]**. [nao verificado]
+
+| Teste do delta acumulado | Contra a volta 2 | [nao verificado]
+|---|---|
+| Ordem na permuta e na troca isolada | **Falhariam:** exigem `carta → celula → colaborador`; a v2 começava por Colaborador. (`delta_v3.patch`, hunk `+331`, métodos `test_TRAVA_carta_celula_COLABORADOR_*`; descrição da v2 no anexo `verif_v2.r`, item 2.) |
+| Donos A/B → B/A | **Falharia:** a comparação por conjunto aceita a inversão; a troca continua e edita os papéis relidos. (`delta_v3.patch`, hunk `+331`, método `test_TROCA_carta_que_TROCOU_de_dono_A_B_para_B_A_e_recusada`; `app/ponto/portas/celula.py:736`, `app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:753`.) |
+| Rejeitada na troca isolada | **Passaria:** a v2 já verificava rejeição antes de chamar `editar_dia`. (`verif_v2.r`, item 1, linha “Carta rejeitada”; `delta_v3.patch`, hunk `+331`, método `test_TROCA_isolada_recusa_carta_REJEITADA`.) |
+| Instância velha/desligado, rejeitada na permuta e quatro documentos antes da primeira troca | **Passariam:** são correções acumuladas da v2, não discriminadores da v3. (`verif_v2.r`, itens 1 e 5; `delta_v3.patch`, hunks `+216` e `+253`.) |
+| Rollback com segunda recusa forjada | **Passaria:** preserva o mesmo atomic e conversão de recusa da base; executa a primeira troca real e exige trilha antes da segunda chamada. (`app/ponto/portas/celula.py:972`, `app/ponto/portas/celula.py:1018`, `app/ponto/portas/celula.py:1020`; `delta_v3.patch`, hunk `+290`.) |
+
+**Os testes de ordem não são vazios por falta de células na fixture.** A base gera CED/SUB/CTL/C61 de 01/09 até 31/12; os testes novos usam 03/11 e 04/11. A composição da fixture chama essa base, e `_cel` usa `.get`, portanto a ausência de uma célula também derrubaria as fotografias dos testes que as usam. (`app/ponto/tests/test_o10b_editar_dia_troca.py:91`, `app/ponto/tests/test_o10b_editar_dia_troca.py:93`, `app/ponto/tests/test_o10b_editar_dia_troca.py:103`; `app/ponto/tests/test_o10d_permuta_reciproca.py:48`, `app/ponto/tests/test_o10d_permuta_reciproca.py:89`.)
+
+**O helper continua insuficiente para provar proteção de célula ausente.** Ele reconhece a instrução `SELECT … FOR UPDATE` pelo SQL e coleta nomes distintos; não verifica quantas linhas foram travadas. Um SELECT que devolva zero linhas também satisfaz essa coleta. Não há segunda conexão ou interleaving concorrente nesses testes. (`delta_v3.patch`, hunk `+331`, métodos `_ordem_das_travas` e `_confere_ordem_da_casa`; concorrência executada: **[nao verificado]**.) [nao verificado]
+
+Outros defeitos que permanecem:
+
+- A idempotência da permuta compara apenas `origem`, `trabalha` e existência de trilha com as mesmas cartas; não compara DNA, vínculo gerador ou autoria da última edição, e retorna antes das barreiras. (`app/ponto/portas/celula.py:1003`, `app/ponto/portas/celula.py:1005`, `app/ponto/portas/celula.py:1006`, `app/ponto/portas/celula.py:1010`.)
+- A troca isolada continua sem chamar as barreiras de interjornada/DSR da permuta. (`app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:753`; barreiras em `app/ponto/portas/celula.py:902`, `app/ponto/portas/celula.py:927`.)
+- Tipo específico e aprovação das cartas continuam sem exigência; a fixture positiva usa `declaracao/aguardando_decisao`. (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`, `app/ponto/tests/test_o10b_editar_dia_troca.py:108`; o próprio contrato do teste declara a lacuna em `app/ponto/tests/test_o10d_permuta_reciproca.py:12`.)
+- A carta permanece também um fato de ausência: a guarda exclui seus IDs, mas a grade consulta cobertura aprovada e pode apagar os marcos de ausência integral. (`app/ponto/portas/celula.py:897`; `app/escala/utils.py:1188`, `app/escala/utils.py:1220`, `app/escala/utils.py:1251`.)
+- `d1 == d2` continua recusado apesar de o contrato documentado dizer permitido. (`app/ponto/portas/celula.py:975`; `app/ponto/tests/test_o10d_permuta_reciproca.py:259`.)
 
 ## 17/11 03:26 · sessao 919afaf4b8c8 · O10-D-PERMUTA-RECIPROCA · verificador · origem=Code
 
@@ -744,172 +820,4 @@ Os números da sonda 4 **dimensionam**, sem resolver “deveria voltar ao colabo
 
 Essas duas sondas, por seus predicados, não acrescentam pergunta própria de lei F7 nem novo caso de RED: R1b permanece dimensão de conservação, sem prova do antigo fold; ressuscitação continua dependência herdada. Contagem final depende da conferência das demais sondas e do código atual dos dois REDs. (`app/chamados/models.py:4087`; `app/docs/CORTES.md:488`.)
 
-## 17/11 01:27 · sessao a1991c3094f8 · PREPARA-F2-F4-F7 · sonda · origem=Code
-
-**Os números não mudam a entrega: lei 0 nova; RED que morde 3.** Eles dimensionam o estoque e derrubam a inferência “uma U163 entregue na fila ⇒ uma que hoje plantaria”. Não demonstram execução dos três RED. (`app/docs/RELATO.md:17`; resultados da sonda [nao verificado])
-
-Na cópia atual, lista e contador já constam respondidos por complemento; permanece devolvida a condição completa do RED. Essa atualização vem do registro do corte, não dos números. (`app/docs/RELATO.md:5`, `app/docs/RELATO.md:8`)
-
-Os valores abaixo são os fornecidos no **DADO RASPADO**, sem verificação independente: **[nao verificado]**. As referências sustentam sua interpretação pelo código. Uso estas abreviações, com equivalência literal `sigla:n = arquivo:linha`:
-
-| Sigla | Arquivo |
-|---|---|
-| M | `app/chamados/services/materializacao.py` |
-| MD | `app/chamados/models.py` |
-| J | `app/chamados/juizes.py` |
-| V | `app/chamados/services/validacao.py` |
-| BF | `app/chamados/management/commands/backfill_decisoes_pergunta.py` |
-| BP | `app/chamados/management/commands/bug_par_103.py` |
-| U | `app/chamados/services/universo_bug_par.py` |
-
-**SCRIPT 1 — lacunas e pré-backfill, seção 4.**
-
-| Rótulo | Valor | O que responde |
-|---|---:|---|
-| `integral_linhas_resposta` | 16941 | **Dimensiona** lacunas RESPOSTA por correspondência de pergunta/ato/instante; não mede divergência de texto. (`MD:4094`, `MD:4098`) |
-| `integral_linhas_resposta_em_validadas_nao_materializadas` | 96 | **Confirma** lacuna RESPOSTA também nesse recorte operacional. (`MD:4098`, `M:2063`) |
-| `integral_linhas_validacao` | 15115 | **Dimensiona** lacunas VALIDACAO por correspondência de pergunta/ato/instante. (`MD:4102`) |
-| `integral_linhas_validacao_em_validadas_nao_materializadas` | 96 | **Confirma** lacuna VALIDACAO nesse recorte; não somar às 96 anteriores como perguntas distintas. (`MD:4098`, `MD:4102`) |
-| `integral_perguntas_examinadas` | 50447 | **Dimensiona** o denominador informado; seleção integral exata da sonda [nao verificado]. |
-| `recorte_oficial_linhas_resposta` | 2992 | **Dimensiona** o backfill oficial, cujo recorte inclui horizonte, sem dia e conversa; difere do integral. (`BF:55`, `BF:59`, `BF:67`) |
-| `recorte_oficial_linhas_validacao` | 2248 | **Dimensiona** a mesma pendência oficial para VALIDACAO. (`BF:59`, `BF:67`, `MD:4102`) |
-| `recorte_oficial_nao_entregue_resposta` | 2992 | **Dimensiona:** igual ao total oficial RESPOSTA; não demonstra lacuna entregue nesse recorte. Critério exato dessa classificação [nao verificado]. |
-| `recorte_oficial_nao_entregue_validacao` | 2248 | **Dimensiona:** igual ao total oficial VALIDACAO; mesma limitação. Critério exato [nao verificado]. |
-
-**O pré-backfill não está satisfeito como “zero lacunas”.** Tampouco cabe usar o integral como quantidade autorizada do backfill oficial: o comando tem recorte próprio. (`MD:4081`, `BF:55`; valores [nao verificado])
-
-**SCRIPT 2 — contador, seção 4 e OPUS-C4-B da seção 5.**
-
-| Rótulo | Valor | O que responde |
-|---|---:|---|
-| `contador_aplicaveis` | 40 | **Dimensiona** perguntas cuja testemunha diz `aplicavel`; não prova validação ou plantio. (`M:340`) |
-| `contador_bug_par_103` | 19 | **Dimensiona** carimbadas elegíveis ainda devolvíveis, com competência não entregue. (`M:326`, `M:330`, `M:336`) |
-| `contador_bug_par_103_pauta_dp` | 84 | **Dimensiona** carimbadas elegíveis separadas por competência entregue. (`M:333`) |
-| `contador_bug_par_103_sem_dia` | 0 | **Dimensiona** ausência de exemplar nesse balde; não derruba o RED estrutural sem dia. (`M:331`, `M:795`) |
-| `contador_congelados_no_recorte` | 163 | **Confirma** presença do universo congelado no recorte; pertencimento vem do arquivo fechado. (`M:321`, `M:356`, `U:30`) |
-| `contador_delta_conservacao` | 0 | **Confirma** conservação aritmética: `79 + 0 + 84 + 0 = 163`. (`M:316`) |
-| `contador_espera_declarado` | 9 | **Dimensiona** a espera declarado×gravado, que impede tratar todo pendente como plantável. (`M:344`, `M:741`) |
-| `contador_legitimas` | 10 | **Dimensiona** testemunhas `bloqueada_paridade`. (`M:342`) |
-| `contador_n_aplicaveis` | 40 | **Confirma** o mesmo tamanho de `contador_aplicaveis`; não são outras 40. (`M:352`, `M:353`) |
-| `contador_outras` | 1 | **Dimensiona** outro estado da testemunha; estado individual [nao verificado]. (`M:347`) |
-| `contador_pendentes_aval` | 79 | **Confirma** `60 + 19`; mede espera do admin, não promessa de plantio. (`M:314`, `M:356`) |
-| `contador_resolvidas` | 0 | **Dimensiona** o estado atual; não demonstra a transição exigida pelo OPUS-C4-B. (`M:327`) |
-| `contador_universo` | 60 | **Confirma** a partição corrente `40 + 10 + 9 + 1`; não é o total congelado U163. (`M:351`) |
-
-O OPUS-C4-B **continua sem prova da transição pela autoridade real**: a fotografia acima não executa `pendentes 1→0 / resolvidas 0→1`. O teste existente verifica essa transição, mas sua fixture instala `competencia_entregue=False`. (`app/chamados/tests/test_bug_par_volta.py:463`, `app/chamados/tests/test_bug_par_volta.py:468`, `app/chamados/tests/test_bug_par_projetado.py:51`)
-
-**SCRIPT 2 — lista textual, seção 4 e RED da lista na seção 5.**
-
-| Rótulo | Valor | O que responde |
-|---|---:|---|
-| `pauta_comando_linhas` | 1178 | **Dimensiona** a saída textual; não são 1178 U163 nem Pautas criadas. Distinção entre itens e linhas físicas da extração [nao verificado]. (`BP:85`, `BP:89`) |
-| `pauta_comando_u163_distintas` | 84 | **Dimensiona** presença U163 na saída; igualdade numérica com o balde 84 não comprova identidade individual. (`BP:53`, `BP:62`) |
-| `pauta_comando_u60_distintas` | 0 | **Confirma** a omissão atual de U60: primeiro percurso U103; segundo exclui U163. Sustenta a mordida da lista. (`BP:53`, `BP:72`) |
-
-**SCRIPT 2 — U163 e montagem do RED, seções 4 e 5.**
-
-| Rótulo | Valor | O que responde |
-|---|---:|---|
-| `u163_presentes` | 163 | **Confirma** presença informada do universo fechado `60 + 103`. (`U:20`, `U:30`) |
-| `u163_sem_dia_do_fato` | 0 | **Dimensiona:** nenhum exemplar observado para L5; não elimina o defeito estrutural do pulo anterior à consulta do dia. (`M:795`, `M:806`, `M:809`) |
-| `u163_competencia_entregue` | 85 | **Dimensiona** competência entregue pelo dia do fato; não significa 85 validáveis. (`M:776`, `M:786`) |
-| `u163_entregue_estado_recusada_paridade` | 84 | **Dimensiona** recusas já carimbadas, devolvidas pela testemunha antes do derivador; não são candidatas atuais a plantio. (`M:862`, `M:868`) |
-| `u163_entregue_estado_bloqueada_competencia_entregue` | 1 | **Confirma** bloqueio já existente na composição pergunta/irmã; não demonstra a falha procurada pelo novo RED. (`M:885`, `V:224`, `V:225`) |
-| `u163_entregue_fm_do_fato_aberto` | 78 | **Dimensiona** FM aberto; sozinho não libera K6 nem as demais guardas. (`M:818`, `V:652`) |
-| `u163_entregue_fm_do_fato_aprovado` | 7 | **Dimensiona** o restante da partição `78 + 7 = 85`; aprovação FM não substitui a autoridade K6. (`M:786`, `M:830`) |
-| `u163_entregue_na_fila_real` | 1 | **Confirma** uma pergunta no filtro R/V/C do laço; pertencer à fila não equivale a poder plantar. (`M:2063`, `M:2084`) |
-| `u163_entregue_fila_testemunha_aplicavel` | 0 | **Derruba** “a única entregue na fila hoje plantaria”; nenhuma aplicável é mostrada nesse recorte. (`M:885`, `M:2063`) |
-| `u163_aplicavel_com_bloqueio_real` | 0 | **Dimensiona** a classe nominada; não fornece exemplar do candidato RED. Predicado completo da sonda [nao verificado]. (`V:225`) |
-| `u163_aplicavel_sem_bloqueio_real` | 0 | **Dimensiona** a classe nominada; não fecha prova de plantio liberado. Predicado completo [nao verificado]. (`V:225`) |
-| `u163_aplicavel_exige_confirmacao` | 0 | **Dimensiona** a classe nominada; não demonstra passagem pela confirmação. Predicado completo [nao verificado]. (`V:615`) |
-| `u163_aplicavel_sem_implausivel` | 0 | **Dimensiona** a classe nominada; não demonstra passagem pelas demais guardas. Predicado completo [nao verificado]. (`V:615`) |
-
-Os quatro últimos zeros **não significam “zero aplicáveis em toda U163”**: o contador informou 40. A relação exata entre esses filtros exige o corpo integral da sonda, ausente do texto fornecido. (`M:340`, `M:352`; filtros [nao verificado])
-
-**SCRIPT 3 — L-130, reparo e absorção, seções 4 e 5.**
-
-| Rótulo | Valor | O que responde |
-|---|---:|---|
-| `respondida_sem_texto` | 9626 | **Dimensiona** estoque com instante e texto vazio após trim. Não prova nova escrita ilegal nem que todo esse estoque deva voltar a pendente. (`J:1534`, `app/docs/LEIS.md:151`) |
-| `texto_sem_carimbo` | 0 | **Derruba** hipótese de estoque observado do meio par inverso; não elimina sua guarda nem reabre a lei do reparo. (`J:1541`, `app/docs/CORTES.md:488`) |
-| `absorcao_pares_retornados_pela_funcao_real` | 0 | **Dimensiona** ausência de pares retornados na execução fornecida; não prova inexistência histórica de absorção. (`M:1105`, `M:1109`) |
-| `absorcao_perguntas_retornadas_pela_funcao_real` | 0 | **Dimensiona** ausência de perguntas retornadas pelo predicado atual, que exclui Batida viva. (`M:1116`, `M:1118`) |
-| `absorcao_linhas_no_acervo` | 56 | **Confirma** acervo histórico informado de ABSORCAO; não equivale ao conjunto devolvível hoje. (`MD:4048`, `M:1105`) |
-| `absorcao_pares_no_acervo` | 52 | **Dimensiona** pares históricos distintos informados; chave exata dessa agregação [nao verificado]. Não contradiz retorno atual zero. (`MD:4059`, `M:1109`) |
-
-A diferença entre acervo e retorno atual **não revoga o corte**: M9b/M10 permanecem no carimbo nesta F4. (`app/docs/CORTES.md:488`)
-
-**SCRIPT 4 — J1, seções 4 e 5.**
-
-| Rótulo | Valor | O que responde |
-|---|---:|---|
-| `j1_hora_examinadas` | 7240 | **Dimensiona** o recorte `hora` comparado; seleção exata [nao verificado]. (`J:376`, `M:599`) |
-| `j1_hora_divergentes` | 0 | **Confirma** paridade observada nesse recorte; derruba divergência J1 observada nele. O juiz chama o mesmo derivador. (`J:376`) |
-| `j1_hora_indeterminadas` | 0 | **Confirma** ausência de indeterminação reportada nessa comparação; não certifica plantio ou fechamento. (`J:378`, `M:2084`) |
-
-Esses números não cobrem o parse próprio de `data_hora`, nem demonstram execução das duas metades ou C6. (`J:363`, `M:214`, `M:222`, `M:2086`)
-
-**ERROR — causa e número faltante.**
-
-| Script | Causa em uma linha | O que ficou sem número |
-|---|---|---|
-| 2 | `marcos_faltantes` e ATA discordam sobre E/S; o código registra o diagnóstico e retorna `t1 or t2`. (`M:568`, `M:571`, `M:576`) | Nenhuma perda demonstrada; os contadores finais foram fornecidos. Completude contra o roteiro integral [nao verificado]. |
-| 4 | Mesmo diagnóstico durante a derivação; isso difere de divergência juiz×materializador. (`M:568`, `J:376`) | Os três números J1 foram fornecidos; outros números previstos [nao verificado]. |
-
-`NoneType: None` é compatível com `exc_info=True` fora de um `except`; não é, por si, traceback de aborto. O dado termina com `rc_sombra=0` [nao verificado]. (`app/core/observ.py:79`, `M:571`)
-
-**Contagem mantida: lei 0 nova / RED que morde 3.** Os zeros não retiram os casos estruturais U163 entregue e U163 sem dia; a omissão U60 sustenta o caso da lista. O candidato produtivo que atravessaria todas as guardas continua sem demonstração, e o OPUS-C4-B permanece lacuna de prova. (`app/docs/RELATO.md:17`, `app/docs/RELATO.md:8`, `M:795`, `BP:72`, `app/chamados/tests/test_bug_par_projetado.py:51`; execução dos RED [nao verificado])
-
-## 17/11 01:25 · sessao 233baf0da3f5 · - · - · origem=Ronald (tmux)
-
-Referências atuais para SCRIPT 2, todas somente lidas:
-
-| Número recebido | Interpretação e efeito |
-|---|---|
-| `contador_aplicaveis=40` | Comprimento da lista de testemunhas `aplicavel`; dimensiona o recorte, sem provar ato de validação ou plantio. `app/chamados/services/materializacao.py:340` |
-| `contador_n_aplicaveis=40` | Mesmo número anterior, exposto como escalar; não somar outra vez. `app/chamados/services/materializacao.py:352` |
-| `contador_legitimas=10` | Dez testemunhas `bloqueada_paridade`; dimensiona impedimentos atuais. `app/chamados/services/materializacao.py:342` |
-| `contador_espera_declarado=9` | Nove testemunhas `espera_declarado_x_gravado`; dimensiona guarda que antecede validação. `app/chamados/services/materializacao.py:344`, `app/chamados/services/validacao.py:611` |
-| `contador_outras=1` | Uma testemunha em outro estado; estado individual não mostrado pelo dado. `app/chamados/services/materializacao.py:347`; identidade/estado exato [nao verificado] |
-| `contador_universo=60` | Soma `40+10+9+1`; universo corrente sem carimbo no recorte, não total U163. `app/chamados/services/materializacao.py:351` |
-| `contador_bug_par_103=19` | Carimbadas U103 ainda elegíveis e cuja competência do fato não foi entregue. `app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:336` |
-| `contador_bug_par_103_pauta_dp=84` | Carimbadas elegíveis de competência entregue, separadas para Pauta DP. `app/chamados/services/materializacao.py:333` |
-| `contador_bug_par_103_sem_dia=0` | Nenhuma carimbada elegível sem dia do fato nesse balde; não elimina RED estrutural sem dia. `app/chamados/services/materializacao.py:331`, `app/chamados/services/materializacao.py:795` |
-| `contador_pendentes_aval=79` | `60+19`; aguardam admin. Não é 163, nem promessa de que todas plantariam hoje. `app/chamados/services/materializacao.py:356` |
-| `contador_resolvidas=0` | Nenhuma carimbada saiu da condição de caso no recorte. Não demonstra transição do OPUS-C4-B. `app/chamados/services/materializacao.py:327` |
-| `contador_congelados_no_recorte=163` | Pertencimento presente no recorte; U60 e U103 vêm de arquivo fechado, disjuntos, união U163. `app/chamados/services/materializacao.py:356`, `app/chamados/services/universo_bug_par.py:20`, `app/chamados/services/universo_bug_par.py:30` |
-| `contador_delta_conservacao=0` | Confirma conservação aritmética: `79+0+84+0=163`. Fórmula documental: `app/chamados/services/materializacao.py:316` |
-| `pauta_comando_linhas=1178` | Volume recebido da saída textual; código da sonda não disponível para conferir se conta itens ou linhas físicas [nao verificado]. Comando publica `pauta` em `app/chamados/management/commands/bug_par_103.py:85` |
-| `pauta_comando_u163_distintas=84` | Dimensiona presença U163 na lista; corresponde numericamente às 84 U103 entregues. Identidade individual dessa correspondência [nao verificado]. Seleção U103: `app/chamados/management/commands/bug_par_103.py:53`, inclusão: `app/chamados/management/commands/bug_par_103.py:62` |
-| `pauta_comando_u60_distintas=0` | Confirma omissão atual de U60 nessa saída: primeiro percurso U103, segundo exclui U163. `app/chamados/management/commands/bug_par_103.py:53`, `app/chamados/management/commands/bug_par_103.py:72` |
-| `u163_presentes=163` | Todos os membros presentes segundo dado; cardinalidade fechada do arquivo confere com 60+103. `app/chamados/services/universo_bug_par.py:20`, `app/chamados/services/universo_bug_par.py:30` |
-| `u163_sem_dia_do_fato=0` | Sem exemplar atual para RED L5; não derruba o pulo estrutural antes de consultar dia. `app/chamados/services/materializacao.py:795`, `app/chamados/services/materializacao.py:806` |
-| `u163_competencia_entregue=85` | Dimensiona autoridade K6 pelo fato; não implica 85 validáveis. Autoridade real: `app/chamados/services/materializacao.py:776`, `app/chamados/services/materializacao.py:786` |
-| `u163_entregue_estado_recusada_paridade=84` | Testemunha retorna recusa pelo carimbo antes do derivador; não são 84 candidatas a plantio. `app/chamados/services/materializacao.py:862`, `app/chamados/services/materializacao.py:868` |
-| `u163_entregue_estado_bloqueada_competencia_entregue=1` | Um caso já bloqueia hoje pela composição pergunta/irmã; não demonstra falha da extensão U163. `app/chamados/services/materializacao.py:885`, `app/chamados/services/validacao.py:224` |
-| `u163_entregue_fm_do_fato_aberto=78` | Dimensiona FM; FM aberto sozinho não libera K6 nem demais guardas. `app/chamados/services/materializacao.py:818`, `app/chamados/services/validacao.py:652` |
-| `u163_entregue_fm_do_fato_aprovado=7` | Completa `78+7=85`; não substitui entregue pela autoridade K6. `app/chamados/services/materializacao.py:786`, `app/chamados/services/materializacao.py:830` |
-| `u163_entregue_na_fila_real=1` | Uma satisfaz filtro R/V/C do laço. Não equivale a testemunha aplicável. `app/chamados/services/materializacao.py:2063` |
-| `u163_entregue_fila_testemunha_aplicavel=0` | Derruba a inferência “uma na fila ⇒ uma hoje plantaria”; não elimina RED estrutural. `app/chamados/services/materializacao.py:2063`, `app/chamados/services/materializacao.py:885` |
-| `u163_aplicavel_com_bloqueio_real=0` | Nenhum candidato aplicável com bloqueio real mostrado; não prova ausência futura. Critério exato da sonda [nao verificado]; composição atual em `app/chamados/services/validacao.py:225` |
-| `u163_aplicavel_sem_bloqueio_real=0` | Nenhum candidato aplicável liberado pela autoridade real mostrado; OPUS-C4-B continua sem prova do ato real. Critério da sonda [nao verificado]; teste existente valida transição em `app/chamados/tests/test_bug_par_volta.py:464` |
-| `u163_aplicavel_exige_confirmacao=0` | Nenhum candidato aplicável nessa classe mostrado; não é prova de validação. Guarda: `app/chamados/services/validacao.py:615` |
-| `u163_aplicavel_sem_implausivel=0` | Nenhum candidato aplicável sem implausibilidade mostrado; não fecha montagem do RED. Guarda: `app/chamados/services/validacao.py:615` |
-
-O caso bloqueado entre U163 deve envolver pergunta fora163 na composição pelo código: `_k6_que_barra` ignora U163, e `entrega_que_barra_a_validacao` compõe pergunta/irmã. Sem ITEM, identidade e encadeamento individual continuam [nao verificado]. `app/chamados/services/materializacao.py:795`, `app/chamados/services/materializacao.py:805`, `app/chamados/services/validacao.py:224`.
-
-OPUS-C4-B permanece lacuna de prova: teste existente verifica `pendentes 1→0`, `resolvidas 0→1`, congelado e autoridade conservados, mas fixture instala `competencia_entregue=False`. `app/chamados/tests/test_bug_par_volta.py:463`, `app/chamados/tests/test_bug_par_volta.py:468`, `app/chamados/tests/test_bug_par_volta.py:471`, `app/chamados/tests/test_bug_par_projetado.py:51`.
-
-Contagem anterior está documentada: **lei 0 nova; RED que morde 3**, com três pendências U163 no topo. Estes números dimensionam as pendências e afastam candidato produtivo presumido; não resolvem abrangência da lista, destino de balde ou condição normativa do RED. `app/docs/RELATO.md:17`, `app/docs/RELATO.md:19`, `app/docs/RELATO.md:6`, `app/docs/RELATO.md:8`.
-
-## 17/11 01:25 · sessao d8e751783447 · - · - · origem=Ronald (tmux)
-
-- **Script 1:** lacunas são por correspondência `(pergunta, ato, instante)`, não ausência de qualquer ato nem divergência de texto; 96 respostas + 96 validações não significam 192 perguntas distintas. (`app/chamados/models.py:4094`, `app/chamados/models.py:4098`, `app/chamados/models.py:4102`)
-- **Recorte oficial:** horizonte L-124, perguntas sem dia e conversas; difere do integral. O comando mede R/V e não as aplica. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:3`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`)
-- **Script 3:** 9.626 `respondida_sem_texto` dimensionam o estoque do meio par ilegal; não provam escrita nova irregular. Zero `texto_sem_carimbo` elimina estoque observado desse segundo meio par, preservando o controle. (`app/chamados/juizes.py:1534`, `app/chamados/juizes.py:1541`)
-- **Absorção:** função real seleciona carimbo, via, escape no grupo e ausência de Batida viva; acervo ABSORCAO guarda vínculos históricos. Portanto 0 pares/0 perguntas retornados coexistem com 56 linhas/52 pares históricos, sem revogar o corte que mantém o leitor por carimbo. (`app/chamados/services/materializacao.py:1105`, `app/chamados/services/materializacao.py:1109`, `app/chamados/services/materializacao.py:1116`, `app/chamados/models.py:4048`, `app/docs/CORTES.md:487`)
-- **Script 4:** 7.240 examinadas, 0 divergentes e 0 indeterminadas confirmam paridade observada no recorte `hora`; não comprovam paridade `data_hora`, composição das duas metades, escrita ou C6. Juiz de hora chama o mesmo derivador; `data_hora` tem parse próprio. (`app/chamados/juizes.py:363`, `app/chamados/juizes.py:376`, `app/chamados/services/materializacao.py:599`)
-- **ERROR dos scripts 2/4:** conflito `marcos_faltantes`×ATA é registrado, mas prevalece `t1` e a função retorna normalmente; não é divergência entre juiz e materializador. `NoneType: None` decorre do logger com `exc_info=True` chamado fora de `except`. (`app/chamados/services/materializacao.py:568`, `app/chamados/services/materializacao.py:571`, `app/chamados/services/materializacao.py:576`, `app/core/observ.py:79`)
-- O dado fornecido termina com os números J1 e `rc_sombra=0`; não demonstra script abortado nem número previsto perdido. Como o texto dos scripts da sonda não acompanha o anexo truncado, completude dos rótulos previstos: **[nao verificado]**.
-
-_6312 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6315 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
