@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 18:22** · publicado em **17/11/2026 18:22** (UTC-3)
+> Ultima resposta processada: **17/11/2026 19:02** · publicado em **17/11/2026 19:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 19:02 · sessao 0bfd9e67d4e3 · E4C-F1-B2 · verificador · origem=Code
+
+**PROCEDE: a tabela ainda não sustenta a construção.** Identifiquei quatro problemas distintos no desenho ou na descrição; a revisão integral das quatro perguntas para as 55 linhas **não foi concluída**. Por isso, as linhas marcadas **[não verificado]** não estão aprovadas. A contagem ao fim é dos quatro achados identificados, não uma contagem integral de possíveis defeitos.
+
+A cópia está legível, mas não tem metadados Git disponíveis para confirmar o hash informado **[não verificado]**. Os avais e a tabela foram avaliados pelo texto raspado; seus arquivos físicos e linhas **[não verificado]**. Efeitos reais em exportadas, dinheiro e `!` são **[não verificado]**.
+
+### Achados
+
+1. **PROCEDE — B4 / X6: falta julgar as outras perguntas retratadas no reapontamento.** `reapontar_resolvedora` pode chamar `retratar_para_canonica` para `a_retratar`, além de salvar a pergunta principal. Essa função percorre as perdedoras e chama `retratar_duplicata`, que grava cada uma. Julgar somente a pergunta passada ao reapontamento não cobre essas escritas; X6 atribui sua cobertura ao backfill, mas há também esse caminho de reapontamento. Fora de cerca, a guarda é no-op. [fio.py:942](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:942), [fio.py:969](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:969), [fio.py:1473](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1473), [fio.py:1492](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1492).
+
+2. **PROCEDE — P11–P15: o ponto antes de `_materializar_uma` não demonstra o universo exato da escrita.** A função ainda possui saídas sem escrita, inclusive sua própria guarda de competência; assim, julgar e contar toda pergunta antes de entrar nela pode contar uma pergunta que não chegaria a uma escrita. A irmã também entra em `_materializar_uma` por outro caminho, com tratamento próprio do par. A tabela não demonstra como preservar esses retornos e julgar cada pergunta imediatamente antes da escrita que efetivamente ocorreria. [materializacao.py:1853](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:1853), [materializacao.py:1719](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:1719), [materializacao.py:2102](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:2102).
+
+3. **PROCEDE — P17: a partição do queryset precisa preservar o universo efetivo da porta.** Mover a partição para antes da chamada resolve o problema anterior de deixar decisões e células para trás, mas o queryset entregue à porta pode conter linhas que `descarimbar_em_lote` exclui por `VIAS_FORA_DO_FATO`. A tabela manda julgar o `qs` antes da chamada sem especificar essa exclusão; pode, portanto, contar como retida uma linha que não seria escrita. [curar_perguntas_em_limbo.py:69](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/management/commands/curar_perguntas_em_limbo.py:69), [disputa_emissao.py:1643](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/disputa_emissao.py:1643), [models.py:3400](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3400).
+
+4. **PROCEDE — B2a: o fecho após a retenção é uma mudança de fluxo não resolvida na linha.** Hoje, se `p.carimbar` retorna falso, a função retorna antes de chegar ao fecho. A tabela determina que, quando a pergunta for retida, o fecho siga, mas não especifica como chegar a ele preservando as condições existentes. A consequência do fecho e sua compatibilidade integral com o aval são **[não verificado]**. [reconciliador.py:407](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:407), [reconciliador.py:413](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:413).
+
+### Cabeçalho
+
+- **F0 — CONFERE parcialmente:** fora da cerca a guarda retorna sem consultar; dentro, consulta. Censo integral dos quatro abridores **[não verificado]**. [fio.py:1396](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1396).
+- **F1 — CONFERE parcialmente:** chamada aninhada executa no estado externo, sem novo savepoint de `executar_sob_cerca`. Compatibilidade com item 5 do aval raspado confere; demais caminhos **[não verificado]**. [fio.py:1433](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1433).
+- **F2 — CONFERE parcialmente:** veto anotado leva ao rollback do atomic do abridor mesmo se a exceção intermediária foi engolida. Afirmação universal sobre todos os `except` internos **[não verificado]**. [fio.py:1439](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1439).
+- **F3 — CONFERE:** a guarda precede o atomic do `save` de linha existente e precede o `update` do lote. [models.py:3572](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3572), [models.py:3400](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3400).
+- **F4 — CONFERE parcialmente:** a deduplicação atual compara a última linha da chave fixa de chamado; `evento` é best-effort. O item 6 raspado decide essa semântica e aceita falha da trilha. A extensão para pergunta ainda é proposta **[não verificado]**. [reconciliador.py:489](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:489), [observ.py:94](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/core/observ.py:94).
+- **F5 — [não verificado]:** a regra de resumo e lista consta do aval raspado; sua realização em cada lote ainda não foi demonstrada. [não verificado]
+- **F6 — PROCEDE parcialmente:** a extração pode ser um MOVE, mas a aplicação nos pontos P11–P15 e B4/X6 não demonstra o universo da escrita; achados 1 e 2. A leitura atual está em [fio.py:1403](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1403).
+- **F7 — CONFERE parcialmente:** o aval raspado separa porta humana; a validação comum consulta a regra antes do carimbo, enquanto o aceite de folga retorna antes dela. Completude dos achados humanos **[não verificado]**. [validacao.py:711](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/validacao.py:711), [validacao.py:740](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/validacao.py:740).
+
+### Resultado por linha
+
+**CONFERE parcialmente** abaixo significa somente que a premissa indicada foi conferida; as demais perguntas da linha permanecem **[não verificado]**.
+
+- **A1, A2, A3, B2c — CONFERE parcialmente:** o aninhamento usa o estado externo, como decidido no item 5 raspado. [fio.py:1433](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1433).
+- **A4, A5, A6, A7, A8 — [não verificado]** quanto à revisão integral; a precedência da relavra foi explicitamente decidida pelo item 3 raspado. [não verificado]
+- **A9a — [não verificado].**
+- **A9c — CONFERE parcialmente:** o S144 pula os dois casos indicados antes de carimbar; o caminho da tranca segue A9d. [materializacao.py:2154](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:2154).
+- **A9d — INDECISO:** ver análise da tranca abaixo. [signals.py:157](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/signals.py:157).
+- **B1a, B1b — [não verificado].**
+- **B2a — PROCEDE:** achado 4. [reconciliador.py:407](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:407).
+- **B2b, B2d — PROCEDE parcialmente:** dependem da cobertura ausente das perdedoras no reapontamento, achado 1; demais condições **[não verificado]**. [reconciliador.py:998](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:998), [reconciliador.py:1712](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:1712).
+- **B3a, B3b — [não verificado].**
+- **B4 — PROCEDE:** achado 1. [fio.py:969](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:969).
+- **B5, B6, B7, B8, B9a, B9b — [não verificado].**
+- **P1, P3, P4, P5, P6, P7 — [não verificado].** Em P4, o problema de veto residual da revisão anterior não foi repetido na mesma forma: fora de cerca a guarda retorna sem vetar; a revisão completa da linha permanece pendente. [fio.py:1396](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1396).
+- **P11, P12, P13, P14, P15 — PROCEDE:** achado 2; a cobertura de cada entrada adicional de P13 é **[não verificado]**. [materializacao.py:1853](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:1853).
+- **P17 — PROCEDE:** achado 3. [models.py:3405](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3405).
+- **P18, P19, P20, P21 — [não verificado].**
+- **X1 — CONFERE parcialmente:** os `continue` citados precedem o carimbo; tranca depende de A9d. [materializacao.py:2161](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:2161).
+- **X2, X3, X5 — [não verificado].**
+- **X6 — PROCEDE:** o backfill não é o único caminho até a retratação; achado 1. [fio.py:969](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:969).
+- **X7, X8, X9, X10, X12 — PROCEDE parcialmente:** a cobertura das perdedoras pelo julgamento da pergunta principal não está demonstrada, achado 1; alcance concreto de cada chamador e demais perguntas **[não verificado]**. [fio.py:942](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:942).
+- **X13, X14 — [não verificado].**
+- **X15 — CONFERE parcialmente:** a tabela agora descreve a mudança de ordem ausente na revisão anterior; a correção em execução e o RED proposto **[não verificado]**. Hoje o reset está no `finally`, depois da saída do `atomic`. [fio.py:1439](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1439), [fio.py:1449](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1449).
+
+### Achados de porta humana e indecisos
+
+- **P8 — CONFERE parcialmente:** os gates e o `save` do motivo antecedendo a reabertura conferem; completude das entradas e impacto **[não verificado]**. [validacao.py:886](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/validacao.py:886), [validacao.py:920](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/validacao.py:920).
+- **P9, P16, A9b, X11 — [não verificado]** integralmente.
+- **X4 — CONFERE parcialmente:** o ramo de aceite retorna antes da consulta em `:740`. Efeitos e entradas completos **[não verificado]**. [validacao.py:711](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/validacao.py:711).
+- **INDECISOS — CONFERE a premissa de A9d:** S144 captura `Exception`; a tranca tem `atomic` por disputa e chama `fechar` dentro dele. Sem propagação ou outro mecanismo, a retenção por item no S144 não faz esse atomic desfazer o fecho. [signals.py:157](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/signals.py:157), [competencia_trancada.py:221](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/competencia_trancada.py:221).
+- **A9d — permanece INDECISO:** o item 4 raspado inclui o fecho por tranca na classe (ii) e preserva R7, que diz que a disputa fica aberta. Uma leitura possível é R7 excepcionar o resultado geral da classe (ii); outra é aplicar a partição do S144 e deixar o fecho. O texto não explicita a precedência nem o mecanismo sem segundo enumerador. [não verificado]
+- **Outros sítios decididos ou indecisos — [não verificado]:** a revisão parcial não permite afirmar que A9d seja o único ponto ainda dependente de decisão, nem que todas as decisões da tabela decorram do aval. [não verificado]
+
+### F6 e campos
+
+**F6 pode ser MOVE sem mudar predicado nem universo**, desde que a função extraída preserve exatamente os dados da instância e do banco, inclusive os dois testes independentes de `conversa`, o `None` e o caso sem dias, que hoje é pulado. A porta deve continuar agregando por empresa e vetando com `is not False`; os laços devem chamar a mesma função para a pergunta que efetivamente chegaria à escrita. A extração em si não está implementada, portanto sua equivalência concreta é **[não verificado]**. [fio.py:1403](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1403), [fio.py:1418](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1418).
+
+Escritores e leitores **identificados**, não censo completo:
+
+- **`recusa_motivo`:** escrevem, entre outros, `carimbar_identidade`, materialização e recusa humana; a materialização também o relê para comparar o motivo. A proposta da trilha não deve salvá-lo na pergunta vetada. [models.py:3307](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3307), [materializacao.py:1676](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:1676), [validacao.py:916](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/validacao.py:916). Censo completo **[não verificado]**.
+- **`materializada_em`, `materializada_por`, `via_resolucao`:** `carimbar_identidade` grava os três; `descarimbar` e a porta de lote os limpam; há escrita isolada da via. A materialização lê instante e via, entre outros leitores. [models.py:3289](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3289), [models.py:3324](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3324), [models.py:3406](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3406), [models.py:3415](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/models.py:3415), [materializacao.py:862](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/materializacao.py:862). Censo completo **[não verificado]**.
+- **`LogAuditoria` da retenção:** `registrar_retencao` lê a última linha e chama `evento`; `evento` cria a linha; a tela de auditoria consulta os logs. A generalização do alvo para pergunta ainda não existe. [reconciliador.py:489](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/reconciliador.py:489), [observ.py:133](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/core/observ.py:133), [views.py:705](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/core/views.py:705).
+- **`_CERCA`:** é contexto de execução, não campo persistido. `executar_sob_cerca` define e reseta; a guarda lê e altera o estado de empresas, memo e vetadas. [fio.py:1381](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1381), [fio.py:1396](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1396), [fio.py:1435](/home/ronald/codex_ws/afda61fbd665ab31c8f68e53beb94b98187efe8c/app/chamados/services/fio.py:1435).
+
+**PROCEDE: 4 achados distintos nesta revisão parcial. INDECISOS: 1 identificado na tabela; total após revisão integral [não verificado].**
 
 ## 17/11 18:22 · sessao a8fb34fb036a · [nome]-NAO-DESFAZ-O-PAPEL · construtor · origem=Code
 
@@ -908,87 +983,4 @@ rg -n 'ata_do_dia\(|\.ata\s*=|update_fields.*ata|bulk_update\(' ponto/services/c
 
 [truncado em 20000 de 25342 caracteres]
 
-## 17/11 17:24 · sessao 2fab1abab9c0 · CORTE-FOLHA-ESPELHO · leitura · origem=Code
-
-**Subperguntas ainda sem resposta demonstrada**
-
-1. Se a pergunta tem dia, mas não existe célula para esse dia, como verificar se ela é apenas de intervalo para aplicar a exceção de pausa? O leitor atual recebe uma célula; a resposta para a ausência dela não foi demonstrada. ([export.py:1158](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:1158); [nao verificado])
-2. Quando a folha fica retida **somente pelo veredito da célula**, sem pergunta elegível, o PDF auditável deve ser impedido também, ou o bloqueio novo do PDF acompanha apenas a pergunta? Os anexos preservam a retenção da célula, mas não explicitam essa consequência para o PDF. ([export.py:968](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:968); [pdf_espelho.py:1085](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/pdf_espelho.py:1085); [nao verificado])
-
-**Limite da entrega:** o dado raspado não contém linhas individuais de pessoas e dias; portanto, não permite preencher uma matriz nominal nem medir quantos casos mudam. O mapa abaixo identifica caminhos, mas **não está fechado**: faltam a conferência de todas as cascas e consumidores indiretos, a classificação dos comandos operacionais e a prova de que nenhum outro leitor decide ou mostra esse resultado. Não é uma autorização de construção. [nao verificado]
-
-### (ii) Mapa de caminhos
-
-**caminhos: 14 identificados; lista fechada: NAO fechada.** Conto abaixo 14 grupos de sítios, não afirmo que sejam 14 sítios individuais. A última coluna descreve o pré-desenho, ainda não implementado. [nao verificado]
-
-| Caminho: chamador → sítio | Como receber a resposta |
-|---|---|
-| 1. Montador → `classificar_export` → retenção da célula. ([export.py:714](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:714); [export.py:968](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:968)) | K2 pergunta ao juiz novo e conserva a retenção da célula. [nao verificado] |
-| 2. Geração da folha → classificação e montagem do TXT. ([views.py:212](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/views.py:212); [views.py:268](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/views.py:268)) | Herda K2. [nao verificado] |
-| 3. PDF auditável → bloqueio próprio por disputa aberta. ([services.py:70](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/services.py:70); [pdf_espelho.py:1085](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/pdf_espelho.py:1085)) | Precisa perguntar ao juiz novo para o bloqueio por pergunta; a subpergunta 2 permanece aberta. [nao verificado] |
-| 4. PDF em lote → serviço auditável → alternativa informacional; job → lote. ([services.py:237](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/services.py:237); [services.py:250](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/services.py:250); [lote_espelho.py:205](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/lote_espelho.py:205)) | Herda o bloqueio do PDF auditável; período livre já segue caminho informacional. [nao verificado] |
-| 5. Emissão avulsa e por competência → serviço de PDF. ([views.py:1003](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/views.py:1003); [views.py:1127](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/views.py:1127)) | Herdam o bloqueio do PDF; demais cascas de anexação precisam de fechamento do censo. [nao verificado] |
-| 6. `dias_que_seguram` → K2 → dias do retentor da célula. ([fora_da_folha.py:147](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:147); [fora_da_folha.py:156](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:156); [fora_da_folha.py:165](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:165)) | Herda a classificação, mas precisa receber também os dias e evidências do juiz novo: hoje só busca dias da célula. [nao verificado] |
-| 7. `fora_da_folha` → `dias_que_seguram` → tarefa dos dias retidos. ([fora_da_folha.py:200](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:200); [fora_da_folha.py:217](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:217)) | Herda K2 e as evidências ampliadas do caminho 6; não deve compor outro juiz. [nao verificado] |
-| 8. `o_que_segura` → K2 e retentor da célula em leituras separadas. ([fora_da_folha.py:273](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:273); [fora_da_folha.py:275](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:275)) | Herda K2; precisa receber os dias do juiz novo para explicar a retenção. [nao verificado] |
-| 9. Lavrador → `montar_linhas` → `fora_da_folha` → grava retrato. ([retrato_folha.py:1214](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/retrato_folha.py:1214); [lavrar_retrato_folha.py:77](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/management/commands/lavrar_retrato_folha.py:77)) | Herda K2 e grava a explicação recebida; o formato suficiente para pergunta, dia e ação ainda precisa ser conferido. [nao verificado] |
-| 10. Tela do admin → retrato gravado. ([views_retrato.py:194](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/views_retrato.py:194)) | Herda o retrato após nova lavra; até então mostra a fotografia anterior. [nao verificado] |
-| 11. Contadores do retrato → linhas do mesmo retrato. ([lavrar_retrato_folha.py:65](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/management/commands/lavrar_retrato_folha.py:65); [lavrar_retrato_folha.py:68](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/management/commands/lavrar_retrato_folha.py:68)) | Herdam K2 pela lavra; contador de pergunta viva sem dia e sua lista precisam de sítio próprio demonstrado. [nao verificado] |
-| 12. Vigia de alcance → `dias_que_seguram`. ([vigia_fio.py:510](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/vigia_fio.py:510); [vigia_fio.py:537](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/vigia_fio.py:537)) | Herda o universo e os dias corrigidos do caminho 6. [nao verificado] |
-| 13. Prévia → K2; cobertura da proposta → dias do retentor da célula. ([previa.py:43](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/previa.py:43); [previa.py:169](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/previa.py:169)) | Herda classificação; cobertura precisa considerar também os dias do juiz novo, sem presumir que a proposta os resolve. [nao verificado] |
-| 14. Outros leitores diretos de K2: painéis, validação, vigia e comandos. ([views_pend.py:58](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/views_pend.py:58); [validacao_pdf.py:65](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/validacao_pdf.py:65); [vigia_txt.py:231](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/services/vigia_txt.py:231); [porta_export.py:469](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/porta_export.py:469)) | Herdam K2 quanto à classificação; falta examinar individualmente a interpretação e os efeitos de cada chamador. [nao verificado] |
-
-### (iii) Matriz de comportamento por pessoa × dia
-
-Esta é uma matriz de **casos**, não de pessoas reais. “Retém” significa acréscimo pelo juiz novo; outros motivos de K2, inclusive a célula, continuam independentes. Nos caminhos 9–11, a apresentação depende de nova lavra. A coluna PDF trata somente do bloqueio por pergunta, sujeita à subpergunta 2. [nao verificado]
-
-| Caso | K2/TXT e leitores que herdam K2: 1, 2, 14 | PDF: 3–5 | Dias, explicação, retrato e contadores: 6–12 | Prévia: 13 |
-|---|---|---|---|---|
-| A. Viva, dia dentro, ação de pessoa, não só intervalo | Retém pela pergunta. | Bloqueio por pergunta. | Mostram dia e ação; contam a pessoa conforme K2. | Considera o dia retido. |
-| B. Como A, disputa fechada | Mesmo resultado de A. | Mesmo resultado de A. | Mesmo resultado de A. | Mesmo resultado de A. |
-| C. Como A, com `nao_sei` no mesmo dia | Mesmo resultado de A. | Mesmo resultado de A. | Preservam ação e desconhecimento. | Mesmo resultado de A. |
-| D. Viva e ação humana, somente intervalo L-033 comprovado | Não acrescenta retenção. | Sem bloqueio **por essa pergunta**. | Não atribuem retenção à pergunta. | Não acrescenta esse dia. |
-| E. Viva e ação humana, dia misto | Retém pela pergunta. | Bloqueio por pergunta. | Mostram dia e ação. | Considera o dia retido. |
-| F. Viva, sem dia gravado | Não acrescenta retenção. | Sem bloqueio por essa pergunta. | Lista nossa; contador esperado zero; não atribuem dia inventado. | Não acrescenta dia. |
-| G. Viva, dia fora da janela | Não acrescenta retenção nesta competência. | Sem bloqueio por essa pergunta nesta competência. | Não atribuem o dia a esta competência. | Não acrescenta dia. |
-| H. Viva, dentro, só sistema ou ninguém age | Não acrescenta retenção. | Sem bloqueio por essa pergunta. | Caso sem dono para nossa lista; célula pode continuar retendo. | Não acrescenta retenção pela pergunta. |
-| I. Pergunta morta ou inexistente | Não acrescenta retenção. | Sem bloqueio por essa pergunta. | Célula pode continuar retendo. | Considera apenas retenções existentes. |
-
-Resultados propostos da matriz: [nao verificado]. A janela de C19 usa os dois extremos inclusivos; C6 consulta a tranca e pode declarar morta uma pergunta em dia trancado, mesmo quando a competência não tem TXT vigente. ([tarefa_do_dia.py:405](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:405); [juizes.py:1403](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:1403))
-
-**Correção do pd2:** as linhas H e I não liberam uma pessoa que a célula ainda retém. O item 4(d) fornecido preserva essa retenção; o K2 atual já a consulta. ([export.py:968](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:968); texto do anexo fornecido: [nao verificado])
-
-### (iv) REDs propostos
-
-Nenhum RED foi executado; como a lista de caminhos não está fechada, a cobertura integral também permanece [nao verificado].
-
-- **A:** célula sem retenção, pergunta viva dentro e ação humana → K2 passa a reter; conferir todos os leitores e a explicação do dia. ([export.py:968](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:968); [nao verificado])
-- **B:** repetir A com disputa fechada → continua retendo; detecta filtro indevido de disputa aberta. ([pdf_espelho.py:1085](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/relatorios/pdf_espelho.py:1085); [nao verificado])
-- **C:** repetir A com ação humana e `nao_sei=True` → retém; incluir resposta do colaborador nas instâncias com ação vazia no topo. ([tarefa_do_dia.py:651](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:651); [tarefa_do_dia.py:701](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:701); [nao verificado])
-- **D:** viva e acionável, célula com apenas pausa isenta → não acrescenta retenção; verificar chamada ao leitor existente. ([export.py:1158](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:1158); [nao verificado])
-- **E:** mesmo dia com pausa e outro problema → retém; detecta isenção aplicada ao dia misto. ([export.py:1293](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:1293); [nao verificado])
-- **F:** pergunta viva sem dia → não retém por ela, aparece na lista nossa e aciona o contador de anomalia esperado zero; criação e dia civil não viram dia do turno. ([juizes.py:338](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:338); [nao verificado])
-- **G:** única pergunta viva acionável fora da janela, inclusive dia imediatamente anterior e posterior → não retém nesta competência. ([tarefa_do_dia.py:408](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:408); [nao verificado])
-- **H:** pergunta viva dentro, ação só do sistema → não acrescenta retenção; controle com célula acusadora continua fora pela célula. ([tarefa_do_dia.py:660](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:660); [export.py:968](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:968); [nao verificado])
-- **I:** disputa aberta com apenas pergunta morta → PDF não bloqueia por essa pergunta; controle com célula acusadora preserva a retenção da folha. ([juizes.py:1405](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:1405); [export.py:968](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:968); [nao verificado])
-
-### (v) Ataques cruzados
-
-**ataques cruzados: 6 identificados; completude [nao verificado].**
-
-1. **Dia do turno × dia civil:** conversa guarda dia civil em `data_evento`, mas o leitor do dia do turno devolve `None` para conversa. Não usar o campo cru como dia elegível. ([juizes.py:338](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:338))
-2. **Outro leitor do mesmo campo:** a prévia agrupa por `data_evento` sem o filtro `conversa=False` visível nessa consulta; C19 filtra fatos. Comparar os universos antes de usar a prévia como evidência do juiz. ([previa.py:64](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/previa.py:64); [tarefa_do_dia.py:405](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:405))
-3. **Janela e empresa:** testar primeiro e último dia inclusivos, vizinhos externos, virada de ano e empresas com cortes diferentes. ([janelas.py:10](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/ponto/janelas.py:10); [janelas.py:54](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/ponto/janelas.py:54); [tarefa_do_dia.py:408](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/services/tarefa_do_dia.py:408))
-4. **Fuso e meia-noite:** `fora_da_folha` recebe um instante, mas seu próprio comentário declara que K2 ainda lê relógio separado; testar decisões dos dois lados da meia-noite local. ([fora_da_folha.py:137](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:137); [fora_da_folha.py:200](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/fora_da_folha.py:200))
-5. **Noite e virada civil:** o ajuste de saída trata `data_evento` como dia do turno e compara horário local; testar turno que termina no dia civil seguinte. ([juizes.py:300](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:300); [juizes.py:329](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:329))
-6. **Tranca × TXT vigente:** K6 responde existência de TXT vigente; C6 também consulta tranca do dia. Testar aprovada, trancada e TXT invalidado sem substituto sem trocar a resposta de C6 pela de K6. ([export.py:556](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/export.py:556); [juizes.py:1407](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/chamados/juizes.py:1407))
-
-### (vi) ENTREGUE e ESQUEMA
-
-**ENTREGUE:** há escritor demonstrado em competência entregue: `lavrar_status_competencia --apply` chama `julgar_colab` para completar status de células; K6 ali informa, não barra. Também o lavrador de retrato aceita mês e ano explícitos e grava o retrato com `--apply`, sem guarda de K6 visível nesse caminho. A lista de todos os escritores envolvidos ainda não está fechada. ([lavrar_status_competencia.py:10](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/ponto/management/commands/lavrar_status_competencia.py:10); [lavrar_status_competencia.py:43](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/ponto/management/commands/lavrar_status_competencia.py:43); [lavrar_status_competencia.py:56](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/ponto/management/commands/lavrar_status_competencia.py:56); [lavrar_retrato_folha.py:57](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/management/commands/lavrar_retrato_folha.py:57); [lavrar_retrato_folha.py:77](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/management/commands/lavrar_retrato_folha.py:77))
-
-**ESQUEMA:** mudança não demonstrada. O retrato grava `linhas`, mas ainda não foi provado que seu formato atual comporta todas as evidências e consumidores propostos; portanto, não há base para declarar “não muda” nem para identificar a janela entre migração e reload. ([lavrar_retrato_folha.py:77](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/folha/management/commands/lavrar_retrato_folha.py:77); [nao verificado])
-
-perguntas de lei: 2
-
-_6672 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6673 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
