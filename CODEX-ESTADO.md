@@ -1,7 +1,413 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 09:25** · publicado em **17/11/2026 09:25** (UTC-3)
+> Ultima resposta processada: **17/11/2026 09:30** · publicado em **17/11/2026 09:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 09:30 · sessao db4eb04e80f0 · - · - · origem=Ronald (tmux)
+
+1. [nota] **Sim, o teste agora distingue validação só no ato.** `so_no_ato` nasce com projeção vazia, recebe RESPOSTA e VALIDACAO, continua com `validada_em=None` e deve sair de `_ancoradas` junto com a validada alinhada. Referências: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:487-494`; `app/chamados/tests/cortes_f2_f9_apoio.py:66-74`.
+
+2. [fila] **A âncora ainda tem mutante sobrevivente nos dois testes.** Em `app/chamados/models.py:355-356`, substituir o filtro por:
+
+   ```python
+   _ancora = PerguntaDisputa.objects.filter(
+       Q(chamado_destino_id=self.pk)).values('pk')
+   ```
+
+   preserva a subquery, o `pk__in`, a face e uma query (`app/chamados/models.py:357-359`). Todas as perguntas desses testes têm `destino=ch`, logo o mutante conserva seus resultados esperados: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:484-494`; `app/chamados/tests/test_cortes_f2_f9_m13.py:49-55,59-64`. Entretanto, perde perguntas sem destino ancoradas pelo chamado da disputa, contrariando `app/chamados/services/fio.py:100-102,116-117`. Sobrevivência deduzida por leitura; execução [nao verificado].
+
+   Para fechar essa lacuna, incluir pergunta sem destino com `disputa.chamado=ch`, além de pergunta destinada a outro chamado. A fixture atual cria a disputa sem preencher `chamado`: `app/chamados/tests/cortes_f2_f9_apoio.py:58-64`.
+
+## 17/11 09:30 · sessao 3b3e67c2f1be · - · - · origem=Ronald (tmux)
+
+3. **[nota] No delta fornecido, a única mudança produtiva é o texto da docstring**, na mesma linha; o corpo de `_ancoradas` permanece abaixo dela, sem deslocamento (`app/chamados/models.py:343-359`, especialmente `:346`). Comportamento produtivo adicional ao delta fornecido: [nao verificado].
+
+4. **[nota] O selo c12 por linha não foi afetado por este delta.** Ele inclui o número da linha na identidade do `CORPO` (`app/chamados/tests/e4b_c12_ast.py:17-27,222-223`); conferência AST somente em memória encontrou todas as nove chamadas nas linhas cadastradas: 205, 302, 462, 667, 847, 865, 1501, 1705 e 1725 (`app/chamados/tests/e4b_c12_ast.py:19-27`). Os acréscimos nos dois testes não entram no universo produtivo: a pasta `tests` é excluída (`app/chamados/tests/e4b_c12_ast.py:32-39`). O mecanismo dos sítios também resolve a linha atual pelo AST, usando `linha_base` apenas para a fonte-base (`app/chamados/tests/e4b_c12_verificar.py:84-92,106-115`); o sítio E01 continua sendo a chamada de `fechar` (`app/chamados/tests/e4b_c12_sitios.json:370-376`; `app/chamados/models.py:464-467`).
+
+Não executei a suíte c12; resultado integral de execução: [nao verificado]. [nao verificado]
+
+## 17/11 09:27 · sessao 4ee5805a2bd9 · EXPORT-UM-JUIZ-DO-CODIGO · censo · origem=Code
+
+**A divergência confere:** o export aceita qualquer código não vazio após `strip()`, enquanto o layout exige matrícula numérica em dez posições; qualquer erro de layout interrompe o TXT inteiro. `app/folha/export.py:840`, `app/folha/export.py:872`, `app/folha/export.py:273`, `app/folha/export.py:277`, `app/folha/views.py:275`.
+
+**1. Escritores**
+
+Contagem por sítio funcional que persiste o campo: **8 = duas atribuições explícitas + quatro regravações integrais + duas inicializações**. As portas comuns estão discriminadas abaixo, sem contá-las novamente.
+
+| # | Sítio | O que grava |
+|---|---|---|
+| 1 | Admissão | `codigo_folha.strip()`, somente se não vazio; atribui e salva. `app/colaboradores/views.py:1131`, `app/colaboradores/views.py:1232`, `app/colaboradores/views.py:1237` |
+| 2 | Edição | Mesmo tratamento; enviar vazio **preserva o código anterior**. `app/colaboradores/views.py:1353`, `app/colaboradores/views.py:1355`, `app/colaboradores/views.py:1365` |
+| 3 | Vincular posto | `save()` integral regrava também o código carregado. `app/colaboradores/views.py:345`, `app/colaboradores/services/colaborador.py:160` |
+| 4 | Transferir posto | Mesma regravação integral. `app/colaboradores/views.py:1418`, `app/colaboradores/services/colaborador.py:160` |
+| 5 | Desligamento | Mesma regravação integral. `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/colaborador.py:160` |
+| 6 | Reativação | Regrava o objeto inteiro pela porta própria. `app/colaboradores/services/desligamento.py:247`, `app/colaboradores/services/colaborador.py:200` |
+| 7 | Comando `smoke_chamados` | Cria colaborador de fixture sem código explícito, recebendo `default=''`. `app/chamados/management/commands/smoke_chamados.py:78`, `app/colaboradores/models.py:312` |
+| 8 | Migration `0026` | Adiciona o campo com `default=''`; é `AddField`, não migration de dados com `RunPython`. `app/colaboradores/migrations/0026_colaborador_codigo_dominio.py:13` |
+
+As persistências comuns são `salvar_campos`, `salvar_inteiro`, `salvar_reativacao`, `criar_colaborador` e, finalmente, `Colaborador.save()`. Não validam a forma do código. `app/colaboradores/services/colaborador.py:140`, `app/colaboradores/services/colaborador.py:152`, `app/colaboradores/services/colaborador.py:184`, `app/colaboradores/services/colaborador.py:204`, `app/colaboradores/models.py:415`.
+
+As portas genéricas `gravar` e `atualizar_em_lote` também permitem esse campo na operação `cadastro`; a existência de outro chamador dinâmico que lhes entregue o código é **[nao verificado]**. `app/colaboradores/services/colaborador.py:46`, `app/colaboradores/services/colaborador.py:126`, `app/colaboradores/services/colaborador.py:164`.
+
+O Django admin **não é escritor**: `ColaboradorAdmin` herda `SoLeitura`, que nega inclusão, alteração e exclusão. Os aliases usados para reexibir formulários recusados alteram apenas memória. `app/colaboradores/admin.py:48`, `app/core/admin.py:59`, `app/core/admin.py:62`, `app/core/admin.py:65`, `app/colaboradores/views.py:1117`, `app/colaboradores/views.py:1282`, `app/core/reexibir.py:21`.
+
+Importador especializado do código ou outra migration de dados que o preencha: **[nao verificado]**.
+
+**2. Leitores e ESMERIL-SEMÂNTICA**
+
+Contagem: **20 sítios funcionais**, incluindo leitura do valor, projeção, matrícula serializada e admin; consumidores apenas de status/motivo ficam separados.
+
+| # | Leitor | Suposição |
+|---|---|---|
+| 1 | `classificar_export` | Vazio após `strip()` fica fora; texto não vazio supera esse crivo. `app/folha/export.py:840`, `app/folha/export.py:872` |
+| 2 | `montar_linhas_export` | Aplica `strip().zfill(10)`; não exige número nem trunca. `app/folha/export.py:728` |
+| 3 | Pendências cadastrais | `None`, vazio e só espaços significam ausente. `app/colaboradores/services/cadastro.py:50`, `app/colaboradores/services/cadastro.py:82` |
+| 4 | API `_cadastro_incompleto` | Somente `NULL` ou `''` significam ausente; espaços passam. `app/api/views_mensageria.py:1281` |
+| 5 | Tela de edição | Exibe texto; vazio aparece vazio; JS exige preenchimento. `app/templates/colaboradores/editar.html:62`, `app/templates/colaboradores/editar.html:298` |
+| 6 | Diferença entre exportações | Chave global `strip().zfill(10)`, sem recorte de empresa; colisão sobrescreve. `app/folha/haiku_export.py:115`, `app/folha/haiku_export.py:117` |
+| 7 | Vigia do TXT | Ignora vazio após `strip()`; usa `zfill(10)` para associar motivo. `app/folha/services/vigia_txt.py:114` |
+| 8 | Tradutor do PDF | Exige matrícula numérica no registro de 43 caracteres; resolve nome por empresa e código preenchido com zeros. `app/folha/pdf_export.py:112`, `app/folha/pdf_export.py:147` |
+| 9 | PDF de validação | Código preenchido com zeros vira chave para ID; colisão sobrescreve. `app/folha/validacao_pdf.py:72` |
+| 10 | Montagem da prévia | Copia código do juiz; vazio vira `''`. `app/folha/previa.py:100` |
+| 11 | PDF de retidos | Exibição textual; vazio vira `'-'`. `app/folha/retidos_pdf.py:93` |
+| 12 | Preview do export | Exibição textual escapada; vazio vira `'-'`. `app/folha/views.py:401` |
+| 13 | Prévia de propostas | Código cru no CSV; escapado no HTML; sem validação própria. `app/folha/views.py:736`, `app/folha/views.py:742`, `app/folha/views.py:787`, `app/folha/views.py:811` |
+| 14 | Retrato da folha | Copia para a chave `codigo`; vazio vira `''`. `app/folha/retrato_folha.py:1239` |
+| 15 | Match configurável de holerite | Igualdade exata, com empresa quando há CNPJ; exige exatamente um candidato. `app/templates/holerite/upload_lote_v2.html:46`, `app/holerite/motor.py:218`, `app/holerite/motor.py:225`, `app/holerite/motor.py:298` |
+| 16 | `montar_linha_10` | Converte para texto e aplica `zfill(10)`; não valida. `app/folha/export.py:36` |
+| 17 | `partes_da_linha` | Reconhece matrícula numérica em dez posições de registro com 43 caracteres. `app/folha/export.py:247` |
+| 18 | `validar_layout_dominio` | Exige comprimento 43 e matrícula `.isdigit()`. `app/folha/export.py:273`, `app/folha/export.py:277` |
+| 19 | Agregador do export | Exige registro de 43 caracteres; usa a fatia da matrícula como chave sem exigir que seja numérica. `app/folha/export.py:313`, `app/folha/export.py:319` |
+| 20 | Django admin | Exibe o campo como somente leitura, derivado dos metadados do modelo. `app/colaboradores/admin.py:48`, `app/core/admin.py:50`, `app/core/admin.py:68` |
+
+O raio-x da folha, os relatórios de pendências e “quem cobrar”, e o tique do fechamento **herdam o julgamento**, sem verificar novamente o formato do código. `app/folha/views.py:589`, `app/relatorios/views_pend.py:49`, `app/relatorios/views_pend.py:58`, `app/relatorios/views.py:1660`, `app/ponto/services/fechamento_lista.py:29`.
+
+Os selos de cartão/TXT e PDF/espelho selecionam quem o juiz declarou `entra`; o selo integrado delega à porta, cujo universo também usa esse status. `app/relatorios/management/commands/cartao_x_txt_divergentes.py:53`, `app/relatorios/management/commands/pdf_x_espelho_divergentes.py:58`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:33`, `app/folha/porta_export.py:469`.
+
+**ESMERIL-SEMÂNTICA não fecha:** há texto de até vinte caracteres no modelo, presença de texto no export, matrícula numérica de dez posições no layout e conceitos diferentes de vazio na API e no cadastro. `app/colaboradores/models.py:311`, `app/folha/export.py:872`, `app/folha/export.py:277`, `app/api/views_mensageria.py:1281`, `app/colaboradores/services/cadastro.py:83`.
+
+**3. Validação no cadastro e no modelo**
+
+Os dois inputs são `type="text"`, sem `pattern` nem `maxlength`; os scripts os tornam obrigatórios. Não exigem número ou dez dígitos. `app/templates/colaboradores/admitir.html:58`, `app/templates/colaboradores/admitir.html:204`, `app/templates/colaboradores/editar.html:62`, `app/templates/colaboradores/editar.html:298`.
+
+No servidor, obrigatórios são nome/CPF, com dispensa do CPF na edição; código ausente vira pendência. A lista antiga que contém `codigo_folha` deixou de ser o juiz da gravação. `app/colaboradores/services/cadastro.py:22`, `app/colaboradores/services/cadastro.py:53`, `app/colaboradores/services/cadastro.py:29`, `app/colaboradores/views.py:3225`.
+
+A guarda genérica de tamanho **não cobre o alias normal da tela**: admissão omite o código do dicionário examinado; edição entrega `codigo_folha`, enquanto o helper procura o nome exato `codigo_dominio`. `app/colaboradores/views.py:1180`, `app/colaboradores/views.py:1298`, `app/core/validacao.py:49`.
+
+O modelo declara `CharField(max_length=20, blank=True, default='')`, sem validator específico ou unicidade. Seu `save()` não valida o código. `app/colaboradores/models.py:311`, `app/colaboradores/models.py:400`, `app/colaboradores/models.py:415`.
+
+**4. Exigência do layout e predicado atual**
+
+`montar_linha_10` preenche a matrícula à esquerda até dez posições; código maior permanece maior. O validador exige registro de 43 caracteres, constante `11` e campos numéricos, incluindo matrícula nas posições `[2:12]`. `app/folha/export.py:36`, `app/folha/export.py:45`, `app/folha/export.py:273`, `app/folha/export.py:275`, `app/folha/export.py:277`.
+
+O predicado exato de `sem_codigo_dominio` é:
+
+```python
+item['codigo_dominio'] = (colab.codigo_dominio or '').strip()
+if not item['codigo_dominio']:
+    # status='fora', motivo='sem_codigo_dominio'
+```
+
+Fontes: `app/folha/export.py:840`, `app/folha/export.py:872`. Esse ramo vem depois de rescisão; não pergunta número, tamanho ou duplicidade. `app/folha/export.py:866`, `app/folha/export.py:872`.
+
+**Correção da premissa do anexo:** o layout não verifica repetição nem vazio original. Vazio montado diretamente vira dez zeros; repetição não é comparada entre colaboradores. `app/folha/export.py:36`, `app/folha/export.py:266`. Que ambos devam ser recusados é **[nao verificado]**.
+
+**5. Juízes registrados e predicados vivos**
+
+**Nenhum juiz específico registrado responde “código do Domínio válido?”** O registro aponta `classificar_export` para aprovação/entrada no TXT e para a leitura de tela; o documento aponta o mesmo juiz de entrada. `app/core/juizes.py:329`, `app/core/juizes.py:330`, `app/core/juizes.py:743`, `app/docs/JUIZES.md:118`.
+
+Há **quatro implementações vivas de juízo sobre entrada/forma do código no TXT**, contando sítios, não expressões distintas:
+
+- Presença após `strip()`: `app/folha/export.py:840`, `app/folha/export.py:872`.
+- Matrícula numérica/largura no layout: `app/folha/export.py:273`, `app/folha/export.py:277`.
+- Matrícula numérica/largura no parser comum: `app/folha/export.py:247`.
+- Matrícula numérica/largura no parser do PDF: `app/folha/pdf_export.py:112`.
+
+As verificações de completude cadastral, SQL e `required` do navegador são adicionais, discriminadas acima, fora dessa contagem de juízos de entrada/forma do TXT. `app/colaboradores/services/cadastro.py:83`, `app/api/views_mensageria.py:1281`, `app/templates/colaboradores/admitir.html:204`, `app/templates/colaboradores/editar.html:298`.
+
+**6. Perguntas de lei**
+
+**lei 0 para o PREPARA solicitado:** coerência e consumidor lendo a autoridade já têm lei escrita; juiz único já consta como padrão estrutural. `app/docs/LEIS.md:122`, `app/docs/LEIS.md:95`, `app/docs/CORTES.md:378`.
+
+Política nova para duplicidade, novo motivo de retenção ou nascimento de nova autoridade não ficam decididos por este censo; sua autorização específica é **[nao verificado]**. Regra nova não pode ser deduzida apenas do código existente, e autoridade nova exige frase de nascimento no CORTES. `app/docs/LEIS.md:136`, `app/docs/LEIS.md:69`.
+
+CENSO: escritores 8, leitores 20, predicados vivos 4, lei 0
+
+## 17/11 09:26 · sessao c49d7242cbfa · CLASSE-D-NA-FRENTE-DA-E4D · leitura · origem=Code
+
+A R1 continua por construir: C5 ainda sai sem `data`, e `dias_na_lista` continua aceitando apenas assinaturas datadas. O complemento LU2-07 inclui alteração no vigia; portanto, o cruzamento nominal é **1 com B2+delta e 1 com F2**. `app/escala/services/cadastro_realidade.py:180`, `app/escala/services/cadastro_realidade.py:1047`; listas anexadas [nao verificado].
+
+A cópia não contém `.git` nem `logs/`; não executei git. A identidade do HEAD, os arquivos históricos citados e a correspondência das listas aos commits ficam [nao verificado]. Os cruzamentos abaixo usam os anexos fornecidos [nao verificado]. [nao verificado]
+
+**1. Remedida do brief**
+
+| Referência antiga | Sítio neste HEAD e resultado |
+|---|---|
+| BACKLOG:1942 | Registro agora em `app/docs/BACKLOG.md:1990`; continua “REGISTRADA, não construída”. |
+| `colabs_nunca_bateu:137–173` | Confere: janela anterior até ontem, leitura de `CelulaDia`, exclusão pelo juiz de desligamento e retorno por colaborador com datas. `app/escala/services/cadastro_realidade.py:137`, `app/escala/services/cadastro_realidade.py:166`, `app/escala/services/cadastro_realidade.py:169`. |
+| `_nunca_bateu:176–182` | Confere integralmente o defeito: um item por colaborador, sem `data` nem `dono_do_dia`; três datas no detalhe, depois reticências. `app/escala/services/cadastro_realidade.py:176`, `app/escala/services/cadastro_realidade.py:180`. |
+| C9:342–355 | `_teto_do_dia` começa agora em 344; copia data, vínculo, template e dono da lavra. `app/escala/services/cadastro_realidade.py:344`, `app/escala/services/cadastro_realidade.py:350`. |
+| C12:358–376 | `_cxr_do_motor` começa em 360. **Correção do brief:** admite item sem data, conforme publicado pelo motor; não garante sempre um item datado. `app/escala/services/cadastro_realidade.py:360`, `app/escala/services/cadastro_realidade.py:374`. |
+| C10:383–397 | `_fase_deslocada` começa em 386; preserva leitura da lavra, data e dono. `app/escala/services/cadastro_realidade.py:386`, `app/escala/services/cadastro_realidade.py:393`. |
+| `beco_em_lote:414`; queryset:450–453 | Função permanece em 414; queryset está em 452–455. Continua exigindo célula ativa, `indefinida` e protesto correspondente. `app/escala/services/cadastro_realidade.py:414`, `app/escala/services/cadastro_realidade.py:452`. |
+| Guarda C11:469 | Agora em 472: continua excluindo dia sem pergunta viva ou com porta. Além da âncora terminal, admite M1: todas as vivas respondidas e sem âncora; exige folga não definida. `app/escala/services/cadastro_realidade.py:472`, `app/escala/services/cadastro_realidade.py:502`. |
+| Montagem do dono:503–507; item:512 | Agora montagem em 510–511 e item em 516. Mantém `sem_motor=True`, CXR lavrado e cadastro carregado. `app/escala/services/cadastro_realidade.py:510`, `app/escala/services/cadastro_realidade.py:516`. |
+| `lista:768`; C5:857–863 | `lista` começa em 773; C5 entra pelo `try/except` em 863–868. `app/escala/services/cadastro_realidade.py:773`, `app/escala/services/cadastro_realidade.py:863`. |
+| `um_dono_por_dia:866` | Chamada agora em 871; definição em 971. Continua conciliando assinaturas datadas pelo mesmo juiz. `app/escala/services/cadastro_realidade.py:871`, `app/escala/services/cadastro_realidade.py:971`. |
+| Laço:885–916; acesso perigoso:910–912 | Laço começa em 890; ramos C9/C10/C11/C12 em 892–909; acesso a `_extra['dono']` em 917. **O risco permanece:** acrescentar C5 ao conjunto sem seu ramo próprio causa `KeyError`, fora do `try` da produção C5. `app/escala/services/cadastro_realidade.py:890`, `app/escala/services/cadastro_realidade.py:915`. |
+| `por_ass` ocorrências:941–947 | Agregado agora em 946–952; soma uma ocorrência por assinatura emitida. `app/escala/services/cadastro_realidade.py:921`, `app/escala/services/cadastro_realidade.py:946`. |
+| `DONO_PELO_JUIZ:963` | Agora em 968, ainda somente C9/C10/C11/C12. `app/escala/services/cadastro_realidade.py:968`. |
+| `_dono_resolvido:1014–1022` | Agora em 1019–1027; dono do juiz prevalece, divergência no mesmo nível devolve `None`. `app/escala/services/cadastro_realidade.py:1019`. |
+| `dias_na_lista:1025–1045`; guarda:1042 | Agora começa em 1030; guarda de `data` em 1047. `app/escala/services/cadastro_realidade.py:1030`, `app/escala/services/cadastro_realidade.py:1047`. |
+| C5:78; ação:671; chave no app:35 | Assinatura permanece em 78; ação mudou para 676–678, ainda `TELA_COLAB`; chave no app permanece em 35. `app/escala/services/cadastro_realidade.py:78`, `app/escala/services/cadastro_realidade.py:676`, `app/chamados/services/pergunta_no_app.py:35`. |
+
+Os leitores e autoridades também mudaram de linha:
+
+| Referência antiga | Sítio atual |
+|---|---|
+| `ListaDoAdmin:188–255` | Classe em 166; `dia_do_admin` em 200, `dia_na_lista` em 208, `colab_na_lista` em 226. `app/chamados/services/vigia_fio.py:166`, `app/chamados/services/vigia_fio.py:200`, `app/chamados/services/vigia_fio.py:208`, `app/chamados/services/vigia_fio.py:226`. |
+| `dono_fora_do_fio:274–315`; fio admin:313 | Função em 240; encaminhamento ao fio do admin em 261–262. `app/chamados/services/vigia_fio.py:240`, `app/chamados/services/vigia_fio.py:261`. |
+| `censo_alcance:542` | Começa em 487; universo em 537, vivas em 566, `ps` em 597, causa d em 638, causa e datada sem dono em 642–645, contadores em 656–659. `app/chamados/services/vigia_fio.py:487`, `app/chamados/services/vigia_fio.py:537`, `app/chamados/services/vigia_fio.py:566`, `app/chamados/services/vigia_fio.py:597`, `app/chamados/services/vigia_fio.py:638`, `app/chamados/services/vigia_fio.py:642`, `app/chamados/services/vigia_fio.py:656`. |
+| Chamadores do censo | Conferem os sítios citados: `app/chamados/management/commands/vigiar_fio_morto.py:175`, `app/chamados/management/commands/vigiar_fio_morto.py:181`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:78`. |
+| `porta_da_tarefa:638`; carga:648 | Agora em `app/chamados/services/tarefa_do_dia.py:712` e `app/chamados/services/tarefa_do_dia.py:728`. |
+| `alimentar_portas:1595`; universo:109 | Agora em `app/chamados/juizes.py:1616` e `app/folha/fora_da_folha.py:125`. |
+| Juiz e6:98–110; `InsumosDoDono:113–195` | Corpo decisório e classe conferem; a definição do juiz começa em 53. **A chamada exige o dia:** `dono(self, data)`, não `.dono()` sem argumento. `app/ponto/management/commands/e6_oraculo.py:53`, `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:113`, `app/ponto/management/commands/e6_oraculo.py:182`. |
+| `sem_motor` sem CXR; gate:351–353 | Conferem; ausência de CXR pode produzir `None`. O gate do command continua separado dessa montagem do dono. `app/ponto/management/commands/e6_oraculo.py:189`, `app/ponto/management/commands/e6_oraculo.py:351`. |
+
+Há duas correções materiais adicionais:
+
+- **Leitores diretos:** `contador_nunca_bateu` expande as datas; `vigia_retido_calado.censo` usa apenas o conjunto de colaboradores. Ambos continuam consumindo `colabs_nunca_bateu`, mas o brief erra ao dizer que ambos leem por dia. `app/chamados/management/commands/disparar_perguntas_competencia.py:56`, `app/folha/vigia_retido_calado.py:71`.
+- **Tela/PDF:** o agregado `ocorrencias` passaria a contar dias, mas a etiqueta da tela mostra `colabs`. Tela e PDF mostram `detalhe`, usando ocorrências somente como alternativa; não procede dizer que aquele agregado já determina o número visível nos dois. `app/escala/services/cadastro_realidade.py:949`, `app/templates/escala/cadastro_x_realidade.html:19`, `app/templates/escala/cadastro_x_realidade.html:28`, `app/escala/services/cadastro_realidade.py:1090`.
+
+D1 persiste: C11 exige vivas, enquanto causa d exige ausência delas. Os consumidores compartilhados do predicado continuam nos sítios citados. `app/escala/services/cadastro_realidade.py:472`, `app/chamados/services/vigia_fio.py:638`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:82`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:105`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:51`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:54`.
+
+Conferem o molde do teste de custo, os três sítios do motor e o padrão “lâmpada”; isso confirma sua existência, não uma execução dos testes neste preparo. `app/escala/tests/test_f3_beco1_folga_na_lista.py:395`, `app/ponto/motor_calculo_v2.py:1528`, `app/ponto/motor_calculo_v2.py:1623`, `app/ponto/motor_calculo_v2.py:1997`, `app/docs/GLOSSARIO.md:13`.
+
+Quanto aos números:
+
+| Número do brief | Remedida possível |
+|---|---|
+| 212 dias, 35 colaboradores; competências 97 + 115 | Constam no registro histórico; atualidade neste HEAD [nao verificado]. `app/docs/RELATO.md:393`. |
+| Matriz `13+113+28+14+1+14+(7+4)+9+9=212` | A soma fecha no anexo; pertencimento de cada dia, inclusive os 23+5 dentro dos 28, [nao verificado]. |
+| R1: 126 datados = 13+113; causa d 212→86 | Coerente com a matriz histórica; efeito atual e classificação individual [nao verificado]. Registro: `app/docs/RELATO.md:421`. |
+| CADASTRO 22; sem divergência 13; ramos A/B/C = 168/26/18 | Constam no registro histórico; população atual [nao verificado]. `app/docs/RELATO.md:393`. |
+| Emp1: 46 como subconjunto; alcance 80 | Registro histórico confirma a distinção; nenhuma recontagem pela função real foi possível [nao verificado]. `app/docs/RELATO.md:448`. |
+| j4: 16 SEM_PORTA + 3 SEM_LEITURA = 19 | Contagem do raspado fornecido; correspondência desses 16 com os 126 alcançáveis pela R1 [nao verificado]. |
+
+A pergunta “R1 sozinha ou espera LU2?” **já tem decisão técnica registrada: R1 sozinha**, mantendo D1/D2 em espera. A ordem antiga “CLASSE-D antes de F2” também já recebeu exceção: F2 abre sem esperar CLASSE-D. `app/docs/RELATO.md:421`, `app/docs/RELATO.md:4`.
+
+`competencia_ja_paga` continua registrada como obra; implementação com esse nome nesta cópia [nao verificado]. Não cabe substituí-la por predicado paralelo. `app/docs/BACKLOG.md:1992`, `app/docs/LEIS.md:60`.
+
+O complemento LU2-07 ainda encontra o vigia lendo `empresas_visiveis`, sem `em_rollout`. Cadastro, tela e literal do cron conferem; alterar a consulta global alcançaria o lavrador da folha. `app/chamados/services/vigia_fio.py:517`, `app/colaboradores/queries.py:85`, `app/colaboradores/models.py:45`, `app/templates/colaboradores/empresa_form.html:35`, `app/config/crons.py:17`, `app/folha/management/commands/lavrar_retrato_folha.py:51`.
+
+**2. LU2-08 que permanece aberta e toca a obra**
+
+- **PARCIAL_SEM_PERIODO:** a lei já responde **CADASTRO**, sem julgar batida dentro/fora e nunca FATO_EM_AUSENCIA. A referência antiga `CORTES.md:370` está agora em `app/docs/CORTES.md:386`.
+- **Implementação pendente:** o registro manda levar esse insumo por `InsumosDoDono.dono()`, antes da decisão BATIDA; registra 14 parciais ativos, 10 da CLASSE-D, e resultado diferente se introduzido depois. Esses quantitativos atuais são [nao verificado]. `app/docs/RELATO.md:422`. O juiz atual ainda não recebe insumo específico dessa parcial. `app/ponto/management/commands/e6_oraculo.py:53`, `app/ponto/management/commands/e6_oraculo.py:185`.
+- **FATO_EM_AUSENCIA:** segue sem corte entre CADASTRO, BATIDA e ESTRUTURA; registro menciona 10 na classe e 57 na frota, cuja atualidade é [nao verificado]. `app/docs/RELATO.md:352`, `app/docs/RELATO.md:422`.
+- O número histórico 21 significa 10 parciais + 10 FATO_EM_AUSENCIA + 1 colaborador de teste; não são 21 casos igualmente abertos. `app/docs/RELATO.md:352`.
+
+Para col265, col838 e col407, a origem individual do desconhecimento é **não recuperável pelo raspado fornecido** [nao verificado]. O código publicar `nao_sei` sem rota não identifica qual caminho ocorreu para cada pessoa. `app/chamados/services/tarefa_do_dia.py:719`.
+
+**3. Cruzamento por arquivo**
+
+Sem `.git`, estas são interseções **nominais das listas anexadas**, não diffs autenticados [nao verificado].
+
+| Arquivo que a obra tocaria | B2+delta | F2 | Fundamento do escopo |
+|---|---:|---:|---|
+| `app/escala/services/cadastro_realidade.py` | 0 | 0 | R1 registrada em `app/docs/RELATO.md:421`; presença nas listas [nao verificado]. |
+| Teste R1 em `app/escala/tests/`, nome não definido | — | — | Nome e eventual colisão [nao verificado]; nenhuma entrada desse diretório nas listas anexadas [nao verificado]. | [nao verificado]
+| **`app/chamados/services/vigia_fio.py`** | **1** | **1** | Complemento LU2-07 do anexo [nao verificado]; sítio atual em `app/chamados/services/vigia_fio.py:517`; presença nas duas listas [nao verificado]. |
+| `app/ponto/management/commands/e6_oraculo.py`, se incorporar LU2-08 | 0 | 0 | Complemento registrado em `app/docs/RELATO.md:422`; presença nas listas [nao verificado]. |
+| Testes dos complementos | — | — | Arquivos não nomeados [nao verificado]. | [nao verificado]
+
+O delta nomeia `app/chamados/reconciliador.py` e seus testes; o escritor existe em `app/chamados/reconciliador.py:504`, com transição em `app/chamados/reconciliador.py:524`. Nenhum desses arquivos foi nomeado como alvo da CLASSE-D; nomes dos testes do delta [nao verificado].
+
+Não acrescentei `config/crons.py` ao escopo: o complemento manda registrar sua futura migração, não executá-la nesta obra [nao verificado: anexo]. Também não há obrigação demonstrada de editar o template para rotular o detalhe diário, pois ele lê o texto produzido. `app/templates/escala/cadastro_x_realidade.html:28`.
+
+**Contagem nominal conhecida: B2+delta 1; F2 1**, ambos pelo mesmo `app/chamados/services/vigia_fio.py` [nao verificado: listas anexadas]. R1 isolada daria 0/0; o brief completo inclui o complemento local LU2-07 [nao verificado: anexo].
+
+**4. Perguntas de lei**
+
+**lei: qual dono deve responder por FATO_EM_AUSENCIA — CADASTRO, BATIDA ou ESTRUTURA?** O registro mantém expressamente essa escolha aberta; L-099 define os donos e destinos, mas não resolve essa classe específica. `app/docs/RELATO.md:352`, `app/docs/RELATO.md:422`, `app/docs/LEIS.md:122`.
+
+Para o recorte R1 + exclusão local LU2-07 + parcial sem período, não identifiquei outra lei faltante: origem e autoridade única estão escritas; parcial sem período já é CADASTRO; R1 independente já foi decidida. D1/D2 permanecem desenho reservado, sem solução presumida neste preparo. `app/docs/LEIS.md:59`, `app/docs/LEIS.md:60`, `app/docs/CORTES.md:386`, `app/docs/RELATO.md:421`.
+
+A contagem final considera o preparo integral e sua pendência LU2-08; não declara os 16 SEM_PORTA resolvidos. `app/docs/RELATO.md:422`; cobertura individual [nao verificado].
+
+PREPARO: lei 1; cruzamento B2+delta 1, F2 1 -- app/chamados/services/vigia_fio.py [nao verificado: listas anexadas]
+
+## 17/11 09:26 · sessao 1b03fefdaae1 · E4C-F2 · verificador · origem=Code
+
+1. **[bloqueia] O delta quebra a aplicação do mutante M13.** `_incluir_validadas` exige exatamente um `PerguntaDisputa.objects.filter`; agora `_ancoradas` contém dois. Reproduzido com AST em memória: ocorre `RuntimeError: mutante m13_inclui_validadas sem filtro unico; isto nao e mordida`, antes da asserção de negócio. O próprio apoio proíbe contar esse erro como mordida. Fontes: `app/chamados/models.py:355`, `app/chamados/models.py:357`, `app/chamados/tests/test_cortes_f2_f9_m13.py:25`, `app/chamados/tests/test_cortes_f2_f9_m13.py:31`, `app/chamados/tests/cortes_f2_f9_apoio.py:81`, `app/chamados/tests/cortes_f2_f9_apoio.py:93`.
+
+   O GREEN normal não revela a quebra: sem o seletor do mutante, o transformador não roda. É necessário adaptar o mutador para retirar somente a face, conservar a âncora e voltar a morrer na asserção de negócio. Fontes: `app/chamados/tests/cortes_f2_f9_apoio.py:84`, `app/chamados/tests/test_cortes_f2_f9_m13.py:45`.
+
+2. **[nota] O conjunto e a ordem são equivalentes, por inspeção do código.** A transformação conserva `face(p) AND âncora(p)`: a subquery enumera as PKs pela mesma âncora, e a face continua aplicada à pergunta externa. Fontes: `app/chamados/models.py:355`, `app/chamados/models.py:357`, `app/chamados/models.py:3513`.
+
+   | Caso | Resultado nas duas formas |
+   |---|---|
+   | Destino é outro chamado, mas `disputa.chamado=self` | Fora: o fallback exige destino nulo. `app/chamados/models.py:356` |
+   | Destino nulo e `disputa.chamado=self` | Entra se passar pela face. `app/chamados/models.py:356`, `app/chamados/models.py:357` |
+   | Destino nulo e `disputa.chamado` nulo | Fora. Esse chamado da disputa pode ser nulo. `app/chamados/models.py:356`, `app/chamados/models.py:1835` |
+   | Destino nulo e própria disputa nula | Fora; além disso, `PerguntaDisputa.disputa` não admite nulo no modelo. `app/chamados/models.py:2552`, `app/chamados/models.py:356` |
+
+   Não há join multiplicador nessa composição: a âncora percorre FK, a face usa `Exists` e os relacionamentos carregados são FKs. Portanto o `IN` não elimina duplicatas que a versão anterior produzisse nesse caminho. Fontes: `app/chamados/models.py:2552`, `app/chamados/models.py:3503`, `app/chamados/models.py:3505`, `app/chamados/models.py:358`.
+
+   Permanecem o mesmo `select_related`, a materialização imediata por `list` e a ordenação explícita por `pk`. A subquery não é avaliada separadamente: há um statement para chamado com PK; sem PK, retorna `[]` antes da consulta. Fontes: `app/chamados/models.py:348`, `app/chamados/models.py:355`, `app/chamados/models.py:357`, `app/chamados/models.py:358`, `app/chamados/models.py:359`.
+
+3. **[nota] Há cinco chamadores diretos de produção.**
+
+   | Chamador | Local da chamada |
+   |---|---|
+   | `_gravar_estado` | `app/chamados/models.py:229` |
+   | `_vivas_ancoradas` | `app/chamados/models.py:341` |
+   | `_plano_pergunta_viva` | `app/chamados/models.py:393` |
+   | `_perguntas_relavradas_ou_ressuscitadas` | `app/chamados/services/disputa_emissao.py:1821` |
+   | `_resolver_perguntas_por_chamado_resolvido` | `app/chamados/services/disputa_emissao.py:1962` |
+
+   Os testes também chamam diretamente: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:411`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:488`, `app/chamados/tests/test_cortes_f2_f9_m13.py:45`, `app/chamados/tests/test_cortes_f2_f9_m13.py:54`.
+
+   Nenhum desses consumidores recebe um QuerySet preguiçoso ou acrescenta `select_for_update`: recebem a lista pronta. O cache plano→núcleo continua reaproveitando essa lista. Fontes: `app/chamados/models.py:357`, `app/chamados/models.py:222`, `app/chamados/models.py:229`, `app/chamados/models.py:394`.
+
+   Há dependência de contagem nos selos: o novo exige uma consulta; o chokepoint mede `reconciliar` sem perguntas e cruzando a fronteira com três perguntas. A subquery preserva a estrutura de um statement, mas o resultado desses testes nesta execução é **[nao verificado]**. Fontes: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:489`, `app/ponto/tests/test_selo_chokepoint_escrita.py:363`, `app/ponto/tests/test_selo_chokepoint_escrita.py:369`.
+
+4. **[fila] O teste novo morde a forma anterior, mas não distingue ato de projeção.** [nao verificado]
+
+   **Voltar ao OR no mesmo WHERE:** falha, por inspeção, na exigência literal de `"chamados_perguntadisputa"."id" IN (SELECT`. A face contém `Exists`, não esse `IN` da âncora. Fontes: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:493`, `app/chamados/models.py:3503`, `app/chamados/models.py:3505`.
+
+   **Trocar somente a face por `Q(validada_em__isnull=True)`, conservando a subquery:** esse mutante passa no teste novo, por inspeção. As únicas fixtures são uma pergunta sem carimbo e outra com carimbo; ambas fazem ato/passivo e projeção concordarem. Fontes: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:484`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:486`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:490`, `app/chamados/models.py:3509`.
+
+   Isso não significa sobrevivência à suíte inteira: o M13 normal já exige excluir uma pergunta validada somente no ato, com projeção vazia. Essa asserção distingue as fontes; seu mecanismo de certificação por mutante é que foi quebrado pelo delta, conforme achado 1. Fontes: `app/chamados/tests/test_cortes_f2_f9_m13.py:42`, `app/chamados/tests/test_cortes_f2_f9_m13.py:43`, `app/chamados/tests/test_cortes_f2_f9_m13.py:45`. Execução Django dos dois mutantes: **[nao verificado]**.
+
+5. **[nota] Checklist das classes de reprovação, restrito a este delta.**
+
+   | Classe | Avaliação |
+   |---|---|
+   | Segundo juiz duplicando autoridade | Não introduzido: o retorno continua chamando a mesma face, que nega `q_validada_pelo_ato`. `app/chamados/models.py:357`, `app/chamados/models.py:3515` |
+   | Segundo escritor fora da porta | Não introduzido pelo método alterado: ele apenas consulta. As nove identidades de `CORPO` correspondem ao AST real; `EXCECOES` segue vazio. `app/chamados/models.py:355`, `app/chamados/tests/e4b_c12_ast.py:18`, `app/chamados/tests/e4b_c12_ast.py:29` |
+   | Relógio fora da borda | Nenhuma leitura de relógio acrescentada no caminho alterado. `app/chamados/models.py:348`, `app/chamados/models.py:355`, `app/chamados/models.py:359` |
+   | Derivação paralela de fonte única | Não acrescentada: a subquery trata somente da âncora; a validação permanece na face existente. `app/chamados/models.py:355`, `app/chamados/models.py:357` |
+   | Selo/RED sem mordida | **Reprovado na aplicação do M13**; o novo teste tem mordida estrutural, mas admite o mutante da projeção isoladamente. `app/chamados/tests/test_cortes_f2_f9_m13.py:31`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:486`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:493` |
+   | Ordem de trava | Nenhuma inversão introduzida: `_ancoradas` continua leitura simples; as travas explícitas seguem na porta, na ordem Colaborador→Disputa→Chamado→Pergunta. `app/chamados/models.py:357`, `app/chamados/models.py:2802`, `app/chamados/models.py:2811`, `app/chamados/models.py:2824`, `app/chamados/models.py:2828`, `app/chamados/services/disputa_emissao.py:1902` |
+   | Campo com dois significados | Nenhum significado novo introduzido. Há documentação residual incorreta: `_ancoradas` ainda descreve seu universo como `validada_em` nulo, embora use a sequência do ato. `app/chamados/models.py:346`, `app/chamados/models.py:357` |
+
+6. **[nota] O ganho de desempenho não está provado pelo dado fornecido.** Tempos, estimativa de linhas e custo de JIT aparecem como alegações nos comentários; o teste cobra quantidade, resultado e fragmento SQL, sem medir plano ou tempo. Ganho de 1,8 s→0,02 s, igualdade observada em produção e execução física da face “só sobre a âncora”: **[nao verificado]**. Fontes: `app/chamados/models.py:352`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:476`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:487`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:493`.
+
+## 17/11 09:25 · sessao c83ef10efcdf · - · - · origem=Ronald (tmux)
+
+Contagem proposta: **20 leitores funcionais = 15 leitores de valor/projeção + 4 funções da matrícula serializada + admin genérico**, conforme os sítios enumerados abaixo. Não inclui leitores apenas de status/motivo, testes, documentação ou POST para reexibição. [app/folha/export.py:728; app/core/admin.py:50]
+
+| # | Leitor | Suposição |
+|---|---|---|
+| 1 | `classificar_export`, app/folha/export.py:840 e :872 | Normaliza `(codigo_dominio or '').strip()`; vazio fica fora por `sem_codigo_dominio`; qualquer texto não vazio supera esse crivo. |
+| 2 | `montar_linhas_export`, app/folha/export.py:728 | `strip().zfill(10)`; completa com zeros, não limita a dez caracteres nem exige número. |
+| 3 | `pendencias_do_colaborador`, app/colaboradores/services/cadastro.py:74 | Alias em :50; ausente se `None`, `''` ou string só de espaços (:82-85); não exige número/tamanho. |
+| 4 | API `_cadastro_incompleto`, app/api/views_mensageria.py:1273 | Só `NULL` ou `''` são ausentes (:1281); espaços passam. |
+| 5 | Template de edição, app/templates/colaboradores/editar.html:62 | Mostra código como texto; vazio usa `''`; JS torna obrigatório (:298-299), sem exigir número/tamanho. |
+| 6 | `diferenca_entre_exportacoes`, app/folha/haiku_export.py:115 | Exclui código `''`/NULL e monta chave global `strip().zfill(10)` (:117); repetidos sobrescrevem no dicionário, sem filtro de empresa. |
+| 7 | `_motivo_por_matricula`, app/folha/services/vigia_txt.py:98 | Lê projeção; código vazio após strip é ignorado; demais viram chave `zfill(10)` (:114-116). |
+| 8 | `traduzir_texto`, app/folha/pdf_export.py:69 | Parser exige reg10 de 43 caracteres, const11 e matrícula `.isdigit()` (:112-115); volta matrícula→nome por empresa com `strip().zfill(10)` (:147-150), sem checar colisões. |
+| 9 | `gerar_pdf_validacao_bytes`, app/folha/validacao_pdf.py:58 | Dicionário matrícula→ID usa `str(código or '').strip().zfill(10)` (:70-72); vazio vira zeros e colisão sobrescreve. |
+| 10 | `montar_previa`, app/folha/previa.py:28 | Copia a projeção do juiz, vazio→`''`; não valida (:100). |
+| 11 | `gerar_pdf_retidos_bytes`, app/folha/retidos_pdf.py:41 | Exibição textual; vazio→`'-'`, sem validação (:93). |
+| 12 | `preview_exportacao`, app/folha/views.py:313 | Exibe a projeção textual escapada, vazio→`'-'` (:401). |
+| 13 | `previa_proposta`, app/folha/views.py:701 | CSV usa valor cru (:736, :742); HTML usa código escapado, vazio→`'-'` (:787, :811). CSV/HTML contam como uma função. |
+| 14 | `montar_linhas`, app/folha/retrato_folha.py:1174 | Copia projeção para chave `codigo`, vazio→`''`, sem validar (:1239). |
+| 15 | `_casar` do holerite configurável, app/holerite/motor.py:177 | Selecionável `codigo_dominio` no template upload_lote_v2.html:46 e view app/holerite/views.py:1741; `processar` aceita override (:298); filtro de igualdade com empresa quando há CNPJ, contando 0/1/mais de um candidato (:218-230). Padrão Domínio atual usa nome completo (:161). |
+| 16 | `montar_linha_10`, app/folha/export.py:34 | `str(matricula).zfill(10)` (:36), sem validar número ou truncar. |
+| 17 | `partes_da_linha`, app/folha/export.py:224 | Reg10 só é reconhecido com 43 caracteres e matrícula de dez posições `.isdigit()` (:247-252). |
+| 18 | `validar_layout_dominio`, app/folha/export.py:266 | Reg10 exige 43 caracteres (:273-274) e posições 2:12 numéricas (:277-279). Não verifica código repetido ou vazio na origem. |
+| 19 | `agregar_export_dominio`, app/folha/export.py:310 | Só agrega reg10 de 43 caracteres (:313); matrícula é fatia 2:12 usada como chave (:319); não verifica que matrícula seja numérica. |
+| 20 | Django admin de Colaborador, app/colaboradores/admin.py:47 | Registro `ColaboradorAdmin(SoLeitura, ModelAdmin)` (:48); campos derivados integralmente de `_meta.fields` em app/core/admin.py:46-50 e tornados readonly em :68-75. O dado é visível; add/change/delete negados (:59-66). |
+
+**Consumidores do julgamento, fora dos 20:** raio-x da folha chama juiz e usa status/motivo, sem revalidar código (app/folha/views.py:589-600); relatório pendências cadastrais herda especificamente `sem_codigo_dominio` (app/relatorios/views_pend.py:49 e :53-59); “quem cobrar” herda o juiz e traduz o motivo (app/relatorios/views.py:1660-1671); tique da lista de fechamento traduz motivo do juiz (app/ponto/services/fechamento_lista.py:25-36). Selos `cartao_x_txt_divergentes` e `pdf_x_espelho_divergentes` selecionam `status='entra'`, sem validar código (app/relatorios/management/commands/cartao_x_txt_divergentes.py:53-58; app/relatorios/management/commands/pdf_x_espelho_divergentes.py:58-61); selo integrado delega a `porta_export.medir` (app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:33-38), cujo universo também é `status='entra'` (app/folha/porta_export.py:469-471).
+
+**Suportes dinâmicos separados:** `preencher_em_memoria` recebe alias `codigo_folha→codigo_dominio`, mas escreve somente na cópia em memória para reexibir POST (app/colaboradores/views.py:1116-1117, :1281-1282; app/core/reexibir.py:21-49). Template de admissão lê apenas o POST, não um código persistido (app/templates/colaboradores/admitir.html:58), e também impõe `required` via JS (:204-205).
+
+**Guarda genérica de tamanho não cobre o campo na tela normal:** admissão omite código de `_dados_tam` (app/colaboradores/views.py:1180-1185); edição passa o nome do POST `codigo_folha` sem remapeamento (app/colaboradores/views.py:1298-1300), enquanto `erros_de_tamanho` só examina campos cujo nome do modelo está no dicionário (app/core/validacao.py:49-54). Portanto `max_length=20` não equivale a validação da porta de cadastro para esse alias (app/colaboradores/models.py:311-314).
+
+**Predicados principais de aptidão/forma TXT: quatro implementações vivas:** não vazio após strip (`classificar_export`, app/folha/export.py:840 e :872); matrícula numérica/largura via layout (`validar_layout_dominio`, app/folha/export.py:273-279); matrícula numérica/largura via parser comum (`partes_da_linha`, app/folha/export.py:247-252); matrícula numérica/largura via parser do PDF (`traduzir_texto`, app/folha/pdf_export.py:112-115). As perguntas de completude cadastral, SQL da API e `required` do navegador são decisões adicionais com semânticas diferentes (app/colaboradores/services/cadastro.py:82-85; app/api/views_mensageria.py:1281; app/templates/colaboradores/editar.html:298-299).
+
+ESMERIL-SEMÂNTICA não fecha: cadastro/modelo comportam texto de até vinte caracteres, export usa existência de texto, layout exige matrícula numérica de dez posições e API distingue espaços de vazio de forma diferente do juiz (app/colaboradores/models.py:311-314; app/folha/export.py:840, :872, :277-279; app/api/views_mensageria.py:1281).
+
+Selo de teste existente confirma apenas código vazio fora; não demonstra que texto não numérico seja barrado (app/folha/tests/test_classificar_export.py:40-45). Testes não foram executados. [não verificado]
+
+## 17/11 09:25 · sessao f62e78945988 · E4C-F1-B2 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 6:** `savepoint + raise`, sozinho, não prova “nada de folha muda”: o fechamento agenda efeitos por `on_commit`, e o medidor existente recusa justamente a retomada de regularizações. (`app/chamados/signals.py:146`; `app/chamados/services/foto_e4b.py:37`.)
+
+Nas referências ao aval transcrito, conto “aval Ronald…” como linha 1; os itens 1/2/3/6/7 ficam nas linhas 2/3/4/7/8. Existência dos arquivos originais dos anexos nesta cópia: **[nao verificado]**.
+
+**Item 1 — CONFERE, com obrigações concretas de implementação.**
+
+1. **Premissas:** existe `veto_de_competencia(empresa, dias, memo)`. Recebe empresa, coleção de datas e dicionário de cache; não recebe nem seleciona perguntas. Retorna `None` se qualquer data for desconhecida; caso contrário, `True` se alguma competência estiver entregue, ou `False`. Não contém recorte por motivo, família ou fora163. (`app/chamados/services/fio.py:1357`; `app/chamados/services/fio.py:1365`.)
+
+   Ele compõe **dia → janela da empresa → K6**. K6 pergunta pela existência de `ExportacaoDominio` vigente não invalidada; C21 pergunta se há instante **e** texto após trim. Portanto, é **o mesmo K6, não um segundo predicado de entrega; C21 é outra pergunta**. (`app/chamados/services/vigia_fio.py:802`; `app/folha/export.py:588`; `app/core/juizes.py:306`; `app/core/juizes.py:343`; `app/chamados/juizes.py:1552`.)
+
+2. **Colisão:** consultar essa composição no escritor respeita juiz único. Copiar `_k6_que_barra` perderia alcance, porque ela consulta somente metades de intervalo fora163. A cerca específica também não transforma K6 em veto universal de escrita: L-113 alterou L-092 e revogou a recusa genérica de recálculo em exportada. (`CLAUDE.md:182`; `app/chamados/services/materializacao.py:792`; `app/chamados/services/materializacao.py:805`; `app/docs/LEIS.md:155`.)
+
+3. **Literal e unidade:** a unidade externa é `transaction.atomic()` em `_retratar:524`, abrangendo transição, rejeição da justificativa, resolver e ocorrência. A retenção atual ocorre **antes** desse bloco e pode registrar auditoria. `transicionar_com_pauta` está em `services/fecho_runtime.py:146`; chama `ch.reconciliar` e pode persistir Pauta antes de retornar. A consulta precisa anteceder essa chamada. (`app/chamados/reconciliador.py:520`; `app/chamados/reconciliador.py:524`; `app/chamados/reconciliador.py:531`; `app/chamados/reconciliador.py:538`; `app/chamados/services/fecho_runtime.py:165`; `app/chamados/services/fecho_runtime.py:168`.)
+
+   O censo mínimo de alcance é:
+
+   | Ramo | Seleção/efeito que precisa entrar |
+   |---|---|
+   | Resolver direto | `chamado_destino=ch`, materialização nula, disputa aberta; inclui validadas. (`app/chamados/services/disputa_emissao.py:1928`; `app/chamados/services/disputa_emissao.py:1950`.) |
+   | Ancoradas/reabertura | Destino igual ao chamado ou destino nulo com pai da disputa igual ao chamado; reabrir pode ressuscitar e relavrar. Existe enumerador específico desse ramo. (`app/chamados/models.py:344`; `app/chamados/services/disputa_emissao.py:1814`; `app/chamados/services/disputa_emissao.py:1969`.) |
+   | Relavra | Destino igual ao chamado, validação nula, **sem filtro de materialização ou disputa aberta**. (`app/chamados/models.py:303`; `app/chamados/models.py:309`.) |
+   | S143/HX | Todas as disputas abertas do colaborador, inclusive perguntas sem destino de outras disputas órfãs; pode carimbar e fechar. (`app/chamados/services/disputa_emissao.py:2048`; `app/chamados/services/disputa_emissao.py:2057`; `app/chamados/services/disputa_emissao.py:2082`; `app/chamados/services/disputa_emissao.py:2114`.) |
+   | Cascata | Fechar disputa pode reconciliar outro pai; saves de chamado e justificativa também acordam cartório. (`app/chamados/signals.py:43`; `app/chamados/signals.py:218`; `app/ponto/signals.py:165`.) |
+
+   Logo, unir apenas “perguntas do destino” e “perguntas da disputa original” é insuficiente. A enumeração precisa acompanhar a cascata dos escritores, deduplicando identidades; suficiência do futuro delta: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:2050`; `app/chamados/signals.py:43`.)
+
+   Duas armadilhas fecham sem juiz novo: passar **lista/tupla**, porque os dois `any` consomem um gerador; e tratar `None` explicitamente. Em `[None, dia_ENTREGUE]`, o retorno é `None`, portanto `if veto:` falharia. Já existe o padrão conservador `is not False`. (`app/chamados/services/fio.py:1365`; `app/chamados/services/fio.py:1367`; `app/chamados/services/fio.py:1116`; `app/chamados/services/fio.py:1118`.)
+
+4. **Exportada/dinheiro/!:** a cerca antes da transição preserva os efeitos declarados, inclusive evita chegar à escrita de Pauta desse ato. Não prova ausência de efeitos financeiros nos caminhos permitidos, que ainda podem fechar disputas e agendar retomadas; isso depende da medida do item 6. (`app/chamados/services/fecho_runtime.py:168`; `app/chamados/services/disputa_emissao.py:2114`; `app/chamados/signals.py:146`.)
+
+**Item 2 — CONFERE; o indireto é montável, mas o RED ainda não está demonstrado.**
+
+1. **Premissas:** há dois desenhos concretos para (b):
+
+   - **Receiver, sem vínculo direto:** pergunta sem destino em outra disputa órfã do mesmo colaborador, C6 morta, com dia pertencente a competência entregue. S143 a alcança pela varredura global. A fixture existente já constrói a órfã sem destino e verifica seu carimbo/fechamento; a adaptação para ENTREGUE e entrada por `_retratar` ainda é **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:2048`; `app/chamados/tests/test_e4b_c6_orm.py:82`; `app/chamados/tests/test_e4b_c6_orm.py:86`; `app/chamados/tests/test_e4b_c6_orm.py:120`.)
+   - **Relavra, fora do resolver direto:** pergunta ENTREGUE com destino no chamado, validação nula, materialização preenchida e disputa fechada. Fica fora do resolver direto, mas pode entrar na relavra da travessia de estado. Mesmo sem mudar o veredito, a lavra escreve `julgado_em`; relógio posterior ao snapshot torna o efeito observável. Execução desse cenário: **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1928`; `app/chamados/models.py:303`; `app/chamados/models.py:309`; `app/chamados/veredito_lavrado.py:270`.)
+
+2. **Colisão:** exigir RED anterior à cura e mutante que morde coincide com LEI-AKITA; nenhuma colisão identificada nesse requisito. (`CLAUDE.md:28`; `CLAUDE.md:194`.)
+
+3. **Literal:** “nada muda” precisa ser medido na **unidade de `_retratar`**. O consumidor do evento já rejunta células e carimba perguntas antes dela, além de executar outros escritores depois. A cerca localizada não garante imutabilidade do evento inteiro. Os casos (a)/(b)/(c), os snapshots e a mordida do mutante ainda são **[nao verificado]**. (`app/chamados/reconciliador.py:1366`; `app/chamados/reconciliador.py:1368`; `app/chamados/reconciliador.py:1378`; `app/chamados/reconciliador.py:1386`.)
+
+4. **Exportada/dinheiro/!:** o teste deve verificar também lavra e efeitos indiretos; conferir apenas `materializada_em` deixaria passar escrita em ENTREGUE pela relavra. Resultado financeiro real: **[nao verificado]**. (`app/chamados/veredito_lavrado.py:270`; `app/chamados/veredito_lavrado.py:275`.)
+
+**Item 3 — CONFERE.**
+
+1. **Premissas:** construtor → verificador → suíte inteira → opus final corresponde ao fluxo vigente. (`CLAUDE.md:362`; `CLAUDE.md:372`; `CLAUDE.md:378`.) [nao verificado]
+2. **Colisão:** reutilizar K6 e conservar C21 respeita as autoridades registradas e a proibição de duplicação/fallback. (`app/core/juizes.py:306`; `app/core/juizes.py:343`; `CLAUDE.md:17`.)
+3. **Literal:** “opus final só do delta” não pode excluir escritores e leitores dos campos/funções atingidos: a regra inclui esses sítios mesmo fora do diff. Commit, suíte e aprovação futuros: **[nao verificado]**. (`CLAUDE.md:379`; `CLAUDE.md:380`.) [nao verificado]
+4. **Exportada/dinheiro/!:** o procedimento de construção não amplia autorização de aplicação; o escopo e as condições continuam literais. (`CLAUDE.md:37`; `CLAUDE.md:265`.)
+
+**Item 6 — PROCEDE.**
+
+1. **Premissas:** as três condições são verificáveis em princípio, mas o dado fornecido não apresenta opus final do delta, hash antes/depois do `FechamentoMensal` exportado nem resultado da medida do item 4: **[nao verificado]**. Há fotografia dos modelos financeiros e captura de DML aproveitáveis para a medida. (`app/chamados/services/foto_e4b.py:18`; `app/chamados/services/foto_e4b.py:87`.)
+
+2. **Colisão:** o caráter condicional do pouso coincide com a regra vigente. Tratar o aval como `!` já liberado, sem fechar as três condições, colidiria com o escopo literal. (`anexo corte_b2_cerca_no_escritor_1711.txt:7`; `CLAUDE.md:37`; `CLAUDE.md:265`.) [nao verificado]
+
+3. **Condição que não fecha com o protocolo simples:** `fechar` salva a disputa; o receiver agenda retomada de regularizações confirmadas do colaborador. Essa retomada pode criar batida e agendar recálculo, inclusive em competência exportada. Esses efeitos não rodam automaticamente numa transação terminada por rollback. (`app/chamados/models.py:2027`; `app/chamados/signals.py:146`; `app/chamados/services/regularizacao_ext.py:219`; `app/chamados/services/regularizacao_ext.py:77`; `app/ponto/services/fechamento.py:1790`; `app/ponto/services/fechamento.py:1824`.)
+
+   O instrumento existente **recusa** essa retomada; não serve para executá-la e concluir “nada mudou”. A prova precisa contemplar os callbacks reais e seus descendentes, comparar o estado após os efeitos **antes do desfazimento**, e registrar qualquer efeito não coberto como impedimento. Hash igual somente depois do rollback não demonstra ausência de escrita. (`app/chamados/services/foto_e4b.py:37`; `app/chamados/services/foto_e4b.py:57`; `app/chamados/services/foto_e4b.py:65`; `app/chamados/services/foto_e4b.py:77`.)
+
+4. **Exportada/dinheiro/!:** há caminho concreto para alcançar dinheiro; sua ocorrência nas disputas raspadas é **[nao verificado]**. Hash do TXT/`ExportacaoDominio` não substitui fotografia/hash do `FechamentoMensal`, `DiaPago` e células exigidos pela medida. Portanto, o ramo “nada de folha muda” permanece **[nao verificado]**. (`app/folha/export.py:572`; `app/chamados/services/foto_e4b.py:25`; `anexo corte_b2_cerca_no_escritor_1711.txt:5`.)
+
+**Item 7 — CONFERE como continuação condicionada ao rebase e à recertificação.**
+
+1. **Premissas:** a comparação encontrou `reconciliador.py` idêntico entre B2 e `wt-f2-073854`, inclusive `_retratar`. Não há sobreposição textual atual com uma cerca inserida somente nesse ponto. Conflito com o delta ainda inexistente: **[nao verificado]**. (`app/chamados/reconciliador.py:520`; `/home/ronald/wt-f2-073854/app/chamados/reconciliador.py:520`.)
+
+2. **Colisão:** a exceção nominal fornecida substitui a parada da F2 por mudança da B2. Conferência do texto integral do aval anterior: **[nao verificado]**. A recertificação da árvore resultante continua obrigatória. (`anexo corte_b2_cerca_no_escritor_1711.txt:8`; `CLAUDE.md:320`.)
+
+3. **Literal:** existe interação semântica em `models.py`: F2 troca a seleção da relavra e de `_ancoradas` para `q_nao_validada_pelo_ato`; também altera a leitura da retenção para a sequência de decisões. A enumeração da cerca deve ser reavaliada nessa base. Se o delta compartilhar enumeração em `models.py`, haverá arquivo comum; isso ainda não prova conflito de merge. (`/home/ronald/wt-f2-073854/app/chamados/models.py:315`; `/home/ronald/wt-f2-073854/app/chamados/models.py:351`; `/home/ronald/wt-f2-073854/app/chamados/models.py:1945`; `CLAUDE.md:309`.)
+
+4. **Exportada/dinheiro/!:** continuar construindo não dispensa as condições do pouso nem autoriza efeitos adicionais em exportada. Resultado da árvore combinada: **[nao verificado]**. (`anexo corte_b2_cerca_no_escritor_1711.txt:7`; `anexo corte_b2_cerca_no_escritor_1711.txt:8`; `CLAUDE.md:265`.) [nao verificado]
+
+VEREDITO: item 1 CONFERE; item 2 CONFERE; item 3 CONFERE; item 6 PROCEDE; item 7 CONFERE -- item 6: rollback simples e medidor que recusa a retomada não provam os efeitos pós-commit nem fecham “nada de folha muda” (app/chamados/signals.py:146; app/chamados/services/foto_e4b.py:37).
 
 ## 17/11 09:25 · sessao 0b5e2282f266 · - · - · origem=Ronald (tmux)
 
@@ -273,129 +679,4 @@ VEREDITO: REPROVA -- predicado duplicado, erro de entrada pode virar zero/ok e a
 - Para **R1 estrito**, a sugestão é **lei 0**: origem, autoridade única e dono estão escritos em `app/docs/LEIS.md:59`, `app/docs/LEIS.md:60`, `app/docs/LEIS.md:122`; o pouso independente consta em `app/docs/RELATO.md:421`.
 - Se incluir a resolução do complemento LU2-08, registrar **lei: qual dono L-099 deve responder por FATO_EM_AUSENCIA**. O próprio registro mantém essa escolha aberta: `app/docs/RELATO.md:352`, `app/docs/RELATO.md:422`.
 
-## 17/11 09:19 · sessao c5a0e7256b78 · ENSAIO-DA-FOLHA-11 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — itens 1 e 4:** o caminho do lote existe e o defeito do export confere, mas faltam fechar a execução completa de B1 e as condições de abertura da obra lateral. (`app/relatorios/lote_espelho.py:132`; `bin/sombra.sh:490`; `app/folha/export.py:872`; `app/docs/BACKLOG.md:2088`.)
-
-*Referências a `respostas_1711_0915.txt` são ao anexo colado, contando “aval Ronald” como linha 1.*
-
-**Item 1 — B1 na sombra**
-
-1. **As premissas conferem parcialmente.** A view chama `pedir` e `disparar`; este lança o command, que chama `executar` e o mesmo gerador de PDF do lote. O command exige lote previamente criado; não cria o pedido sozinho. (`app/relatorios/views.py:1227`; `app/relatorios/views.py:1246`; `app/relatorios/lote_espelho.py:127`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:44`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:57`; `app/relatorios/lote_espelho.py:205`.)
-
-   **O filho herda as settings da sombra, por inferência do código:** `Popen` não fornece `env`; o container define `DJANGO_SETTINGS_MODULE=config.settings.sombra`; `manage.py` preserva esse valor com `setdefault`. Essas settings fixam banco `sombra`, host `sombra_db`; o subprocesso recebe o schema da conexão do pai. Configuração efetivamente usada numa execução: **[nao verificado]**. (`app/relatorios/lote_espelho.py:126`; `app/relatorios/lote_espelho.py:132`; `bin/sombra.sh:184`; `app/manage.py:9`; `app/config/settings/sombra.py:29`; `app/config/settings/sombra.py:47`; `app/config/settings/sombra.py:49`.)
-
-2. **O novo aval resolve os pontos de autorização anteriores no escopo declarado.** Autoriza função/command sem POST, trava inteira, saída por `/sombra` e as duas operações da lavra. A exigência específica de smoke HTTP em banco `juliani_ref_*` não se aplica à chamada direta proposta; continuam valendo banco da sombra, CPUSET de teste e escopo literal. (`respostas_1711_0915.txt:2`, anexo; `CLAUDE.md:205`; `CLAUDE.md:206`; `CLAUDE.md:87`; `CLAUDE.md:37`.) [nao verificado]
-
-3. **A espera e a retirada do PDF ainda não fecham automaticamente.**
-
-   - **`--rodar` não espera especificamente o filho do `Popen`.** `disparar` abre uma nova sessão e devolve apenas o PID, sem `wait`; `--rodar` executa o script principal dentro de `sh -c`. Não há nesse caminho uma espera adicional pelo job destacado. `start_new_session=True` não demonstra sobrevivência ao encerramento do container `--rm`. (`app/relatorios/lote_espelho.py:132`; `app/relatorios/lote_espelho.py:146`; `bin/sombra.sh:183`; `bin/sombra.sh:191`; `bin/sombra.sh:490`.)
-   - **Como segurar a trava inteira:** usar o próprio `--rodar`, que adquire o `flock` antes da lavra, e manter o script em primeiro plano até terminar geração, conferência e retirada do PDF. O descritor 8 permanece aberto no processo do host durante essa chamada. O caminho concreto mais direto é `pedir` seguido de chamada síncrona ao command, com `schema='juliani'`, em vez de destacar o job. Isso é uma receita possível pelo código; script B1 que a implemente: **[nao verificado]**. (`bin/sombra.sh:487`; `bin/sombra.sh:489`; `bin/sombra.sh:490`; `bin/sombra_trava.sh:26`; `bin/sombra_trava.sh:28`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:37`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:57`.)
-   - **O PDF não sai automaticamente por `/sombra`.** O gerador grava em `MEDIA_ROOT/cartoes_lote`, dentro do tmpfs. É preciso copiar o arquivo para `/sombra` antes de encerrar o container e depois encaminhá-lo à pasta do ensaio; `/sombra` corresponde a `logs/sombra` do host. (`app/config/settings/base.py:102`; `app/relatorios/models.py:125`; `app/relatorios/lote_espelho.py:250`; `bin/sombra.sh:81`; `bin/sombra.sh:189`; `bin/sombra.sh:190`.)
-   - **Conclusão do lote não prova B1 auditável:** o informacional também incrementa `n_ok`, e o lote pode terminar `CONCLUIDO`. Além disso, `--rodar` termina com um `echo` depois da pipeline, sem propagar explicitamente seu resultado; o retorno da porta sozinho não certifica sucesso. (`app/relatorios/services.py:244`; `app/relatorios/services.py:252`; `app/relatorios/lote_espelho.py:251`; `bin/sombra.sh:45`; `bin/sombra.sh:492`; `bin/sombra.sh:493`.)
-
-4. **Há escritas, agora autorizadas no banco sombra, e artefatos a declarar.** A lavra faz dois `update_or_create`, podendo alterar snapshots existentes, e escreve `lavra_prod.json` e `repor_lavra.py`; a porta também escreve `logs/<rotulo>.out`. Não envolver `--rodar` em `--com-a-sombra`: ambas chamam a lavra, duplicando as operações aceitas. (`bin/sombra.sh:144`; `bin/sombra.sh:151`; `bin/sombra.sh:157`; `bin/sombra.sh:160`; `bin/sombra.sh:460`; `bin/sombra.sh:489`; `bin/sombra.sh:492`; `respostas_1711_0915.txt:2`, anexo.)
-
-   O caminho registra lote e auditoria de PDF; não demonstra alteração de dinheiro ou de exportada em produção. Efeito real de uma execução: **[nao verificado]**. A raspagem continua necessária porque o PDF imprime nome e CPF; exportar dado pessoal segue proibido. (`app/relatorios/lote_espelho.py:103`; `app/relatorios/pdf_base.py:152`; `app/relatorios/pdf_espelho.py:739`; `CLAUDE.md:206`; `CLAUDE.md:265`.)
-
-**Item 4 — EXPORT-UM-JUIZ-DO-CODIGO**
-
-1. **O defeito confere como possibilidade do código.** O classificador começa com `entra`, normaliza com `strip` e, nesse crivo, exclui apenas código vazio. A montagem preenche com zeros até dez posições; o validador exige linha de 43 caracteres e campo `matric` numérico. Se os demais crivos permitirem entrada e houver evento gerado, um código não numérico pode provocar recusa do TXT inteiro. Caso real de col1041 e dimensão na frota: **[nao verificado]**. (`app/folha/export.py:840`; `app/folha/export.py:841`; `app/folha/export.py:872`; `app/folha/export.py:728`; `app/folha/export.py:273`; `app/folha/export.py:277`; `app/folha/views.py:275`; `app/folha/views.py:279`.)
-
-   **Precisão para o censo:** esse validador não verifica duplicidade; código numérico curto é preenchido com zeros; vazio já sai pelo classificador. Portanto essas classes não podem ser todas rotuladas como “recusadas pelo layout”. (`app/folha/export.py:266`; `app/folha/export.py:307`; `app/folha/export.py:728`; `app/folha/export.py:872`.)
-
-2. **Registrar e preparar são compatíveis; “juiz único” não autoriza automaticamente registrar outro juiz.** Não encontrei autoridade específica registrada para “código do Domínio válido”; existem `classificar_export` para entrada no TXT e aprovação, também apontado em `JUIZES.md`. Declarar autoridade existente exige medir unicidade, mesmo predicado e universo igual; autoridade nova exige corte. (`app/core/juizes.py:181`; `app/core/juizes.py:182`; `app/core/juizes.py:329`; `app/core/juizes.py:330`; `app/docs/JUIZES.md:118`; `CLAUDE.md:74`; `CLAUDE.md:278`; `CLAUDE.md:314`.)
-
-3. **A abertura futura não fecha apenas com “censo fechado e lei 0”.** O anexo menciona “4 condições” sem enumerá-las. A cópia reserva vaga 2 para obras da espinha, exige cruzamento por arquivo/juiz/vaga e condiciona laterais à disponibilidade; a B2 exemplifica que censo fechado e lei zero não bastam quando há arquivos comuns. Cumprimento das quatro condições e vaga disponível: **[nao verificado]**. (`respostas_1711_0915.txt:5`, anexo; `app/docs/BACKLOG.md:1875`; `app/docs/BACKLOG.md:2088`; `app/docs/BACKLOG.md:824`.)
-
-   A CLASSE-D estava posicionada após F1 e antes de F2; há registro posterior de que F2 pode abrir sem esperá-la. O novo aval pode estabelecer prioridade relativa desta lateral sobre CLASSE-D, mas isso não comprova vaga livre nem permite deslocar a espinha, que o próprio anexo preserva. (`app/docs/BACKLOG.md:1990`; `app/docs/PROMPTS.md:2448`; `respostas_1711_0915.txt:5`, anexo.)
-
-4. **Somente registrar/preparar não autoriza gerar TXT, corrigir cadastro ou aplicar dinheiro.** Usar o gerador como sonda teria escrita: ele pode aprovar fechamentos antes da validação final do layout. Uma futura cura precisa respeitar exportada e os demais `!`; neste aval a construção está expressamente excluída. (`app/folha/views.py:250`; `app/folha/views.py:252`; `app/folha/views.py:275`; `CLAUDE.md:265`; `CLAUDE.md:411`; `respostas_1711_0915.txt:5`, anexo.)
-
-VEREDITO: item 1 PROCEDE; item 4 PROCEDE -- B1 precisa fechar espera e retirada do PDF antes do container sair; o item 4 permite preparar, mas não demonstra as quatro condições nem a disponibilidade da segunda vaga. (`app/relatorios/lote_espelho.py:132`; `bin/sombra.sh:189`; `bin/sombra.sh:490`; `respostas_1711_0915.txt:5`, anexo; `app/docs/BACKLOG.md:2088`.)
-
-## 17/11 09:18 · sessao 0ef5ca9a8648 · - · - · origem=Ronald (tmux)
-
-Item 4 — evidências para consolidação:
-
-1. **Defeito confere como possibilidade do código.** `classificar_export` inicia em `entra`, aplica `.strip()` e só exclui código vazio; não exige número nem limite de dez posições. A montagem usa `.zfill(10)`, que preserva texto e códigos longos; o layout exige registro de 43 caracteres e `matric` numérico. Havendo linha gerada, qualquer erro recusa o TXT inteiro da empresa. (`app/folha/export.py:840`; `app/folha/export.py:841`; `app/folha/export.py:872`; `app/folha/export.py:728`; `app/folha/export.py:36`; `app/folha/export.py:273`; `app/folha/export.py:277`; `app/folha/views.py:275`; `app/folha/views.py:279`.) Ocorrência real do caso col1041 e dimensão na frota: **[nao verificado]**.
-
-   Precisão importante: o layout **não verifica duplicidade**; código numérico com menos de dez posições é preenchido com zeros. Portanto “o validar_layout recusaria vazio, repetido, fora do tamanho” não descreve literalmente todos esses casos: vazio já é excluído pelo classificador; repetido não é recusado por esse validador; tamanho menor é admitido por preenchimento. (`app/folha/export.py:266`; `app/folha/export.py:307`; `app/folha/export.py:728`; `app/folha/export.py:872`.)
-
-2. **Não encontrei juiz registrado para “código do Domínio válido”.** O registro declara `classificar_export` para aprovação e entrada no TXT; a tabela documental também aponta esse juiz, sem autoridade específica para validade do código. Isso não transforma automaticamente o validador de linhas em juiz já registrado desse novo predicado. (`app/core/juizes.py:319`; `app/core/juizes.py:329`; `app/core/juizes.py:330`; `app/docs/JUIZES.md:118`.) Registro de autoridade nova exige corte; a autonomia para declarar autoridade existente exige função já existente, única autoridade medida, mesmo predicado e universo igual. (`CLAUDE.md:74`; `CLAUDE.md:278`; `CLAUDE.md:280`.)
-
-3. **Preparar censo cabe; abertura automática ainda não está demonstrada.** A segunda vaga tem fila: E4C-F1-B2 ocupa a vaga 2 e espera BUG-PAR por cruzar oito arquivos; a ordem anterior também protege R3/F1. Laterais exigem conferir cruzamento por arquivo/juiz/vaga e só andam com a suíte livre. (`app/docs/BACKLOG.md:824`; `app/docs/BACKLOG.md:1875`; `app/docs/BACKLOG.md:2088`.) CLASSE-D estava explicitamente após E4c F1 e antes de F2; o novo anexo pode priorizar esta lateral sobre CLASSE-D, mas não prova disponibilidade nem autoriza deslocar a espinha. (`app/docs/BACKLOG.md:1990`; `app/docs/BACKLOG.md:2265`; anexo `respostas_1711_0915.txt`, item 4 **[nao verificado: arquivo ausente na cópia]**.) As “4 condições” não são enumeradas no anexo; identificá-las e demonstrá-las permanece **[nao verificado]**. Há ainda portão documentado da segunda vaga por carga, horário e arquivos comuns. (`app/docs/BACKLOG.md:2187`.)
-
-4. **Somente registrar/preparar não contém apply de exportada ou dinheiro.** Uma futura execução do gerador não seria leitura: aprova fechamentos antes da validação final do layout; o defeito não autoriza usar esse caminho para medir. (`app/folha/views.py:250`; `app/folha/views.py:252`; `app/folha/views.py:275`.) Exportada, escala/vínculo e regras fora do pedido continuam sob `!`. (`CLAUDE.md:265`; `CLAUDE.md:268`.)
-
-Complemento útil ao censo: o modelo aceita texto de até vinte caracteres, sem validator numérico no campo; a admissão e a edição recebem `codigo_folha` com `.strip()` e gravam o valor não vazio. A porta de persistência confere operação/dono, sem validar o código nessas funções. (`app/colaboradores/models.py:311`; `app/colaboradores/models.py:312`; `app/colaboradores/views.py:1131`; `app/colaboradores/views.py:1231`; `app/colaboradores/views.py:1237`; `app/colaboradores/views.py:1353`; `app/colaboradores/views.py:1365`; `app/colaboradores/services/colaborador.py:140`; `app/colaboradores/services/colaborador.py:148`; `app/colaboradores/services/colaborador.py:152`; `app/colaboradores/services/colaborador.py:160`.)
-
-## 17/11 09:17 · sessao bf379d6c6987 · ENSAIO-DA-FOLHA-11 · leitura · origem=Code
-
-1. **Quem grava:** `folha.porta_export.lavrar()` escreve em **`MetricaSnapshot`**, chave **`porta_export_leitores`**, com escopo `empresa`, `escopo_id=empresa.pk` e `data_ref=hoje`; guarda competência em `detalhe.mes/ano` e falhas em `valor`. (`app/folha/porta_export.py:18`, `app/folha/porta_export.py:768-796`) Quem chama essa gravação é **`selo_leitores_no_mesmo_numero`**, após medir cada empresa ativa, com mês/ano obrigatórios. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27-35`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-92`)
-
-2. **Cron:** o selo está em **`FORA_DE_PIPELINE`**, explicitamente destinado à execução manual antes do export; portanto **não tem horário nem cobertura automática da aberta 11/2026**. (`app/config/crons.py:769`, `app/config/crons.py:887-897`) O universo geral do cron é empresas `(2, 3, 4)`, schema `juliani`; o comando do selo percorre todas as empresas ativas do tenant e mede exatamente a competência passada em `--mes/--ano`. (`app/config/crons.py:17-18`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:35`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-92`) Apesar do comentário dizer “roda no ATO do export”, o POST **somente confere**. (`app/config/crons.py:893-894`, `app/folha/views.py:128-133`) Crontab instalado e execução efetiva de hoje: [nao verificado].
-
-3. **O que o admin vê:** sem carimbo, `gerar_dominio_txt` interrompe o fluxo, passa a recusa como erro e redireciona para a tela de exportação, que exibe a mensagem em alerta. (`app/folha/views.py:128-133`, `app/core/respostas.py:50-51`, `app/core/respostas.py:68-71`, `app/templates/folha/exportar.html:10`) A mensagem manda literalmente **`Rode: docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 11 --ano 2026`**; não orienta uma ação disponível na tela. (`app/folha/porta_export.py:809-813`) **Não há botão/rota para produzir esse carimbo** no fluxo: há seleção, Raio-X, PDFs e geração do TXT; o botão de gerar aparece por haver elegíveis, sem exigir previamente o selo. (`app/folha/urls.py:6-29`, `app/templates/folha/exportar.html:25-54`, `app/folha/views.py:356`, `app/folha/views.py:406-428`) Que esse admin específico não tenha shell: [nao verificado].
-
-4. **Escopo e validade:** a porta exige carimbo da **mesma empresa, mesma competência, data de hoje e valor zero**. (`app/folha/porta_export.py:807-821`, `app/folha/porta_export.py:865-867`) Porém, a chave persistida não inclui competência: medir outra competência da mesma empresa no mesmo dia **sobrescreve** o carimbo anterior. (`app/folha/porta_export.py:772-776`, `app/inteligencia/models.py:102-105`) “Hoje” é **data civil local**, via `timezone.localdate()`, com fuso padrão `America/Sao_Paulo`: vale até a virada da data, não por 24 horas desde a medição. (`app/folha/porta_export.py:21-23`, `app/folha/porta_export.py:807-808`, `app/config/settings/base.py:93-95`)
-
-BECO: sim -- a recusa exige comando de shell e o fluxo da tela não oferece ação para gerar o carimbo. (`app/folha/porta_export.py:809-813`, `app/folha/urls.py:6-29`, `app/folha/views.py:406-428`)
-
-## 17/11 09:17 · sessao cb7662e893ce · - · - · origem=Ronald (tmux)
-
-Item 1 tem caminho viável, mas o `--rodar` não garante sozinho a espera do filho nem a retirada do PDF; essas condições dependem do script B1, cujo conteúdo não foi fornecido. (`bin/sombra.sh:490-493`; `app/relatorios/lote_espelho.py:132-146`; [nao verificado].)
-
-1. **Premissas.** A view usa `pedir` e `disparar`; o filho executa o command que chama o mesmo gerador de lote. (`app/relatorios/views.py:1227-1246`; `app/relatorios/lote_espelho.py:127-133`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:44-64`; `app/relatorios/lote_espelho.py:205-207`.)
-
-   Por inferência do código, o filho herda a configuração da sombra: `Popen` não passa `env`, o container fixa `DJANGO_SETTINGS_MODULE=config.settings.sombra`, e `manage.py` usa `setdefault`, preservando esse valor; o settings fixa banco `sombra`, host `sombra_db`, e o comando recebe o schema do pai. Execução efetiva: [nao verificado]. (`app/relatorios/lote_espelho.py:126-133`; `bin/sombra.sh:184`; `app/manage.py:9`; `app/config/settings/sombra.py:29`; `app/config/settings/sombra.py:47-51`.)
-
-2. **Compatibilidade.** Sem POST HTTP, a restrição específica de smoke de porta não se aplica ao caminho proposto; o aval fornecido aceita função/command e as duas escritas da lavra. Permanecem o escopo literal, banco da sombra e CPUSET de teste. (`CLAUDE.md:37-38`; `CLAUDE.md:87`; `CLAUDE.md:205-206`; `bin/sombra.sh:183-184`; `respostas_1711_0915.txt:2`, anexo, contando linhas desde “aval Ronald”.)
-
-3. **Condições literais.**
-   
-   - **Espera:** `disparar` cria processo com `start_new_session=True` e devolve somente PID; não chama `wait`. `--rodar` espera o comando principal do container, sem supervisão adicional desse filho. O script precisa permanecer executando até o job terminar. (`app/relatorios/lote_espelho.py:132-146`; `bin/sombra.sh:490-493`.)
-   - **Trava inteira:** `--rodar` já adquire `flock`; a shell do host mantém o descritor 8 enquanto aguarda o container. Assim, basta que o script não termine antes de concluir geração, conferência e retirada do artefato; não é necessário um segundo `--com-a-sombra`. (`bin/sombra.sh:487-492`; `bin/sombra_trava.sh:26-39`.)
-   - **Alternativa síncrona:** dentro do script B1, criar/reutilizar o lote pela porta e chamar o command de forma síncrona evita o `Popen`; o command assume e executa o lote antes de retornar. O command precisa de lote já existente e schema correto. (`app/relatorios/lote_espelho.py:83-114`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:27-38`; `app/relatorios/management/commands/gerar_cartoes_em_lote.py:44-64`.)
-   - **PDF:** o lote grava em `cartoes_lote/`, dentro de media; `/app/media` é tmpfs, e `/sombra` corresponde a `logs/sombra`. O script precisa copiar o PDF para `/sombra` antes do container encerrar e depois encaminhá-lo à pasta do ensaio; essa cópia não é automática. (`app/relatorios/models.py:125`; `app/relatorios/lote_espelho.py:250-253`; `bin/sombra.sh:81`; `bin/sombra.sh:183`; `bin/sombra.sh:189-190`.)
-   - **Resultado:** `CONCLUIDO` e quantidade gerada não provam ausência de fallback: o informacional também incrementa `n_ok`, e o lote termina concluído. (`app/relatorios/services.py:235-255`; `app/relatorios/lote_espelho.py:251-253`.)
-
-4. **Efeitos adicionais.** As duas operações de `MetricaSnapshot` podem atualizar registros existentes, e ocorrem antes do script B1, em outro container. Também são escritos `lavra_prod.json`, `repor_lavra.py` e `logs/<rotulo>.out`; esses artefatos devem constar da descrição do ensaio. (`bin/sombra.sh:144`; `bin/sombra.sh:151`; `bin/sombra.sh:157-167`; `bin/sombra.sh:489-492`.)
-
-   Não há, nesses trechos, demonstração de alteração de competência exportada ou pagamento; a lavra deixou de decidir dinheiro segundo o comentário vigente. Efeitos reais em produção: [nao verificado]. (`app/ponto/services/esmeril_espelho.py:351-352`; `CLAUDE.md:265-268`.)
-
-   **Cuidado concreto:** envolver `--rodar` em `--com-a-sombra` executaria a lavra nas duas portas, excedendo as duas operações declaradas. (`bin/sombra.sh:460`; `bin/sombra.sh:489`; `bin/sombra.sh:157-163`.)
-
-## 17/11 09:17 · sessao 59845f30321f · - · - · origem=Ronald (tmux)
-
-- O comando **não tem horário em `CRONS` nem elo em `ENCADEADOS`**: está em `FORA_DE_PIPELINE`, mapa iniciado em `app/config/crons.py:769`, com justificativa explícita de execução sob ato/manual em `app/config/crons.py:887` e `app/config/crons.py:891`.
-- A declaração “roda no ATO do export” em `app/config/crons.py:894` é comentário/descritivo: o próprio comando explica que ele mede e lavra, enquanto o TXT apenas confere, em `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:36`.
-- **Competência é fornecida explicitamente**: `--mes` e `--ano` são obrigatórios, em `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:28`. O comando usa esses valores em `:35`, percorre todas as empresas ativas em `:86`, mede em `:88` e lavra em `:92`. Logo `--mes 11 --ano 2026` mede essa competência, mas não há cobertura automática de 11/2026 por esse selo; evidências: `app/config/crons.py:891` e `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:28`.
-- O universo padrão do cron é empresas `(2, 3, 4)`, tenant `juliani`, em `app/config/crons.py:17`; isso **não restringe** o selo manual, que percorre `Empresa.objects.filter(ativa=True)` em `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86`.
-- O render percorre `CRONS` em `app/config/crons.py:1889`, expande empresas em `:1894`, acrescenta schema em `:1899` e conecta correntes em `:1913`. `bin/crons.sh` somente renderiza/check/instala esse resultado em `bin/crons.sh:24` e `bin/crons.sh:27`.
-- Há cron parecido, **`vigiar_txt_dominio`**, declarado como elo em `app/config/crons.py:1615`, mas ele compara o acervo de exportações e não grava o selo, conforme `app/folha/management/commands/vigiar_txt_dominio.py:8` e chamada de `censo` em `:59`. O `lavrar_retrato_folha`, outro elo em `app/config/crons.py:1655`, é retrato para a tela, descrito em `app/config/crons.py:1619`; não substitui esse selo.
-- `cartao_x_txt_divergentes` é chamado separadamente pelo placar em `bin/placar_code.sh:330`, sem chamada a `lavrar`; os contadores PDF/cartão são explicitamente tratados como manuais por competência em `app/config/crons.py:1139`, e o cartão está em `FORA_DE_PIPELINE` em `app/config/crons.py:1282`.
-- Cron instalado e execução real em produção hoje: **[não verificado]**.
-
-## 17/11 09:16 · sessao b9ab0ef52323 · - · - · origem=Ronald (tmux)
-
-(3) O clique usa formulário POST comum para `folha:gerar_txt`, com empresa/mês/ano ocultos e botão “Gerar arquivo dos N elegiveis”; a prévia decide mostrar esse botão apenas por `n_entra > 0`, sem consultar carimbo (`app/folha/views.py:356`, `app/folha/views.py:416-428`).
-
-`gerar_dominio_txt` chama `conferir(empresa, mes, ano)`; se houver recusa, devolve a mensagem integral por `resposta_acao(ok=False, ..., redirect_url=folha:exportar)` (`app/folha/views.py:128-133`). Esse helper classifica `ok=False` como erro, grava Django message e retorna redirect 302 para a tela (`app/core/respostas.py:50-51`, `app/core/respostas.py:68-71`). O template exibe a mensagem em um `alert`; a base também a passa ao toast, cuja variante erro é vermelha e desaparece após dez segundos (`app/templates/folha/exportar.html:10`, `app/templates/base.html:334`, `app/templates/core/_dialogo.html:26-43`, `app/templates/core/_dialogo.html:46-54`).
-
-Sem carimbo, o texto é: “A PORTA DO EXPORT NAO FOI MEDIDA HOJE para %s. O TXT nao sai sem a prova de que a tela, o PDF, o fechamento e o TXT estao no mesmo numero. Rode: %s”; o `%s` final contém `docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes %02d --ano %s` (`app/folha/porta_export.py:809-813`).
-
-A mensagem oferece uma instrução de shell, sem ação correspondente na tela: o inventário de rotas da folha não contém medir/lavrar o carimbo; o template oferece seleção de empresa/competência e Raio-X; a prévia oferece PDFs e gerar TXT (`app/folha/urls.py:6-29`, `app/templates/folha/exportar.html:25-54`, `app/folha/views.py:406-430`). O próprio POST declara que só confere, pois medir custa aproximadamente cem segundos para 205 colaboradores e quem mede é o comando (`app/folha/views.py:124-126`). Que o administrador específico não tenha acesso ao shell: [nao verificado].
-
-Conclusão para consolidar: **BECO: sim**, no sentido definido pelo usuário, pois a recusa manda executar comando operacional e não oferece pela tela uma ação para produzir o carimbo (`app/folha/porta_export.py:809-813`, `app/folha/urls.py:6-29`, `app/folha/views.py:406-430`).
-
-## 17/11 09:16 · sessao 786cf13e0f0a · - · - · origem=Ronald (tmux)
-
-- **Gravador real:** `folha.porta_export.lavrar(empresa, mes, ano, r)` faz `MetricaSnapshot.objects.update_or_create`; chave literal **`porta_export_leitores`**, `escopo='empresa'`, `escopo_id=empresa.pk`, `data_ref=hoje`; guarda falhas em `valor` (`-1` quando não mediu), competência em `detalhe['mes'/'ano']` e `data_ini=hoje` (`app/folha/porta_export.py:18`, `app/folha/porta_export.py:768-776`).
-- **Comando escritor:** `selo_leitores_no_mesmo_numero` exige `--mes` e `--ano`, importa `medir, lavrar`, percorre `Empresa.objects.filter(ativa=True).order_by('id')`, mede e lavra para cada empresa (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27-35`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-92`). Pode interromper a sequência se medição levantar exceção ou `cartao_x_txt is None` (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:89-95`).
-- **Leitura/recusa:** `conferir` consulta chave+empresa+`data_ref=_hoje()`; ausência produz “A PORTA DO EXPORT NAO FOI MEDIDA HOJE...” com shell `docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes %02d --ano %s`; em seguida compara a competência armazenada com a pedida, rejeita `valor is None`, negativo ou positivo; só zero retorna vazio/libera (`app/folha/porta_export.py:800-821`, `app/folha/porta_export.py:865-867`).
-- **Nuance importante:** a validação é por empresa **e competência**, mas a identidade persistida é somente **chave+escopo+empresa+data**, sem mês/ano. Logo medir outra competência da mesma empresa no mesmo dia **sobrescreve** o carimbo anterior; não coexistem carimbos independentes de 10 e 11 no mesmo dia (`app/folha/porta_export.py:772-776`; constraint confirma `app/inteligencia/models.py:102-105`).
-- **Validade:** “hoje” é `timezone.localdate()`, isto é, data civil local, e não janela móvel de 24 h; o carimbo deixa de atender assim que a data local muda. Configuração padrão: `TIME_ZONE='America/Sao_Paulo'`, `USE_TZ=True` (`app/folha/porta_export.py:21-23`, `app/folha/porta_export.py:807-808`, `app/config/settings/base.py:92-95`).
-- **Comentário enganoso no modelo:** docstring de `MetricaSnapshot` diz “Escrito so por inteligencia.metricas”, porém a escrita efetiva aqui é `folha.porta_export.lavrar` (`app/inteligencia/models.py:81-82`; `app/folha/porta_export.py:770-776`).
-
-_6432 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
