@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 09:47** · publicado em **17/11/2026 09:47** (UTC-3)
+> Ultima resposta processada: **17/11/2026 09:50** · publicado em **17/11/2026 09:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 09:50 · sessao 1e4b3d0bf14d · CONTADOR-CODEX-OCIOSO · verificador · origem=Code
+
+**A volta 2 ainda reprova:** há reparos efetivos, mas entradas de sessão continuam podendo derrubar o ESTADO, o disjuntor mantém outro relógio/borda e quatro mutantes recebem o selo após exceções convertidas em `FALHA:`. (`bin/codex_limite_estado.py:325`, `bin/codex_limite_estado.py:448`, `bin/gerar_estado.py:270`, `bin/disjuntor.py:2036`, `bin/disjuntor.py:2132`, `bin/tests/test_codex_ociosidade.sh:200`)
+
+Conferi por leitura e simulação dos casos em memória, com arquivos e PIDs simulados. Execução integral do selo no host e ocorrência dos defeitos em produção: [nao verificado].
+
+**1) Os achados de v1.r foram resolvidos?**
+
+| Achado de v1.r | Situação no código atual |
+|---|---|
+| Segundo juiz em `ultimas_chamadas` | **Resolvido na composição principal.** `ler()` compartilha `_foto`; ela calcula `_em_curso`, e últimas chamadas lê o resultado. (`bin/codex_limite_estado.py:93`, `bin/codex_limite_estado.py:94`, `bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`) |
+| Garantia de carimbo quando nasce ABERTO | **Não demonstrada.** A fixture escreve a fila; produtor real e procedimento de abertura: [nao verificado]. (`bin/tests/test_codex_ociosidade.sh:39`) |
+| Truncamento de 30min59s | **Resolvido para segundos inteiros:** 1859 supera 1800, com caso explícito. Ainda há truncamento subsegundo: 30min00,500s vira 1800 e não acusa. (`bin/codex_limite_estado.py:51`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:296`, `bin/tests/test_codex_ociosidade.sh:84`) |
+| Janelas de 24h divergentes | **Parcial.** Limite, papéis e contexto horário usam `_na_janela`; o censo do disjuntor mantém a borda inferior inclusiva. (`bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:164`, `bin/codex_limite_estado.py:283`, `bin/disjuntor.py:2132`) |
+| Linhas curtas, hora inválida e tipo desconhecido ignorados | **Resolvido para essas classes na ociosidade:** são contabilizados e produzem SEM DADO. A validação dos demais campos continua incompleta. (`bin/codex_limite_estado.py:125`, `bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:275`) |
+| PID inválido ou erro do SO tratado como morto | **Resolvido para chamadas sem fim:** retorna `None`, que torna a foto SEM DADO. (`bin/codex_limite_estado.py:188`, `bin/codex_limite_estado.py:198`, `bin/codex_limite_estado.py:279`) |
+| `chamadas.log` sem permissão derruba `ler()` | **Resolvido nesse caminho:** a guarda envolve foto, papéis e últimas chamadas. A segurança do caminho completo continua incompleta por causa das sessões. (`bin/codex_limite_estado.py:92`, `bin/codex_limite_estado.py:95`, `bin/codex_limite_estado.py:89`, `bin/codex_limite_estado.py:325`) |
+| Executor certifica exceção como morte | **Parcial:** rejeita traceback e `EXCECAO:`, mas os próprios casos convertem exceções em `FALHA:`, aceitas pelo executor. (`bin/tests/test_codex_ociosidade.sh:51`, `bin/tests/test_codex_ociosidade.sh:134`, `bin/tests/test_codex_ociosidade.sh:200`, `bin/tests/test_codex_ociosidade.sh:202`) |
+| M2 dependia da exceção `None > 30`; M11 dependia do motivo | **Corrigidos nos mutantes atuais:** M2 muda o requisito para mais de um ABERTO; M11 transforma erro em registro vazio, alterando o estado esperado. (`bin/tests/test_codex_ociosidade.sh:208`, `bin/tests/test_codex_ociosidade.sh:217`, `bin/tests/test_codex_ociosidade.sh:60`, `bin/tests/test_codex_ociosidade.sh:128`) |
+| Diretório era caso vacuamente “ausente”; faltavam bordas | **Corrigidos:** fila diretório chega ao `open`; existem casos de 30min59s e início igual a `agora`. (`bin/codex_limite_estado.py:214`, `bin/codex_limite_estado.py:217`, `bin/tests/test_codex_ociosidade.sh:84`, `bin/tests/test_codex_ociosidade.sh:93`, `bin/tests/test_codex_ociosidade.sh:113`) |
+| `rc` continha código ou situação sintética | **Separação implementada:** tupla com cinco campos e consumidor adaptado. Entretanto, o código não valida que o `rc` recebido seja numérico. (`bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:178`, `bin/codex_limite_estado.py:179`, `bin/codex_limite_estado.py:486`) |
+
+**2) Quem escreve, quem lê e quais significados compartilham?**
+
+| Campo/fonte | Quem escreve | Quem lê e significado efetivo |
+|---|---|---|
+| `chamadas.log/ini`: hora, obra, papel, hash, PID, pergunta | Wrapper: hora sem offset, hash com 12 caracteres, PID `$$`, pergunta raspada; grava antes da espera por slot. (`bin/codex_pergunta.sh:295`, `bin/codex_pergunta.sh:308`, `bin/codex_pergunta.sh:364`) | `_registro` interpreta hora, obra, papel e chave `(obra,hash,pid)`; não conserva a pergunta. Portanto, o início inclui espera do wrapper, sem comprovar execução do Codex. (`bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:135`, `bin/codex_limite_estado.py:137`, `bin/disjuntor.py:2073`) |
+| `chamadas.log/fim`: hora, chave, papel, sessão, rc, duração | `_saida`, pelo trap EXIT após `INI=1`; duração em segundos pela diferença de epoch. (`bin/codex_pergunta.sh:265`, `bin/codex_pergunta.sh:269`, `bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:273`, `bin/codex_pergunta.sh:282`) | Parser valida hora/tamanho, mas conserva somente sessão, rc e duração como texto. `_em_curso` usa existência da chave; últimas usa rc; procedência e tokens usam sessão. A hora do fim é descartada, sem conferência de fim posterior ao início. (`bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:175`, `bin/codex_limite_estado.py:205`, `bin/codex_limite_estado.py:306`, `bin/codex_limite_estado.py:403`) |
+| `fila.md`: estado e carimbo | Escrita demonstrada na fixture; escritor real: [nao verificado]. (`bin/tests/test_codex_ociosidade.sh:39`) | `ler_fila_reserva` exige estado conhecido e data+hora para ABERTO; produz quantidade, idade em segundos inteiros e erro. Ociosidade consome os três. (`bin/codex_limite_estado.py:227`, `bin/codex_limite_estado.py:235`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:251`, `bin/codex_limite_estado.py:287`) |
+| `limite.log`: hora, obra, mensagem | Wrapper grava uma linha quando reconhece limite/indisponibilidade. (`bin/codex_pergunta.sh:451`, `bin/codex_pergunta.sh:452`, `bin/codex_pergunta.sh:456`) | `ler()` exige três campos e hora válida; conta linhas, sem usar obra/mensagem para validar a classificação. Publica total, janela, última hora e inválidas. (`bin/codex_limite_estado.py:73`, `bin/codex_limite_estado.py:75`, `bin/codex_limite_estado.py:81`, `bin/codex_limite_estado.py:97`) |
+| Registro/foto internos | `_registro` produz existência, inícios, fins, descartadas e futuras; `_foto` acrescenta `em_curso=True/False/None`. (`bin/codex_limite_estado.py:105`, `bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:153`) | `ler()` compartilha o registro com papéis, últimas e ociosidade; esta consome os contadores de erro e o valor trivalente. (`bin/codex_limite_estado.py:94`, `bin/codex_limite_estado.py:101`, `bin/codex_limite_estado.py:273`, `bin/codex_limite_estado.py:280`) |
+| Tupla `(hora,obra,papel,rc,situacao)` | `ultimas_chamadas`: `rc=None` sem fim; situação em campo próprio. (`bin/codex_limite_estado.py:177`, `bin/codex_limite_estado.py:179`) | `_ultimas_txt` desempacota cinco campos; testes verificam situação no índice 4 e rc no 3. (`bin/codex_limite_estado.py:486`, `bin/tests/test_codex_ociosidade.sh:67`, `bin/tests/test_codex_ociosidade.sh:71`) |
+
+Outros consumidores de chamadas são procedência no painel, tokens por papel e censo do disjuntor; `_linhas_chamadas` entrega somente inícios/fins, eliminando os contadores de entradas descartadas. (`bin/gerar_codex_estado.py:176`, `bin/codex_limite_estado.py:399`, `bin/disjuntor.py:2126`, `bin/codex_limite_estado.py:145`, `bin/codex_limite_estado.py:146`)
+
+**Não há contrato temporal uniforme entre todos:** o módulo usa `(agora−24h,agora]`, mas o censo usa `[agora−24h,agora]`. O disjuntor também chama a contagem por papel sem transmitir seu `agora`. (`bin/codex_limite_estado.py:59`, `bin/disjuntor.py:2132`, `bin/disjuntor.py:2036`, `bin/codex_limite_estado.py:159`)
+
+Os produtores gravam hora sem offset; o leitor usa `strptime` ingênuo e relógio local. Igualdade efetiva dos fusos dos processos: [nao verificado]. (`bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:308`, `bin/codex_pergunta.sh:456`, `bin/codex_limite_estado.py:63`, `bin/codex_limite_estado.py:124`)
+
+**3) Ainda existe entrada virando zero/ok ou leitura derrubando o ESTADO? Sim.**
+
+- **`fim` malformado ainda vira conclusão válida.** Na simulação, `rc=lixo` e `dur=lixo` foram aceitos, encerraram a chave e produziram `em_curso=0`, `estado=ok` com fila sem ABERTO; últimas publicou `('lixo','terminou')`. O parser não valida esses campos. (`bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:205`, `bin/codex_limite_estado.py:273`, `bin/codex_limite_estado.py:296`)
+- **JSON válido com estrutura errada derruba a leitura semanal.** Por exemplo, `{"payload":[1],"rate_limits":true}` produz `AttributeError` no acesso a `.get`. O tratamento externo dessa leitura captura somente `OSError`; `gerar_estado.py` não protege a chamada. (`bin/codex_limite_estado.py:325`, `bin/codex_limite_estado.py:89`, `bin/gerar_estado.py:270`)
+- **`used_percent="lixo"` derruba a composição.** O leitor conserva o valor e `_semanal_txt` chama `float`, produzindo `ValueError` fora das guardas de leitura. (`bin/codex_limite_estado.py:331`, `bin/codex_limite_estado.py:448`, `bin/codex_limite_estado.py:453`, `bin/gerar_estado.py:270`)
+- **Log ausente ainda aparece como zero nas seções auxiliares:** papéis zerados e últimas vazias; a ociosidade corretamente permanece SEM DADO. (`bin/codex_limite_estado.py:115`, `bin/codex_limite_estado.py:161`, `bin/codex_limite_estado.py:174`, `bin/codex_limite_estado.py:270`)
+
+A queda do gerador continua propagando saída 1 para `relato.sh`. (`bin/relato.sh:38`)
+
+**4) Cada mutante morre pela propriedade?**
+
+Na reprodução dos casos Python em memória, o original passou e os 25 mutantes divergiram. Isso não comprova a execução integral do shell nem permissões/PIDs reais: [nao verificado]. [nao verificado]
+
+| Mutante | Divergência observada e asserção correspondente |
+|---|---|
+| M1 | Chamada viva passa a ACUSA. (`bin/tests/test_codex_ociosidade.sh:62`, `bin/tests/test_codex_ociosidade.sh:207`) |
+| M2 | Um ABERTO antigo deixa de acusar. (`bin/tests/test_codex_ociosidade.sh:60`, `bin/tests/test_codex_ociosidade.sh:208`) |
+| M3 | 30min00s e 10min passam a acusar. (`bin/tests/test_codex_ociosidade.sh:83`, `bin/tests/test_codex_ociosidade.sh:85`, `bin/tests/test_codex_ociosidade.sh:209`) |
+| M4, M8 | PID morto conta como vivo ou recebe situação “em curso”. (`bin/tests/test_codex_ociosidade.sh:65`, `bin/tests/test_codex_ociosidade.sh:67`, `bin/tests/test_codex_ociosidade.sh:210`, `bin/tests/test_codex_ociosidade.sh:214`) |
+| M5, M6, M7 | Sem carimbo, fila ausente ou log ausente passam a `ok`. (`bin/tests/test_codex_ociosidade.sh:75`, `bin/tests/test_codex_ociosidade.sh:79`, `bin/tests/test_codex_ociosidade.sh:80`, `bin/tests/test_codex_ociosidade.sh:211`) |
+| M9, M10 | Fila malformada, diretório ou sem permissão passa a `ok`. (`bin/tests/test_codex_ociosidade.sh:113`, `bin/tests/test_codex_ociosidade.sh:123`, `bin/tests/test_codex_ociosidade.sh:126`, `bin/tests/test_codex_ociosidade.sh:215`, `bin/tests/test_codex_ociosidade.sh:216`) |
+| M11, M12, M13, M14 | Log ilegível/corrompido ou PID desconhecido passa de SEM DADO para ACUSA. (`bin/tests/test_codex_ociosidade.sh:128`, `bin/tests/test_codex_ociosidade.sh:145`, `bin/tests/test_codex_ociosidade.sh:148`, `bin/tests/test_codex_ociosidade.sh:154`, `bin/tests/test_codex_ociosidade.sh:217`) |
+| M15 | 30min59s deixa de acusar. (`bin/tests/test_codex_ociosidade.sh:84`, `bin/tests/test_codex_ociosidade.sh:221`) |
+| M16, M18 | Contagens incluem a borda inferior ou excluem `agora`. (`bin/tests/test_codex_ociosidade.sh:97`, `bin/tests/test_codex_ociosidade.sh:99`, `bin/tests/test_codex_ociosidade.sh:222`, `bin/tests/test_codex_ociosidade.sh:224`) |
+| M17 | Log futuro deixa de produzir SEM DADO. (`bin/tests/test_codex_ociosidade.sh:102`, `bin/tests/test_codex_ociosidade.sh:223`) |
+| M19 | Situação sintética entra em rc. (`bin/tests/test_codex_ociosidade.sh:72`, `bin/tests/test_codex_ociosidade.sh:225`) |
+| M21 | Papéis/últimas publicam zero ou ausência de registro após erro. (`bin/tests/test_codex_ociosidade.sh:137`, `bin/tests/test_codex_ociosidade.sh:139`, `bin/tests/test_codex_ociosidade.sh:227`) |
+| M24 | Contador de linhas inválidas fica zero em vez de dois. (`bin/tests/test_codex_ociosidade.sh:169`, `bin/tests/test_codex_ociosidade.sh:230`) |
+| **M20, M22, M23, M25** | **Morrem exclusivamente por exceção convertida em `FALHA: ... LEVANTOU`.** (`bin/tests/test_codex_ociosidade.sh:51`, `bin/tests/test_codex_ociosidade.sh:134`, `bin/tests/test_codex_ociosidade.sh:165`, `bin/tests/test_codex_ociosidade.sh:176`) |
+
+Os quatro últimos verificam uma regressão útil de “nunca levanta”, mas **não satisfazem o critério pedido de morte sem exceção**. O executor não reconhece essa origem porque rejeita apenas traceback/`EXCECAO:` e depois aceita qualquer `FALHA:`. Nenhum dos outros mutantes depende somente de mudança no motivo. (`bin/tests/test_codex_ociosidade.sh:200`, `bin/tests/test_codex_ociosidade.sh:202`, `bin/tests/test_codex_ociosidade.sh:53`, `bin/tests/test_codex_ociosidade.sh:169`)
+
+Há duas ressalvas adicionais:
+
+- **M8 não prova unicidade.** Um mutante adicional que troca a leitura de `em_curso` por nova chamada a `_em_curso(c,reg['fins'])` sobreviveu aos casos em memória: reintroduz a consulta duplicada, mas conserva as respostas com PIDs estáveis. M8 atual introduz situação errada, sem medir quantidade de avaliações. (`bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`, `bin/codex_limite_estado.py:207`, `bin/tests/test_codex_ociosidade.sh:214`)
+- **O relaxamento `b>=1` para `b>=0` é equivalente sob os invariantes atuais:** zero ABERTO implica idade `None`, barrada por `s is not None`. Esse mutante adicional sobreviveu em memória; M2 atual usa `b>1`, uma alteração diferente. (`bin/codex_limite_estado.py:232`, `bin/codex_limite_estado.py:251`, `bin/codex_limite_estado.py:296`, `bin/tests/test_codex_ociosidade.sh:208`)
+
+**5) Classes solicitadas**
+
+- **Segundo juiz:** removido da composição atual; o selo ainda deixa sobreviver sua reintrodução correta. (`bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`, `bin/tests/test_codex_ociosidade.sh:214`)
+- **Relógio fora da borda:** permanece na chamada do disjuntor sem `agora`. (`bin/disjuntor.py:2036`, `bin/codex_limite_estado.py:159`)
+- **Derivação paralela:** permanece na janela inclusiva do censo. (`bin/disjuntor.py:2132`, `bin/codex_limite_estado.py:59`)
+- **Campo com dois significados:** separação estrutural corrigida; falta validar rc para impedir texto inválido de entrar nesse campo. (`bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:179`, `bin/codex_limite_estado.py:486`)
+- **Selo sem mordida:** parcialmente corrigido; persistem a certificação das quatro exceções e a falta de detecção da avaliação duplicada. (`bin/tests/test_codex_ociosidade.sh:51`, `bin/tests/test_codex_ociosidade.sh:134`, `bin/tests/test_codex_ociosidade.sh:200`, `bin/tests/test_codex_ociosidade.sh:214`)
+
+VEREDITO: REPROVA -- entrada inválida ainda vira zero/ok, sessões podem derrubar o ESTADO e o selo aceita mortes por exceção (bin/codex_limite_estado.py:139, bin/codex_limite_estado.py:325, bin/codex_limite_estado.py:448; bin/gerar_estado.py:270; bin/tests/test_codex_ociosidade.sh:202).
+
+## 17/11 09:48 · sessao 77c456e611f7 · - · - · origem=Ronald (tmux)
+
+Reprodução em memória: baseline verde; todos os 25 mutantes atuais geram `FALHA`, sem traceback escapado. Execução integral do selo: [nao verificado]. [nao verificado]
+
+- M1–M19 e M24 apresentam divergências em estado, contagem, idade ou campos; M21 detecta publicação de zero/ausência de SEM DADO. Nenhum desses depende somente do texto do motivo. (`bin/tests/test_codex_ociosidade.sh:53`, `bin/tests/test_codex_ociosidade.sh:67`, `bin/tests/test_codex_ociosidade.sh:137`, `bin/tests/test_codex_ociosidade.sh:169`)
+- M20/M22/M23/M25 morrem exclusivamente porque exceções são convertidas pelo teste em `FALHA: ... LEVANTOU`. Isso verifica a propriedade “nunca levanta”, mas o executor aceita mortes por exceção, contrariando seu critério declarado. (`bin/tests/test_codex_ociosidade.sh:51`, `bin/tests/test_codex_ociosidade.sh:134`, `bin/tests/test_codex_ociosidade.sh:165`, `bin/tests/test_codex_ociosidade.sh:176`, `bin/tests/test_codex_ociosidade.sh:200`)
+- A antiga vacuidade “fila é diretório” foi corrigida: `exists` permite chegar ao `open`, cujo `IsADirectoryError` produz SEM DADO. (`bin/codex_limite_estado.py:214`, `bin/codex_limite_estado.py:217`, `bin/codex_limite_estado.py:219`; `bin/tests/test_codex_ociosidade.sh:113`)
+- As bordas 30min59s e início exatamente em `agora` agora têm comparações explícitas. (`bin/tests/test_codex_ociosidade.sh:84`, `bin/tests/test_codex_ociosidade.sh:93`, `bin/tests/test_codex_ociosidade.sh:97`)
+
+Dois mutantes adicionais sobreviveram a todos os casos em memória:
+
+1. Trocar `v = c['em_curso']` por `v = _em_curso(c, reg['fins'])`: reintroduz avaliação duplicada, mas os PIDs estáveis não revelam a consulta adicional. M8 testa rótulo errado, não unicidade. (`bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`, `bin/codex_limite_estado.py:207`; `bin/tests/test_codex_ociosidade.sh:214`)
+2. Trocar `b >= 1` por `b >= 0`: equivalente sob os invariantes atuais, pois `b=0` implica idade `None`, barrada por `s is not None`. M2 atual usa `b > 1`, que é diferente desse relaxamento. (`bin/codex_limite_estado.py:232`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:251`, `bin/codex_limite_estado.py:296`; `bin/tests/test_codex_ociosidade.sh:208`)
 
 ## 17/11 09:47 · sessao a37b28740f37 · - · - · origem=Ronald (tmux)
 
@@ -605,46 +705,4 @@ Item 7 — **CONFERE como autorização nominal para continuar e recertificar**,
 
 Existe interação semântica relevante: F2 troca a seleção da relavra de coluna `validada_em` para `q_nao_validada_pelo_ato`, e faz o mesmo em `_ancoradas` (`/home/ronald/wt-f2-073854/app/chamados/models.py:315`, `/home/ronald/wt-f2-073854/app/chamados/models.py:351`). Também muda a retenção para ler `DecisaoPergunta.leitura`, conservando C21 e `materializada_em` da coluna (`/home/ronald/wt-f2-073854/app/chamados/models.py:1945`). A enumeração da cerca precisa acompanhar esse universo após o rebase; editar `models.py` para compartilhá-la criaria interseção de arquivo, mas isso ainda não é um conflito provado (`CLAUDE.md:309`, `CLAUDE.md:320`).
 
-## 17/11 09:23 · sessao cb0cd920166d · - · - · origem=Ronald (tmux)
-
-`passivo_sem_linha` identifica **projeção de resposta/validação sem a linha correspondente da sequência E1** (`app/chamados/models.py:4098`, `app/chamados/models.py:4102`).
-
-- `_pela_decisao` retorna `('passivo_sem_linha', None)` em `app/chamados/services/tarefa_do_dia.py:154`; o chamador grava a razão e levanta `nao_sei` em `app/chamados/services/tarefa_do_dia.py:334` e `app/chamados/services/tarefa_do_dia.py:338`.
-- A ligação explícita ao escritor existe: `passivo_sem_linha` → `registrar_decisao` em `app/chamados/management/commands/backfill_fio_morto_e4b.py:98`; execução por `DecisaoPergunta.registrar(linhas_da_projecao_sem_linha(ps))` em `app/chamados/management/commands/backfill_fio_morto_e4b.py:141`.
-- A porta única que escreve essa sequência é `DecisaoPergunta.registrar`, usando `bulk_create` (`app/chamados/models.py:4110`, `app/chamados/models.py:4120`).
-- O ramo de lavra do veredito é outro: `veredito_sem_lavra_vigente` em `app/chamados/services/tarefa_do_dia.py:167`; `passivo_sem_linha` retorna antes dele (`app/chamados/services/tarefa_do_dia.py:154`).
-- A saída fornecida permite identificar a falta de registro E1, mas não discrimina se falta resposta, validação ou ambas, nem qual escritor histórico originou a lacuna: **não recuperável [não verificado]**.
-
-## 17/11 09:22 · sessao 463517ba4a9f · - · - · origem=Ronald (tmux)
-
-Remedida dos leitores e autoridades:
-
-| Citação do brief | Neste HEAD | Resultado |
-|---|---|---|
-| `ListaDoAdmin:188-255` | `app/chamados/services/vigia_fio.py:166` | Classe preservada; `dia_do_admin:200`, `dia_na_lista:208`, `colab_na_lista:226`. |
-| `dono_fora_do_fio:274-315` | `app/chamados/services/vigia_fio.py:240` | Continua consultando a lista; balde `fio_do_admin` em `:261-262`. |
-| `censo_alcance:542` | `app/chamados/services/vigia_fio.py:487` | Universo via `dias_que_seguram:537`; perguntas vivas `:566`, `ps:597`; causa d `:638-639`; causa e de dono ausente `:642-645`; contador `:656-659`; rótulos `:483`. |
-| Chamadores do censo | `app/chamados/management/commands/vigiar_fio_morto.py:175`, `:181`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:78` | Conferem. |
-| `porta_da_tarefa:638`, `carga_da_tarefa:648` | `app/chamados/services/tarefa_do_dia.py:712`, `:728` | Nomes e contrato preservados; desconhecimento sem rota em `:719-722`. |
-| `alimentar_portas:1595` | `app/chamados/juizes.py:1616` | Nome preservado. |
-| `dias_que_seguram:109` | `app/folha/fora_da_folha.py:125` | Universo sem consultar porta; contrato em `:126-139`. |
-| Juiz e6 | `app/ponto/management/commands/e6_oraculo.py:53` | Definição começa em 53; corpo decisório continua `:98-110`. `InsumosDoDono:113`, `.dono:182`, `sem_motor` sem CXR retorna `None:193-194`. |
-| Gate e6 | `app/ponto/management/commands/e6_oraculo.py:351` | Continua descartando zero nos dois lados em `:351-353`; distinto da montagem de dono na lista em `app/escala/services/cadastro_realidade.py:510`. |
-| Consumidores do beco | `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:82`, `:105`; `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:51`, `:54` | Conferem. |
-| Chave C5 em pergunta_no_app | `app/chamados/services/pergunta_no_app.py:35` | Confere. |
-| Motor: sentidos de dia | `app/ponto/motor_calculo_v2.py:1528`, `:1623`, `:1997` | Conferem os sítios mencionados. |
-| Padrão lâmpada | `app/docs/GLOSSARIO.md:13` | Confere. |
-| Selo de custo | `app/escala/tests/test_f3_beco1_folga_na_lista.py:395` | Teste citado existe. |
-
-Duas inexatidões materiais do brief:
-
-- Os leitores diretos não leem ambos o dicionário por dia: `contador_nunca_bateu` expande seus pares em `app/chamados/management/commands/disparar_perguntas_competencia.py:56-57`; `vigia_retido_calado.censo` usa somente o conjunto de colaboradores, `app/folha/vigia_retido_calado.py:71-72`.
-- O agregado `por_ass['C5']['ocorrencias']` existe em `app/escala/services/cadastro_realidade.py:946-950`, mas a etiqueta da tela lê `colabs`, `app/templates/escala/cadastro_x_realidade.html:19`. As linhas da tela/PDF mostram `detalhe` e só usam `ocorrencias` como alternativa, respectivamente `app/templates/escala/cadastro_x_realidade.html:28` e `app/escala/services/cadastro_realidade.py:1090-1092`. Portanto não procede afirmar que esse agregado já determina o número mostrado no PDF/tela; a mudança efetiva será sobretudo multiplicar assinaturas e trocar seus detalhes, conforme a implementação futura [nao verificado].
-
-O recorte local da LU2-07 continua por construir: `censo_alcance` usa `empresas_visiveis()` em `app/chamados/services/vigia_fio.py:517-520`; essa consulta filtra apenas ativa/CNPJ em `app/colaboradores/queries.py:85-87`. Cadastro e rótulo continuam `app/colaboradores/models.py:45` e `app/templates/colaboradores/empresa_form.html:35`; terceiro sítio manual em `app/config/crons.py:17`. Alteração global alcançaria o lavrador em `app/folha/management/commands/lavrar_retrato_folha.py:51`.
-
-C11 continua exigindo perguntas vivas, `app/escala/services/cadastro_realidade.py:464-472`, e o ramo d continua exigindo ausência delas, `app/chamados/services/vigia_fio.py:638`; a disjunção D1 persiste.
-
-`competencia_ja_paga` segue obra aberta em `app/docs/BACKLOG.md:1992`; implementação com esse nome não encontrada [nao verificado]. Existem a composição de entregue, `app/chamados/services/vigia_fio.py:785-807`, o juiz `competencia_entregue`, `app/folha/export.py:556`, e o veto `app/chamados/services/fio.py:1353-1363`.
-
-_6443 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6445 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
