@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 05:32:43.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (189.6 MB). Acoes na janela: **505**.
+**Medido em 17/11/2026 05:38:14.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (189.6 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -510,8 +510,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:52:16 | Bash | Check ESPERANDO pids alive | `ps -o pid= -p 1321903 1379354` |
 | 17:52:11 | Bash | Save aval, launch Codex review, register | `cd /home/ronald/saas-hasner; A=logs/AVAIS-1515; D=logs/ESPINHA-BRIEFS/F2; H=$(git rev-parse HEAD) cat > $A/respostas_f2_estados_1611.txt <<'EOF' aval Ronald: RESPOSTAS-F2-ESTADOS-1611 (16/11 17:5x) -- UNIDADE: pergunta (PerguntaDisputa) lida por leitor da projecao e por leitor do ato. Nenhuma lei nova: as 9 PERGUNTAS DE DESENHO de logs/ESPINHA-BRIEFS/F2/estados.md respondidas por CORTE-JUIZ-RESPON ...` |
 | 17:51:50 | Bash | Locate the two cortes files | `cd /home/ronald/saas-hasner; ls logs/AVAIS-1515 \| /bin/grep -i "respondida\\|f2_f9\\|f2-f9\\|cortes_f2"; /bin/grep -ln "CORTE-JUIZ-RESPONDIDA" logs/AVAIS-1515/* 2>/dev/null \| head -3; /bin/grep -ln "CORTES-F2-F9" logs/AVAIS-1515/* \| head -3` |
-| 17:33:49 | Bash | Point ESPERANDO to live c4 suite | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old='ESPERANDO: push.sh \| pid=1245513\n'; assert s.count(old)==1 s=s.replace(old,'ESPERANDO: suite.sh \| pid=1321903\n'); open(p,'w').write(s) EOF echo ok` |
-| 17:33:46 | Bash | Find live builder jobs | `ps -eo pid,args \| /bin/grep "[s]uite.sh\\|[c]odex_pergunta.sh" \| cut -c1-140` |
-| 17:33:43 | Bash | Commit docs marco | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/scratchpad; cat > $S/msg_smoke.txt <<'EOF' Marco SMOKE-EDITOR-CALENDARIO-1611 FECHADA + ESPINHA-NAO-FICA-SEM-CONSTRUTOR-1611 leituras (docs) - UI-EDITOR-CALENDARIO-TRES-GRADES FECHADA: smoke de clique do [nome] em prod 5/5 OK, nada gravado; aval SMOKE-EDITOR-CALENDARIO-1611: dois Rep ...` |
-| 17:33:36 | Bash | See prior docs-marco LEI-AKITA line | `cd /home/ronald/saas-hasner; git log -1 --format=%B ebc7af1a9 \| /bin/grep LEI-AKITA; git status --porcelain app/docs \| head` |
-| 17:33:30 | Bash | Confirm push landed on remote | `cd /home/ronald/saas-hasner; tail -2 logs/UI-EDITOR-CALENDARIO/push.log \| cut -c1-150; git fetch -q origin; git rev-list --count origin/main..main; git rev-list --count main..origin/main` |

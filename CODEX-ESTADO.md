@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 03:42** · publicado em **17/11/2026 03:45** (UTC-3)
+> Ultima resposta processada: **17/11/2026 05:38** · publicado em **17/11/2026 05:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 05:38 · sessao 948a32929507 · - · - · origem=Ronald (tmux)
+
+Numeração contada desde a primeira linha de cada anexo, incluindo vazias.
+
+| Anexo | Linha | Trecho literal |
+|---|---:|---|
+| verif_v1.q | 10 | “(2) sobreposicao com turno previsto ou ausencia barra;” |
+| verif_v1.q | 11 | “tipos de escala diferentes ok; (4) qualquer intervalo, d1 = d2 permitido, competencia nao exportada; (5) carta = Ausencia” |
+| verif_v1.q | 12 | “tipo permuta, aprovada, dia exato, ligada ao id da permuta; (6) compensacao, nao folga trabalhada; sem DSR na semana barra.” |
+| verif_v1.q | 16 | “1. Para cada regra (1)-(6) e cada item do contrato: o codigo a cumpre, cumpre em parte, ou nao cumpre? Contra-exemplo” |
+| verif_v1.q | 18 | “2. Existe caminho em que algo saia da casa (push, julgamento gravado, recalculo de dinheiro, chamado, log externo) ANTES” | [nao verificado]
+| verif_v1.q | 21 | “3. Ordem de travas: permuta x permuta cruzada, permuta x trocar_plantao, permuta x regenerar_celulas_vinculo/” |
+| verif_v1.q | 25 | “LogAuditoria.valor_depois permuta_id/cartas, Ausencia.status/documento/data/data_fim): arquivo:linha de cada” |
+| verif_v1.q | 27 | “significado (dia civil x dia do turno, inclusivo x exclusivo, fuso)?” |
+| verif_v1.q | 29 | “(a interjornada e o DSR locais sao juiz novo?);” |
+| verif_v1.q | 30 | “selo sem mordida (algum teste” | [nao verificado]
+| verif_v1.q | 31 | “passaria com o codigo da base ou com a regra removida?); ordem de trava; campo com dois significados.” |
+| verif_v1.q | 32 | “6. A idempotencia ('igual') pode dar falso positivo (celulas editadas por OUTRA operacao com o mesmo estado, trilha de” |
+| verif_v2.q | 14 | “2. A trava nova cria ORDEM INVERTIDA com algum caminho que ja trava CelulaDia, Ausencia, Chamado ou Pergunta ANTES de” |
+| verif_v2.q | 21 | “5. Os testes novos do delta mordem (passariam com o codigo do hash b85315b2b)? Algum e vacuo?” |
+| verif_v3.q | 11 | “1. TABELA DE ORDEM DE TRAVA. Para cada caminho -- permutar_plantoes, trocar_plantao isolada, editar_dia direto,” |
+| verif_v3.q | 17 | “2. CELULA AUSENTE: quando uma das celulas nao existe (fora do horizonte gerado), ha ciclo entre a permuta/troca e” |
+| verif_v3.q | 18 | “editar_dia direto ou a geracao/regeneracao criando a MESMA celula? Compare com o codigo do hash (sem o delta): o delta” |
+| verif_v3.q | 21 | “4. Os testes novos/reescritos falhariam com o codigo da volta 2 (colaborador travado antes das cartas; guarda de dono” | [nao verificado]
+
+Respostas relevantes:
+
+- **verif_v1.r:12:** “**proíbe expressamente a igualdade**.”
+- **verif_v1.r:13:** “**Não exige tipo nem aprovação e não grava vínculo na Ausencia.**”
+- **verif_v1.r:60:** “Cobertura e sobreposição usam intervalo fechado; a permuta confere posição e fim igual ao início ou nulo.”
+- **verif_v1.r:71:** “A exclusão só existe na guarda da própria permuta.”
+- **verif_v1.r:73:** “`data_fim` é **inclusiva**; nulo significa aberto somente para determinados tipos.”
+- **verif_v1.r:79:** “As guardas locais **são decisões novas**, com piso de11h e semana segunda–domingo. Registro/corte específico delas: **não achei** [nao verificado].”
+- **verif_v1.r:93:** “Entretanto, não compara DNA, geradora, autor, carimbo, pedido, papéis ou se a última edição ainda pertence àquela permuta.”
+- **verif_v3.r:1:** “A alegada ‘ordem da casa’ não corresponde a todas as transações existentes.” Atenção: as aspas no original são tipográficas duplas: `“ordem da casa”`.
+- **verif_v3.r:69:** linha da tabela sobre ordem invertida: “**Continua globalmente:** outra ausência, desligamento, INSS, Chamado e transações de várias etapas têm C antes de algum X posterior.”
+- **verif_v3.r:70:** “**Continua sem demonstrar concorrência ou célula ausente.**”
+- **verif_v3.r:77–78:** testes de ordem na permuta e troca “**Falharia**” contra v2. [nao verificado]
+- **verif_v3.r:84:** “o helper reconhece a presença do SQL `FOR UPDATE`, não a quantidade de linhas retornadas; uma consulta vazia também acrescentaria ‘celula’ à ordem.” Original usa aspas duplas tipográficas em `“celula”`.
+- **verif_v3.r:91:** “**Não rejeitada não significa aprovada.**”
+- **verif_v3.r:103:** “`igual` compara origem/trabalha e existência de trilha com as cartas; não compara DNA, geradora ou última edição, e retorna antes das barreiras atuais.”
+- **verif_v3.r:104:** “**Corrida de criação também pode resultar em erro de unicidade**, mesmo sem deadlock: os criadores não recuperam a célula concorrente, e troca/permuta capturam apenas suas exceções de recusa.”
+- **verif_v3.r:105:** “**Tipo/aprovação das cartas e mesmo dia continuam pendentes.**”
+
+Os pontos `verif_v1.r:60`, `:73` e `verif_v3.r:104` coincidem com as referências fornecidas pelo opus.
+
+## 17/11 05:37 · sessao bddc04b98043 · - · - · origem=Ronald (tmux)
+
+Numeração de `entrega.md` contando linhas vazias, com `# O10-D...` como linha 1; texto total: 180 linhas.
+
+| Tema | Linhas e trecho literal |
+|---|---|
+| `d1=d2` | `entrega.md:5`: `1. **AVAL item 2 literal NAO cumprido: "d1 = d2 aceito".** PERGUNTA DE DESENHO. A porta RECUSA d1 = d2 com frase` |
+| Motivo para adiamento de `d1=d2` | `entrega.md:8`: `os marcos sao os do template do PROPRIO vinculo. Com d1 = d2 os dois ja trabalham no dia; "trocar o turno" so` — complementa `:9-14`; `:14`: `muda). A recusa NAO tem selo nem mutante de proposito, para nao travar o oposto do contrato.` |
+| Tipo/status | `entrega.md:15`: `2. **Regra (5) em parte: carta "tipo permuta, aprovada".** Nao existe `tipo='permuta'` em `ponto/models.py`/` |
+| Qualquer ausência | `entrega.md:16`: `` `ponto/catalogo/ausencias.py`; a porta aceita qualquer `Ausencia` com `documento`, do dia exato, da celula certa,`` |
+| Motivo tipo/status | `entrega.md:18`: ``conferido: exigir `aprovada` com o tipo de hoje (ex. `declaracao`, que e ABONA em``; `:20`: `pelo consumidor da ausencia o dia em que a pessoa trabalha -- efeito de dinheiro errado. Precisa do tipo`; `:21`: `` `permuta` sem efeito no catalogo (migration + catalogo congelado), que e fatia propria. Pergunta: corte do tipo.`` |
+| Interjornada/DSR sem juiz | `entrega.md:22`: ``3. **Interjornada (1) e DSR (6) sem juiz registrado** em `core/juizes.py`: a porta compoe guardas LOCAIS sobre juizes``; `:23`: ``registrados (`vinculo_do_dia`, `eh_dia_trabalho`, `marcos_turno`). Nao registrei juiz (PROIBIDO autoridade nova).``; `:24`: `Pergunta de lei: confirmar com o DP (o aval ja pede homologacao de (1), (3), (6)).` |
+| Ordem global adiada | `entrega.md:29`: `5. **PERGUNTA DE DESENHO -- ORDEM GLOBAL DE TRAVA (Codex v3, procedente, NAO curavel nesta obra).** A casa NAO tem` |
+| Motivo estrutural | `entrega.md:39`: `as barreiras liam vizinho e desligado sem trava (Codex v1, procedente). Opcoes, todas fora desta obra: (a) corte da`; `:40`: `ORDEM DA CASA (ex. C sempre primeiro) migrando editar_dia/regeneracao/cartorio -- obra ESTRUTURA propria;` |
+| Selos/M24/M25 congelam escolha | `entrega.md:55`: ``**Selo congela a escolha:** `test_TRAVA_carta_celula_COLABORADOR_*` e os mutantes M24/M25 cravam X antes de C; se o``; `:56`: `corte for (a) C primeiro, esses selos INVERTEM (mesmo motivo de d1 = d2 nao ter selo). E o comentario` |
+| Comentários/docstring | `entrega.md:57`: `` `ORDEM DA CASA` em `celula.py:744` e `:1003` e a docstring `:969` (linhas de bd590178e) dizem mais do que o vivo: e a ordem dos caminhos``; `:58`: `X -> C, nao uma ordem universal -- ajustar o texto no pouso (nao mexi para nao descertificar a suite).` |
+| Dois significados | `entrega.md:65`: `8. **Carta = Ausencia tem DOIS significados (Codex v1 (4)/(5), procedente, nao curado: e o item 2).** A carta`; restante `:66-68`. |
+| Status pendente | `entrega.md:70`: ``9. **"Nao rejeitada" != "aprovada"** (Codex v3 item 5): a porta exclui so carta `rejeitada`; carta pendente vale.`` |
+| Triagem tipo/status e mesmo dia | `entrega.md:150`: `isolada aceitava rejeitada. Nao curados (TOPO): d1 = d2 (1), tipo/aprovacao da carta (2, 8), regeneracao sem trava` |
+| Idempotência descartada | `entrega.md:153`: ``comparado por CONJUNTO (A/B -> B/A passava). Notas ao TOPO: 6 e 9. Descartado com motivo: idempotencia `igual` nao``; `:154`: ``compara DNA (o DNA e funcao de `trabalha` + vinculo pelo produtor unico P13; repetir com cadastro mudado e``; `:155`: `regeneracao, nao permuta) -- vai ao opus.` |
+| IntegrityError reconhecido/adiado | `entrega.md:157`: `e o A<->C da mesma carta, e que os testes novos discriminam a v2 (3 de 4). PROCEDENTE e NAO curavel aqui: a casa nao`; `:158`: `tem ordem global X/C (TOPO 5), celula ausente (TOPO 5), corrida de criacao pode dar IntegrityError de unicidade em vez`; `:159`: `de deadlock (mesmo desenho, TOPO 7). Repetidos: barreiras na troca isolada (6), idempotencia (descarte acima),` | [nao verificado]
+| RED módulo inexistente | `entrega.md:95`: `- Volta 1: arquivo de teste novo (RED = modulo inexistente na base fbc5c76ce).` |
+| Placar contaminado por ERROR | `entrega.md:104`: ``MORDEM**, MEDIDA POR CAMADA: 21 contra os testes da volta 3 (`placar3.txt`, com o defeito de fixture do teste do``; `:105`: ``dono que dava ERROR em todo run); M19/M26 contra test.v4 (`placar4.txt`); M08/M18/M24/M25 contra o codigo e os testes`` | [nao verificado]
+| Motivo não rerodar mutantes | `entrega.md:106`: ``FINAIS (`placar6.txt`). Os outros 20 (so no placar3) nao foram rerodados sobre v5 -- mutar `celula.py` depois do veredito descertificaria a arvore (o delta v3->v5 so muda o texto da regra 4 e`` |
+| Sombra se declara atomic+raise | `entrega.md:113`: ``## DIFF NA SOMBRA (atomic+raise; `o10d_permuta_diff.py`, log `sombra_diff_final.log`; codigo da volta 1)`` |
+| Dois colaboradores no FM futuro | `entrega.md:116`: `(uma por colab, {d1,d2}); FechamentoMensal movido: (128,12/2026), (136,12/2026), nenhum em competencia exportada.` |
+| FM intacto alegado | `entrega.md:121`: `- (2c) competencia exportada 21/08-20/09: `recusada` com 4 frases LAVRADA; FM intacto True; frota `editada` +0.` |
+| Drenagem manual mencionada | `entrega.md:128`: ``linhas: `on_commit registrados` 1 -> 3 e `drenados` 5 -> 7. Os +2 sao os sentinelas `_TravaDoColaborador` `` |
+| Alegação dos efeitos | `entrega.md:131`: `` `permutada`, 4 celulas, frota +4, trilhas 1/2/4, rabo 0 dentro / 2 no commit, FM movidos so na competencia aberta,`` | [nao verificado]
+
+Não achados específicos na entrega:
+
+- Bug da aceitação de **range aberto** como carta e exclusão indevida da guarda: **não achado**; `:65-68` tratam do conflito geral dos significados.
+- Pergunta sobre **dia cedido ter de ser plantão**: **não achado**; `:119` apenas relata a recusa `"nao tem plantao previsto 14/11"`.
+- `M06/M09` morrerem por exceção: **não achado**.
+- Literal `GREEN_v3 errors=1`: **não achado**; defeito geral de ERROR em todo run consta de `:104-105`.
+- MD5 de somente dois colaboradores: **não achado**.
+- Aviso explícito de que a drenagem aconteceu **dentro do atomic**: **não achado**; `:113` dá contexto atomic+raise e `:128` menciona drenagem, sem essa crítica.
+
+A remissão de `entrega.md:159` para “TOPO 7” é textual, mas o TOPO 7 em `:61-64` trata de “ambos ativos”, não de `IntegrityError`.
+
+## 17/11 05:37 · sessao 7d588557d67a · - · - · origem=Ronald (tmux)
+
+Auditoria recomendada:
+
+- **Item 1: (a).** A pergunta cobria ausência, dia exato e semântica de `data_fim` (`verif_v1.q:10–12`, `:24–27`). A resposta descreveu intervalo fechado/nulo aberto, mas não identificou o contraexemplo composto de aceitar afastamento como carta e excluí-lo da barreira (`verif_v1.r:60`, `:73`).
+- **Item 2: (b).** Tipo/aprovação e `d1=d2` foram apontados e conscientemente adiados (`verif_v1.r`, seção 1; `entrega.md`, TOPO 1, 2, 8, 9).
+- **Item 3:** comentários/docstring de ordem universal **(b)**: a abertura de `verif_v3.r` contesta expressamente a “ordem da casa”; TOPO 5 admite o exagero e adia sua correção. Para o defeito específico de **selos congelarem escolha sem aval**, não há crítica literal na resposta: **(a)** é mais rigoroso que atribuir reconhecimento explícito ao Codex. A resposta identifica o comportamento dos testes, mas não esse defeito (`verif_v3.r`, seção 4). Resultados particulares de M24/M25 ficam **(c)**. [nao verificado]
+- **Item 4:** IntegrityError **(b)**; interjornada/DSR como decisões sem juiz **(b)**; exigência adicional de plantão no dia cedido **(e)**. Para esta última, trecho específico nas perguntas/respostas: **não achado**. O construtor conhecia o predicado, pois o implementou e justificou (`app/ponto/portas/celula.py:905–911`) e registrou sua recusa na sombra (`entrega.md`, seção DIFF NA SOMBRA, caso 2a). Portanto não cabe **(d)**.
+- **Item 5: (b).** DNA/geradora ignorados foram vistos; houve descarte expresso por P13 (`verif_v1.r`, seção 6; `verif_v3.r`, seção 6; `entrega.md`, TRIAGEM CODEX v2).
+- **Itens 6–7: (c).** Os defeitos concretos dependem de RED, execuções de mutantes e instrumento/medição da sombra fornecidos posteriormente (`opus_final.md:7–8`, contando título como linha 1).
+
+Não encontrei fundamento para **(d)**: nos casos ausentes da crítica do Codex, existe reconhecimento do construtor ou o material está fora do alcance declarado. [nao verificado]
 
 ## 17/11 03:42 · sessao 170bd6b657ed · O10-D-PERMUTA-RECIPROCA · verificador · origem=Code
 
@@ -727,169 +827,4 @@ Executei o classificador real, com `python3 -B` e `PYTHONDONTWRITEBYTECODE=1`, s
 
 **Fila — limite futuro:** o coletor aceita qualquer keyword cujo primeiro segmento seja `resposta_colab`, inclusive `resposta_colab=` em escrita, e usa `ast.walk`, que atravessa corpos diferidos. Assim, uma futura função de escrita pode entrar indevidamente no conjunto; isso não ocorre entre os novos membros atuais. (`app/chamados/tests/test_e3_catraca_respondedores.py:124`, `app/chamados/tests/test_e3_catraca_respondedores.py:131`, `app/chamados/tests/test_e3_catraca_respondedores.py:144`)
 
-## 17/11 02:53 · sessao 250803e680f9 · - · - · origem=Ronald (tmux)
-
-**Pergunta 5 — a docstring está correta no predicado, mas a sonda não cobre a cadeia inteira.** `irmas_respondidas_sem_consumo` usa o universo de crédito e delega a `sem_veredito_entre(..., ignorar_tranca=True)`; esse juiz exige `validada_em/materializada_em` nulos e `pergunta_respondida` (instante E texto). `app/chamados/juizes.py:2115-2117`; `app/chamados/models.py:1926-1936`.
-
-A frase “15 chamados, 113 perguntas a menos” corresponde às 15 linhas CH alteradas e ao resumo 111 ENTREGUE + 2 abertas do anexo; a lista das 111 está truncada, portanto sua cardinalidade não pode ser recontada integralmente. **[não verificado — anexo fornecido, sem arquivo:linha]**
-
-| Gravidade | Achado e evidência |
-|---|---|
-| **fila** | A saída fornecida mede a lista de irmãs, retenção e chamadas diretas de `encerrar_com_retencao`/`_retratar` para CH23072/33525; mede também o resultado do juiz CSF. Não demonstra aprovação de justificativa, cascata real, `_fecha`, reabertura HX, executor CSF completo, I12 ou consumidor outbox. **[não verificado — limites da saída fornecida]** |
-| **fila** | Perder a retenção não equivale a retratar. `retencao_da_retratacao` verifica irmãs e depois justificativa alheia no ato; `_retratar` ainda exige `ch.reconciliar`. `app/chamados/reconciliador.py:448-455`; `app/chamados/reconciliador.py:520-526`. |
-| **fila** | Os caminhos de justificativa não foram executados na saída: aprovação chama `encerrar_chamado_de_origem` e `_encerrar_bloqueio_de_entrada`; ajuste retroativo percorre `_cascata_do_turno` e chama `encerrar_com_retencao`. `app/ponto/services/justificativa.py:217-218`; `app/ponto/services/justificativa.py:393-408`. A enumeração de cinco justificativas relacionadas não é execução dessas portas. **[não verificado — anexo fornecido]** |
-| **fila** | `_fecha` da materialização consulta irmãs; sem elas tenta reconciliar destino e clones. Esse efeito não aparece executado na sonda. `app/chamados/services/materializacao.py:1246-1266`. |
-| **fila** | HX só reabre pai terminal em disputa aberta quando ainda há irmãs; meia-resposta deixa de justificar reabertura. A sonda imprime pais/disputas/listas, mas não mostra execução desse ramo. `app/chamados/services/disputa_emissao.py:2025-2035`. |
-| **fila** | CSF reúne perguntas do pai **e** do destino, com `ignorar_tranca=True`; `pode_executar_csf` nega quando a lista é não vazia. A mesma lista protege o gate do pai em `reconciliar`. `app/ponto/supra_juiz.py:573-588`; `app/chamados/models.py:716-719`. Portanto medir CSF cobre esse predicado compartilhado, mas não executa o fechamento pelo gate. |
-| **fila** | I12 é outro leitor não medido: chamado de turno vivo com TM fechado vai ao piso I12r quando tem irmãs; sem irmãs vira violação I12. A contraprova ainda consulta a trilha histórica de retenção. `app/chamados/management/commands/auditar_invariantes_chamados.py:980-995`; `app/chamados/management/commands/auditar_invariantes_chamados.py:121-129`. |
-
-**CH33525:** não atribuir seu `_retratar=False` a uma premissa específica. O encerramento forçado verifica motor e pergunta viva; a reconciliação verifica também premissa e conversa do pai. Isso explica por que os resultados podem divergir, mas a causa exata não foi exposta na sonda. `app/chamados/models.py:1686-1693`; `app/chamados/models.py:683-693`. **Causa específica de CH33525: [não verificado].**
-
-**EXPORTADA e cron: alcance existe; execução concreta dos casos anexados não está provada.**
-
-- O cron CSF executável usa `--executar` sem datas e, portanto, janela corrente. O comando exige também lavra `cobranca_indevida`, código, gate CSF e ausência de cobrança órfã de regeneração antes de tentar retratar. `app/config/crons.py:599`; `app/ponto/management/commands/supra_juiz.py:85-97`; `app/ponto/management/commands/supra_juiz.py:249-286`. Os dois chamados anexados são de setembro e estão fora da janela informada; não se pode dizer que esse cron os retratará hoje. **[não verificado — anexo fornecido]**
-- Existe outro caminho automático: cron de um minuto → `consumir_eventos_celula` → retratação por célula e por premissa. Ele percorre todos os vivos pertinentes do colaborador sem cerca de competência entregue nesses laços. `app/config/crons.py:394`; `app/chamados/management/commands/consumir_eventos_celula.py:31`; `app/chamados/reconciliador.py:1367-1375`; `app/chamados/reconciliador.py:998-1000`; `app/chamados/reconciliador.py:1456-1467`.
-- O gate de pergunta viva **exclui explicitamente competência entregue** da proteção adicional; portanto essa guarda não transforma o consumidor em proteção geral contra escrita em EXPORTADA. `app/chamados/models.py:364-365`. Uma retratação permitida escreve chamado, pode rejeitar justificativa pendente, resolve perguntas e acrescenta ocorrência; a transição também relavra perguntas de destino não validadas. `app/chamados/reconciliador.py:524-542`; `app/chamados/models.py:307-312`.
-- Isso prova **alcance estrutural automático em EXPORTADA**, condicionado a evento pendente e aos demais juízos. Não prova que CH23072/33525 satisfaçam os produtores e os juízos desse consumidor hoje. Ambos mostram célula `cobrado` na saída, e a retratação por célula só aceita veredito que absolve e ausência de marcos pendentes. `app/chamados/reconciliador.py:1025-1033`. **Evento pendente e execução concreta: [não verificado].**
-- O cron `reconciliar_chamados */15` é vigia, sem `--apply`; não confundir seus comentários históricos com escritor atual. `app/config/crons.py:395`; `app/chamados/management/commands/reconciliar_chamados.py:29`; `app/chamados/management/commands/reconciliar_chamados.py:71-85`.
-
-**Pergunta 6, neste recorte:** não encontrei novo segundo juiz na retenção: retratação, materialização, HX e auditor delegam à mesma autoridade; CSF delega ao mesmo corpo de veredito. `app/chamados/reconciliador.py:448-449`; `app/chamados/services/materializacao.py:1243-1247`; `app/chamados/services/disputa_emissao.py:2024-2031`; `app/chamados/management/commands/auditar_invariantes_chamados.py:977-986`; `app/ponto/supra_juiz.py:573-574`. O achado demonstrável aqui é **quem-mais-lê/medição incompleta (fila)**; não classificaria a simples perda de retenção em entregues como violação do aval restrito de devolução de estoque. A ocorrência concreta de escrita automática indevida em entregues permanece **[não verificado]**.
-
-## 17/11 01:36 · sessao d9fc54d941c8 · PREPARA-F2-F4-F7 · sonda · origem=Code
-
-**F7 permanece com `lei 0` própria e `RED que morde 2`, como classificação estática.** A property continua divergindo do juiz; os prefills continuam lendo o texto cru. A execução desses REDs permanece **[nao verificado]**. (`app/chamados/models.py:3665`; `app/chamados/juizes.py:1552`; `app/templates/chamados/partials/_card_atendimento.html:114`; `app/templates/chamados/partials/_card_atendimento.html:148`; `app/templates/chamados/partials/_card_atendimento.html:154`.)
-
-Todos os valores abaixo foram recebidos no dado raspado, sem reconferência independente: **[nao verificado]**. As referências ao código sustentam sua interpretação.
-
-**SCRIPT 1 — projeção sem linha**
-
-A função procura correspondência por **pergunta, ato e instante**. O recorte do comando inclui horizonte, perguntas sem dia e conversas; a projeção integral amplia essa seleção. (`app/chamados/models.py:4087`; `app/chamados/models.py:4094`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:59`.)
-
-| Rótulo | Valor recebido | O que responde em §4/§5 |
-|---|---:|---|
-| `backfill_recorte_linhas_resposta` | 2992 [nao verificado] | **Confirma e dimensiona** RESPOSTAS projetadas sem linha correspondente no recorte. |
-| `backfill_recorte_linhas_validacao` | 2248 [nao verificado] | **Confirma e dimensiona** VALIDAÇÕES projetadas sem correspondência no mesmo recorte. |
-| `backfill_recorte_perguntas` | 3023 [nao verificado] | **Dimensiona** perguntas distintas com alguma dessas faltas. |
-| `projecao_integral_linhas_resposta` | 16941 [nao verificado] | **Dimensiona** a falta de linhas RESPOSTA no universo integral. |
-| `projecao_integral_linhas_validacao` | 15115 [nao verificado] | **Dimensiona** a falta de linhas VALIDAÇÃO no universo integral. |
-| `projecao_integral_perguntas` | 16972 [nao verificado] | **Dimensiona** perguntas distintas afetadas no universo integral. |
-
-Esses números preenchem a lacuna quantitativa do final da §4 e dimensionam o R1b da §5. Não estabelecem equivalência com o antigo fold nem demonstram revogação de validação humana; a função apenas propõe conservar a projeção existente. Recorte e integral não se somam. (`app/chamados/models.py:4082`; `app/chamados/models.py:4098`; `app/chamados/models.py:4102`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`.)
-
-**SCRIPT 2 — divergências físicas e estados**
-
-A property testa somente I; o juiz exige I e texto após trim. Portanto, a divergência contada corresponde a instante preenchido com texto vazio/branco. (`app/chamados/models.py:3665`; `app/chamados/juizes.py:1546`; `app/chamados/juizes.py:1552`.)
-
-| Rótulo | Valor recebido | O que responde em §4/§5 |
-|---|---:|---|
-| `perguntas_lidas` | 50447 [nao verificado] | **Dimensiona** o universo percorrido pelas comparações. |
-| `property_respondida_diverge_juiz` | 9626 [nao verificado] | **Confirma e dimensiona o primeiro RED** da §5 na sombra recebida. |
-| `U2_fisico_ultima_devolucao_com_V` | 0 [nao verificado] | **Derruba a ocorrência atual dessa forma física no universo sondado**; não demonstra equivalência entre projeção e fold. |
-| `U1_forma_materializada_sem_identidade` | 27486 [nao verificado] | **Dimensiona candidatos físicos U1**; materialização sem via de identidade ainda exige julgamento de lastro. |
-| `U1_forma_juiz_lastro_false` | 4431 [nao verificado] | **Confirma e dimensiona discordância entre carimbo e juiz de lastro** dentro desses candidatos; não acrescenta automaticamente RED próprio F7. |
-| `U1_falhas_juiz_lastro` | 0 [nao verificado] | **Confirma completude das chamadas externas desse juiz na sonda**; não significa ausência de diagnósticos internos. |
-
-U2 usa a ordenação temporal da sequência. U1 exclui as vias que encerram por identidade e consulta o juiz de testemunha externa. (`app/chamados/models.py:4056`; `app/chamados/models.py:3202`; `app/chamados/juizes.py:666`.)
-
-Os números seguintes contam retornos do **adaptador**, inclusive perguntas que podem ficar fora dos gates visuais. Não são contagens de botões apresentados nem de cliques executados. (`app/chamados/templatetags/chamados_tags.py:132`; `app/templates/chamados/partials/_pergunta_card.html:29`; `app/templates/chamados/partials/_pergunta_card.html:42`.)
-
-| Rótulo | Valor recebido | O que responde em §4/§5 |
-|---|---:|---|
-| `estado_card_aplicada` | 5869 [nao verificado] | **Dimensiona** o ramo por carimbo; não certifica lastro. |
-| `estado_card_aplicavel` | 430 [nao verificado] | **Dimensiona** o retorno “aplicável agora”; não prova validação ou plantio. |
-| `estado_card_bloqueada_competencia` | 3 [nao verificado] | **Dimensiona** o impedimento F6 cujo gate conserva o toque de Validar. |
-| `estado_card_bloqueada_competencia_entregue` | 65 [nao verificado] | **Confirma e dimensiona** o estado próprio de entregue, retirado de Validar pelos templates. |
-| `estado_card_bloqueada_data` | 11 [nao verificado] | **Dimensiona** o impedimento de data em disputa. |
-| `estado_card_bloqueada_paridade` | 122 [nao verificado] | **Dimensiona** o impedimento de paridade. |
-| `estado_card_espera_declarado_x_gravado` | 9 [nao verificado] | **Confirma e dimensiona** a espera tratada na §4/§5. |
-| `estado_card_fora_de_escopo` | 43205 [nao verificado] | **Dimensiona** retornos sem estado de aplicação; não significa perguntas sem resposta ou sem problema. |
-| `estado_card_invalida` | 301 [nao verificado] | **Dimensiona** casos em que o derivador não produziu instante de plantio. |
-| `estado_card_ja_satisfeita` | 75 [nao verificado] | **Dimensiona** batida aprovada já existente na janela. |
-| `estado_card_recusada_fato_ocupado` | 28 [nao verificado] | **Dimensiona** recusas terminais por fato ocupado. |
-| `estado_card_recusada_paridade` | 329 [nao verificado] | **Dimensiona** recusas terminais por paridade. |
-
-As autoridades desses estados estão em `app/chamados/services/materializacao.py:840`, `app/chamados/services/materializacao.py:862`, `app/chamados/services/materializacao.py:886`, `app/chamados/services/materializacao.py:891`, `app/chamados/services/materializacao.py:895`, `app/chamados/services/materializacao.py:899`, `app/chamados/services/materializacao.py:903` e `app/chamados/services/materializacao.py:933`. Os gates distinguem entregue, espera e competência apenas fechada. (`app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/_pergunta_card.html:49`; `app/templates/chamados/partials/modal_fio.html:274`.)
-
-`aplicada` decorre do carimbo antes da consulta ao derivador; por isso seus 5869 não refutam os 4431 resultados U1 sem lastro. A interseção individual dessas contagens é **[nao verificado]**. (`app/chamados/services/materializacao.py:871`.)
-
-O **segundo RED**, texto retirado reaparecendo em prefill, continua sustentado pelo código, mas não recebeu contador específico: a sonda não cruza texto sem I, reabertura, vitalidade e tipo de entrada. Sua ocorrência individual na sombra é **[nao verificado]**. (`app/templates/chamados/partials/_card_atendimento.html:114`; `app/templates/chamados/partials/_card_atendimento.html:148`; `app/templates/chamados/partials/_card_atendimento.html:154`.)
-
-**SCRIPT 3 — BUG-PAR e U163**
-
-O contador parte dos IDs fechados de U163 e separa carimbadas das atualmente sem carimbo; pertencimento não deriva do estado ou da recusa. (`app/chamados/services/universo_bug_par.py:12`; `app/chamados/services/universo_bug_par.py:33`; `app/chamados/services/materializacao.py:321`; `app/chamados/services/materializacao.py:326`.)
-
-| Rótulo | Valor recebido | O que responde em §4/§5 |
-|---|---:|---|
-| `BUGPAR_universo` | 60 [nao verificado] | **Dimensiona** U163 atualmente sem carimbo; não comprova identidade com os IDs originais de U60. |
-| `BUGPAR_n_aplicaveis` | 40 [nao verificado] | **Dimensiona** as atualmente aplicáveis pela testemunha. |
-| `BUGPAR_resolvidas` | 0 [nao verificado] | **Dimensiona** ausência de carimbadas que deixaram de satisfazer o predicado BUG-PAR-103. |
-| `BUGPAR_pendentes_aval` | 79 [nao verificado] | **Dimensiona** pendências administrativas, incluindo estados que impedem validar. |
-| `BUGPAR_congelados_no_recorte` | 163 [nao verificado] | **Dimensiona** pertencimento presente no recorte; esse contador não deve zerar. |
-| `BUGPAR_legitimas` | 10 [nao verificado] | **Dimensiona** retornos `bloqueada_paridade`. |
-| `BUGPAR_outras` | 1 [nao verificado] | **Dimensiona** outro estado; qual estado e pergunta: **[nao verificado]**. |
-| `BUGPAR_espera_declarado` | 9 [nao verificado] | **Confirma e dimensiona** a espera declarado × gravado da §4/§5. |
-| `BUGPAR_bug_par_103` | 19 [nao verificado] | **Dimensiona** carimbadas absolvidas devolvíveis em competência não entregue. |
-| `BUGPAR_bug_par_103_pauta_dp` | 84 [nao verificado] | **Dimensiona** carimbadas absolvidas em competência entregue, separadas para Pauta DP. |
-| `BUGPAR_bug_par_103_sem_dia` | 0 [nao verificado] | **Dimensiona** ausência de dia faltante nesse subconjunto carimbado. |
-| `U163_existentes` | 163 [nao verificado] | **Confirma e dimensiona** presença dos IDs da fonte fechada. |
-| `U163_competencia_entregue` | 85 [nao verificado] | **Dimensiona** toda U163 em entregue pelo dia do fato; não se soma aos 84 de Pauta DP. |
-| `U163_sem_dia_do_fato` | 0 [nao verificado] | **Dimensiona** ausência de dia faltante em toda U163 existente; não responde pelo universo fora163. |
-
-As partições são as do contador real: `40+10+1+9=60`, `60+19=79` e `79+0+84+0=163`, aplicadas aos valores recebidos **[nao verificado]**. (`app/chamados/services/materializacao.py:330`; `app/chamados/services/materializacao.py:339`; `app/chamados/services/materializacao.py:351`; `app/chamados/services/materializacao.py:356`.)
-
-**Correção da §4:** já há redação registrada para `CORTE-U163-NO-K6`: retirar a exclusão de U163 da guarda L1/L5 e manter F6 intocada. Cai a lacuna “literal não verificado”; permanece a implementação pendente na F4, pois o código ainda pula U163. Os 85 dimensionam esse complemento; os 40 aplicáveis são resultado da guarda atual, não previsão após a mudança. (`app/docs/BACKLOG.md:823`; `app/chamados/services/materializacao.py:795`; `app/chamados/services/materializacao.py:806`.)
-
-**SCRIPT 4 — ressuscitação**
-
-A seleção real exige materialização, texto `NULL` ou vazio, exclusões por via, guarda do marco e C6 sobre a pergunta como ficaria após a limpeza. Portanto, não é censo de toda resposta vazia ou de todos os pares ilegais. (`app/chamados/models.py:1530`; `app/chamados/models.py:1533`; `app/chamados/models.py:1550`; `app/chamados/models.py:1553`.)
-
-| Rótulo | Valor recebido | O que responde em §4/§5 |
-|---|---:|---|
-| `ressuscitacao_atual_chamados` | 730 [nao verificado] | **Dimensiona** chamados com seleção não vazia pela porta atual. |
-| `ressuscitacao_atual_perguntas` | 2025 [nao verificado] | **Dimensiona** perguntas distintas que seriam selecionadas. |
-| `ressuscitacao_atual_colaboradores` | 119 [nao verificado] | **Dimensiona** pessoas distintas alcançadas pela seleção. |
-
-Isso preenche o alcance da dependência herdada na §4, sem decidir “deveria voltar ao colaborador?”. Essa pergunta continua expressamente não decidida. Não demonstra ressuscitação executada. (`app/chamados/models.py:1501`; `app/docs/LEIS.md:151`; `app/docs/CORTES.md:488`.)
-
-**ERROR e números ausentes**
-
-**Scripts 2/3, causa em uma linha:** marco cobrado e ATA discordam no tipo; o código registra `Exception` como diagnóstico e continua retornando o tipo do marco cobrado. (`app/chamados/services/materializacao.py:568`; `app/chamados/services/materializacao.py:571`; `app/chamados/services/materializacao.py:576`.)
-
-`NoneType: None` decorre de `exc_info=True` nessa chamada sem exceção ativa. (`app/core/observ.py:79`; `app/chamados/services/materializacao.py:573`.)
-
-No dado recebido, os scripts 1–4 imprimiram todos os números previstos e terminou `rc_sombra=0`: nenhum número solicitado ficou ausente por esses diagnósticos **[nao verificado]**. Não há contador dedicado de divergências de marco; `U1_falhas_juiz_lastro=0` não mede isso. (`app/core/observ.py:75`; `app/core/observ.py:77`.)
-
-O SCRIPT 5 foi retirado deliberadamente desta volta; não apresentou falha nem número de frota **[nao verificado]**.
-
-**Contagem final:** nenhum número acrescenta pergunta própria de lei F7 ou novo RED que morde. Mantêm-se `lei 0` própria e `RED que morde 2`; o primeiro ganhou dimensão de sombra, e o segundo continua sem dimensão de frota. A pergunta herdada de ressuscitação permanece aberta; U163 passa de lacuna documental a complemento F4 já decidido. (`app/docs/LEIS.md:151`; `app/docs/BACKLOG.md:823`; `app/chamados/models.py:3665`; `app/chamados/juizes.py:1552`; `app/templates/chamados/partials/_card_atendimento.html:148`.)
-
-## 17/11 01:35 · sessao ab507d5ea233 · - · - · origem=Ronald (tmux)
-
-SCRIPT 3 interpreta assim os valores do dado fornecido; confirmação independente dos valores em banco: **[nao verificado]**.
-
-| Rótulo | Valor | Resposta às seções 4/5 |
-|---|---:|---|
-| `BUGPAR_universo` | 60 | Dimensiona as perguntas atuais de U163 sem carimbo de materialização. Não comprova que os IDs sejam exatamente os do conjunto original U60. (`app/chamados/services/materializacao.py:321`, `:326`, `:338`, `:351`.) |
-| `BUGPAR_n_aplicaveis` | 40 | Dimensiona as que a testemunha real devolve como `aplicavel`; não comprova execução da validação nem teste RED. (`app/chamados/services/materializacao.py:339`, `:340`, `:352`.) |
-| `BUGPAR_resolvidas` | 0 | Nenhuma carimbada deixou de satisfazer o predicado `paridade_absolvida_bug_par_103` neste recorte. (`app/chamados/services/materializacao.py:326`, `:327`, `:328`.) |
-| `BUGPAR_pendentes_aval` | 79 | Dimensiona pendências administrativas: `universo + len(bug_par_103)` = 60+19, incluindo estados que ainda impedem validar. (`app/chamados/services/materializacao.py:314`, `:356`.) |
-| `BUGPAR_congelados_no_recorte` | 163 | Dimensiona pertencimento fechado no recorte; não é um contador destinado a zerar. (`app/chamados/services/materializacao.py:315`, `:356`; `app/chamados/services/universo_bug_par.py:30`.) |
-| `BUGPAR_legitimas` | 10 | Dimensiona respostas cuja testemunha retorna `bloqueada_paridade`; não significa dez leis ou dez REDs. (`app/chamados/services/materializacao.py:342`, `:343`.) |
-| `BUGPAR_outras` | 1 | Dimensiona um estado diferente de aplicável/paridade/espera; o estado individual não consta do dado. (`app/chamados/services/materializacao.py:344`, `:346`, `:347`; identidade/estado: **[nao verificado]**.) |
-| `BUGPAR_espera_declarado` | 9 | Confirma ocorrência da espera prevista pelo corte declarado versus gravado; dimensiona o caso RED da seção 5, sem demonstrar o HTML ou clique. (`app/chamados/services/materializacao.py:305`, `:344`, `:736`, `:741`.) |
-| `BUGPAR_bug_par_103` | 19 | Dimensiona carimbadas absolvidas devolvíveis, com competência não entregue. (`app/chamados/services/materializacao.py:326`, `:330`, `:335`.) |
-| `BUGPAR_bug_par_103_pauta_dp` | 84 | Dimensiona carimbadas absolvidas em competência entregue, separadas para Pauta DP. (`app/chamados/services/materializacao.py:333`, `:334`; `app/chamados/services/validacao.py:338`, `:339`.) |
-| `BUGPAR_bug_par_103_sem_dia` | 0 | Nenhuma carimbada absolvida sem data do fato nesse subconjunto. (`app/chamados/services/materializacao.py:330`, `:331`, `:332`.) |
-| `U163_existentes` | 163 | Dimensiona presença em banco dos IDs da fonte fechada; pertencimento não depende de recusa ou lâmpada. (`app/chamados/services/universo_bug_par.py:12`, `:20`, `:30`, `:33`.) |
-| `U163_competencia_entregue` | 85 | Dimensiona toda a interseção U163 × competência entregue pelo dia do fato, maior que o subconjunto Pauta DP de 84; não soma aos 84. (`app/chamados/services/materializacao.py:776`, `:784`, `:788`, `:789`.) |
-| `U163_sem_dia_do_fato` | 0 | Nenhuma pergunta existente de U163 sem dia do fato; não extrapola às perguntas fora163. (`app/chamados/services/materializacao.py:782`, `:784`.) |
-
-As partições fecham: 40+10+1+9=60; 60+19=79; 79+0+84+0=163. São relações do contador real. (`app/chamados/services/materializacao.py:351`, `:356`.) Como as carimbadas são 19+84 e `resolvidas=0`, a diferença 85−84 situa uma entregue entre as 60 sem carimbo; sua identidade é **[nao verificado]**.
-
-**Correção relevante da seção 4:** a cópia contém a redação registrada do `CORTE-U163-NO-K6`: retirar a exclusão das 163 de `k6_consulta_a_pergunta`, aplicar L1/L5 e manter F6 intocada; é complemento F4 com sonda antes de construir. A antiga lacuna “literal [nao verificado]” pode ser baixada. (`app/docs/BACKLOG.md:823`.) O código ainda exclui U163, portanto os 85 dimensionam esse complemento pendente, sem constituir nova pergunta de lei F7. (`app/chamados/services/materializacao.py:792`, `:795`, `:806`.)
-
-**ERROR dos scripts 2/3, em uma linha:** divergência entre o tipo do marco cobrado e o tipo da ATA; o código registra um objeto `Exception` e segue retornando o tipo do marco cobrado, sem `raise` nesse ramo. (`app/chamados/services/materializacao.py:527`, `:568`, `:571`, `:576`.) O `NoneType: None` vem de `exc_info=True` sem exceção ativa nessa chamada. (`app/core/observ.py:79`; `app/chamados/services/materializacao.py:573`.)
-
-Não há evidência de script abortado: os números solicitados dos scripts 1–4 e `rc_sombra=0` estão no dado; confirmação independente da execução: **[nao verificado]**. Script 5 foi explicitamente excluído, não falhou **[nao verificado]**. Falta número próprio para divergências de marco e exceções engolidas pelo adaptador: `U1_falhas_juiz_lastro=0` não mede esses eventos. (`app/core/observ.py:75`, `:77`; `app/chamados/templatetags/chamados_tags.py:135`, `:137`.)
-
-_6316 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6319 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
