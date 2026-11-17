@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 14:00** · publicado em **17/11/2026 14:03** (UTC-3)
+> Ultima resposta processada: **17/11/2026 14:09** · publicado em **17/11/2026 14:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 14:09 · sessao 56328c467ec4 · - · - · origem=Ronald (tmux)
+
+ITEM 2 — AVAL-DEVOLVIDO
+
+1. Premissas: parcialmente. O POST só consulta a porta e devolve recusa (`app/folha/views.py:124-133`); o escritor existente lavra `MetricaSnapshot` por empresa/dia via `update_or_create`, sem tentativa individual (`app/folha/porta_export.py:768-796`). O comando aceita somente `--mes` e `--ano`, portanto a distinção “manual sem `--tentativa`” não existe nesta cópia (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27-29`). A medição está explicitamente declarada como não agendada, contrariando a premissa de cron existente (`app/config/crons.py:887-897`). A exceção de `medir` imprime motivo e termina antes de `lavrar`; não deixa registro FALHOU (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-95`).
+
+2. Lei vigente: escritor único está alinhado à L-007 e ao contrato estrutural (`app/docs/LEIS.md:65`; `CLAUDE.md:178`). A declaração atual de cron é “não agendar”; o aval precisa reconciliar isso para tornar R9 executável (`app/config/crons.py:887-897`). Não há estados FALHOU/DIVERGENTE demonstrados no escritor atual, cujo valor é número de falhas ou -1 (`app/folha/porta_export.py:772-776`).
+
+3. Literal: “toda execução cria a tentativa” não define se a unidade é invocação ou empresa. O comando percorre empresas, lavra cada uma e aborta na primeira exceção; uma invocação pode ter empresas já lavradas e outras não medidas (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-95`). O carimbo atual sobrescreve a mesma empresa/dia inclusive quando muda competência, pois competência só está em `defaults` (`app/folha/porta_export.py:772-776`). A unidade do registro e o cron de R9 precisam ser identificados antes da construção.
+
+4. Dinheiro/exportada/!: a escrita examinada é de métrica, sem alteração de `FechamentoMensal` (`app/folha/porta_export.py:768-796`). Tocar gravado exportado exigiria `!` e a porta específica, fora dessa escrita (`CLAUDE.md:411-417`). Impacto real em produção: [não verificado].
+
+ITEM 2: PROCEDE — premissas de cron e `--tentativa` não correspondem à cópia, e “toda execução” deixa a unidade do registro indefinida (`app/config/crons.py:887-897`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27-29`, `:86-95`).
 
 ## 17/11 14:00 · sessao 3f14516fb790 · PORTA-EXPORT · verificador · origem=Code
 
@@ -793,20 +807,4 @@ Não restou item em **(iii)** para repetir as quatro perguntas; as pendências a
 
 VEREDITO item 2: CONFERE -- itens em (iii): nenhum
 
-## 17/11 12:01 · sessao 1ab63001e53f · - · - · origem=Ronald (tmux)
-
-Minha leitura é **nenhum (iii)**, pelo critério estrito pedido; as pendências concretas são de execução orientada pelo literal, e o encaixe técnico pertence ao Code. (`CLAUDE.md:25–27`, `:276–281`.)
-
-- **Morte sem tela:** vigia só roda por `estado_da_porta → vigiar`; falta observação autônoma. O literal já exige morto → FALHOU; periodicidade/caminho são encaixe **(ii)**. (`app/folha/porta_export.py:1043–1063`, `:1077`; `CLAUDE.md:276`.)
-- **PID:** registro novo não recebe PID; o PID aparece na auditoria de disparo, enquanto vida é consultada em `pg_locks`. O literal exige PID gravado/conferido, portanto ajustar é **(ii)**; não há duas regras de resultado a escolher. (`app/folha/porta_export.py:963–972`, `:1005–1011`, `:1029–1033`, `:1146–1149`.)
-- **Verde anterior:** pedido FALHOU perde para carimbo verde existente; a leitura retorna PRONTA. Corrigir precedência é **(ii)** sob “processo morto = FALHOU” e resultado da tentativa gravado; conservar liberação pelo verde anterior contrariaria esse resultado. (`app/folha/porta_export.py:1081–1090`.)
-- **R8:** segue abortando na primeira exceção ou cartão/TXT não medido, portanto **(ii)**: continuar outras empresas e persistir resultado individual já está ordenado. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:121–139`.)
-- **Global cartão/TXT:** R8 não autoriza transformar esse número global em local. Ele continua integrando `falhas` de cada empresa; “outra passa” só vale quando a medição dela satisfaz os critérios existentes. Remover global seria regra fora do pedido. **(ii)**. (`app/folha/porta_export.py:753–764`; `CLAUDE.md:265–268`.)
-
-**Contador merece ressalva explícita:** o código existente conta linhas de recusa, sem deduplicação; só publica Resolver dia. Logo não existe ainda uma unidade implementada para o novo N. (`app/core/recusa_critica.py:104–125`; `bin/gerar_estado.py:262–266`.)
-
-Eventos ruins versus pares atualmente ruins são duas métricas distintas, mas não demonstram as duas consequências para cliente/dinheiro exigidas pelo usuário: contador esperado zero “só alarma, NUNCA juiz”; a liberação efetiva lê o estado/carimbo. Portanto eu não inflaria **(iii)** por essa diferença operacional. (`CLAUDE.md:172–173`; `app/folha/porta_export.py:1066–1091`; `app/folha/views.py:130–135`.)
-
-Leitura implementável **(ii)**: N = uma conclusão FALHOU ou DIVERGENTE por tentativa empresarial ocorrida hoje, sem somar magnitude das divergências, sem multiplicar por POST e sem apagar a ocorrência após repetição verde. Essa escolha conserva o sentido de “falhou ou divergiu hoje” e o padrão de uma linha de recusa; deve ser declarada como decisão técnica, sem alegar que a unidade já está implementada. (`app/core/recusa_critica.py:66–82`, `:104–119`; `CLAUDE.md:36`, `:276`.)
-
-_6561 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6562 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
