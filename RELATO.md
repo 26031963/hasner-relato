@@ -17,6 +17,8 @@ ESTADO 01:2x RESPOSTAS-DEVOLVIDOS-1711 B2 causa de 4633d2c17 MEDIDA: nasceu 58c5
 PRE-DESENHO B3 (nao construido) linha 1: limite a fechar = cherry-pick; medido em repo descartavel (git 2.43): cherry-pick chama prepare-commit-msg e post-commit, NAO commit-msg nem pre-commit; rebase [nao verificado]
 PRE-DESENHO B3 linha 2: cura = o mesmo bin/commit_msg.sh chamado tambem do prepare-commit-msg quando a fonte e message/commit sem editor (cherry-pick), que recusa com rc!=0; juiz o mesmo julgar_commit, sem regra nova
 PRE-DESENHO B3 linha 3: custo = 1 hook novo no bin/hooks.sh install + selo do hook em toda copia ganha o 2o nome + caso MORDE (cherry-pick de commit n/a em negocio recusado); commit anterior ao hook segue so do pre-push
+AVAL-DEVOLVIDO RESPOSTAS-DEVOLVIDOS-1711 item A (A4): "sem batida aprovada na janela" nao garante a contagem +1 -- a busca de reuso _batida_existente_na_janela (chamados/juizes.py:239-250) nao filtra aprovada, e o escritor reusa qualquer batida achada (materializacao.py:1347-1353); a testemunha so diz ja_satisfeita se aprovada (:898-899). Pergunta: A4 passa a exigir NENHUMA batida do mesmo tipo em +/-20 min de ts (aprovada ou nao)? Conferido abrindo os 3 sitios. Item B segue (medido acima). PROVA: logs/AVAIS-1515/revisao_rd1711/r.r
+ESTADO 01:3x O10-D-CONSTROI-NA-VAGA recebido: REVISAO-DO-AVAL em curso; vaga medida (1 construtor vivo, B2 a1382ccebe8727e06; teto 2); lista de arquivos da B2 contra a base 520d7b557 = 54 (logs/O10-D-PERMUTA-NA-TELA/b2_arquivos_1711.txt) para o cruzamento do item 3. PROVA: logs/AVAIS-1515/o10d_constroi_na_vaga_1711.txt
 ESTADO 23:5x AUSENCIA-EFEITO-PELO-ESTADO NO AR: commit 6ce96a55e, deploy --sem-migrate rc 0 (3 cascas HUP, 3 rotas provadas, importerror_500=0). Smoke de clique em /ponto/ausencias pendente do Ronald; push retido pelo PAREI push-lei-akita. PROVA: logs/AUSENCIA-EFEITO-PELO-ESTADO/deploy.log
 ESTADO 23:5x AUSENCIA-EFEITO-PELO-ESTADO POUSO: opus final APROVA (0 procedentes; furo declarado C4(c) sem mordida em ponto/views.py:2280, fila); merge --no-ff de 44e0be955, cmp 5/5 igual a copia certificada (suite 16621 OK); deploy --sem-migrate no mesmo ato; push segue retido pelo PAREI push-lei-akita. PROVA: logs/AUSENCIA-EFEITO-PELO-ESTADO/suite_pouso.log
 ESTADO 23:5x AUSENCIA-EFEITO-PELO-ESTADO suite INTEIRA da copia de pouso 13e6ad2ad VERDE: Ran 16621, OK (skipped=42, expected failures=41), rc 0; opus final lancado. PROVA: logs/AUSENCIA-EFEITO-PELO-ESTADO/suite_pouso.log
@@ -8287,7 +8289,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 > **calado**; agora o lugar e declarado (acima da 1a secao) e o motivo sai no stderr.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (225)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (226)
 
 > **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (1302 h), FECHAMENTO-UI-PORTAS (1284 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (1281 h), ESTEIRA-RETA-FINAL (1280 h), ZUMBIDO (1277 h), CARTAO-TOTAL-IGUAL-SOMA (1274 h), CERT-VIGIA (1263 h), CHAMADO-GANHA-CADASTRO (1262 h), JUIZ-BATIDA-NASCE (1262 h), JUIZ-ESCALA-NASCE (1262 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (1262 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (1262 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
@@ -8325,7 +8327,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 1262 h | recebido | O35 CONTRATOS-14 |
 | **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 1262 h | recebido | E3-CHAMADO |
 | **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 1075 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
-| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 1072 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
+| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 1073 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
 | **PAPEL-PRAZO-NASCE** | 2026-10-03 09:5x | 1071 h | registrado -- lei L-101, obra O139; censo dos 27 a medir antes de mover um nome | O139 PAPEL-PRAZO |
 | **HOLERITE-MES-CIVIL** | 2026-10-04 17:5x | 1039 h | construindo na raia `k5-encerrada` -- o corte RATIFICA `6a350aa9`, que ja tirou os dois sitios com nota MEDIDA (08/2026, a unica competencia com holerite publicado: 16 de 19 admitidos 21-31/08 TEM holerite de 08, contra 1 de 17 demitidos 21-31/07). Falta a segunda frase dele -- a CONDICAO de que cada conforme depende, na forma do `_A14 CURADO` -- e o teto dos dois contratos, que as duas raias deixaram no numero do main. | PLACAR-ESTRUTURAL R6 item 3, raia `k5-encerrada` (`6a350aa9`) |
 | **RAIA-VERDE-POUSA** | 2026-10-04 19:2x | 1037 h | lei L-105 escrita e a conduta vale DESDE JA: o pacote de pouso em curso se separou no mesmo turno -- K8 e K5 pousam como PRODUTO (`02391558`), o CERT-AST sai para pouso proprio porque e INSTRUMENTO (cria `bin/suite_nucleo.sh` e o selo `test_nucleo_tem_porta.sh`). Os itens (3) contador no ESTADO, (4) selo de host no pre-push e (5) veredito das raias velhas ficam na FILA 2, depois da CELULA-TURNO-FECHA e da O145, por ordem dele | o pouso de produto de 04/10 19:3x (K8+K5) e a lei no LEIS.md, no commit do marco |
@@ -8444,7 +8446,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **JUIZ-DIA-SEM-TRABALHO (F1C4-3-EMISSORES)** | 2026-10-31 12:2x | 396 h | vigente (linha restaurada) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | JUIZ-NOVO-SEM-FRASE-NO-CORTES |
 | **GRADE-FOLGA-JUIZ (GRADE-v5)** | 2026-10-31 19:3x | 389 h | vigente (linha restaurada) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | JUIZ-NOVO-SEM-FRASE-NO-CORTES |
 | **HORIZONTE-PARA-FRENTE** | 2026-11-02 13:38 | 347 h | vigente: L-124; obras ISENTO-H10 (depois da CODS-DO-ATO) e BACKFILL-UNICO (so registrada) | ISENTO-H10 |
-| **FIO-E0-V4 (FIO-COM-ASSENTO-E0)** | 2026-11-06 22:12 | 242 h | vigente (linha restaurada) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | JUIZ-NOVO-SEM-FRASE-NO-CORTES |
+| **FIO-E0-V4 (FIO-COM-ASSENTO-E0)** | 2026-11-06 22:12 | 243 h | vigente (linha restaurada) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | JUIZ-NOVO-SEM-FRASE-NO-CORTES |
 | **FIO-E0-V4-E2 (LEI-TRANCA-E2-JUIZ)** | 2026-11-07 14:5x | 226 h | vigente (linha restaurada) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | JUIZ-NOVO-SEM-FRASE-NO-CORTES |
 | **MODO-COMUM-PASSADO-SEM-TURNO (MODO-COMUM (d) da E4a-1, aval LEI-PASSADO-SEM-MARCOS)** | 2026-11-09 21:0x | 172 h | vigente (linha restaurada) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | JUIZ-NOVO-SEM-FRASE-NO-CORTES |
 | **JUIZ-TEM-GPS-NASCE** | 2026-11-10 17:0x | 152 h | vigente (texto literal logs/BO-0611-05/aval_libera_b3_volta7_1110.txt; nenhuma lei nova) -- restaurada de ac431c506^1:CORTES.md (linha escrita a mao fora do JSON, apagada pela regeracao do merge JANELA-NAO-SEGURA-POUSO 14/11) | BO-0611-05 / JUIZ-NOVO-SEM-FRASE-NO-CORTES |
@@ -8472,7 +8474,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **LIBERA-B3-FRAC5** | 2026-11-14 15:37 | 57 h | em curso: rearma-b3 feito; suite da arvore final rodando, depois UM opus; reprovou = PAREI sem volta; literal logs/AVAIS-1313/libera_b3_e3_qual_main_1537.txt | FRAC5 |
 | **E3-V10-QUAL-MAIN** | 2026-11-14 15:37 | 57 h | em curso: lei L-129 COLAB-DEVE-PERGUNTA-E-DO-COLAB (LEIS.md na copia wt-e3-v10-150600, pousa com a E3); remedida das 4 condicoes na sombra (logs/e3v10_cond_*.out); literal logs/AVAIS-1313/libera_b3_e3_qual_main_1537.txt | E3 |
 | **E3-V10-COMPLEMENTO-L129** | 2026-11-14 15:5x | 57 h | em curso: item (2) SUBSTITUIDO por E3-V10-DEGRAU-DONO-E-PORTA 16:16; matriz Codex m1 entregue (logs/E3-V10/matriz/m1.r); literal logs/AVAIS-1313/e3_v10_complemento_l129.txt | E3 |
-| **E3-V10-DEGRAU-DONO-E-PORTA** | 2026-11-14 16:16 | 56 h | em curso: lei (corte) fio = 1o com ACAO ALCANCAVEL na ordem colab > admin, senao "sem porta" contado; pousa com a E3; obra PORTA-DO-ADMIN-NA-PERGUNTA-VENCIDA registrada (2333); literal logs/AVAIS-1313/e3_v10_degrau_dono_porta.txt | E3 |
+| **E3-V10-DEGRAU-DONO-E-PORTA** | 2026-11-14 16:16 | 57 h | em curso: lei (corte) fio = 1o com ACAO ALCANCAVEL na ordem colab > admin, senao "sem porta" contado; pousa com a E3; obra PORTA-DO-ADMIN-NA-PERGUNTA-VENCIDA registrada (2333); literal logs/AVAIS-1313/e3_v10_degrau_dono_porta.txt | E3 |
 | **LU-01** | 2026-11-14 19:23 | 53 h | E3-RESTO-R3 (nao barra o pouso da E3 v10); literal logs/AVAIS-1313/lista_unica_cortada.txt | E3 |
 | **LU-02** | 2026-11-14 19:23 | 53 h | lote LU da E3 v10 (construtor c1 lote_lu); literal logs/AVAIS-1313/lista_unica_cortada.txt | E3 |
 | **LU-03** | 2026-11-14 19:23 | 53 h | lote LU da E3 v10 (construtor c1 lote_lu); literal logs/AVAIS-1313/lista_unica_cortada.txt | E3 |
@@ -8518,6 +8520,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
 | **COMPLEMENTO-3-PREPARA-ANTECIPADA** | 2026-11-17 01:0x | 0 h | aplicado item 1 (despacho 01:06); item 2 medido: f2 volta 2 = 1 tentativa rc 0 (logs/codex/chamadas.log), teto nao estourou -> item 3 segue como esta; REVISAO em curso | E4c |
 | **RESPOSTAS-DEVOLVIDOS-1711** | 2026-11-17 01:1x | 0 h | B medido (causa: commit anterior ao hook + cherry-pick, logs/AVAIS-1515/en7_causa_1711.txt; pre-desenho no RELATO); A aguarda REVISAO-DO-AVAL (logs/AVAIS-1515/revisao_rd1711) | E4c F4 / PUSH-DOS-TRES-MARCOS |
+| **O10-D-CONSTROI-NA-VAGA** | 2026-11-17 01:2x | 0 h | REVISAO-DO-AVAL em curso (logs/AVAIS-1515/revisao_o10d1711); teto: 1 construtor vivo (B2), vaga existe | O10-D-PERMUTA-RECIPROCA |
 <!-- SEUS-CORTES:FIM -->
 
 ## DEPLOYS AGENDADOS
