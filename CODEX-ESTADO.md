@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 00:57** · publicado em **17/11/2026 00:57** (UTC-3)
+> Ultima resposta processada: **17/11/2026 00:59** · publicado em **17/11/2026 01:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 00:59 · sessao ee9a3cb53b1e · E4C-F1-B2 · verificador · origem=Code
+
+1. **BLOQUEANTE — a união de travas ainda pode adquirir linha nova fora da ordem.** O comando lê `elegiveis` e suas FKs antes do `atomic`; depois trava essa fotografia inteira. A porta individual relê as FKs e trava novamente. Existe escritor de produção que troca `chamado_destino` nesse intervalo: `reapontar_resolvedora`. Se ele concluir antes da trava do comando, o laço adquirirá o **novo Chamado depois das Perguntas já travadas**. Portanto, o comentário “não adquire nada novo” não é garantido. (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:37`, `:73`, `:77`; `app/chamados/services/validacao.py:424`, `:429`; `app/chamados/services/fio.py:937`, `:973`)
+
+   No caso estável, a união cobre as quatro entidades travadas pela porta e respeita C → D → Chamado → Pergunta, por PK. As chamadas posteriores atualizam a pergunta, registram decisões e emitem eventos; não exigem outra união dessas quatro entidades. (`app/chamados/models.py:2780`, `:2789`, `:2802`, `:2806`, `:3394`, `:4133`; `app/chamados/services/validacao.py:439`, `:446`)
+
+   A conferência do **conjunto elegível exato** também ocorre somente antes das travas. Se um alvo perder elegibilidade, a releitura individual e o contador final desfazem o lote; se outra pergunta ganhar elegibilidade fora da fotografia, não há nova consulta global que detecte isso. Ocorrência em produção: [nao verificado]. (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:54`, `:82`, `:90`; `app/chamados/services/validacao.py:432`)
+
+2. **BLOQUEANTE PARA HOMOLOGAÇÃO — o harness sem banco não chega à asserção principal.** A adaptação injeta a guarda extraída, mas a guarda importa `chamados.juizes`, que importa os modelos e `django.db`; o teste não isola esse import. Executei o módulo: seis testes passaram e esse caso terminou em `ModuleNotFoundError: No module named 'django.db'`, antes de conferir as batidas coletadas. (`app/chamados/tests/test_bug_par_sem_banco.py:181`, `:188`, `:192`, `:193`; `app/chamados/services/materializacao.py:1284`; `app/chamados/juizes.py:12`; `app/chamados/models.py:7`)
+
+   Isolando **somente em memória** esse import com o juiz extraído da fonte, o caso passou; removendo em memória `_criadas.add(nova_batida.pk)`, falhou. Portanto, a asserção sobre criação/reuso tem mordida, mas o harness entregue não consegue alcançá-la isoladamente. Já existe auxiliar apropriado para carregar o juiz real sem Django. (`app/chamados/services/materializacao.py:1482`, `:1485`; `app/chamados/tests/test_bug_par_sem_banco.py:193`; `app/chamados/tests/e4_apoio.py:19`)
+
+3. **NÃO BLOQUEANTE — a guarda cobre os três ramos de aplicação, mas não antecede toda escrita do ato.** Hora, data_hora e escolha chamam `_recusa_sem_anuencia` antes do cálculo/plantio, parse ou criação de ausência/fechamento dos destinos. Tipo desconhecido não materializa: permanece com resultado falso e sofre `_Reprovada` antes do carimbo. (`app/chamados/services/materializacao.py:1340`, `:1575`, `:1659`, `:1858`, `:1910`, `:1923`)
+
+   Validação, passivo e irmã do par chegam à mesma unidade. Entretanto, a validação já consultou C21 e gravou sua validação/trilha antes da guarda do ramo; há também recusa por data divergente antes dela. Logo, “antes de qualquer escrita” seria uma descrição excessiva. (`app/chamados/services/validacao.py:681`, `:743`, `:775`, `:786`; `app/chamados/services/passivo_validado.py:537`; `app/chamados/services/materializacao.py:1729`, `:1893`)
+
+   Existem carimbadores fora dessa guarda: absorção por ausência, S144 e a própria porta `carimbar`. São caminhos existentes de resolução por outro fato; não demonstram bypass novo de plantio neste delta. (`app/chamados/services/materializacao.py:1046`, `:2161`, `:2165`; `app/chamados/models.py:3223`, `:3250`)
+
+4. **NÃO BLOQUEANTE — a recusa preserva o comportamento local de hora, inclusive suas limitações.** A helper escreve motivo curto, acrescenta erro e retorna `True`; o ramo retorna `None`, a unidade retorna falso e o `finally` escreve novamente a recusa com a mensagem completa. A recusa normal não solicita rollback; os efeitos próprios do ramo ainda não aconteceram. No par, o savepoint pode desfazer inclusive a recusa da irmã. (`app/chamados/services/materializacao.py:1287`, `:1340`, `:1916`, `:1987`, `:1723`, `:1739`)
+
+   **Ela não escreve `pendencia_admin`.** Essa escrita fica depois do cálculo no ramo hora. Também não desfaz automaticamente `validada_em`; a devolução da validação tem filtro próprio para resposta de hora. Assim, não se deve inferir “voltou à fila administrativa” apenas porque há `recusa_motivo`. (`app/chamados/services/materializacao.py:1350`, `:1674`, `:1687`; `app/chamados/services/validacao.py:264`, `:273`; `app/chamados/juizes.py:1405`)
+
+   A mensagem compartilhada é inadequada para **escolha**: fala em batida e horário, enquanto esse ramo pode declarar ausência e resolver destinos sem produzir batida. Para data_hora, a referência ao horário ainda corresponde ao efeito pretendido. (`app/chamados/services/materializacao.py:1289`, `:1590`, `:1646`, `:1662`)
+
+5. **NÃO BLOQUEANTE — mapa de escritores/leitores dos valores envolvidos.**
+
+   | Campo/valor | Quem escreve | Quem lê no percurso auditado |
+   |---|---|---|
+   | `respondida_em` e `resposta_colab` | Resposta core grava o par; ressuscitação e estoque limpam pela porta do lote; `carimbar` pode completar o instante por simetria. | C21, seleção do materializador, universo da ressuscitação e seleção do estoque. (`app/chamados/services/disputa_emissao.py:1481`; `app/chamados/models.py:3250`, `:1638`; `app/chamados/services/validacao.py:440`; `app/chamados/juizes.py:1552`; `app/chamados/services/materializacao.py:2089`; `app/chamados/models.py:1533`) |
+   | `validada_em` | `_carimbar_validacao`; devolução e ressuscitação desfazem; `carimbar` pode completar por simetria. | C6, seleção do materializador, exclusão nova e impedimento do estoque. (`app/chamados/services/validacao.py:168`, `:273`, `:392`; `app/chamados/models.py:3254`, `:1638`, `:1546`; `app/chamados/juizes.py:1405`; `app/chamados/services/materializacao.py:2091`) |
+   | `materializada_em`, autor e via | Portas de carimbo/descarimbo; a atribuição central está em `_escrever_carimbo`. | C6, materializador, ressuscitação e impedimento do estoque. (`app/chamados/models.py:3217`, `:3372`, `:1531`; `app/chamados/juizes.py:1450`; `app/chamados/services/materializacao.py:2092`; `app/chamados/services/validacao.py:394`) |
+   | `recusa_motivo` | A helper usa `_carimbar_recusa`; não nasce escritor paralelo. | Devolução da validação, explicador e apresentação do fio. (`app/chamados/services/materializacao.py:1287`, `:1687`; `app/chamados/services/validacao.py:266`; `app/chamados/services/explicador.py:113`; `app/templates/chamados/partials/modal_fio.html:226`) |
+   | `pendencia_admin` | Ramo hora, após cálculo. | Explicador e modal; a recusa de anuência não o preenche. (`app/chamados/services/materializacao.py:1350`, `:1687`; `app/chamados/services/explicador.py:108`; `app/templates/chamados/partials/modal_fio.html:222`) |
+   | Followup do destino | `_carimbar_recusa` chama `nota.anexar_ocorrencia`, que deduplica pelo evento. | Fio do chamado. (`app/chamados/services/materializacao.py:1692`; `app/chamados/services/nota.py:95`, `:107`; `app/templates/chamados/fio_colaborador.html:235`) |
+   | `DecisaoPergunta` | Porta `registrar`; resposta/validação registram seus atos; ressuscitação/estoque preservam projeções anteriores. | Histórico e `tarefa_do_dia`, que interpreta o último ato. (`app/chamados/models.py:4123`, `:1620`, `:3688`; `app/chamados/services/validacao.py:439`; `app/chamados/services/tarefa_do_dia.py:158`) |
+
+   Nos predicados usados pelo delta, “respondida” continua sendo **instante E texto após trim**. Python usa `.strip()`; SQL usa o conjunto de `str.isspace()`, incluindo NBSP. Presença de texto não garante formato válido de hora/data_hora. Texto de decisão histórica também não equivale, sozinho, à resposta vigente. (`app/chamados/juizes.py:1526`, `:1552`, `:1560`, `:1580`; `app/chamados/services/materializacao.py:1578`; `app/chamados/services/tarefa_do_dia.py:158`)
+
+6. **NÃO BLOQUEANTE — a exclusão protege o texto, mas deixa uma categoria sem diagnóstico publicado.** O `continue` acontece antes de acrescentar a pergunta aos grupos de marco aceso ou C6 morto. Reabrir, desarquivar e cartório continuam usando a porta; o cartório pode receber zero e ambos os grupos vazios, sem explicar essa exclusão. (`app/chamados/models.py:1546`, `:1558`, `:1564`, `:1498`, `:1512`; `app/chamados/views_arquivar.py:86`; `app/ponto/services/cartorio.py:1674`, `:1685`)
+
+   Não cabe afirmar que toda excluída fica presa: se C6 a considera viva, há porta para nova resposta; também existe reabertura que preserva o texto em decisão e limpa o estado. Porém, a seleção comum de corrigíveis exige resposta legal e validar rejeita esse meio-par; portanto, saída automática geral tampouco está demonstrada. (`app/chamados/views.py:1239`, `:1242`; `app/chamados/services/disputa_emissao.py:1481`, `:1631`, `:1648`; `app/chamados/juizes.py:1756`; `app/chamados/services/validacao.py:681`)
+
+   O comentário corrigido descreve a seleção nominal; o docstring **“Nunca toca … resposta com texto” continua falso**, pois texto sem instante **com validação** permanece elegível e pode ser guardado em linha VALIDACAO antes de ser zerado. (`app/chamados/models.py:1546`, `:1570`, `:1626`, `:1638`, `:4115`)
+
+7. **NÃO BLOQUEANTE — os REDs novos têm mordida estática, mas cobrem partes distintas do contrato.**
+
+   - **Materializador:** sem as guardas, escolha pode aplicar; data_hora produz recusa de formato, sem o motivo exigido. Os testes verificam ausência de materialização e motivo, mas não followup, ausência criada, retorno, pendência ou rollback. (`app/chamados/tests/test_f1nova_b2_leitores.py:173`, `:182`, `:184`, `:185`; `app/chamados/services/materializacao.py:1578`, `:1662`)
+   - **União:** usa consultas/UPDATEs reais e detecta a inversão original entre dois alvos. Não testa troca de destino entre leitura e trava, nem múltiplos colaboradores; o rastreador exclui travas implícitas de FK. (`app/chamados/tests/test_f1nova_b2_leitores.py:300`, `:303`, `:307`; `app/chamados/tests/test_e1_v9.py:51`, `:78`, `:87`, `:113`)
+   - **Preservação do texto:** aceita manter o texto ou removê-lo com trilha, prendendo resultado em vez do `continue`. Sem exclusão ou trilha nova, a limpeza perde o texto e a asserção falha. Não exige uma linha nova do ato nem verifica a fila resultante. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:345`, `:348`; `app/chamados/models.py:1638`, `:4104`)
+
+   Execução desses testes com banco e RED/GREEN contra a base: [nao verificado]. [nao verificado]
+
+8. **NÃO BLOQUEANTE — O261 recuperou a comparação integral.** A tupla inclui materialização, autor, via, instante, validação e texto; agora todos são comparados, enquanto o fechamento da disputa é conferido separadamente. Isso prende o contrato de estado. Não há, neste delta, alteração correspondente de produção cuja retirada necessariamente faça esse teste falhar. (`app/chamados/tests/test_o261_resposta_vazia.py:74`, `:115`, `:116`)
+
+9. **NÃO BLOQUEANTE — demais classes citadas.** Não identifiquei no delta novo juiz paralelo, escritor fora da porta ou derivação concorrente de “respondida”: a helper delega a C21, e a exclusão usa o predicado existente de vazio. Permanecem os bloqueantes de **ordem de trava** e **harness sem prova executável isolada** acima. Não foi acrescentada leitura de relógio nos trechos novos de produção. (`app/chamados/services/materializacao.py:1284`; `app/chamados/models.py:1546`; `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:77`; `app/chamados/tests/test_bug_par_sem_banco.py:181`)
+
+   HEAD pelo Git, pouso/deploy, contagens de produção e medições mencionadas nos comentários: **[nao verificado]**. [nao verificado]
 
 ## 17/11 00:57 · sessao 379168b451c3 · - · - · origem=Ronald (tmux)
 
@@ -416,14 +474,4 @@ A existência/execução de tal RED e de pergunta real que cumpra todas essas co
 
 Cuidado de implementação: remover simplesmente a exclusão U163 do segundo laço faz sobreposição com U103 já inserida pelo primeiro; a lista deve conservar uma ocorrência por pergunta. (`app/chamados/management/commands/bug_par_103.py:53`; `app/chamados/management/commands/bug_par_103.py:63`; `app/chamados/management/commands/bug_par_103.py:71`; `app/chamados/management/commands/bug_par_103.py:77`; `app/chamados/services/universo_bug_par.py:30`)
 
-## 16/11 23:53 · sessao 8556b2524238 · - · - · origem=Ronald (tmux)
-
-- **Premissas documentadas:** `RELATO.md:7-8` registra a recusa de `4633d2c17`, `padrao=n/a (medida)`, somente docstrings nos dois arquivos, proposta de catraca 12→13 e descendência das cópias B2/AUSENCIA; os fatos de produção permanecem **[não verificado]**.
-- **Precedentes compatíveis:** crescer a exceção exige novo aval e não regravar histórico (`CORTES.md:449`); a proibição literal posterior refere-se a commit novo **sem `padrao=`**, condição diferente de `n/a (medida)` (`CORTES.md:484`; `RELATO.md:8`). [nao verificado]
-- **Causa já prevista:** o hook deveria recusar `n/a (instrumento)` tocando negócio no commit (`BACKLOG.md:778`); seus limites conhecidos incluem `--amend` julgando somente o delta e diferença de vocabulário (`BACKLOG.md:780`; `bin/commit_msg.sh:10-11`).
-- **Implementação ainda futura:** catraca atual 12 (`bin/tests/test_lei_akita.sh:409`); o caso de item extra é construído dinamicamente, portanto pode continuar cobrando o 14º após a lista passar a 13 (`bin/tests/test_lei_akita.sh:990-999`).
-- **Condição dos 45:** a tentativa anterior documentada tinha 34 commits (`RELATO.md:20`); quantidade atual 45 e presença no ar **[não verificado]**. [nao verificado]
-- **Registro e pouso:** frase em CORTES deve entrar pela geração a partir de JSON (`CORTES.md:3`); pouso próprio do instrumento respeita o corte vigente (`CORTES.md:304`). [nao verificado]
-- **Escopo:** o bloqueio declarado é justamente `!` para exceção de selo/regravação (`RELATO.md:7`); efeito adicional em dinheiro/exportadas pelo push completo **[não verificado]**. [nao verificado]
-
-_6253 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6254 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
