@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 17:39:46.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (4.5 MB). Acoes na janela: **117**.
+**Medido em 17/11/2026 17:45:15.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (4.6 MB). Acoes na janela: **123**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:45:14 | Bash | Add P1 landing line to RELATO | `cd /home/ronald/saas-hasner && python3 - <<'EOF' r='app/docs/RELATO.md'; t=open(r,encoding='utf-8').read() anc='F2-P2 ('; i=t.find(anc); assert t.count(anc)>=1 and i>=0 linha=("F2-P1 POUSO (17/11 ~17:5x): opus final APROVA (merge-base fbc5c76ce, 2 commits, 9 arquivos; suite INTEIRA da wt e35a760b2 Ran 16627 OK rc=0, logs/F2-RESSUSCITAR/p1/suite_full_p1.log). " "Expand 0054/0055 db_default=False, s ...` |
+| 17:45:08 | Bash | Check padrao term and P1 seal line | `cd /home/ronald/saas-hasner; /bin/grep -n -i "compensating event" app/docs/GLOSSARIO.md app/docs/PLANO-PADROES.md \| head -3; git log -1 --format=%B dae3bfca0 \| /bin/grep -n "LEI-AKITA" \| cut -c1-400` |
+| 17:45:03 | Bash | Inspect unrelated dirty files | `cd /home/ronald/saas-hasner; git diff --stat CLAUDE.md bin/keepalive.sh \| cat; git diff CLAUDE.md \| head -30; git diff bin/keepalive.sh \| head -20` |
+| 17:44:55 | Bash | Read deploy sombra gate | `cd /home/ronald/saas-hasner; /bin/grep -n "sombra\\|ensaio" bin/deploy.sh \| head -40` |
+| 17:44:49 | Bash | Dry-run deploy gates | `cd /home/ronald/saas-hasner; timeout 300 bin/deploy.sh --conferir 2>&1 \| tail -25; echo "rc=${PIPESTATUS[0]}"` |
+| 17:44:41 | Bash | P1 files, main head, dirty tree, crons | `cd /home/ronald/saas-hasner; git diff --stat fbc5c76ce e35a760b2 \| cat; git log --oneline -1 main; git status --porcelain \| /bin/grep -v '^??' ; ls logs/crons_em_curso/ 2>/dev/null; pgrep -af "push.sh\|pre-push" \| head -3` |
 | 17:39:46 | Bash | Find pista runner script and processes | `cd /home/ronald/saas-hasner; /bin/grep -rln "suite inteira raia" bin/ logs/PORTA-EXPORT/*.sh 2>/dev/null; ls logs/PORTA-EXPORT/ \| tr '\n' ' '; ps -eo pid,etime,cmd \| /bin/grep -E "suite\|pista\|173084" \| /bin/grep -v grep \| cut -c1-200` |
 | 17:39:42 | Bash | Find pista job runner state | `cd /home/ronald/saas-hasner; date '+%H:%M:%S'; /bin/grep -rl "job=" bin/*.sh 2>/dev/null \| head -5; ls logs/fila* logs/jobs* 2>/dev/null \| head; docker ps --format '{{.Names}} {{.Status}}' \| /bin/grep -v -E '^saas_\|^sombra_db\|^juliani_db_test' \| head` |
 | 17:39:38 | Bash | Read pista log tail and lock holder | `cd /home/ronald/saas-hasner; grep -n "1117173501_173084e6" logs/PORTA-EXPORT/pista.log \| head -3; tail -6 logs/PORTA-EXPORT/pista.log \| cut -c1-300; bin/trava_teste.sh --quem 2>&1 \| head -3` |
