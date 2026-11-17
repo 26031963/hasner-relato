@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 22:39:27.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (179.2 MB). Acoes na janela: **1052**.
+**Medido em 16/11/2026 22:44:54.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (179.3 MB). Acoes na janela: **1050**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1060,5 +1060,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:57:30 | Bash | Read LOTE3 opus conditions | `cd /home/ronald/saas-hasner; sed -n '4,40p' logs/RETOMA-HE-LOTE3/c7/opus_final.md \| cut -c1-400` |
 | 10:57:27 | Bash | Check LOTE3 opus and merge file list | `cd /home/ronald/saas-hasner; head -3 logs/RETOMA-HE-LOTE3/c7/opus_final.md \| cut -c1-200; git diff --name-only ab616d1c7 cadd518a1; echo ---; git diff --name-only ab616d1c7 cadd518a1 -- '*/migrations/*'` |
 | 10:57:21 | Bash | Read LOTE3 suite verdict and tree state | `cd /home/ronald/saas-hasner; L=logs/RETOMA-HE-LOTE3/c7/suite_pouso.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; git -C /home/ronald/wt-lote3-c6-014304 log --oneline -1; git -C /home/ronald/wt-lote3-c6-014304 status --porcelain \| head; git log --oneline -1; git status --porcelain \| grep -v '^??'` |
-| 10:39:47 | Bash | Record postmortem and save memory | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() o='Postmortem: classificacao Codex censo em voo.'; assert s.count(o)==1 s=s.replace(o,'Postmortem (Codex censo, logs/E4C/f1nova/b1/c2/postmortem_c2.r): (e) NAO PERGUNTADO -- nenhuma das 4 .q pediu conferir a frase do juiz novo na FONTE CORTES.json; falha de quem perguntou (a sessao), falha Codex 0.',1) open(p,' ...` |
-| 10:39:36 | Bash | Read Codex postmortem result | `cd /home/ronald/saas-hasner; D=logs/E4C/f1nova/b1/c2; tail -3 $D/postmortem_c2.out; wc -c $D/postmortem_c2.r; head -c 3000 $D/postmortem_c2.r` |
