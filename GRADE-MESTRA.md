@@ -14,18 +14,18 @@
 |---|---|---|
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
-| LATERAL-ESTRUTURA | 155 | 155 |
+| LATERAL-ESTRUTURA | 157 | 157 |
 | INSTRUMENTO | 180 | 180 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **459** | **458** |
+| **total** | **461** | **460** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 390; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 392; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 302 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 304 com a coluna
 
-resolve preenchido 13/459
+resolve preenchido 13/461
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -266,6 +266,8 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | SNC2-FILA | LATERAL-ESTRUTURA | Completa testes e trata resíduos de relógio e criação. | - | ? (precedência não indicada) | ......... | REGISTRADA | BACKLOG:1816 | ? | ? |
 | H12H06-SEPARA-E-CRONTAB | LATERAL-ESTRUTURA | Separa a correção da falta da atualização do passivo. | - | censo de trava; desenho da parte B | ++...++++ | PARADA (parte B aguarda desenho) | BACKLOG:1827 [+7 compl.] | ? | ? |
 | DIA-SEM-TRABALHO-PORTA | LATERAL-ESTRUTURA | Oferece decisão administrativa para batida em folga ou feriado. | - | LEI-FIO-MUDO-B | .+.+..... | REGISTRADA | BACKLOG:1848 [+1 compl.] | ? | ? |
+| [nome]-NAO-DESFAZ-O-PAPEL | LATERAL-ESTRUTURA | Impede que o casador de marcos desfaça o par já casado e deixe marco vazio com batida órfã. | - | simulação de quinta 19/11; 1a vaga lateral | +........ | REGISTRADA | BACKLOG:[nome]-NAO-DESFAZ-O-PAPEL | ? | ? |
+| ESCALA-NAO-DESCREVE | LATERAL-ESTRUTURA | Mostra onde a escala cadastrada não descreve o que a pessoa faz. | - | simulação de quinta 19/11; leis do brief | ~........ | REGISTRADA | BACKLOG:ESCALA-NAO-DESCREVE | ? | ? |
 | AUSENCIA-UMA-VIGENTE | LATERAL-ESTRUTURA | Evita descontar dias apresentados como abonados. | - | lei da família; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1849 | ? | ? |
 | PAINEL-SITUACIONAL-UM-MONTADOR | LATERAL-ESTRUTURA | Usa o mesmo montador na atualização individual e na lista. | - | censo; vaga de negócio | .+....... | REGISTRADA | BACKLOG:1851 | ? | ? |
 | ESMERIL-SEM-INSTANTE | LATERAL-ESTRUTURA | Unifica o significado dos instantes e das datas locais. | - | RED; vaga; rebase; opus; pouso | ..~...... | REGISTRADA (suite antiga não certifica) | BACKLOG:1857 | ? | ? |
