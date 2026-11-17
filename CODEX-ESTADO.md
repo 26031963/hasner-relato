@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 08:42** · publicado em **17/11/2026 08:43** (UTC-3)
+> Ultima resposta processada: **17/11/2026 08:58** · publicado em **17/11/2026 08:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 08:58 · sessao 73f8d70f028f · - · - · origem=Ronald (tmux)
+
+(b) **[fila] Invalidação limitada à instância recebida.** `registrar` limpa somente `ln.get('pergunta')._prefetched_objects_cache['decisoes']`; não alcança outra instância da mesma pk nem linhas passadas apenas por ID. `leitura` confia integralmente em `p.decisoes.all()`, portanto outra instância previamente carregada pode conservar sequência velha. Isso é possibilidade demonstrável pela implementação; ocorrência em fluxo produtivo concreto permanece **[nao verificado]**. (`app/chamados/models.py:4217`, `app/chamados/models.py:4251`)
+
+Quem produz/passsa `pergunta_id`:
+
+- `linhas_da_projecao_sem_linha` produz sempre ID, tanto RESPOSTA quanto VALIDACAO; seus consumidores escritores incluem nascimento, ressuscitação, validação/devolução, resposta humana/automática e E4b. Os escritores que acrescentam uma linha `pergunta=p` invalidam essa mesma instância; os que registram somente o passivo não recebem essa proteção. (`app/chamados/models.py:4173`, `app/chamados/models.py:4177`, `app/chamados/models.py:3156`, `app/chamados/models.py:1629`, `app/chamados/services/validacao.py:173`, `app/chamados/services/validacao.py:279`, `app/chamados/services/validacao.py:354`, `app/chamados/services/validacao.py:439`, `app/chamados/services/disputa_emissao.py:1525`, `app/chamados/services/disputa_emissao.py:1678`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:141`)
+- `reabrir_para_correcao` registra diretamente por ID e executa o UPDATE por outro queryset. (`app/chamados/services/disputa_emissao.py:1631`, `app/chamados/services/disputa_emissao.py:1648`)
+
+Não encontrei leitura subsequente comprovadamente velha nos chamadores produtivos examinados:
+
+- `recusar_pergunta` carrega instância sem prefetch; depois da reabertura usa foto, nota, evento e push, sem consultar novamente `decisoes`/`estado`. (`app/chamados/services/validacao.py:894`, `app/chamados/services/validacao.py:925`, `app/chamados/services/validacao.py:927`)
+- Rejeição de ausência carrega perguntas sem prefetch; depois da reabertura usa suas disputas e a foto anterior. (`app/chamados/services/materializacao.py:1118`, `app/chamados/services/materializacao.py:1153`, `app/chamados/services/materializacao.py:1167`, `app/chamados/services/materializacao.py:1170`)
+- `curar_perguntas_em_limbo` termina com o relatório após reabrir por queryset. (`app/chamados/management/commands/curar_perguntas_em_limbo.py:69`)
+- O modal reconstrói o contexto após a ação; a leitura posterior de `_p.estado` no caminho de validação de disputa fechada vem depois de `refresh_from_db()`. (`app/chamados/services/fio.py:540`, `app/chamados/services/fio.py:659`)
+- Upload de foto valida por ID, usando outra instância internamente, mas o fluxo seguinte atualiza a disputa e consulta novamente suas perguntas. (`app/api/foto_recebida.py:43`, `app/api/foto_recebida.py:51`, `app/api/foto_recebida.py:74`, `app/api/foto_recebida.py:81`)
+
+(c) **[nota] A correspondência é a mesma, desde que as linhas em memória estejam completas e atuais.** Banco e memória restringem `ja` aos mesmos atos RESPOSTA/VALIDACAO; o único corpo compara exatamente `(pk, ato, ato_em)`, sem texto ou motivo. Outros atos presentes na sequência não alteram a correspondência. (`app/chamados/models.py:4165`, `app/chamados/models.py:4171`, `app/chamados/models.py:4175`, `app/chamados/models.py:4218`, `app/chamados/models.py:4222`)
+
+**[fila] `ja` velho/parcial pode diferir do banco.** A leitura não verifica se o cache está atualizado: pode acrescentar uma foto sintética que o banco já possui, além de omitir atos novos. O delta protege a mesma instância recebida; proteção de outras instâncias permanece ausente. (`app/chamados/models.py:4217`, `app/chamados/models.py:4221`, `app/chamados/models.py:4251`)
+
+Candidato de regressão independente do cache: ressuscitação preserva linhas antigas e zera a projeção sem novo ato que limpe a sequência; L130 também mantém a RESPOSTA e zera somente a projeção. A nova leitura reaplica as linhas antigas. O pai está examinando esse ponto. (`app/chamados/models.py:1629`, `app/chamados/models.py:1647`, `app/chamados/services/validacao.py:436`, `app/chamados/services/validacao.py:439`, `app/chamados/models.py:4226`)
+
+## 17/11 08:58 · sessao 35b4f208b605 · - · - · origem=Ronald (tmux)
+
+Inventário de RESPOSTA encontrado em produção:
+
+| Escritor | Motivo | `validada_em` no ato |
+|---|---|---|
+| `responder_pergunta_disputa_core` | Omitido, portanto `''` | Zera quando preenchida; grava projeção e linha no mesmo `atomic`. `app/chamados/services/disputa_emissao.py:1484`, `:1494`, `:1517`, `:1522`, `:1525`; default em `app/chamados/models.py:4111`. |
+| `responder_automaticamente` | `resposta automatica (fato entregue por outro caminho)` | Preserva; salva somente texto/instante. `app/chamados/services/disputa_emissao.py:1674`, `:1677`, `:1679`. |
+| `carimbar_resposta_pela_trilha` | `pela trilha: %s` | Preserva; salva somente instante. `app/chamados/services/disputa_emissao.py:1696`, `:1698`, `:1700`. |
+| Foto da projeção | `MOTIVO_PROJECAO_SEM_LINHA` | A foto isolada não altera projeção; gera RESPOSTA por correspondência. `app/chamados/models.py:4146`, `:4171`, `:4173`. |
+
+Chamadores que merecem distinção:
+
+- Nascimento com assinaturas recebidas usa a foto e conserva os valores: `app/chamados/models.py:3151`, `:3154`, `:3156`.
+- `backfill_fio_morto_e4b` grava fotos sob trava sem mudar resposta/validação nesse ramo: `app/chamados/management/commands/backfill_fio_morto_e4b.py:138`.
+- `backfill_decisoes_pergunta.linhas_a_criar` é DRY e consulta o helper; o apply explícito encontrado escreve SILENCIO: `app/chamados/management/commands/backfill_decisoes_pergunta.py:44`, `:67`, `:324`.
+- `curar_perguntas_em_limbo` delega à trilha com motivo de corte e nota; a limpeza delega à reabertura: `app/chamados/management/commands/curar_perguntas_em_limbo.py:67`.
+- `foto_e4b` fotografa campos, inclusive decisões; sua função `guardar` apenas monta dicionário: `app/chamados/services/foto_e4b.py:247`, `:280`.
+- A migração 0051 transforma o acervo de `RespostaAnterior` em REABERTURA, não RESPOSTA: `app/chamados/migrations/0051_decisao_pergunta.py:41`, `:49`, `:61`. A migração 0053 apenas verifica colisões: `app/chamados/migrations/0053_pergunta_unica_por_familia.py:36`.
+- Nenhum cadastro administrativo de `DecisaoPergunta` foi encontrado; ausência em todos os caminhos possíveis [nao verificado].
+
+**Exceção literal à frase “RESPOSTA com motivo preserva V no mesmo ato”:** a foto com motivo pode acompanhar um ato que limpa V. O core humano gera `_sem_linha` antes de zerar V e grava as fotos junto à resposta nova; devoluções fazem o mesmo junto à DEVOLUCAO. Não são respostas novas com semântica contraditória, mas fotos históricas no mesmo atomic: `app/chamados/services/disputa_emissao.py:1480`, `:1494`, `:1525`; `app/chamados/services/validacao.py:272`, `:273`, `:279`.
+
+**[bloqueia] Ressuscitação sem ato que represente a limpeza.** A porta grava fotos RESPOSTA/VALIDACAO e depois zera instante/texto/validação, explicitamente sem REABERTURA: `app/chamados/models.py:1629`, `:1640`, `:1647`. A nova leitura só limpa V por DEVOLUCAO/RECUSA/REABERTURA ou RESPOSTA sem motivo; portanto conserva a VALIDACAO fotografada: `app/chamados/models.py:4187`, `:4201`, `:4227`. `estado` devolve VALIDADA após esse reset: `app/chamados/models.py:3180`. Há cenário concreto já na suíte: fixture com validação e instante sem texto, reset esperado, somente fotos R/V e nenhum ato limpador: `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:263`, `:270`, `:280`. A mordida antiga verifica projeção e trilha, mas não `estado`/face SQL após o reset: `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:275`. Impacto em produção [nao verificado].
+
+**[fila] `ato_motivo` passou a acumular descrição e controle de efeito.** O template exibe o motivo como explicação, enquanto o replay e SQL usam sua presença para decidir se a RESPOSTA desfaz V: `app/templates/chamados/partials/modal_fio.html:212`; `app/chamados/models.py:4201`, `:3496`. Os escritores diretos atuais concordam com essa convenção, mas `registrar` aceita qualquer motivo e as constraints não impõem o protocolo: `app/chamados/models.py:4248`, `:4125`. O outro leitor de conteúdo usa prefixo BUG-PAR-103 apenas para DEVOLUCAO: `app/chamados/services/materializacao.py:275`.
+
+**[nota] Comentário residual contradiz a regra nova.** Diz “salvo a foto da projeção”, mas automática e trilha também preservam V: `app/chamados/models.py:4183`, `:4197`.
 
 ## 17/11 08:42 · sessao e193028b9d06 · ENSAIO-DA-FOLHA-11 · leitura · origem=Code
 
@@ -1591,85 +1643,4 @@ try:
 
 [truncado em 20000 de 24415 caracteres]
 
-## 17/11 08:09 · sessao 1b51d1bc7272 · CODEX-RESERVA-R5 · leitura · origem=Code
-
-**São 43 obras PARADA fora do balde ESPINHA-E: 19 LATERAL-ESTRUTURA, 14 INSTRUMENTO, 9 UI e 1 de 20/20.** A contagem considera IDs distintos nas tabelas principais `| id | balde |`, com estado iniciado por `PARADA`; exclui complementos, obsoletas e a lista de raias do rodapé. Esse é o critério do parser da GRADE. Portanto, **22 não corresponde à contagem desta cópia**. Se “espinha” também incluir o balde 20/20, o recorte fica em **42**. (bin/placar_grade.py:69; bin/placar_grade.py:80; bin/placar_grade.py:118; app/docs/GRADE-MESTRA.md:527; app/docs/GRADE-MESTRA.md:1757)
-
-Abaixo, referências sem diretório pertencem a **`app/docs/`**. **DESTRAVADA-JA** significa que a trava nominal foi resolvida ou que a obra já pousou/fechou; pode restar implementação, revisão ou baixa documental. A cópia é preparada por `git archive`; **`git log` e ancestralidade dos hashes: [não verificado]**. Os hashes citados são os registrados nos arquivos, sem consulta à árvore viva. (CLAUDE.md:344) [nao verificado]
-
-| obra | linha GRADE | trava | destrava | conferido HEAD | classe |
-|---|---|---|---|---|---|
-| HE-DE-14H-NUM-DIA — col945 12/09 | GRADE-MESTRA.md:177 | `! REGEN-EM-EXPORTADA` para o gravado da 09 | `!` específico para o ato na exportada | **Existe para o gravado.** Causa já lida; HEAD documentado já calcula HE zero. A 09 continua condicionada ao `!`; valor original de produção não foi reproduzido integralmente. (RELATO.md:120) | **ESPERA-RONALD** |
-| BUG-ANCORA-NAO-REGENERA | GRADE-MESTRA.md:178 | Decisão sobre col824 e col899 | Encaminhar o resíduo ao cadastro/admin | **Resolvida:** FECHADA pelo CORTE B em 16/11; pendência marcada respondida, nenhum vínculo alterado. Signal da cura permanece presente. (BACKLOG.md:1208; RELATO.md:133; PENDENTES_RONALD.json:295; app/escala/signals.py:113) | **DESTRAVADA-JA — baixa** |
-| O-GEO-DECISAO | GRADE-MESTRA.md:183 | Fecho do ESPELHO-VERDADE; O198 antes do complemento | Fechar ESPELHO-VERDADE; depois O198 para GEO-SILENCIO | **Existe.** Portão reafirmado; V0 em voo, V1–V4 registradas. O198 conserva ordem de parar após o censo. (RELATO.md:123; GRADE-MESTRA.md:889; GRADE-MESTRA.md:893; BACKLOG.md:1544) | **ESPERA-OBRA — ESPELHO-VERDADE; O198 no complemento** |
-| O99 | GRADE-MESTRA.md:190 | Decisão sobre 61 dias; TXT | CORTE B: resíduo ao cadastro/admin | **Resolvida como obra:** FECHADA em 16/11. A linha ainda conserva esperas históricas de cura1/TXT, mas o fechamento posterior é explícito. (BACKLOG.md:1342; RELATO.md:133) | **DESTRAVADA-JA — baixa** |
-| LOTE-1-PENDENTES | GRADE-MESTRA.md:193 | Autorização da troca; decisões dos itens 2/5; cadastro do item 3 | Respostas/`!` dos itens 2, 4 e 5; dado cadastral do item 3 | **Preservada:** só item 1 feito; demais atos continuam condicionados às respostas. Item 3 também depende do fim da ausência #3186. (BACKLOG.md:1369) | **ESPERA-RONALD**, com dado adicional |
-| O28 | GRADE-MESTRA.md:195 | DIFF na aberta; paga ao DP; `!` depois do número | Medir DIFF e obter `!` nominal | **Existe.** Corte C restringiu o escopo, mas o registro diz “nada medido”; não equivale ao `!` do ato. (BACKLOG.md:1399; RELATO.md:125) | **ESPERA-RONALD**, precedida da medida |
-| O58 | GRADE-MESTRA.md:198 | Parecer jurídico para hash; Card 4 | Parecer para hash; registro de emissão pode avançar separadamente | **Parcial:** fonte mantém exigência do parecer e libera o registro independentemente dele. Parecer posterior recebido: **[não verificado]**. (BACKLOG.md:1433) | **ESPERA-DADO — parecer jurídico** |
-| O147 | GRADE-MESTRA.md:201 | `!`; REGEN-EM-EXPORTADA | Medir efeito financeiro dos três atrasados e apresentar para decisão | **Preservada na fonte:** “não começada”, primeiro o número, depois a decisão sobre a 09. Medida/aval posterior: **[não verificado]**. (BACKLOG.md:1492) | **ESPERA-RONALD**, precedida da medida |
-| O175 | GRADE-MESTRA.md:204 | Corte sobre exportada/paga; censo para construção | Regra já definida: recusar exportada/paga; exceção com `!` nominal | **Corte resolvido; defeito presente.** Comando e núcleo ainda recomputam sem essa guarda. Pode retomar censo/brief; não é autorização para apply. (BACKLOG.md:1521; RELATO.md:121; app/ponto/management/commands/materializar_turnos.py:16; app/ponto/nucleo.py:40) | **DESTRAVADA-JA — preparação/construção condicionada ao censo** |
-| CARIMBO-POR-ORIGEM | GRADE-MESTRA.md:225 | Censo no brief; atrás do ESPELHO-VERDADE | Fecho do espelho e censo dos modelos/escritores | **Existe o portão de obra.** Desenho já registrado: corrigir save/QuerySet na origem. Exemplo do problema permanece: `reabrir` salva sem atualizar o carimbo. (BACKLOG.md:1695; app/ponto/services/fechamento.py:1354; GRADE-MESTRA.md:889) | **ESPERA-OBRA — ESPELHO-VERDADE** |
-| EMPATES-SEM-VIGENCIA | GRADE-MESTRA.md:226 | Censo no brief; atrás do ESPELHO-VERDADE | Fecho do espelho, censo e competência de referência definida | **Existe.** Desenho registrado, porém contador ainda filtra apenas `ativo`; juiz filtra vigência. A competência de referência continua indicada como pergunta dele. (BACKLOG.md:1698; app/core/services/aplicacao_convencao.py:60; app/core/regua_cct.py:259) | **ESPERA-OBRA — ESPELHO-VERDADE**, com decisão residual |
-| GRAVADO-NAO-CARIMBA-A-REGUA | GRADE-MESTRA.md:229 | Censo no brief; atrás do ESPELHO-VERDADE | Fecho do espelho e censo; carimbo no ato da lavra | **Portão permanece.** Decisão de desenho já registrada; a fonte conserva a medição de 0/17 competências nomeáveis pela autoridade, sem cura. Medida atual desses 17: **[não verificado]**. (BACKLOG.md:1721; GRADE-MESTRA.md:889) | **ESPERA-OBRA — ESPELHO-VERDADE** |
-| ABRANGENCIA-DOS-QUATRO-INSTRUMENTOS-SEM-PDF | GRADE-MESTRA.md:232 | Chegada dos PDFs | Receber os quatro instrumentos e conferir a base territorial | **Preservada na fonte:** declara expressamente que não fecha por nova medição, mas pela chegada dos PDFs. Recebimento posterior: **[não verificado]**. (BACKLOG.md:1736) | **ESPERA-DADO — PDFs** |
-| JANELA-DO-NOTURNO-CRAVADA | GRADE-MESTRA.md:234 | `!` para zona inviolável | Aval nominal para alterar o motor e tornar a janela cadastrável | **Existe.** Janela continua constante 22h–05h no motor; fonte exige aval para esse sítio. Aval específico posterior: **[não verificado]**. (app/ponto/motor_calculo_v2.py:44; app/ponto/motor_calculo_v2.py:45; BACKLOG.md:1738) | **ESPERA-RONALD** |
-| SEM-CELULA-11-DEVE-TER-CELULA | GRADE-MESTRA.md:243 | `!` para col305 | Decisão sobre o vínculo do col305 | **Resolvida:** `! COL305=(b)` aplicado em 25/10, desativando ec965. Remedição de 16/11 confirma ausência de vínculo cobrindo a 11 e conclui “nada a aplicar”. (RELATO.md:3982; RELATO.md:130) | **DESTRAVADA-JA — baixa** | [nao verificado]
-| LAUDO-col33-0310 | GRADE-MESTRA.md:250 | Corte sobre o restante da frota | Corte REJULGAR-COMP10-RESTO-DA-FROTA | **Resolvida:** corte dado em 27/10; CORTES registra atos aplicados e lista HE regenerada. Resíduo col988 ficou em obra própria. (CORTES.md:360; CORTES.md:102; BACKLOG.md:839) | **DESTRAVADA-JA — reconciliar fechamento/resíduo** | [nao verificado]
-| H12H06-SEPARA-E-CRONTAB | GRADE-MESTRA.md:257 | Censo de trava; desenho da parte B | Resposta H12H06-B-SIMPLES e pouso da B | **Resolvida:** pergunta respondida, B pousada e aplicação das 28 linhas registrada. O comando correspondente está nesta cópia. (RELATO.md:2401; RELATO.md:2324; RELATO.md:3107; app/ponto/management/commands/rederivar_minutos_h06_comp11.py:2) | **DESTRAVADA-JA — baixa da espera antiga** |
-| BO-0611-05 | GRADE-MESTRA.md:270 | Liberação B3; revisão; smoke | LIBERA-B3, certificação e pouso | **PARADA vencida:** corte LIBERA-B3 registrado; opus aprovou, merge `fb9269ea9`, deploy e push registrados. Smoke a/b/d continuava devido; isso não desfaz o pouso já realizado. (CORTES.md:433; RELATO.md:9354; RELATO.md:9368) | **DESTRAVADA-JA — pousada, com smoke residual** |
-| SETNULL-ORFA-DNA | GRADE-MESTRA.md:280 | Censo no brief; atrás do ESPELHO-VERDADE | Fecho do espelho e deleção de EC pela porta da célula | **Portão existe; desenho já dado.** Relação ainda usa `SET_NULL`, mantendo presente o sítio descrito no achado. (BACKLOG.md:2259; app/escala/models.py:1692; GRADE-MESTRA.md:889) | **ESPERA-OBRA — ESPELHO-VERDADE** |
-| SELOS-CANON-I2 | GRADE-MESTRA.md:292 | SELOS-CANON-I3 | Pouso do I3 | **Existe:** I3 conserva matriz/volta 4 e certificações/pouso pendentes. (BACKLOG.md:805; RELATO.md:1770) | **ESPERA-OBRA — SELOS-CANON-I3** | [nao verificado]
-| CONTENCAO-QUE-MORDE-V2 | GRADE-MESTRA.md:304 | Contrato 20; contrato novo | Fechar contrato 20 e apresentar novo contrato de cinco linhas | **Existe:** estacionamento preservado; contrato “chamado, um juiz” ainda não está marcado verde e conserva dependências O168/O169/LASTRO. (BACKLOG.md:977; RELATO.md:2763; app/core/contratos_estruturais.py:262; app/core/contratos_estruturais.py:270) | **ESPERA-OBRA — contrato 20**, depois contrato novo |
-| MAIS-CODEX-PLACAR | GRADE-MESTRA.md:331 | Duas curas de produto no ar | Segunda cura e encerramento da moratória | **Resolvida expressamente:** moratória caiu com `9ed75130` + `77eb28ce`; placar voltou à fila sob CONTRATO-DE-INSTRUMENTO. (RELATO.md:3463) | **DESTRAVADA-JA** |
-| GATE-EXPORT-10 | GRADE-MESTRA.md:337 | Decisão do DP sobre HE; autorização | Decisões/`!`, relavrar carimbo e executar o ato | **Fonte ainda bloqueia:** registro específico conserva 184 dias sem decisão. Estado atual desses dias **[não verificado]**; há contradição posterior entre “10 exportada” no aval e juiz dizendo não entregue. (BACKLOG.md:1185; RELATO.md:4038; RELATO.md:130) | **ESPERA-RONALD — conservadora** |
-| ~~PROVA-DOMINIO~~ | GRADE-MESTRA.md:339 | Execução cortada | Baixa para estado terminal | **Já CORTADA**, fora da fila desde 28/09; fonte manda “Não executar”. (BACKLOG.md:1207) | **DESTRAVADA-JA — somente baixa para CORTADA** |
-| HIGIENE-DE-CONTEXTO | GRADE-MESTRA.md:350 | Autorização do item 5, CLAUDE→LAPIDES | Aval para mover a história | **Espera antiga superada:** CLAUDE-MD-ENXUTO recebeu aval e pousou `9ce5181d`, com história em LAPIDES e pistas em PISTA. Meta integral de tamanho não fechou e foi parada pelo aval. (BACKLOG.md:1050; BACKLOG.md:1357; RELATO.md:2879) | **DESTRAVADA-JA — remover espera antiga** |
-| O64 | GRADE-MESTRA.md:357 | Investigação do ambiente; `!` | Explicar divergência prod/sombra; depois autorizar apply | **Preservada na fonte:** 10 em produção contra 14 na sombra, sem causa definida. Repetição atual ou solução posterior: **[não verificado]**. (BACKLOG.md:1440) | **ESPERA-DADO — causa da divergência**, depois `!` |
-| O91 | GRADE-MESTRA.md:360 | `!` de instalação | Reconciliar com corte “não instala” | **Espera contradita pelo próprio cabeçalho:** FECHADA pelo corte “não instala”, enquanto a célula antiga ainda pede `!`. Isso não autoriza instalar. (BACKLOG.md:1467) | **DESTRAVADA-JA — baixa, sem instalação** |
-| O176 | GRADE-MESTRA.md:371 | Corte para conferir conteúdo do pacote | Corte sobre o critério por conteúdo | **Existe:** fonte mantém ESPERA CORTE; código ainda lê títulos e verifica presença do rótulo. (BACKLOG.md:1522; app/core/esteira_vigia.py:296; app/core/esteira_vigia.py:312) | **ESPERA-RONALD** |
-| O279 | GRADE-MESTRA.md:388 | Liberação ou cura da regra operacional | Resolver a restrição que impediu corrigir o religador | **Código antigo presente:** `while true` e detecção textual de `PAREI`. Restrição operacional atual do agente: **[não verificado]**. (BACKLOG.md:1655; bin/keepalive.sh:3; bin/keepalive.sh:7) | **ESPERA-RONALD** |
-| O296 | GRADE-MESTRA.md:393 | `!` para sítio na zona inviolável | `!` nominal para o comentário no motor | **Fonte preserva a espera** para o décimo sítio; nove externos podem ser separados. Contagem atual e aval posterior: **[não verificado]**. (BACKLOG.md:1673) | **ESPERA-RONALD** |
-| PROTEGE-VAZIA-EM-55-LEIS | GRADE-MESTRA.md:403 | Autorização para alterar LEIS.md | Autorizar movimentação entre colunas existentes | **Defeito presente:** L-006 tem sítios em DONO e PROTEGE vazio; selo ainda pula célula vazia. Total atual “55”: **[não verificado]**. (BACKLOG.md:1724; LEIS.md:64; bin/tests/test_lei_protege_sitio.sh:77) | **ESPERA-RONALD** |
-| RESIDUO-PREMIG-NO-BIND-MOUNT | GRADE-MESTRA.md:404 | Autorização para apagar | Decisão nominal sobre os arquivos do bind mount | **Autorização continua exigida na fonte.** Os 64 arquivos foram descritos como ignorados pelo git; presença atual no bind mount **[não verificado]** nesta cópia arquivada. (BACKLOG.md:1730) | **ESPERA-RONALD**, com existência atual não verificada |
-| PAUTA-PREFIXO-IDENTIDADE-NO-TEXTO | GRADE-MESTRA.md:445 | Corte de desenho; congelamento | Decidir desenho da identidade textual | **Congelamento preservado; defeitos presentes:** motivo vazio retorna normalmente; identidade textual continua cortada em `[:480]`. (BACKLOG.md:2173; app/core/management/commands/alarme_esteira.py:34; app/core/management/commands/alarme_esteira.py:56) | **ESPERA-RONALD** |
-| O256 | GRADE-MESTRA.md:476 | Porta PDF; O261; smoke final | PDF publicado, O261 curada; smoke como revisão final | **Travas de avanço vencidas:** rota PDF existe; O261 consta fechada; O310 e lente pousaram. Corte diz explicitamente que smoke do retrato não segura push. Smoke positivo posterior aos últimos pousos: **[não verificado]**. (app/folha/urls.py:24; BACKLOG.md:1652; BACKLOG.md:1687; BACKLOG.md:1696; CORTES.md:65) | **DESTRAVADA-JA — revisão de smoke residual** |
-| AVISO-ENTRADA-ANTECIPADA | GRADE-MESTRA.md:477 | Descongelamento pela L-096 | Aval que alcance o serviço Python ou encerramento do congelamento | **Existe:** BACKLOG mantém CONGELADA. Exceção da raia UI cobre templates/static/testes, enquanto esta entrega inclui `aviso_da_batida.py`. (BACKLOG.md:1212; CLAUDE.md:311; LEIS.md:114) | **ESPERA-RONALD** | [nao verificado]
-| AVISO-ESPURIA-JANELA — desenho | GRADE-MESTRA.md:478 | Confirmação do admin da folha e do dono | Confirmação de ambos sobre janela e mensagem | **Preservada:** “REGISTRADO, NAO CONSTRUIR”, aguardando confirmação. Resposta posterior: **[não verificado]**. (BACKLOG.md:1213) | **ESPERA-RONALD**, também admin |
-| BUG-APP-SESSAO-401 | GRADE-MESTRA.md:479 | Autorização; smoke nas duas cascas | `!` e smoke para a metade APP | **Preservada:** admin no ar, APP aguardando `!`/smoke. Autorização e smoke posteriores: **[não verificado]**. (BACKLOG.md:1238) | **ESPERA-RONALD** |
-| AVISO-DO-DONO | GRADE-MESTRA.md:481 | Portão da 09; descongelamento; smoke no celular | Liberação específica e smoke do push | **Congelamento explícito permanece.** Exceção de UI não cobre automaticamente o emissor de push por evento. Portão da 09 cumprido e smoke específico: **[não verificado]**. (BACKLOG.md:1254; CLAUDE.md:311) | **ESPERA-RONALD** | [nao verificado]
-| F2 | GRADE-MESTRA.md:486 | Contratos 22/22; O157 | Fecho estrutural e O157 | **Existe, com teto antigo:** teto atual é 20. O157 não começou; código ainda conta somente `tipo='falta'`, sem a suspensão exigida pelo corte. (app/core/contratos_estruturais.py:1041; BACKLOG.md:1501; app/ferias/models.py:144) | **ESPERA-OBRA — O157 + fecho estrutural** |
-| O30 | GRADE-MESTRA.md:487 | Vale F1; `pillow_heif`; rebuild | Rebuild HEIC e liberação do complemento F3 POS-20 | **Parcial:** vale F1 já dado em 03/10, “A F2 ABRE”. F3 continua POS-20, dependente do decodificador/próximo rebuild. Rebuild concluído: **[não verificado]**. (PENDENTES_RONALD.json:2093; RELATO.md:1112; BACKLOG.md:1401) | **ESPERA-OBRA — rebuild HEIC / F3 POS-20** |
-| O206 | GRADE-MESTRA.md:493 | Correção da prévia; smoke das duas cascas | Prévia pela autoridade e smoke aceito | **Resolvida:** template lê texto da autoridade; comunicação aprovada em 17/10. Restos de push nativo/disputa foram separados na O311. (app/templates/chamados/partials/_js_cobranca.html:30; PENDENTES_RONALD.json:2360; BACKLOG.md:1688) | **DESTRAVADA-JA** |
-| O310-RAIOX | GRADE-MESTRA.md:499 | Corte para história, modelo e migration | Corte específico para histórico | **Existe para o complemento:** lente já NO AR `3ea519d7`, mas fonte mantém “história (modelo + migration) é corte dele”. Corte posterior: **[não verificado]**. (BACKLOG.md:1696) | **ESPERA-RONALD** |
-| E3-ENTRADA-ORFA-SEM-TURNO — balde 20/20 | GRADE-MESTRA.md:121 | Lei para dia sem turno com batida | Corte sobre a entrada real órfã sem turno previsto | **Preservada:** fonte distingue esse caso da lei do dia sem nada; ainda aparece na fila como pergunta de lei. Corte posterior: **[não verificado]**. (BACKLOG.md:2176; RELATO.md:1729) | **ESPERA-RONALD** |
-
-**Totais da classificação acima**, mantendo o recorte das 43 linhas principais e as ressalvas de cada linha. (GRADE-MESTRA.md:121; GRADE-MESTRA.md:177; GRADE-MESTRA.md:280; GRADE-MESTRA.md:292; GRADE-MESTRA.md:445; GRADE-MESTRA.md:476; GRADE-MESTRA.md:499)
-
-| balde | DESTRAVADA-JA | ESPERA-RONALD | ESPERA-OBRA | ESPERA-DADO | total |
-|---|---:|---:|---:|---:|---:|
-| LATERAL-ESTRUTURA | 7 | 5 | 5 | 2 | **19** |
-| INSTRUMENTO | 4 | 7 | 2 | 1 | **14** |
-| UI | 2 | 5 | 2 | 0 | **9** |
-| 20/20 | 0 | 1 | 0 | 0 | **1** |
-| **Total** | **13** | **18** | **9** | **3** | **43** |
-
-## 17/11 08:08 · sessao 320413038536 · - · - · origem=Ronald (tmux)
-
-Confirmado: corrija L2 para **MUDOU — contagem incorreta**, sem atribuir isso a uma obra posterior. Há **18 funções com save/create/get_or_create**, mais **1 função com delete**, total **19** incluindo exclusão; os sítios adicionais à amostra são `agendar_ferias_porta`, `app/ferias/services.py:316`; `aplicar_art130`, `app/ferias/services.py:412`; e `excluir_periodo_aquisitivo`, `app/ferias/services.py:876`.
-
-Esses sítios podem já existir no momento do inventário; novidade temporal/commit [nao verificado]. [nao verificado]
-
-Delta das perguntas 1–8:
-
-| pergunta | conferência atual |
-|---|---|
-| 1 — cancelamento iniciado | Permanece: botão por data `app/ferias/models.py:340`, botão por status `app/templates/ferias/saldo.html:70`, porta aceita `em_gozo` `app/ferias/services.py:652`; fila/lei explicitada em `app/docs/RELATO.md:842`. |
-| 2 — PA em_curso pode agendar | Permanece: `pode_agendar` exige adquirido `app/ferias/models.py:234`; porta normal não exige esse estado `app/ferias/views.py:245`, `app/ferias/services.py:578`; solicitação exige `app/ferias/services.py:765`. |
-| 3 — vencendo/vencido | Permanece: juiz por data `app/ferias/models.py:260`, filtros gravados/literal 60 `app/ferias/views.py:64`, `app/ferias/services.py:263`; RC1-2 sem construtor `app/docs/BACKLOG.md:759`. |
-| 4 — confirmado_em na recusa | Permanece: recusa salva somente confirmação `app/ferias/services.py:908`; sentido histórico ou vigente [nao verificado]. |
-| 5 — guardas sob trava | Permanece: guardas externas `app/ferias/views.py:945`, `app/ferias/views.py:994`; escritores só vetam cancelado `app/ferias/services.py:887`, `app/ferias/services.py:905`. |
-| 6 — SOL sem nascente | Criação produtiva não identificada; leitura permanece `app/ferias/views.py:41`, `app/ferias/views.py:785`; canal externo/dado existente [nao verificado]. |
-| 7 — relógio residual | Permanece `app/ferias/services.py:654`, `app/ferias/services.py:681`, `app/ferias/services.py:686`, `app/ferias/services.py:934`, `app/ferias/views.py:29`, `app/ferias/views.py:117`; residual explicitamente em fila `app/docs/RELATO.md:847`. |
-| 8 — comentário concluído | Permanece inexato `app/ferias/models.py:304`; troca de janela e cron podem mover concluído `app/ferias/services.py:721`, `app/ferias/services.py:954`. |
-
-_6399 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6401 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
