@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 05:54:14.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (189.6 MB). Acoes na janela: **496**.
+**Medido em 17/11/2026 05:59:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (189.7 MB). Acoes na janela: **497**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:54:19 | Bash | Confirm waiter alive and hook clear | `cd /home/ronald/saas-hasner; ps -p 3057728 -o pid=; echo '{}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
 | 05:29:01 | Bash | Waiter for O10-D pos-opus volta | `cd /home/ronald/saas-hasner; D=logs/O10-D-PERMUTA-NA-TELA; cat > $D/espera_volta.sh <<'EOF' #!/bin/bash # a sessao grava volta_pos_opus.done ao receber a entrega do construtor for i in $(seq 1 2880); do test -e /home/ronald/saas-hasner/logs/O10-D-PERMUTA-NA-TELA/volta_pos_opus.done && { echo fim; exit 0; } /usr/bin/sleep 15 done echo timeout; exit 1 EOF setsid nohup bash $D/espera_volta.sh > $D/es ...` |
 | 05:28:54 | Agent | Fix O10-D after opus REPROVA | `Voce e o construtor (volta pos-opus) da obra O10-D-PERMUTA-RECIPROCA, projeto /home/ronald/saas-hasner (Django em app/). Leia /home/ronald/saas-hasner/CLAUDE.md INTEIRO antes de agir (secao 0 LEI-AKITA, 3 TESTES, 6 CONDUTAS, 7b CODEX item 5). Copia: /home/ronald/wt-o10d-023001, branch o10d-023001, HEAD bd590178e, base fbc5c76ce. Trabalhe SO nela; commits por cima (git add por path, mensagem por he ...` |
 | 05:28:32 | Bash | Record O10-D opus REPROVA | `cd /home/ronald/saas-hasner; D=logs/O10-D-PERMUTA-NA-TELA; cat > $D/opus_final.md <<'EOF' # Opus final O10-D-PERMUTA-RECIPROCA (bd590178e) -- REPROVA (transcrito pela sessao 17/11) 1 BLOQUEIA: celula.py:1027 _largas deixa passar ausencia de range aberto (data_fim nulo, TIPOS_EM_ABERTO ponto/models.py:689) como carta; :920 excluir_pks=pks_cartas tira essa ausencia (ou atestado aprovado do dia) da r ...` |
