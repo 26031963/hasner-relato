@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 09:30** · publicado em **17/11/2026 09:30** (UTC-3)
+> Ultima resposta processada: **17/11/2026 09:32** · publicado em **17/11/2026 09:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 09:32 · sessao daeb5df7e465 · E4C-F2 · verificador · origem=Code
+
+1. **[nota] O mutador preserva exatamente a âncora atual.** A conferência AST em memória mostrou apenas a retirada de `q_nao_validada_pelo_ato()`: permanecem o OR da âncora, `pk__in`, relacionamentos e ordenação. Não há atributo com `'validad'` nos argumentos atuais da âncora; ali aparece `self.pk` (`app/chamados/models.py:355–359`; `app/chamados/tests/test_cortes_f2_f9_m13.py:28–43`).
+
+   Para a forma antiga documentada, `validada_em__isnull=True`, a regra também remove somente esse keyword (`app/chamados/tests/test_cortes_f2_f9_m13.py:5`, `:39`). Aplicação ao código exato de **708162b15**: **[nao verificado]**; a sondagem dessa forma sintética não comprova a revisão histórica.
+
+2. **[fila] AncoradasCustoTest distingue validação só no ATO, mas deixa sobreviver uma dependência indevida da projeção.** Agora exige excluir `so_no_ato`, mesmo com `validada_em=None` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:487–494`). Contudo, este mutante no filtro externo ainda satisfaz custo e M13, por leitura das fixtures (`app/chamados/models.py:357`; `app/chamados/tests/test_cortes_f2_f9_m13.py:49–64`):
+
+   ```python
+   PerguntaDisputa.objects.filter(
+       PerguntaDisputa.q_nao_validada_pelo_ato() & Q(validada_em__isnull=True),
+       pk__in=_ancora,
+   )
+   ```
+
+   Falta a divergência inversa: carimbo residual, VALIDACAO em T1 e RECUSA em T2; a pergunta deveria entrar, mas esse mutante a excluiria. O caso existe contra leitura/face, sem chamar `_ancoradas` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:51–55`, `:105–109`). O seletor M13 ainda retiraria um único argumento composto e produziria a mordida esperada por PK (`app/chamados/tests/test_cortes_f2_f9_m13.py:33–43`, `:54–56`). Execução desse mutante: **[nao verificado]**.
+
+3. **[fila] Há também um mutante sobrevivente da âncora:** reduzir o OR a `Q(chamado_destino_id=self.pk)`. Todas as perguntas desses dois testes usam `destino=ch`, deixando sem cobertura o ramo “sem destino, pelo chamado da disputa” (`app/chamados/models.py:355–356`; `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:484–488`; `app/chamados/tests/test_cortes_f2_f9_m13.py:49–62`). Esse ramo é exigido pelo juiz da âncora (`app/chamados/services/fio.py:100–102`, `:117`). Sobrevivência deduzida por leitura; execução **[nao verificado]**.
+
+4. **[nota] No delta fornecido, não muda lógica produtiva além da docstring, nem se deslocam linhas de produção.** A substituição ocupa a mesma linha (`app/chamados/models.py:346`). O c12 inclui linhas na identidade, mas exclui arquivos de testes, onde ocorreram os acréscimos (`app/chamados/tests/e4b_c12_ast.py:17–27`, `:32–39`, `:222–223`). Executei, sem banco e sem escrita de bytecode, os dois testes do censo e corpo nominal: **2 passaram** (`app/chamados/tests/test_e4b_c12_selo.py:22`, `:34`). Suíte completa e efeito em produção: **[nao verificado]**.
+
+## 17/11 09:31 · sessao db4eb04e80f0 · - · - · origem=Ronald (tmux)
+
+[ fila ] Confirmado por leitura: o mutante abaixo em `app/chamados/models.py:357` passa nos dois testes normais:
+
+```python
+PerguntaDisputa.objects.filter(
+    PerguntaDisputa.q_nao_validada_pelo_ato() & Q(validada_em__isnull=True),
+    pk__in=_ancora,
+)
+```
+
+As pendentes têm projeção nula; as validadas já saem pela face. Referências: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:485-494`; `app/chamados/tests/test_cortes_f2_f9_m13.py:50-55,60-64`.
+
+Com o seletor M13, `_incluir_validadas` remove o argumento posicional composto inteiro ao encontrar `q_nao_validada_pelo_ato`; conta uma retirada e conserva `pk__in`. Assim, continua produzindo a mordida esperada por PK. Referências: `app/chamados/tests/test_cortes_f2_f9_m13.py:33-43,54-56`.
+
+O caso ausente é a **divergência inversa**: projeção `validada_em=T1`, VALIDACAO em T1 e RECUSA em T2. A pergunta deve entrar em `_ancoradas`, mas o mutante a exclui pelo carimbo residual. Esse caso existe somente contra leitura e face: `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:105-109,51-55`.
+
+Adversarial mínimo: repetir esse caso com `destino=ch` e exigir seu PK em `ch._ancoradas()`. Execução [nao verificado].
 
 ## 17/11 09:30 · sessao db4eb04e80f0 · - · - · origem=Ronald (tmux)
 
@@ -615,68 +655,4 @@ Limite literal importante: “evento … nada muda” não pode significar todo 
 
 Limite de atomicidade: callbacks `on_commit` de retomada de regularizações e fechamento de becos são posteriores à transação; uma sonda que termina em rollback não os executa (`app/chamados/signals.py:122`, `:146`, `:229`, `:240`). A unidade SQL não é garantia automática sobre esses efeitos posteriores (`app/chamados/signals.py:129`, `:146`).
 
-## 17/11 09:21 · sessao d9205bf7e500 · CONTADOR-CODEX-OCIOSO · verificador · origem=Code
-
-1. **(a) está implementado, mas não num sítio só; (b) só está comprovado no leitor.**
-
-   `_em_curso` exige `ini` sem `fim` da mesma chave e PID vivo. `ultimas_chamadas` repete essa decisão, sem chamar `_em_curso`, contrariando sua própria documentação de predicado único. Ambos conferem o PID; nesses leitores de chamadas não permanece o antigo rótulo incondicional. (`bin/codex_limite_estado.py:85`, `bin/codex_limite_estado.py:111`, `bin/codex_limite_estado.py:131`)
-
-   O leitor da fila exige data+hora em ABERTO; ausência, data inválida ou futuro produzem SEM DADO. Isso não prova que a linha **nasça** carimbada: o escritor real da fila e seu procedimento de abertura são [nao verificado]. (`bin/codex_limite_estado.py:45`, `bin/codex_limite_estado.py:159`, `bin/codex_limite_estado.py:173`)
-
-2. **Escritores, leitores e significados não formam um contrato uniforme.**
-
-   | Campo/fonte | Quem escreve | Quem lê |
-   |---|---|---|
-   | `ini`: horário, obra, papel, hash, PID | Wrapper grava horário de `date`, hash abreviado e `$$`, antes da espera por slots. (`bin/codex_pergunta.sh:308`, `bin/codex_pergunta.sh:364`) | Parser comum; contagem por papel; últimas chamadas; ociosidade. (`bin/codex_limite_estado.py:82`, `bin/codex_limite_estado.py:98`, `bin/codex_limite_estado.py:107`, `bin/codex_limite_estado.py:194`) |
-   | `fim`: horário, mesma chave, sessão, rc, duração | `_saida`, pelo trap EXIT, depois de `INI=1`. (`bin/codex_pergunta.sh:269`, `bin/codex_pergunta.sh:282`) | Parser valida o horário, mas guarda somente sessão/rc/duração; últimas chamadas usam rc; ociosidade usa existência da chave. (`bin/codex_limite_estado.py:82`, `bin/codex_limite_estado.py:89`, `bin/codex_limite_estado.py:111`, `bin/codex_limite_estado.py:133`) |
-   | PID | É o PID do wrapper, incluindo espera por vaga/trava; reutilização pelo SO é limitação declarada. (`bin/codex_pergunta.sh:308`, `bin/codex_limite_estado.py:19`) | `_pid_vivo`, chamado separadamente pelas últimas chamadas e pelo contador. (`bin/codex_limite_estado.py:111`, `bin/codex_limite_estado.py:123`, `bin/codex_limite_estado.py:133`) |
-   | `fila.md`: estado e data+hora | Escritor demonstrado somente nas fixtures; produtor real: [nao verificado]. (`bin/tests/test_codex_ociosidade.sh:32`) | `ler_fila_reserva`; resultado consumido por `ler_ociosidade`. (`bin/codex_limite_estado.py:136`, `bin/codex_limite_estado.py:203`) |
-
-   Outros consumidores do log são a procedência das sessões, tokens por papel e censo do disjuntor; eles reaproveitam o parser. (`bin/codex_limite_estado.py:220`, `bin/codex_limite_estado.py:315`, `bin/gerar_codex_estado.py:176`, `bin/disjuntor.py:2126`)
-
-   **Fuso:** o formato gravado não contém offset, e o parser produz datetime ingênuo; o contrato declara hora local ingênua. Igualdade efetiva entre os fusos dos produtores e leitores em produção: [nao verificado]. (`bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:308`, `bin/codex_limite_estado.py:27`, `bin/codex_limite_estado.py:82`)
-
-   **30 minutos:** a idade é truncada antes da comparação. Assim, 30min59s vira `30` e não acusa; o primeiro minuto inteiro acusável é 31. Isso não corresponde ao literal de duração `>30 min`. (`bin/codex_limite_estado.py:169`, `bin/codex_limite_estado.py:212`)
-
-   **24 horas:** o contexto novo usa `(agora−24h, agora]`; por papel, a condição inclui exatamente 24h atrás **e qualquer horário futuro**. O censo usa ambas as bordas inclusivas. (`bin/codex_limite_estado.py:199`, `bin/codex_limite_estado.py:99`, `bin/disjuntor.py:2132`)
-
-3. **Não: há erro convertido em zero/ok, e o caminho completo pode derrubar o ESTADO.**
-
-   Linhas de chamadas curtas ou com timestamp inválido são descartadas silenciosamente. Um log inteiro corrompido pode resultar em `em_curso=0`; com fila sem ABERTO, termina `ok`. PID inválido e `OSError` diferente de `PermissionError` também viram “não vivo”, sem SEM DADO. (`bin/codex_limite_estado.py:79`, `bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:118`, `bin/codex_limite_estado.py:126`, `bin/codex_limite_estado.py:195`, `bin/codex_limite_estado.py:212`)
-
-   O `try` de `ler_ociosidade` protege suas operações internas, mas `ler()` chama antes `ler_chamadas` e `ultimas_chamadas`, cujas leituras não têm esse tratamento. `chamadas.log` existente e sem permissão pode levantar `PermissionError` antes de chegar à ociosidade. `gerar_estado.py` chama esse conjunto sem proteção local; `relato.sh` encerra com 1 se o gerador falhar. (`bin/codex_limite_estado.py:67`, `bin/codex_limite_estado.py:77`, `bin/codex_limite_estado.py:186`, `bin/gerar_estado.py:270`, `bin/relato.sh:38`)
-
-4. **O executor dos mutantes não garante morte por asserção.**
-
-   Ele considera **qualquer saída** de `_casos`, com stderr agregado, como “mordeu”; não exige `FALHA:` nem separa traceback de comparação divergente. Portanto, uma exceção escapada também certifica falsamente o mutante. (`bin/tests/test_codex_ociosidade.sh:117`, `bin/tests/test_codex_ociosidade.sh:118`)
-
-   Na reprodução em memória dos casos, com E/S e PIDs simulados, os 11 mutantes produziram falhas de comparação; execução integral do selo original no host: [nao verificado]. As comparações estão em `bin/tests/test_codex_ociosidade.sh:42`; as mutações, em `bin/tests/test_codex_ociosidade.sh:122`.
-
-   Há duas ressalvas relevantes:
-
-   - **M2:** enfraquecer `b>=1` faz `None > 30` levantar `TypeError`, capturado como SEM DADO; a comparação contra `ok` mata o mutante por consequência dessa exceção interna. (`bin/tests/test_codex_ociosidade.sh:70`, `bin/tests/test_codex_ociosidade.sh:123`, `bin/codex_limite_estado.py:177`, `bin/codex_limite_estado.py:212`)
-   - **M11:** continua retornando SEM DADO; morre somente porque o motivo muda de “chamadas.log ilegivel” para “erro ao ler (PermissionError)”. Não demonstra perda da propriedade SEM DADO. (`bin/tests/test_codex_ociosidade.sh:95`, `bin/tests/test_codex_ociosidade.sh:131`, `bin/codex_limite_estado.py:214`)
-
-   **Vacuidade:** “fila é diretório” não exercita captura de exceção: `isfile` devolve falso e retorna “fila ausente”. Também faltam os casos de 30min59s e início exatamente em `agora`; o teste da janela cobre a borda inferior e futuro, mas não demonstra inclusão da borda superior. (`bin/tests/test_codex_ociosidade.sh:67`, `bin/tests/test_codex_ociosidade.sh:76`, `bin/tests/test_codex_ociosidade.sh:87`, `bin/codex_limite_estado.py:140`)
-
-5. **Classes citadas no pedido:**
-
-   - **Segundo juiz:** demonstrado pela decisão duplicada em `ultimas_chamadas` e `_em_curso`. (`bin/codex_limite_estado.py:111`, `bin/codex_limite_estado.py:133`)
-   - **Relógio fora da borda:** no caminho principal da ociosidade, `agora` é capturado uma vez e repassado. Entretanto, log e PIDs são relidos entre componentes, permitindo números e rótulos de observações diferentes; no consumidor do disjuntor, `ler_chamadas(raiz)` ainda captura outro relógio. (`bin/codex_limite_estado.py:49`, `bin/codex_limite_estado.py:67`, `bin/codex_limite_estado.py:107`, `bin/codex_limite_estado.py:194`, `bin/disjuntor.py:2036`)
-   - **Derivação paralela:** contagens de inícios por papel e por hora calculam separadamente a mesma janela nominal, com bordas divergentes. (`bin/codex_limite_estado.py:99`, `bin/codex_limite_estado.py:199`)
-   - **Campo com dois significados:** o elemento publicado como `rc` contém ora código de saída, ora estado sintético “em curso”/“sem fim”. É sobrecarga já existente em parte, ampliada pelo diff. (`bin/codex_limite_estado.py:111`, `bin/codex_limite_estado.py:391`)
-
-VEREDITO: REPROVA -- predicado duplicado, erro de entrada pode virar zero/ok e a leitura completa pode derrubar o ESTADO (bin/codex_limite_estado.py:111, bin/codex_limite_estado.py:79, bin/codex_limite_estado.py:67; bin/gerar_estado.py:270).
-
-## 17/11 09:21 · sessao 988c3a4c30d7 · - · - · origem=Ronald (tmux)
-
-- `logs/LU2-CORTES/08` não está disponível na cópia; seu conteúdo integral é [nao verificado].
-- LU2-08 continua dividida: `PARCIAL_SEM_PERIODO` tem resposta CADASTRO; `FATO_EM_AUSENCIA` continua com alternativas CADASTRO/BATIDA/ESTRUTURA sem corte registrado. Fonte: `app/docs/RELATO.md:352`.
-- O complemento atinge `InsumosDoDono.dono()` e o juiz existente. O registro informa 14 parciais ativos, dos quais 10 da CLASSE-D, e alerta que carregar o insumo depois do teste BATIDA muda a classificação; esses números atuais são [nao verificado]. Fonte documental: `app/docs/RELATO.md:422`.
-- A precedência da parcial sem período já está respondida pela lei: vai ao admin como CADASTRO, sem julgar a batida dentro/fora e nunca como FATO_EM_AUSENCIA. A referência antiga `CORTES.md:370` passou para `app/docs/CORTES.md:386`.
-- Hoje o juiz verifica CADASTRO inicial, depois BATIDA, depois fase/CxR; não recebe insumo específico de parcial sem período. Fonte: `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:104`, `app/ponto/management/commands/e6_oraculo.py:110`, `app/ponto/management/commands/e6_oraculo.py:185`.
-- A pergunta do brief sobre R1 pousar sozinho já ganhou decisão técnica: sozinho, sem esperar LU2-07/08; D1/D2 continuam em espera como desenho. Fonte: `app/docs/RELATO.md:421`.
-- Para **R1 estrito**, a sugestão é **lei 0**: origem, autoridade única e dono estão escritos em `app/docs/LEIS.md:59`, `app/docs/LEIS.md:60`, `app/docs/LEIS.md:122`; o pouso independente consta em `app/docs/RELATO.md:421`.
-- Se incluir a resolução do complemento LU2-08, registrar **lei: qual dono L-099 deve responder por FATO_EM_AUSENCIA**. O próprio registro mantém essa escolha aberta: `app/docs/RELATO.md:352`, `app/docs/RELATO.md:422`.
-
-_6439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6441 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
