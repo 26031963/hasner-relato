@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 09:32** · publicado em **17/11/2026 09:36** (UTC-3)
+> Ultima resposta processada: **17/11/2026 09:47** · publicado em **17/11/2026 09:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 09:47 · sessao a37b28740f37 · - · - · origem=Ronald (tmux)
+
+Achados confirmados no código e por simulação somente em memória:
+
+- **O caminho completo ainda pode derrubar o ESTADO.** JSON de sessão válido com `payload: [1]`, `rate_limits: [1]` ou raiz `["rate_limits"]` produz `AttributeError`; `ler_semanal()` captura somente `ValueError` do parsing, enquanto `ler()` captura somente `OSError` dessa leitura. A chamada em `gerar_estado.py` não protege leitura nem composição. (`bin/codex_limite_estado.py:325`, `bin/codex_limite_estado.py:326`, `bin/codex_limite_estado.py:328`, `bin/codex_limite_estado.py:87`, `bin/gerar_estado.py:270`)
+- **Também há queda na composição.** `used_percent: "lixo"` passa pelo leitor e produz `ValueError` em `float(...)`; não há guarda na composição da frase. (`bin/codex_limite_estado.py:331`, `bin/codex_limite_estado.py:448`, `bin/codex_limite_estado.py:453`, `bin/gerar_estado.py:270`)
+- **Entrada malformada ainda pode virar zero/ok.** Uma linha `fim` com `rc=lixo` e `dur=lixo`, mas quantidade suficiente de campos, é aceita sem incrementar descartadas. Ela encerra a chamada pelo simples casamento da chave; com fila legível sem ABERTO, obtém-se `em_curso=0`, `estado=ok`, além de `rc=lixo` publicado em últimas chamadas. Reprodução em memória confirmou esses valores. (`bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:205`, `bin/codex_limite_estado.py:273`, `bin/codex_limite_estado.py:296`, `bin/codex_limite_estado.py:178`)
+- **Ausência do log ainda se apresenta como zeros nas seções auxiliares.** `_registro()` devolve registro vazio, `ler_chamadas()` devolve todos os papéis zero e `ultimas_chamadas()` devolve lista vazia; a ociosidade, corretamente, continua SEM DADO. (`bin/codex_limite_estado.py:115`, `bin/codex_limite_estado.py:161`, `bin/codex_limite_estado.py:174`, `bin/codex_limite_estado.py:270`)
+
+Reparos de v1 efetivos:
+
+- O segundo juiz de últimas chamadas foi removido no caminho `ler()`: a mesma foto alimenta papéis, últimas e ociosidade; `_em_curso` é carimbado e seu valor é consumido por últimas. (`bin/codex_limite_estado.py:93`, `bin/codex_limite_estado.py:153`, `bin/codex_limite_estado.py:176`)
+- A janela do módulo passou a uma função única `(agora−24h, agora]`, usada por limite, papéis e contexto por hora. (`bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:164`, `bin/codex_limite_estado.py:283`)
+- `30min59s` agora acusa; a idade está em segundos, comparada a 1800. (`bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:296`)
+- `rc` e `situacao` agora ocupam posições distintas e o consumidor foi adaptado, embora `rc` de entrada não seja validado. (`bin/codex_limite_estado.py:178`, `bin/codex_limite_estado.py:179`, `bin/codex_limite_estado.py:486`, `bin/codex_limite_estado.py:139`)
+
+Classes ainda presentes:
+
+- **Relógio fora da borda:** o disjuntor chama `ler_chamadas(raiz)` sem transmitir seu `agora`; a função captura outro relógio. (`bin/disjuntor.py:2036`, `bin/codex_limite_estado.py:159`)
+- **Derivação paralela:** o censo mantém janela inclusiva nas duas bordas, diferente da função única do módulo, e usa `_linhas_chamadas()`, que descarta os contadores de linhas inválidas/futuras do registro. (`bin/disjuntor.py:2132`, `bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:145`, `bin/codex_limite_estado.py:146`)
+
+Ocorrência desses casos em produção: [nao verificado].
+
+## 17/11 09:46 · sessao 0a302ad15775 · - · - · origem=Ronald (tmux)
+
+- **`chamadas.log/ini`**: `bin/codex_pergunta.sh:308` grava hora local sem offset, obra, papel, hash de 12 caracteres, PID `$$`, tipo `ini` e pergunta raspada; a pergunta é reduzida a uma linha em `bin/codex_pergunta.sh:295`. O registro precede a espera por slot em `bin/codex_pergunta.sh:364`; portanto, conta tentativa/espera do wrapper, sem provar execução do Codex (`bin/disjuntor.py:2073`). `_registro` lê hora/obra/papel/hash/PID/tipo, ignora conteúdo da pergunta e usa `(obra,hash,pid)` como chave (`bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:128`, `bin/codex_limite_estado.py:135`, `bin/codex_limite_estado.py:137`).
+
+- **`chamadas.log/fim`**: `_saida`, via trap EXIT, grava hora, mesma chave, papel, sessão ou `-`, código de saída e duração em segundos de epoch (`bin/codex_pergunta.sh:265`, `bin/codex_pergunta.sh:269`, `bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:282`). O parser valida timestamp e quantidade de campos, mas **descarta a hora do fim** e guarda sessão/rc/duração como strings sem validação de domínio (`bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:129`, `bin/codex_limite_estado.py:139`). `_em_curso` considera qualquer `fim` da chave suficiente para encerrar, sem testar se ocorreu depois do `ini` (`bin/codex_limite_estado.py:205`).
+
+- **Consumidores de `ini/fim`**: contagem por papel (`bin/codex_limite_estado.py:157`), últimas chamadas (`bin/codex_limite_estado.py:169`), ociosidade (`bin/codex_limite_estado.py:273`), origem de sessões (`bin/codex_limite_estado.py:304`, `bin/gerar_codex_estado.py:176`), tokens por papel (`bin/codex_limite_estado.py:399`) e censo do disjuntor (`bin/disjuntor.py:2126`). Não encontrei consumidor da duração além de seu armazenamento; consumidor externo: [nao verificado].
+
+- **`fila.md`**: escritor demonstrado somente na fixture, que grava o argumento `fila` (`bin/tests/test_codex_ociosidade.sh:39`). Produtor real, responsável pela transição para ABERTO e garantia do carimbo no nascimento: [nao verificado]. O leitor exige prefixo de estado conhecido e carimbo `AAAA-MM-DD HH:MM` para ABERTO, calcula idade em segundos inteiros e devolve quantidade/idade/erro (`bin/codex_limite_estado.py:53`, `bin/codex_limite_estado.py:54`, `bin/codex_limite_estado.py:227`, `bin/codex_limite_estado.py:235`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:251`). Ociosidade consome esses resultados (`bin/codex_limite_estado.py:287`).
+
+- **`limite.log`**: wrapper escreve hora, obra e primeira mensagem de erro reconhecida como limite/indisponibilidade, com tabs/newlines removidos da mensagem (`bin/codex_pergunta.sh:451`, `bin/codex_pergunta.sh:452`, `bin/codex_pergunta.sh:454`, `bin/codex_pergunta.sh:456`). `ler()` lê os três campos, valida somente hora/quantidade mínima, conta linhas e publica total/janela/última hora; não usa obra nem mensagem para classificar o evento (`bin/codex_limite_estado.py:73`, `bin/codex_limite_estado.py:75`, `bin/codex_limite_estado.py:81`, `bin/codex_limite_estado.py:97`). A fonte de escrita pode ser alterada por `CODEX_LOGD`, enquanto o leitor usa `<raiz>/logs/codex` (`bin/codex_pergunta.sh:101`, `bin/codex_limite_estado.py:45`, `bin/codex_limite_estado.py:64`); configuração real alinhada: [nao verificado].
+
+- **Tupla `ultimas_chamadas`**: escritor agora produz `(hora,obra,papel,rc,situacao)`, com `rc=None` sem fim e situação separada (`bin/codex_limite_estado.py:175`, `bin/codex_limite_estado.py:177`, `bin/codex_limite_estado.py:179`). `ler()` fornece a mesma `_foto` para as últimas e a contagem, eliminando a duplicação do predicado nessa composição (`bin/codex_limite_estado.py:93`, `bin/codex_limite_estado.py:94`, `bin/codex_limite_estado.py:101`, `bin/codex_limite_estado.py:153`). O renderizador desempacota cinco campos corretamente (`bin/codex_limite_estado.py:486`); testes consultam a situação no índice 4 e rc no índice 3 (`bin/tests/test_codex_ociosidade.sh:67`, `bin/tests/test_codex_ociosidade.sh:71`). Entretanto, rc inválido do log continua sendo aceito e publicado, inclusive texto sintético se vier na entrada (`bin/codex_limite_estado.py:139`, `bin/codex_limite_estado.py:178`, `bin/codex_limite_estado.py:486`).
+
+- **Bordas ainda diferentes entre consumidores**: módulo usa `(agora−24h,agora]` para limite, papéis e contexto horário (`bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:83`, `bin/codex_limite_estado.py:164`, `bin/codex_limite_estado.py:283`), mas censo do disjuntor mantém ambas as bordas inclusivas (`bin/disjuntor.py:2132`). Além disso, disjuntor chama `ler_chamadas(raiz)` sem passar seu relógio (`bin/disjuntor.py:2036`), fazendo o leitor capturar outro `now` (`bin/codex_limite_estado.py:159`). Portanto, as classes **derivação paralela** e **relógio fora da borda** permanecem demonstradas nesses consumidores (`bin/disjuntor.py:2036`, `bin/disjuntor.py:2132`).
+
+- **Fuso e precisão**: gravações de hora usam `date` sem offset, leitores usam `strptime` ingênuo e `datetime.now()` local (`bin/codex_pergunta.sh:272`, `bin/codex_pergunta.sh:308`, `bin/codex_pergunta.sh:456`, `bin/codex_limite_estado.py:63`, `bin/codex_limite_estado.py:124`, `bin/codex_limite_estado.py:235`). Igualdade efetiva entre os ambientes produtores/leitores: [nao verificado]. A correção resolve 30min59s, mas ainda trunca frações de segundo: `30min00.500s` vira 1800 e não acusa, embora a comparação final seja `s > 1800` (`bin/codex_limite_estado.py:51`, `bin/codex_limite_estado.py:243`, `bin/codex_limite_estado.py:296`).
 
 ## 17/11 09:32 · sessao daeb5df7e465 · E4C-F2 · verificador · origem=Code
 
@@ -606,53 +647,4 @@ C11 continua exigindo perguntas vivas, `app/escala/services/cadastro_realidade.p
 
 `competencia_ja_paga` segue obra aberta em `app/docs/BACKLOG.md:1992`; implementação com esse nome não encontrada [nao verificado]. Existem a composição de entregue, `app/chamados/services/vigia_fio.py:785-807`, o juiz `competencia_entregue`, `app/folha/export.py:556`, e o veto `app/chamados/services/fio.py:1353-1363`.
 
-## 17/11 09:22 · sessao 6d9ab2b82ba4 · - · - · origem=Ronald (tmux)
-
-Não há `.git` nesta cópia; não executei git. `logs/CLASSE-D/brief/brief.md` também não está nela. Os cruzamentos abaixo usam exclusivamente os anexos transcritos; sua correspondência aos commits não pode ser autenticada aqui [nao verificado].
-
-| Escopo do brief | Arquivo | B2+delta | F2 |
-|---|---|---:|---:|
-| R1 | `app/escala/services/cadastro_realidade.py` | não | não |
-| RED R1 | teste em `app/escala/tests/`, nome não definido [nao verificado] | indeterminado pelo nome; diretório ausente das listas fornecidas [nao verificado] | idem [nao verificado] | [nao verificado]
-| Complemento LU2-07, recorte local no vigia | `app/chamados/services/vigia_fio.py` | **sim** [nao verificado: lista anexa] | **sim** [nao verificado: lista anexa] |
-| LU2-08, caso incorporado | `app/ponto/management/commands/e6_oraculo.py` | não [nao verificado: lista anexa] | não [nao verificado: lista anexa] |
-| RED dos complementos | nomes não definidos [nao verificado] | [nao verificado] | [nao verificado] |
-
-O sítio atual do recorte é `censo_alcance` em `app/chamados/services/vigia_fio.py:487`, que obtém `empresas_visiveis()` em `:517` e intersecta o parâmetro `empresas` em `:518`. Essa consulta global filtra `ativa` e CNPJ, sem consultar `em_rollout`: `app/colaboradores/queries.py:85`.
-
-**Contagem nominal conhecida do escopo integral:** B2+delta **1**, F2 **1**; arquivo comum `app/chamados/services/vigia_fio.py` [nao verificado: cruzamento calculado dos anexos]. R1 isolado teria **0/0**, mas omitir o complemento LU2-07 do brief produziria conclusão incompleta [nao verificado: escopo do anexo].
-
-O delta explicitado só acrescenta `app/chamados/reconciliador.py` e testes sem nome fornecido; esse escritor não pertence ao escopo R1/complemento local do brief [nao verificado: anexos]. Seu sítio existe: `_retratar`, `app/chamados/reconciliador.py:504`; a transição está em `:524`. A identidade dos arquivos de testes do delta fica [nao verificado].
-
-A tela não obriga outro arquivo: a etiqueta agregada imprime **colaboradores**, `a.colabs`, em `app/templates/escala/cadastro_x_realidade.html:19`. O detalhe imprime `a.detalhe`, com `a.ocorrencias` apenas como fallback, em `:28`. O PDF está no próprio produtor, `app/escala/services/cadastro_realidade.py:1053`, e usa a mesma preferência detalhe/fallback em `:1090`. Logo, o novo detalhe pode dizer “dia” no produtor; a afirmação do brief de que mudar `por_ass['C5']['ocorrencias']` muda o contador visível da tela não confere literalmente: o agregado é montado em `app/escala/services/cadastro_realidade.py:949`, mas a tela lê `colabs` em `app/templates/escala/cadastro_x_realidade.html:19`.
-
-A pergunta de pouso R1 isolado já tem resposta registrada: `app/docs/RELATO.md:421` diz decisão técnica de pousar sozinho, sem esperar LU2-07/08, mantendo D1/D2 em espera. O complemento LU2-08 e sua pergunta sobre precedência do insumo frente a BATIDA estão registrados em `app/docs/RELATO.md:422`.
-
-`app/config/crons.py` não deve entrar na interseção desta obra: o anexo manda apenas registrar sua futura migração, não fazê-la [nao verificado: anexo]. O literal continua em `app/config/crons.py:17`.
-
-## 17/11 09:22 · sessao e6d2517028d1 · - · - · origem=Ronald (tmux)
-
-Item 1: o ponto correto é dentro de `_retratar` no `transaction.atomic()` de `app/chamados/reconciliador.py:524`, antes de `transicionar_com_pauta` em `:525`. O bloco reúne transição, rejeição da justificativa, resolver e ocorrência (`app/chamados/reconciliador.py:525`, `:531`, `:538`, `:540`). A retenção anterior fica fora dele e pode registrar auditoria antes da cerca (`app/chamados/reconciliador.py:520`, `:522`).
-
-`transicionar_com_pauta` está em `app/chamados/services/fecho_runtime.py:146`; recebe `ato=ch.reconciliar`, abre atomic próprio, coleta recusas e pode escrever Pautas antes de devolver o resultado (`app/chamados/services/fecho_runtime.py:157`, `:161`, `:165`, `:168`). Logo, barrar depois dela seria tarde também para Pauta (`app/chamados/services/fecho_runtime.py:168`).
-
-A enumeração suficiente não é só `ch._ancoradas()`:
-
-- Diretas do resolver: destino igual ao chamado, materialização nula, disputa aberta; inclui validadas (`app/chamados/services/disputa_emissao.py:1928`, `:1950`).
-- Ancoradas: não validadas, destino igual ao chamado OU destino nulo com pai da disputa igual ao chamado (`app/chamados/models.py:336`, `:344`).
-- Relavra: destino igual ao chamado, validação nula; não filtra materialização nem disputa aberta (`app/chamados/models.py:303`, `:309`).
-- S143 inclui todas as disputas abertas do colaborador, alcançando perguntas sem destino de outras disputas órfãs; pode carimbar e fechar essas disputas (`app/chamados/services/disputa_emissao.py:2048`, `:2057`, `:2082`, `:2113`).
-- Fechar disputa pode reconciliar seu pai e disparar outra rodada de S143/relavra (`app/chamados/signals.py:19`, `:43`; `app/chamados/models.py:296`, `:309`).
-- Reabrir credor também pode relavrar/ressuscitar perguntas; existe enumerador desse ramo, que não constitui enumerador de toda `_retratar` (`app/chamados/services/disputa_emissao.py:1814`, `:1820`, `:1969`).
-
-Assim, o literal “TODAS” requer prova da cobertura da cascata; um único filtro por destino ou por disputa do chamado é insuficiente (`app/chamados/services/disputa_emissao.py:2048`, `:2050`). Suficiência do futuro delta: [nao verificado].
-
-Item 2(b): é montável conceitualmente por relavra, sem depender da criação de batida: pergunta ENTREGUE com destino=chamado, `validada_em=NULL`, `materializada_em` preenchida e disputa já fechada. Ela está fora do resolver direto e da pré-vassoura do consumidor, mas dentro da relavra (`app/chamados/services/disputa_emissao.py:1928`; `app/chamados/reconciliador.py:629`; `app/chamados/models.py:309`). Na travessia vivo→resolvido a relavra escreve `julgado_em` mesmo se o veredito permanecer igual; relógio congelado posterior ao snapshot torna esse efeito observável (`app/chamados/models.py:273`, `:303`; `app/chamados/veredito_lavrado.py:270`, `:275`). Competência entregue não bloqueia por si o gate de vivas (`app/chamados/models.py:364`). Execução RED/mutante desse cenário: [nao verificado].
-
-Outro cenário indireto é a pergunta sem destino de uma disputa órfã diferente, mesmo colaborador: S143 a alcança pela varredura global de disputas abertas (`app/chamados/services/disputa_emissao.py:2048`). A fixture existente já constrói escolha sem destino, prova C6 morto e espera carimbo/fecho da órfã; falta adaptar essa pergunta para competência entregue e para a entrada `_retratar` (`app/chamados/tests/test_e4b_c6_orm.py:62`, `:82`, `:86`, `:120`). Execução adaptada: [nao verificado].
-
-Limite literal importante: “evento … nada muda” não pode significar todo o consumidor. Antes de `_retratar`, ele já rejunta células e carimba perguntas absolvidas; depois roda órfãs e lastro (`app/chamados/reconciliador.py:1366`, `:1368`, `:1371`, `:1376`, `:1385`). A cerca de `_retratar` garante apenas sua unidade; teste via evento deve controlar esses outros escritores e medir a fronteira correta (`app/chamados/reconciliador.py:524`, `:1368`).
-
-Limite de atomicidade: callbacks `on_commit` de retomada de regularizações e fechamento de becos são posteriores à transação; uma sonda que termina em rollback não os executa (`app/chamados/signals.py:122`, `:146`, `:229`, `:240`). A unidade SQL não é garantia automática sobre esses efeitos posteriores (`app/chamados/signals.py:129`, `:146`).
-
-_6441 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6443 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
