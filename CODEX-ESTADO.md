@@ -1,7 +1,448 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 14:18** · publicado em **17/11/2026 14:19** (UTC-3)
+> Ultima resposta processada: **17/11/2026 14:25** · publicado em **17/11/2026 14:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 14:25 · sessao 75c84ea53fc0 · COMPLEMENTO-1-1410 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — somente item 1: PROCEDE o achado de premissa divergente da cópia.** A retratação existente está em `_retratar`, com transição e resolvedor; o ponto indicado como consulta de competência encerra uma docstring (`app/chamados/reconciliador.py:504`, `app/chamados/reconciliador.py:524`, `app/chamados/reconciliador.py:537`, `app/chamados/reconciliador.py:576`).
+
+As referências aos anexos abaixo contam as linhas do texto transcrito.
+
+1. **As premissas conferem?**
+
+   **(a) PROCEDE a divergência.** Nesta cópia, a unidade consulta `retencao_da_retratacao`, que trata irmã pendente e justificativa alheia; não é a guarda de competência descrita. `retratar` delega diretamente a `_retratar`. A sequência `retratar_com_motivo → consulta em :576` não corresponde ao código inspecionado (`app/chamados/reconciliador.py:438`, `app/chamados/reconciliador.py:519`, `app/chamados/reconciliador.py:545`, `app/chamados/reconciliador.py:576`).
+
+   Existem consultas nomeáveis de competência, mas locais: `_dia_fora_do_alcance_c` consulta entregue, enquanto o ramo HIST conserva o caminho anterior quando está fora desse alcance. Isso não constitui a guarda geral pressuposta (`app/chamados/reconciliador.py:743`, `app/chamados/reconciliador.py:745`, `app/chamados/reconciliador.py:1593`).
+
+   **(b) PROCEDE a insuficiência da identificação das escritas.** AST consegue enumerar funções, métodos e chamadas explícitas: há `bulk_update` em `gravar_lavras_em_lote`, `save` em `lavrar` e persistência da costura. Entretanto, reconhecer apenas esses verbos não identifica automaticamente os modelos, campos e limites do ato protegido; `carimbar`, por exemplo, constrói `campos` por ramos antes do `save` (`app/chamados/veredito_lavrado.py:240`, `app/chamados/veredito_lavrado.py:250`, `app/chamados/veredito_lavrado.py:275`, `app/chamados/services/fio.py:974`, `app/chamados/models.py:3238`, `app/chamados/models.py:3262`).
+
+   **(c) PROCEDE o limite da promessa por AST.** O callback aparece como referência `ato=ch.reconciliar`, sendo executado como `ato()`; existe também a aresta implícita `save → post_save → resolvedor`. Um censo de nomes/chamadas não demonstra passagem obrigatória pela guarda antes de toda escrita (`app/chamados/reconciliador.py:524`, `app/chamados/services/fecho_runtime.py:160`, `app/chamados/services/fecho_runtime.py:165`, `app/chamados/models.py:296`, `app/chamados/signals.py:91`, `app/chamados/signals.py:117`).
+
+   **NAO PROCEDE que alias e reexport, isoladamente, impeçam análise estática.** São explícitos nestes exemplos: `retratar as _retr` e reexport do resolvedor. Identificar essas referências continua sendo diferente de provar o fluxo da guarda (`app/ponto/management/commands/supra_juiz.py:258`, `app/ponto/management/commands/supra_juiz.py:286`, `app/chamados/models.py:4259`, `app/chamados/models.py:4260`).
+
+2. **Colide com o vigente?**
+
+   **PROCEDE a incompatibilidade com uma expectativa existente**, caso a cerca passe a impedir a reconciliação com pergunta entregue: há teste exigindo expressamente que essa pergunta **não segure** `reconciliar()`, e o código atual exclui entregue da lista de vivas (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:113`, `app/chamados/tests/test_o261e_f1_porta_encerramento.py:117`, `app/chamados/models.py:364`).
+
+   **NAO PROCEDE que os selos existentes já satisfaçam o pedido ou que a sobreposição seja, sozinha, colisão.** Eles verificam portas de escrita e ordem de `_vivas_entre`; a pergunta sobre competência é diferente (`app/chamados/tests/test_selo_status_so_pelas_portas.py:1`, `app/chamados/tests/test_porta_veredito_pergunta.py:94`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:5`, `app/chamados/tests/test_o261e_f1_selo_encerramento.py:24`).
+
+   **PROCEDE a ambiguidade entre allowlist vazia e exceção nomeada:** se a exceção dispensa a guarda e deixa verde, funciona como permissão de violação; se apenas registra o sítio mantendo vermelho, não contradiz a lista vazia. O item não especifica esse efeito (`comp1_aval.txt:2`). A proibição localizada de allowlist em L-106 trata de commits de documentação, não estabelece proibição universal de declarações nominais (`app/docs/LEIS.md:132`).
+
+3. **Alguma condição não fecha no literal?**
+
+   **PROCEDE.** A matriz já exige consulta obrigatória **antes da primeira escrita funcional do ato**; portanto, mera presença da guarda em algum ancestral não basta. Falta fechar como o selo reconhece essa obrigação através das unidades encadeadas e callbacks (`matriz.r:17`, `app/chamados/services/becos.py:53`, `app/chamados/services/fecho_runtime.py:165`).
+
+   Também não fica fechado se “16º chamador” inclui entrada indireta: wrappers podem apenas delegar, sem chamada local à guarda. Exigir guarda no mesmo corpo e aceitar proteção transitiva são critérios diferentes (`comp1_aval.txt:2`, `app/chamados/reconciliador.py:545`, `app/chamados/reconciliador.py:547`).
+
+   Há ainda distinção entre atribuição em memória e persistência: `lavrar(..., salvar=False)` altera campos, mas quem salva é o chamador. Isso interfere no marco da “primeira escrita” (`app/chamados/veredito_lavrado.py:270`, `app/chamados/veredito_lavrado.py:274`, `app/chamados/services/fio.py:973`, `app/chamados/services/fio.py:974`).
+
+4. **Toca exportada, dinheiro ou `!` fora do declarado?**
+
+   **NAO PROCEDE afirmar esse alcance adicional pelo texto:** o complemento exclui porta do export e produção. Não autoriza apply financeiro nem mudança do gravado exportado (`comp1_aval.txt:5`, `CLAUDE.md:265`, `CLAUDE.md:406`, `CLAUDE.md:411`). Efeito material da implementação futura, selo vermelho com 16º chamador e mordida do mutante: **[nao verificado]**.
+
+## 17/11 14:24 · sessao ae657b1ef1bd · CENSO-FECHA-DE-VERDADE · verificador · origem=Code
+
+**AVAL-DEVOLVIDO, por item: PROCEDE em 1, 3, 4, 5, RED, CONTRATO e CONDUTA**, pelas lacunas abaixo. Item 2, RESERVA e PROIBIDO não apresentam colisão necessária com a regra vigente (`bin/disjuntor.py:1522`, `1698`, `2306`; `CLAUDE.md:394`).
+
+“PROCEDE” abaixo significa achado contra o fechamento do aval. As reprovações B2/F2, os briefs efetivamente aprovados, os construtores atualmente abertos e o custo de 10–20 minutos permanecem **[nao verificado]**.
+
+**1 — caminhos**
+
+- **Q1 — Premissas:** conferem os endereços do juiz e da porta. Hoje o juiz exige leitores/escritores com referência, decisões e perguntas cortadas; não interpreta caminhos, ponto único ou lista fechada (`bin/disjuntor.py:1522`, `1565`, `1698`).
+- **Q2 — Colisão:** **NAO PROCEDE** como incompatibilidade necessária: é aperto do juiz existente. Entretanto, um brief conforme hoje pode faltar aos novos requisitos: a própria fixture `CONFORME` não contém caminhos nem ataques (`bin/tests/test_censo_antes_da_vaga.sh:54`, `86`).
+- **Q3 — Literal:** **PROCEDE.** Contar N linhas não comprova “TODO caminho”. Também ficam sem definição explícita N=0, duplicatas e correspondência entre destinos e “lista fechada: N sitios” **[nao verificado]**. A referência atual apenas casa aparência `arquivo.ext:numero`; não verifica existência, conteúdo ou relação chamador→sítio (`bin/disjuntor.py:1501`, `1566`).
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como toque direto: este juiz lê o brief e retorna motivo; não escreve dado de negócio (`bin/disjuntor.py:1525`, `1577`).
+
+**2 — nenhuma ocorrência de “nao verificado”**
+
+- **Q1 — Premissas:** hoje vale o **primeiro** título que case `^(#{1,6})\s*CENSO\b`, com caixa literal. O bloco termina no próximo título de nível igual ou superior; subtítulos permanecem dentro (`bin/disjuntor.py:1496`, `1530`, `1538`).
+- **Q2 — Colisão:** **NAO PROCEDE** como contradição necessária. O aperto passa a recusar conteúdo antes aceito; hoje não existe teste dessa expressão no juiz (`bin/disjuntor.py:1543`, `1577`).
+- **Q3 — Literal:** **NAO PROCEDE** a objeção de capturar prosa fora do bloco, preservado o recorte existente. Dentro dele, inclusive subtítulos, a proibição é literal. “Citando a linha” ainda não existe: o parser conserva texto, mas descarta os números físicos ao montar `bloco` (`bin/disjuntor.py:1537`, `1544`).
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como toque direto; é validação textual do brief (`bin/disjuntor.py:1525`, `1577`).
+
+**3 — ataques cruzados**
+
+- **Q1 — Premissas:** o juiz atual lê somente o brief; não busca ataques nem interpreta respostas a eles (`bin/disjuntor.py:1524`, `1547`, `1577`).
+- **Q2 — Colisão:** **NAO PROCEDE** contra a revisão vigente: ela já exige classes anteriores de reprovação e escritores/leitores, inclusive fora do diff (`CLAUDE.md:373`, `379`).
+- **Q3 — Literal:** **PROCEDE.** `ataques cruzados: 0 (busca: grep...)` declara um comando; não prova execução, resultado, universo pesquisado ou ausência de ataques. Igualmente, escrever “respondido por” não comprova que a resposta enfrenta o ataque. Essa comprovação não é feita pelo juiz atual (`bin/disjuntor.py:1525`, `1577`); buscas e respostas concretas: **[nao verificado]**.
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como toque direto. Registrar uma resposta no brief não amplia autorização sobre negócio ou competência exportada (`CLAUDE.md:265`, `268`).
+
+**4 — complemento é abertura e exige brief próprio**
+
+- **Q1 — Premissas:** **PROCEDE a lacuna.** A porta recebe obra, texto, via e raiz; não recebe marcador de complemento, volta ou construtor já aberto. Um brief citado de outra pasta sob `logs/` pode satisfazer a abertura sem existir brief na pasta da obra (`bin/disjuntor.py:1698`, `1607`, `1619`, `1715`).
+- **Q2 — Colisão:** **PROCEDE o risco concreto de revalidar material antigo.** O coletor reúne **todos** os `brief*.md` próprios e citados, e qualquer recusado barra a chamada. Assim, brief novo conforme não salva brief antigo da mãe também coletado. Aprovação anterior não é autorização duradoura nessa decisão (`bin/disjuntor.py:1604`, `1619`, `1703`, `1717`). Obras reais atingidas: **[nao verificado]**. Exigir brief próprio não elimina, por si, a competência técnica da sessão para encaixar complemento (`CLAUDE.md:276`, `278`).
+- **Q3 — Literal:** **PROCEDE.** O reconhecimento foi remetido ao contrato, mas o contrato fornecido não distingue complemento de volta **[nao verificado em arquivo local]**. Continuar um processo aberto não chama novamente este portão; uma nova invocação de construtor passa por ele, sem sinal de continuidade (`bin/disjuntor.py:1851`, `1855`; `bin/codex_pergunta.sh:247`). A ressalva sobre obras abertas não fica automaticamente assegurada para suas próximas chamadas.
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como autorização adicional. Complemento continua submetido ao escopo literal e aos casos que exigem `!` (`CLAUDE.md:265`, `268`).
+
+**5 — fila 1, LATERAL-ESTRUTURA, tela e instrumento**
+
+- **Q1 — Premissas:** fila 1, na conduta, é contrato 20/placar L-099 (`CLAUDE.md:291`). No código, `_fila1_viva` lê os IDs andáveis do bloco OBRAS; o hook exclui fechados/parados pela coluna de estado, e `_pertence_fila1` resolve identidade e ambiguidades (`bin/disjuntor.py:1630`, `1634`, `1688`; `bin/hook_stop_fila1.py:180`, `250`). **Não há classificação desses baldes na decisão atual**: fora da fila 1, a porta retorna imediatamente (`bin/disjuntor.py:1707`).
+- **Q2 — Colisão:** **PROCEDE a interseção não resolvida.** Tela e fila 1 não são categorias necessariamente exclusivas: há registro histórico explícito de “TELA” que é “FILA 1 AGORA”; isso não prova obra aberta hoje (`app/docs/BACKLOG.md:1248`).
+- **Q3 — Literal/costura:** **PROCEDE.** O CLI do wrapper também decide “fora da fila 1” e retorna **antes** de `_censo_nega`. Ampliar somente a porta deixa Codex lateral escapando por esse retorno (`bin/disjuntor.py:2306`, `2311`, `2315`). Além disso, “tela como está” preserva a cobrança atual quando ela pertence à fila 1; R6, lido como isenção universal de tela, diz outra coisa (`bin/disjuntor.py:1707`).
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como toque direto; ampliar universo do portão não amplia aval de negócio (`CLAUDE.md:265`, `268`).
+
+**RED — R1 a R6**
+
+- **Q1 — Premissas:** existem testes de juiz, CLI, pretool e costura. A fixture conforme atual passa sem os novos campos; o caso de tela usa especificamente `CONGELADA, FILA 2` (`bin/tests/test_censo_antes_da_vaga.sh:44`, `54`, `86`, `252`).
+- **Q2 — Colisão:** **NAO PROCEDE** contra exigir casos e mutantes: o selo vigente já distingue testes do juiz e testes da costura (`bin/tests/test_censo_antes_da_vaga.sh:13`, `18`).
+- **Q3 — Literal:** **PROCEDE em R4/R6.** R4 depende da distinção complemento/volta ainda ausente; R6 não resolve tela∩fila1. R5 também precisa continuar satisfazendo os campos antigos: o aval diz “também”, e o juiz atual os exige (`bin/disjuntor.py:1698`, `1707`, `1565`). Nenhum resultado dos novos R1–R6 está provado **[nao verificado]**.
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** pelo desenho dos testes: o selo existente usa árvore de mentira, não BACKLOG de produção (`bin/tests/test_censo_antes_da_vaga.sh:20`, `36`).
+
+**CONTRATO**
+
+- **Q1 — Premissas:** os dois chamadores conferem. Agent construtor chama `_censo_nega` no pretool; há também chamada na recuperação de exceção (`bin/disjuntor.py:1851`, `1855`, `1763`). Codex passa pelo wrapper→CLI→porta, antes da vaga; o pretool deliberadamente não julga essa via (`bin/codex_pergunta.sh:247`; `bin/disjuntor.py:1832`, `2315`).
+- **Q2 — Colisão:** **NAO PROCEDE** contra contrato prévio único e pouso próprio: ambos já são exigidos (`CLAUDE.md:327`, `394`; `app/docs/PISTA.md:170`).
+- **Q3 — Fechamento:** **PROCEDE parcialmente.** Brief ilegível e exceção recusam no ramo alcançado (`bin/disjuntor.py:1527`, `1733`). PAREI provado exige wrapper vivo da mesma raiz, obra exata e papel `censo|leitura`; não basta publicar a linha (`bin/hook_stop_fila1.py:734`, `763`). Porém faltam o reconhecimento de complemento e a medida prometida: hoje ESTADO publica negativas **agregadas**, não por motivo (`bin/disjuntor.py:2104`, `2145`, `2164`). O contrato normativo também pede contador com esperado; o esperado da nova medida não foi explicitado **[nao verificado]** (`app/docs/PISTA.md:173`).
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como toque direto. Desligamento já tem chave própria atribuída a Ronald; não é allowlist por obra (`bin/disjuntor.py:124`, `209`, `2291`).
+
+**CONDUTA**
+
+- **Q1 — Premissas:** conferir manualmente e registrar cabe à sessão; leitura/censo pertence ao despacho Codex (`CLAUDE.md:285`, `358`). A existência de publicação `CENSO-MANUAL` para qualquer obra concreta é **[nao verificado]**.
+- **Q2 — Colisão:** **PROCEDE.** “Qualquer construtor ou complemento” inclui tela/instrumento, enquanto o item 5 os preserva; essa diferença está no literal fornecido **[nao verificado em arquivo local]**. O código atual não oferece classificação que resolva a diferença (`bin/disjuntor.py:1698`, `1707`).
+- **Q3 — Limite:** **PROCEDE quanto à evidência.** A linha manual de contagens não prova mapas ou respostas. O Codex de leitura recebe cópia por `git archive`, e `logs/` é ignorado; os dados vivos chegam por anexos/sonda raspados, não pela cópia (`bin/codex_pergunta.sh:315`, `331`, `334`, `425`; `.gitignore:53`). Portanto não pode conferir buscas nos logs que não recebeu **[nao verificado]**.
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como autorização de escrita; conferir e publicar censo não remove os limites do aval (`CLAUDE.md:265`, `268`).
+
+**RESERVA**
+
+- **Q1 — Premissas:** **NAO PROCEDE** como desvio de papel: ataque adversarial, censo e mapa de escritores/leitores cabem ao Codex. A lista vigente de classes já está descrita (`CLAUDE.md:358`, `367`, `373`).
+- **Q2 — Colisão:** **NAO PROCEDE** como abertura necessária de construtor: leitura pode ocorrer sem vaga; a própria preparação registrada separa leitura/desenho de construção (`app/docs/BACKLOG.md:794`).
+- **Q3 — Limite:** ataques efetivos, respostas e mapas completos de F4/F7/F3/F9 são **[nao verificado]**. A cópia registra preparação de F2/F4/F7, mas não substitui seus anexos (`app/docs/BACKLOG.md:822`; `bin/codex_pergunta.sh:331`).
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** para a leitura reservada. Eventual escrita resultante continua sob os limites de negócio (`CLAUDE.md:265`, `268`).
+
+**PROIBIDO**
+
+- **Q1 — Premissas:** **NAO PROCEDE** afirmar necessidade de novo juiz ou allowlist. Já existem juiz, porta e coletor compartilhados; a aprovação percorre todos os briefs coletados (`bin/disjuntor.py:1522`, `1698`, `1717`).
+- **Q2 — Colisão:** **NAO PROCEDE**: a proibição de allowlist é compatível com o corte vigente. A ressalva temporal não autoriza inventar lista de obras dispensadas (`app/docs/CORTES.md:300`; `bin/disjuntor.py:1703`).
+- **Q3 — Limite:** a existência de retorno “FORA” no CLI é uma decisão de alcance, não um segundo parser do brief; permanece, porém, a costura que impede ampliar somente `_censo_nega` (`bin/disjuntor.py:2311`, `2315`).
+- **Q4 — Exportada/dinheiro/!:** **NAO PROCEDE** como permissão para contornar `!`; esses limites permanecem expressos (`CLAUDE.md:265`, `268`).
+
+**QUEM ESCREVE / QUEM LÊ**
+
+| Arquivo/campos | Quem escreve | Quem lê |
+|---|---|---|
+| `logs/<OBRA>/brief*.md`: leitores, escritores, decisões, perguntas | Autor concreto de cada brief: **[nao verificado]**. O portão não escreve o brief; lê e solicita correção (`bin/disjuntor.py:1525`, `1728`). | `_briefs_do_censo` coleta; `censo_do_brief` julga (`bin/disjuntor.py:1607`, `1718`). |
+| Novos campos: caminhos, ponto único/lista fechada, ataques/respostas | Produtor concreto e autoridade para atestar completude: **[nao verificado]**. | Leitura futura pretendida no mesmo juiz; interpretação desses campos ainda ausente (`bin/disjuntor.py:1498`, `1547`). |
+| BACKLOG: ID, descrição, estado e marcador | Sessão registra OBRAS; gerador preserva bloco/marcador escritos à mão. `backlog_estado.py` atualiza estado (`CLAUDE.md:436`; `bin/gerar_backlog.py:103`, `113`; `bin/backlog_estado.py:58`). | `_fila1_viva`→`_itens_andaveis`→`_pertence_fila1`; não lê balde semântico (`bin/disjuntor.py:1634`, `1688`; `bin/hook_stop_fila1.py:250`). |
+| `chamadas.log`: hora, obra, papel, hash12, pid, `ini`, pergunta raspada | Wrapper (`bin/codex_pergunta.sh:266`, `308`). | `_linhas_chamadas` extrai hora/obra/papel/chave; `_censo_24h` casa abertura por obra+pid+hash (`bin/codex_limite_estado.py:63`; `bin/disjuntor.py:2126`, `2134`). |
+| `chamadas.log`: `fim`, thread_id, rc, duração | Trap `_saida` do wrapper (`bin/codex_pergunta.sh:269`, `272`). | Parser, últimas chamadas e procedência do ESTADO (`bin/codex_limite_estado.py:66`, `82`, `92`; `bin/gerar_codex_estado.py:176`). |
+| `logs/sessao/disjuntor.log`: aprovação/negativa/motivo | `trilha`, chamada pela porta e pelo CLI (`bin/disjuntor.py:193`, `1724`, `2317`). | `_censo_24h`; esta é a fonte das negativas. Recusa anterior à vaga não alcança o `ini` de `chamadas.log` (`bin/disjuntor.py:2090`, `2102`; `bin/codex_pergunta.sh:247`, `308`). |
+| RELATO: `PAREI: censo-<obra> \| espera Codex` | Mecanismo de negativa via `esteira_vigia.no_topo` (`bin/disjuntor.py:302`, `324`). | Hook de parada verifica literal e produtor vivo; não relê os novos campos do brief (`bin/hook_stop_fila1.py:773`, `783`). |
+
+O host do wrapper consulta a raiz viva; o Codex leitor trabalha na cópia e recebe anexos. São acessos distintos (`bin/codex_pergunta.sh:247`, `315`, `331`, `425`). Nenhuma identificação de construtor hoje aberto ou brief de produção foi inferida dessas referências **[nao verificado]**.
+
+## 17/11 14:24 · sessao bd950d29c346 · - · - · origem=Ronald (tmux)
+
+- **PROCEDE — existem selos sobre os mesmos escritores, mas com outra pergunta.** O selo de status fiscaliza quem escreve `status_local`/`fechada_em`, inclusive `save`, `update`, `bulk_update`, aliases e SQL (`app/chamados/tests/test_selo_status_so_pelas_portas.py:1`, `:10`, `:36`, `:340`). O selo do veredito fixa `lavrar` e `gravar_lavras_em_lote` e suas escritas nominais (`app/chamados/tests/test_porta_veredito_pergunta.py:94`, `:123`). Nenhum desses trechos prova passagem pela guarda de competência.
+
+- **PROCEDE — existe tripwire de ordem, mas é outro predicado.** O tripwire existente exige `_vivas_entre` e `raise` antes da primeira atribuição a `status_local`, apenas em `_gravar_estado`; possui mutantes de chamada removida, `raise` removido e escrita antecipada (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:10`, `:24`, `:64`, `:78`). O teste funcional existente exige que pergunta de competência ENTREGUE **não impeça** `reconciliar()` (`app/chamados/tests/test_o261e_f1_porta_encerramento.py:113`). Portanto, não equivale à cerca pedida.
+
+- **NAO PROCEDE — sobreposição de arquivos, sozinha, não demonstra duplicação de selo.** A advertência contra terceiro varredor trata expressamente da mesma pergunta “escrita de status fora da porta”; o próprio arquivo acrescenta uma pergunta diferente sobre ordem da guarda (`app/chamados/tests/test_o261e_f1_selo_encerramento.py:5`). A nova pergunta de competência não está demonstrada por esses selos.
+
+- **PROCEDE — distinguir declaração de porta e exceção que perdoa violação.** O gate da família exige `ALLOWLIST == ()` e zero escrita fora de porta (`app/chamados/tests/test_chokepoint_chamado_gate.py:371`). Entretanto, portas nominais com motivos continuam declaradas no selo de status (`app/chamados/tests/test_selo_status_so_pelas_portas.py:36`). Uma lista dos 15 pontos, por si, não contradiz allowlist vazia; uma exceção que faça violação passar precisa ser confrontada com o literal do anexo [nao verificado quanto ao mecanismo ainda inexistente].
+
+- **NAO PROCEDE — proibição universal de listas nominais não está comprovada.** A frase `proibido allowlist` em `CLAUDE.md:334` e `app/docs/LEIS.md:132` refere-se especificamente a commits só de documentação. Há inclusive exceção declarada e medida em selo de resolução (`app/chamados/tests/test_selo_resolucao_um_escritor.py:77`).
+
+- **Limite já declarado na casa:** o selo de status admite que AST não resolve receptor/tipo genérico nem campos externos em todos os casos (`app/chamados/tests/test_selo_status_so_pelas_portas.py:17`). Logo, usá-lo como prova de completude irrestrita de chamadores seria indevido.
+
+- A busca local não localizou o aval `RESPOSTAS-1711-1410`/`COMPLEMENTO-1-1410`; vigência adicional além do anexo fornecido: **[nao verificado]**.
+
+## 17/11 14:23 · sessao 19d8c964bebe · - · - · origem=Ronald (tmux)
+
+- **PROCEDE — a premissa de identidade da cópia falha.** O corpo atual é `_retratar`, com retenção em `app/chamados/reconciliador.py:519`, callback de reconciliação em `:524` e resolvedor em `:537`; `retratar` delega a ele em `:547`. A guarda `retratar_com_motivo → _retratacao_toca_entregue` descrita no anexo não corresponde a esse corpo. O reexport real está em `app/chamados/models.py:4260`; o resolvedor é definido em `app/chamados/services/disputa_emissao.py:1887`.
+
+- **PROCEDE — AST sintático não equivale à propriedade semântica prometida.** O callback é passado como valor (`ato=ch.reconciliar`), em `app/chamados/reconciliador.py:524`, e executado como `ato()`, em `app/chamados/services/fecho_runtime.py:160` e `:165`. Há ainda ligação implícita `save → post_save → resolvedor`: `app/chamados/models.py:296`; `app/chamados/signals.py:91`; `:117`. Um censo de chamadas por nome não demonstra que a guarda domina todas as escritas desses caminhos.
+
+- **NÃO PROCEDE — alias/reexport, isoladamente, tornariam o censo impossível.** São resolvíveis estaticamente nestes exemplos: `retratar as _retr`, em `app/ponto/management/commands/supra_juiz.py:258`, utilizado em `:286`; reexport do resolvedor em `app/chamados/models.py:4259`, `:4260`. Essa resolução identifica referências; não certifica a execução obrigatória de guarda antes da escrita, conforme a execução indireta em `app/chamados/services/fecho_runtime.py:165`.
+
+- **PROCEDE — “qualquer ancestral” não determina passagem obrigatória anterior.** O callback pode executar por dois ramos, em `app/chamados/services/fecho_runtime.py:160` e `:165`; a reconciliação pode retornar sem transição, em `app/chamados/models.py:653`, ou escrever em `:655`. A existência de um ancestral com consulta não estabelece, sozinha, o caminho efetivamente executado nem a propagação da recusa.
+
+- **Exportada/dinheiro/!** Existe consulta local de entregue na reabertura do credor, em `app/chamados/services/disputa_emissao.py:1857`, com veto por `motivo` antes de `credor.reabrir()`, em `:1867` e `:1873`; ela não é uma guarda universal dos quinze sítios. K6 é `competencia_entregue`, em `app/folha/export.py:556`; a composição por dia é `competencia_do_dia_entregue`, em `app/chamados/services/vigia_fio.py:785`. O limite vigente exige `!` para tocar gravado de exportada, em `CLAUDE.md:265`, e distingue apply financeiro de competência aberta, em `CLAUDE.md:406`. Impacto material futuro desse selo em exportada/dinheiro: **[nao verificado]**.
+
+## 17/11 14:23 · sessao bbc39757284b · - · - · origem=Ronald (tmux)
+
+- **1(a) — NÃO PROCEDE a premissa nesta cópia.** A unidade existente é `_retratar`, definida em `app/chamados/reconciliador.py:504`: consulta `retencao_da_retratacao` em `:519`, transiciona em `:524`, pode salvar justificativa em `:536` e chama o resolvedor em `:537`. `retratar` apenas delega (`app/chamados/reconciliador.py:545`, `:547`). A linha `:576` encerra a docstring de E2; não consulta competência (`app/chamados/reconciliador.py:550`, `:576`). A busca global de Python em `app` não encontrou os símbolos `retratar_com_motivo`, `_retratacao_toca_entregue` e `perguntas_alcancadas_pela_retratacao`; a matriz não corresponde integralmente à cópia inspecionada (`app/chamados/reconciliador.py:504`, `:545`, `:550`).
+
+- **Existem predicados nomeáveis de competência, mas não equivalem à guarda geral descrita.** `_dia_fora_do_alcance_c` consulta `competencia_do_dia_entregue` e a tranca (`app/chamados/reconciliador.py:743`, `:745`, `:748`); no HIST, estar fora do alcance conserva o percurso anterior (`app/chamados/reconciliador.py:1593`, `:1594`, `:1608`). O helper `reabrir_credor_de_pergunta_viva` verifica competência da carga, porém somente considera dias diferentes de `None` (`app/chamados/services/disputa_emissao.py:1827`, `:1857`, `:1858`, `:1859`).
+
+- **1(b) — PROCEDE listar os símbolos; NÃO PROCEDE confundir isso com identificar todas as escritas protegidas.** Há escritores explícitos para estado (`app/chamados/models.py:201`, `:296`), carimbo (`app/chamados/models.py:3207`, `:3213`, `:3262`), costura (`app/chamados/services/fio.py:972`, `:974`) e lote (`app/chamados/veredito_lavrado.py:240`, `:250`). Entretanto, `campos` é construído por ramos e passado ao `save` (`app/chamados/models.py:3238`, `:3243`, `:3247`, `:3261`, `:3262`); reconhecer somente `.save/.update/.bulk_update` não identifica modelo, campos nem unidade funcional desses atos (`app/chamados/models.py:296`, `:3262`).
+
+- **3 — PROCEDE o achado de ambiguidade entre atribuição em memória e primeira persistência.** `lavrar(p, salvar=False)` atribui os três campos sem chamar `save`; a persistência fica no chamador (`app/chamados/veredito_lavrado.py:254`, `:270`, `:274`, `:275`; `app/chamados/services/fio.py:973`, `:974`; `app/chamados/models.py:3260`, `:3262`). Uma regra de presença/ordem de chamadas precisa distinguir esses comportamentos para sustentar o literal “antes da primeira escrita” [nao verificado].
+
+- **A lista de 15 tem um alvo ausente e 14 nomes existentes.** As posições atuais são: `fechar_beco` (`app/chamados/services/becos.py:36`), resolvedor (`app/chamados/services/disputa_emissao.py:1887`), `reconciliar` (`app/chamados/models.py:642`), `transicionar` (`app/chamados/models.py:128`), `encerrar` (`app/chamados/models.py:1669`), `encerrar_por_competencia_trancada` (`app/chamados/models.py:1686`), `reabrir` (`app/chamados/models.py:1409`), `DisputaSupervisao.fechar` (`app/chamados/models.py:1936`), E2 (`app/chamados/reconciliador.py:550`), `reatar_pergunta_orfa` (`app/chamados/reconciliador.py:1534`), `encerrar_orfas_pela_lampada` (`app/chamados/reconciliador.py:1113`), `reapontar_resolvedora` (`app/chamados/services/fio.py:851`), `lavrar` (`app/chamados/veredito_lavrado.py:254`) e `gravar_lavras_em_lote` (`app/chamados/veredito_lavrado.py:240`).
+
+## 17/11 14:23 · sessao 10ac03e7bce0 · CONFRONTO-PILOTO · sonda · origem=Code
+
+Transcrição do dado fornecido, sem reexecução: `sonda_fp.py` não foi localizado na cópia e não há acesso à sombra. [nao verificado]
+
+```text
+SAIDA_BEGIN
+sonda_leitura: sonda_fp.py [9b60a7ed9c0c0dce] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+emp2 colabs=741 com_batida_na_janela=401 codigos=11
+emp3 colabs=163 com_batida_na_janela=101 codigos=5
+emp4 colabs=35 com_batida_na_janela=20 codigos=4
+M C001 | emp2 | nao mapeado | - | 1 pre-candidatos, 0 casam dia a dia
+M C002 | emp2 | MAPEADO | col882 | 1 pre-candidatos, 1 casam dia a dia
+M C003 | emp2 | MAPEADO | col719 | 1 pre-candidatos, 1 casam dia a dia
+M C004 | emp2 | MAPEADO | col281 | 1 pre-candidatos, 1 casam dia a dia
+M C005 | emp2 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
+M C006 | emp2 | MAPEADO | col351 | 1 pre-candidatos, 1 casam dia a dia
+M C007 | emp2 | MAPEADO | col307 | 1 pre-candidatos, 1 casam dia a dia
+M C008 | emp2 | nao mapeado | - | 1 pre-candidatos, 0 casam dia a dia
+M C009 | emp2 | MAPEADO | col902 | 1 pre-candidatos, 1 casam dia a dia
+M C010 | emp2 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
+M C011 | emp2 | MAPEADO | col327 | 1 pre-candidatos, 1 casam dia a dia
+M C012 | emp3 | nao mapeado | - | 1 pre-candidatos, 0 casam dia a dia
+M C013 | emp3 | MAPEADO | col117 | 1 pre-candidatos, 1 casam dia a dia
+M C014 | emp3 | MAPEADO | col125 | 1 pre-candidatos, 1 casam dia a dia
+M C015 | emp3 | MAPEADO | col89 | 1 pre-candidatos, 1 casam dia a dia
+M C016 | emp3 | MAPEADO | col133 | 1 pre-candidatos, 1 casam dia a dia
+M C017 | emp4 | MAPEADO | col32 | 1 pre-candidatos, 1 casam dia a dia
+M C018 | emp4 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
+M C019 | emp4 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
+M C020 | emp4 | MAPEADO | col712 | 1 pre-candidatos, 1 casam dia a dia
+ESTADO: mapearam 13 de 20
+FIM_SONDA_FP
+rc_sombra=0
+SAIDA_END
+```
+
+O dado fornecido reporta **13/20 casamentos únicos**, nenhum ambíguo, `rc_sombra=0` e nenhuma ocorrência de `ERRO_COLETA`; sem validação independente. [nao verificado]  
+C001, C008 e C012: cada um tem **0 candidatos finais**, após 1 pré-candidato; falharam na comparação diária, mas a divergência concreta não foi fornecida. [nao verificado]  
+C005, C010, C018 e C019: cada um tem **0 pré-candidatos e 0 finais**; exclusão já no pré-filtro, cuja composição e causa concreta não estão demonstradas. [nao verificado]  
+Dia: `str(data)` de um `date` coincide com `AAAA-MM-DD`; o PDF usa `dia['data']`, exibido como `%d/%m` + dia da semana. A implementação da comparação na sonda está [nao verificado]. [pdf_espelho.py:868](app/relatorios/pdf_espelho.py:868)  
+Hora: o PDF usa `timezone.localtime(b.timestamp).strftime('%H:%M')`, somente para `orfa=False`; espúrias aparecem separadas como `*HH:MM`. [pdf_espelho.py:876](app/relatorios/pdf_espelho.py:876), [pdf_espelho.py:881](app/relatorios/pdf_espelho.py:881), [pdf_espelho.py:885](app/relatorios/pdf_espelho.py:885)  
+Atribuir os sete insucessos a espúrias do auditor, multiconjunto de HH:MM ou erro de coleta, e confirmar que a sonda reproduz esses critérios: [nao verificado].
+
+## 17/11 14:22 · sessao 64f2c72c2154 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+- **Item 5 — PROCEDE:** a porta atual decide somente pertinência da obra à fila 1 viva, por ID e estado das células do bloco OBRAS; não lê classe tela, instrumento ou balde: `bin/disjuntor.py:1707`, `bin/disjuntor.py:1688`, `bin/hook_stop_fila1.py:231`, `bin/hook_stop_fila1.py:250`. O literal novo não resolve a obra simultaneamente fila 1 e tela [nao verificado — anexo aval.txt]. Essa interseção não é impossível na documentação: há item histórico escrito “a outra metade e a TELA, e ela e a FILA 1 AGORA”, já fechado: `app/docs/BACKLOG.md:1248`. Não afirmar construtor desse item hoje aberto [nao verificado].
+
+- **Item 4 / CONTRATO — PROCEDE:** o aval remete a identificação de complemento ao contrato, mas suas cinco cláusulas não dão um campo, evento, ID ou critério para distinguir complemento de volta [nao verificado — anexo aval.txt]. A API atual recebe obra/texto/via, sem parâmetro de complemento ou volta: `bin/disjuntor.py:1698`; o coletor reúne todos os briefs próprios e citados: `bin/disjuntor.py:1607`. A regra vigente permite à sessão decidir tecnicamente quando obra entra como complemento: `CLAUDE.md:276`, `CLAUDE.md:278`; exigir brief próprio não revoga necessariamente esse poder.
+
+- **CONDUTA — PROCEDE:** “qualquer construtor ou complemento”, exigindo itens 1–4, abrange também tela e instrumento, enquanto o alcance do item 5 diz deixá-los como estão [nao verificado — anexo aval.txt]. O código existente não dá um significado mais estreito a “qualquer”: `bin/disjuntor.py:1698`, `bin/disjuntor.py:1737`.
+
+- **PROIBIDO — NAO PROCEDE, quanto a alegar conflito obrigatório:** endurecer o juiz existente e manter a porta existente é compatível com as funções únicas atuais: `bin/disjuntor.py:1522`, `bin/disjuntor.py:1698`; o contrato prévio único e pouso separado de instrumento já são exigidos: `CLAUDE.md:394`, `CLAUDE.md:327`, `app/docs/PISTA.md:170`. Não há autorização para uma allowlist implícita de obras já aprovadas [nao verificado — anexo aval.txt]. `CENSO APROVADO` atual prova brief aprovado, não vaga aberta: `bin/disjuntor.py:1703`.
+
+- **Exportada/dinheiro/! — NAO PROCEDE como efeito direto declarado:** os pontos de mudança indicados são o parser do brief e a porta de abertura, que leem arquivos e decidem recusa: `bin/disjuntor.py:1525`, `bin/disjuntor.py:1713`, `bin/disjuntor.py:1728`. Isso não amplia autorização de negócio: `CLAUDE.md:265`, `CLAUDE.md:268`; a competência exportada segue exigindo `!`: `CLAUDE.md:411`. Implementação futura além desses pontos [nao verificado].
+
+- **RESERVA — NAO PROCEDE quanto a colisão necessária:** leitura adversarial e mapa de escritores/leitores já pertencem ao despacho Codex: `CLAUDE.md:358`, `CLAUDE.md:359`; a lista vigente de classes inclui segundo juiz, segundo escritor, relógio, derivação paralela, selo sem mordida, ordem de trava e pouso sem pré-requisito: `CLAUDE.md:373`. Estado atual dos ataques F4/F7/F3/F9 e sua resposta no brief [nao verificado]. [nao verificado]
+
+Regra vigente e documentação:
+
+- Fila 1 é contrato 20 e placar L-099 pela conduta: `CLAUDE.md:291`; o código usa os itens andáveis do bloco OBRAS: `bin/disjuntor.py:1634`. UI fila 2 tem recorte próprio: `CLAUDE.md:312`; instrumento em `bin/` tem pouso próprio: `CLAUDE.md:327`.
+- O registro existente do CENSO-ANTES-DA-VAGA descreve brief `logs/<obra>/brief*.md`, perguntas sem corte, recusa e PAREI: `app/docs/BACKLOG.md:802`. Defeitos já registrados do instrumento ficam na linha seguinte: `app/docs/BACKLOG.md:803`.
+- CORTES.md declara ser gerado do JSON: `app/docs/CORTES.md:3`; corte ESPINHA-ANTES-DA-UI mantém prioridade estrutural e proíbe allowlist: `app/docs/CORTES.md:300`.
+- Contrato precisa declarar quem chama, espera, falha/limite, medida e desligamento; procedente muda o contrato antes do código: `app/docs/PISTA.md:170`, `app/docs/PISTA.md:174`.
+
+**BACKLOG: quem escreve / quem lê**
+
+- **Escrevem:** sessão registra prompt em OBRAS no mesmo turno, autorizada pela rotina: `CLAUDE.md:285`, `CLAUDE.md:436`. O bloco OBRAS e o marcador ORDEM-VIVA são escritos à mão: `bin/gerar_backlog.py:103`, `bin/gerar_backlog.py:113`; `backlog_estado.py` recebe ID/texto e grava coluna de estado `[3]`: `bin/backlog_estado.py:29`, `bin/backlog_estado.py:58`. O gerador escreve o arquivo preservando esse bloco: `bin/gerar_backlog.py:119`, `bin/gerar_backlog.py:138`.
+- **Leem para o portão:** `disjuntor._fila1_viva`, que usa o juiz do hook: `bin/disjuntor.py:1630`, `bin/disjuntor.py:1634`; `_itens_andaveis` lê ID, fechamento e parada: `bin/hook_stop_fila1.py:244`, `bin/hook_stop_fila1.py:250`.
+- **Outros leitores comprovados:** fabricante: `bin/fabricante_alvo.py:238`; contador de interrompidas: `bin/interrompidas_estado.py:89`; publicação do relato: `bin/relato.sh:130`.
+
+## 17/11 14:22 · sessao 35317b459d4b · - · - · origem=Ronald (tmux)
+
+Achados do wrapper/contrato, somente por leitura:
+
+- **Item 5 — PROCEDE:** ampliar apenas `_censo_nega` não cobre Codex lateral: `main_censo` calcula pertença à fila 1 e retorna 0 antes da porta quando está fora; só depois chama `_censo_nega` (`bin/disjuntor.py:2306`, `bin/disjuntor.py:2311`, `bin/disjuntor.py:2315`). O wrapper efetivamente chama esse CLI antes de prender a vaga, passando raiz do repositório vivo, obra, pid, hash, pergunta e anexos (`bin/codex_pergunta.sh:241`, `bin/codex_pergunta.sh:247`, `bin/codex_pergunta.sh:252`).
+
+- **Item 4 — PROCEDE:** hoje o coletor é união de todos os briefs da pasta da obra e dos citados; não exige que exista brief próprio quando um citado já serve (`bin/disjuntor.py:1604`, `bin/disjuntor.py:1607`, `bin/disjuntor.py:1619`). O wrapper fornece somente obra/papel/WT/pergunta/anexos, sem campo de complemento ou volta de construção (`bin/codex_pergunta.sh:57`, `bin/codex_pergunta.sh:81`, `bin/codex_pergunta.sh:247`). Não há nessa chamada informação que distinga complemento de nova chamada para obra aberta [nao verificado quanto a outros chamadores].
+
+- **CONTRATO — PROCEDE na medida:** o ESTADO atual conta negativas totais, não por motivo: incrementa `negados` ao ler `NEGOU`, retornando um único número (`bin/disjuntor.py:2102`, `bin/disjuntor.py:2104`, `bin/disjuntor.py:2145`). Seu texto publica “aberturas negadas por censo nas 24 h”, também sem motivos (`bin/disjuntor.py:2164`). As negativas vêm de `logs/sessao/disjuntor.log`, não de `chamadas.log` (`bin/disjuntor.py:2090`). O censo antecede a gravação do `ini`; chamada recusada ali não alcança esse registro (`bin/codex_pergunta.sh:247`, `bin/codex_pergunta.sh:308`).
+
+- **CONTRATO — NAO PROCEDE quanto a falta da porta no wrapper:** ela existe e qualquer rc diferente de zero recusa; raiz usada para BACKLOG/brief/RELATO é a raiz do repositório vivo, derivada do git-common-dir (`bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:247`). Brief ilegível retorna motivo de recusa (`bin/disjuntor.py:1524`, `bin/disjuntor.py:1528`); falha ao ler pergunta/anexo vira negativa no CLI (`bin/disjuntor.py:2295`, `bin/disjuntor.py:2308`).
+
+- **CONTRATO — NAO PROCEDE quanto a “PAREI provado como hoje”:** a prova existente exige wrapper vivo desta raiz, mesmo uid, obra exata e papel `censo|leitura`; quando acaba, deixa de provar espera (`bin/hook_stop_fila1.py:734`, `bin/hook_stop_fila1.py:744`, `bin/hook_stop_fila1.py:763`, `bin/hook_stop_fila1.py:770`). O hook não lê o conteúdo do brief para essa prova; verifica processo e ambiente (`bin/hook_stop_fila1.py:747`, `bin/hook_stop_fila1.py:759`).
+
+- **CONDUTA/RESERVA — PROCEDE quanto ao acesso do leitor:** os quatro papéis de leitura do Codex recebem cópia feita por `git archive` e executam em `$WS`, sob read-only (`bin/codex_pergunta.sh:312`, `bin/codex_pergunta.sh:315`, `bin/codex_pergunta.sh:425`). `logs/` é ignorado (`.gitignore:53`). Portanto esse leitor não recebe os logs vivos por esse mecanismo; recebe os anexos concatenados e raspados no prompt (`bin/codex_pergunta.sh:331`, `bin/codex_pergunta.sh:334`, `bin/codex_pergunta.sh:360`). Exigir que o Codex confirme a busca nos logs sem fornecer seu resultado deixa essa confirmação [nao verificado]. O portão em host tem acesso à raiz viva por argumento; não confundir com o leitor Codex (`bin/codex_pergunta.sh:247`).
+
+- **Item 1/RED — prova de compatibilidade antiga:** a fixture atualmente chamada `CONFORME` contém apenas CENSO, leitores, escritores, decisões e perguntas de lei 0; não contém caminhos/ataques (`bin/tests/test_censo_antes_da_vaga.sh:54`). A forma atual aprova quando esses requisitos fecham (`bin/disjuntor.py:1565`, `bin/disjuntor.py:1577`). Logo o aperto deliberadamente torna insuficiente um brief conforme ao contrato antigo; ocorrência de brief de produção nessas condições [nao verificado].
+
+Quem escreve/lê:
+
+| Arquivo/campo | Escritor | Leitor |
+|---|---|---|
+| `logs/<OBRA>/brief*.md` e novos campos caminhos/ponto/ataques | Autor concreto não demonstrado na cópia [nao verificado]; o aval anexo atribui conferência à sessão [nao verificado como arquivo:linha] | Coletor `_briefs_do_censo`, depois `censo_do_brief` (`bin/disjuntor.py:1607`, `bin/disjuntor.py:1718`) |
+| `BACKLOG` | Registrar BACKLOG é ação pré-aprovada da sessão/Code (`CLAUDE.md:282`, `CLAUDE.md:285`); prompt que pede obra deve virar item no bloco OBRAS (`CLAUDE.md:436`) | `main_censo` consulta fila 1 antes da porta (`bin/disjuntor.py:2306`); `_censo_nega` recebe as mesmas células (`bin/disjuntor.py:2315`) |
+| `chamadas.log`: hora, obra, papel, hash12, pid, `ini`, pergunta raspada | Wrapper, antes da chamada (`bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:308`) | Parser `_linhas_chamadas`, que extrai t/obra/papel/chave, ignorando texto da pergunta (`bin/codex_limite_estado.py:49`, `bin/codex_limite_estado.py:63`) |
+| `chamadas.log`: `fim`, thread_id, rc, duração | Trap `_saida` do wrapper (`bin/codex_pergunta.sh:269`, `bin/codex_pergunta.sh:272`) | Mesmo parser; últimas chamadas/rc e procedência por thread (`bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:82`, `bin/codex_limite_estado.py:92`); `gerar_codex_estado` usa procedência (`bin/gerar_codex_estado.py:176`) |
+| Casamento `ini` com censo aprovado | Wrapper escreve ini; trilha de aprovação vem da porta (`bin/codex_pergunta.sh:308`, `bin/disjuntor.py:1722`) | `_censo_24h`, mesma obra+pid+hash em janela de 600 s (`bin/disjuntor.py:2052`, `bin/disjuntor.py:2134`) |
+
+A mudança de instrumento em `bin/` não pode ser entregue pelo papel construtor deste wrapper: ele proíbe `bin/` e tudo fora de app (`bin/codex_pergunta.sh:128`, `bin/codex_pergunta.sh:134`); isso é compatível com instrumento/pouso próprio (`CLAUDE.md:327`). Nenhum apply de dinheiro ou exportada decorre desses caminhos do portão; operações de negócio e estado de produção citados no anexo continuam [nao verificado].
+
+## 17/11 14:22 · sessao 12b949535d78 · E4C-F2 · verificador · origem=Code
+
+1. **O INSERT antigo grava `False` nas duas colunas.** Os defaults estão no banco nas migrations [0054:19](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L19) e [0055:26](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26).
+
+   **Nenhuma das duas constraints citadas rejeita esse INSERT, para qualquer `ato`.** Ambas têm a forma `ato=... OR campo=False`; com `False`, a segunda condição sempre satisfaz o check ([0054:24](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L24); [0055:34](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L34)).
+
+2. **O backfill continua correto para as linhas alcançadas pelo UPDATE.** Ele atribui explicitamente `True` às RESPOSTAS com motivo; `db_default=False` não impede essa atualização ([0055:12](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12)).
+
+   A ordem apresentada é coerente: adiciona a coluna, atualiza, verifica constraints diferidas antes do próximo `ALTER TABLE` e adiciona o check. O código já emprega esse mecanismo na 0051 ([0055:22–35](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L22); [0051:101–104](./app/chamados/migrations/0051_decisao_pergunta.py#L101)). Execução efetiva dessa sequência: **[nao verificado]**.
+
+   **A ressalva é temporal:** o backfill roda uma vez; INSERTs antigos posteriores recebem `False`, mesmo quando têm `ato='resposta'` e motivo preenchido — combinação que o próprio backfill classificaria como `True` ([0055:12](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12), [0055:26–28](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26)).
+
+3. **Os dois campos e respectivos checks estão consistentes por inspeção.** Modelo e migrations declaram igualmente `default=False, db_default=False`, com as mesmas condições e nomes de constraints ([models.py:4178](./app/chamados/models.py#L4178), [4185](./app/chamados/models.py#L4185), [4203–4207](./app/chamados/models.py#L4203); [0054:19–25](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L19); [0055:26–35](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26)).
+
+   `makemigrations` executado e sem diferenças, inclusive fora desses campos: **[nao verificado]**.
+
+4. **O teste morde o default do banco, por construção.** O SQL omite as duas colunas, usa `RETURNING` e exige `(False, False)`; não passa pelo default Python. O segundo teste exige os dois defaults no catálogo ([teste:25–32](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L25); [teste:34–39](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L34)). Num banco reconstruído sem os `db_default` das migrations, o primeiro INSERT deve falhar por `NOT NULL`; remover apenas os defaults do modelo, mantendo o banco já migrado, não testa essa regressão ([0054:19](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L19); [0055:26](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26); [teste:25](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L25)).
+
+   **Não deixa a linha órfã para o teardown:** `_Desfaz` sai do `atomic`, desfazendo o INSERT antes da asserção; somente essa exceção é capturada ([teste:21–32](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L21)). Isso pressupõe a FK diferida declarada no comentário; configuração real da FK e execução de `check_constraints`: **[nao verificado]** ([teste:24](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L24)). A reversão de eventual avanço da sequência de IDs também não é verificada pelo teste ([teste:25](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L25)).
+
+5. **Escritores e leitores identificados:**
+
+   - `da_ressuscitacao`: a ressuscitação escreve `True`; o predicado exige REABERTURA e marca verdadeira; a carga da tarefa usa esse predicado para excluir a linha. `False` conserva o tratamento comum ([models.py:1695](./app/chamados/models.py#L1695), [4214](./app/chamados/models.py#L4214); [tarefa_do_dia.py:426](./app/chamados/services/tarefa_do_dia.py#L426)).
+   - `resposta_mantem_validacao`: resposta humana escreve `False`; automática, carimbo pela trilha e foto da projeção escrevem `True`; o backfill escreve `True` no histórico selecionado ([disputa_emissao.py:1534](./app/chamados/services/disputa_emissao.py#L1534), [1688](./app/chamados/services/disputa_emissao.py#L1688), [1710](./app/chamados/services/disputa_emissao.py#L1710); [models.py:4253](./app/chamados/models.py#L4253); [0055:12](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12)).
+   - A porta genérica instancia os dicionários e insere em lote; os leitores Python e SQL interpretam RESPOSTA com `False` como ato que desfaz validação ([models.py:4328](./app/chamados/models.py#L4328), [4281](./app/chamados/models.py#L4281), [3547](./app/chamados/models.py#L3547), [4311–4312](./app/chamados/models.py#L4311)).
+
+   **Há, portanto, um contraexemplo semântico para a janela:** validação em T0; RESPOSTA automática ou pela trilha em T1>T0, inserida pelo código antigo após o backfill, omitindo a coluna. Ela recebe `False`, e a leitura nova desfaz a validação. Porém esses caminhos preservam `validada_em` e exigem `True` na cópia atual ([disputa_emissao.py:1685–1688](./app/chamados/services/disputa_emissao.py#L1685), [1707–1710](./app/chamados/services/disputa_emissao.py#L1707); [models.py:4281](./app/chamados/models.py#L4281), [4311–4312](./app/chamados/models.py#L4311)). Ocorrência desse caso em produção e corpos exatos desses escritores antigos: **[nao verificado]**.
+
+**REPROVADO** para o pouso irrestrito descrito: o delta resolve a aceitação dos INSERTs, mas o backfill único não preserva a semântica das RESPOSTAS antigas posteriores que deveriam manter validação ([0055:12,28](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12); [models.py:4281](./app/chamados/models.py#L4281)).
+
+## 17/11 14:22 · sessao 3e7b5d496f7c · - · - · origem=Ronald (tmux)
+
+Achados da leitura estática, sem executar os selos que escrevem arquivos (`bin/tests/test_censo_antes_da_vaga.sh:78`).
+
+- **Premissa do juiz/porta — NAO PROCEDE como objeção.** Existem exatamente os sítios citados: juiz `censo_do_brief` em `bin/disjuntor.py:1522`, porta `_censo_nega` em `bin/disjuntor.py:1698`. Agent chama a porta em `bin/disjuntor.py:1855`; a recuperação de exceção também chama em `bin/disjuntor.py:1763`; CLI do wrapper chama em `bin/disjuntor.py:2315`.
+
+- **Reconhecimento atual do bloco.** Primeiro título que case `^(#{1,6})\s*CENSO\b`, com caixa literal; termina no próximo título de nível igual ou superior (`bin/disjuntor.py:1496`, `bin/disjuntor.py:1530`, `bin/disjuntor.py:1538`). Portanto títulos de nível 1–6 e sufixos depois de `CENSO` são reconhecidos; só o primeiro bloco é julgado (`bin/disjuntor.py:1534`). Prosa fora desse recorte não entra no juízo (`bin/disjuntor.py:1538`).
+
+- **Campos atuais.** Lê leitores, escritores, decisões e perguntas de lei; exige alguma referência sintática em leitores/escritores e alguma decisão não vazia (`bin/disjuntor.py:1498`, `bin/disjuntor.py:1565`). A regex de referência só reconhece aparência `arquivo.ext:NN`; não abre o código citado nem verifica que a linha exista (`bin/disjuntor.py:1501`, `bin/disjuntor.py:1566`). Exige quantidade exata de perguntas e cada uma terminando em `? cortada por Ronald <aval>` (`bin/disjuntor.py:1572`, `bin/disjuntor.py:1574`). Não existe interpretação de `caminhos`, `ponto unico`, `lista fechada`, `ataques cruzados` ou do resultado de buscas na função atual (`bin/disjuntor.py:1543`, `bin/disjuntor.py:1577`).
+
+- **Item 1 — PROCEDE a lacuna literal.** O aval pede N linhas e “TODO caminho”, mas não define casos como N=0, duplicatas, arquivos inexistentes e como uma lista fechada de sítios se relaciona às linhas de caminhos; o juiz atual somente faz validação sintática de referências, não confere alcance de chamadas (`bin/disjuntor.py:1501`, `bin/disjuntor.py:1566`). A completude real dos caminhos descritos no anexo é `[nao verificado]`.
+
+- **Item 2 — NAO PROCEDE a objeção de atingir prosa externa**, se preservado o recorte atual: só conteúdo entre o primeiro título CENSO e o próximo título de nível igual/maior fica no bloco (`bin/disjuntor.py:1530`, `bin/disjuntor.py:1538`). **PROCEDE** observar que “citando a linha” não é um recurso existente: o laço de validação perde os índices ao construir `bloco`; mensagens atuais não retornam o número físico da linha (`bin/disjuntor.py:1537`, `bin/disjuntor.py:1544`).
+
+- **Item 3 — PROCEDE a diferença entre declarar busca e comprovar busca.** O juiz lê apenas o texto do brief (`bin/disjuntor.py:1524`); não executa grep nem pesquisa outros logs; o juízo atual termina em `bin/disjuntor.py:1577`. Uma linha contendo o comando usado pode ser conferida quanto à forma; a realização e cobertura dessa busca não ficam comprovadas pelo conteúdo dessa linha `[nao verificado]`.
+
+- **Item 4 — PROCEDE a insuficiência do reconhecimento e a colisão com brief antigo.** A porta recebe `obra,texto,via,raiz` e não recebe indicador de complemento, volta ou construtor já aberto (`bin/disjuntor.py:1698`). Coleta TODOS os `logs/<OBRA>/brief*.md` unidos a TODOS os briefs citados, inclusive brief de outra pasta sob logs (`bin/disjuntor.py:1607`, `bin/disjuntor.py:1619`). Se qualquer um falhar, a abertura é negada (`bin/disjuntor.py:1717`, `bin/disjuntor.py:1728`). Assim, adicionar um brief novo conforme não salva o brief antigo da obra-mãe citado na abertura: ele também seria julgado pela nova forma (`bin/disjuntor.py:1611`, `bin/disjuntor.py:1718`). Não há memória de aprovação anterior nem exceção para volta de construtor já aberto nessa decisão (`bin/disjuntor.py:1706`, `bin/disjuntor.py:1727`). Quais obras reais seriam atingidas está `[nao verificado]`.
+
+- **Fila 1 hoje.** `_fila1_viva` lê `app/docs/BACKLOG.md` e pede ao hook os itens andáveis dentro de `<!-- OBRAS:INICIO -->` (`bin/disjuntor.py:1630`, `bin/disjuntor.py:1634`). Andável é o contrário de fechado/parado; a coluna de estado participa dessa decisão (`bin/hook_stop_fila1.py:171`, `bin/hook_stop_fila1.py:180`, `bin/hook_stop_fila1.py:244`). A pertença de uma obra é decidida por token exato de ID, com ambiguidades negadas (`bin/disjuntor.py:1688`, `bin/disjuntor.py:1694`); não é o marcador da obra atualmente em curso, que tem juiz diferente (`bin/hook_stop_fila1.py:192`).
+
+- **Item 5 — PROCEDE a falta de classificação/precedência.** A porta só sabe fila 1 e libera imediatamente fora dela (`bin/disjuntor.py:1707`). O CLI também libera fora da fila 1 ANTES de chamar a porta (`bin/disjuntor.py:2306`, `bin/disjuntor.py:2311`). Portanto ampliar apenas `_censo_nega` deixa o wrapper fora do novo alcance. Nem tela, instrumento nem balde LATERAL-ESTRUTURA entram na decisão atual (`bin/disjuntor.py:1698`, `bin/disjuntor.py:1707`). Obra que seja fila 1 e tela já cai no censo hoje: não há isenção de tela (`bin/disjuntor.py:1707`). O literal novo precisa ter precedência inequívoca para essa interseção; a escolha pretendida é `[nao verificado]`.
+
+- **RED — PROCEDE a insuficiência de R4/R6 sem essas distinções.** O selo atual tem fixture “CONFORME” que não contém nenhum dos novos campos e espera rc=0 (`bin/tests/test_censo_antes_da_vaga.sh:54`, `bin/tests/test_censo_antes_da_vaga.sh:86`); ele terá de mudar para representar o novo contrato. Não há prova executada de R1–R6 nesta revisão `[nao verificado]`. Para R4 falta o sinal de complemento na entrada atual (`bin/disjuntor.py:1698`); para R6 falta classificação de tela (`bin/disjuntor.py:1707`).
+
+- **CONTRATO — parcialmente confere.** Agent construtor é tipo fora de `SO_LEITURA` cujo prompt contém caminho `/.../wt-*`; `_censo_nega` é chamado só nessa condição (`bin/disjuntor.py:151`, `bin/disjuntor.py:153`, `bin/disjuntor.py:1851`). Exceções e brief ilegível negam no ramo do censo (`bin/disjuntor.py:1527`, `bin/disjuntor.py:1733`). O Stop prova a espera por processo vivo do wrapper da mesma raiz, obra exata e papel censo/leitura; não julga os novos campos do brief (`bin/hook_stop_fila1.py:730`, `bin/hook_stop_fila1.py:763`). **PROCEDE a diferença na medida:** ESTADO hoje conta recusas agregadas, não por motivo (`bin/disjuntor.py:2102`, `bin/disjuntor.py:2145`, `bin/disjuntor.py:2164`).
+
+- **Aprovação, PAREI e abertura.** `CENSO APROVADO` não registra autorização duradoura: o Agent o escreve só se o hook inteiro passar (`bin/disjuntor.py:1805`, `bin/disjuntor.py:1808`). O CLI escreve aprovação do brief; depois a medida casa essa aprovação ao `ini` de chamadas.log por obra+pid+hash e janela de 600 s (`bin/disjuntor.py:2052`, `bin/disjuntor.py:2134`). O PAREI é escrito pelo mecanismo de RELATO e lido de volta pelo leitor do Stop (`bin/disjuntor.py:312`, `bin/disjuntor.py:324`).
+
+- **PROIBIDO — NAO PROCEDE afirmar necessidade de segundo juiz ou allowlist.** Os pontos existentes aceitam extensão do mesmo juiz e porta; não há allowlist no caminho atual de aprovação, que percorre todos os briefs coletados (`bin/disjuntor.py:1713`, `bin/disjuntor.py:1717`). Preservar a cabeça `NEG_CENSO` importa: ela alimenta identificação de obra no PAREI e na medida (`bin/disjuntor.py:1512`, `bin/disjuntor.py:1516`, `bin/disjuntor.py:309`, `bin/disjuntor.py:2103`).
+
+- **Exportada/dinheiro/! — NAO PROCEDE afirmar toque direto pelo juiz/porta descritos.** O juiz abre brief e valida texto (`bin/disjuntor.py:1524`, `bin/disjuntor.py:1577`); a porta decide abertura e registra trilha (`bin/disjuntor.py:1706`, `bin/disjuntor.py:1724`). Impacto indireto sobre cronograma e obras que mexem nesses domínios é `[nao verificado]`.
+
+## 17/11 14:21 · sessao 70d03b6c7fae · - · - · origem=Ronald (tmux)
+
+Item 5: há risco semântico na janela autorizada.
+
+- `da_ressuscitacao`: escritor de `True` é `ChamadoColaborador.ressuscitar_perguntas` (`app/chamados/models.py:1695`); omissões recebem `False` (`app/chamados/models.py:4178`). O predicado exige REABERTURA e marca verdadeira (`app/chamados/models.py:4214`); `CargaDaTarefa` exclui apenas essas linhas (`app/chamados/services/tarefa_do_dia.py:426`). `False` significa reabertura comum, coerente com a documentação do campo (`app/chamados/models.py:4171`).
+
+- `resposta_mantem_validacao`: quatro escritores explícitos atuais: humano `False` (`app/chamados/services/disputa_emissao.py:1534`); automática `True` (`app/chamados/services/disputa_emissao.py:1688`); carimbo pela trilha `True` (`app/chamados/services/disputa_emissao.py:1710`); foto da projeção `True` (`app/chamados/models.py:4253`). Histórico é atualizado pelo `RunPython` (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`). A porta genérica instancia os dicts e faz `bulk_create`, aplicando defaults às omissões (`app/chamados/models.py:4328`).
+
+- Leitores diretos: SQL de validação considera RESPOSTA com `False` um ato que limpa validação (`app/chamados/models.py:3547`); predicado Python faz o mesmo (`app/chamados/models.py:4281`), chamado pela leitura (`app/chamados/models.py:4299`), que zera `validada` (`app/chamados/models.py:4311`). Leitores indiretos incluem estado (`app/chamados/models.py:3231`), `respondida` (`app/chamados/models.py:3782`), texto exibido (`app/chamados/models.py:3806`) e `q_vivas` (`app/chamados/models.py:3609`).
+
+**Contraexemplo:** depois do backfill, antes HUP, uma RESPOSTA automática ou pela trilha do código antigo omite a coluna e recebe `False`; a nova leitura passa a tratá-la como resposta que desfaz validação (`app/chamados/models.py:4185`, `4281`, `4311`). Contudo esses caminhos preservam `validada_em`: seus saves só incluem texto/instante (`app/chamados/services/disputa_emissao.py:1685`, `1707`) e o código atual exige `True` (`app/chamados/services/disputa_emissao.py:1688`, `1710`). O `RunPython` executado uma vez não alcança inserts posteriores (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`, `28`). Ocorrência em produção e código antigo exato: [nao verificado].
+
+O teste nominal documenta que o default nunca deveria decidir silenciosamente o efeito de uma resposta (`app/chamados/tests/test_f2_resposta_mantem_validacao.py:3`), e distingue os quatro escritores e seus valores (`app/chamados/tests/test_f2_resposta_mantem_validacao.py:18`). Logo o delta resolve compatibilidade estrutural, mas não demonstra compatibilidade semântica universal da janela (`app/chamados/models.py:4281`; `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:28`).
+
+Recomendação: **REPROVADO** para pouso com escritores antigos irrestritos após o backfill, pelo contraexemplo acima (`app/chamados/services/disputa_emissao.py:1685`, `1688`; `app/chamados/models.py:4281`).
+
+## 17/11 14:21 · sessao 2e3a0a2f08fd · CONFRONTO-PILOTO · sonda · origem=Code
+
+Transcrição literal da saída fornecida; não representa nova execução. [nao verificado]
+
+```text
+SAIDA_BEGIN
+sonda_leitura: sonda_47.py [28c98d9f6041901c] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+SITUACOES emp2-4 {'ativo': 545, 'desligado': 383, 'afastado': 11}
+ATIVOS situacao=ativo emp2-4: 545 | zero batida apuravel 21/10..16/11: 47 por empresa {2: 37, 3: 8, 4: 2}
+admissao antes/durante: {'antes': 41, 'durante': 6}
+estrato em 16/11: {'5x2': 6, 'personalizado': 1, '12x36_diurno': 16, '12x36_noturno': 7, '6x1': 11, 'sem_vinculo': 4, 'intermitente': 2}
+no TXT (status entra + fechamento em STATUS_NO_TXT): 26 | fora: 21
+status classificar_export: {'entra': 26, 'fora': 21}
+status x motivo (fora do TXT): {('fora', 'furo_espelho', 'aberto'): 20, ('fora', 'sem_codigo_dominio', 'aberto'): 1}
+ainda zero ate o fim da janela (20/11): 47 | bateram entre 17/11 e 20/11: 0
+-- por pessoa: colNNN | emp | admissao | estrato | status | motivo | status_fech | no_txt | batidas_ate_fim
+P col181 | emp2 | antes | 5x2 | entra |  | aberto | TXT | 0
+P col186 | emp2 | antes | personalizado | entra |  | aberto | TXT | 0
+P col209 | emp2 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col216 | emp2 | antes | 5x2 | entra |  | aberto | TXT | 0
+P col225 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col234 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col236 | emp2 | antes | 5x2 | fora | furo_espelho | aberto | fora | 0
+P col257 | emp2 | antes | 5x2 | entra |  | aberto | TXT | 0
+P col268 | emp2 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col274 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col291 | emp2 | antes | 12x36_noturno | entra |  | aberto | TXT | 0
+P col298 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col303 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col312 | emp2 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col317 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col391 | emp2 | antes | sem_vinculo | entra |  | aberto | TXT | 0
+P col440 | emp2 | antes | 6x1 | entra |  | aberto | TXT | 0
+P col499 | emp2 | antes | 12x36_noturno | entra |  | aberto | TXT | 0
+P col534 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col607 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col644 | emp2 | antes | sem_vinculo | entra |  | aberto | TXT | 0
+P col647 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col650 | emp2 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col667 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col704 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col717 | emp2 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col832 | emp2 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col915 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col921 | emp2 | antes | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col938 | emp2 | antes | 12x36_noturno | entra |  | aberto | TXT | 0
+P col966 | emp2 | antes | 12x36_diurno | entra |  | aberto | TXT | 0
+P col1009 | emp2 | durante | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col1016 | emp2 | durante | 12x36_noturno | fora | furo_espelho | aberto | fora | 0
+P col1025 | emp2 | durante | 5x2 | entra |  | aberto | TXT | 0
+P col1027 | emp2 | durante | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col1033 | emp2 | durante | 6x1 | fora | furo_espelho | aberto | fora | 0
+P col1043 | emp2 | durante | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col66 | emp3 | antes | sem_vinculo | entra |  | aberto | TXT | 0
+P col76 | emp3 | antes | intermitente | entra |  | aberto | TXT | 0
+P col128 | emp3 | antes | 12x36_noturno | entra |  | aberto | TXT | 0
+P col144 | emp3 | antes | 12x36_diurno | fora | furo_espelho | aberto | fora | 0
+P col168 | emp3 | antes | 12x36_noturno | entra |  | aberto | TXT | 0
+P col642 | emp3 | antes | 5x2 | entra |  | aberto | TXT | 0
+P col751 | emp3 | antes | intermitente | entra |  | aberto | TXT | 0
+P col980 | emp3 | antes | 12x36_noturno | entra |  | aberto | TXT | 0
+P col41 | emp4 | antes | 6x1 | entra |  | aberto | TXT | 0
+P col758 | emp4 | antes | sem_vinculo | fora | sem_codigo_dominio | aberto | fora | 0
+FIM_SONDA_47
+rc_sombra=0
+SAIDA_END
+```
+
+1. Pelo dado fornecido, sim: `situacao=ativo`, empresas 2–4, totaliza 545. [nao verificado]
+2. Zero batida apurável em 21/10–16/11: 47; empresas 2/3/4 = 37/8/2; admissões antes/durante = 41/6: esses recortes conferem com o auditor. [nao verificado]
+3. Estratos não conferem: diurna 16 versus 17; noturna 7 versus 8; sem vínculo 4 versus 2; demais conferem: 6x1=11, 5x2=6, intermitente=2, personalizado=1. [nao verificado]
+4. Pelo critério da sonda, 26 entram e 21 ficam fora, sendo 20 `furo_espelho` e 1 `sem_codigo_dominio`; presença em TXT efetivamente emitido não foi demonstrada. [nao verificado]
+5. `entra` significa liberado pela classificação, com motivo vazio; `fora` significa excluído pelo motivo indicado (`app/folha/export.py:841`, `app/folha/export.py:970`); `aberto` é status do fechamento e é aceito no TXT, assim como `aprovado` (`app/folha/export.py:687`, `app/folha/export.py:716`).
+6. `furo_espelho` significa pendência retornada pelo juiz de retenção das células, consultado por `motivos_retencao_espelho` (`app/folha/export.py:968`, `app/folha/export.py:1301`); o subtipo e os dias desses 20 casos não constam do dado. [nao verificado]
+7. `sem_codigo_dominio` significa código do colaborador ausente ou vazio após remover espaços, causando exclusão antes da análise do espelho (`app/folha/export.py:840`, `app/folha/export.py:872`).
+8. Não houve nova execução: não localizei `sonda_47.py` na cópia [nao verificado]; o invólucro escreve credencial, temporários e trilha (`bin/sonda_leitura.sh:126`, `bin/sonda_leitura.sh:216`, `bin/sonda_leitura.sh:248`); `rc_sombra=0` pertence somente ao dado fornecido. [nao verificado]
+
+## 17/11 14:20 · sessao b5b1bedae917 · - · - · origem=Ronald (tmux)
+
+1. As duas colunas recebem `False`: ambas têm `db_default=False` nas migrations (`app/chamados/migrations/0054_decisao_da_ressuscitacao.py:19`; `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:26`). Nenhuma das duas constraints citadas pode rejeitar esses valores, independentemente de `ato`: cada expressão é `ato=... OR campo=False` (`0054_decisao_da_ressuscitacao.py:24`; `0055_decisao_resposta_mantem_validacao.py:34`). Outros motivos de rejeição, como constraint antiga da absorção, continuam possíveis (`app/chamados/migrations/0051_decisao_pergunta.py:79`).
+
+2. O `UPDATE` explícito para `True` continua correto; default não o substitui, e o filtro limita a `RESPOSTA` com motivo (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`). A sequência adiciona campo, atualiza, força constraints e adiciona check; o mesmo mecanismo para eventos pendentes aparece na 0051 (`0055_decisao_resposta_mantem_validacao.py:22`; `:28`; `:30`; `:31`; `0051_decisao_pergunta.py:101`; `:104`).
+
+   **Risco concreto da janela:** o backfill é executado uma vez (`0055...:28`). Um `INSERT` antigo posterior com `ato='resposta'` e motivo preenchido recebe `False`; a regra histórica o classificaria como `True` (`0055...:12`), enquanto os leitores novos interpretam `False` como “desfaz validação” (`app/chamados/models.py:3547`; `:4281`; `:4311`). O default resolve aceitação do INSERT, mas não preserva automaticamente essa semântica.
+
+   Contraexemplo: validação em t0, resposta automática antiga em t1>t0 após migrate e antes HUP, omitindo campos. A linha de resposta impede criar outra foto correspondente (`app/chamados/models.py:4249`), e a leitura nova limpa a validação (`:4299`; `:4311`). Na cópia, respostas automática e pela trilha preservam `validada_em` e explicitam `True` (`app/chamados/services/disputa_emissao.py:1682`; `:1685`; `:1688`; `:1705`; `:1707`; `:1710`). Ocorrência real desse caso e corpos do commit anterior: [nao verificado].
+
+3. Os dois campos e respectivas constraints coincidem entre modelo e migrations (`app/chamados/models.py:4178`; `:4185`; `:4203`; `:4206`; `0054...:19`; `:24`; `0055...:26`; `:34`). `makemigrations` efetivamente executado sem diferenças: [nao verificado]. A cópia fixa Django 5.2.14 (`app/requirements.txt:13`).
+
+O delta é estruturalmente consistente, mas a condição de pouso descrita não garante a semântica de `resposta_mantem_validacao` para linhas antigas pós-backfill (`0055...:12`; `app/chamados/models.py:4281`). Minha conclusão para o pouso amplo: **REPROVADO**.
 
 ## 17/11 14:18 · sessao c3cb2be916ab · E4C-F1-B2 · leitura · origem=Code
 
@@ -300,501 +741,4 @@ Achados para consolidar:
 
 - **Limite de autorização dos itens 3–5:** mudar retenção altera quem entra no TXT, cuja decisão é `classificar_export` (`app/folha/export.py:765`, `:768`). Não autoriza tocar gravado exportado: exige `!` (`CLAUDE.md:265`); escopo literal não se amplia por alegar que dinheiro não mudou (`:268`). Apply em não exportada segue a autorização própria de `CLAUDE.md:286`.
 
-## 17/11 14:09 · sessao f1ac47d7d425 · - · - · origem=Ronald (tmux)
-
-Item 7 — achados para consolidação:
-
-1. **Premissas:** o hook recebe JSON de stdin, mas só lê `transcript_path`; a presença real de `stop_hook_active` é **[nao verificado]** (`bin/hook_stop_fila1.py:1339-1347`). O registro local apenas aponta o comando de Stop, sem schema do payload (`.claude/settings.json:3-10`). O formato novo `ESPERANDO: subagente <nome>` atualmente cai em “produtor nao declarado em 1 palavra”; essa é a mudança pedida, não um defeito da implementação atual (`bin/hook_stop_fila1.py:814-830`). A implementação do despertador RETOMA-AUTO é **[nao verificado]**; há registros históricos de sua invocação (`app/docs/PROMPTS.md:2092`, `app/docs/PROMPTS.md:2102`, `app/docs/PROMPTS.md:2135`, `app/docs/PROMPTS.md:2341`).
-
-2. **Lei vigente:** aceitar a declaração sem comprovar subagente vivo exige esclarecer a relação com a regra de produtor vivo provado (`CLAUDE.md:262-264`; `app/docs/LEIS.md:66`). Há também uma precedência vigente que o item precisa preservar ou excepcionar expressamente: afirmação sem prova impede fechar o turno, antes de qualquer liberação (`bin/hook_stop_fila1.py:1349-1358`), inclusive ESPERANDO válido (`bin/tests/test_hook_esperando_com_prova.sh:186-189`).
-
-3. **Literal não fecha:** para a combinação `stop_hook_active=true` + `ESPERANDO` com PID morto, (a) manda liberar e o RED manda continuar recusando; falta precedência. A recusa do PID morto está implementada e possui caso nominal (`bin/hook_stop_fila1.py:621-628`, `bin/hook_stop_fila1.py:832-836`; `bin/tests/test_hook_esperando_com_prova.sh:95-96`). Também falta dizer qual prova distingue `<nome>` vivo de nome inexistente: a implementação atual exige PID/arquivo e não observa agentes diretamente (`bin/hook_stop_fila1.py:527-541`, `bin/hook_stop_fila1.py:829-836`).
-
-4. **Exportada/dinheiro/!:** os ramos examinados operam o encerramento e arquivos de trilha/contador (`bin/hook_stop_fila1.py:43-56`, `bin/hook_stop_fila1.py:1433-1435`, `bin/hook_stop_fila1.py:1453-1459`). Não demonstram escrita de competência/dinheiro. Porém, se a liberação de (a) contornar a prova obrigatória, cai na vedação de atalho; a exceção precisa ser literal (`CLAUDE.md:265-268`; `bin/hook_stop_fila1.py:1349-1358`).
-
-**ITEM 7: PROCEDE — devolver para definir precedência entre liberação por entrada ativa, recusa de PID morto e prova obrigatória, além de localizar o RETOMA-AUTO e definir a prova de vida do subagente (`bin/hook_stop_fila1.py:621-628`, `bin/hook_stop_fila1.py:829-836`, `bin/hook_stop_fila1.py:1349-1358`; RETOMA-AUTO [nao verificado]).**
-
-## 17/11 14:09 · sessao 56328c467ec4 · - · - · origem=Ronald (tmux)
-
-ITEM 2 — AVAL-DEVOLVIDO
-
-1. Premissas: parcialmente. O POST só consulta a porta e devolve recusa (`app/folha/views.py:124-133`); o escritor existente lavra `MetricaSnapshot` por empresa/dia via `update_or_create`, sem tentativa individual (`app/folha/porta_export.py:768-796`). O comando aceita somente `--mes` e `--ano`, portanto a distinção “manual sem `--tentativa`” não existe nesta cópia (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27-29`). A medição está explicitamente declarada como não agendada, contrariando a premissa de cron existente (`app/config/crons.py:887-897`). A exceção de `medir` imprime motivo e termina antes de `lavrar`; não deixa registro FALHOU (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-95`).
-
-2. Lei vigente: escritor único está alinhado à L-007 e ao contrato estrutural (`app/docs/LEIS.md:65`; `CLAUDE.md:178`). A declaração atual de cron é “não agendar”; o aval precisa reconciliar isso para tornar R9 executável (`app/config/crons.py:887-897`). Não há estados FALHOU/DIVERGENTE demonstrados no escritor atual, cujo valor é número de falhas ou -1 (`app/folha/porta_export.py:772-776`).
-
-3. Literal: “toda execução cria a tentativa” não define se a unidade é invocação ou empresa. O comando percorre empresas, lavra cada uma e aborta na primeira exceção; uma invocação pode ter empresas já lavradas e outras não medidas (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86-95`). O carimbo atual sobrescreve a mesma empresa/dia inclusive quando muda competência, pois competência só está em `defaults` (`app/folha/porta_export.py:772-776`). A unidade do registro e o cron de R9 precisam ser identificados antes da construção.
-
-4. Dinheiro/exportada/!: a escrita examinada é de métrica, sem alteração de `FechamentoMensal` (`app/folha/porta_export.py:768-796`). Tocar gravado exportado exigiria `!` e a porta específica, fora dessa escrita (`CLAUDE.md:411-417`). Impacto real em produção: [não verificado].
-
-ITEM 2: PROCEDE — premissas de cron e `--tentativa` não correspondem à cópia, e “toda execução” deixa a unidade do registro indefinida (`app/config/crons.py:887-897`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:27-29`, `:86-95`).
-
-## 17/11 14:00 · sessao 3f14516fb790 · PORTA-EXPORT · verificador · origem=Code
-
-**G ainda tem uma regressão no reinício: a limpeza de `detalhe` feita por `pedir` deixou de valer. Também há lacunas nos testes novos e falhas de `assumir` sem registro persistido da falha original.** (`app/folha/porta_export.py:1105`, `app/folha/porta_export.py:1049`, `app/folha/tests/test_porta_sem_beco_item2.py:459`, `app/folha/tests/test_porta_sem_beco_item2.py:477`, `app/folha/porta_export.py:1209`)
-
-1. **Chamadores, transações e travas**
-
-   Há quatro chamadores diretos em produção e um em teste. O auxiliar abre `atomic`, busca com `select_for_update`, filtra estado/tentativa e deriva o detalhe da linha travada. (`app/folha/porta_export.py:1040`, `app/folha/porta_export.py:1049`)
-
-   | Chamador direto | Contexto |
-   |---|---|
-   | `_falhar` | Sem `atomic` próprio; usa o do auxiliar e depois registra a recusa. (`app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1076`) |
-   | `pedir`, ao refazer | O `atomic` da tentativa de criação já terminou; a retomada usa o `atomic` do auxiliar, sem advisory local. (`app/folha/porta_export.py:1093`, `app/folha/porta_export.py:1098`, `app/folha/porta_export.py:1106`) |
-   | `assumir`, com tentativa | Leitura inicial comum; no comando, entra sob a advisory já adquirida. (`app/folha/porta_export.py:1129`, `app/folha/porta_export.py:1131`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`) |
-   | `concluir` | Tem `atomic` externo, já travou a mesma linha e já chamou `lavrar`; o auxiliar abre `atomic` aninhado e pede novamente a trava dessa linha. (`app/folha/porta_export.py:1179`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1185`, `app/folha/porta_export.py:1187`) |
-   | Teste direto | Ignora o retorno, em classe `TestCase`, sem advisory explícita nesse teste. (`app/folha/tests/test_porta_sem_beco_item2.py:34`, `app/folha/tests/test_porta_sem_beco_item2.py:102`) |
-
-   `_falhar` recebe chamadas de `encerrar` e dos dois ramos de `vigiar`. `encerrar` vem da recuperação do comando, de `falhar_ao_assumir` e da falha de disparo do subprocesso. Os dois primeiros caminhos do comando permanecem dentro da advisory; `disparar` não adquire essa trava. (`app/folha/porta_export.py:1199`, `app/folha/porta_export.py:1229`, `app/folha/porta_export.py:1238`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/folha/porta_export.py:1215`, `app/folha/porta_export.py:1340`)
-
-   `vigiar` também roda pela leitura da porta, pelo censo global anterior à advisory e por `assumir` sem tentativa, este último sob a advisory do comando. O helper de testes chama `assumir`/`concluir` sem advisory local. (`app/folha/porta_export.py:1272`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:73`, `app/folha/porta_export.py:1252`, `app/folha/porta_export.py:1137`, `app/folha/porta_export.py:887`)
-
-   **Não identifiquei inversão dessas travas formando ciclo nos caminhos de produção examinados.** A ordem do comando é advisory → pedido → carimbo; a segunda aquisição do pedido em `concluir` é da linha que a própria transação já travou. O censo global encerra cada `atomic` antes de chegar à advisory; esta usa `pg_try_advisory_lock`, e `medicao_viva` somente consulta `pg_locks`. Ausência de deadlock em execução real: **[nao verificado]**. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1185`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1040`, `app/folha/porta_export.py:982`, `app/folha/porta_export.py:1002`)
-
-2. **Dependência da cópia do chamador: sim, em `pedir`**
-
-   `pedir` fazia `linha.detalhe = {}` para reiniciar o registro. Agora essa limpeza é ignorada: `_mudar_estado` começa com `atual.detalhe`, vindo do banco. (`app/folha/porta_export.py:1105`, `app/folha/porta_export.py:1049`)
-
-   Os extras da retomada substituem competência, origem, ator e tentativa, mas deixam sobreviver, quando existentes, **`resultado`, `n`, `motivo`, `pid`, `backend_pid`, `em_curso_em`, `concluido_em` e `falhou_em` da tentativa anterior**. Seus escritores são `assumir`, `_falhar`, `concluir` e o timestamp automático da transição. (`app/folha/porta_export.py:1106`, `app/folha/porta_export.py:1132`, `app/folha/porta_export.py:1141`, `app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1052`)
-
-   **`pedido_em` é renovado**, porque `para=PEDIDO` o regrava dinamicamente; não procede concluir timeout imediato por timestamp antigo. A regressão comprovada é o registro da tentativa nova carregar campos da anterior. Liberação indevida do TXT por isso: **[nao verificado]**; o leitor decide por estado, identidade da tentativa e carimbo, e a adoção sobrescreve a sessão antes de entrar em curso. (`app/folha/porta_export.py:1052`, `app/folha/porta_export.py:1106`, `app/folha/porta_export.py:1275`, `app/folha/porta_export.py:1283`, `app/folha/porta_export.py:1131`)
-
-3. **Mudança de retorno: os usos encontrados continuam corretos**
-
-   | Uso | Avaliação |
-   |---|---|
-   | `_falhar` | Usa o estado anterior na trilha e devolve `bool(antes)`. (`app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1077`) |
-   | `pedir` | Converte explicitamente para bool; `abrir_a_porta` testa `if criado`. (`app/folha/porta_export.py:1106`, `app/folha/porta_export.py:1308`) |
-   | `assumir` | Usa `not`; sucesso retorna `'pedido'`, string não vazia, e derrota retorna `None`. Preserva seu contrato linha/`None`. (`app/folha/porta_export.py:913`, `app/folha/porta_export.py:1047`, `app/folha/porta_export.py:1055`, `app/folha/porta_export.py:1131`) |
-   | `concluir` | Ignora o retorno, mas já protege a mesma linha/estado/tentativa na transação externa. Seu retorno continua dict/`None`. (`app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1192`) |
-   | Teste direto | Ignora o retorno. (`app/folha/tests/test_porta_sem_beco_item2.py:102`) |
-
-   `encerrar` e `falhar_ao_assumir` continuam repassando bool; `_fechar` descarta esse retorno. O comando testa `linha is None` e `res is None`, não o estado anterior contra `True`. Não apareceu comparação incompatível nos consumidores encontrados. (`app/folha/porta_export.py:1199`, `app/folha/porta_export.py:1215`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:156`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:172`)
-
-4. **Fechamento, leitores e falhas sem registro**
-
-   `falhar_ao_assumir` delega a `encerrar` → `_falhar` → `_mudar_estado`: grava estado, resultado, motivo, instante da falha e `calculado_em`, condicionado à tentativa. Depois `_recusa` escreve a trilha pelo mecanismo existente. `_fechar` somente executa o callback e captura exceções com saída em stdout; não é outro escritor de estado. (`app/folha/porta_export.py:1215`, `app/folha/porta_export.py:1199`, `app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1051`, `app/folha/porta_export.py:1066`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59`)
-
-   Os leitores relevantes são: `vigiar`, para estado/sessão/prazo; `estado_da_porta`, para estado/tentativa/carimbo; `conferir`, para o texto; `_recusa`, para identificação e autoria; e o contador de recusas, que lê a linha crítica. O stdout de `_fechar` não entra nesse contador. (`app/folha/porta_export.py:1225`, `app/folha/porta_export.py:1275`, `app/folha/porta_export.py:820`, `app/folha/porta_export.py:1063`, `app/core/recusa_critica.py:108`, `app/core/recusa_critica.py:133`, `bin/recusa_estado.py:68`)
-
-   **Nos dois callsites novos, outro detentor vivo da mesma advisory impede a entrada no ramo de recuperação.** O CAS também impede encerrar uma tentativa sucessora com outro UUID. Essa proteção depende de conservar a sessão que adquiriu a trava; perda/substituição da conexão durante a recuperação: **[nao verificado]**. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:139`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/folha/porta_export.py:1042`)
-
-   Há uma ressalva anterior a G, dentro do escopo dos chamadores: `disparar` inclui `Popen` e a saída do contexto do arquivo no mesmo `try`. **Se o fechamento do arquivo levantar `OSError` depois de o filho nascer**, chama `encerrar`, que aceita também `EM_CURSO`, sem consultar vivacidade. Esse caminho pode fechar o estado da mesma tentativa já adotada pelo filho vivo; ocorrência real: **[nao verificado]**. (`app/folha/porta_export.py:1335`, `app/folha/porta_export.py:1337`, `app/folha/porta_export.py:1339`, `app/folha/porta_export.py:1199`)
-
-   **Sim, `assumir` pode levantar sem deixar a falha original no registro do job nem na recusa crítica:** cron/manual não passa tentativa, e `falhar_ao_assumir` retorna `False` imediatamente. Se a própria recuperação levantar, `_fechar` também fica apenas no stdout; uma tentativa aberta poderá receber depois o motivo genérico do vigia. Isso não prova ausência de toda saída: o comando imprime o erro; retenção dessa saída em produção é **[nao verificado]**. (`app/folha/porta_export.py:1125`, `app/folha/porta_export.py:1209`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`, `app/folha/porta_export.py:1229`, `app/folha/porta_export.py:1238`)
-
-   A mensagem final “cada uma FALHOU com o seu motivo” não é garantida: `_fechar` não verifica sucesso e pode capturar a falha da gravação. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:270`)
-
-5. **Os três testes de `VoltaTresTest`** [nao verificado]
-
-   - **Primeiro: morde a regressão da cópia velha.** Lê PEDIDO, adota, encerra pela cópia antiga e exige trilha `antes=em_curso`, ator e metadados presentes. É sequencial; não prova concorrência/travas e não compara os valores exatos da sessão e do instante preservados. (`app/folha/tests/test_porta_sem_beco_item2.py:430`, `app/folha/tests/test_porta_sem_beco_item2.py:432`, `app/folha/tests/test_porta_sem_beco_item2.py:438`, `app/folha/tests/test_porta_sem_beco_item2.py:442`)
-   - **Segundo: morde a persistência da falha do clique, mas não A→B no mesmo disparo.** Executa um comando exclusivo para A e outro para B. O mock também levanta antes de qualquer escrita real de `assumir`. (`app/folha/tests/test_porta_sem_beco_item2.py:453`, `app/folha/tests/test_porta_sem_beco_item2.py:459`, `app/folha/tests/test_porta_sem_beco_item2.py:460`, `app/folha/tests/test_porta_sem_beco_item2.py:462`)
-   - **Terceiro: pode passar vazio quanto a “encerrar levantou”.** Não exige que o mock de `encerrar` seja chamado. Removendo a recuperação do handler, A ainda entra em `falharam`, B continua medindo e o comando termina com `SystemExit`; suas assertivas continuam satisfeitas. (`app/folha/tests/test_porta_sem_beco_item2.py:477`, `app/folha/tests/test_porta_sem_beco_item2.py:478`, `app/folha/tests/test_porta_sem_beco_item2.py:480`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:170`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:275`)
-
-6. **Classes de reprovação**
-
-   **Presentes:** selo sem mordida no terceiro teste; cobertura insuficiente do “mesmo disparo” no segundo; e campos misturando tentativas após o reinício — por exemplo, UUID novo com resultado/sessão/instantes anteriores. (`app/folha/tests/test_porta_sem_beco_item2.py:477`, `app/folha/tests/test_porta_sem_beco_item2.py:459`, `app/folha/porta_export.py:1105`, `app/folha/porta_export.py:1049`)
-
-   **Não identifiquei introdução de segundo juiz, segundo escritor fora da porta ou derivação paralela:** os helpers novos delegam às funções existentes. Tampouco identifiquei inversão das travas examinadas. As leituras de relógio adicionadas são timestamps da transição; não há demonstração de divergência de dia causada por G. (`app/folha/porta_export.py:1215`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1052`)
-
-   Resultado de execução dos testes, concorrência real e ocorrência desses caminhos em produção: **[nao verificado]**. [nao verificado]
-
-## 17/11 13:58 · sessao c06c9acddf9f · - · - · origem=Ronald (tmux)
-
-**Q3 — retorno compatível nos usos encontrados.**
-
-- `_falhar` usa o estado anterior na trilha e devolve `bool(antes)`; `encerrar` e `falhar_ao_assumir` repassam esse bool (`app/folha/porta_export.py:1073`, `:1075`, `:1077`, `:1199`, `:1215`).
-- `pedir` converte explicitamente para bool; `abrir_a_porta` testa `if criado` (`app/folha/porta_export.py:1106`, `:1307`, `:1308`).
-- `assumir` testa `not _mudar_estado`; o sucesso devolve `'pedido'`, string não vazia, e o fracasso devolve `None`. Depois retorna linha ou `None`, que o comando testa com `is None` (`app/folha/porta_export.py:913`, `:1047`, `:1055`, `:1131`, `:1134`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:156`).
-- `concluir` ignora esse retorno, mantendo o contrato dict ou `None`; já travou a mesma linha com estado e tentativa antes da chamada interna. O comando testa `res is None` e depois `res['resultado']` (`app/folha/porta_export.py:1179`, `:1180`, `:1187`, `:1192`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:172`, `:179`).
-- A quinta chamada direta fica no teste e ignora o retorno (`app/folha/tests/test_porta_sem_beco_item2.py:102`). Comparações desse retorno com `True`/`False` não foram encontradas na cópia [nao verificado fora da cópia].
-
-**Q5 — duas limitações concretas nos testes novos.** [nao verificado]
-
-1. O primeiro testa efetivamente cópia antiga, trilha `antes=em_curso`, ator e presença dos metadados da adoção. Porém é sequencial; chama `assumir` diretamente, sem advisory lock, e só exige que sessão e instante sejam verdadeiros, sem comparar os valores exatos (`app/folha/tests/test_porta_sem_beco_item2.py:428`, `:430`, `:432`, `:438`, `:439`, `:442`, `:443`).
-
-2. O segundo testa que falha de adoção do clique persiste estado, motivo e uma recusa. **Não prova continuidade A→B no mesmo disparo:** executa um comando exclusivo para A e outro exclusivo para B. Além disso, o mock levanta antes de qualquer escrita real de `assumir`, cobrindo apenas essa posição da falha (`app/folha/tests/test_porta_sem_beco_item2.py:451`, `:453`, `:459`, `:460`, `:462`, `:463`, `:464`, `:465`).
-
-3. O terceiro **pode passar vazio quanto a “encerrar levantou”**: instala o mock, mas não verifica que ele foi chamado. Se a chamada de recuperação for removida do comando, o handler ainda acrescenta A a `falharam`, continua para B e levanta `SystemExit` no final; as duas assertivas permanecem satisfeitas. Portanto ele prova B pronta após falha de concluir, mas não exige que a exceção de encerrar tenha ocorrido (`app/folha/tests/test_porta_sem_beco_item2.py:471`, `:477`, `:478`, `:480`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `:170`, `:171`, `:275`, `:276`).
-
-Observação corrigida: **não há evidência de `pedido_em` velho no retry**, pois `_mudar_estado(..., para=PEDIDO)` regrava `pedido_em` dinamicamente. Os outros campos antigos continuam presentes porque a limpeza da cópia em memória deixou de ser a base da persistência (`app/folha/porta_export.py:1049`, `:1052`, `:1105`, `:1106`).
-
-Execução dos testes e comportamento em produção: [nao verificado]. [nao verificado]
-
-## 17/11 13:57 · sessao 0721ab2ad95a · - · - · origem=Ronald (tmux)
-
-Q4: há caminho sem registro da falha original: cron/manual chama `assumir` sem tentativa; se levantar, `falhar_ao_assumir` retorna `False` sem gravar. O comando só imprime e acrescenta a empresa a `falharam`; depois afirma “cada uma FALHOU com seu motivo”, mesmo sem essa garantia. (`app/folha/porta_export.py:1125`, `app/folha/porta_export.py:1209`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:269`.)
-
-`_fechar` não é escritor alternativo: executa o callback e captura qualquer `Exception`, imprimindo em stdout. Não verifica sucesso nem preserva o erro em outro registro. Se a recuperação falhar, a tentativa pode continuar aberta e o vigia posteriormente gravar apenas o motivo genérico de prazo/processo morto. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59`, `app/folha/porta_export.py:1226`, `app/folha/porta_export.py:1237`.)
-
-Nos dois callsites atuais, `_fechar` executa dentro da advisory lock adquirida para empresa/competência; outro detentor dessa mesma trava impede a entrada no ramo. A tentativa também é conferida novamente pelo CAS. Não encontrei nesse caminho fechamento de tentativa de outro detentor vivo da mesma trava; comportamento com perda/substituição de sessão de conexão [nao verificado]. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/folha/porta_export.py:982`, `app/folha/porta_export.py:1042`.)
-
-Existe caminho anterior ao diff que merece ressalva: `disparar` põe `Popen` e saída do contexto de arquivo no mesmo `try`; um `OSError` no fechamento do arquivo depois de o filho nascer chama `encerrar`, que aceita também `EM_CURSO` e não consulta vivacidade. Pode, portanto, fechar o estado da tentativa já adotada pelo filho vivo; ocorrência real [nao verificado]. (`app/folha/porta_export.py:1335`, `app/folha/porta_export.py:1337`, `app/folha/porta_export.py:1339`, `app/folha/porta_export.py:1199`.)
-
-Os campos gravados seguem pela porta existente: `_falhar` fornece `resultado` e `motivo`; `_mudar_estado` grava `estado`, `falhou_em` e `calculado_em`; `_recusa` escreve a trilha por `recusa_critica.registrar`. (`app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1051`, `app/folha/porta_export.py:1063`, `app/core/recusa_critica.py:70`.) `vigiar` lê estado/sessão/prazo; `estado_da_porta` lê estado/tentativa; `conferir` transforma FALHA em texto fixo, sem mostrar o motivo. (`app/folha/porta_export.py:1225`, `app/folha/porta_export.py:1275`, `app/folha/porta_export.py:823`.) O contador lê exclusivamente as linhas de recusa; stdout de `_fechar` não alimenta esse mecanismo. (`app/core/recusa_critica.py:108`, `app/core/recusa_critica.py:133`, `bin/recusa_estado.py:68`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`.)
-
-Q6: os helpers novos delegam ao escritor existente, sem introduzir segundo juiz ou segundo escritor de estado; permanece a lacuna de observabilidade acima. (`app/folha/porta_export.py:1215`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`.) Não executei testes nem acessei banco/log; efeitos reais [nao verificado].
-
-## 17/11 13:57 · sessao e84a60e96239 · - · - · origem=Ronald (tmux)
-
-Censo completo de `_mudar_estado`: quatro chamadores em produção e um direto em teste; o auxiliar sempre abre `atomic`, trava a linha filtrada por estado/ficha, deriva `detalhe` da linha travada e retorna estado anterior ou `None` (`app/folha/porta_export.py:1040–1055`).
-
-| Chamador direto | Contexto e travas |
-|---|---|
-| `_falhar` | Sem `atomic` próprio; delega ao auxiliar e depois registra recusa (`app/folha/porta_export.py:1072–1077`). Vem de `encerrar` (`:1199`), de `vigiar` para EM_CURSO (`:1229`) ou PEDIDO (`:1238`). |
-| `pedir`, retomada | O `atomic` da tentativa de criação já terminou antes de chamar o auxiliar; não retém trava explícita anterior nesse caminho (`app/folha/porta_export.py:1093–1107`). Vem de `abrir_a_porta` (`:1307`), acionada pela view sem `atomic` local (`app/folha/views.py:101–131`). |
-| `assumir`, com tentativa | Sem `atomic` próprio; faz leitura comum e chama o auxiliar (`app/folha/porta_export.py:1129–1134`). No comando, executa dentro da advisory lock (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138–150`). |
-| `concluir` | Já está dentro de `atomic` externo e já travou a MESMA linha; chama `lavrar` antes do auxiliar, que abre `atomic` aninhado e pede novamente a mesma trava (`app/folha/porta_export.py:1179–1188`). No comando, permanece sob advisory lock (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138–168`). |
-| Teste `test_CONCLUIDO_sem_o_carimbo_DESTA_tentativa_nao_le_o_verde_antigo` | Chamada direta, sem uso do retorno, dentro de classe `TestCase`; nenhum advisory lock explícito nesse teste (`app/folha/tests/test_porta_sem_beco_item2.py:34`, `:96–104`). |
-
-Entradas indiretas relevantes: `encerrar` é chamado pela recuperação do comando, ainda dentro da advisory lock (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`, `:168`), por `falhar_ao_assumir` nesse mesmo contexto (`:152`; `app/folha/porta_export.py:1215`), e por `disparar` quando o subprocesso não nasce, sem advisory lock local (`app/folha/porta_export.py:1331–1340`). `vigiar` vem da leitura da porta (`:1272`), do censo global antes da aquisição da advisory lock (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:73`, `:138`; `app/folha/porta_export.py:1252`) e de `assumir` sem tentativa, sob a advisory do comando (`app/folha/porta_export.py:1135–1138`). O helper de testes chama `assumir` e `concluir` sem advisory lock local (`app/folha/porta_export.py:887–890`).
-
-Não encontrei ciclo de espera introduzido: comando adquire advisory → linha do pedido; `concluir` adquire pedido → carimbo → novamente o próprio pedido; a advisory usa `pg_try_advisory_lock`, sem espera, e `medicao_viva` apenas consulta `pg_locks` (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`; `app/folha/porta_export.py:982`, `:1002–1006`, `:1179–1188`, `:779`). O censo anterior ao comando encerra cada chamada do auxiliar antes de chegar à advisory lock (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:73`, `:138`; `app/folha/porta_export.py:1040–1055`, `:1249–1253`). Ausência de deadlock em execução real: [nao verificado].
-
-Q2: **há dependência da cópia em memória**. `pedir` faz explicitamente `linha.detalhe = {}` antes de chamar o auxiliar; essa limpeza agora é ignorada porque a base vem de `atual.detalhe` (`app/folha/porta_export.py:1105`, `:1049`). Assim, retomada ganha nova `tentativa`, `pedido_em`, origem/ator/competência, mas conserva `resultado`, `n`, `motivo`, `pid`, `backend_pid`, `em_curso_em`, `concluido_em` e `falhou_em` anteriormente existentes, pois os extras não os removem (`app/folha/porta_export.py:1106–1107`, `:1050–1052`). Escritores desses campos: `assumir` (`:1132`, `:1141–1143`), `_falhar` (`:1073–1074`), `concluir` (`:1187–1188`) e carimbos automáticos de transição (`:1052`).
-
-**Correção de hipótese preliminar:** `pedido_em` não permanece velho: `para=PEDIDO` faz `'%s_em' % para` renová-lo (`app/folha/porta_export.py:1052`, `:1106`). Portanto não há base para afirmar timeout imediato por esse campo. A mistura de campos de tentativas está demonstrada; liberação indevida do TXT por ela não está demonstrada, pois a porta decide por estado/tentativa e carimbo, e `assumir` substitui o `backend_pid` antes de EM_CURSO (`app/folha/porta_export.py:1275–1291`, `:1131–1132`). Os leitores encontrados de `resultado/n/motivo` do registro são sobretudo asserts dos testes (`app/folha/tests/test_porta_sem_beco_item2.py:121–130`); `vigiar` só consulta `backend_pid` quando estado é EM_CURSO (`app/folha/porta_export.py:1226–1228`).
-
-## 17/11 13:38 · sessao 2977a8187bea · PORTA-EXPORT · verificador · origem=Code
-
-**Não considero a obra fechada:** a exceção em `assumir` ainda não grava FALHOU/motivo/recusa; e o `antes` de `encerrar` pode diferir do estado vencido pelo CAS. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`; `app/folha/porta_export.py:1065`; `app/folha/porta_export.py:1192`)
-
-Execução dos testes, reprodução das corridas e ocorrência em produção: **[nao verificado]**. [nao verificado]
-
-1. **Quem escreve e quem lê**
-
-   | Campo | Escritores e leitores encontrados |
-   |---|---|
-   | Pedido: `detalhe.tentativa` | `pedir` cria/renova UUID; `assumir` adota a recebida ou cria outra. `_mudar_estado` transporta o detalhe. Leem `_ficha`/CAS, adoção, conclusão, recusa, estado da porta e argv do subprocesso. (`app/folha/porta_export.py:1083`; `app/folha/porta_export.py:1100`; `app/folha/porta_export.py:1123`; `app/folha/porta_export.py:1135`; `app/folha/porta_export.py:1022`; `app/folha/porta_export.py:1040`; `app/folha/porta_export.py:1170`; `app/folha/porta_export.py:1060`; `app/folha/porta_export.py:1260`; `app/folha/porta_export.py:1307`) |
-   | Pedido: `detalhe.ator` | `pedir` grava `getattr(ator, 'pk', None)`, recebendo `request.user` da view. A adoção preserva o campo; uma tentativa nova cron/manual substitui o detalhe sem ator. `_recusa` o lê. (`app/folha/views.py:131`; `app/folha/porta_export.py:1082`; `app/folha/porta_export.py:1100`; `app/folha/porta_export.py:1124`; `app/folha/porta_export.py:1134`; `app/folha/porta_export.py:1057`) |
-   | Carimbo: `detalhe.tentativa` | `lavrar` grava o argumento, inclusive `None`; `concluir` fornece a tentativa da linha validada. O leitor decisório é `estado_da_porta`. (`app/folha/porta_export.py:768`; `app/folha/porta_export.py:784`; `app/folha/porta_export.py:1178`; `app/folha/porta_export.py:1260`) |
-   | Motivo | `_falhar` persiste até 500 caracteres; `concluir` persiste `res['motivo']`. `_recusa` acrescenta a trilha; divergência recebe texto explicativo somente na linha. `registrar` normaliza espaços; o parser recupera o motivo, mas o contador usa data/porta, sem interpretar seu conteúdo. (`app/folha/porta_export.py:1067`; `app/folha/porta_export.py:1181`; `app/folha/porta_export.py:1056`; `app/folha/porta_export.py:1184`; `app/core/recusa_critica.py:84`; `app/core/recusa_critica.py:92`; `app/core/recusa_critica.py:117`) |
-
-   **Há escrita fora de `concluir`:** `lavrar` continua escrevendo diretamente; os dois testes negativos novos a chamam; a fixture `_carimbo` escreve pedido e carimbo diretamente, com tentativa constante `fixture`. Portanto, exclusividade literal de `concluir` não existe. (`app/folha/porta_export.py:779`; `app/folha/tests/test_porta_sem_beco_item2.py:305`; `app/folha/tests/test_porta_sem_beco_item2.py:317`; `app/folha/tests/test_porta_do_export.py:42`; `app/folha/tests/test_porta_do_export.py:46`)
-
-   Nos caminhos produtivos encontrados, o comando chama `concluir`; o helper corrigido usa `assumir → concluir`, inclusive para o teste de relatórios. Não encontrei outro chamador produtivo de escrita desse carimbo. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:157`; `app/folha/porta_export.py:887`; `app/relatorios/tests/test_cauda_trilha_do_cartao.py:109`)
-
-   Não encontrei leitor decisório alternativo aceitando carimbo sozinho: `conferir`, `abrir_a_porta` e a view delegam à mesma porta. (`app/folha/porta_export.py:820`; `app/folha/porta_export.py:1282`; `app/folha/views.py:130`)
-
-2. **PRONTA e caminhos legítimos**
-
-   Nos objetos lidos pela função, **PRONTA exige pedido CONCLUIDO, tentativa não vazia e igual à do carimbo**, ambos consultados pelo mesmo dia. Os dois escapes da volta 2 estão fechados. (`app/folha/porta_export.py:1248`; `app/folha/porta_export.py:1258`; `app/folha/porta_export.py:1260`; `app/folha/porta_export.py:1268`)
-
-   Isso não garante que o banco permaneça naquele estado até a resposta: entre as duas consultas, um cron pode substituir o pedido concluído por outra tentativa EM_CURSO, enquanto o leitor conserva o pedido antigo e encontra o carimbo antigo correspondente. É uma leitura válida do par anterior; não demonstra liberação sem jamais ter existido o par exigido. Corrida executada: **[nao verificado]**. (`app/folha/porta_export.py:1249`; `app/folha/porta_export.py:1250`; `app/folha/porta_export.py:1131`)
-
-   Não encontrei beco estrutural novo para cron/manual/rollout: sem clique, `assumir` cria pedido EM_CURSO com UUID, e `concluir` grava o par. O rollout seleciona empresas ativas em rollout e a competência corrente; o cron está declarado com `--rollout --origem cron`. Instalação e funcionamento reais: **[nao verificado]**. (`app/folha/porta_export.py:1131`; `app/folha/porta_export.py:1178`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:46`; `app/config/crons.py:1803`)
-
-3. **R8 alargado**
-
-   **`assumir` continua incompleto.** Seu `except` apenas imprime, acrescenta a empresa a `falharam` e continua. Não persiste FALHOU, motivo nem linha de recusa. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`)
-
-   Se a exceção ocorrer antes da criação e não houver pedido anterior, não nasce registro. Se houver pedido do clique e a adoção ainda não ocorreu, ele pode permanecer PEDIDO até o vigia aplicar o prazo de 300 segundos; o motivo posterior será o prazo, não a exceção original. (`app/folha/porta_export.py:1118`; `app/folha/porta_export.py:1122`; `app/folha/porta_export.py:920`; `app/folha/porta_export.py:1214`)
-
-   **`concluir` entrou no `try` corretamente.** Exceções dentro do bloco que lavra e muda o estado desfazem ambas as escritas; depois o comando tenta `encerrar` a tentativa como FALHOU. Essa chamada de recuperação não tem proteção adicional: se ela levantar, a seguinte empresa não será alcançada. (`app/folha/porta_export.py:1172`; `app/folha/porta_export.py:1178`; `app/folha/porta_export.py:1180`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:155`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:159`)
-
-   A frase “`concluir` levantou, nada ficou” é ampla demais: `_recusa` ocorre depois do `atomic`. Uma exceção ali não desfaz o par já confirmado. É o limite do log não transacional já descartado na triagem, não outro bloqueador por queda CAS/log. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`; `app/folha/porta_export.py:1182`; `app/folha/porta_export.py:1184`)
-
-4. **Verdade da trilha**
-
-   **Contraexemplo do `antes`:** `encerrar` conserva um objeto PEDIDO(t); outro chamador adota a mesma tentativa, mudando o banco para EM_CURSO(t); o encerramento aceita ambos os estados e vence de EM_CURSO, mas imprime `antes=pedido`. Além disso, escreve o JSON antigo inteiro, podendo apagar `pid`, `backend_pid` e o instante da adoção. Esse interleaving é permitido pelo código; reprodução: **[nao verificado]**. (`app/folha/porta_export.py:1065`; `app/folha/porta_export.py:1192`; `app/folha/porta_export.py:1124`; `app/folha/porta_export.py:1035`; `app/folha/porta_export.py:1039`; `app/folha/porta_export.py:1042`)
-
-   Nos caminhos do vigia, o CAS aceita um único estado; em `concluir`, EM_CURSO é conferido sob trava da linha. Nesses sítios, o problema acima não se aplica. (`app/folha/porta_export.py:1206`; `app/folha/porta_export.py:1215`; `app/folha/porta_export.py:1173`)
-
-   Há também uma ambiguidade em **`origem`**: nasce como origem do pedido e é sobrescrita pela origem do executor durante a adoção. O CLI aceita `--tentativa` com `--origem manual`; nessa combinação, a linha deixa de preservar literalmente a origem do pedido. (`app/folha/porta_export.py:1083`; `app/folha/porta_export.py:1125`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:39`)
-
-   **Ator é pk nesse caminho**, nunca username: a porta grava `.pk` e o imprime no motivo. Cron/manual sem ator saem `ator=-`; o campo principal `usuario` também fica `-`, pois `_recusa` passa `request=None`. (`app/folha/porta_export.py:1082`; `app/folha/porta_export.py:1057`; `app/folha/porta_export.py:1058`; `app/core/recusa_critica.py:77`)
-
-5. **Mordida dos testes** [nao verificado]
-
-   - Os freezes existem nas duas classes; os negativos exercitam a porta real contra carimbo sozinho e tentativa ausente dos dois lados. (`app/folha/tests/test_porta_sem_beco_item2.py:19`; `:292`; `:302`; `:310`; `:387`)
-   - M9 verifica retorno, ausência de carimbo/recusa e preservação da sucessora. O marcador de log não esvazia a verificação: o filtro seleciona a porta. (`app/folha/tests/test_porta_sem_beco_item2.py:328`; `:341`; `:29`)
-   - M12 verifica o perdedor do CAS e uma linha, mas ambos os objetos começam EM_CURSO. Não cobre a adoção PEDIDO→EM_CURSO entre leitura e encerramento, nem verifica ator. (`app/folha/tests/test_porta_sem_beco_item2.py:350`; `:354`; `:358`)
-   - O relógio simulado hoje/amanhã morde a antiga leitura dupla; o reclique exige um único subprocesso, impedindo que todos os POSTs passem inertes. (`app/folha/tests/test_porta_sem_beco_item2.py:366`; `:368`; `:384`)
-   - **R8ConcluirTest prova tratamento na borda e continuação para B.** Para A, lança antes do corpo real; não prova rollback após lavrar, ausência de carimbo parcial, uma recusa ou tratamento de `assumir`. (`app/folha/tests/test_porta_sem_beco_item2.py:400`; `:405`; `:408`)
-   - O acréscimo do shell exige ausência de arquivo também para a porta e verifica sua frase, com datas explícitas. (`bin/tests/test_recusa_estado.sh:30`; `:44`; `:48`)
-
-6. **Classes históricas**
-
-   Não encontrei segundo juiz nem derivação paralela nova: texto e clique continuam consultando `estado_da_porta`; a dupla leitura do dia foi removida. Não identifiquei inversão nova de travas no trecho: o comando mantém advisory lock antes da trava da linha em `concluir`. (`app/folha/porta_export.py:820`; `app/folha/porta_export.py:1282`; `app/folha/porta_export.py:1248`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:130`; `app/folha/porta_export.py:1173`)
-
-   Permanecem a escrita direta de fixtures fora de `concluir`, a cobertura insuficiente do selo para rollback/R8 completo e o campo `origem` servindo ao pedido e ao executor. Os bloqueadores concretos desta revisão são a falha de `assumir` sem registro e a trilha `antes` potencialmente falsa. (`app/folha/tests/test_porta_do_export.py:42`; `app/folha/tests/test_porta_sem_beco_item2.py:400`; `app/folha/porta_export.py:1125`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`; `app/folha/porta_export.py:1065`)
-
-## 17/11 13:36 · sessao d53c28693167 · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-1. **R8 não cumpre “assumir levantou → FALHOU com motivo e uma recusa”.** O `except` de `assumir` apenas imprime, acrescenta a empresa a `falharam` e segue; não chama `encerrar`, não persiste motivo nem emite `_recusa`. Se falhar antes da criação, não nasce registro; se já existia pedido do clique, ele pode continuar `PEDIDO` até o vigia expirar os 300 segundos. A seguinte empresa é tentada, supondo que a saída e a liberação da trava não levantem. Fontes: `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`, `app/folha/porta_export.py:1118`, `app/folha/porta_export.py:1122`, `app/folha/porta_export.py:1214`, `app/folha/porta_export.py:920`. Ocorrência em produção: [nao verificado].
-
-2. **`antes` não é necessariamente o estado vencido pelo CAS amplo de `encerrar`.** `_falhar` guarda `antes` do objeto em memória; `encerrar` aceita banco em `PEDIDO` **ou** `EM_CURSO`, com filtro somente da tentativa. Se outra chamada adotar o mesmo pedido entre essa leitura e o UPDATE, o banco pode transitar `PEDIDO→EM_CURSO` preservando a tentativa; o encerramento então vence de `EM_CURSO`, mas escreve `antes=pedido`. Como o JSON inteiro sai do objeto antigo, também pode apagar `pid`, `backend_pid` e o instante da adoção. Nos caminhos de `vigiar`, o estado permitido é unitário; no `concluir`, `EM_CURSO` está protegido pela linha travada. Fontes: `app/folha/porta_export.py:1065`, `app/folha/porta_export.py:1192`, `app/folha/porta_export.py:1124`, `app/folha/porta_export.py:1035`, `app/folha/porta_export.py:1039`, `app/folha/porta_export.py:1042`, `app/folha/porta_export.py:1206`, `app/folha/porta_export.py:1215`, `app/folha/porta_export.py:1173`. Interleaving reproduzido: [nao verificado].
-
-3. **Rollback de concluir:** falhas dentro do bloco que trava o pedido, lavra e muda o estado ficam no mesmo `atomic`; o comando captura a exceção e chama `encerrar` sobre a tentativa. Entretanto, a afirmação comentada “`concluir` levantou, nada ficou” não cobre literalmente toda a função: a cópia do detalhe e `_recusa` são posteriores ao `atomic`. Isso é o limite já associado ao log não transacional, não proponho reabrir a queda CAS/log descartada. Fontes: `app/folha/porta_export.py:1172`, `app/folha/porta_export.py:1178`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1182`, `app/folha/porta_export.py:1184`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:158`.
-
-4. **Limite de R8 se o próprio encerramento levantar:** a chamada a `encerrar` no tratamento da exceção não tem proteção adicional; uma exceção nela interrompe o laço, logo a continuação não é incondicional. Fonte: `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:159`. Ocorrência concreta: [nao verificado].
-
-5. **R8ConcluirTest cobre a borda, não o rollback interno.** Há freeze na classe. Para A, o mock lança antes de executar qualquer linha do `concluir` real; somente B usa a implementação real. O teste verifica FALHA, motivo e B pronta, mas não verifica ausência de carimbo parcial nem quantidade de recusas. Fontes: `app/folha/tests/test_porta_sem_beco_item2.py:387`, `app/folha/tests/test_porta_sem_beco_item2.py:400`, `app/folha/tests/test_porta_sem_beco_item2.py:405`, `app/folha/tests/test_porta_sem_beco_item2.py:408`.
-
-6. **M12 morde perdedor do CAS, mas não o `antes` concorrente acima.** Ambos os objetos começam `EM_CURSO`, o primeiro encerra e o segundo perde; não há adoção `PEDIDO→EM_CURSO` entre leitura e CAS. Fontes: `app/folha/tests/test_porta_sem_beco_item2.py:350`, `app/folha/tests/test_porta_sem_beco_item2.py:354`, `app/folha/tests/test_porta_sem_beco_item2.py:358`.
-
-7. **PRONTA local está protegida; fotografia atual do banco não está garantida.** A função exige pedido local `CONCLUIDO`, tentativa verdadeira e igualdade com carimbo. Ela pode ler o pedido concluído antigo, um cron substituí-lo por nova tentativa em curso, e ainda ler o carimbo antigo correspondente. Isso continua linearizável ao instante inicial em que aquele par era válido; não demonstra liberação sem jamais ter existido o par exigido. Fontes: `app/folha/porta_export.py:1249`, `app/folha/porta_export.py:1250`, `app/folha/porta_export.py:1258`, `app/folha/porta_export.py:1260`, `app/folha/porta_export.py:1268`, `app/folha/porta_export.py:1131`. Corrida executada: [nao verificado].
-
-8. **Ator:** `pedir` grava `getattr(ator, 'pk', None)`, a adoção preserva o campo e a recusa o imprime no motivo. Cron/manual criam detalhe sem `ator`, saindo `ator=-`; o campo principal `usuario` da linha também sai `-`, porque `_recusa` chama `registrar(None, ...)`. Nome de usuário não é introduzido por esse caminho da porta. Fontes: `app/folha/porta_export.py:1082`, `app/folha/porta_export.py:1083`, `app/folha/porta_export.py:1124`, `app/folha/porta_export.py:1134`, `app/folha/porta_export.py:1056`, `app/folha/porta_export.py:1058`, `app/core/recusa_critica.py:77`.
-
-Nenhum teste foi executado; resultados de execução: [nao verificado]. [nao verificado]
-
-## 17/11 13:35 · sessao 7dede955e4c0 · - · - · origem=Ronald (tmux)
-
-- **Pedido — tentativa:** `pedir` cria UUID e o renova ao refazer (`app/folha/porta_export.py:1083`, `app/folha/porta_export.py:1100`); `assumir` adota a tentativa recebida ou cria outra para cron/manual (`app/folha/porta_export.py:1122`, `app/folha/porta_export.py:1135`). Leitores: `_ficha`/CAS, `assumir`, `concluir`, `_recusa`, `estado_da_porta` e argv do subprocesso (`app/folha/porta_export.py:1022`, `app/folha/porta_export.py:1040`, `app/folha/porta_export.py:1123`, `app/folha/porta_export.py:1170`, `app/folha/porta_export.py:1060`, `app/folha/porta_export.py:1260`, `app/folha/porta_export.py:1307`).
-
-- **Pedido — ator:** escritor explícito é `pedir`, via `getattr(ator, 'pk', None)`; a view fornece `request.user`, e a recusa imprime esse pk (`app/folha/porta_export.py:1082`, `app/folha/porta_export.py:1100`, `app/folha/views.py:131`, `app/folha/porta_export.py:1057`). `assumir` com tentativa conserva ator mas sobrescreve origem; sem tentativa substitui todo detalhe e não inclui ator, como esperado para nova tentativa cron/manual (`app/folha/porta_export.py:1124`, `app/folha/porta_export.py:1131`).
-
-- **Carimbo — tentativa:** `lavrar` grava o argumento recebido, incluindo `None`; `concluir` passa a tentativa validada da linha atual (`app/folha/porta_export.py:768`, `app/folha/porta_export.py:784`, `app/folha/porta_export.py:1178`). O leitor decisório exige pedido `CONCLUIDO`, tentativa verdadeira e igualdade com o carimbo (`app/folha/porta_export.py:1258`).
-
-- **Ainda há escrita de carimbo fora de `concluir`:** `lavrar` continua função pública capaz de escrever diretamente; dois testes novos a chamam sem pedido ou sem tentativa (`app/folha/porta_export.py:779`, `app/folha/tests/test_porta_sem_beco_item2.py:305`, `app/folha/tests/test_porta_sem_beco_item2.py:317`). A fixture escreve diretamente tanto pedido quanto carimbo (`app/folha/tests/test_porta_do_export.py:42`, `app/folha/tests/test_porta_do_export.py:46`). Não encontrei outro chamador produtivo que escreva esse carimbo; o comando usa `concluir` e o helper passou a usar `assumir → concluir` (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:157`, `app/folha/porta_export.py:885`).
-
-- **Testes de outros apps:** o uso encontrado em relatórios chama o helper corrigido (`app/relatorios/tests/test_cauda_trilha_do_cartao.py:109`). Os demais usos do helper estão em integração/fixtures de folha (`app/folha/tests/test_integracao.py:160`, `app/folha/tests/test_txt_le_a_celula_e_o_juiz.py:155`, `app/folha/tests/test_sm1_monster_export.py:124`).
-
-- **Nenhum leitor decisório encontrado aceita carimbo sozinho:** `conferir` delega ao estado, o clique delega ao estado e a view delega ao clique; o script externo encontrado chama `conferir` (`app/folha/porta_export.py:820`, `app/folha/porta_export.py:1282`, `app/folha/views.py:130`, `bin/txt_antes_badge_linha.py:60`). PRONTA sem as condições do par não atravessa a cadeia de `elif` (`app/folha/porta_export.py:1254`).
-
-- **Motivo da recusa:** `_falhar` grava no pedido o motivo truncado a 500 caracteres e envia o original à recusa; `concluir` grava `res['motivo']`, mas divergência grava vazio e usa fallback apenas na linha (`app/folha/porta_export.py:1067`, `app/folha/porta_export.py:1069`, `app/folha/porta_export.py:1181`, `app/folha/porta_export.py:1184`). `_recusa` acrescenta antes/depois/origem/ator; `registrar` normaliza espaços e grava WARNING (`app/folha/porta_export.py:1056`, `app/core/recusa_critica.py:80`, `app/core/recusa_critica.py:85`).
-
-- **Leitores do motivo:** o parser o devolve como campo, mas o contador da porta ignora seu conteúdo e conta por data local da linha e porta; o wrapper de estado usa esse contador (`app/core/recusa_critica.py:49`, `app/core/recusa_critica.py:92`, `app/core/recusa_critica.py:113`, `app/core/recusa_critica.py:136`, `bin/recusa_estado.py:68`). A mensagem de FALHA na tela não lê o motivo persistido (`app/folha/porta_export.py:823`, `app/folha/porta_export.py:933`).
-
-## 17/11 13:35 · sessao 267c99086cf9 · - · - · origem=Ronald (tmux)
-
-Revisão estática; resultado da execução dos testes = [nao verificado]. [nao verificado]
-
-- **Freeze existe e está importado:** ambas as classes novas têm `@freeze_time`, com import de `freezegun`; não encontrei ausência de congelamento nesses testes. `app/folha/tests/test_porta_sem_beco_item2.py:19`, `:292`, `:387`.
-- **Os negativos da porta mordem os dois bugs declarados:** criam carimbo sem pedido e par sem tentativa, chamam `estado_da_porta` real e exigem recusa/FALHA. `app/folha/tests/test_porta_sem_beco_item2.py:302`, `:310`.
-- **Helper verde:** exercita o helper real e exige PRONTA, pedido CONCLUIDO e tentativa preenchida; não espiona `assumir`/`concluir`, portanto prova o resultado, não a exclusividade desse caminho. `app/folha/tests/test_porta_sem_beco_item2.py:320`; implementação efetivamente usa ambos em `app/folha/porta_export.py:887`.
-- **M9:** cria sucessora real, conserva detalhe da velha e verifica retorno `None`, ausência de carimbo, ausência de recusa e sucessora EM_CURSO; o marcador de log não torna a asserção vazia, pois `_linhas_da_porta` filtra só a porta. `app/folha/tests/test_porta_sem_beco_item2.py:328`, `:29`.
-- **M12:** verifica CAS perdedor mediante duas cópias lidas antes do primeiro encerramento, contando exatamente uma recusa; porém é sequencial e cobre somente EM_CURSO→FALHOU, sem testar `PEDIDO→EM_CURSO` entre leitura e CAS de `encerrar`, nem ator. `app/folha/tests/test_porta_sem_beco_item2.py:346`.
-- **Relógio:** o mock retorna hoje na primeira chamada e amanhã nas seguintes; ao exigir PRONTA com os registros de hoje, morde a antiga leitura dupla entre pedido/carimbo. Não é um contador literal de chamadas ignoradas, mas cobre o efeito relevante. `app/folha/tests/test_porta_sem_beco_item2.py:361`.
-- **Reclique:** exercita POSTs e CAS reais; substitui apenas subprocesso e medição indevida no request, exigindo uma linha e um disparo. Não verifica respostas HTTP, mas `popen.call_count == 1` impede que todos os POSTs sejam inertes. `app/folha/tests/test_porta_sem_beco_item2.py:371`.
-- **Lacuna principal: R8ConcluirTest não prova atomicidade de concluir.** Para A, o mock lança ANTES de chamar a implementação real; para B, chama a real. Isso morde tratamento da exceção no comando, motivo de A e continuação de B, mas não falha após lavrar, rollback do carimbo/estado, exceção pós-commit, nem uma linha de recusa. `app/folha/tests/test_porta_sem_beco_item2.py:398`, `:400`, `:408`.
-- **Essa lacuna importa:** a `_recusa` real ocorre depois do `transaction.atomic`; uma exceção ali não é revertida pelo bloco, ao contrário do comentário do comando. `app/folha/porta_export.py:1172`, `:1182`, `:1184`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`.
-- **Nenhum teste novo injeta falha em `assumir`**; o R8 novo injeta apenas `concluir`. `app/folha/tests/test_porta_sem_beco_item2.py:396`.
-- **Fixtures alteradas:** `_carimbo` ainda escreve diretamente pedido+carimbo, com tentativa constante `fixture`, fora de `concluir`; assim continua adequada para testar o leitor/texto, mas não certifica escritor único nem protocolo do job. `app/folha/tests/test_porta_do_export.py:33`, `:42`, `:46`. Já `_pela_porta` passou a usar `assumir→concluir`. `app/folha/tests/test_porta_sem_beco.py:34`.
-- **Shell:** o acréscimo realmente torna obrigatórios `sem_arquivo` da porta e texto “sem arquivo”; datas são explícitas, sem relógio solto nesse trecho. `bin/tests/test_recusa_estado.sh:29`, `:44`, `:48`.
-
-## 17/11 12:42 · sessao 04f310b9fdf3 · PORTA-EXPORT · verificador · origem=Code
-
-**Item 2 ainda não fecha integralmente.** Há liberação sem pedido/tentativa concluída, janela para término ruim ficar sem recusa e reemissão de recusa pelo POST. A proteção contra conclusão atrasada e contra FALHOU encoberto por verde antigo está implementada no caminho normal. (`app/folha/porta_export.py:1238–1257`, `:1056–1060`, `:1163–1174`; `app/folha/views.py:130–135`; `app/core/respostas.py:50–56`.)
-
-Execução dos testes, comportamento em produção, banco, logs e correspondência histórica dos commits com o hash informado: **[nao verificado]**. [nao verificado]
-
-**1. Quem escreve e quem lê**
-
-As identidades de pedido e carimbo são empresa × competência × dia: competência na chave, empresa no escopo e dia em `data_ref`; a constraint inclui esses quatro campos. (`app/folha/porta_export.py:779–784`, `:933–941`, `:1077–1079`; `app/inteligencia/models.py:103–105`.)
-
-| Campo | Escritor | Leitor |
-|---|---|---|
-| Pedido: `estado` | `pedir` cria PEDIDO; `assumir` cria EM_CURSO; `_mudar_estado` faz as demais transições, chamado por `pedir`, `assumir`, `_falhar` e `concluir`. (`app/folha/porta_export.py:1030–1039`, `:1056–1058`, `:1073–1079`, `:1089–1090`, `:1114–1126`, `:1170–1171`.) | CAS, repetição, adoção, conclusão, vigia, varredura e porta. (`app/folha/porta_export.py:1034`, `:1086`, `:1114–1119`, `:1164`, `:1193–1198`, `:1217`, `:1242–1249`.) |
-| Pedido: `tentativa` | UUID novo em `pedir` e em `assumir` sem tentativa; adoção conserva o UUID recebido. (`app/folha/porta_export.py:1010–1012`, `:1073`, `:1090`, `:1112–1125`.) | Ficha do CAS, adoção, conclusão, objeto da recusa, argv do job e comparação com carimbo. (`app/folha/porta_export.py:1015–1017`, `:1035–1036`, `:1051–1052`, `:1113–1114`, `:1160–1168`, `:1248`, `:1296`.) |
-| Pedido: `pid` | `assumir`, com `os.getpid()`. O PID retornado por `Popen` vai à auditoria, sem atualização do pedido naquele ponto. (`app/folha/porta_export.py:1115`, `:1125`, `:1303–1315`.) | O teste exige presença; o vigia operacional consulta `backend_pid`, não `pid`. (`app/folha/tests/test_porta_sem_beco_item2.py:60–64`; `app/folha/porta_export.py:1193–1196`.) |
-| Pedido: `backend_pid` | `assumir` consulta `pg_backend_pid()` e grava a sessão. (`app/folha/porta_export.py:1108–1115`, `:1125`.) | `vigiar → medicao_viva`, comparando-o com `pg_locks.pid`. (`app/folha/porta_export.py:997–1001`, `:1194`.) |
-| Pedido: `resultado`, `n` | `resultado_de` produz; `concluir` persiste ambos. `_falhar` grava `resultado='falhou'`, sem acrescentar `n`. (`app/folha/porta_export.py:1056–1058`, `:1136–1147`, `:1170–1171`.) | Os testes leem o registro; o command lê o retorno de `concluir`. A porta decide pelo estado e pelo carimbo, sem consultar esses dois campos persistidos. (`app/folha/tests/test_porta_sem_beco_item2.py:121–129`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:154–164`; `app/folha/porta_export.py:1241–1257`.) |
-| Pedido: `motivo` | `_falhar`, limitado a 500 caracteres; `concluir`, com o motivo de `resultado_de`. (`app/folha/porta_export.py:1058`, `:1136–1144`, `:1171`.) | Testes conferem o motivo persistido. A mensagem pública deixou de lê-lo; a recusa recebe o motivo como argumento. (`app/folha/tests/test_porta_sem_beco_item2.py:56`, `:130`; `app/folha/porta_export.py:1050`, `:1174`, `:1261–1262`.) |
-| Pedido: `pedido_em` | Criação em `pedir`; repetição por `_mudar_estado`, que gera `pedido_em` a partir do nome do estado. (`app/folha/porta_export.py:1033`, `:1074`, `:1089–1090`.) | `vigiar`, para os 300 segundos sem adoção. (`app/folha/porta_export.py:1200–1205`.) |
-| Pedido: `em_curso_em`, `concluido_em`, `falhou_em` | `_mudar_estado`; `assumir` sem tentativa escreve diretamente `em_curso_em`. Esses timestamps não participam da decisão de vida atual, que usa sessão/trava ou `pedido_em`. (`app/folha/porta_export.py:1033`, `:1126`, `:1192–1205`.) | Leitor operacional específico desses timestamps: **[nao verificado]**. |
-| Pedido/carimbo: `calculado_em` | `auto_now` do modelo; `_mudar_estado` também o atualiza explicitamente. (`app/inteligencia/models.py:96`; `app/folha/porta_export.py:1037`.) | Uso específico para liberar ou vigiar a porta: não aparece nos respectivos julgamentos. (`app/folha/porta_export.py:1192–1205`, `:1238–1257`.) |
-| Carimbo: `tentativa` | Somente `lavrar`; `concluir` fornece a tentativa corrente. (`app/folha/porta_export.py:784`, `:1168`.) | `estado_da_porta`, quando o pedido está CONCLUIDO; testes conferem o vínculo. (`app/folha/porta_export.py:1247–1248`; `app/folha/tests/test_porta_sem_beco_item2.py:92`, `:268`.) |
-| Carimbo: `erro_cartao_x_txt` | `medir` produz; `lavrar` persiste. (`app/folha/porta_export.py:671–675`, `:737`, `:790`.) | Teste verifica a persistência. O texto público não lê mais esse campo. (`app/folha/tests/test_porta_sem_beco_item2.py:132–133`; `app/folha/porta_export.py:1261–1262`.) |
-| Carimbo: `valor` | `lavrar`: `falhas`, ou `-1` quando ausente. (`app/folha/porta_export.py:779–781`.) | `estado_da_porta` classifica o escalar; `conferir` imprime a quantidade divergente. (`app/folha/porta_export.py:871–872`, `:1252–1257`.) |
-
-**Escritores externos existem nos testes:** `_carimbo` escreve diretamente o snapshot; o teste R7 altera diretamente `backend_pid`. Não são escritores operacionais novos. O helper verde chama o mesmo `lavrar`. (`app/folha/tests/test_porta_do_export.py:33–42`; `app/folha/tests/test_porta_sem_beco_item2.py:50–52`; `app/folha/porta_export.py:875–887`.)
-
-O escritor genérico `inteligencia.metricas.calcular` exige chave registrada; os calculadores declarados usam outras chaves. Não há nesses registros um segundo escritor identificado para as chaves da porta. (`app/inteligencia/metricas.py:36–56`; `app/inteligencia/calculadores.py:9`, `:112`, `:183`, `:240`, `:302`.)
-
-**Os dois PIDs têm significados separados**, mas “PID gravado e conferido” precisa dessa ressalva: o `pid` do SO fica como trilha e só nasce no pedido ao assumir; quem é conferido é o PID do backend. (`app/folha/porta_export.py:899–904`, `:1073–1079`, `:1115`, `:1194`.)
-
-**2. Liberação e tentativa atrasada**
-
-**Sim, há caminho para `conferir == ''` sem tentativa concluída:** pedido ausente + carimbo do dia com zero chega a PRONTA. `lavrar` aceita `tentativa=None`, e o helper verde produz exatamente esse estado. A exceção é executável e não está condicionada a ambiente de teste; utilização desse caminho em produção: **[nao verificado]**. (`app/folha/porta_export.py:768`, `:875–887`, `:1238–1257`, `:820–822`.)
-
-Também não se exige tentativa **preenchida**: pedido CONCLUIDO e carimbo com tentativa ausente passam pela comparação `None == None`. Existência desses registros em produção: **[nao verificado]**. (`app/folha/porta_export.py:1247–1248`.)
-
-**FALHOU de hoje com verde antigo não libera:** FALHOU prevalece antes da inspeção do escalar. CONCLUIDO com carimbo de outra tentativa também falha. (`app/folha/porta_export.py:1245–1249`.)
-
-**No caminho do command, a tentativa atrasada é barrada:** adoção exige PEDIDO com o UUID recebido; `encerrar` usa CAS por tentativa; `concluir` trava e filtra a linha pela tentativa EM_CURSO antes de carimbar. (`app/folha/porta_export.py:1112–1116`, `:1056–1058`, `:1160–1168`, `:1178–1182`.)
-
-Essa proteção pertence a `concluir`; uma chamada direta a `lavrar` continua sem verificar posse ou estado. Os chamadores diretos encontrados incluem o helper e testes. (`app/folha/porta_export.py:768–807`, `:885–887`; `app/folha/tests/test_porta_sem_beco.py:157–162`.)
-
-**3. Pedido preso, morte e R7**
-
-O vigia consulta a trava correta de dois inteiros: banco, `classid`, `objid`, `objsubid=2`, `granted` e o `pid` gravado do backend. Não basta outra sessão segurar a trava. (`app/folha/porta_export.py:995–1001`.)
-
-Entretanto, a pergunta respondida é **“essa sessão segura essa trava?”**. Perder a sessão enquanto o processo Python continua vivo gera FALHOU; continuar segurando a trava enquanto o processo fica travado conserva EM_CURSO, sem prazo máximo nessa fase. (`app/folha/porta_export.py:1193–1205`.)
-
-**Reuso de PID não é distinguido pela identidade da sessão:** não há `backend_start` nem outro identificador de encarnação no registro/consulta. Um backend reutilizado com o mesmo PID e a mesma trava satisfaria o predicado; ocorrência real dessa combinação: **[nao verificado]**. (`app/folha/porta_export.py:997–1000`, `:1108–1115`, `:1124–1126`.)
-
-**R7 ganhou observador sem tela:** o command varre todos os pedidos abertos do schema, inclusive de dias anteriores, antes de selecionar os alvos. Isso fecha a dependência exclusiva da leitura humana. (`app/folha/porta_export.py:1209–1221`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63–66`.)
-
-**Não garante observação independente da execução seguinte:** o selo está no fim da corrente; o encadeador pode não executá-lo quando faltar o carimbo do predecessor. Uma morte depois da varredura inicial espera outra chamada. Portanto, basta para observação eventual com a corrente funcionando; prazo garantido e funcionamento instalado em produção: **[nao verificado]**. (`app/config/crons.py:1793–1805`; `bin/encadeado.sh:81–95`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`.)
-
-FALHOU também não é histórico imutável no registro: `pedir` e `assumir` reutilizam a linha para outra tentativa. A memória diária da falha depende da recusa emitida antes dessa substituição. (`app/folha/porta_export.py:1085–1090`, `:1118–1126`, `:1056–1060`.)
-
-**4. Uma recusa por tentativa e contador**
-
-**Zero linhas é possível por interrupção:** `_falhar` persiste primeiro e registra depois; `concluir` termina a transação antes de registrar. Morte nesse intervalo deixa a tentativa terminal fora da varredura dos abertos, sem mecanismo mostrado de recuperação da recusa. (`app/folha/porta_export.py:1056–1060`, `:1162–1174`, `:1216–1217`.)
-
-**A corrida normal entre vigia, encerrar e concluir não demonstra duplicação da linha `porta_export`:** o CAS só deixa o vencedor de `_falhar` emitir, e `concluir` filtra/trava a mesma tentativa. (`app/folha/porta_export.py:1034–1042`, `:1056–1060`, `:1163–1174`.)
-
-**Mas há 2+ recusas críticas associadas ao fluxo da tentativa:** além da emissão do término sob `porta_export`, cada POST recusado passa pelo envelope sem `recusas=()`, que registra outra linha sob a porta da rota. O contador do export exclui essas linhas; isso evita inflação daquele N, mas não cumpre literalmente ausência de reemissão pelo clique. (`app/folha/porta_export.py:1050–1053`; `app/folha/views.py:130–135`; `app/core/respostas.py:45`, `:50–56`; `app/core/recusa_critica.py:119–121`.)
-
-**O contador usa o leitor único e está integrado ao ESTADO**, com esperado zero e distinção explícita entre arquivo ausente e zero. (`app/core/recusa_critica.py:133–139`; `bin/recusa_estado.py:60–77`; `bin/gerar_estado.py:267–270`.)
-
-**O dia contado é o prefixo temporal da linha**, não o campo `dia=` — este recebe o dia da tentativa. Assim, uma falha observada hoje para pedido de ontem conta pela data de emissão do log. (`app/folha/porta_export.py:1050`; `app/core/recusa_critica.py:46–50`, `:113–121`.)
-
-A equivalência com o dia civil da aplicação continua **[nao verificado]**: a aplicação declara São Paulo; o ESTADO usa `datetime.date.today()` do host, e o formatter usa `asctime` sem conversão explícita de fuso nesses pontos. (`app/config/settings/base.py:93–95`; `bin/recusa_estado.py:64`; `app/config/settings/saas.py:122`.)
-
-Há outra limitação de ausência de sinal: com o arquivo existente, erros de abertura são ignorados pelo leitor; isso pode terminar em zero, sem a distinção `sem_arquivo` feita anteriormente pelo wrapper. (`app/core/recusa_critica.py:95–105`, `:114–123`; `bin/recusa_estado.py:65–68`.)
-
-**5. R8 e rc**
-
-**Exceção em `medir` e retorno classificado como falhou deixam as seguintes medirem**, desde que persistência e emissão da falha terminem normalmente: ambos os ramos acrescentam a empresa a `falharam` e fazem `continue`. O fechamento retorna rc 2 quando houve essas falhas ou divergências acumuladas. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:147–165`, `:251–259`.)
-
-O isolamento não cobre qualquer exceção da empresa: `assumir`, `concluir` e a persistência/emissão feita por `encerrar` ficam fora da proteção de `medir`. Uma falha nesses pontos pode abortar as seguintes. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140–154`.)
-
-**O rc não fica vermelho para toda falha descoberta na rodada.** Exemplo estático: `vigiar_abertos` marca FALHOU um PEDIDO expirado; o job com aquele `--tentativa` não consegue adotá-lo, entra em `compartilhadas` e termina pelo retorno normal. Essa falha não entra em `falharam`. (`app/folha/porta_export.py:1200–1205`, `:1112–1116`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`, `:128`, `:140–146`, `:258–265`.)
-
-A parcela global `cartao_x_txt` foi preservada: continua medida para a competência inteira e integrada às falhas de cada empresa. R8 não a tornou artificialmente empresarial. (`app/folha/porta_export.py:667`, `:723–727`, `:753–764`.)
-
-**6. Classes de reprovação e força dos testes** [nao verificado]
-
-- **Clone de juiz registrado: não demonstrado.** A medição continua chamando `classificar_export`, autoridade registrada; `resultado_de` valida/classifica o retorno da medição. Existe, porém, classificação paralela do resultado na leitura: o registro guarda `resultado/n`, enquanto a porta volta a interpretar o escalar do carimbo. (`app/core/juizes.py:329–331`; `app/folha/porta_export.py:469`, `:1136–1147`, `:1171`, `:1252–1257`.)
-- **Fallback presente:** carimbo sozinho responde quando falta pedido. **Segundo escritor operacional do carimbo: não identificado**; `concluir` passa por `lavrar`, e os escritores diretos externos apontados são fixtures. (`app/folha/porta_export.py:1168`, `:1235–1257`; `app/folha/tests/test_porta_do_export.py:33–42`.)
-- **Relógio não é capturado uma vez para a leitura inteira:** pedido e carimbo consultam `_hoje()` separadamente. A gravação pelo job adotado conserva o dia do pedido, mas a leitura ainda pode atravessar a meia-noite entre as duas consultas. (`app/folha/porta_export.py:1004–1007`, `:1112–1117`, `:1168`, `:1238–1240`.)
-- **Trilha incompleta permanece:** a recusa do término recebe `request=None`, produzindo usuário `-`, e não contém antes/depois. A auditoria do disparo tem ator/PID, mas não equivale à trilha das transições terminais exigida na rev2.r. (`app/folha/porta_export.py:1050–1053`, `:1311–1314`; `app/core/recusa_critica.py:77–85`; `CLAUDE.md:32–34`.)
-- **Ordem de trava no caminho normal:** advisory lock → assumir/medir → trava da linha → carimbo/estado. Inversão concorrente demonstrada: **[nao verificado]**. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:129–154`; `app/folha/porta_export.py:1162–1171`.)
-
-Os testes novos **têm mordida**, mas não provam tudo que seus nomes sugerem. (`app/folha/tests/test_porta_sem_beco_item2.py:42–57`, `:69–134`, `:168–190`.)
-
-| Cobertura | O que efetivamente prova / o que falta |
-|---|---|
-| Identidade e atraso | Exercita persistência, CAS e carimbo com tentativa; as sucessões são sequenciais, sem corrida entre processos nesses testes. (`app/folha/tests/test_porta_sem_beco_item2.py:60–104`.) |
-| R7 | Exercita `pg_locks` com backend gravado artificialmente inexistente e varredura de pedido de ontem; não mata um processo nem executa o encadeador. (`app/folha/tests/test_porta_sem_beco_item2.py:47–57`, `:137–146`.) |
-| R8 | Mocka `medir`, mas usa o command e a persistência reais para os estados das duas empresas. É cobertura válida do isolamento dessas respostas; não prova recuperação de indisponibilidade real do banco. (`app/folha/tests/test_porta_sem_beco_item2.py:158–190`.) |
-| Re-clique | O teste chamado “nenhuma por clique repetido” chama `conferir` três vezes, sem POST; o filtro ainda descarta linhas de outras portas. Esconde precisamente a costura do envelope. (`app/folha/tests/test_porta_sem_beco_item2.py:29–30`, `:214–223`.) |
-| Meia-noite | Confere vínculo e mesmo `data_ref` na gravação; não confere uma leitura da porta atravessando a virada. (`app/folha/tests/test_porta_sem_beco_item2.py:249–268`.) |
-| Contador | O teste novo conta linhas sintéticas já formatadas; apesar do nome, não exercita ausência de arquivo. O teste shell verifica ausência para o leitor anterior, sem chamar `ler_porta_export` nessa situação. (`app/folha/tests/test_porta_sem_beco_item2.py:273–289`; `bin/tests/test_recusa_estado.sh:29–43`.) |
-
-O selo de soma em `relatorios` mocka conclusão, vigia, trava e adoção; serve para a agregação, sem comprovar essas costuras do item 2. Evidência de RED anterior e execução verde dos testes: **[nao verificado]**. (`app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:126–136`.)
-
-**7. Quais pontos (ii) da rev2.r continuam abertos**
-
-| Ponto da rev2.r | Situação nesta cópia |
-|---|---|
-| Posse da tentativa e conclusão atrasada | **Fechado no caminho normal**, pelo UUID/CAS e conclusão transacional; permanece a liberação excepcional sem pedido/tentativa preenchida. (`app/folha/porta_export.py:1056–1058`, `:1163–1171`, `:1247–1257`.) |
-| PID gravado e conferido | **Parcial:** ambos gravados ao assumir; somente backend conferido; PID do processo ainda não é persistido no PEDIDO ao disparar. (`app/folha/porta_export.py:1073–1079`, `:1115`, `:1194`, `:1314`.) |
-| Observador sem tela | **Implementado na declaração/caminho do cron**, condicionado à próxima execução do elo. Garantia operacional de periodicidade: **[nao verificado]**. (`app/config/crons.py:1803–1805`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`; `bin/encadeado.sh:84–95`.) |
-| Resultado empresarial vinculado | **Persistência fechada; leitura parcial:** resultado/N estão no job, mas a porta continua classificando o carimbo. (`app/folha/porta_export.py:1170–1171`, `:1241–1257`.) |
-| FALHOU × verde antigo | **Fechado.** (`app/folha/porta_export.py:1245–1249`.) |
-| Dia e meia-noite | **Gravação vinculada fechada; leitura sem referência única permanece.** (`app/folha/porta_export.py:1168`, `:1007`, `:1238–1240`.) |
-| Textos e lista | **Fechado no código:** literal de FALHA e fecho de DIVERGENTE, conservando a lista. (`app/folha/porta_export.py:828–872`, `:922–929`.) |
-| Motivos, recusa única e trilha | **Ainda aberto:** motivo foi persistido, mas faltam garantia da emissão após interrupção, supressão da reemissão pelo POST e trilha terminal com ator/antes/depois. (`app/folha/porta_export.py:790`, `:1050–1060`, `:1170–1174`; `app/folha/views.py:135`; `app/core/respostas.py:54–56`; `CLAUDE.md:32–34`.) |
-| Contador | **Integração fechada; dia operacional e completude do sinal não demonstrados integralmente.** (`bin/gerar_estado.py:267–270`; `bin/recusa_estado.py:64–68`; `app/core/recusa_critica.py:95–105`, `:117–121`.) |
-| R8 | **Fechado para exceção de `medir` e resultado falhou com registro funcionando.** Não cobre falha na conclusão/persistência, nem torna vermelho o rc por falha descoberta apenas na varredura inicial. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`, `:140–165`, `:251–265`.) |
-
-## 17/11 12:39 · sessao 5a018d6a0313 · E4C-F1-B2 · verificador · origem=Code
-
-**A cerca ainda permite contorno e também recusa atos que não tocariam perguntas entregues.** Os dois problemas aparecem nos caminhos abaixo. (`app/ponto/management/commands/reconciliar_fantasmas.py:288`; `app/chamados/services/disputa_emissao.py:1891`)
-
-Execução da suíte, RED contra o objeto Git `682ccefa4` e reprodução dinâmica dos contraexemplos: **[não verificado]**.
-
-1. **A enumeração não coincide com a escrita efetiva.**
-
-   Contraexemplo: A vivo; disputa D já fechada, cujo pai é A; pergunta Q entregue, materializada, não validada, **sem destino**, morta pelo C6. `_ancoradas()` inclui Q pelo pai, e a cerca a enumera. (`app/chamados/models.py:344`; `app/chamados/services/disputa_emissao.py:1942`)
-
-   Nesse estado, Q não entra no direto, que exige destino A, materialização nula e disputa aberta; não provoca reabertura, pois está morta; D fica fora da varredura de abertas; a relavra S2 exige destino A. Portanto a enumeração inclui Q embora esses escritores não a escrevam. (`app/chamados/services/disputa_emissao.py:1830`; `app/chamados/services/disputa_emissao.py:1968`; `app/chamados/services/disputa_emissao.py:1839`; `app/chamados/models.py:309`)
-
-   Mesmo assim, o dia entregue de Q produz veto e recusa A. Há outro sobrealcance, específico da previsão do fecho, no item 6. (`app/chamados/reconciliador.py:530`; `app/chamados/reconciliador.py:538`; `app/chamados/reconciliador.py:576`)
-
-2. **A cerca não antecede a primeira escrita em todos os caminhos.**
-
-   | Entrada | Constatação |
-   |---|---|
-   | `retratar` | Quando chega à consulta, o veto antecede a transição, o Fix A, o resolver explícito e a ocorrência. Porém a retenção anterior pode escrever trilha e retornar sem consultar competência. (`app/chamados/reconciliador.py:564`; `app/chamados/reconciliador.py:576`; `app/chamados/reconciliador.py:580`; `app/chamados/reconciliador.py:592`; `app/chamados/reconciliador.py:593`) |
-   | `reconciliar_geofence` | Delega a `retratar`; separa retorno verdadeiro de falso e só registra sucesso quando verdadeiro. (`app/ponto/services/geofence.py:444`; `app/ponto/services/geofence.py:448`; `app/ponto/services/geofence.py:449`) |
-   | `reconciliar_fantasmas` | Interrompe somente pelo motivo `competencia_entregue`. Uma recusa por `retencao` continua no resolver direto. (`app/ponto/management/commands/reconciliar_fantasmas.py:284`; `app/ponto/management/commands/reconciliar_fantasmas.py:288`) |
-   | Ramo HIST, antigo ponto `1685` | A cópia chama primeiro `reapontar_resolvedora` em `1700`, que grava destino e lavra; depois chama o resolver em `1706`. A guarda da costura permite o destino terminal quando a competência é entregue. (`app/chamados/reconciliador.py:1700`; `app/chamados/services/fio.py:824`; `app/chamados/services/fio.py:973`; `app/chamados/reconciliador.py:1706`) |
-   | `becos.py:55` | Chama diretamente o resolver depois das travas, sem consultar a cerca da retratação. O wrapper do resolver também só trata a via de tranca e adquire travas. (`app/chamados/services/becos.py:52`; `app/chamados/services/becos.py:55`; `app/chamados/services/disputa_emissao.py:2021`; `app/chamados/services/disputa_emissao.py:2027`) |
-   | S143 | Pode chamar o resolver após qualquer save elegível de encerramento; sua entrada não exige passagem por `retratar_com_motivo`. (`app/chamados/signals.py:104`; `app/chamados/signals.py:112`; `app/chamados/signals.py:124`) |
-
-   **Contorno concreto por retenção:** considere A elegível em fantasmas, com resposta completa sem veredito creditada a ele; e outra disputa aberta do mesmo colaborador, sem credor vivo, contendo Q entregue, morta, não validada nem materializada. A resposta retém A antes da cerca; o comando recebe `'retencao'` e chama o resolver. (`app/chamados/juizes.py:2115`; `app/chamados/reconciliador.py:449`; `app/chamados/reconciliador.py:564`; `app/ponto/management/commands/reconciliar_fantasmas.py:288`)
-
-   O resolver varre todas as disputas abertas do colaborador, seleciona Q, passa pela guarda de vitalidade e a carimba. Esse caminho escreve a pergunta entregue sem consultar o veto; `recusados_competencia_entregue` permanece zero porque só incrementa na recusa explícita da cerca. (`app/chamados/services/disputa_emissao.py:2168`; `app/chamados/services/disputa_emissao.py:1867`; `app/chamados/services/disputa_emissao.py:2182`; `app/chamados/services/disputa_emissao.py:2194`; `app/ponto/management/commands/reconciliar_fantasmas.py:285`)
-
-3. **Há classes reprovadoras presentes.**
-
-   - **Derivação paralela do fecho/alcance:** `_disputa_fecha_no_ato` chama C7 sobre uma lista reduzida, descartando perguntas apenas potencialmente escritas. O escritor consulta C7 sobre o estado real restante. Usar o mesmo juiz com universos diferentes não estabelece equivalência; o contraexemplo do item 6 mostra a divergência. (`app/chamados/services/disputa_emissao.py:1890`; `app/chamados/services/disputa_emissao.py:1892`; `app/chamados/services/disputa_emissao.py:2225`; `app/chamados/models.py:1943`)
-   - **Defesa 1:** não houve duplicação literal do predicado extraído: receptor e enumerador usam `defesa_1_reconcilia`. Entretanto, a previsão ignora o gate do pai, enquanto o receptor respeita sua recusa; isso amplia indevidamente o conjunto previsto como encerrado. (`app/chamados/signals.py:23`; `app/chamados/signals.py:41`; `app/chamados/services/disputa_emissao.py:1899`; `app/chamados/services/disputa_emissao.py:1909`; `app/chamados/signals.py:50`)
-   - **Escritor sem cerca:** continuam existindo entradas diretas ao resolver compartilhado; o problema demonstrado é ausência da proteção nessas entradas, embora o carimbo ainda passe pela porta `carimbar`. (`app/chamados/services/becos.py:55`; `app/chamados/services/disputa_emissao.py:2028`; `app/chamados/services/disputa_emissao.py:2194`)
-   - **Relógio:** a nova previsão consulta C7 sem fornecer um instante comum; C6 pode chegar a `date.today()`. Divergência efetiva numa virada temporal: **[não verificado]**. (`app/chamados/services/disputa_emissao.py:1892`; `app/chamados/models.py:1944`; `app/chamados/juizes.py:596`)
-   - **Ordem de trava:** no caminho protegido, a cerca usa a porta global antes da transição; essa porta adquire Colaborador → Disputa → Chamado → Pergunta. Inversão nova nesse trecho: **[não verificado]**. (`app/chamados/reconciliador.py:575`; `app/chamados/models.py:2781`; `app/chamados/models.py:2790`; `app/chamados/models.py:2803`; `app/chamados/models.py:2807`)
-   - **Valor com descrição incompleta:** `relatorio['recusados']` recebe qualquer retorno falso, incluindo `'transicao'`, embora a saída diga apenas “retenção ou competência ENTREGUE”. (`app/ponto/services/geofence.py:448`; `app/chamados/reconciliador.py:543`; `app/chamados/reconciliador.py:581`; `app/ponto/management/commands/reconciliar_geofence.py:46`)
-
-4. **Escritores e leitores dos valores alterados e dos principais campos usados na composição.**
-
-   | Campo/valor | Quem escreve/produz | Quem lê |
-   |---|---|---|
-   | `(bool, motivo)`: `'retencao'`, `'competencia_entregue'`, `'transicao'`, `None` | `retratar_com_motivo`, nos quatro retornos. (`app/chamados/reconciliador.py:567`; `:579`; `:581`; `:598`) | `_retratar` descarta o motivo; fantasmas o recebe e distingue somente competência. (`app/chamados/reconciliador.py:543`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`; `:284`) |
-   | Lista de empresas vetadas | Agrupamento por empresa e composição do veto. (`app/chamados/reconciliador.py:533`; `:538`) | Unidade de retratação e escritor da retenção. (`app/chamados/reconciliador.py:576`; `:578`; `:477`) |
-   | Trilha `retratacao_retida_competencia_entregue`; `empresas_vetadas`; ação/modelo/objeto/descrição | Payload em `registrar_retencao`; persistência por `evento`. (`app/chamados/reconciliador.py:477`; `:491`; `app/core/observ.py:134`) | Deduplicação lê o último `valor_depois`; teste conta a trilha. (`app/chamados/reconciliador.py:480`; `:487`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:174`) |
-   | `recusa_entregue` / `recusados_competencia_entregue` | Inicialização, incremento e publicação no comando. (`app/ponto/management/commands/reconciliar_fantasmas.py:169`; `:285`; `:321`) | Asserção do caso f. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:377`) |
-   | `relatorio['retratados'/'recusados']` | Serviço geofence acrescenta o PK conforme `ok`. (`app/ponto/services/geofence.py:448`) | Comando conta cada lista separadamente. (`app/ponto/management/commands/reconciliar_geofence.py:47`) |
-   | `perdeu`, `acusam`, total de ocorrências | Reavaliação geofence calcula e acrescenta os chamados sem premissa. (`app/ponto/services/geofence.py:433`; `:437`) | Aplicação e apresentação do comando; continuam representando perda de premissa. (`app/ponto/services/geofence.py:443`; `app/ponto/management/commands/reconciliar_geofence.py:35`) |
-   | `Chamado.status_local` | `_gravar_estado` atribui e salva. (`app/chamados/models.py:228`; `:296`) | Seleção HX e predicado da Defesa 1. (`app/chamados/services/disputa_emissao.py:1860`; `app/chamados/signals.py:23`) |
-   | `Disputa.fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` | Porta `fechar`. (`app/chamados/models.py:2023`; `:2027`) | Seleção HX e receptores do fecho. (`app/chamados/services/disputa_emissao.py:1856`; `app/chamados/signals.py:36`; `:172`) |
-   | `materializada_em`, `materializada_por`, `via_resolucao` | `_escrever_carimbo`, persistido por `carimbar`; S128, HX e S144 chamam essa porta. (`app/chamados/models.py:3220`; `:3273`; `app/chamados/services/disputa_emissao.py:2129`; `:2194`; `app/chamados/services/materializacao.py:2167`) | Seleções direta/HX/FECHO e C6. (`app/chamados/services/disputa_emissao.py:1832`; `:1845`; `:1948`; `app/chamados/juizes.py:1404`) |
-   | `respondida_em`, `resposta_colab`, `validada_em`, `validada_por` | `carimbar` pode completar instante/validação quando há texto; validação humana também grava seu par. (`app/chamados/models.py:3251`; `app/chamados/services/validacao.py:168`) | C21, C6 e seleções HX/âncoras. (`app/chamados/juizes.py:1552`; `:1405`; `app/chamados/services/disputa_emissao.py:1845`; `app/chamados/models.py:344`) |
-   | `data_evento`, `conversa` | Dia atribuído por `gravar_dia_do_fato`; nascimento informa conversa. (`app/chamados/services/fio.py:848`; `app/chamados/models.py:3134`) | Juiz do dia distingue conversa; cerca exclui conversa e consulta esse juiz. (`app/chamados/juizes.py:342`; `app/chamados/reconciliador.py:531`; `:534`) |
-   | `chamado_destino`, vínculo à disputa/célula | Nascimento da pergunta; costura pode trocar o destino. (`app/chamados/models.py:3134`; `app/chamados/services/fio.py:973`) | Direto, HX, previsão de fecho e âncoras. (`app/chamados/services/disputa_emissao.py:1831`; `:1865`; `:1891`; `app/chamados/models.py:345`) |
-   | `veredito_lavrado`, `julgado_em`, `janela_expira_em` | `lavrar`; S2 chama após mudança de estado, e a costura salva a mesma lavra. (`app/chamados/veredito_lavrado.py:270`; `app/chamados/models.py:312`; `app/chamados/services/fio.py:975`) | Fotografia dos testes observa os campos persistidos da pergunta. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:164`) |
-   | Justificativa `status`/`descricao`; ocorrência da retratação | Fix A rejeita justificativa pendente; a ocorrência passa por `nota.anexar_ocorrencia`. (`app/chamados/reconciliador.py:588`; `:592`; `:595`) | Retenção lê o status; teste de controle confere a rejeição. (`app/chamados/reconciliador.py:454`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:300`) |
-
-   Censo global exaustivo de todos os demais escritores desses campos fora dos caminhos examinados: **[não verificado]**.
-
-5. **Os testes têm mordida parcial; não demonstram uniformemente o motivo anunciado.** [nao verificado]
-
-   - **a/b/n:** `_pergunta` verifica C6 somente na instância recém-criada. O resolver recarrega perguntas e pula as vivas. Se a pergunta está morta apenas em memória, isso não invalida testar a recusa preventiva, mas invalida usar o caso como prova de que aquele S128/HX carimbaria a pergunta; a fotografia pode falhar só pela alteração do chamado ou justificativa. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:135`; `:162`; `:196`; `app/chamados/services/disputa_emissao.py:2083`; `:2109`; `:2182`)
-   - **b2:** a discrepância não elimina o caminho da relavra: S2 busca destino igual ao chamado e validação nula, sem exigir pergunta morta. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:272`; `app/chamados/models.py:309`)
-   - **c:** é controle positivo, esperado verde, não RED. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:288`)
-   - **h1/h2:** exercitam os pulos por pai/destino vivo, mas não cobrem a pergunta viva removida da projeção HX no contraexemplo do item 6. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:302`; `:311`; `app/chamados/services/disputa_emissao.py:1890`)
-   - **k/s:** exigem igualdade da própria pergunta entregue antes da fotografia geral, uma verificação mais específica. O caso **s**, porém, grava texto vazio com `respondida_em` preenchido: testa uma validada com par ilegal legado, e não uma resposta completa segundo C21. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:205`; `:334`; `:347`; `:357`; `app/chamados/juizes.py:1552`)
-   - **f:** corrige a célula no banco e verifica C6 por objeto fresco; **g** verifica especificamente a contagem de sucesso. O caso f não exercita o contorno por `'retencao'` demonstrado no item 2. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:371`; `:372`; `:393`; `app/ponto/management/commands/reconciliar_fantasmas.py:284`)
-   - **Anti-vacuidade:** o harness aceita mensagens amplas de `AssertionError`; portanto “morde” não significa necessariamente escrita da pergunta-alvo. As novas allowlists também dispensam a fiscalização dessas funções, sem provar equivalência com os escritores. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:455`; `app/chamados/tests/test_contract_leitores_vitalidade.py:103`; `:356`)
-
-   Pelo diff fornecido, a cerca já existia na base da volta; a/b/b2/n não constituem novos REDs dessa volta pela ausência da cerca. A nova exigência nesses casos inclui trilha/deduplicação. Execução contra a base e causa exata de cada falha: **[não verificado]**. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:203`; `:257`)
-
-6. **Sim: a superaproximação pode recusar retratação legítima em competência não entregue.**
-
-   Caminho específico pelo **destino que encerra**:
-
-   - A é cobrança duplicada de dia aberto; S é o sobrevivente válido do mesmo dia. Q viva aponta para A numa disputa dB cujo pai é B. O gate permite fechar A por dedup, reatando Q para S antes de gravar o encerramento. (`app/chamados/models.py:795`; `app/chamados/models.py:389`; `app/chamados/models.py:435`; `app/chamados/models.py:655`)
-   - No ato real, Q continua viva com destino S vivo: HX pula a disputa e C7 impede seu fecho; portanto a Defesa 1 não encerra B por esse caminho. (`app/chamados/juizes.py:1456`; `app/chamados/services/disputa_emissao.py:1865`; `app/chamados/models.py:1944`; `app/chamados/services/disputa_emissao.py:2225`)
-   - A previsão remove Q pelo destino **antigo A**, considera dB fechável e acrescenta B à cascata. Uma pergunta R entregue, de destino B, em disputa fechada, entra então no alcance previsto e veta A — embora B não fosse encerrado nem R relavrada pelo ato real. (`app/chamados/services/disputa_emissao.py:1891`; `:1911`; `:1938`; `:1942`; `app/chamados/reconciliador.py:538`)
-
-   Há também a variante HX: pergunta Q viva de escolha em dia aberto, sem credor vivo, e irmã R validada não materializada em dia entregue. A previsão remove Q como candidata HX e prevê fecho; o escritor pula Q viva e não fecha. R é acrescentada indevidamente pelo FECHO. (`app/chamados/services/disputa_emissao.py:1845`; `:1890`; `:1948`; `:2182`; `app/chamados/juizes.py:1405`; `app/chamados/models.py:1944`)
-
-   A recusa nesses exemplos depende de uma pergunta entregue indevidamente incluída. Se **todos** os dias enumerados forem conhecidos e não entregues, o veto retorna falso. (`app/chamados/services/fio.py:1365`)
-
-VEREDITO: REPROVA -- achados: contorno por retenção (`app/ponto/management/commands/reconciliar_fantasmas.py:288`); resolver sem cerca (`app/chamados/services/disputa_emissao.py:2028`); sobrealcance (`app/chamados/services/disputa_emissao.py:1891`); mordida inespecífica (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:455`).
-
-## 17/11 12:36 · sessao 09fa193ca3fa · - · - · origem=Ronald (tmux)
-
-Achados confirmados por leitura:
-
-1. **Enumeração e escrita efetiva diferem por sobrealcance.** `_ancoradas()` inclui pergunta sem destino ancorada pelo pai, mesmo materializada e em disputa fechada (`app/chamados/models.py:336`, `app/chamados/models.py:344`). O enumerador incorpora esse universo inteiro (`app/chamados/services/disputa_emissao.py:1942`). Contraexemplo: A vivo, d fechada com pai A, q entregue, materializada, não validada, sem destino e morta pelo C6. O resolver não a carimba diretamente, pois exige destino A, materialização nula e disputa aberta (`app/chamados/services/disputa_emissao.py:1830`); a tentativa de reabertura termina sem ato porque q está morta (`app/chamados/services/disputa_emissao.py:1968`); d fechada fica fora da varredura aberta (`app/chamados/services/disputa_emissao.py:1839`); a relavra S2 exige destino A (`app/chamados/models.py:309`). Mesmo assim, q veta A (`app/chamados/reconciliador.py:530`, `app/chamados/reconciliador.py:538`). Reprodução executada: [não verificado].
-
-2. **A projeção do fecho também produz falso positivo.** dX aberta sem pai, q de escolha viva, não validada e sem destino em competência aberta; r validada, não materializada, sem destino em competência entregue. HX seleciona somente q (`app/chamados/services/disputa_emissao.py:1845`, `app/chamados/services/disputa_emissao.py:1867`). O resolver real pula q viva (`app/chamados/services/disputa_emissao.py:2182`) e C7 impede fechar dX (`app/chamados/models.py:1944`). A preditora remove q como se HX a tivesse escrito (`app/chamados/services/disputa_emissao.py:1890`); r validada está morta pelo C6 (`app/chamados/juizes.py:1405`), logo prevê fecho e incorpora r (`app/chamados/services/disputa_emissao.py:1947`). A acaba recusada embora r não fosse tocada (`app/chamados/reconciliador.py:576`). Reprodução executada: [não verificado].
-
-3. **Variante pedida em Q6, pelo destino encerrando.** A é cobrança duplicada em competência aberta, sustentada por sobrevivente S do mesmo dia; q viva aponta inicialmente para A em dB com pai B. O gate permite dedup apoiado em S (`app/chamados/models.py:795`), planeja e aplica reaponte de q para S (`app/chamados/models.py:389`, `app/chamados/models.py:435`) antes de gravar A (`app/chamados/models.py:689`, `app/chamados/models.py:655`). Portanto, q permanece viva, destino S vivo impede HX e C7 segura dB (`app/chamados/juizes.py:1456`, `app/chamados/services/disputa_emissao.py:1865`, `app/chamados/models.py:1944`). A preditora, porém, elimina q pelo destino **antigo** A, presente em `encerrando` (`app/chamados/services/disputa_emissao.py:1891`), pode prever fecho de dB e incluir B na cascata (`app/chamados/services/disputa_emissao.py:1911`). Uma pergunta entregue r de destino B em disputa fechada passa a entrar no alcance projetado, embora B não fosse efetivamente encerrado (`app/chamados/services/disputa_emissao.py:1938`, `app/chamados/services/disputa_emissao.py:1942`). Assim pode recusar a retratação legítima aberta de A (`app/chamados/reconciliador.py:538`). Reprodução executada: [não verificado].
-
-4. **Defesa 1 não ganhou cópia literal do seu predicado de seleção:** ambos usam `defesa_1_reconcilia` (`app/chamados/signals.py:19`, `app/chamados/signals.py:41`, `app/chamados/services/disputa_emissao.py:1909`). Entretanto, a predição ignora deliberadamente o gate real de reconciliação do pai (`app/chamados/services/disputa_emissao.py:1899`), enquanto o receiver respeita sua recusa (`app/chamados/signals.py:50`). Isso acrescenta sobreaproximação ao alcance, além da diferença no universo fornecido a C7 (`app/chamados/services/disputa_emissao.py:1891`, `app/chamados/models.py:1943`).
-
-5. Ressuscitação pode reabrir disputas inicialmente fechadas (`app/chamados/models.py:1648`), enquanto `_disputas_do_resolver` parte das abertas e do direto anterior (`app/chamados/services/disputa_emissao.py:1873`). Um subalcance concreto decorrente dessa mutação não foi fechado nesta leitura: [não verificado].
-
-A recusa de uma retratação aberta nos contraexemplos depende de uma pergunta entregue acrescentada indevidamente ao alcance; se todos os dias enumerados forem conhecidos e não entregues, o veto retorna falso (`app/chamados/services/fio.py:1365`).
-
-**Conclusão do subexame: REPROVA por sobrealcance demonstrável no código; equivalência entre enumeração e escrita efetiva não se sustenta** (`app/chamados/services/disputa_emissao.py:1891`, `app/chamados/services/disputa_emissao.py:1942`, `app/chamados/services/disputa_emissao.py:2182`).
-
-_6570 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6583 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
