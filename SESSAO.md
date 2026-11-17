@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 09:09:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (198.5 MB). Acoes na janela: **495**.
+**Medido em 17/11/2026 09:14:52.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (198.5 MB). Acoes na janela: **492**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -502,6 +502,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:34:45 | Bash | Read Codex item 5 and 6 | `sed -n 36,60p /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/volta/c4/verif_c4c.r` |
 | 21:34:43 | Bash | Scan Codex response for caveats | `D=/home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/volta/c4; wc -c $D/verif_c4c.r; /bin/grep -niE 'ressalva\|nao verificado\|contra-exemplo\|risco\|morde\|mordida' $D/verif_c4c.r \| cut -c1-300 \| head -20; ls $D/ \| /bin/grep -iE 'opus\|verif_c4_v\|entrega'` |
 | 21:34:39 | Bash | Read verifier verdict and suite result | `D=/home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/volta/c4; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks/b3ijhuczb.output; /bin/grep -E '^(OK\|FAILED)($\| \()' $D/suite_pouso_c4c.log \| tail -1; /bin/grep -E '^Ran ' $D/suite_pouso_c4c.log \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' $D/suite_pouso_c4c.log \| head` |
-| 21:10:06 | Bash | Wait for c4c verifier and landing suite | `D=/home/ronald/saas-hasner/logs/BUG-PAR-O-PAR/volta/c4; while [ ! -f $D/verif_c4c.fim ] \|\| [ ! -f $D/suite_pouso_c4c.fim ]; do /usr/bin/sleep 15; done; tail -1 $D/verif_c4c.r; cat $D/suite_pouso_c4c.fim` |
-| 21:10:03 | Bash | Update RELATO wait line and state | `cd /home/ronald/saas-hasner; ps -o args= -p 1893305 \| cut -c1-100; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old='ESPERANDO: trava_teste.sh \| pid=1844372\n'; assert s.count(old)==1 new=('ESPERANDO: suite.sh \| pid=1893305\n' 'ESTADO 21:1x BUG-PAR-O-PAR c4c CONSTRUIDA (41f5648af sobre 31d352247; logs/BUG-PAR-O-PAR/volta/c4/entrega_c4c.md): suite de pouso anterior FAILED failures= ...` |
-| 21:09:52 | Bash | Launch landing suite on c4c copy | `cd /home/ronald/saas-hasner; D=logs/BUG-PAR-O-PAR/volta/c4; W=$(cat $D/copia_pouso_c4c.txt); cat > $D/lanca_pouso_c4c.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner bash bin/suite.sh --dir $W --motivo "pouso BUG-PAR-O-PAR-c4" > $D/suite_pouso_c4c.log 2>&1; echo "rc=\$?" > $D/suite_pouso_c4c.fim EOF setsid bash $D/lanca_pouso_c4c.sh </dev/null >/dev/null 2>&1 & /usr/bin/sleep 5; pgrep -f "suite.s ...` |

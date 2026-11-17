@@ -1,7 +1,18 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 09:10** · publicado em **17/11/2026 09:09** (UTC-3)
+> Ultima resposta processada: **17/11/2026 09:10** · publicado em **17/11/2026 09:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 09:10 · sessao ebb638ddcccf · - · - · origem=Ronald (tmux)
+
+Contagem dos rótulos `COL` positivos fornecidos: [nao verificado]
+
+| Rótulo | COL positivos | Soma das perguntas | `NUMERO` declarado |
+|---|---:|---:|---:|
+| `P1_A_candidatas_sem_nova_devolucao` / `P1_B_candidatas_com_devolucao` | 118 | 2145 | 2174 |
+| `P2_A_textos_divergentes_conservados` / `P2_B_textos_divergentes_substituidos` | 64 | 191 | 226 |
+
+As somas dos `COL` diferem dos `NUMERO` declarados em 29 para P1 e 35 para P2; a causa não aparece no dado. [nao verificado]
 
 ## 17/11 09:10 · sessao af563760d743 · - · - · origem=Ronald (tmux)
 
@@ -720,8 +731,4 @@ Execução Django/SQL, incidência em produção, contagens mencionadas em comen
 
 [truncado em 20000 de 35429 caracteres]
 
-## 17/11 08:19 · sessao 3c73bf371cb4 · PISTA-VOLTOU-1711 · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_6410 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6411 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
