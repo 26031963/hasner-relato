@@ -1,7 +1,120 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 11:00** · publicado em **17/11/2026 11:03** (UTC-3)
+> Ultima resposta processada: **17/11/2026 11:05** · publicado em **17/11/2026 11:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 11:05 · sessao 10256d37c037 · E4C-F1-B2 · verificador · origem=Code
+
+A consulta está antes da escrita, mas a cerca **não cobre exatamente a unidade**: há sobrealcance HX, subalcance pela Defesa 1 e contorno da recusa em fantasmas. (`app/chamados/reconciliador.py:557`; `app/chamados/services/disputa_emissao.py:1862`; `app/chamados/signals.py:43`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`.)
+
+**1. Posição correta; universo insuficiente e excessivo.**
+
+`_retratar` abre o atomic, chama `trava_na_ordem`, consulta a cerca e retorna antes de `transicionar_com_pauta`. O veto recebe uma lista deduplicada de dias por empresa, obtidos por `_dia_de_turno_da_pergunta`. (`app/chamados/reconciliador.py:519`; `app/chamados/reconciliador.py:549`; `app/chamados/reconciliador.py:556`; `app/chamados/reconciliador.py:559`.)
+
+A seleção direta é compartilhada com o resolvedor; inclui perguntas não materializadas de disputa aberta, inclusive validadas. As ancoradas abrangem também a relavra de destino não validado em disputa fechada. (`app/chamados/services/disputa_emissao.py:1827`; `app/chamados/services/disputa_emissao.py:1969`; `app/chamados/models.py:344`; `app/chamados/models.py:309`.)
+
+**Sobrealcance: pelo menos dois casos-base montáveis**, sem relação da pergunta ENTREGUE com o chamado A retratado:
+
+- Outra disputa aberta tem pai B vivo e pergunta ENTREGUE sem destino.
+- Outra disputa aberta tem pai ausente/terminal, pergunta ENTREGUE sem destino e uma irmã com destino C vivo.
+
+Ambos entram na cerca; o resolvedor pula o primeiro pelo pai vivo e o segundo pelo destino vivo. Tornando a pergunta ENTREGUE viva por célula acusadora, C7 impede também o fechamento final da disputa: A pode ser legitimamente retratado sem escrever nessa pergunta, mas a cerca recusa. São duas classes combináveis; número de ocorrências produtivas **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1862`; `app/chamados/services/disputa_emissao.py:2090`; `app/chamados/services/disputa_emissao.py:2094`; `app/chamados/juizes.py:1454`; `app/chamados/models.py:1944`; `app/chamados/reconciliador.py:527`.)
+
+**Subalcance bloqueante pela Defesa 1**, montável pelo encadeamento do código:
+
+- A é retratado; outra disputa dB aberta tem pai B vivo e uma pergunta morta de competência ABERTA.
+- O HX pula o carimbo de dB, mas o laço final ainda pode fechar dB: esse laço não conserva o pulo por credor vivo.
+- O fechamento dispara Defesa 1 e transiciona B.
+- Uma pergunta ENTREGUE, já materializada, não validada, em disputa dC FECHADA e com destino B ficou fora da enumeração de A; a transição de B relavra essa pergunta.
+
+C7 examina as perguntas de dB; a guarda de vivas de B exclui competência ENTREGUE. Portanto essas guardas não impedem o caminho. Execução integrada desse cenário **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1859`; `app/chamados/services/disputa_emissao.py:2091`; `app/chamados/services/disputa_emissao.py:2131`; `app/chamados/services/disputa_emissao.py:2148`; `app/chamados/models.py:1943`; `app/chamados/signals.py:43`; `app/chamados/models.py:364`; `app/chamados/models.py:309`.)
+
+**2. Zero escrita na recusa local; ordem local compatível.**
+
+No ramo que retorna pela nova cerca, chamado, justificativa, carimbo, lavra e ocorrência não são escritos: todos esses efeitos estão depois do retorno. Isso não garante zero escrita no chamador completo, especialmente no fallback de fantasmas descrito abaixo. (`app/chamados/reconciliador.py:558`; `app/chamados/reconciliador.py:559`; `app/chamados/reconciliador.py:571`; `app/chamados/reconciliador.py:572`; `app/chamados/reconciliador.py:574`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`.)
+
+A trava nova adquire Colaborador → Disputa → Chamado; perguntas, quando solicitadas, vêm por último. `_gravar_estado` e o envelope do resolvedor pedem o mesmo universo. Não identifiquei inversão nova nesses pontos; ausência universal de deadlock **[nao verificado]**. (`app/chamados/models.py:2781`; `app/chamados/models.py:2790`; `app/chamados/models.py:2803`; `app/chamados/models.py:2807`; `app/chamados/models.py:289`; `app/chamados/services/disputa_emissao.py:1943`.)
+
+Não se pode estender “zero escrita” a qualquer `False`: a retenção anterior pode registrar auditoria antes de entrar na cerca. (`app/chamados/reconciliador.py:545`; `app/chamados/reconciliador.py:484`.)
+
+**3. Quem escreve, quem lê e quem contorna.**
+
+O delta de produção acrescenta seleção, trava e consulta; as persistências continuam nas portas existentes. O mapa abaixo identifica os escritores e leitores pertinentes; exaustividade de todos os escritores históricos da cópia **[nao verificado]**. (`app/chamados/reconciliador.py:505`; `app/chamados/services/disputa_emissao.py:1848`.)
+
+| Campo | Escritores identificados | Leitores pertinentes |
+|---|---|---|
+| Pergunta `pk/disputa/conversa/chamado_destino/celula` | Nascimento: `app/chamados/models.py:3134`; reuso de célula/destino: `app/chamados/models.py:3085`, `app/chamados/models.py:3102` | Seleções: `app/chamados/services/disputa_emissao.py:1830`, `app/chamados/services/disputa_emissao.py:1860`; conversa: `app/chamados/reconciliador.py:520` |
+| Pergunta `data_evento` | Ponto de atribuição: `app/chamados/services/fio.py:848` | Cerca: `app/chamados/reconciliador.py:523`; dia: `app/chamados/juizes.py:342`; veto: `app/chamados/services/fio.py:1365` |
+| Chamado `pk/colaborador_id` | Nascimento: `app/chamados/models.py:1018` | Trava/carga HX: `app/chamados/reconciliador.py:556`; `app/chamados/services/disputa_emissao.py:1862` |
+| Disputa `colaborador/chamado` | Nascimento: `app/chamados/services/disputa_emissao.py:601` | Seleção HX: `app/chamados/services/disputa_emissao.py:1839`; credor vivo: `app/chamados/services/disputa_emissao.py:2090` |
+| Colaborador `empresa_id` | Edição/transferência: `app/colaboradores/views.py:1335`, `app/colaboradores/views.py:1417` | Agrupamento da cerca: `app/chamados/reconciliador.py:522` |
+| Disputa `fechada_em/por/resolucao/motivo_fechamento` | Fechar: `app/chamados/models.py:2023`; reabrir: `app/chamados/models.py:2240`, `app/chamados/models.py:2264` | Seleções: `app/chamados/services/disputa_emissao.py:1833`, `app/chamados/services/disputa_emissao.py:1839`; receivers: `app/chamados/signals.py:29`, `app/chamados/signals.py:131` |
+| Pergunta `materializada_em/por/via_resolucao` | Atribuição: `app/chamados/models.py:3218`; persistência: `app/chamados/models.py:3273`; limpeza em lote: `app/chamados/models.py:3402` | Seleção: `app/chamados/services/disputa_emissao.py:1845`; C6: `app/chamados/juizes.py:1389`; preservação de autoria: `app/chamados/models.py:3304`; histórico: `app/chamados/services/historico.py:103` |
+| Pergunta `respondida_em/resposta_colab/validada_em/por` | Complementação pelo carimbo: `app/chamados/models.py:3251`; limpeza na ressuscitação: `app/chamados/models.py:1639` | C21: `app/chamados/juizes.py:1552`; universo de ressuscitação: `app/chamados/models.py:1533`, `app/chamados/models.py:1546`; histórico: `app/chamados/services/historico.py:99` |
+| Pergunta `veredito_lavrado/julgado_em/janela_expira_em` | `app/chamados/veredito_lavrado.py:270`; lote: `app/chamados/veredito_lavrado.py:250` | `esta_stale`: `app/chamados/veredito_lavrado.py:224`, `app/chamados/veredito_lavrado.py:228` |
+| Chamado `status_local/resolvido_em/via_encerramento/atualizado_em` | `_gravar_estado`: `app/chamados/models.py:228`, `app/chamados/models.py:296` | Gate/recarga: `app/chamados/models.py:674`, `app/chamados/models.py:761`; via no resolvedor: `app/chamados/services/disputa_emissao.py:1964`; leitor específico de apresentação de `atualizado_em`: **[nao verificado]** |
+| Chamado `urgencia/urgencia_original` | Rebaixamento/restauração: `app/chamados/models.py:246`, `app/chamados/models.py:250` | Restauração: `app/chamados/models.py:250` |
+| Justificativa `status/descricao` | `app/chamados/reconciliador.py:568` | Status nas portas DP: `app/ponto/services/justificativa.py:143`, `app/ponto/services/justificativa.py:278`; leitor específico do sufixo da descrição: **[nao verificado]** |
+| Ocorrência `chamado/autor/conteudo/anexo_hash` | `app/chamados/services/nota.py:88`, `app/chamados/services/nota.py:103` | Histórico: `app/chamados/services/historico.py:80` |
+| Auditoria de estado | `app/chamados/models.py:292` | Histórico: `app/chamados/services/historico.py:86` |
+| Decisão da ressuscitação | `app/chamados/models.py:1621` | Projeção do histórico decisório: `app/chamados/juizes.py:1382` |
+
+Os caminhos pedidos têm estas diferenças:
+
+| Caminho | Alcance sem a cerca de `_retratar` |
+|---|---|
+| Fantasmas | Seleciona chamados VIVOS e, após `False`, chama diretamente o resolvedor. O resolvedor não exige estado encerrado; pode carimbar mortas ENTREGUE e o comando ainda pode anexar ocorrência. `app/ponto/management/commands/reconciliar_fantasmas.py:157`, `:280`, `:286`; `app/chamados/services/disputa_emissao.py:1964`, `:2045`, `:2117` |
+| Órfãs/HIST | Conserva explicitamente o caminho anterior para ENTREGUE e chama o resolvedor. `app/chamados/reconciliador.py:1627`, `:1685` |
+| Becos | Seleciona pai/destinos terminais e chama o resolvedor. `app/chamados/services/becos.py:21`, `:44`, `:55` |
+| S143 | Exige ENCERRADOS e save de status; chama o resolvedor sem a nova cerca. `app/chamados/signals.py:97`, `:105`, `:117` |
+| Defesa 1 | Chama `reconciliar` diretamente; pode alcançar a relavra ENTREGUE descrita no item 1. `app/chamados/signals.py:43`; `app/chamados/models.py:655`, `:309` |
+
+Pelo delta fornecido, esses escritores e seleções são preexistentes; a extração dos filtros preserva o alcance anterior. A cerca cria **uma causa nova para “chamado ainda aberto + resolvedor direto”**: antes, nessa mesma tentativa bem-sucedida, a retratação transicionava; agora o veto devolve `False` e aciona o fallback. Comparação independente com o objeto Git de `708162b15` **[nao verificado]**. (`app/chamados/reconciliador.py:557`; `app/ponto/management/commands/reconciliar_fantasmas.py:280`; `app/chamados/services/disputa_emissao.py:1969`.)
+
+**4. Recusa silenciosa: sem laço infinito demonstrado, com repetição e relatório falso.**
+
+- Os dois reconciliadores contam somente `True`; `False` não entra em `falhas`. O consumidor pode marcar o evento como processado apesar da recusa. (`app/chamados/reconciliador.py:1040`; `app/chamados/reconciliador.py:1501`; `app/chamados/reconciliador.py:1431`; `app/chamados/reconciliador.py:1438`.)
+- Justificativa devolve o booleano; aprovação e fechamento do chamado continuam sendo resultados distintos. A aprovação já salva antes da tentativa de encerramento. (`app/ponto/services/justificativa.py:46`; `app/ponto/services/justificativa.py:205`; `app/ponto/services/justificativa.py:217`.)
+- Grade registra `RETRACT` antes da chamada e ignora seu retorno; imprime o plano sem separar recusas. (`app/ponto/management/commands/reconciliar_grade.py:303`; `:309`; `:318`.)
+- Vínculo conta e anuncia apenas sucessos: esse contador permanece correto. (`app/ponto/management/commands/reconciliar_vinculo.py:68`; `:83`; `:84`.)
+- **Geofence anuncia sucesso falso:** devolve todos os candidatos `perdeu`, inclusive recusados, e imprime seu tamanho como “chamados reconciliados”. (`app/ponto/services/geofence.py:434`; `:441`; `:448`; `app/ponto/management/commands/reconciliar_geofence.py:44`.)
+- Alertas de turno ignora `False` e relata somente exceções. (`app/ponto/management/commands/processar_alertas_turno.py:216`; `:219`.)
+
+Esses trechos percorrem candidatos, sem repetir sincronamente até obter `True`. Como a recusa conserva o chamado vivo, novas invocações podem repetir o trabalho; frequência e custo produtivos **[nao verificado]**. (`app/chamados/reconciliador.py:1032`; `:1493`; `:558`; `app/ponto/services/geofence.py:440`.)
+
+**5. Semântica do dia correta, com distinção explícita da conversa.**
+
+Para pergunta de fato, `_dia_de_turno_da_pergunta` retorna justamente `data_evento`, cujo contrato é dia do turno. Conversa grava dia civil e retorna `None` nesse juiz. O veto espera o dia usado na janela da empresa, não o mês civil nem o timestamp da batida. (`app/chamados/juizes.py:338`; `app/chamados/models.py:2898`; `app/chamados/models.py:2911`; `app/chamados/services/vigia_fio.py:802`.)
+
+A exclusão de conversas usa o mesmo discriminador de `q_do_horizonte`; não reproduz seu recorte completo, que também exige data maior ou igual ao horizonte. Dia ausente recusa por `is not False`, conservando o significado de `None` do veto. (`app/chamados/reconciliador.py:520`; `:527`; `app/chamados/services/fio.py:1463`; `:1365`.)
+
+**6. RED e mutantes: desenho verificável; execução Django não certificada.**
+
+A matriz exigida pelo selo é esta; suas mortes efetivas nesta cópia **[nao verificado]**:
+
+| Mutante | Casos que devem morrer por asserção |
+|---|---|
+| `sem_cerca` | a, b, b2, n |
+| `so_direto` | b, b2 |
+| `if_veto` | n |
+
+Os patches fazem essas alterações; nenhum é equivalente ao original no domínio exercitado. O harness só aceita `AssertionError` com mensagem da recusa: erro operacional não conta como mordida. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:46`; `:249`; `:252`; `:255`; `:242`.)
+
+A fotografia compara linhas completas das quatro entidades principais; decisões, pautas, ocorrências e auditoria são verificadas somente por contagem. Os casos não exercitam sobrealcance HX, cascata por outro pai nem o chamador fantasmas. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:125`; `:155`; `:206`.)
+
+Executei os dois mutantes reancorados em memória, com bytecode desativado: **cada execução apresentou `Ran 1`, rc=0 e morte por `AssertionError`**. `funde_perdendo_validadas` mantém a substituição pela seleção ancorada; `evento_volta_varredura_global` mantém a varredura global, agora localizada no resolvedor. O harness exige alvo único, original verde e falha sem erro operacional. (`app/chamados/tests/test_e4b_classe_e_memoria.py:38`; `:143`; `:1043`; `:1050`; `:1057`.)
+
+A ALLOWLIST cresceu duas seleções extraídas dos mesmos escritores, sem novo persistidor. Entretanto elas agora também são **leitores da cerca**: a justificativa “mesmo escritor” não demonstra que a nova enumeração seja exata. (`app/chamados/tests/test_contract_leitores_vitalidade.py:101`; `:102`; `app/chamados/services/disputa_emissao.py:1859`; `:1864`.)
+
+Suíte Django inteira, pista, hashes de sombra e mortes executadas dos três mutantes da cerca: **[nao verificado]**. [nao verificado]
+
+**7. Classes de reprovação.**
+
+Não identifiquei segundo juiz de competência nem novo persistidor: a consulta reutiliza o veto e as escritas continuam nas portas existentes. Há, porém, **escritor indireto sem cobertura**, **derivação de alcance excessiva** e **selo sem cobertura desses contraexemplos**. (`app/chamados/reconciliador.py:517`; `app/chamados/signals.py:43`; `app/chamados/models.py:309`; `app/chamados/services/disputa_emissao.py:1862`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:206`.)
+
+A ordem local de trava está preservada. O campo com dois significados, `data_evento`, é discriminado por `conversa` neste delta. Quanto ao relógio, a enumeração chama o universo de ressuscitação, que consulta C6 sem instante explícito; o fallback de relógio da máquina continua alcançável. Estabilidade atravessando a borda temporal **[nao verificado]**. (`app/chamados/reconciliador.py:556`; `app/chamados/juizes.py:342`; `app/chamados/services/disputa_emissao.py:1820`; `app/chamados/models.py:1564`; `app/chamados/juizes.py:596`.)
+
+VEREDITO: REPROVA -- subalcance pela Defesa 1 em app/chamados/signals.py:43 e app/chamados/models.py:309; sobrealcance HX em app/chamados/services/disputa_emissao.py:1862; contorno da recusa em app/ponto/management/commands/reconciliar_fantasmas.py:281; sucesso falso em app/ponto/management/commands/reconciliar_geofence.py:44
 
 ## 17/11 11:00 · sessao 30209424bfb1 · - · - · origem=Ronald (tmux)
 
@@ -587,34 +700,4 @@ O custo adicional no app continua pendente: a consulta não faz prefetch de deci
 
 VEREDITO por item: 1 CONFERE; 2 PROCEDE; 4 PROCEDE
 
-## 17/11 10:30 · sessao 5ce08cc5d9ea · - · - · origem=Ronald (tmux)
-
-F2 exige origem **nominal de ressuscitação**; `ato_por=sistema` não distingue o evento: a ausência rejeitada já grava REABERTURA pelo usuário sistema para devolver ao colaborador (`app/chamados/services/materializacao.py:1158`, `:1167`). `DecisaoPergunta` atualmente não possui campo de origem (`app/chamados/models.py:4110`).
-
-Censo consolidado:
-
-| Leitor | Local | F1 / F2 |
-|---|---|---|
-| Resposta/validação vigentes | `app/chamados/models.py:4230` | F1 exige reconhecimento; F2 já limpa ambos. |
-| Face SQL de validação | `app/chamados/models.py:3500` | F1 exige inclusão; F2 já reconhece. |
-| Histórico anterior | `app/chamados/models.py:3750` | F1 exige reconhecimento e compatibilidade da foto; F2 já reconhece REABERTURA. |
-| Fila por última decisão | `app/chamados/services/tarefa_do_dia.py:159` | Ambos precisam preservar a decisão anterior para a fila. |
-| Rótulo BUG-PAR | `app/chamados/services/materializacao.py:275` | Só lê DEVOLUCAO com prefixo; ignora ambos. |
-| Backfill SILENCIO | `app/chamados/management/commands/backfill_decisoes_pergunta.py:99`, `:315` | Só considera SILENCIO/VALIDACAO; ressuscitada sai do universo ao limpar via/materialização (`:101`). |
-| Foto E4b | `app/chamados/services/foto_e4b.py:280` | Captura ambos independentemente do tipo. |
-
-Leitores indiretos que herdam o resultado, sem precisar de alteração própria:
-
-- `estado`, `respondida`, `resposta_display`: `app/chamados/models.py:3184`, `:3735`, `:3759`.
-- Respostas sem veredito: `app/chamados/models.py:1953`; wrapper `:1928`; CSF `app/ponto/supra_juiz.py:573`; irmãs `app/chamados/juizes.py:2117`; fechar `app/chamados/models.py:1964`, `:1997`; reconciliador `app/chamados/reconciliador.py:1166`; desligamento `app/colaboradores/services/desligamento.py:165`.
-- Âncoras e relavra S2: `app/chamados/models.py:357`, `:315`.
-- C6 lê a projeção, não os atos: `app/chamados/juizes.py:1389`, `:1404`; relavra usa esse juiz (`app/chamados/services/relavra_via.py:242`).
-- Consumidores de `q_vivas`: `app/chamados/juizes.py:1763`; `app/chamados/services/fio.py:256`; `janela_colab.py:63`; `vigia_fio.py:711`; `raiox.py:74`; `cobranca.py:237`; `pergunta_no_app.py:53`; `app/ponto/services/veredito_celula.py:181`.
-- API: `app/api/views.py:2550`, `:2562`, `:2578`; outra exposição de display em `:1164`.
-- Histórico: wrapper `app/chamados/services/disputa_emissao.py:2123`; apresentação `app/templates/chamados/partials/modal_fio.html:205`, `:212`.
-- Templates de resposta: `app/templates/chamados/partials/modal_fio.html:217`; `_pergunta_card.html:29`; `_card_atendimento.html:106`.
-- App continua sem prefetch de decisões na consulta, enquanto a serialização pede `estado` e `resposta_display`: `app/chamados/services/pergunta_no_app.py:52`, `app/api/views.py:2550`, `:2562`.
-
-Contagem por **leitor lógico**, incluindo os dois leitores que compartilham `_LIMPAM_VALIDACAO`: F1 = **4**; F2 = **1**, alterando a seleção da última decisão em `CargaDaTarefa.carregar`, com identificação exclusiva da ressuscitação. A evidência dos pontos de reconhecimento está em `app/chamados/models.py:3500`, `:3750`, `:4230` e `app/chamados/services/tarefa_do_dia.py:159`.
-
-_6483 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6484 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
