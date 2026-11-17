@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 00:25:48.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (184.4 MB). Acoes na janela: **998**.
+**Medido em 17/11/2026 00:31:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (184.4 MB). Acoes na janela: **995**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1005,6 +1005,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:39:31 | Bash | Gather file lists of in-flight obras | `cd /home/ronald/saas-hasner; echo BUGPAR; git diff --name-only $(git merge-base main bugpar-main-095024) bugpar-main-095024 \| head -30; echo F4; grep -o 'app/[a-z_/]*\.py\\|[a-z_]*/[a-z_/]*\.py' logs/ESPINHA-BRIEFS/F4/matriz.md \| sort -u \| head -30; echo F2; grep -o '[a-z_]*/[a-z_/]*\.py' logs/ESPINHA-BRIEFS/F2/matriz.md \| sort -u \| head -30; ls logs/ESPINHA-BRIEFS/` |
 | 12:39:26 | Bash | Read prior censo launcher and BACKLOG estado | `cd /home/ronald/saas-hasner; cat logs/O10-D-PERMUTA-NA-TELA/lancar_censo_v2.sh; head -c 1500 logs/O10-D-PERMUTA-NA-TELA/censo_v2.q; echo; sed -n 2177p app/docs/BACKLOG.md \| awk -F' \\\| ' '{print $3}'` |
 | 12:39:23 | Bash | Orient on O10-D files and BACKLOG row | `cd /home/ronald/saas-hasner; date +%H:%M; ls logs/O10-D-PERMUTA-NA-TELA/ \| head -30; wc -c logs/O10-D-PERMUTA-NA-TELA/censo_v2.r; grep -n 'O10-D-PERMUTA-RECIPROCA' app/docs/BACKLOG.md \| cut -c1-200; tail -3 logs/E4C/f1nova/b1/c3/push.log \| cut -c1-200` |
-| 12:26:29 | Bash | Record F2 state and despacho in RELATO | `cd /home/ronald/saas-hasner; ps -p 551196 -o pid= ; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p,encoding='utf-8').read() a="ESPERANDO: push.sh \| pid=551196\n" b=a+"ESTADO 12:26 F2 L1 RE-MEDIDA POS-F1: RESIDUAL, nao MOOT (Codex rel.r @4e364a414, amostra 4/4: valor nao conservado, descarimbar apaga chamados/models.py:3314-3320; projecao le o campo atual chamados/juizes.py:1389-1400; premissa ...` |
-| 12:26:00 | Bash | Check construtor launch log | `sleep 20; cd /home/ronald/saas-hasner; cat logs/CORTES-F2-F9-1611/f2_pos_f1/reds.log \| tail -8; pgrep -af 'codex exec\|codex --sandbox' \| cut -c1-150` |
-| 12:25:49 | Bash | Rename worktree and relaunch construtor | `cd /home/ronald/saas-hasner; D=logs/CORTES-F2-F9-1611/f2_pos_f1; OLD=$(cat $D/wt_reds.txt); NEW=/home/ronald/wt-codex-cortes-f2-f9-1611-122527; git worktree move $OLD $NEW && echo $NEW > $D/wt_reds.txt; sed -i "s#$OLD#$NEW#" $D/lanca_reds.sh; rm -f $D/reds.log $D/reds.fim; setsid nohup $D/lanca_reds.sh >/dev/null 2>&1 < /dev/null & sleep 8; head -3 $D/reds.log` |
