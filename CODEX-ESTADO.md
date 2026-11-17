@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 09:04** · publicado em **17/11/2026 09:04** (UTC-3)
+> Ultima resposta processada: **17/11/2026 09:10** · publicado em **17/11/2026 09:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 09:10 · sessao af563760d743 · - · - · origem=Ronald (tmux)
+
+P1: **118 col** com valor positivo; soma dos `COL`: **2145**. O `NUMERO P1_A_candidatas_sem_nova_devolucao` fornecido é **2174**. [nao verificado]
+
+P2: **64 col** com valor positivo; soma dos `COL`: **191**. O `NUMERO P2_A_textos_divergentes_conservados` fornecido é **226**. [nao verificado]
+
+As somas por `COL` não coincidem com os respectivos `NUMERO` no dado transcrito. [nao verificado]
 
 ## 17/11 09:04 · sessao 29e3e1889e9d · E4C-F2 · verificador · origem=Code
 
@@ -716,15 +724,4 @@ Execução Django/SQL, incidência em produção, contagens mencionadas em comen
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 17/11 08:19 · sessao 0cef7d1edeea · - · - · origem=Ronald (tmux)
-
-- **Pré-opus** = suíte **inteira da árvore da obra verde antes do opus final**; não basta recorte, nem suíte rodada depois da leitura final. A regra não exige VM explicitamente: `CLAUDE.md:377-378`; `app/docs/PISTA.md:113-114`.
-- **Não concluir colisão automática entre pré-opus na pista e pouso certificado na VM.** O contrato antigo dizia pista não certificar nem pré-opus (`app/docs/BACKLOG.md:2098`), mas registro posterior diz expressamente “PISTA-2 certifica pre-opus” (`app/docs/BACKLOG.md:2266`). O precedente de lateral também separa pista e certificação de pouso na VM: `app/docs/CORTES.md:493`. Isso exige reconhecer a evolução documental, sem transportar a proibição antiga como absoluta.
-- **SUITE-UMA-VEZ-POR-ARVORE:** a parte operativa exige identidade da árvore, ausência de mudanças em `.py` entre veredito e merge, `cmp` contra a cópia e uma suíte para comboio; árvore diversa não herda certificação: `CLAUDE.md:320-324`; `app/docs/PISTA.md:35-38`. Duas execuções determinadas pelo arranjo pista/VM não são, por si, violação provada; o precedente da VM após pista está em `app/docs/CORTES.md:493`.
-- **VM antes do pouso:** pode certificar o pouso e ser a suíte pré-opus se ocorrer **antes** desse opus, inteira e verde da mesma árvore (`CLAUDE.md:377-378`, `CLAUDE.md:320-321`). Se ocorrer depois, não sana retroativamente pré-opus ausente, recortado, vermelho ou de outra árvore (`app/docs/PISTA.md:113-114`, `app/docs/PISTA.md:38`).
-- **PISTA-2 item 2:** o literal vigente permite espinha nas duas quando “VM livre e pista livre”, enquanto o item 3 proposto envia à pista com VM ocupada/fila. Há mudança operacional delimitada que precisa ser lida como exceção do novo complemento; não é dedutível da regra anterior: `app/docs/CORTES.md:490`.
-- **“2 construtores”** mede vagas/papéis de construção simultâneos, teto padrão `1 opus + 1 Codex`; medidas, censos, sondas e RED por exemplo ficam fora desse teto (`app/docs/LEIS.md:147`). O teto é conferido antes de abrir (`CLAUDE.md:291-292`); o wrapper guarda apenas um Codex construtor por repositório e não guarda o limite de opus (`CLAUDE.md:355-356`). “Dois construtores da espinha abertos agora”, com nomes e obras, não foi demonstrado pelo dado colado: `[nao verificado]`.
-- **Decisor da rota:** decisões técnicas e encaixe de raia são do Code (`CLAUDE.md:276-281`). A rota em `suite.sh` continua apenas registrada, construção mediante novo aval; até lá, conduta (`app/docs/BACKLOG.md:2100`). Não atribuir decisão automática a esse script.
-- **Estado externo:** `app/docs/BACKLOG.md:2101` e `app/docs/RELATO.md:99` registram censo parcial e peças faltantes; são registros da cópia, não medições atuais desta revisão. Não afirmar paridade atual da pista como provada.
-
-_6409 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6410 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
