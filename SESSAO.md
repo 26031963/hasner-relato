@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 01:25:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (186.1 MB). Acoes na janela: **998**.
+**Medido em 17/11/2026 01:30:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (186.1 MB). Acoes na janela: **996**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1006,5 +1006,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:43:32 | Bash | Locate u163.py | `cd /home/ronald/saas-hasner; find logs -name 'u163.py' 2>/dev/null;` |
 | 13:43:30 | Bash | Find missing data file reference | `cd /home/ronald/saas-hasner/logs/BUG-PAR-O-PAR; grep -n "u163\\|0486b005\\|U60\\|U103\\|json" volta/volta.q volta/brief.md 2>/dev/null \| head -20; grep -rln "0486b005" . 2>/dev/null \| head; ls volta/` |
 | 13:43:26 | Bash | Inspect volta constructor output | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks/bw4gzx8y5.output; W=$(cat logs/BUG-PAR-O-PAR/volta/wt_volta.txt); echo $W; git -C $W log --oneline -6; git -C $W status --porcelain \| head; wc -l logs/BUG-PAR-O-PAR/volta/volta.r; head -60 logs/BUG-PAR-O-PAR/volta/volta.r \| cut -c1-300` |
-| 13:26:16 | Bash | Record item 2 and 3 results | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p,encoding='utf-8').read(); a="ESPERANDO: codex_pergunta.sh \| pid=691058\n" b=a+"""ESTADO 13:5x COMPLEMENTO-1 item 2 FECHADO: logs/UI-VINCULO-CALENDARIO/calendarios_incompletos.md (sonda prod leitor, rc 0, raspagem 0 vazamento): 72 calendarios dias_mes em uso, 68 com grade vazia, 77 vinculos ativos afetados, por uso, co ...` |
-| 13:26:02 | Bash | Read list and leitura results | `cd /home/ronald/saas-hasner/logs/UI-VINCULO-CALENDARIO; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/5a24b180-cd5d-4594-80c3-6d074cee70cf/tasks/b1sc0l3o9.output; wc -l calendarios_incompletos.md; tail -40 leitura_folga_celula.r \| cut -c1-400` |

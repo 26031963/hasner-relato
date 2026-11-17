@@ -1,7 +1,165 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 01:25** · publicado em **17/11/2026 01:25** (UTC-3)
+> Ultima resposta processada: **17/11/2026 01:27** · publicado em **17/11/2026 01:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 01:27 · sessao a1991c3094f8 · PREPARA-F2-F4-F7 · sonda · origem=Code
+
+**Os números não mudam a entrega: lei 0 nova; RED que morde 3.** Eles dimensionam o estoque e derrubam a inferência “uma U163 entregue na fila ⇒ uma que hoje plantaria”. Não demonstram execução dos três RED. (`app/docs/RELATO.md:17`; resultados da sonda [nao verificado])
+
+Na cópia atual, lista e contador já constam respondidos por complemento; permanece devolvida a condição completa do RED. Essa atualização vem do registro do corte, não dos números. (`app/docs/RELATO.md:5`, `app/docs/RELATO.md:8`)
+
+Os valores abaixo são os fornecidos no **DADO RASPADO**, sem verificação independente: **[nao verificado]**. As referências sustentam sua interpretação pelo código. Uso estas abreviações, com equivalência literal `sigla:n = arquivo:linha`:
+
+| Sigla | Arquivo |
+|---|---|
+| M | `app/chamados/services/materializacao.py` |
+| MD | `app/chamados/models.py` |
+| J | `app/chamados/juizes.py` |
+| V | `app/chamados/services/validacao.py` |
+| BF | `app/chamados/management/commands/backfill_decisoes_pergunta.py` |
+| BP | `app/chamados/management/commands/bug_par_103.py` |
+| U | `app/chamados/services/universo_bug_par.py` |
+
+**SCRIPT 1 — lacunas e pré-backfill, seção 4.**
+
+| Rótulo | Valor | O que responde |
+|---|---:|---|
+| `integral_linhas_resposta` | 16941 | **Dimensiona** lacunas RESPOSTA por correspondência de pergunta/ato/instante; não mede divergência de texto. (`MD:4094`, `MD:4098`) |
+| `integral_linhas_resposta_em_validadas_nao_materializadas` | 96 | **Confirma** lacuna RESPOSTA também nesse recorte operacional. (`MD:4098`, `M:2063`) |
+| `integral_linhas_validacao` | 15115 | **Dimensiona** lacunas VALIDACAO por correspondência de pergunta/ato/instante. (`MD:4102`) |
+| `integral_linhas_validacao_em_validadas_nao_materializadas` | 96 | **Confirma** lacuna VALIDACAO nesse recorte; não somar às 96 anteriores como perguntas distintas. (`MD:4098`, `MD:4102`) |
+| `integral_perguntas_examinadas` | 50447 | **Dimensiona** o denominador informado; seleção integral exata da sonda [nao verificado]. |
+| `recorte_oficial_linhas_resposta` | 2992 | **Dimensiona** o backfill oficial, cujo recorte inclui horizonte, sem dia e conversa; difere do integral. (`BF:55`, `BF:59`, `BF:67`) |
+| `recorte_oficial_linhas_validacao` | 2248 | **Dimensiona** a mesma pendência oficial para VALIDACAO. (`BF:59`, `BF:67`, `MD:4102`) |
+| `recorte_oficial_nao_entregue_resposta` | 2992 | **Dimensiona:** igual ao total oficial RESPOSTA; não demonstra lacuna entregue nesse recorte. Critério exato dessa classificação [nao verificado]. |
+| `recorte_oficial_nao_entregue_validacao` | 2248 | **Dimensiona:** igual ao total oficial VALIDACAO; mesma limitação. Critério exato [nao verificado]. |
+
+**O pré-backfill não está satisfeito como “zero lacunas”.** Tampouco cabe usar o integral como quantidade autorizada do backfill oficial: o comando tem recorte próprio. (`MD:4081`, `BF:55`; valores [nao verificado])
+
+**SCRIPT 2 — contador, seção 4 e OPUS-C4-B da seção 5.**
+
+| Rótulo | Valor | O que responde |
+|---|---:|---|
+| `contador_aplicaveis` | 40 | **Dimensiona** perguntas cuja testemunha diz `aplicavel`; não prova validação ou plantio. (`M:340`) |
+| `contador_bug_par_103` | 19 | **Dimensiona** carimbadas elegíveis ainda devolvíveis, com competência não entregue. (`M:326`, `M:330`, `M:336`) |
+| `contador_bug_par_103_pauta_dp` | 84 | **Dimensiona** carimbadas elegíveis separadas por competência entregue. (`M:333`) |
+| `contador_bug_par_103_sem_dia` | 0 | **Dimensiona** ausência de exemplar nesse balde; não derruba o RED estrutural sem dia. (`M:331`, `M:795`) |
+| `contador_congelados_no_recorte` | 163 | **Confirma** presença do universo congelado no recorte; pertencimento vem do arquivo fechado. (`M:321`, `M:356`, `U:30`) |
+| `contador_delta_conservacao` | 0 | **Confirma** conservação aritmética: `79 + 0 + 84 + 0 = 163`. (`M:316`) |
+| `contador_espera_declarado` | 9 | **Dimensiona** a espera declarado×gravado, que impede tratar todo pendente como plantável. (`M:344`, `M:741`) |
+| `contador_legitimas` | 10 | **Dimensiona** testemunhas `bloqueada_paridade`. (`M:342`) |
+| `contador_n_aplicaveis` | 40 | **Confirma** o mesmo tamanho de `contador_aplicaveis`; não são outras 40. (`M:352`, `M:353`) |
+| `contador_outras` | 1 | **Dimensiona** outro estado da testemunha; estado individual [nao verificado]. (`M:347`) |
+| `contador_pendentes_aval` | 79 | **Confirma** `60 + 19`; mede espera do admin, não promessa de plantio. (`M:314`, `M:356`) |
+| `contador_resolvidas` | 0 | **Dimensiona** o estado atual; não demonstra a transição exigida pelo OPUS-C4-B. (`M:327`) |
+| `contador_universo` | 60 | **Confirma** a partição corrente `40 + 10 + 9 + 1`; não é o total congelado U163. (`M:351`) |
+
+O OPUS-C4-B **continua sem prova da transição pela autoridade real**: a fotografia acima não executa `pendentes 1→0 / resolvidas 0→1`. O teste existente verifica essa transição, mas sua fixture instala `competencia_entregue=False`. (`app/chamados/tests/test_bug_par_volta.py:463`, `app/chamados/tests/test_bug_par_volta.py:468`, `app/chamados/tests/test_bug_par_projetado.py:51`)
+
+**SCRIPT 2 — lista textual, seção 4 e RED da lista na seção 5.**
+
+| Rótulo | Valor | O que responde |
+|---|---:|---|
+| `pauta_comando_linhas` | 1178 | **Dimensiona** a saída textual; não são 1178 U163 nem Pautas criadas. Distinção entre itens e linhas físicas da extração [nao verificado]. (`BP:85`, `BP:89`) |
+| `pauta_comando_u163_distintas` | 84 | **Dimensiona** presença U163 na saída; igualdade numérica com o balde 84 não comprova identidade individual. (`BP:53`, `BP:62`) |
+| `pauta_comando_u60_distintas` | 0 | **Confirma** a omissão atual de U60: primeiro percurso U103; segundo exclui U163. Sustenta a mordida da lista. (`BP:53`, `BP:72`) |
+
+**SCRIPT 2 — U163 e montagem do RED, seções 4 e 5.**
+
+| Rótulo | Valor | O que responde |
+|---|---:|---|
+| `u163_presentes` | 163 | **Confirma** presença informada do universo fechado `60 + 103`. (`U:20`, `U:30`) |
+| `u163_sem_dia_do_fato` | 0 | **Dimensiona:** nenhum exemplar observado para L5; não elimina o defeito estrutural do pulo anterior à consulta do dia. (`M:795`, `M:806`, `M:809`) |
+| `u163_competencia_entregue` | 85 | **Dimensiona** competência entregue pelo dia do fato; não significa 85 validáveis. (`M:776`, `M:786`) |
+| `u163_entregue_estado_recusada_paridade` | 84 | **Dimensiona** recusas já carimbadas, devolvidas pela testemunha antes do derivador; não são candidatas atuais a plantio. (`M:862`, `M:868`) |
+| `u163_entregue_estado_bloqueada_competencia_entregue` | 1 | **Confirma** bloqueio já existente na composição pergunta/irmã; não demonstra a falha procurada pelo novo RED. (`M:885`, `V:224`, `V:225`) |
+| `u163_entregue_fm_do_fato_aberto` | 78 | **Dimensiona** FM aberto; sozinho não libera K6 nem as demais guardas. (`M:818`, `V:652`) |
+| `u163_entregue_fm_do_fato_aprovado` | 7 | **Dimensiona** o restante da partição `78 + 7 = 85`; aprovação FM não substitui a autoridade K6. (`M:786`, `M:830`) |
+| `u163_entregue_na_fila_real` | 1 | **Confirma** uma pergunta no filtro R/V/C do laço; pertencer à fila não equivale a poder plantar. (`M:2063`, `M:2084`) |
+| `u163_entregue_fila_testemunha_aplicavel` | 0 | **Derruba** “a única entregue na fila hoje plantaria”; nenhuma aplicável é mostrada nesse recorte. (`M:885`, `M:2063`) |
+| `u163_aplicavel_com_bloqueio_real` | 0 | **Dimensiona** a classe nominada; não fornece exemplar do candidato RED. Predicado completo da sonda [nao verificado]. (`V:225`) |
+| `u163_aplicavel_sem_bloqueio_real` | 0 | **Dimensiona** a classe nominada; não fecha prova de plantio liberado. Predicado completo [nao verificado]. (`V:225`) |
+| `u163_aplicavel_exige_confirmacao` | 0 | **Dimensiona** a classe nominada; não demonstra passagem pela confirmação. Predicado completo [nao verificado]. (`V:615`) |
+| `u163_aplicavel_sem_implausivel` | 0 | **Dimensiona** a classe nominada; não demonstra passagem pelas demais guardas. Predicado completo [nao verificado]. (`V:615`) |
+
+Os quatro últimos zeros **não significam “zero aplicáveis em toda U163”**: o contador informou 40. A relação exata entre esses filtros exige o corpo integral da sonda, ausente do texto fornecido. (`M:340`, `M:352`; filtros [nao verificado])
+
+**SCRIPT 3 — L-130, reparo e absorção, seções 4 e 5.**
+
+| Rótulo | Valor | O que responde |
+|---|---:|---|
+| `respondida_sem_texto` | 9626 | **Dimensiona** estoque com instante e texto vazio após trim. Não prova nova escrita ilegal nem que todo esse estoque deva voltar a pendente. (`J:1534`, `app/docs/LEIS.md:151`) |
+| `texto_sem_carimbo` | 0 | **Derruba** hipótese de estoque observado do meio par inverso; não elimina sua guarda nem reabre a lei do reparo. (`J:1541`, `app/docs/CORTES.md:488`) |
+| `absorcao_pares_retornados_pela_funcao_real` | 0 | **Dimensiona** ausência de pares retornados na execução fornecida; não prova inexistência histórica de absorção. (`M:1105`, `M:1109`) |
+| `absorcao_perguntas_retornadas_pela_funcao_real` | 0 | **Dimensiona** ausência de perguntas retornadas pelo predicado atual, que exclui Batida viva. (`M:1116`, `M:1118`) |
+| `absorcao_linhas_no_acervo` | 56 | **Confirma** acervo histórico informado de ABSORCAO; não equivale ao conjunto devolvível hoje. (`MD:4048`, `M:1105`) |
+| `absorcao_pares_no_acervo` | 52 | **Dimensiona** pares históricos distintos informados; chave exata dessa agregação [nao verificado]. Não contradiz retorno atual zero. (`MD:4059`, `M:1109`) |
+
+A diferença entre acervo e retorno atual **não revoga o corte**: M9b/M10 permanecem no carimbo nesta F4. (`app/docs/CORTES.md:488`)
+
+**SCRIPT 4 — J1, seções 4 e 5.**
+
+| Rótulo | Valor | O que responde |
+|---|---:|---|
+| `j1_hora_examinadas` | 7240 | **Dimensiona** o recorte `hora` comparado; seleção exata [nao verificado]. (`J:376`, `M:599`) |
+| `j1_hora_divergentes` | 0 | **Confirma** paridade observada nesse recorte; derruba divergência J1 observada nele. O juiz chama o mesmo derivador. (`J:376`) |
+| `j1_hora_indeterminadas` | 0 | **Confirma** ausência de indeterminação reportada nessa comparação; não certifica plantio ou fechamento. (`J:378`, `M:2084`) |
+
+Esses números não cobrem o parse próprio de `data_hora`, nem demonstram execução das duas metades ou C6. (`J:363`, `M:214`, `M:222`, `M:2086`)
+
+**ERROR — causa e número faltante.**
+
+| Script | Causa em uma linha | O que ficou sem número |
+|---|---|---|
+| 2 | `marcos_faltantes` e ATA discordam sobre E/S; o código registra o diagnóstico e retorna `t1 or t2`. (`M:568`, `M:571`, `M:576`) | Nenhuma perda demonstrada; os contadores finais foram fornecidos. Completude contra o roteiro integral [nao verificado]. |
+| 4 | Mesmo diagnóstico durante a derivação; isso difere de divergência juiz×materializador. (`M:568`, `J:376`) | Os três números J1 foram fornecidos; outros números previstos [nao verificado]. |
+
+`NoneType: None` é compatível com `exc_info=True` fora de um `except`; não é, por si, traceback de aborto. O dado termina com `rc_sombra=0` [nao verificado]. (`app/core/observ.py:79`, `M:571`)
+
+**Contagem mantida: lei 0 nova / RED que morde 3.** Os zeros não retiram os casos estruturais U163 entregue e U163 sem dia; a omissão U60 sustenta o caso da lista. O candidato produtivo que atravessaria todas as guardas continua sem demonstração, e o OPUS-C4-B permanece lacuna de prova. (`app/docs/RELATO.md:17`, `app/docs/RELATO.md:8`, `M:795`, `BP:72`, `app/chamados/tests/test_bug_par_projetado.py:51`; execução dos RED [nao verificado])
+
+## 17/11 01:25 · sessao 233baf0da3f5 · - · - · origem=Ronald (tmux)
+
+Referências atuais para SCRIPT 2, todas somente lidas:
+
+| Número recebido | Interpretação e efeito |
+|---|---|
+| `contador_aplicaveis=40` | Comprimento da lista de testemunhas `aplicavel`; dimensiona o recorte, sem provar ato de validação ou plantio. `app/chamados/services/materializacao.py:340` |
+| `contador_n_aplicaveis=40` | Mesmo número anterior, exposto como escalar; não somar outra vez. `app/chamados/services/materializacao.py:352` |
+| `contador_legitimas=10` | Dez testemunhas `bloqueada_paridade`; dimensiona impedimentos atuais. `app/chamados/services/materializacao.py:342` |
+| `contador_espera_declarado=9` | Nove testemunhas `espera_declarado_x_gravado`; dimensiona guarda que antecede validação. `app/chamados/services/materializacao.py:344`, `app/chamados/services/validacao.py:611` |
+| `contador_outras=1` | Uma testemunha em outro estado; estado individual não mostrado pelo dado. `app/chamados/services/materializacao.py:347`; identidade/estado exato [nao verificado] |
+| `contador_universo=60` | Soma `40+10+9+1`; universo corrente sem carimbo no recorte, não total U163. `app/chamados/services/materializacao.py:351` |
+| `contador_bug_par_103=19` | Carimbadas U103 ainda elegíveis e cuja competência do fato não foi entregue. `app/chamados/services/materializacao.py:326`, `app/chamados/services/materializacao.py:336` |
+| `contador_bug_par_103_pauta_dp=84` | Carimbadas elegíveis de competência entregue, separadas para Pauta DP. `app/chamados/services/materializacao.py:333` |
+| `contador_bug_par_103_sem_dia=0` | Nenhuma carimbada elegível sem dia do fato nesse balde; não elimina RED estrutural sem dia. `app/chamados/services/materializacao.py:331`, `app/chamados/services/materializacao.py:795` |
+| `contador_pendentes_aval=79` | `60+19`; aguardam admin. Não é 163, nem promessa de que todas plantariam hoje. `app/chamados/services/materializacao.py:356` |
+| `contador_resolvidas=0` | Nenhuma carimbada saiu da condição de caso no recorte. Não demonstra transição do OPUS-C4-B. `app/chamados/services/materializacao.py:327` |
+| `contador_congelados_no_recorte=163` | Pertencimento presente no recorte; U60 e U103 vêm de arquivo fechado, disjuntos, união U163. `app/chamados/services/materializacao.py:356`, `app/chamados/services/universo_bug_par.py:20`, `app/chamados/services/universo_bug_par.py:30` |
+| `contador_delta_conservacao=0` | Confirma conservação aritmética: `79+0+84+0=163`. Fórmula documental: `app/chamados/services/materializacao.py:316` |
+| `pauta_comando_linhas=1178` | Volume recebido da saída textual; código da sonda não disponível para conferir se conta itens ou linhas físicas [nao verificado]. Comando publica `pauta` em `app/chamados/management/commands/bug_par_103.py:85` |
+| `pauta_comando_u163_distintas=84` | Dimensiona presença U163 na lista; corresponde numericamente às 84 U103 entregues. Identidade individual dessa correspondência [nao verificado]. Seleção U103: `app/chamados/management/commands/bug_par_103.py:53`, inclusão: `app/chamados/management/commands/bug_par_103.py:62` |
+| `pauta_comando_u60_distintas=0` | Confirma omissão atual de U60 nessa saída: primeiro percurso U103, segundo exclui U163. `app/chamados/management/commands/bug_par_103.py:53`, `app/chamados/management/commands/bug_par_103.py:72` |
+| `u163_presentes=163` | Todos os membros presentes segundo dado; cardinalidade fechada do arquivo confere com 60+103. `app/chamados/services/universo_bug_par.py:20`, `app/chamados/services/universo_bug_par.py:30` |
+| `u163_sem_dia_do_fato=0` | Sem exemplar atual para RED L5; não derruba o pulo estrutural antes de consultar dia. `app/chamados/services/materializacao.py:795`, `app/chamados/services/materializacao.py:806` |
+| `u163_competencia_entregue=85` | Dimensiona autoridade K6 pelo fato; não implica 85 validáveis. Autoridade real: `app/chamados/services/materializacao.py:776`, `app/chamados/services/materializacao.py:786` |
+| `u163_entregue_estado_recusada_paridade=84` | Testemunha retorna recusa pelo carimbo antes do derivador; não são 84 candidatas a plantio. `app/chamados/services/materializacao.py:862`, `app/chamados/services/materializacao.py:868` |
+| `u163_entregue_estado_bloqueada_competencia_entregue=1` | Um caso já bloqueia hoje pela composição pergunta/irmã; não demonstra falha da extensão U163. `app/chamados/services/materializacao.py:885`, `app/chamados/services/validacao.py:224` |
+| `u163_entregue_fm_do_fato_aberto=78` | Dimensiona FM; FM aberto sozinho não libera K6 nem demais guardas. `app/chamados/services/materializacao.py:818`, `app/chamados/services/validacao.py:652` |
+| `u163_entregue_fm_do_fato_aprovado=7` | Completa `78+7=85`; não substitui entregue pela autoridade K6. `app/chamados/services/materializacao.py:786`, `app/chamados/services/materializacao.py:830` |
+| `u163_entregue_na_fila_real=1` | Uma satisfaz filtro R/V/C do laço. Não equivale a testemunha aplicável. `app/chamados/services/materializacao.py:2063` |
+| `u163_entregue_fila_testemunha_aplicavel=0` | Derruba a inferência “uma na fila ⇒ uma hoje plantaria”; não elimina RED estrutural. `app/chamados/services/materializacao.py:2063`, `app/chamados/services/materializacao.py:885` |
+| `u163_aplicavel_com_bloqueio_real=0` | Nenhum candidato aplicável com bloqueio real mostrado; não prova ausência futura. Critério exato da sonda [nao verificado]; composição atual em `app/chamados/services/validacao.py:225` |
+| `u163_aplicavel_sem_bloqueio_real=0` | Nenhum candidato aplicável liberado pela autoridade real mostrado; OPUS-C4-B continua sem prova do ato real. Critério da sonda [nao verificado]; teste existente valida transição em `app/chamados/tests/test_bug_par_volta.py:464` |
+| `u163_aplicavel_exige_confirmacao=0` | Nenhum candidato aplicável nessa classe mostrado; não é prova de validação. Guarda: `app/chamados/services/validacao.py:615` |
+| `u163_aplicavel_sem_implausivel=0` | Nenhum candidato aplicável sem implausibilidade mostrado; não fecha montagem do RED. Guarda: `app/chamados/services/validacao.py:615` |
+
+O caso bloqueado entre U163 deve envolver pergunta fora163 na composição pelo código: `_k6_que_barra` ignora U163, e `entrega_que_barra_a_validacao` compõe pergunta/irmã. Sem ITEM, identidade e encadeamento individual continuam [nao verificado]. `app/chamados/services/materializacao.py:795`, `app/chamados/services/materializacao.py:805`, `app/chamados/services/validacao.py:224`.
+
+OPUS-C4-B permanece lacuna de prova: teste existente verifica `pendentes 1→0`, `resolvidas 0→1`, congelado e autoridade conservados, mas fixture instala `competencia_entregue=False`. `app/chamados/tests/test_bug_par_volta.py:463`, `app/chamados/tests/test_bug_par_volta.py:468`, `app/chamados/tests/test_bug_par_volta.py:471`, `app/chamados/tests/test_bug_par_projetado.py:51`.
+
+Contagem anterior está documentada: **lei 0 nova; RED que morde 3**, com três pendências U163 no topo. Estes números dimensionam as pendências e afastam candidato produtivo presumido; não resolvem abrangência da lista, destino de balde ou condição normativa do RED. `app/docs/RELATO.md:17`, `app/docs/RELATO.md:19`, `app/docs/RELATO.md:6`, `app/docs/RELATO.md:8`.
 
 ## 17/11 01:25 · sessao d8e751783447 · - · - · origem=Ronald (tmux)
 
@@ -977,32 +1135,4 @@ O walker vigente é `ofensores()` (`app/chamados/tests/test_contract_leitores_vi
 
 O contrato é listado pelos harnesses `app/chamados/tests/e3_pos_suite_sem_banco.py:21` e `app/chamados/tests/e4b_c4_verificar.py:247`. Resultado executado: [nao verificado].
 
-## 17/11 01:11 · sessao 035b1cb5991a · - · - · origem=Ronald (tmux)
-
-- **A não colide com o encaixe vigente:** F4 sobre B2 já consta em `app/docs/RELATO.md:26` e `app/docs/BACKLOG.md:823`. A alteração da exceção anterior “U163 entregue fica sob F6” (`app/docs/RELATO.md:49`) já foi decidida expressamente como inclusão em L1/L5, mantendo F6 intacta (`app/docs/RELATO.md:28`).
-
-- **A condição J1 continua vigente:** F4 deve pousar logo após F1/F2 **ou** haver contador esperado zero para a costura enquanto F4 não pousa (`app/docs/CORTES.md:488`). “Depois da B2” não elimina essa obrigação (`app/docs/RELATO.md:26`).
-
-- **CLASSE-D/LU2 não bloqueiam este registro:** o resumo do brief CLASSE-D determina R1 isolada entre F1/F2 e dispensa esperar LU2-07/08 (`app/docs/RELATO.md:421`); o complemento PREPARA posteriormente registra abertura de F2 após B2 sem esperar CLASSE-D (`app/docs/RELATO.md:4`). LU2-08 conserva o ramo FATO_EM_AUSENCIA aberto (`app/docs/RELATO.md:352`), e LU2-07 conserva a pergunta emp1 e a distinção dos 155 casos (`app/docs/RELATO.md:354`). A não decide esses ramos. A conferência do **arquivo integral** `logs/CLASSE-D/brief/brief.md` é [nao verificado]: ele não foi localizado na cópia; o resumo está em `app/docs/RELATO.md:421`.
-
-- **B corrige a devolução registrada:** a objeção era apagar a exceção L-123 e curar sem medir a causa (`app/docs/RELATO.md:7`). O juiz já preserva n/a medida em módulo autorizado (`bin/tests/test_lei_akita.sh:348`) e já recusa o restante (`bin/tests/test_lei_akita.sh:350`); o hook chama esse juiz (`bin/commit_msg.sh:29`). Amend e cherry-pick/rebase são limites declarados (`bin/commit_msg.sh:10`). “Cópia sem hook” como causa concreta permanece [nao verificado].
-
-- **B não amplia exceções nem regrava história:** a exceção nominal vigente já é fechada em 4633d2c17, catraca 13, e recusa regravar (`app/docs/CORTES.md:497`). Medição com cura adiada não muda isso; causa efetiva e recuperabilidade: [nao verificado].
-
-- **Exportada/dinheiro:** o histórico já reconhece o recálculo herdado fora do delta (`app/docs/RELATO.md:57`) e não o transforma em condição de pouso (`app/docs/RELATO.md:49`). Alterar `FechamentoMensal` exportado continua exigindo `!` (`CLAUDE.md:411`); paga também conserva `!` fora da competência corrente (`CLAUDE.md:404`). Não há autorização adicional desses atos no escopo descrito; impacto monetário efetivo: [nao verificado].
-
-**Conclusão da frente de cortes: CONFERE, preservada a condição J1 de `app/docs/CORTES.md:488`; nenhuma colisão nova encontrada nos registros examinados.**
-
-## 17/11 01:11 · sessao 4056af62b199 · - · - · origem=Ronald (tmux)
-
-Item B **CONFERE como medição, sem cura agora**:
-
-- **B1:** `negocio()` classifica arquivos de `app/` fora de testes/docs; o juiz recusa `n/a`, preservando exclusivamente o aceite de `n/a (medida)` quando `medida(a)` permite. O registro é fechado e a comparação exige AST mascarada idêntica. (`bin/tests/test_lei_akita.sh:152`, `bin/tests/test_lei_akita.sh:172`, `bin/tests/test_lei_akita.sh:317`, `bin/tests/test_lei_akita.sh:346`)
-- **Premissa do hook:** ele já chama o mesmo juiz; `julgar_commit` calcula os arquivos do commit e encaminha à mesma função `julgar`. A proposta anterior de criar recusa por arquivo estava devolvida por apagar a permissão de medida; B1 resolve essa colisão ao preservá-la explicitamente. (`bin/commit_msg.sh:29`, `bin/tests/test_lei_akita.sh:441`, `bin/tests/test_lei_akita.sh:463`, `app/docs/RELATO.md:7`)
-- **B2:** `--amend` julga somente o delta, e cherry-pick/rebase sem `--edit` constam dos limites declarados. Há também limite conhecido de `revert` sem chamar o hook, registrado no BACKLOG; isso recomenda não tratar a enumeração como prova da causa. A causa concreta de `4633d2c17` permanece **[nao verificado]**. (`bin/commit_msg.sh:10`, `app/docs/BACKLOG.md:780`)
-- **B3 / cortes:** medir e devolver pré-desenho não altera a exceção nominal, a catraca 13 nem história; a exceção de `4633d2c17` já está presente e fixada pela catraca. Não há fundamento no código para exigir nova regra de recusa antes dessa medição. (`app/docs/CORTES.md:497`, `bin/tests/test_lei_akita.sh:411`, `bin/tests/test_lei_akita.sh:413`, `bin/tests/test_lei_akita.sh:423`)
-- **Exportada/dinheiro/`!`:** o item B permanece instrumento de julgamento de commits; o `!` anteriormente documentado era exceção de selo ou regravação, já respondido pela exceção nominal. Usar `--no-verify` seria outro `!`, mas não está pedido no novo aval. (`bin/tests/test_lei_akita.sh:441`, `app/docs/RELATO.md:9`, `app/docs/BACKLOG.md:780`)
-
-Ressalva sem procedência: se B2 pretendesse uma taxonomia exaustiva das causas possíveis, omitiria o `revert` conhecido; o texto fornecido permite encerrar como “não recuperável”, sem inventar causa. (`app/docs/BACKLOG.md:780`; previsão de encerramento no anexo fornecido **[nao verificado]** quanto a execução.)
-
-_6293 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6295 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
