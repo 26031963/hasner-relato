@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 19:40:14.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (11.4 MB). Acoes na janela: **356**.
+**Medido em 17/11/2026 19:45:44.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (11.5 MB). Acoes na janela: **361**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:45:42 | SendMessage |  | `-` |
+| 19:45:32 | Bash | Locate D1 aval, autopsia and brief | `cd /home/ronald/saas-hasner; ls logs/AVAIS-1515/ \| /bin/grep -i -E "espur\|cirin\|autop\|1800\|d1"; find logs -name "autopsia_1711*" 2>/dev/null \| head; find logs -maxdepth 3 -iname "*brief*" -newer logs/AVAIS-1515/ordem_viva_1511_noite.txt 2>/dev/null \| head` |
+| 19:45:24 | Bash | Find PROCEDE items in revaval3 | `cd /home/ronald/saas-hasner; /bin/grep -n -i "PROCEDE\\|parcial\\|não verificado\]" logs/E4C/f1nova/b2/cerca/v4/revaval3.r \| cut -c1-400 \| head -40` |
+| 19:45:21 | Bash | Is revaval3 done? | `cd /home/ronald/saas-hasner; date +%H:%M; D=logs/E4C/f1nova/b2/cerca/v4; tail -3 $D/revaval3.out; ps -p 1158534 -o pid,cmd \| cut -c1-120; tail -15 $D/revaval3.r` |
+| 19:45:17 | Bash | Save aval; check revaval3 and [nome] files | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/respostas_1711_1950.txt <<'EOF' aval Ronald: RESPOSTAS-1711-1950 (17/11 19:50) -- UNIDADE: batida casada a um marco pelo casador (item 1); disputa fechada pela tranca (item 2). Lei: o item 1 CORRIGE o corte D1 de 17/11 18:00, que foi redigido errado; o item 2 corrige o item 4 do CERCA-B2-REGRAS-2. Responde a lei CORTE-D1 x 3 LEIS COM SELO e a lei  ...` |
 | 19:00:29 | Bash | RELATO top: A9d lei line and achados | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md'; L=open(r,encoding='utf-8').read().split('\n') i=[k for k,l in enumerate(L[:25]) if l.startswith('CERCA-B2-REGRAS-2 18:45 RECEBIDO')][0] L[i:i+1]=["lei: CERCA-B2 A9d (FECHOU_COMPETENCIA_TRANCADA) -- aval 18:45 item 4 diz classe (ii) (S144 por item: pergunta ENTREGUE nao se grava e a disputa FECHA) e 'a R7 segue para a tranca' (R ...` |
 | 19:00:15 | Bash | Launch Codex REVISAO-DO-AVAL volta 3 | `cd /home/ronald/saas-hasner; D=logs/E4C/f1nova/b2/cerca/v4; cat > $D/revaval3.q <<'EOF' REVISAO-DO-AVAL volta 3 da tabela unica da cerca B2 (anexos: tabela_unica.md volta 4 do opus de leitura; aval vigente CERCA-B2-REGRAS-2 cerca_b2_regras2_1845.txt, que substitui versoes anteriores; R1-R7 cerca_b2_regras_1711_1720.txt; respostas_1711_1750.txt; revaval2.r = volta anterior). Para CADA linha da tabe ...` |
 | 19:00:03 | Bash | Look at previous REVISAO-DO-AVAL question | `cd /home/ronald/saas-hasner/logs/E4C/f1nova/b2/cerca/v4; ls; head -c 1500 revaval2.q; echo; cat revaval2.out 2>/dev/null \| head -5` |

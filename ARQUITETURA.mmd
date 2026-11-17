@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (68 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (69 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -72,6 +72,7 @@ flowchart TD
     c_marcar_foto_ausente_retro["marcar_foto_ausente_retro<br/>07:26"]
     c_pipeline_placar["pipeline_placar<br/>07:40"]
     c_recusar_ponta_pequena["recusar_ponta_pequena<br/>apos lavrar_he_pendente"]
+    c_selo_leitores_no_mesmo_numero["selo_leitores_no_mesmo_numero<br/>apos lavrar_cxr_do_motor"]
     c_tripwire_tipo_batida["tripwire_tipo_batida<br/>07:25"]
     c_vigia_b5_ausencia["vigia_b5_ausencia<br/>07:22"]
     c_vigia_pareador_celula["vigia_pareador_celula<br/>apos vigiar_ausencia_x_veredito"]
@@ -131,6 +132,7 @@ flowchart TD
   c_disparar_perguntas_competencia --> c_reconciliar_perguntas_orfas
   c_detectar_par_relampago --> c_reconciliar_vinculo
   c_lavrar_he_pendente --> c_recusar_ponta_pequena
+  c_processar_cartorio --> c_selo_leitores_no_mesmo_numero
   c_processar_cartorio --> c_silenciar_chamados_isentos
   c_processar_cartorio --> c_supra_juiz
   c_gerar_celulas --> c_termometro_regua
@@ -152,7 +154,7 @@ flowchart TD
   c_lavrar_retrato_folha --> c_vigiar_retido_calado
   c_recusar_ponta_pequena --> c_vigiar_txt_dominio
   c_processar_cartorio --> c_vigiar_txt_dominio
-  %% arestas `depende` declaradas: 57
+  %% arestas `depende` declaradas: 58
 
   %% (c) PORTAS CANONICAS — fonte: AST sobre app/ (nome usado, nunca string)
   subgraph PORTAS["escritores unicos / portas canonicas"]
