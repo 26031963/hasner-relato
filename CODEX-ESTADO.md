@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 15:52** · publicado em **17/11/2026 15:56** (UTC-3)
+> Ultima resposta processada: **17/11/2026 16:12** · publicado em **17/11/2026 16:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 16:12 · sessao a324e3d67aa4 · PORTA-EXPORT · censo · origem=Code
+
+Os anexos estão no texto da solicitação; **não localizei arquivos correspondentes na cópia**. As referências abaixo contam as linhas de cada bloco fornecido, a partir da primeira linha após `== anexo: ... ==`; a correspondência com linhas de arquivos originais é [não verificado].
+
+1. **Estados na tela e GET — (e) não perguntado.** A pergunta tratou dos textos de FALHOU e DIVERGENTE: “**textos: FALHOU =** … **DIVERGENTE acrescenta** ‘Avise o suporte Hasner.’ e conserva a lista” (v2.q:7–8). A resposta disse “**Textos e lista | Fechado no código**” (v2.r, seção 7; linha [não verificado]). A exigência de mostrar os três estados no GET e o smoke de PRONTA não aparecem nessa pergunta (v2.q:5–9; opus_final_H.txt:3).
+
+2. **Instrumento na mesma raia do produto — (e) não perguntado.** A pergunta sobre classes históricas incluía “**pouso antes do pre-requisito**” (v2.q:22–24), mas não a separação de raias para o pouso dos instrumentos (opus_final_H.txt:4; v2.q:22–24). A resposta examinou “**Ordem de trava no caminho normal**” e declarou inversão “**[nao verificado]**” (v2.r, seção 6; linha [não verificado]); não encontrei resposta sobre a raia apontada pelo opus [não verificado]. [nao verificado]
+
+3. **Tentativa não criada diante de outra aberta — (c) fora do alcance da revisão de H.** A pergunta de v4 abrangia “**Ha caminho em que assumir levanta e nenhum registro mostra a falha?**” (v4.q:12–13). O verificador respondeu que “**cron/manual não passa tentativa, e `falhar_ao_assumir` retorna `False` imediatamente**” (v4.r, seção 4; linha [não verificado]). A triagem registra que a solução que introduziu `_cunhar` foi feita em **H**, “**sem 5a volta**” (v4.triagem:1,5); o comportamento específico apontado pelo opus pertence a essa solução posterior (opus_final_H.txt:5; v4.triagem:5).
+
+4. **Leitura que passou a gravar — (a) tema presente, não visto.** A primeira pergunta pediu, para cada campo lido ou gravado pelo diff, “**QUEM ESCREVE e QUEM LE** … **no repositorio inteiro**” (v1.q:11–13). A resposta identificou `estado_da_porta` como leitor do carimbo: “**Classificação da porta**” (v1.r:10), mas não apontou que essa leitura passaria a gravar por meio do vigia [não verificado]. O chamador rotulado “SO LEITURA” é o elemento específico do achado do opus (opus_final_H.txt:6). [nao verificado]
+
+5. **Chave da trava sem dia e virada da meia-noite — (a) tema presente, não visto.** A pergunta incluiu colisões da chave (v1.q:17–19) e depois perguntou expressamente por “**data_ref do pedido x do carimbo na virada da meia-noite**” (v2.q:12–13). A resposta examinou colisões da chave por ano, schema e faixa de ID (v1.r, seção 4; linha [não verificado]) e, sobre meia-noite, disse que “**a leitura ainda pode atravessar a meia-noite entre as duas consultas**” (v2.r, seção 6; linha [não verificado]). Não apontou a ausência do dia em `k1` com a consequência descrita pelo opus [não verificado].
+
+6. **DIVERGENTE não remede no clique — (e) não perguntado.** A pergunta de v2 especificou o texto e a lista de DIVERGENTE (v2.q:7–8); não perguntou se clicar nesse estado disparava nova medição [não verificado]. A resposta disse “**Textos e lista | Fechado no código**” (v2.r, seção 7; linha [não verificado]). O comportamento de remedir no clique é o objeto do achado do opus (opus_final_H.txt:6).
+
+7. **Vivacidade por `pg_locks` como segundo predicado — (a) tema presente, não visto.** A pergunta juntou o teste de vida por `pg_locks` (v2.q:16–18) à classe “**2o juiz que duplica juiz registrado**” (v2.q:22–24). A resposta descreveu “**`vigiar → medicao_viva`, comparando-o com `pg_locks.pid`**” (v2.r:14) e afirmou “**Clone de juiz registrado: não demonstrado**” (v2.r, seção 6; linha [não verificado]). Não identificou a relação com `job_morreu` apontada pelo opus (opus_final_H.txt:6; v2.r, seção 6; linha [não verificado]). [nao verificado]
+
+8. **`lavrar_verde_para_teste` sem chamador de produção — (a) tema presente, não visto como o achado formulado.** A pergunta pediu “**Algum escritor de carimbo … fora de concluir (inclusive lavrar, testes de outros apps, comandos)?**” (v3.q:15–17). A resposta viu o helper: “**o helper corrigido usa `assumir → concluir`, inclusive para o teste de relatórios**”, e disse não ter encontrado outro chamador produtivo de escrita do carimbo (v3.r:16). Ela não afirmou que o próprio helper tinha zero chamadores de produção [não verificado]; essa é a formulação do opus (opus_final_H.txt:6). [nao verificado]
+
+9. **Descarte da leitura concorrente — (b) visto e descartado pela triagem.** A pergunta pediu caminho de PRONTA sem o par exigido e o inverso (v3.q:18–19). A resposta viu a corrida: “**um cron pode substituir o pedido concluído por outra tentativa EM_CURSO**” entre consultas, mas a descreveu como “**uma leitura válida do par anterior**” (v3.r:24). A triagem descartou pelo motivo: “**devolve o par anterior VALIDO, nunca um par que nao existiu**” (v3.triagem:7). A avaliação posterior do opus consta em opus_final_H.txt:6.
+
+10. **Cron em produção — (c) dado de produção fora do alcance.** A pergunta já delimitava: “**cron diario (NAO esta neste diff)**” (v1.q:8). A resposta declarou “**Banco, logs, execução integrada e cron implantado: [nao verificado]**” (v1.r:3). Os fatos de duração, ambiente, `nice` e rc diário aparecem no dado do opus, sem banco ou logs adicionais fornecidos (opus_final_H.txt:6; [não verificado]).
 
 ## 17/11 15:52 · sessao fa3c0b2a4cb7 · E4C-F2 · verificador · origem=Code
 
@@ -1136,128 +1160,4 @@ def executar_fidelidade():
 
 [truncado em 20000 de 22503 caracteres]
 
-## 17/11 15:15 · sessao 51bc0855b4b9 · E4C-F1-B2-CERCA · verificador · origem=Code
-
-**REPROVA.** Há falhas na seleção do dia consultado, no alcance da guarda e na certificação por mutantes/AST. Os caminhos síncronos dos antigos achados 1 e 2 passaram a abrir cerca. (`app/chamados/services/fio.py:1409`; `app/chamados/models.py:3576`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:565`; `selo_diff.txt:+102`; `app/chamados/services/disputa_emissao.py:1909`)
-
-Nas referências ao selo, `+N` indica a linha do arquivo novo apresentado no anexo. Execução integral da suíte, resultados dos logs citados na triagem e ocorrência dos contraexemplos em produção: **[nao verificado]**. [nao verificado]
-
-**1. Contorno por retenção — NAO PROCEDE como falha remanescente nesse caminho.**
-
-O fallback continua sendo chamado quando a retratação retorna falsa por `retencao` ou `transicao`, mas agora entra na porta pública do resolver; essa porta trava e executa o corpo sob cerca. A recusa volta no dicionário e o comando a conta antes do `continue`. (`app/ponto/management/commands/reconciliar_fantasmas.py:288`; `app/chamados/services/disputa_emissao.py:1903`; `app/chamados/services/disputa_emissao.py:1909`; `app/chamados/services/disputa_emissao.py:1914`; `app/ponto/management/commands/reconciliar_fantasmas.py:291`)
-
-As escritas ordinárias de perguntas existentes desse resolver passam pelo `save` vigiado; o descarimbo em lote também tem vigilância. Não identifiquei, nesse fluxo síncrono, escrita do resolver pelo bulk de lavras. (`app/chamados/models.py:3572`; `app/chamados/models.py:3401`; `app/chamados/services/disputa_emissao.py:2019`; `app/chamados/services/disputa_emissao.py:2093`; `app/chamados/management/commands/backfill_veredito_lavrado.py:143`)
-
-**2. Resolver sem cerca — NAO PROCEDE para as entradas nomeadas.**
-
-| Entrada | Caminho efetivo |
-|---|---|
-| Beco | O callback inclui resolvers e `d.fechar`, dentro da cerca do beco. (`app/chamados/services/becos.py:55`; `app/chamados/services/becos.py:66`) |
-| HIST | Costura e resolver estão no mesmo callback cercado. (`app/chamados/reconciliador.py:1690`; `app/chamados/reconciliador.py:1701`) |
-| S143 | Chama a porta pública, que abre a cerca do resolver. (`app/chamados/signals.py:117`; `app/chamados/services/disputa_emissao.py:1909`) |
-| Retratação | Chama o resolver dentro da cerca externa da unidade. (`app/chamados/reconciliador.py:553`; `app/chamados/reconciliador.py:580`) |
-| Fantasmas | Chama a mesma porta pública. (`app/ponto/management/commands/reconciliar_fantasmas.py:288`) |
-
-As chamadas de produção encontradas ao corpo privado estão na própria porta: a chamada cercada e a exceção da via trancada. Nessa exceção, o corpo retorna antes das consultas e escritas de perguntas. Portanto, **chamar o corpo sem cerca nessa via não demonstra bypass de escrita**. (`app/chamados/services/disputa_emissao.py:1897`; `app/chamados/services/disputa_emissao.py:1909`; `app/chamados/services/disputa_emissao.py:1934`)
-
-**3. Sobrealcance — PROCEDE na porta; a cura não seleciona somente aquilo que será persistido.**
-
-O `save` chama a vigilância antes de encaminhar `update_fields`. A vigilância examina o objeto inteiro em memória e a data gravada, sem receber os campos efetivamente enviados ao banco. (`app/chamados/models.py:3572`; `app/chamados/models.py:3576`; `app/chamados/models.py:3581`; `app/chamados/services/fio.py:1403`; `app/chamados/services/fio.py:1409`)
-
-Isso permite dois contraexemplos estáticos:
-
-- Pergunta ENTREGUE com `save(update_fields=[])`: a guarda pode recusar antes de chegar à operação que não persistiria campos. (`app/chamados/models.py:3576`; `app/chamados/models.py:3581`)
-- Banco com dia ABERTO, objeto com dia ENTREGUE somente em memória e `update_fields=['pergunta']`: a guarda consulta também o dia ENTREGUE, embora `data_evento` não fosse gravada. (`app/chamados/services/fio.py:1409`; `app/chamados/services/fio.py:1411`; `app/chamados/models.py:3581`)
-
-O descarimbo individual e o lote também não eliminam previamente linhas cujos campos já estejam nos valores finais. Assim, podem consultar o veto para um descarimbo sem mudança de valores. (`app/chamados/models.py:3327`; `app/chamados/models.py:3333`; `app/chamados/models.py:3401`; `app/chamados/models.py:3406`)
-
-Os controles HX evitam o sobrealcance anteriormente provocado pela previsão; isso não prova ausência dos contraexemplos acima em toda retratação real. Ocorrência integrada desses padrões em produção: **[nao verificado]**. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:331`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:345`)
-
-**4. Mordida dos testes — PROCEDE parcialmente: alvo corrigido, certificação ainda defeituosa.** [nao verificado]
-
-A asserção específica foi implementada: compara a linha completa pelo PK da pergunta-alvo antes das outras fotografias; a classificação `ALVO` também exige esse PK na mensagem. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:249`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:258`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:535`)
-
-| Ponto | Conclusão |
-|---|---|
-| `sem_escopo:fechar_beco = {}` | **Coerente com o caso, mas sem mordida.** Retirar apenas a cerca do beco preserva a cerca interna do resolver. Falta caso que exija a proteção adicional do `d.fechar`. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:435`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:563`; `app/chamados/services/becos.py:60`; `app/chamados/services/disputa_emissao.py:1909`) |
-| `engolido_sobrevive → e=ALVO` | **Incoerente.** No caso `e`, o veto direto sobe ao `except` do próprio mutante, que devolve as vetadas. O wrapper registra a recusa. A guarda continua anterior à persistência; o fluxo desse caso deve permanecer verde, não escrever o alvo. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:94`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:418`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:565`; `app/chamados/services/disputa_emissao.py:1913`; `app/chamados/models.py:3576`) |
-| Caso `s` | **C21 completo:** texto não vazio, `respondida_em` e validação. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:382`) |
-| Geofence | **Rótulo coerente:** o relatório particiona pelos mesmos três motivos impressos pelo comando. (`app/ponto/services/geofence.py:444`; `app/ponto/services/geofence.py:448`; `app/ponto/management/commands/reconciliar_geofence.py:46`) |
-
-A fotografia também tem limites: decisões, pautas, ocorrências e auditoria são comparadas por contagem; a auditoria exclui todas as ações `retratacao_retida_*`. Ela não demonstra identidade integral do conteúdo dessas tabelas. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:215`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:219`)
-
-**5. Quem escreve e quem lê — PROCEDE a existência de escritor sem vigilância, declarado como backfill.**
-
-O mapa abaixo reúne os campos explícitos do diff e dos caminhos examinados. Enumeração global de todos os leitores e escritores indiretos da aplicação: **[nao verificado]**.
-
-| Modelo / campos | Escritores | Leitores relevantes |
-|---|---|---|
-| Pergunta: `disputa`, `motivo`, `pergunta`, `tipo_resposta`, `conversa` | Nascimento em `app/chamados/models.py:3134`; fixtures em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:146` | Guarda em `app/chamados/services/fio.py:1408`; HIST em `app/chamados/reconciliador.py:1602`; leitura integral da pergunta em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:258` |
-| Pergunta: `celula`, `chamado_destino` | Nascimento/reuso em `app/chamados/models.py:3086`, `app/chamados/models.py:3102`, `app/chamados/models.py:3134`; costura em `app/chamados/services/fio.py:974` | Seleção direta em `app/chamados/services/disputa_emissao.py:1939`; HX em `app/chamados/services/disputa_emissao.py:2069`; relavra em `app/chamados/models.py:309` |
-| Pergunta: `data_evento` | Atribuição na porta em `app/chamados/services/fio.py:849`; costura em `app/chamados/services/fio.py:928`; nascimento em `app/chamados/models.py:3136` | Guarda em `app/chamados/services/fio.py:1403`, `app/chamados/services/fio.py:1409`; HIST em `app/chamados/reconciliador.py:1612`; resolver em `app/chamados/services/disputa_emissao.py:2019` |
-| Pergunta: `materializada_em`, `materializada_por`, `via_resolucao` | Porta do carimbo em `app/chamados/models.py:3220`; persistências em `app/chamados/models.py:3273`, `app/chamados/models.py:3311`, `app/chamados/models.py:3333`; lote em `app/chamados/models.py:3406` | Resolver em `app/chamados/services/disputa_emissao.py:1941`, `app/chamados/services/disputa_emissao.py:2073`, `app/chamados/services/disputa_emissao.py:2083`; exclusão do lote em `app/chamados/models.py:3402` |
-| Pergunta: `resposta_colab`, `respondida_em` | Resposta em `app/chamados/services/disputa_emissao.py:1481`; automática em `app/chamados/services/disputa_emissao.py:1674`; reparo em `app/chamados/services/disputa_emissao.py:1696`; carimbo em `app/chamados/models.py:3253`; limpeza em `app/chamados/models.py:3408` | C21 em `app/chamados/juizes.py:1552`; resolver em `app/chamados/services/disputa_emissao.py:2013`; HX em `app/chamados/services/disputa_emissao.py:2090`; porta do par em `app/chamados/models.py:3603` |
-| Pergunta: `validada_em`, `validada_por` | Validação em `app/chamados/services/validacao.py:168`; devolução em `app/chamados/services/validacao.py:273`; nova resposta em `app/chamados/services/disputa_emissao.py:1494`; carimbo em `app/chamados/models.py:3256`; limpeza em `app/chamados/models.py:3408` | Relavra em `app/chamados/models.py:310`; HX em `app/chamados/services/disputa_emissao.py:2073`; nova resposta em `app/chamados/services/disputa_emissao.py:1484` |
-| Pergunta: `veredito_lavrado`, `julgado_em`, `janela_expira_em` | `lavrar` em `app/chamados/veredito_lavrado.py:270`; backfill em `app/chamados/management/commands/backfill_veredito_lavrado.py:138`; bulk em `app/chamados/veredito_lavrado.py:250` | `esta_stale` em `app/chamados/veredito_lavrado.py:224`; fotografia em `app/chamados/veredito_lavrado.py:281`; teste em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:258` |
-| Chamado: `status_local`, `resolvido_em`, `via_encerramento`, `respondido_por`, `atualizado_em` | `_gravar_estado` em `app/chamados/models.py:228`, `app/chamados/models.py:231`, `app/chamados/models.py:244`; persistência em `app/chamados/models.py:296` | Resolver em `app/chamados/services/disputa_emissao.py:1896`, `app/chamados/services/disputa_emissao.py:2066`; S143 em `app/chamados/signals.py:97`; fotografia em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:211` |
-| Chamado: `urgencia`, `urgencia_original` | Ritual em `app/chamados/models.py:460`; restauração em `app/chamados/models.py:251`; update do receiver em `app/chamados/models.py:637` | Rebaixamento em `app/chamados/models.py:469`; fotografia em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:211` |
-| Chamado: `colaborador`, `justificativa_relacionada`, `categoria`, `subcategoria`, `modulo_origem`, `contexto_json`, `assunto`, `titulo`, `area` | Nascimento parametrizado em `app/chamados/models.py:1142`; fixtures em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:139` | Retratação em `app/chamados/reconciliador.py:550`, `app/chamados/reconciliador.py:573`; HIST em `app/chamados/reconciliador.py:1633`, `app/chamados/reconciliador.py:1642`; fotografia em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:211` |
-| Disputa: `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento` | Fecho em `app/chamados/models.py:2023`; reaberturas em `app/chamados/models.py:2240`, `app/chamados/models.py:2264` | Beco em `app/chamados/services/becos.py:59`; resolver em `app/chamados/services/disputa_emissao.py:2063`; receivers em `app/chamados/signals.py:29`, `app/chamados/signals.py:165` |
-| Disputa: `colaborador`, `chamado`, `motivos`, `contexto` | Emissão em `app/chamados/services/disputa_emissao.py:550`; alterações em `app/chamados/models.py:2057`, `app/chamados/models.py:2154`, `app/chamados/models.py:2195`; fixtures em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:201` | Guarda em `app/chamados/services/fio.py:1414`; beco em `app/chamados/services/becos.py:44`; HIST em `app/chamados/reconciliador.py:1605`; resolver em `app/chamados/services/disputa_emissao.py:2061` |
-| Auditoria: `acao`, `modelo`, `objeto_id`, `descricao`, `valor_antes`, `valor_depois`, `usuario`, `ip`, `ator` | `evento` em `app/core/observ.py:134`; adaptador em `app/core/observ.py:146`; retenção prepara e delega em `app/chamados/reconciliador.py:478`, `app/chamados/reconciliador.py:493` | Deduplicação lê ação/modelo/objeto, `id` e payload em `app/chamados/reconciliador.py:489`; testes filtram ações em `app/chamados/tests/test_e4c_b2_cerca_retratar.py:219`, `app/chamados/tests/test_e4c_b2_cerca_retratar.py:224` |
-
-**Bypass concreto:** `gravar_lavras_em_lote` usa `bulk_update` sem `vigiar`. Os chamadores encontrados são os dois pontos do backfill; não encontrei ligação dos atos cercados até esse escritor. (`app/chamados/veredito_lavrado.py:250`; `app/chamados/management/commands/backfill_veredito_lavrado.py:143`; `app/chamados/management/commands/backfill_veredito_lavrado.py:146`)
-
-O `update` de descarimbo passa pela guarda; os `save` de nascimento não passam, por decisão explícita da implementação. Ausência absoluta de escrita dinâmica/raw: **[nao verificado]**. (`app/chamados/models.py:3401`; `app/chamados/models.py:3406`; `app/chamados/models.py:3572`)
-
-**6. Classes recorrentes — PROCEDE a falha semântica; ordem dos abridores não é uniforme.**
-
-**ESMERIL-SEMANTICA:** o helper utilizado pela guarda simplesmente devolve `data_evento`. Entretanto, o próprio módulo distingue essa chave gravada da identidade do fato, obtida pelo juiz do turno para linhas com episódio. A migração reconhece dia da saída diferente do dia do turno e preserva grupos que toquem competência exportada. Logo, o código não garante que a chave consultada tenha sempre o significado exigido pelo veto. (`app/chamados/juizes.py:342`; `app/chamados/services/fio.py:1409`; `app/chamados/services/fio.py:1605`; `app/chamados/services/fio.py:1620`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:17`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:30`)
-
-Contraexemplo estático: turno de 23/09 ENTREGUE, saída em 24/09 ABERTA e pergunta legada com `data_evento=24/09`. Uma pergunta materializada, não validada, pode ser relavrada pela transição do destino; a guarda consulta somente 24/09 e libera. Existência desse caso em produção: **[nao verificado]**. (`app/chamados/models.py:305`; `app/chamados/models.py:310`; `app/chamados/veredito_lavrado.py:275`; `app/chamados/services/fio.py:1409`; `app/chamados/services/vigia_fio.py:802`)
-
-| Abridor | Savepoint da cerca em relação à trava |
-|---|---|
-| Retratação | Depois da trava. (`app/chamados/reconciliador.py:552`; `app/chamados/reconciliador.py:553`) |
-| Beco | Depois da trava. (`app/chamados/services/becos.py:52`; `app/chamados/services/becos.py:66`) |
-| Resolver | Depois da trava. (`app/chamados/services/disputa_emissao.py:1903`; `app/chamados/services/disputa_emissao.py:1909`) |
-| HIST | Antes da trava interna da costura. (`app/chamados/reconciliador.py:1701`; `app/chamados/reconciliador.py:1691`; `app/chamados/services/fio.py:938`) |
-
-Essa diferença do HIST, isoladamente, não prova deadlock. Deadlock observado: **[nao verificado]**.
-
-Não nasceu outro juiz de competência: a guarda chama o veto existente, que compõe janela e K6. As funções novas da cerca não leem relógio; os caminhos continuam tendo `now()` internos no resolver e na lavra. Portanto, “nenhum relógio fora da borda” não foi demonstrado. (`app/chamados/services/fio.py:1419`; `app/chamados/services/fio.py:1365`; `app/chamados/services/vigia_fio.py:800`; `app/chamados/services/disputa_emissao.py:2019`; `app/chamados/services/disputa_emissao.py:2076`; `app/chamados/veredito_lavrado.py:271`)
-
-A `_CERCA` recebe estado por abertura e restaura o token em `finally`; aninhamentos reutilizam o estado externo. Não encontrei fundamento nesse código para afirmar vazamento normal entre requests, threads independentes ou testes. Certificação no ambiente real: **[nao verificado]**. (`app/chamados/services/fio.py:1433`; `app/chamados/services/fio.py:1435`; `app/chamados/services/fio.py:1448`)
-
-Cumprimento dos pré-requisitos de pouso: **[nao verificado]**. [nao verificado]
-
-**7. Selo AST — PROCEDE a insuficiência da adaptação como certificação.**
-
-A implementação consulta na porta, depois de a transição já ter iniciado; o rollback substitui a consulta anterior à transição. Isso não implementa o instante literal descrito no aval reproduzido na triagem. (`app/chamados/reconciliador.py:553`; `app/chamados/reconciliador.py:567`; `app/chamados/models.py:3576`)
-
-Quanto aos requisitos do próprio selo:
-
-- **(a) Insuficientemente provado.** O selo aceita chamada sob `if False` antes do save; procura qualquer `If/Raise` para a guarda e qualquer `With/If/Raise` para a cerca, sem demonstrar a condição de veto ou o `atomic` correto. O abridor só precisa mencionar as vetadas em algum `if`. (`selo_diff.txt:+277`; `selo_diff.txt:+290`; `selo_diff.txt:+296`; `selo_diff.txt:+239`)
-- **(b) Falha concreta de subaproximação.** `_indexa` e `_liga` não atravessam `if`/`with` para indexar definições. Perdem `_ato` do beco e `_costura_e_fecho` do HIST; o corpo desses callbacks também é excluído do chamador. Callbacks sem definição são depois ignorados. Esse limite não é o limite declarado de atributos homônimos. (`selo_diff.txt:+102`; `selo_diff.txt:+139`; `selo_diff.txt:+148`; `selo_diff.txt:+308`; `app/chamados/services/becos.py:42`; `app/chamados/services/becos.py:55`; `app/chamados/reconciliador.py:1603`; `app/chamados/reconciliador.py:1690`)
-- **(c) Coerente para `lavrar(salvar=False)`:** a persistência fica no save do chamador, mas isso depende de o grafo encontrar esse chamador. (`selo_diff.txt:+163`; `app/chamados/services/fio.py:975`; `app/chamados/services/fio.py:976`)
-- **(d) Coerente tratar `registrar_retencao` como trilha:** ela delega a escrita de auditoria, não escreve pergunta. (`selo_diff.txt:+47`; `app/chamados/reconciliador.py:493`)
-
-Os 14 nomes declarados têm explicações compatíveis com entradas avulsas sem cobertura integral. Os dois nomes do resolver incluem falsos positivos conservadores da via trancada, cujo corpo não escreve. A quantidade efetivamente emitida pelo selo completo: **[nao verificado]**. Essa lista não certifica completude, pois os callbacks acima desaparecem do grafo. (`app/chamados/services/disputa_emissao.py:1897`; `app/chamados/services/disputa_emissao.py:1934`; `selo_diff.txt:+102`; `selo_diff.txt:+308`)
-
-**8. Matriz dos 15 sítios — PROCEDE uma lacuna de cobertura da unidade.**
-
-| Sítio | Situação |
-|---|---|
-| 1. `retratar_com_motivo` | Abre cerca antes do corpo, depois da trava. (`app/chamados/reconciliador.py:552`; `app/chamados/reconciliador.py:553`) |
-| 2. `fechar_beco` | Cerca resolver e fecho. (`app/chamados/services/becos.py:55`; `app/chamados/services/becos.py:66`) |
-| 3. Resolver | Cerca o corpo; via trancada retorna sem escrita. (`app/chamados/services/disputa_emissao.py:1909`; `app/chamados/services/disputa_emissao.py:1934`) |
-| 4. `reconciliar` | Herda cerca quando aninhado; avulso escreve estado/relavra. (`app/chamados/models.py:655`; `app/chamados/models.py:296`; `app/chamados/models.py:312`) |
-| 5. `transicionar` | Cobertura herdada; converge no escritor de estado. (`app/chamados/models.py:450`; `app/chamados/models.py:296`) |
-| 6. `encerrar` | Cobertura herdada. (`app/chamados/models.py:1686`; `app/chamados/models.py:296`) |
-| 7. Encerramento por tranca | Via especial; resolver não escreve. (`app/chamados/models.py:1702`; `app/chamados/services/disputa_emissao.py:1934`) |
-| 8. `reabrir` | Descarimbo vigiado quando há cerca externa. (`app/chamados/models.py:1639`; `app/chamados/models.py:3401`) |
-| 9. `Disputa.fechar` | Herda cerca; avulso pode escrever perguntas e disputa. (`app/chamados/models.py:2012`; `app/chamados/models.py
-
-[truncado em 20000 de 22820 caracteres]
-
-_6631 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6632 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
