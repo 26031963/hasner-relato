@@ -1,7 +1,22 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 20:06** · publicado em **17/11/2026 20:07** (UTC-3)
+> Ultima resposta processada: **17/11/2026 20:11** · publicado em **17/11/2026 20:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 20:11 · sessao 0cbdddbdbae2 · PORTA-DO-EXPORT-SEM-BECO · construtor · origem=Code
+
+Parei com a entrega **incompleta**: três asserções existentes exigem `NAO FOI MEDIDA HOJE`, mas o aval exige que `conferir` devolva a nova frase literal para `SEM_MEDICAO` ([test_porta_do_export.py:53](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_do_export.py:53), [test_porta_do_export.py:529](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_do_export.py:529), [test_porta_do_export.py:536](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_do_export.py:536), [porta_export.py:932](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/porta_export.py:932)). Pela inspeção, essas três asserções falharão; sua instrução manda parar e listar quando outro teste existente quebrar. A execução delas permanece **[não verificado]**. [nao verificado]
+
+As alterações parciais ficaram na cópia:
+
+- [porta_export.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/porta_export.py): predicado de tentativa morta, leitura sem persistência, espera opcional, textos e montagem do bloco.
+- [selo_leitores_no_mesmo_numero.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py): espera e encerramento do pedido no ramo com tentativa.
+- [views.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/views.py), [urls.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/urls.py) e [_estado_da_porta.html](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/templates/folha/_estado_da_porta.html): rota e bloco exibido no preview.
+- [test_porta_sem_beco.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_sem_beco.py) e [test_porta_sem_beco_item2.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_sem_beco_item2.py): inversão das duas asserções autorizadas.
+
+A análise sintática dos quatro módulos de produção alterados passou **[verificado localmente]**. Não executei testes com banco, conforme a restrição. **Ra–Rg não foram escritos nem executados; os mutantes não foram preparados nem executados; a cura e a suíte permanecem [não verificado].** Também falta concluir e conferir o mapa solicitado de escritores e leitores dos campos. [nao verificado]
+
+LEI-AKITA: origem=folha/porta_export.py; testemunha=estado_da_porta; RED=Ra-Rg **[não entregues]**; quem-mais-le=censo do item 0 **[conferência da implementação incompleta]**; juizes novos=0 **[não verificado]**; padrao=job assincrono com estado visivel + escritor unico **[não verificado]**.
 
 ## 17/11 20:06 · sessao 867aa006560c · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
 
@@ -473,12 +488,4 @@ Para os resultados abaixo, primeiro uso “próprio marco” como **o marco em q
 
 **PROCEDE: 1** — referência ambígua de “próprio marco”, com consequência demonstrada no selo O195 col174. [escala/utils.py:644](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/escala/utils.py:644), [teste O195:280](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/escala/tests/test_montador_realizado_pela_autoridade.py:280).
 
-## 17/11 19:46 · sessao 238ec1c1d74e · - · - · origem=Ronald (tmux)
-
-- O D1 registrado em [CORTES.json:1973](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/docs/CORTES.json:1973) diverge do novo literal, que declara substituí-lo; a numeração de linhas do anexo fornecido é **[não verificado]**.
-- Os demais cortes das 18h tratam de outras obras e da janela de pouso: [CORTES.json:1980](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/docs/CORTES.json:1980), [CORTES.json:2015](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/docs/CORTES.json:2015).
-- O motor chama o casador, de modo que há alcance indireto ao cálculo: [motor_calculo_v2.py:3052](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/ponto/motor_calculo_v2.py:3052). Impacto financeiro e em exportada: **[não verificado]**.
-- A L-110 atribui ao DIFF o papel de medir impacto: [LEIS.md:136](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/docs/LEIS.md:136). A L-103 nomeia o selo col347: [LEIS.md:129](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/docs/LEIS.md:129).
-- JUIZES é tabela de consulta, sujeita ao código vivo: [JUIZES.md:7](/home/ronald/codex_ws/3e1bf21eb5bdb774c95ebddcd0be2662d5689687/app/docs/JUIZES.md:7).
-
-_6695 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6696 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
