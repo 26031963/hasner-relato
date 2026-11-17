@@ -1,7 +1,239 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 01:36** · publicado em **17/11/2026 01:36** (UTC-3)
+> Ultima resposta processada: **17/11/2026 02:57** · publicado em **17/11/2026 02:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 02:57 · sessao cdb003f546de · E4C-F1-B2 · verificador · origem=Code
+
+**Não encontrei bloqueador funcional demonstrado no delta apresentado.** A delegação elimina a cópia do predicado, e os novos testes cobrem a ausência de trilha e a guarda de contagem que o laudo apontava. Restam filas de cobertura e de medição dos efeitos indiretos. (`app/chamados/juizes.py:1591`; `app/chamados/tests/test_f1nova_b2_leitores.py:430`; `app/chamados/tests/test_f1nova_b2_leitores.py:452`; `app/chamados/tests/test_f1nova_b2_leitores.py:469`.)
+
+A cópia não contém `.git`: identidade do HEAD e integralidade do diff **[nao verificado]**. Executei somente leitura e classificação AST em memória; execução dos testes Django, mutantes com banco e suite **[nao verificado]**. [nao verificado]
+
+**1. Escritores, leitores e significado dos campos — sem bloqueio demonstrado; há distinções importantes.**
+
+| Campo/valor | Quem escreve | Quem lê e o significado usado |
+|---|---|---|
+| Log L130: `usuario`, `valor_antes`, `valor_depois` | A porta monta a fotografia crua anterior, o estado posterior e o autor; `evento` converte `ator` em `usuario` e grava os JSONs. (`app/chamados/services/validacao.py:434`; `app/chamados/services/validacao.py:449`; `app/core/observ.py:118`; `app/core/observ.py:134`.) | Os testes interpretam essa ação especificamente. Auditoria e fotografia E4B alcançam a linha genericamente; não encontrei consumidor de negócio específico para seus JSONs. (`app/chamados/tests/test_f1nova_b2_leitores.py:438`; `app/core/views.py:705`; `app/chamados/services/foto_e4b.py:311`.) |
+| `respondida_em` / `resposta_colab` | Resposta humana pelo core; resposta automática; recuperação do instante pela trilha; `carimbar`, quando existe texto; zeragem pela porta do lote, usada por reabertura, ressuscitação e devolução L130. (`app/chamados/services/disputa_emissao.py:1481`; `app/chamados/services/disputa_emissao.py:1674`; `app/chamados/services/disputa_emissao.py:1696`; `app/chamados/models.py:3251`; `app/chamados/models.py:3402`; `app/chamados/models.py:1639`; `app/chamados/services/validacao.py:440`.) | Juiz Python, faces SQL, property e estado; vitalidade; retenção; fila de validação; validar/recusar; app. Todos esses caminhos usam o par ou delegam ao juiz. (`app/chamados/juizes.py:1526`; `app/chamados/juizes.py:1544`; `app/chamados/juizes.py:1565`; `app/chamados/models.py:3675`; `app/chamados/models.py:3164`; `app/chamados/juizes.py:1423`; `app/chamados/models.py:1933`; `app/chamados/juizes.py:1763`; `app/chamados/services/validacao.py:682`; `app/chamados/services/validacao.py:902`; `app/api/views.py:2578`.) |
+| `validada_em` | Atribuição positiva em `_carimbar_validacao` e na opção `resposta='validar'` de `carimbar`. Desfazem: nova resposta, devoluções da validação/paridade, reabertura e ressuscitação. (`app/chamados/services/validacao.py:168`; `app/chamados/models.py:3255`; `app/chamados/services/disputa_emissao.py:1494`; `app/chamados/services/validacao.py:273`; `app/chamados/services/validacao.py:349`; `app/chamados/services/disputa_emissao.py:1609`; `app/chamados/models.py:1639`.) | Estado, vitalidade, retenção, materializador, portas de validação e seleção do estoque. É assinatura/processamento da validação, não substituto de “respondida”. (`app/chamados/models.py:3161`; `app/chamados/juizes.py:1405`; `app/chamados/models.py:1934`; `app/chamados/services/materializacao.py:2056`; `app/chamados/services/validacao.py:685`; `app/chamados/services/validacao.py:392`.) |
+| `materializada_em` / `via_resolucao` | Carimbo em `_escrever_carimbo`, pelas portas `carimbar`, `carimbar_identidade` e `descarimbar`; lote em `descarimbar_em_lote`. Há duas portas próprias que mudam somente a via: `encerrar_por_fato_no_espelho` e `relavrar`, declaradas no selo. (`app/chamados/models.py:3218`; `app/chamados/models.py:3224`; `app/chamados/models.py:3289`; `app/chamados/models.py:3324`; `app/chamados/models.py:3402`; `app/chamados/models.py:3413`; `app/chamados/services/relavra_via.py:125`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:51`.) | Estado, C6, espelho SQL, retenção, materialização, estoque e leitores do lastro. Um carimbo não prova sozinho que nasceu batida: existem vias de identidade e resolução sem batida. (`app/chamados/models.py:3161`; `app/chamados/juizes.py:1416`; `app/chamados/juizes.py:1489`; `app/chamados/models.py:3494`; `app/chamados/models.py:1934`; `app/chamados/services/materializacao.py:2067`; `app/chamados/services/validacao.py:394`.) |
+| `DecisaoPergunta` | Escrita física por `registrar`. Produtores: nascimento/ressuscitação/fechamento/retratação no modelo; resposta/reabertura/automática/recuperação pela trilha; validação/devoluções/L130; absorção; silêncio do veredito; backfills. (`app/chamados/models.py:4134`; `app/chamados/models.py:1621`; `app/chamados/models.py:2015`; `app/chamados/models.py:2147`; `app/chamados/models.py:3139`; `app/chamados/services/disputa_emissao.py:1525`; `app/chamados/services/disputa_emissao.py:1631`; `app/chamados/services/disputa_emissao.py:1678`; `app/chamados/services/disputa_emissao.py:1699`; `app/chamados/services/validacao.py:173`; `app/chamados/services/validacao.py:279`; `app/chamados/services/validacao.py:354`; `app/chamados/services/validacao.py:439`; `app/chamados/services/materializacao.py:1048`; `app/ponto/services/veredito_celula.py:195`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:324`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:141`.) | Histórico de respostas, tarefa do dia, fio, rótulo de devolução BUG-PAR, backfill e fotografia E4B. (`app/chamados/models.py:3681`; `app/chamados/services/tarefa_do_dia.py:158`; `app/chamados/services/fio.py:263`; `app/chamados/services/materializacao.py:275`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:98`; `app/chamados/services/foto_e4b.py:280`.) |
+
+**Não é correto dizer que toda leitura desses campos pergunta a mesma coisa.** A API pode serializar o instante; a lavra calcula sua maior data; o histórico preserva um carimbo legado mesmo com texto vazio. Esses usos tratam instante e histórico, enquanto `pergunta_respondida` decide validade da resposta. (`app/api/views.py:2563`; `app/chamados/veredito_lavrado.py:206`; `app/chamados/models.py:4112`; `app/chamados/juizes.py:1552`.)
+
+Para decidir “respondida”, o vazio é `(texto or '').strip()`: NULL, `''` e somente brancos são equivalentes, inclusive NBSP. O SQL constrói os brancos a partir de `str.isspace()`. Já a trilha L130 conserva o texto anterior cru; `DecisaoPergunta` normaliza texto falso para `''`, mas conserva brancos. Isso corresponde a preservação histórica, não a outro juiz de resposta. (`app/chamados/juizes.py:1528`; `app/chamados/juizes.py:1560`; `app/chamados/services/validacao.py:434`; `app/chamados/models.py:4115`.)
+
+A porta de integridade recusa os dois meios-estados; o `save` verifica o par que ficará gravado, e a porta do lote também verifica as metades recebidas. Existe uma corrida concorrente expressamente declarada para saves fora da trava canônica; não é introduzida por este delta. (`app/chamados/services/fio.py:1607`; `app/chamados/models.py:3581`; `app/chamados/models.py:3591`; `app/chamados/models.py:3381`.)
+
+**2. Três testes novos — corrigem os dois bloqueios de teste do laudo, por leitura.** [nao verificado]
+
+| Mutação | Resultado esperado nos novos testes | [nao verificado]
+|---|---|
+| **(a) Apagar `evento(...)`** | Falha a exigência de exatamente uma linha por pergunta; se `_log` ficar indefinido, ocorre exceção antes. (`app/chamados/tests/test_f1nova_b2_leitores.py:438`; `app/chamados/services/validacao.py:449`.) |
+| **(b) Apagar `if _log is None: raise`** | Falha o `assertRaises(TrilhaNaoGravada)` da porta direta. (`app/chamados/tests/test_f1nova_b2_leitores.py:459`; `app/chamados/services/validacao.py:455`.) |
+| **(c) Apagar a guarda de contagem** | O segundo alvo falha na trilha, o comando captura e continua com uma devolvida; sem a guarda, não levanta o `CommandError` exigido e conserva a primeira alteração. (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:103`; `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:111`; `app/chamados/tests/test_f1nova_b2_leitores.py:469`.) |
+| **(d) Gravar ator/antes/depois diferentes dos esperados** | As igualdades exatas falham para os dois alvos da fixture. (`app/chamados/tests/test_f1nova_b2_leitores.py:441`.) |
+
+O patch **alcança a chamada real**: a porta importa `evento` localmente durante cada chamada, dentro do contexto do patch. O interceptador captura previamente a função real e só devolve `None` para a ação e os PKs escolhidos. (`app/chamados/services/validacao.py:423`; `app/chamados/tests/test_f1nova_b2_leitores.py:421`; `app/chamados/tests/test_f1nova_b2_leitores.py:459`; `app/chamados/tests/test_f1nova_b2_leitores.py:476`.)
+
+**Fila — mutantes plausíveis sobreviventes:** substituir o ANTES por `resposta_colab=''` ou `via_resolucao=''` passa nos três testes novos: ambos começam nesses defaults, e a fixture só altera o instante. Também não se confere a descrição do evento. A implementação atual preserva corretamente os valores crus; a lacuna é de cobertura para brancos/NBSP e via anterior não vazia. (`app/chamados/models.py:2562`; `app/chamados/models.py:2676`; `app/chamados/tests/test_f1nova_b2_leitores.py:234`; `app/chamados/tests/test_f1nova_b2_leitores.py:438`; `app/chamados/services/validacao.py:434`; `app/chamados/services/validacao.py:450`.)
+
+**3. `q_nao_respondida` — mesmo conjunto para todas as combinações perguntadas.**
+
+O ramo retirado é exatamente o retorno de `q_respondida_sem_texto`; a troca é substituição por chamada, sem nova negação nem mudança de tratamento de NULL. (`app/chamados/juizes.py:1572`; `app/chamados/juizes.py:1591`.)
+
+| `respondida_em` | Texto NULL | `''` | Só brancos, inclusive NBSP | Texto após trim |
+|---|---:|---:|---:|---:|
+| NULL | inclui | inclui | inclui | inclui |
+| Presente | inclui | inclui | inclui | exclui |
+
+A tabela decorre dos mesmos ramos antes/depois; NULL no texto é caso lógico previsto pela face, embora o campo atual não aceite NULL. (`app/chamados/juizes.py:1568`; `app/chamados/juizes.py:1572`; `app/chamados/juizes.py:1591`; `app/chamados/models.py:2562`.)
+
+Os **sete chamadores de produção** encontrados usam a face em `filter()`:
+
+- Canal: `app/chamados/canal.py:66`.
+- Universo da ressuscitação: `app/chamados/models.py:1533`.
+- Reabrir disputa pela view: `app/chamados/views.py:1418`.
+- Validar inline: `app/chamados/views_cobrar.py:178`.
+- Auditor C2: `app/chamados/management/commands/auditar_invariantes_chamados.py:1607`.
+- Ação de reabertura: `app/chamados/services/acoes_disputa.py:98`.
+- Recobrança: `app/chamados/services/disputa_emissao.py:1735`.
+
+Ressuscitação e auditor encadeiam `exclude` sobre outros campos; nesses sítios não há inspeção de `Q.children`, `~q_nao_respondida()` ou dependência de `annotate`. (`app/chamados/models.py:1533`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1607`.)
+
+**4. Coletor da catraca — nenhum RESPONDEDOR atual escondido em outro arquivo; limite futuro em fila.**
+
+Reconstruindo em memória o coletor anterior fornecido no anexo, o conjunto anterior tem estes **24 membros**; o posterior é esse conjunto mais as três faces SQL abaixo. Sementes e fechamento transitivo são calculados em `app/chamados/tests/test_e3_catraca_respondedores.py:116`.
+
+```text
+_dias_das_perguntas_vivas
+_pergunta_materializada_de_fato
+_pergunta_viva_calc
+_resposta_concorda_com_a_luz
+_slot_esperado
+alimentar_portas
+classificar_resposta_validacao
+competencia_do_chamado
+declarou_hora
+delta_da_resposta
+disputa_viva_do_chamado
+fio_vivo
+motivo_implausivel_validacao
+pergunta_respondida
+pergunta_sem_lastro_ou_viva
+pergunta_viva
+perguntas_corrigiveis
+perguntas_respondidas_a_validar
+perguntas_vivas_de
+porta_alcancavel_do_dia
+projecao_temporal_da_pergunta
+respondida_sem_texto
+texto_sem_carimbo
+texto_vazio
+```
+
+| Novo membro | O que faz com o texto |
+|---|---|
+| `q_respondida_sem_texto` | Exige instante e texto NULL ou composto somente de brancos. (`app/chamados/juizes.py:1572`.) |
+| `q_respondida_com_texto` | Exige instante e algum caractere fora dos brancos. (`app/chamados/juizes.py:1580`.) |
+| `q_nao_respondida` | Inclui ausência de instante ou delega ao primeiro predicado. (`app/chamados/juizes.py:1591`.) |
+
+Executei o classificador real em memória: respondedores atuais `[]`; reconstrução anterior também `[]`. Mantendo o código atual e trocando somente o coletor, a única classificação alterada é `q_nao_respondida`, de RESPONDEDOR para PAR; nenhum outro arquivo muda de papel. (`app/chamados/tests/test_e3_catraca_respondedores.py:422`; `app/chamados/tests/test_e3_catraca_respondedores.py:385`.)
+
+**Fila — a ampliação admite falso PAR futuro.** O coletor aceita qualquer kwarg cujo primeiro segmento seja `resposta_colab`, sem exigir consulta, e atravessa corpos diferidos por `ast.walk`. Confirmei em memória que uma função acrescentada ao juiz contendo apenas `qs.update(resposta_colab="x")` faz um consumidor `p.respondida_em is not None and função(qs)` virar PAR. Esse membro não existe na árvore atual. (`app/chamados/tests/test_e3_catraca_respondedores.py:124`; `app/chamados/tests/test_e3_catraca_respondedores.py:131`; `app/chamados/tests/test_e3_catraca_respondedores.py:151`; `app/chamados/tests/test_e3_catraca_respondedores.py:390`.)
+
+**5. Retração, sonda e EXPORTADA — docstring corrigida; medição incompleta em fila.**
+
+A docstring bate com o código: universo de crédito, `ignorar_tranca=True`, validação/materialização ausentes e resposta pelo juiz instante **E** texto. (`app/chamados/juizes.py:2104`; `app/chamados/juizes.py:2115`; `app/chamados/models.py:1933`.)
+
+As diferenças CH fornecidas são compatíveis com “15 chamados, 113 perguntas a menos”: as remoções listadas somam 113, sem adição. A docstring registra essa medida; reprodução em produção **[nao verificado]**. (`app/chamados/juizes.py:2107`.)
+
+O anexo mostra perda da retenção nos dois destinos, encerramento forçado permitido nos dois, `_retratar=True` somente no CH23072 e liberação do predicado CSF nos dois. São resultados do dado fornecido; execução independente **[nao verificado]**.
+
+| Leitor/caminho | Efeito da mudança e limite da sonda |
+|---|---|
+| `retencao_da_retratacao` → `_retratar` | Perder irmãs remove uma retenção; ainda existe a retenção de justificativa alheia durante aprovação e o gate de `reconciliar`. (`app/chamados/reconciliador.py:448`; `app/chamados/reconciliador.py:453`; `app/chamados/reconciliador.py:520`.) |
+| `encerrar_com_retencao` | Usa o encerramento forçado, distinto de reconciliar: não passa pelos mesmos gates de premissa/conversa. Isso permite resultados diferentes; a causa específica do `False` do CH33525 é **[nao verificado]**. (`app/chamados/reconciliador.py:498`; `app/chamados/models.py:1686`; `app/chamados/models.py:683`.) |
+| Justificativa | Aprovação pode retratar a origem; ajuste retroativo percorre a cascata e força encerramentos com retenção. Enumerar justificativas relacionadas não demonstra executar essas portas nem o contexto de aprovação. (`app/ponto/services/justificativa.py:41`; `app/ponto/services/justificativa.py:46`; `app/ponto/services/justificativa.py:393`; `app/chamados/reconciliador.py:429`.) |
+| Materialização `_fecha` | Sem irmãs, tenta reconciliar destino e clones. Execução desse ramo não aparece demonstrada no anexo **[nao verificado]**. (`app/chamados/services/materializacao.py:1246`; `app/chamados/services/materializacao.py:1258`.) |
+| HX do pai | Pai terminal em disputa aberta deixa de ser reaberto por meias-respostas. Imprimir pais e listas não demonstra executar a reabertura. (`app/chamados/services/disputa_emissao.py:2025`; `app/chamados/services/disputa_emissao.py:2031`.) |
+| CSF e gate do pai | CSF reúne perguntas da origem **e** do destino, com a mesma opção de ignorar tranca. O gate do pai lê essa lista. A sonda cobre o predicado, não o fechamento completo. (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:588`; `app/chamados/models.py:716`.) |
+| Auditor I12 | Com TM fechado e chamado vivo, irmãs levam ao piso I12r; sem elas, o chamado entra na violação I12. Esse leitor não foi medido na saída fornecida **[nao verificado]**. (`app/chamados/management/commands/auditar_invariantes_chamados.py:980`; `app/chamados/management/commands/auditar_invariantes_chamados.py:986`.) |
+
+**Há alcance automático estrutural em EXPORTADA; execução concreta hoje não está demonstrada.** O consumidor de eventos está configurado a cada minuto e chama retratação por célula e por premissa sobre vivos do colaborador, sem cerca de competência nesses laços. O gate adicional de pergunta viva exclui expressamente competências entregues de sua proteção. Uma retratação admitida escreve chamado, pode rejeitar justificativa e aciona resolução de perguntas. (`app/config/crons.py:394`; `app/chamados/reconciliador.py:1367`; `app/chamados/reconciliador.py:1375`; `app/chamados/reconciliador.py:998`; `app/chamados/reconciliador.py:1456`; `app/chamados/models.py:364`; `app/chamados/reconciliador.py:524`.)
+
+Isso **não prova que os dois CH anexados sejam retratados por esse cron hoje**: faltam evento pendente e aprovação dos demais juízos; a retratação por célula exige veredito que absolve, enquanto o anexo mostra `cobrado`. Execução desses casos pelo consumidor **[nao verificado]**. (`app/chamados/reconciliador.py:1346`; `app/chamados/reconciliador.py:1025`.)
+
+O cron CSF executável usa janela corrente e ainda exige lavra/código/gates antes da retratação; os dois dias de setembro estão fora da janela informada no anexo. Instalação/execução efetiva dos crons **[nao verificado]**. (`app/config/crons.py:599`; `app/ponto/management/commands/supra_juiz.py:85`; `app/ponto/management/commands/supra_juiz.py:249`.)
+
+A devolução direta do estoque continua recusando competência entregue, e seu comando permanece declarado como ato único. Não confundir essa proteção com uma cerca geral dos consumidores indiretos. (`app/chamados/services/validacao.py:400`; `app/config/crons.py:791`.)
+
+**6. Classes de reprovação — resultado neste recorte.**
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz / derivação paralela | A delegação remove a duplicação do ramo SQL; retenção e CSF leem o corpo compartilhado. Sem nova duplicação demonstrada. (`app/chamados/juizes.py:1591`; `app/chamados/juizes.py:2117`; `app/ponto/supra_juiz.py:573`.) |
+| Segundo escritor fora da porta | L130 zera pela porta do lote e registra histórico pela porta da sequência. As duas escritas próprias de via estão declaradas no selo. (`app/chamados/services/validacao.py:439`; `app/chamados/services/validacao.py:440`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:51`.) |
+| Relógio fora da borda | No comando, `hoje` nasce uma vez e segue até a porta; o segundo relógio serve ao arquivo de reversão. Sem nova violação demonstrada nesse caminho. (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:36`; `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:62`; `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:105`.) |
+| Selo/RED sem mordida | Os bloqueios anteriores ganharam asserções relevantes; permanecem **em fila** os mutantes de fotografia constante e o falso PAR futuro descritos acima. (`app/chamados/tests/test_f1nova_b2_leitores.py:441`; `app/chamados/tests/test_f1nova_b2_leitores.py:460`; `app/chamados/tests/test_f1nova_b2_leitores.py:477`; `app/chamados/tests/test_e3_catraca_respondedores.py:124`.) |
+| Ordem de trava | Lote trava a união antes das portas e confere FKs/elegibilidade; porta usa a ordem canônica. Sem inversão nova demonstrada no caminho do comando. (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:78`; `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:91`; `app/chamados/services/validacao.py:429`.) |
+| Campo com dois significados | Histórico de carimbo legado e resposta válida são usos distintos explic
+
+[truncado em 20000 de 20360 caracteres]
+
+## 17/11 02:53 · sessao 732e39fefeed · - · - · origem=Ronald (tmux)
+
+**Q2 — correções do laudo têm mordida por leitura do fluxo; execução dos testes/mutantes não verificada.** [nao verificado]
+
+| Mutação | O que falha | Fonte |
+|---|---|---|
+| Remover `evento(...)` | Teste exige exatamente um log por pergunta, com ação/modelo/id; se restar `_log` indefinido, falha antes por exceção. | `app/chamados/tests/test_f1nova_b2_leitores.py:438-445`; `app/chamados/services/validacao.py:449-455` |
+| Remover `if _log is None: raise` | Teste direto exige `TrilhaNaoGravada` quando evento devolve `None`. Sem a guarda, retorna `True` e deixa o ato. | `app/chamados/tests/test_f1nova_b2_leitores.py:459-467`; `app/chamados/services/validacao.py:455-458` |
+| Remover guarda de contagem | O segundo alvo falha na trilha; comando captura a exceção e continua, ficando `devolvida=1`. Sem `:111-113`, o primeiro alvo fica devolvido e o comando não levanta o `CommandError` exigido. | `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:103-115`; `app/chamados/tests/test_f1nova_b2_leitores.py:469-483` |
+| Ator/antes/depois errados | Igualdade exata dos três é exigida para ambos os alvos da fixture. | `app/chamados/tests/test_f1nova_b2_leitores.py:441-445` |
+
+O patch **alcança a chamada real**: a porta faz import local de `core.observ.evento` a cada chamada (`app/chamados/services/validacao.py:423`), dentro dos contextos do patch (`app/chamados/tests/test_f1nova_b2_leitores.py:459`, `:476`). `_evento_falha_para` captura o evento real antes do patch e intercepta apenas ação + pk selecionados (`app/chamados/tests/test_f1nova_b2_leitores.py:421-427`).
+
+**Fila — mutantes plausíveis sobreviventes nos três testes novos.** Trocar o ANTES por `resposta_colab=''` e/ou `via_resolucao=''` passa, pois ambos os campos são default `''` (`app/chamados/models.py:2562`, `:2676-2678`) e a fixture não os varia (`app/chamados/tests/test_f1nova_b2_leitores.py:234-237`). O primeiro perderia brancos/NBSP históricos; o segundo perderia via histórica não vazia. A implementação atual preserva ambos crus (`app/chamados/services/validacao.py:434-435`). Alterar/remover `descricao` também não é conferido pelos três testes (`app/chamados/tests/test_f1nova_b2_leitores.py:438-445`; evento em `app/chamados/services/validacao.py:450-451`). Isso é limitação de cobertura, sem defeito atual demonstrado.
+
+**Atomicidade, trava e relógio — sem nova violação demonstrada no caminho do comando.** Comando abre atomic do lote, trava união inteira e confere FKs/filtro antes de chamar portas (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:73-105`); porta abre savepoint/atomic e usa trava canônica (`app/chamados/services/validacao.py:428-430`). A implementação da trava ordena Colaborador, Disputa, Chamado, Pergunta (`app/chamados/models.py:2781`, `:2790`, `:2803`, `:2807`). `hoje` nasce na borda e é repassado ao predicado/porta (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:36`, `:42`, `:99`, `:105`); a porta não chama relógio diretamente (`app/chamados/services/validacao.py:408-458`). A data do arquivo de reversão usa segundo relógio para nome/metadado, não para elegibilidade (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:62-67`).
+
+**Escritores/leitores do log específico.** Porta monta ANTES e DEPOIS e passa autor (`app/chamados/services/validacao.py:434-454`); escritor genérico mapeia `ator` para `usuario`, `antes/depois` para JSON (`app/core/observ.py:118`, `:134-137`). O evento usa savepoint próprio e retorna `None` na falha best-effort (`app/core/observ.py:105`, `:133-139`), justificando a guarda fail-closed da porta (`app/chamados/services/validacao.py:455-457`). Pela busca literal, consumidores específicos dessa ação são os testes (`app/chamados/tests/test_f1nova_b2_leitores.py:415`, `:438-450`, `:465`, `:483`); consumidor de negócio dinâmico adicional [não verificado]. Leitores genéricos alcançam a linha: auditoria filtra por ação/modelo/usuário (`app/core/views.py:705-714`), mas template só mostra usuário/ação/descrição, sem os JSONs (`app/templates/core/log_auditoria.html:55-74`); foto E4B captura toda auditoria dos sujeitos (`app/chamados/services/foto_e4b.py:311-323`).
+
+**DecisaoPergunta — histórico de projeção, não selo de resposta válida L-130.** A porta grava o anterior pela sequência antes de zerar (`app/chamados/services/validacao.py:436-440`). O carregador histórico aceita qualquer `respondida_em != None`, inclusive texto vazio, e normaliza texto falso para `''` (`app/chamados/models.py:4105-4119`). Isso corresponde ao propósito de preservar projeção legada (`app/chamados/models.py:4095-4104`). `registrar` é porta única, com registros imutáveis (`app/chamados/models.py:4124-4137`, `:4084-4090`). O leitor da tarefa verifica o texto da linha RESPOSTA e devolve ação de responder se vazio (`app/chamados/services/tarefa_do_dia.py:159-162`), coerente com L-130. A trilha histórica não é prova de `pergunta_respondida`.
+
+Leitores adicionais: coleção de decisões no fio (`app/chamados/services/fio.py:251-264`), tarefa ordenada por ato/instante (`app/chamados/services/tarefa_do_dia.py:421-430`), foto E4B (`app/chamados/services/foto_e4b.py:280-281`), rótulo BUG-PAR que só procura DEVOLUCAO (`app/chamados/services/materializacao.py:275-276`), histórico de respostas (`app/chamados/models.py:3688-3697`; delegado em `app/chamados/services/disputa_emissao.py:2119-2123`). Neste último, a única RESPOSTA vazia fica como “vigente” da sequência até aparecer outra resposta ou ato com foto, portanto não aparece imediatamente na lista de anteriores; a porta L130 deliberadamente não cria REABERTURA/DEVOLUCAO (`app/chamados/services/validacao.py:417-419`).
+
+## 17/11 02:53 · sessao 2703bf549fd7 · - · - · origem=Ronald (tmux)
+
+Q3/Q4: não encontrei bloqueio atual; a delegação preserva o predicado e o coletor não encobre outro respondedor nesta cópia. (`app/chamados/juizes.py:1572`, `app/chamados/juizes.py:1591`, `app/chamados/tests/test_e3_catraca_respondedores.py:116`)
+
+- A expressão anterior era `A | (B & (C | D))`; `q_respondida_sem_texto()` devolve exatamente `B & (C | D)`. Logo permanece: instante NULL inclui qualquer texto; instante presente inclui NULL, `''` e somente brancos, inclusive NBSP, e exclui texto não vazio após trim. (`app/chamados/juizes.py:1528`, `app/chamados/juizes.py:1560`, `app/chamados/juizes.py:1572`, `app/chamados/juizes.py:1591`)
+- São sete chamadores de produção, todos usam `filter()`: canal:66; models:1533; views:1418; views_cobrar:178; auditar_invariantes_chamados:1607; acoes_disputa:98; disputa_emissao:1735. `models` e auditor encadeiam `exclude` sobre outros campos; nenhum inspeciona a estrutura do Q, aplica `~` nessa face ou depende de `annotate`. (`app/chamados/canal.py:66`, `app/chamados/models.py:1533`, `app/chamados/views.py:1418`, `app/chamados/views_cobrar.py:178`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1607`, `app/chamados/services/acoes_disputa.py:98`, `app/chamados/services/disputa_emissao.py:1735`)
+- Antes eram 24 predicados; depois, os mesmos 24 mais as três faces SQL: `q_respondida_sem_texto`, `q_respondida_com_texto`, `q_nao_respondida`. As três decidem pela resposta; nenhum novo membro é um uso de `update`/`values` sem decisão pelo texto. (`app/chamados/tests/test_e3_catraca_respondedores.py:122`, `app/chamados/juizes.py:1572`, `app/chamados/juizes.py:1580`, `app/chamados/juizes.py:1591`)
+
+Conjunto anterior completo, obtido pelo coletor antigo reconstruído em memória:
+
+```text
+_dias_das_perguntas_vivas
+_pergunta_materializada_de_fato
+_pergunta_viva_calc
+_resposta_concorda_com_a_luz
+_slot_esperado
+alimentar_portas
+classificar_resposta_validacao
+competencia_do_chamado
+declarou_hora
+delta_da_resposta
+disputa_viva_do_chamado
+fio_vivo
+motivo_implausivel_validacao
+pergunta_respondida
+pergunta_sem_lastro_ou_viva
+pergunta_viva
+perguntas_corrigiveis
+perguntas_respondidas_a_validar
+perguntas_vivas_de
+porta_alcancavel_do_dia
+projecao_temporal_da_pergunta
+respondida_sem_texto
+texto_sem_carimbo
+texto_vazio
+```
+
+O conjunto posterior é esse conjunto unido às três faces SQL acima. O cálculo das sementes e do fecho está em `app/chamados/tests/test_e3_catraca_respondedores.py:116-136`.
+
+Executei o classificador real, com `python3 -B` e `PYTHONDONTWRITEBYTECODE=1`, sobre `production_sources()` e `templates_da_arvore()`, sem Django, banco ou arquivos criados. Resultado: antes e depois, respondedores vivos vazios; mantendo o código HEAD e trocando apenas o coletor, a única mudança é `juizes.q_nao_respondida:1591`, de RESPONDEDOR para PAR. Nenhum outro arquivo muda de papel. (`app/chamados/tests/test_e3_pendentes_app.py:96`, `app/chamados/tests/test_e3_catraca_respondedores.py:403`, `app/chamados/tests/test_e3_catraca_respondedores.py:422`)
+
+**Fila — limite futuro:** o coletor aceita qualquer keyword cujo primeiro segmento seja `resposta_colab`, inclusive `resposta_colab=` em escrita, e usa `ast.walk`, que atravessa corpos diferidos. Assim, uma futura função de escrita pode entrar indevidamente no conjunto; isso não ocorre entre os novos membros atuais. (`app/chamados/tests/test_e3_catraca_respondedores.py:124`, `app/chamados/tests/test_e3_catraca_respondedores.py:131`, `app/chamados/tests/test_e3_catraca_respondedores.py:144`)
+
+## 17/11 02:53 · sessao 250803e680f9 · - · - · origem=Ronald (tmux)
+
+**Pergunta 5 — a docstring está correta no predicado, mas a sonda não cobre a cadeia inteira.** `irmas_respondidas_sem_consumo` usa o universo de crédito e delega a `sem_veredito_entre(..., ignorar_tranca=True)`; esse juiz exige `validada_em/materializada_em` nulos e `pergunta_respondida` (instante E texto). `app/chamados/juizes.py:2115-2117`; `app/chamados/models.py:1926-1936`.
+
+A frase “15 chamados, 113 perguntas a menos” corresponde às 15 linhas CH alteradas e ao resumo 111 ENTREGUE + 2 abertas do anexo; a lista das 111 está truncada, portanto sua cardinalidade não pode ser recontada integralmente. **[não verificado — anexo fornecido, sem arquivo:linha]**
+
+| Gravidade | Achado e evidência |
+|---|---|
+| **fila** | A saída fornecida mede a lista de irmãs, retenção e chamadas diretas de `encerrar_com_retencao`/`_retratar` para CH23072/33525; mede também o resultado do juiz CSF. Não demonstra aprovação de justificativa, cascata real, `_fecha`, reabertura HX, executor CSF completo, I12 ou consumidor outbox. **[não verificado — limites da saída fornecida]** |
+| **fila** | Perder a retenção não equivale a retratar. `retencao_da_retratacao` verifica irmãs e depois justificativa alheia no ato; `_retratar` ainda exige `ch.reconciliar`. `app/chamados/reconciliador.py:448-455`; `app/chamados/reconciliador.py:520-526`. |
+| **fila** | Os caminhos de justificativa não foram executados na saída: aprovação chama `encerrar_chamado_de_origem` e `_encerrar_bloqueio_de_entrada`; ajuste retroativo percorre `_cascata_do_turno` e chama `encerrar_com_retencao`. `app/ponto/services/justificativa.py:217-218`; `app/ponto/services/justificativa.py:393-408`. A enumeração de cinco justificativas relacionadas não é execução dessas portas. **[não verificado — anexo fornecido]** |
+| **fila** | `_fecha` da materialização consulta irmãs; sem elas tenta reconciliar destino e clones. Esse efeito não aparece executado na sonda. `app/chamados/services/materializacao.py:1246-1266`. |
+| **fila** | HX só reabre pai terminal em disputa aberta quando ainda há irmãs; meia-resposta deixa de justificar reabertura. A sonda imprime pais/disputas/listas, mas não mostra execução desse ramo. `app/chamados/services/disputa_emissao.py:2025-2035`. |
+| **fila** | CSF reúne perguntas do pai **e** do destino, com `ignorar_tranca=True`; `pode_executar_csf` nega quando a lista é não vazia. A mesma lista protege o gate do pai em `reconciliar`. `app/ponto/supra_juiz.py:573-588`; `app/chamados/models.py:716-719`. Portanto medir CSF cobre esse predicado compartilhado, mas não executa o fechamento pelo gate. |
+| **fila** | I12 é outro leitor não medido: chamado de turno vivo com TM fechado vai ao piso I12r quando tem irmãs; sem irmãs vira violação I12. A contraprova ainda consulta a trilha histórica de retenção. `app/chamados/management/commands/auditar_invariantes_chamados.py:980-995`; `app/chamados/management/commands/auditar_invariantes_chamados.py:121-129`. |
+
+**CH33525:** não atribuir seu `_retratar=False` a uma premissa específica. O encerramento forçado verifica motor e pergunta viva; a reconciliação verifica também premissa e conversa do pai. Isso explica por que os resultados podem divergir, mas a causa exata não foi exposta na sonda. `app/chamados/models.py:1686-1693`; `app/chamados/models.py:683-693`. **Causa específica de CH33525: [não verificado].**
+
+**EXPORTADA e cron: alcance existe; execução concreta dos casos anexados não está provada.**
+
+- O cron CSF executável usa `--executar` sem datas e, portanto, janela corrente. O comando exige também lavra `cobranca_indevida`, código, gate CSF e ausência de cobrança órfã de regeneração antes de tentar retratar. `app/config/crons.py:599`; `app/ponto/management/commands/supra_juiz.py:85-97`; `app/ponto/management/commands/supra_juiz.py:249-286`. Os dois chamados anexados são de setembro e estão fora da janela informada; não se pode dizer que esse cron os retratará hoje. **[não verificado — anexo fornecido]**
+- Existe outro caminho automático: cron de um minuto → `consumir_eventos_celula` → retratação por célula e por premissa. Ele percorre todos os vivos pertinentes do colaborador sem cerca de competência entregue nesses laços. `app/config/crons.py:394`; `app/chamados/management/commands/consumir_eventos_celula.py:31`; `app/chamados/reconciliador.py:1367-1375`; `app/chamados/reconciliador.py:998-1000`; `app/chamados/reconciliador.py:1456-1467`.
+- O gate de pergunta viva **exclui explicitamente competência entregue** da proteção adicional; portanto essa guarda não transforma o consumidor em proteção geral contra escrita em EXPORTADA. `app/chamados/models.py:364-365`. Uma retratação permitida escreve chamado, pode rejeitar justificativa pendente, resolve perguntas e acrescenta ocorrência; a transição também relavra perguntas de destino não validadas. `app/chamados/reconciliador.py:524-542`; `app/chamados/models.py:307-312`.
+- Isso prova **alcance estrutural automático em EXPORTADA**, condicionado a evento pendente e aos demais juízos. Não prova que CH23072/33525 satisfaçam os produtores e os juízos desse consumidor hoje. Ambos mostram célula `cobrado` na saída, e a retratação por célula só aceita veredito que absolve e ausência de marcos pendentes. `app/chamados/reconciliador.py:1025-1033`. **Evento pendente e execução concreta: [não verificado].**
+- O cron `reconciliar_chamados */15` é vigia, sem `--apply`; não confundir seus comentários históricos com escritor atual. `app/config/crons.py:395`; `app/chamados/management/commands/reconciliar_chamados.py:29`; `app/chamados/management/commands/reconciliar_chamados.py:71-85`.
+
+**Pergunta 6, neste recorte:** não encontrei novo segundo juiz na retenção: retratação, materialização, HX e auditor delegam à mesma autoridade; CSF delega ao mesmo corpo de veredito. `app/chamados/reconciliador.py:448-449`; `app/chamados/services/materializacao.py:1243-1247`; `app/chamados/services/disputa_emissao.py:2024-2031`; `app/chamados/management/commands/auditar_invariantes_chamados.py:977-986`; `app/ponto/supra_juiz.py:573-574`. O achado demonstrável aqui é **quem-mais-lê/medição incompleta (fila)**; não classificaria a simples perda de retenção em entregues como violação do aval restrito de devolução de estoque. A ocorrência concreta de escrita automática indevida em entregues permanece **[não verificado]**.
 
 ## 17/11 01:36 · sessao d9fc54d941c8 · PREPARA-F2-F4-F7 · sonda · origem=Code
 
@@ -976,265 +1208,4 @@ Cada número nas colunas abaixo significa `arquivo da primeira coluna:linha`. In
 
 [truncado em 20000 de 65829 caracteres]
 
-## 17/11 01:19 · sessao dd1609596b5a · PREPARA-F3-F5-F6-F8-F9 · leitura · origem=Code
-
-## 1 DEPENDE e premissas
-
-BASE: cópia identificada no pedido por `fbc5c76ced33bf25943f3a5bc78ebff257d68c56`. Confirmação independente do HEAD/main: **[nao verificado]**. Banco, logs, execução de testes e medidas atuais de produção: **[nao verificado]**.
-
-**A premissa central caiu:** a F1 atual fornece `pergunta_respondida`, sobre instante **e** texto da projeção. O D01 conservado pressuposto pelos anexos não é o contrato desses corpos. A face SQL-R existe, mas também consulta a projeção. (`app/chamados/juizes.py:1389`; `app/chamados/juizes.py:1544`; `app/chamados/juizes.py:1552`; `app/chamados/juizes.py:1580`)
-
-As referências `brief:NN` e `matriz:NN` abaixo numeram os anexos do enunciado, contando o título como linha 1; correspondência com os arquivos externos originais: **[nao verificado]**. A contagem considera **uma premissa por linha da tabela**, agrupando repetições explicitamente indicadas; CAIU parcial entra em CAIU.
-
-Abreviações usadas nas referências seguintes:
-
-| Sigla | Arquivo da BASE |
-|---|---|
-| J | `app/chamados/juizes.py` |
-| MD | `app/chamados/models.py` |
-| A | `app/chamados/management/commands/auditar_invariantes_chamados.py` |
-| B | `app/chamados/management/commands/backfill_decisoes_pergunta.py` |
-| L | `app/chamados/management/commands/curar_perguntas_em_limbo.py` |
-| G | `app/ponto/management/commands/reconciliar_grade.py` |
-| S | `app/chamados/tests/test_contract_leitores_vitalidade.py` |
-| cmd/ | `app/chamados/management/commands/` |
-| pcmd/ | `app/ponto/management/commands/` |
-| T/ | `app/chamados/tests/` |
-
-Assim, `A:177` significa `app/chamados/management/commands/auditar_invariantes_chamados.py:177`.
-
-| # | Origem: marca ou premissa | Julgamento na BASE |
-|---|---|---|
-| 1 | `[DEPENDE-F1]` D01/`atos_pergunta.leitura` conservado — brief:28; matriz:22; P4:100–102; resumo:139–141 | **CAIU.** O leitor atual recebe os campos projetados; o juiz de respondida testa esse par. (`J:1389`; `J:1423`; `J:1552`) |
-| 2 | `[DEPENDE-F1]` SQL-R lê atos; offsets da F1 antiga — brief:29; matriz:12,23 | **CAIU quanto à fonte.** Os nomes SQL existem, mas leem R/T projetados. (`J:1565`; `J:1572`; `J:1575`; `J:1580`) |
-| 3 | `[DEPENDE-F1]` walker `leituras_rvc` reutilizável da F1 — brief:71–73,77,110; matriz:109 | **CAIU como recurso disponível.** O walker vigente é `ofensores`, com alcance menor. O walker histórico: **[nao verificado]**. (`S:14`; `S:310`; `S:328`) |
-| 4 | `[DEPENDE-F2]` `_q_validada_pelo_ato` disponível, inclusive questão público/privado — brief:30,135–137; matriz:13,23,126–128 | **CAIU como API da BASE.** `q_vivas` ainda filtra `validada_em`; o corte autoriza a face do juiz, mas não demonstra aquela implementação presente. (`MD:3496`; `app/docs/CORTES.md:488`) |
-| 5 | `[DEPENDE-F2]` selo F2 por função já disponível para união — brief:74–75 | **CAIU como pré-requisito demonstrado.** O contrato presente exclui models/juízes e só cobre C/V. O selo histórico citado: **[nao verificado]**. (`S:14`; `S:320`) |
-| 6 | `[DEPENDE-F1]` D01/SQL-R daria `ORFA_FIO_PRESO` para RESPOSTA somente no ato — brief:84; matriz:33 | **CAIU o oráculo antigo.** O filtro atual é R projetado; o juiz atual também não transforma a existência de RESPOSTA em par respondido. (`G:460`; `G:461`; `J:1552`) |
-| 7 | `[DEPENDE-F1]` D06/D08: `fio_vivo` e `pergunta_viva` já leem atos conservados — matriz:44,48 | **CAIU a fonte pressuposta.** `fio_vivo` chama C6; C6 começa pela projeção temporal. (`J:1519`; `J:1404`; `J:1389`) |
-| 8 | `[DEPENDE-F1]` D11/D14/D15: nota, rótulo dedup e impressão classe A podem consumir D01 — matriz:54,59,60 | **CAIU como dependência satisfeita.** Os três leem T diretamente. (`L:32`; `cmd/dedup_perguntas_fato.py:75`; `cmd/validar_classe_a.py:80`; `J:1552`) |
-| 9 | `[DEPENDE-F1]` D22 contraprova I21a recebe D01-R — matriz:71 | **CAIU.** A contraprova ainda testa apenas R. (`A:177`) |
-| 10 | `[DEPENDE-F1]` D23 rótulo F1t recebe D01-V — matriz:72 | **CAIU.** O rótulo usa V projetada depois de consultar C6. (`A:202`; `A:205`) |
-| 11 | `[DEPENDE-F1]` D26 I2 recebe D01-R — matriz:75 | **CAIU.** O piso ainda usa somente instante. (`A:592`) |
-| 12 | `[DEPENDE-F1/F2]` D32 I21 precisa migrar R cru e V para as interfaces antigas — matriz:81 | **CAIU parcialmente.** R já usa a face SQL atual; V/C continuam projetados. (`A:1574`; `A:1575`; `A:1576`; `A:1577`) |
-| 13 | `[DEPENDE-F1/F2]` D33 C2 dispõe de SQL-R/SQL-V por atos — matriz:82 | **CAIU.** C2 ainda exige R/V/C nulos da projeção. (`A:1604`; `A:1605`) |
-| 14 | `[DEPENDE-F1]` D34 F1 dispõe de D01 para texto/vida — matriz:83 | **CAIU a interface.** C6 e texto continuam sendo leituras distintas, sendo T lida diretamente. (`A:1655`; `A:1657`; `J:1389`) |
-| 15 | `[DEPENDE-F1/F2]` D35/D36 usam C6 por ato e migrarão V pela face existente — matriz:84–85 | **CAIU.** Os pré-filtros V são projetivos e C6 também começa pela projeção. (`A:1768`; `A:1780`; `J:1404`) |
-| 16 | `[DEPENDE-F2]` D05/D07 dispõem da seleção V por ato — matriz:43,47 | **CAIU.** Encerrar e reabrir órfãs filtram V projetada. (`cmd/encerrar_perguntas_com_fato.py:32`; `cmd/reabrir_orfas_enterradas.py:68`) |
-| 17 | `[DEPENDE-F2]` D29/I18 dispõe de V e autor vigentes pelo ato — matriz:78,95–97,128 | **CAIU como implementação presente.** A consulta usa V e `validada_por__username` projetados. (`A:1075`; `A:1076`) |
-| 18 | `[DEPENDE-F1/F2]` conservação dos legados pelos folds antigos; divergências V — brief:86–97; matriz:87–90 | **CAIU a explicação pelo fold disponível.** A conservação atual dos valores vem dos campos; lacunas da sequência são medidas por correspondência de instante. Números atuais: **[nao verificado]**. (`J:1389`; `MD:4094`; `MD:4098`; `MD:4102`) |
-| 19 | Nenhum dos 12 comandos foi tocado pela F1 — brief:13–16; matriz:10 | **CAIU como descrição da BASE atual.** I21 contém a adoção explícita da face SQL da F1 nova. O diff histórico dos hashes: **[nao verificado]**. (`A:1572`; `A:1574`) |
-| 20 | Retrato BUG-PAR limitado a crons/teste, sem dependência relevante para esses leitores — brief:123 | **CAIU como retrato atual suficiente.** A BASE registra c4+c4c e contém composição K6, testemunha e devolução próprias. Interseção histórica exata do hash antigo: **[nao verificado]**. (`app/docs/BACKLOG.md:2084`; `app/chamados/services/materializacao.py:792`; `app/chamados/services/validacao.py:349`) |
-| 21 | RELAVRA-11 cruza backfill/reabrir; seus sítios precisam ser reconferidos — brief:114–118,125–127,160; matriz:120–121 | **CONFERE a dependência dos sítios.** A BASE ainda mostra `marcos_da_competencia` e `competencia_entregue` nesses corpos. Pouso do hash citado: **[nao verificado]**. (`cmd/reabrir_orfas_enterradas.py:95`; `B:453`; `B:471`; `B:498`) |
-| 22 | C fica projetado até E4d; nenhum ato de conclusão atual — brief:31–32,131–133; matriz:124 | **CONFERE.** O ato de conclusão está registrado para E4d; escrita dupla morre no Contract. (`app/docs/BACKLOG.md:1981`; `MD:4024`) |
-| 23 | Backfill, reversões e I20 examinam integridade da própria projeção — brief:33,48–50; matriz:106–107 | **CONFERE.** Há correspondência pergunta/ato/instante, fotos antes/depois e I20 projetivo. (`MD:4094`; `cmd/reabrir_orfas_enterradas.py:129`; `A:1105`) |
-| 24 | Construtor pode escolher livremente limbo projetivo ou “ato sem projeção” — brief:138–140; matriz:118–119,128 | **CAIU como escolha técnica livre.** O comando tem corte próprio e recusa mudança do conjunto nominal. (`L:3`; `L:13`; `L:17`; `L:46`; `L:48`) |
-| 25 | Correção da matriz: existe selo parcial; R e cargas gerais ficam fora — matriz:14–19 | **CONFERE.** O selo cobre C/V e formas específicas de comparação. (`S:14`; `S:328`; `S:330`; `S:332`) |
-| 26 | Existem os três importadores produtivos enumerados — brief:147–148; matriz:111–112 | **CONFERE.** Relavra importa I6; dedup importa o apply; worklist importa parser/catálogo. (`cmd/relavrar_via_i6.py:46`; `cmd/dedup_perguntas_fato.py:104`; `app/ponto/worklist.py:37`) |
-| 27 | P8: `universo_i6` devolve `(pk, materializada_em)` — matriz:111 | **CAIU.** Retorna `(set de violações, dict de pisos)`; aqueles pares são consulta interna. (`A:457`; `A:470`; `A:484`; `cmd/relavrar_via_i6.py:49`) |
-| 28 | Selo global só fecha após todos os leitores, não apenas os 12 — brief:78,126–127; matriz:108–110 | **CONFERE a condição.** Contract só apaga depois de nenhum leitor antigo permanecer. A lista efetiva das demais fatias: **[nao verificado]**. (`app/docs/PLANO-PADROES.md:92`; `app/docs/PLANO-PADROES.md:94`; `app/docs/BACKLOG.md:2036`) |
-| 29 | Os 12 não escrevem diretamente atributos RVC; as operações seguem portas — brief:21–22; matriz:113–115 | **CONFERE no censo estático.** Fotos não são atribuições de campo; reabertura, correção e registro seguem portas. (`cmd/reabrir_orfas_enterradas.py:129`; `cmd/reabrir_orfas_enterradas.py:157`; `L:67`; `L:69`; `B:324`) |
-| 30 | Três crons e “nada persistido” pelas auditorias — brief:141–146; matriz:116–117 | **CAIU parcialmente.** Agendas/flags conferem, mas auditor com `--html` grava arquivo. Grade está sem apply; alarme desliga apply dos fantasmas. (`app/config/crons.py:392`; `app/config/crons.py:462`; `app/config/crons.py:542`; `A:1855`; `pcmd/reconciliar_fantasmas.py:153`) |
-
-DEPENDE CAIU 23 de 30
-
-## 2 Censo escritores e leitores
-
-R=`respondida_em`; T=`resposta_colab`; V=`validada_em`; VP=`validada_por[/_id]`; C=`materializada_em`; CP=`materializada_por[/_id]`. Os campos pertencem à pergunta nos seguintes sítios; o homônimo de regularização externa é outro modelo. (`MD:2552`; `MD:2553`; `MD:2554`; `MD:3514`; `MD:3530`; `MD:3534`; `MD:4152`)
-
-O levantamento combina AST de atributos, keywords e strings ORM com busca textual de templates/importadores. **NOVO** significa ausente do inventário correspondente do brief, sem afirmar criação recente. Resolução de nomes inteiramente dinâmicos: **[nao verificado]**.
-
-**Escritores e portas, além dos comandos:**
-
-| Campos | Escritor, persistência e sequência |
-|---|---|
-| R/T — **NOVO** | Resposta humana: atribui e persiste o par; registra RESPOSTA. (`app/chamados/services/disputa_emissao.py:1481`; `:1482`; `:1483`; `:1525`) |
-| R/T — **NOVO** | Automática: conserva anterior, escreve par e RESPOSTA. (`app/chamados/services/disputa_emissao.py:1673`; `:1674`; `:1675`; `:1677`; `:1678`) |
-| R | Reparo pela trilha: carimbo e RESPOSTA retroativa. (`app/chamados/services/disputa_emissao.py:1696`; `:1698`; `:1699`) |
-| V/VP — **NOVO** | Nova resposta invalida a validação anterior. (`app/chamados/services/disputa_emissao.py:1494`; `:1495`; `:1496`) |
-| V/VP — **NOVO** | `_carimbar_validacao`: campos e VALIDACAO. (`app/chamados/services/validacao.py:168`; `:169`; `:171`; `:173`) |
-| V/VP — **NOVO** | Devolução recusada e devolução BUG-PAR: zeragem e DEVOLUCAO. (`app/chamados/services/validacao.py:273`; `:276`; `:279`; `:349`; `:351`; `:354`) |
-| C/CP — **NOVO** | `_escrever_carimbo`; persistem carimbo comum, identidade e descarimbo. (`MD:3209`; `MD:3210`; `MD:3262`; `MD:3300`; `MD:3322`) |
-| R/V/VP — **NOVO** | `carimbar(resposta=)` também preenche esses campos; o corpo salva sem registrar RESPOSTA/VALIDACAO. (`MD:3242`; `MD:3245`; `MD:3246`; `MD:3262`) |
-| C/CP e campos adicionais — **NOVO** | `descarimbar_em_lote`; ressuscitação e reabertura passam a zeragem por ele. (`MD:3391`; `MD:3393`; `MD:1629`; `MD:1630`; `app/chamados/services/disputa_emissao.py:1609`; `:1648`) |
-| R/T por entrada — **NOVO** | `_nascer` recebe campos, instancia/salva e conserva projeção sem linha. (`MD:2949`; `MD:2950`; `MD:3124`; `MD:3127`; `MD:3129`) |
-| Apenas memória — **NOVO** | Simulação de ressuscitação e restauração após rollback. (`MD:1554`; `MD:1555`; `MD:1556`; `MD:3273`; `MD:3274`; `MD:3275`) |
-| DecisaoPergunta | Escritor físico único `registrar`, com escrita em lote interna. (`MD:4110`; `MD:4120`) |
-
-**Todos os sítios RVC encontrados nos 12 comandos:**
-
-| Arquivo | Leituras, seleção ou transporte |
-|---|---|
-| `cmd/auditar_invariantes_chamados.py` | R `:177,592,1105,1605`; T `:1106,1657`; V `:205,1075,1576,1604,1768,1780`; VP `:1076`; C `:470,538,588,905,955,1075,1156,1577,1604,1769`. |
-| `cmd/backfill_decisoes_pergunta.py` | R `:56,60`; T `:61,326,504`; V `:56,60,102`; VP `:60`; C `:101,325`; CP `:326`. |
-| `cmd/reabrir_orfas_enterradas.py` | C `:67,88,91,129,142,160`; CP `:130,143,160`; V `:68`. |
-| `cmd/curar_perguntas_em_limbo.py` | R `:46,69`; T `:32,46`. |
-| `cmd/auditar_disputas.py` | C `:71,150`. |
-| `cmd/encerrar_perguntas_com_fato.py` | C/V `:32`. |
-| `cmd/dedup_perguntas_fato.py` | T `:75`. |
-| `cmd/migrar_data_evento_dia_do_turno.py` | C `:147`. |
-| `cmd/validar_classe_a.py` | T `:80`. |
-| `cmd/relavrar_via_i6.py` | Sem acesso RVC direto; herda I6 por importação `:46` e chamada `:49`. |
-| `pcmd/reconciliar_fantasmas.py` | C `:213`. |
-| `pcmd/reconciliar_grade.py` | R `:461`. |
-
-**NOVO no inventário repo-wide do brief: leitores, seletores e transportadores fora dos 12.** Esta enumeração inclui os corpos escritores quando também leem/fotografam os campos; não transforma toda ocorrência em juiz.
-
-```text
-app/api/views.py:1163,2561 [T]; :1165,2563,2577,2620,2637 [R]
-app/api/views_mensageria.py:567 [T]; :569,570 [R]
-app/chamados/canal.py:65 [T]
-
-app/chamados/juizes.py:292,683,711,858,1390,1502 [C]
- :352,856,1389,1423,1534,1541,1552,1572,1580,1744,1753 [R]
- :364,857,1360,1389,1423,1534,1541,1552,1572,1580,1779,1926,2030,2035,2052 [T]
- :856,1389 [V]
-
-app/chamados/models.py:
- :1531,1923,2006,3153,3156,3166,3209,3236,3238,3292,3293,3296,3320,
-  3331,3365,3393,3411,3423,3440,3483,3485 [C]
- :3210,3236,3238,3293,3296,3320,3365,3393 [CP]
- :1555,1614,1629,1924,2949,3155,3158,3237,3241,3242,3243,3273,3331,
-  3370,3375,3376,3380,3382,3568,3584,3585,3665,4091,4098,4099,4100 [R]
- :1533,1556,1614,1630,1925,2007,2139,2950,3240,3331,3370,3375,3379,
-  3383,3568,3584,3586,3688,3693,3697,3701,3705,3708,3709,3710,4101,4105 [T]
- :310,344,1554,1614,1629,1923,3151,3237,3244,3245,3247,3274,3331,
-  3496,4091,4102,4103,4104 [V]
- :1614,1629,3237,3246,3247,3275,4105 [VP]
-
-app/chamados/reconciliador.py:367,630,1050,1145,1155,1505 [C]
- :1146,1156 [CP]; :365,1083 [T]; :631,1050 [V]
-app/chamados/services/acoes_disputa.py:97,132 [R]; :355 [T]; :347 [V]
-app/chamados/services/becos.py:30 [R]
-app/chamados/services/declaracao_texto.py:417,419,687 [R]; :417 [T]; :227 [V]
-app/chamados/services/disputa_emissao.py:
- :228,776,1084,1104,1340,1637,1930,2062,2073,2090 [C]
- :1482,1483,1609,1635,1675,1677,1692,1696,1698,1703,1735,1843,1861,2074,2091 [R]
- :1481,1483,1609,1635,1663,1674,1677,1692,1700,1861,2079 [T]
- :1484,1485,1494,1496,1537,1538,1609,1636,2062 [V]
- :1484,1495,1496,1537,1538,1609,1636 [VP]
-app/chamados/services/explicador.py:55,102,103 [T]
-app/chamados/services/fabrica_da_celula.py:171 [C]
-app/chamados/services/fio.py:187,706,1613 [R]; :377,1279,1291,1613 [T]
-app/chamados/services/foto_e4b.py:180 [C,R,V]
-app/chamados/services/historico.py:99 [R]; :101 [V]; :103 [C]; :109 [T]
-app/chamados/services/materializacao.py:
- :148,261,262,289,326,862,871,1015,1107,1109,1114,1153,1652,1656,2066,2079,2127 [C]
- :1154 [CP]; :1151,2064 [R]
- :546,574,625,671,678,718,733,770,869,950,1047,1109,1150,1311,1352,
-  1534,1558,1567,1619 [T]
- :199,201,1152,2065,2082 [V]; :1152 [VP]
-app/chamados/services/painel.py:67 [C,R,V]; :270,271,272,273 [V]; :262 [VP]
-app/chamados/services/passivo_validado.py:64,534,535,536 [C]; :64,535 [CP]; :66 [R,V,VP]
-app/chamados/services/pergunta_no_app.py:81 [R]
-app/chamados/services/raiox.py:135,182 [C]; :138,147 [R,T]
-app/chamados/services/relavra_via.py:181,244,252 [C]
-app/chamados/services/validacao.py:
- :262,264,341,363,556,681,701,717 [C]; :342,363 [CP]
- :594,813,824,848,1167 [R]
- :175,263,281,356,380,823,843,848,1094,1096,1098,1103,1104,1105,1106,1109 [T]
- :168,171,173,181,262,269,273,276,300,302,343,349,351,364,489,553,597,
-  701,810,975,996 [V]
- :169,171,181,262,274,276,300,302,343,350,351,364,489 [VP]
-app/chamados/services/verbos.py:335,336,342,345 [R]; :264,270 [V]; :264,265,266,268 [VP]
-app/chamados/services/vigia_carimbo.py:98 [V]
-app/chamados/services/vigia_fio.py:636,746 [R]; :749 [T]
-app/chamados/templatetags/chamados_tags.py:139,166 [T]
-app/chamados/veredito_lavrado.py:203,204 [C]; :207,208 [R]
-app/chamados/views.py:1257 [C]; :1280,1416 [R]
-app/chamados/views_cobrar.py:169,176 [R]; :291 [T]
-app/chamados/management/commands/bug_par_103.py:66 [C]; :67 [CP]; :68 [V,VP]
-
-app/colaboradores/services/calendario.py:504 [T]
-app/colaboradores/services/ficha.py:171 [T]
-app/folha/previa.py:142 [T]
-app/ponto/services/cartorio.py:1641 [T]
-app/ponto/services/dia_do_colab.py:70 [T]
-app/ponto/services/flip_auto.py:130 [V]
-app/ponto/services/procedencia_batida.py:74 [C,V]; :71,72 [CP,VP]
-app/ponto/services/veredito_celula.py:196 [C]; :197 [T]
-
-bin/censo_folha.py:28,29 [R]; :29 [V]
-bin/sombra_regras_pessoais.py:85 [T]
-
-app/templates/chamados/partials/_card_atendimento.html:
- :106,143,391 [R,T/display]; :114,141,148,154,182,183 [T]
-app/templates/chamados/partials/_lote_preview.html:24 [T]
-app/templates/chamados/partials/_pergunta_card.html:20,23,42 [V]; :24,29,32 [R]
-app/templates/chamados/partials/modal_fio.html:185,217,220 [R]; :219 [T]; :228 [V]
-```
-
-**Sequência DP e conservação também entram no censo:**
-
-| Objeto | Escritores/leitores |
-|---|---|
-| Produtores de atos | Resposta/reabertura/automática/trilha: `app/chamados/services/disputa_emissao.py:1525,1631,1678,1699`; validação/devoluções: `app/chamados/services/validacao.py:173,279,354`; absorção: `app/chamados/services/materializacao.py:1045`; silêncio/retratação: `MD:2005,2137`; silêncio do espelho: `app/ponto/services/veredito_celula.py:195`; backfill: `B:324`. |
-| Leitores do helper de correspondência | `MD:1613,3129`; `app/chamados/services/disputa_emissao.py:1480,1673`; `app/chamados/services/validacao.py:167,272,345`; **NOVO** `app/chamados/services/tarefa_do_dia.py:430`; `B:67`; **NOVO** `cmd/backfill_fio_morto_e4b.py:141`. |
-| Outros leitores DP — **NOVO** | Histórico `MD:3675`; rótulo BUG-PAR `app/chamados/services/materializacao.py:275`; tarefa `app/chamados/services/tarefa_do_dia.py:159,178,421`; prefetch `app/chamados/services/fio.py:263`; fotografia `app/chamados/services/foto_e4b.py:280`; backfill `B:99,315`. |
-
-**Funções da fatia e consumidores encontrados:**
-
-| Função | Produção | Testes/contratos consumidores | [nao verificado]
-|---|---|---|
-| `nota_da_resposta` | `L:56` | Mock em `T/test_curar_perguntas_em_limbo.py:65`. |
-| `linhas_a_criar` | `B:455` | `T/test_e1_v6_horizonte.py:125`; registros em `T/test_e3_catraca_respondedores.py:68,81`; `S:43`. |
-| `admin_decidiu_sem_ato` | `B:487,488` | `T/test_e1_v13d_exportada_fora.py:64,73,88,156,157`; `T/test_e1_v6_horizonte.py:130,302,303,312,335`; `S:282`. |
-| `universo_i6` | `A:496,737`; `cmd/relavrar_via_i6.py:49` | `T/test_selo_lapide_legado.py:89`; `T/test_selo_i6_ouve_a_lei.py:166,178,188,199`; registro em `app/core/tests/test_medida_turno_do_par.py:367`. |
-| `_i6_pares` | `A:461` | Substituição/restauração em `T/test_selo_lapide_legado.py:85,87,91`; `S:89`. |
-| `_contraprova_i21a` | `A:1587` | Chamador direto de teste: **NENHUM localizado**; chamadas dinâmicas **[nao verificado]**. | [nao verificado]
-| `_contraprova_f1t` | `A:1723` | Registro `S:277`; chamador direto de teste: **NENHUM localizado**; chamadas dinâmicas **[nao verificado]**. | [nao verificado]
-| `_relavrar_orfa` | `G:228` | `app/escala/tests/test_cobranca_orfa_regeneracao.py:301,314,320,328,345`; **NOVO** `T/test_porta_chamado_e2.py:65,72`. |
-| `classificar` do migrador | `cmd/migrar_data_evento_dia_do_turno.py:212` | `T/test_e1_v15f.py:351,357,362,366,372,376,381`; registros `S:45`; `app/core/tests/test_medida_turno_do_par.py:169,265`. |
-| `aplicar`/`CONTADORES_DO_APPLY` | `cmd/dedup_perguntas_fato.py:104` | Família backfill/dedup; exemplos `T/test_e1_v9.py:212,235,250,261`. |
-| `_parse_pendentes`/`MODULOS_ALVO` | `app/ponto/worklist.py:37` | Contratos do consumidor: alcance além das referências inspecionadas **[nao verificado]**. |
-| Walker atual `ofensores` | Sem consumidor de domíni
-
-[truncado em 20000 de 54349 caracteres]
-
-## 17/11 01:16 · sessao 01a855b0f46d · PREPARA-F2-F4-F7 · sonda · origem=Code
-
-**O anexo recebido está truncado: termina em `pergunta=53057 a`, dentro do SCRIPT 1. Não aparecem totalizadores, resultados de RED nem mensagens de ERRO. A entrega `logs/ESPINHA-BRIEFS/PREPARA-1611/f7.r` também não foi localizada nesta cópia; a associação exata às perguntas das seções 4 e 5 fica [nao verificado].**
-
-| Rótulo recebido | Valor visível | O que confirma, derruba ou dimensiona |
-|---|---|---|
-| `ITEM backfill_recorte … ato=resposta` | IDs individuais; exemplo: col283, pergunta **33692**. [nao verificado] | Confirma presença de itens **listados pela sonda**; não fornece o total do recorte nem prova execução do backfill. O significado exato do filtro da sonda permanece [nao verificado]. |
-| `ITEM backfill_recorte … ato=validacao` | IDs individuais; exemplo: col950, pergunta **55894**. [nao verificado] | Confirma presença dessa categoria na listagem; não dimensiona seu universo completo nem demonstra mordida de RED. [nao verificado] |
-| Mesma pergunta nos dois atos | Exemplo: col503, pergunta **33719**, aparece como resposta e validação. [nao verificado] | Não demonstra duplicação indevida: o código trata resposta e validação separadamente e verifica correspondência por **pergunta + ato + instante**. `app/chamados/models.py:4094`, `:4098`, `:4102`. |
-| `pergunta=NNNNN` e `colNNN` | Identificadores, não quantidades. [nao verificado] | Cada ocorrência identifica um item; não corresponde a “lei N” nem a “RED que morde n”. A ligação individual às seções anteriores permanece [nao verificado]. |
-
-No código, `linhas_a_criar()` consulta a função que encontra resposta/validação da projeção sem linha correspondente na sequência; isso mede **linhas candidatas**, não comprova escrita. `app/chamados/management/commands/backfill_decisoes_pergunta.py:44`, `:67`, `:82`; `app/chamados/models.py:4081`.
-
-**Scripts com ERRO:** nenhum erro está visível no trecho recebido; causa [nao verificado]. Ficaram sem número os totais completos do recorte, os demais resultados das SONDAS e qualquer execução de RED; truncamento não comprova falha do script. [nao verificado]
-
-**Contagens da entrega:** nenhum resultado recebido sustenta alterar “lei N” ou “RED que morde n”; seus valores específicos permanecem [nao verificado]. Existe um registro de **F7 “lei 0”** em `app/docs/RELATO.md:403`, mas sua identidade com a entrega PREPARA solicitada é [nao verificado]. Para fechar a avaliação pedida, faltam o `f7.r` e a continuação integral da saída. [nao verificado]
-
-## 17/11 01:16 · sessao 359cd9de0f44 · - · - · origem=Ronald (tmux)
-
-- A cópia registra F7 com **lei 0**, 22 linhas em quatro templates, dependências F1+F2+BUG-PAR e smoke no pouso (`app/docs/RELATO.md:403`).
-- A grade aponta para `logs/ESPINHA-BRIEFS/F7/matriz.md` e `brief.md`, com referência de commit marcada `[nao verificado]` (`app/docs/GRADE-MESTRA.md:1808`).
-- Não localizei `logs/ESPINHA-BRIEFS/PREPARA-1611/f7.r`, a entrega PREPARA anterior, suas seções 4/5 nem a contagem “RED que morde n”; portanto, o conteúdo e os totais específicos dessa entrega permanecem [nao verificado].
-- O registro “lei 0” acima pertence ao brief F7 citado pelo RELATO; sua identidade com a entrega PREPARA pedida pelo usuário permanece [nao verificado].
-
-## 17/11 01:12 · sessao ec551772e0be · REVISAO-AVAL-RD1711 · verificador · origem=Code
-
-1. **Premissas: conferem, exceto a garantia de criação discutida no item 3.** K6 hoje exclui U163; a validação exige resposta, ausência de validação anterior, passagem pela espera declarado × gravado e pelo implausível. (`app/chamados/services/materializacao.py:795`; `app/chamados/services/validacao.py:594`; `app/chamados/services/validacao.py:597`; `app/chamados/services/validacao.py:609`; `app/chamados/services/validacao.py:615`)
-
-   Entregue com `FechamentoMensal` aberto é compatível: K6 consulta exportação vigente; F6 barra fechamento aprovado/exportado. B1 também confere: o juiz preserva L-123-MEDIDA-EM-PY, e o hook já chama esse juiz. A causa concreta de `4633d2c17` permanece **[nao verificado]**. (`app/folha/export.py:564`; `app/ponto/janelas.py:86`; `bin/tests/test_lei_akita.sh:348`; `bin/commit_msg.sh:29`)
-
-2. **Colisões: nenhuma nova identificada nos registros conferidos.** F4 sobre B2 já é o encaixe declarado; a inclusão de U163 em L1/L5 sucede expressamente o tratamento anterior, preservando F6. Continua obrigatória a condição J1: F4 logo atrás de F1/F2 ou contador esperado zero no intervalo. (`app/docs/RELATO.md:26`; `app/docs/RELATO.md:28`; `app/docs/BACKLOG.md:823`; `app/docs/CORTES.md:488`)
-
-   BACKLOG e resumo do brief CLASSE-D registram R1 antes de F2; o registro posterior dispensa F2 de esperar CLASSE-D. LU2-07/LU2-08 conservam seus ramos abertos, sem decisão nova por este aval. Conferência do brief integral: **[nao verificado]**; seu resumo consta no RELATO. (`app/docs/BACKLOG.md:1990`; `app/docs/RELATO.md:421`; `app/docs/RELATO.md:4`; `app/docs/RELATO.md:352`; `app/docs/RELATO.md:354`)
-
-   B preserva a permissão cuja supressão motivou a devolução e mantém a exceção nominal fechada, com catraca 13. (`app/docs/RELATO.md:7`; `bin/tests/test_lei_akita.sh:348`; `bin/tests/test_lei_akita.sh:411`; `bin/tests/test_lei_akita.sh:413`)
-
-3. **Literal: ainda não fecha a contagem `+1` de A4.** A busca de batida existente não filtra aprovação; o escritor reutiliza qualquer encontrada e só cria quando não encontra nenhuma. Portanto, “sem batida aprovada” ainda permite reuso sem criação. (`app/chamados/juizes.py:247`; `app/chamados/services/materializacao.py:1347`; `app/chamados/services/materializacao.py:1353`)
-
-   Contraexemplo de código: sem irmã, batida não aprovada do mesmo tipo exatamente em `ts`. Ela não produz `ja_satisfeita` e não entra na vizinhança anterior/posterior, cujos limites são estritos; ainda assim, o escritor a reutiliza. Nenhuma guarda precisa ser afrouxada. Ocorrência em produção: **[nao verificado]**. (`app/chamados/services/materializacao.py:899`; `app/chamados/services/materializacao.py:113`; `app/chamados/services/materializacao.py:116`; `app/chamados/services/materializacao.py:1347`)
-
-   Para fechar esse ponto, A4 precisa exigir ausência de qualquer batida retornada pela busca de reuso. (`app/chamados/juizes.py:239`; `app/chamados/services/materializacao.py:1353`)
-
-4. **Exportada, dinheiro e `!`: não identifiquei ampliação além do bloqueio declarado.** A guarda está antes do carimbo e do recálculo na validação e antes das escritas do materializador. Alteração do `FechamentoMensal` exportado continua sob `!`; impacto monetário efetivo: **[nao verificado]**. (`app/chamados/services/validacao.py:652`; `app/chamados/services/validacao.py:655`; `app/chamados/services/validacao.py:666`; `app/chamados/services/materializacao.py:1829`; `CLAUDE.md:411`)
-
-**VEREDITO: PROCEDE (item 3/A4: “sem batida aprovada” permite reuso sem criação e não garante `+1`; app/chamados/juizes.py:247; app/chamados/services/materializacao.py:1353).**
-
-_6298 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6302 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
