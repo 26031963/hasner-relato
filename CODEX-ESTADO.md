@@ -1,7 +1,178 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 11:24** · publicado em **17/11/2026 11:24** (UTC-3)
+> Ultima resposta processada: **17/11/2026 11:25** · publicado em **17/11/2026 11:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 11:25 · sessao 26b2f5915fe9 · PERSPECTIVA-ESPINHA · censo · origem=Code
+
+PERGUNTA-SEM-SELO | GRADE-MESTRA.md:37 | PENDENTE REAL | Faltam classes além dos pousos parciais (app/docs/BACKLOG.md:806); apenas C7 tem censo fechado (app/docs/RELATO.md:2015); espera de lei/! e censo integral [nao verificado]; HEAD/git log desta cópia [nao verificado] | outras | lei_ou_bang=N | censo=N
+JUIZ-DO-PAR-DUAS-ENTRADAS | GRADE-MESTRA.md:38 | SUPERADA/ABSORVIDA | Absorvida por JUIZ-DO-PAR-CURA-NA-FONTE (app/docs/RELATO.md:1142); implementação em app/escala/utils.py:590 | - | lei_ou_bang=N | censo=N
+COBERTURA-PARCIAL-UM-JUIZ | GRADE-MESTRA.md:39 | FEITA | Fechada após reabertura, pouso 97bcb01c com prova de frota (app/docs/RELATO.md:8908; app/docs/TICKETS.md:156); juiz em app/ponto/services/cartorio.py:398 | - | lei_ou_bang=N | censo=N
+FIO-LE-O-JUIZ | GRADE-MESTRA.md:40 | FEITA | Pouso 7c9e4c27 (app/docs/RELATO.md:3835); push posteriormente concluído em 9185652e por PUSH-AGORA-SEM-O-CLIQUE, mantendo clique como smoke de prova (app/docs/RELATO.md:3741) | - | lei_ou_bang=N | censo=N
+CXR-TELA-LE-O-MOTOR | GRADE-MESTRA.md:41 | FEITA | Pouso 94d41ea5 (app/docs/RELATO.md:2031); resíduos transferidos por aval a CXR-PRONTO1-COL841 e CXR-PRONTO5-DEFINICAO (app/docs/RELATO.md:2038; app/docs/RELATO.md:2039); primeira lavra posterior [nao verificado] | - | lei_ou_bang=N | censo=N
+C6-TETO-MARCO-PENDENTE | GRADE-MESTRA.md:42 | PENDENTE REAL | Falta curar tratamento do marco pendente no C6 (app/docs/BACKLOG.md:906); discordância com lâmpada registrada em app/docs/RELATO.md:3380; espera de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+PASSIVO-VALIDADO-K6 | GRADE-MESTRA.md:43 | PENDENTE REAL | Falta substituir cópia pelo juiz K6 (app/docs/BACKLOG.md:907); predicado copiado permanece em app/chamados/services/passivo_validado.py:127; espera de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+PROGRAMA-CELULA-E-O-DIA | GRADE-MESTRA.md:44 | PENDENTE REAL | Escopo inclui E1 e pista V3 (app/docs/BACKLOG.md:909; app/docs/BACKLOG.md:910), apesar da catraca de status vazia (app/core/medida_leitor_do_dia.py:340); leis C16/C06 abertas (app/docs/RELATO.md:837); censo integral fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+GRADE-FOLGA-JUIZ | GRADE-MESTRA.md:45 | FEITA | Pouso 6f583cbc após opus aprovado e prova de frota (app/docs/RELATO.md:8803; app/docs/RELATO.md:8804); leitor do juiz em app/ponto/services/declarar_dia.py:73 | - | lei_ou_bang=N | censo=N
+A2-RAISE-NO-FUROS | GRADE-MESTRA.md:46 | PENDENTE REAL | Falta tratar recusa A2 na tela (app/docs/BACKLOG.md:971); chamada em app/relatorios/furos.py:198 e raise em app/escala/services/leitor_celula.py:288; espera de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | GRADE-MESTRA.md:47 | PENDENTE REAL | Falta registrar juiz do clique morto sob TRAVA JUIZ-NOVO, com corte (app/docs/BACKLOG.md:984); função em app/chamados/services/raiox.py:160; censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+E1-PERGUNTA-AO-DP-CONTADOR | GRADE-MESTRA.md:48 | PENDENTE REAL | Faltam respostas legais do DP/contador (app/docs/BACKLOG.md:986; app/docs/RELATO.md:2985); C16/C06 constam abertas (app/docs/RELATO.md:837); censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+V-FASE-AS-OF-CADASTRO-SEM-LINHA | GRADE-MESTRA.md:49 | PENDENTE REAL | Falta levar ao admin dias passados com dono CADASTRO após relavra (app/docs/BACKLOG.md:991); limitação de janela em app/escala/services/cadastro_realidade.py:390; espera de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+BUG-ENC-CELULAS-FORMA | GRADE-MESTRA.md:50 | FEITA | Pouso 7825fec5b, árvore certificada 2b80dcdca, deploy registrado (app/docs/RELATO.md:256); forma corrigida em app/ponto/turnos.py:2155 | - | lei_ou_bang=N | censo=N
+MODO-COMUM-OUT-DO-LOTE | GRADE-MESTRA.md:51 | FEITA | Pouso fc62165a e prova posterior do cartório (app/docs/RELATO.md:8939); portão cumprido, zero decisão lendo chave do lote (app/docs/BACKLOG.md:1036); selo em app/ponto/tests/test_out_do_lote.py:223 | - | lei_ou_bang=N | censo=N
+BACKFILL-UNICO | GRADE-MESTRA.md:52 | PENDENTE REAL | Faltam porta única, lista com dono, tratamento dos dormentes e definição do alcance em exportada; obra somente registrada (app/docs/BACKLOG.md:1037); espera atual de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+ISENTO-PONTO-JUIZ-REGISTRADO | GRADE-MESTRA.md:53 | PENDENTE REAL | Falta registrar autoridade após comparar predicado e universo (app/docs/BACKLOG.md:1045); função em app/core/constants.py:13 e leitura crua em app/ponto/services/cartorio.py:1272; espera de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+RESPONDIDA-SEM-TEXTO-DUAS-COPIAS | GRADE-MESTRA.md:54 | FEITA | Cura pelo juiz no marco E3 (app/docs/RELATO.md:1109), merge 90f3fa66b e deploy (app/docs/RELATO.md:614; app/docs/RELATO.md:597); predicado central importado pelo vigia (app/chamados/juizes.py:1531; app/chamados/services/vigia_fio.py:734) | - | lei_ou_bang=N | censo=N
+DIA-DA-PERGUNTA-E-O-TURNO | GRADE-MESTRA.md:55 | PENDENTE REAL | Falta escritor único de data_evento/célula/dedup pelo data_turno; cópia anterior reprovada (app/docs/BACKLOG.md:1115); censo histórico dos escritores em app/docs/RELATO.md:3309; espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
+O261-VETO-NA-PORTA | GRADE-MESTRA.md:56 | PENDENTE REAL | A pousou em cdc7d8e2; faltam comparação posterior e lotes B/C (app/docs/BACKLOG.md:1116), mostra/trilha do ato humano (app/docs/BACKLOG.md:1106); censo em app/docs/RELATO.md:3338; espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
+EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | GRADE-MESTRA.md:57 | PENDENTE REAL | Falta substituir cópia pelo juiz e guarda AST (app/docs/BACKLOG.md:1166); cálculo inline persiste em app/ponto/selecao_periodo.py:288; espera de lei/! e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | GRADE-MESTRA.md:58 | PENDENTE REAL | Cura pousada, mas restam passivo, cache, RED e trilha; cinco disputas ainda têm classe a medir (app/docs/RELATO.md:3821; app/docs/RELATO.md:3823); espera de lei/! e fecho integral do censo [nao verificado] | outras | lei_ou_bang=N | censo=N
+JUIZ-DE-DONO-DO-DIA | GRADE-MESTRA.md:59 | PENDENTE REAL | Falta predicado autorizado para dono do dia da pergunta (app/docs/BACKLOG.md:1170); parada aceita sem novo predicado (app/docs/RELATO.md:3842); censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+VINCULO-LINHA-DO-TEMPO | GRADE-MESTRA.md:60 | PENDENTE REAL | Faltam migrar leitores B, medir passivo e instalar tripwire/EXCLUDE; censo atualizado aponta cerca de 55 sítios B e constraint ausente (app/docs/RELATO.md:283); espera de lei/! e censo integral fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O-DIA-PAGO | GRADE-MESTRA.md:61 | SUPERADA/ABSORVIDA | Pai explicitamente fechado por fatias, com estado delegado a S3/S4/S5/S5b (app/docs/BACKLOG.md:1221); isso não prova troca integral: S5b ainda pede ! (app/docs/BACKLOG.md:1231; app/docs/BACKLOG.md:1378) | - | lei_ou_bang=N | censo=N
+PLACAR-ESTRUTURAL | GRADE-MESTRA.md:62 | PENDENTE REAL | Faltam R3/R4/R6 e ! dos casos pagos/exportados do R4 (app/docs/BACKLOG.md:1263); bateria e R4 permanecem parciais (app/core/placar_estrutural.py:99; app/core/placar_estrutural.py:211); censo global fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+L111-ORFAOS-DO-MOTOR | GRADE-MESTRA.md:63 | PENDENTE REAL | Falta conferir O275/O277 e remover os dois sítios com lápide; censo explicitamente fechado dos 202 nomes (app/docs/BACKLOG.md:1271); definições persistem (app/ponto/calculador/regras.py:302; app/ponto/motor_calculo_v2.py:334); espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
+O219 | GRADE-MESTRA.md:64 | PENDENTE REAL | Regra/horizonte implementados (app/ponto/services/cartorio.py:142); faltam TXT novo da 09 e Pauta DP (app/docs/BACKLOG.md:1287); espera atual de lei/! e censo integral fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O228 | GRADE-MESTRA.md:65 | FEITA | Fecho inteiro escrito nos commits b4d938aa, 7cb0efbb e 31fce87c (app/docs/BACKLOG.md:1291; app/docs/RELATO-ARQUIVO.md:39600); lápides em app/ponto/precedencia.py:151 e app/ponto/precedencia.py:548 | - | lei_ou_bang=N | censo=N
+O218 | GRADE-MESTRA.md:66 | FEITA | Fechada no main em 1b6d5d02, com bateria e prova de frota (app/docs/TICKETS.md:196); cenários e ponto fixo em app/ponto/tests/test_bateria_lavratura.py:169 e app/ponto/tests/test_bateria_lavratura.py:193 | - | lei_ou_bang=N | censo=N
+O221 | GRADE-MESTRA.md:67 | FEITA | Três pousos documentados: bb0bd0fa, d0625307 e 52bfc524 (app/docs/TICKETS.md:193; app/docs/BACKLOG.md:1305); papel prazo presente em app/config/crons.py:2128 | - | lei_ou_bang=N | censo=N
+O129 | GRADE-MESTRA.md:68 | PENDENTE REAL | Falta declarar os 28 campos censados do wizard (app/docs/BACKLOG.md:1310); wizard permanece fora das telas declaradas (app/core/configuracao_efeito.py:239); espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
+O117 | GRADE-MESTRA.md:69 | SEM PROVA | Censo histórico encontrou zero casos (app/docs/TICKETS.md:250), mas fecho ficou condicional (app/docs/RELATO-ARQUIVO.md:24143; app/docs/RELATO-ARQUIVO.md:24145); encerramento efetivado ou obra sucessora [nao verificado] | - | lei_ou_bang=N | censo=S
+O105 | GRADE-MESTRA.md:70 | PENDENTE REAL | Espera ! entre substituir TXT e autopsiar datas_falta; comparação histórica isolou uma linha divergente (app/docs/BACKLOG.md:1336); derivação persiste em app/folha/export.py:740; censo integral fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+O44 | GRADE-MESTRA.md:71 | PENDENTE REAL | Pouso 70d159b9, mas faltam baixa dos dois sítios mantidos, caso 1 pela tela e smoke (app/docs/TICKETS.md:168); censo fechado (app/docs/RELATO-ARQUIVO.md:974); espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
+O54 | GRADE-MESTRA.md:72 | PENDENTE REAL | Programa parcial 20/29 (app/docs/RELATO.md:254); faltam portas V0–V4 (app/docs/BACKLOG.md:2267; app/docs/BACKLOG.md:2274), com 12 dias sem nome (app/docs/BACKLOG.md:2270); quatro esperas Ronald (app/docs/RELATO.md:246); censo integral fechado [nao verificado] | espelho-verdade (O54) | lei_ou_bang=S | censo=N
+O95 | GRADE-MESTRA.md:73 | PENDENTE REAL | DIFF do resgate entregue sem apply (app/docs/RELATO.md:278); candidata exigir volta ainda sem código e em conflito com selo (app/docs/RELATO.md:282); faltam definição e fecho da cura; espera de lei/! e censo integral fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O92 | GRADE-MESTRA.md:74 | PENDENTE REAL | Falta alimentação em lote dos quatro leitores censados (app/docs/BACKLOG.md:1466); chamadas por dia persistem, por exemplo em app/ponto/calculador/alimentacao.py:516; cópia inline já removida (app/escala/utils.py:2126); espera atual de lei/! [nao verificado] | outras | lei_ou_bang=N | censo=S
+O136 | GRADE-MESTRA.md:75 | PENDENTE REAL | Faltam consulta nos dois sentidos, DIFF e ! do motor; censo histórico de 341 templates isolou dois casos (app/docs/BACKLOG.md:1480); consulta ainda funciona como veto do ramo turno_partido (app/ponto/motor_calculo_v2.py:3659) | outras | lei_ou_bang=S | censo=S
+CHAMADO-EM-RAIA | GRADE-MESTRA.md:76 | PENDENTE REAL | Escritor fechado por ESCRITOR-UNICO-DE-CHAMADO (app/docs/RELATO.md:5686; app/docs/RELATO.md:5690), mas contrato juiz permanece declarado PARCIAL, condicionado a O168/O169/LASTRO (app/core/contratos_estruturais.py:270); espera atual de lei/! e censo restante fechado [nao verificado] | contrato 20 | lei_ou_bang=N | censo=N
+QUADRO lote 1: FEITA=10 PENDENTE=27 SUPERADA=2 SEM_PROVA=1 TOTAL=40
+
+## 17/11 11:25 · sessao b0698118728f · RESPOSTAS-1120 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: itens 2 e 3.** O item 2 conserva uma igualdade que a F5 passaria a violar; o item 3 precisa fechar a identificação e a leitura do processo da medição. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319–335`; `app/folha/porta_export.py:768–821`.)
+
+A revisão abaixo vale para os arquivos desta cópia. A identidade Git do HEAD, a implantação e os efeitos reais em produção são [nao verificado].
+
+**Item 1 — CONFERE, com “cobrar” no sentido literal do botão existente.** O botão envia uma notificação; não transfere a tarefa ao colaborador. (`app/chamados/views_cobrar.py:34–57`.)
+
+**1. Premissas.** Conferem os dois ramos: sem decisão → `aguarda_resposta`, ação `RESPONDER`, dono `COLABORADOR`; último ato SILENCIO → `silencio_decidido`, ações vazias. Isso descreve a pergunta; não prova ausência de qualquer outra tarefa naquele dia, pois ações residuais e Resolver dia também podem produzir dono. (`app/chamados/services/tarefa_do_dia.py:156–177`, `:665–686`.)
+
+O K6 está registrado e lê exportação vigente, não invalidada, por empresa/mês/ano. A tarefa já converte o dia do fato para competência usando `janela_atual` e consulta esse juiz. (`app/core/juizes.py:343`; `app/folha/export.py:580–594`; `app/chamados/services/tarefa_do_dia.py:467–483`.)
+
+Não encontrei definição ou chamada Python de `competencia_ja_paga` nesta cópia; a existência da implementação é [nao verificado]. O documento local registra a obra e seu pouso pendente. (`app/docs/BACKLOG.md:1992`.)
+
+**2. Colisão com aval.** Na transcrição fornecida, o item 1 substitui expressamente o item 1 do CORTE-RESSUSCITAR-TEM-DONO: preserva o colaborador onde ele já recebe `responder` e atribui ao admin o silêncio ressuscitado. Não revoga o ato compensatório exigido pelo CORTE-F2. Vigência além dos anexos fornecidos: [nao verificado]. A separação entre preservar a fila existente e construir o novo encaminhamento enfrenta, porém, o conflito de teste descrito no item 2. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319–335`.)
+
+**3. Literal.** O botão existe, recebe um **chamado**, envia push genérico ao atendimento e limita a cobrança a uma por **colaborador/dia**. Ele não grava decisão nem transforma SILENCIO em `RESPONDER`. Sua apresentação atual está no ramo `verbo == "cobrar"`, não no ramo `decidir`; disponibilizá-lo na futura lista administrativa ainda precisa ser construído. (`app/chamados/views_cobrar.py:24–57`; `app/templates/chamados/partials/_lista_chamados.html:83–86`.)
+
+Também não basta interpretar qualquer SILENCIO como “ressuscitada”: a ressuscitação atual limpa a projeção e registra auditoria; a carga da tarefa lê perguntas e decisões. A identificação que a F5 usará deve ser coerente com o ato compensatório da F2; essa costura futura é [nao verificado]. (`app/chamados/models.py:1613–1630`, `:1651–1662`; `app/chamados/services/tarefa_do_dia.py:405–430`.)
+
+**4. Exportada, dinheiro ou `!`.** O encaminhamento pode consultar entregue sem escrever nela: o K6 é leitura. A ressalva é não confundir este corte de dono com autorização para executar ressuscitação ou corrigir estoque entregue: a porta atual de ressuscitação efetivamente limpa resposta, validação e materialização. Efeito monetário ou passivo real: [nao verificado]. (`app/folha/export.py:580–594`; `app/chamados/models.py:1629–1630`, `:3391–3393`.)
+
+**Quem escreve e quem lê os valores do item 1:**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| Dia do fato, `data_evento` | Nascimento chama `gravar_dia_do_fato`. (`app/chamados/models.py:3123–3127`.) | Carga agrupa perguntas pelo dia; competência sai de `janela_atual`. (`app/chamados/services/tarefa_do_dia.py:405–412`, `:467–483`.) |
+| SILENCIO e seus `ato_em`, autor, texto e motivo | Encerramento administrativo chama `DecisaoPergunta.registrar`; esta porta faz `bulk_create`. (`app/chamados/models.py:1999–2007`, `:4110–4122`.) | Carga ordena por `ato_em, pk`, limita por `agora`; `_pela_decisao` interpreta o último ato. (`app/chamados/services/tarefa_do_dia.py:421–424`, `:158–177`.) |
+| Resposta, validação e carimbo removidos ao ressuscitar | `ressuscitar_perguntas` chama `descarimbar_em_lote`, após conservar a projeção anterior na trilha. (`app/chamados/models.py:1613–1630`, `:3391–3393`.) | Carga da tarefa lê projeção e sequência de decisões. (`app/chamados/services/tarefa_do_dia.py:405–430`.) |
+| Evidência atual de “ressuscitada” | Auditoria `perguntas_ressuscitadas`, com IDs antes/depois. (`app/chamados/models.py:1651–1662`.) | Leitor dessa auditoria para o novo encaminhamento: [nao verificado]. A carga atual usa perguntas/decisões. (`app/chamados/services/tarefa_do_dia.py:405–430`.) |
+| `razao`, `acoes`, `acao`, `de`, `porta` e dono publicado | Produção em memória por `_pela_decisao` e projeção da porta; não é gravação de coluna “dono”. (`app/chamados/services/tarefa_do_dia.py:142–177`, `:662–708`, `:733–736`.) | `porta_da_tarefa`. Novo leitor/lista administrativa: [nao verificado]. (`app/chamados/services/tarefa_do_dia.py:712–725`.) |
+| Entregue pelo K6 | `ExportacaoDominio.registrar`; invalidação por `invalidar`. (`app/folha/models.py:143–162`, `:174–187`.) | `competencia_entregue`, chamado pela tarefa. (`app/folha/export.py:580–594`; `app/chamados/services/tarefa_do_dia.py:479–483`.) |
+| Cobrança `[COBRANCA]` | View envia push e chama `nota.anexar_ocorrencia`, que grava `FollowupChamado`. (`app/chamados/views_cobrar.py:44–56`; `app/chamados/services/nota.py:75–109`.) | View aplica limite diário; painel monta `cobrado_hoje`; template mostra a marca/botão. (`app/chamados/views_cobrar.py:36–43`; `app/chamados/services/painel.py:349–359`, `:395–396`; `app/templates/chamados/partials/_lista_chamados.html:84`.) |
+| Lista textual DP por pergunta/colaborador; novo registro “paga fora” | Escritores e leitores dessa entrega futura: [nao verificado]. | [nao verificado]. |
+
+**Item 2 — PROCEDE.**
+
+**1. Premissas.** O teste existe, mas sua exigência é mais forte que “não devolver ao colaborador”: guarda a tarefa anterior e exige **igualdade integral** depois da ressuscitação. O caso SILENCIO usa exatamente essa comparação. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319–335`.)
+
+As matrizes próprias F5/F6 não estão disponíveis para conferência literal nesta cópia: os documentos apontam para `logs/ESPINHA-BRIEFS/<f>/matriz.md`. Conteúdo atual e marcação `RESOLVIDO-PELO-CORTE`: [nao verificado]. (`app/docs/RELATO.md:298`, `:313–314`, `:425`.)
+
+**2. Colisão com aval.** Separar F2 e F5 preserva a fronteira de construção, mas não resolve a árvore final: se a F5 fizer aquela ressuscitada com SILENCIO passar ao admin, o teste preservado falhará. A transcrição do CORTE-F2 também exige conservação da fila; vigência externa desse anexo: [nao verificado]. A contradição executável está na igualdade e no caso SILENCIO. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:329–335`.)
+
+**3. Literal.** Falta declarar como a prova de conservação da F2 coexistirá com a mudança autorizada na F5: escopo distinto demonstrável ou revisão expressa da expectativa após a F5. Apenas acrescentar outro teste não permite que a mesma tarefa seja simultaneamente igual e diferente antes/depois. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319–335`.)
+
+**4. Exportada, dinheiro ou `!`.** Registro documental e testes não demonstram alteração monetária. Entretanto, mudar a tarefa pode alcançar leitores além da lista: o registro vigente já associa F6 ao dono publicado pela tarefa. Alcance real e diferença em produção: [nao verificado]. (`app/docs/CORTES.md:488`; `app/chamados/services/tarefa_do_dia.py:708–725`.)
+
+**Quem escreve e quem lê os valores do item 2:**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| Expectativa de invariância | Fixture captura `antes`; ressuscitação altera a pergunta. (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319–328`.) | Asserção compara `_fila(p)` com `antes`; caso SILENCIO chama essa prova. (`:329–335` do mesmo arquivo.) |
+| Novo caso SILENCIO → admin | Produtor futuro na F5: [nao verificado]. Produtor atual retorna ações vazias. (`app/chamados/services/tarefa_do_dia.py:176–177`.) | Novo teste F5 e lista administrativa: [nao verificado]. |
+| `aguarda_admin` da F6 | Hoje o serializador calcula por `p.estado == RESPONDIDA`. (`app/api/views.py:2549–2553`.) | Consumidor cliente desse JSON: [nao verificado]. |
+| `RESOLVIDO-PELO-CORTE` nas matrizes | Registro solicitado, ainda [nao verificado]. | Leitor automatizado ou conteúdo efetivo das matrizes: [nao verificado]; seus endereços são apenas referenciados localmente. (`app/docs/RELATO.md:298`, `:313`.) |
+
+**Item 3 — PROCEDE; a troca da unidade da frase confere.**
+
+**1. Premissas.** `N` soma ocorrências heterogêneas, incluindo listas de divergências e, quando habilitados, dias de HE; não conta colaboradores únicos. Retirar “colaborador(es)” confere. A frase atual do código é “discordam em N ponto(s)”; os estados nomeados pertencem à construção proposta. (`app/folha/porta_export.py:687–695`, `:762–764`, `:865–867`.)
+
+**2. Colisão com aval.** Na transcrição fornecida, o novo item altera expressamente a frase e acrescenta FALHOU/R7 ao aval anterior; vigência externa: [nao verificado]. Isso preserva a porta existente somente se falha e processo morto continuarem bloqueando TXT: atualmente negativo e positivo bloqueiam, zero libera. (`app/folha/porta_export.py:818–821`, `:867`.)
+
+**3. Literal — faltam estas costuras:**
+
+- **Quem sabe que morreu?** O carimbo atual não contém identidade de job/PID nem estado de execução. Existe padrão concreto da casa: serviço grava PID/início, modelo consulta `os.kill(pid, 0)`, vigia converte morte em erro e a tela chama o vigia. Sua ligação à medição do export é [nao verificado]. (`app/inteligencia/models.py:87–105`; `app/relatorios/lote_espelho.py:66–80`, `:117–138`; `app/relatorios/models.py:140–161`; `app/relatorios/views.py:1270–1278`.)
+- **Erro não é sinônimo de saída não zero.** O command retorna `SystemExit(2)` tanto por erro de medição quanto por divergência. Além disso, mede todas as empresas ativas e pode carimbar uma antes de falhar na seguinte. FALHOU precisa ser decidido pelo resultado da empresa/competência/tentativa correspondente, não apenas pelo término do command. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86–95`, `:178–183`.)
+- **Qual logger avisa quem?** Há logger `folha.porta_export`, atualmente usado com WARNING, e configuração de destino `/app/logs/errors.log`. O emissor CRITICAL da nova falha, seu leitor operacional e a comprovação de “suporte foi avisado” são [nao verificado]. (`app/folha/porta_export.py:83–85`, `:97–99`; `app/config/settings/saas.py:136–142`, `:183`.)
+
+**4. Exportada, dinheiro ou `!`.** O escritor mostrado grava snapshot; a medição já separa contadores de exportada que ficam fora de `falhas`. Alterar esses contadores, o cálculo ou o TXT ultrapassaria o controle de execução e a apresentação descritos. Implementação futura e efeito real: [nao verificado]. (`app/folha/porta_export.py:705–712`, `:772–796`.)
+
+**Quem escreve e quem lê os valores do item 3:**
+
+| Campo/valor | Quem escreve | Quem lê |
+|---|---|---|
+| Chave, empresa, dia, mês/ano, `valor`, listas em `detalhe` | `lavrar`; competência hoje fica no detalhe, fora da chave única. (`app/folha/porta_export.py:772–796`; `app/inteligencia/models.py:102–105`.) | `conferir`; view lê sua mensagem para bloquear. (`app/folha/porta_export.py:807–821`; `app/folha/views.py:128–133`.) |
+| `N` | `medir` calcula `falhas`; `lavrar` persiste em `valor`. (`app/folha/porta_export.py:687–691`, `:762–764`, `:774`.) | `conferir` lê e formata o número. (`app/folha/porta_export.py:821`, `:865–866`.) |
+| Hora da conferência | Modelo atualiza `calculado_em` automaticamente. (`app/inteligencia/models.py:96`.) | Leitor futuro da hora na tela: [nao verificado]. |
+| EM CONFERENCIA, PRONTA, DIVERGENTE, FALHOU; tentativa, PID e liberação para repetir | Escritor da porta futura: [nao verificado]. O snapshot atual tem somente campos genéricos. (`app/inteligencia/models.py:87–105`.) | Leitor/vigia da porta futura: [nao verificado]. O padrão disponível escreve PID no serviço e o lê no modelo. (`app/relatorios/lote_espelho.py:138`; `app/relatorios/models.py:151–161`.) |
+| Erro da medição | `medir` produz `erro_cartao_x_txt`, mas `lavrar` não o inclui no detalhe. (`app/folha/porta_export.py:737`, `:776–796`.) | `conferir` tenta ler esse erro e pode cair em “motivo não registrado”. (`app/folha/porta_export.py:818–820`.) |
+| Linha CRITICAL / aviso ao suporte | Novo emissor: [nao verificado]. Destino configurado: `errfile` pela raiz. (`app/config/settings/saas.py:136–142`, `:183`.) | Leitor operacional e aviso efetivo: [nao verificado]. |
+
+VEREDITO por item: 1 CONFERE; 2 PROCEDE; 3 PROCEDE
+
+## 17/11 11:24 · sessao 830b3ff7a75c · PERSPECTIVA-ESPINHA · censo · origem=Code
+
+DOSSIES-DAS-CELULAS | GRADE-MESTRA.md:77 | SEM PROVA | Seis itens permanecem EM CURSO; falta prova consolidada do fecho, inclusive dieta de prosa (app/docs/BACKLOG.md:1487); HEAD/git log desta cópia [nao verificado] | - | lei_ou_bang=N | censo=N
+O142 | GRADE-MESTRA.md:78 | FEITA | Pouso d1689254 (app/docs/RELATO-ARQUIVO.md:37752); borda incorporada à cura (app/docs/RELATO-ARQUIVO.md:38964; app/ponto/turnos.py:1135); três relavras aplicadas (app/docs/RELATO-ARQUIVO.md:38695) | - | lei_ou_bang=N | censo=N
+O177 | GRADE-MESTRA.md:79 | SUPERADA/ABSORVIDA | Absorvida pela O119: duas pausas lidas nos dois sítios (app/ponto/juiz_batida.py:119; app/ponto/juiz_batida.py:271), NO AR 801253ed (app/docs/BACKLOG.md:1316), com DIFF, reversão e exportada intacta (app/docs/RELATO-ARQUIVO.md:24025) | - | lei_ou_bang=N | censo=N
+O178 | GRADE-MESTRA.md:80 | PENDENTE REAL | Faltam prazo, dono e contador de pauta sem leitura; registro ABERTA (app/docs/BACKLOG.md:1524), campos ainda opcionais (app/pautas/models.py:90); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O179 | GRADE-MESTRA.md:81 | PENDENTE REAL | Falta medir horas reais dos três colaboradores no espelho e decidir dono pela L-099; causa não medida (app/docs/BACKLOG.md:1525); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O180 | GRADE-MESTRA.md:82 | PENDENTE REAL | Falta entregar lista dos 102 colaboradores; regeneração do passado espera ! (app/docs/BACKLOG.md:1526); fecho do censo [nao verificado] | outras | lei_ou_bang=S | censo=N
+O183 | GRADE-MESTRA.md:83 | PENDENTE REAL | Guarda presente (app/chamados/models.py:1132); faltam DIFF e tratamento do estoque de 494; censo dos quatro escritores fechado por AST (app/docs/BACKLOG.md:1529) | outras | lei_ou_bang=N | censo=S
+O229 | GRADE-MESTRA.md:84 | PENDENTE REAL | Faltam curas e RED por classe dos nove achados; itens 1, 2 e 6 pedem censo próprio (app/docs/BACKLOG.md:1557); filtro exclusivo de chegada permanece (app/ponto/services/espelho.py:1261); censo integral fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O216 | GRADE-MESTRA.md:85 | PENDENTE REAL | Falta remedir pela função real os três números da entrada da O191 após O195 e republicar; dívida ABERTA e pré-aprovada (app/docs/BACKLOG.md:1559); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+SOBRA-NA-BORDA-O-QUE-FICOU | GRADE-MESTRA.md:86 | PENDENTE REAL | Item a exige obra de rejulgamento quando mudam batidas; tentativa não certificada e cinco demais achados guardados (app/docs/BACKLOG.md:1584); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+ATA-NAO-DISPENSA-JUSTIFICADA | GRADE-MESTRA.md:87 | FEITA | Cura NO AR 44e268a8 (app/docs/RELATO.md:5397); acervo da 10 APLICADO com reversão e 09 intacta (app/docs/RELATO.md:5360); resumo posterior contradiz essa aplicação detalhada (app/docs/RELATO.md:838) | - | lei_ou_bang=N | censo=N
+CONCORDE-PREVISTO-ZERO | GRADE-MESTRA.md:88 | PENDENTE REAL | Falta investigar os 730 dias concorde com previsto zero, excluídos sem investigação (app/docs/BACKLOG.md:1608); censo fechado [nao verificado] | espelho-verdade (O54) | lei_ou_bang=N | censo=N
+ESPELHO-VERDADE-REMEDIDO | GRADE-MESTRA.md:89 | FEITA | Atualizações registradas no placar (app/core/espelho_verdade.py:117; app/core/espelho_verdade.py:141; app/core/espelho_verdade.py:183; app/core/espelho_verdade.py:187); termômetro publicado no pouso R1-PUBLICA a16637ca (app/docs/RELATO.md:3128) | - | lei_ou_bang=N | censo=N
+C5-LISTA-DE-FROTA | GRADE-MESTRA.md:90 | SUPERADA/ABSORVIDA | Universo de 27 dias/18 colaboradores (app/docs/BACKLOG.md:1620) retomado pela C5-FALTA-MAIOR-QUE-PREVISTO, com remedida após os pousos e dono L-099 por caso (app/docs/BACKLOG.md:1816) | - | lei_ou_bang=N | censo=N
+FERIADO-DIA-CHAVE | GRADE-MESTRA.md:91 | PENDENTE REAL | Falta unificar dia-chave e predicado e provar caso atravessando meia-noite (app/docs/BACKLOG.md:1623); diferença permanece nos leitores (app/ponto/calculador/alimentacao.py:521; app/ponto/services/fechamento.py:949); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+LISTA-POR-COMPETENCIA | GRADE-MESTRA.md:92 | PENDENTE REAL | Falta uma linha por competência aberta (app/docs/BACKLOG.md:1625); lavra ainda mede janela agregada por colaborador (app/ponto/services/esmeril_espelho.py:38; app/ponto/services/esmeril_espelho.py:219); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+REGUA-DO-PERIODO-COMPLEMENTO-19-10 | GRADE-MESTRA.md:93 | PENDENTE REAL | Faltam comprovar conclusão dos leitores restantes, censo das quatro testemunhas em 09/10 e encaminhamento/apply por dono (app/docs/BACKLOG.md:1706; app/docs/BACKLOG.md:1725); antigos ! atendidos (app/docs/RELATO.md:7507); censo integral fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O327 | GRADE-MESTRA.md:94 | PENDENTE REAL | Falta lei do ancoramento do trecho extra e cobertura explícita dos não julgados (app/docs/BACKLOG.md:1753); recusa persiste em medição posterior (app/docs/RELATO.md:1294); censo fechado [nao verificado] | espelho-verdade (O54) | lei_ou_bang=S | censo=N
+RETIFICACAO-DA-10-8069-PRIMEIRO | GRADE-MESTRA.md:95 | PENDENTE REAL | Faltam retificação pela porta, DIFF/reversão/prova e corte da 243 (app/docs/BACKLOG.md:1757); premissa do sinal da 8069 foi corrigida (app/docs/RELATO.md:6020); censo fechado [nao verificado] | folha-online (O48) | lei_ou_bang=S | censo=N
+REABRIR-PERGUNTA-A-PREMISSA | GRADE-MESTRA.md:96 | PENDENTE REAL | Código NO AR bdfad18f, mas falta prova do portão: contador zero e sete dias sem laço (app/docs/BACKLOG.md:1777; app/docs/RELATO.md:4751); censo fechado [nao verificado] | contrato 20 | lei_ou_bang=N | censo=N
+LOTE-VAZA-ENTRE-COLABS | GRADE-MESTRA.md:97 | PENDENTE REAL | Falta medir causa da divergência lote versus individual e apresentar cura (app/docs/BACKLOG.md:1800); pouso e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+PASSADO-SEM-MARCOS-SEM-TETO | GRADE-MESTRA.md:98 | SUPERADA/ABSORVIDA | Tratamento incorporado à E4a-1, NO AR 892159c5f (app/docs/RELATO.md:1729), e ao MODO-COMUM-PASSADO-SEM-TURNO FECHADO (app/docs/BACKLOG.md:2147); passado sem turno encaminhado ao cadastro (app/chamados/services/fabrica_da_celula.py:20) | - | lei_ou_bang=N | censo=N
+LEGADO-51-ACESAS | GRADE-MESTRA.md:99 | PENDENTE REAL | Falta medir as 51 pela função real e fechar pela porta o que a lei encerra (app/docs/BACKLOG.md:1815); aplicação e censo fechado [nao verificado] | contrato 20 | lei_ou_bang=N | censo=N
+DIA-DA-BATIDA-JUIZ-UNICO | GRADE-MESTRA.md:100 | PENDENTE REAL | Faltam censo AST classificado, migração dos juízos paralelos, selo e DIFF por migração (app/docs/BACKLOG.md:1818); rejulgamento prévio de col33 comprovado (app/docs/RELATO.md:4265); fecho do censo [nao verificado] | contrato 20 | lei_ou_bang=N | censo=N
+PERGUNTA-DO-DIA-EM-CURSO | GRADE-MESTRA.md:101 | FEITA | 165fee20 NO AR e push provado (app/docs/RELATO.md:4236); pouso documentado (app/docs/RELATO.md:4255); teto por instante presente (app/chamados/services/fabrica_da_celula.py:8) | - | lei_ou_bang=N | censo=N
+R1-ESTRUTURA-91 | GRADE-MESTRA.md:102 | PENDENTE REAL | A-i e flip fechados (app/docs/BACKLOG.md:1790; app/docs/BACKLOG.md:1839); faltam causas/cura do restante, com 57 dias ESTRUTURA e investigação incompleta (app/docs/RELATO.md:229; app/docs/RELATO.md:221); lei/! e censo fechado desse restante [nao verificado] | espelho-verdade (O54) | lei_ou_bang=N | censo=N
+BATERIA-QUEIXAS-ADMIN | GRADE-MESTRA.md:103 | PENDENTE REAL | Faltam validação Ronald+DP e selos após FIO MUDO (app/docs/BACKLOG.md:1901; app/docs/RELATO.md:2481); conclusão dos casos e censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+TIPO-NA-FONTE | GRADE-MESTRA.md:104 | PENDENTE REAL | Falta corte LU2-03 entre selo do valor e acessor tipado, seguido de construção em cópia nova (app/docs/RELATO.md:344); censo do item 3 explicitamente fechado (app/docs/RELATO.md:827) | contrato 20 | lei_ou_bang=S | censo=S
+MOTOR-LE-O-TURNO | GRADE-MESTRA.md:105 | PENDENTE REAL | Faltam migrações PAR/DIA, RED, DIFF por dono e certificação DP (app/docs/BACKLOG.md:1997); herança própria de dia permanece (app/ponto/motor_calculo_v2.py:2407); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+FIO-E0-V4-E1-ENTRADAS | GRADE-MESTRA.md:106 | FEITA | FECHADA expressamente: núcleo a8a692f55 e E1-FILA pousados; 16 complementos em linhas próprias (app/docs/BACKLOG.md:2008; app/docs/RELATO.md:284) | - | lei_ou_bang=N | censo=N
+FIO-E0-V4-E4-ESCRITORES | GRADE-MESTRA.md:107 | PENDENTE REAL | Faltam leitores E4c e Contract E4d (app/docs/BACKLOG.md:2035); B2 em construção (app/docs/RELATO.md:30); apply exportado espera ! (app/docs/RELATO.md:285); censos E4c/E4d fechados na base indicada, com revalidação pós-E3 requerida (app/docs/RELATO.md:833) | E4c | lei_ou_bang=S | censo=S
+RAIZ-DA-DISPUTA | GRADE-MESTRA.md:108 | PENDENTE REAL | Faltam etapas do programa F0–F7, incluindo F5 com E4d (app/docs/BACKLOG.md:2055); BO-DISPUTA exige matriz conferida e aval (app/docs/BACKLOG.md:2049); censo de escritores/eleitores fechado (app/docs/RELATO.md:827) | outras | lei_ou_bang=S | censo=S
+LAVRA-PREMATURA-CONCORDE | GRADE-MESTRA.md:109 | PENDENTE REAL | Falta decisão de desenho sobre concorde com marco vencido faltando durante turno em curso; construção vedada (app/docs/BACKLOG.md:2141); censo fechado [nao verificado] | outras | lei_ou_bang=S | censo=N
+RETRATO-POR-EVENTO | GRADE-MESTRA.md:110 | PENDENTE REAL | Faltam evento empresa×competência, consumidor e frescor por evento (app/docs/BACKLOG.md:2199; app/docs/RELATO.md:1812), além de construção e certificação (app/docs/RELATO.md:1774); censo fechado [nao verificado] | folha-online (O48) | lei_ou_bang=N | censo=N
+JV1-MERGE-FILA | GRADE-MESTRA.md:111 | PENDENTE REAL | Faltam RED da janela, alimentação além do envelope, contador do corte 21 e alimentação dos feriados em espelho/PDF (app/docs/BACKLOG.md:2221; app/docs/RELATO.md:2477); censo fechado [nao verificado] | outras | lei_ou_bang=N | censo=N
+O168 | GRADE-MESTRA.md:117 | FEITA | Pouso 89a5b0d85 registrado (app/docs/BACKLOG.md:1513), NO AR d33c0a899 (app/docs/RELATO.md:890); guarda no gate do pai (app/chamados/models.py:718); restantes em linha própria (app/docs/BACKLOG.md:1514) | - | lei_ou_bang=N | censo=N
+O169 | GRADE-MESTRA.md:118 | FEITA | C20-O169 FECHADA (app/docs/BACKLOG.md:1913), pouso bede09aa mantido (app/docs/RELATO.md:2403); lastro do próprio dia consultado (app/ponto/services/cluster_espurio.py:53); carimbo persistente separado em O169-FECHADA (app/docs/RELATO.md:284) | - | lei_ou_bang=N | censo=N
+FIO-E0-V4-E3-LEITORES | GRADE-MESTRA.md:119 | FEITA | Recorte autorizado com restos em obras próprias (app/docs/BACKLOG.md:742); merge 90f3fa66b (app/docs/RELATO.md:614), deploy e smoke (app/docs/RELATO.md:597); R2 separado e R3 pousado (app/docs/BACKLOG.md:761; app/docs/BACKLOG.md:770); censo fechado (app/docs/RELATO.md:2001) | - | lei_ou_bang=N | censo=S
+E3-CADASTRO-ADMIN | GRADE-MESTRA.md:120 | PENDENTE REAL | Falta correção administrativa dos cadastros listados; fonte determina que não se cura por código (app/docs/BACKLOG.md:2028); fecho do censo [nao verificado] | rabos da E3 | lei_ou_bang=N | censo=N
+E3-ENTRADA-ORFA-SEM-TURNO | GRADE-MESTRA.md:121 | PENDENTE REAL | Falta lei para dia sem turno COM batida, fora da lei de passado sem marcos (app/docs/BACKLOG.md:2176); emissor permanece (app/chamados/services/disputa_emissao.py:257); censo fechado [nao verificado] | rabos da E3 | lei_ou_bang=S | censo=N
+QUADRO lote 2: FEITA=8 PENDENTE=28 SUPERADA=3 SEM_PROVA=1 TOTAL=40
 
 ## 17/11 11:24 · sessao 1592a5b9720c · E4C-F2 · verificador · origem=Code
 
@@ -440,152 +611,4 @@ Correções de premissa:
 
 8. **`ato_instante` não está definido nesse modelo.** O conjunto de campos contém `ato_em`, autor, texto, motivo, fotos, ligações e marca (`app/chamados/models.py:4139`). Seu significado fora disso: [nao verificado]. A foto de conservação captura todos os campos concretos e todas as decisões, incluindo a nova marca (`app/chamados/services/foto_e4b.py:209`, `:280`).
 
-## 17/11 11:20 · sessao 735199da21a3 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia — `ato_motivo` continua decidindo estado.** A leitura de `RESPOSTA` desfaz validação somente quando o motivo é vazio, e a face SQL repete esse significado (`app/chamados/models.py:4241`, `app/chamados/models.py:4251`, `app/chamados/models.py:3529`). O teste novo chamado `achado5` usa apenas duas `REABERTURAS` com motivos iguais; prova a distinção pelo campo novo, mas não ataca a dupla função do motivo em `RESPOSTA` (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:346`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:358`).
-
-2. **Bloqueia — RED(b) pode passar sem comparar a main.** Todas as comparações main × F2 dependem de `if os.path.exists(GOLDEN)`; não há falha caso o arquivo falte (`app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:149`). Nesta cópia, o golden está presente e contém tarefa e fila não vazias, além de CSF com P4 (`app/chamados/tests/f2_ressuscitar_tarefa_main.json:9`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:71`). O teste compara uma fixture de três ressuscitações; não mede as 2.025 unidades do anexo (`app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:111`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:146`). A alegada geração do golden pela main é **[nao verificado]**.
-
-3. **Fila — escritor único é fiscalização estática, sem trava na porta.** O tripwire cobre kwargs, dicts literais, atribuição de atributo e `setattr` literal, exige exatamente um sítio autorizado e testa três sintaxes externas (`app/chamados/tests/test_f2_ressuscitacao_um_escritor.py:28`, `app/chamados/tests/test_f2_ressuscitacao_um_escritor.py:65`). A porta `registrar` aceita os campos fornecidos e faz `bulk_create`, sem conferir a origem da marca (`app/chamados/models.py:4288`, `app/chamados/models.py:4298`). A constraint permite qualquer `REABERTURA` marcada, independentemente de escritor (`app/chamados/models.py:4178`). Segundo escritor concreto nesta cópia: **[nao verificado]**.
-
-4. **Selos que têm mordida estática identificável.** RED(a) exige validação anterior, ressuscitação efetiva, leitura/SQL desvalidadas, C6 vivo e continência em `q_vivas` (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:424`). RED(c) exige que a pergunta protegida mantenha estado e quantidade de decisões (`app/chamados/tests/test_e4c_f2_leitura_do_ato.py:448`). RED(b) impede CSF vazio por `assertIn('P4', ...)` e verifica competência exportada (`app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:106`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:147`). O teto do app impede resposta vazia, compara 1 × 5 perguntas e exige consultas iguais (`app/api/tests/test_f2_teto_consultas_app.py:54`). Execução desses testes: **[nao verificado]**.
-
-5. **Fila — selo de ordem não percorre a inserção nova.** O mock retorna universo vazio para o compensador; a instrumentação continua cobrando somente captura → update → acordar (`app/chamados/tests/test_e4_expand.py:323`, `app/chamados/tests/test_e4_expand.py:327`). Há teste separado de segunda chamada sem nova trilha (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:381`).
-
-6. **Pouso antes da migration não demonstrado na porta oficial.** A migration adiciona campo com default falso e depois constraint (`app/chamados/migrations/0054_decisao_da_ressuscitacao.py:15`). O deploy recusa `--sem-migrate`, reload agendado e reload da cópia quando há migration pendente; no caminho normal aplica migrations antes do HUP (`bin/deploy.sh:205`, `bin/deploy.sh:317`, `bin/deploy.sh:360`). Migration aplicada em produção: **[nao verificado]**.
-
-## 17/11 11:20 · sessao 302818cc2ab8 · PERSPECTIVA-ESPINHA · sonda · origem=Code
-
-ESTADO 17/11/2026: **19/20 verdes**, conforme a sonda fornecida e a contagem declarada pelo juiz; **GLOBAL verde**. (app/core/contratos_estruturais.py:1053; app/core/contratos_estruturais.py:1063; app/core/contratos_estruturais.py:81)
-
-A única vermelha é **chamado:um juiz por pergunta**. (app/core/contratos_estruturais.py:262; app/core/contratos_estruturais.py:62)
-
-| Verificação na cópia | Resultado | Fonte |
-|---|---|---|
-| Classe de teste existe? | Sim: `JuizChamadoContratoTest` | app/chamados/tests/test_contract_juiz_chamado.py:22 |
-| `JUIZES_POR_VARREDURA` | Vazia: **0 itens** | app/config/crons.py:2056–2121 |
-| `PENDENTES_CHAMADO` | Vazia: **0 itens** | app/core/juizes.py:482; app/core/juizes.py:1380 |
-| Qual exceção está cheia? | **Nenhuma das duas declaradas** | app/core/contratos_estruturais.py:264; fontes acima |
-
-**O impedimento registrado é a condição explícita que mantém a célula PARCIAL até O168, O169 e LASTRO**, com proibição de torná-la verde por reclassificação de papel. (app/core/contratos_estruturais.py:270) O RELATO confirma “VERMELHA POR DECLARAÇÃO”, com exceções vazias e desbloqueio dependente de aval após o fechamento dessas condições. (app/docs/RELATO.md:839)
-
-A nota não demonstra que as três obras continuam integralmente pendentes: O168 já registra pouso, e O169-FECHADA registra pouso de uma fase. A satisfação integral da condição para liberar o verde permanece **[nao verificado]**. (app/docs/BACKLOG.md:1513; app/docs/RELATO.md:1445)
-
-**Comparação com 26/10:** o registro das 21:1x já era **19/20**, portanto o resultado atual é igual, **delta 0**. Naquele dia houve queda intermediária para 18/20, antes da recuperação. (app/docs/RELATO.md:4414; app/docs/RELATO.md:4419; app/docs/RELATO.md:4486)
-
-N/20 = 19; vermelhas = chamado:um juiz por pergunta
-
-## 17/11 11:05 · sessao 10256d37c037 · E4C-F1-B2 · verificador · origem=Code
-
-A consulta está antes da escrita, mas a cerca **não cobre exatamente a unidade**: há sobrealcance HX, subalcance pela Defesa 1 e contorno da recusa em fantasmas. (`app/chamados/reconciliador.py:557`; `app/chamados/services/disputa_emissao.py:1862`; `app/chamados/signals.py:43`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`.)
-
-**1. Posição correta; universo insuficiente e excessivo.**
-
-`_retratar` abre o atomic, chama `trava_na_ordem`, consulta a cerca e retorna antes de `transicionar_com_pauta`. O veto recebe uma lista deduplicada de dias por empresa, obtidos por `_dia_de_turno_da_pergunta`. (`app/chamados/reconciliador.py:519`; `app/chamados/reconciliador.py:549`; `app/chamados/reconciliador.py:556`; `app/chamados/reconciliador.py:559`.)
-
-A seleção direta é compartilhada com o resolvedor; inclui perguntas não materializadas de disputa aberta, inclusive validadas. As ancoradas abrangem também a relavra de destino não validado em disputa fechada. (`app/chamados/services/disputa_emissao.py:1827`; `app/chamados/services/disputa_emissao.py:1969`; `app/chamados/models.py:344`; `app/chamados/models.py:309`.)
-
-**Sobrealcance: pelo menos dois casos-base montáveis**, sem relação da pergunta ENTREGUE com o chamado A retratado:
-
-- Outra disputa aberta tem pai B vivo e pergunta ENTREGUE sem destino.
-- Outra disputa aberta tem pai ausente/terminal, pergunta ENTREGUE sem destino e uma irmã com destino C vivo.
-
-Ambos entram na cerca; o resolvedor pula o primeiro pelo pai vivo e o segundo pelo destino vivo. Tornando a pergunta ENTREGUE viva por célula acusadora, C7 impede também o fechamento final da disputa: A pode ser legitimamente retratado sem escrever nessa pergunta, mas a cerca recusa. São duas classes combináveis; número de ocorrências produtivas **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1862`; `app/chamados/services/disputa_emissao.py:2090`; `app/chamados/services/disputa_emissao.py:2094`; `app/chamados/juizes.py:1454`; `app/chamados/models.py:1944`; `app/chamados/reconciliador.py:527`.)
-
-**Subalcance bloqueante pela Defesa 1**, montável pelo encadeamento do código:
-
-- A é retratado; outra disputa dB aberta tem pai B vivo e uma pergunta morta de competência ABERTA.
-- O HX pula o carimbo de dB, mas o laço final ainda pode fechar dB: esse laço não conserva o pulo por credor vivo.
-- O fechamento dispara Defesa 1 e transiciona B.
-- Uma pergunta ENTREGUE, já materializada, não validada, em disputa dC FECHADA e com destino B ficou fora da enumeração de A; a transição de B relavra essa pergunta.
-
-C7 examina as perguntas de dB; a guarda de vivas de B exclui competência ENTREGUE. Portanto essas guardas não impedem o caminho. Execução integrada desse cenário **[nao verificado]**. (`app/chamados/services/disputa_emissao.py:1859`; `app/chamados/services/disputa_emissao.py:2091`; `app/chamados/services/disputa_emissao.py:2131`; `app/chamados/services/disputa_emissao.py:2148`; `app/chamados/models.py:1943`; `app/chamados/signals.py:43`; `app/chamados/models.py:364`; `app/chamados/models.py:309`.)
-
-**2. Zero escrita na recusa local; ordem local compatível.**
-
-No ramo que retorna pela nova cerca, chamado, justificativa, carimbo, lavra e ocorrência não são escritos: todos esses efeitos estão depois do retorno. Isso não garante zero escrita no chamador completo, especialmente no fallback de fantasmas descrito abaixo. (`app/chamados/reconciliador.py:558`; `app/chamados/reconciliador.py:559`; `app/chamados/reconciliador.py:571`; `app/chamados/reconciliador.py:572`; `app/chamados/reconciliador.py:574`; `app/ponto/management/commands/reconciliar_fantasmas.py:281`.)
-
-A trava nova adquire Colaborador → Disputa → Chamado; perguntas, quando solicitadas, vêm por último. `_gravar_estado` e o envelope do resolvedor pedem o mesmo universo. Não identifiquei inversão nova nesses pontos; ausência universal de deadlock **[nao verificado]**. (`app/chamados/models.py:2781`; `app/chamados/models.py:2790`; `app/chamados/models.py:2803`; `app/chamados/models.py:2807`; `app/chamados/models.py:289`; `app/chamados/services/disputa_emissao.py:1943`.)
-
-Não se pode estender “zero escrita” a qualquer `False`: a retenção anterior pode registrar auditoria antes de entrar na cerca. (`app/chamados/reconciliador.py:545`; `app/chamados/reconciliador.py:484`.)
-
-**3. Quem escreve, quem lê e quem contorna.**
-
-O delta de produção acrescenta seleção, trava e consulta; as persistências continuam nas portas existentes. O mapa abaixo identifica os escritores e leitores pertinentes; exaustividade de todos os escritores históricos da cópia **[nao verificado]**. (`app/chamados/reconciliador.py:505`; `app/chamados/services/disputa_emissao.py:1848`.)
-
-| Campo | Escritores identificados | Leitores pertinentes |
-|---|---|---|
-| Pergunta `pk/disputa/conversa/chamado_destino/celula` | Nascimento: `app/chamados/models.py:3134`; reuso de célula/destino: `app/chamados/models.py:3085`, `app/chamados/models.py:3102` | Seleções: `app/chamados/services/disputa_emissao.py:1830`, `app/chamados/services/disputa_emissao.py:1860`; conversa: `app/chamados/reconciliador.py:520` |
-| Pergunta `data_evento` | Ponto de atribuição: `app/chamados/services/fio.py:848` | Cerca: `app/chamados/reconciliador.py:523`; dia: `app/chamados/juizes.py:342`; veto: `app/chamados/services/fio.py:1365` |
-| Chamado `pk/colaborador_id` | Nascimento: `app/chamados/models.py:1018` | Trava/carga HX: `app/chamados/reconciliador.py:556`; `app/chamados/services/disputa_emissao.py:1862` |
-| Disputa `colaborador/chamado` | Nascimento: `app/chamados/services/disputa_emissao.py:601` | Seleção HX: `app/chamados/services/disputa_emissao.py:1839`; credor vivo: `app/chamados/services/disputa_emissao.py:2090` |
-| Colaborador `empresa_id` | Edição/transferência: `app/colaboradores/views.py:1335`, `app/colaboradores/views.py:1417` | Agrupamento da cerca: `app/chamados/reconciliador.py:522` |
-| Disputa `fechada_em/por/resolucao/motivo_fechamento` | Fechar: `app/chamados/models.py:2023`; reabrir: `app/chamados/models.py:2240`, `app/chamados/models.py:2264` | Seleções: `app/chamados/services/disputa_emissao.py:1833`, `app/chamados/services/disputa_emissao.py:1839`; receivers: `app/chamados/signals.py:29`, `app/chamados/signals.py:131` |
-| Pergunta `materializada_em/por/via_resolucao` | Atribuição: `app/chamados/models.py:3218`; persistência: `app/chamados/models.py:3273`; limpeza em lote: `app/chamados/models.py:3402` | Seleção: `app/chamados/services/disputa_emissao.py:1845`; C6: `app/chamados/juizes.py:1389`; preservação de autoria: `app/chamados/models.py:3304`; histórico: `app/chamados/services/historico.py:103` |
-| Pergunta `respondida_em/resposta_colab/validada_em/por` | Complementação pelo carimbo: `app/chamados/models.py:3251`; limpeza na ressuscitação: `app/chamados/models.py:1639` | C21: `app/chamados/juizes.py:1552`; universo de ressuscitação: `app/chamados/models.py:1533`, `app/chamados/models.py:1546`; histórico: `app/chamados/services/historico.py:99` |
-| Pergunta `veredito_lavrado/julgado_em/janela_expira_em` | `app/chamados/veredito_lavrado.py:270`; lote: `app/chamados/veredito_lavrado.py:250` | `esta_stale`: `app/chamados/veredito_lavrado.py:224`, `app/chamados/veredito_lavrado.py:228` |
-| Chamado `status_local/resolvido_em/via_encerramento/atualizado_em` | `_gravar_estado`: `app/chamados/models.py:228`, `app/chamados/models.py:296` | Gate/recarga: `app/chamados/models.py:674`, `app/chamados/models.py:761`; via no resolvedor: `app/chamados/services/disputa_emissao.py:1964`; leitor específico de apresentação de `atualizado_em`: **[nao verificado]** |
-| Chamado `urgencia/urgencia_original` | Rebaixamento/restauração: `app/chamados/models.py:246`, `app/chamados/models.py:250` | Restauração: `app/chamados/models.py:250` |
-| Justificativa `status/descricao` | `app/chamados/reconciliador.py:568` | Status nas portas DP: `app/ponto/services/justificativa.py:143`, `app/ponto/services/justificativa.py:278`; leitor específico do sufixo da descrição: **[nao verificado]** |
-| Ocorrência `chamado/autor/conteudo/anexo_hash` | `app/chamados/services/nota.py:88`, `app/chamados/services/nota.py:103` | Histórico: `app/chamados/services/historico.py:80` |
-| Auditoria de estado | `app/chamados/models.py:292` | Histórico: `app/chamados/services/historico.py:86` |
-| Decisão da ressuscitação | `app/chamados/models.py:1621` | Projeção do histórico decisório: `app/chamados/juizes.py:1382` |
-
-Os caminhos pedidos têm estas diferenças:
-
-| Caminho | Alcance sem a cerca de `_retratar` |
-|---|---|
-| Fantasmas | Seleciona chamados VIVOS e, após `False`, chama diretamente o resolvedor. O resolvedor não exige estado encerrado; pode carimbar mortas ENTREGUE e o comando ainda pode anexar ocorrência. `app/ponto/management/commands/reconciliar_fantasmas.py:157`, `:280`, `:286`; `app/chamados/services/disputa_emissao.py:1964`, `:2045`, `:2117` |
-| Órfãs/HIST | Conserva explicitamente o caminho anterior para ENTREGUE e chama o resolvedor. `app/chamados/reconciliador.py:1627`, `:1685` |
-| Becos | Seleciona pai/destinos terminais e chama o resolvedor. `app/chamados/services/becos.py:21`, `:44`, `:55` |
-| S143 | Exige ENCERRADOS e save de status; chama o resolvedor sem a nova cerca. `app/chamados/signals.py:97`, `:105`, `:117` |
-| Defesa 1 | Chama `reconciliar` diretamente; pode alcançar a relavra ENTREGUE descrita no item 1. `app/chamados/signals.py:43`; `app/chamados/models.py:655`, `:309` |
-
-Pelo delta fornecido, esses escritores e seleções são preexistentes; a extração dos filtros preserva o alcance anterior. A cerca cria **uma causa nova para “chamado ainda aberto + resolvedor direto”**: antes, nessa mesma tentativa bem-sucedida, a retratação transicionava; agora o veto devolve `False` e aciona o fallback. Comparação independente com o objeto Git de `708162b15` **[nao verificado]**. (`app/chamados/reconciliador.py:557`; `app/ponto/management/commands/reconciliar_fantasmas.py:280`; `app/chamados/services/disputa_emissao.py:1969`.)
-
-**4. Recusa silenciosa: sem laço infinito demonstrado, com repetição e relatório falso.**
-
-- Os dois reconciliadores contam somente `True`; `False` não entra em `falhas`. O consumidor pode marcar o evento como processado apesar da recusa. (`app/chamados/reconciliador.py:1040`; `app/chamados/reconciliador.py:1501`; `app/chamados/reconciliador.py:1431`; `app/chamados/reconciliador.py:1438`.)
-- Justificativa devolve o booleano; aprovação e fechamento do chamado continuam sendo resultados distintos. A aprovação já salva antes da tentativa de encerramento. (`app/ponto/services/justificativa.py:46`; `app/ponto/services/justificativa.py:205`; `app/ponto/services/justificativa.py:217`.)
-- Grade registra `RETRACT` antes da chamada e ignora seu retorno; imprime o plano sem separar recusas. (`app/ponto/management/commands/reconciliar_grade.py:303`; `:309`; `:318`.)
-- Vínculo conta e anuncia apenas sucessos: esse contador permanece correto. (`app/ponto/management/commands/reconciliar_vinculo.py:68`; `:83`; `:84`.)
-- **Geofence anuncia sucesso falso:** devolve todos os candidatos `perdeu`, inclusive recusados, e imprime seu tamanho como “chamados reconciliados”. (`app/ponto/services/geofence.py:434`; `:441`; `:448`; `app/ponto/management/commands/reconciliar_geofence.py:44`.)
-- Alertas de turno ignora `False` e relata somente exceções. (`app/ponto/management/commands/processar_alertas_turno.py:216`; `:219`.)
-
-Esses trechos percorrem candidatos, sem repetir sincronamente até obter `True`. Como a recusa conserva o chamado vivo, novas invocações podem repetir o trabalho; frequência e custo produtivos **[nao verificado]**. (`app/chamados/reconciliador.py:1032`; `:1493`; `:558`; `app/ponto/services/geofence.py:440`.)
-
-**5. Semântica do dia correta, com distinção explícita da conversa.**
-
-Para pergunta de fato, `_dia_de_turno_da_pergunta` retorna justamente `data_evento`, cujo contrato é dia do turno. Conversa grava dia civil e retorna `None` nesse juiz. O veto espera o dia usado na janela da empresa, não o mês civil nem o timestamp da batida. (`app/chamados/juizes.py:338`; `app/chamados/models.py:2898`; `app/chamados/models.py:2911`; `app/chamados/services/vigia_fio.py:802`.)
-
-A exclusão de conversas usa o mesmo discriminador de `q_do_horizonte`; não reproduz seu recorte completo, que também exige data maior ou igual ao horizonte. Dia ausente recusa por `is not False`, conservando o significado de `None` do veto. (`app/chamados/reconciliador.py:520`; `:527`; `app/chamados/services/fio.py:1463`; `:1365`.)
-
-**6. RED e mutantes: desenho verificável; execução Django não certificada.**
-
-A matriz exigida pelo selo é esta; suas mortes efetivas nesta cópia **[nao verificado]**:
-
-| Mutante | Casos que devem morrer por asserção |
-|---|---|
-| `sem_cerca` | a, b, b2, n |
-| `so_direto` | b, b2 |
-| `if_veto` | n |
-
-Os patches fazem essas alterações; nenhum é equivalente ao original no domínio exercitado. O harness só aceita `AssertionError` com mensagem da recusa: erro operacional não conta como mordida. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:46`; `:249`; `:252`; `:255`; `:242`.)
-
-A fotografia compara linhas completas das quatro entidades principais; decisões, pautas, ocorrências e auditoria são verificadas somente por contagem. Os casos não exercitam sobrealcance HX, cascata por outro pai nem o chamador fantasmas. (`app/chamados/tests/test_e4c_b2_cerca_retratar.py:125`; `:155`; `:206`.)
-
-Executei os dois mutantes reancorados em memória, com bytecode desativado: **cada execução apresentou `Ran 1`, rc=0 e morte por `AssertionError`**. `funde_perdendo_validadas` mantém a substituição pela seleção ancorada; `evento_volta_varredura_global` mantém a varredura global, agora localizada no resolvedor. O harness exige alvo único, original verde e falha sem erro operacional. (`app/chamados/tests/test_e4b_classe_e_memoria.py:38`; `:143`; `:1043`; `:1050`; `:1057`.)
-
-A ALLOWLIST cresceu duas seleções extraídas dos mesmos escritores, sem novo persistidor. Entretanto elas agora também são **leitores da cerca**: a justificativa “mesmo escritor” não demonstra que a nova enumeração seja exata. (`app/chamados/tests/test_contract_leitores_vitalidade.py:101`; `:102`; `app/chamados/services/disputa_emissao.py:1859`; `:1864`.)
-
-Suíte Django inteira, pista, hashes de sombra e mortes executadas dos três mutantes da cerca: **[nao verificado]**. [nao verificado]
-
-**7. Classes de reprovação.**
-
-Não identifiquei segundo juiz de competência nem novo persistidor: a consulta reutiliza o veto e as escritas continuam nas portas existentes. Há, porém, **escritor indireto sem cobertura**, **derivação de alcance excessiva** e **selo sem cobertura desses contraexemplos**. (`app/chamados/reconciliador.py:517`; `app/chamados/signals.py:43`; `app/chamados/models.py:309`; `app/chamados/services/disputa_emissao.py:1862`; `app/chamados/tests/test_e4c_b2_cerca_retratar.py:206`.)
-
-A ordem local de trava está preservada. O campo com dois significados, `data_evento`, é discriminado por `conversa` neste delta. Quanto ao relógio, a enumeração chama o universo de ressuscitação, que consulta C6 sem instante explícito; o fallback de relógio da máquina continua alcançável. Estabilidade atravessando a borda temporal **[nao verificado]**. (`app/chamados/reconciliador.py:556`; `app/chamados/juizes.py:342`; `app/chamados/services/disputa_emissao.py:1820`; `app/chamados/models.py:1564`; `app/chamados/juizes.py:596`.)
-
-VEREDITO: REPROVA -- subalcance pela Defesa 1 em app/chamados/signals.py:43 e app/chamados/models.py:309; sobrealcance HX em app/chamados/services/disputa_emissao.py:1862; contorno da recusa em app/ponto/management/commands/reconciliar_fantasmas.py:281; sucesso falso em app/ponto/management/commands/reconciliar_geofence.py:44
-
-_6503 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6506 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

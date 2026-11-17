@@ -14,18 +14,18 @@
 |---|---|---|
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
-| LATERAL-ESTRUTURA | 154 | 154 |
+| LATERAL-ESTRUTURA | 155 | 155 |
 | INSTRUMENTO | 180 | 180 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **458** | **457** |
+| **total** | **459** | **458** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 389; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 390; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 301 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 302 com a coluna
 
-resolve preenchido 12/458
+resolve preenchido 13/459
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -34,91 +34,101 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
-| PERGUNTA-SEM-SELO | ESPINHA-E | Faz leitores estruturais consultarem a autoridade correta. | - | FECHAR2; autorização sobre exportada | +++...... | REGISTRADA (construção histórica) | BACKLOG:751 | ? | ? |
-| JUIZ-DO-PAR-DUAS-ENTRADAS | ESPINHA-E | Faz motor e ata formarem os mesmos turnos. | - | MOTOR-PASSA-O-TURNO-A-VOLTA; grupo 1 | ++.....+~ | REGISTRADA (cura no ar; resíduos pendentes) | BACKLOG:776 [+19 compl.] | ? | ? |
-| COBERTURA-PARCIAL-UM-JUIZ | ESPINHA-E | Faz ausências parciais cobrirem apenas o trecho devido. | - | COBPARC-DIFF-ISOLADO; autorização sobre exportada | .+++.+~+~ | PARADA (reaberta; PAREI de impacto) | BACKLOG:786 [+17 compl.] | ? | ? |
-| FIO-LE-O-JUIZ | ESPINHA-E | Mostra perguntas vivas mesmo em disputas encerradas. | - | clique de validação; push | .++....+~ | REGISTRADA (no ar antigo; push pendente) | BACKLOG:794 | ? | ? |
-| CXR-TELA-LE-O-MOTOR | ESPINHA-E | Mostra ao admin os dias divergentes apontados pelo motor. | - | ATA-X-TURNO-PAUSA; CXR-PRONTO5-DEFINICAO; lavra | .+++..++~ | REGISTRADA (no ar; conclusão parcial) | BACKLOG:798 [+4 compl.] | ? | ? |
-| C6-TETO-MARCO-PENDENTE | ESPINHA-E | Evita cobrar um marco antes de terminar seu prazo. | - | cura no juiz C6 | .+....... | REGISTRADA | BACKLOG:818 | ? | ? |
-| PASSIVO-VALIDADO-K6 | ESPINHA-E | Usa a autoridade correta para reconhecer competência entregue. | - | juiz K6 | .+....... | REGISTRADA | BACKLOG:819 | ? | ? |
-| PROGRAMA-CELULA-E-O-DIA | ESPINHA-E | Faz todas as telas lerem o mesmo julgamento do dia. | - | E1; E2; E3; E4 | .++...... | REGISTRADA (programa parcial) | BACKLOG:821 [+106 compl.] | ? | ? |
-| GRADE-FOLGA-JUIZ | ESPINHA-E | Faz os leitores usarem a mesma decisão sobre folga lançada. | - | decisão GRADE-TETO | .++...~.. | REGISTRADA (construção antiga; opus reprovado) | BACKLOG:845 [+2 compl.] | ? | ? |
-| A2-RAISE-NO-FUROS | ESPINHA-E | Evita erro de tela quando A2 recusa o estado do dia. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:883 | ? | ? |
-| O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | ESPINHA-E | Identifica perguntas cujo clique já não produz efeito. | - | registro do juiz com corte | .+....... | REGISTRADA | BACKLOG:896 | ? | ? |
-| E1-PERGUNTA-AO-DP-CONTADOR | ESPINHA-E | Obtém respostas pendentes sobre horas extras, intervalo e convenção. | - | DP/contador | .+....... | PARADA (três respostas pendentes) | BACKLOG:898 | ? | ? |
-| V-FASE-AS-OF-CADASTRO-SEM-LINHA | ESPINHA-E | Leva ao admin problemas de cadastro de dias passados. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:903 | ? | ? |
-| BUG-ENC-CELULAS-FORMA | ESPINHA-E | Corrige o formato das células entregues ao julgamento de turnos. | - | F2; E4-CARGA-PARIDADE | ++....... | INTERROMPIDA | BACKLOG:933; anexo:interrompidas.txt:9 [+2 compl.] | ? | ? |
-| MODO-COMUM-OUT-DO-LOTE | ESPINHA-E | Impede dados do lote de decidirem o resultado de um ato individual. | - | prova do cartório; resíduos indicados | +++~..~+~ | REGISTRADA (código no ar; portão posterior indicado) | BACKLOG:946 | ? | ? |
-| BACKFILL-UNICO | ESPINHA-E | Centraliza correções antigas com responsável e destino explícitos. | - | antes do último horizonte; corte de exportada | .+....... | REGISTRADA | BACKLOG:947 [+2 compl.] | ? | ? |
-| ISENTO-PONTO-JUIZ-REGISTRADO | ESPINHA-E | Declara a autoridade da isenção e elimina consultas paralelas. | - | corte; comparação de predicado e universo | ......... | REGISTRADA | BACKLOG:955 | ? | ? |
-| RESPONDIDA-SEM-TEXTO-DUAS-COPIAS | ESPINHA-E | Unifica a identificação de resposta sem texto. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:988 | ? | ? |
-| DIA-DA-PERGUNTA-E-O-TURNO | ESPINHA-E | Liga cada pergunta ao dia correto do turno. | - | pouso A do VETO | .+....~.. | REGISTRADA (cópia anterior reprovada) | BACKLOG:1025 [+2 compl.] | ? | ? |
-| O261-VETO-NA-PORTA | ESPINHA-E | Impede cobrança automática em dia vetado e preserva a decisão humana. | - | comparação posterior; lotes B/C | .++....~~ | REGISTRADA (A no ar; B/C pendentes) | BACKLOG:1026 [+3 compl.] | ? | ? |
-| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | ESPINHA-E | Faz os turnos antigos usarem a mesma regra de expiração dos demais. | - | ORFAS | . + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1076 | ? | ? |
-| JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | ESPINHA-E | Impede que a mesma pergunta mude de estado sem um fato registrado. | - | ? (precedência da retomada não escrita) | + + + + . + . . + | REGISTRADA (cura no ar; passivo e trilha pendentes) | app/docs/BACKLOG.md:1077 [+1 compl.] | ? | ? |
-| JUIZ-DE-DONO-DO-DIA | ESPINHA-E | Separa problemas do sistema de problemas de cadastro ou batida. | - | corte para predicado de dono | + . . . . . . . . | PARADA (sem predicado autorizado) | app/docs/BACKLOG.md:1080 | ? | ? |
-| VINCULO-LINHA-DO-TEMPO | ESPINHA-E | Mantém uma sequência de vínculos válidos sem sobreposição. | - | ESMERIL-2; censo de leitores; autorização para col899 | + + + + . . . . . | PARADA (porta pronta; tripwire e constraint pendentes) | app/docs/BACKLOG.md:1127 [+3 compl.] | ? | ? |
-| O-DIA-PAGO | ESPINHA-E | Faz todas as telas lerem um único valor diário de pagamento. | - | fatias S3, S4, S5 e S5b | + + + . . . . . . | REGISTRADA (fechada por fatias; S5b citada em voo antigo) | app/docs/BACKLOG.md:1131 [+14 compl.] | ? | ? |
-| PLACAR-ESTRUTURAL | ESPINHA-E | Mostra se cálculo, telas e folha permanecem coerentes com o cadastro. | - | autorização dos casos da 09 exportada; lote do R6 | + + + . . . . . . | PARADA (resultados parciais; espera autorização) | app/docs/BACKLOG.md:1173 [+5 compl.] | ? | ? |
-| L111-ORFAOS-DO-MOTOR | ESPINHA-E | Remove duas respostas antigas de cálculo que já não têm leitores. | - | conferência da O275/O277 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1181 | ? | ? |
-| O219 | ESPINHA-E | Rejulga dias quando muda a regra, respeitando seu alcance e período. | - | TXT novo da 09; Pauta DP | + + + . . . . + + | REGISTRADA (regra no ar; TXT e pauta pendentes) | app/docs/BACKLOG.md:1197 [+1 compl.] | ? | ? |
-| O228 | ESPINHA-E | Remove código obsoleto de célula e turno com prova de desuso. | - | - | + + + + . . . + + | REGISTRADA (inteira no ar; data do fecho incerta) | app/docs/BACKLOG.md:1201 | ? | ? |
-| O218 | ESPINHA-E | Certifica que a lavratura produz ata correta e estável em diferentes cenários. | - | cura O217; cenários; relavra de col146 | + + . . . . . . . | REGISTRADA (instrumento no ar; bateria incompleta na fonte) | app/docs/BACKLOG.md:1214 [+1 compl.] | ? | ? |
-| O221 | ESPINHA-E | Integra as curas de escrita única e julgamento pelas autoridades. | - | marco O218; suíte da junção | + + + . . . . + + | REGISTRADA (fonte diz no ar e também nada juntado) | app/docs/BACKLOG.md:1215 | ? | ? |
-| O129 | ESPINHA-E | Declara o efeito dos 28 campos editáveis do assistente de escalas. | - | O127 | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1220 | ? | ? |
-| O117 | ESPINHA-E | Resolve a divergência sobre o previsto de células sem marcos. | - | corte se ainda desejado | + + . . . . . . . | PARADA (zero casos na frota; corte pendente) | app/docs/BACKLOG.md:1234 | ? | ? |
-| O105 | ESPINHA-E | Faz o arquivo da folha refletir de forma estável o valor gravado. | - | decidir substituição ou autópsia de datas_falta | + + . . . . . . . | PARADA (PAREI por divergência no TXT) | app/docs/BACKLOG.md:1246 [+1 compl.] | ? | ? |
-| O44 | ESPINHA-E | Permite retomar um dia antigo sem destrancar outros dias. | - | smoke do caso 1; critérios do item | + + + + . . . + . | REGISTRADA (pousada; marco sem data explícita) | app/docs/BACKLOG.md:1325 [+3 compl.] | ? | ? |
-| O54 | ESPINHA-E | Faz previsão, cálculo, telas e fechamento concordarem sobre cada dia. | - | portas E0→E6 provadas em sequência | + + ~ . . . . . . | REGISTRADA (programa parcial pelas fontes vivas 15/11 23:2x: placar core/espelho_verdade.py E1 2/4, E3 8/10, E4 4/5, E5 1/2, E6 5/8 = 20/29; E6 oraculo 27/09 91,5% dos dias batem; R1-REMEDE 06/11 FECHADA, BACKLOG:1854; fecho: ESPELHO-VERDADE-FECHO V0-V4) | app/docs/BACKLOG.md:1338 [+51 compl.] | ? | ? |
-| O95 | ESPINHA-E | Impede absorver saída real como pausa sem prova de retorno. | - | censo; DIFF de frota | + . . . . . . . . | PARADA (cura candidata revertida; espera censo) | app/docs/BACKLOG.md:1371 | ? | ? |
-| O92 | ESPINHA-E | Alimenta a previsão em lote para evitar consultas repetidas por dia. | - | quatro leitores; DIFF da cópia inline | + + ~ . . . . . . | REGISTRADA (chamador da tela fechado; demais pendentes) | app/docs/BACKLOG.md:1375 | ? | ? |
-| O136 | ESPINHA-E | Faz a escolha do motor reconhecer turno partido nos dois sentidos. | - | O134 item 5; DIFF; ! do motor | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1389 | ? | ? |
-| CHAMADO-EM-RAIA | ESPINHA-E | Concentra as mudanças de estado dos chamados numa porta. | - | O123; régua da trilha principal | . + . . . . . . . | REGISTRADA (voo só registrado em 03/10) | app/docs/BACKLOG.md:1394 [+23 compl.] | ? | ? |
-| DOSSIES-DAS-CELULAS | ESPINHA-E | Organiza a cura dos contratos e leitores das famílias estruturais. | - | ordem O134; obras dos seis itens | + + ~ . . . . . + | REGISTRADA (parte no ar; restante sem curso atual comprovado) | app/docs/BACKLOG.md:1396 [+14 compl.] | ? | ? |
-| O142 | ESPINHA-E | Faz o mesmo dia produzir o mesmo turno em janelas diferentes. | - | vínculo do dia; provas de invariância | + + . . . . . . . | REGISTRADA | app/docs/BACKLOG.md:1398 [+1 compl.] | ? | ? |
-| O177 | ESPINHA-E | Faz o cálculo considerar todas as pausas cadastradas. | - | DIFF de frota; reversão; exportadas intactas | ++....... | REGISTRADA | BACKLOG:1432 | ? | ? |
-| O178 | ESPINHA-E | Dá responsável e prazo às pendências do administrador. | - | Prazo, dono e contador de leitura da pauta | ++....... | REGISTRADA | BACKLOG:1433 | ? | ? |
-| O179 | ESPINHA-E | Investiga dias com batidas que chegam zerados à folha. | - | Medir horas e decidir o dono pela L-099 | ++....... | REGISTRADA | BACKLOG:1434 [+1 compl.] | ? | ? |
-| O180 | ESPINHA-E | Entrega ao administrador dias gerados além do vínculo. | - | Lista dos colaboradores; ! para regenerar passado | ++....... | PARADA (ato de passado espera !) | BACKLOG:1435 | ? | ? |
-| O183 | ESPINHA-E | Impede chamados com urgências desconhecidas pelo sistema. | - | Merge; DIFF; tratamento do estoque | ++++..... | REGISTRADA (cura na raia; estoque pendente) | BACKLOG:1438 | ? | ? |
-| O229 | ESPINHA-E | Corrige diferenças entre marcos e leitores de horas. | - | Censo e RED por classe; O197 no item 9 | ++....... | REGISTRADA | BACKLOG:1466 [+1 compl.] | ? | ? |
-| O216 | ESPINHA-E | Refaz a medição após a correção do juiz dos turnos. | - | O195; medição pela função real | ++....... | REGISTRADA | BACKLOG:1468 | ? | ? |
-| SOBRA-NA-BORDA-O-QUE-FICOU | ESPINHA-E | Reúne problemas restantes após mudanças em batidas antigas. | - | Obra própria do item a; censos por classe | ++....... | REGISTRADA | BACKLOG:1493 | ? | ? |
-| ATA-NAO-DISPENSA-JUSTIFICADA | ESPINHA-E | Faz a ata reconhecer o período abonado pela justificativa. | - | Acesso para aplicar o acervo da 10 | ++++...++ | PARADA (cura publicada; aplicação sem permissão) | BACKLOG:1515 | ? | ? |
-| CONCORDE-PREVISTO-ZERO | ESPINHA-E | Investiga dias corretos com batidas e previsão zerada. | - | Medir a causa da previsão zero | ++....... | REGISTRADA | BACKLOG:1517 | ? | ? |
-| ESPELHO-VERDADE-REMEDIDO | ESPINHA-E | Atualiza o placar com testes e medições comprovados. | - | K6/E1; termômetro R1; antes da triagem | ++....... | REGISTRADA | BACKLOG:1522 [+2 compl.] | ? | ? |
-| C5-LISTA-DE-FROTA | ESPINHA-E | Corrige faltas descontadas acima da jornada prevista. | - | Medir os 27 casos; invariante falta ≤ previsto | ++....... | REGISTRADA | BACKLOG:1529 [+2 compl.] | ? | ? |
-| FERIADO-DIA-CHAVE | ESPINHA-E | Faz cálculo e fechamento reconhecerem o mesmo dia de feriado. | - | Dia-chave único; caso atravessando meia-noite | ++....... | REGISTRADA | BACKLOG:1532 | ? | ? |
-| LISTA-POR-COMPETENCIA | ESPINHA-E | Separa problemas cadastrais por competência da folha. | - | Apply da competência 10 | .+....... | REGISTRADA | BACKLOG:1534 | ? | ? |
-| REGUA-DO-PERIODO-COMPLEMENTO-19-10 | ESPINHA-E | Confere a régua por fatia e encaminha divergências. | - | Itens 1 e 2; pergunta 18; item 5 após 2 | ++....... | REGISTRADA | BACKLOG:1634 | ? | ? |
-| O327 | ESPINHA-E | Mostra quem o cálculo independente conseguiu avaliar. | - | Lei do ancoramento do trecho extra | +........ | PARADA (espera lei) | BACKLOG:1662 [+1 compl.] | ? | ? |
-| RETIFICACAO-DA-10-8069-PRIMEIRO | ESPINHA-E | Corrige diferenças de pagamento começando pela rubrica 8069. | - | Corte da 243; HE publicada; decisão do admin | ++....... | REGISTRADA (243 parada por corte) | BACKLOG:1666 | ? | ? |
-| REABRIR-PERGUNTA-A-PREMISSA | ESPINHA-E | Evita reabrir cobrança encerrada sem fato novo. | - | Contador; conferência de sete dias sem ciclo | +++....++ | REGISTRADA (medição do portão pendente) | BACKLOG:1686 [+3 compl.] | ? | ? |
-| LOTE-VAZA-ENTRE-COLABS | ESPINHA-E | Faz o cálculo em lote igualar o cálculo individual. | - | Medir a causa | +........ | REGISTRADA | BACKLOG:1709 | ? | ? |
-| PASSADO-SEM-MARCOS-SEM-TETO | ESPINHA-E | Verifica perguntas que nascem antes do fim real do trabalho. | - | Medir encerramento do fato | +........ | REGISTRADA | BACKLOG:1721 | ? | ? |
-| LEGADO-51-ACESAS | ESPINHA-E | Encerra perguntas antigas cujo marco já está atendido. | - | Medição pelo juiz real | ++....... | REGISTRADA | BACKLOG:1724 | ? | ? |
-| DIA-DA-BATIDA-JUIZ-UNICO | ESPINHA-E | Faz decisões usarem o dia definido pelo juiz do turno. | - | Rejulgamento de col33; antes de fechar contrato 20 | .+....... | REGISTRADA | BACKLOG:1727 [+4 compl.] | ? | ? |
-| PERGUNTA-DO-DIA-EM-CURSO | ESPINHA-E | Abre cobrança do marco vencido pelo evento e instante corretos. | - | Medição das 48 perguntas futuras | ++....... | REGISTRADA | BACKLOG:1729 | ? | ? |
-| R1-ESTRUTURA-91 | ESPINHA-E | Corrige famílias de divergência entre cálculo e regra. | - | E4; E5; motor; classes cegas | .+......+ | REGISTRADA (restante pendente) | BACKLOG:1765 [+1 compl.] | ? | ? |
-| BATERIA-QUEIXAS-ADMIN | ESPINHA-E | Testa quatro queixas nas escalas canônicas pela regra. | - | casos; validação do DP; FIO MUDO | .+....... | REGISTRADA | BACKLOG:1809 | ? | ? |
-| TIPO-NA-FONTE | ESPINHA-E | Entrega a ata aos leitores por acesso de significado explícito. | - | corte; E3; DESLIGADO; FERIADO; O168; HJ-090 | ++++.+... | PARADA | BACKLOG:1836; RELATO:112; RELATO:149 [+7 compl.] | ? | ? |
-| MOTOR-LE-O-TURNO | ESPINHA-E | Faz cálculo e pagamento usarem o mesmo turno oficial. | - | E2; E3; DIFF; autorização das exportadas | .+....... | REGISTRADA | BACKLOG:1879 [+3 compl.] | ? | ? |
-| FIO-E0-V4-E1-ENTRADAS | ESPINHA-E | Faz as perguntas nascerem ligadas ao fato correto. | - | desenho; suite; sombra; opus | ++.+.+... | PARADA (último estado escrito) | BACKLOG:1888 [+16 compl.] | ? | ? |
-| FIO-E0-V4-E4-ESCRITORES | ESPINHA-E | Substitui estados paralelos por atos registrados da pergunta. | - | E4B; E4C; E4D | ++.+.++++ | REGISTRADA (E4a-1 no ar; restante pendente) | BACKLOG:1915 [+24 compl.] | ? | ? |
-| RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA | BACKLOG:1934 [+16 compl.] | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) |
-| LAVRA-PREMATURA-CONCORDE | ESPINHA-E | Define quando o dia pode ser confirmado antes do turno terminar. | - | decisão de desenho | ...+.+... | PARADA (construção vedada) | BACKLOG:1981 | ? | ? |
-| RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA | BACKLOG:2039 | ? | ? |
-| JV1-MERGE-FILA | ESPINHA-E | Trata lacunas de janela e alimentação dos feriados. | - | medir dinheiro antes | ......... | REGISTRADA | BACKLOG:2061 | ? | ? |
+| PERGUNTA-SEM-SELO | ESPINHA-E | Faz leitores estruturais consultarem a autoridade correta. | - | FECHAR2; autorização sobre exportada | +++...... | REGISTRADA (construção histórica) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:751 | ? | ? |
+| JUIZ-DO-PAR-DUAS-ENTRADAS | ESPINHA-E | Faz motor e ata formarem os mesmos turnos. | - | MOTOR-PASSA-O-TURNO-A-VOLTA; grupo 1 | ++.....+~ | REGISTRADA (cura no ar; resíduos pendentes) [PERSPECTIVA 17/11: SUPERADA] | BACKLOG:776 [+19 compl.] | ? | ? |
+| COBERTURA-PARCIAL-UM-JUIZ | ESPINHA-E | Faz ausências parciais cobrirem apenas o trecho devido. | - | COBPARC-DIFF-ISOLADO; autorização sobre exportada | .+++.+~+~ | PARADA (reaberta; PAREI de impacto) [PERSPECTIVA 17/11: FEITA] | BACKLOG:786 [+17 compl.] | ? | ? |
+| FIO-LE-O-JUIZ | ESPINHA-E | Mostra perguntas vivas mesmo em disputas encerradas. | - | clique de validação; push | .++....+~ | REGISTRADA (no ar antigo; push pendente) [PERSPECTIVA 17/11: FEITA] | BACKLOG:794 | ? | ? |
+| CXR-TELA-LE-O-MOTOR | ESPINHA-E | Mostra ao admin os dias divergentes apontados pelo motor. | - | ATA-X-TURNO-PAUSA; CXR-PRONTO5-DEFINICAO; lavra | .+++..++~ | REGISTRADA (no ar; conclusão parcial) [PERSPECTIVA 17/11: FEITA] | BACKLOG:798 [+4 compl.] | ? | ? |
+| C6-TETO-MARCO-PENDENTE | ESPINHA-E | Evita cobrar um marco antes de terminar seu prazo. | - | cura no juiz C6 | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:818 | ? | ? |
+| PASSIVO-VALIDADO-K6 | ESPINHA-E | Usa a autoridade correta para reconhecer competência entregue. | - | juiz K6 | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:819 | ? | ? |
+| PROGRAMA-CELULA-E-O-DIA | ESPINHA-E | Faz todas as telas lerem o mesmo julgamento do dia. | - | E1; E2; E3; E4 | .++...... | REGISTRADA (programa parcial) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:821 [+106 compl.] | ? | ? |
+| GRADE-FOLGA-JUIZ | ESPINHA-E | Faz os leitores usarem a mesma decisão sobre folga lançada. | - | decisão GRADE-TETO | .++...~.. | REGISTRADA (construção antiga; opus reprovado) [PERSPECTIVA 17/11: FEITA] | BACKLOG:845 [+2 compl.] | ? | ? |
+| A2-RAISE-NO-FUROS | ESPINHA-E | Evita erro de tela quando A2 recusa o estado do dia. | - | ? (não indicada) | ......... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:883 | ? | ? |
+| O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL | ESPINHA-E | Identifica perguntas cujo clique já não produz efeito. | - | registro do juiz com corte | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:896 | ? | ? |
+| E1-PERGUNTA-AO-DP-CONTADOR | ESPINHA-E | Obtém respostas pendentes sobre horas extras, intervalo e convenção. | - | DP/contador | .+....... | PARADA (três respostas pendentes) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:898 | ? | ? |
+| V-FASE-AS-OF-CADASTRO-SEM-LINHA | ESPINHA-E | Leva ao admin problemas de cadastro de dias passados. | - | ? (não indicada) | ......... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:903 | ? | ? |
+| BUG-ENC-CELULAS-FORMA | ESPINHA-E | Corrige o formato das células entregues ao julgamento de turnos. | - | F2; E4-CARGA-PARIDADE | ++....... | INTERROMPIDA [PERSPECTIVA 17/11: FEITA] | BACKLOG:933; anexo:interrompidas.txt:9 [+2 compl.] | ? | ? |
+| MODO-COMUM-OUT-DO-LOTE | ESPINHA-E | Impede dados do lote de decidirem o resultado de um ato individual. | - | prova do cartório; resíduos indicados | +++~..~+~ | REGISTRADA (código no ar; portão posterior indicado) [PERSPECTIVA 17/11: FEITA] | BACKLOG:946 | ? | ? |
+| BACKFILL-UNICO | ESPINHA-E | Centraliza correções antigas com responsável e destino explícitos. | - | antes do último horizonte; corte de exportada | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:947 [+2 compl.] | ? | ? |
+| ISENTO-PONTO-JUIZ-REGISTRADO | ESPINHA-E | Declara a autoridade da isenção e elimina consultas paralelas. | - | corte; comparação de predicado e universo | ......... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:955 | ? | ? |
+| RESPONDIDA-SEM-TEXTO-DUAS-COPIAS | ESPINHA-E | Unifica a identificação de resposta sem texto. | - | ? (não indicada) | ......... | REGISTRADA [PERSPECTIVA 17/11: FEITA] | BACKLOG:988 | ? | ? |
+| DIA-DA-PERGUNTA-E-O-TURNO | ESPINHA-E | Liga cada pergunta ao dia correto do turno. | - | pouso A do VETO | .+....~.. | REGISTRADA (cópia anterior reprovada) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1025 [+2 compl.] | ? | ? |
+| O261-VETO-NA-PORTA | ESPINHA-E | Impede cobrança automática em dia vetado e preserva a decisão humana. | - | comparação posterior; lotes B/C | .++....~~ | REGISTRADA (A no ar; B/C pendentes) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1026 [+3 compl.] | ? | ? |
+| EXPIRACAO-DA-ABERTA-COPIA-ANTIGA | ESPINHA-E | Faz os turnos antigos usarem a mesma regra de expiração dos demais. | - | ORFAS | . + . . . . . . . | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1076 | ? | ? |
+| JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO | ESPINHA-E | Impede que a mesma pergunta mude de estado sem um fato registrado. | - | ? (precedência da retomada não escrita) | + + + + . + . . + | REGISTRADA (cura no ar; passivo e trilha pendentes) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1077 [+1 compl.] | ? | ? |
+| JUIZ-DE-DONO-DO-DIA | ESPINHA-E | Separa problemas do sistema de problemas de cadastro ou batida. | - | corte para predicado de dono | + . . . . . . . . | PARADA (sem predicado autorizado) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1080 | ? | ? |
+| VINCULO-LINHA-DO-TEMPO | ESPINHA-E | Mantém uma sequência de vínculos válidos sem sobreposição. | - | ESMERIL-2; censo de leitores; autorização para col899 | + + + + . . . . . | PARADA (porta pronta; tripwire e constraint pendentes) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1127 [+3 compl.] | ? | ? |
+| O-DIA-PAGO | ESPINHA-E | Faz todas as telas lerem um único valor diário de pagamento. | - | fatias S3, S4, S5 e S5b | + + + . . . . . . | REGISTRADA (fechada por fatias; S5b citada em voo antigo) [PERSPECTIVA 17/11: PENDENTE REAL, amostra da sessao reclassificou de SUPERADA] | app/docs/BACKLOG.md:1131 [+14 compl.] | ? | ? |
+| PLACAR-ESTRUTURAL | ESPINHA-E | Mostra se cálculo, telas e folha permanecem coerentes com o cadastro. | - | autorização dos casos da 09 exportada; lote do R6 | + + + . . . . . . | PARADA (resultados parciais; espera autorização) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1173 [+5 compl.] | ? | ? |
+| L111-ORFAOS-DO-MOTOR | ESPINHA-E | Remove duas respostas antigas de cálculo que já não têm leitores. | - | conferência da O275/O277 | + + . . . . . . . | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1181 | ? | ? |
+| O219 | ESPINHA-E | Rejulga dias quando muda a regra, respeitando seu alcance e período. | - | TXT novo da 09; Pauta DP | + + + . . . . + + | REGISTRADA (regra no ar; TXT e pauta pendentes) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1197 [+1 compl.] | ? | ? |
+| O228 | ESPINHA-E | Remove código obsoleto de célula e turno com prova de desuso. | - | - | + + + + . . . + + | REGISTRADA (inteira no ar; data do fecho incerta) [PERSPECTIVA 17/11: FEITA] | app/docs/BACKLOG.md:1201 | ? | ? |
+| O218 | ESPINHA-E | Certifica que a lavratura produz ata correta e estável em diferentes cenários. | - | cura O217; cenários; relavra de col146 | + + . . . . . . . | REGISTRADA (instrumento no ar; bateria incompleta na fonte) [PERSPECTIVA 17/11: FEITA] | app/docs/BACKLOG.md:1214 [+1 compl.] | ? | ? |
+| O221 | ESPINHA-E | Integra as curas de escrita única e julgamento pelas autoridades. | - | marco O218; suíte da junção | + + + . . . . + + | REGISTRADA (fonte diz no ar e também nada juntado) [PERSPECTIVA 17/11: FEITA] | app/docs/BACKLOG.md:1215 | ? | ? |
+| O129 | ESPINHA-E | Declara o efeito dos 28 campos editáveis do assistente de escalas. | - | O127 | + + . . . . . . . | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1220 | ? | ? |
+| O117 | ESPINHA-E | Resolve a divergência sobre o previsto de células sem marcos. | - | corte se ainda desejado | + + . . . . . . . | PARADA (zero casos na frota; corte pendente) [PERSPECTIVA 17/11: SEM PROVA] | app/docs/BACKLOG.md:1234 | ? | ? |
+| O105 | ESPINHA-E | Faz o arquivo da folha refletir de forma estável o valor gravado. | - | decidir substituição ou autópsia de datas_falta | + + . . . . . . . | PARADA (PAREI por divergência no TXT) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1246 [+1 compl.] | ? | ? |
+| O44 | ESPINHA-E | Permite retomar um dia antigo sem destrancar outros dias. | - | smoke do caso 1; critérios do item | + + + + . . . + . | REGISTRADA (pousada; marco sem data explícita) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1325 [+3 compl.] | ? | ? |
+| O54 | ESPINHA-E | Faz previsão, cálculo, telas e fechamento concordarem sobre cada dia. | - | portas E0→E6 provadas em sequência | + + ~ . . . . . . | REGISTRADA (programa parcial pelas fontes vivas 15/11 23:2x: placar core/espelho_verdade.py E1 2/4, E3 8/10, E4 4/5, E5 1/2, E6 5/8 = 20/29; E6 oraculo 27/09 91,5% dos dias batem; R1-REMEDE 06/11 FECHADA, BACKLOG:1854; fecho: ESPELHO-VERDADE-FECHO V0-V4) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1338 [+51 compl.] | ? | ? |
+| O95 | ESPINHA-E | Impede absorver saída real como pausa sem prova de retorno. | - | censo; DIFF de frota | + . . . . . . . . | PARADA (cura candidata revertida; espera censo) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1371 | ? | ? |
+| O92 | ESPINHA-E | Alimenta a previsão em lote para evitar consultas repetidas por dia. | - | quatro leitores; DIFF da cópia inline | + + ~ . . . . . . | REGISTRADA (chamador da tela fechado; demais pendentes) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1375 | ? | ? |
+| O136 | ESPINHA-E | Faz a escolha do motor reconhecer turno partido nos dois sentidos. | - | O134 item 5; DIFF; ! do motor | + + . . . . . . . | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1389 | ? | ? |
+| CHAMADO-EM-RAIA | ESPINHA-E | Concentra as mudanças de estado dos chamados numa porta. | - | O123; régua da trilha principal | . + . . . . . . . | REGISTRADA (voo só registrado em 03/10) [PERSPECTIVA 17/11: PENDENTE REAL] | app/docs/BACKLOG.md:1394 [+23 compl.] | ? | ? |
+| DOSSIES-DAS-CELULAS | ESPINHA-E | Organiza a cura dos contratos e leitores das famílias estruturais. | - | ordem O134; obras dos seis itens | + + ~ . . . . . + | REGISTRADA (parte no ar; restante sem curso atual comprovado) [PERSPECTIVA 17/11: SEM PROVA] | app/docs/BACKLOG.md:1396 [+14 compl.] | ? | ? |
+| O142 | ESPINHA-E | Faz o mesmo dia produzir o mesmo turno em janelas diferentes. | - | vínculo do dia; provas de invariância | + + . . . . . . . | REGISTRADA [PERSPECTIVA 17/11: FEITA] | app/docs/BACKLOG.md:1398 [+1 compl.] | ? | ? |
+| O177 | ESPINHA-E | Faz o cálculo considerar todas as pausas cadastradas. | - | DIFF de frota; reversão; exportadas intactas | ++....... | REGISTRADA [PERSPECTIVA 17/11: SUPERADA] | BACKLOG:1432 | ? | ? |
+| O178 | ESPINHA-E | Dá responsável e prazo às pendências do administrador. | - | Prazo, dono e contador de leitura da pauta | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1433 | ? | ? |
+| O179 | ESPINHA-E | Investiga dias com batidas que chegam zerados à folha. | - | Medir horas e decidir o dono pela L-099 | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1434 [+1 compl.] | ? | ? |
+| O180 | ESPINHA-E | Entrega ao administrador dias gerados além do vínculo. | - | Lista dos colaboradores; ! para regenerar passado | ++....... | PARADA (ato de passado espera !) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1435 | ? | ? |
+| O183 | ESPINHA-E | Impede chamados com urgências desconhecidas pelo sistema. | - | Merge; DIFF; tratamento do estoque | ++++..... | REGISTRADA (cura na raia; estoque pendente) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1438 | ? | ? |
+| O229 | ESPINHA-E | Corrige diferenças entre marcos e leitores de horas. | - | Censo e RED por classe; O197 no item 9 | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1466 [+1 compl.] | ? | ? |
+| O216 | ESPINHA-E | Refaz a medição após a correção do juiz dos turnos. | - | O195; medição pela função real | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1468 | ? | ? |
+| SOBRA-NA-BORDA-O-QUE-FICOU | ESPINHA-E | Reúne problemas restantes após mudanças em batidas antigas. | - | Obra própria do item a; censos por classe | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1493 | ? | ? |
+| ATA-NAO-DISPENSA-JUSTIFICADA | ESPINHA-E | Faz a ata reconhecer o período abonado pela justificativa. | - | Acesso para aplicar o acervo da 10 | ++++...++ | PARADA (cura publicada; aplicação sem permissão) [PERSPECTIVA 17/11: FEITA] | BACKLOG:1515 | ? | ? |
+| CONCORDE-PREVISTO-ZERO | ESPINHA-E | Investiga dias corretos com batidas e previsão zerada. | - | Medir a causa da previsão zero | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1517 | ? | ? |
+| ESPELHO-VERDADE-REMEDIDO | ESPINHA-E | Atualiza o placar com testes e medições comprovados. | - | K6/E1; termômetro R1; antes da triagem | ++....... | REGISTRADA [PERSPECTIVA 17/11: FEITA] | BACKLOG:1522 [+2 compl.] | ? | ? |
+| C5-LISTA-DE-FROTA | ESPINHA-E | Corrige faltas descontadas acima da jornada prevista. | - | Medir os 27 casos; invariante falta ≤ previsto | ++....... | REGISTRADA [PERSPECTIVA 17/11: SUPERADA] | BACKLOG:1529 [+2 compl.] | ? | ? |
+| FERIADO-DIA-CHAVE | ESPINHA-E | Faz cálculo e fechamento reconhecerem o mesmo dia de feriado. | - | Dia-chave único; caso atravessando meia-noite | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1532 | ? | ? |
+| LISTA-POR-COMPETENCIA | ESPINHA-E | Separa problemas cadastrais por competência da folha. | - | Apply da competência 10 | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1534 | ? | ? |
+| REGUA-DO-PERIODO-COMPLEMENTO-19-10 | ESPINHA-E | Confere a régua por fatia e encaminha divergências. | - | Itens 1 e 2; pergunta 18; item 5 após 2 | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1634 | ? | ? |
+| O327 | ESPINHA-E | Mostra quem o cálculo independente conseguiu avaliar. | - | Lei do ancoramento do trecho extra | +........ | PARADA (espera lei) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1662 [+1 compl.] | ? | ? |
+| RETIFICACAO-DA-10-8069-PRIMEIRO | ESPINHA-E | Corrige diferenças de pagamento começando pela rubrica 8069. | - | Corte da 243; HE publicada; decisão do admin | ++....... | REGISTRADA (243 parada por corte) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1666 | ? | ? |
+| REABRIR-PERGUNTA-A-PREMISSA | ESPINHA-E | Evita reabrir cobrança encerrada sem fato novo. | - | Contador; conferência de sete dias sem ciclo | +++....++ | REGISTRADA (medição do portão pendente) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1686 [+3 compl.] | ? | ? |
+| LOTE-VAZA-ENTRE-COLABS | ESPINHA-E | Faz o cálculo em lote igualar o cálculo individual. | - | Medir a causa | +........ | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1709 | ? | ? |
+| PASSADO-SEM-MARCOS-SEM-TETO | ESPINHA-E | Verifica perguntas que nascem antes do fim real do trabalho. | - | Medir encerramento do fato | +........ | REGISTRADA [PERSPECTIVA 17/11: SUPERADA] | BACKLOG:1721 | ? | ? |
+| LEGADO-51-ACESAS | ESPINHA-E | Encerra perguntas antigas cujo marco já está atendido. | - | Medição pelo juiz real | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1724 | ? | ? |
+| DIA-DA-BATIDA-JUIZ-UNICO | ESPINHA-E | Faz decisões usarem o dia definido pelo juiz do turno. | - | Rejulgamento de col33; antes de fechar contrato 20 | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1727 [+4 compl.] | ? | ? |
+| PERGUNTA-DO-DIA-EM-CURSO | ESPINHA-E | Abre cobrança do marco vencido pelo evento e instante corretos. | - | Medição das 48 perguntas futuras | ++....... | REGISTRADA [PERSPECTIVA 17/11: FEITA] | BACKLOG:1729 | ? | ? |
+| R1-ESTRUTURA-91 | ESPINHA-E | Corrige famílias de divergência entre cálculo e regra. | - | E4; E5; motor; classes cegas | .+......+ | REGISTRADA (restante pendente) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1765 [+1 compl.] | ? | ? |
+| BATERIA-QUEIXAS-ADMIN | ESPINHA-E | Testa quatro queixas nas escalas canônicas pela regra. | - | casos; validação do DP; FIO MUDO | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1809 | ? | ? |
+| TIPO-NA-FONTE | ESPINHA-E | Entrega a ata aos leitores por acesso de significado explícito. | - | corte; E3; DESLIGADO; FERIADO; O168; HJ-090 | ++++.+... | PARADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1836; RELATO:112; RELATO:149 [+7 compl.] | ? | ? |
+| MOTOR-LE-O-TURNO | ESPINHA-E | Faz cálculo e pagamento usarem o mesmo turno oficial. | - | E2; E3; DIFF; autorização das exportadas | .+....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1879 [+3 compl.] | ? | ? |
+| FIO-E0-V4-E1-ENTRADAS | ESPINHA-E | Faz as perguntas nascerem ligadas ao fato correto. | - | desenho; suite; sombra; opus | ++.+.+... | PARADA (último estado escrito) [PERSPECTIVA 17/11: FEITA] | BACKLOG:1888 [+16 compl.] | ? | ? |
+| FIO-E0-V4-E4-ESCRITORES | ESPINHA-E | Substitui estados paralelos por atos registrados da pergunta. | - | E4B; E4C; E4D | ++.+.++++ | REGISTRADA (E4a-1 no ar; restante pendente) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1915 [+24 compl.] | ? | ? |
+| RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1934 [+16 compl.] | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) |
+| LAVRA-PREMATURA-CONCORDE | ESPINHA-E | Define quando o dia pode ser confirmado antes do turno terminar. | - | decisão de desenho | ...+.+... | PARADA (construção vedada) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1981 | ? | ? |
+| RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2039 | ? | ? |
+| JV1-MERGE-FILA | ESPINHA-E | Trata lacunas de janela e alimentação dos feriados. | - | medir dinheiro antes | ......... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2061 | ? | ? |
 
 ## 20/20 (5)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
-| O168 | 20/20 | Preserva a cobrança enquanto uma resposta aguarda julgamento. | - | Guarda no evento antes de retirar o executor do supra | +++..++++ | NO AR hoje | BACKLOG:1422; BACKLOG:2076; app/docs/RELATO.md:5; app/docs/RELATO.md:7; app/docs/RELATO.md:31 [+3 compl.] | ? | ? |
-| O169 | 20/20 | Impede encerrar cobranças apenas porque envelheceram. | - | ? (célula antiga conserva pergunta já superada) | +........ | REGISTRADA (pousada em outra fonte) | BACKLOG:1424; BACKLOG:1821; BACKLOG:2076 [+11 compl.] | ? | ? |
-| FIO-E0-V4-E3-LEITORES | 20/20 | Faz telas e contadores mostrarem a mesma tarefa diária. | - | cura; preverif; suite; sombra; opus | ++++.~... | EM VOO | BACKLOG:1902; RELATO:6; RELATO:33 [+9 compl.] | 2 (roteiro BO-[nome]-1311 / mapa HJ) | arquivo congelado (base E3-MORRE 14/11 07:5x: chamados/models.py, chamados/juizes.py, tarefa_do_dia.py, painel.py, ponto/vigia_fio.py, ponto/supra_juiz.py; espinha em voo na copia wt-codex-e3-forma-sql-005806, nao entra na REGRA DA VAGA VAZIA) |
-| E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 | ? | ? |
-| E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) | BACKLOG:2016 | ? | ? |
+| O168 | 20/20 | Preserva a cobrança enquanto uma resposta aguarda julgamento. | - | Guarda no evento antes de retirar o executor do supra | +++..++++ | NO AR hoje [PERSPECTIVA 17/11: FEITA] | BACKLOG:1422; BACKLOG:2076; app/docs/RELATO.md:5; app/docs/RELATO.md:7; app/docs/RELATO.md:31 [+3 compl.] | ? | ? |
+| O169 | 20/20 | Impede encerrar cobranças apenas porque envelheceram. | - | ? (célula antiga conserva pergunta já superada) | +........ | REGISTRADA (pousada em outra fonte) [PERSPECTIVA 17/11: FEITA] | BACKLOG:1424; BACKLOG:1821; BACKLOG:2076 [+11 compl.] | ? | ? |
+| FIO-E0-V4-E3-LEITORES | 20/20 | Faz telas e contadores mostrarem a mesma tarefa diária. | - | cura; preverif; suite; sombra; opus | ++++.~... | EM VOO [PERSPECTIVA 17/11: FEITA] | BACKLOG:1902; RELATO:6; RELATO:33 [+9 compl.] | 2 (roteiro BO-[nome]-1311 / mapa HJ) | arquivo congelado (base E3-MORRE 14/11 07:5x: chamados/models.py, chamados/juizes.py, tarefa_do_dia.py, painel.py, ponto/vigia_fio.py, ponto/supra_juiz.py; espinha em voo na copia wt-codex-e3-forma-sql-005806, nao entra na REGRA DA VAGA VAZIA) |
+| E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1908 | ? | ? |
+| E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2016 | ? | ? |
+
+
+## PERSPECTIVA 17/11 (aval PERSPECTIVA-DA-ESPINHA itens 2-5) -- ESPINHA-E + 20/20 = 80 linhas
+
+> Classificacao: Codex leitura sobre HEAD fbc5c76ce (logs/PERSPECTIVA-ESPINHA/lote1.r, lote2.r); amostra da sessao: 5 FEITA, 5 PENDENTE REAL, todas as SUPERADA e SEM PROVA conferidas no arquivo:linha do HEAD; 1 reclassificada (O-DIA-PAGO, SUPERADA -> PENDENTE REAL). O estado canonico da linha NAO muda (a nota entra depois dele); nenhuma linha apagada. Triagem so em marco fechado ou fila sem item que ande.
+
+- **PENDENTE REAL (56):** A2-RAISE-NO-FUROS, BACKFILL-UNICO, BATERIA-QUEIXAS-ADMIN, C6-TETO-MARCO-PENDENTE, CHAMADO-EM-RAIA, CONCORDE-PREVISTO-ZERO, DIA-DA-BATIDA-JUIZ-UNICO, DIA-DA-PERGUNTA-E-O-TURNO, E1-PERGUNTA-AO-DP-CONTADOR, E3-CADASTRO-ADMIN, E3-ENTRADA-ORFA-SEM-TURNO, EXPIRACAO-DA-ABERTA-COPIA-ANTIGA, FERIADO-DIA-CHAVE, FIO-E0-V4-E4-ESCRITORES, ISENTO-PONTO-JUIZ-REGISTRADO, JUIZ-DE-DONO-DO-DIA, JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO, JV1-MERGE-FILA, L111-ORFAOS-DO-MOTOR, LAVRA-PREMATURA-CONCORDE, LEGADO-51-ACESAS, LISTA-POR-COMPETENCIA, LOTE-VAZA-ENTRE-COLABS, MOTOR-LE-O-TURNO, O-DIA-PAGO, O105, O129, O136, O178, O179, O180, O183, O216, O219, O229, O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL, O261-VETO-NA-PORTA, O327, O44, O54, O92, O95, PASSIVO-VALIDADO-K6, PERGUNTA-SEM-SELO, PLACAR-ESTRUTURAL, PROGRAMA-CELULA-E-O-DIA, R1-ESTRUTURA-91, RAIZ-DA-DISPUTA, REABRIR-PERGUNTA-A-PREMISSA, REGUA-DO-PERIODO-COMPLEMENTO-19-10, RETIFICACAO-DA-10-8069-PRIMEIRO, RETRATO-POR-EVENTO, SOBRA-NA-BORDA-O-QUE-FICOU, TIPO-NA-FONTE, V-FASE-AS-OF-CADASTRO-SEM-LINHA, VINCULO-LINHA-DO-TEMPO
+- **FEITA (18):** ATA-NAO-DISPENSA-JUSTIFICADA, BUG-ENC-CELULAS-FORMA, COBERTURA-PARCIAL-UM-JUIZ, CXR-TELA-LE-O-MOTOR, ESPELHO-VERDADE-REMEDIDO, FIO-E0-V4-E1-ENTRADAS, FIO-E0-V4-E3-LEITORES, FIO-LE-O-JUIZ, GRADE-FOLGA-JUIZ, MODO-COMUM-OUT-DO-LOTE, O142, O168, O169, O218, O221, O228, PERGUNTA-DO-DIA-EM-CURSO, RESPONDIDA-SEM-TEXTO-DUAS-COPIAS
+- **SUPERADA (4):** C5-LISTA-DE-FROTA, JUIZ-DO-PAR-DUAS-ENTRADAS, O177, PASSADO-SEM-MARCOS-SEM-TETO
+- **SEM PROVA (2):** DOSSIES-DAS-CELULAS, O117
 
 ## LATERAL-ESTRUTURA (156)
 
