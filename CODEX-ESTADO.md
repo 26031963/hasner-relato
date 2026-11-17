@@ -1,7 +1,193 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 23:20** · publicado em **16/11/2026 23:21** (UTC-3)
+> Ultima resposta processada: **16/11/2026 23:24** · publicado em **16/11/2026 23:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 23:24 · sessao ee701c2b51bc · - · - · origem=Ronald (tmux)
+
+Achado indireto em Python:
+
+| Saída | Quem vê | Evidência | Pílula? |
+|---|---|---|---|
+| Formulário de detalhe/edição do `TipoEscala` no Django admin: campo `tipo_base`, com seleção do valor gravado e rótulos das choices | Admin com acesso ao modelo | Registro com `ModelAdmin` sem exclusão/customização de campos: `app/escala/admin.py:7`; campo e choices: `app/escala/models.py:163`, `app/escala/models.py:170`; comentário confirma ModelForm do admin: `app/escala/services/cadastro_tipo.py:383`; rota: `app/config/urls.py:24` | Outra coisa: campo de formulário |
+
+As choices são “12x36 — vigilância padrão”, “Turno partido — dois períodos/dia”, “Comercial — horário fixo semanal”, “Plantão — 24x48 ou similar” e “Intermitente-horista — apenas horas cumpridas (par E/S)” (`app/escala/models.py:164`).
+
+Caso limítrofe: mensagens de validação dizem “tipo base 'Comercial'” quando a base é `comercial` (`app/escala/models.py:358`, `app/escala/models.py:361`, `app/escala/models.py:366`). A edição preserva a base (`app/escala/services/cadastro_tipo.py:179`), chama `save()` (`app/escala/services/cadastro_tipo.py:307`), que executa `full_clean()` (`app/escala/models.py:798`); a view entrega `e.messages` ao usuário (`app/escala/views_wizard.py:110`) por toast/messages (`app/core/respostas.py:63`, `app/core/respostas.py:68`). É aviso condicional de validação, não identificador do tipo nem pílula (`app/escala/models.py:360`).
+
+Saídas verificadas que **não apresentam `tipo_base`**:
+
+- API `/me`: `nome_canonico()` e `tipo_ciclo` (`app/api/views_core.py:254`); API de escala: `template_nome`/`descricao` e display de `tipo_ciclo` (`app/api/views.py:948`).
+- PDF do espelho: código, `tipo_ciclo` e horários (`app/relatorios/pdf_espelho.py:730`).
+- Builder de relatórios, coluna Escala: `str(ec.tipo_escala)` (`app/relatorios/views.py:1317`, `app/relatorios/views.py:1335`); `__str__` retorna nome canônico ou código/descrição (`app/escala/models.py:801`), e nome canônico usa `tipo_ciclo_canonico()` (`app/escala/models.py:424`).
+- Tag `rotulo_escala`: parte `tipo` vem de `nome_canonico_partes()` (`app/core/templatetags/hasner_filters.py:72`), que lê ciclo (`app/escala/models.py:484`); o descritor adicional chama `rotulo_do_desenho()` (`app/core/templatetags/hasner_filters.py:145`).
+
+## 16/11 23:24 · sessao ad6cef41af58 · - · - · origem=Ronald (tmux)
+
+Tela: `espelho_ponto` chama `espelho_do_colab` e entrega `dias` ao template; use diretamente esse serviço na sonda, preservando o caminho real sem simular request. `app/ponto/views.py:160-163`, `app/ponto/views.py:195-200`, `app/ponto/services/espelho.py:1294-1296`.
+
+Separação concreta: o realizado carrega `turnos_do_colab` diretamente e usa `_realizado_do_dia_tela`; a geometria `dia.turnos` provém dos períodos do motor. `app/ponto/services/espelho.py:614`, `app/ponto/services/espelho.py:675-676`, `app/ponto/services/espelho.py:421-422`, `app/ponto/services/espelho.py:450-460`, `app/ponto/services/espelho.py:767`.
+
+O motor começa pelos turnos da autoridade e passa por `_periodos_pelo_marco`; quando a ata responde, remove **todos** os períodos cujo dia do juiz corresponde ao dia e acrescenta **um** período entrada–saída da ata. Esse mecanismo pode produzir a forma “dois turnos no realizado, um no motor”; sua execução específica para col922 depende da sonda [nao verificado]. `app/ponto/motor_calculo_v2.py:530-534`, `app/ponto/motor_calculo_v2.py:616`, `app/ponto/motor_calculo_v2.py:636-640`, `app/ponto/motor_calculo_v2.py:679-688`.
+
+Não atribuir isso a retratada: ambos os carregamentos excluem `retratada_em` preenchida. `app/ponto/services/espelho.py:1022`, `app/ponto/turnos.py:2888-2895`, `app/ponto/turnos.py:1868-1871`.
+
+Precisão necessária na resposta: o template não desenha início–fim de `dia.turnos`; usa essa lista para badges/alertas. Os horários visíveis vêm prioritariamente de `realizado_grade`, depois de `dia.batidas`. `app/templates/ponto/espelho.html:192-204`, `app/templates/ponto/espelho.html:298-305`, `app/templates/ponto/espelho.html:231-247`.
+
+`montar_realizado_grade` só adapta células e órfãs; não devolve turnos nem minutos. A função antiga que calculava minutos da grade foi removida para evitar um segundo juiz. Portanto, a métrica “minutos dos turnos desenhados” precisa declarar que lê `dia.turnos` e restringe o realizado real a esses turnos, ou a contagem confundirá dinheiro do motor com geometria visível. `app/escala/utils.py:1078-1110`, `app/escala/utils.py:1113-1125`.
+
+A janela real do request atual vai de `min(piso_visual, apur_ini)` até hoje, mesmo navegando competência anterior; passar `hoje=apur_fim` muda esse caminho. `app/ponto/views.py:100-101`, `app/ponto/views.py:161`, `app/ponto/services/espelho.py:1225-1227`, `app/ponto/services/espelho.py:1262-1263`.
+
+## 16/11 23:24 · sessao 54c77838a647 · - · - · origem=Ronald (tmux)
+
+Achados independentes:
+
+| Saída | Prova | Quem vê | Classe |
+|---|---|---|---|
+| Wizard criando sob pai: mostra `pai.tipo_base` gravado, em “canônico herdado” | `app/templates/escala/wizard_tipo_escala.html:56` | Usuário autenticado autorizado em `editar_escalas` — `app/escala/views_wizard.py:63` e `:64` | Outra coisa: texto auxiliar |
+| Wizard editando: mostra `tipo.tipo_base` gravado | `app/templates/escala/wizard_tipo_escala.html:61` | Mesmo público — `app/escala/views_wizard.py:63` e `:64` | Outra coisa: texto auxiliar |
+| Wizard criação sem pai: opções de Base vêm de `TIPO_BASE_CHOICES` | `app/templates/escala/wizard_tipo_escala.html:37`; fonte `app/escala/views_wizard.py:79`, rótulos em `app/escala/models.py:163` | Mesmo público | Seletor de cadastro: exibe vocabulário gravável, mas não rótulo de registro já gravado; ramo restrito por `wizard_tipo_escala.html:26` |
+| Wizard criação personalizada: opções “escala-base de referência” são rótulos literais | `app/templates/escala/wizard_tipo_escala.html:42`, `:44`, `:45`, `:46`, `:47` | Mesmo público | Seletor de cadastro, mesma ressalva; também dentro do ramo de criação de `:26` |
+
+Os achados do wizard existem tanto na página inteira quanto no drawer: `app/escala/views_wizard.py:88`, `:89`, `:90`, `:91`, `:92`.
+
+A pílula protegida lê `desenho_do_turno` em `app/templates/escala/tipos_lista.html:55`, delega a `rotulo_do_desenho` em `app/core/templatetags/hasner_filters.py:59` e `:60`; a função decide pelo intervalo e cruzamento da meia-noite em `app/escala/servico_jornada.py:193` e `:194`, monta rótulo em `:195` a `:205`.
+
+A **cor continua vindo do tipo gravado**: azul para `12x36` (`app/templates/escala/tipos_lista.html:51`); verde para `comercial` (`:52`); amarelo para `plantao` (`:53`); cinza para os demais (`:54`).
+
+Exclusões fundamentadas:
+
+- `tipo_base` em inputs hidden não é exibição ao usuário: `app/templates/escala/wizard_tipo_escala.html:19`.
+- A pílula azul do tag `rotulo_escala` usa `p['tipo']` (`app/core/templatetags/hasner_filters.py:81`), que vem de `tipo_ciclo_canonico()` (`app/escala/models.py:484`), mapeamento do ciclo (`app/escala/models.py:389`), e não de `tipo_base`.
+- `rotulo_escala_texto` também lê `nome_canonico_partes()` (`app/core/templatetags/hasner_filters.py:207`), portanto sua parte “tipo” tem a mesma origem em ciclo (`app/escala/models.py:484`).
+- O teste O74 verifica texto nas linhas-raiz (`app/escala/tests/test_o74_pilula_le_desenho.py:59`, `:65`, `:66`, `:69`, `:74`, `:75`); verde no HEAD não foi executado [nao verificado].
+
+## 16/11 23:23 · sessao 1181ba86e409 · - · - · origem=Ronald (tmux)
+
+Censo dos templates/tags: **2 pontos de exibição de valor gravado**, ambos no wizard, fora da pílula protegida:
+
+| Ponto | Quem vê | Conteúdo |
+|---|---|---|
+| `app/templates/escala/wizard_tipo_escala.html:56` | Usuário autenticado com ação `editar_escalas` — `app/escala/views_wizard.py:63-64` | Ao criar sob pai, mostra `{{ pai.tipo_base }}` cru em “canônico herdado”. Pai carregado do banco — `app/escala/views_wizard.py:73-74`. |
+| `app/templates/escala/wizard_tipo_escala.html:61` | Usuário autenticado com ação `editar_escalas` — `app/escala/views_wizard.py:63-64` | Ao editar, mostra `{{ tipo.tipo_base }}` cru em “Canônico (não editável)”. Tipo carregado do banco — `app/escala/views_wizard.py:67`. |
+
+São a mesma página, também servida como drawer conforme `HX-Request` — `app/escala/views_wizard.py:88-92`; rotas criar e editar em `app/escala/urls.py:19,23`.
+
+**Vocabulário de cadastro, separado do censo de valores gravados:** o `<select>` Base lê `bases` e imprime suas labels — `app/templates/escala/wizard_tipo_escala.html:36-37`; `bases` vem de `TipoEscala.TIPO_BASE_CHOICES` — `app/escala/views_wizard.py:79`, labels em `app/escala/models.py:163-168`. Esse ramo só aparece ao criar sem pai — `app/templates/escala/wizard_tipo_escala.html:26`, portanto não mostra o tipo gravado de registro existente. O seletor `tipo_base_ref` também só é cadastro; labels literais em `app/templates/escala/wizard_tipo_escala.html:42-47`.
+
+**Pílula O74:** texto usa `t|desenho_do_turno` — `app/templates/escala/tipos_lista.html:55`; filtro delega a `rotulo_do_desenho` — `app/core/templatetags/hasner_filters.py:52-60`. Cor vem do **tipo gravado**: `12x36` azul, `comercial` verde, `plantao` amarelo, demais cinza — `app/templates/escala/tipos_lista.html:51-54`. Público autenticado com `ver_escalas` — `app/escala/views.py:77-79`.
+
+**Outra pílula/tag que não é achado:** `rotulo_escala` constrói a pílula com `p['tipo']` — `app/core/templatetags/hasner_filters.py:72-81`; esse valor vem de `tipo_ciclo_canonico()`, não `tipo_base` — `app/escala/models.py:479-486`; seu descritor adicional também lê o desenho — `app/core/templatetags/hasner_filters.py:145-150`.
+
+**Admin implícito a verificar na consolidação:** `TipoEscalaAdmin` é `admin.ModelAdmin` sem `fields`, `fieldsets`, `exclude` ou formulário próprio — `app/escala/admin.py:7-15`; modelo declara `tipo_base` com choices — `app/escala/models.py:170-174`. Isso implica widget padrão de choices na edição Django Admin, mas a renderização concreta do framework nesta cópia é **[não verificado]**.
+
+## 16/11 23:23 · sessao 0de1d50dfbd0 · - · - · origem=Ronald (tmux)
+
+Recomendações para a sonda:
+
+- Chamar `turnos_do_colab(c, ini, fim)`; o wrapper carrega células, vínculos e papéis reais e exclui retratadas. O retorno contém `Turno(data_turno, entrada, saida, batidas, aberto, cross_meianoite)`. Serializar IDs das bordas e batidas, sem recalcular casamento. `app/ponto/turnos.py:43`, `app/ponto/turnos.py:1850`, `app/ponto/turnos.py:1867`, `app/ponto/turnos.py:1920`.
+- Ler os carimbos nas instâncias de `t.batidas`: `_papel_ata`, `_intra_dur`, `_intra_ata`, `_intra_declarado`, `_eco_flush`, mais `is_intervalo`. São respostas do pareador; ele trabalha com cópias por segmento. `app/ponto/turnos.py:1310`, `app/ponto/turnos.py:1325`, `app/ponto/turnos.py:1370`, `app/ponto/turnos.py:1984`.
+- `intervalos_do_turno(t)` entrega as pausas reconhecidas; `pausas_abaixo_do_piso(t)` entrega os pares marcados rejeitados pelo piso. Não derivar pausas examinando tipos adjacentes. `app/ponto/turnos.py:542`, `app/ponto/turnos.py:563`.
+- Batida crua ausente dos turnos retornados deve sair como “ausente dos turnos retornados”; isso não demonstra que não recebeu papel. O pareador consome intervalo/`X` sem turno corrente e pode não incorporá-lo a retorno algum. Para imprimir o papel da ata desses casos, chamar `papel_por_minuto_da_ata(...)` e `_papel_da_ata(b, mapa)`, preservando o nome “papel da ata”. `app/ponto/turnos.py:1371`, `app/ponto/turnos.py:1395`, `app/ponto/turnos.py:890`, `app/ponto/turnos.py:1565`.
+- Universo cru com retratadas deve ser lido separadamente por `Batida`; imprimir `timestamp` e `retratada_em` por `timezone.localtime`. Retratada não entra na geometria, mas continua exibível. `app/ponto/models.py:23`, `app/ponto/models.py:64`, `app/ponto/turnos.py:1868`, `app/ponto/turnos.py:45`.
+- Célula: imprimir `trabalha`, `escala_geradora_id` e `CelulaDia.marcos_presentes((cel.dna or {}).get("marcos"))`. Evitar imprimir DNA inteiro. `app/escala/models.py:1671`, `app/escala/models.py:1685`, `app/escala/models.py:1692`, `app/escala/models.py:1697`.
+- Pausa efetivamente declarada: chamar `ec.intervalo_do_dia(d, celulas=mapa_composto)` ou `ec.pausas_do_dia(...)`. Célula existente sem marcos responde nenhuma pausa; `marcos_do_dia` pode retornar marcos do template nessa mesma situação, por isso imprimir ambos com rótulos distintos. `app/escala/models.py:1124`, `app/escala/models.py:1160`, `app/escala/models.py:1182`, `app/escala/models.py:1202`.
+- Número do realizado pelo caminho exato da tela: `_realizado_do_dia_tela(c, d, turnos, escalas_periodo, celulas)`, que chama o juiz real passando vínculo, modo livre e intervalo declarado do dia. `app/ponto/services/espelho.py:267`, `app/ponto/services/espelho.py:286`, `app/ponto/services/espelho.py:290`.
+
+Armadilha de erros: `papel_por_minuto_da_ata` captura silenciosamente exceções de `periodos_do_dia` e se abstém; o `except` externo da sonda não verá esses erros internos. Caso a sonda pretenda contabilizá-los, precisa chamar também `periodos_do_dia(cel, te)` sob seu próprio contador, sem substituir a regra real. `app/ponto/turnos.py:1631`.
+
+## 16/11 23:23 · sessao fae23013399b · - · - · origem=Ronald (tmux)
+
+- O leitor do E6 é `minutos_do_espelho`: prioriza `minutos_realizados`; só usa `pago_h * 60` quando o primeiro é `None`; sem ambos retorna ausência, não zero (`app/ponto/management/commands/e6_oraculo.py:242`, `:263-269`).
+- O campo `minutos_realizados` vem da chamada de `_realizado_do_dia_tela`, que usa `vinculo_do_dia`, `tipo_escala._intervalo_livre()` e `ec.intervalo_do_dia(...)`; não há cálculo próprio no wrapper (`app/ponto/services/espelho.py:267-294`, `:675-676`, `:783`).
+- A autoridade final é `realizado_do_dia → realizado_dos_turnos` (`app/ponto/turnos.py:774-795`). A seleção diária usa **`t.data_turno == data`** (`:719`). O ramo usual obtém o fim por `_fim_fechado`, desconta `intervalos_do_turno` ou janela declarada e acumula `liquido` (`:735-771`). Há ramo diário especial L-115 por `_borda_posicional`, anterior à soma usual (`:725-732`).
+- Os turnos usados por essa conta vêm de `turnos_do_colab(colaborador, data_ini, data_fim_mes)` (`app/ponto/services/espelho.py:611-614`). Essa função consulta batidas **sem retratação**, com janela de pad de dois dias antes e um depois, carrega células e escalas e delega ao corpo único `_turnos_do_colab_puro` (`app/ponto/turnos.py:1847`, `:1850-1920`). O corpo lê o papel da ata em `papel_por_minuto_da_ata` (`:1940-1944`).
+- O desenho usa **outra lista**: o dicionário `resultados_por_entrada` recebe `resultado_v2.periodos + resultado_v2.periodos_ft` (`app/ponto/services/espelho.py:421-422`). A ponte entrada → pk da batida → `dia_das_batidas` atribui cada período ao dia (`:450-460`); `turnos_dia` é essa lista diária (`:655-656`), exportada como `dia['turnos']` (`:767`).
+- Portanto, existe separação verificável de fontes entre períodos do motor (`app/ponto/services/espelho.py:421-422`) e turnos do juiz (`:614`). O uso do juiz para **atribuir datas** aos cards (`:450-460`) não converte os períodos do motor nos turnos do juiz. A causa específica da ausência dos turnos de col922 precisa da execução da sonda [nao verificado].
+- As duas cadeias filtram retratadas: o motor recebe `batidas_apuraveis` (`app/ponto/services/espelho.py:1019-1022`); os turnos do juiz filtram `retratada_em__isnull=True` (`app/ponto/turnos.py:1867-1871`). A diferença de filtros de retratação não está provada como causa.
+- Os envelopes carregados diferem: motor usa `[ini - 1 dia, fim 23:59:59 + 1 dia]` (`app/ponto/services/espelho.py:1019-1022`); juiz usa `janela_com_pad`, que começa em `ini - 2 dias` (`app/ponto/turnos.py:1847`, `:1867-1871`). Isso é diferença de carga comprovada; sua influência em col922 é [nao verificado].
+- Para obter parcelas **sem replicar regras**, uma sonda pode observar `realizado_dos_turnos.__code__` via `sys.settrace`: no evento de linha de `total += liquido` captura `t`, `fim`, `bruto`, `pausas` e `liquido` já calculados pelo código real (`app/ponto/turnos.py:770`). No retorno especial captura `_t0`, `_ult`, `_bruto`, `_pausa` e o resultado L-115 (`:725-732`). Deve rotular esse ramo como parcela diária, pois ele não distribui contribuição por turno.
+- Para contar a **mesma classe de geometria**, não comparar diretamente `minutos_realizados` com `p.minutos_trabalhados`: o próprio código distingue FATO de dinheiro apurado e registra exemplo de valores diferentes legítimos (`app/ponto/services/espelho.py:398-402`). Comparação fiel: chamar novamente `_realizado_do_dia_tela` com os **mesmos** escalas/células e somente os turnos do juiz representados pelos cards reais, preservando a autoridade de intervalo e a regra L-115 (`:267-294`; `app/ponto/turnos.py:725-732`). Eventual card sem correspondência deve gerar `ERRO`, não ser descartado em silêncio [nao verificado].
+
+## 16/11 23:22 · sessao 75ff2010922c · - · - · origem=Ronald (tmux)
+
+Padrões pertinentes:
+
+- **Single Source of Truth / Aggregate Root**, alias “célula soberana / fonte única”: `app/docs/GLOSSARIO.md:11`; o norte explicita **single source of truth / um juiz por pergunta** em `app/docs/PLANO-PADROES.md:55-59`. Se as montagens do mesmo turno entregam universos incompatíveis para número e testemunha, esse é o padrão principal quebrado — interpretação da separação a demonstrar no código.
+- **Duplicated business logic / logic drift**, alias “derivação paralela”, proibida pela LEI-AKITA 2: `app/docs/GLOSSARIO.md:25`. Aplicável se a separação revelar dois derivadores concorrentes da mesma pergunta; não basta constatar duas funções com finalidades diferentes.
+- **CQRS com projeções reconstruíveis** inclui explicitamente espelho, DiaPago, fechamento, retrato e pílulas: `app/docs/GLOSSARIO.md:24`; O-PROJECOES exige fonte, versão do juiz e comando de reconstrução: `app/docs/PLANO-PADROES.md:11`. A divergência sozinha não prova defeito de versão ou reconstrução.
+- **Immutable event log + compensating event** vincula “batida só retratada” ao universo `batidas_apuraveis`: `app/docs/GLOSSARIO.md:27`. Só nomear como quebra se houver diferença concreta no tratamento da retratada.
+- O selo deve verificar o **significado da classe** — dia da batida, competência, vínculo do dia, retratada — nunca apenas a forma: `app/docs/PLANO-PADROES.md:9`.
+- Não atribuir automaticamente quebra de **Single Writer Principle**: o glossário identifica esse padrão em `app/docs/GLOSSARIO.md:12`, mas duas projeções divergentes não provam dois escritores.
+
+Universo da frota usado pelo E6:
+
+```python
+for empresa in Empresa.objects.filter(ativa=True).order_by("pk"):
+    ini, fim = janelas.janela_fechamento(mes, ano, empresa)
+    ids = FechamentoMensal.objects.filter(
+        mes=mes, ano=ano, colaborador__empresa=empresa
+    ).values_list("colaborador_id", flat=True)
+    for colaborador in Colaborador.objects.filter(pk__in=ids):
+        ...
+```
+
+É a seleção real em `app/ponto/management/commands/e6_oraculo.py:303-314`: empresas ativas e colaboradores com FechamentoMensal daquela competência/empresa; não filtra `Colaborador.ativo`. `--so-txt` é filtro adicional opcional em `app/ponto/management/commands/e6_oraculo.py:307-313`.
+
+As competências devem chamar `janela_fechamento(mes, ano, empresa)`, que aplica o corte próprio da empresa: `app/ponto/janelas.py:54-57`. A delimitação por corte está em `app/ponto/janelas.py:10-21`; não são outubro/novembro civis.
+
+Fonte numérica efetivamente comparada pelo E6: prefere `minutos_realizados`; sem ele usa `pago_h * 60`; sem ambos retorna ausência de lavratura: `app/ponto/management/commands/e6_oraculo.py:263-269`.
+
+A borda usada pelos insumos E6 não é idêntica à janela da tela: `InsumosDoDono` lê `batidas_apuraveis` de início menos 12 h a fim mais um dia e 14 h (`app/ponto/management/commands/e6_oraculo.py:149-153`), e oferece `turnos_do_colab` de início menos um dia a fim mais um dia (`app/ponto/management/commands/e6_oraculo.py:156-160`). Isso pertence à comparação E6 e não deve substituir as funções reais da tela no censo solicitado.
+
+## 16/11 23:22 · sessao d01e48c2ba58 · - · - · origem=Ronald (tmux)
+
+Na cópia, a regra é L-099: separar defeito estrutural de escala/batida; apenas ESTRUTURA entra como obra, CADASTRO/BATIDA vão à lista do administrador (`app/docs/LEIS.md:122`).
+
+A precedência **executada**, que deve orientar a resposta, é:
+
+1. `folga_nao_definida`, `sem_vinculo_no_dia` ou `sem_vinculo_em_dia_de_trabalho` → CADASTRO (`app/ponto/management/commands/e6_oraculo.py:98`).
+2. `batida_fora_de_turno=True` → BATIDA (`app/ponto/management/commands/e6_oraculo.py:104`).
+3. Quantidade ímpar em `horas_do_dia` atribuídas **pelo E6** → BATIDA (`app/ponto/management/commands/e6_oraculo.py:106`).
+4. `fase_deslocada=True`, lida da lavra mais recente que cobriu o dia → CADASTRO (`app/ponto/management/commands/e6_oraculo.py:108`, `app/ponto/management/commands/e6_oraculo.py:174`).
+5. Dia presente na lista `dias_cadastro_x_realidade` → CADASTRO; restante → ESTRUTURA (`app/ponto/management/commands/e6_oraculo.py:110`).
+
+A docstring que diz BATIDA primeiro e o comentário do laço de comparação estão incompletos diante das precedências acrescentadas; citar o corpo executável acima (`app/ponto/management/commands/e6_oraculo.py:61`, `app/ponto/management/commands/e6_oraculo.py:98`, `app/ponto/management/commands/e6_oraculo.py:374`).
+
+**Chamada correta, sem copiar regra:**
+
+```python
+from ponto import janelas
+from ponto.services.espelho import espelho_do_colab
+from ponto.management.commands.e6_oraculo import (
+    InsumosDoDono, minutos_do_espelho, batida_fora_de_turno,
+)
+from ponto.supra_juiz import cadastro_do_dia_carregado
+
+ini, fim = janelas.janela_fechamento(mes, ano, c.empresa)
+esp = espelho_do_colab(c, hoje, ini, fim, agora=agora)
+ins = InsumosDoDono(c, ini, fim, hoje, espelho=esp, agora=agora)
+turnos = ins.turnos()
+dono = ins.dono(dia)
+```
+
+Essas mesmas chamadas aparecem no comando real: janela por empresa, espelho e carregador único (`app/ponto/management/commands/e6_oraculo.py:304`, `app/ponto/management/commands/e6_oraculo.py:316`, `app/ponto/management/commands/e6_oraculo.py:328`, `app/ponto/management/commands/e6_oraculo.py:378`).
+
+**Insumos úteis para imprimir:**
+
+- `ins.oraculo.minutos`, `.horas`, `.impares`, `.envelope`, `.brutas`, `.cortes`, `.pausa`; o E6 soma pares por posição e atribui pela primeira batida do fragmento (`app/ponto/calculador/nucleo.py:236`, `app/ponto/calculador/nucleo.py:245`, `app/ponto/calculador/nucleo.py:254`).
+- `ins.cxr()`: conjunto das chaves `dia`, sem recalcular distâncias (`app/ponto/management/commands/e6_oraculo.py:162`).
+- Linhas originais de `esp["resultado"].dias_cadastro_x_realidade`: cada uma pode trazer causa, real/cadastrado e minutos fora, ou ambas as pontas e deltas (`app/ponto/motor_calculo_v2.py:1622`, `app/ponto/motor_calculo_v2.py:1670`, `app/ponto/motor_calculo_v2.py:1992`).
+- `ins.fase()` e `cadastro_do_dia_carregado(c.pk, dia)` são as autoridades reais das outras entradas do juiz (`app/ponto/management/commands/e6_oraculo.py:174`, `app/ponto/supra_juiz.py:179`).
+- `batida_fora_de_turno(c, dia, turnos)` não é sinônimo de “qualquer batida não usada”: exige `realizado_do_dia(... livre=False, intervalo=(), turnos=turnos).aberto` **e** entrada real de turno aberto sem saída no universo apurável (`app/ponto/management/commands/e6_oraculo.py:198`, `app/ponto/management/commands/e6_oraculo.py:208`).
+
+CXR não deve ser inferido só por “escala diurna versus batidas noturnas”: o juiz lê a lista publicada pelo motor. A regra das duas pontas exige ambas a mais de 180 minutos dos marcos, e o motor também publica causas de janela/HE na mesma lista (`app/ponto/management/commands/e6_oraculo.py:170`, `app/ponto/motor_calculo_v2.py:1931`, `app/ponto/motor_calculo_v2.py:1946`, `app/ponto/motor_calculo_v2.py:1670`).
+
+`minutos_do_espelho(de)` lê `minutos_realizados`, depois `pago_h*60`; ausentes ambos retorna `(None, "sem lavratura")`, nunca zero (`app/ponto/management/commands/e6_oraculo.py:263`).
+
+O universo E6 usa batidas apuráveis da competência com pad de 12 horas antes e 14 horas depois; `ins.turnos()` usa `turnos_do_colab` com um dia a mais em cada extremidade. Portanto não construir o E6 apenas com as três datas impressas (`app/ponto/management/commands/e6_oraculo.py:149`, `app/ponto/management/commands/e6_oraculo.py:156`).
+
+Nenhum dado fornecido decide os insumos concretos atuais dos 12 casos; seus donos permanecem [nao verificado].
 
 ## 16/11 23:20 · sessao 0204aa9d588e · PREPARA-F2-F4-F7 · censo · origem=Code
 
@@ -1359,177 +1545,4 @@ Para sondas:
 - O estoque de projeção sem linha tem função de domínio real pronta: `linhas_a_criar()` (`app/chamados/management/commands/backfill_decisoes_pergunta.py:44`), que chama `linhas_da_projecao_sem_linha` em :67 e devolve grupos por empresa/competência/ato em :82. Para escopo irrestrito além do horizonte desse comando, chamar diretamente o método de model em lotes (`app/chamados/models.py:4081`).
 - Uma sonda que importe a antiga `leitura` para comparar pura/conservada não é executável confirmada nesta BASE [nao verificado]; não incluir implementação substituta.
 
-## 16/11 23:07 · sessao e04e0be3606c · PREPARA-F2-F4-F7 · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 16/11 23:07 · sessao fdc5a77d78e7 · - · - · origem=Ronald (tmux)
-
-- **Premissa F2: confere só quanto à F1 diferente.** O registro diz expressamente “premissa F1=be2b8d733 da matriz CAIU”; não atribui a queda à BUG-PAR (`app/docs/RELATO.md:142`). O código atual projeta os campos vigentes (`app/chamados/juizes.py:1389`) e descarimbar realmente apaga o instante (`app/chamados/models.py:3391`). “F2 caiu por F1 **e** BUG-PAR diferentes” amplia a evidência; a parte BUG-PAR é [nao verificado].
-
-- **ESPINHA-NAO-FICA item 1/PREPARA B2 existem documentalmente.** Item 1 registrado como abertura condicional, inicialmente sem brief (`app/docs/PROMPTS.md:2427`); PREPARA rodou como leitura (`app/docs/RELATO.md:39`); depois fechou censo, lei 0, tabela, mas encontrou 8 arquivos cruzados e condicionou a abertura ao pouso BUG-PAR (`app/docs/RELATO.md:37`; `app/docs/BACKLOG.md:821`). Isso prova o precedente de preparo; a cópia B2 em voo e sua lista atual permanecem [nao verificado].
-
-- **Complementos F2 1/2/3 existem como registros, não como anexos legíveis aqui.** C1 substitui respostas 2 e 9 (`app/docs/PROMPTS.md:2433`); C2 especifica medida por último ato e efeito como carimbo vigente, com histórico remetido à E4d (`app/docs/PROMPTS.md:2438`); C3 responde ao 9a devolvido (`app/docs/PROMPTS.md:2442`). RELATO confirma revisão C3 “1,2,3 CONFERE”, registro e L1 resolvido, incluindo selo dos sete leitores (`app/docs/RELATO.md:8`). Conteúdo integral dos complementos/brief e aplicação no arquivo não disponível: [nao verificado].
-
-- **Quatro condições específicas de abertura F2: [nao verificado].** A enumeração localizada é a do PREPARA BUG-PAR: lei 0, revisão 3x NÃO PROCEDE, cruzamento 0, vaga livre (`app/docs/RELATO.md:136`). Não autoriza transplantá-la implicitamente à F2. Para B2, o registro expõe censo, tabela, cruzamento e lei 0, mas não apresenta um literal chamado “as quatro condições da F2” (`app/docs/RELATO.md:37`; `app/docs/RELATO.md:39`). PROCEDE no pedido de tornar essa remissão explícita.
-
-- **Lei aberta não impede preparar; impede construir a fatia pertinente.** O precedente F2 exige as nove respostas antes da construção (`app/docs/RELATO.md:36`); C2/C3 registram fechamento dos pontos que tinham sido devolvidos (`app/docs/PROMPTS.md:2438`; `app/docs/RELATO.md:8`). “Nenhuma fatia abre com pergunta aberta” é compatível com preparar agora e consolidar perguntas depois; não prova lei 0 das três entregas futuras [nao verificado].
-
-- **RED em texto é possível; “morde” executado não.** Há precedente explícito de leitura com “RED só em TEXTO” (`app/docs/PROMPTS.md:2321`). O item 9 antigo é outra atividade: construir testes em cópia e declarar mutante/resultado (`app/docs/CORTES.md:487`). No PREPARA atual, “morde” pode significar avaliação por leitura; execução permanece [nao verificado]. Convém rotular “caso/resultado esperado; mordida por leitura”, sem declarar RED executado.
-
-- **Envelope:** Codex não roda a sonda de prod diretamente; o Code executa `sonda_leitura.sh`, raspa a saída e a anexa antes de chamar Codex (`bin/codex_pergunta.sh:15`; `bin/codex_pergunta.sh:17`; `bin/codex_pergunta.sh:20`). “Tudo ao Codex (… sonda)” precisa dessa explicitação; os números novos pedidos não vieram no raspado [nao verificado].
-
-## 16/11 23:06 · sessao c745ac5b3b03 · - · - · origem=Ronald (tmux)
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-## 16/11 23:06 · sessao 8d3f205a31df · - · - · origem=Ronald (tmux)
-
-Consolidação da pergunta 2 e premissa B2:
-
-- **Existe ESPINHA-NAO-FICA item 1 e PREPARA B2**, com registro em `app/docs/PROMPTS.md:2427`, despacho em `app/docs/RELATO.md:38` e resultado em `app/docs/RELATO.md:37`: censo fechado, lei 0, tabela pronta, mas cruzamento de **8 arquivos** com BUG-PAR; B2 abre depois do pouso da BUG-PAR c4. Os logs originais não estão na cópia; seu conteúdo além desses registros é **[nao verificado]**.
-- **“B2 já abriu/em voo” e worktree `wt-e4c-b2-215705`: [nao verificado]**. Os registros disponíveis ainda mostram abertura condicionada à BUG-PAR (`app/docs/BACKLOG.md:821`, `app/docs/RELATO.md:37`); a BUG-PAR consta pousada às 21:41 (`app/docs/RELATO.md:5`). Isso permite a abertura posterior, mas não a comprova.
-- **CLASSE-D continua sendo predecessor da construção F2**: `app/docs/PROMPTS.md:2331`, `app/docs/BACKLOG.md:1987`, `app/docs/RELATO.md:346`. O encaixe técnico específico de R1 sozinho entre F1 e F2 aparece em `app/docs/RELATO.md:394`. Preparação por leitura não elimina essa precedência; dizer que F2 abre apenas após B2 e “4 condições” deixa esse predecessor sem explicitação.
-- **ORDEM VIVA** permanece identificada como ORDEM-VIVA-1511-NOITE (`app/docs/BACKLOG.md:8`, `app/docs/BACKLOG.md:1872`, `app/docs/PROMPTS.md:2364`). A proibição literal de nova obra de instrumento/lateral por iniciativa aparece no comentário da ordem anterior (`app/docs/BACKLOG.md:9`), e sua aplicação à ORDEM-VIVA-1511-NOITE aparece em `app/docs/RELATO.md:258`. Este aval é uma autorização expressa de preparação de fatias existentes; não há colisão demonstrada com essa proibição enquanto ficar nessa preparação.
-- **PISTA**: regra registrada em `app/docs/CORTES.md:489`; complemento mais recente em `app/docs/RELATO.md:75`: suites de não pouso de lateral/tela/instrumento vão à pista; VM para espinha, pouso e push. Preparação sem suite/trava é compatível com esse recorte.
-- **CORTE-U163-NO-K6 e devolução em três itens: [nao verificado]**. Não aparecem na cópia consultada. O que aparece é a sonda anterior: **1** competência do fato entregue com FechamentoMensal aberto (`app/docs/RELATO.md:19`) e a pergunta a subir depois da c4; item pendente do opus em `app/docs/RELATO.md:5`. Não cabe tratá-lo como complemento já decidido.
-- **As “4 condições de sempre” da F2: [nao verificado]**. Existe um conjunto explícito para **BUG-PAR**, em `app/docs/RELATO.md:136`: lei 0; revisão sem procedência; cruzamento 0; vaga livre. Não prova que seja o conjunto F2. A preparação B2 enumera censo/tabela/arquivos em `app/docs/RELATO.md:39`, sem fornecer quatro condições literais completas.
-- **Lei aberta não deve impedir a preparação**, mas impede decidir sua construção: a regra manda pergunta de lei ao topo com números e seguir obra independente (`CLAUDE.md:269`); desenho para a própria obra (`CLAUDE.md:274`). Esperar necessariamente as três entregas para publicar lei residual pode atrasar esse registro, conforme o literal `CLAUDE.md:269`.
-- **Exportada/!**: tocar gravado de competência exportada, dado de escala/vínculo ou regra fora do pedido exige `!` (`CLAUDE.md:265`). Preparação por leitura não autoriza esses atos; garantir a sonda concreta como somente leitura depende de verificar seu envelope **[nao verificado]**.
-
-## 16/11 23:01 · sessao 64ed77f64ee2 · REVISAO-AVAL-2300 · verificador · origem=Code
-
-**CORTE-U163-NO-K6: PROCEDE nos itens lista/contador e pré-condições do RED.** Retirar a exclusão no K6 não inclui automaticamente U163 na lista, e uma U163 com irmã fora163 entregue já pode bloquear hoje. (`app/chamados/services/materializacao.py:795`; `app/chamados/management/commands/bug_par_103.py:72`; `app/chamados/tests/test_bug_par_volta.py:145`)
-
-**PUSH-DOS-TRES-MARCOS: PROCEDE no item 1 quanto à garantia de ordem; item 2 depende de apuração.** A trava oferece exclusão mútua, sem prioridade; a causa da demora e a ausência de tentativas posteriores são [nao verificado]. (`bin/trava_teste.sh:25`; `bin/trava_teste.sh:35`)
-
-**CORTE-U163-NO-K6**
-
-1. **Premissas: conferem quanto ao pulo e às autoridades.**
-
-   `k6_consulta_a_pergunta` retorna verdadeiro somente para pergunta existente, metade de intervalo e **fora U163**; `_k6_que_barra` pula quando recebe falso. (`app/chamados/services/materializacao.py:792`; `app/chamados/services/materializacao.py:806`)
-
-   O pulo está documentado na docstring do predicado (“as 163 nao passam pelo K6”), na docstring da guarda (“o ramo que pula as 163 nao muda”), na composição K6/F6, na docstring do escritor e no comentário de sua guarda inicial. Todos precisam acompanhar a mudança. (`app/chamados/services/materializacao.py:793`; `app/chamados/services/materializacao.py:799`; `app/chamados/services/materializacao.py:819`; `app/chamados/services/materializacao.py:1818`; `app/chamados/services/materializacao.py:1829`)
-
-   Há **um predicado de entregue nessa composição**: `competencia_do_fato` deriva a competência pelo dia do fato e chama `competencia_entregue`; esse juiz verifica exportação vigente não invalidada e está registrado como K6. F6 responde outra pergunta. (`app/chamados/services/materializacao.py:776`; `app/chamados/services/materializacao.py:786`; `app/folha/export.py:556`; `app/folha/export.py:588`; `app/core/juizes.py:343`)
-
-   Hoje, F6 também alcança U163: consulta a competência do **instante local do plantio**, barrando FM `aprovado` ou `exportado`; FM aberto passa por essa guarda. O materializador chama a porta com `fato_de_chao=False`, que aplica F6. (`app/ponto/janelas.py:75`; `app/ponto/janelas.py:84`; `app/ponto/registro_batida.py:154`; `app/chamados/services/materializacao.py:1455`)
-
-2. **Colisões: extensão autorizada, mas exige atualizar a exceção e a matriz.**
-
-   O corte anterior exige K6 nos três caminhos **fora163**; o COMPLEMENTO-4 registra explicitamente U163 entregue sob F6, com aberto seguindo. A lacuna da matriz original — L1 fora163 e L2 não entregue — já consta no RELATO. O novo corte pode suceder essa exceção, mas deve ampliar L1/L5 e registrar essa sucessão. (`app/docs/BACKLOG.md:2082`; `app/docs/RELATO.md:22`; `app/docs/RELATO.md:30`)
-
-   A dependência da B2 está registrada: oito arquivos compartilhados, abertura por cima da BUG-PAR c4. Construir U163 depois da B2 é compatível com essa dependência; B2 efetivamente “em voo” no horário do anexo é [nao verificado]. (`app/docs/RELATO.md:37`; `app/docs/BACKLOG.md:821`)
-
-   CORTES mantém uma condição adicional para a futura F4: pousar atrás da F1/F2 ou deixar a costura J1 sob contador esperado zero. O encaixe precisa respeitá-la. (`app/docs/CORTES.md:487`) Os avais anteriores têm remissões em PROMPTS; seu registro literal em CORTES.md fica [nao verificado]. (`app/docs/PROMPTS.md:2382`; `app/docs/PROMPTS.md:2422`)
-
-3. **Literal: há três pendências.**
-
-   - **PROCEDE — “vai na lista da Pauta DP”.** A lista existe como **saída textual do comando** `bug_par_103`: inclui U103 entregue/sem dia e, em outro laço, metades respondidas fora U163; depois imprime `PAUTA DP`. Não há nessa construção criação de uma `Pauta`. (`app/chamados/management/commands/bug_par_103.py:53`; `app/chamados/management/commands/bug_par_103.py:63`; `app/chamados/management/commands/bug_par_103.py:70`; `app/chamados/management/commands/bug_par_103.py:85`)
-
-     A guarda apenas devolve estado e texto “preservada para Pauta DP”. Retirar o `not no_universo_163` não altera o laço que exclui U163; portanto não garante incluir U60 nessa lista. O ajuste do comando precisa entrar no escopo futuro. (`app/chamados/services/materializacao.py:812`; `app/chamados/management/commands/bug_par_103.py:72`)
-
-   - **PROCEDE — classificação do contador.** Entregue/sem dia têm baldes separados no ramo das perguntas carimbadas elegíveis à devolução U103. Uma U163 não materializada que passe a receber L1/L5 cai hoje em `outras` e continua somando `pendentes_aval`. Registrar a matriz F4 precisa explicitar o destino dessas perguntas e a conservação das contagens. (`app/chamados/services/materializacao.py:326`; `app/chamados/services/materializacao.py:339`; `app/chamados/services/materializacao.py:347`; `app/chamados/services/materializacao.py:351`)
-
-   - **PROCEDE — RED insuficientemente condicionado.** “U163 + entregue + FM aberto” não basta para garantir “hoje valida e grava”: quando pula a pergunta, a composição procura a irmã; uma irmã fora163 entregue já bloqueia. Existe teste desse cenário. (`app/chamados/services/validacao.py:219`; `app/chamados/services/validacao.py:224`; `app/chamados/tests/test_bug_par_volta.py:145`)
-
-     O caminho que pode gravar é `validar_pergunta` → carimbo → `_validar_o_par`/`_materializar_uma` → `registrar_batida`. Exige resposta, ausência de validação anterior, passagem pelo declarado × gravado, confirmação de implausível quando necessária e demais guardas do plantio. (`app/chamados/services/validacao.py:594`; `app/chamados/services/validacao.py:609`; `app/chamados/services/validacao.py:615`; `app/chamados/services/validacao.py:652`; `app/chamados/services/validacao.py:681`; `app/chamados/services/materializacao.py:1455`)
-
-     O número **1** está declarado no registro da sonda; ele não demonstra, sozinho, que essa pergunta atravessa todas essas condições e cria batida. Essa conclusão e a nova medição permanecem [nao verificado]. (`app/docs/RELATO.md:19`)
-
-4. **Exportada, dinheiro e `!`: não há autorização adicional implícita.**
-
-   O bloqueio proposto atua antes do carimbo na validação e antes de recusa/pendência no escritor, compatível com preservar o gravado. Seu efeito declarado é impedir plantio futuro em competência entregue. (`app/chamados/services/validacao.py:652`; `app/chamados/services/materializacao.py:1829`)
-
-   Há recalculo por evento no caminho atual de validação, já apontado como herdado no RELATO. Isso não autoriza apply, retificação ou alteração de FM exportado; essa escrita continua sob `!`. Impacto monetário efetivo é [nao verificado]. (`app/chamados/services/validacao.py:664`; `app/docs/RELATO.md:30`; `CLAUDE.md:411`)
-
-**PUSH-DOS-TRES-MARCOS** [nao verificado]
-
-1. **Premissas: a regra existe; push disputa a trava.** [nao verificado]
-
-   “PUSH: um por MARCO” está literal. `push.sh` chama `git push`, preserva seu retorno e chama `pos_push.sh` após sucesso; o pós-push atualiza e commita o derivado TICKETS. (`CLAUDE.md:336`; `bin/push.sh:6`; `bin/pos_push.sh:18`; `bin/pos_push.sh:29`)
-
-   O pre-push adquire `/tmp/regua.lock`, com espera ou herança; cada `_teste_irmao` disputa separadamente a trava do banco de teste. O arsenal pode ser dispensado por certificação da mesma árvore; o control-plane permanece chamado. (`bin/pre-push.sh:80`; `bin/pre-push.sh:86`; `bin/pre-push.sh:142`; `bin/pre-push.sh:66`; `bin/pre-push.sh:198`)
-
-   Os três marcos têm registros documentais, mas SHA remoto, distância de 34 commits, hook instalado e ausência efetiva de push são [nao verificado]. (`app/docs/RELATO.md:5`; `app/docs/RELATO.md:6`; `app/docs/RELATO.md:13`; `app/docs/RELATO.md:15`)
-
-2. **Colisões: a finalidade confere; a prioridade precisa ser despachada.**
-
-   CORTES reserva a VM para espinha, pouso e push; lateral usa a pista e só volta à VM, atrás da espinha, se a pista não responder. O novo aval não deve ser interpretado como trazer lateral para disputar normalmente a VM. (`app/docs/CORTES.md:489`)
-
-   A continuidade da B2 é compatível com a dependência registrada; sua execução e eventual interferência operacional são [nao verificado]. (`app/docs/RELATO.md:37`) O COMPLEMENTO-2 fornecido exclui push de seu alcance; conferência do texto integral em arquivo local é [nao verificado].
-
-3. **Literal: item 1 precisa de mecanismo operacional; item 2 não tem causa provada.**
-
-   - **PROCEDE, item 1:** `flock -w` oferece exclusão mútua, sem ticket, posição ou prioridade. Apenas lançar o push em espera não garante “logo depois da atual, antes da lateral”. Arsenal e control-plane ainda fazem aquisições separadas, permitindo intercalação. A ordem precisa ser assegurada pelo despacho dos chamadores. (`bin/trava_teste.sh:25`; `bin/trava_teste.sh:35`; `bin/pre-push.sh:142`; `bin/pre-push.sh:186`; `bin/pre-push.sh:198`)
-   - **Item 2:** há registro de push em pre-push às 17:1x. A causa da demora e a ausência de tentativas posteriores são [nao verificado]; a linha pedida não pode inventá-las. (`app/docs/RELATO.md:44`)
-   - **Item 3:** pedir push no fechamento acompanha a regra vigente; os scripts examinados não implementam esse agendamento automático. (`CLAUDE.md:332`; `CLAUDE.md:336`; `bin/push.sh:6`; `bin/pre-push.sh:142`)
-   - **Item 4:** as duas partials existem. L5 mostra o detalhe “sem dia do fato” e oculta Validar; L2 conserva Validar e preserva `COMPETENCIA_APROVADA` na recusa, devolução e nota. O roteiro pode cobrar esses resultados; disponibilidade de casos reais e execução do smoke são [nao verificado]. (`app/chamados/tests/test_bug_par_volta.py:200`; `app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/modal_fio.html:274`; `app/chamados/tests/test_bug_par_volta.py:247`; `app/chamados/tests/test_bug_par_volta.py:258`; `app/chamados/tests/test_bug_par_volta.py:267`; `app/chamados/tests/test_bug_par_volta.py:313`)
-
-4. **Exportada, dinheiro e `!`: nenhum toque direto aparece nesses caminhos.**
-
-   O wrapper executa push e pós-push documental; os testes usam árvore do commit e configurações de teste. Não há chamada explícita de deploy/apply nesses trechos. Efeitos efetivos do ambiente e do hook instalado são [nao verificado]. (`bin/push.sh:6`; `bin/pos_push.sh:19`; `bin/pos_push.sh:29`; `bin/pre-push.sh:144`; `bin/pre-push.sh:186`; `bin/pre-push.sh:198`)
-
-**Quem escreve e quem lê**
-
-| Valor | Quem produz/escreve | Leitores diretos de produção |
-|---|---|---|
-| `no_universo_163(p)` | É função, sem campo persistido: produz booleano consultando a PK no universo congelado. O carregador lê o JSON e forma conjuntos imutáveis. (`app/chamados/services/universo_bug_par.py:7`; `app/chamados/services/universo_bug_par.py:12`; `app/chamados/services/universo_bug_par.py:25`; `app/chamados/services/universo_bug_par.py:33`) | `_espera_do_aval_163`, para aplicar declarado × gravado; `k6_consulta_a_pergunta`, para excluir U163. (`app/chamados/services/materializacao.py:742`; `app/chamados/services/materializacao.py:795`) |
-| Retorno de `k6_consulta_a_pergunta(p)` | A própria função produz **booleano de consulta**, não veredito de entrega. (`app/chamados/services/materializacao.py:792`) | `_k6_que_barra`, decidindo pular a pergunta; `entrega_que_barra_a_validacao`, decidindo procurar a irmã quando a pergunta é pulada. (`app/chamados/services/materializacao.py:806`; `app/chamados/services/validacao.py:224`) |
-
-Os leitores diretos de teste de pertencimento estão em `test_universo_bug_par`, `test_bug_par_volta`; há substituições do predicado nos testes sem banco e mutantes de pertencimento. A função K6 também é carregada no ambiente do teste sem banco. Isso é evidência de código, sem comprovação de execução nesta revisão. (`app/chamados/tests/test_universo_bug_par.py:65`; `app/chamados/tests/test_bug_par_volta.py:33`; `app/chamados/tests/test_bug_par_volta.py:100`; `app/chamados/tests/test_bug_par_sem_banco.py:88`; `app/chamados/tests/test_bug_par_sem_banco.py:134`; `app/chamados/tests/bug_par_mutantes.py:55`; `app/chamados/tests/test_bug_par_sem_banco.py:140`)
-
-## 16/11 22:58 · sessao 3a1b9f7f1505 · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-1. **Premissas do pulo conferem.** `k6_consulta_a_pergunta` devolve `False` para U163 (`app/chamados/services/materializacao.py:793-795`); `_k6_que_barra` obedece esse retorno (`:805-808`). Documentação a atualizar no ato: docstrings `:793-794`, `:799-803`, `:819`; comentário sobre procurar a irmã somente quando a pergunta é pulada em `app/chamados/services/validacao.py:220-224`.
-
-2. **Um predicado de entregue nessa composição.** `competencia_do_fato` compõe competência pela data do fato com `competencia_entregue` (`app/chamados/services/materializacao.py:776-789`); registro do juiz em `app/core/juizes.py:343`; implementação do predicado único em `app/folha/export.py:556-594`. F6 consulta outra pergunta: `FechamentoMensal` aprovado/exportado para a competência dos instantes (`app/ponto/janelas.py:75-89`, `app/chamados/services/materializacao.py:818-835`).
-
-3. **Mudança autorizada sucede a exceção vigente; não é colisão impeditiva por si.** O corte anterior registrado no BACKLOG exige K6 nos três caminhos **fora163** (`app/docs/BACKLOG.md:2082`). COMPLEMENTO-4 registra que U163 entregue atualmente cai em F6: aprovado/exportado bloqueia; aberto segue (`app/docs/RELATO.md:22`). A matriz original deixou lacuna para U163 entregue, registrada em `app/docs/RELATO.md:30`. É necessário ampliar L1/L5 e registrar a sucessão dessa exceção; atualizar só F4 deixa o texto anterior coexistindo (`app/docs/RELATO.md:22,30`; matriz anexada pelo usuário [nao verificado quanto a arquivo local]).
-
-4. **PROCEDE — condição literal “vai na lista da Pauta DP”.** A lista existe como saída do comando: U103 entra pelo laço de `app/chamados/management/commands/bug_par_103.py:53-63`; fora163 entra pelo laço `:71-77`; a saída é impressa em `:85`. Esse segundo laço exclui U163 inteira (`:72`), portanto retirar a exclusão da guarda K6 não põe U60 nessa lista. O contador também coloca bloqueadas por entregue/sem dia em `outras` e conserva a soma em `pendentes_aval` (`app/chamados/services/materializacao.py:339-356`); só o ramo das já materializadas separa pauta/sem dia (`:326-336`). Registrar uma matriz não implementa esse encaminhamento [nao verificado quanto à implementação futura].
-
-5. **PROCEDE — RED insuficientemente condicionado.** “Uma das 163 + entregue + FM aberto” não garante que hoje valida e grava: ao pular a pergunta U163, a porta procura a irmã e consulta seu K6 (`app/chamados/services/validacao.py:220-225`); há teste de U163 com irmã fora163 entregue já bloqueando hoje (`app/chamados/tests/test_bug_par_volta.py:145-160`). Também há portão declarado × gravado (`app/chamados/services/materializacao.py:922-937`). O RED deve explicitar irmã igualmente pulada/ausente e declaração compatível, além das demais condições de plantio (`app/chamados/services/validacao.py:220-225`; `app/chamados/services/materializacao.py:895-937`). O caso real da sonda efetivamente gravar permanece **[nao verificado]**.
-
-6. **B2.** O registro disponível diz que cruza oito arquivos com BUG-PAR e abre por cima da c4 (`app/docs/RELATO.md:37`; `app/docs/BACKLOG.md:821`). “B2 em voo” na hora do aval não está demonstrado pelo dado anexado **[nao verificado]**. Respeitar sua continuidade e encaixar U163 depois dela é compatível com a dependência registrada (`app/docs/RELATO.md:37`).
-
-7. **CORTES.md.** Não localizei registro literal de `CORTE-BUG-PAR-FORA163`, `COMPLEMENTO-2 ESPINHA-ABRE-A-VOLTA-BUG-PAR` ou `CORTE-U163-NO-K6` no arquivo **[nao verificado quanto a registro ausente]**. Há referências aos dois primeiros em `app/docs/PROMPTS.md:2382,2422`; o corte fora163 é reproduzido em `app/docs/BACKLOG.md:2082`.
-
-**Veredito recomendado U163: PROCEDE nos itens literais de encaminhamento à lista/contador e pré-condições do RED**, pelas referências dos itens 4–5; a extensão do K6 em si confere com a estrutura existente (`app/chamados/services/materializacao.py:792-835`).
-
-## 16/11 22:58 · sessao d0594a09bc3a · - · - · origem=Ronald (tmux)
-
-1. **Pulo atual confirmado.** `k6_consulta_a_pergunta` retorna bool e exclui `no_universo_163`; a docstring diz literalmente “as 163 nao passam pelo K6” (`app/chamados/services/materializacao.py:792-795`). `_k6_que_barra` documenta “o ramo que pula as 163 nao muda” e consome aquele bool (`:798-807`). Outros textos a atualizar no mesmo ato: composição “metades fora163” (`:818-824`), docstring de `_materializar_uma` (`:1813-1819`) e comentário da guarda inicial (`:1829-1833`).
-
-2. **Um juiz de entregue neste caminho.** `competencia_do_fato` compõe janela do dia do fato com `folha.export.competencia_entregue`, devolvendo `None` sem dia ou `(mes, ano, entregue)` (`app/chamados/services/materializacao.py:776-789`). O juiz verifica Exportação vigente não invalidada; não usa `FechamentoMensal` (`app/folha/export.py:556-594`). A F6 é outra pergunta: por instante local, busca FM e barra somente status `aprovado`/`exportado` (`app/ponto/janelas.py:75-89`); `registrar_batida` a aplica para `fato_de_chao=False` (`app/ponto/registro_batida.py:147-161`), exatamente a flag passada pelo materializador (`app/chamados/services/materializacao.py:1454-1462`). FM aberto portanto não basta para barrar U163 entregue por esse caminho (`app/ponto/janelas.py:86-89`).
-
-3. **RED possível, porém existência real não demonstrada.** Porta exige resposta, ausência de validação anterior (`app/chamados/services/validacao.py:594-599`), passa pelo portão declarado x gravado e pela confirmação de implausível (`:605-618`), consulta K6 de pergunta+irmã e só depois carimba (`:638-655`); segue por `_validar_o_par` ou `_materializar_uma` (`:681-687`), e o escritor chama `registrar_batida` (`app/chamados/services/materializacao.py:1454-1462`). Uma U163 com irmã fora163 entregue **já é bloqueada hoje**: a composição consulta também a irmã quando pula a pergunta (`app/chamados/services/validacao.py:219-225`), cenário explicitamente coberto no código do teste (`app/chamados/tests/test_bug_par_volta.py:145-160`; execução [nao verificado]). Portanto o RED precisa uma U163 realmente gravável, sem irmã fora163 que já a barre e sem L3/paridade/data/reuso impeditivos (`app/chamados/services/materializacao.py:889-940`). O “1” da sonda e qual pergunta satisfaz todas essas condições: [nao verificado].
-
-4. **PROCEDE — literal “a pergunta vai na lista da Pauta DP” / escopo MUDA incompleto.** A lista existe como saída textual do comando `bug_par_103`, não como escrita de `Pauta`: constrói `pauta=[]`, inclui U103 entregue/sem dia, acrescenta metades respondidas hora **fora U163** e imprime stdout (`app/chamados/management/commands/bug_par_103.py:54-85`). `_k6_que_barra` apenas retorna estado e texto “preservada para Pauta DP” (`app/chamados/services/materializacao.py:808-815`). Retirar a exclusão no bool não faz o comando incluir U60/U163 não materializadas, pois o filtro atual continua excluindo U163 (`app/chamados/management/commands/bug_par_103.py:70-77`). Deve declarar ajuste desse leitor ou deixar explícito que o encaminhamento ainda não estará implementado.
-
-5. **PROCEDE — F4 exige completar classificação.** Contador só separa entregues/sem dia no ramo das U103 carimbadas (`app/chamados/services/materializacao.py:325-337`). Pergunta U163 não materializada que ganhar L1/L5 cairá hoje em `outras` (`:339-347`), continuará em `universo` e `pendentes_aval` (`:351-356`); não irá automaticamente aos baldes `bug_par_103_pauta_dp`/`bug_par_103_sem_dia`. Isso precisa entrar na matriz F4 que o aval manda registrar (`app/chamados/services/materializacao.py:311-316`).
-
-6. **Escopo e preservação.** Bloqueio K6 precede qualquer carimbo na validação (`app/chamados/services/validacao.py:652-655`) e precede recusa/pendência/materialização no escritor (`app/chamados/services/materializacao.py:1829-1833`), compatível com “nada gravado”. O delta muda a possibilidade futura de plantar batidas em competência entregue, cuja criação passa pelo escritor indicado (`app/chamados/services/materializacao.py:1454-1462`); impacto monetário efetivo e dados exportados de produção [nao verificado]. As condições de L3 continuam antes da escrita (`app/chamados/services/validacao.py:605-613`), e L1/L5 permanecem estados próprios consumidos pela tela (`app/templates/chamados/partials/_pergunta_card.html:44-47`, `app/templates/chamados/partials/modal_fio.html:274`).
-
-**Veredito do recorte: PROCEDE nos itens lista Pauta DP e classificação F4; RED e contagem precisam ser explicitamente tratados como cenário a demonstrar, sem afirmar prova de produção [nao verificado].**
-
-## 16/11 22:58 · sessao e0112d968bb3 · - · - · origem=Ronald (tmux)
-
-Veredito PUSH: **PROCEDE, item 1** — a posição na fila não é garantida pelos scripts; os demais itens conferem como instruções de conduta/documentação, com limites abaixo. (`bin/trava_teste.sh:35-42`; `CLAUDE.md:332-336`)
-
-1. **Premissas.** “PUSH: um por MARCO” existe literalmente. (`CLAUDE.md:336`) `push.sh` chama `git push`, preserva seu rc e, se passar, chama `pos_push.sh`. (`bin/push.sh:6-9`) O pós-push atualiza e commita somente o derivado do TICKETS. (`bin/pos_push.sh:18-30`) O pre-push possui trava da régua, espera até 30 minutos ou herda a trava do chamador; cada execução de testes disputa também a trava do banco de teste. (`bin/pre-push.sh:80-89`, `bin/pre-push.sh:142-145`) O arsenal pode ser dispensado pelo carimbo da mesma árvore; o control-plane continua chamado. (`bin/pre-push.sh:65-70`, `bin/pre-push.sh:159`, `bin/pre-push.sh:190-199`) Existe bypass `SKIP_TESTS=1`; o aval não o autoriza. (`bin/pre-push.sh:5`; [nao verificado] quanto ao ambiente efetivo)
-
-2. **Colisão.** A orientação de push por marco está alinhada com CLAUDE. (`CLAUDE.md:332-336`) A B2 tinha dependência expressa de pousar BUG-PAR antes de abrir, por oito arquivos em comum; isso é registro da cópia, não prova de seu estado atual em execução. (`app/docs/RELATO.md:37`) O COMPLEMENTO-2 separa push do próprio alcance no dado fornecido; interferência operacional real na B2/suite em curso fica [nao verificado]. Os cortes de dinheiro preservam `!` para alterar gravado exportado. (`CLAUDE.md:411-417`)
-
-3. **Literal que não fecha.**
-   - **Item 1, PROCEDE:** a trava implementa somente `flock -w`, execução e liberação; não tem posição, ticket, prioridade nem reserva para “push depois da atual e antes da lateral”. (`bin/trava_teste.sh:21-42`) Além disso, arsenal e control-plane são duas aquisições separadas da trava: outra execução pode intercalar. (`bin/pre-push.sh:142-145`, `bin/pre-push.sh:186-199`) Precisa declarar o despacho dos chamadores e impedir que a lateral seja lançada antes do push; atribuir essa ordem à trava seria falso. (`bin/trava_teste.sh:25-42`)
-   - **Item 2:** não há prova da causa da demora nem da ausência de tentativa posterior; [nao verificado]. Há registro de push em pre-push às 17:1x. (`app/docs/RELATO.md:44`) Logo a linha deve relatar uma causa apurada, sem inventar histórico; [nao verificado].
-   - **Item 3:** pedir o push no fechamento está alinhado à regra existente, mas não há agendador automático nos dois scripts. (`CLAUDE.md:332-336`; `bin/push.sh:1-9`; `bin/pre-push.sh:80-89`)
-   - **Item 4:** as duas partials existem, identificadas também no teste de matriz. (`app/chamados/tests/test_bug_par_volta.py:200-202`) L2 conserva Validar e cobra motivo/nota `COMPETENCIA_APROVADA`; L5 mostra “sem dia do fato” e oculta Validar. (`app/chamados/tests/test_bug_par_volta.py:247-267`, `app/chamados/tests/test_bug_par_volta.py:311-318`) O RELATO apenas remete o smoke ao responsável, sem roteiro ali. (`app/docs/RELATO.md:5`) Disponibilidade de casos reais para executar esses cliques: [nao verificado].
-   - SHA remoto `71e9576bf`, 34 commits e ausência de push dos três marcos não puderam ser confirmados por git: cópia sem repositório utilizável; [nao verificado]. Há registros dos pousos e do uso de `343565cf6` como base, que não demonstram estado remoto. (`app/docs/RELATO.md:6`, `app/docs/RELATO.md:13-16`)
-
-4. **Exportada, dinheiro, `!`.** O wrapper apresentado faz push e atualização documental do TICKETS; o pre-push executa testes com configurações de teste e árvore do commit. (`bin/push.sh:6-8`; `bin/pos_push.sh:18-30`; `bin/pre-push.sh:142-145`, `bin/pre-push.sh:186-199`) Nesses caminhos não há chamada explícita de apply/deploy/retificação de produção. (`bin/push.sh:1-9`; `bin/pos_push.sh:18-30`; `bin/pre-push.sh:186-199`) A escrita real em produção, efeitos das credenciais e estado do hook instalado são [nao verificado]; o wrapper esperado do hook está documentado no instalador. (`bin/hooks.sh:60-65`)
-
-_6213 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6221 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

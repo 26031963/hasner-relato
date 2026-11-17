@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 23:21:49.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (181.9 MB). Acoes na janela: **1092**.
+**Medido em 16/11/2026 23:26:51.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (181.9 MB). Acoes na janela: **1093**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:22:04 | Bash | Write remedida files and RELATO lines | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/PREPARA-1611; H(){ cat <<EOF # REMEDIDA $1 -- PREPARA-ANTECIPADA-F2-F4-F7 (aval Ronald 16/11 23:1x; logs/AVAIS-1515/prepara_antecipada_f2_f4_f7_1611.txt) Base 520d7b557. Fonte: Codex leitura $D/$2.r (corpo abaixo, intacto). Matriz e brief NAO alterados. MEDIDA: $3 Contagens: DEPENDE CAIU = linhas da tabela da parte 1 com CAIU no veredito (inclui C ...` |
 | 23:21:47 | Bash | Launch round-2 sondas on shadow, prepare dirs | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/PREPARA-1611; for f in f2 f4 f7; do cat > $D/r2/$f.q <<EOF PREPARA-ANTECIPADA $f, volta 2 (aval anexo): a saida da sonda anexada e a execucao, na SOMBRA (dump de hoje), dos scripts da secao SONDAS da sua resposta anterior ($D/$f.r, anexo). Para cada NUMERO impresso: rotulo, valor, e o que ele responde na secao 4 (perguntas de lei) ou 5 (RED) da su ...` |
 | 23:21:37 | Bash | Inspect the update() hit and envelope launcher | `cd /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/PREPARA-1611; /bin/grep -o '.\{80\}update(.\{40\}' r2/f7_sonda.py; /bin/grep -o 'motor_calculo\\|calcular_\\|MotorCalculo' r2/*.py \| sort \| uniq -c; cat /home/ronald/saas-hasner/logs/PRIORIDADE-EV/r3/lanca_partes.sh \| head -20` |
 | 23:21:34 | Bash | Extract round-2 sonda scripts and scan for writes | `cd /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/PREPARA-1611; mkdir -p r2; for f in f2 f4 f7; do python3 - $f <<'EOF' import sys,re f=sys.argv[1]; s=open(f+'.r').read(); sond=s[s.index('## SONDAS'):] bl=re.findall(r'```python\n(.*?)```',sond,re.S) out=["# PREPARA %s round 2: %d scripts da resposta Codex, cada um isolado em try"%(f,len(bl)),"import traceback"] for i,b in enumerate(bl,1): out.append ...` |
