@@ -1,7 +1,94 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 20:55** · publicado em **16/11/2026 20:58** (UTC-3)
+> Ultima resposta processada: **16/11/2026 21:09** · publicado em **16/11/2026 21:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 21:09 · sessao 87ecc702a040 · - · - · origem=Ronald (tmux)
+
+- **3(b) PROCEDENTE, como possibilidade demonstrável pelo código:** chips e filtro compartilham os pares classificados uma vez; a coluna chama o juiz novamente. Se o catálogo mudar entre essas leituras, chip/filtro podem classificar `descontado` e a coluna pintar `abonado`. O cache pode expirar ou ser invalidado; ocorrência real em produção é **[nao verificado]**. Referências: `app/ponto/views.py:2229`, `app/ponto/views.py:2240`, `app/ponto/views.py:2254`, `app/ponto/views.py:2287`, `app/ponto/services/dia_decidido.py:482`, `app/ponto/catalogo/ausencias.py:267`, `app/ponto/catalogo/ausencias.py:293`, `app/ponto/models.py:1245`.
+
+- **Tipo desconhecido/inativo, catálogo estável: NAO PROCEDENTE para divergência entre os três sítios.** O catálogo lê somente tipos ativos; tipo ausente devolve `None`, e o juiz devolve `ABONADO` para qualquer efeito diferente de desconta/suprime, salvo rejeitada. Os três leitores usam esse juiz; desconhecido aprovado entra no balde Abona, desconhecido rejeitado no balde rejeitadas. O desaparecimento do `?` produz, portanto, ABONA para desconhecido não rejeitado, por decisão preexistente do juiz. Referências: `app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:293`, `app/ponto/services/dia_decidido.py:475`, `app/ponto/services/dia_decidido.py:483`, `app/ponto/services/dia_decidido.py:487`, `app/templates/ponto/ausencias.html:158`.
+
+- **Total igual à soma dos quatro baldes com desconhecido: NAO PROCEDENTE para quebra, sob dados estáveis.** Todo par passa por juiz que retorna exatamente um dos quatro vereditos; rejeitada vence antes de consultar efeito. O contador rejeitadas é pelo mesmo status literal. Referências: `app/ponto/views.py:2229`, `app/ponto/views.py:2238`, `app/ponto/views.py:2240`, `app/ponto/services/dia_decidido.py:475`, `app/ponto/services/dia_decidido.py:487`.
+
+- **`?efeito=xyz`/`abonado`/`rejeitado`: NAO PROCEDENTE para 500 ou corte indevido direto.** A inversão do mapa aceita somente `abona`, `desconta`, `suprime`; fora dele, não aplica filtro. O contexto ainda conserva o valor recebido. Referências: `app/ponto/services/dia_decidido.py:80`, `app/ponto/views.py:2232`, `app/ponto/views.py:2249`, `app/ponto/views.py:2301`.
+
+- **`?efeito=abona` sem pares: NAO PROCEDENTE para listar tudo.** O acumulador começa em `None` e termina em `qs.none()` quando nenhum par pertence ao veredito pedido. Referências: `app/ponto/views.py:2253`, `app/ponto/views.py:2254`, `app/ponto/views.py:2257`.
+
+- **`?registro=<pk>` fora do mês: comportamento global preservado.** O PK substitui inteiramente o queryset de vigência; colaborador/tipo e depois status/efeito ainda restringem essa busca. `q_universo` conserva o PK e o JS tenta abrir seu painel. Mês/data exibidos não passam a ser a data desse registro. Referências: `app/ponto/views.py:2189`, `app/ponto/views.py:2192`, `app/ponto/views.py:2195`, `app/ponto/views.py:2209`, `app/ponto/views.py:2241`, `app/templates/ponto/ausencias.html:200`.
+
+- **`?de=lixo`: NAO PROCEDENTE para 500 dessa conversão.** `_d` devolve `None`, `de` usa primeiro dia do mês e o trecho dos chips omite a data inválida. O formulário mostra a data efetiva. `_de_pedido`/`_ate_pedido` são datas válidas solicitadas; `de`/`ate` são limites efetivos com defaults. Referências: `app/ponto/views.py:2181`, `app/ponto/views.py:2186`, `app/ponto/views.py:2205`, `app/ponto/views.py:2304`, `app/templates/ponto/ausencias.html:72`.
+
+- **Ordenação no GROUP BY: NAO PROCEDENTE para quebra.** `.order_by()` limpa a ordenação antes de `values/annotate`, inclusive a ordenação herdada do modelo. Referências: `app/ponto/views.py:2229`, `app/ponto/models.py:829`.
+
+- **MUDA c, literal “uma função só usada por b e c”: cumpre em parte.** Existe uma classificação compartilhada em dicionário dentro da view; não foi extraída uma função comum. A mesma estrutura alimenta soma e construção do Q. Referências: `app/ponto/views.py:2228`, `app/ponto/views.py:2240`, `app/ponto/views.py:2254`.
+
+- **3(a), 3(f), 3(g): NAO PROCEDENTE no trecho examinado.** A view chama o juiz e não escreve regra nova de efeito/rejeição; escreve somente atributos transitórios de apresentação, e o mapa inverso é derivado do mapa único. A regra do ANEXO! permanece em autoridade separada, já existente. Referências: `app/ponto/views.py:2230`, `app/ponto/views.py:2232`, `app/ponto/views.py:2287`, `app/ponto/services/ausencia.py:745`, `app/ponto/models.py:867`.
+
+- **3(e): sem relógio novo explícito no diff; existe dependência transitiva do cache.** A data atual é lida na entrada da view; o catálogo consulta `monotonic()` internamente em cada avaliação de validade do cache. Referências: `app/ponto/views.py:2169`, `app/ponto/catalogo/ausencias.py:274`.
+
+- **Leitor JS externo confirmado:** o motor de tabela usa `data-value` para largura e ordenação, mas trata-o como texto genérico, sem exigir os antigos literais `abona/desconta/suprime`. Referências: `app/static/js/hasner-table.js:35`, `app/static/js/hasner-table.js:189`, `app/static/js/hasner-table.js:207`.
+
+- **Semântica após edição na mesma tela:** o JS de salvar altera visualmente Data e Tipo, sem recalcular coluna Efeito ou chips; essa limitação é externa ao diff fornecido e anterior à mudança da fonte da coluna. Referências: `app/templates/ponto/ausencias.html:260`, `app/templates/ponto/ausencias.html:267`, `app/templates/ponto/ausencias.html:268`.
+
+## 16/11 21:08 · sessao 1e152ed22ba8 · - · - · origem=Ronald (tmux)
+
+Censo somente por leitura; execução em banco/log e comportamento real de produção permanecem [nao verificado].
+
+- **Campos persistidos**: `Ausencia.tipo` é `CharField` e `status` tem quatro escolhas; defaults/definições em `app/ponto/models.py:749`, `app/ponto/models.py:700`, `app/ponto/models.py:809`. A porta de criação escreve ambos em `app/ponto/services/ausencia.py:483`; edição escreve `tipo` em `app/ponto/services/ausencia.py:648`; transição escreve `status` em `app/ponto/services/ausencia.py:976`, chamada por decisão em `app/ponto/services/ausencia.py:1088`. Há escritor especial preexistente de rejeição de férias em `app/ponto/services/ausencia.py:1496`. O diff da lista apenas lê esses campos para agrupar/filtrar e julgar: `app/ponto/views.py:2229`, `app/ponto/views.py:2256`, `app/ponto/views.py:2287`.
+
+- **`Ausencia.efeito`**: property sem armazenamento/setter, devolve `efeito_vigente(tipo)`, sem status: `app/ponto/models.py:849`. Leitores externos reais são `app/ponto/turnos.py:2704`, `app/ponto/services/fechamento.py:697`, `app/ponto/services/efeito_ausencia.py:58`, `app/colaboradores/services/calendario.py:705`. O significado permanece efeito do tipo, diferente do vocabulário do veredito da nova célula, que escreve `abonado/descontado/suprimido/rejeitado`: `app/ponto/services/dia_decidido.py:475`, `app/ponto/services/dia_decidido.py:482`, `app/templates/ponto/ausencias.html:158`.
+
+- **Rejeitada NÃO entra no mapa do calendário**: mapa nasce em `_cap(..., para='cobranca')` em `app/colaboradores/services/calendario.py:516`; `_cap` chama `_pelo_efeito` em `app/ponto/turnos.py:2765`; para cobrança, exclui `status='rejeitada'` em `app/ponto/turnos.py:2531`. Fechamento e `efeito_ausencia` pedem cobertura de folha (`app/ponto/services/fechamento.py:683`, `app/ponto/services/efeito_ausencia.py:53`), que só admite aprovada (`app/ponto/turnos.py:2529`). `dias_com_ausencia_de_dia_inteiro` recebe cobertura já filtrada, e seu wrapper pede folha (`app/ponto/turnos.py:2695`, `app/ponto/turnos.py:2709`).
+
+- **`contradiz_documento`**: property delega em `app/ponto/models.py:867`; regra lê documento e efeito vigente, sem considerar status (`app/ponto/services/ausencia.py:753`). Leitores: selo ANEXO! em `app/templates/ponto/ausencias.html:158`; gate de aprovação em `app/ponto/services/ausencia.py:765`; título do chamado em `app/ponto/services/ausencia.py:802`; testes externos em `app/ponto/tests/test_gate_anexo_desconta.py:28`, `app/ponto/tests/test_o137_esmeril_ausencia_le_o_cadastro.py:109`. Como não considera status, uma rejeitada de tipo que desconta COM documento também pode exibir ANEXO!; o fixture novo só nega ANEXO! para rejeitada SEM documento (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:99`, `app/ponto/tests/test_ausencia_efeito_pelo_estado.py:233`).
+
+- **`veredito` / `apresentacao` de linha**: escritor em memória `app/ponto/views.py:2287` / `app/ponto/views.py:2288`; leitor célula `app/templates/ponto/ausencias.html:158`; são atributos transitórios, não campos declarados no trecho do modelo (`app/ponto/models.py:743`, `app/ponto/models.py:849`). `APRESENTACAO_AUSENCIA` é declarado em `app/ponto/services/dia_decidido.py:80`; leitores produtivos encontrados são inversão URL→veredito (`app/ponto/views.py:2232`) e lookup para cada linha (`app/ponto/views.py:2288`). Testes leem mapa em `app/ponto/tests/test_ausencia_efeito_pelo_estado.py:214`, `app/ponto/tests/test_ausencia_efeito_pelo_estado.py:239`, e o alteram temporariamente por mock em `app/ponto/tests/test_ausencia_efeito_pelo_estado.py:307`.
+
+- **Leitor JS externo do `data-value` existe**, mas usa string genérica: ajusta largura em `app/static/js/hasner-table.js:36`; ordenação lê e converte a minúsculas em `app/static/js/hasner-table.js:191`, ordena em `app/static/js/hasner-table.js:207`. Script é carregado em `app/templates/base.html:84`. Assim passa a ordenar/medir pelo veredito novo; não há nesse leitor tabela que exija literalmente `abona/desconta/suprime` ou `"?"` (`app/static/js/hasner-table.js:189`). A busca livre usa o conteúdo da linha, chamada em `app/templates/ponto/ausencias.html:96`.
+
+- **Leitor JS externo de `registro` existe**: autoabre o drawer lendo `location.search`, sem depender da ordem da query string, em `app/templates/ponto/ausencias.html:200`. Alteração de tipo pelo drawer atualiza só célula Tipo/Data; não atualiza Efeito/chips até recarregar — comportamento preexistente em `app/templates/ponto/ausencias.html:260`, `app/templates/ponto/ausencias.html:265`, `app/templates/ponto/ausencias.html:268`.
+
+- **API não lê atributos da nova linha nem HTML/chips**: o GET consulta `Ausencia` diretamente, em `app/api/views.py:1853`; emite tipo/status em `app/api/views.py:1865` e `app/api/views.py:1867`. Dependência de outros clientes externos ao código disponível é [nao verificado].
+
+- **Tipos desconhecidos/inativos não quebram a partição**: catálogo consulta somente ativos (`app/ponto/catalogo/ausencias.py:249`); `efeito_vigente` devolve `None` quando ausente (`app/ponto/catalogo/ausencias.py:293`); juiz decide rejeitada primeiro e, fora desconta/suprime, retorna ABONADO (`app/ponto/services/dia_decidido.py:475`, `app/ponto/services/dia_decidido.py:487`). Portanto registros desconhecidos/inativos não rejeitados entram no balde Abona; coluna e filtro acompanham essa mesma regra enquanto catálogo está estável (`app/ponto/views.py:2230`, `app/ponto/views.py:2254`, `app/ponto/views.py:2287`). É comportamento preexistente do juiz, agora refletido pela lista (`app/ponto/services/dia_decidido.py:467`).
+
+- **Risco real de divergência temporal, classe (b), PROCEDENTE**: chips/filtro usam vereditos dos pares calculados em `app/ponto/views.py:2230`; coluna chama o juiz novamente em `app/ponto/views.py:2287`. Cada chamada vai a `CAT.efeito_vigente` (`app/ponto/services/dia_decidido.py:482`), cujo catálogo tem cache por processo com TTL de 60 segundos e lê `monotonic()` internamente (`app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:275`). Se catálogo é atualizado e cache vence/invalida entre fases, chips/filtro podem manter ABONADO enquanto célula vira DESCONTADO. Signal invalida em post-save/post-delete no mesmo processo (`app/ponto/models.py:1245`), e outro processo observa atualização após TTL (`app/ponto/catalogo/ausencias.py:276`). Não há snapshot do catálogo/veredito compartilhado entre fases (`app/ponto/views.py:2230`, `app/ponto/views.py:2287`). Ocorrência em produção é [nao verificado].
+
+- **Relógio**: diff não introduz chamada de relógio direta na lista; a borda já lê `date.today()` em `app/ponto/views.py:2169`. A chamada indireta ao juiz chega ao relógio interno preexistente do catálogo (`app/ponto/services/dia_decidido.py:482`, `app/ponto/catalogo/ausencias.py:275`); distinguir “relógio novo no diff” de “dependência temporal preexistente com nova sequência de leituras” evita acusação excessiva.
+
+- **Datas**: `de/ate` de contexto são datas efetivas (fallback mensal), escritas em `app/ponto/views.py:2187`, entregues em `app/ponto/views.py:2304`, lidas nos inputs em `app/templates/ponto/ausencias.html:72`. `_de_pedido/_ate_pedido` são datas válidas explicitamente recebidas e só estas vão à query de chips (`app/ponto/views.py:2186`, `app/ponto/views.py:2207`). São variáveis distintas com significados distintos; não há troca silenciosa entre elas nesses consumidores (`app/ponto/views.py:2186`, `app/ponto/views.py:2304`).
+
+## 16/11 21:08 · sessao 9202c61e1543 · - · - · origem=Ronald (tmux)
+
+Auditoria estática; execução de RED/GREEN/mutantes/suite: **NAO SEI [nao verificado]**. Os testes usam `django.test.TestCase` e criam registros; não os executei, respeitando somente leitura (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:22,80-101`).
+
+- **RESULTADOS 1–3: PROCEDENTE quanto ao teste escrito.** R1 exige 13 linhas, acessa a rejeitada conhecida e confere texto, title, classe e data-value; R2 exige números concretos; R3 exige lista não vazia, exclui a rejeitada do efeito e inclui três rejeitadas pelo status (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:131-157`).
+- **RESULTADO 4: PROCEDENTE quanto ao teste escrito.** Cobre ambos os estados abertos, badge ABONA, contador 4 e interseção Abona+Pendente com duas linhas (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:161-171`).
+- **5a/5b/5c: PROCEDENTE na fixture estável escrita.** Total fixado em 13, partição conferida no contexto e no HTML; 5b exige chip positivo e segue os hrefs; 5c exige três rejeitadas (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:175-197`).
+- **RESULTADO 6: PROCEDENTE na fixture escrita.** Exige 13 linhas, compara data-value/texto/title do HTML, exige 12 combinações e os quatro vereditos; ANEXO! recebe teste separado (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:213-233`).
+
+**M1–M5 têm mordida estática identificável; mortes efetivamente executadas: NAO SEI [nao verificado].**
+
+| Mutante | Teste que detectaria a restauração literal | [nao verificado]
+|---|---|
+| M1, coluna volta a `a.efeito` | Regex proíbe a leitura; R1 exige rejeitada SEM EFEITO (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:275-277,131-140`). |
+| M2, contador antigo por tipo | R2 espera Abona=4, enquanto fixture tem cinco registros daquele tipo; AST detecta os nomes antigos (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:89-98,142-148,255-266,286-294`). |
+| M3, filtro antigo por tipo | R3 exige que a rejeitada conhecida fique fora de Abona, com lista explicitamente não vazia (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:150-157`). |
+| M4, badge literal no template | Selo proíbe os literais; teste substitui texto/title do mapa por sentinelas e exige essas sentinelas no HTML (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:279-284,301-312`). |
+| M5, link perde de/ate | Exige ambos nos sete chips; segue cinco links e exclui registro do dia 20 (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:318-329`). |
+
+**Vacuidade: NAO PROCEDENTE nos testes centrais escritos.** Existem sentinelas de população: 13 linhas em R1/R6, lista não vazia em R3, chip positivo em 5b, três rejeitadas em 5c, sete chips em C2 (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:133,153,188,197,217,321`). O selo AST exige que encontre a função; o selo da célula exige exatamente uma célula antes da comparação (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:280-288`).
+
+O teste de cobertura do mapa usa apenas diferença de conjuntos, sem assert explícito de catálogo não vazio; porém o caminho atual de `vigente()` usa `CATALOGO` como alternativa não vazia, impedindo esse vazio no caminho normal (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:247-252`; `app/ponto/catalogo/ausencias.py:87-105,249-254,267-281`). O selo AST cobre os três nomes proibidos, não toda possível regra paralela escrita com literais novos (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:255-266`).
+
+**Lacuna material: PROCEDENTE para divergência sob mudança do catálogo durante a requisição.** Contador e filtro guardam o julgamento dos pares, mas a coluna chama novamente `veredito_de` depois; esse juiz consulta novamente `efeito_vigente`, cujo catálogo pode ser recarregado após TTL de 60 segundos ou invalidação. Com efeito alterado no banco e recarga entre esses pontos, chip/filtro ficam com o julgamento anterior e coluna com o posterior (`app/ponto/views.py:2229-2240,2254-2257,2287`; `app/ponto/services/dia_decidido.py:482-495`; `app/ponto/catalogo/ausencias.py:257-281,293-295`). Ocorrência efetiva em produção: **[nao verificado]**.
+
+Nenhum teste deste arquivo encena essa troca, tipo desconhecido ou tipo inativo: a fixture constrói três tipos fixos nos quatro status, e `setUp` invalida o cache antes do pedido (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:32-35,89-109`). Assim, a suíte escrita poderia passar mesmo existindo a divergência descrita (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:213-227`; `app/ponto/views.py:2229,2287`).
+
+**Bordas cobertas por testes escritos:** efeito fora do mapa, efeito válido sem par, corte válido de datas, registro específico, datas inválidas (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:199-209,318-348`). O teste de registro usa um registro do mesmo mês, portanto não demonstra especificamente o caso fora do mês (`app/ponto/tests/test_ausencia_efeito_pelo_estado.py:91-93,331-339`).
+
+**Prova histórica de RED e mutantes: NAO SEI [nao verificado].** As entradas desta obra encontradas no RELATO registram revisões de aval e leitura anterior, não a execução dos novos testes; o próprio cabeçalho do teste descreve o defeito, sem anexar uma execução (`app/docs/RELATO.md:4,9,17-18,43,46`; `app/ponto/tests/test_ausencia_efeito_pelo_estado.py:1-10`).
 
 ## 16/11 20:55 · sessao 815f9174063b · ESPINHA-F2 · verificador · origem=Code
 
@@ -532,134 +619,4 @@ A simulação da ressuscitação chama `descarimbar(salvar=False)` em cópia; a 
 
 O levantamento por AST incluindo migrações, com tratamento de aliases/dicionários conforme o scanner existente, encontrou os quatro escritores de `PerguntaDisputa` acima; inexistência absoluta de outros mecanismos dinâmicos fora do alcance do scanner: [nao verificado] (`app/chamados/tests/test_o261e_f2_porta_carimbo.py:99-115`). A identidade Git HEAD/hash não pôde ser confirmada porque a cópia não contém repositório Git: [nao verificado].
 
-## 16/11 18:51 · sessao 2e39e403ec2d · - · - · origem=Ronald (tmux)
-
-**9a — Não fecha a premissa nem o literal.** O comentário realmente chama os três campos de “UM ato”, mas `_escrever_carimbo` não é escritor exclusivo: `descarimbar_em_lote` executa `update()` direto dos três; `encerrar_por_fato_no_espelho` escreve apenas `via_resolucao`; o selo declara ainda `relavra_via.relavrar` como escritor da via (`app/chamados/models.py:3184`; `app/chamados/models.py:3391`; `app/chamados/models.py:3393`; `app/chamados/models.py:3402`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:44`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:51`; `app/chamados/tests/test_o261e_f2_porta_carimbo.py:57`).
-
-O corte manda, se residual, **“efeito = o ato de materializacao, valor conservado”**; o registro da re-medição declara precisamente F2 L1 **RESIDUAL, não MOOT**, porque descarimbar apaga e a projeção consulta o campo atual (`app/docs/CORTES.md:487`; `app/docs/RELATO.md:109`). O código confirma: descarimbo apaga o instante; a projeção temporal começa pelo valor atual, apenas escondendo valores posteriores a `agora`, sem reconstruir um carimbo apagado (`app/chamados/models.py:3318`; `app/chamados/juizes.py:1390`; `app/chamados/juizes.py:1396`). “Ler o campo é ler o ato” não demonstra a fonte do instante anterior que permanece residual (`app/docs/RELATO.md:109`).
-
-**9b — Fecha como conservação do resultado atual, não como resolução de 9a.** Descarimbar grava `None` para instante e autor, e `''` para via; portanto dizer genericamente “os três gravam None” seria inexato (`app/chamados/models.py:3318`; `app/chamados/models.py:3322`). Preservar esse resultado presente não fornece o instante apagado referido pela re-medição (`app/chamados/juizes.py:1390`; `app/docs/RELATO.md:109`).
-
-**9c — A premissa confere; o registro lateral não sana 9a.** Os oito tipos de `DecisaoPergunta` não incluem materialização, e a remessa explícita do item 3 do corte é do predicado novo de absorção para E4d (`app/chamados/models.py:4024`; `app/chamados/models.py:4035`; `app/docs/CORTES.md:487`). Retirar a remessa de F2 L1 evita aquele desvio, mas não comprova cumprimento do destino residual do item 1 (`app/docs/CORTES.md:487`; `app/docs/RELATO.md:109`).
-
-**Exportada/dinheiro/`!`:** o corte exige que `supra_juiz` em competência exportada não mude; eventual DIFF divergente exige `PAREI !` com tabela (`app/docs/CORTES.md:487`). Existe alcance indireto concreto: CSF lê `sem_veredito_entre` para pai e destino e decide a permissão de execução pelo resultado (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:574`; `app/ponto/supra_juiz.py:588`). Invariância efetiva de frota e efeito monetário: [nao verificado].
-
-## 16/11 18:51 · sessao 3618618bcf91 · - · - · origem=Ronald (tmux)
-
-**2a — confere, no ramo declarado.** Última RESPOSTA com `ato_texto` vazio retorna `respondida_sem_texto` e RESPONDER do COLABORADOR; o juiz exige instante e texto não vazio na projeção. São leituras distintas, coerentes quanto ao vazio, sem equivalência garantida entre ato e projeção (`app/chamados/services/tarefa_do_dia.py:159`; `app/chamados/services/tarefa_do_dia.py:161`; `app/chamados/juizes.py:1546`; `app/chamados/juizes.py:1552`).
-
-**2b — fecha o defeito anterior da conservação da API.** A API calcula `aguarda_admin` exclusivamente de `_estado == RESPONDIDA`; conservar essa expressão elimina a mudança adicional em pares legais que decorreria de consultar o dono (`app/api/views.py:2550`; `app/api/views.py:2553`; `app/chamados/services/tarefa_do_dia.py:176`). A prova efetiva main/cópia, por pk, continua [nao verificado]. O corte F6 trata do dono em F6; o corte F5 mantém resposta vazia fora do app e registra a pergunta de lei, permitindo delimitar a conservação proposta à F2 (`app/docs/CORTES.md:487`; `app/chamados/services/pergunta_no_app.py:81`).
-
-**2c — confere.** Ressuscitar preserva a fila existente e não grava REABERTURA nesse caminho; a lei sobre devolver ao colaborador continua registrada e não decidida, inclusive junto da pergunta sobre resposta vazia (`app/chamados/models.py:1622`; `app/chamados/models.py:1626`; `app/chamados/models.py:1629`; `app/docs/RELATO.md:131`; `app/docs/LEIS.md:151`). Não autoriza correção nova na F2; eventual nova decisão e DIFF são futuro declarado no anexo [nao verificado].
-
-**2d — não fecha como afirmação universal.** Viva com instante e texto vazio satisfaz o predicado ilegal e resulta em `estado=RESPONDIDA`, porque C6 viva exclui validação e o estado usa o instante cru (`app/chamados/juizes.py:1531`; `app/chamados/juizes.py:1534`; `app/chamados/juizes.py:1405`; `app/chamados/models.py:3151`; `app/chamados/models.py:3155`). Porém esse par projetado **não garante** RESPONDER do colaborador: a tarefa lê o último ato; RESPOSTA vazia produz colaborador, DEVOLUCAO produz admin, SILENCIO produz nenhuma ação (`app/chamados/services/tarefa_do_dia.py:158`; `app/chamados/services/tarefa_do_dia.py:161`; `app/chamados/services/tarefa_do_dia.py:165`; `app/chamados/services/tarefa_do_dia.py:176`). Ainda existem guardas anteriores e exposição administrativa específica (`app/chamados/services/tarefa_do_dia.py:298`; `app/chamados/services/tarefa_do_dia.py:306`; `app/chamados/services/tarefa_do_dia.py:309`; `app/chamados/services/tarefa_do_dia.py:267`).
-
-Correção necessária: medir o conjunto I-sem-T e discriminar último ato/resultado real da tarefa; afirmar colaborador apenas no ramo correspondente (`app/chamados/services/tarefa_do_dia.py:159`). Quantidade atual e ocorrência dos contraexemplos: [nao verificado]. Destinar leitores de instante cru ao complemento da B2 corresponde ao escopo documentado B/C/D; mudar a tarefa não corresponde à B2 (`app/chamados/juizes.py:1550`; `app/chamados/juizes.py:1551`; `app/docs/LEIS.md:151`).
-
-O dado fornecido não traz a saída dessa medição; os números históricos dos documentos não certificam a população atual [nao verificado]. `git rev-parse HEAD` falhou porque esta cópia não contém repositório Git; correspondência independente do HEAD com o hash fornecido: [nao verificado].
-
-## 16/11 18:47 · sessao be76af41eae5 · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
-
-**AVAL-DEVOLVIDO em a, b e c quanto às condições literais abaixo; d e e conferem.** A identidade do HEAD, a comparação com `71e9576bf` e o cruzamento por `git diff --name-only` ficam **[não verificado]**: esta cópia não contém metadados Git.
-
-1. **As premissas conferem, com correção das linhas dos chips.**
-
-| MUDA | Conferência na cópia |
-|---|---|
-| **a** | A coluna lê `a.efeito`, inclusive no `data-value`; a propriedade consulta somente `efeito_vigente(self.tipo)`, sem status. O laço existente permite entregar o veredito ao template. (`app/templates/ponto/ausencias.html:158`; `app/ponto/models.py:849-852`; `app/ponto/views.py:2249-2254`.) |
-| **b** | Os chips contam por tipo, sem excluir rejeitadas: Abona em **2208**, Desconta em **2210**, Suprime em **2211**. As linhas 2205–2207 contam estados. (`app/ponto/views.py:2205-2211`.) |
-| **c** | O filtro de efeito também consulta somente conjuntos de tipos; o filtro de status é aplicado separadamente. (`app/ponto/views.py:2212-2226`.) |
-| **d** | Confere: `veredito_de` delega ao núcleo, que trata especialmente apenas `rejeitada`; os demais estados seguem o efeito/default do tipo. (`app/ponto/services/dia_decidido.py:461-481`.) |
-| **e** | Os quatro leitores citados existem: turnos, fechamento, coletor de efeitos e calendário. A proteção por status varia conforme a alimentação, detalhada no censo abaixo. (`app/ponto/turnos.py:2704`; `app/ponto/services/fechamento.py:697`; `app/ponto/services/efeito_ausencia.py:58`; `app/colaboradores/services/calendario.py:705`.) |
-
-Os **quatro status reais** são `aguardando_documento`, `aguardando_decisao`, `aprovada` e `rejeitada`. `pendente` na URL significa os dois estados abertos; `cancelada` não integra essas choices, e cancelar pela tela grava `rejeitada`. (`app/ponto/models.py:701-704`; `app/ponto/views.py:2212-2219`; `app/ponto/views.py:2378-2389`.)
-
-`veredito_do_tipo` aceita os quatro — e aceita outros valores sem validá-los. Seus retornos são exatamente:
-
-| Condição | Retorno |
-|---|---|
-| `status == 'rejeitada'` | `rejeitado` |
-| Outro status, efeito DESCONTA | `descontado` |
-| Outro status, efeito SUPRIME | `suprimido` |
-| Qualquer outro caso | `abonado` |
-
-Essa é a implementação completa, com as quatro strings declaradas no módulo. (`app/ponto/services/dia_decidido.py:26`; `app/ponto/services/dia_decidido.py:461-473`.)
-
-**Quem escreve status e tipo:**
-
-- **Nascimento:** `criar_ausencia` recebe o tipo, calcula o estado inicial e instancia o registro com ambos. (`app/ponto/services/ausencia.py:475-486`; `app/ponto/services/ausencia.py:529-531`.)
-- **Alteração de tipo:** `editar_ausencia_registro` valida o catálogo, atribui/salva o tipo e manda rejulgar o estado aberto. (`app/ponto/services/ausencia.py:624-625`; `app/ponto/services/ausencia.py:648-676`.)
-- **Transição normal de status:** `mudar_estado` valida a transição e atribui/salva o novo estado. (`app/ponto/services/ausencia.py:969-988`.)
-- **Exceção concreta:** o cancelamento do agendamento de férias atribui diretamente `rejeitada`, com transação e trilha obrigatória; portanto não cabe afirmar que toda atribuição passa por `mudar_estado`. (`app/ponto/services/ausencia.py:1484-1507`.)
-
-**Quem lê status e tipo, por responsabilidade:**
-
-| Leitor | Uso |
-|---|---|
-| Modelo | Status para abertura/aprovação; tipo para exigência documental e efeito. (`app/ponto/models.py:719-741`; `app/ponto/models.py:849-852`.) |
-| Serviço de ausência | Tipo/anexo para estado inicial; tipo/status para rejulgamento e transições. (`app/ponto/services/ausencia.py:687-692`; `app/ponto/services/ausencia.py:937-944`; `app/ponto/services/ausencia.py:969-976`.) |
-| Cobertura | Status para folha/cobrança; tipo para cobertura indeterminada. (`app/ponto/turnos.py:2523-2546`.) |
-| Lista/template | Tipo/status para filtros, contadores, apresentação e alerta médico. (`app/ponto/views.py:2195-2233`; `app/templates/ponto/ausencias.html:157-179`.) |
-| Juiz visual/histórico | Tipo/status para veredito; estados abertos para apresentação do lançamento pendente. (`app/ponto/services/dia_decidido.py:447-481`; `app/ponto/services/dia_decidido.py:610-615`.) |
-| Exportação/fechamento | Seleção de aprovadas e classificação por tipo/efeito. (`app/folha/export.py:87-91`; `app/ponto/services/fechamento.py:683-701`.) |
-
-2. **Leis, aval vigente e decisão d.**
-
-**a–c são compatíveis com juiz único** quando apenas transportam/classificam a resposta existente, sem reproduzir a regra de rejeição ou efeito na view. Essa é a exigência da LEI-AKITA 2 e da L2; `veredito_de` já delega ao mesmo núcleo. (`CLAUDE.md:20-22`; `app/docs/LEIS-UI.md:23-25`; `app/ponto/services/dia_decidido.py:453-481`.)
-
-Há uma precisão documental: **`JUIZES.md` não nomeia `dia_decidido` nesse domínio**; ele remete ao registro vivo, que registra `catalogo.efeito_vigente` para “paga, desconta ou suprime”. A autoridade visual compartilhada está declarada no próprio `dia_decidido`. Usá-la não exige nascer outro juiz. (`app/docs/JUIZES.md:10-15`; `app/docs/JUIZES.md:55-58`; `app/core/juizes.py:260-265`; `app/ponto/services/dia_decidido.py:16-24`.)
-
-A grade chama `do_dia`; o espelho publica sua palavra e o PDF consome essa palavra. Portanto a premissa de apresentação compartilhada confere, embora o PDF não precise chamar diretamente `veredito_de`. (`app/colaboradores/services/calendario.py:737-756`; `app/ponto/services/espelho.py:328-345`; `app/relatorios/pdf_espelho.py:923-924`.)
-
-**d não colide com `veredito_de`.** Existe, porém, outra pergunta já resolvida: `veredito_do_lancamento` retorna PENDENTE para os estados abertos, conforme o contrato anterior de pendente amarelo. A decisão d deve permanecer explicitamente sobre a coluna **Efeito**, sem ser apresentada como o estado decidido do pedido. (`app/ponto/services/dia_decidido.py:37-40`; `app/ponto/services/dia_decidido.py:439-450`; `app/ponto/services/dia_decidido.py:461-473`.)
-
-**L-123:** o padrão “juiz unico” já é termo admitido; fazê-lo valer exige que coluna, contador e filtro consumam a autoridade, conforme proposto. (`CLAUDE.md:65-70`; `app/docs/PLANO-PADROES.md:55-58`.)
-
-**L7, em a:** o novo `title` não deve ser prosa colada no template; precisa vir do mapa de apresentação da autoridade. O texto prescrito pode ser preservado sem criar regra de veredito. (`app/docs/LEIS-UI.md:77-84`; `app/ponto/services/dia_decidido.py:476-481`.)
-
-A documentação da cópia registra Repetir em construção e os complementos da UI-Vínculo antes desta obra; a ordem anexada é compatível com esses registros. O cruzamento efetivo entre arquivos das obras em voo permanece **[não verificado]**. (`app/docs/RELATO.md:9`; `app/docs/RELATO.md:20-33`.)
-
-3. **Condições que fecham e condições que precisam de emenda.**
-
-**Resultado 5: SIM, a partição por vereditos fecha para todo par solicitado**, inclusive tipo sem efeito e status `cancelada` ou outro: rejeitada entra exclusivamente em rejeitado; todo restante entra exclusivamente em descontado, suprimido ou abonado. Tipo ausente do catálogo produz `None`, que cai em **abonado**. Isso comprova a partição do juiz atual, sem comprovar que um tipo desconhecido deveria conceder abono. (`app/ponto/catalogo/ausencias.py:293-295`; `app/ponto/services/dia_decidido.py:461-473`.)
-
-**b — o universo precisa ser explicitado:** Total hoje conta registros de `_base`, depois de vigência — ou busca por registro —, colaborador e tipo, **antes de status e efeito**. A lista recebe esses dois cortes depois; portanto Total não significa quantidade de linhas atualmente filtradas. (`app/ponto/views.py:2188-2226`; `app/ponto/views.py:2248-2255`.)
-
-Assim, a soma pode fechar em `_base` e ainda não cumprir a **L1 literal**, que exige o mesmo queryset da lista e da ação. Os links dos chips conservam status/efeito, tornando essa distinção observável na navegação. É necessário resolver essa promessa de universo em b/c, não usar apenas a soma como prova de L1. (`app/docs/LEIS-UI.md:12-15`; `app/templates/ponto/ausencias.html:48-67`; `app/ponto/views.py:2201-2226`.)
-
-**c — a comparação literal não fecha:** a URL pede `abona/desconta/suprime`, mas o juiz devolve `abonado/descontado/suprimido`. É preciso declarar o mapa entre os vocabulários antes de comparar “veredito == pedido”. (`app/templates/ponto/ausencias.html:65-67`; `app/ponto/services/dia_decidido.py:26`.)
-
-O **OR de pares `(tipo,status)` é possível sem juiz novo**: o helper chama o juiz, soma `n` no balde correspondente e reúne exatamente os pares desse veredito. A montagem do predicado apenas transporta a resposta; não precisa testar rejeição ou consultar conjuntos de efeitos novamente. O caso de nenhum par deve produzir filtro vazio. (`app/ponto/services/dia_decidido.py:453-481`; `app/ponto/views.py:2195-2219`; `app/ponto/turnos.py:2773-2774`.)
-
-**a — resultado 6 não fecha como igualdade textual literal:** `ABONA` não é `abonado`, nem `SEM EFEITO` é `rejeitado`. A propriedade deve exigir `data-value == veredito_de(a)` e texto igual à apresentação mapeada desse veredito. A coluna também contém o selo ANEXO!, que não integra o retorno do juiz. (`app/ponto/services/dia_decidido.py:26`; `app/ponto/services/dia_decidido.py:481`; `app/templates/ponto/ausencias.html:158`.)
-
-**O selo é satisfazível:** retirar da contagem/filtro os três conjuntos proibidos e usar `veredito_do_tipo` basta; o núcleo consulta `efeito_vigente`, sem usar aqueles conjuntos. O catálogo pode continuar atendendo perguntas diferentes, como tipos médicos, parcialidade e fim aberto. (`app/ponto/views.py:2208-2211`; `app/ponto/views.py:2222-2253`; `app/ponto/services/dia_decidido.py:460-473`.)
-
-RED executado, mutantes mortos, suite e smoke dos resultados propostos: **[não verificado]**. [nao verificado]
-
-4. **Exportada, dinheiro, `!` e MEDIR.**
-
-**O corpo de `lista_ausencias` é de consulta/renderização; a tela não é só leitura:** ela oferece lançar, editar, aprovar e cancelar, com POSTs. Os itens a–d podem ficar restritos à apresentação/seleção sem escrever dinheiro ou gravado exportado. (`app/ponto/views.py:2165-2270`; `app/templates/ponto/ausencias.html:43`; `app/templates/ponto/ausencias.html:249`; `app/templates/ponto/ausencias.html:277-312`.)
-
-Alterar status pelas ações existentes pode acordar a projeção do fechamento; ampliar esta obra para esses escritores ou para gravado exportado ultrapassaria o escopo e alcançaria as regras de `!`. Conservar a propriedade em e preserva os leitores financeiros existentes. (`app/ponto/services/ausencia.py:987-994`; `CLAUDE.md:265-268`; `app/ponto/services/fechamento.py:697-701`.)
-
-**MEDIR: rejeitada NÃO entra no mapa de `_cap(..., para='cobranca')`.** A cobertura aplica `_pelo_efeito`, que exclui rejeitada antes de construir o mapa; a leitura de `_a.efeito` está protegida a montante. (`app/colaboradores/services/calendario.py:516`; `app/ponto/turnos.py:2530-2531`; `app/ponto/turnos.py:2765-2766`; `app/colaboradores/services/calendario.py:705`.)
-
-Censo dos demais leitores diretos de efeito de registro, distinguindo ausência de filtro local de proteção anterior:
-
-| Leitor | Proteção por status |
-|---|---|
-| `Ausencia.efeito` | Nenhuma: consulta só tipo. (`app/ponto/models.py:849-852`.) |
-| Coluna atual | Nenhuma obrigatória: a lista admite todos os status por padrão. (`app/templates/ponto/ausencias.html:158`; `app/ponto/views.py:2189-2219`.) |
-| `tipo_contradiz_documento` | **Nenhuma:** exige documento e consulta efeito do tipo; alimenta ANEXO!, gate e título do chamado. (`app/ponto/services/ausencia.py:754-757`; `app/ponto/services/ausencia.py:765`; `app/ponto/services/ausencia.py:802`; `app/ponto/models.py:867-869`.) |
-| `dias_com_ausencia_de_dia_inteiro` | Sem filtro local; recebe cobertura de folha nos chamadores atuais. (`app/ponto/turnos.py:2704-2709`; `app/ponto/services/fechamento.py:683-687`; `app/ponto/services/efeito_ausencia.py:53-65`; `app/ponto/management/commands/diff_calculador.py:412`.) |
-| Fechamento | Cobertura `para='folha'`: somente aprovadas. (`app/ponto/services/fechamento.py:683-697`; `app/ponto/turnos.py:2528-2529`.) |
-| Coletor `efeito_ausencia` | Mesma proteção de folha. (`app/ponto/services/efeito_ausencia.py:53-58`; `app/ponto/turnos.py:2528-2529`.) |
-| Command `ausencias_sem_efeito_na_celula` | Cobertura de folha antes de `efeito_vigente(a.tipo)`. (`app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:44-49`.) |
-| Núcleo `veredito_do_tipo` | Rejeitada retorna antes da consulta ao efeito. (`app/ponto/services/dia_decidido.py:461-468`.) |
-
-O outro leitor sem filtro de status é, portanto, **a contradição documental**, expressamente preservada em e; os leitores financeiros citados recebem somente aprovadas. O calendário não fornece o RED adicional de rejeitada previsto condicionalmente no aval. (`app/ponto/services/ausencia.py:754-757`; `app/ponto/turnos.py:2528-2531`; `app/colaboradores/services/calendario.py:516`.)
-
-VEREDITO: AVAL-DEVOLVIDO em a,b,c -- a: resultado 6 exige distinguir texto e veredito (`app/ponto/services/dia_decidido.py:26`; `app/templates/ponto/ausencias.html:158`); b/c: Total anterior aos filtros não prova L1 (`app/ponto/views.py:2201-2226`; `app/docs/LEIS-UI.md:12-15`); c: pedido e retorno usam vocabulários diferentes (`app/templates/ponto/ausencias.html:65-67`; `app/ponto/services/dia_decidido.py:26`).
-
-_6167 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6170 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
