@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 18:10** · publicado em **17/11/2026 18:11** (UTC-3)
+> Ultima resposta processada: **17/11/2026 18:12** · publicado em **17/11/2026 18:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 18:12 · sessao 64ed62c5368d · [nome]-NAO-DESFAZ-O-PAPEL · construtor · origem=Code
+
+Gravei os cinco casos em [test_cirineu_nao_desfaz_o_papel.py](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-181144/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:28), sem alterar o casador. A execução ficou **não verificada**: `python3` não encontra Django ao iniciar [manage.py](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-181144/app/manage.py:11).
+
+Pela leitura das guardas atuais em [utils.py:580](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-181144/app/escala/utils.py:580) e [utils.py:650](/home/ronald/wt-codex-cirineu-nao-desfaz-o-papel-181144/app/escala/utils.py:650), os resultados esperados são:
+
+- **11:31:** falha hoje: a guarda pode retirar a saída do marco ocupado segundo seu papel. A D1 deve preservá-la por estar a 31 minutos do próprio marco. Execução [não verificado].
+- **11:29:** passa hoje como controle e deve continuar passando após a D1. Execução [não verificado].
+- **12:29:** falha hoje pela mesma guarda; a D1 deve preservar a volta, a 31 minutos do próprio marco. Execução [não verificado].
+- **Rajada:** falha hoje: 18:58 está mais perto de E19:00 do que a ocupante 18:56, portanto a comparação atual não a remove de S00:00. A D1 deve removê-la por estar a 2 minutos da vizinha e a 302 minutos do próprio marco. Execução [não verificado].
+- **Intervalo curto, teste do mutante:** falha hoje pela guarda atual. A D1 deve preservá-lo pelo raio de 90 minutos; o teste foi construído para falhar se essa condição for omitida. Execução e mutante [não verificado]. [nao verificado]
+
+Comando para executar todos os casos, em ambiente com as dependências instaladas:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cirineu_nao_desfaz_o_papel --verbosity 2
+```
+
+O mutante não foi aplicado nem executado nesta volta, que solicita apenas o arquivo RED. [não verificado] [nao verificado]
 
 ## 17/11 18:10 · sessao 9a0ae00e996c · [nome]-NAO-DESFAZ-O-PAPEL · construtor · origem=Code
 
@@ -953,47 +973,4 @@ perguntas de lei: 2
 
 Identidade Git do `HEAD`, execução dos testes, banco e logs de produção: **[não verificado]**. [nao verificado]
 
-## 17/11 17:23 · sessao 7a8f91a44217 · CENSO-FECHA · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — itens 3 e 5: PROCEDE.** Os dois voltam ao Ronald pelas condições que ainda deixam decisões necessárias ao construtor. Os três anexos são dados fornecidos na pergunta, mas seus textos não foram verificados em arquivos locais; a cópia não tem o diretório `logs/`, portanto os briefs de produção e o estado real das obras estão **[nao verificado]**. O comando `git rev-parse HEAD` também não encontrou um repositório Git nesta cópia; o hash informado está **[nao verificado]**.
-
-### Item 3 — mãe, balde e contrato
-
-**1. Premissas.** O portão atual exige censo somente para a fila 1 viva; o CLI consulta a mesma pertença e retorna `FORA` antes de chamar a porta. Assim, a inclusão de LATERAL-ESTRUTURA precisa alcançar as duas bocas, como apontava a devolução. ([bin/disjuntor.py:1707](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1707), [bin/disjuntor.py:2306](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:2306))
-
-O coletor reúne `logs/<obra>/brief*.md` e briefs citados **no texto da abertura**. Ele não lê uma linha `MAE:` para localizar o brief da mãe, nem coleta automaticamente referências encontradas dentro dos briefs. A consulta à existência do brief da mãe é, portanto, trabalho futuro. ([bin/disjuntor.py:1587](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1587), [bin/disjuntor.py:1599](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1599), [bin/disjuntor.py:1607](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1607))
-
-A GRADE tem tabelas principais para os seis baldes e também linhas desses baldes nas tabelas de **complementos e obsoletas**; o placar inicial tem outra estrutura, com o balde na primeira coluna e número na segunda. Há ainda linhas com `?` qualificado na segunda coluna, fora da lista fechada. ([app/docs/GRADE-MESTRA.md:13](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:13), [app/docs/GRADE-MESTRA.md:33](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:33), [app/docs/GRADE-MESTRA.md:517](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:517), [app/docs/GRADE-MESTRA.md:527](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:527), [app/docs/GRADE-MESTRA.md:1561](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:1561))
-
-Hoje a porta agrega motivos de vários briefs numa única negativa, mas o juiz retorna o **primeiro** motivo encontrado em cada brief. A medida atual conta negativas, não pares brief × motivo. O novo contrato define a unidade pedida pela devolução, mas exige alterar a obtenção ou representação dos motivos para contar mais de um por brief. ([bin/disjuntor.py:1565](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1565), [bin/disjuntor.py:1713](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1713), [bin/disjuntor.py:2083](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:2083))
-
-**2. Colisão.** Não identifiquei colisão necessária com lei de negócio: conferir referências, pertença e contadores é instrumento; o contrato de instrumento continua exigindo medida, esperado, falha e desligamento. O novo indicador não deve ser confundido com a medida de segurança existente: `ini` do wrapper é tentativa, não prova de execução do Codex, e chamadas casadas com `FORA` têm tratamento próprio. ([app/docs/PISTA.md:170](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/PISTA.md:170), [bin/disjuntor.py:2071](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:2071))
-
-**3. Literal — lacunas que devolvem o item:**
-
-- **Reconhecimento e localização da mãe.** `MAE: <id>` resolve a separação por hífen, mas ainda falta dizer como o portão reconhece que um brief é de complemento e, portanto, deve ter a linha; também falta fixar qual caminho ou padrão constitui “brief da mãe”, o tratamento de múltiplas linhas `MAE:` e de ID inválido. O coletor existente só conhece a pasta da obra e citações na abertura. ([bin/disjuntor.py:162](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:162), [bin/disjuntor.py:1607](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1607))
-- **Filtro versus `?`.** Pelo filtro literal, uma linha cuja coluna 2 seja `? (classificação não decidida)` fica fora do universo; ao mesmo tempo, a resposta manda recusar `?`. Falta dizer como localizar e tratar essa linha fora do filtro, inclusive se coexistir com linha de balde reconhecido. ([app/docs/GRADE-MESTRA.md:519](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:519))
-- **Herança versus linha própria.** A resposta mantém, no complemento fornecido, a pertença da mãe, mas manda casar o ID com toda linha elegível. A GRADE contém mãe `20/20` com complemento `INSTRUMENTO`; falta determinar qual balde governa, e a precedência entre a herança e a fila 1 própria do complemento. O predicado atual também não herda pertença por prefixo com hífen. ([app/docs/GRADE-MESTRA.md:119](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:119), [app/docs/GRADE-MESTRA.md:531](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:531), [bin/hook_stop_fila1.py:110](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/hook_stop_fila1.py:110))
-- **Contagem dos motivos.** O par brief × motivo responde à unidade, mas faltam a identidade estável dos motivos e o tratamento das recusas sem brief específico, como nenhum brief, citação fora da raiz ou GRADE ilegível. Sem isso, o construtor decide como incluí-las na medida **[nao verificado]**. ([bin/disjuntor.py:1713](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1713))
-
-**4. Exportada, dinheiro ou `!`.** Não há, no delta descrito, autorização para tocar gravado de exportada, dinheiro ou outra hipótese de `!`; o alcance literal do aval e essas travas continuam valendo. Efeito concreto em produção **[nao verificado]**. ([CLAUDE.md:265](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:265), [app/docs/LEIS.md:125](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/LEIS.md:125))
-
-**PROCEDE — volta ao Ronald** para fechar o reconhecimento e a busca da mãe, `?` fora do filtro, precedência da pertença herdada e a contabilização dos motivos sem brief. As respostas sobre igualdade de ID, divergência e duplicata de mesmo balde avançam a definição, mas não resolvem essas combinações. ([bin/disjuntor.py:1607](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1607), [app/docs/GRADE-MESTRA.md:519](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/GRADE-MESTRA.md:519))
-
-### Item 5 — linhas do brief e bloqueio de pista
-
-**1. Premissas.** O mesmo portão já lê os briefs coletados, mas seu juiz atual procura o bloco `CENSO` e os campos ali definidos; não exige `ENTREGUE:` nem `ESQUEMA:`. O Agent chega à porta para abertura de construtor com cópia, e o wrapper a alcança pelo CLI, sujeito à pertença atual e ao retorno antecipado `FORA`. Logo, acrescentar campos ao juiz não basta, por si só, para garantir “todo brief de obra que constrói”. ([bin/disjuntor.py:1522](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1522), [bin/disjuntor.py:1848](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1848), [bin/disjuntor.py:2311](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:2311))
-
-**2. Colisão.** Há uma mudança de regra de pista a compatibilizar explicitamente. A 7b manda corrigir achado procedente e chamar o Codex de novo; para achado **descartado** como fora do escopo, exige motivo e anexo ao opus, que decide entre fila e bloqueio. O novo texto trata o caso distinto de achado triado **PROCEDENTE e fora do escopo**, levando-o ao topo como bloqueio antes do opus; não demonstra, por si, revogação da rota dos achados descartados. Também permanece a obrigação de corrigir bug provado no caminho. ([CLAUDE.md:30](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:30), [CLAUDE.md:372](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:372), [app/docs/PISTA.md:120](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/app/docs/PISTA.md:120))
-
-**3. Literal — lacunas que devolvem o item:**
-
-- **Alcance do portão.** “Todo brief de obra que constrói” inclui, em leitura literal, obras fora da fila 1 e de LATERAL-ESTRUTURA; o complemento fornecido deixa tela e instrumento fora dessas duas pertenças sem portão. Falta resolver se o item 5 amplia a pertença para todas as obras que constroem ou se as linhas são obrigatórias por conduta fora do portão. ([bin/disjuntor.py:1701](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1701), [bin/disjuntor.py:2311](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:2311))
-- **O que a porta valida.** “Sem as duas = recusa” não define se basta presença dos rótulos ou se campos vazios, duplicados, alternativas incompletas e `arquivo:linha` inexistente recusam; tampouco fixa se as linhas podem estar em qualquer ponto do brief ou devem integrar o bloco CENSO. O juiz atual limita seu exame ao bloco CENSO. ([bin/disjuntor.py:1529](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1529), [bin/disjuntor.py:1537](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1537))
-- **Saída do bloqueio.** Falta dizer quem resolve e retira a linha, e se o opus fica impedido até a cura, até decisão sobre escopo ou apenas até o registro. Isso importa porque a regra atual exige correção de procedente antes da leitura final e define escopo também pelos escritores e leitores envolvidos, mesmo fora do diff. ([CLAUDE.md:375](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:375), [CLAUDE.md:379](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:379))
-
-**4. Exportada, dinheiro ou `!`.** As duas declarações pedem identificar escritores e a janela de migração; não autorizam executar escrita em competência exportada, movimentar dinheiro ou dispensar `!`. Se uma obra concreta exigir esses atos, seguem os limites próprios; conteúdo e efeito dos briefs abertos **[nao verificado]**. ([CLAUDE.md:265](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:265), [CLAUDE.md:37](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:37))
-
-**PROCEDE — volta ao Ronald** para fechar o alcance efetivo do portão, a forma mínima validada das duas linhas e a condição de saída do bloqueio antes do opus. ([bin/disjuntor.py:1701](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/bin/disjuntor.py:1701), [CLAUDE.md:375](/home/ronald/codex_ws/fbc5c76ced33bf25943f3a5bc78ebff257d68c56/CLAUDE.md:375))
-
-_6670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6671 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
