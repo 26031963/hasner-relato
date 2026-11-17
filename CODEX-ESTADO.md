@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 22:23** · publicado em **16/11/2026 22:23** (UTC-3)
+> Ultima resposta processada: **16/11/2026 22:30** · publicado em **16/11/2026 22:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 22:30 · sessao c014cdc3a87b · E4C-F1-B2 · verificador · origem=Code
+
+**Não aprovaria B2 como “todo leitor lê o juiz” nem como garantia de ausência de efeitos nas competências entregues.** Restam leitores operacionais próprios e existem caminhos de escrita alcançados pela mudança da retenção. `app/chamados/services/verbos.py:335`, `app/chamados/canal.py:65`, `app/chamados/models.py:1925`, `app/ponto/management/commands/supra_juiz.py:286`.
+
+A cópia não contém `.git`: identidade do HEAD e comparação integral `520d7b557..HEAD` **[nao verificado]**. Testes, PostgreSQL, estado efetivo das duas perguntas e efeitos nas 141 entregues **[nao verificado]**.
+
+**ACHADOS**
+
+1. **Grave — a lista fechada do saneamento não isola os efeitos dos leitores nas entregues.** A retenção deixa de segurar ambos os pares ilegais; isso libera o CSF a tentar retratação. O gate posterior de pergunta viva exclui expressamente competência entregue, portanto não substitui essa proteção. Há caminho para resolver chamado, rejeitar justificativa e executar o resolver de perguntas. `app/chamados/models.py:1923`, `app/ponto/supra_juiz.py:573`, `app/ponto/supra_juiz.py:588`, `app/chamados/models.py:364`, `app/chamados/reconciliador.py:525`, `app/chamados/reconciliador.py:531`, `app/chamados/reconciliador.py:538`.  
+   Isso comprova **alcance possível**, não ocorrência nas 141 perguntas: faltam suas datas, âncoras, lâmpadas e trilhas **[nao verificado]**.
+
+2. **Médio — a migração dos leitores ficou incompleta.** O placar continua chamando de “respondidos” os registros selecionados somente por instante; o canal partido continua definindo “sem resposta” por texto exatamente `''`; a ressuscitação mantém seleção por texto NULL/`''`; cobrança/cartão ainda recebem uma recomposição local de `not J`. São resíduos preexistentes que impedem certificar a conclusão “todo leitor”. `app/chamados/services/verbos.py:325`, `app/chamados/services/verbos.py:335`, `app/chamados/canal.py:53`, `app/chamados/canal.py:65`, `app/chamados/models.py:1494`, `app/chamados/models.py:1533`, `app/chamados/services/fio.py:187`.
+
+3. **Médio — a lista fechada não é uma restrição da porta.** `ESTOQUE_L130_ALVOS` existe, mas `impedimento_estoque_l130` e a porta aceitam qualquer pk elegível. Somente o comando compara o conjunto com a lista, antes das travas; depois aplica uma pergunta por transação. Assim, a igualdade é garantida na fotografia inicial, não como condição atômica do lote inteiro. Pode haver aplicação parcial por perda de elegibilidade ou falha de trilha da outra pergunta. `app/chamados/services/validacao.py:378`, `app/chamados/services/validacao.py:381`, `app/chamados/services/validacao.py:432`, `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:53`, `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:70`.
+
+4. **Médio — novo caminho de julgamento sem relógio recebido da borda.** O predicado novo chama `pergunta_viva(perg)` sem `agora`/`hoje`; esse caminho pode ler `date.today()` e, adiante, `timezone.now()`. A leitura do comando acontece depois da seleção e serve apenas ao arquivo de reversão. Contraria a consequência documentada de Clock Injection. `app/chamados/services/validacao.py:398`, `app/chamados/juizes.py:596`, `app/chamados/juizes.py:1475`, `app/escala/servico_jornada.py:387`, `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:61`, `app/docs/PLANO-PADROES.md:101`.
+
+5. **Médio — o teste da property não prova delegação.** Comparar resultados com o juiz permite passar uma property que copie integralmente sua expressão. Os casos distinguem as regras antigas B/C/D, mas não demonstram a mordida de um mutante que substitua a delegação por um segundo juiz equivalente. `app/chamados/tests/test_f1nova_b2_leitores.py:61`, `app/chamados/tests/test_f1nova_b2_leitores.py:75`, `app/chamados/tests/test_f1nova_b2_leitores.py:142`. Mordidas executadas **[nao verificado]**.
+
+6. **Menor — documentação permanece na situação anterior.** O lookup ainda diz que B/C/D migrarão no B2, e a LEIS declara B2 “por construir”; o teste O168 conserva docstring dizendo que a retenção usa I OU T e “nunca solta”, embora seu corpo agora teste o contrário para os pares ilegais. `app/docs/JUIZES.md:105`, `app/docs/LEIS.md:151`, `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:278`, `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:290`.
+
+**Conferido e conforme, com as ressalvas acima**
+
+**1. Escritores, leitores e significado dos campos**
+
+O contrato correto é J = instante presente E texto restante após trim; os carimbos são `DateTimeField`, não o dia do fato. `app/chamados/juizes.py:1552`, `app/chamados/models.py:2553`, `app/chamados/models.py:2554`, `app/chamados/models.py:3531`.
+
+| Campo | Quem escreve em produção |
+|---|---|
+| `respondida_em` | Nascimento com campos recebidos; resposta humana; resposta automática; recuperação pela trilha; preenchimento de simetria em `carimbar`; limpeza por reabertura/ressuscitação e pela nova porta, via lote. `app/chamados/models.py:3124`, `app/chamados/services/disputa_emissao.py:1482`, `app/chamados/services/disputa_emissao.py:1675`, `app/chamados/services/disputa_emissao.py:1696`, `app/chamados/models.py:3243`, `app/chamados/services/disputa_emissao.py:1648`, `app/chamados/models.py:1629`, `app/chamados/services/validacao.py:440`. |
+| `resposta_colab` | Nascimento; resposta humana/automática; limpeza integral na reabertura, ressuscitação e saneamento L-130. `app/chamados/models.py:3124`, `app/chamados/services/disputa_emissao.py:1481`, `app/chamados/services/disputa_emissao.py:1674`, `app/chamados/services/disputa_emissao.py:1609`, `app/chamados/models.py:1630`, `app/chamados/services/validacao.py:440`. |
+| `validada_em` | Validação administrativa; preenchimento de simetria em `carimbar(resposta='validar')`; limpeza por nova resposta, devolução de validação, BUG-PAR-103, reabertura e ressuscitação. `app/chamados/services/validacao.py:168`, `app/chamados/models.py:3246`, `app/chamados/services/disputa_emissao.py:1494`, `app/chamados/services/validacao.py:273`, `app/chamados/services/validacao.py:349`, `app/chamados/services/disputa_emissao.py:1609`, `app/chamados/models.py:1629`. |
+| `materializada_em` | Atribuição central em `_escrever_carimbo`, usada por `carimbar`, `carimbar_identidade` e `descarimbar`; limpeza de lote em `descarimbar_em_lote`. `app/chamados/models.py:3210`, `app/chamados/models.py:3240`, `app/chamados/models.py:3293`, `app/chamados/models.py:3319`, `app/chamados/models.py:3394`. |
+| `via_resolucao` | Mesmas portas de carimbo; adicionalmente, encerramento por fato no espelho e relavra da via derivada. `app/chamados/models.py:3212`, `app/chamados/models.py:3394`, `app/chamados/models.py:3403`, `app/chamados/services/relavra_via.py:125`. |
+| `DecisaoPergunta` | Escritor físico `registrar`. Recebe atos de nascimento, resposta, reabertura/recusa, validação/devolução, silêncio, retratação, absorção e reconstrução da projeção. `app/chamados/models.py:4124`, `app/chamados/models.py:3129`, `app/chamados/services/disputa_emissao.py:1525`, `app/chamados/services/disputa_emissao.py:1631`, `app/chamados/services/validacao.py:173`, `app/chamados/services/validacao.py:354`, `app/chamados/models.py:2005`, `app/chamados/models.py:2137`, `app/chamados/services/materializacao.py:1048`, `app/chamados/services/validacao.py:439`. |
+| Evento novo | A porta chama `evento('l130_instante_sem_texto_devolvida')`; o escritor de `LogAuditoria` é `core.observ.evento`. `app/chamados/services/validacao.py:449`, `app/core/observ.py:134`. |
+
+Os leitores ficam distribuídos assim:
+
+| Campo | Quem lê |
+|---|---|
+| Par instante/texto para decidir resposta | Juiz Python, faces SQL, vitalidade temporal, property, estado, retenção, corrigíveis e fila a validar. `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1423`, `app/chamados/juizes.py:1552`, `app/chamados/juizes.py:1572`, `app/chamados/juizes.py:1580`, `app/chamados/juizes.py:1588`, `app/chamados/models.py:3669`, `app/chamados/models.py:3156`, `app/chamados/models.py:1925`, `app/chamados/juizes.py:1753`, `app/chamados/juizes.py:1760`. |
+| Par instante/texto nos consumidores migrados | API/web, regularização/reabertura, declaração de hora, partição do app, validação/recusa, becos, canônica/mérito, materialização, reconciliador, cartório, ficha, calendário, prévia e auditoria. `app/api/views.py:2577`, `app/api/views.py:2620`, `app/chamados/views.py:1280`, `app/chamados/views.py:1417`, `app/chamados/services/acoes_disputa.py:98`, `app/chamados/services/acoes_disputa.py:133`, `app/chamados/services/fio.py:706`, `app/chamados/services/declaracao_texto.py:417`, `app/chamados/services/declaracao_texto.py:687`, `app/chamados/services/pergunta_no_app.py:81`, `app/chamados/services/validacao.py:681`, `app/chamados/services/validacao.py:900`, `app/chamados/services/becos.py:30`, `app/chamados/services/fio.py:1281`, `app/chamados/services/fio.py:1294`, `app/chamados/services/materializacao.py:872`, `app/chamados/services/materializacao.py:1315`, `app/chamados/services/materializacao.py:2069`, `app/chamados/reconciliador.py:366`, `app/chamados/reconciliador.py:1085`, `app/ponto/services/cartorio.py:1642`, `app/colaboradores/services/ficha.py:171`, `app/colaboradores/services/calendario.py:505`, `app/folha/previa.py:142`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1658`. |
+| `respondida_em` como tempo bruto | Reconstrução da projeção, marcos de invalidação, histórico, idade da fila e serialização API; também o placar divergente. `app/chamados/models.py:4095`, `app/chamados/veredito_lavrado.py:207`, `app/chamados/services/historico.py:99`, `app/chamados/services/validacao.py:1254`, `app/api/views.py:2563`, `app/chamados/services/verbos.py:335`. |
+| `resposta_colab` como conteúdo | Display, parsing do horário/data, opções/escapes, classificação da resposta e testemunha declarado × gravado. `app/chamados/models.py:3692`, `app/chamados/juizes.py:364`, `app/chamados/juizes.py:1788`, `app/chamados/juizes.py:1935`, `app/chamados/juizes.py:2039`, `app/chamados/services/materializacao.py:625`, `app/chamados/services/materializacao.py:718`, `app/chamados/services/materializacao.py:953`, `app/chamados/services/materializacao.py:1562`, `app/chamados/services/validacao.py:1181`. |
+| `validada_em` | Gates de chamado e retenção, estado/vitalidade/SQL, validação/devolução/recusa/lote, materialização/irmã, declaração, fila de flip, vigias, placares, histórico e auditorias. `app/chamados/models.py:310`, `app/chamados/models.py:344`, `app/chamados/models.py:1924`, `app/chamados/models.py:3151`, `app/chamados/models.py:3497`, `app/chamados/juizes.py:1389`, `app/chamados/services/validacao.py:269`, `app/chamados/services/validacao.py:684`, `app/chamados/services/validacao.py:897`, `app/chamados/services/validacao.py:1062`, `app/chamados/services/materializacao.py:199`, `app/chamados/services/materializacao.py:2070`, `app/chamados/services/declaracao_texto.py:227`, `app/ponto/services/flip_auto.py:130`, `app/chamados/services/vigia_carimbo.py:98`, `app/chamados/services/verbos.py:264`, `app/chamados/services/painel.py:270`, `app/chamados/services/historico.py:101`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1075`. |
+| `materializada_em` | Ressuscitação, retenção, estado, portas de carimbo, vitalidade/lastro, reconciliador, materialização/passivo, validação, API/web, emissão, procedência, marcos temporais, histórico e comandos de estoque/auditoria. `app/chamados/models.py:1531`, `app/chamados/models.py:1924`, `app/chamados/models.py:3153`, `app/chamados/models.py:3293`, `app/chamados/juizes.py:683`, `app/chamados/juizes.py:1502`, `app/chamados/reconciliador.py:368`, `app/chamados/reconciliador.py:631`, `app/chamados/services/materializacao.py:862`, `app/chamados/services/materializacao.py:2071`, `app/chamados/services/passivo_validado.py:534`, `app/chamados/services/validacao.py:264`, `app/chamados/views.py:1257`, `app/chamados/services/disputa_emissao.py:776`, `app/ponto/services/procedencia_batida.py:74`, `app/chamados/veredito_lavrado.py:203`, `app/chamados/services/historico.py:103`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:32`. |
+| `via_resolucao` | Identidade/terminalidade, vitalidade e projeção temporal, ressuscitação, estado/carimbo, resolver, canônica/mérito/dedup, materialização/recusas/absorção, tarefa, relavra, Pauta/tranca, passivo, explicador e templates. `app/chamados/models.py:3312`, `app/chamados/models.py:3484`, `app/chamados/juizes.py:683`, `app/chamados/juizes.py:1390`, `app/chamados/models.py:1535`, `app/chamados/models.py:3166`, `app/chamados/services/disputa_emissao.py:2072`, `app/chamados/services/fio.py:1293`, `app/chamados/services/fio.py:1400`, `app/chamados/services/materializacao.py:868`, `app/chamados/services/materializacao.py:1111`, `app/chamados/services/tarefa_do_dia.py:256`, `app/chamados/services/relavra_via.py:118`, `app/chamados/services/competencia_trancada.py:276`, `app/chamados/services/passivo_validado.py:141`, `app/chamados/services/explicador.py:118`, `app/templates/chamados/partials/_card_atendimento.html:192`. |
+| Decisões/evento | Decisões alimentam projeção temporal, tarefa, respostas anteriores e reconstrução da projeção; o evento fica disponível na consulta genérica da auditoria. `app/chamados/juizes.py:1389`, `app/chamados/services/tarefa_do_dia.py:158`, `app/chamados/services/tarefa_do_dia.py:421`, `app/chamados/models.py:3679`, `app/chamados/models.py:4098`, `app/core/views.py:705`. |
+
+**Não há significado uniforme em todos os leitores.** Os resíduos do achado 2 ainda confundem presença de carimbo ou de string com resposta. Além disso, `validada_em` tem assinatura administrativa e preenchimento de simetria; `materializada_em` também registra encerramentos sem plantio de batida. Esses significados já existem nas portas, não foram criados pelo descarimbo B2. `app/chamados/services/verbos.py:335`, `app/chamados/canal.py:65`, `app/chamados/models.py:3245`, `app/chamados/models.py:3175`, `app/chamados/models.py:3415`.
+
+O instante da resposta não é o dia do fato: a recuperação usa o instante testemunhado pela nota; a resposta automática usa instante recebido; K6 usa o dia do fato. Não encontrei conversão nova desses carimbos em “dia de competência”. `app/chamados/services/disputa_emissao.py:1687`, `app/chamados/services/disputa_emissao.py:1675`, `app/chamados/services/materializacao.py:784`. Ausência integral de tal conversão fora dos caminhos examinados **[nao verificado]**.
+
+**2. Leitores residuais: migrar ou preservar**
+
+A classificação formal E/F depende do censo citado, que não veio no dado nem está disponível na cópia **[nao verificado]**. A classificação abaixo é pela finalidade observável.
+
+| Residual | Avaliação |
+|---|---|
+| `fio.espera_o_texto_do_colaborador` | **Deveria delegar.** Recompõe `I ausente OU instante sem texto`, equivalente hoje a `not J`; alimenta cobrança e cartão. `app/chamados/services/fio.py:187`, `app/chamados/services/cobranca.py:227`, `app/chamados/services/fio.py:359`. |
+| `canal.perguntas_mudas_com_resposta` | **Deveria migrar**, se “sem resposta” mantém o sentido declarado: exige texto exatamente vazio e perde brancos/NBSP/texto sem instante. Consumido pelo cobrar. `app/chamados/canal.py:53`, `app/chamados/canal.py:65`, `app/chamados/views_cobrar.py:181`. |
+| `verbos.placar_aceite` | **Deveria migrar.** “Respondidos” depende somente de I após cobrança; chega ao painel e à Folha. `app/chamados/services/verbos.py:325`, `app/chamados/services/verbos.py:335`, `app/chamados/services/painel.py:298`, `app/folha/views_retrato.py:515`. |
+| `_universo_da_ressuscitacao` | **Regra operacional própria**, não exibição: declara “SEM resposta”, mas seleciona NULL/`''`. Brancos/NBSP ficam fora; T sem I conserva proteção pelo texto. `app/chamados/models.py:1494`, `app/chamados/models.py:1530`. |
+| `bin/censo_folha.py` | **Também residual**, fora de `app/`: publica `PERG_VIVAS`/`AGUARDA_ADMIN` por I nulo/não nulo. É instrumento de diagnóstico; uso efetivo em produção **[nao verificado]**. `bin/censo_folha.py:28`, `bin/censo_folha.py:29`, `bin/censo_folha.py:37`. |
+
+Preservações legítimas por finalidade:
+
+- **Trilha, projeção e cache temporal:** leem o carimbo bruto, inclusive ilegal, para não apagar evidência. `app/chamados/models.py:4095`, `app/chamados/models.py:4102`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`, `app/chamados/services/historico.py:98`, `app/chamados/veredito_lavrado.py:207`, `app/chamados/services/painel.py:67`.
+- **Integridade/estoque específico:** detectam meio-par, não julgam resposta operacional. I20 e curar limbo ainda usam `!= ''`, portanto seu diagnóstico também não acompanha o trim. `app/chamados/services/vigia_fio.py:737`, `app/chamados/services/disputa_emissao.py:1692`, `app/chamados/services/disputa_emissao.py:1861`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1105`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:46`.
+- **Preservação de voz e reparo do par:** impedir sobrescrita de texto bruto na resposta automática; preencher carimbo faltante na porta de simetria. `app/chamados/services/disputa_emissao.py:1663`, `app/chamados/models.py:3241`.
+- **Parse e apresentação de conteúdo/testemunha:** não são, por si, outro julgamento de J. `app/chamados/services/materializacao.py:625`, `app/chamados/services/materializacao.py:718`, `app/chamados/services/materializacao.py:770`, `app/chamados/templatetags/chamados_tags.py:139`, `app/chamados/templatetags/chamados_tags.py:166`, `app/chamados/services/fio.py:377`.
+- **API, ponto e templates:** serialização, seleção de opção, preenchimento e exibição do cru. As condições operacionais dos dois templates alterados usam `.respondida`. `app/api/views.py:1163`, `app/api/views.py:2563`, `app/api/views_mensageria.py:567`, `app/ponto/services/dia_do_colab.py:70`, `app/templates/chamados/partials/_card_atendimento.html:114`, `app/templates/chamados/partials/_card_atendimento.html:141`, `app/templates/chamados/partials/_card_atendimento.html:148`, `app/templates/chamados/partials/_card_atendimento.html:154`, `app/templates/chamados/partials/_card_atendimento.html:182`, `app/templates/chamados/partials/_lote_preview.html:24`, `app/templates/chamados/partials/_pergunta_card.html:29`, `app/templates/chamados/partials/modal_fio.html:217`.
+
+Não apareceu negação executável `~q_respondida_com_texto()` nos leitores examinados; a nova face escreve os ramos explicitamente. `app/chamados/juizes.py:1588`. Ausência por execução **[nao verificado]**.
+
+**3. Complemento SQL e whitespace**
+
+**Conforme por inspeção.** O conjunto de brancos vem de `str.isspace()`, e não de `\s` do PostgreSQL; Python usa `(t or '').strip()`. `app/chamados/juizes.py:1526`, `app/chamados/juizes.py:1560`.
+
+| Valores | Positiva | Negada |
+|---|---:|---:|
+| Sem I, qualquer texto | Falso | Verdadeiro |
+| Com I, texto NULL, `''`, somente espaços, NBSP, tabs ou LF | Falso | Verdadeiro |
+| Com I e algum caractere não branco | Verdadeiro | Falso |
+
+A tabela decorre dos ramos NULL/vazio, regex positiva e negação escrita. `app/chamados/juizes.py:1572`, `app/chamados/juizes.py:1580`, `app/chamados/juizes.py:1588`.
+
+O teste B2 contém seis pares e não testa NULL/tab/LF; a bateria anterior cobre tab/LF, NBSP e outros brancos. NULL SQL não é exercitado porque o campo é NOT NULL; `None` aparece apenas no teste Python. `app/chamados/tests/test_f1nova_b2_leitores.py:127`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:11`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:29`, `app/chamados/tests/test_e3_forma_sql_do_juiz.py:118`. Concordância executada no banco desta cópia **[nao verificado]**.
+
+**4. Pergunta viva com I e sem T**
+
+| Leitor | Resultado atual |
+|---|---|
+| App/consulta | Pendente se a disputa estiver aberta; em disputa fechada, histórico. `app/chamados/services/pergunta_no_app.py:81`. |
+| Fila a validar | Não entra. `app/chamados/juizes.py:1760`. |
+
+[truncado em 20000 de 33679 caracteres]
 
 ## 16/11 22:23 · sessao 833c837a69a0 · - · - · origem=Ronald (tmux)
 
@@ -812,23 +911,4 @@ VEREDITO: APROVA
 
 - Não encontrei `from_db`, `__init__`, manager próprio ou `post_init` das classes `DisputaSupervisao`, `Colaborador` e `Empresa`; ausência absoluta de gatilhos externos ou de outros escritores históricos: **[não verificado]**.
 
-## 16/11 21:11 · sessao af619cee5ad4 · - · - · origem=Ronald (tmux)
-
-5. O teto tem mordida por contagem real: 90 em `app/core/tests/test_selo_performance.py:143`, captura em `:333-340`, `assertLessEqual` em `:342-351`, modal em `:377-380`. A fixture do colaborador medido tem uma pergunta de intervalo (`:317-322`, `:379`).
-
-Partindo dos 90 informados no anexo, irmã sempre acrescentaria uma consulta (91); reverter somente `colaborador__empresa` acrescentaria duas (92), pelos acessos `validacao.py:224-225` e `materializacao.py:808`. É dedução condicional; execução desses mutantes contra o teto Django: **[não verificado]**.
-
-Executei exclusivamente em memória com `python3 -B`: [nao verificado]
-
-- AST sem banco: sete testes verdes. [nao verificado]
-- Mutante irmã sempre: sete verdes.
-- Mutante sem eager loading de colaborador/empresa: sete verdes.
-- Mutante K6 omitido: uma falha por asserção, zero erros (`'10/2026' not found in ''`).
-
-A carga AST compartilha o ambiente real (`app/chamados/tests/e4_apoio.py:8-16`); o teste cobra competência, consulta K6 e ausência de F6 (`app/chamados/tests/test_bug_par_sem_banco.py:123-149`). Portanto ele morde a semântica K6; a proteção das duas otimizações pertence ao teto, não a esse teste. Resultados executados nesta inspeção não foram salvos em arquivo; referências persistidas dos resultados: **[não verificado]**.
-
-Os mutantes registrados não incluem reversões c4c de performance (`app/chamados/tests/bug_par_mutantes.py:122-149`). Isso limita a prova executada apresentada: o RED raspado demonstra a combinação anterior de 93, sem demonstrar individualmente cada reversão **[não verificado]**. Não encontrei selo sem asserção: o teto usa `assertLessEqual` (`test_selo_performance.py:344`); o AST usa valores e contagens concretos (`test_bug_par_sem_banco.py:145-149`).
-
-6. Nas alterações examinadas não aparece escritor nem relógio novo: são seleção da irmã, consulta ao mesmo guard e eager loading (`validacao.py:216-225`; `materializacao.py:792-812`; `fio.py:213-216`). O helper é chamado pelo próprio guard (`materializacao.py:806`) e conserva a competência em `competencia_do_fato` (`:808`), sem derivação concorrente nesta fatia.
-
-_6192 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6193 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
