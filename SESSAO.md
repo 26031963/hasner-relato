@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 14:52:48.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (219.5 MB). Acoes na janela: **686**.
+**Medido em 17/11/2026 14:58:15.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (219.5 MB). Acoes na janela: **692**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:53:19 | Bash | Publish juiz question at RELATO top | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: ')][0] P='logs/CORTE-FOLHA-ESPELHO/pd3.r' L[i+1:i+1]=['lei: CORTE-FOLHA-UNIDADE-1711 (JUIZ ANTES DO SITIO) -- o pre-desenho final parou no item (i): a pergunta "esta pessoa, neste dia da janela, tem pergunta viva (C6) com acao de PESSOA na tar ...` |
+| 14:53:10 | Bash | Verify C6/C19/K2 registry and export sites | `cd /home/ronald/saas-hasner/app; sed -n 288,335p core/juizes.py \| cut -c1-180; sed -n 1288,1296p folha/export.py; sed -n 355,364p chamados/services/tarefa_do_dia.py` |
+| 14:53:05 | Bash | Read final pre-desenho answer | `cd /home/ronald/saas-hasner; cat logs/CORTE-FOLHA-ESPELHO/pd3.r` |
+| 14:53:03 | Bash | Check pd3 wrapper outcome | `cd /home/ronald/saas-hasner; tail -5 logs/CORTE-FOLHA-ESPELHO/pd3.out; ls -la logs/CORTE-FOLHA-ESPELHO/pd3.r 2>&1 \| awk '{print $5}'` |
+| 14:53:01 | Bash | Update CONFRONTO BACKLOG cell; check wrappers | `cd /home/ronald/saas-hasner; python3 - <<'EOF' bp='app/docs/BACKLOG.md'; B=open(bp).read().split('\n') k=[j for j,l in enumerate(B) if l.startswith('\| CONFRONTO-PILOTO-[nome] \|')] print(len(k)); if k: c=B[k[0]].split(' \| ') c[2]='13 de 20 mapeados (impressao digital). Item 3: 351 dias, igual 48, difere 4m 96, par unico 50, impar 6+2, sem marcacao 149. Item 4: Trabalhadas 0 de 13 batem (C013 - ...` |
+| 14:52:56 | SendMessage |  | `-` |
 | 14:52:47 | ToolSearch |  | `-` |
 | 14:52:44 | Bash | Publish CONFRONTO 3-4 and selo decisions | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: ')][0] T='logs/CONFRONTO-PILOTO/item34_tabela.md'; R='logs/CONFRONTO-PILOTO/r34.r'; C='logs/RESPOSTAS-1410/comp1b.r' L[i+1:i+1]=[ 'MEDIDO CONFRONTO item 3 (13 mapeados, 351 pessoa-dia, sombra, so leitura; unidade conferida: pago_h em horas dec ...` |
 | 14:52:19 | Bash | Read comp1b review on B2 copy | `cd /home/ronald/saas-hasner; cat logs/RESPOSTAS-1410/comp1b.r` |
