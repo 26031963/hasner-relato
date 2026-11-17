@@ -1,7 +1,170 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 07:32** · publicado em **17/11/2026 07:32** (UTC-3)
+> Ultima resposta processada: **17/11/2026 07:59** · publicado em **17/11/2026 07:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 07:59 · sessao d3af4591c5b5 · QUEIMA-UTIL-1711 · verificador · origem=Code
+
+**Item 2 — CONFERE para corrigir a precondição da A4; implementação corrigida: [nao verificado].**
+
+1. **Premissas:** conferem. O materializador procura batida do mesmo colaborador e tipo em ±20 minutos inclusivos, sem filtro de aprovação ou retratação. A porta também reutiliza qualquer batida do colaborador no timestamp exato, inclusive oposta ou retratada. Portanto, a exclusão adicional cobre a brecha apontada anteriormente. (`app/chamados/juizes.py:248`; `app/chamados/services/materializacao.py:1341`; `app/ponto/registro_batida.py:144`)
+
+2. **Colisão com aval vigente:** não identificada no cotejo dos anexos: “também” acrescenta a exclusão exata à ausência de mesmo tipo em ±20 minutos; não substitui essa condição nem manda alterar o reuso da porta. Conferência dos anexos em arquivo: **[nao verificado]**. Os dois mecanismos permanecem distintos no código. (`app/chamados/juizes.py:248`; `app/ponto/registro_batida.py:144`)
+
+3. **Literal:** fecha a objeção anterior. Isso não garante `+1` isoladamente: as demais condições do RED precisam continuar satisfeitas, pois paridade, competência e colisão ainda podem impedir criação. (`app/chamados/services/materializacao.py:1357`; `app/chamados/services/materializacao.py:1455`; `app/ponto/registro_batida.py:156`; `app/ponto/registro_batida.py:162`)
+
+   **Quem escreve e quem lê, para a matriz F4:** o respondedor grava texto/instante projetados e ato RESPOSTA; o automático também. O materializador lê texto projetado, e sua fila seleciona pelos carimbos R/V/C. O juiz lê texto em `data_hora` e chama o derivador do materializador em `hora`. A escrita de Batida passa por `registrar_batida`. (`app/chamados/services/disputa_emissao.py:1481`; `app/chamados/services/disputa_emissao.py:1525`; `app/chamados/services/disputa_emissao.py:1674`; `app/chamados/services/materializacao.py:678`; `app/chamados/services/materializacao.py:2063`; `app/chamados/juizes.py:364`; `app/chamados/juizes.py:375`; `app/chamados/services/materializacao.py:1455`)
+
+   A matriz anexa declara referência histórica; equivalência integral à cópia atual e identidade de quem escreverá a A4 corrigida: **[nao verificado]**.
+
+4. **Exportada/dinheiro/`!`:** liberar a matriz não autoriza executar o plantio em produção — alcance literal dos anexos, **[nao verificado em arquivo]**. O caminho real cria Batida e chama recálculo por evento; gravado exportado continua exigindo `!`. Efeito monetário real: **[nao verificado]**. (`app/ponto/registro_batida.py:176`; `app/ponto/registro_batida.py:195`; `CLAUDE.md:265`)
+
+**Item 5 — CONFERE como abertura condicionada; abertura efetiva: [nao verificado].**
+
+1. **Premissas:** F3 e F9 têm lei 0 nas remedidas fornecidas. As quatro condições correspondem às já enumeradas no RELATO: lei 0, revisão sem procedência, cruzamento 0 e vaga livre. (`anexo prepara_linhas.txt:48`; `anexo prepara_linhas.txt:44`; `app/docs/RELATO.md:4`) As listas completas de arquivos contra F2 em `708162b15` e contra as remedidas F4/F7, a revisão de cada candidata e a ocupação atual das vagas: **[nao verificado]**.
+
+2. **Colisão com aval vigente:** não identificada na autorização condicional. O critério vigente é arquivo em comum, não família ou app; o teto deve ser conferido antes de abrir. A composição permanece **1 opus + 1 Codex**. (`CLAUDE.md:309`; `CLAUDE.md:291`; `app/docs/LEIS.md:147`) Preservação da ordem B2/F2/F4/F7 e da exceção nominal de base: cotejo dos anexos fornecidos, **[nao verificado em arquivo]**.
+
+3. **Literal:** as quatro condições e o teto fecham como portões, sem demonstrar que já foram satisfeitos. “Vaga” precisa ser disponível para o papel escolhido: total menor que dois não basta para abrir outro opus ou outro Codex. O wrapper guarda somente um Codex construtor; a vaga opus exige conferência pela sessão. (`app/docs/RELATO.md:4`; `app/docs/LEIS.md:147`; `CLAUDE.md:355`)
+
+   A escolha Codex exige consultar a lista completa de proibidos, que inclui `models`, migrations, configuração de crons e tudo fora de `app/`, além dos arquivos nucleares. O literal não dispensa essa guarda, a suíte nem o opus final. (`bin/codex_pergunta.sh:121`; `bin/codex_pergunta.sh:346`; `app/docs/LEIS.md:147`) A prioridade da trava precisa ser mantida pelo despacho: o mecanismo usa `flock`, sem prioridade própria. (`bin/trava_teste.sh:35`; `app/docs/RELATO.md:6`)
+
+4. **Exportada/dinheiro/`!`:** medir e construir em cópia cabem na rotina autorizada; escolher opus não concede autorização para matéria de `!`. Gravado exportado e demais exclusões continuam sujeitos aos portões vigentes. Efeito monetário das futuras alterações: **[nao verificado]**. (`CLAUDE.md:282`; `CLAUDE.md:265`; `app/docs/LEIS.md:147`)
+
+VEREDITO: item 2 CONFERE; item 5 CONFERE
+
+## 17/11 07:59 · sessao 7d6ef86015ad · - · - · origem=Ronald (tmux)
+
+| Classe | Casa e lei | Limite importante |
+|---|---|---|
+| Madrugada, 17 | L-085 atribui a jornada ao início (`app/docs/LEIS.md:117`); `_data_do_turno` consulta a jornada noturna da véspera, inclusive para S órfã (`app/ponto/turnos.py:285-309`); `_mk` usa esse juiz (`app/ponto/turnos.py:312-318`). | Deslocar toda madrugada seria incorreto: turno que sai fora do envelope é novo e permanece no dia próprio (`app/ponto/turnos.py:301-307`). |
+| Pareamento, 11 | L-087 manda obter papel da ata contra DNA, sem decidir pelo tipo gravado (`app/docs/LEIS.md:119`); pareador usa papel da ata, e `X` fica interno (`app/ponto/turnos.py:1377-1401`). | Quando a ata se cala, existe fallback para tipo (`app/ponto/turnos.py:1382`). Posição é legítima na exceção L-115 após pausa fechada; preservar esse ramo (`app/docs/LEIS.md:153`; `app/ponto/turnos.py:722-732`). |
+| Corte, 3 | Casa fecha por teto da jornada prevista +4h (`app/ponto/turnos.py:78-82`, `:1433-1434`), com envelope de 26h no ramo de fecho e exceção L-084 quando as duas pontas destoam do cadastro (`app/ponto/turnos.py:1435-1457`; `app/docs/LEIS.md:116`). | Não basta retirar todo teto: há colagem implausível a rejeitar; pós-fecho O68b também tem envelope próprio (`app/ponto/turnos.py:1029-1036`). Não localizei L-NNN que mande corte universal em 14h [nao verificado]. |
+| Pausa, 12 | L-032 manda subtrair intervalo cadastrado (`app/docs/LEIS.md:80`). Casa rejeita pausa marcada inferior a 15min como descanso (`app/ponto/turnos.py:542-546`), então desconta janela declarada se intervalo fixo (`app/ponto/turnos.py:756-764`). | Intervalo livre sem pausa não desconta janela (`app/ponto/turnos.py:760`); fonte da janela vem do vínculo/célula do dia (`app/ponto/services/espelho.py:286-294`). |
+
+A tela calcula realizado pela mesma autoridade dos turnos (`app/ponto/services/espelho.py:267-294`, `:783`), mas monta cards por ponte instante→pk→dia (`app/ponto/services/espelho.py:450-460`). Portanto a divergência de col922, 01/11 e 04/11, entre soma realizada e cards exibidos é candidata da casa, separada dos 43; confirmação individual depende do anexo, sem reprodução nesta leitura [nao verificado]. O enquadramento ESTRUTURA é L-099 (`app/docs/LEIS.md:122`); E3-geometria existe como item de leitores de turno (`app/core/espelho_verdade.py:76-78`), mas sua suficiência para curar col922 não está demonstrada [nao verificado].
+
+Selos existentes que ajudam a desenhar RED do E6:
+
+- Madrugada: borda do envelope, saída 17s após marco, turno novo fora do envelope e jornada diurna preservada (`app/ponto/tests/test_o195_dia_do_turno_por_envelope.py:59-83`); S órfã e véspera folga/diurna (`app/ponto/tests/test_o195_dia_do_turno_por_envelope.py:113-173`).
+- Pausa: subpiso não bloqueia janela, expectativa 546 e carimbo 60 (`app/ponto/tests/test_pausa_zero_guarda_le_o_mesmo.py:147-153`); pausa válida após fim contado não autoriza desconto da janela (`app/ponto/tests/test_pausa_zero_guarda_le_o_mesmo.py:155-165`).
+- Corte: rejeitar 21h27 acima do teto cadastrado, aceitar dentro do teto, aceitar 25h sem jornada declarada e 19h40 na exceção L-084 (`app/ponto/tests/test_h_portao_teto_do_dia.py:32-55`).
+
+Esses testes exercitam a casa; não demonstram RED atual do E6. Adaptação ao E6 e resultado RED/GREEN permanecem [nao verificado]. [nao verificado]
+
+## 17/11 07:59 · sessao 98a672fc9f41 · - · - · origem=Ronald (tmux)
+
+Leis e limites encontrados:
+
+- **d1=d2 — DECIDIDO PELA LEI LEI-O10-D-PERMUTA: permitido.** Texto: “d1=d2 permitido, nao exportada”. A limitação do DNA explica o impedimento técnico, mas não autoriza mudar a regra; P13 diz quem produz o DNA, sem proibir expressamente horário cedido. (`app/docs/PROMPTS.md:2015`; `app/docs/RELATO.md:1811`; `CLAUDE.md:156`; `app/ponto/management/commands/gerar_celulas.py:73`).
+- **Carta — DECIDIDO PELA LEI LEI-O10-D-PERMUTA: ato de tipo permuta aprovado.** Texto: “carta = ato tipo permuta aprovado”. A recusa das cartas inadequadas enquanto o tipo falta é compatível com **L-081**, “aplica-se a mais RESTRITIVA”; aceitar pendente ou outro tipo não cumpre o contrato. A frase integral “ausencia pre-existente de outro tipo nunca vale como carta” só consta do anexo fornecido, cujo arquivo não está na cópia: [não verificado]. (`app/docs/PROMPTS.md:2015`; `app/docs/LEIS.md:108`; `app/ponto/portas/celula.py:1043`).
+- **IntegrityError — DECIDIDO PELA LEI O10-D-PERMUTA-RECIPROCA: rollback integral.** Texto: “4 validadas antes da 1a escrita, rollback integral, id na trilha”. A lei não escolhe entre serializar a criação e devolver recusa com possibilidade de repetir. **H12H06-B-SIMPLES** já diz “(b) sem ordem global”, mas não resolve a unicidade concorrente. (`app/docs/PROMPTS.md:2013`; `app/docs/PROMPTS.md:1890`).
+- **Cede só plantão — não há literal suficiente para carimbar DECIDIDO.** **TROCA-DE-PLANTAO** diz “troca e ATO com par (dia cedido = folga trocada sem desconto; dia assumido = dia normal com AN/intra, sem HE100)”; **LEI-O10-D-PERMUTA** diz “compensacao”. Isso sustenta a guarda por interpretação, mas não enuncia expressamente que o dia cedido precisa estar previsto como trabalho; o anexo T5(ii) identifica justamente essa lacuna. (`app/docs/CORTES.md:254`; `app/docs/PROMPTS.md:2015`; anexo `entrega.md`, T5(ii): [não verificado]).
+- **Interjornada/DSR — DECIDIDO PELA LEI LEI-O10-D-PERMUTA: exigir 11h previstas para ambos e barrar semana sem DSR na permuta.** Texto: “11h art.66 previsto nos dois colabs” e “compensacao, sem DSR na semana barra”. A autoridade central ainda depende da disciplina **L-011/JUIZ-ANTES-DO-SITIO**: “registrar autoridade nova [...] exige a frase ‘corte Ronald: juiz <nome> nasce’”; predicado novo sobe como pergunta, enquanto declarar autoridade já única exige as três medidas previstas. Extensão dessas barreiras à **troca isolada O10-B** não está expressa no aval localizado. (`app/docs/PROMPTS.md:2015`; `app/docs/LEIS.md:69`; `CLAUDE.md:278`; `CLAUDE.md:314`).
+
+A leitura atual confirma a distância entre contrato e código: recusa d1=d2 (`app/ponto/portas/celula.py:1002`), só exclui carta rejeitada (`app/ponto/portas/celula.py:1043`), captura apenas `_PermutaRecusada` (`app/ponto/portas/celula.py:1091`), exige plantão cedido (`app/ponto/portas/celula.py:909`) e calcula localmente descanso entre turnos e semanal (`app/ponto/portas/celula.py:927`; `app/ponto/portas/celula.py:952`).
+
+## 17/11 07:58 · sessao 71e1ef06da10 · - · - · origem=Ronald (tmux)
+
+O dado permite duas classes comprovadas de saída do leitor: **SEM_PORTA (16 linhas)** e **SEM_LEITURA (3 linhas)**; atribuir uma causa interna mais específica a qualquer pessoa permanece **[não verificado]**, porque a linha gravada transporta apenas os testemunhos e a classificação, sem `razao`/`instancias`/`fila`/`verbos` da tarefa (`app/folha/retrato_folha.py:1183`, `app/folha/retrato_folha.py:1237`).
+
+- **SEM_PORTA**: `_porta` lê a porta publicada pela tarefa; o leitor retorna `nada` se não há porta, ou se o envelope não tem rota e não declara desconhecimento (`app/folha/fora_da_folha.py:70`, `app/folha/fora_da_folha.py:86`). O agrupamento D exige ausência de qualquer fio de ação e nenhum `nao_sei` (`app/folha/fora_da_folha.py:102`). Esse D é gravado como `ninguem`, e `DONO_DO_FIO` o apresenta como `sem_acao_disponivel` (`app/folha/retrato_folha.py:180`, `app/folha/retrato_folha.py:194`). Todos os dias raspados dessa classe estão em `dias_sem_porta` **[não verificado: dado fornecido]**.
+- **SEM_LEITURA**: envelope sem rota com `nao_sei=True` vira fio `nao_sei` (`app/folha/fora_da_folha.py:89`). O agrupamento E prevalece quando não há fio de ação e existe desconhecimento (`app/folha/fora_da_folha.py:105`). O mapeamento apresenta esse fio como `sem_leitura_sistema` (`app/folha/retrato_folha.py:194`). Todos os dias raspados dessa classe estão em `dias_sem_leitura` **[não verificado: dado fornecido]**.
+
+**Cuidados para a consolidação:**
+
+1. `acoes=[]` no retrato não prova ausência de ações exigíveis na tarefa: a folha só transporta ações publicadas no campo singular `acao` da porta (`app/folha/fora_da_folha.py:223`); uma ação de sistema pode terminar sem rota (`app/chamados/services/tarefa_do_dia.py:660`, `app/chamados/services/tarefa_do_dia.py:683`), sendo projetada como ausência de porta quando não há desconhecimento (`app/chamados/services/tarefa_do_dia.py:722`).
+2. `tipo` não explica por que não há porta: dono, ações e tipo são derivados separadamente (`app/folha/retrato_folha.py:1248`). `folga` comporta `escala_sem_folga_definida` e `dias_trocados`; `nao_bate` comporta `adesao_zero` e `realizado_zero`; `sem_causa` comporta `indeterminado` e `sem_furo` (`app/folha/retrato_folha.py:237`, `app/folha/retrato_folha.py:242`, `app/folha/retrato_folha.py:247`, `app/folha/retrato_folha.py:253`).
+3. O juiz tem diversas origens de desconhecimento: `sem_celula`, `ata_sem_lampadas`, `lampada_nao_sabe`, `marco_fora_do_turno`, `passivo_sem_linha`, `veredito_sem_lavra_vigente` e falha da autoridade do Resolver dia (`app/chamados/services/tarefa_do_dia.py:230`, `app/chamados/services/tarefa_do_dia.py:240`, `app/chamados/services/tarefa_do_dia.py:298`, `app/chamados/services/tarefa_do_dia.py:302`, `app/chamados/services/tarefa_do_dia.py:154`, `app/chamados/services/tarefa_do_dia.py:168`, `app/chamados/services/tarefa_do_dia.py:635`). Escolher uma delas para col265, col838 ou col407 seria **[não verificado]**.
+4. O Resolver dia depende da oferta do calendário (`app/chamados/services/tarefa_do_dia.py:605`). A oferta exige último recurso, passado e status que pede decisão (`app/colaboradores/services/calendario.py:94`); último recurso exige dia anterior ao início da competência e ausência de pergunta viva (`app/colaboradores/services/calendario.py:117`). Os resultados dessas condições não vieram no dado **[não verificado]**.
+5. “Sem porta” não prova “sem chamado”: os verbos `cobrar`, históricos/arquivados e `None` não dão dono (`app/chamados/services/tarefa_do_dia.py:665`, `app/chamados/services/tarefa_do_dia.py:717`).
+
+Obra diretamente relacionada ao conjunto SEM_PORTA: **CLASSE-D-NA-FRENTE-DA-E4D**, registrada para classificar dia-colab sem porta pela porta existente, com CADASTRO/BATIDA encaminhados ao admin (`app/docs/BACKLOG.md:1990`). A cobertura concreta de cada uma das 16 pessoas não está provada pelo dado **[não verificado]**.
+
+## 17/11 07:58 · sessao d681bcd0abae · - · - · origem=Ronald (tmux)
+
+P2 pode ser apresentada em **duas opções**, sem inventar uma terceira regra de prevalência. A definição de “respondida” da L-130 exige instante e texto; ela não manda buscar texto no último ato. (`app/docs/LEIS.md:151`; `app/chamados/juizes.py:1544`; `app/chamados/juizes.py:1552`.)
+
+**Hoje, em linguagem de leigo:** “O sistema guarda o texto atual da pergunta e também o histórico do que foi feito. A prévia da folha, o calendário, a ficha e o resumo do dia ainda consultam o texto atual. Ao encerrar uma pergunta porque o administrador decidiu o dia, o registro de SILÊNCIO fotografa esse mesmo texto.” (`app/folha/previa.py:142`; `app/colaboradores/services/calendario.py:504`; `app/colaboradores/services/ficha.py:171`; `app/ponto/services/dia_do_colab.py:70`; `app/ponto/services/veredito_celula.py:197`.)
+
+| Opção | Explicação leiga | Lei existente e limite | Alcance |
+|---|---|---|---|
+| A — conservar o texto atual | Se histórico e pergunta mostram textos diferentes, continuar usando o texto guardado na pergunta, inclusive ao fotografar SILÊNCIO. (`app/ponto/services/veredito_celula.py:197`.) | L-130 mantém a definição pelo par atual e exige que reabrir/ressuscitar zere ambos os campos; o corte conserva o valor durante a troca. Isso **inclina** à conservação enquanto falta decisão de precedência; não prova que qualquer divergência seja correta. (`app/docs/LEIS.md:151`; `app/docs/CORTES.md:488`; `app/docs/LEIS.md:136`.) | Perguntas cujo texto corrente difere do último ato: **[a medir]**, preservadas. |
+| B — último ato substitui o texto atual | Quando forem diferentes, leitores e fotografia de SILÊNCIO passariam a usar o texto do último registro, inclusive se vazio. Proposta para decisão: **[nao verificado]**. | L-002 exige mesma autoridade para leitores, mas **não escolhe qual texto vence**. A precedência universal não está determinada pela L-130. (`app/docs/LEIS.md:60`; `app/docs/LEIS.md:151`.) | As mesmas perguntas divergentes: **[a medir]**, substituídas; abrir por tipo de ato. |
+
+**Cuidado indispensável para a opção B:** o texto de um ato pode ser a resposta **dada, validada ou retirada**. O texto de uma RECUSA/REABERTURA não é automaticamente uma nova resposta corrente. Copiá-lo de volta pode contrariar o esvaziamento exigido pela L-130. (`app/chamados/models.py:4018`; `app/chamados/models.py:4021`; `app/docs/LEIS.md:151`.)
+
+A lei não permite concluir “o último registro sempre vence” só porque o histórico é imutável: imutabilidade conserva os acontecimentos; a própria pergunta continua explicitamente como projeção. (`app/chamados/models.py:4007`; `app/chamados/models.py:4010`; `app/chamados/models.py:4070`.) A L-121 trata reconstrução pela porta **depois de haver cura de juiz**; não decide previamente a semântica desse juiz. (`app/docs/LEIS.md:142`.)
+
+Para a sonda da principal:
+
+- Ordenar por `pergunta_id, ato_em, pk`; a ordem normativa do modelo é `(ato_em, pk)`. (`app/chamados/models.py:4056`.)
+- Comparar `(p.resposta_colab or '') != (ultimo.ato_texto or '')`, sem trim para não esconder mudanças de conteúdo; contar também diferenças após trim como informação adicional. Os campos são texto corrente e texto tocado pelo ato. (`app/chamados/models.py:4010`; `app/chamados/models.py:4021`; `app/chamados/models.py:4042`.)
+- Sem atos: contar à parte e conservar a projeção nas duas opções; a inexistência de ato não invalida o par corrente pelo juiz atual. (`app/chamados/juizes.py:1552`; `app/chamados/models.py:4081`.)
+- Atingidas A = divergentes preservadas; substituições A = zero por definição da opção. Atingidas B = divergentes substituídas. Separar por `ultimo.ato`, disputa aberta/fechada, `respondida_em is None`, `validada_em is not None`, `materializada_em is not None`. As opções são recortes para decisão, não código aprovado. **[nao verificado]**
+- Não chamar `fechar_o_fio_do_dia`: ele trava e escreve carimbo/ato. A sonda pode comparar os textos que seriam fotografados, sem executar encerramento. (`app/ponto/services/veredito_celula.py:176`; `app/ponto/services/veredito_celula.py:190`; `app/ponto/services/veredito_celula.py:195`.)
+- O contador de correspondência existente não detecta diferença de texto quando já existe mesmo ato/instante: ele compara pergunta, tipo e instante. Medir divergência de texto diretamente, não usar `linhas_da_projecao_sem_linha` como equivalente. (`app/chamados/models.py:4094`; `app/chamados/models.py:4098`.)
+
+Fecho sugerido:
+
+`lei: ULTIMO-ATO-TEXTO-F8 -- hoje leitores/SILENCIO usam texto corrente; opcoes A conservar/B substituir pelo ultimo ato; lei existente L-002 exige autoridade unica e L-130 nao decide precedencia; alcance [a medir]. (app/ponto/services/veredito_celula.py:197; app/docs/LEIS.md:60; app/docs/LEIS.md:151)`
+
+## 17/11 07:58 · sessao 75da4898174b · - · - · origem=Ronald (tmux)
+
+- A obra geral dos becos é **O261-E-CELULA-20-UM-DONO**: prevê régua por alcançabilidade e absorve a cura do fio morto do retrato (`app/docs/BACKLOG.md:981`; `app/docs/GRADE-MESTRA.md:971`). O antecedente **O261-FIO-MORTO-PELO-RETRATO** exige medir a causa antes da cura e lista várias causas possíveis; portanto, seu escopo geral não comprova qual delas atinge cada linha (`app/docs/BACKLOG.md:1088`; `app/docs/GRADE-MESTRA.md:979`).
+
+- **O261-E-F5B-JUIZ-PORTA-ALCANCAVEL** cobre a concordância dos leitores sobre a porta: `_fio_do_dia`, `pergunta_sem_acao_possivel` e `censo_alcance` devem ler o juiz (`app/docs/BACKLOG.md:983`; `app/docs/GRADE-MESTRA.md:1660`). Não comprova reparo dos 19 casos específicos [não verificado].
+
+- **E3-V10-DEGRAU-DONO-E-PORTA** define fio pelo primeiro dono com ação alcançável, na ordem colab > admin; sem ação, conta “sem porta”; os resíduos “cobrar sem pergunta” e “sem devida no app” não pertencem ao colaborador (`app/docs/BACKLOG.md:769`). **E3-RESTO-R3** cobre LU-01..07, incluindo a leitura dos donos do retrato; o BACKLOG registra c17 no ar, enquanto a GRADE ainda registra c17 retida (`app/docs/BACKLOG.md:770`; `app/docs/GRADE-MESTRA.md:1800`). É cobertura da classificação/publicação, sem nexo comprovado com a causa material de cada beco [não verificado].
+
+- **DIA-SEM-TRABALHO-PORTA** cobre **batida em folga/feriado**, oferecendo decisão administrativa; ausência lançada permanece sem porta por dia decidido (`app/docs/BACKLOG.md:1940`; `app/docs/GRADE-MESTRA.md:258`). Não atribuir essa obra apenas porque a sonda mostra `tipo=folga`: batida e veredito necessários não constam no dado [não verificado].
+
+- **E3-X2-NUNCA-JULGADAS** cobre 26 células de outros colaboradores; o dado não demonstra que os três `sem_leitura_sistema` pertençam a essa causa (`app/docs/BACKLOG.md:2029`; `app/docs/GRADE-MESTRA.md:541`; [não verificado] para os três casos).
+
+Sugestão para a coluna obra: usar **“sem obra específica comprovada [não verificado]”**, podendo acrescentar o guarda-chuva O261-E com sua referência. Atribuir uma cura mais específica exigiria `razao`, instâncias, perguntas, portas, verbos e resultado do calendário que a sonda não fornece [não verificado].
+
+## 17/11 07:58 · sessao 2b0a44050cea · - · - · origem=Ronald (tmux)
+
+Item 2 — **CONFERE**, no alcance de corrigir a precondição do RED e liberar a matriz; existência/execução da A4 corrigida: **[nao verificado]**.
+
+1. **Premissas:** a busca reutilizada pelo materializador exige mesmo colaborador e tipo em ±20 minutos inclusivos, sem filtrar aprovação ou retratação (`app/chamados/juizes.py:239-251`; `app/chamados/services/materializacao.py:1341`). A vizinhança ignora o instante exato (`app/chamados/services/materializacao.py:113,116`), mas a porta devolve qualquer batida do colaborador naquele instante, inclusive oposta ou retratada (`app/ponto/registro_batida.py:140-146`). Excluir qualquer batida em `ts` elimina precisamente essa brecha; autorização literal fornecida: **[nao verificado — anexo queima_util_1711.txt, item 2]**.
+
+2. **Colisão:** o novo literal acrescenta a exclusão exata à ausência de mesmo tipo ±20 minutos; não exige remover o reuso da porta (`app/chamados/juizes.py:248-251`; `app/ponto/registro_batida.py:144-146`). Compatibilidade com os avais fornecidos: **[nao verificado — anexos r.r e corte_b2_meia_resposta_1711.txt, item 6]**.
+
+3. **Literal:** fecha a objeção anterior, preservadas as demais condições do RED; a exclusão sozinha não promete `+1` em qualquer cenário, pois continuam existindo recusa sem texto, paridade, competência e colisão (`app/chamados/services/materializacao.py:1311-1323,1357,1391,1450-1458`; `app/ponto/registro_batida.py:156-169`). A matriz fornecida declara referência histórica e dependências F1; equivalência integral ao código atual: **[nao verificado — anexo matriz.md]**.
+
+   **Escritores e leitores conferidos na cópia:** o respondedor grava projeção e ato RESPOSTA (`app/chamados/services/disputa_emissao.py:1481-1483,1522-1526`); o automático também (`app/chamados/services/disputa_emissao.py:1674-1679`). O materializador lê texto projetado e deriva `ts/tipo` (`app/chamados/services/materializacao.py:1311,1328,625,678,1558`); a fila lê R/V/C (`app/chamados/services/materializacao.py:2063-2067`). O juiz usa texto para `data_hora` e o derivador do materializador para `hora` (`app/chamados/juizes.py:364-377`). A Batida é escrita pela porta chamada pelo materializador (`app/chamados/services/materializacao.py:1455-1462`; `app/ponto/registro_batida.py:176-180`). Identidade de quem escreverá o teste A4 ou atualizará a matriz: **[nao verificado]**.
+
+4. **Exportada/dinheiro/`!`:** a liberação literal é da matriz, sem escrita em produção: **[nao verificado — anexo queima_util_1711.txt, abertura e item 2]**. Executar o caminho real cria Batida e dispara recálculo por evento (`app/ponto/registro_batida.py:176-180,195-198`); tocar gravado exportado continua exigindo `!` (`CLAUDE.md:265-268`). Efeito monetário real: **[nao verificado]**.
+
+## 17/11 07:58 · sessao 15dfd50447be · - · - · origem=Ronald (tmux)
+
+Item 5: **CONFERE**, como abertura condicionada; nenhuma falha literal concreta encontrada. As quatro condições já constam em `app/docs/RELATO.md:4`; o teste é interseção de **arquivos**, e o teto deve ser conferido antes da abertura (`CLAUDE.md:309-311`; `CLAUDE.md:291`).
+
+1. **Premissas:** F3/F9 com lei 0 constam das remedidas fornecidas; reconferência independente dessas remedidas: **[nao verificado]**. Listas completas dos arquivos contra F2 em 708162b15 e remedidas F4/F7, revisão sem procedência e vaga atual: **[nao verificado]**. Isso impede afirmar abertura imediata; não contradiz a ordem de medir e abrir somente após os quatro portões (`app/docs/RELATO.md:4`; `CLAUDE.md:309`).
+
+2. **Colisão:** o literal preserva as quatro condições vigentes e o teto (`app/docs/RELATO.md:4`; `CLAUDE.md:291`). A vaga precisa respeitar também a composição vigente **1 opus + 1 Codex**; a regra “senão opus” não declara revogação dessa composição (`app/docs/LEIS.md:147`).
+
+3. **Literal:** fecha com “vaga” aferida conforme essas regras. O wrapper guarda apenas um Codex construtor por repositório; não mede o teto global nem a vaga opus (`bin/codex_pergunta.sh:42-44`; `CLAUDE.md:355-356`). A elegibilidade Codex exige conferir a lista real: inclui models, migrations, config/crons e tudo fora de app, além dos três arquivos nucleares (`bin/codex_pergunta.sh:121-135`). Não basta contar construtores e escolher opus se sua vaga estiver ocupada (`app/docs/LEIS.md:147`).
+
+4. **Exportada/dinheiro/`!`:** medir e construir em cópia estão preaprovados; isso não amplia autorização para gravado exportado, escala/vínculo ou outras matérias de `!` (`CLAUDE.md:282-286`; `CLAUDE.md:265-268`). O construtor Codex também continua sujeito às exclusões e ao opus final (`app/docs/LEIS.md:147`). Efeito monetário real das futuras alterações: **[nao verificado]**.
+
+No pouso permanece obrigatória a certificação da árvore resultante; medir agora não dispensa suíte nem certifica uma árvore posterior (`CLAUDE.md:320-324`; `app/docs/PISTA.md:35-38`).
+
+## 17/11 07:58 · sessao 3bc6ff2ff83b · - · - · origem=Ronald (tmux)
+
+P1: “voltar a pendente” e “voltar a ser cobrada do colaborador” são coisas distintas hoje. A porta limpa resposta/validação/carimbo, conserva o anterior e reabre a disputa, mas não grava REABERTURA; assim, último SILENCIO continua sem ação na tarefa. O app, por sua vez, inclui entre pendentes a pergunta viva com resposta sem instante e disputa aberta. (`app/chamados/models.py:1613`; `app/chamados/models.py:1623`; `app/chamados/models.py:1629`; `app/chamados/models.py:1638`; `app/chamados/services/tarefa_do_dia.py:176`; `app/chamados/services/pergunta_no_app.py:81`.)
+
+A L-130 determina limpar a resposta inteira, mas declara expressamente a devolução ao colaborador ainda não decidida. O corte da F5 já determina resposta vazia fora do app, ação admin; não deve ser vendido como regra já cumprida por todos os leitores, porque `_pela_decisao` ainda atribui RESPOSTA vazia ao colaborador. (`app/docs/LEIS.md:151`; `app/docs/CORTES.md:488`; `app/chamados/services/tarefa_do_dia.py:159`.)
+
+Duas opções bastam:
+
+- A: manter quem deve agir conforme o último ato, inclusive SILENCIO sem ação. É a conservação explicitamente ordenada para a B1, enquanto a pergunta geral aguarda decisão. Alcance: universo atual de ressuscitação, separado pelo último ato e dono; quantidade [a medir]. (`app/docs/RELATO.md:188`; `app/docs/RELATO.md:191`; `app/chamados/services/tarefa_do_dia.py:142`.)
+- B: toda ressuscitação autorizada passa a pedir resposta ao colaborador. REABERTURA já produz esse resultado na tarefa, mas aplicá-la à ressuscitação exige a decisão pendente; L-130 só decide a limpeza física. Alcance: mesmo universo, destacando quantas mudariam de dono/ação; quantidade [a medir]. (`app/chamados/services/tarefa_do_dia.py:163`; `app/docs/LEIS.md:151`.)
+
+Para a sonda, usar `ChamadoColaborador.perguntas_a_ressuscitar()`: é o universo real e somente leitura da porta. Ele exige carimbo de encerramento, texto vazio, exclui vias fora do fato e consulta C6 sobre cópia como ficaria após a limpeza. Não reimplementar esse filtro. (`app/chamados/models.py:1501`; `app/chamados/models.py:1530`; `app/chamados/models.py:1541`.)
+
+Os 97 do RELATO são registro histórico, sem revalidação nesta sessão; não apresentar como quantidade atual. A sequência DP, isoladamente, não prova todas as ressuscitações passadas, pois não há ato próprio de devolução gravado nessa porta. (`app/docs/RELATO.md:191`; `app/chamados/models.py:1565`.)
 
 ## 17/11 07:32 · sessao c72a3ef3dbe3 · CORTE-B2-MEIA-RESPOSTA · leitura · origem=Code
 
@@ -456,399 +619,4 @@ A drenagem dentro do atomic e o MD5 restrito a dois colaboradores são achados d
 
 **Não há caso (d), MODO-COMUM, demonstrado pelos anexos.** O caso não perguntado do item 4.2 era conhecido pelo construtor; os demais ficaram classificados pelas evidências acima. (`app/ponto/portas/celula.py:905`; `entrega.md:119`)
 
-## 17/11 05:38 · sessao 948a32929507 · - · - · origem=Ronald (tmux)
-
-Numeração contada desde a primeira linha de cada anexo, incluindo vazias.
-
-| Anexo | Linha | Trecho literal |
-|---|---:|---|
-| verif_v1.q | 10 | “(2) sobreposicao com turno previsto ou ausencia barra;” |
-| verif_v1.q | 11 | “tipos de escala diferentes ok; (4) qualquer intervalo, d1 = d2 permitido, competencia nao exportada; (5) carta = Ausencia” |
-| verif_v1.q | 12 | “tipo permuta, aprovada, dia exato, ligada ao id da permuta; (6) compensacao, nao folga trabalhada; sem DSR na semana barra.” |
-| verif_v1.q | 16 | “1. Para cada regra (1)-(6) e cada item do contrato: o codigo a cumpre, cumpre em parte, ou nao cumpre? Contra-exemplo” |
-| verif_v1.q | 18 | “2. Existe caminho em que algo saia da casa (push, julgamento gravado, recalculo de dinheiro, chamado, log externo) ANTES” | [nao verificado]
-| verif_v1.q | 21 | “3. Ordem de travas: permuta x permuta cruzada, permuta x trocar_plantao, permuta x regenerar_celulas_vinculo/” |
-| verif_v1.q | 25 | “LogAuditoria.valor_depois permuta_id/cartas, Ausencia.status/documento/data/data_fim): arquivo:linha de cada” |
-| verif_v1.q | 27 | “significado (dia civil x dia do turno, inclusivo x exclusivo, fuso)?” |
-| verif_v1.q | 29 | “(a interjornada e o DSR locais sao juiz novo?);” |
-| verif_v1.q | 30 | “selo sem mordida (algum teste” | [nao verificado]
-| verif_v1.q | 31 | “passaria com o codigo da base ou com a regra removida?); ordem de trava; campo com dois significados.” |
-| verif_v1.q | 32 | “6. A idempotencia ('igual') pode dar falso positivo (celulas editadas por OUTRA operacao com o mesmo estado, trilha de” |
-| verif_v2.q | 14 | “2. A trava nova cria ORDEM INVERTIDA com algum caminho que ja trava CelulaDia, Ausencia, Chamado ou Pergunta ANTES de” |
-| verif_v2.q | 21 | “5. Os testes novos do delta mordem (passariam com o codigo do hash b85315b2b)? Algum e vacuo?” |
-| verif_v3.q | 11 | “1. TABELA DE ORDEM DE TRAVA. Para cada caminho -- permutar_plantoes, trocar_plantao isolada, editar_dia direto,” |
-| verif_v3.q | 17 | “2. CELULA AUSENTE: quando uma das celulas nao existe (fora do horizonte gerado), ha ciclo entre a permuta/troca e” |
-| verif_v3.q | 18 | “editar_dia direto ou a geracao/regeneracao criando a MESMA celula? Compare com o codigo do hash (sem o delta): o delta” |
-| verif_v3.q | 21 | “4. Os testes novos/reescritos falhariam com o codigo da volta 2 (colaborador travado antes das cartas; guarda de dono” | [nao verificado]
-
-Respostas relevantes:
-
-- **verif_v1.r:12:** “**proíbe expressamente a igualdade**.”
-- **verif_v1.r:13:** “**Não exige tipo nem aprovação e não grava vínculo na Ausencia.**”
-- **verif_v1.r:60:** “Cobertura e sobreposição usam intervalo fechado; a permuta confere posição e fim igual ao início ou nulo.”
-- **verif_v1.r:71:** “A exclusão só existe na guarda da própria permuta.”
-- **verif_v1.r:73:** “`data_fim` é **inclusiva**; nulo significa aberto somente para determinados tipos.”
-- **verif_v1.r:79:** “As guardas locais **são decisões novas**, com piso de11h e semana segunda–domingo. Registro/corte específico delas: **não achei** [nao verificado].”
-- **verif_v1.r:93:** “Entretanto, não compara DNA, geradora, autor, carimbo, pedido, papéis ou se a última edição ainda pertence àquela permuta.”
-- **verif_v3.r:1:** “A alegada ‘ordem da casa’ não corresponde a todas as transações existentes.” Atenção: as aspas no original são tipográficas duplas: `“ordem da casa”`.
-- **verif_v3.r:69:** linha da tabela sobre ordem invertida: “**Continua globalmente:** outra ausência, desligamento, INSS, Chamado e transações de várias etapas têm C antes de algum X posterior.”
-- **verif_v3.r:70:** “**Continua sem demonstrar concorrência ou célula ausente.**”
-- **verif_v3.r:77–78:** testes de ordem na permuta e troca “**Falharia**” contra v2. [nao verificado]
-- **verif_v3.r:84:** “o helper reconhece a presença do SQL `FOR UPDATE`, não a quantidade de linhas retornadas; uma consulta vazia também acrescentaria ‘celula’ à ordem.” Original usa aspas duplas tipográficas em `“celula”`.
-- **verif_v3.r:91:** “**Não rejeitada não significa aprovada.**”
-- **verif_v3.r:103:** “`igual` compara origem/trabalha e existência de trilha com as cartas; não compara DNA, geradora ou última edição, e retorna antes das barreiras atuais.”
-- **verif_v3.r:104:** “**Corrida de criação também pode resultar em erro de unicidade**, mesmo sem deadlock: os criadores não recuperam a célula concorrente, e troca/permuta capturam apenas suas exceções de recusa.”
-- **verif_v3.r:105:** “**Tipo/aprovação das cartas e mesmo dia continuam pendentes.**”
-
-Os pontos `verif_v1.r:60`, `:73` e `verif_v3.r:104` coincidem com as referências fornecidas pelo opus.
-
-## 17/11 05:37 · sessao bddc04b98043 · - · - · origem=Ronald (tmux)
-
-Numeração de `entrega.md` contando linhas vazias, com `# O10-D...` como linha 1; texto total: 180 linhas.
-
-| Tema | Linhas e trecho literal |
-|---|---|
-| `d1=d2` | `entrega.md:5`: `1. **AVAL item 2 literal NAO cumprido: "d1 = d2 aceito".** PERGUNTA DE DESENHO. A porta RECUSA d1 = d2 com frase` |
-| Motivo para adiamento de `d1=d2` | `entrega.md:8`: `os marcos sao os do template do PROPRIO vinculo. Com d1 = d2 os dois ja trabalham no dia; "trocar o turno" so` — complementa `:9-14`; `:14`: `muda). A recusa NAO tem selo nem mutante de proposito, para nao travar o oposto do contrato.` |
-| Tipo/status | `entrega.md:15`: `2. **Regra (5) em parte: carta "tipo permuta, aprovada".** Nao existe `tipo='permuta'` em `ponto/models.py`/` |
-| Qualquer ausência | `entrega.md:16`: `` `ponto/catalogo/ausencias.py`; a porta aceita qualquer `Ausencia` com `documento`, do dia exato, da celula certa,`` |
-| Motivo tipo/status | `entrega.md:18`: ``conferido: exigir `aprovada` com o tipo de hoje (ex. `declaracao`, que e ABONA em``; `:20`: `pelo consumidor da ausencia o dia em que a pessoa trabalha -- efeito de dinheiro errado. Precisa do tipo`; `:21`: `` `permuta` sem efeito no catalogo (migration + catalogo congelado), que e fatia propria. Pergunta: corte do tipo.`` |
-| Interjornada/DSR sem juiz | `entrega.md:22`: ``3. **Interjornada (1) e DSR (6) sem juiz registrado** em `core/juizes.py`: a porta compoe guardas LOCAIS sobre juizes``; `:23`: ``registrados (`vinculo_do_dia`, `eh_dia_trabalho`, `marcos_turno`). Nao registrei juiz (PROIBIDO autoridade nova).``; `:24`: `Pergunta de lei: confirmar com o DP (o aval ja pede homologacao de (1), (3), (6)).` |
-| Ordem global adiada | `entrega.md:29`: `5. **PERGUNTA DE DESENHO -- ORDEM GLOBAL DE TRAVA (Codex v3, procedente, NAO curavel nesta obra).** A casa NAO tem` |
-| Motivo estrutural | `entrega.md:39`: `as barreiras liam vizinho e desligado sem trava (Codex v1, procedente). Opcoes, todas fora desta obra: (a) corte da`; `:40`: `ORDEM DA CASA (ex. C sempre primeiro) migrando editar_dia/regeneracao/cartorio -- obra ESTRUTURA propria;` |
-| Selos/M24/M25 congelam escolha | `entrega.md:55`: ``**Selo congela a escolha:** `test_TRAVA_carta_celula_COLABORADOR_*` e os mutantes M24/M25 cravam X antes de C; se o``; `:56`: `corte for (a) C primeiro, esses selos INVERTEM (mesmo motivo de d1 = d2 nao ter selo). E o comentario` |
-| Comentários/docstring | `entrega.md:57`: `` `ORDEM DA CASA` em `celula.py:744` e `:1003` e a docstring `:969` (linhas de bd590178e) dizem mais do que o vivo: e a ordem dos caminhos``; `:58`: `X -> C, nao uma ordem universal -- ajustar o texto no pouso (nao mexi para nao descertificar a suite).` |
-| Dois significados | `entrega.md:65`: `8. **Carta = Ausencia tem DOIS significados (Codex v1 (4)/(5), procedente, nao curado: e o item 2).** A carta`; restante `:66-68`. |
-| Status pendente | `entrega.md:70`: ``9. **"Nao rejeitada" != "aprovada"** (Codex v3 item 5): a porta exclui so carta `rejeitada`; carta pendente vale.`` |
-| Triagem tipo/status e mesmo dia | `entrega.md:150`: `isolada aceitava rejeitada. Nao curados (TOPO): d1 = d2 (1), tipo/aprovacao da carta (2, 8), regeneracao sem trava` |
-| Idempotência descartada | `entrega.md:153`: ``comparado por CONJUNTO (A/B -> B/A passava). Notas ao TOPO: 6 e 9. Descartado com motivo: idempotencia `igual` nao``; `:154`: ``compara DNA (o DNA e funcao de `trabalha` + vinculo pelo produtor unico P13; repetir com cadastro mudado e``; `:155`: `regeneracao, nao permuta) -- vai ao opus.` |
-| IntegrityError reconhecido/adiado | `entrega.md:157`: `e o A<->C da mesma carta, e que os testes novos discriminam a v2 (3 de 4). PROCEDENTE e NAO curavel aqui: a casa nao`; `:158`: `tem ordem global X/C (TOPO 5), celula ausente (TOPO 5), corrida de criacao pode dar IntegrityError de unicidade em vez`; `:159`: `de deadlock (mesmo desenho, TOPO 7). Repetidos: barreiras na troca isolada (6), idempotencia (descarte acima),` | [nao verificado]
-| RED módulo inexistente | `entrega.md:95`: `- Volta 1: arquivo de teste novo (RED = modulo inexistente na base fbc5c76ce).` |
-| Placar contaminado por ERROR | `entrega.md:104`: ``MORDEM**, MEDIDA POR CAMADA: 21 contra os testes da volta 3 (`placar3.txt`, com o defeito de fixture do teste do``; `:105`: ``dono que dava ERROR em todo run); M19/M26 contra test.v4 (`placar4.txt`); M08/M18/M24/M25 contra o codigo e os testes`` | [nao verificado]
-| Motivo não rerodar mutantes | `entrega.md:106`: ``FINAIS (`placar6.txt`). Os outros 20 (so no placar3) nao foram rerodados sobre v5 -- mutar `celula.py` depois do veredito descertificaria a arvore (o delta v3->v5 so muda o texto da regra 4 e`` |
-| Sombra se declara atomic+raise | `entrega.md:113`: ``## DIFF NA SOMBRA (atomic+raise; `o10d_permuta_diff.py`, log `sombra_diff_final.log`; codigo da volta 1)`` |
-| Dois colaboradores no FM futuro | `entrega.md:116`: `(uma por colab, {d1,d2}); FechamentoMensal movido: (128,12/2026), (136,12/2026), nenhum em competencia exportada.` |
-| FM intacto alegado | `entrega.md:121`: `- (2c) competencia exportada 21/08-20/09: `recusada` com 4 frases LAVRADA; FM intacto True; frota `editada` +0.` |
-| Drenagem manual mencionada | `entrega.md:128`: ``linhas: `on_commit registrados` 1 -> 3 e `drenados` 5 -> 7. Os +2 sao os sentinelas `_TravaDoColaborador` `` |
-| Alegação dos efeitos | `entrega.md:131`: `` `permutada`, 4 celulas, frota +4, trilhas 1/2/4, rabo 0 dentro / 2 no commit, FM movidos so na competencia aberta,`` | [nao verificado]
-
-Não achados específicos na entrega:
-
-- Bug da aceitação de **range aberto** como carta e exclusão indevida da guarda: **não achado**; `:65-68` tratam do conflito geral dos significados.
-- Pergunta sobre **dia cedido ter de ser plantão**: **não achado**; `:119` apenas relata a recusa `"nao tem plantao previsto 14/11"`.
-- `M06/M09` morrerem por exceção: **não achado**.
-- Literal `GREEN_v3 errors=1`: **não achado**; defeito geral de ERROR em todo run consta de `:104-105`.
-- MD5 de somente dois colaboradores: **não achado**.
-- Aviso explícito de que a drenagem aconteceu **dentro do atomic**: **não achado**; `:113` dá contexto atomic+raise e `:128` menciona drenagem, sem essa crítica.
-
-A remissão de `entrega.md:159` para “TOPO 7” é textual, mas o TOPO 7 em `:61-64` trata de “ambos ativos”, não de `IntegrityError`.
-
-## 17/11 05:37 · sessao 7d588557d67a · - · - · origem=Ronald (tmux)
-
-Auditoria recomendada:
-
-- **Item 1: (a).** A pergunta cobria ausência, dia exato e semântica de `data_fim` (`verif_v1.q:10–12`, `:24–27`). A resposta descreveu intervalo fechado/nulo aberto, mas não identificou o contraexemplo composto de aceitar afastamento como carta e excluí-lo da barreira (`verif_v1.r:60`, `:73`).
-- **Item 2: (b).** Tipo/aprovação e `d1=d2` foram apontados e conscientemente adiados (`verif_v1.r`, seção 1; `entrega.md`, TOPO 1, 2, 8, 9).
-- **Item 3:** comentários/docstring de ordem universal **(b)**: a abertura de `verif_v3.r` contesta expressamente a “ordem da casa”; TOPO 5 admite o exagero e adia sua correção. Para o defeito específico de **selos congelarem escolha sem aval**, não há crítica literal na resposta: **(a)** é mais rigoroso que atribuir reconhecimento explícito ao Codex. A resposta identifica o comportamento dos testes, mas não esse defeito (`verif_v3.r`, seção 4). Resultados particulares de M24/M25 ficam **(c)**. [nao verificado]
-- **Item 4:** IntegrityError **(b)**; interjornada/DSR como decisões sem juiz **(b)**; exigência adicional de plantão no dia cedido **(e)**. Para esta última, trecho específico nas perguntas/respostas: **não achado**. O construtor conhecia o predicado, pois o implementou e justificou (`app/ponto/portas/celula.py:905–911`) e registrou sua recusa na sombra (`entrega.md`, seção DIFF NA SOMBRA, caso 2a). Portanto não cabe **(d)**.
-- **Item 5: (b).** DNA/geradora ignorados foram vistos; houve descarte expresso por P13 (`verif_v1.r`, seção 6; `verif_v3.r`, seção 6; `entrega.md`, TRIAGEM CODEX v2).
-- **Itens 6–7: (c).** Os defeitos concretos dependem de RED, execuções de mutantes e instrumento/medição da sombra fornecidos posteriormente (`opus_final.md:7–8`, contando título como linha 1).
-
-Não encontrei fundamento para **(d)**: nos casos ausentes da crítica do Codex, existe reconhecimento do construtor ou o material está fora do alcance declarado. [nao verificado]
-
-## 17/11 03:42 · sessao 170bd6b657ed · O10-D-PERMUTA-RECIPROCA · verificador · origem=Code
-
-**Parecer: não aprovar como fechamento integral.** O delta corrige a inversão local contra edição/regeneração de células existentes, mas mantém ciclos com células ausentes e com caminhos que começam pelo Colaborador. A alegada “ordem da casa” não corresponde a todas as transações existentes. (`delta_v3.patch:+744`; `delta_v3.patch:+1000`; `app/colaboradores/services/desligamento.py:128`; `app/ponto/services/cadastro_futuro.py:31`.)
-
-Referências `app/...:N` apontam à cópia original; `delta_v3.patch:+N`, à numeração de destino do anexo aplicado mentalmente. Execução de testes, reprodução concorrente, DDL efetivo e ocorrência em produção: **[nao verificado]**. [nao verificado]
-
-**1. Tabela de ordem de trava**
-
-Notação: **A** = Ausencia; **X** = CelulaDia; **C** = Colaborador; **D/H/P** = Disputa/Chamado/Pergunta. A autoridade ordena C e depois D/H/P por PK; ordenar uma chamada não ordena todas as aquisições da transação. (`app/chamados/models.py:2757`; `app/chamados/models.py:2771`; `app/chamados/models.py:2780`; `app/chamados/models.py:2793`; `app/chamados/models.py:2797`.)
-
-| Caminho | Sequência efetiva |
-|---|---|
-| `permutar_plantoes`, com delta | **A por PK → X existentes por colaborador/data → C por PK → trocas internas → criação/edição de X → H**, quando o marcador encontra cobrança elegível. As trocas internas retomam travas já adquiridas; X ausente só nasce depois de C. (`delta_v3.patch:+1000`; `delta_v3.patch:+1013`; `app/ponto/portas/celula.py:1018`; `app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:672`.) |
-| `trocar_plantao` isolada, com delta | **A por PK → X existentes por colaborador/data → C por PK → criação/edição dos dois X → H**, condicional ao marcador. (`delta_v3.patch:+734`; `delta_v3.patch:+752`; `delta_v3.patch:+756`; `app/ponto/portas/celula.py:751`; `app/ponto/portas/celula.py:672`.) |
-| `editar_dia` direto | **X existente por `FOR UPDATE`, ou INSERT de X ausente → C → H**, estes dois últimos somente se houver cobrança órfã elegível. O rabo fica depois do atomic próprio; atomic externo pode conservá-lo na mesma transação. (`app/ponto/portas/celula.py:637`; `app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:676`; `app/chamados/models.py:487`.) |
-| `regenerar_celulas_vinculo` isolada | Leitura inicial **sem trava → INSERT/UPDATE dos X em ordem de data → C → H**, se o marcador for elegível. O marcador recebe dias **reescritos**, não os meramente criados. O rabo fica depois do atomic próprio. (`app/ponto/portas/celula.py:226`; `app/ponto/portas/celula.py:227`; `app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:311`; `app/ponto/portas/celula.py:328`; `app/ponto/portas/celula.py:393`.) |
-| Command `gerar_celulas` | Um atomic envolve **regeneração de hoje por colaborador crescente → geração do período**. Pode conservar **X de A → C de A → X de B → C de B → mais X da geração**. Portanto não é simplesmente “todos os X antes de todos os C”. (`app/ponto/management/commands/gerar_celulas.py:319`; `app/ponto/management/commands/gerar_celulas.py:323`; `app/ponto/management/commands/gerar_celulas.py:345`; `app/ponto/management/commands/gerar_celulas.py:349`.) |
-| `gerar_celulas_periodo` | Leitura sem trava → **INSERT de X ausente / UPDATE de DNA antigo nulo**. Atomic próprio e pedido explícito de C: **não achei**. Se chamado pelo command, herda as travas anteriores dele. (`app/ponto/portas/celula.py:1201`; `app/ponto/portas/celula.py:1218`; `app/ponto/portas/celula.py:1230`; `app/ponto/management/commands/gerar_celulas.py:345`.) |
-| `decidir(Ausencia)` | Atomic → **UPDATE de A → post_save síncrono → cartório**. O cartório pode fazer **C/H → UPDATE de X** durante emissão; também pode escrever X antes de uma reconciliação que pede C. Não tem uma sequência única A→X→C. (`app/ponto/services/ausencia.py:1079`; `app/ponto/services/ausencia.py:1088`; `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`; `app/ponto/services/cartorio.py:1791`; `app/ponto/services/cartorio.py:1873`; `app/ponto/services/cartorio.py:1007`.) |
-| `mudar_estado` direto | Não abre atomic próprio. **A → cartório → demais travas na mesma transação** exige atomic externo. O consumidor `on_commit` é outro momento, distinto do cartório síncrono. (`app/ponto/services/ausencia.py:955`; `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`; `app/ponto/signals.py:272`.) |
-| Desligamento | **C → UPDATE de vínculo → X futuros gerados por data**, conservados no atomic do desligamento. (`app/colaboradores/services/desligamento.py:128`; `app/colaboradores/services/desligamento.py:133`; `app/colaboradores/services/desligamento.py:148`; `app/colaboradores/services/vinculo.py:641`; `app/colaboradores/services/vinculo.py:662`; `app/ponto/services/cadastro_futuro.py:31`.) |
-| Lançamento INSS | **C → criação/reabertura de A → post_save/cartório → X**, dentro do atomic da view. (`app/ponto/views.py:2544`; `app/ponto/views.py:2546`; `app/ponto/views.py:2547`; `app/ponto/views.py:2564`.) |
-| Escrita/transição de Chamado | **C → D/H/P conforme a operação → cartório síncrono → X**, quando a mudança de estado exige julgamento. (`app/chamados/models.py:290`; `app/chamados/models.py:487`; `app/chamados/signals.py:189`; `app/chamados/signals.py:218`; `app/ponto/portas/celula.py:1267`.) |
-| `regenerar_futuras_do_cadastro` | **X futuros existentes por data → regeneração de cada dia → C/H**, se o marcador alcançar cobrança elegível. (`app/ponto/services/cadastro_futuro.py:30`; `app/ponto/services/cadastro_futuro.py:36`; `app/ponto/services/cadastro_futuro.py:44`; `app/ponto/portas/celula.py:328`.) |
-| Foto futura de folgas | **X futuros → FolgaDia → regeneração futura**, conservando as travas de X. (`app/escala/folgas.py:620`; `app/escala/folgas.py:621`; `app/escala/folgas.py:639`; `app/escala/folgas.py:640`.) |
-| Restauração de snapshot | **EscalaColaborador por PK → X que referenciam vínculos removidos → DELETE/UPDATE dos vínculos → regeneração futura**. O chamador ainda pode escrever nota/transição de Chamado no atomic externo. (`app/colaboradores/services/vinculo.py:1017`; `app/colaboradores/services/vinculo.py:1020`; `app/colaboradores/services/vinculo.py:1025`; `app/colaboradores/services/vinculo.py:1035`; `app/chamados/services/acoes_chamado.py:142`; `app/chamados/services/acoes_chamado.py:153`.) |
-| Salvamento de template | Atomic envolvendo várias regenerações: pode acumular **X/C de A antes de pedir X de B**, como o command. (`app/escala/services/cadastro_tipo.py:140`; `app/escala/services/cadastro_tipo.py:323`; `app/escala/services/cadastro_tipo.py:339`; `app/escala/services/cadastro_tipo.py:353`.) |
-| Cancelamento de férias | **A por PK → saves → cartório síncrono**, com os sufixos condicionais já descritos. (`app/ponto/services/ausencia.py:1484`; `app/ponto/services/ausencia.py:1488`; `app/ponto/services/ausencia.py:1498`.) |
-| Reversão de regeneração / lavra / carimbo | UPDATE de X; reversão tem rabo depois do atomic próprio. Lavra e carimbo herdam as travas do chamador; `salvar_e_emitir` não impõe ordem anterior de C. (`app/ponto/portas/celula.py:1130`; `app/ponto/portas/celula.py:1140`; `app/ponto/portas/celula.py:1162`; `app/ponto/portas/celula.py:1266`.) |
-
-**Pares envolvendo permuta/troca**, consideradas suas invocações isoladas, sem travas prévias do chamador:
-
-| Par | Resultado com o delta |
-|---|---|
-| Permuta×permuta; permuta×troca; troca×troca | Com conjuntos estáveis e apenas essas portas, ciclo: **não achei**. Os prefixos são ordenados e a criação ocorre depois da trava comum de C. Isso não demonstra segurança perante os outros caminhos. (`delta_v3.patch:+752`; `delta_v3.patch:+756`; `delta_v3.patch:+1000`; `delta_v3.patch:+1013`.) |
-| Permuta/troca×edição direta, X existente | A inversão simples da v2 fecha: ambas chegam a X antes de C. Ciclo nesse prefixo isolado: **não achei**. X ausente muda o resultado, abaixo. (`app/ponto/portas/celula.py:638`; `app/ponto/portas/celula.py:672`; `delta_v3.patch:+752`; `delta_v3.patch:+1013`.) |
-| Permuta/troca×regeneração isolada, todos os X existentes | No prefixo de um colaborador, as células são adquiridas antes de C e por data; ciclo local: **não achei**. Atomic externo, criação e acumulação de colaboradores precisam da análise separada abaixo. (`app/ponto/portas/celula.py:228`; `app/ponto/portas/celula.py:311`; `app/ponto/portas/celula.py:328`.) |
-| Permuta/troca×command ou salvamento de template | **Ciclo possível:** G reescreve A/hoje e segura C_A; P segura A/futuro e B/hoje e espera C_A; G avança e espera B/hoje. O bloqueio de P ocorre antes das barreiras. (`app/ponto/management/commands/gerar_celulas.py:321`; `app/ponto/management/commands/gerar_celulas.py:345`; `app/ponto/portas/celula.py:328`; `delta_v3.patch:+1010`; `delta_v3.patch:+1013`.) |
-| Permuta/troca×decisão da **mesma carta** | O ciclo simples A↔C da v2 fica serializado pela carta antes de X/C. Outros recursos anteriores do chamador: **[nao verificado]**. (`delta_v3.patch:+735`; `delta_v3.patch:+1008`; `app/ponto/services/ausencia.py:988`.) |
-| Permuta/troca×decisão de **outra ausência** do mesmo colaborador | **Ciclo possível:** P segura X; decisão de outra A emite cobrança e segura C; P espera C; decisão espera X para carimbar. (`delta_v3.patch:+1013`; `app/ponto/services/cartorio.py:1791`; `app/chamados/models.py:952`; `app/ponto/services/cartorio.py:1873`.) |
-| Permuta/troca×desligamento | **Ciclo possível:** P segura X futuro gerado; desligamento segura C; desligamento espera X; P espera C. Não exige célula ausente nem marcador elegível na permuta. (`delta_v3.patch:+1010`; `delta_v3.patch:+1013`; `app/colaboradores/services/desligamento.py:133`; `app/colaboradores/services/desligamento.py:148`; `app/ponto/services/cadastro_futuro.py:31`.) |
-| Permuta/troca×INSS ou transição de Chamado com cartório | **Ciclo possível pelo mesmo X↔C:** o outro caminho pode possuir C antes de pedir X. Na reabertura de A também pode haver A↔C se for uma carta já retida pela troca. (`app/ponto/views.py:2546`; `app/ponto/views.py:2547`; `app/chamados/models.py:290`; `app/chamados/signals.py:218`; `delta_v3.patch:+756`.) |
-| Permuta/troca×escrita somente de C | Sem pedido posterior de A/X, ciclo: **não achei**; há espera unilateral. (`app/colaboradores/services/colaborador.py:131`; `app/colaboradores/services/colaborador.py:136`; `delta_v3.patch:+1013`.) |
-| Permuta/troca×lavra/carimbo somente de X | Sem pedido posterior de C ou outro recurso retido pela permuta, ciclo: **não achei**. Se o chamador já detém C, é o caso anterior de X↔C. (`app/ponto/portas/celula.py:1266`; `app/chamados/signals.py:218`.) |
-
-Para os demais pares, o mesmo cruzamento está presente em **edição ou regeneração×desligamento/Chamado/decisão emissora**: E/R segura X e pede C; o outro segura C e pede X. Em **edição/regeneração×command/template**, o command pode reter C de uma etapa e pedir X que E/R retém. São ciclos condicionados aos marcadores/emissões indicados, não observações de produção. (`app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:328`; `app/ponto/management/commands/gerar_celulas.py:321`; `app/chamados/models.py:952`; `app/ponto/services/cadastro_futuro.py:31`.)
-
-Entre duas edições diretas de uma célula cada, duas regenerações isoladas do mesmo colaborador em ordem de data, ou duas operações que adquirem somente C: ciclo concreto **não achei**. Para as demais combinações dos caminhos compostos do inventário, **não achei demonstração completa de ausência de ciclos**; os atomics externos impedem concluir segurança apenas pela ordem de uma função interna. (`app/ponto/portas/celula.py:638`; `app/ponto/portas/celula.py:228`; `app/ponto/portas/celula.py:393`; `app/chamados/models.py:2771`.)
-
-**2. Célula ausente: o delta não fecha o problema global**
-
-`SELECT FOR UPDATE` das existentes não reserva a chave da célula ausente; os três criadores usam `create`, e o modelo declara unicidade por colaborador/data. A trava de C só serializa os escritores que a adquirem **antes** de criar. (`app/ponto/portas/celula.py:638`; `app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:1218`; `app/escala/models.py:1833`; `delta_v3.patch:+1013`.)
-
-| Par e interleaving concreto | Comparação com o hash |
-|---|---|
-| **P/T×edição:** P consulta X ausente; E insere X; P trava C; E encontra cobrança órfã e espera C; P tenta inserir X e espera a transação de E pela unicidade. | **Piora esse interleaving.** No hash, sem aquisição anterior de C pelo marcador de outra célula, P esperaria X enquanto E obteria C e terminaria. O delta passa a exigir C antes dessa criação. (`app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:672`; `app/chamados/models.py:487`; `delta_v3.patch:+1013`; `app/escala/models.py:1833`.) |
-| **P/T×regeneração:** R insere X e reescreve outro dia Y; P não vê X, trava C e tenta criar X; R chega ao marcador de Y e espera C. | **Piora esse interleaving**, quando o hash ainda não tinha adquirido C por edição anterior. A criação de X, sozinha, não entra em `_reescritos`; Y é necessário para esse exemplo pelo marcador. (`app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:317`; `app/ponto/portas/celula.py:328`; `delta_v3.patch:+1013`.) |
-| **P/T×geração/regeneração em atomic com vários X:** G insere X; P pretrava outro X existente Y e depois pede/cria X; G tenta atualizar Y. | **Empata quanto à existência desse ciclo:** a base já pretravava Y antes da criação de X. Acrescentar C não elimina X↔Y. No gerador de período, a atualização possível é o enriquecimento de DNA antigo nulo. (`app/ponto/portas/celula.py:984`; `app/ponto/portas/celula.py:1218`; `app/ponto/portas/celula.py:1230`; `app/ponto/portas/celula.py:311`.) |
-| **Permuta×permuta / permuta×troca**, criando células em etapas diferentes | **Melhora:** a trava comum de C agora antecede todas as criações dessas portas. Na base, a permuta compunha dois pares sucessivos e podia criar o segundo par depois de outra operação ter criado parte dele. (`app/ponto/portas/celula.py:1018`; `app/ponto/portas/celula.py:751`; `delta_v3.patch:+756`; `delta_v3.patch:+1013`.) |
-| **Troca isolada×troca isolada** | No caminho simples, ciclo original por criação em ordem oposta: **não achei**; a base já ordenava os dois lados por colaborador/data. Portanto não atribuo ao delta uma correção demonstrada desse par. (`app/ponto/portas/celula.py:751`.) |
-
-Há ainda uma hipótese independente do marcador: G insere X; P trava C e espera o INSERT de G pela unicidade; G precisa validar a FK de X para C e espera P. O modelo declara FK e unicidade, mas **DDL efetivo e momento dessa validação: [nao verificado]**. Não afirmo que o INSERT sempre peça essa trava imediatamente. Sob essa condição, o delta piora o par simples contra qualquer criador; a v2 já tinha o mesmo risco. (`app/escala/models.py:1681`; `app/escala/models.py:1833`; `delta_v3.patch:+756`; `delta_v3.patch:+1013`.)
-
-O hash também podia chegar a C por um marcador anterior; portanto “piora” acima significa **ampliar os interleavings que ciclam**, não afirmar que a base era livre de deadlocks. (`app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:1018`.)
-
-**3. Situação dos itens 1, 2, 5 e 7 da volta 2**
-
-| Item | Veredito |
-|---|---|
-| **1 — validações e criação concorrente** | Mantém as correções de releitura do desligado, quatro documentos e rejeição. Conserva serialização entre permutas/trocas. **Não fecha** a criação ausente contra edição/geração/regeneração. A troca isolada continua sem barreiras de descanso. (`delta_v3.patch:+1013`; `delta_v3.patch:+1027`; `delta_v3.patch:+757`; `app/ponto/portas/celula.py:753`; `app/ponto/portas/celula.py:902`.) |
-| **2 — ordem invertida** | **Fecha o contraexemplo local com X existente** de edição/regeneração e o ciclo simples com decisão da mesma carta. **Continua globalmente:** outra ausência, desligamento, INSS, Chamado e transações de várias etapas têm C antes de algum X posterior. Contra caminhos C→X, a v3 perde a serialização que C primeiro proporcionava na v2. (`delta_v3.patch:+752`; `delta_v3.patch:+1013`; `app/ponto/services/cartorio.py:1791`; `app/colaboradores/services/desligamento.py:148`; `app/ponto/management/commands/gerar_celulas.py:345`.) |
-| **5 — testes** | Melhora a discriminação da ordem v3 e acrescenta o caso A/B→B/A. **Continua sem demonstrar concorrência ou célula ausente.** A fragilidade de contar callbacks brutos também permanece: a trava registra sentinelas `on_commit`. (`delta_v3.patch:+333`; `delta_v3.patch:+380`; `app/chamados/services/trava_do_colaborador.py:47`; `app/ponto/tests/test_o10d_permuta_reciproca.py:305`.) |
-| **7 — outros defeitos** | **Fecha a comparação de donos por conjunto.** Permanecem tipo/aprovação sem exigência, cartas como fatos de ausência, leitura antiga da regeneração, recusa de mesmo dia e idempotência insuficiente. (`delta_v3.patch:+742`; `app/ponto/portas/celula.py:227`; `app/ponto/portas/celula.py:897`; `app/ponto/portas/celula.py:975`; `app/ponto/portas/celula.py:1003`.) |
-
-**4. Os testes distinguem a volta 2?** [nao verificado]
-
-| Teste novo/reescrito | Contra o código da volta 2 | [nao verificado]
-|---|---|
-| Ordem carta→célula→Colaborador na permuta | **Falharia:** a v2 começava por Colaborador. (`delta_v3.patch:+352`; `delta_v3.patch:+359`.) |
-| Mesma ordem na troca isolada | **Falharia**, pelo mesmo motivo. (`delta_v3.patch:+352`; `delta_v3.patch:+371`.) |
-| Donos A/B→B/A | **Falharia:** conjuntos iguais não detectam papéis invertidos. (`delta_v3.patch:+380`; `delta_v3.patch:+742`.) |
-| Rejeitada na troca isolada | **Passaria:** a rejeição já era verificada na v2. É regressão adicional, não discriminador da v3. (`delta_v3.patch:+757`; `delta_v3.patch:+396`.) |
-| Desligado no banco, rejeitada na permuta, quatro documentos antes da primeira troca | **Passariam:** são correções acumuladas da v2. (`delta_v3.patch:+219`; `delta_v3.patch:+256`; `delta_v3.patch:+266`.) |
-| Rollback com segunda recusa forjada | **Passaria:** o atomic e a conversão da segunda recusa já existiam. O teste executa a primeira troca real e exige trilha antes de forjar a segunda recusa. (`delta_v3.patch:+290`; `app/ponto/portas/celula.py:972`; `app/ponto/portas/celula.py:1019`.) |
-
-**Não passam vazios por falta de células na fixture:** a base gera as células de setembro até dezembro, e os testes de ordem usam novembro. Contudo, o helper reconhece a presença do SQL `FOR UPDATE`, não a quantidade de linhas retornadas; uma consulta vazia também acrescentaria “celula” à ordem. Teste concorrente com segunda conexão/célula ausente: **não achei no delta**. (`app/ponto/tests/test_o10b_editar_dia_troca.py:91`; `app/ponto/tests/test_o10b_editar_dia_troca.py:93`; `app/ponto/tests/test_o10d_permuta_reciproca.py:48`; `delta_v3.patch:+333`; `delta_v3.patch:+352`.)
-
-**5. Quem escreve, quem lê e qual significado**
-
-| Campo/valor | Escritores encontrados | Leitores e divergência |
-|---|---|---|
-| `Ausencia.colaborador` | A criação atribui o dono e salva. Escritor de produção que **transfira** uma ausência existente: **não achei**; o editor normal não altera esse campo. (`app/ponto/services/ausencia.py:484`; `app/ponto/services/ausencia.py:562`; `app/ponto/services/ausencia.py:648`.) | Troca lê dono como papel cedente/substituto; cobertura e sobreposição leem como pessoa ausente. O par ordenado corrige a identidade dos papéis recebidos. (`delta_v3.patch:+734`; `delta_v3.patch:+742`; `app/ponto/turnos.py:2543`; `app/ponto/turnos.py:2839`.) |
-| `Ausencia.status` | Estado inicial na criação; `mudar_estado`; decisão; cancelamento de férias grava rejeitada. (`app/ponto/services/ausencia.py:475`; `app/ponto/services/ausencia.py:486`; `app/ponto/services/ausencia.py:976`; `app/ponto/services/ausencia.py:1496`.) | Delta exclui só rejeitada; folha exige aprovada; cobrança/sobreposição consideram não rejeitadas. **Não rejeitada não significa aprovada.** (`delta_v3.patch:+757`; `delta_v3.patch:+
-
-[truncado em 20000 de 24725 caracteres]
-
-## 17/11 03:37 · sessao 466bb7bb03cb · - · - · origem=Ronald (tmux)
-
-Achado adicional decisivo: o delta v3 mantém inversão contra **desligamento**, mesmo com células existentes. `executar_desligamento` segura Colaborador pelo `salvar_inteiro`, fecha vínculos e trava células futuras na mesma transação. A permuta/troca agora segura essas células antes de pedir Colaborador. Interleaving: P segura célula futura; D segura Colaborador; D espera célula; P espera Colaborador. (`app/colaboradores/services/desligamento.py:128`, `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/desligamento.py:148`; `app/colaboradores/services/colaborador.py:90`, `app/colaboradores/services/colaborador.py:158`; `app/colaboradores/services/vinculo.py:640`, `app/colaboradores/services/vinculo.py:662`; `app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:31`; `delta_v3.patch:+997`, `delta_v3.patch:+1009`.)
-
-O command também compõe outra ordem: regenera A/hoje, podendo reter Colaborador A pelo marcador; depois regenera B/hoje. P pode segurar A/futuro e B/hoje, esperando Colaborador A, enquanto G espera B/hoje. Bloqueia antes das barreiras da permuta. O mesmo padrão existe no salvamento de template em atomic envolvendo vários colaboradores. (`app/ponto/management/commands/gerar_celulas.py:319`, `app/ponto/management/commands/gerar_celulas.py:323`, `app/ponto/management/commands/gerar_celulas.py:345`; `app/ponto/portas/celula.py:311`, `app/ponto/portas/celula.py:328`; `app/escala/services/cadastro_tipo.py:140`, `app/escala/services/cadastro_tipo.py:323`, `app/escala/services/cadastro_tipo.py:339`, `app/escala/services/cadastro_tipo.py:353`.)
-
-Inventário adicional de caminhos:
-
-| Caminho | Sequência observada |
-|---|---|
-| `regenerar_futuras_do_cadastro` | Células futuras geradas por data → regeneração de cada dia → Colaborador/Chamado se marcador elegível. (`app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:36`, `app/ponto/services/cadastro_futuro.py:44`; `app/ponto/portas/celula.py:328`.) |
-| `sincronizar_foto_futura_do_calendario` | Células futuras → FolgaDia → serviço anterior. (`app/escala/folgas.py:620`, `app/escala/folgas.py:621`, `app/escala/folgas.py:639`, `app/escala/folgas.py:640`.) |
-| `reverter_para_snapshot` | EscalaColaborador por PK → células referenciando vínculos removidos → DELETE/UPDATE vínculos → futuras. No chamador, nota/transição do Chamado ainda dentro do atomic externo. (`app/colaboradores/services/vinculo.py:1017`, `app/colaboradores/services/vinculo.py:1020`, `app/colaboradores/services/vinculo.py:1025`, `app/colaboradores/services/vinculo.py:1035`; `app/chamados/services/acoes_chamado.py:142`, `app/chamados/services/acoes_chamado.py:149`, `app/chamados/services/acoes_chamado.py:153`, `app/chamados/services/acoes_chamado.py:155`.) |
-| `reverter_regeneracao_dia` | UPDATE célula sem releitura sob trava → evento; rabo após atomic próprio, ainda sob transação externa quando houver. (`app/ponto/portas/celula.py:1121`, `app/ponto/portas/celula.py:1130`, `app/ponto/portas/celula.py:1140`, `app/ponto/portas/celula.py:1162`.) |
-| `salvar_e_emitir` | UPDATE célula → INSERT EventoCelula no atomic. (`app/ponto/portas/celula.py:1266`, `app/ponto/portas/celula.py:1267`, `app/ponto/portas/celula.py:1269`.) |
-| Lançamento INSS | Colaborador → criação/reabertura Ausencia → post_save/cartório → atualização situação, mesmo atomic. (`app/ponto/views.py:2544`, `app/ponto/views.py:2546`, `app/ponto/views.py:2547`, `app/ponto/views.py:2564`.) |
-
-Para célula ausente há também ciclo **condicionado à FK efetiva**: G insere X; P não vê INSERT não confirmado, trava Colaborador e tenta inserir X, esperando a UNIQUE; G valida FK no INSERT/commit e pede chave compartilhada no Colaborador, esperando P. Modelo declara FK e UNIQUE, backend declarado é PostgreSQL; DDL vivo e momento efetivo da validação **[nao verificado]**. Não afirmar que todo INSERT trava Colaborador imediatamente. (`app/escala/models.py:1681`, `app/escala/models.py:1833`; `app/ponto/portas/celula.py:645`, `app/ponto/portas/celula.py:294`, `app/ponto/portas/celula.py:1218`; `app/config/settings/prod.py:11`.)
-
-Entre apenas duas permutas/trocas, com conjuntos de donos/cartas/células estáveis, **não achei** ciclo novo: prefixos ordenados e trava comum antecedem criação; isso não permite concluir ordem global segura diante dos caminhos acima. (`delta_v3.patch:+749`, `delta_v3.patch:+1003`; `app/chamados/models.py:2771`.)
-
-## 17/11 03:36 · sessao 90e72400e96b · - · - · origem=Ronald (tmux)
-
-Achados para consolidação, todos por leitura; concorrência executada/produção: **[nao verificado]**.
-
-| Caminho | Ordem efetiva e limites |
-|---|---|
-| `decidir` | `atomic` → UPDATE Ausencia → `post_save` síncrono → cartório. (`app/ponto/services/ausencia.py:1079`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`, `app/ponto/signals.py:93`.) |
-| `mudar_estado` direto | Não abre atomic próprio: sobreposição da trava de Ausencia com as seguintes exige atomic externo. (`app/ponto/services/ausencia.py:955`, `app/ponto/services/ausencia.py:988`, `app/ponto/services/ausencia.py:1002`.) |
-| Cartório, ramo emissor | Pode adquirir Colaborador/Chamado antes de escrever CelulaDia: emissão em `cartorio.py:1791` → `detectar_ausencias.py:694` → `models.py:949`, `models.py:952`; carimbo posterior em `cartorio.py:1873` → `celula.py:1505`, `celula.py:1267`. |
-| Cartório, outros ramos | Sem adesão, escreve célula e retorna, sem emissão. Já a primeira passada pode escrever célula e a reconciliação seguinte pedir Colaborador. Portanto não há ordem universal “Ausencia→célula→Colaborador”. (`app/ponto/services/cartorio.py:1292`, `app/ponto/services/cartorio.py:1314`, `app/ponto/services/cartorio.py:1318`, `app/ponto/services/cartorio.py:1007`, `app/ponto/services/cartorio.py:1011`.) |
-| Consumidor de Ausencia | É `on_commit`; suas travas não pertencem ao atomic original. Não confundir com o cartório síncrono. (`app/ponto/signals.py:250`, `app/ponto/signals.py:272`.) |
-| INSS pela view | Colaborador → criação/reabertura de Ausencia → cartório/célula → situação `afastado`, no mesmo atomic. (`app/ponto/views.py:2544`, `app/ponto/views.py:2546`, `app/ponto/views.py:2547`, `app/ponto/views.py:2564`; `app/colaboradores/services/colaborador.py:90`, `app/colaboradores/services/colaborador.py:81`.) |
-| Desligamento | Colaborador → UPDATE vínculo → células futuras geradas por data, no mesmo atomic. (`app/colaboradores/services/desligamento.py:128`, `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/desligamento.py:148`; `app/colaboradores/services/vinculo.py:862`, `app/colaboradores/services/vinculo.py:641`, `app/colaboradores/services/vinculo.py:662`; `app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:31`, `app/ponto/services/cadastro_futuro.py:36`.) |
-| Cadastro futuro | Trava células existentes por data e chama regeneração mantendo as travas. (`app/ponto/services/cadastro_futuro.py:30`, `app/ponto/services/cadastro_futuro.py:36`, `app/ponto/services/cadastro_futuro.py:44`.) |
-| Cancelamento de férias | Ausencias por PK → saves síncronos → cartório, dentro do atomic; pode ter os mesmos sufixos anteriores. (`app/ponto/services/ausencia.py:1484`, `app/ponto/services/ausencia.py:1488`, `app/ponto/services/ausencia.py:1498`.) |
-| Backfill origem férias | AgendamentoFerias (+ período pelo `select_related`) → Ausencias por PK → UPDATE origem; Colaborador explícito posterior não achei. (`app/ponto/services/ausencia.py:1671`, `app/ponto/services/ausencia.py:1673`, `app/ponto/services/ausencia.py:1679`, `app/ponto/services/ausencia.py:1696`.) |
-
-**Ciclo preservado pela volta 3:** permuta/troca segura célula X, antes da nova trava de Colaborador; uma decisão de **outra Ausencia** do mesmo colaborador consegue segurar Colaborador durante emissão, depois pede X para carimbar; a permuta pede Colaborador: ciclo X↔Colaborador. Se for exatamente a mesma carta, o pedido inicial de carta da permuta a faz esperar antes de possuir X; esse interleaving simples fica serializado. (`delta_v3.patch:+754`, `delta_v3.patch:+1013`; `app/ponto/services/cartorio.py:1791`, `app/ponto/services/cartorio.py:1873`; `app/chamados/models.py:952`.)
-
-**Outro ciclo concreto:** P segura célula futura gerada X e pede Colaborador; desligamento segura Colaborador e pede X pelo suplemento futuro. A ordem célula→Colaborador já era alcançável na base pelo marcador de órfãs; o delta antecipa o ponto dessa espera, sem eliminar o ciclo. (`delta_v3.patch:+1013`; `app/ponto/portas/celula.py:672`; `app/colaboradores/services/desligamento.py:133`, `app/colaboradores/services/desligamento.py:148`; `app/ponto/services/cadastro_futuro.py:31`.)
-
-| Campo | Escritores e leitores |
-|---|---|
-| `Ausencia.colaborador` | Criação escreve em `ausencia.py:484`, persiste em `ausencia.py:562`; edição normal altera tipo/data/minutos, sem dono em `ausencia.py:648`, `ausencia.py:659`. **Escritor de produção que transfere dono: não achei.** Leitores de cobertura e sobreposição usam esse FK como pessoa ausente: `turnos.py:2543`, `turnos.py:2839`. |
-| `Ausencia.documento` | Criação: `ausencia.py:492`; anexar: `ausencia.py:1017`, `ausencia.py:1019`; reabrir: `ausencia.py:1307`, `ausencia.py:1309`. Modelo define comprovante, preenchido só no primeiro dia do intervalo: `models.py:777`, `models.py:780`. Leitores: estado inicial `ausencia.py:938`; gate de aprovação `ausencia.py:754`, `ausencia.py:774`; aviso `ausencia.py:796`, `ausencia.py:813`. |
-| `Ausencia.status` | Criação deriva estado: `ausencia.py:475`, `ausencia.py:486`; transição: `ausencia.py:976`, `ausencia.py:988`; cancelamento férias: `ausencia.py:1496`, `ausencia.py:1498`. Folha exige aprovada, cobrança aceita todas não rejeitadas: `turnos.py:2528`, `turnos.py:2531`; sobreposição exclui rejeitadas: `turnos.py:2839`. |
-| `Colaborador.situacao` | Portas guardadas: `colaborador.py:126`, `colaborador.py:140`, `colaborador.py:152`, `colaborador.py:164`; desligar: `desligamento.py:129`, `desligamento.py:133`; reativar: `desligamento.py:242`, `desligamento.py:247`; INSS: `ponto/views.py:2564`. `esta_desligado` significa somente estado `desligado`; agendamento futuro e afastamento não satisfazem: `desligamento.py:23`, `desligamento.py:29`, `desligamento.py:32`. Choices incluem ativo, afastado, férias, desligado: `colaboradores/models.py:295`. |
-| `CelulaDia` no cartório | Cartório lê célula existente: `cartorio.py:2027`; futura/inexistente retorna: `cartorio.py:2025`, `cartorio.py:2028`; escreve veredito/ata/carimbos pela porta: `cartorio.py:1853`, `cartorio.py:1873`, `celula.py:1505`, `celula.py:1267`. |
-
-**Divergência semântica que continua:** não rejeitada não significa aprovada; documento presente normalmente coloca a linha em `aguardando_decisao`. As cartas aceitas na permuta continuam sendo fatos de ausência para cobrança e, quando aprovadas, para folha. Não desligado também não significa ativo. (`app/ponto/services/ausencia.py:938`, `app/ponto/services/ausencia.py:912`; `app/ponto/turnos.py:2528`, `app/ponto/turnos.py:2531`; `app/colaboradores/services/desligamento.py:32`; `app/colaboradores/models.py:295`.)
-
-## 17/11 03:35 · sessao 4aabe714545d · - · - · origem=Ronald (tmux)
-
-Auditoria dos testes por leitura; execução e concorrência real: **[nao verificado]**. [nao verificado]
-
-| Teste do delta acumulado | Contra a volta 2 | [nao verificado]
-|---|---|
-| Ordem na permuta e na troca isolada | **Falhariam:** exigem `carta → celula → colaborador`; a v2 começava por Colaborador. (`delta_v3.patch`, hunk `+331`, métodos `test_TRAVA_carta_celula_COLABORADOR_*`; descrição da v2 no anexo `verif_v2.r`, item 2.) |
-| Donos A/B → B/A | **Falharia:** a comparação por conjunto aceita a inversão; a troca continua e edita os papéis relidos. (`delta_v3.patch`, hunk `+331`, método `test_TROCA_carta_que_TROCOU_de_dono_A_B_para_B_A_e_recusada`; `app/ponto/portas/celula.py:736`, `app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:753`.) |
-| Rejeitada na troca isolada | **Passaria:** a v2 já verificava rejeição antes de chamar `editar_dia`. (`verif_v2.r`, item 1, linha “Carta rejeitada”; `delta_v3.patch`, hunk `+331`, método `test_TROCA_isolada_recusa_carta_REJEITADA`.) |
-| Instância velha/desligado, rejeitada na permuta e quatro documentos antes da primeira troca | **Passariam:** são correções acumuladas da v2, não discriminadores da v3. (`verif_v2.r`, itens 1 e 5; `delta_v3.patch`, hunks `+216` e `+253`.) |
-| Rollback com segunda recusa forjada | **Passaria:** preserva o mesmo atomic e conversão de recusa da base; executa a primeira troca real e exige trilha antes da segunda chamada. (`app/ponto/portas/celula.py:972`, `app/ponto/portas/celula.py:1018`, `app/ponto/portas/celula.py:1020`; `delta_v3.patch`, hunk `+290`.) |
-
-**Os testes de ordem não são vazios por falta de células na fixture.** A base gera CED/SUB/CTL/C61 de 01/09 até 31/12; os testes novos usam 03/11 e 04/11. A composição da fixture chama essa base, e `_cel` usa `.get`, portanto a ausência de uma célula também derrubaria as fotografias dos testes que as usam. (`app/ponto/tests/test_o10b_editar_dia_troca.py:91`, `app/ponto/tests/test_o10b_editar_dia_troca.py:93`, `app/ponto/tests/test_o10b_editar_dia_troca.py:103`; `app/ponto/tests/test_o10d_permuta_reciproca.py:48`, `app/ponto/tests/test_o10d_permuta_reciproca.py:89`.)
-
-**O helper continua insuficiente para provar proteção de célula ausente.** Ele reconhece a instrução `SELECT … FOR UPDATE` pelo SQL e coleta nomes distintos; não verifica quantas linhas foram travadas. Um SELECT que devolva zero linhas também satisfaz essa coleta. Não há segunda conexão ou interleaving concorrente nesses testes. (`delta_v3.patch`, hunk `+331`, métodos `_ordem_das_travas` e `_confere_ordem_da_casa`; concorrência executada: **[nao verificado]**.) [nao verificado]
-
-Outros defeitos que permanecem:
-
-- A idempotência da permuta compara apenas `origem`, `trabalha` e existência de trilha com as mesmas cartas; não compara DNA, vínculo gerador ou autoria da última edição, e retorna antes das barreiras. (`app/ponto/portas/celula.py:1003`, `app/ponto/portas/celula.py:1005`, `app/ponto/portas/celula.py:1006`, `app/ponto/portas/celula.py:1010`.)
-- A troca isolada continua sem chamar as barreiras de interjornada/DSR da permuta. (`app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:753`; barreiras em `app/ponto/portas/celula.py:902`, `app/ponto/portas/celula.py:927`.)
-- Tipo específico e aprovação das cartas continuam sem exigência; a fixture positiva usa `declaracao/aguardando_decisao`. (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`, `app/ponto/tests/test_o10b_editar_dia_troca.py:108`; o próprio contrato do teste declara a lacuna em `app/ponto/tests/test_o10d_permuta_reciproca.py:12`.)
-- A carta permanece também um fato de ausência: a guarda exclui seus IDs, mas a grade consulta cobertura aprovada e pode apagar os marcos de ausência integral. (`app/ponto/portas/celula.py:897`; `app/escala/utils.py:1188`, `app/escala/utils.py:1220`, `app/escala/utils.py:1251`.)
-- `d1 == d2` continua recusado apesar de o contrato documentado dizer permitido. (`app/ponto/portas/celula.py:975`; `app/ponto/tests/test_o10d_permuta_reciproca.py:259`.)
-
-## 17/11 03:26 · sessao 919afaf4b8c8 · O10-D-PERMUTA-RECIPROCA · verificador · origem=Code
-
-**Parecer: não aprovar como fechamento integral.** O delta corrige validações locais, mas introduz conflito de ordem com caminhos existentes: a permuta passa a fazer **Colaborador → célula**, enquanto edição e regeneração podem fazer **célula → Colaborador**. (`delta_v2.patch:+998`; `app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:672`, `app/chamados/models.py:487`.)
-
-Referências ao código são da cópia original; `delta_v2.patch:+N` indica a numeração de destino do anexo. Execução de testes, reprodução concorrente e ocorrência em produção: **[nao verificado]**. [nao verificado]
-
-**1. O que fecha da volta 1**
-
-| Achado | Parecer | Fundamento e limite |
-|---|---|---|
-| Deadlock na criação de célula ausente | **Fecha em parte.** | Entre permutas/trocas que compartilham colaboradores, ambas passam a adquirir os mesmos Colaborador por PK antes das cartas/células; isso elimina o interleaving original de criação cruzada. Entretanto, permanece possibilidade de deadlock contra edição/regeneração, detalhada abaixo. (`delta_v2.patch:+738`, `delta_v2.patch:+998`; `app/chamados/models.py:2771`; `app/ponto/portas/celula.py:672`, `app/ponto/portas/celula.py:328`.) |
-| TOCTOU de interjornada/DSR entre permutas/trocas | **Fecha a janela concorrente entre essas portas; fecha em parte a garantia de descanso.** | A trava comum serializa essas operações, mas `trocar_plantao` continua escrevendo sem chamar `_barreiras_da_permuta`. Assim, uma troca executada depois da permuta pode produzir descanso inválido. (`delta_v2.patch:+738`, `delta_v2.patch:+998`; `app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:753`, `app/ponto/portas/celula.py:1010`.) |
-| `esta_desligado` sobre instância velha | **Fecha para a validação da permuta.** | Os dois colaboradores são relidos depois da trava; a guarda recebe essas instâncias. Os escritores guardados de situação também usam a trava de Colaborador. Isso não transforma “não desligado” em “ativo”. (`delta_v2.patch:+1000`; `app/ponto/portas/celula.py:1010`; `app/colaboradores/services/colaborador.py:80`, `app/colaboradores/services/colaborador.py:130`; `app/colaboradores/services/desligamento.py:32`.) |
-| Documento conferido somente na vez do par | **Fecha.** | A permuta verifica os quatro documentos antes de alcançar qualquer chamada interna de troca, inclusive antes do retorno `igual`. É preenchimento do campo; existência/conteúdo do arquivo: **[nao verificado]**. (`delta_v2.patch:+1020`; `app/ponto/portas/celula.py:998`, `app/ponto/portas/celula.py:1018`.) |
-| Carta rejeitada | **Fecha a aceitação de `status='rejeitada'` nessas portas.** | A permuta verifica as quatro; a troca isolada verifica seu par, sobre cartas relidas e travadas. Exigir aprovação ou tipo específico continua ausente. (`delta_v2.patch:+749`, `delta_v2.patch:+1021`; `app/ponto/portas/celula.py:734`, `app/ponto/portas/celula.py:987`.) |
-
-Contraexemplo para a garantia de descanso: A, 24x48 07–07, cede 09/11 e recebe 10/11 numa permuta válida. Depois, uma troca isolada faz A assumir 11/11. A termina o primeiro turno em 11/11 às 07h e começa o seguinte nesse mesmo instante; a troca não consulta interjornada. O equivalente para DSR é receber sábado numa permuta e domingo numa troca posterior. São contraexemplos deduzidos dos caminhos; execução: **[nao verificado]**. (`app/ponto/portas/celula.py:818`, `app/ponto/portas/celula.py:915`, `app/ponto/portas/celula.py:931`, `app/ponto/portas/celula.py:753`; `app/ponto/tests/test_o10d_permuta_reciproca.py:48`.)
-
-**2. Ordem invertida**
-
-**Sim, há caminho concreto no código.** A ordem nova é **Colaborador → Ausencia → CelulaDia**. (`delta_v2.patch:+738`, `delta_v2.patch:+998`; `app/ponto/portas/celula.py:734`, `app/ponto/portas/celula.py:982`, `app/ponto/portas/celula.py:984`.)
-
-- **Edição direta: CelulaDia → Colaborador → Chamado.** `editar_dia` trava a célula e, ainda no atomic, chama `_marcar_cobrancas_orfas`; este chama `renovar_contexto`, que pede a trava de Colaborador e Chamado antes do save. (`app/ponto/portas/celula.py:638`, `app/ponto/portas/celula.py:672`; `app/ponto/management/commands/gerar_celulas.py:264`; `app/chamados/services/contexto.py:103`; `app/chamados/models.py:487`.)
-
-  Interleaving: E segura a célula; P segura seu Colaborador e espera a célula; E encontra cobrança órfã elegível e espera Colaborador. Há ciclo de espera. Exige cobrança que atravesse as guardas do marcador; reprodução: **[nao verificado]**. (`app/ponto/management/commands/gerar_celulas.py:257`, `app/ponto/management/commands/gerar_celulas.py:261`; referências anteriores.)
-
-- **Regeneração: CelulaDia → Colaborador → Chamado.** O UPDATE da célula ocorre antes do mesmo marcador. O command gerador também alcança esse caminho dentro de seu atomic, pela regeneração das células de hoje. (`app/ponto/portas/celula.py:311`, `app/ponto/portas/celula.py:328`; `app/ponto/management/commands/gerar_celulas.py:323`, `app/ponto/management/commands/gerar_celulas.py:345`, `app/ponto/management/commands/gerar_celulas.py:347`.)
-
-- **Porta de ausência: Ausencia → Colaborador.** `decidir` abre atomic e chega ao save de Ausencia. Seu `post_save` chama o cartório sincronamente; havendo emissão de cobrança, a abertura de Chamado pede Colaborador. Portanto uma decisão pode segurar a carta e esperar Colaborador enquanto a permuta segura Colaborador e espera essa carta. Exemplo deduzido: rejeição de atestado passado deixa furo que exige emissão. Execução: **[nao verificado]**. (`app/ponto/services/ausencia.py:1079`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`, `app/ponto/signals.py:93`; `app/ponto/services/cartorio.py:1791`; `app/ponto/management/commands/detectar_ausencias.py:694`; `app/chamados/models.py:952`.)
-
-- **`gerar_celulas_periodo` isoladamente:** pedido explícito posterior de Colaborador **não achei**. Há leitura sem trava, INSERT e atualização de DNA; o caminho composto do command tem a inversão da regeneração acima. (`app/ponto/portas/celula.py:1201`, `app/ponto/portas/celula.py:1218`, `app/ponto/portas/celula.py:1230`; `app/ponto/management/commands/gerar_celulas.py:347`.)
-
-- **`abertas_do_colaborador`:** dentro da autoridade, a sequência continua Colaborador → Disputa → Chamado → Pergunta. Não achei inversão causada apenas por essa flag; ela tampouco verifica as travas que o chamador já adquiriu. (`app/chamados/models.py:2771`, `app/chamados/models.py:2780`, `app/chamados/models.py:2793`, `app/chamados/models.py:2797`.)
-
-**3. Reentrância e precondições**
-
-**Sim, para as mesmas linhas na mesma transação.** A autoridade refaz o `SELECT FOR UPDATE`; o registro evita adicionar sentinelas duplicadas. Na composição normal, a permuta já possui os dois Colaborador quando as duas trocas internas os pedem novamente. (`app/chamados/models.py:2771`, `app/chamados/models.py:2773`; `app/chamados/services/trava_do_colaborador.py:42`; `delta_v2.patch:+738`, `delta_v2.patch:+998`.)
-
-O delta cumpre as precondições indicadas: as chamadas ficam dentro dos atomics existentes e passam listas, tipo aceito pelo primeiro argumento. A restrição de `abertas_do_colaborador=True` a no máximo um colaborador não se aplica, pois o delta não passa essa flag. (`app/ponto/portas/celula.py:729`, `app/ponto/portas/celula.py:972`; `app/chamados/models.py:2742`, `app/chamados/models.py:2763`, `app/chamados/models.py:2765`; `delta_v2.patch:+738`, `delta_v2.patch:+998`.)
-
-**Reentrância não garante ordem por transação:** a função ordena os IDs daquela chamada; não impede acrescentar outro Colaborador depois de já possuir células, Chamados ou Perguntas. Chamador de produção envolvendo a permuta dessa maneira: **não achei [nao verificado]**. (`app/chamados/models.py:2757`, `app/chamados/models.py:2763`, `app/chamados/models.py:2771`.)
-
-**4. Catraças**
-
-**Não achei catraca que fique vermelha pelas adições mostradas; execução: [nao verificado].**
-
-- A catraca de travas proíbe `select_for_update` das quatro entidades fora da autoridade. O delta chama a autoridade, sem criar outro escritor direto de trava de Colaborador. (`app/chamados/tests/test_e1_v7_catracas.py:85`, `app/chamados/tests/test_e1_v7_catracas.py:116`, `app/chamados/tests/test_e1_v7_catracas.py:131`; `delta_v2.patch:+738`, `delta_v2.patch:+998`.)
-- A16 exclui imports dentro de funções; os novos imports de `chamados.models` são locais. (`app/core/tests/test_contract_direcao_a16.py:88`, `app/core/tests/test_contract_direcao_a16.py:95`, `app/core/tests/test_contract_direcao_a16.py:123`; `delta_v2.patch:+736`, `delta_v2.patch:+996`.)
-- O selo Disputa→Colaborador examina travas diretas dentro da função; não demonstra a ordem dos caminhos indiretos encontrados acima. (`app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:90`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:110`.)
-
-Lista AST fechada de **quem pode chamar** `trava_na_ordem`: **não achei [nao verificado]**.
-
-**5. Os testes mordem?** [nao verificado]
-
-Por leitura, **os cinco testes novos falhariam no hash**; execução efetiva: **[nao verificado]**. [nao verificado]
-
-| Teste novo | Por que distingue a base | [nao verificado]
-|---|---|
-| Desligado no banco, instância velha | A base pergunta à instância recebida. (`delta_v2.patch:+219`; `app/ponto/portas/celula.py:863`.) |
-| Carta rejeitada | A base não verifica rejeição e alcança a troca mockada, contrariando a recusa exigida. (`delta_v2.patch:+256`; `app/ponto/portas/celula.py:994`, `app/ponto/portas/celula.py:1018`.) |
-| Documento antes da primeira troca | A base só confere documento dentro da troca, que o teste substitui. (`delta_v2.patch:+266`; `app/ponto/portas/celula.py:741`, `app/ponto/portas/celula.py:1018`.) |
-| Primeira trava na permuta | Na base, a primeira trava é de Ausencia. (`delta_v2.patch:+331`; `app/ponto/portas/celula.py:982`.) |
-| Primeira trava na troca isolada | Na base, a primeira trava também é de Ausencia. (`delta_v2.patch:+331`; `app/ponto/portas/celula.py:734`.) |
-
-O **rollback reescrito passaria na base**, pois o atomic e a conversão da segunda recusa já existem. **Não é vazio:** executa a primeira troca real, exige sua trilha e exige duas chamadas. (`delta_v2.patch:+290`; `app/ponto/portas/celula.py:972`, `app/ponto/portas/celula.py:1019`.)
-
-Os testes de SQL comprovam a primeira instrução de trava, mas não demonstram concorrência ou proteção de célula ausente: a fixture gera as células previamente. Testes novos com segunda conexão, mudança de dono da carta ou rejeição na troca isolada: **não achei no delta [nao verificado]**. (`app/ponto/tests/test_o10b_editar_dia_troca.py:91`; `app/ponto/tests/test_o10d_permuta_reciproca.py:70`; `delta_v2.patch:+331`.)
-
-Há uma fragilidade adicional no teste antigo de callbacks: ele conta a fila bruta, mas a trava registra sentinelas `on_commit`. A fixture pode já trazer os colaboradores registrados pela geração de matrícula; portanto não concluo que surgirão exatamente três callbacks nesse teste. O repo já possui contador que exclui esses sentinelas. (`app/ponto/tests/test_o10d_permuta_reciproca.py:305`; `app/chamados/services/trava_do_colaborador.py:47`; `app/colaboradores/models.py:436`; `app/chamados/tests/test_e1_v13_ordem.py:8`; `app/ponto/tests/test_selo_chokepoint_escrita.py:258`.)
-
-**6. Quem escreve, quem lê e os significados**
-
-| Campo | Escritores encontrados | Leitores e significado |
-|---|---|---|
-| `Colaborador.situacao` | Portas `gravar`, `salvar_campos`, `salvar_inteiro`, `atualizar_em_lote`; desligamento atribui `desligado`, reativação atribui `ativo`. (`app/colaboradores/services/colaborador.py:126`, `app/colaboradores/services/colaborador.py:140`, `app/colaboradores/services/colaborador.py:152`, `app/colaboradores/services/colaborador.py:164`; `app/colaboradores/services/desligamento.py:129`, `app/colaboradores/services/desligamento.py:242`.) | A permuta lê `esta_desligado`, que reconhece somente esse estado. Afastado não é desligado; desligamento futuro agendado ainda não altera a situação. (`app/ponto/portas/celula.py:863`; `app/colaboradores/services/desligamento.py:29`, `app/colaboradores/services/desligamento.py:32`.) |
-| `Ausencia.status` | Criação escolhe estado inicial; `mudar_estado` persiste transições; `decidir` aceita aprovação/rejeição. Cancelamento de férias também grava `rejeitada`. (`app/ponto/services/ausencia.py:475`, `app/ponto/services/ausencia.py:486`, `app/ponto/services/ausencia.py:976`, `app/ponto/services/ausencia.py:1057`, `app/ponto/services/ausencia.py:1496`.) | Folha exige aprovada; cobrança e sobreposição excluem rejeitada. (`app/ponto/turnos.py:2528`, `app/ponto/turnos.py:2531`, `app/ponto/turnos.py:2839`.) |
-
-Não achei significado incompatível de **desligado** nesses caminhos. Porém **não desligado ≠ ativo**: existem `afastado` e `ferias`, e essa diferença continua na guarda. (`app/colaboradores/services/desligamento.py:30`; `app/colaboradores/models.py:295`; `app/ponto/portas/celula.py:863`.)
-
-**Não rejeitada ≠ aprovada:** documento presente normalmente produz `aguardando_decisao`, ainda aberto. Além disso, rejeitada também representa férias canceladas; não permite concluir falsidade do documento. (`app/ponto/services/ausencia.py:912`, `app/ponto/services/ausencia.py:938`, `app/ponto/services/ausencia.py:1496`.)
-
-Permanece o conflito das **cartas como comprovantes e fatos de ausência**: a permuta exclui seus IDs da própria guarda, mas a grade continua consultando cobertura aprovada; uma carta integral aprovada pode transformar o dia assumido em ausência e apagar seus marcos. (`app/ponto/portas/celula.py:897`; `app/escala/utils.py:1188`, `app/escala/utils.py:1220`, `app/escala/utils.py:1251`.)
-
-**7. Outros defeitos e limites**
-
-- **A guarda de mudança de colaborador é incompleta.** Compara conjuntos: se as duas cartas passam de donos A/B para B/A, o conjunto permanece `{A,B}` e a troca executa os papéis invertidos. As travas ainda cobrem os dois donos, mas a promessa de recusar carta cujo dono mudou não é cumprida. Escritor de produção que altere `Ausencia.colaborador`: **não achei [nao verificado]**; a falha lógica está na comparação. (`delta_v2.patch:+737`, `delta_v2.patch:+747`; `app/ponto/portas/celula.py:751`, `app/ponto/portas/celula.py:753`; `app/ponto/services/ausencia.py:648`.)
-
-- **Tipo e aprovação continuam sem exigência.** O caso positivo usa `declaracao/aguardando_decisao`; excluir rejeitada não resolve esse achado da volta 1. (`app/ponto/tests/test_o10b_editar_dia_troca.py:106`; `app/ponto/tests/test_o10d_permuta_reciproca.py:130`; `delta_v2.patch:+1021`.)
-
-- **A regeneração ainda pode sobrescrever com leitura antiga.** Ela carrega células sem trava e decide pela origem dessa instância; a nova trava da permuta não é adquirida antes dessa leitura/escrita. (`app/ponto/portas/celula.py:227`, `app/ponto/portas/celula.py:298`, `app/ponto/portas/celula.py:311`.)
-
-- **Persistem `d1=d2` recusado e idempotência insuficiente.** O delta não altera a recusa, nem faz `igual` comparar DNA ou conferir que a última edição ainda pertence à permuta; esse retorno continua anterior à guarda de desligamento. (`app/ponto/portas/celula.py:975`, `app/ponto/portas/celula.py:1003`, `app/ponto/portas/celula.py:1005`, `app/ponto/portas/celula.py:1010`.)
-
-## 17/11 03:23 · sessao e39e9a130d99 · - · - · origem=Ronald (tmux)
-
-**4. Catraças: não achei uma que fique vermelha pelas mudanças mostradas; execução efetiva: [nao verificado].**
-
-- A catraca de travas proíbe `select_for_update` de Colaborador/Disputa/Chamado/Pergunta fora da autoridade; não proíbe chamar a autoridade. O delta adiciona chamadas a `PerguntaDisputa.trava_na_ordem`, sem novo `Colaborador.select_for_update`. (`app/chamados/tests/test_e1_v7_catracas.py:71`, `app/chamados/tests/test_e1_v7_catracas.py:85`, `app/chamados/tests/test_e1_v7_catracas.py:116`, `app/chamados/tests/test_e1_v7_catracas.py:131`; `delta_v2.patch`, hunks `@@ -730` e `@@ -976`)
-- A16 considera imports de topo e exclui os que estão dentro de funções; os imports novos de `chamados.models` são locais. Portanto essas adições não infringem essa catraca. (`app/core/tests/test_contract_direcao_a16.py:88`, `app/core/tests/test_contract_direcao_a16.py:95`, `app/core/tests/test_contract_direcao_a16.py:123`; `delta_v2.patch`, hunks `@@ -730` e `@@ -976`)
-- O selo Disputa→Colaborador examina `select_for_update` direto na mesma função e não segue chamadas indiretas; as adições não introduzem esse padrão. (`app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:12`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:20`, `app/chamados/tests/test_selo_ordem_de_trava_disputa_colaborador.py:110`)
-- Catraça AST que fixe uma lista de **quem pode chamar** `trava_na_ordem`: **não achei** [nao verificado].
-
-**5. Mordida dos testes, por leitura; execução: [nao verificado].** [nao verificado]
-
-| Teste do delta | Passaria no hash? | Evidência | [nao verificado]
-|---|---|---|
-| `test_R3_desligado_le_o_BANCO_e_nao_a_instancia` | **Não**, por leitura: o hash consulta `esta_desligado` sobre a instância recebida. | `app/ponto/portas/celula.py:863`; delta `@@ -216` |
-| `test_R5_carta_REJEITADA_nao_e_carta` | **Não**: o hash não verifica rejeição e alcança o mock de troca; falta a recusa anterior exigida. | `app/ponto/portas/celula.py:994`, `app/ponto/portas/celula.py:1018`, `app/ponto/portas/celula.py:1042`; delta `@@ -246` |
-| `test_R5_carta_sem_documento_barra_ANTES_da_1a_escrita` | **Não**: a conferência do hash está na troca, que o teste substitui; a permuta não recusa antes dela. | `app/ponto/portas/celula.py:741`, `app/ponto/portas/celula.py:1018`; delta `@@ -246` |
-| Primeira trava de Colaborador na permuta | **Não**: a primeira trava explícita do hash é Ausencia. | `app/ponto/portas/celula.py:982`; delta `@@ -291` |
-| Primeira trava de Colaborador na troca isolada | **Não**: a primeira trava explícita do hash é Ausencia. | `app/ponto/portas/celula.py:734`; delta `@@ -291` |
-| Rollback reescrito, segunda recusa forjada | **Sim, por leitura**: a rede de rollback já existe no hash. Não é vazio: executa a primeira troca real, exige trilha e exige duas chamadas. | `app/ponto/portas/celula.py:972`, `app/ponto/portas/celula.py:1019`; delta `@@ -265` |
-
-Os testes novos de SQL provam a posição da primeira instrução, mas **não demonstram ausência de deadlock nem proteção de células ausentes**: a fixture gera as células previamente e os testes mostrados usam uma única execução, sem segunda conexão concorrente. (`app/ponto/tests/test_o10b_editar_dia_troca.py:91`, `app/ponto/tests/test_o10d_permuta_reciproca.py:70`; delta `@@ -291`)
-
-Testes novos de concorrência interjornada/DSR, de carta cujo colaborador mudou e de rejeição na troca isolada: **não achei no delta** [nao verificado]. [nao verificado]
-
-**Cuidado com a contagem de callbacks:** `trava_na_ordem` registra um sentinela `on_commit` por colaborador ainda não registrado; logo callback não equivale necessariamente a rabo. (`app/chamados/models.py:2773`, `app/chamados/services/trava_do_colaborador.py:37`, `app/chamados/services/trava_do_colaborador.py:47`)
-
-Não afirmaria que o teste antigo `len(cbs)==1` passa a falhar com três callbacks: sua fixture cria colaboradores sem matrícula, e cada criação trava o colaborador anterior para gerar matrícula; assim os colaboradores usados podem estar registrados desde o atomic da classe. Essa contaminação de fixture já é documentada por outro selo. (`app/ponto/tests/test_o10d_permuta_reciproca.py:305`, `app/ponto/tests/test_o10b_editar_dia_troca.py:95`, `app/colaboradores/models.py:427`, `app/colaboradores/models.py:436`, `app/chamados/tests/test_e1_v13_ordem.py:8`)
-
-Já existe no repo uma contagem que exclui explicitamente esses sentinelas. (`app/ponto/tests/test_selo_chokepoint_escrita.py:258`)
-
-_6330 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6339 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
