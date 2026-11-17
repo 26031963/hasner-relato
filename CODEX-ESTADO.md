@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 21:13** · publicado em **16/11/2026 21:14** (UTC-3)
+> Ultima resposta processada: **16/11/2026 21:21** · publicado em **16/11/2026 21:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 21:21 · sessao 83911a7e8be8 · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
+
+1. **PROCEDENTE: MUDA c está cumprido.** `_pares_por_veredito` agrupa por `(tipo,status)`, consulta o juiz e devolve os baldes; a lista chama essa função uma vez, e contador e filtro leem o mesmo retorno. O filtro monta o OR com ambos os campos. ([views.py:2175](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2175), [views.py:2240](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2240), [views.py:2250](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2250), [views.py:2264](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2264))
+
+   **NAO PROCEDENTE a suspeita de juiz novo ou significado trocado.** A função não decide por status/efeito: usa o retorno de `veredito_do_tipo`. Lê `tipo`, `status` e a contagem `n`; modifica somente o dicionário local, sem gravar registros. O próprio `veredito_de` delega ao mesmo núcleo com os mesmos campos. ([views.py:2174](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2174), [dia_decidido.py:495](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/services/dia_decidido.py:495))
+
+2. **PROCEDENTE: o selo morde, com alcance limitado.** Na reprodução isolada do corpo do teste, com fontes mutadas somente em memória: [nao verificado]
+
+   - Remover ou duplicar `_pares_por_veredito(_base)` falha: exige exatamente uma chamada. ([teste:298](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:298))
+   - Introduzir `abonam_vigentes` no helper falha: o varredor reconhece esse nome proibido. ([teste:258](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:258), [teste:301](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:301))
+   - Trocar a chave de `setdefault` por `'abonado'`, ignorando o juiz, **passa nesse selo**; substituir a soma do contador por `0` também passa. Ele não verifica delegação ao juiz nem o consumo do retorno pelos dois caminhos. ([views.py:2176](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2176), [views.py:2250](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2250), [teste:295](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:295))
+
+   Portanto, **NAO PROCEDENTE tratá-lo como prova completa de MUDA c**; ele protege a estrutura nominal descrita acima. ([teste:295](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:295))
+
+3. **NAO PROCEDENTE: retirar o segundo `unescape` não esvazia os asserts nem deixa escapar M5.** O parser entrega o atributo desescapado, e `_segue` agora usa esse valor diretamente. O teste com datas válidas exige `de` e `ate` em todos os sete chips, segue os links e exclui o registro de fora do recorte; um link sem esses parâmetros falha já nas verificações de presença. ([teste:42](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:42), [teste:122](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:122), [teste:331](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:331))
+
+   **PROCEDENTE uma limitação anterior:** `parse_qs` sem `keep_blank_values=True` permite que `de=&ate=` passe pelos asserts de ausência. Isso não foi criado pela retirada do `unescape` e não neutraliza o teste de datas válidas contra M5. ([teste:358](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:358), [teste:336](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:336))
+
+4. Quanto às seis linhas da triagem:
+
+   - **4.1 — PROCEDENTE a cura:** há helper compartilhado e ambos os consumidores usam seus baldes; a ressalva sobre o alcance do selo permanece no item 2. ([views.py:2240](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2240), [views.py:2250](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2250), [views.py:2264](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2264))
+   - **4.2 — PROCEDENTE como questão preservada no delta; não como risco eliminado.** Agrupamento e coluna continuam chamando o juiz separadamente, e o catálogo tem cache de 60 segundos, sem fotografia por requisição. A coluna efetivamente lê `veredito_de(a)`, conforme o aval. ([views.py:2176](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2176), [views.py:2297](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2297), [ausencias.py:258](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/catalogo/ausencias.py:258), [ausencias.py:276](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/catalogo/ausencias.py:276)) A equivalência com o HEAD histórico e a alegação de que qualquer solução exigiria fallback: **NAO SEI [nao verificado]**.
+   - **4.3 — PROCEDENTE quanto ao comportamento atual:** `registro` substitui a consulta por busca de PK e pode trazer registro fora do mês. A janela também aceita ausências que atravessam sua borda. ([views.py:2206](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2206), [turnos.py:3170](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/turnos.py:3170)) A alegada concordância da volta 1: **NAO SEI [nao verificado]**.
+   - **4.4 — NAO SEI quanto ao descarte formal por C3 [nao verificado].** O problema técnico continua: os chips preservam a outra dimensão, enquanto os contadores antecedem ambos os filtros; a própria cópia documenta esse contraexemplo. ([ausencias.html:65](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/templates/ponto/ausencias.html:65), [views.py:2243](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2243), [RELATO.md:4](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/docs/RELATO.md:4))
+   - **4.5 — NAO SEI:** os resultados de execução de RED e mutantes não foram fornecidos; afirmar que rodaram não comprova seus resultados. **[nao verificado]**
+   - **4.6 — PROCEDENTE a correção atual:** o parser desescapa o atributo e `_segue` não repete a operação. A atribuição histórica ao commit `2b2b0256e`: **[nao verificado]**. ([teste:42](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:42), [teste:117](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/tests/test_ausencia_efeito_pelo_estado.py:117))
+
+   **NAO SEI se houve achado omitido:** o relatório integral da volta 1 não consta dos anexos fornecidos. **[nao verificado]**
+
+5. **NAO PROCEDENTE a hipótese de nova quebra funcional identificável no delta.** A extração conserva agrupamento/delegação, contador e filtro compartilham os baldes, a coluna continua lendo o juiz e os links continuam levando o universo montado na view. ([views.py:2175](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2175), [views.py:2250](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2250), [views.py:2264](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2264), [views.py:2297](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2297), [views.py:2219](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/ponto/views.py:2219), [ausencias.html:48](/home/ronald/codex_ws/b33acd6034b19a2f39c6ef7dc6f8b31893cd070e/app/templates/ponto/ausencias.html:48))
+
+   **NAO SEI quanto à comprovação executada dos resultados 1–6 e C2 item 1:** a inspeção e o selo isolado não substituem os testes Django nem o smoke de produção. **[nao verificado]** [nao verificado]
 
 ## 16/11 21:13 · sessao e5d084d5b3df · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
 
@@ -619,17 +652,4 @@ Os números finais reproduzem exclusivamente a saída fornecida. [nao verificado
 
 NUMERO: validaveis_entregue=1 | aberto=1 | total_erros=0.
 
-## 16/11 19:36 · sessao ecdcbcf268f1 · BUG-PAR-O-PAR · sonda · origem=Code
-
-1. A saída fornecida informa **0 vivas com `data_evento` vazio**, **0 com o campo vazio** e universo de **19.630 perguntas de intervalo**. Validação independente em produção: [nao verificado].
-
-2. **Não é possível certificar que o script mede o solicitado**: o texto contém somente a saída; não localizei `sonda_3e_sem_dia.py` nem `_PAR_DO_INTERVALO` da c4 na cópia. [nao verificado] Falta conferir no script:
-   - Universo filtrado exatamente pelas chaves de `_PAR_DO_INTERVALO` da c4. [nao verificado]
-   - Seleção de `data_evento` nulo, compatível com o campo declarado em `app/chamados/models.py:2528`.
-   - Contagem das selecionadas por `chamados.juizes.pergunta_viva(p)`, cuja entrada está em `app/chamados/juizes.py:866` e delegação em `app/chamados/juizes.py:898`.
-
-3. A saída informa **`total_erros=0`**; a abrangência desse contador depende do script ausente. [nao verificado]
-
-NUMERO: 0 de 0 de 19630 | total_erros=0
-
-_6176 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6177 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

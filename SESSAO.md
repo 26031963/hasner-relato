@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 16/11/2026 21:19:47.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (176.8 MB). Acoes na janela: **1162**.
+**Medido em 16/11/2026 21:25:16.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (176.8 MB). Acoes na janela: **1155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1165,10 +1165,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:27:36 | Bash | Find pista submission door | `cd /home/ronald/saas-hasner; ls logs/DUAS-PISTAS/ \| head -40; timeout 15 ssh -o BatchMode=yes pista estado 2>&1 \| tail -8; grep -rn 'ssh pista' logs/RETOMA-HE-LOTE3/*.sh logs/DUAS-PISTAS/*.sh 2>/dev/null \| head -8 \| cut -c1-250` |
 | 09:27:33 | Bash | Read pista aval and lock script | `cd /home/ronald/saas-hasner; cat logs/AVAIS-1515/complemento1_pista_voltou.txt; grep -n 'PISTA-VOLTOU\\|pista' app/docs/RELATO.md \| head -12 \| cut -c1-300; sed -n 1,40p bin/pista_lock.sh` |
 | 09:27:30 | Bash | Ping pista and find PISTA-VOLTOU door | `cd /home/ronald/saas-hasner; timeout 15 ssh -o BatchMode=yes -o ConnectTimeout=8 pista ping; echo rc=$?; grep -rln 'PISTA-VOLTOU' app/docs logs/AVAIS-1515 bin 2>/dev/null \| head; ls bin \| grep -i pista` |
-| 09:24:47 | Bash | Fix ESPERANDO pid | `cd /home/ronald/saas-hasner; sed -i 's/^ESPERANDO: espera_red_c2.sh \| pid=164123$/ESPERANDO: espera_red_c2.sh \| pid=164124/' app/docs/RELATO.md; python3 -c "import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |
-| 09:24:44 | Bash | Record LOTE3 green, repoint ESPERANDO | `cd /home/ronald/saas-hasner; date +%H:%M; P=$(pgrep -f 'espera_red_c2.sh' \| head -1); pgrep -fa espera_red_c2.sh \| cut -c1-90; python3 - "$P" <<'EOF' import sys,re p='app/docs/RELATO.md'; t=open(p,encoding='utf-8').read() anc="ESTADO 09:19 TRAVA-E-SITIO-1911"; assert t.count(anc)==1 t=t.replace(anc,"ESTADO 09:26 LOTE3 c7 SUITE VERDE (copia @2e79fdc30, logs/RETOMA-HE-LOTE3/c7/suite.log: OK (skipp ...` |
-| 09:24:38 | Bash | Run waiter for LOTE7 suite after c2 RED | `/home/ronald/saas-hasner/logs/DUAS-PISTAS/lote7_c7/espera_red_c2.sh` |
-| 09:24:37 | Bash | Write waiter that runs LOTE7 suite after c2 RED | `cd /home/ronald/saas-hasner; cat > logs/DUAS-PISTAS/lote7_c7/espera_red_c2.sh <<'EOF' #!/bin/bash # TRAVA-E-SITIO-1911 item 2: a suite do LOTE7 c7 so volta a fila da trava depois do RED da F1 B1 c2 (arquivo-sinal). cd /home/ronald/saas-hasner \|\| exit 2 until [ -f logs/E4C/f1nova/b1/c2/red.fim ]; do /usr/bin/sleep 30; done echo "red.fim visto $(date +%H:%M): $(cat logs/E4C/f1nova/b1/c2/red.fim)"  ...` |
-| 09:24:29 | Agent | Opus final LOTE3 c7 | `Opus final (somente leitura) da obra SITUACAO-DESLIGADO-SEM-PORTA / LOTE3 c7, repo /home/ronald/saas-hasner (leia CLAUDE.md da raiz). Copia: /home/ronald/wt-lote3-c6-014304 @2e79fdc30; base main f8ee770a5 (diff a avaliar: `git -C /home/ronald/wt-lote3-c6-014304 diff f8ee770a5 HEAD`; o c7 sozinho e 3744e8eab..2e79fdc30). Nao rode suite, nao escreva fora de logs/RETOMA-HE-LOTE3/c7/, nao toque prod n ...` |
-| 09:24:16 | Bash | List LOTE3 c7 artefacts and base | `cd /home/ronald/saas-hasner; ls logs/RETOMA-HE-LOTE3/c7/; cd /home/ronald/wt-lote3-c6-014304; git log --oneline main..HEAD 2>/dev/null \| head; git merge-base HEAD main` |
-| 09:24:10 | Bash | Read LOTE3 c7 suite verdict | `cd /home/ronald/saas-hasner; L=logs/RETOMA-HE-LOTE3/c7/suite.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep -E '^Ran [0-9]+ tests' $L \| tail -1; tail -1 $L; cd /home/ronald/wt-lote3-c6-014304 && git log --oneline -1 && git status --porcelain \| head` |
