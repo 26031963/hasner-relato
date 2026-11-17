@@ -1,7 +1,185 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 20:18** · publicado em **17/11/2026 20:18** (UTC-3)
+> Ultima resposta processada: **17/11/2026 20:21** · publicado em **17/11/2026 20:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 20:21 · sessao 039ca51e6204 · CURA-DE-FASE · censo · origem=Code
+
+A classificação **DATA GARANTIDA** abaixo vale para os caminhos de produção rastreados; quando a origem de um parâmetro não foi fechada, marquei **DUVIDOSO**. As referências são relativas à raiz da cópia. [não verificado: identidade do HEAD por Git, pois a cópia não contém `.git`]
+
+| arquivo:linha | alvo | fonte | veredito |
+|---|---|---|---|
+| app/api/views.py:588 | escala_vigente | `localtime(ts_efetivo).date()`, app/api/views.py:584 | DATA GARANTIDA |
+| app/api/views_core.py:574 | escala_vigente | `localtime(ts_efetivo).date()`, app/api/views_core.py:570 | DATA GARANTIDA |
+| app/chamados/detector_anomalias.py:146 | escala_vigente | `localtime(timestamp_batida).date()`, app/chamados/detector_anomalias.py:139–140 | DATA GARANTIDA |
+| app/chamados/juizes.py:2203 | escala_vigente | Chamador passa `min(_d_perg, _d_ch)` após subtração; `_d_ch` é convertido a data, app/chamados/juizes.py:2363–2377 | DATA GARANTIDA |
+| app/chamados/juizes.py:321 | escala_vigente | Parâmetro recebido de materialização: data da pergunta ou conversão do contexto, app/chamados/services/materializacao.py:613–616, :692; falta fechar a origem de todas as instâncias em memória | DUVIDOSO |
+| app/chamados/juizes.py:519 | escala_vigente | `date.fromisoformat(str(data_iso)[:10])`, app/chamados/juizes.py:469–473 | DATA GARANTIDA |
+| app/chamados/juizes.py:2009 | vinculo_do_dia | Chamadores encontrados omitem `data`, usando `localdate()`, app/chamados/juizes.py:1996; app/chamados/views.py:929; app/chamados/services/fio.py:509; app/chamados/services/acoes_chamado.py:422 | DATA GARANTIDA |
+| app/chamados/management/commands/auditar_disputas.py:112 | escala_vigente | `timezone.localdate(b.timestamp)`, app/chamados/management/commands/auditar_disputas.py:110–111 | DATA GARANTIDA |
+| app/chamados/management/commands/auditar_invariantes_chamados.py:391 | vinculo_do_dia | `c.data` de `CelulaDia` consultada pelo ORM, app/chamados/management/commands/auditar_invariantes_chamados.py:331–333; campo em app/escala/models.py:1685 | DATA GARANTIDA |
+| app/chamados/management/commands/auditar_invariantes_chamados.py:1538 | vinculo_cobre_a_data | `f.data` de `FolgaDia` consultada pelo ORM, app/chamados/management/commands/auditar_invariantes_chamados.py:1527, :1536–1538; app/escala/models.py:1588 | DATA GARANTIDA |
+| app/chamados/management/commands/auditar_invariantes_chamados.py:361 | q_vinculo_cobre_a_data | `p.data_evento` de pergunta consultada pelo ORM, app/chamados/management/commands/auditar_invariantes_chamados.py:347–348; `DateField`, app/chamados/models.py:2528 | DATA GARANTIDA |
+| app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:87 | escala_vigente | `t.data_turno`, app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:115, :145; construída de timestamp local e `.date()`, app/ponto/turnos.py:45, :285–308, :318–323 | DATA GARANTIDA |
+| app/chamados/services/carga_pergunta_viva.py:162 | escala_vigente | `dia` é parâmetro; também recebe `data_evento` de `classificar_falta`, app/escala/servico_jornada.py:280, :363. Faltou fechar todos os chamadores dessa função | DUVIDOSO |
+| app/chamados/services/disputa_emissao.py:833 | escala_vigente | Chamador passa data extraída do JSON por `_ddc`, app/chamados/services/disputa_emissao.py:1246–1249; parser converte, app/chamados/data_evento.py:7–13, :27–39 | DATA GARANTIDA |
+| app/chamados/services/disputa_emissao.py:923 | escala_vigente | `data_evento` é parâmetro, app/chamados/services/disputa_emissao.py:901; há caminhos com conversão de JSON, app/chamados/services/disputa_emissao.py:1184–1185, :1246–1254, mas faltou fechar todos os chamadores | DUVIDOSO |
+| app/chamados/services/limbo_folgas.py:321 | escala_vigente | `dia_do_fato`, app/chamados/services/limbo_folgas.py:318; célula de `DateField` ou datas convertidas, app/escala/models.py:1685; app/chamados/juizes.py:51–54, :99–122, :162–170 | DATA GARANTIDA |
+| app/chamados/services/limbo_folgas.py:200 | vinculo_cobre_a_data | `dia_do_fato`, app/chamados/services/limbo_folgas.py:197; fontes e conversões em app/chamados/juizes.py:51–54, :99–122, :162–170; app/escala/models.py:1685 | DATA GARANTIDA |
+| app/colaboradores/queries.py:64 | q_vinculo_cobre_a_data | `timezone.localdate()`, app/colaboradores/queries.py:62 | DATA GARANTIDA |
+| app/colaboradores/services/calendario.py:536 | vinculo_cobre_a_data | `data_ini` construída como data ou convertida do GET, app/colaboradores/services/calendario.py:204–241; janela da competência, app/ponto/janelas.py:10–21 | DATA GARANTIDA |
+| app/colaboradores/services/calendario.py:537 | vinculo_cobre_a_data | `data_fim` construída como data ou convertida do GET, app/colaboradores/services/calendario.py:204–241; app/ponto/janelas.py:10–21 | DATA GARANTIDA |
+| app/colaboradores/services/calendario.py:418 | vinculo_do_dia | `_data` vem da grade, app/colaboradores/services/calendario.py:363, :382–383; grade constrói dias da janela, app/escala/services/leitor_celula.py:375–390; janela em app/colaboradores/services/calendario.py:204–241 | DATA GARANTIDA |
+| app/colaboradores/services/feriado_do_posto.py:103 | vinculo_do_dia | `cel.data` de consulta a `CelulaDia`, app/colaboradores/services/feriado_do_posto.py:94–96; `DateField`, app/escala/models.py:1685 | DATA GARANTIDA |
+| app/colaboradores/services/ficha.py:129 | vinculo_do_dia | Chamadas produtivas identificadas usam o padrão `localtime(now()).date()`, app/colaboradores/services/ficha.py:117–118, :269–275; app/api/views_mensageria.py:1133–1134 | DATA GARANTIDA |
+| app/colaboradores/services/vinculo.py:955 | vinculo_cobre_a_data | Chamador passa `timezone.localdate()`, app/colaboradores/services/estrutura.py:62 | DATA GARANTIDA |
+| app/colaboradores/views.py:2652 | q_vinculo_cobre_a_data | `timezone.localdate()`, app/colaboradores/views.py:2650 | DATA GARANTIDA |
+| app/core/feriados.py:161 | vinculo_do_dia | Dias construídos por aritmética de datas, app/core/feriados.py:147–150; exemplos de fontes em app/colaboradores/services/calendario.py:204–241, :347 e app/relatorios/pdf_espelho.py:298 | DATA GARANTIDA |
+| app/escala/alimentacao.py:358 | vinculo_do_dia | `d` vem dos pares recebidos, app/escala/alimentacao.py:334, :350; outro carregador repassa parâmetro `data`, :320–330. Faltou fechar as fontes de todos os chamadores | DUVIDOSO |
+| app/escala/alimentacao.py:285 | vinculo_cobre_a_data | `data` vem de `escala_vigente`, app/escala/servico_jornada.py:66; chamada recebe `x['virada']`, app/ponto/management/commands/censo_fase_12x36.py:413, gerada por `str(virada)`, :224 | TEXTO POSSÍVEL |
+| app/escala/folgas.py:487 | vinculo_cobre_a_data | `fd.data`; chamadores identificados carregam `FolgaDia` pelo ORM, app/escala/folgas.py:535–541; app/escala/management/commands/reparentar_folgas.py:28–34; campo em app/escala/models.py:1588 | DATA GARANTIDA |
+| app/escala/folgas.py:451 | q_vinculo_cobre_a_data | `data` é parâmetro, app/escala/folgas.py:442; não foi identificado chamador de produção que estabeleça sua fonte | DUVIDOSO |
+| app/escala/folgas.py:539 | vinculo_cobre_a_data | `fd.data` de consulta a `FolgaDia`, app/escala/folgas.py:535–538; app/escala/models.py:1588 | DATA GARANTIDA |
+| app/escala/folgas.py:624 | vinculo_cobre_a_data | `data` consultada de `CelulaDia`, app/escala/folgas.py:621–623; `DateField`, app/escala/models.py:1685 | DATA GARANTIDA |
+| app/escala/management/commands/reparentar_folgas.py:31 | vinculo_cobre_a_data | `fd.data` de consulta a `FolgaDia`, app/escala/management/commands/reparentar_folgas.py:28–30; app/escala/models.py:1588 | DATA GARANTIDA |
+| app/escala/models.py:929 | q_vinculo_cobre_a_data | Chamador encontrado omite `hoje`, app/escala/management/commands/vinculos_5x2_6x1_trabalha_feriado.py:15; padrão `date.today()`, app/escala/models.py:920, :926 | DATA GARANTIDA |
+| app/escala/services/cadastro_realidade.py:513 | vinculo_do_dia | Dias extraídos de células consultadas pelo ORM, app/escala/services/cadastro_realidade.py:452–456, :497–498; app/escala/models.py:1685 | DATA GARANTIDA |
+| app/escala/services/cadastro_realidade.py:765 | vinculo_do_dia | `hoje` é repassado por `lista`, app/escala/services/cadastro_realidade.py:748, :773, :780–781, :877; faltou fechar todas as bordas que fornecem `hoje` | DUVIDOSO |
+| app/escala/services/cadastro_realidade.py:761 | q_vinculo_cobre_a_data | Mesmo parâmetro `hoje` de `lista`, app/escala/services/cadastro_realidade.py:748, :773, :780–781, :877; faltou fechar todas as bordas | DUVIDOSO |
+| app/escala/services/escala_certa.py:31 | escala_vigente | Caminho identificado: motor passa `data_jornada`, app/ponto/motor_calculo_v2.py:2403–2409, :2461; vem de `.date()` ou `t.data_turno`, :884–895; app/ponto/turnos.py:45–48, :285–308 | DATA GARANTIDA |
+| app/escala/services/fase_na_tela.py:161 | q_vinculo_cobre_a_data | Chamador passa `hoje=localdate()` e `contra`, app/colaboradores/views_fase.py:54, :67, :73; `contra` vem dos dias trabalhados, app/escala/services/fase_na_tela.py:40–47, :113–120; app/escala/services/propositor.py:106–118; app/ponto/turnos.py:45–48, :285–308 | DATA GARANTIDA |
+| app/escala/services/propositor.py:448 | vinculo_do_dia | `d` é construído com `timedelta` a partir de `hoje`, app/escala/services/propositor.py:415–417 | DATA GARANTIDA |
+
+Nos seis sítios de `q_vinculo_cobre_a_data`, o `Q` monta lookups `lte`/`gte` sobre os campos de vínculo, que são `DateField` ([alimentacao.py:219](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/escala/alimentacao.py:219), [models.py:875](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/escala/models.py:875)). **Conforme o dado fornecido**, o lookup do Django coage texto ISO válido; a coerção não foi verificada independentemente na cópia [não verificado]. A comparação Python da juíza é direta ([alimentacao.py:214](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/escala/alimentacao.py:214)).
+
+**LOTE 0: 40 linhas, DATA GARANTIDA 32, TEXTO POSSÍVEL 1, DUVIDOSO 7.**
+
+## 17/11 20:20 · sessao 3e36c6765b3a · CURA-DE-FASE · censo · origem=Code
+
+O lote tem **39 chamadas**. Nos casos duvidosos, a tabela identifica a parte da cadeia que foi localizada e o que falta comprovar; isso não demonstra, por si só, que texto alcance a chamada.
+
+| arquivo:linha | alvo | fonte | veredito |
+|---|---|---|---|
+| `app/ponto/portas/regen_exportada.py:152` | `vinculo_cobre_a_data` | `_d=desde` em `app/ponto/portas/regen_exportada.py:150`; a guarda exige `date` em `:118`; chamador filtra datas em `app/chamados/services/passivo_validado.py:450` e passa o intervalo em `:453`. | DATA GARANTIDA |
+| `app/ponto/precedencia.py:349` | `vinculo_do_dia` | `data` parte de `data_ini` em `app/ponto/precedencia.py:334`, parâmetro de `:259`; falta fechar as fontes dos chamadores. | DUVIDOSO |
+| `app/ponto/precedencia.py:537` | `escala_vigente` | `d` deriva do parâmetro `data` em `app/ponto/precedencia.py:430,507`; um caminho converte ISO em `app/ponto/views.py:2520,2547` e passa por `app/ponto/services/ausencia.py:483,524`; demais fontes não fechadas. | DUVIDOSO |
+| `app/ponto/precedencia.py:510` | `escala_vigente` | Mesma cadeia: `data` em `app/ponto/precedencia.py:430,507`; caminho convertido em `app/ponto/views.py:2520,2547` e `app/ponto/services/ausencia.py:483,524`; demais fontes não fechadas. | DUVIDOSO |
+| `app/ponto/propositor.py:350` | `escala_vigente` | `dia` vem de `t.data_turno` em `app/chamados/reconciliador.py:96,113`; campo `DateField` em `app/ponto/models.py:1208,1215`. | DATA GARANTIDA |
+| `app/ponto/registro_batida.py:29` | `escala_vigente` | `timezone.localtime(timestamp).date()` em `app/ponto/registro_batida.py:28`. | DATA GARANTIDA |
+| `app/ponto/registro_batida.py:44` | `escala_vigente` | `timestamp` localizado e `.date()` em `app/ponto/registro_batida.py:40,43`. | DATA GARANTIDA |
+| `app/ponto/services/cadastro_futuro.py:70` | `vinculo_do_dia` | `cel.data` das células consultadas em `app/ponto/services/cadastro_futuro.py:64`; `DateField` em `app/escala/models.py:1635,1685`. | DATA GARANTIDA |
+| `app/ponto/services/cartorio.py:875` | `escala_vigente` | Fontes rastreadas: `cel.data` em `app/ponto/services/cartorio.py:1353,1364`, `app/ponto/services/vigia_de_hora.py:126` e `app/chamados/services/fabrica_da_celula.py:46`; ISO convertido em `app/ponto/management/commands/recusar_ponta_pequena.py:133,150`; outro caminho faz aritmética de data em `app/ponto/services/cartorio.py:378,395,445`. Campo em `app/escala/models.py:1685`. | DATA GARANTIDA |
+| `app/ponto/services/cartorio.py:1903` | `_vinculo_do_dia` | Chamadores passam `data` em `app/ponto/services/cartorio.py:1783,1819,1845`, obtida de `cel.data` em `:1353`; campo em `app/escala/models.py:1685`. | DATA GARANTIDA |
+| `app/ponto/services/cartorio.py:2035` | `escala_vigente` | `data` é parâmetro em `app/ponto/services/cartorio.py:2011`; comparação com `localdate()` em `:2016,2025` antecede a chamada, mas as fontes dos chamadores não foram fechadas. | DUVIDOSO |
+| `app/ponto/services/cartorio.py:1768` | `_vinculo_do_dia` | `data=cel.data` em `app/ponto/services/cartorio.py:1353`; campo em `app/escala/models.py:1685`. | DATA GARANTIDA |
+| `app/ponto/services/cobertura.py:278` | `escala_vigente` | `dia` e `hoje` são parâmetros em `app/ponto/services/cobertura.py:247`; `hoje` pode ser fornecido e há comparação em `:273`; falta comprovar as fontes de ambos. | DUVIDOSO |
+| `app/ponto/services/declarar_dia.py:58` | `escala_vigente` | `data` é parâmetro em `app/ponto/services/declarar_dia.py:56`, repassado por chamadas em `:75,109,182`; faltam as fontes de todos os caminhos. | DUVIDOSO |
+| `app/ponto/services/diagnostico_escala.py:53` | `vinculo_cobre_a_data` | `d=ini` em `app/ponto/services/diagnostico_escala.py:148,150`; a API constrói `ini` de `localdate()` ou da data convertida em `app/api/views_mensageria.py:1994,2006,2009`; conversão em `:1726,1731,1759`. | DATA GARANTIDA |
+| `app/ponto/services/espelho.py:286` | `vinculo_do_dia` | `d` recebe `data` em `app/ponto/services/espelho.py:675`; esta deriva de `data_ini` em `:653`; `montar_dias` recebe o parâmetro em `:365` e é chamada com `vis_ini` em `:1262`; fonte completa de `vis_ini` não fechada. | DUVIDOSO |
+| `app/ponto/services/espelho.py:1065` | `vinculo_do_dia` | `fim` é parâmetro em `app/ponto/services/espelho.py:971`; há chamada em `:1227`, mas as fontes de todos os chamadores não foram fechadas. | DUVIDOSO |
+| `app/ponto/services/espelho.py:724` | `vinculo_do_dia` | `data` deriva de `data_ini` em `app/ponto/services/espelho.py:653`; `montar_dias` recebe o parâmetro em `:365` e é chamada com `vis_ini` em `:1262`; fonte completa não fechada. | DUVIDOSO |
+| `app/ponto/services/fechamento.py:125` | `vinculo_do_dia` | `_d=fim` em `app/ponto/services/fechamento.py:123`; chamador passa `fim.date()` em `:851`. | DATA GARANTIDA |
+| `app/ponto/services/fechamento.py:191` | `vinculo_do_dia` | `_d` é chave do mapa em `app/ponto/services/fechamento.py:189`; mapa formado de `c.data` em `:605` ou pelo carregador em `app/escala/alimentacao.py:67,73`; campo em `app/escala/models.py:1685`; outros chamadores em `app/ponto/services/espelho.py:1049,1164` e `app/relatorios/pdf_espelho.py:354,419`. | DATA GARANTIDA |
+| `app/ponto/services/fechamento.py:948` | `escala_vigente` | `timezone.localtime(_p_f.entrada).date()` em `app/ponto/services/fechamento.py:947`. | DATA GARANTIDA |
+| `app/ponto/services/fechamento.py:229` | `vinculo_cobre_a_data` | `_d=fatia_ini` em `app/ponto/services/fechamento.py:225`; `fatia_ini` inclui parâmetro `ini` em `:132,206`. Um chamador passa `.date()` em `:754`; fontes dos outros, em `app/ponto/services/espelho.py:1164` e `app/relatorios/pdf_espelho.py:419`, não foram fechadas. | DUVIDOSO |
+| `app/ponto/services/flip_auto.py:66` | `vinculo_do_dia` | `dia=timezone.localtime(ts_b).date()` em `app/ponto/services/flip_auto.py:62,63`. A chamada efetiva é `vinculo_do_dia`, embora o lote a rotule `escala_vigente` (`:66`). | DATA GARANTIDA |
+| `app/ponto/services/furos_vetados.py:24` | `escala_vigente` | `data` é parâmetro em `app/ponto/services/furos_vetados.py:18`; um caminho usa `cel.data` em `:64`, outro usa `dia_do_fato` em `:101,106`; falta fechar esta última fonte. | DUVIDOSO |
+| `app/ponto/services/veredito_celula.py:41` | `escala_vigente` | `data` é parâmetro em `app/ponto/services/veredito_celula.py:22`; repasses em `:211,227` e `app/ponto/services/flip_auto.py:201,215,293`; faltam as fontes de todos os chamadores. | DUVIDOSO |
+| `app/ponto/services/vigia_cadastro_futuro.py:58` | `vinculo_do_dia` | `cel.data` da consulta em `app/ponto/services/vigia_cadastro_futuro.py:25,31,38,43`; campo em `app/escala/models.py:1685`. | DATA GARANTIDA |
+| `app/ponto/services/vigia_de_hora.py:47` | `escala_vigente` | `cel.data` de `CelulaDia` em `app/ponto/services/vigia_de_hora.py:117,118`; campo em `app/escala/models.py:1685`. | DATA GARANTIDA |
+| `app/ponto/services/vigia_de_hora.py:74` | `escala_vigente` | `hoje` recebe `cel.data` na chamada em `app/ponto/services/vigia_de_hora.py:130`; campo em `app/escala/models.py:1685`. | DATA GARANTIDA |
+| `app/ponto/supra_juiz.py:174` | `vinculo_do_dia` | `data` é parâmetro da closure em `app/ponto/supra_juiz.py:173`; um caminho vem de `cel.data` em `app/ponto/services/cartorio.py:1353,1475`; outro lê `dia.get('data')` em `app/ponto/management/commands/emitir_furo_retroativo.py:90,110`; origem completa da grade não fechada. | DUVIDOSO |
+| `app/ponto/turnos.py:2230` | `escala_vigente` | `hoje=timezone.localdate(agora)` em `app/ponto/turnos.py:2227`. | DATA GARANTIDA |
+| `app/ponto/turnos.py:788` | `escala_vigente` | `data` é parâmetro em `app/ponto/turnos.py:774`; fontes dos diversos chamadores não foram fechadas. | DUVIDOSO |
+| `app/ponto/turnos.py:1965` | `vinculo_do_dia` | `_d=ini` em `app/ponto/turnos.py:1963`; há aritmética prévia sobre a janela em `:1934` e `:1847`; fontes de `ini` dos chamadores em `:1920,3048` não foram fechadas. | DUVIDOSO |
+| `app/ponto/turnos.py:2105` | `escala_vigente` | `data` é parâmetro em `app/ponto/turnos.py:2098`; um chamador passa `p.data_evento` em `app/chamados/reconciliador.py:1091`, campo em `app/chamados/models.py:2528`; demais fontes não fechadas. | DUVIDOSO |
+| `app/ponto/turnos.py:2373` | `vinculo_do_dia` | `hoje=timezone.localdate(agora)` em `app/ponto/turnos.py:2342`. | DATA GARANTIDA |
+| `app/ponto/turnos.py:3070` | `vinculo_do_dia` | `data` é parâmetro em `app/ponto/turnos.py:3065`; exemplos de chamadas em `app/escala/servico_jornada.py:363` e `app/chamados/juizes.py:322`; fontes de todos os caminhos não fechadas. | DUVIDOSO |
+| `app/ponto/turnos.py:2178` | `vinculo_do_dia` | `d` parte de `ini` em `app/ponto/turnos.py:2176`; chamadores em `:2161,3057`; fonte de todos os valores de `ini` não fechada. | DUVIDOSO |
+| `app/relatorios/dia_da_frota.py:42` | `escala_vigente` | API lê GET em `app/api/views_mensageria.py:1820` e chama o relatório em `:1828`; `_data_pedida` converte ISO ou constrói `date` em `:1726,1731,1748,1759,1764`. | DATA GARANTIDA |
+| `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:115` | `vinculo_do_dia` | `d=ini+timedelta` em `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:109`; `ini` vem de `janela_fechamento` em `:94`, construída com `datetime.date` em `app/ponto/janelas.py:16,54`. | DATA GARANTIDA |
+| `app/relatorios/pdf_espelho.py:571` | `vinculo_do_dia` | `d` é parâmetro da closure em `app/relatorios/pdf_espelho.py:565`; não foi localizada chamada da closure no arquivo, portanto a fonte de `d` não foi identificada. | DUVIDOSO |
+
+Nenhuma linha deste lote chama `q_vinculo_cobre_a_data`; a função monta lookups `DateField` em `app/escala/alimentacao.py:219,223`. O lookup Django aceita e coage uma string ISO válida **[não verificado na cópia]**. A comparação Python relevante para a classe está em `app/escala/alimentacao.py:214`.
+
+**LOTE 2: 39 linhas, DATA GARANTIDA 20, TEXTO POSSIVEL 0, DUVIDOSO 19.**
+
+## 17/11 20:20 · sessao 549f10d565d5 · CURA-DE-FASE · censo · origem=Code
+
+O sítio confirmado com texto é o da cura; esse valor também pode alcançar as duas chamadas internas de `escala_vigente` quando há vínculos candidatos (`app/ponto/management/commands/censo_fase_12x36.py:224`, `app/ponto/management/commands/censo_fase_12x36.py:413`, `app/escala/servico_jornada.py:63`, `app/escala/servico_jornada.py:66`).
+
+Para encurtar as referências na tabela, **C** significa `app/ponto/management/commands/`. Referências `:linha` na coluna fonte pertencem ao arquivo da própria linha.
+
+| arquivo:linha | alvo | fonte | veredito |
+|---|---|---|---|
+| app/escala/services/semana_do_posto.py:75 | q_vinculo_cobre_a_data | `seg` vem de `limites_da_semana(inicio)` e recebe `timedelta` antes da chamada (:51, :55, :75, :132, :134). | DATA GARANTIDA |
+| app/escala/servico_jornada.py:66 | vinculo_do_dia | Parâmetro `data` (:15); `_curar` passa `x['virada']`, montada com `str(virada)` (C`censo_fase_12x36.py:224`, :413). | TEXTO POSSIVEL |
+| app/escala/servico_jornada.py:544 | escala_vigente | Parâmetro `data_evento` de `procedencia_fina` (:513); origem de todos os chamadores não estabelecida [não verificado]. | DUVIDOSO |
+| app/escala/servico_jornada.py:63 | vinculo_do_dia | Parâmetro `data` (:15); `_curar` passa `x['virada']`, montada com `str(virada)` (C`censo_fase_12x36.py:224`, :413); este ramo depende de célula geradora. | TEXTO POSSIVEL |
+| app/escala/servico_jornada.py:233 | escala_vigente | `data_evento` é parâmetro (:220); um chamador repassa o parâmetro de `classificar_falta` (:280, :364), cuja origem completa falta [não verificado]. | DUVIDOSO |
+| app/escala/servico_jornada.py:362 | escala_vigente | `data_evento` é parâmetro (:280); `motivo_da_lei` repassa seu próprio `data` (:558, :566); fontes completas faltam [não verificado]. | DUVIDOSO |
+| app/escala/utils.py:2194 | vinculo_do_dia | `data` é parâmetro (:2142), repassado por `intervalo_declarado_do_dia` e `minutos_previstos_do_dia` (:2197, :2212, :2230, :2260); nem todas as fontes foram estabelecidas [não verificado]. | DUVIDOSO |
+| app/escala/utils.py:988 | vinculo_do_dia | `d` vem de `ref - timedelta` (:979, :987, :989, :992); `ref` ausente usa `localdate`. | DATA GARANTIDA |
+| app/escala/utils.py:1311 | vinculo_do_dia | `d` vem de `ref - timedelta` (:1290, :1306, :1313, :1316); o default de `ref` usa `.date()`. | DATA GARANTIDA |
+| app/folha/export.py:1255 | vinculo_cobre_a_data | `dia` ← `d` ← parâmetro `ini` de `_dias_sem_decisao` (:1231, :1254, :1264, :1267); fontes completas de `ini` não estabelecidas [não verificado]. | DUVIDOSO |
+| app/folha/previa.py:81 | vinculo_cobre_a_data | `d = cel.data` (:78); `CelulaDia.data` é `DateField` (app/escala/models.py:1635, :1685). | DATA GARANTIDA |
+| app/ponto/calculador/alimentacao.py:196 | vinculo_do_dia | `_dia` vem dos valores de `resultado.dia_da_jornada` (:193, :195); o motor mescla mapas (app/ponto/motor_calculo_v2.py:1073), mas todas as origens e todos os resultados aceitos não foram fechados [não verificado]. | DUVIDOSO |
+| app/ponto/calculador/alimentacao.py:432 | vinculo_do_dia | `_dia` ← `k` (:492); `k` converte strings com `date.fromisoformat` e os demais valores passam pela comparação com os limites (:473, :474). A origem dos valores não string como datas é [não verificado]. | DUVIDOSO |
+| C`aplicar_col900.py:229` | vinculo_do_dia | `dia = date.fromisoformat(it['dia'])` (:226). | DATA GARANTIDA |
+| C`aplicar_col900.py:176` | vinculo_do_dia | `dia` vem de `dias`, cujos itens são convertidos com `date.fromisoformat` (:159, :172). | DATA GARANTIDA |
+| C`ausencias_sem_efeito_na_celula.py:55` | q_vinculo_cobre_a_data | `d` é chave de `cobertura_ausencia_periodo` (:44, :48); a cobertura constrói as chaves por aritmética de datas (app/ponto/turnos.py:2777, :2790, :2794). | DATA GARANTIDA |
+| C`censo_col900.py:111` | vinculo_do_dia | `dia` é chave construída de `CelulaDia.data` (:104, :110; app/escala/models.py:1685). | DATA GARANTIDA |
+| C`censo_fase_12x36.py:413` | escala_vigente | `x['virada']` é montada como `str(virada)` (:224), repassada sem conversão (:413). | TEXTO POSSIVEL |
+| C`censo_fase_12x36.py:161` | vinculo_do_dia | `_d` vem de `dias`, construída por `ini + timedelta` e `(fim - ini).days` (:129, :134, :160). | DATA GARANTIDA |
+| C`curar_residuo_bug115.py:85` | escala_vigente | `d` vem de `dias_do_fato` (:77, :80); os ramos incluem data da célula, JSON convertido com `fromisoformat` e `localdate` (app/chamados/juizes.py:188, :194, :204); demais ramos [não verificado]. | DUVIDOSO |
+| C`detectar_ausencias.py:140` | escala_vigente | `data_ref` vem de `hoje` ou `ontem` (:137, :139); `hoje = agora.date()` (:67, :71, :72). | DATA GARANTIDA |
+| C`diff_calculador.py:387` | vinculo_do_dia | `_dia` ← `k` na chamada (:479); `k = date.fromisoformat(k_str)` (:428, :429). | DATA GARANTIDA |
+| C`diff_col900.py:69` | vinculo_do_dia | `dia = date.fromisoformat(it['dia'])` (:66). | DATA GARANTIDA |
+| C`dna_x_batida_real.py:77` | vinculo_do_dia | `d` é chave de `cels`, construída com `CelulaDia.data` (:64, :76; app/escala/models.py:1685). | DATA GARANTIDA |
+| C`emitir_furo_retroativo.py:130` | escala_vigente | `data` vem de `grade_da_celula` (:60, :90, :91); o leitor usa `_cur = fim` como `data` e decrementa um dia (app/escala/services/leitor_celula.py:376, :390, :444); `fim` é convertido com `fromisoformat` (:41). | DATA GARANTIDA |
+| C`emitir_turno_aberto_retroativo.py:104` | escala_vigente | `data` vem de `t.data_turno` (:88, :89), produzido pelo pareamento (app/ponto/turnos.py:318); `_data_do_turno` declara retorno `date` (app/ponto/turnos.py:248). | DATA GARANTIDA |
+| C`gerar_celulas.py:287` | vinculo_cobre_a_data | `d` é parâmetro de `_outro_vinculo_cobre` (:269), chamado com o `d` da regeneração (app/ponto/portas/celula.py:227, :254); origem de `desde` para todos os chamadores falta [não verificado]. | DUVIDOSO |
+| C`processar_alertas_avancados.py:37` | escala_vigente | `ontem` deriva de `agora.date()` (:20, :21, :22). | DATA GARANTIDA |
+| C`processar_alertas_turno.py:134` | escala_vigente | `tm` vem de `TurnoMaterializado.objects` (:76, :81); `data_turno` é `DateField` (app/ponto/models.py:1208, :1215). | DATA GARANTIDA |
+| C`processar_alertas_turno.py:106` | escala_vigente | Mesmo `tm` do queryset (:76, :81); `TurnoMaterializado.data_turno` é `DateField` (app/ponto/models.py:1215). | DATA GARANTIDA |
+| C`reconciliar_grade.py:157` | escala_vigente | `dt = self._dt(..., ref)` (:133); `_dt` retorna `datetime.date(...)` ou `ref - timedelta` (:349, :356, :359); `ref` vem de `fromisoformat` ou `.date()` (:78). | DATA GARANTIDA |
+| C`reconciliar_grade.py:196` | vinculo_do_dia | `_d_rg = win0` e avança por `timedelta` (:194, :197); `win0` deriva de `ref` convertido ou `.date()` (:78, :79). | DATA GARANTIDA |
+| C`rejulgar_ausencia_em_folga.py:65` | escala_vigente | `d` é chave de `folgas_lancadas_do_periodo` (:64); construída de `FolgaDia.data` (app/ponto/precedencia.py:204, :208; app/escala/models.py:1582, :1588). | DATA GARANTIDA |
+| C`tripwire_celulas.py:107` | vinculo_do_dia | `cel.data` é `CelulaDia.data`, `DateField` (app/escala/models.py:1635, :1685). | DATA GARANTIDA |
+| C`vigia_plantio_overnight.py:42` | escala_vigente | `t` vem de `turnos_do_colab` (:38); o pareador atribui `data_turno` por `_data_do_turno` (app/ponto/turnos.py:318), cujo retorno declarado é `date` (app/ponto/turnos.py:248). | DATA GARANTIDA |
+| app/ponto/nucleo.py:26 | vinculo_cobre_a_data | `d` é parâmetro (:18); `dt_fim_previsto_de` repassa `data_turno` (:31, :36), inclusive a partir de turno (:55); todas as origens desse parâmetro não foram fechadas [não verificado]. | DUVIDOSO |
+| app/ponto/portas/celula.py:229 | vinculo_cobre_a_data | `d = desde` (:227); `desde` é parâmetro da porta (:112), sem conversão ali; todas as fontes faltam [não verificado]. | DUVIDOSO |
+| app/ponto/portas/celula.py:906 | vinculo_cobre_a_data | `d` vem de `dias`, construído com `ini + timedelta` e `(fim - ini).days` (:886, :901). | DATA GARANTIDA |
+| app/ponto/portas/celula.py:339 | vinculo_cobre_a_data | `_d` vem de `rejulgar` (:337), mas só alcança a chamada se pertencer ao conjunto de `CelulaDia.data` consultado no banco (:335, :336, :338; app/escala/models.py:1685). | DATA GARANTIDA |
+| app/ponto/portas/celula.py:909 | vinculo_do_dia | Mesmo `d` da lista construída por aritmética de datas (:886, :901). | DATA GARANTIDA |
+
+Sobre os dois sítios `q_vinculo_cobre_a_data`: o `Q` monta lookups de `DateField` (`app/escala/alimentacao.py:219`, :223, :224; `app/escala/models.py:875`, :876). O Django normalmente coage uma string ISO válida nesses lookups; a implementação do Django nesta cópia não foi verificada, portanto essa afirmação é **[não verificado]**. Já a juíza Python compara diretamente `ec.data_inicio <= data` (`app/escala/alimentacao.py:214`).
+
+**LOTE 1: 40 linhas, DATA GARANTIDA 26, TEXTO POSSIVEL 3, DUVIDOSO 11.**
+
+## 17/11 20:20 · sessao dc5b573b873d · - · - · origem=Ronald (tmux)
+
+Rastreamento das linhas 28 a 40 enviado ao agente principal, com as cadeias de data e os pontos que permanecem duvidosos.
+
+## 17/11 20:19 · sessao 286e59cd4048 · - · - · origem=Ronald (tmux)
+
+Resultados dos 13 sítios enviados ao agente principal, com as cadeias verificadas e os pontos que permanecem duvidosos.
+
+## 17/11 20:19 · sessao f878465dd084 · - · - · origem=Ronald (tmux)
+
+Investigação das 13 chamadas atribuídas concluída e enviada ao agente principal, com as cadeias verificadas e as fontes que permanecem duvidosas. [não verificado]
+
+## 17/11 20:19 · sessao af38b8160005 · - · - · origem=Ronald (tmux)
+
+Resultados e referências das linhas 15 a 27 foram enviados ao agente principal.
+
+## 17/11 20:19 · sessao 9bbd47c9c14d · - · - · origem=Ronald (tmux)
+
+Rastreamento enviado ao agente principal, com fontes, vereditos e as incertezas identificadas.
+
+## 17/11 20:19 · sessao 89947f98b6af · - · - · origem=Ronald (tmux)
+
+Resultado dos 13 sítios enviado ao agente principal, com as cadeias verificadas e as lacunas identificadas.
 
 ## 17/11 20:18 · sessao 623b984d2c9f · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
 
@@ -454,216 +632,4 @@ A cópia foi lida nos caminhos abaixo; o hash HEAD informado não pôde ser conf
 
 **PROCEDE: 4 — item 0, item 2, item 4 e R4.**
 
-## 17/11 20:11 · sessao 0cbdddbdbae2 · PORTA-DO-EXPORT-SEM-BECO · construtor · origem=Code
-
-Parei com a entrega **incompleta**: três asserções existentes exigem `NAO FOI MEDIDA HOJE`, mas o aval exige que `conferir` devolva a nova frase literal para `SEM_MEDICAO` ([test_porta_do_export.py:53](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_do_export.py:53), [test_porta_do_export.py:529](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_do_export.py:529), [test_porta_do_export.py:536](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_do_export.py:536), [porta_export.py:932](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/porta_export.py:932)). Pela inspeção, essas três asserções falharão; sua instrução manda parar e listar quando outro teste existente quebrar. A execução delas permanece **[não verificado]**. [nao verificado]
-
-As alterações parciais ficaram na cópia:
-
-- [porta_export.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/porta_export.py): predicado de tentativa morta, leitura sem persistência, espera opcional, textos e montagem do bloco.
-- [selo_leitores_no_mesmo_numero.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py): espera e encerramento do pedido no ramo com tentativa.
-- [views.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/views.py), [urls.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/urls.py) e [_estado_da_porta.html](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/templates/folha/_estado_da_porta.html): rota e bloco exibido no preview.
-- [test_porta_sem_beco.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_sem_beco.py) e [test_porta_sem_beco_item2.py](/home/ronald/wt-codex-porta-do-export-sem-beco-200717/app/folha/tests/test_porta_sem_beco_item2.py): inversão das duas asserções autorizadas.
-
-A análise sintática dos quatro módulos de produção alterados passou **[verificado localmente]**. Não executei testes com banco, conforme a restrição. **Ra–Rg não foram escritos nem executados; os mutantes não foram preparados nem executados; a cura e a suíte permanecem [não verificado].** Também falta concluir e conferir o mapa solicitado de escritores e leitores dos campos. [nao verificado]
-
-LEI-AKITA: origem=folha/porta_export.py; testemunha=estado_da_porta; RED=Ra-Rg **[não entregues]**; quem-mais-le=censo do item 0 **[conferência da implementação incompleta]**; juizes novos=0 **[não verificado]**; padrao=job assincrono com estado visivel + escritor unico **[não verificado]**.
-
-## 17/11 20:06 · sessao 867aa006560c · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
-
-1. **CONFERE — os dois mutantes descritos são barrados**, considerando a saída normal do gerador. A AST passa a contar `AnnAssign`; uma atribuição adicional `recusa_txt: str = ''` aumenta a contagem, e substituir a atribuição original por ela também falha porque o selo exige `=` como primeira atribuição. O selo também executa `gerar_estado.py` e exige os dois prefixos no arquivo gerado, detectando a troca isolada de `recusa_txt` por `''` no argumento do modelo. ([test_recusa_estado.sh:22](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:22), [test_recusa_estado.sh:67](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:67), [gerar_estado.py:384](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:384))
-
-2. **PROCEDE — ainda há bypass da verificação de publicação.** Exemplo de mutante: trocar o argumento `recusa_txt` por um bloco de código Markdown contendo linhas literais iniciadas pelos dois prefixos exigidos. A AST das atribuições continuaria igual e os dois `grep` encontrariam as linhas, embora os valores calculados não aparecessem no corpo informativo do ESTADO. O selo verifica apenas prefixos no arquivo inteiro, não a seção, o fechamento da frase ou os valores. É um contraexemplo por inspeção, não executado. ([gerar_estado.py:342](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:342), [gerar_estado.py:379](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:379), [test_recusa_estado.sh:68](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:68)) Além disso, o selo examina o arquivo **antes** da raspagem e cópia que produzem o ESTADO publicado; a presença final em produção é **[não verificado]**. ([relato.sh:38](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/relato.sh:38), [relato.sh:114](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/relato.sh:114), [raspar_publico.py:28](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/raspar_publico.py:28))
-
-3. **PROCEDE — há efeitos fora do temporário e possibilidade de vermelho alheio ao contrato.** O destino explícito do ESTADO e o log sintético ficam em `$T`, mas as importações Python podem criar `__pycache__` na cópia, pois o selo não desativa bytecode; `git status` também pode atualizar o índice do worktree. A ocorrência efetiva depende do ambiente **[não verificado]**. ([test_recusa_estado.sh:36](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:36), [test_recusa_estado.sh:40](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:40), [gerar_estado.py:183](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:183))
-
-   O gerador lê a raiz real, chama Git e tmux e usa o relógio; falhas desses subprocessos são convertidas em texto, portanto Git ausente ou worktree sem repositório não implicam, por si só, vermelho. Porém, por exemplo, se `esteira.pausada` existir e não puder ser aberto, a exceção de leitura pode derrubar o gerador e o selo fica vermelho por motivo alheio às frases. A chamada examinada de `fabrica_estado.ler` não executa o Docker: este aparece em `_lavrar`, chamado somente pelo caminho `--lavrar`. Dependência de rede no caminho executado completo: **[não verificado]**. ([gerar_estado.py:23](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:23), [gerar_estado.py:178](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:178), [gerar_estado.py:270](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:270), [fabrica_estado.py:24](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/fabrica_estado.py:24), [fabrica_estado.py:61](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/fabrica_estado.py:61))
-
-4. **CONFERE — fluxo principal de escritores e leitores:**
-
-   | Arquivo ou valor | Quem escreve / produz | Quem lê / usa |
-   |---|---|---|
-   | `gerar_estado.py` e `recusa_estado.py` da cópia | Escritor anterior **[não verificado]** | O selo lê o primeiro pela AST e pelo `grep`, e importa o segundo. ([test_recusa_estado.sh:18](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:18), [test_recusa_estado.sh:43](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:43)) |
-   | `$T/app/core/recusa_critica.py` | O selo copia o arquivo da raiz. | `recusa_estado._leitor` carrega a cópia quando recebe `$T`. ([test_recusa_estado.sh:38](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:38), [recusa_estado.py:30](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/recusa_estado.py:30)) |
-   | `$T/app/logs/ponto.log` | O Python do selo cria e acrescenta linhas sintéticas. | `ler` e `ler_porta_export` chamam os contadores comuns, que leem o arquivo e até três rotacionados e filtram data e porta. ([test_recusa_estado.sh:49](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:49), [recusa_estado.py:37](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/recusa_estado.py:37), [recusa_critica.py:95](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/app/core/recusa_critica.py:95)) |
-   | `ponto.log` da raiz usada pelo gerador | `registrar` emite para o logger; o handler configurado grava `/app/logs/ponto.log`. Os envelopes e a porta do export chamam `registrar`. O arquivo efetivo em produção é **[não verificado]**. | O gerador passa `raiz` e a mesma data aos dois leitores; `recusa_estado` procura `raiz/app/logs`. ([recusa_critica.py:70](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/app/core/recusa_critica.py:70), [saas.py:160](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/app/config/settings/saas.py:160), [respostas.py:55](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/app/core/respostas.py:55), [porta_export.py:1071](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/app/folha/porta_export.py:1071), [gerar_estado.py:270](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:270), [recusa_estado.py:23](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/recusa_estado.py:23)) |
-   | Contagens, `sem_arquivo`, `esperado` e frases | Os leitores comuns produzem as contagens; `recusa_estado` produz a representação de arquivo ausente e compõe as frases. | O selo compara a saída sintética com `True 1 2 0 1 True`; o gerador insere as frases em `recusa_txt`. ([recusa_critica.py:108](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/app/core/recusa_critica.py:108), [recusa_estado.py:41](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/recusa_estado.py:41), [recusa_estado.py:71](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/recusa_estado.py:71), [test_recusa_estado.sh:60](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:60), [gerar_estado.py:271](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:271)) |
-   | `$T/ESTADO.md` | `gerar_estado.py` escreve no destino passado pelo selo. | Os dois `grep` do selo leem o arquivo; na publicação, `raspar_publico.py` lê outro ESTADO temporário e escreve no destino público. ([gerar_estado.py:399](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:399), [test_recusa_estado.sh:67](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:67), [raspar_publico.py:28](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/raspar_publico.py:28)) |
-
-   O gerador também consulta outros medidores, arquivos de `logs/` e worktrees; o inventário integral de seus escritores e efeitos indiretos é **[não verificado]**. ([gerar_estado.py:198](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/gerar_estado.py:198), [raias_estado.py:51](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/raias_estado.py:51))
-
-**PROCEDE: 2** — perguntas 2 e 3. Não executei o selo nem os mutantes, pois eles criam arquivos; as conclusões são por leitura. ([test_recusa_estado.sh:36](/home/ronald/codex_ws/494ffb93e96eaf04fc115a31f4233fac744b1709/bin/tests/test_recusa_estado.sh:36))
-
-## 17/11 20:05 · sessao 774a688b709b · PORTA-DO-EXPORT-SEM-BECO · censo · origem=Code
-
-**Sítios fora da lista de partida que mudam:** o script `bin/txt_antes_badge_linha.py` deixa de provocar a persistência de falha ao chamar `conferir`; e o comando de medição passa a esperar ou encerrar o pedido no ramo `--tentativa`. Os testes que exigem persistência ou recusa pela leitura também mudam. As ocorrências estão detalhadas em D e E. [bin/txt_antes_badge_linha.py:27,60; app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140–158; app/folha/tests/test_porta_sem_beco.py:107–115; app/folha/tests/test_porta_sem_beco_item2.py:226–232]
-
-**Identidade da cópia:** o diretório recebido não tem metadados Git; a correspondência exata com o HEAD `ba4cb6c3c` está **[não verificado]**. O censo abaixo é da cópia presente, por inspeção de AST dos Python em `app/`, `bin/` e `scripts/`, complementada por busca textual e leitura dos fluxos. Chamadas ou acesso construídos dinamicamente que não apareçam nessas formas estão **[não verificado]**. Não há observação de banco, logs ou estado de produção.
-
-Para encurtar as tabelas, `P` significa [app/folha/porta_export.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:768); `C`, [selo_leitores_no_mesmo_numero.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:70); `T`, [test_porta_sem_beco.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_sem_beco.py:1); `T2`, [test_porta_sem_beco_item2.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_sem_beco_item2.py:1); `T4`, [test_porta_sem_beco_item4.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_sem_beco_item4.py:1); `TV1`, [test_porta_sem_beco_v1.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_sem_beco_v1.py:1); e `TE`, [test_porta_do_export.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_do_export.py:1). Em cada célula, os números após o apelido são linhas desse arquivo.
-
-### A — Escrita do pedido e do carimbo
-
-| Função ou caminho | Escrita identificada |
-|---|---|
-| `abrir_a_porta → pedir` | `pedir` cria a linha diária com `PEDIDO`; se já terminal, chama `_mudar_estado` para reiniciá-la. P:1085,1095–1101,1108–1111,1382–1386. |
-| `assumir → _cunhar` | Sem tentativa recebida, `_cunhar` cria ou atualiza a linha diária em `EM_CURSO`; se não assumir, cria ou atualiza linha própria com sufixo UUID e `NAO_ASSUMIU`. P:1123,1145–1155,1163–1180,1199–1204. |
-| Comando → `_cunhar` | Sem `--tentativa` e sem trava, o comando passa `_cunhar` a `_fechar`, com `sem_trava=True`, para registrar a linha própria. C:145–149; P:1163–1175. |
-| Comando → `assumir → _mudar_estado` | Com tentativa recebida, adota a linha por CAS de `PEDIDO` para `EM_CURSO`. C:163–166; P:1208–1214. |
-| Comando → `concluir → lavrar` e `_mudar_estado` | `lavrar` faz `update_or_create` do **carimbo**; `concluir` muda o estado da tentativa no mesmo bloco transacional. C:183–188; P:768–780,1237–1258. |
-| Comando → `encerrar → _falhar → _mudar_estado` | Encerra a tentativa em `FALHOU`, condicionada à identidade e estado da linha. C:183–190; P:1028–1058,1077–1082,1265–1269. |
-| Comando → `falhar_ao_assumir → _cunhar` ou `encerrar` | A recuperação pode cunhar a tentativa própria e encerrá-la, ou registrar a recusa de assumir. C:164–169; P:1272–1292. |
-| `disparar → encerrar` | Se o processo não nasce, encerra o pedido em `FALHOU`. P:1384–1386,1390,1417–1421. |
-| `assumir`, `vigiar_abertos` ou `estado_da_porta` → `vigiar → _falhar → _mudar_estado` | Hoje, leitura de tentativa morta ou pedido vencido pode persistir `FALHOU`. P:1200–1202,1295–1315,1326–1329,1349. |
-| `lavrar_verde_para_teste → assumir → concluir` | Helper de teste usa os caminhos de pedido e carimbo. P:875–891. | [nao verificado]
-| Escrita direta em testes | `TE._carimbo` cria/atualiza as duas chaves; T2 atualiza uma linha por PK e cria um pedido diretamente; T2 também chama `lavrar` e `_mudar_estado` diretamente. TE:33–47; T2:42–52,102,305,314–317. | [nao verificado]
-
-A lista inicial omite, portanto, o escritor físico do carimbo `lavrar`, o atualizador físico `_mudar_estado` e os caminhos `falhar_ao_assumir` e `disparar`, além das escritas diretas dos testes. Não encontrei exclusão dessas linhas nas formas estáticas inspecionadas; exclusão dinâmica está **[não verificado]**. P:779–780,1028–1058,1272–1292,1417–1421; TE:33–47. [nao verificado]
-
-### B — Leitura das duas chaves
-
-| Leitor | Leitura e caminho |
-|---|---|
-| `_linha_do_pedido` | `filter` da chave diária; chamado por `pedir`, `assumir` e `estado_da_porta`. P:1012–1015,1104,1200,1349. |
-| `_linha_do_dia_travada` | `filter` da chave diária com `select_for_update`; chamado por `_cunhar`. P:1115–1120,1145. |
-| `assumir` | Busca pedido por chave e UUID para adotá-lo. P:1208–1212. |
-| `falhar_ao_assumir` | Busca pedido por chave e UUID antes da recuperação. P:1280–1289. |
-| `vigiar_abertos` | Busca pelo prefixo `_PEDIDO + ':'` e estados abertos. P:1324–1329. |
-| `estado_da_porta` | Lê o pedido por `_linha_do_pedido` e consulta diretamente o carimbo diário. P:1347–1352. |
-| `conferir` | Recebe o resultado de `estado_da_porta` e lê o detalhe do carimbo divergente. P:820–826. |
-| `abrir_a_porta` | Lê indiretamente pelo estado e por `conferir`. P:1382–1387. |
-| `lavrar_verde_para_teste` | Faz `get` do carimbo depois de concluir. P:875–891. |
-| Testes: consultas ao modelo fora de P | Carimbo: T:139,183–184; TV1:65; T2:90,132,266,341. Pedido: T2:258,262,567; T4:24. Há leituras por PK de linhas já obtidas em T2:351–352,430,440. | [nao verificado]
-| Testes: gravação via ORM que também consulta | `update_or_create` da fixture das duas chaves. TE:42–47. | [nao verificado]
-
-### C — Chamadores e leitura da tabela de textos
-
-`_TEXTO_DO_ESTADO` é tabela, não função: o leitor identificado é `conferir`, em P:824; a definição está em P:931–938.
-
-| Alvo | Chamadores de produção, comando e script |
-|---|---|
-| `estado_da_porta` | `conferir` P:820; `abrir_a_porta` P:1382. |
-| `conferir` | `abrir_a_porta` P:1387; script `pe.conferir`, com import `from folha import porta_export as pe`, [bin/txt_antes_badge_linha.py:27,60](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/bin/txt_antes_badge_linha.py:27). |
-| `vigiar` | `assumir` P:1202; `vigiar_abertos` P:1329; `estado_da_porta` P:1349. |
-| `vigiar_abertos` | `C.handle`: import local `from folha import porta_export as _pe` C:71 e chamada C:76. |
-| `trava_da_medicao` | `C.handle`: mesmo import local `_pe` C:71 e chamada C:146. |
-| `medicao_viva` | `vigiar` P:1304. |
-| `abrir_a_porta` | Import local `abrir_a_porta as _abrir_porta` e chamada em [app/folha/views.py:130–131](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/views.py:130). |
-
-| Alvo | Chamadas em testes | [nao verificado]
-|---|---|
-| `estado_da_porta` | Alias local `pe`: T:85,102,112,122,125,136,148,159,195,204,218,219,278,284; TV1:35,39,67; T4:116,124; T2:53,93,100,103,111,134,171,172,180,181,188,190,230,231,306,318,323,368,408,410,465,482,521,526,544,563,597,620. T:289 guarda a função real e T:316 a substitui por mock. |
-| `conferir` | Import local direto em TE:51–52,60–65,79–83,112–116,519–544; alias `pe` em T:87,96,149,160,167,168,176,177,206; TV1:41; T2:57,112,209,221,308. |
-| `vigiar` | `pe.vigiar` em TV1:50 e T2:355; referência e mock em T2:603,612. |
-| `vigiar_abertos` | `pe.vigiar_abertos` em T4:125; mocks em T2:611 e [app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:134](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:134). |
-| `trava_da_medicao` | `pe.trava_da_medicao` em T:199,253; T2:47; T4:61,101. Mocks em T4:33 e [app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:135](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:135). |
-| `abrir_a_porta` | `pe.abrir_a_porta` em T:308. |
-| `medicao_viva` | Mock em TV1:49; chamada de produção em P:1304. |
-
-### D — Efeito das duas alterações propostas
-
-Aqui “leitura pura” pressupõe o comportamento descrito no dado: detectar a mesma tentativa morta ou pedido vencido e responder `FALHA` sem persistir. O retorno completo inclui o objeto `pedido`; seu `detalhe['estado']` continua aberto nessa leitura. P:1295–1315,1349–1369.
-
-| Chamador | Estado passa a só ler | Espera opcional com default sem espera |
-|---|---|---|
-| `conferir`, P:820 | **MUDA** em pedido vencido ou sessão morta: mantém o código/texto de falha sob a premissa acima, mas deixa de persistir `FALHOU` e registrar a recusa. P:820–824,1077–1082,1295–1315. |
-| `abrir_a_porta`, P:1382 | **NÃO MUDA** quanto à persistência pretendida se receber o `vigiar` anterior à leitura, como especificado no dado; continua podendo pedir e disparar após falha. Interleavings de concorrência da implementação futura: **[não verificado]**. P:1382–1387; dado raspado, item 1. |
-| Chamadas de `estado_da_porta` em T, TV1, T2 e T4, listadas em C | **MUDA** o efeito observável quando a entrada está morta/vencida: não grava nem emite recusa; muda também o objeto `pedido` retornado. Falham especificamente a exigência de estado persistido em T:107–115 e a de uma recusa em T2:226–232. Nos casos que só verificam o código e recebem o mesmo código, a asserção indicada **NÃO MUDA** por essa razão; resultado da suíte inteira **[não verificado]**. | [nao verificado]
-| `C.handle → trava_da_medicao`, C:140–158 | **MUDA** para `--tentativa` se o comando optar pela espera: hoje, sem a trava, imprime compartilhamento e continua; o dado pede aguardar e, no limite, encerrar o próprio pedido. Para cron/manual sem tentativa, **NÃO MUDA** pelo default sem espera. C:140–158; dado raspado, item 3. |
-| Chamadas diretas de trava em T:199,253; T2:47; T4:61,101 | **NÃO MUDA** pela adição do parâmetro com default sem espera: não passam opção de espera. P:973–986; linhas de chamada citadas. |
-| Mock de trava no teste do comando | **[não verificado]** quanto à implementação futura: o mock aceita `*a`, mas não palavras-chave; passar a opção nomeada nesse caminho pode quebrá-lo. [app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:135](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:135). |
-
-### E — Fora da lista de partida
-
-| Sítio | Mudança demonstrável pela proposta |
-|---|---|
-| Script `bin/txt_antes_badge_linha.py:27,60` | **MUDA:** chama `conferir`; em tentativa morta/vencida deixa de causar a gravação e a linha de recusa que hoje vêm de `estado_da_porta → vigiar`. O valor textual sob a premissa de mesma classificação continua o de falha. P:820,1077–1082,1295–1315,1349. |
-| `C.handle`, C:140–158 | **MUDA:** o ramo do job com `--tentativa` hoje sai ao perder a trava; o dado determina espera e fechamento no limite. |
-| T:107–115 | **MUDA:** exige explicitamente `pedido.detalhe['estado'] == FALHOU` depois da leitura. |
-| T2:226–232 | **MUDA:** exige uma linha de recusa após duas leituras; leitura pura não a produz por si. P:1077–1082,1349. |
-
-A lista de partida está incompleta como censo de funções: `lavrar` é quem efetivamente escreve o carimbo; `_mudar_estado` atualiza o detalhe do pedido; `falhar_ao_assumir` e `disparar` alcançam escritores; e há leitores ORM e fixtures fora da lista. As funções e caminhos estão discriminados em A e B, com as respectivas linhas. P:779–780,1028–1058,1284–1292,1417–1421; TE:33–47.
-
-## 17/11 20:05 · sessao 35d8fddad05c · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — itens 0, 1, 3, 5 e RED.** Os demais itens conferem dentro dos limites abaixo. O diretório não contém metadados Git; portanto, a identidade da cópia como HEAD `ba4cb6c3c` está **[não verificado]**.
-
-Os textos integrais dos avais 1655 e 1005 não estão disponíveis na cópia. A comparação com eles é limitada ao registro em [RELATO.md:39](app/docs/RELATO.md#L39) e [RELATO.md:46](app/docs/RELATO.md#L46); colisões com cláusulas não reproduzidas ficam **[não verificado]**. O corte VESPERA está em [CORTES.json:2015](app/docs/CORTES.json#L2015).
-
-1. **Item 0 — PROCEDE.**
-   - **Premissas:** os pontos de partida incluem os leitores e escritores centrais; o censo AST pedido ainda é trabalho futuro **[não verificado]**. O carimbo também tem escritor `lavrar` em [porta_export.py:768](app/folha/porta_export.py#L768).
-   - **Cortes:** o registro de 1655 encaminha os itens 4–6 à obra, mas o texto integral não está disponível **[não verificado]** ([RELATO.md:46](app/docs/RELATO.md#L46)).
-   - **Literal:** há sítio fora da lista inicial com mudança de comportamento: [txt_antes_badge_linha.py:60](bin/txt_antes_badge_linha.py#L60) chama `conferir`, que hoje chega a `vigiar` ([porta_export.py:820](app/folha/porta_export.py#L820), [porta_export.py:1349](app/folha/porta_export.py#L1349)). Pela própria condição do item 0, esse efeito deve constar no topo e não ser decidido sozinho. O teste de [test_porta_sem_beco_item2.py:226](app/folha/tests/test_porta_sem_beco_item2.py#L226) também depende da escrita pela leitura.
-   - **Alcance:** o censo é de leitura; a mudança encontrada altera a persistência indireta, não demonstra escrita em exportada ou dinheiro ([porta_export.py:1295](app/folha/porta_export.py#L1295)). Outros alcances **[não verificado]**.
-
-2. **Item 1 — PROCEDE.**
-   - **Premissas:** `estado_da_porta` chama `vigiar` hoje; `abrir_a_porta` o faz **indiretamente**, ao chamar `estado_da_porta`, e não por chamada direta ([porta_export.py:1349](app/folha/porta_export.py#L1349), [porta_export.py:1382](app/folha/porta_export.py#L1382)).
-   - **Cortes:** não identifiquei colisão nos trechos disponíveis; comparação integral com 1655 e 1005 **[não verificado]** ([RELATO.md:46](app/docs/RELATO.md#L46)).
-   - **Literal:** o corpo indicado também considera morto um `PEDIDO` com `pedido_em` ausente ou inválido, não apenas vencido ([porta_export.py:1310](app/folha/porta_export.py#L1310)). Além disso, ele consulta banco e relógio; para ser *puro* literalmente, esses fatos precisam ser fornecidos como entradas, sem perder esse caso ([porta_export.py:996](app/folha/porta_export.py#L996), [porta_export.py:1314](app/folha/porta_export.py#L1314)).
-   - **Alcance:** altera a vigília e a recusa persistida da porta, declaradas no item; o POST usa essa porta antes do TXT ([porta_export.py:1303](app/folha/porta_export.py#L1303), [views.py:128](app/folha/views.py#L128)). Escrita adicional em exportada, dinheiro ou `!` **[não verificado]**.
-
-3. **Item 2 — CONFERE.**
-   - **Premissas:** `medicao_viva` consulta a sessão do banco e tem o chamador produtivo indicado; `job_morreu` consulta PID do processo ([porta_export.py:996](app/folha/porta_export.py#L996), [porta_export.py:1304](app/folha/porta_export.py#L1304), [models.py:140](app/relatorios/models.py#L140)).
-   - **Cortes:** manter a função não mostra colisão nos trechos disponíveis; avais integrais **[não verificado]** ([RELATO.md:39](app/docs/RELATO.md#L39)).
-   - **Literal:** as perguntas das funções são distintas, como afirma o item ([porta_export.py:997](app/folha/porta_export.py#L997), [models.py:151](app/relatorios/models.py#L151)).
-   - **Alcance:** o item mantém o comportamento; efeito novo sobre exportada, dinheiro ou `!` não está declarado nem demonstrado ([porta_export.py:996](app/folha/porta_export.py#L996)).
-
-4. **Item 3 — PROCEDE.**
-   - **Premissas:** com `--tentativa`, a trava ocupada leva à mensagem “compartilhada” e à saída sem fechar o pedido; sem tentativa, grava-se linha própria ([selo_leitores_no_mesmo_numero.py:140](app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py#L140)). A trava tem um chamador produtivo, compartilhado pelas modalidades, além de chamadores de teste ([selo_leitores_no_mesmo_numero.py:146](app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py#L146), [test_porta_sem_beco_item4.py:61](app/folha/tests/test_porta_sem_beco_item4.py#L61)).
-   - **Cortes:** preservar cron sem absorção é compatível com o trecho registrado do item 4 de 1655 ([RELATO.md:39](app/docs/RELATO.md#L39), [porta_export.py:1163](app/folha/porta_export.py#L1163)); restante do texto integral **[não verificado]**.
-   - **Literal:** `PEDIDO` impede outra tentativa de assumir pela linha do dia, mas isso **não prova** que quem já segura a trava a soltará em seguida; há inclusive possibilidade de colisão da chave CRC entre pares distintos ([porta_export.py:952](app/folha/porta_export.py#L952), [porta_export.py:1163](app/folha/porta_export.py#L1163)). Na borda do prazo, um vigia pode fechar o pedido antes da adoção; `encerrar` só vence se o CAS ainda encontrar a mesma tentativa aberta ([porta_export.py:1211](app/folha/porta_export.py#L1211), [porta_export.py:1265](app/folha/porta_export.py#L1265), [porta_export.py:1314](app/folha/porta_export.py#L1314)). O tratamento da corrida precisa ficar explícito.
-   - **Alcance:** muda quando o job mede e encerra seu pedido, na porta declarada; não demonstra escrita em exportada ou dinheiro fora desse alcance ([selo_leitores_no_mesmo_numero.py:183](app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py#L183)). Outros efeitos **[não verificado]**.
-
-5. **Item 4 — CONFERE.**
-   - **Premissas:** o preview existe, exige `ver_folha` e retorna vazio sem os parâmetros; a tela inicial tem empresa vazia ([views.py:315](app/folha/views.py#L315), [exportar.html:26](app/templates/folha/exportar.html#L26)).
-   - **Cortes:** a retirada das duas cascas responde ao problema registrado em [RELATO.md:39](app/docs/RELATO.md#L39); demais cláusulas integrais de 1655 e 1005 **[não verificado]**.
-   - **Literal:** `exportar.html` estende `base.html`, que já carrega HTMX; existe precedente de polling restrito ao fragmento ([exportar.html:1](app/templates/folha/exportar.html#L1), [base.html:19](app/templates/base.html#L19), [_lote_progresso.html:4](app/templates/holerite/_lote_progresso.html#L4)). O funcionamento da rota nova ainda **[não verificado]**.
-   - **Alcance:** acrescenta leitura na tela de exportação; o preview atual já consulta a classificação do export ([views.py:332](app/folha/views.py#L332)). Escrita em exportada, dinheiro ou `!` fora do declarado **[não verificado]**.
-
-6. **Item 5 — PROCEDE.**
-   - **Premissas:** `n` é gravado na tentativa e `concluido_em` é formado na transição; o POST divergente hoje contém a lista técnica ([porta_export.py:1232](app/folha/porta_export.py#L1232), [porta_export.py:1255](app/folha/porta_export.py#L1255), [porta_export.py:1053](app/folha/porta_export.py#L1053), [porta_export.py:825](app/folha/porta_export.py#L825)).
-   - **Cortes:** o aval dado substitui o item 5 de 1655 e mantém a lista técnica no POST; a comparação com o texto integral anterior fica **[não verificado]** ([RELATO.md:39](app/docs/RELATO.md#L39), [porta_export.py:870](app/folha/porta_export.py#L870)).
-   - **Literal:** “N divergências entre espelho e folha” não descreve fielmente o `n` exigido: ele inclui, entre outros, dias de HE sem decisão quando travam e cartão × TXT da competência inteira ([porta_export.py:680](app/folha/porta_export.py#L680), [porta_export.py:753](app/folha/porta_export.py#L753)). O texto precisa de decisão; não cabe trocá-lo silenciosamente. Para `PRONTA`, `conferir` precisa continuar retornando vazio para liberar o POST ([porta_export.py:820](app/folha/porta_export.py#L820)).
-   - **Alcance:** a mudança textual não demonstra alteração de exportada ou dinheiro; a recusa existente permanece no caminho do POST ([views.py:130](app/folha/views.py#L130)). Efeito fora do declarado **[não verificado]**.
-
-7. **RED / PROIBIDO / POUSO — PROCEDE.** [nao verificado]
-   - **Premissas:** Rf corresponde ao comportamento atual: cron sem tentativa e sem trava grava `NAO_ASSUMIU` em linha própria ([selo_leitores_no_mesmo_numero.py:145](app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py#L145), [porta_export.py:1169](app/folha/porta_export.py#L1169)). Os RED e mutantes propostos ainda não foram executados **[não verificado]**.
-   - **Cortes:** a janela de pouso coincide com VESPERA; o fim efetivo da simulação **[não verificado]** ([CORTES.json:2015](app/docs/CORTES.json#L2015)). A exceção nominal de vaga aparece no despacho, mas seu texto integral **[não verificado]** ([RELATO.md:46](app/docs/RELATO.md#L46)).
-   - **Literal:** Rd promete adoção e medição se a trava soltar antes do limite, mas a liberação anterior ao limite não garante que a adoção ocorrerá antes de um vigia vencer o CAS. O caso precisa fixar essa sincronização ou decidir o resultado da corrida ([porta_export.py:1211](app/folha/porta_export.py#L1211), [porta_export.py:1314](app/folha/porta_export.py#L1314)). Re também depende de o encerramento vencer o CAS ([porta_export.py:1077](app/folha/porta_export.py#L1077)).
-   - **Alcance:** o pouso toca export, como declarado; as proibições vedam escrita em GET e afrouxamento da porta. Ausência de efeitos em exportada, dinheiro ou `!` na implementação futura **[não verificado]** ([views.py:128](app/folha/views.py#L128)).
-
-**PROCEDE: 5** — item 0: sítio adicional que perde escrita indireta; item 1: predicado incompleto e pureza literal; item 3: garantia de liberação e corrida no prazo; item 5: significado de `N`; RED: corrida de Rd/Re.
-
-## 17/11 20:04 · sessao e31732ea5497 · - · - · origem=Ronald (tmux)
-
-Censo e análise dos chamadores enviados ao agente principal, incluindo o script `bin/txt_antes_badge_linha.py` e os testes que dependem da persistência feita por `estado_da_porta`.
-
-## 17/11 20:04 · sessao 9d6e3a864103 · - · - · origem=Ronald (tmux)
-
-- O corpo de `vigiar` considera morto também um `PEDIDO` com `pedido_em` ausente ou inválido; essa condição precisa ser preservada na extração ([porta_export.py:1308](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1308)). O corpo atual consulta banco e relógio, portanto não é literalmente puro sem receber esses fatos como entradas ([porta_export.py:1303](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1303)).
-- `abrir_a_porta` já aciona `vigiar` indiretamente por `estado_da_porta`; a chamada direta proposta muda a ordem e o ponto da persistência ([porta_export.py:1349](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1349), [porta_export.py:1382](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1382)). Um teste vigente espera emissão de recusa ao ler o estado e precisará ser ajustado ([test_porta_sem_beco_item2.py:226](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_sem_beco_item2.py:226)).
-- O comando deixa o pedido órfão quando recebe `--tentativa` e não pega a trava; sem tentativa, grava a linha própria ([selo_leitores_no_mesmo_numero.py:145](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:145), [porta_export.py:1163](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1163)). A existência de `PEDIDO` impede outra tentativa sem UUID de assumir, mas não garante que a sessão que já segura a trava vá soltá-la logo; há inclusive colisão possível entre chaves CRC ([porta_export.py:952](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:952)).
-- `vigiar_abertos` roda antes da medição e outro vigia pode vencer a corrida no limite, encerrando o pedido antes da adoção ([selo_leitores_no_mesmo_numero.py:74](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:74), [porta_export.py:1211](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1211)). `encerrar` só grava a recusa se vencer o CAS ([porta_export.py:1077](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1077)).
-- O censo AST integral solicitado no item 0 permanece [não verificado].
-
-## 17/11 20:04 · sessao d4a30cc27631 · - · - · origem=Ronald (tmux)
-
-- **VESPERA:** o corte vigente proíbe pouso de alterações em folha ou export de 18/11 às 18h até o fim da simulação de 19/11; a janela proposta é compatível. O fim efetivo da simulação está **[não verificado]**. [CORTES.json:2015](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/docs/CORTES.json:2015)
-
-- **Aval 1655, item 4:** o código documenta e implementa que cron ou manual sem `--tentativa` deixa uma linha própria `NAO_ASSUMIU` quando outra tentativa está aberta ou a trava está ocupada, preservando a linha da outra tentativa. Isso sustenta a compatibilidade da regra de não absorção e do controle Rf. [porta_export.py:1123](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1123), [porta_export.py:1163](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1163), [selo_leitores_no_mesmo_numero.py:145](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:145)
-
-- **Limite da comparação com avais:** o relato registra a exceção nominal de vaga e identifica a pergunta sobre o pedido que perdeu a trava, mas os textos integrais citados dos avais 1655 e 1005 não foram localizados na cópia; a comparação com todas as suas cláusulas permanece **[não verificado]**. [RELATO.md:39](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/docs/RELATO.md:39), [RELATO.md:46](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/docs/RELATO.md:46)
-
-- **Justificativa temporal do item 3:** `_cunhar` impede que outra execução assuma a linha aberta, mas isso não demonstra que quem já detém a trava a soltará em seguida. A trava cobre a medição e também admite colisão de CRC32 entre chaves distintas. A soltura antes do prazo está **[não verificado]**; o limite proposto prevê a falha quando ela não ocorrer. [porta_export.py:952](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:952), [selo_leitores_no_mesmo_numero.py:183](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:183)
-
-## 17/11 20:04 · sessao 0758b69961af · - · - · origem=Ronald (tmux)
-
-Censo de escritores e leitores enviado ao agente principal, incluindo as escritas diretas das fixtures e os caminhos do comando que passam escritores como argumentos. Referências principais: [porta_export.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1028), [selo_leitores_no_mesmo_numero.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:145), [test_porta_do_export.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_do_export.py:33) e [test_porta_sem_beco_item2.py](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/tests/test_porta_sem_beco_item2.py:42).
-
-## 17/11 20:04 · sessao f2d2234f4bd7 · - · - · origem=Ronald (tmux)
-
-Item 5 tem uma condição que não fecha: o `N` gravado é o total de `falhas`, que inclui categorias além de divergências entre espelho e folha, inclusive HE sem decisão quando configurada para travar e cartão × TXT da competência inteira ([porta_export.py:680](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:680), [porta_export.py:723](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:723), [porta_export.py:1217](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1217)). O texto literal precisa de decisão.
-
-As demais premissas da tela conferem: a permissão `ver_folha` é usada no preview; a tela estende `base.html`, que carrega HTMX; e o registro da tentativa recebe `n` e `concluido_em` ([views.py:314](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/views.py:314), [exportar.html:1](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/templates/folha/exportar.html:1), [base.html:19](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/templates/base.html:19), [porta_export.py:1053](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1053), [porta_export.py:1255](/home/ronald/codex_ws/ba4cb6c3c33403eecacbefeeef01b64c5b441a83/app/folha/porta_export.py:1255)).
-
-_6707 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6716 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
