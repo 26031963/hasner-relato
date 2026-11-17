@@ -1,7 +1,92 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 21:54** · publicado em **16/11/2026 21:56** (UTC-3)
+> Ultima resposta processada: **16/11/2026 22:23** · publicado em **16/11/2026 22:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 22:23 · sessao 833c837a69a0 · - · - · origem=Ronald (tmux)
+
+Achados:
+
+- **Médio — relógio fora da borda por novo caminho.** `impedimento_estoque_l130` não recebe `agora` e chama `pergunta_viva(perg)` sem relógio (`app/chamados/services/validacao.py:381`, `:398`). O juiz pode cair em `date.today()` (`app/chamados/juizes.py:1471`, `:596`) e passar `agora=None` a `classificar_falta` (`:1475`), que lê `_tz.now()` (`app/escala/servico_jornada.py:387`). O comando lê `timezone.localtime()` somente depois da seleção, para o arquivo de reversão, e não o transmite (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:61`). A consequência documentada exige um relógio na borda até o julgamento (`app/docs/PLANO-PADROES.md:99`–`:103`).
+
+- **Médio — lista fechada não pertence à porta.** A porta aceita qualquer pk que satisfaça o predicado; nem o predicado nem a porta consultam `ESTOQUE_L130_ALVOS` (`app/chamados/services/validacao.py:378`, `:381`, `:408`, `:432`). O comando compara a lista antes das travas (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:53`), depois chama a porta separadamente por pergunta (`:70`–`:76`). Assim, garante igualdade na fotografia inicial, não igualdade do conjunto durante as escritas; também permite aplicação parcial se outra pergunta perder elegibilidade ou falhar. A porta individual continua segura contra perda de elegibilidade daquela pergunta porque relê o predicado travado (`app/chamados/services/validacao.py:431`–`:433`).
+
+- **Médio — teste não prova delegação da property.** O teste compara resultados nos casos listados; uma property que copie integralmente a expressão do juiz passa por ele (`app/chamados/tests/test_f1nova_b2_leitores.py:75`–`:85`). Há casos que, por inspeção, distinguem os mutantes antigos de B, C e D (`:61`–`:69`, `:75`–`:91`, `:142`–`:147`), porém o arquivo não contém injeção de mutantes, patch do juiz ou teste que force a delegação. Mordida executada: [não verificado].
+
+Conforme:
+
+- Ordem C → Disputa → Chamado → Pergunta pela porta canônica: chamada em `app/chamados/services/validacao.py:429`; aquisições em `app/chamados/models.py:2771`, `:2780`, `:2793`, `:2797`.
+- Releitura sob trava e uma escrita pelo descarimbo canônico: `app/chamados/services/validacao.py:431`–`:440`; único `update` do descarimbo em `app/chamados/models.py:3392`–`:3394`. Não nasce segundo escritor de descarimbo nesse trecho.
+- Linha RESPOSTA registrada antes do `update`, no mesmo `atomic` (`app/chamados/services/validacao.py:428`, `:439`, `:440`). O evento vem depois, mas `None` levanta exceção dentro do mesmo `atomic`, revertendo pergunta e sequência (`:449`–`:457`). `evento` retorna registro ou `None` (`app/core/observ.py:133`–`:139`); `DecisaoPergunta.registrar` não engole falhas (`app/chamados/models.py:4123`–`:4127`).
+- Idempotência individual decorre de retirar `respondida_em`: segunda chamada encontra `nao_e_instante_sem_texto` (`app/chamados/services/validacao.py:390`, `:440`). A projeção evita duplicar RESPOSTA pelo mesmo instante (`app/chamados/models.py:4098`–`:4105`). O teste verifica segunda execução do comando, não duas chamadas diretas nem rollback por falha do evento (`app/chamados/tests/test_f1nova_b2_leitores.py:238`–`:244`).
+- Complemento SQL correto por inspeção para NULL, vazio, espaços, NBSP, tab e LF: Python usa `(t or '').strip()` (`app/chamados/juizes.py:1526`–`:1528`), regex deriva os caracteres de `isspace()` (`:1560`–`:1562`), vazio SQL inclui NULL (`:1572`), positivo exige I e algum não branco (`:1580`), negativo é ausência de I ou I com vazio (`:1588`). Execução no PostgreSQL desta cópia: [não verificado].
+- O teste B2 da face negada tem seis pares, sem NULL/tab/LF (`app/chamados/tests/test_f1nova_b2_leitores.py:127`–`:129`). A bateria anterior cobre tab/LF, NBSP e outros brancos (`app/chamados/tests/test_e3_forma_sql_do_juiz.py:29`–`:38`, `:89`–`:120`). NULL SQL não é exercitado porque o campo é NOT NULL; há teste de `None` somente em Python (`:11`–`:15`, `:118`–`:120`).
+- `test_o168` preserva o sujeito e adiciona controle positivo legal antes das duas metades ilegais; a inversão corresponde à L-130 (`app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:287`–`:297`). Restou docstring histórica que afirma “nunca solta”, agora contrariada pelo próprio teste (`:276`–`:280`): **menor**, documentação.
+- `test_e3_10` inverte exatamente a retenção de instante sem texto, conserva controle positivo e mantém `pode_fechar=False`; não enfraquece essa proteção (`app/chamados/tests/test_e3_10_cura_no_escritor.py:127`–`:148`).
+- `test_estado_aplicacao` completa o objeto sintético com instante fixo, adequando a fixture respondida ao novo contrato; as asserções permanecem específicas (`app/chamados/tests/test_estado_aplicacao.py:37`–`:44`, `:49`–`:77`).
+- K6 usa dia do fato, sem relógio implícito: `app/chamados/services/materializacao.py:784`–`:789` → `app/chamados/services/passivo_validado.py:86`–`:95`.
+
+Nenhum teste foi executado, nenhum banco acessado e nenhum arquivo escrito. Execução e resultados de produção: [não verificado]. [nao verificado]
+
+## 16/11 22:23 · sessao ba4d04fd8d7d · - · - · origem=Ronald (tmux)
+
+Q2 — resíduos que deveriam ler o juiz:
+
+- `espera_o_texto_do_colaborador` ainda recompõe `not J`: `I ausente OU respondida_sem_texto`. Hoje é equivalente, mas é derivação paralela; alimenta cobrança e cartão. `app/chamados/services/fio.py:177`, `app/chamados/services/fio.py:187`, `app/chamados/services/cobranca.py:227`, `app/chamados/services/fio.py:359`.
+- Canal partido chama seu universo de “Perguntas sem resposta” e exige `resposta_colab=''`: perde espaços, NBSP e texto sem instante. O cobrar consome esse detector. `app/chamados/canal.py:53`, `app/chamados/canal.py:65`, `app/chamados/views_cobrar.py:181`.
+- Placar de aceite conta “respondidos” por `respondida_em__gte`, sem texto. É consumido pelo painel e pela Folha. `app/chamados/services/verbos.py:277`, `app/chamados/services/verbos.py:325`, `app/chamados/services/verbos.py:335`, `app/chamados/views.py:1489`, `app/chamados/services/painel.py:298`, `app/folha/views_retrato.py:515`.
+- Ressuscitação seleciona materializadas com texto NULL/`''`, embora descreva seu universo como perguntas “SEM resposta”. Espaços/NBSP ficam fora; texto sem instante recebe a proteção reservada à resposta. É decisão operacional, não exibição. `app/chamados/models.py:1494`, `app/chamados/models.py:1530`, `app/chamados/models.py:1533`. Sua classificação formal E/F no censo é [não verificado].
+
+E/F legítimos por sua função:
+
+- Trilha/projeção: `app/chamados/models.py:4095`, `app/chamados/models.py:4102`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`, `app/chamados/services/historico.py:98`.
+- Marcos temporais/cache: `app/chamados/veredito_lavrado.py:202`, `app/chamados/veredito_lavrado.py:207`, `app/chamados/services/painel.py:64`.
+- Integridade/estoque específico: `app/chamados/services/vigia_fio.py:737`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1104`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:46`, `app/chamados/services/disputa_emissao.py:1692`, `app/chamados/services/disputa_emissao.py:1861`. Auditor I20 e curar limbo usam `!= ''`, portanto não espelham trim, mas julgam integridade, não estado operacional. `app/chamados/management/commands/auditar_invariantes_chamados.py:1105`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:46`.
+- Preservar texto bruto/escrever metades: `app/chamados/services/disputa_emissao.py:1663`, `app/chamados/models.py:3241`.
+- Parse/classificação de conteúdo: `app/chamados/services/validacao.py:467`, `app/chamados/services/validacao.py:1181`, `app/chamados/services/materializacao.py:546`, `app/chamados/services/materializacao.py:625`, `app/chamados/services/materializacao.py:718`, `app/chamados/services/materializacao.py:770`, `app/chamados/services/materializacao.py:953`, `app/chamados/services/materializacao.py:1562`.
+- Fallback da testemunha por conteúdo bruto: `app/chamados/templatetags/chamados_tags.py:139`, `app/chamados/templatetags/chamados_tags.py:166`, `app/chamados/services/fio.py:377`.
+- Exibição API/ponto: `app/api/views.py:1163`, `app/api/views.py:2561`, `app/api/views.py:2637`, `app/api/views_mensageria.py:567`, `app/chamados/views_cobrar.py:292`, `app/ponto/services/dia_do_colab.py:70`, `app/ponto/services/veredito_celula.py:197`. A API de validação recebe seu universo do juiz. `app/api/views_mensageria.py:539`.
+- Templates: seleção/exibição do cru em `_card_atendimento.html:114`, `:141`, `:148`, `:154`, `:182`; datas sob `resposta_enviada` em `:106` e `:391`; preview cru em `_lote_preview.html:24`; os dois templates migrados guardam a resposta com `.respondida`. `app/templates/chamados/partials/_pergunta_card.html:29`, `app/templates/chamados/partials/modal_fio.html:217`.
+
+Q4 — pergunta viva I sem T:
+
+| Leitor | Resultado |
+|---|---|
+| App | Pendente se disputa aberta. `app/chamados/services/pergunta_no_app.py:81` |
+| Fila validar | Não entra. `app/chamados/juizes.py:1760` |
+| Estado | Pendente. `app/chamados/models.py:3156` |
+| Retenção | Não integra respostas sem veredito. `app/chamados/models.py:1923` |
+| Pode fechar | Não fecha enquanto fio vivo. `app/chamados/models.py:1934` |
+| CSF | Essa pergunta não segura pelo predicado de conversa. `app/ponto/supra_juiz.py:573`, `app/ponto/supra_juiz.py:588` |
+| Órfã | Ausência de resposta permite continuar; ainda exige fato=True, C6 e teto. `app/chamados/reconciliador.py:1085`, `app/chamados/reconciliador.py:1087`, `app/chamados/reconciliador.py:1091` |
+| Pauta DP | Não entra por resposta sem veredito; só mede trancada, não mera exportada. `app/chamados/services/competencia_trancada.py:95`, `app/chamados/services/competencia_trancada.py:126`, `app/chamados/services/competencia_trancada.py:137` |
+| Cobrar | Conta como esperando colaborador, sujeito ao C6/canal/prazo. `app/chamados/services/cobranca.py:241`, `app/chamados/services/cobranca.py:252`, `app/chamados/services/cobranca.py:255` |
+| Vigia | Pode classificar causa b, depois de precedências anteriores. `app/chamados/services/vigia_fio.py:628`, `app/chamados/services/vigia_fio.py:634` |
+
+Tarefa/dono não decorre apenas de I/T: última linha RESPOSTA vazia exige responder/colaborador; projeção sem linha gera desconhecimento; linhas posteriores podem mudar o próximo ato. `app/chamados/services/tarefa_do_dia.py:154`, `app/chamados/services/tarefa_do_dia.py:159`, `app/chamados/services/tarefa_do_dia.py:163`. O dono colab exige também presença entre pendentes do app e ação responder. `app/chamados/services/tarefa_do_dia.py:651`.
+
+Existe oposição condicional: placar diz “respondido” e app diz “pendente” para I sem T cujo instante esteja na janela pós-cobrança. `app/chamados/services/verbos.py:335`, `app/chamados/services/verbos.py:342`, `app/chamados/services/pergunta_no_app.py:81`. A ocorrência dessa janela nas pk reais é [não verificado].
+
+## 16/11 22:23 · sessao 00869dd13935 · - · - · origem=Ronald (tmux)
+
+Q6 — há caminhos de escrita que alcançam competência entregue; o comando novo não protege os demais consumidores. A ocorrência nas 141 perguntas do dado não pode ser afirmada sem conhecer suas datas, âncoras e lâmpadas [não verificado].
+
+| Consumidor | Mudança e escrita possível | Entregue |
+|---|---|---|
+| **CSF / supra_juiz** | `sem_veredito_entre` deixa de reter I sem T/T sem I (`app/chamados/models.py:1923`). A lista compartilhada libera CSF (`app/ponto/supra_juiz.py:573`, `:588`); o executor chama `retratar` (`app/ponto/management/commands/supra_juiz.py:261`, `:286`). `_retratar` fecha chamado, pode rejeitar justificativa e chama resolver (`app/chamados/reconciliador.py:520`, `:525`, `:531`, `:538`). | **Sim, potencial.** O gate de pergunta viva exclui entregue explicitamente (`app/chamados/models.py:364`); portanto não substitui a retenção removida. O cron `--executar` está configurado (`app/config/crons.py:599`), mas sua janela padrão é atual (`app/ponto/management/commands/supra_juiz.py:90`). Alcance nas 141 [não verificado]. |
+| **Pauta após fechamento** | S143 passa I sem T para `reabrir_credor` (`app/chamados/services/disputa_emissao.py:1843`, `:1969`), que recusa entregue por K6 (`:1857`, `:1867`) e escreve nota de recusa (`:1879`). O resolver coleta (`:1973`); `transicionar_com_pauta` escreve Pauta no mesmo ato (`app/chamados/services/fecho_runtime.py:161`, `:168`, `:139`). | **Sim, potencial**, após fechamento agora liberado pela retenção B; nenhum descarimbo é necessário para nascer essa Pauta. |
+| **Cartório** | A isenção D passa de T para J (`app/ponto/services/cartorio.py:1641`); T sem I deixa de isentar o chamado e pode liberar dedup/fecho (`:1652`, `:1667`) ou tentativa de ressuscitação (`:1674`). | **Não há veto K6 nesse bloco.** A ressuscitação continua selecionando somente texto NULL/`''` (`app/chamados/models.py:1530`), então T sem I isolado não é descarimbado; irmãs vazias no mesmo chamado podem ser atingidas (`:1600`, `:1629`). O comentário reconhece alcance exportado histórico (`app/ponto/services/cartorio.py:1626`). |
+| **Reconciliador — lavrar_sem_turno_aberto** | D passa a J (`app/chamados/reconciliador.py:365`); T sem I pode chegar ao carimbo `sem_turno_aberto` e ao fechamento da disputa (`:407`, `:413`). | **Não existe K6 neste caminho**; depende de ausência de turno e C6 morto (`:373`, `:399`). O carimbo escreve materialização/via (`app/chamados/models.py:3239`, `:3263`), sem tocar o par quando `resposta=None` (`:3241`). |
+| **Reconciliador — veredito_orfa** | D passa a J (`app/chamados/reconciliador.py:1084`); T sem I pode produzir `ENCERRA` após lâmpada, C6 e teto (`:1087`, `:1093`). O consumidor chama `encerrar_fantasma` e evento (`:1138`, `:1150`, `:1152`), podendo fechar disputa (`:1173`). | **Sem veto K6 neste caminho**. `encerrar_fantasma` grava pela porta de carimbo (`app/chamados/models.py:3415`). Para I sem T a condição D já era falsa antes: a troca D não cria delta próprio nesse caso (`app/chamados/reconciliador.py:1085`). |
+| **Becos** | O leitor C usa property (`app/chamados/services/becos.py:29`); I sem T torna-se visível quando destino não terminal, reduzindo candidatos. Havendo destino terminal, `pode_fechar` ainda decide (`:33`). O ato resolve perguntas e fecha disputa (`:54`, `:56`). | A retirada da retenção B pode liberar disputa cuja pergunta esteja morta pelo C6, inclusive trancada (`app/chamados/models.py:1934`). **O cron instalado usa `--alarme`, sem escrita** (`app/config/crons.py:663`); a porta por evento continua escrevendo (`app/chamados/services/becos.py:74`, `:78`). |
+| **Materialização** | A seleção C agora exclui I sem T (`app/chamados/services/materializacao.py:2067`); reduz plantios. D `_materializar_resposta_hora` agora recusa T sem I com escrita de recusa (`:1314`, `:1322`). | A guarda K6 é específica para metades de intervalo fora163 (`:792`, `:805`), não geral. A fila pública não traz mais esses pares (`:2069`), mas a unidade `_materializar_uma` também tem consumidor no passivo (`app/chamados/services/passivo_validado.py:39`). Não afirmar novo plantio: a migração endurece anuência. |
+| **Vigia fio** | Usa J no subtipo c, mantendo antes o subtipo b para I sem T (`app/chamados/services/vigia_fio.py:634`, `:636`). | Esse trecho somente conta/lista e retorna (`:656`, `:660`). Não é escritor. |
+| **views_cobrar** | I sem T sai do lote validar e entra em aguardando colaborador (`app/chamados/views_cobrar.py:169`, `:175`, `:197`). | **Sem nova escrita para o par ilegal**; validação só é chamada para `pendentes` J (`:202`, `:209`), em POST humano (`:151`). |
+| **Dedup / backfill decisões** | A escolha canônica e mérito mudam T para J (`app/chamados/services/fio.py:1281`, `:1294`). O apply do dedup delega à porta do backfill (`app/chamados/management/commands/dedup_perguntas_fato.py:105`). | **O apply preserva grupos exportados**, com lista e saída PAREI (`:112`, `:132`); o contrato do veto aparece no próprio chamador (`:102`). |
+
+Pauta da tranca: `medir` só trabalha se `periodo_trancado` existir (`app/chamados/services/competencia_trancada.py:95`); pede `respostas_sem_veredito(ignorar_tranca=True)` (`:126`). I sem T sai de `decidir_pelo_dp` (`:137`), podendo liberar `pode_fechar` se C6 também disser morto (`:178`); `encerrar` escreve chamado/disputa (`:209`, `:229`) e Pauta somente se sobrar lista (`:232`). **Exportada e trancada são estados distintos no próprio contrato** (`:5`); o dado não prova quantas das 141 são trancadas [não verificado].
+
+Push: a migração de `recobrar_questionario` altera a contagem de pendentes (`app/chamados/services/disputa_emissao.py:1735`); o mesmo serviço envia push e grava nota (`:1748`, `:1758`), sem veto K6 nesse caminho. É ação de recobrança, não consequência demonstrada de cron [não verificado].
 
 ## 16/11 21:54 · sessao ff8736dc078a · E4C-F1-B2 · censo · origem=Code
 
@@ -746,61 +831,4 @@ Os mutantes registrados não incluem reversões c4c de performance (`app/chamado
 
 6. Nas alterações examinadas não aparece escritor nem relógio novo: são seleção da irmã, consulta ao mesmo guard e eager loading (`validacao.py:216-225`; `materializacao.py:792-812`; `fio.py:213-216`). O helper é chamado pelo próprio guard (`materializacao.py:806`) e conserva a competência em `competencia_do_fato` (`:808`), sem derivação concorrente nesta fatia.
 
-## 16/11 21:11 · sessao 1e152ed22ba8 · - · - · origem=Ronald (tmux)
-
-Complemento do censo:
-
-- **Escritores externos à porta**: não encontrei atribuição direta efetiva de `Ausencia.tipo/status` fora de `services/ausencia.py` em produção, commands ou `bin`; exaustividade diante de aliases/escrita dinâmica é [nao verificado]. Chamadores externos concretos usam a porta: aprovação em `app/ponto/views.py:2338`, rejeição em `app/ponto/views.py:2414`, criação em `app/ponto/views.py:2508`, criação pelo Resolver dia em `app/ponto/services/veredito_celula.py:337`, copiloto em `app/ponto/services/checar_ausencia.py:46`, e rejulgamento por command em `app/ponto/management/commands/rejulgar_status_por_tipo.py:35`.
-
-- **Modelo/admin**: `Ausencia.save` lê status/tipo para derivar `aprovada_em`, minutos e range, mas não atribui status/tipo (`app/ponto/models.py:882`, `app/ponto/models.py:887`, `app/ponto/models.py:912`). Admin usa `SoLeitura` para Ausencia (`app/ponto/admin.py:37`). A exceção preexistente de rejeição de férias escreve status dentro da própria porta (`app/ponto/services/ausencia.py:1496`).
-
-- **Juiz fora do diff**: calendário chama `do_dia` com cobertura/decisão (`app/colaboradores/services/calendario.py:747`); `do_dia` chama `veredito_do_dia` (`app/ponto/services/dia_decidido.py:421`), que delega a `veredito_de(cobertura)` (`app/ponto/services/dia_decidido.py:378`). `rotulo_de` também chama `veredito_de` (`app/ponto/services/dia_decidido.py:506`). PDF consome a palavra já montada (`app/relatorios/pdf_espelho.py:923`). Export consulta Ausencia diretamente por status aprovada/tipo, sem depender da célula, mapa ou chips (`app/folha/export.py:87`).
-
-- **Deep links externos**: chamados emite `?registro=pk` (`app/chamados/views.py:1519`); notificação da ausência também (`app/ponto/services/ausencia.py:828`); grade emite registro e acrescenta voltar (`app/templates/colaboradores/partials/_calendario_grade.html:97`). A lista lê registro por `URLSearchParams`, sem depender da ordem dos parâmetros (`app/templates/ponto/ausencias.html:202`). Vigia constrói o destino `'/ponto/ausencias/?' + qs` (`app/ponto/services/vigia_ausencia.py:46`). Dependências de clientes externos ao código disponível são [nao verificado].
-
-## 16/11 21:10 · sessao d93331f9442f · - · - · origem=Ronald (tmux)
-
-1. A resposta funcional é preservada, para o mesmo estado das fontes. A irmã implícita vem da mesma disputa, com `data_evento` igual e motivo complementar; outra competência não é candidata (`app/chamados/services/materializacao.py:142-150`). K6 deriva somente de `data_evento` e da empresa do mesmo colaborador (`app/chamados/services/materializacao.py:776-789`, `app/chamados/services/materializacao.py:808`).
-
-   - Fora163, com competência entregue: a pergunta já devolvia bloqueio antes de examinar a irmã; continua devolvendo o mesmo estado e texto (`app/chamados/services/materializacao.py:805-815`).
-   - Fora163, competência não entregue: a irmã da mesma data recebe o mesmo K6, ou é pulada por pertencer a U163; eliminá-la dessa composição não muda o resultado (`app/chamados/services/materializacao.py:795-815`).
-   - U163: a busca da irmã permanece, porque `k6_consulta_a_pergunta` retorna falso (`app/chamados/services/materializacao.py:795`, `app/chamados/services/validacao.py:224`).
-   - Sem irmã: permanece `None`; irmã de outra competência não entra na busca implícita (`app/chamados/services/materializacao.py:143-150`).
-   - Irmã explícita, inclusive de outra competência: permanece examinada, porque o atalho só atua no argumento sentinela (`app/chamados/services/validacao.py:219-225`).
-   - L5: `data_evento=None` já faz a própria pergunta devolver `bloqueada_sem_dia_do_fato`; a busca antiga também não encontraria irmã (`app/chamados/services/materializacao.py:143`, `app/chamados/services/materializacao.py:784-785`, `app/chamados/services/materializacao.py:809-810`).
-
-   Não encontrei contraexemplo funcional no código para esses casos; igualdade diante de mudanças concorrentes nas fontes entre consultas não foi exercitada. [não verificado]
-
-2. O helper é a negação exata do antigo predicado de pulo apresentado no diff: `p is not None and intervalo and not U163`. A fonte U163 continua sendo exclusivamente a PK no JSON conferido por hash (`app/chamados/services/materializacao.py:792-807`, `app/chamados/services/universo_bug_par.py:12-35`). O helper decide a aplicabilidade da guarda; não decide se a competência foi entregue, pergunta que continua encaminhada ao juiz registrado `competencia_entregue` (`app/chamados/services/materializacao.py:786-789`, `app/core/juizes.py:334-343`, `app/docs/JUIZES.md:40-42`, `app/folha/export.py:556-594`).
-
-A cópia não contém histórico Git acessível; a comparação com o código anterior depende do diff fornecido pelo usuário. [não verificado]
-
-## 16/11 21:09 · sessao 87ecc702a040 · - · - · origem=Ronald (tmux)
-
-- **3(b) PROCEDENTE, como possibilidade demonstrável pelo código:** chips e filtro compartilham os pares classificados uma vez; a coluna chama o juiz novamente. Se o catálogo mudar entre essas leituras, chip/filtro podem classificar `descontado` e a coluna pintar `abonado`. O cache pode expirar ou ser invalidado; ocorrência real em produção é **[nao verificado]**. Referências: `app/ponto/views.py:2229`, `app/ponto/views.py:2240`, `app/ponto/views.py:2254`, `app/ponto/views.py:2287`, `app/ponto/services/dia_decidido.py:482`, `app/ponto/catalogo/ausencias.py:267`, `app/ponto/catalogo/ausencias.py:293`, `app/ponto/models.py:1245`.
-
-- **Tipo desconhecido/inativo, catálogo estável: NAO PROCEDENTE para divergência entre os três sítios.** O catálogo lê somente tipos ativos; tipo ausente devolve `None`, e o juiz devolve `ABONADO` para qualquer efeito diferente de desconta/suprime, salvo rejeitada. Os três leitores usam esse juiz; desconhecido aprovado entra no balde Abona, desconhecido rejeitado no balde rejeitadas. O desaparecimento do `?` produz, portanto, ABONA para desconhecido não rejeitado, por decisão preexistente do juiz. Referências: `app/ponto/catalogo/ausencias.py:249`, `app/ponto/catalogo/ausencias.py:293`, `app/ponto/services/dia_decidido.py:475`, `app/ponto/services/dia_decidido.py:483`, `app/ponto/services/dia_decidido.py:487`, `app/templates/ponto/ausencias.html:158`.
-
-- **Total igual à soma dos quatro baldes com desconhecido: NAO PROCEDENTE para quebra, sob dados estáveis.** Todo par passa por juiz que retorna exatamente um dos quatro vereditos; rejeitada vence antes de consultar efeito. O contador rejeitadas é pelo mesmo status literal. Referências: `app/ponto/views.py:2229`, `app/ponto/views.py:2238`, `app/ponto/views.py:2240`, `app/ponto/services/dia_decidido.py:475`, `app/ponto/services/dia_decidido.py:487`.
-
-- **`?efeito=xyz`/`abonado`/`rejeitado`: NAO PROCEDENTE para 500 ou corte indevido direto.** A inversão do mapa aceita somente `abona`, `desconta`, `suprime`; fora dele, não aplica filtro. O contexto ainda conserva o valor recebido. Referências: `app/ponto/services/dia_decidido.py:80`, `app/ponto/views.py:2232`, `app/ponto/views.py:2249`, `app/ponto/views.py:2301`.
-
-- **`?efeito=abona` sem pares: NAO PROCEDENTE para listar tudo.** O acumulador começa em `None` e termina em `qs.none()` quando nenhum par pertence ao veredito pedido. Referências: `app/ponto/views.py:2253`, `app/ponto/views.py:2254`, `app/ponto/views.py:2257`.
-
-- **`?registro=<pk>` fora do mês: comportamento global preservado.** O PK substitui inteiramente o queryset de vigência; colaborador/tipo e depois status/efeito ainda restringem essa busca. `q_universo` conserva o PK e o JS tenta abrir seu painel. Mês/data exibidos não passam a ser a data desse registro. Referências: `app/ponto/views.py:2189`, `app/ponto/views.py:2192`, `app/ponto/views.py:2195`, `app/ponto/views.py:2209`, `app/ponto/views.py:2241`, `app/templates/ponto/ausencias.html:200`.
-
-- **`?de=lixo`: NAO PROCEDENTE para 500 dessa conversão.** `_d` devolve `None`, `de` usa primeiro dia do mês e o trecho dos chips omite a data inválida. O formulário mostra a data efetiva. `_de_pedido`/`_ate_pedido` são datas válidas solicitadas; `de`/`ate` são limites efetivos com defaults. Referências: `app/ponto/views.py:2181`, `app/ponto/views.py:2186`, `app/ponto/views.py:2205`, `app/ponto/views.py:2304`, `app/templates/ponto/ausencias.html:72`.
-
-- **Ordenação no GROUP BY: NAO PROCEDENTE para quebra.** `.order_by()` limpa a ordenação antes de `values/annotate`, inclusive a ordenação herdada do modelo. Referências: `app/ponto/views.py:2229`, `app/ponto/models.py:829`.
-
-- **MUDA c, literal “uma função só usada por b e c”: cumpre em parte.** Existe uma classificação compartilhada em dicionário dentro da view; não foi extraída uma função comum. A mesma estrutura alimenta soma e construção do Q. Referências: `app/ponto/views.py:2228`, `app/ponto/views.py:2240`, `app/ponto/views.py:2254`.
-
-- **3(a), 3(f), 3(g): NAO PROCEDENTE no trecho examinado.** A view chama o juiz e não escreve regra nova de efeito/rejeição; escreve somente atributos transitórios de apresentação, e o mapa inverso é derivado do mapa único. A regra do ANEXO! permanece em autoridade separada, já existente. Referências: `app/ponto/views.py:2230`, `app/ponto/views.py:2232`, `app/ponto/views.py:2287`, `app/ponto/services/ausencia.py:745`, `app/ponto/models.py:867`.
-
-- **3(e): sem relógio novo explícito no diff; existe dependência transitiva do cache.** A data atual é lida na entrada da view; o catálogo consulta `monotonic()` internamente em cada avaliação de validade do cache. Referências: `app/ponto/views.py:2169`, `app/ponto/catalogo/ausencias.py:274`.
-
-- **Leitor JS externo confirmado:** o motor de tabela usa `data-value` para largura e ordenação, mas trata-o como texto genérico, sem exigir os antigos literais `abona/desconta/suprime`. Referências: `app/static/js/hasner-table.js:35`, `app/static/js/hasner-table.js:189`, `app/static/js/hasner-table.js:207`.
-
-- **Semântica após edição na mesma tela:** o JS de salvar altera visualmente Data e Tipo, sem recalcular coluna Efeito ou chips; essa limitação é externa ao diff fornecido e anterior à mudança da fonte da coluna. Referências: `app/templates/ponto/ausencias.html:260`, `app/templates/ponto/ausencias.html:267`, `app/templates/ponto/ausencias.html:268`.
-
-_6189 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6192 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
