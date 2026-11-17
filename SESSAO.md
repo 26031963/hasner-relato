@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 08:10:19.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (194.5 MB). Acoes na janela: **497**.
+**Medido em 17/11/2026 08:15:46.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (194.5 MB). Acoes na janela: **494**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -504,6 +504,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:21:55 | Bash | Find REPETIR aval files and branch | `cd /home/ronald/saas-hasner; ls logs/AVAIS-1515/ \| /bin/grep -i -E "repet\|editor\|smoke"; cd /home/ronald/wt-ui-repetir-confirma-171035 && git branch --show-current` |
 | 20:21:52 | Bash | Read REPETIR delivery summary | `cd /home/ronald/saas-hasner; head -30 logs/UI-EDITOR-CAL-REPETIR/entrega.md; git branch --contains c20096dd5 \| head; git log --oneline -3 c20096dd5; ls logs/AVAIS-1515/ \| /bin/grep -i repet` |
 | 20:21:50 | Bash | Read REPETIR suite verdict | `cd /home/ronald/saas-hasner; L=logs/UI-EDITOR-CAL-REPETIR/suite_pouso.log; cat logs/UI-EDITOR-CAL-REPETIR/suite_pouso.fim; /bin/grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; /bin/grep '^Ran ' $L\|tail -1; /bin/grep -E "^(FAIL\|ERROR):" $L \| head; cat logs/UI-EDITOR-CAL-REPETIR/copia_pouso.txt; ls logs/UI-EDITOR-CAL-REPETIR/` |
-| 20:14:54 | Bash | Check Codex review launched | `cd /home/ronald/saas-hasner/logs/AUSENCIA-EFEITO-PELO-ESTADO; sleep 5; ls -la revisao_c2.* ; head -c 400 revisao_c2.out; ps -eo pid,args \| /bin/grep "[c]odex_pergunta.sh" \| cut -c1-120` |
-| 20:14:49 | Bash | Register complement-2 and launch Codex aval review | `cd /home/ronald/saas-hasner; D=logs/AUSENCIA-EFEITO-PELO-ESTADO; A=logs/AVAIS-1515/complemento2_ausencia_efeito_1611.txt cat > $A <<'EOF' aval Ronald: COMPLEMENTO-2 AUSENCIA-EFEITO-PELO-ESTADO-1611 (16/11 20:2x) -- CONSTRUIR. UNIDADE: registro de Ausencia na lista. Nenhuma lei nova: L1 das LEIS-UI. Responde o AVAL-DEVOLVIDO b/c (universo). Substitui SO a frase "os links dos chips nao mudam" do COM ...` |
-| 20:14:31 | Bash | Look at previous Ausencia revisao launcher | `cd /home/ronald/saas-hasner; ls logs/AUSENCIA-EFEITO-PELO-ESTADO/; cat logs/AUSENCIA-EFEITO-PELO-ESTADO/lanca*c1*.sh 2>/dev/null \|\| cat logs/AUSENCIA-EFEITO-PELO-ESTADO/lanca*.sh \| head -20; tail -3 app/docs/PROMPTS.md \| cut -c1-200` |
