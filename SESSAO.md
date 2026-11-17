@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 18:39:17.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (10.3 MB). Acoes na janela: **333**.
+**Medido em 17/11/2026 18:44:46.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (10.4 MB). Acoes na janela: **342**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:40:42 | Bash | Fix ESPERANDO format and recheck hook | `cd /home/ronald/saas-hasner; sed -i '3s/.*/ESPERANDO: ssh \| pid=987496/' app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| head -c 600` |
+| 18:40:40 | Bash | Read ESPERANDO proof logic | `cd /home/ronald/saas-hasner; sed -n 812,856p bin/hook_stop_fila1.py` |
+| 18:40:38 | Bash | How hook parses ESPERANDO | `cd /home/ronald/saas-hasner; /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
+| 18:40:35 | Bash | Check RELATO top and hook reason | `cd /home/ronald/saas-hasner; sed -n 1,6p app/docs/RELATO.md \| cut -c1-90; kill -0 987496 && echo vivo; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| head -c 1500` |
+| 18:40:20 | Bash | Check pista and push progress | `cd /home/ronald/saas-hasner; tail -4 logs/PORTA-EXPORT/v5/pista_espera_b.out; tail -3 logs/ESPURIAS-ABRE/push_e56c.log; pgrep -f bin/push.sh \| head -1` |
+| 18:40:18 | SendMessage |  | `-` |
+| 18:40:08 | Bash | PROMPTS line; find BACKLOG item | `echo "- 17/11 18:45 CERCA-B2-REGRAS-2 (substitui 18:40): F0 fica; fora dos abridores (i) porta humana fora da cerca, (ii) ato de sistema = R2 por item so sem cerca aberta, mesma leitura de dias da vigiar_escrita_de_perguntas; R2 vence o exemplo da R1; R4 corrigida; R5 aninhada = abridor de fora desfaz; trilha = semantica da porta. Tabela volta ao opus de leitura, depois REVISAO Codex. Log: logs/AV ...` |
+| 18:40:04 | Bash | Mark B2 lei lines answered; PROMPTS format | `python3 - <<'EOF' r='docs/RELATO.md'; L=open(r,encoding='utf-8').read().split('\n') for k,l in enumerate(L[:20]): if l.startswith('lei: CERCA-B2'): L[k]='RESPONDIDA por CERCA-B2-REGRAS-2 17/11 18:45 (logs/AVAIS-1515/cerca_b2_regras2_1845.txt): '+l[5:] i=[k for k,l in enumerate(L[:20]) if l.startswith('RESPONDIDA por CERCA-B2-REGRAS-2')][0] L.insert(i,"CERCA-B2-REGRAS-2 18:45 RECEBIDO: tabela_unica ...` |
+| 18:40:01 | Write |  | `/home/ronald/saas-hasner/logs/AVAIS-1515/cerca_b2_regras2_1845.txt` |
 | 18:29:44 | Bash | Block for pista result | `cd /home/ronald/saas-hasner; while kill -0 987496 2>/dev/null; do /usr/bin/sleep 20; done; tail -4 logs/PORTA-EXPORT/v5/pista_espera_b.out; tail -3 logs/ESPURIAS-ABRE/push_e56c.log` |
 | 18:29:40 | Bash | Advance raia branch; read results summary | `cd /home/ronald/saas-hasner; git branch -f porta-export-raia-v5 54e2dd60b && git log --oneline -1 porta-export-raia-v5; tail -20 logs/PORTA-EXPORT/v5/resultados.md` |
 | 18:29:38 | Bash | PORTA wt branch | `cd /home/ronald/wt-porta-export-105532; git branch --show-current; git log --oneline -2` |
