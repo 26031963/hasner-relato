@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 08:32:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (195.9 MB). Acoes na janela: **501**.
+**Medido em 17/11/2026 08:37:46.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (196.6 MB). Acoes na janela: **504**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:37:43 | Bash | Check B3 consumption and export functions | `cd /home/ronald/saas-hasner; tail -5 logs/sessao/disjuntor.log \| cut -c1-200; /bin/grep -rn '^def ' app/folha/export.py \| head -40` |
+| 08:36:45 | Bash | Save aval and read wrapper header build | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/ensaio_folha_11_1711.txt <<'EOF' aval Ronald: ENSAIO-DA-FOLHA-11 (17/11 08:4x) -- UNIDADE: colaborador x competencia 11/2026 (21/10 a 20/11, parcial ate ontem). Nenhuma lei nova. MEDIR, so leitura; nada escrito em producao. Prazo de utilidade: antes de 20/11. Entra na frente da fila de reserva do Codex, atras so da espinha. PARTE A -- MECANICA DA  ...` |
+| 08:36:28 | Bash | Check wrapper workspace options | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/ensaio_folha_11_1711.txt <<'EOF' PLACEHOLDER EOF sed -n 1,80p bin/codex_pergunta.sh \| /bin/grep -n 'usage\\|uso\\|--[a-z]\+)' ; /bin/grep -n 'codex_ws\\|git archive\\|-C \\|--cd' bin/codex_pergunta.sh \| head -20` |
 | 08:23:33 | Bash | Register aval in PROMPTS and BACKLOG | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/PROMPTS.md'; s=open(p).read() s+='- 17/11 08:2x COMPLEMENTO-2 QUEIMA-UTIL-1711 (aval Ronald; logs/AVAIS-1515/complemento2_queima_util_1711.txt): libera B3 ERRO-BOBO de E4C-F1-B2 e O10-D; SERIE-BLOQUEIO 03/11 e 10/11 em banco lateral lendo o RetratoFolha lavrado; contador Codex-ocioso por foto (substitui o item 5 do C1); REVISAO dos itens 2 ...` |
 | 08:23:23 | Bash | Wait for revisao items 2 and 5 | `cd /home/ronald/saas-hasner; D=logs/AVAIS-1515/revisao_c2q1711; /usr/bin/sleep 5; tail -2 $D/out; while ! [ -s $D/r.r ] \|\| ! /bin/grep -q '^VEREDITO' $D/r.r; do /usr/bin/sleep 20; pgrep -f "revisao_c2q1711" >/dev/null \|\| break; done; touch $D/fim; tail -1 $D/r.r` |
 | 08:23:20 | Bash | Launch Codex REVISAO for items 2 and 5 | `cd /home/ronald/saas-hasner; D=logs/AVAIS-1515/revisao_c2q1711; mkdir -p $D; cp logs/SMOKES-[nome]-1711/smk_b_retrato.py $D/; cp logs/CODEX-RESERVA/fila.md $D/fila_reserva.md; tail -40 logs/codex/chamadas.log \| cut -c1-160 > $D/chamadas_amostra.log; cat > $D/q.q <<'EOF' REVISAO-DO-AVAL dos itens 2 e 5 do aval COMPLEMENTO-2 QUEIMA-UTIL-1711 (anexo complemento2_queima_util_1711.txt), itens 3, 4 e ...` |
