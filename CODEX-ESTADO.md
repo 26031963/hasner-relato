@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 12:42** · publicado em **17/11/2026 12:42** (UTC-3)
+> Ultima resposta processada: **17/11/2026 13:36** · publicado em **17/11/2026 13:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 13:36 · sessao d53c28693167 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar:
+
+1. **R8 não cumpre “assumir levantou → FALHOU com motivo e uma recusa”.** O `except` de `assumir` apenas imprime, acrescenta a empresa a `falharam` e segue; não chama `encerrar`, não persiste motivo nem emite `_recusa`. Se falhar antes da criação, não nasce registro; se já existia pedido do clique, ele pode continuar `PEDIDO` até o vigia expirar os 300 segundos. A seguinte empresa é tentada, supondo que a saída e a liberação da trava não levantem. Fontes: `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`, `app/folha/porta_export.py:1118`, `app/folha/porta_export.py:1122`, `app/folha/porta_export.py:1214`, `app/folha/porta_export.py:920`. Ocorrência em produção: [nao verificado].
+
+2. **`antes` não é necessariamente o estado vencido pelo CAS amplo de `encerrar`.** `_falhar` guarda `antes` do objeto em memória; `encerrar` aceita banco em `PEDIDO` **ou** `EM_CURSO`, com filtro somente da tentativa. Se outra chamada adotar o mesmo pedido entre essa leitura e o UPDATE, o banco pode transitar `PEDIDO→EM_CURSO` preservando a tentativa; o encerramento então vence de `EM_CURSO`, mas escreve `antes=pedido`. Como o JSON inteiro sai do objeto antigo, também pode apagar `pid`, `backend_pid` e o instante da adoção. Nos caminhos de `vigiar`, o estado permitido é unitário; no `concluir`, `EM_CURSO` está protegido pela linha travada. Fontes: `app/folha/porta_export.py:1065`, `app/folha/porta_export.py:1192`, `app/folha/porta_export.py:1124`, `app/folha/porta_export.py:1035`, `app/folha/porta_export.py:1039`, `app/folha/porta_export.py:1042`, `app/folha/porta_export.py:1206`, `app/folha/porta_export.py:1215`, `app/folha/porta_export.py:1173`. Interleaving reproduzido: [nao verificado].
+
+3. **Rollback de concluir:** falhas dentro do bloco que trava o pedido, lavra e muda o estado ficam no mesmo `atomic`; o comando captura a exceção e chama `encerrar` sobre a tentativa. Entretanto, a afirmação comentada “`concluir` levantou, nada ficou” não cobre literalmente toda a função: a cópia do detalhe e `_recusa` são posteriores ao `atomic`. Isso é o limite já associado ao log não transacional, não proponho reabrir a queda CAS/log descartada. Fontes: `app/folha/porta_export.py:1172`, `app/folha/porta_export.py:1178`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1182`, `app/folha/porta_export.py:1184`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:158`.
+
+4. **Limite de R8 se o próprio encerramento levantar:** a chamada a `encerrar` no tratamento da exceção não tem proteção adicional; uma exceção nela interrompe o laço, logo a continuação não é incondicional. Fonte: `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:159`. Ocorrência concreta: [nao verificado].
+
+5. **R8ConcluirTest cobre a borda, não o rollback interno.** Há freeze na classe. Para A, o mock lança antes de executar qualquer linha do `concluir` real; somente B usa a implementação real. O teste verifica FALHA, motivo e B pronta, mas não verifica ausência de carimbo parcial nem quantidade de recusas. Fontes: `app/folha/tests/test_porta_sem_beco_item2.py:387`, `app/folha/tests/test_porta_sem_beco_item2.py:400`, `app/folha/tests/test_porta_sem_beco_item2.py:405`, `app/folha/tests/test_porta_sem_beco_item2.py:408`.
+
+6. **M12 morde perdedor do CAS, mas não o `antes` concorrente acima.** Ambos os objetos começam `EM_CURSO`, o primeiro encerra e o segundo perde; não há adoção `PEDIDO→EM_CURSO` entre leitura e CAS. Fontes: `app/folha/tests/test_porta_sem_beco_item2.py:350`, `app/folha/tests/test_porta_sem_beco_item2.py:354`, `app/folha/tests/test_porta_sem_beco_item2.py:358`.
+
+7. **PRONTA local está protegida; fotografia atual do banco não está garantida.** A função exige pedido local `CONCLUIDO`, tentativa verdadeira e igualdade com carimbo. Ela pode ler o pedido concluído antigo, um cron substituí-lo por nova tentativa em curso, e ainda ler o carimbo antigo correspondente. Isso continua linearizável ao instante inicial em que aquele par era válido; não demonstra liberação sem jamais ter existido o par exigido. Fontes: `app/folha/porta_export.py:1249`, `app/folha/porta_export.py:1250`, `app/folha/porta_export.py:1258`, `app/folha/porta_export.py:1260`, `app/folha/porta_export.py:1268`, `app/folha/porta_export.py:1131`. Corrida executada: [nao verificado].
+
+8. **Ator:** `pedir` grava `getattr(ator, 'pk', None)`, a adoção preserva o campo e a recusa o imprime no motivo. Cron/manual criam detalhe sem `ator`, saindo `ator=-`; o campo principal `usuario` da linha também sai `-`, porque `_recusa` chama `registrar(None, ...)`. Nome de usuário não é introduzido por esse caminho da porta. Fontes: `app/folha/porta_export.py:1082`, `app/folha/porta_export.py:1083`, `app/folha/porta_export.py:1124`, `app/folha/porta_export.py:1134`, `app/folha/porta_export.py:1056`, `app/folha/porta_export.py:1058`, `app/core/recusa_critica.py:77`.
+
+Nenhum teste foi executado; resultados de execução: [nao verificado]. [nao verificado]
+
+## 17/11 13:35 · sessao 7dede955e4c0 · - · - · origem=Ronald (tmux)
+
+- **Pedido — tentativa:** `pedir` cria UUID e o renova ao refazer (`app/folha/porta_export.py:1083`, `app/folha/porta_export.py:1100`); `assumir` adota a tentativa recebida ou cria outra para cron/manual (`app/folha/porta_export.py:1122`, `app/folha/porta_export.py:1135`). Leitores: `_ficha`/CAS, `assumir`, `concluir`, `_recusa`, `estado_da_porta` e argv do subprocesso (`app/folha/porta_export.py:1022`, `app/folha/porta_export.py:1040`, `app/folha/porta_export.py:1123`, `app/folha/porta_export.py:1170`, `app/folha/porta_export.py:1060`, `app/folha/porta_export.py:1260`, `app/folha/porta_export.py:1307`).
+
+- **Pedido — ator:** escritor explícito é `pedir`, via `getattr(ator, 'pk', None)`; a view fornece `request.user`, e a recusa imprime esse pk (`app/folha/porta_export.py:1082`, `app/folha/porta_export.py:1100`, `app/folha/views.py:131`, `app/folha/porta_export.py:1057`). `assumir` com tentativa conserva ator mas sobrescreve origem; sem tentativa substitui todo detalhe e não inclui ator, como esperado para nova tentativa cron/manual (`app/folha/porta_export.py:1124`, `app/folha/porta_export.py:1131`).
+
+- **Carimbo — tentativa:** `lavrar` grava o argumento recebido, incluindo `None`; `concluir` passa a tentativa validada da linha atual (`app/folha/porta_export.py:768`, `app/folha/porta_export.py:784`, `app/folha/porta_export.py:1178`). O leitor decisório exige pedido `CONCLUIDO`, tentativa verdadeira e igualdade com o carimbo (`app/folha/porta_export.py:1258`).
+
+- **Ainda há escrita de carimbo fora de `concluir`:** `lavrar` continua função pública capaz de escrever diretamente; dois testes novos a chamam sem pedido ou sem tentativa (`app/folha/porta_export.py:779`, `app/folha/tests/test_porta_sem_beco_item2.py:305`, `app/folha/tests/test_porta_sem_beco_item2.py:317`). A fixture escreve diretamente tanto pedido quanto carimbo (`app/folha/tests/test_porta_do_export.py:42`, `app/folha/tests/test_porta_do_export.py:46`). Não encontrei outro chamador produtivo que escreva esse carimbo; o comando usa `concluir` e o helper passou a usar `assumir → concluir` (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:157`, `app/folha/porta_export.py:885`).
+
+- **Testes de outros apps:** o uso encontrado em relatórios chama o helper corrigido (`app/relatorios/tests/test_cauda_trilha_do_cartao.py:109`). Os demais usos do helper estão em integração/fixtures de folha (`app/folha/tests/test_integracao.py:160`, `app/folha/tests/test_txt_le_a_celula_e_o_juiz.py:155`, `app/folha/tests/test_sm1_monster_export.py:124`).
+
+- **Nenhum leitor decisório encontrado aceita carimbo sozinho:** `conferir` delega ao estado, o clique delega ao estado e a view delega ao clique; o script externo encontrado chama `conferir` (`app/folha/porta_export.py:820`, `app/folha/porta_export.py:1282`, `app/folha/views.py:130`, `bin/txt_antes_badge_linha.py:60`). PRONTA sem as condições do par não atravessa a cadeia de `elif` (`app/folha/porta_export.py:1254`).
+
+- **Motivo da recusa:** `_falhar` grava no pedido o motivo truncado a 500 caracteres e envia o original à recusa; `concluir` grava `res['motivo']`, mas divergência grava vazio e usa fallback apenas na linha (`app/folha/porta_export.py:1067`, `app/folha/porta_export.py:1069`, `app/folha/porta_export.py:1181`, `app/folha/porta_export.py:1184`). `_recusa` acrescenta antes/depois/origem/ator; `registrar` normaliza espaços e grava WARNING (`app/folha/porta_export.py:1056`, `app/core/recusa_critica.py:80`, `app/core/recusa_critica.py:85`).
+
+- **Leitores do motivo:** o parser o devolve como campo, mas o contador da porta ignora seu conteúdo e conta por data local da linha e porta; o wrapper de estado usa esse contador (`app/core/recusa_critica.py:49`, `app/core/recusa_critica.py:92`, `app/core/recusa_critica.py:113`, `app/core/recusa_critica.py:136`, `bin/recusa_estado.py:68`). A mensagem de FALHA na tela não lê o motivo persistido (`app/folha/porta_export.py:823`, `app/folha/porta_export.py:933`).
+
+## 17/11 13:35 · sessao 267c99086cf9 · - · - · origem=Ronald (tmux)
+
+Revisão estática; resultado da execução dos testes = [nao verificado]. [nao verificado]
+
+- **Freeze existe e está importado:** ambas as classes novas têm `@freeze_time`, com import de `freezegun`; não encontrei ausência de congelamento nesses testes. `app/folha/tests/test_porta_sem_beco_item2.py:19`, `:292`, `:387`.
+- **Os negativos da porta mordem os dois bugs declarados:** criam carimbo sem pedido e par sem tentativa, chamam `estado_da_porta` real e exigem recusa/FALHA. `app/folha/tests/test_porta_sem_beco_item2.py:302`, `:310`.
+- **Helper verde:** exercita o helper real e exige PRONTA, pedido CONCLUIDO e tentativa preenchida; não espiona `assumir`/`concluir`, portanto prova o resultado, não a exclusividade desse caminho. `app/folha/tests/test_porta_sem_beco_item2.py:320`; implementação efetivamente usa ambos em `app/folha/porta_export.py:887`.
+- **M9:** cria sucessora real, conserva detalhe da velha e verifica retorno `None`, ausência de carimbo, ausência de recusa e sucessora EM_CURSO; o marcador de log não torna a asserção vazia, pois `_linhas_da_porta` filtra só a porta. `app/folha/tests/test_porta_sem_beco_item2.py:328`, `:29`.
+- **M12:** verifica CAS perdedor mediante duas cópias lidas antes do primeiro encerramento, contando exatamente uma recusa; porém é sequencial e cobre somente EM_CURSO→FALHOU, sem testar `PEDIDO→EM_CURSO` entre leitura e CAS de `encerrar`, nem ator. `app/folha/tests/test_porta_sem_beco_item2.py:346`.
+- **Relógio:** o mock retorna hoje na primeira chamada e amanhã nas seguintes; ao exigir PRONTA com os registros de hoje, morde a antiga leitura dupla entre pedido/carimbo. Não é um contador literal de chamadas ignoradas, mas cobre o efeito relevante. `app/folha/tests/test_porta_sem_beco_item2.py:361`.
+- **Reclique:** exercita POSTs e CAS reais; substitui apenas subprocesso e medição indevida no request, exigindo uma linha e um disparo. Não verifica respostas HTTP, mas `popen.call_count == 1` impede que todos os POSTs sejam inertes. `app/folha/tests/test_porta_sem_beco_item2.py:371`.
+- **Lacuna principal: R8ConcluirTest não prova atomicidade de concluir.** Para A, o mock lança ANTES de chamar a implementação real; para B, chama a real. Isso morde tratamento da exceção no comando, motivo de A e continuação de B, mas não falha após lavrar, rollback do carimbo/estado, exceção pós-commit, nem uma linha de recusa. `app/folha/tests/test_porta_sem_beco_item2.py:398`, `:400`, `:408`.
+- **Essa lacuna importa:** a `_recusa` real ocorre depois do `transaction.atomic`; uma exceção ali não é revertida pelo bloco, ao contrário do comentário do comando. `app/folha/porta_export.py:1172`, `:1182`, `:1184`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`.
+- **Nenhum teste novo injeta falha em `assumir`**; o R8 novo injeta apenas `concluir`. `app/folha/tests/test_porta_sem_beco_item2.py:396`.
+- **Fixtures alteradas:** `_carimbo` ainda escreve diretamente pedido+carimbo, com tentativa constante `fixture`, fora de `concluir`; assim continua adequada para testar o leitor/texto, mas não certifica escritor único nem protocolo do job. `app/folha/tests/test_porta_do_export.py:33`, `:42`, `:46`. Já `_pela_porta` passou a usar `assumir→concluir`. `app/folha/tests/test_porta_sem_beco.py:34`.
+- **Shell:** o acréscimo realmente torna obrigatórios `sem_arquivo` da porta e texto “sem arquivo”; datas são explícitas, sem relógio solto nesse trecho. `bin/tests/test_recusa_estado.sh:29`, `:44`, `:48`.
 
 ## 17/11 12:42 · sessao 04f310b9fdf3 · PORTA-EXPORT · verificador · origem=Code
 
@@ -839,87 +896,4 @@ Na tabela final, **I** significa “causa no dia original indeterminada”; a pe
 | col108 | **I** — p26995, colaborador responde. [nao verificado] | O? |
 | col151 | **I** — p55742, admin valida. [nao verificado] | O? |
 
-## 17/11 11:55 · sessao 158de115794e · - · - · origem=Ronald (tmux)
-
-**Colisões e limites do item 2:**
-
-- **L-007:** qualquer novo estado persistido precisa de um escritor canônico, tripwire e trilha da ação crítica; o aval não nomeia essa porta nem define suas transições. A regra está em `CLAUDE.md:32–34`, espelhada em `app/docs/LEIS.md:65`. Portanto a construção deverá fechar quem grava início, resultado e morte sem criar escritores concorrentes (`CLAUDE.md:32–34`).
-- **Juiz único:** `JUIZES.md` é lookup, enquanto `core/juizes.py` é registro vivo (`app/docs/JUIZES.md:7–15`). O lookup ainda diz “o que bloqueia … SEM juiz” (`app/docs/JUIZES.md:118–121`), mas o registro vivo já aponta `classificar_export` para as perguntas de entrada no TXT e travas de aprovação (`app/core/juizes.py:319–331`). O estado operacional de execução pode ler a medição existente; transformar PID/contador/vigia em novo juiz de dinheiro ou prontidão contrariaria a regra de leitores e a regra de vigia (`CLAUDE.md:20–22`, `CLAUDE.md:170–173`).
-- **TRAVA JUIZ-NOVO:** uma autoridade nova registrada exige a frase literal “corte Ronald: juiz `<nome>` nasce” no CORTES.md (`CLAUDE.md:74–76`). Não é possível afirmar que o item exige um juiz novo apenas por acrescentar estado operacional; eventual novo predicado de negócio ou domínio precisa ser explicitado antes de avaliar essa trava (`CLAUDE.md:74–76`, `CLAUDE.md:176–179`).
-- **PORTA-DO-EXPORT-SEM-BECO:** texto e vigência literal desse aval não constam do dado raspado fornecido; a busca nos principais documentos da cópia não localizou seu nome. A comparação integral com ele permanece **[nao verificado]**. Há autorização histórica explícita para recusar TXT com leitores divergentes no módulo e na view (`app/folha/porta_export.py:2–15`, `app/folha/views.py:121–133`).
-
-**Exportada, dinheiro e `!`:**
-
-- A escrita atual dessa porta é o snapshot, com resultado e detalhes; sua leitura bloqueia a geração do TXT antes das etapas seguintes (`app/folha/porta_export.py:772–796`, `app/folha/views.py:128–133`). Só acrescentar controle de execução, motivo e apresentação não demonstra mudança em rubrica ou gravado monetário; a implementação futura permanece **[nao verificado]**.
-- É fora desse item alterar a composição das divergências que bloqueiam: a soma está em `app/folha/porta_export.py:687–691` e `app/folha/porta_export.py:762–764`; divergências específicas de exportada e linha/badge estão expressamente fora de `falhas` (`app/folha/porta_export.py:705–712`).
-- Mexer no gravado de exportada, escala/vínculo, motor ou regra fora do pedido exige `!`; “dinheiro não se moveu” não amplia o aval (`CLAUDE.md:265–268`). Logo nenhum dos subitens nem R7/R8 autoriza essas intervenções (`CLAUDE.md:265–268`).
-
-**Costura adicional para R8:**
-
-O resultado operacional pode ser por empresa, mas nem todo insumo da divergência é independente: `cartao_x_txt` abrange a competência inteira, devolve o mesmo número por empresa e não aceita `--empresa`; `falhas` por empresa inclui esse número global (`app/folha/porta_export.py:723–727`, `app/folha/porta_export.py:753–764`). Assim, “uma empresa falha e outra passa” fecha para falha própria da execução; não promete verde para outra empresa quando existe divergência global de cartão/TXT (`app/folha/porta_export.py:723–727`, `app/folha/porta_export.py:753–764`).
-
-**Texto atual de divergência:**
-
-A frase já fala em pontos: `TXT RECUSADO: os leitores discordam em %d ponto(s) no universo do TXT de %s. %s`; não promete aviso ao suporte (`app/folha/porta_export.py:865–866`). A troca de “O suporte Hasner ja foi avisado” incide sobre uma apresentação proposta/anterior, cuja existência nesta cópia é **[nao verificado]**.
-
-## 17/11 11:55 · sessao f34469953972 · - · - · origem=Ronald (tmux)
-
-**2(d): o mecanismo existe; o vínculo da porta do export e a definição do contador ainda precisam fechar.** (`app/core/recusa_critica.py:66–82`; `bin/gerar_estado.py:262–266`.)
-
-1. **Premissa:** `core/recusa_critica` é um módulo de emissão/leitura de log, não um modelo. A porta `registrar(request, *, motivo, tipo='erro', colab=None, dia=None, objeto=None, porta=None)` emite **WARNING**, não CRITICAL. Escreve uma linha `RECUSA-ACAO-CRITICA porta=... usuario=... colab=... dia=... objeto=... tipo=... motivo=...`. (`app/core/recusa_critica.py:30–46`, `:66–82`.) O destino configurado é `/app/logs/ponto.log`, com três rotados; `ponto` usa esse handler sem propagação. (`app/config/settings/saas.py:160–181`.)
-
-   Os envelopes `resposta_acao` e `resposta_render` chamam essa porta para `erro`/`aviso`; também aceitam lista de recusas e `recusas=()` para evitar dupla emissão. (`app/core/recusa_critica.py:32–34`; `app/core/respostas.py:41–56`, `:74–80`.) A emissão efetiva pela futura falha/divergência do export e sua ligação ao registro do job são [nao verificado].
-
-2. **Colisão:** usar a porta existente é coerente com “um escritor”; os novos campos/estados do job precisam escritor canônico e tripwire, e a ação crítica pede usuário, antes/depois e motivo. Apenas uma linha de recusa não substitui automaticamente essa trilha: o formato atual não possui campos separados `antes`/`depois`, empresa ou competência. (`CLAUDE.md:32–34`; `app/docs/LEIS.md:65`; `app/core/recusa_critica.py:76–80`.) O contador deve ler a fonte real, com rótulo/universo coincidentes. (`CLAUDE.md:35–36`.) Nova autoridade registrada em `core/juizes.py` exigiria a frase de nascimento no CORTES; o item fornecido não comprova esse nascimento [nao verificado]. (`CLAUDE.md:74–76`; `app/docs/LEIS.md:69`.)
-
-3. **Literal não fechado:**
-   - O leitor existente conta **linhas**, sem deduplicação por job, tentativa, empresa, competência ou estado; só compara data do **prefixo do log** e, opcionalmente, porta. Não usa o campo `dia=` para definir “hoje”. (`app/core/recusa_critica.py:104–119`.) Logo é preciso dizer se o novo `N` soma eventos/tentativas ou pares empresa–competência, e como trata retentativas e FALHOU→DIVERGENTE [nao verificado].
-   - O contador atual do ESTADO é especificamente “Resolver dia recusado hoje”: filtra `veredito_celula`, não export; ESTADO importa esse leitor. (`app/core/recusa_critica.py:35–37`, `:122–126`; `bin/gerar_estado.py:262–266`, `:333–335`.) A nova linha “porta do export falhou ou divergiu hoje: N”, esperado 0, é [nao verificado].
-   - No host, `bin/recusa_estado.py` fornece `datetime.date.today()`; no endpoint, fornece `timezone.localdate()`. O Django configura São Paulo, mas igualdade do relógio/fuso efetivo do host, processo emissor e container é [nao verificado]. (`bin/recusa_estado.py:37–45`; `app/api/views_mensageria.py:1864–1872`; `app/config/settings/base.py:93–95`.)
-   - `registrar` aceita `request=None` por usar `getattr`, mas nesse caso o usuário sai `-`; se o job não tem request, é necessário definir como conservar solicitante e identidade empresa/competência/tentativa. A API permite `porta` e `objeto` explícitos; a definição desses valores é [nao verificado]. (`app/core/recusa_critica.py:54–80`.)
-   - O precedente distingue ausência de arquivo de zero; não convém converter observação indisponível em “esperado 0 atingido”. (`bin/recusa_estado.py:41–54`.) Seu contador existente declara **não** ter esperado 0; portanto o novo esperado deve pertencer ao novo contador. (`bin/recusa_estado.py:11–12`.)
-
-4. **Exportada/dinheiro/`!`:** a porta de recusa mostrada escreve log, e seu contador lê arquivos; não há nesses corpos operação de exportação nem cálculo monetário. (`app/core/recusa_critica.py:66–82`, `:91–125`.) Efeitos da implementação futura fora desses corpos são [nao verificado].
-
-**Escritores/leitores do padrão disponível:**
-
-| Dado | Quem escreve/produz | Quem lê |
-|---|---|---|
-| `usuario` | `registrar` extrai `request.user.pk/username`, ausente=`-`. (`app/core/recusa_critica.py:73–74`.) | Regex e contador retornam agrupamento por usuário. (`app/core/recusa_critica.py:42–46`, `:112–119`.) |
-| `porta` | Argumento explícito, senão `resolver_match.view_name`/path. (`app/core/recusa_critica.py:54–57`, `:77`.) | `contar`, comparando último segmento após `:`. (`app/core/recusa_critica.py:115–116`.) |
-| `objeto` | Argumento explícito, senão kwargs ordenados da rota. (`app/core/recusa_critica.py:60–63`, `:79`.) | `ler_linha` entrega no dict; contador atual não o usa. (`app/core/recusa_critica.py:85–88`, `:112–119`.) |
-| `colab`, `dia` | Chamador informa; `registrar` normaliza pk/ISO; ausentes=`-`. (`app/core/recusa_critica.py:49–51`, `:75–79`.) | Regex extrai; contador atual não usa esses campos para filtro. (`app/core/recusa_critica.py:42–46`, `:112–119`.) |
-| `tipo`, `motivo` | Chamador/envelopes fornecem; `registrar` reduz espaços e emite WARNING. (`app/core/respostas.py:54–56`, `:78–80`; `app/core/recusa_critica.py:79–81`.) | `ler_linha`; contador atual conta sem filtrar `tipo`/motivo. (`app/core/recusa_critica.py:85–88`, `:112–119`.) |
-| Data prefixada/hora e arquivo | Formatter `full` e handler `pontofile`. (`app/config/settings/saas.py:122`, `:160–166`.) | `ler_linha` captura data; `contar` compara ao alvo. (`app/core/recusa_critica.py:42–46`, `:109–114`.) |
-| Dia alvo | Host: `date.today()`; API: `timezone.localdate()`. (`bin/recusa_estado.py:41`; `app/api/views_mensageria.py:1870`.) | `resolver_dia_recusado` → `contar`. (`app/core/recusa_critica.py:122–125`.) |
-| `recusas`, `por_usuario`, rótulo | Leitor `contar` e wrapper produzem em memória. (`app/core/recusa_critica.py:117–125`.) | `bin/recusa_estado.py:48–54`; ESTADO importa em `bin/gerar_estado.py:265–266`; API publica em `app/api/views_mensageria.py:1870–1873`. |
-| Empresa/competência/tentativa/motivo do novo job; novo `N` export | Escritores e leitores propostos [nao verificado]. | [nao verificado]. |
-
-## 17/11 11:55 · sessao fe5f1741355d · - · - · origem=Ronald (tmux)
-
-(a)/R7: o padrão citado existe, mas pertence a `LoteEspelho`, com `estado`, `erro`, `pid`, `iniciado_em` e `concluido_em`; não é um job da porta do export. (`app/relatorios/models.py:71`, `:118–132`.)
-
-| Dado | Quem escreve | Quem lê |
-|---|---|---|
-| Empresa, competência, filtros, chave | `lote_espelho.pedir`, com criação protegida pela constraint parcial | `pedir` para dedup e `executar` para gerar. (`app/relatorios/lote_espelho.py:92–113`, `:200–207`; `app/relatorios/models.py:167–171`.) |
-| PID/início | `disparar` grava `Popen.pid`; `assumir` confirma `os.getpid()`, início e GERANDO | `LoteEspelho.job_morreu`. (`app/relatorios/lote_espelho.py:132–138`, `:161–162`; `app/relatorios/models.py:151–156`.) |
-| Morte/estado ERRO/motivo/fim/PID limpo | `vigiar`; exceção tratada por `falhar` | Tela lê `estado`, `erro`, progresso e placar. (`app/relatorios/lote_espelho.py:66–79`, `:261–270`; `app/relatorios/views.py:1272–1279`; `app/templates/relatorios/_lote_espelho_progresso.html:18–41`.) |
-| Conclusão/placar/fim/PID limpo | `executar` | Tela do lote. (`app/relatorios/lote_espelho.py:239–253`; `app/relatorios/views.py:1276–1279`.) |
-
-O método só acusa morte com estado em curso, PID preenchido e depois de carência de 15 segundos; usa `os.kill(pid, 0)`, considera `ProcessLookupError` morte e `PermissionError` vivo. PID ausente não vira FALHOU; identidade além do número do PID não é conferida. (`app/relatorios/models.py:151–161`.)
-
-Quem observa é `vigiar`, chamado na tela/poll e antes da dedup de um novo pedido; o template consulta a cada dois segundos enquanto em curso. Sem acesso/pedido, essa conversão não ocorre por esses caminhos. Ligação da porta export a esse vigia: [nao verificado]. (`app/relatorios/views.py:1270–1291`; `app/relatorios/lote_espelho.py:96–98`; `app/templates/relatorios/_lote_espelho_progresso.html:12–14`.)
-
-Hoje o registro da porta é **carimbo em modelo `MetricaSnapshot`**, não arquivo e não registro de execução com PID/estado/tentativa. `lavrar` escreve; `conferir` lê; a view do TXT lê a mensagem e recusa se não vazia. (`app/folha/porta_export.py:768–808`; `app/inteligencia/models.py:87–105`; `app/folha/views.py:128–133`.)
-
-A competência está somente em `detalhe`; a chave única é chave/escopo/empresa/dia. Portanto duas competências da mesma empresa no mesmo dia sobrescrevem o mesmo carimbo; a leitura recusa se a competência pedida divergir da última gravada. (`app/folha/porta_export.py:772–776`, `:815–817`; `app/inteligencia/models.py:102–105`.)
-
-O dia é `timezone.localdate()` no momento da gravação; ontem permanece como outro snapshot, mas `conferir` só lê hoje. Não há estado “ontem”: ausência de carimbo hoje segue o ramo “NAO FOI MEDIDA HOJE”. (`app/folha/porta_export.py:21–23`, `:771–776`, `:803–813`.)
-
-Concorrência ainda precisa de decisão concreta: a gravação atual não carrega tentativa, claim ou PID; duas medições podem disputar a mesma chave empresa/dia e o resultado não identifica qual execução o produziu. Uma medição que levanta exceção antes de `lavrar` também deixa eventual verde anterior do mesmo dia intacto. (`app/folha/porta_export.py:772–796`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86–95`.)
-
-R8 não fecha no command atual: ele percorre empresas ativas em ordem, grava cada resultado e aborta no primeiro erro; uma empresa anterior pode ter sido carimbada e as seguintes nem são medidas. `cartao_x_txt=None` grava negativo antes de abortar. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86–95`.)
-
-Separar resultados por empresa não autoriza reinterpretar `cartao_x_txt`: seu universo continua sendo a competência inteira, repetido por empresa. (`app/folha/porta_export.py:723–727`, `:753–764`.)
-
-_6553 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6556 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
