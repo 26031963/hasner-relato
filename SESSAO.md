@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 10:13:58.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (203.4 MB). Acoes na janela: **533**.
+**Medido em 17/11/2026 10:19:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (203.5 MB). Acoes na janela: **538**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:19:06 | Bash | Confirm Codex census job started | `cd /home/ronald/saas-hasner; sleep 5; cat logs/ESPINHA-BRIEFS/F2/construtor/codex/censo_reprova.out \| head -5; du -ch logs/ESPINHA-BRIEFS/F2/construtor/codex/v*.[qr] logs/ESPINHA-BRIEFS/F2/construtor/entrega.md \| tail -1` |
+| 10:19:00 | Bash | Publish B3 DESENHO line; launch Codex postmortem census | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() i=s.index('PERGUNTA DE DESENHO E4C-F2 (nao segura a obra)'); j=s.index('\n',i)+1 new=('DESENHO E4C-F2: lei=celula soberana pergunta=opus final REPROVA @4d0d81b64 (logs/ESPINHA-BRIEFS/F2/construtor/opus_final.md): com a F2 a validada ressuscitada le VALIDADA pelo ato enquanto o C6 pergunta_viva a da por viva (ap ...` |
+| 10:18:47 | Bash | Save opus F2 review to file | `cd /home/ronald/saas-hasner; wc -l app/chamados/juizes.py app/ponto/services/cartorio.py app/chamados/services/fio.py \| head -3; F=logs/ESPINHA-BRIEFS/F2/construtor/opus_final.md; cat > $F <<'EOF' Opus final E4C-F2 @4d0d81b64 (17/11) -- texto devolvido pelo verificador (so leitura), gravado pela sessao. 1. F2 piora o ressuscitar: validada ressuscitada le VALIDADA em leitura, estado (models.py:317 ...` |
+| 10:18:34 | Bash | Read B3 line format | `cd /home/ronald/saas-hasner; sed -n 11,24p bin/disjuntor.py; sed -n 725,740p bin/disjuntor.py` |
+| 10:18:32 | Bash | Check disjuntor B3 contract | `cd /home/ronald/saas-hasner; /bin/grep -n 'B3' bin/disjuntor.py \| head -25` |
 | 10:12:52 | Bash | Point ESPERANDO at the ssh producer pid | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old='ESPERANDO: pista \| pid=3927865\n'; assert s.count(old)==1 open(p,'w').write(s.replace(old,'ESPERANDO: ssh \| pid=3927868\n')) EOF python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md; echo rc=$?` |
 | 10:12:49 | Bash | Find ssh child process of pista waiter | `pgrep -P 3927865 -a; for c in $(pgrep -P 3927865); do pgrep -P $c -a; done` |
 | 10:12:47 | Bash | Check how hook validates ESPERANDO producer | `cd /home/ronald/saas-hasner; /bin/grep -n 'ESPERANDO\\|produtor\\|comm\\|cmdline' bin/hook_stop_fila1.py \| head -30; ps -p 3927865 -o pid=,comm=,args=` |
