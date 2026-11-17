@@ -1,7 +1,832 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 23:24** · publicado em **16/11/2026 23:26** (UTC-3)
+> Ultima resposta processada: **16/11/2026 23:31** · publicado em **16/11/2026 23:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 23:31 · sessao 68ac2e2d6427 · ESPELHO-VERDADE-NA-BRECHA · leitura · origem=Code
+
+**Os 12 donos permanecem [nao verificado].** O registro disponível mantém esses casos pendentes justamente por faltar a leitura dos papéis das batidas; não autoriza converter as candidatas em causas provadas (`app/docs/RELATO.md:99-101`).
+
+A L-099 exige separar ESTRUTURA, CADASTRO e BATIDA; somente ESTRUTURA vira obra de código (`app/docs/LEIS.md:122`). A decisão deve sair de `InsumosDoDono(..., espelho=esp).dono(dia)`, que alimenta o juiz existente, sem reconstruir seus predicados (`app/ponto/management/commands/e6_oraculo.py:182-195`).
+
+A precedência **executada** é:
+
+1. Folga não definida ou ausência de vínculo → **CADASTRO** (`app/ponto/management/commands/e6_oraculo.py:98-99`).
+2. Aberto com entrada solta apurável confirmado por `batida_fora_de_turno` → **BATIDA**; “não apareceu no turno” sozinho não basta (`app/ponto/management/commands/e6_oraculo.py:198-212`).
+3. Quantidade ímpar nas horas **atribuídas pelo E6** → **BATIDA** (`app/ponto/management/commands/e6_oraculo.py:106-107`).
+4. Fase deslocada lavrada → **CADASTRO** (`app/ponto/management/commands/e6_oraculo.py:108-109`, `app/ponto/management/commands/e6_oraculo.py:174-179`).
+5. Presença em `dias_cadastro_x_realidade` → **CADASTRO**; restante → **ESTRUTURA** (`app/ponto/management/commands/e6_oraculo.py:110`, `app/ponto/management/commands/e6_oraculo.py:170-171`).
+
+O resíduo ESTRUTURA não identifica sozinho qual testemunha errou: o próprio núcleo registra cortes suspeitos do oráculo, e o RELATO distingue esses defeitos do espelho (`app/ponto/calculador/nucleo.py:218-223`, `app/docs/RELATO.md:100`). “ORACULO” não é uma quarta saída desse juiz (`app/ponto/management/commands/e6_oraculo.py:98-110`).
+
+As identidades abaixo vêm do anexo; a causa e o dono individual continuam [nao verificado]. Em cada linha, os sinais indicados alimentam a precedência acima.
+
+| Caso | O que o dado impresso precisa decidir |
+|---|---|
+| col369 — 12/10 | Se o vão pertence a pausa reconhecida e qual intervalo o dia declara; isso decide o desconto efetivamente aplicado (`app/ponto/turnos.py:756-766`). |
+| col864 — 12/10 | Se as batidas internas foram marcadas como pausa ou ficaram como trabalho; a sequência gravada S→E sozinha não decide (`app/ponto/turnos.py:798-883`). |
+| col114 — 08/11 | Quais papéis receberam as pontas do vão e qual pausa o leitor real reconheceu (`app/ponto/turnos.py:875-883`, `app/ponto/turnos.py:542-546`). |
+| col114 — 15/11 | Se a célula declara intervalo e se houve pausa marcada; célula existente sem marcos não herda pausa do template (`app/escala/models.py:1189-1208`). |
+| col723 — 08/10 | Se o vão integra uma pausa reconhecida, foi limitado pelo fim contado ou substituído pela janela declarada (`app/ponto/turnos.py:735-764`). |
+| col746 — 24/09 | A mesma conferência entre bordas, pausa reconhecida e janela efetivamente descontada (`app/ponto/turnos.py:735-764`). |
+| col876 — 21/09 | Se a batida excluída deixa aberto com entrada solta real; somente esse resultado aciona a porta específica BATIDA (`app/ponto/management/commands/e6_oraculo.py:208-212`). |
+| col130 — 29/10 | A que `data_turno` pertencem os segmentos vizinhos e se existe aberto com entrada solta apurável (`app/ponto/turnos.py:719-740`, `app/ponto/management/commands/e6_oraculo.py:208-212`). |
+| col220 — 10/11 | Se a batida fora do segmento produz o insumo real BATIDA, preservadas as precedências de cadastro (`app/ponto/management/commands/e6_oraculo.py:98-110`, `app/ponto/management/commands/e6_oraculo.py:208-212`). |
+| col868 — 22/09 | Qual vínculo/célula responde pelo dia e se o motor publicou esse dia em CXR; horário noturno contra template diurno não substitui essa consulta (`app/ponto/management/commands/e6_oraculo.py:170-171`, `app/escala/servico_jornada.py:66`). |
+| col516 — 23/10 | Fonte dos minutos do espelho, turnos atribuídos ao dia e fragmentos que o E6 atribuiu às datas vizinhas (`app/ponto/management/commands/e6_oraculo.py:263-269`, `app/ponto/turnos.py:719-740`, `app/ponto/calculador/nucleo.py:236-247`). |
+| col884 — 08/11 | Papel real das pontas, pausa reconhecida e cobertura efetiva da ausência; tipo invertido e atestado rejeitado não substituem os insumos do juiz (`app/ponto/turnos.py:875-883`, `app/ponto/turnos.py:2523-2531`). |
+
+A sonda abaixo mantém a janela real da competência e as margens do carregador, imprime as três datas e observa as instâncias consumidas pelo pareador, inclusive as que não chegaram aos turnos retornados (`app/ponto/management/commands/e6_oraculo.py:149-159`, `app/ponto/turnos.py:1371-1397`, `app/ponto/turnos.py:1988-2000`). Ela imprime o dono **condicionado à persistência da divergência**, sem copiar a classificação ou mudar tolerâncias (`app/ponto/management/commands/e6_oraculo.py:354-378`).
+
+Execução Django, envelope V0 e atualidade do dump: **[nao verificado]**. O contador abaixo cobre exceções capturadas pela sonda; funções reais também contêm capturas internas, como a abstenção do leitor de papéis (`app/ponto/turnos.py:1631-1635`).
+
+```python
+# Base: 520d7b55720888d80b46ffbca2ca73e59da40277.
+# Django shell do envelope V0, SOMBRA, dump de 16/11/2026.
+# Envelope/dump efetivos: [nao verificado] nesta copia.
+import sys
+sys.dont_write_bytecode = True
+import contextlib
+import datetime as dt
+import io
+import json
+import logging
+import re
+from decimal import Decimal
+from collections import defaultdict
+from zoneinfo import ZoneInfo
+
+BASE = "520d7b55720888d80b46ffbca2ca73e59da40277"
+CASOS = (
+    (369, 10, "2026-10-12"), (864, 10, "2026-10-12"),
+    (114, 11, "2026-11-08"), (114, 11, "2026-11-15"),
+    (723, 10, "2026-10-08"), (746, 10, "2026-09-24"),
+    (876, 10, "2026-09-21"), (130, 11, "2026-10-29"),
+    (220, 11, "2026-11-10"), (868, 10, "2026-09-22"),
+    (516, 11, "2026-10-23"), (884, 11, "2026-11-08"),
+)  # Identidades do anexo: [nao verificado] nesta copia.
+
+saida = sys.stdout
+erros = 0
+lidos = set()
+donos = {}
+segredos = {}
+timezone = None
+
+
+def raspar(texto):
+    for segredo in sorted(segredos, key=len, reverse=True):
+        texto = re.sub(
+            re.escape(segredo), segredos[segredo], texto,
+            flags=re.IGNORECASE,
+        )
+    return re.sub(
+        r"(?<!\d)(?:\d{3}\.?\d{3}\.?\d{3}-?\d{2})(?!\d)",
+        "[CPF removido]", texto,
+    )
+
+
+def serializar(valor):
+    if isinstance(valor, dt.datetime):
+        return timezone.localtime(valor).isoformat()
+    if isinstance(valor, (dt.date, dt.time)):
+        return valor.isoformat()
+    if isinstance(valor, Decimal):
+        return str(valor)
+    if isinstance(valor, (set, frozenset)):
+        return sorted(valor)
+    raise TypeError(
+        "objeto sem serializacao segura: " + type(valor).__name__
+    )
+
+
+def emitir(evento, fonte, **dados):
+    linha = dict(evento=evento, base=BASE, fonte=fonte, **dados)
+    print(
+        raspar(json.dumps(
+            linha, ensure_ascii=False, default=serializar,
+        )),
+        file=saida, flush=True,
+    )
+
+
+def erro(etapa, exc, **contexto):
+    global erros
+    erros += 1
+    emitir(
+        "ERRO", "[nao verificado]", etapa=etapa,
+        mensagem=type(exc).__name__ + ": " + str(exc),
+        **contexto,
+    )
+
+
+def executar():
+    global timezone
+    from django.apps import apps
+    from django.db import connection, transaction
+    from django.db.models import Q
+    from django.utils import timezone
+    from django_tenants.utils import schema_context
+    from ponto import janelas, turnos as T
+    from ponto.models import Batida, Ausencia
+    from escala.models import CelulaDia
+    from escala.alimentacao import (
+        celulas_do_periodo, escalas_do_periodo, vinculo_do_dia,
+    )
+    from ponto.services.espelho import (
+        espelho_do_colab, _realizado_do_dia_tela,
+    )
+    from ponto.management.commands.e6_oraculo import (
+        InsumosDoDono, minutos_do_espelho, batida_fora_de_turno,
+        diferenca_e_a_janela_declarada,
+    )
+    from ponto.supra_juiz import cadastro_do_dia_carregado
+
+    with timezone.override(ZoneInfo("America/Sao_Paulo")):
+        agora = timezone.localtime(timezone.now())
+        hoje = agora.date()
+        if hoje != dt.date(2026, 11, 16):
+            raise RuntimeError(
+                "esta sonda pede o envelope V0 de 16/11/2026"
+            )
+        if agora.utcoffset() != dt.timedelta(hours=-3):
+            raise RuntimeError("localtime nao esta em UTC-3")
+        if connection.in_atomic_block:
+            raise RuntimeError(
+                "executar em shell sem transacao externa"
+            )
+
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION READ ONLY")
+                cursor.execute("SELECT current_database()")
+                if cursor.fetchone()[0] != "sombra":
+                    raise RuntimeError("banco diferente de sombra")
+
+            with schema_context("juliani"):
+                Colaborador = apps.get_model(
+                    "colaboradores", "Colaborador"
+                )
+                colabs = {
+                    c.pk: c
+                    for c in Colaborador.objects.filter(
+                        pk__in={cid for cid, _, _ in CASOS}
+                    ).select_related("empresa")
+                }
+                for cid, c in colabs.items():
+                    if c.nome:
+                        segredos[c.nome] = "col%d" % cid
+                    if c.cpf:
+                        segredos[c.cpf] = "[CPF removido]"
+
+                emitir(
+                    "CONTEXTO",
+                    "app/ponto/management/commands/e6_oraculo.py:304",
+                    agora=agora, banco="sombra", schema="juliani",
+                    dump_de_hoje=(
+                        "[nao verificado pelo Python; "
+                        "conferir no envelope V0]"
+                    ),
+                )
+
+                for cid, mes, iso in CASOS:
+                    chave = (cid, iso)
+                    contexto = dict(
+                        colaborador="col%d" % cid, alvo=iso
+                    )
+                    try:
+                        with transaction.atomic():
+                            c = colabs[cid]
+                            dia = dt.date.fromisoformat(iso)
+                            ini, fim = janelas.janela_fechamento(
+                                mes, 2026, c.empresa
+                            )
+                            if not ini <= dia <= fim:
+                                raise ValueError(
+                                    "alvo fora da competencia da empresa"
+                                )
+
+                            esp = espelho_do_colab(
+                                c, hoje, ini, fim, agora=agora
+                            )
+                            ins = InsumosDoDono(
+                                c, ini, fim, hoje,
+                                espelho=esp, agora=agora,
+                            )
+
+                            # Observa instancias REAIS, sem recalcular papel.
+                            # Inclui batidas consumidas sem entrar no retorno.
+                            # app/ponto/turnos.py:1217,1315,1371,1988
+                            observadas = defaultdict(list)
+                            codigo = T.parear_turnos.__code__
+
+                            def observar(frame, evento, argumento):
+                                if (
+                                    evento == "return"
+                                    and frame.f_code is codigo
+                                ):
+                                    pai = frame.f_back.f_locals
+                                    segmento = (
+                                        pai.get("seg_ini"),
+                                        pai.get("seg_fim"),
+                                    )
+                                    for b in frame.f_locals.get("bs", ()):
+                                        observadas[b.pk].append(
+                                            (b, segmento)
+                                        )
+
+                            perfil_anterior = sys.getprofile()
+                            try:
+                                sys.setprofile(observar)
+                                ts = ins.turnos()
+                            finally:
+                                sys.setprofile(perfil_anterior)
+
+                            vizinhas = [
+                                dia + dt.timedelta(days=i)
+                                for i in (-1, 0, 1)
+                            ]
+                            a, z = vizinhas[0], vizinhas[-1]
+                            cels = celulas_do_periodo([cid], a, z)
+                            ecs = escalas_do_periodo(
+                                cid, a, z,
+                                mais=[
+                                    cel.escala_geradora_id
+                                    for cel in cels.values()
+                                ],
+                            )
+                            por_data = {
+                                d["data"]: d for d in esp["dias"]
+                            }
+                            lo = timezone.make_aware(
+                                dt.datetime.combine(a, dt.time.min)
+                            )
+                            hi = timezone.make_aware(
+                                dt.datetime.combine(
+                                    z + dt.timedelta(days=1),
+                                    dt.time.min,
+                                )
+                            )
+                            cruas = list(
+                                Batida.objects.filter(
+                                    colaborador=c,
+                                    timestamp__gte=lo,
+                                    timestamp__lt=hi,
+                                ).order_by("timestamp", "pk")
+                            )
+                            emitir(
+                                "CASO",
+                                "app/ponto/management/commands/e6_oraculo.py:328",
+                                **contexto,
+                                competencia=mes, ini=ini, fim=fim,
+                            )
+
+                            for d in vizinhas:
+                                cel = cels.get((cid, d))
+                                ec = vinculo_do_dia(
+                                    cid, d, ecs, celulas=cels
+                                )
+                                ata = (cel.ata or {}) if cel else {}
+                                emitir(
+                                    "CELULA",
+                                    "app/escala/models.py:1672;"
+                                    "app/escala/models.py:1163",
+                                    **contexto, dia=d,
+                                    existe=cel is not None,
+                                    trabalha=cel.trabalha if cel else None,
+                                    geradora_id=(
+                                        cel.escala_geradora_id
+                                        if cel else None
+                                    ),
+                                    vinculo_do_dia_id=ec.pk if ec else None,
+                                    tipo_base=(
+                                        ec.tipo_escala.tipo_base
+                                        if ec and ec.tipo_escala else None
+                                    ),
+                                    marcos_dna=(
+                                        CelulaDia.marcos_presentes(
+                                            (cel.dna or {}).get("marcos")
+                                        ) if cel else None
+                                    ),
+                                    marcos_do_vinculo=(
+                                        ec.marcos_do_dia(d, celulas=cels)
+                                        if ec else None
+                                    ),
+                                    intervalo_efetivo=(
+                                        ec.intervalo_do_dia(d, celulas=cels)
+                                        if ec else None
+                                    ),
+                                    pausas_declaradas=(
+                                        ec.pausas_do_dia(d, celulas=cels)
+                                        if ec else None
+                                    ),
+                                    veredito_gravado=(
+                                        cel.veredito if cel else None
+                                    ),
+                                    ata={
+                                        k: ata[k] for k in (
+                                            "tipo_dia",
+                                            "minutos_previstos",
+                                            "minutos_realizados",
+                                            "n_missing", "n_orfas",
+                                            "sem_ancora",
+                                        ) if k in ata
+                                    },
+                                )
+
+                                de = por_data.get(d)
+                                m, fonte = minutos_do_espelho(de)
+                                k = d.isoformat()
+                                v = ins.oraculo
+                                real = _realizado_do_dia_tela(
+                                    c, d, ts, ecs, cels
+                                )
+                                emitir(
+                                    "ESPELHO_E6",
+                                    "app/ponto/services/espelho.py:267;"
+                                    "app/ponto/management/commands/e6_oraculo.py:263;"
+                                    "app/ponto/calculador/nucleo.py:236",
+                                    **contexto, dia=d,
+                                    linha_existe=de is not None,
+                                    espelho={
+                                        campo: (de or {}).get(campo)
+                                        for campo in (
+                                            "minutos_realizados", "pago_h",
+                                            "veredito_dia", "palavra_dia",
+                                            "folga", "feriado",
+                                            "realizado_aberto",
+                                            "realizado_sem_turno",
+                                            "realizado_janela_descontada",
+                                            "falta_marcos",
+                                            "realizado_grade",
+                                        )
+                                    },
+                                    batidas_cruas_no_dia=sum(
+                                        timezone.localtime(
+                                            b.timestamp
+                                        ).date() == d
+                                        for b in cruas
+                                    ),
+                                    minutos_lidos=m,
+                                    fonte_minutos=fonte,
+                                    realizado_com_turnos_do_juiz=(
+                                        real._asdict()
+                                    ),
+                                    turnos_exibidos=[
+                                        dict(
+                                            entrada=p.entrada,
+                                            saida=p.saida,
+                                            aberto=p.turno_aberto,
+                                        )
+                                        for p in (de or {}).get("turnos", ())
+                                    ],
+                                    e6_minutos=v.minutos.get(k, 0.0),
+                                    e6_horas=v.horas.get(k, []),
+                                    e6_envelope=v.envelope.get(k, 0.0),
+                                    e6_pausa=v.pausa.get(k
+
+[truncado em 20000 de 30653 caracteres]
+
+## 16/11 23:30 · sessao 08cb9dbda68f · ESPELHO-VERDADE-NA-BRECHA · leitura · origem=Code
+
+**As listas se separam no código; a reprodução de col922 e os números da frota nesta cópia continuam [nao verificado].** A separação está em `app/ponto/services/espelho.py:421-422` versus `:614`.
+
+- **(a) REALIZADO:** `minutos_do_espelho` prefere `minutos_realizados`, depois `pago_h × 60` (`app/ponto/management/commands/e6_oraculo.py:263-269`). O primeiro nasce em `_realizado_do_dia_tela` → `realizado_do_dia` → `realizado_dos_turnos`, que seleciona `data_turno == data` e soma os líquidos (`app/ponto/services/espelho.py:267-294`, `:675-676`, `:783`; `app/ponto/turnos.py:719`, `:735-771`, `:795`).
+
+- **(a) TELA:** a view `espelho_ponto` chama `espelho_do_colab` e entrega seus dias a `ponto/espelho.html` (`app/ponto/views.py:160-163`, `:195-200`). `montar_dias` monta `dia.turnos` com **períodos do motor**, remapeados por entrada → batida → dia do juiz (`app/ponto/services/espelho.py:421-422`, `:450-460`, `:656`, `:767`). Precisão: o template usa esses turnos para status/alertas; os horários vêm de `realizado_grade`, adaptado por `montar_realizado_grade`, ou de `dia.batidas` (`app/templates/ponto/espelho.html:192-204`, `:231-247`, `:298-305`; `app/escala/utils.py:1078-1110`).
+
+- **(b) SEPARAÇÃO:** o cálculo recebe diretamente os turnos do juiz; o desenho recebe o resultado do motor (`app/ponto/services/espelho.py:614`, `:421-422`). Dentro do motor, `_periodos_pelo_marco` pode substituir **todos os períodos daquele dia** por **um período da ata**; o cálculo do realizado não percorre essa transformação (`app/ponto/motor_calculo_v2.py:530-534`, `:616`, `:679-688`; `app/ponto/services/espelho.py:614`). Sua execução como causa dos dois casos: [nao verificado].
+
+  Não é uma oposição simples entre dia civil e dia do turno: a tela também consulta o juiz; batidas não reclamadas recebem dia civil, e a transformação do motor usa dia civil quando falta a resposta do mapa (`app/ponto/services/espelho.py:450-460`; `app/ponto/turnos.py:2957-2967`; `app/ponto/motor_calculo_v2.py:684-686`). Ambos excluem retratadas, mas os envelopes diferem: motor começa em `ini−1`; juiz em `ini−2` (`app/ponto/services/espelho.py:1019-1022`; `app/ponto/turnos.py:1847`, `:1867-1871`). O realizado lê célula/vínculo para intervalo; o pareador lê o papel da ata; o motor também lê a célula para substituir períodos (`app/ponto/services/espelho.py:286-294`; `app/ponto/turnos.py:1944`, `:1997-2000`; `app/ponto/motor_calculo_v2.py:616`). Qual dessas diferenças decidiu col922: [nao verificado].
+
+- **(c) PADRÃO:** a omissão relatada contraria **Single Source of Truth / um juiz por pergunta**; a montagem paralela da testemunha corresponde ao termo **Duplicated business logic / logic drift**. A separação de listas, isoladamente, não prova a omissão nesta base (`app/docs/GLOSSARIO.md:11`, `:25`; `app/docs/PLANO-PADROES.md:55-59`; reprodução: [nao verificado]).
+
+A sonda define `classe_mesma` como realizado completo diferente do **mesmo realizado real restrito às entradas de `dia.turnos`**. Isso evita confundir realizado com dinheiro do motor; o adaptador da grade não fornece um somador de duração (`app/ponto/services/espelho.py:398-402`; `app/escala/utils.py:1078-1110`, `:1113-1125`). A frota segue a seleção do E6: empresas ativas e colaboradores com fechamento na competência, sem `--so-txt`, usando o corte de cada empresa (`app/ponto/management/commands/e6_oraculo.py:303-314`; `app/ponto/janelas.py:54-57`). Execução na sombra e contagens: [nao verificado].
+
+```python
+# Django shell, SOMBRA/V0, base 520d7b557. Sem escrita de arquivos.
+# Fontes: app/ponto/services/espelho.py:614,675,767,783,1225
+#         app/ponto/turnos.py:707,719,725,770,795
+# classe_mesma: realizado completo != mesmo realizado restrito
+# as entradas de dia.turnos. Nao compara realizado com dinheiro.
+# app/ponto/services/espelho.py:398-402; app/escala/utils.py:1113-1125
+
+import datetime as dt
+import inspect
+import logging
+import re
+import sys
+from collections import Counter
+from zoneinfo import ZoneInfo
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador, Empresa
+from ponto.models import Batida, FechamentoMensal
+from ponto.janelas import janela_fechamento
+from ponto.services import espelho as svc
+from ponto import turnos as tj
+from ponto import motor_calculo_v2 as mv2
+from ponto.management.commands.e6_oraculo import minutos_do_espelho
+
+
+ALVOS = {dt.date(2026, 11, 1), dt.date(2026, 11, 4)}
+erros = 0
+exemplos = []
+numeros = {}
+cobertura = {}
+redacoes = []
+vistos_alvos = set()
+
+
+def erro(contexto, exc):
+    global erros
+    erros += 1
+    msg = str(exc)
+    for nome, alias in redacoes:
+        msg = re.sub(re.escape(nome), alias, msg, flags=re.I)
+    msg = re.sub(
+        r"(?<!\d)\d{3}\.?\d{3}\.?\d{3}-?\d{2}(?!\d)",
+        "[CPF removido]", msg,
+    )
+    print("ERRO", contexto, type(exc).__name__, msg.replace("\n", " "))
+
+
+def hora(x):
+    return "-" if x is None else timezone.localtime(x).isoformat()
+
+
+def borda(b):
+    return None if b is None else b.timestamp
+
+
+def linha_unica(funcao, trecho):
+    linhas, inicio = inspect.getsourcelines(funcao)
+    achadas = [inicio + i for i, s in enumerate(linhas) if trecho in s]
+    if len(achadas) != 1:
+        raise RuntimeError("base divergente: trecho nao univoco: " + trecho)
+    return achadas[0]
+
+
+def ler_espelho(c, ini, fim, hoje, agora, detalhe):
+    # Observa os locais das funcoes reais; nao altera seus argumentos.
+    # app/ponto/turnos.py:770; app/ponto/motor_calculo_v2.py:685,689
+    soma_ln = linha_unica(tj.realizado_dos_turnos, "total += liquido")
+    antes_ln = linha_unica(
+        mv2._periodos_pelo_marco,
+        "periodos = [(e, x) for (e, x) in periodos",
+    )
+    depois_ln = linha_unica(
+        mv2._periodos_pelo_marco, "itv = resp.get('intervalo')",
+    )
+    obs = {"reais": {}, "marco": []}
+    parcelas = {}
+    anteriores = {}
+
+    def observar(frame, evento, valor):
+        codigo = frame.f_code
+        if evento == "call":
+            if codigo is svc.montar_dias.__code__:
+                frame.f_trace_lines = False
+                return observar
+            if codigo is tj.realizado_dos_turnos.__code__:
+                pai = frame.f_back
+                avo = pai.f_back if pai else None
+                if (
+                    avo is not None
+                    and avo.f_code is svc._realizado_do_dia_tela.__code__
+                ):
+                    parcelas[id(frame)] = []
+                    frame.f_trace_lines = detalhe
+                    return observar
+            if detalhe and codigo is mv2._periodos_pelo_marco.__code__:
+                frame.f_trace_lines = True
+                return observar
+            return None
+
+        v = frame.f_locals
+        if codigo is tj.realizado_dos_turnos.__code__:
+            if evento == "line" and frame.f_lineno == soma_ln:
+                parcelas[id(frame)].append((
+                    v["t"], v["fim"], v["bruto"], v["pausas"], v["liquido"],
+                ))
+            if evento == "return" and valor is not None:
+                obs["reais"][v["data"]] = {
+                    "resultado": valor,
+                    "turnos": list(v["do_dia"]),
+                    "args": {
+                        k: v[k] for k in ("livre", "previsto_min", "intervalo")
+                    },
+                    "parcelas": parcelas.pop(id(frame), []),
+                    "pos": v.get("_pos"),
+                }
+
+        elif codigo is svc.montar_dias.__code__ and evento == "return":
+            obs["juiz"] = list(v["_turnos_juiz_tela"])
+            obs["dia_pk"] = dict(v["_dia_por_pk"])
+
+        elif codigo is mv2._periodos_pelo_marco.__code__:
+            chave = id(frame)
+            if evento == "line" and v.get("dia") in ALVOS:
+                if frame.f_lineno == antes_ln:
+                    anteriores[chave] = tuple(v["periodos"])
+                elif frame.f_lineno == depois_ln:
+                    obs["marco"].append((
+                        v["dia"],
+                        anteriores.pop(chave),
+                        tuple(v["periodos"]),
+                    ))
+            if evento == "return":
+                anteriores.pop(chave, None)
+        return observar
+
+    anterior = sys.gettrace()
+    if anterior is not None:
+        raise RuntimeError("ha tracer ativo; observacao nao instalada")
+    try:
+        sys.settrace(observar)
+        esp = svc.espelho_do_colab(
+            c, hoje, ini, fim, ano=2026, modo_gestor=False, agora=agora,
+        )
+    finally:
+        sys.settrace(anterior)
+    if "juiz" not in obs:
+        raise RuntimeError("montar_dias nao foi observado")
+    return esp, obs
+
+
+def projetar(dia, real):
+    # Recorta representacao; o calculo continua na funcao real.
+    # app/ponto/services/espelho.py:767; app/ponto/turnos.py:707
+    entradas = {p.entrada for p in dia["turnos"]}
+    todos = real["turnos"]
+    faltam = entradas - {borda(t.entrada) for t in todos}
+    if faltam:
+        raise RuntimeError(
+            "periodo da tela sem turno correspondente neste dia: "
+            + ", ".join(hora(x) for x in sorted(faltam))
+        )
+    recorte = [t for t in todos if borda(t.entrada) in entradas]
+    resposta = tj.realizado_dos_turnos(
+        recorte, dia["data"], **real["args"],
+    )
+    # Conjunto vazio soma zero; None da fonte original nao vira zero.
+    minutos = 0 if not recorte else resposta.minutos
+    if minutos is None:
+        raise RuntimeError("recorte nao vazio sem minutos")
+    return minutos
+
+
+def mostrar(c, dia, real, obs, minutos_tela):
+    data = dia["data"]
+    alias = "col%d" % c.pk
+    print(
+        "ALVO", alias, data,
+        "realizado", real["resultado"].minutos,
+        "realizado_restrito_a_dia.turnos", minutos_tela,
+        "fonte_e6", minutos_do_espelho(dia),
+        "intervalo", real["args"]["intervalo"],
+        "livre", real["args"]["livre"],
+    )
+
+    # Papeis das instancias reais do pareador.
+    # app/ponto/turnos.py:1315,1868,2888; app/ponto/models.py:67
+    papeis = {}
+    for t in obs["juiz"]:
+        for b in t.batidas:
+            papeis.setdefault(b.pk, []).append((
+                t.data_turno, getattr(b, "_papel_ata", None),
+            ))
+
+    lo = timezone.make_aware(dt.datetime.combine(
+        data - dt.timedelta(days=2), dt.time(),
+    ))
+    hi = timezone.make_aware(dt.datetime.combine(
+        data + dt.timedelta(days=3), dt.time(),
+    ))
+    for b in Batida.objects.filter(
+        colaborador=c, timestamp__gte=lo, timestamp__lt=hi,
+    ).order_by("timestamp", "pk"):
+        print(
+            "BATIDA", alias, "pk", b.pk, hora(b.timestamp),
+            "tipo", b.tipo,
+            "retratada", hora(b.retratada_em),
+            "papel_ata_e_data_turno", papeis.get(b.pk, "[nao verificado]"),
+            "dia_tela", obs["dia_pk"].get(b.pk, "[nao verificado]"),
+        )
+
+    for t in real["turnos"]:
+        print(
+            "TURNO_REALIZADO", alias, "data_turno", t.data_turno,
+            hora(borda(t.entrada)), hora(borda(t.saida)),
+            "aberto", t.aberto,
+        )
+    for t, fim, bruto, pausa, liquido in real["parcelas"]:
+        print(
+            "PARCELA_REAL", alias, "data_turno", t.data_turno,
+            hora(borda(t.entrada)), hora(borda(fim)),
+            "minutos", liquido, "bruto", bruto, "pausa", pausa,
+        )
+    if real["pos"] is not None:
+        t, ult, pausa = real["pos"]
+        print(
+            "PARCELA_DIARIA_L115", alias, t.data_turno,
+            hora(borda(t.entrada)), hora(borda(ult)),
+            "minutos", real["resultado"].minutos,
+            "pausa", hora(borda(pausa[0])), hora(borda(pausa[1])),
+        )
+
+    for p in dia["turnos"]:
+        correspondentes = [
+            t for t in real["turnos"] if borda(t.entrada) == p.entrada
+        ]
+        r = tj.realizado_dos_turnos(
+            correspondentes, data, **real["args"],
+        )
+        print(
+            "TURNO_TELA", alias, "dia_tela", data,
+            "data_turno", [t.data_turno for t in correspondentes],
+            hora(p.entrada), hora(p.saida),
+            "minutos_mesmo_juiz_isolado", r.minutos,
+            "minutos_motor_dinheiro", p.minutos_trabalhados,
+        )
+
+    for d, antes, depois in obs["marco"]:
+        if d == data:
+            print(
+                "MARCO_REAL", alias, d,
+                "antes", [(hora(a), hora(z)) for a, z in antes],
+                "depois", [(hora(a), hora(z)) for a, z in depois],
+            )
+
+    # Saida real do adaptador: app/escala/utils.py:1078
+    print("GRADE_TELA", alias, data, [
+        {k: x.get(k) for k in (
+            "hora", "tipo", "tipo_real", "missing", "status",
+        )}
+        for x in dia["realizado_grade"]
+    ])
+    print("ORFAS_GRADE_TELA", alias, data, dia["orfas_grade"])
+    print("BATIDAS_FALLBACK_TELA", alias, data, [
+        (b.pk, hora(b.timestamp), b.tipo) for b in dia["batidas"]
+    ])
+
+
+nivel_log = logging.root.manager.disable
+logging.disable(logging.CRITICAL)
+try:
+    with timezone.override(ZoneInfo("America/Sao_Paulo")), schema_context("juliani"):
+        agora = timezone.now()
+        hoje = timezone.localtime(agora).date()
+        print("ATO", hora(agora), "hoje", hoje, "base", "520d7b557")
+
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION READ ONLY")
+
+            redacoes = [
+                (nome, "col%d" % pk)
+                for pk, nome in Colaborador.objects.values_list("pk", "nome")
+                if nome
+            ]
+            redacoes.sort(key=lambda x: len(x[0]), reverse=True)
+
+            for mes in (10, 11):
+                n = 0
+                stats = Counter()
+
+                # Universo E6: e6_oraculo.py:303-314; sem --so-txt.
+                for empresa in Empresa.objects.filter(ativa=True).order_by("pk"):
+                    ini, fim = janela_fechamento(mes, 2026, empresa)
+                    ids = FechamentoMensal.objects.filter(
+                        mes=mes, ano=2026, colaborador__empresa=empresa,
+                    ).values_list("colaborador_id", flat=True)
+
+                    for c in Colaborador.objects.filter(pk__in=ids).order_by("pk"):
+                        contexto = "col%d comp%d" % (c.pk, mes)
+                        try:
+                            with transaction.atomic():
+                                esp, obs = ler_espelho(
+                                    c, ini, fim, hoje, agora,
+                                    c.pk == 922 and mes == 11,
+                                )
+                        except Exception as exc:
+                            erro(contexto, exc)
+                            stats["colabs_erro"] += 1
+                            continue
+
+                        por_data = {x["data"]: x for x in esp["dias"]}
+                        data = ini
+                        while data <= fim:
+                            atual = data
+                            data += dt.timedelta(days=1)
+                            if atual > hoje:
+                                stats["futuros"] += 1
+                                continue
+                            try:
+                                with transaction.atomic():
+                                    dia = por_data[atual]
+                                    real = obs["reais"][atual]
+                                    if (
+                                        real["resultado"].minutos
+                                        != dia["minutos_realizados"]
+                                    ):
+                                        raise RuntimeError(
+                                            "retorno observado difere do campo da tela"
+                                        )
+
+                                    m = projetar(dia, real)
+                                    if (
+                                        c.pk == 922 and mes == 11
+                                        and atual in ALVOS
+                                    ):
+                                        mostrar(c, dia, real, obs, m)
+                                        vistos_alvos.add(atual)
+
+                                    if real["resultado"].minutos is None:
+                                        stats["sem_realizado"] += 1
+                                        continue
+
+                                    stats["comparados"] += 1
+                                    if real["resultado"].minutos != m:
+                                        n += 1
+                                        if len(exemplos) < 10:
+                                            exemplos.append((
+                                                mes, c.pk, atual,
+                                                real["resultado"].minutos, m,
+                                            ))
+                            except Exception as exc:
+                                erro(contexto + " " + str(atual), exc)
+                                stats["dias_erro"] += 1
+
+                numeros[mes] = n
+                cobertura[mes] = dict(stats)
+
+            for data in sorted(ALVOS - vistos_alvos):
+                erro(
+                    "col922 " + str(data),
+                    RuntimeError(
+                        "alvo nao medido; conferir universo ou erros anteriores"
+                    ),
+                )
+
+except Exception as exc:
+    erro("sonda", exc)
+
+finally:
+    logging.disable(nivel_log)
+    for mes in (10, 11):
+        print(
+            "NUMERO classe_mesma comp%d: %s"
+            % (mes, numeros.get(mes, "[nao verificado]"))
+        )
+        print(
+            "COBERTURA comp%d" % mes,
+            cobertura.get(mes, "[nao verificado]"),
+        )
+    for mes, pk, data, m_real, m_tela in exemplos:
+        print(
+            "EXEMPLO", "col%d" % pk, data, "comp%d" % mes,
+            "realizado", m_real, "tela_mesmo_juiz", m_tela,
+        )
+    print(
+        "VEREDITO",
+        "INCOMPLETO [nao verificado]" if erros else (
+            "DIVERGENCIA REPRODUZIDA"
+            if sum(numeros.values()) else "NAO REPRODUZ"
+        ),
+        "| erros: %d" % erros,
+    )
+```
+
+## 16/11 23:29 · sessao 2a2b912ac709 · ESPELHO-VERDADE-NA-BRECHA · censo · origem=Code
+
+**E4 permanece EM CURSO:** há exibição do tipo gravado fora da pílula, nos dois ramos do wizard abaixo; o placar também registra esse estado em `app/core/espelho_verdade.py:142–143`.
+
+| Achado | Quem vê | Pílula ou outra coisa |
+|---|---|---|
+| **Criar sob pai:** imprime `{{ pai.tipo_base }}` em “canônico herdado” — `app/templates/escala/wizard_tipo_escala.html:56`. O pai é carregado pelo ID — `app/escala/views_wizard.py:74`. | Usuário autenticado com ação `editar_escalas` — `app/escala/views_wizard.py:63–64`. | Outra coisa: texto auxiliar do cadastro — `app/templates/escala/wizard_tipo_escala.html:56`. |
+| **Editar escala:** imprime `{{ tipo.tipo_base }}` em “Canônico (não editável)” — `app/templates/escala/wizard_tipo_escala.html:61`. O tipo é carregado pelo ID — `app/escala/views_wizard.py:67`. | Mesmo público do wizard — `app/escala/views_wizard.py:63–64`. | Outra coisa: texto auxiliar do cadastro — `app/templates/escala/wizard_tipo_escala.html:61`. |
+| **Django admin, formulário de TipoEscala:** configuração implica campo `tipo_base` com seleção do valor gravado e labels das choices: `ModelAdmin` sem exclusão de campos — `app/escala/admin.py:7–15`; campo com choices — `app/escala/models.py:163–174`. **Inferência estática; renderização efetiva [nao verificado].** | Admin do modelo, registrado em `app/escala/admin.py:7`, pela rota `app/config/urls.py:24`. | Outra coisa: seletor de formulário, pela configuração de `app/escala/admin.py:8`. |
+| **Mensagens condicionais:** quando `tipo_base == 'comercial'`, a validação escreve “tipo base 'Comercial'” em duas recusas — `app/escala/models.py:358–367`; o wizard encaminha essas mensagens ao usuário — `app/escala/views_wizard.py:110–112`. | Usuário com `editar_escalas` — `app/escala/views_wizard.py:95–98`; entrega por toast ou mensagem — `app/core/respostas.py:63–69`. | Outra coisa: aviso de validação, sem consultar o desenho para nomear a base — `app/escala/models.py:358–367`. |
+
+Os dois textos do wizard aparecem tanto na página inteira quanto no drawer, pelo mesmo template — `app/escala/views_wizard.py:88–92`.
+
+Também inventariados, com distinção de origem:
+
+- **Seletor “Base”:** imprime labels de `TipoEscala.TIPO_BASE_CHOICES` — `app/templates/escala/wizard_tipo_escala.html:36–37`, fonte em `app/escala/views_wizard.py:79`. É vocabulário de cadastro, disponível somente na criação sem pai, e não leitura de registro existente — `app/templates/escala/wizard_tipo_escala.html:26`.
+- **“Escala-base de referência”:** labels literais das bases — `app/templates/escala/wizard_tipo_escala.html:42–47`; também está nesse ramo de criação — `app/templates/escala/wizard_tipo_escala.html:26`.
+- **Hidden, legenda e manual:** não são rótulos derivados de um registro exibido: hidden em `app/templates/escala/wizard_tipo_escala.html:19`; legenda fixa em `app/templates/escala/tipos_lista.html:106–109`; texto fixo em `app/templates/core/manual.html:127`.
+
+**A pílula protegida:** o texto lê `desenho_do_turno` — `app/templates/escala/tipos_lista.html:55`; o filtro delega a `rotulo_do_desenho` — `app/core/templatetags/hasner_filters.py:59–60`, que decide pelos horários e intervalo — `app/escala/servico_jornada.py:189–205`.
+
+**A cor vem do tipo gravado:** `12x36` azul, `comercial` verde, `plantao` amarelo, demais cinza — `app/templates/escala/tipos_lista.html:51–54`.
+
+Nos caminhos de PDF, CSV e API examinados, não apareceu outro emissor de `tipo_base`: PDF usa código/ciclo/horário — `app/relatorios/pdf_espelho.py:730–740`; builder de relatórios usa `str(tipo_escala)` — `app/relatorios/views.py:1317–1335`, cuja implementação retorna nome canônico ou código/descrição — `app/escala/models.py:801–804`; APIs usam nome e ciclo — `app/api/views_core.py:254–267`, `app/api/views.py:948–957`.
+
+O selo O74 verifica o texto nas linhas-raiz da lista — `app/escala/tests/test_o74_pilula_le_desenho.py:59–76`. **Verde no HEAD: [nao verificado]**, não executado nesta leitura.
 
 ## 16/11 23:24 · sessao ee701c2b51bc · - · - · origem=Ronald (tmux)
 
@@ -1297,252 +2122,4 @@ Esses testes foram lidos, não executados [nao verificado]. [nao verificado]
 
 `pergunta_cega` lê apenas motivo/pergunta (`app/chamados/templatetags/chamados_extras.py:8`; `:11`). Filtros data delegam à função do fio (`:15`; `:30`; `:37`; `:50`). `respostas_que_o_reabrir_apaga` delega a `perguntas_corrigiveis` (`app/chamados/templatetags/chamados_tags.py:222`; `:226`).
 
-## 16/11 23:08 · sessao eca3963189f1 · - · - · origem=Ronald (tmux)
-
-Leitura concluída sem banco, sem testes executados e sem escrita. As evidências abaixo são da cópia atribuída à BASE; a cópia não tem `.git`, portanto SHA efetivo não é verificável localmente. [nao verificado] [nao verificado]
-
-**BUG-PAR / U163 / pontos que ficam com Ronald**
-
-| Estado | Juiz | Operação | Persistido | Retorno | Prova existente |
-|---|---|---|---|---|---|
-| Fora163, dia do fato entregue | `competencia_do_fato` → K6; composição anterior às demais guardas (`materializacao.py:776-815`; `validacao.py:652-655`) | Validar, laço ou passivo | Nada novo em perguntas, DP ou Batida | `bloqueada_competencia_entregue` | `app/chamados/tests/test_bug_par_volta.py::test_fora163_entregue_k6_tres_caminhos_intactos` (162-188); `::test_matriz_linha1_entregue_fora163_recusa_estado_proprio_esconde_validar` (222-235) |
-| Fora163 sem `data_evento` | `_k6_que_barra`, sem chamar K6 (`materializacao.py:808-810`) | Validar/tela | Nada novo | `bloqueada_sem_dia_do_fato`; Validar oculto | `test_bug_par_volta.py::test_matriz_linha5_fora163_sem_dia_do_fato_estado_proprio` (304-321; `assert_not_called`:319) |
-| K6 aberto, FM aprovado (F6) | `competencia_fechada`, instante local do plantio (`ponto/janelas.py:75-89`) | Toque de validação é permitido, plantio recusado | VALIDACAO + DEVOLUCAO, validação limpa, motivo/nota COMPETENCIA_APROVADA, irmã intocada, zero Batida | Tela `bloqueada_competencia`, mantém Validar; porta `nao_gravou`, `devolvida=True` | `test_bug_par_volta.py::test_matriz_linha2_fechada_nao_entregue_conserva_o_toque_e_o_motivo` (237-273); laço `::test_matriz_linha2_laco_conserva_o_motivo` (378-389); passivo `::test_matriz_linha2_passivo_conserva_o_motivo` (391-403) |
-| U163 declarado diferente do gravado, F6 aberto | `_espera_do_aval_163` via derivador (`materializacao.py:922-924,936-938`) | Validar/tela | Nada novo | `espera_declarado_x_gravado`; sem Validar | `test_bug_par_volta.py::test_matriz_linha3_163_declarado_x_gravado_mostra_a_espera` (275-287) |
-| Nada barra, fora163 | Derivador/porta compartilhados (`materializacao.py:925-927`; `validacao.py:681-698`) | Validar | Par, C/VIA, uma VALIDACAO por metade | `validada`, `par=<irmã>` | `test_bug_par_volta.py::test_matriz_linha4_nada_barra_aplicavel_validar_grava` (289-302) |
-| U163 com irmã fora163 entregue | Pergunta U163 é pulada; composição consulta irmã (`materializacao.py:795`; `validacao.py:219-225`) | Validar/tela | Zero Batida | **Já bloqueia hoje** com L1 | `test_bug_par_volta.py::test_k6_da_irma_fora163_testemunha_le_a_mesma_composicao_da_porta` (145-160) |
-| U163 entregue, irmã ausente ou também U163, FM aberto, demais guardas satisfeitas | Hoje K6 pula ambas; CORTE-U163-NO-K6 manda consultar a pergunta | Complemento futuro F4 | Pelo corte: nada novo; hoje pode seguir até plantio (`materializacao.py:795,1830,1887-1893`; `validacao.py:652-655,681-687`) | Futuro L1; hoje sucesso depende das condições abaixo | **NENHUM** teste do novo corte localizado. Condição irmã tem prova adversária no teste 145-160 | [nao verificado]
-| U163 sem dia, sem irmã consultável pelo K6 | Hoje exclusão `not no_universo_163`; corte estende L5 (`materializacao.py:795,808-810`) | Complemento futuro F4 | Pelo corte, nada novo | Futuro L5 | **NENHUM** para U163; teste atual L5 é fora163 (304-321) | [nao verificado]
-| U60 entregue/sem dia precisa aparecer em “PAUTA DP” | Comando tem laço U103 (53-63) e outro **excluindo U163** (71-77) | Apenas saída textual | Não cria `Pauta` (`bug_par_103.py:85-89`) | Retirar exclusão K6 não muda essa lista | **NENHUM** do complemento. **Destino/abrangência permanecem com Ronald**, conforme revisão fornecida |
-| U163 não materializada ganha L1/L5 | Contador chama testemunha; estados novos caem em `outras` (`materializacao.py:338-347`) | Contar | Nada | Soma em `universo` e `pendentes_aval` (`351-356`) | **NENHUM** do destino futuro. **Balde permanece com Ronald**; conservação atual explicitada `316,351-356` |
-
-`F6 status exportado` não está provado pelo teste F6 de 217-220, que monta somente `aprovado`; existe fila expressa para isso em `app/docs/BACKLOG.md:824`.
-
-**RED U163 corretamente condicionado**
-
-Cadastro deve montar escala/vínculo, pergunta hora de intervalo dentro U163, resposta e RESPOSTA correspondentes, data do fato coerente com contexto, texto igual ao marco efetivamente plantado, nenhuma validação anterior, K6 real entregue, FM aberto no instante local do plantio e **irmã ausente ou também U163**. Deve também assegurar ausência de bloqueio de data, implausível sem confirmação, colisão/paridade, defeito de fato e rejeição C6. A porta exige resposta em `validacao.py:594`, ausência de V em `597`, passa declarado×gravado em `609-614`, implausível em `615-618`, K6 em `652-655`, depois plantio em `681-687`; `_materializar_uma` acrescenta data em `1850-1872`, espera em `1877-1881`, juiz de fato em `1899-1910`, C6 em `1944-1948`.
-
-Pela regra do corte fornecido: L1, nada gravado; controle U163 em competência aberta continua validando. **MORDE-HOJE: sim, condicional à fixture acima**: exclusão está em `materializacao.py:795`; simplesmente “U163 + entregue + FM aberto” **não demonstra** falha atual por causa da irmã (`validacao.py:224`; teste 145-160). Resultado de produção atravessando todas as guardas = [nao verificado]. [nao verificado]
-
-RED lista: U60 entregue/sem dia deve estar na saída textual decidida pelo corte; **morde hoje** porque a primeira lista só inclui U103 e a segunda exclui U163 (`bug_par_103.py:53,71-77`). O escopo exato do ajuste e eventual duplicidade U103 ficam com Ronald, conforme revisão fornecida.
-
-RED contador: incluir caso U163 não materializado L1/L5 e cobrar conservação; **balde esperado ainda não decidido**, logo não inventar asserção de destino. Hoje ambos seriam `outras` e continuariam em `pendentes_aval` (`materializacao.py:347,351-356`).
-
-**FILA-OPUS-C4-B: teste com autoridade real** [nao verificado]
-
-O teste `app/chamados/tests/test_bug_par_volta.py::BugParF4RecorteTest.test_c4_f4_pendentes_aval_zera_pela_validacao_do_admin` (457-472) cobra exatamente pendentes 1→0, resolvidas 0→1, congelados=1 e conservação; porém herda o mock fixo K6=False de `_Col960Fixture` (`test_bug_par_projetado.py:45-53`). Sua comparação “K6 inalterado” não prova a autoridade real (`test_bug_par_volta.py:461,471-472`).
-
-Montagem real precisa:
-
-- Declarar U60/U163 por PK sem instalar patch em `folha.export.competencia_entregue`; hoje universo e patch K6 estão acoplados no mesmo `if` (`test_bug_par_projetado.py:45-53`).
-- Cenário resolvível com escala, batidas de chão E/S e respostas nos marcos (`test_bug_par_projetado.py:59-85,103-110`; `test_bug_par_volta.py:459-460`).
-- K6 **real** falso: ausência de `ExportacaoDominio` vigente válido ou vigente revogado sem substituta; usar a função real, cuja autoridade é `folha/export.py:588-594`. Caso sem TXT é provado em `app/folha/tests/test_k6_competencia_entregue.py::JuizTest.test_sem_txt_nao_entregue` (60-63); revogado em `::test_MORDE_vigente_revogado_sem_substituta_nao_e_entregue` (72-76).
-- Cobrar os mesmos 1→0/0→1/conservação e que empresa/competência/exportações permaneçam iguais antes/depois; controls de TXT vigente/substituição podem reutilizar a estrutura dos testes K6 (65-91). [nao verificado]
-- Para o controle entregue, criar `ExportacaoDominio` vigente da empresa/competência, com os campos do modelo `folha/models.py:75-86`; o juiz aceita vigente não invalidado (`folha/export.py:588-594`). Após complemento U163, a porta deve bloquear L1 e não zerar pendentes por “validação”; destino de contador com Ronald.
-
-**Nenhum leitor de produção do contador muda só para acrescentar esse teste.** Busca global do nome e chaves encontrou consumo de produção em `app/chamados/management/commands/bug_par_103.py:79-83`; o próprio produtor e docstrings estão em `materializacao.py:295-356`. Templates consomem estado da testemunha, não esse contador (`materializacao.py:852-873`; teste tela `test_bug_par_volta.py:199-210`). Escopo de ampliação de contador pelo corte U163 é assunto distinto, pendente de balde.
-
-**Provas úteis dos demais estados F4**
-
-| Estado | Comportamento/prova |
-|---|---|
-| Resposta normal | R + instante + trilha, `(True,None)` (`disputa_emissao.py:1481-1482,1522-1526`); `test_porta_resposta_pergunta.py::test_responder_grava_a_resposta_e_UMA_trilha` (174-182) |
-| Texto vazio | Nada escrito, `(False,erro)` (`disputa_emissao.py:1446-1448`); `test_porta_resposta_pergunta.py::test_MORDE_resposta_vazia_nao_escreve_nada` (184-194) |
-| Resposta nova sobre validada | Limpa V/autor (`disputa_emissao.py:1484-1496`); `test_porta_resposta_pergunta.py::test_MORDE_resposta_NOVA_invalida_a_validacao_anterior` (225-237) |
-| Reabertura | Foto DP, R/V limpos, C/VIA pela porta lote, n (`disputa_emissao.py:1609,1631-1648`); `test_o261_e1_ausencia_rejeitada_devolve.py::test_RED_rejeitada_devolve_as_absorvidas_a_pendente` (88-103) |
-| Auto com voz já existente | False sem query (`disputa_emissao.py:1663-1664`); `test_e3_10_cura_no_escritor.py::test_voz_do_colaborador_continua_no_op_mesmo_com_texto_vazio` (80-85) |
-| Auto texto válido | R/RESPOSTA, True (`disputa_emissao.py:1672-1680`); `test_e3_10_cura_no_escritor.py::test_MORDE_texto_valido_segue_escrevendo_o_par` (71-78) |
-| Auto vazio | Exceção antes de escrever (`disputa_emissao.py:1672`); `test_e3_10_cura_no_escritor.py::test_RED_texto_vazio_ou_so_espacos_e_recusado_sem_escrever` (55-69) |
-| Limbo reparado | Instante da trilha, RESPOSTA retroativa, True (`disputa_emissao.py:1692-1704`); `test_curar_perguntas_em_limbo.py::test_MORDE_carimba_com_o_instante_da_trilha` (29-42); fora meio estado `::test_nao_age_fora_do_meio_estado` (44-52) |
-| Recobrar | Conta `respondida_em NULL`, não apaga fala (`disputa_emissao.py:1734-1735`); `test_recobrar_questionario.py::test_MORDE_recobrar_nao_apaga_resposta_de_ninguem` (122-141) |
-| Falta/atestado | Ausência, sem Batida, carimbo C (`materializacao.py:944-978`); `test_declara_falta.py::test_falta_dia_inteiro_materializa_ausencia` (37-59), `::test_atestado_materializa_ausencia_atestado` (61-73) |
-| Absorção e rejeição | Carimbo atual identifica absorvidas; volta com foto, não duplica (`materializacao.py:1085-1173`); `test_o261_e1_ausencia_rejeitada_devolve.py::test_RED_rejeitada_devolve_as_absorvidas_a_pendente` (88-103), `::test_idempotente_rejeitar_2x_e_1_devolucao` (106-117) |
-| Hora vazia materializador | Recusa falante, sem carimbo C (`materializacao.py:1311-1323`); `test_a27_recusa_com_dono.py::test_hora_vazia_fica_pendente_com_motivo_e_followup` (38-50) |
-| Colisão oposta | VIA_FATO_OCUPADO terminal (`materializacao.py:1646-1670`); `test_a27_recusa_com_dono.py::test_colisao_tipo_oposto_e_terminal_fato_ocupado` (52-62) |
-| Juiz reprova Batida recém plantada | Rollback Batida e C (`materializacao.py:1899-1910`); `test_hx_materializa_depois_julga.py::test_reprovacao_do_juiz_desfaz_a_batida` (30-43) |
-| Hora inválida/escape/texto do ato divergente | Hoje lê projeção (`materializacao.py:625,678,1311,1328`; fila `2063-2067`); **NENHUM** teste novo F4 de troca texto D01 encontrado nesta busca | [nao verificado]
-| Paridade do ts nos três chamadores | `_ts_tipo_do_plantio` recebe só `carga` como kwarg (`materializacao.py:599`); não existe contrato `decisoes/agora` nesse helper na BASE; **NENHUM** RED novo F4 encontrado nesta busca |
-
-**Sonda U163 só leitura, funções reais**
-
-A etiqueta “aplicável” abaixo é a testemunha real, não prova de futura escrita: `estado_aplicacao_pergunta` é leitura (`materializacao.py:852-873`), enquanto a porta tem outras condições (`validacao.py:594-618`). Não se deve chamar `validar_pergunta`, nem “em rollback”: isso executaria escritores e efeitos. Para a unidade “validáveis hoje”, o script reporta a fila real e separa testemunha/implausível.
-
-```python
-# Django shell. Somente leitura. Não imprime nome, CPF nem resposta.
-from collections import Counter
-from django_tenants.utils import schema_context
-from chamados.models import PerguntaDisputa
-from chamados.juizes import perguntas_respondidas_a_validar, motivo_implausivel_validacao
-from chamados.services.universo_bug_par import _carregar_universo_bug_par
-from chamados.services.materializacao import (
-    competencia_do_fato, estado_aplicacao_pergunta,
-    respostas_intervalo_recusadas_paridade,
-)
-from chamados.services.validacao import entrega_que_barra_a_validacao
-
-with schema_context('juliani'):
-    universo = _carregar_universo_bug_par()
-    fila_ids = {p.pk for p in perguntas_respondidas_a_validar()}
-    numeros = Counter()
-    ps = (PerguntaDisputa.objects.filter(pk__in=universo.U163)
-          .select_related('disputa__colaborador__empresa', 'chamado_destino')
-          .order_by('pk'))
-    for p in ps.iterator():
-        numeros['u163_presentes'] += 1
-        k6 = competencia_do_fato(p, p.disputa.colaborador.empresa)
-        if k6 is None:
-            numeros['u163_sem_dia_do_fato'] += 1
-            continue
-        if not k6[2]:
-            continue
-        numeros['u163_competencia_entregue'] += 1
-        estado = estado_aplicacao_pergunta(p.disputa, p)
-        estado_nome = estado['estado'] if estado else 'fora_de_escopo'
-        numeros['u163_entregue_estado_' + estado_nome] += 1
-        if p.pk in fila_ids:
-            numeros['u163_entregue_na_fila_real_de_validacao'] += 1
-        if p.pk in fila_ids and estado_nome == 'aplicavel':
-            numeros['u163_entregue_fila_testemunha_aplicavel'] += 1
-            imp = motivo_implausivel_validacao(p)
-            numeros['u163_entregue_aplicavel_' + (
-                'exige_confirmacao_implausivel' if imp else 'sem_implausivel'
-            )] += 1
-            barra = entrega_que_barra_a_validacao(p)
-            numeros['u163_entregue_aplicavel_' + (
-                'com_bloqueio_real_validacao' if barra else 'sem_bloqueio_real_validacao'
-            )] += 1
-            print('CASO p%s col%s %02d/%s estado=%s implausivel=%s' % (
-                p.pk, p.disputa.colaborador_id, k6[0], k6[1],
-                estado_nome, bool(imp)))
-    for rotulo in (
-        'u163_presentes', 'u163_sem_dia_do_fato',
-        'u163_competencia_entregue',
-        'u163_entregue_na_fila_real_de_validacao',
-        'u163_entregue_fila_testemunha_aplicavel',
-        'u163_entregue_aplicavel_exige_confirmacao_implausivel',
-        'u163_entregue_aplicavel_sem_implausivel',
-        'u163_entregue_aplicavel_com_bloqueio_real_validacao',
-        'u163_entregue_aplicavel_sem_bloqueio_real_validacao',
-    ):
-        print('NUMERO %s: %s' % (rotulo, numeros[rotulo]))
-    for rotulo in sorted(k for k in numeros if k.startswith('u163_entregue_estado_')):
-        print('NUMERO %s: %s' % (rotulo, numeros[rotulo]))
-    c = respostas_intervalo_recusadas_paridade()
-    for chave in ('pendentes_aval', 'resolvidas', 'congelados_no_recorte'):
-        print('NUMERO contador_%s: %s' % (chave, c[chave]))
-    for chave in ('aplicaveis', 'legitimas', 'outras', 'espera_declarado',
-                  'bug_par_103', 'bug_par_103_pauta_dp', 'bug_par_103_sem_dia'):
-        print('NUMERO contador_%s: %s' % (chave, len(c[chave])))
-    soma = (c['pendentes_aval'] + c['resolvidas']
-            + len(c['bug_par_103_pauta_dp']) + len(c['bug_par_103_sem_dia']))
-    print('NUMERO contador_delta_conservacao: %s' % (soma - c['congelados_no_recorte']))
-```
-
-`perguntas_respondidas_a_validar` é fila real em `app/chamados/juizes.py:1749-1754`; `motivo_implausivel_validacao` é real em `2043-2063`; fonte congelada verificada em `universo_bug_par.py:12-30`. Números atuais do script = [nao verificado].
-
-## 16/11 23:08 · sessao 7e1e748d3c13 · - · - · origem=Ronald (tmux)
-
-Todas as referências de `models.py` dos M1a–M20 de `estados.md` continuam nos mesmos números e com os mesmos corpos projetivos na cópia; não há `_leitura_dos_atos` ou migração c3 nos leitores (`app/chamados/models.py:3151`; `app/chamados/models.py:3665`; `app/chamados/models.py:3688`; `app/chamados/models.py:1923`; `app/chamados/models.py:3496`). Suíte não executada; resultado de execução: [nao verificado].
-
-| M | BASE: operação/retorno | Prova existente lida |
-|---|---|---|
-| M1a | Validação sem materialização retorna `validada`, antes de C6 (`app/chamados/models.py:3151`). | `app/chamados/tests/test_pergunta_estado.py::EstadoDaPerguntaTest.test_validada_nao_e_mais_viva`, asserções :41–42. |
-| M1b | Validação + materialização retorna `resolvida`, sem testemunha nesse ramo (`app/chamados/models.py:3153`). | `app/chamados/tests/test_pergunta_estado.py::EstadoDaPerguntaTest.test_materializada_e_resolvida`, :44–48. |
-| M2 sem instante | Viva sem instante → `pendente` (`app/chamados/models.py:3155`). | `app/chamados/tests/test_pergunta_estado.py::EstadoDaPerguntaTest.test_sem_carimbo_e_pendente_e_viva`, :28–31. |
-| M2 com instante | Viva com instante → `respondida`, sem exigir texto nesse leitor (`app/chamados/models.py:3155`). | `app/chamados/tests/test_pergunta_estado.py::EstadoDaPerguntaTest.test_respondida_sem_validar_ainda_e_viva`, :33–37; caso instante com texto vazio neste leitor: NENHUM confirmado. |
-| M3 | Morta + qualquer materialização → `resolvida` (`app/chamados/models.py:3156`). | `app/chamados/tests/test_pergunta_estado.py::EstadoDaPerguntaTest.test_materializada_sem_resposta_tambem_e_resolvida`, :50–54. |
-| M4 | Morta sem validação/materialização ainda cai no instante (`app/chamados/models.py:3158`). | NENHUM específico confirmado para o estado de pergunta morta sem carimbo. |
-| M3/M10 sem carimbo | C6 retorna viva antes da testemunha quando `materializada is None` (`app/chamados/juizes.py:1482`). | NENHUM específico confirmado para testemunha factual verdadeira sem carimbo. |
-| M5 | `respondida` continua só `respondida_em is not None` (`app/chamados/models.py:3665`). | NENHUM direto confirmado para property contra último ato divergente. |
-| M6 | Display lê texto projetado, não texto do ato (`app/chamados/models.py:3688`; `app/chamados/models.py:3710`). | NENHUM direto confirmado para divergência ato/projeção. |
-| M7 | Posto/escala/opções continuam por projeção (`app/chamados/models.py:3693`; `app/chamados/models.py:3701`; `app/chamados/models.py:3708`). | `app/chamados/tests/test_valor_rotulo.py::RespostaDisplayValorTest.test_escolha_com_valor_resolve_rotulo`, :12; `test_escolha_string_pura_back_compat`, :16. Posto/escala: NENHUM confirmado. |
-| M8 | Validação exclui da lista (`app/chamados/models.py:1923`). | `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py::PaiComConversaNoGateTest.test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito`, :289–290; `app/ponto/tests/test_supra_juiz_executor.py::ExecutorCsfTest.test_resposta_com_veredito_nao_barra`, :83–85. |
-| M9 instante OU texto | Inclusão por instante ou texto mantém OR vigente (`app/chamados/models.py:1924`). | `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py::PaiComConversaNoGateTest.test_RED_retratacao_pergunta_o_MESMO_juiz_do_veredito`, :283–288 testa os DOIS pares ilegais. |
-| M9 sem ambos | Lista exclui sem instante e sem texto; fechamento ainda consulta vida (`app/chamados/models.py:1924`; `app/chamados/models.py:1934`). | `app/ponto/tests/test_supra_juiz_executor.py::ExecutorCsfTest.test_sem_conversa_executa`, :68–69; `app/chamados/tests/test_c7_red_minimos.py::C7_01_PerguntaVivaRecusaTest.test_RED_fechar_com_pergunta_MUDA_viva_RECUSA`, :132–140. |
-| M10 | Qualquer materialização exclui, mesmo se C6 viva (`app/chamados/models.py:1923`). | `app/ponto/tests/test_supra_juiz_executor.py::ExecutorCsfTest.test_resposta_com_veredito_nao_barra`, :83–85 cobre exclusão por materialização; combinação materializada E C6 viva: NENHUM confirmado. |
-| M11 | Tranca mata C6 e lista normal exclui; CSF/retratação ignoram tranca (`app/chamados/juizes.py:1409`; `app/chamados/models.py:1926`). | `app/chamados/tests/test_c7_red_minimos.py::C7_08_CompetenciaTrancadaTest.test_RED_o_C6_le_a_tranca_sem_escrever`, :361–367; `test_RED_resposta_de_dia_trancado_nao_segura_a_disputa`, :377–382; `app/chamados/tests/test_o168_pai_com_conversa_no_gate.py::PaiComConversaNoGateTest.test_RED_dia_trancado_CSF_e_retratacao_dao_a_MESMA_resposta`, :303–311. |
-| M12 | Q continua campo de validação e face SQL de resposta, contrato de continência (`app/chamados/models.py:3467`; `app/chamados/models.py:3481`; `app/chamados/models.py:3496`). | `app/chamados/tests/test_contract_pergunta_viva.py::DerivacaoNaoBifurcaTest.test_property_e_o_juiz_e_queryset_contem_nas_cinco_combinacoes`, :55–60. Degraus também em `test_viva_delega_ao_juiz.py::_Bateria._confere`, :42–46. |
-| M13 | `_ancoradas` sem PK → []; com PK exige validação nula e destino/âncora; sem q_vivas (`app/chamados/models.py:341`; `app/chamados/models.py:344`). | PARCIAL: `app/chamados/tests/test_e4b_classe_e_memoria.py::[classe do teste a confirmar].test_RED_D3_carga_le_ancoradas_mesmo_morta_pelo_c6`, :898–910 confirma consumidor/carga; corpo ORM/PK nula: NENHUM confirmado. |
-| M14 | Guarda antes do save; relavra destinos não validados depois do save (`app/chamados/models.py:221`; `app/chamados/models.py:296`; `app/chamados/models.py:310`). | PARCIAL: `app/ponto/tests/test_selo_chokepoint_escrita.py` declara casos `_gravar_estado` :124–125; prova específica da troca do filtro para ato: NENHUM. |
-| M15 normal | Resposta sem veredito recusa antes de vivas (`app/chamados/models.py:1967`; `app/chamados/models.py:1978`). | `app/chamados/tests/test_c7_red_minimos.py::C7_03_RespostaSemVereditoRecusaTest.test_resposta_sem_veredito_RECUSA`, :160–166; `C7_01_PerguntaVivaRecusaTest.test_RED_fechar_com_pergunta_MUDA_viva_RECUSA`, :132–140. |
-| M15 admin/desligamento | Carimba e escreve SILENCIO com texto projetado (`app/chamados/models.py:1999`; `app/chamados/models.py:2007`). | `app/chamados/tests/test_c7_red_minimos.py::C7_06_AdminEncerraTest.test_RED_com_motivo_fecha_e_carimba_as_mudas_com_trilha`, :261–279; `C7_05_DesligamentoPelaPortaTest.test_resposta_sem_veredito_SEGURA_a_disputa_mesmo_no_desligamento`, :234–242. Foto do texto SILENCIO divergente do ato: NENHUM confirmado. |
-| M15 competência | Exceção fecha disputa sem carimbar pergunta (`app/chamados/models.py:1999`; `app/chamados/models.py:2013`). | `app/chamados/tests/test_c7_red_minimos.py::C7_08_CompetenciaTrancadaTest.test_RED_trancada_fecha_pela_porta_com_trilha_e_nao_carimba`, :329–350. |
-| M16 | RETRATACAO fotografa projeção; conserva carimbo quando existente (`app/chamados/models.py:2137`; `app/chamados/models.py:2142`). | `app/chamados/tests/test_e1_entradas.py::RemoverMotivoRetrataTest.test_MORDE_a_retratada_morre_e_tem_linha`, :142–154 conserva texto e sequência. Foto divergente do ato: NENHUM confirmado. |
-| M17 | Ressuscitar conserva linhas faltantes, zera instante E texto; NÃO escreve REABERTURA (`app/chamados/models.py:1613`; `app/chamados/models.py:1622`; `app/chamados/models.py:1629`). | `app/chamados/tests/test_f1nova_b1_juiz_respondida.py::RessuscitacaoZeraAResposta.test_RED_ressuscitar_com_SILENCIO_nao_devolve_ao_colaborador`, :334–335, helper compara tarefa antes/depois :319–329. `test_RED_ressuscitar_sem_decisao_nao_muda_a_tarefa_do_dia`, :331–332. |
-| M18 | Simula descarimbo e C6 em cópia; marco aceso exclui (`app/chamados/models.py:1550`; `app/chamados/models.py:1553`; `app/chamados/models.py:1557`). | `app/chamados/tests/test_o261_ressuscita_respeita_o_marco.py::RessuscitaRespeitaOMarcoTest.test_RED_marco_ACESO_fica_morto_e_o_APAGADO_volta`, :108–128; `test_MORDE_sem_celula_o_juiz_diz_None_e_a_pergunta_VOLTA`, :151–159; `test_MORDE_pulou_TODAS_nao_muda_estado_e_nao_escreve_trilha`, :161–169. |
-| M19 | Helper c3 ausente; properties continuam lendo projeção inclusive instância não salva (`app/chamados/models.py:3665`; `app/chamados/models.py:3688`). | `test_valor_rotulo.py` :6–12 confirma instância não salva. Custos existentes: `app/chamados/tests/test_o168_custo_da_guarda_constante.py::CustoDaGuardaTest.test_custo_da_guarda_E2_e_constante_com_1_e_3_disputas`, :64–68; `test_custo_constante_com_N_PENDENTES`, :70–76. Custo da hipotética migração: [nao verificado]. |
-| M20 | Selo c3 ausente; teste AST atual exige materialização nula no corpo (`app/chamados/tests/test_contract_dedup_status.py:143`). | `app/chamados/tests/test_contract_dedup_status.py::ContratoDedupDistingueStatusTest.test_porta_humana_de_disputa_presta_contas`, :133–146. Selo F2 c3: NENHUM na cópia. |
-
-**Referências de apresentação que CAÍRAM ou ganharam comportamento:**
-
-- `_pergunta_card.html:23`, `:25`, `:29`, `:31` continuam correspondendo ao cabeçalho por projeção e ao display; o corpo da ação ganhou `bloqueada_sem_dia_do_fato` em :44/:47 e espera DECLARADO-X-GRAVADO em :49–51 (`app/templates/chamados/partials/_pergunta_card.html:23`; `app/templates/chamados/partials/_pergunta_card.html:44`; `app/templates/chamados/partials/_pergunta_card.html:49`).
-- Explicador antigo `:73/:77/:85/:93/:102/:139` não casa mais: estado agora :95; pendente :96; respondida :100; pendência admin :108; testemunha :116; sem gravação :134–142; pode_fechar :177 (`app/chamados/services/explicador.py:95`; `app/chamados/services/explicador.py:177`).
-- Há mudança material adicional no explicador: ao testemunhar efeito, consulta `estado_aplicacao_pergunta` e `ESTADOS_DE_RECUSA` e marca `gravou=False`; sem efeito consulta `espera_declarado_x_gravado` antes da explicação de cadastro/sistema (`app/chamados/services/explicador.py:122`; `app/chamados/services/explicador.py:125`; `app/chamados/services/explicador.py:131`).
-- Modal antigo `:436/:440/:442` não casa: bloco explicação agora :462; “Aguardando COLABORADOR” :467; aguardando validação :468; validada sem gravar :469 (`app/templates/chamados/partials/modal_fio.html:462`; `app/templates/chamados/partials/modal_fio.html:467`; `app/templates/chamados/partials/modal_fio.html:469`).
-- `pergunta_no_app.py:52/:61/:81` preservados: SQL → C6 → partição por instante/disputa aberta (`app/chamados/services/pergunta_no_app.py:52`; `app/chamados/services/pergunta_no_app.py:61`; `app/chamados/services/pergunta_no_app.py:81`).
-
-**Complementos conferidos no código:**
-
-- Descarimbo sozinho não garante inclusão: validação remanescente, falta simultânea de instante/texto ou tranca continuam excluindo (`app/chamados/models.py:1923`; `app/chamados/models.py:1924`; `app/chamados/models.py:1926`).
-- Ressuscitação zera ambos, logo serve como controle que NÃO volta à lista por resposta (`app/chamados/models.py:1629`; `app/chamados/models.py:1630`; `app/chamados/models.py:1924`).
-- Tarefa usa último ato: passivo antes; sem decisão; RESPOSTA vazia; RECUSA/REABERTURA; DEVOLUCAO; VALIDACAO; SILENCIO; ABSORCAO (`app/chamados/services/tarefa_do_dia.py:154`; `app/chamados/services/tarefa_do_dia.py:156`; `app/chamados/services/tarefa_do_dia.py:158`; `app/chamados/services/tarefa_do_dia.py:160`; `app/chamados/services/tarefa_do_dia.py:163`; `app/chamados/services/tarefa_do_dia.py:165`; `app/chamados/services/tarefa_do_dia.py:167`; `app/chamados/services/tarefa_do_dia.py:176`; `app/chamados/services/tarefa_do_dia.py:178`).
-
-## 16/11 23:08 · sessao 791cd10eb62e · - · - · origem=Ronald (tmux)
-
-Achado central: o contrato antigo de `leitura`/fold não pousou nesta BASE; pousou o juiz `pergunta_respondida`, que lê o par projetado instante+texto. A lei determina a migração dos leitores B/C/D na B2, e o código ainda conserva `estado`, `respondida` e `resposta_display` lendo a projeção. (`app/docs/LEIS.md:151`; `app/chamados/juizes.py:1544`; `app/chamados/models.py:3151`; `app/chamados/models.py:3664`; `app/chamados/models.py:3688`.)
-
-Premissas relevantes para consolidar:
-
-| Premissa | Julgamento | Evidência BASE |
-|---|---|---|
-| F1 disponibilizou `LeituraDosAtos`, texto e instantes extraídos de fold | **CAIU**: o contrato pousado é `pergunta_respondida`; disponibilidade da API antiga = [nao verificado] | `app/chamados/juizes.py:1544`; `app/docs/LEIS.md:151` |
-| D0/C1/P0/M0 leem V crua antes da vitalidade | **CONFERE** | `app/chamados/juizes.py:1389`; `app/chamados/juizes.py:1404` |
-| U2 com V não nula é considerada morta e filtrada pelo juiz atual | **CONFERE** enquanto a projeção permanece assim | `app/chamados/juizes.py:1405` |
-| `respondida`/`estado`/`resposta_display` já leriam o ato depois da F2 | **CAIU na BASE** | `app/chamados/models.py:3151`; `app/chamados/models.py:3664`; `app/chamados/models.py:3688` |
-| A data e o texto antigos são zerados por reabertura real | **CONFERE**, agora também por L-130 | `app/chamados/services/disputa_emissao.py:1609`; `app/docs/LEIS.md:151` |
-| Devolução real deixa V legada não nula | **CAIU**: a porta limpa V/autoria e registra DEVOLUÇÃO no mesmo atomic | `app/chamados/services/validacao.py:269`; `app/chamados/services/validacao.py:275` |
-| `linhas_da_projecao_sem_linha` conserva por correspondência `(ato, instante)` | **CONFERE**, porém isso não comprova um leitor conservado de fold disponível | `app/chamados/models.py:4081`; `app/chamados/models.py:4094`; `app/chamados/models.py:4102` |
-| BUG-PAR acrescenta somente espera DECLARADO-X-GRAVADO ao gate antigo | **CAIU**: também há `indisponivel`, entrega K6 e ausência do dia do fato | `app/chamados/services/materializacao.py:699`; `app/chamados/services/materializacao.py:702`; `app/chamados/services/materializacao.py:705`; `app/chamados/services/materializacao.py:706` |
-| F6 e K6 retiram igualmente Validar | **CAIU**: F6 conserva o toque; só os estados próprios K6/sem-dia o retiram pela guarda | `app/chamados/services/validacao.py:59`; `app/chamados/services/validacao.py:209`; `app/chamados/services/materializacao.py:881` |
-
-Tabela da porta já respaldada por testes: [nao verificado]
-
-| Estado | Juiz/porta | Operação | Persistido | Retorno | Prova |
-|---|---|---|---|---|---|
-| Fora163 entregue | `entrega_que_barra_a_validacao` → `_k6_que_barra` | esconde Validar; recusa antes do carimbo | nada muda | `bloqueada_competencia_entregue` | `app/chamados/tests/test_bug_par_volta.py::test_matriz_linha1_entregue_fora163_recusa_estado_proprio_esconde_validar`, :222 |
-| F6 fechada/aprovada, não entregue | testemunha + chokepoint | conserva Validar; tentativa recusada | VALIDACAO+DEVOLUCAO, V volta a nulo, irmã intacta | tela `bloqueada_competencia`; porta `nao_gravou`, `devolvida=True` | `app/chamados/tests/test_bug_par_volta.py::test_matriz_linha2_fechada_nao_entregue_conserva_o_toque_e_o_motivo`, :237 |
-| U163 divergente | `_espera_do_aval_163` | mostra espera; esconde Validar | nada muda | `espera_declarado_x_gravado` | `app/chamados/tests/test_bug_par_volta.py::test_matriz_linha3_163_declarado_x_gravado_mostra_a_espera`, :275 |
-| Nenhum impedimento | `estado_aplicacao_pergunta`/`validar_pergunta` | conserva Validar; grava par inteiro | uma VALIDACAO nova por metade + par | `aplicavel` → `validada`, `par=pk` | `app/chamados/tests/test_bug_par_volta.py::test_matriz_linha4_nada_barra_aplicavel_validar_grava`, :289 |
-| Fora163 sem dia do fato | `_k6_que_barra` | não consulta K6; esconde Validar | nada muda | `bloqueada_sem_dia_do_fato` | `app/chamados/tests/test_bug_par_volta.py::test_matriz_linha5_fora163_sem_dia_do_fato_estado_proprio`, :304 |
-| Testemunha falha/ausente | `fio`/filtro | esconde Validar | render não persiste | `indisponivel` | `app/chamados/tests/test_bug_par_volta.py::test_testemunha_falha_ou_ausente_nos_dois_htmls`, :103 |
-
-A implementação das guardas está em `app/chamados/services/materializacao.py:798`, `app/chamados/services/materializacao.py:876`, e a porta retorna o mesmo nome de estado em `app/chamados/services/validacao.py:228`. O `validar_pergunta` ainda recusa ausência de instante por leitura crua, em `app/chamados/services/validacao.py:594`; a migração L-130 dessa finalidade pertence à B2, conforme `app/chamados/juizes.py:1550`.
-
-RED pela regra, sem elevar o brief a lei:
-
-- **R2 por fluxo real não morde hoje**: reabrir deve zerar o par (L-130), e a porta o faz; prova `app/chamados/tests/test_reabrir_nao_destroi.py::test_MORDE_a_pergunta_volta_a_pendente_como_antes`, :54–58; escritor `app/chamados/services/disputa_emissao.py:1609`.
-- **R2 sintético morde a leitura crua**, mas sua entrada `(I=None,T='velho')` é legado ilegal, não estado novo permitido: o legado intocado permanece tolerado e a transição nova é recusada (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:177`; `app/chamados/juizes.py:1537`; `app/chamados/juizes.py:1544`).
-- **R1 por fluxo real não morde hoje**: devolver limpa V e registra DEVOLUÇÃO (`app/chamados/services/validacao.py:269`; `app/chamados/services/validacao.py:279`).
-- **R1 sintético U2 comprova leitura crua, mas não comprova sozinho o retorno exigido pelo fold antigo**: o juiz atual mata por V (`app/chamados/juizes.py:1405`) e D05 conserva fases (`app/docs/BACKLOG.md:2088`). Dizer que o template necessariamente deve sobrepor V por um fold inexistente seria [nao verificado].
-- A tabela verdade L-130 está provada em `app/chamados/tests/test_f1nova_b1_juiz_respondida.py::test_RED_tabela_verdade_do_corte`, :28: instante+texto = True; instante sem texto e texto sem instante = False.
-
-Decisões de lei existentes:
-
-- **DECIDIDO PELA LEI L-130 | contestavel**: significado de respondida, par ilegal, reabertura zerando instante e texto (`app/docs/LEIS.md:151`).
-- **DECIDIDO PELA LEI E4C-D04-D05/L-127 | contestavel**: atos humanos e conservação das fases públicas; exigibilidade aditiva (`app/docs/BACKLOG.md:2088`).
-- **DECIDIDO PELA LEI LU-08 | contestavel**: conferência só vale para o par conferido (`app/docs/CORTES.md:465`).
-- **DECIDIDO PELA LEI CORTES-F2-F9-1611, item 1 | contestavel**: efeito = ato de materialização, valor conservado; não presumir que qualquer carimbo atual prova esse efeito (`app/docs/CORTES.md:487`; distinção das portas em `app/chamados/models.py:3183`).
-- **DECIDIDO PELA LEI CORTES-F2-F9-1611, item 8 | contestavel**: resposta sintética de backfill posterior não revoga validação humana legada (`app/docs/CORTES.md:487`).
-- **DECIDIDO PELA LEI CORTE-BUG-PAR-FORA163 | contestavel**: fora163 entregue, os três caminhos não plantam nem desvalidam (`app/docs/BACKLOG.md:2082`).
-- **DECIDIDO PELA LEI BUG-PAR-163-X-DECLARADO | contestavel**: U163 divergente espera sem Validar (`app/docs/BACKLOG.md:2083`).
-
-O literal **CORTE-U163-NO-K6** não apareceu nos registros inspecionados; o anexo só o nomeia. Sua redação e abrangência são [nao verificado]. O código atual pula U163 no K6 (`app/chamados/services/materializacao.py:792`); a própria fila ainda menciona “lei U163 em entregue” (`app/docs/BACKLOG.md:2081`). Isso deve ser registrado como dependência de reconferência da F4, sem inventar questão nova própria da F7.
-
-Para sondas:
-
-- U1 pode medir a **forma física** “materializada sem via de identidade” chamando `PerguntaDisputa.vias_de_identidade()` (`app/chamados/models.py:3197`), sem chamar isso automaticamente de erro.
-- U2 pode ser contado como **forma física** “última linha DEVOLUCAO + V não nula”, pela ordenação real `(ato_em,pk)`, sem implementar fold; função de domínio própria para esse censo não foi encontrada [nao verificado].
-- O estoque de projeção sem linha tem função de domínio real pronta: `linhas_a_criar()` (`app/chamados/management/commands/backfill_decisoes_pergunta.py:44`), que chama `linhas_da_projecao_sem_linha` em :67 e devolve grupos por empresa/competência/ato em :82. Para escopo irrestrito além do horizonte desse comando, chamar diretamente o método de model em lotes (`app/chamados/models.py:4081`).
-- Uma sonda que importe a antiga `leitura` para comparar pura/conservada não é executável confirmada nesta BASE [nao verificado]; não incluir implementação substituta.
-
-_6221 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6224 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
