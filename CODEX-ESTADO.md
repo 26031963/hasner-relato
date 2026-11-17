@@ -1,7 +1,77 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 13:58** · publicado em **17/11/2026 13:58** (UTC-3)
+> Ultima resposta processada: **17/11/2026 14:00** · publicado em **17/11/2026 14:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 14:00 · sessao 3f14516fb790 · PORTA-EXPORT · verificador · origem=Code
+
+**G ainda tem uma regressão no reinício: a limpeza de `detalhe` feita por `pedir` deixou de valer. Também há lacunas nos testes novos e falhas de `assumir` sem registro persistido da falha original.** (`app/folha/porta_export.py:1105`, `app/folha/porta_export.py:1049`, `app/folha/tests/test_porta_sem_beco_item2.py:459`, `app/folha/tests/test_porta_sem_beco_item2.py:477`, `app/folha/porta_export.py:1209`)
+
+1. **Chamadores, transações e travas**
+
+   Há quatro chamadores diretos em produção e um em teste. O auxiliar abre `atomic`, busca com `select_for_update`, filtra estado/tentativa e deriva o detalhe da linha travada. (`app/folha/porta_export.py:1040`, `app/folha/porta_export.py:1049`)
+
+   | Chamador direto | Contexto |
+   |---|---|
+   | `_falhar` | Sem `atomic` próprio; usa o do auxiliar e depois registra a recusa. (`app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1076`) |
+   | `pedir`, ao refazer | O `atomic` da tentativa de criação já terminou; a retomada usa o `atomic` do auxiliar, sem advisory local. (`app/folha/porta_export.py:1093`, `app/folha/porta_export.py:1098`, `app/folha/porta_export.py:1106`) |
+   | `assumir`, com tentativa | Leitura inicial comum; no comando, entra sob a advisory já adquirida. (`app/folha/porta_export.py:1129`, `app/folha/porta_export.py:1131`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`) |
+   | `concluir` | Tem `atomic` externo, já travou a mesma linha e já chamou `lavrar`; o auxiliar abre `atomic` aninhado e pede novamente a trava dessa linha. (`app/folha/porta_export.py:1179`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1185`, `app/folha/porta_export.py:1187`) |
+   | Teste direto | Ignora o retorno, em classe `TestCase`, sem advisory explícita nesse teste. (`app/folha/tests/test_porta_sem_beco_item2.py:34`, `app/folha/tests/test_porta_sem_beco_item2.py:102`) |
+
+   `_falhar` recebe chamadas de `encerrar` e dos dois ramos de `vigiar`. `encerrar` vem da recuperação do comando, de `falhar_ao_assumir` e da falha de disparo do subprocesso. Os dois primeiros caminhos do comando permanecem dentro da advisory; `disparar` não adquire essa trava. (`app/folha/porta_export.py:1199`, `app/folha/porta_export.py:1229`, `app/folha/porta_export.py:1238`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/folha/porta_export.py:1215`, `app/folha/porta_export.py:1340`)
+
+   `vigiar` também roda pela leitura da porta, pelo censo global anterior à advisory e por `assumir` sem tentativa, este último sob a advisory do comando. O helper de testes chama `assumir`/`concluir` sem advisory local. (`app/folha/porta_export.py:1272`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:73`, `app/folha/porta_export.py:1252`, `app/folha/porta_export.py:1137`, `app/folha/porta_export.py:887`)
+
+   **Não identifiquei inversão dessas travas formando ciclo nos caminhos de produção examinados.** A ordem do comando é advisory → pedido → carimbo; a segunda aquisição do pedido em `concluir` é da linha que a própria transação já travou. O censo global encerra cada `atomic` antes de chegar à advisory; esta usa `pg_try_advisory_lock`, e `medicao_viva` somente consulta `pg_locks`. Ausência de deadlock em execução real: **[nao verificado]**. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1185`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1040`, `app/folha/porta_export.py:982`, `app/folha/porta_export.py:1002`)
+
+2. **Dependência da cópia do chamador: sim, em `pedir`**
+
+   `pedir` fazia `linha.detalhe = {}` para reiniciar o registro. Agora essa limpeza é ignorada: `_mudar_estado` começa com `atual.detalhe`, vindo do banco. (`app/folha/porta_export.py:1105`, `app/folha/porta_export.py:1049`)
+
+   Os extras da retomada substituem competência, origem, ator e tentativa, mas deixam sobreviver, quando existentes, **`resultado`, `n`, `motivo`, `pid`, `backend_pid`, `em_curso_em`, `concluido_em` e `falhou_em` da tentativa anterior**. Seus escritores são `assumir`, `_falhar`, `concluir` e o timestamp automático da transição. (`app/folha/porta_export.py:1106`, `app/folha/porta_export.py:1132`, `app/folha/porta_export.py:1141`, `app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1052`)
+
+   **`pedido_em` é renovado**, porque `para=PEDIDO` o regrava dinamicamente; não procede concluir timeout imediato por timestamp antigo. A regressão comprovada é o registro da tentativa nova carregar campos da anterior. Liberação indevida do TXT por isso: **[nao verificado]**; o leitor decide por estado, identidade da tentativa e carimbo, e a adoção sobrescreve a sessão antes de entrar em curso. (`app/folha/porta_export.py:1052`, `app/folha/porta_export.py:1106`, `app/folha/porta_export.py:1275`, `app/folha/porta_export.py:1283`, `app/folha/porta_export.py:1131`)
+
+3. **Mudança de retorno: os usos encontrados continuam corretos**
+
+   | Uso | Avaliação |
+   |---|---|
+   | `_falhar` | Usa o estado anterior na trilha e devolve `bool(antes)`. (`app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1077`) |
+   | `pedir` | Converte explicitamente para bool; `abrir_a_porta` testa `if criado`. (`app/folha/porta_export.py:1106`, `app/folha/porta_export.py:1308`) |
+   | `assumir` | Usa `not`; sucesso retorna `'pedido'`, string não vazia, e derrota retorna `None`. Preserva seu contrato linha/`None`. (`app/folha/porta_export.py:913`, `app/folha/porta_export.py:1047`, `app/folha/porta_export.py:1055`, `app/folha/porta_export.py:1131`) |
+   | `concluir` | Ignora o retorno, mas já protege a mesma linha/estado/tentativa na transação externa. Seu retorno continua dict/`None`. (`app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1192`) |
+   | Teste direto | Ignora o retorno. (`app/folha/tests/test_porta_sem_beco_item2.py:102`) |
+
+   `encerrar` e `falhar_ao_assumir` continuam repassando bool; `_fechar` descarta esse retorno. O comando testa `linha is None` e `res is None`, não o estado anterior contra `True`. Não apareceu comparação incompatível nos consumidores encontrados. (`app/folha/porta_export.py:1199`, `app/folha/porta_export.py:1215`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:156`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:172`)
+
+4. **Fechamento, leitores e falhas sem registro**
+
+   `falhar_ao_assumir` delega a `encerrar` → `_falhar` → `_mudar_estado`: grava estado, resultado, motivo, instante da falha e `calculado_em`, condicionado à tentativa. Depois `_recusa` escreve a trilha pelo mecanismo existente. `_fechar` somente executa o callback e captura exceções com saída em stdout; não é outro escritor de estado. (`app/folha/porta_export.py:1215`, `app/folha/porta_export.py:1199`, `app/folha/porta_export.py:1073`, `app/folha/porta_export.py:1051`, `app/folha/porta_export.py:1066`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59`)
+
+   Os leitores relevantes são: `vigiar`, para estado/sessão/prazo; `estado_da_porta`, para estado/tentativa/carimbo; `conferir`, para o texto; `_recusa`, para identificação e autoria; e o contador de recusas, que lê a linha crítica. O stdout de `_fechar` não entra nesse contador. (`app/folha/porta_export.py:1225`, `app/folha/porta_export.py:1275`, `app/folha/porta_export.py:820`, `app/folha/porta_export.py:1063`, `app/core/recusa_critica.py:108`, `app/core/recusa_critica.py:133`, `bin/recusa_estado.py:68`)
+
+   **Nos dois callsites novos, outro detentor vivo da mesma advisory impede a entrada no ramo de recuperação.** O CAS também impede encerrar uma tentativa sucessora com outro UUID. Essa proteção depende de conservar a sessão que adquiriu a trava; perda/substituição da conexão durante a recuperação: **[nao verificado]**. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:138`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:139`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/folha/porta_export.py:1042`)
+
+   Há uma ressalva anterior a G, dentro do escopo dos chamadores: `disparar` inclui `Popen` e a saída do contexto do arquivo no mesmo `try`. **Se o fechamento do arquivo levantar `OSError` depois de o filho nascer**, chama `encerrar`, que aceita também `EM_CURSO`, sem consultar vivacidade. Esse caminho pode fechar o estado da mesma tentativa já adotada pelo filho vivo; ocorrência real: **[nao verificado]**. (`app/folha/porta_export.py:1335`, `app/folha/porta_export.py:1337`, `app/folha/porta_export.py:1339`, `app/folha/porta_export.py:1199`)
+
+   **Sim, `assumir` pode levantar sem deixar a falha original no registro do job nem na recusa crítica:** cron/manual não passa tentativa, e `falhar_ao_assumir` retorna `False` imediatamente. Se a própria recuperação levantar, `_fechar` também fica apenas no stdout; uma tentativa aberta poderá receber depois o motivo genérico do vigia. Isso não prova ausência de toda saída: o comando imprime o erro; retenção dessa saída em produção é **[nao verificado]**. (`app/folha/porta_export.py:1125`, `app/folha/porta_export.py:1209`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`, `app/folha/porta_export.py:1229`, `app/folha/porta_export.py:1238`)
+
+   A mensagem final “cada uma FALHOU com o seu motivo” não é garantida: `_fechar` não verifica sucesso e pode capturar a falha da gravação. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:65`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:270`)
+
+5. **Os três testes de `VoltaTresTest`** [nao verificado]
+
+   - **Primeiro: morde a regressão da cópia velha.** Lê PEDIDO, adota, encerra pela cópia antiga e exige trilha `antes=em_curso`, ator e metadados presentes. É sequencial; não prova concorrência/travas e não compara os valores exatos da sessão e do instante preservados. (`app/folha/tests/test_porta_sem_beco_item2.py:430`, `app/folha/tests/test_porta_sem_beco_item2.py:432`, `app/folha/tests/test_porta_sem_beco_item2.py:438`, `app/folha/tests/test_porta_sem_beco_item2.py:442`)
+   - **Segundo: morde a persistência da falha do clique, mas não A→B no mesmo disparo.** Executa um comando exclusivo para A e outro para B. O mock também levanta antes de qualquer escrita real de `assumir`. (`app/folha/tests/test_porta_sem_beco_item2.py:453`, `app/folha/tests/test_porta_sem_beco_item2.py:459`, `app/folha/tests/test_porta_sem_beco_item2.py:460`, `app/folha/tests/test_porta_sem_beco_item2.py:462`)
+   - **Terceiro: pode passar vazio quanto a “encerrar levantou”.** Não exige que o mock de `encerrar` seja chamado. Removendo a recuperação do handler, A ainda entra em `falharam`, B continua medindo e o comando termina com `SystemExit`; suas assertivas continuam satisfeitas. (`app/folha/tests/test_porta_sem_beco_item2.py:477`, `app/folha/tests/test_porta_sem_beco_item2.py:478`, `app/folha/tests/test_porta_sem_beco_item2.py:480`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:168`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:170`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:275`)
+
+6. **Classes de reprovação**
+
+   **Presentes:** selo sem mordida no terceiro teste; cobertura insuficiente do “mesmo disparo” no segundo; e campos misturando tentativas após o reinício — por exemplo, UUID novo com resultado/sessão/instantes anteriores. (`app/folha/tests/test_porta_sem_beco_item2.py:477`, `app/folha/tests/test_porta_sem_beco_item2.py:459`, `app/folha/porta_export.py:1105`, `app/folha/porta_export.py:1049`)
+
+   **Não identifiquei introdução de segundo juiz, segundo escritor fora da porta ou derivação paralela:** os helpers novos delegam às funções existentes. Tampouco identifiquei inversão das travas examinadas. As leituras de relógio adicionadas são timestamps da transição; não há demonstração de divergência de dia causada por G. (`app/folha/porta_export.py:1215`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63`, `app/folha/porta_export.py:1180`, `app/folha/porta_export.py:1187`, `app/folha/porta_export.py:1052`)
+
+   Resultado de execução dos testes, concorrência real e ocorrência desses caminhos em produção: **[nao verificado]**. [nao verificado]
 
 ## 17/11 13:58 · sessao c06c9acddf9f · - · - · origem=Ronald (tmux)
 
@@ -739,28 +809,4 @@ Eventos ruins versus pares atualmente ruins são duas métricas distintas, mas n
 
 Leitura implementável **(ii)**: N = uma conclusão FALHOU ou DIVERGENTE por tentativa empresarial ocorrida hoje, sem somar magnitude das divergências, sem multiplicar por POST e sem apagar a ocorrência após repetição verde. Essa escolha conserva o sentido de “falhou ou divergiu hoje” e o padrão de uma linha de recusa; deve ser declarada como decisão técnica, sem alegar que a unidade já está implementada. (`app/core/recusa_critica.py:66–82`, `:104–119`; `CLAUDE.md:36`, `:276`.)
 
-## 17/11 12:01 · sessao 0ec570bbba1b · - · - · origem=Ronald (tmux)
-
-(c) **(ii), com lista já fechada em (i).** A lista continua montada por `conferir`, incluindo cartão/TXT; a recusa chega à view e daí ao toast/mensagem do template. O FALHA ainda tem texto antigo, e o comentário declara pendente o texto final. O literal fornecido já determina as duas mensagens; falta implementação, sem escolha nova para Ronald. A presença atual da frase “O suporte Hasner ja foi avisado” é **[nao verificado]**; a busca textual não a localizou. (`app/folha/porta_export.py:819`; `app/folha/porta_export.py:846`; `app/folha/porta_export.py:862`; `app/folha/porta_export.py:905`; `app/folha/porta_export.py:913`; `app/folha/views.py:131`; `app/core/respostas.py:63`; `app/templates/folha/exportar.html:10`.)
-
-(d), motivo e emissão: **(ii)**. Exceção de medição já passa o motivo a `encerrar`, que persiste pelo serviço canônico, mas o command não emite a linha de recusa crítica; o POST já a emite pelo envelope. O literal orienta acrescentar uma emissão do resultado ruim e impedir duplicação no envelope por `recusas=()`; não precisa de nova decisão de negócio. O erro interno `erro_cartao_x_txt` continua fora do JSON de `lavrar`, embora seja procurado pelo texto. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:131`; `app/folha/porta_export.py:1037`; `app/folha/porta_export.py:986`; `app/folha/views.py:135`; `app/core/respostas.py:43`; `app/core/respostas.py:54`; `app/folha/porta_export.py:779`; `app/folha/porta_export.py:1097`.)
-
-(d), contador: **candidato real a (iii), unidade**. O ESTADO ainda integra apenas “Resolver dia recusado hoje”, filtrado pela porta `veredito_celula`; esse contador soma linhas, sem deduplicação de empresa, competência ou tentativa. (`bin/gerar_estado.py:262`; `bin/gerar_estado.py:333`; `app/core/recusa_critica.py:35`; `app/core/recusa_critica.py:104`; `app/core/recusa_critica.py:122`.)
-
-Duas leituras do novo rótulo, ainda sem escolha no literal fornecido **[nao verificado]**:
-
-- **Eventos/tentativas ruins no dia:** falhou e depois passou continua N=1; sucessivas falhas podem produzir N>1 para o mesmo par. O padrão disponível de contador conta linhas. (`app/core/recusa_critica.py:111`; `app/core/recusa_critica.py:117`.)
-- **Pares empresa/competência atualmente ruins:** falhou e depois passou resulta N=0; mantém alerta apenas dos pares ainda problemáticos. O registro diário atual é sobrescrito na repetição, não histórico de tentativas. (`app/folha/porta_export.py:1017`; `app/folha/porta_export.py:1029`.)
-
-O efeito diferente é conservar ou apagar do alerta operacional uma falha sofrida pelo cliente e já recuperada; reação efetiva do suporte ou efeito financeiro em produção é **[nao verificado]**.
-
-Para esse candidato, as quatro perguntas:
-
-1. **Premissas conferem?** O contador de export ainda não está no compositor mostrado; o contador disponível conta linhas de outra porta. (`bin/gerar_estado.py:262`; `app/core/recusa_critica.py:117`; `app/core/recusa_critica.py:124`.)
-2. **Colide com aval vigente?** A escolha deve anteceder a implementação para que rótulo, unidade e universo coincidam; essa obrigação já existe. (`CLAUDE.md:35`.)
-3. **Alguma condição não fecha no literal?** Eventos ruins hoje versus pares atualmente ruins produz N distinto após recuperação; escolha no literal fornecido **[nao verificado]**.
-4. **Toca exportada, dinheiro ou `!` fora do declarado?** O contador disponível somente lê log e soma linhas; alteração monetária não decorre desse corpo. Efeito de um contador futuro é **[nao verificado]**. (`app/core/recusa_critica.py:91`; `app/core/recusa_critica.py:104`.)
-
-“Hoje”, ausência de sinal e formato de emissão são **(ii)**: o padrão lê a data prefixada na linha e distingue arquivo ausente de zero; o novo contador pode adotar esse mesmo padrão explicitamente. Igualdade dos fusos efetivos do host e do emissor permanece **[nao verificado]**. (`app/core/recusa_critica.py:42`; `app/core/recusa_critica.py:113`; `bin/recusa_estado.py:41`; `bin/recusa_estado.py:50`; `app/config/settings/base.py:93`.)
-
-_6560 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6561 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
