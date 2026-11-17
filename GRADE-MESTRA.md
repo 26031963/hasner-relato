@@ -120,7 +120,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA | BACKLOG:1908 | ? | ? |
 | E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | PARADA (aguarda lei) | BACKLOG:2016 | ? | ? |
 
-## LATERAL-ESTRUTURA (155)
+## LATERAL-ESTRUTURA (156)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
@@ -278,6 +278,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | EFEITO-SEM-FALLBACK-CATALOGO | LATERAL-ESTRUTURA | Evita voltar silenciosamente ao efeito antigo quando a leitura falha. | - | medir alcance | ......... | REGISTRADA | BACKLOG:2079 | ? | ? |
 | TRANCA-VIVAS-08-FILA | LATERAL-ESTRUTURA | Alinha o significado do resgate e mede seus efeitos. | - | medir universo e impacto | ......... | REGISTRADA | BACKLOG:2095 | ? | ? |
 | SETNULL-ORFA-DNA | LATERAL-ESTRUTURA | Trata célula futura com vínculo apagado ainda no DNA. | - | decisao de desenho registrada (delecao de EC pela porta da celula); censo no brief; atras do espelho-verdade | +........ | PARADA (decisao de desenho registrada) | BACKLOG:2099 | ? | ? |
+| EMPRESAS-EM-OPERACAO-LE-CADASTRO | LATERAL-ESTRUTURA | O cron deixa de listar a mao as empresas em operacao e le o cadastro em_rollout. | LU2-07 | vez da CLASSE-D (censo quem-le empresas_visiveis/em_rollout) | ......... | REGISTRADA | BACKLOG:1991 | ? | ? |
 
 ## INSTRUMENTO (177)
 

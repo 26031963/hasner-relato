@@ -1,7 +1,136 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 00:59** · publicado em **17/11/2026 01:03** (UTC-3)
+> Ultima resposta processada: **17/11/2026 01:09** · publicado em **17/11/2026 01:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 01:09 · sessao c7315c0bceaf · - · - · origem=Ronald (tmux)
+
+Achados na BASE, somente leitura; nenhum teste ou banco executado. [nao verificado]
+
+| Premissa | Julgamento e prova |
+|---|---|
+| F1 antiga fornece `LeituraDosAtos`, `leitura`, `_leitura_conservada` | **CAIU como contrato disponível.** Não localizei arquivo `atos_pergunta` por `rg --files`; ausência absoluta/dinâmica: [nao verificado]. O contrato vigente é `pergunta_respondida(p)`, lendo o par projetado. `app/chamados/juizes.py:1544`, `:1552`. |
+| Juiz D01 mecânico sem registro em `core/juizes.py` | **CAIU.** Existe `_C21` registrado para `pergunta_respondida`. `app/core/juizes.py:170`, `:306`; `app/docs/JUIZES.md:102`. |
+| F1 antiga já migra leitores para atos | **CAIU.** O comentário atribui a migração B/C/D à B2. `app/chamados/juizes.py:1550`, `:1551`. |
+| P5 (texto sem instante) é resposta conservada válida | **CAIU quanto a “respondida”.** É par ilegal e o juiz retorna falso. `app/chamados/juizes.py:1537`, `:1541`, `:1552`; `app/docs/LEIS.md:151`. Não deduzir daqui uma regra para apagar o texto legado exibido: [nao verificado]. |
+| P5 entra na mensageria e produz 500 no lote atual | **CAIU hoje.** A fila exige `q_respondida_com_texto`, que exige instante não nulo. `app/chamados/juizes.py:1751`, `:1580`; chamada `app/api/views_mensageria.py:540`. `_item_validar` continua vulnerável se chamado diretamente com instante nulo: `:569`, `:570`; ocorrência atual pelo endpoint: [nao verificado]. |
+| P5 entra em corrigíveis pela F1 | **CAIU na BASE.** `perguntas_corrigiveis` continua exigindo instante não nulo. `app/chamados/juizes.py:1744`. |
+| BUG-PAR ainda fora; apenas novo filtro vizinho de U12 | **CAIU.** Há adaptador `aplicacao_da_resposta`, fallback restritivo e novo acesso cru a texto. `app/chamados/templatetags/chamados_tags.py:132`, `:139`. O registro declara c4+c4c pousada. `app/docs/BACKLOG.md:2081`. Ancestralidade independente: [nao verificado]. |
+| F6 inteira não persiste | **CAIU.** U6/U9 escolhem rótulo persistido, U7 aciona validação, U10 escolhe escritor. `app/api/views.py:2620`, `:2627`; `app/chamados/views.py:1280`, `:1283`; `app/chamados/views_cobrar.py:208`; `app/chamados/views.py:1425`, `:1436`. |
+| `ja_respondida` só log/rótulo sem escrita | **CAIU.** Core grava auditoria com “correcao” e followup com tag. `app/chamados/services/disputa_emissao.py:1546`, `:1561`, `:1569`. |
+| U7 aguardando contém só vivas | **CAIU.** O ramo usa todas as perguntas da disputa com instante nulo. `app/chamados/views_cobrar.py:175`, `:176`. |
+| U9b inalcançável | **CONFERE por leitura sem mutação entre guardas.** A primeira guarda elimina mortas; a segunda exige morta. `app/chamados/views.py:1242`, `:1243`, `:1246`, `:1257`. Não é 404 HTTP na web: é `resposta_acao`/redirect; status preciso depende desse helper [nao verificado]. API retorna 404 explícito: `app/api/views.py:2619`. |
+| Relógio dentro de U1c | **CONFERE.** `app/api/views_mensageria.py:570`. T já exige relógio pela borda: `app/chamados/services/tarefa_do_dia.py:733`, `:738`. |
+| `aguarda_admin` já acompanha dono/T | **CAIU.** Continua `p.estado == RESPONDIDA`. `app/api/views.py:2550`, `:2553`. |
+| Passivo medido pela falta de correspondência | **CONFERE.** Correspondência é pergunta+ato+instante; carga corta pelo horizonte. `app/chamados/models.py:4094`, `:4098`, `:4102`; `app/chamados/services/tarefa_do_dia.py:430`. Números históricos: [nao verificado]. |
+
+**Atenção aos offsets:** o corte relevante está agora em **`app/docs/CORTES.md:488`**, e não `:487` dos anexos F2/F4/F7. A linha `:487` atual é outro corte.
+
+Estados completos de `_pela_decisao`, sem inventar tabela própria:
+
+| Entrada | Razão | Ação/dono | Prova |
+|---|---|---|---|
+| PK no passivo | `passivo_sem_linha` | `None` | `app/chamados/services/tarefa_do_dia.py:154`, `:155` |
+| Sem decisão | `aguarda_resposta` | responder/colaborador | `:156`, `:157` |
+| RESPOSTA vazia | `respondida_sem_texto` | responder/colaborador | `:159`, `:161` |
+| RESPOSTA texto | `aguarda_validacao` | validar/admin | `:162` |
+| RECUSA/REABERTURA | `devolvida_ao_colaborador` | responder/colaborador | `:163`, `:164` |
+| DEVOLUCAO | `materializacao_recusada` | validar/admin | `:165`, `:166` |
+| VALIDACAO sem lavra vigente | `veredito_sem_lavra_vigente` | `None` | `:169`, `:170` |
+| VALIDACAO, lavra não | `validada_sem_efeito` | materializar/sistema | `:171`, `:172` |
+| VALIDACAO, lavra sim, efeito presente | `efeito_sem_lampada` | rejulgar/sistema | `:173`, `:174` |
+| VALIDACAO, lavra sim, sem efeito pendente | `encerrada_pelo_juiz` | `[]` | `:175` |
+| SILENCIO | `silencio_decidido` | `[]` | `:176`, `:177` |
+| ABSORCAO aprovada | `absorvida_aprovada` | `[]` | `:178`, `:181` |
+| ABSORCAO rejeitada | `absorcao_rejeitada` | responder/colaborador | `:182`, `:183` |
+| ABSORCAO aguardando documento | **`absorcao_aguarda_documento`** | entregar_documento/colaborador | `:184`, `:185` |
+| Outra ABSORCAO | `absorcao_pendente` | decidir_ausencia/admin | `:186` |
+| Outro ato | **`ato_desconhecido:<ato>`** | `None` | `:187` |
+
+Todas as referências abreviadas na última tabela pertencem a `app/chamados/services/tarefa_do_dia.py`.
+
+As perguntas antigas ficam classificadas assim:
+
+- **F6 L1: DECIDIDO PELA LEI CORTES-F2-F9-1611 item 6 | contestavel.** Dono admin=True; colab=False; sem dono=False; contador esperado zero e caso que morde; nenhuma tabela própria. `app/docs/CORTES.md:488`.
+- **F6 L2/P5: DECIDIDO PELA LEI L-130 + corte item 7 | contestavel.** P5 não é respondida; resta conferência factual de compatibilidade do APK 3.9.3 com null, que não é lei nova nem condição da F1. `app/docs/LEIS.md:151`; `app/docs/CORTES.md:488`. Fonte do APK nesta cópia: [nao verificado].
+- **Validação sem efeito: DECIDIDO PELA LEI E4C-D04-D05 | contestavel.** `aguarda_admin` continua verdadeiro até efeito, apesar do dono SISTEMA nos estados T `validada_sem_efeito`/`efeito_sem_lampada`. `app/docs/BACKLOG.md:2088`; `app/chamados/services/tarefa_do_dia.py:172`, `:174`. Portanto, usar cegamente `any(de == admin)` para TODOS os estados violaria essa cláusula; item 6 resolve os estados omitidos e não declara revogá-la. `app/docs/CORTES.md:488`.
+- **Resposta vazia deve voltar ao colab?: LEI NOVA: decisão geral sobre devolver ao colaborador resposta vazia/ressuscitação.** A pendência está explicitamente não decidida; nesta F5 fica fora do app e dono admin. `app/docs/CORTES.md:488`; `app/docs/LEIS.md:151`. A regra histórica “142 ficam sempre fora” não pode ser tomada como medida atual após L-130. `app/docs/LEIS.md:151`; estoque atual [nao verificado].
+- **Silêncio: nada exigível**, demonstrado por `[]`; quantidade de vivas e flip do JSON: [nao verificado]. `app/chamados/services/tarefa_do_dia.py:177`; fonte atual do bool `app/api/views.py:2553`.
+- **Conservação pública e passivo:** D05 conserva fases e prevê exigibilidade aditiva; passivo T não inventa ação. `app/docs/BACKLOG.md:2088`; `app/chamados/services/tarefa_do_dia.py:155`. O número “714” e equivalência de todos leitores históricos: [nao verificado].
+
+Para sondas: chamar `carga_da_tarefa` e `tarefa_do_dia` reais no mesmo `agora`, e `_pela_decisao` apenas se precisar separar veredito por pergunta de exposição efetiva. A exposição pode excluir identidade/retratação e exigir C6 viva: `app/chamados/services/tarefa_do_dia.py:256`, `:260`, `:271`. Não contar ausência de linha em `instancias` como “sem dono” sem separar essas exclusões. Retorno público completo e puro: `app/chamados/services/tarefa_do_dia.py:42`, `:44`, `:733`.
+
+## 17/11 01:06 · sessao 482170e77b7a · PREPARA-F2-F4-F7 · sonda · origem=Code
+
+**Os números dimensionam passivo e ressuscitação; não comprovam nova mordida de RED nem decidem a lei pendente** (`app/chamados/models.py:1622`; `app/docs/CORTES.md:490`). A entrega `f2.r` e os scripts originais não foram localizados nesta cópia; a numeração exata das perguntas das seções 4/5 e os totais anteriores `N/n` ficam `[nao verificado]`.
+
+Os valores abaixo vêm exclusivamente do anexo, sem conferência independente `[nao verificado]`. A interpretação usa as autoridades da cópia; os filtros exatos da sonda permanecem `[nao verificado]`.
+
+| Rótulo | Valor anexado | O que confirma, derruba ou dimensiona nas seções 4/5 |
+|---|---:|---|
+| `erros_universo` | **0** `[nao verificado]` | **Confirma**, no relato da execução, ausência de erros contabilizados pelo script 2. Não certifica o script 1 nem a equivalência do código executado com esta cópia `[nao verificado]`. |
+| `legado_resposta` | **16.941** `[nao verificado]` | **Dimensiona** respostas projetadas sem linha correspondente de mesmo ato e instante. **Derruba a premissa de sequência completa**, caso fosse usada para substituir imediatamente a projeção. A autoridade verifica essa correspondência em `app/chamados/models.py:4098`. |
+| `legado_validacao` | **15.115** `[nao verificado]` | **Dimensiona** validações projetadas sem linha correspondente. Sustenta a necessidade de conservar instante, autor e texto antes da troca do leitor (`app/chamados/models.py:4102`; `app/chamados/models.py:4104`). |
+| `linhas_da_projecao_sem_linha` | **32.056** `[nao verificado]` | **Dimensiona** o passivo recuperável da projeção atual. Uma pergunta pode produzir linha de resposta e de validação; isso não reconstrói texto já sobrescrito (`app/chamados/models.py:4098`; `app/chamados/models.py:4102`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:12`). |
+| `perguntas_com_projecao_sem_linha` | **16.972** `[nao verificado]` | **Dimensiona perguntas afetadas**, enquanto o contador anterior dimensiona atos. A distinção é necessária porque a autoridade pode devolver os dois atos para uma pergunta (`app/chamados/models.py:4098`; `app/chamados/models.py:4102`). |
+| `puladas_c6_morta` | **10.355** `[nao verificado]` | **Confirma incidência e dimensiona** o veto do C6: ele julga uma cópia como ficaria após limpar carimbos e resposta. Não significa “todas as perguntas mortas” (`app/chamados/models.py:1553`; `app/chamados/models.py:1557`). |
+| `puladas_marco_aceso` | **8.904** `[nao verificado]` | **Confirma incidência e dimensiona** a proteção contra recobrar marco já atendido. Esse filtro ocorre antes do C6, com `continue`; os dois contadores representam etapas ordenadas (`app/chamados/models.py:1550`; `app/chamados/models.py:1557`). |
+| `ressuscitaveis_agora` | **2.025** `[nao verificado]` | **Dimensiona candidatas**, não ressuscitações executadas. A porta seleciona materializadas sem texto, exclui vias fora do fato e aplica marco/C6; esse universo não abrange toda pergunta morta (`app/chamados/models.py:1530`; `app/chamados/models.py:1535`; `app/chamados/models.py:1557`). |
+| `ressuscitaveis_sem_decisao` | **1.704** `[nao verificado]` | **Dimensiona** a classe para o RED de conservação da tarefa. Sem decisões, após a precedência do passivo, o leitor retorna `aguarda_resposta`, ação do colaborador; o teste existente compara a tarefa antes/depois (`app/chamados/services/tarefa_do_dia.py:154`; `app/chamados/services/tarefa_do_dia.py:156`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:331`). |
+| `ressuscitaveis_ultimo_silencio` | **321** `[nao verificado]` | **Confirma existência e dimensiona** a classe sensível à lei **RESSUSCITAR-DEVOLVE-AO-COLABORADOR**: último `SILENCIO` resulta em nenhuma ação; `REABERTURA` manda responder. O total não demonstra mudança efetiva da fila (`app/chamados/services/tarefa_do_dia.py:163`; `app/chamados/services/tarefa_do_dia.py:176`; `app/chamados/models.py:1622`). |
+
+**Script 1 — causa e lacuna:** o módulo carregado em `/app/chamados/juizes.py` não forneceu `texto_sem_carimbo` naquela execução `[nao verificado]`; nesta cópia a função existe (`app/chamados/juizes.py:1537`), portanto a causa específica da divergência de ambiente/versão fica `[nao verificado]`. O script terminou sem contadores: os rótulos pretendidos não aparecem no anexo, e o censo dos pares ilegais ficou sem medição apresentada `[nao verificado]`; esses predicados estão em `app/chamados/juizes.py:1531` e `app/chamados/juizes.py:1537`.
+
+**Script 3 — alcance da foto:** o trecho fornecido tem data civil `2026-11-16`, termina durante a foto da pergunta 897 e não apresenta nenhum `NUMERO` `[nao verificado]`. Nas fotos 115/116 de col226, `q_vivas=true` com `viva=false` é compatível com o contrato: SQL é pré-filtro generoso, e a propriedade consulta o juiz exato (`app/chamados/models.py:3464`; `app/chamados/models.py:3512`). Não constitui, sozinho, defeito da face SQL (`app/chamados/models.py:3467`).
+
+Também há fotos com `respondida=true` e o mesmo hash de display de fotos com `respondida=false` `[nao verificado]`. A propriedade atual lê somente o instante, enquanto o juiz exige instante **e** texto; o hash não revela o conteúdo original (`app/chamados/models.py:3664`; `app/chamados/juizes.py:1544`). Sem comparação antes/depois, a conservação desses leitores fica `[nao verificado]`.
+
+**Contagens:** nenhum destes números justifica acrescentar uma lei ou uma mordida comprovada `[nao verificado]`. O corte documentado estabelece **lei F2 = 0** para as perguntas da matriz (`app/docs/CORTES.md:487`); a lei **RESSUSCITAR-DEVOLVE-AO-COLABORADOR** continua registrada como **não decidida**, e os 321 dimensionam essa questão (`app/docs/RELATO.md:164`). Há testes escritos para as duas classes de ressuscitação, mas sua execução e mordida não aparecem no anexo (`app/chamados/tests/test_f1nova_b1_juiz_respondida.py:331`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:334`; execução `[nao verificado]`). Os totais exatos `lei N` e `RED que morde n` da entrega ausente permanecem `[nao verificado]`.
+
+## 17/11 01:05 · sessao 97b2a3544c32 · - · - · origem=Ronald (tmux)
+
+Script fonte `f2_sonda.py` / entrega `f2.r` não apareceu na cópia em `rg --files -uu`; filtros e unidade exatos da sonda continuam `[nao verificado]`.
+
+Referências para consolidar cada número do Script 2:
+
+| Rótulo / valor do dado | Leitura sustentada pelo código |
+|---|---|
+| `erros_universo=0` | Zero erros impressos pela sonda, somente no universo executado `[nao verificado]`. Não prova ausência de erros fora dele nem validade do Script 1. |
+| `legado_resposta=16941` | Se conta as linhas RESPOSTA devolvidas pela autoridade: projeção com `respondida_em` sem correspondência `(pergunta, resposta, mesmo instante)` na sequência. Não significa necessariamente pergunta sem decisão alguma. `app/chamados/models.py:4094`, `:4098`, `:4100`. Valor e filtro exato `[nao verificado]`. |
+| `legado_validacao=15115` | Análogo para VALIDACAO: `validada_em` sem correspondência de ato e instante; inclui texto e autor da validação ao preservar a projeção. `app/chamados/models.py:4102`, `:4104`. Valor/filtro `[nao verificado]`. |
+| `linhas_da_projecao_sem_linha=32056` | Dimensiona atos RESPOSTA/VALIDACAO faltantes recuperáveis da projeção atual; função pode devolver duas linhas para a mesma pergunta. `app/chamados/models.py:4098`, `:4102`. Soma do dado fecha: 16941+15115=32056 `[nao verificado]`. Não reconstrói resposta já sobrescrita: `app/chamados/management/commands/backfill_decisoes_pergunta.py:12`. |
+| `perguntas_com_projecao_sem_linha=16972` | Dimensiona perguntas, distinguindo-as das 32056 linhas; pergunta pode contribuir nos dois atos. `app/chamados/models.py:4098`, `:4102`. Deduplicação efetiva da sonda `[nao verificado]`. |
+| `puladas_marco_aceso=8904` | Guarda anterior ao C6: `fato_do_marco_no_espelho(_q) is True` põe no balde marco e faz `continue`. `app/chamados/models.py:1548`, `:1550`. Dimensiona proteção contra recobrar marco já provado; não mede todas as perguntas com marco aceso. Valor/escopo `[nao verificado]`. |
+| `puladas_c6_morta=10355` | Após excluir marco aceso, C6 julga cópia em memória como ficaria depois da ressuscitação: sem carimbos, instante e texto. `app/chamados/models.py:1553`, `:1557`. Dimensiona segundo veto; baldes ordenados, não incidências independentes. Valor/escopo `[nao verificado]`. |
+| `ressuscitaveis_agora=2025` | Candidatas que passam marco e C6, segundo a porta. Universo inicial: materializadas, resposta `NULL`/`''`, excluídas `VIAS_FORA_DO_FATO`; não é toda pergunta morta. `app/chamados/models.py:1530`, `:1535`, `:1557`. Não prova execução de ressuscitação. Valor/escopo `[nao verificado]`. |
+| `ressuscitaveis_sem_decisao=1704` | Grupo sem sequência tem, no leitor, razão `aguarda_resposta` e ação responder do colaborador, salvo precedências/alcance da carga. `app/chamados/services/tarefa_do_dia.py:154`, `:156`. Valor/classificação concreta `[nao verificado]`. |
+| `ressuscitaveis_ultimo_silencio=321` | Último ato SILENCIO resulta em `silencio_decidido`, ações vazias. `app/chamados/services/tarefa_do_dia.py:176`. Ressuscitar grava apenas preservação RESPOSTA/VALIDACAO e limpa projeção, sem REABERTURA: `app/chamados/models.py:1613`, `:1622`, `:1629`. Valor `[nao verificado]`. |
+
+A pergunta de lei **RESSUSCITAR-DEVOLVE-AO-COLABORADOR** já está registrada como **não decidida**, fora da B1, que deve preservar a fila. Os 321 dimensionam esse problema; existência ou quantidade não decide a política. `app/docs/RELATO.md:164`; `app/chamados/models.py:1622`.
+
+Há dois REDs já escritos que distinguem exatamente as classes sem decisão e último SILENCIO, comparando `tarefa_do_dia` antes/depois da ressuscitação: `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:319`, `:331`, `:334`. Sonda não demonstra que passaram, falharam ou mataram mutante; execução/contagem “RED que morde n” permanece `[nao verificado]`.
+
+**Importante para Script 1:** a função **existe nesta cópia**, em `app/chamados/juizes.py:1537`; há import em `app/chamados/services/fio.py:1612`. Portanto o ImportError do anexo prova somente que o módulo `/app/chamados/juizes.py` carregado naquela execução não forneceu o símbolo `[nao verificado]`; motivo específico da divergência de árvore/módulo `[nao verificado]`. Não afirmar “função inexistente na cópia”.
+
+Não substituir automaticamente os antigos **97** mencionados no registro histórico pelos **321**: o histórico refere outro universo e instrumento, e sem a sonda fonte a igualdade de recortes não foi estabelecida. `app/docs/RELATO.md:164`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:288`.
+
+## 17/11 01:04 · sessao 45c396d0802c · - · - · origem=Ronald (tmux)
+
+Não localizei a entrega exata `logs/ESPINHA-BRIEFS/PREPARA-1611/f2.r` nem o literal PREPARA-ANTECIPADA nos arquivos pesquisados; logo, o número anterior de “lei N” e “RED que morde n” e a correspondência exata com suas seções 4/5 permanecem `[nao verificado]`.
+
+Referências aproveitáveis:
+
+- `app/docs/CORTES.md:487`: F2 L1 pergunta pelo efeito que retira da lista de veredito; residual exige ato de materialização com valor conservado. F2 L2 é face SQL do juiz existente, exige comparação por pergunta na sombra inteira e caso que morde. O corte declara perguntas de lei das matrizes F2/F4/F5/F6/F8 = 0.
+- `app/docs/RELATO.md:142`: re-medida pós-F1 declarou L1 **RESIDUAL, não MOOT**, porque descarimbo apaga valor e projeção lê campo atual.
+- `app/docs/RELATO.md:35`: explicita a lacuna: remeter L1 à E4d não conserva instante apagado; faltava optar por campo com perda ou trazer ato.
+- `app/docs/RELATO.md:8`: registro posterior diz COMPLEMENTO-3 resolveu L1 pelo corte; registra censo = 0 leitores dependentes do instante apagado, e ressalva que descarimbo só devolve à lista se também houver resposta preservada, ausência de validação e tranca liberada/ignorada.
+- `app/docs/RELATO.md:161` e `:164`: RESSUSCITAR-DEVOLVE-AO-COLABORADOR registrada, **não decidida**; B1 mantém fila anterior, sem REABERTURA na ressuscitação. Resposta vazia retornar ao colaborador é questão juntada à mesma lei.
+- `app/docs/RELATO.md:207`: medida histórica de 283 ressuscitáveis, main 0 muda e B1 97 silêncio sem ação → colaborador, 105 somente rótulo e 81 iguais. **Não comparar diretamente ao 2025 do anexo** sem universo, data e código de seleção iguais `[nao verificado]`.
+- `app/docs/CORTES.md:490`: RED sem mordida fica “NAO MORDE” e não entra em brief; F2 primeiro 10 integrais, depois 4 parciais só ramo sem mordida.
+- `app/docs/RELATO.md:143`: despacho de RED pós-F1 M4/M13/M14/M15/M18 (+M19/M20 condicional).
+- `app/docs/RELATO.md:91`: documento diz REDs F2 fechados; **não prova a contagem nem execução do PREPARA solicitado** `[nao verificado]`.
+
+Conclusão recomendada: os números do anexo dimensionam passivo e ressuscitação; não resolvem lei por quantidade nem acrescentam mordidas executadas. Sem entrega original não certificar “lei N” ou “RED n” exatos. A ausência de comparação antes/depois e mutante nos dados impede certificar novo RED.
 
 ## 17/11 00:59 · sessao ee9a3cb53b1e · E4C-F1-B2 · verificador · origem=Code
 
@@ -432,46 +561,4 @@ O novo teste sentinela da property melhora a prova: exige delegação, impedindo
 
 [truncado em 20000 de 23857 caracteres]
 
-## 16/11 23:54 · sessao d698d1708027 · REVISAO-AVAL-2355 · verificador · origem=Code
-
-1. **Premissas:** as quatro condições conferem com a enumeração da BUG-PAR; o complemento agora as atribui expressamente à F2, respondendo à devolução. LU2-07 permanece aberta. A sequência histórica completa até F7 é **[nao verificado]**; BUG-PAR → B2 → F2 → F4 tem respaldo documental. (app/docs/RELATO.md:158; app/docs/RELATO.md:4; app/docs/RELATO.md:349; app/docs/CORTES.md:495; anexo complemento1_prepara_f2_f4_f7_1611.txt:1)
-
-2. **Colisão:** a precedência anterior era F1 → CLASSE-D → F2 → E4d. O complemento a altera nominalmente quanto à F2 e preserva CLASSE-D antes da E4d; portanto resolve a colisão apontada. Também substitui o encaixe técnico anterior de R1 entre F1/F2, que independia de LU2-07/08: esperar LU2-07 passa a ser ordem expressa, não dependência técnica demonstrada. (app/docs/BACKLOG.md:1990; app/docs/RELATO.md:368; app/docs/RELATO.md:416; anexo complemento1_prepara_f2_f4_f7_1611.txt:1)
-
-3. **Literal:** fecha como autorização condicional. B2 consta aberta e “em voo”; seu pouso é **[nao verificado]**. Lei 0 da F2 está registrada na base `520d7b557`; cumprimento das quatro condições no HEAD pós-B2 é **[nao verificado]**. Cortar LU2-07 tampouco comprova fechamento integral da CLASSE-D: LU2-08 conserva parte aberta. São condições ainda por conferir, sem invalidar a resposta à devolução. (app/docs/RELATO.md:25; app/docs/RELATO.md:21; app/docs/RELATO.md:11; app/docs/RELATO.md:347; app/docs/RELATO.md:4)
-
-4. **Exportada, dinheiro ou `!`:** o complemento declara registro e reordenação; não autoriza esses atos adicionais. Permanecem a guarda da F2 sobre exportada — DIFF mudou, PAREI `!` — e a conferência do recorte `_nascer`. Efeitos de execução futura sobre dinheiro ou gravado são **[nao verificado]**. (anexo complemento1_prepara_f2_f4_f7_1611.txt:1; app/docs/CORTES.md:487; app/docs/RELATO.md:468; CLAUDE.md:265)
-
-**VEREDITO: CONFERE**
-
-## 16/11 23:54 · sessao 5c40158a9144 · REVISAO-AVAL-2355 · verificador · origem=Code
-
-1. **Premissas: parcialmente conferidas.** A recusa de `4633d2c17`, as docstrings nos dois arquivos e os 30+ descendentes/B2/AUSÊNCIA estão registrados em `app/docs/RELATO.md:8`. A classificação desses caminhos como negócio confere com `bin/tests/test_lei_akita.sh:152`; eles estão fora do registro de medida (`bin/tests/test_lei_akita.sh:172`). SHA completo, diff histórico, descendência e aceitação efetiva pelo hook: **[não verificado]**.
-
-2. **Colisão: item 2 precisa de ressalva.** A nova exceção nominal segue a forma dos precedentes: crescimento exige novo aval, sem regravar histórico (`app/docs/CORTES.md:449`; `app/docs/CORTES.md:484`). Porém, “n/a medida ou instrumento tocando arquivo de negócio = recusa”, como proibição absoluta por arquivo, elimina a permissão vigente de alterar dados medidos nos módulos registrados: o juiz expressamente admite esse caso (`bin/tests/test_lei_akita.sh:348`; `app/docs/BACKLOG.md:1955`; `app/docs/RELATO.md:2095`). O literal precisa preservar L-123-MEDIDA-EM-PY.
-
-3. **Condições literais: o predicado compartilhado já existe.** O hook chama o mesmo juiz utilizado pelo push (`bin/commit_msg.sh:29`; `bin/tests/test_lei_akita.sh:529`). Há limites declarados para `--amend` e cherry-pick/rebase; a causa concreta deste caso permanece **[não verificado]** (`bin/commit_msg.sh:10`). A catraca atual é 12, e o teste acrescenta um item dinamicamente, compatível com cobrar o 14º após a alteração (`bin/tests/test_lei_akita.sh:409`; `bin/tests/test_lei_akita.sh:990`). Os **45 commits** não estão comprovados: a tentativa documentada tinha 34 (`app/docs/RELATO.md:20`; **[não verificado]**).
-
-4. **Exportada, dinheiro ou outro `!`: efeito adicional [não verificado].** O `!` documentado é justamente exceção de selo ou regravação (`app/docs/RELATO.md:7`). O pouso próprio do instrumento respeita o corte vigente (`app/docs/CORTES.md:304`); integridade financeira/exportada do pacote completo: **[não verificado]**.
-
-**VEREDITO: PROCEDE (item 2: preservar explicitamente a permissão L-123-MEDIDA-EM-PY ao definir a recusa; `bin/tests/test_lei_akita.sh:348`).**
-
-## 16/11 23:53 · sessao 24271795b704 · - · - · origem=Ronald (tmux)
-
-**Item 3: PROCEDE — o RED ainda não está suficientemente condicionado.** Irmã U163/ausente elimina o bloqueio herdado pelo K6 da irmã, porque o predicado atual pula U163; o controle com irmã fora163 entregue confere. (`app/chamados/services/materializacao.py:795`; `app/chamados/services/validacao.py:224`; `app/chamados/tests/test_bug_par_volta.py:145`)
-
-O literal ainda admite casos que **hoje não gravam**: U163 com declarado diferente do gravado espera mesmo com F6 aberto; ausência de irmã com vizinha do mesmo tipo impede fechar a paridade; batida aprovada existente resulta em `ja_satisfeita`, sem nova batida. (`app/chamados/services/materializacao.py:933`; `app/chamados/services/materializacao.py:936`; `app/chamados/services/materializacao.py:194`; `app/chamados/services/materializacao.py:903`; `app/chamados/services/materializacao.py:928`; `app/chamados/services/materializacao.py:898`)
-
-Para tornar o RED discriminante, explicitar: metade de intervalo respondida, sem validação/materialização anterior, declarado igual ao gravado, plantio permitido pelas guardas de data/paridade/colisão, sem reuso e implausibilidade ausente ou devidamente confirmada; F6 aberto deve corresponder à competência do instante local de cada plantio. (`app/chamados/services/validacao.py:594`; `app/chamados/services/validacao.py:597`; `app/chamados/services/validacao.py:609`; `app/chamados/services/validacao.py:615`; `app/chamados/services/validacao.py:681`; `app/chamados/services/materializacao.py:891`; `app/chamados/services/materializacao.py:914`; `app/ponto/janelas.py:84`)
-
-A existência/execução de tal RED e de pergunta real que cumpra todas essas condições permanece [nao verificado].
-
-## 16/11 23:53 · sessao 30eb8b95c3ab · - · - · origem=Ronald (tmux)
-
-2. O complemento responde às três dúvidas registradas e mantém o encaixe F4 sobre B2; a exceção anterior U163 entregue/F6 precisa ser sucedida no registro e na matriz. (`app/docs/RELATO.md:5`; `app/docs/RELATO.md:21`; `app/docs/RELATO.md:44`; `app/docs/RELATO.md:52`; `app/docs/BACKLOG.md:823`) Continua vigente F4 logo atrás de F1/F2 **ou** contador J1 esperado zero no intervalo. (`app/docs/CORTES.md:487`)
-
-4. O bloqueio ocorre antes do carimbo/recalculo no admin e antes de recusa/pendência/carimbo no escritor; corresponde à preservação declarada. (`app/chamados/services/validacao.py:652`; `app/chamados/services/validacao.py:655`; `app/chamados/services/validacao.py:666`; `app/chamados/services/materializacao.py:1829`) Recalculo herdado já está apontado; o complemento não autoriza alterar FechamentoMensal exportado, que continua sob `!`. (`app/docs/RELATO.md:44`; `app/docs/RELATO.md:52`; `CLAUDE.md:411`) Impacto monetário real: [nao verificado].
-
-Cuidado de implementação: remover simplesmente a exclusão U163 do segundo laço faz sobreposição com U103 já inserida pelo primeiro; a lista deve conservar uma ocorrência por pergunta. (`app/chamados/management/commands/bug_par_103.py:53`; `app/chamados/management/commands/bug_par_103.py:63`; `app/chamados/management/commands/bug_par_103.py:71`; `app/chamados/management/commands/bug_par_103.py:77`; `app/chamados/services/universo_bug_par.py:30`)
-
-_6254 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6258 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
