@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 13:36** · publicado em **17/11/2026 13:36** (UTC-3)
+> Ultima resposta processada: **17/11/2026 13:38** · publicado em **17/11/2026 13:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 13:38 · sessao 2977a8187bea · PORTA-EXPORT · verificador · origem=Code
+
+**Não considero a obra fechada:** a exceção em `assumir` ainda não grava FALHOU/motivo/recusa; e o `antes` de `encerrar` pode diferir do estado vencido pelo CAS. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`; `app/folha/porta_export.py:1065`; `app/folha/porta_export.py:1192`)
+
+Execução dos testes, reprodução das corridas e ocorrência em produção: **[nao verificado]**. [nao verificado]
+
+1. **Quem escreve e quem lê**
+
+   | Campo | Escritores e leitores encontrados |
+   |---|---|
+   | Pedido: `detalhe.tentativa` | `pedir` cria/renova UUID; `assumir` adota a recebida ou cria outra. `_mudar_estado` transporta o detalhe. Leem `_ficha`/CAS, adoção, conclusão, recusa, estado da porta e argv do subprocesso. (`app/folha/porta_export.py:1083`; `app/folha/porta_export.py:1100`; `app/folha/porta_export.py:1123`; `app/folha/porta_export.py:1135`; `app/folha/porta_export.py:1022`; `app/folha/porta_export.py:1040`; `app/folha/porta_export.py:1170`; `app/folha/porta_export.py:1060`; `app/folha/porta_export.py:1260`; `app/folha/porta_export.py:1307`) |
+   | Pedido: `detalhe.ator` | `pedir` grava `getattr(ator, 'pk', None)`, recebendo `request.user` da view. A adoção preserva o campo; uma tentativa nova cron/manual substitui o detalhe sem ator. `_recusa` o lê. (`app/folha/views.py:131`; `app/folha/porta_export.py:1082`; `app/folha/porta_export.py:1100`; `app/folha/porta_export.py:1124`; `app/folha/porta_export.py:1134`; `app/folha/porta_export.py:1057`) |
+   | Carimbo: `detalhe.tentativa` | `lavrar` grava o argumento, inclusive `None`; `concluir` fornece a tentativa da linha validada. O leitor decisório é `estado_da_porta`. (`app/folha/porta_export.py:768`; `app/folha/porta_export.py:784`; `app/folha/porta_export.py:1178`; `app/folha/porta_export.py:1260`) |
+   | Motivo | `_falhar` persiste até 500 caracteres; `concluir` persiste `res['motivo']`. `_recusa` acrescenta a trilha; divergência recebe texto explicativo somente na linha. `registrar` normaliza espaços; o parser recupera o motivo, mas o contador usa data/porta, sem interpretar seu conteúdo. (`app/folha/porta_export.py:1067`; `app/folha/porta_export.py:1181`; `app/folha/porta_export.py:1056`; `app/folha/porta_export.py:1184`; `app/core/recusa_critica.py:84`; `app/core/recusa_critica.py:92`; `app/core/recusa_critica.py:117`) |
+
+   **Há escrita fora de `concluir`:** `lavrar` continua escrevendo diretamente; os dois testes negativos novos a chamam; a fixture `_carimbo` escreve pedido e carimbo diretamente, com tentativa constante `fixture`. Portanto, exclusividade literal de `concluir` não existe. (`app/folha/porta_export.py:779`; `app/folha/tests/test_porta_sem_beco_item2.py:305`; `app/folha/tests/test_porta_sem_beco_item2.py:317`; `app/folha/tests/test_porta_do_export.py:42`; `app/folha/tests/test_porta_do_export.py:46`)
+
+   Nos caminhos produtivos encontrados, o comando chama `concluir`; o helper corrigido usa `assumir → concluir`, inclusive para o teste de relatórios. Não encontrei outro chamador produtivo de escrita desse carimbo. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:157`; `app/folha/porta_export.py:887`; `app/relatorios/tests/test_cauda_trilha_do_cartao.py:109`)
+
+   Não encontrei leitor decisório alternativo aceitando carimbo sozinho: `conferir`, `abrir_a_porta` e a view delegam à mesma porta. (`app/folha/porta_export.py:820`; `app/folha/porta_export.py:1282`; `app/folha/views.py:130`)
+
+2. **PRONTA e caminhos legítimos**
+
+   Nos objetos lidos pela função, **PRONTA exige pedido CONCLUIDO, tentativa não vazia e igual à do carimbo**, ambos consultados pelo mesmo dia. Os dois escapes da volta 2 estão fechados. (`app/folha/porta_export.py:1248`; `app/folha/porta_export.py:1258`; `app/folha/porta_export.py:1260`; `app/folha/porta_export.py:1268`)
+
+   Isso não garante que o banco permaneça naquele estado até a resposta: entre as duas consultas, um cron pode substituir o pedido concluído por outra tentativa EM_CURSO, enquanto o leitor conserva o pedido antigo e encontra o carimbo antigo correspondente. É uma leitura válida do par anterior; não demonstra liberação sem jamais ter existido o par exigido. Corrida executada: **[nao verificado]**. (`app/folha/porta_export.py:1249`; `app/folha/porta_export.py:1250`; `app/folha/porta_export.py:1131`)
+
+   Não encontrei beco estrutural novo para cron/manual/rollout: sem clique, `assumir` cria pedido EM_CURSO com UUID, e `concluir` grava o par. O rollout seleciona empresas ativas em rollout e a competência corrente; o cron está declarado com `--rollout --origem cron`. Instalação e funcionamento reais: **[nao verificado]**. (`app/folha/porta_export.py:1131`; `app/folha/porta_export.py:1178`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:46`; `app/config/crons.py:1803`)
+
+3. **R8 alargado**
+
+   **`assumir` continua incompleto.** Seu `except` apenas imprime, acrescenta a empresa a `falharam` e continua. Não persiste FALHOU, motivo nem linha de recusa. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`)
+
+   Se a exceção ocorrer antes da criação e não houver pedido anterior, não nasce registro. Se houver pedido do clique e a adoção ainda não ocorreu, ele pode permanecer PEDIDO até o vigia aplicar o prazo de 300 segundos; o motivo posterior será o prazo, não a exceção original. (`app/folha/porta_export.py:1118`; `app/folha/porta_export.py:1122`; `app/folha/porta_export.py:920`; `app/folha/porta_export.py:1214`)
+
+   **`concluir` entrou no `try` corretamente.** Exceções dentro do bloco que lavra e muda o estado desfazem ambas as escritas; depois o comando tenta `encerrar` a tentativa como FALHOU. Essa chamada de recuperação não tem proteção adicional: se ela levantar, a seguinte empresa não será alcançada. (`app/folha/porta_export.py:1172`; `app/folha/porta_export.py:1178`; `app/folha/porta_export.py:1180`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:155`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:159`)
+
+   A frase “`concluir` levantou, nada ficou” é ampla demais: `_recusa` ocorre depois do `atomic`. Uma exceção ali não desfaz o par já confirmado. É o limite do log não transacional já descartado na triagem, não outro bloqueador por queda CAS/log. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:153`; `app/folha/porta_export.py:1182`; `app/folha/porta_export.py:1184`)
+
+4. **Verdade da trilha**
+
+   **Contraexemplo do `antes`:** `encerrar` conserva um objeto PEDIDO(t); outro chamador adota a mesma tentativa, mudando o banco para EM_CURSO(t); o encerramento aceita ambos os estados e vence de EM_CURSO, mas imprime `antes=pedido`. Além disso, escreve o JSON antigo inteiro, podendo apagar `pid`, `backend_pid` e o instante da adoção. Esse interleaving é permitido pelo código; reprodução: **[nao verificado]**. (`app/folha/porta_export.py:1065`; `app/folha/porta_export.py:1192`; `app/folha/porta_export.py:1124`; `app/folha/porta_export.py:1035`; `app/folha/porta_export.py:1039`; `app/folha/porta_export.py:1042`)
+
+   Nos caminhos do vigia, o CAS aceita um único estado; em `concluir`, EM_CURSO é conferido sob trava da linha. Nesses sítios, o problema acima não se aplica. (`app/folha/porta_export.py:1206`; `app/folha/porta_export.py:1215`; `app/folha/porta_export.py:1173`)
+
+   Há também uma ambiguidade em **`origem`**: nasce como origem do pedido e é sobrescrita pela origem do executor durante a adoção. O CLI aceita `--tentativa` com `--origem manual`; nessa combinação, a linha deixa de preservar literalmente a origem do pedido. (`app/folha/porta_export.py:1083`; `app/folha/porta_export.py:1125`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:39`)
+
+   **Ator é pk nesse caminho**, nunca username: a porta grava `.pk` e o imprime no motivo. Cron/manual sem ator saem `ator=-`; o campo principal `usuario` também fica `-`, pois `_recusa` passa `request=None`. (`app/folha/porta_export.py:1082`; `app/folha/porta_export.py:1057`; `app/folha/porta_export.py:1058`; `app/core/recusa_critica.py:77`)
+
+5. **Mordida dos testes** [nao verificado]
+
+   - Os freezes existem nas duas classes; os negativos exercitam a porta real contra carimbo sozinho e tentativa ausente dos dois lados. (`app/folha/tests/test_porta_sem_beco_item2.py:19`; `:292`; `:302`; `:310`; `:387`)
+   - M9 verifica retorno, ausência de carimbo/recusa e preservação da sucessora. O marcador de log não esvazia a verificação: o filtro seleciona a porta. (`app/folha/tests/test_porta_sem_beco_item2.py:328`; `:341`; `:29`)
+   - M12 verifica o perdedor do CAS e uma linha, mas ambos os objetos começam EM_CURSO. Não cobre a adoção PEDIDO→EM_CURSO entre leitura e encerramento, nem verifica ator. (`app/folha/tests/test_porta_sem_beco_item2.py:350`; `:354`; `:358`)
+   - O relógio simulado hoje/amanhã morde a antiga leitura dupla; o reclique exige um único subprocesso, impedindo que todos os POSTs passem inertes. (`app/folha/tests/test_porta_sem_beco_item2.py:366`; `:368`; `:384`)
+   - **R8ConcluirTest prova tratamento na borda e continuação para B.** Para A, lança antes do corpo real; não prova rollback após lavrar, ausência de carimbo parcial, uma recusa ou tratamento de `assumir`. (`app/folha/tests/test_porta_sem_beco_item2.py:400`; `:405`; `:408`)
+   - O acréscimo do shell exige ausência de arquivo também para a porta e verifica sua frase, com datas explícitas. (`bin/tests/test_recusa_estado.sh:30`; `:44`; `:48`)
+
+6. **Classes históricas**
+
+   Não encontrei segundo juiz nem derivação paralela nova: texto e clique continuam consultando `estado_da_porta`; a dupla leitura do dia foi removida. Não identifiquei inversão nova de travas no trecho: o comando mantém advisory lock antes da trava da linha em `concluir`. (`app/folha/porta_export.py:820`; `app/folha/porta_export.py:1282`; `app/folha/porta_export.py:1248`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:130`; `app/folha/porta_export.py:1173`)
+
+   Permanecem a escrita direta de fixtures fora de `concluir`, a cobertura insuficiente do selo para rollback/R8 completo e o campo `origem` servindo ao pedido e ao executor. Os bloqueadores concretos desta revisão são a falha de `assumir` sem registro e a trilha `antes` potencialmente falsa. (`app/folha/tests/test_porta_do_export.py:42`; `app/folha/tests/test_porta_sem_beco_item2.py:400`; `app/folha/porta_export.py:1125`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:143`; `app/folha/porta_export.py:1065`)
 
 ## 17/11 13:36 · sessao d53c28693167 · - · - · origem=Ronald (tmux)
 
@@ -830,70 +894,4 @@ A emenda separada é `TOTAL=40` seguido de **DOSSIES-DAS-CELULAS**, cuja classe 
 
 TOTAL PENDENTES REAIS: 55
 
-## 17/11 11:55 · sessao 56f320519012 · CORTE-FOLHA-ESPELHO · leitura · origem=Code
-
-**Não é possível fechar a classificação causal dos 31 no dia original com este recorte.** O TSV traz o resultado para o **dia da pergunta**, mas não traz a data efetivamente devolvida por `_data_furo_da_grade` na leitura original nem identifica os dois `ata_sem_lampadas`. A atribuição individual de (a)–(e) permanece **[nao verificado]**.
-
-O código não permite reconstruir essa data apenas pelas perguntas: `_data_furo_da_grade` lê os contextos da disputa/chamado, busca a batida de origem e retorna seu dia do turno se a grade disser `trabalho`. A tarefa, por sua vez, seleciona perguntas por `data_evento == dia`. Portanto, encontrar ação em outro dia não comprova sozinho toda a condição **(d)**. Fontes: `app/chamados/services/disputa_emissao.py:54`, `app/chamados/services/disputa_emissao.py:68`, `app/chamados/services/disputa_emissao.py:82`; `app/chamados/services/tarefa_do_dia.py:262`.
-
-Há ainda uma diferença decisiva: **`nao_sei=True` e `passivo_sem_linha` podem coexistir com ação alcançável**. O código produz `passivo_sem_linha` nas instâncias, mas pode publicar dono e ação pelos verbos residuais; o contrato manda verificar `rota`. Fontes: `app/chamados/services/tarefa_do_dia.py:154`, `app/chamados/services/tarefa_do_dia.py:665`, `app/chamados/services/tarefa_do_dia.py:698`, `app/chamados/services/tarefa_do_dia.py:712`.
-
-No TSV transcrito, todas as 31 pessoas têm pelo menos uma pergunta viva cujo dia devolve porta para colaborador ou admin. Isso afasta “disputa sem pergunta viva” **nesse dump**, mas não determina a causa da leitura anterior de produção. A equivalência entre os dois retratos é **[nao verificado]**.
-
-Dois cuidados individuais impedem classificações apressadas:
-
-- **col727:** p21248 devolve `folga/nada`, mas p56610 devolve `admin/validar/porta_fila`; atribuir **(c)** à pessoa inteira é **[nao verificado]**.
-- **col956:** p35170 está em `folga`, porém devolve `admin/validar/porta_fila`, apesar de `passivo_sem_linha`; atribuir **(b)** ou **(c)** apenas por esses campos é **[nao verificado]**. A tarefa admite exposição administrativa em dia sem trabalho: `app/chamados/services/tarefa_do_dia.py:267`, `app/chamados/services/tarefa_do_dia.py:288`.
-
-**Contagem:** no dump, **0 pessoas sem pergunta viva**; para a causa histórica no dia original, **31 indeterminadas**. A distribuição dessas 31 entre (b), (c), (d) e (e), incluindo a identidade dos dois desconhecidos originais, é **[nao verificado]**. Não classifico falta de informação como “outra causa”.
-
-As obras encontradas cobrem estas classes; sua aplicação individual depende da causa ainda não demonstrada:
-
-| Classe | Obra e cobertura documentada |
-|---|---|
-| **(a) Nasceu sem pergunta** | **BO-DISPUTA-SEM-PERGUNTA**, estacionada como insumo da RAIZ por **BO-DISPUTA-DESENHO-RAIZ**. `app/docs/GRADE-MESTRA.md:1023`; `app/docs/BACKLOG.md:774`. |
-| **(a) Ficou aberta depois de perder todas as vivas** | **DISPUTA-4418-ABERTA-COM-TUDO-RESOLVIDO**. `app/docs/GRADE-MESTRA.md:1027`. |
-| **(b) Viva sem tarefa** | Obra específica para cada caso: **[nao verificado]**. `passivo_sem_linha` isolado não demonstra ausência de porta: `app/chamados/services/tarefa_do_dia.py:665`. |
-| **(c) Folga/ausência de turno** | **DIA-SEM-TRABALHO-PORTA** cobre batida em folga/feriado; **E4A1-C6-X-PASSADO-SEM-TURNO** cobre a divergência descrita entre fábrica e C6. Aplicação aos casos: **[nao verificado]**. `app/docs/BACKLOG.md:1940`; `app/docs/BACKLOG.md:2148`. |
-| **(d) Dia da disputa versus dias das perguntas** | **RAIZ-DA-DISPUTA**, com **RAIZ-DA-DISPUTA-F0-CASO-7279**, cujo escopo inclui a disputa absorver perguntas de outro dia. Cobertura de uma mudança específica no uso de `_data_furo_da_grade`: **[nao verificado]**. `app/docs/BACKLOG.md:2055`; `app/docs/BACKLOG.md:2670`; `app/docs/GRADE-MESTRA.md:108`. |
-| **(e) `ata_sem_lampadas`** | Resultado produzido em `app/chamados/services/tarefa_do_dia.py:234` e `app/chamados/services/tarefa_do_dia.py:240`. Obra específica comprovada para os dois casos: **[nao verificado]**. |
-| Problema do par do intervalo | **BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS** cobre validações isoladas das metades. Ter motivo de intervalo no TSV não comprova esse defeito **[nao verificado]**. `app/docs/BACKLOG.md:2178`; `app/docs/GRADE-MESTRA.md:1024`. |
-| Divergência entre projeções e atos | **FIO-E0-V4-E4-ESCRITORES**, etapa **E4c LEITORES DIVERGE + selo 2**. Vincular cada `passivo_sem_linha` a essa etapa é **[nao verificado]**. `app/docs/BACKLOG.md:2035`; `app/docs/GRADE-MESTRA.md:107`. |
-
-Na tabela final, **I** significa “causa no dia original indeterminada”; a pergunta citada é uma testemunha de ação **no dia dela**, conforme o TSV transcrito. **O?** significa “obra individual não determinada”, sem afirmar “sem obra”. As atribuições individuais permanecem **[nao verificado]**.
-
-| Pessoa | Causa — evidência disponível | Obra |
-|---|---|---|
-| col193 | **I** — p33805, colaborador responde. [nao verificado] | O? |
-| col238 | **I** — p49400, admin valida, mesmo com `nao_sei`. [nao verificado] | O? |
-| col247 | **I** — p58549, admin valida. [nao verificado] | O? |
-| col248 | **I** — p56220, admin valida. [nao verificado] | O? |
-| col266 | **I** — p25096, colaborador responde. [nao verificado] | O? |
-| col269 | **I** — p15586, colaborador responde. [nao verificado] | O? |
-| col276 | **I** — p42790, admin resolve dia. [nao verificado] | O? |
-| col439 | **I** — p53577, admin valida. [nao verificado] | O? |
-| col478 | **I** — p45783, admin valida, mesmo com `nao_sei`. [nao verificado] | O? |
-| col521 | **I** — p56881, colaborador responde. [nao verificado] | O? |
-| col570 | **I** — p38697, admin resolve dia. [nao verificado] | O? |
-| col727 | **I** — p21248 sem ação; p56610 com admin validando. [nao verificado] | O? |
-| col850 | **I** — p58478, admin valida. [nao verificado] | O? |
-| col854 | **I** — p49663, admin valida, mesmo com `nao_sei`. [nao verificado] | O? |
-| col861 | **I** — p26860, colaborador responde. [nao verificado] | O? |
-| col874 | **I** — p58368, admin valida. [nao verificado] | O? |
-| col898 | **I** — p55561, admin valida. [nao verificado] | O? |
-| col920 | **I** — p31695, colaborador responde, mesmo com `nao_sei`. [nao verificado] | O? |
-| col930 | **I** — p26892, colaborador responde. [nao verificado] | O? |
-| col956 | **I** — p35170, folga com admin validando. [nao verificado] | O? |
-| col983 | **I** — p41303, colaborador responde. [nao verificado] | O? |
-| col986 | **I** — p44878, colaborador responde. [nao verificado] | O? |
-| col989 | **I** — p44114, colaborador responde. [nao verificado] | O? |
-| col1008 | **I** — p56200, colaborador responde. [nao verificado] | O? |
-| col1010 | **I** — p53353, colaborador responde. [nao verificado] | O? |
-| col1018 | **I** — p54128, colaborador responde. [nao verificado] | O? |
-| col1040 | **I** — p57635, admin valida. [nao verificado] | O? |
-| col56 | **I** — p41903, colaborador responde. [nao verificado] | O? |
-| col99 | **I** — p40911, colaborador responde. [nao verificado] | O? |
-| col108 | **I** — p26995, colaborador responde. [nao verificado] | O? |
-| col151 | **I** — p55742, admin valida. [nao verificado] | O? |
-
-_6556 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6557 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
