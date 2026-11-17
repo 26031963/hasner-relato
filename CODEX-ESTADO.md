@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 00:01** · publicado em **17/11/2026 00:03** (UTC-3)
+> Ultima resposta processada: **17/11/2026 00:08** · publicado em **17/11/2026 00:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 00:08 · sessao 76cb3264c26f · REVISAO-AVAL-C2PREP · verificador · origem=Code
+
+1. **Premissas:** conferem nos registros: oito matrizes existentes e PREPARA anterior com remedidas, “depende CAIU”, classificação de lei e RED; despacho Codex paralelo, sem cópia/suite/trava (app/docs/RELATO.md:314,16–19,23). Conteúdo integral dos briefs, matrizes e logs: [nao verificado].
+
+2. **Colisão:** nenhuma demonstrada para esta extensão de leitura; os cortes de F5/F6/F8 permanecem aplicáveis (app/docs/CORTES.md:488). A exceção nominal F2 sem esperar CLASSE-D consta como CONFERE (app/docs/RELATO.md:4). Ressalva: R1 da CLASSE-D foi separado para andar sem LU2-07/08; portanto a pergunta aberta não bloqueia toda a CLASSE-D (app/docs/RELATO.md:421). LU2-07 permanece aberta e LU2-08 parcialmente aberta (app/docs/RELATO.md:354,352).
+
+3. **Literal:** nenhuma condição impossível demonstrada. O item 3 estabelece um gatilho ainda pendente: a volta 2 consta “rodando”; seu fechamento é [nao verificado] (app/docs/RELATO.md:19). i1/i2 já constam em curso, compatível com preservá-los (app/docs/RELATO.md:12). HEAD futuro, cruzamentos novos e reconferência das oito remedidas: [nao verificado].
+
+4. **Exportada, dinheiro ou `!`:** nenhuma extrapolação demonstrada no escopo de leitura, que tem precedente sem construção (app/docs/RELATO.md:23; bin/codex_pergunta.sh:425). Permanecem os limites de kernel, exportada e `apply` para execução posterior (app/docs/RELATO.md:473; CLAUDE.md:265–268).
+
+VEREDITO: CONFERE (app/docs/RELATO.md:4,23; app/docs/CORTES.md:488).
+
+## 17/11 00:07 · sessao 234c5d704cdd · - · - · origem=Ronald (tmux)
+
+- As cinco fatias existem no recorte E4c; o registro enumera nove fatias, com F3/F5/F6/F8 no grupo posterior à F2 e F9 no final. A preparação antecipada não equivale a alterar essa ordem de construção (`app/docs/RELATO.md:830`).
+- O PREPARA anterior já separa leitura de construção: Codex, paralelo, sondas na volta 2, sem cópia, suite ou trava (`app/docs/RELATO.md:23`). O wrapper executa leitores em sandbox somente leitura e não ocupa vaga de construtor (`bin/codex_pergunta.sh:75`, `bin/codex_pergunta.sh:425`).
+- As matrizes das oito fatias estavam registradas; as perguntas antigas de F5/F6/F8 receberam cortes, que o novo censo deve conservar (`app/docs/RELATO.md:314`, `app/docs/CORTES.md:488`).
+- Os riscos futuros estão declarados: F3 exige `!` se atingir aceite de folga ou gravado exportado; F5 passa pelo kernel do reconciliador; F6 requer smoke; F8 passa pelo kernel de `flip_auto`; F9 permanece sem ato enquanto não rodar `apply` (`app/docs/RELATO.md:473`). Só registrar e ler não autoriza esses atos, cujo limite geral permanece em `CLAUDE.md:265`.
+- A neutralidade das batidas na F8 ainda exige medida na sombra; o corte não permite trocar a expectativa por resultado presumido (`app/docs/CORTES.md:488`). Execução dessas sondas, REDs e cruzamentos novos: `[nao verificado]`.
+
+Não identifiquei extrapolação de exportada/dinheiro/`!` no escopo literal de preparação por leitura; as restrições citadas continuam exigíveis na construção e no pouso (`app/docs/RELATO.md:473`, `CLAUDE.md:265`).
+
+## 17/11 00:07 · sessao 933497f8c4c6 · - · - · origem=Ronald (tmux)
+
+Para o COMPLEMENTO-2, não identifiquei colisão procedente:
+
+- A exceção nominal da F2 sem esperar CLASSE-D já consta como revisão CONFERE em `app/docs/RELATO.md:4`; portanto a ordem antiga de `app/docs/BACKLOG.md:1990` e `app/docs/RELATO.md:373` não impede essa abertura.
+- Ressalva de precisão: R1 da CLASSE-D foi desenhada para pousar sozinha sem esperar LU2-07/08 (`app/docs/RELATO.md:421`). Não afirmar que toda CLASSE-D depende dessas respostas. O C2, limitado à leitura, não altera esse desenho.
+- A R1 permanece identificável no código: C5 agrega dias em uma assinatura por colaborador (`app/escala/services/cadastro_realidade.py:176`); C5 segue fora de `DONO_PELO_JUIZ` (`app/escala/services/cadastro_realidade.py:968`).
+- LU2-08 está parcialmente decidida e parcialmente aberta: PARCIAL_SEM_PERIODO é CADASTRO; FATO_EM_AUSENCIA espera corte (`app/docs/RELATO.md:352`). LU2-07 distingue emp1, L-124 e assinatura datada C5, sem resolver tudo por uma única decisão (`app/docs/RELATO.md:354`).
+- O brief completo e os logs mencionados não estão disponíveis nesta cópia; conteúdo além dos registros acima é `[nao verificado]`.
+
+Conclusão desta subanálise: **CONFERE para o C2**, sem importar como bloqueio uma colisão de ordem já resolvida nominalmente (`app/docs/RELATO.md:4`).
+
+## 17/11 00:07 · sessao a70e7bf2a2da · - · - · origem=Ronald (tmux)
+
+Leitura literal do COMPLEMENTO-2:
+
+- Formato e precedente conferem nos registros: três remedidas por fatia, base 520d7b557, contagem “depende CAIU”, lei, RED e extras em `app/docs/RELATO.md:16-19`; despacho Codex paralelo, sem cópia/suíte/trava em `app/docs/RELATO.md:23`; resumo das seis partes em `app/docs/BACKLOG.md:822`.
+- As oito matrizes F2–F9 estão registradas como fechadas em `app/docs/RELATO.md:314`; três anteriores + cinco novas = oito, sem erro aritmético.
+- A volta 2 anterior consta **rodando**, sem fecho comprovado: `app/docs/RELATO.md:19`. Logo item 3 define portão futuro; não autoriza afirmar que já abriu.
+- i1/i2 estão registrados em curso em `app/docs/RELATO.md:12`, após despacho em `app/docs/RELATO.md:21`. Preservá-los não colide com o registro.
+- Arquivos originais `logs/ESPINHA-BRIEFS/*/{brief,matriz,remedida}.md`, HEAD do main no despacho futuro e execução da reconferência do item 6: **[nao verificado]**. Não estão disponíveis no snapshot.
+- Não achei condição literalmente impossível no complemento 2. A reconferência “no pouso da B2” pressupõe disponibilidade das oito entregas naquele marco, mas a ordem futura efetiva é **[nao verificado]**; não constitui colisão demonstrada. [nao verificado]
+
+Ponto substantivo para consolidação: a justificativa do complemento 1 não representa todo o brief CLASSE-D. O registro diz que **R1 pousa sozinho entre F1 e F2 sem esperar LU2-07/08**, embora outros ramos esperem desenho: `app/docs/RELATO.md:421`. A exceção nominal pode mudar a ordem; não se deve concluir que LU2-07 bloqueia a CLASSE-D inteira.
 
 ## 17/11 00:01 · sessao f0af060a5ee8 · REVISAO-AVAL-LU207 · verificador · origem=Code
 
@@ -315,97 +362,4 @@ A correção preserva o `atomic` externo e pré-trava a união dos dois alvos an
 
 Donos/disputas reais de 38251/38252 e ocorrência de deadlock: [não verificado]. A catraca estrutural existente não certifica essa sequência entre chamadas; seu observador por tabela declara que não vê outra PK da mesma tabela adquirida depois (`app/chamados/tests/test_e1_v7_catracas.py:39`).
 
-## 16/11 23:49 · sessao 0e37165938ec · - · - · origem=Ronald (tmux)
-
-Refinamento: `_card_atendimento.html:141-144` deve migrar ou receber rótulo explícito de texto legado. O gate externo é `p.viva` (`:77`) e tipo hora (`:117`), sem exigir `p.respondida`/`resposta_enviada`. T sem I pode ser viva numa célula acusadora (`app/chamados/juizes.py:1423`, `:1454-1457`) e PENDENTE (`app/chamados/models.py:3155-3156`). Nesse caso a tela diz “Você respondeu […] escolha de novo para corrigir” enquanto o botão diz “Enviar resposta” (`app/templates/chamados/partials/_card_atendimento.html:141`, `:161`; `app/chamados/services/fio.py:187`, `:359`).
-
-“ Sua resposta” em `_card_atendimento.html:182-184` está no `else` de `p.viva` (`:179`), no cartão histórico sem formulário: exposição legítima do conteúdo cru, distinguível do primeiro ramo.
-
-Nenhum novo teste foi executado nesta revisão. [não verificado] [nao verificado]
-
-## 16/11 23:49 · sessao f82102ce8d71 · - · - · origem=Ronald (tmux)
-
-Dois achados concretos do delta:
-
-1. **Materializador aplica pergunta “escolha” sem resposta, embora o comentário prometa apenas recusa.** A união nova seleciona qualquer `tipo_resposta` com I, texto vazio, validação e sem materialização (`app/chamados/services/materializacao.py:2071`). O despacho encaminha escolha (`:1896`); seu ramo ignora a resposta, reconcilia destino e retorna `True` (`:1638-1647`). O juiz do lastro é dispensado para escolha (`:1903`), e o carimbo é solicitado (`:1948`). `carimbar` conserva o par vazio (`app/chamados/models.py:3241`), C6 devolve morta pela validação (`app/chamados/juizes.py:1405`) e salva materialização/via (`app/chamados/models.py:3263`). Isso pode alcançar entregue: K6 desse caminho só consulta metades de intervalo fora163 (`app/chamados/services/materializacao.py:792-807`); escolha comum não planta batida, portanto também não passa pela guarda F6 do registro de batida. Incidência real: [não verificado].
-
-   Reproduzi os corpos AST reais `_materializar_uma` e `_materializar_resposta_escolha`, sem Django/banco, com dependências laterais falsas: escolha, I presente, `T=''`, validada, não materializada → retorno `True`, chamadas `reconciliar_destino` e `carimbar(... resposta='validar', lavrar_veredito=True)`, erros `[]`. O juiz do lastro, instrumentado para explodir se chamado, não foi chamado. A limitação é que não houve execução ORM. (`app/chamados/services/materializacao.py:1813`, `:1630`.)
-
-2. **Ressuscitação passa a apagar texto sem instante sem garantir preservar o texto anterior.** A seleção nova `q_nao_respondida` inclui T¬I materializada (`app/chamados/models.py:1530-1536`); a projeção zera o par e, se C6 aprovar, inclui o PK (`:1553-1557`). A porta registra somente `linhas_da_projecao_sem_linha` (`:1613`) e depois zera texto (`:1629`). Essa função descarta pergunta sem I e sem validação (`:4095-4097`); o log posterior guarda IDs/estados, não texto (`:1653-1662`). `linhas_do_evento` guarda somente célula/colaborador/data (`:3336-3339`), e o lote usa `update`, sem `save` (`:3392-3394`).
-
-   Reproduzi a função AST real `linhas_da_projecao_sem_linha` para T=`'08:00'`, I=None, validação=None: retorno `[]`, sem chamada ORM. (`app/chamados/models.py:4085`.)
-
-   Caminho cartório alcançável: T¬I materializada por `admin_decidiu`, sem validação, marco apagado, célula acusando; C6 atual morta pela identidade (`app/chamados/juizes.py:1443-1445`), C6 projetado limpa a identidade e fica viva (`:1454-1457`). Cartório passa por `_fio_vivo=False`, juiz da resposta=False, não é tudo duplicata, chama ressuscitar (`app/ponto/services/cartorio.py:1643-1674`). Esse bloco não consulta entregue; cron carrega todos os dias passados (`app/ponto/management/commands/processar_cartorio.py:49-62`). Impressão igual pode impedir executar agora, mas insumo novo ou `--forcar` permite chegar (`app/ponto/services/cartorio.py:1409-1415`). Incidência em produção: [não verificado].
-
-Sobre desligamento e os quatro pares:
-
-- Assumindo não validada, não materializada e dia não trancado: I∧T entra em `respostas_sem_veredito`; I¬T, ¬IT e nenhum ficam fora (`app/chamados/models.py:1923-1926`). Dia trancado também fica fora; `ignorar_tranca=True` é usado por CSF/retratação, não pelo desligamento (`:1926`; `app/ponto/supra_juiz.py:573-574`).
-- I∧T: desligamento pula o fechamento da disputa (`app/colaboradores/services/desligamento.py:164-167`). O chamado só é retido pela guarda da pergunta viva **em competência aberta** (`app/chamados/models.py:364-368`), pois `encerrar` não usa gate da conversa (`:1669-1683`). Portanto não generalizar “resposta legal segura chamado exportado”.
-- Outros três pares: se não houver outra resposta legal segurando a disputa, a porta de exceção fecha e carimba **as perguntas vivas** como `admin_decidiu`, registra SILENCIO e auditoria (`app/chamados/models.py:1999-2017`); depois `encerrar` fecha o chamado (`app/colaboradores/services/desligamento.py:182-190`). Pergunta morta não recebe esse carimbo, pois o laço é só de `vivas` (`app/chamados/models.py:1976-1977`, `:2000`).
-- Relativo à regra antiga I OU T, os dois meios-pares deixam de reter. A coerência com “respondida=I∧T” existe; disso não decorre ausência de escrita em entregue. A porta desligamento não filtra competência antes de matar mudas (`app/chamados/models.py:1999-2017`).
-- A Pauta é de **recusa de reabertura coletada no ato**, não consequência automática de ser exportada (`app/chamados/services/fecho_runtime.py:16-20`, `:118-141`, `:161-169`; `app/chamados/services/disputa_emissao.py:1969-1974`). Se a disputa fecha antes e a pergunta morre, não sobra a recusa que antes gerava Pauta; o teste legado confirma esse novo efeito (`app/chamados/tests/test_e4b_c12_orm.py:225-234`).
-
-O teste C12 não prova retenção de resposta na própria entregue: cria a pergunta principal exportada (`app/chamados/tests/test_e4b_c12_orm.py:49-56`) e a resposta legal adicional **na aberta** (`:57-62`). Seu zero Pauta e chamado aberto dependem desta segunda pergunta (`:167-175`). O comentário “exportada ou não” é mais amplo que o cenário exercitado; falta o caso resposta legal ancorada somente em entregue. (`app/chamados/models.py:364-365`.)
-
-Quanto aos crons:
-
-- `fechar_becos_disputa` instalado usa `--alarme` (`app/config/crons.py:663`); isso vence `--apply`, e portanto essa execução não fecha (`app/chamados/management/commands/fechar_becos_disputa.py:30`). O uso explícito de `--apply` pode fechar por porta (`:57`; `app/chamados/services/becos.py:54-58`).
-- Vigia `censo_alcance` declara leitura pura e muda classificação, não estado de pergunta (`app/chamados/services/vigia_fio.py:490-493`, `:634-637`).
-- Desligamento agendado instalado roda `--apply` (`app/config/crons.py:440`), chama a mesma cascata (`app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:57`).
-- Cartório pode escrever via ressuscitação, inclusive entregue, conforme achado 2. (`app/ponto/services/cartorio.py:1674`.)
-- Materialização pode escrever por seleção ampliada, inclusive entregue no ramo escolha, conforme achado 1. (`app/chamados/services/materializacao.py:2071`, `:1630`.)
-- CSF/reconciliador usam retenção comum: pares ilegais não seguram mais CSF/retratação (`app/ponto/supra_juiz.py:573-588`; `app/chamados/reconciliador.py:448-451`, `:520-526`). Porém a alteração do corpo `sem_veredito_entre` não aparece no delta anexado, logo atribuí-la especificamente à volta 2 seria [não verificado]. O delta de property/function explícita, por si, pode ser equivalente caso a property da base já desse I∧T. Base Git indisponível: [não verificado].
-
-## 16/11 23:49 · sessao e6a9726f3f13 · - · - · origem=Ronald (tmux)
-
-Achado bloqueante no delta: a união em `materializacao.py:2072` admite **toda** pergunta validada com I sem T, embora o comentário prometa admiti-la só para recusa. A recusa pelo juiz está apenas no ramo `hora` (`app/chamados/services/materializacao.py:1314`). No ramo `escolha`, a função reconcilia destino/clones e retorna `True` sem exigir resposta (`app/chamados/services/materializacao.py:1630`). O chamador dispensa o juiz de lastro para esse tipo (`app/chamados/services/materializacao.py:1903`).
-
-Esse caminho realmente pode carimbar: a pergunta selecionada já é validada (`app/chamados/services/materializacao.py:2073`), condição que faz C6 retornar morta imediatamente (`app/chamados/juizes.py:1404`). `carimbar` preserva o par I sem T e salva materialização/via/lavra (`app/chamados/models.py:3241`, `app/chamados/models.py:3263`); a guarda do par retorna quando `update_fields` não contém seus campos (`app/chamados/models.py:3576`). K6 só alcança metades de intervalo fora163, portanto não barra uma escolha `gps_ausente` exportada (`app/chamados/services/materializacao.py:792`, `app/chamados/services/materializacao.py:1833`).
-
-Reprodução executada em memória, sem arquivos/banco: extraí por AST as funções reais `_materializar_uma`, `_materializar_resposta_escolha`, `carimbar`, `_escrever_carimbo`, `_recusa_par_ilegal`, `_pergunta_viva_calc` e `texto_vazio`; I/O/contextos foram fakes. Para `escolha/gps_ausente`, I sem T e validada: C6=False, materialização=True, chamadas capturadas de reconciliação/lavra/save, via final `chamado_encerrado`, nenhum erro. Seleção SQL real, banco, ocorrência e quantidade em produção: [não verificado].
-
-Sobre os testes: [nao verificado]
-
-- `e4_apoio.juiz_respondida` executa o juiz **real extraído da fonte**, com `texto_vazio` real; não reimplementa a expressão (`app/chamados/tests/e4_apoio.py:8`, `app/chamados/tests/e4_apoio.py:19`). `fonte_real` também respeita mutações em memória (`app/chamados/tests/e4_catracas.py:8`).
-- `test_e3_degrau_dono_e_porta` conserva sujeito e assertions de partição, carga, C6 e relógio; acrescenta texto ao instante que representa resposta legal (`app/chamados/tests/test_e3_degrau_dono_e_porta.py:262`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:289`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:320`).
-- `test_e1_v10` modifica somente `_ln`, dando instante à fixture textual; assertions de mérito/partição/retratação permanecem (`app/chamados/tests/test_e1_v10.py:118`, `app/chamados/tests/test_e1_v10.py:143`, `app/chamados/tests/test_e1_v10.py:169`).
-- `test_e4b_c12_orm` troca explicitamente o cenário geral do desligamento para resposta legal num dia aberto adicional (`app/chamados/tests/test_e4b_c12_orm.py:59`, `app/chamados/tests/test_e4b_c12_orm.py:148`). Isso explica conservar chamado aberto/zero Pauta (`app/chamados/tests/test_e4b_c12_orm.py:171`). O cenário ilegal anterior continua em teste separado, com fechamento da disputa/chamado, via `admin_decidiu`, zero Pauta e exportação/fechamento intactos (`app/chamados/tests/test_e4b_c12_orm.py:207`). A alteração reflete L-130 quanto à retenção, porém `test_RED_desligamento` deixa de exercitar emissão de Pauta nesse gatilho (`app/chamados/tests/test_e4b_c12_orm.py:174`). Mordida atual dos mutantes ORM: [não verificado].
-- Há enfraquecimento objetivo adicional: `test_o261_resposta_vazia` passa de comparação do estado inteiro para apenas I e T; perde assertions sobre validação/materialização/via e também remove a assertion de disputa aberta sem acrescentar a de disputa fechada (`app/chamados/tests/test_o261_resposta_vazia.py:74`, `app/chamados/tests/test_o261_resposta_vazia.py:113`). Parte da mudança se justifica pelo novo fecho; a cobertura ficou menor.
-- O teste sentinela novo prova delegação da property e evita cópia que apenas produza os mesmos valores (`app/chamados/tests/test_f1nova_b2_leitores.py:87`).
-- O teste de face SQL negada inclui NBSP e compara conjuntos pk a pk (`app/chamados/tests/test_f1nova_b2_leitores.py:134`); execução ORM: [não verificado].
-
-Validação sem banco executada: `PYTHONPATH=app python3 -B -m unittest chamados.tests.test_e3_catraca_respondedores` → **17 testes, OK, rc0**. O zero dessa catraca não certifica “todo leitor usa o juiz”: uma expressão própria que mencione I e T recebe papel `PAR` e fica fora de `RESPONDEDOR` (`app/chamados/tests/test_e3_catraca_respondedores.py:381`).
-
-## 16/11 23:47 · sessao 0e37165938ec · - · - · origem=Ronald (tmux)
-
-Achado remanescente: há decisão própria de produção fora de C21, embora equivalente no resultado. `espera_o_texto_do_colaborador()` retorna `p.respondida_em is None or respondida_sem_texto(p)`, em vez de delegar a `not pergunta_respondida(p)`. Alimenta `resposta_enviada`, aviso/correção do cartão e `_calados`, que alimenta pauta da supervisão. Deve migrar por unicidade; não é exposição do cru. (`app/chamados/services/fio.py:177`, `app/chamados/services/fio.py:187`, `app/chamados/services/fio.py:359`, `app/chamados/services/fio.py:386`, `app/chamados/services/cobranca.py:227`, `app/chamados/services/cobranca.py:241`.)
-
-Classificação dos demais usos diretos encontrados:
-
-| Sítio | Classificação |
-|---|---|
-| `app/api/views.py:1165`, `app/api/views.py:2563`; `app/api/views_mensageria.py:569` | Serialização do instante, legítima; não decide respondida. |
-| `app/chamados/veredito_lavrado.py:207`; `app/chamados/services/painel.py:67`; `app/chamados/services/verbos.py:344`; `app/chamados/services/validacao.py:1256` | Tempo, Max, idade e ordenação: legítimos. |
-| `app/chamados/models.py:4095`, `app/chamados/models.py:4102`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`; `app/chamados/services/historico.py:99` | Trilha/projeção de ato ocorrido, legítima; não substituir pela situação atual C21. |
-| `app/chamados/models.py:3241`, `app/chamados/models.py:3242`; `app/chamados/models.py:3371`; `app/chamados/models.py:3586` | Porta de escrita, construção/conferência do par: legítimos. |
-| `app/chamados/services/disputa_emissao.py:1663` | Preservação do texto existente na resposta automática: legítima proteção de conteúdo, inclusive legado; não transformar em C21 e permitir sobrescrever texto sem I. |
-| `app/chamados/services/disputa_emissao.py:1692`; `app/chamados/management/commands/curar_perguntas_em_limbo.py:46` | Cura histórica do meio-par e conferência da lista fixa: legítima pergunta de integridade/trilha. |
-| `app/chamados/services/disputa_emissao.py:1861` | Detecta limbo para impedir reabertura e preservar texto; legítima integridade, embora possa chamar `texto_sem_carimbo`. |
-| `app/chamados/services/disputa_emissao.py:2079` | Texto para relato do ato e porta que carimba resposta: legítimo contexto de escritor. |
-| `app/chamados/management/commands/auditar_invariantes_chamados.py:1106` | Alarme legado de meio-par: não é decisão respondida. Contudo usa `!= ''`, sem trim; também conta espaço/NBSP sem I como “preenchida”, divergindo da integridade L130. |
-| `app/chamados/services/vigia_fio.py:747`, `app/chamados/services/vigia_fio.py:750` | Censo de integridade I sem T, com `texto_vazio` real: legítimo. |
-| `app/chamados/models.py:3692`; `app/templates/chamados/partials/_card_atendimento.html:141`, `app/templates/chamados/partials/_card_atendimento.html:182`; seletores em `:114` e `:154` | Renderização/seleção do conteúdo cru: legítimos para esse propósito. As frases “Você respondeu”/“Sua resposta” ainda aparecem por texto truthy, independentemente de I. |
-| `app/chamados/services/fio.py:377`; `app/chamados/templatetags/chamados_tags.py:139` | Guarda conservadora de indisponibilidade da testemunha de aplicação, não classificação geral de respondida: legítima. |
-| `app/chamados/templatetags/chamados_tags.py:166`; `app/chamados/services/materializacao.py:770` | Atalho por ausência de conteúdo para análise/parsing da hora: legítimo; não afirmar C21 por ele. |
-| `app/chamados/services/validacao.py:467`, `:1183`, `:1194`; `app/chamados/services/materializacao.py:625`, `:953`, `:1562` | Interpretação do valor (folga, escape, hora/data), legítima. |
-| `app/chamados/services/acoes_disputa.py:357`; `app/ponto/services/dia_do_colab.py:70` | Foto/texto exibido ou conservado: legítimos. |
-
-Os templates que decidem estado por `.respondida` passam pela property delegadora (`app/templates/chamados/partials/modal_fio.html:217`; `app/templates/chamados/partials/_pergunta_card.html:24`; `app/chamados/models.py:3664`). Não encontrei `~q_respondida_com_texto()` executável nos leitores pesquisados; há menção proibitiva na docstring (`app/chamados/juizes.py:1585`). A varredura global dos campos não encontrou usos executáveis adicionais em folha/escala/ferias fora das famílias catalogadas; isso é alcance de busca, não prova dinâmica. [não verificado]
-
-NBSP está contemplado no código: Python usa `.strip()`; SQL constrói a classe completa a partir de `str.isspace()`, em vez de `\s` do banco. As faces positiva e negativa empregam essa mesma classe (`app/chamados/juizes.py:1528`, `app/chamados/juizes.py:1552`, `app/chamados/juizes.py:1560`, `app/chamados/juizes.py:1580`, `app/chamados/juizes.py:1590`). Há teste pk a pk da face negativa com `' \xa0 '` e testes da face positiva/ilegais, mas não executei testes de banco (`app/chamados/tests/test_f1nova_b2_leitores.py:137`; `app/chamados/tests/test_e3_forma_sql_do_juiz.py:89`; `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:34`). Execução SQL nesta cópia: [não verificado].
-
-O selo de respondedores tem ponto cego concreto: conta apenas decisões sobre `respondida_em`, considera `PAR` qualquer expressão que também leia texto, e o teste explicitamente preserva `espera_o_texto_do_colaborador` nessa classe. Logo zero não significa “todos delegam ao juiz”; um clone de I∧T continua verde (`app/chamados/tests/test_e3_catraca_respondedores.py:51`, `:356`, `:381`, `:505`, `:512`). A mudança de `PAROU_EM` para zero não fortaleceu esse contrato (`app/chamados/tests/test_e3_catraca_respondedores.py:54`).
-
-Executei o módulo sem banco e sem bytecode: 17 testes, OK, rc=0. O resultado da execução não tem artefato porque a tarefa proíbe criar arquivos. [não verificado] [nao verificado]
-
-_6244 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6248 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
