@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 19:51:16.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (11.8 MB). Acoes na janela: **384**.
+**Medido em 17/11/2026 19:56:47.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (12.4 MB). Acoes na janela: **389**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:53:22 | Bash | Push progress and hook | `cd /home/ronald/saas-hasner; tail -2 logs/PORTA-EXPORT/v5/push_ba4cb6c3c.log \| cut -c1-120; kill -0 1163738 && echo push-vivo; echo '{}' \| python3 bin/hook_stop_fila1.py \| head -c 200` |
+| 19:53:20 | Bash | Add BACKLOG item for PORTA-TELA | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/BACKLOG.md'; L=open(r,encoding='utf-8').read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PORTA-DO-EXPORT-SEM-BECO \|')][0] print(L[i].count('\|')) cols=L[i].count('\|')-1 cells=['PORTA-TELA-ESTADO-NO-PREVIEW','aval PORTA-TELA-1711-1955 item 1 (logs/AVAIS-1515/porta_tela_1711_1955.txt); lateral de tela, copia propria; pou ...` |
+| 19:53:15 | Bash | Locate PORTA-EXPORT backlog rows | `cd /home/ronald/saas-hasner; /bin/grep -n "PORTA-DO-EXPORT\\|ESPURIAS\\|[nome]" app/docs/BACKLOG.md \| head -6 \| cut -c1-260; sed -n 714,716p app/docs/BACKLOG.md \| cut -c1-200` |
+| 19:53:12 | Bash | Find BACKLOG OBRAS rows | `cd /home/ronald/saas-hasner; /bin/grep -n "^\| PORTA\\|^\| [nome]\\|OBRAS" app/docs/BACKLOG.md \| head -8 \| cut -c1-200` |
+| 19:53:09 | Bash | Save aval, PROMPTS, launch Codex revisao | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/porta_tela_1711_1955.txt <<'EOF' aval Ronald: PORTA-TELA-1711-1955 (17/11 19:55) -- UNIDADE: estado da porta do export por empresa e competencia, mostrado ao admin. Nenhuma lei nova. COMPLEMENTO do RESPOSTAS-1711-1655 item 5: responde o AVAL-DEVOLVIDO item 5 (P5.1 a P5.5) e a PERGUNTA DE DESENHO do achado 3. NAO alcanca o produto da PORTA ja no ar ...` |
 | 19:48:31 | Bash | Point ESPERANDO at real push pid | `cd /home/ronald/saas-hasner; sed -i "3s/.*/ESPERANDO: push.sh \| pid=1163738/" app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py \| head -c 200` |
 | 19:48:28 | Bash | Check ESPERANDO pid alive | `cd /home/ronald/saas-hasner; sed -n 3p app/docs/RELATO.md; P=$(pgrep -f "bin/push.sh" \| head -1); echo P=$P; ps -p $P -o pid,cmd \| tail -1` |
 | 19:48:26 | Bash | Hook check | `cd /home/ronald/saas-hasner; echo '{}' \| python3 bin/hook_stop_fila1.py \| head -c 200` |
