@@ -1,7 +1,103 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 03:37** · publicado em **17/11/2026 03:39** (UTC-3)
+> Ultima resposta processada: **17/11/2026 03:42** · publicado em **17/11/2026 03:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 03:42 · sessao 170bd6b657ed · O10-D-PERMUTA-RECIPROCA · verificador · origem=Code
+
+**Parecer: não aprovar como fechamento integral.** O delta corrige a inversão local contra edição/regeneração de células existentes, mas mantém ciclos com células ausentes e com caminhos que começam pelo Colaborador. A alegada “ordem da casa” não corresponde a todas as transações existentes. (`delta_v3.patch:+744`; `delta_v3.patch:+1000`; `app/colaboradores/services/desligamento.py:128`; `app/ponto/services/cadastro_futuro.py:31`.)
+
+Referências `app/...:N` apontam à cópia original; `delta_v3.patch:+N`, à numeração de destino do anexo aplicado mentalmente. Execução de testes, reprodução concorrente, DDL efetivo e ocorrência em produção: **[nao verificado]**. [nao verificado]
+
+**1. Tabela de ordem de trava**
+
+Notação: **A** = Ausencia; **X** = CelulaDia; **C** = Colaborador; **D/H/P** = Disputa/Chamado/Pergunta. A autoridade ordena C e depois D/H/P por PK; ordenar uma chamada não ordena todas as aquisições da transação. (`app/chamados/models.py:2757`; `app/chamados/models.py:2771`; `app/chamados/models.py:2780`; `app/chamados/models.py:2793`; `app/chamados/models.py:2797`.)
+
+| Caminho | Sequência efetiva |
+|---|---|
+| `permutar_plantoes`, com delta | **A por PK → X existentes por colaborador/data → C por PK → trocas internas → criação/edição de X → H**, quando o marcador encontra cobrança elegível. As trocas internas retomam travas já adquiridas; X ausente só nasce depois de C. (`delta_v3.patch:+1000`; `delta_v3.patch:+1013`; `app/ponto/portas/celula.py:1018`; `app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:672`.) |
+| `trocar_plantao` isolada, com delta | **A por PK → X existentes por colaborador/data → C por PK → criação/edição dos dois X → H**, condicional ao marcador. (`delta_v3.patch:+734`; `delta_v3.patch:+752`; `delta_v3.patch:+756`; `app/ponto/portas/celula.py:751`; `app/ponto/portas/celula.py:672`.) |
+| `editar_dia` direto | **X existente por `FOR UPDATE`, ou INSERT de X ausente → C → H**, estes dois últimos somente se houver cobrança órfã elegível. O rabo fica depois do atomic próprio; atomic externo pode conservá-lo na mesma transação. (`app/ponto/portas/celula.py:637`; `app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:676`; `app/chamados/models.py:487`.) |
+| `regenerar_celulas_vinculo` isolada | Leitura inicial **sem trava → INSERT/UPDATE dos X em ordem de data → C → H**, se o marcador for elegível. O marcador recebe dias **reescritos**, não os meramente criados. O rabo fica depois do atomic próprio. (`app/ponto/portas/celula.py:226`; `app/ponto/portas/celula.py:227`; `app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:311`; `app/ponto/portas/celula.py:328`; `app/ponto/portas/celula.py:393`.) |
+| Command `gerar_celulas` | Um atomic envolve **regeneração de hoje por colaborador crescente → geração do período**. Pode conservar **X de A → C de A → X de B → C de B → mais X da geração**. Portanto não é simplesmente “todos os X antes de todos os C”. (`app/ponto/management/commands/gerar_celulas.py:319`; `app/ponto/management/commands/gerar_celulas.py:323`; `app/ponto/management/commands/gerar_celulas.py:345`; `app/ponto/management/commands/gerar_celulas.py:349`.) |
+| `gerar_celulas_periodo` | Leitura sem trava → **INSERT de X ausente / UPDATE de DNA antigo nulo**. Atomic próprio e pedido explícito de C: **não achei**. Se chamado pelo command, herda as travas anteriores dele. (`app/ponto/portas/celula.py:1201`; `app/ponto/portas/celula.py:1218`; `app/ponto/portas/celula.py:1230`; `app/ponto/management/commands/gerar_celulas.py:345`.) |
+| `decidir(Ausencia)` | Atomic → **UPDATE de A → post_save síncrono → cartório**. O cartório pode fazer **C/H → UPDATE de X** durante emissão; também pode escrever X antes de uma reconciliação que pede C. Não tem uma sequência única A→X→C. (`app/ponto/services/ausencia.py:1079`; `app/ponto/services/ausencia.py:1088`; `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`; `app/ponto/services/cartorio.py:1791`; `app/ponto/services/cartorio.py:1873`; `app/ponto/services/cartorio.py:1007`.) |
+| `mudar_estado` direto | Não abre atomic próprio. **A → cartório → demais travas na mesma transação** exige atomic externo. O consumidor `on_commit` é outro momento, distinto do cartório síncrono. (`app/ponto/services/ausencia.py:955`; `app/ponto/services/ausencia.py:988`; `app/ponto/signals.py:147`; `app/ponto/signals.py:272`.) |
+| Desligamento | **C → UPDATE de vínculo → X futuros gerados por data**, conservados no atomic do desligamento. (`app/colaboradores/services/desligamento.py:128`; `app/colaboradores/services/desligamento.py:133`; `app/colaboradores/services/desligamento.py:148`; `app/colaboradores/services/vinculo.py:641`; `app/colaboradores/services/vinculo.py:662`; `app/ponto/services/cadastro_futuro.py:31`.) |
+| Lançamento INSS | **C → criação/reabertura de A → post_save/cartório → X**, dentro do atomic da view. (`app/ponto/views.py:2544`; `app/ponto/views.py:2546`; `app/ponto/views.py:2547`; `app/ponto/views.py:2564`.) |
+| Escrita/transição de Chamado | **C → D/H/P conforme a operação → cartório síncrono → X**, quando a mudança de estado exige julgamento. (`app/chamados/models.py:290`; `app/chamados/models.py:487`; `app/chamados/signals.py:189`; `app/chamados/signals.py:218`; `app/ponto/portas/celula.py:1267`.) |
+| `regenerar_futuras_do_cadastro` | **X futuros existentes por data → regeneração de cada dia → C/H**, se o marcador alcançar cobrança elegível. (`app/ponto/services/cadastro_futuro.py:30`; `app/ponto/services/cadastro_futuro.py:36`; `app/ponto/services/cadastro_futuro.py:44`; `app/ponto/portas/celula.py:328`.) |
+| Foto futura de folgas | **X futuros → FolgaDia → regeneração futura**, conservando as travas de X. (`app/escala/folgas.py:620`; `app/escala/folgas.py:621`; `app/escala/folgas.py:639`; `app/escala/folgas.py:640`.) |
+| Restauração de snapshot | **EscalaColaborador por PK → X que referenciam vínculos removidos → DELETE/UPDATE dos vínculos → regeneração futura**. O chamador ainda pode escrever nota/transição de Chamado no atomic externo. (`app/colaboradores/services/vinculo.py:1017`; `app/colaboradores/services/vinculo.py:1020`; `app/colaboradores/services/vinculo.py:1025`; `app/colaboradores/services/vinculo.py:1035`; `app/chamados/services/acoes_chamado.py:142`; `app/chamados/services/acoes_chamado.py:153`.) |
+| Salvamento de template | Atomic envolvendo várias regenerações: pode acumular **X/C de A antes de pedir X de B**, como o command. (`app/escala/services/cadastro_tipo.py:140`; `app/escala/services/cadastro_tipo.py:323`; `app/escala/services/cadastro_tipo.py:339`; `app/escala/services/cadastro_tipo.py:353`.) |
+| Cancelamento de férias | **A por PK → saves → cartório síncrono**, com os sufixos condicionais já descritos. (`app/ponto/services/ausencia.py:1484`; `app/ponto/services/ausencia.py:1488`; `app/ponto/services/ausencia.py:1498`.) |
+| Reversão de regeneração / lavra / carimbo | UPDATE de X; reversão tem rabo depois do atomic próprio. Lavra e carimbo herdam as travas do chamador; `salvar_e_emitir` não impõe ordem anterior de C. (`app/ponto/portas/celula.py:1130`; `app/ponto/portas/celula.py:1140`; `app/ponto/portas/celula.py:1162`; `app/ponto/portas/celula.py:1266`.) |
+
+**Pares envolvendo permuta/troca**, consideradas suas invocações isoladas, sem travas prévias do chamador:
+
+| Par | Resultado com o delta |
+|---|---|
+| Permuta×permuta; permuta×troca; troca×troca | Com conjuntos estáveis e apenas essas portas, ciclo: **não achei**. Os prefixos são ordenados e a criação ocorre depois da trava comum de C. Isso não demonstra segurança perante os outros caminhos. (`delta_v3.patch:+752`; `delta_v3.patch:+756`; `delta_v3.patch:+1000`; `delta_v3.patch:+1013`.) |
+| Permuta/troca×edição direta, X existente | A inversão simples da v2 fecha: ambas chegam a X antes de C. Ciclo nesse prefixo isolado: **não achei**. X ausente muda o resultado, abaixo. (`app/ponto/portas/celula.py:638`; `app/ponto/portas/celula.py:672`; `delta_v3.patch:+752`; `delta_v3.patch:+1013`.) |
+| Permuta/troca×regeneração isolada, todos os X existentes | No prefixo de um colaborador, as células são adquiridas antes de C e por data; ciclo local: **não achei**. Atomic externo, criação e acumulação de colaboradores precisam da análise separada abaixo. (`app/ponto/portas/celula.py:228`; `app/ponto/portas/celula.py:311`; `app/ponto/portas/celula.py:328`.) |
+| Permuta/troca×command ou salvamento de template | **Ciclo possível:** G reescreve A/hoje e segura C_A; P segura A/futuro e B/hoje e espera C_A; G avança e espera B/hoje. O bloqueio de P ocorre antes das barreiras. (`app/ponto/management/commands/gerar_celulas.py:321`; `app/ponto/management/commands/gerar_celulas.py:345`; `app/ponto/portas/celula.py:328`; `delta_v3.patch:+1010`; `delta_v3.patch:+1013`.) |
+| Permuta/troca×decisão da **mesma carta** | O ciclo simples A↔C da v2 fica serializado pela carta antes de X/C. Outros recursos anteriores do chamador: **[nao verificado]**. (`delta_v3.patch:+735`; `delta_v3.patch:+1008`; `app/ponto/services/ausencia.py:988`.) |
+| Permuta/troca×decisão de **outra ausência** do mesmo colaborador | **Ciclo possível:** P segura X; decisão de outra A emite cobrança e segura C; P espera C; decisão espera X para carimbar. (`delta_v3.patch:+1013`; `app/ponto/services/cartorio.py:1791`; `app/chamados/models.py:952`; `app/ponto/services/cartorio.py:1873`.) |
+| Permuta/troca×desligamento | **Ciclo possível:** P segura X futuro gerado; desligamento segura C; desligamento espera X; P espera C. Não exige célula ausente nem marcador elegível na permuta. (`delta_v3.patch:+1010`; `delta_v3.patch:+1013`; `app/colaboradores/services/desligamento.py:133`; `app/colaboradores/services/desligamento.py:148`; `app/ponto/services/cadastro_futuro.py:31`.) |
+| Permuta/troca×INSS ou transição de Chamado com cartório | **Ciclo possível pelo mesmo X↔C:** o outro caminho pode possuir C antes de pedir X. Na reabertura de A também pode haver A↔C se for uma carta já retida pela troca. (`app/ponto/views.py:2546`; `app/ponto/views.py:2547`; `app/chamados/models.py:290`; `app/chamados/signals.py:218`; `delta_v3.patch:+756`.) |
+| Permuta/troca×escrita somente de C | Sem pedido posterior de A/X, ciclo: **não achei**; há espera unilateral. (`app/colaboradores/services/colaborador.py:131`; `app/colaboradores/services/colaborador.py:136`; `delta_v3.patch:+1013`.) |
+| Permuta/troca×lavra/carimbo somente de X | Sem pedido posterior de C ou outro recurso retido pela permuta, ciclo: **não achei**. Se o chamador já detém C, é o caso anterior de X↔C. (`app/ponto/portas/celula.py:1266`; `app/chamados/signals.py:218`.) |
+
+Para os demais pares, o mesmo cruzamento está presente em **edição ou regeneração×desligamento/Chamado/decisão emissora**: E/R segura X e pede C; o outro segura C e pede X. Em **edição/regeneração×command/template**, o command pode reter C de uma etapa e pedir X que E/R retém. São ciclos condicionados aos marcadores/emissões indicados, não observações de produção. (`app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:328`; `app/ponto/management/commands/gerar_celulas.py:321`; `app/chamados/models.py:952`; `app/ponto/services/cadastro_futuro.py:31`.)
+
+Entre duas edições diretas de uma célula cada, duas regenerações isoladas do mesmo colaborador em ordem de data, ou duas operações que adquirem somente C: ciclo concreto **não achei**. Para as demais combinações dos caminhos compostos do inventário, **não achei demonstração completa de ausência de ciclos**; os atomics externos impedem concluir segurança apenas pela ordem de uma função interna. (`app/ponto/portas/celula.py:638`; `app/ponto/portas/celula.py:228`; `app/ponto/portas/celula.py:393`; `app/chamados/models.py:2771`.)
+
+**2. Célula ausente: o delta não fecha o problema global**
+
+`SELECT FOR UPDATE` das existentes não reserva a chave da célula ausente; os três criadores usam `create`, e o modelo declara unicidade por colaborador/data. A trava de C só serializa os escritores que a adquirem **antes** de criar. (`app/ponto/portas/celula.py:638`; `app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:1218`; `app/escala/models.py:1833`; `delta_v3.patch:+1013`.)
+
+| Par e interleaving concreto | Comparação com o hash |
+|---|---|
+| **P/T×edição:** P consulta X ausente; E insere X; P trava C; E encontra cobrança órfã e espera C; P tenta inserir X e espera a transação de E pela unicidade. | **Piora esse interleaving.** No hash, sem aquisição anterior de C pelo marcador de outra célula, P esperaria X enquanto E obteria C e terminaria. O delta passa a exigir C antes dessa criação. (`app/ponto/portas/celula.py:645`; `app/ponto/portas/celula.py:672`; `app/chamados/models.py:487`; `delta_v3.patch:+1013`; `app/escala/models.py:1833`.) |
+| **P/T×regeneração:** R insere X e reescreve outro dia Y; P não vê X, trava C e tenta criar X; R chega ao marcador de Y e espera C. | **Piora esse interleaving**, quando o hash ainda não tinha adquirido C por edição anterior. A criação de X, sozinha, não entra em `_reescritos`; Y é necessário para esse exemplo pelo marcador. (`app/ponto/portas/celula.py:294`; `app/ponto/portas/celula.py:317`; `app/ponto/portas/celula.py:328`; `delta_v3.patch:+1013`.) |
+| **P/T×geração/regeneração em atomic com vários X:** G insere X; P pretrava outro X existente Y e depois pede/cria X; G tenta atualizar Y. | **Empata quanto à existência desse ciclo:** a base já pretravava Y antes da criação de X. Acrescentar C não elimina X↔Y. No gerador de período, a atualização possível é o enriquecimento de DNA antigo nulo. (`app/ponto/portas/celula.py:984`; `app/ponto/portas/celula.py:1218`; `app/ponto/portas/celula.py:1230`; `app/ponto/portas/celula.py:311`.) |
+| **Permuta×permuta / permuta×troca**, criando células em etapas diferentes | **Melhora:** a trava comum de C agora antecede todas as criações dessas portas. Na base, a permuta compunha dois pares sucessivos e podia criar o segundo par depois de outra operação ter criado parte dele. (`app/ponto/portas/celula.py:1018`; `app/ponto/portas/celula.py:751`; `delta_v3.patch:+756`; `delta_v3.patch:+1013`.) |
+| **Troca isolada×troca isolada** | No caminho simples, ciclo original por criação em ordem oposta: **não achei**; a base já ordenava os dois lados por colaborador/data. Portanto não atribuo ao delta uma correção demonstrada desse par. (`app/ponto/portas/celula.py:751`.) |
+
+Há ainda uma hipótese independente do marcador: G insere X; P trava C e espera o INSERT de G pela unicidade; G precisa validar a FK de X para C e espera P. O modelo declara FK e unicidade, mas **DDL efetivo e momento dessa validação: [nao verificado]**. Não afirmo que o INSERT sempre peça essa trava imediatamente. Sob essa condição, o delta piora o par simples contra qualquer criador; a v2 já tinha o mesmo risco. (`app/escala/models.py:1681`; `app/escala/models.py:1833`; `delta_v3.patch:+756`; `delta_v3.patch:+1013`.)
+
+O hash também podia chegar a C por um marcador anterior; portanto “piora” acima significa **ampliar os interleavings que ciclam**, não afirmar que a base era livre de deadlocks. (`app/ponto/portas/celula.py:672`; `app/ponto/portas/celula.py:1018`.)
+
+**3. Situação dos itens 1, 2, 5 e 7 da volta 2**
+
+| Item | Veredito |
+|---|---|
+| **1 — validações e criação concorrente** | Mantém as correções de releitura do desligado, quatro documentos e rejeição. Conserva serialização entre permutas/trocas. **Não fecha** a criação ausente contra edição/geração/regeneração. A troca isolada continua sem barreiras de descanso. (`delta_v3.patch:+1013`; `delta_v3.patch:+1027`; `delta_v3.patch:+757`; `app/ponto/portas/celula.py:753`; `app/ponto/portas/celula.py:902`.) |
+| **2 — ordem invertida** | **Fecha o contraexemplo local com X existente** de edição/regeneração e o ciclo simples com decisão da mesma carta. **Continua globalmente:** outra ausência, desligamento, INSS, Chamado e transações de várias etapas têm C antes de algum X posterior. Contra caminhos C→X, a v3 perde a serialização que C primeiro proporcionava na v2. (`delta_v3.patch:+752`; `delta_v3.patch:+1013`; `app/ponto/services/cartorio.py:1791`; `app/colaboradores/services/desligamento.py:148`; `app/ponto/management/commands/gerar_celulas.py:345`.) |
+| **5 — testes** | Melhora a discriminação da ordem v3 e acrescenta o caso A/B→B/A. **Continua sem demonstrar concorrência ou célula ausente.** A fragilidade de contar callbacks brutos também permanece: a trava registra sentinelas `on_commit`. (`delta_v3.patch:+333`; `delta_v3.patch:+380`; `app/chamados/services/trava_do_colaborador.py:47`; `app/ponto/tests/test_o10d_permuta_reciproca.py:305`.) |
+| **7 — outros defeitos** | **Fecha a comparação de donos por conjunto.** Permanecem tipo/aprovação sem exigência, cartas como fatos de ausência, leitura antiga da regeneração, recusa de mesmo dia e idempotência insuficiente. (`delta_v3.patch:+742`; `app/ponto/portas/celula.py:227`; `app/ponto/portas/celula.py:897`; `app/ponto/portas/celula.py:975`; `app/ponto/portas/celula.py:1003`.) |
+
+**4. Os testes distinguem a volta 2?** [nao verificado]
+
+| Teste novo/reescrito | Contra o código da volta 2 | [nao verificado]
+|---|---|
+| Ordem carta→célula→Colaborador na permuta | **Falharia:** a v2 começava por Colaborador. (`delta_v3.patch:+352`; `delta_v3.patch:+359`.) |
+| Mesma ordem na troca isolada | **Falharia**, pelo mesmo motivo. (`delta_v3.patch:+352`; `delta_v3.patch:+371`.) |
+| Donos A/B→B/A | **Falharia:** conjuntos iguais não detectam papéis invertidos. (`delta_v3.patch:+380`; `delta_v3.patch:+742`.) |
+| Rejeitada na troca isolada | **Passaria:** a rejeição já era verificada na v2. É regressão adicional, não discriminador da v3. (`delta_v3.patch:+757`; `delta_v3.patch:+396`.) |
+| Desligado no banco, rejeitada na permuta, quatro documentos antes da primeira troca | **Passariam:** são correções acumuladas da v2. (`delta_v3.patch:+219`; `delta_v3.patch:+256`; `delta_v3.patch:+266`.) |
+| Rollback com segunda recusa forjada | **Passaria:** o atomic e a conversão da segunda recusa já existiam. O teste executa a primeira troca real e exige trilha antes de forjar a segunda recusa. (`delta_v3.patch:+290`; `app/ponto/portas/celula.py:972`; `app/ponto/portas/celula.py:1019`.) |
+
+**Não passam vazios por falta de células na fixture:** a base gera as células de setembro até dezembro, e os testes de ordem usam novembro. Contudo, o helper reconhece a presença do SQL `FOR UPDATE`, não a quantidade de linhas retornadas; uma consulta vazia também acrescentaria “celula” à ordem. Teste concorrente com segunda conexão/célula ausente: **não achei no delta**. (`app/ponto/tests/test_o10b_editar_dia_troca.py:91`; `app/ponto/tests/test_o10b_editar_dia_troca.py:93`; `app/ponto/tests/test_o10d_permuta_reciproca.py:48`; `delta_v3.patch:+333`; `delta_v3.patch:+352`.)
+
+**5. Quem escreve, quem lê e qual significado**
+
+| Campo/valor | Escritores encontrados | Leitores e divergência |
+|---|---|---|
+| `Ausencia.colaborador` | A criação atribui o dono e salva. Escritor de produção que **transfira** uma ausência existente: **não achei**; o editor normal não altera esse campo. (`app/ponto/services/ausencia.py:484`; `app/ponto/services/ausencia.py:562`; `app/ponto/services/ausencia.py:648`.) | Troca lê dono como papel cedente/substituto; cobertura e sobreposição leem como pessoa ausente. O par ordenado corrige a identidade dos papéis recebidos. (`delta_v3.patch:+734`; `delta_v3.patch:+742`; `app/ponto/turnos.py:2543`; `app/ponto/turnos.py:2839`.) |
+| `Ausencia.status` | Estado inicial na criação; `mudar_estado`; decisão; cancelamento de férias grava rejeitada. (`app/ponto/services/ausencia.py:475`; `app/ponto/services/ausencia.py:486`; `app/ponto/services/ausencia.py:976`; `app/ponto/services/ausencia.py:1496`.) | Delta exclui só rejeitada; folha exige aprovada; cobrança/sobreposição consideram não rejeitadas. **Não rejeitada não significa aprovada.** (`delta_v3.patch:+757`; `delta_v3.patch:+
+
+[truncado em 20000 de 24725 caracteres]
 
 ## 17/11 03:37 · sessao 466bb7bb03cb · - · - · origem=Ronald (tmux)
 
@@ -796,28 +892,4 @@ As partições fecham: 40+10+1+9=60; 60+19=79; 79+0+84+0=163. São relações do
 
 Não há evidência de script abortado: os números solicitados dos scripts 1–4 e `rc_sombra=0` estão no dado; confirmação independente da execução: **[nao verificado]**. Script 5 foi explicitamente excluído, não falhou **[nao verificado]**. Falta número próprio para divergências de marco e exceções engolidas pelo adaptador: `U1_falhas_juiz_lastro=0` não mede esses eventos. (`app/core/observ.py:75`, `:77`; `app/chamados/templatetags/chamados_tags.py:135`, `:137`.)
 
-## 17/11 01:34 · sessao 19c1683c44fa · - · - · origem=Ronald (tmux)
-
-Somente leitura; conclusões das sondas 1 e 4:
-
-| NUMERO recebido | Interpretação e efeito em §4/§5 | Código atual |
-|---|---|---|
-| `backfill_recorte_linhas_resposta = 2992` | Linhas RESPOSTA propostas no recorte do comando; confirma existência e dimensiona projeção sem correspondência na sequência. Dimensiona §4 e R1b de §5; não fecha o antigo oráculo de fold. Valor recebido: [nao verificado] | `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`; `app/chamados/models.py:4098` |
-| `backfill_recorte_linhas_validacao = 2248` | Mesmo recorte, linhas VALIDACAO propostas. Dimensiona a conservação necessária; não significa 2248 perguntas adicionais. Valor recebido: [nao verificado] | `app/chamados/models.py:4102` |
-| `backfill_recorte_perguntas = 3023` | Perguntas distintas com ao menos uma das duas faltas. O recorte inclui horizonte L-124, perguntas sem dia e conversas. Valor recebido: [nao verificado] | `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:59` |
-| `projecao_integral_linhas_resposta = 16941` | Linhas RESPOSTA propostas sobre todas as perguntas percorridas pela sonda; dimensiona estoque integral, além do recorte. Valor recebido: [nao verificado] | `app/chamados/models.py:4091`; `app/chamados/models.py:4098` |
-| `projecao_integral_linhas_validacao = 15115` | Linhas VALIDACAO propostas no universo integral. Valor recebido: [nao verificado] | `app/chamados/models.py:4102` |
-| `projecao_integral_perguntas = 16972` | Perguntas distintas com alguma falta no universo integral. Recorte e integral não se somam, pois a função de domínio é a mesma e o comando restringe a seleção. Valor recebido: [nao verificado] | `app/chamados/management/commands/backfill_decisoes_pergunta.py:56`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`; `app/chamados/models.py:4089` |
-| `ressuscitacao_atual_chamados = 730` | Chamados com lista não vazia da porta hoje; dimensiona a dependência herdada de ressuscitação em §4. Valor recebido: [nao verificado] | `app/chamados/models.py:1501`; `app/chamados/models.py:1507` |
-| `ressuscitacao_atual_perguntas = 2025` | Perguntas distintas que a porta selecionaria; não demonstra que foram ressuscitadas. Valor recebido: [nao verificado] | `app/chamados/models.py:1502`; `app/chamados/models.py:1530`; `app/chamados/models.py:1557` |
-| `ressuscitacao_atual_colaboradores = 119` | Pessoas distintas abrangidas pelas 2025 perguntas; dimensiona alcance da pendência herdada. Não fornece lista individual. Valor/lista: [nao verificado] | `app/chamados/models.py:1507` |
-
-A falta de linha é definida por correspondência de **pergunta, ato e instante**, e não por inexistência de qualquer RESPOSTA/VALIDACAO. A função conserva o texto atualmente projetado; não recupera resposta antiga já sobrescrita. (`app/chamados/models.py:4082`; `app/chamados/models.py:4087`; `app/chamados/models.py:4094`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:13`.)
-
-O universo da ressuscitação exige materialização presente e texto `NULL` ou `''`, exclui vias fora do fato, pula marco já aceso e consulta C6 sobre cópia em memória após a limpeza. Portanto, os 2025 não são censo de toda resposta vazia, nem de todos os pares ilegais da L-130. (`app/chamados/models.py:1530`; `app/chamados/models.py:1533`; `app/chamados/models.py:1535`; `app/chamados/models.py:1550`; `app/chamados/models.py:1553`; `app/chamados/models.py:1557`.)
-
-Os números da sonda 4 **dimensionam**, sem resolver “deveria voltar ao colaborador?”. Essa lei continua expressamente não decidida; a implementação conserva a fila atual, limpa o par inteiro e registra previamente as linhas projetadas faltantes, sem usar REABERTURA para mudar o dono. (`app/docs/CORTES.md:488`; `app/docs/LEIS.md:151`; `app/chamados/models.py:1613`; `app/chamados/models.py:1622`; `app/chamados/models.py:1629`.)
-
-Essas duas sondas, por seus predicados, não acrescentam pergunta própria de lei F7 nem novo caso de RED: R1b permanece dimensão de conservação, sem prova do antigo fold; ressuscitação continua dependência herdada. Contagem final depende da conferência das demais sondas e do código atual dos dois REDs. (`app/chamados/models.py:4087`; `app/docs/CORTES.md:488`.)
-
-_6315 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6316 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
