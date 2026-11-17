@@ -15,17 +15,17 @@
 | ESPINHA-E | 75 | 75 |
 | 20/20 | 5 | 4 |
 | LATERAL-ESTRUTURA | 154 | 154 |
-| INSTRUMENTO | 179 | 179 |
+| INSTRUMENTO | 180 | 180 |
 | UI | 39 | 39 |
 | CEREJA | 1 | 1 |
 | ? | 4 | 4 |
-| **total** | **457** | **456** |
+| **total** | **458** | **457** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 388; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 389; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
 fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 301 com a coluna
 
-resolve preenchido 12/457
+resolve preenchido 12/458
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -283,6 +283,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
+| ORACULO-E6-43-DEFEITOS | INSTRUMENTO | Faz o oraculo E6 seguir a lei da casa nos 43 dias que hoje acusa por defeito proprio (madrugada no dia do turno 17, pareamento posicional 11, corte por vao 3, pausa L-032 12). | - | CONTRATO-DE-INSTRUMENTO quando for a vez | ......... | REGISTRADA | logs/AVAIS-1515/espelho_verdade_na_brecha_1611.txt item 4; logs/ESPELHO-VERDADE-FECHO/V0/causas.md |
 | DESLIGADOS-RETIDOS-UNIVERSO | INSTRUMENTO | Faz a contagem de desligados retidos corresponder ao seu rótulo. | - | pouso LEI-DESLIGADO-NAO-TRAVA | .+....... | REGISTRADA | BACKLOG:736 |
 | RAIA-PREPARACAO | INSTRUMENTO | Prepara levantamentos e instruções para as próximas obras. | HJ-091 | marco LEI-DESLIGADO; sequência 1→4 | ++....... | REGISTRADA (levantamentos entregues) | BACKLOG:739; app/docs/RELATO.md:12; app/docs/RELATO.md:28 |
 | BO-[nome]-1311-ROTEIRO | INSTRUMENTO | Classifica os casos relatados e identifica o que falta resolver. | casos 01–10 | declaração do colaborador; projeção do retentor | ++....... | REGISTRADA (roteiro parcial) | BACKLOG:740; app/docs/RELATO.md:37 |
