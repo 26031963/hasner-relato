@@ -1,7 +1,418 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 14:52** · publicado em **17/11/2026 14:52** (UTC-3)
+> Ultima resposta processada: **17/11/2026 15:03** · publicado em **17/11/2026 15:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 15:03 · sessao 5dcc15cd69b2 · CENSO-FECHA-DE-VERDADE · verificador · origem=Code
+
+**AVAL-DEVOLVIDO nos itens 3, 4, 5 e CONTRATO**, pelas lacunas abaixo. Não devolvo novamente a completude ao portão nem exijo esperado zero para recusas informativas (`bin/disjuntor.py:674`; `app/docs/PISTA.md:173`; decisão do complemento fornecido: [nao verificado em arquivo local]).
+
+Revisão estática: os selos criam e apagam arquivos temporários; foram somente inspecionados. Resultado dos novos casos: **[nao verificado]** (`bin/tests/test_censo_antes_da_vaga.sh:27`, `28`; `bin/tests/test_disjuntor.sh:39`, `41`).
+
+**1 — forma dos caminhos**
+
+1. **Premissas:** o juiz atual verifica aparência de referência, sem conferir existência; o aperto proposto ainda precisa entrar nesse juiz. A cópia já possui `_sitio_existe`, portanto não falta um instrumento para verificar existência e limite da linha (`bin/disjuntor.py:1501`, `1565`, `674`).
+
+2. **Colisão:** não há incompatibilidade necessária em atribuir a completude à leitura do Codex: censo e rastreamento já pertencem a esse papel, e o escopo continua alcançando escritores e leitores fora do diff (`CLAUDE.md:358`, `379`). Conferir somente existência do `.r` não certifica seu conteúdo; essa limitação foi expressamente assumida no complemento **[nao verificado em arquivo local]**.
+
+3. **Literal:** “linha cabe” já tem definição operacional disponível: número inteiro positivo, até o total de quebras `LF`, acrescido de uma última linha sem quebra final. Arquivo vazio tem zero linhas; `x\n` tem uma; `x\ny` tem duas. O predicado também exige caminho relativo, dentro da raiz, sem symlink e legível (`bin/disjuntor.py:678`, `683`, `685`, `693`, `698`). Há casos e mutantes para zero, fim exato, além do fim e última linha sem quebra (`bin/tests/test_disjuntor.sh:714`, `720`, `1665`). Igualar contagens não comprova cobertura dos destinos; não devolvo essa objeção como completude automática, pois o complemento a retirou do portão **[nao verificado em arquivo local]**. A ligação desse predicado ao CENSO continua futura (`bin/disjuntor.py:1565`, `1577`).
+
+4. **Exportada/dinheiro/!:** verificar referências e existência do relatório não autoriza escrita de negócio; permanecem os limites de competência exportada, escala/vínculo e escopo literal (`CLAUDE.md:265`, `268`).
+
+**3 — busca fixa de ataques**
+
+1. **Premissas:** o juiz atual lê o brief e examina seu bloco; não pesquisa ataques nos logs. A busca fixa é alteração futura do mesmo juiz (`bin/disjuntor.py:1525`, `1544`, `1577`). Substituir comando declarado por termos literais fecha a objeção anterior de executar ou confiar no “grep usado” **[nao verificado em arquivo local]**.
+
+2. **Colisão:** responder achados anteriores é compatível com a revisão vigente. Cobrar resposta também para falso positivo é custo declarado no complemento, não colisão independente (`CLAUDE.md:373`, `375`; declaração desse custo: **[nao verificado em arquivo local]**).
+
+3. **Literal — PROCEDE:** o universo ainda não fecha: `logs/AVAIS-*` significa arquivos, diretórios percorridos recursivamente ou ambos? A pasta da obra inclui subpastas? `RELATO.md` significa o arquivo canônico `app/docs/RELATO.md`? Este último caminho existe como constante; o algoritmo de busca proposto permanece **[nao verificado]** (`bin/disjuntor.py:125`, `1525`, `1577`).
+
+   Também falta fixar se basta **qualquer** termo, sensibilidade à caixa, termo vazio, significado de N e consequência de arquivo ilegível ou busca interrompida **[nao verificado]**. “Busca fixa” impede executar o brief, mas ainda não especifica essas respostas.
+
+   **O próprio brief casa**, se todos os arquivos da pasta forem pesquisados: ele contém obrigatoriamente o ID entre os termos. Sem exclusão declarada, precisará de `respondido: <seu próprio caminho>`. Isso é atendível, não impossibilidade lógica; o achado efetivo depende do futuro algoritmo **[nao verificado]**. A coleta atual inclui justamente os briefs dessa pasta (`bin/disjuntor.py:1604`, `1613`).
+
+   O custo depende dos arquivos/bytes, termos e briefs julgados; repetir a busca por brief pode repetir a leitura do universo, pois a porta julga todos os coletados. Volume, duração e achados reais são **[nao verificado]** (`bin/disjuntor.py:1717`). Não há prova desses logs pelo material raspado fornecido; `logs/` é ignorado na cópia (`.gitignore:53`; `bin/codex_pergunta.sh:315`, `331`).
+
+4. **Exportada/dinheiro/!:** a busca textual não amplia autorização de negócio. O risco residual identificado é de alcance, recusa e custo do instrumento (`CLAUDE.md:265`, `268`; custo concreto: **[nao verificado]**).
+
+**4 — complemento como obra própria**
+
+1. **Premissas:** confirma o coletor preservado: todos os `brief*.md` da pasta literal da obra, unidos aos citados no **texto da abertura**. Não há coleta recursiva das citações encontradas dentro dos briefs (`bin/disjuntor.py:1587`, `1604`, `1607`, `1619`). No CLI, nomes e conteúdo dos anexos compõem esse texto (`bin/disjuntor.py:2296`, `2305`).
+
+2. **Colisão:** separar ID/pasta elimina a inclusão automática da pasta da mãe; voltar com o mesmo ID continua submetendo a pasta inteira ao juiz. Isso resolve aquela parte da devolução anterior sem mudar o coletor (`bin/disjuntor.py:1604`, `1619`, `1717`). O encaixe técnico de complemento continua atribuído à sessão (`CLAUDE.md:276`, `278`).
+
+3. **Literal — PROCEDE:** a forma do censo admite hífens indistintos; ela não separa `<MAE>` de `<COMPL>`. Por exemplo, `MAE-A-B` pode representar mãe `MAE-A` ou mãe `MAE`; critério de identificação, mãe ausente e múltiplas mães candidatas permanecem **[nao verificado]** (`bin/disjuntor.py:162`).
+
+   A pertença atual também não fornece herança por prefixo: a fronteira de ID exclui hífen, portanto reconhecer `MAE` não reconhece automaticamente `MAE-COMPL` (`bin/hook_stop_fila1.py:110`, `117`; `bin/disjuntor.py:1688`, `1689`).
+
+   “O complemento citar a mãe” precisa significar citação na abertura/anexo; somente escrever o caminho dentro de um brief descoberto pelo glob não a coleta. Exigir brief próprio continua sendo aperto da porta: hoje uma união composta apenas por brief citado de outra pasta pode passar (`bin/disjuntor.py:1611`, `1613`, `1715`). Preservar o coletor não impede cobrar essa condição, mas o reconhecimento necessário ainda não está fechado **[nao verificado]**.
+
+4. **Exportada/dinheiro/!:** herdar pertença não herda autorização adicional de negócio; permanecem os limites literais do aval (`CLAUDE.md:265`, `268`).
+
+**5 — uma pertença nas duas bocas**
+
+1. **Premissas:** a costura apontada confere: CLI e porta usam `_pertence_fila1`, mas o CLI retorna `FORA` antes da porta. Alterar somente `_censo_nega` deixa o escape identificado na revisão anterior (`bin/disjuntor.py:1707`, `2306`, `2307`, `2311`, `2315`). A fila viva vem do BACKLOG e do predicado de estado do hook (`bin/disjuntor.py:1630`, `1634`; `bin/hook_stop_fila1.py:180`, `250`).
+
+2. **Colisão:** a precedência explícita de fila 1 resolve tela∩fila1; distinguir CONDUTA de alcance do portão também responde à divergência anterior **[nao verificado em arquivo local: complemento fornecido]**. Não há necessidade de segunda pertença para isso (`bin/disjuntor.py:1672`, `1674`).
+
+3. **Literal — PROCEDE:** coluna 2 é `balde` nas tabelas de obras, mas não em toda tabela da GRADE: o placar usa coluna 2 numérica, e complementos têm tabela própria (`app/docs/GRADE-MESTRA.md:13`, `35`, `125`, `532`). Falta definir o universo de tabelas e o casamento entre o ID recebido e a coluna 1; ausência, qualificação, duplicatas, baldes divergentes e `?` ainda não têm resultado especificado **[nao verificado]**. O predicado atual só resolve ambiguidades das células da fila 1 (`bin/disjuntor.py:1675`, `1681`, `1694`).
+
+   “Ambígua = recusa” fixa a consequência, mas não quais situações tornam a GRADE ambígua **[nao verificado]**. Também falta resolver a combinação entre pertença própria e herdada: a GRADE contém mãe e complemento com baldes diferentes, portanto ler diretamente a linha do complemento pode contrariar a herança proposta (`app/docs/GRADE-MESTRA.md:119`, `531`, `534`). Filho na fila 1 e mãe fora exige precedência explícita entre os itens 4 e 5 **[nao verificado]**.
+
+4. **Exportada/dinheiro/!:** ampliar quem precisa de censo não amplia o aval de negócio (`CLAUDE.md:265`, `268`).
+
+**CONTRATO — medida**
+
+1. **Premissas:** negativas atuais são agregadas; uma recusa pode reunir motivos de vários briefs. Aprovação do brief, tentativa do wrapper e abertura Agent têm significados distintos (`bin/disjuntor.py:1714`, `1728`, `2072`, `2077`, `2104`, `2145`).
+
+2. **Colisão:** não procede exigir esperado zero para recusas informativas. O contrato pode ter contador auxiliar informativo e um indicador de segurança com esperado zero; a regra exige contador e esperado no contrato (`app/docs/PISTA.md:170`, `173`; nova distribuição dos indicadores: **[nao verificado em arquivo local]**).
+
+3. **Literal — PROCEDE:** “por motivo” ainda precisa definir a unidade: uma recusa com dois motivos conta em ambos, somente no primeiro ou por brief? O código produz essa multiplicidade numa única negativa (`bin/disjuntor.py:1714`, `1717`, `1728`).
+
+   “Abertura sem APROVADO” também precisa preservar o significado observável: `ini` é tentativa, não prova execução do Codex. O indicador atual declara isso e exclui chamadas casadas com `FORA`; desligamento tem tratamento próprio. Renomear para abertura efetiva ou contar indistintamente obras dispensadas produziria outra medida (`bin/disjuntor.py:2072`, `2081`, `2143`, `2159`). A definição futura desses pontos é **[nao verificado]**.
+
+4. **Exportada/dinheiro/!:** o delta de medição não autoriza escrita de negócio nem alteração das hipóteses de `!` (`CLAUDE.md:265`, `268`).
+
+**RED**
+
+1. **Premissas:** existem casos de juiz/CLI, pretool, pertença, controles e mutantes no selo específico. O selo geral tem outra lista de casos; não comprova hoje os novos REDs do complemento (`bin/tests/test_censo_antes_da_vaga.sh:650`, `660`, `662`, `668`; `bin/tests/test_disjuntor.sh:1501`).
+
+2. **Colisão:** os quatro casos adicionais são compatíveis com esse método; não há objeção independente por serem testes futuros. A infraestrutura já exige controle sem mutação e queda do caso quando a costura sai (`bin/tests/test_censo_antes_da_vaga.sh:662`, `680`, `685`).
+
+3. **Literal:** o caso lateral pelo CLI ataca o retorno antecipado correto; o controle de complemento continua dependente das definições devolvidas nos itens 3–5 (`bin/disjuntor.py:2311`, `2315`; comportamento futuro: **[nao verificado]**). “Conforme” precisa incluir os campos antigos, ainda exigidos pelo juiz (`bin/disjuntor.py:1565`, `1568`, `1570`). `RED=test_disjuntor.sh` pode ser destino futuro; não é prova de ligação já existente com o selo específico (`bin/tests/test_disjuntor.sh:1501`; `bin/tests/test_censo_antes_da_vaga.sh:650`). Mordida dos novos casos e mutantes: **[nao verificado]**.
+
+4. **Exportada/dinheiro/!:** o molde inspecionado usa árvores de mentira; não demonstra toque em produção (`bin/tests/test_censo_antes_da_vaga.sh:20`, `36`; `bin/tests/test_disjuntor.sh:47`, `59`).
+
+Item 1 — **NAO PROCEDE** (`bin/disjuntor.py:674`; `CLAUDE.md:358`).
+Item 3 — **PROCEDE**: universo e semântica da busca ainda **[nao verificado]**.
+Item 4 — **PROCEDE** (`bin/disjuntor.py:162`, `1611`; `bin/hook_stop_fila1.py:117`).
+Item 5 — **PROCEDE** (`app/docs/GRADE-MESTRA.md:35`, `532`; `bin/disjuntor.py:1675`).
+CONTRATO — **PROCEDE** (`bin/disjuntor.py:1728`, `2072`, `2159`).
+RED — **NAO PROCEDE** como objeção independente; execução e mordida novas **[nao verificado]**.
+
+## 17/11 15:01 · sessao 3c5a184a33b5 · - · - · origem=Ronald (tmux)
+
+**CONTRATO**
+
+1. **Premissas:** a medida vigente distingue aprovação do brief, tentativa no wrapper e abertura Agent; uma aprovação cobre todos os briefs coletados (`bin/disjuntor.py:1701`, `1703`, `2072`, `2077`, `2163`). As negativas atuais são agregadas, sem abertura por motivo (`bin/disjuntor.py:2102`, `2145`, `2164`).
+
+2. **Colisão:** não devolveria apenas por tornar recusas informativas. O contrato exige contador e esperado, e o complemento fornece esperado 0 para o indicador de segurança; o literal não exige esperado 0 para cada contador auxiliar (`app/docs/PISTA.md:170`, `173`). A decisão nova foi fornecida no anexo; existência local desse aval: **[nao verificado]**.
+
+3. **Literal:** persiste uma distinção relevante: “abertura sem CENSO APROVADO” não pode ser apresentada como execução efetiva de construtor Codex. O `ini` é tentativa e não prova que o Codex rodou; o próprio ESTADO declara essa limitação (`bin/disjuntor.py:2072`, `2159`). Também falta definir a unidade de “por motivo”: uma chamada pode acumular vários motivos de vários briefs; contar eventos, motivos ou briefs produz números diferentes (`bin/disjuntor.py:1714`, `1717`, `1728`). Sugestão: manter o indicador vigente de **tentativas**, declarar recusas por motivo como contagem de eventos associados a cada motivo, ou explicitar outra unidade; a escolha concreta permanece **[nao verificado]**.
+
+4. **Exportada/dinheiro/!:** o delta de medida não autoriza escrita de negócio; continuam os limites literais de competência exportada, escala/vínculo, atalhos e dinheiro (`CLAUDE.md:265`, `268`, `404`).
+
+**Conclusão sugerida: CONTRATO — PROCEDE**, exclusivamente pelo significado operacional de “abertura”/unidade de contagem, **não** por ausência de esperado 0 nas recusas (`bin/disjuntor.py:2072`, `1714`; `app/docs/PISTA.md:173`).
+
+**RED**
+
+1. **Premissas:** o selo específico atual exercita juiz/CLI, pretool, topo, importação, medida e pertença, incluindo controle sem mutação e mutantes (`bin/tests/test_censo_antes_da_vaga.sh:13`, `650`, `662`, `668`). `test_disjuntor.sh` tem outra lista de casos e outra declaração final de cobertura (`bin/tests/test_disjuntor.sh:1501`, `1836`).
+
+2. **Colisão:** casos novos e mutantes são compatíveis com o método existente; a exigência original de mutantes permanece no dado “nada mais muda” **[nao verificado em arquivo local]**. Não trataria a ausência atual dos testes futuros como reprovação do desenho; o selo existente já separa casos do juiz e casos da costura (`bin/tests/test_censo_antes_da_vaga.sh:18`, `668`).
+
+3. **Literal:** os quatro casos novos resolvem alvos da devolução anterior, mas seu resultado depende das definições ainda discutidas nos itens 1, 3, 4 e 5 **[nao verificado]**. O caso CLI lateral alcança justamente a saída antecipada atual (`bin/disjuntor.py:2311`, `2315`). O controle de complemento precisa conservar os campos antigos do CENSO: hoje até a fixture “conforme” contém leitores, escritores, decisões e perguntas (`bin/tests/test_censo_antes_da_vaga.sh:54`). A indicação `RED=bin/tests/test_disjuntor.sh` deve ser entendida como destino futuro ou ganhar ligação explícita com o selo específico; a cópia não comprova que esse arquivo já executa os casos de censo (`bin/tests/test_disjuntor.sh:1501`; `bin/tests/test_censo_antes_da_vaga.sh:650`). Resultados novos: **[nao verificado]**.
+
+4. **Exportada/dinheiro/!:** o molde existente usa árvore de mentira; executar os selos criaria e apagaria arquivos temporários, motivo para somente inspecioná-los nesta revisão (`bin/tests/test_censo_antes_da_vaga.sh:20`, `27`, `28`, `36`; `bin/tests/test_disjuntor.sh:39`).
+
+**Conclusão sugerida: RED — NAO PROCEDE como objeção independente**, preservadas as devoluções dos itens de que os casos dependem; cobertura executada dos novos casos e seus mutantes: **[nao verificado]**.
+
+## 17/11 15:01 · sessao fef53bc871a8 · - · - · origem=Ronald (tmux)
+
+Item 1:
+
+- Q1: juiz atual só reconhece aparência de referência (`_REF_RE`) e exige uma em leitores/escritores; ainda não valida caminhos ou existência (`bin/disjuntor.py:1501`, `bin/disjuntor.py:1565`, `bin/disjuntor.py:1577`). Isso é implementação futura autorizada, não achado por si.
+- “Linha cabe” tem predicado existente preciso: `_sitio_existe` exige arquivo legível, regular, relativo e dentro da raiz, sem symlink em nenhum trecho; `1 <= linha <= total`, total = quantidade de `\n` + última linha sem `\n` (`bin/disjuntor.py:674`, `bin/disjuntor.py:683`, `bin/disjuntor.py:693`, `bin/disjuntor.py:698`; regular vem de `_abre`, `bin/disjuntor.py:187`, `bin/orcamento_contexto.py:77`). Arquivo vazio tem zero linhas; `x\n` tem uma, `x\ny` tem duas, `x\r y` sem LF conta uma segundo esse predicado (`bin/disjuntor.py:695`, `bin/disjuntor.py:698`).
+- Existem REDs de B3 para zero, última linha exata, além do fim, última sem LF, fora da raiz, todas referências, sintaxe truncada e symlinks (`bin/tests/test_disjuntor.sh:714`, `bin/tests/test_disjuntor.sh:720`, `bin/tests/test_disjuntor.sh:723`, `bin/tests/test_disjuntor.sh:731`, `bin/tests/test_disjuntor.sh:735`). Não provam a costura futura no CENSO, cujo teste conforme ainda usa referências fictícias (`bin/tests/test_censo_antes_da_vaga.sh:54`, `bin/tests/test_censo_antes_da_vaga.sh:86`).
+- Q2: completude por leitura do Codex é compatível com seu papel de censo e rastreamento; escopo continua incluindo leitores/escritores fora do diff (`CLAUDE.md:358`, `CLAUDE.md:379`). O anexo retira explicitamente do portão a prova de “TODO caminho”; não devolver novamente essa objeção como se o portão ainda a prometesse [nao verificado].
+- Q3: o complemento não diz se incorpora integralmente `_sitio_existe` ou só “arquivo existe/linha cabe”; vincular explicitamente ao predicado evita divergência entre `splitlines()` (usado no brief, `bin/disjuntor.py:1526`) e contagem LF (referências, `bin/disjuntor.py:695`). Também não explicita se N conta linhas ou destinos distintos: duas linhas podem apontar ao mesmo sítio e satisfazer só igualdade numérica; o código atual não oferece essa verificação (`bin/disjuntor.py:1544`, `bin/disjuntor.py:1577`). “ponto único”, autorizado no aval-base, deixa de ter fechamento se a nova exigência obrigar sempre “lista fechada”; esclarecer se o único é lista de um [nao verificado].
+- Q4: validar arquivos/linhas e existência do `.r` não toca diretamente negócio; a leitura atual retorna motivo, e limites de exportada/escala/vínculo permanecem (`bin/disjuntor.py:1525`, `bin/disjuntor.py:1577`, `CLAUDE.md:265`).
+
+Item 3:
+
+- Q1: juiz atual só abre o brief e examina seu bloco; não pesquisa logs (`bin/disjuntor.py:1525`, `bin/disjuntor.py:1544`, `bin/disjuntor.py:1577`). Fixar algoritmo, ler termos como texto e não executar comando fecha o defeito anterior de “grep declarado = busca provada” [nao verificado].
+- Q2: custo de responder falso positivo foi assumido no anexo, portanto não é colisão por si [nao verificado]. Requisito de levar classes anteriores e responder achados tem apoio vigente (`CLAUDE.md:373`, `CLAUDE.md:375`).
+- Q3: faltam definir universo concreto de arquivos: `logs/AVAIS-*` inclui arquivos diretamente, diretórios recursivos ou ambos? `logs/<OBRA>/` é recursivo? Qual `RELATO.md`? A constante existente é `app/docs/RELATO.md`, não arquivo na raiz (`bin/disjuntor.py:125`). Faltam semântica OR/AND dos termos, caixa/normalização, termo vazio e tratamento de arquivo ilegível/symlink/limite; a infra já distingue arquivo regular e symlink (`bin/disjuntor.py:187`, `bin/orcamento_contexto.py:68`).
+- Busca obrigatoriamente casa o próprio brief se ele contém o ID exigido e todos os arquivos da pasta são pesquisados; sem exclusão declarada, requer `respondido: logs/<OBRA>/brief*.md` para si mesmo [nao verificado]. Isso é atendível sob o custo de falsos positivos; não é impossibilidade lógica. Contudo, qualquer exigência de “ataques cruzados: 0” precisa distinguir número de termos, de arquivos encontrados e de respostas, pois ID obrigatório gera termo e o brief pode gerar achado [nao verificado].
+- Custo depende do total de arquivos/bytes pesquisados, termos e quantidade de briefs julgados: a porta julga cada brief coletado (`bin/disjuntor.py:1717`); busca refeita em cada juiz pode repetir a leitura desse universo. Volume e duração reais são [nao verificado]. Não inventar benchmark de produção.
+- Logs vivos não estão na cópia: `.gitignore:53`; leitor nasce via archive e recebe anexos raspados (`bin/codex_pergunta.sh:315`, `bin/codex_pergunta.sh:331`, `bin/codex_pergunta.sh:334`). Logo não é possível provar achados efetivos nesta revisão.
+- Q4: busca textual e recusa não ampliam aval de negócio; limites continuam literais (`CLAUDE.md:265`, `CLAUDE.md:268`).
+
+Juízo sugerido: PROCEDE no item 3 pelas lacunas de universo/semântica/custo; item 1 exige separar lacuna operacional real de escolha já feita pelo aval. A necessidade de ligar formalmente o novo validador ao `_sitio_existe`, a correspondência caminhos→sítios e a sobrevivência de “ponto único” justificam devolução pontual, sem repetir cobrança de completude pelo portão [nao verificado].
+
+## 17/11 15:01 · sessao 7d9abfee0495 · - · - · origem=Ronald (tmux)
+
+**Item 4 — PROCEDE, pelas lacunas restantes.**
+
+1. O coletor confirma a união de todos os `brief*.md` da pasta literal da obra com os briefs citados no **texto da abertura**, sem coleta recursiva do conteúdo dos briefs (`bin/disjuntor.py:1587`, `1604`, `1607`, `1619`). No CLI, o conteúdo dos anexos também compõe esse texto (`bin/disjuntor.py:2296`, `2305`).
+2. Separar o complemento em outro ID/pasta resolve a coleta automática do brief antigo da mãe; a volta com mesmo ID continua julgando a pasta inteira (`bin/disjuntor.py:1604`, `1619`, `1717`). Não há colisão necessária com o encaixe técnico de complemento atribuído à sessão (`CLAUDE.md:276`, `278`).
+3. Restam três lacunas:
+   - `OBRA_CENSO_ID = [A-Za-z0-9-]+` não distingue mãe de complemento: `MAE-A-B` admite mais de uma decomposição; campo declarativo, candidatos, regra de seleção e mãe inexistente são **[nao verificado]** (`bin/disjuntor.py:162`).
+   - O reconhecimento atual por ID inteiro exclui hífen da fronteira; portanto `MAE-COMPL` não herda automaticamente a pertença de `MAE` (`bin/hook_stop_fila1.py:110`, `117`; `bin/disjuntor.py:1688`, `1689`).
+   - Pasta própria não assegura **brief próprio**: a porta aceita apenas brief citado de outra pasta, pois exige somente união não vazia. A obrigação precisa ser cobrada na porta existente, preservando o coletor (`bin/disjuntor.py:1713`, `1715`, `1717`).
+   
+   “Se o complemento citar” precisa indicar abertura/anexo; citar dentro de um brief apenas encontrado pelo glob não produz coleta recursiva (`bin/disjuntor.py:1587`, `1611`, `1613`; `bin/disjuntor.py:2300`).
+4. Não há autorização adicional sobre negócio; exportada, escala/vínculo, dinheiro e demais hipóteses de `!` continuam subordinados ao escopo literal (`CLAUDE.md:265`, `268`, `286`).
+
+**Item 5 — PROCEDE, pelas lacunas restantes.**
+
+1. As duas bocas atuais efetivamente compartilham `_pertence_fila1`; o CLI consulta antes da porta e retorna `FORA` antecipadamente. O complemento aponta a costura correta a alterar (`bin/disjuntor.py:1707`, `2306`, `2307`, `2311`, `2315`). Fila viva usa o predicado do hook sobre estado, não classificação por balde (`bin/disjuntor.py:1623`, `1634`; `bin/hook_stop_fila1.py:180`, `231`, `250`).
+2. A precedência expressa de fila 1 resolve a objeção anterior de tela∩fila1, e a separação CONDUTA/portão resolve a divergência declarada anterior **[nao verificado em arquivo local: delta fornecido]**. Permanece necessária uma única resposta compartilhada pelas duas bocas, como já estabelece o código (`bin/disjuntor.py:1672`, `1674`, `2307`).
+3. “Coluna 2” identifica o campo balde nas tabelas de obras (`app/docs/GRADE-MESTRA.md:35`, `125`), mas não define:
+   - quais tabelas entram: o placar tem coluna 2 numérica, complementos têm baldes próprios, OBSOLETAS também têm baldes e o quadro final tem coluna 2 de estado (`app/docs/GRADE-MESTRA.md:13`, `532`, `1561`, `1674`, `1759`);
+   - como se casa o ID, como se tratam IDs qualificados, ausência, duplicatas concordantes/divergentes e balde `?`; esses casos não são resolvidos pelo predicado atual, que só recebe células do BACKLOG (`bin/disjuntor.py:1672`, `1688`; `app/docs/GRADE-MESTRA.md:505`, `521`);
+   - como a herança da mãe prevalece sobre a linha própria do complemento. Há exemplo concreto de mãe `20/20` e complemento `INSTRUMENTO` (`app/docs/GRADE-MESTRA.md:119`, `531`, `534`). Como combinar “filho fila 1 viva” com “pertença é a da mãe” permanece **[nao verificado]**.
+   
+   “Ambígua = recusa” define a consequência, mas os critérios da ambiguidade da GRADE continuam **[nao verificado]**; a ambiguidade implementada hoje pertence às células da fila 1 (`bin/disjuntor.py:1681`, `1694`).
+4. Ampliar o universo do portão não amplia a autorização sobre negócio ou as hipóteses de `!` (`CLAUDE.md:265`, `268`).
+
+Item 4: **PROCEDE**.  
+Item 5: **PROCEDE**.
+
+## 17/11 14:59 · sessao 944bdb1b0fda · CENSO-FECHA-DE-VERDADE · censo · origem=Code
+
+**Não certifico fechamento global das quatro fatias.** Os mapas abaixo registram as arestas conferidas na cópia; os contratos F1/F2 citados nos anexos, os hashes de origem e a execução dos backfills em produção permanecem **[nao verificado]**. A cópia já contém caminhos do par de intervalo que ampliam o alcance dos briefs (`app/chamados/services/materializacao.py:214`, `app/chamados/services/validacao.py:526`).
+
+Contagem: uma linha do mapa é uma aresta de chamada, registro de evento ou entrega explícita de callback; caminhos maiores resultam da composição dessas arestas. Isso não transforma um fechamento transitivo incompleto em lista fechada. **[nao verificado]**
+
+Para caber sem perder as referências, as abreviações expandem literalmente para:
+
+| Abreviação | Arquivo ou prefixo |
+|---|---|
+| `D` | `app/chamados/services/disputa_emissao.py` |
+| `M` | `app/chamados/services/materializacao.py` |
+| `V` | `app/chamados/views.py` |
+| `VC` | `app/chamados/views_cobrar.py` |
+| `MD` | `app/chamados/models.py` |
+| `J` | `app/chamados/juizes.py` |
+| `K` | `app/config/crons.py` |
+| `S/` | `app/chamados/services/` |
+| `C/` | `app/chamados/management/commands/` |
+| `P/` | `app/ponto/management/commands/` |
+| `T/` | `app/templates/chamados/` |
+
+**F4 — mapa de caminhos**
+
+```text
+_depois app/ponto/signals.py:262 -> devolver_absorvidas_da_ausencia_rejeitada M:1121
+_validar_pelo_dono app/api/foto_recebida.py:48 -> responder_automaticamente D:1654
+api_disputa_responder app/api/views.py:2627 -> responder_pergunta_disputa_core D:1439
+reabrir_por_colab MD:2318 -> reabrir_para_correcao D:1576
+_slot_esperado J:376 -> _ts_tipo_do_plantio M:599
+responder_pergunta_disputa V:1283 -> responder_pergunta_disputa_core D:1439
+reabrir_disputa_supervisao V:1425 -> recobrar_questionario D:1712
+reabrir_disputa_supervisao V:1436 -> reabrir_para_correcao D:1576
+materializa_perguntas_ao_fechar_disputa app/chamados/signals.py:165 -> materializar_pendentes_aprovadas M:2098
+_plantar_o_dia S/passivo_validado.py:537 -> _materializar_uma M:1809
+par_do_intervalo M:214 -> _ts_tipo_do_plantio M:599
+par_do_intervalo M:222 -> _ts_tipo_do_plantio M:599
+respostas_intervalo_recusadas_paridade M:339 -> estado_aplicacao_pergunta M:852
+_ts_tipo_do_plantio M:656 -> _tipo_pelo_marco M:512
+espera_declarado_x_gravado M:757 -> estado_aplicacao_pergunta M:852
+_estado_pelo_derivador M:895 -> _ts_tipo_do_plantio M:599
+devolver_absorvidas_da_ausencia_rejeitada M:1147 -> perguntas_absorvidas_por M:1085
+devolver_absorvidas_da_ausencia_rejeitada M:1164 -> reabrir_para_correcao D:1576
+_materializar_resposta_hora M:1328 -> _ts_tipo_do_plantio M:599
+_materializar_resposta_escolha M:1641 -> _declarar_ausencia_de_pergunta M:944
+_gravar_irma_do_par M:1707 -> _materializar_uma M:1809
+_materializar_uma M:1889 -> _materializar_resposta_hora M:1266
+_materializar_uma M:1891 -> _materializar_resposta_data_hora M:1541
+_materializar_uma M:1893 -> _materializar_resposta_escolha M:1626
+materializar_perguntas_validadas_da_disputa M:2084 -> _materializar_uma M:1809
+_validar_o_par S/validacao.py:555 -> _materializar_uma M:1809
+validar_pergunta S/validacao.py:687 -> _materializar_uma M:1809
+validar_pergunta S/validacao.py:698 -> materializar_perguntas_validadas_da_disputa M:2032
+recusar_pergunta S/validacao.py:836 -> reabrir_para_correcao D:1576
+declarar_hora_colab S/declaracao_texto.py:419 -> responder_pergunta_disputa_core D:1439
+aplicar_declaracao S/declaracao_texto.py:693 -> responder_pergunta_disputa_core D:1439
+responder_pergunta_disputa_core D:1555 -> _materializar_ausencia_de_resposta M:978
+resolver_perguntas_por_chamado_resolvido D:1897 -> _resolver_perguntas_por_chamado_resolvido D:1906
+resolver_perguntas_por_chamado_resolvido D:1903 -> _resolver_perguntas_por_chamado_resolvido D:1906
+_resolver_perguntas_por_chamado_resolvido D:1969 -> reabrir_credor_de_pergunta_viva D:1827
+explicar_pergunta S/explicador.py:124 -> estado_aplicacao_pergunta M:852
+acao_reabrir_disputa S/acoes_disputa.py:105 -> reabrir_para_correcao D:1576
+acao_regularizar_disputa S/acoes_disputa.py:141 -> materializar_perguntas_validadas_da_disputa M:2032
+acao_corrigir_resposta S/acoes_disputa.py:373 -> responder_pergunta_disputa_core D:1439
+montar_chamados_fio S/fio.py:376 -> estado_aplicacao_pergunta M:852
+processar_post_fio S/fio.py:716 -> materializar_perguntas_validadas_da_disputa M:2032
+aplicacao_da_resposta app/chamados/templatetags/chamados_tags.py:136 -> estado_aplicacao_pergunta M:852
+handle C/curar_perguntas_em_limbo.py:67 -> carimbar_resposta_pela_trilha D:1683
+handle C/curar_perguntas_em_limbo.py:69 -> reabrir_para_correcao D:1576
+ato_do_dia C/backfill_fio_morto_e4b.py:90 -> reabrir_credor_de_pergunta_viva D:1827
+_executar_dia C/backfill_fio_morto_e4b.py:135 -> reabrir_credor_de_pergunta_viva D:1827
+_executar_dia C/backfill_fio_morto_e4b.py:147 -> materializar_perguntas_validadas_da_disputa M:2032
+_exportadas_classe_e C/backfill_fio_morto_e4b.py:175 -> reabrir_credor_de_pergunta_viva D:1827
+resolver_disputas_de_foto app/api/foto_recebida.py:74 -> _validar_pelo_dono app/api/foto_recebida.py:28
+api_upload_foto app/api/views_core.py:845 -> resolver_disputas_de_foto app/api/foto_recebida.py:57
+api_upload_foto app/api/views.py:861 -> resolver_disputas_de_foto app/api/foto_recebida.py:57
+_validar_pelo_dono app/api/foto_recebida.py:51 -> validar_pergunta S/validacao.py:574
+api_solicitar_correcao_disputa app/api/views.py:2686 -> reabrir_por_colab MD:2263
+solicitar_correcao_disputa V:1334 -> reabrir_por_colab MD:2263
+responder_chamado_colaborador V:1090 -> declarar_hora_colab S/declaracao_texto.py:306
+detalhe_chamado_local V:475 -> acao_regularizar_disputa S/acoes_disputa.py:120
+detalhe_chamado_local V:480 -> aplicar_declaracao S/declaracao_texto.py:641
+detalhe_chamado_local V:501 -> acao_validar_pergunta S/acoes_disputa.py:13
+detalhe_chamado_local V:518 -> acao_recusar_pergunta S/acoes_disputa.py:67
+detalhe_chamado_local V:536 -> acao_corrigir_resposta S/acoes_disputa.py:304
+meu_atendimento V:569 -> montar_chamados_fio S/fio.py:190
+fio_colaborador V:674 -> processar_post_fio S/fio.py:531
+fio_colaborador V:677 -> montar_chamados_fio S/fio.py:190
+_resp_modal_full V:889 -> montar_chamados_fio S/fio.py:190
+modal_fio_colaborador V:954 -> processar_post_fio S/fio.py:531
+contexto_parcial_fio S/fio.py:492 -> montar_chamados_fio S/fio.py:190
+acao_validar_pergunta S/acoes_disputa.py:19 -> validar_pergunta S/validacao.py:574
+acao_recusar_pergunta S/acoes_disputa.py:82 -> recusar_pergunta S/validacao.py:770
+acao_corrigir_resposta S/acoes_disputa.py:381 -> validar_pergunta S/validacao.py:574
+_validar_o_par S/validacao.py:545 -> par_do_intervalo M:175
+_gravar_irma_do_par M:1695 -> par_do_intervalo M:175
+_materializar_resposta_hora M:1371 -> _gravar_irma_do_par M:1687
+validar_pergunta S/validacao.py:683 -> _validar_o_par S/validacao.py:526
+_pergunta_materializada_de_fato J:756 -> _slot_esperado J:345
+classificar S/vigia_carimbo.py:110 -> _slot_esperado J:345
+classe_do_lote S/validacao.py:1115 -> _slot_esperado J:345
+resolve_perguntas_ao_resolver app/chamados/signals.py:117 -> resolver_perguntas_por_chamado_resolvido D:1887
+handle P/reconciliar_fantasmas.py:281 -> resolver_perguntas_por_chamado_resolvido D:1887
+handle C/validar_classe_a.py:100 -> validar_pergunta S/validacao.py:574
+handle C/bug_par_103.py:79 -> respostas_intervalo_recusadas_paridade M:295
+include app/config/urls.py:28 -> urlpatterns app/chamados/urls.py:8
+include app/config/urls.py:37 -> urlpatterns app/api/urls.py:9
+include app/config/urls_core.py:6 -> urlpatterns app/api/urls_core.py:7
+rota app/chamados/urls.py:14 -> detalhe_chamado_local V:359
+rota app/chamados/urls.py:16 -> meu_atendimento V:559
+rota app/chamados/urls.py:17 -> responder_pergunta_disputa V:1228
+rota app/chamados/urls.py:19 -> solicitar_correcao_disputa V:1317
+rota app/chamados/urls.py:20 -> reabrir_disputa_supervisao V:1372
+rota app/chamados/urls.py:21 -> fio_colaborador V:659
+rota app/chamados/urls.py:39 -> modal_fio_colaborador V:869
+rota app/chamados/urls.py:42 -> responder_chamado_colaborador V:1041
+rota app/api/urls.py:59 -> api_upload_foto app/api/views.py:839
+rota app/api/urls.py:93 -> api_disputa_responder app/api/views.py:2584
+rota app/api/urls.py:94 -> api_solicitar_correcao_disputa app/api/views.py:2670
+rota app/api/urls_core.py:8 -> api_upload_foto app/api/views_core.py:823
+handle_ensaio C/materializar_passivo_validado.py:104 -> reparar S/passivo_validado.py:289
+handle_apply_dry C/materializar_passivo_validado.py:113 -> reparar S/passivo_validado.py:289
+reparar S/passivo_validado.py:380 -> _trabalhar_o_par S/passivo_validado.py:431
+_trabalhar_o_par S/passivo_validado.py:443 -> _plantar_o_dia S/passivo_validado.py:489
+post_save_Chamado app/chamados/signals.py:91 -> resolve_perguntas_ao_resolver app/chamados/signals.py:92
+post_save_Disputa app/chamados/signals.py:149 -> materializa_perguntas_ao_fechar_disputa app/chamados/signals.py:150
+post_save_Ausencia app/ponto/signals.py:275 -> _consumidor_post_save_ausencia app/ponto/signals.py:276
+post_delete_Ausencia app/ponto/signals.py:282 -> _consumidor_post_delete_ausencia app/ponto/signals.py:283
+_consumidor_post_save_ausencia app/ponto/signals.py:279 -> _consumidor_ausencia app/ponto/signals.py:250
+_consumidor_post_delete_ausencia app/ponto/signals.py:284 -> _consumidor_ausencia app/ponto/signals.py:250
+on_commit app/ponto/signals.py:272 -> _depois app/ponto/signals.py:254
+julgar_colab app/ponto/services/cartorio.py:1045 -> perguntar_pela_celula S/fabrica_da_celula.py:178
+perguntar_pela_celula S/fabrica_da_celula.py:207 -> motivos_a_perguntar S/fabrica_da_celula.py:92
+perguntar_pela_celula S/fabrica_da_celula.py:219 -> perguntar S/fabrica_da_celula.py:160
+perguntar S/fabrica_da_celula.py:169 -> desfazer_carimbo_sem_lastro S/relavra_via.py:187
+perguntar_pela_celula S/fabrica_da_celula.py:209 -> desfazer_carimbo_sem_lastro S/relavra_via.py:187
+handle C/relavrar_via_i6.py:102 -> relavrar S/relavra_via.py:106
+cron K:392 -> handle P/reconciliar_fantasmas.py:152
+handle C/backfill_fio_morto_e4b.py:238 -> _exportadas_classe_e C/backfill_fio_morto_e4b.py:153
+handle C/backfill_fio_morto_e4b.py:255 -> ato_do_dia C/backfill_fio_morto_e4b.py:82
+handle C/backfill_fio_morto_e4b.py:309 -> ato_do_dia C/backfill_fio_morto_e4b.py:82
+handle C/backfill_fio_morto_e4b.py:316 -> _executar_dia C/backfill_fio_morto_e4b.py:125
+```
+
+Os registros de `backfill_fio_morto_e4b`, `materializar_passivo_validado`, `validar_classe_a` e `curar_perguntas_em_limbo` são declarações de **não rotina**, não chamadas de cron (`K:791`, `K:853`, `K:1363`, `K:1476`). O fechamento de todos os chamadores transitivos dos juízes e de todos os disparadores dos signals permanece **[nao verificado]**.
+
+**caminhos: 117**  
+**lista fechada: [nao verificado]** — o mapa identifica 20 funções receptoras do núcleo, além das pontes e das exceções conservadas; não demonstra que sejam todos os sítios de campo alcançados.
+
+**F4 — ataques adversariais**
+
+1. **Par fora dos “três chamadores”: derivação paralela / 2º juiz.** O par chama o derivador duas vezes e decide validade por `q.validada_em` cru (`M:199`, `M:201`, `M:214`, `M:222`). A validação e o plantio da irmã passam por esse par (`S/validacao.py:545`, `M:1695`, `M:1707`). Migrar apenas os três caminhos do RED-4 permite que principal e irmã usem autoridades diferentes. **Caminho omitido:** `par_do_intervalo -> _ts_tipo_do_plantio`. Resposta da cura a esse ataque **[nao verificado]**.
+
+2. **Outro parser de `data_hora`: derivação paralela.** O juiz deriva o timestamp diretamente da projeção (`J:364`, `J:370`); o materializador repete o parser (`M:1558`, `M:1565`). Trocar somente o texto do materializador permite plantar o timestamp do ato e reprovar esse mesmo plantio pelo timestamp velho do juiz, na conferência final (`M:1899`, `M:1906`). **Caminho não coberto pelo RED dos três chamadores:** ramo `data_hora` de `_slot_esperado`.
+
+3. **Instante histórico ≠ processamento: relógio fora da borda.** O upload passa seu instante de processamento à resposta automática (`app/api/foto_recebida.py:42`, `:48`; `D:1675`, `D:1678`). A cura pela trilha usa o instante histórico recebido (`D:1696`, `D:1699`). Substituir ambos por “última resposta” sem preservar essa origem temporal pode promover uma resposta anterior à reabertura a resposta vigente. Ordem efetiva desses casos em produção **[nao verificado]**.
+
+4. **Dia do turno ≠ dia civil: relógio fora da borda.** A derivação usa `data_evento` e ajusta overnight (`M:685`, `M:692`); o envelope inclui as duas bordas (`J:328`, `J:333`). O passivo consulta competência por `data_evento`, com `localdate(ts)` como fallback (`S/passivo_validado.py:98`, `:113`). A cura não pode trocar isso pelo dia de `ato_em`. Falta caso do último dia da competência, saída no dia seguinte e instante exatamente na borda.
+
+5. **ABSORÇÃO tem vínculo e geração: 2º juiz / 2º escritor fora da porta.** A escrita guarda `absorcao_escape` e `absorcao_ausencia` (`M:1045`, `M:1048`); o leitor atual associa a geração pelo carimbo e exclui batidas vivas (`M:1109`, `M:1118`). A rejeição chega por `on_commit` e reabre efetivamente as perguntas (`app/ponto/signals.py:262`, `:272`; `M:1164`). Um fold “existe ABSORCAO” pode atingir geração antiga. A cura desse vínculo continua **[nao verificado]**.
+
+6. **Backfill não fecha escritor vivo: 2º escritor fora da porta.** `carimbar(resposta=...)` sintetiza R/V e salva sem registrar RESPOSTA/VALIDACAO (`MD:3240`, `MD:3247`, `MD:3262`). Além dos dois furos citados pelo brief, há o carimbo central e o resolver (`M:1944`, `M:1945`; `D:2008`, `D:2009`). A conservação recompõe apenas quando chamada, por `(ato, instante)` (`MD:4094`, `MD:4105`). **Caminho omitido na lista de dois furos:** resolver → `carimbar`.
+
+7. **Unidade real do plantio: dia/par, não pergunta: selo sem mordida.** O passivo usa savepoint do dia e conferência geométrica antes/depois (`S/passivo_validado.py:505`, `:513`, `:526`, `:550`); o materializador pode plantar também a irmã (`M:1371`, `M:1707`). RED que confira uma pergunta e apenas contagens pode passar com uma metade usando texto ou timestamp diferente da outra. Resposta do brief sobre paridade de atos das duas metades **[nao verificado]**.
+
+8. **Selo dos cinco arquivos não protege os consumidores: selo sem mordida.** O retorno é consumido por explicador, filtro, vigia e classificador de lote (`S/explicador.py:124`; `app/chamados/templatetags/chamados_tags.py:136`; `S/vigia_carimbo.py:110`; `S/validacao.py:1115`). Um selo limitado à fatia não detecta o parser cru em `J:364`, nem a validade crua da irmã em `M:199`.
+
+9. **Leitura alcança escrita financeira: derivação paralela / selo sem mordida.** O caminho do passivo chega ao mesmo materializador (`C/materializar_passivo_validado.py:104`, `:113`; `S/passivo_validado.py:380`, `:443`, `:537`). A configuração classifica esse ato como movimentação de dinheiro em competência exportada (`K:853`, `K:858`). “Só muda leitura” não prova ausência de mudança na seleção e no resultado dessa escrita. Impacto financeiro efetivo **[nao verificado]**.
+
+**ataques cruzados: 9**
+
+**F7 — mapa de caminhos**
+
+```text
+rota app/chamados/urls.py:16 -> meu_atendimento V:559
+meu_atendimento V:569 -> montar_chamados_fio S/fio.py:190
+meu_atendimento V:633 -> pagina T/meu_atendimento.html:1
+include T/meu_atendimento.html:127 -> card T/partials/_card_atendimento.html:1
+include T/meu_atendimento.html:144 -> card T/partials/_card_atendimento.html:1
+rota app/chamados/urls.py:14 -> detalhe_chamado_local V:359
+detalhe_chamado_local V:551 -> montar_contexto_detalhe S/acoes_chamado.py:337
+detalhe_chamado_local V:550 -> pagina T/detalhe_local.html:1
+include T/detalhe_local.html:310 -> card T/partials/_pergunta_card.html:1
+detalhe_chamado_local V:501 -> acao_validar_pergunta S/acoes_disputa.py:13
+detalhe_chamado_local V:518 -> acao_recusar_pergunta S/acoes_disputa.py:67
+detalhe_chamado_local V:536 -> acao_corrigir_resposta S/acoes_disputa.py:304
+injeta_resp V:501 -> _resp_card V:377
+injeta_resp V:518 -> _resp_card V:377
+injeta_resp V:536 -> _resp_card V:377
+_resp_card V:404 -> card T/partials/_pergunta_card.html:1
+rota app/chamados/urls.py:39 -> modal_fio_colaborador V:869
+modal_GET V:956 -> _resp_modal_full V:882
+modal_POST V:954 -> processar_post_fio S/fio.py:531
+injeta_resp_final V:954 -> _resp_modal_full V:882
+_resp_modal_full V:889 -> montar_chamados_fio S/fio.py:190
+_resp_modal_full V:927 -> modal T/partials/modal_fio.html:1
+rota app/chamados/urls.py:21 -> fio_colaborador V:659
+fio_POST V:674 -> processar_post_fio S/fio.py:531
+processar_post_fio S/fio.py:611 -> _resp_parcial S/fio.py:540
+_resp_parcial S/fio.py:543 -> contexto_parcial_fio S/fio.py:483
+_resp_parcial S/fio.py:542 -> modal T/partials/modal_fio.html:1
+contexto_parcial_fio S/fio.py:492 -> montar_chamados_fio S/fio.py:190
+injeta_resp S/fio.py:597 -> _resp_parcial S/fio.py:540
+injeta_resp S/fio.py:629 -> _resp_parcial S/fio.py:540
+injeta_resp S/fio.py:655 -> _resp_parcial S/fio.py:540
+injeta_resp S/fio.py:684 -> _resp_parcial S/fio.py:540
+injeta_resp S/fio.py:685 -> _resp_parcial S/fio.py:540
+injeta_resp S/fio.py:690 -> _resp_parcial S/fio.py:540
+rota app/chamados/urls.py:20 -> reabrir_disputa_supervisao V:1372
+reabrir_disputa_supervisao V:1458 -> _fio V:1395
+_fio V:1400 -> contexto_parcial_fio S/fio.py:483
+_fio V:1399 -> modal T/partials/modal_fio.html:1
+rota app/chamados/urls.py:36 -> lote_preview VC:353
+lote_preview VC:361 -> fila_validar_classificada S/validacao.py:1155
+lote_recusa VC:358 -> previa T/partials/_lote_preview.html:1
+lote_preview VC:362 -> previa T/partials/_lote_preview.html:1
+rota app/chamados/urls.py:37 -> validar_lote_tela VC:372
+validar_lote_tela VC:381 -> validar_lote_classe_a S/validacao.py:938
+lote_recusa VC:378 -> previa T/partials/_lote_preview.html:1
+lote_resultado VC:386 -> previa T/partials/_lote_preview.html:1
+```
+
+Os terminais de leitura declarados pelo brief estão nestas **22 linhas** da cópia:
+
+| Template | Sítios |
+|---|---|
+| `T/partials/_card_atendimento.html` | `:106`, `:114`, `:141`, `:143`, `:148`, `:154`, `:182`, `:183`, `:189`, `:391` |
+| `T/partials/modal_fio.html` | `:185`, `:217`, `:219`, `:220`, `:228` |
+| `T/partials/_pergunta_card.html` | `:20`, `:23`, `:24`, `:29`, `:32`, `:42` |
+| `T/partials/_lote_preview.html` | `:24` |
+
+A escolha das duas cascas vem do context processor registrado nas settings (`app/config/settings/base.py:82`; `app/core/context_processors.py:210`) e do `extends base_tpl` (`T/meu_atendimento.html:1`). O detalhe usa `base.html` fixo (`T/detalhe_local.html:1`).
+
+Não localizei uma entrada direta de signal ou cron que renderize esses quatro templates; ausência de renderização dinâmica por essas vias **[nao verificado]**. O mapa também não fecha todas as invocações de retorno dentro dos callbacks nem o acessor novo ainda não implementado **[nao verificado]**.
+
+**caminhos: 46**  
+**lista fechada: 22 sitios** nos quatro templates declarados; fechamento do alcance Python e dinâmico **[nao verificado]**.
+
+**F7 — ataques adversariais**
+
+1. **Texto pelo ato, Enviar/Reenviar pela projeção: 2º juiz.** `resposta_enviada` continua vindo de `respondida_em` (`S/fio.py:187`, `S/fio.py:359`), enquanto o brief troca texto/data exibidos. Com RESPOSTA no ato e R nulo, o formulário pode dizer “Enviar resposta” ao lado de resposta vigente; com REABERTURA e projeção velha, o ramo pode continuar “enviado” (`T/partials/_card_atendimento.html:100`, `:161`, `:390`). A dependência F5 está citada, mas a paridade efetiva **[nao verificado]**.
+
+2. **Um texto público não substitui valor e rótulo: derivação paralela.** O dropdown compara ID serializado (`T/partials/_card_atendimento.html:154`); `resposta_display` transforma ID em nome e códigos em rótulos (`MD:3693`, `MD:3701`, `MD:3708`). Reutilizar o display no prefill quebra `selected`; reutilizar o ID no SHOW perde o nome. A cura precisa preservar separadamente valor original e apresentação. Contrato desse acessor **[nao verificado]**
+
+[truncado em 20000 de 45964 caracteres]
 
 ## 17/11 14:52 · sessao e11c1d0b2faa · CORTE-FOLHA-ESPELHO · leitura · origem=Code
 
@@ -830,149 +1241,4 @@ O host do wrapper consulta a raiz viva; o Codex leitor trabalha na cópia e rece
 
 - **Exportada/dinheiro/!** Existe consulta local de entregue na reabertura do credor, em `app/chamados/services/disputa_emissao.py:1857`, com veto por `motivo` antes de `credor.reabrir()`, em `:1867` e `:1873`; ela não é uma guarda universal dos quinze sítios. K6 é `competencia_entregue`, em `app/folha/export.py:556`; a composição por dia é `competencia_do_dia_entregue`, em `app/chamados/services/vigia_fio.py:785`. O limite vigente exige `!` para tocar gravado de exportada, em `CLAUDE.md:265`, e distingue apply financeiro de competência aberta, em `CLAUDE.md:406`. Impacto material futuro desse selo em exportada/dinheiro: **[nao verificado]**.
 
-## 17/11 14:23 · sessao bbc39757284b · - · - · origem=Ronald (tmux)
-
-- **1(a) — NÃO PROCEDE a premissa nesta cópia.** A unidade existente é `_retratar`, definida em `app/chamados/reconciliador.py:504`: consulta `retencao_da_retratacao` em `:519`, transiciona em `:524`, pode salvar justificativa em `:536` e chama o resolvedor em `:537`. `retratar` apenas delega (`app/chamados/reconciliador.py:545`, `:547`). A linha `:576` encerra a docstring de E2; não consulta competência (`app/chamados/reconciliador.py:550`, `:576`). A busca global de Python em `app` não encontrou os símbolos `retratar_com_motivo`, `_retratacao_toca_entregue` e `perguntas_alcancadas_pela_retratacao`; a matriz não corresponde integralmente à cópia inspecionada (`app/chamados/reconciliador.py:504`, `:545`, `:550`).
-
-- **Existem predicados nomeáveis de competência, mas não equivalem à guarda geral descrita.** `_dia_fora_do_alcance_c` consulta `competencia_do_dia_entregue` e a tranca (`app/chamados/reconciliador.py:743`, `:745`, `:748`); no HIST, estar fora do alcance conserva o percurso anterior (`app/chamados/reconciliador.py:1593`, `:1594`, `:1608`). O helper `reabrir_credor_de_pergunta_viva` verifica competência da carga, porém somente considera dias diferentes de `None` (`app/chamados/services/disputa_emissao.py:1827`, `:1857`, `:1858`, `:1859`).
-
-- **1(b) — PROCEDE listar os símbolos; NÃO PROCEDE confundir isso com identificar todas as escritas protegidas.** Há escritores explícitos para estado (`app/chamados/models.py:201`, `:296`), carimbo (`app/chamados/models.py:3207`, `:3213`, `:3262`), costura (`app/chamados/services/fio.py:972`, `:974`) e lote (`app/chamados/veredito_lavrado.py:240`, `:250`). Entretanto, `campos` é construído por ramos e passado ao `save` (`app/chamados/models.py:3238`, `:3243`, `:3247`, `:3261`, `:3262`); reconhecer somente `.save/.update/.bulk_update` não identifica modelo, campos nem unidade funcional desses atos (`app/chamados/models.py:296`, `:3262`).
-
-- **3 — PROCEDE o achado de ambiguidade entre atribuição em memória e primeira persistência.** `lavrar(p, salvar=False)` atribui os três campos sem chamar `save`; a persistência fica no chamador (`app/chamados/veredito_lavrado.py:254`, `:270`, `:274`, `:275`; `app/chamados/services/fio.py:973`, `:974`; `app/chamados/models.py:3260`, `:3262`). Uma regra de presença/ordem de chamadas precisa distinguir esses comportamentos para sustentar o literal “antes da primeira escrita” [nao verificado].
-
-- **A lista de 15 tem um alvo ausente e 14 nomes existentes.** As posições atuais são: `fechar_beco` (`app/chamados/services/becos.py:36`), resolvedor (`app/chamados/services/disputa_emissao.py:1887`), `reconciliar` (`app/chamados/models.py:642`), `transicionar` (`app/chamados/models.py:128`), `encerrar` (`app/chamados/models.py:1669`), `encerrar_por_competencia_trancada` (`app/chamados/models.py:1686`), `reabrir` (`app/chamados/models.py:1409`), `DisputaSupervisao.fechar` (`app/chamados/models.py:1936`), E2 (`app/chamados/reconciliador.py:550`), `reatar_pergunta_orfa` (`app/chamados/reconciliador.py:1534`), `encerrar_orfas_pela_lampada` (`app/chamados/reconciliador.py:1113`), `reapontar_resolvedora` (`app/chamados/services/fio.py:851`), `lavrar` (`app/chamados/veredito_lavrado.py:254`) e `gravar_lavras_em_lote` (`app/chamados/veredito_lavrado.py:240`).
-
-## 17/11 14:23 · sessao 10ac03e7bce0 · CONFRONTO-PILOTO · sonda · origem=Code
-
-Transcrição do dado fornecido, sem reexecução: `sonda_fp.py` não foi localizado na cópia e não há acesso à sombra. [nao verificado]
-
-```text
-SAIDA_BEGIN
-sonda_leitura: sonda_fp.py [9b60a7ed9c0c0dce] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-emp2 colabs=741 com_batida_na_janela=401 codigos=11
-emp3 colabs=163 com_batida_na_janela=101 codigos=5
-emp4 colabs=35 com_batida_na_janela=20 codigos=4
-M C001 | emp2 | nao mapeado | - | 1 pre-candidatos, 0 casam dia a dia
-M C002 | emp2 | MAPEADO | col882 | 1 pre-candidatos, 1 casam dia a dia
-M C003 | emp2 | MAPEADO | col719 | 1 pre-candidatos, 1 casam dia a dia
-M C004 | emp2 | MAPEADO | col281 | 1 pre-candidatos, 1 casam dia a dia
-M C005 | emp2 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
-M C006 | emp2 | MAPEADO | col351 | 1 pre-candidatos, 1 casam dia a dia
-M C007 | emp2 | MAPEADO | col307 | 1 pre-candidatos, 1 casam dia a dia
-M C008 | emp2 | nao mapeado | - | 1 pre-candidatos, 0 casam dia a dia
-M C009 | emp2 | MAPEADO | col902 | 1 pre-candidatos, 1 casam dia a dia
-M C010 | emp2 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
-M C011 | emp2 | MAPEADO | col327 | 1 pre-candidatos, 1 casam dia a dia
-M C012 | emp3 | nao mapeado | - | 1 pre-candidatos, 0 casam dia a dia
-M C013 | emp3 | MAPEADO | col117 | 1 pre-candidatos, 1 casam dia a dia
-M C014 | emp3 | MAPEADO | col125 | 1 pre-candidatos, 1 casam dia a dia
-M C015 | emp3 | MAPEADO | col89 | 1 pre-candidatos, 1 casam dia a dia
-M C016 | emp3 | MAPEADO | col133 | 1 pre-candidatos, 1 casam dia a dia
-M C017 | emp4 | MAPEADO | col32 | 1 pre-candidatos, 1 casam dia a dia
-M C018 | emp4 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
-M C019 | emp4 | nao mapeado | - | 0 pre-candidatos, 0 casam dia a dia
-M C020 | emp4 | MAPEADO | col712 | 1 pre-candidatos, 1 casam dia a dia
-ESTADO: mapearam 13 de 20
-FIM_SONDA_FP
-rc_sombra=0
-SAIDA_END
-```
-
-O dado fornecido reporta **13/20 casamentos únicos**, nenhum ambíguo, `rc_sombra=0` e nenhuma ocorrência de `ERRO_COLETA`; sem validação independente. [nao verificado]  
-C001, C008 e C012: cada um tem **0 candidatos finais**, após 1 pré-candidato; falharam na comparação diária, mas a divergência concreta não foi fornecida. [nao verificado]  
-C005, C010, C018 e C019: cada um tem **0 pré-candidatos e 0 finais**; exclusão já no pré-filtro, cuja composição e causa concreta não estão demonstradas. [nao verificado]  
-Dia: `str(data)` de um `date` coincide com `AAAA-MM-DD`; o PDF usa `dia['data']`, exibido como `%d/%m` + dia da semana. A implementação da comparação na sonda está [nao verificado]. [pdf_espelho.py:868](app/relatorios/pdf_espelho.py:868)  
-Hora: o PDF usa `timezone.localtime(b.timestamp).strftime('%H:%M')`, somente para `orfa=False`; espúrias aparecem separadas como `*HH:MM`. [pdf_espelho.py:876](app/relatorios/pdf_espelho.py:876), [pdf_espelho.py:881](app/relatorios/pdf_espelho.py:881), [pdf_espelho.py:885](app/relatorios/pdf_espelho.py:885)  
-Atribuir os sete insucessos a espúrias do auditor, multiconjunto de HH:MM ou erro de coleta, e confirmar que a sonda reproduz esses critérios: [nao verificado].
-
-## 17/11 14:22 · sessao 64f2c72c2154 · - · - · origem=Ronald (tmux)
-
-Achados para consolidar:
-
-- **Item 5 — PROCEDE:** a porta atual decide somente pertinência da obra à fila 1 viva, por ID e estado das células do bloco OBRAS; não lê classe tela, instrumento ou balde: `bin/disjuntor.py:1707`, `bin/disjuntor.py:1688`, `bin/hook_stop_fila1.py:231`, `bin/hook_stop_fila1.py:250`. O literal novo não resolve a obra simultaneamente fila 1 e tela [nao verificado — anexo aval.txt]. Essa interseção não é impossível na documentação: há item histórico escrito “a outra metade e a TELA, e ela e a FILA 1 AGORA”, já fechado: `app/docs/BACKLOG.md:1248`. Não afirmar construtor desse item hoje aberto [nao verificado].
-
-- **Item 4 / CONTRATO — PROCEDE:** o aval remete a identificação de complemento ao contrato, mas suas cinco cláusulas não dão um campo, evento, ID ou critério para distinguir complemento de volta [nao verificado — anexo aval.txt]. A API atual recebe obra/texto/via, sem parâmetro de complemento ou volta: `bin/disjuntor.py:1698`; o coletor reúne todos os briefs próprios e citados: `bin/disjuntor.py:1607`. A regra vigente permite à sessão decidir tecnicamente quando obra entra como complemento: `CLAUDE.md:276`, `CLAUDE.md:278`; exigir brief próprio não revoga necessariamente esse poder.
-
-- **CONDUTA — PROCEDE:** “qualquer construtor ou complemento”, exigindo itens 1–4, abrange também tela e instrumento, enquanto o alcance do item 5 diz deixá-los como estão [nao verificado — anexo aval.txt]. O código existente não dá um significado mais estreito a “qualquer”: `bin/disjuntor.py:1698`, `bin/disjuntor.py:1737`.
-
-- **PROIBIDO — NAO PROCEDE, quanto a alegar conflito obrigatório:** endurecer o juiz existente e manter a porta existente é compatível com as funções únicas atuais: `bin/disjuntor.py:1522`, `bin/disjuntor.py:1698`; o contrato prévio único e pouso separado de instrumento já são exigidos: `CLAUDE.md:394`, `CLAUDE.md:327`, `app/docs/PISTA.md:170`. Não há autorização para uma allowlist implícita de obras já aprovadas [nao verificado — anexo aval.txt]. `CENSO APROVADO` atual prova brief aprovado, não vaga aberta: `bin/disjuntor.py:1703`.
-
-- **Exportada/dinheiro/! — NAO PROCEDE como efeito direto declarado:** os pontos de mudança indicados são o parser do brief e a porta de abertura, que leem arquivos e decidem recusa: `bin/disjuntor.py:1525`, `bin/disjuntor.py:1713`, `bin/disjuntor.py:1728`. Isso não amplia autorização de negócio: `CLAUDE.md:265`, `CLAUDE.md:268`; a competência exportada segue exigindo `!`: `CLAUDE.md:411`. Implementação futura além desses pontos [nao verificado].
-
-- **RESERVA — NAO PROCEDE quanto a colisão necessária:** leitura adversarial e mapa de escritores/leitores já pertencem ao despacho Codex: `CLAUDE.md:358`, `CLAUDE.md:359`; a lista vigente de classes inclui segundo juiz, segundo escritor, relógio, derivação paralela, selo sem mordida, ordem de trava e pouso sem pré-requisito: `CLAUDE.md:373`. Estado atual dos ataques F4/F7/F3/F9 e sua resposta no brief [nao verificado]. [nao verificado]
-
-Regra vigente e documentação:
-
-- Fila 1 é contrato 20 e placar L-099 pela conduta: `CLAUDE.md:291`; o código usa os itens andáveis do bloco OBRAS: `bin/disjuntor.py:1634`. UI fila 2 tem recorte próprio: `CLAUDE.md:312`; instrumento em `bin/` tem pouso próprio: `CLAUDE.md:327`.
-- O registro existente do CENSO-ANTES-DA-VAGA descreve brief `logs/<obra>/brief*.md`, perguntas sem corte, recusa e PAREI: `app/docs/BACKLOG.md:802`. Defeitos já registrados do instrumento ficam na linha seguinte: `app/docs/BACKLOG.md:803`.
-- CORTES.md declara ser gerado do JSON: `app/docs/CORTES.md:3`; corte ESPINHA-ANTES-DA-UI mantém prioridade estrutural e proíbe allowlist: `app/docs/CORTES.md:300`.
-- Contrato precisa declarar quem chama, espera, falha/limite, medida e desligamento; procedente muda o contrato antes do código: `app/docs/PISTA.md:170`, `app/docs/PISTA.md:174`.
-
-**BACKLOG: quem escreve / quem lê**
-
-- **Escrevem:** sessão registra prompt em OBRAS no mesmo turno, autorizada pela rotina: `CLAUDE.md:285`, `CLAUDE.md:436`. O bloco OBRAS e o marcador ORDEM-VIVA são escritos à mão: `bin/gerar_backlog.py:103`, `bin/gerar_backlog.py:113`; `backlog_estado.py` recebe ID/texto e grava coluna de estado `[3]`: `bin/backlog_estado.py:29`, `bin/backlog_estado.py:58`. O gerador escreve o arquivo preservando esse bloco: `bin/gerar_backlog.py:119`, `bin/gerar_backlog.py:138`.
-- **Leem para o portão:** `disjuntor._fila1_viva`, que usa o juiz do hook: `bin/disjuntor.py:1630`, `bin/disjuntor.py:1634`; `_itens_andaveis` lê ID, fechamento e parada: `bin/hook_stop_fila1.py:244`, `bin/hook_stop_fila1.py:250`.
-- **Outros leitores comprovados:** fabricante: `bin/fabricante_alvo.py:238`; contador de interrompidas: `bin/interrompidas_estado.py:89`; publicação do relato: `bin/relato.sh:130`.
-
-## 17/11 14:22 · sessao 35317b459d4b · - · - · origem=Ronald (tmux)
-
-Achados do wrapper/contrato, somente por leitura:
-
-- **Item 5 — PROCEDE:** ampliar apenas `_censo_nega` não cobre Codex lateral: `main_censo` calcula pertença à fila 1 e retorna 0 antes da porta quando está fora; só depois chama `_censo_nega` (`bin/disjuntor.py:2306`, `bin/disjuntor.py:2311`, `bin/disjuntor.py:2315`). O wrapper efetivamente chama esse CLI antes de prender a vaga, passando raiz do repositório vivo, obra, pid, hash, pergunta e anexos (`bin/codex_pergunta.sh:241`, `bin/codex_pergunta.sh:247`, `bin/codex_pergunta.sh:252`).
-
-- **Item 4 — PROCEDE:** hoje o coletor é união de todos os briefs da pasta da obra e dos citados; não exige que exista brief próprio quando um citado já serve (`bin/disjuntor.py:1604`, `bin/disjuntor.py:1607`, `bin/disjuntor.py:1619`). O wrapper fornece somente obra/papel/WT/pergunta/anexos, sem campo de complemento ou volta de construção (`bin/codex_pergunta.sh:57`, `bin/codex_pergunta.sh:81`, `bin/codex_pergunta.sh:247`). Não há nessa chamada informação que distinga complemento de nova chamada para obra aberta [nao verificado quanto a outros chamadores].
-
-- **CONTRATO — PROCEDE na medida:** o ESTADO atual conta negativas totais, não por motivo: incrementa `negados` ao ler `NEGOU`, retornando um único número (`bin/disjuntor.py:2102`, `bin/disjuntor.py:2104`, `bin/disjuntor.py:2145`). Seu texto publica “aberturas negadas por censo nas 24 h”, também sem motivos (`bin/disjuntor.py:2164`). As negativas vêm de `logs/sessao/disjuntor.log`, não de `chamadas.log` (`bin/disjuntor.py:2090`). O censo antecede a gravação do `ini`; chamada recusada ali não alcança esse registro (`bin/codex_pergunta.sh:247`, `bin/codex_pergunta.sh:308`).
-
-- **CONTRATO — NAO PROCEDE quanto a falta da porta no wrapper:** ela existe e qualquer rc diferente de zero recusa; raiz usada para BACKLOG/brief/RELATO é a raiz do repositório vivo, derivada do git-common-dir (`bin/codex_pergunta.sh:72`, `bin/codex_pergunta.sh:247`). Brief ilegível retorna motivo de recusa (`bin/disjuntor.py:1524`, `bin/disjuntor.py:1528`); falha ao ler pergunta/anexo vira negativa no CLI (`bin/disjuntor.py:2295`, `bin/disjuntor.py:2308`).
-
-- **CONTRATO — NAO PROCEDE quanto a “PAREI provado como hoje”:** a prova existente exige wrapper vivo desta raiz, mesmo uid, obra exata e papel `censo|leitura`; quando acaba, deixa de provar espera (`bin/hook_stop_fila1.py:734`, `bin/hook_stop_fila1.py:744`, `bin/hook_stop_fila1.py:763`, `bin/hook_stop_fila1.py:770`). O hook não lê o conteúdo do brief para essa prova; verifica processo e ambiente (`bin/hook_stop_fila1.py:747`, `bin/hook_stop_fila1.py:759`).
-
-- **CONDUTA/RESERVA — PROCEDE quanto ao acesso do leitor:** os quatro papéis de leitura do Codex recebem cópia feita por `git archive` e executam em `$WS`, sob read-only (`bin/codex_pergunta.sh:312`, `bin/codex_pergunta.sh:315`, `bin/codex_pergunta.sh:425`). `logs/` é ignorado (`.gitignore:53`). Portanto esse leitor não recebe os logs vivos por esse mecanismo; recebe os anexos concatenados e raspados no prompt (`bin/codex_pergunta.sh:331`, `bin/codex_pergunta.sh:334`, `bin/codex_pergunta.sh:360`). Exigir que o Codex confirme a busca nos logs sem fornecer seu resultado deixa essa confirmação [nao verificado]. O portão em host tem acesso à raiz viva por argumento; não confundir com o leitor Codex (`bin/codex_pergunta.sh:247`).
-
-- **Item 1/RED — prova de compatibilidade antiga:** a fixture atualmente chamada `CONFORME` contém apenas CENSO, leitores, escritores, decisões e perguntas de lei 0; não contém caminhos/ataques (`bin/tests/test_censo_antes_da_vaga.sh:54`). A forma atual aprova quando esses requisitos fecham (`bin/disjuntor.py:1565`, `bin/disjuntor.py:1577`). Logo o aperto deliberadamente torna insuficiente um brief conforme ao contrato antigo; ocorrência de brief de produção nessas condições [nao verificado].
-
-Quem escreve/lê:
-
-| Arquivo/campo | Escritor | Leitor |
-|---|---|---|
-| `logs/<OBRA>/brief*.md` e novos campos caminhos/ponto/ataques | Autor concreto não demonstrado na cópia [nao verificado]; o aval anexo atribui conferência à sessão [nao verificado como arquivo:linha] | Coletor `_briefs_do_censo`, depois `censo_do_brief` (`bin/disjuntor.py:1607`, `bin/disjuntor.py:1718`) |
-| `BACKLOG` | Registrar BACKLOG é ação pré-aprovada da sessão/Code (`CLAUDE.md:282`, `CLAUDE.md:285`); prompt que pede obra deve virar item no bloco OBRAS (`CLAUDE.md:436`) | `main_censo` consulta fila 1 antes da porta (`bin/disjuntor.py:2306`); `_censo_nega` recebe as mesmas células (`bin/disjuntor.py:2315`) |
-| `chamadas.log`: hora, obra, papel, hash12, pid, `ini`, pergunta raspada | Wrapper, antes da chamada (`bin/codex_pergunta.sh:266`, `bin/codex_pergunta.sh:308`) | Parser `_linhas_chamadas`, que extrai t/obra/papel/chave, ignorando texto da pergunta (`bin/codex_limite_estado.py:49`, `bin/codex_limite_estado.py:63`) |
-| `chamadas.log`: `fim`, thread_id, rc, duração | Trap `_saida` do wrapper (`bin/codex_pergunta.sh:269`, `bin/codex_pergunta.sh:272`) | Mesmo parser; últimas chamadas/rc e procedência por thread (`bin/codex_limite_estado.py:66`, `bin/codex_limite_estado.py:82`, `bin/codex_limite_estado.py:92`); `gerar_codex_estado` usa procedência (`bin/gerar_codex_estado.py:176`) |
-| Casamento `ini` com censo aprovado | Wrapper escreve ini; trilha de aprovação vem da porta (`bin/codex_pergunta.sh:308`, `bin/disjuntor.py:1722`) | `_censo_24h`, mesma obra+pid+hash em janela de 600 s (`bin/disjuntor.py:2052`, `bin/disjuntor.py:2134`) |
-
-A mudança de instrumento em `bin/` não pode ser entregue pelo papel construtor deste wrapper: ele proíbe `bin/` e tudo fora de app (`bin/codex_pergunta.sh:128`, `bin/codex_pergunta.sh:134`); isso é compatível com instrumento/pouso próprio (`CLAUDE.md:327`). Nenhum apply de dinheiro ou exportada decorre desses caminhos do portão; operações de negócio e estado de produção citados no anexo continuam [nao verificado].
-
-## 17/11 14:22 · sessao 12b949535d78 · E4C-F2 · verificador · origem=Code
-
-1. **O INSERT antigo grava `False` nas duas colunas.** Os defaults estão no banco nas migrations [0054:19](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L19) e [0055:26](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26).
-
-   **Nenhuma das duas constraints citadas rejeita esse INSERT, para qualquer `ato`.** Ambas têm a forma `ato=... OR campo=False`; com `False`, a segunda condição sempre satisfaz o check ([0054:24](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L24); [0055:34](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L34)).
-
-2. **O backfill continua correto para as linhas alcançadas pelo UPDATE.** Ele atribui explicitamente `True` às RESPOSTAS com motivo; `db_default=False` não impede essa atualização ([0055:12](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12)).
-
-   A ordem apresentada é coerente: adiciona a coluna, atualiza, verifica constraints diferidas antes do próximo `ALTER TABLE` e adiciona o check. O código já emprega esse mecanismo na 0051 ([0055:22–35](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L22); [0051:101–104](./app/chamados/migrations/0051_decisao_pergunta.py#L101)). Execução efetiva dessa sequência: **[nao verificado]**.
-
-   **A ressalva é temporal:** o backfill roda uma vez; INSERTs antigos posteriores recebem `False`, mesmo quando têm `ato='resposta'` e motivo preenchido — combinação que o próprio backfill classificaria como `True` ([0055:12](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12), [0055:26–28](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26)).
-
-3. **Os dois campos e respectivos checks estão consistentes por inspeção.** Modelo e migrations declaram igualmente `default=False, db_default=False`, com as mesmas condições e nomes de constraints ([models.py:4178](./app/chamados/models.py#L4178), [4185](./app/chamados/models.py#L4185), [4203–4207](./app/chamados/models.py#L4203); [0054:19–25](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L19); [0055:26–35](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26)).
-
-   `makemigrations` executado e sem diferenças, inclusive fora desses campos: **[nao verificado]**.
-
-4. **O teste morde o default do banco, por construção.** O SQL omite as duas colunas, usa `RETURNING` e exige `(False, False)`; não passa pelo default Python. O segundo teste exige os dois defaults no catálogo ([teste:25–32](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L25); [teste:34–39](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L34)). Num banco reconstruído sem os `db_default` das migrations, o primeiro INSERT deve falhar por `NOT NULL`; remover apenas os defaults do modelo, mantendo o banco já migrado, não testa essa regressão ([0054:19](./app/chamados/migrations/0054_decisao_da_ressuscitacao.py#L19); [0055:26](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L26); [teste:25](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L25)).
-
-   **Não deixa a linha órfã para o teardown:** `_Desfaz` sai do `atomic`, desfazendo o INSERT antes da asserção; somente essa exceção é capturada ([teste:21–32](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L21)). Isso pressupõe a FK diferida declarada no comentário; configuração real da FK e execução de `check_constraints`: **[nao verificado]** ([teste:24](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L24)). A reversão de eventual avanço da sequência de IDs também não é verificada pelo teste ([teste:25](./app/chamados/tests/test_f2_db_default_das_colunas_novas.py#L25)).
-
-5. **Escritores e leitores identificados:**
-
-   - `da_ressuscitacao`: a ressuscitação escreve `True`; o predicado exige REABERTURA e marca verdadeira; a carga da tarefa usa esse predicado para excluir a linha. `False` conserva o tratamento comum ([models.py:1695](./app/chamados/models.py#L1695), [4214](./app/chamados/models.py#L4214); [tarefa_do_dia.py:426](./app/chamados/services/tarefa_do_dia.py#L426)).
-   - `resposta_mantem_validacao`: resposta humana escreve `False`; automática, carimbo pela trilha e foto da projeção escrevem `True`; o backfill escreve `True` no histórico selecionado ([disputa_emissao.py:1534](./app/chamados/services/disputa_emissao.py#L1534), [1688](./app/chamados/services/disputa_emissao.py#L1688), [1710](./app/chamados/services/disputa_emissao.py#L1710); [models.py:4253](./app/chamados/models.py#L4253); [0055:12](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12)).
-   - A porta genérica instancia os dicionários e insere em lote; os leitores Python e SQL interpretam RESPOSTA com `False` como ato que desfaz validação ([models.py:4328](./app/chamados/models.py#L4328), [4281](./app/chamados/models.py#L4281), [3547](./app/chamados/models.py#L3547), [4311–4312](./app/chamados/models.py#L4311)).
-
-   **Há, portanto, um contraexemplo semântico para a janela:** validação em T0; RESPOSTA automática ou pela trilha em T1>T0, inserida pelo código antigo após o backfill, omitindo a coluna. Ela recebe `False`, e a leitura nova desfaz a validação. Porém esses caminhos preservam `validada_em` e exigem `True` na cópia atual ([disputa_emissao.py:1685–1688](./app/chamados/services/disputa_emissao.py#L1685), [1707–1710](./app/chamados/services/disputa_emissao.py#L1707); [models.py:4281](./app/chamados/models.py#L4281), [4311–4312](./app/chamados/models.py#L4311)). Ocorrência desse caso em produção e corpos exatos desses escritores antigos: **[nao verificado]**.
-
-**REPROVADO** para o pouso irrestrito descrito: o delta resolve a aceitação dos INSERTs, mas o backfill único não preserva a semântica das RESPOSTAS antigas posteriores que deveriam manter validação ([0055:12,28](./app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py#L12); [models.py:4281](./app/chamados/models.py#L4281)).
-
-_6594 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6599 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
