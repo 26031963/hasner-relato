@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 23:12** · publicado em **16/11/2026 23:11** (UTC-3)
+> Ultima resposta processada: **16/11/2026 23:13** · publicado em **16/11/2026 23:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 23:13 · sessao a9ed8c02f370 · - · - · origem=Ronald (tmux)
+
+Numeração dos anexos contada por transcrição integral em strings em memória; nenhum arquivo escrito. `brief.md` tem 186 linhas e `matriz.md` 136 linhas nesta transcrição; equivalência com arquivos locais dos anexos = [nao verificado].
+
+| Origem | Julgamento | Evidência na BASE |
+|---|---|---|
+| brief:38 — F1 sem ramo absorção | **CAIU como dependência do contrato D01**: a F1 real é `pergunta_respondida`, sem leitura de atos. **CONFERE** permanecer no carimbo, por corte posterior. | `app/chamados/juizes.py:1544`; `app/chamados/services/materializacao.py:1105`; `app/docs/CORTES.md:487` |
+| brief:106-107 — assinatura `leitura(...decisoes,agora,materializada_conservada_em)` | **CAIU**: o contrato positivo pousado é `pergunta_respondida(p)` → booleano I∧T; não é assinatura substituída por outra versão de D01. | `app/chamados/juizes.py:1544`; `app/chamados/juizes.py:1552` |
+| brief:117 — carga fornece decisões ao juiz e texto D01 | **CAIU**: carga mantém `agora` e `slots`, mas chama `_slot_esperado(p,carga=self)`; juiz lê `p.resposta_colab` ou passa `p` real ao derivador. | `app/chamados/services/carga_pergunta_viva.py:88`; `app/chamados/services/carga_pergunta_viva.py:119`; `app/chamados/juizes.py:364`; `app/chamados/juizes.py:376` |
+| brief:137 — ordem `(ato_em,pk)` “do F1” | **CONFERE na sequência**, **CAIU atribuição ao D01/F1 pousado**. | `app/chamados/models.py:4056`; `app/chamados/juizes.py:1544` |
+| brief:144 — teste de absorção não servido pelo D01 | **CAIU contrato D01**; permanência do leitor por carimbo **CONFERE pelo corte**, sem necessidade de perguntar de novo. | `app/chamados/services/materializacao.py:1105`; `app/docs/CORTES.md:487` |
+| brief:162-164 — absorção ainda pergunta de lei e sem ato que desfaz | **CAIU pergunta aberta**: corte manda M9b/M10 permanecer no carimbo. A devolução efetivamente registra REABERTURA antes de limpar a projeção. | `app/docs/CORTES.md:487`; `app/chamados/services/disputa_emissao.py:1631`; `app/chamados/services/disputa_emissao.py:1648` |
+| matriz:20,22-28 — contrato de entrada D01 completo | **CAIU**: juiz real I∧T e projeção temporal, sem `LeituraDosAtos`. Ordem da sequência **CONFERE**, mas não prova o redutor descrito. | `app/chamados/juizes.py:1382`; `app/chamados/juizes.py:1544`; `app/chamados/models.py:4056` |
+| matriz:40 M7 — decisões/agora da F1 no estado de aplicação | **CAIU**: testemunha recebe `(disputa,p)` e consulta projeção/derivador. | `app/chamados/services/materializacao.py:852`; `app/chamados/services/materializacao.py:869`; `app/chamados/services/materializacao.py:873` |
+| matriz:43 M9b — “ninguém lê ABSORCAO hoje” | **CAIU**: tarefa lê ABSORCAO e status da ausência, retornando quatro estados específicos. | `app/chamados/services/tarefa_do_dia.py:178` |
+| matriz:44 M10 — absorção como pergunta de lei dependente F1 | **CAIU pergunta aberta**; **CONFERE leitor mantido no carimbo**, por corte. | `app/docs/CORTES.md:487`; `app/chamados/services/materializacao.py:1105` |
+| matriz:72 E9 — REABERTURA alimenta D01 | **CONFERE escrita da REABERTURA**, **CAIU leitor D01**. | `app/chamados/services/disputa_emissao.py:1631`; `app/chamados/juizes.py:1389`; `app/chamados/juizes.py:1544` |
+| matriz:91 J1 — embrulho `_PerguntaParaPlantio` na F1 pousada | **CAIU**: juiz passa `p` diretamente; ramo data_hora lê projeção. | `app/chamados/juizes.py:364`; `app/chamados/juizes.py:376` |
+| matriz:94-99 — divergência instalada juiz D01 × materializador projeção | **CAIU na BASE**: juiz e materializador continuam recebendo projeção; a obrigação documental de ordem/contador permanece escrita. | `app/chamados/juizes.py:376`; `app/chamados/services/materializacao.py:895`; `app/docs/CORTES.md:487` |
+| matriz:106 — leitores do núcleo passam a `leitura().resposta` | **CAIU suporte da F1 pousada**. O contrato vigente define um juiz de “respondida”, sem decidir por si só que texto do último ato substitui a projeção. | `app/chamados/juizes.py:1544`; `app/docs/LEIS.md:151` |
+| matriz:107-108 — fila M23 por D01 | **CAIU suporte D01**; fila atual documenta R/V/C da projeção. | `app/chamados/services/materializacao.py:2032`; `app/chamados/services/materializacao.py:2035` |
+| matriz:110 — três chamadores com decisões/agora D01 | **CAIU nesse formato**: juiz continua chamando o derivador com pergunta real e carga opcional. | `app/chamados/juizes.py:376` |
+| matriz:121-122 — lei de absorção aberta | **CAIU**: respondida no adendo matriz:133-136 e no corte da BASE. | `app/docs/CORTES.md:487` |
+| matriz:131 — contagem das marcas | É resumo editorial, não dependência adicional; contagem de marcas atuais do contrato = [nao verificado]. | [nao verificado] |
+
+Premissas BUG-PAR:
+
+- **brief:35;148-153 e matriz:40;48 — CONFERE que a BUG-PAR reescreveu a testemunha e introduziu leitores**: `_estado_pelo_derivador`, K6 da pergunta/irmã, par projetado e classificação do contador existem na BASE. Os offsets e identidade do diff `6e2fc9133` **CAÍRAM como descrição da versão pousada**; o RELATO registra c4+c4c e os estados L1/L5 estão implementados. (`app/chamados/services/materializacao.py:876`; `app/chamados/services/materializacao.py:885`; `app/chamados/services/materializacao.py:907`; `app/chamados/services/materializacao.py:339`; `app/docs/RELATO.md:5`)
+- **brief:152-153;184 e matriz:12-14 — CONFERE a necessidade de recensear depois da BUG-PAR**; premissa “BUG-PAR fora do main/aguardando” **CAIU**, pois a BASE registra pouso. Comparação histórica dos commits sem `.git` = [nao verificado]. (`app/docs/RELATO.md:5`)
+- **brief:156-157 — CAIU F1 como adição de `atos_pergunta`/embrulho**, embora **CONFIRA** o vínculo de chamada juiz → `_ts_tipo_do_plantio`. (`app/chamados/juizes.py:376`; `app/chamados/juizes.py:1544`)
+
+Leis:
+
+- **DECIDIDO PELA LEI CORTES-F2-F9-1611, item 3 | contestavel**: absorção M9b/M10 permanece no carimbo na F4; predicado por ato pertence à E4d. (`app/docs/CORTES.md:487`)
+- **DECIDIDO PELA LEI CORTES-F2-F9-1611, item 4 | contestavel**: guardas E11/E14/E17 permanecem na projeção por allowlist exata; saída futura na E4d com lápide. (`app/docs/CORTES.md:487`)
+- **DECIDIDO PELA LEI L-130 | contestavel**: respondida exige instante e texto após trim; os dois meios pares são ilegais; reabrir/ressuscitar limpa o par. Isso não fornece sozinho a antiga semântica D01. (`app/docs/LEIS.md:151`; `app/chamados/juizes.py:1544`)
+- As perguntas sobre absorção e limbo do brief:162-169 / matriz:121-124 não sobram. A condição de pouso/J1 continua documentada, mas o estado atual da costura tem de ser reconferido depois da B2. (`app/docs/CORTES.md:487`; `app/chamados/juizes.py:376`)
+- A questão “ressuscitar devolve ao colaborador” está registrada como não decidida, porém fora deste pedido de leitura da F4; não ampliar a lista de lei com ela. (`app/docs/LEIS.md:151`)
+
+PRE-BACKFILL:
+
+- Mora em `DecisaoPergunta.linhas_da_projecao_sem_linha`, **`app/chamados/models.py:4081`**. É leitura que devolve dicionários; exige correspondência **pergunta + ato + instante**, sem esconder resposta anterior atrás de qualquer RESPOSTA existente. Produz RESPOSTA para `respondida_em` e VALIDACAO para `validada_em`, preservando autor da validação. (`app/chamados/models.py:4091`; `app/chamados/models.py:4094`; `app/chamados/models.py:4098`; `app/chamados/models.py:4102`)
+- O medidor real `linhas_a_criar()` usa esse helper, mas mede horizonte/sem dia/conversa, distribuindo competência pela função real; portanto precisa distinguir esse recorte do total integral da frota. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:44`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:55`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:67`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:79`)
+- **O command atual não aplica as linhas R/V do item 1**: o texto declara outro ato, com aval próprio; `--aplicar` cobre itens 2 e 4. Não dizer que executar `backfill_decisoes_pergunta --aplicar` satisfaz esse pré-requisito. (`app/chamados/management/commands/backfill_decisoes_pergunta.py:3`)
+- Exigência verificável antes de trocar um leitor por atos: zerar as faltas correspondentes no universo efetivamente migrado, incluindo re-respostas posteriores à reabertura; cobertura atual e necessidade quantitativa = [nao verificado]. A função conserva projeção vigente e não reconstrói texto já sobrescrito. (`app/chamados/models.py:4084`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:12`)
+- Números do brief são históricos anexados; números atuais = [nao verificado]. As duas sondas necessárias são helper direto em lotes sobre todas as perguntas e `linhas_a_criar()` para o recorte oficial; nenhuma precisa executar o `Command.handle`, que no DRY faz simulação de apply com escrita/rollback. (`app/chamados/models.py:4081`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:44`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:578`)
 
 ## 16/11 23:12 · sessao ecdfda28a78b · - · - · origem=Ronald (tmux)
 
@@ -1196,25 +1243,4 @@ Tarefa/dono não decorre apenas de I/T: última linha RESPOSTA vazia exige respo
 
 Existe oposição condicional: placar diz “respondido” e app diz “pendente” para I sem T cujo instante esteja na janela pós-cobrança. `app/chamados/services/verbos.py:335`, `app/chamados/services/verbos.py:342`, `app/chamados/services/pergunta_no_app.py:81`. A ocorrência dessa janela nas pk reais é [não verificado].
 
-## 16/11 22:23 · sessao 00869dd13935 · - · - · origem=Ronald (tmux)
-
-Q6 — há caminhos de escrita que alcançam competência entregue; o comando novo não protege os demais consumidores. A ocorrência nas 141 perguntas do dado não pode ser afirmada sem conhecer suas datas, âncoras e lâmpadas [não verificado].
-
-| Consumidor | Mudança e escrita possível | Entregue |
-|---|---|---|
-| **CSF / supra_juiz** | `sem_veredito_entre` deixa de reter I sem T/T sem I (`app/chamados/models.py:1923`). A lista compartilhada libera CSF (`app/ponto/supra_juiz.py:573`, `:588`); o executor chama `retratar` (`app/ponto/management/commands/supra_juiz.py:261`, `:286`). `_retratar` fecha chamado, pode rejeitar justificativa e chama resolver (`app/chamados/reconciliador.py:520`, `:525`, `:531`, `:538`). | **Sim, potencial.** O gate de pergunta viva exclui entregue explicitamente (`app/chamados/models.py:364`); portanto não substitui a retenção removida. O cron `--executar` está configurado (`app/config/crons.py:599`), mas sua janela padrão é atual (`app/ponto/management/commands/supra_juiz.py:90`). Alcance nas 141 [não verificado]. |
-| **Pauta após fechamento** | S143 passa I sem T para `reabrir_credor` (`app/chamados/services/disputa_emissao.py:1843`, `:1969`), que recusa entregue por K6 (`:1857`, `:1867`) e escreve nota de recusa (`:1879`). O resolver coleta (`:1973`); `transicionar_com_pauta` escreve Pauta no mesmo ato (`app/chamados/services/fecho_runtime.py:161`, `:168`, `:139`). | **Sim, potencial**, após fechamento agora liberado pela retenção B; nenhum descarimbo é necessário para nascer essa Pauta. |
-| **Cartório** | A isenção D passa de T para J (`app/ponto/services/cartorio.py:1641`); T sem I deixa de isentar o chamado e pode liberar dedup/fecho (`:1652`, `:1667`) ou tentativa de ressuscitação (`:1674`). | **Não há veto K6 nesse bloco.** A ressuscitação continua selecionando somente texto NULL/`''` (`app/chamados/models.py:1530`), então T sem I isolado não é descarimbado; irmãs vazias no mesmo chamado podem ser atingidas (`:1600`, `:1629`). O comentário reconhece alcance exportado histórico (`app/ponto/services/cartorio.py:1626`). |
-| **Reconciliador — lavrar_sem_turno_aberto** | D passa a J (`app/chamados/reconciliador.py:365`); T sem I pode chegar ao carimbo `sem_turno_aberto` e ao fechamento da disputa (`:407`, `:413`). | **Não existe K6 neste caminho**; depende de ausência de turno e C6 morto (`:373`, `:399`). O carimbo escreve materialização/via (`app/chamados/models.py:3239`, `:3263`), sem tocar o par quando `resposta=None` (`:3241`). |
-| **Reconciliador — veredito_orfa** | D passa a J (`app/chamados/reconciliador.py:1084`); T sem I pode produzir `ENCERRA` após lâmpada, C6 e teto (`:1087`, `:1093`). O consumidor chama `encerrar_fantasma` e evento (`:1138`, `:1150`, `:1152`), podendo fechar disputa (`:1173`). | **Sem veto K6 neste caminho**. `encerrar_fantasma` grava pela porta de carimbo (`app/chamados/models.py:3415`). Para I sem T a condição D já era falsa antes: a troca D não cria delta próprio nesse caso (`app/chamados/reconciliador.py:1085`). |
-| **Becos** | O leitor C usa property (`app/chamados/services/becos.py:29`); I sem T torna-se visível quando destino não terminal, reduzindo candidatos. Havendo destino terminal, `pode_fechar` ainda decide (`:33`). O ato resolve perguntas e fecha disputa (`:54`, `:56`). | A retirada da retenção B pode liberar disputa cuja pergunta esteja morta pelo C6, inclusive trancada (`app/chamados/models.py:1934`). **O cron instalado usa `--alarme`, sem escrita** (`app/config/crons.py:663`); a porta por evento continua escrevendo (`app/chamados/services/becos.py:74`, `:78`). |
-| **Materialização** | A seleção C agora exclui I sem T (`app/chamados/services/materializacao.py:2067`); reduz plantios. D `_materializar_resposta_hora` agora recusa T sem I com escrita de recusa (`:1314`, `:1322`). | A guarda K6 é específica para metades de intervalo fora163 (`:792`, `:805`), não geral. A fila pública não traz mais esses pares (`:2069`), mas a unidade `_materializar_uma` também tem consumidor no passivo (`app/chamados/services/passivo_validado.py:39`). Não afirmar novo plantio: a migração endurece anuência. |
-| **Vigia fio** | Usa J no subtipo c, mantendo antes o subtipo b para I sem T (`app/chamados/services/vigia_fio.py:634`, `:636`). | Esse trecho somente conta/lista e retorna (`:656`, `:660`). Não é escritor. |
-| **views_cobrar** | I sem T sai do lote validar e entra em aguardando colaborador (`app/chamados/views_cobrar.py:169`, `:175`, `:197`). | **Sem nova escrita para o par ilegal**; validação só é chamada para `pendentes` J (`:202`, `:209`), em POST humano (`:151`). |
-| **Dedup / backfill decisões** | A escolha canônica e mérito mudam T para J (`app/chamados/services/fio.py:1281`, `:1294`). O apply do dedup delega à porta do backfill (`app/chamados/management/commands/dedup_perguntas_fato.py:105`). | **O apply preserva grupos exportados**, com lista e saída PAREI (`:112`, `:132`); o contrato do veto aparece no próprio chamador (`:102`). |
-
-Pauta da tranca: `medir` só trabalha se `periodo_trancado` existir (`app/chamados/services/competencia_trancada.py:95`); pede `respostas_sem_veredito(ignorar_tranca=True)` (`:126`). I sem T sai de `decidir_pelo_dp` (`:137`), podendo liberar `pode_fechar` se C6 também disser morto (`:178`); `encerrar` escreve chamado/disputa (`:209`, `:229`) e Pauta somente se sobrar lista (`:232`). **Exportada e trancada são estados distintos no próprio contrato** (`:5`); o dado não prova quantas das 141 são trancadas [não verificado].
-
-Push: a migração de `recobrar_questionario` altera a contagem de pendentes (`app/chamados/services/disputa_emissao.py:1735`); o mesmo serviço envia push e grava nota (`:1748`, `:1758`), sem veto K6 nesse caminho. É ação de recobrança, não consequência demonstrada de cron [não verificado].
-
-_6209 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6210 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
