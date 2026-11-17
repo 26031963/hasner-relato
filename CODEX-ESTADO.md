@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 00:08** · publicado em **17/11/2026 00:09** (UTC-3)
+> Ultima resposta processada: **17/11/2026 00:16** · publicado em **17/11/2026 00:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 00:16 · sessao d624a857caf2 · EV-NA-BRECHA-1611 · sonda · origem=Code
+
+**Não conclui:** a saída fornecida registra erro de envelope V0 e zero casos lidos. [nao verificado]
+
+Não reexecutei a porta: ela cria e substitui arquivos, contrariando a restrição de somente leitura. [bin/sonda_leitura.sh:126](/home/ronald/codex_ws/6ce96a55e348c14734c286ff5785ebf8c8a13336/bin/sonda_leitura.sh:126) [bin/sonda_leitura.sh:134](/home/ronald/codex_ws/6ce96a55e348c14734c286ff5785ebf8c8a13336/bin/sonda_leitura.sh:134)
+
+Saída crua **fornecida no pedido**, sem nova execução: [nao verificado]
+
+```text
+sonda_leitura: i2_sonda.py [305bd1279efde7d3] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/v0-arvore-3580b35e0 (copia), banco segue sombra como leitor
+
+{"evento": "ERRO", "base": "520d7b55720888d80b46ffbca2ca73e59da40277", "fonte": "[nao verificado]", "etapa": "sonda", "mensagem": "RuntimeError: esta sonda pede o envelope V0 de 16/11/2026"}
+{"evento": "VEREDITO", "base": "520d7b55720888d80b46ffbca2ca73e59da40277", "fonte": "[nao verificado ate executar no envelope V0]", "casos_lidos": 0, "total": 12, "donos_condicionais": [], "sem_dono": ["col369 2026-10-12", "col864 2026-10-12", "col114 2026-11-08", "col114 2026-11-15", "col723 2026-10-08", "col746 2026-09-24", "col876 2026-09-21", "col130 2026-10-29", "col220 2026-11-10", "col868 2026-09-22", "col516 2026-10-23", "col884 2026-11-08"], "veredito": "erros: 1"}
+rc_sombra=0
+```
+
+“Sem dono” abaixo significa **não apurado pela sonda**; nenhum retorno de `InsumosDoDono.dono` foi demonstrado pelo dado fornecido. [nao verificado]
+
+| Caso | Dono e motivo |
+|---|---|
+| col369 2026-10-12 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col864 2026-10-12 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col114 2026-11-08 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col114 2026-11-15 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col723 2026-10-08 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col746 2026-09-24 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col876 2026-09-21 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col130 2026-10-29 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col220 2026-11-10 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col868 2026-09-22 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col516 2026-10-23 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+| col884 2026-11-08 | sem dono — erro de envelope V0; caso não lido. [nao verificado] |
+
+## 17/11 00:15 · sessao a9646a3a1d74 · EV-NA-BRECHA-1611 · sonda · origem=Code
+
+Não executei novamente: `i1_sonda.py` não foi localizado [nao verificado]. O envelope reescreve arquivos ([bin/sonda_leitura.sh:132]( /home/ronald/codex_ws/6ce96a55e348c14734c286ff5785ebf8c8a13336/bin/sonda_leitura.sh:132)), contrariando sua regra de somente leitura.
+
+Transcrição crua do dado fornecido, sem validação independente [nao verificado]:
+
+```text
+NUMERO classe_mesma comp10: 38
+COBERTURA comp10 {'sem_realizado': 10727, 'comparados': 7990, 'dias_erro': 3}
+NUMERO classe_mesma comp11: 39
+COBERTURA comp11 {'sem_realizado': 9207, 'futuros': 2380, 'comparados': 6858}
+EXEMPLO col263 2026-09-21 comp10 realizado 549 tela_mesmo_juiz 377
+EXEMPLO col263 2026-09-22 comp10 realizado 548 tela_mesmo_juiz 370
+EXEMPLO col263 2026-09-23 comp10 realizado 550 tela_mesmo_juiz 370
+EXEMPLO col263 2026-09-24 comp10 realizado 551 tela_mesmo_juiz 370
+EXEMPLO col263 2026-09-25 comp10 realizado 551 tela_mesmo_juiz 370
+EXEMPLO col263 2026-09-26 comp10 realizado 551 tela_mesmo_juiz 377
+EXEMPLO col263 2026-09-28 comp10 realizado 535 tela_mesmo_juiz 356
+EXEMPLO col263 2026-09-29 comp10 realizado 551 tela_mesmo_juiz 370
+EXEMPLO col263 2026-09-30 comp10 realizado 550 tela_mesmo_juiz 374
+EXEMPLO col263 2026-10-01 comp10 realizado 540 tela_mesmo_juiz 382
+VEREDITO INCOMPLETO [nao verificado] | erros: 3
+```
+
+1. col922, 01/11: o dado registra realizado 1382 e tela pelo mesmo juiz 481; diferença de 901 minutos [nao verificado].
+2. col922, 04/11: o dado registra realizado 676 e tela pelo mesmo juiz 458; diferença de 218 minutos [nao verificado].
+3. comp10: contagem informada de 38 casos, com 7990 dias comparados e 3 dias com erro [nao verificado].
+4. comp11: contagem informada de 39 casos, com 6858 dias comparados e 2380 futuros [nao verificado].
+5. Erros informados: `RuntimeError periodo da tela sem turno correspondente neste dia`, col277 em 03/10 e 19/10, col788 em 12/10; veredito incompleto, sem conclusão de reprodução ou total definitivo [nao verificado].
 
 ## 17/11 00:08 · sessao 76cb3264c26f · REVISAO-AVAL-C2PREP · verificador · origem=Code
 
@@ -340,26 +404,4 @@ Achados na base indicada:
 
 Possível fundamento de **PROCEDE, item 2**: predicado compartilhado já existe, causa não demonstrada e a redação da cura precisa manter L-123-MEDIDA-EM-PY. (`bin/commit_msg.sh:29`, `bin/tests/test_lei_akita.sh:347`, `bin/tests/test_lei_akita.sh:437`; causa: [não verificado]).
 
-## 16/11 23:53 · sessao 57325c0c3f95 · - · - · origem=Ronald (tmux)
-
-- A precedência anterior está literal: CLASSE-D após F1 e antes da F2; E4d depois. O complemento fornece exceção nominal expressa a essa posição, preservando antes da E4d. A posição antiga, por si, não gera colisão residual. ([BACKLOG.md:1990](app/docs/BACKLOG.md:1990); [RELATO.md:368](app/docs/RELATO.md:368); exceção: anexo fornecido, sem arquivo:linha da cópia [nao verificado]).
-- LU2-07 está ABERTA. Há, porém, registro de que **R1 da CLASSE-D independe de LU2-07/08** e podia pousar entre F1/F2. Assim, “a CLASSE-D tem pergunta aberta” confere, mas “toda CLASSE-D depende do corte LU2-07” não se demonstra. O anexo ordena esperar esse corte; isso é nova ordem expressa, não consequência técnica provada. ([RELATO.md:349](app/docs/RELATO.md:349); [RELATO.md:416](app/docs/RELATO.md:416)).
-- A regra de seguir outro item sem depender da pergunta está literal; ela sustenta continuar F2 quando a pergunta da CLASSE-D não a bloqueia. ([CLAUDE.md:269](CLAUDE.md:269); [CLAUDE.md:270](CLAUDE.md:270)).
-- A exceção de ordem não afasta as guardas de F2: selo da face SQL versus juiz na sombra inteira; supra_juiz em exportada não muda, DIFF que muda implica PAREI `!`. ([CORTES.md:487](app/docs/CORTES.md:487)).
-- O complemento não declara apply de dinheiro, alteração de escala/vínculo ou exportada; efeitos de execução futura permanecem [nao verificado]. Essas escritas exigem a guarda específica; exportada gravada exige `!`, e dinheiro em não exportada exige reversão, hash da exportada intacta e prova de frota. ([CLAUDE.md:265](CLAUDE.md:265); [CLAUDE.md:406](CLAUDE.md:406); [CLAUDE.md:411](CLAUDE.md:411)).
-
-## 16/11 23:51 · sessao e6a9726f3f13 · - · - · origem=Ronald (tmux)
-
-Confirmei a violação de ordem introduzida pelo `atomic` externo do delta: o comando mantém uma transação para os dois alvos, mas adquire as travas por pergunta, sem travar antes a união do lote (`app/chamados/management/commands/estoque_l130_instante_sem_texto.py:73`, `app/chamados/services/validacao.py:429`).
-
-No próprio cenário de teste, cada alvo nasce em disputa distinta (`app/chamados/tests/test_f1nova_b2_leitores.py:199`, `app/chamados/tests/test_f1nova_b2_leitores.py:208`). A sequência fica:
-
-`C → D1 → P38251 → C(reentrante) → D2(nova) → P38252`.
-
-Isso contraria a ordem explícita de adquirir todas as disputas/chamados antes da primeira pergunta; o helper ordena apenas os conjuntos recebidos em **cada chamada** (`app/chamados/models.py:2736`, `app/chamados/models.py:2770`, `app/chamados/models.py:2796`). Se os donos forem diferentes, também falta travar todos os colaboradores por PK no topo (`app/chamados/models.py:2759`).
-
-A correção preserva o `atomic` externo e pré-trava a união dos dois alvos antes do laço; as portas depois reentram nas mesmas linhas (`app/chamados/models.py:2741`).
-
-Donos/disputas reais de 38251/38252 e ocorrência de deadlock: [não verificado]. A catraca estrutural existente não certifica essa sequência entre chamadas; seu observador por tabela declara que não vê outra PK da mesma tabela adquirida depois (`app/chamados/tests/test_e1_v7_catracas.py:39`).
-
-_6248 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6250 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
