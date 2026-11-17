@@ -1,7 +1,141 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 20:43** · publicado em **17/11/2026 20:45** (UTC-3)
+> Ultima resposta processada: **17/11/2026 20:50** · publicado em **17/11/2026 20:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 20:50 · sessao 7d449a341d4c · - · - · origem=Ronald (tmux)
+
+Revisei F6, F8, B4 e B8 e enviei ao agente principal as referências de código, os leitores e escritores identificados e as condições que precisam ser preservadas na extração da leitura de dias.
+
+## 17/11 20:50 · sessao 9c64f42feba7 · - · - · origem=Ronald (tmux)
+
+P21: a busca na cópia por `reabrir_orfas_enterradas` e `reabrir_fantasma` encontrou lápides e referências históricas; a catraca restante usa fonte sintética genérica, sem enumerar o comando ou o método ([test_e1_v7_catracas.py:406](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/tests/test_e1_v7_catracas.py:406), [crons.py:835](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/config/crons.py:835), [models.py:3429](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/models.py:3429)).
+
+RED-NOVO-3: a célula A9d pede controle **não ENTREGUE**, enquanto o bloco RED-NOVO-3 pede controle **ENTREGUE**; o primeiro não demonstra o mutante de julgamento antecipado [não verificado]. O caminho passa por `pode_fechar` e pela aprovação do lastro antes de `carimbar`; o C6 retorna falso para dia trancado ([competencia_trancada.py:221](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/services/competencia_trancada.py:221), [materializacao.py:2154](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/services/materializacao.py:2154), [juizes.py:1407](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/juizes.py:1407)). O alcance efetivo do controle pela tranca permanece [não verificado].
+
+## 17/11 20:50 · sessao 9bbee99a68fc · - · - · origem=Ronald (tmux)
+
+B9a e B9b têm uma colisão a devolver: o aval de 18:45 manda julgar a pergunta que seria escrita, por item e depois dos `continue`; a partição existente exclui componentes inteiros de colisão antes do planejamento em [backfill_decisoes_pergunta.py:245](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/management/commands/backfill_decisoes_pergunta.py:245) e [migrar_data_evento_dia_do_turno.py:379](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:379). A citação do aval anterior diz “nunca o item”; a menção desses comandos como exemplos na R2 não resolve, por si, o conflito literal posterior ([backfill_decisoes_pergunta.py:245](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/management/commands/backfill_decisoes_pergunta.py:245); aval 18:45, item 2(ii), fornecido).
+
+Na reversão, o código atual desfaz todas as linhas quando uma falha ([migrar_data_evento_dia_do_turno.py:465](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:465)); a proposta por grupo também depende da resolução dessa colisão. O aval integral de 08/11 não foi localizado na cópia; seu literal acima vem da tabela fornecida e do comentário do código.
+
+Há ainda uma divergência concreta em B9a: o comentário afirma que um grupo sem nenhum dia produz `None`, mas a função passa uma lista vazia ao veto ([backfill_decisoes_pergunta.py:355](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/management/commands/backfill_decisoes_pergunta.py:355), [backfill_decisoes_pergunta.py:374](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/management/commands/backfill_decisoes_pergunta.py:374)); `veto_de_competencia` retorna `False` para essa lista ([fio.py:1365](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/services/fio.py:1365)).
+
+## 17/11 20:49 · sessao c852b2308b28 · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
+
+Há **quatro achados que procedem**: uma alteração semântica de docstring preserva o hash; há uma brecha no gerador e outra no leitor para alterar a frase em uma data não coberta; e a repetição pode esconder uma falha da primeira volta. As mutações abaixo são deduções do código, com execução e `rc` **[não verificado]**; não executei o selo porque ele cria arquivos temporários ([test_recusa_estado.sh:82](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:82)).
+
+1. **Hash da AST.** Trocar a docstring de `linha_porta_export`, em [recusa_estado.py:72](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/recusa_estado.py:72), por `"""ALTERADA"""` muda o valor observável de `linha_porta_export.__doc__`, mas o selo remove essa primeira expressão antes de calcular o hash ([test_recusa_estado.sh:70](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:70)). Comentários também não entram na AST ([test_recusa_estado.sh:64](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:64)). Essa mutação de docstring **não demonstra alteração da frase publicada**; outra mudança semântica preservando o hash que altere essa frase é **[não verificado]**.
+
+   Em **`bin/gerar_estado.py`**, inserir imediatamente antes da escrita em [gerar_estado.py:399](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/gerar_estado.py:399):
+
+   ```python
+   if _hoje_recusa.isoformat() == '2040-01-01':
+       out = out.replace(' -- VERMELHO', '')
+   ```
+
+   Em 2040-01-01, isso remove ` -- VERMELHO` do texto escrito. O selo verifica as atribuições de `recusa_txt`, mas essa mutação altera `out` depois; seu teste de ponta a ponta usa o dia corrente, não 2040-01-01 ([test_recusa_estado.sh:19](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:19), [test_recusa_estado.sh:217](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:217)). Passagem com o relógio fora dessa data: inferida, `rc` **[não verificado]**.
+
+   Em **`app/core/recusa_critica.py`**, inserir após [recusa_critica.py:137](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:137):
+
+   ```python
+   if d['dia'] == '2040-01-01':
+       d['rotulo'] = 'export normal'
+   ```
+
+   Nesse dia, a frase recebe o rótulo alterado pelo leitor; o hash congelado cobre `recusa_estado.py`, e a grade explícita do leitor não inclui 2040-01-01 ([recusa_estado.py:68](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/recusa_estado.py:68), [recusa_estado.py:75](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/recusa_estado.py:75), [test_recusa_estado.sh:196](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:196)). Passagem com o relógio fora dessa data: inferida, `rc` **[não verificado]**. Os `rc=1` dos mutantes C1, C2, E1, E5 e E7 constam do anexo fornecido; eles não comprovam a execução destas duas mutações exatas **[não verificado]**.
+
+2. **A repetição pode mascarar falha real.** Se a geração falhar por erro transitório na primeira volta e o dia tiver mudado até a comparação final, a segunda volta apaga `FALHOU`; se então a geração e os dois `grep` passarem, o selo termina verde, mesmo que a primeira falha não tenha sido causada pela virada ([test_recusa_estado.sh:217](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:217), [test_recusa_estado.sh:222](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:222), [test_recusa_estado.sh:227](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:227)). O anexo informa `C3-meia-noite-sempre rc=0`; isso mostra o resultado informado para o selo mutado, mas não identifica a causa de uma eventual falha real da primeira volta **[não verificado]**.
+
+3. **Quem escreve e quem lê os valores do delta:**
+
+   | Valor | Quem escreve/produz | Quem lê |
+   |---|---|---|
+   | Código do medidor e hash esperado | O arquivo do medidor contém o código; o hash literal está no selo ([recusa_estado.py:1](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/recusa_estado.py:1), [test_recusa_estado.sh:68](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:68)). A pessoa ou processo que os escreveu é **[não verificado]**. | O Python do selo lê o arquivo, normaliza a AST e compara o hash ([test_recusa_estado.sh:70](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:70)). |
+   | Data `hoje` | O relógio local é consultado pelo Python do selo ([test_recusa_estado.sh:219](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:219)). | O selo usa a data no log e nas linhas esperadas, e consulta novamente o relógio para decidir a repetição; o gerador consulta seu próprio relógio ([test_recusa_estado.sh:220](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:220), [test_recusa_estado.sh:227](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:227), [gerar_estado.py:270](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/gerar_estado.py:270)). |
+   | Log sintético, incluindo porta e usuário | O `printf` do selo escreve duas linhas `porta_export` e uma `ponto:veredito_celula`, todas com `usuario=7:x` ([test_recusa_estado.sh:220](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:220)). | `linhas_do_arquivo` lê o arquivo; `contar` interpreta data, porta e usuário ([recusa_critica.py:95](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:95), [recusa_critica.py:113](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:113)). |
+   | Log da aplicação | Para o export, `_recusa` chama `registrar`; este monta o corpo e emite o aviso. A configuração encaminha o logger `ponto` ao handler de arquivo ([porta_export.py:1063](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/folha/porta_export.py:1063), [recusa_critica.py:77](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:77), [saas.py:160](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/config/settings/saas.py:160), [saas.py:181](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/config/settings/saas.py:181)). O conteúdo efetivo em produção é **[não verificado]**. | Os mesmos `linhas_do_arquivo` e `contar` fazem a leitura ([recusa_critica.py:95](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:95), [recusa_critica.py:108](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:108)). |
+   | Contagens, rótulos e esperado | `contar` produz contagem e usuários; as duas funções especializadas acrescentam rótulos, e a do export fixa `esperado=0` ([recusa_critica.py:113](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:113), [recusa_critica.py:126](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/app/core/recusa_critica.py:126)). | O medidor recebe os dicionários e formata as frases; o gerador as incorpora ao texto ([recusa_estado.py:48](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/recusa_estado.py:48), [recusa_estado.py:71](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/recusa_estado.py:71), [gerar_estado.py:270](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/gerar_estado.py:270)). |
+   | `ESTADO.md` sintético e resultado da volta | O gerador escreve o destino; o shell atribui `FALHOU` conforme a execução e os `grep` ([gerar_estado.py:399](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/gerar_estado.py:399), [test_recusa_estado.sh:218](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:218)). | O selo lê o arquivo com `grep -qFx` e, ao final, lê `FALHOU` para decidir o resultado ([test_recusa_estado.sh:225](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:225), [test_recusa_estado.sh:229](/home/ronald/codex_ws/a82d4b10b06261e8ffa200e0589d5b8bf662cfd8/bin/tests/test_recusa_estado.sh:229)). |
+
+PROCEDE: 4
+
+## 17/11 20:48 · sessao b18d046b7370 · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
+
+1. **A fronteira matemática é a mesma:** o job rejeita quando `agora > espera_ate` ([porta_export.py:990](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:990)); o vigia julga vencido quando `(agora - pedido_em) > 300 s` ([porta_export.py:1321](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1321)). O comando calcula `espera_ate` como `pedido_em + 300 s` ([selo_leitores_no_mesmo_numero.py:146](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:146)).
+
+   **Há uma intercalação em que o vigia já julgou vencido e o job mede:** o job passa pela leitura do relógio antes do limite e pausa; depois do limite, o vigia calcula o motivo, mas pausa antes de gravar; o job pega a trava e vence o CAS `PEDIDO → EM_CURSO`; o CAS do vigia, baseado em `PEDIDO`, perde; o job chama `medir` ([porta_export.py:990](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:990), [porta_export.py:1227](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1227), [porta_export.py:1331](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1331), [porta_export.py:1057](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1057), [selo_leitores_no_mesmo_numero.py:189](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:189)). Se o vigia **vence o CAS primeiro**, a adoção falha e o job não mede ([porta_export.py:1227](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1227), [selo_leitores_no_mesmo_numero.py:189](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:189)). Esta é a corrida da decisão técnica já descartada, portanto não a conto como novo achado [não verificado].
+
+2. **Há uma lacuna de mutação no limite.** Mutação exata em [porta_export.py:990](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:990):
+
+   ```python
+   if espera_ate is not None and (timezone.now() - espera_ate).total_seconds() > 0.000001:
+   ```
+
+   Ela permite tentar a trava até um microssegundo depois do prazo. Re avança em passos de 60 segundos, enquanto Rh salta para um segundo além do prazo; eles não exercitam esse intervalo ([test_porta_estado_na_tela.py:127](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:127), [test_porta_estado_na_tela.py:151](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:151)). **A passagem pelo conjunto inteiro é uma previsão, não uma execução observada: [não verificado].** O `vered4.txt` fornecido registra apenas os quatro mutantes ali nomeados [não verificado].
+
+3. Rastreio dos valores relevantes:
+
+   | Valor | Quem escreve ou calcula | Quem lê |
+   |---|---|---|
+   | `pedido_em` | `pedir` na criação; `_mudar_estado` ao reabrir como `PEDIDO` ([porta_export.py:1106](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1106), [porta_export.py:1067](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1067)) | Comando para o limite e `tentativa_morta` para o vigia ([selo_leitores_no_mesmo_numero.py:152](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152), [porta_export.py:1322](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1322)). |
+   | `PRAZO_PARA_ASSUMIR_S`, `_limite`/`espera_ate` | Constante de 300 segundos; comando calcula `_limite` e o passa como argumento ([porta_export.py:922](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:922), [selo_leitores_no_mesmo_numero.py:152](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152)). | `trava_da_medicao` lê o limite para decidir e dormir; `tentativa_morta` lê a constante ([porta_export.py:990](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:990), [porta_export.py:1323](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1323)). |
+   | Detalhe do pedido: `estado`, `tentativa`, `motivo`, `resultado` | `pedir` cria; `_mudar_estado` faz as transições; `_falhar` fornece resultado e motivo; `_cunhar` escreve a linha própria `NAO_ASSUMIU` ([porta_export.py:1106](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1106), [porta_export.py:1057](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1057), [porta_export.py:1088](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1088), [porta_export.py:1181](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1181)). | Adoção e CAS, vigia, `_recusa` e estado da porta; Re, Rf e Rh conferem partes desse detalhe ([porta_export.py:1227](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1227), [porta_export.py:1314](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1314), [porta_export.py:1079](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1079), [porta_export.py:1373](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1373), [test_porta_estado_na_tela.py:137](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:137), [test_porta_estado_na_tela.py:158](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:158), [test_porta_estado_na_tela.py:175](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:175)). |
+   | `concluido_em` | `_mudar_estado` escreve o instante da transição; `concluir` provoca a transição ([porta_export.py:1067](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1067), [porta_export.py:1273](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1273)). | `_campos_do_texto` formata a hora; Ra confere a leitura em outro instante ([porta_export.py:1395](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1395), [test_porta_estado_na_tela.py:46](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:46)). |
+   | Linha de recusa | `_falhar`, se vence o CAS, chama `_recusa`; `registrar` emite a linha no logger ([porta_export.py:1088](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:1088), [core/recusa_critica.py:70](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/core/recusa_critica.py:70)). | `ler_linha` e `contar`, via `porta_export_falhou_hoje`; Re substitui `registrar` por mock e conta chamadas, sem ler uma linha real ([core/recusa_critica.py:89](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/core/recusa_critica.py:89), [core/recusa_critica.py:108](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/core/recusa_critica.py:108), [core/recusa_critica.py:133](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/core/recusa_critica.py:133), [test_porta_estado_na_tela.py:130](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/tests/test_porta_estado_na_tela.py:130)). |
+
+4. **Sim, há uma nova leitura interna do relógio:** a condição adicionada chama `timezone.now()` dentro de `trava_da_medicao`; o cálculo do sono também chama o relógio, em outra leitura ([porta_export.py:990](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:990), [porta_export.py:997](/home/ronald/codex_ws/500d4e208a9646a5bef3c71019bdf38ec333c70a/app/folha/porta_export.py:997)). A espera precisa observar a passagem do tempo; se essa leitura interna viola uma regra arquitetural aplicável a esta função, isso está **[não verificado]**.
+
+PROCEDE: 1
+
+## 17/11 20:48 · sessao c87cea7b2a3d · CURA-DE-FASE · verificador · origem=Code
+
+**R3 e R4 montam o estado anunciado; ainda há duas lacunas de teste.** A primeira é que R3 e R4 não comprovam que a porta foi alcançada ou aceitou a operação. A segunda é que uma alteração adicional na condição do `NO_OP` sobrevive por análise estática. ([teste:157](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:157), [teste:172](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:172), [comando:418](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:418))
+
+1. **Estado e sinais.** R3 verifica que a juíza devolve o vínculo velho, com âncora igual à proposta e início diferente da virada; R4 verifica que devolve o novo, com início igual à virada e âncora diferente. A cura consulta a mesma juíza em seguida. ([teste:164](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:164), [teste:181](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:181), [comando:412](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:412))
+
+   O `update()` pula os sinais de `save`: uma alteração de âncora por `save` acionaria os caminhos de regeneração histórica e futura e de invalidação do previsto. Assim, as células podem ficar com desenho desatualizado no teste; não está demonstrado que um `save()` produziria exatamente a mesma geradora. ([sinais:18](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/signals.py:18), [sinais:86](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/signals.py:86), [sinais:137](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/signals.py:137))
+
+   Isso não explica os testes passarem com uma condição falsa: `escala_vigente` faz nova consulta à célula e à geradora, e a juíza escolhe pela geradora e pela vigência, sem usar a âncora nessa escolha. Os próprios testes conferem os campos do objeto devolvido. ([serviço:40](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/servico_jornada.py:40), [juíza:269](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:269), [teste:165](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:165), [teste:183](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:183))
+
+   **Lacuna 1:** após montar o estado, R3 e R4 exigem somente ausência de `NO_OP`; não exigem `desde` nem ausência de `RECUSADO`. A cura captura exceções da porta e pode imprimir `RECUSADO` sem imprimir `NO_OP`. ([teste:169](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:169), [teste:187](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:187), [comando:425](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:425))
+
+2. **Lacuna 2 — mutação exata do `NO_OP`:** acrescentar `and _cobre.ativa` à condição existente: ([comando:418](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:418))
+
+   ```python
+   if (_cobre is not None
+           and str(_cobre.data_ancora_colaborador) == x['proposta_ancora']
+           and str(_cobre.data_inicio) == x['virada']
+           and _cobre.ativa):
+   ```
+
+   Por análise estática, os quatro testes passam: R2 usa o vínculo novo ativo; nos estados de R1, R3 e da segunda chamada de R4, pelo menos uma das comparações originais já é falsa. **A execução desse mutante é [não verificado]**: o anexo relata apenas os mutantes que removem início e âncora, e não executei testes que criam arquivos temporários. ([teste:110](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:110), [teste:115](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:115), [teste:164](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:164), [teste:181](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:181), [teste:59](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:59))
+
+   A mutação muda o comportamento: a juíza pode devolver uma geradora inativa cuja vigência cubra o dia, mas a nova condição impediria o `NO_OP`. Ocorrência desse caso em produção: **[não verificado]**. ([juíza:270](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:270))
+
+3. **Escritores e leitores no fluxo relevante** — não é um inventário exaustivo de toda a cópia:
+
+   - **`data_inicio` do vínculo:** a porta cria vínculos com o campo; há também escrita na restauração de snapshot. A cura o lê na escolha do ativo, na reversão e no `NO_OP`; a juíza o lê para cobertura e escolha. ([porta:287](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/colaboradores/services/vinculo.py:287), [porta:1030](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/colaboradores/services/vinculo.py:1030), [comando:386](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:386), [comando:403](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:403), [comando:419](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:419), [juíza:214](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:214))
+   - **`data_ancora_colaborador`:** a porta cria ou altera a âncora; R3 e R4 a escrevem diretamente. A cura a lê na reversão e no `NO_OP`; o cálculo de fase também a lê. ([porta:268](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/colaboradores/services/vinculo.py:268), [porta:287](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/colaboradores/services/vinculo.py:287), [teste:164](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:164), [teste:182](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:182), [comando:389](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:389), [comando:418](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:418), [modelo:1272](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/models.py:1272))
+   - **`escala_geradora` da célula:** a porta da célula a grava na regeneração, na edição manual, na reversão e na geração em lote. R2 a lê para conferir a geradora; `escala_vigente` a carrega e `vinculo_do_dia` a usa na decisão. ([porta da célula:292](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/portas/celula.py:292), [porta da célula:637](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/portas/celula.py:637), [porta da célula:824](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/portas/celula.py:824), [porta da célula:911](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/portas/celula.py:911), [teste:142](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:142), [serviço:46](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/servico_jornada.py:46), [juíza:269](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:269))
+
+PROCEDE: 2
+
+## 17/11 20:47 · sessao ff7479d7b42e · - · - · origem=Ronald (tmux)
+
+R3 e R4 conferem a instância devolvida por `escala_vigente` antes da chamada a `_curar`: R3 verifica âncora igual e início diferente; R4 verifica início igual e âncora diferente. [app/escala/tests/test_cura_de_fase_virada_data.py:164](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:164) [app/escala/tests/test_cura_de_fase_virada_data.py:181](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:181)
+
+O `update()` pula os sinais de salvamento, incluindo a regeneração de células após alteração da âncora; portanto, pode deixar o DNA da célula desatualizado. A consulta posterior carrega novamente a célula e sua geradora, e a juíza escolhe usando geradora e vigência, sem consultar a âncora para essa escolha. Não está verificado que um `save()` produziria exatamente o mesmo cenário. [app/escala/signals.py:86](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/signals.py:86) [app/escala/servico_jornada.py:40](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/servico_jornada.py:40) [app/escala/alimentacao.py:205](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:205) [app/escala/alimentacao.py:228](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:228)
+
+R3 e R4 só exigem ausência de `NO_OP`; não comprovam que a porta aceitou a operação, pois `_curar` captura exceções e imprime `RECUSADO`. [app/escala/tests/test_cura_de_fase_virada_data.py:169](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:169) [app/escala/tests/test_cura_de_fase_virada_data.py:187](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:187) [app/ponto/management/commands/censo_fase_12x36.py:425](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:425)
+
+## 17/11 20:47 · sessao 849bd64357d7 · - · - · origem=Ronald (tmux)
+
+Mutação candidata: acrescentar `and _cobre.ativa` à condição de NO_OP em [censo_fase_12x36.py](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/ponto/management/commands/censo_fase_12x36.py:418). Pela leitura dos testes, ela preserva os quatro casos exercitados, mas impediria o NO_OP para uma geradora inativa cuja vigência cobre a virada, vínculo que a juíza pode devolver ([testes](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/tests/test_cura_de_fase_virada_data.py:99), [juíza](/home/ronald/codex_ws/7e5db2001d72fe379dd2faf7228887987baa6fed/app/escala/alimentacao.py:269)). A sobrevivência do mutante não foi executada: [não verificado].
+
+## 17/11 20:47 · sessao 8df04e71e925 · - · - · origem=Ronald (tmux)
+
+O mapa dos campos e os pontos de leitura e escrita relevantes foram enviados ao agente responsável pela consolidação.
 
 ## 17/11 20:43 · sessao a66ebb51d54c · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
 
@@ -513,169 +647,4 @@ Nenhuma linha deste lote chama `q_vinculo_cobre_a_data`; a função monta lookup
 
 **LOTE 2: 39 linhas, DATA GARANTIDA 20, TEXTO POSSIVEL 0, DUVIDOSO 19.**
 
-## 17/11 20:20 · sessao 549f10d565d5 · CURA-DE-FASE · censo · origem=Code
-
-O sítio confirmado com texto é o da cura; esse valor também pode alcançar as duas chamadas internas de `escala_vigente` quando há vínculos candidatos (`app/ponto/management/commands/censo_fase_12x36.py:224`, `app/ponto/management/commands/censo_fase_12x36.py:413`, `app/escala/servico_jornada.py:63`, `app/escala/servico_jornada.py:66`).
-
-Para encurtar as referências na tabela, **C** significa `app/ponto/management/commands/`. Referências `:linha` na coluna fonte pertencem ao arquivo da própria linha.
-
-| arquivo:linha | alvo | fonte | veredito |
-|---|---|---|---|
-| app/escala/services/semana_do_posto.py:75 | q_vinculo_cobre_a_data | `seg` vem de `limites_da_semana(inicio)` e recebe `timedelta` antes da chamada (:51, :55, :75, :132, :134). | DATA GARANTIDA |
-| app/escala/servico_jornada.py:66 | vinculo_do_dia | Parâmetro `data` (:15); `_curar` passa `x['virada']`, montada com `str(virada)` (C`censo_fase_12x36.py:224`, :413). | TEXTO POSSIVEL |
-| app/escala/servico_jornada.py:544 | escala_vigente | Parâmetro `data_evento` de `procedencia_fina` (:513); origem de todos os chamadores não estabelecida [não verificado]. | DUVIDOSO |
-| app/escala/servico_jornada.py:63 | vinculo_do_dia | Parâmetro `data` (:15); `_curar` passa `x['virada']`, montada com `str(virada)` (C`censo_fase_12x36.py:224`, :413); este ramo depende de célula geradora. | TEXTO POSSIVEL |
-| app/escala/servico_jornada.py:233 | escala_vigente | `data_evento` é parâmetro (:220); um chamador repassa o parâmetro de `classificar_falta` (:280, :364), cuja origem completa falta [não verificado]. | DUVIDOSO |
-| app/escala/servico_jornada.py:362 | escala_vigente | `data_evento` é parâmetro (:280); `motivo_da_lei` repassa seu próprio `data` (:558, :566); fontes completas faltam [não verificado]. | DUVIDOSO |
-| app/escala/utils.py:2194 | vinculo_do_dia | `data` é parâmetro (:2142), repassado por `intervalo_declarado_do_dia` e `minutos_previstos_do_dia` (:2197, :2212, :2230, :2260); nem todas as fontes foram estabelecidas [não verificado]. | DUVIDOSO |
-| app/escala/utils.py:988 | vinculo_do_dia | `d` vem de `ref - timedelta` (:979, :987, :989, :992); `ref` ausente usa `localdate`. | DATA GARANTIDA |
-| app/escala/utils.py:1311 | vinculo_do_dia | `d` vem de `ref - timedelta` (:1290, :1306, :1313, :1316); o default de `ref` usa `.date()`. | DATA GARANTIDA |
-| app/folha/export.py:1255 | vinculo_cobre_a_data | `dia` ← `d` ← parâmetro `ini` de `_dias_sem_decisao` (:1231, :1254, :1264, :1267); fontes completas de `ini` não estabelecidas [não verificado]. | DUVIDOSO |
-| app/folha/previa.py:81 | vinculo_cobre_a_data | `d = cel.data` (:78); `CelulaDia.data` é `DateField` (app/escala/models.py:1635, :1685). | DATA GARANTIDA |
-| app/ponto/calculador/alimentacao.py:196 | vinculo_do_dia | `_dia` vem dos valores de `resultado.dia_da_jornada` (:193, :195); o motor mescla mapas (app/ponto/motor_calculo_v2.py:1073), mas todas as origens e todos os resultados aceitos não foram fechados [não verificado]. | DUVIDOSO |
-| app/ponto/calculador/alimentacao.py:432 | vinculo_do_dia | `_dia` ← `k` (:492); `k` converte strings com `date.fromisoformat` e os demais valores passam pela comparação com os limites (:473, :474). A origem dos valores não string como datas é [não verificado]. | DUVIDOSO |
-| C`aplicar_col900.py:229` | vinculo_do_dia | `dia = date.fromisoformat(it['dia'])` (:226). | DATA GARANTIDA |
-| C`aplicar_col900.py:176` | vinculo_do_dia | `dia` vem de `dias`, cujos itens são convertidos com `date.fromisoformat` (:159, :172). | DATA GARANTIDA |
-| C`ausencias_sem_efeito_na_celula.py:55` | q_vinculo_cobre_a_data | `d` é chave de `cobertura_ausencia_periodo` (:44, :48); a cobertura constrói as chaves por aritmética de datas (app/ponto/turnos.py:2777, :2790, :2794). | DATA GARANTIDA |
-| C`censo_col900.py:111` | vinculo_do_dia | `dia` é chave construída de `CelulaDia.data` (:104, :110; app/escala/models.py:1685). | DATA GARANTIDA |
-| C`censo_fase_12x36.py:413` | escala_vigente | `x['virada']` é montada como `str(virada)` (:224), repassada sem conversão (:413). | TEXTO POSSIVEL |
-| C`censo_fase_12x36.py:161` | vinculo_do_dia | `_d` vem de `dias`, construída por `ini + timedelta` e `(fim - ini).days` (:129, :134, :160). | DATA GARANTIDA |
-| C`curar_residuo_bug115.py:85` | escala_vigente | `d` vem de `dias_do_fato` (:77, :80); os ramos incluem data da célula, JSON convertido com `fromisoformat` e `localdate` (app/chamados/juizes.py:188, :194, :204); demais ramos [não verificado]. | DUVIDOSO |
-| C`detectar_ausencias.py:140` | escala_vigente | `data_ref` vem de `hoje` ou `ontem` (:137, :139); `hoje = agora.date()` (:67, :71, :72). | DATA GARANTIDA |
-| C`diff_calculador.py:387` | vinculo_do_dia | `_dia` ← `k` na chamada (:479); `k = date.fromisoformat(k_str)` (:428, :429). | DATA GARANTIDA |
-| C`diff_col900.py:69` | vinculo_do_dia | `dia = date.fromisoformat(it['dia'])` (:66). | DATA GARANTIDA |
-| C`dna_x_batida_real.py:77` | vinculo_do_dia | `d` é chave de `cels`, construída com `CelulaDia.data` (:64, :76; app/escala/models.py:1685). | DATA GARANTIDA |
-| C`emitir_furo_retroativo.py:130` | escala_vigente | `data` vem de `grade_da_celula` (:60, :90, :91); o leitor usa `_cur = fim` como `data` e decrementa um dia (app/escala/services/leitor_celula.py:376, :390, :444); `fim` é convertido com `fromisoformat` (:41). | DATA GARANTIDA |
-| C`emitir_turno_aberto_retroativo.py:104` | escala_vigente | `data` vem de `t.data_turno` (:88, :89), produzido pelo pareamento (app/ponto/turnos.py:318); `_data_do_turno` declara retorno `date` (app/ponto/turnos.py:248). | DATA GARANTIDA |
-| C`gerar_celulas.py:287` | vinculo_cobre_a_data | `d` é parâmetro de `_outro_vinculo_cobre` (:269), chamado com o `d` da regeneração (app/ponto/portas/celula.py:227, :254); origem de `desde` para todos os chamadores falta [não verificado]. | DUVIDOSO |
-| C`processar_alertas_avancados.py:37` | escala_vigente | `ontem` deriva de `agora.date()` (:20, :21, :22). | DATA GARANTIDA |
-| C`processar_alertas_turno.py:134` | escala_vigente | `tm` vem de `TurnoMaterializado.objects` (:76, :81); `data_turno` é `DateField` (app/ponto/models.py:1208, :1215). | DATA GARANTIDA |
-| C`processar_alertas_turno.py:106` | escala_vigente | Mesmo `tm` do queryset (:76, :81); `TurnoMaterializado.data_turno` é `DateField` (app/ponto/models.py:1215). | DATA GARANTIDA |
-| C`reconciliar_grade.py:157` | escala_vigente | `dt = self._dt(..., ref)` (:133); `_dt` retorna `datetime.date(...)` ou `ref - timedelta` (:349, :356, :359); `ref` vem de `fromisoformat` ou `.date()` (:78). | DATA GARANTIDA |
-| C`reconciliar_grade.py:196` | vinculo_do_dia | `_d_rg = win0` e avança por `timedelta` (:194, :197); `win0` deriva de `ref` convertido ou `.date()` (:78, :79). | DATA GARANTIDA |
-| C`rejulgar_ausencia_em_folga.py:65` | escala_vigente | `d` é chave de `folgas_lancadas_do_periodo` (:64); construída de `FolgaDia.data` (app/ponto/precedencia.py:204, :208; app/escala/models.py:1582, :1588). | DATA GARANTIDA |
-| C`tripwire_celulas.py:107` | vinculo_do_dia | `cel.data` é `CelulaDia.data`, `DateField` (app/escala/models.py:1635, :1685). | DATA GARANTIDA |
-| C`vigia_plantio_overnight.py:42` | escala_vigente | `t` vem de `turnos_do_colab` (:38); o pareador atribui `data_turno` por `_data_do_turno` (app/ponto/turnos.py:318), cujo retorno declarado é `date` (app/ponto/turnos.py:248). | DATA GARANTIDA |
-| app/ponto/nucleo.py:26 | vinculo_cobre_a_data | `d` é parâmetro (:18); `dt_fim_previsto_de` repassa `data_turno` (:31, :36), inclusive a partir de turno (:55); todas as origens desse parâmetro não foram fechadas [não verificado]. | DUVIDOSO |
-| app/ponto/portas/celula.py:229 | vinculo_cobre_a_data | `d = desde` (:227); `desde` é parâmetro da porta (:112), sem conversão ali; todas as fontes faltam [não verificado]. | DUVIDOSO |
-| app/ponto/portas/celula.py:906 | vinculo_cobre_a_data | `d` vem de `dias`, construído com `ini + timedelta` e `(fim - ini).days` (:886, :901). | DATA GARANTIDA |
-| app/ponto/portas/celula.py:339 | vinculo_cobre_a_data | `_d` vem de `rejulgar` (:337), mas só alcança a chamada se pertencer ao conjunto de `CelulaDia.data` consultado no banco (:335, :336, :338; app/escala/models.py:1685). | DATA GARANTIDA |
-| app/ponto/portas/celula.py:909 | vinculo_do_dia | Mesmo `d` da lista construída por aritmética de datas (:886, :901). | DATA GARANTIDA |
-
-Sobre os dois sítios `q_vinculo_cobre_a_data`: o `Q` monta lookups de `DateField` (`app/escala/alimentacao.py:219`, :223, :224; `app/escala/models.py:875`, :876). O Django normalmente coage uma string ISO válida nesses lookups; a implementação do Django nesta cópia não foi verificada, portanto essa afirmação é **[não verificado]**. Já a juíza Python compara diretamente `ec.data_inicio <= data` (`app/escala/alimentacao.py:214`).
-
-**LOTE 1: 40 linhas, DATA GARANTIDA 26, TEXTO POSSIVEL 3, DUVIDOSO 11.**
-
-## 17/11 20:20 · sessao dc5b573b873d · - · - · origem=Ronald (tmux)
-
-Rastreamento das linhas 28 a 40 enviado ao agente principal, com as cadeias de data e os pontos que permanecem duvidosos.
-
-## 17/11 20:19 · sessao 286e59cd4048 · - · - · origem=Ronald (tmux)
-
-Resultados dos 13 sítios enviados ao agente principal, com as cadeias verificadas e os pontos que permanecem duvidosos.
-
-## 17/11 20:19 · sessao f878465dd084 · - · - · origem=Ronald (tmux)
-
-Investigação das 13 chamadas atribuídas concluída e enviada ao agente principal, com as cadeias verificadas e as fontes que permanecem duvidosas. [não verificado]
-
-## 17/11 20:19 · sessao af38b8160005 · - · - · origem=Ronald (tmux)
-
-Resultados e referências das linhas 15 a 27 foram enviados ao agente principal.
-
-## 17/11 20:19 · sessao 9bbd47c9c14d · - · - · origem=Ronald (tmux)
-
-Rastreamento enviado ao agente principal, com fontes, vereditos e as incertezas identificadas.
-
-## 17/11 20:19 · sessao 89947f98b6af · - · - · origem=Ronald (tmux)
-
-Resultado dos 13 sítios enviado ao agente principal, com as cadeias verificadas e as lacunas identificadas.
-
-## 17/11 20:18 · sessao 623b984d2c9f · PORTA-DO-EXPORT-SEM-BECO · verificador · origem=Code
-
-**PROCEDE: NÃO.** O selo ainda permite que o ESTADO publique um número diferente do devolvido pelo leitor único: ele compara a saída do ESTADO com a frase produzida pelo mesmo medidor, e só testa a frase da porta do export com o valor sintético `2`. [bin/tests/test_recusa_estado.sh:81](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:81), [bin/tests/test_recusa_estado.sh:93](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:93)
-
-1. **BLOQUEIA 1 continua aberto.** Um mutante concreto é inserir, em `linha_porta_export`, depois do retorno para `sem_arquivo` e antes do retorno que formata a frase: [bin/recusa_estado.py:71](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/recusa_estado.py:71)
-
-   ```python
-   if d['recusas'] != 2:
-       d = dict(d, recusas=d['recusas'] + 1)
-   ```
-
-   Para qualquer contagem diferente de `2`, a frase passa a mostrar uma unidade a mais que `porta_export_falhou_hoje` devolveu. A AST nova examina os retornos de `ler` e `ler_porta_export` e proíbe certos nomes, mas não verifica essa alteração em `linha_porta_export`; o caso sintético com `2` permanece igual e a comparação do ESTADO usa a mesma função alterada dos dois lados. [bin/recusa_estado.py:68](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/recusa_estado.py:68), [bin/tests/test_recusa_estado.sh:37](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:37), [bin/tests/test_recusa_estado.sh:83](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:83), [bin/tests/test_recusa_estado.sh:90](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:90)
-
-   A passagem é uma **conclusão estática**, condicionada às demais etapas do selo passarem e às duas leituras da raiz permanecerem coerentes; não executei o mutante nem o selo, pois o próprio selo cria e remove arquivos temporários. Resultado executado: **[não verificado]**. [bin/tests/test_recusa_estado.sh:59](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:59)
-
-2. **BLOQUEIA 2: há registro de vermelho, mas não prova completa das mutações.** O anexo fornecido registra, para M1–M5, nome, arquivo, `diff stat`, mensagem e `rc=1`; isso informa o motivo *reportado* pelo selo para cada execução. Porém, o `diff stat` não mostra as linhas alteradas: não comprova que cada mutação corresponde ao nome atribuído, nem permite avaliar se houve outra alteração com o mesmo tamanho. A autenticidade e a reprodução do log são **[não verificado]**. [anexo `instr_v5_mutantes.log`, fornecido na pergunta: não verificado]
-
-3. **Quem escreve e quem lê os valores:**
-
-   | Valor ou sinal | Quem escreve ou produz | Quem lê |
-   |---|---|---|
-   | Linhas sintéticas do teste | O próprio selo cria o `ponto.log` temporário e escreve as portas e datas de teste. [selo:70](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:70) | `ler` e `ler_porta_export`; o selo verifica ausência, contagens, esperado e frase. [selo:68](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:68), [selo:81](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:81) |
-   | Recusas do Resolver dia | Os envelopes chamam `registrar`, que emite a linha no logger; a configuração SaaS encaminha `ponto` ao arquivo. [respostas.py:54](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/respostas.py:54), [respostas.py:78](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/respostas.py:78), [recusa_critica.py:70](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/recusa_critica.py:70), [saas.py:160](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/config/settings/saas.py:160), [saas.py:181](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/config/settings/saas.py:181) | `contar` lê o log e produz `recusas` e `por_usuario`; `resolver_dia_recusado` acrescenta o rótulo; o medidor e o ESTADO consomem o resultado. [recusa_critica.py:95](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/recusa_critica.py:95), [recusa_critica.py:108](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/recusa_critica.py:108), [recusa_critica.py:126](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/recusa_critica.py:126), [gerar_estado.py:265](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/gerar_estado.py:265) |
-   | Falhas ou divergências da porta do export | `_recusa` chama o mesmo `registrar` com a porta do export. [porta_export.py:1063](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/folha/porta_export.py:1063) | `porta_export_falhou_hoje` conta as linhas e define `esperado = 0`; o medidor formata contagem, esperado e vermelho, e o ESTADO usa a frase. [recusa_critica.py:133](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/app/core/recusa_critica.py:133), [recusa_estado.py:60](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/recusa_estado.py:60), [gerar_estado.py:274](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/gerar_estado.py:274) |
-   | `sem_arquivo`, data e frases do ESTADO | Os dois métodos do medidor produzem `sem_arquivo` quando falta o arquivo; o gerador fornece uma data e escreve o ESTADO. [recusa_estado.py:37](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/recusa_estado.py:37), [recusa_estado.py:60](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/recusa_estado.py:60), [gerar_estado.py:270](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/gerar_estado.py:270), [gerar_estado.py:399](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/gerar_estado.py:399) | O selo lê os retornos sintéticos e compara as duas frases do medidor com linhas do ESTADO gerado. [selo:83](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:83), [selo:100](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:100) |
-
-4. **FILAs 4–7:** permanecem como riscos já apontados: duas leituras em momentos distintos; erro do gerador ocultado; igualdade dos fusos sustentada no código por comentário; e AST que procura substrings sem impedir reatribuição de `_hoje_recusa`. [selo:90](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:90), [selo:93](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:93), [gerar_estado.py:267](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/gerar_estado.py:267), [selo:30](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:30)
-
-   A mudança não demonstra, por si, que qualquer uma dessas quatro filas tenha virado um **novo** bloqueio. A falha de integridade demonstrada acima mantém aberto o BLOQUEIA 1; a checagem de `: 2**` reduz o caso da antiga FILA 3 apenas para esse exemplo sintético. [selo:83](/home/ronald/codex_ws/6638cb39e21e625829c4b2ad1c5c4565c50f18e7/bin/tests/test_recusa_estado.sh:83)
-
-## 17/11 20:18 · sessao 7e1d803ea754 · E4C-F1-B2 · verificador · origem=Code
-
-A tabela ainda precisa de correção: há **7 linhas procedentes entre os 26 sítios pedidos**, além de 6 itens comuns ou seções procedentes. O descarte de B4 resolve a colisão física, mas deixa duas contradições; os descartes de B9a e B9b não demonstram compatibilidade com o aval posterior.
-
-Os caminhos de código abaixo são relativos a `app/chamados/`, salvo indicação diferente. Os avais são os anexos transcritos na solicitação, identificados por item.
-
-| ID | Revisão |
-|---|---|
-| Cabeçalho | **PROCEDE** — O hash integral da cópia não pôde ser confirmado por Git: a cópia não contém repositório Git [não verificado]. Além disso, o cabeçalho declara zero indecisos enquanto deixa P21 no topo; o aval já manda usar a mesma leitura nos comandos que escrevem por item (anexo 18:45, item 2; `management/commands/reabrir_orfas_enterradas.py:85`, `:157`). |
-| F0 | **CONFERE** — A guarda retorna fora da cerca; há quatro chamadas abridoras no código de produção (`services/fio.py:1396-1398`; `reconciliador.py:553`, `:1701`; `services/becos.py:66`; `services/disputa_emissao.py:1909`). |
-| F1 | **CONFERE** — Cerca aninhada executa no contexto externo, sem abrir savepoint próprio (`services/fio.py:1433-1434`). |
-| F2 | **CONFERE** — O abridor testa a anotação de veto dentro do atomic e devolve a recusa após o rollback (`services/fio.py:1439-1446`). |
-| F3 | **CONFERE** — A guarda antecede o save de pergunta existente e o update em lote (`models.py:3574-3577`, `:3400-3407`). |
-| F4 | **PROCEDE** — `evento` protege sua própria gravação, mas a consulta da última retenção ocorre antes dele e fora desse tratamento; falha nessa leitura pode subir, contrariando a garantia proposta de que falha da trilha não derruba o ato (`reconciliador.py:489-493`; `app/core/observ.py:94-105`, `:133-136`; anexo 18:45, item 6). |
-| F5 | **CONFERE** — O juiz existente retorna `None` para dia indecidível e usa memo; o resumo e a lista são exigências do aval, ainda não uma implementação demonstrada (`services/fio.py:1358-1368`; anexo 17:20, R3). |
-| F6 | **CONFERE** — A extração pode preservar o universo se mantiver exatamente dia do turno, dia **gravado**, exclusão de conversa e o `continue` para conjunto vazio; o juiz e a agregação permanecem separados (`services/fio.py:1399-1422`). |
-| F7 | **CONFERE** — A regra da validação existe no caminho comum; o retorno antecipado da folga fica como achado (`services/validacao.py:711-712`, `:740-742`; anexo 18:45, item 2(i)). |
-| F8 | **PROCEDE** — A lista descrita como deduplicada por `(pk, motivo)` não especifica como preservar **duas entidades de trilha** para o mesmo pk exigidas por B2a/B2b; as chamadas são sequenciais e `ch_novo` aparece depois (`reconciliador.py:977-1001`, `:1664-1666`). O coletor proposto ainda não existe; `_ESPERAS_163` é somente exemplo de contexto (`services/materializacao.py:1726-1734`). |
-| F9 | **CONFERE** — O ponto proposto fica depois dos dois retornos sem escrita e antes da lavra e do save (`models.py:3241-3242`, `:3264-3273`). |
-| INDECISOS | **PROCEDE** — A9d está decidido, mas P21 não deve permanecer em “manter ou trocar”: a regra posterior inclui comando de sistema e exige a mesma leitura de dias (`management/commands/reabrir_orfas_enterradas.py:85`, `:94-99`, `:157`; `services/fio.py:1403-1413`; anexo 18:45, item 2(ii)). |
-| ACHADOS | **CONFERE** — As seis portas ficam como lista sem obra e sem cerca por decisão expressa; a folga passa antes da regra comum (`services/validacao.py:711-712`, `:740-742`; anexo 19:50, item 3). |
-| RED-NOVO-1 | **CONFERE** — O gate chama o reaponte e hoje levanta `ValueError` quando ele recusa; o caso adicional precisa distinguir recusa por veto (`models.py:435-439`, `:689`). |
-| RED-NOVO-2 | **CONFERE** — O controle deve chegar a `carimbar` e sair sem escrita para testar a posição do julgamento (`services/materializacao.py:2161-2167`; `models.py:3241-3242`, `:3264-3266`). |
-| RED-NOVO-3 | **PROCEDE** — O controle especificado como **não ENTREGUE** não demonstra que `julga_antes_de_carimbar` contaria indevidamente uma saída sem escrita: para morder esse mutante, o controle precisa ser vetável e sair por C6 ou fora do fato (`models.py:3241-3242`, `:3264-3266`; `services/fio.py:1418-1419`). |
-| DECISÕES | **PROCEDE** — A decisão B4 repete o descarte apesar das contradições de alvo e de dia; P21 também não deve ficar pendente da escolha manter/trocar (`services/fio.py:1403-1411`, `:969-976`; `management/commands/reabrir_orfas_enterradas.py:85`, `:157`; anexo 18:45, item 2(ii)). |
-| A1 | **CONFERE** — O save de justificativa e as escritas de pergunta ficam no ato cercado; o resolver aninhado não abre outra unidade (`reconciliador.py:543-580`; `services/fio.py:1433-1446`). |
-| A2 | **CONFERE** — Resolver e fecho ficam sob o abridor do beco; o veto aninhado pertence ao abridor externo (`services/becos.py:42-72`; `services/fio.py:1433-1446`). |
-| A3 | **CONFERE** — Direto, resolver abre cerca; aninhado, executa na existente (`services/disputa_emissao.py:1902-1914`; `services/fio.py:1433-1434`). |
-| A4 | **CONFERE** — A transição alcança o gate de reata e a relavra; fora de cerca o tratamento deve ser por item (`models.py:435-439`, `:642-656`, `:689`, `:307-312`; anexo 18:45, itens 2-3). |
-| A5 | **CONFERE** — O laço da relavra chama a escrita por pergunta; dentro da cerca prevalece o veto do abridor (`models.py:307-312`; `services/fio.py:1439-1446`; anexo 18:45, item 3). |
-| A6 | **CONFERE** — Encerrar passa pelo gate e pela gravação do estado; os pontos de pergunta são os identificados na tabela (`models.py:1686-1693`, `:435-439`, `:307-312`). |
-| A7 | **CONFERE** — O caminho da tranca passa pelo gate e pela relavra, sem abridor próprio (`models.py:1711`, `:307-312`; `services/competencia_trancada.py:207-209`; anexo 18:45, item 3). |
-| A8 | **CONFERE** — Filtrar depois do universo e antes de `alvo` também exclui a vetada das decisões, células e disputas derivadas (`models.py:1601-1609`, `:1621`, `:1638-1649`). |
-| A9a | **CONFERE** — O fecho por desligamento continua sem cerca; a cadeia S144 posterior é ato de sistema por item (`models.py:2009-2012`; `signals.py:164-167`; anexo 18:45, itens 1-4). |
-| A9c | **CONFERE** — Os `continue` do S144 e as duas saídas de `carimbar` antecedem F9 (`services/materializacao.py:2154-2167`; `models.py:3241-3242`, `:3264-3273`). |
-| A9d | **CONFERE** — O aval posterior decide disputa fechada e pergunta vetada sem gravação; F9 permite retorno sem exceção (`services/competencia_trancada.py:222-229`; `signals.py:164-167`; `models.py:3264-3273`; anexo 19:50, item 2). |
-| B1a | **CONFERE** — `False` sai pelo `continue`, fora de `n`; a trilha sem chamado deve ter a pergunta como alvo (`reconciliador.py:628-645`; anexo 17:50, item 1). |
-| B1b | **CONFERE** — O fecho posterior pode disparar S144; seu julgamento fica em F9 (`reconciliador.py:652-660`; `signals.py:164-167`; `models.py:3264-3273`). |
-| B2a | **PROCEDE** — A saída sem fecho confere, mas a especificação de duas trilhas para um pk não fecha com o coletor F8 descrito apenas como lista deduplicada (`reconciliador.py:400-415`, `:1664-1666`, `:977-1001`). |
-| B2b | **PROCEDE** — `ch_novo` é o chamado da costura e a recusa retorna `False`, mas falta preservar esse segundo alvo sem duplicar a contagem já feita em B2a (`reconciliador.py:977-1001`, `:1664-1666`). |
-| B2c | **CONFERE** — Costura e resolver estão no mesmo abridor HIST; a recusa devolve `False` (`reconciliador.py:1690-1705`; `services/fio.py:1433-1446`). |
-| B2d | **PROCEDE** — `(False, mot)` é o retorno de `reapontar_resolvedora`; o chamador de B2d o consome e devolve apenas `False`, não o par afirmado na tabela (`reconciliador.py:1712-1716`). |
-| B3a | **CONFERE** — `encerrar_fantasma` delega ao carimbo; `False` pula o evento (`models.py:3421-3429`; `reconciliador.py:1191-1193`). |
-| B3b | **CONFERE** — O fecho alcança S144 e, nele, F9 depois das saídas sem escrita (`reconciliador.py:1216-1218`; `services/materializacao.py:2154-2167`; `models.py:3264-3273`). |
-| B4 | **PROCEDE** — O risco de índice ao datar a principal com perdedora viva está documentado, mas a célula manda trilha ora ao chamado destino, ora sempre à pergunta. Também afirma que a porta lê `data_evento` da instância: ela lê o **gravado** e o dia do turno (`services/fio.py:939-947`, `:969-976`, `:1403-1411`; `reconciliador.py:489-493`). |
-| B5 | **CONFERE** — `lavrar` grava por item; o backfill citado usa o escritor em lote, não essa chamada (`veredito_lavrado.py:240-250`, `:254-275`; `management/commands/backfill_veredito_lavrado.py:143-146`). |
-| B6 | **CONFERE** — O `bulk_update` usa a lista recebida e não passa pelo `save` de cada pergunta (`veredito_lavrado.py:240-251`; `models.py:3565-3577`). |
-| B7 | **CONFERE** — O ponto antes do save fica depois dos dois `continue` do laço (`services/relavra_via.py:117-127`). |
-| B8 | **PROCEDE** — O pré-veto existente usa dia gravado e `novo_dia` e devolve recusa antes da porta; a tabela não demonstra a mesma leitura F6 nem o contrato por item que conta e deixa os demais seguirem, inclusive sob cerca (`services/fio.py:1105-1123`, `:1403-1419`; `models.py:3072-3076`; anexo 18:45, item 2(ii)). |
-| B9a | **PROCEDE** — O código confirma o aval anterior por grupo, mas o aval posterior inclui backfill e determina julgamento por item; o descarte não demonstra que a regra antiga prevalece nessa colisão (`management/commands/backfill_decisoes_pergunta.py:244-262`; anexo 18:45, item 2(ii)). |
-| B9b | **PROCEDE** — Grupo na ida e reversão tudo ou nada existem, mas sua prevalência sobre o comando posterior por item não foi resolvida pelo descarte (`management/commands/migrar_data_evento_dia_do_turno.py:380-393`, `:476-495`; anexo 18:45, item 2(ii)). |
-
-**Quem escreve e quem lê:** `recusa_motivo` é escrito, entre outros pontos, pelo materializador e pela recusa humana, e lido pelo próprio materializador e pela validação (`services/materializacao.py:1676-1690`; `services/validacao.py:262-266`, `:916-922`). Os carimbos `materializada_em`, `materializada_por` e `via_resolucao` são atribuídos pela porta de carimbo e lidos pelo C6 (`models.py:3218-3222`, `:3260-3273`; `juizes.py:1389-1405`). `evento` cria `LogAuditoria`; `registrar_retencao` lê a última linha para deduplicar (`app/core/observ.py:94-105`, `:133-136`; `reconciliador.py:489-493`). `_CERCA` é escrito e restaurado pelo abridor e lido pela guarda (`services/fio.py:1381`, `:1396`, `:1433-1436`, `:1449`). O coletor F8 é proposto, portanto seus escritores e leitores ainda não existem na cópia; `_ESPERAS_163` apenas demonstra a técnica de `ContextVar` (`services/materializacao.py:1726-1734`).
-
-A extração F6 deve preservar a consulta ao **dia gravado**, inclusive quando B4 já atribuiu outro dia em memória; tratar essa atribuição como leitura existente mudaria o predicado. A ativação exclusiva do coletor por sistema e sua ausência em portas humanas são requisitos do desenho, ainda não comportamento implementado (`services/fio.py:917-928`, `:1403-1413`; `services/materializacao.py:1726-1734`).
-
-**PROCEDE: 13** — 7 dos sítios e 6 itens comuns/seções. **LINHAS RESPONDIDAS: 26 de 26.**
-
-_6725 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6734 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
