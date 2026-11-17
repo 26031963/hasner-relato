@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 03:07** · publicado em **17/11/2026 03:07** (UTC-3)
+> Ultima resposta processada: **17/11/2026 03:09** · publicado em **17/11/2026 03:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 03:09 · sessao 1c0230761cb3 · - · - · origem=Ronald (tmux)
+
+Q3 — conclusões por inspeção; concorrência executada e incidência em produção: [nao verificado].
+
+- **Permuta × permuta cruzada, com as quatro células existentes:** a ordem explícita é cartas por PK e células por `(colaborador_id,data)`; não achei inversão direta nessa sequência. As reentradas em `trocar_plantao` usam cartas já travadas pela própria permuta. `app/ponto/portas/celula.py:979-986`, `:1018-1020`, `:733-735`, `:751-753`.
+
+- **Células ausentes: há interleaving que deadlocka.** Cadastro A12x36 trabalha03/11, B12x36 trabalha04/11; ambas19–07; vínculos vigentes e sem células03/04 ainda. P=`permutar(A,03,B,04)` e Q=`permutar(B,04,A,03)`, com cartas distintas. Ambas passam a pré-trava vazia; P insere A03,B03, Q insere A04,B04; no segundo par P espera A04 e Q espera A03. O código trava apenas linhas existentes, compõe pares na ordem dos argumentos e cria células posteriormente; unicidade por colaborador/data transforma esses INSERTs em disputa. `app/ponto/portas/celula.py:984-986`, `:1018-1020`, `:645-646`; `app/escala/models.py:1833`. Execução desse interleaving: [nao verificado].
+
+- **Permuta × troca isolada, células ausentes:** mesmo risco. P acima insere A03,B03; T, com cartas distintas, troca A04→B03, inserindo A04 antes de esperar B03; P espera A04 no segundo par. A troca ordena seus dois lados, mas a permuta não preserva essa ordem de criação nas quatro células ausentes. `app/ponto/portas/celula.py:751-753`, `:984-986`, `:1018-1020`, `:645-646`. Execução: [nao verificado].
+
+- **Interjornada valida estado não travado.** A24x48 07–07, âncora03/11, trabalha09 e12. P: A cede09 a B5/6x1 com folga segunda, B cede10 a A. Q: A cede12 a C6x1 com folga quinta, C cede11 a A. P e Q validam paralelamente: cada uma vê24h entre seu turno assumido e o turno original vizinho; suas células travadas são disjuntas. Depois de ambas, A trabalha10/11 07→11/11 07 e11/11 07→12/11 07: descanso0h. A pré-trava alcança só as quatro células da operação; vizinhos±2 são leituras comuns. `app/ponto/portas/celula.py:984-986`, `:905-925`. Execução: [nao verificado].
+
+- **DSR também tem TOCTOU.** A5x2 08–17 folgas sábado/domingo; B e C5x2 08–17 folgas segunda/terça. P: A cede03/11, B cede14/11; Q: A cede24/11, C cede15/11. Cada validação vê uma folga restante no fim de semana14/15; juntas preenchem as duas, deixando A trabalhar09–15 inteiro. B conserva segunda02 e C segunda23 como descanso. Datas/fontes do exemplo são cadastro hipotético permitido pelo modelo. `app/escala/models.py:852-861`; `app/ponto/portas/celula.py:929-931`, `:984-986`. Execução: [nao verificado].
+
+- **Regenerar × permuta: sobrescrita por snapshot antigo.** A regeneração lê células sem trava; decide `origem=='gerada'` no objeto carregado e salva `trabalha/dna` depois. Interleaving: R lê A03 gerada; P edita e commita A03 como folga; R salva sua leitura antiga. Como `origem` não está em `update_fields`, sobra `origem='editada'` e carimbo da permuta, mas `trabalha/dna` voltam ao cálculo da regeneração. `app/ponto/portas/celula.py:226-227`, `:298`, `:307-312`. Não achei inversão direta das travas de célula neste par quando todas existem: regeneração percorre datas crescentes e permuta trava por colaborador/data. `:228-229`, `:320`, `:984-986`. Execução: [nao verificado].
+
+- **Gerar × permuta:** o gerador carrega células sem trava; se carregar A03 passada com `origem='gerada',dna=None`, e a permuta editar antes do enriquecimento, o gerador pode gravar o DNA calculado usando o `trabalha` antigo, deixando célula editada com `trabalha=False` e marcos de trabalho. Nas ausentes há corrida de INSERT/unicidade. `app/ponto/portas/celula.py:1200-1202`, `:1217-1230`; `app/escala/models.py:1833`. Execução: [nao verificado].
+
+- **Guarda de lavra:** na permuta que chega a escrever, sim, é consultada depois da pré-trava das células; na edição direta/troca isolada, a guarda de cada edição vem antes da trava daquela célula. Regeneração consulta antes do atomic. Nenhum desses pontos trava a exportação/holerite, portanto não fecha corrida com lavra concorrente; `ExportacaoDominio.registrar` insere sem protocolo comum de trava de células. `app/ponto/portas/celula.py:984-986`, `:1010`, `:872-875`, `:613-638`, `:222-227`; `app/folha/models.py:174-187`; `app/ponto/management/commands/gerar_celulas.py:170-185`.
+
+- **Selo insuficiente para concorrência:** o teste confere texto/posição de SQL numa chamada; não abre duas transações nem cobre ausência de células ou alteração de vizinhos. `app/ponto/tests/test_o10d_permuta_reciproca.py:273-291`.
+
+## 17/11 03:08 · sessao c608e03f6016 · - · - · origem=Ronald (tmux)
+
+Achados para consolidar (todos por leitura estática; ocorrência em produção [nao verificado]):
+
+1. **Carta usada como documento também continua sendo ausência com efeito no dia assumido.** O fixture cria `tipo='declaracao', status='aguardando_decisao'`, e O10D reutiliza esse helper: `app/ponto/tests/test_o10b_editar_dia_troca.py:106`, `app/ponto/tests/test_o10d_permuta_reciproca.py:43`. A permuta exclui essas quatro linhas apenas da consulta de sobreposição: `app/ponto/portas/celula.py:897`. Os demais leitores não recebem essa exclusão:
+   - Cobrança considera toda ausência não rejeitada; folha só aprovada: `app/ponto/turnos.py:2523`.
+   - Cobertura usa data única ou intervalo inclusivo: `app/ponto/turnos.py:2550`.
+   - Grade de folha busca cobertura aprovada: `app/escala/utils.py:1168`, `app/escala/utils.py:1188`; muda o dia para `ausencia`: `app/escala/utils.py:1210`, `app/escala/utils.py:1220`; ausência integral apaga marcos da grade: `app/escala/utils.py:1251`.
+   - Precedência faz ausência ganhar de jornada e tipo desconhecido cair em atestado: `app/ponto/precedencia.py:46`, `app/ponto/precedencia.py:76`, `app/ponto/precedencia.py:379`, `app/ponto/precedencia.py:396`.
+   - Contraexemplo: sucesso G01 (CED 03/11, SUB 04/11), com as mesmas cartas aprovadas de declaração integral: as células assumidas ficam `trabalha=True`, porém a grade as apresenta como ausência. Cadastro/data do caso: `app/ponto/tests/test_o10d_permuta_reciproca.py:129`; interpretação da ausência: referências acima. Não executado [nao verificado].
+
+2. **Interjornada e descanso semanal locais são perguntas novas, não achei duplicata de juiz já registrado.** `core/juizes.py` não contém interjornada nem juiz de descanso semanal previsto [nao verificado: resultado negativo de busca]. DSR do motor é direito financeiro perdido por faltas, pergunta diferente: `app/ponto/motor_calculo_v2.py:2565`, `app/ponto/motor_calculo_v2.py:2593`, `app/ponto/motor_calculo_v2.py:2605`. Guardas novas estão em `app/ponto/portas/celula.py:915`, `app/ponto/portas/celula.py:929`; registro delas não achei [nao verificado].
+
+3. **Mapa dos campos, leitores fora do diff:**
+   - `trabalha`: fonte lida por `EscalaColaborador.eh_dia_trabalho`: `app/escala/models.py:1094`; precedência: `app/ponto/precedencia.py:347`, `app/ponto/precedencia.py:357`; cala cobrança com `False`: `app/chamados/juizes.py:443`, `app/chamados/juizes.py:459`; leitura lavrada e previsto: `app/escala/services/leitor_celula.py:397`, `app/escala/services/leitor_celula.py:411`; cartório protesta apenas se não False: `app/ponto/services/cartorio.py:1459`.
+   - `dna`: marcos congelados: `app/escala/models.py:1124`; encadeamento aware de marcos: `app/escala/servico_jornada.py:76`, `app/escala/servico_jornada.py:89`; impressão e ata do cartório: `app/ponto/services/cartorio.py:1398`, `app/ponto/services/cartorio.py:1437`; grade alimenta juiz de turno com DNA: `app/escala/utils.py:1892`.
+   - `origem='editada'`: bloqueia remoção de geradora ao restaurar snapshot: `app/colaboradores/services/vinculo.py:1025`; bloqueia desfazer ajuste que removeria vínculo novo: `app/colaboradores/services/vinculo.py:1103`; apresentação do dia: `app/ponto/services/dia_do_colab.py:91`. Regeneração e geração também a respeitam dentro do mesmo arquivo da porta: `app/ponto/portas/celula.py:120`, `app/ponto/portas/celula.py:1223`.
+   - `editada_em`: fato novo para cartório: `app/ponto/services/cartorio.py:393`; invalida respostas lavradas: `app/chamados/veredito_lavrado.py:191`; reabre janela de censo de fase: `app/escala/services/fase_12x36.py:188`; carimbo de reescrita para cobrança órfã: `app/escala/services/regeneracao.py:72`, `app/escala/services/regeneracao.py:101`, `app/escala/services/regeneracao.py:119`, `app/escala/services/regeneracao.py:154`; apresentação localtime: `app/ponto/services/dia_do_colab.py:93`.
+   - `editada_por`: escritor `editar_dia`: `app/ponto/portas/celula.py:646`, `app/ponto/portas/celula.py:653`; leitor de produção específico fora do diff não achei [nao verificado]. Modelo tem FK `SET_NULL`: `app/escala/models.py:1733`.
+   - `LogAuditoria.valor_depois`: escritor material é `core.observ.evento`, CREATE: `app/core/observ.py:134`; adaptador `evento_kw`: `app/core/observ.py:143`. `permuta_id`/`cartas` são escritos pela porta: `app/ponto/portas/celula.py:1030`; leitor específico de `cartas` é só idempotência da própria permuta: `app/ponto/portas/celula.py:1005`. Leitor de `permuta_id` fora do diff não achei [nao verificado].
+   - `Ausencia.status/data/data_fim/documento`: criação pela porta de ausência monta kwargs e valida/salva: `app/ponto/services/ausencia.py:483`, `app/ponto/services/ausencia.py:529`; edição escreve datas: `app/ponto/services/ausencia.py:649`; transição escreve status: `app/ponto/services/ausencia.py:976`; anexo escreve documento: `app/ponto/services/ausencia.py:1017`. `Ausencia.save` deriva fim inclusivo e dias: `app/ponto/models.py:904`, `app/ponto/models.py:917`; carimba aprovação/rejeição: `app/ponto/models.py:882`. Permuta não escreve esses campos, apenas os lê: `app/ponto/portas/celula.py:987`, `app/ponto/portas/celula.py:995`, `app/ponto/portas/celula.py:1019` (troca checa documento).
+
+4. **Semântica temporal:**
+   - `CelulaDia.data`/`Ausencia.data` são `DateField`, não instante: `app/escala/models.py:1685`, `app/ponto/models.py:750`.
+   - Turno ancora em `dia`, avança a data quando marco seguinte `<=` anterior e usa timezone corrente com `make_aware`: `app/escala/servico_jornada.py:69`, `app/escala/servico_jornada.py:89`.
+   - Ausência cobre data final inclusiva: `app/ponto/turnos.py:2552`, `app/ponto/turnos.py:2844`; NULL é aberto só para tipos específicos: `app/ponto/turnos.py:2553`. Help text do campo diz NULL indeterminado genericamente: `app/ponto/models.py:751` — divergência de descrição preexistente.
+   - Parcial noturna pertence ao dia inicial do turno: `app/ponto/models.py:765`, `app/ponto/services/ausencia.py:1040`; bordas parciais inclusivas: `app/escala/utils.py:1239`.
+
+5. **Possível derivação divergente de duração:** `_turno_pos_permuta` usa `marcos_turno`, que só encadeia quatro marcos: `app/escala/servico_jornada.py:76`, `app/escala/servico_jornada.py:82`; produtor de DNA já congela dois intervalos e lâmpadas: `app/ponto/management/commands/gerar_celulas.py:90`, `app/ponto/management/commands/gerar_celulas.py:101`; ordem canônica inclui os dois pares: `app/escala/models.py:1652`, `app/escala/models.py:1665`. Divergência concreta com cadastro aceito [nao verificado]; pede inspeção das restrições de pausa antes de elevar a defeito confirmado.
+
+6. **A guarda de competência não duplica juiz registrado:** `_competencias_exportadas` enumera candidatas e chama `competencia_fechada_para_celula`: `app/ponto/management/commands/gerar_celulas.py:155`, `app/ponto/management/commands/gerar_celulas.py:161`. Essa autoridade está registrada K9: `app/core/juizes.py:346`, `app/core/juizes.py:353`.
 
 ## 17/11 03:07 · sessao 845411659453 · - · - · origem=Ronald (tmux)
 
@@ -966,26 +1020,4 @@ Referências aos anexos contam as linhas a partir de “aval Ronald”.
 
 VEREDITO: CONFERE (`complemento3_prepara_1711.txt:2–6`; `app/docs/RELATO.md:4`; `bin/codex_pergunta.sh:95`).
 
-## 17/11 01:21 · sessao a191aa5b5315 · - · - · origem=Ronald (tmux)
-
-- **Premissas documentadas:** O10-D exige quatro pré-validações antes da primeira escrita, rollback integral, recusa falante, ID próprio e escala-base intocada; construtor opus e pouso no `!` de escala já constam em `app/docs/BACKLOG.md:2198`. PREPARA fechada, lei zero e cruzamento dependente da lista do construtor constam em `app/docs/RELATO.md:147`; LOTE7 registrado como pousado em `app/docs/RELATO.md:164`. A referência do aval a `BACKLOG:2199` erra uma linha: ali está RETRATO-POR-EVENTO (`app/docs/BACKLOG.md:2199`).
-
-- **Pista/trava, item 7:** o corte vigente manda suite inteira/pre-opus lateral à PISTA; pista ocupada significa esperar, e VM é fallback somente com pista indisponível e causa registrada (`app/docs/CORTES.md:490`). O complemento distingue suite de não-pouso lateral na PISTA e VM para espinha/pouso/push (`app/docs/RELATO.md:102`). Portanto “pedir a trava na brecha” não autoriza escolher VM enquanto a PISTA funciona; essa leitura colidiria com esses cortes (`app/docs/CORTES.md:490`; `app/docs/RELATO.md:102`). O item pode coexistir se conservar esse roteamento; intenção literal de substituir o roteamento: [nao verificado].
-
-- **Fila não é garantia mecânica:** `--quem` só informa titular; aquisição usa `flock`, sem interface de fila ou prioridade (`bin/trava_teste.sh:28`; `bin/trava_teste.sh:35`). O RELATO já registra que prioridade depende do despacho (`app/docs/RELATO.md:6`). Estado atual “espinha sem suite na fila” e cessão efetiva: [nao verificado].
-
-- **CLASSE-D/LU2:** CLASSE-D R1 trata C5 por dia/dono, muda tela/PDF e admite pouso separado sem aguardar LU2-07/08 (`app/docs/RELATO.md:421`). LU2-08 conserva corte pendente para FATO_EM_AUSENCIA e migração do insumo em `InsumosDoDono.dono()` (`app/docs/RELATO.md:352`; `app/docs/RELATO.md:422`). LU2-07 conserva questão emp1 e preservação L-124 da competência 10 paga (`app/docs/RELATO.md:354`). O aval não deve ser interpretado como autorização para decidir esses pontos; cruzamento efetivo com futura lista de O10-D: [nao verificado]. Os briefs físicos referidos em `logs/` não estão disponíveis nesta cópia: [nao verificado].
-
-- **Ordem atualizada:** não bloquear F2 simplesmente pela ordem antiga CLASSE-D → F2 de `app/docs/BACKLOG.md:1990`: o complemento já permite F2 após B2 sem aguardar CLASSE-D (`app/docs/RELATO.md:4`).
-
-- **Verificação obrigatória permanece:** todo construtor deve passar pelo pre-verificador, triagem com descartes anexos ao opus, suite inteira verde e depois opus final (`CLAUDE.md:372`; `CLAUDE.md:376`; `CLAUDE.md:378`). O aval cita os papéis, mas execução desses portões ainda é [nao verificado]. [nao verificado]
-
-## 17/11 01:20 · sessao dc4aa7b78cbb · - · - · origem=Ronald (tmux)
-
-- **Teto/condição literal:** “teto do papel sonda” corresponde ao teto de **1179 s**, eventualmente rebaixado por `CODEX_TIMEOUT` (`bin/codex_pergunta.sh:95-98`). O timeout envolve o Codex desse papel (`bin/codex_pergunta.sh:425-428`); `124` é tratado como timeout (`bin/codex_pergunta.sh:447-451`). Portanto, **não há colisão literal** no item 3. Quantidade de tentativas e respectivos rc: **[nao verificado]**.
-- **Precisão operacional:** a execução do envelope antecede o timeout do Codex (`bin/codex_pergunta.sh:323-329`). Assim, timeout do papel não prova demora do SQL; o aval fala do papel, portanto isso não fundamenta PROCEDE (`bin/codex_pergunta.sh:95`; `bin/codex_pergunta.sh:425`).
-- **Paralelismo:** leituras independentes em paralelo estão previstas até o teto medido (`CLAUDE.md:357-365`), e o wrapper controla slots (`bin/codex_pergunta.sh:364-381`). Soltar as cinco leituras não exige aumentar esse teto.
-- **Abertura F2/CLASSE-D:** o registro vigente já responde que F2 abre pelas quatro condições contra HEAD com B2 pousada, **sem esperar CLASSE-D** (`app/docs/RELATO.md:4`). A frota aparece como medida posterior de volta 2, com lei zero já registrada (`app/docs/RELATO.md:16-19`).
-- **B2/suite/trava/push:** o PREPARA registrado já é sem cópia, suite ou trava (`app/docs/RELATO.md:23`). B2 consta aberta separadamente (`app/docs/RELATO.md:30`); regras próprias da VM/pista seguem em `app/docs/CORTES.md:490`. Não encontrei colisão nesses pontos; estado real dos processos/logs: **[nao verificado]**.
-
-_6305 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6307 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
