@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 10:19:17.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (203.5 MB). Acoes na janela: **538**.
+**Medido em 17/11/2026 10:24:45.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (203.5 MB). Acoes na janela: **537**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -547,4 +547,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:54:13 | Bash | Show full assertion messages of both failures | `cd /home/ronald/saas-hasner/logs/AUSENCIA-EFEITO-PELO-ESTADO; awk '/^FAIL: test_CATRACA_linhas_reais/,/^-{20}/' suite_pouso.log \| tail -12 \| cut -c1-400; awk '/^FAIL: test_nenhum_escritor_fora/,/^-{20}/' suite_pouso.log \| tail -6 \| cut -c1-600` |
 | 22:54:09 | Bash | Read suite verdict and failures | `cd /home/ronald/saas-hasner/logs/AUSENCIA-EFEITO-PELO-ESTADO; L=suite_pouso.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran ' $L \| tail -1; /bin/grep -E '^(ERROR\|FAIL):' $L \| head -20; tail -15 $L \| cut -c1-200` |
 | 22:54:07 | Bash | Check suite, cortes mechanism, F4 matrix location | `cd /home/ronald/saas-hasner; date +%H:%M; cat logs/AUSENCIA-EFEITO-PELO-ESTADO/suite_pouso.fim 2>/dev/null \|\| echo suite-em-curso; head -30 bin/gerar_cortes.py \| /bin/grep -n 'json\\|JSON\\|fonte\\|def ' ; ls app/docs/*.json docs/*.json 2>/dev/null; ls logs/ESPINHA-BRIEFS/ ; /bin/grep -n 'lei: U163' app/docs/RELATO.md \| cut -c1-200; tail -5 app/docs/PROMPTS.md \| cut -c1-200` |
-| 22:20:19 | Bash | Check suite status and hook proof | `cd /home/ronald/saas-hasner; cat logs/AUSENCIA-EFEITO-PELO-ESTADO/suite_pouso.fim 2>/dev/null \|\| echo suite-em-curso; ps -p 1998837 -o pid= ; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"` |

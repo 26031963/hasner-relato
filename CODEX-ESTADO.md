@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 10:15** · publicado em **17/11/2026 10:19** (UTC-3)
+> Ultima resposta processada: **17/11/2026 10:24** · publicado em **17/11/2026 10:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 10:24 · sessao 962e33240ae4 · E4C-F2 · censo · origem=Code
+
+Referências aos anexos usam linhas contadas desde a primeira linha de cada bloco, incluindo linhas vazias. A classificação abaixo trata da cobertura do tema, sem decidir a procedência dos achados.
+
+1. **Ressuscitada VALIDADA versus C6/fio — b: visto e descartado.**
+
+   **Pergunta:** “algum deles agora DISCORDA de um leitor migrado” e “validada ressuscitada vira o que?” (`v1.q:26–28`, `v1.q:34–35`).
+
+   **Resposta:** “Ressuscitar pergunta validada conserva justamente a validação que a porta apaga”; também aponta que “A pergunta excluída não chega ao juiz”, citando o fio (`v1.r:5–7`, `v1.r:38–42`).
+
+   **Triagem:** “#1, #4 ressuscitar -> DESCARTADO para a F2”. Motivo declarado: pergunta de desenho, ato novo proibido e alteração de RESSUSCITAR fora da F2; a volta 2 acrescenta “frota 0, caracterizado” (`entrega.md:68`, `entrega.md:80`).
+
+2. **Caminhos reais que chamam ressuscitar — a: tema perguntado, ligação com esses chamadores não apresentada.**
+
+   **Pergunta:** pede “QUEM ESCREVE (todo escritor)” e pergunta “Ha outro caminho com o mesmo formato?” (`v1.q:13–17`, `v1.q:34–35`).
+
+   **Resposta:** apresenta o contraexemplo dentro da ressuscitação e identifica outro reset, `devolver_instante_sem_texto_l130`; esses trechos não apresentam a ligação cartório → ressuscitação, desarquivamento → ressuscitação ou reabertura → ressuscitação (`v1.r:7–11`). Esses chamadores estão na cópia (`app/ponto/services/cartorio.py:1674`, `app/chamados/views_arquivar.py:86`, `app/chamados/models.py:1510`).
+
+   **Triagem correspondente ao tema:** descarta ressuscitar como desenho fora da F2; não apresenta análise desses três chamadores nessa justificativa (`entrega.md:68`, `entrega.md:80`). **A classificação a se limita à rastreabilidade dos chamadores; o mecanismo já havia sido visto no item 1.**
+
+3. **“Ressuscitáveis = 0” e medida de produção — c: dado de produção fora do alcance demonstrado.**
+
+   **Pergunta:** exige conservação “mesmo valor por pk antes e depois”, mas esse trecho não fornece a medição de ressuscitáveis (`v1.q:7–8`).
+
+   **Resposta:** declara expressamente “incidência em produção, contagens mencionadas em comentários [...] [nao verificado]” (`v1.r:3`).
+
+   **Triagem:** usa “ressuscitaveis_agora = 0 (remedida.md:455)” e repete “frota 0” nos descartes (`entrega.md:7–8`, `entrega.md:80`, `entrega.md:104–105`). A contraposição com Counter e 2.025 ressuscitáveis consta do Opus; validação independente dessas medidas: **[nao verificado]** (`opus_final.md:4`).
+
+4. **N+1 no app/API — b: visto e descartado.**
+
+   **Pergunta:** pede explicitamente “custo N+1” (`v1.q:33`).
+
+   **Resposta:** “Há N+1 novo em caminhos sem prefetch”; descreve o carregamento do app, `_item`, `estado`, `resposta_display` e “duas buscas adicionais de decisões por pergunta” (`v1.r:71–73`).
+
+   **Triagem:** “#6 N+1 -> DESCARTADO (fila): medido; o custo real que apareceu foi o do JIT, curado”. Esse é o motivo declarado do descarte; a resposta separava contagem executada e latência como não verificadas (`entrega.md:77`, `v1.r:77`).
+
+5. **`ato_motivo` com dois significados e sem protocolo imposto — b: visto e descartado.**
+
+   **Pergunta:** “Algum leitor de `ato_motivo` supoe outro significado (campo com dois significados)?” (`v2.q:17–20`).
+
+   **Resposta:** “`ato_motivo` acumula explicação e controle de efeito”; acrescenta que “O campo permanece texto livre e `registrar` não valida esse protocolo” (`v2.r:26`).
+
+   **Triagem:** “DESCARTADO (fila)”. Motivo declarado: atualmente motivo vazio só vem da porta humana; selar o vocabulário ficou para a fase de remoção da projeção (`entrega.md:81–82`).
+
+6. **L-130: reset inteiro versus leitura pelo ato — b: visto no tema, descartado junto com ressuscitar.**
+
+   **Pergunta:** pede comparar cada reset da projeção com a leitura do ato e procurar outro caminho semelhante à ressuscitação (`v1.q:15–17`, `v1.q:34–35`).
+
+   **Resposta:** identifica `devolver_instante_sem_texto_l130`: “fotografa a resposta e zera o par sem ato limpador”, mas “permanece divergência do instante bruto” (`v1.r:11`). Isso toca diretamente o tema do reset que não se reproduz integralmente na leitura; o trecho não formula uma conclusão nominal sobre `LEIS.md:151` (`v1.r:11`).
+
+   **Triagem temática:** ressuscitar foi descartado como pergunta de desenho; o registro R2 invoca o controle “zera o par, nao volta”. Não há nesses trechos um descarte nominal separado chamado L-130 (`entrega.md:68`, `entrega.md:102–103`). A afirmação sobre CSF exportada com zero diferenças aparece separadamente na conservação (`entrega.md:60`).
+
+CLASSES: a=1 b=4 c=1 d=0 e=0
 
 ## 17/11 10:15 · sessao f3a5c41825e1 · CONTADOR-CODEX-OCIOSO · verificador · origem=Code
 
@@ -613,12 +667,4 @@ Adversarial mínimo: repetir esse caso com `destino=ch` e exigir seu PK em `ch._
 
    Para fechar essa lacuna, incluir pergunta sem destino com `disputa.chamado=ch`, além de pergunta destinada a outro chamado. A fixture atual cria a disputa sem preencher `chamado`: `app/chamados/tests/cortes_f2_f9_apoio.py:58-64`.
 
-## 17/11 09:30 · sessao 3b3e67c2f1be · - · - · origem=Ronald (tmux)
-
-3. **[nota] No delta fornecido, a única mudança produtiva é o texto da docstring**, na mesma linha; o corpo de `_ancoradas` permanece abaixo dela, sem deslocamento (`app/chamados/models.py:343-359`, especialmente `:346`). Comportamento produtivo adicional ao delta fornecido: [nao verificado].
-
-4. **[nota] O selo c12 por linha não foi afetado por este delta.** Ele inclui o número da linha na identidade do `CORPO` (`app/chamados/tests/e4b_c12_ast.py:17-27,222-223`); conferência AST somente em memória encontrou todas as nove chamadas nas linhas cadastradas: 205, 302, 462, 667, 847, 865, 1501, 1705 e 1725 (`app/chamados/tests/e4b_c12_ast.py:19-27`). Os acréscimos nos dois testes não entram no universo produtivo: a pasta `tests` é excluída (`app/chamados/tests/e4b_c12_ast.py:32-39`). O mecanismo dos sítios também resolve a linha atual pelo AST, usando `linha_base` apenas para a fonte-base (`app/chamados/tests/e4b_c12_verificar.py:84-92,106-115`); o sítio E01 continua sendo a chamada de `fechar` (`app/chamados/tests/e4b_c12_sitios.json:370-376`; `app/chamados/models.py:464-467`).
-
-Não executei a suíte c12; resultado integral de execução: [nao verificado]. [nao verificado]
-
-_6457 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6458 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
