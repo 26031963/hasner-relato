@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 12:16:49.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (213.7 MB). Acoes na janela: **644**.
+**Medido em 17/11/2026 12:21:51.** Transcript: `5a24b180-cd5d-4594-80c3-6d074cee70cf.jsonl` (214.1 MB). Acoes na janela: **658**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:19:17 | ListAgents |  | `-` |
+| 12:19:00 | Bash | Wait up to 30 min for export builder's next commit | `cd /home/ronald; h1=$(git -C wt-porta-export-105532 rev-parse HEAD); t=0; while [ "$(git -C wt-porta-export-105532 rev-parse HEAD)" = "$h1" ] && [ $t -lt 1800 ]; do /usr/bin/sleep 30; t=$((t+30)); done; echo "porta HEAD $h1 -> $(git -C wt-porta-export-105532 rev-parse HEAD) after ${t}s"` |
+| 12:18:42 | ListAgents |  | `-` |
+| 12:18:32 | SendFeedback |  | `-` |
+| 12:18:15 | Bash | Check RELATO top for hook-teto line | `cd /home/ronald/saas-hasner; sed -n 1,4p app/docs/RELATO.md \| cut -c1-200` |
+| 12:17:56 | Bash | Retry backlog update with unique anchor | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() old='opus 30/10). \| registrada \| achado 30/10 \| &mdash; \| 30/10 \|' assert s.count(old)==1, s.count(old) s=s.replace(old,'opus 30/10). \| registrada; remedida 17/11 (COMPLEMENTO-1 item 6): 729 ERROR em 24 h no saas_ui, 125 perguntas, 0 respostas 500, so log \| achado 30/10 \| &mdash; \| 17/11 \|'); open(p, ...` |
+| 12:17:52 | Bash | Fold today's measurement into existing backlog row | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() old='\| registrada \| achado 30/10 \| &mdash; \| 30/10 \|' assert s.count(old)==1 s=s.replace(old,'\| registrada; remedida 17/11 (COMPLEMENTO-1 item 6): 729 ERROR em 24 h no saas_ui, 125 perguntas, 0 respostas 500, so log \| achado 30/10 \| &mdash; \| 17/11 \|'); open(p,'w').write(s) EOF python3 - <<'EOF' p='/ ...` |
+| 12:17:45 | Bash | Read the RELATO bug line | `cd /home/ronald/saas-hasner; sed -n 20p app/docs/RELATO.md` |
+| 12:17:43 | Bash | Read existing backlog row for the bug | `cd /home/ronald/saas-hasner; sed -n 1088p app/docs/BACKLOG.md \| cut -c1-600` |
+| 12:17:39 | Bash | Read bug site and check existing backlog mentions | `cd /home/ronald/saas-hasner; sed -n 560,572p app/chamados/materializacao.py; /bin/grep -n 'tipo_marco_divergente' app/docs/BACKLOG.md app/docs/RELATO.md \| cut -c1-250 \| head` |
+| 12:17:28 | Bash | Record that the live order has no free item | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: ')]; assert len(i)==1 L[i[0]+1:i[0]+1]=['ORDEM VIVA SEM ITEM ANDAVEL 12:3x (ORDEM-VIVA-1511-NOITE): as 4 leituras ja entregues (O95 DIFF 15/11 20:18, VINCULO-LINHA-DO-TEMPO censo 20:1x, FIO-E0-V4-E1 e O169 despachadas 20:1x); vagas tomadas por ...` |
+| 12:17:12 | Bash | Check status of the four Codex readings | `cd /home/ronald/saas-hasner; for k in O95 VINCULO-LINHA-DO-TEMPO FIO-E0-V4-E1-ENTRADAS O169; do echo "== $k"; /bin/grep -n "$k" app/docs/RELATO.md \| cut -c1-220 \| head -3; ls -d logs/*$k* 2>/dev/null \| head -2; done; /bin/grep -n 'ORDEM VIVA SEM ITEM' app/docs/RELATO.md \| head -2` |
+| 12:17:07 | Bash | Read rest of work order | `cd /home/ronald/saas-hasner; fold -w 300 logs/AVAIS-1515/ordem_viva_1511_noite.txt \| sed -n 2,30p` |
+| 12:17:05 | Bash | Read the live work order | `cd /home/ronald/saas-hasner; cat logs/AVAIS-1515/ordem_viva_1511_noite.txt \| cut -c1-400` |
 | 12:16:44 | Bash | Publish COMPLEMENTO-2 results to RELATO and BACKLOG | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: ')]; assert len(i)==1 L[i[0]+1:i[0]+1]=[ 'ENTREGA COMPLEMENTO-2 item 6: /tmp/auditaveis20_v2.zip (20 espelhos auditaveis com marcacao, empresa e posto mascarados como empN/postoN, sem os colchetes da Convencao; conferi: 0 nome de empresa ou po ...` |
 | 12:16:29 | Bash | Verify zip contents and masking | `cd /home/ronald/saas-hasner; unzip -l /tmp/auditaveis20_v2.zip \| tail -3; D=$(mktemp -d); unzip -q /tmp/auditaveis20_v2.zip -d $D; ls -l logs/ENSAIO-FOLHA-11/NOMES-FROTA-PRIVADA.txt \| cut -c1-10; echo nomes=$(/bin/grep -rFi -f logs/ENSAIO-FOLHA-11/NOMES-FROTA-PRIVADA.txt $D \| wc -l); echo colchete=$(/bin/grep -rE '\[[^]]*[\|=][^]]*\]' $D \| wc -l); /bin/grep -rh 'Convenc' $D \| sort \| uniq -c  ...` |
 | 12:05:20 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
