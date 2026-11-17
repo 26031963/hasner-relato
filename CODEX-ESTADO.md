@@ -1,7 +1,293 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 15:35** · publicado em **17/11/2026 15:35** (UTC-3)
+> Ultima resposta processada: **17/11/2026 15:44** · publicado em **17/11/2026 15:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 15:44 · sessao 663bc85bf2f6 · E4C-F1-B2 · leitura · origem=Code
+
+```python
+# SONDA1: texto para bin/sonda_leitura.sh; nao executada. [nao verificado]
+# A propria sonda so le; o invocador tambem altera credencial/GRANTs e
+# arquivos de apoio e trilha: bin/sonda_leitura.sh:28, :115, :145, :245.
+# Resultado em producao e cobertura: [nao verificado].
+#
+# Referencias das funcoes de dominio chamadas diretamente:
+# pergunta_viva: app/chamados/juizes.py:866
+# _dia_de_turno_da_pergunta: app/chamados/juizes.py:338
+# familia_do_motivo: app/chamados/catalogo/motivos.py:53
+# _fonte_materializada: app/chamados/management/commands/
+#     migrar_data_evento_dia_do_turno.py:65
+# _fonte_viva: mesmo arquivo:94
+# turnos_do_colab: app/ponto/turnos.py:1850
+# dia_do_turno_da_batida: app/ponto/turnos.py:2939
+# competencia_do_dia_entregue: app/chamados/services/vigia_fio.py:785
+#
+# _fonte_viva retorna None tanto para caso coerente quanto para ausencia de
+# turno identificavel: mesmo arquivo do migrador:94-125. Aqui None e
+# INDETERMINADA; nao e convertido em dia igual nem em zero.
+# Conversa nao tem dia de turno pela porta: app/chamados/juizes.py:338-342.
+# Outras classes sem fonte definida nos ramos pedidos ficam INDETERMINADAS.
+# As contagens usam uma unica fotografia REPEATABLE READ; igualdade de
+# contagens nao prova ausencia de alteracoes concorrentes. [nao verificado]
+
+import datetime as dt
+from collections import Counter, defaultdict
+
+from django.db import connection, transaction
+from django_tenants.utils import schema_context
+
+from chamados.catalogo.motivos import FAMILIA_BATIDA, familia_do_motivo
+from chamados.juizes import _dia_de_turno_da_pergunta, pergunta_viva
+from chamados.management.commands.migrar_data_evento_dia_do_turno import (
+    _Fora,
+    _fonte_materializada,
+    _fonte_viva,
+)
+from chamados.models import PerguntaDisputa
+from chamados.services.vigia_fio import competencia_do_dia_entregue
+from ponto.models import Batida
+from ponto.turnos import dia_do_turno_da_batida, turnos_do_colab
+
+
+def contagens():
+    # Todas as tabelas comuns e particionadas dos dois schemas acessiveis pela
+    # porta. ONLY conta cada relacao fisica uma vez, inclusive particoes.
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT n.nspname, c.relname
+              FROM pg_catalog.pg_class c
+              JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+             WHERE n.nspname IN ('public', 'juliani')
+               AND c.relkind IN ('r', 'p')
+             ORDER BY n.nspname, c.relname
+        """)
+        tabelas = cursor.fetchall()
+        resultado = {}
+        for schema, tabela in tabelas:
+            identificador = (
+                connection.ops.quote_name(schema)
+                + "."
+                + connection.ops.quote_name(tabela)
+            )
+            cursor.execute("SELECT count(*) FROM ONLY " + identificador)
+            resultado[(schema, tabela)] = cursor.fetchone()[0]
+        return resultado
+
+
+def resumo_empresas(contador):
+    return " ".join(
+        "empresa%s=%s" % (empresa, contador.get(empresa, 0))
+        for empresa in (2, 3, 4)
+    ) + " outras=%s" % sum(
+        n for empresa, n in contador.items() if empresa not in (2, 3, 4)
+    )
+
+
+def fonte_da_pergunta(p, colab, dia):
+    # Episodio BATIDA e a propria batida de origem:
+    # app/chamados/models.py:2541-2546.
+    if familia_do_motivo(p.motivo) == FAMILIA_BATIDA:
+        if not p.batida_origem_id:
+            return None
+        return Batida.objects.filter(
+            pk=p.batida_origem_id, retratada_em__isnull=True
+        ).first()
+
+    # O migrador usa estas fontes para perguntas de hora:
+    # migrar_data_evento_dia_do_turno.py:65-79, :94-126, :147-157.
+    if p.motivo not in ("saida_sem_entrada", "orfao_14h"):
+        return None
+    if dia is None:
+        return None
+
+    um = dt.timedelta(days=1)
+    turnos = turnos_do_colab(colab, dia - 2 * um, dia + um)
+    if p.materializada_em:
+        plantadas = {
+            p.pk: list(Batida.objects.filter(
+                pergunta_origem_id=p.pk, retratada_em__isnull=True
+            ))
+        }
+        fonte, _turno = _fonte_materializada(p, turnos, plantadas)
+        return fonte
+
+    resultado = _fonte_viva(p, colab, turnos)
+    return resultado[0] if resultado is not None else None
+
+
+def executar():
+    falhas = []
+    vivas = 0
+    alvos = []
+    indeterminadas = Counter()
+    dias_indeterminados = Counter()
+    memo_competencias = {}
+
+    with schema_context("juliani"):
+        with transaction.atomic():
+            try:
+                # Antes de qualquer consulta desta transacao.
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+                    )
+                    cursor.execute("SELECT current_user, current_schema()")
+                    role, schema = cursor.fetchone()
+                    print("ROLE=%s SCHEMA=%s" % (role, schema))
+                    if role != "leitor" or schema != "juliani":
+                        raise RuntimeError("role_ou_schema_incorreto")
+
+                antes = contagens()
+                for (schema, tabela), quantidade in antes.items():
+                    print("ANTES %s.%s=%s" % (schema, tabela, quantidade))
+
+                perguntas = PerguntaDisputa.objects.select_related(
+                    "disputa__colaborador__empresa"
+                ).order_by("pk")
+
+                for p in perguntas.iterator(chunk_size=200):
+                    cid = p.disputa.colaborador_id
+                    empresa_id = p.disputa.colaborador.empresa_id
+                    etapa = "juiz_viva"
+                    try:
+                        # Savepoint recupera erros SQL sem invalidar a
+                        # transacao principal e permite listar outras falhas.
+                        with transaction.atomic():
+                            if not pergunta_viva(p):
+                                continue
+                            vivas += 1
+                            colab = p.disputa.colaborador
+                            empresa = colab.empresa
+                            etapa = "dia_gravado"
+                            dia_gravado = _dia_de_turno_da_pergunta(p)
+                            etapa = "fonte"
+                            try:
+                                fonte = fonte_da_pergunta(p, colab, dia_gravado)
+                            except _Fora:
+                                fonte = None
+                            if fonte is None:
+                                indeterminadas[empresa_id] += 1
+                                continue
+
+                            etapa = "dia_turno"
+                            dia_turno = dia_do_turno_da_batida(colab, fonte)
+                            if dia_turno is None:
+                                indeterminadas[empresa_id] += 1
+                                continue
+                            if dia_gravado is None:
+                                dias_indeterminados[empresa_id] += 1
+                                continue
+
+                            etapa = "competencia"
+                            entregue_gravado = competencia_do_dia_entregue(
+                                dia_gravado, empresa, memo=memo_competencias
+                            )
+                            entregue_turno = competencia_do_dia_entregue(
+                                dia_turno, empresa, memo=memo_competencias
+                            )
+                            if entregue_gravado is None or entregue_turno is None:
+                                dias_indeterminados[empresa_id] += 1
+                            elif entregue_gravado is False and entregue_turno is True:
+                                alvos.append(
+                                    (cid, p.pk, empresa_id, dia_gravado, dia_turno)
+                                )
+                    except Exception as exc:
+                        # Nao imprime mensagem da excecao: pode conter dados
+                        # pessoais. A etapa e o tipo permitem localizar a falha.
+                        falhas.append((cid, p.pk, etapa, type(exc).__name__))
+
+                por_empresa = Counter(item[2] for item in alvos)
+                pessoas = {item[0] for item in alvos}
+                print("UNIVERSO_VIVO=%s" % vivas)
+                print(
+                    "ALVO=%s PESSOAS_DISTINTAS=%s %s"
+                    % (len(alvos), len(pessoas), resumo_empresas(por_empresa))
+                )
+                for cid, pk, empresa_id, gravado, turno in alvos[:3]:
+                    print(
+                        "EXEMPLO col%s pergunta=%s empresa=%s "
+                        "dia_gravado=%s dia_turno=%s"
+                        % (cid, pk, empresa_id, gravado, turno)
+                    )
+                print(
+                    "FONTE_INDETERMINADA=%s %s"
+                    % (sum(indeterminadas.values()), resumo_empresas(indeterminadas))
+                )
+                print(
+                    "DIA_INDETERMINADO=%s %s"
+                    % (
+                        sum(dias_indeterminados.values()),
+                        resumo_empresas(dias_indeterminados),
+                    )
+                )
+                print("FALHAS=%s" % len(falhas))
+                for cid, pk, etapa, tipo in falhas:
+                    print(
+                        "FALHA col%s pergunta=%s etapa=%s tipo=%s"
+                        % (cid, pk, etapa, tipo)
+                    )
+                if falhas:
+                    print("COBERTURA INCOMPLETA")
+
+                depois = contagens()
+                for (schema, tabela), quantidade in depois.items():
+                    print("DEPOIS %s.%s=%s" % (schema, tabela, quantidade))
+                print("CONTAGENS_IGUAIS=%s" % (antes == depois))
+            finally:
+                transaction.set_rollback(True)
+
+
+try:
+    executar()
+except Exception as exc:
+    # Falha geral impede concluir o censo; nao expor texto da excecao.
+    print("FALHA_GERAL tipo=%s" % type(exc).__name__)
+    print("COBERTURA INCOMPLETA")
+    print("CONTAGENS_IGUAIS=INDETERMINADO")
+finally:
+    print("FIM_SONDA1")
+```
+
+## 17/11 15:44 · sessao bb3764e09ea6 · E4C-F1-B2 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 2: PROCEDE.** A decisão de cercar o satélite é compatível com a ideia de ato próprio, mas o texto não define a unidade do rollback nem o dono da trilha desse ato. Essas escolhas mudam o comportamento de `reconciliar_chamados_colab` e precisam voltar ao Ronald. ([app/chamados/signals.py:365](app/chamados/signals.py#L365); [app/chamados/reconciliador.py:1457](app/chamados/reconciliador.py#L1457))
+
+**AVAL-DEVOLVIDO — item 3: PROCEDE.** A porta viva e a vigilância do lote são identificáveis, mas “cada sítio passa pela porta” deixa ambíguo onde se abre a cerca e qual ato é desfeito, especialmente na tranca e em chamadas aninhadas. A correção dos falsos positivos é possível em princípio, mas o selo proposto não está disponível no dado para confirmar a implementação ou sua mordida. ([app/chamados/services/fio.py:1389](app/chamados/services/fio.py#L1389); [app/chamados/services/fio.py:1425](app/chamados/services/fio.py#L1425); [app/chamados/services/disputa_emissao.py:1896](app/chamados/services/disputa_emissao.py#L1896); selo `selo_diff.txt` [não verificado])
+
+A cópia fornecida não contém metadados Git acessíveis: os caminhos e linhas abaixo foram conferidos na cópia, mas a identidade do seu `HEAD` com o hash informado está **[não verificado]**.
+
+## Item 2 — satélite `on_commit`
+
+**O que a cerca faz hoje.** A vigia anota as empresas vetadas e levanta `EscritaEmCompetenciaEntregue`. Na abertura externa, `executar_sob_cerca` executa o ato em `atomic`, desfaz esse escopo se houver veto — inclusive se a exceção tiver sido engolida — e retorna `(None, vetadas)`. Em cerca aninhada, ela executa no estado externo; a exceção ou a anotação fica para a abertura externa resolver. Exceção sem veto anotado é relançada. ([app/chamados/services/fio.py:1420](app/chamados/services/fio.py#L1420); [app/chamados/services/fio.py:1433](app/chamados/services/fio.py#L1433))
+
+Logo, a premissa “veto não sobe para dentro do ato já commitado” é coerente para o veto tratado pela abertura **externa** do callback: ele é chamado por `on_commit` e a cerca anterior já restaura seu contexto ao terminar. Isso não equivale a dizer que qualquer erro do callback será convertido em veto; hoje o callback envolve sua execução em `engolir`. ([app/chamados/signals.py:365](app/chamados/signals.py#L365); [app/chamados/signals.py:371](app/chamados/signals.py#L371); [app/chamados/services/fio.py:1443](app/chamados/services/fio.py#L1443); [app/chamados/services/fio.py:1449](app/chamados/services/fio.py#L1449))
+
+**A unidade precisa ser decidida.** Hoje o satélite executa, em sequência, absolvições pela célula, reconciliação de órfãs e retratação de premissas mortas. As absolvições têm `atomic` por carimbo e capturam falhas por pergunta; as órfãs também capturam por pergunta; as premissas capturam por chamado. ([app/chamados/reconciliador.py:1477](app/chamados/reconciliador.py#L1477); [app/chamados/reconciliador.py:636](app/chamados/reconciliador.py#L636); [app/chamados/reconciliador.py:645](app/chamados/reconciliador.py#L645); [app/chamados/reconciliador.py:1569](app/chamados/reconciliador.py#L1569); [app/chamados/reconciliador.py:1501](app/chamados/reconciliador.py#L1501))
+
+Se o callback inteiro entrar em **uma** abertura externa, um veto anotado em qualquer etapa desfaz também as etapas anteriores bem-sucedidas daquele callback, apesar das capturas internas; sem essa abertura, as transações individuais podem concluir separadamente. O aval não explicita se quer rollback do satélite inteiro ou de cada ato interno. ([app/chamados/services/fio.py:1439](app/chamados/services/fio.py#L1439); [app/chamados/reconciliador.py:636](app/chamados/reconciliador.py#L636); [app/chamados/reconciliador.py:1477](app/chamados/reconciliador.py#L1477))
+
+**Trilha.** O escritor canônico existente é `registrar_retencao(ch, ret)`: para `RECUSA_COMPETENCIA_ENTREGUE`, ele deduplica por chamado e empresas e delega a `core.observ.evento`. A cerca não escreve a trilha por si; o abridor deve fazê-lo depois do rollback, como já faz a porta do resolver. Para o satélite, o aval não especifica qual chamado identifica a recusa: o filho que disparou o callback ou outro chamado alcançado pela varredura. A escolha é relevante porque a deduplicação e o objeto da trilha usam `ch.pk`. A gravação da auditoria também é best-effort; garantia de linha persistida em caso de falha da própria auditoria é **[não verificado]**. ([app/chamados/reconciliador.py:459](app/chamados/reconciliador.py#L459); [app/chamados/reconciliador.py:477](app/chamados/reconciliador.py#L477); [app/chamados/reconciliador.py:489](app/chamados/reconciliador.py#L489); [app/chamados/services/disputa_emissao.py:1909](app/chamados/services/disputa_emissao.py#L1909); [app/core/observ.py:124](app/core/observ.py#L124))
+
+Não identifiquei contradição direta entre a decisão de um ato próprio e L-099 ou a regra de escritor único; a lacuna é o contrato concreto de atomicidade e de atribuição da recusa. A L-099 exige dono da divergência e separa estrutura de cadastro e batida; ela não escolhe, por si, a unidade transacional deste callback. ([app/docs/LEIS.md:122](app/docs/LEIS.md#L122); [CLAUDE.md:178](CLAUDE.md#L178))
+
+## Item 3 — os 12 sítios e o selo
+
+A leitura literal de L-051 protege o passivo histórico com a via `competencia_trancada` e proíbe perguntas novas com essa via; o código da tranca declara também que a pergunta do dia trancado não deve ser escrita, enquanto chamado e disputa têm portas próprias. Portanto, cercar uma escrita de pergunta não exige criar outro escritor de estado, mas cercar **o ato inteiro** pode impedir escritas de chamado ou disputa que hoje pertencem às suas portas. ([app/docs/LEIS.md:92](app/docs/LEIS.md#L92); [app/chamados/services/competencia_trancada.py:8](app/chamados/services/competencia_trancada.py#L8); [app/chamados/models.py:1946](app/chamados/models.py#L1946))
+
+| Sítios do anexo | Confronto e decisão ainda necessária |
+|---|---|
+| `reconciliar`, `transicionar`, `encerrar` | Convergem no escritor canônico `_gravar_estado`, que pode relavrar perguntas. A vigia pode proteger a escrita sem substituir esse escritor; falta definir o abridor e o rollback do ato avulso e de seus chamadores. ([app/chamados/models.py:128](app/chamados/models.py#L128); [app/chamados/models.py:450](app/chamados/models.py#L450); [app/chamados/models.py:655](app/chamados/models.py#L655); [app/chamados/models.py:1693](app/chamados/models.py#L1693); [app/chamados/models.py:305](app/chamados/models.py#L305)) |
+| `reabrir` | O descarimbo em lote já chama a vigia quando existe cerca; a abertura avulsa e sua unidade permanecem a especificar. O escritor do descarimbo deve continuar sendo a porta existente. ([app/chamados/models.py:1639](app/chamados/models.py#L1639); [app/chamados/models.py:3401](app/chamados/models.py#L3401); [app/chamados/services/fio.py:1396](app/chamados/services/fio.py#L1396)) |
+| `Disputa.fechar` | É a porta única da disputa e pode carimbar perguntas nas vias nomeadas. A cerca pode envolvê-la sem outro escritor, mas o veto do ato inteiro também desfaz o fecho da disputa. ([app/chamados/models.py:1946](app/chamados/models.py#L1946); [app/chamados/models.py:2009](app/chamados/models.py#L2009); [app/chamados/models.py:2023](app/chamados/models.py#L2023); [app/chamados/services/fio.py:1439](app/chamados/services/fio.py#L1439)) |
+| `reapontar` e `lavrar` | A costura usa o escritor canônico e salva a pergunta; `lavrar` persiste pelo `save` quando solicitado. Já passam pela vigia **se** houver cerca externa; falta definir a fronteira das chamadas avulsas, sem duplicar a costura ou a lavra. ([app/chamados/services/fio.py:974](app/chamados/services/fio.py#L974); [app/chamados/veredito_lavrado.py:270](app/chamados/veredito_lavrado.py#L270); [app/chamados/models.py:3572](app/chamados/models.py#L3572)) |
+| Encerramento por tranca | É o ponto de maior ambiguidade: a via da tranca deve encerrar o chamado e permitir o fecho próprio da disputa sem carimbar a pergunta trancada. O resolver dessa via retorna antes de escrever perguntas, mas `_gravar_estado` tem relavra de perguntas ancoradas; uma cerca abrangente pode vetar e desfazer também o encerramento do chamado. Não há base para excluir o sítio por nome nem para criar escrita alternativa. ([app/chamados/services/competencia_trancada.py:8](app/chamados/services/competencia_trancada.py#L8); [app/chamados/services/disputa_emissao.py:1896](app/chamados/services/disputa_emissao.py#L1896); [app/chamados/services/disputa_emissao.py:1931](app/chamados/services/disputa_emissao.py#L1931); [app/chamados/models.py:305](app/chamados/models.py#L305)) |
+| Absolvidas pela célula e órfãs pela lâmpada | Ambas usam as portas existentes de carimbo/fecho; cercá-las não exige outro escritor. É preciso escolher se o veto desfaz cada carimbo ou uma varredura maior, pois as etapas e capturas atuais diferem. ([app/chamados/reconciliador.py:636](app/chamados/reconciliador.py#L636); [app/chamados/reconciliador.py:645](app/chamados/reconciliador.py#L645); [app/chamados/reconciliador.py:1191](app/chamados/reconciliador.py#L1191); [app/chamados/reconciliador.py:1215](app/chamados/reconciliador.py#L1215)) |
+| Reatar órfã | O ramo HIST já abre cerca e registra recusa; os ramos `c1` e derivável seguem outros caminhos. Uma abertura comum deve preservar o escritor de costura e definir como a recusa dos demais ramos é atribuída, inclusive quando aninhada no satélite. ([app/chamados/reconciliador.py:1664](app/chamados/reconciliador.py#L1664); [app/chamados/reconciliador.py:1690](app/chamados/reconciliador.py#L1690); [app/chamados/reconciliador.py:1701](app/chamados/reconciliador.py#L1701); [app/chamados/reconciliador.py:1712](app/chamados/reconciliador.py#L1712)) |
+| Lavra em lote | **Sim:** `gravar_lavras_em_lote` já concentra o `bulk_update` dos três campos; pode chamar a vigia sobre a lista imediatamente antes do bulk, mantendo a persistência nessa mesma porta. A vigia só veta dentro de uma cerca, portanto também é preciso definir quem abre o ato e o tamanho do rollback do lote; os dois chamadores mostrados são o lote cheio e a sobra do backfill. ([app/chamados/veredito_lavrado.py:237](app/chamados/veredito_lavrado.py#L237); [app/chamados/veredito_lavrado.py:248](app/chamados/veredito_lavrado.py#L248); [app/chamados/services/fio.py:1396](app/chamados/services/fio.py#L1396); [app/chamados/management/commands/backfill_veredito_lavrado.py:141](app/chamados/management/commands/backfill_veredito_lavrado.py#L141)) |
+
+**Falsos positivos do grafo.** Os dois nomes associados ao resolver, segundo o anexo fornecido, incluem a via trancada; o código comprova que essa via retorna antes das consultas e escritas de pergunta. Uma cura sem exclusão nominal é o selo representar o ramo e o retorno antecipado, com um caso que aceite esse caminho sem escrita e um mutante que acrescente escrita alcançável antes do retorno e faça o selo falhar. Isso é uma proposta de teste estrutural, não uma certificação existente: o conteúdo de `selo_diff.txt` e a execução desse caso estão **[não verificado]**. Também não basta corrigir esses dois falsos positivos para provar completude: o próprio anexo relata callbacks perdidos pelo grafo; sua implementação exata no selo está **[não verificado]**. ([app/chamados/services/disputa_emissao.py:1896](app/chamados/services/disputa_emissao.py#L1896); [app/chamados/services/disputa_emissao.py:1931](app/chamados/services/disputa_emissao.py#L1931); [app/chamados/services/becos.py:55](app/chamados/services/becos.py#L55); [app/chamados/reconciliador.py:1690](app/chamados/reconciliador.py#L1690))
+
+A ocorrência desses vetos ou conflitos em produção e os resultados de testes ou logs são **[não verificado]**. [nao verificado]
 
 ## 17/11 15:35 · sessao 812ed054067f · E4C-F1-B2 · verificador · origem=Code
 
@@ -1038,39 +1324,4 @@ O censo histórico exato do **pai da obra** permanece `[nao verificado]`: o mate
 4 — Censo exato dos escritores e caminhos do pai da obra: `[nao verificado]`.  
 5 — O intervalo não é excluído pelo backfill; o escritor da REABERTURA exige o filtro correspondente da tarefa no P1. (`app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12`, `app/chamados/services/tarefa_do_dia.py:426`)
 
-## 17/11 15:12 · sessao 402d3089e3f6 · - · - · origem=Ronald (tmux)
-
-Interfaces e limites confirmados, sem executar banco ou escrever arquivo:
-
-- Tenant: `schema_context('juliani')`, padrão usado por `app/tenants/cron.py:7` e `app/tenants/cron.py:25`; os dados de tenant ficam em schema próprio, segundo `app/tenants/models.py:4`.
-- Frota ativa: `Colaborador.objects.filter(empresa_id__in=(2, 3, 4), situacao='ativo').select_related('empresa').order_by('pk')`; FK empresa e campo situação em `app/colaboradores/models.py:321` e `app/colaboradores/models.py:323`, escolha ativo em `app/colaboradores/models.py:296`.
-- Janela: `janela_competencia(empresa, 11, 2026)`, assinatura e delegação em `app/folha/export.py:47`; corte por empresa real em `app/ponto/janelas.py:36` e `app/ponto/janelas.py:54`.
-- `batidas_apuraveis(colab, ini_datetime, fim_datetime)` aceita timestamps inclusivos, sempre exclui retratadas e inclui pendentes de DP: `app/ponto/turnos.py:2868`, `app/ponto/turnos.py:2871`, `app/ponto/turnos.py:2888`. Não passar datas diretamente; o filtro é `timestamp__gte`/`timestamp__lte`, em `app/ponto/turnos.py:2890` e `app/ponto/turnos.py:2892`.
-- `turnos_do_colab(colab, ini_date, fim_date)` recebe datas e devolve turnos cujo `data_turno` pertence à janela; carrega pad real em `app/ponto/turnos.py:1850` e `app/ponto/turnos.py:1867`. Entrada e saída são objetos Batida, evidenciado por acesso a `.timestamp` em `app/ponto/turnos.py:209` e `app/ponto/turnos.py:740`.
-- Montador exato que deixa as batidas prontas para impressão: `_coletar_dados_espelho(colab, data_ini, data_fim, _turnos_juiz=turnos, agora=agora)`, assinatura em `app/relatorios/pdf_espelho.py:187`; usa `espelho_do_colab` em `app/relatorios/pdf_espelho.py:596` e devolve os dias recortados em `app/relatorios/pdf_espelho.py:602`.
-- Atenção à fronteira temporal: PDF real clipa o fim em ontem, em `app/relatorios/pdf_espelho.py:285`–`288`; `ate_ontem` é `min(data_fim, hoje-1)` em `app/relatorios/cartao_pela_celula.py:37`. Deve-se declarar janela pedida até hoje e janela efetivamente impressa até ontem; medir batidas de hoje contra PDF acusa perdas previstas pelo próprio teto.
-- O PDF reescreve `b.orfa` por HH:MM da grade, em `app/relatorios/pdf_espelho.py:604`–`609`; só chamar `espelho_do_colab` não assegura o flag exato que o PDF imprimirá.
-- A saída de turno noturno do último dia pode estar na tarde do dia seguinte; a classe é explicitamente documentada em `app/relatorios/pdf_espelho.py:271`–`281`. Não restringir o universo esperado exclusivamente ao timestamp dentro da janela: unir batidas dos turnos reclamados pelo juiz; `dia_das_batidas` já documenta fim+1 em `app/ponto/turnos.py:2919`.
-- Borda pode ser identificada por `t.cross_meianoite`, `t.data_turno == fim`, `t.saida is not None`, `t.saida.pk in ausentes`; campos oficiais do Turno em `app/ponto/turnos.py:43` e construção em `app/ponto/turnos.py:323`.
-- Identidade correta é PK; timestamp não deve ser chave, conforme contrato explícito em `app/ponto/turnos.py:2916`.
-- `espelho_do_colab` pode montar dias anteriores à competência porque usa `min(piso_visual, apur_ini)`, em `app/ponto/services/espelho.py:1225`; o PDF filtra os dias em `app/relatorios/pdf_espelho.py:602`.
-- Existem exceções engolidas internamente por funções reais: leitura de DiaPago em `app/ponto/services/espelho.py:409`–`412`, grade em `app/ponto/services/espelho.py:569`–`571`, palavra do dia em `app/ponto/services/espelho.py:645`–`651`. O script deve ao menos contabilizar exceções propagadas por pessoa; afirmar que captura todas as exceções internas seria incorreto.
-
-Sugestão de defesa do script: transação externa com `SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY`, savepoint por pessoa para sobreviver a erro SQL, exceção sentinela ao final para rollback, e contagens de linhas de todas as tabelas do schema antes/depois. Essa montagem é proposta, não validada executando o ambiente. [não verificado]
-
-## 17/11 15:11 · sessao 88bde2b706ce · - · - · origem=Ronald (tmux)
-
-Não encontrei medidor que responda a conjunção inteira por identidade de batida na frota; os instrumentos próximos abaixo comparam fixtures, minutos ou resumos. A inexistência absoluta fora dos caminhos pesquisados permanece [não verificado].
-
-| Instrumento | Universo e exclusões | Esperado / quem chama | Lacuna |
-|---|---|---|---|
-| `CartaoNaoPerdeBatidaTest` | Fixture de **um colaborador**, três turnos noturnos de junho/2026 e uma batida espúria, construídos em `app/relatorios/tests/test_cartao_nao_perde_batida.py:24` e `:39`. | `test_toda_batida_do_periodo_aparece_no_documento` chama `_coletar_dados_espelho`, compara `self.ids` com `b.pk`, espera conjunto faltante vazio (`:57`). `test_nao_imprime_batida_duplicada` espera comprimento da lista igual ao conjunto de PKs (`:67`). | Não consulta `batidas_apuraveis`, não mede frota e não compara cada dia com `turnos_do_colab`; os predicados efetivos estão em `:61` e `:71`. |
-| `test_pdf_le_o_juiz_do_dia` | Um cenário 12x36 19h–07h, um colaborador construído no teste (`app/relatorios/tests/test_pdf_le_o_juiz_do_dia.py:40`). | Chama `turnos_do_colab` e espera `data_turno=11/09`, `cross_meianoite=True` (`:56`); outro teste inspeciona o código para exigir referência ao juiz e ausência da heurística antiga (`:74`). | O teste comportamental mostrado verifica o turno; o teste do PDF é estrutural, sem censo por identidade em produção (`:61`, `:84`). |
-| `pdf_x_espelho_divergentes` | Todas as empresas, mas só pessoas com `classificar_export(status='entra')`; empresa cuja classificação falha é excluída e colaborador ausente é pulado (`app/relatorios/management/commands/pdf_x_espelho_divergentes.py:56`). | Chama `_coletar_dados_espelho` (`:73`) e `espelho_do_colab` (`:92`); compara por dia **soma de minutos e flag de aberto**, esperado zero divergentes (`:78`, `:97`, `:114`). É comando manual, não cron (`app/config/crons.py:1139`). | Não lê `dia['batidas']`, não compara PKs, completude, duplicidade ou proveniência; os campos comparados são somente os de `:83` e `:101`. Registrado em **E4-pdf-x-espelho** (`app/core/espelho_verdade.py:124`). |
-| `selo_leitores_no_mesmo_numero` / `folha.porta_export.medir` | Empresas ativas no comando (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:86`); comparação tela/PDF só entre `classificar_export(status='entra')` (`app/folha/porta_export.py:469`). | O comando chama `medir` e **lavra** resultado (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:88`). `medir` chama os leitores reais e compara cinco escalares do resumo, com tolerância 0,01 (`app/folha/porta_export.py:476`, `:496`). É selo de porta/manual, não pipeline agendado (`app/config/crons.py:887`). | Pode haver a mesma perda nos dois leitores com resumo coincidente; identidade das marcações não participa do predicado (`app/folha/porta_export.py:497`). Está relacionado ao **E4** (`app/core/espelho_verdade.py:120`) e é fonte do **R4** (`app/core/placar_estrutural.py:211`, `:414`). |
-| `e6_oraculo` | Empresas ativas e colaboradores com `FechamentoMensal` na competência, opcionalmente restritos ao TXT (`app/ponto/management/commands/e6_oraculo.py:303`). Exclui dias de isenção/ausência, sem lavratura, zero nos dois e diferença de janela declarada (`:339`). | Compara minutos do espelho com calculadora independente, tolerância até 10 minutos (`:362`). Lê `batidas_apuraveis`, mas forma turnos com regra própria (`:8`). | Não confere marcação impressa por identidade nem usa `turnos_do_colab` como autoridade do esperado para cada PK. Itens **E6-sistema-bate**, **E6-batida-impar** (`app/core/espelho_verdade.py:180`, `:188`); valor é termômetro **R1** no estrutural (`app/core/placar_estrutural.py:58`). |
-| `esmeril_espelho` | `colaboradores_em_operacao`, exclui `isento_ponto`; janela mais antiga não entregue até ontem (`app/ponto/services/esmeril_espelho.py:38`, `:206`). | Conta assinaturas recorrentes A1–A11 (`:14`); A5 vem de órfãs da ata e requer repetição (`:125`, `:139`). Cron declarado às 08:30 com `--apply` (`app/config/crons.py:640`); comando lê ou lavra (`app/ponto/management/commands/esmeril_espelho.py:15`). | Não monta `dia['batidas']`, portanto não verifica fidelidade do impresso; seus insumos são células, turnos e ata (`app/ponto/services/esmeril_espelho.py:95`). |
-
-O **R4** declara pares entre leitores e meta zero em cada par; a lista é tela/PDF, cartão/TXT, espelho/DiaPago, fechamento/soma, topo/linhas, app/tela e linhas/badge, sem um par “apuráveis × marcações impressas” (`app/core/placar_estrutural.py:211`). O item de “dia com batida apurável e sem DiaPago” aparece como **cura ainda necessária**, e diz respeito à lavratura, não ao espelho impresso (`app/core/placar_estrutural.py:406`).
-
-_6625 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6627 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
