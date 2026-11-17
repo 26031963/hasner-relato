@@ -1,7 +1,175 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **16/11/2026 21:21** · publicado em **16/11/2026 21:25** (UTC-3)
+> Ultima resposta processada: **16/11/2026 21:40** · publicado em **16/11/2026 21:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 16/11 21:40 · sessao 950d9935f151 · ESPINHA-F2 · verificador · origem=Code
+
+**Os três itens conferem como aval de conservação; os sete nomes não formam um censo fechado do trio.** O próprio C3 inclui leitores adicionais no selo, e o zero permanece limitado ao predicado investigado pelo C2 (`complemento3_respostas_f2_estados_1611.txt:3`; `complemento2_respostas_f2_estados_1611.txt:4`). Execução do selo, ocorrências em produção e correspondência independente do hash: [nao verificado].
+
+Referências dos anexos contam desde o conteúdo fornecido, incluindo linhas vazias.
+
+**Item 1**
+
+1. **Premissas conferem.** A lista exige ausência de validação e materialização, instante **ou** texto de resposta e tratamento da tranca. O descarimbo efetivo remove a materialização; ressuscitar também apaga instante e texto de resposta, fazendo o controle ficar fora da lista (`app/chamados/models.py:1923`; `app/chamados/models.py:1924`; `app/chamados/models.py:1926`; `app/chamados/models.py:3318`; `app/chamados/models.py:1629`; `app/chamados/models.py:1630`).
+
+2. **Não colide com o vigente.** Adota a correção pedida na devolução e conserva a escolha de perder o instante no descarimbo, mantendo o comportamento anterior (`app/docs/RELATO.md:4`; `app/docs/RELATO.md:31`; `complemento1_respostas_f2_estados_1611.txt:9`).
+
+3. **Fecha no literal.** “Descarimbada” precisa significar descarimbo efetivamente realizado, mantendo a pergunta no universo passado à lista. A preparação do caso deve excluir via terminal, pois essa via faz a porta recusar o descarimbo (`app/chamados/models.py:1922`; `app/chamados/models.py:3316`; `app/chamados/models.py:3392`). “Resposta preservada” corresponde ao instante presente ou texto não branco exigido pelo predicado (`app/chamados/models.py:1924`; `app/chamados/models.py:1925`).
+
+4. **Há alcance declarado no CSF.** A lista alimenta sua permissão de execução; qualquer diferença em competência exportada continua exigindo `PAREI !` com tabela (`app/ponto/supra_juiz.py:573`; `app/ponto/supra_juiz.py:574`; `app/ponto/supra_juiz.py:588`; `app/docs/CORTES.md:487`). Efeito financeiro efetivo: [nao verificado].
+
+**Item 2**
+
+1. **Os sete pontos existem, mas são observáveis diferentes.** `respondida` lê `respondida_em`; `resposta_display` lê a resposta, não o trio. `supra_juiz` e `irmas_respondidas_sem_consumo` delegam à lista (`app/chamados/models.py:3665`; `app/chamados/models.py:3688`; `app/ponto/supra_juiz.py:573`; `app/chamados/juizes.py:2105`).
+
+2. **Não colide com o vigente:** amplia expressamente o selo anterior para os sete e para qualquer leitor adicional, preservando a obrigação geral de conservação (`complemento3_respostas_f2_estados_1611.txt:3`; `respostas_registradas.md:5`).
+
+3. **Fecha como condição extensível, não como inventário encerrado.** Encontrar leitores adicionais obriga incluí-los no selo; não devolve automaticamente este item (`complemento3_respostas_f2_estados_1611.txt:3`). A atribuição integral dos consumidores abaixo ao escopo da matriz F2: [nao verificado].
+
+4. **Não autoriza mudança de comportamento nesses leitores.** Continua exigindo igualdade antes/depois, com a restrição de exportadas preservada (`complemento3_respostas_f2_estados_1611.txt:2`; `complemento2_respostas_f2_estados_1611.txt:5`; `app/docs/CORTES.md:487`). Igualdade efetivamente demonstrada: [nao verificado].
+
+**Resposta ao censo solicitado: não, os sete não esgotam os leitores do trio na cópia.** Há os seguintes consumidores adicionais identificados; inclusive portas que leem antes de escrever (`app/chamados/models.py:3236`; `app/chamados/juizes.py:1390`; `app/ponto/services/procedencia_batida.py:72`).
+
+| Outros leitores | Arquivo:linha |
+|---|---|
+| `_universo_da_ressuscitacao`: seleciona por instante e via | `app/chamados/models.py:1531`, `app/chamados/models.py:1535` |
+| `fechar`; `remover_motivo`: leem via e/ou instante | `app/chamados/models.py:2001`, `app/chamados/models.py:2006`, `app/chamados/models.py:2136`, `app/chamados/models.py:2141` |
+| `do_fato`; `q_dos_fatos`; `fora_do_fato`: classificam pela via | `app/chamados/models.py:2829`, `app/chamados/models.py:2860`, `app/chamados/models.py:3311` |
+| `fechar_por_admin`; `carimbar`; `carimbar_identidade`: idempotência, foto anterior e preservação de carimbo | `app/chamados/models.py:3165`, `app/chamados/models.py:3166`, `app/chamados/models.py:3236`, `app/chamados/models.py:3292`, `app/chamados/models.py:3293` |
+| `descarimbar_em_lote`; encerramento por fato/fantasma; reaberturas | `app/chamados/models.py:3392`, `app/chamados/models.py:3400`, `app/chamados/models.py:3411`, `app/chamados/models.py:3423`, `app/chamados/models.py:3440`, `app/chamados/models.py:3447` |
+| `_retratada_com_trilha`; `_pergunta_materializada_de_fato`; chave do memo; projeção temporal; `pergunta_sem_lastro_ou_viva` | `app/chamados/juizes.py:292`, `app/chamados/juizes.py:683`, `app/chamados/juizes.py:711`, `app/chamados/juizes.py:857`, `app/chamados/juizes.py:858`, `app/chamados/juizes.py:1390`, `app/chamados/juizes.py:1502` |
+| Materialização: guardas, pendentes, grupos de absorção e foto do trio | `app/chamados/services/materializacao.py:440`, `app/chamados/services/materializacao.py:539`, `app/chamados/services/materializacao.py:631`, `app/chamados/services/materializacao.py:633`, `app/chamados/services/materializacao.py:638`, `app/chamados/services/materializacao.py:674`, `app/chamados/services/materializacao.py:677`, `app/chamados/services/materializacao.py:678`, `app/chamados/services/materializacao.py:1099`, `app/chamados/services/materializacao.py:1378`, `app/chamados/services/materializacao.py:1425` |
+| Emissão: filtros de via/materialização e resolução pelo chamado | `app/chamados/services/disputa_emissao.py:228`, `app/chamados/services/disputa_emissao.py:337`, `app/chamados/services/disputa_emissao.py:409`, `app/chamados/services/disputa_emissao.py:428`, `app/chamados/services/disputa_emissao.py:446`, `app/chamados/services/disputa_emissao.py:776`, `app/chamados/services/disputa_emissao.py:1084`, `app/chamados/services/disputa_emissao.py:1104`, `app/chamados/services/disputa_emissao.py:1340`, `app/chamados/services/disputa_emissao.py:1930`, `app/chamados/services/disputa_emissao.py:2062` |
+| Validação; tarefa | `app/chamados/services/validacao.py:215`, `app/chamados/services/validacao.py:486`, `app/chamados/services/validacao.py:513`, `app/chamados/services/tarefa_do_dia.py:256` |
+| Reconciliação: guardas, seleção e fotos | `app/chamados/reconciliador.py:367`, `app/chamados/reconciliador.py:630`, `app/chamados/reconciliador.py:1050`, `app/chamados/reconciliador.py:1144`, `app/chamados/reconciliador.py:1145`, `app/chamados/reconciliador.py:1146`, `app/chamados/reconciliador.py:1505` |
+| Re-lavra: comparação de via, seleção e foto | `app/chamados/services/relavra_via.py:118`, `app/chamados/services/relavra_via.py:121`, `app/chamados/services/relavra_via.py:155`, `app/chamados/services/relavra_via.py:181`, `app/chamados/services/relavra_via.py:244` |
+| Fio: identidade, duplicatas e seleção | `app/chamados/services/fio.py:1139`, `app/chamados/services/fio.py:1206`, `app/chamados/services/fio.py:1282`, `app/chamados/services/fio.py:1389`, `app/chamados/services/fio.py:1472`, `app/chamados/services/fio.py:1913`, `app/chamados/services/fio.py:1949`, `app/chamados/services/fio.py:1971`, `app/chamados/services/fio.py:2016` |
+| Histórico; marcador do painel; marcos temporais da lavra | `app/chamados/services/historico.py:103`, `app/chamados/services/historico.py:105`, `app/chamados/services/painel.py:67`, `app/chamados/veredito_lavrado.py:203`, `app/chamados/veredito_lavrado.py:204` |
+| Procedência da batida: autor e instante | `app/ponto/services/procedencia_batida.py:72`, `app/ponto/services/procedencia_batida.py:74` |
+| Raio X; explicador; fábrica; passivo; reabertura de competência | `app/chamados/services/raiox.py:135`, `app/chamados/services/raiox.py:182`, `app/chamados/services/explicador.py:95`, `app/chamados/services/fabrica_da_celula.py:149`, `app/chamados/services/fabrica_da_celula.py:171`, `app/chamados/services/passivo_validado.py:141`, `app/chamados/services/competencia_trancada.py:276` |
+| View; cartório; flip; decisão do dia; apresentação da via | `app/chamados/views.py:1257`, `app/ponto/services/cartorio.py:1650`, `app/ponto/services/flip_auto.py:129`, `app/ponto/services/veredito_celula.py:196`, `app/templates/chamados/partials/_card_atendimento.html:192` |
+
+Também existem consumidores indiretos além dos dois nomeados: `respostas_sem_veredito`, `pode_fechar`, reconciliação, fechamento por competência, fila por causa, ficha e desligamento (`app/chamados/models.py:1906`; `app/chamados/models.py:1934`; `app/chamados/reconciliador.py:1164`; `app/chamados/services/competencia_trancada.py:126`; `app/chamados/services/fila_por_causa.py:226`; `app/colaboradores/services/ficha.py:169`; `app/colaboradores/services/desligamento.py:165`).
+
+**Item 3**
+
+1. **Confere como registro do censo específico do C2.** A projeção parte dos campos atuais e apenas corta valores posteriores a `agora`; não reconstrói materialização apagada pelo descarimbo (`complemento2_respostas_f2_estados_1611.txt:4`; `respostas_registradas.md:14`; `app/chamados/juizes.py:1390`; `app/chamados/juizes.py:1396`; `app/chamados/juizes.py:1400`; `app/chamados/models.py:3318`).
+
+2. **L1 resolvido pelo corte é compatível com a escolha vigente.** Resolve pela conservação do campo atual, mantendo a perda do instante; não declara MOOT pela F1 nem cria ato histórico (`complemento2_respostas_f2_estados_1611.txt:3`; `complemento3_respostas_f2_estados_1611.txt:4`; `app/docs/RELATO.md:31`).
+
+3. **O zero não significa ausência de leitores temporais.** `marcos_do_lote` filtra `materializada_em <= ate` e calcula seu máximo; tarefa e raio X fornecem horizonte. Isso lê o campo atual, sem demonstrar dependência de reconstruir um instante já apagado (`app/chamados/veredito_lavrado.py:163`; `app/chamados/veredito_lavrado.py:203`; `app/chamados/veredito_lavrado.py:204`; `app/chamados/services/tarefa_do_dia.py:434`; `app/chamados/services/raiox.py:38`). Afirmação universal sobre produção: [nao verificado].
+
+4. **Não libera exportadas nem dispensa a prova.** A mudança de classificação de L1 conserva a exigência de igualdade e a parada diante de diferença em competência exportada (`complemento3_respostas_f2_estados_1611.txt:2`; `app/docs/CORTES.md:487`). Resultado efetivo da sombra e impacto financeiro: [nao verificado].
+
+VEREDITO por item: 1 CONFERE (`app/chamados/models.py:1923`, `app/chamados/models.py:1629`); 2 CONFERE — selo extensível, sete não exaustivos (`complemento3_respostas_f2_estados_1611.txt:3`, `app/chamados/juizes.py:1390`); 3 CONFERE — zero no escopo registrado do C2 (`complemento2_respostas_f2_estados_1611.txt:4`, `respostas_registradas.md:14`).
+
+## 16/11 21:39 · sessao 425552aa2e88 · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
+
+**O C4 resolve as devoluções examinadas; (d) permite agrupar por `(tipo, status)`.** O juiz depende também do catálogo atual, mas não consulta a data da ausência para escolher esse catálogo. (`complemento4_ausencia_efeito_1611.txt:2-5`; `app/ponto/services/dia_decidido.py:453-481`; `app/ponto/catalogo/ausencias.py:267-295`.)
+
+As referências aos anexos contam linhas desde `aval Ronald`, sem o cabeçalho do anexo.
+
+**(a)**
+
+1. **Premissas:** conferem. Os hrefs de status conservam efeito; os de efeito conservam status. A contagem facetada acompanha essa navegação. (`app/templates/ponto/ausencias.html:48-67`; `complemento3_ausencia_efeito_1611.txt:4`.)
+2. **Colisão:** o C4 revoga expressamente o universo anterior dos chips e Total e restringe o 5a à requisição sem corte nas duas dimensões. Resolve o conflito apontado com o C1. (`complemento1_ausencia_efeito_1611.txt:5-6,10`; `complemento4_ausencia_efeito_1611.txt:2`.)
+3. **Literal:** o exemplo fecha: em `status=rejeitada`, nenhum efeito conta a rejeitada; Todos remove o corte de status e conta os dois registros. A preservação de datas e registro continua dependendo do C2, mantido pelo C3. (`app/ponto/services/dia_decidido.py:461-473`; `app/templates/ponto/ausencias.html:48,65-67`; `complemento2_ausencia_efeito_1611.txt:2`; `complemento3_ausencia_efeito_1611.txt:4`; `complemento4_ausencia_efeito_1611.txt:2`.)
+4. **Exportada/dinheiro/`!`:** muda o universo exibido dos contadores, dentro da autorização explícita; não exige gravação financeira. (`complemento4_ausencia_efeito_1611.txt:2`; `app/ponto/views.py:2197-2226,2254-2270`.)
+
+**(b)**
+
+1. **Premissas:** M-a corrigido é morto pelo RED 1: contar Suprime sobre `_base` cru inclui o aprovado que suprime, embora a origem esteja em Rejeitada. (`complemento3_ausencia_efeito_1611.txt:6`; `complemento4_ausencia_efeito_1611.txt:3`.)
+2. **Colisão:** substitui nominalmente M-a, acrescenta M-c e conserva M-b; não mantém a associação errada anterior. (`complemento3_ausencia_efeito_1611.txt:7`; `complemento4_ausencia_efeito_1611.txt:3`.)
+3. **Literal:** M-c também fecha: com efeito Suprime, a rejeitada não pertence ao universo do contador Rejeitada; o mutante sobre a base crua conta 1. São contraexemplos lógicos, não ocorrências produtivas demonstradas. (`app/ponto/services/dia_decidido.py:461-473`; `complemento4_ausencia_efeito_1611.txt:3`.)
+4. **Exportada/dinheiro/`!`:** são condições de verificação dos contadores, sem alteração declarada dos registros. (`complemento4_ausencia_efeito_1611.txt:3`.)
+
+**(c)**
+
+1. **Premissas:** `pendentes` hoje conta `_A4_ABERTAS`, importado de `ABERTAS`: as duas filas abertas. (`app/ponto/views.py:79,2197`; `app/ponto/services/ausencia.py:912`.)
+2. **Colisão:** a ordem específica do C4 substitui a proibição anterior de tocar essa contagem. (`complemento3_ausencia_efeito_1611.txt:9`; `complemento4_ausencia_efeito_1611.txt:4`.)
+3. **Literal:** preserva o valor se `por_status(..., 'pendente')` usar a união dessas duas filas. É necessário definir `_base` antes da chamada: atualmente sua atribuição vem depois de `pendentes`. (`complemento3_ausencia_efeito_1611.txt:4`; `app/ponto/views.py:2197-2201,2212-2219`.)
+4. **Exportada/dinheiro/`!`:** continua sendo contagem entregue ao contexto, sem gravação. (`app/ponto/views.py:2197,2256`; `complemento4_ausencia_efeito_1611.txt:4`.)
+
+**(d)**
+
+1. **Premissas:** `veredito_de` lê somente `ausencia.tipo` e `ausencia.status`. Rejeitada retorna imediatamente; os demais casos consultam `CAT.efeito_vigente(tipo)`. Portanto, **não é função exclusivamente do par**, pois existe a dependência externa do catálogo. (`app/ponto/services/dia_decidido.py:453-481`.)
+2. **Colisão:** a consulta agrupada substitui expressamente as sete contagens, esclarecendo o orçamento anterior; `pendentes` conserva sua contagem separada conforme (c). (`app/ponto/views.py:2197-2211`; `complemento4_ausencia_efeito_1611.txt:4-5`.)
+3. **Literal:** **dá para agrupar por `(tipo, status)`** e classificar cada grupo pelo juiz. O catálogo é o atual: lê tipos ativos, com cache de 60 segundos e semente quando a leitura não fornece cadastro. Não há seleção histórica por data do lançamento. Datas delimitam `_base`, não o veredito. Isso não torna a view inteira uma única consulta. (`app/ponto/catalogo/ausencias.py:240-295`; `app/ponto/services/dia_decidido.py:468-481`; `app/ponto/views.py:2186-2196,2231-2258`.)
+4. **Exportada/dinheiro/`!`:** agrupar e consultar o juiz não exige alterar catálogo, status ou projeção financeira; a gravação e o despertar da projeção pertencem à transição de estado. (`app/ponto/catalogo/ausencias.py:240-295`; `app/ponto/services/ausencia.py:976-994`.)
+
+O `ANEXO!` permanece um predicado separado; nenhuma dessas letras exige modificá-lo. (`app/templates/ponto/ausencias.html:158`; `app/ponto/services/ausencia.py:745-759`.) Implementação futura, REDs executados, mutantes mortos, total SQL e comportamento produtivo: **[não verificado]**.
+
+VEREDITO por letra/item: (a) CONFERE (`complemento4_ausencia_efeito_1611.txt:2`); (b) CONFERE (`complemento4_ausencia_efeito_1611.txt:3`); (c) CONFERE (`app/ponto/views.py:2197-2201,2212-2219`); (d) CONFERE (`app/ponto/services/dia_decidido.py:453-481`; `app/ponto/catalogo/ausencias.py:267-295`).
+
+## 16/11 21:39 · sessao 201f536c64d6 · - · - · origem=Ronald (tmux)
+
+**Item 2: CONFERE como compromisso de conservação extensível; os sete não constituem censo completo do trio.** O próprio C3 manda incluir qualquer leitor adicional no selo; portanto encontrar outro não contradiz sua condição, mas impede registrar “universo fechado = 7” (`complemento3_respostas_f2_estados_1611.txt:3`). A abrangência exata do brief/matriz F2, ausentes nesta cópia: [nao verificado].
+
+`respondida` e `resposta_display` são observáveis da F2 citados no aval, mas não leem o trio: leem `respondida_em` e `resposta_colab`, respectivamente (`app/chamados/models.py:3665`; `app/chamados/models.py:3688`). `supra_juiz` e `irmas_respondidas_sem_consumo` são consumidores indiretos da lista (`app/ponto/supra_juiz.py:573`; `app/chamados/juizes.py:2105`).
+
+**Leitores adicionais no mesmo arquivo de modelos**, além dos sete nomeados:
+
+| Função/unidade | Leitura |
+|---|---|
+| `_universo_da_ressuscitacao` | Filtra instante e via (`app/chamados/models.py:1531`; `app/chamados/models.py:1535`). |
+| `fechar` | Guarda via anterior e usa instante no SILENCIO (`app/chamados/models.py:2001`; `app/chamados/models.py:2006`). |
+| `remover_motivo` | Filtra via e a registra no motivo da retratação (`app/chamados/models.py:2136`; `app/chamados/models.py:2141`). |
+| `do_fato`; `q_dos_fatos` | Excluem vias fora do fato (`app/chamados/models.py:2829`; `app/chamados/models.py:2860`). |
+| `fechar_por_admin` | Guarda de idempotência por via e instante (`app/chamados/models.py:3165`; `app/chamados/models.py:3166`). |
+| `carimbar`; `carimbar_identidade` | Leem estado anterior do trio / preservam instante e autor (`app/chamados/models.py:3236`; `app/chamados/models.py:3292`; `app/chamados/models.py:3293`). |
+| `fora_do_fato` | Classifica pela via (`app/chamados/models.py:3311`). |
+| `descarimbar_em_lote` | Lê via no filtro antes de apagar o trio (`app/chamados/models.py:3392`; `app/chamados/models.py:3393`). |
+| `encerrar_por_fato_no_espelho`; `encerrar_fantasma` | Guardas pela via / via com instante (`app/chamados/models.py:3400`; `app/chamados/models.py:3411`). |
+| `reabrir_fantasma`; `reabrir_por_resposta`; `reabrir_por_competencia` | Guardas por instante/via (`app/chamados/models.py:3423`; `app/chamados/models.py:3440`; `app/chamados/models.py:3447`). |
+| Índices de unicidade | Condições dependem da via (`app/chamados/models.py:3652`; `app/chamados/models.py:3658`). |
+
+**Outros consumidores produtivos do trio na cópia** — atribuí-los automaticamente à F2 seria [nao verificado]:
+
+| Arquivo/funções | Evidência |
+|---|---|
+| Juízes: `_retratada_com_trilha`, `_pergunta_materializada_de_fato`, `_chave_memo_pv`, `projecao_temporal_da_pergunta`, `pergunta_sem_lastro_ou_viva` | `app/chamados/juizes.py:292`; `:683`; `:711`; `:857`; `:1390`; `:1502`. |
+| Materialização: estado de aplicação, seleção de pendentes, agrupamento de absorvidas, foto do trio, guarda de recusa | `app/chamados/services/materializacao.py:440`; `:539`; `:631`; `:633`; `:638`; `:674`; `:677`; `:678`; `:1099`; `:1378`; `:1425`. |
+| Emissão: derivação do destino, geração de perguntas, órfãs/âncoras e resolução pelo chamado | `app/chamados/services/disputa_emissao.py:228`; `:337`; `:409`; `:428`; `:446`; `:776`; `:1084`; `:1104`; `:1340`; `:1930`; `:2062`. |
+| Validação | `app/chamados/services/validacao.py:215`; `:486`; `:513`. |
+| Tarefa | `app/chamados/services/tarefa_do_dia.py:256`; `:257`. |
+| Reconciliação: guardas, universos e fotos | `app/chamados/reconciliador.py:367`; `:630`; `:1050`; `:1144`; `:1146`; `:1505`. |
+| Re-lavra: filtros e foto anterior | `app/chamados/services/relavra_via.py:118`; `:121`; `:123`; `:155`; `:181`; `:244`. |
+| Fio: identidade, duplicatas e grupos | `app/chamados/services/fio.py:1139`; `:1206`; `:1282`; `:1389`; `:1472`; `:1913`; `:1949`; `:1971`; `:2016`. |
+| Procedência: **autor e instante**, além da via nos demais leitores | `app/ponto/services/procedencia_batida.py:72`; `:74`. |
+| Histórico; painel; marcos do lote | `app/chamados/services/historico.py:103`; `:105`; `app/chamados/services/painel.py:67`; `app/chamados/veredito_lavrado.py:203`. |
+| Raio X; explicador; fábrica; passivo; reabertura de competência | `app/chamados/services/raiox.py:135`; `:182`; `app/chamados/services/explicador.py:95`; `app/chamados/services/fabrica_da_celula.py:149`; `:171`; `app/chamados/services/passivo_validado.py:141`; `app/chamados/services/competencia_trancada.py:276`. |
+| View; cartório; flip; decisão do dia; template | `app/chamados/views.py:1257`; `app/ponto/services/cartorio.py:1650`; `app/ponto/services/flip_auto.py:129`; `app/ponto/services/veredito_celula.py:196`; `app/templates/chamados/partials/_card_atendimento.html:192`. |
+
+O trio também aparece em manutenção, testes e migrações; esses usos não devem ser contados automaticamente como leitores de pouso da F2 [nao verificado]. Não confundir com `RegularizacaoExtraordinaria`, outro modelo que possui campos homônimos (`app/chamados/models.py:4152`; `app/chamados/models.py:4153`).
+
+## 16/11 21:38 · sessao c7d251d56727 · - · - · origem=Ronald (tmux)
+
+**Item 3: CONFERE no sentido registrado pelo C2; a afirmação universal sobre produção permanece [nao verificado].** O C2 pede o predicado composto: leitor da F2 que chama projeção com `agora` anterior a um descarimbo **e depende do instante apagado** (`complemento2_respostas_f2_estados_1611.txt:4`). O registro fornecido mantém esse censo como zero **no código** (`respostas_registradas.md:15`).
+
+1. **Premissas:** a projeção recebe os campos atuais e apenas elimina valores posteriores ao horizonte; não busca trilha nem recompõe instante apagado (`app/chamados/juizes.py:1389`; `app/chamados/juizes.py:1391`; `app/chamados/juizes.py:1396`; `app/chamados/juizes.py:1400`). Descarimbar escreve `None` no instante (`app/chamados/models.py:3318`). Os três chamadores diretos produtivos são `_slot_esperado`, que usa resposta, `_pergunta_viva_calc`, que usa materialização/via, e `beco_em_lote`, que usa somente o instante de resposta (`app/chamados/juizes.py:351`; `app/chamados/juizes.py:352`; `app/chamados/juizes.py:1404`; `app/chamados/juizes.py:1416`; `app/chamados/juizes.py:1444`; `app/chamados/juizes.py:1482`; `app/escala/services/cadastro_realidade.py:502`). Não encontrei nesses corpos a dependência histórica composta pedida pelo C2; ocorrência real em produção: [nao verificado].
+
+2. **Colisão:** resolver L1 pela conservação do comportamento vigente é compatível com o cabeçalho do corte e com a manutenção de descarimbo apagando o instante; é resolução pelo corte, não demonstração de MOOT pela F1 (`app/docs/CORTES.md:487`; `complemento1_respostas_f2_estados_1611.txt:9`; `complemento2_respostas_f2_estados_1611.txt:3`). A cópia ainda registra a medição anterior como RESIDUAL; isso é o estado pendente que a resposta pretende resolver (`app/docs/RELATO.md:138`).
+
+3. **Literal/limite:** “nenhum leitor depende do instante apagado” deve conservar o significado restrito do censo registrado, sem virar afirmação de ausência de leitores temporais (`respostas_registradas.md:15`). A tarefa passa `agora` ao C6 (`app/chamados/services/tarefa_do_dia.py:537`; `app/chamados/services/tarefa_do_dia.py:541`). Há também leitor temporal fora dos sete: **`marcos_do_lote`** filtra `materializada_em <= ate` e calcula seu máximo; `esta_stale` usa esse máximo para decidir nova lavra (`app/chamados/veredito_lavrado.py:151`; `app/chamados/veredito_lavrado.py:163`; `app/chamados/veredito_lavrado.py:202`; `app/chamados/veredito_lavrado.py:204`; `app/chamados/veredito_lavrado.py:230`; `app/chamados/veredito_lavrado.py:232`). A tarefa e o raio X fornecem horizonte a esse leitor (`app/chamados/services/tarefa_do_dia.py:434`; `app/chamados/services/raiox.py:38`). Isso é dependência do campo atual, não prova de exigência de recuperar instante já apagado (`app/chamados/veredito_lavrado.py:202`; `app/chamados/veredito_lavrado.py:204`).
+
+4. **Exportada/dinheiro/!:** o item não revoga a proibição: qualquer diferença de `supra_juiz` em competência exportada exige `PAREI !` com tabela (`app/docs/CORTES.md:487`; `complemento2_respostas_f2_estados_1611.txt:5`). Igualdade efetiva na sombra, impacto financeiro e produção: [nao verificado].
+
+**Recomendação para consolidar:** item 3 CONFERE como registro do censo de código delimitado no C2; não promova “zero” a prova de produção nem a inexistência de outros leitores temporais (`respostas_registradas.md:15`; `app/chamados/veredito_lavrado.py:202`).
+
+## 16/11 21:38 · sessao e6b94b016dcf · - · - · origem=Ronald (tmux)
+
+Item 1 — **CONFERE**.
+
+1. **Premissas:** o caso positivo satisfaz o predicado: sem validação, sem materialização, instante ou texto de resposta preservado e tranca ausente/ignorada (`app/chamados/models.py:1922-1926`). O descarimbo efetivo apaga materialização e via (`app/chamados/models.py:3318`). Ressuscitar também apaga instante e texto de resposta; portanto, a pergunta não entra nessa lista (`app/chamados/models.py:1629-1630`; `app/chamados/models.py:1924-1925`).
+
+2. **Compatibilidade:** o C3 adota exatamente a formulação proposta na devolução já registrada (`app/docs/RELATO.md:4`). Conservação lendo o campo atual corresponde à alternativa explicitamente oferecida anteriormente (`app/docs/RELATO.md:31`) e ao cabeçalho de conservação do corte (`app/docs/CORTES.md:487`).
+
+3. **Literal:** fecha tomando “descarimbada” como descarimbo efetivo e mantendo a pergunta no universo passado ao leitor (`app/chamados/models.py:1922`). Para montar o caso que morde, a via não pode ser terminal: o descarimbo individual recusa `fora_do_fato`, e o lote exclui essas vias (`app/chamados/models.py:3316-3318`; `app/chamados/models.py:3391-3393`). Isso é requisito de preparação do caso, não contradição da afirmação sobre a pergunta já descarimbada (`app/chamados/models.py:1922-1926`).
+
+4. **Exportada/dinheiro/!:** há alcance já declarado no CSF: os dois universos passam pela lista, cuja ausência permite executar o CSF (`app/ponto/supra_juiz.py:573-574`; `app/ponto/supra_juiz.py:588`). Continua valendo `PAREI !` diante de diferença em competência exportada (`app/docs/CORTES.md:487`). Execução do selo ou efeito efetivo em produção: [nao verificado].
+
+VEREDITO por item: item 1 CONFERE (`app/chamados/models.py:1922-1926`; `app/chamados/models.py:1629-1630`).
 
 ## 16/11 21:21 · sessao 83911a7e8be8 · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
 
@@ -519,137 +687,4 @@ Há consumidores indiretos de C6 com instante: `app/chamados/services/pergunta_n
 
 VEREDITO: APROVA -- sem bloqueio funcional identificado no recorte; ressalvas de cobertura e docstring acima; execução RED, mutantes e suites [não verificado].
 
-## 16/11 20:29 · sessao 1dacffdb9902 · - · - · origem=Ronald (tmux)
-
-- **Padrão do tipo:** a FK admite `NULL` e sua semântica declarada é cópia/exibição; a engine não lê diretamente esse campo. O wizard lê a escolha e a envia a `salvar_tipo`, que valida o calendário, atribui o ID ou `None` e persiste o tipo. (`app/escala/models.py:87-93`; `app/templates/escala/_wizard_cal_select.html:1-6`; `app/escala/views_wizard.py:42-43`; `app/escala/views_wizard.py:108`; `app/escala/services/cadastro_tipo.py:192-203`; `app/escala/services/cadastro_tipo.py:307`)
-
-- **Escritores da FK do vínculo:** `_copiar_folga_padrao` copia o padrão apenas quando existe padrão e a FK está vazia; é chamado na criação/reutilização do vínculo. `trocar_calendario_de_folga` grava o argumento recebido e sincroniza fotos futuras quando muda. Aplicação em lote chama essa mesma porta; ajuste automático e seu desfazimento copiam a FK antiga para os vínculos novos. (`app/colaboradores/services/vinculo.py:151-166`; `app/colaboradores/services/vinculo.py:284-298`; `app/colaboradores/services/vinculo.py:459-465`; `app/escala/views.py:404-412`; `app/colaboradores/services/vinculo.py:1084-1092`; `app/colaboradores/services/vinculo.py:1110-1113`)
-
-- **Salvar vazio:** a view resolve vazio para `ec.tipo_escala.folga_calendario_padrao`, ou `None` se não houver tipo, e passa o resultado à porta. Logo, o padrão comparado no novo template é exatamente a FK usada para resolver o POST vazio, desde que esse calendário esteja em `folgas_projecao`. (`app/colaboradores/views.py:230-239`; `app/templates/colaboradores/partials/painel_vinculo.html:211-215`)
-
-- **ESMERIL-SEMÂNTICA existente:** a docstring da porta afirma `None = padrao do template`, mas o corpo salva `None` literalmente; a resolução do padrão pertence à view. A materialização lê a FK do vínculo, e `datas_que_o_calendario_manda(None, ...)` devolve conjunto vazio, sem buscar o padrão. (`app/colaboradores/services/vinculo.py:450-462`; `app/colaboradores/views.py:235-239`; `app/escala/folgas.py:52-56`; `app/escala/folgas.py:157-158`)
-
-- **Leitores relevantes:** painel lê FK para seleção/visibilidade; trilha registra o ID; divergência foto/calendário, vigia de calendário vazio, materialização e sincronização futura usam a FK do vínculo. O universo da lavra exclui FK nula; o endpoint de pendências também lista vínculos 6x1 com FK nula como `sem_plano`. Nenhum desses caminhos resolve `NULL` pelo padrão do tipo. (`app/templates/colaboradores/partials/painel_vinculo.html:200-215`; `app/colaboradores/services/vinculo.py:28-42`; `app/escala/folgas.py:74-79`; `app/escala/folgas.py:99`; `app/escala/folgas.py:126-129`; `app/escala/folgas.py:157-158`; `app/escala/folgas.py:627-629`; `app/api/views_mensageria.py:1221-1231`)
-
-- **FK nula não significa ausência de folgas efetivas:** previsão consulta `FolgaDia`, ciclo e âncora; com foto, consulta suas datas e combina com a resposta do ciclo, e sem foto pode usar a âncora. O título novo limita corretamente a apresentação às datas mandadas pelo calendário, sem prometer folga efetiva da pessoa. (`app/escala/models.py:1280-1295`; `app/escala/models.py:1306-1321`; `app/escala/models.py:1365-1371`; `app/templates/colaboradores/partials/painel_vinculo.html:206-214`)
-
-- **Padrão ausente da projeção:** o template não cria bloco vazio se nenhum `fc.pk` coincidir; nesse contexto não exibirá o padrão embora salvar vazio ainda resolva a FK padrão. Na view atual a lista vem de todos os `FolgaCalendario`, sem filtro de oferta/ativo, portanto um padrão existente no mesmo universo consultado entra na projeção; ocorrência real de ausência ou concorrência entre consultas é **[não verificado]**. (`app/templates/colaboradores/partials/painel_vinculo.html:211-217`; `app/colaboradores/views.py:236`; `app/colaboradores/views.py:301-305`)
-
-## 16/11 20:29 · sessao cee5c7a7c695 · - · - · origem=Ronald (tmux)
-
-- Os três casos estão escritos: escolhido exige título antes dos dias; vazio com padrão exige título, dias pela regra e pela fonte, link correto; vazio sem padrão exige nenhum bloco numérico visível e nenhum bloco/título do padrão. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:149`, `:161`, `:170`)
-- O caso “sem calendário nenhum” continua passando no template anterior apresentado no anexo: o anterior já ocultava todos os blocos com FK nula, e não tinha bloco nem título do padrão. Portanto esse caso isolado comprova conservação do comportamento, não o RED da novidade. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:149`; template anterior do diff anexo: [não verificado por execução])
-- O RED da novidade tem assertions capazes de reprovar o template anterior: título escolhido ausente e bloco padrão ausente. Execução RED real: [não verificado]. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:165`, `:177`)
-- Não há mutante `forloop.first` no arquivo de testes desta obra; o mutante implementado retira o `onchange` do HTML já renderizado. Sua execução real e uma morte do mutante `forloop.first`: [não verificado]. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:346`, `:380`)
-- Se o gate do bloco padrão fosse substituído por `forloop.first`, o caso sem padrão passaria a gerar bloco vazio visível e seria reprovado pela assertion `_padrao(html) == []`; se for usado para selecionar o primeiro calendário como padrão, a fixture ordena `UVC-MES` antes de `UVC-SD`, mas exige os dias do segundo domingo, portanto detectaria a fonte errada. Isso é análise estática, não prova de execução. (`app/templates/colaboradores/partials/painel_vinculo.html:211`; `app/colaboradores/views.py:301`; `app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:73`, `:77`, `:157`, `:184`)
-- O mutante de fonte usa sentinelas diferentes por calendário/mês e exige uma chamada por calendário/mês, mas renderiza `colab_mes`, cujo tipo não tem padrão; ele não interroga diretamente o novo bloco padrão com a sentinela. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:67`, `:205`)
-- As duas classes que renderizam estão congeladas em 10/12/2026; a classe restante varre arquivos. Não identifiquei relógio solto no recorte de testes. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:117`, `:314`, `:392`)
-- O navegador usa páginas renderizadas com a casca confirmada, os carregadores reais e estilo computado/geometria para medir visibilidade; cobre `base.html/vincular`, `base.html/drawer`, `base_app.html/drawer` tanto sem padrão quanto vazio com padrão. Execução browser: [não verificado]. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:269`, `:328`, `:362`, `:371`)
-- Os carregadores reais injetam o partial por `innerHTML` e processam HTMX; o drawer está incluído nas duas cascas. (`app/templates/colaboradores/vincular.html:143`; `app/templates/core/_drawer_generico.html:19`; `app/templates/base.html:399`; `app/templates/base_app.html:154`)
-- Lacuna de cobertura: o navegador do caso padrão troca para `cal_mes`, enquanto o padrão é `cal_sd`; não exercita seleção explícita do próprio padrão, nem abertura com FK já igual ao padrão. A fixture de FK preenchida com padrão no tipo usa outro calendário e só tem teste de markup. Isso não prova bug: o `onchange` compara exatamente `""` ou o PK, e o template distingue esses atributos, portanto a lógica estática separa corretamente os dois blocos. (`app/colaboradores/tests/test_ui_vinculo_mostra_calendario.py:86`, `:89`, `:188`, `:376`; `app/templates/colaboradores/partials/painel_vinculo.html:196`, `:205`, `:212`)
-- A proposta anterior ao código está registrada em três linhas, incluindo o comportamento sem padrão. (`app/docs/RELATO.md:28`)
-
-## 16/11 20:17 · sessao 7afc540c893c · AUSENCIA-EFEITO-PELO-ESTADO · verificador · origem=Code
-
-**AVAL-DEVOLVIDO no item 2:** preservar a base corrige a perda de parâmetros, mas não garante “número do chip == tamanho da lista” para qualquer requisição: os links mantêm o filtro da outra dimensão, enquanto os contadores ignoram status e efeito. (`app/ponto/views.py:2201-2226`; `app/templates/ponto/ausencias.html:48-67`.)
-
-Identidade da cópia com o hash informado: **[não verificado]**.
-
-**1. Premissas e parâmetros de `_base`**
-
-A composição real é esta; a referência a `2186-2192` não abrange os filtros posteriores de colaborador e tipo. (`app/ponto/views.py:2186-2201`.)
-
-| Parâmetro | Participação em `_base` | Links dos chips hoje |
-|---|---|---|
-| `mes`, `ano` | Sanitizados; fornecem as bordas padrão do período. | Levam ambos. |
-| `de`, `ate` | Cada data válida substitui sua respectiva borda padrão. | Omitem ambos. |
-| `registro` | Quando reconhecido como número, substitui a consulta de vigência por consulta ao `pk`. | Omitem. |
-| `colaborador`, `tipo` | Filtram a consulta resultante, inclusive depois da substituição por `pk`. | Levam quando preenchidos. |
-
-Fontes da tabela: `app/ponto/views.py:2171-2196`; `app/templates/ponto/ausencias.html:48-67`.
-
-**Não há outro parâmetro GET que altere `_base` nesse corpo de função.** `status` e `efeito` filtram depois dos contadores; os chips de status preservam efeito e os de efeito preservam status. (`app/ponto/views.py:2171-2226`; `app/templates/ponto/ausencias.html:48-67`.)
-
-`voltar` também se perde no clique, mas serve ao retorno de navegação, sem participar de `_base`. (`app/templates/ponto/ausencias.html:31`; `app/templates/ponto/ausencias.html:48-67`; `app/ponto/views.py:2171-2201`.)
-
-**2. Compatibilidade e quem mais usa os links**
-
-O item 1 do C2 é compatível com preservar o universo e corrige uma perda relevante para L1. Entretanto, o item 2 universaliza a igualdade justamente sobre o cruzamento efeito × status excluído pelo C1 fornecido: os links preservam esse cruzamento, e os contadores continuam anteriores a ele. (`app/docs/LEIS-UI.md:12-15`; `app/ponto/views.py:2201-2226`; `app/templates/ponto/ausencias.html:48-67`.)
-
-Para manter o restante do C1, a promessa precisa conservar sua condição: **mesma base, somente o chip considerado ligado** — efeito sem status; rejeitada sem efeito. Garantir a igualdade para qualquer combinação exigiria mudar também a navegação ou os contadores, ultrapassando a mera inclusão de `de/ate/registro`. (`app/ponto/views.py:2201-2226`; `app/templates/ponto/ausencias.html:48-67`.)
-
-Consumidores e produtores relevantes:
-
-- Calendário gera `registro` e acrescenta `voltar`; chamados redirecionam por `registro`; o serviço de ausência produz esse endereço para notificação. (`app/templates/colaboradores/partials/_calendario_grade.html:97`; `app/chamados/views.py:1512-1519`; `app/ponto/services/ausencia.py:826-828`.)
-- O JavaScript da lista lê `registro` para abrir automaticamente o painel. (`app/templates/ponto/ausencias.html:200-205`.)
-- Cadastro de realidade monta `colaborador/tipo`; a vigia monta URLs com status ou tipo. (`app/escala/services/cadastro_realidade.py:18`; `app/ponto/services/vigia_ausencia.py:46-47`; `app/ponto/services/vigia_ausencia.py:166-195`.)
-- Na própria tela, setas mensais e “Limpar” reconstruem URLs; o formulário GET envia período, registro, colaborador, tipo e eventualmente status, sem campos para efeito, mês ou ano. (`app/templates/ponto/ausencias.html:38-40`; `app/templates/ponto/ausencias.html:71-93`.)
-- A paginação trabalha no DOM, com 50 linhas por padrão; a busca local oculta linhas. A view entrega `list(qs)` integralmente. Portanto, a igualdade deve contar registros da resposta inteira. (`app/static/js/hasner-table.js:282-325`; `app/static/js/hasner-filter.js:43-51`; `app/ponto/views.py:2248-2255`.)
-- Não há ramo de exportação na view nem controle de exportação no template da lista. (`app/ponto/views.py:2165-2270`; `app/templates/ponto/ausencias.html:31-197`.)
-
-Os testes existentes conferem período, registro e status pelos registros do contexto; outro exige `registro` no redirecionamento do chamado. Não demonstram a igualdade após clicar nos chips. (`app/ponto/tests/test_lista_ausencias.py:19-31`; `app/ponto/tests/test_chamado_ausencia_botao.py:40-45`.) Teste que fixe literalmente o `href` dos chips: **[não verificado; não localizado na busca]**.
-
-**3. Condições literais**
-
-**Registro preservado:** sem o filtro da outra dimensão, conservar um `registro` válido mantém a mesma base de zero ou um registro; aplicar o predicado correspondente ao contador permite a igualdade. O registro substitui somente a vigência: colaborador e tipo continuam aplicáveis, e status/efeito continuam podendo excluir a linha. (`app/ponto/views.py:2190-2226`.)
-
-**Contraexemplo estático ao item 2:** suponha um registro aprovado cujo veredito seja `suprimido`, consultado com `registro=<pk>&status=rejeitada`. `_base` contém esse registro e o chip Suprime conta 1; clicar Suprime mantendo registro **também mantém `status=rejeitada`**, produzindo lista vazia. Isso permanece verdadeiro com a classificação pelo juiz prevista no aval. É um cenário derivado do código, sem ocorrência de produção demonstrada. (`app/ponto/views.py:2190-2226`; `app/templates/ponto/ausencias.html:67`; `app/ponto/services/dia_decidido.py:461-473`.)
-
-**Datas e mês/ano:** a view sanitiza mês/ano e executa `_d` separadamente para cada borda. Data válida prevalece sobre a borda mensal; ausente, vazia ou inválida resulta em `None` e usa a borda correspondente do mês. Uma borda válida pode coexistir com outra mensal; não existe validação ou reordenação de `de > ate` nesse trecho. (`app/core/sanitiza.py:11-35`; `app/ponto/views.py:2171-2189`.)
-
-Assim, **`?de=&ate=` literalmente vazio não recorta o período**: usa o mês inteiro. Para o RED demonstrar perda de recorte, precisa fornecer datas válidas que efetivamente alterem a janela; usar `registro` válido nesse RED retiraria a dependência do período. (`app/ponto/views.py:2181-2192`.)
-
-**Trecho compartilhado:** ele ainda não existe na cópia; os links continuam montados individualmente e o contexto entrega `de/ate`, sem o fragmento proposto. Portanto, sua implementação repetir ou compartilhar a leitura é **[não verificado]**. Para cumprir o desenho, deve consumir os valores já lidos, respeitando a mesma normalização, sem uma segunda interpretação das datas. (`app/ponto/views.py:2254-2270`; `app/templates/ponto/ausencias.html:48-67`.)
-
-**4. Exportada, dinheiro ou `!`**
-
-No escopo declarado de transportar parâmetros nos links, não aparece escrita em competência exportada nem cálculo financeiro: a função consulta, prepara a lista e renderiza. Há inclusive selo existente que exige que ela permaneça sem leitura de fechamento. (`app/ponto/views.py:2165-2270`; `app/ponto/tests/test_k8_tela_abre_na_competencia.py:272-295`.)
-
-As ações POST da tela são outro caminho; transições de ausência podem salvar dados e acordar a projeção da folha. Alterá-las extrapolaria este complemento. Nenhum `!` adicional está demonstrado para a mudança restrita dos links. (`app/templates/ponto/ausencias.html:278-282`; `app/templates/ponto/ausencias.html:308-312`; `app/ponto/services/ausencia.py:987-994`; `CLAUDE.md:265-268`.)
-
-Implementação, RED executado, M5 morto, suíte, deploy, smoke e efeito concreto em produção: **[não verificado]**. [nao verificado]
-
-VEREDITO: PROCEDE (item 2 — preservar de/ate/registro não garante igualdade para qualquer R, pois os links mantêm o filtro cruzado: app/templates/ponto/ausencias.html:48-67; app/ponto/views.py:2201-2226; RED literalmente vazio não recorta período: app/ponto/views.py:2181-2187).
-
-## 16/11 20:16 · sessao 472e469899ff · - · - · origem=Ronald (tmux)
-
-Censo de produtores/leitores da URL:
-
-- O calendário gera `?registro=<id>` e acrescenta `voltar` com a URL de origem. A lista usa `voltar` somente para o retorno; seu JavaScript lê `registro` para abrir o painel automaticamente. (`app/templates/colaboradores/partials/_calendario_grade.html:97`; `app/templates/ponto/ausencias.html:31`; `app/templates/ponto/ausencias.html:200-205`.)
-- Chamados redirecionam para `?registro=<id>`; o serviço de ausência também produz esse endereço. Há teste que exige `registro` no redirecionamento do chamado, sem fixar href de chip. (`app/chamados/views.py:1512-1519`; `app/ponto/services/ausencia.py:828`; `app/ponto/tests/test_chamado_ausencia_botao.py:40-45`.)
-- O cadastro de realidade produz `?colaborador=<id>&tipo=afastamento_inss`. A vigia produz URLs com `status` ou `tipo`. (`app/escala/services/cadastro_realidade.py:18`; `app/ponto/services/vigia_ausencia.py:46-47`; `app/ponto/services/vigia_ausencia.py:166`; `app/ponto/services/vigia_ausencia.py:179-195`.)
-- O menu, os retornos de lançamento e o histórico de atestados apontam para a lista sem query string. (`app/templates/base.html:246`; `app/templates/ponto/lancar_ausencia.html:4`; `app/templates/ponto/lancar_ausencia.html:89`; `app/templates/ponto/historico_atestados.html:52`.)
-- A própria tela reconstrói URLs nos chips, nas setas mensais e em “Limpar”. O formulário GET envia `de/ate/registro/colaborador/tipo` e eventualmente `status`; não contém campo de `efeito`, `mes`, `ano` ou `voltar`. Isso é comportamento anterior ao complemento. (`app/templates/ponto/ausencias.html:38-40`; `app/templates/ponto/ausencias.html:48-67`; `app/templates/ponto/ausencias.html:71-93`.)
-
-Paginação, busca e export:
-
-- A view materializa integralmente `list(qs)`; o template percorre todos os registros. A paginação acontece no DOM, com 50 linhas por página por padrão, sem URL de página. A busca também oculta linhas no navegador. Assim, cardinalidade precisa significar registros da resposta integral. (`app/ponto/views.py:2248`; `app/templates/ponto/ausencias.html:142-185`; `app/static/js/hasner-table.js:282-325`; `app/static/js/hasner-filter.js:43-51`.)
-- Não há controle de exportação no template da lista nem ramo de exportação no corpo da view; consumidor externo desses hrefs em produção: [não verificado]. (`app/templates/ponto/ausencias.html:31-197`; `app/ponto/views.py:2165-2270`.)
-
-Testes: [nao verificado]
-
-- Os testes da lista conferem vigência por `de/ate`, busca por `registro` e filtro por status mediante pks no contexto; não clicam chips nem verificam igualdade de seus contadores com a resposta de destino. (`app/ponto/tests/test_lista_ausencias.py:19-31`.)
-- Há teste de GET inválido para `mes=13&ano=lixo`; ele exige apenas resposta inferior a 500. (`app/ponto/tests/test_get_sanitizado_ponto.py:31-34`; `app/ponto/tests/test_get_sanitizado_ponto.py:44-46`.)
-- Não encontrei teste que fixe literalmente o href dos chips na busca por `lista_ausencias`, `ausencias.html`, `chip-efeito` e URLs de status/efeito; exaustividade semântica dessa busca: [não verificado]. [nao verificado]
-
-Risco literal principal:
-
-- Adicionar os três parâmetros não resolve a promessa “qualquer chip a partir de qualquer R”: chips de status preservam `efeito`, chips de efeito preservam `status`, enquanto todos os contadores vêm de `_base` antes de ambos. Esse cruzamento continua anterior/excluído pelo C1 e conflita com a generalização literal do C2. (`app/templates/ponto/ausencias.html:48-67`; `app/ponto/views.py:2201-2226`; anexo COMPLEMENTO-1: [não verificado — sem numeração de arquivo].)
-
-## 16/11 19:37 · sessao 7901657f82ee · BUG-PAR-O-PAR · sonda · origem=Code
-
-1. **Saída fornecida:** universo 163/163; 60 vivas sem `validada_em`; nenhuma sem `data_evento`; **1** com competência do fato ENTREGUE; desta, **1** com FechamentoMensal `aberto`; `total_erros=0`. Valores transcritos, sem validação independente. [nao verificado]
-
-2. **Equivalência do script: [nao verificado].** Não localizei `sonda_c4_u163.py` na cópia; o conteúdo não acompanha o dado fornecido. Portanto, não posso confirmar suas chamadas, filtros ou tratamento de erros. [nao verificado] As autoridades conferidas são:
-
-   - Vida: `pergunta_viva`, em `app/chamados/juizes.py:866`; a implementação rejeita pergunta com `validada_em` preenchido em `app/chamados/juizes.py:1405`.
-   - Entrega: `competencia_do_dia_entregue` consulta a janela da empresa e `competencia_entregue`, usando mês/ano do fim da janela. `app/chamados/services/vigia_fio.py:799–807`.
-   - Fechamento: os estados são `aberto`, `aprovado`, `exportado`, com padrão `aberto`. `app/ponto/models.py:399–410`.
-
-3. **Sem linha passa pela F6: sim.** A F6 só bloqueia quando existe fechamento `aprovado` ou `exportado`; sem linha retorna `''`, permitindo passar essa guarda. Isso equivale operacionalmente a aberto, sem atribuir status a uma linha inexistente. `app/ponto/janelas.py:75–89`. A porta chama essa autoridade em `app/ponto/registro_batida.py:132–137`; o registro da F6 está em `app/core/juizes.py:315`.
-
-Os números finais reproduzem exclusivamente a saída fornecida. [nao verificado]
-
-NUMERO: validaveis_entregue=1 | aberto=1 | total_erros=0.
-
-_6177 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6182 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
