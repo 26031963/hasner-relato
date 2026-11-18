@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=1648399
+ESPERANDO: codex_pergunta.sh | pid=1722170
+E4C-F1-B2 23:11: os 18 vermelhos sao da BRANCH -- os mesmos 9 modulos no main 28802cbcf: Ran 118 OK rc=0 (c2b/main_mesmos_9.log); 17 deles ja vermelhos no v3/vizinhos.log 15:18 e nunca tratados. Aval CORTE-B2-CERCA item 3 exige suite inteira: B2 NAO vai ao opus. Codex censo classifica (teste com regra antiga x regressao x teto de queries x diagrama), c2b/suite_reprova/leitura1.r.
+PORTA-ESTADO-NA-TELA 23:11: suite INTEIRA @6fe59075c Ran 16719 OK rc=0; opus final (verificador) rodando.
 E4C-F1-B2 22:42: suite INTEIRA @9057ce4e0 VERMELHA -- Ran 16632, failures=17 errors=1 (chamados pep_reentrada/o168/fila_v2_2/reconciliar, ponto chokepoint, core diagrama); triagem do log em agente sonnet (branch x nao-branch); opus final segura.
 PORTA-ESTADO-NA-TELA 22:42 @6fe59075c (c3, rotulos): vizinhos 99 OK rc=0; suite INTEIRA rodando (logs/PORTA-EXPORT/v7/suite_inteira_c3.log).
 E4C-F1-B2 22:15: ver2 Codex limpo (4 NAO PROCEDE, amostra fio.py:1081 conferida); suite INTEIRA da copia @9057ce4e0 rodando (logs/E4C/f1nova/b2/cerca/c2b/suite_inteira_9057ce4e0.log; test_selo_b2_cerca_15_sitios.py nao rastreado guardado no scratchpad, fora da arvore certificada); depois opus final.
