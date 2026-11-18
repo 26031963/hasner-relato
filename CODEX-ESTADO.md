@@ -1,7 +1,180 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 16:02** · publicado em **18/11/2026 16:04** (UTC-3)
+> Ultima resposta processada: **18/11/2026 16:08** · publicado em **18/11/2026 16:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 16:08 · sessao 6167850f2c04 · FILA-CODEX-1811 · sonda · origem=Code
+
+Transcrição integral da saída fornecida da parte 3 de 6 [não verificado]:
+
+```text
+sonda_leitura: script.py [c3a2fcb8e125469d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 3 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 102
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 600
+UNIVERSO_PARTE 11/2026 101
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 203 minutos_total 3.5 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 203 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 203 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 203 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1236, 'bate_ate_10min': 1169, 'esp_zero_e6_trabalho': 12, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 2, 'diverge_acima_60': 47, 'dia_batida_impar': 65, 'impar_que_BATE': 23, 'impar_que_DIVERGE': 42, 'impar_dentro_da_faixa': 33, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 42, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1421, 'dia_isento_ou_ausencia': 342, 'dia_sem_trabalho_ambos': 22, 'esp_desconta_janela_declarada': 39, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1236 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.2 h    3 colabs
+[3] CADASTRO      7 dia-colab      35.9 h    4 colabs
+[3] BATIDA       57 dia-colab     297.7 h   24 colabs
+[4] TOTAL divergentes 67
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.209666666666665|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=7|horas=35.88209174|colabs=4
+PARCIAL|10/2026|BATIDA|dias=57|horas=297.66026132194446|colabs=24
+PARCIAL_TOTAL|10/2026|dias=67|horas=348.752019728611125|colabs=29
+ESTIMATIVA processados 125 universo 203 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 203 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 203 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 203 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1158, 'bate_ate_10min': 1099, 'esp_zero_e6_trabalho': 6, 'e6_zero_esp_trabalho': 7, 'diverge_10_60': 3, 'diverge_acima_60': 43, 'dia_batida_impar': 58, 'impar_que_BATE': 20, 'impar_que_DIVERGE': 38, 'impar_dentro_da_faixa': 30, 'impar_FORA_da_faixa': 8, 'impar_no_conjunto_do_dia': 37, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 202, 'dia_sem_lavratura_no_espelho': 1477, 'dia_isento_ou_ausencia': 217, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 53, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.9% de 1158 dias comparados
+[3] ESTRUTURA     7 dia-colab      21.8 h    6 colabs
+[3] CADASTRO     10 dia-colab      35.9 h    6 colabs
+[3] BATIDA       42 dia-colab     209.6 h   22 colabs
+[4] TOTAL divergentes 59
+[5] colabs com divergencia: 28
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=7|horas=21.8227|colabs=6
+PARCIAL|11/2026|CADASTRO|dias=10|horas=35.92035111111112|colabs=6
+PARCIAL|11/2026|BATIDA|dias=42|horas=209.5975820575|colabs=22
+PARCIAL_TOTAL|11/2026|dias=59|horas=267.34063316861112|colabs=28
+TEMPO_SEGUNDOS 182.3
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 261918
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 278
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1738
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6053
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 41
+TRATADA_LOCAL app/escala/utils.py:1511 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1698 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:2002 GeneratorExit 6974
+TRATADA_LOCAL app/escala/utils.py:2044 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:533 GeneratorExit 4738
+TRATADA_LOCAL app/escala/utils.py:534 GeneratorExit 4738
+TRATADA_LOCAL app/escala/utils.py:899 GeneratorExit 620
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 184
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 17
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 488727
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 550
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3269
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 176
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13334
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 111
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4282
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 194
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 24759
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4929
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41466
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 18839
+SOMA 10/2026 67   <- tem de ser igual a soma das classes (67) True
+SOMA 10/2026 HORAS 348.752019728611125 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 59   <- tem de ser igual a soma das classes (59) True
+SOMA 11/2026 HORAS 267.34063316861112 True
+SOMA 11/2026 COLABS_UNIAO 28 True
+rc_sombra=0
+```
+
+As seis linhas `SOMA` estão marcadas como `True`. Não aparece `INCOMPLETO` na saída fornecida. [não verificado]
+
+## 18/11 16:04 · sessao 5ca3a7232bcd · FILA-CODEX-1811 · sonda · origem=Code
+
+```text
+sonda_leitura: script.py [8f462593598e8306] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 2 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 109
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 600
+UNIVERSO_PARTE 11/2026 103
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 212 minutos_total 3.3 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 212 minutos_total 3.3 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 212 minutos_total 3.3 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 212 minutos_total 3.1 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1268, 'bate_ate_10min': 1227, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 7, 'diverge_acima_60': 28, 'dia_batida_impar': 63, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 24, 'impar_FORA_da_faixa': 6, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1563, 'dia_isento_ou_ausencia': 353, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 62, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.8% de 1268 dias comparados
+[3] ESTRUTURA     5 dia-colab      11.1 h    3 colabs
+[3] CADASTRO      8 dia-colab      20.4 h    6 colabs
+[3] BATIDA       28 dia-colab     136.0 h   18 colabs
+[4] TOTAL divergentes 41
+[5] colabs com divergencia: 23
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=5|horas=11.084600277777778|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=8|horas=20.397520712222224|colabs=6
+PARCIAL|10/2026|BATIDA|dias=28|horas=136.0465618775|colabs=18
+PARCIAL_TOTAL|10/2026|dias=41|horas=167.528682867500002|colabs=23
+ESTIMATIVA processados 125 universo 212 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 212 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 212 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 212 minutos_total 3.2 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1161, 'bate_ate_10min': 1098, 'esp_zero_e6_trabalho': 3, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 3, 'diverge_acima_60': 53, 'dia_batida_impar': 85, 'impar_que_BATE': 31, 'impar_que_DIVERGE': 54, 'impar_dentro_da_faixa': 49, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 53, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 206, 'dia_sem_lavratura_no_espelho': 1521, 'dia_isento_ou_ausencia': 220, 'dia_sem_trabalho_ambos': 27, 'esp_desconta_janela_declarada': 58, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1161 dias comparados
+[3] ESTRUTURA     3 dia-colab      12.1 h    3 colabs
+[3] CADASTRO     16 dia-colab      52.5 h    7 colabs
+[3] BATIDA       44 dia-colab     212.9 h   22 colabs
+[4] TOTAL divergentes 63
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=12.1|colabs=3
+PARCIAL|11/2026|CADASTRO|dias=16|horas=52.48679821444445|colabs=7
+PARCIAL|11/2026|BATIDA|dias=44|horas=212.917450995|colabs=22
+PARCIAL_TOTAL|11/2026|dias=63|horas=277.50424920944445|colabs=29
+TEMPO_SEGUNDOS 189.5
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 277416
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 53
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1589
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6925
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 61
+TRATADA_LOCAL app/escala/utils.py:1511 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1698 GeneratorExit 8
+TRATADA_LOCAL app/escala/utils.py:2002 GeneratorExit 6800
+TRATADA_LOCAL app/escala/utils.py:2044 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:533 GeneratorExit 4975
+TRATADA_LOCAL app/escala/utils.py:534 GeneratorExit 4975
+TRATADA_LOCAL app/escala/utils.py:899 GeneratorExit 617
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 188
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 503393
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 665
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3196
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 224
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13694
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 117
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4084
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 201
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 2
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 26995
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 6185
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41990
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 20189
+SOMA 10/2026 41   <- tem de ser igual a soma das classes (41) True
+SOMA 10/2026 HORAS 167.528682867500002 True
+SOMA 10/2026 COLABS_UNIAO 23 True
+SOMA 11/2026 63   <- tem de ser igual a soma das classes (63) True
+SOMA 11/2026 HORAS 277.50424920944445 True
+SOMA 11/2026 COLABS_UNIAO 29 True
+rc_sombra=0
+```
+
+As seis linhas **SOMA** estão marcadas como `True`, e não aparece `INCOMPLETO` no trecho fornecido. A saída não foi verificada em arquivo: [não verificado].
 
 ## 18/11 16:02 · sessao b5ff49165bba · REVISAO-R1600 · verificador · origem=Code
 
@@ -919,63 +1092,4 @@ Os números do anexo — 35 chamados na classe da ata gravada e zero justificati
 
 O dado fornecido rotula **244 inversões em 5.708 decisões** como proxy, não como censo por escritor nem como número de lavras afetadas por B **[não verificado]**. A cópia confirma que a sombra mascara `ato_motivo`; a causa dos zero logs de auditoria e o impacto de B permanecem **[não verificado]**. [sombra_regras_pessoais.py:142](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/bin/sombra_regras_pessoais.py:142)
 
-## 18/11 15:16 · sessao 4b32d17fa48b · FILA-CODEX-1811 · leitura · origem=Code
-
-# CLASSE-D-NA-FRENTE-DA-E4D — material para corte
-
-## 1. Pergunta literal
-
-> “qual dono (CADASTRO, BATIDA ou ESTRUTURA) responde por FATO_EM_AUSENCIA?” [app/docs/RELATO.md:409](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:409)
-
-A pergunta sobre o dono permanece registrada como lei aberta. O RELATO registra como **respondida outra pergunta**: `FATO_EM_AUSENCIA` deve chegar dia a dia ao juiz de dono. [app/docs/RELATO.md:409](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:409) [app/docs/RELATO.md:392](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:392)
-
-## 2. Opções e efeito no código de hoje
-
-O juiz `dono_da_divergencia` **ainda não recebe `FATO_EM_AUSENCIA` como insumo**. Hoje ele retorna CADASTRO para folga não definida ou ausência de vínculo; depois BATIDA para batida fora de turno ou quantidade ímpar; depois CADASTRO para fase deslocada ou dia na lista do motor; e ESTRUTURA como resíduo. Portanto, as opções abaixo descrevem o efeito dos donos nas portas existentes, não um encaminhamento já implementado especificamente para essa classe. [app/ponto/management/commands/e6_oraculo.py:53](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/management/commands/e6_oraculo.py:53) [app/ponto/management/commands/e6_oraculo.py:98](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/management/commands/e6_oraculo.py:98)
-
-| Opção | Efeito nas portas existentes |
-|---|---|
-| **CADASTRO** | Em uma assinatura diária que use `_porta_pelo_dono`, a ação é a porta de cadastro própria da assinatura. Se o dia constar na lista com esse dono, o vigia pode classificá-lo como `fio_do_admin`, respeitada a precedência das demais condições do vigia. [app/escala/services/cadastro_realidade.py:731](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:731) [app/chamados/services/vigia_fio.py:254](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/vigia_fio.py:254) |
-| **BATIDA** | Na mesma porta diária, a ação é “Regularizar a batida do dia”. Se o dia constar na lista com esse dono, o vigia pode classificá-lo como `fio_do_admin`, sob as mesmas condições. [app/escala/services/cadastro_realidade.py:738](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:738) [app/chamados/services/vigia_fio.py:200](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/vigia_fio.py:200) |
-| **ESTRUTURA** | A porta diária mostra “Com o sistema: em cura (nao e do cadastro)”, sem URL; esse dono não satisfaz o predicado `dia_do_admin` do vigia. A L-099 reserva a fatia de código a ESTRUTURA. [app/escala/services/cadastro_realidade.py:743](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:743) [app/chamados/services/vigia_fio.py:200](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/vigia_fio.py:200) [app/docs/LEIS.md:122](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/LEIS.md:122) |
-| **Sem dono lavrado / sem resposta** | É um estado técnico já previsto, não um quarto dono da L-099: a porta diária informa que a próxima lavra trará o dono; `dias_na_lista` pode devolver `None` para donos inconciliáveis, e o vigia mantém contagem de dias sem resposta da lista. [app/escala/services/cadastro_realidade.py:738](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:738) [app/escala/services/cadastro_realidade.py:1020](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:1020) [app/chamados/services/vigia_fio.py:166](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/vigia_fio.py:166) |
-
-**Limite da rota atual:** A9 é uma assinatura de ausência com batida que o esmeril coleta por dia; ao montar a lista, a assinatura agregada é apresentada com `ocorrencias`, sem campo `data`, e recebe a ação padrão “em cura”. `dias_na_lista` só incorpora assinaturas com `data` e lê `dono_do_dia`. A9 e `FATO_EM_AUSENCIA` não devem ser presumidos universos idênticos: A9 usa `ausencia_id` e pelo menos duas batidas, enquanto o supra-juiz também tem ramo de batida sem par. [app/ponto/services/esmeril_espelho.py:133](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/services/esmeril_espelho.py:133) [app/escala/services/cadastro_realidade.py:922](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:922) [app/escala/services/cadastro_realidade.py:728](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:728) [app/escala/services/cadastro_realidade.py:1043](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/services/cadastro_realidade.py:1043) [app/ponto/supra_juiz.py:450](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/supra_juiz.py:450)
-
-**Placar:** o R1 apresenta divergências do E6 por três donos; o contador de soma compara as partes com o total. Os números publicados pertencem ao universo divergente do E6, não são contagem específica de `FATO_EM_AUSENCIA`. [app/core/placar_estrutural.py:115](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/core/placar_estrutural.py:115) [app/core/placar_estrutural.py:123](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/core/placar_estrutural.py:123)
-
-## 3. Onde o fato nasce e é lido
-
-- `classificar_dia` produz `FATO_EM_AUSENCIA` no ramo de fato em dia encerrado coberto por ausência aprovada; parcial sem período vira `PARCIAL_SEM_PERIODO`, e período fora segue outro ramo. Há também produção para batida sem par em parcial coberta, com período diferente de `fora`. [app/ponto/supra_juiz.py:387](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/supra_juiz.py:387) [app/ponto/supra_juiz.py:450](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/supra_juiz.py:450)
-- O cartório chama `classificar_dia` e recolhe os códigos; `derivar_veredito` mapeia o código para `fato_em_ausencia`, sujeito à precedência do mapa. A célula inclui esse veredito entre os que acusam. [app/ponto/services/cartorio.py:1464](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/services/cartorio.py:1464) [app/escala/models.py:1611](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/models.py:1611) [app/escala/models.py:1767](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/models.py:1767)
-- A tarefa do dia lê o **veredito lavrado** e, nas condições indicadas no código, expõe ação `VALIDAR` para o admin quando não há pergunta viva. [app/chamados/services/tarefa_do_dia.py:352](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:352)
-- A fábrica consulta `VEREDITOS_ACUSAM`; a folha também lê esse conjunto na apuração dos motivos de retenção. [app/chamados/services/fabrica_da_celula.py:120](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/fabrica_da_celula.py:120) [app/folha/export.py:1273](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/folha/export.py:1273)
-
-## 4. Números disponíveis e faltantes
-
-- O RELATO registra **10 casos `FATO_EM_AUSENCIA` na classe D e 57 na frota**; na mesma linha, registra **14 `PARCIAL_SEM_PERIODO`** em outra população, dos quais 10 na classe D. São retratos registrados, não contagens atuais verificadas. [app/docs/RELATO.md:904](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:904)
-- Outro recorte registra **21 dias com ausência aprovada**, divididos em 10 `PARCIAL_SEM_PERIODO`, 10 `FATO_EM_AUSENCIA` e 1 colaborador de teste; registra que a frota além desses 21 não foi medida naquele recorte. [app/docs/RELATO.md:834](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:834)
-- O placar registra, para a medição de 06/11, **303 dias divergentes na competência 10** — 26 ESTRUTURA, 78 CADASTRO, 199 BATIDA — e **201 na 11** — 9, 72 e 120, respectivamente. A fonte ressalta que os colaboradores por dono não somam o total, pois o total é a união. [app/core/placar_estrutural.py:127](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/core/placar_estrutural.py:127)
-- **[não verificado]** Total atual de `FATO_EM_AUSENCIA`, interseção com A9, distribuição por dono e quantos chegam à lista diária ou ao `fio_do_admin`. **Sonda que mediria:** leitura por `(colaborador, dia)` do código/veredito da célula, das datas A9, do resultado de `InsumosDoDono.dono` e de `dias_na_lista`, com cruzamento dos resultados do vigia; registrar separadamente ausência de resposta. [app/escala/models.py:1619](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/escala/models.py:1619) [app/ponto/services/esmeril_espelho.py:133](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/services/esmeril_espelho.py:133) [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/management/commands/e6_oraculo.py:182) [app/chamados/services/vigia_fio.py:166](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/vigia_fio.py:166)
-- O RELATO registra cruzamento de **0 arquivos** de `cadastro_realidade.py` e `e6_oraculo.py` com B2 e **0** com F2; registra `vigia_fio.py` nas duas e a obra fechada enquanto o encaminhamento precisar editá-lo. [app/docs/RELATO.md:379](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:379)
-
-## 5. Leis vizinhas
-
-- **L-099:** separa estrutural de dado, exige coerência com o cadastro existente e nomeia ESTRUTURA, CADASTRO e BATIDA; só ESTRUTURA é fatia de código. [app/docs/LEIS.md:122](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/LEIS.md:122)
-- **L-040:** define uma lista única Cadastro x Realidade, com assinatura e ação, e o PDF como a mesma lista. [app/docs/LEIS.md:88](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/LEIS.md:88)
-- **L-130:** define pergunta respondida como instante **e** texto não vazio, com um juiz para as finalidades listadas; trata da resposta à pergunta, não atribui por si o dono de `FATO_EM_AUSENCIA`. [app/docs/LEIS.md:151](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/LEIS.md:151)
-- **L-020, célula soberana:** dia e marcos são dado com DNA congelado e irretroativo; a exceção formal para passado errado por cadastro passa pela porta e a célula denuncia o ato. [app/docs/LEIS.md:71](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/LEIS.md:71)
-
-## 18/11 15:16 · sessao 1008fd345092 · - · - · origem=Ronald (tmux)
-
-- O juiz registrado para a pergunta “a que turno pertence a batida?” é `ponto/turnos.py::turnos_do_colab`; o recorte por batida é `dia_do_turno_da_batida`. [app/core/juizes.py:216-217; app/ponto/turnos.py:2939-2948]
-
-- Os dois sítios de `folha/porta_export.py` têm caminho que **grava**: o comando chama `medir` e `concluir`, que chama `lavrar`; o snapshot inclui as listas produzidas pelos dois sítios. A gravação depende da tentativa ainda vigente. [app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:219-220; app/folha/porta_export.py:1255-1274; app/folha/porta_export.py:779-795]
-
-- `_periodos_pelo_marco` participa do cálculo do fechamento, com condições para uso da ata; o próprio código consulta `periodos_do_dia`, juiz registrado para períodos e intervalo. [app/ponto/motor_calculo_v2.py:559-578; app/ponto/motor_calculo_v2.py:611-616; app/core/juizes.py:1207-1209; app/ponto/motor_calculo_v2.py:530-531; app/ponto/motor_calculo_v2.py:2748; app/ponto/motor_calculo_v2.py:2354; app/ponto/services/fechamento.py:286]
-
-- `_previsto_do_dia`, `_intervalo_descontado_no_dia` e `_janela_do_dia` usam a data do argumento ou entrada como chave; seus resultados chegam ao cálculo de período e ao fechamento. A autoridade específica para converter cada argumento em dia de jornada permanece [não verificado]. [app/ponto/motor_calculo_v2.py:1227; app/ponto/motor_calculo_v2.py:1313; app/ponto/motor_calculo_v2.py:1528; app/ponto/motor_calculo_v2.py:1273; app/ponto/motor_calculo_v2.py:1803; app/ponto/motor_calculo_v2.py:1760; app/ponto/motor_calculo_v2.py:2835; app/ponto/motor_calculo_v2.py:2840; app/ponto/motor_calculo_v2.py:2759; app/ponto/motor_calculo_v2.py:2458; app/ponto/services/fechamento.py:286]
-
-- O detector de proposta agrupa por data local e declara a limitação para turnos noturnos. Há caminho de exibição pelo comando `propor_escala_limbo`; o efeito de todos os demais consumidores permanece [não verificado]. [app/escala/detector_proposta.py:18-25; app/escala/detector_proposta.py:55-58; app/escala/detector_proposta.py:118-120; app/escala/management/commands/propor_escala_limbo.py:22-48; app/escala/services/escala_auto.py:119-120]
-
-_7020 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7022 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
