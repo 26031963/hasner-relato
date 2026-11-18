@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 15:33** · publicado em **18/11/2026 15:37** (UTC-3)
+> Ultima resposta processada: **18/11/2026 15:56** · publicado em **18/11/2026 15:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 15:56 · sessao 04982e85ea36 · FILA-CODEX-1811 · sonda · origem=Code
+
+A saída fornecida é a seguinte; não executei a sonda, pois não há acesso ao banco neste ambiente. [não verificado] [nao verificado]
+
+```text
+banco= sombra schema= juliani
+eventos_d3_na_trilha= 0
+perguntas_distintas= 0
+eventos_sem_objeto_id= 0
+```
+
+Ela não apresenta erro e indica que a consulta fornecida não encontrou eventos com a ação `l130_instante_sem_texto_devolvida` e o modelo `PerguntaDisputa`; por isso, também não encontrou perguntas distintas nem eventos desse conjunto sem `objeto_id`. Esses resultados são do banco `sombra`, schema `juliani`, conforme o dado raspado; não foram verificados diretamente. [não verificado]
+
+Na cópia, o D3 registra essa ação com o ID da pergunta e os valores de antes e depois; se `evento` retornar `None`, a função lança exceção dentro da transação. O código também registra previamente linhas de projeção e documenta a preservação da resposta anterior. [validacao.py:408](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:408)
+
+Os zeros **não comprovam nem uma violação nem a conformidade da L-130 “com trilha”**: não há evento correspondente para examinar quanto ao conteúdo ou à preservação da resposta. Também não demonstram, por si só, que o D3 nunca executou ou que os dados consultados abrangem toda a história relevante; isso não foi verificado. [não verificado]
+
+## 18/11 15:55 · sessao b716c04107b0 · FILA-CODEX-1811 · sonda · origem=Code
+
+A saída fornecida contém os contadores e termina em `FIM_SONDA`, sem erro exibido. Não executei a sonda: o enunciado informa que não há acesso ao banco nem a logs. [não verificado] [nao verificado]
+
+```text
+ATO_1_JUIZ_1 CONTADOR 0
+ATO_0_JUIZ_0 CONTADOR 42870
+ATO_1_JUIZ_0 CONTADOR 0
+ATO_0_JUIZ_1 CONTADOR 8342
+```
+
+Os PKs discordantes **literalmente fornecidos** são os abaixo; a sonda anexada limita a impressão aos primeiros 50 de cada grupo discordante. Não há PK impresso para `ATO_1_JUIZ_0`. [não verificado]
+
+```text
+ATO_0_JUIZ_1 PK #6
+ATO_0_JUIZ_1 PK #7
+ATO_0_JUIZ_1 PK #8
+ATO_0_JUIZ_1 PK #118
+ATO_0_JUIZ_1 PK #119
+ATO_0_JUIZ_1 PK #120
+ATO_0_JUIZ_1 PK #158
+ATO_0_JUIZ_1 PK #174
+ATO_0_JUIZ_1 PK #175
+ATO_0_JUIZ_1 PK #176
+ATO_0_JUIZ_1 PK #180
+ATO_0_JUIZ_1 PK #181
+ATO_0_JUIZ_1 PK #183
+ATO_0_JUIZ_1 PK #184
+ATO_0_JUIZ_1 PK #185
+ATO_0_JUIZ_1 PK #186
+ATO_0_JUIZ_1 PK #189
+ATO_0_JUIZ_1 PK #190
+ATO_0_JUIZ_1 PK #193
+ATO_0_JUIZ_1 PK #194
+ATO_0_JUIZ_1 PK #200
+ATO_0_JUIZ_1 PK #202
+ATO_0_JUIZ_1 PK #203
+ATO_0_JUIZ_1 PK #207
+ATO_0_JUIZ_1 PK #208
+ATO_0_JUIZ_1 PK #263
+ATO_0_JUIZ_1 PK #264
+ATO_0_JUIZ_1 PK #265
+ATO_0_JUIZ_1 PK #266
+ATO_0_JUIZ_1 PK #267
+ATO_0_JUIZ_1 PK #268
+ATO_0_JUIZ_1 PK #272
+ATO_0_JUIZ_1 PK #287
+ATO_0_JUIZ_1 PK #289
+ATO_0_JUIZ_1 PK #292
+ATO_0_JUIZ_1 PK #293
+ATO_0_JUIZ_1 PK #294
+ATO_0_JUIZ_1 PK #295
+ATO_0_JUIZ_1 PK #301
+ATO_0_JUIZ_1 PK #302
+ATO_0_JUIZ_1 PK #305
+ATO_0_JUIZ_1 PK #308
+ATO_0_JUIZ_1 PK #309
+ATO_0_JUIZ_1 PK #310
+ATO_0_JUIZ_1 PK #311
+ATO_0_JUIZ_1 PK #313
+ATO_0_JUIZ_1 PK #320
+ATO_0_JUIZ_1 PK #321
+ATO_0_JUIZ_1 PK #322
+ATO_0_JUIZ_1 PK #323
+```
+
+**(a)** A soma é **51.212**. Pela lógica da sonda anexada, cada `PerguntaDisputa` percorrida é colocada em um dos quatro grupos; portanto, a soma corresponde ao total percorrido pela sonda. Não há uma contagem independente do banco no dado fornecido para conferi-la. [não verificado]
+
+**(b)** O juiz considera a pergunta respondida quando `respondida_em` existe **e** `resposta_colab` tem texto após remover os espaços das extremidades. O teste de vazio aplica `(t or '').strip()`. [juizes.py:1526](/home/ronald/codex_ws/1df6cedd588b4ad93ae0b14a42813542f448f1ef/app/chamados/juizes.py:1526), [juizes.py:1544](/home/ronald/codex_ws/1df6cedd588b4ad93ae0b14a42813542f448f1ef/app/chamados/juizes.py:1544)
+
+- **`ATO_1_JUIZ_1` — 0:** a combinação compararia o texto vazio do último ato com os campos atuais da pergunta, usados pelo juiz. Como a saída informa zero, não há caso nesse grupo a explicar individualmente. [juizes.py:1552](/home/ronald/codex_ws/1df6cedd588b4ad93ae0b14a42813542f448f1ef/app/chamados/juizes.py:1552); definição do ato e contador na sonda fornecida [não verificado].
+- **`ATO_0_JUIZ_1` — 8.342:** o juiz encontrou instante e texto na pergunta; `ATO_0` significa apenas que o último ato selecionado não satisfez simultaneamente as condições de existir, ser `RESPOSTA` e ter texto vazio. O dado não informa qual dessas condições falhou para cada PK, nem a causa histórica da combinação. [juizes.py:1552](/home/ronald/codex_ws/1df6cedd588b4ad93ae0b14a42813542f448f1ef/app/chamados/juizes.py:1552); definição do ato e contador na sonda fornecida [não verificado].
 
 ## 18/11 15:33 · sessao 0c6e31f1840c · E4C-F9 · censo · origem=Code
 
@@ -799,85 +889,4 @@ A lista fornecida acrescenta:
 
 Resultados enviados ao agente principal com cadeias, efeitos e referências de arquivo:linha. Os pontos em que a correspondência com um juiz registrado ou a causalidade histórica não foi provada estão marcados como [não verificado].
 
-## 18/11 15:15 · sessao 1056077d10a0 · FILA-CODEX-1811 · leitura · origem=Code
-
-A definição das três classes está na cópia, mas **não é possível entregar uma sonda completa e verificável para as exceções indiretas** com o material disponível: falta a implementação ou um contrafactual fiel da F5 para comparar os dois estados e atribuir causalidade a uma PK. A sonda parcial abaixo mede o confronto entre ato e L-130; não a executei. [não verificado] [nao verificado]
-
-**(A) Predicados e associação**
-
-- **(a) SILÊNCIO:** último ato aplicável `SILENCIO`; a regra manda classificá-lo como histórico. `_pela_decisao` retorna `silencio_decidido` e nenhuma ação, salvo a precedência de `passivo_sem_linha`. A carga ordena os atos por instante e PK, corta em `agora` e exclui atos marcados como ressuscitação antes de escolher o último. [CORTES.md:561](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/CORTES.md:561), [tarefa_do_dia.py:154](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:154), [tarefa_do_dia.py:421](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:421)
-
-- **(b) RESPOSTA vazia:** último ato aplicável `RESPOSTA` e `texto_vazio(ato_texto)`; a regra determina pendente no universo de perguntas vivas e disputa aberta. `_pela_decisao` chama o juiz de texto e devolve `respondida_sem_texto` com `responder/colaborador`, se o passivo não tiver precedência. O aval transcrito determina expressamente que o critério para a lista é o **ato**. [CORTES.md:561](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/CORTES.md:561), [tarefa_do_dia.py:154](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:154); aval transcrito no pedido [não verificado em arquivo].
-
-- **(c) ABSORÇÃO rejeitada:** último ato aplicável `ABSORCAO` cuja ausência ligada tem `status='rejeitada'`; a regra determina pendente e `_pela_decisao` devolve `absorcao_rejeitada` com `responder/colaborador`, sujeito à mesma precedência do passivo. [CORTES.md:561](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/CORTES.md:561), [tarefa_do_dia.py:178](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:178)
-
-- **L-130:** `chamados.juizes.pergunta_respondida(p)` exige `respondida_em` e `resposta_colab` não vazio após `strip`; lê a projeção da pergunta, não o texto do último ato. Portanto, o contador precisa tratar os dois resultados separadamente. [juizes.py:1526](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/juizes.py:1526), [juizes.py:1544](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/juizes.py:1544)
-
-- **Indireto e causador:** a tarefa agrega as ações de todas as instâncias e só publica a porta do colaborador quando uma instância tem `responder/colaborador` **e** sua PK está entre as pendentes do app. Se a rota ficar nula e o calendário oferecer `resolver_dia`, acrescenta essa ação à primeira instância — que pode pertencer a outra pergunta — e publica `admin/porta_acao`. A ligação causal exige comparar antes/depois mantendo os demais dados iguais e identificar qual alteração de pendência de PK (a), (b) ou (c) produziu a diferença; compartilhar dia, por si só, não prova causa. O aval transcrito determina vermelho para mudança indireta sem essa causa nominal. [tarefa_do_dia.py:642](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:642), [tarefa_do_dia.py:656](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:656), [tarefa_do_dia.py:689](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:689); aval transcrito [não verificado em arquivo].
-
-- **`sem_associacao`:** quando nenhuma instância da tarefa aponta para a PK, esse marcador representa o par conservado da pergunta, não a tarefa inteira do dia. Por exemplo, `fora_vinculo` pode retornar sem instâncias, e a exposição de motivo fora do mapa não necessariamente associa a pergunta. [tarefa_do_dia.py:208](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:208), [tarefa_do_dia.py:342](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:342); marcador no aval transcrito [não verificado em arquivo].
-
-**(B) Texto de sonda parcial — contador ato × L-130**
-
-Este trecho usa um único `agora`, as funções reais de texto e do juiz, e abre transação PostgreSQL somente de leitura. Compara **todos os registros de pergunta**, não apenas as vivas no app; por isso seus números não são diretamente os da matriz. A seleção do último ato segue a ordenação e a exclusão usadas pela carga da tarefa. Não imprime texto, nome ou CPF. [tarefa_do_dia.py:421](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/tarefa_do_dia.py:421), [juizes.py:1544](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/juizes.py:1544)
-
-```python
-# Django shell; PostgreSQL; executar apenas quando a sonda tiver a vaga.
-from django.db import connection, transaction
-from django.utils import timezone
-from chamados.models import PerguntaDisputa, DecisaoPergunta as D
-from chamados.juizes import texto_vazio, pergunta_respondida
-
-agora = timezone.now()
-
-if connection.vendor != "postgresql":
-    raise RuntimeError("Sonda exige transacao PostgreSQL somente leitura")
-
-with transaction.atomic():
-    with connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION READ ONLY")
-
-    ultimos = {}
-    atos = (D.objects.filter(ato_em__lte=agora)
-            .order_by("pergunta_id", "ato_em", "pk")
-            .iterator(chunk_size=2000))
-    for ato in atos:
-        if not D.es_da_ressuscitacao(ato):
-            ultimos[ato.pergunta_id] = ato
-
-    # Chaves: (ultimo ato e RESPOSTA vazia, juiz diz respondida).
-    grupos = {(False, False): [], (False, True): [],
-              (True, False): [], (True, True): []}
-    perguntas = PerguntaDisputa.objects.all().order_by("pk").iterator(chunk_size=2000)
-    for p in perguntas:
-        ato = ultimos.get(p.pk)
-        b = bool(ato and ato.ato == D.RESPOSTA and texto_vazio(ato.ato_texto))
-        juiz = pergunta_respondida(p)
-        grupos[(b, juiz)].append(p.pk)
-
-    for b, juiz in ((True, True), (False, False),
-                    (True, False), (False, True)):
-        pks = grupos[(b, juiz)]
-        print("ATO_%d_JUIZ_%d CONTADOR %d" % (b, juiz, len(pks)))
-        for pk in pks:
-            print("ATO_%d_JUIZ_%d PK %d" % (b, juiz, pk))
-
-print("FIM_SONDA")
-```
-
-Os quatro grupos evitam uma ambiguidade: comparando literalmente os booleanos `ato_vazio` e `pergunta_respondida`, as discordâncias são `ATO_1_JUIZ_0` e `ATO_0_JUIZ_1`; comparando **“ato vazio” com “juiz diz não respondida”**, as discordâncias são `ATO_1_JUIZ_1` e `ATO_0_JUIZ_0`. Os PKs e contadores de ambos ficam disponíveis na saída. [juizes.py:1544](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/juizes.py:1544)
-
-**(C) Limites [nv]**
-
-- [nv] A lista nominal completa (a)/(b)/(c), seus cruzamentos e as exceções indiretas com e sem causador. O resumo recebido informa que o contrafactual trocou `_pendentes_app` em memória e não executou a F5 real; o código dessa sonda não foi fornecido. A mudança de pendência sozinha não demonstra todas as diferenças da F5. [não verificado]
-- [nv] A sonda parcial não foi executada nem testada contra o banco; não prova que uma sonda completa consiga percorrer todas as funções reais sem tentativa de escrita ou relógio adicional. O próprio registro da matriz assinala uma possível escrita *best-effort* durante leitura. [RELATO.md:30](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:30)
-- [nv] O hash Git do HEAD: esta cópia não contém `.git`, portanto não pude verificá-lo. [não verificado]
-- [nv] A fidelidade da sonda da matriz anterior: seu código não foi fornecido, conforme o próprio anexo `r2`. [não verificado]
-
-O **número principal a medir** é o de perguntas conservadas cujo par `razão/ações` muda fora das exceções nominais autorizadas, incluindo os dias indiretos sem PK causadora: **esperado zero pela regra; valor medido [nv]**. A matriz anterior registra **368 perguntas**, distribuídas em **263 colaborador, 68 admin e 37 ninguém em 16 colaboradores**; essa classificação usa precedência própria e não equivale necessariamente à associação da PK na tarefa. Não há, nos dados fornecidos, divergência nominal medida entre essa matriz e uma sonda nova. [RELATO.md:26](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:26), [RELATO.md:30](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/RELATO.md:30)
-
-## 18/11 15:15 · sessao 4335686bde57 · - · - · origem=Ronald (tmux)
-
-Leitura de X4, A9b, X11 e do clique mudo concluída e enviada ao agente principal, com referências ao código e aos testes localizados. Os testes não foram executados. [app/chamados/tests/test_e4_expand_orm.py:63](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/tests/test_e4_expand_orm.py:63)
-
-_7015 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7017 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
