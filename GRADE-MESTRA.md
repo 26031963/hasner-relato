@@ -112,7 +112,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2039 | ? | ? |
 | JV1-MERGE-FILA | ESPINHA-E | Trata lacunas de janela e alimentação dos feriados. | - | medir dinheiro antes | ......... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2061 | ? | ? |
 
-## 20/20 (5)
+## 20/20 (6)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte | fecha BO | portao |
 |---|---|---|---|---|---|---|---|---|---|
@@ -121,6 +121,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | FIO-E0-V4-E3-LEITORES | 20/20 | Faz telas e contadores mostrarem a mesma tarefa diária. | - | cura; preverif; suite; sombra; opus | ++++.~... | EM VOO [PERSPECTIVA 17/11: FEITA] | BACKLOG:1902; RELATO:6; RELATO:33 [+9 compl.] | 2 (roteiro BO-[nome]-1311 / mapa HJ) | arquivo congelado (base E3-MORRE 14/11 07:5x: chamados/models.py, chamados/juizes.py, tarefa_do_dia.py, painel.py, ponto/vigia_fio.py, ponto/supra_juiz.py; espinha em voo na copia wt-codex-e3-forma-sql-005806, nao entra na REGRA DA VAGA VAZIA) |
 | E3-CADASTRO-ADMIN | 20/20 | Entrega cadastros que precisam de decisão humana ao administrador. | - | correção administrativa do cadastro | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1908 | ? | ? |
 | E3-ENTRADA-ORFA-SEM-TURNO | 20/20 | Define o tratamento da entrada real sem turno previsto. | - | lei para dia sem turno com batida | ......... | REGISTRADA (lei dada: DST-L1-1800, ESPURIAS-ABRE 17/11 18:05 item 1 literal "entrada real em dia sem turno vai a porta de decisao do admin"; construir pela DIA-SEM-TRABALHO-PORTA L1) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2016 | ? | ? |
+| CADEIA-DO-CONTRATO-20 | 20/20 | Fecha a celula chamado/um juiz por pergunta: TIPO item 3 -> orfa com instante -> LASTRO-FAIXA -> celula verde pelo selo. | 19/20 -> 20/20 | TIPO-NA-FONTE item 3; LASTRO-FAIXA-SEM-DEFAULT | +........ | REGISTRADA 18/11 18:2x (aval TIPO-ITEM3-DESENHO-1811-1820 item 6; medida: 19/20, listas de excecao vazias, presa pela nota O168/O169/LASTRO) | BACKLOG CADEIA-DO-CONTRATO-20 | ? | um passo so abre com o anterior no ar |
 
 
 ## PERSPECTIVA 17/11 (aval PERSPECTIVA-DA-ESPINHA itens 2-5) -- ESPINHA-E + 20/20 = 80 linhas
