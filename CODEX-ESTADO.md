@@ -1,7 +1,115 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 13:53** · publicado em **18/11/2026 13:54** (UTC-3)
+> Ultima resposta processada: **18/11/2026 14:10** · publicado em **18/11/2026 14:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 14:10 · sessao 3a71134a64be · DST-L2 · leitura · origem=Code
+
+**A medida de produção ainda não está completa:** o dado raspado informa 35 chamados e zero justificativas pendentes pelas duas vias, mas não informa as quantidades de aprovadas, rejeitadas ou sem justificativa. [não verificado] A sonda original `sonda_impacto_dstl2.py` não está disponível nesta cópia; portanto, a equivalência exata de uma nova seleção com ela também está **[não verificado]**.
+
+**(b1) Leitor e escritores.** O leitor da justificativa para a grade é `_marcar_ausencias`: ele filtra `Justificativa.status='aprovada'` em [app/escala/utils.py:1194](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1194). Uma justificativa aprovada marca `justificado`, limpa os furos e **não altera o `tipo_dia`**; pendente não entra nesse filtro. [app/escala/utils.py:1192](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1192), [app/escala/utils.py:1254](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1254)
+
+Separadamente, a mesma grade consulta a cobertura de **Ausência** para folha e pode escrever `tipo_dia='ausencia'` ou `'falta'`; o filtro de status dessa via está em `_pelo_efeito`, que para folha aceita ausência aprovada. [app/escala/utils.py:1188](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1188), [app/escala/utils.py:1210](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1210), [app/ponto/turnos.py:2527](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/turnos.py:2527). A ata copia o `tipo_dia` da grade, e `_protesta` pergunta a `dia_sem_trabalho`, com exceção para cobertura parcial. [app/ponto/services/cartorio.py:730](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:730), [app/ponto/services/cartorio.py:1462](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1462), [app/chamados/juizes.py:454](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:454)
+
+O status da justificativa nasce com padrão `pendente`; entre seus escritores estão a aprovação e rejeição individuais, a aprovação e rejeição em lote e a rejeição pelo reconciliador. [app/ponto/models.py:159](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:159), [app/ponto/services/justificativa.py:205](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:205), [app/ponto/services/justificativa.py:283](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:283), [app/ponto/views.py:1799](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1799), [app/ponto/views.py:1878](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1878), [app/chamados/reconciliador.py:576](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:576). Outro leitor da aprovada é `efeitos_da_ausencia`, usado para compor os dias justificados. [app/ponto/services/efeito_ausencia.py:28](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/efeito_ausencia.py:28), [app/ponto/services/efeito_ausencia.py:40](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/efeito_ausencia.py:40)
+
+**(b2) Rejeição depois do fecho.** A porta individual real é `rejeitar_justificativa_dp`, chamada pela view `rejeitar_justificativa`; ela só decide uma justificativa pendente, grava `rejeitada` e chama `save()`. [app/ponto/views.py:1925](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1925), [app/ponto/services/justificativa.py:262](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:262), [app/ponto/services/justificativa.py:277](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:277)
+
+Esse `save()` dispara o `post_save` da justificativa, que tenta rejulgar a célula; o handler pode parar se já estiver em julgamento ou se ocorrer erro engolido, e `julgar_celula` também retorna sem julgar em certas condições temporais ou sem célula. [app/ponto/signals.py:161](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:161), [app/ponto/signals.py:85](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:85), [app/ponto/services/cartorio.py:2033](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:2033)
+
+A passagem de **pendente para rejeitada**, por si, não retira uma justificativa aprovada do filtro da grade: nenhuma das duas passa nele. [app/escala/utils.py:1194](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1194) Assim, se os demais fatos que produziram o dia sem trabalho continuarem iguais, essa troca não faz o dia voltar a protestar por essa via. [app/ponto/services/cartorio.py:1464](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1464), [app/chamados/juizes.py:454](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:454)
+
+Se o novo julgamento encontrar furo e cumprir os portões de emissão, o cartório chama o emissor, que pode reabrir ou emitir conforme o caso; isso não está demonstrado para um dos 35. [app/ponto/services/cartorio.py:1712](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1712), [app/ponto/services/cartorio.py:1755](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1755), [app/ponto/services/cartorio.py:1773](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1773)
+
+Depois do `save`, a porta individual **tenta criar um novo chamado interno de categoria `justificativa_rejeitada`** e criar follow-up; o gate de criação pode recusá-lo, e isso não prova a existência de cobrança do furo. [app/ponto/services/justificativa.py:289](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:289), [app/chamados/models.py:1101](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:1101), [app/ponto/services/justificativa.py:324](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:324). Pergunta nova e resultado concreto da cobrança: **[não verificado]**.
+
+**(b3) S1 — leitura, texto não executado.** A seleção abaixo interpreta “só pela ata gravada” como `trabalha` diferente de `False`, com `dia_sem_trabalho(celula)` verdadeiro; ela usa o juiz real, inclusive a exceção de ausência parcial. [app/chamados/juizes.py:445](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:445) É uma reconstrução da descrição fornecida, não equivalência comprovada à sonda original **[não verificado]**. As vias são `Justificativa.chamado_origem` e `ChamadoColaborador.justificativa_relacionada`; um chamado com justificativas de status diferentes conta em mais de uma categoria. [app/ponto/models.py:173](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:173), [app/chamados/models.py:69](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:69)
+
+```python
+from collections import Counter
+from django.db.models import Q
+from chamados.catalogo.furo_modulos import FURO_MODULES
+from chamados.catalogo.motor import VIVOS
+from chamados.juizes import dia_sem_trabalho
+from chamados.models import ChamadoColaborador
+from ponto.models import Justificativa
+
+totais = Counter()
+candidato = None
+
+qs = (
+    ChamadoColaborador.objects
+    .filter(modulo_origem__in=FURO_MODULES, status_local__in=VIVOS,
+            celula__isnull=False)
+    .select_related("celula")
+    .order_by("pk")
+)
+
+for ch in qs.iterator():
+    cel = ch.celula
+    if cel.trabalha is False or not dia_sem_trabalho(cel):
+        continue
+
+    totais["universo"] += 1
+    justs = list(
+        Justificativa.objects.filter(
+            Q(chamado_origem_id=ch.pk) |
+            Q(pk=ch.justificativa_relacionada_id)
+        ).values_list("pk", "status")
+    )
+    status = {s for _, s in justs}
+    if not justs:
+        totais["nenhuma"] += 1
+    for s in ("pendente", "aprovada", "rejeitada"):
+        if s in status:
+            totais[s] += 1
+    if candidato is None and justs:
+        candidato = (ch.pk, ch.colaborador_id, cel.data)
+
+for chave in ("universo", "pendente", "aprovada", "rejeitada", "nenhuma"):
+    print(chave, totais[chave])
+
+if candidato:
+    pk, colab_id, dia = candidato
+    print("candidato", "chamado", pk, "col" + str(colab_id), dia.isoformat())
+else:
+    print("candidato nenhum")
+print("FIM_SONDA")
+```
+
+**S2 — não forneço como pronta para execução.** `_protesta` é uma função local de `julgar_colab`, não uma porta importável, e o fecho depende da ata gerada durante o julgamento. [app/ponto/services/cartorio.py:1435](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1435), [app/ponto/services/cartorio.py:1464](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1464) Além disso, a porta real tenta enviar push fora de seu `atomic` interno; um `raise` em transação externa desfaz escritas de banco, mas não desfaz uma notificação externa. [app/ponto/services/justificativa.py:273](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:273), [app/ponto/services/justificativa.py:308](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:308) Não verifiquei todos os efeitos externos possíveis do julgamento e do emissor, nem uma forma de capturar o resultado da função local sem alterar a observação; apresentar uma sonda como segura e fiel seria **[não verificado]**. A prova em sombra, portanto, permanece pendente.
+
+## 18/11 14:09 · sessao 1b52d7327d1d · RAIA-ESPURIAS-1811-1410 · verificador · origem=Code
+
+Os anexos foram fornecidos como texto, sem numeração de linhas; por isso, as referências a eles aparecem com **[não verificado]** quanto a arquivo:linha. A cópia disponível não contém metadados Git para conferir os hashes ou executar o merge-tree. [não verificado]
+
+**Item 1 — CONFERE, condicionado às medições antes de cada abertura:** a ordem foi declarada e a exceção ao complemento é nominal; os cruzamentos informados ainda não foram verificados nesta cópia. [não verificado]
+
+1. **Premissas:** as medições de DST-L2 e ESPURIA-TELA e o recorte de ESCALA não puderam ser conferidos por merge-tree. [não verificado]
+2. **Aval vigente:** a nova ordem depois das 18h é uma exceção nominal ao item 1c do complemento; a restrição anterior a esse horário permanece. [não verificado]
+3. **Literal:** a abertura depende de medir contra a ponta da espinha em voo; arquivo `.py` comum exige esperar o pouso ou entrar no mesmo comboio. A medição antiga não substitui essa condição. [não verificado] [nao verificado]
+4. **Exportada, dinheiro ou `!`:** o item proíbe tocar exportada e declara o custo de parar instrumentos; efeito das obras sobre dinheiro ou outras matérias de `!` ainda depende dos diffs. [não verificado]
+
+**Item 2 — CONFERE, condicionado ao pouso após a simulação e ao smoke:** o critério do “desde” e o marco de pouso repetem a resposta do aval vigente. [não verificado] [nao verificado]
+
+1. **Premissas:** L-040 existe em [LEIS.md:88](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/LEIS.md:88). A referência do anexo a `esmeril_espelho.py:238` não corresponde ao cálculo do “desde” nesta cópia: ali está `p = r['proposta']`, em [esmeril_espelho.py:238](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/esmeril_espelho.py:238). O recorte da obra e seu censo ainda precisam ser verificados. [não verificado]
+2. **Aval vigente:** a volta ao construtor, o menor “desde” ou INCOMPLETO e o pouso após a simulação com smoke constam da resposta anterior; a nova ordem é a exceção nominal ao complemento. [não verificado] [nao verificado]
+3. **Literal:** comboio com a espinha, se pronta na mesma meia hora, continua sujeito ao pouso de ESCALA somente depois da simulação; a viabilidade temporal do comboio é [não verificado]. [nao verificado]
+4. **Exportada, dinheiro ou `!`:** o aval proíbe tocar exportada; o diff ainda é necessário para verificar outros efeitos. Alterar dados de escala ou vínculo exige `!`, conforme [CLAUDE.md:265](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/CLAUDE.md:265). [não verificado]
+
+**Item 3 — CONFERE para a decisão e a medição, sem considerar o pouso liberado:** a cópia confirma o precedente para `trabalha is False`; os resultados pedidos em b1–b3 ainda não estão completos. [cartorio.py:1451](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/cartorio.py:1451)
+
+1. **Premissas:** `_protesta` exclui `trabalha is False` e o fechamento usa `reconciliar` em [cartorio.py:1458](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/cartorio.py:1458) e [cartorio.py:1533](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/cartorio.py:1533). O comportamento específico da cópia DST-L2, a reação à rejeição e a distribuição completa dos 35 são [não verificado]. O anexo informa zero pendentes por `chamado_origem` e por ponteiro, sem fornecer a contagem de aprovadas e nenhuma. [não verificado]
+2. **Aval vigente:** não foi identificada colisão nos dois avais fornecidos; o item mantém a DST-L2 sem pouso até a medida. [não verificado] [nao verificado]
+3. **Literal:** b2 exige prova pela porta real de rejeição em sombra com rollback; a existência da porta é visível em [justificativa.py:262](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/justificativa.py:262), mas seu resultado no caso pedido é [não verificado].
+4. **Exportada, dinheiro ou `!`:** a medição pedida é em leitura e sombra; eventual cobrança ou cura após rejeição ainda não foi demonstrada. O tratamento de gravado exportado segue sujeito a `!` em [CLAUDE.md:265](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/CLAUDE.md:265). [não verificado]
+
+**Item 4 — CONFERE para registrar o dry:** o apply permanece dependente do `!` declarado. [não verificado]
+
+1. **Premissas:** o universo dos afetados, o número de órfãs e a situação da competência 11 não constam do dado fornecido. [não verificado]
+2. **Aval vigente:** o dry foi marcado para depois da simulação, compatível com a proibição anterior de regenerar células antes dela. [não verificado]
+3. **Literal:** reversão e contagem antes/depois são condições do dry; sua execução e seus resultados são [não verificado].
+4. **Exportada, dinheiro ou `!`:** o registro não autoriza apply; o aval reserva o apply ao `!` com o número em mãos e proíbe tocar exportada. [não verificado]
 
 ## 18/11 13:53 · sessao 9e7ece3f7811 · LAUDO-[nome]-1811-1340 · sonda · origem=Code
 
@@ -1134,40 +1242,4 @@ Resultados de escala e do contrato de vitalidade enviados ao agente principal, c
 
 Análise enviada ao agente principal, com causas agrupadas, locais das fixtures, escritores e leitor do campo, comparação com a base e curas propostas. O resultado após as curas permanece [não verificado].
 
-## 18/11 13:24 · sessao 6fdfcb3b8125 · - · - · origem=Ronald (tmux)
-
-As duas falhas dos selos do app decorrem da mesma alteração na chamada de `consulta_do_app`: a view passou a fornecer `agora`, enquanto os testes exigem a chamada literal anterior ([api/views.py:2537](/home/ronald/codex_ws/b66587c26b63b818e192f0e00d3cf4c20a6e0c60/app/api/views.py:2537), [test_pergunta_no_app.py:168](/home/ronald/codex_ws/b66587c26b63b818e192f0e00d3cf4c20a6e0c60/app/chamados/tests/test_pergunta_no_app.py:168), [test_contract_pergunta_viva.py:69](/home/ronald/codex_ws/b66587c26b63b818e192f0e00d3cf4c20a6e0c60/app/chamados/tests/test_contract_pergunta_viva.py:69)).
-
-A cura proposta preserva os selos e o relógio comum: vincular `agora` à função localmente e manter a chamada literal exigida; ela altera código de produção e seu resultado ainda não foi executado [não verificado].
-
-## 18/11 13:00 · sessao 6e1ba8910912 · EFEITOS-REAIS-1811 · leitura · origem=Code
-
-1. **Corrente real.** O cron chama `processar_cartorio --apply` por empresa; ele executa `julgar_colab` nas células passadas. Depois vêm, encadeados, `apurar_furos_diarios` e `disparar_perguntas_competencia --comp-corrente --alarme`; este último é **vigia, não escritor de perguntas**. [app/config/crons.py:616] [app/config/crons.py:1527] [app/config/crons.py:1539] [app/ponto/management/commands/processar_cartorio.py:33] [app/chamados/management/commands/disparar_perguntas_competencia.py:130]
-
-   No julgamento, se houver `FURO_PARCIAL`, o cartório identifica os marcos apagados e chama `detectar_ausencias.Command._abrir_chamado`, que abre ou reaproveita o `batida_ausente` e grava seus marcos. Esse emissor chama `criar_disputa_a_partir_de_chamados_orfaos`; para chamado elegível de dia passado, `cobra_marcos_da_ata` encaminha à leitura da ata e `_complementar_marcos_faltantes` cria a pergunta do marco. Há também nascimento **direto pela célula julgada**, por `perguntar_pela_celula` → `perguntar` → `gerar_perguntas_disputa`. Alterações de batida ou de status de chamado também podem acionar julgamento por signals. [app/ponto/services/cartorio.py:1814] [app/ponto/services/cartorio.py:1887] [app/ponto/management/commands/detectar_ausencias.py:694] [app/ponto/management/commands/detectar_ausencias.py:788] [app/chamados/services/disputa_emissao.py:736] [app/chamados/services/disputa_emissao.py:1180] [app/chamados/services/disputa_emissao.py:864] [app/ponto/services/cartorio.py:1029] [app/chamados/services/fabrica_da_celula.py:160] [app/ponto/signals.py:132] [app/chamados/signals.py:189]
-
-   O ramo para categoria `intervalo_ausente` lê os marcos do contexto, mas o detector específico está com emissão aposentada; seu cron roda em alarme. [app/chamados/services/disputa_emissao.py:1150] [app/ponto/management/commands/detectar_intervalo_ausente.py:150] [app/config/crons.py:491]
-
-2. **Não é possível identificar uma guarda única que tenha impedido cada caso com o anexo fornecido.** O caminho direto exige que o veredito da célula acuse; se houver veredito fora de `VEREDITOS_ACUSAM`, retorna antes de consultar os motivos da ata. O caminho do chamado depende de `FURO_PARCIAL`, entre outras condições; esse código exige, por exemplo, dia encerrado, fato e célula da grade com `missing`. A existência de uma lâmpada apagada na ata, por si só, não prova quais insumos, código e veredito foram usados no julgamento anterior. [app/chamados/services/fabrica_da_celula.py:119] [app/ponto/supra_juiz.py:318] [app/ponto/supra_juiz.py:392] [app/ponto/supra_juiz.py:429]
-
-   - **(a) Sem chamado nem pergunta:** não há chamado para o ramo de repasse; o nascimento direto ainda pode ocorrer em julgamento elegível. Qual guarda incidiu no caso concreto: **[não verificado]**. [app/chamados/services/disputa_emissao.py:1057] [app/chamados/services/fabrica_da_celula.py:178]
-   - **(b) Chamado resolvido e pergunta `saida_sem_entrada` resolvida:** chamado encerrado fica fora da fábrica de órfãos; a abertura de chamado usa identidade por colaborador, módulo e dia e pode tentar renascimento, sujeito às guardas da porta. Isso não demonstra que o chamado antigo bloqueou definitivamente um novo marco. A pergunta de outro motivo não é, por si, deduplicação da pergunta de intervalo: a identidade considera motivo e dia. [app/chamados/services/disputa_emissao.py:767] [app/ponto/management/commands/detectar_ausencias.py:694] [app/ponto/management/commands/detectar_ausencias.py:740] [app/chamados/services/disputa_emissao.py:1399]
-   - **(c) `orfao_14h` resolvida:** a via registra a resolução daquela pergunta; não comprova, sozinha, bloqueio de `intervalo_saida` ou `intervalo_volta`. `MOTIVOS_DO_DIA_SEM_FECHAR` permite associar motivos ao chamado do dia, não transforma motivos diferentes em uma pergunta só. [app/chamados/models.py:3880] [app/chamados/services/disputa_emissao.py:403]
-
-   O teto é por instante do marco, inclusive para dia passado; não se pode inferir que esteja vencido apenas pela data. A janela `--comp-corrente` limita o universo do vigia e não escreve perguntas; `_pendentes_app` filtra perguntas já existentes e vivas para apresentação, não as cria. [app/chamados/services/fabrica_da_celula.py:35] [app/chamados/management/commands/disparar_perguntas_competencia.py:147] [app/chamados/services/tarefa_do_dia.py:530]
-
-   Há uma correção no enunciado: o próprio anexo mostra **col787 em 30/10 com dois marcos faltantes**, `inicio` e `int_volta`, e `hi` apagado; portanto não são 28 casos com exatamente um marco faltante. [não verificado: transcrição fornecida, sem arquivo:linha]
-
-3. **col878: a causa específica da luz não está demonstrada pelo recorte.** A sonda informa quatro papéis acesos e `intervalo.inicio=None`, `fim=None`, mas omite os campos completos `luz`, `tipo_real`, `dispensada` e `isencao` das lâmpadas da **ata**. Assim, não dá para afirmar reaproveitamento de batida nem absolvência para esse caso. [não verificado: transcrição fornecida, sem arquivo:linha]
-
-   O cartório acende normalmente a lâmpada a partir da célula alinhada; há também dispensa por ausência ou justificativa, que pode deixá-la acesa **sem luz**, e crédito por isenção. O alinhamento normal consome índices de batidas; a tolerância de 90 minutos é envelope de atribuição, não prova de uma mesma batida em dois papéis. É preciso a ata completa e os insumos do julgamento para escolher o ramo. [app/ponto/services/cartorio.py:680] [app/ponto/services/cartorio.py:781] [app/escala/utils.py:812] [app/escala/utils.py:585] [app/escala/utils.py:625]
-
-4. **Escritores e leitores.**
-
-   - `dna['lampadas']` contém **marcos esperados**, chave, tipo, hora e instante; o gerador não grava ali `acesa`. O estado `acesa` fica em **`CelulaDia.ata['lampadas']`**, produzido por `lampadas_do_dia` e lavrado pelo cartório; `leitor_celula` e `juiz_batida` o leem. [app/ponto/management/commands/gerar_celulas.py:63] [app/ponto/management/commands/gerar_celulas.py:103] [app/ponto/services/cartorio.py:599] [app/ponto/services/cartorio.py:1851] [app/escala/services/leitor_celula.py:114] [app/ponto/juiz_batida.py:157]
-   - `contexto_json['marcos_faltantes']`: `_abrir_chamado` o grava na abertura e `_espelhar_marcos` o atualiza; o agrupador de disputa e a grade estão entre os leitores. [app/ponto/management/commands/detectar_ausencias.py:694] [app/ponto/management/commands/detectar_ausencias.py:544] [app/chamados/services/disputa_emissao.py:1157] [app/escala/utils.py:1066]
-   - `PerguntaDisputa.motivo` é gravado no nascimento por `abrir`/`_nascer`; `via_resolucao` é atribuída pela porta de carimbo. **`estado` é propriedade calculada**, não coluna escrita: lê validação, materialização e o juiz de pergunta viva. [app/chamados/models.py:2534] [app/chamados/models.py:2889] [app/chamados/models.py:3131] [app/chamados/models.py:3216] [app/chamados/models.py:3151]
-
-O hash do HEAD não pôde ser confirmado: a cópia disponível não tem metadados Git acessíveis. **[não verificado]**
-
-_6967 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6969 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
