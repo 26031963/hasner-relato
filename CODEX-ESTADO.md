@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 05:39** · publicado em **18/11/2026 05:42** (UTC-3)
+> Ultima resposta processada: **18/11/2026 05:46** · publicado em **18/11/2026 05:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 05:46 · sessao 6801b2f64f9b · R1-REMEDE-1811 · sonda · origem=Code
+
+Transcrição da saída fornecida — origem e conteúdo independentes não verificados:
+
+```text
+sonda_leitura: script.py [972aacf9a2766647] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 5 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 107
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 597
+UNIVERSO_PARTE 11/2026 103
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 210 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 210 minutos_total 2.9 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1285, 'bate_ate_10min': 1215, 'esp_zero_e6_trabalho': 9, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 55, 'dia_batida_impar': 78, 'impar_que_BATE': 29, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 42, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 49, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1533, 'dia_isento_ou_ausencia': 275, 'dia_sem_trabalho_ambos': 45, 'esp_desconta_janela_declarada': 72, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1285 dias comparados
+[3] ESTRUTURA     3 dia-colab      29.2 h    3 colabs
+[3] CADASTRO     19 dia-colab      52.3 h    8 colabs
+[3] BATIDA       48 dia-colab     197.3 h   26 colabs
+[4] TOTAL divergentes 70
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=29.23270916666667|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=19|horas=52.325450786111105|colabs=8
+PARCIAL|10/2026|BATIDA|dias=48|horas=197.29829774694443|colabs=26
+PARCIAL_TOTAL|10/2026|dias=70|horas=278.856457699722205|colabs=29
+ESTIMATIVA processados 125 universo 210 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1236, 'bate_ate_10min': 1146, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 6, 'diverge_acima_60': 75, 'dia_batida_impar': 98, 'impar_que_BATE': 37, 'impar_que_DIVERGE': 61, 'impar_dentro_da_faixa': 52, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 61, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 206, 'dia_sem_lavratura_no_espelho': 1402, 'dia_isento_ou_ausencia': 227, 'dia_sem_trabalho_ambos': 38, 'esp_desconta_janela_declarada': 84, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 92.7% de 1236 dias comparados
+[3] ESTRUTURA     9 dia-colab      60.5 h    7 colabs
+[3] CADASTRO     31 dia-colab     104.1 h   11 colabs
+[3] BATIDA       50 dia-colab     255.3 h   25 colabs
+[4] TOTAL divergentes 90
+[5] colabs com divergencia: 35
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=9|horas=60.54144059916667|colabs=7
+PARCIAL|11/2026|CADASTRO|dias=31|horas=104.14722180555555|colabs=11
+PARCIAL|11/2026|BATIDA|dias=50|horas=255.3167716316666|colabs=25
+PARCIAL_TOTAL|11/2026|dias=90|horas=420.00543403638882|colabs=35
+TEMPO_SEGUNDOS 184.8
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 278619
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 34
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1955
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 8224
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 80
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 14
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 8043
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 5767
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 5767
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 350
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 193
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 505992
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 861
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3482
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 218
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 14496
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 171
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4379
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 199
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 28919
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3793
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 45361
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 21691
+SOMA 10/2026 70   <- tem de ser igual a soma das classes (70) True
+SOMA 10/2026 HORAS 278.856457699722205 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 90   <- tem de ser igual a soma das classes (90) True
+SOMA 11/2026 HORAS 420.00543403638882 True
+SOMA 11/2026 COLABS_UNIAO 35 True
+rc_sombra=0
+```
+
+As seis linhas **SOMA** estão marcadas como `True` no dado fornecido. Não aparece `INCOMPLETO` na saída fornecida. A execução e sua origem não foram verificadas independentemente. [não verificado]
+
+## 18/11 05:42 · sessao b42c501a0c3b · R1-REMEDE-1811 · sonda · origem=Code
+
+Saída da sonda, conforme o dado fornecido [nao verificado]:
+
+```text
+sonda_leitura: script.py [22b7b39d0d46bdd1] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 4 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 96
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 597
+UNIVERSO_PARTE 11/2026 94
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 190 minutos_total 2.6 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 190 minutos_total 2.6 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1235, 'bate_ate_10min': 1188, 'esp_zero_e6_trabalho': 6, 'e6_zero_esp_trabalho': 1, 'diverge_10_60': 5, 'diverge_acima_60': 35, 'dia_batida_impar': 54, 'impar_que_BATE': 21, 'impar_que_DIVERGE': 33, 'impar_dentro_da_faixa': 29, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 32, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1275, 'dia_isento_ou_ausencia': 315, 'dia_sem_trabalho_ambos': 18, 'esp_desconta_janela_declarada': 37, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.2% de 1235 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.6 h    3 colabs
+[3] CADASTRO     23 dia-colab     107.6 h    8 colabs
+[3] BATIDA       21 dia-colab      97.0 h   16 colabs
+[4] TOTAL divergentes 47
+[5] colabs com divergencia: 25
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.566319135833336|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=23|horas=107.60888681222221|colabs=8
+PARCIAL|10/2026|BATIDA|dias=21|horas=97.03832052916665|colabs=16
+PARCIAL_TOTAL|10/2026|dias=47|horas=220.213526477222196|colabs=25
+ESTIMATIVA processados 100 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 190 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 190 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1069, 'bate_ate_10min': 1036, 'esp_zero_e6_trabalho': 8, 'e6_zero_esp_trabalho': 0, 'diverge_10_60': 0, 'diverge_acima_60': 25, 'dia_batida_impar': 54, 'impar_que_BATE': 29, 'impar_que_DIVERGE': 25, 'impar_dentro_da_faixa': 21, 'impar_FORA_da_faixa': 4, 'impar_no_conjunto_do_dia': 24, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 188, 'dia_sem_lavratura_no_espelho': 1319, 'dia_isento_ou_ausencia': 280, 'dia_sem_trabalho_ambos': 27, 'esp_desconta_janela_declarada': 31, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.9% de 1069 dias comparados
+[3] ESTRUTURA     1 dia-colab       9.8 h    1 colabs
+[3] CADASTRO      4 dia-colab      16.4 h    2 colabs
+[3] BATIDA       28 dia-colab     170.3 h   13 colabs
+[4] TOTAL divergentes 33
+[5] colabs com divergencia: 15
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=1|horas=9.770812222222222|colabs=1
+PARCIAL|11/2026|CADASTRO|dias=4|horas=16.358279375833334|colabs=2
+PARCIAL|11/2026|BATIDA|dias=28|horas=170.27799270138888|colabs=13
+PARCIAL_TOTAL|11/2026|dias=33|horas=196.407084299444436|colabs=15
+TEMPO_SEGUNDOS 162.6
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 244200
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 605
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1215
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6259
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 50
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 1
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 36
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 7089
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 8
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 3
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3868
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3868
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 344
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 171
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 1246
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 453258
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 653
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3025
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 192
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13120
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 109
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4097
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 180
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 25134
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3863
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 40470
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 19410
+SOMA 10/2026 47   <- tem de ser igual a soma das classes (47) True
+SOMA 10/2026 HORAS 220.213526477222196 True
+SOMA 10/2026 COLABS_UNIAO 25 True
+SOMA 11/2026 33   <- tem de ser igual a soma das classes (33) True
+SOMA 11/2026 HORAS 196.407084299444436 True
+SOMA 11/2026 COLABS_UNIAO 15 True
+rc_sombra=0
+```
+
+As seis linhas **SOMA** estão marcadas como `True`. Não há ocorrência de `INCOMPLETO` na saída fornecida. [nao verificado]
 
 ## 18/11 05:39 · sessao 9e4f22a34972 · R1-REMEDE-1811 · sonda · origem=Code
 
@@ -745,63 +917,4 @@ Censo enviado ao agente principal, com os sítios de chamada, as condições de 
 
 Censo e referências enviados ao agente principal.
 
-## 17/11 23:26 · sessao 7077c8d192be · - · - · origem=Ronald (tmux)
-
-Censo das fixtures enviado ao agente principal, com referências e distinção entre competência simulada, competência exportada criada e situações não verificadas.
-
-## 17/11 23:16 · sessao 387262c5dc06 · S6-INTERMITENTE-FERIADO-CURA-A · censo · origem=Code
-
-**Achado para o topo do brief: SIM — o calculador decide uma rubrica de dobra para intermitente por conta própria.** O caminho `regras.do_dia` deixa o intermitente seguir para a regra normal e, havendo minutos trabalhados e entradas de feriado/CCT, pode lançar toda a jornada em HE 100. Essa apuração é gravada na versão `oraculo` de `DiaPago`; os leitores de exportação encontrados filtram a versão `motor`. Portanto, a decisão independente está no código, mas **efeito no TXT de produção por esse caminho: [não verificado]**. Pelo critério do item 1 do aval fornecido, o construtor **não abre** até o achado ser tratado. [app/ponto/calculador/regras.py:661](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:661) [app/ponto/calculador/regras.py:779](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:779) [app/ponto/services/fechamento.py:1265](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/fechamento.py:1265) [app/ponto/services/fechamento.py:1294](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/fechamento.py:1294) [app/folha/porta_export.py:284](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/folha/porta_export.py:284)
-
-A identificação do intermitente não é uniforme: a fábrica escolhe `MotorIntermitente` quando **`tipo_ciclo` ou `tipo_base`** é `intermitente`; a guarda de folga do motor e a alimentação do calculador consultam **`tipo_ciclo`**. Um cadastro com base e ciclo diferentes precisa, portanto, ser distinguido do caso em que ambos são intermitentes. [app/ponto/motor_calculo_v2.py:2365](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:2365) [app/ponto/motor_calculo_v2.py:3647](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3647) [app/ponto/calculador/alimentacao.py:497](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/alimentacao.py:497)
-
-**Escritores no motor e subclasses**
-
-| Campo | Escritor | Efeito |
-|---|---|---|
-| `self.feriados` | [motor_calculo_v2.py:790](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:790), `MotorBase.__init__` | Cria conjunto a partir da entrada. |
-| `self._feriados_injetados` | [motor_calculo_v2.py:795](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:795), `MotorBase.__init__` | Guarda a identidade do conjunto, ou `None`. |
-| `self.feriados` | [motor_calculo_v2.py:3581](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3581), `MotorIntermitente.__init__` | Substitui-o por outro conjunto vazio. |
-
-Quando a identidade deixa de coincidir, `eh_feriado` pode cair em `is_feriado`; isso explica o mecanismo descrito no dado fornecido, sem confirmar o caso de produção por banco ou log. [app/ponto/motor_calculo_v2.py:956](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:956) **Caso col830 e seus 713 minutos: [não verificado]**, além do relato fornecido.
-
-**Chamadas no motor**
-
-São sete chamadas literais de `self.eh_feriado`; há também a chamada de módulo `eh_feriado(data, praca)` dentro do fallback `is_feriado`, que é distinta dessas sete. [app/ponto/motor_calculo_v2.py:30](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:30)
-
-| Chamada | Método e classe que a contém | Pode executar com `MotorIntermitente`? |
-|---|---|---|
-| [linha 934](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:934) | `MotorBase._feriado_dobra_no_dia` | **SIM**, herdado e chamado pelo cálculo de período. |
-| [linha 1449](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1449) | `MotorBase._dia_sem_previsto_fora_da_janela` | **SIM**, herdado pelo cálculo mensal. |
-| [linha 2796](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:2796) | `Motor12x36.calcular_periodo` | **SIM**, herdado. |
-| [linha 3082](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3082) | `MotorTurnoPartido.calcular_mes` | **NÃO**, não pertence à hierarquia de `MotorIntermitente`. |
-| [linha 3170](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3170) | `MotorTurnoPartido.calcular_mes` | **NÃO**, pela mesma hierarquia. |
-| [linha 3264](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3264) | `MotorComercial.calcular_periodo` | **NÃO**, não pertence à hierarquia de `MotorIntermitente`. |
-| [linha 3343](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3343) | `MotorComercial.calcular_mes` | **NÃO**, pela mesma hierarquia. |
-
-A herança é declarada em [motor_calculo_v2.py:3569](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3569); a chamada mensal ao bloqueio está em [motor_calculo_v2.py:2461](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:2461).
-
-**Leitores depois do motor**
-
-| Leitor | Arquivo:linha | Fonte do feriado | Decide dinheiro? | Alcança intermitente? |
-|---|---|---|---|---|
-| Fechamento mensal: rubricas do resultado | [fechamento.py:919](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/fechamento.py:919) | Campos de `resultado` do motor. | **NÃO** nesse trecho: copia os valores apurados. | **SIM**, pelo motor escolhido por base ou ciclo. |
-| Fechamento: partição de folga em feriado | [fechamento.py:933](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/fechamento.py:933) | `periodos_ft` do motor e `feriado_vira_folga`, que consulta `core.feriados`. | **SIM** em geral: promove minutos para rubrica HE 100 feriado. | Para `tipo_ciclo=intermitente`, a guarda de folga do motor exclui esse ciclo; para `tipo_base=intermitente` com outro ciclo, **[não verificado]**. [motor_calculo_v2.py:2447](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:2447) [escala/models.py:1392](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/escala/models.py:1392) |
-| Calculador `regras.do_dia` | [regras.py:779](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:779) | Conjunto passado pela alimentação; `_ContextoFeriado` empresta `MotorBase.eh_feriado`, com `_feriados_injetados=None` e fallback `is_feriado`. [regras.py:287](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:287) | **SIM**: calcula HE 100 de feriado. | **SIM**: a alimentação identifica por ciclo e passa `intermitente`, mas a regra da dobra não o exclui. A saída encontrada é `oraculo`. [alimentacao.py:521](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/alimentacao.py:521) |
-| Calculador por período | [periodo.py:831](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/periodo.py:831) | `cct.feriados` e `cct.feriado_em_dobra`; a CCT pode ser extraída dos atributos do motor. [nucleo.py:347](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/nucleo.py:347) | **SIM**: escreve minutos de HE 100 quando a dobra responde positiva. | Alcance em fluxo de produção de intermitente: **[não verificado]**. |
-| Espelho | [espelho.py:860](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/espelho.py:860) | `feriados_do_colab`, separado do resultado do motor. [espelho.py:1027](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/espelho.py:1027) | **NÃO** nesse campo: marca o dia; as pendências são traduzidas do resultado do motor. | **SIM**; não há identificação específica de intermitente nesse campo. |
-| Cartão/PDF | [pdf_espelho.py:870](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/relatorios/pdf_espelho.py:870) | `dia['feriado']` do espelho. | **NÃO**: desenha o indicador. | **SIM**; sem identificação específica nesse leitor. |
-| TXT Domínio | [export.py:420](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/folha/export.py:420) | Campo `horas_extras_100_feriado` do fechamento e cláusula de CCT. | **SIM em geral**: suprime a parcela para ciclo `12x36` sem cláusula; para ciclo `intermitente`, emite o valor apurado sem essa supressão. | **SIM**, identificado por `tipo_ciclo` do vínculo de referência, não pela classe do motor. [export.py:341](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/folha/export.py:341) Para base intermitente com ciclo `12x36`, a supressão pode alcançar o valor. |
-| Régua CCT | [regua_cct.py:473](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/core/regua_cct.py:473) | Cadastro da cláusula, não a pergunta se uma data é feriado. | **NÃO depois do motor**: configura `feriado_em_dobra` antes de criá-lo; a cláusula especial é para ciclo `12x36`. | **SIM**, pela fábrica; identifica a cláusula pelo ciclo. |
-| Gestão de HE | [gestao_he.py:8](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/gestao_he.py:8) | Retrato da pendência derivado do resultado do motor, não consulta de feriado própria. | **NÃO** na listagem: lê pendência e dinheiro lavrado. A decisão humana passa pela porta e pode provocar recálculo. [portas/he.py:212](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/portas/he.py:212) | **SIM**; sem filtro específico de intermitente evidenciado no leitor citado. |
-| Status do dia | [status_dia.py:180](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/status_dia.py:180) | Fatos de precedência, abastecidos por `feriados_do_colab`. [precedencia.py:330](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/precedencia.py:330) | **NÃO** nas linhas examinadas: classifica o status como folga, entre outros. [status_dia.py:308](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/status_dia.py:308) | **SIM** como colaborador; identificação específica de intermitente nesse caminho: **[não verificado]**. |
-
-**Bloqueio L-097 e a lista.** O bloco exige folga ou feriado, empresa dentro da janela, previsto igual a zero e ausência de autorização; há ainda a exceção de folga sem escala certa. Quando bloqueia, soma os minutos fora da janela, zera campos do período, colapsa a saída efetiva e acrescenta `{dia, minutos, hora}` à lista publicada no resultado. [motor_calculo_v2.py:1448](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1448) [motor_calculo_v2.py:1471](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1471) [motor_calculo_v2.py:2720](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:2720)
-
-Fora do motor, o fechamento **concatena** a lista entre fatias; o espelho a traduz em pendência `sentido='dia'`; o retrato de HE registra minutos e estado para a Gestão; e o calculador a usa para reconhecer o par bloqueado e visitar o dia com zero na saída `oraculo`. [fechamento.py:96](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/fechamento.py:96) [espelho.py:743](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/espelho.py:743) [he_pendente_lavrado.py:132](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/services/he_pendente_lavrado.py:132) [alimentacao.py:73](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/alimentacao.py:73) [alimentacao.py:459](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/alimentacao.py:459)
-
-A árvore recebida não contém metadados Git acessíveis; correspondência do conteúdo com o **HEAD do main e o hash informado: [não verificado]**.
-
-**perguntas de lei: 1 (a dobra, item 5)** — sem decisão neste censo. O tratamento da decisão independente na versão `oraculo` e dos cadastros com `tipo_base` e `tipo_ciclo` divergentes fica registrado como questão de alcance técnico; se exige outra decisão de lei, **[não verificado]**.
-
-_6771 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6773 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
