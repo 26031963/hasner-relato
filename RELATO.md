@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: suite.sh | pid=1578643
+ESPERANDO: suite.sh | pid=1648399
+E4C-F1-B2 22:42: suite INTEIRA @9057ce4e0 VERMELHA -- Ran 16632, failures=17 errors=1 (chamados pep_reentrada/o168/fila_v2_2/reconciliar, ponto chokepoint, core diagrama); triagem do log em agente sonnet (branch x nao-branch); opus final segura.
+PORTA-ESTADO-NA-TELA 22:42 @6fe59075c (c3, rotulos): vizinhos 99 OK rc=0; suite INTEIRA rodando (logs/PORTA-EXPORT/v7/suite_inteira_c3.log).
 E4C-F1-B2 22:15: ver2 Codex limpo (4 NAO PROCEDE, amostra fio.py:1081 conferida); suite INTEIRA da copia @9057ce4e0 rodando (logs/E4C/f1nova/b2/cerca/c2b/suite_inteira_9057ce4e0.log; test_selo_b2_cerca_15_sitios.py nao rastreado guardado no scratchpad, fora da arvore certificada); depois opus final.
 PORTA-ESTADO-NA-TELA v7 c2 22:15 @57bb479c9: ver1 Codex 3/4/5 PROCEDEM -- tentativa nao vigente sai SEM VEREDITO (mesma causa do assumir->None), motivo 'nao pegou a trava ate o prazo de assumir', Rk afirma o hx-get inteiro; 71 OK rc=0, mutantes m1/m2 FAILED; ver2 (22:18) 2 PROCEDENTES de rotulo: SEM VEREDITO/VERMELHO afirmavam outro processo/vigia sem prova -> 'o estado delas e o que o registro da porta tiver' (triagem_ver2.md); vizinhos na fila da trava atras da suite B2. Postmortem v6: (a) 5, triagem-sem-linha 2, (e) 2, (c) 1, (d) 0 (postmortem/tabela.md).
 PORTA-ESTADO-NA-TELA v7 22:09: opus final v6 REPROVA (2 BLOQUEIA, logs/PORTA-EXPORT/v6/opus_final.md) curada na copia @179509b84 -- job do clique sem medir sai VERMELHO rc 2 (Rj x3 RED FAILED 3 -> 71 OK rc=0), preview com o bloco do estado (Rk, mutante FAILED); Codex verificador ver1 rodando.
