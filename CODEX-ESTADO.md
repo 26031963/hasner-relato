@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 12:47** · publicado em **18/11/2026 12:47** (UTC-3)
+> Ultima resposta processada: **18/11/2026 12:56** · publicado em **18/11/2026 12:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 12:56 · sessao 03b37b05405b · EFEITOS-REAIS-1811 · leitura · origem=Code
+
+1. **Escritor:** `dia_pago.lavrar` grava o `DiaPago`; na versão do motor, soma `PeriodoCalculo.minutos_intrajornada_indenizada / 60`. Há também caminho opcional em que rubricas do calculador substituem o valor: [dia_pago.py:135](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:135), [dia_pago.py:186](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:186), [dia_pago.py:312](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:312), [dia_pago.py:345](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:345). No motor contínuo, jornada superior a seis horas gera indenização pelo mínimo menos a pausa reconhecida, zerada se a supressão for até dez minutos; o mínimo é cadastro ou piso, o maior, salvo perfil específico: [motor_calculo_v2.py:1805](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1805), [motor_calculo_v2.py:2750](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2750), [motor_calculo_v2.py:3239](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:3239). Duas batidas ou marca na célula **não são requisitos para indenizar**; um par reconhecido pode reduzir a pausa suprimida: [turnos.py:542](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:542), [motor_calculo_v2.py:1892](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1892).
+
+2. **Depende do caso:** valida o par inteiro se a metade isolada quebraria a paridade e a irmã respondida passar os testes do par; se não, tenta materializar só a metade solicitada. A irmã permanece respondida quando não é validada por esse ramo; a varredura posterior seleciona apenas perguntas já validadas: [validacao.py:613](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:613), [validacao.py:769](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:769), [materializacao.py:189](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:189), [materializacao.py:2091](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:2091). Existe guarda contra vizinha imediata do mesmo tipo, com exceções e possibilidade de gravar o par: [materializacao.py:95](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:95), [materializacao.py:1373](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1373). O lote **não exclui `intervalo_volta` por motivo**: as duas views chamam a mesma validação, que aceita as referências classificadas A segundo hora, marco e conflito: [views_cobrar.py:263](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/views_cobrar.py:263), [views_cobrar.py:383](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/views_cobrar.py:383), [validacao.py:1067](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:1067), [validacao.py:1177](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:1177).
+
+3. **Sim, pode tratar como interna**, apesar de `is_intervalo=False`: o pareador pode derivar o papel pela ata ou pela proximidade dos marcos; isso não prova uma pausa completa: [ponto/models.py:26](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:26), [turnos.py:1310](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:1310), [turnos.py:1356](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:1356). Com `E, S-int, S-fim`, o par de pausa reconhecido pode ficar vazio; o **motor** decide a supressão a partir dos intervalos fornecidos pelo pareador, conforme os predicados do item 1: [turnos.py:542](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:542), [motor_calculo_v2.py:2764](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2764).
+
+4. **Não foi encontrado esse caminho sem batida.** O BACKLOG registra `INTERVALO-DECLARADO` como “nada construído”; no caminho de resposta de hora examinado, a materialização exige fato de batida e o motor consome intervalos reconhecidos pelo pareador: [BACKLOG.md:1622](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/BACKLOG.md:1622), [materializacao.py:1920](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1920), [motor_calculo_v2.py:1892](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1892). Ausência de **qualquer outro caminho** em todo o código: **[não verificado]**.
+
+5. **Exceções — ramo correspondente na cópia, sem afirmar a execução histórica exata:**
+   - **col219 13/11:** `paridade_recusada` corresponde à vizinha de mesmo tipo com marco cobrado aceso; a devolução ocorre para resposta de hora sem materialização e com motivo de recusa, limpando a validação e registrando o ato. O motivo raspado das duas devoluções não permite identificar sua causa específica: [materializacao.py:1411](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1411), [materializacao.py:1437](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1437), [validacao.py:261](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:261).
+   - **col908 08/11:** a volta isolada pode ser materializada como declaração quando passa as guardas; a saída não validada não entra na varredura de materialização: [validacao.py:769](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:769), [materializacao.py:1474](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1474), [materializacao.py:1968](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1968).
+   - **col171 27/10, col947 06/11 e col1024 04/11:** `celula_absolveu` corresponde ao reconciliador que consulta `pergunta_viva`, exclui dia trancado e carimba pela porta: [reconciliador.py:628](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/reconciliador.py:628), [reconciliador.py:689](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/reconciliador.py:689). A célula e o código **no instante histórico** de cada carimbo: **[não verificado]**.
+
+6. **Escrita e leitura:** `estado` é propriedade calculada, não campo gravado; lê validação, materialização, vitalidade e resposta: [models.py:3151](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3151). `validada_em` é gravada na validação e pode ser limpa na devolução; também pode ser preenchida por `carimbar(..., resposta='validar')`: [validacao.py:161](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:161), [validacao.py:269](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:269), [models.py:3248](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3248). `via_resolucao` e `materializada_em` são escritos juntos pela porta de carimbo e lidos, por exemplo, pelo estado e pela seleção de materialização: [models.py:3216](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3216), [models.py:3287](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3287), [materializacao.py:2091](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:2091). A origem retro é passada ao registrador e `pergunta_origem` é vinculada depois, inclusive em reuso; a procedência lê ambos: [materializacao.py:1474](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1474), [materializacao.py:1524](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1524), [procedencia_batida.py:62](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/procedencia_batida.py:62).
+
+**Ressalva sobre o anexo:** o texto raspado mostra col993 com volta `pendente` e col996 sem pergunta de volta listada; portanto a contagem afirmada de 16 dias com irmã `respondida` não foi confirmada pela transcrição. **[não verificado]** A identidade Git da cópia também não pôde ser conferida: não há metadados Git disponíveis. **[não verificado]**
 
 ## 18/11 12:47 · sessao e36752fddc88 · EVAL-NOTURNO-SEM-VEREDITO · verificador · origem=Code
 
@@ -715,116 +734,4 @@ A nova 1(d) declara conservação, medição e registro; não determina escrita 
 
 Investigação de `app/folha` enviada ao agente principal, com as quatro consultas diretas, seus filtros e destinos, e a distinção entre a leitura de `DiaPago` e a geração do TXT a partir de `FechamentoMensal`.
 
-## 18/11 11:40 · sessao 2f15d4625b3b · DST-L1-B-MEDIDA · sonda · origem=Code
-
-**A premissa de que o pareador devolve zero para todos esses dias não confere.** Nas 65 linhas `DIA` com `n_bat >= 2`, ele devolve minutos positivos em **58** e zero em **7**. Nos 58 positivos, a ata traz o mesmo número e `DiaPago.minutos_realizados` aparece como `0,0`; nos outros sete, pareador e ata são zero, mas o DiaPago é `0,0` em três e `None` em quatro. Os valores e a contagem abaixo vêm exclusivamente das linhas `DIA` fornecidas; elas não têm arquivo:linha, portanto são marcadas **[não verificado em arquivo]**.
-
-A cópia consultada está no diretório informado, mas o diretório não contém metadados Git para confirmar o hash por `git rev-parse`. **[não verificado]**
-
-## 1. Os três números, por dia
-
-Nas primeiras tabelas, **A = primeiro elemento de `realizado_do_dia`**, **B = `ata_min_real`** e **C = `diapago_min_real`**. Todas as datas são de 2026. Os valores são a transcrição da saída fornecida **[não verificado em arquivo]**.
-
-| Colaborador | Data | A e B, minutos | C |
-|---|---:|---:|---:|
-| col55 | 11/11 | 68 | 0,0 |
-| col61 | 08/11 | 718 | 0,0 |
-| col114 | 02/11 | 439 | 0,0 |
-| col114 | 15/11 | 499 | 0,0 |
-| col123 | 05/11 | 722 | 0,0 |
-| col137 | 16/11 | 685 | 0,0 |
-| col198 | 08/11 | 721 | 0,0 |
-| col203 | 02/11 | 425 | 0,0 |
-| col203 | 15/11 | 427 | 0,0 |
-| col206 | 09/11 | 501 | 0,0 |
-| col206 | 16/11 | 515 | 0,0 |
-| col237 | 07/11 | 725 | 0,0 |
-| col242 | 02/11 | 423 | 0,0 |
-| col270 | 22/10 | 420 | 0,0 |
-| col270 | 29/10 | 420 | 0,0 |
-| col278 | 02/11 | 423 | 0,0 |
-| col278 | 15/11 | 440 | 0,0 |
-| col281 | 08/11 | 723 | 0,0 |
-| col282 | 01/11 | 724 | 0,0 |
-| col328 | 22/10 | 60 | 0,0 |
-| col331 | 17/11 | 684 | 0,0 |
-| col334 | 16/11 | 209 | 0,0 |
-| col364 | 08/11 | 725 | 0,0 |
-| col373 | 21/10 | 361 | 0,0 |
-| col373 | 23/10 | 362 | 0,0 |
-| col398 | 07/11 | 720 | 0,0 |
-| col399 | 31/10 | 722 | 0,0 |
-| col424 | 24/10 | 715 | 0,0 |
-| col444 | 25/10 | 579 | 0,0 |
-| col476 | 02/11 | 447 | 0,0 |
-| col489 | 09/11 | 419 | 0,0 |
-| col617 | 02/11 | 420 | 0,0 |
-| col627 | 21/10 | 665 | 0,0 |
-| col634 | 27/10 | 689 | 0,0 |
-| col696 | 22/10 | 556 | 0,0 |
-| col696 | 24/10 | 564 | 0,0 |
-| col741 | 15/11 | 718 | 0,0 |
-| col835 | 15/11 | 720 | 0,0 |
-| col843 | 07/11 | 662 | 0,0 |
-| col845 | 06/11 | 567 | 0,0 |
-| col849 | 04/11 | 251 | 0,0 |
-| col864 | 02/11 | 409 | 0,0 |
-| col899 | 01/11 | 122 | 0,0 |
-| col913 | 25/10 | 661 | 0,0 |
-| col932 | 26/10 | 386 | 0,0 |
-| col935 | 13/11 | 660 | 0,0 |
-| col936 | 15/11 | 314 | 0,0 |
-| col944 | 02/11 | 275 | 0,0 |
-| col950 | 15/11 | 629 | 0,0 |
-| col985 | 02/11 | 241 | 0,0 |
-| col996 | 02/11 | 781 | 0,0 |
-| col998 | 26/10 | 366 | 0,0 |
-| col1001 | 02/11 | 442 | 0,0 |
-| col1001 | 15/11 | 442 | 0,0 |
-| col1012 | 12/11 | 721 | 0,0 |
-| col1012 | 16/11 | 430 | 0,0 |
-| col1045 | 14/11 | 659 | 0,0 |
-| col1045 | 16/11 | 658 | 0,0 |
-
-| Colaborador | Data | A | B | C |
-|---|---:|---:|---:|---:|
-| col130 | 30/10 | 0 | 0 | `None` |
-| col227 | 03/11 | 0 | 0 | `None` |
-| col250 | 07/11 | 0 | 0 | `None` |
-| col451 | 22/10 | 0 | 0 | 0,0 |
-| col451 | 15/11 | 0 | 0 | 0,0 |
-| col515 | 28/10 | 0 | 0 | `None` |
-| col999 | 25/10 | 0 | 0 | 0,0 |
-
-**Onde os números chegam a zero:**
-
-- **A, nos sete casos:** `realizado_dos_turnos` seleciona somente turnos cujo `data_turno` é a data consultada. O total começa em zero; um turno sem fim fechado é ignorado e o total é devolvido. Para esses sete, a saída mostra turno do próprio dia aberto e sem `fim_fechado`; as batidas anteriores pertencem a turno com `data_turno` anterior. Em col451 de 22/10, esse turno anterior também não tem entrada. Não há evidência, nesses sete, de que `bruto <= 0` tenha sido a causa. [turnos.py:609](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:609), [turnos.py:719](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:719), [turnos.py:733](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:733); dados da sonda **[não verificado em arquivo]**.
-- **B:** o montador passa para a grade o resultado do pareador, convertendo `sem_turno` em zero; `ata_do_dia` copia esse número para a ata com `int(... or 0)`. Nos sete da tabela, a saída mostra `sem_turno=False` e A=0, de modo que B acompanha esse zero. [utils.py:2045](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/utils.py:2045), [cartorio.py:730](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/cartorio.py:730); dados da sonda **[não verificado em arquivo]**.
-- **C:** `por_dia_da_grade` exclui `tipo_dia='folga'` do mapa de realizado; quando outra rubrica cria a linha do dia, `lavrar` a inicia com os campos em `0,0`, sem receber contribuição desse mapa. Portanto esse zero é do **relógio de grade do DiaPago**, e não prova que o pareador foi zero nem que todas as rubricas do DiaPago foram zero. O caminho de retrato também atribui `real.get(d) or 0` às linhas que retrata. Qual caminho gravou cada linha da sonda **[não verificado]**. [dia_pago.py:167](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:167), [dia_pago.py:285](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:285), [dia_pago.py:386](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:386), [dia_pago.py:464](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:464).
-
-O agrupamento observável soma **58 + 7 = 65**: 58 com A/B positivos e C zero; sete com A/B zero por turno do dia sem fim fechado, dos quais três têm C zero e quatro `None`. `None` não deve ser contado como zero. **[não verificado em arquivo: linhas da sonda]**
-
-O fato de `trabalha` e `tipo_dia` não serem sinônimos também aparece em **col741, 15/11**: `trabalha=True`, `tipo_dia='folga'`, A/B=718 e C=0,0. O filtro de C usa `tipo_dia`. [dia_pago.py:386](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:386); linha da sonda **[não verificado em arquivo]**.
-
-## 2. Escritores e leitores
-
-- **A — retorno do pareador:** `realizado_do_dia` delega a `realizado_dos_turnos`; o montador da grade o usa para formar o dia e o serviço de espelho o consulta para preencher `minutos_realizados` e `realizado_h`. A tela de espelho usa `realizado_h` também para mostrar parcial de dia aberto. [turnos.py:774](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:774), [utils.py:2045](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/utils.py:2045), [espelho.py:675](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:675), [espelho.html:187](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/templates/ponto/espelho.html:187).
-- **B — ata da célula:** o cartório monta `ata.minutos_realizados` a partir do dia da grade e usa a porta da célula na lavratura; `leitor_celula` lê a ata mesmo quando o tipo é folga. O PDF de validação soma diretamente os minutos de **todas** as atas encontradas, sem filtro de folga: portanto há, sim, leitor de produção de B nesses dias, como referência de conferência. [cartorio.py:730](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/cartorio.py:730), [cartorio.py:1437](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/cartorio.py:1437), [leitor_celula.py:397](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/services/leitor_celula.py:397), [validacao_pdf.py:29](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/validacao_pdf.py:29).
-- **C — DiaPago:** o fechamento obtém os mapas da grade e os passa a `lavrar`; o retrato de competência exportada é outro caminho que atualiza esses campos. Para o cálculo de percentual da folha, o fallback da grade seleciona trabalho e ausência, excluindo folga; o espelho usa também outras rubricas do DiaPago para o pago do dia. [fechamento.py:1060](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1060), [fechamento.py:1200](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1200), [dia_pago.py:464](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:464), [export.py:1095](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:1095), [espelho.py:801](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:801).
-
-## 3. A porta de HE
-
-**A porta existente aceita um número positivo fornecido pelo chamador, mas isso sozinho não prova que ela resolveria cada dia pela tela nem qual valor seria pago.** Ela exige estado `AUTORIZADO` ou `NAO`, permissão `autorizar_he`, data válida e minutos convertíveis para inteiro e maiores que zero; para autorizar, exige motivo de pelo menos 10 caracteres. Não há nessa função guarda específica que recuse `tipo_dia='folga'` ou `trabalha=False`. Uma decisão vigente igual retorna `no_op`; caso contrário `_gravar` cria ou atualiza a decisão e tenta registrar trilha, e a porta agenda recálculo por evento. [he.py:37](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:37), [he.py:44](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:44), [he.py:159](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:159), [he.py:195](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:195).
-
-A view recebe `minutos` do formulário; a porta **não recalcula nem confirma** que sejam os minutos do pareador. A tela de gestão obtém a pendência somando `he_fora_da_janela`; o espelho forma essa lista com pontas e com os dias sem previsto publicados pelo motor, quando a janela de HE está ativa. `estado_por_dia` lê as decisões vigentes, não calcula minutos. A saída fornecida não inclui a lista `he_fora_da_janela`, a configuração da janela, a escala certa ou os minutos do motor para cada caso. [views.py:512](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:512), [he_pendente_lavrado.py:68](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:68), [espelho.py:720](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:720), [gestao_he.py:63](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:63); dados ausentes **[não verificado]**.
-
-No motor, para o caso abrangido de folga ou feriado, previsto zero, empresa dentro da janela e escala certa quando aplicável, a ausência de autorização faz o período calculado ser bloqueado e publicado como pendência; uma decisão vigente `autorizado` faz o motor sair antes desse bloqueio. Isso **não escreve os minutos da decisão no pagamento**: o motor recalcula os períodos, e o fechamento classifica folga com escala certa em `horas_folga_trabalhada`, feriado aplicável em `horas_extras_100`, e folga sem escala certa em trabalhadas. O recálculo é agendado após commit e pode falhar; o resultado efetivo em cada dia não está na sonda. [motor_calculo_v2.py:1397](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1397), [motor_calculo_v2.py:1440](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1440), [motor_calculo_v2.py:1471](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1471), [fechamento.py:933](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:933), [fechamento.py:1798](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1798).
-
-**Classificação dos 65 dias com o minuto A da tabela como argumento direto da porta:**
-
-- **58 dias positivos**, exatamente as 58 linhas da primeira tabela: passam **a guarda numérica** de `minutos > 0`, condicionados às demais exigências da porta. Se a tela existente oferece esses minutos, se o motor os identifica como pendência e se a autorização produziria pagamento naquele valor: **[não verificado]**. [he.py:175](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:175).
-- **Sete dias zero**, exatamente as sete linhas da segunda tabela: **não passam** com A=0, pois a porta recusa minutos `<= 0`. O motivo do zero do pareador é o turno do dia sem fim fechado, após a seleção por `data_turno`, conforme descrito acima. [he.py:186](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:186), [turnos.py:719](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:719).
-
-Assim, **58 passam a condição numérica e sete não passam; a utilidade efetiva da porta por dia permanece não verificada** com os dados fornecidos. A decisão autorizada pode liberar o bloqueio do motor nas condições descritas, sem escritor novo, mas não transforma automaticamente `DiaPago.minutos_realizados` de folga no número A: esse campo continua vindo do mapa da grade que exclui folga. [he.py:229](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/portas/he.py:229), [dia_pago.py:386](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:386).
-
-_6946 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6947 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
