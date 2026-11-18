@@ -1,7 +1,229 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 13:49** · publicado em **18/11/2026 13:49** (UTC-3)
+> Ultima resposta processada: **18/11/2026 13:53** · publicado em **18/11/2026 13:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 13:53 · sessao 9e7ece3f7811 · LAUDO-[nome]-1811-1340 · sonda · origem=Code
+
+O retrato de col830 foi calculado em **18/11/2026 às 04:37:31,642334, UTC−3**. A hora do pouso da S6 e a ordem entre os dois eventos estão **[não verificado]**. (DADO RASPADO, linha `col830 retrato_calculado_em`; hora da S6: [não verificado]) [nao verificado]
+
+- **Retrato de 15/11:** `sem_decisao`, 713 minutos, com uma ponta às 06:50, `marco=None`, `sentido=dia` e 713 minutos. (DADO RASPADO, linha `col830 retrato_dia`)
+- **DecisaoHE:** a consulta retornou lista vazia para o dia. (DADO RASPADO, linha `col830 decisoes`)
+- **Batidas apuráveis na data local:** 06:50:03,757330 e 18:53:09,580000, ambas em UTC−3. (DADO RASPADO, linha `col830 batidas_apuraveis_data_local`)
+- **Espelho:** `he_fora_da_janela=[]` e zero minutos. (DADO RASPADO, linha `col830 espelho_dia`)
+- **Lavratura dry:** a sonda reproduziu o critério de inclusão e apontou `entra=False`, sem minutos; o estado do dry completo permanece **[não verificado]**. O comando sem `--apply` é dry, mas a sonda não executou o comando completo. (DADO RASPADO, linha `col830 dry_inclusao_dia`; anexo `laudo2_d_leitura.r`, seção 3; [lavrar_he_pendente.py:25](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:25); [he_pendente_lavrado.py:132](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:132))
+
+Se a Gestão enviar os **713 minutos** do retrato e as validações passarem, a porta gravará `DecisaoHE` autorizada com `minutos_na_decisao=713` e origem `admin`: ela recebe os minutos do formulário e não os recalcula. A lista vazia observada é a situação no momento da sonda; uma decisão vigente igual no momento do ato faria a porta retornar sem alterar a foto. ([gestao_he.py:270](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/gestao_he.py:270); [gestao_he.html:256](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/ponto/gestao_he.html:256); [he.py:159](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:159); [he.py:195](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:195))
+
+O motor carrega **data e estado**, não a foto de 713 minutos. A autorização pode alterar o cálculo quando as condições dos cortes ou do bloqueio de dia sem previsto se aplicam; **se ela mudaria o valor deste dia ou moveria dinheiro está [não verificado]** com o dado fornecido. ([motor_calculo_v2.py:1397](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1397); [motor_calculo_v2.py:1448](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1448); [motor_calculo_v2.py:1691](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1691); [motor_calculo_v2.py:1733](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1733))
+
+**Dono L-099: [não verificado].** O material mostra a divergência entre retrato e espelho, mas não estabelece a hora da S6 nem a causa dessa divergência. (DADO RASPADO, linhas `col830 retrato_dia` e `col830 espelho_dia`; causa e hora da S6: [não verificado])
+
+## 18/11 13:51 · sessao 266cc9c807c3 · LAUDO-[nome]-1811-1340 · sonda · origem=Code
+
+A sonda terminou com os três marcadores esperados, `FIM_SONDA_ENVELOPE` e `rc_sombra=0`; não há traceback no dado fornecido. [dado raspado, linhas 11, 18, 25–27]
+
+Para localizar as referências abaixo, conto as linhas a partir de `sonda_leitura` como linha 1, incluindo a linha em branco seguinte. [dado raspado, linhas 1–3]
+
+A sonda recalculou o motor em leitura para a competência 11/2026 e agrupou os dias com minutos positivos de intrajornada e escala com `intervalo_indenizavel=False`, pela quantidade de batidas apuráveis. A flag `False`, por si só, não comprova que todos esses dias tenham intervalo **pre-assinalado**; a sonda não apresentou a modalidade da escala. [dado raspado, anexo `laudo2_c_leitura.r`: código de `linha_motor` e do censo; `pre-assinalado`: não verificado]
+
+| Batidas apuráveis | Dias | Minutos do motor |
+|---|---:|---:|
+| 2 | 335 | 20.264,00 |
+| 3 | 169 | 10.444,00 |
+| 4 ou mais | 216 | 6.196,86 |
+| **Subtotal pedido** | **720** | **36.904,86** |
+
+Os valores da tabela são os emitidos pela sonda; o subtotal é a soma das três linhas. [dado raspado, linhas 6–8] A sonda encontrou ainda **1 dia com uma batida e 60,00 minutos**, nenhum com zero batidas, nenhum dia sem escala e zero erros de colaboradores; incluindo a classe de uma batida, são **721 dias e 36.964,86 minutos**. [dado raspado, linhas 4–10]
+
+- **col868, 14/11:** confirmados 2 batidas apuráveis, 60 minutos no motor, flag `False` e 60 minutos em `DiaPago`. A pergunta consultada como 39550 retornou `mesma_pessoa=False`, com evento e célula em 03/10; portanto, não confirma associação dessa pergunta ao caso. [dado raspado, linhas 12–14; anexo `laudo2_c_leitura.r`, tupla de conferência]
+- **col934, 15/11:** confirmados 2 batidas apuráveis, 60 minutos no motor, flag `False` e 60 minutos em `DiaPago`. A pergunta consultada como 39556 também retornou `mesma_pessoa=False`, com evento e célula em 03/10; portanto, não confirma associação dessa pergunta ao caso. [dado raspado, linhas 19–21; anexo `laudo2_c_leitura.r`, tupla de conferência]
+
+O aval pede comparação com **151/152**, e a leitura anterior descreve 151 dias `False` em um recorte de 152 dias com marcação ímpar; o arquivo original `os152.r` e suas linhas não estão disponíveis para verificar esses números e filtros. [dado raspado, anexo `laudo_fernando_1811_1340.txt`, item 1(c); anexo `laudo2_c_leitura.r`, parágrafo sobre os152; não verificado] Sob essa descrição, o recorte ímpar deixava de fora os dias pares, incluindo a classe de **335 dias com duas batidas** medida agora; a classe `4+` mistura quantidades pares e ímpares, sem abertura suficiente para contar quantos ficaram fora. [dado raspado, linhas 6 e 8; não verificado: filtro original os152] Não é possível obter a interseção ou o acréscimo exato por subtração: a leitura anterior informa que os152 usava `DiaPago` gravado, enquanto esta sonda mede o motor recalculado. [dado raspado, anexo `laudo2_c_leitura.r`, parágrafo final; não verificado: execução e linhas originais de os152]
+
+**Dono L-099: [não verificado].** O código declara que o motor não lê `intervalo_indenizavel` por decisão expressa; os resultados apresentados não demonstram, por si, uma divergência classificada pelo juiz de dono nem permitem atribuí-la a ESTRUTURA, CADASTRO ou BATIDA. [motor_calculo_v2.py:822](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:822), [CLAUDE.md:179](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/CLAUDE.md:179); [não verificado]
+
+## 18/11 13:50 · sessao dc9a98c9df5d · LAUDO-[nome]-1811-1340 · leitura · origem=Code
+
+**Resultado:** não encontrei gerador de AEJ nem de AFD identificado como tal na cópia. O registro do projeto também declara ausente o gerador de AEJ, e o glossário da interface declara pendente a exportação de AFD. A busca por nome não exclui, por si só, uma implementação sob outro nome. ([RELATO.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/RELATO.md:13); [BACKLOG.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/BACKLOG.md:2340); [glossario.html](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/core/glossario.html:154))
+
+O requisito legal detalhado da Portaria 671 para este desenho ainda não foi fornecido no material da pergunta; portanto, **a lista completa de lacunas para conformidade, inclusive layout, conteúdo, integridade e assinatura, é [não verificado]**. O que se pode afirmar pela cópia é que falta um gerador de AEJ identificado e que os artefatos existentes abaixo não demonstram essa geração. ([BACKLOG.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/BACKLOG.md:2340))
+
+**Inventário AEJ e AFD**
+
+| Componente | O que faz e fonte | Chamador e exposição |
+|---|---|---|
+| Importação AEJ atual | Não gera nem importa arquivo: retorna uma página informando a descontinuação, com HTTP 410. Não lê batidas, célula ou motor. ([views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:54)) | A rota `importar-aej/` chama `importar_aej`, que exige login. A página descontinuada é a resposta efetiva da rota. ([urls.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/urls.py:9); [views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:56)) |
+| Importador AEJ legado | `processar_aej`, em arquivo `.disabled`, lia TXT ou TXT dentro de ZIP do Nexti, identificava registros de empresa, colaborador, escala e batida e gravava batidas com origem `aej`; era importação, não geração. ([aej_importer.py.disabled](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/legacy/aej_importer.py.disabled:9); [mesmo arquivo](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/legacy/aej_importer.py.disabled:140)) | A view histórica no mesmo arquivo o chamava; a view ativa não o chama. O README registra a descontinuação e risco de associação por matrícula reutilizada. ([aej_importer.py.disabled](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/legacy/aej_importer.py.disabled:185); [README.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/legacy/README.md:8)) |
+| Modelo de importação | `ImportacaoAEJ` guarda arquivo recebido, estado, contadores, log, operador e datas; não é um modelo de AEJ gerado. `Batida` admite origem `aej`. ([models.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:200); [models.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:8)) | O legado usava o modelo; há registro no admin em modo somente leitura. A rota ativa não executa a importação. ([aej_importer.py.disabled](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/legacy/aej_importer.py.disabled:173); [admin.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/admin.py:25); [views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:57)) |
+| Formulário e manual antigos | O template ainda descreve upload TXT/ZIP e histórico; o manual ainda anuncia a importação. São textos remanescentes, divergentes da resposta 410 da view ativa. ([importar_aej.html](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/ponto/importar_aej.html:8); [manual.html](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/core/manual.html:296); [views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:64)) |
+| AFD | O glossário afirma que a exportação automática está pendente. Não localizei modelo, view, rota, comando ou teste **identificado por AFD**; fonte, chamador e download de gerador AFD: [não verificado]. ([glossario.html](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/core/glossario.html:154)) | O glossário é informativo: tem rota, view e link no menu; não é uma tela de geração. A afirmação nele sobre suficiência de evidência alternativa é [não verificado]. ([urls.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/core/urls.py:26); [views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/core/views.py:327); [base.html](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/base.html:274)) |
+| Comandos e testes que mencionam AEJ | O comando de smoke cria batidas de teste com origem `aej`; outro comando contabiliza importações. Há teste estrutural da porta e do admin e um teste que usa essa origem. Eles não demonstram geração de AEJ. Não localizei teste de gerador identificado como AEJ. ([gerar_batidas_smoke_motor.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/gerar_batidas_smoke_motor.py:5); [zerar_dados_operacionais.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/zerar_dados_operacionais.py:50); [test_chokepoint_batida_gate.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/tests/test_chokepoint_batida_gate.py:73); [test_e3_status_lavrado.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/tests/test_e3_status_lavrado.py:186)) |
+
+**Fontes e saídas existentes que não demonstram ser AEJ**
+
+- `Batida` guarda, entre outros campos, colaborador, instante, tipo, origem e informações de retratação, dispositivo e localização. Isso identifica dados disponíveis no modelo; sua suficiência para AFD ou AEJ é **[não verificado]**. ([models.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:8); [models.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:58))
+
+- O espelho usa `autoridade_do_periodo` para obter batidas e resultado, monta os dias e consulta `folha_manda` para os totais; é chamado pela tela de ponto e pelo cartão PDF. O PDF avulso está exposto por rota e view, mas gera PDF de espelho, não demonstra gerar AEJ. ([espelho.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/espelho.py:1225); [espelho.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/espelho.py:1262); [espelho.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/espelho.py:1283); [ponto/views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:160); [pdf_espelho.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/relatorios/pdf_espelho.py:596); [relatorios/urls.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/relatorios/urls.py:28))
+
+- O TXT da folha é outro fluxo: `gerar_dominio_txt` chama `montar_linhas_export`, cujo módulo descreve como entrada fechamento já lavrado e célula soberana. A rota o expõe na interface de folha; o código citado não o identifica como AEJ. ([folha/views.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/folha/views.py:264); [export.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/folha/export.py:4); [folha/urls.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/folha/urls.py:14))
+
+**Juízes a consultar no desenho**, conforme as perguntas que o requisito vier a exigir — a obrigatoriedade de cada campo para AEJ permanece **[não verificado]**:
+
+- Geometria e pareamento de turnos, marcos da célula e passagem pela meia-noite; grade e alinhamento dos marcos; núcleo e cálculo. ([JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:20))
+- Dia de trabalho, precedência, ausência, feriado, minutos previstos e status lavrado; vínculo que vale no dia e sua cobertura. ([JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:123); [JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:142))
+- Régua CCT e aplicação, se os campos pedirem resultados sujeitos a ela; janela de folha, se a pergunta exigir competência; fechamento e classificação do TXT somente se o requisito alcançar essas perguntas. ([JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:29); [JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:35); [JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:114))
+
+O próprio índice manda conferir o registro vivo quando houver divergência. Há uma diferença relevante: a tabela diz que competência fechada está sem juiz, enquanto o registro vivo já declara `competencia_fechada`; essa pergunta deve ser conferida no registro vivo se entrar no desenho. ([JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:14); [JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:114); [juizes.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/core/juizes.py:311))
+
+## 18/11 13:50 · sessao 81bf612d48ec · LAUDO-[nome]-1811-1340 · leitura · origem=Code
+
+**Campos dos modelos**, antes do rastreamento das funções:
+
+- `MetricaSnapshot`: `chave`, `escopo`, `escopo_id`, `data_ini`, `data_ref`, `numerador`, `denominador`, `valor`, `detalhe`, `calculado_em`. [app/inteligencia/models.py:81](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/inteligencia/models.py:81)
+- `DecisaoHE`: `colaborador`, `data`, `estado`, `minutos_na_decisao`, `motivo`, `decidida_por`, `origem`, `decidida_em`, `atualizada_em`, `revogada_em`, `revogada_motivo`, `minutos_na_revogacao`. [app/ponto/models.py:1300](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:1300)
+- `Batida`: `colaborador`, `timestamp`, `tipo`, `sequencia`, `is_intervalo`, `terminal`, `tipo_registro`, `escala`, `pergunta_origem`, `origem`, `canal`, `justificativa`, `latitude`, `longitude`, `gps_accuracy`, `aprovada`, `retratada_em`, `aprovada_por`, `aprovada_em`, `timestamp_dispositivo`, `timestamp_gap_ms`, `sincronizado_em`, `foto`, `criado_em`, `ordem_substituicao`, `posto_efetivo`. [app/ponto/models.py:22](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:22)
+- `CelulaDia`: `colaborador`, `data`, `trabalha`, `origem`, `escala_geradora`, `dna`, `gerada_em`, `regenerada_em`, `regeneracoes`, `dna_anterior`, `editada_em`, `editada_por`, `julgada_em`, `impressao`, `veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata`, `ausencia`, `tem_entrada`, `tem_saida`, `insumos_em`, `status_dia`, `status_rotulo`. [app/escala/models.py:1681](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/escala/models.py:1681) [app/escala/models.py:1770](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/escala/models.py:1770)
+
+**1. Lavratura.** A função que grava é `ponto.services.he_pendente_lavrado.lavrar`: ela faz `update_or_create` de `MetricaSnapshot` e guarda o retrato em `detalhe`; `calculado_em`, atualizado automaticamente, marca a hora da gravação. [app/ponto/services/he_pendente_lavrado.py:177](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:177) [app/inteligencia/models.py:95](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/inteligencia/models.py:95)
+
+O comando é `lavrar_he_pendente`; no pipeline, `config/crons.py` o encadeia após `lavrar_deslogados` com `--apply`. [app/ponto/management/commands/lavrar_he_pendente.py:18](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:18) [app/config/crons.py:1572](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/config/crons.py:1572)
+
+Existe dry: **omitir `--apply`**; não há um flag `--dry` declarado. [app/ponto/management/commands/lavrar_he_pendente.py:21](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:21) O dry não grava, mas pode chamar a porta de revogação, que executa `select_for_update` antes de retornar; por isso, não é executável integralmente sob a transação `READ ONLY` pedida, nem atende à restrição de não chamar porta de decisão. [app/ponto/management/commands/lavrar_he_pendente.py:56](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:56) [app/ponto/portas/he.py:473](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:473)
+
+**2. Autorização sobre retrato velho.** Na Gestão, os dias e minutos vêm do retrato, enquanto o estado da decisão é consultado vivo; o formulário envia seus minutos no campo oculto `minutos`. [app/ponto/services/gestao_he.py:270](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/gestao_he.py:270) [app/templates/ponto/gestao_he.html:256](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/ponto/gestao_he.html:256)
+
+A view passa esse valor à porta, que **não consulta novamente o motor ou o espelho**: valida permissão, motivo, data e minutos positivos. [app/ponto/views.py:512](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:512) [app/ponto/portas/he.py:159](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:159) Se o formulário enviar 713, as validações passarem e não houver autorização vigente igual, cria ou atualiza a decisão com `minutos_na_decisao=713` e `origem=admin`; se já houver autorização vigente, retorna sem alterar a foto existente. [app/ponto/portas/he.py:186](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:186) [app/ponto/portas/he.py:65](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:65)
+
+Uma decisão nova ou trocada solicita recálculo do fechamento para a data. [app/ponto/portas/he.py:205](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:205) O motor lê **data e estado** das decisões vigentes, não os 713 minutos fotografados; autorização pode impedir o corte das pontas e também afastar o bloqueio de dia sem previsto quando suas condições se aplicam. [app/ponto/motor_calculo_v2.py:1397](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1397) [app/ponto/motor_calculo_v2.py:1691](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1691) [app/ponto/motor_calculo_v2.py:1733](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1733) [app/ponto/motor_calculo_v2.py:1448](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1448)
+
+Portanto, **a autorização pode mudar o cálculo, mas o código e o dado fornecido não provam mudança de dinheiro neste caso**: é preciso comparar o cálculo antes e depois, sem efetuar a autorização. [app/ponto/motor_calculo_v2.py:1630](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1630) [não verificado] A hora do retrato, a hora do pouso da S6 e a relação entre ambas também estão **[não verificado]**.
+
+**3. Sonda para a sombra.** Ela consulta o mesmo espelho e aplica ao dia o critério de inclusão de `apurar`: colaborador ativo, dia na janela e lista `he_fora_da_janela` não vazia. [app/ponto/services/he_pendente_lavrado.py:89](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:89) [app/ponto/services/he_pendente_lavrado.py:114](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:114) Ela mostra a **inclusão e os minutos** que o dry produziria para o dia, sem executar o callback de revogação; assim, o estado que o dry completo atribuiria à linha fica **[não verificado]**. [app/ponto/management/commands/lavrar_he_pendente.py:48](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:48)
+
+Cole no `manage.py tenant_command shell --schema=juliani`. A sonda não foi executada aqui. [não verificado]
+
+```python
+import datetime as dt
+import logging
+from django.db import connection, transaction
+from django.utils import timezone
+from colaboradores.models import Colaborador
+from ponto import janelas
+from ponto.models import DecisaoHE
+from ponto.services.espelho import espelho_do_colab
+from ponto.services.he_pendente_lavrado import (
+    data_do_dia, ler, minutos_fora_do_dia,
+)
+from ponto.turnos import batidas_apuraveis
+
+logging.disable(logging.CRITICAL)
+DIA = dt.date(2026, 11, 15)
+
+def saida(chave, valor):
+    print("col830", chave, valor)
+
+try:
+    with transaction.atomic():
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION READ ONLY")
+
+            c = Colaborador.objects.select_related("empresa").get(pk=830)
+            empresa = c.empresa
+            ini, fim = janelas.janela_fechamento(11, 2026, empresa)
+            retrato, calculado_em = ler(empresa, 11, 2026)
+
+            saida(
+                "retrato_calculado_em",
+                timezone.localtime(calculado_em).isoformat()
+                if calculado_em else None,
+            )
+
+            linhas_retrato = [
+                {"data": d.get("data"), "estado": d.get("estado"),
+                 "minutos": d.get("minutos"), "pontas": d.get("pontas")}
+                for col in (retrato or {}).get("colabs", [])
+                if col.get("colab") == c.pk
+                for d in col.get("dias", [])
+                if data_do_dia(d) == DIA
+            ]
+            saida("retrato_dia", linhas_retrato)
+
+            decisoes = list(
+                DecisaoHE.objects.filter(colaborador=c, data=DIA)
+                .values("estado", "origem", "minutos_na_decisao", "revogada_em")
+            )
+            for d in decisoes:
+                if d["revogada_em"]:
+                    d["revogada_em"] = timezone.localtime(
+                        d["revogada_em"]
+                    ).isoformat()
+            saida("decisoes", decisoes)
+
+            batidas = [
+                timezone.localtime(b.timestamp).isoformat()
+                for b in batidas_apuraveis(c).order_by("timestamp")
+                if timezone.localtime(b.timestamp).date() == DIA
+            ]
+            saida("batidas_apuraveis_data_local", batidas)
+
+            agora = timezone.now()
+            esp = espelho_do_colab(c, fim, ini, fim, ano=2026, agora=agora)
+            dias = [d for d in (esp.get("dias") or [])
+                    if data_do_dia(d) == DIA]
+
+            for d in dias:
+                pontas = d.get("he_fora_da_janela") or []
+                saida("espelho_dia", {
+                    "data": str(DIA),
+                    "he_fora_da_janela": pontas,
+                    "minutos": minutos_fora_do_dia(d),
+                })
+
+            if not dias:
+                saida("espelho_dia", "ausente")
+
+            entra = (
+                c.situacao == "ativo"
+                and ini <= DIA <= fim
+                and any(d.get("he_fora_da_janela") for d in dias)
+            )
+            saida("dry_inclusao_dia", {
+                "entra": entra,
+                "minutos": [
+                    minutos_fora_do_dia(d) for d in dias
+                    if d.get("he_fora_da_janela")
+                ],
+                "estado_dry_completo": "nao verificado",
+            })
+        finally:
+            transaction.set_rollback(True)
+except Exception as exc:
+    # Não imprimir mensagem nem traceback: podem conter dados pessoais.
+    saida("erro_tipo", type(exc).__name__)
+finally:
+    print("FIM_SONDA_D")
+```
+
+A sonda não identifica a hora do pouso da S6: esse dado não está no material fornecido. [não verificado] [nao verificado]
+
+## 18/11 13:50 · sessao 1e00446590f1 · LAUDO-[nome]-1811-1340 · sonda · origem=Code
+
+Para localizar o dado, conto as linhas a partir de `sonda_leitura` como linha 1, incluindo a linha em branco: as cinco seções têm `FIM_SONDA_`, não há traceback e `rc_sombra=0`. [Dado raspado, linhas 1–13]
+
+Para **col882 em 21/10/2026**, a competência identificada é **11/2026**, de 21/10 a 20/11. [Dado raspado, linha 3]
+
+- **Espelho:** `espelho_do_colab` chama `montar_dias`, que usa `marcar_pontas_fora`; essa função testa a ponta e arredonda os minutos para inteiro. A sonda encontrou **10 min antes**. [app/ponto/services/espelho.py:1194; app/ponto/services/espelho.py:721; app/ponto/janela_he.py:215; dado raspado, linha 5]
+- **Motor:** o cálculo passa por `_janela_do_par`, que chama `_entrada_efetiva` e `_saida_efetiva`. A sonda encontrou **9,598966666666666 min fora da janela** em um período atribuído ao dia, sem períodos sem atribuição. [app/ponto/motor_calculo_v2.py:1752; dado raspado, linha 5]
+- **Gestão:** `he_pendente_lavrado.ler` lê o retrato e `gestao_he.enriquecer` usa `estado_por_dia` para sobrepor a decisão vigente. O dia aparece com **10 min** e estado **`nao`**; o retrato foi calculado em **18/11/2026 às 07:37:31,642334 UTC**. [app/ponto/views.py:932; app/ponto/services/gestao_he.py:245; app/ponto/services/gestao_he.py:278; dado raspado, linha 7]
+- **PDF:** `_coletar_dados_espelho_mes` chama o coletor, que usa `espelho_do_colab`; o PDF lê `he_fora_da_janela`. A sonda encontrou **10 min antes**. [app/relatorios/pdf_espelho.py:654; app/relatorios/pdf_espelho.py:596; app/relatorios/pdf_espelho.py:932; dado raspado, linha 11]
+
+Há **uma DecisaoHE vigente**, com estado **`nao`**, origem **`sistema`** e **10 min na decisão**. `nao` representa decisão de não autorizar, ou ciência registrada; a origem informada é do sistema. [Dado raspado, linha 9; app/ponto/models.py:1283; app/ponto/models.py:1299]
+
+A sonda encontrou tanto os **9,598966666666666 min** do motor quanto os **10 min** do aviso no mesmo recorte; ela não demonstra, por si só, que o aviso resultou do arredondamento desse valor específico ou que os dois cálculos usaram entradas idênticas. [Dado raspado, linha 5; não verificado]
+
+**Dono L-099: ESTRUTURA**, para a divergência de estado exibido: o template do espelho imprime “sem decisão” fixamente, embora a consulta tenha retornado decisão vigente `nao` para o dia. [app/templates/ponto/espelho.html:189; dado raspado, linha 9; app/docs/LEIS.md:122]
 
 ## 18/11 13:49 · sessao 8801768e4dda · - · - · origem=Ronald (tmux)
 
@@ -948,233 +1170,4 @@ A cura proposta preserva os selos e o relógio comum: vincular `agora` à funç�
 
 O hash do HEAD não pôde ser confirmado: a cópia disponível não tem metadados Git acessíveis. **[não verificado]**
 
-## 18/11 12:56 · sessao 03b37b05405b · EFEITOS-REAIS-1811 · leitura · origem=Code
-
-1. **Escritor:** `dia_pago.lavrar` grava o `DiaPago`; na versão do motor, soma `PeriodoCalculo.minutos_intrajornada_indenizada / 60`. Há também caminho opcional em que rubricas do calculador substituem o valor: [dia_pago.py:135](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:135), [dia_pago.py:186](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:186), [dia_pago.py:312](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:312), [dia_pago.py:345](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:345). No motor contínuo, jornada superior a seis horas gera indenização pelo mínimo menos a pausa reconhecida, zerada se a supressão for até dez minutos; o mínimo é cadastro ou piso, o maior, salvo perfil específico: [motor_calculo_v2.py:1805](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1805), [motor_calculo_v2.py:2750](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2750), [motor_calculo_v2.py:3239](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:3239). Duas batidas ou marca na célula **não são requisitos para indenizar**; um par reconhecido pode reduzir a pausa suprimida: [turnos.py:542](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:542), [motor_calculo_v2.py:1892](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1892).
-
-2. **Depende do caso:** valida o par inteiro se a metade isolada quebraria a paridade e a irmã respondida passar os testes do par; se não, tenta materializar só a metade solicitada. A irmã permanece respondida quando não é validada por esse ramo; a varredura posterior seleciona apenas perguntas já validadas: [validacao.py:613](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:613), [validacao.py:769](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:769), [materializacao.py:189](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:189), [materializacao.py:2091](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:2091). Existe guarda contra vizinha imediata do mesmo tipo, com exceções e possibilidade de gravar o par: [materializacao.py:95](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:95), [materializacao.py:1373](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1373). O lote **não exclui `intervalo_volta` por motivo**: as duas views chamam a mesma validação, que aceita as referências classificadas A segundo hora, marco e conflito: [views_cobrar.py:263](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/views_cobrar.py:263), [views_cobrar.py:383](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/views_cobrar.py:383), [validacao.py:1067](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:1067), [validacao.py:1177](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:1177).
-
-3. **Sim, pode tratar como interna**, apesar de `is_intervalo=False`: o pareador pode derivar o papel pela ata ou pela proximidade dos marcos; isso não prova uma pausa completa: [ponto/models.py:26](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:26), [turnos.py:1310](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:1310), [turnos.py:1356](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:1356). Com `E, S-int, S-fim`, o par de pausa reconhecido pode ficar vazio; o **motor** decide a supressão a partir dos intervalos fornecidos pelo pareador, conforme os predicados do item 1: [turnos.py:542](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:542), [motor_calculo_v2.py:2764](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2764).
-
-4. **Não foi encontrado esse caminho sem batida.** O BACKLOG registra `INTERVALO-DECLARADO` como “nada construído”; no caminho de resposta de hora examinado, a materialização exige fato de batida e o motor consome intervalos reconhecidos pelo pareador: [BACKLOG.md:1622](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/BACKLOG.md:1622), [materializacao.py:1920](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1920), [motor_calculo_v2.py:1892](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1892). Ausência de **qualquer outro caminho** em todo o código: **[não verificado]**.
-
-5. **Exceções — ramo correspondente na cópia, sem afirmar a execução histórica exata:**
-   - **col219 13/11:** `paridade_recusada` corresponde à vizinha de mesmo tipo com marco cobrado aceso; a devolução ocorre para resposta de hora sem materialização e com motivo de recusa, limpando a validação e registrando o ato. O motivo raspado das duas devoluções não permite identificar sua causa específica: [materializacao.py:1411](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1411), [materializacao.py:1437](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1437), [validacao.py:261](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:261).
-   - **col908 08/11:** a volta isolada pode ser materializada como declaração quando passa as guardas; a saída não validada não entra na varredura de materialização: [validacao.py:769](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:769), [materializacao.py:1474](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1474), [materializacao.py:1968](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1968).
-   - **col171 27/10, col947 06/11 e col1024 04/11:** `celula_absolveu` corresponde ao reconciliador que consulta `pergunta_viva`, exclui dia trancado e carimba pela porta: [reconciliador.py:628](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/reconciliador.py:628), [reconciliador.py:689](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/reconciliador.py:689). A célula e o código **no instante histórico** de cada carimbo: **[não verificado]**.
-
-6. **Escrita e leitura:** `estado` é propriedade calculada, não campo gravado; lê validação, materialização, vitalidade e resposta: [models.py:3151](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3151). `validada_em` é gravada na validação e pode ser limpa na devolução; também pode ser preenchida por `carimbar(..., resposta='validar')`: [validacao.py:161](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:161), [validacao.py:269](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:269), [models.py:3248](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3248). `via_resolucao` e `materializada_em` são escritos juntos pela porta de carimbo e lidos, por exemplo, pelo estado e pela seleção de materialização: [models.py:3216](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3216), [models.py:3287](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:3287), [materializacao.py:2091](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:2091). A origem retro é passada ao registrador e `pergunta_origem` é vinculada depois, inclusive em reuso; a procedência lê ambos: [materializacao.py:1474](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1474), [materializacao.py:1524](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/materializacao.py:1524), [procedencia_batida.py:62](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/procedencia_batida.py:62).
-
-**Ressalva sobre o anexo:** o texto raspado mostra col993 com volta `pendente` e col996 sem pergunta de volta listada; portanto a contagem afirmada de 16 dias com irmã `respondida` não foi confirmada pela transcrição. **[não verificado]** A identidade Git da cópia também não pôde ser conferida: não há metadados Git disponíveis. **[não verificado]**
-
-## 18/11 12:47 · sessao e36752fddc88 · EVAL-NOTURNO-SEM-VEREDITO · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — item 3:** procede devolver as perguntas **1 e 3** para completar o censo e fechar os casos do desenho. Não identifiquei colisão com o aval ou com a lei escrita, nem toque declarado em exportada ou dinheiro, nos limites da cópia e dos anexos. O próprio aval mantém a obra parada até o rearme do B3. [anexo aval.txt, item 3: “A obra segue PARADA ate eu rearmar o B3”]
-
-**1. Premissas do código e censo — PROCEDE devolver parcialmente.**
-
-- As linhas citadas existem e explicam a reprovação: o código escolhe `max(datas)` **antes** de verificar se a data é futura. Assim, um futuro sozinho, ou coexistindo com um relatório anterior válido, produz `medido=False`; a linha publicada diz “sem medida”, sem `ALERTA`. [bin/eval_estado.py:51](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:51) [bin/eval_estado.py:56](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:56) [bin/eval_estado.py:63](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:63)
-- Pasta vazia e pasta sem data válida também dão `sem medida`, sem `ALERTA`; pasta ausente cai no tratamento de `OSError` e tem a mesma saída geral. [bin/eval_estado.py:38](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:38) [bin/eval_estado.py:51](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:51) [bin/eval_estado.py:63](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:63)
-- `quem-mais-le=bin/gerar_estado.py` identifica o consumidor de publicação: ele importa `ler` e `linha`, e inclui o resultado no ESTADO. O censo textual também encontra o selo, que executa a CLI do medidor, lê seu JSON e suas linhas, e verifica a integração por `grep`; `bin/relato.sh` chama o gerador, indiretamente. Devolver a linha de censo com esses papéis distinguidos. [bin/gerar_estado.py:316](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/gerar_estado.py:316) [bin/gerar_estado.py:402](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/gerar_estado.py:402) [bin/tests/test_eval_estado.sh:19](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/tests/test_eval_estado.sh:19) [bin/tests/test_eval_estado.sh:30](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/tests/test_eval_estado.sh:30) [bin/relato.sh:38](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/relato.sh:38)
-- A identidade Git da cópia com o hash informado é **[não verificado]**: a cópia disponibilizada não tem metadados Git acessíveis.
-
-**2. Colisão com aval ou lei escrita — NÃO PROCEDE**, quanto ao desenho declarado. O item 4 original pede a idade pelo nome, limite `<= 1`, publicação no ESTADO e caso de três dias; o complemento especifica como tratar futuro e ausência. Não encontrei, no censo textual desses nomes e da fonte, outra implementação que responda à mesma idade: o medidor existente é `eval_estado.ler`, e o gerador consome seu resultado. Isso é conclusão limitada ao censo textual, não prova contra chamadas dinâmicas desconhecidas. [anexo aval_origem.txt, item 4: “esperado <= 1, fonte = data do ultimo eval/runs/relatorio_*.md”] [anexo aval.txt, item 3: “relatorio com data FUTURA nao conta”] [bin/eval_estado.py:32](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:32) [bin/gerar_estado.py:316](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/gerar_estado.py:316)
-
-A implementação deve continuar usando essa autoridade, com contrato de instrumento e pouso próprio previstos nas regras; a dispensa de padrão para instrumento depende de não tocar código de negócio. [CLAUDE.md:394](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/CLAUDE.md:394) [app/docs/LEIS.md:131](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/app/docs/LEIS.md:131) [app/docs/LEIS.md:144](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/app/docs/LEIS.md:144)
-
-**3. Condições que não fecham no literal — PROCEDE devolver os pontos abaixo.**
-
-- **Hoje e futuro sozinho.** Na publicação atual, a borda captura `date.today()` ou recebe data explícita e a passa ao medidor; o escritor usa `time.strftime` no nome. Ambos usam a data local do processo, mas a configuração efetiva de fuso em produção é **[não verificado]**. O literal manda excluir o futuro e dar-lhe linha própria, e manda `ALERTA sem medida` para pasta vazia, ausente ou “sem nome valido”; não diz expressamente se um futuro sozinho, cujo nome e data são válidos mas inelegíveis, também recebe `ALERTA sem medida`. Devolver essa saída combinada para ser fixada. [bin/gerar_estado.py:417](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/gerar_estado.py:417) [eval/noturno.py:113](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/eval/noturno.py:113) [anexo aval.txt, item 3: “data <= hoje” e “pasta vazia, ausente ou sem nome valido = ALERTA ‘sem medida’”]
-- **Limite.** “Mais de 1 dia” coincide com o código: `ESPERADO_MAX = 1` e `dias > ESPERADO_MAX`. Dois dias já alertam; o selo atual verifica esse limite. Não há condição a devolver nesse ponto. [bin/eval_estado.py:29](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:29) [bin/eval_estado.py:59](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:59) [bin/tests/test_eval_estado.sh:51](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/tests/test_eval_estado.sh:51)
-- **Nome inválido.** `relatorio_2026-13-45.md` casa com a expressão, falha na construção da data e entra em `invalidos`; `relatorio_x.md` não casa e é ignorado. Ambos isoladamente deixam a pasta sem data válida, mas não percorrem o mesmo ramo. Devolver a definição de quais nomes inválidos devem ser reconhecidos e testados. [bin/eval_estado.py:28](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:28) [bin/eval_estado.py:43](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:43)
-- **Cobertura.** Os quatro exemplos nomeados não especificam, por si, futuro coexistindo com relatório válido, nem pasta ausente ou as duas classes de nome acima. “Mutante por ramo” exige mordida nos ramos que forem implementados, mas não descreve esses arranjos de entrada. Devolver a inclusão explícita do caso misto: idade e eventual alerta do válido **mais** linha do futuro; acrescentar casos para ausência e para as classes de nome que o desenho vier a exigir. [anexo aval.txt, item 3: “Selo com caso que MORDE em cada um dos quatro (...) e mutante por ramo”] [bin/eval_estado.py:43](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:43)
-- **RED pelo caso.** É possível nesta cópia: o medidor existe e o selo já o chama com data e raiz injetadas. Um teste das saídas novas pode falhar pelo comportamento atual, sem depender da ausência do arquivo. O selo atual, porém, só exige `sem medida` nos casos sem relatório e só muta o limite; não prova os novos alertas nem o ramo futuro. [bin/tests/test_eval_estado.sh:19](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/tests/test_eval_estado.sh:19) [bin/tests/test_eval_estado.sh:66](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/tests/test_eval_estado.sh:66) [bin/tests/test_eval_estado.sh:79](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/tests/test_eval_estado.sh:79)
-
-**4. Exportada, dinheiro ou `!` fora do declarado — NÃO PROCEDE**, para o desenho e os arquivos do contador examinados: o medidor lê nomes em `eval/runs`, calcula a idade e compõe texto; o gerador o publica no ESTADO. Não há, nesse fluxo examinado, escrita de competência ou operação de dinheiro. Uma implementação futura fora desses arquivos ou seus efeitos indiretos são **[não verificado]**. A liberação do B3 continua sendo de Ronald, conforme o anexo. [bin/eval_estado.py:26](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:26) [bin/eval_estado.py:32](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/eval_estado.py:32) [bin/gerar_estado.py:316](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/bin/gerar_estado.py:316) [CLAUDE.md:265](/home/ronald/codex_ws/13f5c2913616985ee1c4a7f13593e116b1ea4644/CLAUDE.md:265) [anexo aval.txt, item 3: “A obra segue PARADA ate eu rearmar o B3”]
-
-## 18/11 12:34 · sessao a709fac15f77 · COMBOIO-DAS-SUITES-1811 · verificador · origem=Code
-
-**Resultado:** as premissas medidas sustentam a devolução dos itens **1 e 2**. A colisão com os avais vigentes e o alcance sobre exportada, dinheiro e `!` não podem ser fechados integralmente com os diffs disponíveis. O anexo prevê devolução por item e continuidade do outro item quando apenas um proceder: “PROCEDE = AVAL-DEVOLVIDO por item; o outro item segue” (*aval.txt*, revisão).
-
-A cópia do HEAD fornecida não contém metadados Git; por isso, **o diff de cada raia contra main está [não verificado]**. As listas de arquivos abaixo são as que constam literalmente de *medidas.md*, não uma substituição por um diff Git.
-
-### 1. Premissas — **PROCEDE: devolver itens 1 e 2**
-
-- **Suite da P2:** o aval diz “a suite da P2 que esta rodando”; a medida diz “NAO esta rodando: terminou FAILED 2” e que sua base não continha `d54160999`. A afirmação do aval não confere (*aval.txt*, item 1; *medidas.md*, parágrafo da suite da P2).
-- **F4 e F6F7 sobre P2:** `main+P2+F4` foi medido limpo, mas acrescentar F6F7 deu conflito em `app/chamados/services/tarefa_do_dia.py`; F6F7 também conflita sobre `main+P2`, identificando o conflito com a P2 (*medidas.md*, parágrafo “merge-tree”). O próprio aval prevê excluir a raia em conflito (*aval.txt*, item 1). Assim, a árvore com as três raias não está disponível sem resolver o conflito.
-- **Cirineu c4c:** a identificação confere: a raia medida é `raia/cirineu-pouso-115210`, `4ec3e15d0 = main + 843b57e43 c4c` (*medidas.md*, primeira lista).
-- **ESPURIA c9:** a condição de entrada após RED e GREEN está declarada no aval; a medida registra RED existente e GREEN não rodado. Portanto, a condição **ainda não está satisfeita** (*aval.txt*, item 2; *medidas.md*, parágrafo “ESPURIA c9”).
-- **Deslocamento de `escala/utils.py`:** o arquivo consta da própria Cirineu, e a medida diz que nenhuma de P2, F4, F6F7 ou ESCALA toca esse arquivo ou a catraca. A atribuição do deslocamento à soma das árvores não está demonstrada; **[não verificado]** que a catraca seria o único vermelho ou qual seria sua causa (*aval.txt*, item 2; *medidas.md*, parágrafo “Comboio B”).
-
-### 2. Colisão com aval vigente — **NÃO PROCEDE, com alcance parcial [não verificado]**
-
-O texto do comboio preserva a ordem P2 → F4 → F6F7 e a janela de véspera (*aval.txt*, itens 1 e 3; *ordem_viva_1811_manha_0855.txt*, itens 0 e 3). A decisão de Cirineu mantém a espinha à frente e determina pouso antes das 18h se fechar verde, ou permanência em raia até o fim da simulação; o comboio B conserva o prazo, mas sua posição efetiva de pouso deve respeitar também essa ordem (*cirineu_12h_decidida_1811_1110.txt*; *aval.txt*, item 2). **A execução efetiva dessa ordem está [não verificado].** [nao verificado]
-
-Quanto aos arquivos contra `main`, o pedido de listar o diff completo de cada raia **não pôde ser cumprido**:
-
-| Raia | Arquivos fornecidos no dado raspado |
-|---|---|
-| P2 | Diff completo **[não verificado]**. |
-| F4 | Diff completo **[não verificado]**. |
-| F6F7 | `app/chamados/services/tarefa_do_dia.py` aparece como local do conflito; diff completo **[não verificado]**. |
-| Cirineu | `core/tests/test_medida_turno_do_par.py`, `escala/tests/test_cirineu_nao_desfaz_o_papel.py`, `escala/utils.py`. |
-| ESCALA | `escala/regua_defesa.py`, `escala/services/cadastro_realidade.py`, `escala/urls.py`, `escala/views.py`, `ponto/services/esmeril_espelho.py`, `templates/escala/cadastro_x_realidade.html` e “teste novo”, sem caminho informado. |
-| ESPURIA c9 | Diff completo **[não verificado]**. |
-
-Fonte das listas: *medidas.md*, parágrafos “merge-tree” e “Comboio B”. Portanto, **quais raias tocam folha, export, retenção ou DiaPago está [não verificado]**; não há base para declarar uma colisão concreta com a janela nem para descartá-la em todas as raias. A janela é expressa em *ordem_viva_1811_manha_0855.txt*, item 0.
-
-### 3. Condições literais — **PROCEDE: devolver itens 1 e 2**
-
-**a. Árvore do B.** A medida do B foi feita sobre `main+P2+F4`, chegando a `8a60c3c31` com Cirineu e ESCALA; c9 ainda não tinha GREEN (*medidas.md*, parágrafo “Comboio B” e “ESPURIA c9”). Se F6F7 pousar antes de B, a árvore resultante incluirá F6F7 e **não será automaticamente a árvore medida para B**. Se só P2+F4 pousarem antes, a base medida corresponde à espinha descrita, mas a igualdade da árvore final, inclusive com as raias efetivamente incluídas, exige comparação: **[não verificado]**. A regra exige que a árvore certificada seja a que pousa e `cmp` antes do commit ([CLAUDE.md:320](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/CLAUDE.md:320)). “Mesma medida de conflito” não certifica essa igualdade (*aval.txt*, item 2).
-
-**b. F6F7 fora do comboio A.** Para pousar depois de P2 e F4, sua suite precisa certificar a árvore que resultará desse pouso sobre a ponta então vigente, com o conflito resolvido; uma suite da raia isolada, sem P2, não demonstra isso ([CLAUDE.md:320](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/CLAUDE.md:320)). A suite isolada medida usava base sem `d54160999` e sem P2 e terminou FAILED (*medidas.md*, parágrafo “Suite do F6F7 sozinho”). A resolução e a árvore resultante estão **[não verificado]**.
-
-**c. Cancelamento do job.** O job começou às 12:30:09 e foi cancelado às 12:31:56, antes do aval das 12:35 (*medidas.md*, parágrafo do job; *aval.txt*, cabeçalho). O aval posterior proíbe interromper suite em curso, mas o dado não sustenta aplicar essa proibição retroativamente (*aval.txt*, “PROIBIDO”). A pré-aprovação permite cancelar job em fila ou rodando **de volta superada da mesma obra**, com linha no RELATO ([CLAUDE.md:288](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/CLAUDE.md:288)). Que fosse volta superada da mesma obra e que a linha exigida exista está **[não verificado]**; não se pode concluir que o cancelamento estava coberto.
-
-**d. Opus por obra.** O aval exige “cada um com o seu opus final sobre o proprio diff” (*aval.txt*, item 1), e a regra exige suite inteira verde antes do opus final por obra ([CLAUDE.md:372](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/CLAUDE.md:372)). O literal consultado **não fixa** se o comando de diff é contra `main` original ou contra a ponta anterior: **[não verificado]**. Para identificar o que cada obra acrescenta, o diff contra a ponta anterior isola sua contribuição; a revisão também precisa considerar os sítios e leitores/escritores exigidos pela regra, inclusive fora do diff ([CLAUDE.md:379](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/CLAUDE.md:379)). Isso é uma interpretação operacional, não uma base de comparação prescrita literalmente.
-
-### 4. Exportada, dinheiro ou `!` fora do declarado — **[não verificado]; sem base para PROCEDE ou NÃO PROCEDE**
-
-A regra exige `!` para, entre outros casos, tocar o gravado de competência exportada ou dado de escala/vínculo ([CLAUDE.md:265](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/CLAUDE.md:265)). Há autorização expressa para o botão de vínculo pela porta existente com trilha (*ordem_viva_1811_manha_0855.txt*, última linha), e Cirineu não deve regerar célula da competência 11 antes do corte posterior à simulação (*cirineu_12h_decidida_1811_1110.txt*). Sem os diffs completos e sem dado de produção além do raspado, **o alcance real sobre exportada, dinheiro ou outro `!` permanece [não verificado]**.
-
-**Fecho:** 1 **PROCEDE — itens 1 e 2 devolvidos**; 2 **NÃO PROCEDE no texto examinado, com alcance dos diffs [não verificado]**; 3 **PROCEDE — itens 1 e 2 devolvidos**, pelas condições de árvore que precisam fechar; 4 **[não verificado] — não classificável**.
-
-## 18/11 12:16 · sessao d2c13875bd5b · DSTL1-PORTA-HE · sonda · origem=Code
-
-No dado fornecido, não aparece erro nem traceback. `CONCLUSAO_LIBERADA` está presente e `rc_sombra=0`. [não verificado]
-
-Cópia das três linhas solicitadas: [não verificado]
-
-```text
-FUNIL_HOJE_CAP0611 {'B_trabalha': 277, 'B_sem_trabalho': 139, 'C_pago>0': 78, 'C_ESTRUTURA_DINHEIRO': 54, 'C_ESTR_2mais': 36, 'C_decisao_he': 4, 'C_porta': 3}
-HOJE_ESTR_2mais_MARCADORES {'regen_pos': 4, 'regeneracoes': 12, 'dna_anterior': 12, 'julgada_pos': 9, 'diapago_lavrado_pos': 33, 'sem_marcador': 3, 'colab_desligado': 4} de 36
-HOJE_ESTR_POR_DIA {'2026-11-02': 11, '2026-11-05': 1, '2026-10-30': 1, '2026-11-03': 1, '2026-10-22': 4, '2026-10-29': 1, '2026-11-01': 2, '2026-10-21': 2, '2026-10-23': 1, '2026-10-31': 1, '2026-10-24': 2, '2026-10-25': 3, '2026-10-28': 1, '2026-10-27': 1, '2026-11-06': 1, '2026-11-04': 1, '2026-10-26': 2}
-```
-
-Contagem das 19 linhas `AMOSTRA` por `razao_hoje`: [não verificado]
-
-| `razao_hoje` | Contagem |
-|---|---:|
-| `pago_sem_decisao_ou_pago` | 11 |
-| `ESTRUTURA_DINHEIRO` | 8 |
-
-Dicionário `marc` de cada linha, agrupado por `razao_hoje`: [não verificado]
-
-| `razao_hoje` | Amostra | `marc` |
-|---|---|---|
-| `pago_sem_decisao_ou_pago` | `col43` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col207` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col369` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col384` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col789` | `{'regeneracoes': 5, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col822` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col962` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col967` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col991` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col1003` | `{'diapago_lavrado_pos': 1}` |
-| `pago_sem_decisao_ou_pago` | `col749` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col97` | `{'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col242` | `{'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col278` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col617` | `{'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col820` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col864` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col944` | `{'diapago_lavrado_pos': 1}` |
-| `ESTRUTURA_DINHEIRO` | `col900` | `{'regen_pos': 1, 'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
-
-## 18/11 12:15 · sessao 365c53fd8db0 · DSTL1-PORTA-HE · sonda · origem=Code
-
-A saída fornecida não contém erro nem traceback e chegou a `CONCLUSAO_LIBERADA`, seguida de `rc_sombra=0`. [não verificado]
-
-As tabelas abaixo transcrevem ou contam o dado fornecido no enunciado, que não tem arquivo e linha associados. [não verificado]
-
-**I4**
-
-| Contagem | Valor |
-|---|---:|
-| Linhas com `causaC=True` | 65 |
-| Total de linhas | 65 |
-
-| `classe_e6` entre as `causaC` | Quantidade |
-|---|---:|
-| `bate_ate_10min` | 52 |
-| `DIVERGE` | 7 |
-| `sem_trabalho_ambos` | 6 |
-
-**DONOS_DOS_DIVERGENTES**
-
-| Dono | Quantidade |
-|---|---:|
-| `ESTRUTURA` | 2 |
-| `BATIDA` | 5 |
-
-**I2 e I2_RELATO**
-
-| Colaborador | Dia | `janela_he_ativa` | `desde` | `piso` | `saida_ativa` | `dia_ge_desde` | `he_fora_espelho` | `motor_cxr_do_dia` | `motor_sem_previsto_fora` | `I2_RELATO` |
-|---|---|---|---|---:|---|---|---|---|---|---|
-| col741 | 2026-11-15 | True | 2026-08-21 | 0 | True | True | `[]` | `[]` | `[]` | `[] -> []` |
-| col899 | 2026-11-01 | True | 2026-08-21 | 0 | True | True | `[]` | `[]` | `[]` | `[] -> []` |
-| col944 | 2026-11-02 | True | 2026-08-21 | 0 | True | True | `[]` | `[]` | `[]` | `[]` | `[] -> []` |
-
-**I4SOMA**
-
-| Colaborador | `soma_min_real` | `fech_min_real` |
-|---|---:|---:|
-| col55 | 8352.0 | 8352 |
-| col61 | 5758.0 | 5758 |
-| col114 | 9221.0 | 9221 |
-| col123 | 9356.0 | 9356 |
-| col130 | 8915.0 | 8915 |
-| col137 | 5572.0 | 5572 |
-| col198 | 8639.0 | 8639 |
-| col203 | 8819.0 | 8819 |
-| col206 | 8485.0 | 8485 |
-| col227 | 9113.0 | 9113 |
-| col237 | 9360.0 | 9360 |
-| col242 | 6150.0 | 6150 |
-| col250 | 5931.0 | 5931 |
-| col270 | 2083.0 | 2083 |
-| col278 | 8731.0 | 8731 |
-| col281 | 8639.0 | 8639 |
-| col282 | 8528.0 | 8528 |
-| col328 | 6871.0 | 6871 |
-| col331 | 6894.0 | 6894 |
-| col334 | 7325.0 | 7325 |
-| col364 | 8630.0 | 8630 |
-| col373 | 1880.0 | 1880 |
-| col398 | 9097.0 | 9097 |
-| col399 | 9299.0 | 9299 |
-| col424 | 9356.0 | 9356 |
-| col444 | 8061.0 | 8061 |
-| col451 | 5040.0 | 5040 |
-| col476 | 9455.0 | 9455 |
-| col489 | 8698.0 | 8698 |
-| col515 | 9229.0 | 9229 |
-| col617 | 6300.0 | 6300 |
-| col627 | 8313.0 | 8313 |
-| col634 | 8114.0 | 8114 |
-| col696 | 0.0 | 0 |
-| col741 | 711.0 | 711 |
-| col835 | 9217.0 | 9217 |
-| col843 | 9234.0 | 9234 |
-| col845 | 8580.0 | 8580 |
-| col849 | 9232.0 | 9232 |
-| col864 | 10056.0 | 10056 |
-| col899 | 7081.0 | 7081 |
-| col913 | 8889.0 | 8889 |
-| col932 | 7763.0 | 7763 |
-| col935 | 8580.0 | 8580 |
-| col936 | 7597.0 | 7597 |
-| col944 | 7730.0 | 7730 |
-| col950 | 4427.0 | 4427 |
-| col985 | 9452.0 | 9452 |
-| col996 | 9271.0 | 9271 |
-| col998 | 8074.0 | 8074 |
-| col999 | 7692.0 | 7692 |
-| col1001 | 6748.0 | 6748 |
-| col1012 | 4710.0 | 4710 |
-| col1045 | 0.0 | 0 |
-
-Linhas `I4SOMA` com valores numericamente diferentes: **0 de 54**. [não verificado]
-
-_6962 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6967 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
