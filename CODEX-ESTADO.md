@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 00:10** · publicado em **18/11/2026 00:10** (UTC-3)
+> Ultima resposta processada: **18/11/2026 00:14** · publicado em **18/11/2026 00:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 00:14 · sessao ea8ca390e0f4 · E4C-F1-B2 · sonda · origem=Code
+
+Saída fornecida da sonda R4b, reproduzida linha a linha [não verificado]:
+
+```text
+sonda_leitura: script.py [c7a6c16b8f96e6d2] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+UNIVERSO sem chamado_destino: 10197 | sem data_evento: 0
+EMP 2 COMP 08/2026 entregue: sem_chamado=1717 vivas=0
+EMP 2 COMP 09/2026 entregue: sem_chamado=2702 vivas=1102
+EMP 3 COMP 07/2026 entregue: sem_chamado=183 vivas=0
+EMP 3 COMP 09/2026 entregue: sem_chamado=353 vivas=120
+EMP 4 COMP 06/2026 entregue: sem_chamado=34 vivas=0
+EMP 4 COMP 07/2026 entregue: sem_chamado=71 vivas=0
+EMP 4 COMP 09/2026 entregue: sem_chamado=24 vivas=0
+POR MOTIVO (vivas): {'batida_fora_escala_grave': 23, 'sem_posto': 3, 'saida_sem_entrada': 355, 'orfao_14h': 250, 'intervalo_saida': 295, 'intervalo_volta': 296}
+TOTAL entregue sem_chamado=5084 vivas=1222 erros=0
+FIM_R4B
+rc_sombra=0
+```
+
+Data do banco sombra lido: [não verificado].
 
 ## 18/11 00:10 · sessao a6ac9bf8fe83 · S6-INTERMITENTE-FERIADO-CURA-A · construtor · origem=Code
 
@@ -575,62 +598,4 @@ A diferença é de chave de dia: `turnos_do_colab` devolve turnos pelo `data_tur
 
 **Dono L-099: não determinável para ambos com o material fornecido.** A sonda não mostra que o comando E6 alcançou qualquer dos casos. O comando só chama o dono depois de passar pelos filtros da comparação e encontrar diferença superior a dez minutos; os minutos comparados não foram fornecidos. Mesmo numa chamada direta ao juiz, faltam insumos como cadastro do dia, fase lavrada, resultado do motor e a atribuição de horas pelo próprio oráculo. `motivo_escala_errada=None`, isoladamente, não resolve esses insumos. Portanto, atribuir **ESTRUTURA**, **CADASTRO** ou **BATIDA** a qualquer dos dois seria especulação. [app/ponto/management/commands/e6_oraculo.py:328](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/e6_oraculo.py:328), [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/e6_oraculo.py:182), [app/ponto/management/commands/e6_oraculo.py:98](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/e6_oraculo.py:98) **[alcance e insumos não verificados]**
 
-## 17/11 20:51 · sessao 1448cc453bb8 · E4C-F1-B2 · verificador · origem=Code
-
-| id | Revisão |
-|---|---|
-| Cabeçalho | **PROCEDE** — `TOPO 0` e `INDECISOS 0` deixam de refletir o conflito de unidade de B9a/B9b; a extração F6 precisa conservar os dois discriminadores de conversa e o `continue` para conjunto vazio (`fio.py:1403-1413`). |
-| F0 | **CONFERE** — `_CERCA` ausente retorna sem consultar; há quatro chamadas de abertura (`fio.py:1396-1398`; `reconciliador.py:553,1701`; `becos.py:66`; `disputa_emissao.py:1909`). |
-| F1 | **CONFERE** — cerca aninhada executa no escopo externo, sem novo savepoint (`fio.py:1433-1434`; `disputa_emissao.py:1902`). |
-| F2 | **CONFERE** — veto anotado desfaz o savepoint do abridor, mesmo se a exceção da porta tiver sido engolida (`fio.py:1439-1446`). |
-| F3 | **PROCEDE** — a premissa existe, mas os endereços da tabela são do HEAD anterior à remoção: nesta cópia, `save` está em `models.py:3555`, a guarda em `:3562-3566`, antes do atomic `:3567`. |
-| F4 | **PROCEDE** — proteger também a consulta é necessário: hoje só `evento` a engole (`reconciliador.py:489-493`; `core/observ.py:105-136`). Falta especificar o comparador de mudança para o novo resumo de perguntas: o atual compara `empresas_vetadas` (`reconciliador.py:477-482`). |
-| F5 | **CONFERE** — o veto existente recebe dias e memo e distingue `None`, `True` e `False` (`fio.py:1358-1368`). |
-| F6 | **CONFERE** — o MOVE é possível preservando universo, conversa da instância **e** do gravado e conjunto vazio; `None` presente veta. A função compartilhada ainda é desenho (`fio.py:1403-1419`). |
-| F7 | **CONFERE** — a validação comum consulta a regra própria; a saída antecipada da folga exige o achado separado (`validacao.py:711-712,740-742,777-780`). |
-| F8 | **CONFERE** — coletor por contexto é desenho, não comportamento atual; `_ESPERAS_163` demonstra apenas o molde de set/reset. A implementação deve ligar somente nos chamadores de sistema e preservar a porta humana sem coletor (`materializacao.py:1726-1735`; `fio.py:853,976`). |
-| F9 | **CONFERE** — o ponto deve vir após as duas saídas sem escrita e antes da lavra/save; nesta cópia elas estão em `models.py:3239-3240,3262-3264`, e o save em `:3271`. |
-| INDECISOS | **PROCEDE** — A9d está decidido, mas a colisão B9a/B9b continua precisando de decisão; P21 não acrescenta escritor ativo na cópia (`competencia_trancada.py:221-230`; `backfill_decisoes_pergunta.py:245-265`; `models.py:3429`). |
-| ACHADOS | **CONFERE** — as seis portas permanecem listadas sem obra ou cerca pelo item 3 de 19:50; por exemplo, recusa grava `recusa_motivo` e folga sai antes da regra comum (`validacao.py:711-712,740-742,916-925`; `respostas_1711_1950.txt:4`). |
-| RED-NOVO-1 | **CONFERE** — relavra e gate são caminhos distintos e precisam dos dois casos (`models.py:309-312,435-439`). |
-| RED-NOVO-2 | **CONFERE** — o controle deve alcançar `carimbar` e sair sem escrita antes do julgamento proposto (`materializacao.py:2154-2167`; `models.py:3239-3240,3262-3264`). |
-| RED-NOVO-3 | **PROCEDE** — A9d pede controle **não ENTREGUE**, enquanto o bloco RED pede **ENTREGUE**; o primeiro não distingue julgamento antecipado. A chegada do controle vetável pela tranca ainda precisa ser demonstrada: há `pode_fechar` e aprovação do lastro antes de `carimbar` (`competencia_trancada.py:221-230`; `materializacao.py:2154-2167`; `juizes.py:1407-1410`). |
-| DECISÕES | **PROCEDE** — B9a/B9b não estão resolvidas pela mera referência aos comandos na R2; B4 também precisa qualificar a hipótese de instância fiel ao banco (`backfill_decisoes_pergunta.py:245-265`; `fio.py:916-928,1403-1411`). |
-| A1 | **CONFERE** — retratação abre a cerca; o resolver chamado dentro dela não abre outra (`reconciliador.py:543-580`; `fio.py:1433-1446`). |
-| A2 | **CONFERE** — resolver e fecho integram o ato do beco; o retorno consulta o estado final (`becos.py:42-72`). |
-| A3 | **CONFERE** — resolver direto abre cerca; aninhado usa o contexto externo (`disputa_emissao.py:1902-1914`; `fio.py:1433-1434`). |
-| A4 | **CONFERE** — relavra e reata são pontos distintos; fora da cerca a partição proposta deve preservar a transição (`models.py:309-312,435-439,642-656`). |
-| A5 | **CONFERE** — a relavra é laço sob um savepoint e não tem `continue` anterior à chamada (`models.py:305-312`). |
-| A6 | **CONFERE** — o encerramento passa pelo gate e pela gravação do estado (`models.py:1677-1693`). |
-| A7 | **CONFERE** — a via da tranca chama o gate e a transição sem abrir cerca própria (`models.py:1696-1711`; `competencia_trancada.py:206-209`). |
-| A8 | **PROCEDE** — o ponto proposto precisa ser corrigido para esta cópia: o universo é obtido em `models.py:1599` e `alvo` nasce em `:1606`; filtrar depois de `:1601`, como escrito, é uma referência a linhas anteriores à remoção. |
-| A9a | **CONFERE** — desligamento não abre cerca para o laço das vivas; o S144 posterior é outro ato de sistema (`models.py:2007-2010,2021-2025`; `signals.py:150-165`). |
-| A9c | **CONFERE** — S144 passa pelos dois `continue` e só soma o carimbo bem-sucedido (`materializacao.py:2154-2168`; `models.py:3239-3240,3262-3271`). |
-| A9d | **PROCEDE** — a classe e o fecho seguem o item 2 de 19:50, mas o controle **não ENTREGUE** da própria célula não testa o veto; alinhar ao RED-NOVO-3 e demonstrar alcance (`competencia_trancada.py:221-230`; `materializacao.py:2161-2167`). |
-| B1a | **CONFERE** — carimbo recusado sai antes da contagem; a trilha sem chamado precisa ter a pergunta por alvo (`reconciliador.py:628-645`; `respostas_1711_1750.txt:3`). |
-| B1b | **CONFERE** — o fecho posterior tem S144 como cadeia de escrita de pergunta (`reconciliador.py:652-659`; `signals.py:164-167`). |
-| B2a | **CONFERE** — `False` do carimbo impede o fecho desse caminho e permite seguir à reemissão (`reconciliador.py:400-415,1664-1666`). |
-| B2b | **CONFERE** — `ch_novo` é o chamado passado ao reaponte; recusa devolve `False` (`reconciliador.py:977-1001`). |
-| B2c | **CONFERE** — HIST cerca reaponte e resolver juntos; veto retorna `False` (`reconciliador.py:1690-1706`). |
-| B2d | **CONFERE** — o par é interno; o chamador recebe apenas `False` ou `True` (`reconciliador.py:1712-1716`). |
-| B3a | **CONFERE** — carimbo recusado pula evento e contagem (`reconciliador.py:1188-1202`; `models.py:3421-3427`). |
-| B3b | **CONFERE** — o fecho é posterior e pode disparar S144 (`reconciliador.py:1203-1219`; `signals.py:164-167`). |
-| B4 | **PROCEDE** — com instância fiel e gravado NULL, datar produz conjunto contendo o dia novo e `None`, portanto veto; “todo reaponte que DATA” é mais amplo que essa prova, pois a query depende da linha gravada encontrada (`fio.py:916-928,1403-1419`; `juizes.py:338-342`). |
-| B5 | **CONFERE** — `lavrar` salva individualmente; o lote tem escritor próprio (`veredito_lavrado.py:240-250,254-275`). |
-| B6 | **CONFERE** — `bulk_update` não passa pelo `save` individual; a partição deve ocorrer no conjunto efetivamente gravado (`veredito_lavrado.py:240-250`; `models.py:3555-3567`). |
-| B7 | **CONFERE** — o julgamento deve vir após os `continue` e antes do save (`relavra_via.py:117-127`). |
-| B8 | **CONFERE** — o pré-veto atual compõe dias separadamente; F6 precisa receber o dia futuro sem perder os filtros da porta (`fio.py:1105-1123,1403-1413`). |
-| B9a | **PROCEDE** — “grupo inteiro, nunca o item”, citado pela tabela, colide com o julgamento da pergunta após os `continue` do aval de 18:45; citar o comando como exemplo na R2 não resolve o literal posterior. Além disso, lista vazia de dias retorna `False`, não `None` (`backfill_decisoes_pergunta.py:245-265,355-379`; `fio.py:1365-1368`; `cerca_b2_regras2_1845.txt:3`). |
-| B9b | **PROCEDE** — a reversão atual desfaz tudo por falha de competência; a proposta por grupo evita isso, mas herda a colisão de unidade de B9a. A preservação do tudo-ou-nada para outras falhas é distinta (`migrar_data_evento_dia_do_turno.py:279-313,465-501`; `cerca_b2_regras2_1845.txt:3`). |
-
-| id | Escritores e leitores relevantes |
-|---|---|
-| F4 / recusa | `recusa_motivo`: escrevem `materializacao.py:1352-1353,1686-1690`, `fio.py:1492-1493` por `models.py:3305-3309`, `validacao.py:916-922` e `disputa_emissao.py:1511,1522`; leem, entre outros, `materializacao.py:1676-1680` e `validacao.py:262-266`. |
-| F9 / carimbos | `_escrever_carimbo` atribui os três campos; `carimbar` e `carimbar_identidade` persistem; o descarimbo em lote os limpa. O C6 os lê na projeção (`models.py:3216-3220,3271,3301-3309,3405-3406`; `juizes.py:1389-1404`). |
-| F4 / trilha | `registrar_retencao` lê a última linha; `evento` escreve `LogAuditoria` (`reconciliador.py:489-493`; `core/observ.py:94-136`). |
-| F8 / contextos | `_CERCA` é criado, lido, ligado e restaurado em `fio.py:1381,1396,1433-1449`. O coletor proposto ainda não existe; seus futuros produtores e consumidor são parte do desenho F8 (`materializacao.py:1726-1735`). |
-| INDECISOS / P21 | A busca na cópia encontrou lápides e referência histórica na catraca, não uma enumeração ativa do comando ou método (`models.py:3429-3431`; `crons.py:835-838`; `test_e1_v7_catracas.py:406-411`). A medida de produção é a fornecida na triagem, não uma consulta desta revisão (`triagem_revaval5.md`, linha P21). |
-
-**PROCEDE: 11** — cinco das 26 linhas A/B e seis linhas de cabeçalho, fatos ou seções. **LINHAS RESPONDIDAS: 26 de 26.**
-
-_6758 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6759 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
