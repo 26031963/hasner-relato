@@ -1,12 +1,12 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 18/11/2026 16:48 @e253f2bf7
+medido em 18/11/2026 16:54 @e253f2bf7
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
 | ESPINHA-E | 77 | 0 | 0 | 15 | 62 | 26.2 |
 | 20/20 | 5 | 1 | 1 | 0 | 3 | 32.2 |
-| LATERAL-ESTRUTURA | 157 | 0 | 3 | 22 | 132 | 19.5 |
+| LATERAL-ESTRUTURA | 158 | 0 | 3 | 22 | 133 | 19.5 |
 | INSTRUMENTO | 180 | 0 | 0 | 17 | 163 | 15.0 |
 | UI | 42 | 0 | 0 | 9 | 33 | 19.0 |
 | CEREJA | 1 | 0 | 0 | 0 | 1 | 11.1 |
@@ -26,11 +26,11 @@ medido em 18/11/2026 16:48 @e253f2bf7
 | ATA-NAO-DISPENSA-JUSTIFICADA | 67 | Acesso para aplicar o acervo da 10 |
 | H12H06-SEPARA-E-CRONTAB | 67 | censo de trava; desenho da parte B |
 
-resolve preenchido 13/467
+resolve preenchido 13/468
 
 casos ESTRUTURA sem obra: 2 (logs/GRADE-MESTRA/resolve/quadro.md)
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 306 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 307 com a coluna
 
 | obra | fecha BO | portao | estado |
 |---|---|---|---|
@@ -41,8 +41,8 @@ fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PAR
 | CONTRATO-DE-ENTRADA-DO-FIO (compl.) | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/juizes.py) | BRIEF PRONTO |
 | O232 (compl.) | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com JUSTIFICATIVA-PAGA-O-PERIODO (app/ponto/turnos.py alterado sem commit na wt-justif-040525 @eb584c2b0, git status 14/11 10:5x) | REGISTRADA |
 
-casas cheias na frota: cen 235, lei 320, con 75, R/G 33, mut 3, ver 14, opus 9, pou 43, ar 37
+casas cheias na frota: cen 236, lei 320, con 75, R/G 33, mut 3, ver 14, opus 9, pou 43, ar 37
 
-obras lidas: 467
+obras lidas: 468
 
 nao lidas: 0

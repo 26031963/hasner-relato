@@ -14,18 +14,18 @@
 |---|---|---|
 | ESPINHA-E | 77 | 77 |
 | 20/20 | 5 | 4 |
-| LATERAL-ESTRUTURA | 157 | 157 |
+| LATERAL-ESTRUTURA | 158 | 158 |
 | INSTRUMENTO | 180 | 180 |
 | UI | 42 | 42 |
 | CEREJA | 1 | 1 |
 | ? | 5 | 5 |
-| **total** | **467** | **466** |
+| **total** | **468** | **467** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 399; INTERROMPIDA 7; PARADA 56; NO AR hoje 1; nao lidas: 1
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 400; INTERROMPIDA 7; PARADA 56; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 306 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 307 com a coluna
 
-resolve preenchido 13/467
+resolve preenchido 13/468
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -283,7 +283,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | HOLERITE-ZIP-MATRICULA | LATERAL-ESTRUTURA | Retira o envio antigo de holerites sem uso pela tela. | - | E1; E2 | ++....... | REGISTRADA | BACKLOG:1883 [+1 compl.] | ? | ? |
 | BO-0611-05 | LATERAL-ESTRUTURA | Permite registrar ponto sem coordenadas de GPS. | - | liberação B3; revisão; smoke | ++.+.+... | PARADA (último estado da linha) | BACKLOG:1927 [+7 compl.] | ? | ? |
 | DECLARADO-X-GRAVADO | LATERAL-ESTRUTURA | Faz a gravação respeitar o horário declarado na resposta. | - | censo; construtor; passivo separado | ++....... | REGISTRADA | BACKLOG:1939 [+1 compl.] | 4 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS e E3 (app/chamados/services/materializacao.py no diff de wt-bugpar-124848 @338fd37b0 e de wt-codex-e3-forma-sql-005806 @f569063be; as 5 lei cortadas por DXG-LEIS-CORTADAS 14/11 10:24, logs/AVAIS-1313/dxg_leis_cortadas.txt) |
-| RAIA-INTERVALO-1811-1650 | LATERAL-ESTRUTURA | Vaga 2 alterna espúria/intervalo: (a) LOTE-CONHECE-A-IRMA, (b) DECLARADO-X-GRAVADO, (c) JUIZ-DO-DIA-LE-A-LAMPADA-DA-ATA. | - | censo (a) lei 1; sonda28 | +........ | REGISTRADA 18/11 | logs/AVAIS-1515/raia_intervalo_1811_1650.txt; complemento1_raia_intervalo_1811_1650.txt | ? | (a) censo lei 1; (b) censo lei 0; condicoes DECLARADO-NA-VAGA na abertura |
+| RAIA-INTERVALO-1811-1650 | LATERAL-ESTRUTURA | Vaga 2 alterna espúria/intervalo: (a) LOTE-CONHECE-A-IRMA, (b) DECLARADO-X-GRAVADO, (c) JUIZ-DO-DIA-LE-A-LAMPADA-DA-ATA. | - | (a) censo lei 1; (b) censo lei 0; sonda28 | +........ | REGISTRADA 18/11 | logs/AVAIS-1515/raia_intervalo_1811_1650.txt; complemento1_raia_intervalo_1811_1650.txt | ? | lei LOTE-CONHECE-A-IRMA |
 | BATIDA-ID-DO-CLIQUE | LATERAL-ESTRUTURA | Identifica cada clique para evitar batidas duplicadas. | - | migration; PWA; build nativo posterior | ......... | REGISTRADA | BACKLOG:1963 | ? | ? |
 | ADMIN-FECHA-SEM-MOTIVO | LATERAL-ESTRUTURA | Exige motivo e histórico ao encerrar o chamado. | - | correção da porta administrativa | ++....... | REGISTRADA | BACKLOG:1973 | ? | ? |
 | G3G4-ESTRUTURA-RESIDUO | LATERAL-ESTRUTURA | Dá obra aos resíduos estruturais sem cobertura. | - | nomear padrão | .+....... | REGISTRADA | BACKLOG:2048 | ? | ? |
