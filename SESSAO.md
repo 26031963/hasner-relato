@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 15:37:01.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (59.5 MB). Acoes na janela: **1643**.
+**Medido em 18/11/2026 15:42:28.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (59.5 MB). Acoes na janela: **1644**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:42:13 | Monitor | F6F7 full pre-opus suite | `cd /home/ronald/saas-hasner; while kill -0 3908542 2>/dev/null; do sleep 20; done; echo "suite F6F7 terminou: $(grep -E '^(OK\|FAILED)($\| \()' logs/E4C-F6F7/suite_c10/suite.log \| tail -1) $(grep '^Ran ' logs/E4C-F6F7/suite_c10/suite.log \| tail -1)"` |
 | 15:33:46 | Bash | Write F9 lei question to RELATO top | `python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p,encoding='utf-8').read().split('\n') L.insert(4,"lei: E4C-F9 (RESPOSTAS-1811-1535 item 1; censo Codex contra o main d6da98509, logs/ESPINHA-BRIEFS/F9/censo_main/r.txt): 'alcance nao verificado: 0', 'perguntas de lei: 1' -> F9 ESPERA, construtor NAO abre. A pergunta: curar_perguntas_em_limbo (D12/D13, curar_perguntas_em_limbo.py:46 e :69; D11 :32)  ...` |
 | 15:33:37 | Bash | Brief treatment of limbo sites | `/bin/grep -nE "D1[123]\|limbo\|ALLOW" logs/ESPINHA-BRIEFS/F9/brief.md logs/ESPINHA-BRIEFS/F9/matriz.md \| cut -c1-260 \| head -20; sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' logs/ESPINHA-BRIEFS/F9/censo_main/r.txt \| /bin/grep -A3 "Pergunta de comportamento" \| cut -c1-900` |
 | 15:33:28 | Bash | Read F9 census result | `D=logs/ESPINHA-BRIEFS/F9/censo_main; tail -1 $D/log \| cut -c1-60; wc -c $D/r.txt; sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' $D/r.txt \| /bin/grep -nE "alcance nao verificado\|alcance não verificado\|perguntas de lei" ; sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' $D/r.txt \| head -60 \| cut -c1-330` |
