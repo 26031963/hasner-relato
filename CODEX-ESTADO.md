@@ -1,7 +1,380 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 19:21** · publicado em **18/11/2026 19:25** (UTC-3)
+> Ultima resposta processada: **18/11/2026 19:30** · publicado em **18/11/2026 19:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 19:30 · sessao e13c90ffe027 · RAIA-ESPURIAS · leitura · origem=Code
+
+A sonda lê a ata lavrada em `CelulaDia.ata`, a mesma fonte que `grade_da_celula` consulta; `ata_do_dia` grava nela a lista `orfas`. Não recalcula a grade. [app/escala/models.py:1773](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/models.py:1773), [app/escala/services/leitor_celula.py:350](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:350), [app/ponto/services/cartorio.py:730](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:730)
+
+No bloco B, o casamento é **aproximado por HH:MM**, consultando a ata do dia civil de cada batida e a da véspera. A ambiguidade é medida entre batidas apuráveis do colaborador no mesmo dia civil. Ata ausente ou sem lista reconhecível produz resultado indeterminado, não negativo. A sonda mostra também o dia de apresentação atribuído pela função da casa para abrir os casos de col67. [app/ponto/turnos.py:2899](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:2899), [não verificado]
+
+Funções da cópia chamadas diretamente:
+
+- `batidas_apuraveis`: [app/ponto/turnos.py:2868](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:2868).
+- `dia_das_batidas`: [app/ponto/turnos.py:2899](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:2899); `janela_com_pad`: [app/ponto/turnos.py:1834](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1834).
+
+A sonda e seus resultados na sombra, inclusive contagens, preenchimento dos campos e `ERROS=0`, ficam **[não verificado]**.
+
+```python
+# Executar no shell Django do tenant, pelo envelope da sessao.
+# BLOCO B: casamento aproximado por HH:MM com ata do dia civil e da vespera.
+# Somente consultas; nao chama portas de escrita nem monta a grade.
+
+from collections import Counter, defaultdict
+from datetime import date, datetime, time, timedelta
+import re
+
+from django.apps import apps
+from django.utils import timezone
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia
+from ponto.models import Batida
+from ponto.turnos import batidas_apuraveis, dia_das_batidas, janela_com_pad
+
+
+ERROS = 0
+UM_DIA = timedelta(days=1)
+INI_DIA = date(2026, 10, 21)
+FIM_DIA_EXCLUSIVO = date(2026, 11, 21)
+EMPRESAS = (2, 3, 4)
+FAIXAS = ("0-10s", "11-60s", "61s-10min")
+CUMULATIVAS = ("ate_10s", "ate_60s", "ate_10min")
+
+
+def erro(etapa, exc):
+    global ERROS
+    ERROS += 1
+    # Nao imprime a mensagem: ela pode conter dados pessoais ou SQL.
+    print("ERRO etapa={} tipo={}".format(etapa, type(exc).__name__))
+
+
+def limite(dia):
+    return timezone.make_aware(datetime.combine(dia, time.min),
+                               timezone.get_current_timezone())
+
+
+def local(ts):
+    if ts is None:
+        return None
+    if timezone.is_naive(ts):
+        raise ValueError("datetime sem timezone")
+    return timezone.localtime(ts)
+
+
+def instante(ts):
+    valor = local(ts)
+    return valor.strftime("%d/%m/%Y %H:%M:%S.%f %z") if valor else None
+
+
+def faixa(segundos):
+    # Limites reais, sem arredondar: 10 < s <= 60 pertence a 11-60s.
+    if 0 <= segundos <= 10:
+        return "0-10s"
+    if segundos <= 60:
+        return "11-60s"
+    if segundos <= 600:
+        return "61s-10min"
+    return None
+
+
+def grupos(segundos):
+    f = faixa(segundos)
+    if f is None:
+        return ()
+    saida = [f, "ate_10min"]
+    if segundos <= 60:
+        saida.append("ate_60s")
+    if segundos <= 10:
+        saida.append("ate_10s")
+    return tuple(saida)
+
+
+def registro(b, campos):
+    resultado = {
+        "col": "col{}".format(b.colaborador_id),
+        "pk_batida": b.pk,
+        "instante": instante(b.timestamp),
+        "tipo": b.tipo,
+        "origem": b.origem,
+        "criado_em": instante(b.criado_em),
+    }
+    for nome in ("canal", "terminal", "timestamp_dispositivo"):
+        if nome in campos:
+            valor = getattr(b, nome)
+            resultado[nome] = instante(valor) if nome == "timestamp_dispositivo" else valor
+    return resultado
+
+
+def lista_ata(celula):
+    if celula is None:
+        return "celula_ausente", None
+    ata = celula.ata
+    if not isinstance(ata, dict):
+        return "ata_ausente_ou_invalida", None
+    if "orfas" not in ata or not isinstance(ata["orfas"], list):
+        return "lista_orfas_ausente_ou_invalida", None
+    valores = ata["orfas"]
+    if any(not isinstance(h, str) or not re.fullmatch(r"\d{2}:\d{2}", h)
+           for h in valores):
+        return "lista_orfas_invalida", None
+    return "disponivel", valores
+
+
+def mostrar_ata(cid, dia, cels):
+    estado, horas = lista_ata(cels.get((cid, dia)))
+    celula = cels.get((cid, dia))
+    print("ATA col{} dia={} estado={} orfas={} marcos_dna={} lampadas={}".format(
+        cid, dia.isoformat(), estado, horas,
+        (celula.dna or {}).get("marcos")
+        if celula and isinstance(celula.dna, dict) else None,
+        (celula.ata or {}).get("lampadas")
+        if celula and isinstance(celula.ata, dict) else None,
+    ))
+
+
+def cruzar(b, cels, minutos):
+    dt = local(b.timestamp)
+    dia = dt.date()
+    hhmm = dt.strftime("%H:%M")
+    consultas = []
+    encontrou = False
+    desconhecida = False
+    for data_ata in (dia, dia - UM_DIA):
+        estado, horas = lista_ata(cels.get((b.colaborador_id, data_ata)))
+        casou = None if horas is None else hhmm in horas
+        encontrou = encontrou or casou is True
+        desconhecida = desconhecida or casou is None
+        consultas.append({
+            "dia_ata": data_ata.isoformat(),
+            "estado": estado,
+            "orfas": horas,
+            "casou_hhmm": casou,
+        })
+    situacao = "sim" if encontrou else ("indeterminado" if desconhecida else "nao")
+    candidatos = minutos[(b.colaborador_id, dia, hhmm)]
+    return {
+        "orfa_hhmm": situacao,
+        "ambiguo": candidatos > 1,
+        "batidas_apuraveis_no_minuto_civil": candidatos,
+        "atas": consultas,
+    }
+
+
+def resultado_par(a, b):
+    if "sim" in (a, b):
+        return "sim"
+    if "indeterminado" in (a, b):
+        return "indeterminado"
+    return "nao"
+
+
+def abrir_caso(dia, campos, cels):
+    cid = 67
+    # O mapa da casa inclui batidas reclamadas pelo turno e atribui as demais
+    # ao dia civil. O pad vem da mesma porta; a consulta e apuravel.
+    colab = Colaborador.objects.filter(pk=cid, empresa_id__in=EMPRESAS).first()
+    print("CASO col67 dia={}".format(dia.isoformat()))
+    if colab is None:
+        print("CASO col67 fora_da_frota_ou_ausente")
+        return
+    mapa = dia_das_batidas(colab, dia, dia)
+    pad_ini, pad_fim = janela_com_pad(dia, dia)
+    bs = list(
+        batidas_apuraveis(colab, limite(pad_ini))
+        .filter(timestamp__lt=limite(pad_fim + UM_DIA))
+        .order_by("timestamp", "pk")
+    )
+    mostrar_ata(cid, dia, cels)
+    for b in bs:
+        civil = local(b.timestamp).date()
+        atribuido = mapa.get(b.pk)
+        if civil == dia or atribuido == dia:
+            r = registro(b, campos)
+            r["dia_civil"] = civil.isoformat()
+            r["dia_apresentacao_casa"] = atribuido.isoformat() if atribuido else None
+            r["no_dia_civil"] = civil == dia
+            r["no_dia_apresentacao"] = atribuido == dia
+            print("CASO_BATIDA", r)
+
+
+def executar():
+    # Inclui modelos que as funcoes da casa possam consultar indiretamente.
+    # Sao nomes de campos, nao valores de pessoas.
+    for modelo in sorted(apps.get_models(), key=lambda m: m._meta.label_lower):
+        print("CAMPOS {} {}".format(
+            modelo._meta.label, [f.name for f in modelo._meta.get_fields()]
+        ))
+
+    campos = {f.name for f in Batida._meta.get_fields()}
+    print("CAMPOS_DIMENSOES_BATIDA", [
+        n for n in ("origem", "canal", "terminal", "timestamp_dispositivo")
+        if n in campos
+    ])
+    print("UNIVERSO empresas=2,3,4 inicio_local=21/10/2026_00:00:00 "
+          "fim_local_exclusivo=21/11/2026_00:00:00")
+
+    # ---------- BLOCO A: apenas Batida, sem grade nem ata ----------
+    print("BLOCO_A")
+    inicio = limite(INI_DIA)
+    fim = limite(FIM_DIA_EXCLUSIVO)
+    batidas = list(
+        batidas_apuraveis(None, inicio)
+        .filter(timestamp__lt=fim, colaborador__empresa_id__in=EMPRESAS)
+        .order_by("colaborador_id", "timestamp", "pk")
+    )
+    pares = []
+    anterior = None
+    for b in batidas:
+        if anterior is not None and anterior.colaborador_id == b.colaborador_id:
+            segundos = (b.timestamp - anterior.timestamp).total_seconds()
+            if anterior.tipo != b.tipo and faixa(segundos) is not None:
+                pares.append((anterior, b, segundos))
+        anterior = b
+
+    # Cada par conta uma vez em cada faixa aplicavel; pessoas sao distintas
+    # dentro de cada faixa e de cada combinacao ordenada de dimensoes.
+    agregados = defaultdict(lambda: [0, set()])
+    for a, b, segundos in pares:
+        dimensoes = [
+            ("origem_a/origem_b", (a.origem, b.origem)),
+        ]
+        for campo in ("canal", "terminal"):
+            if campo in campos:
+                dimensoes.append(
+                    (campo + "_a/" + campo + "_b",
+                     (getattr(a, campo), getattr(b, campo)))
+                )
+        for grupo in grupos(segundos):
+            for nome, valor in dimensoes:
+                item = agregados[(grupo, nome, valor)]
+                item[0] += 1
+                item[1].add(a.colaborador_id)
+
+    for grupo in FAIXAS + CUMULATIVAS:
+        selecionados = [(a, b, s) for a, b, s in pares if grupo in grupos(s)]
+        print("A_TOTAL faixa={} pares={} pessoas={}".format(
+            grupo, len(selecionados),
+            len({a.colaborador_id for a, _, _ in selecionados})
+        ))
+        itens = [(chave, valor) for chave, valor in agregados.items()
+                 if chave[0] == grupo]
+        for (g, nome, valor), (qtd, pessoas) in sorted(itens, key=lambda x: repr(x[0])):
+            print("A_DIMENSAO faixa={} dimensao={} valores={} pares={} pessoas={}".format(
+                g, nome, valor, qtd, len(pessoas)
+            ))
+
+    # ---------- BLOCO B: ata lavrada; comparacao aproximada HH:MM ----------
+    print("BLOCO_B criterio=HH:MM dia_civil_e_vespera")
+    ids = {a.colaborador_id for a, _, _ in pares}
+    ids.add(67)
+
+    # Para ambiguidades, inclui dias civis completos mesmo nas bordas
+    # da competencia. Os pares continuam restritos ao universo do bloco A.
+    batidas_dias = list(
+        batidas_apuraveis(None, limite(INI_DIA))
+        .filter(
+            timestamp__lt=limite(FIM_DIA_EXCLUSIVO),
+            colaborador_id__in=ids,
+            colaborador__empresa_id__in=EMPRESAS,
+        )
+        .order_by("colaborador_id", "timestamp", "pk")
+    )
+    minutos = Counter()
+    for b in batidas_dias:
+        dt = local(b.timestamp)
+        minutos[(b.colaborador_id, dt.date(), dt.strftime("%H:%M"))] += 1
+
+    cels = {
+        (c.colaborador_id, c.data): c
+        for c in CelulaDia.objects.filter(
+            colaborador_id__in=ids,
+            colaborador__empresa_id__in=EMPRESAS,
+            data__gte=INI_DIA - UM_DIA,
+            data__lt=FIM_DIA_EXCLUSIVO,
+        ).order_by("colaborador_id", "data")
+    }
+
+    resultados = []
+    for a, b, segundos in pares:
+        ca = cruzar(a, cels, minutos)
+        cb = cruzar(b, cels, minutos)
+        situacao = resultado_par(ca["orfa_hhmm"], cb["orfa_hhmm"])
+        ambiguo = ca["ambiguo"] or cb["ambiguo"]
+        resultados.append((a, b, segundos, situacao, ambiguo))
+        print("B_PAR faixa={} segundos={} a={} b={} "
+              "a_cruzamento={} b_cruzamento={} par_orfa_hhmm={} ambiguo={}".format(
+                  faixa(segundos), segundos, registro(a, campos), registro(b, campos),
+                  ca, cb, situacao, ambiguo
+              ))
+
+    for dia in (date(2026, 11, 10), date(2026, 11, 14)):
+        try:
+            abrir_caso(dia, campos, cels)
+        except Exception as exc:
+            erro("caso_col67_" + dia.isoformat(), exc)
+
+    for grupo in FAIXAS + CUMULATIVAS:
+        itens = [r for r in resultados if grupo in grupos(r[2])]
+        contagens = Counter(r[3] for r in itens)
+        pessoas_sim = {r[0].colaborador_id for r in itens if r[3] == "sim"}
+        print(
+            "RESUMO_5II faixa={} pares={} pessoas={} "
+            "par_orfa_hhmm_sim={} pessoas_orfa_hhmm_sim={} "
+            "par_orfa_hhmm_nao={} par_orfa_hhmm_indeterminado={} "
+            "pares_ambiguos={} criterio=casamento_HH:MM_dia_civil_e_vespera".format(
+                grupo, len(itens), len({r[0].colaborador_id for r in itens}),
+                contagens["sim"], len(pessoas_sim), contagens["nao"],
+                contagens["indeterminado"], sum(r[4] for r in itens)
+            )
+        )
+
+
+try:
+    executar()
+except Exception as exc:
+    erro("execucao", exc)
+finally:
+    print("FIM_BATIDA_DEDUP_5II; ERROS={}".format(ERROS))
+```
+
+## 18/11 19:29 · sessao 7c4b518c2063 · RAIA-ESPURIAS · sonda · origem=Code
+
+**Contagem: 14 plantadas distintas, 13 pessoas distintas e 14 pares.** Sim, a contagem impressa bate numericamente com “14 plantadas / 13 pessoas”: `col996` aparece em duas plantadas; as outras 12 pessoas aparecem uma vez cada. O texto original do aval não foi fornecido para conferência independente. [não verificado: arquivo e linha do envelope e do aval não fornecidos]
+
+Os dados da tabela abaixo são transcritos do envelope fornecido no prompt; **não há arquivo:linha fornecido para verificá-los independentemente**. Em todos os casos, a classe atual do lote é `b_conversa`, há zero colisões de tipo oposto na janela de 300 segundos, e a real foi criada antes da validação. O valor na coluna “conflito” é apenas `conflito_no_detalhe`; a classe do lote e esse campo não são o julgamento de dono L-099. A implementação de `classe_do_lote` tem decisões próprias sobre resposta, marco e conflito ([validacao.py:1177](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/validacao.py:1177)). [não verificado: arquivo:linha do envelope]
+
+| Caso | Plantada: ID, instante, tipo | Real: ID, instante | Distância | Real criada vs. declaração / validação | Conflito atual | Dono |
+|---|---|---|---:|---|---|---|
+| col40 | 139931 · 23/10 12:00 · S | 135364 · 23/10 13:37:31 | 97,52 min | antes / antes | sim | sem dono provado |
+| col60 | 152873 · 03/11 11:00 · S | 144882 · 03/11 13:19:17 | 139,30 min | antes / antes | não | sem dono provado |
+| col200 | 146569 · 03/11 02:00 · S | 144414 · 03/11 03:02:17 | 62,29 min | antes / antes | sim | sem dono provado |
+| col263 | 146777 · 31/10 14:00 · S | 142735 · 31/10 16:16:40 | 136,67 min | antes / antes | não | sem dono provado |
+| col301 | 151816 · 08/11 23:00 · S | 149559 · 08/11 20:00:06 | 179,89 min | antes / antes | sim | sem dono provado |
+| col444 | 140817 · 28/10 16:00 · E | 139776 · 28/10 13:01:36 | 178,39 min | antes / antes | sim | sem dono provado |
+| col446 | 144666 · 25/10 18:00 · S | 136990 · 25/10 15:57:29 | 122,50 min | antes / antes | sim | sem dono provado |
+| col549 | 151894 · 10/11 17:20 · S | 151065 · 10/11 14:20:02 | 179,97 min | antes / antes | sim | sem dono provado |
+| col727 | 140816 · 25/10 14:00 · S | 136998 · 25/10 16:01:28 | 121,47 min | antes / antes | sim | sem dono provado |
+| col881 | 154095 · 13/11 12:00 · S | 154081 · 13/11 13:19:50 | 79,84 min | **depois / antes** | sim | sem dono provado |
+| col899 | 151735 · 24/10 10:00 · E | 136112 · 24/10 11:17:42 | 77,70 min | antes / antes | não | sem dono provado |
+| col909 | 149856 · 07/11 12:00 · S | 148650 · 07/11 14:59:24 | 179,41 min | antes / antes | sim | sem dono provado |
+| col996 | 153862 · 29/10 15:50 · S | 140804 · 29/10 13:17:11 | 152,81 min | antes / antes | sim | sem dono provado |
+| col996 | 153847 · 04/11 15:52 · S | 146242 · 04/11 12:54:21 | 177,65 min | antes / antes | sim | sem dono provado |
+
+O motivo da classificação é comum aos 14: o envelope não traz o julgamento L-099 nem todos os seus insumos por dia. O juiz considera, entre outros, vínculo e folga, batida fora de turno, paridade, fase e cadastro versus realidade; a presença de um par próximo ou o conflito atual, isoladamente, não determina seu resultado ([e6_oraculo.py:53](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/e6_oraculo.py:53), [e6_oraculo.py:98](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/e6_oraculo.py:98)). A ausência desses insumos em cada caso é observação sobre o envelope do prompt. [não verificado: arquivo:linha do envelope]
+
+**col881:** a declaração foi respondida às 13:19:38; a real foi criada às 13:19:50, **12 segundos depois da declaração**, mas antes da validação às 13:48:40. Assim, ela integra os 14 pares com real criada antes da validação, embora não integre os 13 com real criada antes da declaração. A guarda histórica e o dono seguem sem prova. [não verificado: arquivo:linha do envelope]
+
+**RESUMO_5I — pares**, conforme impresso no envelope; a faixa compara a distância da plantada à real e a ordem compara a criação da real à validação. [não verificado: arquivo:linha do envelope]
+
+| Criação da real vs. validação | Até 60 min | Fora de 60 min |
+|---|---:|---:|
+| Antes | 0 | 14 |
+| Depois | 0 | 0 |
+| Mesmo instante | 0 | 0 |
+| Desconhecida | 0 | 0 |
+
+**Erros e limites:** o envelope declara `ERROS=0` e `rc_sombra=0`; isso informa o resultado declarado da execução, sem reconstruir a guarda histórica. A própria saída marca a guarda histórica e a regra ou corte por caso como não verificados e informa que `registrar_batida` não foi chamado. O código da sonda, a execução, o acesso efetivo à sombra e a condição de ter rodado uma única vez em um arquivo **não foram verificados independentemente**. [não verificado: arquivo:linha da sonda e dos avais não fornecidos]
 
 ## 18/11 19:21 · sessao 4bcf8eb5e0d7 · RAIA-ESPURIAS · leitura · origem=Code
 
@@ -2268,133 +2641,4 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-## 18/11 18:16 · sessao 5f0a28b44986 · E4D-PROJECAO-UM-ESCRITOR · leitura · origem=Code
-
-A remedição **não está concluída**: não tenho uma classificação revisada dos 1.697 registros por receptor e comportamento, nem a lista por sítio dos 67 `getattr` dinâmicos. Por isso, os totais finais e a lista completa de juízes com selo (b) permanecem **[não verificado]**. A cópia disponível não contém metadados Git que permitam confirmar o HEAD ou o hash informado **[não verificado]**.
-
-A amostra confirma que a saída bruta não pode ser usada como contagem final:
-
-- **Homônimo de outro modelo:** `materializada_em` em [regularizacao_ext.py:219](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/regularizacao_ext.py:219) pertence ao queryset de `RegularizacaoExterna`, portanto deve sair da contagem das três entidades.
-- **Chave POST, não coluna:** `resolucao` em [acoes_chamado.py:187](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/acoes_chamado.py:187) é uma chave de `request.POST`.
-- **Indireção com receptor resolvido:** `trava_na_ordem` lê `fechada_em` de `DisputaSupervisao` e usa `status_local` no queryset de `ChamadoColaborador` em [models.py:2858](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2858).
-- **DECIDE, amostra:** `fechar_beco` verifica `d.fechada_em` antes de chamar `d.fechar` em [becos.py:55](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/becos.py:55).
-- **MOSTRA, amostra:** o card exibe resposta e instante em [\_card_atendimento.html:106](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_card_atendimento.html:106); a atribuição do objeto ao modelo, nesse trecho isolado, é **[não verificado]**.
-- **Leitura dinâmica alcançável:** [historico.py:96](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/historico.py:96) obtém `PerguntaDisputa` e passa três nomes de colunas ao `getattr` da linha 105. Se esse sítio está entre os 67 da sonda é **[não verificado]**.
-
-A tabela abaixo reproduz o **antes informado no anexo**; os valores do anexo e todos os valores “depois” não foram reconciliados sítio a sítio **[não verificado]**.
-
-| Coluna | Antes informado | Depois |
-|---|---:|---|
-| status_local | 467 | [não verificado] |
-| resolvido_em | 27 | [não verificado] |
-| via_encerramento | 20 | [não verificado] |
-| respondido_por | 8 | [não verificado] |
-| fechada_em | 199 | [não verificado] |
-| fechada_por | 2 | [não verificado] |
-| resolucao | 25 | [não verificado] |
-| motivo_fechamento | 18 | [não verificado] |
-| reaberturas_admin | 6 | [não verificado] |
-| reaberturas_colab | 11 | [não verificado] |
-| motivos | 26 | [não verificado] |
-| materializada_em | 232 | [não verificado] |
-| materializada_por | 1 | [não verificado] |
-| via_resolucao | 162 | [não verificado] |
-| respondida_em | 86 | [não verificado] |
-| resposta_colab | 157 | [não verificado] |
-| validada_em | 187 | [não verificado] |
-| validada_por | 7 | [não verificado] |
-| recusa_motivo | 20 | [não verificado] |
-| pendencia_admin | 5 | [não verificado] |
-| data_conferida_em | 5 | [não verificado] |
-| data_conferida_por | 1 | [não verificado] |
-| veredito_lavrado | 15 | [não verificado] |
-| julgado_em | 5 | [não verificado] |
-| janela_expira_em | 5 | [não verificado] |
-| **Total** | **1.697** | **[não verificado]** |
-
-Quanto ao selo (b), um juiz registrado cuja leitura foi conferida é `pergunta_respondida`: o registro está em [core/juizes.py:306](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/core/juizes.py:306), e as leituras de `respondida_em` e `resposta_colab` estão em [chamados/juizes.py:1552](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1552). Outro é `motivo_fora_da_fabrica`, registrado em [core/juizes.py:297](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/core/juizes.py:297), que lê `status_local` e filtra `materializada_em` em [disputa_emissao.py:769](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:769). **A lista completa e seu total são [não verificado].**
-
-**Fecho:** DECIDE = **[não verificado]**; MOSTRA/FILTRA = **[não verificado]**; INDETERMINADO = **[não verificado]**; juízes que leem projeção = **[não verificado]**. A contagem de quantos dos 67 `getattr` podem alcançar projeção também é **[não verificado]**.
-
-## 18/11 18:14 · sessao fdb6b644d62b · E4D-PROJECAO-UM-ESCRITOR · leitura · origem=Code
-
-O desenho ainda **não está fechado para construção**: a sequência de decisões da pergunta já fornece parte da reconstrução, mas os atos existentes de chamado e de disputa não demonstram, nesta leitura, uma reconstrução completa e obrigatória das colunas. Em particular, `evento()` é *best-effort*: uma falha pode deixar a alteração de negócio seguir sem a linha de auditoria. [app/core/observ.py:94](app/core/observ.py:94), [app/chamados/models.py:298](app/chamados/models.py:298), [app/chamados/models.py:2100](app/chamados/models.py:2100).
-
-Este é um **pré-desenho parcial**. O censo individual de leitores e a comprovação de todos os atos, autores, relógios e transações permanecem abertos; por isso, não apresento contagens inventadas nem trato o contador proposto como prova já existente. [nao verificado]
-
-**Contrato comum proposto.** Cada projetor deve reconstruir os valores a partir de atos persistidos, escrever na mesma transação do ato e ter, no mesmo pouso, um contador por linha da frota: `reconstruido != gravado`, esperado zero, com um caso que provoque divergência. O selo AST deve impedir qualquer outro escritor das colunas projetadas, com allowlist zero; o selo de juízes deve identificar leituras de coluna por autoridades registradas. Essas exigências vêm dos itens 3 e 5 do aval fornecido; o texto raspado não tem arquivo:linha local conferido. [nao verificado] [nao verificado]
-
-## PerguntaDisputa
-
-| Coluna | Ato e derivação identificados | Porta e transação | Prova proposta e lacuna |
-|---|---|---|---|
-| `respondida_em` | `DecisaoPergunta.RESPOSTA.ato_em`; `RECUSA` e `REABERTURA` limpam o par. [app/chamados/models.py:4167](app/chamados/models.py:4167), [app/chamados/models.py:4319](app/chamados/models.py:4319) | Resposta humana, automática e por trilha registram decisão nos respectivos `atomic`; projetar depois do registro, ainda no `atomic` externo. [app/chamados/services/disputa_emissao.py:1517](app/chamados/services/disputa_emissao.py:1517), [app/chamados/services/disputa_emissao.py:1684](app/chamados/services/disputa_emissao.py:1684), [app/chamados/services/disputa_emissao.py:1706](app/chamados/services/disputa_emissao.py:1706) | Comparar por PK com a dobra da sequência, inclusive resposta posterior à validação e reabertura; cobertura integral do legado sem linha **[nao verificado]**. [app/chamados/models.py:4256](app/chamados/models.py:4256) |
-| `resposta_colab` | `RESPOSTA.ato_texto`, com limpeza por `RECUSA`/`REABERTURA`. [app/chamados/models.py:4170](app/chamados/models.py:4170), [app/chamados/models.py:4322](app/chamados/models.py:4322) | Mesmas portas e transações do par anterior. [app/chamados/services/disputa_emissao.py:1532](app/chamados/services/disputa_emissao.py:1532) | Comparação por PK e caso de texto e instante inconsistentes; o tratamento D3 permanece aberto. [app/chamados/services/validacao.py:414](app/chamados/services/validacao.py:414) |
-| `validada_em` | `VALIDACAO.ato_em`; `DEVOLUCAO`, `RECUSA`, `REABERTURA` e certas respostas posteriores retiram a validação. [app/chamados/models.py:4278](app/chamados/models.py:4278) | `_carimbar_validacao` e devolução registram no `atomic`; projetar após registrar. [app/chamados/services/validacao.py:170](app/chamados/services/validacao.py:170), [app/chamados/services/validacao.py:275](app/chamados/services/validacao.py:275) | Comparação por PK, exercitando `resposta_mantem_validacao` nas duas posições. [app/chamados/models.py:4195](app/chamados/models.py:4195) |
-| `validada_por` | Candidato: `VALIDACAO.ato_por`, limpo pelos mesmos atos que retiram a validação. O método de leitura aberto retorna instante, mas não autor; a dobra completa do autor e seu legado são **[nao verificado]**. [app/chamados/models.py:4169](app/chamados/models.py:4169), [app/chamados/models.py:4295](app/chamados/models.py:4295) | Mesmas portas de validação e devolução; cobrir também correção em lote e ressuscitação. [app/chamados/services/validacao.py:170](app/chamados/services/validacao.py:170), [app/chamados/models.py:1702](app/chamados/models.py:1702) | Comparação por PK incluindo autor nulo e validações sucessivas; **[nao verificado]** se os atos históricos bastam. |
-| `materializada_em` | O ato de conclusão ainda precisa nascer na materialização; o backlog exige choice em `DecisaoPergunta`, mesmo instante e backfill medido. Não há esse choice na lista aberta. [app/docs/BACKLOG.md:2015](app/docs/BACKLOG.md:2015), [app/chamados/models.py:4152](app/chamados/models.py:4152) | Materialização registra conclusão e chama o projetor no mesmo `atomic`; o encaixe para todas as vias e descarimbos é **[nao verificado]**. [app/chamados/models.py:3299](app/chamados/models.py:3299) | Comparar por PK, incluindo conclusão, desfazimento e legado; estoque em competência entregue e autorização para alcançá-lo **[nao verificado]**. [app/docs/BACKLOG.md:2015](app/docs/BACKLOG.md:2015) |
-| `materializada_por` | Candidato: autor do ato de conclusão; escolha de campo e cobertura dos atos de identidade/desfazimento **[nao verificado]**. [app/chamados/models.py:3295](app/chamados/models.py:3295), [app/chamados/models.py:3364](app/chamados/models.py:3364) | Mesmo ponto transacional da conclusão e dos atos compensadores; fronteiras exatas **[nao verificado]**. | Comparação por PK com autores distintos e nulos; reconstruibilidade histórica **[nao verificado]**. |
-| `via_resolucao` | A fonte única para todas as vias, inclusive relavra, identidade e desfazimento, **[nao verificado]**. Há escrita direta no carimbo e na relavra. [app/chamados/models.py:3295](app/chamados/models.py:3295), [app/chamados/services/relavra_via.py:125](app/chamados/services/relavra_via.py:125) | Os pontos de gravação precisam convergir para o projetor junto de seus atos; transações de todos os ramos **[nao verificado]**. | Comparação por PK com mudança de via sem mudança de instante; ato suficiente para cada ramo **[nao verificado]**. |
-
-A leitura atual de decisões ainda incorpora, como passivo, resposta e validação da projeção sem linha correspondente. Portanto, usá-la diretamente como contador independente poderia comparar a coluna consigo mesma e esconder divergência; o contador precisa distinguir e resolver esse legado antes de afirmar reconstrução exclusiva dos atos. [app/chamados/models.py:4256](app/chamados/models.py:4256), [app/chamados/models.py:4309](app/chamados/models.py:4309).
-
-**Escritores atuais a retirar das colunas projetadas**, sujeitos às exceções FATO e à solução dos atos faltantes: carimbo e carimbo de identidade, descarimbo individual e em lote, resposta humana/automática/por trilha, validação/devolução, correção, relavra e devoluções D1–D4. Os pontos confirmados incluem [models.py:3324](app/chamados/models.py:3324), [models.py:3378](app/chamados/models.py:3378), [models.py:3399](app/chamados/models.py:3399), [models.py:3485](app/chamados/models.py:3485), [disputa_emissao.py:1481](app/chamados/services/disputa_emissao.py:1481), [disputa_emissao.py:1617](app/chamados/services/disputa_emissao.py:1617), [disputa_emissao.py:1682](app/chamados/services/disputa_emissao.py:1682), [disputa_emissao.py:1705](app/chamados/services/disputa_emissao.py:1705), [validacao.py:168](app/chamados/services/validacao.py:168), [validacao.py:273](app/chamados/services/validacao.py:273), [validacao.py:346](app/chamados/services/validacao.py:346), [models.py:1702](app/chamados/models.py:1702), [validacao.py:440](app/chamados/services/validacao.py:440) e [relavra_via.py:246](app/chamados/services/relavra_via.py:246). A exaustividade, inclusive nomes dinâmicos e chamadores, **[nao verificado]**.
-
-**R2 fora da projeção por enquanto:** `recusa_motivo`, `pendencia_admin`, `data_conferida_em` e `data_conferida_por`: o aval fornecido classifica essas colunas como sem fato próprio para a E4d; a existência de ocorrência ou auditoria em algum ramo não prova fonte completa para todos os ramos. [app/chamados/services/materializacao.py:1365](app/chamados/services/materializacao.py:1365), [app/chamados/services/validacao.py:916](app/chamados/services/validacao.py:916), [app/chamados/services/validacao.py:996](app/chamados/services/validacao.py:996), [nao verificado].
-
-O cache de lavra `veredito_lavrado`, `julgado_em` e `janela_expira_em` permanece separado dessa matriz de atos; seus escritores L1–L5 precisam ser examinados para escritor único, conforme a classe R3 do aval fornecido. [app/chamados/veredito_lavrado.py:250](app/chamados/veredito_lavrado.py:250), [app/chamados/services/fio.py:975](app/chamados/services/fio.py:975), [nao verificado].
-
-## DisputaSupervisao e RAIZ-DA-DISPUTA
-
-| Coluna | Ato candidato e porta | Transação e prova proposta |
-|---|---|---|
-| `fechada_em` | `LogAuditoria` de ação `disputa_fechada`: seu relógio `criado_em` é candidato, mas é gerado depois do relógio gravado na coluna; igualdade exata não está demonstrada. [app/chamados/models.py:2095](app/chamados/models.py:2095), [app/core/models.py:307](app/core/models.py:307) | `fechar` tem `atomic`, mas o evento é best-effort; antes de projetar, é necessário um ato obrigatório com o mesmo relógio. Contador por PK e teste de falha de gravação do ato. [app/chamados/models.py:2068](app/chamados/models.py:2068), [app/core/observ.py:98](app/core/observ.py:98) |
-| `fechada_por` | Candidato: `LogAuditoria.usuario` do fechamento; equivalência para todos os atores e histórico **[nao verificado]**. [app/core/models.py:295](app/core/models.py:295), [app/chamados/models.py:2100](app/chamados/models.py:2100) | Mesma lacuna de obrigatoriedade; comparar por PK inclusive ator nulo. [app/core/observ.py:98](app/core/observ.py:98) |
-| `resolucao` | Candidato: `valor_depois.resolucao` do fechamento; reabertura e limpeza residual também alteram o valor e precisam de trilha suficiente. [app/chamados/models.py:2103](app/chamados/models.py:2103), [app/chamados/models.py:2338](app/chamados/models.py:2338), [app/chamados/models.py:2428](app/chamados/models.py:2428) | Comparar por PK depois de fechar, reabrir e limpar resíduo; ato obrigatório em todos os ramos **[nao verificado]**. |
-| `motivo_fechamento` | Candidato: `valor_depois.motivo_fechamento`, limpo na reabertura. [app/chamados/models.py:2103](app/chamados/models.py:2103), [app/chamados/models.py:2339](app/chamados/models.py:2339) | Mesma necessidade de ato obrigatório e comparação por PK após cada ciclo. [app/core/observ.py:98](app/core/observ.py:98) |
-| `reaberturas_colab` | Ocorrência `pedido_de_correcao` é candidata; comprovação de uma ocorrência obrigatória por incremento e reconstrução histórica **[nao verificado]**. [app/chamados/models.py:2402](app/chamados/models.py:2402), [app/chamados/models.py:2407](app/chamados/models.py:2407) | Projetar na porta de reabertura do colaborador, no mesmo `atomic` do ato; atomicidade integral dessa porta **[nao verificado]**. Contar por PK e testar repetição/no-op. |
-
-**Escritores a substituir nessa fatia:** `fechar`, `reabrir_admin`, `reabrir_sistema` e `limpar_resolucao_residual` nos quatro campos de fechamento, conforme aplicável, e `reabrir_por_colab` no contador. A reabertura administrativa continua com a exceção FATO A03 declarada no aval fornecido: sua mudança depende da fonte própria, cuja forma e momento **[nao verificado]**. [app/chamados/models.py:2095](app/chamados/models.py:2095), [app/chamados/models.py:2312](app/chamados/models.py:2312), [app/chamados/models.py:2336](app/chamados/models.py:2336), [app/chamados/models.py:2402](app/chamados/models.py:2402), [app/chamados/models.py:2428](app/chamados/models.py:2428), [nao verificado].
-
-**R2:** `reaberturas_admin` e `motivos` ficam fora até fato próprio; o primeiro é incrementado em A03 e o segundo também é atualizado em outras portas, sem fonte substituta completa demonstrada. [app/chamados/models.py:2316](app/chamados/models.py:2316), [app/chamados/models.py:2129](app/chamados/models.py:2129), [app/chamados/services/disputa_emissao.py:550](app/chamados/services/disputa_emissao.py:550), [nao verificado].
-
-### Matriz conjunta da raiz e do projetor
-
-| Evento | RAIZ decide | PROJETOR grava |
-|---|---|---|
-| Nascer | Aplicar o contrato de nascimento e vínculo com filhos; o tratamento de órfãos e dona fechada ainda exige conferir as decisões F1 e seus números atuais. [app/docs/BACKLOG.md:2113](app/docs/BACKLOG.md:2113), [nao verificado] | Estado inicial correspondente ao ato de nascimento; ato suficiente e chamada exata **[nao verificado]**. |
-| Filho muda | No fim de `carimbar` e de `DecisaoPergunta.registrar`, no mesmo `atomic`, reavaliar `pode_fechar`; se puder, chamar `fechar`. Isso é o desenho solicitado no complemento fornecido, ainda não demonstrado como implementação atual. [app/chamados/models.py:2009](app/chamados/models.py:2009), [app/chamados/models.py:4329](app/chamados/models.py:4329), [nao verificado] | Depois do ato de fechamento obrigatório, projetar os quatro campos do fechamento; não gravar fechamento só porque um filho mudou. [app/chamados/models.py:2095](app/chamados/models.py:2095) |
-| Par | A regra do par decide o efeito dos filhos; a devolução BUG-PAR usa `DEVOLUCAO`, distinta da reabertura de ressuscitação. A suficiência da BUG-PAR como F4 da raiz ainda exige censo. [app/chamados/services/validacao.py:308](app/chamados/services/validacao.py:308), [app/chamados/models.py:4180](app/chamados/models.py:4180), [nao verificado] | Projetar a pergunta a partir do ato compensador; projetar disputa apenas se a raiz decidir mudança do ciclo. [app/chamados/services/validacao.py:355](app/chamados/services/validacao.py:355) |
-| Fechar | `pode_fechar` exige ausência de resposta sem veredito e de fio vivo; `fechar` aplica suas guardas e exceções. [app/chamados/models.py:2009](app/chamados/models.py:2009), [app/chamados/models.py:2017](app/chamados/models.py:2017) | Gravar os quatro campos a partir do ato obrigatório de fechamento, ainda não demonstrado suficiente. [app/chamados/models.py:2095](app/chamados/models.py:2095), [app/core/observ.py:98](app/core/observ.py:98) |
-| Reabrir | Distinguir reabertura administrativa, de sistema e pedido do colaborador; a administrativa tem limite e fato próprio pendente. [app/chamados/models.py:2289](app/chamados/models.py:2289), [app/chamados/models.py:2326](app/chamados/models.py:2326), [app/chamados/models.py:2345](app/chamados/models.py:2345) | Limpar os campos de fechamento ou incrementar o contador correspondente **somente quando houver ato suficiente**; a ocorrência de sistema é condicional à existência de chamado. [app/chamados/models.py:2340](app/chamados/models.py:2340) |
-| Tranca | `fechar` distingue a exceção de competência trancada e declara que ela não carimba as perguntas. [app/chamados/models.py:2027](app/chamados/models.py:2027) | Projetar o fechamento decidido pela porta, sem fabricar carimbo de filho; ato de fechamento suficiente **[nao verificado]**. |
-| Desligamento | A porta excepcional pode encerrar perguntas mudas e registrar `SILENCIO`, mantendo a guarda de resposta sem veredito. [app/chamados/models.py:2027](app/chamados/models.py:2027), [app/chamados/models.py:2082](app/chamados/models.py:2082) | Projetar cada filho a partir de seus atos e a disputa a partir do fechamento; ordem e prevenção de reentrada no gancho F3 **[nao verificado]**. |
-
-**Pergunta 29 / fronteira F5.** A proposta é F3 possuir a reação da raiz e a decisão de chamar `fechar`; F5/E4d possuir a substituição das gravações diretas e os selos, em conjunto, para que a escrita direta de `fechar` e das reaberturas acima morra uma vez só. O acoplamento concreto entre o gancho da raiz e os projetores de pergunta e disputa, inclusive reentrada e ordem de travas, ainda precisa ser demonstrado; o backlog registra F5 com E4d e F3 antes dela. [app/docs/BACKLOG.md:1904](app/docs/BACKLOG.md:1904), [app/docs/BACKLOG.md:2113](app/docs/BACKLOG.md:2113), [app/chamados/models.py:2069](app/chamados/models.py:2069).
-
-## ChamadoColaborador
-
-| Coluna | Ato candidato | Porta, transação e prova proposta |
-|---|---|---|
-| `status_local` | `LogAuditoria.valor_depois.status_local` de `estado_chamado`; nascimento usa caminho próprio. [app/chamados/models.py:298](app/chamados/models.py:298), [app/chamados/models.py:1274](app/chamados/models.py:1274) | `_gravar_estado`, dentro do `atomic` de [models.py:286](app/chamados/models.py:286); o evento precisa deixar de ser fonte best-effort se for a fonte do projetor. Contador por PK deve cobrir nascimento e transições. [app/core/observ.py:98](app/core/observ.py:98) |
-| `resolvido_em` | A transição grava `timezone.now()` e preserva instante entre estados encerrados; o evento aberto não demonstra guardar esse mesmo instante. [app/chamados/models.py:248](app/chamados/models.py:248), [app/chamados/models.py:298](app/chamados/models.py:298) | Projetar na mesma transação da transição, após ato com relógio suficiente; comparar por PK e testar transição encerrado→encerrado. |
-| `via_encerramento` | Candidata: `valor_depois.via` de `estado_chamado`; verificar normalização do vazio e nascimento. [app/chamados/models.py:299](app/chamados/models.py:299) | Mesmo `atomic`; comparar por PK depois de encerrar e reabrir, condicionado à garantia de persistência do ato. [app/core/observ.py:98](app/core/observ.py:98) |
-| `respondido_por` | A porta só altera quando `set_user=True`; a suficiência do ator do evento para distinguir “não alterar” de “alterar para nulo” **[nao verificado]**. [app/chamados/models.py:236](app/chamados/models.py:236), [app/chamados/models.py:301](app/chamados/models.py:301) | Mesmo `atomic`; contador por PK precisa cobrir ambos os valores de `set_user` e atores nulos. |
-
-**Escritores atuais:** `_gravar_estado` nos quatro campos; defaults de `abrir` e `criar` em `status_local` devem passar a refletir o estado inicial do projetor. As migrations históricas 0038/0039 são mantidas pelo aval fornecido, portanto não devem ser apresentadas como código histórico a editar para satisfazer o selo de execução atual. [app/chamados/models.py:234](app/chamados/models.py:234), [app/chamados/models.py:1000](app/chamados/models.py:1000), [app/chamados/models.py:1154](app/chamados/models.py:1154), [app/chamados/migrations/0038_a3_registrado_backfill.py:10](app/chamados/migrations/0038_a3_registrado_backfill.py:10), [app/chamados/migrations/0039_a3_via_backfill.py:24](app/chamados/migrations/0039_a3_via_backfill.py:24), [nao verificado].
-
-## Leitores e selo de juízes
-
-A **remedida pedida não foi concluída**: o anexo fornecido contém totais agregados por nome, sem a lista de arquivo:linha por leitor, e informa 67 `getattr` dinâmicos não atribuídos; assim, os números 1.588 e 1.336 não são contagens remedidas de DECIDE e MOSTRA/FILTRA. A contagem de cada classe por coluna e a lista completa de sítios permanecem **[nao verificado]**.
-
-O critério para concluir a remedida é identificar o modelo pelo receptor, queryset/manager, relação ORM ou contexto do template; quando a origem não puder ser resolvida, manter o sítio como indeterminado em vez de atribuí-lo pelo nome. Por exemplo, `reaberturas_colab` em `fio.py` é anotação em memória sobre chamado, não escrita da coluna homônima da disputa. [app/chamados/services/fio.py:390](app/chamados/services/fio.py:390), [app/core/contratos_estruturais.py:719](app/core/contratos_estruturais.py:719).
-
-**Juízes registrados com leitura de projeção confirmada nesta amostra, para o selo (b):**
-
-- C21 `pergunta_respondida` lê `respondida_em` e `resposta_colab` do objeto recebido; é preciso distinguir chamadas com objeto projetado das que recebem leitura do ato. [app/core/juizes.py:306](app/core/juizes.py:306), [app/chamados/juizes.py:1544](app/chamados/juizes.py:1544).
-- C6 `pergunta_viva` utiliza a projeção temporal que acessa resposta, validação, materialização e via; o caminho concreto de cada chamador permanece a medir. [app/core/juizes.py:291](app/core/juizes.py:291), [app/chamados/juizes.py:1382](app/chamados/juizes.py:1382).
-- `DisputaSupervisao.respostas_sem_veredito`, regist
-
-[truncado em 20000 de 22625 caracteres]
-
-_7102 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7104 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
