@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 16:56** · publicado em **18/11/2026 16:59** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:10** · publicado em **18/11/2026 17:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:10 · sessao 82ae805f088e · B4-OLHA-O-RESET · verificador · origem=Code
+
+**Parecer: não aprovo o diff como está.** Com uma cota estável entre as leituras, ele implementa o corte de três horas. Mas há um contraexemplo em que a ESCADA lê 84% e a segunda leitura recebe 86% com reset próximo: o diff permite o Agent, embora a segunda medida esteja na ESCADA. A troca atômica de `cota.json` permite que as duas leituras vejam versões diferentes. O risco de duas leituras já existe no código anterior; a nova folga cria o caminho que deixa passar uma segunda medida de 86%. ([bin/disjuntor.py:1203](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1203), [bin/disjuntor.py:1215](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1215), [bin/statusline_cota.py:45](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/statusline_cota.py:45); diff fornecido, trecho `b4_decide`: [não verificado em arquivo])
+
+O aval e o diff vieram como texto na pergunta; não há arquivos `aval.txt` ou `diff.patch` para citar com linhas nesta cópia. As referências ao conteúdo desses anexos abaixo são, portanto, **[não verificado em arquivo]**. A cópia disponível contém o código anterior ao diff; também não executei o selo, pois ele cria e remove arquivos temporários. ([bin/tests/test_disjuntor.sh:40](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:40), [bin/tests/test_disjuntor.sh:50](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:50))
+
+1. **Regra e bordas.** Para uma leitura válida e estável, o diff conserva a prioridade da ESCADA, passa abaixo de 75%, e em `75% <= pct < 85%` passa se as horas forem `<= 3.0` e nega se forem maiores; a negativa inclui as horas. Cota ausente, vencida ou ilegível continua retornando `None`. Com folga zero, toda leitura válida tem `reset > agora`, logo horas positivas e a definição antiga é recuperada. A apresentação com uma casa decimal pode, porém, dizer `faltam 3.0 h` numa negativa quando faltam, por exemplo, 3,01 h: a decisão usa o valor sem arredondar. ([bin/disjuntor.py:1159](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1159), [bin/disjuntor.py:1203](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1203); diff fornecido, trechos `ler_cota_e_reset` e `_b4_reset_perto`: [não verificado em arquivo])
+
+2. **Escritores e leitores.**
+   - `seven_day_resets_at` e o percentual são escritos pela status line a partir de `rate_limits.seven_day`, com substituição atômica. No código atual, `ler_cota` lê e valida ambos; no diff, `ler_cota_e_reset` faz essa leitura e `ler_cota` vira uma projeção do percentual. `escada`, o painel `ler` e, no diff, `b4_decide` consomem essa via; não identifiquei outra derivação de `cota.json` nos leitores Python pesquisados. ([bin/statusline_cota.py:40](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/statusline_cota.py:40), [bin/disjuntor.py:1159](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1159), [bin/disjuntor.py:2044](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:2044); diff fornecido: [não verificado em arquivo])
+   - A nova linha `B4-FAIXA` é escrita por `_b4_reset_perto` via `trilha`; falha de escrita é engolida, portanto a medida não é garantida em toda passagem. `ler` filtra eventos pelo terceiro campo e não conta `B4-FAIXA` como `NEGOU`, `DISJUNTOR`, `FALHA` ou `LIBERA`; o leitor do censo também não casa essa linha. `gerar_estado.py` usa esse mesmo `ler`. No trecho localizado do Stop, o arquivo é identificado como protegido, não interpretado como uma prova de espera. Assim, **não encontrei reclassificação da linha pelos leitores indicados**. ([bin/disjuntor.py:193](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:193), [bin/disjuntor.py:1979](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1979), [bin/disjuntor.py:2049](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:2049), [bin/gerar_estado.py:285](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/gerar_estado.py:285), [bin/hook_stop_fila1.py:664](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/hook_stop_fila1.py:664); diff fornecido: [não verificado em arquivo])
+   - `b4.negou_desde` é lido, criado e removido no ramo Agent do PreToolUse, sob a transição de estado existente. Continua marcando o início de uma sequência de negativas, mas agora também é removido quando a folga permite passar com cota ainda acima de 75%; o comentário “cota abaixo do limiar” fica incompleto. Uma negativa posterior pode gerar novo disparo B4. ([bin/disjuntor.py:1858](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1858), [bin/disjuntor.py:335](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:335); diff fornecido: [não verificado em arquivo])
+
+3. **Classes de reprovação.** Não identifiquei segundo juiz nem segundo escritor da cota introduzidos pelo diff: a decisão permanece em `b4_decide`, e a leitura física proposta é centralizada em `ler_cota_e_reset`. Isso não elimina as **duas chamadas de leitura por decisão**, causa do contraexemplo acima. `agora` vem da borda `main_pretool`, é passado por `pretool` e chega a `b4_decide`; a aritmética do diff usa esse mesmo instante. ([bin/disjuntor.py:1895](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1895), [bin/disjuntor.py:1802](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1802), [bin/disjuntor.py:1858](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1858); diff fornecido: [não verificado em arquivo])
+
+   O selo proposto tem mordida contra “sempre passa” e “nunca passa”, segundo sua estrutura e o resultado relatado, mas esse resultado de execução é **[não verificado]**. O caso de borda usa 10.790 segundos, não exatamente 10.800: um mutante que trocasse `<=` por `<` poderia sobreviver a esse caso. Os mutantes antigos dependem das âncoras e casos existentes; sua execução verde relatada também é **[não verificado]**. ([bin/tests/test_disjuntor.sh:1507](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1507), [bin/tests/test_disjuntor.sh:1567](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1567), [bin/tests/test_disjuntor.sh:1799](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1799); diff fornecido, caso `b4_reset`: [não verificado em arquivo])
+
+4. **Corrida do texto `1.0 h`: sim, é possível, mas exige atraso grande.** `_cota` fixa o reset como `date +%s + 3600`, e o PreToolUse captura depois seu próprio `time.time()`. Um atraso próximo de 180 segundos entre esses pontos leva a medida à vizinhança de 0,95 h, onde o arredondamento para uma casa pode produzir `0.9` e fazer a comparação textual falhar, embora a decisão de passar esteja correta. A execução normal ou ocorrência real desse atraso é **[não verificado]**. O mesmo princípio afeta a expectativa textual de `4.0 h`. ([bin/tests/test_disjuntor.sh:435](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:435), [bin/disjuntor.py:1895](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1895); diff fornecido, caso `b4_reset`: [não verificado em arquivo])
 
 ## 18/11 16:56 · sessao 5e7ff4e30e77 · B4-OLHA-O-RESET · verificador · origem=Code
 
@@ -470,88 +489,4 @@ PG 3997 resp_em_nulo False texto True leitura 2026-07-30T14:50:54.921690-03:00|T
 
 **No contrafactual pedido, a resposta lida terminaria igual à projeção gravada**, considerando os `atos []` informados e que o carimbo fosse efetivamente gravado sem outros atos posteriores. [não verificado] A porta registra um ato de resposta com o mesmo instante e texto da projeção; `leitura` processa esse ato e devolve seu instante e texto. [disputa_emissao.py:1705](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/disputa_emissao.py:1705) [models.py:4308](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4308)
 
-## 18/11 16:19 · sessao 073fae13d2a1 · FILA-CODEX-1811 · sonda · origem=Code
-
-```text
-sonda_leitura: script.py [455c4e7660bc3a87] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE 6 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 100
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 600
-UNIVERSO_PARTE 11/2026 99
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 199 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1298, 'bate_ate_10min': 1258, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 32, 'dia_batida_impar': 55, 'impar_que_BATE': 27, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 277, 'dia_sem_trabalho_ambos': 11, 'esp_desconta_janela_declarada': 18, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.9% de 1298 dias comparados
-[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
-[3] CADASTRO      8 dia-colab      40.5 h    2 colabs
-[3] BATIDA       30 dia-colab     127.8 h   17 colabs
-[4] TOTAL divergentes 40
-[5] colabs com divergencia: 20
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
-PARCIAL|10/2026|CADASTRO|dias=8|horas=40.4628|colabs=2
-PARCIAL|10/2026|BATIDA|dias=30|horas=127.75368121722221|colabs=17
-PARCIAL_TOTAL|10/2026|dias=40|horas=176.36648121722221|colabs=20
-ESTIMATIVA processados 100 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 125 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1206, 'bate_ate_10min': 1163, 'esp_zero_e6_trabalho': 3, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 2, 'diverge_acima_60': 34, 'dia_batida_impar': 64, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 31, 'impar_dentro_da_faixa': 26, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 198, 'dia_sem_lavratura_no_espelho': 1343, 'dia_isento_ou_ausencia': 288, 'dia_sem_trabalho_ambos': 23, 'esp_desconta_janela_declarada': 11, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.4% de 1206 dias comparados
-[3] ESTRUTURA     3 dia-colab      10.6 h    2 colabs
-[3] CADASTRO      7 dia-colab      65.8 h    5 colabs
-[3] BATIDA       33 dia-colab     166.7 h   22 colabs
-[4] TOTAL divergentes 43
-[5] colabs com divergencia: 26
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=3|horas=10.610499166666667|colabs=2
-PARCIAL|11/2026|CADASTRO|dias=7|horas=65.7971625|colabs=5
-PARCIAL|11/2026|BATIDA|dias=33|horas=166.71064350722222|colabs=22
-PARCIAL_TOTAL|11/2026|dias=43|horas=243.118305173888887|colabs=26
-TEMPO_SEGUNDOS 167.4
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 241905
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 80
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1406
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4830
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 58
-TRATADA_LOCAL app/escala/utils.py:1511 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1698 GeneratorExit 10
-TRATADA_LOCAL app/escala/utils.py:2002 GeneratorExit 6629
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:533 GeneratorExit 3848
-TRATADA_LOCAL app/escala/utils.py:534 GeneratorExit 3848
-TRATADA_LOCAL app/escala/utils.py:899 GeneratorExit 626
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 180
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 455936
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 544
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3097
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 183
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13064
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 93
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4326
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 189
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 21916
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4418
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 39965
-TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 17580
-SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
-SOMA 10/2026 HORAS 176.36648121722221 True
-SOMA 10/2026 COLABS_UNIAO 20 True
-SOMA 11/2026 43   <- tem de ser igual a soma das classes (43) True
-SOMA 11/2026 HORAS 243.118305173888887 True
-SOMA 11/2026 COLABS_UNIAO 26 True
-rc_sombra=0
-```
-
-As seis linhas `SOMA` informam `True`. Não aparece `INCOMPLETO` na parte fornecida. [não verificado]
-
-_7045 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7046 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
