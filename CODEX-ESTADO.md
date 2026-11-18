@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 01:56** · publicado em **18/11/2026 01:58** (UTC-3)
+> Ultima resposta processada: **18/11/2026 05:35** · publicado em **18/11/2026 05:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 05:35 · sessao b6b30e7671b2 · R1-REMEDE-1811 · sonda · origem=Code
+
+As seis linhas `SOMA` terminam em `True`. Não aparece `INCOMPLETO` na saída fornecida. [não verificado: o dado fornecido não tem arquivo:linha]
+
+```text
+sonda_leitura: script.py [8f462593598e8306] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 2 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 109
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 597
+UNIVERSO_PARTE 11/2026 102
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 211 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 211 minutos_total 2.9 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1268, 'bate_ate_10min': 1227, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 7, 'diverge_acima_60': 28, 'dia_batida_impar': 63, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 24, 'impar_FORA_da_faixa': 6, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1563, 'dia_isento_ou_ausencia': 353, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 62, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.8% de 1268 dias comparados
+[3] ESTRUTURA     5 dia-colab      11.1 h    3 colabs
+[3] CADASTRO      8 dia-colab      20.4 h    6 colabs
+[3] BATIDA       28 dia-colab     136.0 h   18 colabs
+[4] TOTAL divergentes 41
+[5] colabs com divergencia: 23
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=5|horas=11.084600277777778|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=8|horas=20.397520712222224|colabs=6
+PARCIAL|10/2026|BATIDA|dias=28|horas=136.0465618775|colabs=18
+PARCIAL_TOTAL|10/2026|dias=41|horas=167.528682867500002|colabs=23
+ESTIMATIVA processados 125 universo 211 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 211 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1161, 'bate_ate_10min': 1098, 'esp_zero_e6_trabalho': 3, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 3, 'diverge_acima_60': 53, 'dia_batida_impar': 85, 'impar_que_BATE': 31, 'impar_que_DIVERGE': 54, 'impar_dentro_da_faixa': 49, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 53, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 204, 'dia_sem_lavratura_no_espelho': 1492, 'dia_isento_ou_ausencia': 220, 'dia_sem_trabalho_ambos': 27, 'esp_desconta_janela_declarada': 58, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1161 dias comparados
+[3] ESTRUTURA     3 dia-colab      12.1 h    3 colabs
+[3] CADASTRO     16 dia-colab      52.5 h    7 colabs
+[3] BATIDA       44 dia-colab     212.9 h   22 colabs
+[4] TOTAL divergentes 63
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=12.1|colabs=3
+PARCIAL|11/2026|CADASTRO|dias=16|horas=52.48679821444445|colabs=7
+PARCIAL|11/2026|BATIDA|dias=44|horas=212.917450995|colabs=22
+PARCIAL_TOTAL|11/2026|dias=63|horas=277.50424920944445|colabs=29
+TEMPO_SEGUNDOS 179.9
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 277290
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 53
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1589
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6877
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 61
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 8
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6800
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4975
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4975
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 617
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 187
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 503275
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 665
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3196
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 224
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13694
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 117
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4084
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 200
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 2
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 26995
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 6185
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41986
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 20189
+SOMA 10/2026 41   <- tem de ser igual a soma das classes (41) True
+SOMA 10/2026 HORAS 167.528682867500002 True
+SOMA 10/2026 COLABS_UNIAO 23 True
+SOMA 11/2026 63   <- tem de ser igual a soma das classes (63) True
+SOMA 11/2026 HORAS 277.50424920944445 True
+SOMA 11/2026 COLABS_UNIAO 29 True
+rc_sombra=0
+```
+
+## 18/11 05:31 · sessao dcd0bcbc6659 · R1-REMEDE-1811 · sonda · origem=Code
+
+Saída da sonda, parte 1 de 6, conforme o dado fornecido pelo usuário:
+
+```text
+sonda_leitura: script.py [27c01d2784902123] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 1 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 110
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 597
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 209 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1181, 'bate_ate_10min': 1141, 'esp_zero_e6_trabalho': 1, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 11, 'diverge_acima_60': 25, 'dia_batida_impar': 33, 'impar_que_BATE': 15, 'impar_que_DIVERGE': 18, 'impar_dentro_da_faixa': 15, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 18, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1726, 'dia_isento_ou_ausencia': 316, 'dia_sem_trabalho_ambos': 34, 'esp_desconta_janela_declarada': 43, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.6% de 1181 dias comparados
+[3] ESTRUTURA    10 dia-colab       9.1 h    3 colabs
+[3] CADASTRO     10 dia-colab      38.4 h    3 colabs
+[3] BATIDA       20 dia-colab     110.2 h   13 colabs
+[4] TOTAL divergentes 40
+[5] colabs com divergencia: 17
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=10|horas=9.116283817777775|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=10|horas=38.355213611111104|colabs=3
+PARCIAL|10/2026|BATIDA|dias=20|horas=110.21011656222223|colabs=13
+PARCIAL_TOTAL|10/2026|dias=40|horas=157.681613991111109|colabs=17
+ESTIMATIVA processados 125 universo 209 minutos_total 2.6 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 209 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 209 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1106, 'bate_ate_10min': 1039, 'esp_zero_e6_trabalho': 14, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 10, 'diverge_acima_60': 37, 'dia_batida_impar': 55, 'impar_que_BATE': 20, 'impar_que_DIVERGE': 35, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 10, 'impar_no_conjunto_do_dia': 35, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 198, 'dia_sem_lavratura_no_espelho': 1426, 'dia_isento_ou_ausencia': 261, 'dia_sem_trabalho_ambos': 40, 'esp_desconta_janela_declarada': 38, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 93.9% de 1106 dias comparados
+[3] ESTRUTURA    10 dia-colab      30.4 h    4 colabs
+[3] CADASTRO     14 dia-colab      30.4 h    4 colabs
+[3] BATIDA       43 dia-colab     284.7 h   17 colabs
+[4] TOTAL divergentes 67
+[5] colabs com divergencia: 21
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=10|horas=30.40733995027778|colabs=4
+PARCIAL|11/2026|CADASTRO|dias=14|horas=30.370979816666665|colabs=4
+PARCIAL|11/2026|BATIDA|dias=43|horas=284.70216034805554|colabs=17
+PARCIAL_TOTAL|11/2026|dias=67|horas=345.480480114999985|colabs=21
+TEMPO_SEGUNDOS 165.8
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 253969
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 76
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1161
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6244
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 52
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6196
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 3
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3608
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3608
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 623
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 181
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 469726
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 513
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3021
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 178
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 12424
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 124
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4109
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 192
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 5
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 23456
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4859
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 38424
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 16
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 16981
+SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
+SOMA 10/2026 HORAS 157.681613991111109 True
+SOMA 10/2026 COLABS_UNIAO 17 True
+SOMA 11/2026 67   <- tem de ser igual a soma das classes (67) True
+SOMA 11/2026 HORAS 345.480480114999985 True
+SOMA 11/2026 COLABS_UNIAO 21 True
+rc_sombra=0
+```
+
+As seis linhas `SOMA` exibem `True`. A palavra `INCOMPLETO` não aparece na saída fornecida. A saída original e a execução não foram verificadas independentemente. [não verificado]
 
 ## 18/11 01:56 · sessao 5b93856c6c89 · E4C-F1-B2b · leitura · origem=Code
 
@@ -573,82 +745,4 @@ Na tabela, **NP** significa **NÃO PROCEDE: não encontrei a falha indicada**, d
 
 O caso de produção de `col830`, os 713 minutos, o controle de 14/11 e os resultados efetivos de frota permanecem **[não verificado]**: foram fornecidos como relato, sem acesso ao banco ou aos logs correspondentes.
 
-## 17/11 23:14 · sessao 62fa9ba54c8b · E4C-F1-B2 · censo · origem=Code
-
-A causa comum de **nove falhas funcionais** é a cerca de escrita: ela passou a vetar perguntas de competência entregue **ou com dia indecidível**, inclusive durante o S143 e a costura HIST. Nos testes com dia ausente, isso impede que eles cheguem ao comportamento que pretendiam medir; nos testes de competência entregue, altera o comportamento antigo que a fixture esperava. A identificação do veto como causa imediata nesses casos é uma **inferência do código e das fixtures**: o traceback fornecido não mostra a lista de empresas vetadas nem a consulta executada. ([fio.py:1389](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/fio.py:1389), [disputa_emissao.py:1901](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/disputa_emissao.py:1901), [reconciliador.py:1687](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/reconciliador.py:1687))
-
-Os anexos `avais.txt` e `falhas.txt` foram fornecidos no enunciado sem numeração de linhas. Identifico abaixo os avais por nome e item e cito seus trechos literais; **a linha desses anexos é [não verificado]**. Os caminhos com linha apontam para a cópia.
-
-O fundamento comum da classificação **T** é o aval `CERCA-B2-REGRAS-2`, item 2(ii): **“dia indecidivel = vetado”**; e item 5: **“a recusa sobe e o abridor de fora desfaz o ato inteiro”**. O veto implementado lê tanto o dia atual quanto o gravado, e trata `None` como recusa. ([fio.py:1358](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/fio.py:1358), [fio.py:1403](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/fio.py:1403))
-
-### Cerca no HIST: três casos
-
-1. **`test_RED_a_reatar_HIST_terminal_independente` — T.** A fixture cria pergunta com dia, disputa fechada e candidato terminal; força o caminho HIST e simula competência entregue. O assert exige que `reatar_pergunta_orfa` retorne `True`, mas a nova unidade cercada envolve reapontamento e resolver e retorna `False` quando há veto. Para continuar testando a ordem de travas, o caso precisa montar competência aberta e preservar o caminho HIST por outro meio; a competência entregue deve ter expectativa de recusa. ([test_e1_fila_v2_2_integracao.py:87](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_e1_fila_v2_2_integracao.py:87), [reconciliador.py:1690](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/reconciliador.py:1690))
-
-2. **`test_MORDE_fecho_antigo_acusa_a` — T, mesma causa.** Usa a mesma fixture e espera a mensagem de violação de ordem de trava, mas falha antes no `assertTrue` da costura; por isso recebe `False is not true`. Depois de ajustar a fixture, o mutante ainda precisa demonstrar a violação pretendida. ([test_e1_fila_v2_2_integracao.py:96](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_e1_fila_v2_2_integracao.py:96), [test_e1_fila_v2_2_integracao.py:175](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_e1_fila_v2_2_integracao.py:175))
-
-3. **`test_R4b_viva_com_encerrado_em_dia_exportado_segue_o_caminho_de_hoje` — T.** A fixture cria exportação, pergunta viva com dia e célula e chamado resolvido; o assert exige reapontá-la ao chamado. A cerca nova envolve justamente a costura HIST e desfaz a escrita vetada. O aval `CERCA-B2-REGRAS-2`, abertura, estabelece **“o sistema nao altera sozinho pergunta de competencia entregue”**; a expectativa deve passar a recusa e ausência de reapontamento. ([test_o261_c_viva_sem_chamado_do_dia.py:101](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:101), [test_o261_c_viva_sem_chamado_do_dia.py:312](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:312), [reconciliador.py:1699](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/reconciliador.py:1699))
-
-### Cerca no S143 e dia indecidível: sete casos
-
-Nos casos 4–9, as perguntas relevantes são criadas sem `data_evento`; a cerca lê esse campo, recebe `None` e pode desfazer o resolver inteiro ao tentar gravar. A regra sobre dia indecidível cobre esse efeito; **o aval não mudou a regra de voo nem a regra de conversa que esses testes querem medir**. Para preservá-las, as fixtures precisam fornecer dia determinável em competência aberta e manter os demais controles. ([juizes.py:338](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/juizes.py:338), [models.py:3561](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/models.py:3561))
-
-4. **`test_RED_B_pai_com_conversa_TODA_validada_fecha_pela_cascata_S143` — T quanto à fixture.** A pergunta tem instante, texto e validação, mas não dia; não está inicialmente materializada. A batida existe e o destino é marcado resolvido; o assert de disputa fechada falha antes do assert sobre o pai. ([test_o168_pai_com_conversa_no_gate.py:42](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:42), [test_o168_pai_com_conversa_no_gate.py:108](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:108))
-
-5. **`test_pai_SEM_conversa_fecha_pela_cascata_como_sempre` — T quanto à fixture.** Parte da mesma pergunta sem dia e zera instante e texto; a validação da fixture permanece. O assert de disputa fechada falha após o resolver. ([test_o168_pai_com_conversa_no_gate.py:56](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:56), [test_o168_pai_com_conversa_no_gate.py:213](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:213))
-
-6. **`test_P_fora_de_voo_o_S143_segue_carimbando` — T quanto à fixture.** Pergunta validada, com instante e texto, sem dia, destino resolvido e batida real; o controle espera uma pergunta resolvida e recebe zero. O novo wrapper cerca o resolver, e o `save` do carimbo consulta o veto. ([test_pep_reentrada.py:44](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:44), [test_pep_reentrada.py:230](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:230), [models.py:3267](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/models.py:3267))
-
-7. **`test_MORDE_P_em_voo_o_S143_pula` — T quanto à fixture.** A P fica em voo; a irmã, também sem dia, tem instante, texto e validação e deveria servir de controle fora de voo. O assert que falha é o carimbo da irmã; a cerca pode desfazer esse carimbo por dia indecidível. ([test_pep_reentrada.py:239](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:239), [disputa_emissao.py:1988](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/disputa_emissao.py:1988))
-
-8. **`test_MORDE_P_em_voo_SEM_destino_o_laco_sem_credor_pula` — T quanto à fixture.** P e irmã ficam sem instante, texto e validação; P fica sem destino; a irmã não recebe dia. O C6 é mockado como morto, mas a cerca ainda julga a escrita da irmã e o controle de carimbo falha. ([test_pep_reentrada.py:264](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:264), [test_pep_reentrada.py:274](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:274))
-
-9. **`test_MORDE_P_em_voo_COM_destino_nao_vivo_o_laco_sem_credor_pula` — T quanto à fixture.** É o mesmo helper do caso 8, com P apontando para destino não vivo; a irmã sem dia continua sendo o controle que não recebe carimbo. ([test_pep_reentrada.py:284](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:284), [test_pep_reentrada.py:308](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_pep_reentrada.py:308))
-
-10. **`test_s128_segue_carimbando_a_nao_respondida` — T quanto à fixture.** A pergunta nasce sem resposta e sem `data_evento`; depois recebe célula que absolve. O assert espera carimbo, mas a leitura da cerca usa o dia da pergunta, não extrai o dia da célula. A fixture precisa também preencher o dia para testar o controle positivo em competência aberta. ([test_resposta_nao_e_fantasma.py:49](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_resposta_nao_e_fantasma.py:49), [test_resposta_nao_e_fantasma.py:102](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_resposta_nao_e_fantasma.py:102), [juizes.py:338](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/juizes.py:338))
-
-11. **`test_06_candidato_historico_resolvido_reata_e_materializa` — T quanto à fixture; causa imediata inferida.** Cria órfã sem `data_evento`, planta texto **sem instante** e associa célula que absolve; o contexto do candidato fornece dia para a costura. A cerca consulta também o dia **anterior gravado**, ainda `None`, e pode desfazer a costura; o teste recebe contagem zero. Para continuar cobrindo a costura e o carimbo de paridade, precisa de dia gravado determinável e competência aberta. ([test_reconciliar_pergunta_orfa.py:37](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_reconciliar_pergunta_orfa.py:37), [test_reconciliar_pergunta_orfa.py:96](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/test_reconciliar_pergunta_orfa.py:96), [fio.py:1403](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/fio.py:1403))
-
-### Selo estrutural: um caso
-
-12. **`test_RED_um_subTest_por_sitio` — C no instrumento do teste.** O cadastro S06 procura a chamada `transicionar_com_pauta(...)` dentro da função `_retratar`; a branch mudou `_retratar` para delegar a `retratar_com_motivo` e moveu a chamada para `_ato_da_retratacao`. `no_do_sitio` encontra menos candidatos que o ordinal solicitado e lança `IndexError` antes de avaliar os subtestes. O aval cobre a cerca de retratação, mas **não cobre a perda do selo**; o instrumento precisa acompanhar o novo sítio e continuar verificando a porta. ([e4b_c12_sitios.json:43](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/e4b_c12_sitios.json:43), [e4b_c12_verificar.py:84](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/tests/e4b_c12_verificar.py:84), [reconciliador.py:517](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/reconciliador.py:517), [reconciliador.py:563](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/reconciliador.py:563))
-
-### Tetos de queries: quatro casos
-
-A diferença abaixo é **em relação ao teto**, não uma medição do delta contra o main. A chamada nova identificável no código é `executar_sob_cerca` no resolver: quando abre a cerca, entra em `transaction.atomic()`, mesmo se não houver pergunta; dentro de transação isso introduz um savepoint. O veto no `save` acrescenta leituras quando há escrita sob cerca, mas **a atribuição exata das queries capturadas de cada caso é [não verificado]**: faltam as SQLs capturadas ou uma medição comparativa instrumentada. ([disputa_emissao.py:1898](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/disputa_emissao.py:1898), [fio.py:1425](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/fio.py:1425), [fio.py:1402](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/fio.py:1402))
-
-13. **`test_gate_da_premissa_fecha_com_dia_e_celula` — Q:** 62 contra teto 60, **+2 sobre o teto**. Fixture: chamado de furo, dia e célula, lâmpada acesa; mede `ch.reconciliar()`. ([test_selo_chokepoint_escrita.py:373](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:373), [test_selo_chokepoint_escrita.py:394](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:394))
-
-14. **`test_gravar_estado_sem_pergunta` — Q:** 30 contra 28, **+2 sobre o teto**. Fixture: chamado sem pergunta, mede `reconciliar()`. Nesse caso não há base para atribuir o aumento à consulta de veto de uma pergunta; o savepoint novo é o candidato visível. ([test_selo_chokepoint_escrita.py:300](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:300), [test_selo_chokepoint_escrita.py:361](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:361))
-
-15. **`test_registrar_batida_com_1_furo_vivo_que_ela_fecha` — Q:** 224 contra 220, **+4 sobre o teto**. A fixture cria um chamado de furo e comprova que ele fecha após a batida. ([test_selo_chokepoint_escrita.py:406](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:406), [test_selo_chokepoint_escrita.py:435](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:435))
-
-16. **`test_registrar_batida_com_3_furos_vivos_que_ela_fecha` — Q:** 288 contra 280, **+8 sobre o teto**. A mesma fixture cria três chamados e comprova que os três fecham. O crescimento acompanha o número de fechamentos, mas a decomposição exata por chamada é **[não verificado]**. ([test_selo_chokepoint_escrita.py:406](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:406), [test_selo_chokepoint_escrita.py:440](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/tests/test_selo_chokepoint_escrita.py:440))
-
-### Diagrama: dois casos
-
-17. **`test_MORDE_o_mmd_commitado_bate_com_o_codigo` — D.** O diagrama commitado declara a aresta `reconciliar_fantasmas.py → retratar` e nove chamadores de `retratar`; a branch mudou esse comando para chamar `retratar_com_motivo`. O gerador conta usos do símbolo `retratar` por AST, portanto essa aresta é uma divergência concreta a reconciliar no diagrama gerado. A lista completa de outras diferenças do diagrama é **[não verificado]**. ([ARQUITETURA.mmd:189](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/docs/ARQUITETURA.mmd:189), [reconciliar_fantasmas.py:274](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/ponto/management/commands/reconciliar_fantasmas.py:274), [gerar_diagrama.py:209](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/core/management/commands/gerar_diagrama.py:209))
-
-18. **`test_MORDE_uma_aresta_a_mais_no_mmd_derruba_o_selo` — ?** O anexo termina no cabeçalho desse FAIL, sem traceback. O teste acrescenta uma aresta, espera divergência, restaura o arquivo e então espera que o original coincida; a divergência do caso 17 pode fazer falhar essa última verificação, mas **qual assert falhou é [não verificado]**. Falta o bloco completo. ([test_selo_diagrama_do_codigo.py:85](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/core/tests/test_selo_diagrama_do_codigo.py:85))
-
-A migração da property `respondida` e de `estado` para o juiz instante **e** texto existe na branch, assim como a guarda de anuência na materialização; porém os tracebacks fornecidos não demonstram que essas mudanças sejam a causa imediata dos casos acima. A remoção de `reabrir_fantasma` e `reabrir_orfas_enterradas` também aparece no diff, mas sua relação causal com algum dos 18 resultados é **[não verificado]**. ([models.py:3151](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/models.py:3151), [models.py:3673](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/models.py:3673), [materializacao.py:1269](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/services/materializacao.py:1269), [models.py:3429](/home/ronald/codex_ws/9057ce4e02293d008e61dcfc89231a42e74c7d1c/app/chamados/models.py:3429))
-
-## 17/11 22:17 · sessao 0d84e18c3b69 · PORTA-ESTADO-NA-TELA · verificador · origem=Code
-
-1. **NÃO PROCEDE o verde por ausência no caminho normal de `--tentativa`.** Para cada empresa, pedido ausente entra em `compartilhadas`; trava não obtida ou erro entram em `falharam`; `assumir → None` e `concluir → None` entram em `compartilhadas`; só depois de `medir` e `concluir` é impressa a linha individual de carimbo ([comando:141](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:141), [comando:166](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:166), [comando:206](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:206), [comando:218](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:218), [comando:291](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:291)). Falha encerra com rc 2; compartilhada impede o verde e o texto final de carimbo ([comando:323](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:323)).
-
-2. **PROCEDE a afirmação falsa no SEM VEREDITO.** A busca só comprova que não encontrou aquela combinação de empresa, competência e UUID; não comprova outra tentativa nem outro processo medindo ([porta_export.py:1195](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1195)). O próprio teste chama o comando com UUID inexistente sem criar pedido e espera SEM VEREDITO; nesse cenário construído, a frase “a medição delas é a do outro processo” não tem fundamento ([teste:249](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/tests/test_porta_estado_na_tela.py:249), [comando:339](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:339)). Ocorrência em produção: **[não verificado]**.
-
-   Mesmo no fluxo normal, um pedido antigo pode ser dado por morto e depois substituído por um novo que também falhe antes de o filho antigo consultar seu UUID: o vigia fecha pedidos vencidos, `pedir` substitui tentativas fechadas e uma falha ao nascer fecha o novo pedido ([porta_export.py:1311](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1311), [porta_export.py:1119](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1119), [porta_export.py:1462](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1462)). A linha é criada por `pedir` ou `_cunhar` e seu UUID pode ser substituído por esses caminhos ([porta_export.py:1109](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1109), [porta_export.py:1161](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1161), [porta_export.py:1188](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1188)). Apagador de produção dessa linha: **[não verificado]**.
-
-3. **NÃO PROCEDE dependência encontrada do texto antigo.** A tela escolhe texto pelo código do estado e usa hora e `n`, sem ler o motivo ([porta_export.py:1354](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1354), [porta_export.py:1395](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1395)). O vigia decide por estado, sessão e prazo, e produz seu próprio motivo ([porta_export.py:1311](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1311)). O comando grava e imprime o motivo novo; a recusa crítica o recebe na transição ([comando:173](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:173), [porta_export.py:1088](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1088)). Os testes Re, Rh e Ri comparam o novo literal ([teste:158](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/tests/test_porta_estado_na_tela.py:158), [teste:181](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/tests/test_porta_estado_na_tela.py:181), [teste:208](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/tests/test_porta_estado_na_tela.py:208)). Consumidores externos à cópia: **[não verificado]**.
-
-4. **PROCEDE que há motivos falsos nos descartes.**
-
-   - **Item 1:** `assumir → None` pode ocorrer porque o vigia já fechou o pedido como `FALHOU`; isso não garante medição por outro processo, embora a saída final a afirme ([porta_export.py:1227](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1227), [porta_export.py:1319](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1319), [comando:339](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:339)).
-   - **Item 4, CAS:** “sem a falha gravada por esta rodada” é sustentado pelo retorno falso do CAS; ele não identifica quem venceu ([porta_export.py:1057](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1057), [porta_export.py:1088](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1088)).
-   - **Item 7:** a continuação “a tentativa aberta é de outro processo ou o banco recusou, e o vigia a julga” não cobre necessariamente o CAS perdido para o vigia: nesse caso a tentativa pode já estar `FALHOU`, sem recusa do banco e sem estar aberta para julgamento futuro ([comando:173](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:173), [comando:326](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:326), [porta_export.py:1331](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1331)).
-
-5. **[Não verificado]** Não há base de commit consultável nesta cópia para comparar independentemente as seis classes com `179509b84`; o diff fornecido limita-se aos trechos do comando e dos testes transcritos pelo usuário. Na cópia atual, por exemplo, `concluir` chama `resultado_de` e condiciona a lavra à tentativa em curso ([porta_export.py:1264](/home/ronald/codex_ws/57bb479c9ab8721c198b384ca754c4da477fcc46/app/folha/porta_export.py:1264)); isso, isoladamente, não comprova a ausência de todas as classes listadas no delta.
-
-_6768 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6770 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
