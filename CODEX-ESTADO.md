@@ -1,7 +1,856 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:48** · publicado em **18/11/2026 17:48** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:54** · publicado em **18/11/2026 17:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:54 · sessao ebd05b3637cc · RAIA-INTERVALO · sonda · origem=Code
+
+A ata fica no campo JSON `CelulaDia.ata`; as chaves são `ata['orfas']` e `ata['lampadas']`. [app/escala/models.py:1778](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1778), [app/ponto/services/cartorio.py:738](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:738)
+
+O vocabulário é `E` para entrada e `S` para saída, tanto para batidas quanto para marcos. [app/ponto/models.py:9](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/models.py:9), [app/escala/models.py:1653](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1653)
+
+A chave é a **hora `HH:MM` de `ata.orfas`, não a identidade da Batida**. A distância usa minutos do dia: `23:55` e `00:05` distam 1.430 minutos, sem circular pela meia-noite. Em empate entre apagadas de tipos diferentes, o tipo esperado e o resultado de `oposto` ficam desconhecidos. O script não foi executado em produção; resultados são [não verificado].
+
+```python
+import datetime as dt
+import io
+import re
+from collections import Counter, defaultdict
+
+from django.core.management import call_command
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia, derivar_veredito
+from ponto.models import Batida
+from ponto.turnos import batidas_apuraveis
+
+
+G = {
+    'G1': [(622, d) for d in (
+        '27/10', '29/10', '04/11', '05/11', '12/11', '13/11', '16/11'
+    )],
+    'G2': [(362, '22/10'), (945, '29/10'), (735, '16/11')],
+    'G3': [(583, '12/11'), (829, '11/11'), (369, '12/11')],
+    'G4': [
+        (224, '28/10'), (469, '01/11'), (924, '11/11'),
+        (631, '03/11'), (988, '31/10'), (988, '03/11'),
+        (836, '04/11'), (1000, '03/11'), (1000, '13/11'),
+        (962, '05/11'), (962, '09/11'), (962, '16/11'),
+        (991, '09/11'), (991, '11/11'),
+    ],
+    'G5': [(787, '30/10')],
+}
+
+INI = dt.date(2026, 10, 22)
+FIM = dt.date(2026, 11, 16)
+tz = timezone.get_current_timezone()
+erros = Counter()
+
+# O texto entre o id e a data e o detalhe apos "|" nunca sao impressos.
+DUMP_RE = re.compile(
+    r'^([A-Z][A-Z0-9_]*)\|col([0-9]+) .*? '
+    r'([0-9]{4}-[0-9]{2}-[0-9]{2}) \|'
+)
+AVALIADOS_RE = re.compile(r'^dias-colab avaliados: ([0-9]+)$')
+HORA_RE = re.compile(r'^(?:[01][0-9]|2[0-3]):[0-5][0-9]$')
+
+
+def executar_etapa(etapa, funcao):
+    # O savepoint permite continuar apos erro de banco.
+    # Nunca imprime a mensagem da excecao.
+    try:
+        with transaction.atomic():
+            return True, funcao()
+    except Exception as exc:
+        erros[(etapa, type(exc).__name__)] += 1
+        return False, None
+
+
+def hora_local(valor):
+    if valor is None:
+        return '?'
+    return timezone.localtime(valor, tz).strftime('%d/%m/%Y_%H:%M:%S')
+
+
+def data_caso(dm):
+    dd, mm = dm.split('/')
+    return dt.date(2026, int(mm), int(dd))
+
+
+def carregar_command(empresa):
+    buf = io.StringIO()
+    call_command(
+        'supra_juiz',
+        empresa=empresa,
+        ini=INI.isoformat(),
+        fim=FIM.isoformat(),
+        dump=True,
+        stdout=buf,
+    )
+
+    codigos = defaultdict(list)
+    avaliados = None
+    no_dump = False
+
+    for linha in buf.getvalue().splitlines():
+        if linha == '--- DUMP (HX-DUMP) ---':
+            no_dump = True
+            continue
+
+        if not no_dump:
+            m = AVALIADOS_RE.fullmatch(linha)
+            if m:
+                if avaliados is not None:
+                    raise ValueError('contador_duplicado')
+                avaliados = int(m.group(1))
+            continue
+
+        m = DUMP_RE.match(linha)
+        if not m:
+            # Nao aceitar silenciosamente uma linha de dump em formato novo.
+            raise ValueError('formato_dump')
+        codigo, col_id, iso = m.groups()
+        data = dt.date.fromisoformat(iso)
+        codigos[(int(col_id), data)].append(codigo)
+
+    if not no_dump or avaliados is None:
+        raise ValueError('dump_ou_contador_ausente')
+
+    return codigos, avaliados
+
+
+def tem_batida_na_janela_command(col):
+    inicio = timezone.make_aware(
+        dt.datetime.combine(INI - dt.timedelta(days=1), dt.time.min), tz
+    )
+    fim = timezone.make_aware(
+        dt.datetime.combine(FIM + dt.timedelta(days=3), dt.time.min), tz
+    )
+    return Batida.objects.filter(
+        colaborador=col, timestamp__gte=inicio, timestamp__lt=fim
+    ).exists()
+
+
+def batidas_do_dia(col, data):
+    inicio = timezone.make_aware(dt.datetime.combine(data, dt.time.min), tz)
+    fim = timezone.make_aware(
+        dt.datetime.combine(data + dt.timedelta(days=1), dt.time.min), tz
+    )
+    # A autoridade usa fim inclusivo; excluir a meia-noite seguinte.
+    return [
+        b for b in batidas_apuraveis(col, inicio, fim)
+        if b.timestamp < fim
+    ]
+
+
+def minutos_do_dia(hora):
+    if not isinstance(hora, str) or not HORA_RE.fullmatch(hora):
+        raise ValueError('hora_invalida')
+    return int(hora[:2]) * 60 + int(hora[3:5])
+
+
+def imprimir_medida_sem_marco(grupo, pk, dm, cel, bats):
+    # A chave e a hora HH:MM de ata.orfas, nao a identidade da Batida.
+    # Distancias usam minutos do dia, sem circular pela meia-noite.
+    ata = cel.ata if cel is not None else None
+    if not isinstance(ata, dict) or not ata.get('lampadas'):
+        print('B %s col%d %s ata_ausente' % (grupo, pk, dm))
+        return None
+
+    lampadas = ata['lampadas']
+    orfas = ata.get('orfas')
+    if not isinstance(lampadas, list) or not isinstance(orfas, list):
+        print('B %s col%d %s ata_invalida' % (grupo, pk, dm))
+        return None
+
+    try:
+        horas_orfas = [(h, minutos_do_dia(h)) for h in orfas]
+        apagadas = []
+        for lampada in lampadas:
+            if not isinstance(lampada, dict):
+                raise ValueError('lampada_invalida')
+            if lampada.get('acesa') not in (True, False, None):
+                raise ValueError('estado_lampada_invalido')
+            if lampada.get('acesa') is False:
+                apagadas.append(
+                    (minutos_do_dia(lampada.get('hora')), lampada.get('tipo'))
+                )
+    except (TypeError, ValueError):
+        print('B %s col%d %s ata_invalida' % (grupo, pk, dm))
+        return None
+
+    por_hora = defaultdict(list)
+    for batida in bats:
+        hora = timezone.localtime(batida.timestamp, tz).strftime('%H:%M')
+        por_hora[hora].append(batida)
+
+    origens_validas = {valor for valor, _ in Batida.ORIGEM_CHOICES}
+    total_oposto = 0
+    oposto_desconhecido = False
+    ambiguas = 0
+    sem_batida = 0
+
+    for hora, minuto in horas_orfas:
+        candidatas = por_hora.get(hora, [])
+        if len(candidatas) >= 2:
+            chave = 'ambigua'
+            tipo = origem = '?'
+            ambiguas += 1
+        elif not candidatas:
+            chave = 'sem_batida'
+            tipo = origem = '?'
+            sem_batida += 1
+        else:
+            chave = 'unica'
+            batida = candidatas[0]
+            tipo = batida.tipo if batida.tipo in ('E', 'S') else '?'
+            origem = (
+                batida.origem if batida.origem in origens_validas else '?'
+            )
+
+        if apagadas:
+            distancia = min(abs(minuto - m) for m, _ in apagadas)
+            tipos_proximos = {
+                t for m, t in apagadas if abs(minuto - m) == distancia
+                and t in ('E', 'S')
+            }
+            tipos_invalidos = any(
+                t not in ('E', 'S')
+                for m, t in apagadas if abs(minuto - m) == distancia
+            )
+            esperado = (
+                next(iter(tipos_proximos))
+                if len(tipos_proximos) == 1 and not tipos_invalidos
+                else '?'
+            )
+            dist_txt = str(distancia)
+        else:
+            distancia = None
+            dist_txt = '-'
+            esperado = '-'
+
+        if tipo in ('E', 'S') and esperado in ('E', 'S'):
+            oposto = 'sim' if tipo != esperado else 'nao'
+        else:
+            oposto = '?'
+
+        if distancia is not None and distancia <= 90:
+            if oposto == 'sim':
+                total_oposto += 1
+            elif oposto == '?':
+                oposto_desconhecido = True
+
+        print(
+            'B %s col%d %s orfa=%s tipo=%s origem=%s chave=%s '
+            'apagadas=%d dist_min=%s tipo_esperado=%s oposto=%s'
+            % (
+                grupo, pk, dm, hora, tipo, origem, chave,
+                len(apagadas), dist_txt, esperado, oposto,
+            )
+        )
+
+    return (
+        len(horas_orfas), total_oposto, ambiguas, sem_batida,
+        oposto_desconhecido,
+    )
+
+
+def rodar():
+    resumo = {
+        grupo: Counter({
+            'sim': 0, 'nao': 0, '?': 0,
+            'acusa': 0, 'concorde': 0,
+            'fora_do_command': 0, 'hoje_?': 0,
+            'sem_marco_total': 0,
+            'sem_marco_ate90_oposto': 0,
+            'ambiguas': 0,
+            'sem_batida': 0,
+            'medida_desconhecida': 0,
+            'oposto_desconhecido': 0,
+        })
+        for grupo in G
+    }
+
+    ids = sorted({pk for casos in G.values() for pk, _ in casos})
+    colaboradores = {}
+    for pk in ids:
+        ok, col = executar_etapa(
+            'colaborador', lambda pk=pk: Colaborador.objects.get(pk=pk)
+        )
+        if ok:
+            colaboradores[pk] = col
+
+    empresas = sorted({
+        col.empresa_id for col in colaboradores.values()
+        if col.empresa_id is not None
+    })
+    comandos = {}
+    for empresa in empresas:
+        ok, resultado = executar_etapa(
+            'command', lambda empresa=empresa: carregar_command(empresa)
+        )
+        if ok:
+            comandos[empresa] = resultado
+            print(
+                'COMMAND empresa=%s dias-colab avaliados: %d'
+                % (empresa, resultado[1])
+            )
+        else:
+            print('COMMAND empresa=%s dias-colab avaliados: ?' % empresa)
+
+    elegibilidade = {}
+    for pk, col in colaboradores.items():
+        if col.situacao != 'ativo':
+            elegibilidade[pk] = 'inativo'
+        else:
+            ok, tem = executar_etapa(
+                'janela_command',
+                lambda col=col: tem_batida_na_janela_command(col)
+            )
+            if ok:
+                elegibilidade[pk] = None if tem else 'sem_batida'
+            else:
+                elegibilidade[pk] = '?'
+
+    for grupo, casos in G.items():
+        for pk, dm in casos:
+            data = data_caso(dm)
+            col = colaboradores.get(pk)
+            cel = None
+            grav = julg = ub = None
+            hoje = codigos = motivo_hoje = None
+            ok_cel = ok_bats = False
+            bats = None
+
+            if col is not None:
+                ok_cel, cel = executar_etapa(
+                    'celula',
+                    lambda pk=pk, data=data: CelulaDia.objects.filter(
+                        colaborador_id=pk, data=data
+                    ).first()
+                )
+                if ok_cel and cel is not None:
+                    grav = cel.veredito
+                    julg = cel.julgada_em
+
+                estado = elegibilidade.get(pk, '?')
+                if estado in ('inativo', 'sem_batida'):
+                    hoje = 'fora_do_command'
+                    motivo_hoje = estado
+                elif estado is None and col.empresa_id in comandos:
+                    codigos = comandos[col.empresa_id][0].get((pk, data), [])
+                    if not codigos:
+                        hoje = 'concorde'
+                    else:
+                        ok_ver, hoje = executar_etapa(
+                            'veredito_dump',
+                            lambda codigos=codigos: derivar_veredito(codigos)
+                        )
+                        if not ok_ver:
+                            hoje = None
+
+                ok_bats, bats = executar_etapa(
+                    'batidas_apuraveis',
+                    lambda col=col, data=data: batidas_do_dia(col, data)
+                )
+                if ok_bats and bats:
+                    ub = max(
+                        bats, key=lambda b: (b.timestamp, b.pk)
+                    ).criado_em
+
+            # Ausencia de JULG e ausencia de UB so sao conclusoes se as
+            # respectivas leituras terminaram com sucesso.
+            motivo_velho = None
+            if not ok_cel:
+                velho = '?'
+                motivo_velho = 'leitura_celula'
+            elif julg is None:
+                velho = '?'
+                motivo_velho = 'sem_julgamento'
+            elif not ok_bats:
+                velho = '?'
+                motivo_velho = 'leitura_batidas'
+            elif ub is not None and ub > julg:
+                velho = 'sim'
+            else:
+                velho = '?'
+                motivo_velho = 'ata_sem_carimbo'
+
+            r = resumo[grupo]
+            r[velho] += 1
+            if hoje is None:
+                r['hoje_?'] += 1
+            elif hoje == 'fora_do_command':
+                r['fora_do_command'] += 1
+            elif hoje == 'concorde':
+                r['concorde'] += 1
+            else:
+                r['acusa'] += 1
+
+            cod_txt = '?' if codigos is None else (
+                ','.join(codigos) if codigos else '-'
+            )
+            linha = (
+                'D %s col%d %s GRAV=%s JULG=%s HOJE=%s COD=%s '
+                'UB=%s UA=? VELHO=%s'
+                % (
+                    grupo, pk, dm, grav or '?', hora_local(julg),
+                    hoje or '?', cod_txt, hora_local(ub), velho,
+                )
+            )
+            if motivo_hoje:
+                linha += ' motivo_hoje=%s' % motivo_hoje
+            if motivo_velho:
+                linha += ' motivo_velho=%s' % motivo_velho
+            if hoje == 'concorde':
+                linha += ' RAMO ?'
+            print(linha)
+
+            if not ok_cel:
+                r['medida_desconhecida'] += 1
+                print('B %s col%d %s leitura_celula=?' % (grupo, pk, dm))
+            elif cel is None or not isinstance(cel.ata, dict) or not cel.ata.get('lampadas'):
+                r['medida_desconhecida'] += 1
+                print('B %s col%d %s ata_ausente' % (grupo, pk, dm))
+            elif not ok_bats:
+                r['medida_desconhecida'] += 1
+                print('B %s col%d %s leitura_batidas=?' % (grupo, pk, dm))
+            else:
+                ok_medida, medida = executar_etapa(
+                    'medida_sem_marco',
+                    lambda: imprimir_medida_sem_marco(grupo, pk, dm, cel, bats)
+                )
+                if not ok_medida:
+                    r['medida_desconhecida'] += 1
+                    print('B %s col%d %s medida=?' % (grupo, pk, dm))
+                elif medida is None:
+                    r['medida_desconhecida'] += 1
+                else:
+                    total, oposto, ambiguas, sem_batida, oposto_incerto = medida
+                    r['sem_marco_total'] += total
+                    r['sem_marco_ate90_oposto'] += oposto
+                    r['ambiguas'] += ambiguas
+                    r['sem_batida'] += sem_batida
+                    if oposto_incerto:
+                        r['oposto_desconhecido'] += 1
+
+    for grupo in G:
+        r = resumo[grupo]
+        # Um total so e inteiro quando todos os dias do grupo sao conhecidos.
+        total = (
+            '?' if r['medida_desconhecida']
+            else str(r['sem_marco_total'])
+        )
+        oposto = (
+            '?' if r['medida_desconhecida'] or r['oposto_desconhecido']
+            else str(r['sem_marco_ate90_oposto'])
+        )
+        ambiguas = (
+            '?' if r['medida_desconhecida'] else str(r['ambiguas'])
+        )
+        sem_batida = (
+            '?' if r['medida_desconhecida'] else str(r['sem_batida'])
+        )
+        print(
+            'RESUMO %s VELHO sim=%d nao=%d ?=%d '
+            'HOJE acusa=%d concorde=%d fora_do_command=%d ?=%d '
+            'sem_marco_ate90_oposto=%s sem_marco_total=%s '
+            'ambiguas=%s sem_batida=%s '
+            'medida_dias_desconhecidos=%d'
+            % (
+                grupo, r['sim'], r['nao'], r['?'],
+                r['acusa'], r['concorde'], r['fora_do_command'],
+                r['hoje_?'], oposto, total, ambiguas, sem_batida,
+                r['medida_desconhecida'],
+            )
+        )
+
+
+try:
+    if connection.in_atomic_block:
+        raise RuntimeError('transacao_preexistente')
+    if connection.vendor != 'postgresql':
+        raise RuntimeError('banco_nao_postgresql')
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute('SET TRANSACTION READ ONLY')
+            cursor.execute('SELECT current_schema()')
+            if cursor.fetchone()[0] != 'juliani':
+                raise RuntimeError('schema_ativo_nao_e_juliani')
+        rodar()
+except Exception as exc:
+    erros[('sonda', type(exc).__name__)] += 1
+
+print('ERROS %d' % sum(erros.values()))
+for (etapa, tipo), quantidade in sorted(erros.items()):
+    print('ERROS etapa=%s tipo=%s n=%d' % (etapa, tipo, quantidade))
+print('FIM_SONDA_VELHO')
+```
+
+## 18/11 17:49 · sessao f3840f73219c · RAIA-INTERVALO · sonda · origem=Code
+
+A ata registra, por marco, `acesa`, `luz` e `tipo_real`, mas a estrutura produzida pelo cartório não registra a identidade da `Batida` casada; `orfas` também contém horas, não IDs. Assim, não é possível identificar com segurança cada batida sem marco sem refazer uma associação por horário. A sonda sinaliza `ata_sem_chave` e mantém os totais correspondentes como desconhecidos quando há batidas apuráveis. [app/ponto/services/cartorio.py:711](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:711), [app/ponto/services/cartorio.py:738](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:738)
+
+A sonda não foi executada e seus resultados em produção são [não verificado]. `UA` permanece desconhecida porque não foi demonstrado um carimbo para toda alteração da ata. [app/ponto/portas/celula.py:1060](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1060), [app/ponto/portas/celula.py:1205](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1205)
+
+```python
+import datetime as dt
+import io
+import re
+from collections import Counter, defaultdict
+
+from django.core.management import call_command
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia, derivar_veredito
+from ponto.models import Batida
+from ponto.turnos import batidas_apuraveis
+
+
+G = {
+    'G1': [(622, d) for d in (
+        '27/10', '29/10', '04/11', '05/11', '12/11', '13/11', '16/11'
+    )],
+    'G2': [(362, '22/10'), (945, '29/10'), (735, '16/11')],
+    'G3': [(583, '12/11'), (829, '11/11'), (369, '12/11')],
+    'G4': [
+        (224, '28/10'), (469, '01/11'), (924, '11/11'),
+        (631, '03/11'), (988, '31/10'), (988, '03/11'),
+        (836, '04/11'), (1000, '03/11'), (1000, '13/11'),
+        (962, '05/11'), (962, '09/11'), (962, '16/11'),
+        (991, '09/11'), (991, '11/11'),
+    ],
+    'G5': [(787, '30/10')],
+}
+
+INI = dt.date(2026, 10, 22)
+FIM = dt.date(2026, 11, 16)
+tz = timezone.get_current_timezone()
+erros = Counter()
+
+# O texto entre o id e a data e o detalhe apos "|" nunca sao impressos.
+DUMP_RE = re.compile(
+    r'^([A-Z][A-Z0-9_]*)\|col([0-9]+) .*? '
+    r'([0-9]{4}-[0-9]{2}-[0-9]{2}) \|'
+)
+AVALIADOS_RE = re.compile(r'^dias-colab avaliados: ([0-9]+)$')
+
+
+def executar_etapa(etapa, funcao):
+    # O savepoint permite continuar apos erro de banco.
+    # Nunca imprime a mensagem da excecao.
+    try:
+        with transaction.atomic():
+            return True, funcao()
+    except Exception as exc:
+        erros[(etapa, type(exc).__name__)] += 1
+        return False, None
+
+
+def hora_local(valor):
+    if valor is None:
+        return '?'
+    return timezone.localtime(valor, tz).strftime('%d/%m/%Y_%H:%M:%S')
+
+
+def data_caso(dm):
+    dd, mm = dm.split('/')
+    return dt.date(2026, int(mm), int(dd))
+
+
+def carregar_command(empresa):
+    buf = io.StringIO()
+    call_command(
+        'supra_juiz',
+        empresa=empresa,
+        ini=INI.isoformat(),
+        fim=FIM.isoformat(),
+        dump=True,
+        stdout=buf,
+    )
+
+    codigos = defaultdict(list)
+    avaliados = None
+    no_dump = False
+
+    for linha in buf.getvalue().splitlines():
+        if linha == '--- DUMP (HX-DUMP) ---':
+            no_dump = True
+            continue
+
+        if not no_dump:
+            m = AVALIADOS_RE.fullmatch(linha)
+            if m:
+                if avaliados is not None:
+                    raise ValueError('contador_duplicado')
+                avaliados = int(m.group(1))
+            continue
+
+        m = DUMP_RE.match(linha)
+        if not m:
+            # Nao aceitar silenciosamente uma linha de dump em formato novo.
+            raise ValueError('formato_dump')
+        codigo, col_id, iso = m.groups()
+        data = dt.date.fromisoformat(iso)
+        codigos[(int(col_id), data)].append(codigo)
+
+    if not no_dump or avaliados is None:
+        raise ValueError('dump_ou_contador_ausente')
+
+    return codigos, avaliados
+
+
+def tem_batida_na_janela_command(col):
+    inicio = timezone.make_aware(
+        dt.datetime.combine(INI - dt.timedelta(days=1), dt.time.min), tz
+    )
+    fim = timezone.make_aware(
+        dt.datetime.combine(FIM + dt.timedelta(days=3), dt.time.min), tz
+    )
+    return Batida.objects.filter(
+        colaborador=col, timestamp__gte=inicio, timestamp__lt=fim
+    ).exists()
+
+
+def batidas_do_dia(col, data):
+    inicio = timezone.make_aware(dt.datetime.combine(data, dt.time.min), tz)
+    fim = timezone.make_aware(
+        dt.datetime.combine(data + dt.timedelta(days=1), dt.time.min), tz
+    )
+    # A autoridade usa fim inclusivo; excluir a meia-noite seguinte.
+    return [
+        b for b in batidas_apuraveis(col, inicio, fim)
+        if b.timestamp < fim
+    ]
+
+
+def imprimir_medida_sem_marco(grupo, pk, dm, bats):
+    if not bats:
+        # Nao ha batida apuravel que possa estar sem marco.
+        return False, False
+
+    # Procurou-se em CelulaDia.ata e no produtor:
+    # app/escala/models.py:1778
+    # app/ponto/portas/celula.py:88-105
+    # app/ponto/services/cartorio.py:599-725 e 730-747
+    #
+    # lampadas[].luz guarda HH:MM, nao a identidade da Batida;
+    # ata.orfas tambem guarda horas. Associar essas horas a objetos
+    # Batida seria refazer a associacao, sobretudo com horas duplicadas.
+    print('B %s col%d %s ata_sem_chave' % (grupo, pk, dm))
+    return None, None
+
+
+def rodar():
+    resumo = {
+        grupo: Counter({
+            'sim': 0, 'nao': 0, '?': 0,
+            'acusa': 0, 'concorde': 0,
+            'fora_do_command': 0, 'hoje_?': 0,
+            'sem_marco_total': 0,
+            'sem_marco_ate90_oposto': 0,
+            'medida_desconhecida': 0,
+        })
+        for grupo in G
+    }
+
+    ids = sorted({pk for casos in G.values() for pk, _ in casos})
+    colaboradores = {}
+    for pk in ids:
+        ok, col = executar_etapa(
+            'colaborador', lambda pk=pk: Colaborador.objects.get(pk=pk)
+        )
+        if ok:
+            colaboradores[pk] = col
+
+    empresas = sorted({
+        col.empresa_id for col in colaboradores.values()
+        if col.empresa_id is not None
+    })
+    comandos = {}
+    for empresa in empresas:
+        ok, resultado = executar_etapa(
+            'command', lambda empresa=empresa: carregar_command(empresa)
+        )
+        if ok:
+            comandos[empresa] = resultado
+            print(
+                'COMMAND empresa=%s dias-colab avaliados: %d'
+                % (empresa, resultado[1])
+            )
+        else:
+            print('COMMAND empresa=%s dias-colab avaliados: ?' % empresa)
+
+    elegibilidade = {}
+    for pk, col in colaboradores.items():
+        if col.situacao != 'ativo':
+            elegibilidade[pk] = 'inativo'
+        else:
+            ok, tem = executar_etapa(
+                'janela_command',
+                lambda col=col: tem_batida_na_janela_command(col)
+            )
+            if ok:
+                elegibilidade[pk] = None if tem else 'sem_batida'
+            else:
+                elegibilidade[pk] = '?'
+
+    for grupo, casos in G.items():
+        for pk, dm in casos:
+            data = data_caso(dm)
+            col = colaboradores.get(pk)
+            grav = julg = ub = None
+            hoje = codigos = motivo_hoje = None
+            ok_cel = ok_bats = False
+            bats = None
+
+            if col is not None:
+                ok_cel, cel = executar_etapa(
+                    'celula',
+                    lambda pk=pk, data=data: CelulaDia.objects.filter(
+                        colaborador_id=pk, data=data
+                    ).first()
+                )
+                if ok_cel and cel is not None:
+                    grav = cel.veredito
+                    julg = cel.julgada_em
+
+                estado = elegibilidade.get(pk, '?')
+                if estado in ('inativo', 'sem_batida'):
+                    hoje = 'fora_do_command'
+                    motivo_hoje = estado
+                elif estado is None and col.empresa_id in comandos:
+                    codigos = comandos[col.empresa_id][0].get((pk, data), [])
+                    if not codigos:
+                        hoje = 'concorde'
+                    else:
+                        ok_ver, hoje = executar_etapa(
+                            'veredito_dump',
+                            lambda codigos=codigos: derivar_veredito(codigos)
+                        )
+                        if not ok_ver:
+                            hoje = None
+
+                ok_bats, bats = executar_etapa(
+                    'batidas_apuraveis',
+                    lambda col=col, data=data: batidas_do_dia(col, data)
+                )
+                if ok_bats and bats:
+                    ub = max(
+                        bats, key=lambda b: (b.timestamp, b.pk)
+                    ).criado_em
+
+            # Ausencia de JULG e ausencia de UB so sao conclusoes se as
+            # respectivas leituras terminaram com sucesso.
+            motivo_velho = None
+            if not ok_cel:
+                velho = '?'
+                motivo_velho = 'leitura_celula'
+            elif julg is None:
+                velho = '?'
+                motivo_velho = 'sem_julgamento'
+            elif not ok_bats:
+                velho = '?'
+                motivo_velho = 'leitura_batidas'
+            elif ub is not None and ub > julg:
+                velho = 'sim'
+            else:
+                velho = '?'
+                motivo_velho = 'ata_sem_carimbo'
+
+            r = resumo[grupo]
+            r[velho] += 1
+            if hoje is None:
+                r['hoje_?'] += 1
+            elif hoje == 'fora_do_command':
+                r['fora_do_command'] += 1
+            elif hoje == 'concorde':
+                r['concorde'] += 1
+            else:
+                r['acusa'] += 1
+
+            cod_txt = '?' if codigos is None else (
+                ','.join(codigos) if codigos else '-'
+            )
+            linha = (
+                'D %s col%d %s GRAV=%s JULG=%s HOJE=%s COD=%s '
+                'UB=%s UA=? VELHO=%s'
+                % (
+                    grupo, pk, dm, grav or '?', hora_local(julg),
+                    hoje or '?', cod_txt, hora_local(ub), velho,
+                )
+            )
+            if motivo_hoje:
+                linha += ' motivo_hoje=%s' % motivo_hoje
+            if motivo_velho:
+                linha += ' motivo_velho=%s' % motivo_velho
+            if hoje == 'concorde':
+                linha += ' RAMO ?'
+            print(linha)
+
+            if ok_bats:
+                total, oposto = imprimir_medida_sem_marco(
+                    grupo, pk, dm, bats
+                )
+                if total is None or oposto is None:
+                    r['medida_desconhecida'] += 1
+                else:
+                    r['sem_marco_total'] += int(total)
+                    r['sem_marco_ate90_oposto'] += int(oposto)
+            else:
+                r['medida_desconhecida'] += 1
+                print('B %s col%d %s leitura_batidas=?' % (grupo, pk, dm))
+
+    for grupo in G:
+        r = resumo[grupo]
+        # Um total so e inteiro quando todos os dias do grupo sao conhecidos.
+        total = (
+            '?' if r['medida_desconhecida']
+            else str(r['sem_marco_total'])
+        )
+        oposto = (
+            '?' if r['medida_desconhecida']
+            else str(r['sem_marco_ate90_oposto'])
+        )
+        print(
+            'RESUMO %s VELHO sim=%d nao=%d ?=%d '
+            'HOJE acusa=%d concorde=%d fora_do_command=%d ?=%d '
+            'sem_marco_ate90_oposto=%s sem_marco_total=%s '
+            'medida_dias_desconhecidos=%d'
+            % (
+                grupo, r['sim'], r['nao'], r['?'],
+                r['acusa'], r['concorde'], r['fora_do_command'],
+                r['hoje_?'], oposto, total, r['medida_desconhecida'],
+            )
+        )
+
+
+try:
+    if connection.in_atomic_block:
+        raise RuntimeError('transacao_preexistente')
+    if connection.vendor != 'postgresql':
+        raise RuntimeError('banco_nao_postgresql')
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute('SET TRANSACTION READ ONLY')
+            cursor.execute('SELECT current_schema()')
+            if cursor.fetchone()[0] != 'juliani':
+                raise RuntimeError('schema_ativo_nao_e_juliani')
+        rodar()
+except Exception as exc:
+    erros[('sonda', type(exc).__name__)] += 1
+
+print('ERROS %d' % sum(erros.values()))
+for (etapa, tipo), quantidade in sorted(erros.items()):
+    print('ERROS etapa=%s tipo=%s n=%d' % (etapa, tipo, quantidade))
+print('FIM_SONDA_VELHO')
+```
 
 ## 18/11 17:48 · sessao 5fea559ba4a8 · E4C-F6F7 · construtor · origem=Code
 
@@ -1176,16 +2025,4 @@ A classificação `b_conversa` por conflito só ocorre depois de passar pelos te
 
 A sonda indicada não foi encontrada nesta cópia; a comparação direta de seu método com essas funções está [não verificado].
 
-## 18/11 17:21 · sessao 30f63ae7fee3 · - · - · origem=Ronald (tmux)
-
-A função [metade_irma_do_intervalo](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139) procura uma irmã **não gravada** e retorna uma candidata somente se houver exatamente uma; também exige resposta com texto e exclui perguntas fora do fato ou em voo. A contagem pedida de irmãs **gravadas** mede outra população.
-
-A função [classe_do_lote](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1204) considera conflito a existência de qualquer batida apurável perto do instante do slot, sem excluir batida de irmã.
-
-O arquivo da sonda indicado não foi localizado na cópia; a comparação do método efetivamente usado pela sonda com essas funções está [não verificado].
-
-## 18/11 17:21 · sessao da741c9eb6ab · - · - · origem=Ronald (tmux)
-
-A sonda `logs/RAIA-INTERVALO/sonda_irma_ambigua.py` não está presente na cópia consultada. Assim, sua metodologia e o hash informado não puderam ser conferidos; a correspondência entre seus contadores e as funções de produção é **[não verificado]**.
-
-_7068 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7070 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
