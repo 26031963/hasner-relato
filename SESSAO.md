@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 18:22:37.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (82.0 MB). Acoes na janela: **2312**.
+**Medido em 18/11/2026 18:28:20.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (82.1 MB). Acoes na janela: **2317**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:28:02 | Bash | Wait for volta c12b | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do [ -e logs/E4C-F6F7/c12/volta_f9b.fim ] && break; /usr/bin/sleep 15; done; ls logs/E4C-F6F7/c12/volta_f9b.* ; tail -3 logs/E4C-F6F7/c12/volta_f9b.log 2>/dev/null; date +%H:%M` |
+| 18:27:59 | Bash | Record censo D in RELATO | `cd /home/ronald/saas-hasner; systemd-run --user --scope -q -p MemoryMax=256M python3 -I - <<'EOF' p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('PRE-DESENHO E4d parte D:')][0] L.insert(i+1,'PRE-DESENHO E4d parte D MEDIDA (sonnet, classificador AST por RECEPTOR na copia c8b6d1ec2, logs/PRE-MAPA-E4D/projetores/censo_d/{classificador ...` |
+| 18:27:50 | Bash | Check models.py:980 and juiz registry | `cd /home/ronald/saas-hasner/app; sed -n 975,982p chamados/models.py \| cut -c1-150; grep -n "abrir\b\\|respostas_sem_veredito\\|sem_veredito_entre" core/juizes.py \| head -5 \| cut -c1-160` |
+| 18:27:42 | Bash | Spot-check censo output | `cd /home/ronald/saas-hasner; S=logs/PRE-MAPA-E4D/projetores/censo_d/saida.tsv; wc -l $S; grep -P "chamados/models.py:200[0-9]\b" $S; grep -c "^DECIDE" $S; grep -P "^DECIDE\t" $S \| grep -v "\tchamados/models.py" \| shuf -n 4 --random-source=<(yes); grep -P "^MOSTRA\t" $S \| shuf -n 2 --random-source=<(yes)` |
+| 18:27:37 | Bash | Read censo totals | `cd /home/ronald/saas-hasner; cat logs/PRE-MAPA-E4D/projetores/censo_d/totais.txt \| cut -c1-200 \| head -60` |
 | 18:22:20 | Bash | Wait for volta or censo | `cd /home/ronald/saas-hasner; for i in $(seq 1 38); do [ -e logs/E4C-F6F7/c12/volta_f9b.fim ] && break; [ -s logs/PRE-MAPA-E4D/projetores/censo_d/totais.txt ] && break; /usr/bin/sleep 15; done; ls logs/E4C-F6F7/c12/volta_f9b.fim logs/PRE-MAPA-E4D/projetores/censo_d/ 2>&1 \| head; date +%H:%M` |
 | 18:22:16 | Bash | Record volta red and c12b | `cd /home/ronald/saas-hasner; systemd-run --user --scope -q -p MemoryMax=256M python3 -I - <<'EOF' p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') i=[n for n,l in enumerate(L) if l.startswith('PRE-DESENHO E4d volta 1')][0] L.insert(i,'F9 condicao (RESPOSTAS-1811-1800 item 1): volta_intermediaria da c12 f2de785d4 VERMELHA (logs/E4C-F6F7/c12/volta_f9.log, rc=1 18:18, Ran 8110 FAI ...` |
 | 18:22:07 | Bash | Relaunch volta on c12b | `cd /home/ronald/saas-hasner; B=$(git merge-base 7d5a40f57 c8b6d1ec2); echo base=$B; V=/home/ronald/wt-c12-volta-175841; O=logs/E4C-F6F7/c12/volta_f9b; setsid nohup bash bin/volta_intermediaria.sh $V $B $O > $O.out 2>&1 < /dev/null & /usr/bin/sleep 3; pgrep -f "volta_intermediaria.sh $V" \| head -2` |
