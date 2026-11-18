@@ -21,7 +21,7 @@
 | ? | 5 | 5 |
 | **total** | **467** | **466** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 399; INTERROMPIDA 7; PARADA 56; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 399; INTERROMPIDA 7; PARADA 56; NO AR hoje 1; nao lidas: 1
 
 fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 306 com a coluna
 
@@ -283,6 +283,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | HOLERITE-ZIP-MATRICULA | LATERAL-ESTRUTURA | Retira o envio antigo de holerites sem uso pela tela. | - | E1; E2 | ++....... | REGISTRADA | BACKLOG:1883 [+1 compl.] | ? | ? |
 | BO-0611-05 | LATERAL-ESTRUTURA | Permite registrar ponto sem coordenadas de GPS. | - | liberação B3; revisão; smoke | ++.+.+... | PARADA (último estado da linha) | BACKLOG:1927 [+7 compl.] | ? | ? |
 | DECLARADO-X-GRAVADO | LATERAL-ESTRUTURA | Faz a gravação respeitar o horário declarado na resposta. | - | censo; construtor; passivo separado | ++....... | REGISTRADA | BACKLOG:1939 [+1 compl.] | 4 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS e E3 (app/chamados/services/materializacao.py no diff de wt-bugpar-124848 @338fd37b0 e de wt-codex-e3-forma-sql-005806 @f569063be; as 5 lei cortadas por DXG-LEIS-CORTADAS 14/11 10:24, logs/AVAIS-1313/dxg_leis_cortadas.txt) |
+| RAIA-INTERVALO-1811-1650 | LATERAL-ESTRUTURA | Vaga 2 alterna espúria/intervalo: (a) LOTE-CONHECE-A-IRMA, (b) DECLARADO-X-GRAVADO, (c) JUIZ-DO-DIA-LE-A-LAMPADA-DA-ATA. | - | censo (a) lei 1; sonda28 | +........ | REGISTRADA 18/11 | logs/AVAIS-1515/raia_intervalo_1811_1650.txt; complemento1_raia_intervalo_1811_1650.txt | ? | (a) censo lei 1; (b) censo lei 0; condicoes DECLARADO-NA-VAGA na abertura |
 | BATIDA-ID-DO-CLIQUE | LATERAL-ESTRUTURA | Identifica cada clique para evitar batidas duplicadas. | - | migration; PWA; build nativo posterior | ......... | REGISTRADA | BACKLOG:1963 | ? | ? |
 | ADMIN-FECHA-SEM-MOTIVO | LATERAL-ESTRUTURA | Exige motivo e histórico ao encerrar o chamado. | - | correção da porta administrativa | ++....... | REGISTRADA | BACKLOG:1973 | ? | ? |
 | G3G4-ESTRUTURA-RESIDUO | LATERAL-ESTRUTURA | Dá obra aos resíduos estruturais sem cobertura. | - | nomear padrão | .+....... | REGISTRADA | BACKLOG:2048 | ? | ? |
@@ -1040,7 +1041,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 |---|---|---|---|---|---|---|---|
 | BO-DISPUTA-MATRIZ-ANTES-DO-OPUS | ESPINHA-E | Confere os caminhos de nascimento antes da revisão final. | - | matriz; BO-DISPUTA-SEM-PERGUNTA | ~+....... | REGISTRADA | BACKLOG:1929 |
 | BO-DISPUTA-SEM-PERGUNTA | ESPINHA-E | Impede nascer disputa sem pergunta para responder. | - | RAIZ F1/F2; BO-0611-05 | ++....... | REGISTRADA (estacionada) | BACKLOG:1928; BACKLOG:1912 |
-| BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | LATERAL-ESTRUTURA | Permite julgar saída e retorno do intervalo juntos. | - | condições do passivo exportado | +++++~~.. | EM VOO | BACKLOG:2018; RELATO:18; RELATO:36; RELATO:42 |
+| BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | LATERAL-ESTRUTURA | Permite julgar saída e retorno do intervalo juntos. | - | condições do passivo exportado | +++++~~.. | FECHADA 17/11 (pouso 520d7b557 no main; smoke SMOKES-[nome]-1711 item 2 MATCH, RELATO:487; aval RAIA-INTERVALO-1811-1650 item 1) | BACKLOG:2018; RELATO:18; RELATO:36; RELATO:42 |
 | BUG-PAR-ESTADO-EXPLICITO | LATERAL-ESTRUTURA | Explicita a espera pela outra metade do intervalo. | - | BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS | ......... | REGISTRADA (superada e absorvida) | BACKLOG:2019 |
 | BUG-PAR-FROTA-1110 | ESPINHA-E | Trata pausas com uma metade validada e outra pendente. | - | BUG-PAR; RAIZ F3/F4 | +........ | REGISTRADA (absorvida) | BACKLOG:1933 |
 | DISPUTA-4418-ABERTA-COM-TUDO-RESOLVIDO | LATERAL-ESTRUTURA | Trata disputas abertas que já não têm pergunta viva. | - | censo de disputas abertas sem pergunta viva | ++....... | REGISTRADA (não construir) | app/docs/BACKLOG.md:1138 |
