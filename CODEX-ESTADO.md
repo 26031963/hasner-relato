@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:25** · publicado em **18/11/2026 17:27** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:32** · publicado em **18/11/2026 17:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:32 · sessao c2bbe7b05200 · ESCALA-NAO-DESCREVE · verificador · origem=Code
+
+**O c4 distingue os dois mutantes pela conta da fixture; a evidência de execução dos mutantes permanece [não verificado].** A mudança usa uma órfã que o caminho normal examinado de produção não gera, e o item 7 do veredito contém divergências do literal do aval que não podem ser tratadas como resolvidas sem aceite explícito. [app/escala/tests/test_escala_nao_descreve.py:63; app/escala/utils.py:621; anexo `veredito.md`, item 7]
+
+1. **Mutantes de R1.** A fixture coloca em A `08:10`, `08:20`, `8h` e `14:00`; R1 espera carga **4**. [app/escala/tests/test_escala_nao_descreve.py:63; app/escala/tests/test_escala_nao_descreve.py:91]
+
+   - `n_orfas = 3 + 1 = 4`, pois soma o comprimento das listas. [app/ponto/services/esmeril_espelho.py:130]
+   - `_hm` lê `08:10` e `08:20` na faixa 16, lê `14:00` na faixa 28 e retorna `None` para `8h`; assim, `a5 = {16: 2, 28: 1}`. [app/ponto/services/esmeril_espelho.py:31; app/ponto/services/esmeril_espelho.py:132]
+   - Portanto, `len(a5) = 2` e `sum(a5.values()) = 3`: ambos divergem do 4 exigido pelo teste, que recebe a medida pela lavra. [app/ponto/services/esmeril_espelho.py:142; app/ponto/services/esmeril_espelho.py:235; app/escala/tests/test_escala_nao_descreve.py:88]
+
+   O diff anexo relata uma falha para cada mutante e restauração do arquivo, mas os logs dessa execução não foram fornecidos: **rodada efetiva [não verificado]**. [anexo `delta.diff`, mensagem do commit] [nao verificado]
+
+2. **Escritor e formato.** O cartório monta `ata['orfas']` com `str(h)` para cada elemento de `dia['orfas']`, passa a ata à operação de lavra e a porta atribui a nova ata à `CelulaDia`. [app/ponto/services/cartorio.py:730; app/ponto/services/cartorio.py:745; app/ponto/services/cartorio.py:1852; app/ponto/portas/celula.py:1049; app/ponto/portas/celula.py:1090]
+
+   Nos caminhos de montagem examinados, as horas vêm de `strftime('%H:%M')`, inclusive as horas de células que depois viram órfãs; logo, **`'8h'` não é forma gerada por esses caminhos**, embora `ata_do_dia` isoladamente aceite e converta qualquer valor recebido. Dados antigos, escritos por outro caminho ou corrompidos: **[não verificado]**. [app/escala/utils.py:621; app/escala/utils.py:662; app/escala/utils.py:1722; app/escala/utils.py:326; app/escala/utils.py:1832; app/ponto/services/cartorio.py:745]
+
+   Duas órfãs legíveis na mesma faixa fazem `len(a5)` diferir de `n_orfas`, **mas não** fazem `sum(a5.values())` diferir: cada órfã lida incrementa o contador uma vez. Para a soma diferir é necessário ao menos um elemento que `_hm` não leia; não identifiquei outra forma produzida pelo caminho normal examinado. [app/ponto/services/esmeril_espelho.py:130; app/ponto/services/esmeril_espelho.py:135]
+
+   O selo pode manter o caso defensivo `'8h'` para a regra literal de contar elementos, mas deve identificá-lo como caso sintético; não há, na evidência examinada, uma forma normal de produção comprovada para substituí-lo e ainda matar esse mutante. [app/escala/tests/test_escala_nao_descreve.py:5; app/ponto/services/esmeril_espelho.py:130]
+
+3. **Outros testes do módulo.** A nova fixture tem apenas **duas** órfãs na faixa 16 e uma na faixa 28; A5 exige ao menos três na mesma faixa, portanto não cria A5 para A. Isso preserva as pré-condições de R1 e R3 de que A não tenha assinatura nem proposta, quanto a essa alteração de A5. [app/escala/tests/test_escala_nao_descreve.py:63; app/ponto/services/esmeril_espelho.py:148; app/escala/tests/test_escala_nao_descreve.py:89; app/escala/tests/test_escala_nao_descreve.py:105] Resultado efetivo dos demais testes: **[não verificado]**.
+
+4. **`HistoricoVinculo.de`.** `executar_vinculo` fotografa o vínculo ativo anterior como `código desde data · turno data-ou-"-"`, passa esse texto a `registrar_mudanca`, que cria `HistoricoVinculo.de`. [app/colaboradores/services/vinculo.py:182; app/colaboradores/services/vinculo.py:349; app/colaboradores/services/historico_vinculo.py:7]
+
+   Na fixture de R4, X começa no template de código `ENDL-5`; portanto, o texto anterior esperado contém `ENDL-5`, como a nova asserção exige. [app/escala/tests/test_escala_nao_descreve.py:127; app/escala/tests/test_escala_nao_descreve.py:135; app/escala/tests/test_escala_nao_descreve.py:140; app/escala/tests/test_escala_nao_descreve.py:288]
+
+5. **Classificação dos itens do veredito**, considerando o literal reproduzido no próprio anexo; o texto integral do aval é **[não verificado]**:
+
+   - **Item 3 — FILA.** Há leitores separados da classificação de ciclo, mas o anexo caracteriza o leitor anterior como herdado e a obra como acrescentando outro leitor; isso, por si só, não demonstra violação da proibição literal de *juiz novo*. [app/escala/services/cadastro_realidade.py:849; app/escala/regua_defesa.py:313; app/colaboradores/services/vinculo.py:128; anexo `veredito.md`, itens 2–3]
+   - **Item 4 — BLOQUEIA o selo de R5.** O caso declarado exige que o POST direto seja recusado pela porta, mas o teste só verifica que não houve vínculo; o POST retorna no predicado da view antes de chamar `realocar_vinculo_para_destino`. Assim, não prova a recusa da porta indicada em R4/R5. [app/escala/tests/test_escala_nao_descreve.py:12; app/escala/tests/test_escala_nao_descreve.py:15; app/escala/tests/test_escala_nao_descreve.py:299; app/escala/views.py:498; app/escala/views.py:502; app/escala/regua_defesa.py:313]
+   - **Item 6 — FILA**, com risco real de proposta antiga: o leitor busca o último snapshot sem limite de idade e a view usa sua proposta para aplicar a partir de hoje; o anexo não reproduz exigência literal de validade temporal. Existência ou efeito de lavra vencida em produção: **[não verificado]**. [app/ponto/services/esmeril_espelho.py:371; app/escala/views.py:493; app/escala/regua_defesa.py:315; anexo `veredito.md`, item 6]
+   - **Item 7 — BLOQUEIA por divergência literal pendente de aceite.** Segundo o anexo, o aval inclui `ciclo` no mapa e manda o link ao wizard; o código omite `ciclo` e aponta à tela de vínculo. A justificativa técnica para ler o ciclo atual não comprova alteração do aval. [anexo `veredito.md`, item 7; app/ponto/services/esmeril_espelho.py:245; app/escala/services/cadastro_realidade.py:13; app/escala/tests/test_escala_nao_descreve.py:299]
+   - **Item 8 — FILA**, pelo que é verificável: a L-040 ainda cita o selo antigo, e a L-042 tem a coluna `PROTEGE` vazia; o portão cobra citação quando o diff toca função declarada nessa coluna. Não há prova disponível de uma exigência literal do aval que transforme esses dois apontamentos em bloqueio desta obra. Resultado do portão sobre o range de pouso: **[não verificado]**. [app/docs/LEIS.md:88; app/docs/LEIS.md:90; bin/tests/test_lei_protege_sitio.sh:13; bin/tests/test_lei_protege_sitio.sh:200]
 
 ## 18/11 17:25 · sessao c8d57d9f8e0f · LOTE-CONHECE-A-IRMA · sonda · origem=Code
 
@@ -422,8 +456,4 @@ Os anexos foram fornecidos no texto, sem arquivo com linhas na cópia; por isso,
 - A unicidade de pergunta de marco tem condições e não demonstra impossibilidade geral de duas saídas ([app/chamados/models.py:3762](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:3762)). O tratamento de múltiplas irmãs gravadas com os mesmos critérios no desenho proposto está **[não verificado]**.
 - A lei da lâmpada e a L-099 estão registradas em [app/docs/CORTES.md:372](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:372) e [app/docs/LEIS.md:122](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:122).
 
-## 18/11 16:48 · sessao 48aaba0bd489 · - · - · origem=Ronald (tmux)
-
-Resultados enviados ao agente principal, com as referências do elo, seus leitores, a função de irmã e o registro de juízes.
-
-_7055 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7056 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
