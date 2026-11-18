@@ -1,7 +1,58 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 16:49** · publicado em **18/11/2026 16:53** (UTC-3)
+> Ultima resposta processada: **18/11/2026 16:56** · publicado em **18/11/2026 16:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 16:56 · sessao 5e7ff4e30e77 · B4-OLHA-O-RESET · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — CONTRATO-DE-INSTRUMENTO, pergunta 3:** a medida exigida não existe hoje para cada passagem pela faixa, e `ler_cota` não entrega o instante do reset ao chamador. O contrato precisa ser implementado e demonstrado; não basta alterar a mensagem da negativa. [bin/disjuntor.py:1159](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1159), [bin/disjuntor.py:1858](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1858), [bin/disjuntor.py:1901](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1901).
+
+Uso **CONFERE** quando a premissa ou a ausência do problema é sustentada; **PROCEDE** quando há divergência ou condição que não fecha. O texto do aval foi fornecido na mensagem, sem arquivo e linhas verificáveis; o estado de produção, o prazo e a execução futura são **[não verificado]**.
+
+### 1 CONSTRUIR
+
+1. **Premissas — CONFERE, com ressalva.** Hoje `B4_NEGA = 75`, `B4_PARA = 85`; `b4_decide` consulta primeiro a escada e depois nega a faixa a partir de 75%. A ressalva é que `ler_cota` *lê* o reset para validá-lo, mas devolve apenas o percentual. [bin/disjuntor.py:145](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:145), [bin/disjuntor.py:1159](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1159), [bin/disjuntor.py:1215](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1215).
+2. **Colisão — CONFERE como alteração expressa.** A regra pedida contraria a definição anterior para 75–85%, mas o próprio dado fornecido declara o corte que a altera nessa faixa. A escada continua precedendo a decisão; Stop e B4-CODEX também usam `escada`, portanto preservar sua interface e comportamento importa. [bin/disjuntor.py:20](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:20), [bin/disjuntor.py:1297](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1297), [bin/disjuntor.py:1471](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1471). Outra colisão vigente específica: **[não verificado]**.
+3. **Literal — PROCEDE.** A implementação precisa obter percentual e reset de uma leitura coerente e manter a validação atual de reset vencido, ausente ou inválido; o retorno atual não contém o reset. Uma passagem que passa também limpa `b4.negou_desde`, inclusive pela nova razão de reset próximo: isso altera quando o próximo disparo B4 será contado. [bin/disjuntor.py:1162](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1162), [bin/disjuntor.py:1858](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1858).
+4. **Exportada, dinheiro ou `!` — CONFERE no escopo declarado.** O trecho inspecionado decide chamadas de `Agent`; não evidencia escrita de folha ou exportada. Efeito indireto em trabalhos posteriores ou execução em produção: **[não verificado]**. Os casos que exigem `!` estão em [CLAUDE.md:265](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/CLAUDE.md:265); a unidade do código em [bin/disjuntor.py:1839](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1839).
+
+### RED
+
+1. **Premissas — CONFERE por leitura do código.** Com 80% e reset válido em 1 h ou 4 h, hoje nega; com 86% e 1 h, a escada nega. Os casos existentes usam 86.400 segundos e cobrem inclusive 75%, 85% e reset vencido. Execução real do RED e do verde: **[não verificado]**. [bin/disjuntor.py:1203](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1203), [bin/tests/test_disjuntor.sh:435](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:435).
+2. **Colisão — CONFERE.** Os três casos propostos são compatíveis com preservar a escada e os casos existentes, sujeito à execução do selo. [bin/tests/test_disjuntor.sh:443](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:443).
+3. **Literal — PROCEDE como cuidado de implementação.** O mutante existente procura uma sequência **textual exata** de `b4_decide`; se a construção remover essa âncora, o selo falha mesmo sem editar o teste. A construção deve preservar a âncora ou resolver essa condição sem afrouxar o selo; que isso foi conseguido é **[não verificado]**. O caso de 4 h distingue o mutante proposto “sempre passa”. [bin/tests/test_disjuntor.sh:1515](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1515), [bin/tests/test_disjuntor.sh:1567](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1567).
+4. **Exportada, dinheiro ou `!` — CONFERE no escopo do teste.** O selo usa árvore de teste e invoca o hook contra ela; não há ato sobre produção demonstrado. Execução nesta revisão: **[não verificado]**. [bin/tests/test_disjuntor.sh:81](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:81).
+
+### CONTRATO-DE-INSTRUMENTO
+
+1. **Premissas — CONFERE, com ressalva.** O `PreToolUse` chama o disjuntor, e este chama `b4_decide` no ramo `Agent`. Cota ilegível ou sem reset válido faz `ler_cota` devolver `None`; a escada por palavra humana ainda pode negar independentemente da cota. [settings.json:62](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/.claude/settings.json:62), [bin/disjuntor.py:1159](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1159), [bin/disjuntor.py:1209](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1209).
+2. **Colisão — CONFERE no corte declarado.** A medida nova deve preservar o significado dos eventos existentes: `ler` conta `DISJUNTOR` por identificador e `NEGOU` como negativa; o ESTADO consome essa leitura. [bin/disjuntor.py:1971](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1971), [bin/gerar_estado.py:285](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/gerar_estado.py:285).
+3. **Literal — PROCEDE.** A afirmação de que o log só recebe linha na primeira negativa precisa de precisão: o **disparo `DISJUNTOR B4`** é condicionado a `negou_desde`, mas **cada negativa** também gera `NEGOU`; a passagem que passa não gera a medida exigida de percentual e horas. Além disso, `trilha` engole falhas de escrita, logo “cada passagem” não é garantido pelo mecanismo atual. O contrato diz “quem espera = ninguém”, mas a transição de estado existente tenta adquirir `flock` até 20 vezes, com espera entre tentativas. [bin/disjuntor.py:1859](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1859), [bin/disjuntor.py:1901](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1901), [bin/disjuntor.py:193](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:193), [bin/disjuntor.py:345](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:345). A efetividade de ajustar a constante a zero depende da implementação futura: **[não verificado]**.
+4. **Exportada, dinheiro ou `!` — CONFERE no instrumento declarado.** A trilha e o estado examinados são arquivos de sessão; o contrato não demonstra operação sobre gravado exportado ou dinheiro. [bin/disjuntor.py:121](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:121), [CLAUDE.md:265](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/CLAUDE.md:265).
+
+### PRONTO
+
+1. **Premissas — CONFERE como critério futuro; cumprimento [não verificado].** O selo e a condição de uma passagem real existem como critérios no dado fornecido; não há resultado de execução nem passagem real no dado raspado. O selo existente está em [bin/tests/test_disjuntor.sh:1501](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1501).
+2. **Colisão — [não verificado].** A abertura do opus, a árvore indicada e a situação da vaga dependem de fatos não demonstrados pelo dado fornecido. A ordem geral de fila está em [CLAUDE.md:288](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/CLAUDE.md:288).
+3. **Literal — PROCEDE.** Verde do selo não prova, sozinho, a **primeira passagem real** nem sua linha no RELATO; a nova medida precisa existir e a passagem precisa ocorrer. [bin/disjuntor.py:1901](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1901).
+4. **Exportada, dinheiro ou `!` — [não verificado] quanto à fila subsequente.** Para o selo e o registro do instrumento não foi identificado ato desses tipos; não há dados suficientes para afirmar o alcance do trabalho que vier depois. [CLAUDE.md:265](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/CLAUDE.md:265).
+
+### PROIBIDO
+
+1. **Premissas — CONFERE.** A status line é a escritora declarada de `cota.json`; a escada é compartilhada; e o selo contém casos e mutantes existentes. [bin/statusline_cota.py:4](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/statusline_cota.py:4), [bin/disjuntor.py:1203](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1203), [bin/tests/test_disjuntor.sh:1507](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1507).
+2. **Colisão — CONFERE.** As proibições são compatíveis com preservar a escada e a configuração atual; atalhos como pular teste constam entre os casos que exigem `!`. [CLAUDE.md:265](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/CLAUDE.md:265), [settings.json:62](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/.claude/settings.json:62).
+3. **Literal — CONFERE como restrições; cumprimento futuro [não verificado].** Em particular, preservar os testes inclui suas âncoras de mutação, não apenas suas asserções. [bin/tests/test_disjuntor.sh:1515](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:1515).
+4. **Exportada, dinheiro ou `!` — CONFERE no escopo declarado.** Não há autorização declarada para ampliar a obra a esses atos; a regra de escopo literal está em [app/docs/LEIS.md:62](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:62) e os casos de `!` em [CLAUDE.md:265](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/CLAUDE.md:265).
+
+### Escritores e leitores
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `seven_day_pct` | `statusline_cota.py`, a partir de `rate_limits.seven_day.used_percentage`; o teste também fabrica dados de teste. [bin/statusline_cota.py:40](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/statusline_cota.py:40), [bin/tests/test_disjuntor.sh:453](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:453) | `ler_cota`; seu retorno alimenta `escada`, `b4_decide` e a leitura do ESTADO. O teste também inspeciona o JSON. [bin/disjuntor.py:1164](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1164), [bin/disjuntor.py:2044](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:2044), [bin/tests/test_disjuntor.sh:445](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:445) |
+| `seven_day_resets_at` | A mesma status line, a partir de `rate_limits.seven_day.resets_at`; o teste fabrica um JSON. [bin/statusline_cota.py:45](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/statusline_cota.py:45), [bin/tests/test_disjuntor.sh:453](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/tests/test_disjuntor.sh:453) | `ler_cota` valida tipo, finitude e vencimento, mas não devolve o reset. Outros leitores diretos na cópia pesquisada: **[não verificado]**. [bin/disjuntor.py:1164](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1164) |
+| `b4.negou_desde` | O ramo `Agent` atribui o instante na primeira negativa e remove o objeto `b4` quando uma chamada passa; `_com_estado` grava o arquivo de estado. [bin/disjuntor.py:1859](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1859), [bin/disjuntor.py:335](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:335) | O mesmo ramo lê o campo para limpar o estado ou decidir se registra um novo disparo. O Stop usa `b4_para`, separado, e chama `b4_stop`, não `b4_decide`. [bin/disjuntor.py:1858](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1858), [bin/disjuntor.py:1301](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/disjuntor.py:1301), [bin/hook_stop_fila1.py:1199](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/bin/hook_stop_fila1.py:1199) |
+
+Nenhum arquivo foi criado, editado ou apagado nesta revisão. O diretório disponibilizado não expõe metadados Git para confirmar o hash informado: **[não verificado]**.
 
 ## 18/11 16:49 · sessao 2981715c4d0f · DECLARADO-X-GRAVADO · censo · origem=Code
 
@@ -503,90 +554,4 @@ rc_sombra=0
 
 As seis linhas `SOMA` informam `True`. Não aparece `INCOMPLETO` na parte fornecida. [não verificado]
 
-## 18/11 16:16 · sessao 0047d0f2aa38 · FILA-CODEX-1811 · sonda · origem=Code
-
-Segue a saída integral fornecida da sonda R1-REMEDE, parte 5 de 6. A origem e a execução da sonda são [não verificado].
-
-```text
-sonda_leitura: script.py [972aacf9a2766647] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE 5 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 107
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 600
-UNIVERSO_PARTE 11/2026 103
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 210 minutos_total 3.0 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1285, 'bate_ate_10min': 1215, 'esp_zero_e6_trabalho': 9, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 55, 'dia_batida_impar': 78, 'impar_que_BATE': 29, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 42, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 49, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1533, 'dia_isento_ou_ausencia': 275, 'dia_sem_trabalho_ambos': 45, 'esp_desconta_janela_declarada': 72, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.6% de 1285 dias comparados
-[3] ESTRUTURA     3 dia-colab      29.2 h    3 colabs
-[3] CADASTRO     19 dia-colab      52.3 h    8 colabs
-[3] BATIDA       48 dia-colab     197.3 h   26 colabs
-[4] TOTAL divergentes 70
-[5] colabs com divergencia: 29
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=3|horas=29.23270916666667|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=19|horas=52.325450786111105|colabs=8
-PARCIAL|10/2026|BATIDA|dias=48|horas=197.29829774694443|colabs=26
-PARCIAL_TOTAL|10/2026|dias=70|horas=278.856457699722205|colabs=29
-ESTIMATIVA processados 125 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1236, 'bate_ate_10min': 1146, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 6, 'diverge_acima_60': 75, 'dia_batida_impar': 98, 'impar_que_BATE': 37, 'impar_que_DIVERGE': 61, 'impar_dentro_da_faixa': 52, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 61, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 206, 'dia_sem_lavratura_no_espelho': 1402, 'dia_isento_ou_ausencia': 227, 'dia_sem_trabalho_ambos': 38, 'esp_desconta_janela_declarada': 84, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 92.7% de 1236 dias comparados
-[3] ESTRUTURA     9 dia-colab      60.5 h    7 colabs
-[3] CADASTRO     31 dia-colab     104.1 h   11 colabs
-[3] BATIDA       50 dia-colab     255.3 h   25 colabs
-[4] TOTAL divergentes 90
-[5] colabs com divergencia: 35
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=9|horas=60.54144059916667|colabs=7
-PARCIAL|11/2026|CADASTRO|dias=31|horas=104.14722180555555|colabs=11
-PARCIAL|11/2026|BATIDA|dias=50|horas=255.3167716316666|colabs=25
-PARCIAL_TOTAL|11/2026|dias=90|horas=420.00543403638882|colabs=35
-TEMPO_SEGUNDOS 190.0
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 278619
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 34
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1955
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 8224
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 80
-TRATADA_LOCAL app/escala/utils.py:1511 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:1698 GeneratorExit 14
-TRATADA_LOCAL app/escala/utils.py:2002 GeneratorExit 8043
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:533 GeneratorExit 5767
-TRATADA_LOCAL app/escala/utils.py:534 GeneratorExit 5767
-TRATADA_LOCAL app/escala/utils.py:899 GeneratorExit 350
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 193
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 505992
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 861
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3482
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 218
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 14496
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 171
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4379
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 199
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 28919
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3793
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 45361
-TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 21691
-SOMA 10/2026 70   <- tem de ser igual a soma das classes (70) True
-SOMA 10/2026 HORAS 278.856457699722205 True
-SOMA 10/2026 COLABS_UNIAO 29 True
-SOMA 11/2026 90   <- tem de ser igual a soma das classes (90) True
-SOMA 11/2026 HORAS 420.00543403638882 True
-SOMA 11/2026 COLABS_UNIAO 35 True
-rc_sombra=0
-```
-
-As seis linhas **SOMA** exibem `True`; não há ocorrência de `INCOMPLETO` no texto fornecido. A integridade da execução fora desse texto é [não verificado].
-
-_7044 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7045 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
