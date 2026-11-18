@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 06:52:13.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (51.2 MB). Acoes na janela: **1146**.
+**Medido em 18/11/2026 06:57:24.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (51.2 MB). Acoes na janela: **1151**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:57:10 | Bash | Launch S6 frota DIFF on sombra | `cd /home/ronald/saas-hasner; mkdir -p /home/ronald/s6-antes-4307c01e6/app/logs /home/ronald/s6-antes-4307c01e6/app/media /home/ronald/wt-s6-feriado-002611/app/logs /home/ronald/wt-s6-feriado-002611/app/media; D=logs/S6-INTERMITENTE-FERIADO-CURA-A/diff; mkdir -p $D; setsid bash -c "bin/simular_folha.sh par s6comp11 /home/ronald/s6-antes-4307c01e6/app /home/ronald/wt-s6-feriado-002611/app > $D/par.l ...` |
+| 06:57:05 | Bash | Check S6 trees and sombra readiness | `cd /home/ronald/saas-hasner; for d in /home/ronald/s6-antes-4307c01e6/app /home/ronald/wt-s6-feriado-002611/app; do ls -d $d/logs $d/media 2>&1 \| tr '\n' ' '; echo; done; (cd /home/ronald/wt-s6-feriado-002611 && git log --oneline -1 && git status --porcelain \| head -3); sed -n 60,140p bin/simular_folha.sh \| grep -n "competencia\\|mes\\|ano" \| head -10; cat logs/sombra/ultimo* 2>/dev/null \| ta ...` |
+| 06:56:58 | Bash | Read R1 list output and simular_folha usage | `cd /home/ronald/saas-hasner; ls logs/r1remede1811/lista; head -c 3000 logs/r1remede1811/lista/* 2>/dev/null \| head -60; sed -n 1,60p bin/simular_folha.sh \| grep -n "par\\|uso\\|Uso\\|\$1\\|--" \| head -30` |
+| 06:56:57 | ListAgents |  | `-` |
+| 06:56:53 | Bash | Read B2 suite verdict and R1 chain status | `cd /home/ronald/saas-hasner; date +%H:%M; L=logs/E4C/f1nova/b2/cerca/c2b/suite_c26d0941f.log; grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; grep '^Ran' $L\|tail -1; tail -1 $L; grep -E "^(FAIL\|ERROR):" $L\|cut -c1-170; cat logs/r1remede1811/cadeia.status 2>&1 \| tail -5; ls logs/r1remede1811/ \| tail -20` |
 | 01:58:36 | Bash | Remove temporary worktrees | `cd /home/ronald/saas-hasner; for w in /home/ronald/wt-b2-mut-teto-013148 /home/ronald/wt-b2-mut-none-013210 /home/ronald/wt-main-4307-011931; do git worktree remove --force $w 2>&1 \| tail -1; done; git worktree list \| grep -c "mut-\\|main-4307"` |
 | 01:58:32 | Bash | Mark B2-TETOS/TORNEIRA RESPONDIDA; repoint ESPERANDO | `cd /home/ronald/saas-hasner; ps -o args= -p 2069328 \| cut -c1-140; cd app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() s=s.replace('ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1975825','ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=2069328',1) for a,r in [('lei: B2-TETOS (aval VAGA-E-DA-B2 00:20 item 5a)','RESPONDIDA por aval RESPOSTAS-B2-TETOS-E-TORNE ...` |
 | 01:58:22 | Bash | Read measured counts from teto-1 mutant | `cd /home/ronald/saas-hasner; grep -E "AssertionError" logs/E4C/f1nova/b2/cerca/c2b/tetos/mutante_teto_menos1.log \| cut -c1-160` |
