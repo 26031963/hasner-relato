@@ -1,7 +1,156 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 19:10** · publicado em **18/11/2026 19:13** (UTC-3)
+> Ultima resposta processada: **18/11/2026 19:19** · publicado em **18/11/2026 19:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 19:19 · sessao 526d0726e133 · RAIA-ESPURIAS · leitura · origem=Code
+
+**Os anexos não identificam seis classes que somem o quadro inteiro.** [auditoria_espurias_fecha_1811_1920.txt:5; demais números de linha dos anexos: não verificados]
+
+A partição mais próxima mostrada é **classe × tipo de dia** em `espuria_1711.out`. Ela tem cinco combinações e soma as **1.265 órfãs** da medição das 15:34; os totais abaixo são somas das linhas do anexo. [espuria_1711.out:3; espuria_1711.out:5; linhas dos agregados: não verificadas]
+
+| Classe × tipo de dia | Órfãs | Linha do anexo que mostra o rótulo |
+|---|---:|---|
+| `folga_desmentida × folga` | 624 | `espuria_1711.out:7` |
+| `folga_desmentida × ausencia` | 6 | `espuria_1711.out:30` |
+| `geometria × trabalho` | 525 | `espuria_1711.out:8` |
+| `indefinida × trabalho` | 108 | `espuria_1711.out:14` |
+| `eco_cluster × trabalho` | 2 | `espuria_1711.out:32` |
+| **Soma** | **1.265** | `espuria_1711.out:5` |
+
+As linhas citadas mostram os rótulos, mas **não definem seis classes de dia-colab**; a classificação disponível na cópia retorna classe por horário de órfã e pode atribuir `geometria` e `eco_cluster` ao mesmo dia. [app/escala/orfa_classe.py:53; app/escala/orfa_classe.py:73]
+
+O raio-x verde apresenta seis rótulos de **motivo da órfã**, com contagens 71, 14, 13, 3, 2 e 2, que somam 105. Eles se referem aos 83 dias e 50 pessoas do raio-x, e não constituem uma partição demonstrada das 1.265 órfãs. [raiox_verde_1811.out, linhas `RESUMO` e `CLASSE`: não verificadas] [nao verificado]
+
+**Não consigo entregar honestamente o script completo solicitado com estes insumos.** O `sonda_espuria2.py` transcrito seleciona `CelulaDia` por `ata__n_orfas__gt=0` e imprime um vetor `sem_trabalho/cxr/regen`; a saída `espuria_1711.out` apresenta outro quadro, por `classe/tipo_dia/distância`, e o texto transcrito não mostra a chamada ao classificador que gerou esse quadro. [sonda_espuria2.py, trechos `todas.filter`, `chave` e `QUADRO`: linhas não verificadas; app/escala/orfa_classe.py:53] Não encontrei os arquivos dos anexos na cópia para resolver essa discrepância. [não verificado]
+
+Além disso, a medida posterior registra **1.267 órfãs**, duas a mais que as 1.265 das 15:34; a causa da diferença e a composição histórica exata não são demonstradas pelos dados fornecidos. [cruza_1711.out, linha `CRUZA`: não verificada; espuria_1711.out:5]
+
+Para escrever a sonda que satisfaça o pedido sem inventar precedência entre classes, falta a **sonda efetivamente usada para gerar `espuria_1711.out`** e uma regra autorizada para atribuir um dia com órfãs de classes diferentes a uma única classe de dia-colab. A identidade histórica do universo verde também depende dos dados da execução anterior, não apenas do critério executado sobre o estado atual. [app/escala/orfa_classe.py:73; raiox_verde.py, filtro e período: linhas não verificadas] [nao verificado]
+
+Nenhuma função de produção foi executada nesta leitura; efeito colateral transitivo das funções necessárias e resultado no tenant permanecem **[não verificado]**.
+
+## 18/11 19:16 · sessao 33520c760eaf · RAZAO-DA-SOBRA · censo · origem=Code
+
+O anexo contém **49 expressões de leitura da chave de órfãs da ata ou da grade, em 29 funções e 24 arquivos**, contando cada nó sintático e incluindo os acessos usados para acrescentar ou ordenar a própria lista. As **14 expressões em 10 arquivos** da resposta anterior são um subconjunto: o recorte ali declarado era a **ata direta**, enquanto o pedido atual inclui também a grade. A identidade da cópia com o hash informado é **[não verificado]**: `git rev-parse HEAD` retornou que a cópia não é um repositório Git.
+
+A unidade de contagem importa: `get` e indexação contam separadamente; uma expressão `['orfas'].append(...)` também aparece como leitura AST porque obtém a lista para mutá-la. Isso não significa que cada expressão seja um consumidor independente ([escala/utils.py:810](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:810)).
+
+### Separação das 88 linhas do anexo
+
+| Classe | Linhas | Critério |
+|---|---:|---|
+| Leituras literais de `orfas`/`n_orfas` da ata ou grade em código fora de testes e snapshots | **49** | Inclui comandos e funções construtoras; execução efetiva em produção não é demonstrada pelo anexo. | [nao verificado]
+| Homônimos | **22** | Não são a lista ou contagem de batidas órfãs da ata/grade. |
+| Teste | **1** | [app/tenants/tests.py:60](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/tenants/tests.py:60), pista de chamado órfão. |
+| Snapshot excluído | **1** | Lê a ata, mas está no diretório explicitamente excluído: [bin/snapshot_o118_col221.py:32](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/snapshot_o118_col221.py:32). |
+| Escritas na chave da grade, sem expressão de leitura naquele nó | **8** | [escala/utils.py:814](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:814), `973`, `977`, `1164`, `1229`, `1264`, `1269`, `1849`. |
+| Pistas relacionadas às órfãs da ata/grade, mas que não são por si leituras literais | **7** | Definições de funções, identificadas abaixo. |
+| **Total** | **88** | |
+
+Os **22 homônimos** são:
+
+- **Perguntas órfãs: 8 linhas** — sete pistas em [chamados/reconciliador.py:1088](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/reconciliador.py:1088), `1104`, `1157`, `1227`, `1530`, `1554`, `1578`; e `out['orfas']` em [chamados/reconciliador.py:1421](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/reconciliador.py:1421), contador de perguntas encerradas.
+- **Chamados ou cobranças órfãos: 8 pistas** — [acoes_disputa.py:214](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/acoes_disputa.py:214), [disputa_emissao.py:705](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/disputa_emissao.py:705), `804`, `1041`, [regeneracao.py:141](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/regeneracao.py:141), `158`, [gerar_celulas.py:232](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/gerar_celulas.py:232) e [reconciliar_grade.py:430](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/reconciliar_grade.py:430).
+- **Turno sem par: 3 pistas** — [regularizacao.py:19](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/regularizacao.py:19), [turnos.py:234](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:234) e [utils_turno_orfao.py:9](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/utils_turno_orfao.py:9). O último trata, por exemplo, de entrada sem saída.
+- **Outros: 3 linhas** — `c['orfas']` são perguntas fora de juízes em [gerar_diagrama.py:854](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/core/management/commands/gerar_diagrama.py:854); `_sobra` mede dias previstos sem batida em [propositor.py:246](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/propositor.py:246); `_acesas_de_sobra` compara batidas apuráveis com marcos vencidos em [vigia_de_hora.py:64](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_de_hora.py:64).
+
+As sete pistas relacionadas são [orfa_classe.py:53](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:53), [leitor_celula.py:180](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:180), [tripwire_celulas.py:135](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/tripwire_celulas.py:135) e `199`, [cluster_espurio.py:40](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cluster_espurio.py:40) e `88`, e [cartao_pela_celula.py:277](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/cartao_pela_celula.py:277).
+
+### Matriz final
+
+Uma linha abaixo representa **uma função**, com todas as linhas AST pertinentes agrupadas. **PAGA** significa que rastreei a influência até folha ou export; isso não comprova um valor pago. Onde o caminho não foi rastreado, marco **PAGA [não verificado]**, sem presumir ausência.
+
+| Arquivo:linha | Função | Uso e derivação própria |
+|---|---|---|
+| [chamados/juizes.py:514](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/juizes.py:514), duas expressões | `_celula_furada` | **DECIDE** se a sobra prende o dia; condiciona à confiabilidade da régua. Não classifica cada sobra. PAGA **[não verificado]**. |
+| [materializacao.py:449](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/materializacao.py:449) | `_plantio_preenche_furo_na_data` | **DECIDE** materialização; filtra horas válidas e as junta às marcas para atribuição. PAGA **[não verificado]**. |
+| [calendario.py:409](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/colaboradores/services/calendario.py:409), `410` | `contexto_calendario` | **MOSTRA** horas no calendário; transforma em conjunto. Razão própria: não identificada. PAGA **[não verificado]**. |
+| [orfa_classe.py:58](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:58) | `classificar_orfas` | **DECIDE** classe por folga, marco ausente e rajada de até 15 minutos. Chamador de produção dinâmico **[não verificado]**. PAGA **[não verificado]**. |
+| [furos_diarios.py:22](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:22) | `_furos_do_dia` | **GRAVA** indiretamente: conta órfãs e a apuração entrega o número à porta que grava `FuroDiario` ([furos_diarios.py:54](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:54), [portas/celula.py:1257](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/portas/celula.py:1257)). PAGA **[não verificado]**. |
+| [leitor_celula.py:187](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:187), `190` | `_orfas_da_ata` | **TRANSPORTA; PAGA** no sentido de chegar à folha: lista real ou `?` repetido pela contagem antiga → `grade_da_celula` ([linha 420](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:420)) → `grade_do_fechamento` ([export.py:329](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/folha/export.py:329)) → causa gravada no fechamento ([fechamento.py:1080](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/fechamento.py:1080)). Não classifica a razão. |
+| [escala/utils.py:810](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:810), `813`, `814` | `montar_grade_prevista` | **GRAVA** na grade em memória: acrescenta batidas não consumidas e ordena. Produz a lista; não classifica motivo por sobra. PAGA **[não verificado]**. |
+| [escala/utils.py:1054](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1054) | `_montar_grade_prevista_periodo_legacy` | **TRANSPORTA/GRAVA** a lista na grade unificada. Não deriva razão. PAGA **[não verificado]**. |
+| [escala/utils.py:1121](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1121) | `montar_realizado_grade` | **MOSTRA/TRANSPORTA** cópia da lista junto ao realizado. Não classifica. PAGA **[não verificado]**. |
+| [escala/utils.py:1843](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1843), `1845`, `1848`, `1849`, `1905`, `1906`, `1979`, `1984` | `montar_grade_prevista_periodo_por_turno` | **DECIDE/GRAVA** grade: acrescenta e ordena, fornece lista ao juiz e verifica órfãs das bordas, inclusive saída no dia seguinte; pode mover borda para marco conforme as guardas ([linha 2007](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:2007)). PAGA **[não verificado]**. |
+| [folha/causas.py:43](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/folha/causas.py:43), `100` | `classificar_causa` | **DECIDE/GRAVA; PAGA** pelo critério de chegada à folha: filtra dias úteis, conta dias com órfã e identifica trabalho em folga; o fechamento grava `causa_espelho` ([fechamento.py:1077](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/fechamento.py:1077), [1144](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/fechamento.py:1144)). Mudança de rubrica ou valor por essa causa **[não verificado]**. |
+| [juiz_batida.py:161](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/juiz_batida.py:161) | `periodos_do_dia` | **MOSTRA/TRANSPORTA** órfãs no resultado; contrato diz que não somam ao período ([linha 18](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/juiz_batida.py:18)). A função é chamada pelo motor e pelo export, mas os trechos examinados usam outros campos, não essa lista ([motor_calculo_v2.py:616](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/motor_calculo_v2.py:616), [export.py:1150](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/folha/export.py:1150)). **PAGA pela lista [não verificado]**. |
+| [detectar_par_relampago.py:140](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/detectar_par_relampago.py:140) | `_score_geometria` | **DECIDE/MOSTRA** escore de comando; conta órfãs na grade de um dia. PAGA **[não verificado]**. |
+| [propor_reorganizacao.py:104](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/propor_reorganizacao.py:104) | `_run` | **DECIDE/MOSTRA** proposta; valida horas e as passa à atribuição global. PAGA **[não verificado]**. |
+| [tripwire_celulas.py:264](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/tripwire_celulas.py:264) | `medir_sobra_com_tipo_trocado` | **DECIDE/MOSTRA** vigilância; filtra sobra na borda por raio. PAGA **[não verificado]**. |
+| [ponto/propositor.py:39](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/propositor.py:39) | `dia_degenerado` | **DECIDE** escalada; valida horas, procura cluster em janela e combina órfãs com furo ([linha 52](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/propositor.py:52)). PAGA **[não verificado]**. |
+| [bordas_realizado.py:49](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/bordas_realizado.py:49) | `_teve_batida_na_ata` | **DECIDE** presença de batida; considera isenção e contagem de marcos. PAGA **[não verificado]**. |
+| [cartorio.py:736](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:736), `742`, `745` | `ata_do_dia` | **GRAVA** ata: passa lista às lâmpadas e grava contagem e horas; contagem própria, sem classe de razão. A ata é lavrada em [cartorio.py:1852](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1852). Caminho financeiro completo a partir desta entrada **[não verificado]**. |
+| [cartorio.py:839](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:839) | `insumos_da_ata` | **DECIDE/GRAVA** indiretamente entrada e saída desconhecidas quando não há lâmpadas e há contagem; o cartório carimba os insumos ([linha 1873](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1873)). PAGA **[não verificado]**. |
+| [cartorio.py:1426](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1426) | `_julgar_colab_corpo` | **DECIDE/GRAVA** julgamento; soma quantidade de órfãs às batidas reconhecidas e lavra resultado. Efeito financeiro dessa contagem **[não verificado]**. |
+| [cluster_espurio.py:29](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cluster_espurio.py:29), `31` | `_leitura_da_celula` | **DECIDE** assinatura: exige lista e lâmpadas, conta faltantes e procura duas órfãs consecutivas a até 15 minutos. PAGA **[não verificado]**. |
+| [esmeril_espelho.py:125](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/esmeril_espelho.py:125) | `assinaturas_do_colab` | **DECIDE/MOSTRA** assinatura recorrente; agrupa horas em faixas de 30 minutos. PAGA **[não verificado]**. |
+| [simular_dia.py:12](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/simular_dia.py:12) | `dia_perfeito` | **DECIDE** que dia com órfã não é perfeito. Não classifica a sobra. PAGA **[não verificado]**. |
+| [vigia_pareador_celula.py:74](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:74), duas expressões | `censo` | **DECIDE/MOSTRA** divergência; só monta conjunto quando há contagem e recorta janela por empresa. PAGA **[não verificado]**. |
+| [status_dia.py:188](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/status_dia.py:188) | `fatos_do_status` | **DECIDE/GRAVA** indiretamente status: soma a quantidade às batidas para `tem_batida`; cartório passa os fatos à lavra ([cartorio.py:1858](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1858)). PAGA **[não verificado]**. |
+| [supra_juiz.py:392](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/supra_juiz.py:392), `527` duas expressões | `classificar_dia` | **DECIDE/GRAVA; PAGA**: usa presença e conteúdo, podendo emitir `BATIDA_ORFA_FORA_TOLERANCIA` com contagem e horas; cartório lavra códigos ([cartorio.py:1464](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1464), [1855](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1855)); export examina veredito e protestos para retenção ([export.py:1273](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/folha/export.py:1273)). Efeito em caso concreto **[não verificado]**. |
+| [turnos.py:2679](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:2679) | `horas_reais_do_dia` | **DECIDE/TRANSPORTA** horas convertidas em minutos; alimenta a decisão de período de ausência parcial ([escala/utils.py:1245](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1245)). Caminho até valor ou retenção **[não verificado]**. |
+| [cartao_pela_celula.py:288](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/cartao_pela_celula.py:288) | `orfas_e_isencao_da_ata` | **MOSTRA/TRANSPORTA** conjunto de horas por data; chamador de produção **[não verificado]**. PAGA **[não verificado]**. |
+| [pdf_espelho.py:477](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:477), `552` | `_coletar_dados_espelho` | **MOSTRA** conjuntos de horas e por data no espelho/PDF. Não identifica razão individual. PAGA **[não verificado]**. |
+
+### Confronto com as 14 leituras anteriores
+
+As 14 expressões da tabela anterior continuam presentes, sem diferença de endereço ou quantidade por função:
+
+| Linha da resposta anterior | Expressões conferidas | Diferença |
+|---|---|---|
+| `_celula_furada` | [514](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/juizes.py:514): 2 | Sem mudança. |
+| `_plantio_preenche_furo_na_data` | [449](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/materializacao.py:449): 1 | Sem mudança. |
+| `_orfas_da_ata` | [187](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:187), `190`: 2 | Acrescentado caminho rastreado até causa no fechamento. |
+| `periodos_do_dia` | [161](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/juiz_batida.py:161): 1 | Precisão: ser chamado pelo motor/export não prova uso financeiro da lista de órfãs. |
+| `medir_sobra_com_tipo_trocado` | [264](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/tripwire_celulas.py:264): 1 | Sem mudança. |
+| `insumos_da_ata` | [839](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:839): 1 | Acrescentada a gravação indireta dos insumos. |
+| `_leitura_da_celula` | [29](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cluster_espurio.py:29), `31`: 2 | Sem mudança; explicitado o limite de 15 minutos. |
+| `assinaturas_do_colab` | [125](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/esmeril_espelho.py:125): 1 | Sem mudança; explicitadas faixas de 30 minutos. |
+| `censo` | [74](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:74): 2 | Sem mudança. |
+| `orfas_e_isencao_da_ata` | [288](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/cartao_pela_celula.py:288): 1 | A função lê para possível exibição; chamador de produção **[não verificado]**. |
+
+A diferença numérica é **49 − 14 = 35 expressões adicionais**, todas discriminadas na matriz: são leituras da grade ou de sua construção e transporte que não pertenciam ao recorte anterior de ata direta. A busca é a do anexo e das expressões literais examinadas; aliases, acesso dinâmico e caminhos não percorridos permanecem **[não verificado]**.
+
+**Leitores que PAGAM: 3 caminhos comprovados nesta leitura**, contando funções, sob o critério pedido de chegada à folha/export: `_orfas_da_ata`, `classificar_causa` e `classificar_dia`. O total real entre os 29 leitores é **[não verificado]**; os demais caminhos marcados como não verificados podem aumentar esse número. Nenhum dado fornecido prova pagamento efetivo ou valor pago.
+
+## 18/11 19:14 · sessao 4dce2fc3f869 · E4C-F9 · construtor · origem=Code
+
+Implementei as sete trocas para leitura pelo ato e acrescentei testes de divergência e um selo AST. **RED, GREEN e mutantes não foram executados**, conforme a instrução de não rodar banco nem suíte; seus resultados são **[não verificado]**. A análise sintática dos quatro arquivos passou, assim como `git diff --check` **[não verificado pelo Code]**. [nao verificado]
+
+As alterações estão em:
+
+- [auditar_invariantes_chamados.py:206](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:206): M1 lê o rótulo pela sequência; M2–M5 usam a face SQL em [I21](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1586), [C2](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1617), [F2](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1781) e [F3](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1794). I18 e I20 receberam comentários de exceção em [I18](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1081) e [I20](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1113).
+- [encerrar_perguntas_com_fato.py:33](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/encerrar_perguntas_com_fato.py:33): M6 seleciona perguntas materializadas e não validadas **pelo ato**. Com `--apply`, uma validação desfeita no ato deixa de excluir a pergunta por causa de um carimbo residual; uma validação vigente no ato passa a excluí-la mesmo com a coluna vazia. A escrita continua sujeita aos demais critérios e portas do comando ([encerrar_perguntas_com_fato.py:38](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/encerrar_perguntas_com_fato.py:38)).
+- [validar_classe_a.py:80](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/validar_classe_a.py:80): M7 imprime a resposta lida do ato.
+- [test_e4c_f9_comandos_leem_o_ato.py:60](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:60): cria a divergência por `registrar` e `.update()`, inclui controles e selo AST. **Limite:** M2–M5 testam o predicado de cada sítio extraído da AST, isolado dos demais critérios; não exercitam o auditor inteiro ([teste:23](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:23)). [nao verificado]
+
+Não editei `backfill_decisoes_pergunta.py` nem `curar_perguntas_em_limbo.py`: a solicitação de comentários nesses arquivos conflita com a proibição de editar fora dos três comandos e testes. Os sítios remanescentes constam do censo fornecido **[não verificado além do anexo do pedido]**. [nao verificado]
+
+Para o Code, o comando do módulo — tanto para observar o **RED na base, com o novo teste presente**, quanto para o GREEN com a cura — é: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4c-f9-191111 --only "chamados.tests.test_e4c_f9_comandos_leem_o_ato"
+```
+
+A aceitação de módulo em `--only` é **[não verificado]**. O recorte explicitamente solicitado é:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4c-f9-191111 --only "chamados"
+```
+
+Para os mutantes, aplicar **um por vez**, executar o comando do módulo acima e restaurar a cura antes do seguinte. As mortes esperadas são **[não verificado]**:
+
+| Mutante | Substituição | Caso que deve falhar |
+|---|---|---|
+| M1 | `DecisaoPergunta.leitura(_p).validada_em` → `_p.validada_em` | `test_M1_rotulo_e_controle` |
+| M2, M3, M4, M5 | No sítio correspondente, `PD.q_nao_validada_pelo_ato()` → `validada_em__isnull=True` | `test_M2_M3_M4_M5_filtros_de_cada_sitio_e_controle`, subteste do sítio |
+| M6 | `PerguntaDisputa.q_nao_validada_pelo_ato()` → `validada_em__isnull=True` | `test_M6_dry_run_universo_e_controle` |
+| M7 | `DecisaoPergunta.leitura(q).resposta_colab` → `q.resposta_colab` | `test_M7_texto_do_ato_e_controle` |
+
+Os escritores identificados na cópia incluem validação e devolução em [validacao.py:168](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/validacao.py:168) e [validacao.py:273](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/validacao.py:273), resposta humana e reabertura em [disputa_emissao.py:1481](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/disputa_emissao.py:1481) e [disputa_emissao.py:1617](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/disputa_emissao.py:1617). A enumeração completa de escritores é **[não verificado]**. Os M passam a consultar [q_nao_validada_pelo_ato](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/models.py:3564) e [DecisaoPergunta.leitura](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/models.py:4295); essa leitura também incorpora o passivo E4b descrito no próprio método.
+
+**LEI-AKITA:** origem = os três comandos acima; testemunha = `DecisaoPergunta.leitura` / `q_nao_validada_pelo_ato`; RED = [teste E4C-F9](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:60) **[execução não verificada]**; quem mais lê = os cinco comandos do censo anexado, incluindo backfill e cura de limbo **[censo fornecido, não refeito]**; juízes novos = 0 **[diff dos três comandos e teste]**; padrão = CQRS com projeções reconstruíveis. [nao verificado]
 
 ## 18/11 19:10 · sessao c0153fbf6c21 · RAZAO-DA-SOBRA · leitura · origem=Code
 
@@ -2166,56 +2315,4 @@ print("ERROS=%d" % sum(erros.values()))
 print("FIM_REMEDIDA_1011")
 ```
 
-## 18/11 18:07 · sessao 1e6ace81736a · B2B-RETAGUARDA-1811-1810 · leitura · origem=Code
-
-**Há ações condicionais disponíveis ao admin**: para uma pergunta respondida e não validada, o card pode oferecer **Rejeitar**; o modal também pode oferecer **Corrigir** e **Conferir data**. A validação dessa pergunta é escondida e a porta a recusa pelo K6. O dado fornecido não identifica uma pergunta, suas permissões, se a disputa está aberta ou se as datas divergem; a disponibilidade no caso concreto é **[não verificado]**. (`app/templates/chamados/partials/_pergunta_card.html:42`, `:47`, `:117`; `app/templates/chamados/partials/modal_fio.html:162`, `:274`, `:316`; `app/chamados/services/validacao.py:740`)
-
-**Origem e leitores.** `estado_aplicacao_pergunta` deriva o estado para pergunta de resposta `hora`, respondida e ainda não materializada; consulta `entrega_que_barra_a_validacao`, que usa o K6 para metades de intervalo. O K6 consulta a competência do **dia do fato** e devolve `bloqueada_competencia_entregue` quando há exportação vigente não invalidada. O detalhe exibível diz que a pergunta está preservada para Pauta DP; essa frase, por si, não comprova a criação de uma pauta. (`app/chamados/services/materializacao.py:788`, `:804`, `:811`, `:865`, `:892`; `app/chamados/services/validacao.py:209`; `app/folha/export.py:580`)
-
-O card lê a testemunha pelo filtro `aplicacao_da_resposta`; o fio a calcula ao montar o contexto. A própria porta de validação consulta a mesma composição antes do carimbo e volta a conferi-la depois da tentativa de materialização, com rollback se necessário. (`app/chamados/templatetags/chamados_tags.py:131`; `app/chamados/services/fio.py:375`; `app/chamados/services/validacao.py:729`, `:776`)
-
-**(a) Card da pergunta.** Mostra pergunta, resposta e situação; se respondida, não validada e `pode_agir`, mostra o detalhe da competência entregue e esconde as duas variantes de **Validar**. Se a pergunta já estiver validada ou `pode_agir` for falso, esse bloco de detalhe e ações não aparece. (`app/templates/chamados/partials/_pergunta_card.html:20`, `:29`, `:42`, `:44`, `:47`, `:75`, `:100`)
-
-- **Rejeitar**, com motivo obrigatório, permanece fora do ramo que esconde Validar. O POST do card chega à view de detalhe, passa por `acao_recusar_pergunta` e alcança `recusar_pergunta`. A porta exige motivo, resposta ainda não validada e pergunta não excluída do fato; não consulta K6 e, satisfeitas as condições, grava o motivo e reabre a resposta para o colaborador. (`app/templates/chamados/partials/_pergunta_card.html:117`; `app/chamados/views.py:505`; `app/chamados/services/acoes_disputa.py:81`; `app/chamados/services/validacao.py:886`, `:898`, `:906`, `:916`)
-- Um POST direto de **Validar**, embora sem botão nesse estado, alcança `validar_pergunta`; a guarda K6 devolve a recusa antes do carimbo. (`app/chamados/views.py:483`; `app/chamados/services/validacao.py:740`)
-
-**(b) Modal do fio.** Quando o bloco da disputa é acessível ao admin, mostra pergunta e resposta. O detalhe de competência entregue aparece nos ramos de resposta validada ou não validada, mas o ramo anterior de `pendencia_admin` tem precedência e mostra sua própria pendência e motivo. Para resposta não validada, o estado entregue esconde **Validar**. (`app/templates/chamados/partials/modal_fio.html:123`, `:157`, `:217`, `:222`, `:228`, `:251`, `:274`)
-
-- **Rejeitar resposta** aparece para resposta não validada, sem o ramo anterior de pendência, se a pergunta não estiver em disputa fechada. `modal_fio_colaborador` encaminha ao serviço do fio, que verifica permissão, disputa e pertencimento da pergunta; chega à mesma `recusar_pergunta`, que pode gravar e reabrir sem guarda de entrega. (`app/templates/chamados/partials/modal_fio.html:316`; `app/chamados/views.py:869`; `app/chamados/services/fio.py:605`, `:672`; `app/chamados/services/validacao.py:898`, `:916`)
-- **Corrigir**, com hora e motivo, aparece no mesmo ramo se `tipo_resposta == 'hora'`. A mesma view e o serviço do fio chegam a `acao_corrigir_resposta`: ela registra a ocorrência e chama `responder_pergunta_disputa_core` **antes** de chamar a validação. Assim, pode gravar a resposta corrigida e depois informar que a validação recusou pela entrega. (`app/templates/chamados/partials/modal_fio.html:327`; `app/chamados/services/fio.py:672`; `app/chamados/services/acoes_disputa.py:338`, `:358`, `:374`, `:383`; `app/chamados/services/validacao.py:740`)
-- **Conferir data**, com justificativa, aparece se as datas divergirem, ainda não houver conferência e `pode_conferir_data` for verdadeiro. A view `conferir_data_pergunta` chama `conferir_data_do_fato`; a porta exige divergência e justificativa, mas não consulta entrega, e grava `data_conferida_em/por`. (`app/templates/chamados/partials/modal_fio.html:162`, `:170`; `app/chamados/views.py:1293`; `app/chamados/services/validacao.py:983`, `:990`, `:996`)
-- No nível da disputa aberta, **Reabrir questionário** alcança `reabrir_disputa_supervisao`, que seleciona perguntas corrigíveis e chama `reabrir_para_correcao`; pode gravar a reabertura sem consultar esse estado. Se esta pergunta pertence ao conjunto corrigível, é **[não verificado]**. Se não houver corrigíveis, a view pode cobrar pendências vivas ou informar que não há o que reabrir. (`app/templates/chamados/partials/modal_fio.html:353`, `:394`; `app/chamados/views.py:1373`, `:1414`, `:1421`, `:1437`)
-- Ainda na disputa aberta, se houver pergunta sem resposta, aparece **Cobrar resposta**; se todas estiverem respondidas e não for o ramo de âncora, aparece **Regularizar disputa e fechar**. A primeira chama a view de cobrança, sujeita às suas condições; a segunda chama a materialização das perguntas validadas e pode terminar com pendências, sem garantir o fechamento. O estado desta pergunta, sozinho, não determina qual botão aparece. (`app/templates/chamados/partials/modal_fio.html:353`, `:354`, `:361`, `:376`, `:379`; `app/chamados/views_cobrar.py:24`; `app/chamados/services/fio.py:693`, `:708`, `:718`, `:741`)
-
-**(c) Lista de chamados/perguntas.** A lista resumida e a detalhada mostram o verbo e o estado do **chamado**, sem exibir o detalhe `bloqueada_competencia_entregue`. O estado informado não determina, sozinho, se a linha aparecerá como “validar”, “cobrar” ou outro verbo. (`app/templates/chamados/partials/_lista_resumo.html:64`; `app/templates/chamados/partials/_lista_chamados.html:74`; `app/chamados/services/verbos.py:30`; `app/chamados/services/painel.py:380`)
-
-- Na resumida, expandir o grupo é interação local; **Abrir fio** e a linha do chamado abrem o modal. Na detalhada, clicar a linha também abre o fio. O telefone, quando existente, é link `tel:`. A view do modal é `modal_fio_colaborador`; os controles da pergunta e suas portas são os descritos acima. (`app/templates/chamados/partials/_lista_resumo.html:30`, `:38`, `:53`, `:58`; `app/templates/chamados/partials/_lista_chamados.html:42`, `:56`; `app/chamados/urls.py:39`)
-- Na detalhada, se `item.verbo == "validar"`, aparece **Validar inline**. A view exige permissão, área e disputa aberta e percorre perguntas vivas respondidas pela porta de validação: a pergunta entregue é recusada, mas outras perguntas do mesmo lote podem ser validadas. (`app/templates/chamados/partials/_lista_chamados.html:79`; `app/chamados/views_cobrar.py:145`, `:160`, `:168`, `:202`; `app/chamados/services/validacao.py:740`)
-- Se o verbo for `cobrar`, aparece **Cobrar** quando ainda não cobrado no dia e **Resgatar** se o chamado estiver silenciado. As views de cobrança e desarquivamento não usam este estado derivado como guarda; podem, conforme suas demais condições, enviar cobrança ou alterar o arquivamento do chamado. (`app/templates/chamados/partials/_lista_chamados.html:83`; `app/chamados/views_cobrar.py:24`; `app/chamados/views_arquivar.py:52`)
-- O painel também oferece prévia de **validação em lote**; a porta reclassifica o lote e usa a validação. A pergunta entregue encontra a guarda K6, embora outras possam ser gravadas. A inclusão desta pergunta no lote é **[não verificado]**. (`app/templates/chamados/painel_gestao.html:14`; `app/chamados/views_cobrar.py:336`, `:373`; `app/chamados/services/validacao.py:740`)
-
-**(d) Pauta do DP.** A gaveta de pautas não mostra esse estado derivado: sua serialização e apresentação trabalham com texto, âncora, leitura, conclusão e respostas. A existência de uma pauta para esta pergunta é **[não verificado]**; há também um mecanismo de pauta para competência *trancada*, condição que não se pode inferir apenas de “entregue”. (`app/pautas/views.py:37`; `app/templates/core/_copiloto.html:394`; `app/chamados/services/competencia_trancada.py:95`)
-
-- Em pauta existente, clicar o remetente marca leitura quando o usuário é destinatário e tenta abrir a âncora; âncoras de dia ou competência recebem aviso. **Marcar feita** aparece para pauta recebida, permitida e ainda não concluída e grava conclusão/leitura. **Responder** aparece fora da aba sistema e cria resposta. **Cancelar** aparece para pauta enviada pelo próprio usuário quando permitido e grava cancelamento se ainda não concluída. São escritas na pauta, sem decisão sobre a pergunta bloqueada. (`app/templates/core/_copiloto.html:398`, `:431`, `:440`, `:451`, `:562`; `app/pautas/views.py:91`, `:99`, `:107`, `:118`; `app/pautas/services.py:192`, `:204`, `:233`, `:281`)
-- O compositor, fora da aba sistema, permite escolher objeto e escrever uma pauta; a view e o serviço criam pauta com âncora válida, sem consultar esse estado. O modelo aceita âncoras como colaborador, chamado, dia e competência, não uma âncora de pergunta. (`app/templates/core/_copiloto.html:331`, `:535`; `app/pautas/views.py:70`; `app/pautas/services.py:152`; `app/pautas/models.py:30`)
-
-ACOES DISPONIVEIS AO ADMIN: rejeitar resposta; corrigir resposta; conferir data; reabrir questionário; cobrar; regularizar disputa; abrir fio; validar inline ou em lote outras perguntas elegíveis; resgatar chamado; criar, ler, responder, concluir ou cancelar pauta — cada ação sujeita às condições indicadas acima.
-
-## 18/11 18:06 · sessao 778413d53eac · - · - · origem=Ronald (tmux)
-
-A pauta do DP não mostra automaticamente o estado `bloqueada_competencia_entregue`: a resposta da view contém texto, âncora, leitura, conclusão e respostas da pauta, mas não o estado da pergunta ([views.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/views.py:37)). A existência de uma pauta para o caso é **[não verificado]**.
-
-Na aba Pautas, o administrador pode escrever uma pauta para o DP com texto e uma âncora válida; não há âncora específica de pergunta, mas há âncora de chamado e de dia ([models.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/models.py:30)). O formulário aparece fora da aba Sistema e envia para `escrever`, que cria a pauta sem consultar o estado da pergunta ([template](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/core/_copiloto.html:349), [view](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/views.py:70), [service](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/services.py:152)).
-
-Em pauta existente, os controles dependem da pauta e do usuário, não desse estado:
-
-- **Abrir objeto:** clique no remetente; marca a pauta lida se o usuário for destinatário e abre âncoras de colaborador, chamado ou posto. Para dia ou competência, exibe aviso de que não há tela própria ([template](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/core/_copiloto.html:398), [rota](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/core/_copiloto.html:562), [view](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/views.py:91), [service](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/services.py:204)).
-- **Marcar feita:** aparece para pauta recebida, quando o usuário pode fechá-la e ela ainda não está feita; a porta grava conclusão e leitura somente para destinatário ([template](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/core/_copiloto.html:440), [view](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/views.py:99), [service](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/services.py:233)).
-- **Responder:** aparece fora da aba Sistema; a porta cria uma pauta filha com a mesma âncora ([template](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/core/_copiloto.html:451), [view](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/views.py:107), [service](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/services.py:192)).
-- **Cancelar:** aparece em pauta enviada pelo próprio usuário ainda não feita; a porta exige autoria e grava o cancelamento ([template](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/core/_copiloto.html:431), [view](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/views.py:118), [service](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/pautas/services.py:281)).
-
-## 18/11 18:06 · sessao b58431db4ec7 · - · - · origem=Ronald (tmux)
-
-Achados enviados ao agente principal, com as condições da lista, as portas de validação, cobrança e resgate, e a distinção entre o estado da pergunta e o verbo do chamado.
-
-_7097 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7100 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
