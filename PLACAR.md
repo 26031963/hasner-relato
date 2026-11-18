@@ -1,6 +1,6 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 18/11/2026 13:44 @b9ba42282
+medido em 18/11/2026 13:50 @b9ba42282
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
@@ -8,9 +8,9 @@ medido em 18/11/2026 13:44 @b9ba42282
 | 20/20 | 5 | 1 | 1 | 1 | 2 | 32.2 |
 | LATERAL-ESTRUTURA | 157 | 0 | 3 | 22 | 132 | 19.5 |
 | INSTRUMENTO | 180 | 0 | 0 | 17 | 163 | 15.0 |
-| UI | 39 | 0 | 0 | 9 | 30 | 20.5 |
+| UI | 42 | 0 | 0 | 9 | 33 | 19.0 |
 | CEREJA | 1 | 0 | 0 | 0 | 1 | 11.1 |
-| ? | 4 | 0 | 0 | 0 | 4 | 13.9 |
+| ? | 5 | 0 | 0 | 0 | 5 | 11.1 |
 
 | obra | estado | cen lei con R/G mut ver opus pou ar | % | falta |
 |---|---|---|---|---|
@@ -26,7 +26,7 @@ medido em 18/11/2026 13:44 @b9ba42282
 | ATA-NAO-DISPENSA-JUSTIFICADA | 67 | Acesso para aplicar o acervo da 10 |
 | H12H06-SEPARA-E-CRONTAB | 67 | censo de trava; desenho da parte B |
 
-resolve preenchido 13/461
+resolve preenchido 13/465
 
 casos ESTRUTURA sem obra: 2 (logs/GRADE-MESTRA/resolve/quadro.md)
 
@@ -43,6 +43,6 @@ fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PAR
 
 casas cheias na frota: cen 235, lei 320, con 75, R/G 33, mut 3, ver 14, opus 9, pou 43, ar 37
 
-obras lidas: 461
+obras lidas: 465
 
 nao lidas: 0

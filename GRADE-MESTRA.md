@@ -16,16 +16,16 @@
 | 20/20 | 5 | 4 |
 | LATERAL-ESTRUTURA | 157 | 157 |
 | INSTRUMENTO | 180 | 180 |
-| UI | 39 | 39 |
+| UI | 42 | 42 |
 | CEREJA | 1 | 1 |
-| ? | 4 | 4 |
-| **total** | **461** | **460** |
+| ? | 5 | 5 |
+| **total** | **465** | **464** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 392; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 396; INTERROMPIDA 7; PARADA 57; NO AR hoje 1; nao lidas: 0
 
 fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 304 com a coluna
 
-resolve preenchido 13/461
+resolve preenchido 13/465
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -477,7 +477,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | ROTA-DA-PISTA-NO-SUITE | INSTRUMENTO | Manda a suite que nao e de pouso para a pista e deixa a trava da VM para espinha, pouso e push. | - | aval novo para construir | ......... | REGISTRADA | BACKLOG:2086 |
 | PISTA-CERTIFICA-POUSO | INSTRUMENTO | Deixa a pista certificar pouso com imagem por digest, fila com teto e paridade conferida no inicio do job. | - | censo, depois aval novo | ......... | REGISTRADA | BACKLOG:2087 |
 
-## UI (39)
+## UI (42)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
@@ -520,6 +520,9 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | BO-0611-10-TELA-DA-TROCA | UI | Acrescenta a tela da troca relatada. | caso 10 | fim da série E | ......... | REGISTRADA | BACKLOG:1980 |
 | G6-PAGINA | UI | Mantém a página da lista após ação administrativa. | - | vaga; smoke nas duas cascas | ......... | REGISTRADA | BACKLOG:2035 |
 | BO-ROTULO-REABRIR-SO-NO-DETALHE | UI | Oferece somente mudanças de estado realmente executáveis. | - | corte para construir | +........ | REGISTRADA | BACKLOG:2081 [+2 compl.] |
+| ESPELHO-LE-A-DECISAO-HE | UI | Espelho escreve o estado da DecisaoHE vigente do dia no lugar do "sem decisao" fixo (complemento da DST-L1, mae fora da grade). | - | 19/11 (LAUDO-[nome]-1811-1340: nao construir antes); medida laudo2_a | ......... | REGISTRADA | BACKLOG:2337 |
+| RETRATO-HE-DIZ-A-IDADE | UI | Gestao de HE mostra data/hora do retrato e avisa pouso/escala posterior a ele; se (d) provar dinheiro movido por retrato velho, vira BUG no topo. | - | 19/11; medida laudo2_d | ......... | REGISTRADA | BACKLOG:2338 |
+| PDF-MOSTRA-O-PRE-ASSINALADO | UI | Cartao PDF imprime o intervalo pre-assinalado e separa previsto de usufruido (complemento da INTERVALO-DECLARADO). | - | 19/11; INTERVALO-DECLARADO; medida laudo2_c | ......... | REGISTRADA | BACKLOG:2339 |
 
 ## CEREJA (1)
 
@@ -527,7 +530,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 |---|---|---|---|---|---|---|---|
 | JORNADA-EXCEPCIONAL-POR-DATA | CEREJA | Permite jornada excepcional para uma data específica. | - | 20/20; TROCA-DE-PLANTAO | .+....... | REGISTRADA | BACKLOG:762 |
 
-## ? (4)
+## ? (5)
 
 | id | balde | entrega | resolve | depende de | grade | estado | fonte |
 |---|---|---|---|---|---|---|---|
@@ -535,6 +538,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | CARIMBO-QUE-A-CELULA-DESMENTE | ? (dono não medido) | Investiga respostas retiradas da fila com problema ainda no dia. | - | Medir dono pela L-099 | ++....... | REGISTRADA | BACKLOG:1617 |
 | PLANO-JANELA-POS-RESET | ? (ordem com vários baldes) | Define a fila e os limites após o reset. | - | auditoria; sequência registrada | .+....... | REGISTRADA (auditoria reposicionada pelo aval atual) | BACKLOG:1784; anexo:aval.txt:1 [+2 compl.] |
 | FUNIL-28-PROCEDENTES | ? (áreas não discriminadas) | Guarda achados procedentes para abertura de obras. | - | nomear padrão por obra | ......... | REGISTRADA | BACKLOG:2056 |
+| AEJ-GERADOR | ? (requisito legal nao cortado) | Gerador do AEJ (Portaria 671) a partir do que existe de AEJ/AFD. | - | Codex leitura aej_leitura.r; requisito legal do Ronald antes do desenho | ......... | REGISTRADA | BACKLOG:2340 |
 
 
 ## COMPLEMENTOS por obra-mae (passada 2, 548; nao contam no placar -- a mae carrega)

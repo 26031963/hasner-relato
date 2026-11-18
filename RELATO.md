@@ -3523,6 +3523,7 @@ LEI-AKITA: origem=app/docs (CORTES/LEIS) e frase do topo da lista, testemunha=av
 - (b) censo no CORTES.json real: os 7 cortes citados nos + dos .py d54160999..81f678c7e = 1 cada (logs/COMBOIO-1811/pouso_f4/censo_b.txt).
 - (c) selos de host apos o doc: 8 rc 0; leis_indice rc 1 com 94 = o do HEAD, delta 0 (logs/COMBOIO-1811/pouso_f4/selo_*.log). test_disjuntor (longo) roda logo apos o deploy: o merge ja estava na arvore viva (L-107), o doc nao muda codigo.
 - (d) cmp: 7/7 arquivos fora de app/docs IGUAIS a 81f678c7e (suite A, 16850 OK), 0 DIFERE; diff do indice contra 81f678c7e fora de app/docs vazio. Sem migration: deploy --sem-migrate.
+- commit b9ba42282; deploy --sem-migrate rc 0 (3 cascas HUP, 3 rotas, importerror_500=0; logs/COMBOIO-1811/pouso_f4/deploy.log); test_disjuntor rc 0 depois; smoke /health/ 200, /login/ 200.
 
 ## POUSO E4C-F2-P2 (18/11 13:4x) -- POUSOS-COMBOIO-1811-1332 item 1 + COMPLEMENTO-1 1336 item 1
 LEI-AKITA: origem=app/docs (CORTES/LEIS) e frase do topo da lista, testemunha=avais de origem em logs/AVAIS-*, RED=selos de host de CORTES/LEIS, quem-mais-le=bin/tests que leem CORTES.json, juizes novos=0, padrao=n/a (instrumento)
