@@ -1,7 +1,170 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 10:13** · publicado em **18/11/2026 10:13** (UTC-3)
+> Ultima resposta processada: **18/11/2026 10:16** · publicado em **18/11/2026 10:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 10:16 · sessao fec0b6249760 · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
+
+**O censo ainda está ABERTO nos quatro itens.** A saída recebida permitiu confirmar escritores, leitores e caminhos que faltavam, mas não sustenta uma lista exaustiva nem a classificação individual de todos os acessos dinâmicos. **[nao verificado: completude do censo]**
+
+Há duas correções relevantes para o construtor:
+
+- A escrita de `validada_em` não se limita ao ato de validar: há limpeza pela resposta humana, devoluções e preenchimentos associados ao carimbo. A distinção é entre o dono do **ato de validar** e todos os escritores do campo. [app/chamados/services/validacao.py:1] [app/chamados/models.py:3249] [app/chamados/services/disputa_emissao.py:1494]
+- A carga remove as decisões marcadas como ressuscitação antes de escolher o último ato, mas `respostas_anteriores` percorre atos com fotografia sem esse filtro. Um novo ato marcado precisa ter os dois leitores avaliados. [app/chamados/services/tarefa_do_dia.py:421] [app/chamados/models.py:3688]
+
+As listas abaixo registram os sítios confirmados nesta volta; **não são a lista completa pedida**. **[nao verificado: sítios restantes]**
+
+### 1. Escritores e leitores R/V/C e porta `registrar` — STATUS ABERTO
+
+**Escrita da projeção:**
+
+- Resposta humana e invalidação da validação anterior: [app/chamados/services/disputa_emissao.py:1481].
+- Resposta automática e carimbo pela trilha: [app/chamados/services/disputa_emissao.py:1675] [app/chamados/services/disputa_emissao.py:1698].
+- Validação e devoluções: [app/chamados/services/validacao.py:168] [app/chamados/services/validacao.py:273] [app/chamados/services/validacao.py:349].
+- Carimbo com preenchimento condicional de resposta e validação: [app/chamados/models.py:3249].
+- Escrita em lote dinâmica por `**outros`: [app/chamados/models.py:3371] [app/chamados/models.py:3404]. Os chamadores confirmados limpam R/V/C na ressuscitação, R/V/C na reabertura e o par de resposta na devolução L-130: [app/chamados/models.py:1637] [app/chamados/services/disputa_emissao.py:1610] [app/chamados/services/disputa_emissao.py:1649] [app/chamados/services/validacao.py:440].
+- A entrada por foto delega à resposta automática e à validação; o cabeçalho antigo do módulo que a descreve como escrita local não corresponde ao corpo atual. [app/api/foto_recebida.py:2] [app/api/foto_recebida.py:39]
+
+**Escrita da sequência pela porta `DecisaoPergunta.registrar`:**
+
+- Modelo e portas de resposta/reabertura: [app/chamados/models.py:1619] [app/chamados/models.py:2013] [app/chamados/models.py:2145] [app/chamados/models.py:3137] [app/chamados/services/disputa_emissao.py:1525] [app/chamados/services/disputa_emissao.py:1632] [app/chamados/services/disputa_emissao.py:1679] [app/chamados/services/disputa_emissao.py:1701].
+- Validação, devoluções e absorção: [app/chamados/services/validacao.py:173] [app/chamados/services/validacao.py:279] [app/chamados/services/validacao.py:354] [app/chamados/services/validacao.py:439] [app/chamados/services/materializacao.py:1048].
+- Cartório e comandos de acervo: [app/ponto/services/veredito_celula.py:195] [app/chamados/management/commands/backfill_decisoes_pergunta.py:324] [app/chamados/management/commands/backfill_fio_morto_e4b.py:141].
+- Falso positivo: `registrar` em [app/chamados/views.py:91] é da recusa crítica, não a porta de `DecisaoPergunta`. [app/chamados/views.py:90]
+
+**Leituras confirmadas que o desenho precisa considerar:**
+
+- Juízes, faces SQL e ordenação da fila: [app/chamados/juizes.py:352] [app/chamados/juizes.py:856] [app/chamados/juizes.py:1389] [app/chamados/juizes.py:1534] [app/chamados/juizes.py:1552] [app/chamados/juizes.py:1572] [app/chamados/juizes.py:1580] [app/chamados/juizes.py:1761].
+- Estado e apresentação da pergunta; histórico de decisões: [app/chamados/models.py:3159] [app/chamados/models.py:3681] [app/chamados/models.py:3701].
+- Fio e materialização: [app/chamados/services/fio.py:188] [app/chamados/services/fio.py:263] [app/chamados/services/materializacao.py:546] [app/chamados/services/materializacao.py:1153] [app/chamados/services/materializacao.py:2091].
+- API e apresentação: [app/api/views.py:1163] [app/api/views.py:2561] [app/api/views.py:2639] [app/api/views_mensageria.py:567] [app/chamados/templatetags/chamados_tags.py:139] [app/chamados/templatetags/chamados_tags.py:166].
+- Histórico cronológico lê dinamicamente os três instantes e o texto; a reversão do passivo também fotografa campos da pergunta: [app/chamados/services/historico.py:96] [app/chamados/services/passivo_validado.py:64] [app/chamados/services/passivo_validado.py:83].
+- Auditoria, placares e procedência têm leituras próprias: [app/chamados/management/commands/auditar_invariantes_chamados.py:1077] [app/chamados/management/commands/auditar_invariantes_chamados.py:1107] [app/chamados/services/painel.py:261] [app/chamados/services/verbos.py:263] [app/ponto/services/procedencia_batida.py:71].
+
+**Por que permanece aberto:** faltam a classificação de todos os leitores listados no inventário, o rastreamento completo dos chamadores e a resolução individual dos acessos genéricos que podem receber objetos ou nomes em execução. **[nao verificado]**
+
+### 2. Importadores, selo e medida da sombra — STATUS ABERTO
+
+Importadores confirmados: `relavrar_via_i6` importa `universo_i6`; `dedup_perguntas_fato` importa `aplicar` e `CONTADORES_DO_APPLY`; `worklist` importa `_parse_pendentes` e `MODULOS_ALVO`, e tem consumidores na view e no comando. [app/chamados/management/commands/relavrar_via_i6.py:46] [app/chamados/management/commands/dedup_perguntas_fato.py:105] [app/ponto/worklist.py:37] [app/colaboradores/views.py:3061] [app/ponto/management/commands/worklist_dp.py:12]
+
+O selo global de vitalidade declarado examina `materializada_em` e `validada_em` e formas sintáticas específicas; ele não demonstra, sozinho, cobertura de todos os campos ou acessos dinâmicos. [app/chamados/tests/test_contract_leitores_vitalidade.py:14] [app/chamados/tests/test_contract_leitores_vitalidade.py:329] O selo específico lista os quatro escritores esperados de `resposta_mantem_validacao`. [app/chamados/tests/test_f2_resposta_mantem_validacao.py:19]
+
+A medida raspada da **sombra** informa:
+
+| Projeção atual nula com ato histórico correspondente | Último físico / efetivo | Total |
+|---|---|---:|
+| Resposta | reabertura / reabertura | 52 |
+| Resposta | recusa / recusa | 7 |
+| Validação | devolução / devolução | 60 |
+| Validação | reabertura / reabertura | 9 |
+| Validação | resposta / resposta | 3 |
+
+Esses valores são os fornecidos no anexo da conversa; produção e interseção dos grupos são **[nao verificado]**. A função confirmada mede o sentido inverso, projeção sem linha correspondente por ato e instante; os números acima não demonstram erros nem uma correspondência geral ato → projeção. [app/chamados/models.py:4122] [app/chamados/services/disputa_emissao.py:1632]
+
+A exclusividade dos importadores e a classificação completa dos selos permanecem **[nao verificado]**.
+
+### 3. Campos novos e leituras de REABERTURA — STATUS ABERTO
+
+- `da_ressuscitacao` e `resposta_mantem_validacao` têm defaults e restrições por tipo de ato. [app/chamados/models.py:4071] [app/chamados/models.py:4077] [app/chamados/models.py:4095] [app/chamados/models.py:4098]
+- A marca de ressuscitação é lida pelo predicado em [app/chamados/models.py:4103] e pela carga em [app/chamados/services/tarefa_do_dia.py:421]. A porta de ressuscitação nesta cópia registra a projeção faltante e limpa os campos; não se pode presumir que já grave a nova marca. [app/chamados/models.py:1619] [app/chamados/models.py:1637]
+- A reabertura fotografa resposta, instantes e autor antes de limpar a projeção; `respostas_anteriores` é leitor da sequência e a carga do fio busca também o autor original. [app/chamados/services/disputa_emissao.py:1632] [app/chamados/models.py:3688] [app/chamados/services/fio.py:263]
+- Os valores declarados para `resposta_mantem_validacao` são `True` na fotografia da projeção, resposta automática e carimbo pela trilha; `False` na resposta humana. [app/chamados/models.py:4141] [app/chamados/services/disputa_emissao.py:1525] [app/chamados/services/disputa_emissao.py:1679] [app/chamados/services/disputa_emissao.py:1701]
+
+**Contradição a resolver no desenho:** o comentário do modelo associa a regra atual ao `ato_motivo`, mas `_pela_decisao` aqui trata toda última `RESPOSTA` com texto como `aguarda_validacao`, sem consultar esse motivo ou `resposta_mantem_validacao`. [app/chamados/models.py:4072] [app/chamados/services/tarefa_do_dia.py:158] Não está demonstrado que trocar esse leitor pela nova marca preserve o comportamento atual. **[nao verificado]**
+
+A lista completa de leitores indiretos e o efeito de todos os caminhos de `registrar` seguem **[nao verificado]**.
+
+### 4. Cascas, templates e PDF — STATUS ABERTO
+
+- `base_tpl` é escolhido pelo contexto entre `base_app.html` e `base.html`; `meu_atendimento.html` usa essa escolha e inclui o cartão nas duas abas. [app/core/context_processors.py:194] [app/core/context_processors.py:205] [app/templates/chamados/meu_atendimento.html:1] [app/templates/chamados/meu_atendimento.html:127] [app/templates/chamados/meu_atendimento.html:144]
+- O cartão do colaborador lê resposta e instante. [app/templates/chamados/partials/_card_atendimento.html:106] [app/templates/chamados/partials/_card_atendimento.html:143] [app/templates/chamados/partials/_card_atendimento.html:183] [app/templates/chamados/partials/_card_atendimento.html:391]
+- A casca administrativa `detalhe_local` estende `base.html` e inclui `_pergunta_card`, que também pode ser renderizado isoladamente por HTMX. [app/templates/chamados/detalhe_local.html:1] [app/templates/chamados/detalhe_local.html:310] [app/chamados/views.py:398]
+- `modal_fio` lê histórico, resposta e validação e também é renderizado isoladamente; portanto o grafo que parte apenas das bases não o enumera como alcançado. [app/templates/chamados/partials/modal_fio.html:205] [app/templates/chamados/partials/modal_fio.html:219] [app/templates/chamados/partials/modal_fio.html:228] [app/chamados/views.py:927] [app/chamados/views.py:1399]
+- A prévia de lote lê a resposta e é renderizada pela view de cobrança. [app/templates/chamados/partials/_lote_preview.html:24] [app/chamados/views_cobrar.py:360]
+- No caminho de PDF inspecionado, a view alimenta o gerador de histórico e o bloco examinado lê followups. Relações indiretas adicionais entre PDF e R/V/C permanecem **[nao verificado]**. [app/relatorios/views.py:871] [app/relatorios/pdf_chamados.py:135]
+
+### Classificação dos dinâmicos examinados
+
+- **Escrita real de R/V/C:** `models.py:3404`, por `**outros`, com os três chamadores identificados no item 1. [app/chamados/models.py:3379] [app/chamados/models.py:3404]
+- **Leitura real:** `historico.py:105`; `passivo_validado.py:83`; e `_PD` em `veredito_lavrado.py:202` e `:206` é alias de `PerguntaDisputa`, com filtros sobre materialização e resposta. [app/chamados/services/historico.py:96] [app/chamados/services/passivo_validado.py:64] [app/chamados/veredito_lavrado.py:163] [app/chamados/veredito_lavrado.py:202]
+- **Não é acesso R/V/C nesses sítios:** os dinâmicos de `ChamadoColaborador` em `models.py:637`, `:953`, `:976`, `:1018` e `:1142`; os filtros de chave de família em `fio.py:2110`, `:2112`, `:2122`, `:2134`, `:2164`, `:2166` e `:2187`; e os filtros dinâmicos por identidade nas duas portas de validação. [app/chamados/models.py:637] [app/chamados/models.py:953] [app/chamados/models.py:976] [app/chamados/models.py:1018] [app/chamados/models.py:1142] [app/chamados/services/fio.py:1515] [app/chamados/services/fio.py:2110] [app/chamados/services/fio.py:2112] [app/chamados/services/fio.py:2122] [app/chamados/services/fio.py:2134] [app/chamados/services/fio.py:2164] [app/chamados/services/fio.py:2166] [app/chamados/services/fio.py:2187] [app/chamados/services/validacao.py:673] [app/chamados/services/validacao.py:890]
+- **Ainda indeterminados:** os demais candidatos genéricos do inventário, inclusive o alcance completo dos wrappers de `carga_pergunta_viva` e dos resolvedores genéricos de `core`, não foram classificados um a um. [app/chamados/services/carga_pergunta_viva.py:30] [app/chamados/services/carga_pergunta_viva.py:59] [app/core/intake.py:487] [app/core/reexibir.py:49] **[nao verificado]**
+
+Para terminar a classificação dos **selos** sem acesso a logs, seria necessária a parte da saída bruta filtrada referente a `tests/`; para o censo de produção ainda falta completar a leitura dos candidatos e caminhos indiretos acima. **[nao verificado]**
+
+alcance nao verificado restante: 4
+
+## 18/11 10:15 · sessao 6e3da0f0e6be · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
+
+O censo **ainda não autoriza abrir o construtor**: os itens 1, 3 e 5 permanecem abertos. O inventário amplia os sítios conhecidos, mas não demonstra que todos os acessos dinâmicos, aliases indiretos, carregamentos de templates e leitores foram classificados. [não verificado]
+
+Há uma contradição concreta com a formulação da volta 1 sobre Q4: o card de pergunta exibe “validada” diretamente quando `validada_em` existe, mas o “Validada” do modal está dentro do ramo `perg.respondida` e depois do ramo prioritário `pendencia_admin`. Assim, validação projetada sem linha de decisão, por si só, **não demonstra** que o modal mostrará “Validada”; isso também depende do par de resposta e da ausência de pendência prioritária. [app/templates/chamados/partials/_pergunta_card.html:23](app/templates/chamados/partials/_pergunta_card.html:23) [app/templates/chamados/partials/modal_fio.html:217](app/templates/chamados/partials/modal_fio.html:217) [app/templates/chamados/partials/modal_fio.html:222](app/templates/chamados/partials/modal_fio.html:222) [app/templates/chamados/partials/modal_fio.html:228](app/templates/chamados/partials/modal_fio.html:228)
+
+### 1. Cascas do card — STATUS: ABERTO
+
+Os caminhos de produção identificados para a F7 são:
+
+- **Card do colaborador, leitura:** `meu_atendimento` inclui `_card_atendimento` nos dois loops; a casca pode ser `base.html` ou `base_app.html`, conforme `base_tpl`. O card lê o par de resposta e a fase. [app/templates/chamados/meu_atendimento.html:1](app/templates/chamados/meu_atendimento.html:1) [app/templates/chamados/meu_atendimento.html:127](app/templates/chamados/meu_atendimento.html:127) [app/templates/chamados/meu_atendimento.html:144](app/templates/chamados/meu_atendimento.html:144) [app/core/context_processors.py:210](app/core/context_processors.py:210) [app/templates/chamados/partials/_card_atendimento.html:106](app/templates/chamados/partials/_card_atendimento.html:106) [app/templates/chamados/partials/_card_atendimento.html:189](app/templates/chamados/partials/_card_atendimento.html:189)
+- **Card da pergunta, leitura:** a página de detalhe usa `base.html` e inclui `_pergunta_card`; o rerender parcial também chega ao mesmo template por `_render_card`, alias de `render`. [app/templates/chamados/detalhe_local.html:1](app/templates/chamados/detalhe_local.html:1) [app/templates/chamados/detalhe_local.html:310](app/templates/chamados/detalhe_local.html:310) [app/chamados/views.py:397](app/chamados/views.py:397) [app/chamados/views.py:404](app/chamados/views.py:404)
+- **Modal do fio, leitura:** é um fragmento renderizado diretamente, sem casca própria; uma hospedeira comprovada é o painel em `base.html`, que o busca pela rota. Há também chamada da fila de benefícios com `modo=beneficio`; a lista integral de hospedeiras e suas cascas permanece [não verificado]. [app/chamados/views.py:927](app/chamados/views.py:927) [app/chamados/views.py:1400](app/chamados/views.py:1400) [app/chamados/services/fio.py:543](app/chamados/services/fio.py:543) [app/templates/chamados/painel_gestao.html:1](app/templates/chamados/painel_gestao.html:1) [app/templates/chamados/painel_gestao.html:528](app/templates/chamados/painel_gestao.html:528) [app/templates/colaboradores/fila_solicitacoes_beneficio.html:119](app/templates/colaboradores/fila_solicitacoes_beneficio.html:119)
+- **Prévia de lote, leitura:** é fragmento renderizado diretamente; o painel em `base.html` abre-o no drawer. Outras hospedeiras não foram excluídas. [app/templates/chamados/painel_gestao.html:14](app/templates/chamados/painel_gestao.html:14) [app/chamados/views_cobrar.py:360](app/chamados/views_cobrar.py:360) [app/chamados/views_cobrar.py:364](app/chamados/views_cobrar.py:364) [app/chamados/views_cobrar.py:380](app/chamados/views_cobrar.py:380) [app/chamados/views_cobrar.py:388](app/chamados/views_cobrar.py:388) [app/templates/chamados/partials/_lote_preview.html:24](app/templates/chamados/partials/_lote_preview.html:24)
+
+O grafo fornecido identifica includes compartilhados pelas duas bases, mas não prova, sozinho, todas as hospedeiras dos fragmentos nem renderização e cliques em execução. Essa revisão transitiva continua aberta. [app/templates/base.html:93](app/templates/base.html:93) [app/templates/base_app.html:85](app/templates/base_app.html:85) [app/templates/base.html:399](app/templates/base.html:399) [app/templates/base_app.html:154](app/templates/base_app.html:154) [não verificado]
+
+### 2. Escritor de reabertura — STATUS: FECHADO para a dúvida específica
+
+`reabrir_para_correcao` prepara a limpeza do par e da validação, registra uma decisão com a fotografia anterior e chama `descarimbar_em_lote`; o corpo dessa função não chama `linhas_da_projecao_sem_linha`. Isso fecha a dúvida sobre **essa chamada**, sem fechar o censo de escritores. [app/chamados/services/disputa_emissao.py:1577](app/chamados/services/disputa_emissao.py:1577) [app/chamados/services/disputa_emissao.py:1610](app/chamados/services/disputa_emissao.py:1610) [app/chamados/services/disputa_emissao.py:1632](app/chamados/services/disputa_emissao.py:1632) [app/chamados/services/disputa_emissao.py:1649](app/chamados/services/disputa_emissao.py:1649)
+
+### 3. Leitores cruzados e escritores — STATUS: ABERTO
+
+A lista seguinte é de **sítios comprovados a considerar**, não uma lista integral nem uma determinação de que todos devam ser alterados pela F7. O brief completo e o efeito exato pretendido em cada consumidor não estão demonstrados no material fornecido. [não verificado]
+
+- **Escrita persistida:** resposta e validação em `disputa_emissao`; validações em `validacao`; carimbo com possível preenchimento de resposta e validação em `models`; e limpeza em lote, inclusive campos passados por `**outros`. O último ponto é relevante: a porta verifica expressamente se `outros` contém campos do par e os passa ao `update`. [app/chamados/services/disputa_emissao.py:1481](app/chamados/services/disputa_emissao.py:1481) [app/chamados/services/disputa_emissao.py:1494](app/chamados/services/disputa_emissao.py:1494) [app/chamados/services/disputa_emissao.py:1675](app/chamados/services/disputa_emissao.py:1675) [app/chamados/services/disputa_emissao.py:1698](app/chamados/services/disputa_emissao.py:1698) [app/chamados/services/validacao.py:168](app/chamados/services/validacao.py:168) [app/chamados/services/validacao.py:273](app/chamados/services/validacao.py:273) [app/chamados/services/validacao.py:349](app/chamados/services/validacao.py:349) [app/chamados/models.py:3247](app/chamados/models.py:3247) [app/chamados/models.py:3251](app/chamados/models.py:3251) [app/chamados/models.py:3254](app/chamados/models.py:3254) [app/chamados/models.py:3371](app/chamados/models.py:3371) [app/chamados/models.py:3404](app/chamados/models.py:3404)
+- **Atribuições que não são, isoladamente, escrita persistida:** as de `models.py:1561–1563` alteram uma cópia usada no julgamento; as de `models.py:3282–3284` restauram a instância em memória após recusa. Classificá-las simplesmente como escritoras de banco seria incorreto. [app/chamados/models.py:1548](app/chamados/models.py:1548) [app/chamados/models.py:1561](app/chamados/models.py:1561) [app/chamados/models.py:3278](app/chamados/models.py:3278)
+- **Juízes e fase, leitura:** projeção temporal, juiz do par, propriedade `respondida` e `estado` são pontos centrais; `estado` dá precedência à validação projetada. [app/chamados/juizes.py:1382](app/chamados/juizes.py:1382) [app/chamados/juizes.py:1544](app/chamados/juizes.py:1544) [app/chamados/models.py:3152](app/chamados/models.py:3152) [app/chamados/models.py:3674](app/chamados/models.py:3674)
+- **Interfaces e API, leitura:** além dos quatro templates do item 1, há apresentação de resposta por filtros e saídas da API e mensageria. [app/chamados/templatetags/chamados_tags.py:139](app/chamados/templatetags/chamados_tags.py:139) [app/chamados/templatetags/chamados_tags.py:166](app/chamados/templatetags/chamados_tags.py:166) [app/api/views.py:1163](app/api/views.py:1163) [app/api/views.py:2561](app/api/views.py:2561) [app/api/views_mensageria.py:567](app/api/views_mensageria.py:567)
+- **Outros consumidores de produção, leitura:** materialização, reconciliação, histórico, painel, folha e cartório têm leituras diretas ou via juiz que precisam ser avaliadas conforme a mudança final. [app/chamados/services/materializacao.py:191](app/chamados/services/materializacao.py:191) [app/chamados/services/materializacao.py:2091](app/chamados/services/materializacao.py:2091) [app/chamados/reconciliador.py:365](app/chamados/reconciliador.py:365) [app/chamados/services/historico.py:98](app/chamados/services/historico.py:98) [app/chamados/services/painel.py:270](app/chamados/services/painel.py:270) [app/folha/previa.py:141](app/folha/previa.py:141) [app/ponto/services/cartorio.py:1641](app/ponto/services/cartorio.py:1641)
+- **Auditoria e reconstrução, leitura e eventual escrita de decisões:** os comandos consultam as projeções, e o backfill chama a construção de linhas ausentes. Seu comportamento completo e a necessidade de mudança pela F7 permanecem [não verificado]. [app/chamados/management/commands/auditar_invariantes_chamados.py:1077](app/chamados/management/commands/auditar_invariantes_chamados.py:1077) [app/chamados/management/commands/backfill_decisoes_pergunta.py:56](app/chamados/management/commands/backfill_decisoes_pergunta.py:56) [app/chamados/management/commands/backfill_decisoes_pergunta.py:67](app/chamados/management/commands/backfill_decisoes_pergunta.py:67)
+
+**Indeterminados examinados:**
+
+- `models.py:637–638`: acesso dinâmico aos campos de urgência de `ChamadoColaborador`, não uma escrita da projeção de `PerguntaDisputa`. [app/chamados/models.py:620](app/chamados/models.py:620) [app/chamados/models.py:637](app/chamados/models.py:637)
+- `models.py:953`, `:976`, `:1018`, `:1142`: filtros e criação da porta de `ChamadoColaborador`; não são, nesses sítios, escritas de `PerguntaDisputa`. [app/chamados/models.py:953](app/chamados/models.py:953) [app/chamados/models.py:976](app/chamados/models.py:976) [app/chamados/models.py:1018](app/chamados/models.py:1018) [app/chamados/models.py:1142](app/chamados/models.py:1142)
+- `models.py:3404`: **escrita relevante**, inclusive dos campos dinâmicos `outros`, além dos carimbos explícitos. [app/chamados/models.py:3371](app/chamados/models.py:3371) [app/chamados/models.py:3404](app/chamados/models.py:3404)
+- `historico.py:105`: **leitura relevante**; o laço percorre `respondida_em`, `validada_em` e `materializada_em`, e também lê o texto. [app/chamados/services/historico.py:98](app/chamados/services/historico.py:98) [app/chamados/services/historico.py:105](app/chamados/services/historico.py:105) [app/chamados/services/historico.py:109](app/chamados/services/historico.py:109)
+- `passivo_validado.py:83`: **leitura relevante** para fotografia de reversão; a lista inclui materialização, resposta, validação e autor da validação. [app/chamados/services/passivo_validado.py:64](app/chamados/services/passivo_validado.py:64) [app/chamados/services/passivo_validado.py:83](app/chamados/services/passivo_validado.py:83)
+- `validacao.py:677` e `:894`: filtros dinâmicos por `pk` e, opcionalmente, disputa; selecionam a pergunta, mas essas chaves não são campos da projeção. Os corpos seguintes ainda são consumidores relevantes. [app/chamados/services/validacao.py:673](app/chamados/services/validacao.py:673) [app/chamados/services/validacao.py:677](app/chamados/services/validacao.py:677) [app/chamados/services/validacao.py:890](app/chamados/services/validacao.py:890) [app/chamados/services/validacao.py:894](app/chamados/services/validacao.py:894)
+- `veredito_lavrado.py:202` e `:206`: **leituras relevantes** dos instantes de materialização e resposta, com limite temporal dinâmico; `:177` e `:180` consultam `Batida`. [app/chamados/veredito_lavrado.py:163](app/chamados/veredito_lavrado.py:163) [app/chamados/veredito_lavrado.py:177](app/chamados/veredito_lavrado.py:177) [app/chamados/veredito_lavrado.py:180](app/chamados/veredito_lavrado.py:180) [app/chamados/veredito_lavrado.py:202](app/chamados/veredito_lavrado.py:202) [app/chamados/veredito_lavrado.py:206](app/chamados/veredito_lavrado.py:206)
+- `fio.py:2112`, `:2122`, `:2134`, `:2164`, `:2166`, `:2187`: consultas dinâmicas às chaves de família e aos campos de exclusão do índice; os nomes são definidos nas tabelas do próprio arquivo. A classificação de seu impacto indireto completo continua [não verificado]. [app/chamados/services/fio.py:1515](app/chamados/services/fio.py:1515) [app/chamados/services/fio.py:1521](app/chamados/services/fio.py:1521) [app/chamados/services/fio.py:2109](app/chamados/services/fio.py:2109) [app/chamados/services/fio.py:2164](app/chamados/services/fio.py:2164)
+- `explicador.py:43`: `dict.update` em resultado de apresentação, não `QuerySet.update` nem escrita de modelo. [app/chamados/services/explicador.py:41](app/chamados/services/explicador.py:41)
+- `pdf_espelho.py:856`: o `getattr` apontado lê campos de rubricas dos turnos; não é, nesse ponto, leitura direta da projeção da pergunta. Outros caminhos indiretos até PDF permanecem [não verificado]. [app/relatorios/pdf_espelho.py:844](app/relatorios/pdf_espelho.py:844) [app/relatorios/pdf_espelho.py:855](app/relatorios/pdf_espelho.py:855)
+- `core/reexibir.py:45` e `:49`: atribuições genéricas em memória; os chamadores encontrados são em `colaboradores/views.py`. Não demonstram, por si, escrita persistida da pergunta. [app/core/reexibir.py:21](app/core/reexibir.py:21) [app/core/reexibir.py:45](app/core/reexibir.py:45) [app/core/reexibir.py:49](app/core/reexibir.py:49) [app/colaboradores/views.py:1116](app/colaboradores/views.py:1116) [app/colaboradores/views.py:1281](app/colaboradores/views.py:1281)
+
+**Não concluído:** não classifiquei individualmente todos os demais indeterminados e aliases da saída, nem demonstrei a lista integral de consumidores indiretos, SQL bruto ou caminhos de PDF. O item 3, portanto, não está fechado. [não verificado]
+
+### 4. Contrato F1 antigo — STATUS: FECHADO quanto à implicação para a F7
+
+A F7 deve censar os leitores efetivos desta cópia; não há demonstração de equivalência geral entre eles e o fold histórico descrito no anexo. Aqui, `respondida` delega ao juiz do par projetado, enquanto a projeção temporal e `estado` consideram outros campos. A ancestralidade e os bytes do objeto histórico informados no anexo permanecem [não verificado]. [app/chamados/models.py:3674](app/chamados/models.py:3674) [app/chamados/juizes.py:1544](app/chamados/juizes.py:1544) [app/chamados/juizes.py:1382](app/chamados/juizes.py:1382) [app/chamados/models.py:3152](app/chamados/models.py:3152)
+
+### 5. Frota U1/U2 — STATUS: ABERTO
+
+O anexo declara resultado de sombra com **U1 global = 29.931** e **15.118 validações projetadas sem linha**, com `rc_sombra=0`; não há acesso independente ao banco ou log nesta sessão. [não verificado]
+
+O segundo contador usa correspondência de projeção por pergunta, ato e instante; ele não mede o último ato exigido para U2. Portanto, a sonda relatada fecha o resultado declarado para U1 e para o contador auxiliar, mas **U2 continua não medida**. [app/chamados/models.py:4122](app/chamados/models.py:4122) [app/chamados/models.py:4135](app/chamados/models.py:4135) [não verificado]
+
+alcance nao verificado restante: 3
+
+## 18/11 10:15 · sessao a2b0196b566b · - · - · origem=Ronald (tmux)
+
+Evidências e limitações enviadas ao agente principal, incluindo os escritores de decisão, os leitores de REABERTURA, os importadores, os limites dos selos e a divergência entre o comentário sobre `ato_motivo` e o comportamento de `_pela_decisao` ([models.py:4075](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4075), [tarefa_do_dia.py:158](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:158)).
+
+## 18/11 10:15 · sessao 7bb0d685aa36 · - · - · origem=Ronald (tmux)
+
+Classificação dos candidatos dinâmicos relevantes enviada ao agente principal, com os sítios de leitura e escrita de R/V/C, os falsos positivos identificados e as lacunas que permanecem [nao verificado].
+
+## 18/11 10:14 · sessao e888750e899c · - · - · origem=Ronald (tmux)
+
+Rastreamento de templates, cascas dinâmicas e PDF enviado ao agente principal, com os respectivos arquivos, linhas e limites de verificação.
 
 ## 18/11 10:13 · sessao b997298c28f7 · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
 
@@ -1214,149 +1377,4 @@ A falha confirmada do teste sem banco ocorre **antes de qualquer asserção**, p
 
 A porta mais próxima para uma decisão humana **por dia** é `veredito_celula` / `decisao_do_dia`, mas seu vocabulário é `trabalhou`, `faltou`, `justificado`, e ela recusa `trabalhou` na grade sem trabalho. Falta a porta que grave e permita ler a decisão DST e suas transições; a identidade do HEAD informado permanece **[não verificado: a cópia não fornece metadados Git, conforme r2]**. ([veredito_celula.py:18](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:18), [veredito_celula.py:85](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:85), [veredito_celula.py:243](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:243))
 
-## 18/11 09:57 · sessao 8fec532fac33 · E4C-F5 · leitura · origem=Code
-
-A partição de hoje **não é determinada pelo último ato**: entre as perguntas vivas, é pendente quando a disputa está aberta e o par projetado não satisfaz o juiz de resposta; as demais vão ao histórico. Pergunta fora do universo de vivas fica fora dessa partição. [app/chamados/services/pergunta_no_app.py:45](app/chamados/services/pergunta_no_app.py:45), [app/chamados/services/pergunta_no_app.py:76](app/chamados/services/pergunta_no_app.py:76), [app/chamados/juizes.py:1544](app/chamados/juizes.py:1544)
-
-| Último ato — definição | App hoje | Proposta do brief para a partição | LU-16 | Muda? / consulta de frota |
-|---|---|---|---|---|
-| **RESPOSTA** — [models.py:4040](app/chamados/models.py:4040) | Pendente ou histórico conforme o par projetado e a disputa; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | Texto não vazio: histórico; texto vazio: pendente. [brief_F5.md:84](brief_F5.md:84), [brief_F5.md:85](brief_F5.md:85) | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **Sim, condicional:** `Q1` e `Q2`. Para texto vazio há corte posterior que diz fora do app; a relação com a regra atual está em aberto. [app/docs/CORTES.md:509](app/docs/CORTES.md:509), [F5.r:22](F5.r:22) |
-| **VALIDACAO** — [models.py:4041](app/chamados/models.py:4041) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | O brief diz “validada”, sem fixar a partição. [brief_F5.md:87](brief_F5.md:87) | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **[não verificado]**: destino na partição não especificado; contagem de mudança também não verificável. |
-| **DEVOLUCAO** — [models.py:4042](app/chamados/models.py:4042) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | O brief diz “não validada”, sem fixar a partição. [brief_F5.md:88](brief_F5.md:88) | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **[não verificado]**: destino na partição e contagem de mudança não especificados. |
-| **RECUSA** — [models.py:4043](app/chamados/models.py:4043) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | Pendente. [brief_F5.md:86](brief_F5.md:86) | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **Sim, condicional:** `Q3`. |
-| **REABERTURA** — [models.py:4044](app/chamados/models.py:4044) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | Pendente. [brief_F5.md:86](brief_F5.md:86) | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **Sim, condicional:** `Q4`. |
-| **SILENCIO** — [models.py:4045](app/chamados/models.py:4045) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | Histórico, como proposta a decidir; o contraexemplo pede fixar o resultado. [brief_F5.md:90](brief_F5.md:90), [brief_F5.md:118](brief_F5.md:118) | “Silêncio não fecha; só fato na célula”, sobre **chamado**; a classificação de toda pergunta no app não decorre explicitamente dessa frase. [app/docs/CORTES.md:495](app/docs/CORTES.md:495), [F5.r §3.1](F5.r) | **Sim, condicional à proposta:** `Q5`. A tarefa retorna lista vazia, mas isso não determina por si a partição do app. [tarefa_do_dia.py:176](app/chamados/services/tarefa_do_dia.py:176) |
-| **RETRATACAO** — [models.py:4046](app/chamados/models.py:4046) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | [não verificado]: o brief fornecido não fixa destino na partição para esse ato. | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **[não verificado]**: destino e contagem de mudança não especificados. `_pela_decisao` cai no ramo de ato desconhecido. [tarefa_do_dia.py:187](app/chamados/services/tarefa_do_dia.py:187) |
-| **ABSORCAO** — [models.py:4047](app/chamados/models.py:4047) | Mesma regra geral; fora, se não viva. [pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82) | **Rejeitada:** pendente, como proposta a decidir. Outros status: destino no app [não verificado]. [brief_F5.md:90](brief_F5.md:90), [brief_F5.md:118](brief_F5.md:118) | Não trata expressamente do ato. [app/docs/CORTES.md:495](app/docs/CORTES.md:495) | **Sim, condicional para rejeitada:** `Q6`. A tarefa distingue aprovada, rejeitada e outros status; isso não fixa a partição. [tarefa_do_dia.py:178](app/chamados/services/tarefa_do_dia.py:178) |
-
-As consultas abaixo contam **diferenças condicionais nas perguntas vivas de hoje**, inclusive disputas fechadas, comparando a partição atual com os destinos explicitados na tabela. A seleção usa `q_vivas()` como pré-filtro e o juiz real para a vida; o último ato é escolhido por `(ato_em, pk)`. Não mede entradas ou saídas futuras do universo de vivas. [app/chamados/models.py:3458](app/chamados/models.py:3458), [app/chamados/services/pergunta_no_app.py:45](app/chamados/services/pergunta_no_app.py:45), [app/chamados/models.py:4081](app/chamados/models.py:4081)
-
-```python
-from django.db.models import OuterRef, Subquery, Q
-from django.utils import timezone
-from chamados.juizes import pergunta_viva, q_nao_respondida, texto_vazio
-from chamados.models import DecisaoPergunta as D, PerguntaDisputa as P
-
-agora = timezone.now()
-ultimo = D.objects.filter(pergunta_id=OuterRef("pk")).order_by("-ato_em", "-pk")
-
-base = P.objects.filter(P.q_vivas()).annotate(
-    ultimo_ato=Subquery(ultimo.values("ato")[:1]),
-    ultimo_texto=Subquery(ultimo.values("ato_texto")[:1]),
-    ultima_ausencia_status=Subquery(ultimo.values("absorcao_ausencia__status")[:1]),
-).select_related("disputa", "celula")
-
-# O juiz de vida é necessário: q_vivas() é um pré-filtro generoso.
-vivas_ids = [p.pk for p in base.iterator() if pergunta_viva(p, agora=agora)]
-vivas = base.filter(pk__in=vivas_ids)
-
-pendente_hoje = Q(disputa__fechada_em__isnull=True) & q_nao_respondida()
-historico_hoje = ~pendente_hoje
-
-# O texto do ato usa o mesmo trim Python de texto_vazio().
-respostas = vivas.filter(ultimo_ato=D.RESPOSTA)
-resposta_vazia_ids = [
-    pk for pk, texto in respostas.values_list("pk", "ultimo_texto").iterator()
-    if texto_vazio(texto)
-]
-
-Q1 = respostas.exclude(pk__in=resposta_vazia_ids).filter(pendente_hoje).count()
-Q2 = respostas.filter(pk__in=resposta_vazia_ids).filter(historico_hoje).count()
-Q3 = vivas.filter(ultimo_ato=D.RECUSA).filter(historico_hoje).count()
-Q4 = vivas.filter(ultimo_ato=D.REABERTURA).filter(historico_hoje).count()
-Q5 = vivas.filter(ultimo_ato=D.SILENCIO).filter(pendente_hoje).count()
-Q6 = vivas.filter(
-    ultimo_ato=D.ABSORCAO, ultima_ausencia_status="rejeitada"
-).filter(historico_hoje).count()
-```
-
-Números atuais dessas seis consultas: **[não verificado]**. Os 253 do anexo são uma aproximação histórica, não esses resultados. [brief_F5.md:139](brief_F5.md:139), [F5.r:44](F5.r:44)
-
-**Pergunta ao dono:** Na partição da F5, SILENCIO deve ir ao histórico e ABSORCAO rejeitada a pendente, mesmo quando a projeção ou o fechamento da disputa apontarem outro resultado? Para RESPOSTA com texto vazio, prevalece o destino fora do app do corte posterior ou pendente, como no brief? [brief_F5.md:90](brief_F5.md:90), [app/docs/CORTES.md:509](app/docs/CORTES.md:509), [app/chamados/services/pergunta_no_app.py:82](app/chamados/services/pergunta_no_app.py:82)
-
-## 18/11 09:56 · sessao 09ccd8d01e2b · E4C-F5 · leitura · origem=Code
-
-**(a) Sim, o texto geral da L-130 cobre esse par.** Ele declara ilegal “texto sem instante” e diz: “Reabrir/ressuscitar zera a resposta INTEIRA (instante e texto), texto anterior na trilha do ato”. A frase não cria uma exceção escrita para ausência de validação. [app/docs/LEIS.md:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/LEIS.md:151)
-
-Hoje, o universo da ressuscitação **exclui explicitamente** a pergunta com texto não vazio, `respondida_em=None` e `validada_em=None`, para não apagá-lo sem trilha. [app/chamados/models.py:1541](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:1541)
-
-**(b)** `reabrir_para_correcao` passa o texto anterior como `ato_texto` a `DecisaoPergunta.registrar`, criando uma linha de `REABERTURA` ou `RECUSA`; a chamada também fotografa os instantes e o autor da validação. O campo de texto pertence ao modelo `DecisaoPergunta`. [app/chamados/services/disputa_emissao.py:1632](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1632) · [app/chamados/models.py:4051](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4051)
-
-**(c) Ainda não pelo mesmo caminho na implementação atual, sem acrescentar o ato correspondente.** A ressuscitação chama `linhas_da_projecao_sem_linha`, que só seleciona perguntas com instante de resposta ou validação; portanto, para esse estado, ela não produz fotografia. [app/chamados/models.py:1619](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:1619) · [app/chamados/models.py:4132](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4132)
-
-O modelo já dispõe de `REABERTURA` com `ato_texto` e da marca `da_ressuscitacao`, mas o próprio código indica que falta o escritor dessa marca na ressuscitação. A carga da tarefa já ignora atos marcados antes de escolher o último; uma reabertura comum, por sua vez, é lida como devolução ao colaborador. Assim, uma linha marcada de reabertura é um caminho possível no modelo, sem fabricar `RESPOSTA`, mas ainda não está implementada nessa porta. [app/chamados/models.py:4069](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4069) · [app/chamados/services/tarefa_do_dia.py:421](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:421) · [app/chamados/services/tarefa_do_dia.py:163](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:163)
-
-**resposta proposta:** interpretar a L-130 como exigindo preservar também esse texto ao ressuscitar. [app/docs/LEIS.md:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/LEIS.md:151)  
-Propor ato `REABERTURA` marcado `da_ressuscitacao`, com a foto em `ato_texto`, antes de zerar o par; a decisão é do responsável pela lei. [app/chamados/models.py:4055](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4055) · [app/chamados/models.py:4069](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4069)
-
-## 18/11 09:55 · sessao 65581a4570a3 · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-1. **PROCEDE parcialmente.** O delta elimina a divergência persistente entre o ciclo fotografado na lavra e o cadastro: botão e porta consultam `tipo_ciclo` e a mesma constante; porém são consultas separadas, então uma alteração entre elas pode fazer o botão dizer `aplicar` e a porta recusar por ciclo, inclusive entre as duas consultas do POST, ou deixar na tela um link cíclico quando o cadastro já passou a não cíclico. [cadastro_realidade.py:798](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/services/cadastro_realidade.py:798), [views.py:498](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:498), [regua_defesa.py:310](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/regua_defesa.py:310).
-
-2. **NÃO PROCEDE quanto a leitor identificado de `ciclo` da lavra:** `anomalias_da_frota` escreve o mapa sem `ciclo`; `lista` e a view de aplicação o leem, enquanto o PDF de propostas e o comando que acessam `proposta['ciclo']` recebem a resposta direta do detector, que ainda contém esse campo. [esmeril_espelho.py:241](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/ponto/services/esmeril_espelho.py:241), [cadastro_realidade.py:950](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/services/cadastro_realidade.py:950), [views.py:493](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:493), [proposta_pdf.py:43](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/proposta_pdf.py:43), [propor_escala_limbo.py:37](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/management/commands/propor_escala_limbo.py:37), [detector_proposta.py:154](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/detector_proposta.py:154).
-
-3. **NÃO PROCEDE que as chaves casem para todo tipo de entrada:** a lista consulta destinos de todas as propostas da lavra, a view consulta só a proposta da pessoa, `None` ou ID ausente gera mapa vazio e template apagado não entra; com ID numérico produzido pelo detector e preservado como número no JSON, as chaves casam, mas um ID `"123"` em texto pode ser aceito pela consulta ORM e voltar como chave inteira `123`, fazendo o predicado suprimir o botão; ocorrência desse formato na lavra real é **[não verificado]**. [cadastro_realidade.py:798](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/services/cadastro_realidade.py:798), [cadastro_realidade.py:822](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/services/cadastro_realidade.py:822), [views.py:498](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:498), [detector_proposta.py:154](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/detector_proposta.py:154), [models.py:95](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/inteligencia/models.py:95).
-
-4. **PROCEDE quanto ao universo de empresas e à mordida por inspeção:** as duas views usam `empresas_visiveis()`, que exclui inativas e CNPJ de diagnóstico, embora a lista ainda exija vínculo e linha elegível; o teste de empresa exige 404 para inativa, e os testes de ciclo e template ausente falhariam ao retirar suas respectivas curas, mas execução e mutação efetivas são **[não verificado]**. [views.py:492](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:492), [views.py:524](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:524), [queries.py:78](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/colaboradores/queries.py:78), [cadastro_realidade.py:956](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/services/cadastro_realidade.py:956), [test_escala_nao_descreve.py:292](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/tests/test_escala_nao_descreve.py:292).
-
-5. **NÃO PROCEDE mudança identificada nos outros chamadores:** os caminhos C7 e do chamado antigo não passam `hoje`, portanto continuam usando `localdate()` dentro da porta; a rota nova passa o dia que usou no predicado. [views.py:471](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:471), [regua_defesa.py:315](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/regua_defesa.py:315), [regua_defesa.py:329](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/regua_defesa.py:329), [views.py:496](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:496).
-
-6. **PROCEDE quanto à decisão de ciclo ainda duplicada no tempo:** o predicado classifica o ciclo e a porta o classifica novamente, com a janela do item 1; no delta fornecido não identifiquei segundo escritor, novo relógio fora da borda ou campo novo com dois significados, e os testes novos não cobrem essa alteração concorrente nem ID em texto. [cadastro_realidade.py:828](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/services/cadastro_realidade.py:828), [regua_defesa.py:313](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/regua_defesa.py:313), [test_escala_nao_descreve.py:292](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/tests/test_escala_nao_descreve.py:292).
-
-**Bloqueia:** a classificação cíclica continua sendo feita em duas leituras independentes, com possibilidade de discordância se o cadastro mudar entre elas. [views.py:498](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/views.py:498), [regua_defesa.py:310](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/escala/regua_defesa.py:310).
-
-A presença de IDs em texto na lavra de produção, a execução dos testes e a identidade Git da cópia são **[não verificado]**. [nao verificado]
-
-## 18/11 09:55 · sessao bed4b37206b5 · ESPURIA-TELA · verificador · origem=Code
-
-**O teste novo cobre folga e feriado nas duas cascas e compara o HTML renderizado com os mapas, mas a comparação de cor ainda admite um falso verde.** A análise é estática; execução e mutações reais: **[não verificado]**. ([teste:198–221](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:198))
-
-1. **Mudanças isoladas.** Trocar apenas `Folga` ou `Feriado` no `title` do template por outro texto comum faria falhar o `assertIn` correspondente; trocar apenas a entrada correspondente de `PALAVRA` também, desde que o novo valor não coincida com outro `title="..."` presente no trecho examinado. Os demais asserts podem continuar verdes, e a primeira falha interrompe o método antes das iterações seguintes. ([partial:8](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/templates/ponto/partials/_dia_classe_icone.html:8), [teste:207–221](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:207), [mapa:67–71](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/services/dia_decidido.py:67))
-
-   Para **cor**, não é garantido: o teste procura uma substring sem delimitar o fim do valor. Por exemplo, mudar apenas no template `#94a3b8` para `#94a3b800` preserva a substring `color:#94a3b8`, embora mude a cor CSS para transparente; os quatro asserts dessa iteração continuariam satisfeitos pela leitura do código. Uma troca isolada para uma cor que não contenha a substring esperada falharia. ([teste:214–221](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:214), [partial:8](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/templates/ponto/partials/_dia_classe_icone.html:8))
-
-   Uma mudança **só em `CORES[FOLGA]` ou `CORES[FERIADO]`** para outro valor comum não encontrado no trecho faria falhar a comparação de cor; ainda assim, o teste usa substring, e não igualdade do valor CSS. O antigo pino dos valores fixos foi removido pelo delta: uma mudança coordenada no mapa e no template pode passar, mesmo alterando os valores antes fixados. ([teste:207–217](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:207), [mapa:45–53](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/services/dia_decidido.py:45); remoção do pino: delta fornecido)
-
-2. **O slice atual não corta antes de `title` ou `style`, nem alcança texto externo ao ícone**, para os templates presentes: os dois atributos seguem `data-dia-classe` na mesma abertura; cada include contém um SVG sem `</span>`; e o primeiro `</span>` seguinte é o fechamento do próprio ícone. Assim, os asserts positivos não são vazios nessa estrutura. ([teste:203–205](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:203), [partial:8](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/templates/ponto/partials/_dia_classe_icone.html:8), [SVG folga:7–12](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/templates/core/_icone_dia_folga.html:7), [SVG feriado:8](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/templates/core/_icone_dia_feriado.html:8))
-
-   O recorte depende, porém, **da ordem textual e do primeiro fechamento**, sem analisar HTML. Se `title` ou `style` fossem movidos para antes de `data-dia-classe`, o teste deixaria de encontrá-los e falharia; uma futura inclusão de outro `</span>` ou de conteúdo adicional dentro do span também mudaria o trecho inspecionado. ([teste:204–217](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:204))
-
-3. **Outro limite do delta:** o cenário pendente é montado diretamente no fixture; ele verifica a renderização para os valores fornecidos, mas não chama `do_dia` para provar que um pedido pendente produz essa combinação para ambos os vereditos. O ramo de produção preserva `v` e retorna a cor de pendente quando não há cobertura e há pendente. ([teste:198–203](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/tests/test_espelho_decidiu_icone.py:198), [dia_decidido.py:430–449](/home/ronald/codex_ws/ac94bfc74479acef47998e97dd64e731c5e314c0/app/ponto/services/dia_decidido.py:430))
-
-## 18/11 09:53 · sessao 4ad7decfa540 · ESPURIA-TELA · verificador · origem=Code
-
-**Parecer do delta: fecha os dois sintomas nos ícones alterados, mas deixa aberta a ambiguidade da trilha e introduz duplicação de apresentação.** A verificação é estática; execução dos testes e comportamento em produção são **[não verificado]**. [nao verificado]
-
-1. **Fechamento de A e B**
-
-   **A — parcialmente fechado.** O título compartilhado pelo espelho e pela grade passou de “Decidido por” para “Ausencia por”, com a explicação de que o nome pode ser de quem aprovou, recusou ou lançou. Portanto, esse título já não afirma que o registrador decidiu. O mesmo partial é incluído pelo espelho e pela grade. ([`_decidiu_icone.html:9`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_decidiu_icone.html:9), [`espelho.html:192`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/espelho.html:192), [`_calendario_grade.html:109`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/colaboradores/partials/_calendario_grade.html:109))
-
-   A trilha continua ambígua: `quem_quando` escolhe nome e instante **independentemente**. Por exemplo, sem aprovador mas com `aprovada_em`, pode mostrar o registrador junto do instante de aprovação; também pode cair no literal `sistema`. O título explica as alternativas para o nome, mas não identifica qual ocorreu nem a origem do instante. ([`dia_decidido.py:528`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/services/dia_decidido.py:528), [`_decidiu_icone.html:9`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_decidiu_icone.html:9))
-
-   A API continua exportando os campos chamados `ausencia_decidida_por` e `_em` nos dois caminhos de dia; o delta não altera seu contrato nem informa a origem dos valores. Nos templates e JavaScript pesquisados da cópia, os leitores desses campos encontrados são os dois includes acima; interpretação por clientes da API, inclusive PWA ou clientes externos: **[não verificado]**. ([`api/views.py:1552`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/api/views.py:1552), [`api/views.py:1615`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/api/views.py:1615), [`espelho.html:192`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/espelho.html:192), [`_calendario_grade.html:109`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/colaboradores/partials/_calendario_grade.html:109))
-
-   **B — fechado no ícone de classe do espelho.** O partial agora escolhe título e cor fixos para cada veredito, de modo que a palavra e a cor de pendente deixaram de vestir esses dois ícones. `do_dia` continua devolvendo a palavra e a cor de pendente quando não há cobertura; logo, outros leitores desse retorno ainda podem exibi-las, conforme seu próprio contrato. ([`_dia_classe_icone.html:8`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_dia_classe_icone.html:8), [`dia_decidido.py:444`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/services/dia_decidido.py:444))
-
-2. **Autoridade, literais e grade**
-
-   **Sim, os quatro literais são duplicados.** O partial os escreve diretamente, embora os mesmos valores constem em `PALAVRA` e `CORES`; ele não lê esses mapas em tempo de renderização. ([`_dia_classe_icone.html:8`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_dia_classe_icone.html:8), [`dia_decidido.py:45`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/services/dia_decidido.py:45), [`dia_decidido.py:67`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/services/dia_decidido.py:67))
-
-   O pino **morde uma mudança isolada na constante**: compara cada entrada dos mapas com os valores fixos. Mas ele não renderiza nem compara o partial com a autoridade; se só um literal do template mudar, esse teste específico continua satisfeito. O teste de renderização adicional exige o título de folga e exclui a cor de pendente, mas não exige a cor correta de folga nem verifica título e cor do feriado. ([`test_espelho_decidiu_icone.py:198`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/tests/test_espelho_decidiu_icone.py:198), [`test_espelho_decidiu_icone.py:203`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/tests/test_espelho_decidiu_icone.py:203))
-
-   A grade tem cópias próprias das duas cores e do título literal “Feriado”. Para folga, ela lê o título de `dia.status_rotulo`, escrito a partir do rótulo de D4, e seleciona o ícone por `dia.status`; para feriado, lê o booleano `dia.feriado`, escrito a partir do conjunto de feriados. O partial novo, por sua vez, lê `veredito_dia`, escrito a partir de `do_dia`, e escreve seus próprios título e cor. São, portanto, caminhos de apresentação distintos, ainda que hoje compartilhem literais e SVGs. ([`_calendario_grade.html:106`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/colaboradores/partials/_calendario_grade.html:106), [`_calendario_grade.html:109`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/colaboradores/partials/_calendario_grade.html:109), [`calendario.py:695`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/colaboradores/services/calendario.py:695), [`calendario.py:785`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/colaboradores/services/calendario.py:785), [`espelho.py:341`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/services/espelho.py:341))
-
-3. **Os testes novos morderiam c2?** [nao verificado]
-
-   - **Folga com pendente: sim, pela leitura do diff.** O teste fornece `palavra_dia='Atestado pendente'` e a cor de pendente, depois exige `title="Folga"` e que a cor pendente não esteja no span. O lado removido de c2 interpolava `{{ palavra }}` e `{{ cor }}` nesse span; assim, as duas condições seriam violadas. A primeira falha interromperia esse teste antes da segunda asserção. ([`test_espelho_decidiu_icone.py:203`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/tests/test_espelho_decidiu_icone.py:203), [`_dia_classe_icone.html:8`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_dia_classe_icone.html:8); lado `-` do delta fornecido)
-   - **`assertNotIn 'Decidido por'`: a condição detectaria o título de c2, mas não seria alcançada nesse teste como está.** Antes dela, o teste exige o novo `TITLE`, “Ausencia por ...”; c2 renderiza “Decidido por ...”, então falharia primeiro no `assertIn(TITLE, html)`. O fixture injeta diretamente nome e data, portanto não exercita a seleção real do registrador por `quem_quando`. ([`test_espelho_decidiu_icone.py:115`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/tests/test_espelho_decidiu_icone.py:115), [`test_espelho_decidiu_icone.py:135`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/tests/test_espelho_decidiu_icone.py:135); lado `-` do delta fornecido)
-
-   Resultado de execução histórica contra c2: **[não verificado]**.
-
-4. **Classificação dos achados**
-
-   - **Derivação paralela de apresentação: sim.** O delta cria outra cópia do mapa de palavra e cor para dois vereditos; a grade já tinha apresentação própria. Isso permite divergência futura mesmo com o veredito correto. ([`_dia_classe_icone.html:8`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_dia_classe_icone.html:8), [`_calendario_grade.html:106`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/colaboradores/partials/_calendario_grade.html:106))
-   - **Segundo juiz de classe: não demonstrado no delta.** O novo partial seleciona pelo veredito recebido; não recalcula o veredito a partir de fatos do dia. ([`_dia_classe_icone.html:8`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/templates/ponto/partials/_dia_classe_icone.html:8))
-   - **Selo com mordida parcial:** prende as constantes, mas não garante igualdade entre elas e os literais renderizados; a cobertura do cenário pendente também só verifica folga. ([`test_espelho_decidiu_icone.py:198`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/tests/test_espelho_decidiu_icone.py:198))
-   - **Campo com dois significados: persiste.** O rótulo novo reconhece as alternativas, mas os campos continuam podendo transportar aprovador/instante de aprovação ou registrador/instante de criação, inclusive em combinações independentes, sem marcador de proveniência. ([`dia_decidido.py:534`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/ponto/services/dia_decidido.py:534), [`api/views.py:1552`](/home/ronald/codex_ws/7a10f3fda0fe357ccda384bcebdf08aebe31ca38/app/api/views.py:1552))
-
-_6881 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6886 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
