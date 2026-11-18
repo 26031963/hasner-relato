@@ -1,7 +1,219 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 18:16** · publicado em **18/11/2026 18:17** (UTC-3)
+> Ultima resposta processada: **18/11/2026 18:18** · publicado em **18/11/2026 18:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 18:18 · sessao 987d7175aba3 · TIPO-NA-FONTE · leitura · origem=Code
+
+**A cópia fornecida não contém a porta da volta 5.** Nesta árvore, os dez leitores identificados acessam `orfas` ou `n_orfas` diretamente; a ata sintética também é montada diretamente. A busca por `leitura_orfas`, `horas_orfas`, `contar_orfas`, `gravar_orfas`, `instantes_orfas` e `copiar_ata` em `app/**/*.py` não encontrou ocorrências. A existência e o conteúdo de `app/escala/services/ata.py` nesta cópia: **[não verificado: arquivo ausente]**. Exemplos do código presente: [leitor_celula.py:187](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:187), [cartorio.py:742](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:742).
+
+O diretório recebido não tem `.git`; `git rev-parse HEAD` e `git log` falharam. Assim, **não foi possível verificar o HEAD de hoje, a ancestralidade ou atribuir mudanças a commits**. O hash informado no pedido identifica a cópia solicitada, mas sua identidade como HEAD atual permanece **[não verificado]**. O anexo da volta 5 descreve outra implementação, cuja presença no HEAD atual também fica **[não verificado]**. [nao verificado]
+
+A entrega abaixo é, portanto, um **pré-desenho parcial sobre a árvore recebida**, com a comparação ao anexo explicitamente limitada. Não criei `logs/TIPO-NA-FONTE/item3/retomada/`, conforme a regra de somente leitura.
+
+## 1. Censo: cópia recebida × pré-desenho
+
+A busca AST literal em produção, excluindo testes e migrações, encontrou **zero chamadas aos acessores nomeados** e **14 operações de leitura crua da ata em dez arquivos**, listadas abaixo. Isso não é uma comparação de commits: as **12 chamadas em dez arquivos** são o censo da cópia da volta 5 transcrito no pedido; a relação histórica entre ela e a árvore recebida é **[não verificado]**. Leituras dinâmicas, aliases não identificados e chamadas indiretas: **[não verificado]**. [nao verificado]
+
+| Leitor de ata | Leituras cruas presentes |
+|---|---|
+| Materialização | [materializacao.py:449](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:449) |
+| Juiz de chamado | [juizes.py:514](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:514), duas leituras |
+| Leitor da grade | [leitor_celula.py:187](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:187), [linha 190](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:190) |
+| Juiz de batida | [juiz_batida.py:161](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/juiz_batida.py:161) |
+| Esmeril | [esmeril_espelho.py:125](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/esmeril_espelho.py:125) |
+| Vigia | [vigia_pareador_celula.py:74](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/vigia_pareador_celula.py:74), duas leituras |
+| Cartório | [cartorio.py:839](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:839) |
+| Cluster | [cluster_espurio.py:29](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cluster_espurio.py:29), [linha 31](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cluster_espurio.py:31) |
+| Tripwire | [tripwire_celulas.py:264](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/tripwire_celulas.py:264) |
+| Cartão | [cartao_pela_celula.py:288](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/relatorios/cartao_pela_celula.py:288) |
+
+Pelo mesmo critério do pré-desenho, as **33 leituras da grade/saída-dia** continuam reconhecíveis, com linhas deslocadas:
+
+| Arquivo | Linhas |
+|---|---|
+| [calendario.py:409](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/colaboradores/services/calendario.py:409) | 409, 410 |
+| [orfa_classe.py:58](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/orfa_classe.py:58) | 58 |
+| [furos_diarios.py:22](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/furos_diarios.py:22) | 22 |
+| [utils.py:810](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:810) | 810, 813, 814, 1054, 1121, 1843, 1845, 1848, 1849, 1905, 1906, 1979, 1984 |
+| [causas.py:43](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/causas.py:43) | 43, 100 |
+| [detectar_par_relampago.py:140](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/detectar_par_relampago.py:140) | 140 |
+| [propor_reorganizacao.py:104](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/propor_reorganizacao.py:104) | 104 |
+| [propositor.py:39](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/propositor.py:39) | 39 |
+| [bordas_realizado.py:49](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/bordas_realizado.py:49) | 49 |
+| [cartorio.py:736](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:736) | 736, 742, 745, 1426 |
+| [simular_dia.py:12](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/simular_dia.py:12) | 12 |
+| [status_dia.py:188](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/status_dia.py:188) | 188 |
+| [supra_juiz.py:392](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/supra_juiz.py:392) | 392, 527 |
+| [turnos.py:2679](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/turnos.py:2679) | 2679 |
+| [pdf_espelho.py:477](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/relatorios/pdf_espelho.py:477) | 477, 552 |
+
+**Correção da contagem:** a lista acima contém **34**, não 33: há quatro leituras da grade em `cartorio.py` (736, 742, 745 e 1426), enquanto o pré-desenho listava três. A quarta reconhecida aqui é a leitura usada na montagem da contagem em [cartorio.py:742](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:742). Se o censo anterior excluía essa ocorrência por outro critério semântico, essa intenção é **[não verificado]**. A origem por commit/obra da diferença é **[não verificado]**.
+
+## 2. Matriz de ação dos leitores presentes
+
+Os seis nomes são usados aqui como **rótulos analíticos da classificação descrita no anexo**, pois a implementação classificadora não está disponível nesta cópia: **[não verificado no HEAD]**. `N` = não lavrada; `S` = legado sem chaves; `C` = só contagem; `L` = só lista; `D` = descasada; `V` = lavrada. `v` é a lista/valor cru e `n` a contagem. As ações condicionais e erros por tipos inadequados são relevantes: a classificação antiga admitia valores inadequados em certos estados segundo o anexo; sua classificação atual é **[não verificado]**.
+
+| Leitor | N | S | C | L | D | V |
+|---|---|---|---|---|---|---|
+| **Grade** | A chamada corrente recebe `{}` e devolve `[]` | `[]` | `['?'] * int(n)` | Converte elementos verdadeiros em strings; se resultado vazio, usa contagem | Lista convertida se houver; senão usa contagem; conversão pode falhar | Lista convertida; se vazia usa contagem. [leitor_celula.py:187](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:187), [379](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:379) |
+| **Materialização** | Sem lâmpadas, pula | Sem lâmpadas, pula; com lâmpadas, nenhuma marca órfã | Nenhuma marca órfã | Filtra horas válidas e junta às marcas | Filtra o valor iterável; forma inadequada pode falhar | Filtra horas e junta às marcas. [materializacao.py:440](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:440) |
+| **Juiz de chamado** | Sem `lampadas`, retorna `None` | Sem `lampadas`, `None`; com elas pode chegar a falso | `n` verdadeiro aciona consulta à régua | `v` verdadeiro aciona consulta à régua | `v or n` verdadeiro aciona consulta à régua | Idem; lâmpada apagada pode decidir antes. [juizes.py:497](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:497) |
+| **Cartão** | Conjunto vazio | Conjunto vazio | Conjunto vazio | Conjunto dos elementos string | Itera e filtra strings; forma inadequada pode falhar | Conjunto dos elementos string. [cartao_pela_celula.py:287](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/relatorios/cartao_pela_celula.py:287) |
+| **Juiz de batida** | Lista vazia | Lista vazia | Lista vazia | Converte elementos a string | Itera e converte; forma inadequada pode falhar | Converte elementos a string. [juiz_batida.py:157](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/juiz_batida.py:157) |
+| **Esmeril** | Nenhuma contribuição A5 | Nenhuma contribuição A5 | Nenhuma contribuição A5 | Converte horas e conta faixas | Itera; forma inadequada pode falhar | Conta faixas para A5. [esmeril_espelho.py:125](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/esmeril_espelho.py:125) |
+| **Vigia** | Conjunto vazio | Conjunto vazio | `n` verdadeiro permite leitura de `v` ausente e resulta vazio | `n` ausente impede a leitura e descarta `v` | `n` verdadeiro → `set(v or ())`; falso → vazio | Contagem controla leitura e conjunto. [vigia_pareador_celula.py:73](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/vigia_pareador_celula.py:73) |
+| **Cluster** | `None`, salvo guarda de dia sem trabalho | `None` se falta lista | `None` se falta lista | Se `v` e lâmpadas são listas, calcula assinatura; senão `None` | Depende dos tipos e conteúdo; conversão de hora pode falhar | Calcula assinatura ou `()`, conforme rajada e lâmpadas. [cluster_espurio.py:25](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cluster_espurio.py:25) |
+| **Cartório/insumos** | Sem lâmpadas: `(False, False)` | Sem lâmpadas: `(False, False)`; com lâmpadas usa marcos | Sem lâmpadas: `n` verdadeiro → `(None, None)`; falso → `(False, False)` | Sem lâmpadas ignora lista e retorna `(False, False)` | Sem lâmpadas decide pela verdade de `n`; com lâmpadas usa marcos | Mesma decisão por lâmpadas e contagem. [cartorio.py:833](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:833) |
+| **Tripwire** | Pula | `{}` pula; com ata e marcos suficientes, valor ausente vira vazio na peneira | Valor ausente vira vazio na peneira | Peneira `v` | Valor falso vira vazio; verdadeiro é iterado | Peneira a lista, se guarda permitir. [tripwire_celulas.py:258](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/tripwire_celulas.py:258), [165](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/tripwire_celulas.py:165) |
+
+**Catraca — não LAVRADA que pode virar vazio:** grade em N/S e C com contagem falsa; materialização em S/C; cartão, juiz de batida e esmeril em N/S/C; vigia em N/S/C/L e D conforme contagem; tripwire em S/C/D conforme guarda e valor. Esses são os sítios da tabela acima, não uma decisão nova sobre o que cada estado deve passar a fazer. A adaptação futura e o DIFF de frota por leitor são **[não verificado]**.
+
+## 3. Normalização da ata antes da leitura
+
+Nos leitores da matriz, os sítios reconhecidos são [materializacao.py:440](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:440), [juizes.py:497](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:497), [leitor_celula.py:379](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:379), [juiz_batida.py:157](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/juiz_batida.py:157), [esmeril_espelho.py:125](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/esmeril_espelho.py:125), [vigia_pareador_celula.py:73](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/vigia_pareador_celula.py:73), [cluster_espurio.py:27](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cluster_espurio.py:27), [cartorio.py:833](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:833) e [cartao_pela_celula.py:287](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/relatorios/cartao_pela_celula.py:287). O tripwire troca não-dict por `None` e pula na guarda, em [tripwire_celulas.py:258](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/tripwire_celulas.py:258).
+
+Há outros `ata or {}` na árvore, inclusive [juizes.py:454](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:454), [tripwire_celulas.py:341](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/tripwire_celulas.py:341) e [celula.py:1054](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1054). Se cada um alcança a futura porta de órfãs, diretamente ou por transporte: **[não verificado]**; a lista de fluxo anterior à porta é, portanto, incompleta.
+
+## 4. Ata sintética e universo do censo
+
+A grade copia a célula em memória e atribui uma ata com `lampadas` e `orfas`, sem `n_orfas`, antes de passá-la a `turnos_do_colab`: [utils.py:1897](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:1897), [1903](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:1903), [1909](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:1909). O caminho de turnos chama o juiz de batida, que lê `ata.get('orfas')`: [turnos.py:1569](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/turnos.py:1569), [juiz_batida.py:161](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/juiz_batida.py:161).
+
+Pela classificação transcrita no pré-desenho, essa forma seria `LEGADO_SO_LISTA`; passando pela porta da volta 5, lista e contagem seriam gravadas juntas. **O resultado concreto da porta e o universo do contador no HEAD são [não verificado]**, pois suas funções não estão na cópia recebida. O aval fornecido determina que a ata sintética passe pela porta e que o censo conte o mesmo universo que ela vê; essa é uma exigência de desenho, ainda sem implementação verificável aqui. **[não verificado em arquivo da cópia]**
+
+## 5–7. Histórico, APIs e cópia de consulta
+
+- **`ponto/portas/celula.py` desde `7621a973f`: [não verificado].** Sem objetos Git não é possível produzir log ou diff por commit, nem um resumo confiável por função. O arquivo presente pode ser lido, mas isso não demonstra seu delta: [celula.py:1054](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1054).
+- **`orfas_instantes`, `instantes_orfas`, `copiar_ata`:** a busca literal em `app/**/*.py` não encontrou definições nem chamadores na árvore recebida. Chamadores dinâmicos e a situação no HEAD real: **[não verificado]**. A regra L-111 está registrada em [CONDUTAS.md:15](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CONDUTAS.md:15); o aval transcrito determina a retirada, mas nenhuma alteração foi feita. **[não verificado em arquivo da cópia]**
+- **Base da cópia nova:** o aval fornecido determina HEAD de hoje; seu hash efetivo é **[não verificado]**. `wt-codex-tipo-na-fonte-184856` não estava no caminho consultado; o que ainda serve por arquivo e o que está velho são **[não verificado]**. O conteúdo transcrito de `predesenho.r`, `matriz_v5c.txt` e `veredito.md` serve como referência histórica fornecida, com linhas a reconferir na respectiva árvore; não prova o HEAD.
+
+**Pergunta de lei:** o aval fornecido condiciona o uso do padrão “tipo soma” à existência do termo no glossário. Busquei `tipo soma`, `sum type`, `algebraic` e variantes em [GLOSSARIO.md:1](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/GLOSSARIO.md:1) e `PLANO-PADROES.md`; não encontrei essas formas. A resposta escrita à inclusão ou denominação desse padrão é **[não verificado]**. Qual termo do glossário deve reger o desenho, ou deve “tipo soma” ser incluído?
+
+perguntas de lei: 1
+
+## 18/11 18:18 · sessao d97fcbb47de4 · E4D-PROJECAO-UM-ESCRITOR · censo · origem=Code
+
+Não consegui produzir um script que cumpra todo o contrato com segurança. Em particular, a cópia contém um `Q` construído e atribuído antes de ser aplicado ao queryset; atribuir seu modelo exige acompanhar esse fluxo ([models.py:2858](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2858)). Também há um `getattr` cujo nome vem de uma tupla percorrida em laço ([historico.py:96](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/historico.py:96)).
+
+O script abaixo é **uma parte utilizável do trabalho**, não o censo solicitado. Ele lista candidatos a `getattr` dinâmico quando uma das 25 colunas aparece como string literal em tupla ou lista no mesmo módulo. A associação é conservadora: a presença no módulo não prova que a string alcance o `getattr`, nem identifica o modelo ou o comportamento; por isso todas as linhas saem como `INDETERMINADO` [não verificado]. Ele não resolve receptores, templates, juízes, donos ou as classes FILTRA/MOSTRA/DECIDE, e não produz os totais solicitados por entidade [não verificado]. Não executei o script [não verificado]. [nao verificado]
+
+```python
+#!/usr/bin/env python3
+"""Candidatos conservadores a getattr dinamico. Uso: python3 script.py COPIA.
+
+Somente leitura. A saida nao e o censo E4d completo.
+"""
+import ast
+import os
+import sys
+from collections import Counter
+
+COLUNAS = {
+    "status_local", "resolvido_em", "via_encerramento", "respondido_por",
+    "fechada_em", "fechada_por", "resolucao", "motivo_fechamento",
+    "reaberturas_admin", "reaberturas_colab", "motivos", "materializada_em",
+    "materializada_por", "via_resolucao", "respondida_em", "resposta_colab",
+    "validada_em", "validada_por", "recusa_motivo", "pendencia_admin",
+    "data_conferida_em", "data_conferida_por", "veredito_lavrado",
+    "julgado_em", "janela_expira_em",
+}
+
+
+def arquivos_python(raiz):
+    for diretorio, subdirs, arquivos in os.walk(raiz):
+        subdirs[:] = sorted(
+            d for d in subdirs
+            if d not in {".git", "__pycache__", "node_modules", "staticfiles"}
+        )
+        for nome in sorted(arquivos):
+            if nome.endswith(".py"):
+                yield os.path.join(diretorio, nome)
+
+
+def candidatos_no_modulo(arvore):
+    encontrados = set()
+    for no in ast.walk(arvore):
+        if isinstance(no, (ast.Tuple, ast.List)):
+            for elemento in no.elts:
+                if (isinstance(elemento, ast.Constant)
+                        and isinstance(elemento.value, str)
+                        and elemento.value in COLUNAS):
+                    encontrados.add(elemento.value)
+    return encontrados
+
+
+class BuscaGetattr(ast.NodeVisitor):
+    def __init__(self):
+        self.escopo = []
+        self.sitios = []
+
+    def _escopo(self, no):
+        self.escopo.append(no.name)
+        self.generic_visit(no)
+        self.escopo.pop()
+
+    visit_FunctionDef = _escopo
+    visit_AsyncFunctionDef = _escopo
+    visit_ClassDef = _escopo
+
+    def visit_Call(self, no):
+        if (isinstance(no.func, ast.Name)
+                and no.func.id == "getattr"
+                and len(no.args) >= 2
+                and not isinstance(no.args[1], ast.Constant)):
+            self.sitios.append(
+                (no.lineno, ".".join(self.escopo) or "<modulo>")
+            )
+        self.generic_visit(no)
+
+
+def main():
+    if len(sys.argv) != 2 or not os.path.isdir(sys.argv[1]):
+        print("uso: python3 script.py COPIA", file=sys.stderr)
+        return 2
+
+    raiz = os.path.abspath(sys.argv[1])
+    linhas = []
+    erros = []
+
+    for caminho in arquivos_python(raiz):
+        rel = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+        try:
+            with open(caminho, encoding="utf-8", errors="replace") as arquivo:
+                arvore = ast.parse(arquivo.read(), filename=rel)
+        except (OSError, SyntaxError, ValueError) as erro:
+            erros.append((rel, str(erro)))
+            continue
+
+        colunas = candidatos_no_modulo(arvore)
+        if not colunas:
+            continue
+
+        busca = BuscaGetattr()
+        busca.visit(arvore)
+        for linha, funcao in busca.sitios:
+            for coluna in sorted(colunas):
+                linhas.append(
+                    ("INDETERMINADO", coluna, "INDETERMINADO",
+                     f"{rel}:{linha}", funcao, "?")
+                )
+
+    for registro in sorted(linhas, key=lambda r: (r[3], r[1], r[4])):
+        print("\t".join(registro))
+
+    print("# TOTAL_CANDIDATOS\t" + str(len(linhas)))
+    por_coluna = Counter(registro[1] for registro in linhas)
+    for coluna, total in sorted(por_coluna.items()):
+        print(f"# TOTAL_CANDIDATOS_COLUNA\t{coluna}\t{total}")
+
+    for rel, erro in erros:
+        print(f"ERRO_LEITURA_OU_PARSE\t{rel}\t{erro}", file=sys.stderr)
+    return 1 if erros else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
 
 ## 18/11 18:16 · sessao 5f0a28b44986 · E4D-PROJECAO-UM-ESCRITOR · leitura · origem=Code
 
@@ -1694,34 +1906,4 @@ A contagem abaixo considera uma questão de lei: o texto literal da frase exigid
 
 perguntas de lei: 1
 
-## 18/11 17:46 · sessao 45232c15941a · REPROVAS-1811-1740 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — item 2:** as perguntas **1 e 3 PROCEDEM**. A cópia registra uma ponta F6F7 com suite c10 verde, mas não comprova a c12 nem define o resultado necessário para abrir a F9. [app/docs/RELATO.md:41](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:41) [não verificado]
-
-1. **Premissas — PROCEDE.** O brief da F9 foi registrado como refeito contra o main `d6da98509`; o censo originalmente tinha uma pergunta de lei, depois respondida com “perguntas de lei 0”. Os números 24/68 do brief, porém, são registrados como não remedidos. [app/docs/RELATO.md:45](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:45) [app/docs/RELATO.md:42](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:42) [app/docs/RELATO.md:35](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:35)
-
-   A F9 depende de F1/F2 na ponta `e78031f79`; nessa árvore há registro de **suite c10** verde, e o opus final estava aberto. Isso não comprova a existência, o hash ou o estado verde da ponta **c12** que o item condiciona à abertura. [app/docs/RELATO.md:32](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:32) [app/docs/RELATO.md:41](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:41) [app/docs/RELATO.md:4](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:4) [não verificado]
-
-2. **Colisão com o aval vigente — CONFERE, com guardas cumulativas.** A decisão das 16:13 efetivamente manda a F9 nascer sobre a ponta **pousada**; o anexo fornecido declara substituí-la somente nesse ponto. O despacho POUSOS-COMBOIO registra F9 e F6F7 após as 18h; a vedação de ESPURIAS-ABRE proíbe, até o fim da simulação, pousos que toquem folha, export, retenção ou DiaPago. O anexo determina F6F7 após a simulação e F9 depois dela. [app/docs/RELATO.md:32](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:32) [app/docs/RELATO.md:65](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:65) [app/docs/CORTES.json:2019](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.json:2019) [anexo fornecido; arquivo na cópia não verificado]
-
-   RAIA-INTERVALO registra a vez de DECLARADO-X-GRAVADO e manda medir arquivo comum com raia viva na abertura. O teto geral permite dois construtores **sem arquivo em comum**; além dele, o wrapper recusa uma segunda chamada de **Codex construtor** enquanto a vaga única estiver ocupada. Ocupação e cruzamento na abertura da F9: [não verificado]. [app/docs/RELATO.md:8](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:8) [app/docs/RELATO.md:15](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:15) [app/docs/CORTES.json:1349](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.json:1349) [bin/codex_pergunta.sh:253](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/codex_pergunta.sh:253)
-
-3. **Condições no literal — PROCEDE.** “C12 GREEN” não identifica no dado fornecido qual recorte ou suite deve estar verde, nem aponta resultado ou hash da c12. O registro disponível é a suite inteira **c10**, `Ran 16885`, sem `rc` gravado em arquivo. [app/docs/RELATO.md:41](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:41) [não verificado]
-
-   “Codex verificador dela sem bloqueio” também não aponta laudo da c12 nem esclarece o tratamento de achados procedentes triados ou pendentes. O registro de verificador com zero bloqueantes é de volta anterior; a recusa do wrapper por B3 parado ou estado ilegível é outra guarda e não prova um laudo sem bloqueantes. [app/docs/RELATO.md:111](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:111) [bin/codex_pergunta.sh:393](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/codex_pergunta.sh:393) [não verificado]
-
-4. **Exportada, dinheiro ou `!` fora do declarado — CONFERE quanto ao texto da abertura; efeitos da obra [não verificado].** O item fornecido autoriza abertura em cópia e posterga o pouso; não declara apply ou alteração em produção. A conferência histórica da F6F7 registrou zero arquivos de código em folha, export, retenção e DiaPago, mas ela não demonstra o conteúdo da futura c12 nem os efeitos da F9. [app/docs/RELATO.md:43](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:43) [anexo fornecido; arquivo na cópia não verificado] [não verificado]
-
-A cópia disponibilizada não contém metadados Git para confirmar independentemente o hash informado como HEAD. [não verificado]
-
-## 18/11 17:45 · sessao f71e2d7a1389 · - · - · origem=Ronald (tmux)
-
-- O wrapper aplica o limite de **um Codex construtor por vez** por `flock` no repositório vivo; vaga ocupada causa recusa com `rc 2`. Ele também exige censo aprovado antes da vaga e que o `HEAD` da cópia corresponda ao hash informado. [bin/codex_pergunta.sh:241](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/codex_pergunta.sh:241) [bin/codex_pergunta.sh:248](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/codex_pergunta.sh:248)
-
-- A evidência registrada é de **suite inteira verde da F6F7 c10**, na árvore `e78031f79`, com `Ran 16885` e sem `rc` gravado; não demonstra uma cura c12 verde. [app/docs/RELATO.md:41](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:41) O teste, o hash e o resultado de “c12 GREEN” são [não verificado].
-
-- O papel verificador é de leitura; o wrapper também recusa sua volta se a obra estiver parada pelo B3 ou se o estado/trilha for ilegível. Isso não comprova o resultado de uma revisão da c12 nem define, por si só, um laudo sem bloqueantes. [bin/codex_pergunta.sh:2](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/codex_pergunta.sh:2) [bin/codex_pergunta.sh:393](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/codex_pergunta.sh:393)
-
-- A conferência histórica da F6F7 registra zero arquivos de código em folha, exportação, retenção e DiaPago; isso não comprova o conteúdo futuro da c12 nem o efeito da F9. [app/docs/RELATO.md:43](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/RELATO.md:43) Efeitos futuros sobre exportada, dinheiro ou `!`: [não verificado].
-
-_7084 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7086 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
