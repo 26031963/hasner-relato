@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 00:51:09.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (45.8 MB). Acoes na janela: **1323**.
+**Medido em 18/11/2026 00:56:13.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (46.0 MB). Acoes na janela: **1336**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:52:33 | Bash | Fix ESPERANDO producer and verify with hook | `cd /home/ronald/saas-hasner/app/docs && python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a='ESPERANDO: roda.sh \| pid=1827029\n'; assert s.count(a)==1 s=s.replace(a,'ESPERANDO: /home/ronald/saas-hasner/bin/trava_teste.sh \| pid=1866180\n') s=s.replace("green e mutante veto=False estao na fila atras da suite da B2","green VERDE (Ran 22 OK, r4b_aval/green.log); mutante veto=False na fila",1) open(p ...` |
+| 00:52:27 | Bash | Check run logs and trava holder | `cd /home/ronald/saas-hasner/logs; for f in E4C-F1-B2/r4b_aval/green.log E4C-F1-B2/r4b_aval/mutante.log S6-INTERMITENTE-FERIADO-CURA-A/run/volta.log S6-INTERMITENTE-FERIADO-CURA-A/run/mutante1.log torneira_1811/main.log; do echo "== $f"; [ -f $f ] && { grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep '^Ran ' $f \| tail -1; tail -1 $f; }; done; bash /home/ronald/saas-hasner/bin/trava_teste.sh --q ...` |
+| 00:52:22 | Bash | Find script pids and hook main order | `for p in $(pgrep -f "r4b_aval/roda.sh\\|S6-INTERMITENTE-FERIADO-CURA-A/run/roda.sh"); do echo "$p $(tr '\0' ' ' < /proc/$p/cmdline \| cut -c1-150)"; done; cd /home/ronald/saas-hasner; sed -n 1339,1400p bin/hook_stop_fila1.py \| grep -n "esperando\\|b3\\|B3"` |
+| 00:52:18 | Bash | Read produtor matching and ESPERANDO logic | `cd /home/ronald/saas-hasner; sed -n 582,603p bin/hook_stop_fila1.py; sed -n 788,840p bin/hook_stop_fila1.py; grep -n "B3\b.*bloque\\|_b3_\\|def main" bin/hook_stop_fila1.py \| head` |
+| 00:52:15 | Bash | Inspect stop hook ESPERANDO logic | `cd /home/ronald/saas-hasner; grep -n "ESPERANDO\\|def _esperando\\|B3\\|pid" bin/hook_stop_fila1.py \| head -50` |
+| 00:52:09 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 00:52:07 | Bash | Confirm pid alive and locate RELATO top | `cd /home/ronald/saas-hasner/app/docs; ps -p 1827029 -o pid=,cmd= ; grep -n "^B2 suite inteira @ca25543b3" RELATO.md; sed -n 1,6p RELATO.md \| cut -c1-120` |
+| 00:51:57 | Bash | Get pid of running R4b runner | `pgrep -f "wt-b2-r4b-002812" \| head -3; pgrep -f "r4b_aval/roda.sh"` |
+| 00:51:55 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 00:51:51 | Bash | Queue torneira test on main tree | `cd /home/ronald/saas-hasner; mkdir -p logs/torneira_1811; (bash bin/suite.sh --only "escala.tests.test_torneira_folgas" > logs/torneira_1811/main.log 2>&1; echo rc=$? >> logs/torneira_1811/main.log) & disown; echo ok` |
+| 00:51:45 | Bash | Read torneira test and check B2 touches escala | `cd /home/ronald/saas-hasner/app; sed -n 20,80p escala/tests/test_torneira_folgas.py; git log --oneline -3 -- escala/tests/test_torneira_folgas.py; git -C /home/ronald/wt-codex-e4c-f1-b2-232432 diff --stat 4307c01e6 ca25543b3 \| tail -3; git -C /home/ronald/wt-codex-e4c-f1-b2-232432 diff --stat 4307c01e6 ca25543b3 \| grep -i escala` |
+| 00:51:39 | Bash | Read torneira_folgas failure tracebacks | `cd /home/ronald/saas-hasner/logs/E4C/f1nova/b2/cerca/c2b; awk '/^FAIL: test_calendario_relavra/,/^(FAIL\|ERROR):\|^-{50,}$/' suite_ca25543b3.log \| head -5; grep -n -A25 "^FAIL: test_plano_manual_relavra" suite_ca25543b3.log \| head -40` |
+| 00:51:35 | Bash | Read B2 full suite verdict | `cd /home/ronald/saas-hasner/logs/E4C/f1nova/b2/cerca/c2b; L=suite_ca25543b3.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -1 $L; grep -E "^(FAIL\|ERROR):" $L \| sort \| uniq \| head -30` |
 | 00:38:44 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 00:38:37 | Bash | Launch Codex verificador on S6 c1 | `cd /home/ronald/saas-hasner; D=logs/S6-INTERMITENTE-FERIADO-CURA-A; git -C /home/ronald/wt-s6-feriado-002611 diff 4307c01e6 70e63a0b8 > $D/c1.diff; wc -c $D/c1.diff; grep -c "lei: S6-DOBRA" app/docs/RELATO.md; cat > $D/verif1.q <<'EOF' CODEX_PAPEL=verificador, obra S6-INTERMITENTE-FERIADO-CURA-A, arvore = 70e63a0b8 (main 4307c01e6 + c1). Diff anexo (por ultimo). Avais anexos. Checklist: (1) o diff ...` |
 | 00:38:24 | Bash | S6 volta and mutants (queued behind trava) | `/home/ronald/saas-hasner/logs/S6-INTERMITENTE-FERIADO-CURA-A/run/roda.sh` |
