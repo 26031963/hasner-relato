@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=1569659
+ESPERANDO: suite.sh | pid=1578643
+E4C-F1-B2 22:15: ver2 Codex limpo (4 NAO PROCEDE, amostra fio.py:1081 conferida); suite INTEIRA da copia @9057ce4e0 rodando (logs/E4C/f1nova/b2/cerca/c2b/suite_inteira_9057ce4e0.log; test_selo_b2_cerca_15_sitios.py nao rastreado guardado no scratchpad, fora da arvore certificada); depois opus final.
+PORTA-ESTADO-NA-TELA v7 c2 22:15 @57bb479c9: ver1 Codex 3/4/5 PROCEDEM -- tentativa nao vigente sai SEM VEREDITO (mesma causa do assumir->None), motivo 'nao pegou a trava ate o prazo de assumir', Rk afirma o hx-get inteiro; 71 OK rc=0, mutantes m1/m2 FAILED; ver2 (22:18) 2 PROCEDENTES de rotulo: SEM VEREDITO/VERMELHO afirmavam outro processo/vigia sem prova -> 'o estado delas e o que o registro da porta tiver' (triagem_ver2.md); vizinhos na fila da trava atras da suite B2. Postmortem v6: (a) 5, triagem-sem-linha 2, (e) 2, (c) 1, (d) 0 (postmortem/tabela.md).
 PORTA-ESTADO-NA-TELA v7 22:09: opus final v6 REPROVA (2 BLOQUEIA, logs/PORTA-EXPORT/v6/opus_final.md) curada na copia @179509b84 -- job do clique sem medir sai VERMELHO rc 2 (Rj x3 RED FAILED 3 -> 71 OK rc=0), preview com o bloco do estado (Rk, mutante FAILED); Codex verificador ver1 rodando.
 E4C-F1-B2 C2b 22:09: ver1 Codex D/E PROCEDEM, curados @9057ce4e0 (revertidas=0 no rollback; grupo de 2 linhas inteiro, mutante veto_por_linha FAILED; 7 modulos Ran 110 OK rc=0); A/B/C descartados (c2b/triagem_ver1.md); ver2 rodando.
 E4C-F1-B2 C2 REVERSAO POR GRUPO 22:01: `migrar_data_evento_dia_do_turno::_reverter` por `_grupos`+`_veto_do_grupo` sob a trava (aval 2135 item 1); RED antes FAILED 2 (c2/reversao_por_grupo_RED.log); GREEN 7 modulos Ran 106 OK rc=0 (c2/reversao_por_grupo_green.log); mutante reversao_tudo_ou_nada FAILED 2 rc=1, copia removida; v13d invertida; ruff OK; commit 13f5adf67 na copia; Codex verificador ver1 em curso.
