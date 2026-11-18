@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:21** · publicado em **18/11/2026 17:21** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:25** · publicado em **18/11/2026 17:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:25 · sessao c8d57d9f8e0f · LOTE-CONHECE-A-IRMA · sonda · origem=Code
+
+Na saída raspada fornecida:
+
+- Universo de perguntas de intervalo-hora na fila: **550**. [não verificado]
+- Em `b_conversa` por conflito: **72**. [não verificado]
+- Com conflito somente de batida de irmã gravada: **23**. [não verificado]
+  - Com exatamente uma irmã gravada: **23**. [não verificado]
+  - Com mais de uma irmã gravada, no contador de irmã ambígua: **0**. [não verificado]
+- Erros: **0**. [não verificado]
+
+A conferência do método da sonda ficou **não verificada**: o arquivo `logs/RAIA-INTERVALO/sonda_irma_ambigua.py` não foi encontrado na cópia. [não verificado]
+
+No código, `classe_do_lote` só marca conflito depois de passar pelas verificações anteriores e usa batidas apuráveis próximas ao instante do slot. [validacao.py](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1177) Já `metade_irma_do_intervalo` procura uma única irmã respondida **ainda não materializada**, com filtros adicionais. [materializacao.py](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139) Isso não permite confirmar que o método da sonda, que relata irmãs gravadas, corresponda ao método pretendido ou detectar eventual divergência. [não verificado]
+
+## 18/11 17:24 · sessao df1a716c32a1 · RAIA-INTERVALO · sonda · origem=Code
+
+Na saída fornecida, **7 perguntas** estão em `espera_declarado_x_gravado`: **7 dentro do U163 e 0 fora**. O contador `respostas_intervalo_recusadas_paridade()['espera_declarado']` também tem **7**; a interseção é **7**, com **0 só na função** e **0 só no contador**. Os IDs informados são 41706, 45598, 45599, 47207, 50176, 50177 e 51526. [não verificado em arquivo:linha; números transcritos da saída fornecida]
+
+Esses conjuntos coincidem **nesta medição**, embora os critérios permitam diferença. O contador começa pelas perguntas do U163 e acrescenta à lista as não carimbadas cujo estado é espera; a função consulta o estado de uma pergunta de intervalo tipo hora sem exigir, ela própria, que o PK consultado pertença ao U163. [materializacao.py:323](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:323), [materializacao.py:341](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:341), [materializacao.py:762](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:762)
+
+O portão examina as metades que seriam gravadas no ato e exige U163 para a **metade divergente**. Quando o ato grava um par, isso permite, em princípio, que a consulta de uma pergunta fora do U163 retorne espera por causa da irmã dentro do U163; essa pergunta ficaria fora do contador, que seleciona pelo próprio PK. Nesta saída, não apareceu nenhum caso assim. [materializacao.py:748](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:748), [materializacao.py:923](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:923), [não verificado em arquivo:linha para o resultado da sonda]
+
+**Erros à parte:** a sonda informa `erros 0` e `ERROS []`; a saída também contém mensagens `ERROR` de `tipo_marco_divergente`, algumas repetidas. Esses registros não devem ser somados às sete esperas nem confundidos com a lista de erros da sonda. [não verificado em arquivo:linha; saída fornecida]
+
+As **79** do aval são identificadas como contagem histórica; a saída atual, por si só, não mostra a interseção nem a evolução entre aquelas 79 e as 7 atuais. Qualquer relação adicional é **[não verificado]**. [RELATO.md:13](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/docs/RELATO.md:13)
+
+## 18/11 17:23 · sessao 9f77027bbad7 · RAIA-INTERVALO · sonda · origem=Code
+
+A sonda fornecida relata **“não” para zero faltantes em todos os 28 dias**. Em nenhum deles ela mostra uma batida ocupando o marco que a ata aponta como faltante. A saída identifica a sonda como `sonda28.py`, mas esse arquivo não foi localizado nesta cópia; os dados abaixo são transcrição do material fornecido e, quanto à execução independente, **[não verificado]**.
+
+Em cada linha: `colaborador data grupo — grade vê 0 faltantes?; marco que a ata dá por apagado; batida que o ocupa (hora, tipo, origem → marco casado)`.
+
+- col622 27/10 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col622 29/10 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col622 04/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col622 05/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col622 12/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col622 13/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col622 16/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col362 22/10 G2 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col945 29/10 G2 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col735 16/11 G2 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col583 12/11 G3 — N; S 11:00; nenhuma mostrada. [não verificado]
+- col829 11/11 G3 — N; S 14:40; nenhuma mostrada. [não verificado]
+- col369 12/11 G3 — N; S 12:00; nenhuma mostrada. [não verificado]
+- col224 28/10 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col469 01/11 G4 — N; E 19:00; nenhuma mostrada. [não verificado]
+- col924 11/11 G4 — N; E 19:00; nenhuma mostrada. [não verificado]
+- col631 03/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col988 31/10 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col988 03/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col836 04/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col1000 03/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col1000 13/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
+- col962 05/11 G4 — N; E 18:00; nenhuma mostrada. [não verificado]
+- col962 09/11 G4 — N; E 18:00; nenhuma mostrada. [não verificado]
+- col962 16/11 G4 — N; E 18:00; nenhuma mostrada. [não verificado]
+- col991 09/11 G4 — N; E 17:00; nenhuma mostrada. [não verificado]
+- col991 11/11 G4 — N; E 17:00; nenhuma mostrada. [não verificado]
+- col787 30/10 G5 — N; E 08:00 e E 13:00; nenhuma mostrada para qualquer dos dois. [não verificado]
+
+A saída mostra, por exemplo, que em col369 12/11 as batidas **12:53:12 S/app** e **13:55:44 S/app** casaram com `NENHUM`; em col787 30/10, **10:32:17 E/app** também casou com `NENHUM`. Não há, portanto, marco casado a atribuir a essas batidas no dado fornecido. [não verificado]
+
+**Resposta por grupo:** G1, G2, G3, G4 e G5: **não**, a grade não vê zero faltantes em nenhum dos respectivos dias relatados; e o passo em que uma batida ocuparia o marco apagado é **[não verificado] em todos os grupos**. A saída não mostra essa ocupação e não permite classificá-la como ocorrida dentro ou fora de `escala/utils.py`. [não verificado]
+
+Nesta cópia, o caminho de casamento está em [`_match_marcos`](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/escala/utils.py:595), que pode usar alinhamento por papel ou a rotina de alinhamento; o cartório monta as lâmpadas a partir das células e também contém um ramo de proximidade para marco ausente da régua em [`lampadas_do_dia`](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/ponto/services/cartorio.py:656). O leitor transforma as lâmpadas da ata em células e deriva `missing` de `acesa` em [`_celulas_da_ata`](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/escala/services/leitor_celula.py:114). A existência desses caminhos no código não identifica qual ramo foi executado para cada registro da sonda **[não verificado]**.
 
 ## 18/11 17:21 · sessao d73e96b3b221 · LOTE-CONHECE-A-IRMA · sonda · origem=Code
 
@@ -358,32 +426,4 @@ Os anexos foram fornecidos no texto, sem arquivo com linhas na cópia; por isso,
 
 Resultados enviados ao agente principal, com as referências do elo, seus leitores, a função de irmã e o registro de juízes.
 
-## 18/11 16:48 · sessao 43dbfb1aff18 · - · - · origem=Ronald (tmux)
-
-Censo dos leitores e da chamada para a sonda enviado ao agente principal, com referências de arquivo e linha.
-
-## 18/11 16:29 · sessao 3b8c17eb3273 · REVISAO-C1-1600 · verificador · origem=Code
-
-1. **PROCEDE — premissas parcialmente não verificadas.** Fora de `passivo`, o juiz retorna `silencio_decidido` sem ações para SILENCIO, devolve RECUSA/REABERTURA ao colaborador e manda responder quando a ABSORCAO foi rejeitada. Para pergunta em `passivo`, porém, retorna primeiro `passivo_sem_linha`. [tarefa_do_dia.py:142](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:142)
-
-   A leitura disponível nesta cópia é `DecisaoPergunta.leitura`; ela incorpora linhas faltantes da projeção e não faz de SILENCIO, por si só, uma resposta vigente ou uma classificação de histórico. O arquivo `atos_pergunta.py` citado no brief não foi localizado nesta cópia; seu comportamento fica **[não verificado]**. [models.py:4272](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4272), [models.py:4295](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4295)
-
-   Os cortes F5 citados existem e registram as classes de silêncio, resposta vazia e absorção rejeitada; a L-130 também existe. A reabertura compensadora da ressuscitação tem ressalva própria na L-130, portanto não cabe generalizar sua consequência para a fila. O nome exato `E4-EXPAND-CONTRACT` não foi localizado em `CORTES.md` ou `LEIS.md`; a L-127 registra expand-contract em 09/11, mas o aval nominal de migração de leitores permanece **[não verificado]**. [CORTES.md:560](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:560), [CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561), [LEIS.md:151](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:151), [LEIS.md:148](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:148)
-
-2. **CONFERE — nenhuma colisão de ordem identificada.** O complemento fornecido mantém a vez da F5 na vaga 1 **[não verificado no arquivo original]**; a ordem F9 → F6F7 → F5 → B2b consta também na cópia. [BACKLOG.md:2345](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/BACKLOG.md:2345)
-
-3. **CONFERE — no literal da separação por último ato, com limite de verificação.** A saída raspada informa `DIVERGENTES_FORA_DOS_40 213` e `CLASSE_ULT silencio 213`: nela, as 213 foram separadas por último ato e nenhuma aparece em classe de último ato sem corte. A execução e o universo efetivamente selecionado pela sonda são **[não verificado]**. O corte para SILENCIO existe. [CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561)
-
-   `Passivo` é uma condição transversal ao último ato; a medida fornecida não diz quantas das 213 estão nela, portanto **N > 0 ou N = 0 é [não verificado]**. Isso não demonstra outra classe de *último ato* sem corte: a conservação de `passivo_sem_linha` já é reconhecida no corte, que devolveu o RED universal incompatível com ela. Também não se pode afirmar o par efetivamente exposto pela tarefa para cada uma das 213. [CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561), [tarefa_do_dia.py:154](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:154), [tarefa_do_dia.py:288](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:288)
-
-4. **CONFERE — quanto ao escopo declarado; efeito da futura implementação [não verificado].** O complemento fornecido proíbe tocar competência entregue **[não verificado no arquivo original]**; os cortes reservam o estoque entregue a `!` próprio e preservam os nove sem porta. [CORTES.md:560](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:560), [CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561)
-
-   A partição alimenta também a carga da tarefa e a cobrança, de modo que há consumidores indiretos a verificar na construção e no DIFF. Ausência de efeito efetivo sobre exportada, dinheiro ou outro `!` não pode ser demonstrada antes da implementação e das verificações correspondentes **[não verificado]**. [tarefa_do_dia.py:529](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:529), [cobranca.py:45](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/cobranca.py:45)
-
-## 18/11 16:28 · sessao 81d9d9004041 · - · - · origem=Ronald (tmux)
-
-A cópia atual já usa `pergunta_respondida` na partição do app, embora o brief raspado descreva a leitura direta do carimbo. A tarefa e a cobrança consomem essa partição ou leitores relacionados, de modo que há efeitos indiretos a considerar. [pergunta_no_app.py:80](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/pergunta_no_app.py:80), [tarefa_do_dia.py:529](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:529), [cobranca.py:45](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/cobranca.py:45).
-
-O corte preserva os nove casos sem porta e reconhece a conservação de passivo pendente; o estoque de competência entregue depende de `!` próprio. [CORTES.md:560](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:560), [CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561), [LEIS.md:151](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:151). Efeito efetivo de implementação futura sobre exportada ou dinheiro: [não verificado].
-
-_7052 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7055 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
