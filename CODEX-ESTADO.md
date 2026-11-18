@@ -1,7 +1,111 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:10** · publicado em **18/11/2026 17:10** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:21** · publicado em **18/11/2026 17:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:21 · sessao d73e96b3b221 · LOTE-CONHECE-A-IRMA · sonda · origem=Code
+
+No dado raspado, os contadores são **[não verificado]**:
+
+- Universo de perguntas de intervalo-hora na fila: **550**
+- Em `b_conversa` por conflito: **72**
+- Conflito só de batida de irmã gravada: **23**
+  - Com exatamente uma irmã gravada: **23**
+  - Com mais de uma irmã gravada — contador de irmã ambígua: **0**
+- Erros: **0**
+
+A conferência do método da sonda ficou **[não verificada]**: o arquivo indicado não está disponível nesta cópia. O código de `classe_do_lote` marca conflito pela existência de qualquer batida apurável no intervalo de 60 minutos em torno do instante do slot, sem identificar sua origem ([validacao.py:1133](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1133), [validacao.py:1204](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1204)).
+
+Há uma **diferença de critério** a considerar: `metade_irma_do_intervalo` procura irmã **ainda não materializada** e só retorna uma quando há exatamente uma candidata; isso não equivale diretamente à contagem de irmãs já gravadas ([materializacao.py:139](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139)). Sem o código da sonda, não é possível confirmar se ela tratou essa diferença nem se as 23 sairiam do conflito pela cura **[não verificado]**.
+
+## 18/11 17:21 · sessao 6fe46adaff6b · - · - · origem=Ronald (tmux)
+
+A classificação `b_conversa` por conflito só ocorre depois de passar pelos testes de resposta legível, marco, AM/PM e envelope; ela consulta batidas apuráveis em até 60 minutos do instante do slot ([validacao.py:1177](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1177), [validacao.py:1133](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1133)).
+
+`metade_irma_do_intervalo` procura irmã **ainda não materializada** e só retorna uma candidata única, após outros filtros ([materializacao.py:139](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139)). Seu critério, portanto, não é diretamente a contagem de irmãs já gravadas.
+
+A sonda indicada não foi encontrada nesta cópia; a comparação direta de seu método com essas funções está [não verificado].
+
+## 18/11 17:21 · sessao 30f63ae7fee3 · - · - · origem=Ronald (tmux)
+
+A função [metade_irma_do_intervalo](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139) procura uma irmã **não gravada** e retorna uma candidata somente se houver exatamente uma; também exige resposta com texto e exclui perguntas fora do fato ou em voo. A contagem pedida de irmãs **gravadas** mede outra população.
+
+A função [classe_do_lote](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1204) considera conflito a existência de qualquer batida apurável perto do instante do slot, sem excluir batida de irmã.
+
+O arquivo da sonda indicado não foi localizado na cópia; a comparação do método efetivamente usado pela sonda com essas funções está [não verificado].
+
+## 18/11 17:21 · sessao da741c9eb6ab · - · - · origem=Ronald (tmux)
+
+A sonda `logs/RAIA-INTERVALO/sonda_irma_ambigua.py` não está presente na cópia consultada. Assim, sua metodologia e o hash informado não puderam ser conferidos; a correspondência entre seus contadores e as funções de produção é **[não verificado]**.
+
+## 18/11 17:20 · sessao a3a69aa0eb6d · DECLARADO-X-GRAVADO · sonda · origem=Code
+
+Na saída fornecida, a função real encontrou **7 perguntas em espera**, todas dentro do U163 e nenhuma fora. A varredura informa `universo_intervalo_hora 19822`, `erros 0` e `ERROS []`. A leitura ocorreu em 18/11 às 17:19; a situação atual é **[não verificado]**. [Fonte: saída raspada fornecida; execução e base não verificadas.]
+
+| Comparação informada pela sonda | Perguntas |
+|---|---:|
+| Função real: total | 7 |
+| Função real: dentro / fora do U163 | 7 / 0 |
+| Contador `espera_declarado` | 7 |
+| Interseção informada | 0 |
+| Só na função / só no contador, informado | 7 / 7 |
+
+Esses últimos três números **não podem ser tomados como interseção confirmada de PKs** sem conferir a comparação feita pela sonda. A saída os apresenta, mas o código da sonda não foi localizado na cópia consultada. [Fonte: saída raspada fornecida; código da comparação não verificado.]
+
+Há uma tensão com o código da cópia: a função consulta a testemunha e retorna detalhe quando seu estado é espera; para uma pergunta não carimbada dentro de U163, o contador consulta essa mesma testemunha e adiciona o PK à lista quando recebe esse mesmo estado. Portanto, **se as duas leituras viram os mesmos dados e a comparação usou PKs dos dois lados**, os sete da função dentro de U163 deveriam aparecer também no contador. A causa concreta do `inter_paridade 0` é **[não verificado]**. [materializacao.py:324](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:324), [materializacao.py:341](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:341), [materializacao.py:762](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:762), [materializacao.py:875](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:875).
+
+Os dois leitores têm, em geral, escopos diferentes: o contador percorre apenas PKs de U163 e trata as carimbadas separadamente; a função aceita uma pergunta de intervalo tipo hora também fora de U163. Na avaliação de um par, a guarda examina as duas metades e pode encontrar a divergência na irmã pertencente a U163. Assim, **em geral**, uma pergunta fora de U163 pode aparecer na função e não no contador. Isso não explica os `7 só função` desta saída, pois ela informa que todas as sete estão dentro de U163. [materializacao.py:324](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:324), [materializacao.py:329](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:329), [materializacao.py:748](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:748), [materializacao.py:938](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:938).
+
+A saída também contém linhas de log `tipo_marco_divergente`; elas são separadas do `erros 0` e de `ERROS []` informados pela sonda. Não se pode concluir, apenas desses campos, que não houve mensagens de erro no log. [Fonte: saída raspada fornecida; execução não verificada.]
+
+Quanto às **79 do aval DECLARADO-NA-VAGA**, a saída fornecida não apresenta sua lista nem uma comparação com os conjuntos atuais. A interseção, quantas continuam em espera e a evolução entre a contagem histórica e esta leitura são **[não verificado]**.
+
+## 18/11 17:18 · sessao 09d4943bb652 · RAIA-INTERVALO · sonda · origem=Code
+
+**A sonda fornecida não mostra nenhuma batida ocupando um marco que a ata informa como apagado.** Em todos os 28 dias, `grade_ve_0_faltantes=False`. As linhas abaixo transcrevem o dado fornecido; como o arquivo da sonda não está nesta cópia, sua execução e seu conteúdo não foram verificados. [não verificado]
+
+Em cada linha, “batida no marco apagado” é **não mostrada**: portanto hora, tipo, origem e marco casado dessa suposta batida ficam **[não verificado]**. O marco entre parênteses é o faltante informado pela sonda.
+
+```text
+col622  27/10 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col622  29/10 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col622  04/11 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col622  05/11 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col622  12/11 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col622  13/11 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col622  16/11 G1: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col362  22/10 G2: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col945  29/10 G2: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col735  16/11 G2: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col583  12/11 G3: N; batida no marco apagado S 11:00: não mostrada [não verificado]
+col829  11/11 G3: N; batida no marco apagado S 14:40: não mostrada [não verificado]
+col369  12/11 G3: N; batida no marco apagado S 12:00: não mostrada [não verificado]
+col224  28/10 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col469  01/11 G4: N; batida no marco apagado E 19:00: não mostrada [não verificado]
+col924  11/11 G4: N; batida no marco apagado E 19:00: não mostrada [não verificado]
+col631  03/11 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col988  31/10 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col988  03/11 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col836  04/11 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col1000 03/11 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col1000 13/11 G4: N; batida no marco apagado E 13:00: não mostrada [não verificado]
+col962  05/11 G4: N; batida no marco apagado E 18:00: não mostrada [não verificado]
+col962  09/11 G4: N; batida no marco apagado E 18:00: não mostrada [não verificado]
+col962  16/11 G4: N; batida no marco apagado E 18:00: não mostrada [não verificado]
+col991  09/11 G4: N; batida no marco apagado E 17:00: não mostrada [não verificado]
+col991  11/11 G4: N; batida no marco apagado E 17:00: não mostrada [não verificado]
+col787  30/10 G5: N; batida nos marcos apagados E 08:00 e E 13:00: não mostrada [não verificado]
+```
+
+Por grupo, a resposta à pergunta “a grade vê zero faltantes?” é **não**: G1 0/7, G2 0/3, G3 0/3, G4 0/14 e G5 0/1. Em nenhum grupo a saída identifica um passo que tenha ocupado o marco apagado; logo não é possível atribuir essa suposta ocupação a `escala/utils.py` ou a outro sítio. [não verificado]
+
+O código desta cópia distingue os possíveis sítios, sem provar qual ramo executou em cada caso:
+
+- O casamento em `_match_marcos` pode usar alinhamento por papel ou a DP, produzindo célula `missing` quando não há par ([utils.py:595](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/escala/utils.py:595), [utils.py:622](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/escala/utils.py:622), [utils.py:639](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/escala/utils.py:639)).
+- Na lavratura, `lampadas_do_dia` normalmente copia a célula correspondente; existe também um ramo de proximidade quando a chave do DNA não está na régua. A saída fornecida não demonstra que esse ramo tenha ocupado qualquer marco destes dias ([cartorio.py:656](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/services/cartorio.py:656), [cartorio.py:680](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/services/cartorio.py:680)). [não verificado]
+- O leitor transforma as lâmpadas da ata em células, copiando luz e tipo real e derivando `missing` de `acesa`; esse trecho não casa batidas ([leitor_celula.py:114](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/escala/services/leitor_celula.py:114)).
+
+Há batidas com tipo diferente do marco casado em col735 e nos col583 e col829; a saída as associa a **outros marcos**, não aos indicados como faltantes. Em col369 e col787, há batidas explicitamente marcadas `NENHUM`. [não verificado]
 
 ## 18/11 17:10 · sessao 82ae805f088e · B4-OLHA-O-RESET · verificador · origem=Code
 
@@ -282,211 +386,4 @@ A cópia atual já usa `pergunta_respondida` na partição do app, embora o brie
 
 O corte preserva os nove casos sem porta e reconhece a conservação de passivo pendente; o estoque de competência entregue depende de `!` próprio. [CORTES.md:560](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:560), [CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561), [LEIS.md:151](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:151). Efeito efetivo de implementação futura sobre exportada ou dinheiro: [não verificado].
 
-## 18/11 16:28 · sessao 229f50c5c2fd · - · - · origem=Ronald (tmux)
-
-Verifiquei os ramos do juiz e da leitura por ato e enviei os achados ao agente principal. [app/chamados/services/tarefa_do_dia.py:142](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:142), [app/chamados/models.py:4295](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4295).
-
-## 18/11 16:28 · sessao 67b226359c3b · - · - · origem=Ronald (tmux)
-
-- `F5-L1-VALE-L130-1811` consta como vigente e determina resposta vazia pendente no app, com porta do colaborador. [app/docs/CORTES.md:560](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:560)
-- `F5-DSTL1-RESPOSTAS-1811` consta como vigente e registra silêncio como histórico e absorção rejeitada como pendente; também registra a devolução do RED universal por causa de `passivo_sem_linha`. [app/docs/CORTES.md:561](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:561)
-- `L-130` consta em `LEIS.md`; determina que reabrir ou ressuscitar zera o par de resposta e ressalva o tratamento da reabertura compensadora da ressuscitação na fila. [app/docs/LEIS.md:151](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:151)
-- A busca pelo nome exato `E4-EXPAND-CONTRACT` em `CORTES.md` e `LEIS.md` não encontrou o aval nominal. `LEIS.md` registra a L-127 sobre expand-contract em 09/11, mas isso não comprova o texto nominal de migração de leitores. [app/docs/LEIS.md:148](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:148)
-
-## 18/11 16:23 · sessao 066df091ce4e · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-**Parecer:** o resumo agrega campos já lavrados, sem recalcular a carga nem consultar relógio. O diff não altera a ordenação existente. Os três testes têm asserções que podem falhar, mas sua execução e a renderização efetiva não foram verificadas. A cópia disponível não tem metadados Git; a identidade do commit informada no pedido é **[não verificado]**. ([cadastro_realidade.py:788](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:788), [test_escala_nao_descreve.py:244](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/tests/test_escala_nao_descreve.py:244))
-
-1. **Autoridade e derivação.** `resumo_da_carga` faz uma agregação nova para apresentação: filtra linhas com carga positiva, soma as cargas, toma a menor data não nula e conta cargas `None`. Ela lê as linhas prontas; não mede órfãs, não chama juiz nem lê relógio. Não identifiquei segundo juiz para a carga nesse trecho. ([cadastro_realidade.py:796](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:796))
-
-   A autoridade da medida é a lavra: o escritor soma os comprimentos de `ata.orfas` das células na janela e grava, juntos, o total e o início da janela. Esse início não é a data da primeira órfã. A janela existente consulta `competencia_entregue` e vai até ontem; isso pertence ao escritor preexistente. `lista` lê o relógio em sua borda se não receber `agora`, e o PDF já lia o seu para a data de geração; o resumo novo não acrescenta leitura de relógio. ([esmeril_espelho.py:79](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:79), [esmeril_espelho.py:130](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:130), [esmeril_espelho.py:233](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:233), [esmeril_espelho.py:38](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:38), [cadastro_realidade.py:868](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:868), [cadastro_realidade.py:1167](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:1167))
-
-2. **Escritores e leitores.** O escritor usa uma chave por colaborador: célula na janela com zero órfãs produz `0`; ausência de célula deixa a pessoa fora dos mapas. `lista` transforma a ausência em `None`, converte o início ISO em `date` e cria uma linha por colaborador incluído, após filtro de empresa e presença de assinatura. Portanto, X conta **linhas da lista**, não todas as pessoas medidas na frota; Y soma batidas dessas linhas e N conta linhas com carga `None`. A frase chama X de colaboradores, coerente com a construção de uma linha por `cid`. ([esmeril_espelho.py:99](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:99), [esmeril_espelho.py:224](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:224), [cadastro_realidade.py:960](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:960), [cadastro_realidade.py:977](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:977), [cadastro_realidade.py:1030](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:1030))
-
-   `lista` escreve `linhas` e `carga_resumo`; tela e PDF leem a frase e a mesma sequência `linhas`. O censo dos chamadores de produção encontrados mostra a view, o vigia e dois comandos: o vigia e os comandos usam `postos`, que continua disponível e ordenado como antes; a view passa diretamente a saída de `lista` ao PDF. Não encontrei quebra nesses consumidores por chave nova ou ordem. Os testes encontrados que chamam `pdf_bytes` também obtêm os dados de `lista`. Chamadores dinâmicos ou externos à cópia: **[não verificado]**. ([cadastro_realidade.py:1053](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:1053), [cadastro_x_realidade.html:17](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/templates/escala/cadastro_x_realidade.html:17), [cadastro_x_realidade.html:25](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/templates/escala/cadastro_x_realidade.html:25), [cadastro_realidade.py:1184](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:1184), [views.py:521](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/views.py:521), [vigia_fio.py:190](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/chamados/services/vigia_fio.py:190), [fechar_avisos_regua_na_lista.py:27](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/management/commands/fechar_avisos_regua_na_lista.py:27), [fechar_chamados_vinculo_na_lista.py:31](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:31), [test_cxr_tela_le_o_motor.py:126](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/tests/test_cxr_tela_le_o_motor.py:126))
-
-3. **Os três testes.** Pela leitura estática, nenhum passa vazio: todos exigem valores concretos. Não executei mutações nem testes. ([test_escala_nao_descreve.py:244](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/tests/test_escala_nao_descreve.py:244))
-
-   - **Duas datas:** fica vermelho se escolher a maior data, incluir a data mais antiga da carga zero, ou alterar os totais ou a frase esperada. ([test_escala_nao_descreve.py:244](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/tests/test_escala_nao_descreve.py:244))
-   - **Uma sem medida:** fica vermelho se a contagem ou soma incluir essa linha, se N deixar de ser 1, ou se tela/PDF deixarem de apresentar a frase calculada. A verificação da tela procura a frase em qualquer ponto do HTML; a do PDF exige o segundo `Paragraph`. ([test_escala_nao_descreve.py:256](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/tests/test_escala_nao_descreve.py:256))
-   - **Todas sem medida:** fica vermelho se X/Y não forem zero, N não for seis, ou a frase contiver `desde`. Esse é o terceiro caso autorizado pelo aval fornecido; o teste não cobre carga positiva sem data. ([test_escala_nao_descreve.py:263](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/tests/test_escala_nao_descreve.py:263); aval no texto fornecido, numeração de arquivo:linha **[não verificado]**)
-
-4. **L-040.** O texto novo descreve a ordenação por carga e acompanha o corte END-L3. O código detalha carga decrescente, `None` por último e desempate por nome; a L-040 não explicita esses detalhes. Com mesmo nome e carga, a ordenação estável conserva a ordem de entrada; não há outro desempate explícito. Não identifiquei contradição nas linhas de LEIS/CORTES examinadas. O registro de pendências da L-040 continua a declarar limitações sobre destino e prova do PDF, sem contradizer a ordenação. ([LEIS.md:88](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/docs/LEIS.md:88), [CORTES.md:536](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/docs/CORTES.md:536), [cadastro_realidade.py:1055](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:1055), [LEIS.md:170](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/docs/LEIS.md:170))
-
-5. **Alcance e template.** O diff fornecido modifica lei, serviço de apresentação, teste e template; não modifica diretamente folha, export, retenção, `DiaPago`, dinheiro, escala/vínculo gravado ou `motor_calculo_v2`. A janela preexistente do escritor *consulta* export, conforme item 1; efeitos de produção ou simulação: **[não verificado]**. ([cadastro_realidade.py:788](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:788), [esmeril_espelho.py:51](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/ponto/services/esmeril_espelho.py:51))
-
-   Os comentários examinados do template usam `{% comment %}`, inclusive o comentário antigo que ainda descreve ordem por posto; não há comentário HTML novo no diff. A chave ausente é um risco: o template acessa `dados.carga_resumo.frase` sem guarda e a configuração base não define `string_if_invalid`; o comportamento efetivo com configurações de ambiente é **[não verificado]**. Já o PDF usa indexação obrigatória e falharia com chave ausente. A view normal recebe a chave de `lista` quando esta retorna dados. ([cadastro_x_realidade.html:2](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/templates/escala/cadastro_x_realidade.html:2), [cadastro_x_realidade.html:17](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/templates/escala/cadastro_x_realidade.html:17), [cadastro_x_realidade.html:22](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/templates/escala/cadastro_x_realidade.html:22), [base.py:70](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/config/settings/base.py:70), [cadastro_realidade.py:1184](/home/ronald/codex_ws/550c810b6a1a83e609df3e2d71af54901363a4c1/app/escala/services/cadastro_realidade.py:1184))
-
-## 18/11 16:22 · sessao 42ba92f0a4d4 · FILA-CODEX-1811 · leitura · origem=Code
-
-**Resultado:** o universo somado confere nas duas competências; o BATE calculado é **95,934959% em 10/2026** e **94,881776% em 11/2026**. [não verificado]
-
-Todas as tabelas abaixo derivam exclusivamente da transcrição fornecida, identificada como anexo `s.r`, partes 1 a 6. A origem, a execução e a transcrição não foram verificadas em arquivo. Em cada soma, os seis valores estão na ordem das partes **1, 2, 3, 4, 5, 6**. As horas foram somadas a partir dos valores completos de `PARCIAL` e `PARCIAL_TOTAL`, sem arredondamento prévio. [não verificado]
-
-### 10/2026
-
-Janela informada: `2026-09-21` a `2026-10-20`. Universo: **110 + 109 + 102 + 96 + 107 + 100 = 624**, igual ao `UNIVERSO` informado de **624**. [não verificado]
-
-| Chave de [1] | Conta por parte | Soma |
-|---|---:|---:|
-| dias_comparados | 1181 + 1268 + 1236 + 1235 + 1285 + 1298 | 7503 |
-| bate_ate_10min | 1141 + 1227 + 1169 + 1188 + 1215 + 1258 | 7198 |
-| esp_zero_e6_trabalho | 1 + 2 + 12 + 6 + 9 + 5 | 35 |
-| e6_zero_esp_trabalho | 3 + 4 + 6 + 1 + 3 + 2 | 19 |
-| diverge_10_60 | 11 + 7 + 2 + 5 + 3 + 1 | 29 |
-| diverge_acima_60 | 25 + 28 + 47 + 35 + 55 + 32 | 222 |
-| dia_batida_impar | 33 + 63 + 65 + 54 + 78 + 55 | 348 |
-| impar_que_BATE | 15 + 33 + 23 + 21 + 29 + 27 | 148 |
-| impar_que_DIVERGE | 18 + 30 + 42 + 33 + 49 + 28 | 200 |
-| impar_dentro_da_faixa | 15 + 24 + 33 + 29 + 42 + 25 | 168 |
-| impar_FORA_da_faixa | 3 + 6 + 9 + 4 + 7 + 3 | 32 |
-| impar_no_conjunto_do_dia | 18 + 30 + 42 + 32 + 49 + 28 | 199 |
-| impar_SO_POR_CORTE_do_oraculo | 0 + 0 + 0 + 1 + 0 + 0 | 1 |
-| dia_sem_linha_no_espelho | 0 + 0 + 0 + 0 + 0 + 0 | 0 |
-| dia_sem_lavratura_no_espelho | 1726 + 1563 + 1421 + 1275 + 1533 + 1396 | 8914 |
-| dia_isento_ou_ausencia | 316 + 353 + 342 + 315 + 275 + 277 | 1878 |
-| dia_sem_trabalho_ambos | 34 + 24 + 22 + 18 + 45 + 11 | 154 |
-| esp_desconta_janela_declarada | 43 + 62 + 39 + 37 + 72 + 18 | 271 |
-| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 | 0 |
-
-**BATE:** 7198 ÷ 7503 × 100 = **95,934959%**, aproximadamente **95,93%**. [não verificado]
-
-| Dono | Medida | Conta por parte | Soma |
-|---|---|---:|---:|
-| ESTRUTURA | dia-colab | 10 + 5 + 3 + 3 + 3 + 2 | 26 |
-| ESTRUTURA | horas | 9.116283817777775 + 11.084600277777778 + 15.209666666666665 + 15.566319135833336 + 29.23270916666667 + 8.15 | 88.359579064722224 |
-| ESTRUTURA | colabs | 3 + 3 + 3 + 3 + 3 + 1 | 16 |
-| CADASTRO | dia-colab | 10 + 8 + 7 + 23 + 19 + 8 | 75 |
-| CADASTRO | horas | 38.355213611111104 + 20.397520712222224 + 35.88209174 + 107.60888681222221 + 52.325450786111105 + 40.4628 | 295.031963661666643 |
-| CADASTRO | colabs | 3 + 6 + 4 + 8 + 8 + 2 | 31 |
-| BATIDA | dia-colab | 20 + 28 + 57 + 21 + 48 + 30 | 204 |
-| BATIDA | horas | 110.21011656222223 + 136.0465618775 + 297.66026132194446 + 97.03832052916665 + 197.29829774694443 + 127.75368121722221 | 966.007239254999980 |
-| BATIDA | colabs | 13 + 18 + 24 + 16 + 26 + 17 | 114 |
-| **TOTAL** | **dia-colab** | **40 + 41 + 67 + 47 + 70 + 40** | **305** |
-| **TOTAL** | **horas** | **157.681613991111109 + 167.528682867500002 + 348.752019728611125 + 220.213526477222196 + 278.856457699722205 + 176.36648121722221** | **1349.398781981388847** |
-| **TOTAL** | **colabs, união** | **17 + 23 + 29 + 25 + 29 + 20** | **143** |
-
-O total de colabs usa a união informada em `PARCIAL_TOTAL` de cada parte; não é a soma dos colabs das três classes, pois um colaborador pode aparecer em mais de uma classe. A soma entre partes usa a condição de universos disjuntos dada no pedido. [não verificado]
-
-### 11/2026
-
-Janela informada: `2026-10-21` a `2026-11-20`. Universo: **99 + 103 + 101 + 95 + 103 + 99 = 600**, igual ao `UNIVERSO` informado de **600**. [não verificado]
-
-| Chave de [1] | Conta por parte | Soma |
-|---|---:|---:|
-| dias_comparados | 1106 + 1161 + 1158 + 1069 + 1236 + 1206 | 6936 |
-| bate_ate_10min | 1039 + 1098 + 1099 + 1036 + 1146 + 1163 | 6581 |
-| esp_zero_e6_trabalho | 14 + 3 + 6 + 8 + 5 + 3 | 39 |
-| e6_zero_esp_trabalho | 6 + 4 + 7 + 0 + 4 + 4 | 25 |
-| diverge_10_60 | 10 + 3 + 3 + 0 + 6 + 2 | 24 |
-| diverge_acima_60 | 37 + 53 + 43 + 25 + 75 + 34 | 267 |
-| dia_batida_impar | 55 + 85 + 58 + 54 + 98 + 64 | 414 |
-| impar_que_BATE | 20 + 31 + 20 + 29 + 37 + 33 | 170 |
-| impar_que_DIVERGE | 35 + 54 + 38 + 25 + 61 + 31 | 244 |
-| impar_dentro_da_faixa | 25 + 49 + 30 + 21 + 52 + 26 | 203 |
-| impar_FORA_da_faixa | 10 + 5 + 8 + 4 + 9 + 5 | 41 |
-| impar_no_conjunto_do_dia | 35 + 53 + 37 + 24 + 61 + 30 | 240 |
-| impar_SO_POR_CORTE_do_oraculo | 0 + 1 + 1 + 1 + 0 + 1 | 4 |
-| dia_sem_linha_no_espelho | 198 + 206 + 202 + 190 + 206 + 198 | 1200 |
-| dia_sem_lavratura_no_espelho | 1426 + 1521 + 1477 + 1348 + 1402 + 1343 | 8517 |
-| dia_isento_ou_ausencia | 261 + 220 + 217 + 280 + 227 + 288 | 1493 |
-| dia_sem_trabalho_ambos | 40 + 27 + 24 + 27 + 38 + 23 | 179 |
-| esp_desconta_janela_declarada | 38 + 58 + 53 + 31 + 84 + 11 | 275 |
-| esp_lido_pelo_pago_h | 0 + 0 + 0 + 0 + 0 + 0 | 0 |
-
-**BATE:** 6581 ÷ 6936 × 100 = **94,881776%**, aproximadamente **94,88%**. [não verificado]
-
-| Dono | Medida | Conta por parte | Soma |
-|---|---|---:|---:|
-| ESTRUTURA | dia-colab | 10 + 3 + 7 + 1 + 9 + 3 | 33 |
-| ESTRUTURA | horas | 30.40733995027778 + 12.1 + 21.8227 + 9.770812222222222 + 60.54144059916667 + 10.610499166666667 | 145.252791938333339 |
-| ESTRUTURA | colabs | 4 + 3 + 6 + 1 + 7 + 2 | 23 |
-| CADASTRO | dia-colab | 14 + 16 + 10 + 4 + 31 + 7 | 82 |
-| CADASTRO | horas | 30.370979816666665 + 52.48679821444445 + 35.92035111111112 + 16.358279375833334 + 104.14722180555555 + 65.7971625 | 305.080792823611119 |
-| CADASTRO | colabs | 4 + 7 + 6 + 2 + 11 + 5 | 35 |
-| BATIDA | dia-colab | 43 + 44 + 42 + 28 + 50 + 33 | 240 |
-| BATIDA | horas | 284.70216034805554 + 212.917450995 + 209.5975820575 + 170.27799270138888 + 255.3167716316666 + 166.71064350722222 | 1299.522601240833240 |
-| BATIDA | colabs | 17 + 22 + 22 + 13 + 25 + 22 | 121 |
-| **TOTAL** | **dia-colab** | **67 + 63 + 59 + 33 + 90 + 43** | **355** |
-| **TOTAL** | **horas** | **345.480480114999985 + 277.50424920944445 + 267.34063316861112 + 196.407084299444436 + 420.00543403638882 + 243.118305173888887** | **1749.856186002777698** |
-| **TOTAL** | **colabs, união** | **21 + 29 + 28 + 15 + 35 + 26** | **154** |
-
-### Estado informado pelas partes
-
-`TRATADA_LOCAL` abaixo mostra tanto o número de linhas quanto a soma das contagens impressas nessas linhas. Os dados de execução são por parte, abrangendo as duas competências, e não permitem separá-los por competência. [não verificado]
-
-| Parte | rc_sombra | `INCOMPLETO` no texto | `TRATADA_LOCAL`: linhas / soma das contagens | Erros que atravessaram frame |
-|---:|---:|---|---:|---|
-| 1 | 0 | Não aparece | 27 / 849755 | Nenhuma linha explícita; contagem [não verificado] |
-| 2 | 0 | Não aparece | 27 / 924554 | Nenhuma linha explícita; contagem [não verificado] |
-| 3 | 0 | Não aparece | 28 / 887957 | Nenhuma linha explícita; contagem [não verificado] |
-| 4 | 0 | Não aparece | 27 / 832559 | Nenhuma linha explícita; contagem [não verificado] |
-| 5 | 0 | Não aparece | 26 / 938620 | Nenhuma linha explícita; contagem [não verificado] |
-| 6 | 0 | Não aparece | 27 / 824745 | Nenhuma linha explícita; contagem [não verificado] |
-
-O campo separado `erros_no_espelho` é **0 em cada parte e em cada competência**; isso não estabelece, por si só, a contagem de erros que atravessaram frame. [não verificado]
-
-As linhas `SOMA` transcritas informam os seguintes valores e resultados. Cada célula corresponde, respectivamente, a **dias / horas / COLABS_UNIAO**, todos com `True`. [não verificado]
-
-| Parte | 10/2026 | 11/2026 |
-|---:|---|---|
-| 1 | 40 True / 157.681613991111109 True / 17 True | 67 True / 345.480480114999985 True / 21 True |
-| 2 | 41 True / 167.528682867500002 True / 23 True | 63 True / 277.50424920944445 True / 29 True |
-| 3 | 67 True / 348.752019728611125 True / 29 True | 59 True / 267.34063316861112 True / 28 True |
-| 4 | 47 True / 220.213526477222196 True / 25 True | 33 True / 196.407084299444436 True / 15 True |
-| 5 | 70 True / 278.856457699722205 True / 29 True | 90 True / 420.00543403638882 True / 35 True |
-| 6 | 40 True / 176.36648121722221 True / 20 True | 43 True / 243.118305173888887 True / 26 True |
-
-Não há linhas de lista de dias nem itens identificados como `ESPELHO-VERDADE` nas seis saídas transcritas; portanto, não há linhas desse tipo a agregar. [não verificado]
-
-## 18/11 16:22 · sessao 4993f7f07443 · REVISAO-R1600 · sonda · origem=Code
-
-A sonda **não foi executada nesta sessão**: o arquivo `f5_213.py` não foi localizado na cópia pesquisada e o enunciado informa que não há acesso ao banco ou aos logs. Abaixo estão as linhas fornecidas, reproduzidas literalmente; não pude verificar sua execução. [não verificado]
-
-```text
-sonda_leitura: f5_213.py [fafed29561f61f3f] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-DIVERGENTES_FORA_DOS_40 213
-CLASSE_ULT silencio 213
-LEITURA silencio|proj_r_nulo|leitura_resp_False 213
-FIM_SONDA
-agora 2026-11-18T19:21:25.416210+00:00
-DIVERGE espera_texto proj x ato 252
-DIVERGE particao(r None) x ato 1839
-V proj x ult=VALIDACAO diverge (so com decisao) 42
-ato_espera_texto 22734
-com decisao e particao diverge 252
-com decisao: r None mas ult=RESPOSTA c/ texto 0
-com decisao: r setado mas ult RECUSA/REABERTURA 39
-proj_pendente(r None) 21321
-sem_decisao 25304
-universo_disputa_aberta 26813
-perguntas(todas) com >1 RESPOSTA (historico:99 mostra 1) 178
-```
-
-O dado fornecido contém `FIM_SONDA` e informa uma única `CLASSE_ULT`: **silencio, 213**. [não verificado]
-
-Para essa classe, o par produzido por `_pela_decisao`, quando o último ato considerado é `SILENCIO` e a pergunta não está no conjunto `passivo`, já é **`('silencio_decidido', [])`**, correspondente à classe **(a) SILENCIO**. A F5 descrita não mudaria esse par do juiz: ele já é escolhido pelo último ato, não por `respondida_em` da projeção. A montagem usa esse retorno para preencher a instância quando chega a essa pergunta. [tarefa_do_dia.py:154](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:154), [tarefa_do_dia.py:176](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:176), [tarefa_do_dia.py:332](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:332).
-
-A ressalva é que o dado raspado não mostra se cada uma das 213 perguntas entra em `passivo` nem se a montagem chega ao ramo da pergunta. Em `passivo`, o retorno é `('passivo_sem_linha', None)`; outros ramos da montagem podem decidir a instância antes. Portanto, não é possível afirmar o par efetivamente exposto para cada uma das 213. [tarefa_do_dia.py:154](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:154), [tarefa_do_dia.py:288](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:288). A leitura do ato também incorpora linhas faltantes da projeção antes de calcular a resposta vigente, de modo que `leitura_resp_False` por si só não informa o par da tarefa. [models.py:4299](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4299), [models.py:4308](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4308).
-
-## 18/11 16:21 · sessao 084323277230 · REVISAO-R1600 · sonda · origem=Code
-
-A saída fornecida contém `FIM_SONDA` e não mostra erro. Não executei a sonda: o texto fornecido traz sua saída raspada, e não há acesso ao banco ou aos logs de produção. [não verificado] [nao verificado]
-
-Literais da saída fornecida: [não verificado]
-
-```text
-LIMBO_AGORA 0 IGUAL_MEDIDAS False
-COMANDO_RECUSA True
-PG 3996 resp_em_nulo False texto True leitura 2026-07-30T14:50:45.071027-03:00|True atos []
-  CARIMBAVEL 3996 SEM_NOTA
-PG 3997 resp_em_nulo False texto True leitura 2026-07-30T14:50:54.921690-03:00|True atos []
-  CARIMBAVEL 3997 SEM_NOTA
-```
-
-**Com essa saída, `--apply` não grava nada:** o conjunto do limbo difere de `MEDIDAS`, e o comando retorna antes de chegar às chamadas de escrita. [curar_perguntas_em_limbo.py:46](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/management/commands/curar_perguntas_em_limbo.py:46) A saída também indica que ambas já têm `respondida_em` e estão `SEM_NOTA`; a porta de carimbo não age em pergunta já carimbada. [não verificado] [disputa_emissao.py:1701](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/disputa_emissao.py:1701)
-
-**No contrafactual pedido, a resposta lida terminaria igual à projeção gravada**, considerando os `atos []` informados e que o carimbo fosse efetivamente gravado sem outros atos posteriores. [não verificado] A porta registra um ato de resposta com o mesmo instante e texto da projeção; `leitura` processa esse ato e devolve seu instante e texto. [disputa_emissao.py:1705](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/disputa_emissao.py:1705) [models.py:4308](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:4308)
-
-_7046 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7052 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
