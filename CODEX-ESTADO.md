@@ -1,7 +1,210 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 11:55** · publicado em **18/11/2026 11:56** (UTC-3)
+> Ultima resposta processada: **18/11/2026 11:59** · publicado em **18/11/2026 12:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 11:59 · sessao 7dd20f0f2148 · S6-ORACULO-FERIADO · sonda · origem=Code
+
+[Não verificado]
+
+```text
+=== SOMBRA (sombra_db, leitor) 18/11 11:58:07 ===
+sonda_leitura: sonda.py [b0295e9b96b03c82] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+VERSOES_NA_COMP ['motor', 'oraculo']
+ORACULO_COM_HE100FER>0_total_linhas 95
+ORACULO_COM_HE100FER>0_de_colab_com_escala_intermitente 11
+POR_CICLO_NO_DIA x motor {(('intermitente',), 'motor_he100fer=0'): 7, (('6x1',), 'motor_he100fer>0'): 79, (('12x36', '6x1'), 'motor_he100fer>0'): 2, (('personalizado',), 'motor_he100fer>0'): 4, (('6x1', 'intermitente'), 'motor_he100fer>0'): 2, (('12x36',), 'motor_he100fer=0'): 1}
+INTERMITENTE_NO_DIA 9 datas ['2026-11-02', '2026-11-15']
+NAO_INTERMITENTES_com_he100fer>0_no_oraculo 84
+--- col85 2026-11-02
+  ORACULO linha: trab=11.9 he100fer=11.9 he100=11.9 he50=0.0 folga=0.0
+  MOTOR  linha: trab=11.9 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=11.897632222222223 extras_100=0.0 extras_50=0.0 trab=11.9 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=11.9 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=78.2
+  CONTRAFATO leitor com versao=oraculo: pago=11.897632222222223 extras_100=11.9
+--- col146 2026-11-02
+  ORACULO linha: trab=13.5 he100fer=13.5 he100=13.5 he50=0.0 folga=0.0
+  MOTOR  linha: trab=13.5 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=13.50255722222222 extras_100=0.0 extras_50=0.0 trab=13.5 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=13.5 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=53.58
+  CONTRAFATO leitor com versao=oraculo: pago=13.50255722222222 extras_100=13.5
+--- col346 2026-11-02
+  ORACULO linha: trab=11.65 he100fer=11.65 he100=11.65 he50=0.0 folga=0.0
+  MOTOR  linha: trab=11.65 he100fer=11.65 he100=11.65 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=11.646084444444446 extras_100=11.65 extras_50=0.0 trab=11.65 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=11.65 he100=11.65 he50=0.0 trab=11.65 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (11.65, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=23.17 he100=23.17 trab=81.37
+  CONTRAFATO leitor com versao=oraculo: pago=11.646084444444446 extras_100=11.65
+--- col346 2026-11-15
+  ORACULO linha: trab=11.52 he100fer=11.52 he100=11.52 he50=0.0 folga=0.0
+  MOTOR  linha: trab=11.52 he100fer=11.52 he100=11.52 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=11.521407777777776 extras_100=11.52 extras_50=0.0 trab=11.52 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=11.52 he100=11.52 he50=0.0 trab=11.52 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (11.52, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=23.17 he100=23.17 trab=81.37
+  CONTRAFATO leitor com versao=oraculo: pago=11.521407777777776 extras_100=11.52
+--- col365 2026-11-02
+  ORACULO linha: trab=12.0 he100fer=12.0 he100=12.0 he50=0.0 folga=0.0
+  MOTOR  linha: trab=12.0 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=12.0 extras_100=0.0 extras_50=0.0 trab=12.0 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=12.0 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=80.16
+  CONTRAFATO leitor com versao=oraculo: pago=12.0 extras_100=12.0
+--- col365 2026-11-15
+  ORACULO linha: trab=11.04 he100fer=11.04 he100=11.04 he50=0.0 folga=0.0
+  MOTOR  linha: trab=11.04 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=11.036849166666666 extras_100=0.0 extras_50=0.0 trab=11.04 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=11.04 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=80.16
+  CONTRAFATO leitor com versao=oraculo: pago=11.036849166666666 extras_100=11.04
+--- col830 2026-11-02
+  ORACULO linha: trab=12.07 he100fer=12.07 he100=12.07 he50=0.0 folga=0.0
+  MOTOR  linha: trab=12.07 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=12.066969811944444 extras_100=0.0 extras_50=0.0 trab=12.07 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=12.07 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=105.07
+  CONTRAFATO leitor com versao=oraculo: pago=12.066969811944444 extras_100=12.07
+--- col830 2026-11-15
+  ORACULO linha: trab=11.89 he100fer=11.89 he100=11.89 he50=0.0 folga=0.0
+  MOTOR  linha: trab=11.89 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=11.885994444444444 extras_100=0.0 extras_50=0.0 trab=11.89 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=11.89 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=105.07
+  CONTRAFATO leitor com versao=oraculo: pago=11.885994444444444 extras_100=11.89
+--- col975 2026-11-02
+  ORACULO linha: trab=3.96 he100fer=3.96 he100=3.96 he50=0.0 folga=0.0
+  MOTOR  linha: trab=3.96 he100fer=0.0 he100=0.0 he50=0.0 folga=0.0
+  LEITOR espelho/calendario/PDF/app (linhas_do_periodo->pago_do_dia, rubricas_do_dia): pago=3.9582752777777777 extras_100=0.0 extras_50=0.0 trab=3.96 lavrada=True
+  LEITOR extrato/gestao_he (soma_do_periodo): he100fer=0.0 he100=0.0 he50=0.0 trab=3.96 sem_lavr=False sem_apur=False
+  LEITOR gestao_he he_lavrada_do_colab: (0.0, '')
+  LEITOR cartao-PDF/porta_export (soma_da_competencia, competencia inteira): he100fer=0.0 he100=0.0 trab=32.87
+  CONTRAFATO leitor com versao=oraculo: pago=3.9582752777777777 extras_100=3.96
+rc_sombra=0
+```
+
+## 18/11 11:58 · sessao 5f4761714ba9 · S6-ORACULO-FERIADO · leitura · origem=Code
+
+A lavra `versao='oraculo'` **pode chegar a fotos, arquivos de reversão, diffs e contagens que não filtram versão**. Nos caminhos de tela, PDF, API e relatório rastreados abaixo, as chamadas usam o padrão `motor`; o TXT Dominio lê `FechamentoMensal`. A existência ou o conteúdo de linhas em produção é **[não verificado]**. [app/ponto/models.py:322](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:322) · [app/chamados/services/foto_e4b.py:289](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:289) · [app/ponto/services/dia_pago.py:833](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:833) · [app/folha/export.py:719](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:719)
+
+O campo `versao` documenta `motor` e `oraculo`, com default `motor`, mas é um `CharField` sem `choices`: esses são os dois valores documentados, não uma enumeração fechada pelo modelo. A constraint inclui `versao`, portanto **não escolhe uma única versão** para uma consulta sem filtro; o modelo não declara manager com filtro de versão. [app/ponto/models.py:303](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:303) · [app/ponto/models.py:322](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:322) · [app/ponto/models.py:382](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:382)
+
+Para abreviar a tabela: **feriado** significa `horas_extras_100_feriado`; **CAMPOS_DIA** são todas as rubricas e os três campos de minutos, incluindo feriado; **CAMPOS** acrescenta reflexo DSR e saldo de banco. “Oráculo possível” significa que o código aceita ou inclui essa versão, **condicionado à existência das linhas**, não que elas existam em produção. [app/ponto/services/dia_pago.py:33](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:33)
+
+### Consultas ORM e seus destinos
+
+| Leitura ORM e função | Versão e campos efetivamente usados | Destino; caminho do oráculo |
+|---|---|---|
+| [dia_pago.py:466](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:466), `retratar_exportada` | `versao` argumento, default `motor` ([linha 405](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:405)); `data` e minutos abonados, previstos e realizados. Não usa feriado no cálculo. | Atualiza ou cria retrato de grade ([linha 481](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:481), [linha 538](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:538)). **Oráculo possível** pelo `--versao` passado pelo comando ([lavrar_dias_pagos.py:52](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/lavrar_dias_pagos.py:52), [linha 123](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/lavrar_dias_pagos.py:123)). |
+| [dia_pago.py:504](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:504), `retratar_exportada` | Mesmo argumento; linha de ajuste, reflexo DSR e saldo de banco. | Retrato/escrita do ajuste ([linha 518](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:518)). **Oráculo possível** pela mesma opção do comando. |
+| [dia_pago.py:559](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:559), `soma_da_competencia` | `versao` argumento, default `motor`; `Sum` de **CAMPOS**, inclusive feriado ([linha 562](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:562)). | PDF/cartão usa rubricas selecionadas ([cartao_pela_celula.py:143](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/cartao_pela_celula.py:143), [linha 173](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/cartao_pela_celula.py:173)); porta compara com fechamento/badge ([porta_export.py:267](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:267), [linha 388](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:388)). Esses chamadores usam `motor`; chamada explícita com `oraculo` é possível, mas destino produtivo assim **[não verificado]**. |
+| [dia_pago.py:588](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:588), `lavratura_sem_furo` | Argumento default `motor`; `exists` de `tipo` e `furo_apurado IS NULL`. | Vigia da porta ([porta_export.py:430](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:430)). Chamador rastreado usa `motor`; chamada explícita com outra versão é possível. |
+| [dia_pago.py:645](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:645), `apurar_furo_da_exportada` | Argumento default `motor`; lê `pk`, `data`, `furo_apurado`, `lavrado_em` ([linha 649](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:649)). | Medida/reversão e atualização de furo ([linha 651](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:651), [linha 671](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:671)). **Oráculo possível**: comando escolhe versões observadas com nulos ([apurar_furo_da_exportada.py:99](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/apurar_furo_da_exportada.py:99)). |
+| [dia_pago.py:698](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:698), `dias_com_abono` | Argumento default `motor`; conta dias com `minutos_abonados > 0`. | Contagem no resumo do cartão/PDF ([cartao_pela_celula.py:190](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/cartao_pela_celula.py:190)). Chamador usa `motor`; outra versão pode ser passada à função. |
+| [dia_pago.py:784](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:784), `soma_do_periodo` | Argumento default `motor` ([linha 752](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:752)); agrega cada campo de **CAMPOS_DIA**, incluindo feriado. | Extrato exibido seleciona trabalhadas, noturnas, HE50, HE100 e atraso ([views.py:487](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/views.py:487), [linha 520](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/views.py:520), [template:70](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/templates/relatorios/extrato_parcial.html:70)); gestão e autorização usam HE50 + HE100 ([gestao_he.py:256](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:256), [autorizacao_he_periodo.py:174](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/autorizacao_he_periodo.py:174), [dia_pago.py:749](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:749)); comando usa em diff ([diff_extrato_parcial.py:103](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/management/commands/diff_extrato_parcial.py:103)). Chamadas citadas usam `motor`; destino produtivo com argumento `oraculo` **[não verificado]**. |
+| [dia_pago.py:810](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:810), `soma_do_periodo` | Mesmo argumento; `colaborador_id`, `mes`, `ano`, distintos; não lê feriado. | Classifica ausência de lavratura/apuração para os mesmos destinos ([linha 814](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:814)). Chamadas citadas usam `motor`; argumento `oraculo` é possível. |
+| [dia_pago.py:855](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:855), `linhas_do_periodo` | Argumento default `motor`; carrega linhas de dia completas. Consumidores efetivos estão na tabela seguinte. | Espelho, calendário e API chamam sem versão; portanto usam `motor` ([espelho.py:410](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:410), [calendario.py:319](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/services/calendario.py:319), [api/views.py:1449](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/api/views.py:1449)). Destino produtivo com argumento `oraculo` **[não verificado]**. |
+| [porta_export.py:75](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:75), `dias_fora_do_dia_pago` | Argumento default `motor`, ou mapa fornecido pelo chamador; lê data e campos de `pago_do_dia`, inclusive feriado como teste de presença. | Diff espelho × dia pago ([linha 107](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:107)). Chamador rastreado fornece mapa `motor` ([linha 588](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:588)); a interface também aceita `oraculo` ou outro mapa. |
+| [porta_export.py:284](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:284), `regua_das_linhas` | Literal `motor`; agrupa `versao_motor`, conta PK e obtém máximo de `lavrado_em` ([linha 285](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:285)). | Diagnóstico da régua da linha × badge ([linha 443](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:443)); **oráculo não passa pelo filtro**. |
+| [porta_export.py:588](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:588), `medir` | Literal `motor`; mapa por `data`, consumido por `pago_do_dia`. | Diff da porta ([linha 597](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:597)), persistido na métrica ([linha 779](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:779)); **oráculo não passa**. |
+| [porta_export.py:650](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:650), `medir` | Literal `motor`; `colaborador_id`. | Compõe universo da medida ([linha 658](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:658)); **oráculo não passa**. |
+| [foto_e4b.py:289](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:289), `foto_do_colaborador` | **Não filtra versão**; lê todos os campos concretos, inclusive feriado ([linha 247](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:247)). | Foto, diff e relato de campos numéricos ([linha 187](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:187)); comando imprime diff JSON ([backfill_fio_morto_e4b.py:404](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/management/commands/backfill_fio_morto_e4b.py:404)). **Sim, oráculo pode chegar** se houver linha. |
+| [apurar_furo_da_exportada.py:59](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/apurar_furo_da_exportada.py:59), `_universo` | **Não filtra versão**; lê `versao`, colaborador e `furo_apurado` ([linha 61](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/apurar_furo_da_exportada.py:61)). | Contagem por versão impressa ([linha 101](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/apurar_furo_da_exportada.py:101)). **Oráculo pode chegar**. |
+| [lavrar_dias_pagos.py:140](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/lavrar_dias_pagos.py:140), `handle` | Filtra argumento `--versao`, default `motor`; `count`, sem rubricas. | Contagem impressa ([linha 141](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/lavrar_dias_pagos.py:141)). **Oráculo possível** com `--versao oraculo` ([linha 52](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/lavrar_dias_pagos.py:52)). |
+
+### Destinos que consomem as linhas do período
+
+| Consumidor | Campos e destino | Oráculo |
+|---|---|---|
+| [espelho.py:410](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:410), serviço do espelho | `pago_do_dia` verifica rubricas incluindo feriado e calcula trabalhadas + folga trabalhada + `detalhe.folga_feriado_min`; não soma diretamente o campo feriado ([dia_pago.py:861](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:861), [linha 890](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:890)). `rubricas_do_dia` usa HE50, HE100, atraso, antecipada, noturnas, intra e trabalhadas ([linha 914](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:914)); exibição no [espelho.html:276](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/templates/ponto/espelho.html:276) e [PDF:902](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/pdf_espelho.py:902). | Chamada usa default `motor`; não chega por esse caminho. |
+| [calendario.py:319](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/services/calendario.py:319) | Usa `rubricas_do_dia` ([linha 689](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/services/calendario.py:689)) e entrega a linha e o indicador de lavra ao calendário ([linha 778](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/services/calendario.py:778)). | Default `motor`; não chega por esse caminho. |
+| [api/views.py:1449](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/api/views.py:1449), `api_espelho_v2` | Obtém horas do dia e exporta `horas_trabalhadas` e `dia_pago_lavrada` no payload ([linha 1531](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/api/views.py:1531), [linha 1546](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/api/views.py:1546)). | Default `motor`; não chega por esse caminho. |
+
+A soma consulta feriado separadamente, mas o extrato e o cartão selecionam `horas_extras_100` como total, sem acrescentar o subset de feriado outra vez. [app/relatorios/views.py:525](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/views.py:525) · [app/relatorios/cartao_pela_celula.py:177](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/cartao_pela_celula.py:177)
+
+No TXT Dominio, `eventos_do_fechamento` lê o feriado de **`FechamentoMensal`**, separa-o da HE100 normal e o transforma em evento; a geração consulta fechamentos e monta as linhas. Um caminho em que o valor de uma linha `DiaPago` `oraculo` alimente esse TXT é **[não verificado]**. [app/folha/export.py:420](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:420) · [app/folha/export.py:719](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:719) · [app/folha/export.py:730](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:730)
+
+### Scripts avulsos fora de `app/`
+
+Estes são leitores no código da cópia; sua execução em produção é **[não verificada]**.
+
+| Leitura e função | Versão, campos e destino | Oráculo |
+|---|---|---|
+| [snapshot_badge_linha_09_10.py:50](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_badge_linha_09_10.py:50), nível de módulo | Sem filtro; identificação, versão, origem e **CAMPOS**, inclusive feriado; grava JSON de reversão ([linha 71](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_badge_linha_09_10.py:71)). A consulta separada em [linha 78](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_badge_linha_09_10.py:78) conta todas as versões. | **Pode chegar** ao JSON e à contagem. |
+| [r5_idempotencia_frota.py:65](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/r5_idempotencia_frota.py:65), função de foto | Sem filtro; chave com colaborador, data e versão; hash de trabalhadas, realizados e `getattr(horas_extras)` ([linha 67](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/r5_idempotencia_frota.py:67)). | **Pode chegar** ao diff/hash; feriado não é lido nominalmente. |
+| [relavrar_o118_col221.py:40](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o118_col221.py:40), [o119:39](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o119_col221.py:39), [o120:69](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o120_col221_09.py:69), nível de módulo | Sem filtro; campos do modelo por introspecção, inclusive feriado; JSON de reversão ([o118:31](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o118_col221.py:31), [linha 45](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o118_col221.py:45), [o120:71](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o120_col221_09.py:71)). | **Pode chegar** à foto. |
+| [relavrar_o118_col221.py:60](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o118_col221.py:60), [o119:59](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o119_col221.py:59), nível de módulo | Literal `motor`; `data` e `minutos_previstos`, para contagem e soma impressas ([o118:62](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/relavrar_o118_col221.py:62)). | Não passa pelo filtro. |
+| [snapshot_o263_comp10.py:61](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_o263_comp10.py:61), [snapshot_relavratura_10_2026.py:34](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_relavratura_10_2026.py:34), nível de módulo | Literal `motor`; campos do modelo por introspecção, inclusive feriado, para foto de reversão ([o263:42](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_o263_comp10.py:42), [relavratura:26](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/snapshot_relavratura_10_2026.py:26)). | Não passa pelo filtro. |
+| [remedir_congelados_placar_e.py:21](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/remedir_congelados_placar_e.py:21) e [linha 61](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/remedir_congelados_placar_e.py:61), nível de módulo | Literal `motor`; data, atraso e saída antecipada; medida e impressão ([linha 50](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/remedir_congelados_placar_e.py:50), [linha 64](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/remedir_congelados_placar_e.py:64)). | Não passa pelo filtro. |
+
+### Escrita
+
+| Escritor | O que grava |
+|---|---|
+| [fechamento.py:1265](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1265), `recalcular_fechamento_mes` | Para competência a partir de 10/2026, calcula rubricas e chama a lavra com literal `versao='oraculo'` ([linha 1271](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1271), [linha 1277](
+
+[truncado em 20000 de 24018 caracteres]
+
+## 18/11 11:57 · sessao f1d73f865ba4 · S6-ORACULO-FERIADO · sonda · origem=Code
+
+Os valores abaixo reproduzem o dado raspado fornecido. A marca **[não verificado]** indica que não há arquivo e linha identificáveis para conferi-los. O número de `he100fer` do oráculo aparece em `trab` nos leitores de todos os casos; nas rubricas de extras dos leitores, aparece para col346 e col610. [não verificado]
+
+Em todas as linhas, `he50=0.0` e `folga=0.0` no oráculo e no motor. Nos leitores de espelho, `extras_50=0.0` e `lavrada=True`; nos de extrato, `he50=0.0`, `sem_lavr=False` e `sem_apur=False`. [não verificado]
+
+| Colaborador e data | Oráculo: `trab / he100fer / he100` | Motor: `trab / he100fer / he100` |
+|---|---|---|
+| col85 2026-11-02 [não verificado] | 11.9 / 11.9 / 11.9 | 11.9 / 0.0 / 0.0 |
+| col146 2026-11-02 [não verificado] | 13.5 / 13.5 / 13.5 | 13.5 / 0.0 / 0.0 |
+| col346 2026-11-02 [não verificado] | 11.65 / 11.65 / 11.65 | 11.65 / 11.65 / 11.65 |
+| col346 2026-11-15 [não verificado] | 11.52 / 11.52 / 11.52 | 11.52 / 11.52 / 11.52 |
+| col365 2026-11-02 [não verificado] | 12.0 / 12.0 / 12.0 | 12.0 / 0.0 / 0.0 |
+| col365 2026-11-15 [não verificado] | 11.04 / 11.04 / 11.04 | 11.04 / 0.0 / 0.0 |
+| col610 2026-11-02 [não verificado] | 11.8 / 11.8 / 11.8 | 11.8 / 11.8 / 11.8 |
+| col610 2026-11-15 [não verificado] | 12.0 / 12.0 / 12.0 | 12.0 / 12.0 / 12.0 |
+| col830 2026-11-02 [não verificado] | 12.07 / 12.07 / 12.07 | 12.07 / 0.0 / 0.0 |
+| col830 2026-11-15 [não verificado] | 11.89 / 11.89 / 11.89 | 11.89 / 0.0 / 0.0 |
+| col975 2026-11-02 [não verificado] | 3.96 / 3.96 / 3.96 | 3.96 / 0.0 / 0.0 |
+
+| Colaborador e data | Espelho/calendário/PDF/app: `pago / extras_100 / trab` | Extrato/gestão HE: `he100fer / he100 / trab` | Gestão HE: `he_lavrada_do_colab` |
+|---|---|---|---|
+| col85 2026-11-02 [não verificado] | 11.897632222222223 / 0.0 / 11.9 | 0.0 / 0.0 / 11.9 | (0.0, '') |
+| col146 2026-11-02 [não verificado] | 13.50255722222222 / 0.0 / 13.5 | 0.0 / 0.0 / 13.5 | (0.0, '') |
+| col346 2026-11-02 [não verificado] | 11.646084444444446 / 11.65 / 11.65 | 11.65 / 11.65 / 11.65 | (11.65, '') |
+| col346 2026-11-15 [não verificado] | 11.521407777777776 / 11.52 / 11.52 | 11.52 / 11.52 / 11.52 | (11.52, '') |
+| col365 2026-11-02 [não verificado] | 12.0 / 0.0 / 12.0 | 0.0 / 0.0 / 12.0 | (0.0, '') |
+| col365 2026-11-15 [não verificado] | 11.036849166666666 / 0.0 / 11.04 | 0.0 / 0.0 / 11.04 | (0.0, '') |
+| col610 2026-11-02 [não verificado] | 11.797882500000002 / 11.8 / 11.8 | 11.8 / 11.8 / 11.8 | (11.8, '') |
+| col610 2026-11-15 [não verificado] | 12.0 / 12.0 / 12.0 | 12.0 / 12.0 / 12.0 | (12.0, '') |
+| col830 2026-11-02 [não verificado] | 12.066969811944444 / 0.0 / 12.07 | 0.0 / 0.0 / 12.07 | (0.0, '') |
+| col830 2026-11-15 [não verificado] | 11.885994444444444 / 0.0 / 11.89 | 0.0 / 0.0 / 11.89 | (0.0, '') |
+| col975 2026-11-02 [não verificado] | 3.9582752777777777 / 0.0 / 3.96 | 0.0 / 0.0 / 3.96 | (0.0, '') |
+
+O cartão-PDF/porta_export mostra a **soma da competência inteira**, repetida abaixo para cada data. O contrafato é a saída registrada com `versao=oraculo`. [não verificado]
+
+| Colaborador e data | Cartão-PDF/porta_export: `he100fer / he100 / trab` | Contrafato: `pago / extras_100` |
+|---|---|---|
+| col85 2026-11-02 [não verificado] | 0.0 / 0.0 / 78.2 | 11.897632222222223 / 11.9 |
+| col146 2026-11-02 [não verificado] | 0.0 / 0.0 / 53.58 | 13.50255722222222 / 13.5 |
+| col346 2026-11-02 [não verificado] | 23.17 / 23.17 / 81.37 | 11.646084444444446 / 11.65 |
+| col346 2026-11-15 [não verificado] | 23.17 / 23.17 / 81.37 | 11.521407777777776 / 11.52 |
+| col365 2026-11-02 [não verificado] | 0.0 / 0.0 / 80.16 | 12.0 / 12.0 |
+| col365 2026-11-15 [não verificado] | 0.0 / 0.0 / 80.16 | 11.036849166666666 / 11.04 |
+| col610 2026-11-02 [não verificado] | 23.8 / 23.8 / 106.99 | 11.797882500000002 / 11.8 |
+| col610 2026-11-15 [não verificado] | 23.8 / 23.8 / 106.99 | 12.0 / 12.0 |
+| col830 2026-11-02 [não verificado] | 0.0 / 0.0 / 105.07 | 12.066969811944444 / 12.07 |
+| col830 2026-11-15 [não verificado] | 0.0 / 0.0 / 105.07 | 11.885994444444444 / 11.89 |
+| col975 2026-11-02 [não verificado] | 0.0 / 0.0 / 32.87 | 3.9582752777777777 / 3.96 |
+
+A sonda registra `VERSOES_NA_COMP ['motor', 'oraculo']`, 95 linhas do oráculo com `he100fer>0`, das quais 11 são de colaboradores com escala intermitente e 84 de não intermitentes; `rc_sombra=0`. [não verificado]
 
 ## 18/11 11:55 · sessao 3c38a202ef76 · - · - · origem=Ronald (tmux)
 
@@ -454,54 +657,4 @@ O contexto é calculado em outro `docker exec` com outro boot do Django, depois 
 
 **Hipótese:** crescimento dos alertas, maior custo das rotas do core ou diferenças nas perguntas podem ter encarecido o contexto calculado fora do tiro; o harness não mede esse custo separadamente, e a mudança entre as datas não está demonstrada. [mensageria/nucleo/ferramentas.py](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/mensageria/nucleo/ferramentas.py:71), [mensageria/nucleo/ferramentas.py](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/mensageria/nucleo/ferramentas.py:391), [eval/harness.py](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/eval/harness.py:22).
 
-## 18/11 11:15 · sessao 0e3630083a6c · LAUDO-[nome]-1811 · leitura · origem=Code
-
-A conclusão principal é que **o motor intermitente responde `False` para um feriado do calendário**, mesmo quando o chamador lhe entrega esse feriado: o construtor substitui os dois campos por um mesmo `set()` vazio, e `MotorBase.eh_feriado` trata esse conjunto como injetado, sem consultar o banco. Já o calculador de rubricas tem um caminho de produção separado que pode responder `True` para a mesma data. ([motor_calculo_v2.py:956](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:956), [motor_calculo_v2.py:3577](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3577), [regras.py:287](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:287))
-
-**Limite da verificação:** o diretório fornecido não contém metadados Git; por isso, não consegui confirmar que seu conteúdo corresponde ao HEAD `dd489c627`. A análise abaixo é do conteúdo disponível no workspace. A busca estática identificou os caminhos citados, mas não prova ausência de chamadas ou atribuições dinâmicas; portanto, a completude de **todo** caminho de produção permanece [não verificado].
-
-Para “feriado no calendário”, considero abaixo uma data cadastrada **e aplicável ao município do vínculo naquele dia**. `feriados_do_colab` monta o conjunto por vínculo e município; sem município, o juiz só considera feriado nacional. ([feriados.py:57](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/feriados.py:57), [feriados.py:101](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/feriados.py:101), [feriados.py:135](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/feriados.py:135))
-
-### Motor intermitente: caminhos alcançáveis
-
-A fábrica escolhe `MotorIntermitente` quando o ciclo **ou** a base é `intermitente`; `get_motor_cct` repassa os argumentos à fábrica nos dois ramos do switch, sem decidir se uma data é feriado. ([motor_calculo_v2.py:3647](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3647), [regua_cct.py:428](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/regua_cct.py:428), [regua_cct.py:457](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/regua_cct.py:457), [regua_cct.py:479](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/regua_cct.py:479))
-
-| Entrada e caminho | Conjunto que chega | Resposta para a data |
-|---|---|---|
-| **ALCANÇÁVEL — recálculo pela view ou command.** A view chama o fechamento; o command também chama a mesma função. O fechamento carrega os feriados, entrega-os à fábrica por fatia e chama `calcular_mes`. ([views.py:1255](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/views.py:1255), [recalcular_fechamento.py:118](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/management/commands/recalcular_fechamento.py:118), [fechamento.py:648](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:648), [fechamento.py:724](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:724), [fechamento.py:279](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:279), [fechamento.py:286](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:286)) | Calendário do colaborador, injetado; o construtor intermitente o troca por `set()` vazio. ([motor_calculo_v2.py:3581](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3581)) | `eh_feriado` responde **False**; a dobra também é **False**. ([motor_calculo_v2.py:934](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:934), [motor_calculo_v2.py:963](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:963)) |
-| **ALCANÇÁVEL — geração do TXT.** A view da folha chama o mesmo recálculo em leitura antes de classificar a exportação. ([folha/views.py:102](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/views.py:102), [folha/views.py:209](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/views.py:209)) | Mesmo calendário injetado e depois esvaziado pelo construtor. ([fechamento.py:648](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:648), [motor_calculo_v2.py:3581](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3581)) | **False** no motor. O modo somente leitura, por si só, não entra na lavratura do oráculo descrita adiante. ([motor_calculo_v2.py:963](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:963), [fechamento.py:1191](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:1191)) |
-| **ALCANÇÁVEL — tela do espelho e cron de HE pendente.** A view chama `espelho_do_colab`; o cron agenda `lavrar_he_pendente`, cujo serviço também chama o espelho. A autoridade carrega o calendário, monta o motor por fatia e o calcula. ([ponto/views.py:161](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/views.py:161), [crons.py:1572](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/config/crons.py:1572), [he_pendente_lavrado.py:94](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/he_pendente_lavrado.py:94), [espelho.py:1029](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/espelho.py:1029), [espelho.py:1111](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/espelho.py:1111), [espelho.py:1164](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/espelho.py:1164)) | Calendário da janela das batidas; substituído pelo vazio no intermitente. ([espelho.py:1019](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/espelho.py:1019), [motor_calculo_v2.py:3581](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3581)) | **False** no motor. Há uma decisão independente para a palavra exibida no dia, descrita abaixo. ([motor_calculo_v2.py:963](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:963), [espelho.py:648](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/espelho.py:648)) |
-| **ALCANÇÁVEL — PDF e medição da porta do export.** O coletor do PDF carrega feriados e monta motor por fatia; a medição da porta chama tanto o espelho quanto o coletor do PDF. O cron agenda o selo dessa porta. ([pdf_espelho.py:298](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/relatorios/pdf_espelho.py:298), [pdf_espelho.py:394](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/relatorios/pdf_espelho.py:394), [pdf_espelho.py:419](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/relatorios/pdf_espelho.py:419), [porta_export.py:476](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/porta_export.py:476), [porta_export.py:496](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/porta_export.py:496), [crons.py:1809](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/config/crons.py:1809)) | Calendário injetado e substituído por vazio no intermitente. ([motor_calculo_v2.py:3581](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3581)) | **False** no motor. ([motor_calculo_v2.py:963](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:963)) |
-| **ALCANÇÁVEL — cron `esmeril_espelho`.** O serviço constrói o motor e chama `calcular_mes`. ([crons.py:640](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/config/crons.py:640), [esmeril_espelho.py:161](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/esmeril_espelho.py:161)) | Omite `feriados`, portanto chega `None` à fábrica; o construtor intermitente instala `set()` vazio. ([motor_calculo_v2.py:3626](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3626), [motor_calculo_v2.py:3581](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3581)) | **False**, sem fallback. ([motor_calculo_v2.py:963](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:963)) |
-
-Dentro desses cálculos, os sítios herdados são:
-
-- `calcular_mes` chama `Motor12x36.calcular_periodo`; este chama `eh_feriado` e, se houver duração positiva, `_feriado_dobra_no_dia`, que por sua vez chama `eh_feriado` apenas se `feriado_em_dobra` for verdadeiro. ([motor_calculo_v2.py:2458](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:2458), [motor_calculo_v2.py:2750](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:2750), [motor_calculo_v2.py:2796](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:2796), [motor_calculo_v2.py:2809](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:2809), [motor_calculo_v2.py:934](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:934))
-- O mesmo laço chama `_dia_sem_previsto_fora_da_janela`, que consulta `eh_feriado` quando a condição anterior de folga não encerra a expressão por curto-circuito. ([motor_calculo_v2.py:2461](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:2461), [motor_calculo_v2.py:1440](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:1440))
-- **NÃO alcançável por essa herança:** os sítios de `MotorTurnoPartido` e `MotorComercial` não são métodos herdados por `MotorIntermitente`, que deriva de `Motor12x36`. ([motor_calculo_v2.py:2859](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:2859), [motor_calculo_v2.py:3199](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3199), [motor_calculo_v2.py:3569](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3569))
-
-**Fallback `is_feriado`: NÃO alcançável nesses sítios do intermitente após o construtor**, enquanto os campos conservarem a identidade instalada. Em outros contextos ele chama `core.feriados.eh_feriado(data, None)`: responde `True` para nacional cadastrado, `False` para estadual ou municipal sem praça, e `False` se ocorrer exceção. ([motor_calculo_v2.py:30](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:30), [motor_calculo_v2.py:963](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:963), [feriados.py:101](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/feriados.py:101))
-
-### Calculador e outras decisões independentes
-
-- **ALCANÇÁVEL — lavratura aditiva `oraculo` no recálculo.** A partir da competência 10/2026, quando há lavratura, o fechamento passa o calendário carregado a `rubricas_por_dia`, que o converte em conjunto e chama `regras.do_dia`; o ramo intermitente prossegue até `dobra_de_feriado_do_dia`. ([fechamento.py:1191](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:1191), [fechamento.py:1265](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:1265), [alimentacao.py:408](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/alimentacao.py:408), [alimentacao.py:514](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/alimentacao.py:514), [regras.py:661](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:661), [regras.py:779](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:779))
-
-  Aqui **não chega o conjunto vazio do motor como calendário**: chega o conjunto separado do fechamento. `_ContextoFeriado` copia esse conjunto, mas mantém `_feriados_injetados = None`; se a data estiver no conjunto, `eh_feriado` responde **True**. Se estiver fora, cai no fallback nacional sem praça. Com trabalho positivo e `feriado_em_dobra=True`, a função retorna todos os minutos trabalhados; com flag falsa ou sem trabalho, retorna zero. Se faltar a flag, `do_dia` declara falta de entrada em vez de tomar a decisão. ([regras.py:287](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:287), [regras.py:348](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:348), [regras.py:637](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:637))
-
-  O motor criado sem `feriados` em `alimentacao.py` serve ali para extrair a CCT; o calendário passado à regra vem do argumento separado. A lavratura usa `versao='oraculo'`, portanto a execução desse juiz é produção aditiva, ainda que sua versão se chame oráculo. ([alimentacao.py:389](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/alimentacao.py:389), [alimentacao.py:403](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/alimentacao.py:403), [fechamento.py:1277](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:1277))
-
-- **NÃO comprovado como alcançável em produção — `ponto/calculador/periodo.py::reler`.** O código o identifica como leitura de ensaio e, quando recebe CCT, chama a mesma dobra com `cct.feriados`. Uma CCT extraída do intermitente contém o conjunto vazio do motor; nesse contexto separado, uma data nacional ainda pode dar `True` pelo fallback, desde que a flag permita a consulta. A busca estática não encontrou chamador de produção para `reler`; chamada dinâmica permanece [não verificada]. ([periodo.py:543](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/periodo.py:543), [periodo.py:832](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/periodo.py:832), [nucleo.py:344](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/nucleo.py:344), [regras.py:295](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:295))
-- **ALCANÇÁVEL — precedência do calendário, independente do motor.** O calendário da pessoa e a montagem dos dias do espelho passam seu conjunto a `fatos_do_periodo`; esse juiz testa `data in feriados`. Para uma data aplicável presente no conjunto, a variável `feriado` é **True**, embora a classificação final também dependa da precedência e do vínculo. O mesmo juiz carrega o conjunto quando recebe `None`, inclusive no caminho de `folha.services.sem_furo`. ([calendario.py:347](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/colaboradores/services/calendario.py:347), [calendario.py:539](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/colaboradores/services/calendario.py:539), [espelho.py:648](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/espelho.py:648), [precedencia.py:330](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/precedencia.py:330), [precedencia.py:341](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/precedencia.py:341), [precedencia.py:376](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/precedencia.py:376), [sem_furo.py:25](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/services/sem_furo.py:25))
-- **ALCANÇÁVEL — predicado do vínculo.** O fechamento e a precedência podem chamar `feriado_vira_folga`; ele só consulta `core.feriados.eh_feriado` depois das guardas de flag e ciclo. Para ciclo literalmente `intermitente`, retorna **False antes da consulta**, pois os ciclos elegíveis são 6x1, 5x2 e semanal. Atenção: a fábrica também pode escolher o motor por `tipo_base`, portanto o resultado da guarda depende do ciclo real do cadastro. ([fechamento.py:949](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/fechamento.py:949), [precedencia.py:376](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/precedencia.py:376), [models.py:32](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/escala/models.py:32), [models.py:1389](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/escala/models.py:1389), [motor_calculo_v2.py:3647](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3647))
-
-**Reatribuição posterior:** na busca estática por atribuições e mutações em Python de produção, não encontrei caminho que reatribua `self.feriados` ou `_feriados_injetados` numa instância de `MotorIntermitente` depois do seu `__init__`. As atribuições encontradas são as do construtor base, as do próprio construtor intermitente e a do objeto separado `_ContextoFeriado`; atribuição dinâmica ou indireta fora dos padrões pesquisados permanece [não verificada]. ([motor_calculo_v2.py:790](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:790), [motor_calculo_v2.py:3581](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:3581), [regras.py:287](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/calculador/regras.py:287))
-
-## 18/11 11:13 · sessao 43c34e30b4b5 · - · - · origem=Ronald (tmux)
-
-A investigação dos caminhos externos foi enviada ao agente principal, com referências para a régua CCT, os PDFs, a exportação da folha e o cron de horas extras.
-
-## 18/11 11:13 · sessao 26e290adc033 · - · - · origem=Ronald (tmux)
-
-A rastreabilidade do motor foi enviada ao agente principal, incluindo o conjunto vazio instalado pelo construtor, os dois sítios herdados que consultam feriado, os sítios de outras classes que não são herdados e os caminhos de seleção de período e esmeril. As conclusões estão apoiadas nas linhas citadas nas mensagens enviadas.
-
-_6931 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6934 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
