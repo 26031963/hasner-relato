@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 14:26:27.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (50.0 MB). Acoes na janela: **1375**.
+**Medido em 18/11/2026 14:31:54.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (50.1 MB). Acoes na janela: **1383**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:27:23 | Bash | Wait for census v2 and push | `cd /home/ronald/saas-hasner; while kill -0 3746381 2>/dev/null \|\| kill -0 3721966 2>/dev/null; do /usr/bin/sleep 20; done; ls -la logs/PRE-MAPA-E4D/escritores_v2.r; tail -n 3 logs/COMBOIO-1811/push_lote_1811b.log; git fetch -q origin; git rev-parse --short HEAD origin/main` |
+| 14:27:19 | Bash | Insert AVAL-DEVOLVIDO line in RELATO top | `python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[3].startswith('DESENHO E4C-F2-P2') L.insert(4,'AVAL-DEVOLVIDO PRE-MAPA-E4D-1811-1425 item 3 (e o 4, que depende dele): o script re-rodavel de leitores e INSTRUMENTO novo -- o aval diz "nenhuma vaga" e a RAIA-ESPURIAS-1811-1410 item 1 so da vaga 2 a instrumento com a fila de espurias vazia (4 obras na fr ...` |
+| 14:27:13 | Bash | Show RELATO top lines | `sed -n 1,6p app/docs/RELATO.md \| cut -c1-160` |
+| 14:27:05 | Bash | Launch census volta 2, check push | `P=logs/PRE-MAPA-E4D; H=$(cat $P/hash_base.txt) cat > $P/escritores_v2.q <<'EOF' CENSO volta 2 (CODEX_PAPEL=censo), aval PRE-MAPA-E4D-1811-1425 ITEM 1 (anexo). Sua volta 1 (anexo escritores.r) fechou a parte (A) portas; a parte (B) ficou aberta. Faca SO a (B), exaustiva, por varredura no codigo desta copia (rg/AST sobre app/ inteiro, inclusive testes EXCLUIDOS da contagem): Campos (os da volta 1):  ...` |
+| 14:26:51 | Bash | Spot-check three census citations | `git show HEAD:app/chamados/services/validacao.py \| sed -n '343,350p'; echo ---; git show HEAD:app/chamados/models.py \| sed -n '1700,1704p'; echo ---; git show HEAD:app/chamados/migrations/0039_a3_via_backfill.py \| sed -n '22,26p'` |
+| 14:26:46 | Bash | Read item 1 census | `sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' logs/PRE-MAPA-E4D/escritores.r` |
+| 14:26:37 | Bash | Read aval review | `sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' logs/PRE-MAPA-E4D/revaval.r` |
+| 14:26:34 | Bash | Read Codex job outcomes | `cat /tmp/claude-1001/-home-ronald-saas-hasner/d5e4e6e7-ea6c-4683-97a2-a6477ae90088/tasks/bgk1yh67n.output \| tail -8; tail -4 logs/PRE-MAPA-E4D/escritores.log; tail -4 logs/PRE-MAPA-E4D/revaval.log` |
 | 14:25:11 | Bash | Wait for both PRE-MAPA Codex jobs | `while kill -0 3733147 2>/dev/null \|\| kill -0 3733148 2>/dev/null; do /usr/bin/sleep 20; done; cd /home/ronald/saas-hasner; ls -la logs/PRE-MAPA-E4D/*.r; tail -1 logs/PRE-MAPA-E4D/escritores.log logs/PRE-MAPA-E4D/revaval.log` |
 | 14:25:06 | Bash | Regenerate grade header and confer | `python3 bin/placar_grade.py --cabecalho app/docs/GRADE-MESTRA.md >/dev/null; python3 bin/placar_grade.py --conferir app/docs/GRADE-MESTRA.md > /tmp/claude-1001/pg.txt; echo rc=$?; tail -2 /tmp/claude-1001/pg.txt; git diff --stat app/docs/GRADE-MESTRA.md` |
 | 14:25:03 | Bash | Register item 5 in GRADE, BACKLOG, PROMPTS | `python3 - <<'EOF' import re # GRADE p='app/docs/GRADE-MESTRA.md'; t=open(p,encoding='utf-8').read() o='\| PARADA (aguarda lei) [PERSPECTIVA 17/11: PENDENTE REAL] \| BACKLOG:2016 \|' assert t.count(o)==1 t=t.replace(o,'\| REGISTRADA (lei dada: DST-L1-1800, ESPURIAS-ABRE 17/11 18:05 item 1 literal "entrada real em dia sem turno vai a porta de decisao do admin"; construir pela DIA-SEM-TRABALHO-PORTA  ...` |

@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 14:26** · publicado em **18/11/2026 14:26** (UTC-3)
+> Ultima resposta processada: **18/11/2026 14:29** · publicado em **18/11/2026 14:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 14:29 · sessao ea61c0add5dd · PRE-MAPA-E4D · censo · origem=Code
+
+**Censo parcial: a exaustividade da parte B e as contagens de escritores permanecem [nao verificado].** A varredura encontrou os sítios abaixo, mas não terminou a resolução de todos os nomes dinâmicos, aliases, defaults e gravações indiretas em `app/` inteiro. A associação de cada escrita a um ato substituto também permanece [nao verificado], salvo a ausência explícita de ato no fluxo L-130. Não há dados de banco ou log para verificar execução em produção. [app/chamados/services/validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414)
+
+A unidade é **campo × função**. Nos nomes abaixo, a referência aponta para a atribuição ou gravação; chamadas que delegam à porta são identificadas como tais. A classificação de exceção FATO dos escritores adicionais está **[nao verificado]**: o anexo declara seis portas como exceções, mas isso não basta para atribuir automaticamente essa classificação a cada chamador.
+
+| Campo | Escritor comprovado fora das portas A01–A24/27 | Tipo | Ato substituto | Exceção FATO |
+|---|---|---|---|---|
+| `status_local` | [models.py:abrir:1000](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1000), defaults em `get_or_create`; [models.py:criar:1154](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1154); [0038:registrar:10](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0038_a3_registrado_backfill.py:10), [desfazer:15](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0038_a3_registrado_backfill.py:15); [0039:backfill:24](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:24), [desfazer:33](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:33) | outro; migration | [nao verificado] | [nao verificado] |
+| `resolvido_em` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `via_encerramento` | [0039:backfill:24](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:24); [desfazer:34](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:34) | migration | [nao verificado] | [nao verificado] |
+| `respondido_por` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `fechada_em` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `fechada_por` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `resolucao` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `motivo_fechamento` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `reaberturas_admin` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `reaberturas_colab` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `motivos` | [models.py:aparar_motivo_respondido:2129](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2129); [disputa_emissao.py:_abrir_ou_agregar_disputa:550](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:550); [criar_disputa_a_partir_de_chamados_orfaos:1097](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1097); [criar_disputa_ancora_de_chamado:1372](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1372) | outro / save | [nao verificado] | [nao verificado] |
+| `materializada_em` | **Devoluções e ressuscitação:** sítios D1, D2, D3 e D4 definidos abaixo | outro, por A07/A08 | [nao verificado] | [nao verificado] |
+| `materializada_por` | D1, D2, D3 e D4 | outro, por A07/A08 | [nao verificado] | [nao verificado] |
+| `via_resolucao` | D1, D2, D3 e D4 | outro, por A07/A08 | [nao verificado] | [nao verificado] |
+| `respondida_em` | D2 e D3 | outro, por A08 | D2: [nao verificado]; D3: nenhum ato de reabertura/devolução no fluxo | [nao verificado] |
+| `resposta_colab` | D2 e D3 | outro, por A08 | D2: [nao verificado]; D3: nenhum ato de reabertura/devolução no fluxo | [nao verificado] |
+| `validada_em` | D1 e D2 | save / outro, por A07/A08 | [nao verificado] | [nao verificado] |
+| `validada_por` | D1 e D2 | save / outro, por A07/A08 | [nao verificado] | [nao verificado] |
+| `recusa_motivo` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `pendencia_admin` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `data_conferida_em` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `data_conferida_por` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
+| `veredito_lavrado` | **Lavra:** sítios L1–L5 definidos abaixo | save / cron-comando / outro | [nao verificado] | [nao verificado] |
+| `julgado_em` | L1–L5 | save / cron-comando / outro | [nao verificado] | [nao verificado] |
+| `janela_expira_em` | L1–L5 | save / cron-comando / outro | [nao verificado] | [nao verificado] |
+
+Os sítios abreviados na tabela são:
+
+- **D1:** [validacao.py:devolver_paridade_bug_par_103:346](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:346): descarimba por A07 e salva a limpeza da validação; registra `DEVOLUCAO`. A equivalência com um número A-NN é [nao verificado].
+- **D2:** [models.py:ressuscitar_perguntas:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702): passa os quatro campos de resposta/validação a A08 e, nessa mesma operação, limpa os três campos de materialização.
+- **D3:** [validacao.py:devolver_instante_sem_texto_l130:440](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:440): passa o par de resposta a A08 e limpa também os três campos de materialização. O próprio fluxo declara não registrar ato de reabertura/devolução. [validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414)
+- **D4:** [relavra_via.py:desfazer_carimbo_sem_lastro:246](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/relavra_via.py:246): chama A07, que salva os três campos do carimbo. [models.py:3399](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3399)
+- **L1:** [veredito_lavrado.py:lavrar:270](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:270), com `save` quando solicitado; o comando [lavrar_perguntas_stale.py:handle:89](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/lavrar_perguntas_stale.py:89) o chama.
+- **L2:** [veredito_lavrado.py:gravar_lavras_em_lote:250](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:250), `bulk_update`; [backfill_veredito_lavrado.py:handle:138](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/backfill_veredito_lavrado.py:138) prepara os valores e chama o lote.
+- **L3:** [fio.py:reapontar_resolvedora:975](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/fio.py:975), lavra em memória e salva os três campos.
+- **L4:** [fio.py:rechavear_data_evento:1091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/fio.py:1091), lavra em memória e salva os três campos.
+- **L5:** [models.py:_nascer:3195](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3195), no ramo de reuso; sua separação da porta A22 para a contagem pedida está **[nao verificado]**.
+
+Em `motivos`, uma mesma função pode conter mais de um ponto de atribuição ou criação: a tabela usa a unidade campo × função, não campo × linha. Por exemplo, `criar_disputa_a_partir_de_chamados_orfaos` também grava em [disputa_emissao.py:1137](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1137), [1145](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1145), [1174](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1174) e [1269](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1269).
+
+A busca textual executada sobre `app/` foi:
+
+```bash
+rg -l --glob '*.py' --glob '!**/tests/**' --glob '!**/test_*.py' '\b(status_local|resolvido_em|via_encerramento|respondido_por|fechada_em|fechada_por|resolucao|motivo_fechamento|reaberturas_admin|reaberturas_colab|motivos|materializada_em|materializada_por|via_resolucao|respondida_em|resposta_colab|validada_em|validada_por|recusa_motivo|pendencia_admin|data_conferida_em|data_conferida_por|veredito_lavrado|julgado_em|janela_expira_em)\b' app/
+```
+
+Também executei uma passagem AST em memória sobre arquivos Python de `app/`, procurando atribuições de atributo, palavras-chave em `update`/`create`/`get_or_create`/`update_or_create`, e literais de campos em `setattr`, `bulk_update` e `update`. A passagem não resolve sozinha nomes dinâmicos nem o fluxo completo de valores; por isso, ausência de resultado não prova ausência de escritor. A exclusão textual acima também não exclui todos os arquivos de teste com outros nomes; testes não foram contados. **[nao verificado]** [nao verificado]
+
+**Contagens:** campos solicitados **25**; escritores fora das portas **[nao verificado]**; escritores sem ato substituto **[nao verificado]**; escritores em exceção FATO **[nao verificado]**.
 
 ## 18/11 14:26 · sessao 5f2a628261a9 · PRE-MAPA-E4D · censo · origem=Code
 
@@ -1227,34 +1285,4 @@ Também passaram 36 testes pontuais de C1/C2, os seis testes sem banco do arquiv
 
 LEI-AKITA: origem=[tarefa_do_dia.py:164](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/tarefa_do_dia.py:164) + [backfill_decisoes_pergunta.py:94](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/management/commands/backfill_decisoes_pergunta.py:94), testemunha=[models.py:4195](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4195) + [models.py:4238](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4238) + [pergunta_no_app.py:68](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/pergunta_no_app.py:68), RED=18 vermelhos da suíte b66587c26 fornecidos no anexo **[não verificado]**, quem-mais-le=[aviso_pendencia.py:9](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/aviso_pendencia.py:9) + [cobranca.py:48](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/cobranca.py:48) + [tarefa_do_dia.py:436](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/tarefa_do_dia.py:436), juizes novos=0, padrao=Single Source of Truth / Aggregate Root ([GLOSSARIO.md:11](/home/ronald/wt-codex-e4c-f6f7-132608/app/docs/GLOSSARIO.md:11)).
 
-## 18/11 13:30 · sessao 49422d7c0b03 · POUSOS-COMBOIO-1811-1332 · verificador · origem=Code
-
-**Item 1 — PROCEDE: AVAL-DEVOLVIDO.** A condição de registrar o texto **literal** de cada corte não fecha com os scripts fornecidos. **Item 3 — inconclusivo:** o dado fornecido não permite comprovar uma colisão nem certificar todas as premissas necessárias para chamá-lo de CONFERE. [anexo `pousos_comboio_1811_1332.txt`, itens 1 e 3, dado raspado; arquivo:linha não conferível]
-
-Os anexos abaixo estão no dado raspado, mas não foram encontrados como arquivos nesta cópia. Por isso, posso comparar seu conteúdo fornecido, sem atribuir-lhes números de linha. A cópia também não tem metadados Git acessíveis: os hashes, diffs e certificações informados são **não conferíveis** aqui. [não verificado]
-
-**Item 1 — E4C-F2-P2 e F4**
-
-1. **Premissas.** `LEIS.md:151` é de fato a L-130, e contém os dois trechos que o script P2 procura alterar. A L-106 exige docs no commit do marco. [app/docs/LEIS.md:151](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/LEIS.md:151), [app/docs/LEIS.md:132](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/LEIS.md:132)
-
-   Os cinco avais de origem constam do dado raspado, com texto identificável; sua existência nos caminhos `logs/AVAIS-*` não é conferível nesta cópia. O item 1 menciona, entre parênteses, RESPOSTAS-1711-1050 e LIBERA-B3-F2-P2 para a P2, enquanto o script insere CORTE-F2-RESSUSCITAR-GRAVA-ATO e RESPOSTAS-1711-1050: a correspondência pretendida precisa ser esclarecida. [anexos `pousos_comboio_1811_1332.txt`, `aplica_doc_p2.py` e cinco avais fornecidos; arquivo:linha não conferível]
-
-2. **Colisão com aval vigente.** LIBERA-B3-F2-P2 item 3 exige drenar os crons antes do migrate e do reload; depois do reload, medir N1 e N2 com denominadores e a corrida de `respondida_em`; qualquer resultado maior que zero mantém os crons desligados e exige PAREI. O item 1 manda fazer deploy e smoke, mas não repete essas condições. A omissão, por si só, não as revoga; executar apenas a sequência resumida do item 1 sem cumpri-las colidiria com o aval anterior. [anexos `libera_b3_f2p2_1758.txt`, item 3, e `pousos_comboio_1811_1332.txt`, item 1; arquivo:linha não conferível] [nao verificado]
-
-3. **Literal.** O aval exige texto literal e devolução se a origem não for achada no literal. As frases dos scripts P2 e F4 são resumos: por exemplo, a frase do COMPLEMENTO-1 reúne os três itens em uma redação condensada, em vez de reproduzir o texto fornecido; a frase RESPOSTAS-1711-1050 também seleciona e resume itens. Essa é uma incompatibilidade comprovável no próprio dado fornecido e sustenta a devolução. Os scripts fornecidos escrevem `CORTES.json` e, no caso P2, `LEIS.md`; não escrevem diretamente `CORTES.md`, embora o item o mencione. Outro mecanismo que atualize o `.md` é **não verificado**. [anexos `aplica_doc_p2.py`, `aplica_doc_f4.py`, `complemento1_corte_u163_no_k6_1611.txt` e `respostas_1711_1050.txt`; arquivo:linha não conferível]
-
-   A instrução de que o opus confira apenas a entrada do doc está expressa no aval; uma obrigação vigente de releitura integral de código que a contradiga é **não verificada**. [anexo `pousos_comboio_1811_1332.txt`, item 1; arquivo:linha não conferível]
-
-4. **Exportada, dinheiro ou `!`.** O deploy normal pode aplicar migrations pendentes antes do reload; portanto, o pouso não é uma operação exclusivamente documental. O conteúdo e efeito da migration 0056 da P2, ausente desta cópia, são **não conferíveis**. Não há dado suficiente para afirmar toque em exportada, dinheiro ou `!` fora do declarado. [bin/deploy.sh:30](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/deploy.sh:30), [bin/deploy.sh:317](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/deploy.sh:317), [não verificado]
-
-**Item 3 — Cirineu sem ESCALA**
-
-1. **Premissas.** A certificação de `fa49abfb6`, a composição de `7bc85383d` e o diff entre esta e a suite A são **não conferíveis** sem os objetos Git ou logs. O aval fornecido reconhece que a árvore sem ESCALA não foi a certificada e exige suite inteira e opus aprovados antes do pouso. [anexo `pousos_comboio_1811_1332.txt`, item 3; arquivo:linha não conferível]
-
-2. **Colisões.** O texto integral e a vigência de [nome]-12H e COMBOIO-DAS-SUITES, bem como a existência e o estado da suite em `4ec3e15d0`, são **não conferíveis**. A ordem de rodar outra suite em paralelo não demonstra, sozinha, que a suite em curso será interrompida ou que a Cirineu tomará a vez da espinha; essas colisões permanecem **não verificadas**. [anexo `pousos_comboio_1811_1332.txt`, item 3; arquivo:linha não conferível]
-
-3. **Literal.** Commits adicionais **apenas de documentação** não contradizem, por si, a proibição de mudar `.py`. São duas verificações distintas: comparar os `.py` com a árvore certificada e demonstrar que a suite verde cobre a árvore efetivamente pousada segundo a regra aplicável. O conteúdo dos commits adicionais, a regra completa de certificação e o resultado dessas verificações são **não conferíveis**. O script de doc da Cirineu fornecido altera `CORTES.json`, sem escrever `.py`. [anexos `pousos_comboio_1811_1332.txt`, item 3, e `aplica_doc_cirineu.py`; arquivo:linha não conferível] [nao verificado]
-
-4. **Exportada, dinheiro ou `!`.** O item proíbe tocar exportada e regerar célula antes da simulação. O efeito real do diff Cirineu e do pouso em exportada, dinheiro ou `!` é **não conferível** nesta cópia. [anexo `pousos_comboio_1811_1332.txt`, item 3; arquivo:linha não conferível] [nao verificado]
-
-_6972 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6973 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
