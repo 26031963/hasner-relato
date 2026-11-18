@@ -1,7 +1,627 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 19:46** · publicado em **18/11/2026 19:49** (UTC-3)
+> Ultima resposta processada: **18/11/2026 19:53** · publicado em **18/11/2026 19:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 19:53 · sessao cc0cfb9ec34d · RAIA-ESPURIAS · leitura · origem=Code
+
+Não consigo fornecer uma sonda completa que cumpra literalmente o requisito de reutilizar **a função de casamento do `s1_v4.py`**: no anexo fornecido, o casamento está dentro do laço principal, não em uma função chamável. As funções `hhmm`, `local_minuto`, `instante` e `virada` são auxiliares; nenhuma delas executa o casamento inteiro. [não verificado: o anexo fornecido não tem arquivo com linhas disponíveis na cópia]
+
+Também há uma diferença relevante no tratamento da lavra: `dono(data)` pode responder mesmo quando `cxr=None`; retorna `None` quando a resposta dependeria da lista não lavrada. Portanto, **falta de cobertura da lavra e dono sem resposta devem ser contados separadamente**. [e6_oraculo.py:182](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:182), [cxr_na_lista.py:165](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/cxr_na_lista.py:165)
+
+A montagem e a chamada verificadas são `InsumosDoDono(c, ini, fim, hoje, agora=agora, sem_motor=True, cxr=ler_cxr(c.pk, ini))` e `ins.dono(dia)`. [cadastro_realidade.py:1010](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/services/cadastro_realidade.py:1010), [e6_oraculo.py:128](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:128)
+
+Para concluir o texto sem criar uma segunda implementação do casamento, preciso da função extraída do `s1_v4.py` ou de autorização para extrair **o bloco existente, sem alterar sua lógica**, para uma função reutilizada pela sonda. Até lá, a classificação, os destinos e a soma contra 645 permanecem **[não verificado]**.
+
+## 18/11 19:51 · sessao 31bc149b290c · RAIA-ESPURIAS · leitura · origem=Code
+
+A regra nova permite preparar o casamento por minuto exato. Ainda assim, o dado fornecido não contém as atas e batidas necessárias para calcular o quadro atual; os números abaixo serão produzidos somente quando a sonda for executada na sombra. A diferença para 1.267, por si só, não prova sua causa. [não verificado]
+
+A sonda usa a ata como denominador e a grade como porta de classificação. Isso importa porque a grade pode devolver `fora_vinculo` sem transportar as órfãs de uma célula existente; nesse caso, a sonda as conserva em `NAO_CLASSIFICADA`. A lista de horas da ata também pode estar ausente, caso em que a grade representa a contagem por `?`. [app/escala/services/leitor_celula.py:180; app/escala/services/leitor_celula.py:379; app/escala/services/leitor_celula.py:389; app/escala/services/leitor_celula.py:420]
+
+**Limite da sonda:** a virada é reconhecida quando os marcos da própria grade ou o DNA da célula apresentam entrada e saída. Se houver batidas no mesmo minuto nos dois dias e a virada não puder ser decidida por esses dados, a ocorrência fica em `NAO_CLASSIFICADA`. Para o turno real, a sonda chama `turnos_do_colab` e informa quantos turnos retornaram, mas as definições solicitadas para F e T1–T6 não dependem de um turno real completo. [app/escala/services/leitor_celula.py:413; app/escala/models.py:1672; app/ponto/turnos.py:1850; não verificado]
+
+Salve o texto somente em ambiente autorizado e execute **apenas** `bin/sonda_leitura.sh --sombra <arquivo.py>`. Não executei a sonda nem criei arquivo: o envelope também cria trilha e pode iniciar a sombra, incompatíveis com a instrução desta chamada de não criar nem alterar arquivos. [bin/sonda_leitura.sh:103; bin/sonda_leitura.sh:252]
+
+```python
+# ITEM 1 — AUDITORIA-ESPURIAS — medida, nao juiz.
+# Universo: CelulaDia de empresas 2, 3 e 4, 2026-10-21 a 2026-11-20.
+# Fonte das ocorrencias: CelulaDia.ata; porta da classificacao: grade_da_celula.
+# Casamento: Batida viva do mesmo colab no minuto exato da data da celula.
+# Exclusoes anteriores as classes: sem_hora; nao_mensuravel (a) e (b).
+# F: tipo_dia == folga; le grade_da_celula.
+# T6: trabalho e grade demonstra ausencia de marcos; le grade_da_celula.
+# T1: trabalho e algum marco missing a <=90 min; le grade_da_celula e Batida.
+# T2: trabalho, ha marco missing e todos estao a >90 min; le grade_da_celula e Batida.
+# T5: outra Batida viva do mesmo tipo a <=10 min; le Batida.
+# T4: entre as restantes, pares de orfas E seguidas da S seguinte, em ordem;
+#     le grade_da_celula e Batida.
+# T3: restante com instante e tipo decidiveis; le grade_da_celula e Batida.
+# T5 auxiliar: outra Batida viva de qualquer tipo a <=5 min; le Batida.
+# Diagnostico adicional: turnos_do_colab; nao decide as classes acima.
+# Precedencia: F, T6, T1, T2, T5, T4, T3.
+# Dias e pessoas sao conjuntos por classe e podem aparecer em varias classes.
+
+from collections import Counter, defaultdict
+from datetime import date, datetime, time, timedelta
+import re
+
+from django.db import DatabaseError
+from django.utils import timezone
+
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia
+from escala.services.leitor_celula import grade_da_celula
+from ponto.models import Batida
+from ponto.turnos import turnos_do_colab
+
+INI = date(2026, 10, 21)
+FIM = date(2026, 11, 20)
+EMPRESAS = (2, 3, 4)
+CLASSES = ("F", "T6", "T1", "T2", "T5", "T4", "T3",
+           "nao_mensuravel_a", "nao_mensuravel_b",
+           "sem_hora", "NAO_CLASSIFICADA")
+
+erros = 0
+totais = Counter()
+dias = defaultdict(set)
+pessoas = defaultdict(set)
+verdes = Counter()
+motivos = Counter()
+t5_aux = Counter()
+total_ata = 0
+turnos_encontrados = 0
+universo_completo = True
+
+
+def campos(modelo):
+    print("CAMPOS", modelo._meta.label,
+          " ".join(f.name for f in modelo._meta.get_fields()
+                   if getattr(f, "concrete", False)))
+
+
+def registrar(classe, cid, dia, verde, motivo=None): [nao verificado]
+    totais[classe] += 1
+    dias[classe].add((cid, dia))
+    pessoas[classe].add(cid)
+    if verde is True: [nao verificado]
+        verdes[classe] += 1
+    elif verde is None: [nao verificado]
+        verdes[classe + "_verde_indeterminado"] += 1
+    if motivo:
+        motivos[(classe, motivo)] += 1
+
+
+def falha(etapa, exc, cid=None):
+    global erros
+    erros += 1
+    # Nao imprimir mensagem da excecao: pode conter nome ou outro dado pessoal.
+    print("ERRO", "etapa=" + etapa, "tipo=" + type(exc).__name__,
+          "col=" + ("col" + str(cid) if cid is not None else "universo"))
+
+
+def perm_negada(exc):
+    atual = exc
+    while atual is not None:
+        if getattr(atual, "pgcode", None) == "42501":
+            return True
+        if getattr(atual, "sqlstate", None) == "42501":
+            return True
+        atual = getattr(atual, "__cause__", None)
+    return False
+
+
+def hhmm(valor):
+    if not isinstance(valor, str) or not re.fullmatch(r"\d{2}:\d{2}", valor):
+        return None
+    h, m = map(int, valor.split(":"))
+    if h > 23 or m > 59:
+        return None
+    return time(h, m)
+
+
+def local_minuto(ts):
+    return timezone.localtime(ts).replace(second=0, microsecond=0)
+
+
+def instante(dia, hora):
+    return timezone.make_aware(datetime.combine(dia, hora),
+                               timezone.get_current_timezone())
+
+
+def ocorrencias_da_ata(ata):
+    # O cartorio normalmente grava ambos; divergencia e conservada e avisada.
+    if not isinstance(ata, dict):
+        raise ValueError("ata nao e objeto")
+    lista = ata.get("orfas") or []
+    if not isinstance(lista, list):
+        raise ValueError("ata.orfas nao e lista")
+    lista = [str(x) if x else "?" for x in lista]
+    n = ata.get("n_orfas")
+    n = len(lista) if n is None else int(n)
+    if n < 0:
+        raise ValueError("n_orfas negativo")
+    if lista and len(lista) != n:
+        print("ATA_CONTAGEM_DIVERGENTE",
+              "lista=" + str(len(lista)), "n_orfas=" + str(n))
+    # A lista lavrada e a fonte quando existe, como em _orfas_da_ata.
+    return lista if lista else ["?"] * n
+
+
+def virada(cel, dia_grade):
+    # True/False so quando ha os dois extremos; None significa nao sei.
+    pares = {}
+    for marco in dia_grade.get("marcos") or []:
+        if isinstance(marco, dict) and marco.get("tipo") in ("E", "S"):
+            h = hhmm(marco.get("hora"))
+            if h is not None:
+                pares.setdefault(marco["tipo"], []).append(h)
+    if pares.get("E") and pares.get("S"):
+        return pares["S"][-1] <= pares["E"][0]
+    dna = cel.dna if isinstance(cel.dna, dict) else {}
+    marcos = dna.get("marcos") or {}
+    if isinstance(marcos, dict):
+        hi, hf = hhmm(marcos.get("hi")), hhmm(marcos.get("hf"))
+        if hi is not None and hf is not None:
+            return hf <= hi
+    return None
+
+
+def verde_do_dia(d):
+    if d.get("tipo_dia") != "trabalho":
+        return False
+    celulas = d.get("celulas")
+    if not isinstance(celulas, list):
+        return None
+    if not celulas:
+        return None
+    if any(not isinstance(c, dict) or "missing" not in c for c in celulas):
+        return None
+    return not any(c["missing"] for c in celulas)
+
+
+def distancias_missing(d, data_celula, ts_orfa):
+    # A ordem dos marcos permite datar marcos apos a virada.
+    celulas = d.get("celulas")
+    if not isinstance(celulas, list):
+        return None, "celulas da grade ausentes"
+    if any(not isinstance(c, dict) or "missing" not in c for c in celulas):
+        return None, "estado missing desconhecido"
+    if not any(c["missing"] for c in celulas):
+        return [], None
+    resultado = []
+    dia_marco = data_celula
+    anterior = None
+    for c in celulas:
+        h = hhmm(c.get("hora_prevista"))
+        if h is None:
+            if c["missing"]:
+                return None, "marco missing sem hora prevista"
+            # Sem hora de um marco intermediario, a virada posterior e incerta.
+            return None, "marco sem hora impede datar os missing"
+        if anterior is not None and h < anterior:
+            dia_marco += timedelta(days=1)
+        anterior = h
+        if c["missing"]:
+            resultado.append(abs((instante(dia_marco, h) - ts_orfa)
+                                 .total_seconds()) / 60)
+    return resultado, None
+
+
+def tem_outra(batida, batidas, minutos, mesmo_tipo):
+    for outra in batidas:
+        if outra.pk == batida.pk:
+            continue
+        if mesmo_tipo and outra.tipo != batida.tipo:
+            continue
+        if abs((outra.timestamp - batida.timestamp).total_seconds()) <= minutos * 60:
+            return True
+    return False
+
+
+for modelo in (Colaborador, CelulaDia, Batida):
+    campos(modelo)
+
+print("UNIVERSO", INI.isoformat(), FIM.isoformat(), "empresas=2,3,4")
+print("REFERENCIA_17_11=1267")
+print("DIA_VERDE_REFERENCIA=83_dias/50_pessoas/105_orfas [nao verificado]")
+
+try:
+    ids = list(
+        CelulaDia.objects.filter(
+            data__range=(INI, FIM),
+            colaborador__empresa_id__in=EMPRESAS,
+        ).values_list("colaborador_id", flat=True).distinct().order_by("colaborador_id")
+    )
+except Exception as exc:
+    falha("listar_colaboradores_da_celula", exc)
+    ids = []
+    universo_completo = False
+
+for cid in ids:
+    etiqueta = "col" + str(cid)
+    etapa = "carregar_celulas"
+    cels = None
+    ocorrencias = []
+    try:
+        cels = list(CelulaDia.objects.filter(
+            colaborador_id=cid, data__range=(INI, FIM)
+        ).order_by("data", "pk"))
+        for cel in cels:
+            for valor in ocorrencias_da_ata(cel.ata or {}):
+                ocorrencias.append((cel, valor))
+        total_ata += len(ocorrencias)
+        if not ocorrencias:
+            continue
+
+        etapa = "carregar_colaborador"
+        colab = Colaborador.objects.get(pk=cid)
+
+        etapa = "grade_da_celula(colab, INI, FIM)"
+        grade = grade_da_celula(colab, INI, FIM)
+        por_data = {d["data"]: d for d in grade["dias"]}
+
+        etapa = "turnos_do_colab(colab, INI, FIM)"
+        turnos = turnos_do_colab(colab, INI, FIM)
+        turnos_encontrados += len(turnos)
+
+        etapa = "consultar_Batida_viva"
+        # Margem cobre T5 nas bordas e casamento no dia seguinte.
+        batidas = list(Batida.objects.filter(
+            colaborador_id=cid,
+            retratada_em__isnull=True,
+            timestamp__date__gte=INI - timedelta(days=1),
+            timestamp__date__lte=FIM + timedelta(days=1),
+        ).order_by("timestamp", "pk"))
+        por_minuto = defaultdict(list)
+        for b in batidas:
+            por_minuto[local_minuto(b.timestamp)].append(b)
+
+        # Primeiro decide exclusoes e classes anteriores a T4.
+        registros = []
+        for cel, valor in ocorrencias:
+            d = por_data.get(cel.data)
+            r = {"cel": cel, "valor": valor, "classe": None,
+                 "motivo": None, "batida": None, "verde": None} [nao verificado]
+            registros.append(r)
+            if d is None:
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "dia ausente da grade"
+                continue
+            r["verde"] = verde_do_dia(d) [nao verificado]
+            hora = hhmm(valor)
+            if valor == "?":
+                r["classe"] = "sem_hora"
+                continue
+            if hora is None:
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "hora da ata invalida"
+                continue
+
+            alvo = instante(cel.data, hora)
+            hoje = por_minuto.get(alvo, [])
+            amanha = por_minuto.get(alvo + timedelta(days=1), [])
+            atravessa = virada(cel, d)
+
+            # (b) tem prioridade quando o proprio minuto da celula e multiplo.
+            if len(hoje) > 1:
+                r["classe"], r["motivo"] = "nao_mensuravel_b", "multiplas batidas no minuto da celula"
+                continue
+            if hoje and amanha:
+                if atravessa is True:
+                    r["classe"], r["motivo"] = "nao_mensuravel_a", "virada e batidas nos dois dias"
+                    continue
+                if atravessa is None:
+                    r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "virada desconhecida com batidas nos dois dias"
+                    continue
+            if not hoje:
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "sem batida viva no minuto da data da celula"
+                continue
+
+            b = hoje[0]
+            r["batida"] = b
+            r["instante"] = local_minuto(b.timestamp)
+            if b.tipo not in ("E", "S"):
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "tipo da batida desconhecido"
+                continue
+
+            if tem_outra(b, batidas, 5, False):
+                t5_aux["5min_qualquer_tipo"] += 1
+            if tem_outra(b, batidas, 10, True):
+                t5_aux["10min_mesmo_tipo"] += 1
+
+            tipo = d.get("tipo_dia")
+            if tipo == "folga":
+                r["classe"] = "F"
+                continue
+            if tipo != "trabalho":
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "tipo_dia=" + str(tipo)
+                continue
+
+            celdia = d.get("celulas")
+            marcos = d.get("marcos")
+            if not isinstance(celdia, list) or not isinstance(marcos, list):
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "marcos ou celulas ausentes"
+                continue
+            if not marcos:
+                if not celdia:
+                    r["classe"] = "T6"
+                else:
+                    r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "ata agregada nao identifica marcos"
+                continue
+
+            dist, motivo = distancias_missing(d, cel.data, alvo)
+            if dist is None:
+                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", motivo
+            elif dist:
+                r["classe"] = "T1" if min(dist) <= 90 else "T2"
+            elif tem_outra(b, batidas, 10, True):
+                r["classe"] = "T5"
+
+        # T4: pareia E com a S seguinte entre ocorrencias ainda elegiveis.
+        # Se uma ocorrencia nao decidida pode interferir, nao forcar T4/T3.
+        por_dia = defaultdict(list)
+        for r in registros:
+            por_dia[r["cel"].data].append(r)
+        for data_celula, itens in por_dia.items():
+            pendentes = [r for r in itens if r["classe"] is None]
+            incerto = any(
+                r["classe"] in ("NAO_CLASSIFICADA", "nao_mensuravel_a",
+                                 "nao_mensuravel_b", "sem_hora")
+                for r in itens
+            )
+            if incerto:
+                for r in pendentes:
+                    r["classe"] = "NAO_CLASSIFICADA"
+                    r["motivo"] = "outra orfa incerta pode interferir no pareamento T4"
+                continue
+            pendentes.sort(key=lambda r: (r["instante"], r["batida"].pk))
+            entrada = None
+            for r in pendentes:
+                if r["batida"].tipo == "E":
+                    if entrada is not None:
+                        entrada["classe"] = "T3"
+                    entrada = r
+                elif entrada is not None:
+                    entrada["classe"] = r["classe"] = "T4"
+                    entrada = None
+                else:
+                    r["classe"] = "T3"
+            if entrada is not None:
+                entrada["classe"] = "T3"
+
+        for r in registros:
+            registrar(r["classe"], cid, r["cel"].data,
+                      r["verde"], r["motivo"]) [nao verificado]
+
+    except Exception as exc:
+        falha(etapa, exc, cid)
+        if perm_negada(exc):
+            print("PERMISSAO_DE_ESCRITA_NEGADA",
+                  "chamada=" + etapa, "col=" + etiqueta,
+                  "acao=parar_este_colab")
+        # Se a ata ja foi contada, preserva todas as suas ocorrencias.
+        if ocorrencias:
+            for cel, valor in ocorrencias:
+                registrar("NAO_CLASSIFICADA", cid, cel.data, None,
+                          "erro na etapa " + etapa)
+        else:
+            universo_completo = False
+
+print("TURNOS_REAIS_RETORNADOS", turnos_encontrados)
+print("T5_AUX_5MIN_QUALQUER_TIPO", t5_aux["5min_qualquer_tipo"])
+print("T5_AUX_10MIN_MESMO_TIPO", t5_aux["10min_mesmo_tipo"])
+print("T5_AUX_ESCOPO=orfas_casadas_com_tipo_valido_antes_da_precedencia")
+
+for classe in CLASSES:
+    print("CLASSE", classe,
+          "dias=" + str(len(dias[classe])),
+          "pessoas=" + str(len(pessoas[classe])),
+          "orfas=" + str(totais[classe]),
+          "dia_verde_orfas=" + str(verdes[classe]),
+          "verde_indeterminado=" + str(verdes[classe + "_verde_indeterminado"]))
+
+for (classe, motivo), n in sorted(motivos.items()):
+    print("MOTIVO", classe, "orfas=" + str(n), motivo)
+
+soma = sum(totais.values())
+print("TOTAL_ORFAS_ATA", total_ata,
+      "universo_completo=" + str(universo_completo))
+print("SOMA_CLASSES_E_EXCLUSOES", soma)
+print("SOMA_CONFERE", soma == total_ata and universo_completo)
+if universo_completo:
+    print("DIFERENCA_PARA_1267", total_ata - 1267)
+else:
+    print("DIFERENCA_PARA_1267 [nao verificado]: universo incompleto")
+print("ERROS=" + str(erros))
+print("FIM_ITEM1")
+```
+
+As interfaces verificadas na cópia são `grade_da_celula` em [leitor_celula.py:350](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:350), `turnos_do_colab` em [turnos.py:1850](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1850) e a lavratura das horas em [cartorio.py:730](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:730). A execução, os totais e o comportamento das chamadas sob o papel leitor permanecem **[não verificado]**.
+
+## 18/11 19:50 · sessao 988b5681a1a8 · RAIA-ESPURIAS · leitura · origem=Code
+
+**Sonda parcial, não executada:** consegui conferir a porta da grade e preparar o levantamento de cobertura da lavra, mas não concluí a implementação e a revisão das seis classes. Portanto, os totais por classe, destinos, origens observadas, `SOMA_CONFERE` e `NAO_CLASSIFICADO` permanecem **[nao verificado]**.
+
+Escolhi `grade_da_celula` para definir o universo: ela devolve `tipo_dia` a partir da ata e da célula e transporta as órfãs lavradas; para ata que só tem contagem, devolve `?`. [app/escala/services/leitor_celula.py:350] [app/escala/services/leitor_celula.py:180]
+
+A cobertura precisa ser medida antes de atribuir donos: `cxr_lavrado` retorna `None` quando a lavra não cobre o colaborador na competência. [app/ponto/services/cxr_na_lista.py:165] A decisão técnica é **não chamar o motor**, independentemente da cobertura; os não cobertos devem ser contados como `dono_sem_resposta`, conforme o complemento fornecido. [nao verificado]
+
+Não executei o envelope: além de não haver banco disponível, o próprio script prevê criação ou alteração de recursos, incluindo GRANTs e arquivos, o que conflita com a regra desta chamada de não criar, editar ou apagar arquivos. [bin/sonda_leitura.sh:1] [bin/sonda_leitura.sh:146] [nao verificado]
+
+```python
+# SONDA PARCIAL — ITEM 2 — NAO EXECUTADA
+#
+# Esta parte mede apenas o universo pela grade e a cobertura da lavra.
+# Nao classifica dias, nao consulta destinos e nao chama InsumosDoDono.
+#
+# Porta: escala/services/leitor_celula.py:350 grade_da_celula
+# Lavra: ponto/services/cxr_na_lista.py:165 cxr_lavrado
+#
+# As classes abaixo sao as definicoes solicitadas, AINDA NAO IMPLEMENTADAS:
+# a: turno E..S completo na folga e trabalho declarado em dia vizinho;
+#    le turnos_do_colab e grade_da_celula.
+# b: turno E..S completo, sem a; le turnos_do_colab e grade_da_celula.
+# d: orfa casada com pergunta_origem ou origem de declaracao; le Batida.
+# e: orfa casada a ate 10 min de outra batida do mesmo tipo; le Batida.
+# c: batida solta; le Batida e turnos_do_colab.
+# f: restante com motivo; le os mesmos insumos anteriores.
+# Precedencia: a > b > d > e > c > f.
+#
+# NAO USAR como resultado do item 2: faltam casamento, classificacao,
+# destinos, dono, nao_mensuravel, reconciliacao e validacao em sombra.
+
+from collections import Counter, defaultdict
+from datetime import date
+
+from django.apps import apps
+
+from escala.models import CelulaDia
+from escala.services.leitor_celula import grade_da_celula
+from ponto.services.cxr_na_lista import cxr_lavrado
+
+INI = date(2026, 10, 21)
+FIM = date(2026, 11, 20)
+EMPRESAS = (2, 3, 4)
+ERROS = Counter()
+
+
+def erro(etapa, exc):
+    ERROS[(etapa, type(exc).__name__)] += 1
+    print("ERRO etapa={} tipo={}".format(etapa, type(exc).__name__))
+
+
+def executar():
+    for modelo in sorted(apps.get_models(), key=lambda m: m._meta.label_lower):
+        print(
+            "CAMPOS {} {}".format(
+                modelo._meta.label,
+                [campo.name for campo in modelo._meta.get_fields()],
+            )
+        )
+
+    print(
+        "UNIVERSO fonte=grade_da_celula "
+        "empresas=2,3,4 inicio={} fim={}".format(INI, FIM)
+    )
+    print("PRECEDENCIA a>b>d>e>c>f IMPLEMENTADA=nao")
+    print(
+        "COMPARACAO_17_11 referencia=1267 "
+        "total_geral_atual=[nao verificado] motivo=[nao verificado]"
+    )
+
+    try:
+        celulas = list(
+            CelulaDia.objects.filter(
+                colaborador__empresa_id__in=EMPRESAS,
+                data__range=(INI, FIM),
+                ata__n_orfas__gt=0,
+            )
+            .select_related("colaborador")
+            .order_by("colaborador_id", "data", "pk")
+        )
+    except Exception as exc:
+        erro("carregar_celulas", exc)
+        print("COBERTURA_LAVRA cobertos=[nao verificado] "
+              "nao_cobertos=[nao verificado]")
+        return
+
+    por_colab = defaultdict(list)
+    for cel in celulas:
+        por_colab[cel.colaborador_id].append(cel)
+
+    # Seleciona pela saida da grade, sem filtrar previamente por ata.tipo_dia.
+    universo = defaultdict(list)
+    grade_falhou = set()
+    for cid, cels in sorted(por_colab.items()):
+        try:
+            grade = grade_da_celula(cels[0].colaborador, INI, FIM)
+            dias = {dia["data"]: dia for dia in grade["dias"]}
+            for cel in cels:
+                dia = dias[cel.data]
+                if dia["tipo_dia"] in ("folga", "ausencia"):
+                    universo[cid].append((cel, dia))
+        except Exception as exc:
+            erro("grade_da_celula", exc)
+            grade_falhou.add(cid)
+
+    cobertos = 0
+    nao_cobertos = 0
+    cobertura_desconhecida = 0
+    try:
+        ler_cxr = cxr_lavrado()
+    except Exception as exc:
+        erro("cxr_lavrado", exc)
+        ler_cxr = None
+
+    for cid in sorted(universo):
+        if ler_cxr is None:
+            cobertura_desconhecida += 1
+            continue
+        try:
+            cxr = ler_cxr(cid, INI)
+            if cxr is None:
+                nao_cobertos += 1
+            else:
+                cobertos += 1
+        except Exception as exc:
+            erro("cobertura_colab", exc)
+            cobertura_desconhecida += 1
+
+    print(
+        "COBERTURA_LAVRA cobertos={} nao_cobertos={} desconhecidos={} "
+        "colabs_com_grade_falha={}".format(
+            cobertos, nao_cobertos, cobertura_desconhecida, len(grade_falhou)
+        )
+    )
+
+    dias = sum(len(itens) for itens in universo.values())
+    orfas = 0
+    contagens_invalidas = 0
+    for itens in universo.values():
+        for cel, dia in itens:
+            n = (cel.ata or {}).get("n_orfas")
+            if isinstance(n, int) and not isinstance(n, bool) and n > 0:
+                orfas += n
+            else:
+                contagens_invalidas += 1
+            print(
+                "DIA col{} data={} tipo_dia={} n_orfas={} "
+                "horas_na_grade={}".format(
+                    cel.colaborador_id,
+                    cel.data.isoformat(),
+                    dia["tipo_dia"],
+                    n,
+                    len(dia["orfas"]),
+                )
+            )
+
+    print(
+        "UNIVERSO_PARCIAL dias={} pessoas={} orfas={} "
+        "contagens_invalidas={} grade_falhou={}".format(
+            dias, len(universo), orfas, contagens_invalidas, len(grade_falhou)
+        )
+    )
+    print("SOMA_CONFERE=[nao verificado]")
+    print("NAO_CLASSIFICADO=[nao verificado]")
+    print("ITEM2=INCOMPLETO")
+
+
+try:
+    executar()
+except Exception as exc:
+    erro("execucao", exc)
+finally:
+    print(
+        "ERROS_DETALHE",
+        {
+            "{}:{}".format(etapa, tipo): n
+            for (etapa, tipo), n in sorted(ERROS.items())
+        },
+    )
+    print("ERROS={}".format(sum(ERROS.values())))
+    print("FIM_ITEM2")
+```
+
+A parte ainda necessária é implementar o casamento por minuto com data e as exclusões do COMPLEMENTO-3, calcular as classes com a precedência pedida e incorporar dono e destinos. A lista administrativa captura algumas exceções internamente, de modo que uma ausência nela não basta, por si só, para provar ausência de destino. [app/escala/services/cadastro_realidade.py:790]
 
 ## 18/11 19:46 · sessao a784106a2534 · RAIA-ESPURIAS · leitura · origem=Code
 
@@ -1481,77 +2101,4 @@ Este é **um censo parcial**, não a resposta solicitada para todo campo, chave 
 
 A verificação de todos os juízes registrados, de todos os campos e funções do diff e de todos os mutantes pedidos permanece **[não verificado]**. Não há base neste retorno para afirmar aprovação, ausência de outros bloqueantes ou impacto em produção.
 
-## 18/11 19:35 · sessao a0368c88b4f9 · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-**Resultado parcial: há uma lacuna de teste confirmada por inspeção, uma classificação cíclica duplicada e uma proposta antiga que continua aplicável sem verificação de idade.** Não posso dar um aval completo: não concluí o censo de **todos** os campos, chaves e funções do diff, nem a análise de todos os juízes e mutantes. Esses pontos ficam **[não verificado]**. [nao verificado]
-
-A cópia não contém metadados Git; portanto, a identidade do hash e o merge-base com `main` não foram confirmados. Usei o diff fornecido e as linhas da cópia presente. Não executei testes nem mutantes; as conclusões sobre sobrevivência são por inspeção. Produção, banco e logs: **[não verificado]**. [nao verificado]
-
-### Achados da árvore
-
-- **FILA — classificação de destino cíclico duplicada.** O botão classifica pela pertinência a `TipoEscala.CICLICOS` em `app/escala/services/cadastro_realidade.py:849`; a porta repete a classificação em `app/escala/regua_defesa.py:313`; e `julgar_vinculo` contém ainda a tupla literal `('12x36', '24x48')` para exigir âncora em `app/colaboradores/services/vinculo.py:128`. As condições não são idênticas: a última se aplica à criação sem âncora. Hoje a constante contém os mesmos dois valores em `app/escala/models.py:386`; a possibilidade de divergência futura decorre das cópias. O teste R5 passaria se apenas a recusa de `regua_defesa` fosse removida, pois o POST é barrado antes em `app/escala/views.py:498` e o teste só verifica que não houve vínculo em `app/escala/tests/test_escala_nao_descreve.py:299`. Sobrevivência executada: **[não verificado]**.
-
-- **FILA — proposta de lavra antiga pode ser aplicada.** `ler_lavra` devolve o snapshot mais recente disponível sem comparar a data com hoje em `app/ponto/services/esmeril_espelho.py:371`; o POST lê proposta e assinaturas dessa lavra e verifica o botão, mas não sua idade, em `app/escala/views.py:493`. A data da lavra é registrada no motivo em `app/escala/views.py:504`. Se isso viola um prazo autorizado ou ocorreu em produção: **[não verificado]**. O teste de lavra antiga remove as chaves novas, mas não exercita uma lavra de outro dia **com** proposta em `app/escala/tests/test_escala_nao_descreve.py:358`.
-
-- **FILA — o teste R1 não fixa a borda da janela independentemente.** A produção filtra `data__gte=ini` e `data__lte=fim` em `app/ponto/services/esmeril_espelho.py:99`; a fixture põe células em 10 e 11/11 em `app/escala/tests/test_escala_nao_descreve.py:63`, e compara o `desde` com a própria função `janela` em `app/escala/tests/test_escala_nao_descreve.py:94`. Por inspeção, um mutante que deslocasse o início da janela, preservando essas células no intervalo, poderia passar nesse teste; a execução e o efeito sobre a bateria inteira são **[não verificado]**.
-
-- **FILA — o selo antigo de agrupamento não prova agrupamento.** Ele verifica a presença do nome do posto em `app/escala/tests/test_cadastro_x_realidade.py:53`, enquanto o template apresenta posto como coluna em `app/templates/escala/cadastro_x_realidade.html:26`. O nome do teste ainda figura como selo de L-040 em `app/docs/LEIS.md:88`. A mudança de layout está declarada na própria L-040; o problema observado é o alcance do nome e da asserção do selo.
-
-### Escritores, leitores e significado: recorte verificado
-
-Isto **não é o censo completo solicitado**; os demais campos, consumidores indiretos e compatibilidade global ficam **[não verificado]**.
-
-| Dado ou função | Escritor e leitores encontrados | Significado e limite verificado |
-|---|---|---|
-| `ata.orfas` | O cartório compõe a ata em `app/ponto/services/cartorio.py:738`; `assinaturas_do_colab` lê em `app/ponto/services/esmeril_espelho.py:130`. | A carga soma o número de itens, inclusive horas não interpretáveis, em `app/ponto/services/esmeril_espelho.py:131`. Outros escritores e leitores na árvore inteira: **[não verificado]**. |
-| `medida['orfas']`, `orfas`, `orfas_desde` | Escritos em `app/ponto/services/esmeril_espelho.py:142` e `app/ponto/services/esmeril_espelho.py:236`; lidos pela lista em `app/escala/services/cadastro_realidade.py:969`. | Contagem por pessoa; zero é medida sem órfãs; ausência da chave é sem medida. A janela consulta datas de célula com ambas as bordas inclusivas e termina ontem: `app/ponto/services/esmeril_espelho.py:38`, `app/ponto/services/esmeril_espelho.py:63`, `app/ponto/services/esmeril_espelho.py:99`. Equivalência entre dia da célula, dia civil e dia do turno para todas as órfãs: **[não verificado]**. |
-| `proposta` e `destino` | `propor_escala` é chamado em `app/ponto/services/esmeril_espelho.py:241`; a lavra escreve mapa estruturado e frase em `app/ponto/services/esmeril_espelho.py:242`; a lista e o POST leem a proposta em `app/escala/services/cadastro_realidade.py:971` e `app/escala/views.py:494`. | A proposta cobre os 60 dias até ontem em `app/ponto/services/esmeril_espelho.py:241`; a carga usa outra janela em `app/ponto/services/esmeril_espelho.py:233`. O ciclo da proposta não é guardado; o botão consulta o cadastro atual em `app/escala/services/cadastro_realidade.py:819`. Todos os demais consumidores e sua interpretação: **[não verificado]**. |
-| `carga`, `carga_desde`, `carga_texto`, `linhas`, `carga_resumo` | A lista monta a linha em `app/escala/services/cadastro_realidade.py:981`, ordena em `app/escala/services/cadastro_realidade.py:1055` e publica o resumo em `app/escala/services/cadastro_realidade.py:1067`; tela e PDF leem a frase em `app/templates/escala/cadastro_x_realidade.html:17` e `app/escala/services/cadastro_realidade.py:1184`. | O resumo soma cargas positivas das linhas listadas, usa a menor data delas e conta sem medida separadamente em `app/escala/services/cadastro_realidade.py:788`. Ele não representa necessariamente toda a frota: o universo das linhas é formado a partir de assinaturas e cadastro em `app/escala/services/cadastro_realidade.py:961`. |
-| `postos` e `linhas` | Ambos saem de `lista` em `app/escala/services/cadastro_realidade.py:1062`; a tela e o PDF usam `linhas`, enquanto o vigia usa `postos` em `app/chamados/services/vigia_fio.py:196`. | São duas apresentações dos registros montados pela lista, com ordenações diferentes, conforme `app/escala/services/cadastro_realidade.py:1055`. Todos os leitores de `postos`: **[não verificado]**. |
-| `tipo_ciclo`, `template_id`, `confirm_txt` | `_vinculos` lê o vínculo do dia e o ciclo em `app/escala/services/cadastro_realidade.py:766`; a porta consulta o template em `app/escala/regua_defesa.py:310`, envia `confirm_txt` em `app/escala/regua_defesa.py:316`, e a execução o inclui em `obs` em `app/colaboradores/services/vinculo.py:350`. | `hoje` é uma data local passada do POST à porta em `app/escala/views.py:496` e `app/escala/views.py:506`. O censo completo dos escritores e leitores dessas colunas é **[não verificado]**. |
-
-Quanto aos juízes registrados, `_vinculos` chama explicitamente os juízes de cobertura e vínculo do dia em `app/escala/services/cadastro_realidade.py:756` e `app/escala/services/cadastro_realidade.py:770`, correspondentes ao registro em `app/docs/JUIZES.md:146`. A duplicação cíclica descrita acima está comprovada entre as três condições citadas; que ela seja duplicação de um juiz **registrado em JUIZES.md**, ou que não haja outro juiz registrado contornado no diff inteiro, é **[não verificado]**.
-
-### Matriz dos 15 achados dos postmortens
-
-A classe e a identificação vêm dos anexos fornecidos; suas linhas originais são **[não verificado]**. “FILA” abaixo indica trabalho de verificação ou defeito de teste/documentação identificado, não uma aprovação da obra. [nao verificado]
-
-| Achado | Classe | Sítio nesta árvore e resultado por classe | Triagem |
-|---|---|---|---|
-| F6F7 1 — significado entre leitores | (a) | Carga e janelas em `app/ponto/services/esmeril_espelho.py:99` e `app/escala/services/cadastro_realidade.py:981`: **[não verificado]** para todos os leitores e dias. | FILA |
-| F6F7 2 — ausência de chamador | (a) | `medida` é passada pelo chamador de frota em `app/ponto/services/esmeril_espelho.py:235`; ausência de outros chamadores relevantes: **[não verificado]**. | FILA |
-| F6F7 3 — sequência de eventos omitida | (a) | Sequência snapshot → mudança cadastral → POST em `app/escala/views.py:493`: lavra antiga é aceita; validade exigida: **[não verificado]**. | FILA |
-| F6F7 4 — mutação que escapa ao selo | (a) | R1 e borda em `app/escala/tests/test_escala_nao_descreve.py:86`: mutante de janela descrito acima sobrevive **por inspeção**; execução **[não verificado]**. | FILA |
-| F6F7 5 — pergunta omitida | (e) | Aval literal e citação em `app/docs/LEIS.md:90`: completude das perguntas contra os avais, cujos textos integrais não foram fornecidos, **[não verificado]**. | FILA |
-| F6F7 6 — erro de fixture omitido | (c) | Fixtures em `app/escala/tests/test_escala_nao_descreve.py:43`: execução e eventuais erros de preparação **[não verificado]**. | FILA |
-| Escala 1 — mutante R1 | (a) | O caso de quatro órfãs agora é afirmado em `app/escala/tests/test_escala_nao_descreve.py:91`; o mutante anterior específico e a bateria executada são **[não verificado]**. A borda de janela continua sem prova independente. | FILA |
-| Escala 2 — rótulo LEI-AKITA | (a) | Novos predicados em `app/escala/services/cadastro_realidade.py:809` e `app/escala/services/cadastro_realidade.py:830`; rótulo da obra e sua correspondência integral **[não verificado]**. | FILA |
-| Escala 3 — segundo juiz cíclico | (a) | **Sim**, há condições repetidas em `app/escala/services/cadastro_realidade.py:849`, `app/escala/regua_defesa.py:313` e `app/colaboradores/services/vinculo.py:128`; condições e propósito não são idênticos. | FILA |
-| Escala 4 — R5 não chega à porta | (a) | **Sim**: guarda anterior em `app/escala/views.py:498`; R5 em `app/escala/tests/test_escala_nao_descreve.py:299`. Remover a recusa da porta sobrevive ao R5 por inspeção. | FILA |
-| Escala 5 — R4 não confere `h.de` | (a) | **Não nesse teste atual**: R4 confere `h.de` em `app/escala/tests/test_escala_nao_descreve.py:288`. Cobertura de todos os formatos do antes **[não verificado]**. | não se aplica ao defeito específico |
-| Escala 6 — lavra vencida | sem classe compatível | **Sim**, não há guarda de idade nos sítios `app/ponto/services/esmeril_espelho.py:371` e `app/escala/views.py:493`; prazo obrigatório **[não verificado]**. | FILA |
-| Escala 7 — literal do aval | (e) | A lavra omite `ciclo` em `app/ponto/services/esmeril_espelho.py:245`; o link aponta ao vínculo em `app/escala/tests/test_escala_nao_descreve.py:305`. Conformidade com o aval integral: **[não verificado]**. | FILA |
-| Escala 8 — rótulo do selo | (a) | **Sim**, o teste verifica presença, não agrupamento, em `app/escala/tests/test_cadastro_x_realidade.py:53`; ainda é citado em `app/docs/LEIS.md:88`. | FILA |
-| Escala 8 — citação L-042 | (e) | L-042 afirma que proposta é recalculada em `app/docs/LEIS.md:90`; o novo mapa é guardado em `app/ponto/services/esmeril_espelho.py:246`. A célula PROTEGE vazia não obriga citação pelo selo, conforme `app/docs/LEIS.md:43` e `bin/tests/test_lei_protege_sitio.sh:77`; aplicabilidade material da lei e citações nos commits **[não verificado]**. | FILA |
-
-**Achados novos desta volta:** a borda da janela sem prova independente é **FILA**; a exaustividade dos leitores, dos juízes e dos mutantes permanece **FILA [não verificado]**. A duplicação cíclica, o R5 que não alcança a porta, a lavra vencida e o selo de agrupamento já constavam dos postmortens fornecidos, portanto não os conto como novos. Não há base suficiente nesta verificação parcial para declarar que nenhum achado **BLOQUEIA** exista.
-
-## 18/11 19:35 · sessao 284d4a129c31 · - · - · origem=Ronald (tmux)
-
-A auditoria da tarefa e dos selos encontrou:
-
-- Os dois selos AST aceitam quatro mutantes que esvaziam ou alteram a lista `perguntas` por alias ou por métodos de `list`. Verifiquei os helpers em memória; a execução da suíte inteira é **[não verificada]**. A lista é criada em [pergunta_no_app.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/services/pergunta_no_app.py:84), e os selos estão em [test_contract_pergunta_viva.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_contract_pergunta_viva.py:26) e [test_pergunta_no_app.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_pergunta_no_app.py:29).
-
-- A sequência `VALIDACAO → SILENCIO → RESPOSTA` que mantém validação produz `aguarda_validacao` na tarefa, pois o laço só recua por respostas contíguas; a leitura do ato conserva a validação. Qual resultado a lei exige para essa sequência é **[não verificado]**. [tarefa_do_dia.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/services/tarefa_do_dia.py:163), [models.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/models.py:4313).
-
-- A face por pergunta chama `_pela_decisao` diretamente, enquanto a tarefa do dia aplica guardas adicionais de vida, lâmpada, teto e ausência. A equivalência das duas saídas em todos os casos é **[não verificada]**. [tarefa_do_dia.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/services/tarefa_do_dia.py:276), [face por pergunta](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/services/tarefa_do_dia.py:436).
-
-- O teste de endpoint do passivo cobre apenas `conservado=True`, mas outro teste no mesmo arquivo cobre também `False`; portanto, o mutante sempre `True` sobrevive ao primeiro teste, não à tabela unitária por inspeção. [test_f6_u4_aguarda_admin_pela_tarefa.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/api/tests/test_f6_u4_aguarda_admin_pela_tarefa.py:67).
-
-- A partição do app passa a projeção diretamente ao juiz de resposta; a property `respondida` passa a leitura da sequência. Sua concordância quando projeção e sequência divergem é **[não verificada]**. [pergunta_no_app.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/services/pergunta_no_app.py:80), [models.py](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/models.py:3785).
-
-## 18/11 19:34 · sessao 568d698c9c3e · - · - · origem=Ronald (tmux)
-
-A auditoria parcial de decisões e seus testes foi enviada ao agente principal com referências de arquivo e linha. A divergência potencial entre a face SQL e o C6 depende das demais guardas de vitalidade; sua incidência em produção permanece **[não verificado]**. [nao verificado]
-
-_7127 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7130 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
