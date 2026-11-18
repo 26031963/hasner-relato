@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 20:21** · publicado em **18/11/2026 20:24** (UTC-3)
+> Ultima resposta processada: **18/11/2026 20:25** · publicado em **18/11/2026 20:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 20:25 · sessao 69896ae881ff · E4C-F6F7 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — BLOQUEIA.** A c14 consulta o juiz existente, mas a leitura alimentada à tarefa não é necessariamente a leitura da sequência completa da pergunta; além disso, pode incorporar uma validação da projeção posterior a `agora`. Os REDs (ii)–(iv) também não ficam vermelhos na ponta anterior, embora o aval exija que cada caso morda e que os quatro estejam vermelhos antes da cura. [tarefa_do_dia.py:387](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:387), [models.py:4295](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4295), [teste c14:34](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:34), [aval fornecido: não verificado em arquivo]
+
+1. **BLOQUEIA — nem todos os caminhos garantem leitura.** Os três pontos de chamada são `expor_admin`, o ramo da instância e `exigencia_das_perguntas`. Os dois primeiros usam `(leituras or {}).get(p.pk)`: se o mapa ou a chave faltar, passam `None`; o terceiro indexa a leitura obrigatoriamente. A carga normal constrói e passa o mapa, mas `_tarefa_pura` aceita `leituras=None`, e há chamadas diretas de teste sem esse argumento. [tarefa_do_dia.py:196](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:196), [tarefa_do_dia.py:279](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:279), [tarefa_do_dia.py:340](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:340), [tarefa_do_dia.py:454](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:454), [tarefa_do_dia.py:522](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:522), [test_e3_c8b_sem_banco.py:187](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e3_c8b_sem_banco.py:187).
+
+   Sim: é **default silencioso**. Sem leitura, a guarda falha e `V→R(m)` termina em `aguarda_validacao`, mesmo que a leitura correta fosse validada. Isso não demonstra que a carga normal omita a leitura; demonstra que a interface permite a omissão e produz uma resposta comum, sem sinalizar desconhecimento. [tarefa_do_dia.py:142](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:142), [tarefa_do_dia.py:158](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:158).
+
+2. **BLOQUEIA — sequência e horizonte alteram a resposta do juiz.** A carga remove atos de ressuscitação e atos reais posteriores a `agora`; a leitura comum usa todas as decisões da pergunta e não tem relógio. Portanto, por exemplo, uma reabertura de ressuscitação ou uma resposta que desfaz posterior ao horizonte pode limpar a validação na leitura completa e estar ausente da leitura alimentada à tarefa; uma validação real posterior pode fazer o inverso. [tarefa_do_dia.py:387](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:387), [models.py:4221](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4221), [models.py:4295](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4295).
+
+   O literal fornecido manda perguntar a `DecisaoPergunta.leitura(p)` pela sequência de atos de uma pergunta; não autoriza expressamente substituir sua sequência pela filtrada. A exigência temporal da carga está documentada no código, mas a conciliação das duas obrigações **não fecha no literal apresentado**; não proponho reabrir a regra. [aval fornecido: não verificado em arquivo], [tarefa_do_dia.py:489](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:489).
+
+   Há ainda um efeito temporal específico: **o ato real futuro sai de `dec`, mas pode voltar como linha passiva sintética**. A cópia conserva `p.validada_em`; como o `ja` é formado somente pelos atos cortados, uma validação projetada posterior a `agora` pode ser considerada sem linha e adicionada à leitura, sem corte temporal. O conjunto `passivo`, calculado separadamente, descarta essa linha futura e não bloqueia a decisão. Exemplo condicionado: `S→R(m)` até agora e validação projetada depois podem fazer a leitura dizer validada e a tarefa escolher `silencio_decidido`. [tarefa_do_dia.py:398](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:398), [tarefa_do_dia.py:403](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:403), [tarefa_do_dia.py:413](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:413), [models.py:4265](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4265), [models.py:4308](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4308).
+
+3. **OK quanto ao cache; BLOQUEIA quanto ao conteúdo, pelo item 2.** `leitura` chama `p.decisoes.all()` e seu próprio contrato diz que essa chamada usa o cache de prefetch. Ela monta `ja` a partir dos reais recebidos e o passa a `linhas_da_projecao_sem_linha`, evitando a query própria que essa função faria se `ja` fosse omitido. Assim, neste caminho, lê a lista `dec` injetada **mais a projeção passiva em memória**, inclusive a ressalva temporal acima. [models.py:4249](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4249), [models.py:4304](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4304), [tarefa_do_dia.py:403](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:403).
+
+4. **FILA — as duas fixtures apontadas não comprovam `V→R(m)`.** Na fixture c8b alterada, a sequência construída é uma resposta que **não** mantém validação; nas duas r3/c5, `_tarefa_pura` é substituída por um stub e `_dec` está vazio. Portanto, não há base nesses trechos para afirmar que seus casos antigos `V→R(m)` passam pelo motivo errado: **não identifiquei tal caso nessas fixtures**. [test_e3_c8b_sem_banco.py:200](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e3_c8b_sem_banco.py:200), [test_e3_r3_c5_sem_banco.py:305](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e3_r3_c5_sem_banco.py:305), [test_e3_r3_c5_sem_banco.py:336](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e3_r3_c5_sem_banco.py:336).
+
+   Já a fixture c13 fornece uma leitura **sintética**, calculada pela última linha; seu `V→R(m)` verifica a propagação da leitura fornecida e o resultado, mas não verifica que a carga obteve a leitura real. O default silencioso continua sendo um risco para outros testes que omitirem o mapa. [test_e4c_f6f7_c13_caso_pela_regra.py:24](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:24), [test_e4c_f6f7_c13_caso_pela_regra.py:49](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:49).
+
+5. **BLOQUEIA — só (i) é RED contra a ponta anterior.** Pelo diff fornecido, a guarda anterior pulava a cauda quando o ato anterior era validação. Assim, (ii) já chegava à lavra; (iii) e (iv) já chegavam a `aguarda_validacao`. Isso contraria o requisito literal de os quatro estarem vermelhos antes da cura; não basta que sejam úteis como regressão. [diff fornecido: não verificado em arquivo], [teste c14:34](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:34), [aval fornecido: não verificado em arquivo].
+
+   Mutantes que cada asserção mataria, por inspeção:
+
+   - **(i)** trocar a consulta à leitura pela adjacência à validação; o teste explícito demonstra o resultado mutado esperado. [teste c14:85](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:85).
+   - **(ii)** impedir o recuo sobre duas respostas mantidas, por exemplo permitindo recuar apenas uma. [tarefa_do_dia.py:160](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:160), [teste c14:37](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:37).
+   - **(iii)** retirar a exigência de leitura validada e sempre pular a cauda mantida. [tarefa_do_dia.py:163](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:163), [teste c14:38](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:38).
+   - **(iv)** tratar também resposta que desfaz como transparente e pular para a validação. [tarefa_do_dia.py:161](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:161), [teste c14:39](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:39).
+
+   Essas mortes, exceto a adjacência expressamente codificada, são previsões por inspeção; execução dos mutantes **[não verificado]**. O selo AST cobre as formas sintáticas previstas e seu mutante, não prova toda possível forma de derivar validação. [teste c14:56](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:56).
+
+6. **FILA — escritores e leitores; mudanças possíveis nos consumidores.**
+
+   | Valor | Quem escreve ou produz | Quem lê |
+   |---|---|---|
+   | `validada_em` da projeção e ato `VALIDACAO` | `_carimbar_validacao` grava ambos; devolução e resposta humana podem limpar o carimbo e registrar outro ato. [validacao.py:161](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/validacao.py:161), [validacao.py:269](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/validacao.py:269), [disputa_emissao.py:1494](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/disputa_emissao.py:1494) | `linhas_da_projecao_sem_linha` usa o carimbo; `leitura` produz seu próprio `validada_em`; a c14 consulta este último. [models.py:4251](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4251), [models.py:4317](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4317), [tarefa_do_dia.py:163](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:163) |
+   | `decisoes` e `resposta_mantem_validacao` | `registrar` é a porta declarada para a sequência; resposta humana registra `False`, automática e pela trilha registram `True`. [models.py:4329](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4329), [disputa_emissao.py:1532](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/disputa_emissao.py:1532), [disputa_emissao.py:1686](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/disputa_emissao.py:1686) | `leitura` interpreta os atos; a tarefa carrega e filtra a sequência e examina a cauda. [models.py:4308](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4308), [tarefa_do_dia.py:390](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:390) |
+   | `leituras` e razão/ações do dia | `_fatos_das_perguntas` produz o mapa em memória; `_pela_decisao` produz razão e ações, inseridas na tarefa. A alteração não grava esses valores no banco. [tarefa_do_dia.py:404](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:404), [tarefa_do_dia.py:340](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:340) | `_portas_da_tarefa` transforma ações e razões em fio/rota; os consumidores leem a porta publicada. [tarefa_do_dia.py:701](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:701) |
+
+   **Sim, podem ver valores diferentes**, dependendo das demais ações e portas do dia: `V→S→R(m)` troca uma ação de validar por silêncio sem ação; isso pode mudar fio, rota e classificações derivadas. Folha lê a porta; retrato lê folha; cadastro, vigia e pautas também consomem essa saída. Não se pode afirmar que cada consumidor mudará em toda ocorrência, pois a porta agrega outras ações. [tarefa_do_dia.py:165](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:165), [tarefa_do_dia.py:711](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:711), [fora_da_folha.py:70](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/folha/fora_da_folha.py:70), [retrato_folha.py:1212](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/folha/retrato_folha.py:1212), [cadastro_realidade.py:466](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/escala/services/cadastro_realidade.py:466), [vigia_fio.py:359](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/vigia_fio.py:359), [pautas_dos_discordantes.py:85](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/ponto/services/pautas_dos_discordantes.py:85).
+
+7. **BLOQUEIA / FILA — classes de reprovação.**
+
+   - **Presente:** RED sem mordida na ponta anterior, item 5; e leitura com universo diferente do juiz comum, item 2. A função do juiz é reutilizada, mas o cache adulterado faz sua resposta depender de uma sequência parcial: isso é uma derivação divergente da fonte, mesmo sem criar outra função juiz. [models.py:4295](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4295), [tarefa_do_dia.py:403](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:403).
+   - **Presente como risco de selo:** a alteração da chamada deixou o alvo literal do mutante `absorcao_admin_sem_rotulo` com a assinatura antiga; a catraca exige exatamente um alvo. A inclusão desse mutante na matriz cobrada pela catraca **[não verificado]**. [e3_v8_mutantes.py:76](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/e3_v8_mutantes.py:76), [test_e3_mutantes_alvo.py:20](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/tests/test_e3_mutantes_alvo.py:20), [tarefa_do_dia.py:279](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:279).
+   - **Não demonstrados no diff:** novo escritor persistente, relógio lido fora da borda, mudança da ordem de trava ou pouso. Ausência global dessas classes e situação do pouso **[não verificado]**. O campo de leitura pode significar leitura integral em `models.py` e leitura de sequência cortada nesta carga; a diferença semântica está demonstrada no item 2. [tarefa_do_dia.py:374](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:374), [models.py:4295](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4295).
+
+8. **FILA — a regra do ramo existe, mas o passivo intercepta o caminho normal.** Sem linha passiva posterior, `V→DEVOLUCAO→R(m)` dá leitura não validada e, portanto, `aguarda_validacao`; o mesmo vale para recusa e reabertura, pois limpam a validação. Se uma leitura fornecida disser validada, a função recua e escolhe o último ato não transparente: devolução → `materializacao_recusada`; recusa/reabertura → `devolvida_ao_colaborador`. Isso corresponde ao literal do aval e à triagem fornecida. [models.py:4272](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/models.py:4272), [tarefa_do_dia.py:160](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:160), [triagem fornecida: não verificado em arquivo].
+
+   Porém, se a validação vier de passivo cuja data é até `agora`, a carga inclui a pergunta em `passivo` e `_pela_decisao` retorna `passivo_sem_linha` **antes** de aplicar aquele ramo. Assim, a afirmação da triagem de que o caso passivo chega ao ramo do ato não está demonstrada para a carga normal; há tensão com o literal nesse caminho. Passivo futuro tem a anomalia separada do item 2. [tarefa_do_dia.py:154](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:154), [tarefa_do_dia.py:413](/home/ronald/codex_ws/0ee6521f52998c4296b84e2d14126ee939977e3d/app/chamados/services/tarefa_do_dia.py:413).
+
+A sombra fornecida reporta zero perguntas com validação antes de silêncio nas 51.212 examinadas e zero candidatas `V→S` para a segunda medição; são resultados dos anexos raspados, sem acesso independente ao banco ou aos programas da sonda **[não verificado]**. Não executei a suíte nem os mutantes; seus resultados de execução **[não verificado]**. [nao verificado]
 
 ## 18/11 20:21 · sessao 4fb0642f9619 · E4C-F9 · construtor · origem=Code
 
@@ -3207,176 +3260,4 @@ finally:
 
 A regra acima trata horas repetidas na própria ata como ambíguas para evitar atribuir uma única batida a duas ocorrências; essa restrição adicional não consta expressamente da decisão da sessão **[nao verificado]**. Os valores de produção, a soma das seis classes e `NAO_CLASSIFICADO` só poderão ser conhecidos após a execução e a definição verificável das classes **[nao verificado]**.
 
-## 18/11 19:43 · sessao 7cdc59c5f93f · RAIA-ESPURIAS · leitura · origem=Code
-
-O ponto principal é que **tela e PDF podem classificar a mesma batida por fontes diferentes**: na competência, a tela normalmente lê a ata; o PDF chama novamente o construtor da grade e usa seu resultado para marcar as batidas impressas ([espelho.py:506](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/espelho.py:506), [pdf_espelho.py:193](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:193), [utils.py:2334](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:2334)). **Caso real atual: [não verificado].**
-
-A leitura abaixo é da cópia identificada no pedido; não executei aplicação nem sondas, e não tenho acesso ao banco ou aos logs de produção. O anexo informa 1.267 sobras na medição de 17/11, mas não fornece os casos necessários para verificar os pares de leitores hoje: **número atual, diferença e causa: [não verificado]**. [nao verificado]
-
-| Leitor | Fonte e alcance observado | Unidade |
-|---|---|---|
-| Espelho, marca `orfas_grade` | Normalmente `grade_da_celula` transporta `ata['orfas']`; ata antiga sem horas pode virar uma lista de `?`. Antes do início da apuração a tela usa o construtor; também cai nele se `remapear_na_regua` levantar `AtaAgregadaSemMarcos`. Sem grade ou marcos, o adaptador retorna lista vazia. ([leitor_celula.py:180](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:180), [leitor_celula.py:420](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:420), [espelho.py:519](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/espelho.py:519), [espelho.py:528](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/espelho.py:528), [utils.py:1095](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1095), [espelho.html:240](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/templates/ponto/espelho.html:240)). | Hora órfã na linha de dia-colab. |
-| PDF/cartão, marca de espúria | `grade_espelho_janela` chama `montar_grade_prevista_periodo`; o PDF compara as horas dessa grade com as batidas das linhas trazidas pelo espelho e imprime as marcadas separadamente. A comparação é por `HH:MM`, não por identificador da batida. ([pdf_espelho.py:193](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:193), [utils.py:2348](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:2348), [pdf_espelho.py:602](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:602), [pdf_espelho.py:606](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:606), [pdf_espelho.py:874](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:874)). | Batida marcada, agrupada por dia-colab. |
-| `furos_diarios.apurar_colab` | Conta `len(orfas)` da grade lavrada, mas só devolve dias elegíveis: trabalho ou ausência parcial que cobra resto, até ontem, com marco previsto; também exclui isentos e escala sob a régua indicada. O ranking soma o campo persistido de `FuroDiario`, portanto é uma projeção e pode depender de quando foi alimentada. ([furos_diarios.py:12](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:12), [furos_diarios.py:25](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:25), [furos_diarios.py:123](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:123)). | Órfãs por dia-colab; ranking agrega por colab ou outro eixo. |
-| Vigia de cluster | Lê diretamente a ata; exige pelo menos duas horas órfãs a até 15 minutos e uma lâmpada apagada, e consulta o juiz de dia sem trabalho. Ata sem as listas necessárias é **não medida**. ([cluster_espurio.py:15](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cluster_espurio.py:15)). | Dia-colab com assinatura; acompanha lista de horas órfãs. |
-| Vigia pareador × célula | Compara `CelulaDia.ata` com `turnos_do_colab`: procura borda de turno fechado que também consta como órfã, com lâmpada de ponta apagada. Exclui turnos não posicionáveis ou com mais de um turno no dia e informa `cego`. ([vigia_pareador_celula.py:42](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:42), [vigia_pareador_celula.py:93](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:93), [vigia_pareador_celula.py:113](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:113)). | Borda de turno; comando também conta colaboradores distintos ([comando:60](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/vigia_pareador_celula.py:60)). |
-| `sobras_sem_razao` do aval | **Implementação e universo da função real da medida de 17/11: [não verificado].** Não consegui identificá-la na leitura realizada; não equiparo os vigias acima a esse instrumento. | [não verificado]. |
-| Lista Cadastro × Realidade | A assinatura C9 mostra uma classe específica de turno aberto e saída órfã separada pelo teto, a partir da lavra de `teto_na_lista`, que lê o carimbo do pareador; a lista também combina outras assinaturas e filtra vínculos/empresas visíveis. Não é demonstrada como lista de todas as sobras da ata. ([cadastro_realidade.py:99](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/cadastro_realidade.py:99), [cadastro_realidade.py:869](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/cadastro_realidade.py:869)). | Linha por colab, com assinatura C9 de dia e ocorrências ([cadastro_realidade.py:890](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/cadastro_realidade.py:890)). |
-| Placar estrutural R2 | Guarda texto e número de medida; declara `cadastro_realidade.lista` como fonte para remedição. A linha não é uma contagem ao vivo de todas as órfãs. ([placar_estrutural.py:32](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/core/placar_estrutural.py:32), [placar_estrutural.py:135](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/core/placar_estrutural.py:135)). | Colaboradores na medida R2; não é medida geral de órfãs. |
-| API `api_espelho_v2` | Usa o espelho para dados e totais, e monta batidas por dia com a geometria de `turnos_do_colab`; na estrutura examinada, cada batida tem tipo, hora, timestamp e origem, sem marca de órfã. O app recebe batidas e status, mas uma classificação de sobra nessa resposta não foi encontrada. ([views.py:1350](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views.py:1350), [views.py:1430](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views.py:1430), [views.py:1461](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views.py:1461), [views.py:1535](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views.py:1535)). | Batida e dia; classificação explícita de órfã: [não verificado]. |
-
-**Pares e sondas.** As sondas abaixo são propostas, **não executadas**. Usam datas fixas de 21/10 a 18/11/2026, que cabem na janela de competência 11 informada no aval; a janela efetiva por empresa deve ser conferida antes de interpretar ausência de caso. O envelope aceita `--sombra`, mas o próprio script documenta que mantém artefatos de infraestrutura e trilha: não o executei nesta tarefa de somente leitura de arquivos ([sonda_leitura.sh:4](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:4), [sonda_leitura.sh:29](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:29)).
-
-**Tela × PDF.** Além da diferença ata versus construtor, o PDF só marca uma órfã quando encontra uma batida da linha com a mesma hora; a tela pode apresentar a hora da grade mesmo sem essa correspondência ([pdf_espelho.py:602](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:602), [utils.py:1121](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1121)). **Caso real: [não verificado].**
-
-```python
-import datetime as dt
-from django.utils import timezone
-from colaboradores.models import Colaborador
-from escala.models import CelulaDia
-from ponto.models import Batida
-from ponto.services.espelho import espelho_do_colab
-from relatorios.pdf_espelho import _coletar_dados_espelho
-
-INI, FIM = dt.date(2026, 10, 21), dt.date(2026, 11, 18)
-AGORA = timezone.make_aware(dt.datetime(2026, 11, 19, 12))
-for modelo in (Colaborador, CelulaDia, Batida):
-    print("CAMPOS", modelo.__name__, [f.name for f in modelo._meta.fields])
-print("INSTANTE", timezone.localtime(AGORA).isoformat())
-erros, achou = 0, False
-ids = CelulaDia.objects.filter(data__range=(INI, FIM)).values_list(
-    "colaborador_id", flat=True
-).distinct().order_by("colaborador_id")
-for c in Colaborador.objects.filter(pk__in=ids).order_by("pk").iterator():
-    try:
-        tela = espelho_do_colab(c, FIM, INI, FIM, agora=AGORA)
-        papel = _coletar_dados_espelho(c, INI, FIM, agora=AGORA)
-        td = {d["data"]: d for d in tela["dias"] if INI <= d["data"] <= FIM}
-        for d in papel["dias"]:
-            dia = d["data"]
-            if dia not in td:
-                continue
-            a = set(td[dia].get("orfas_grade") or [])
-            b = {timezone.localtime(x.timestamp).strftime("%H:%M")
-                 for x in d.get("batidas", []) if getattr(x, "orfa", False)}
-            if a != b:
-                print("DIVERGE col%s %s tela_n=%s pdf_horas_n=%s" %
-                      (c.pk, dia.isoformat(), len(a), len(b)))
-                achou = True
-                break
-        if achou:
-            break
-    except Exception as exc:
-        erros += 1
-        print("ERRO col%s %s" % (c.pk, type(exc).__name__))
-print("CASO_ENCONTRADO=%s" % int(achou))
-print("ERROS=%s" % erros)
-```
-
-**Ata × apuração de furos.** A mesma ata pode conter órfãs em folga ou outro dia excluído da apuração; nesse caso a ausência de linha em `apurar_colab` significa *fora do universo do contador*, não zero órfãs ([furos_diarios.py:32](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:32), [furos_diarios.py:49](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:49)). **Caso real: [não verificado].**
-
-```python
-import datetime as dt
-from django.utils import timezone
-from colaboradores.models import Colaborador
-from escala.models import CelulaDia
-from escala.services.leitor_celula import grade_da_celula
-from escala.services.furos_diarios import apurar_colab
-
-INI, FIM = dt.date(2026, 10, 21), dt.date(2026, 11, 18)
-AGORA = timezone.make_aware(dt.datetime(2026, 11, 19, 12))
-for modelo in (Colaborador, CelulaDia):
-    print("CAMPOS", modelo.__name__, [f.name for f in modelo._meta.fields])
-print("INSTANTE", timezone.localtime(AGORA).isoformat())
-erros, achou = 0, False
-ids = CelulaDia.objects.filter(data__range=(INI, FIM)).values_list(
-    "colaborador_id", flat=True
-).distinct().order_by("colaborador_id")
-for c in Colaborador.objects.filter(pk__in=ids).order_by("pk").iterator():
-    try:
-        grade = grade_da_celula(c, INI, FIM)
-        apurados = {x[0]: x[3] for x in apurar_colab(c, INI, FIM, hoje=AGORA.date())}
-        for d in grade["dias"]:
-            n = len(d.get("orfas") or [])
-            if n and (d["data"] not in apurados or apurados[d["data"]] != n):
-                print("DIVERGE col%s %s ata_n=%s apurado=%s tipo=%s" %
-                      (c.pk, d["data"].isoformat(), n,
-                       apurados.get(d["data"], "fora_do_universo"), d.get("tipo_dia")))
-                achou = True
-                break
-        if achou:
-            break
-    except Exception as exc:
-        erros += 1
-        print("ERRO col%s %s" % (c.pk, type(exc).__name__))
-print("CASO_ENCONTRADO=%s" % int(achou))
-print("ERROS=%s" % erros)
-```
-
-**Ata × vigia de cluster.** Uma ou mais órfãs podem existir sem preencher a assinatura do vigia; uma ata sem listas também não pode ser tratada como ausência de cluster ([cluster_espurio.py:15](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cluster_espurio.py:15)). **Caso real: [não verificado].**
-
-```python
-import datetime as dt
-from django.utils import timezone
-from escala.models import CelulaDia
-from ponto.services.cluster_espurio import _leitura_da_celula
-
-INI, FIM = dt.date(2026, 10, 21), dt.date(2026, 11, 18)
-AGORA = timezone.make_aware(dt.datetime(2026, 11, 19, 12))
-print("CAMPOS CelulaDia", [f.name for f in CelulaDia._meta.fields])
-print("INSTANTE", timezone.localtime(AGORA).isoformat())
-erros, achou = 0, False
-for cel in CelulaDia.objects.filter(data__range=(INI, FIM)).order_by(
-        "colaborador_id", "data").iterator():
-    try:
-        n = len((cel.ata or {}).get("orfas") or [])
-        if not n:
-            continue
-        resultado = _leitura_da_celula(cel)
-        if not resultado:
-            estado = "nao_medido" if resultado is None else "sem_assinatura"
-            print("DIVERGE col%s %s ata_n=%s vigia=%s" %
-                  (cel.colaborador_id, cel.data.isoformat(), n, estado))
-            achou = True
-            break
-    except Exception as exc:
-        erros += 1
-        print("ERRO col%s %s" % (cel.colaborador_id, type(exc).__name__))
-print("CASO_ENCONTRADO=%s" % int(achou))
-print("ERROS=%s" % erros)
-```
-
-**Pareador × ata.** O próprio `censo` procura a divergência entre borda de par fechado e órfã lavrada, com filtros específicos; `cego=1` impede interpretar ausência de casos como confirmação de igualdade ([vigia_pareador_celula.py:42](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:42), [vigia_pareador_celula.py:97](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:97)). **Caso real: [não verificado].**
-
-```python
-import datetime as dt
-from django.utils import timezone
-from colaboradores.models import Colaborador, Empresa
-from escala.models import CelulaDia
-from ponto.models import Batida
-from ponto.services.vigia_pareador_celula import censo
-
-AGORA = timezone.make_aware(dt.datetime(2026, 11, 19, 12))
-for modelo in (Colaborador, Empresa, CelulaDia, Batida):
-    print("CAMPOS", modelo.__name__, [f.name for f in modelo._meta.fields])
-print("INSTANTE", timezone.localtime(AGORA).isoformat())
-erros = 0
-try:
-    r = censo(11, 2026)
-    print("CEGO=%s" % r["cego"])
-    if r["casos"]:
-        cid, dia, borda, _hora = r["casos"][0]
-        print("DIVERGE col%s %s borda=%s" % (cid, dia.isoformat(), borda))
-    else:
-        print("CASO_ENCONTRADO=0")
-except Exception as exc:
-    erros += 1
-    print("ERRO", type(exc).__name__)
-print("ERROS=%s" % erros)
-```
-
-Quanto aos juízes, o registro vivo declara a pergunta **“a batida é espúria (cluster)?” em `SEM_JUIZ`**, com decisões em sítios diferentes no detector e no cluster-guard; portanto há derivação fora de juiz único registrado para essa pergunta ([juizes.py:1224](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/core/juizes.py:1224)). Isso não demonstra, por si só, que toda divergência entre PDF e tela seja uma violação desse mesmo juiz: a classificação e os caminhos específicos precisam ser confrontados com o caso ([pdf_espelho.py:606](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:606), [espelho.py:519](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/espelho.py:519)).
-
-O item **não está fechado**: faltam a identificação da função real de `sobras_sem_razao`, a conferência completa dos leitores “e afins”, sondas para os pares envolvendo lista/placar/API e a execução das sondas na sombra para apresentar casos reais. Tudo isso permanece **[não verificado]**.
-
-_7143 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7144 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
