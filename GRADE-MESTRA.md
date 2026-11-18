@@ -12,20 +12,20 @@
 <!-- placar_grade:cabecalho inicio (escrito por bin/placar_grade.py --cabecalho; nao editar a mao) -->
 | balde | obras | faltam (estado != NO AR hoje) |
 |---|---|---|
-| ESPINHA-E | 76 | 76 |
+| ESPINHA-E | 77 | 77 |
 | 20/20 | 5 | 4 |
 | LATERAL-ESTRUTURA | 157 | 157 |
 | INSTRUMENTO | 180 | 180 |
 | UI | 42 | 42 |
 | CEREJA | 1 | 1 |
 | ? | 5 | 5 |
-| **total** | **466** | **465** |
+| **total** | **467** | **466** |
 
-Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 398; INTERROMPIDA 7; PARADA 56; NO AR hoje 1; nao lidas: 0
+Estados: EM VOO 4; BRIEF PRONTO 0; REGISTRADA 399; INTERROMPIDA 7; PARADA 56; NO AR hoje 1; nao lidas: 0
 
-fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 305 com a coluna
+fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PARADA 0; NO AR hoje 0; linhas medidas 6 de 306 com a coluna
 
-resolve preenchido 13/466
+resolve preenchido 13/467
 <!-- placar_grade:cabecalho fim -->
 
 Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (excluidas na leitura; lista no rodape).
@@ -106,6 +106,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | FIO-E0-V4-E1-ENTRADAS | ESPINHA-E | Faz as perguntas nascerem ligadas ao fato correto. | - | desenho; suite; sombra; opus | ++.+.+... | PARADA (último estado escrito) [PERSPECTIVA 17/11: FEITA] | BACKLOG:1888 [+16 compl.] | ? | ? |
 | FIO-E0-V4-E4-ESCRITORES | ESPINHA-E | Substitui estados paralelos por atos registrados da pergunta. | - | E4B; E4C; E4D | ++.+.++++ | REGISTRADA (E4a-1 no ar; restante pendente) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1915 [+24 compl.] | ? | ? |
 | PRE-MAPA-E4D | ESPINHA-E | Mapa antes da E4d: escritores, perguntas, leitores (script) e matriz por porta. | - | E4D | ......... | REGISTRADA (aval PRE-MAPA-E4D-1811-1425; material logs/PRE-MAPA-E4D/{escritores,perguntas,matriz}.md + script de leitores) | BACKLOG:PRE-MAPA-E4D | ? | ? |
+| ESPURIAS-PRE-MAPA | ESPINHA-E | Leitura antes das espurias: sitios do medidor medida_turno_do_par por classe/caminho/efeito/fatia, leitores da HE fora da janela (DST-L1), 3 vermelhos c8 da ESPURIA-TELA + merge-tree com F6F7 c7; 2o passo registrado sem executar: sonda sitios da lista curta x orfas medidas. | - | MOTOR-LE-O-TURNO | ......... | REGISTRADA (aval ESPURIAS-PRE-MAPA-1811-1445; material logs/ESPURIAS-PRE-MAPA/{sitios,dstl1_leitores,espuria_tela}.md para MOTOR-LE-O-TURNO/DIA-DA-BATIDA-JUIZ-UNICO, ESPELHO-LE-A-DECISAO-HE/DST-L1 e ESPURIA-TELA) | BACKLOG:ESPURIAS-PRE-MAPA | ? | ? |
 | RAIZ-DA-DISPUTA | ESPINHA-E | Faz perguntas e disputas reagirem juntas aos mesmos atos. | - | F0–F7; decisões F1; E4D em F5 | ++....... | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1934 [+16 compl.] | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/models.py) |
 | LAVRA-PREMATURA-CONCORDE | ESPINHA-E | Define quando o dia pode ser confirmado antes do turno terminar. | - | decisão de desenho | ...+.+... | PARADA (construção vedada) [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:1981 | ? | ? |
 | RETRATO-POR-EVENTO | ESPINHA-E | Atualiza o retrato quando um ato altera a apuração. | - | E2; E3 | +........ | REGISTRADA [PERSPECTIVA 17/11: PENDENTE REAL] | BACKLOG:2039 | ? | ? |

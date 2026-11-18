@@ -1,7 +1,35 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 14:29** · publicado em **18/11/2026 14:31** (UTC-3)
+> Ultima resposta processada: **18/11/2026 14:36** · publicado em **18/11/2026 14:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 14:36 · sessao c52e48e0f93d · LAUDO-[nome] · sonda · origem=Code
+
+**col868: o espelho mostra 21 min fora da janela, e o motor publica 21,209933 min para o período.** A regeneração mudou os marcos de 14/11 na mesma manhã da correção de fase e explica geometricamente as duas pontas; a autoria exata da regeneração pelo comando e o dono L-099 permanecem **[não verificado]**. [DADO RASPADO:12–14,29–31; autoria e dono: não verificado]
+
+As referências `DADO RASPADO:linha` abaixo numeram as linhas do resultado fornecido na mensagem, começando em `sonda_leitura` como linha 1; não são números de linha verificados de um arquivo em disco. A sonda foi informada como já executada; não houve nova execução nem acesso ao banco nesta resposta. [DADO RASPADO:1; nova execução: não verificado]
+
+1. **Minutos de 14/11.** No espelho, a entrada às **18:42** está **18 min antes** do marco das 19:00, e a saída às **07:03** está **3 min depois** do marco das 07:00: **21 min no total**. [DADO RASPADO:28–30]
+
+   O motor retornou um período, com entrada em **14/11 às 18:42:28,063** e saída em **15/11 às 07:03:40,659**, horário local UTC−3, e **21,209933333333332 min** fora da janela. O motor soma os minutos retirados das duas pontas; o valor informado conserva os segundos. [DADO RASPADO:31; app/ponto/motor_calculo_v2.py:2759,2787]
+
+2. **Células de col868.** Todas têm origem `gerada`, `editada_em=None` e uma regeneração; horários abaixo são locais UTC−3. [DADO RASPADO:9,12,15]
+
+   | Data | `gerada_em` | `regenerada_em` | DNA atual × anterior |
+   |---|---|---|---|
+   | 13/11 | 21/10 05:50:08,771086 | 18/11 08:19:24,040195 | Atual: `trabalha=False`, sem marcos ou lâmpadas. Anterior: entrada 13/11 19:00, intervalo 14/11 01:00–02:00 e saída 14/11 07:00. [DADO RASPADO:9–11] |
+   | 14/11 | 21/10 05:50:08,772390 | 18/11 08:19:24,041817 | Atual: `trabalha=True`, entrada 14/11 19:00, intervalo 15/11 01:00–02:00 e saída 15/11 07:00. Anterior: sem marcos ou lâmpadas. [DADO RASPADO:12–14] |
+   | 15/11 | 21/10 05:50:08,773706 | 18/11 08:19:24,043138 | Atual: `trabalha=False`, sem marcos ou lâmpadas. Anterior: entrada 15/11 19:00, intervalo 16/11 01:00–02:00 e saída 16/11 07:00. [DADO RASPADO:15–17] |
+
+   Nos três DNAs, o vínculo mudou de **1377 para 1603**; permaneceram `tipo_escala_id=380`, ciclo `12x36`, versão 2, intervalo não livre e jornada de 720 min. [DADO RASPADO:10–11,13–14,16–17]
+
+3. **Gestão.** O retrato existe, cobre 21/10–20/11 e foi calculado em **18/11 às 06:43:43,226639 locais** — depois da regeneração das células. col868 não consta nele; portanto, 14/11 não consta sob col868 nesse retrato. A Gestão sem filtros também não retornou col868. A razão da ausência no retrato é **[não verificado]**. [DADO RASPADO:12,18–22,25; app/ponto/services/gestao_he.py:236; razão: não verificado]
+
+   Não foram encontradas decisões para o dia, e o leitor da Gestão retornou `sem_decisao`. [DADO RASPADO:23–24]
+
+4. **Relação com a fase e dono.** A célula de 14/11 foi regenerada às **08:19:24** e passou de DNA sem marcos para os marcos de 19:00–07:00; esses marcos, comparados às batidas informadas, explicam os **18 + 3 min** exibidos. Isso é consistente com a correção de fase relatada para cerca de 08:19, mas o dado não identifica o comando que produziu a regeneração nem apresenta uma medição de produção imediatamente anterior que, isoladamente, prove a origem causal dos minutos. [DADO RASPADO:12–14,29,31; autoria e medição anterior: não verificado] [nao verificado]
+
+   **Dono L-099: [não verificado].** A mudança do DNA e a ausência no retrato estão demonstradas, mas o dado não estabelece por que a fase anterior ou a nova estava correta, nem por que o retrato posterior não incluiu col868; por isso não sustenta escolher entre ESTRUTURA, CADASTRO e BATIDA. [DADO RASPADO:10–14,20–22; correção da fase e causa da ausência: não verificado]
 
 ## 18/11 14:29 · sessao ea61c0add5dd · PRE-MAPA-E4D · censo · origem=Code
 
@@ -1257,32 +1285,4 @@ Se o mapa de atribuição do motor não estiver publicado ou deixar períodos se
 
 4. **Exportada, dinheiro ou `!` — toque fora do declarado não demonstrado.** O complemento proíbe tocar exportada; o deploy normal pode executar migrations antes do reload, conforme [deploy.sh:30](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/deploy.sh:30) e [deploy.sh:316](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/bin/deploy.sh:316). Os diffs efetivos e efeitos das migrations e do pouso sobre exportada, dinheiro ou `!` são [não verificado].
 
-## 18/11 13:31 · sessao 922407afe52f · E4C-F6F7 · construtor · origem=Code
-
-As curas C1–C4 estão aplicadas. As verificações pontuais sem banco passaram; o fechamento dos 18 vermelhos da suíte permanece **[não verificado]**. A suíte não foi executada. [nao verificado]
-
-- **C1:** escolhi o default `False` nas fixtures, igual ao campo real, mantendo as asserções existentes. Arquivos: [test_e3_c8b_sem_banco.py:68](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e3_c8b_sem_banco.py:68), [test_e3_pos_suite_sem_banco.py:27](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e3_pos_suite_sem_banco.py:27), [test_e3_portas_tarefa.py:725](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e3_portas_tarefa.py:725), [test_e3_r3_c7_sem_banco.py:247](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e3_r3_c7_sem_banco.py:247), [test_e3_tarefa_admin_sem_banco.py:123](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:123). A escolha acompanha o [default do modelo:4195](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4195); o mutante que retira o campo volta a provocar o erro no selo ([teste:74](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:74)). [nao verificado]
-
-- **C2:** a fixture compila `_fatos_das_perguntas` no namespace da classe, usando o corpo do módulo ([test_e3_r3_c7_sem_banco.py:211](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e3_r3_c7_sem_banco.py:211)). As asserções de status e relações continuam no selo; retirar a função reproduz `NameError` ([mutante:82](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:82)).
-
-- **C3:** os selos agora verificam por AST a chamada com `colab` como primeiro argumento e o uso de `pendentes`, aceitando argumentos nomeados ([test_pergunta_no_app.py:29](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:29), [test_contract_pergunta_viva.py:26](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:26)). Cada arquivo contém `test_a_costura_MORDE`, que troca a fonte ou remove a chamada e exige rejeição ([primeiro:189](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:189), [segundo:110](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:110)). A cadeia adicional até `q_vivas` e o juiz continua no segundo selo ([linha 94](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:94)).
-
-- **C4:** o contador entrega o universo à autoridade e conta apenas as linhas de validação que ela devolve ([backfill_decisoes_pergunta.py:104](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/management/commands/backfill_decisoes_pergunta.py:104), [autoridade:4238](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4238)). Escolhi essa opção porque a autoridade já aceita perguntas sem carimbo; não acrescentei exceção à allowlist. O teste sem banco exercita a autoridade real e distingue validação sem linha, validação correspondente e resposta ([teste:30](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:30)). A varredura agora percorre mais perguntas; o custo em produção é **[não verificado]**. [nao verificado]
-
-Para G5, a seleção de células geradas futuras usa `data__gt=hoje` sem teto de competência ([cadastro_futuro.py:22](/home/ronald/wt-codex-e4c-f6f7-132608/app/ponto/services/cadastro_futuro.py:22)); o resultado dos dois testes de folga nesta árvore é **[não verificado]**. [nao verificado]
-
-Os mutantes executados estão em [test_e4c_f6f7_c7_sem_banco.py](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:53). Cada comando abaixo passou, confirmando que o caso detecta o respectivo mutante: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.MutantesDasFixtures.test_sem_default_da_resposta_MORDE
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.MutantesDasFixtures.test_sem_funcao_no_namespace_MORDE
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_selos_e_mutantes_MORDEM
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.ContadorSemBanco.test_mutante_conta_tambem_respostas_MORDE
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.ContadorSemBanco.test_mutante_reintroduz_filtro_cru_MORDE
-```
-
-Também passaram 36 testes pontuais de C1/C2, os seis testes sem banco do arquivo novo e o selo C4 com `SimpleTestCase` substituído por `unittest.TestCase`. `py_compile` passou nos nove arquivos alterados, com a escrita de bytecode desativada. A matriz e os selos que importam Django não iniciaram no interpretador disponível porque `django.contrib` e `django.test` não estavam disponíveis; seu resultado permanece **[não verificado]**. [nao verificado]
-
-LEI-AKITA: origem=[tarefa_do_dia.py:164](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/tarefa_do_dia.py:164) + [backfill_decisoes_pergunta.py:94](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/management/commands/backfill_decisoes_pergunta.py:94), testemunha=[models.py:4195](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4195) + [models.py:4238](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4238) + [pergunta_no_app.py:68](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/pergunta_no_app.py:68), RED=18 vermelhos da suíte b66587c26 fornecidos no anexo **[não verificado]**, quem-mais-le=[aviso_pendencia.py:9](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/aviso_pendencia.py:9) + [cobranca.py:48](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/cobranca.py:48) + [tarefa_do_dia.py:436](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/services/tarefa_do_dia.py:436), juizes novos=0, padrao=Single Source of Truth / Aggregate Root ([GLOSSARIO.md:11](/home/ronald/wt-codex-e4c-f6f7-132608/app/docs/GLOSSARIO.md:11)).
-
-_6973 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6974 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
