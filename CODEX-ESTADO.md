@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 14:10** · publicado em **18/11/2026 14:10** (UTC-3)
+> Ultima resposta processada: **18/11/2026 14:18** · publicado em **18/11/2026 14:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 14:18 · sessao 459a4922e755 · DST-L2 · sonda · origem=Code
+
+- **(b1)** A grade lê somente justificativas **aprovadas**; elas limpam os furos e marcam o dia como justificado, mas não mudam seu `tipo_dia`. A pendente não entra nesse filtro. Separadamente, uma Ausência pode mudar o tipo do dia. [app/escala/utils.py:1188](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1188), [app/escala/utils.py:1197](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1197), [app/escala/utils.py:1210](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1210), [app/escala/utils.py:1254](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1254).
+
+- **(b2)** O efeito concreto da rejeição após o fecho — voltar a protestar e gerar cobrança por chamado reaberto ou novo — permanece **[não verificado]**: o dado não traz a prova em sombra pela porta real com `atomic+raise`. A porta aceita justificativa pendente, grava rejeitada e seu `save()` tenta acionar novo julgamento; esse julgamento pode não ocorrer. [app/ponto/services/justificativa.py:273](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:273), [app/ponto/signals.py:85](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:85), [app/ponto/signals.py:161](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:161). O candidato da S1 é **chamado 37191, col507, 2026-11-05**; sua justificativa já estar rejeitada não demonstra a transição pendente → rejeitada requerida para a prova. [DADO RASPADO: `candidato chamado 37191 col507 2026-11-05`; anexo `medida_b_leitura.r`, S1 e S2].
+
+- **(b3)** Universo **35**, igual em quantidade aos **35** do anexo; diferença numérica **0**. Contagens: **pendente 0, aprovada 0, rejeitada 1, nenhuma 34**. Um chamado pode contar em mais de uma categoria de status. [DADO RASPADO: linhas `universo 35` a `nenhuma 34`; anexo `PERGUNTA-DE-DESENHO.md`, “Números”; anexo `medida_b_leitura.r`, S1]. A igualdade dos integrantes e a equivalência exata com a sonda original permanecem **[não verificado]**. A S1 lê a ata gravada pela implementação de `dia_sem_trabalho` disponível na árvore em que roda; já o cartório da cópia usa a ata do julgamento corrente. Uma diferença de código da árvore viva ou de ata poderia afetar a comparação, mas sua ocorrência aqui é **[não verificado]**. [anexo `medida_b_leitura.r`, S1; app/chamados/juizes.py:445](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:445), [app/ponto/services/cartorio.py:1457](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1457).
 
 ## 18/11 14:10 · sessao 3a71134a64be · DST-L2 · leitura · origem=Code
 
@@ -1238,8 +1246,4 @@ Nenhuma cura foi aplicada ou executada; o fechamento efetivo dos vermelhos e pos
 
 Resultados de escala e do contrato de vitalidade enviados ao agente principal, com referências de arquivo e linha. A suíte da base não foi executada; a reprodução nela permanece [não verificado]. [nao verificado]
 
-## 18/11 13:24 · sessao 3401826c5161 · - · - · origem=Ronald (tmux)
-
-Análise enviada ao agente principal, com causas agrupadas, locais das fixtures, escritores e leitor do campo, comparação com a base e curas propostas. O resultado após as curas permanece [não verificado].
-
-_6969 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6970 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
