@@ -1,7 +1,114 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 09:42** · publicado em **18/11/2026 09:42** (UTC-3)
+> Ultima resposta processada: **18/11/2026 09:47** · publicado em **18/11/2026 09:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 09:47 · sessao 878c5682bc91 · [nome]-NAO-DESFAZ-O-PAPEL · verificador · origem=Code
+
+1. **A cura não cobre toda entrada malformada.** `_eh_hhmm` filtra `None`, `''`, `·S` e os rótulos posicionais, mas aceita caracteres para os quais `isdigit()` é verdadeiro e `int()` falha: com marco `²²:00`, célula `missing` e órfã `11:31`, o contador levanta `ValueError`. Também aceita `24:00` e `99:99`; estes não levantam exceção, mas entram no cálculo circular como horas válidas e podem gerar contagens falsas. [app/escala/orfa_classe.py:31](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:31), [app/escala/orfa_classe.py:125](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:125), [app/escala/orfa_classe.py:130](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:130).
+
+2. **Órfãs malformadas ainda podem derrubar o classificador e o contador.** Em dia de trabalho com célula `missing` e marco válido, órfã `·S` causa `ValueError` e órfã `None` causa `TypeError`, pois a classificação chama `_minutos` sem validar a órfã; o contador também ordena órfãs por `_minutos`. A lista de células mais curta que a régua e uma célula `None` são ignoradas com segurança nesse trecho. Os emissores P1/P2/P3 encontrados formatam horários como `HH:MM` ou copiam a hora de uma célula; não há evidência no dado raspado de órfã malformada em produção. [app/escala/orfa_classe.py:53](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:53), [app/escala/orfa_classe.py:147](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:147), [app/escala/utils.py:631](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:631), [app/escala/utils.py:1730](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1730), [app/escala/utils.py:1841](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1841). Ocorrência em produção: **[não verificado]**.
+
+3. **O limite (i) exagera ao dizer que a distância circular é “certa para P1”.** P1 é associado ao dia usado para montar o turno em ambos os caminhos examinados, mas isso não recupera a data dos instantes: dentro de um turno longo, `00:10` e `23:30` podem estar separados por 23h20, enquanto o contador calcula 40 minutos. Logo, o rótulo do dia do turno, por si só, não garante distância correta nem impede falso alarme P1. A ocorrência desse cenário nos dados de produção é **[não verificado]**. [app/escala/orfa_classe.py:89](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:89), [app/escala/orfa_classe.py:130](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:130), [app/escala/utils.py:784](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:784), [app/escala/utils.py:1712](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1712), [app/escala/utils.py:1768](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1768).
+
+4. **O limite (i) também generaliza incorretamente P3 como “data civil”.** Sobras P3 são atribuídas pela data civil, mas P3 de ponta de override e excedente de slots é acrescentada à lista de órfãs do turno antes de esta ser guardada em `orfas_por_data[d]`. Os limites (ii) e (iii) correspondem ao tratamento examinado: colunas posicionais não têm hora prevista na régua e uma ponta de override sem coluna não recebe célula nessa régua. [app/escala/orfa_classe.py:90](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/orfa_classe.py:90), [app/escala/utils.py:1401](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1401), [app/escala/utils.py:1719](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1719), [app/escala/utils.py:1730](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1730), [app/escala/utils.py:1769](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1769), [app/escala/utils.py:1827](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/utils.py:1827).
+
+5. **A triagem do achado 9 é sustentada pelo teste, com uma ressalva de execução.** `test_com_a_cura_p1_e_zero` exige P1 zero nos dois valores da flag; o teste seguinte usa o mesmo cenário e simula a reversão fazendo `_protegida_da_guarda` retornar `False`, exigindo P1 maior que zero em ambos. Portanto, se esse teste de mutação passar nos dois modos, a asserção de P1 zero falha nos dois com essa reversão. Não executei os testes de integração nesta análise somente de leitura e sem banco; o resultado efetivo em cada modo é **[não verificado]**. [app/escala/tests/test_contador_espurias.py:155](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/tests/test_contador_espurias.py:155), [app/escala/tests/test_contador_espurias.py:163](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/tests/test_contador_espurias.py:163), [app/escala/tests/test_contador_espurias.py:169](/home/ronald/codex_ws/ae3051f9937386873a974a8993a2124b2d19dcb3/app/escala/tests/test_contador_espurias.py:169).
+
+## 18/11 09:45 · sessao 6f2e6e03dc61 · [nome]-NAO-DESFAZ-O-PAPEL · verificador · origem=Code
+
+1. **Procedente — o contador pode lançar exceção em uma régua válida.** O builder por turno cria colunas posicionais de intermitente com `hora='·I1'`, `·I2` etc. e pode marcar essas posições como `missing` ([utils.py:1402](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1402), [utils.py:1553](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1553)). Se houver órfã no mesmo dia, o contador aceita o rótulo como hora e tenta convertê-lo em inteiro ([orfa_classe.py:31](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:31), [orfa_classe.py:135](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:135)). Reproduzi `ValueError` com uma entrada pura que contém `·I1`, `missing` e uma órfã; a frequência dessa combinação em produção é **[não verificado]**.
+
+2. **Procedente — 90 minutos circulares não são a regra de casamento.** O contador usa sempre 90 minutos e reduz as horas a um relógio circular de 24 horas ([orfa_classe.py:100](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:100), [orfa_classe.py:118](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:118)). No caminho DP, `tol_min` delimita o **envelope**, enquanto o alinhamento compara datetimes e não impõe raio de 90 por marco; o caminho por papel tem outra regra de atribuição ([utils.py:216](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:216), [utils.py:511](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:511), [utils.py:635](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:635)). Os builders também aceitam `tol_min` diferente de 90 ([utils.py:2095](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:2095)).
+
+   Contraexemplo de data: uma sobra **P3 de 00:10 no dia civil D** e um marco vazio **23:30 de D** distam 1.400 minutos como instantes, mas o contador as considera a 40 minutos; reproduzi a contagem sobre essa entrada ([utils.py:1825](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1825), [orfa_classe.py:142](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:142)). Em um turno que realmente cruza meia-noite, 23:30 em D e 00:10 em D+1 também dão 40 minutos: o HH:MM isolado não distingue os dois casos ([utils.py:1414](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1414)).
+
+3. **Procedente — `dia['orfas']` tem semânticas de data diferentes.** P1 pode pertencer ao dia de entrada do turno; as sobras P2 e P3 são atribuídas pela data civil local ([utils.py:694](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:694), [utils.py:801](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:801), [utils.py:1449](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1449), [utils.py:1825](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1825)). Outro leitor declara que a órfã pertence à data do dia, enquanto usa deslocamentos explícitos para células noturnas ([turnos.py:2658](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/turnos.py:2658)). Portanto, **não** está demonstrado um significado único de dia para todos os itens. O produtor indica o sítio, mas não recupera a data perdida ([orfa_classe.py:103](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:103)).
+
+4. **Dúvida — alinhamento por índice é intenção do builder, mas não foi provado universalmente.** O builder simples alinha por `(tipo, HH:MM)`; o legacy multi-vínculo realinha cada subgrade à união; o por turno também alinha por chave e usa slots para intervalos e posições de intermitente ([utils.py:788](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:788), [utils.py:1034](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1034), [utils.py:1573](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1573), [utils.py:1715](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1715)). Nos overrides sem coluna, uma ponta casada vira P3 e um marco vazio sem coluna não aparece como célula alinhada ([utils.py:1724](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1724)). Assim, mesmo onde o índice aponta para a coluna correta, **a régua não necessariamente contém todos os marcos efetivos do dia**. Invariante para todo builder e dado possível: **[não verificado]**.
+
+5. **Dúvida — o “esperado 0” pode alarmar por resíduos fora da cura.** O contador agrega todo P1 próximo de vazio, sem distinguir dono ou a classe executável dos 37 dias ([orfa_classe.py:148](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:148)). O anexo `lei.md` informa que a esteira segue com P1 inteiro e que resíduos de cadastro e batida podem permanecer; esses números e sua classificação não são verificáveis pelo código ou por banco/log nesta sessão: **[não verificado]**. Isso é uma limitação declarada do indicador, não prova de decisão indevida.
+
+6. **Censo de emissores e transporte — nenhum outro emissor confirmado, com limite de verificação.** Os sete sítios do diff estão carimbados: P1 no papel e no DP, P2 na sobra civil e P3 nos quatro ramos por turno ([utils.py:631](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:631), [utils.py:673](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:673), [utils.py:810](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:810), [utils.py:1733](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1733), [utils.py:1744](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1744), [utils.py:1843](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1843)). A ordenação e as cópias rasas preservam os objetos; overlays podem remover a lista, e a reconciliação remove um item igual pelo texto ([utils.py:814](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:814), [utils.py:1822](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1822), [utils.py:1852](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1852), [utils.py:2014](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:2014)). Não identifiquei recriação de item antes dos retornos inspecionados; a exaustividade para **qualquer módulo e transporte indireto** permanece **[não verificado]**.
+
+7. **Leitores e efeito do carimbo — nenhuma mudança decisória confirmada; censo exaustivo [não verificado].** `Orfa` herda `str` e não sobrescreve igualdade, hash ou representação ([orfa_classe.py:103](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:103)). Os leitores inspecionados incluem:
+
+   - Cartório: aceita `isinstance(h, str)` para lâmpadas e grava `str(h)` na ata, descartando o atributo ([cartorio.py:628](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/services/cartorio.py:628), [cartorio.py:730](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/services/cartorio.py:730)).
+   - Propositor, supra-juiz e folha: examinam horas, presença ou quantidade de órfãs, sem ler `produtor` nos trechos consultados ([propositor.py:24](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/propositor.py:24), [supra_juiz.py:527](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/supra_juiz.py:527), [causas.py:43](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/folha/causas.py:43)).
+   - Calendário e PDF usam conjuntos e pertinência por hora; o template imprime o texto ([calendario.py:409](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/colaboradores/services/calendario.py:409), [pdf_espelho.py:174](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/relatorios/pdf_espelho.py:174), [espelho.html:240](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/templates/ponto/espelho.html:240)).
+   - O SHA-256 do cartório usa partes de insumos, não a lista de órfãs inspecionada ([cartorio.py:471](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/services/cartorio.py:471), [cartorio.py:556](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/ponto/services/cartorio.py:556)). O teste cobre igualdade, chave de dicionário, JSON, pickle e `str`, mas não prova todos os leitores, `copy`/`deepcopy`, cache ou comparações exatas de tipo ([test_contador_espurias.py:92](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/tests/test_contador_espurias.py:92)).
+
+   Na busca pelos usos do novo contador e de `produtor`, não encontrei chamada de produção ao contador nem leitura do atributo por dinheiro, ata, lâmpada, chamado ou pergunta; a conclusão global **“nenhum caminho existe” permanece [não verificado]** ([orfa_classe.py:144](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:144), [orfa_classe.py:148](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:148)).
+
+8. **Checklist das classes de reprovação.**
+
+   - **Segundo juiz:** **não identificado** para a pergunta de atribuição; o contador lê `missing`, enquanto `_match_marcos` é o juiz registrado ([core/juizes.py:221](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/core/juizes.py:221), [orfa_classe.py:135](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:135)). A classificação de proximidade é, porém, cálculo próprio do vigia; sua equivalência ao casador é **não**, conforme o achado 2.
+   - **Segundo escritor fora da porta:** **não identificado** no contador, que constrói e retorna dados novos; cobertura global **[não verificado]** ([orfa_classe.py:125](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:125)).
+   - **Relógio fora da borda:** **não** no contador inspecionado; ele recebe a grade ([orfa_classe.py:148](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:148)).
+   - **Derivação paralela:** **sim**, quanto à distância circular e ao raio fixo; se isso viola a lei da obra para um recorte de vigia distinto da atribuição, **[não verificado]** ([orfa_classe.py:118](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/orfa_classe.py:118), [utils.py:216](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:216)).
+   - **Campo com dois significados:** **sim**, órfã de dia do turno versus sobra de dia civil, como no achado 3; `marcos[].hora` também pode conter rótulo posicional ([utils.py:1404](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/utils.py:1404)).
+   - **Pouso antes do pré-requisito:** **[não verificado]**; a cópia não contém histórico Git, e não há evidência executável aqui da ordem de pouso. [nao verificado]
+
+9. **Testes — há mordidas úteis, mas não uma prova completa.** Os testes puros cobrem P1, separação P2, borda 90/91, marco cheio, folga, rajada, ausência de produtor e compatibilidade básica de `str`/JSON/pickle ([test_contador_espurias.py:48](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/tests/test_contador_espurias.py:48)). Os testes de builder verificam o golden, simulam a cura revertida e verificam P2 e presença de carimbo em um cenário ([test_contador_espurias.py:153](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/tests/test_contador_espurias.py:153), [test_contador_espurias.py:173](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/tests/test_contador_espurias.py:173)). Os testes puros **passariam independentemente da reversão da cura**, pois não chamam o builder; o teste explicitamente nomeado como reversão espera resultado positivo com `mock` e, sozinho, também não exige a cura ativa ([test_contador_espurias.py:159](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/tests/test_contador_espurias.py:159)). A mordida conjunta efetiva contra a reversão e a cobertura de cada ramo P3 são **[não verificado]**: não executei a suíte nem mutantes. Os casos de régua posicional, meia-noite ambígua e `tol_min` alternativo não aparecem nesses testes ([test_contador_espurias.py:25](/home/ronald/codex_ws/2255b3cada54a137bfad7074e9eec06a0eee4a8c/app/escala/tests/test_contador_espurias.py:25)).
+
+A inspeção foi somente de leitura. O diff foi conferido contra o anexo fornecido; a identidade do pai e do HEAD por Git é **[não verificado]**, pois esta cópia não contém `.git`.
+
+## 18/11 09:44 · sessao d8d98fb95e44 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO · verificador · origem=Code
+
+**Veredito: o delta não demonstra uma ordem de trava segura.** Há uma inversão identificável entre transações que alcançam as mesmas células e folgas: a sincronização do calendário adquire primeiro células e depois escreve folgas; a geração mensal da foto escreve folgas e depois tenta relavrar células. Isso é um **risco de deadlock**, condicionado à sobreposição das linhas e à intercalação das transações; ocorrência em produção está **[não verificado]**. [escala/folgas.py:150](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:150), [escala/folgas.py:193](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:193), [escala/folgas.py:215](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:215), [escala/folgas.py:617](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:617).
+
+## 1. Escritores e ordem de trava
+
+Os seguintes são os sítios **identificados** na cópia. Não posso afirmar que sejam todos os efeitos indiretos de aliases, cascatas e chamadores externos: exaustividade **[não verificado]**.
+
+| Sítio de produção | Aquisição ou escrita identificada |
+|---|---|
+| Alcance futuro | `travar=True` prepara `select_for_update` de `CelulaDia`; a aquisição ocorre quando o queryset é avaliado pelos chamadores. [cadastro_futuro.py:19](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:19), [cadastro_futuro.py:48](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:48), [folgas.py:620](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:620). |
+| Regeneração de vínculo | Lê células sem `select_for_update`, percorre datas crescentes e adquire travas de escrita nas linhas que altera ou cria. Não há trava explícita dia a dia nessa função. [celula.py:225](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:225), [celula.py:265](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:265), [celula.py:279](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:279), [celula.py:293](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:293), [celula.py:310](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:310). |
+| Edição e troca de plantão | `editar_dia` trava uma célula explicitamente e cria ou salva; a troca ordena os dois lados por `(colaborador_id, data)` antes de chamar a edição. [celula.py:630](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:630), [celula.py:690](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:690). |
+| Outras operações da porta | Reversão salva a célula; geração de período cria ou salva; `salvar_e_emitir` salva para lavra e carimbos; carimbo de insumos usa `bulk_update`. [celula.py:826](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:826), [celula.py:914](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:914), [celula.py:957](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:957), [celula.py:1220](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:1220). |
+| Foto mensal de folgas | `gerar_foto_folgas` abre `atomic`; o escritor apaga a foto de calendário, faz `bulk_create` e chama a relavra, que alcança a regeneração futura. A ordem é **FolgaDia → CelulaDia** quando ambas são tocadas. [folgas.py:150](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:150), [folgas.py:180](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:180), [folgas.py:215](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:215), [folgas.py:290](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:290). |
+| Folga manual | Lançamento usa `get_or_create`; alteração e lote chamam `_foto_do_dia`, que pode apagar, criar ou salvar; depois relavram células no mesmo ato. O reparentamento também salva a folga antes da relavra. [folgas.py:332](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:332), [folgas.py:343](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:343), [folgas.py:377](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:377), [folgas.py:405](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:405), [folgas.py:513](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:513). |
+| Salvar calendário | Um `atomic` envolve todos os vínculos; para cada um, a sincronização trava células futuras e depois reconcilia `FolgaDia`: **CelulaDia → FolgaDia**. [folgas.py:571](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:571), [folgas.py:600](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:600), [folgas.py:617](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:617). |
+| Comando gerador | O comando envolve medição, regeneração de hoje e geração de período num `atomic`. A primeira percorre colaboradores ordenados, mas a geração de período percorre vínculos sem ordenar por `(colaborador_id, data)` globalmente. [gerar_celulas.py:319](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/management/commands/gerar_celulas.py:319), [gerar_celulas.py:345](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/management/commands/gerar_celulas.py:345), [celula.py:883](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:883). |
+| Restauração de snapshot | Trava vínculos por PK, depois células e apaga vínculos. A exclusão alcança `FolgaDia` por `CASCADE` e a geradora de `CelulaDia` por `SET_NULL`. [vinculo.py:1017](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/colaboradores/services/vinculo.py:1017), [models.py:1585](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/models.py:1585), [models.py:1692](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/models.py:1692). |
+| Signals | Os signals de vigência e âncora chamam a porta e a regeneração futura; outro chama o reparentamento de folgas. Os signals de batida e ausência chamam o cartório, cujo carimbo passa pela escrita da célula. A transação externa depende do ato chamador **[não verificado]**. [escala/signals.py:67](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/signals.py:67), [escala/signals.py:119](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/signals.py:119), [escala/signals.py:185](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/signals.py:185), [ponto/signals.py:131](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/signals.py:131), [celula.py:1181](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:1181). |
+
+**Não é possível certificar todos os pares de transações como compatíveis.** Além da inversão acima, o salvamento do calendário mantém uma transação ao percorrer vínculos na ordenação padrão `-data_inicio`, e os meses da sincronização vêm de um `set`; nenhum dos dois estabelece uma ordem global por colaborador e mês. A ordem de aquisição efetiva do `DELETE` de múltiplas folgas também está **[não verificado]**. [folgas.py:578](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:578), [folgas.py:600](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:600), [folgas.py:626](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:626), [models.py:1000](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/models.py:1000).
+
+**Comparação histórica:** o diff fornecido mostra que em `bb40f26c5` as duas chamadas já faziam `select_for_update` antes da escrita subsequente; o delta move sua declaração para a raiz e acrescenta ordenação explícita. Portanto, a inversão célula → folga identificada na sincronização não nasce simplesmente dessa movimentação. O SQL anterior e todos os demais caminhos de `bb40f26c5` estão **[não verificado]**; a comparação com `dd489c627` está **[não verificado]**, pois essa revisão não consta do diff fornecido nem do histórico Git desta cópia. [dado fornecido: `c4.diff`, hunks de `escala/folgas.py` e `ponto/services/cadastro_futuro.py`]; [folgas.py:617](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:617).
+
+## 2. Semântica do queryset
+
+Pela composição pretendida do queryset, `filter` restringe o conjunto, `values_list` muda a projeção e `order_by('data')` substitui a ordenação anterior; esses encadeamentos não pedem a remoção de `select_for_update`. **SQL final efetivamente produzido e conjunto efetivamente travado no banco: [não verificado]**. [cadastro_futuro.py:19](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:19), [cadastro_futuro.py:42](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:42).
+
+Na regeneração, a substituição de `(colaborador_id, data)` por `data` preserva a ordem relevante **dentro dessa consulta**, porque ela já fixa um único colaborador; há unicidade por colaborador e data. Isso não estabelece ordem global entre várias consultas ou transações. [cadastro_futuro.py:42](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:42), [models.py:1830](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/models.py:1830).
+
+Os predicados mostrados no diff permanecem os mesmos nos dois pontos alterados, mas **não afirmo identidade exata das tabelas travadas com `bb40f26c5`** sem o SQL: antes havia ordenação padrão por `colaborador`, cujo modelo ordena por nome; um JOIN de ordenação e seu efeito sob `FOR UPDATE` estão **[não verificado]**. O delta usa explicitamente `colaborador_id` na sincronização. [dado fornecido: `c4.diff`]; [models.py:1834](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/models.py:1834), [colaboradores/models.py:400](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/colaboradores/models.py:400), [cadastro_futuro.py:19](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:19).
+
+## 3. Catraca A e JOIN
+
+A dispensa de `CelulaDia` é **coerente com o escopo sintático declarado** da catraca: ela procura os quatro modelos de `TRAVADOS` ou raiz não resolvida; registra imports locais e resolve o nome `CelulaDia`. Isso elimina o falso positivo de raiz desconhecida, mas **não prova** que a ordem envolvendo células e os quatro modelos seja segura. [test_e1_v7_catracas.py:5](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/chamados/tests/test_e1_v7_catracas.py:5), [test_e1_v7_catracas.py:70](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/chamados/tests/test_e1_v7_catracas.py:70), [test_e1_v7_catracas.py:98](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/chamados/tests/test_e1_v7_catracas.py:98).
+
+Os dois usos atuais de `travar=True` não acrescentam `select_related`; o uso com `select_related` no feriado deixa `travar=False`. Um JOIN com `FOR UPDATE` sem `of=` **pode** ampliar as tabelas travadas, mas a presença e o efeito de JOIN no SQL concreto, inclusive em `editar_dia`, estão **[não verificado]**. A própria catraca declara limites dos observadores de ordem e de linhas. [cadastro_futuro.py:42](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:42), [cadastro_futuro.py:73](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:73), [folgas.py:620](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:620), [celula.py:631](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/portas/celula.py:631), [test_e1_v7_catracas.py:36](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/chamados/tests/test_e1_v7_catracas.py:36).
+
+## 4. Chamadores e significado
+
+O alcance comum significa células **existentes**, de `origem='gerada'`, com `data > hoje`, opcionalmente de um colaborador, sem teto superior. `travar` altera a intenção de bloqueio, não o predicado declarado. Os quatro usos diretos encontrados são: regeneração e sincronização com trava; feriado e vigia sem trava. Não encontrei encadeamento direto restante de `select_for_update` nesses chamadores. [cadastro_futuro.py:8](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:8), [cadastro_futuro.py:42](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:42), [cadastro_futuro.py:73](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:73), [folgas.py:620](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:620), [vigia_cadastro_futuro.py:43](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/vigia_cadastro_futuro.py:43).
+
+O vigia declara que mede sem alterar a célula; sua leitura sem trava não é, sozinha, prova de defeito, e a consistência da fotografia concorrente está **[não verificado]**. No feriado existe uma janela concreta: ele lê e agrupa geradoras antes de chamar a regeneração que trava; mudança concorrente nesse intervalo pode tornar a seleção inicial antiga. A consequência efetiva está **[não verificado]**. [vigia_cadastro_futuro.py:1](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/vigia_cadastro_futuro.py:1), [cadastro_futuro.py:73](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:73), [cadastro_futuro.py:83](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:83).
+
+## 5. Checklist das classes
+
+- **Segundo juiz:** o delta seleciona alcance e delega a decisão de vínculo a `vinculos_dos_dias`/`vinculo_do_dia`; duplicação de juiz pelo delta não identificada. Auditoria completa de todos os juízes **[não verificado]**. [cadastro_futuro.py:49](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:49), [cadastro_futuro.py:78](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:78).
+- **Segundo escritor fora da porta:** o delta delega a escrita da célula a `regenerar_celulas_vinculo`; a conciliação de `FolgaDia` usa o escritor existente. Exaustividade de escritores em toda a árvore **[não verificado]**. [cadastro_futuro.py:55](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:55), [folgas.py:637](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:637).
+- **Relógio fora da borda:** o alcance e a regeneração exigem `hoje`; o salvamento do calendário lê uma vez e repassa aos vínculos. Outras leituras em caminhos chamados, inclusive a relavra de folga, existem; conformidade integral da obra **[não verificado]**. [cadastro_futuro.py:17](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:17), [folgas.py:597](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:597), [folgas.py:278](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:278).
+- **Derivação paralela:** os quatro usos encontrados compartilham o alcance; o vigia acrescenta deliberadamente células não geradas ao selo de julgamento. Duplicações fora desses usos **[não verificado]**. [cadastro_futuro.py:8](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/cadastro_futuro.py:8), [vigia_cadastro_futuro.py:30](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/vigia_cadastro_futuro.py:30).
+- **Selo/RED sem mordida:** há testes de mutação da catraca e testes dos selos no código; execução e resultado nesta cópia **[não verificado]**. [test_e1_v7_catracas.py:398](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/chamados/tests/test_e1_v7_catracas.py:398), [test_cadastro_futuro_c5.py:253](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/tests/test_cadastro_futuro_c5.py:253).
+- **Ordem de trava:** **risco identificado**, conforme a inversão entre foto mensal e sincronização; cobertura de todos os pares **[não verificado]**. [folgas.py:193](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:193), [folgas.py:617](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/escala/folgas.py:617).
+- **Campo com dois significados:** o vigia documenta que o parâmetro `fim` não limita mais o universo e usa `ultimo_dia_medido` na saída, evitando reutilizar a chave histórica `fim`; consumidores e snapshots históricos completos **[não verificado]**. [vigia_cadastro_futuro.py:30](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/vigia_cadastro_futuro.py:30), [vigia_cadastro_futuro.py:91](/home/ronald/codex_ws/f1665d857058270ffd7a6575b2dc4b6862c60715/app/ponto/services/vigia_cadastro_futuro.py:91).
+
+Não há, no dado fornecido, resultado de execução concorrente, SQL capturado, banco ou logs; essas conclusões permanecem limitadas à leitura estática e ao diff anexado **[não verificado]**.
 
 ## 18/11 09:42 · sessao de278bb1377d · - · - · origem=Ronald (tmux)
 
@@ -1599,374 +1706,4 @@ A antiga premissa “F6 é só leitura, nada persiste” precisa ser lida por de
 
 perguntas de lei: 0
 
-## 18/11 09:10 · sessao 7f82c1b07e52 · DST-L2 · censo · origem=Code
-
-HASH LIDO = dd489c627bb0a8d5f8782945c7e240e6621c98ed
-
-[nao verificado] O hash acima é o identificador informado e presente no caminho do workspace; não consegui confirmá-lo por Git.
-
-**0.** Script AST consolidado: [nao verificado] Não o executei. A resolução é estática: chamadas dinâmicas, reexportações, atribuições de apelidos fora de `import` e sombreamento dependente de execução podem exigir inspeção manual. `literal_cobrado` inclui ocorrências candidatas, que precisam ser distinguidas entre leitura, escrita e dados. [nao verificado]
-
-```python
-#!/usr/bin/env python3
-import ast
-import pathlib
-import sys
-
-ALVOS = {
-    "chamados.juizes.dia_sem_trabalho",
-    "chamados.juizes.ausencia_parcial_cobra_o_resto",
-    "ponto.supra_juiz._dia_sem_trabalho_pelo_juiz",
-    "ponto.services.lastro.marcos_acesos",
-}
-CHAVES = {"tipo_dia", "cobertura_parcial"}
-
-
-def nome_modulo(rel):
-    partes = list(rel.with_suffix("").parts)
-    if partes and partes[-1] == "__init__":
-        partes.pop()
-    return ".".join(partes)
-
-
-def caminho_expr(no):
-    if isinstance(no, ast.Name):
-        return no.id
-    if isinstance(no, ast.Attribute):
-        base = caminho_expr(no.value)
-        return base + "." + no.attr if base else None
-    return None
-
-
-def string(no):
-    return no.value if isinstance(no, ast.Constant) and isinstance(no.value, str) else None
-
-
-def resolver_relativo(modulo, eh_init, nivel, nome):
-    pacote = modulo.split(".") if eh_init else modulo.split(".")[:-1]
-    if nivel:
-        corte = nivel - 1
-        if corte > len(pacote):
-            return None
-        pacote = pacote[:len(pacote) - corte]
-        if nome:
-            pacote.extend(nome.split("."))
-        return ".".join(pacote)
-    return nome or ""
-
-
-class Censo(ast.NodeVisitor):
-    def __init__(self, arquivo, rel, arvore):
-        self.arquivo = arquivo
-        self.rel = rel
-        self.modulo = nome_modulo(rel)
-        self.eh_init = rel.name == "__init__.py"
-        self.escopos = [{}]
-        self.funcoes = []
-        self.linhas = set()
-        self.locais = {
-            n.name for n in arvore.body
-            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
-        }
-        partes = set(rel.parts)
-        self.classe = (
-            "tests" if "tests" in partes or "test" in partes
-            or rel.name.startswith("test_") else "producao"
-        )
-
-    def emitir(self, no, item, operacao):
-        funcao = ".".join(self.funcoes) or "<modulo>"
-        self.linhas.add((
-            str(self.rel) + ":" + str(no.lineno),
-            funcao, item, operacao, self.classe,
-        ))
-
-    def buscar(self, nome):
-        for escopo in reversed(self.escopos):
-            if nome in escopo:
-                return escopo[nome]
-        return None
-
-    def resolver(self, no):
-        texto = caminho_expr(no)
-        if not texto:
-            return None
-        primeiro, separador, resto = texto.partition(".")
-        base = self.buscar(primeiro)
-        if base is not None:
-            return base + (separador + resto if separador else "")
-        if not separador and primeiro in self.locais:
-            return self.modulo + "." + primeiro
-        return texto
-
-    def visit_Import(self, no):
-        for alias in no.names:
-            if alias.asname:
-                self.escopos[-1][alias.asname] = alias.name
-            else:
-                primeiro = alias.name.split(".")[0]
-                self.escopos[-1][primeiro] = primeiro
-
-    def visit_ImportFrom(self, no):
-        base = resolver_relativo(
-            self.modulo, self.eh_init, no.level, no.module
-        )
-        if base is None:
-            return
-        for alias in no.names:
-            if alias.name != "*":
-                nome = alias.asname or alias.name
-                self.escopos[-1][nome] = ".".join(
-                    p for p in (base, alias.name) if p
-                )
-
-    def escopo_funcao(self, no):
-        for decorador in no.decorator_list:
-            self.visit(decorador)
-        for default in list(no.args.defaults) + [
-            x for x in no.args.kw_defaults if x is not None
-        ]:
-            self.visit(default)
-        self.funcoes.append(no.name)
-        self.escopos.append({})
-        for filho in no.body:
-            self.visit(filho)
-        self.escopos.pop()
-        self.funcoes.pop()
-
-    visit_FunctionDef = escopo_funcao
-    visit_AsyncFunctionDef = escopo_funcao
-
-    def visit_ClassDef(self, no):
-        for decorador in no.decorator_list:
-            self.visit(decorador)
-        for base in no.bases:
-            self.visit(base)
-        self.funcoes.append(no.name)
-        self.escopos.append({})
-        for filho in no.body:
-            self.visit(filho)
-        self.escopos.pop()
-        self.funcoes.pop()
-
-    def visit_Call(self, no):
-        alvo = self.resolver(no.func)
-        if alvo in ALVOS:
-            self.emitir(no, alvo, "chamada")
-
-        if isinstance(no.func, ast.Attribute):
-            metodo = no.func.attr
-            if metodo == "get" and no.args:
-                chave = string(no.args[0])
-                if chave in CHAVES:
-                    self.emitir(no, chave, "leitura_get")
-            if metodo == "update":
-                for arg in no.args:
-                    if isinstance(arg, ast.Dict):
-                        for chave in arg.keys:
-                            valor = string(chave)
-                            if valor in CHAVES:
-                                self.emitir(chave, valor, "escrita_update_literal")
-                for kw in no.keywords:
-                    if kw.arg in CHAVES:
-                        self.emitir(kw.value, kw.arg, "escrita_update_kw")
-
-        if isinstance(no.func, ast.Name) and no.func.id == "dict":
-            for kw in no.keywords:
-                if kw.arg in CHAVES:
-                    self.emitir(kw.value, kw.arg, "escrita_dict_kw")
-
-        self.generic_visit(no)
-
-    def visit_Subscript(self, no):
-        chave = string(no.slice)
-        if chave in CHAVES:
-            if isinstance(no.ctx, ast.Load):
-                operacao = "leitura_subscript"
-            elif isinstance(no.ctx, ast.Del):
-                operacao = "exclusao_subscript"
-            else:
-                operacao = "escrita_subscript"
-            self.emitir(no, chave, operacao)
-        self.generic_visit(no)
-
-    def visit_Dict(self, no):
-        for chave in no.keys:
-            valor = string(chave)
-            if valor in CHAVES:
-                self.emitir(chave, valor, "escrita_dict_literal")
-        self.generic_visit(no)
-
-    def visit_Attribute(self, no):
-        if no.attr == "VEREDITOS_ACUSAM" and isinstance(no.ctx, ast.Load):
-            self.emitir(no, "VEREDITOS_ACUSAM", "leitura_atributo")
-        self.generic_visit(no)
-
-    def visit_Constant(self, no):
-        if no.value == "cobrado":
-            self.emitir(no, "cobrado", "literal_cobrado")
-
-
-def main():
-    if len(sys.argv) != 2:
-        print("uso: python3 script.py <raiz_app>", file=sys.stderr)
-        return 2
-
-    raiz = pathlib.Path(sys.argv[1]).resolve()
-    if not raiz.is_dir():
-        print("raiz_app nao e diretorio: " + str(raiz), file=sys.stderr)
-        return 2
-
-    print("arquivo:linha\tfuncao\titem\toperacao\tgrupo")
-    erros = 0
-    for arquivo in sorted(raiz.rglob("*.py")):
-        rel = arquivo.relative_to(raiz)
-        if "migrations" in rel.parts:
-            continue
-        try:
-            with arquivo.open("r", encoding="utf-8") as fonte:
-                arvore = ast.parse(fonte.read(), filename=str(rel))
-        except (OSError, UnicodeError, SyntaxError) as exc:
-            print(str(rel) + ": " + str(exc), file=sys.stderr)
-            erros += 1
-            continue
-        censo = Censo(arquivo, rel, arvore)
-        censo.visit(arvore)
-        for linha in sorted(censo.linhas):
-            print("\t".join(linha))
-    return 1 if erros else 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
-```
-
-**1.** [nao verificado] Será respondido pela execução do script; o resultado não foi produzido nesta leitura.
-
-**2.** Classificação parcial:
-
-- [app/chamados/juizes.py:442](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:442): `registro` aceita tanto ATA quanto DIA da grade.
-- [app/chamados/juizes.py:454](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:454): `ata` é a ATA de `cel`.
-- [app/ponto/services/cartorio.py:738](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:738): lê `tipo_dia` do DIA e escreve na ATA; [app/ponto/services/cartorio.py:766](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:766): faz a mesma transferência de `cobertura_parcial`.
-- [app/ponto/services/cartorio.py:401](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:401): `registro` de `parcial_so_lista` pode ser DIA ou ATA.
-- [app/escala/services/leitor_celula.py:397](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/escala/services/leitor_celula.py:397): lê ATA para formar o DIA; [app/escala/services/leitor_celula.py:433](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/escala/services/leitor_celula.py:433): transfere a cobertura da ATA para o DIA.
-- [nao verificado] Falta classificar individualmente os demais acessos de produção.
-
-**3.** Leitores identificados, ainda sem alegação de exaustividade:
-
-- [app/ponto/status_dia.py:68](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/status_dia.py:68): inclui `cobrado` no conjunto de vereditos irregulares usado também na parcial.
-- [app/chamados/services/fabrica_da_celula.py:120](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fabrica_da_celula.py:120): interrompe perguntas quando há veredito fora de `VEREDITOS_ACUSAM`.
-- [app/chamados/juizes.py:1379](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1379): testa se o veredito está fora de `VEREDITOS_ACUSAM`; [app/chamados/juizes.py:1456](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1456): testa a pertinência ao conjunto.
-- [app/relatorios/dia_da_frota.py:55](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/relatorios/dia_da_frota.py:55): seleciona células que acusam ou têm veredito `faltou`.
-- [nao verificado] Faltam os demais leitores e a descrição individual de suas consequências.
-
-**4.** Reações verificadas nesse caminho, condicionalmente às guardas:
-
-- [app/ponto/services/cartorio.py:1539](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:1539) chama a transição com `ato=x.reconciliar`; [app/chamados/services/fecho_runtime.py:161](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fecho_runtime.py:161) executa o ato em transação e entrega recusas à escrita de pautas.
-- [app/chamados/models.py:651](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:651) decide o fechamento e, quando permitido, chama `_gravar_estado`; [app/chamados/models.py:228](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:228) prepara status, carimbo, via e urgência.
-- [app/chamados/signals.py:180](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/signals.py:180) captura o status anterior no `pre_save`; [app/chamados/signals.py:54](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/signals.py:54) pode rebaixar urgência por `update`, implementado em [app/chamados/models.py:637](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:637).
-- [app/chamados/signals.py:91](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/signals.py:91) chama o resolvedor de perguntas; seu corpo pode materializar perguntas e fechar disputa, conforme [app/chamados/services/disputa_emissao.py:1920](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1920).
-- [app/chamados/signals.py:189](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/signals.py:189) retorna durante julgamento do cartório; fora dele, pode chamar `julgar_celula`. [app/chamados/signals.py:351](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/signals.py:351) pode agendar reconciliação do pai após commit.
-- [app/chamados/services/fecho_runtime.py:128](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fecho_runtime.py:128) só escreve pauta quando há recusa ancorada, usando a porta em [app/chamados/services/fecho_runtime.py:139](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fecho_runtime.py:139).
-- [nao verificado] A cascata completa de receivers e escritores indiretos não foi fechada.
-
-**5.** Predicados próprios identificados:
-
-- [app/ponto/services/cartorio.py:1458](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:1458): `_protesta` exige `trabalha is not False`, além de testar os marcos; seu resultado participa da seleção de chamados a reconciliar em [app/ponto/services/cartorio.py:1533](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:1533).
-- [app/chamados/services/declaracao_texto.py:120](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/declaracao_texto.py:120): dispensa os marcos quando o DIA não é `trabalho`, salvo ausência parcial que cobra o resto.
-- [app/ponto/supra_juiz.py:317](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/supra_juiz.py:317): define `dia_de_cobranca` a partir de `tipo_dia` e cobertura parcial para o ramo iniciado em [app/ponto/supra_juiz.py:326](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/supra_juiz.py:326).
-- [nao verificado] A lista de todos os predicados do escopo ainda não foi completada.
-
-**6.** Caminhos e origem identificados:
-
-- [app/chamados/services/fabrica_da_celula.py:201](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fabrica_da_celula.py:201) recebe a célula de `perguntar_pela_celula`; no julgamento, [app/ponto/services/cartorio.py:1043](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:1043) passa as células julgadas naquele ato. A mesma função chama o juiz de [app/chamados/services/fabrica_da_celula.py:112](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fabrica_da_celula.py:112) por `motivos_a_perguntar`, em [app/chamados/services/fabrica_da_celula.py:207](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fabrica_da_celula.py:207).
-- [app/chamados/services/fabrica_da_celula.py:299](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fabrica_da_celula.py:299): o caminho por eventos busca células no banco antes de chamar `perguntar_pela_celula`.
-- [app/ponto/services/cluster_espurio.py:46](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cluster_espurio.py:46) e [app/ponto/services/cluster_espurio.py:71](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cluster_espurio.py:71): os caminhos de abertura e fechamento consultam células no banco antes de chegar ao juiz de [app/ponto/services/cluster_espurio.py:25](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cluster_espurio.py:25). O julgamento chama a reconciliação do cluster após a lavra em [app/ponto/services/cartorio.py:1035](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/cartorio.py:1035).
-- [nao verificado] Faltam todos os chamadores transitivos e a confirmação da proveniência em cada ramo.
-
-censo fechado: nao — faltam executar e validar o script, classificar todos os acessos, completar os leitores e predicados, e fechar as cascatas e os chamadores transitivos. [nao verificado]
-
-## 18/11 09:09 · sessao 3494b3c56996 · ESPINHA-REMEDIDA-1811 · censo · origem=Code
-
-## 1 Premissas e sitios
-
-**Resultado parcial:** os 32 itens abaixo cobrem os 28 degraus nomeados da matriz e os quatro grupos de exceções do brief. Não cobrem todas as demais premissas narrativas, provas, dependências e instruções de pouso dos dois anexos; portanto, as contagens ao final **não são a contagem integral solicitada**. Os anexos foram fornecidos no texto da pergunta, sem arquivo numerado na cópia: suas linhas são [não verificado]. Para identificá-los, uso os nomes dos degraus e as linhas históricas citadas nos próprios anexos. [nao verificado]
-
-Critério desta tabela: **CONFERE** preserva o sítio e a leitura descrita; **MOVEU** preserva parte relevante, mas mudou de linha ou de composição; **CAIU** indica que a leitura específica descrita deixou de existir naquele sítio.
-
-| Premissa | Julgamento |
-|---|---|
-| P1 — matriz C1, card antigo :77, `p.viva` | **CONFERE** — [card:77](app/templates/chamados/partials/_card_atendimento.html:77). A propriedade delega ao juiz de vida em [models.py:3507](app/chamados/models.py:3507). |
-| P2 — C2, :100, caixa por `resposta_enviada` | **CONFERE** — [card:100](app/templates/chamados/partials/_card_atendimento.html:100); a flag é posta em [fio.py:360](app/chamados/services/fio.py:360). |
-| P3 — C3, :106, texto e instante | **CONFERE** — [card:106](app/templates/chamados/partials/_card_atendimento.html:106); `resposta_display` ainda lê a projeção em [models.py:3699](app/chamados/models.py:3699). |
-| P4 — C4, :114, radio por resposta | **CONFERE** — [card:114](app/templates/chamados/partials/_card_atendimento.html:114). |
-| P5 — C5, :141–144, resposta de hora | **CONFERE** — [card:141](app/templates/chamados/partials/_card_atendimento.html:141) e [card:143](app/templates/chamados/partials/_card_atendimento.html:143). |
-| P6 — C6, :133–137, input de hora sem prefill | **CONFERE** — [card:133](app/templates/chamados/partials/_card_atendimento.html:133). |
-| P7 — C7, :148, prefill `datetime-local` | **CONFERE** — [card:148](app/templates/chamados/partials/_card_atendimento.html:148). |
-| P8 — C8, :154, `selected` pela projeção | **CONFERE** — [card:154](app/templates/chamados/partials/_card_atendimento.html:154). |
-| P9 — C9, :161, Enviar/Reenviar | **CONFERE** — [card:161](app/templates/chamados/partials/_card_atendimento.html:161). |
-| P10 — C10, :182–183, histórico de resposta | **CONFERE** — [card:182](app/templates/chamados/partials/_card_atendimento.html:182). |
-| P11 — C11, :189, pendência e estado | **CONFERE** — [card:189](app/templates/chamados/partials/_card_atendimento.html:189). `estado` ainda usa `validada_em` e `materializada_em`, com o juiz de respondida no ramo restante: [models.py:3152](app/chamados/models.py:3152). |
-| P12 — C12, :390–391, chip enviado | **CONFERE** — [card:390](app/templates/chamados/partials/_card_atendimento.html:390). |
-| P13 — P0 da matriz, `acoes_chamado.py:352`, universo vivo | **MOVEU** — a consulta está em [acoes_chamado.py:352](app/chamados/services/acoes_chamado.py:352) e o filtro por juiz em [acoes_chamado.py:358](app/chamados/services/acoes_chamado.py:358); não há prefetch nessa consulta. O fragmento consulta separadamente em [views.py:399](app/chamados/views.py:399). |
-| P14 — P1, pergunta-card :20, opacidade por validação | **CONFERE** — [pergunta-card:20](app/templates/chamados/partials/_pergunta_card.html:20). |
-| P15 — P2, :23, rótulo e data de validação | **CONFERE** — [pergunta-card:23](app/templates/chamados/partials/_pergunta_card.html:23). |
-| P16 — P3, :24, condição por `respondida_em` | **CAIU** — agora usa `perg.respondida` em [pergunta-card:24](app/templates/chamados/partials/_pergunta_card.html:24). |
-| P17 — P4, :29, condição por `respondida_em` | **CAIU** — agora usa `perg.respondida` em [pergunta-card:29](app/templates/chamados/partials/_pergunta_card.html:29). |
-| P18 — P5, :31–32, texto e instante | **CONFERE** — [pergunta-card:31](app/templates/chamados/partials/_pergunta_card.html:31). |
-| P19 — P6, :42, gate de validação | **CONFERE** — [pergunta-card:42](app/templates/chamados/partials/_pergunta_card.html:42); há também adaptação de aplicação dentro do bloco em [pergunta-card:43](app/templates/chamados/partials/_pergunta_card.html:43). |
-| P20 — P7, :43, filtro de leitura da resposta | **CONFERE** — [pergunta-card:43](app/templates/chamados/partials/_pergunta_card.html:43); o filtro lê `resposta_colab` em [chamados_tags.py:166](app/chamados/templatetags/chamados_tags.py:166). |
-| P21 — M0, fio :246–273, universo e prefetch | **CONFERE** — [fio.py:251](app/chamados/services/fio.py:251), [fio.py:264](app/chamados/services/fio.py:264) e [fio.py:270](app/chamados/services/fio.py:270). |
-| P22 — M1, modal :185, condição por `respondida_em` | **CAIU** — usa `perg.respondida` em [modal:185](app/templates/chamados/partials/modal_fio.html:185). |
-| P23 — M2, :205–216, respostas anteriores pela sequência | **CONFERE** — [modal:205](app/templates/chamados/partials/modal_fio.html:205) e [models.py:3680](app/chamados/models.py:3680). |
-| P24 — M3, :217–220, condição, texto e instante crus | **MOVEU** — a condição usa `respondida`; texto e instante seguem na projeção: [modal:217](app/templates/chamados/partials/modal_fio.html:217). |
-| P25 — M4, :228, fase validada por carimbo | **CONFERE** — [modal:228](app/templates/chamados/partials/modal_fio.html:228). |
-| P26 — M5, :230–248, estado de aplicação | **CONFERE** — [modal:230](app/templates/chamados/partials/modal_fio.html:230); contexto em [fio.py:376](app/chamados/services/fio.py:376). |
-| P27 — M6, antigo :250, filtro de resposta | **MOVEU** — [modal:274](app/templates/chamados/partials/modal_fio.html:274). |
-| P28 — L1, lote :24, texto da projeção | **CONFERE** — [lote:24](app/templates/chamados/partials/_lote_preview.html:24). |
-| P29 — exceção card :192, via e motivo | **CONFERE** — [card:192](app/templates/chamados/partials/_card_atendimento.html:192). |
-| P30 — exceção modal :170–171, conferência | **CONFERE** — [modal:170](app/templates/chamados/partials/modal_fio.html:170). |
-| P31 — exceção modal :222–226, pendência e recusa | **CONFERE** — [modal:222](app/templates/chamados/partials/modal_fio.html:222). |
-| P32 — exceção modal antigo :379, fechamento da disputa | **MOVEU** — [modal:406](app/templates/chamados/partials/modal_fio.html:406). |
-
-**Contagem dos 32 itens acima:** CONFERE 25, MOVEU 4, CAIU 3. A contagem de todas as premissas do brief e da matriz continua [não verificado].
-
-## 2 O que mudou
-
-O patch anexado compara **520d7b557 com dd489c627**; ele não é um diff da base original do brief, 77dfa94fa. A cópia não tem `.git`, e a comparação independente por Git está [não verificado].
-
-Nos quatro templates, o patch mostra mudanças apenas em `_pergunta_card.html` e `modal_fio.html`: quatro condições antes baseadas em `respondida_em` passaram a `respondida` ([pergunta-card:24](app/templates/chamados/partials/_pergunta_card.html:24), [pergunta-card:29](app/templates/chamados/partials/_pergunta_card.html:29), [modal:185](app/templates/chamados/partials/modal_fio.html:185), [modal:217](app/templates/chamados/partials/modal_fio.html:217)). A propriedade agora chama `pergunta_respondida`, que exige instante **e** texto não vazio da projeção ([models.py:3673](app/chamados/models.py:3673), [juizes.py:1544](app/chamados/juizes.py:1544)). Isso altera os casos de carimbo sem texto, mas não demonstra a leitura da sequência de atos pretendida pela F7.
-
-O patch também altera `estado`: seus ramos de respondida passam pela propriedade, mas a precedência de `validada_em` e `materializada_em` permanece ([models.py:3159](app/chamados/models.py:3159)). Assim, a premissa de que a F2 já teria feito esse estado ler o ato não está demonstrada neste HEAD. O texto formatado continua baseado em `resposta_colab` ([models.py:3699](app/chamados/models.py:3699)); o lote continua mostrando esse campo ([lote:24](app/templates/chamados/partials/_lote_preview.html:24)).
-
-O patch acrescenta as marcas `da_ressuscitacao` e `resposta_mantem_validacao` em `DecisaoPergunta` ([models.py:4065](app/chamados/models.py:4065)). São escritores novos **da marca**: a resposta humana declara `False`, enquanto resposta automática, resposta pela trilha e foto da projeção declaram `True` ([disputa_emissao.py:1526](app/chamados/services/disputa_emissao.py:1526), [disputa_emissao.py:1679](app/chamados/services/disputa_emissao.py:1679), [disputa_emissao.py:1701](app/chamados/services/disputa_emissao.py:1701), [models.py:4139](app/chamados/models.py:4139)). O comentário do modelo informa que o leitor de `resposta_mantem_validacao` ainda não chegou nesse pouso ([models.py:4065](app/chamados/models.py:4065)).
-
-Entre os leitores novos do juiz no patch estão API, validação e recusa, resposta pela view, validação inline, fechamento do fio e seleção de perguntas corrigíveis ([api/views.py:2575](app/api/views.py:2575), [validacao.py:681](app/chamados/services/validacao.py:681), [validacao.py:901](app/chamados/services/validacao.py:901), [views.py:1280](app/chamados/views.py:1280), [views_cobrar.py:169](app/chamados/views_cobrar.py:169), [fio.py:707](app/chamados/services/fio.py:707), [juizes.py:1755](app/chamados/juizes.py:1755)). A enumeração completa de todos os escritores e leitores cruzados dos campos tocados está [não verificado].
-
-A cerca nova intervém nas portas de escrita apenas dentro de atos cercados; o próprio código declara o restante da B2b aberto ([fio.py:1371](app/chamados/services/fio.py:1371), [fio.py:1398](app/chamados/services/fio.py:1398)). O patch também contém mudanças de folha, ausência e feriado; seu efeito sobre a F7 está [não verificado].
-
-## 3 Nao verificado de ALCANCE
-
-- **Cascas do card:** a página inclui o parcial duas vezes e escolhe `base_tpl`; o context processor fornece `base_app.html` ou `base.html` ([meu_atendimento.html:1](app/templates/chamados/meu_atendimento.html:1), [meu_atendimento.html:127](app/templates/chamados/meu_atendimento.html:127), [meu_atendimento.html:144](app/templates/chamados/meu_atendimento.html:144), [context_processors.py:210](app/core/context_processors.py:210)). Isso fecha o caminho estático descrito, não uma execução nas duas cascas.
-- **Pergunta-card:** a página de detalhe estende `base.html` e inclui o parcial; a resposta HTMX o renderiza com objeto carregado separadamente, sem o prefetch mostrado no modal ([detalhe_local.html:1](app/templates/chamados/detalhe_local.html:1), [detalhe_local.html:310](app/templates/chamados/detalhe_local.html:310), [views.py:399](app/chamados/views.py:399)).
-- **Modal e lote:** estão confirmados o painel em `base.html`, seu alvo do fio e o drawer do lote ([painel_gestao.html:1](app/templates/chamados/painel_gestao.html:1), [painel_gestao.html:260](app/templates/chamados/painel_gestao.html:260), [painel_gestao.html:14](app/templates/chamados/painel_gestao.html:14)). Continua aberto [não verificado] percorrer integralmente os caminhos da fila de benefícios e do retrato e os includes transitivos das duas bases; faltam abrir [fila_solicitacoes_beneficio.html](app/templates/colaboradores/fila_solicitacoes_beneficio.html), [retrato_folha.html](app/templates/folha/retrato_folha.html), [retrato_folha.py](app/folha/retrato_folha.py) e os includes transitivos de [base.html](app/templates/base.html) e [base_app.html](app/templates/base_app.html).
-- **Escritor de reabertura:** o sítio confirmado limpa o par e a validação e registra a foto anterior ([disputa_emissao.py:1610](app/chamados/services/disputa_emissao.py:1610), [disputa_emissao.py:1632](app/chamados/services/disputa_emissao.py:1632)). A afirmação do brief sobre a chamada de `linhas_da_projecao_sem_linha` nesse caminho continua [não verificado]: falta examinar todo o corpo de `reabrir_para_correcao` e suas portas chamadas ([disputa_emissao.py:1577](app/chamados/services/disputa_emissao.py:1577)).
-- **Leitores cruzados:** `leitura_da_resposta` lê a projeção, e `aplicacao_da_resposta` também a consulta ([chamados_tags.py:145](app/chamados/templatetags/chamados_tags.py:145), [chamados_tags.py:131](app/chamados/templatetags/chamados_tags.py:131)). A lista completa de leitores e escritores de `resposta_colab`, `respondida_em`, `validada_em` e das funções alcançadas continua [não verificado]; falta um censo da árvore inteira, incluindo chamadas indiretas e consultas ORM.
-- **Contrato F1 antigo:** o anexo descreve `atos_pergunta.leitura`, mas a implementação desse contrato histórico não foi encontrada na cópia; sua porta efetiva e seus leitores em dd489c627 continuam [não verificado]. Falta a árvore ou o conteúdo da implementação que se pretende pousar.
-- **Frota U1/U2:** permanece [não verificado]; os dados fornecidos não trazem uma medição dessa frota.
-
-alcance nao verificado restante: 5
-
-## 4 Perguntas de lei
-
-**DECIDIDO PELA LEI L-130:** “respondida” exige instante e texto não vazio; a lei também trata do par na reabertura e ressuscitação ([LEIS.md:151](app/docs/LEIS.md:151)). A conferência A20 para o par conferido está decidida pelo corte **LU-08** ([CORTES.md:487](app/docs/CORTES.md:487)). A conservação das fases e a exigibilidade aditiva constam do registro **E4C-D04-D05** ([BACKLOG.md:2137](app/docs/BACKLOG.md:2137)).
-
-**Candidata ainda não resolvida nesta leitura:** no caso R1b descrito no brief, quando há validação projetada sem linha correspondente, a F7 deve mostrar a validação pela porta conservada ou omiti-la pela leitura pura? A função que identifica linhas ausentes existe ([models.py:4122](app/chamados/models.py:4122)), mas a aplicação das duas portas candidatas à F7 e uma resposta específica nos documentos de lei estão [não verificado]. Logo, não é possível afirmar que essa candidata seja uma pergunta de lei efetivamente aberta.
-
-A enumeração integral de perguntas de lei da F7 permanece [não verificado]; não há base suficiente nesta leitura para fornecer o número exigido sem apresentar uma contagem como completa indevidamente.
-
-## 18/11 09:09 · sessao aaf420912c18 · - · - · origem=Ronald (tmux)
-
-A análise foi comunicada ao agente principal, incluindo a serialização e comparação do espelho inteiro em [test_atestado_por_minutos.py](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/tests/test_atestado_por_minutos.py:104), os leitores por chave nomeada e as chaves aninhadas relacionadas às possíveis colisões.
-
-_6854 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6857 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
