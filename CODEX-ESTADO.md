@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 05:46** · publicado em **18/11/2026 05:47** (UTC-3)
+> Ultima resposta processada: **18/11/2026 05:50** · publicado em **18/11/2026 05:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 05:50 · sessao d3575bb42232 · R1-REMEDE-1811 · sonda · origem=Code
+
+As seis linhas `SOMA` terminam em `True`. Não há `INCOMPLETO` na saída fornecida. A verificação em arquivo é [não verificado].
+
+```text
+sonda_leitura: script.py [455c4e7660bc3a87] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 6 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 100
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 597
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 199 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 199 minutos_total 2.6 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1298, 'bate_ate_10min': 1258, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 32, 'dia_batida_impar': 55, 'impar_que_BATE': 27, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 277, 'dia_sem_trabalho_ambos': 11, 'esp_desconta_janela_declarada': 18, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.9% de 1298 dias comparados
+[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
+[3] CADASTRO      8 dia-colab      40.5 h    2 colabs
+[3] BATIDA       30 dia-colab     127.8 h   17 colabs
+[4] TOTAL divergentes 40
+[5] colabs com divergencia: 20
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
+PARCIAL|10/2026|CADASTRO|dias=8|horas=40.4628|colabs=2
+PARCIAL|10/2026|BATIDA|dias=30|horas=127.75368121722221|colabs=17
+PARCIAL_TOTAL|10/2026|dias=40|horas=176.36648121722221|colabs=20
+ESTIMATIVA processados 100 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1206, 'bate_ate_10min': 1163, 'esp_zero_e6_trabalho': 3, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 2, 'diverge_acima_60': 34, 'dia_batida_impar': 64, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 31, 'impar_dentro_da_faixa': 26, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 198, 'dia_sem_lavratura_no_espelho': 1343, 'dia_isento_ou_ausencia': 288, 'dia_sem_trabalho_ambos': 23, 'esp_desconta_janela_declarada': 11, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.4% de 1206 dias comparados
+[3] ESTRUTURA     3 dia-colab      10.6 h    2 colabs
+[3] CADASTRO      7 dia-colab      65.8 h    5 colabs
+[3] BATIDA       33 dia-colab     166.7 h   22 colabs
+[4] TOTAL divergentes 43
+[5] colabs com divergencia: 26
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=10.610499166666667|colabs=2
+PARCIAL|11/2026|CADASTRO|dias=7|horas=65.7971625|colabs=5
+PARCIAL|11/2026|BATIDA|dias=33|horas=166.71064350722222|colabs=22
+PARCIAL_TOTAL|11/2026|dias=43|horas=243.118305173888887|colabs=26
+TEMPO_SEGUNDOS 162.1
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 241905
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 80
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1406
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4830
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 58
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 10
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6629
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 3848
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 3848
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 626
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 180
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 455936
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 544
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3097
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 183
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13056
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 93
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4326
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 189
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 21916
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4418
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 39962
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 17580
+SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
+SOMA 10/2026 HORAS 176.36648121722221 True
+SOMA 10/2026 COLABS_UNIAO 20 True
+SOMA 11/2026 43   <- tem de ser igual a soma das classes (43) True
+SOMA 11/2026 HORAS 243.118305173888887 True
+SOMA 11/2026 COLABS_UNIAO 26 True
+rc_sombra=0
+```
 
 ## 18/11 05:46 · sessao 6801b2f64f9b · R1-REMEDE-1811 · sonda · origem=Code
 
@@ -913,8 +997,4 @@ O código examinado sustenta **relatório/CSV no diff**, não bloqueio automáti
 
 Censo enviado ao agente principal, com os sítios de chamada, as condições de abertura da cerca, os escritores de `data_evento` e os limites da verificação de leitores.
 
-## 17/11 23:26 · sessao cc1627cd96a6 · - · - · origem=Ronald (tmux)
-
-Censo e referências enviados ao agente principal.
-
-_6773 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6774 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
