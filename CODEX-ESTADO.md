@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 13:24** · publicado em **18/11/2026 13:24** (UTC-3)
+> Ultima resposta processada: **18/11/2026 13:25** · publicado em **18/11/2026 13:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 13:25 · sessao 53c0ec5d1e4d · E4C-F6F7 · leitura · origem=Code
+
+A triagem aponta **quatro grupos de causa**. Os 11 `AttributeError`, incluindo os dois subtestes Q3/Q4, também explicam o `FAIL` agregado da matriz; não há evidência no anexo de uma segunda divergência naquela matriz. A cura de cada grupo e seu resultado na suíte permanecem **[não verificado]**. [nao verificado]
+
+A cópia não tem metadados Git. Comparei os arquivos com a cópia local identificada por `dd489c627`, mas não executei a suíte naquela base; portanto, a reprodução dos vermelhos nela é **[não verificado]**.
+
+### Tabela por teste [nao verificado]
+
+Os caminhos abaixo são relativos à árvore `b66587c26`.
+
+| Teste vermelho | Causa e classe | Cura mínima proposta | [nao verificado]
+|---|---|---|
+| `BordasDaCura.test_grave_respondida_em_disputa_fechada_nao_e_filtrada_por_motivo` | **G1 — A:** decisão sintética sem o atributo agora lido diretamente. [teste:68](app/chamados/tests/test_e3_c8b_sem_banco.py:68), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `BordasDaCura.test_idempotente` | **G1 — A:** mesma fixture. [teste:63](app/chamados/tests/test_e3_c8b_sem_banco.py:63), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `BordasDaCura.test_schema_sem_chave_nova` | **G1 — A:** mesma fixture. [teste:68](app/chamados/tests/test_e3_c8b_sem_banco.py:68), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `BordasDaCura.test_sem_trabalho_sem_lampadas_nao_esconde_resposta_viva` | **G1 — A:** resposta sintética sem o atributo. [teste:188](app/chamados/tests/test_e3_c8b_sem_banco.py:188), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `AlimentacaoC6.test_carga_da_tarefa_pergunta_ao_c6_avulso_lote_e_idempotencia` | **G1 — A:** a carga sintética entrega decisão sem o atributo. [teste:215](app/chamados/tests/test_e3_c8b_sem_banco.py:215), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `PosSuiteSemBanco.test_linha_sintetica_de_pergunta_sem_marco_tem_data_civil_desconhecida` | **G1 — A:** resposta sintética sem o atributo. [teste:26](app/chamados/tests/test_e3_pos_suite_sem_banco.py:26), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `MatrizV8Test.test_v8_R15_produto_decisoes_residual_A`, subtestes **Q3 e Q4** | **G1 — A:** os dois `SimpleNamespace` de resposta omitem o atributo. [teste:723](app/chamados/tests/test_e3_portas_tarefa.py:723), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `MatrizV8Test.test_v8_R15_produto_decisoes_residual_A`, **FAIL agregado** | **G1 — A, consequência:** Q3 e Q4 abortam antes de `coletor.append`; a comparação final recebe duas entradas a menos. [teste:741](app/chamados/tests/test_e3_portas_tarefa.py:741), [teste:754](app/chamados/tests/test_e3_portas_tarefa.py:754), [teste:758](app/chamados/tests/test_e3_portas_tarefa.py:758). | C1; sem produção. Outras divergências após corrigir as exceções: **[não verificado]**. |
+| `F3Terminal.test_beco_resposta_E1_ancora_resolvida_sem_porta` | **G1 — A:** resposta sintética sem o atributo. [teste:246](app/chamados/tests/test_e3_r3_c7_sem_banco.py:246), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `RedBRespostaTextual.test_B_252_29_set_hipotese_ultima_resposta_textual` | **G1 — A:** hipótese E1 construída sem o atributo. [teste:119](app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:119), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `RedBRespostaTextual.test_B_841_10_out_hipotese_ultima_resposta_textual` | **G1 — A:** mesma construção. [teste:119](app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:119), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
+| `CargaStatusDasAncoras.test_status_em_lote_destino_prevalece_container_sem_N_mais_1` | **G2 — A:** a obra extraiu `_fatos_das_perguntas`; o teste compila a classe isolada, mas seu namespace não contém a nova função global. [produção:377](app/chamados/services/tarefa_do_dia.py:377), [produção:517](app/chamados/services/tarefa_do_dia.py:517), [fixture:80](app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:80), [teste:209](app/chamados/tests/test_e3_r3_c7_sem_banco.py:209). | C2; sem produção. |
+| `ContadorPassivoECopiloto.test_a_view_do_app_le_a_mesma_fonte` | **G3 — A:** selo exige a chamada literal antiga; a view agora passa `agora=agora`. [teste:168](app/chamados/tests/test_pergunta_no_app.py:168), [view:2540](app/api/views.py:2540). | C3; com produção. |
+| `ExibicaoUsaADerivacaoTest.test_endpoint_do_app_filtra_por_q_vivas` | **G3 — A:** mesma mudança de grafia da chamada inspecionada pelo selo. [teste:69](app/chamados/tests/test_contract_pergunta_viva.py:69), [view:2540](app/api/views.py:2540). | C3; com produção. |
+| `LeitoresVitalidadeContract.test_ninguem_julga_vitalidade_por_carimbo_cru` | **G4 — A:** o novo contador filtra `validada_em__isnull=False`; o verificador AST identifica essa forma sem distinguir o universo de um censo de um julgamento de vitalidade. [contador:94](app/chamados/management/commands/backfill_decisoes_pergunta.py:94), [selo:329](app/chamados/tests/test_contract_leitores_vitalidade.py:329), [asserção:343](app/chamados/tests/test_contract_leitores_vitalidade.py:343). | C4; sem produção. |
+| `TorneiraFolgasTest.test_plano_manual_relavra_a_celula_ja_gerada` | **G5 — D:** a fixture escolhe hoje + 3 dias; no traceback isso dá 21/11, fora da janela corrente que termina em 20/11 para corte 21. A regeneração futura limita a busca à janela. [teste:71](app/escala/tests/test_torneira_folgas.py:71), [janela:10](app/ponto/janelas.py:10), [futuras:26](app/ponto/services/cadastro_futuro.py:26). Código e teste correspondentes são iguais na cópia da base; vermelho executado na base **[não verificado]**. | C5; sem produção para estabilizar a fixture. |
+| `TorneiraFolgasTest.test_calendario_relavra_a_celula_ja_gerada` | **G5 — D:** mesma data e mesmo limite de regeneração, por outro escritor de folga. [teste:90](app/escala/tests/test_torneira_folgas.py:90), [relavra:289](app/escala/folgas.py:289), [futuras:26](app/ponto/services/cadastro_futuro.py:26). Reprodução na base **[não verificado]**. | C5; sem produção para estabilizar a fixture. |
+
+### Grupos e curas
+
+- **C1 — decisões sintéticas:** acrescentar `resposta_mantem_validacao=False` às respostas das fixtures antigas, sem trocar suas asserções. O campo do modelo real tem esse default; os testes novos que exercitam `True` devem continuar cobrindo esse caso. [modelo:4072](app/chamados/models.py:4072), [teste F6:19](app/chamados/tests/test_f6_t_resposta_mantem_validacao.py:19). **Produção: não.** A alteração na obra que desencadeia a incompatibilidade está em [tarefa_do_dia.py:159](app/chamados/services/tarefa_do_dia.py:159).
+
+- **C2 — função extraída:** incluir `_fatos_das_perguntas` no namespace compilado pela fixture e fornecer as dependências sintéticas necessárias. O `NameError` é causado pela chamada nova em [tarefa_do_dia.py:517](app/chamados/services/tarefa_do_dia.py:517); se surgirá outro erro depois da injeção é **[não verificado]**. **Produção: não.**
+
+- **C3 — selos literais do app:** manter o mesmo instante para ambas as consultas, vinculando `agora` à função localmente, por exemplo com `functools.partial`, e conservar a chamada literal `consulta = consulta_do_app(colab)` exigida pelos dois selos. A função continua usando a seleção e partição do app em [pergunta_no_app.py:45](app/chamados/services/pergunta_no_app.py:45); os tracebacks, por si, não demonstram seleção incorreta. **Produção: sim; resultado [não verificado].**
+
+- **C4 — contador censitário:** adicionar à `ALLOWLIST` do selo uma exceção específica e justificada para `contador_validada_projetada_sem_linha`, preservando a asserção. O contador seleciona projeções carimbadas e delega a comparação ato/instante à autoridade; há exceção semelhante para outro censo do backfill. [contador:100](app/chamados/management/commands/backfill_decisoes_pergunta.py:100), [autoridade:4122](app/chamados/models.py:4122), [exceção existente:282](app/chamados/tests/test_contract_leitores_vitalidade.py:282). **Produção: não.**
+
+- **C5 — data da fixture de folga:** controlar o relógio e escolher um dia futuro dentro da janela corrente, mantendo a célula previamente criada e as asserções dos dois selos. Isso elimina a dependência de `hoje + 3` atravessar o corte. [teste:54](app/escala/tests/test_torneira_folgas.py:54), [teste:72](app/escala/tests/test_torneira_folgas.py:72), [janela:290](app/ponto/management/commands/gerar_celulas.py:290). **Produção: não para essa cura.** Se o contrato exigir relavrar também células futuras já existentes *fora* da janela, a implementação atual não as seleciona e seria necessária alteração de produção; essa exigência está **[não verificado]**. [cadastro_futuro.py:26](app/ponto/services/cadastro_futuro.py:26).
+
+### Quem escreve e quem lê os campos e funções relevantes
+
+| Campo ou função | Escrita / produção | Leitura |
+|---|---|---|
+| `resposta_mantem_validacao` | Porta humana grava `False`; resposta automática e trilha gravam `True`; a foto da projeção produz `True`. [disputa_emissao.py:1525](app/chamados/services/disputa_emissao.py:1525), [disputa_emissao.py:1674](app/chamados/services/disputa_emissao.py:1674), [disputa_emissao.py:1698](app/chamados/services/disputa_emissao.py:1698), [models.py:4139](app/chamados/models.py:4139). | A obra passa a lê-lo na cauda de respostas de `_pela_decisao`. [tarefa_do_dia.py:159](app/chamados/services/tarefa_do_dia.py:159). |
+| `_fatos_das_perguntas` | A função monta fatos em memória a partir de decisões, projeção, lavra, efeitos e fila. [tarefa_do_dia.py:377](app/chamados/services/tarefa_do_dia.py:377). | `exigencia_das_perguntas` e `CargaDaTarefa` consomem seu retorno. [tarefa_do_dia.py:436](app/chamados/services/tarefa_do_dia.py:436), [tarefa_do_dia.py:517](app/chamados/services/tarefa_do_dia.py:517). |
+| `consulta_do_app` e `agora` | A view obtém o instante e o passa à consulta; a função produz a partição de perguntas. [api/views.py:2538](app/api/views.py:2538), [pergunta_no_app.py:64](app/chamados/services/pergunta_no_app.py:64). | A view lê `pendentes` e `historico` e passa o mesmo instante à exigência por pergunta. Outros leitores incluem [aviso_pendencia.py:9](app/chamados/services/aviso_pendencia.py:9) e [cobranca.py:48](app/chamados/services/cobranca.py:48). [api/views.py:2541](app/api/views.py:2541). |
+| `aguarda_admin` | A view escreve a chave do JSON a partir de `aguarda_admin_pela_tarefa`. [api/views.py:2554](app/api/views.py:2554), [tarefa_do_dia.py:457](app/chamados/services/tarefa_do_dia.py:457). | Consumidores externos da chave: **[não verificado]**. |
+| `validada_em` e `linhas_da_projecao_sem_linha` | `_carimbar_validacao` grava o carimbo e registra a decisão correspondente; a autoridade produz linhas faltantes a partir da projeção. [validacao.py:161](app/chamados/services/validacao.py:161), [models.py:4122](app/chamados/models.py:4122). | O novo contador lê o carimbo para formar seu universo e chama a autoridade; a carga de fatos também chama a autoridade. [backfill_decisoes_pergunta.py:94](app/chamados/management/commands/backfill_decisoes_pergunta.py:94), [tarefa_do_dia.py:408](app/chamados/services/tarefa_do_dia.py:408). |
+
+Nenhuma cura foi aplicada ou executada; o fechamento efetivo dos vermelhos e possíveis falhas encobertas são **[não verificado]**. [nao verificado]
 
 ## 18/11 13:24 · sessao bf6ef124d773 · - · - · origem=Ronald (tmux)
 
@@ -671,56 +725,4 @@ Estes são leitores no código da cópia; sua execução em produção é **[nã
 
 [truncado em 20000 de 24018 caracteres]
 
-## 18/11 11:57 · sessao f1d73f865ba4 · S6-ORACULO-FERIADO · sonda · origem=Code
-
-Os valores abaixo reproduzem o dado raspado fornecido. A marca **[não verificado]** indica que não há arquivo e linha identificáveis para conferi-los. O número de `he100fer` do oráculo aparece em `trab` nos leitores de todos os casos; nas rubricas de extras dos leitores, aparece para col346 e col610. [não verificado]
-
-Em todas as linhas, `he50=0.0` e `folga=0.0` no oráculo e no motor. Nos leitores de espelho, `extras_50=0.0` e `lavrada=True`; nos de extrato, `he50=0.0`, `sem_lavr=False` e `sem_apur=False`. [não verificado]
-
-| Colaborador e data | Oráculo: `trab / he100fer / he100` | Motor: `trab / he100fer / he100` |
-|---|---|---|
-| col85 2026-11-02 [não verificado] | 11.9 / 11.9 / 11.9 | 11.9 / 0.0 / 0.0 |
-| col146 2026-11-02 [não verificado] | 13.5 / 13.5 / 13.5 | 13.5 / 0.0 / 0.0 |
-| col346 2026-11-02 [não verificado] | 11.65 / 11.65 / 11.65 | 11.65 / 11.65 / 11.65 |
-| col346 2026-11-15 [não verificado] | 11.52 / 11.52 / 11.52 | 11.52 / 11.52 / 11.52 |
-| col365 2026-11-02 [não verificado] | 12.0 / 12.0 / 12.0 | 12.0 / 0.0 / 0.0 |
-| col365 2026-11-15 [não verificado] | 11.04 / 11.04 / 11.04 | 11.04 / 0.0 / 0.0 |
-| col610 2026-11-02 [não verificado] | 11.8 / 11.8 / 11.8 | 11.8 / 11.8 / 11.8 |
-| col610 2026-11-15 [não verificado] | 12.0 / 12.0 / 12.0 | 12.0 / 12.0 / 12.0 |
-| col830 2026-11-02 [não verificado] | 12.07 / 12.07 / 12.07 | 12.07 / 0.0 / 0.0 |
-| col830 2026-11-15 [não verificado] | 11.89 / 11.89 / 11.89 | 11.89 / 0.0 / 0.0 |
-| col975 2026-11-02 [não verificado] | 3.96 / 3.96 / 3.96 | 3.96 / 0.0 / 0.0 |
-
-| Colaborador e data | Espelho/calendário/PDF/app: `pago / extras_100 / trab` | Extrato/gestão HE: `he100fer / he100 / trab` | Gestão HE: `he_lavrada_do_colab` |
-|---|---|---|---|
-| col85 2026-11-02 [não verificado] | 11.897632222222223 / 0.0 / 11.9 | 0.0 / 0.0 / 11.9 | (0.0, '') |
-| col146 2026-11-02 [não verificado] | 13.50255722222222 / 0.0 / 13.5 | 0.0 / 0.0 / 13.5 | (0.0, '') |
-| col346 2026-11-02 [não verificado] | 11.646084444444446 / 11.65 / 11.65 | 11.65 / 11.65 / 11.65 | (11.65, '') |
-| col346 2026-11-15 [não verificado] | 11.521407777777776 / 11.52 / 11.52 | 11.52 / 11.52 / 11.52 | (11.52, '') |
-| col365 2026-11-02 [não verificado] | 12.0 / 0.0 / 12.0 | 0.0 / 0.0 / 12.0 | (0.0, '') |
-| col365 2026-11-15 [não verificado] | 11.036849166666666 / 0.0 / 11.04 | 0.0 / 0.0 / 11.04 | (0.0, '') |
-| col610 2026-11-02 [não verificado] | 11.797882500000002 / 11.8 / 11.8 | 11.8 / 11.8 / 11.8 | (11.8, '') |
-| col610 2026-11-15 [não verificado] | 12.0 / 12.0 / 12.0 | 12.0 / 12.0 / 12.0 | (12.0, '') |
-| col830 2026-11-02 [não verificado] | 12.066969811944444 / 0.0 / 12.07 | 0.0 / 0.0 / 12.07 | (0.0, '') |
-| col830 2026-11-15 [não verificado] | 11.885994444444444 / 0.0 / 11.89 | 0.0 / 0.0 / 11.89 | (0.0, '') |
-| col975 2026-11-02 [não verificado] | 3.9582752777777777 / 0.0 / 3.96 | 0.0 / 0.0 / 3.96 | (0.0, '') |
-
-O cartão-PDF/porta_export mostra a **soma da competência inteira**, repetida abaixo para cada data. O contrafato é a saída registrada com `versao=oraculo`. [não verificado]
-
-| Colaborador e data | Cartão-PDF/porta_export: `he100fer / he100 / trab` | Contrafato: `pago / extras_100` |
-|---|---|---|
-| col85 2026-11-02 [não verificado] | 0.0 / 0.0 / 78.2 | 11.897632222222223 / 11.9 |
-| col146 2026-11-02 [não verificado] | 0.0 / 0.0 / 53.58 | 13.50255722222222 / 13.5 |
-| col346 2026-11-02 [não verificado] | 23.17 / 23.17 / 81.37 | 11.646084444444446 / 11.65 |
-| col346 2026-11-15 [não verificado] | 23.17 / 23.17 / 81.37 | 11.521407777777776 / 11.52 |
-| col365 2026-11-02 [não verificado] | 0.0 / 0.0 / 80.16 | 12.0 / 12.0 |
-| col365 2026-11-15 [não verificado] | 0.0 / 0.0 / 80.16 | 11.036849166666666 / 11.04 |
-| col610 2026-11-02 [não verificado] | 23.8 / 23.8 / 106.99 | 11.797882500000002 / 11.8 |
-| col610 2026-11-15 [não verificado] | 23.8 / 23.8 / 106.99 | 12.0 / 12.0 |
-| col830 2026-11-02 [não verificado] | 0.0 / 0.0 / 105.07 | 12.066969811944444 / 12.07 |
-| col830 2026-11-15 [não verificado] | 0.0 / 0.0 / 105.07 | 11.885994444444444 / 11.89 |
-| col975 2026-11-02 [não verificado] | 0.0 / 0.0 / 32.87 | 3.9582752777777777 / 3.96 |
-
-A sonda registra `VERSOES_NA_COMP ['motor', 'oraculo']`, 95 linhas do oráculo com `he100fer>0`, das quais 11 são de colaboradores com escala intermitente e 84 de não intermitentes; `rc_sombra=0`. [não verificado]
-
-_6951 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6952 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
