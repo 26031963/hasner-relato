@@ -1,7 +1,243 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:32** · publicado em **18/11/2026 17:32** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:37** · publicado em **18/11/2026 17:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:37 · sessao d471b06a0eb8 · DECLARADO-X-GRAVADO · construtor · origem=Code
+
+**Parei sem implementar a cura:** não identifiquei uma porta existente que devolva ao colaborador, com a frase exigida, uma resposta já validada nos dois ramos abrangidos. A materialização é chamada após o carimbo de validação. [validacao.py:743](/home/ronald/wt-codex-declarado-x-gravado-173308/app/chamados/services/validacao.py:743), [materializacao.py:1923](/home/ronald/wt-codex-declarado-x-gravado-173308/app/chamados/services/materializacao.py:1923)
+
+A porta `recusar_pergunta` devolve a pergunta ao colaborador, mas recusa perguntas já validadas. A outra porta, `devolver_validacao_recusada`, devolve a resposta ao **admin**, preserva a resposta e se restringe ao caso de resposta de hora; ela não realiza a devolução pedida ao colaborador para o ramo `data_hora`. [validacao.py:898](/home/ronald/wt-codex-declarado-x-gravado-173308/app/chamados/services/validacao.py:898), [validacao.py:237](/home/ronald/wt-codex-declarado-x-gravado-173308/app/chamados/services/validacao.py:237)
+
+A porta de reabertura limpa a resposta e registra o motivo na trilha, mas a representação da pergunta na API examinada não inclui esse motivo. A recusa existente envia um push genérico; a entrega da frase exigida ao colaborador por essa via está **[não verificado]**. [disputa_emissao.py:1584](/home/ronald/wt-codex-declarado-x-gravado-173308/app/chamados/services/disputa_emissao.py:1584), [api/views.py:2549](/home/ronald/wt-codex-declarado-x-gravado-173308/app/api/views.py:2549), [validacao.py:943](/home/ronald/wt-codex-declarado-x-gravado-173308/app/chamados/services/validacao.py:943) [nao verificado]
+
+Falta, portanto, uma porta chamável que trate a devolução de resposta **já validada**, para `hora` e `data_hora`, e disponibilize a frase ao colaborador. Sua localização e implementação exigidas estão **[não verificado]**. A frase literal também não consta do dado fornecido **[não verificado]**.
+
+Nenhum arquivo foi alterado; R1–R10, mutantes, compilação e testes não foram executados. A contagem de palavras de band-aid no diff está **[não verificado]**. A entrega e a linha LEI-AKITA solicitadas permanecem pendentes; não apresento os REDs como existentes. [nao verificado]
+
+## 18/11 17:36 · sessao 7a0a1b4d842c · REPROVAS-1811-1740 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 1: PROCEDE.** O item 2 segue com as reservas abaixo. [não verificado: hash do HEAD por Git; a cópia disponível não tem metadados Git.]
+
+### 1. E4C-F6F7 — PROCEDE
+
+1. **Premissas: conferem parcialmente.** A linha 164 do main devolve a tarefa ao colaborador em caso de recusa ou reabertura; ela não demonstra o laço atribuído à ponta F6F7 ([tarefa_do_dia.py:142](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/tarefa_do_dia.py:142)). A cadeia de leitura existe: `fora_da_folha` lê a porta, deriva o fio e agrupa a pessoa pelos fios dos dias; o retrato consome essa saída ([fora_da_folha.py:70](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/fora_da_folha.py:70), [fora_da_folha.py:94](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/fora_da_folha.py:94), [fora_da_folha.py:265](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/fora_da_folha.py:265), [retrato_folha.py:1212](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/retrato_folha.py:1212)). Cadastro, vigia e pautas também são leitores, direta ou indiretamente ([cadastro_realidade.py:472](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/cadastro_realidade.py:472), [vigia_fio.py:594](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/vigia_fio.py:594), [pautas_dos_discordantes.py:70](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/pautas_dos_discordantes.py:70)).
+
+   **Há vigia de produção onde um contador pode ser integrado:** `vigiar_fio_morto` chama contadores, registra seus valores e esperados, e está encadeado na rotina ([vigiar_fio_morto.py:100](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/vigiar_fio_morto.py:100), [vigiar_fio_morto.py:179](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/vigiar_fio_morto.py:179), [vigiar_fio_morto.py:244](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/vigiar_fio_morto.py:244), [crons.py:1737](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/config/crons.py:1737)). O contador nomeado da F7 e seu caso que morde na ponta: **[não verificado]**.
+
+2. **Colide com o aval vigente.** A autorização de pousar na véspera se o diff der zero conflita com a vedação fornecida de pouso que toque folha ou retenção entre 18/11 às 18h e o fim da simulação, pois a cadeia de leitores alcança folha e retrato ([fora_da_folha.py:70](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/fora_da_folha.py:70), [retrato_folha.py:1212](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/retrato_folha.py:1212)). O zero medido é uma condição adicional do aval anexo; não elimina literalmente a vedação fornecida. A precedência F6F7 antes da F9 e o compact continuam condições informadas; seu cumprimento **[não verificado]**.
+
+3. **O literal não fecha ainda.** Para corte 21, competência 11/2026 compreende **21/10/2026 a 20/11/2026**, inclusive; outros cortes da empresa produzem outros intervalos ([janelas.py:10](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/janelas.py:10), [janelas.py:36](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/janelas.py:36)). O diff existente é de leitura e percorre colaboradores e dias, mas compara C17 com a tarefa da própria cópia; suas projeções não executam os censos e sua saída é agregada e anonimizada. Ele não é a porta pronta para executar **main versus ponta curada** nem entregar a tabela de mudança de grupo e lista nominal pedidas ([diff_e3_sombra.py:1](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/diff_e3_sombra.py:1), [diff_e3_sombra.py:46](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/diff_e3_sombra.py:46), [diff_e3_sombra.py:127](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/diff_e3_sombra.py:127)). Outra porta capaz desse confronto **[não verificado]**.
+
+4. **Exportada, dinheiro ou `!`:** há alcance sobre a apresentação do retido e o retrato lavrado, já reconhecido na retificação do aval; o cron de retrato usa `--apply` ([retrato_folha.py:1207](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/retrato_folha.py:1207), [crons.py:1650](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/config/crons.py:1650)). Alteração de competência exportada, dinheiro ou outro `!` causado pela ponta **[não verificado]**.
+
+### 2. ESCALA-NAO-DESCREVE — CONFERE, com alcance limitado
+
+1. **Premissas:** o veredito fornecido relata selo sem mordida e ausência de log do mutante; a cópia da obra e `test_escala_nao_descreve.py:61-62` **[não verificado]**. Também **[não verificado]** se a cura já feita mata o mutante, se o log existe e se os commits citados contêm a linha exigida. [nao verificado]
+
+2. **Colisão:** o pouso indicado para depois da simulação é compatível com a janela vigente fornecida; o rito, o compact e a ordem eventualmente aplicável continuam pendentes de comprovação **[não verificado]**. [nao verificado]
+
+3. **Literal:** o aval exige log do mutante nomeado e linha `LEI-AKITA` com `padrao=`; o fechamento dessas condições **[não verificado]**. O aceite para os pontos do veredito classificados como fila também **[não verificado]**.
+
+4. **Exportada, dinheiro ou `!`:** o dado fornecido declara que a porta de vínculo regenera células e reconcilia, mas deixa **não verificado** o efeito sobre competência entregue; o código presente confirma a chamada de reconciliação ([vinculo.py:346](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/colaboradores/services/vinculo.py:346)). Efeito sobre exportada, dinheiro ou outro `!` **[não verificado]**.
+
+## 18/11 17:33 · sessao ae999d6c0dcd · E4C-F6F7 · construtor · origem=Code
+
+A cura liga o `handle` ao contador uma vez e publica as quatro chaves devolvidas por ele, antes da bifurcação de `--aplicar`, sem nova escrita ([backfill_decisoes_pergunta.py:595](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/management/commands/backfill_decisoes_pergunta.py:595)).
+
+O teste integrado cria uma pergunta validada sem linha de validação e confere a saída do comando ([test_e4c_f6f7_c11_backfill.py:60](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c11_backfill.py:60)). **RED e GREEN integrados: [não verificado]**, pois precisam de banco e não foram executados. Comando para quem certifica: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f6f7_c11_backfill.BackfillPublicaContadorF7
+```
+
+A verificação sem banco foi executada antes da cura e falhou com `AssertionError: RED: handle nao chama o contador`; depois, passou com `GREEN: costura sem banco`. Ela verifica a chamada, a posição anterior ao ramo `--aplicar` e o uso das quatro chaves com valores sentinela ([test_e4c_f6f7_c11_backfill.py:9](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c11_backfill.py:9)). Comando GREEN: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_e4c_f6f7_c11_backfill.py
+```
+
+Os cinco mutantes em memória morreram: M1 remove chamada e linha; M2–M5 fixam, respectivamente, número, esperado, dono e nome ([test_e4c_f6f7_c11_backfill.py:13](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c11_backfill.py:13)). Cada comando deve falhar por asserção:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_e4c_f6f7_c11_backfill.py M1
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_e4c_f6f7_c11_backfill.py M2
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_e4c_f6f7_c11_backfill.py M3
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_e4c_f6f7_c11_backfill.py M4
+PYTHONDONTWRITEBYTECODE=1 python3 chamados/tests/test_e4c_f6f7_c11_backfill.py M5
+```
+
+`py_compile` passou nos dois arquivos, com a escrita de bytecode desativada: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import py_compile
+py_compile._write_atomic = lambda *args, **kwargs: None
+for p in ('chamados/management/commands/backfill_decisoes_pergunta.py',
+          'chamados/tests/test_e4c_f6f7_c11_backfill.py'):
+    py_compile.compile(p, cfile=p + '.pyc', doraise=True)
+    print('py_compile OK:', p)
+PY
+```
+
+LEI-AKITA: origem=[backfill_decisoes_pergunta.py::handle](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/management/commands/backfill_decisoes_pergunta.py:595), testemunha=[contador_validada_projetada_sem_linha](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/management/commands/backfill_decisoes_pergunta.py:94) (lê `DecisaoPergunta.linhas_da_projecao_sem_linha`), RED=[teste integrado](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c11_backfill.py:61) [não verificado]; verificação sem banco RED executada, quem-mais-le=[teste F7](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_f7_contador_validada_sem_linha.py:31) e [teste sem banco C7](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:51), juizes novos=0, padrao=[Parallel Change / Expand-Contract](/home/ronald/wt-codex-e4c-f6f7-132608/app/docs/GLOSSARIO.md:18). [nao verificado]
+
+## 18/11 17:33 · sessao 681f0c12c82c · E4C-F6F7 · leitura · origem=Code
+
+A sonda abaixo mede **pares candidato de colaborador e dia que também são dias de retenção**, além de colaboradores distintos nessa interseção. Ela não calcula o número de pessoas que efetivamente mudariam de grupo A–E. Na cópia, o grupo depende dos fios de **todos** os dias retidos, e a seleção da porta depende de mais condições além da sequência de atos. [app/folha/fora_da_folha.py:94](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/folha/fora_da_folha.py:94), [app/folha/fora_da_folha.py:210](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/folha/fora_da_folha.py:210), [app/chamados/services/tarefa_do_dia.py:694](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/services/tarefa_do_dia.py:694)
+
+A cópia não tem metadados Git acessíveis; por isso, **não foi possível confirmar nenhuma das funções no main pai**, nem afirmar que alguma esteja ausente nele. [não verificado] Na cópia, as dependências de domínio usadas são `es_da_ressuscitacao`, `empresas_visiveis`, `competencias_a_lavrar` e `dias_que_seguram`. [app/chamados/models.py:4221](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/models.py:4221), [app/colaboradores/queries.py:78](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/colaboradores/queries.py:78), [app/ponto/services/he_pendente_lavrado.py:209](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/ponto/services/he_pendente_lavrado.py:209), [app/folha/fora_da_folha.py:125](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/folha/fora_da_folha.py:125)
+
+O predicado da 0056 é `ato='resposta'` e `ato_motivo` diferente de vazio; a simulação também preserva `True` já existente nas demais respostas. [app/chamados/migrations/0056_decisao_resposta_mantem_validacao_historico.py:12](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/migrations/0056_decisao_resposta_mantem_validacao_historico.py:12) A sequência usa o horizonte, a ordem e a exclusão de ressuscitação da carga; o vínculo ao dia usa `conversa=False`, `colaborador_id` e `data_evento`. [app/chamados/services/tarefa_do_dia.py:393](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/services/tarefa_do_dia.py:393), [app/chamados/services/tarefa_do_dia.py:506](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/services/tarefa_do_dia.py:506)
+
+O universo usa a função real `dias_que_seguram`, chamada por `fora_da_folha` e pelo vigia; o recorte de empresas e competências segue o vigia. A função de competências inclui a atual e, quando não entregue, a anterior: isso não demonstra cobertura de todas as competências históricas abertas. [app/folha/fora_da_folha.py:200](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/folha/fora_da_folha.py:200), [app/chamados/services/vigia_fio.py:529](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/services/vigia_fio.py:529), [app/ponto/services/he_pendente_lavrado.py:209](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/ponto/services/he_pendente_lavrado.py:209)
+
+Execute o texto pelo shell de `tenant_command` indicado, por exemplo redirecionando o arquivo de entrada. A sonda não foi executada aqui. [não verificado] Ela bloqueia comandos SQL que não comecem por `SELECT`, não imprime mensagens de exceção que possam conter dados pessoais e invalida os números se `ERROS > 0`; exceções eventualmente capturadas dentro das próprias funções chamadas não são observáveis por esse contador. [não verificado]
+
+```python
+# Sonda F6F7 item 1.
+# Executar dentro de: manage.py tenant_command shell --schema=juliani
+# Somente leitura; nao muda schema, nao abre atomic e nao grava arquivos.
+
+from itertools import groupby
+
+erros = 0
+etapa = "inicializacao"
+
+
+def somente_select(execute, sql, params, many, context):
+    # Defesa adicional: rejeita comandos que nao sejam SELECT.
+    if not sql.lstrip().upper().startswith("SELECT"):
+        raise RuntimeError("SQL nao SELECT bloqueado")
+    return execute(sql, params, many, context)
+
+
+try:
+    from django.db import connection
+    from django.utils import timezone
+
+    from chamados.models import DecisaoPergunta as D
+    from colaboradores.queries import empresas_visiveis
+    from folha.fora_da_folha import dias_que_seguram
+    from ponto.services.he_pendente_lavrado import competencias_a_lavrar
+
+    agora = timezone.now()
+    hoje = timezone.localdate(agora)
+
+    with connection.execute_wrapper(somente_select):
+        etapa = "predicado_0056"
+        # Mesmo predicado da migracao, sem update.
+        marcadas = set(
+            D.objects.filter(ato="resposta")
+            .exclude(ato_motivo="")
+            .values_list("pk", flat=True)
+        )
+        print("RESPOSTAS_PREDICADO_0056", len(marcadas))
+
+        etapa = "sequencias"
+        # Uma cauda pode conter respostas ja True e respostas que a 0056
+        # marcaria. Examinar as perguntas com qualquer uma dessas respostas.
+        candidatas = set(
+            D.objects.filter(ato="resposta")
+            .filter(resposta_mantem_validacao=True)
+            .values_list("pergunta_id", flat=True)
+        )
+        candidatas.update(
+            D.objects.filter(pk__in=marcadas)
+            .values_list("pergunta_id", flat=True)
+        )
+
+        decisoes = (
+            D.objects.filter(pergunta_id__in=candidatas, ato_em__lte=agora)
+            .select_related("pergunta")
+            .order_by("pergunta_id", "ato_em", "pk")
+        )
+
+        perguntas_mudam_ato = 0
+        pares_perguntas_do_fato = set()
+        perguntas_sem_dia_ou_colaborador = 0
+
+        for pergunta_id, linhas in groupby(
+            decisoes.iterator(), key=lambda d: d.pergunta_id
+        ):
+            sequencia = [
+                d for d in linhas if not D.es_da_ressuscitacao(d)
+            ]
+            if not sequencia:
+                continue
+
+            k = len(sequencia)
+            while k:
+                d = sequencia[k - 1]
+                mantem_depois = (
+                    d.ato == D.RESPOSTA
+                    and (d.resposta_mantem_validacao or d.pk in marcadas)
+                )
+                if not mantem_depois:
+                    break
+                k -= 1
+
+            if not (
+                0 < k < len(sequencia)
+                and sequencia[k - 1].ato == D.VALIDACAO
+            ):
+                continue
+
+            perguntas_mudam_ato += 1
+            p = sequencia[-1].pergunta
+
+            # A carga da tarefa usa apenas perguntas do fato.
+            if p.conversa:
+                continue
+            if p.colaborador_id is None or p.data_evento is None:
+                perguntas_sem_dia_ou_colaborador += 1
+                continue
+            pares_perguntas_do_fato.add((p.colaborador_id, p.data_evento))
+
+        print("PERGUNTAS_MUDAM_ATO", perguntas_mudam_ato)
+        print("PARES_PERGUNTAS_DO_FATO", len(pares_perguntas_do_fato))
+        print(
+            "PERGUNTAS_DO_FATO_SEM_DIA_OU_COLABORADOR",
+            perguntas_sem_dia_ou_colaborador,
+        )
+
+        etapa = "universo_retidos"
+        # Mesmo recorte de empresa e competencia do censo de alcance.
+        # Conjuntos removem repeticoes entre competencias.
+        retidos = set()
+        pares_retidos = set()
+        competencias = 0
+
+        for empresa in empresas_visiveis():
+            for mes, ano in competencias_a_lavrar(empresa, hoje):
+                competencias += 1
+                universo = dias_que_seguram(empresa, mes, ano, hoje=hoje)
+                retidos.update(universo["furo"])
+                for cid, (_motivos, dias) in universo["dias"].items():
+                    for dia in dias:
+                        pares_retidos.add((cid, dia["data"]))
+
+        intersecao = pares_perguntas_do_fato & pares_retidos
+        colaboradores_intersecao = {cid for cid, _dia in intersecao}
+
+        print("COMPETENCIAS_EXAMINADAS", competencias)
+        print("RETIDOS_DISTINTOS_FURO_ESPELHO", len(retidos))
+        print("PARES_DIAS_RETIDOS_DISTINTOS", len(pares_retidos))
+        print("INTERSECAO_PARES", len(intersecao))
+        print("INTERSECAO_COLABORADORES_DISTINTOS", len(colaboradores_intersecao))
+        for cid, dia in sorted(intersecao)[:20]:
+            print("PAR", "col%s" % cid, dia.isoformat())
+
+except Exception as exc:
+    erros += 1
+    # Sem str(exc) ou traceback: podem conter dados pessoais.
+    print("ERRO", etapa, type(exc).__name__)
+finally:
+    print("ERROS", erros)
+    print("FIM_SONDA_F6F7_ITEM1")
+```
+
+Um resultado zero na interseção só elimina candidatos **nesse recorte e instante**; não substitui o diff de `T`/porta, nem prova ausência de mudança após outros dados ou em competências fora do recorte. [app/chamados/services/tarefa_do_dia.py:484](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/services/tarefa_do_dia.py:484), [app/ponto/services/he_pendente_lavrado.py:209](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/ponto/services/he_pendente_lavrado.py:209)
 
 ## 18/11 17:32 · sessao c2bbe7b05200 · ESCALA-NAO-DESCREVE · verificador · origem=Code
 
@@ -401,59 +637,4 @@ perguntas de lei: 1
 
 Conferência de R6–R8, telas, trilha e leitores enviada ao agente principal, com referências às linhas atuais.
 
-## 18/11 16:49 · sessao e6de2b4b6fc9 · - · - · origem=Ronald (tmux)
-
-O estado é calculado por `_espera_do_aval_163`; o portão agora consulta o conjunto fechado U163 por PK, e compara hora local `HH:MM` e tipo, sem comparar a data civil. A testemunha pode avaliar as duas metades do par. [app/chamados/services/materializacao.py:724](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:724), [app/chamados/services/universo_bug_par.py:33](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/universo_bug_par.py:33).
-
-Para contar todas as perguntas cujo estado atual é espera, a sonda deve chamar `espera_declarado_x_gravado(p)` para cada `PerguntaDisputa` elegível e contar retornos não vazios. O filtro seguro é motivo de intervalo, `tipo_resposta='hora'` e disputa associada, pois a própria função retorna vazio fora desse domínio; exceções precisam ser informadas, não contadas como ausência de espera. Não se deve limitar a consulta a U163: a pergunta examinada pode estar fora dele enquanto a irmã avaliada no par pertence a ele. [app/chamados/services/materializacao.py:748](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:748), [app/chamados/services/materializacao.py:762](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:762), [app/chamados/services/materializacao.py:923](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:923).
-
-Para o recorte fechado, `len(respostas_intervalo_recusadas_paridade()['espera_declarado'])` usa U163 e a testemunha, separando perguntas materializadas e bloqueios de competência; é uma medida diferente da contagem global. O número atual e sua relação quantitativa com as 79 históricas são [não verificado]. [app/chamados/services/materializacao.py:295](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:295).
-
-## 18/11 16:49 · sessao 38c8ed46eac6 · - · - · origem=Ronald (tmux)
-
-Conferência enviada ao agente principal, com os caminhos atuais de R1–R5 e R9–R10 e a distinção entre o reuso de 20 minutos e o dedup de 60 segundos. Referências principais: `app/chamados/services/materializacao.py:611`, `app/chamados/juizes.py:239` e `app/ponto/registro_batida.py:118`.
-
-## 18/11 16:48 · sessao 941f7e57ff73 · RAIA-INTERVALO · verificador · origem=Code
-
-**Resultado: nenhum item exige AVAL-DEVOLVIDO pelas colisões ou condições examinadas.** As premissas verificáveis conferem, com limites indicados abaixo. A execução dos itens 1 e 2, porém, está impedida nesta revisão pela regra expressa de não criar nem editar arquivos [não verificado: instrução do pedido].
-
-Os anexos foram fornecidos no texto, sem arquivo com linhas na cópia; por isso, as conclusões que dependem exclusivamente deles estão marcadas **[não verificado]**. Isso não significa que seu conteúdo tenha sido ignorado.
-
-### Item 1 — Registrar a raia
-
-1. **Premissas — CONFERE, com limites.** A lei citada está em [CORTES.md:372](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:372), e DECLARADO-X-GRAVADO está registrado em [BACKLOG.md:2117](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/BACKLOG.md:2117). A grade ainda marca BUG-PAR como **EM VOO** em [GRADE-MESTRA.md:1043](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/GRADE-MESTRA.md:1043); o relato registra o fechamento do BUG-PAR c4 em [RELATO.md:468](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/RELATO.md:468). O BACKLOG também conserva uma linha antiga com estado **ABERTA** em [BACKLOG.md:2234](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/BACKLOG.md:2234).
-
-2. **Colisão — NÃO PROCEDE.** O texto fornecido declara exceção nominal para alternar a vaga 2, preservando a ordem interna das espúrias, a vaga 1 e o teto; também mantém o pouso após a simulação. A situação efetiva das vagas e da simulação é **[não verificado]**. [nao verificado]
-
-3. **Condição literal — NÃO PROCEDE.** O texto permite abrir o censo do item 3 antes da vez do construtor e prevê que a próxima espúria entre se o censo ainda não estiver fechado; assim, a condição citada não cria, por si, espera circular **[não verificado: anexos sem arquivo:linha]**. O registro pedido não pode ser feito sob a regra de somente leitura **[não verificado: instrução do pedido]**.
-
-4. **Exportada, dinheiro ou `!` fora do declarado — NÃO PROCEDE** para o registro descrito; os efeitos de sua execução efetiva são **[não verificado]**.
-
-### Item 2 — Medir na sombra
-
-1. **Premissas — CONFERE, parcialmente.** O supra-juiz lê `dia.get('celulas')` e conta `missing` em [supra_juiz.py:318](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/supra_juiz.py:318). `_ata_do_dia` existe em [disputa_emissao.py:901](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/disputa_emissao.py:901). O casamento de batidas e marcos existe em [utils.py:595](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/escala/utils.py:595). A sonda `logs/CONFRONTO-PILOTO/sonda_guarda29.py`, seu estado cortado, os 28 dias e a contradição de dono **[não verificado]**.
-
-2. **Colisão — NÃO PROCEDE** no texto fornecido: a medição é colocada na fila de sondas e não recebe vaga de construtor nem autoriza pouso **[não verificado: anexos sem arquivo:linha]**. [nao verificado]
-
-3. **Condição literal — NÃO PROCEDE** quanto à bifurcação descrita: se o passo estiver nos sítios indicados, a obra vira complemento; se estiver fora, pede sítio no topo e aval próprio **[não verificado: anexos sem arquivo:linha]**. A entrega de `sonda28.r` e o registro no RELATO exigiriam criar ou editar arquivos e, portanto, não podem ser executados sob a regra atual **[não verificado: instrução do pedido]**.
-
-4. **Exportada, dinheiro ou `!` fora do declarado — NÃO PROCEDE** para a medição descrita como leitura; os resultados e efeitos de uma execução real são **[não verificado]**.
-
-### Item 3 — LOTE-CONHECE-A-IRMA
-
-1. **Premissas — CONFERE, com limites.** O teste de conflito está em [validacao.py:1204](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1204), e `CONFLITO_LOTE_MIN` vale 60 em [validacao.py:1133](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1133). Os extremos da consulta são inclusivos em [turnos.py:2889](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/turnos.py:2889). Na busca textual dos arquivos Python da cópia, há **três chamadas de produção**: [validacao.py:1067](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1067), [validacao.py:1254](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1254) e [views_mensageria.py:545](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/api/views_mensageria.py:545); existem também chamadas em testes, por exemplo [test_fila_validar_lote.py:43](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/tests/test_fila_validar_lote.py:43). Chamadas dinâmicas não identificáveis por essa busca **[não verificado]**. `_PAR_DO_INTERVALO` e `metade_irma_do_intervalo` existem; esta última filtra irmã ainda não materializada em [materializacao.py:136](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:136). O elo com a batida gravada e os exemplos de produção são objeto do censo e permanecem **[não verificado]**.
-
-2. **Colisão — NÃO PROCEDE** no texto fornecido: o censo antecede o construtor, e a construção depende da vez da raia e de lei zero **[não verificado: anexos sem arquivo:linha]**. A disponibilidade efetiva da vaga é **[não verificado]**.
-
-3. **Condição literal — NÃO PROCEDE.** O censo pode anteceder a vaga; o construtor só abre com censo fechado e zero perguntas de lei **[não verificado: anexos sem arquivo:linha]**. A reprodução antes e depois depende de construção e sombra, não verificadas aqui **[não verificado]**.
-
-4. **Exportada, dinheiro ou `!` fora do declarado — NÃO PROCEDE** pelo escopo escrito: o passivo é reservado à tela pelo supervisor, e a mudança proposta altera a classe usada na validação em lote, cuja porta consulta `LOTE_A` em [validacao.py:1067](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1067). O alcance efetivo posterior da mudança sobre exportada ou dinheiro **[não verificado]**.
-
-## 18/11 16:48 · sessao 9f46141693c8 · - · - · origem=Ronald (tmux)
-
-- O registro da família `chamado` não contém juiz para identificar a irmã de uma pergunta; o da família `batida` também não. O “par relâmpago” é outra pergunta e consta em `SEM_JUIZ` ([app/core/juizes.py:285](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/core/juizes.py:285), [app/core/juizes.py:1207](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/core/juizes.py:1207), [app/core/juizes.py:1224](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/core/juizes.py:1224)).
-- `metade_irma_do_intervalo` exclui materializadas e devolve `None` quando há mais de uma candidata. `_situacao_da_irma` inclui materializadas, mas devolve um rótulo e escolhe a primeira por `pk` ([app/chamados/services/materializacao.py:139](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:139), [app/chamados/services/materializacao.py:281](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:281)).
-- A unicidade de pergunta de marco tem condições e não demonstra impossibilidade geral de duas saídas ([app/chamados/models.py:3762](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:3762)). O tratamento de múltiplas irmãs gravadas com os mesmos critérios no desenho proposto está **[não verificado]**.
-- A lei da lâmpada e a L-099 estão registradas em [app/docs/CORTES.md:372](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/CORTES.md:372) e [app/docs/LEIS.md:122](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/docs/LEIS.md:122).
-
-_7056 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7060 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
