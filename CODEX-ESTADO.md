@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 20:52** · publicado em **17/11/2026 20:55** (UTC-3)
+> Ultima resposta processada: **17/11/2026 21:23** · publicado em **17/11/2026 21:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 21:23 · sessao a9faaa9b582a · PORTA-INSTRUMENTO · verificador · origem=Code
+
+1. **Para os dois contadores de recusa, o dia é capturado uma vez no selo e é o mesmo valor** nas linhas sintéticas, no gerador e na conferência: o selo atribui `hoje`, usa-o no log, passa-o na CLI e o usa nas duas linhas esperadas ([bin/tests/test_recusa_estado.sh:227](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:227)). O gerador converte esse argumento para `date` e passa o resultado aos dois leitores ([bin/gerar_estado.py:269](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:269), [bin/gerar_estado.py:406](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:406)); como recebem uma data válida, os fallbacks `today()` dos leitores não são executados ([bin/recusa_estado.py:41](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:41), [bin/recusa_estado.py:64](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:64)).
+
+   **No gerador inteiro, porém, não há apenas uma leitura do relógio:** há outras leituras para outros placares e contadores, inclusive `date.today()` no placar estrutural e duas chamadas explícitas a `time.time()` ([bin/gerar_estado.py:79](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:79), [bin/gerar_estado.py:284](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:284), [bin/gerar_estado.py:289](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:289)). O total de leituras transitivas do processo inteiro é **[não verificado]**.
+
+2. Os chamadores encontrados na cópia são:
+
+   - O próprio `__main__` chama `gerar` com três argumentos ([bin/gerar_estado.py:406](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:406)).
+   - O selo chama a CLI com o terceiro argumento `"$hoje"` ([bin/tests/test_recusa_estado.sh:230](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:230)).
+   - `relato.sh` chama a CLI com dois argumentos; **não quebra por falta de argumento em `gerar`**, pois o `__main__` fornece `date.today()` quando o terceiro argumento da CLI falta ([bin/relato.sh:38](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/relato.sh:38), [bin/gerar_estado.py:407](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:407)).
+   - O teste do painel importa o módulo para ler `PAINEL_ALVO`; não chama `gerar` ([bin/tests/test_painel_e_do_code.sh:20](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_painel_e_do_code.sh:20)).
+
+   Não encontrei chamador por import que invoque essa função com dois argumentos; chamadores dinâmicos ou externos à cópia são **[não verificado]**.
+
+3. Pela lógica das novas checagens AST, seriam rejeitadas estas mutações exatas: trocar a assinatura para `def gerar(raiz, dst, hoje=None):`, trocar `_hoje_recusa = hoje` por `_hoje_recusa = datetime.date.today()`, ou substituir na chamada do `__main__` `datetime.date.fromisoformat(sys.argv[3])` por `datetime.date.today()` ([bin/tests/test_recusa_estado.sh:39](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:39)). **Execução desses mutantes: [não verificado].**
+
+   Um mutante que passaria por essas checagens é inserir imediatamente antes de `_hoje_recusa = hoje`:
+
+   ```python
+   if hoje.isoformat() == '2040-01-01':
+       hoje = hoje.replace(day=2)
+   ```
+
+   Ele preserva a assinatura, a atribuição examinada e a expressão da CLI, mas altera o dia entregue aos leitores nessa data ([bin/tests/test_recusa_estado.sh:39](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:39), [bin/gerar_estado.py:269](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:269)). O próprio selo declara o limite de uma mutação condicionada a data que ele não exercita ([bin/tests/test_recusa_estado.sh:224](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:224)). **Execução do mutante: [não verificado].**
+
+4. **Escrita e leitura do valor:**
+
+   - O selo escreve a variável shell `hoje` pela leitura do relógio; lê-a para montar o log sintético, o terceiro argumento e as linhas esperadas ([bin/tests/test_recusa_estado.sh:227](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:227)).
+   - A CLI recebe esse terceiro argumento em `sys.argv[3]`; `__main__` o lê, converte e entrega ao parâmetro `hoje` de `gerar`. Sem terceiro argumento, a borda escreve o valor obtido de `today()` ([bin/gerar_estado.py:403](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:403)).
+   - `gerar` lê `hoje`, atribui-o a `_hoje_recusa` e lê `_hoje_recusa` nas duas chamadas ao medidor ([bin/gerar_estado.py:269](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:269)).
+   - `recusa_estado.ler` e `ler_porta_export` recebem e leem esse valor, passando-o aos respectivos leitores de `recusa_critica` ([bin/recusa_estado.py:37](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:37), [bin/recusa_estado.py:60](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:60)).
+
+**Linha de fila, fora do delta:** a afirmação de “uma leitura” não descreve todas as leituras de relógio do gerador; a coincidência demonstrada acima é a dos dois contadores de recusa ([bin/gerar_estado.py:79](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:79), [bin/gerar_estado.py:284](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:284)).
+
+A cópia disponível não contém metadados Git; a correspondência independente dos hashes e do diff anexado é **[não verificado]**.
+
+PROCEDE: N
 
 ## 17/11 20:52 · sessao 9458f4e06243 · DIA-SEM-TRABALHO-PORTA · sonda · origem=Code
 
@@ -476,28 +515,4 @@ Os casos Rb e Rc conferem o estado persistido depois da leitura, e Rd exige medi
 
 [truncado em 20000 de 21071 caracteres]
 
-## 17/11 20:35 · sessao 37ec7e3098a2 · PORTA-EXPORT · verificador · origem=Code
-
-1. **Sim. Há uma brecha no selo para o VERMELHO.** Em [recusa_estado.py:77](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/recusa_estado.py:77), substitua apenas o `else ''` por:
-
-   ```python
-   else (' -- VERMELHO' if d['esperado'] > 5 else '')
-   ```
-
-   Para `recusas=6` e `esperado=6`, o mutante produz VERMELHO, embora `recusas != esperado` seja falso. O leitor atual entrega `esperado=0`, portanto esse exemplo demonstra uma falha do contrato da função com o dicionário recebido; não demonstra ocorrência em produção. [recusa_critica.py:133](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/core/recusa_critica.py:133)
-
-   A AST continua contendo exatamente um `d['recusas']` na tupla à direita de `%` e outro como lado esquerdo de `d['recusas'] != d['esperado']`; o novo `IfExp` só acrescenta outro uso de `esperado`, que a regra não limita. Os testes de valores usam apenas `esperado` 0 e 1, e o teste da raiz compara a saída com a própria função. Assim, a leitura do selo indica que o mutante passa; **execução do mutante [não verificado]**. [test_recusa_estado.sh:95](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:95), [test_recusa_estado.sh:120](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:120), [test_recusa_estado.sh:138](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:138)
-
-   Os anexos informam `rc=1` para M8–M16 no v8; eles não incluem o mutante acima. [não verificado: anexo fornecido no enunciado, sem arquivo:linha]
-
-2. **Não identifiquei reprovação do código atual pela forma exigida.** Os ramos `sem_arquivo` formatam `rotulo` e `caminho`, sem acrescentar uso de `recusas`; a lambda de `por_usuario` também não usa essa chave. A proibição de atribuições é aplicada a `linha_porta_export`, não a `linha`, onde está `por = ...`. O anexo informa `base(v8) rc=0`; não executei o selo, pois ele cria e remove arquivos temporários. [recusa_estado.py:48](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/recusa_estado.py:48), [recusa_estado.py:71](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/recusa_estado.py:71), [test_recusa_estado.sh:129](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:129), [test_recusa_estado.sh:59](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:59)
-
-3. **Escrita e leitura:**
-
-   - O delta examina a AST de `bin/recusa_estado.py`, especialmente as funções de formatação; o selo abre esse arquivo e percorre seus nós. [test_recusa_estado.sh:91](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:91), [test_recusa_estado.sh:104](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/tests/test_recusa_estado.sh:104)
-   - Para a trilha da porta do export, `_recusa` chama `registrar`, que emite o aviso no logger; a configuração associa `ponto` ao `RotatingFileHandler` de `/app/logs/ponto.log`. Isso descreve a configuração da cópia; sua aplicação e conteúdo em produção estão [não verificado]. [porta_export.py:1063](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/folha/porta_export.py:1063), [recusa_critica.py:80](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/core/recusa_critica.py:80), [saas.py:160](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/config/settings/saas.py:160), [saas.py:181](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/config/settings/saas.py:181)
-   - `linhas_do_arquivo` lê o arquivo e seus três rotados; `porta_export_falhou_hoje` filtra e conta as linhas da porta. `recusa_estado` chama esse leitor e `gerar_estado` incorpora a frase. O contador do Resolver usa o mesmo leitor básico; a API também o chama. [recusa_critica.py:95](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/core/recusa_critica.py:95), [recusa_critica.py:108](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/core/recusa_critica.py:108), [recusa_critica.py:126](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/core/recusa_critica.py:126), [recusa_estado.py:60](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/recusa_estado.py:60), [gerar_estado.py:274](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/bin/gerar_estado.py:274), [views_mensageria.py:1870](/home/ronald/codex_ws/79ad8aea615fc3b92d5793de7be4339e21ddd7a6/app/api/views_mensageria.py:1870)
-
-**PROCEDE: 1**
-
-_6740 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6741 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
