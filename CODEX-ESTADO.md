@@ -1,7 +1,56 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 15:09** · publicado em **18/11/2026 15:09** (UTC-3)
+> Ultima resposta processada: **18/11/2026 15:15** · publicado em **18/11/2026 15:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 15:15 · sessao 4335686bde57 · - · - · origem=Ronald (tmux)
+
+Leitura de X4, A9b, X11 e do clique mudo concluída e enviada ao agente principal, com referências ao código e aos testes localizados. Os testes não foram executados. [app/chamados/tests/test_e4_expand_orm.py:63](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/tests/test_e4_expand_orm.py:63)
+
+## 18/11 15:15 · sessao 156e23fc3fa6 · - · - · origem=Ronald (tmux)
+
+Levantamento enviado ao agente principal, com os pontos de escrita e leitura localizados, inclusive consumidores fora de `app`, e com a ressalva de que o censo completo permanece **[não verificado]**.
+
+## 18/11 15:14 · sessao 1a24b3e4db43 · - · - · origem=Ronald (tmux)
+
+Leitura de P8, P9 e P16 enviada ao agente principal, com estados de entrada, juízes, operações, campos, retornos e testes identificados. Os testes foram apenas lidos, não executados [não verificado]. [nao verificado]
+
+A cópia não contém `.git`; portanto, a identidade exata do HEAD ficou **[não verificado]**.
+
+## 18/11 15:11 · sessao 0d43c2e84e99 · E4C-F6F7 · construtor · origem=Code
+
+Os dois selos foram alterados para rejeitar chamadas reflexivas indicadas, reatribuições e mutações sintáticas de `perguntas`, e exigir seu uso no campo `perguntas` da resposta. Também foi preservada a rejeição de leitura de `consulta` antes de `pendentes`. [test_pergunta_no_app.py:29](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:29), [test_contract_pergunta_viva.py:26](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:26), [test_e4c_f6f7_c7_sem_banco.py:124](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:124).
+
+A view atual lê `consulta['pendentes']` e usa `perguntas` na resposta; não foram encontradas as chamadas reflexivas indicadas em seu corpo. [views.py:2526](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2526), [views.py:2542](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2542), [views.py:2583](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2583).
+
+O comando abaixo executa **cada mutante como subteste**, contra cada selo. A lista inclui reflexão, reatribuição, exclusão, alteração de item e atributo, métodos e substituição do campo da resposta. [test_e4c_f6f7_c7_sem_banco.py:88](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:88)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_reflexao_e_mutacao_de_perguntas_MORDEM
+```
+
+Antes da cura, a bateria inicial produziu o RED abaixo; quatro variantes já eram rejeitadas. As variantes adicionadas posteriormente passaram na bateria final, mas seu RED individual anterior à cura é **[não verificado]**.
+
+```text
+AssertionError: True is not false
+Ran 1 test in 0.650s
+FAILED (failures=30)
+```
+
+Após a cura, o módulo completo sem banco passou, incluindo os mutantes antigos e novos: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco
+```
+
+```text
+Ran 6 tests in 1.540s
+OK
+```
+
+A detecção de mutação indireta por aliases ou por funções chamadas com `perguntas` é **[não verificado]**; os selos implementam as verificações sintáticas descritas. [test_pergunta_no_app.py:49](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:49)
+
+LEI-AKITA: padrao=Architecture Conformance Test.
 
 ## 18/11 15:09 · sessao 626cbd9f7e08 · E4C-F6F7 · verificador · origem=Code
 
@@ -726,151 +775,4 @@ O contrato atual de `do_dia` associa `quem`, `quando` e `ausencia_id` à ausênc
 
 Quanto ao merge, o anexo fornecido informa `rc 0`, uma árvore `cda458298117a0463f3b86addd90f5846cc1c7f2` e ausência de conflito entre as pontas c9 e F6F7 c7; pela informação relatada, **não houve conflito textual no merge, inclusive em `app/api/views.py`**. O merge não foi reproduzido nem suas entradas foram verificadas nesta leitura. [não verificado]
 
-## 18/11 14:38 · sessao b89783392c74 · LAUDO-[nome] · sonda · origem=Code
-
-Os campos de `TipoEscala` que descrevem o intervalo são:
-
-- `hora_inicio_intervalo` e `hora_fim_intervalo`: par de horários da primeira pausa; `hora_inicio_intervalo2` e `hora_fim_intervalo2`: segundo par opcional. O código considera uma pausa cadastrada quando o par está completo. [app/escala/models.py:52](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:52), [app/escala/models.py:259](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:259)
-- `intervalo_modo`: distingue horário fixo declarado de intervalo por duração; `intervalo_duracao_min` informa a duração para o segundo modo. [app/escala/models.py:94](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:94)
-- `intervalo_indenizavel`: flag distinta dos horários; o motor documenta que não a lê para esse cálculo. [app/escala/models.py:106](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:106), [app/ponto/motor_calculo_v2.py:822](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/ponto/motor_calculo_v2.py:822)
-- `horarios_por_dia` pode substituir os marcos da primeira pausa para um dia; no modo `duracao`, os marcos fixos de intervalo não são emitidos. [app/escala/models.py:326](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:326)
-
-Assim, o **horário pré-assinalado no cadastro** é declarado pelo par de início e fim da pausa, sujeito ao horário específico do dia quando houver substituição; a flag `False` não declara esse horário. [app/escala/models.py:259](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:259), [app/escala/models.py:326](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:326)
-
-A sonda `sonda_laudo2_c2.py` não foi localizada na cópia e não pude executá-la; o ambiente informado também não dá acesso ao banco. **A tabela abaixo reproduz e soma a saída raspada fornecida**, cuja execução independente permanece **[não verificado]**. Para localizar essa fonte, conto `sonda_leitura` como linha 1 do bloco “DADO RASPADO”. [dado raspado:1]
-
-| Grupo da saída | Batidas | Dias | Minutos | Templates no grupo |
-|---|---:|---:|---:|---:|
-| `duracao`, horas declaradas `False` | 2 | 106 | 6.360,00 | 10 |
-| `duracao`, horas declaradas `False` | 3 | 1 | 60,00 | 10 |
-| `duracao`, horas declaradas `False` | 4+ | 6 | 72,90 | 10 |
-| `fixo`, horas declaradas `False` | 2 | 3 | 180,00 | 2 |
-| `fixo`, horas declaradas `False` | 4+ | 2 | 120,00 | 2 |
-| `fixo`, horas declaradas `True` | 1 | 1 | 60,00 | 97 |
-| `fixo`, horas declaradas `True` | 2 | 226 | 13.724,00 | 97 |
-| `fixo`, horas declaradas `True` | 3 | 168 | 10.384,00 | 97 |
-| `fixo`, horas declaradas `True` | 4+ | 208 | 6.003,96 | 97 |
-| **Total** | | **721** | **36.964,86** | |
-
-Os templates são contagens **por grupo**, repetidas na tabela para cada faixa de batidas; não são contagens por faixa nem se pode comprovar que sejam distintos entre grupos. A soma dos dias e minutos fecha com as faixas `MOTOR_FALSE` da saída. [dado raspado:4–21]
-
-A separação informada pela sonda é **603 dias e 30.171,96 minutos** em `fixo|horas_declaradas=True`, contra **118 dias e 6.792,90 minutos** nos demais grupos com flag `False`. O primeiro é o grupo que a saída identifica como tendo modo fixo e horas declaradas; chamar todos esses dias de pré-assinalados **de fato no dia** fica **[não verificado]**, pois o código da sonda e a aplicação de eventuais horários por dia não estão disponíveis no dado. A definição exata usada pela sonda para `horas_declaradas` também é **[não verificado]**. [dado raspado:10–21], [app/escala/models.py:298](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/escala/models.py:298)
-
-- **col868, 14/11:** duas batidas, 60 minutos e flag `False`; grupo `GRUPO_PRE` específico **[não verificado]**. [dado raspado:24]
-- **col934, 15/11:** duas batidas, 60 minutos e flag `False`; grupo `GRUPO_PRE` específico **[não verificado]**. [dado raspado:31]
-
-As linhas individuais não informam `intervalo_modo` nem `horas_declaradas`; as mesmas duas batidas aparecem em todos os três grupos, portanto não identificam o grupo de cada caso. [dado raspado:10–18], [dado raspado:24], [dado raspado:31]
-
-## 18/11 14:37 · sessao e99990621aef · PRE-MAPA-E4D · verificador · origem=Code
-
-**Resultado: o contrato contém as cinco partes, mas o método da linha 4 não prova que os baldes correspondam à cobertura real nem que o universo esteja completo.** Há um furo demonstrável: o contrato limita a leitura a AST de `app/`, mas há templates em `app/` que leem diretamente os campos. A classificação efetiva de qualquer sítio por fatia permanece **[não verificado]**, pois os diffs e `fatias.txt` não foram fornecidos. ([contrato.txt:1–4, dado fornecido]; [modal_fio.html:219](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/templates/chamados/partials/modal_fio.html:219))
-
-**Linha 1 — quem chama.** A parte existe. O comando declara envelope de memória, caminho em `logs/PRE-MAPA-E4D/` e leitura da cópia; o complemento restringe a exceção nominal a esse script e exige envio prévio do contrato. A linha não demonstra que ele foi mandado uma vez antes da construção, que a cópia corresponde ao HEAD indicado ou que havia memória livre: **[não verificado]**. O comando também não identifica onde grava `leitores.out`. ([contrato.txt:1, dado fornecido]; [complemento1_pre_mapa_e4d_1811_1440.txt:4, dado fornecido]; [contrato.txt:2, dado fornecido])
-
-**Linha 2 — quem espera.** A parte existe e declara o item 4 como consumidor, além de excluir `bin/`, selo, hook, cron e pouso. O complemento também exclui construtor, Agent, pista e suíte; a linha 2 não os repete expressamente, embora a cláusula “só o item 4” restrinja o consumidor. O aval pede leitura **fora dos juízes** e a linha 2 não declara essa exclusão; tampouco ela aparece nas demais linhas. ([contrato.txt:1–5, dado fornecido]; [complemento1_pre_mapa_e4d_1811_1440.txt:4, dado fornecido]; [pre_mapa_e4d_1811_1425.txt:10, dado fornecido]) [nao verificado]
-
-**Linha 3 — falha e limite.** A parte existe: declara 4 GB, 10 minutos, erro de parse como contagem incompleta e reconhecimento de apelidos, `getattr` e strings em `values()`/`filter()`. O comando da linha 1 estabelece o limite de memória, mas não mostra como os 10 minutos serão impostos; o comportamento em estouro de tempo ou memória também não está especificado. Strings em `order_by()` e nomes calculados para `getattr` não são explicitamente cobertos. ([contrato.txt:1,3, dado fornecido])
-
-**Linha 4 — medida e baldes.** A parte existe e traz os três baldes, as fatias pendentes e a amostra. Há, porém, condições sem definição suficiente para aplicar a regra: uma função pode intersectar diffs de mais de uma fatia, e o contrato não diz como desempatar; também não define como tratar linhas removidas ou movidas, ou uma mudança na função que não migre aquele campo. Uma coincidência de função e diff, por si só, não demonstra cobertura semântica do campo. ([contrato.txt:4, dado fornecido])
-
-Casos concretos que expõem o limite, sem afirmar um balde efetivamente errado:
-
-- **String e filtro:** `respondida_sem_resposta` filtra `respondida_em__gte` e lê `resposta_colab` por `values_list`. Sua detecção depende de interpretar essas formas; a fatia que cobre esse sítio é **[não verificado]**. ([vigia_fio.py:738](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/vigia_fio.py:738), [vigia_fio.py:747](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/vigia_fio.py:747))
-- **`getattr` dinâmico:** em `historico.py`, os nomes `respondida_em` e `validada_em` vêm de uma tupla e são passados pela variável `campo` a `getattr`. A promessa genérica de reconhecer `getattr` não explica se esse fluxo será resolvido. ([historico.py:96](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/historico.py:96))
-- **Leitura indireta:** um consumidor acessa `p.estado`; a propriedade chama `DecisaoPergunta.leitura`, que chama `linhas_da_projecao_sem_linha`, onde há leituras diretas da projeção. Uma interseção feita apenas na função consumidora não demonstra a cobertura desse caminho. ([explicador.py:95](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/explicador.py:95), [models.py:3225](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3225), [models.py:4312](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4312), [models.py:4251](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4251))
-- **Template:** `modal_fio.html` lê `resposta_colab`, `respondida_em` e `validada_em`. Essas leituras não são nós do AST Python da função que renderiza o template; a restrição da linha 1 deixa sua inclusão no censo sem demonstração. ([modal_fio.html:217](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/templates/chamados/partials/modal_fio.html:217); [contrato.txt:1, dado fornecido])
-- **Resposta da API:** o código lê diretamente `p.resposta_colab` e também a propriedade `p.resposta_display`; esta, por sua vez, chama a leitura da sequência com o passivo da projeção. São caminhos diferentes no mesmo sítio consumidor, que a mera coincidência com um diff não distingue. ([views.py:1163](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/api/views.py:1163), [models.py:3811](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3811), [models.py:4295](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4295))
-
-Um caso concreto de **classificação efetivamente errada por fatia**, inclusive por apelido de import, é **[não verificado]**: não foram fornecidos os diffs dos commits nem o resultado do instrumento. A lista definitiva de campos do item 1 também é **[não verificado]**; os exemplos acima usam campos de projeção identificados no próprio código. ([models.py:4238](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4238))
-
-**Universo.** Sim, há furo: mesmo que a soma dos três baldes seja igual ao universo *detectado*, isso não prova que esse universo inclua os leitores em templates ou os caminhos indiretos citados. A igualdade também não garante exclusividade se um sítio puder entrar em mais de um balde; o contrato não define essa resolução. A amostra de cinco por balde, embora exigida pelo contrato, não demonstra completude dos leitores omitidos. ([contrato.txt:1,4, dado fornecido]; [modal_fio.html:219](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/templates/chamados/partials/modal_fio.html:219))
-
-**Linha 5 — quem desliga.** A parte existe: a sessão encerra ao fechar o item 4, o arquivo permanece em `logs/` e a ida a `bin/` ou a selo exige vaga e pouso próprios. A aplicação dessa condição a um artefato construído é **[não verificado]**. ([contrato.txt:5, dado fornecido]; [complemento1_pre_mapa_e4d_1811_1440.txt:4, dado fornecido]) [nao verificado]
-
-## 18/11 14:36 · sessao c52e48e0f93d · LAUDO-[nome] · sonda · origem=Code
-
-**col868: o espelho mostra 21 min fora da janela, e o motor publica 21,209933 min para o período.** A regeneração mudou os marcos de 14/11 na mesma manhã da correção de fase e explica geometricamente as duas pontas; a autoria exata da regeneração pelo comando e o dono L-099 permanecem **[não verificado]**. [DADO RASPADO:12–14,29–31; autoria e dono: não verificado]
-
-As referências `DADO RASPADO:linha` abaixo numeram as linhas do resultado fornecido na mensagem, começando em `sonda_leitura` como linha 1; não são números de linha verificados de um arquivo em disco. A sonda foi informada como já executada; não houve nova execução nem acesso ao banco nesta resposta. [DADO RASPADO:1; nova execução: não verificado]
-
-1. **Minutos de 14/11.** No espelho, a entrada às **18:42** está **18 min antes** do marco das 19:00, e a saída às **07:03** está **3 min depois** do marco das 07:00: **21 min no total**. [DADO RASPADO:28–30]
-
-   O motor retornou um período, com entrada em **14/11 às 18:42:28,063** e saída em **15/11 às 07:03:40,659**, horário local UTC−3, e **21,209933333333332 min** fora da janela. O motor soma os minutos retirados das duas pontas; o valor informado conserva os segundos. [DADO RASPADO:31; app/ponto/motor_calculo_v2.py:2759,2787]
-
-2. **Células de col868.** Todas têm origem `gerada`, `editada_em=None` e uma regeneração; horários abaixo são locais UTC−3. [DADO RASPADO:9,12,15]
-
-   | Data | `gerada_em` | `regenerada_em` | DNA atual × anterior |
-   |---|---|---|---|
-   | 13/11 | 21/10 05:50:08,771086 | 18/11 08:19:24,040195 | Atual: `trabalha=False`, sem marcos ou lâmpadas. Anterior: entrada 13/11 19:00, intervalo 14/11 01:00–02:00 e saída 14/11 07:00. [DADO RASPADO:9–11] |
-   | 14/11 | 21/10 05:50:08,772390 | 18/11 08:19:24,041817 | Atual: `trabalha=True`, entrada 14/11 19:00, intervalo 15/11 01:00–02:00 e saída 15/11 07:00. Anterior: sem marcos ou lâmpadas. [DADO RASPADO:12–14] |
-   | 15/11 | 21/10 05:50:08,773706 | 18/11 08:19:24,043138 | Atual: `trabalha=False`, sem marcos ou lâmpadas. Anterior: entrada 15/11 19:00, intervalo 16/11 01:00–02:00 e saída 16/11 07:00. [DADO RASPADO:15–17] |
-
-   Nos três DNAs, o vínculo mudou de **1377 para 1603**; permaneceram `tipo_escala_id=380`, ciclo `12x36`, versão 2, intervalo não livre e jornada de 720 min. [DADO RASPADO:10–11,13–14,16–17]
-
-3. **Gestão.** O retrato existe, cobre 21/10–20/11 e foi calculado em **18/11 às 06:43:43,226639 locais** — depois da regeneração das células. col868 não consta nele; portanto, 14/11 não consta sob col868 nesse retrato. A Gestão sem filtros também não retornou col868. A razão da ausência no retrato é **[não verificado]**. [DADO RASPADO:12,18–22,25; app/ponto/services/gestao_he.py:236; razão: não verificado]
-
-   Não foram encontradas decisões para o dia, e o leitor da Gestão retornou `sem_decisao`. [DADO RASPADO:23–24]
-
-4. **Relação com a fase e dono.** A célula de 14/11 foi regenerada às **08:19:24** e passou de DNA sem marcos para os marcos de 19:00–07:00; esses marcos, comparados às batidas informadas, explicam os **18 + 3 min** exibidos. Isso é consistente com a correção de fase relatada para cerca de 08:19, mas o dado não identifica o comando que produziu a regeneração nem apresenta uma medição de produção imediatamente anterior que, isoladamente, prove a origem causal dos minutos. [DADO RASPADO:12–14,29,31; autoria e medição anterior: não verificado] [nao verificado]
-
-   **Dono L-099: [não verificado].** A mudança do DNA e a ausência no retrato estão demonstradas, mas o dado não estabelece por que a fase anterior ou a nova estava correta, nem por que o retrato posterior não incluiu col868; por isso não sustenta escolher entre ESTRUTURA, CADASTRO e BATIDA. [DADO RASPADO:10–14,20–22; correção da fase e causa da ausência: não verificado]
-
-## 18/11 14:29 · sessao ea61c0add5dd · PRE-MAPA-E4D · censo · origem=Code
-
-**Censo parcial: a exaustividade da parte B e as contagens de escritores permanecem [nao verificado].** A varredura encontrou os sítios abaixo, mas não terminou a resolução de todos os nomes dinâmicos, aliases, defaults e gravações indiretas em `app/` inteiro. A associação de cada escrita a um ato substituto também permanece [nao verificado], salvo a ausência explícita de ato no fluxo L-130. Não há dados de banco ou log para verificar execução em produção. [app/chamados/services/validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414)
-
-A unidade é **campo × função**. Nos nomes abaixo, a referência aponta para a atribuição ou gravação; chamadas que delegam à porta são identificadas como tais. A classificação de exceção FATO dos escritores adicionais está **[nao verificado]**: o anexo declara seis portas como exceções, mas isso não basta para atribuir automaticamente essa classificação a cada chamador.
-
-| Campo | Escritor comprovado fora das portas A01–A24/27 | Tipo | Ato substituto | Exceção FATO |
-|---|---|---|---|---|
-| `status_local` | [models.py:abrir:1000](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1000), defaults em `get_or_create`; [models.py:criar:1154](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1154); [0038:registrar:10](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0038_a3_registrado_backfill.py:10), [desfazer:15](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0038_a3_registrado_backfill.py:15); [0039:backfill:24](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:24), [desfazer:33](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:33) | outro; migration | [nao verificado] | [nao verificado] |
-| `resolvido_em` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `via_encerramento` | [0039:backfill:24](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:24); [desfazer:34](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:34) | migration | [nao verificado] | [nao verificado] |
-| `respondido_por` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `fechada_em` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `fechada_por` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `resolucao` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `motivo_fechamento` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `reaberturas_admin` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `reaberturas_colab` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `motivos` | [models.py:aparar_motivo_respondido:2129](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2129); [disputa_emissao.py:_abrir_ou_agregar_disputa:550](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:550); [criar_disputa_a_partir_de_chamados_orfaos:1097](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1097); [criar_disputa_ancora_de_chamado:1372](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1372) | outro / save | [nao verificado] | [nao verificado] |
-| `materializada_em` | **Devoluções e ressuscitação:** sítios D1, D2, D3 e D4 definidos abaixo | outro, por A07/A08 | [nao verificado] | [nao verificado] |
-| `materializada_por` | D1, D2, D3 e D4 | outro, por A07/A08 | [nao verificado] | [nao verificado] |
-| `via_resolucao` | D1, D2, D3 e D4 | outro, por A07/A08 | [nao verificado] | [nao verificado] |
-| `respondida_em` | D2 e D3 | outro, por A08 | D2: [nao verificado]; D3: nenhum ato de reabertura/devolução no fluxo | [nao verificado] |
-| `resposta_colab` | D2 e D3 | outro, por A08 | D2: [nao verificado]; D3: nenhum ato de reabertura/devolução no fluxo | [nao verificado] |
-| `validada_em` | D1 e D2 | save / outro, por A07/A08 | [nao verificado] | [nao verificado] |
-| `validada_por` | D1 e D2 | save / outro, por A07/A08 | [nao verificado] | [nao verificado] |
-| `recusa_motivo` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `pendencia_admin` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `data_conferida_em` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `data_conferida_por` | [nao verificado] | [nao verificado] | [nao verificado] | [nao verificado] |
-| `veredito_lavrado` | **Lavra:** sítios L1–L5 definidos abaixo | save / cron-comando / outro | [nao verificado] | [nao verificado] |
-| `julgado_em` | L1–L5 | save / cron-comando / outro | [nao verificado] | [nao verificado] |
-| `janela_expira_em` | L1–L5 | save / cron-comando / outro | [nao verificado] | [nao verificado] |
-
-Os sítios abreviados na tabela são:
-
-- **D1:** [validacao.py:devolver_paridade_bug_par_103:346](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:346): descarimba por A07 e salva a limpeza da validação; registra `DEVOLUCAO`. A equivalência com um número A-NN é [nao verificado].
-- **D2:** [models.py:ressuscitar_perguntas:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702): passa os quatro campos de resposta/validação a A08 e, nessa mesma operação, limpa os três campos de materialização.
-- **D3:** [validacao.py:devolver_instante_sem_texto_l130:440](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:440): passa o par de resposta a A08 e limpa também os três campos de materialização. O próprio fluxo declara não registrar ato de reabertura/devolução. [validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414)
-- **D4:** [relavra_via.py:desfazer_carimbo_sem_lastro:246](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/relavra_via.py:246): chama A07, que salva os três campos do carimbo. [models.py:3399](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3399)
-- **L1:** [veredito_lavrado.py:lavrar:270](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:270), com `save` quando solicitado; o comando [lavrar_perguntas_stale.py:handle:89](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/lavrar_perguntas_stale.py:89) o chama.
-- **L2:** [veredito_lavrado.py:gravar_lavras_em_lote:250](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:250), `bulk_update`; [backfill_veredito_lavrado.py:handle:138](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/backfill_veredito_lavrado.py:138) prepara os valores e chama o lote.
-- **L3:** [fio.py:reapontar_resolvedora:975](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/fio.py:975), lavra em memória e salva os três campos.
-- **L4:** [fio.py:rechavear_data_evento:1091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/fio.py:1091), lavra em memória e salva os três campos.
-- **L5:** [models.py:_nascer:3195](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3195), no ramo de reuso; sua separação da porta A22 para a contagem pedida está **[nao verificado]**.
-
-Em `motivos`, uma mesma função pode conter mais de um ponto de atribuição ou criação: a tabela usa a unidade campo × função, não campo × linha. Por exemplo, `criar_disputa_a_partir_de_chamados_orfaos` também grava em [disputa_emissao.py:1137](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1137), [1145](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1145), [1174](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1174) e [1269](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1269).
-
-A busca textual executada sobre `app/` foi:
-
-```bash
-rg -l --glob '*.py' --glob '!**/tests/**' --glob '!**/test_*.py' '\b(status_local|resolvido_em|via_encerramento|respondido_por|fechada_em|fechada_por|resolucao|motivo_fechamento|reaberturas_admin|reaberturas_colab|motivos|materializada_em|materializada_por|via_resolucao|respondida_em|resposta_colab|validada_em|validada_por|recusa_motivo|pendencia_admin|data_conferida_em|data_conferida_por|veredito_lavrado|julgado_em|janela_expira_em)\b' app/
-```
-
-Também executei uma passagem AST em memória sobre arquivos Python de `app/`, procurando atribuições de atributo, palavras-chave em `update`/`create`/`get_or_create`/`update_or_create`, e literais de campos em `setattr`, `bulk_update` e `update`. A passagem não resolve sozinha nomes dinâmicos nem o fluxo completo de valores; por isso, ausência de resultado não prova ausência de escritor. A exclusão textual acima também não exclui todos os arquivos de teste com outros nomes; testes não foram contados. **[nao verificado]** [nao verificado]
-
-**Contagens:** campos solicitados **25**; escritores fora das portas **[nao verificado]**; escritores sem ato substituto **[nao verificado]**; escritores em exceção FATO **[nao verificado]**.
-
-_6992 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6996 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
