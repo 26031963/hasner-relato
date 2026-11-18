@@ -1,7 +1,117 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 20:25** · publicado em **18/11/2026 20:30** (UTC-3)
+> Ultima resposta processada: **18/11/2026 20:34** · publicado em **18/11/2026 20:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 20:34 · sessao 4d39f1c0a7d7 · E4C-F6F7 · verificador · origem=Code
+
+**Resultado: os três achados da triagem estão corrigidos no código do delta, com uma ressalva de execução dos testes novos:** as três classes acrescentadas depois de `unittest.main()` são descobertas por `python -m unittest`, mas não quando o arquivo é executado diretamente. Os seis testes do módulo c14 passaram pela primeira forma; a catraca geral dos mutantes E3 não pôde ser importada neste ambiente por falta de `django.test`. [test_e4c_f6f7_c14_lei3_pela_leitura.py:101; test_e3_mutantes_alvo.py:9; execução local, não registrada em arquivo] [nao verificado]
+
+1. **Fechamento dos achados e chamadores**
+
+   - **PROCEDE — default silencioso fechado.** `leitura` e `leituras` são argumentos nomeados obrigatórios; os dois pontos de `_tarefa_pura` indexam o mapa, de modo que uma chave ausente falha em vez de produzir leitura vazia. O teste cobre ausência dos argumentos e mapa incompleto. [tarefa_do_dia.py:142; tarefa_do_dia.py:196; tarefa_do_dia.py:279; tarefa_do_dia.py:340; test_e4c_f6f7_c14_lei3_pela_leitura.py:151] [nao verificado]
+   - **PROCEDE — projeção futura cortada para a leitura.** A cópia recebe `None` nos dois carimbos posteriores a `agora`, antes de `DecisaoPergunta.leitura`; há teste para futuro e igualdade nos dois campos. [tarefa_do_dia.py:405; test_e4c_f6f7_c14_lei3_pela_leitura.py:134] [nao verificado]
+   - **PROCEDE — alvo velho corrigido.** A string do mutante inclui a nova chamada nomeada e corresponde a uma ocorrência na cópia; a catraca exige exatamente uma ocorrência. A execução completa dessa catraca está **[não verificado]**, pois sua importação falhou por falta de `django.test`. [e3_v8_mutantes.py:76; tarefa_do_dia.py:279; test_e3_mutantes_alvo.py:14; execução local, não registrada em arquivo]
+   - **NÃO PROCEDE — chamador omitido encontrado.** A busca textual no repositório não revelou chamada de produção ou fixture à função real sem o novo argumento: produção passa pelas chamadas em `279`, `340`, `458` e `659–663`; os testes que omitem argumento o fazem para verificar `TypeError`. A busca não prova ausência de chamada construída dinamicamente sem o nome literal. [tarefa_do_dia.py:279; tarefa_do_dia.py:340; tarefa_do_dia.py:458; tarefa_do_dia.py:659; test_e4c_f6f7_c14_lei3_pela_leitura.py:151; busca textual, não registrada em arquivo] [nao verificado]
+
+2. **Alcance do corte**
+
+   **PROCEDE — o original fica intacto quanto aos dois carimbos nesse trecho.** O código faz `copy(p)`, altera atributos da cópia e passa essa cópia exclusivamente à leitura; o teste verifica os dois valores originais após as chamadas. A cópia é superficial, portanto isso não é prova geral de isolamento de todos os objetos relacionados. [tarefa_do_dia.py:403; test_e4c_f6f7_c14_lei3_pela_leitura.py:137] [nao verificado]
+
+   Depois da leitura, os originais `_ps` ainda alimentam `linhas_da_projecao_sem_linha`, `esta_stale`, a seleção de âncoras e chamados; a carga também conserva as perguntas originais em `_perg` e as passa à tarefa. A leitura resultante pode, porém, mudar a razão e as ações publicadas: o efeito observável do corte não se limita ao valor interno da leitura. A face por pergunta chega à API; a carga alimenta, entre outros, fora da folha, retrato e vigia. [tarefa_do_dia.py:417; tarefa_do_dia.py:422; tarefa_do_dia.py:432; tarefa_do_dia.py:521; tarefa_do_dia.py:659; tarefa_do_dia.py:163; api/views.py:2544; folha/fora_da_folha.py:62; folha/retrato_folha.py:1212; chamados/services/vigia_fio.py:357]
+
+   **PROCEDE — mesma fronteira temporal e mesmo `agora`:** o corte descarta `instante > agora`, conservando igualdade; o passivo conserva `ato_em <= agora`. Os predicados completos têm entradas diferentes: o passivo primeiro exige projeção sem linha correspondente, enquanto o novo corte atua diretamente sobre os dois campos da cópia. [tarefa_do_dia.py:407; tarefa_do_dia.py:417; models.py:4251]
+
+3. **Exceção no contrato de vitalidade**
+
+   - **NÃO PROCEDE — allowlist anterior zero para serviços.** Já havia entradas para funções de serviços, inclusive `validacao.py`, `relavra_via.py` e `raiox.py`. [test_contract_leitores_vitalidade.py:19; test_contract_leitores_vitalidade.py:40; test_contract_leitores_vitalidade.py:52]
+   - **PROCEDE para os caminhos de produção examinados — a razão descreve a origem do valor.** A carga preenche o mapa com `DecisaoPergunta.leitura`, que retorna `LeituraDoAto`; `_pela_decisao` recebe esse resultado. A assinatura, por si só, não impõe o tipo, e fixtures passam objetos sintéticos. [tarefa_do_dia.py:413; tarefa_do_dia.py:458; tarefa_do_dia.py:528; models.py:4326; test_e3_tarefa_admin_sem_banco.py:126]
+   - **PROCEDE — há alternativa sem essa entrada.** O contrato AST reconhece o nome do atributo e a forma sintática, sem distinguir a origem do objeto. Uma alteração explícita do contrato para reconhecer a leitura do ato permitiria preservar a verificação de carimbo cru sem isentar toda `_pela_decisao`; essa alternativa é uma proposta, não uma alteração aplicada nem validada. [test_contract_leitores_vitalidade.py:299; test_contract_leitores_vitalidade.py:333; test_contract_leitores_vitalidade.py:346] [nao verificado]
+
+4. **Fixtures**
+
+   **NÃO PROCEDE — não identifiquei assert removido, caso retirado ou tolerância ampliada no delta fornecido.** As alterações acrescentam principalmente mapas de leituras sintéticas, campos e um stub de `leitura`; os asserts mostrados permanecem. Isso não demonstra equivalência geral de cobertura: por exemplo, a fixture V8 fornece `validada_em=None` para todas as perguntas, sem reproduzir a leitura real. [e3_v8_apoio.py:126; test_e3_r3_c7_sem_banco.py:179; test_e3_r3_c7_sem_banco.py:195; test_e3_c8b_sem_banco.py:246]
+
+5. **Mutantes do aval**
+
+   **PROCEDE no conjunto dos quatro casos enumerados; fora dele, [não verificado].** Cada mutante é exigido como diferente do resultado correto no caso designado, e igual à função original nos outros três casos enumerados. Assim, a exclusividade demonstrada é apenas sobre essa matriz, não sobre todas as sequências possíveis. [test_e4c_f6f7_c14_lei3_pela_leitura.py:173; test_e4c_f6f7_c14_lei3_pela_leitura.py:192]
+
+   **PROCEDE — sobrevivência faz o teste falhar**, desde que o teste seja executado: `assertNotEqual` falha se o mutante devolver o resultado esperado; `subTest` registra a falha no resultado do `unittest`, sem `try/except` que a suprima. O teste passou na execução por descoberta de módulo. Há a ressalva já indicada: execução direta do arquivo chega a `unittest.main()` antes da definição de `MutantesDoAval`, `HorizonteProjecao` e `LeituraObrigatoria`. [test_e4c_f6f7_c14_lei3_pela_leitura.py:101; test_e4c_f6f7_c14_lei3_pela_leitura.py:104; test_e4c_f6f7_c14_lei3_pela_leitura.py:166; test_e4c_f6f7_c14_lei3_pela_leitura.py:183; execução local, não registrada em arquivo] [nao verificado]
+
+6. **Escritores e leitores dos valores relevantes**
+
+   | Campo ou valor | Escrita e leitura verificadas |
+   |---|---|
+   | `respondida_em` e `resposta_colab` | A resposta humana escreve os dois e registra ato de resposta; resposta automática e carimbo pela trilha também os escrevem. A leitura usa a projeção para compor linhas passivas e devolve resposta vigente. [disputa_emissao.py:1481; disputa_emissao.py:1532; disputa_emissao.py:1682; disputa_emissao.py:1705; models.py:4259; models.py:4312] |
+   | `validada_em` | A validação escreve o carimbo e o ato; devolução e resposta humana podem limpá-lo; o modelo também pode carimbá-lo. O corte escreve apenas `None` na cópia e a leitura usa o campo na composição da sequência. [validacao.py:161; validacao.py:269; disputa_emissao.py:1484; models.py:3325; tarefa_do_dia.py:407; models.py:4265] |
+   | `ato`, `ato_em`, `resposta_mantem_validacao` | Escritores registram atos pela porta `registrar`; resposta humana grava `False`, automática e trilha gravam `True`, assim como a linha passiva de resposta. A carga filtra `ato_em`, a leitura reconstrói a vigência e `_pela_decisao` percorre a cauda. [models.py:4328; disputa_emissao.py:1532; disputa_emissao.py:1685; disputa_emissao.py:1707; models.py:4260; tarefa_do_dia.py:390; models.py:4308; tarefa_do_dia.py:158] |
+   | `leituras[p.pk]`, `leitura.validada_em` | `_fatos_das_perguntas` constrói o mapa; a carga o guarda e o entrega a `_tarefa_pura`; `_pela_decisao` usa a validação vigente para selecionar o ato decisório. A face por pergunta usa o mesmo mapa. [tarefa_do_dia.py:404; tarefa_do_dia.py:528; tarefa_do_dia.py:659; tarefa_do_dia.py:163; tarefa_do_dia.py:458] |
+   | `passivo`, `lavra`, `efeitos`, `fila` | `_fatos_das_perguntas` constrói esses insumos; `_pela_decisao` os lê para escolher razão, ações e porta. A lavra vem de `veredito_lavrado` sujeito a `esta_stale`; efeitos vêm de batidas; fila vem de `qs_na_fila`. [tarefa_do_dia.py:414; tarefa_do_dia.py:420; tarefa_do_dia.py:424; tarefa_do_dia.py:439; tarefa_do_dia.py:152] |
+
+A lista acima identifica os escritores e leitores necessários para avaliar este delta; uma enumeração exaustiva de todos os consumidores e de todos os caminhos de escrita desses campos no repositório é **[não verificado]**. Não há resultado de produção nem execução da suíte inteira nos dados fornecidos: **[não verificado]**. [nao verificado]
+
+## 18/11 20:31 · sessao 752bc2796335 · E4C-F6F7 · construtor · origem=Code
+
+**AVAL-DEVOLVIDO — PRONTO (ii)–(iv):** esses casos já tinham o resultado esperado na ponta anterior; sua mordida foi exercitada com mutantes próprios. A contagem de produção solicitada no aval permanece **[não verificado]**: o dado fornecido não traz a contagem nem há acesso ao banco.
+
+O diff está na cópia, sem commit. A certificação pela suite Code e pelo opus final permanece **[não verificado]**. [nao verificado]
+
+- **A — leitura obrigatória:** assinaturas sem default e acesso por `leituras[p.pk]` nos dois pontos de decisão; o teste verifica ausência de argumento e chave ausente. [serviço:142](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:142), [serviço:196](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:196), [teste:151](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:151). [nao verificado]
+- **B — horizonte:** a cópia entregue à leitura corta `respondida_em` e `validada_em` posteriores a `agora`; o corte do passivo permanece no lugar. O RED, executado antes da cura, retornou `silencio_decidido` onde se esperava `aguarda_validacao`; depois passou, inclusive o espelho no limite. [serviço:405](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:405), [teste:104](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:104). [nao verificado]
+- **C — alvo:** a string do mutante de absorção acompanha a chamada nova; o teste de alvo único passou pela pista AST. [mutante:76](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/e3_v8_mutantes.py:76), [pista:96](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e3_volta7_sem_banco.py:96). [nao verificado]
+- **D — contrato e fixtures:** o contrato detecta comparações com campos chamados `validada_em`, sem distinguir a origem. Registrei a exceção porque aqui o valor vem de `DecisaoPergunta.leitura`, juiz da sequência; não é o carimbo cru da pergunta nem julgamento de vitalidade por `pergunta_viva`. O contrato isolado passou com `SimpleTestCase` substituído por `unittest.TestCase`. [contrato:290](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_contract_leitores_vitalidade.py:290), [juiz:4303](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/models.py:4303). [nao verificado]
+- **Fixtures:** `_leituras` faltava nas cargas sintéticas que pulam o construtor; uma delas também precisava preencher o mapa para as perguntas efetivamente carregadas. O dublê de `DecisaoPergunta` não fornecia `leitura`; e a fixture de pergunta fornecia `celula`, mas não a FK `celula_id`. Foram corrigidas nas fixtures, sem fallback no serviço. [carga:360](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e3_degrau_dono_e_porta.py:360), [mapa:246](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e3_c8b_sem_banco.py:246), [dublê:197](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e3_r3_c7_sem_banco.py:197), [FK:115](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:115).
+
+Os mutantes **(ii), (iii) e (iv)** abaixo foram executados **em memória**, sem alterar o serviço. Para cada um, o teste também compara os outros três casos do aval com o comportamento original. [teste:166](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:166). [nao verificado]
+
+**(ii) Recuar no máximo uma resposta**, substituição única em `tarefa_do_dia.py`:
+
+```text
+antiga:     while k and decisoes[k - 1].ato == D.RESPOSTA and decisoes[k - 1].resposta_mantem_validacao:
+nova:       if k and decisoes[k - 1].ato == D.RESPOSTA and decisoes[k - 1].resposta_mantem_validacao:
+```
+
+**(iii) Dispensar leitura validada**, substituição única:
+
+```text
+antiga:     if 0 < k < len(decisoes) and leitura.validada_em is not None:
+nova:       if 0 < k < len(decisoes) and True:
+```
+
+**(iv) Tornar transparente a resposta que desfaz**, substituição única do bloco:
+
+```python
+    while k and decisoes[k - 1].ato == D.RESPOSTA and decisoes[k - 1].resposta_mantem_validacao:
+        k -= 1
+    if 0 < k < len(decisoes) and leitura.validada_em is not None:
+```
+
+por:
+
+```python
+    while k and decisoes[k - 1].ato == D.RESPOSTA:
+        k -= 1
+    if 0 < k < len(decisoes) and (leitura.validada_em is not None or not decisoes[-1].resposta_mantem_validacao):
+```
+
+Comando da prova em memória para **cada um dos três**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c14_lei3_pela_leitura.MutantesDoAval -v
+```
+
+O teste completo da leitura e o teste da pista de alvos também passaram: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c14_lei3_pela_leitura -v
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e3_volta7_sem_banco -v
+```
+
+Os mutantes específicos das alterações A e B ainda **não foram executados** [não verificado]. A verificação local dos módulos sem banco selecionados passou: 60 testes. A execução integral com Django e o DIFF-RETIDO permanecem **[não verificado]**. [nao verificado]
+
+Por erro no comando destinado ao contrato isolado, iniciei descoberta ampla de testes, contrariando a instrução de não rodar a suite; interrompi a execução ao perceber. Ela apresentou erros de importação por ausência de Django e não constitui resultado de suite. A extensão de possíveis efeitos dessa descoberta interrompida é **[não verificado]**. [nao verificado]
+
+LEI-AKITA: origem=`chamados/services/tarefa_do_dia.py::_pela_decisao`, testemunha=`DecisaoPergunta.leitura`, RED=item 2 e horizonte, juizes novos=0, **padrao=juiz unico**. [serviço:142](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:142)
 
 ## 18/11 20:25 · sessao 69896ae881ff · E4C-F6F7 · verificador · origem=Code
 
@@ -2870,394 +2980,4 @@ finally:
 
 - **Não confirmado:** [não verificado] quais valores aparecem nos pares reais, seus totais, e se existem valores adicionais ou históricos cujo caminho de escrita precise ser identificado. [não verificado] O caminho efetivamente percorrido por cada batida, ou se ela é anterior à regra, não pode ser atribuído apenas aos valores atuais. [não verificado] A sonda não foi executada na sombra nesta sessão.
 
-## 18/11 19:43 · sessao 4a795076c73e · HOOK-B3-PAREI-LEGITIMO · leitura · origem=Code
-
-A trilha fornecida contém **21 linhas `BLOCK` entre 18:54:01 e 18:55:28**, cada uma seguida de `TETO-NAO-CONTA`, além do par `BLOCK`/`ALLOW` de 18:51:07. O anexo descreve nove bloqueios seguidos, mas esse número não corresponde à quantidade de linhas `BLOCK` no recorte apresentado; a relação entre as duas contagens é **[não verificado]**. [Trilha fornecida, linhas 5–48; COMPLEMENTO-1 fornecido, item 1]
-
-A cópia não tem metadados Git disponíveis: `git rev-parse HEAD` falhou. Portanto, a igualdade entre o HEAD da cópia e o hash informado é **[não verificado]**. A correspondência dos eventos com o código abaixo é direta quanto aos textos dos ramos, mas depende de o código executado ser o desta cópia; isso é especialmente relevante para 18:51, quando a trilha registra outro prefixo de HEAD. [Trilha fornecida, linhas 5–8; bin/hook_stop_fila1.py:1404; bin/hook_stop_fila1.py:1448]
-
-### Bloqueio → ramo → motivo
-
-| Instante | Ramo e motivo na trilha | Desfecho que a sequência mostra |
-|---|---|---|
-| 18:51:07 | `BLOCK fila 1 com item aberto`: registro em [bin/hook_stop_fila1.py:1404]. | Em seguida, `ALLOW ALARME teto...`: ramo `n > TETO and not _esperando`, em [bin/hook_stop_fila1.py:1439] e [bin/hook_stop_fila1.py:1448]; `_libera` registra e sai em [bin/hook_stop_fila1.py:145]. A versão executada com prefixo `c8b6d1ec25` é **[não verificado]**. |
-| 18:54:01 | `BLOCK fila 1 com item aberto`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1427]. |
-| 18:54:14 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:34 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:38 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:40 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA` às 18:54:41, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:46 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:53 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:55 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:57 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:54:59 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:02 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:05 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:10 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:12 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:15 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:17 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:19 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:21 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:24 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:26 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-| 18:55:28 | Mesmo `BLOCK`, [bin/hook_stop_fila1.py:1404]. | Seguido de `TETO-NAO-CONTA`, [bin/hook_stop_fila1.py:1429]. |
-
-O `BLOCK` da trilha é escrito **antes** do teto e do B2: sozinho, ele ainda não prova a decisão final. O par das 18:51 ilustra isso: houve `BLOCK` seguido de `ALLOW`. As linhas vizinhas de 18:46:31 e 18:47:52 mostram a mesma sequência com o prefixo antigo. [bin/hook_stop_fila1.py:1404; bin/hook_stop_fila1.py:1439; bin/hook_stop_fila1.py:1450; trilha fornecida, linhas 1–6]
-
-Para os pares de 18:54–18:55, o código mostra que o ramo de trabalho em curso impede tanto a aplicação do teto quanto a consulta ao B2; depois disso, o caminho normal emite `decision: block`. Uma exceção posterior, porém, chama o caminho de falha aberta, e a trilha fornecida não registra a saída JSON do cliente; assim, o resultado final de cada chamada, considerado isoladamente, é **[não verificado]**. [bin/hook_stop_fila1.py:1427; bin/hook_stop_fila1.py:1439; bin/hook_stop_fila1.py:1450; bin/hook_stop_fila1.py:1459; bin/hook_stop_fila1.py:1460]
-
-Antes do `BLOCK`, o fluxo passou pelas portas de B4, orçamento, PAREI, ESPERANDO comprovado e fila vazia sem sair por elas. A trilha não mostra o motivo particular da recusa de cada uma: por exemplo, não distingue ESPERANDO ausente de outras condições sem prova, nem informa o estado interno de B4 ou orçamento. [bin/hook_stop_fila1.py:1361; bin/hook_stop_fila1.py:1372; bin/hook_stop_fila1.py:1381; bin/hook_stop_fila1.py:1386; bin/hook_stop_fila1.py:1394]
-
-### Veredito das hipóteses
-
-- **(a) `[não verificável pela trilha]` quanto ao texto real; procede quanto ao código.** Se a primeira linha útil lida fosse `! PAREI: ...`, ela não começaria por `PAREI:` e `_parei_do_em_curso` retornaria falso. A trilha não guarda o topo do RELATO, então ela não prova que essa era a linha nem que esse foi o teste que falhou. Essa explicação é possível, mas sua probabilidade também é **[não verificado]**. [bin/hook_stop_fila1.py:413; bin/hook_stop_fila1.py:1260; bin/hook_stop_fila1.py:43]
-
-- **(b) Procede como regra do código; sua ocorrência concreta é `[não verificável pela trilha]`.** Para o PAREI genérico liberar, o item em curso precisa ser identificado por ID inteiro na linha e não pode haver outro item andável; há ainda filtros como `!`, exclusão de CLEAR/COTA e SONDA. A trilha não registra o texto do PAREI nem a lista de andáveis, portanto não identifica qual condição falhou. [bin/hook_stop_fila1.py:1243; bin/hook_stop_fila1.py:1263; bin/hook_stop_fila1.py:1275; bin/hook_stop_fila1.py:1280; bin/hook_stop_fila1.py:1286; bin/hook_stop_fila1.py:1310; bin/hook_stop_fila1.py:270]
-
-- **(c) Procede para teto e B2, condicionada à correspondência com a versão executada; “não sobra válvula” não procede como afirmação geral.** `TETO-NAO-CONTA` mostra que o detector retornou verdadeiro naquele ramo, mas não identifica qual processo foi detectado nem prova, por si só, sua natureza real. Com `_esperando` verdadeiro, o teto não libera e B2 é pulado. Ainda existem saídas anteriores, como PAREI ou ESPERANDO comprovado, e a falha aberta posterior; elas não explicam uma liberação na sequência normal observada dos pares de 18:54–18:55. [bin/hook_stop_fila1.py:1427; bin/hook_stop_fila1.py:1439; bin/hook_stop_fila1.py:1450; bin/hook_stop_fila1.py:1381; bin/hook_stop_fila1.py:1386; bin/hook_stop_fila1.py:1460]
-
-### Quem mais lê e regras de pista
-
-O alcance de uma cura concreta é **[não verificado]**, pois nenhuma mudança foi definida. Se tocar a leitura do topo, o B3 também depende dela: `disjuntor._topo_consistente` chama `_bloco_do_topo`, e `decide_b3` passa as linhas a `linhas_libera_b3`, que reconhece `DESENHO` e `ERRO-BOBO` com requisitos próprios. O handoff também chama os dois juízes de PAREI e lê a linha do topo; `_linha_do_topo` serve ainda ao ESPERANDO. [bin/disjuntor.py:764; bin/disjuntor.py:788; bin/disjuntor.py:728; bin/disjuntor.py:1029; bin/handoff_sessao.sh:120; bin/handoff_sessao.sh:129; bin/hook_stop_fila1.py:413]
-
-A regra **HOOK-PAREI-COM-ANDAVEL** impede a liberação pelo PAREI genérico enquanto houver outro item andável; **HOOK-TETO-NAO-CONTA-ESPERA** impede contar a espera como avanço do teto e impede aplicá-lo enquanto o detector indica trabalho em curso. Elas estão explicitadas no código; não encontrei esses nomes literais em `CORTES.md` ou `CLAUDE.md` da cópia. A consolidação de parada e autonomia em `CLAUDE.md` aponta para a forma viva no hook e no disjuntor. [bin/hook_stop_fila1.py:1232; bin/hook_stop_fila1.py:1418; CLAUDE.md:251; resultado da busca nos dois arquivos: **[não verificado por arquivo:linha]**]
-
-**Regra de pista que a cura muda: N = [não verificado]**; candidatas a avaliar conforme a cura forem definidas: `HOOK-PAREI-COM-ANDAVEL` e `HOOK-TETO-NAO-CONTA-ESPERA`. Alterar a interpretação do prefixo, por si só, não demonstra mudança em qualquer uma das duas regras. [bin/hook_stop_fila1.py:1232; bin/hook_stop_fila1.py:1263; bin/hook_stop_fila1.py:1418]
-
-## 18/11 19:43 · sessao 4e4d144f130c · RAIA-ESPURIAS · leitura · origem=Code
-
-**Sonda parcial, não executada:** as decisões da sessão permitem medir identidade, dono e destino, mas não encontrei na cópia uma função que produza as seis classes com a precedência pedida. A porta `classificar_orfas` devolve `folga_desmentida` para todas as órfãs de um dia sem trabalho; ela não distingue as classes (a)–(f). [app/escala/orfa_classe.py:53]
-
-A sonda abaixo aplica o casamento autorizado, chama o dono para todos os colaboradores e mede os destinos. Ela conserva todos os dias em `NAO_CLASSIFICADO`, sem chamar casos ambíguos de descartados. A definição operacional necessária para distinguir as seis classes usando funções reais permanece **[nao verificado]**.
-
-Para chamados, usa `dia_do_fato`, a porta da casa, com `fortes=True`; para a lista do admin, a presença é agregada por colaborador. A própria `lista` captura internamente algumas exceções; portanto, mesmo que a chamada retorne, a completude de seus resultados permanece **[nao verificado]**. [app/chamados/juizes.py:88] [app/escala/services/cadastro_realidade.py:773] [app/escala/services/cadastro_realidade.py:869]
-
-A montagem do dono pode chamar `espelho_do_colab`; os efeitos transitivos completos dessa cadeia e da lista não foram verificados. Ambas são chamadas em transações revertidas por exceção. Rollback de banco não garante reversão de eventual efeito externo **[nao verificado]**. [app/ponto/management/commands/e6_oraculo.py:162] [app/ponto/management/commands/e6_oraculo.py:182]
-
-```python
-# SONDA PARCIAL — AUDITORIA-ESPURIAS ITEM 2 — NAO EXECUTADA
-# Executar somente pelo envelope autorizado da sessao.
-#
-# Fontes:
-# app/escala/orfa_classe.py:53 — porta de folga.
-# app/ponto/turnos.py:2868 — batidas_apuraveis.
-# app/ponto/management/commands/e6_oraculo.py:113,182 — dono.
-# app/chamados/juizes.py:88 — dia_do_fato.
-# app/escala/services/cadastro_realidade.py:773 — lista por colaborador.
-#
-# Casamento autorizado: uma hora da ata no dia D procura batidas
-# apuraveis no dia civil D ou D+1. E a inversao da consulta do bloco B:
-# cada batida olha a ata de seu dia civil e da vespera.
-# 1 candidata = identificada; 0 ou >1 = ambigua.
-# A ata continua sendo a fonte da contagem, inclusive sem lista coerente.
-#
-# Esta sonda NAO implementa um juiz novo para as classes (a)-(f).
-# Precedencia solicitada, ainda nao aplicada: a > b > d > e > c > f. [nao verificado]
-
-from collections import Counter, defaultdict
-from datetime import date, datetime, time, timedelta
-from time import monotonic
-import re
-
-from django.apps import apps
-from django.db import transaction
-from django.utils import timezone
-
-from chamados.juizes import dia_do_fato
-from chamados.models import ChamadoColaborador, PerguntaDisputa
-from escala.models import CelulaDia
-from escala.orfa_classe import FOLGA_DESMENTIDA, classificar_orfas
-from escala.services.cadastro_realidade import lista
-from ponto.management.commands.e6_oraculo import InsumosDoDono
-from ponto.turnos import batidas_apuraveis
-
-INI = date(2026, 10, 21)
-FIM = date(2026, 11, 20)
-EMPRESAS = (2, 3, 4)
-UM_DIA = timedelta(days=1)
-ERROS = Counter()
-
-
-class ReverterSonda(Exception):
-    pass
-
-
-def erro(etapa, exc):
-    chave = (etapa, type(exc).__name__)
-    ERROS[chave] += 1
-    print("ERRO etapa={} tipo={}".format(*chave))
-
-
-def limite(dia):
-    return timezone.make_aware(
-        datetime.combine(dia, time.min),
-        timezone.get_current_timezone(),
-    )
-
-
-def local(ts):
-    if timezone.is_naive(ts):
-        raise ValueError("datetime sem timezone")
-    return timezone.localtime(ts)
-
-
-def instante(ts):
-    return local(ts).isoformat()
-
-
-def executar():
-    # Inclui modelos que as funcoes da casa podem ler indiretamente.
-    for modelo in sorted(apps.get_models(), key=lambda m: m._meta.label_lower):
-        print("CAMPOS {} {}".format(
-            modelo._meta.label,
-            [f.name for f in modelo._meta.get_fields()],
-        ))
-
-    # Relogio de leitura para os leitores que o exigem; nao limita o universo.
-    agora = timezone.now()
-    hoje = local(agora).date()
-    print("RELOGIO_LEITURA", instante(agora))
-    print("UNIVERSO empresas=2,3,4 inicio={} fim={} corte_hoje=nenhum".format(
-        INI.isoformat(), FIM.isoformat()))
-    print("PRECEDENCIA a>b>d>e>c>f NAO_APLICADA")
-    print("COMPARACAO_17_11 valor=1267 unidade=sobras_todas_as_classes "
-          "comparavel_com_folga=nao")
-    print("LISTA_ADMIN_AGREGACAO=colaborador")
-
-    celulas = list(
-        CelulaDia.objects.filter(
-            colaborador__empresa_id__in=EMPRESAS,
-            data__range=(INI, FIM),
-            ata__n_orfas__gt=0,
-            ata__tipo_dia__in=("folga", "ausencia"),
-        )
-        .select_related("colaborador", "colaborador__empresa")
-        .order_by("colaborador_id", "data", "pk")
-    )
-
-    por_col = defaultdict(list)
-    for cel in celulas:
-        por_col[cel.colaborador_id].append(cel)
-
-    # Os indicadores abaixo sao triestado: True, False ou None (desconhecido).
-    donos = {}
-    perguntas = None
-    chamados = None
-    listados = None
-
-    try:
-        perguntas = set(
-            PerguntaDisputa.objects.filter(
-                colaborador_id__in=por_col,
-                data_evento__range=(INI, FIM),
-            ).values_list("colaborador_id", "data_evento")
-        )
-    except Exception as exc:
-        erro("perguntas", exc)
-
-    try:
-        chamados = set()
-        # Nao se restringe por criado_em: o dia do fato nao e o da criacao.
-        qs = ChamadoColaborador.objects.filter(
-            colaborador_id__in=por_col
-        ).select_related("celula").order_by("colaborador_id", "pk")
-        for chamado in qs.iterator():
-            try:
-                dia = dia_do_fato(chamado, fortes=True)
-                if dia:
-                    if isinstance(dia, datetime):
-                        dia = local(dia).date()
-                    elif isinstance(dia, str):
-                        dia = date.fromisoformat(dia[:10])
-                    if INI <= dia <= FIM:
-                        chamados.add((chamado.colaborador_id, dia))
-            except Exception as exc:
-                erro("dia_do_fato", exc)
-                # Uma falha impede afirmar ausencia de chamado.
-                chamados = None
-                break
-    except Exception as exc:
-        erro("chamados", exc)
-        chamados = None
-
-    try:
-        resultado_lista = None
-        try:
-            with transaction.atomic():
-                resultado_lista = lista(
-                    hoje=hoje, empresas=EMPRESAS, agora=agora
-                )
-                raise ReverterSonda()
-        except ReverterSonda:
-            pass
-        listados = set()
-        if resultado_lista:
-            for _posto, linhas in resultado_lista.get("postos", []):
-                for linha in linhas:
-                    listados.add(linha["colab_id"])
-        print("LISTA_ADMIN estado=retornou "
-              "falhas_internas_capturadas_pela_funcao=[nao_verificado]")
-    except Exception as exc:
-        erro("lista_admin", exc)
-        listados = None
-
-    # Monta uma vez por colaborador e chama dono para TODOS os seus dias.
-    for cid, cels in sorted(por_col.items()):
-        inicio_tempo = monotonic()
-        try:
-            try:
-                with transaction.atomic():
-                    ins = InsumosDoDono(
-                        cels[0].colaborador, INI, FIM, hoje, agora=agora
-                    )
-                    for cel in cels:
-                        try:
-                            valor = ins.dono(cel.data)
-                            donos[(cid, cel.data)] = (
-                                valor if valor in (
-                                    "ESTRUTURA", "CADASTRO", "BATIDA"
-                                ) else "nao_sei"
-                            )
-                        except Exception as exc:
-                            erro("dono", exc)
-                            donos[(cid, cel.data)] = "nao_sei"
-                    raise ReverterSonda()
-            except ReverterSonda:
-                pass
-        except Exception as exc:
-            erro("insumos_dono", exc)
-            for cel in cels:
-                donos[(cid, cel.data)] = "nao_sei"
-        finally:
-            print("TEMPO_DONO col{} segundos={:.3f}".format(
-                cid, monotonic() - inicio_tempo))
-
-    total_orfas = 0
-    identificadas = 0
-    ambiguas = 0
-    dono_total = Counter()
-    destino_total = Counter()
-    pessoas = set()
-    dias_contados = 0
-
-    for cid, cels in sorted(por_col.items()):
-        colab = cels[0].colaborador
-        indice = None
-        try:
-            indice = defaultdict(list)
-            bs = batidas_apuraveis(
-                colab, limite(INI), limite(FIM + timedelta(days=2))
-            ).order_by("timestamp", "pk")
-            for batida in bs.iterator():
-                dt = local(batida.timestamp)
-                indice[(dt.date(), dt.strftime("%H:%M"))].append(batida)
-        except Exception as exc:
-            erro("batidas_apuraveis", exc)
-            indice = None
-
-        for cel in cels:
-            try:
-                ata = cel.ata
-                n = ata["n_orfas"]
-                if isinstance(n, bool) or not isinstance(n, int) or n <= 0:
-                    raise ValueError("n_orfas invalido")
-
-                dias_contados += 1
-                total_orfas += n
-                pessoas.add(cid)
-                chave = (cid, cel.data)
-                dono = donos.get(chave, "nao_sei")
-                dono_total[dono] += 1
-
-                p = None if perguntas is None else chave in perguntas
-                c = None if chamados is None else chave in chamados
-                l = None if listados is None else cid in listados
-                if True in (p, c, l):
-                    destino = "com_destino"
-                elif None in (p, c, l):
-                    destino = "desconhecido"
-                else:
-                    # A lista pode ocultar falha interna: nao afirmar ausencia.
-                    destino = "sem_destino_aparente_lista_nao_verificada"
-                destino_total[destino] += 1
-
-                horas = ata.get("orfas")
-                coerente = (
-                    isinstance(horas, list)
-                    and len(horas) == n
-                    and all(
-                        isinstance(h, str)
-                        and re.fullmatch(r"\d{2}:\d{2}", h)
-                        for h in horas
-                    )
-                )
-
-                if coerente:
-                    porta = classificar_orfas({
-                        "tipo_dia": ata.get("tipo_dia"),
-                        "orfas": horas,
-                    })
-                    if any(v != FOLGA_DESMENTIDA for v in porta.values()):
-                        raise ValueError("porta_folga_nao_confirmada")
-
-                    # Repeticao da mesma hora na ata tambem e ambigua:
-                    # nao atribui uma mesma batida a duas ocorrencias.
-                    frequencia = Counter(horas)
-                    for hora in horas:
-                        candidatas = []
-                        if indice is not None:
-                            candidatas = (
-                                indice.get((cel.data, hora), [])
-                                + indice.get((cel.data + UM_DIA, hora), [])
-                            )
-                        if (
-                            indice is not None
-                            and frequencia[hora] == 1
-                            and len(candidatas) == 1
-                        ):
-                            identificadas += 1
-                        else:
-                            ambiguas += 1
-                else:
-                    # Cada ocorrencia contada na ata permanece no universo.
-                    ambiguas += n
-
-                print(
-                    "DIA col{} data={} orfas={} dono={} pergunta={} "
-                    "chamado={} lista_colab={} destino={} classe=nao_classificado".format(
-                        cid, cel.data.isoformat(), n, dono, p, c, l, destino
-                    )
-                )
-            except Exception as exc:
-                erro("celula", exc)
-
-    print("UNIVERSO dias={} pessoas={} orfas={}".format(
-        dias_contados, len(pessoas), total_orfas))
-    print("IDENTIDADE identificadas={} ambiguas={}".format(
-        identificadas, ambiguas))
-    print("DONO_NAO_CLASSIFICADO", dict(sorted(dono_total.items())))
-    print("DESTINO_NAO_CLASSIFICADO", dict(sorted(destino_total.items())))
-    print("SOMA_IDENTIDADE_CONFERE={}".format(
-        identificadas + ambiguas == total_orfas))
-    print("SOMA_CLASSES_CONFERE=[nao_verificado]")
-    print("NAO_CLASSIFICADO={}".format(dias_contados))
-    print("ITEM2=INCOMPLETO")
-
-
-try:
-    executar()
-except Exception as exc:
-    erro("execucao", exc)
-finally:
-    print("ERROS_DETALHE", {
-        "{}:{}".format(etapa, tipo): n
-        for (etapa, tipo), n in sorted(ERROS.items())
-    })
-    print("ERROS={}".format(sum(ERROS.values())))
-    print("FIM_ITEM2")
-```
-
-A regra acima trata horas repetidas na própria ata como ambíguas para evitar atribuir uma única batida a duas ocorrências; essa restrição adicional não consta expressamente da decisão da sessão **[nao verificado]**. Os valores de produção, a soma das seis classes e `NAO_CLASSIFICADO` só poderão ser conhecidos após a execução e a definição verificável das classes **[nao verificado]**.
-
-_7144 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7146 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
