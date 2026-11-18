@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 09:06:06.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (12.6 MB). Acoes na janela: **367**.
+**Medido em 18/11/2026 09:11:14.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (12.8 MB). Acoes na janela: **373**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:08:04 | Bash | Put ESPURIA-TELA predicate question at top | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(4,"PERGUNTA DE DESENHO ESPURIA-TELA (item 6; logs/ORDEM-1811/tela/construtor/entrega.md): a classe 'ausencia DECLARADA pelo colab x LANCADA pelo admin' e o 'disputa #N' nao tem predicado na autoridade -- Ausencia (ponto/models.py:660) so tem chamado_origem (:786) e registrado_por (:811) ...` |
+| 09:07:59 | SendMessage |  | `-` |
+| 09:07:10 | SendMessage |  | `-` |
+| 09:06:34 | Bash | Record ESPURIA-TELA census and constructor | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ITEM7 (aval 08:55)')]; assert len(i)==1 L.insert(i[0],"ITEM6 ESPURIA-TELA: censo FECHADO (logs/ORDEM-1811/tela/censo.md, 3 voltas Codex): 3 templates leitores nas DUAS cascas (espelho.html; _calendario_grade.html via drawer base.html:399/base_app.html:154; painel_ausencia.html), +api_es ...` |
+| 09:06:29 | Agent | ESPURIA-TELA UI constructor | `You are the constructor of obra ESPURIA-TELA (+ESPELHO-DECIDIU-ICONE), fila 2 (UI), in the repo /home/ronald/saas-hasner (Django in app/). Read /home/ronald/saas-hasner/CLAUDE.md fully first, then /home/ronald/saas-hasner/logs/ORDEM-1811/regras_construtor.md (common constructor rules; follow them), then app/docs/LEIS-UI.md. GOAL (BACKLOG.md:1970, aval 06/11 19:0x, item 6 of logs/AVAIS-1515/ordem_v ...` |
+| 09:06:10 | Bash | Find ESPURIA-TELA brief | `/bin/grep -n "ESPURIA-TELA" docs/BACKLOG.md \| head -5; /home/ronald/saas-hasner/logs/ORDEM-1811 2>/dev/null; sed -n '/ESPURIA-TELA/,/^7/p' /home/ronald/saas-hasner/logs/AVAIS-1515/ordem_viva_1811_manha_0855.txt \| head -10` |
 | 09:05:17 | Bash | Record item 7 results | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ITEM8 (aval 08:55) CURA FASE 12x36')]; assert len(i)==1 L.insert(i[0],"ITEM7 (aval 08:55) leituras Codex, prova logs/ORDEM-1811/item7/{a2,b,c}.r: (a) retrato comp 11 = 21 pessoas, todas furo_espelho: 4 sem_leitura_sistema (fio nao_sei; col950 teste, col265, col192, col407) = ESTRUTURA e ...` |
 | 09:05:07 | Bash | Check haiku_export latest-version reader | `cd /home/ronald/saas-hasner && git show HEAD:app/folha/haiku_export.py \| sed -n 45,75p` |
 | 09:03:32 | Bash | Put DST-L1 design question at top | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(3,"PERGUNTA DE DESENHO DST-L1 (aval 08:55 item 4c; matriz logs/ORDEM-1811/dst-l1/r2, 7 transicoes, 8 celulas ainda [nao verificado]): nasce o juiz `decisao_admin_dia_sem_trabalho`? predicado = qual decisao VIGENTE do admin vale para a batida apuravel em dia que a celula diz sem trabalho ...` |
