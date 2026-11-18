@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 09:37:04.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (15.6 MB). Acoes na janela: **449**.
+**Medido em 18/11/2026 09:42:17.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (15.7 MB). Acoes na janela: **463**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:37:51 | Bash | Check memory after last launch | `free -m \| sed -n 2p` |
+| 09:37:51 | Agent | Resume ESCALA-NAO-DESCREVE constructor | `You are resuming obra ESCALA-NAO-DESCREVE after session crashes caused by an OOM in another agent's script. Repo: /home/ronald/saas-hasner. Read /home/ronald/saas-hasner/CLAUDE.md first. Aval and brief - Aval: logs/AVAIS-1515/ordem_viva_1811_manha_0855.txt item 5. Items 1-3 construct now. The vigia_fio.py part waits for the P2 pouso. Item 4 (the button that writes the vinculo through the existing  ...` |
+| 09:37:39 | Bash | Check memory before next agent | `free -m \| sed -n 2p` |
+| 09:37:38 | Agent | Resume DST-L2 verifier step | `You are resuming obra DIA-SEM-TRABALHO-PORTA L2 after session crashes (OOM in another agent's script). Repo /home/ronald/saas-hasner; read /home/ronald/saas-hasner/CLAUDE.md first. Brief: logs/DIA-SEM-TRABALHO-PORTA/brief.md (## CENSO closed, perguntas de lei: 0; full census logs/ORDEM-1811/dst-l2/censo.md). State of the work - Copy: /home/ronald/wt-dst-l2-085632 (branch raia/dst-l2-085632). - Com ...` |
+| 09:37:28 | Bash | Check memory before next agent | `free -m \| sed -n 2p` |
+| 09:37:28 | SendMessage |  | `-` |
+| 09:37:24 | Bash | Check memory before next agent | `free -m \| sed -n 2p` |
+| 09:37:23 | SendMessage |  | `-` |
+| 09:37:19 | Bash | Check memory before next agent | `free -m \| sed -n 2p` |
+| 09:37:18 | SendMessage |  | `-` |
+| 09:37:14 | Bash | Check memory before next agent | `free -m \| sed -n 2p` |
+| 09:37:12 | SendMessage |  | `-` |
+| 09:37:07 | Bash | Check memory before next agent | `free -m \| sed -n 2p` |
+| 09:37:05 | SendMessage |  | `-` |
 | 09:37:00 | ToolSearch |  | `-` |
 | 09:36:53 | Bash | Add three PROMPTS lines; check memory | `python3 - <<'EOF' p='app/docs/PROMPTS.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('- 18/11 09:00 aval COMPLEMENTO-1')) L[i:i]=['- 18/11 09:37 aval COMPLEMENTO-1 OOM-0917 -- segundo estouro 09:29:39 pid 2827436; achar o script pelos 2 pids antes de relancar; so volta em lote com MemoryMax=4G; agentes um a um com free -m; brief do censo cita o censo fechado e o ...` |
 | 09:36:48 | Bash | Read PROMPTS format | `/bin/grep -n "18/11 09:00" app/docs/PROMPTS.md \| head -3; /bin/grep -n "18/11 09:00" app/docs/PROMPTS.md \| head -1 \| cut -d: -f1 \| xargs -I{} sed -n '{}p' app/docs/PROMPTS.md \| cut -c1-200` |
