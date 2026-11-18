@@ -6,10 +6,31 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 07:45:54.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (2.4 MB). Acoes na janela: **72**.
+**Medido em 18/11/2026 07:51:14.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (3.4 MB). Acoes na janela: **93**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:49:02 | Bash | Check whether hook knows the exhausted-list form | `cd /home/ronald/saas-hasner && grep -n "SEM ITEM ANDAVEL\\|SEM_ITEM\\|def _linha_do_topo" bin/hook_stop_fila1.py \| head` |
+| 07:48:50 | Bash | Use the aval's exact exhausted-list form at top | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p,encoding='utf-8').read() old='PAREI: ! ORDEM-VIVA-1511-NOITE sem item andavel 07:5x \| espera Ronald:' assert s.count(old)==1 s=s.replace(old,'ORDEM VIVA SEM ITEM ANDAVEL 07:5x (ORDEM-VIVA-1511-NOITE; as 4 leituras em paralelo ja entregues 15/11 20:1x, RELATO:623-629; o aval PROIBE abrir obra nova por iniciativa) -- espera Ronald:') open(p,'w',encoding ...` |
+| 07:48:43 | Bash | Check status of the 4 parallel readings | `for id in O95 VINCULO-LINHA-DO-TEMPO FIO-E0-V4-E1-ENTRADAS O169-FECHADA FERIADO-LEI-1609; do grep -n "^\| $id \|" docs/BACKLOG.md \| cut -c1-330; done; grep -n "O95\\|VINCULO-LINHA-DO-TEMPO\\|FIO-E0-V4\\|O169" docs/RELATO.md \| head -8 \| cut -c1-250` |
+| 07:48:38 | Bash | Read rest of the live-order aval | `cd /home/ronald/saas-hasner && cut -c600-4000 logs/AVAIS-1515/ordem_viva_1511_noite.txt` |
+| 07:48:36 | Bash | Read the live-order aval | `cd /home/ronald/saas-hasner && cat logs/AVAIS-1515/ordem_viva_1511_noite.txt \| cut -c1-600` |
+| 07:48:32 | Bash | Rewrite top line in PAREI form and test hook | `python3 - <<'EOF' p='docs/RELATO.md' s=open(p,encoding='utf-8').read() old='! ORDEM-VIVA-1511-NOITE SEM ITEM ANDAVEL 07:5x -- espera Ronald:' assert s.count(old)==1 s=s.replace(old,'PAREI: ! ORDEM-VIVA-1511-NOITE sem item andavel 07:5x \| espera Ronald:') open(p,'w',encoding='utf-8').write(s) EOF cd .. && echo '{}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
+| 07:48:25 | Bash | Read the hook's bang logic | `cd /home/ronald/saas-hasner && sed -n 1240,1300p bin/hook_stop_fila1.py` |
+| 07:48:23 | Bash | Check how the hook reads the bang line | `cd /home/ronald/saas-hasner && grep -n "_SO_BANG\\|def _painel\\|startswith('!')\\|'!'" bin/hook_stop_fila1.py \| head -20` |
+| 07:48:08 | Bash | Mark B2b reading done in BACKLOG | `python3 - <<'EOF' p='docs/BACKLOG.md' s=open(p,encoding='utf-8').read() lines=s.split('\n') idx=[i for i,l in enumerate(lines) if l.startswith('\| E4C-F1-B2b \|')] assert len(idx)==1 l=lines[idx[0]] old='\| aberta (aval B2-ESCOPO-E-TORNEIRA-CONSTROI 18/11 01:48 item 2;' assert l.count(old)==1 lines[idx[0]]=l.replace(old,'\| aberta, LEITURA PRONTA 18/11 07:5x (logs/E4C-F1-B2b/MATRIZ.md; 3 escritas  ...` |
+| 07:48:05 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 07:47:57 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
+| 07:47:54 | Write |  | `/home/ronald/saas-hasner/logs/E4C-F1-B2b/MATRIZ.md` |
+| 07:47:34 | Bash | Find B2b BACKLOG row and current time | `grep -n "E4C-F1-B2b" docs/BACKLOG.md \| cut -c1-400; date '+%d/%m %H:%M'` |
+| 07:47:30 | Bash | Check descarimbar guard and RELATO top | `grep -n "def descarimbar_em_lote\\|vigiar_escrita_de_perguntas" chamados/models.py \| head; ps -p 2563781 >/dev/null && echo vivo \|\| echo morto; head -5 docs/RELATO.md \| cut -c1-200` |
+| 07:47:27 | Bash | Spot-check Codex citations against HEAD | `git rev-parse --short HEAD; sed -n '3558,3564p' chamados/models.py; echo ---; sed -n '236,251p' chamados/veredito_lavrado.py \| grep -n "bulk_update\\|vigiar"; echo ---; sed -n '20,28p' chamados/migrations/0051_decisao_pergunta.py; echo ---; sed -n '1400,1404p' chamados/services/fio.py; echo ---; sed -n '1396,1406p' chamados/models.py \| grep -n "vigiar\\|update"` |
+| 07:46:58 | Bash | Find the origin of the number 39 | `cd /home/ronald/saas-hasner && grep -rn -E "\b39\b" logs/E4C/f1nova/b2/cerca/v7/ logs/E4C/f1nova/b2/cerca/revaval_escopo/ logs/AVAIS-1515/b2_escopo_e_torneira_constroi_1811_0148.txt logs/AVAIS-1515/respostas_b2_tetos_e_torneira_1811_0116.txt 2>/dev/null \| cut -c1-300 \| head -12` |
+| 07:46:52 | Bash | Extract class (ii) site list | `cd /home/ronald/saas-hasner && T=logs/E4C/f1nova/b2/cerca/v7/tabela_unica.md; D=logs/E4C-F1-B2b/leitura3; mkdir -p $D; awk -F'\|' '/^\\| [A-Z][0-9]/{c=$3; gsub(/^ +/,"",c); if (c ~ /^(= [A-Z0-9]+: )?\(ii\)/ \|\| c ~ /^\(ii\)/) print $2}' $T \| sed 's/^ //' > $D/sitios_ii.txt; wc -l < $D/sitios_ii.txt; cut -d' ' -f1 $D/sitios_ii.txt \| tr '\n' ' '` |
+| 07:46:46 | Bash | See the 39 reference in fio.py and the class column | `cd /home/ronald/saas-hasner && sed -n 1390,1400p app/chamados/services/fio.py; T=logs/E4C/f1nova/b2/cerca/v7/tabela_unica.md; awk -F'\|' '/^\\| [A-Z][0-9]/{c=$3; gsub(/^ +/,"",c); print $2 "\|\|" substr(c,1,40)}' $T \| cut -c1-150` |
+| 07:46:43 | Bash | Locate the 39 class (ii) sites in tabela v7 | `cd /home/ronald/saas-hasner && T=logs/E4C/f1nova/b2/cerca/v7/tabela_unica.md; grep -n "^## \\|39\b" $T \| cut -c1-220 \| head -30; grep -c "^\| " $T` |
+| 07:46:38 | Read |  | `/home/ronald/saas-hasner/logs/E4C-F1-B2b/leitura2/r.md` |
+| 07:46:36 | Bash | Check leitura2 result size and gaps | `cd /home/ronald/saas-hasner/logs/E4C-F1-B2b/leitura2 && tail -3 out; wc -c r.md; grep -c "nao verificado\\|não verificado" r.md` |
 | 07:43:11 | Bash | Point RELATO panel ESPERANDO to live Codex pid | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() old="ESPERANDO: suite.sh \| pid=2486087\n"; assert s.count(old)==1 s=s.replace(old,"ESPERANDO: codex_pergunta.sh \| pid=2563781\n"); open(p,'w').write(s) EOF kill -0 2563781 && echo vivo` |
 | 07:43:08 | Bash | Look at RELATO top panel | `cd /home/ronald/saas-hasner && head -12 app/docs/RELATO.md \| cut -c1-160; sed -n 440,520p bin/hook_stop_fila1.py \| grep -n "def \\|RELATO\\|PAINEL" \| head` |
 | 07:43:04 | Bash | See how the stop hook reads ESPERANDO | `cd /home/ronald/saas-hasner && grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
