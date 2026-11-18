@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 00:14** · publicado em **18/11/2026 00:15** (UTC-3)
+> Ultima resposta processada: **18/11/2026 00:15** · publicado em **18/11/2026 00:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 00:15 · sessao 9af7d9be3de3 · E4C-F1-B2 · construtor · origem=Code
+
+A entrega está **parcial**: ajustei cinco arquivos de teste e o cadastro S06, mas **não curei o custo dos savepoints em G4**. Os testes e mutantes não foram executados; a sintaxe dos cinco arquivos Python alterados foi analisada com `ast.parse`, sem execução da suíte. A aprovação da cura permanece com a sessão, o Code e o opus final. [não verificado] [nao verificado]
+
+**Arquivos alterados e cobertura pretendida:**
+
+- [test_e1_fila_v2_2_integracao.py:87](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_e1_fila_v2_2_integracao.py:87): o caso HIST continua verificando a ordem das travas e o mutante do fecho antigo, agora com competência simulada como aberta. O novo teste em [linha 178](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_e1_fila_v2_2_integracao.py:178) simula exportada e espera recusa, sem destino ou carimbo na pergunta e com o chamado ainda fechado. Mutantes pretendidos: `_fecho_antigo` para os testes de ordem; veto de competência sempre `False` para o gêmeo. Mordidas: [não verificado]. [nao verificado]
+- [test_o168_pai_com_conversa_no_gate.py:59](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:59): os dois cenários continuam verificando o fechamento do pai com resposta validada e sem conversa. A pergunta da fixture recebe `_DIA`; o teste em [linha 108](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:108) verifica recusa e linha da pergunta intacta quando o dia é nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
+- [test_pep_reentrada.py:60](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_pep_reentrada.py:60): os quatro cenários continuam verificando o carimbo fora de voo e a exclusão da pergunta em voo, inclusive nos dois caminhos sem credor. A fixture e as irmãs recebem `_DIA`; o teste em [linha 230](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_pep_reentrada.py:230) cobre a recusa de dia nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
+- [test_resposta_nao_e_fantasma.py:120](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_resposta_nao_e_fantasma.py:120): o controle S128 continua exigindo carimbo da pergunta não respondida; o dia gravado passa a coincidir com o da célula. O teste em [linha 102](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_resposta_nao_e_fantasma.py:102) cobre a recusa de dia nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
+- [test_reconciliar_pergunta_orfa.py:114](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_reconciliar_pergunta_orfa.py:114): o caso 06 continua exigindo costura histórica, materialização e paridade da resposta; o dia gravado passa a ser o dia da célula. O teste em [linha 96](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_reconciliar_pergunta_orfa.py:96) cobre a recusa de dia nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
+- [e4b_c12_sitios.json:45](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/e4b_c12_sitios.json:45): S06 passa a localizar a chamada em `_ato_da_retratacao`, onde ela está. O mutante cadastrado troca `transicionar_com_pauta(...)` por `ch.reconciliar()`; o instrumento deve acusar S06. [reconciliador.py:563](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/reconciliador.py:563) [e4b_c12_verificar.py:197](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/e4b_c12_verificar.py:197) [não verificado]
+
+Os quatro testes de dia nulo exercitam diretamente uma escrita cercada na pergunta e comparam a linha inteira antes e depois; **eles não reproduzem integralmente as cascatas dos respectivos testes originais**. A cobertura de veto nessas cascatas permanece [não verificado]. [test_pep_reentrada.py:230](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_pep_reentrada.py:230) [nao verificado]
+
+Para a sessão executar os testes alterados: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test \
+  chamados.tests.test_e1_fila_v2_2_integracao \
+  chamados.tests.test_o168_pai_com_conversa_no_gate \
+  chamados.tests.test_pep_reentrada \
+  chamados.tests.test_resposta_nao_e_fantasma \
+  chamados.tests.test_reconciliar_pergunta_orfa \
+  chamados.tests.test_e4b_c12_selo
+```
+
+Para aplicar **em memória** o mutante que faz o veto sempre retornar `False` e executar os cinco testes de recusa: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -c '
+import os, sys, django
+from unittest.mock import patch
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.saas")
+django.setup()
+from django.core.management import execute_from_command_line
+labels = [
+ "chamados.tests.test_e1_fila_v2_2_integracao.FechoRepassePostgresTest.test_HIST_exportada_recusa_costura",
+ "chamados.tests.test_o168_pai_com_conversa_no_gate.PaiComConversaNoGateTest.test_RED_cerca_recusa_pergunta_sem_dia",
+ "chamados.tests.test_pep_reentrada.OSinalEDeEscopoDaTransacao.test_RED_cerca_recusa_pergunta_sem_dia",
+ "chamados.tests.test_resposta_nao_e_fantasma.RespostaNaoEhFantasmaTest.test_RED_cerca_recusa_pergunta_sem_dia",
+ "chamados.tests.test_reconciliar_pergunta_orfa.ReconciliarPerguntaOrfaTest.test_RED_cerca_recusa_pergunta_sem_dia",
+]
+with patch("chamados.services.fio.veto_de_competencia", return_value=False):
+    execute_from_command_line(["manage.py", "test", *labels])
+'
+```
+
+Esse mutante é mais amplo que remover apenas o tratamento de `None`; o resultado e a mordida de cada teste estão [não verificado]. O mutante S06 tem comando próprio: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -m chamados.tests.e4b_c12_verificar --mutante S06
+```
+
+**G4 permanece aberto.** Nenhum savepoint foi reduzido e nenhum teto foi alterado. O resolver também percorre disputas abertas do colaborador, inclusive para perguntas sem destino ligado diretamente ao chamado; não estabeleci uma condição que dispense a cerca sem perder esse alcance. [disputa_emissao.py:1904](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/disputa_emissao.py:1904) [disputa_emissao.py:2063](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/disputa_emissao.py:2063)
+
+A medida anterior fornecida para subir ao topo é: gate **+1 SAVEPOINT e +1 RELEASE**; `_gravar_estado` sem pergunta **+1 par**; batida com um furo fechado **+2 pares**; com três furos fechados **+4 pares**. Nenhum `SELECT` adicional foi informado nessa medida; o resultado após este diff está [não verificado]. Os tetos permanecem em 60, 28, 220 e 280, respectivamente. [ponto/tests/test_selo_chokepoint_escrita.py:124](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:124) [ponto/tests/test_selo_chokepoint_escrita.py:134](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:134) [ponto/tests/test_selo_chokepoint_escrita.py:196](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:196) [ponto/tests/test_selo_chokepoint_escrita.py:210](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:210)
+
+Quanto aos campos usados pelo diff: as fixtures escrevem `data_evento`; em produção, `gravar_dia_do_fato` o atribui e a vigia lê tanto o dia projetado quanto o gravado para consultar o veto. O carimbo é escrito pela porta `_escrever_carimbo`; os testes leem `materializada_em`, `chamado_destino_id` e os demais valores persistidos para verificar o resultado. O censo completo de escritores e leitores desses campos permanece [não verificado]. [fio.py:839](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/fio.py:839) [fio.py:1389](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/fio.py:1389) [juizes.py:338](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/juizes.py:338) [models.py:3216](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/models.py:3216) [nao verificado]
+
+R4b e o diagrama ficaram intocados, conforme a instrução recebida; a contagem necessária para decidir R4b e a regeneração do diagrama cabem à sessão. [não verificado]
 
 ## 18/11 00:14 · sessao ea8ca390e0f4 · E4C-F1-B2 · sonda · origem=Code
 
@@ -575,27 +637,4 @@ A cópia disponível não contém metadados Git; a correspondência independente
 
 PROCEDE: N
 
-## 17/11 20:52 · sessao 9458f4e06243 · DIA-SEM-TRABALHO-PORTA · sonda · origem=Code
-
-**A sonda terminou com dois casos e emitiu avisos de data e hora sem fuso; o dado fornecido não mostra uma exceção que tenha interrompido a execução.** Os avisos atingem os limites usados na consulta de batidas, portanto não demonstram, por si sós, que a listagem seja completa. As saídas e os scripts da sonda não estão presentes na cópia inspecionada; os valores atribuídos a eles abaixo vêm do texto fornecido e ficam **[não verificado]**. O código citado é da cópia.
-
-Os leitores usados nas perguntas são:
-
-- `dia_sem_trabalho` lê `cel.trabalha` e `ata.tipo_dia`, com tratamento específico para ausência parcial. Nos dois registros fornecidos, a célula foi exibida como folga e `trabalha=False`, o que satisfaz o predicado. [app/chamados/juizes.py:445](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/chamados/juizes.py:445) **[dados dos casos não verificados]**
-- `turnos_do_colab` carrega batidas não retratadas, células e escalas, e entrega o pareamento ao corpo comum; sua resposta é limitada por `data_turno`. [app/ponto/turnos.py:1850](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/turnos.py:1850)
-- `itens_sem_decisao` lê o **retrato lavrado**, enriquece-o com o estado vivo das decisões e aplica os filtros pedidos; não procura diretamente qualquer par completo. O escritor do retrato inclui dias com `he_fora_da_janela`. [app/ponto/services/gestao_he.py:399](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/services/gestao_he.py:399), [app/ponto/services/he_pendente_lavrado.py:130](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/services/he_pendente_lavrado.py:130)
-- `motivo_escala_errada` consulta o vínculo do dia e as assinaturas da competência; retorna `LIMBO`, `A2`, `A8` ou `None`. O resultado `None` relatado para cada caso significa “confiável” **nesse predicado**, não uma prova independente de todo o cadastro. [app/escala/services/escala_certa.py:19](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/escala/services/escala_certa.py:19) **[resultados dos casos não verificados]**
-
-**col219, emp2, 2026-11-14 — fora da lista com escala confiável.** O dado relata folga com duas órfãs na ata, `07:03` e `07:04`, e um turno fechado nesse dia de `07:03:07` a `07:04:17`: duração de **70,321 segundos**. Também relata ausência de decisão vigente, ausência da chave na lista e `motivo_escala_errada=None`. Esses fatos explicam o rótulo observado pela sonda, mas o código das sondas de classificação não está na cópia para confirmar seus testes exatos. **[não verificado]** [nao verificado]
-
-A evidência **não demonstra um furo de `itens_sem_decisao` nem permite atribuir conclusivamente um erro à classificação**. O par fechado é real na geometria relatada, mas a lista exige uma ponta registrada no retrato; o dado não mostra o conteúdo, a idade ou os filtros concretos desse retrato, nem `he_fora_da_janela` do dia. Assim, “par completo sem decisão” não basta para provar que a chave deveria entrar na lista. [app/ponto/services/he_pendente_lavrado.py:114](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/services/he_pendente_lavrado.py:114), [app/ponto/services/gestao_he.py:401](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/services/gestao_he.py:401) **[dados do retrato não verificados]**
-
-Quanto aos baldes grandes, o caso **não recebeu** `A2`, `A8` ou `LIMBO` pelo predicado relatado e o turno mostrado é fechado, não o turno aberto que define o balde de batida solta no anexo. Sua duração curta merece investigação própria, mas não prova retratação nem autoriza classificá-lo como erro de batida: o detector tem limite de dez minutos e outras condições. [app/escala/services/escala_certa.py:31](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/escala/services/escala_certa.py:31), [app/ponto/management/commands/detectar_par_relampago.py:63](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/detectar_par_relampago.py:63) **[classificação e fatos de produção não verificados]**
-
-**col993, emp4, 2026-10-23 — órfã sem turno no dia.** O dado relata folga com órfã `00:00` e nenhum turno com `data_turno=23/10`. A batida apurável **pk 134804**, `23/10 00:00:07.808`, coincide exatamente com a saída do turno de **22/10**, iniciado às `12:00:39.721`. Portanto, o dado sustenta que a órfã da ata é a **cauda após a meia-noite do turno do dia anterior**, não uma batida retratada: ela aparece entre as apuráveis fornecidas. A ata usa precisão de minuto, enquanto a coincidência em segundos vem do turno e da batida impressos. **[não verificado]**
-
-A diferença é de chave de dia: `turnos_do_colab` devolve turnos pelo `data_turno`, enquanto a ata de 23/10 relata uma órfã no dia civil. Isso explica o rótulo “sem turno no dia”, mas não prova que haja turno aberto ou batida solta nessa data. Também não há assinatura `A2`, `A8` ou `LIMBO` no resultado relatado para esse caso. [app/ponto/turnos.py:1850](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/turnos.py:1850), [app/escala/services/escala_certa.py:19](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/escala/services/escala_certa.py:19) **[resultados dos casos não verificados]**
-
-**Dono L-099: não determinável para ambos com o material fornecido.** A sonda não mostra que o comando E6 alcançou qualquer dos casos. O comando só chama o dono depois de passar pelos filtros da comparação e encontrar diferença superior a dez minutos; os minutos comparados não foram fornecidos. Mesmo numa chamada direta ao juiz, faltam insumos como cadastro do dia, fase lavrada, resultado do motor e a atribuição de horas pelo próprio oráculo. `motivo_escala_errada=None`, isoladamente, não resolve esses insumos. Portanto, atribuir **ESTRUTURA**, **CADASTRO** ou **BATIDA** a qualquer dos dois seria especulação. [app/ponto/management/commands/e6_oraculo.py:328](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/e6_oraculo.py:328), [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/e6_oraculo.py:182), [app/ponto/management/commands/e6_oraculo.py:98](/home/ronald/codex_ws/706a49b1f65a111d7ccf6f796fdf22c117d5418a/app/ponto/management/commands/e6_oraculo.py:98) **[alcance e insumos não verificados]**
-
-_6759 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6760 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
