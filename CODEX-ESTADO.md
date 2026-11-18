@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 10:46** · publicado em **18/11/2026 10:49** (UTC-3)
+> Ultima resposta processada: **18/11/2026 10:54** · publicado em **18/11/2026 10:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 10:54 · sessao 9b96c36b2372 · - · - · origem=Ronald (tmux)
+
+Achados enviados ao agente principal, com os caminhos do juiz, os leitores identificados, a gravação no `DiaPago` e a hipótese condicionada da janela de HE para a diferença de 49 minutos. [app/ponto/juiz_batida.py:269](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/juiz_batida.py:269), [app/ponto/motor_calculo_v2.py:1714](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/motor_calculo_v2.py:1714), [app/ponto/services/dia_pago.py:173](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/dia_pago.py:173).
+
+## 18/11 10:54 · sessao d65b5a016ac4 · - · - · origem=Ronald (tmux)
+
+A análise dos leitores, dos escritores da projeção e dos testes F7 foi enviada ao agente principal, incluindo a leitura indireta da pergunta pelo PDF e as referências de arquivo e linha. [nao verificado]
+
+## 18/11 10:54 · sessao dda16edd2c89 · - · - · origem=Ronald (tmux)
+
+Concluí a análise da carga, do universo da face por pergunta e dos ramos de `aguarda_admin` e enviei os resultados ao agente principal, incluindo a ressalva de que perguntas com `validada_em` projetada não chegam normalmente ao JSON porque C6 as considera não vivas (`app/chamados/juizes.py:1403-1406`; `app/chamados/services/pergunta_no_app.py:45-73`).
+
+## 18/11 10:54 · sessao 31e2b7c169eb · - · - · origem=Ronald (tmux)
+
+Resultados enviados ao agente principal, com referências aos caminhos de folha, DiaPago, PDF, escala e aos modelos de chamados e perguntas.
+
+## 18/11 10:54 · sessao eff5671bbf24 · - · - · origem=Ronald (tmux)
+
+A análise das sequências e dos escritores foi enviada ao agente principal, com referências de arquivo e linha e as limitações de alcance identificadas.
+
+## 18/11 10:54 · sessao 7e2832a5ea44 · - · - · origem=Ronald (tmux)
+
+Achados de `ponto/motor_calculo_v2.py` e `ponto/turnos.py` enviados ao agente principal, com os limites da inferência para o caso A. [app/ponto/motor_calculo_v2.py:1731](app/ponto/motor_calculo_v2.py), [app/ponto/turnos.py:756](app/ponto/turnos.py)
 
 ## 18/11 10:46 · sessao 671f115eebf8 · SONDA-DIA-IMPAR-1811 · sonda · origem=Code
 
@@ -914,182 +938,4 @@ O cartório declara que orquestra o juiz e a lavra, e que a ata lavrada prevalec
 
 **Há conflito na implementação observada, não uma impossibilidade lógica entre as ordens:** o cartório usa `reconciliar` diretamente para quem não protesta, inclusive após E2, e assim não executa os demais componentes obrigatórios da S128; além disso, quando a justificativa nasce depois do fechamento, o Fix A não tinha ponteiro para ler no instante do fechamento ([cartório](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1011), [cartório](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1546), [ato S128](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:563), [teste](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/tests/test_jz1_autoridade_unica.py:41)). O registro antigo que diz que `_protesta` ainda usa só a primeira cláusula está desatualizado perante o corte DST-L2 e o código desta cópia ([CORTES.md](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/docs/CORTES.md:448), [CORTES.md](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/docs/CORTES.md:533), [cartório](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1464)).
 
-## 18/11 10:16 · sessao fec0b6249760 · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
-
-**O censo ainda está ABERTO nos quatro itens.** A saída recebida permitiu confirmar escritores, leitores e caminhos que faltavam, mas não sustenta uma lista exaustiva nem a classificação individual de todos os acessos dinâmicos. **[nao verificado: completude do censo]**
-
-Há duas correções relevantes para o construtor:
-
-- A escrita de `validada_em` não se limita ao ato de validar: há limpeza pela resposta humana, devoluções e preenchimentos associados ao carimbo. A distinção é entre o dono do **ato de validar** e todos os escritores do campo. [app/chamados/services/validacao.py:1] [app/chamados/models.py:3249] [app/chamados/services/disputa_emissao.py:1494]
-- A carga remove as decisões marcadas como ressuscitação antes de escolher o último ato, mas `respostas_anteriores` percorre atos com fotografia sem esse filtro. Um novo ato marcado precisa ter os dois leitores avaliados. [app/chamados/services/tarefa_do_dia.py:421] [app/chamados/models.py:3688]
-
-As listas abaixo registram os sítios confirmados nesta volta; **não são a lista completa pedida**. **[nao verificado: sítios restantes]**
-
-### 1. Escritores e leitores R/V/C e porta `registrar` — STATUS ABERTO
-
-**Escrita da projeção:**
-
-- Resposta humana e invalidação da validação anterior: [app/chamados/services/disputa_emissao.py:1481].
-- Resposta automática e carimbo pela trilha: [app/chamados/services/disputa_emissao.py:1675] [app/chamados/services/disputa_emissao.py:1698].
-- Validação e devoluções: [app/chamados/services/validacao.py:168] [app/chamados/services/validacao.py:273] [app/chamados/services/validacao.py:349].
-- Carimbo com preenchimento condicional de resposta e validação: [app/chamados/models.py:3249].
-- Escrita em lote dinâmica por `**outros`: [app/chamados/models.py:3371] [app/chamados/models.py:3404]. Os chamadores confirmados limpam R/V/C na ressuscitação, R/V/C na reabertura e o par de resposta na devolução L-130: [app/chamados/models.py:1637] [app/chamados/services/disputa_emissao.py:1610] [app/chamados/services/disputa_emissao.py:1649] [app/chamados/services/validacao.py:440].
-- A entrada por foto delega à resposta automática e à validação; o cabeçalho antigo do módulo que a descreve como escrita local não corresponde ao corpo atual. [app/api/foto_recebida.py:2] [app/api/foto_recebida.py:39]
-
-**Escrita da sequência pela porta `DecisaoPergunta.registrar`:**
-
-- Modelo e portas de resposta/reabertura: [app/chamados/models.py:1619] [app/chamados/models.py:2013] [app/chamados/models.py:2145] [app/chamados/models.py:3137] [app/chamados/services/disputa_emissao.py:1525] [app/chamados/services/disputa_emissao.py:1632] [app/chamados/services/disputa_emissao.py:1679] [app/chamados/services/disputa_emissao.py:1701].
-- Validação, devoluções e absorção: [app/chamados/services/validacao.py:173] [app/chamados/services/validacao.py:279] [app/chamados/services/validacao.py:354] [app/chamados/services/validacao.py:439] [app/chamados/services/materializacao.py:1048].
-- Cartório e comandos de acervo: [app/ponto/services/veredito_celula.py:195] [app/chamados/management/commands/backfill_decisoes_pergunta.py:324] [app/chamados/management/commands/backfill_fio_morto_e4b.py:141].
-- Falso positivo: `registrar` em [app/chamados/views.py:91] é da recusa crítica, não a porta de `DecisaoPergunta`. [app/chamados/views.py:90]
-
-**Leituras confirmadas que o desenho precisa considerar:**
-
-- Juízes, faces SQL e ordenação da fila: [app/chamados/juizes.py:352] [app/chamados/juizes.py:856] [app/chamados/juizes.py:1389] [app/chamados/juizes.py:1534] [app/chamados/juizes.py:1552] [app/chamados/juizes.py:1572] [app/chamados/juizes.py:1580] [app/chamados/juizes.py:1761].
-- Estado e apresentação da pergunta; histórico de decisões: [app/chamados/models.py:3159] [app/chamados/models.py:3681] [app/chamados/models.py:3701].
-- Fio e materialização: [app/chamados/services/fio.py:188] [app/chamados/services/fio.py:263] [app/chamados/services/materializacao.py:546] [app/chamados/services/materializacao.py:1153] [app/chamados/services/materializacao.py:2091].
-- API e apresentação: [app/api/views.py:1163] [app/api/views.py:2561] [app/api/views.py:2639] [app/api/views_mensageria.py:567] [app/chamados/templatetags/chamados_tags.py:139] [app/chamados/templatetags/chamados_tags.py:166].
-- Histórico cronológico lê dinamicamente os três instantes e o texto; a reversão do passivo também fotografa campos da pergunta: [app/chamados/services/historico.py:96] [app/chamados/services/passivo_validado.py:64] [app/chamados/services/passivo_validado.py:83].
-- Auditoria, placares e procedência têm leituras próprias: [app/chamados/management/commands/auditar_invariantes_chamados.py:1077] [app/chamados/management/commands/auditar_invariantes_chamados.py:1107] [app/chamados/services/painel.py:261] [app/chamados/services/verbos.py:263] [app/ponto/services/procedencia_batida.py:71].
-
-**Por que permanece aberto:** faltam a classificação de todos os leitores listados no inventário, o rastreamento completo dos chamadores e a resolução individual dos acessos genéricos que podem receber objetos ou nomes em execução. **[nao verificado]**
-
-### 2. Importadores, selo e medida da sombra — STATUS ABERTO
-
-Importadores confirmados: `relavrar_via_i6` importa `universo_i6`; `dedup_perguntas_fato` importa `aplicar` e `CONTADORES_DO_APPLY`; `worklist` importa `_parse_pendentes` e `MODULOS_ALVO`, e tem consumidores na view e no comando. [app/chamados/management/commands/relavrar_via_i6.py:46] [app/chamados/management/commands/dedup_perguntas_fato.py:105] [app/ponto/worklist.py:37] [app/colaboradores/views.py:3061] [app/ponto/management/commands/worklist_dp.py:12]
-
-O selo global de vitalidade declarado examina `materializada_em` e `validada_em` e formas sintáticas específicas; ele não demonstra, sozinho, cobertura de todos os campos ou acessos dinâmicos. [app/chamados/tests/test_contract_leitores_vitalidade.py:14] [app/chamados/tests/test_contract_leitores_vitalidade.py:329] O selo específico lista os quatro escritores esperados de `resposta_mantem_validacao`. [app/chamados/tests/test_f2_resposta_mantem_validacao.py:19]
-
-A medida raspada da **sombra** informa:
-
-| Projeção atual nula com ato histórico correspondente | Último físico / efetivo | Total |
-|---|---|---:|
-| Resposta | reabertura / reabertura | 52 |
-| Resposta | recusa / recusa | 7 |
-| Validação | devolução / devolução | 60 |
-| Validação | reabertura / reabertura | 9 |
-| Validação | resposta / resposta | 3 |
-
-Esses valores são os fornecidos no anexo da conversa; produção e interseção dos grupos são **[nao verificado]**. A função confirmada mede o sentido inverso, projeção sem linha correspondente por ato e instante; os números acima não demonstram erros nem uma correspondência geral ato → projeção. [app/chamados/models.py:4122] [app/chamados/services/disputa_emissao.py:1632]
-
-A exclusividade dos importadores e a classificação completa dos selos permanecem **[nao verificado]**.
-
-### 3. Campos novos e leituras de REABERTURA — STATUS ABERTO
-
-- `da_ressuscitacao` e `resposta_mantem_validacao` têm defaults e restrições por tipo de ato. [app/chamados/models.py:4071] [app/chamados/models.py:4077] [app/chamados/models.py:4095] [app/chamados/models.py:4098]
-- A marca de ressuscitação é lida pelo predicado em [app/chamados/models.py:4103] e pela carga em [app/chamados/services/tarefa_do_dia.py:421]. A porta de ressuscitação nesta cópia registra a projeção faltante e limpa os campos; não se pode presumir que já grave a nova marca. [app/chamados/models.py:1619] [app/chamados/models.py:1637]
-- A reabertura fotografa resposta, instantes e autor antes de limpar a projeção; `respostas_anteriores` é leitor da sequência e a carga do fio busca também o autor original. [app/chamados/services/disputa_emissao.py:1632] [app/chamados/models.py:3688] [app/chamados/services/fio.py:263]
-- Os valores declarados para `resposta_mantem_validacao` são `True` na fotografia da projeção, resposta automática e carimbo pela trilha; `False` na resposta humana. [app/chamados/models.py:4141] [app/chamados/services/disputa_emissao.py:1525] [app/chamados/services/disputa_emissao.py:1679] [app/chamados/services/disputa_emissao.py:1701]
-
-**Contradição a resolver no desenho:** o comentário do modelo associa a regra atual ao `ato_motivo`, mas `_pela_decisao` aqui trata toda última `RESPOSTA` com texto como `aguarda_validacao`, sem consultar esse motivo ou `resposta_mantem_validacao`. [app/chamados/models.py:4072] [app/chamados/services/tarefa_do_dia.py:158] Não está demonstrado que trocar esse leitor pela nova marca preserve o comportamento atual. **[nao verificado]**
-
-A lista completa de leitores indiretos e o efeito de todos os caminhos de `registrar` seguem **[nao verificado]**.
-
-### 4. Cascas, templates e PDF — STATUS ABERTO
-
-- `base_tpl` é escolhido pelo contexto entre `base_app.html` e `base.html`; `meu_atendimento.html` usa essa escolha e inclui o cartão nas duas abas. [app/core/context_processors.py:194] [app/core/context_processors.py:205] [app/templates/chamados/meu_atendimento.html:1] [app/templates/chamados/meu_atendimento.html:127] [app/templates/chamados/meu_atendimento.html:144]
-- O cartão do colaborador lê resposta e instante. [app/templates/chamados/partials/_card_atendimento.html:106] [app/templates/chamados/partials/_card_atendimento.html:143] [app/templates/chamados/partials/_card_atendimento.html:183] [app/templates/chamados/partials/_card_atendimento.html:391]
-- A casca administrativa `detalhe_local` estende `base.html` e inclui `_pergunta_card`, que também pode ser renderizado isoladamente por HTMX. [app/templates/chamados/detalhe_local.html:1] [app/templates/chamados/detalhe_local.html:310] [app/chamados/views.py:398]
-- `modal_fio` lê histórico, resposta e validação e também é renderizado isoladamente; portanto o grafo que parte apenas das bases não o enumera como alcançado. [app/templates/chamados/partials/modal_fio.html:205] [app/templates/chamados/partials/modal_fio.html:219] [app/templates/chamados/partials/modal_fio.html:228] [app/chamados/views.py:927] [app/chamados/views.py:1399]
-- A prévia de lote lê a resposta e é renderizada pela view de cobrança. [app/templates/chamados/partials/_lote_preview.html:24] [app/chamados/views_cobrar.py:360]
-- No caminho de PDF inspecionado, a view alimenta o gerador de histórico e o bloco examinado lê followups. Relações indiretas adicionais entre PDF e R/V/C permanecem **[nao verificado]**. [app/relatorios/views.py:871] [app/relatorios/pdf_chamados.py:135]
-
-### Classificação dos dinâmicos examinados
-
-- **Escrita real de R/V/C:** `models.py:3404`, por `**outros`, com os três chamadores identificados no item 1. [app/chamados/models.py:3379] [app/chamados/models.py:3404]
-- **Leitura real:** `historico.py:105`; `passivo_validado.py:83`; e `_PD` em `veredito_lavrado.py:202` e `:206` é alias de `PerguntaDisputa`, com filtros sobre materialização e resposta. [app/chamados/services/historico.py:96] [app/chamados/services/passivo_validado.py:64] [app/chamados/veredito_lavrado.py:163] [app/chamados/veredito_lavrado.py:202]
-- **Não é acesso R/V/C nesses sítios:** os dinâmicos de `ChamadoColaborador` em `models.py:637`, `:953`, `:976`, `:1018` e `:1142`; os filtros de chave de família em `fio.py:2110`, `:2112`, `:2122`, `:2134`, `:2164`, `:2166` e `:2187`; e os filtros dinâmicos por identidade nas duas portas de validação. [app/chamados/models.py:637] [app/chamados/models.py:953] [app/chamados/models.py:976] [app/chamados/models.py:1018] [app/chamados/models.py:1142] [app/chamados/services/fio.py:1515] [app/chamados/services/fio.py:2110] [app/chamados/services/fio.py:2112] [app/chamados/services/fio.py:2122] [app/chamados/services/fio.py:2134] [app/chamados/services/fio.py:2164] [app/chamados/services/fio.py:2166] [app/chamados/services/fio.py:2187] [app/chamados/services/validacao.py:673] [app/chamados/services/validacao.py:890]
-- **Ainda indeterminados:** os demais candidatos genéricos do inventário, inclusive o alcance completo dos wrappers de `carga_pergunta_viva` e dos resolvedores genéricos de `core`, não foram classificados um a um. [app/chamados/services/carga_pergunta_viva.py:30] [app/chamados/services/carga_pergunta_viva.py:59] [app/core/intake.py:487] [app/core/reexibir.py:49] **[nao verificado]**
-
-Para terminar a classificação dos **selos** sem acesso a logs, seria necessária a parte da saída bruta filtrada referente a `tests/`; para o censo de produção ainda falta completar a leitura dos candidatos e caminhos indiretos acima. **[nao verificado]**
-
-alcance nao verificado restante: 4
-
-## 18/11 10:15 · sessao 6e3da0f0e6be · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
-
-O censo **ainda não autoriza abrir o construtor**: os itens 1, 3 e 5 permanecem abertos. O inventário amplia os sítios conhecidos, mas não demonstra que todos os acessos dinâmicos, aliases indiretos, carregamentos de templates e leitores foram classificados. [não verificado]
-
-Há uma contradição concreta com a formulação da volta 1 sobre Q4: o card de pergunta exibe “validada” diretamente quando `validada_em` existe, mas o “Validada” do modal está dentro do ramo `perg.respondida` e depois do ramo prioritário `pendencia_admin`. Assim, validação projetada sem linha de decisão, por si só, **não demonstra** que o modal mostrará “Validada”; isso também depende do par de resposta e da ausência de pendência prioritária. [app/templates/chamados/partials/_pergunta_card.html:23](app/templates/chamados/partials/_pergunta_card.html:23) [app/templates/chamados/partials/modal_fio.html:217](app/templates/chamados/partials/modal_fio.html:217) [app/templates/chamados/partials/modal_fio.html:222](app/templates/chamados/partials/modal_fio.html:222) [app/templates/chamados/partials/modal_fio.html:228](app/templates/chamados/partials/modal_fio.html:228)
-
-### 1. Cascas do card — STATUS: ABERTO
-
-Os caminhos de produção identificados para a F7 são:
-
-- **Card do colaborador, leitura:** `meu_atendimento` inclui `_card_atendimento` nos dois loops; a casca pode ser `base.html` ou `base_app.html`, conforme `base_tpl`. O card lê o par de resposta e a fase. [app/templates/chamados/meu_atendimento.html:1](app/templates/chamados/meu_atendimento.html:1) [app/templates/chamados/meu_atendimento.html:127](app/templates/chamados/meu_atendimento.html:127) [app/templates/chamados/meu_atendimento.html:144](app/templates/chamados/meu_atendimento.html:144) [app/core/context_processors.py:210](app/core/context_processors.py:210) [app/templates/chamados/partials/_card_atendimento.html:106](app/templates/chamados/partials/_card_atendimento.html:106) [app/templates/chamados/partials/_card_atendimento.html:189](app/templates/chamados/partials/_card_atendimento.html:189)
-- **Card da pergunta, leitura:** a página de detalhe usa `base.html` e inclui `_pergunta_card`; o rerender parcial também chega ao mesmo template por `_render_card`, alias de `render`. [app/templates/chamados/detalhe_local.html:1](app/templates/chamados/detalhe_local.html:1) [app/templates/chamados/detalhe_local.html:310](app/templates/chamados/detalhe_local.html:310) [app/chamados/views.py:397](app/chamados/views.py:397) [app/chamados/views.py:404](app/chamados/views.py:404)
-- **Modal do fio, leitura:** é um fragmento renderizado diretamente, sem casca própria; uma hospedeira comprovada é o painel em `base.html`, que o busca pela rota. Há também chamada da fila de benefícios com `modo=beneficio`; a lista integral de hospedeiras e suas cascas permanece [não verificado]. [app/chamados/views.py:927](app/chamados/views.py:927) [app/chamados/views.py:1400](app/chamados/views.py:1400) [app/chamados/services/fio.py:543](app/chamados/services/fio.py:543) [app/templates/chamados/painel_gestao.html:1](app/templates/chamados/painel_gestao.html:1) [app/templates/chamados/painel_gestao.html:528](app/templates/chamados/painel_gestao.html:528) [app/templates/colaboradores/fila_solicitacoes_beneficio.html:119](app/templates/colaboradores/fila_solicitacoes_beneficio.html:119)
-- **Prévia de lote, leitura:** é fragmento renderizado diretamente; o painel em `base.html` abre-o no drawer. Outras hospedeiras não foram excluídas. [app/templates/chamados/painel_gestao.html:14](app/templates/chamados/painel_gestao.html:14) [app/chamados/views_cobrar.py:360](app/chamados/views_cobrar.py:360) [app/chamados/views_cobrar.py:364](app/chamados/views_cobrar.py:364) [app/chamados/views_cobrar.py:380](app/chamados/views_cobrar.py:380) [app/chamados/views_cobrar.py:388](app/chamados/views_cobrar.py:388) [app/templates/chamados/partials/_lote_preview.html:24](app/templates/chamados/partials/_lote_preview.html:24)
-
-O grafo fornecido identifica includes compartilhados pelas duas bases, mas não prova, sozinho, todas as hospedeiras dos fragmentos nem renderização e cliques em execução. Essa revisão transitiva continua aberta. [app/templates/base.html:93](app/templates/base.html:93) [app/templates/base_app.html:85](app/templates/base_app.html:85) [app/templates/base.html:399](app/templates/base.html:399) [app/templates/base_app.html:154](app/templates/base_app.html:154) [não verificado]
-
-### 2. Escritor de reabertura — STATUS: FECHADO para a dúvida específica
-
-`reabrir_para_correcao` prepara a limpeza do par e da validação, registra uma decisão com a fotografia anterior e chama `descarimbar_em_lote`; o corpo dessa função não chama `linhas_da_projecao_sem_linha`. Isso fecha a dúvida sobre **essa chamada**, sem fechar o censo de escritores. [app/chamados/services/disputa_emissao.py:1577](app/chamados/services/disputa_emissao.py:1577) [app/chamados/services/disputa_emissao.py:1610](app/chamados/services/disputa_emissao.py:1610) [app/chamados/services/disputa_emissao.py:1632](app/chamados/services/disputa_emissao.py:1632) [app/chamados/services/disputa_emissao.py:1649](app/chamados/services/disputa_emissao.py:1649)
-
-### 3. Leitores cruzados e escritores — STATUS: ABERTO
-
-A lista seguinte é de **sítios comprovados a considerar**, não uma lista integral nem uma determinação de que todos devam ser alterados pela F7. O brief completo e o efeito exato pretendido em cada consumidor não estão demonstrados no material fornecido. [não verificado]
-
-- **Escrita persistida:** resposta e validação em `disputa_emissao`; validações em `validacao`; carimbo com possível preenchimento de resposta e validação em `models`; e limpeza em lote, inclusive campos passados por `**outros`. O último ponto é relevante: a porta verifica expressamente se `outros` contém campos do par e os passa ao `update`. [app/chamados/services/disputa_emissao.py:1481](app/chamados/services/disputa_emissao.py:1481) [app/chamados/services/disputa_emissao.py:1494](app/chamados/services/disputa_emissao.py:1494) [app/chamados/services/disputa_emissao.py:1675](app/chamados/services/disputa_emissao.py:1675) [app/chamados/services/disputa_emissao.py:1698](app/chamados/services/disputa_emissao.py:1698) [app/chamados/services/validacao.py:168](app/chamados/services/validacao.py:168) [app/chamados/services/validacao.py:273](app/chamados/services/validacao.py:273) [app/chamados/services/validacao.py:349](app/chamados/services/validacao.py:349) [app/chamados/models.py:3247](app/chamados/models.py:3247) [app/chamados/models.py:3251](app/chamados/models.py:3251) [app/chamados/models.py:3254](app/chamados/models.py:3254) [app/chamados/models.py:3371](app/chamados/models.py:3371) [app/chamados/models.py:3404](app/chamados/models.py:3404)
-- **Atribuições que não são, isoladamente, escrita persistida:** as de `models.py:1561–1563` alteram uma cópia usada no julgamento; as de `models.py:3282–3284` restauram a instância em memória após recusa. Classificá-las simplesmente como escritoras de banco seria incorreto. [app/chamados/models.py:1548](app/chamados/models.py:1548) [app/chamados/models.py:1561](app/chamados/models.py:1561) [app/chamados/models.py:3278](app/chamados/models.py:3278)
-- **Juízes e fase, leitura:** projeção temporal, juiz do par, propriedade `respondida` e `estado` são pontos centrais; `estado` dá precedência à validação projetada. [app/chamados/juizes.py:1382](app/chamados/juizes.py:1382) [app/chamados/juizes.py:1544](app/chamados/juizes.py:1544) [app/chamados/models.py:3152](app/chamados/models.py:3152) [app/chamados/models.py:3674](app/chamados/models.py:3674)
-- **Interfaces e API, leitura:** além dos quatro templates do item 1, há apresentação de resposta por filtros e saídas da API e mensageria. [app/chamados/templatetags/chamados_tags.py:139](app/chamados/templatetags/chamados_tags.py:139) [app/chamados/templatetags/chamados_tags.py:166](app/chamados/templatetags/chamados_tags.py:166) [app/api/views.py:1163](app/api/views.py:1163) [app/api/views.py:2561](app/api/views.py:2561) [app/api/views_mensageria.py:567](app/api/views_mensageria.py:567)
-- **Outros consumidores de produção, leitura:** materialização, reconciliação, histórico, painel, folha e cartório têm leituras diretas ou via juiz que precisam ser avaliadas conforme a mudança final. [app/chamados/services/materializacao.py:191](app/chamados/services/materializacao.py:191) [app/chamados/services/materializacao.py:2091](app/chamados/services/materializacao.py:2091) [app/chamados/reconciliador.py:365](app/chamados/reconciliador.py:365) [app/chamados/services/historico.py:98](app/chamados/services/historico.py:98) [app/chamados/services/painel.py:270](app/chamados/services/painel.py:270) [app/folha/previa.py:141](app/folha/previa.py:141) [app/ponto/services/cartorio.py:1641](app/ponto/services/cartorio.py:1641)
-- **Auditoria e reconstrução, leitura e eventual escrita de decisões:** os comandos consultam as projeções, e o backfill chama a construção de linhas ausentes. Seu comportamento completo e a necessidade de mudança pela F7 permanecem [não verificado]. [app/chamados/management/commands/auditar_invariantes_chamados.py:1077](app/chamados/management/commands/auditar_invariantes_chamados.py:1077) [app/chamados/management/commands/backfill_decisoes_pergunta.py:56](app/chamados/management/commands/backfill_decisoes_pergunta.py:56) [app/chamados/management/commands/backfill_decisoes_pergunta.py:67](app/chamados/management/commands/backfill_decisoes_pergunta.py:67)
-
-**Indeterminados examinados:**
-
-- `models.py:637–638`: acesso dinâmico aos campos de urgência de `ChamadoColaborador`, não uma escrita da projeção de `PerguntaDisputa`. [app/chamados/models.py:620](app/chamados/models.py:620) [app/chamados/models.py:637](app/chamados/models.py:637)
-- `models.py:953`, `:976`, `:1018`, `:1142`: filtros e criação da porta de `ChamadoColaborador`; não são, nesses sítios, escritas de `PerguntaDisputa`. [app/chamados/models.py:953](app/chamados/models.py:953) [app/chamados/models.py:976](app/chamados/models.py:976) [app/chamados/models.py:1018](app/chamados/models.py:1018) [app/chamados/models.py:1142](app/chamados/models.py:1142)
-- `models.py:3404`: **escrita relevante**, inclusive dos campos dinâmicos `outros`, além dos carimbos explícitos. [app/chamados/models.py:3371](app/chamados/models.py:3371) [app/chamados/models.py:3404](app/chamados/models.py:3404)
-- `historico.py:105`: **leitura relevante**; o laço percorre `respondida_em`, `validada_em` e `materializada_em`, e também lê o texto. [app/chamados/services/historico.py:98](app/chamados/services/historico.py:98) [app/chamados/services/historico.py:105](app/chamados/services/historico.py:105) [app/chamados/services/historico.py:109](app/chamados/services/historico.py:109)
-- `passivo_validado.py:83`: **leitura relevante** para fotografia de reversão; a lista inclui materialização, resposta, validação e autor da validação. [app/chamados/services/passivo_validado.py:64](app/chamados/services/passivo_validado.py:64) [app/chamados/services/passivo_validado.py:83](app/chamados/services/passivo_validado.py:83)
-- `validacao.py:677` e `:894`: filtros dinâmicos por `pk` e, opcionalmente, disputa; selecionam a pergunta, mas essas chaves não são campos da projeção. Os corpos seguintes ainda são consumidores relevantes. [app/chamados/services/validacao.py:673](app/chamados/services/validacao.py:673) [app/chamados/services/validacao.py:677](app/chamados/services/validacao.py:677) [app/chamados/services/validacao.py:890](app/chamados/services/validacao.py:890) [app/chamados/services/validacao.py:894](app/chamados/services/validacao.py:894)
-- `veredito_lavrado.py:202` e `:206`: **leituras relevantes** dos instantes de materialização e resposta, com limite temporal dinâmico; `:177` e `:180` consultam `Batida`. [app/chamados/veredito_lavrado.py:163](app/chamados/veredito_lavrado.py:163) [app/chamados/veredito_lavrado.py:177](app/chamados/veredito_lavrado.py:177) [app/chamados/veredito_lavrado.py:180](app/chamados/veredito_lavrado.py:180) [app/chamados/veredito_lavrado.py:202](app/chamados/veredito_lavrado.py:202) [app/chamados/veredito_lavrado.py:206](app/chamados/veredito_lavrado.py:206)
-- `fio.py:2112`, `:2122`, `:2134`, `:2164`, `:2166`, `:2187`: consultas dinâmicas às chaves de família e aos campos de exclusão do índice; os nomes são definidos nas tabelas do próprio arquivo. A classificação de seu impacto indireto completo continua [não verificado]. [app/chamados/services/fio.py:1515](app/chamados/services/fio.py:1515) [app/chamados/services/fio.py:1521](app/chamados/services/fio.py:1521) [app/chamados/services/fio.py:2109](app/chamados/services/fio.py:2109) [app/chamados/services/fio.py:2164](app/chamados/services/fio.py:2164)
-- `explicador.py:43`: `dict.update` em resultado de apresentação, não `QuerySet.update` nem escrita de modelo. [app/chamados/services/explicador.py:41](app/chamados/services/explicador.py:41)
-- `pdf_espelho.py:856`: o `getattr` apontado lê campos de rubricas dos turnos; não é, nesse ponto, leitura direta da projeção da pergunta. Outros caminhos indiretos até PDF permanecem [não verificado]. [app/relatorios/pdf_espelho.py:844](app/relatorios/pdf_espelho.py:844) [app/relatorios/pdf_espelho.py:855](app/relatorios/pdf_espelho.py:855)
-- `core/reexibir.py:45` e `:49`: atribuições genéricas em memória; os chamadores encontrados são em `colaboradores/views.py`. Não demonstram, por si, escrita persistida da pergunta. [app/core/reexibir.py:21](app/core/reexibir.py:21) [app/core/reexibir.py:45](app/core/reexibir.py:45) [app/core/reexibir.py:49](app/core/reexibir.py:49) [app/colaboradores/views.py:1116](app/colaboradores/views.py:1116) [app/colaboradores/views.py:1281](app/colaboradores/views.py:1281)
-
-**Não concluído:** não classifiquei individualmente todos os demais indeterminados e aliases da saída, nem demonstrei a lista integral de consumidores indiretos, SQL bruto ou caminhos de PDF. O item 3, portanto, não está fechado. [não verificado]
-
-### 4. Contrato F1 antigo — STATUS: FECHADO quanto à implicação para a F7
-
-A F7 deve censar os leitores efetivos desta cópia; não há demonstração de equivalência geral entre eles e o fold histórico descrito no anexo. Aqui, `respondida` delega ao juiz do par projetado, enquanto a projeção temporal e `estado` consideram outros campos. A ancestralidade e os bytes do objeto histórico informados no anexo permanecem [não verificado]. [app/chamados/models.py:3674](app/chamados/models.py:3674) [app/chamados/juizes.py:1544](app/chamados/juizes.py:1544) [app/chamados/juizes.py:1382](app/chamados/juizes.py:1382) [app/chamados/models.py:3152](app/chamados/models.py:3152)
-
-### 5. Frota U1/U2 — STATUS: ABERTO
-
-O anexo declara resultado de sombra com **U1 global = 29.931** e **15.118 validações projetadas sem linha**, com `rc_sombra=0`; não há acesso independente ao banco ou log nesta sessão. [não verificado]
-
-O segundo contador usa correspondência de projeção por pergunta, ato e instante; ele não mede o último ato exigido para U2. Portanto, a sonda relatada fecha o resultado declarado para U1 e para o contador auxiliar, mas **U2 continua não medida**. [app/chamados/models.py:4122](app/chamados/models.py:4122) [app/chamados/models.py:4135](app/chamados/models.py:4135) [não verificado]
-
-alcance nao verificado restante: 3
-
-## 18/11 10:15 · sessao a2b0196b566b · - · - · origem=Ronald (tmux)
-
-Evidências e limitações enviadas ao agente principal, incluindo os escritores de decisão, os leitores de REABERTURA, os importadores, os limites dos selos e a divergência entre o comentário sobre `ato_motivo` e o comportamento de `_pela_decisao` ([models.py:4075](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4075), [tarefa_do_dia.py:158](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:158)).
-
-## 18/11 10:15 · sessao 7bb0d685aa36 · - · - · origem=Ronald (tmux)
-
-Classificação dos candidatos dinâmicos relevantes enviada ao agente principal, com os sítios de leitura e escrita de R/V/C, os falsos positivos identificados e as lacunas que permanecem [nao verificado].
-
-## 18/11 10:14 · sessao e888750e899c · - · - · origem=Ronald (tmux)
-
-Rastreamento de templates, cascas dinâmicas e PDF enviado ao agente principal, com os respectivos arquivos, linhas e limites de verificação.
-
-## 18/11 10:13 · sessao b997298c28f7 · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
-
-```text
-=== SOMBRA (sombra_db, leitor) 18/11 10:12:49 ===
-sonda_leitura: cen_F9_s1.py [3b68d969da5dc8d8] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-R_projecao_nula_com_ato_resposta	ultimo_fisico=reabertura	ultimo_efetivo=reabertura	total=52
-R_projecao_nula_com_ato_resposta	ultimo_fisico=recusa	ultimo_efetivo=recusa	total=7
-V_projecao_nula_com_ato_validacao	ultimo_fisico=devolucao	ultimo_efetivo=devolucao	total=60
-V_projecao_nula_com_ato_validacao	ultimo_fisico=reabertura	ultimo_efetivo=reabertura	total=9
-V_projecao_nula_com_ato_validacao	ultimo_fisico=resposta	ultimo_efetivo=resposta	total=3
-rc_sombra=0
-```
-linhas copiadas: 9
-
-_6900 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6906 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
