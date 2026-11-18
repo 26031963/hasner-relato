@@ -1,7 +1,161 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:54** · publicado em **18/11/2026 17:54** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:59** · publicado em **18/11/2026 17:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:59 · sessao b83f2b7c7015 · RESPOSTAS-1811-1800 · verificador · origem=Code
+
+1. **Premissas — PROCEDE parcialmente; a medida não foi verificável.**
+
+   - O padrão está nomeado: [PLANO-PADROES.md:33](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/PLANO-PADROES.md:33) diz “*projection rebuild* / *read model replay* (CQRS)”; [GLOSSARIO.md:24](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/GLOSSARIO.md:24), “CQRS com projecoes reconstruiveis”.
+   - As três entidades têm campos de estado: `status_local` em [models.py:58](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:58), `fechada_em` em [models.py:1894](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1894) e `validada_em` em [models.py:2636](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2636). Há múltiplos caminhos de gravação: criação e transição do chamado em [models.py:1154](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1154) e [models.py:234](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:234); fechamento e reabertura da disputa em [models.py:2095](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2095) e [models.py:2312](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2312); carimbo individual e retirada em lote da pergunta em [models.py:3324](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3324) e [models.py:3485](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3485). Isso não constitui censo completo de escritores. [não verificado]
+   - `E4D-ATO-DE-CONCLUSAO` consta no [BACKLOG.md:2015](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2015): “choice de ato de conclusao em DecisaoPergunta + escritor unico materializacao.py”. As seis exceções constam em [BACKLOG.md:2095](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2095), [2096](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2096), [2097](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2097), [2098](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2098), [2099](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2099) e [2100](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2100), cada uma com “a projecao segue fonte lida”.
+   - “1588 leituras nao cobertas (1336 fora do dono)” aparece no item 3 raspado, mas `logs/PRE-MAPA-E4D/` não está disponível nesta cópia. **A contagem e sua classificação na fonte: [não verificado].** O anexo foi fornecido no texto da pergunta, sem arquivo:linha verificável. [não verificado]
+
+2. **Colisão com aval vigente — PROCEDE.** O item 3 raspado diz que substitui “SO a clausula ‘E4d CONTRACT’”, mas também diz “O selo 2 do aval de 09/11 passa a ser dois” e mantém “E4c”. O anexo de 09/11 situa o selo 2 em **E4c**: “nenhum leitor le campo abolido”; o novo selo (b) diz “nenhum juiz registrado le coluna projetada”, enquanto tela, filtro e relatório podem lê-la. Há, portanto, alteração expressa de uma condição situada fora da cláusula E4d, apesar da delimitação “SO” e de “NAO muda: E4c”. Os literais dos dois anexos vêm do texto fornecido; seus arquivo:linha são [não verificado].
+
+   O pré-mapa raspado também descreve “E4d = PARAR A PROJECAO” e pede uma matriz do que se grava depois. A mudança de regra torna esse contexto desatualizado; o texto fornecido não esclarece uma retificação do pré-mapa. [não verificado: arquivo:linha dos anexos] A ordem da CLASSE-D antes da E4d continua declarada no item 4 raspado e é compatível com [BACKLOG.md:2027](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2027), “CLASSE-D-NA-FRENTE-DA-E4D”.
+
+3. **Condições que não fecham no literal — PROCEDE.**
+
+   - O item 3 exige “Juiz registrado [...] le o ATO [...] nunca a coluna”, mas conserva as seis exceções “com a projecao como fonte lida ate o fato proprio”. O texto não delimita como o selo (b), “nenhum juiz registrado le coluna projetada”, convive com um juiz que precise de uma dessas fontes excepcionadas. [não verificado: arquivo:linha do anexo] Hoje há leitura concreta de coluna por juiz registrado: [core/juizes.py:291](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/core/juizes.py:291) registra `pergunta_viva`; seu cálculo usa `projecao_temporal_da_pergunta` em [chamados/juizes.py:1404](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1404), que lê `p.validada_em`, `p.respondida_em` e `p.materializada_em` em [chamados/juizes.py:1389](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1389). Isso prova o estado atual, não que a condição futura seja impossível. [não verificado]
+   - “Coluna reconstruida dos atos == coluna gravada, por linha, frota inteira” não define como reconstruir os estados das seis exceções antes de existir o fato próprio. [não verificado: arquivo:linha do anexo] O [BACKLOG.md:2095](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2095) descreve A03 como “reabrir_admin sem DP proprio da reabertura”; para A20, [BACKLOG.md:2100](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2100) diz “fato proprio para conferencia de data”.
+   - Há chamadas de registro de decisão em vários sítios, por exemplo [validacao.py:173](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:173) e [disputa_emissao.py:1532](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1532). Isso exige demonstrar que **cada caminho** chama o único projetor na transação do ato; vários sítios, por si só, não provam impossibilidade. A matriz e a prova transacional futura são [não verificado].
+
+4. **Exportada, dinheiro ou `!` fora do declarado — NAO PROCEDE quanto ao toque autorizado agora.** O item 3 diz “L-092” não muda; o R5/26 diz “o projetor nao regrava linha de competencia entregue sem ! meu”, e o texto proíbe “tocar competencia entregue”. O item 5 condiciona construção a aval próprio. Esses literais são do anexo raspado, sem arquivo:linha verificável. [não verificado] A proteção é relevante também para o ato de conclusão: [BACKLOG.md:2015](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2015) exige “`!` se alcancar exportada”; [LEIS.md:155](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:155) registra a alteração da L-092 pela L-113 e preserva a versão anterior do TXT e a trilha. Impacto futuro sobre dinheiro ou linhas efetivas de produção: [não verificado].
+
+REVISAO item 3: PROCEDE 3 / NAO PROCEDE 1.
+
+## 18/11 17:55 · sessao 987e32e7bb2f · ESCALA-NAO-DESCREVE · censo · origem=Code
+
+**1. BLOQUEIA — classe (a)**
+
+- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “selo/RED sem mordida (os testes de escala/tests/test_escala_nao_descreve.py mordem? quais passariam com a cura removida?)” [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “Os testes R1–R7 exercitam resultados concretos e, por inspeção, removendo suas respectivas curas centrais falhariam”; “mutações e execução dos testes: **[não verificado]**.” [app/escala/tests/test_escala_nao_descreve.py:85](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_escala_nao_descreve.py:85).
+
+**2. FILA, LEI-AKITA — classe (a)**
+
+- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “Qual seria o rotulo honesto de "juizes novos" na linha LEI-AKITA?” [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “O rótulo honesto é `juizes novos=folga_trabalhada_no_6x1, botao_da_proposta (inclui duplicação da classificação cíclica)`, não `0`.” [app/escala/services/cadastro_realidade.py:788](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/services/cadastro_realidade.py:788).
+- Triagem — `logs/ESCALA-NAO-DESCREVE/v2/triagem.md`: “rotulo juizes novos=0: PROCEDENTE -> corrigido no c3 (botao_da_proposta, folga_trabalhada_no_6x1).” [não verificado: linha do anexo].
+
+**3. FILA, segundo juiz cíclico herdado — classe (a)**
+
+- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “Algum deles duplica uma decisao que ja tem autoridade (core/juizes.py, JUIZES.md, a porta `regua_defesa.realocar_vinculo_para_destino`, `colaboradores/services/vinculo.py::julgar_vinculo`, `acao()`, Plano de Folgas)?” [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “O botão decide se o destino é cíclico pela fotografia `proposta.ciclo`, enquanto a porta consulta o `TipoEscala` atual”; nenhum trecho identifica a tupla manual como outro juiz. [app/escala/regua_defesa.py:310](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/regua_defesa.py:310), [não verificado: linha do anexo].
+
+**4. FILA, R5 não chega à porta — classe (a)**
+
+- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “selo/RED sem mordida (os testes de escala/tests/test_escala_nao_descreve.py mordem? quais passariam com a cura removida?)” [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “Os testes R1–R7 exercitam resultados concretos e, por inspeção, removendo suas respectivas curas centrais falhariam”; “mutações e execução dos testes: **[não verificado]**.” [app/escala/tests/test_escala_nao_descreve.py:194](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_escala_nao_descreve.py:194).
+
+**5. FILA, R4 não confere `h.de` — classe (a)**
+
+- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “Trilha: o `!` pede quem, antes/depois, motivo. Onde cada um e gravado (arquivo:linha) e algum fica em branco?”; “os testes de escala/tests/test_escala_nao_descreve.py mordem? quais passariam com a cura removida?” [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “`registrado_por` recebe o usuário, `de` e `para` recebem fotografias textuais”; “Os testes R1–R7 exercitam resultados concretos e, por inspeção, removendo suas respectivas curas centrais falhariam”. [app/colaboradores/services/vinculo.py:182](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/colaboradores/services/vinculo.py:182), [app/escala/tests/test_escala_nao_descreve.py:194](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_escala_nao_descreve.py:194).
+
+**6. FILA, lavra vencida — sem classe compatível**
+
+- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “lavra velha (sem as chaves novas), lavra de outro dia: o que acontece em cada um?” [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “Lavra antiga sem proposta é recusada; lavra de outro dia é aceita sem teste de idade.” [app/ponto/services/esmeril_espelho.py:369](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/ponto/services/esmeril_espelho.py:369).
+- Triagem: nenhum descarte desse achado no anexo fornecido. [não verificado: linha do anexo].
+
+**7. FILA, literal do aval — classe (e)**
+
+- Pergunta sobre a divergência literal do aval para `ciclo` ou sobre o destino do link para o wizard: nenhum. [não verificado: linha do anexo].
+- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver2.r`: “`anomalias_da_frota` escreve o mapa sem `ciclo`; `lista` e a view de aplicação o leem”. [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/ponto/services/esmeril_espelho.py:241).
+
+**8. FILA, rótulo do selo e citação L-042**
+
+- **Rótulo do selo — classe (a).**
+  - Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “O template mudou de `postos` para `linhas`: algum selo de front, contador `data-contador` ou teste que dependia de `data-posto` ou do agrupamento?” [não verificado: linha do anexo].
+  - Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “O selo antigo de agrupamento só procura o nome do posto e continua passando com o posto como coluna”; nenhum trecho identifica a citação do selo em LEIS.md. [app/escala/tests/test_cadastro_x_realidade.py:53](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_cadastro_x_realidade.py:53), [não verificado: linha do anexo].
+- **Citação L-042 — classe (e).**
+  - Pergunta sobre a ausência da citação L-042 no LEI-PROTEGE-SITIO: nenhum. [não verificado: linha do anexo].
+  - Resposta sobre essa ausência: nenhum. [não verificado: linha do anexo].
+
+| Achado | Classe | Arquivo |
+|---|---|---|
+| 1. Mutante R1 sobrevive | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
+| 2. LEI-AKITA | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r`, `triagem.md` |
+| 3. Juiz cíclico herdado | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
+| 4. R5 não chega à porta | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
+| 5. R4 não confere `h.de` | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
+| 6. Lavra vencida | Sem classe compatível | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r`, `triagem.md` |
+| 7. Literal do aval | (e) | `logs/ESCALA-NAO-DESCREVE/v2/ver2.r` |
+| 8. Rótulo do selo | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
+| 8. Citação L-042 | (e) | nenhum |
+
+## 18/11 17:54 · sessao b8ce844dad6a · E4C-F6F7 · construtor · origem=Code
+
+Criei o [teste do caso pela regra](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:16), sem alterar produção. Ele compara os três leitores para V, VR-mantém e VR-não-mantém e verifica duas cargas e ordens de leitura ([teste:68](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:68)). [nao verificado]
+
+Comando e saída do teste sem banco: [nao verificado]
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c13_caso_pela_regra -v
+
+Ran 1 test in 0.109s
+OK
+rc=0
+```
+
+O mutante que troca o `while` de [tarefa_do_dia.py:164](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:164) por `while False:` foi mordido **em memória**: o teste falhou na igualdade VR-mantém == V ([teste:78](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:78)), com `FAILED (failures=1)`, **rc=1**. Para reproduzir: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import unittest
+from pathlib import Path
+from chamados.tests.e4_catracas import FONTES_MUTADAS
+
+caminho = 'chamados/services/tarefa_do_dia.py'
+fonte = Path(caminho).read_text()
+original = 'while k and decisoes[k - 1].ato == D.RESPOSTA and decisoes[k - 1].resposta_mantem_validacao:'
+assert fonte.count(original) == 1
+FONTES_MUTADAS[caminho] = fonte.replace(original, 'while False:')
+suite = unittest.defaultTestLoader.loadTestsFromName( [nao verificado]
+    'chamados.tests.test_e4c_f6f7_c13_caso_pela_regra')
+resultado = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
+raise SystemExit(not resultado.wasSuccessful())
+PY
+```
+
+A execução solicitada sobre uma cópia em `$TMPDIR` ficou **incompleta**: `mktemp` retornou `Read-only file system`, rc=1, antes da cópia. O resultado em memória não substitui essa execução solicitada.
+
+**LEI-AKITA:** origem=n/a (caso pela regra, sem cura); testemunha=tarefa_do_dia/porta_da_tarefa/fio do fora_da_folha; RED=[teste](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:16); quem-mais-lê=[face por pergunta](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:449); juízes novos=0; padrão=n/a (instrumento). [nao verificado]
+
+## 18/11 17:54 · sessao cc604205c6d5 · E4C-F6F7 · censo · origem=Code
+
+1. **BLOQUEIA — classe (a).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Para cada campo/funcao listado em quem_escreve_le.txt: QUEM ESCREVE e QUEM LE no HEAD; todos supoem o mesmo significado?”
+
+   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “`_pela_decisao` também é chamado dentro da tarefa por dia; a porta publicada é lida, entre outros, por Folha, vigia e beco.” Trecho sobre troca de grupo de retenção ou medida de frota: **nenhum**.
+
+2. **BLOQUEIA — classe (a).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Para cada campo/funcao listado em quem_escreve_le.txt: QUEM ESCREVE e QUEM LE no HEAD”.
+
+   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “o contador pergunta ao mesmo predicado de correspondência do backfill se falta o ato no mesmo instante.” Trecho sobre ausência de chamador de produção: **nenhum**.
+
+3. **FILA — classe (a).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Em _pela_decisao, o laco sobre RESPOSTA com resposta_mantem_validacao: ha sequencia […] em que a escolha do ultimo ato fica errada?”
+
+   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “o laço de resposta que mantém validação não cobre interrupções da sequência.” Trecho sobre `SILENCIO/ABSORCAO/RETRATACAO` e o predicado `_resposta_desfaz_validacao`: **nenhum**.
+
+4. **FILA — classe (a).** Pergunta, `logs/E4C-F6F7/codex_c7/construtor_c10.q` [linha não verificada]: “os selos aceitam `perguntas = []` (ou qualquer reatribuicao/mutacao de `perguntas`) entre a leitura de ['pendentes'] e o uso de `perguntas` na resposta”.
+
+   Resposta, `logs/E4C-F6F7/codex_c7/construtor_c10.r` [linha não verificada]: “A detecção de mutação indireta por aliases ou por funções chamadas com `perguntas` é **[não verificado]**”. Trecho com os quatro mutantes sobreviventes: **nenhum**.
+
+5. **FILA — classe (e).** Pergunta: **nenhum** [não verificado]. Resposta: **nenhum** [não verificado].
+
+6. **FILA — classe (c).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Os testes (RED c1 + contador) mordem o defeito, ou passam com ele? Aponte teste sem mordida.”
+
+   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “O teste de passivo U4 só verifica o caso cujo conservado é `True`: uma implementação que devolvesse sempre `True` para passivo passaria nesse teste.” Trecho sobre o `ERROR` da fixture `DecisaoImutavel`: **nenhum**.
+
+| Achado | Classe | Arquivo |
+|---|---|---|
+| 1 | (a) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
+| 2 | (a) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
+| 3 | (a) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
+| 4 | (a) | `logs/E4C-F6F7/codex_c7/construtor_c10.q`, `construtor_c10.r` |
+| 5 | (e) | nenhum [não verificado] |
+| 6 | (c) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
 
 ## 18/11 17:54 · sessao ebd05b3637cc · RAIA-INTERVALO · sonda · origem=Code
 
@@ -1949,80 +2103,4 @@ A conferência do método da sonda ficou **não verificada**: o arquivo `logs/RA
 
 No código, `classe_do_lote` só marca conflito depois de passar pelas verificações anteriores e usa batidas apuráveis próximas ao instante do slot. [validacao.py](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1177) Já `metade_irma_do_intervalo` procura uma única irmã respondida **ainda não materializada**, com filtros adicionais. [materializacao.py](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139) Isso não permite confirmar que o método da sonda, que relata irmãs gravadas, corresponda ao método pretendido ou detectar eventual divergência. [não verificado]
 
-## 18/11 17:24 · sessao df1a716c32a1 · RAIA-INTERVALO · sonda · origem=Code
-
-Na saída fornecida, **7 perguntas** estão em `espera_declarado_x_gravado`: **7 dentro do U163 e 0 fora**. O contador `respostas_intervalo_recusadas_paridade()['espera_declarado']` também tem **7**; a interseção é **7**, com **0 só na função** e **0 só no contador**. Os IDs informados são 41706, 45598, 45599, 47207, 50176, 50177 e 51526. [não verificado em arquivo:linha; números transcritos da saída fornecida]
-
-Esses conjuntos coincidem **nesta medição**, embora os critérios permitam diferença. O contador começa pelas perguntas do U163 e acrescenta à lista as não carimbadas cujo estado é espera; a função consulta o estado de uma pergunta de intervalo tipo hora sem exigir, ela própria, que o PK consultado pertença ao U163. [materializacao.py:323](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:323), [materializacao.py:341](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:341), [materializacao.py:762](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:762)
-
-O portão examina as metades que seriam gravadas no ato e exige U163 para a **metade divergente**. Quando o ato grava um par, isso permite, em princípio, que a consulta de uma pergunta fora do U163 retorne espera por causa da irmã dentro do U163; essa pergunta ficaria fora do contador, que seleciona pelo próprio PK. Nesta saída, não apareceu nenhum caso assim. [materializacao.py:748](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:748), [materializacao.py:923](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:923), [não verificado em arquivo:linha para o resultado da sonda]
-
-**Erros à parte:** a sonda informa `erros 0` e `ERROS []`; a saída também contém mensagens `ERROR` de `tipo_marco_divergente`, algumas repetidas. Esses registros não devem ser somados às sete esperas nem confundidos com a lista de erros da sonda. [não verificado em arquivo:linha; saída fornecida]
-
-As **79** do aval são identificadas como contagem histórica; a saída atual, por si só, não mostra a interseção nem a evolução entre aquelas 79 e as 7 atuais. Qualquer relação adicional é **[não verificado]**. [RELATO.md:13](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/docs/RELATO.md:13)
-
-## 18/11 17:23 · sessao 9f77027bbad7 · RAIA-INTERVALO · sonda · origem=Code
-
-A sonda fornecida relata **“não” para zero faltantes em todos os 28 dias**. Em nenhum deles ela mostra uma batida ocupando o marco que a ata aponta como faltante. A saída identifica a sonda como `sonda28.py`, mas esse arquivo não foi localizado nesta cópia; os dados abaixo são transcrição do material fornecido e, quanto à execução independente, **[não verificado]**.
-
-Em cada linha: `colaborador data grupo — grade vê 0 faltantes?; marco que a ata dá por apagado; batida que o ocupa (hora, tipo, origem → marco casado)`.
-
-- col622 27/10 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col622 29/10 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col622 04/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col622 05/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col622 12/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col622 13/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col622 16/11 G1 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col362 22/10 G2 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col945 29/10 G2 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col735 16/11 G2 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col583 12/11 G3 — N; S 11:00; nenhuma mostrada. [não verificado]
-- col829 11/11 G3 — N; S 14:40; nenhuma mostrada. [não verificado]
-- col369 12/11 G3 — N; S 12:00; nenhuma mostrada. [não verificado]
-- col224 28/10 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col469 01/11 G4 — N; E 19:00; nenhuma mostrada. [não verificado]
-- col924 11/11 G4 — N; E 19:00; nenhuma mostrada. [não verificado]
-- col631 03/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col988 31/10 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col988 03/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col836 04/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col1000 03/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col1000 13/11 G4 — N; E 13:00; nenhuma mostrada. [não verificado]
-- col962 05/11 G4 — N; E 18:00; nenhuma mostrada. [não verificado]
-- col962 09/11 G4 — N; E 18:00; nenhuma mostrada. [não verificado]
-- col962 16/11 G4 — N; E 18:00; nenhuma mostrada. [não verificado]
-- col991 09/11 G4 — N; E 17:00; nenhuma mostrada. [não verificado]
-- col991 11/11 G4 — N; E 17:00; nenhuma mostrada. [não verificado]
-- col787 30/10 G5 — N; E 08:00 e E 13:00; nenhuma mostrada para qualquer dos dois. [não verificado]
-
-A saída mostra, por exemplo, que em col369 12/11 as batidas **12:53:12 S/app** e **13:55:44 S/app** casaram com `NENHUM`; em col787 30/10, **10:32:17 E/app** também casou com `NENHUM`. Não há, portanto, marco casado a atribuir a essas batidas no dado fornecido. [não verificado]
-
-**Resposta por grupo:** G1, G2, G3, G4 e G5: **não**, a grade não vê zero faltantes em nenhum dos respectivos dias relatados; e o passo em que uma batida ocuparia o marco apagado é **[não verificado] em todos os grupos**. A saída não mostra essa ocupação e não permite classificá-la como ocorrida dentro ou fora de `escala/utils.py`. [não verificado]
-
-Nesta cópia, o caminho de casamento está em [`_match_marcos`](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/escala/utils.py:595), que pode usar alinhamento por papel ou a rotina de alinhamento; o cartório monta as lâmpadas a partir das células e também contém um ramo de proximidade para marco ausente da régua em [`lampadas_do_dia`](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/ponto/services/cartorio.py:656). O leitor transforma as lâmpadas da ata em células e deriva `missing` de `acesa` em [`_celulas_da_ata`](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/escala/services/leitor_celula.py:114). A existência desses caminhos no código não identifica qual ramo foi executado para cada registro da sonda **[não verificado]**.
-
-## 18/11 17:21 · sessao d73e96b3b221 · LOTE-CONHECE-A-IRMA · sonda · origem=Code
-
-No dado raspado, os contadores são **[não verificado]**:
-
-- Universo de perguntas de intervalo-hora na fila: **550**
-- Em `b_conversa` por conflito: **72**
-- Conflito só de batida de irmã gravada: **23**
-  - Com exatamente uma irmã gravada: **23**
-  - Com mais de uma irmã gravada — contador de irmã ambígua: **0**
-- Erros: **0**
-
-A conferência do método da sonda ficou **[não verificada]**: o arquivo indicado não está disponível nesta cópia. O código de `classe_do_lote` marca conflito pela existência de qualquer batida apurável no intervalo de 60 minutos em torno do instante do slot, sem identificar sua origem ([validacao.py:1133](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1133), [validacao.py:1204](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1204)).
-
-Há uma **diferença de critério** a considerar: `metade_irma_do_intervalo` procura irmã **ainda não materializada** e só retorna uma quando há exatamente uma candidata; isso não equivale diretamente à contagem de irmãs já gravadas ([materializacao.py:139](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139)). Sem o código da sonda, não é possível confirmar se ela tratou essa diferença nem se as 23 sairiam do conflito pela cura **[não verificado]**.
-
-## 18/11 17:21 · sessao 6fe46adaff6b · - · - · origem=Ronald (tmux)
-
-A classificação `b_conversa` por conflito só ocorre depois de passar pelos testes de resposta legível, marco, AM/PM e envelope; ela consulta batidas apuráveis em até 60 minutos do instante do slot ([validacao.py:1177](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1177), [validacao.py:1133](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1133)).
-
-`metade_irma_do_intervalo` procura irmã **ainda não materializada** e só retorna uma candidata única, após outros filtros ([materializacao.py:139](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139)). Seu critério, portanto, não é diretamente a contagem de irmãs já gravadas.
-
-A sonda indicada não foi encontrada nesta cópia; a comparação direta de seu método com essas funções está [não verificado].
-
-_7070 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7074 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
