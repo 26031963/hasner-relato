@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 01:32:06.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (50.0 MB). Acoes na janela: **1461**.
+**Medido em 18/11/2026 01:37:16.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (50.0 MB). Acoes na janela: **1463**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:32:14 | Bash | Wait for main suite and both mutant runs | `cd /home/ronald/saas-hasner; for f in logs/torneira_1811/main_inteira_4307c01e6.log logs/E4C/f1nova/b2/cerca/c2b/tetos/mutante_teto_menos1.log logs/E4C/f1nova/b2/cerca/c2b/tetos/mutante_none_permitido.log; do until grep -q "^rc=" $f 2>/dev/null; do /usr/bin/sleep 60; done; echo "== $f"; grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1; grep '^Ran' $f \| tail -1; grep -E "^(FAIL\|ERROR):" $f \| cut -c ...` |
+| 01:32:09 | Bash | Build None-allowed veto mutant and queue twins | `cd /home/ronald/saas-hasner; M=/home/ronald/wt-b2-mut-none-$(date +%H%M%S); git worktree add --detach $M 85e90e266 >/dev/null 2>&1; cd $M/app; python3 - <<'EOF' p='chamados/services/fio.py'; s=open(p).read() a="if veto_de_competencia(emp, list(dias), estado['memo']) is not False)" assert s.count(a)==1; s=s.replace(a,a.replace('is not False','is True')); open(p,'w').write(s) EOF git diff --stat \|  ...` |
 | 01:32:03 | Bash | Read vigia veto line in B2 copy | `cd /home/ronald/wt-codex-e4c-f1-b2-232432/app; sed -n 1414,1422p chamados/services/fio.py` |
 | 01:31:57 | Bash | Commit c2d in B2 copy; queue B2 full suite | `cd /home/ronald/wt-codex-e4c-f1-b2-232432; git add app/ponto/tests/test_selo_chokepoint_escrita.py; git commit -q -F - <<'EOF' E4C-F1-B2 c2d: 4 tetos do chokepoint ao MEDIDO exato (30/62/224/288), so o par SAVEPOINT/RELEASE da cerca Aval Ronald RESPOSTAS-B2-TETOS-E-TORNEIRA 18/11 01:16 item 1, opcao (B), com EXCECAO NOMINAL ao item 5a do VAGA-E-DA-B2 (SAVEPOINT/RELEASE nao e consulta de dado). Med ...` |
 | 01:31:47 | Bash | Build teto-1 mutant copy and queue its run | `cd /home/ronald/saas-hasner; M=/home/ronald/wt-b2-mut-teto-$(date +%H%M%S); git worktree add --detach $M 8adeb6cf6 >/dev/null 2>&1; cp /home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py $M/app/ponto/tests/; cd $M/app; python3 - <<'EOF' p='ponto/tests/test_selo_chokepoint_escrita.py'; s=open(p).read() for a,b in [("sem pergunta)': 30,","sem pergunta)': 29,"),("di ...` |
