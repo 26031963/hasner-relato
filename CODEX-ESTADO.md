@@ -1,7 +1,177 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 16:12** · publicado em **18/11/2026 16:14** (UTC-3)
+> Ultima resposta processada: **18/11/2026 16:19** · publicado em **18/11/2026 16:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 16:19 · sessao 073fae13d2a1 · FILA-CODEX-1811 · sonda · origem=Code
+
+```text
+sonda_leitura: script.py [455c4e7660bc3a87] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 6 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 100
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 600
+UNIVERSO_PARTE 11/2026 99
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 199 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 199 minutos_total 2.7 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1298, 'bate_ate_10min': 1258, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 2, 'diverge_10_60': 1, 'diverge_acima_60': 32, 'dia_batida_impar': 55, 'impar_que_BATE': 27, 'impar_que_DIVERGE': 28, 'impar_dentro_da_faixa': 25, 'impar_FORA_da_faixa': 3, 'impar_no_conjunto_do_dia': 28, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1396, 'dia_isento_ou_ausencia': 277, 'dia_sem_trabalho_ambos': 11, 'esp_desconta_janela_declarada': 18, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.9% de 1298 dias comparados
+[3] ESTRUTURA     2 dia-colab       8.2 h    1 colabs
+[3] CADASTRO      8 dia-colab      40.5 h    2 colabs
+[3] BATIDA       30 dia-colab     127.8 h   17 colabs
+[4] TOTAL divergentes 40
+[5] colabs com divergencia: 20
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=2|horas=8.15|colabs=1
+PARCIAL|10/2026|CADASTRO|dias=8|horas=40.4628|colabs=2
+PARCIAL|10/2026|BATIDA|dias=30|horas=127.75368121722221|colabs=17
+PARCIAL_TOTAL|10/2026|dias=40|horas=176.36648121722221|colabs=20
+ESTIMATIVA processados 100 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 125 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 199 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1206, 'bate_ate_10min': 1163, 'esp_zero_e6_trabalho': 3, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 2, 'diverge_acima_60': 34, 'dia_batida_impar': 64, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 31, 'impar_dentro_da_faixa': 26, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 198, 'dia_sem_lavratura_no_espelho': 1343, 'dia_isento_ou_ausencia': 288, 'dia_sem_trabalho_ambos': 23, 'esp_desconta_janela_declarada': 11, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 96.4% de 1206 dias comparados
+[3] ESTRUTURA     3 dia-colab      10.6 h    2 colabs
+[3] CADASTRO      7 dia-colab      65.8 h    5 colabs
+[3] BATIDA       33 dia-colab     166.7 h   22 colabs
+[4] TOTAL divergentes 43
+[5] colabs com divergencia: 26
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=3|horas=10.610499166666667|colabs=2
+PARCIAL|11/2026|CADASTRO|dias=7|horas=65.7971625|colabs=5
+PARCIAL|11/2026|BATIDA|dias=33|horas=166.71064350722222|colabs=22
+PARCIAL_TOTAL|11/2026|dias=43|horas=243.118305173888887|colabs=26
+TEMPO_SEGUNDOS 167.4
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 241905
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 80
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1406
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 4830
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 58
+TRATADA_LOCAL app/escala/utils.py:1511 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1698 GeneratorExit 10
+TRATADA_LOCAL app/escala/utils.py:2002 GeneratorExit 6629
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:533 GeneratorExit 3848
+TRATADA_LOCAL app/escala/utils.py:534 GeneratorExit 3848
+TRATADA_LOCAL app/escala/utils.py:899 GeneratorExit 626
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 180
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 455936
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 544
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3097
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 183
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13064
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 93
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4326
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 189
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 21916
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4418
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 39965
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 17580
+SOMA 10/2026 40   <- tem de ser igual a soma das classes (40) True
+SOMA 10/2026 HORAS 176.36648121722221 True
+SOMA 10/2026 COLABS_UNIAO 20 True
+SOMA 11/2026 43   <- tem de ser igual a soma das classes (43) True
+SOMA 11/2026 HORAS 243.118305173888887 True
+SOMA 11/2026 COLABS_UNIAO 26 True
+rc_sombra=0
+```
+
+As seis linhas `SOMA` informam `True`. Não aparece `INCOMPLETO` na parte fornecida. [não verificado]
+
+## 18/11 16:16 · sessao 0047d0f2aa38 · FILA-CODEX-1811 · sonda · origem=Code
+
+Segue a saída integral fornecida da sonda R1-REMEDE, parte 5 de 6. A origem e a execução da sonda são [não verificado].
+
+```text
+sonda_leitura: script.py [972aacf9a2766647] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 5 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 107
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 600
+UNIVERSO_PARTE 11/2026 103
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 210 minutos_total 3.0 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1285, 'bate_ate_10min': 1215, 'esp_zero_e6_trabalho': 9, 'e6_zero_esp_trabalho': 3, 'diverge_10_60': 3, 'diverge_acima_60': 55, 'dia_batida_impar': 78, 'impar_que_BATE': 29, 'impar_que_DIVERGE': 49, 'impar_dentro_da_faixa': 42, 'impar_FORA_da_faixa': 7, 'impar_no_conjunto_do_dia': 49, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1533, 'dia_isento_ou_ausencia': 275, 'dia_sem_trabalho_ambos': 45, 'esp_desconta_janela_declarada': 72, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1285 dias comparados
+[3] ESTRUTURA     3 dia-colab      29.2 h    3 colabs
+[3] CADASTRO     19 dia-colab      52.3 h    8 colabs
+[3] BATIDA       48 dia-colab     197.3 h   26 colabs
+[4] TOTAL divergentes 70
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=29.23270916666667|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=19|horas=52.325450786111105|colabs=8
+PARCIAL|10/2026|BATIDA|dias=48|horas=197.29829774694443|colabs=26
+PARCIAL_TOTAL|10/2026|dias=70|horas=278.856457699722205|colabs=29
+ESTIMATIVA processados 125 universo 210 minutos_total 3.1 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 210 minutos_total 3.2 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1236, 'bate_ate_10min': 1146, 'esp_zero_e6_trabalho': 5, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 6, 'diverge_acima_60': 75, 'dia_batida_impar': 98, 'impar_que_BATE': 37, 'impar_que_DIVERGE': 61, 'impar_dentro_da_faixa': 52, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 61, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 206, 'dia_sem_lavratura_no_espelho': 1402, 'dia_isento_ou_ausencia': 227, 'dia_sem_trabalho_ambos': 38, 'esp_desconta_janela_declarada': 84, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 92.7% de 1236 dias comparados
+[3] ESTRUTURA     9 dia-colab      60.5 h    7 colabs
+[3] CADASTRO     31 dia-colab     104.1 h   11 colabs
+[3] BATIDA       50 dia-colab     255.3 h   25 colabs
+[4] TOTAL divergentes 90
+[5] colabs com divergencia: 35
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=9|horas=60.54144059916667|colabs=7
+PARCIAL|11/2026|CADASTRO|dias=31|horas=104.14722180555555|colabs=11
+PARCIAL|11/2026|BATIDA|dias=50|horas=255.3167716316666|colabs=25
+PARCIAL_TOTAL|11/2026|dias=90|horas=420.00543403638882|colabs=35
+TEMPO_SEGUNDOS 190.0
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 278619
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 34
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1955
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 8224
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 80
+TRATADA_LOCAL app/escala/utils.py:1511 GeneratorExit 2
+TRATADA_LOCAL app/escala/utils.py:1698 GeneratorExit 14
+TRATADA_LOCAL app/escala/utils.py:2002 GeneratorExit 8043
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:533 GeneratorExit 5767
+TRATADA_LOCAL app/escala/utils.py:534 GeneratorExit 5767
+TRATADA_LOCAL app/escala/utils.py:899 GeneratorExit 350
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 193
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 505992
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 861
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3482
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 218
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 14496
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 171
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4379
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 199
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 28919
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 3793
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 45361
+TRATADA_LOCAL app/ponto/turnos.py:2653 GeneratorExit 4
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 21691
+SOMA 10/2026 70   <- tem de ser igual a soma das classes (70) True
+SOMA 10/2026 HORAS 278.856457699722205 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 90   <- tem de ser igual a soma das classes (90) True
+SOMA 11/2026 HORAS 420.00543403638882 True
+SOMA 11/2026 COLABS_UNIAO 35 True
+rc_sombra=0
+```
+
+As seis linhas **SOMA** exibem `True`; não há ocorrência de `INCOMPLETO` no texto fornecido. A integridade da execução fora desse texto é [não verificado].
 
 ## 18/11 16:12 · sessao d06de8eab110 · FILA-CODEX-1811 · sonda · origem=Code
 
@@ -964,166 +1134,4 @@ O glossário informa que a exportação AFD ainda está pendente; não identifiq
 
 O leiaute específico por tipo de registro do AFD não foi comprovado nas referências encontradas; derivação durante geração AFD também não foi demonstrada. [nv]
 
-## 18/11 15:17 · sessao 6a66938c222e · FILA-CODEX-1811 · leitura · origem=Code
-
-A leitura **não fecha a atribuição das espúrias aos 11 sítios nem produz contagens**: o texto fornecido contém o pré-mapa, mas não as linhas da autópsia com as órfãs medidas e seus identificadores; o formato e o conteúdo desses anexos estão [não verificado]. A cópia também não tem metadados Git para conferir o hash informado. O código abaixo é uma **sonda parcial de correlação**, não uma sonda que prove quantas espúrias cada sítio explica. [não verificado; app/docs/BACKLOG.md:2091]
-
-O registro distingue o juiz do dia da batida, `turnos_do_colab`, do juiz da posição da batida, `_match_marcos`, e do juiz de períodos, `periodos_do_dia`. Portanto, apontar o mesmo juiz como substituto obrigatório de todos os sítios exigiria provar a pergunta de cada um. [app/core/juizes.py:216; app/core/juizes.py:221; app/core/juizes.py:1207]
-
-**Dono ESTRUTURA — achados de código candidatos, ainda sem medida de produção:** a rota alternativa de `views_core` deriva dia civil para gravar contexto; os dois sítios de `folha/porta_export.py` derivam agrupamento por dia civil e seus resultados podem chegar a uma métrica gravada. A divergência concreta em cada órfã e sua atribuição causal permanecem [não verificado]. [app/api/urls_core.py:14; app/api/views_core.py:713; app/folha/porta_export.py:104; app/folha/porta_export.py:538; app/folha/porta_export.py:779]
-
-### Os 20 registros marcados no pré-mapa
-
-Os caminhos abaixo demonstram caminhos possíveis sob as guardas indicadas; execução efetiva em produção é [não verificado]. “Grava” descreve o efeito do caminho, não necessariamente uma escrita da função auxiliar. O registro de `calcular_mes:2408` também aparece como vivo em outra linha do próprio dado fornecido. [app/docs/BACKLOG.md:2091; não verificado]
-
-1. **`escala/utils.py::_alinhar_por_papel:529`.** Alinha papéis de batidas a marcos; é parte de `_match_marcos`, o próprio juiz registrado para a posição do marco. Caminho: `_match_marcos` → montagem da grade por turno → `reconciliar_grade` command; a grade alimenta o plano de reconciliação e pode alcançar escrita, conforme modo e guardas. A classificação desta implementação interna como juiz externo paralelo é [não verificado]. [app/escala/utils.py:511; app/escala/utils.py:623; app/escala/utils.py:1712; app/escala/utils.py:2098; app/ponto/management/commands/reconciliar_grade.py:118; app/core/juizes.py:221]
-
-2. **`escala/utils.py::_papeis_por_alternancia:496`.** Infere papéis por alternância de uma sequência de pelo menos quatro batidas; `_match_marcos` a chama quando não recebe turno e `derivar` está ativo. O juiz de posição é `_match_marcos`, que contém essa chamada. **Zero chamador provado até ponto de entrada para a linha 496**; gravação ou exibição pelo ramo específico [não verificado]. Um caminho com apenas duas batidas não alcança o laço por causa da guarda. [app/escala/utils.py:489; app/escala/utils.py:496; app/escala/utils.py:606; app/core/juizes.py:221]
-
-3. **`ponto/calculador/nucleo.py::minutos_do_oraculo:246`.** Sem pares fornecidos, pareia por sequência. Caminho: command `e6_oraculo` → `InsumosDoDono` → `minutos_do_oraculo`; o comando exibe e, com `--csv`, escreve arquivo. O juiz registrado para períodos é `periodos_do_dia`; a troca direta desse ramo por ele é [não verificado]. Os chamadores que passam `pares` não provam a execução deste ramo. [app/ponto/management/commands/e6_oraculo.py:284; app/ponto/management/commands/e6_oraculo.py:328; app/ponto/management/commands/e6_oraculo.py:153; app/ponto/calculador/nucleo.py:110; app/ponto/calculador/nucleo.py:246; app/ponto/management/commands/e6_oraculo.py:442; app/core/juizes.py:1208]
-
-4. **`ponto/turnos.py::_pares_marcados:812`.** Lê marcas e compõe pares dentro da lógica do juiz de intervalo. Caminho: `_pares_marcados` → `realizado_dos_turnos` → `realizado_do_dia` → `turnos_longos_suspeitos` → command `termometro_regua`; com `--lavrar`, o resultado pode integrar lista gravada. `intervalos_do_turno` é o juiz registrado para intervalo; a necessidade de substituir esta implementação interna é [não verificado]. [app/ponto/turnos.py:545; app/ponto/turnos.py:756; app/ponto/turnos.py:795; app/escala/regua_defesa.py:363; app/escala/management/commands/termometro_regua.py:75; app/escala/management/commands/termometro_regua.py:92; app/core/juizes.py:223]
-
-5. **`ponto/motor_calculo_v2.py::MotorBase.calcular_mes:2408`.** A herança por gap participa do cálculo mensal; o registro a associa às fatias de par e dia, sem provar que cada execução produza divergência. Caminho: view de fechamento → `recalcular_fechamento_mes` → motor `calcular_mes`; **PAGA/GRAVA** pelo fechamento. Para dia de batida o registro aponta `turnos_do_colab`; a substituição exata da herança [não verificado]. [app/ponto/views.py:1255; app/ponto/services/fechamento.py:286; app/ponto/motor_calculo_v2.py:2408; app/core/juizes.py:217; app/docs/BACKLOG.md:2051]
-
-6. **`api/views_core.py::api_bater_ponto:713`.** Usa a data civil local da batida no contexto de chamado. Existe caminho por `config.urls_core` → `api.urls_core` → view, que pode gravar chamado; a seleção desse URLconf em produção é [não verificado]. O juiz registrado para pertença da batida ao turno é `turnos_do_colab`. **GRAVA**, sob as guardas da view. [app/config/urls_core.py:6; app/api/urls_core.py:14; app/api/views_core.py:713; app/api/views_core.py:723; app/config/settings/saas.py:76; app/core/juizes.py:217]
-
-7. **`chamados/juizes.py::_dia_da_batida:54`.** Usa `localdate` da batida. É chamado de `dia_do_fato`, dentro da própria autoridade de dia do chamado; existe caminho pela fábrica de disputa chamada pelo command `processar_alertas_turno`, com possível gravação de pergunta. O juiz de pertença da batida ao turno é `turnos_do_colab`; equivalência e substituição direta neste degrau [não verificado]. [app/chamados/juizes.py:51; app/chamados/juizes.py:128; app/chamados/services/disputa_emissao.py:795; app/ponto/management/commands/processar_alertas_turno.py:382; app/core/juizes.py:217]
-
-8. **`chamados/juizes.py::_dia_do_contexto_fraco:170`.** Extrai data de timestamp do contexto como fonte fraca; é chamado por `dia_do_fato` e `dias_do_fato`. Caminho demonstrado: command `arquivar_competencia_encerrada` → `dias_do_fato` → auxiliar; com `--apply`, pode silenciar chamados selecionados. Para dia do chamado, o registro aponta `data_do_chamado`, e o auxiliar está na implementação equivalente de `dia_do_fato`; troca específica [não verificado]. [app/chamados/juizes.py:139; app/chamados/juizes.py:162; app/chamados/juizes.py:230; app/chamados/management/commands/arquivar_competencia_encerrada.py:93; app/chamados/management/commands/arquivar_competencia_encerrada.py:102; app/chamados/management/commands/arquivar_competencia_encerrada.py:133; app/core/juizes.py:290]
-
-9. **`chamados/juizes.py::_plantio_na_hora_do_slot:275`.** Usa a data do evento ou a data local do instante para procurar plantio no slot, inclusive na janela do dia seguinte. Caminho: command `backfill_veredito_lavrado` → verificação de materialização → auxiliar; com `--apply`, pode gravar veredito. É termo interno da avaliação da pergunta; o registro nomeia juiz para pergunta viva, mas a substituição desse teste pelo juiz de dia da batida é [não verificado]. [app/chamados/juizes.py:254; app/chamados/juizes.py:275; app/chamados/juizes.py:764; app/chamados/management/commands/backfill_veredito_lavrado.py:82; app/chamados/management/commands/backfill_veredito_lavrado.py:105; app/chamados/management/commands/backfill_veredito_lavrado.py:138; app/core/juizes.py:291]
-
-10. **`chamados/juizes.py::dias_do_fato:204`.** Resolve dias de fatos em lote, incluindo data local da batida; é a forma em lote do julgamento do dia do chamado. Caminho e efeito: command `arquivar_competencia_encerrada` → `dias_do_fato` → seleção de alvos → **GRAVA** silenciamento com `--apply`. Juiz de dia do chamado e eventual aplicação do juiz de turno ao ramo são os mesmos limites do item 7. [app/chamados/juizes.py:175; app/chamados/juizes.py:204; app/chamados/management/commands/arquivar_competencia_encerrada.py:102; app/chamados/management/commands/arquivar_competencia_encerrada.py:127; app/chamados/management/commands/arquivar_competencia_encerrada.py:141; app/core/juizes.py:217; app/core/juizes.py:290]
-
-11. **`chamados/services/materializacao.py::_plantio_preenche_furo_na_data:434,455`.** Seleciona dia da célula/pergunta ou evento e usa instante local no cálculo da posição; não é simplesmente data civil em todos os ramos. Caminho demonstrado: rota de chamados → view → ações de disputa → validação → materialização → guarda; pode influenciar **GRAVAÇÃO** de plantio. O código já consulta `dia_sem_trabalho`; aplicação adicional de `turnos_do_colab` a estes ramos [não verificado]. [app/chamados/urls.py:14; app/chamados/views.py:483; app/chamados/services/acoes_disputa.py:13; app/chamados/services/validacao.py:786; app/chamados/services/materializacao.py:2125; app/chamados/services/materializacao.py:1926; app/chamados/services/materializacao.py:1391; app/chamados/services/materializacao.py:418; app/chamados/services/materializacao.py:434; app/chamados/services/materializacao.py:455; app/core/juizes.py:217; app/core/juizes.py:303]
-
-12. **`escala/detector_proposta.py::medir_padrao:58`.** Agrupa batidas por data local para medir padrão. Caminho: command `propor_escala_limbo` → `propor_escala` → `medir_padrao`; nesse caminho **EXIBE** proposta. O juiz registrado para dia de turno é `turnos_do_colab`; sua aplicabilidade a uma proposta de escala em limbo e efeitos de outros chamadores [não verificado]. [app/escala/management/commands/propor_escala_limbo.py:22; app/escala/management/commands/propor_escala_limbo.py:37; app/escala/management/commands/propor_escala_limbo.py:41; app/escala/detector_proposta.py:58; app/escala/detector_proposta.py:120; app/core/juizes.py:217]
-
-13. **`folha/porta_export.py::dias_fora_do_dia_pago:104`.** Agrupa minutos pela data local da entrada e os compara com `DiaPago`. Caminho: command `selo_leitores_no_mesmo_numero` → `medir` → auxiliar → conclusão/lavra da métrica; **GRAVA** métrica quando a lavra ocorre. O juiz registrado para pertença da batida é `turnos_do_colab`; como transportar sua resposta para cada período do resultado está [não verificado]. [app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:219; app/folha/porta_export.py:104; app/folha/porta_export.py:597; app/folha/porta_export.py:779; app/folha/porta_export.py:1255; app/core/juizes.py:217]
-
-14. **`folha/porta_export.py::medir:538`.** Usa a data local da entrada para agrupar trabalhado, HE e intervalo na verificação de rubricas. O mesmo command do item anterior chama `medir`, cujo resultado pode ser lavrado em `MetricaSnapshot`: **GRAVA**, condicionadamente. Juiz de pertença da batida e limite de aplicabilidade: item 13. [app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:219; app/folha/porta_export.py:538; app/folha/porta_export.py:560; app/folha/porta_export.py:779; app/folha/porta_export.py:1255; app/core/juizes.py:217]
-
-15. **`ponto/calculador/nucleo.py::minutos_do_oraculo:117,141,235`.** Conta ou atribui dias aos períodos; em `:141`, há fallback para data da entrada quando falta o terceiro elemento do par. Caminho: view de fechamento → fechamento → alimentação do calculador → núcleo; a lavra pode gravar `DiaPago` de versão oráculo sob as guardas de competência. O juiz registrado para períodos é `periodos_do_dia`, e para dia da batida é `turnos_do_colab`; execução concreta do fallback e substituição exata [não verificado]. [app/ponto/views.py:1255; app/ponto/services/fechamento.py:1265; app/ponto/services/fechamento.py:1271; app/ponto/services/fechamento.py:1277; app/ponto/calculador/alimentacao.py:449; app/ponto/calculador/nucleo.py:117; app/ponto/calculador/nucleo.py:141; app/ponto/calculador/nucleo.py:235; app/core/juizes.py:217; app/core/juizes.py:1208]
-
-16. **`MotorBase._intervalo_descontado_no_dia:1313`.** Usa data como chave para limite de intervalo; consulta também o juiz de intervalo. Caminho: view de fechamento → fechamento → `calcular_mes` → `Motor12x36.calcular_periodo` → `_limite_com_suprimido` → auxiliar; **PAGA/GRAVA** pelo fechamento. O juiz do intervalo já é consultado; qual autoridade deve fornecer a chave de dia nesse ramo [não verificado]. [app/ponto/views.py:1255; app/ponto/services/fechamento.py:286; app/ponto/motor_calculo_v2.py:2458; app/ponto/motor_calculo_v2.py:2840; app/ponto/motor_calculo_v2.py:1803; app/ponto/motor_calculo_v2.py:1313; app/ponto/motor_calculo_v2.py:1321; app/core/juizes.py:223]
-
-17. **`MotorBase._janela_do_dia:1528`.** Usa dia civil da entrada para montar janela e decisões associadas. Caminho: view → fechamento → `calcular_mes` → `Motor12x36.calcular_periodo` → `_janela_do_par` → auxiliar; **PAGA/GRAVA** pelo fechamento. O registro de dia da batida aponta `turnos_do_colab`; correspondência precisa da chave usada aqui [não verificado]. [app/ponto/views.py:1255; app/ponto/services/fechamento.py:286; app/ponto/motor_calculo_v2.py:2458; app/ponto/motor_calculo_v2.py:2759; app/ponto/motor_calculo_v2.py:1760; app/ponto/motor_calculo_v2.py:1528; app/core/juizes.py:217]
-
-18. **`MotorBase._previsto_do_dia:1227`.** Usa data como chave do previsto; consulta a autoridade do previsto. Caminho: view → fechamento → `calcular_mes` → `Motor12x36.calcular_periodo` → `_jornada_do_dia` → auxiliar; **PAGA/GRAVA** pelo fechamento. O juiz da chave de dia aplicável a esse ramo [não verificado]. [app/ponto/views.py:1255; app/ponto/services/fechamento.py:286; app/ponto/motor_calculo_v2.py:2458; app/ponto/motor_calculo_v2.py:2835; app/ponto/motor_calculo_v2.py:1273; app/ponto/motor_calculo_v2.py:1227; app/ponto/motor_calculo_v2.py:1237]
-
-19. **`ponto/motor_calculo_v2.py::_periodos_pelo_marco:578,686,687`.** Agrupa por dia e usa mapa do juiz com fallback civil para filtrar períodos. Caminho: view → fechamento → `calcular_mes` → `montar_periodos` → `_periodos_via_autoridade` → auxiliar; depende das guardas do ramo e pode participar do cálculo **PAGA/GRAVA**. O ramo consulta `periodos_do_dia`, juiz registrado para períodos; a correção específica do fallback de dia [não verificado]. [app/ponto/views.py:1255; app/ponto/services/fechamento.py:286; app/ponto/motor_calculo_v2.py:2354; app/ponto/motor_calculo_v2.py:2748; app/ponto/motor_calculo_v2.py:531; app/ponto/motor_calculo_v2.py:578; app/ponto/motor_calculo_v2.py:611; app/ponto/motor_calculo_v2.py:686; app/core/juizes.py:1208]
-
-20. **`ponto/propositor.py::dia_posicional_completo:364`.** Seleciona marcas pela data local e verifica completude posicional. Caminho parcial: `processar_alertas_turno` → `turnos_abertos_de` do reconciliador → auxiliar; o resultado participa da decisão que pode levar à retratação. O elo do `handle` até esse ramo específico está [não verificado]; portanto, **zero chamador provado até ponto de entrada para esse ramo**. Os juízes registrados de dia e de marco são, respectivamente, `turnos_do_colab` e `_match_marcos`; equivalência com o predicado completo [não verificado]. [app/ponto/management/commands/processar_alertas_turno.py:204; app/ponto/management/commands/processar_alertas_turno.py:216; app/chamados/reconciliador.py:83; app/chamados/reconciliador.py:113; app/ponto/propositor.py:341; app/ponto/propositor.py:364; app/core/juizes.py:217; app/core/juizes.py:221]
-
-### Texto de sonda parcial — não executar agora
-
-**Entrada esperada:** lista transcrita da autópsia, uma linha por órfã, com identificador da medição, `colaborador_id` numérico, data ISO da medição e PK da batida. O formato real do anexo e a disponibilidade dessas quatro chaves estão [não verificado]. A sonda consulta apenas as batidas identificadas e `DiaPago` do mesmo colaborador e data; imprime `colN`, datas e PKs. Os campos consultados existem nos modelos. [app/ponto/models.py:22; app/ponto/models.py:23; app/ponto/models.py:315; app/ponto/models.py:319]
-
-Ela **não satisfaz ainda** a parte que pede os 11 cruzamentos por escritor: não identifica qual sítio gravou uma linha, não compara a decisão histórica com o juiz, não classifica uma coincidência como causa e imprime as contagens por sítio como `[não verificado]`. A relação `Batida.pergunta_origem` é um vínculo possível, mas seu próprio modelo admite ausência em batidas de chão e em plantios antigos; ela não prova autoria para todas as gravações. [app/ponto/models.py:30; app/ponto/models.py:40]
-
-```python
-# Texto para Django shell, em uma sombra PostgreSQL. NÃO EXECUTADO.
-# Preencher somente com linhas da autópsia conferida:
-# (id_da_medicao, colaborador_id, "AAAA-MM-DD", batida_pk)
-ORFAS = []
-
-from datetime import date
-from django.db import connection, transaction
-from ponto.models import Batida, DiaPago
-
-estado = "INCOMPLETA"
-try:
-    if not ORFAS:
-        raise ValueError("Autópsia não fornecida: ORFAS está vazia")
-
-    chaves = set()
-    for medida, col_id, data_iso, batida_pk in ORFAS:
-        if not isinstance(col_id, int) or not isinstance(batida_pk, int):
-            raise ValueError("colaborador_id e batida_pk devem ser inteiros")
-        data = date.fromisoformat(data_iso)
-        chave = (medida, col_id, data, batida_pk)
-        if chave in chaves:
-            raise ValueError("Linha duplicada na entrada: %r" % (chave,))
-        chaves.add(chave)
-
-    if connection.vendor != "postgresql":
-        raise RuntimeError("Sonda requer PostgreSQL em transação read-only")
-
-    with transaction.atomic():
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION READ ONLY")
-
-        for medida, col_id, data, batida_pk in sorted(chaves):
-            batida = (
-                Batida.objects.filter(pk=batida_pk, colaborador_id=col_id)
-                .values("pk", "timestamp", "tipo", "pergunta_origem_id")
-                .first()
-            )
-            dias = list(
-                DiaPago.objects.filter(colaborador_id=col_id, data=data)
-                .values_list("pk", "data", "versao", "tipo")
-                .order_by("pk")
-            )
-            print(
-                "ORFA", medida, "col%s" % col_id, "data", data,
-                "batida_pk", batida_pk, "batida", batida,
-                "diapago_pks_datas_versoes_tipos", dias,
-                "CAUSA_POR_SITIO=[não verificado]",
-            )
-
-        print("CONTAGEM_ESPURIAS_POR_SITIO=[não verificado]")
-        estado = "CORRELACAO_PARCIAL"
-
-except Exception as exc:
-    print("ERRO_SONDA", type(exc).__name__, str(exc))
-finally:
-    print("FIM_SONDA", estado)
-```
-
-Para completar o item (ii), faltam as linhas da autópsia e uma prova, para cada um dos 11 sítios pretendidos, do vínculo entre a decisão daquele sítio e o registro histórico observado. Sem esses vínculos, contagens por data ou colaborador seriam apenas coincidências, e o conjunto exato dos 11 também fica [não verificado]. [app/ponto/models.py:40; não verificado]
-
-## 18/11 15:17 · sessao 14cb2755f941 · FILA-CODEX-1811 · leitura · origem=Code
-
-**O número real de B e a classificação dos 1.588 leitores ficam [não verificado].** A tabela fornecida declara 1.588 ocorrências `NAO_COBERTO`, mas a seção nominal do resumo está limitada a “só direto+template, produção”; ela não traz as ocorrências indiretas necessárias para classificar cada item. O próprio instrumento também associa derivados por nome de método e pode casar campos homônimos. [não verificado: anexos fornecidos no pedido, sem arquivo local numerado]
-
-A cópia recebida não contém os anexos como arquivos locais e não possui `.git`; portanto, não consegui conferir o hash do HEAD nem citar linhas do resumo. [não verificado] Também não seria correto chamar toda linha de `models.py` de A: por exemplo, `PerguntaDisputa` consulta `DisputaSupervisao.fechada_em` em [models.py:2860](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:2860). Do mesmo modo, duas ocorrências de `recusa_motivo` são leituras de `request.POST`, não do campo do modelo: [acoes_disputa.py:83](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/acoes_disputa.py:83) e [fio.py:565](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/fio.py:565). Essas ocorrências exigem uma regra para falsos positivos, além dos três baldes solicitados. **[nv]**
-
-Amostra conferida na cópia: a leitura do próprio `fechada_em` por `DisputaSupervisao.aberta` é A ([models.py:1961](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:1961)); a exibição de `status_local` pela API é B como leitura direta ([views_mensageria.py:1085](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/api/views_mensageria.py:1085)); o auditor de invariantes é C pela finalidade de auditoria ([auditar_invariantes_chamados.py:574](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:574)). A lista nominal completa de B por campo permanece **[não verificado]**.
-
-**D3.** A função mora em [validacao.py:408](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/validacao.py:408). Na busca da cópia, o chamador de produção identificado é `Command.handle` do comando Django `estoque_l130_instante_sem_texto`, que chama a função no ramo `--apply` ([comando:25](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:25), [comando:51](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:51), [comando:105](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:105)). O catálogo o descreve como ato de uma vez, não rotina ([crons.py:791](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/config/crons.py:791)); execução efetiva ou outros chamadores dinâmicos em produção: **[não verificado]**.
-
-O achado “sem ato” precisa de precisão: D3 preserva, se faltar, uma linha `RESPOSTA` da projeção antiga, limpa o par e o carimbo pela porta de lote e grava `LogAuditoria` com antes/depois; não grava uma `DecisaoPergunta` **compensatória da limpeza** ([validacao.py:434](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/validacao.py:434), [models.py:4260](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:4260), [models.py:3485](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:3485)). A falha do evento provoca exceção dentro da transação ([validacao.py:449](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/validacao.py:449)).
-
-A L-130 manda devolver esse estoque a pendente **com trilha** e limpar a resposta inteira; D3 tem a trilha de auditoria descrita acima, de modo que não se comprova ausência total de trilha nem violação dessa cláusula só pela falta de ato compensatório ([LEIS.md:151](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/docs/LEIS.md:151), [validacao.py:449](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/validacao.py:449)). Há, porém, uma **lacuna na sequência de decisões**: seu contrato diz que cada escritor da projeção registra a decisão no mesmo ato, enquanto D3 só preserva a resposta anterior e documenta a ausência deliberada de compensação ([models.py:4134](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:4134), [validacao.py:414](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/validacao.py:414)). A seção 0 item 7 exige escritor canônico e trilha para ação crítica; o uso da porta de lote e do evento, isoladamente, não prova infração dessa redação ([CLAUDE.md:32](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/CLAUDE.md:32)). Se o corte compensatório específico de ressuscitação alcança **também D3**, fica **[nv]**: o texto citado o formula para ressuscitar ([models.py:1671](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:1671)).
-
-A sonda abaixo **não foi executada**. Conta eventos D3 ainda presentes na trilha, tanto ocorrências quanto perguntas distintas; não demonstra eventos removidos, anteriores a essa instrumentação ou ocorridos noutros schemas. A ação e o modelo vêm de [validacao.py:449](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/services/validacao.py:449); os campos consultados são de [core/models.py:285](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/core/models.py:285).
-
-```bash
-python app/manage.py shell <<'FIM_SONDA'
-from django.db import connection, transaction
-from core.models import LogAuditoria
-
-with transaction.atomic():
-    with connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION READ ONLY")
-        cursor.execute("SELECT current_database(), current_schema()")
-        banco, schema = cursor.fetchone()
-
-    eventos = LogAuditoria.objects.filter(
-        acao="l130_instante_sem_texto_devolvida",
-        modelo="PerguntaDisputa",
-    )
-    print("banco=", banco, "schema=", schema)
-    print("eventos_d3_na_trilha=", eventos.count())
-    print("perguntas_distintas=", (
-        eventos.exclude(objeto_id__isnull=True)
-        .order_by().values("objeto_id").distinct().count()
-    ))
-    print("eventos_sem_objeto_id=", eventos.filter(objeto_id__isnull=True).count())
-FIM_SONDA
-```
-
-Para concluir o item (i), falta a listagem **integral** das 1.588 linhas `NAO_COBERTO`, incluindo indiretos e instrumentos, com linhas numeráveis; o total B e sua lista nominal seguem pendentes. **[não verificado]**
-
-_7024 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7026 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
