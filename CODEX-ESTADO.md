@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 10:34** · publicado em **18/11/2026 10:33** (UTC-3)
+> Ultima resposta processada: **18/11/2026 10:39** · publicado em **18/11/2026 10:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 10:39 · sessao 5eee9c2e3d72 · E4C-F4 · verificador · origem=Code
+
+**1. A nova asserção é verdadeira por análise do código; execução do teste [não verificado].** A pauta prevista no segundo comando contém: [nao verificado]
+
+- `(self.saida.pk, 'sem dia do fato')`
+- `(self.volta.pk, '10/2026')`
+
+Os valores numéricos dos PKs são atribuídos pelo banco de teste e estão **[não verificado]**. A fixture cria saída e volta para o mesmo colaborador e com data inicial de 25/09/2026 ([test_bug_par_projetado.py:28](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_projetado.py:28), [test_bug_par_projetado.py:75](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_projetado.py:75), [test_bug_par_projetado.py:87](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_projetado.py:87)).
+
+O caminho é:
+
+1. `_par_163` coloca ambas em U60 e U163; U103 permanece vazio desde a inicialização ([test_bug_par_volta.py:25](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:25), [test_bug_par_volta.py:501](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:501)).
+2. O teste entrega 10/2026, confirma ambas nesse balde e depois altera somente a data da saída para `None` ([test_bug_par_volta.py:496](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:496), [test_bug_par_volta.py:605](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:605), [test_bug_par_volta.py:616](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:616)).
+3. A testemunha consulta a própria pergunta; nesse caminho, não procura a irmã. O contador põe a saída sem dia em `bug_par_103_sem_dia` e a volta entregue em `bug_par_103_pauta_dp` ([validacao.py:209](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/services/validacao.py:209), [materializacao.py:341](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/services/materializacao.py:341)).
+4. Os laços anteriores do comando não incluem essas perguntas: U103 está vazio e o outro laço exclui U163. O comando acrescenta os dois baldes, associa `col<id>` a cada PK e imprime a pauta; a asserção compara apenas PK e rótulo, ordenados ([bug_par_103.py:54](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/management/commands/bug_par_103.py:54), [bug_par_103.py:73](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/management/commands/bug_par_103.py:73), [bug_par_103.py:81](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/management/commands/bug_par_103.py:81), [bug_par_103.py:143](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/management/commands/bug_par_103.py:143), [test_bug_par_volta.py:622](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:622)).
+
+**2. Os três alvos são únicos na respectiva fonte:** contei uma ocorrência textual de cada alvo, nas linhas [bug_par_103.py:148](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/management/commands/bug_par_103.py:148), [bug_par_103.py:86](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/management/commands/bug_par_103.py:86) e [materializacao.py:343](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/services/materializacao.py:343). Os três apontam para o mesmo teste ([bug_par_mutantes.py:113](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:113)).
+
+Por análise estática:
+
+- `u163_l5_fora_da_pauta` deixa a segunda pauta só com `(self.volta.pk, '10/2026')`; a comparação da linha 626 deve falhar por asserção ([bug_par_mutantes.py:120](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:120), [test_bug_par_volta.py:626](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:626)).
+- `u163_fora_da_pauta` elimina a inclusão dos baldes e deve falhar na primeira comparação da pauta, antes da alteração da data ([bug_par_mutantes.py:116](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:116), [test_bug_par_volta.py:611](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:611)).
+- `u163_l1_no_pendente` impede a classificação L1/L5 nesse ramo; após a entrega, as duas passam para `outras`, compondo pendentes, e a asserção de zero deve falhar ([bug_par_mutantes.py:113](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:113), [materializacao.py:352](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/services/materializacao.py:352), [test_bug_par_volta.py:605](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/test_bug_par_volta.py:605)).
+
+A execução efetiva e a confirmação de `falhas > 0`, `erros = 0` para cada mutante ficam **[não verificado]**: são mutantes de integração, cujo executor usa o runner Django de testes ([bug_par_mutantes.py:163](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:163), [bug_par_mutantes.py:170](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:170), [bug_par_mutantes.py:237](/home/ronald/codex_ws/748868e074d9a050fa4d57efe71ae30f9685086a/app/chamados/tests/bug_par_mutantes.py:237)).
+
+## 18/11 10:37 · sessao 9a9ccfe2565c · SONDA-DIA-IMPAR-1811 · sonda · origem=Code
+
+Há traceback em `/app/relatorios/pdf_espelho.py:722`; faltam `FIM_SONDA_CASOS` e `rc_sombra=0` [nao verificado].
+
+```text
+SONDA achadoA_casos agora=18/11 10:37:10 ultima_batida_sombra=18/11 03:55:21
+Traceback (most recent call last):
+  File "/app/manage.py", line 22, in <module>
+    main()
+    ~~~~^^
+  File "/app/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/__init__.py", line 436, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django_tenants/management/commands/tenant_command.py", line 48, in run_from_argv
+    klass.run_from_argv(args)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 420, in run_from_argv
+    self.execute(*args, **cmd_options)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 464, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/commands/shell.py", line 247, in handle
+    exec(options["command"], {**globals(), **self.get_namespace(**options)})
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 1, in <module>
+  File "<string>", line 72, in <module>
+  File "/app/relatorios/pdf_espelho.py", line 722, in _build_story
+    _dir = Paragraph('Emitido %s%s' % (dados['gerado_em_str'], ('<br/><font color="#9a3412">' + _anom_txt + '</font>') if _anom_txt else ''), style_meta)
+                                       ~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'gerado_em_str'
+rc_sombra=1
+```
 
 ## 18/11 10:34 · sessao f9447a60588b · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
 
@@ -952,454 +1017,4 @@ rc_sombra=0
 ```
 linhas copiadas: 7
 
-## 18/11 10:11 · sessao 514b43461e1f · RESPOSTAS-DE-LEI-1811-1010 · leitura · origem=Code
-
-**Hoje, a partição já lê o juiz da L-130:** entre as perguntas vivas, fica pendente aquela cuja disputa está aberta e que não tem **instante e texto não vazio**; as demais ficam no histórico. Portanto, instante sem texto já é pendente hoje, desde que a disputa esteja aberta. [pergunta_no_app.py:76](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/pergunta_no_app.py:76), [juizes.py:1544](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1544)
-
-Depois da F5, o brief propõe ler a sequência de atos, conservando a projeção quando não houver decisão; o aval também determina que a ressuscitada, com o par zerado, apareça pendente. A definição completa para silêncio e absorção ainda é pergunta de lei do item 7; o número total que passará do histórico para pendente, portanto, está **[não verificado]**. [não verificado: anexos `brief.md` §3–4 e `respostas_de_lei_1811_1010.txt` itens 5 e 7]
-
-A ressuscitação atual zera instante e texto sem gravar ato de devolução. A marca `da_ressuscitacao` existe, mas o código a descreve como inerte até o P2; assim, a sonda não consegue identificar todas as ressuscitadas pela sequência de atos. Uma ressuscitada cujo par já está zerado e cuja disputa está aberta **já é pendente hoje**, não uma passagem do histórico no pouso. [models.py:1567](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:1567), [models.py:1619](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:1619), [models.py:4065](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4065), [pergunta_no_app.py:81](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/pergunta_no_app.py:81)
-
-A sonda abaixo chama as funções reais pedidas. Para a previsão, replica a aproximação do anexo: último ato por `ato_em, pk`, com RESPOSTA de texto vazio, RECUSA e REABERTURA como pendentes; mostra absorção rejeitada separadamente, pois sua aplicação à partição está por decidir. Ela não identifica o estoque inteiro de ressuscitadas nem substitui a medição pela função real da F5. [models.py:4081](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4081), [tarefa_do_dia.py:158](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:158), [não verificado: anexo `brief.md` §3 e §6]
-
-```python
-# Executar no shell Django da copia, com acesso de leitura ao banco.
-# Nao grava nem registra atos.
-from collections import Counter
-
-from django.db.models import BooleanField, Case, OuterRef, Q, Subquery, Value, When
-from django.utils import timezone
-
-from chamados.juizes import pergunta_viva, q_nao_respondida, texto_vazio
-from chamados.models import DecisaoPergunta as D, PerguntaDisputa as P
-
-agora = timezone.now()
-ultimo = D.objects.filter(pergunta_id=OuterRef("pk")).order_by("-ato_em", "-pk")
-pendente_hoje = Q(disputa__fechada_em__isnull=True) & q_nao_respondida()
-
-base = (
-    P.objects.filter(P.q_vivas())
-    .annotate(
-        hoje_pendente=Case(
-            When(pendente_hoje, then=Value(True)),
-            default=Value(False),
-            output_field=BooleanField(),
-        ),
-        ultimo_ato=Subquery(ultimo.values("ato")[:1]),
-        ultimo_texto=Subquery(ultimo.values("ato_texto")[:1]),
-        ultima_ausencia_status=Subquery(
-            ultimo.values("absorcao_ausencia__status")[:1]
-        ),
-        ultima_marca_ressuscitacao=Subquery(
-            ultimo.values("da_ressuscitacao")[:1]
-        ),
-    )
-    .select_related("disputa", "celula")
-    .order_by("pk")
-)
-
-cont = Counter()
-prev = Counter()
-indefinidos = Counter()
-
-for p in base.iterator():
-    if not pergunta_viva(p, agora=agora):
-        continue
-
-    cont["vivas"] += 1
-    if p.hoje_pendente:
-        cont["pendentes_hoje"] += 1
-        continue
-
-    cont["historico_hoje"] += 1
-
-    # A disputa fechada permanece fora dos pendentes pela regra do app.
-    if p.disputa.fechada_em is not None:
-        cont["historico_disputa_fechada"] += 1
-        continue
-
-    cont["historico_disputa_aberta"] += 1
-    ato = p.ultimo_ato
-
-    # Categorias mutuamente exclusivas, apenas entre vivas que estao
-    # hoje no historico e cuja disputa esta aberta.
-    if ato == D.RESPOSTA and texto_vazio(p.ultimo_texto):
-        prev["ultimo_ato_resposta_texto_vazio"] += 1
-    elif ato == D.RECUSA:
-        prev["ultimo_ato_recusa"] += 1
-    elif ato == D.REABERTURA:
-        if p.ultima_marca_ressuscitacao:
-            prev["reabertura_marcada_ressuscitacao"] += 1
-        else:
-            prev["reabertura_sem_marca"] += 1
-    elif ato == D.ABSORCAO and p.ultima_ausencia_status == "rejeitada":
-        prev["absorcao_rejeitada_a_decidir"] += 1
-    elif ato is None:
-        # O brief conserva a projecao quando nao ha ato.
-        cont["historico_sem_ato_conservado"] += 1
-    elif ato == D.RESPOSTA:
-        cont["historico_ultimo_ato_resposta_com_texto"] += 1
-    else:
-        # Nao atribuir uma regra de particao aos demais atos.
-        chave = str(ato)
-        if ato == D.ABSORCAO:
-            chave += ":" + str(p.ultima_ausencia_status)
-        indefinidos[chave] += 1
-
-print("agora", timezone.localtime(agora).isoformat())
-print("vivas", cont["vivas"])
-print("pendentes hoje", cont["pendentes_hoje"])
-print("historico hoje", cont["historico_hoje"])
-print("historico hoje com disputa aberta", cont["historico_disputa_aberta"])
-
-print("PREVISAO pela regra do brief, nao funcao do sistema:")
-for motivo in (
-    "ultimo_ato_resposta_texto_vazio",
-    "ultimo_ato_recusa",
-    "reabertura_marcada_ressuscitacao",
-    "reabertura_sem_marca",
-):
-    print(" ", motivo, prev[motivo])
-
-print(
-    " subtotal dos motivos acima, sujeito a identificacao incompleta "
-    "da ressuscitacao:",
-    sum(prev[k] for k in (
-        "ultimo_ato_resposta_texto_vazio",
-        "ultimo_ato_recusa",
-        "reabertura_marcada_ressuscitacao",
-        "reabertura_sem_marca",
-    )),
-)
-print(
-    " absorcao rejeitada: PREVISAO condicional, particao a decidir:",
-    prev["absorcao_rejeitada_a_decidir"],
-)
-print(" demais atos no historico aberto, sem previsao:", dict(indefinidos))
-print(
-    " ressuscitadas totais: NAO IDENTIFICAVEIS pela marca atual; "
-    "nao somar uma categoria estimada ao subtotal"
-)
-```
-
-`P.q_vivas()` é um pré-filtro; o script passa cada candidata pelo juiz real `pergunta_viva`. A face SQL `q_nao_respondida()` corresponde à negação do juiz usado pela partição atual. [models.py:3458](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:3458), [juizes.py:1583](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1583)
-
-Os números de produção e a execução da sonda estão **[não verificados]**: os dados fornecidos não incluem o resultado desta medição, e não há acesso ao banco. O subtotal impresso é uma aproximação sujeita à identificação incompleta da ressuscitação; não deve ser apresentado como o número definitivo de passagem no pouso. [não verificado: anexo `brief.md` §6] [nao verificado]
-
-## 18/11 10:11 · sessao a70628e212cf · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
-
-**Item 1 — ABERTO.** O inventário de escritores e leitores R/V/C e de `registrar` depende da execução e classificação da saída abaixo. A porta `registrar` aparece, por exemplo, em [models.py:1619](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:1619). [não verificado: completude e classificação do inventário]
-
-**Item 2 — ABERTO; medida registrada para E4d.** A sonda identifica perguntas cuja projeção atual de resposta ou validação está nula e que possuem, respectivamente, **algum ato histórico** de resposta ou validação. Esse é o rótulo da medida registrada para o universo solicitado “ato sem projeção”: **projeção atual nula com existência de ato histórico correspondente; não há função real verificada nesta cópia que estabeleça a correspondência ato → projeção**. A função identificada opera no sentido projeção → sequência: [models.py:4122](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4122).
-
-| Medida da sombra | Último físico | Último efetivo | Total |
-|---|---|---|---:|
-| Projeção de resposta nula com ato histórico de resposta | reabertura | reabertura | 52 |
-| Projeção de resposta nula com ato histórico de resposta | recusa | recusa | 7 |
-| Projeção de validação nula com ato histórico de validação | devolução | devolução | 60 |
-| Projeção de validação nula com ato histórico de validação | reabertura | reabertura | 9 |
-| Projeção de validação nula com ato histórico de validação | resposta | resposta | 3 |
-
-Os números são a saída raspada informada para `sombra_db`, com `rc_sombra=0`; não são uma contagem de produção verificada aqui. [não verificado: produção e eventual interseção entre os dois grupos] A reabertura pode limpar a projeção após registrar a fotografia, portanto a medida não classifica essas ocorrências como erros: [disputa_emissao.py:1577](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1577). Os imports e o selo global permanecem abertos até a análise do inventário; há exemplos em [relavrar_via_i6.py:47](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/management/commands/relavrar_via_i6.py:47) e [test_contract_leitores_vitalidade.py:14](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/tests/test_contract_leitores_vitalidade.py:14). [não verificado: exclusividade e classificação completa]
-
-**Item 3 — ABERTO.** Os campos novos e a interpretação de REABERTURA têm pontos conhecidos em [models.py:4071](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4071) e [tarefa_do_dia.py:163](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:163); os demais caminhos dependem da saída e de sua análise. [não verificado: completude]
-
-**Item 4 — ABERTO.** O grafo das duas cascas depende da saída abaixo; existem includes nas duas bases em [base.html:393](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/base.html:393) e [base_app.html:145](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/base_app.html:145). [não verificado: caminhos transitivos e consumidores completos]
-
-Execute o script abaixo **de dentro de `app/`**. Ele imprime ocorrências estáticas e candidatos com arquivo, linha e papel; também sinaliza limites que exigem inspeção. Os papéis são classificações sintáticas, e a saída precisa ser examinada na volta 3: nomes montados em tempo de execução, atribuição de tipos e includes dinâmicos não são resolvidos integralmente por AST. [não verificado: saída e identidade do HEAD]
-
-```python
-import ast
-import os
-import re
-
-CAMPOS = {
-    "respondida_em", "resposta_colab", "validada_em", "validada_por",
-    "materializada_em", "resposta_mantem_validacao", "REABERTURA",
-}
-SIMBOLOS = CAMPOS | {"registrar", "DecisaoPergunta"}
-ALVOS_IMPORT = {
-    "relavrar_via_i6", "dedup_perguntas_fato", "worklist",
-    "curar_perguntas_em_limbo",
-    "auditar_invariantes_chamados", "backfill_decisoes_pergunta",
-    "reconciliar_fantasmas",
-    "universo_i6", "aplicar", "CONTADORES_DO_APPLY",
-    "_parse_pendentes", "MODULOS_ALVO",
-}
-ARQUIVOS_IMPORT = {
-    "relavrar_via_i6.py", "dedup_perguntas_fato.py",
-    "worklist.py", "curar_perguntas_em_limbo.py",
-}
-BASES = ("base.html", "base_app.html")
-SKIP = {".git", "__pycache__", ".venv", "venv", "node_modules"}
-encontrados = []
-
-
-def emitir(path, linha, papel, detalhe):
-    detalhe = re.sub(r"\s+", " ", str(detalhe)).strip()
-    encontrados.append((path.replace(os.sep, "/"), linha, papel, detalhe))
-
-
-def arquivos():
-    for raiz, dirs, nomes in os.walk("."):
-        dirs[:] = sorted(d for d in dirs if d not in SKIP)
-        for nome in sorted(nomes):
-            if nome.endswith((".py", ".html")):
-                yield os.path.normpath(os.path.join(raiz, nome))
-
-
-def fonte_no(no):
-    try:
-        return ast.unparse(no)
-    except Exception:
-        return type(no).__name__
-
-
-def nomes_campo(texto):
-    # Aceita também chaves ORM como validada_em__isnull.
-    return sorted(
-        c for c in SIMBOLOS
-        if re.search(r"(?<![A-Za-z0-9_])" + re.escape(c)
-                     + r"(?=$|[^A-Za-z0-9_]|__)", texto)
-    )
-
-
-def modulo_atual(path):
-    partes = path[:-3].split(os.sep)
-    if partes[-1] == "__init__":
-        partes.pop()
-    return ".".join(partes)
-
-
-def resolver_import(path, no):
-    modulo = no.module or ""
-    if not no.level:
-        return modulo
-    partes = modulo_atual(path).split(".")
-    if not path.endswith(os.sep + "__init__.py"):
-        partes = partes[:-1]
-    sobe = no.level - 1
-    if sobe:
-        partes = partes[:-sobe] if sobe <= len(partes) else []
-    return ".".join(partes + ([modulo] if modulo else []))
-
-
-class Inventario(ast.NodeVisitor):
-    def __init__(self, path):
-        self.path = path
-        self.escopo = []
-        self.pais = []
-
-    def contexto(self):
-        return ".".join(self.escopo) or "<modulo>"
-
-    def visit(self, no):
-        self.pais.append(no)
-        try:
-            return super().visit(no)
-        finally:
-            self.pais.pop()
-
-    def em_escopo(self, no):
-        self.escopo.append(no.name)
-        self.generic_visit(no)
-        self.escopo.pop()
-
-    visit_FunctionDef = em_escopo
-    visit_AsyncFunctionDef = em_escopo
-    visit_ClassDef = em_escopo
-
-    def visit_Import(self, no):
-        for alias in no.names:
-            relevante = (
-                os.path.basename(self.path) in ARQUIVOS_IMPORT
-                or any(x in alias.name.split(".") for x in ALVOS_IMPORT)
-            )
-            if relevante:
-                emitir(self.path, no.lineno, "IMPORT",
-                       "%s; import %s; alias=%s" %
-                       (self.contexto(), alias.name, alias.asname or "-"))
-        self.generic_visit(no)
-
-    def visit_ImportFrom(self, no):
-        resolvido = resolver_import(self.path, no)
-        for alias in no.names:
-            relevante = (
-                os.path.basename(self.path) in ARQUIVOS_IMPORT
-                or any(x in resolvido.split(".") for x in ALVOS_IMPORT)
-                or alias.name in ALVOS_IMPORT
-                or alias.name == "*"
-            )
-            if relevante:
-                emitir(self.path, no.lineno, "IMPORT_FROM",
-                       "%s; escrito=%s%s; resolvido=%s; nome=%s; alias=%s" %
-                       (self.contexto(), "." * no.level, no.module or "",
-                        resolvido, alias.name, alias.asname or "-"))
-        self.generic_visit(no)
-
-    def visit_Attribute(self, no):
-        if no.attr in SIMBOLOS:
-            papel = ("ESCRITA_ATTRIBUTE" if isinstance(no.ctx, ast.Store)
-                     else "EXCLUSAO_ATTRIBUTE" if isinstance(no.ctx, ast.Del)
-                     else "LEITURA_ATTRIBUTE")
-            if no.attr == "registrar":
-                papel = "REGISTRAR_CANDIDATO"
-            emitir(self.path, no.lineno, papel,
-                   "%s; %s" % (self.contexto(), fonte_no(no)))
-        self.generic_visit(no)
-
-    def visit_Name(self, no):
-        if no.id in SIMBOLOS:
-            emitir(self.path, no.lineno, "NOME_CANDIDATO",
-                   "%s; %s; contexto=%s" %
-                   (self.contexto(), no.id, type(no.ctx).__name__))
-        self.generic_visit(no)
-
-    def visit_Constant(self, no):
-        if isinstance(no.value, str):
-            campos = nomes_campo(no.value)
-            if campos:
-                emitir(self.path, no.lineno, "STRING_CANDIDATA",
-                       "%s; campos=%s; valor=%r" %
-                       (self.contexto(), ",".join(campos), no.value))
-        self.generic_visit(no)
-
-    def visit_Call(self, no):
-        func = no.func
-        nome = func.attr if isinstance(func, ast.Attribute) else (
-            func.id if isinstance(func, ast.Name) else "")
-        if nome in {"getattr", "setattr", "delattr", "hasattr"}:
-            if len(no.args) >= 2:
-                chave = no.args[1]
-                if isinstance(chave, ast.Constant) and isinstance(chave.value, str):
-                    if nomes_campo(chave.value):
-                        emitir(self.path, no.lineno, nome.upper(),
-                               "%s; %s" % (self.contexto(), fonte_no(no)))
-                else:
-                    emitir(self.path, no.lineno, "ACESSO_DINAMICO_NAO_RESOLVIDO",
-                           "%s; %s" % (self.contexto(), fonte_no(no)))
-        if nome in {"update", "filter", "exclude", "get", "values",
-                    "values_list", "create", "get_or_create",
-                    "update_or_create", "order_by", "only", "defer"}:
-            for kw in no.keywords:
-                if kw.arg is None:
-                    emitir(self.path, no.lineno, "KWARGS_DINAMICOS_NAO_RESOLVIDOS",
-                           "%s; %s" % (self.contexto(), fonte_no(no)))
-                elif nomes_campo(kw.arg):
-                    papel = ("ORM_ESCRITA_CANDIDATA" if nome in
-                             {"update", "create", "get_or_create",
-                              "update_or_create"} else "ORM_LEITURA_CANDIDATA")
-                    emitir(self.path, no.lineno, papel,
-                           "%s; chamada=%s; chave=%s" %
-                           (self.contexto(), nome, kw.arg))
-            for arg in no.args:
-                if isinstance(arg, ast.Starred):
-                    emitir(self.path, no.lineno, "ARGS_DINAMICOS_NAO_RESOLVIDOS",
-                           "%s; %s" % (self.contexto(), fonte_no(no)))
-        if nome == "registrar":
-            emitir(self.path, no.lineno, "CHAMADA_REGISTRAR_CANDIDATA",
-                   "%s; %s" % (self.contexto(), fonte_no(no)))
-        self.generic_visit(no)
-
-
-templates = {}
-arestas = []
-exibem = set()
-tag_re = re.compile(r"({{.*?}}|{%.*?%})", re.S)
-diretiva_re = re.compile(r"^{%\s*(include|extends)\s+(.+?)\s*%}$", re.S)
-literal_re = re.compile(r"""^\s*(['"])(.*?)\1(?:\s|$)""", re.S)
-
-for path in arquivos():
-    path = path.removeprefix("./")
-    try:
-        with open(path, encoding="utf-8") as f:
-            conteudo = f.read()
-    except (OSError, UnicodeError) as exc:
-        emitir(path, 1, "ERRO_LEITURA", exc)
-        continue
-
-    if path.endswith(".py"):
-        try:
-            arvore = ast.parse(conteudo, filename=path)
-        except (SyntaxError, ValueError) as exc:
-            emitir(path, getattr(exc, "lineno", 1) or 1, "ERRO_AST", exc)
-            continue
-        Inventario(path).visit(arvore)
-        continue
-
-    # Indexa todos os diretórios chamados templates, inclusive os de apps.
-    partes = path.split(os.sep)
-    if "templates" in partes:
-        i = len(partes) - 1 - partes[::-1].index("templates")
-        nome_template = "/".join(partes[i + 1:])
-        templates.setdefault(nome_template, []).append(path)
-    else:
-        nome_template = path.replace(os.sep, "/")
-
-    for m in tag_re.finditer(conteudo):
-        tag = m.group(0)
-        linha = conteudo.count("\n", 0, m.start()) + 1
-        campos = nomes_campo(tag)
-        if campos:
-            emitir(path, linha, "TEMPLATE_LEITURA_CANDIDATA",
-                   "campos=%s; %s" % (",".join(campos), tag))
-        if re.search(r"(?i)pergunta", tag):
-            exibem.add(nome_template)
-            emitir(path, linha, "TEMPLATE_PERGUNTA_CANDIDATO", tag)
-        d = diretiva_re.match(tag)
-        if d:
-            tipo, expressao = d.groups()
-            literal = literal_re.match(expressao)
-            if literal:
-                destino = literal.group(2)
-                arestas.append((nome_template, destino, path, linha, tipo))
-            else:
-                emitir(path, linha, "TEMPLATE_DESTINO_DINAMICO_NAO_RESOLVIDO",
-                       "%s; %s" % (tipo, expressao))
-
-print("=== OCORRENCIAS PYTHON, IMPORTS E TEMPLATES ===")
-for path, linha, papel, detalhe in sorted(encontrados):
-    print("%s:%s | %s | %s" % (path, linha, papel, detalhe))
-
-print("=== GRAFO DE INCLUDES E EXTENDS A PARTIR DAS BASES ===")
-# Inclui tanto includes saindo da base quanto filhos que herdam dela.
-alcancados = set(BASES)
-mudou = True
-while mudou:
-    mudou = False
-    for origem, destino, path, linha, tipo in arestas:
-        novo = None
-        if tipo == "include" and origem in alcancados:
-            novo = destino
-        elif tipo == "extends" and destino in alcancados:
-            novo = origem
-        if novo is not None and novo not in alcancados:
-            alcancados.add(novo)
-            mudou = True
-
-for origem, destino, path, linha, tipo in sorted(arestas):
-    if (tipo == "include" and origem in alcancados) or (
-        tipo == "extends" and destino in alcancados
-    ):
-        status = "resolvido" if destino in templates else "DESTINO_NAO_ENCONTRADO"
-        if len(templates.get(destino, [])) > 1:
-            status = "DESTINO_AMBIGUO"
-        print("%s:%s | %s | %s -> %s | %s | arquivos=%s" %
-              (path, linha, tipo, origem, destino, status,
-               ",".join(templates.get(destino, [])) or "-"))
-
-print("=== TEMPLATES ALCANCADOS COM PERGUNTA CANDIDATA ===")
-for nome in sorted(alcancados & exibem):
-    print("%s | arquivos=%s" %
-          (nome, ",".join(templates.get(nome, [])) or "NAO_ENCONTRADO"))
-
-print("=== LIMITES ===")
-print("Classificacoes sao sintaticas e incluem candidatos e falsos positivos.")
-print("Inspecionar erros, aliases, chamadas indiretas e acessos dinamicos.")
-print("Destinos dinamicos, templates gerados e exibicao sem nome 'pergunta' "
-      "exigem analise adicional.")
-```
-
-alcance nao verificado restante: 4
-
-_6897 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6899 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
