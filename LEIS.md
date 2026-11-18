@@ -373,6 +373,9 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 
 ## CORTES que viraram lei
 
+- `COMPLEMENTO-1-CORTE-U163-NO-K6` -> **L-092**
+- `CORTE-U163-NO-K6` -> **L-092**
+- `CORTE-BUG-PAR-FORA163` -> **L-092**
 - `F5-L1-VALE-L130-1811` -> **L-130**
 - `CORTE-RESSUSCITAR-TEM-DONO` -> **L-130**
 - `RESPOSTAS-1711-1050` -> **L-130**

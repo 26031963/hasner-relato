@@ -1,7 +1,747 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 13:32** · publicado em **18/11/2026 13:34** (UTC-3)
+> Ultima resposta processada: **18/11/2026 13:42** · publicado em **18/11/2026 13:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 13:42 · sessao 411db8141832 · LAUDO-[nome]-1811-1340 · leitura · origem=Code
+
+Os dados fornecidos **não permitem informar o total de dias e minutos do universo pedido**, nem confirmar os dois casos nominais: o anexo os152 traz um subconjunto de marcações ímpares e não inclui as linhas completas dos casos. A sonda abaixo prepara essa medição; ela não foi executada aqui. [não verificado]
+
+## Campos antes da leitura
+
+Campos usados diretamente pela sonda e pelas funções chamadas, com suas definições:
+
+- `Colaborador.empresa`: [colaboradores/models.py:321](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:321); a identificação `pk` é a chave primária implícita do modelo. [colaboradores/models.py:283](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:283)
+- `Batida.colaborador`, `timestamp`, `tipo` e `retratada_em`: [ponto/models.py:22](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:22), [ponto/models.py:23](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:23), [ponto/models.py:24](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:24), [ponto/models.py:67](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:67).
+- `DiaPago.colaborador`, `mes`, `ano`, `data`, `tipo`, `versao` e `horas_intra_indenizada`: [ponto/models.py:315](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:315), [ponto/models.py:317](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:317), [ponto/models.py:318](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:318), [ponto/models.py:319](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:319), [ponto/models.py:321](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:321), [ponto/models.py:322](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:322), [ponto/models.py:337](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:337).
+- `TipoEscala.intervalo_modo`, `intervalo_indenizavel`, `intervalo_duracao_min` e horários de intervalo: [escala/models.py:103](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:103), [escala/models.py:108](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:108), [escala/models.py:110](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:110), [escala/models.py:52](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:52).
+- `EscalaColaborador.colaborador`, `tipo_escala`, `data_inicio`, `data_fim`, `ativa`: [escala/models.py:872](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:872). `CelulaDia.colaborador`, `data` e `origem`: [escala/models.py:1681](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:1681).
+- `PerguntaDisputa.celula`, `motivo`, `data_evento`, `colaborador`, `resposta_colab` e `respondida_em`: [chamados/models.py:2527](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2527), [chamados/models.py:2534](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2534), [chamados/models.py:2536](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2536), [chamados/models.py:2546](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2546), [chamados/models.py:2560](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2560).
+
+## Funções reais e achado do código
+
+- **Espelho:** a view chama `espelho_do_colab`; esta chama `autoridade_do_periodo`, que carrega `batidas_apuraveis` e, havendo escalas, chama `apurar_por_fatia`. [ponto/views.py:160](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:160), [ponto/services/espelho.py:1227](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:1227), [ponto/services/espelho.py:1022](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:1022), [ponto/services/espelho.py:1162](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:1162).
+- **Gestão de HE:** a tela chama `he_pendente_lavrado.ler` e `gestao_he.enriquecer`; esta consulta `estado_por_dia`, que lê `DecisaoHE.objects.vigentes()`. Isso responde à pendência de HE e sua decisão, não é a função que decide a intrajornada. [ponto/views.py:932](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:932), [ponto/views.py:945](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:945), [ponto/services/gestao_he.py:63](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:63).
+- **Motor:** não há uma única implementação de indenização para todos os regimes. `Motor12x36.calcular_periodo` escreve os minutos suprimidos; `MotorComercial.calcular_periodo` tem sua própria condição; `MotorTurnoPartido.calcular_mes` trata o intervalo entre períodos. O mínimo vem de `_intra_minima`, e o intervalo reconhecido vem do pareador. [ponto/motor_calculo_v2.py:2750](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2750), [ponto/motor_calculo_v2.py:3215](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:3215), [ponto/motor_calculo_v2.py:2964](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2964), [ponto/motor_calculo_v2.py:1805](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1805), [ponto/motor_calculo_v2.py:1892](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1892).
+- **PDF:** `_coletar_dados_espelho` chama `apurar_por_fatia` para seu resultado e chama `espelho_do_colab` para as linhas diárias. [relatorios/pdf_espelho.py:417](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/pdf_espelho.py:417), [relatorios/pdf_espelho.py:596](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/pdf_espelho.py:596).
+
+O motor declara que **não usa `TipoEscala.intervalo_indenizavel` para impedir a indenização**; portanto, `False` é um filtro do censo pedido, não uma condição aplicada pelo motor. [ponto/motor_calculo_v2.py:817](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:817)
+
+O anexo informa **152 dias** no recorte os152, dos quais **151 com a flag `False` e um com `True`**. Ele seleciona número ímpar de batidas, exige `DiaPago` e `pago_do_dia`, e exige pago maior que o realizado do pareador em mais de um minuto. Assim, ficaram fora todos os dias pares — inclusive eventuais dias de duas ou quatro batidas — e também os ímpares que não satisfazem as demais condições. A quantidade e os minutos deixados de fora não aparecem no dado fornecido. [não verificado: anexo os152.r e os152_os24.py fornecidos no pedido, sem arquivo e linhas acessíveis]
+
+Para **col868 em 14/11, pergunta 39550**, e **col934 em 15/11, pergunta 39556**, “duas batidas e 60 minutos” é a afirmação do aval; não há no recorte apresentado resultado que a confirme. [não verificado]
+
+## Sonda para o envelope na sombra
+
+A sonda mede o **motor recalculado em leitura**, para todos os colaboradores encontrados, usando a janela da competência de cada empresa. Mostra também a rubrica `DiaPago` gravada nos dois casos, pois ela pode representar outro momento de cálculo. Agrupa as batidas apuráveis pelo `dia_das_batidas`, a mesma autoridade usada pelo espelho, e informa também as classes 0 e 1 para não escondê-las. [ponto/turnos.py:2868](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:2868), [ponto/turnos.py:2898](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:2898), [ponto/services/dia_pago.py:109](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:109).
+
+Execute o bloco como entrada do `manage.py tenant_command shell --schema=juliani`. Ele exige PostgreSQL para estabelecer a transação `READ ONLY`; se isso falhar, não prossegue com a leitura. Os tracebacks mostram quadros e tipo da exceção, sem mensagem de exceção ou conteúdo de variáveis, para reduzir a exposição de dados pessoais. [não verificado: execução no envelope]
+
+```python
+import sys
+import traceback
+import logging
+from collections import Counter, defaultdict
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador
+from chamados.models import PerguntaDisputa
+from escala.alimentacao import escalas_do_periodo, vinculo_do_dia
+from ponto.janelas import janela_fechamento
+from ponto.models import DiaPago
+from ponto.services.dia_pago import _dia_de
+from ponto.services.espelho import autoridade_do_periodo, espelho_do_colab
+from ponto.services import gestao_he, he_pendente_lavrado
+from ponto.turnos import dia_das_batidas
+from relatorios.pdf_espelho import _coletar_dados_espelho
+
+logging.disable(logging.CRITICAL)
+
+def erro(item):
+    exc = sys.exc_info()[1]
+    print("TRACEBACK", item)
+    traceback.print_tb(exc.__traceback__, file=sys.stdout)
+    print("TIPO_ERRO", type(exc).__name__)
+
+def faixa(n):
+    if n >= 4:
+        return "4+"
+    return str(n)
+
+def linha_motor(col, ini, fim):
+    aut = autoridade_do_periodo(col, ini, fim)
+    mapa_batida = dia_das_batidas(col, ini, fim)
+    contagem = Counter(
+        mapa_batida[b.pk]
+        for b in aut.batidas
+        if b.pk in mapa_batida and ini <= mapa_batida[b.pk] <= fim
+    )
+    minutos = defaultdict(float)
+    resultado = aut.resultado
+    mapa_periodo = getattr(resultado, "dia_da_jornada", None)
+    for periodo in list(resultado.periodos) + list(resultado.periodos_ft):
+        dia = _dia_de(periodo, mapa_periodo)
+        if dia is not None and ini <= dia <= fim:
+            minutos[dia] += float(
+                periodo.minutos_intrajornada_indenizada or 0
+            )
+    return contagem, minutos
+
+try:
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+            )
+
+        agora = timezone.now()
+        totais = defaultdict(lambda: [0, 0.0])
+        sem_escala = [0, 0.0]
+        erros = 0
+
+        # Censo: todos os colaboradores cadastrados; a janela é da empresa.
+        try:
+            ids = list(
+                Colaborador.objects.order_by("pk")
+                .values_list("pk", flat=True)
+            )
+            for pk in ids:
+                try:
+                    # Savepoint permite continuar após erro de uma consulta.
+                    with transaction.atomic():
+                        col = Colaborador.objects.select_related(
+                            "empresa"
+                        ).get(pk=pk)
+                        ini, fim = janela_fechamento(11, 2026, col.empresa)
+                        contagem, minutos = linha_motor(col, ini, fim)
+                        escalas = escalas_do_periodo(pk, ini, fim)
+
+                        for dia, valor in minutos.items():
+                            if valor <= 0:
+                                continue
+                            vinculo = vinculo_do_dia(pk, dia, escalas)
+                            te = vinculo.tipo_escala if vinculo else None
+                            if te is None:
+                                sem_escala[0] += 1
+                                sem_escala[1] += valor
+                                continue
+                            if te.intervalo_indenizavel is False:
+                                grupo = faixa(contagem.get(dia, 0))
+                                totais[grupo][0] += 1
+                                totais[grupo][1] += valor
+                except Exception:
+                    erros += 1
+                    print("ERRO_COL col%d" % pk)
+                    erro("CENSO_COL")
+
+            print("CENSO_COLABORADORES", len(ids))
+            for grupo in ("0", "1", "2", "3", "4+"):
+                dias, mins = totais[grupo]
+                print(
+                    "MOTOR_FALSE batidas=%s dias=%d minutos=%.2f"
+                    % (grupo, dias, mins)
+                )
+            print(
+                "SEM_ESCALA dias=%d minutos=%.2f"
+                % (sem_escala[0], sem_escala[1])
+            )
+            print("ERROS_COLABORADORES", erros)
+            if erros:
+                print("RESULTADO_CENSO_INCOMPLETO")
+        except Exception:
+            erro("CENSO")
+        finally:
+            print("FIM_SONDA_CENSO")
+
+        # Conferência dos dois dias e da identidade das perguntas.
+        for pk, dia_iso, pergunta_pk in (
+            (868, "2026-11-14", 39550),
+            (934, "2026-11-15", 39556),
+        ):
+            item = "col%d" % pk
+            try:
+                with transaction.atomic():
+                    from datetime import date
+
+                    dia = date.fromisoformat(dia_iso)
+                    col = Colaborador.objects.select_related(
+                        "empresa"
+                    ).get(pk=pk)
+                    ini, fim = janela_fechamento(11, 2026, col.empresa)
+                    contagem, minutos = linha_motor(col, ini, fim)
+                    escalas = escalas_do_periodo(pk, ini, fim)
+                    vinculo = vinculo_do_dia(pk, dia, escalas)
+                    te = vinculo.tipo_escala if vinculo else None
+
+                    print(
+                        "CASO %s dia=%s batidas_apuraveis=%d "
+                        "motor_minutos=%.2f intervalo_indenizavel=%s"
+                        % (
+                            item, dia_iso, contagem.get(dia, 0),
+                            minutos.get(dia, 0.0),
+                            te.intervalo_indenizavel if te else "SEM_ESCALA",
+                        )
+                    )
+
+                    linhas = DiaPago.objects.filter(
+                        colaborador=col, mes=11, ano=2026,
+                        versao="motor", tipo=DiaPago.TIPO_DIA, data=dia,
+                    ).values_list("horas_intra_indenizada", flat=True)
+                    for horas in linhas:
+                        print(
+                            "DIA_PAGO %s dia=%s minutos=%.2f"
+                            % (item, dia_iso, float(horas or 0) * 60)
+                        )
+
+                    p = PerguntaDisputa.objects.filter(
+                        pk=pergunta_pk
+                    ).values(
+                        "colaborador_id", "motivo",
+                        "data_evento", "celula__data"
+                    ).first()
+                    if p is None:
+                        print("PERGUNTA %s AUSENTE" % item)
+                    else:
+                        print(
+                            "PERGUNTA %s mesma_pessoa=%s motivo=%s "
+                            "data_evento=%s data_celula=%s"
+                            % (
+                                item, p["colaborador_id"] == pk,
+                                p["motivo"], p["data_evento"],
+                                p["celula__data"],
+                            )
+                        )
+
+                    # Leitores reais: apenas características não pessoais.
+                    esp = espelho_do_colab(
+                        col, fim, ini, fim, ano=2026, agora=agora
+                    )
+                    ed = next(
+                        (d for d in esp["dias"] if d["data"] == dia), None
+                    )
+                    print(
+                        "ESPELHO %s dia_presente=%s batidas=%s"
+                        % (
+                            item, ed is not None,
+                            len(ed["batidas"]) if ed else "AUSENTE",
+                        )
+                    )
+
+                    pdf = _coletar_dados_espelho(
+                        col, ini, fim, agora=agora
+                    )
+                    pd = next(
+                        (d for d in pdf["dias"] if d["data"] == dia), None
+                    )
+                    print(
+                        "PDF %s dia_presente=%s batidas=%s"
+                        % (
+                            item, pd is not None,
+                            len(pd["batidas"]) if pd else "AUSENTE",
+                        )
+                    )
+
+                    retrato, calculado_em = he_pendente_lavrado.ler(
+                        col.empresa, 11, 2026
+                    )
+                    vis = gestao_he.enriquecer(
+                        retrato,
+                        limite=int(
+                            getattr(
+                                col.empresa, "limite_decisao_he_min", 0
+                            ) or 0
+                        ),
+                    )
+                    presente = any(
+                        c["colab"] == pk for c in vis["colabs"]
+                    )
+                    print(
+                        "GESTAO_HE %s retrato_existe=%s "
+                        "calculado_em=%s colab_presente=%s"
+                        % (
+                            item, retrato is not None,
+                            calculado_em, presente,
+                        )
+                    )
+            except Exception:
+                erro(item)
+            finally:
+                print("FIM_SONDA_%s" % item.upper())
+
+        # A transação é somente leitura; não há chamada de lavratura.
+except Exception:
+    erro("ENVELOPE")
+finally:
+    print("FIM_SONDA_ENVELOPE")
+```
+
+A comparação numérica com os **151** exige o resultado do censo e, para uma interseção exata, as linhas completas D2 ou a reprodução do filtro os152 no mesmo instante. A diferença entre os totais, por si só, não mede essa interseção: o os152 usa `DiaPago` gravado e a sonda acima usa o motor recalculado. [não verificado]
+
+## 18/11 13:42 · sessao 05766d97b939 · LAUDO-[nome]-1811-1340 · leitura · origem=Code
+
+Os dados raspados relatam que **col868, em 14/11, aparecia no espelho com 18 min antes da entrada e 3 min depois da saída, e não aparecia na Gestão de HE**. A causa, a hora do retrato, a presença do dia nele, a situação cadastral, os filtros efetivamente usados e o instante da mudança permanecem **[não verificado]**. O anexo é o dado fornecido na solicitação, sem arquivo:linha disponível **[não verificado]**.
+
+A cópia disponível não tem metadados Git acessíveis no diretório examinado; portanto, não pude confirmar que corresponde ao hash informado **[não verificado]**.
+
+**Campos relevantes antes da leitura**
+
+- `MetricaSnapshot`: `chave`, `escopo`, `escopo_id`, `data_ini`, `data_ref`, `numerador`, `denominador`, `valor`, `detalhe` e `calculado_em`. O retrato é o JSON `detalhe`; a data e hora são `calculado_em`. [app/inteligencia/models.py:81](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/inteligencia/models.py:81)
+- `Colaborador`: `empresa`, `posto`, `situacao`, `data_admissao` e `data_demissao`; o identificador interno é a chave primária. [app/colaboradores/models.py:283](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:283) [app/colaboradores/models.py:319](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:319)
+- `Empresa`: `dia_inicio_competencia`, `janela_he_ativa`, `janela_he_piso_min`, `limite_decisao_he_min`, `janela_he_teto_min`, `janela_he_saida_ativa`, `janela_he_saida_teto_min` e `janela_he_desde`. [app/colaboradores/models.py:46](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:46) [app/colaboradores/models.py:58](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:58) [app/colaboradores/models.py:69](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:69) [app/colaboradores/models.py:82](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:82) [app/colaboradores/models.py:90](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:90) [app/colaboradores/models.py:101](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:101) [app/colaboradores/models.py:117](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/models.py:117)
+- `DecisaoHE`: `colaborador`, `data`, `estado`, `minutos_na_decisao`, `motivo`, `decidida_por`, `origem`, `revogada_em`, `revogada_motivo` e `minutos_na_revogacao`. `vigentes()` exclui as revogadas. [app/ponto/models.py:1265](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:1265) [app/ponto/models.py:1300](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:1300) [app/ponto/models.py:1335](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:1335)
+- `Batida`: `colaborador`, `timestamp`, `tipo`, `sequencia`, `is_intervalo`, `escala` e `origem`. O resultado do motor não é modelo: `PeriodoCalculo` contém `entrada`, `saida` e `minutos_fora_janela`. [app/ponto/models.py:22](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:22) [app/ponto/models.py:45](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:45) [app/ponto/motor_calculo_v2.py:208](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:208)
+
+**Funções reais e efeito dos filtros**
+
+- A tela do espelho chama `espelho_do_colab`; este chama `autoridade_do_periodo` e `montar_dias`. O montador chama `marcar_pontas_fora`, acrescenta pontas publicadas pelo motor e publica `he_fora_da_janela`. O texto “sem decisão” está fixo no template; ele não comprova ausência de decisão vigente. [app/ponto/views.py:156](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:156) [app/ponto/services/espelho.py:1225](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:1225) [app/ponto/services/espelho.py:721](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:721) [app/templates/ponto/espelho.html:189](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/templates/ponto/espelho.html:189)
+- A Gestão chama `he_pendente_lavrado.ler` e `gestao_he.enriquecer`; a decisão viva vem de `estado_por_dia` e `DecisaoHE.objects.vigentes()`. O PDF da Gestão chama os mesmos leitores. O cartão PDF chama `espelho_do_colab`. [app/ponto/views.py:932](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:932) [app/ponto/services/gestao_he.py:63](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:63) [app/ponto/views.py:804](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:804) [app/relatorios/pdf_espelho.py:596](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/pdf_espelho.py:596)
+- O espelho obtém o resultado por `autoridade_do_periodo`, que usa `apurar_por_fatia` quando há escalas e, no outro ramo, `motor.calcular_mes`. Na implementação `Motor12x36.calcular_periodo`, a linha indicada soma os minutos retirados da entrada e da saída; não há evidência fornecida de que esse seja o ramo específico de col868. [app/ponto/services/espelho.py:1162](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:1162) [app/ponto/motor_calculo_v2.py:2750](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2750) [app/ponto/motor_calculo_v2.py:2787](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2787) **[não verificado]**
+- Na apuração do retrato, o código seleciona colaboradores com `situacao='ativo'` no momento da apuração e só inclui dias dentro da competência que tenham pontas publicadas pelo espelho. Na leitura da Gestão, o limite classifica a ponta por `acima_do_limite`; os filtros de estado e dono podem retirar dias e, se não sobrar nenhum, a linha. Busca, praça e posto também podem retirar a linha. Isso não identifica qual condição ocorreu no caso. [app/ponto/services/he_pendente_lavrado.py:89](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:89) [app/ponto/services/he_pendente_lavrado.py:114](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:114) [app/ponto/services/gestao_he.py:274](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:274) [app/ponto/services/gestao_he.py:317](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:317) **[não verificado]**
+
+A sonda abaixo assume **2026** e interpreta `col868` como chave primária 868; essas correspondências precisam ser confirmadas no envelope **[não verificado]**. Ela imprime primeiro os nomes de todos os campos dos modelos diretamente consultados, usa as funções reais, abre uma transação PostgreSQL `READ ONLY` e força rollback. Os períodos do motor são impressos com suas datas de entrada e saída, sem atribuí-los por conta própria ao dia 14. O traceback preserva a pilha e a classe da exceção, omitindo a mensagem, que pode conter dado pessoal **[não verificado]**.
+
+Execute o texto pelo envelope na sombra com `manage.py tenant_command shell --schema=juliani`. Não execute a geração do PDF: a view da Gestão chama o gerador auditável, enquanto a sonda chama os leitores que a precedem. [app/ponto/views.py:870](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/views.py:870)
+
+```python
+import datetime as dt
+import sys
+import traceback
+
+ITEM = "A"
+COL = 868
+DIA = dt.date(2026, 11, 14)
+ANO, MES = 2026, 11
+
+
+def falha(etapa):
+    print("col868 ERRO", etapa)
+    traceback.print_tb(sys.exc_info()[2], file=sys.stdout)
+    print("TIPO_EXCECAO", sys.exc_info()[0].__name__,
+          "(mensagem omitida para proteção de dados)")
+
+
+def passo(nome, funcao):
+    try:
+        # Um savepoint permite continuar após erro de consulta.
+        with transaction.atomic():
+            return funcao()
+    except Exception:
+        falha(nome)
+        return None
+
+
+try:
+    from django.db import connection, transaction
+    from django.utils import timezone
+    from colaboradores.models import Colaborador, Empresa
+    from inteligencia.models import MetricaSnapshot
+    from ponto.models import Batida, DecisaoHE
+    from ponto.janelas import janela_fechamento
+    from ponto.services import gestao_he as G
+    from ponto.services import he_pendente_lavrado as L
+    from ponto.services.espelho import espelho_do_colab
+
+    # Metadados locais dos modelos, antes de qualquer consulta ao banco.
+    for modelo in (Colaborador, Empresa, MetricaSnapshot, Batida, DecisaoHE):
+        print("col868 [nome]", modelo._meta.label,
+              [campo.name for campo in modelo._meta.fields])
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION READ ONLY")
+
+        def cadastro():
+            c = Colaborador.objects.select_related("empresa").get(pk=COL)
+            e = c.empresa
+            print(
+                "col868 CADASTRO",
+                "situacao", c.situacao,
+                "admissao", c.data_admissao,
+                "demissao", c.data_demissao,
+                "empresa_corresponde_jsp",
+                "jsp" in (e.razao_social or "").lower()
+                or "jsp" in (e.nome_fantasia or "").lower(),
+                "corte", e.dia_inicio_competencia,
+                "janela_ativa", e.janela_he_ativa,
+                "janela_desde", e.janela_he_desde,
+                "piso", e.janela_he_piso_min,
+                "saida_ativa", e.janela_he_saida_ativa,
+                "teto_entrada", e.janela_he_teto_min,
+                "teto_saida", e.janela_he_saida_teto_min,
+                "limite_decisao", e.limite_decisao_he_min,
+            )
+            return c
+
+        c = passo("cadastro", cadastro)
+
+        if c is not None:
+            e = c.empresa
+            janela = passo(
+                "janela",
+                lambda: janela_fechamento(MES, ANO, e),
+            )
+            if janela is not None:
+                ini, fim = janela
+                print("col868 JANELA", ini, fim,
+                      "contem_dia", ini <= DIA <= fim)
+
+                def retrato():
+                    foto, calculado_em = L.ler(e, MES, ANO)
+                    print("col868 RETRATO_EXISTE", foto is not None)
+                    print("col868 RETRATO_CALCULADO_EM", calculado_em)
+                    if foto is None:
+                        return None
+                    print("col868 RETRATO_JANELA",
+                          foto.get("data_ini"), foto.get("data_ref"),
+                          "erros_apuracao", foto.get("erros"))
+                    linhas = [
+                        x for x in (foto.get("colabs") or [])
+                        if x.get("colab") == COL
+                    ]
+                    print("col868 RETRATO_COLAB_EXISTE", bool(linhas))
+                    for linha in linhas:
+                        dias = [
+                            d for d in (linha.get("dias") or [])
+                            if d.get("data") == str(DIA)
+                        ]
+                        print("col868 RETRATO_DIA_EXISTE", bool(dias))
+                        for d in dias:
+                            pontas = [
+                                {k: p.get(k) for k in
+                                 ("hora", "marco", "minutos", "sentido")}
+                                for p in (d.get("pontas") or [])
+                            ]
+                            print("col868 RETRATO_DIA",
+                                  "data", d.get("data"),
+                                  "minutos", d.get("minutos"),
+                                  "estado_na_foto", d.get("estado"),
+                                  "pontas", pontas)
+                    return foto
+
+                foto = passo("retrato", retrato)
+
+                def decisoes():
+                    todos = list(
+                        DecisaoHE.objects.filter(
+                            colaborador_id=COL, data=DIA
+                        ).values(
+                            "estado", "origem", "minutos_na_decisao",
+                            "revogada_em"
+                        )
+                    )
+                    vivos = G.estado_por_dia([COL], DIA, DIA)
+                    print("col868 DECISOES", todos)
+                    print("col868 ESTADO_GESTAO",
+                          vivos.get((COL, str(DIA)), "sem_decisao"))
+
+                passo("decisoes", decisoes)
+
+                def gestao():
+                    vis = G.enriquecer(
+                        foto,
+                        limite=int(e.limite_decisao_he_min or 0),
+                    )
+                    linhas = [
+                        x for x in vis["colabs"]
+                        if x.get("colab") == COL
+                    ]
+                    print("col868 GESTAO_SEM_FILTROS_COLAB", bool(linhas))
+                    for linha in linhas:
+                        dias = [
+                            d for d in (linha.get("dias") or [])
+                            if d.get("data") == str(DIA)
+                        ]
+                        print("col868 GESTAO_SEM_FILTROS_DIA", bool(dias))
+                        for d in dias:
+                            print("col868 GESTAO_DIA",
+                                  "minutos", d.get("minutos"),
+                                  "estado", d.get("estado"),
+                                  "acima_limite", d.get("acima"))
+
+                    # Os valores efetivamente usados na tela observada não
+                    # foram fornecidos. Estes dois recortes medem os filtros
+                    # reais de dono sobre a foto atual.
+                    for dono in ("admin", "sistema"):
+                        filtrado = G.enriquecer(
+                            foto,
+                            limite=int(e.limite_decisao_he_min or 0),
+                            dono=dono,
+                        )
+                        achou = any(
+                            x.get("colab") == COL
+                            and any(d.get("data") == str(DIA)
+                                    for d in (x.get("dias") or []))
+                            for x in filtrado["colabs"]
+                        )
+                        print("col868 GESTAO_FILTRO_DONO", dono, achou)
+
+                passo("gestao", gestao)
+
+                def espelho_e_motor():
+                    agora = timezone.now()
+                    hoje = timezone.localtime(agora).date()
+                    esp = espelho_do_colab(
+                        c, hoje, ini, fim,
+                        ano=ANO, modo_gestor=True, agora=agora,
+                    )
+                    dias = [
+                        d for d in (esp.get("dias") or [])
+                        if d.get("data") == DIA
+                    ]
+                    print("col868 ESPELHO_DIA_EXISTE", bool(dias))
+                    for d in dias:
+                        pontas = [
+                            {k: p.get(k) for k in
+                             ("hora", "marco", "minutos", "sentido")}
+                            for p in (d.get("he_fora_da_janela") or [])
+                        ]
+                        print("col868 ESPELHO_PONTAS", pontas)
+                        print("col868 ESPELHO_TOTAL_REAL",
+                              L.minutos_fora_do_dia(d))
+
+                    resultado = esp["resultado"]
+                    for grupo in ("periodos", "periodos_ft"):
+                        for p in (getattr(resultado, grupo, None) or []):
+                            entrada = getattr(p, "entrada", None)
+                            saida = getattr(p, "saida", None)
+                            if entrada is None:
+                                continue
+                            data_entrada = timezone.localtime(entrada).date()
+                            if abs((data_entrada - DIA).days) <= 1:
+                                print(
+                                    "col868 MOTOR_PERIODO",
+                                    "grupo", grupo,
+                                    "entrada", entrada,
+                                    "saida", saida,
+                                    "minutos_fora_janela",
+                                    getattr(p, "minutos_fora_janela", None),
+                                )
+
+                passo("espelho_e_motor", espelho_e_motor)
+
+        # Também assegura rollback ao sair do bloco, inclusive se algum
+        # leitor chamado vier a tentar mudar dados.
+        transaction.set_rollback(True)
+
+except Exception:
+    falha("envelope")
+finally:
+    print("FIM_SONDA_" + ITEM)
+```
+
+A sonda mede o retrato atual e os valores atuais; **ela não estabelece, por si só, quando ocorreu a mudança nem quais filtros estavam na tela observada**. Sem esses instantes e filtros, não é possível atribuir um único dono causal ao caso **[não verificado]**.
+
+## 18/11 13:41 · sessao ef03d825469f · LAUDO-[nome]-1811-1340 · leitura · origem=Code
+
+**Resultado do item 1(b):** o material fornecido relata que col882 viu **10 min** no espelho e ciência na Gestão, mas não traz a saída das funções nem a linha de `DecisaoHE`. Portanto, os valores atuais das duas leituras, o estado, a origem e a vigência da decisão estão **[não verificado]**. Também não é possível confirmar pelo material que os “9,6 min” do RELATO se referem ao mesmo cálculo e às mesmas entradas do aviso de 10 min. **[não verificado]**
+
+**Campos antes da leitura**
+
+Os campos abaixo são os diretamente relevantes ao recorte e à sonda; as funções reais consultam também outros modelos e campos. A lista não pretende ser um inventário de todas as consultas internas. [app/ponto/services/espelho.py:971; app/relatorios/pdf_espelho.py:187]
+
+- `Colaborador`: `empresa`, `posto`, `situacao`, além do identificador primário usado pela sonda; o modelo também contém `nome` e `cpf`, que não devem ser impressos. [app/colaboradores/models.py:319]
+- `Empresa`: `janela_he_ativa`, `janela_he_piso_min`, `janela_he_teto_min`, `janela_he_saida_ativa`, `janela_he_saida_teto_min`, `janela_he_desde` e `limite_decisao_he_min`. [app/colaboradores/models.py:58; app/colaboradores/models.py:69; app/colaboradores/models.py:82; app/colaboradores/models.py:90; app/colaboradores/models.py:101; app/colaboradores/models.py:105; app/colaboradores/models.py:117]
+- `Batida`: `colaborador`, `timestamp`, `tipo`, `is_intervalo`, `escala` e `origem`. [app/ponto/models.py:22; app/ponto/models.py:45]
+- `EscalaColaborador`: `colaborador`, `posto`, `tipo_escala`, `data_inicio`, `data_fim`, `ativa`; `TipoEscala` inclui `intervalo_indenizavel`. A `CelulaDia` inclui `colaborador`, `data`, `trabalha`, `origem` e `escala_geradora`. [app/escala/models.py:871; app/escala/models.py:108; app/escala/models.py:1681]
+- `MetricaSnapshot`: `chave`, `escopo`, `escopo_id`, `data_ini`, `data_ref`, `numerador`, `denominador`, `valor`, `detalhe`, `calculado_em`. A Gestão lê `detalhe` e `calculado_em` pela função `ler`. [app/inteligencia/models.py:81; app/ponto/services/he_pendente_lavrado.py:193]
+- `DecisaoHE`: `colaborador`, `data`, `estado`, `minutos_na_decisao`, `motivo`, `decidida_por`, `origem`, `decidida_em`, `atualizada_em`, `revogada_em`, `revogada_motivo`, `minutos_na_revogacao`. `objects.vigentes()` filtra `revogada_em__isnull=True`. [app/ponto/models.py:1265; app/ponto/models.py:1300; app/ponto/models.py:1335]
+- Saída do motor, em memória: `ResultadoMes.periodos` e `periodos_ft`; em cada `PeriodoCalculo`, `entrada`, `saida` e `minutos_fora_janela`. O motor pode publicar o mapa `dia_da_jornada` para relacionar período e dia. [app/ponto/motor_calculo_v2.py:207; app/ponto/motor_calculo_v2.py:234; app/ponto/motor_calculo_v2.py:268; app/ponto/motor_calculo_v2.py:1073]
+
+**Funções reais e o que cada uma entrega**
+
+- **Espelho:** a view chama `espelho_do_colab`, que obtém a autoridade do período e chama `montar_dias`. Este chama `marcar_pontas_fora`, acrescenta pontas publicadas pelo motor quando aplicável e entrega `he_fora_da_janela` ao template. A função marcadora testa a ponta contra o piso e arredonda os minutos para inteiro. O template imprime o valor e a expressão fixa “sem decisão”. [app/ponto/views.py:156; app/ponto/services/espelho.py:1225; app/ponto/services/espelho.py:1262; app/ponto/services/espelho.py:721; app/ponto/janela_he.py:215; app/templates/ponto/espelho.html:189]
+- **Gestão:** chama `he_pendente_lavrado.ler` para obter a foto e `gestao_he.enriquecer`. A quantidade e os dias vêm da foto; `enriquecer` chama `estado_por_dia`, que consulta `DecisaoHE.objects.vigentes()`, e sobrepõe o estado vivo. `estado='nao'` é a decisão que representa ciência registrada. O valor da foto e o estado desta pessoa permanecem **[não verificado]**. [app/ponto/views.py:932; app/ponto/services/gestao_he.py:245; app/ponto/services/gestao_he.py:278; app/ponto/services/gestao_he.py:63; app/ponto/models.py:1283]
+- **Motor:** a autoridade da tela chama `apurar_por_fatia` quando há escalas; no ramo sem escalas chama `motor.calcular_mes`. O cálculo de período passa por `_janela_do_par`, que chama `_entrada_efetiva` e `_saida_efetiva`; no ramo `Motor12x36`, as duas parcelas alimentam `minutos_fora_janela`. O valor do período de col882 é **[não verificado]**. [app/ponto/services/espelho.py:1162; app/ponto/motor_calculo_v2.py:1752; app/ponto/motor_calculo_v2.py:2750; app/ponto/motor_calculo_v2.py:2787]
+- **PDF do espelho:** `_coletar_dados_espelho` chama `espelho_do_colab` para montar os dias; o desenho lê `dia['he_fora_da_janela']`. O coletor também apura o motor para seu próprio resultado. O valor do PDF para o caso é **[não verificado]**. [app/relatorios/pdf_espelho.py:187; app/relatorios/pdf_espelho.py:417; app/relatorios/pdf_espelho.py:596; app/relatorios/pdf_espelho.py:932]
+
+A sonda abaixo assume **2026** e que `col882` representa a **PK 882**; a correspondência da etiqueta raspada com essa PK é **[não verificado]**. Ela usa a competência que `janela_atual` atribuir a 21/10 e informa seus limites. O espelho usa a data atual, como a view; isso não reconstrói necessariamente o que foi visto no momento do relato. [app/ponto/views.py:156; app/ponto/views.py:161; app/ponto/views.py:928]
+
+Execute o bloco pelo envelope, no shell `manage.py tenant_command shell --schema=juliani`. Cada passo abre uma transação PostgreSQL somente de leitura; o traceback conserva arquivos, linhas e tipo da exceção, omitindo mensagem e texto-fonte para evitar dados pessoais. A sonda não foi executada aqui. **[não verificado]**
+
+```python
+import datetime as dt
+import io
+import traceback
+from contextlib import redirect_stdout, redirect_stderr
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+DIA = dt.date(2026, 10, 21)
+COLAB_PK = 882
+
+
+def executar(item, funcao):
+    try:
+        # Cada passo tem sua própria transação; falha em um não impede os demais.
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION READ ONLY")
+            # As funções podem produzir mensagens não controladas: não publicá-las.
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                resultado = funcao()
+        print("col882", item, resultado)
+    except Exception as exc:
+        print("col882", item, "Traceback (most recent call last):")
+        for frame in traceback.extract_tb(exc.__traceback__):
+            print('  File "%s", line %s, in %s' %
+                  (frame.filename, frame.lineno, frame.name))
+        print("col882", item, "EXCECAO", type(exc).__name__,
+              "(mensagem omitida)")
+    finally:
+        print("FIM_SONDA_" + item)
+
+
+def contexto():
+    from colaboradores.models import Colaborador
+    from ponto.janelas import janela_atual
+
+    colab = Colaborador.objects.select_related("empresa").get(pk=COLAB_PK)
+    ini, fim = janela_atual(DIA, colab.empresa_id)
+    return colab, ini, fim
+
+
+def identificar():
+    colab, ini, fim = contexto()
+    return {
+        "pk_encontrada": "col882",
+        "dia": DIA.isoformat(),
+        "competencia_inicio": ini.isoformat(),
+        "competencia_fim": fim.isoformat(),
+        "rotulo_da_competencia": "%02d/%04d" % (fim.month, fim.year),
+    }
+
+
+def espelho_e_motor():
+    from ponto.services.espelho import espelho_do_colab
+
+    colab, ini, fim = contexto()
+    agora = timezone.now()
+    esp = espelho_do_colab(
+        colab, timezone.localdate(), ini, fim,
+        ano=fim.year, agora=agora,
+    )
+    dias = [d for d in esp["dias"] if d.get("data") == DIA]
+    resultado = esp["resultado"]
+    mapa = getattr(resultado, "dia_da_jornada", None)
+    periodos = list(resultado.periodos) + list(resultado.periodos_ft)
+
+    # O mapa é a atribuição publicada pelo motor. Sem ele, não se infere [nao verificado]
+    # o dia do turno a partir da data civil da entrada.
+    if mapa is None:
+        motor = "dia_da_jornada nao publicado; valor do dia nao verificado" [nao verificado]
+    else:
+        sem_atribuicao = sum(1 for p in periodos if id(p) not in mapa)
+        motor = {
+            "minutos_fora_por_periodo_atribuido_ao_dia": [
+                p.minutos_fora_janela
+                for p in periodos if mapa.get(id(p)) == DIA
+            ],
+            "periodos_sem_atribuicao": sem_atribuicao,
+        }
+
+    return {
+        "linhas_do_dia_no_espelho": len(dias),
+        "avisos_minutos_e_sentido": [
+            {
+                "minutos": ponta.get("minutos"),
+                "sentido": ponta.get("sentido"),
+            }
+            for dia in dias
+            for ponta in (dia.get("he_fora_da_janela") or [])
+        ],
+        "motor": motor,
+    }
+
+
+def gestao():
+    from ponto.services.he_pendente_lavrado import ler
+    from ponto.services.gestao_he import enriquecer, estado_por_dia
+
+    colab, ini, fim = contexto()
+    retrato, calculado_em = ler(colab.empresa, fim.month, fim.year)
+    estado = estado_por_dia([COLAB_PK], DIA, DIA)
+
+    if retrato is None:
+        return {
+            "retrato": "ausente",
+            "estado_por_dia": estado.get((COLAB_PK, DIA.isoformat())),
+        }
+
+    vis = enriquecer(
+        retrato,
+        limite=int(colab.empresa.limite_decisao_he_min or 0),
+    )
+    linhas = [c for c in vis.get("colabs", []) if c.get("colab") == COLAB_PK]
+    dias = [
+        d for c in linhas for d in (c.get("dias") or [])
+        if str(d.get("data")) == DIA.isoformat()
+    ]
+    return {
+        "retrato_calculado_em": calculado_em.isoformat() if calculado_em else None,
+        "colab_no_resultado": bool(linhas),
+        "dia_na_foto_enriquecida": bool(dias),
+        "dias": [
+            {"minutos": d.get("minutos"), "estado": d.get("estado")}
+            for d in dias
+        ],
+        "estado_por_dia": estado.get((COLAB_PK, DIA.isoformat())),
+    }
+
+
+def decisao_vigente():
+    from ponto.models import DecisaoHE
+
+    linhas = list(
+        DecisaoHE.objects.vigentes()
+        .filter(colaborador_id=COLAB_PK, data=DIA)
+        .values("estado", "origem", "minutos_na_decisao", "revogada_em")
+    )
+    return {
+        "quantidade_vigente": len(linhas),
+        "decisoes": [
+            {
+                "estado": linha["estado"],
+                "origem": linha["origem"],
+                "minutos_na_decisao": linha["minutos_na_decisao"],
+                "vigente_pela_porta": True,
+            }
+            for linha in linhas
+        ],
+    }
+
+
+def pdf():
+    from relatorios.pdf_espelho import _coletar_dados_espelho_mes
+
+    colab, ini, fim = contexto()
+    dados = _coletar_dados_espelho_mes(
+        colab, fim.month, fim.year, agora=timezone.now()
+    )
+    dias = [d for d in dados["dias"] if d.get("data") == DIA]
+    return {
+        "linhas_do_dia": len(dias),
+        "avisos_minutos_e_sentido": [
+            {
+                "minutos": ponta.get("minutos"),
+                "sentido": ponta.get("sentido"),
+            }
+            for dia in dias
+            for ponta in (dia.get("he_fora_da_janela") or [])
+        ],
+    }
+
+
+executar("CONTEXTO", identificar)
+executar("ESPELHO_MOTOR", espelho_e_motor)
+executar("GESTAO", gestao)
+executar("DECISAO_VIGENTE", decisao_vigente)
+executar("PDF", pdf)
+```
+
+Se o mapa de atribuição do motor não estiver publicado ou deixar períodos sem atribuição, a sonda declara essa limitação: uma lista vazia, nesse caso, não prova zero para o dia. A consulta de decisão vigente também não identifica eventual linha revogada; uma lista vazia significa apenas que a porta `vigentes()` não retornou decisão para o dia. [app/ponto/motor_calculo_v2.py:1073; app/ponto/models.py:1265]
 
 ## 18/11 13:32 · sessao 269d7cb7f1fb · POUSOS-COMBOIO-1811-1332 · verificador · origem=Code
 
@@ -501,123 +1241,4 @@ Investigação da pergunta A enviada ao agente principal, com as referências de
 
 Investigação da pergunta C concluída e enviada ao agente principal, com as condições de cada uma das três vias de publicação e os filtros posteriores da Gestão de HE.
 
-## 18/11 12:12 · sessao a39022e4c520 · F5-DSTL1 · sonda · origem=Code
-
-**Não foi possível conferir a implementação da sonda:** o texto fornecido contém sua saída, mas `sonda_matriz.py` não foi localizado na cópia. Assim, a origem exata de cada campo, o hash informado da sonda e a existência de regra reimplementada nela ficam **[não verificado]**. Abaixo, distingo os valores observados no dado raspado das regras das funções reais disponíveis na cópia.
-
-A distinção central é que a tarefa julga o **dia do colaborador**, enquanto a âncora e seu verbo descrevem um **chamado**. A tarefa reúne ações das instâncias e possíveis portas do dia para escolher um fio e uma rota; o verbo isolado de uma âncora não determina necessariamente essa escolha. [tarefa_do_dia.py:633](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:633)
-
-- **`razao`**: o dado traz valores como `fora_vinculo`, `instancia_aceso`, `motivo_fora_do_mapa` e `pos_fora_das_instancias(trabalho)`; a fórmula que produz esses rótulos na sonda é **[não verificado]**. A tarefa real possui uma razão do dia e razões por instância: por exemplo, retorna `fora_vinculo` no nível do dia, e usa `aceso`, `dia_sem_trabalho` ou razões de ausência nas instâncias. Esses rótulos explicam o julgamento da tarefa; por si só, não estabelecem que a pergunta específica tem uma ação associada. [tarefa_do_dia.py:208](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:208), [tarefa_do_dia.py:282](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:282)
-
-- **`dia_fio`**: no formato da tarefa real, `fio` é quem age a seguir no dia. Há `colab` quando uma instância associa `responder/colaborador` a uma pergunta pendente no app; ações administrativas alcançáveis e ações de sistema também entram na escolha, assim como certos verbos residuais. A precedência é `colab`, `admin`, `chamado`, `sistema`; sem esses donos, resulta `nao_sei` ou `nada`. `cobrar`, `historico`, `arquivado` e verbo nulo não dão dono como residual nessa função. Que `dia_fio` tenha sido copiado diretamente desse retorno é **[não verificado]**. [tarefa_do_dia.py:657](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:657)
-
-- **`dia_rota`**: a tarefa publica `porta_app` para `colab`; para outros donos com portas vivas, escolhe `porta_fila` ou `porta_pergunta` conforme a ligação dos chamados ao dia; admin sem chamado vivo pode receber `porta_acao`. `nada` e `nao_sei` não têm rota. Se o calendário oferecer `resolver_dia` quando a rota é nula, a tarefa pode acrescentar essa ação e publicar `admin/porta_acao`. A extração pela sonda é **[não verificado]**. [tarefa_do_dia.py:678](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:678), [tarefa_do_dia.py:609](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:609)
-
-- **`dia_acao`**: na tarefa, o nome publicado é a primeira ação administrativa alcançável quando o fio final é `admin`; se esse fio vier apenas de verbo residual, o nome vem da mesma escada de verbos. Para outro fio, o campo é `None`. Logo, `None` com `colab/porta_app` não significa que não há `responder` nas ações das instâncias: significa que esse campo resumido não nomeia uma ação administrativa. A extração pela sonda é **[não verificado]**. [tarefa_do_dia.py:704](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:704)
-
-- **`ancora_na_fila`**: a âncora real é o `chamado_destino` da pergunta ou, na falta dele, o chamado da disputa. A fila real parte dos chamados vivos, filtra os estados de cobrança e exclui os silenciados até depois de `agora`. O predicado exato usado para preencher o booleano da sonda é **[não verificado]**. [fio.py:97](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/fio.py:97), [painel.py:158](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/painel.py:158)
-
-- **`ancora_verbo`**: a partição real calcula um verbo por chamado a partir de sua origem e dos créditos de perguntas; quando há `silenciado_ate`, pode classificá-lo como `arquivado` ou `historico`. Esse verbo descreve o chamado, não necessariamente a ação da pergunta ou o dono escolhido para todo o dia. O modo pelo qual a sonda o obteve, inclusive quando a âncora está fora da fila, é **[não verificado]**. [verbos.py:30](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/verbos.py:30)
-
-- **`fio_do_verbo`**: a função real `fio_pelos_verbos` usa a escada `cobrar → colab`, `validar → admin`, `decidir → admin`, nessa ordem; se nenhum verbo da escada aparecer, retorna `chamado`. A opção `preservar_porta` altera o tratamento de `decidir`. Porém, a saída raspada mostra `None` para `historico` e `arquivado`, portanto **não se pode afirmar que esse campo seja simplesmente o retorno direto da função para o verbo isolado**; o filtro ou a lógica usados pela sonda são **[não verificado]**. [juizes.py:1685](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/juizes.py:1685), [juizes.py:1690](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/juizes.py:1690)
-
-O próprio dado ilustra por que as perspectivas não devem ser confundidas: na PK **33121**, o dia aparece como `admin/porta_acao/resolver_dia`, enquanto a âncora aparece como `cobrar` e `fio_do_verbo=colab`; na PK **58325**, o dia aparece como `colab/porta_app`, enquanto a âncora aparece como `validar/admin`. Isso é uma observação das linhas fornecidas; a causa factual específica de cada divergência é **[não verificado]**.
-
-Também nas linhas fornecidas, `acoes_da_pergunta` está vazio, mas `dia_acoes` pode conter ações de outras instâncias do mesmo dia — inclusive `responder`, `decidir_ausencia` ou `resolver_dia`. A tarefa real atribui ações por instância e pode escolher uma pergunta por posição; portanto, uma ação no dia não demonstra, sozinha, que ela esteja associada à PK da linha. [tarefa_do_dia.py:319](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:319)
-
-**Conclusão sobre reimplementação:** há evidência de que `fio_do_verbo` **não equivale simplesmente** à chamada direta de `fio_pelos_verbos` sobre qualquer verbo observado, mas isso não prova reimplementação: pode haver filtro anterior ou posterior. Sem o código da sonda, não é possível apontar com segurança qual campo reimplementa uma regra, nem confirmar que os demais leem as funções reais **[não verificado]**.
-
-## 18/11 12:11 · sessao cdd0105b9bb0 · DSTL1-PORTA-HE · verificador · origem=Code
-
-**Resultado: o item 1 não fecha no literal para todo o universo.** A ausência de decisão vigente é uma leitura existente, e a autorização de HE também existe, mas há um terceiro estado, `nao`, e a porta exige minutos positivos fornecidos pelo chamador. Além disso, executar uma decisão de HE pode acionar recálculo e alterar o tratamento de dinheiro; isso é diferente de apenas registrar o aval, que o texto fornecido descreve como a ação imediata. [app/ponto/models.py:1265](app/ponto/models.py:1265), [app/ponto/models.py:1283](app/ponto/models.py:1283), [app/ponto/portas/he.py:159](app/ponto/portas/he.py:159), [app/ponto/portas/he.py:186](app/ponto/portas/he.py:186), [app/ponto/portas/he.py:229](app/ponto/portas/he.py:229); aval fornecido, item 1 [sem arquivo:linha verificado].
-
-A identidade da cópia com o hash informado é **[não verificado]**: `git rev-parse HEAD` não retornou um hash. As referências abaixo são das linhas da cópia disponível.
-
-### 1. Premissas e unidade — **NÃO PROCEDE integralmente**
-
-- `vigentes()` é exatamente o filtro `revogada_em__isnull=True`; a linha revogada permanece acessível pelo manager sem filtro. Portanto, “nenhuma” significa ausência de **decisão vigente**, não necessariamente ausência histórica de linha. [app/ponto/models.py:1251](app/ponto/models.py:1251), [app/ponto/models.py:1265](app/ponto/models.py:1265).
-- A assinatura é `decidir_he(colaborador, data, estado, *, minutos, autor, motivo='', request=None)`. Aceita somente `autorizado` ou `nao`, exige `autorizar_he`, data do tipo `date`, motivo de pelo menos 10 caracteres para autorizar e `int(minutos) > 0`. Não recalcula nem confirma os minutos: recebe-os de quem chama. A função não contém guarda específica de folga ou de situação ativa do colaborador. [app/ponto/portas/he.py:37](app/ponto/portas/he.py:37), [app/ponto/portas/he.py:124](app/ponto/portas/he.py:124), [app/ponto/portas/he.py:159](app/ponto/portas/he.py:159), [app/ponto/portas/he.py:175](app/ponto/portas/he.py:175).
-- “Autorizada” existe como `DecisaoHE.estado == 'autorizado'`; a alternativa é `estado == 'nao'`. `_gravar` cria ou atualiza estado, foto dos minutos, motivo, autor e origem, reativando eventual linha revogada; a trilha é **best effort**, pois falha de auditoria não desfaz a decisão. Mesma decisão vigente retorna `no_op`. [app/ponto/models.py:1283](app/ponto/models.py:1283), [app/ponto/portas/he.py:61](app/ponto/portas/he.py:61), [app/ponto/portas/he.py:89](app/ponto/portas/he.py:89), [app/ponto/portas/he.py:195](app/ponto/portas/he.py:195).
-- A view recebe POST autenticado e chama a porta com o usuário; recusa em lote e autorização em lote também chamam `decidir_he`. A permissão é conferida na própria porta. Existe ainda recusa de ponta pequena pelo sistema, que usa o mesmo `_gravar`, com origem `sistema`: logo, `decidir_he` não é o único **chamador** que produz decisões de HE, embora `_gravar` centralize a escrita do estado. [app/ponto/views.py:498](app/ponto/views.py:498), [app/ponto/portas/he.py:260](app/ponto/portas/he.py:260), [app/ponto/portas/he.py:595](app/ponto/portas/he.py:595), [app/ponto/portas/he.py:369](app/ponto/portas/he.py:369).
-- Há uma única linha por `(colaborador, data)`, com `data` fornecida pelo chamador; o modelo e a porta não impõem que seja `data_turno`. No caminho L-097 examinado, o motor consulta pela `data_jornada`, obtida do mapa do juiz de turno, com fallback para data civil e herança do período anterior em certas condições. Isso **favorece o encaixe**, mas não prova que toda data entregue pela tela/porta coincida com a unidade do aval em todas as bordas. [app/ponto/models.py:1300](app/ponto/models.py:1300), [app/ponto/models.py:1354](app/ponto/models.py:1354), [app/ponto/views.py:526](app/ponto/views.py:526), [app/ponto/motor_calculo_v2.py:2399](app/ponto/motor_calculo_v2.py:2399), [app/ponto/motor_calculo_v2.py:2461](app/ponto/motor_calculo_v2.py:2461). Casamento universal: **[não verificado]**.
-
-### 2. Colisão com o corte e L-097 — **NÃO PROCEDE afirmar colisão textual**
-
-O corte DST-L1-1800 diz que entrada real em dia sem turno vai à **porta de decisão do admin**, mas não nomeia a porta de HE nem determina outra porta concreta. O registro da revisão anterior identifica justamente como lacuna qual objeto observável seria essa porta. Assim, o texto disponível não prova que o corte exigia outra porta; tampouco prova que a porta de HE já cumpria integralmente o alcance do corte. [app/docs/CORTES.md:532](app/docs/CORTES.md:532), [app/docs/RELATO.md:2680](app/docs/RELATO.md:2680).
-
-A L-097 consulta o mapa de decisões vigentes e, no ramo aplicável de dia sem previsto, só sai do bloqueio por decisão quando o estado é `autorizado`. O próprio ramo tem condições e exceções, inclusive empresa na janela, previsto zero e folga com escala certa ou feriado; não se deve generalizar o bloqueio para toda célula sem trabalho. A escolha de HE é compatível com esse mecanismo **nos casos que ele alcança**, mas sua cobertura integral da porta DST-L1 não está demonstrada. [app/ponto/motor_calculo_v2.py:1397](app/ponto/motor_calculo_v2.py:1397), [app/ponto/motor_calculo_v2.py:1422](app/ponto/motor_calculo_v2.py:1422), [app/ponto/motor_calculo_v2.py:1440](app/ponto/motor_calculo_v2.py:1440), [app/ponto/motor_calculo_v2.py:1455](app/ponto/motor_calculo_v2.py:1455).
-
-### 3. Cobertura literal — **NÃO PROCEDE**
-
-**A e B não formam uma partição exaustiva.** Uma decisão vigente `nao` não é “nenhuma”, porque existe decisão vigente, nem é B, porque não é `autorizado`. O modelo explicita que essa recusa é decisão, e a trava do export também trata `nao` como decisão. Se a recusa estiver revogada, aí sim a consulta por vigentes a exclui. [app/ponto/models.py:1283](app/ponto/models.py:1283), [app/folha/porta_export.py:218](app/folha/porta_export.py:218), [app/ponto/models.py:1265](app/ponto/models.py:1265).
-
-Nos **65 dias da medida fornecida**, o anexo relata 55 servidos, sete com minutos de HE zero e três sem pendência publicada; relata também que quatro dos 55 são de desligados. Esses números são o dado raspado fornecido, sem os arquivos brutos disponíveis para conferência nesta revisão **[não verificado em arquivo:linha]**. O código confirma os limites que importam: [nao verificado]
-
-- Com `minutos=0`, a porta recusa tanto autorização como recusa; portanto, esses dias podem continuar em A, mas A não registra uma decisão humana sobre o trabalho. Um turno sem fim fechado pode contribuir zero ao realizado do pareador. [app/ponto/portas/he.py:186](app/ponto/portas/he.py:186), [app/ponto/turnos.py:609](app/ponto/turnos.py:609), [app/ponto/turnos.py:733](app/ponto/turnos.py:733).
-- Para os três sem pendência publicada, a porta não exige consulta à pendência: exige um número positivo fornecido pelo chamador. Com o zero publicado indicado na medida, ela recusa; que exista outro número positivo legítimo e um caminho de tela que o forneça para esses casos é **[não verificado]**. A causa da não publicação também é **[não verificado]**. [app/ponto/portas/he.py:164](app/ponto/portas/he.py:164), [app/ponto/portas/he.py:186](app/ponto/portas/he.py:186).
-- O apurador da lista percorre somente colaboradores ativos e somente dias com `he_fora_da_janela`; a porta individual não contém essa filtragem. Assim, aceitar uma chamada não demonstra que o administrador consiga alcançar aquele dia pela lista existente. [app/ponto/services/he_pendente_lavrado.py:92](app/ponto/services/he_pendente_lavrado.py:92), [app/ponto/services/he_pendente_lavrado.py:132](app/ponto/services/he_pendente_lavrado.py:132), [app/ponto/portas/he.py:175](app/ponto/portas/he.py:175).
-
-`editar_dia` altera a célula e registra trilha; `retratar` atua sobre a batida e a retira da apuração. **A ausência de DecisaoHE, isoladamente, não distingue esses atos de “ninguém decidiu”**: para distingui-los, o leitor precisa consultar a célula, a batida ou suas trilhas. Que uma tela proposta fará essa composição é **[não verificado]**. A edição ou retratação também pode mudar se o caso ainda pertence ao universo, portanto não se pode presumir que permaneça nele após o ato. [app/ponto/portas/celula.py:572](app/ponto/portas/celula.py:572), [app/ponto/services/retratar_humano.py:150](app/ponto/services/retratar_humano.py:150), [app/ponto/services/gestao_he.py:86](app/ponto/services/gestao_he.py:86).
-
-### 4. Exportada, dinheiro, motor e DiaPago — **PROCEDE como alerta de efeito**
-
-O **registro documental** pedido pelo aval não executa a porta nem altera esses dados; nenhuma execução foi solicitada ou realizada nesta revisão. O uso posterior de `decidir_he`, porém, grava a decisão e chama `recalcular_por_evento` para a data, salvo `no_op`; o recálculo é agendado após o commit. O código descreve recálculo inclusive em competência exportada, sujeito à guarda específica. O efeito concreto em uma competência ou pessoa é **[não verificado]**. [app/ponto/portas/he.py:195](app/ponto/portas/he.py:195), [app/ponto/portas/he.py:210](app/ponto/portas/he.py:210), [app/ponto/portas/he.py:229](app/ponto/portas/he.py:229), [app/ponto/services/fechamento.py:1798](app/ponto/services/fechamento.py:1798).
-
-O motor lê a autorização e pode deixar de bloquear minutos no ramo L-097; a porta de export consulta o estado para dias pendentes acima do limite, e a configuração da empresa determina se essa contagem integra as falhas que travam o export. Portanto, não é correto declarar o **uso** da porta sem alcance sobre dinheiro, motor ou trava. A existência de um `!` concreto em dado exportado e seu valor são **[não verificado]**. [app/ponto/motor_calculo_v2.py:1455](app/ponto/motor_calculo_v2.py:1455), [app/folha/porta_export.py:680](app/folha/porta_export.py:680), [app/folha/porta_export.py:687](app/folha/porta_export.py:687).
-
-### Campos: escritores e leitores identificados
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `revogada_em` | `_marcar_revogada` marca; `_gravar` limpa ao reviver a linha. [app/ponto/portas/he.py:401](app/ponto/portas/he.py:401), [app/ponto/portas/he.py:83](app/ponto/portas/he.py:83) | `vigentes()` julga pelo nulo; `_vigente`, Gestão HE, motor e lavrador usam esse juiz. A própria porta também lê o valor para trilha. [app/ponto/models.py:1265](app/ponto/models.py:1265), [app/ponto/portas/he.py:130](app/ponto/portas/he.py:130), [app/ponto/services/gestao_he.py:86](app/ponto/services/gestao_he.py:86), [app/ponto/motor_calculo_v2.py:1416](app/ponto/motor_calculo_v2.py:1416), [app/ponto/management/commands/lavrar_he_pendente.py:48](app/ponto/management/commands/lavrar_he_pendente.py:48), [app/ponto/portas/he.py:61](app/ponto/portas/he.py:61) |
-| `estado` | `_gravar`, chamado pela decisão do admin e pela recusa do sistema. [app/ponto/portas/he.py:66](app/ponto/portas/he.py:66), [app/ponto/portas/he.py:75](app/ponto/portas/he.py:75), [app/ponto/portas/he.py:206](app/ponto/portas/he.py:206), [app/ponto/portas/he.py:369](app/ponto/portas/he.py:369) | Porta para idempotência e revogação; Gestão HE e apurador de pendências; motor; export indiretamente pelo mapa da Gestão HE. [app/ponto/portas/he.py:197](app/ponto/portas/he.py:197), [app/ponto/portas/he.py:488](app/ponto/portas/he.py:488), [app/ponto/services/gestao_he.py:86](app/ponto/services/gestao_he.py:86), [app/ponto/services/he_pendente_lavrado.py:145](app/ponto/services/he_pendente_lavrado.py:145), [app/ponto/motor_calculo_v2.py:1416](app/ponto/motor_calculo_v2.py:1416), [app/folha/porta_export.py:682](app/folha/porta_export.py:682) |
-| `data` | `_gravar` na criação, a partir do argumento; a atualização mantém a chave existente. [app/ponto/portas/he.py:65](app/ponto/portas/he.py:65), [app/ponto/portas/he.py:75](app/ponto/portas/he.py:75) | Porta localiza a linha; Gestão HE e lavrador formam mapas por pessoa e data; motor forma mapa por data. [app/ponto/portas/he.py:195](app/ponto/portas/he.py:195), [app/ponto/services/gestao_he.py:86](app/ponto/services/gestao_he.py:86), [app/ponto/management/commands/lavrar_he_pendente.py:48](app/ponto/management/commands/lavrar_he_pendente.py:48), [app/ponto/motor_calculo_v2.py:1416](app/ponto/motor_calculo_v2.py:1416) |
-| `minutos_na_decisao` | `_gravar`, com minutos fornecidos pelo chamador; é foto, não pendência viva. [app/ponto/portas/he.py:164](app/ponto/portas/he.py:164), [app/ponto/portas/he.py:66](app/ponto/portas/he.py:66), [app/ponto/portas/he.py:75](app/ponto/portas/he.py:75) | Porta para retorno, trilha e revogação; Gestão HE soma a foto por estado. O mapa do motor examinado contém `data` e `estado`, não essa foto. [app/ponto/portas/he.py:61](app/ponto/portas/he.py:61), [app/ponto/portas/he.py:197](app/ponto/portas/he.py:197), [app/ponto/portas/he.py:497](app/ponto/portas/he.py:497), [app/ponto/services/gestao_he.py:92](app/ponto/services/gestao_he.py:92), [app/ponto/motor_calculo_v2.py:1416](app/ponto/motor_calculo_v2.py:1416) |
-
-A tabela identifica os caminhos relevantes encontrados na cópia; a exaustividade de todos os leitores indiretos e administrativos é **[não verificado]**.
-
-## 18/11 12:10 · sessao 43d86bf18c68 · F5-DSTL1 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — item 2: PROCEDE nas perguntas 1 e 3.**
-
-1. Para uma pergunta sem `pergunta_id` em nenhuma instância da tarefa, qual valor deve entrar no par conservado: um marcador explícito de “sem associação”, o resultado inteiro da tarefa do dia, ou outro valor? E qual é exatamente o universo de perguntas a comparar?
-
-2. Para a lista anterior ao código, qual predicado define cada letra, sobretudo “RESPOSTA vazia”: último ato `RESPOSTA` com `ato_texto` vazio, projeção `resposta_colab` vazia, ou ambos? Como tratar sobreposição entre letras e efeitos indiretos sobre outras perguntas do mesmo dia?
-
-A cópia não contém metadados Git acessíveis: `git rev-parse HEAD` falhou. Portanto, o hash informado como HEAD é **[não verificado]**. As referências abaixo são da cópia disponível. Os anexos raspados foram fornecidos no pedido sem arquivo e numeração de linhas verificáveis; seus números são identificados como **[não verificado]**.
-
-1. **Premissas — PROCEDE.** A pendência é calculável por pergunta **dentro de um universo definido**: `consulta_do_app` primeiro seleciona perguntas vivas e depois `particao_do_app` as divide; uma viva está pendente se o juiz disser que não foi respondida e a disputa estiver aberta. Para uma pergunta fora da seleção de vivas, é necessário definir se o valor booleano significa “não pertence à lista de pendentes” ou se ela fica fora do universo da comparação. ([pergunta_no_app.py:45](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:45), [pergunta_no_app.py:64](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:64), [pergunta_no_app.py:76](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:76))
-
-   A outra metade **não está definida por pergunta para todas elas**. `tarefa()` devolve um dicionário por colaborador e dia, com instâncias; a associação exige encontrar uma instância cujo `pergunta_id` seja o pk. `fora_vinculo` retorna sem instâncias. Motivo fora do mapa ou posição fora da grade pode passar por `expor_admin`, mas só é acrescentado quando há exposição efetiva; uma ação de colaborador, por si, não é acrescentada por essa via. Chamar `_pela_decisao` diretamente produz um resultado hipotético para a pergunta, mas não prova que a tarefa publicou essa razão e essas ações para ela. ([tarefa_do_dia.py:208](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:208), [tarefa_do_dia.py:267](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:267), [tarefa_do_dia.py:332](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:332), [tarefa_do_dia.py:342](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:342))
-
-   O anexo relata, por exemplo, 94 casos `fora_vinculo`, 92 com motivo fora do mapa e outros com posição fora das instâncias; isso demonstra a relevância da pergunta, mas as contagens e os casos raspados são **[não verificado]**. O código aceita `agora` explícito, corta decisões por esse instante e exige que a carga tenha o mesmo relógio. Isso não garante repetição apenas com **HOJE** fixo: é preciso fixar o instante completo, os dados e a janela da carga; a estabilidade de todas as dependências é **[não verificado]**. ([tarefa_do_dia.py:417](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:417), [tarefa_do_dia.py:571](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:571), [tarefa_do_dia.py:739](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:739))
-
-2. **Colisão com aval ou lei — NÃO PROCEDE**, com limite de verificação. A L-130 define respondida como instante **e** texto não vazio; o juiz e a partição atuais aplicam essa regra. Assim, retirar o RED universal “toda pendente tem RESPONDER” não revoga, por si, a regra de pendência da L-130. ([LEIS.md:151](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/LEIS.md:151), [juizes.py:1544](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/juizes.py:1544), [pergunta_no_app.py:76](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:76))
-
-   O texto antigo em `CORTES.md` dizia que resposta vazia ficaria fora do app e que o painel diria admin; o `RELATO` registra resposta posterior alcançando também essa frase, e um teste do HEAD já espera pendência no app. A compatibilidade da **retirada do RED universal** com essa obrigação específica depende de não interpretá-la como revogação da lei de resposta vazia. ([CORTES.md:509](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/CORTES.md:509), [RELATO.md:37](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/RELATO.md:37), [test_o261e_f5_alcance.py:192](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/tests/test_o261e_f5_alcance.py:192))
-
-   `F5-L1-VALE-L130-1811` aparece identificado como vigente no índice do relato, mas seu literal completo e `F5-DSTL1-RESPOSTAS-1811` não foram localizados na cópia consultada: confronto literal integral **[não verificado]**. A própria L-130 registra `RESSUSCITAR-DEVOLVE-AO-COLABORADOR` como lei não decidida; se a letra (c) pretender decidi-la, a colisão exige resposta do dono **[não verificado quanto ao alcance pretendido]**. ([RELATO.md:9001](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/RELATO.md:9001), [LEIS.md:151](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/LEIS.md:151))
-
-3. **Literal, lista e mutante — PROCEDE.** Há insumos existentes para listar candidatos antes da F5, mas as letras ainda não definem sem ambiguidade a **lista de exceções do par**:
-
-   - **(a)** Candidatos: perguntas do universo escolhido cujo último ato elegível seja `SILENCIO`; para saber quais efetivamente saem de pendentes, intersectar com os pendentes atuais. A carga ordena por `ato_em, pk`, exclui atos marcados de ressuscitação e corta em `agora`. O relato registra 11 mudanças previstas para histórico; a lista nominal não está no dado fornecido. ([tarefa_do_dia.py:417](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:417), [RELATO.md:33](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/RELATO.md:33))
-   - **(b)** `_pela_decisao` identifica último ato `RESPOSTA` com `ato_texto` vazio; o juiz L-130 examina, porém, a **projeção** `respondida_em` e `resposta_colab`. Não são o mesmo predicado: o passivo sem linha é detectado separadamente e tem precedência na tarefa. O texto do aval não fixa qual dos dois define a letra nem se a lista inclui casos já pendentes. ([tarefa_do_dia.py:154](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:154), [juizes.py:1544](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/juizes.py:1544), [models.py:4122](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:4122))
-   - **(c)** Candidatos: último ato elegível `ABSORCAO` e status da ausência ligada `rejeitada`; `_pela_decisao` devolve `absorcao_rejeitada` e RESPONDER. O relato registra zero mudanças previstas naquele levantamento, não uma prova de zero para outro instante ou universo. ([tarefa_do_dia.py:178](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:178), [RELATO.md:33](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/RELATO.md:33))
-
-   Se as três letras forem definidas exclusivamente por **um mesmo último ato**, são mutuamente exclusivas, pois os atos são valores distintos. Se (b) usar a projeção de texto vazio, pode sobrepor-se a (a) ou (c); a ausência ou presença de casos concretos sobrepostos é **[não verificado]**. ([models.py:4037](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:4037), [tarefa_do_dia.py:158](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:158))
-
-   Há **caminho para efeito indireto**: a carga lê a partição em `_pendentes_app`; `_portas_da_tarefa` usa o conjunto para escolher dono e rota do dia; se não houver rota, a oferta de `resolver_dia` pode acrescentar ação à primeira instância. Logo, mudar a pendência de uma pergunta pode alterar a ação publicada em outra instância do mesmo dia, sob as condições desses ramos. A ocorrência e os pks afetados na sombra são **[não verificado]**. ([tarefa_do_dia.py:535](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:535), [tarefa_do_dia.py:657](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:657), [tarefa_do_dia.py:690](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:690))
-
-   O **mutante é escrevível conceitualmente**: alterar em `particao_do_app` a classificação de uma pergunta viva de uma razão escolhida fora da lista, mantendo a referência anterior e os dados fixos. Um comparador que inclua esse pk deve detectar a mudança do booleano; para testar o efeito indireto, é preciso um caso que percorra o ramo de `resolver_dia`. A existência de um caso adequado e o mutante realmente morder na sombra são **[não verificado]**. Também é preciso definir “razão não listada” para perguntas sem associação à tarefa. ([pergunta_no_app.py:76](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:76), [tarefa_do_dia.py:690](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:690))
-
-4. **Exportada, dinheiro, motor, fechamento, DiaPago ou `!` — NÃO PROCEDE** para o item 2 como medida de leitura. A tarefa consulta competência entregue e usa o resultado para limitar exposições administrativas; isso é leitura de exportada, não evidência de escrita nela. O item proposto compara saídas, mas o comportamento de uma futura implementação da F5 nesses domínios é **[não verificado]**. A L-130 reserva os 141 casos de competência entregue para `!` próprio; a conservação não autoriza curá-los. ([tarefa_do_dia.py:473](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:473), [tarefa_do_dia.py:267](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:267), [LEIS.md:151](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/LEIS.md:151))
-
-**Quem escreve e quem lê.** Os endereços abaixo identificam as portas e leitores relevantes para esta medida; um inventário exaustivo de todos os escritores e leitores do repositório é **[não verificado]**.
-
-| Valor | Quem escreve ou produz | Quem lê |
-|---|---|---|
-| Pendentes do app | É resultado calculado em memória por `particao_do_app`; seus insumos incluem resposta e fechamento da disputa. A resposta humana passa por `responder_pergunta_disputa_core`; o fechamento atribui `fechada_em`. ([pergunta_no_app.py:76](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:76), [disputa_emissao.py:1481](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/disputa_emissao.py:1481), [models.py:2021](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2021)) | A projeção do app, a carga da tarefa e o contador do painel. ([pergunta_no_app.py:101](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/pergunta_no_app.py:101), [tarefa_do_dia.py:535](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:535), [views.py:252](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/core/views.py:252)) |
-| Razão e ações da tarefa | São calculadas em memória por `_tarefa_pura` e `_pela_decisao`; `_portas_da_tarefa` também pode acrescentar `resolver_dia`. ([tarefa_do_dia.py:142](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:142), [tarefa_do_dia.py:190](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:190), [tarefa_do_dia.py:690](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:690)) | A própria `_portas_da_tarefa` lê as ações para compor fio e rota; o contrato público devolve a tarefa ao chamador. ([tarefa_do_dia.py:633](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:633), [tarefa_do_dia.py:739](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:739)) |
-| Último ato `DecisaoPergunta` | A sequência persistida tem porta única `registrar`; por exemplo, o fechamento registra `SILENCIO`, e a porta de resposta registra `RESPOSTA`. ([models.py:4019](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:4019), [models.py:4152](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:4152), [models.py:2011](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:2011), [disputa_emissao.py:1525](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/disputa_emissao.py:1525)) | A carga seleciona e ordena as decisões elegíveis; `_pela_decisao` lê a última dessa sequência filtrada. ([tarefa_do_dia.py:417](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:417), [tarefa_do_dia.py:158](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:158)) |
-
-_6955 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6958 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
