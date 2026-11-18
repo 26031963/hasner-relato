@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 10:39** · publicado em **18/11/2026 10:39** (UTC-3)
+> Ultima resposta processada: **18/11/2026 10:46** · publicado em **18/11/2026 10:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 10:46 · sessao 671f115eebf8 · SONDA-DIA-IMPAR-1811 · sonda · origem=Code
+
+```text
+SONDA achadoA_casos agora=18/11 10:38:15 ultima_batida_sombra=18/11 03:55:21
+============================================================
+CASO C004 col281 08/11  (1.4s)
+ ESPELHO n_marcacoes=2: 18:55 E orfa=True origem=app proc=None just= ; 06:58 S orfa=False origem=app proc=None just=
+ APURAVEIS d-1 12h..d+1 12h n=4: 07/11 18:59:04 E pk=148830 orig=app itv=False apr=True tr= canal=apk perg=None ; 08/11 07:00:09 S pk=149145 orig=app itv=False apr=True tr= canal=apk perg=None ; 08/11 18:55:42 E pk=149472 orig=app itv=False apr=True tr= canal=apk perg=None ; 09/11 06:58:35 S pk=149781 orig=app itv=False apr=True tr= canal=apk perg=None
+ RETRATADAS na janela n=0
+ TURNO data_turno=2026-11-08 entrada=08/11 18:55:42 saida=09/11 06:58:35 aberto=False fim_fechado=09/11 06:58:35 batidas=18:55E 06:58S
+   intervalos_do_turno=[]
+ turnos de data_turno=2026-11-08 no pareamento da janela inteira: 1 (total na janela 14)
+ REALIZADO(todos turnos)=(723, False, False, False, 0, False)
+ REALIZADO(so turnos com saida)=(723, False, False, False, 0, False)
+ borda_posicional=False
+ CELULA: {"id": "137834", "colaborador_id": "281", "data": "2026-11-08", "origem": "gerada", "escala_geradora_id": "246", "dna": "{\"marcos\": null, \"lampadas\": null, \"dna_versao\": 2, \"tipo_ciclo\": \"12x36\", \"vinculo_id\": 246, \"tipo_escala_id\": 179, \"intervalo_livre\": true, \"minutos_jornada\": 720}", "gerada_em": "2026-10-21 08:50:22.986233+00:00", "julgada_em": "2026-11-09 21:57:11.865832+00:00", "impressao": "efd0e9f5a5cc829b1ea09876e6c6d9a33293dd2bc1b08c0ce8092a3058a96355", "veredito": "fato_sem_previsao", "veredito_via": "cartorio", "veredito_em": "2026-11-09 21:57:11.865832+00:00", "protestos": "[\"FATO_SEM_PREVISAO\"]", "ata": "{\"orfas\": [\"18:55\"], \"n_orfas\": 1, \"lampadas\": [], \"tipo_dia\": \"folga\", \"n_celulas\": 0, \"n_missing\": 0, \"sem_ancora\": false, \"precedencia\": {\"faixa\": \"folga\", \"texto\": \"\", \"rotulo\": \"Folga\", \"suprimidos\": [], \"tipo_do_dia\": \"folga\", \"era_dia_previsto\": false}, \"minutos_previstos\": 0, \"minutos_realizados\": 723}", "insumos_em": "2026-11-09 21:57:11.865832+00:00", "status_dia": "folga_trabalhada", "status_rotulo": "Trabalhou em dia sem jornada prevista"}
+ EC.marcos_do_dia=(datetime.time(19, 0), datetime.time(7, 0), None, None) tipo_escala=12x36 · 19:00-07:00
+ JUSTIFICATIVAS data_turno=2026-11-08 n=0 []
+ DIAPAGO versao=motor pago_do_dia_h=None min=None | {"id": "2368660", "colaborador_id": "281", "mes": "11", "ano": "2026", "data": "2026-11-08", "tipo": "dia", "versao": "motor", "versao_motor": "legais|p5h=0|hr=1|fd=0", "evento_origem": "recalcular_fechamento_mes", "lavrado_em": "2026-11-18 10:01:18.646726+00:00"}
+ DIAPAGO versao=oraculo pago_do_dia_h=None min=None | {"id": "2368677", "colaborador_id": "281", "mes": "11", "ano": "2026", "data": "2026-11-08", "tipo": "dia", "versao": "oraculo", "evento_origem": "recalcular_fechamento_mes", "detalhe": "{\"calculador_nao_decide\": [\"horas_atraso\", \"horas_extras_100\", \"horas_extras_100_feriado\", \"horas_extras_100_noturna\", \"horas_extras_50\", \"horas_extras_50_noturna\", \"horas_falta\", \"horas_noturnas\", \"horas_reflexo_dsr\", \"horas_saida_antecipada\", \"saldo_banco_horas\"]}", "lavrado_em": "2026-11-18 10:01:18.771705+00:00"}
+ TELA(dia dict): pago_h=None veredito_dia='folga' palavra_dia='Folga' cor='#94a3b8' realizado_aberto=False realizado_h=12.1 minutos_realizados=723 previsto=[] ausencia=None falta_frase='' falta_marcos=[] rubricas={'lavrada': True, 'extras_50': 0.0, 'extras_100': 0.0, 'atraso': 0.0, 'antecipada': 0.0, 'noturnas': 0.0, 'intra': 0.0, 'trabalhadas': 0.0, 'minutos_extra': 0.0}
+ TELA(dia dict) turnos_motor=[('08/11 18:55:42', '09/11 06:58:35', False, ['Intrajornada suprimida — 60min pagos como hora extra (Art.71 §4 CLT / Sumula 437 TST). Intra real: 0min.', 'DIA SEM JORNADA PREVISTA -- 723 min fora da janela de HE (L-097, bloqueio total): pendencia na Gestao de HE ate Autorizar.', 'FOLGA TRABALHADA — 08/11/2026 18:55 (dia de folga no ciclo 12x36 (ancora 26/07/2026)). Registro mantido conforme Portaria MTE 671/2021. Horas apuradas: 0.0h. Requer validacao do responsavel antes do fechamento.'])]
+ PDF_LINHA: 08/11 dom | 19:00 07:00 | MARCACOES:S06:58 + *18:55 | Folga | HE fora da janela: 723 min em dia sem jornada prevista — nao conta sem decisao |  |  | —
+============================================================
+CASO C009 col902 28/10  (1.3s)
+ ESPELHO n_marcacoes=3: 07:58 E orfa=False origem=app proc=None just= ; 12:06 S orfa=False origem=app proc=None just= ; 18:07 S orfa=False origem=app proc=None just=
+ APURAVEIS d-1 12h..d+1 12h n=8: 27/10 12:10:13 S pk=138670 orig=app itv=False apr=True tr= canal=apk perg=None ; 27/10 13:10:05 E pk=138758 orig=app itv=False apr=True tr= canal=apk perg=None ; 27/10 18:00:44 S pk=139051 orig=app itv=False apr=True tr= canal=apk perg=None ; 28/10 07:58:46 E pk=139547 orig=app itv=False apr=True tr= canal=apk perg=None ; 28/10 12:06:03 S pk=139697 orig=app itv=False apr=True tr= canal=apk perg=None ; 28/10 18:07:37 S pk=140070 orig=app itv=False apr=True tr= canal=apk perg=None ; 29/10 07:58:05 E pk=140537 orig=app itv=False apr=True tr= canal=apk perg=None ; 29/10 11:58:37 S pk=140667 orig=app itv=False apr=True tr= canal=apk perg=None
+ RETRATADAS na janela n=0
+ TURNO data_turno=2026-10-28 entrada=28/10 07:58:46 saida=28/10 18:07:37 aberto=False fim_fechado=28/10 18:07:37 batidas=07:58E 12:06S 18:07S
+   intervalos_do_turno=[]
+ turnos de data_turno=2026-10-28 no pareamento da janela inteira: 1 (total na janela 19)
+ REALIZADO(todos turnos)=(549, False, False, False, 60, False)
+ REALIZADO(so turnos com saida)=(549, False, False, False, 60, False)
+ borda_posicional=False
+ CELULA: {"id": "132139", "colaborador_id": "902", "data": "2026-10-28", "trabalha": "True", "origem": "gerada", "escala_geradora_id": "1101", "dna": "{\"marcos\": {\"hf\": \"18:00\", \"hi\": \"08:00\", \"hfi\": \"13:00\", \"hii\": \"12:00\"}, \"lampadas\": [{\"hora\": \"08:00\", \"tipo\": \"E\", \"chave\": \"hi\", \"instante\": \"2026-10-28T08:00\"}, {\"hora\": \"12:00\", \"tipo\": \"S\", \"chave\": \"hii\", \"instante\": \"2026-10-28T12:00\"}, {\"hora\": \"13:00\", \"tipo\": \"E\", \"chave\": \"hfi\", \"instante\": \"2026-10-28T13:00\"}, {\"hora\": \"18:00\", \"tipo\": \"S\", \"chave\": \"hf\", \"instante\": \"2026-10-28T18:", "gerada_em": "2026-10-21 08:50:15.435733+00:00", "julgada_em": "2026-11-02 07:25:34.015313+00:00", "impressao": "96f692673e51b232b853c86945e57e6ef725ca1cab3957f800b4d2315f088d12", "veredito": "furo", "veredito_via": "cartorio", "veredito_em": "2026-10-28 21:07:38.775318+00:00", "protestos": "[\"FURO_PARCIAL\"]", "ata": "{\"orfas\": [], \"n_orfas\": 0, \"lampadas\": [{\"luz\": \"07:58\", \"hora\": \"08:00\", \"tipo\": \"E\", \"acesa\": true, \"tipo_real\": \"E\"}, {\"luz\": \"12:06\", \"hora\": \"12:00\", \"tipo\": \"S\", \"acesa\": true, \"tipo_real\": \"S\"}, {\"luz\": null, \"hora\": \"13:00\", \"tipo\": \"E\", \"acesa\": false, \"tipo_real\": null}, {\"luz\": \"18:07\", \"hora\": \"18:00\", \"tipo\": \"S\", \"acesa\": true, \"tipo_real\": \"S\"}], \"tipo_dia\": \"trabalho\", \"n_celulas\"", "tem_entrada": "True", "tem_saida": "True", "insumos_em": "2026-11-02 07:25:34.015313+00:00", "status_dia": "irregular", "status_rotulo": "Batida faltando, fora do horario previsto ou em ordem inesperada"}
+ EC.marcos_do_dia=(datetime.time(8, 0), datetime.time(18, 0), datetime.time(12, 0), datetime.time(13, 0)) tipo_escala=5x2 · Seg/Ter/Qua/Qui/Sex 08:00-18:00
+ JUSTIFICATIVAS data_turno=2026-10-28 n=0 []
+ DIAPAGO versao=motor pago_do_dia_h=10.0 min=600 | {"id": "2378566", "colaborador_id": "902", "mes": "11", "ano": "2026", "data": "2026-10-28", "tipo": "dia", "versao": "motor", "horas_trabalhadas": "10.0", "horas_intra_indenizada": "1.0", "minutos_previstos": "540.0", "minutos_realizados": "540.0", "versao_motor": "legais|p5h=0|hr=0|fd=1", "evento_origem": "recalcular_fechamento_mes", "lavrado_em": "2026-11-18 10:02:49.144170+00:00"}
+ DIAPAGO versao=oraculo pago_do_dia_h=10.0 min=600 | {"id": "2378590", "colaborador_id": "902", "mes": "11", "ano": "2026", "data": "2026-10-28", "tipo": "dia", "versao": "oraculo", "horas_trabalhadas": "10.0", "horas_intra_indenizada": "1.0", "minutos_previstos": "540.0", "minutos_realizados": "540.0", "evento_origem": "recalcular_fechamento_mes", "detalhe": "{\"calculador_nao_decide\": [\"horas_falta\", \"horas_reflexo_dsr\", \"saldo_banco_horas\"]}", "lavrado_em": "2026-11-18 10:02:49.362282+00:00"}
+ TELA(dia dict): pago_h=10.0 veredito_dia='trabalhou' palavra_dia='' cor='' realizado_aberto=False realizado_h=9.2 minutos_realizados=549 previsto=[] ausencia=None falta_frase='falta entrada 13:00' falta_marcos=[{'tipo': 'E', 'hora': '13:00'}] rubricas={'lavrada': True, 'extras_50': 0.0, 'extras_100': 0.0, 'atraso': 0.0, 'antecipada': 0.0, 'noturnas': 0.0, 'intra': 1.0, 'trabalhadas': 10.0, 'minutos_extra': 0.0}
+ TELA(dia dict) turnos_motor=[('28/10 07:58:46', '28/10 18:07:37', False, ['Intrajornada suprimida — 60min pagos como hora extra (Art.71 §4 CLT / Sumula 437 TST). Intra real: 0min.'])]
+ PDF_LINHA: 28/10 qua | 08:00 18:00 | MARCACOES:E07:58 S12:06 S18:07 | HE fora da janela: 2 min antes do marco 08:00 — nao conta (Art. 4º §2º) | HE fora da janela: 7 min depois do marco 18:00 | 1h | 10h
+============================================================
+CASO C015 col89 08/11  (1.7s)
+ ESPELHO n_marcacoes=4: 06:55 E orfa=True origem=app proc=None just= ; 12:32 S orfa=False origem=app proc=None just= ; 13:02 E orfa=False origem=app proc=None just= ; 14:00 S orfa=False origem=app proc=None just=
+ APURAVEIS d-1 12h..d+1 12h n=5: 08/11 06:55:32 E pk=149114 orig=app itv=False apr=True tr= canal=apk perg=None ; 08/11 12:32:52 S pk=149266 orig=app itv=False apr=True tr= canal=apk perg=None ; 08/11 13:02:55 E pk=149285 orig=app itv=False apr=True tr= canal=apk perg=None ; 08/11 14:00:04 S pk=149307 orig=app itv=False apr=True tr= canal=apk perg=None ; 09/11 09:55:13 E pk=149917 orig=app itv=False apr=True tr= canal=apk perg=None
+ RETRATADAS na janela n=0
+ TURNO data_turno=2026-11-08 entrada=08/11 06:55:32 saida=08/11 14:00:04 aberto=False fim_fechado=08/11 14:00:04 batidas=06:55E 12:32S 13:02E 14:00S
+   intervalos_do_turno=[('08/11 12:32:52', '08/11 13:02:55')]
+ turnos de data_turno=2026-11-08 no pareamento da janela inteira: 1 (total na janela 24)
+ REALIZADO(todos turnos)=(395, False, False, False, 0, False)
+ REALIZADO(so turnos com saida)=(395, False, False, False, 0, False)
+ borda_posicional=False
+ CELULA: {"id": "123501", "colaborador_id": "89", "data": "2026-11-08", "trabalha": "True", "origem": "gerada", "escala_geradora_id": "1039", "dna": "{\"marcos\": {\"hf\": \"18:20\", \"hi\": \"10:00\", \"hfi\": \"13:00\", \"hii\": \"12:00\"}, \"lampadas\": [{\"hora\": \"10:00\", \"tipo\": \"E\", \"chave\": \"hi\", \"instante\": \"2026-11-08T10:00\"}, {\"hora\": \"12:00\", \"tipo\": \"S\", \"chave\": \"hii\", \"instante\": \"2026-11-08T12:00\"}, {\"hora\": \"13:00\", \"tipo\": \"E\", \"chave\": \"hfi\", \"instante\": \"2026-11-08T13:00\"}, {\"hora\": \"18:20\", \"tipo\": \"S\", \"chave\": \"hf\", \"instante\": \"2026-11-08T18:", "gerada_em": "2026-10-06 10:20:42.792209+00:00", "julgada_em": "2026-11-09 21:15:15.737185+00:00", "impressao": "8cd0ee03c41e7ad6fdf2fe26a5053e3235298638c77c8314f577ce6eb04eab5f", "veredito": "concorde", "veredito_via": "cartorio", "veredito_em": "2026-11-08 21:50:06.197830+00:00", "ata": "{\"orfas\": [\"06:55\"], \"n_orfas\": 1, \"lampadas\": [{\"luz\": \"12:32\", \"hora\": \"10:00\", \"tipo\": \"E\", \"acesa\": true, \"tipo_real\": \"S\"}, {\"luz\": \"13:02\", \"hora\": \"12:00\", \"tipo\": \"S\", \"acesa\": true, \"tipo_real\": \"E\"}, {\"luz\": \"14:00\", \"hora\": \"13:00\", \"tipo\": \"E\", \"acesa\": true, \"tipo_real\": \"S\"}, {\"luz\": null, \"hora\": \"18:20\", \"tipo\": \"S\", \"acesa\": false, \"tipo_real\": null}], \"tipo_dia\": \"trabalho\", \"n_c", "tem_entrada": "True", "insumos_em": "2026-11-09 21:15:15.737185+00:00", "status_dia": "ok", "status_rotulo": "Marco cumprido com batida — todas as batidas previstas registradas"}
+ EC.marcos_do_dia=(datetime.time(10, 0), datetime.time(18, 20), datetime.time(12, 0), datetime.time(13, 0)) tipo_escala=ESCALA ARTES · 6x1 · 10:00-18:20
+ JUSTIFICATIVAS data_turno=2026-11-08 n=0 []
+ DIAPAGO versao=motor pago_do_dia_h=6.574583888888889 min=394 | {"id": "2383042", "colaborador_id": "89", "mes": "11", "ano": "2026", "data": "2026-11-08", "tipo": "dia", "versao": "motor", "horas_trabalhadas": "6.574583888888889", "horas_intra_indenizada": "0.49908749999999996", "minutos_previstos": "440.0", "minutos_realizados": "395.0", "versao_motor": "relogio|p5h=1|hr=0|fd=1", "evento_origem": "recalcular_fechamento_mes", "lavrado_em": "2026-11-18 10:03:36.467889+00:00"}
+ DIAPAGO versao=oraculo pago_do_dia_h=6.5745838888888875 min=394 | {"id": "2383073", "colaborador_id": "89", "mes": "11", "ano": "2026", "data": "2026-11-08", "tipo": "dia", "versao": "oraculo", "horas_trabalhadas": "6.5745838888888875", "horas_intra_indenizada": "0.49908749999999996", "minutos_previstos": "440.0", "minutos_realizados": "395.0", "evento_origem": "recalcular_fechamento_mes", "detalhe": "{\"calculador_nao_decide\": [\"horas_falta\", \"horas_reflexo_dsr\", \"saldo_banco_horas\"]}", "lavrado_em": "2026-11-18 10:03:36.699900+00:00"}
+ TELA(dia dict): pago_h=6.57 veredito_dia='trabalhou' palavra_dia='' cor='' realizado_aberto=False realizado_h=6.6 minutos_realizados=395 previsto=[] ausencia=None falta_frase='falta saida 18:20' falta_marcos=[{'tipo': 'S', 'hora': '18:20'}] rubricas={'lavrada': True, 'extras_50': 0.0, 'extras_100': 0.0, 'atraso': 0.0, 'antecipada': 0.0, 'noturnas': 0.0, 'intra': 0.49908749999999996, 'trabalhadas': 6.574583888888889, 'minutos_extra': 0.0}
+ TELA(dia dict) turnos_motor=[('08/11 06:55:32', '08/11 14:00:04', False, ['Intrajornada suprimida — 29min pagos como hora extra (Art.71 §4 CLT / Sumula 437 TST). Intra real: 30min.'])]
+ PDF_LINHA: 08/11 dom | 10:00 18:20 | MARCACOES:S12:32 E13:02 S14:00 + *06:55 |  |  | 0h30 | 6h34
+============================================================
+CASO C015 col89 15/11  (0.0s)
+ ESPELHO n_marcacoes=4: 06:55 E orfa=True origem=app proc=None just= ; 12:00 S orfa=False origem=app proc=None just= ; 12:32 E orfa=False origem=app proc=None just= ; 14:03 S orfa=False origem=app proc=None just=
+ APURAVEIS d-1 12h..d+1 12h n=8: 14/11 12:01:43 S pk=154912 orig=app itv=False apr=True tr= canal=apk perg=None ; 14/11 13:00:09 E pk=154943 orig=app itv=False apr=True tr= canal=apk perg=None ; 14/11 18:14:16 S pk=155150 orig=app itv=False apr=True tr= canal=apk perg=None ; 15/11 06:55:08 E pk=155519 orig=app itv=False apr=True tr= canal=apk perg=None ; 15/11 12:00:14 S pk=155653 orig=app itv=False apr=True tr= canal=apk perg=None ; 15/11 12:32:30 E pk=155680 orig=app itv=False apr=True tr= canal=apk perg=None ; 15/11 14:03:44 S pk=155731 orig=app itv=False apr=True tr= canal=apk perg=None ; 16/11 09:55:05 E pk=156388 orig=app itv=False apr=True tr= canal=apk perg=None
+ RETRATADAS na janela n=0
+ TURNO data_turno=2026-11-15 entrada=15/11 06:55:08 saida=15/11 14:03:44 aberto=False fim_fechado=15/11 14:03:44 batidas=06:55E 12:00S 12:32E 14:03S
+   intervalos_do_turno=[('15/11 12:00:14', '15/11 12:32:30')]
+ turnos de data_turno=2026-11-15 no pareamento da janela inteira: 1 (total na janela 24)
+ REALIZADO(todos turnos)=(396, False, False, False, 0, False)
+ REALIZADO(so turnos com saida)=(396, False, False, False, 0, False)
+ borda_posicional=False
+ CELULA: {"id": "123508", "colaborador_id": "89", "data": "2026-11-15", "trabalha": "True", "origem": "gerada", "escala_geradora_id": "1039", "dna": "{\"marcos\": {\"hf\": \"18:20\", \"hi\": \"10:00\", \"hfi\": \"13:00\", \"hii\": \"12:00\"}, \"lampadas\": [{\"hora\": \"10:00\", \"tipo\": \"E\", \"chave\": \"hi\", \"instante\": \"2026-11-15T10:00\"}, {\"hora\": \"12:00\", \"tipo\": \"S\", \"chave\": \"hii\", \"instante\": \"2026-11-15T12:00\"}, {\"hora\": \"13:00\", \"tipo\": \"E\", \"chave\": \"hfi\", \"instante\": \"2026-11-15T13:00\"}, {\"hora\": \"18:20\", \"tipo\": \"S\", \"chave\": \"hf\", \"instante\": \"2026-11-15T18:", "gerada_em": "2026-10-06 10:20:42.801509+00:00", "julgada_em": "2026-11-16 21:15:34.708287+00:00", "impressao": "36a7df7a96d4fce7b201973b1c5796436395ec251b17330b70c43b4453ed6889", "veredito": "concorde", "veredito_via": "cartorio", "veredito_em": "2026-11-15 21:50:05.107581+00:00", "ata": "{\"orfas\": [\"06:55\"], \"n_orfas\": 1, \"lampadas\": [{\"luz\": \"12:00\", \"hora\": \"10:00\", \"tipo\": \"E\", \"acesa\": true, \"tipo_real\": \"S\"}, {\"luz\": \"12:32\", \"hora\": \"12:00\", \"tipo\": \"S\", \"acesa\": true, \"tipo_real\": \"E\"}, {\"luz\": \"14:03\", \"hora\": \"13:00\", \"tipo\": \"E\", \"acesa\": true, \"tipo_real\": \"S\"}, {\"luz\": null, \"hora\": \"18:20\", \"tipo\": \"S\", \"acesa\": false, \"tipo_real\": null}], \"tipo_dia\": \"trabalho\", \"n_c", "tem_entrada": "True", "insumos_em": "2026-11-16 21:15:34.708287+00:00", "status_dia": "ok", "status_rotulo": "Marco cumprido com batida — todas as batidas previstas registradas"}
+ EC.marcos_do_dia=(datetime.time(10, 0), datetime.time(18, 20), datetime.time(12, 0), datetime.time(13, 0)) tipo_escala=ESCALA ARTES · 6x1 · 10:00-18:20
+ JUSTIFICATIVAS data_turno=2026-11-15 n=0 []
+ DIAPAGO versao=motor pago_do_dia_h=6.605381666666667 min=396 | {"id": "2383049", "colaborador_id": "89", "mes": "11", "ano": "2026", "data": "2026-11-15", "tipo": "dia", "versao": "motor", "horas_trabalhadas": "6.605381666666667", "horas_extras_100": "6.605381666666667", "horas_extras_100_feriado": "6.605381666666667", "horas_intra_indenizada": "0.4620066666666666", "minutos_previstos": "440.0", "minutos_realizados": "396.0", "versao_motor": "relogio|p5h=1|hr=0|fd=1", "evento_origem": "recalcular_fechamento_mes", "lavrado_em": "2026-11-18 10:03:36.468043+00:00"}
+ DIAPAGO versao=oraculo pago_do_dia_h=6.605381666666667 min=396 | {"id": "2383080", "colaborador_id": "89", "mes": "11", "ano": "2026", "data": "2026-11-15", "tipo": "dia", "versao": "oraculo", "horas_trabalhadas": "6.605381666666667", "horas_extras_100": "6.605381666666667", "horas_extras_100_feriado": "6.605381666666667", "horas_intra_indenizada": "0.4620066666666666", "minutos_previstos": "440.0", "minutos_realizados": "396.0", "evento_origem": "recalcular_fechamento_mes", "detalhe": "{\"calculador_nao_decide\": [\"horas_falta\", \"horas_reflexo_dsr\", \"saldo_banco_horas\"]}", "lavrado_em": "2026-11-18 10:03:36.700054+00:00"}
+ TELA(dia dict): pago_h=6.61 veredito_dia='trabalhou' palavra_dia='' cor='' realizado_aberto=False realizado_h=6.6 minutos_realizados=396 previsto=[] ausencia=None falta_frase='falta saida 18:20' falta_marcos=[{'tipo': 'S', 'hora': '18:20'}] rubricas={'lavrada': True, 'extras_50': 0.0, 'extras_100': 6.605381666666667, 'atraso': 0.0, 'antecipada': 0.0, 'noturnas': 0.0, 'intra': 0.4620066666666666, 'trabalhadas': 6.605381666666667, 'minutos_extra': 396.3229}
+ TELA(dia dict) turnos_motor=[('15/11 06:55:08', '15/11 14:03:44', False, ['Intrajornada suprimida — 27min pagos como hora extra (Art.71 §4 CLT / Sumula 437 TST). Intra real: 32min.', 'Feriado em 15/11/2026 — todas as 6.6h pagas em dobro (Sumula 146 TST).', 'Feriado em 15/11/2026 — todas as 6.6h pagas em dobro (Sumula 146 TST).'])]
+ PDF_LINHA: 15/11 dom ★ | 10:00 18:20 | MARCACOES:S12:00 E12:32 S14:03 + *06:55 |  | 6h36 | 0h28 | 6h37
+============================================================
+CASO C017 col32 22/10  (1.2s)
+ ESPELHO n_marcacoes=3: 07:00 E orfa=False origem=app proc=None just= ; 12:26 S orfa=False origem=app proc=None just= ; 19:00 S orfa=False origem=app proc=None just=
+ APURAVEIS d-1 12h..d+1 12h n=3: 22/10 07:00:23 E pk=133877 orig=app itv=False apr=True tr= canal=None perg=None ; 22/10 12:26:07 S pk=134164 orig=app itv=False apr=True tr= canal=None perg=None ; 22/10 19:00:23 S pk=134711 orig=app itv=False apr=True tr= canal=None perg=None
+ RETRATAD
+
+[truncado em 20000 de 68679 caracteres]
 
 ## 18/11 10:39 · sessao 5eee9c2e3d72 · E4C-F4 · verificador · origem=Code
 
@@ -1004,17 +1092,4 @@ rc_sombra=0
 ```
 linhas copiadas: 9
 
-## 18/11 10:12 · sessao a775ebdff421 · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
-
-```text
-=== SOMBRA (sombra_db, leitor) 18/11 10:12:49 ===
-sonda_leitura: cen_F7_s1.py [c5b054230a562d09] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-U1_carimbo_fora_de_identidade_global: 29931
-validada_projetada_sem_linha: 15118
-U2: NAO MEDIDA — porta real F1 indisponivel nesta copia
-rc_sombra=0
-```
-linhas copiadas: 7
-
-_6899 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6900 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
