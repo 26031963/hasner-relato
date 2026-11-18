@@ -1,7 +1,236 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 12:12** · publicado em **18/11/2026 12:11** (UTC-3)
+> Ultima resposta processada: **18/11/2026 12:16** · publicado em **18/11/2026 12:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 12:16 · sessao d2c13875bd5b · DSTL1-PORTA-HE · sonda · origem=Code
+
+No dado fornecido, não aparece erro nem traceback. `CONCLUSAO_LIBERADA` está presente e `rc_sombra=0`. [não verificado]
+
+Cópia das três linhas solicitadas: [não verificado]
+
+```text
+FUNIL_HOJE_CAP0611 {'B_trabalha': 277, 'B_sem_trabalho': 139, 'C_pago>0': 78, 'C_ESTRUTURA_DINHEIRO': 54, 'C_ESTR_2mais': 36, 'C_decisao_he': 4, 'C_porta': 3}
+HOJE_ESTR_2mais_MARCADORES {'regen_pos': 4, 'regeneracoes': 12, 'dna_anterior': 12, 'julgada_pos': 9, 'diapago_lavrado_pos': 33, 'sem_marcador': 3, 'colab_desligado': 4} de 36
+HOJE_ESTR_POR_DIA {'2026-11-02': 11, '2026-11-05': 1, '2026-10-30': 1, '2026-11-03': 1, '2026-10-22': 4, '2026-10-29': 1, '2026-11-01': 2, '2026-10-21': 2, '2026-10-23': 1, '2026-10-31': 1, '2026-10-24': 2, '2026-10-25': 3, '2026-10-28': 1, '2026-10-27': 1, '2026-11-06': 1, '2026-11-04': 1, '2026-10-26': 2}
+```
+
+Contagem das 19 linhas `AMOSTRA` por `razao_hoje`: [não verificado]
+
+| `razao_hoje` | Contagem |
+|---|---:|
+| `pago_sem_decisao_ou_pago` | 11 |
+| `ESTRUTURA_DINHEIRO` | 8 |
+
+Dicionário `marc` de cada linha, agrupado por `razao_hoje`: [não verificado]
+
+| `razao_hoje` | Amostra | `marc` |
+|---|---|---|
+| `pago_sem_decisao_ou_pago` | `col43` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col207` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col369` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col384` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col789` | `{'regeneracoes': 5, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col822` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col962` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col967` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col991` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col1003` | `{'diapago_lavrado_pos': 1}` |
+| `pago_sem_decisao_ou_pago` | `col749` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col97` | `{'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col242` | `{'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col278` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col617` | `{'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col820` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col864` | `{'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col944` | `{'diapago_lavrado_pos': 1}` |
+| `ESTRUTURA_DINHEIRO` | `col900` | `{'regen_pos': 1, 'regeneracoes': 1, 'dna_anterior': 1, 'diapago_lavrado_pos': 1}` |
+
+## 18/11 12:15 · sessao 365c53fd8db0 · DSTL1-PORTA-HE · sonda · origem=Code
+
+A saída fornecida não contém erro nem traceback e chegou a `CONCLUSAO_LIBERADA`, seguida de `rc_sombra=0`. [não verificado]
+
+As tabelas abaixo transcrevem ou contam o dado fornecido no enunciado, que não tem arquivo e linha associados. [não verificado]
+
+**I4**
+
+| Contagem | Valor |
+|---|---:|
+| Linhas com `causaC=True` | 65 |
+| Total de linhas | 65 |
+
+| `classe_e6` entre as `causaC` | Quantidade |
+|---|---:|
+| `bate_ate_10min` | 52 |
+| `DIVERGE` | 7 |
+| `sem_trabalho_ambos` | 6 |
+
+**DONOS_DOS_DIVERGENTES**
+
+| Dono | Quantidade |
+|---|---:|
+| `ESTRUTURA` | 2 |
+| `BATIDA` | 5 |
+
+**I2 e I2_RELATO**
+
+| Colaborador | Dia | `janela_he_ativa` | `desde` | `piso` | `saida_ativa` | `dia_ge_desde` | `he_fora_espelho` | `motor_cxr_do_dia` | `motor_sem_previsto_fora` | `I2_RELATO` |
+|---|---|---|---|---:|---|---|---|---|---|---|
+| col741 | 2026-11-15 | True | 2026-08-21 | 0 | True | True | `[]` | `[]` | `[]` | `[] -> []` |
+| col899 | 2026-11-01 | True | 2026-08-21 | 0 | True | True | `[]` | `[]` | `[]` | `[] -> []` |
+| col944 | 2026-11-02 | True | 2026-08-21 | 0 | True | True | `[]` | `[]` | `[]` | `[]` | `[] -> []` |
+
+**I4SOMA**
+
+| Colaborador | `soma_min_real` | `fech_min_real` |
+|---|---:|---:|
+| col55 | 8352.0 | 8352 |
+| col61 | 5758.0 | 5758 |
+| col114 | 9221.0 | 9221 |
+| col123 | 9356.0 | 9356 |
+| col130 | 8915.0 | 8915 |
+| col137 | 5572.0 | 5572 |
+| col198 | 8639.0 | 8639 |
+| col203 | 8819.0 | 8819 |
+| col206 | 8485.0 | 8485 |
+| col227 | 9113.0 | 9113 |
+| col237 | 9360.0 | 9360 |
+| col242 | 6150.0 | 6150 |
+| col250 | 5931.0 | 5931 |
+| col270 | 2083.0 | 2083 |
+| col278 | 8731.0 | 8731 |
+| col281 | 8639.0 | 8639 |
+| col282 | 8528.0 | 8528 |
+| col328 | 6871.0 | 6871 |
+| col331 | 6894.0 | 6894 |
+| col334 | 7325.0 | 7325 |
+| col364 | 8630.0 | 8630 |
+| col373 | 1880.0 | 1880 |
+| col398 | 9097.0 | 9097 |
+| col399 | 9299.0 | 9299 |
+| col424 | 9356.0 | 9356 |
+| col444 | 8061.0 | 8061 |
+| col451 | 5040.0 | 5040 |
+| col476 | 9455.0 | 9455 |
+| col489 | 8698.0 | 8698 |
+| col515 | 9229.0 | 9229 |
+| col617 | 6300.0 | 6300 |
+| col627 | 8313.0 | 8313 |
+| col634 | 8114.0 | 8114 |
+| col696 | 0.0 | 0 |
+| col741 | 711.0 | 711 |
+| col835 | 9217.0 | 9217 |
+| col843 | 9234.0 | 9234 |
+| col845 | 8580.0 | 8580 |
+| col849 | 9232.0 | 9232 |
+| col864 | 10056.0 | 10056 |
+| col899 | 7081.0 | 7081 |
+| col913 | 8889.0 | 8889 |
+| col932 | 7763.0 | 7763 |
+| col935 | 8580.0 | 8580 |
+| col936 | 7597.0 | 7597 |
+| col944 | 7730.0 | 7730 |
+| col950 | 4427.0 | 4427 |
+| col985 | 9452.0 | 9452 |
+| col996 | 9271.0 | 9271 |
+| col998 | 8074.0 | 8074 |
+| col999 | 7692.0 | 7692 |
+| col1001 | 6748.0 | 6748 |
+| col1012 | 4710.0 | 4710 |
+| col1045 | 0.0 | 0 |
+
+Linhas `I4SOMA` com valores numericamente diferentes: **0 de 54**. [não verificado]
+
+## 18/11 12:15 · sessao 24f25bb8b191 · DSTL1-PORTA-HE · leitura · origem=Code
+
+**Resultado principal:** o código distingue o `DiaPago.minutos_realizados` dos minutos da ata e dos minutos calculados pelo pareador. `pago_do_dia` e `rubricas_do_dia` **não leem** esse campo do `DiaPago`; portanto, não é possível inferir o pagamento ou uma pendência de HE apenas a partir de ele ser zero. ([dia_pago.py:859](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:859), [espelho.py:775](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:775))
+
+A lista abaixo registra os leitores e caminhos identificados na inspeção. **A exaustividade de todos os leitores indiretos ou dinâmicos de produção permanece [não verificado].** Não houve consulta a banco nem a logs de produção.
+
+### A. Leitores e origem dos valores
+
+**Produção do campo.** `DiaPago.minutos_realizados` é `FloatField(default=0.0)`, sem `null=True` na definição. `por_dia_da_grade` forma o mapa apenas com dias `trabalho` e `ausencia`, usando `min(realizado ou 0, previsto ou 0)`; assim, `folga` e `feriado` não entram nesse mapa. `fechamento` o passa à lavratura. Isso descreve a construção do mapa, não prova o conteúdo de uma linha concreta. ([models.py:351](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/models.py:351), [dia_pago.py:386](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:386), [fechamento.py:1060](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1060), [fechamento.py:1200](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/fechamento.py:1200))
+
+**Leituras efetivas de `DiaPago.minutos_realizados` identificadas:**
+
+| Leitor | Uso de 0 ou nulo em folga/feriado |
+|---|---|
+| `soma_da_competencia` | Faz `Sum` dinâmico de todos os `CAMPOS`, inclusive minutos realizados e linha de ajuste. Zero contribui zero; agregado nulo vira zero. Sem nenhuma linha, retorna `None`. Não filtra tipo de dia. ([dia_pago.py:34](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:34), [dia_pago.py:550](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:550)) |
+| `soma_do_periodo` | Faz `values`/`annotate(Sum(...))` de `CAMPOS_DIA`, agrupando por colaborador. Zero contribui zero e agregado nulo vira zero; a função também devolve conjuntos para distinguir ausência de lavratura e de apuração. Não filtra tipo de dia. ([dia_pago.py:752](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:752), [dia_pago.py:784](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:784)) |
+| `folha.porta_export.medir`, função interna `_medir_dia_pago` | Compara cada campo da soma da competência com o homônimo do `FechamentoMensal`; pode registrar divergência e classificá-la conforme exportação e comparação com a grade. Compara o **total**, não decide isoladamente o estado de uma folga. ([porta_export.py:378](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:378), [porta_export.py:451](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:451)) |
+| `foto_do_colaborador` / `mudancas` | Fotografa todos os campos concretos das linhas `DiaPago` e compara os dicionários completos. Uma mudança no campo pode aparecer como linha alterada, sem regra especial para folga ou feriado. ([foto_e4b.py:209](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:209), [foto_e4b.py:247](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:247), [foto_e4b.py:289](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:289), [foto_e4b.py:116](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/foto_e4b.py:116)) |
+
+**Quem recebe `DiaPago`, mas não usa esse campo para o valor exibido:**
+
+- `linhas_do_periodo` devolve objetos `DiaPago` por data. `pago_do_dia` testa rubricas de dinheiro e devolve `None` se a linha falta ou se todas essas rubricas são zero; caso contrário, soma horas trabalhadas, folga trabalhada e a parcela de folga-feriado no detalhe. `rubricas_do_dia` lê outras rubricas e, sem linha, devolve zeros com `lavrada=False`. Nenhuma das duas funções consulta `DiaPago.minutos_realizados`. ([dia_pago.py:833](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:833), [dia_pago.py:859](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:859), [dia_pago.py:890](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:890), [dia_pago.py:901](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:901))
+- No **espelho**, `montar_dias` entrega `pago_h` e `rubricas` por essas funções. O template omite rubricas zeradas e, sem lavratura, mostra “sem apuração ainda”. O **PDF** lê `pago_h` e rubricas; rubricas zero ficam vazias. O drill do relatório transforma `pago_h=None` em zero interno e exibe vazio se zero. Esses comportamentos dependem das rubricas, não do minuto gravado em `DiaPago`. ([espelho.py:805](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:805), [espelho.html:268](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/templates/ponto/espelho.html:268), [pdf_espelho.py:901](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/pdf_espelho.py:901), [services.py:142](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/services.py:142))
+- No **app**, `horas_do_dia` converte `pago_do_dia=None` em `0.0` quando existe linha; sem linha, usa o período do motor e marca a fonte como não lavrada. A testemunha `espelho_x_dia_pago` da folha também usa `pago_do_dia`, convertendo seu `None` em zero para comparar com os períodos do motor. ([espelho.py:120](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:120), [api/views.py:1531](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/api/views.py:1531), [porta_export.py:101](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/porta_export.py:101))
+- O relatório e o cartão chamam as agregações que incluem o minuto, mas os usos identificados para os valores apresentados selecionam outras chaves de rubricas. O efeito de **todos** os demais consumidores indiretos dessas agregações sobre o minuto está [não verificado]. ([relatorios/views.py:481](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/views.py:481), [cartao_pela_celula.py:141](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/relatorios/cartao_pela_celula.py:141))
+
+**Homônimos que não são o campo de `DiaPago`:**
+
+- `dia['minutos_realizados']` do espelho vem de `_real_dia.minutos`, calculado por `realizado_do_dia`; pode ser `None`. O E6 usa esse valor primeiro e só recorre a `pago_h` quando ele é `None`. ([espelho.py:675](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:675), [espelho.py:783](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:783), [e6_oraculo.py:263](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:263))
+- `CelulaDia.ata['minutos_realizados']`: `referencia_do_espelho` no PDF de conferência converte zero ou `None` em zero e só incrementa dias e minutos quando o valor é verdadeiro. ([validacao_pdf.py:29](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/validacao_pdf.py:29), [validacao_pdf.py:44](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/validacao_pdf.py:44))
+- O `dia` da **grade** em `status_dia.fatos_do_status` converte zero ou `None` em zero para `tem_batida`; ainda pode haver `tem_batida=True` por células ou órfãs. `supra_juiz.classificar_dia` também lê o valor da grade com `or 0`. `folha.causas.classificar_causa` soma o realizado dos dias úteis e pode emitir `realizado_zero` conforme as outras guardas. ([status_dia.py:166](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/status_dia.py:166), [status_dia.py:185](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/status_dia.py:185), [supra_juiz.py:217](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/supra_juiz.py:217), [causas.py:28](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/causas.py:28), [causas.py:84](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/causas.py:84))
+- `folha.export` lê também **`FechamentoMensal.minutos_realizados`**: zero é usado como zero; `None` faz fallback para `trab`. No fallback pela grade, o cálculo do realizado seleciona dias de trabalho. Isso não é leitura do campo diário `DiaPago`. ([export.py:1076](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:1076), [export.py:1095](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/folha/export.py:1095))
+- `core/juizes.py` registra a autoridade `realizado_do_dia`; esse registro não lê o valor de um `DiaPago`. Leitura do campo por `veredito_celula` ou pelo motor: **[não verificado]**. ([juizes.py:203](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/core/juizes.py:203))
+
+### B. Juiz e rótulo `ESTRUTURA_DINHEIRO`
+
+O predicado exato que **produz `ESTRUTURA_DINHEIRO` está [não verificado]**: a busca pelo literal em `app/` encontrou referências documentais, mas não um produtor executável identificado. A descrição documental não substitui o predicado do código. ([RELATO.md:2674](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/RELATO.md:2674))
+
+O que está verificado é o juiz E6, que retorna `CADASTRO`, `BATIDA` ou `ESTRUTURA`. Para retornar **`ESTRUTURA`**, todas estas condições devem valer: os três indicadores cadastrais são falsos; `batida_fora_de_turno` é falso; a quantidade de `horas_do_dia` é par, inclusive zero; `fase_deslocada` é falso; e `em_cadastro_x_realidade` é falso. A função, por si, não exige que haja divergência numérica. ([e6_oraculo.py:53](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:53), [e6_oraculo.py:98](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:98))
+
+Os insumos montados por `InsumosDoDono` são:
+
+- **Horas/paridade:** timestamps de `batidas_apuraveis` na janela ampliada, processados por `minutos_do_oraculo`. ([e6_oraculo.py:149](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:149))
+- **Cadastro:** callback cadastral fornecido ou `cadastro_do_dia_carregado`, que fornece os indicadores passados ao juiz. ([e6_oraculo.py:182](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:182), [supra_juiz.py:173](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/supra_juiz.py:173))
+- **Batida fora de turno:** `realizado_do_dia(...).aberto`, mais a existência de entrada solta que permaneça apurável; os turnos vêm de `turnos_do_colab`. ([e6_oraculo.py:156](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:156), [e6_oraculo.py:198](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:198))
+- **Fase:** dias informados pelo chamador ou lidos por `dias_de_fase_as_of`. **Cadastro x realidade:** conjunto fornecido ou `resultado.dias_cadastro_x_realidade` do espelho/motor. Com `sem_motor=True` e sem esse conjunto, uma resposta que dependeria dele pode ser `None`. ([e6_oraculo.py:128](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:128), [e6_oraculo.py:162](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:162), [e6_oraculo.py:174](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:174), [e6_oraculo.py:189](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:189))
+
+**Nenhum desses insumos é `DiaPago.minutos_realizados`.** Na comparação que antecede a chamada ao dono, o E6 lê primeiro o minuto do **espelho/pareador**; se for `None`, usa `pago_h`, que vem das rubricas descritas acima. Alterar somente o minuto de `DiaPago` não altera diretamente essa entrada nem o juiz. Se o minuto **do espelho** for zero, ele é comparado como zero; se for `None`, há fallback para `pago_h`, e, sem ambos, o dia sai da comparação. ([e6_oraculo.py:242](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:242), [e6_oraculo.py:332](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:332), [espelho.py:783](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:783), [dia_pago.py:890](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:890))
+
+### C. Condições para não aparecer pendência de HE
+
+Ter duas ou mais batidas apuráveis **não basta** para publicar uma pendência: a lista do dia é a união de três vias, e só fica vazia quando nenhuma delas produz item. As condições abaixo são gerais; não atribuem causa a nenhum dia concreto. ([espelho.py:720](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:720))
+
+1. **Cadastro e vigência.** A lista começa vazia e as três vias só são executadas se `janela_he_ativa` for verdadeira, `janela_he_desde` existir e a data for igual ou posterior a ela. Saída desligada impede as pontas de saída, mas não impede por si uma ponta de entrada ou o item de dia inteiro. ([espelho.py:384](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:384), [espelho.py:720](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:720), [janela_he.py:194](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:194))
+
+2. **Vínculo e grade.** Sem vínculo **do dia**, as extras declaradas permanecem zero; o código continua e ainda tenta produzir pendência. Se não houver montador de realizado, `_real_grade` fica vazia, eliminando as duas vias que precisam de células-alvo, mas isso não elimina necessariamente a via de dia inteiro. ([espelho.py:688](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:688), [espelho.py:720](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:720), [janela_he.py:272](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:272))
+
+3. **Ponta diretamente atribuída.** `marcar_pontas_fora` considera a primeira célula de marco tipo `E` e a última tipo `S`; ignora célula `missing`, demais marcos, saída com a opção desligada e desvio no sentido errado ou zero. Da sobra no sentido correto desconta a extra declarada; se a sobra for zero ou não exceder o piso, não produz aquela ponta. Igualdade com o piso fica dentro da janela. ([janela_he.py:51](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:51), [janela_he.py:73](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:73), [janela_he.py:194](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:194))
+
+4. **Recuperação de ponta pelo relato.** `missing` sozinho **não elimina a pendência**: `pontas_do_relato` pode recuperá-la. Essa via não acrescenta item se faltar relato do mesmo dia com causa de janela e sentido reconhecido, se a saída estiver desligada, se o sentido já tiver sido marcado, se não existir célula-alvo `missing`, se o marco não coincidir ou se os minutos arredondados não forem positivos. A ausência nessa via tampouco elimina as outras duas. ([janela_he.py:267](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:267), [janela_he.py:293](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:293), [janela_he.py:311](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/janela_he.py:311))
+
+5. **Dia inteiro sem previsto.** A terceira via traduz itens do motor com a mesma data e minutos verdadeiros. O motor deixa de produzir esse item, entre outras guardas, se faltar entrada ou minutos trabalhados, se não for folga nem feriado, se a empresa não estiver na janela, se o previsto não for exatamente zero, se houver autorização, ou, para folga com colaborador conhecido, se `escala_certa_no_dia` for falsa. Essas guardas são específicas dessa via. ([espelho.py:743](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:743), [motor_calculo_v2.py:1440](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1440), [motor_calculo_v2.py:1465](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:1465))
+
+6. **Apuração e competência.** `apurar` percorre apenas colaboradores da empresa com `situacao='ativo'`; erro ao obter o espelho pula o colaborador e incrementa erros. Para os dias recebidos, rejeita data ilegível ou fora da janela da competência e pula lista `he_fora_da_janela` vazia. Uma decisão existente muda o estado e a contagem de “sem decisão”, mas não remove automaticamente o dia que já tem pontas da fotografia. ([he_pendente_lavrado.py:89](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:89), [he_pendente_lavrado.py:114](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:114), [he_pendente_lavrado.py:132](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:132))
+
+7. **Publicação e visualização.** A Gestão lê uma fotografia que pode não existir; a leitura devolve também quando foi calculada. O cron mantém a competência atual e a anterior enquanto esta não estiver entregue. Na Gestão, busca, praça, posto, estado e dono podem ocultar uma linha ou dia já fotografado; isso é filtro de exibição, não prova de que a pendência não foi lavrada. ([he_pendente_lavrado.py:193](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:193), [he_pendente_lavrado.py:209](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/he_pendente_lavrado.py:209), [gestao_he.py:236](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:236), [gestao_he.py:317](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/gestao_he.py:317))
+
+## 18/11 12:13 · sessao 807b8f662b4b · - · - · origem=Ronald (tmux)
+
+A busca em `app/` encontrou o literal `ESTRUTURA_DINHEIRO` em documentação, mas não em um produtor executável. O predicado exato do rótulo composto está **[não verificado]**. A documentação o descreve como dias sem pago, decisão de HE, porta ou verbo de administrador, mas isso não substitui o predicado da sonda que os classificou ([app/docs/RELATO.md:2674](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/docs/RELATO.md:2674)).
+
+O juiz E6 responde outra pergunta e retorna apenas `CADASTRO`, `BATIDA` ou `ESTRUTURA`. Ele retorna `ESTRUTURA` quando os três indicadores de cadastro são falsos, `batida_fora_de_turno` é falso, a quantidade de `horas_do_dia` é par, `fase_deslocada` é falso e o dia não está em cadastro versus realidade; zero batidas também é par ([e6_oraculo.py:98](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:98)). Com `sem_motor=True`, sem conjunto CXR fornecido, o resultado que dependeria dessa lista fica `None` ([e6_oraculo.py:189](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:189)).
+
+Os insumos de `InsumosDoDono` são:
+
+- `horas`: timestamps das batidas apuráveis na janela ampliada, agrupados pelo oráculo; batidas retratadas são excluídas ([e6_oraculo.py:149](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:149), [nucleo.py:230](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/calculador/nucleo.py:230), [turnos.py:2868](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/turnos.py:2868)).
+- `batida_fora_de_turno`: o estado `aberto` de `realizado_do_dia` e a existência de entrada solta apurável, usando turnos carregados para a janela ampliada ([e6_oraculo.py:156](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:156), [e6_oraculo.py:198](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:198)).
+- Indicadores cadastrais: vínculo do dia e defeito de folga; na ausência de vínculo, célula e data de demissão alimentam o indicador específico de dia de trabalho ([supra_juiz.py:179](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/supra_juiz.py:179), [supra_juiz.py:206](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/supra_juiz.py:206)).
+- `fase_deslocada`: dias da lavra mais recente que cobre cada data, em `itens` e `itens_reabertos` ([e6_oraculo.py:174](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:174), [fase_12x36.py:117](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/services/fase_12x36.py:117)).
+- Cadastro versus realidade: conjunto fornecido ao carregador ou extraído de `resultado.dias_cadastro_x_realidade` do motor no espelho ([e6_oraculo.py:142](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:142), [e6_oraculo.py:162](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:162), [motor_calculo_v2.py:2719](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/motor_calculo_v2.py:2719)).
+
+Nenhum desses insumos lê diretamente `DiaPago.minutos_realizados`. A comparação feita pelo comando E6 antes de perguntar o dono lê o homônimo do espelho, proveniente de `_real_dia.minutos` do pareador; se ele for `None`, usa `pago_h`, quando disponível ([espelho.py:777](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/espelho.py:777), [e6_oraculo.py:263](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/management/commands/e6_oraculo.py:263)). `pago_do_dia` usa rubricas monetárias e detalhe, não esse campo de minutos ([dia_pago.py:859](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:859), [dia_pago.py:890](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/dia_pago.py:890)). Assim, alterar apenas `DiaPago.minutos_realizados` para `0` ou `None` não muda diretamente esses insumos nem esse fallback; o efeito sobre o rótulo composto da sonda permanece **[não verificado]**.
+
+## 18/11 12:13 · sessao dc1dc864d1a9 · - · - · origem=Ronald (tmux)
+
+Investigação da pergunta A enviada ao agente principal, com as referências de código e a distinção entre `DiaPago.minutos_realizados`, o valor da ata e o valor do espelho.
+
+## 18/11 12:13 · sessao 0720f43be677 · - · - · origem=Ronald (tmux)
+
+Investigação da pergunta C concluída e enviada ao agente principal, com as condições de cada uma das três vias de publicação e os filtros posteriores da Gestão de HE.
 
 ## 18/11 12:12 · sessao a39022e4c520 · F5-DSTL1 · sonda · origem=Code
 
@@ -643,116 +872,4 @@ A cópia fornecida não contém `.git`; portanto, a identidade com o hash inform
 - **`passivo_sem_linha`:** é valor calculado, não campo persistido. `linhas_da_projecao_sem_linha` compara os campos de resposta/validação da pergunta com a sequência; a carga forma `_passivo` e `_pela_decisao` o lê antes do último ato. A porta `registrar` pode escrever as linhas ausentes, por exemplo na validação ou no backfill. ([models.py:4122](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/models.py:4122), [tarefa_do_dia.py:433](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:433), [tarefa_do_dia.py:154](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/tarefa_do_dia.py:154), [validacao.py:167](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/services/validacao.py:167), [backfill_fio_morto_e4b.py:141](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/chamados/management/commands/backfill_fio_morto_e4b.py:141))
 - **`decisao_do_dia`:** não é campo escrito: a função lê `veredito`, `veredito_via`, `veredito_em` da célula e autoria da auditoria. A porta de lavra é delegada por `CelulaDia.lavrar_veredito`; o calendário chama a função e lê o resultado por data. Outros leitores ou escritores relevantes ao DST-L1 **[não verificado]**. ([veredito_celula.py:85](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/ponto/services/veredito_celula.py:85), [models.py:1819](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/escala/models.py:1819), [calendario.py:445](/home/ronald/codex_ws/d541609996e4a8a54198178991ad0c1a17db1f01/app/colaboradores/services/calendario.py:445))
 
-## 18/11 11:37 · sessao ffbeb739668c · - · - · origem=Ronald (tmux)
-
-Rastreamento das portas P8, P9, P16 e X4 enviado ao agente principal, com as referências de código e os limites de verificação.
-
-## 18/11 11:37 · sessao 3979583d66c1 · - · - · origem=Ronald (tmux)
-
-Achados de A9b e X11 enviados ao agente principal, com referências de código e limites de verificação.
-
-## 18/11 11:37 · sessao 1c948a13e548 · - · - · origem=Ronald (tmux)
-
-Achados enviados ao agente principal, com referências de arquivo e linha para a decisão de entrega, invalidação, campos da guarda, recálculo e Pauta DP.
-
-## 18/11 11:30 · sessao 97a0a71d9854 · EVAL-NOTURNO · verificador · origem=Code
-
-1. **Não encontrei erro de sintaxe nem grep que deixe de casar na cópia:** `bash -n` e a análise sintática Python passaram; os três greps correspondem às linhas atuais do gerador. O selo completo não foi executado porque cria e apaga arquivos. [bin/tests/test_eval_estado.sh:23](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:23), [bin/gerar_estado.py:316](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:316), [bin/gerar_estado.py:402](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:402).
-
-   Há uma **possível passagem vacuosa no caso de mtime**: o selo usa apenas `set -u`, não verifica o sucesso de `touch -d`, e depois só verifica o resultado do medidor. Se o `touch` falhar, a inversão de mtimes pretendida pode não existir e o caso ainda passar. Isso enfraquece o teste; não demonstra defeito no medidor. [bin/tests/test_eval_estado.sh:15](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:15), [bin/tests/test_eval_estado.sh:55](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:55). O caso de dois dias e seu mutante conferem resultados distintos, portanto não passam vacuamente pelo defeito de limite que pretendem detectar. [bin/tests/test_eval_estado.sh:51](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:51), [bin/tests/test_eval_estado.sh:82](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:82).
-
-2. **No caminho do contador de eval, não resta leitura própria do relógio**, desde que `gerar` receba uma data: ela é passada a `ler`, cujo `today()` só é usado quando `hoje` é `None`. [bin/gerar_estado.py:317](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:317), [bin/eval_estado.py:32](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/eval_estado.py:32). **No caminho do ESTADO como um todo, sim:** o placar estrutural chama `date.today()` internamente, e o carimbo de geração chama `date` separadamente. [bin/gerar_estado.py:79](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:79), [bin/gerar_estado.py:320](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:320), [bin/gerar_estado.py:409](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:409).
-
-3. Na CLI, a borda fornece `hoje` pelo terceiro argumento ou por `date.today()`; `gerar` o recebe e o passa ao eval e aos dois contadores de recusa. Nessas seções é **a mesma data recebida**. [bin/gerar_estado.py:417](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:417), [bin/gerar_estado.py:269](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:269), [bin/gerar_estado.py:317](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:317). Não é garantido que seja o mesmo dia de **todas** as seções: o placar estrutural lê o relógio de novo, podendo divergir na virada do dia ou quando se injeta outra data. [bin/gerar_estado.py:79](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/gerar_estado.py:79).
-
-4. **Os dois descartes, por si, não precisam bloquear este delta.** Uma data futura produz explicitamente “sem medida”, com motivo, em vez de uma idade enganosa; isso é uma escolha de comportamento visível. [bin/eval_estado.py:54](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/eval_estado.py:54). O selo não gerar o ESTADO inteiro deixa sem verificação dinâmica a publicação integrada: ele procura trechos no código e exercita o medidor separadamente. Essa limitação é real, mas não prova que a publicação falhe. [bin/tests/test_eval_estado.sh:23](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:23), [bin/tests/test_eval_estado.sh:30](/home/ronald/codex_ws/4b207e02b236331e197c0688ad01dc228817cceb/bin/tests/test_eval_estado.sh:30). A exigência de um teste integrado como condição de aceite é **[não verificado]**.
-
-## 18/11 11:28 · sessao b6692ccfca8e · EVAL-NOTURNO · verificador · origem=Code
-
-O medidor atende, por inspeção, ao caso de relatório de três dias, mas há uma falha de integração do relógio: o gerador já recebe `hoje` e chama o medidor sem passá-lo, causando uma segunda leitura que pode divergir da data usada pelas demais seções. O selo também não verifica a publicação real no ESTADO nem o limite de dois dias. [bin/eval_estado.py:53; bin/eval_estado.py:59; bin/gerar_estado.py:317; bin/gerar_estado.py:417; bin/tests/test_eval_estado.sh:21; bin/tests/test_eval_estado.sh:42]
-
-1. **Escritor e leitor.** `eval/noturno.py` muda para o diretório `eval`, executa harness e juiz e grava `runs/relatorio_AAAA-MM-DD.md` com `time.strftime` no momento da escrita. Sem argumento de tempo, essa função usa a hora local do processo; o nome, portanto, representa o dia civil local, não necessariamente UTC. O medidor lista os nomes em `eval/runs`, interpreta as datas e escolhe a maior; não lê o conteúdo do relatório. `gerar_estado.py` chama esse medidor e publica sua linha. [eval/noturno.py:24; eval/noturno.py:36; eval/noturno.py:43; eval/noturno.py:113; bin/eval_estado.py:25; bin/eval_estado.py:37; bin/eval_estado.py:53; bin/gerar_estado.py:315; bin/gerar_estado.py:374]
-
-   Os dois usam dia civil local, **desde que os processos tenham o mesmo fuso configurado**; não há fuso explícito nesses pontos. O fuso efetivo do escritor e do gerador em produção é [não verificado]. [eval/noturno.py:113; bin/eval_estado.py:31]
-
-2. **Outro medidor.** Na busca no código disponível de `bin/`, `eval/` e `app/`, não encontrei um segundo cálculo de dias desde o último relatório. `eval/estatisticas.py` lista placares e tempos por execução e conta commits recentes; `app/config/crons.py` trata do agendamento e da duração do processo, perguntas diferentes. A inexistência absoluta de outro medidor é [não verificado]. [eval/estatisticas.py:12; eval/estatisticas.py:47; eval/estatisticas.py:57; app/config/crons.py:575; app/config/crons.py:594]
-
-3. **Relógios.** No medidor, `date.today()` aparece no default de `ler`; o CLI aceita `--hoje` e o entrega a `ler`. No gerador, a borda já captura ou recebe uma data, mas `_ler_evn(raiz)` não a usa: entra no default e lê o relógio novamente. Ao atravessar a meia-noite, ou ao gerar com uma data injetada, a seção do eval pode usar outro dia. Há ainda uma leitura de `date` para o carimbo geral do ESTADO e leituras próprias do escritor para título e nome. [bin/eval_estado.py:31; bin/eval_estado.py:77; bin/gerar_estado.py:317; bin/gerar_estado.py:320; bin/gerar_estado.py:417; eval/noturno.py:60; eval/noturno.py:113]
-
-4. **O selo morde parcialmente.** As mutações abaixo são consequências dos testes, não execuções observadas; sua execução é [não verificado]. [bin/tests/test_eval_estado.sh:14; bin/tests/test_eval_estado.sh:67]
-
-   | Caso | Mutação que o caso detecta | Mutação plausível que passa nesse caso |
-   |---|---|---|
-   | Integração | Remover os textos `from eval_estado import` ou `evn_txt,`. | Deixar os textos em comentários, ou apagar/substituir o conteúdo depois: o teste usa `grep` e não gera o ESTADO. [bin/tests/test_eval_estado.sh:21] | [nao verificado]
-   | Ontem, com relatório mais antigo | Escolher o mais antigo, calcular idade errada ou alertar ontem. | Exibir uma linha sem o número, desde que não contenha `ALERTA`: o número é conferido no JSON, não na linha. [bin/tests/test_eval_estado.sh:36] |
-   | Três dias | Devolver idade ou alerta errados, ou omitir `ALERTA` da linha. | Não alertar com **dois** dias: uma comparação `dias > 2` preserva os resultados de um e três dias, embora viole o máximo de um. [bin/tests/test_eval_estado.sh:42; bin/eval_estado.py:28] |
-   | Vazio, ausente, data inválida | Retornar `medido=True` ou deixar de dizer `sem medida` nesses três exemplos. | Tratar incorretamente uma data futura ou uma data inválida junto de uma válida: essas combinações não são testadas. [bin/tests/test_eval_estado.sh:48; bin/eval_estado.py:53] |
-   | JSONL e mtime | Usar o JSONL de hoje ou o `mtime` atualizado para zerar a idade no exemplo. | Usar `mtime` apenas em outra configuração, por exemplo quando há vários relatórios; o caso tem um relatório. [bin/tests/test_eval_estado.sh:56] |
-   | Mutante explícito | Demonstra que acrescentar `+ 5` ao limite faz o exemplo de três dias deixar de alertar e que isso é detectável. | O limite `dias > 2` continua passando pelos exemplos; a presença literal da comparação também é exigida pelo `grep`, não uma prova geral do comportamento. [bin/tests/test_eval_estado.sh:61] |
-
-5. **Vizinhos e publicação.** A seção e seu argumento foram acrescentados na mesma posição do molde e da tupla; a importação, leitura e composição ficam em `try`, que publica “indisponivel” em caso de exceção. Isso reduz o risco de uma falha do medidor derrubar a geração, mas não comprova o resultado executado. A data passada ao gerador continua com a assinatura exigida pelo selo de recusa, embora não chegue ao novo medidor. [bin/gerar_estado.py:315; bin/gerar_estado.py:374; bin/gerar_estado.py:391; bin/tests/test_recusa_estado.sh:39]
-
-   O selo de artefatos enumera arquivos `bin/*.sh` e dois diretórios de moldes, não o novo `.py` nem `bin/tests/test_eval_estado.sh`; o censo atual tampouco declara o relatório do eval. A régua, por outro lado, enumera `tests/test_*.sh`, incluindo o novo selo quando presente. Não identifiquei, nas buscas feitas, um selo que exija uma lista fechada de seções do ESTADO; a ausência de qualquer outro conflito e o resultado dos selos são [não verificado]. [bin/tests/test_artefato_de_estado.sh:93; bin/tests/test_artefato_de_estado.sh:110; bin/artefatos_de_estado.txt:23; bin/regua.sh:134]
-
-6. **Bordas e outros defeitos.**
-
-   - Pasta ausente ou erro de leitura de diretório produz `sem medida` com motivo; pasta vazia ou só com datas impossíveis também. Nomes que não casam com o padrão são ignorados silenciosamente; datas inválidas só são listadas na linha quando também existe uma data válida e não futura. [bin/eval_estado.py:37; bin/eval_estado.py:42; bin/eval_estado.py:50; bin/eval_estado.py:62]
-   - Uma data futura máxima produz `sem medida`, mesmo havendo relatório anterior válido; a explicação identifica o futuro, mas não publica a idade do último não futuro. [bin/eval_estado.py:53]
-   - `os.listdir` examina nomes sem verificar se são arquivos regulares: um diretório ou link com nome compatível pode ser contado como relatório. Também não valida conteúdo ou conclusão da escrita. [bin/eval_estado.py:38; bin/eval_estado.py:42]
-   - O alerta afirma que a noite não fechou e que juiz/relatório não rodou; a idade do nome, sozinha, não distingue falha do juiz, falha de escrita, remoção ou outra causa. [bin/eval_estado.py:53; bin/eval_estado.py:69; eval/noturno.py:47; eval/noturno.py:113]
-   - `eval/runs/` está ignorado pelo Git. Uma cópia sem esses dados pode mostrar `sem medida` apesar de existir relatório no host; a presença e montagem dos dados em produção são [não verificado]. [eval/.gitignore:1; bin/eval_estado.py:35]
-
-A análise foi somente de leitura; os testes não foram executados porque o próprio selo cria e remove arquivos temporários. [bin/tests/test_eval_estado.sh:26] [nao verificado]
-
-## 18/11 11:20 · sessao 2b9d75ecc198 · EVAL-NOTURNO · verificador · origem=Code
-
-**Item 3 — AVAL-DEVOLVIDO:** a causa descrita confere no código da cópia, mas “a noite sempre fecha com relatório” não está garantido apenas pelo tratamento do harness: o juiz e o investigador também têm timeouts sem tratamento antes da gravação do relatório. O prazo por pergunta, a contagem das geradas e o tratamento de arquivo vazio ou inválido precisam ficar explícitos na construção. ([eval/noturno.py:36](eval/noturno.py#L36), [eval/noturno.py:43](eval/noturno.py#L43), [eval/noturno.py:92](eval/noturno.py#L92), [eval/noturno.py:113](eval/noturno.py#L113), [eval/harness.py:67](eval/harness.py#L67), [eval/juiz.py:199](eval/juiz.py#L199)).
-
-**Item 4 — PROCEDE, condicionado ao pouso próprio e à ordem de vagas:** o contador pode ser instrumento de leitura no host, integrado ao gerador do `ESTADO.md`, sem juiz novo e sem tocar `app/`; ausência de relatório precisa aparecer como ausência de medida, não como idade zero. ([bin/gerar_estado.py:191](bin/gerar_estado.py#L191), [bin/gerar_estado.py:295](bin/gerar_estado.py#L295), [app/docs/LEIS.md:131](app/docs/LEIS.md#L131), [app/config/crons.py:251](app/config/crons.py#L251)).
-
-A cópia fornecida não tem `.git`: o `git diff --stat ba4cb6c3c HEAD -- eval/` falhou com “not a git repository”. Assim, a identidade do HEAD e o resultado do diff são **[não verificado]**; as referências abaixo são às linhas da cópia identificada pelo hash no pedido. Os fatos de produção do anexo são **[não verificado]** por esta revisão.
-
-## Item 3
-
-**1. Premissas no código.** Conferem quanto ao caminho de falha: `noturno.py` chama o harness com `timeout=1200` fora do `try` do gerador; se a chamada levanta `TimeoutExpired`, a execução não chega à escolha do JSONL, ao juiz nem à escrita do relatório. O código também exige a palavra `gravado` no stdout para continuar. ([eval/noturno.py:29](eval/noturno.py#L29), [eval/noturno.py:36](eval/noturno.py#L36), [eval/noturno.py:38](eval/noturno.py#L38), [eval/noturno.py:113](eval/noturno.py#L113)).
-
-O harness abre um JSONL em modo `w`, escreve uma linha após completar as três operações da pergunta, imprime ID, HTTP e segundos, e só imprime `gravado` depois de sair do bloco do arquivo. **Não há `flush()` por linha**: após uma interrupção externa, não se pode presumir que toda linha já passada a `write()` chegou ao arquivo visível. ([eval/harness.py:73](eval/harness.py#L73), [eval/harness.py:84](eval/harness.py#L84), [eval/harness.py:87](eval/harness.py#L87)).
-
-O juiz lê e interpreta cada linha não vazia do JSONL, julga os casos e imprime `ok de total`; o total é `len(res)`, isto é, resultados devolvidos pelo juiz, não o total planejado da rodada. O noturno lê os vereditos em um dicionário por ID e imprime `len(ok) de len(agora)`; IDs repetidos seriam colapsados ali. Além disso, se não houver saída do subprocesso do modelo, o juiz retorna somente os casos resolvidos deterministicamente. ([eval/juiz.py:199](eval/juiz.py#L199), [eval/juiz.py:249](eval/juiz.py#L249), [eval/juiz.py:324](eval/juiz.py#L324), [eval/noturno.py:16](eval/noturno.py#L16), [eval/noturno.py:51](eval/noturno.py#L51)).
-
-O cron deriva o início da duração medida de `noturno.py`: arredonda a duração e a tolerância para cima, subtrai ambas do vizinho de 03:20 e recusa se o início ficar antes de 00:15. A cópia contém 1.800 s, que pela fórmula dão **02:48**; isso confere com o horário informado no anexo, mas não comprova o crontab vivo. Um novo prazo no harness **não altera diretamente** a fórmula nem o JSON de duração; uma duração posteriormente medida diferente pode alterar o horário derivado ou fazê-lo levantar. ([app/config/crons_duracao.json:56](app/config/crons_duracao.json#L56), [app/config/crons.py:146](app/config/crons.py#L146), [app/config/crons.py:266](app/config/crons.py#L266), [app/config/crons.py:594](app/config/crons.py#L594); crontab vivo **[não verificado]**).
-
-**2. Aval ou lei vigente.** Não identifiquei, nas referências pesquisadas, uma proibição específica dessa alteração do eval. A execução deve preservar as condições gerais: contrato de instrumento de cinco linhas antes da construção, instrumento em pouso próprio, ordem de fila e escopo literal; a moratória impede criar lei nova por iniciativa própria. O aval anexo prevê essas condições, mas sua satisfação operacional é **[não verificado]**. ([CLAUDE.md:394](CLAUDE.md#L394), [CLAUDE.md:265](CLAUDE.md#L265), [CLAUDE.md:291](CLAUDE.md#L291), [app/docs/LEIS.md:131](app/docs/LEIS.md#L131), [app/docs/LEIS.md:138](app/docs/LEIS.md#L138)).
-
-**3. Condições que não fecham automaticamente no literal.**
-
-- **N deve incluir as geradas efetivamente carregadas:** o harness começa com `GOLDEN` e anexa `geradas_hoje.json` quando consegue lê-lo. Falha de leitura é ignorada; portanto, contar apenas o golden pode ocultar perguntas planejadas. ([eval/harness.py:67](eval/harness.py#L67)).
-- **Não existe hoje um teto total nomeado por pergunta.** Existem limites individuais: HTTP 90 s; subprocessos de tiro, contexto e oráculo, 120 s cada. O prazo proposto precisa definir o teto composto e o comportamento de uma chamada já em andamento, sem baixar os limites proibidos pelo aval. ([eval/harness.py:24](eval/harness.py#L24), [eval/harness.py:41](eval/harness.py#L41), [eval/harness.py:52](eval/harness.py#L52), [eval/oraculo.py:107](eval/oraculo.py#L107)).
-- **Parcial válido pode ser lido; parcial arbitrário não está garantido.** O juiz não exige a quantidade do golden, mas faz `json.loads` em cada linha não vazia: uma linha truncada falha. Um arquivo vazio também não garante relatório, pois o noturno rejeita vereditos vazios. A execução real do bruto de hoje é **[não verificado]**. ([eval/juiz.py:199](eval/juiz.py#L199), [eval/noturno.py:45](eval/noturno.py#L45)).
-- **O denominador atual aparece**, tanto no juiz quanto no relatório, mas representa resultados julgados, não necessariamente as N perguntas planejadas. Para cumprir o aval, o relatório precisa também mostrar `k de N perguntadas`, preservando a regra de acerto existente. ([eval/juiz.py:324](eval/juiz.py#L324), [eval/noturno.py:60](eval/noturno.py#L60), [eval/juiz.py:26](eval/juiz.py#L26)).
-- **Há outros pontos que impedem o “sempre”.** O juiz tem timeout externo de 1.200 s e interno de 600 s; o investigador tem timeout de 1.800 s antes de o relatório ser escrito. Essas exceções podem interromper a noite mesmo depois de o harness fechar limpo. A forma de atender à promessa sem ampliar indevidamente o escopo deve ser resolvida no desenho devolvido. ([eval/noturno.py:43](eval/noturno.py#L43), [eval/juiz.py:240](eval/juiz.py#L240), [eval/noturno.py:92](eval/noturno.py#L92), [eval/noturno.py:113](eval/noturno.py#L113)).
-- **PRONTO em 19/11 é possível, não comprovado.** A cópia deriva 02:48 e o nome do relatório usa a data no momento da escrita; para produzir o arquivo de 19/11, a mudança teria de estar no cron efetivamente instalado a tempo e a rodada terminar nesse dia. Estado da vaga, pouso, crontab e resultado futuro são **[não verificado]**. ([app/config/crons.py:594](app/config/crons.py#L594), [eval/noturno.py:113](eval/noturno.py#L113)).
-
-**4. Alcance.** A alteração declarada em `eval/` não exige alterar dado de competência exportada nem regra de dinheiro; o cron é um consumidor indireto da duração e deve ser observado, sem edição manual de horário. O efeito real sobre serviços chamados pelo harness e qualquer toque não declarado na implementação futura são **[não verificado]**. ([eval/harness.py:14](eval/harness.py#L14), [app/config/crons.py:586](app/config/crons.py#L586), [CLAUDE.md:265](CLAUDE.md#L265)).
-
-## Item 4
-
-**1. Premissas no código.** `bin/gerar_estado.py::gerar` compõe e escreve o conteúdo do estado; `bin/relato.sh` o chama para produzir `ESTADO.md` temporário e o inclui na publicação. Portanto, escrever só uma linha em outro arquivo não a tornará visível no `ESTADO.md`. ([bin/gerar_estado.py:178](bin/gerar_estado.py#L178), [bin/gerar_estado.py:312](bin/gerar_estado.py#L312), [bin/gerar_estado.py:398](bin/gerar_estado.py#L398), [bin/relato.sh:38](bin/relato.sh#L38), [bin/relato.sh:117](bin/relato.sh#L117)).
-
-**2. Aval ou lei vigente.** A solução proposta é compatível com a separação de instrumento e pouso próprio, com um único medidor para a mesma pergunta e sem juiz novo; a disponibilidade efetiva da vaga é **[não verificado]**. ([app/docs/LEIS.md:131](app/docs/LEIS.md#L131), [bin/gerar_estado.py:195](bin/gerar_estado.py#L195), [CLAUDE.md:291](CLAUDE.md#L291)).
-
-**3. Condições literais.** A fonte pedida é a **data no nome do último `relatorio_*.md`**, não o JSONL nem o veredito: um bruto recente não prova relatório recente. O contador deve alertar quando a diferença for maior que um dia; o caso de três dias solicitado pelo aval deve exercitar esse limite. Sem arquivo ou com nome/data inválidos, deve declarar medida indisponível; o estado real dos relatórios é **[não verificado]**. ([eval/noturno.py:113](eval/noturno.py#L113), [bin/gerar_estado.py:295](bin/gerar_estado.py#L295)).
-
-**4. Onde mora e alcance.** Sugestão técnica: um medidor único em `bin/`, por exemplo `bin/eval_estado.py`, que leia os nomes em `eval/runs/` e componha a linha; `bin/gerar_estado.py` chama esse medidor e inclui o resultado, com falha visível. Isso segue o padrão de medidores separados já usado pelo gerador, não exige `app/` nem novo juiz. O comportamento e quaisquer efeitos de uma implementação futura são **[não verificado]**. ([bin/gerar_estado.py:195](bin/gerar_estado.py#L195), [bin/gerar_estado.py:211](bin/gerar_estado.py#L211), [bin/gerar_estado.py:295](bin/gerar_estado.py#L295)).
-
-## Quem escreve e quem lê os artefatos
-
-| Artefato | Escreve | Leitores identificados na cópia |
-|---|---|---|
-| `eval/runs/*.jsonl` | `harness.py`, uma linha por pergunta concluída. ([eval/harness.py:64](eval/harness.py#L64)) | `juiz.py`; `investigador.py`; `estatisticas.py`; `noturno.py` lista os nomes e passa o escolhido aos processos. ([eval/juiz.py:199](eval/juiz.py#L199), [eval/investigador.py:222](eval/investigador.py#L222), [eval/estatisticas.py:14](eval/estatisticas.py#L14), [eval/noturno.py:38](eval/noturno.py#L38)) |
-| `*_veredito.json` | `juiz.py`. ([eval/juiz.py:344](eval/juiz.py#L344)) | `noturno.py` lê anterior e atual; `investigador.py` e `estatisticas.py` também leem. ([eval/noturno.py:16](eval/noturno.py#L16), [eval/noturno.py:26](eval/noturno.py#L26), [eval/investigador.py:222](eval/investigador.py#L222), [eval/estatisticas.py:12](eval/estatisticas.py#L12)) |
-| `relatorio_*.md` | `noturno.py`. ([eval/noturno.py:113](eval/noturno.py#L113)) | Não identifiquei leitor de código na busca pelos padrões do nome na cópia; leitores externos ou leitura humana são **[não verificado]**. |
-
-Nenhum arquivo foi criado, editado ou apagado nesta revisão. A execução do juiz e as sondas de produção dos itens 1 e 2 não foram realizadas; seus resultados permanecem **[não verificado]**.
-
-_6938 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6944 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
