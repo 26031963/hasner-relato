@@ -1,7 +1,982 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 09:14** · publicado em **18/11/2026 09:16** (UTC-3)
+> Ultima resposta processada: **18/11/2026 09:17** · publicado em **18/11/2026 09:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 09:17 · sessao f7974ea77078 · ESPINHA-REMEDIDA-1811 · censo · origem=Code
+
+O script faz análise estática, separa os resultados de `tests/` ao final e registra falhas de leitura ou sintaxe em stderr. Resolução dinâmica e cobertura efetiva da árvore: [não verificado].
+
+```python
+#!/usr/bin/env python3
+import ast
+import csv
+import re
+import sys
+import tokenize
+from pathlib import Path
+
+EXACT_FIELDS = {"resposta_colab", "respondida_em"}
+FIELD_PREFIXES = ("validada_", "materializada_")
+ORM_CALLS = {"filter", "exclude", "Q", "F", "values", "order_by"}
+WRITE_CALLS = {"create", "update"}
+TEMPLATE_TOKEN = re.compile(r"{{.*?}}|{%.*?%}", re.DOTALL)
+TEMPLATE_FIELD = re.compile(
+    r"(?<![\w])(?:\w+\.)*"
+    r"(resposta_colab|respondida_em|validada_\w+|materializada_\w+)"
+    r"(?!\w)"
+)
+
+
+def field_from_name(value):
+    if not isinstance(value, str):
+        return None
+    name = value.lstrip("-").split("__", 1)[0]
+    if name in EXACT_FIELDS or name.startswith(FIELD_PREFIXES):
+        return name
+    return None
+
+
+def dotted(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        parent = dotted(node.value)
+        return parent + "." + node.attr if parent else None
+    return None
+
+
+def clean(value):
+    return " ".join(str(value).split())
+
+
+def is_test(path):
+    return any(part == "tests" for part in path.parts)
+
+
+class ScopeBindings(ast.NodeVisitor):
+    """Collect bindings in one lexical scope, without entering child scopes."""
+
+    def __init__(self):
+        self.aliases = {}
+        self.values = {}
+
+    def visit_Import(self, node):
+        for alias in node.names:
+            local = alias.asname or alias.name.split(".", 1)[0]
+            self.aliases[local] = alias.name if alias.asname else local
+
+    def visit_ImportFrom(self, node):
+        prefix = "." * node.level + (node.module or "")
+        for alias in node.names:
+            if alias.name != "*":
+                self.aliases[alias.asname or alias.name] = (
+                    prefix + "." + alias.name if prefix else alias.name
+                )
+
+    def visit_Assign(self, node):
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                self.values[target.id] = node.value
+                name = dotted(node.value)
+                if name:
+                    self.aliases[target.id] = name
+        self.generic_visit(node.value)
+
+    def visit_AnnAssign(self, node):
+        if isinstance(node.target, ast.Name) and node.value is not None:
+            self.values[node.target.id] = node.value
+            name = dotted(node.value)
+            if name:
+                self.aliases[node.target.id] = name
+        if node.value is not None:
+            self.visit(node.value)
+
+    def visit_FunctionDef(self, node):
+        pass
+
+    def visit_AsyncFunctionDef(self, node):
+        pass
+
+    def visit_ClassDef(self, node):
+        pass
+
+    def visit_Lambda(self, node):
+        pass
+
+
+class Census(ast.NodeVisitor):
+    def __init__(self, path, source):
+        self.path = path
+        self.source = source
+        self.lines = source.splitlines()
+        self.scope_names = []
+        self.bindings = []
+        self.rows = []
+        self.seen = set()
+
+    def add(self, node, field, mode):
+        line = getattr(node, "lineno", 1)
+        segment = ast.get_source_segment(self.source, node)
+        if not segment:
+            segment = self.lines[line - 1] if line <= len(self.lines) else ""
+        scope = ".".join(self.scope_names) or "<modulo>"
+        row = (str(self.path), line, scope, field, mode, clean(segment))
+        if row not in self.seen:
+            self.seen.add(row)
+            self.rows.append(row)
+
+    def push_scope(self, body): [nao verificado]
+        bindings = ScopeBindings()
+        for statement in body:
+            bindings.visit(statement)
+        self.bindings.append(bindings)
+
+    def resolve_alias(self, name):
+        if not name:
+            return ""
+        seen = set()
+        while name and name not in seen:
+            seen.add(name)
+            head, separator, tail = name.partition(".")
+            replacement = None
+            for bindings in reversed(self.bindings):
+                if head in bindings.aliases:
+                    replacement = bindings.aliases[head]
+                    break
+            if not replacement or replacement == head:
+                break
+            name = replacement + (separator + tail if separator else "")
+        return name
+
+    def resolve_value(self, node, seen=None):
+        if not isinstance(node, ast.Name):
+            return node
+        seen = set() if seen is None else seen
+        if node.id in seen:
+            return node
+        seen.add(node.id)
+        for bindings in reversed(self.bindings):
+            if node.id in bindings.values:
+                return self.resolve_value(bindings.values[node.id], seen)
+        return node
+
+    def strings(self, node, seen=None):
+        """Yield literal strings from a statically visible expression."""
+        seen = set() if seen is None else seen
+        if isinstance(node, ast.Name):
+            if node.id in seen:
+                return
+            seen.add(node.id)
+            resolved = self.resolve_value(node)
+            if resolved is not node:
+                yield from self.strings(resolved, seen)
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            yield node, node.value
+        elif isinstance(node, (ast.List, ast.Tuple, ast.Set)):
+            for element in node.elts:
+                yield from self.strings(element, set(seen))
+        elif isinstance(node, ast.Dict):
+            for key in node.keys:
+                if key is not None:
+                    yield from self.strings(key, set(seen))
+        elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            yield from self.strings(node.left, set(seen))
+            yield from self.strings(node.right, set(seen))
+
+    def record_strings(self, node, mode):
+        for location, value in self.strings(node):
+            field = field_from_name(value)
+            if field:
+                self.add(location, field, mode)
+
+    def record_dict_keys(self, node):
+        node = self.resolve_value(node)
+        if isinstance(node, ast.Dict):
+            for key, value in zip(node.keys, node.values):
+                if key is None:
+                    self.record_dict_keys(value)
+                else:
+                    self.record_strings(key, "S")
+        elif isinstance(node, ast.Call) and self.call_name(node) == "dict":
+            for keyword in node.keywords:
+                if keyword.arg is None:
+                    self.record_dict_keys(keyword.value)
+                else:
+                    field = field_from_name(keyword.arg)
+                    if field:
+                        self.add(keyword.value, field, "S")
+
+    def call_name(self, node):
+        name = self.resolve_alias(dotted(node.func))
+        return name.rsplit(".", 1)[-1] if name else ""
+
+    def visit_Module(self, node):
+        self.push_scope(node.body) [nao verificado]
+        self.generic_visit(node)
+        self.bindings.pop()
+
+    def visit_ClassDef(self, node):
+        for decorator in node.decorator_list:
+            self.visit(decorator)
+        for base in node.bases:
+            self.visit(base)
+        for keyword in node.keywords:
+            self.visit(keyword.value)
+        self.scope_names.append(node.name)
+        self.push_scope(node.body) [nao verificado]
+        for statement in node.body:
+            self.visit(statement)
+        self.bindings.pop()
+        self.scope_names.pop()
+
+    def visit_function(self, node):
+        for decorator in node.decorator_list:
+            self.visit(decorator)
+        for default in node.args.defaults:
+            self.visit(default)
+        for default in node.args.kw_defaults:
+            if default is not None:
+                self.visit(default)
+        if node.returns is not None:
+            self.visit(node.returns)
+        self.scope_names.append(node.name)
+        self.push_scope(node.body) [nao verificado]
+        for statement in node.body:
+            self.visit(statement)
+        self.bindings.pop()
+        self.scope_names.pop()
+
+    visit_FunctionDef = visit_function
+    visit_AsyncFunctionDef = visit_function
+
+    def visit_Lambda(self, node):
+        self.scope_names.append("<lambda>")
+        self.bindings.append(ScopeBindings())
+        self.visit(node.body)
+        self.bindings.pop()
+        self.scope_names.pop()
+
+    def visit_Attribute(self, node):
+        field = field_from_name(node.attr)
+        if field:
+            if isinstance(node.ctx, ast.Load):
+                self.add(node, field, "L")
+            elif isinstance(node.ctx, ast.Store):
+                self.add(node, field, "S")
+        self.generic_visit(node)
+
+    def visit_AugAssign(self, node):
+        if isinstance(node.target, ast.Attribute):
+            field = field_from_name(node.target.attr)
+            if field:
+                self.add(node.target, field, "L")
+        self.generic_visit(node)
+
+    def visit_Call(self, node):
+        name = self.call_name(node)
+
+        if name in {"getattr", "setattr"} and len(node.args) >= 2:
+            mode = "L" if name == "getattr" else "S"
+            self.record_strings(node.args[1], mode)
+
+        if name in WRITE_CALLS:
+            for keyword in node.keywords:
+                if keyword.arg is None:
+                    self.record_dict_keys(keyword.value)
+                else:
+                    field = field_from_name(keyword.arg)
+                    if field:
+                        self.add(keyword.value, field, "S")
+            if name == "update":
+                for argument in node.args:
+                    self.record_dict_keys(argument)
+
+        if name == "save":
+            for keyword in node.keywords:
+                if keyword.arg == "update_fields":
+                    self.record_strings(keyword.value, "S")
+                elif keyword.arg is None:
+                    mapping = self.resolve_value(keyword.value)
+                    if isinstance(mapping, ast.Dict):
+                        for key, value in zip(mapping.keys, mapping.values):
+                            if (
+                                isinstance(key, ast.Constant)
+                                and key.value == "update_fields"
+                            ):
+                                self.record_strings(value, "S")
+
+        if name == "carimbar":
+            for keyword in node.keywords:
+                if keyword.arg == "resposta":
+                    self.add(keyword.value, "resposta_colab", "S")
+                elif keyword.arg is None:
+                    mapping = self.resolve_value(keyword.value)
+                    if isinstance(mapping, ast.Dict):
+                        for key, value in zip(mapping.keys, mapping.values):
+                            if (
+                                isinstance(key, ast.Constant)
+                                and key.value == "resposta"
+                            ):
+                                self.add(value, "resposta_colab", "S")
+
+        if name in ORM_CALLS:
+            for argument in node.args:
+                self.record_strings(argument, "O")
+            for keyword in node.keywords:
+                if keyword.arg is None:
+                    mapping = self.resolve_value(keyword.value)
+                    if isinstance(mapping, ast.Dict):
+                        for key in mapping.keys:
+                            if key is not None:
+                                self.record_strings(key, "O")
+                else:
+                    field = field_from_name(keyword.arg)
+                    if field:
+                        self.add(keyword.value, field, "O")
+
+        self.generic_visit(node)
+
+
+def python_rows(root, path):
+    relative = path.relative_to(root)
+    try:
+        with tokenize.open(path) as stream:
+            source = stream.read()
+        tree = ast.parse(source, filename=str(relative))
+    except (OSError, UnicodeError, SyntaxError) as exc:
+        print(f"[nao verificado] {relative}: {exc}", file=sys.stderr)
+        return []
+    census = Census(relative, source)
+    census.visit(tree)
+    return census.rows
+
+
+def template_rows(root, path):
+    relative = path.relative_to(root)
+    try:
+        source = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        print(f"[nao verificado] {relative}: {exc}", file=sys.stderr)
+        return []
+    rows = []
+    for token in TEMPLATE_TOKEN.finditer(source):
+        for match in TEMPLATE_FIELD.finditer(token.group()):
+            line = source.count("\n", 0, token.start() + match.start()) + 1
+            rows.append(
+                (
+                    str(relative),
+                    line,
+                    "<template>",
+                    match.group(1),
+                    "T",
+                    clean(token.group()),
+                )
+            )
+    return rows
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("Uso: python3 censo.py RAIZ", file=sys.stderr)
+        return 2
+
+    root = Path(sys.argv[1])
+    if not root.is_dir():
+        print(f"[nao verificado] Raiz nao e diretorio: {root}", file=sys.stderr)
+        return 2
+
+    rows = []
+    for path in root.rglob("*"):
+        if not path.is_file():
+            continue
+        if path.suffix == ".py":
+            rows.extend(python_rows(root, path))
+        elif path.suffix == ".html" and "templates" in path.relative_to(root).parts:
+            rows.extend(template_rows(root, path))
+
+    rows.sort(key=lambda row: (is_test(Path(row[0])), row[0], row[1], row[2], row[3], row[4], row[5]))
+    writer = csv.writer(sys.stdout, delimiter="\t", lineterminator="\n")
+    writer.writerow(("arquivo", "linha", "funcao qualificada", "campo", "modo", "trecho", "teste")) [nao verificado]
+    for row in rows:
+        writer.writerow((*row, "sim" if is_test(Path(row[0])) else "nao"))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+## 18/11 09:17 · sessao de38741cfd0b · ESPINHA-REMEDIDA-1811 · censo · origem=Code
+
+O censo abaixo é estático; referências dinâmicas e o efeito de código que não está no dado fornecido ficam [nao verificado]. `brief.md:92`; `matriz.md`, U6 e P8.
+
+```python
+#!/usr/bin/env python3
+import ast
+import re
+import sys
+import tokenize
+from pathlib import Path
+
+FIELDS = (
+    "resposta_colab",
+    "respondida_em",
+    "validada_em",
+    "materializada_em",
+    "via_resolucao",
+)
+FIELD_SET = set(FIELDS)
+ORM = {
+    "filter", "exclude", "get", "Q", "F", "values", "values_list",
+    "order_by", "distinct", "only", "defer", "select_related",
+    "prefetch_related", "annotate", "aggregate",
+}
+WRITES = {"create", "update", "get_or_create", "update_or_create", "bulk_update"}
+FIELD_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9_])(" + "|".join(FIELDS) + r")"
+    r"(?=$|__[A-Za-z0-9_]+|[^A-Za-z0-9_])"
+)
+TEMPLATE_EXPR = re.compile(r"{{.*?}}|{%.*?%}", re.DOTALL)
+
+
+def fields_in(text):
+    return {m.group(1) for m in FIELD_PATTERN.finditer(text)}
+
+
+def name_of(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        prefix = name_of(node.value)
+        return (prefix + "." if prefix else "") + node.attr
+    return ""
+
+
+def literal(node):
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    return None
+
+
+def is_test(path):
+    return "tests" in path.parts or path.name.startswith("test_")
+
+
+def clean(text):
+    return " ".join(text.replace("\t", " ").split())
+
+
+class Census(ast.NodeVisitor):
+    def __init__(self, path, rel, source):
+        self.path = path
+        self.rel = rel
+        self.source = source
+        self.lines = source.splitlines()
+        self.scope = []
+        self.parents = []
+        self.aliases = [{}]
+        self.rows = set()
+
+    def emit(self, node, field, mode):
+        line = getattr(node, "lineno", 1)
+        excerpt = self.lines[line - 1] if 0 < line <= len(self.lines) else ""
+        function = ".".join(self.scope) or "<modulo>"
+        self.rows.add(
+            (str(self.rel), line, function, field, mode, clean(excerpt),
+             "sim" if is_test(self.rel) else "nao")
+        )
+
+    def resolve(self, name):
+        parts = name.split(".")
+        for table in reversed(self.aliases):
+            if parts[0] in table:
+                return ".".join([table[parts[0]], *parts[1:]])
+        return name
+
+    def call_name(self, call):
+        raw = name_of(call.func)
+        return self.resolve(raw).split(".")[-1]
+
+    def visit(self, node):
+        self.parents.append(node)
+        try:
+            return super().visit(node)
+        finally:
+            self.parents.pop()
+
+    def visit_Import(self, node):
+        for alias in node.names:
+            local = alias.asname or alias.name.split(".")[0]
+            self.aliases[-1][local] = alias.name if alias.asname else local
+
+    def visit_ImportFrom(self, node):
+        module = "." * node.level + (node.module or "")
+        for alias in node.names:
+            if alias.name == "*":
+                continue
+            local = alias.asname or alias.name
+            self.aliases[-1][local] = (
+                module + ("." if module and not module.endswith(".") else "")
+                + alias.name
+            )
+
+    def scoped(self, node):
+        self.scope.append(node.name)
+        self.aliases.append({})
+        for child in ast.iter_child_nodes(node):
+            self.visit(child)
+        self.aliases.pop()
+        self.scope.pop()
+
+    visit_FunctionDef = scoped
+    visit_AsyncFunctionDef = scoped
+    visit_ClassDef = scoped
+
+    def visit_Attribute(self, node):
+        if node.attr in FIELD_SET:
+            if isinstance(node.ctx, ast.Load):
+                self.emit(node, node.attr, "L")
+            elif isinstance(node.ctx, (ast.Store, ast.Del)):
+                self.emit(node, node.attr, "S")
+        self.generic_visit(node)
+
+    def visit_Name(self, node):
+        resolved = self.resolve(node.id).split(".")[-1]
+        if resolved in FIELD_SET and node.id != resolved:
+            if isinstance(node.ctx, ast.Load):
+                self.emit(node, resolved, "L")
+            elif isinstance(node.ctx, (ast.Store, ast.Del)):
+                self.emit(node, resolved, "S")
+
+    def strings(self, node, mode):
+        for child in ast.walk(node):
+            value = literal(child)
+            if value is not None:
+                for field in fields_in(value):
+                    self.emit(child, field, mode)
+
+    def visit_Call(self, node):
+        method = self.call_name(node)
+
+        if method in {"getattr", "setattr"} and len(node.args) >= 2:
+            value = literal(node.args[1])
+            if value in FIELD_SET:
+                self.emit(node.args[1], value, "L" if method == "getattr" else "S")
+
+        if method in ORM:
+            for arg in node.args:
+                self.strings(arg, "O")
+            for kw in node.keywords:
+                if kw.arg:
+                    for field in fields_in(kw.arg):
+                        self.emit(kw.value, field, "O")
+                else:
+                    self.strings(kw.value, "O")
+
+        if method in WRITES:
+            for arg in node.args:
+                self.strings(arg, "S")
+            for kw in node.keywords:
+                if kw.arg:
+                    for field in fields_in(kw.arg):
+                        self.emit(kw.value, field, "S")
+                # Includes defaults={...}, create_defaults={...}, and **{...}.
+                self.strings(kw.value, "S")
+
+        if method == "save":
+            for kw in node.keywords:
+                if kw.arg == "update_fields":
+                    self.strings(kw.value, "S")
+
+        if method == "carimbar":
+            for kw in node.keywords:
+                if kw.arg == "resposta":
+                    self.emit(kw.value, "resposta_colab", "S")
+                elif kw.arg:
+                    for field in fields_in(kw.arg):
+                        self.emit(kw.value, field, "S")
+                else:
+                    self.strings(kw.value, "S")
+
+        self.generic_visit(node)
+
+
+def python_rows(path, rel):
+    try:
+        with tokenize.open(path) as stream:
+            source = stream.read()
+        tree = ast.parse(source, filename=str(rel), type_comments=True)
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        print(f"ERRO\t{rel}\t{exc}", file=sys.stderr)
+        return set()
+    visitor = Census(path, rel, source)
+    visitor.visit(tree)
+    return visitor.rows
+
+
+def template_rows(path, rel):
+    try:
+        source = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        print(f"ERRO\t{rel}\t{exc}", file=sys.stderr)
+        return set()
+    lines = source.splitlines()
+    rows = set()
+    for expr in TEMPLATE_EXPR.finditer(source):
+        for match in FIELD_PATTERN.finditer(expr.group()):
+            offset = expr.start() + match.start()
+            line = source.count("\n", 0, offset) + 1
+            excerpt = lines[line - 1] if line <= len(lines) else ""
+            rows.add(
+                (str(rel), line, "<template>", match.group(1), "T",
+                 clean(excerpt), "sim" if is_test(rel) else "nao")
+            )
+    return rows
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("uso: python3 censo.py RAIZ", file=sys.stderr)
+        return 2
+
+    root = Path(sys.argv[1])
+    if not root.is_dir():
+        print(f"raiz nao e diretorio: {root}", file=sys.stderr)
+        return 2
+
+    rows = set()
+    for path in root.rglob("*"):
+        if not path.is_file():
+            continue
+        rel = path.relative_to(root)
+        if path.suffix == ".py":
+            rows.update(python_rows(path, rel))
+        elif path.suffix == ".html" and "templates" in rel.parts:
+            rows.update(template_rows(path, rel))
+
+    print("arquivo\tlinha\tfuncao qualificada\tcampo\tmodo\ttrecho\tteste")
+    for test_flag in ("nao", "sim"):
+        for row in sorted((r for r in rows if r[-1] == test_flag),
+                          key=lambda r: (r[0], r[1], r[2], r[3], r[4], r[5])):
+            print("\t".join(map(str, row)))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+**Selo de queries.** O dado identifica `ponto/tests/test_procedencia_batida.py:126-128`: `assertNumQueries(1)` para cinco batidas, com fixture sem `respondida_em` e `validada_em`; ele não mede a variação de N com R e V carimbadas (`matriz.md`, U1b e P5). O brief relata não encontrar `assertNumQueries` nos testes de colaboradores para `contexto_calendario`, mas não verifica outros apps (`brief.md:92`). A lista completa de testes com `assertNumQueries` ou `CaptureQueriesContext`, e a existência de algum outro que varie N com R e V carimbadas, ficam **[nao verificado]**.
+
+**Resposta futura no calendário.** O dado informa que a forma R3/F1 chama `_pv(_q, agora=_agora)` e associa `_pv` a `_perg_viva` (`colaboradores/services/calendario.py:506`; `matriz.md`, U6b). Ele não mostra o corpo do juiz nem o percurso completo até a grade. Portanto, se uma pergunta com `respondida_em > agora` é considerada viva e o efeito final na grade ficam **[nao verificado]**; o próprio brief deixa a exposição desse caso pelo calendário em aberto (`brief.md`, seção 4, caso 2).
+
+## 18/11 09:17 · sessao 311b363a29e9 · ESPINHA-REMEDIDA-1811 · censo · origem=Code
+
+O censo é estático e pode incluir ocorrências de campos homônimos; resolução dinâmica e a completude do resultado ficam [não verificado].
+
+```python
+#!/usr/bin/env python3
+"""Censo estático, somente leitura, de campos da projeção.
+
+Uso: python3 censo.py /caminho/para/app
+
+A saída reúne primeiro os arquivos fora de tests/ e depois os de tests/.
+Ocorrências sintáticas de campos homônimos também são incluídas.
+"""
+
+import ast
+import re
+import sys
+from pathlib import Path
+
+CAMPOS = {
+    "resposta_colab",
+    "respondida_em",
+    "validada_em",
+    "validada_por",
+    "materializada_em",
+    "via_resolucao",
+}
+
+LOOKUPS = {
+    "filter", "exclude", "get", "Q", "F",
+    "values", "values_list", "order_by",
+}
+ESCRITAS = {"create", "update", "get_or_create", "update_or_create"}
+RESULTADOS = set()
+
+
+def trecho(linhas, numero):
+    if 1 <= numero <= len(linhas):
+        return linhas[numero - 1].strip().replace("\t", " ")
+    return ""
+
+
+def registrar(arquivo, linhas, linha, funcao, campo, modo):
+    if campo not in CAMPOS or not linha:
+        return
+    teste = "sim" if "tests" in Path(arquivo).parts else "nao" [nao verificado]
+    RESULTADOS.add(
+        (teste, arquivo, linha, funcao, campo, modo, trecho(linhas, linha)) [nao verificado]
+    )
+
+
+def campo_lookup(valor):
+    if not isinstance(valor, str):
+        return None
+    partes = valor.lstrip("-").split("__")
+    for parte in partes:
+        if parte in CAMPOS:
+            return parte
+    return None
+
+
+def nome_chamada(no):
+    if isinstance(no, ast.Name):
+        return no.id
+    if isinstance(no, ast.Attribute):
+        return no.attr
+    return None
+
+
+def constantes(no):
+    """Percorre literais e concatenações literais simples."""
+    if isinstance(no, ast.Constant) and isinstance(no.value, str):
+        yield no.value, no
+    elif isinstance(no, (ast.List, ast.Tuple, ast.Set)):
+        for item in no.elts:
+            yield from constantes(item)
+    elif isinstance(no, ast.Dict):
+        for chave in no.keys:
+            if chave is not None:
+                yield from constantes(chave)
+    elif isinstance(no, ast.BinOp) and isinstance(no.op, ast.Add):
+        try:
+            valor = ast.literal_eval(no)
+        except (ValueError, TypeError, SyntaxError):
+            return
+        if isinstance(valor, str):
+            yield valor, no
+
+
+class Censo(ast.NodeVisitor):
+    def __init__(self, arquivo, linhas):
+        self.arquivo = arquivo
+        self.linhas = linhas
+        self.escopo = []
+        self.aliases = [{}]
+        self.valores = [{}]
+
+    def qualificada(self):
+        return ".".join(self.escopo) or "<modulo>"
+
+    def emitir(self, no, campo, modo):
+        registrar(
+            self.arquivo, self.linhas, getattr(no, "lineno", 0),
+            self.qualificada(), campo, modo,
+        )
+
+    def obter(self, pilha, nome):
+        for escopo in reversed(pilha):
+            if nome in escopo:
+                return escopo[nome]
+        return None
+
+    def expandir(self, no, vistos=None):
+        """Segue variáveis locais com atribuição literal, inclusive dicionários."""
+        vistos = set() if vistos is None else vistos
+        if isinstance(no, ast.Name) and no.id not in vistos:
+            vistos.add(no.id)
+            valor = self.obter(self.valores, no.id)
+            if valor is not None:
+                yield from self.expandir(valor, vistos)
+                return
+        if isinstance(no, ast.Dict):
+            for chave, valor in zip(no.keys, no.values):
+                if chave is None:
+                    yield from self.expandir(valor, vistos.copy())
+                else:
+                    yield from constantes(chave)
+            return
+        yield from constantes(no)
+
+    def nome_resolvido(self, no):
+        if isinstance(no, ast.Name):
+            return self.obter(self.aliases, no.id) or no.id
+        if isinstance(no, ast.Attribute):
+            return no.attr
+        return None
+
+    def visit_Import(self, no):
+        for item in no.names:
+            nome = item.asname or item.name.split(".")[0]
+            self.aliases[-1][nome] = item.name.split(".")[-1]
+
+    def visit_ImportFrom(self, no):
+        for item in no.names:
+            if item.name != "*":
+                self.aliases[-1][item.asname or item.name] = item.name
+
+    def visitar_escopo(self, no):
+        self.escopo.append(no.name)
+        self.aliases.append({})
+        self.valores.append({})
+        self.generic_visit(no)
+        self.valores.pop()
+        self.aliases.pop()
+        self.escopo.pop()
+
+    visit_FunctionDef = visitar_escopo
+    visit_AsyncFunctionDef = visitar_escopo
+    visit_ClassDef = visitar_escopo
+
+    def visit_Assign(self, no):
+        for alvo in no.targets:
+            if isinstance(alvo, ast.Name):
+                self.valores[-1][alvo.id] = no.value
+        self.generic_visit(no)
+
+    def visit_AnnAssign(self, no):
+        if isinstance(no.target, ast.Name) and no.value is not None:
+            self.valores[-1][no.target.id] = no.value
+        self.generic_visit(no)
+
+    def visit_Attribute(self, no):
+        if no.attr in CAMPOS:
+            if isinstance(no.ctx, ast.Load):
+                self.emitir(no, no.attr, "L")
+            elif isinstance(no.ctx, ast.Store):
+                self.emitir(no, no.attr, "S")
+        self.generic_visit(no)
+
+    def visit_Call(self, no):
+        nome = self.nome_resolvido(no.func)
+
+        if nome in {"getattr", "setattr"} and len(no.args) >= 2:
+            for valor, origem in self.expandir(no.args[1]):
+                if valor in CAMPOS:
+                    self.emitir(origem, valor, "L" if nome == "getattr" else "S")
+
+        if nome in LOOKUPS:
+            for argumento in no.args:
+                for valor, origem in self.expandir(argumento):
+                    campo = campo_lookup(valor)
+                    if campo:
+                        self.emitir(origem, campo, "O")
+            for palavra in no.keywords:
+                if palavra.arg is not None:
+                    campo = campo_lookup(palavra.arg)
+                    if campo:
+                        self.emitir(palavra.value, campo, "O")
+                else:
+                    for valor, origem in self.expandir(palavra.value):
+                        campo = campo_lookup(valor)
+                        if campo:
+                            self.emitir(origem, campo, "O")
+
+        if nome in ESCRITAS:
+            for palavra in no.keywords:
+                if palavra.arg in CAMPOS:
+                    self.emitir(palavra.value, palavra.arg, "S")
+                elif palavra.arg in {"defaults", "create_defaults"} or palavra.arg is None:
+                    for valor, origem in self.expandir(palavra.value):
+                        if valor in CAMPOS:
+                            self.emitir(origem, valor, "S")
+            if nome == "update":
+                for argumento in no.args:
+                    for valor, origem in self.expandir(argumento):
+                        if valor in CAMPOS:
+                            self.emitir(origem, valor, "S")
+
+        if nome == "save":
+            for palavra in no.keywords:
+                if palavra.arg == "update_fields":
+                    for valor, origem in self.expandir(palavra.value):
+                        if valor in CAMPOS:
+                            self.emitir(origem, valor, "S")
+
+        if nome == "carimbar":
+            for palavra in no.keywords:
+                if palavra.arg == "resposta":
+                    for campo in (
+                        "resposta_colab", "respondida_em",
+                        "validada_em", "validada_por",
+                        "materializada_em", "via_resolucao",
+                    ):
+                        self.emitir(palavra.value, campo, "S")
+
+        self.generic_visit(no)
+
+
+def ler_python(caminho, relativo):
+    try:
+        import tokenize
+        with tokenize.open(caminho) as arquivo:
+            texto = arquivo.read()
+        arvore = ast.parse(texto, filename=relativo)
+    except (OSError, UnicodeError, SyntaxError) as erro:
+        print(f"{relativo}: leitura/análise falhou: {erro}", file=sys.stderr)
+        return
+    Censo(relativo, texto.splitlines()).visit(arvore)
+
+
+def ler_template(caminho, relativo):
+    try:
+        texto = caminho.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as erro:
+        print(f"{relativo}: leitura falhou: {erro}", file=sys.stderr)
+        return
+
+    linhas = texto.splitlines()
+    nomes = "|".join(sorted(map(re.escape, CAMPOS), key=len, reverse=True))
+    campo_re = re.compile(r"\.\s*(" + nomes + r")\b")
+    # Tags e filtros também podem ler propriedades, além de {{ ... }}.
+    bloco_re = re.compile(r"{{.*?}}|{%.*?%}", re.DOTALL)
+    for bloco in bloco_re.finditer(texto):
+        for ocorrencia in campo_re.finditer(bloco.group()):
+            posicao = bloco.start() + ocorrencia.start(1)
+            linha = texto.count("\n", 0, posicao) + 1
+            registrar(
+                relativo, linhas, linha, "<template>",
+                ocorrencia.group(1), "T",
+            )
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("uso: python3 censo.py RAIZ", file=sys.stderr)
+        return 2
+
+    raiz = Path(sys.argv[1])
+    if not raiz.is_dir():
+        print(f"raiz não é diretório: {raiz}", file=sys.stderr)
+        return 2
+
+    for caminho in sorted(raiz.rglob("*")):
+        if not caminho.is_file():
+            continue
+        relativo = caminho.relative_to(raiz).as_posix()
+        if caminho.suffix == ".py":
+            ler_python(caminho, relativo)
+        elif caminho.suffix.lower() == ".html" and "templates" in caminho.parts:
+            ler_template(caminho, relativo)
+
+    print("arquivo\tlinha\tfuncao qualificada\tcampo\tmodo\ttrecho\tteste")
+    for teste, arquivo, linha, funcao, campo, modo, texto in sorted( [nao verificado]
+        RESULTADOS,
+        key=lambda item: (
+            item[0] == "sim", item[1], item[2],
+            item[3], item[4], item[5], item[6],
+        ),
+    ):
+        print(f"{arquivo}\t{linha}\t{funcao}\t{campo}\t{modo}\t{texto}\t{teste}") [nao verificado]
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
 
 ## 18/11 09:14 · sessao 29157680a737 · ESPINHA-REMEDIDA-1811 · censo · origem=Code
 
@@ -927,120 +1902,4 @@ Não concluí a prova exaustiva de aliases, referências passadas como argumento
 
 censo fechado: nao -- auditoria de caminhos genericos fora de app e de chamadores indiretos permanece aberta.
 
-## 18/11 09:08 · sessao 2a19390e677a · - · - · origem=Ronald (tmux)
-
-Conferência dos sítios U1–U9 enviada ao agente principal, com linhas atuais, mudanças de leitura e a ressalva sobre a idempotência de U5d.
-
-## 18/11 09:07 · sessao a2125936859d · E4C-F2-P2 · sonda · origem=Code
-
-```text
-DB saas_hasner
-MIGR ['0055_decisao_resposta_mantem_validacao', '0054_decisao_da_ressuscitacao', '0053_pergunta_unica_por_familia']
-DEN total_perguntas 51291 | fonte PerguntaDisputa.objects.count()
-DEN validada_em_nulo 35683 | fonte filter(validada_em__isnull=True)
-DEN com_algum_ato 2172 | fonte filter(decisoes__isnull=False).distinct()
-DEN com_ato_VALIDACAO 566 | fonte filter(decisoes__ato=VALIDACAO).distinct()
-N1 0 de 35683 (validada_em nulo)
-N2 0 de 0 (N1)
-N2_PKS []
-CORRIDA_BASELINE 0 de 2172 (perguntas com algum ato; universo do aval = 0 antes do reload da P2)
-CORRIDA_PKS []
-```
-
-## 18/11 09:06 · sessao 1c86d37464f2 · ESPINHA-REMEDIDA-1811 · censo · origem=Code
-
-## 1 Premissas e sitios
-
-**A remedição está incompleta.** Julguei os sítios centrais abaixo, mas não conferi individualmente todas as premissas do brief e da matriz. Por isso, as contagens totais CONFERE/MOVEU/CAIU e o total definitivo de perguntas de lei ficam **[nao verificado]**.
-
-Retifico também minha atualização anterior: citei `app/docs/CORTES.md:560` para o corte posterior sobre silêncio sem tê-lo confirmado nessa linha. O corte está transcrito no anexo F6, mas sua localização na árvore fornecida é **[nao verificado]**. O código atual ainda retorna `silencio_decidido` sem ações. ([app/chamados/services/tarefa_do_dia.py:176](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:176))
-
-### F6
-
-Na tabela, **MOVEU** indica mudança de implementação ou de linha; não significa, por si só, que o destino proposto pelo brief tenha sido entregue.
-
-| Premissa e sítio antigo | Julgamento em dd489c627 |
-|---|---|
-| U1a–c, brief:15, matriz:32–34: texto, instante e dias da mensageria | **CONFERE** a leitura projetada e o relógio no serializer; **CAIU** o contrato antigo `LeituraDosAtos` como interface demonstrada nesta cópia. A fila atual exige instante e texto, portanto P5 não chega ao serializer por essa fila. ([views_mensageria.py:567](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views_mensageria.py:567), [juizes.py:1761](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1761)) |
-| U2, brief:16, matriz:35: JSON de chamados/v2 | **CONFERE** a leitura de texto e instante da projeção. ([views.py:1163](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:1163)) |
-| U3, brief:17, matriz:36: JSON de disputa | **CONFERE** a leitura projetada de texto e instante. ([views.py:2561](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:2561)) |
-| U4, brief:18, matriz:37: `aguarda_admin` deriva de `estado == RESPONDIDA` | **CONFERE**; a saída ainda não consulta diretamente a tarefa do dia. ([views.py:2553](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:2553)) |
-| U5, brief:19, matriz:38: filtro apenas por instante | **MOVEU** para o juiz de respondida. ([views.py:2578](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:2578)) |
-| U6, brief:20, matriz:39: `ja_respondida` apenas por instante | **MOVEU** para o juiz; o instante da resposta ainda é serializado depois da porta. ([views.py:2622](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:2622), [views.py:2639](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:2639)) |
-| U7a/b, brief:21, matriz:40–41: seleção por instante | **MOVEU** para o juiz e sua face SQL negada. O segundo filtro continua partindo de todas as perguntas da disputa, sem filtro de vitalidade nesse trecho. ([views_cobrar.py:170](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views_cobrar.py:170), [views_cobrar.py:178](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views_cobrar.py:178)) |
-| U8, brief:22, matriz:42: texto projetado na proposta | **MOVEU** de linha; a leitura continua. ([views_cobrar.py:293](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views_cobrar.py:293)) |
-| U9a, brief:23, matriz:43: `ja_respondida` por instante | **MOVEU** para o juiz. ([views.py:1281](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views.py:1281)) |
-| U9b, brief:33–35, matriz:44: ramo materializada e não viva é inalcançável | **CONFERE** por leitura estática: a guarda anterior elimina a pergunta não viva; o ramo continua presente. A resposta web é erro/redirecionamento; o 404 explícito é da API. ([views.py:1242](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views.py:1242), [views.py:1257](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views.py:1257), [views.py:2619](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/api/views.py:2619)) |
-| U10, brief:24, matriz:45: pendentes por instante nulo | **MOVEU** para a face negada e depois filtra vivas; corrigíveis usam a face positiva. ([views.py:1418](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views.py:1418), [juizes.py:1753](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1753)) |
-| U11, brief:25, matriz:46: canal por string vazia literal | **MOVEU** para `q_nao_respondida()`. ([canal.py:64](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/canal.py:64)) |
-| U12, brief:26, matriz:47: tag lê texto projetado | **MOVEU** de linha; a leitura continua. O retorno da tag é a estrutura `impl`/`fr`, não diretamente o texto “X” ou “sem texto” pressuposto no RED antigo. ([chamados_tags.py:166](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/templatetags/chamados_tags.py:166)) |
-
-S1/S2 e as demais premissas gerais, provas, exceções e transições do brief e da matriz ainda precisam de julgamento individual. **CONFERE a, MOVEU b, CAIU c: [nao verificado]**.
-
-### F7
-
-| Premissa e sítio antigo | Julgamento em dd489c627 |
-|---|---|
-| C1/C2/C9/C12, matriz: card recebe `viva` e `resposta_enviada` do contexto | **CONFERE** a flag fornecida pelo montador; o predicado usa instante e o juiz de resposta sem texto. ([fio.py:178](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fio.py:178), [fio.py:360](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fio.py:360)) |
-| C3–C5, C7–C8, C10–C12: apresentação e prefill do card leem projeção | **CONFERE** nos sítios principais: texto/data, radio, input, select, histórico e chip continuam presentes. ([\_card_atendimento.html:106](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_card_atendimento.html:106), [\_card_atendimento.html:114](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_card_atendimento.html:114), [\_card_atendimento.html:148](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_card_atendimento.html:148), [\_card_atendimento.html:154](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_card_atendimento.html:154), [\_card_atendimento.html:182](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_card_atendimento.html:182), [\_card_atendimento.html:391](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_card_atendimento.html:391)) |
-| P0, matriz: detalhe e fragmento sem prefetch explícito de decisões | **CONFERE** nos dois trechos. ([acoes_chamado.py:352](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/acoes_chamado.py:352), [views.py:399](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views.py:399)) |
-| P1/P2/P6: validação projetada controla aparência e gate | **CONFERE**. ([\_pergunta_card.html:20](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_pergunta_card.html:20), [\_pergunta_card.html:42](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_pergunta_card.html:42)) |
-| P3/P4: os dois gates eram `respondida_em` | **MOVEU** para `perg.respondida`, que delega ao juiz. A data exibida continua projetada. ([\_pergunta_card.html:24](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_pergunta_card.html:24), [models.py:3674](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:3674)) |
-| P7/M6: filtro compartilhado | **CONFERE** no card; no modal **MOVEU** de `:250` para `:274`. ([\_pergunta_card.html:43](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_pergunta_card.html:43), [modal_fio.html:274](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/modal_fio.html:274)) |
-| M0: modal tem prefetch de decisões | **MOVEU** de `fio.py:261` para `:264`. ([fio.py:264](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fio.py:264)) |
-| M1/M3: gates eram `respondida_em` | **MOVEU** para `perg.respondida`; texto e data seguem projetados. ([modal_fio.html:185](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/modal_fio.html:185), [modal_fio.html:217](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/modal_fio.html:217)) |
-| M4 e L1: validação projetada no modal e resposta projetada no lote | **CONFERE**. ([modal_fio.html:228](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/modal_fio.html:228), [\_lote_preview.html:24](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_lote_preview.html:24)) |
-| A03 no modal, brief `:379` | **MOVEU** para `:406`. ([modal_fio.html:406](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/modal_fio.html:406)) |
-
-C6, C11, P5, M2, M5, as demais exceções e as premissas de contrato, provas e estados ainda precisam de julgamento individual. **CONFERE a, MOVEU b, CAIU c: [nao verificado]**.
-
-## 2 O que mudou
-
-### F6
-
-O patch fornecido de `fbc5c76ce` para `dd489c627` mostra que `respondidas`, os dois `ja_respondida`, a seleção de validação, o canal e a seleção de reabertura passaram ao juiz ou às suas faces SQL. O juiz exige **instante e texto não vazio**; sua face negada inclui ausência de instante ou instante sem texto. Isso altera os casos de meio par em relação aos filtros antigos. ([juizes.py:1544](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1544), [juizes.py:1583](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1583), [views_cobrar.py:170](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views_cobrar.py:170))
-
-Novos leitores no delta incluem `perguntas_corrigiveis`, `recobrar_questionario` e o universo de ressuscitação; este último exclui texto sem instante e sem validação para não apagá-lo sem uma linha que o conserve. ([juizes.py:1753](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:1753), [disputa_emissao.py:1737](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1737), [models.py:1533](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:1533))
-
-O delta também acrescenta as marcas `da_ressuscitacao` e `resposta_mantem_validacao`: os escritores de resposta humana, automática e pela trilha declaram valores diferentes para a segunda; a carga da tarefa consulta a primeira. Isso **não demonstra** que os leitores da F6 passaram a exibir texto e instante de um redutor de atos. ([models.py:4067](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4067), [disputa_emissao.py:1527](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1527), [disputa_emissao.py:1681](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1681), [tarefa_do_dia.py:427](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:427))
-
-### F7
-
-O patch de `520d7b557` para `dd489c627` troca quatro gates nos dois templates para `perg.respondida`; a property passou a delegar ao juiz. Os campos de texto, instante e validação identificados na seção 1 continuam em uso. ([models.py:3674](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:3674), [\_pergunta_card.html:24](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/_pergunta_card.html:24), [modal_fio.html:217](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/partials/modal_fio.html:217))
-
-O mesmo patch altera leitores em `fio.py` e `validacao.py`, incluindo a escolha da pergunta canônica e as guardas de validar e recusar, e acrescenta a porta para o estoque L-130. O inventário completo de novos escritores e leitores de todos os campos tocados pelas duas fatias permanece **[nao verificado]**. ([fio.py:1283](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/fio.py:1283), [validacao.py:681](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/validacao.py:681), [validacao.py:901](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/validacao.py:901))
-
-## 3 Nao verificado de ALCANCE
-
-### F6
-
-A antiga dúvida sobre a partição do app fecha quanto ao **código atual**: ela consulta `pergunta_respondida` e a disputa aberta. A atribuição organizacional à F5 pelo brief próprio continua **[nao verificado]**. ([pergunta_no_app.py:79](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/pergunta_no_app.py:79))
-
-Continuam abertos o inventário integral de leitores e escritores, acessos dinâmicos, manifestos futuros de arquivos cruzados e consumidores externos efetivos do JSON; falta concluir a busca por referências e conferir os clientes externos disponíveis. **[nao verificado]**
-
-### F7
-
-O card de atendimento chega às duas cascas: a página o inclui e escolhe `base_tpl`, que o context processor define conforme `e_app`. O detalhe inclui o outro card e estende `base.html`; o fragmento também é renderizado diretamente pela view. Isso fecha esses caminhos específicos, mas não completa a auditoria de todos os includes e leitores cruzados. ([meu_atendimento.html:1](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/meu_atendimento.html:1), [meu_atendimento.html:127](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/meu_atendimento.html:127), [context_processors.py:210](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/context_processors.py:210), [detalhe_local.html:1](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/templates/chamados/detalhe_local.html:1), [views.py:404](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/views.py:404))
-
-**alcance nao verificado restante: [nao verificado]** — a contagem requer terminar o levantamento integral; os itens acima não constituem uma contagem fechada.
-
-## 4 Perguntas de lei
-
-### F6
-
-- **DECIDIDO PELA LEI L-130:** texto sem instante não é respondida, assim como instante sem texto; o juiz é único para as finalidades enumeradas na lei. ([LEIS.md:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/LEIS.md:151))
-- **DECIDIDO PELO CORTE CORTES-F2-F9-1611, item 6:** os estados omitidos da matriz usam o dono declarado pela tarefa, sem tabela própria no leitor. ([CORTES.md:509](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/CORTES.md:509))
-- **DECIDIDO PELO CORTE COMPLEMENTO-1-CORTES-F2-F9-1611, item 3:** o registro documental diz que o app aceita `respondida_em` opcional e não lê `dias_esperando`. A implementação Android independente permanece **[nao verificado]**. ([CORTES.md:512](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/CORTES.md:512))
-- **Pergunta herdada ainda aberta:** resposta vazia/ressuscitada deve voltar ao colaborador? A lei a registra como não decidida; o corte distingue essa pergunta do tratamento já determinado para a F5. ([LEIS.md:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/LEIS.md:151), [CORTES.md:509](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/CORTES.md:509))
-
-F6: **1 pergunta herdada identificada**; total definitivo da fatia **[nao verificado]**, pois a revisão de todas as premissas não terminou.
-
-### F7
-
-A classificação de todas as candidatas de F7 permanece **[nao verificado]**. Em particular, não concluí a verificação de todas as premissas sobre a escolha entre leitura pura e conservação, nem sua relação com as decisões posteriores.
-
-F7: **[nao verificado]**. Total F6 + F7: **[nao verificado]**.
-
-perguntas de lei: [nao verificado]
-
-_6846 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6849 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
