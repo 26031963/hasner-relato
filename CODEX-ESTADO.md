@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 23:28** · publicado em **17/11/2026 23:31** (UTC-3)
+> Ultima resposta processada: **18/11/2026 00:10** · publicado em **18/11/2026 00:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 00:10 · sessao a6ac9bf8fe83 · S6-INTERMITENTE-FERIADO-CURA-A · construtor · origem=Code
+
+A cura e a bateria estão escritas. **Os testes RED, os mutantes e o resultado após a cura não foram executados**: a sessão ficou responsável por rodá-los e devolver o log. A certificação também permanece com Code e opus final. [não verificado] [nao verificado]
+
+O diff altera somente os dois pontos autorizados do motor: atualiza o comentário em [motor_calculo_v2.py:791](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:791) e faz os dois atributos apontarem para o mesmo conjunto vazio em [motor_calculo_v2.py:3581](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:3581). A bateria nova usa `get_motor` e `calcular_mes`, com cadastro próprio e relógio fixado ([teste:25](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/tests/test_s6_intermitente_feriado.py:25), [teste:50](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/tests/test_s6_intermitente_feriado.py:50)). [nao verificado]
+
+A resposta esperada em cada caso é:
+
+- **RED, RED2 e RED3:** respectivamente, feriado injetado, feriado injetado com dobra explícita e `feriados=None`. O par 07–19 soma **720 minutos = 12 horas**, sem pausa registrada; o motor desconta a pausa efetivamente registrada e trata eventual intervalo suprimido em campo próprio. Espera-se zero HE 100, zero HE 100 de feriado e ausência do dia na lista de bloqueio ([teste:63](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/tests/test_s6_intermitente_feriado.py:63), [motor:2766](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:2766)). [nao verificado]
+- **Dia comum:** o mesmo par também deve resultar em 12 horas e zero HE 100 ([teste:81](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/tests/test_s6_intermitente_feriado.py:81)). [nao verificado]
+- **Controle 12x36:** com feriado injetado e dobra explícita, espera-se 12 horas trabalhadas e 12 horas em cada campo de HE 100, sendo o campo de feriado um subconjunto da HE 100, não uma segunda dobra ([teste:84](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/tests/test_s6_intermitente_feriado.py:84), [motor:331](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:331)). [nao verificado]
+
+Para a sessão executar a bateria na cópia:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test ponto.tests.test_s6_intermitente_feriado
+```
+
+Para o **mutante da troca por conjunto não injetado**, substitua a linha de [motor_calculo_v2.py:3581](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:3581) por `self.feriados = set()` e execute o mesmo comando. A expectativa é que RED, RED2 e RED3 falhem; depois, restaure a linha da cura. Isso ainda precisa ser demonstrado pelo log. [não verificado]
+
+```bash
+sed -i 's/self\.feriados = self\._feriados_injetados = set()/self.feriados = set()/' ponto/motor_calculo_v2.py
+PYTHONDONTWRITEBYTECODE=1 python manage.py test ponto.tests.test_s6_intermitente_feriado
+sed -i 's/^        self\.feriados = set()$/        self.feriados = self._feriados_injetados = set()/' ponto/motor_calculo_v2.py
+```
+
+Quanto aos escritores e leitores:
+
+- `feriados` é escrito pela base em [motor:790](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:790) e pela subclasse em [motor:3581](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:3581). `_feriados_injetados` é escrito nos mesmos dois pontos, com a atribuição da base em [motor:795](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:795). Ambos são lidos por `eh_feriado` em [motor:963](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:963).
+- Os minutos trabalhados e de dobra são escritos em [motor:2785](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:2785) e [motor:2809](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:2809); as propriedades do resultado os leem em [motor:295](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:295) e [motor:328](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:328), e o fechamento as lê em [fechamento.py:902](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/services/fechamento.py:902).
+- O bloqueio acrescenta o dia em [motor:1487](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:1487), publica a lista em [motor:2720](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/motor_calculo_v2.py:2720), e o espelho a lê em [espelho.py:748](/home/ronald/wt-codex-s6-intermitente-feriado-cura-a-000718/app/ponto/services/espelho.py:748).
+
+Não executei testes, mutações, acesso a banco ou comparação de frota; seus resultados permanecem [não verificado]. Não alterei o pendente em `core/juizes.py`, reservado à sessão, nem a v3, excluída desta obra pelo complemento fornecido. [não verificado]
 
 ## 17/11 23:28 · sessao b3d2225e0b94 · E4C-F1-B2 · censo · origem=Code
 
@@ -599,40 +633,4 @@ A diferença é de chave de dia: `turnos_do_colab` devolve turnos pelo `data_tur
 
 **PROCEDE: 11** — cinco das 26 linhas A/B e seis linhas de cabeçalho, fatos ou seções. **LINHAS RESPONDIDAS: 26 de 26.**
 
-## 17/11 20:51 · sessao e44d04e448f0 · E4C-F1-B2 · verificador · origem=Code
-
-| id | Revisão |
-|---|---|
-| P1 | **PROCEDE** — A presença do pk no coletor pode vir de veto anterior e não identifica a recusa atual: `rechavear_no_reuso` também devolve outros motivos, todos convertidos em `ReusoSemRechave`. É preciso distinguir a causa desta exceção. `fio.py:1117-1124`; `models.py:3069-3074`. |
-| P3 | **CONFERE** — É ato de sistema; a partição antecede as escritas do laço. O fecho posterior ainda consulta as vivas. `models.py:2145-2163`; `models.py:1984-1991`. |
-| P4 | **CONFERE** — O universo selecionado exclui as saídas sem escrita da porta; o julgamento cabe antes da chamada. `encerrar_perguntas_com_fato.py:31-43`; `:65-69`; `models.py:3413-3416`. |
-| P5 | **CONFERE** — O laço da reabertura da competência seleciona a via correspondente e pode julgar antes da chamada, sem abrir cerca. `competencia_trancada.py:276-286`; `models.py:3450-3462`. |
-| P6 | **CONFERE** — A validação comum tem regra própria; a folga retorna antes dela e está separada como achado. `validacao.py:711-712`; `:740-743`. |
-| P7 | **CONFERE** — A devolução está no caminho da regra própria de validação, sem cerca nova. `validacao.py:777-781`; `:237-276`. |
-| P11 | **PROCEDE** — Pular apenas o save da pendência e seguir não garante o resultado descrito: `_pend` pode coexistir com `ts` válido, e o fluxo pode plantar ou processar a irmã antes do carimbo. A recusa precisa encerrar a unidade de modo a impedir esses efeitos. `materializacao.py:658-671`; `:683-694`; `:1347-1356`; `:1388-1391`. |
-| P12 | **PROCEDE** — Antes de `carimbar_identidade` é cedo demais: a porta pode retornar `False` para linha fora do fato sem escrever. Julgar ali a contaria indevidamente. `materializacao.py:1461`; `models.py:3297-3300`. |
-| P13 | **PROCEDE** — `_carimba or _muda_motivo` não prova escrita da pergunta: no ramo `_carimba`, `carimbar_identidade` pode recusar sem save, embora a nota seguinte ainda possa ocorrer. `materializacao.py:1679-1694`; `models.py:3299-3300`. |
-| P14 | **PROCEDE** — A linha herda o ponto comum de P13 e, com ele, a contagem indevida do ramo `_carimba` sem escrita; o save de P14 ocorre somente no `elif _muda_motivo`. `materializacao.py:1680-1691`; `models.py:3299-3300`. |
-| P15 | **PROCEDE** — A saída C6 ou fora do fato não conta por P15, e o `finally` pode chegar a P13; porém o teste proposto em P13 ainda pode contar uma chamada sem escrita. `models.py:3239-3240`; `:3262-3264`; `materializacao.py:1976-1990`; `:1680-1691`. | [nao verificado]
-| P17 | **CONFERE** — No chamador de sistema, excluir a vetada antes do lote impede as três escritas; a linha fora do fato continua podendo acordar célula, como descrito. `curar_perguntas_em_limbo.py:67-69`; `disputa_emissao.py:1625-1649`. |
-| P18 | **CONFERE** — A resposta automática é escrita de sistema; texto já presente sai antes da escrita. A validação posterior tem o desvio da folga já identificado no topo. `disputa_emissao.py:1654-1678`; `validacao.py:711-712`. |
-| P19 | **CONFERE** — A saída por resposta já carimbada ou texto vazio precede a mutação; o julgamento pode ficar entre ambas. `disputa_emissao.py:1692-1698`. |
-| P20 | **CONFERE** — A seleção relida exclui as vias de identidade, inclusive as fora do fato, antes do descarimbo; os demais `continue` também precedem o ponto proposto. `relavra_via.py:171-181`; `:236-246`; `models.py:2623-2627`. |
-| P21 | **CONFERE** — Na cópia, restam referências históricas e lápides; a catraca citada testa uma forma sintética, sem enumerar o command removido. `models.py:3429-3431`; `config/crons.py:835-838`; `test_contract_leitores_vitalidade.py:177`; `test_e1_v7_catracas.py:406-411`. |
-| X1 | **CONFERE** — Os `continue` e as saídas sem escrita de `carimbar` precedem o ponto proposto; na tranca, a disputa fecha e a pergunta vetada não é gravada. O controle de RED-NOVO-3 precisa demonstrar que alcança esse ponto pelo caminho da tranca. `materializacao.py:2154-2167`; `models.py:3239-3240`; `:3262-3271`; `competencia_trancada.py:221-230`; `respostas_1711_1950.txt:2`. |
-| X2 | **PROCEDE** — O RED exige dia gravado aberto e dia do turno entregue, mas a instância é relida do banco e o dia do turno é seu próprio `data_evento`; o caso proposto não se monta nesse caminho. `validacao.py:333-351`; `juizes.py:338-342`. |
-| X3 | **PROCEDE** — O mesmo problema do RED de X2: a pergunta é relida sem alteração do dia antes do julgamento, e o impedimento já examina a competência desse dia. `validacao.py:400-404`; `:429-440`; `juizes.py:338-342`. |
-| X5 | **PROCEDE** — Julgar antes de `fechar_por_admin` pode contar linha que a porta devolve sem escrita, inclusive fora do fato. O ponto precisa respeitar essas saídas. `veredito_celula.py:180-190`; `models.py:3174-3183`; `:3299-3300`; `:3315-3318`. |
-| X6 | **PROCEDE** — A leitura de B9a como “item = grupo” não resolve o conflito literal: o comando mantém o grupo inteiro fora, enquanto 18:45 manda julgar a pergunta que seria escrita. Além disso, o filtro do grupo ignora dias nulos mistos; a porta os inclui. B9b herda a mesma disputa ao escolher grupos para a reversão. `backfill_decisoes_pergunta.py:355-375`; `fio.py:1403-1419`; `migrar_data_evento_dia_do_turno.py:482-490`; `cerca_b2_regras2_1845.txt:3`. |
-| X7 | **CONFERE** — O reaponte usa a recusa existente e o laço prossegue; em B4, instância datada com gravado nulo leva `None` ao veto e é retida como indecidível. `fio.py:916-928`; `:1365-1367`; `:1403-1419`; `:2328-2334`. |
-| X8 | **CONFERE** — Fora de cerca, a consequência da classe (ii) é seguir o fechamento sem reatar a vetada; o veto precisa ser distinguido das outras recusas, que continuam levantando. Dentro de cerca não há partição. `models.py:435-445`; `fio.py:1396-1398`; `cerca_b2_regras2_1845.txt:3`. |
-| X9 | **CONFERE** — A saída por item já registra `ok` e motivo; o coletor proposto permite reter a escrita de sistema e seguir o laço. `limbo_folgas.py:239-246`; `fio.py:969-976`. |
-| X10 | **CONFERE** — A vetada permanece com o destino anterior, sem save. Se o furo não fecha **e** outra pergunta reatou, o rollback desfaz as reatas daquela tentativa; a trilha proposta deve ser drenada depois dele. `limbo_folgas.py:278-289`; `fio.py:969-976`. |
-| X12 | **CONFERE** — O comando já trata a recusa por pergunta; o julgamento proposto usa o ponto de B4 e deixa os demais itens seguirem. `reatar_beco_folga_ao_limbo.py:129-136`; `fio.py:969-976`. |
-| X13 | **CONFERE** — A escrita de pergunta decorrente do fecho passa pelo S144 e pelo mesmo ponto posterior às saídas sem escrita. `materializacao.py:2030`; `:2154-2167`; `models.py:3262-3271`. |
-| X14 | **CONFERE** — O fecho da emissão aciona o S144; o julgamento proposto é por pergunta no ponto de escrita. `disputa_emissao.py:1298`; `signals.py:164-167`; `materializacao.py:2154-2167`. |
-| X15 | **CONFERE** — Mover o reset para antes da saída bem-sucedida do `atomic` faz o callback observar a cerca solta; o veto do ato continua testado antes do reset. `fio.py:1438-1449`. |
-
-**PROCEDE: 10. LINHAS RESPONDIDAS: 29 de 29.**
-
-_6757 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6758 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
