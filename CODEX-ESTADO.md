@@ -1,7 +1,85 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 15:21** · publicado em **18/11/2026 15:26** (UTC-3)
+> Ultima resposta processada: **18/11/2026 15:33** · publicado em **18/11/2026 15:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 15:33 · sessao 0c6e31f1840c · E4C-F9 · censo · origem=Code
+
+A cópia recebida contém a face SQL pública de validação e o leitor da sequência de atos, mas vários sítios F9 ainda decidem pela **projeção**. Em particular, o juiz registrado `pergunta_respondida` e sua face SQL leem hoje `respondida_em` e `resposta_colab` da projeção; `pergunta_viva` também lê a projeção temporal, embora `DecisaoPergunta.leitura` já exista. [app/chamados/models.py:3539] [app/chamados/models.py:4295] [app/chamados/juizes.py:1544] [app/chamados/juizes.py:1575] [app/chamados/juizes.py:1382]
+
+A cópia foi identificada pelo usuário como HEAD `d6da98509`; ela não contém `.git`, portanto o hash não pôde ser verificado independentemente. [nao verificado]
+
+### Sítios V/R do brief e da matriz
+
+Na tabela, **P** significa leitura da projeção; **sequência** significa redução ordenada dos atos com conservação do passivo. “Mudou” indica que o sítio continua existindo, mas o nome ou o predicado apresentado no brief mudou. Os caminhos são relativos à raiz da cópia.
+
+| Sítio do brief / matriz | Arquivo:linha no main | Nome real e decisão atual | Estado |
+|---|---|---|---|
+| Grade, D01 | [reconciliar_grade.py:460](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/ponto/management/commands/reconciliar_grade.py:460) | `_relavrar_orfa`: `q_respondida_com_texto()` pré-filtra por **P**; depois chama `fio_vivo`, também baseado em **P**. [app/chamados/juizes.py:1575] [app/chamados/juizes.py:1403] | Mudou: usa o juiz SQL, mas ainda não a sequência. |
+| Encerrar, D05/D06 | [encerrar_perguntas_com_fato.py:31](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/encerrar_perguntas_com_fato.py:31) | `Command.handle`: V nula por **P**; depois `fio_vivo` por **P**. [app/chamados/management/commands/encerrar_perguntas_com_fato.py:83] [app/chamados/juizes.py:1403] | Sim. |
+| Reabrir órfãs, D07–D10 | [models.py:3510](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:3510) | O comando e sua porta `reabrir_fantasma` foram retirados; a lápide identifica o comando como o único chamador. A decisão antiga deixou de existir na cópia. [app/chamados/models.py:3510] | Não. |
+| Limbo, D11 | [curar_perguntas_em_limbo.py:32](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/curar_perguntas_em_limbo.py:32) | `nota_da_resposta`: texto de R por **P**. | Sim. |
+| Limbo, D12/D13 | [curar_perguntas_em_limbo.py:46](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/curar_perguntas_em_limbo.py:46) | `Command.handle`: seleciona texto com instante nulo por **P**; repete a guarda de instante nulo na chamada de reabertura. [app/chamados/management/commands/curar_perguntas_em_limbo.py:69] | Sim. |
+| Deduplicação, D14 | [dedup_perguntas_fato.py:76](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/dedup_perguntas_fato.py:76) | `Command.handle`, `com_resp`: `pergunta_respondida`, por **P**, inclusive instante e texto. [app/chamados/juizes.py:1552] | Mudou: antes testava só texto. |
+| Validar classe A, D15 | [validar_classe_a.py:80](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/validar_classe_a.py:80) | `Command.handle`: imprime `resposta_colab` por **P**. | Sim. |
+| Backfill, D18 | [backfill_decisoes_pergunta.py:56](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/backfill_decisoes_pergunta.py:56) | `linhas_a_criar`: seleciona R/V por **P** e procura linha correspondente por tipo **e instante**, não pelo último ato. [app/chamados/management/commands/backfill_decisoes_pergunta.py:47] [app/chamados/management/commands/backfill_decisoes_pergunta.py:67] | Sim. |
+| Backfill, D19 | [backfill_decisoes_pergunta.py:94](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/backfill_decisoes_pergunta.py:94) | `admin_decidiu_sem_ato`: V por **P**; exclui pergunta que tenha **qualquer** `SILENCIO` ou `VALIDACAO`. [app/chamados/management/commands/backfill_decisoes_pergunta.py:99] | Sim. |
+| Backfill, D20/D21 | [backfill_decisoes_pergunta.py:315](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/backfill_decisoes_pergunta.py:315) | `aplicar`: repete a guarda por **qualquer** silêncio/validação e fotografa texto R da **P** para o silêncio; `handle` carrega R para o relatório. [app/chamados/management/commands/backfill_decisoes_pergunta.py:324] [app/chamados/management/commands/backfill_decisoes_pergunta.py:504] | Sim. |
+| Auditor I21a, D22 | [auditar_invariantes_chamados.py:166](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:166) | `_contraprova_i21a`: `pergunta_respondida`, por **P**. [app/chamados/management/commands/auditar_invariantes_chamados.py:176] [app/chamados/juizes.py:1552] | Mudou: chama o juiz. |
+| Auditor F1t, D23 | [auditar_invariantes_chamados.py:206](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:206) | `_contraprova_f1t`: rótulo V por **P**; `pergunta_viva` anterior também decide por **P**. [app/chamados/management/commands/auditar_invariantes_chamados.py:203] [app/chamados/juizes.py:1403] | Sim. |
+| Auditor I2, D26 | [auditar_invariantes_chamados.py:592](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:592) | `Command.handle`: `pergunta_respondida`, por **P**. [app/chamados/juizes.py:1552] | Mudou: chama o juiz. |
+| Auditor I18, D29 | [auditar_invariantes_chamados.py:1077](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:1077) | `Command.handle`: V e autor da validação por **P**. | Sim. |
+| Auditor I20, D30 | [auditar_invariantes_chamados.py:1106](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:1106) | `Command.handle`: meio-estado R por **P**, com exclusão da cicatriz nominal. [app/chamados/management/commands/auditar_invariantes_chamados.py:1103] | Sim. |
+| Auditor I21, D32 | [auditar_invariantes_chamados.py:1576](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:1576) | `Command.handle`, `_i21_cru`: R pelo `q_respondida_com_texto`, V diretamente, ambos por **P**. [app/chamados/juizes.py:1580] | Mudou: R usa face SQL do juiz. |
+| Auditor C2, D33 | [auditar_invariantes_chamados.py:1605](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:1605) | `Command.handle`: R por `q_nao_respondida`, V diretamente; ambos por **P**. [app/chamados/juizes.py:1583] | Mudou: R usa face SQL do juiz. |
+| Auditor F1, D34 | [auditar_invariantes_chamados.py:1658](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:1658) | `Command.handle`: `pergunta_viva` e `pergunta_respondida`, por **P**. [app/chamados/management/commands/auditar_invariantes_chamados.py:1661] [app/chamados/juizes.py:1403] | Mudou: resposta passa pelo juiz. |
+| Auditor F2/F3, D35/D36 | [auditar_invariantes_chamados.py:1770](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/management/commands/auditar_invariantes_chamados.py:1770) | `Command.handle`: pré-filtro V por **P**, seguido de `pergunta_viva`, também por **P**. [app/chamados/management/commands/auditar_invariantes_chamados.py:1784] [app/chamados/juizes.py:1403] | Sim. |
+
+Os degraus exclusivamente C ou sem leitura R/V própria não entram nessa contagem de sítios V/R; D06, por chamar `fio_vivo`, está incluído acima. [app/chamados/management/commands/encerrar_perguntas_com_fato.py:83]
+
+### Os três endereços de `models.py`
+
+- [models.py:3539](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:3539): `PerguntaDisputa.q_validada_pelo_ato(cls)` é **classmethod público** e devolve um objeto Django `Q`. Ele considera validação sem ato posterior que a limpe e também o passivo da projeção sem linha correspondente. É o equivalente atual da face privada citada pelo brief; não se limita a perguntar se existe qualquer validação. [app/chamados/models.py:3542] [app/chamados/models.py:3551]
+- [models.py:3564](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:3564): `PerguntaDisputa.q_nao_validada_pelo_ato(cls)` é **classmethod público** e devolve o `Q` negado da função anterior. [app/chamados/models.py:3566]
+- [models.py:4295](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/models.py:4295): `DecisaoPergunta.leitura(cls, p)` é **classmethod** e devolve `LeituraDoAto(validada_em, respondida_em, resposta_colab)`. Ordena linhas por instante e desempate, acrescenta o passivo sem linha correspondente e aplica os efeitos sucessivos; isso não é simplesmente selecionar a última linha de qualquer tipo. [app/chamados/models.py:4308] [app/chamados/models.py:4317]
+
+A comparação entre “qualquer ato” e o estado vigente é relevante no backfill: numa sequência **VALIDACAO → DEVOLUCAO → REABERTURA**, a guarda de `admin_decidiu_sem_ato` ainda encontra a validação histórica e exclui a pergunta; a redução de `leitura`, por sua vez, termina sem validação e sem resposta. São perguntas diferentes: a primeira verifica se falta uma linha histórica, enquanto a segunda calcula o estado vigente. [app/chamados/management/commands/backfill_decisoes_pergunta.py:99] [app/chamados/models.py:4277] [app/chamados/models.py:4317]
+
+Os **24** e **68** do brief são números raspados de “existe ato”, com data e ressalva fornecidas no enunciado; não mostram quantos permaneciam respondidos ou validados após os atos posteriores, nem permitem recalcular essa divisão. [nao verificado]
+
+### Quem escreve e quem lê
+
+- **Resposta, instante e texto:** a resposta humana escreve `resposta_colab` e `respondida_em` e pode limpar V; resposta automática e `carimbar_resposta_pela_trilha` também escrevem R. A reabertura limpa o par. Nos sítios F9, os leitores estão na tabela; o juiz registrado de “respondida” é `pergunta_respondida`, com face SQL `q_respondida_com_texto`. [app/chamados/services/disputa_emissao.py:1439] [app/chamados/services/disputa_emissao.py:1481] [app/chamados/services/disputa_emissao.py:1494] [app/chamados/services/disputa_emissao.py:1662] [app/chamados/services/disputa_emissao.py:1692] [app/chamados/services/disputa_emissao.py:1617] [app/core/juizes.py:306]
+- **Validação e autor:** `validar_pergunta` é a porta registrada para validar; seu caminho grava V e registra o ato. Devolução e reabertura podem limpar V, e `carimbar` também pode preencher V e autor. Os leitores F9 de V estão na tabela; I18 lê ainda o autor projetado. [app/docs/JUIZES.md:40] [app/chamados/services/validacao.py:661] [app/chamados/services/validacao.py:168] [app/chamados/services/validacao.py:273] [app/chamados/services/disputa_emissao.py:1617] [app/chamados/models.py:3326] [app/chamados/management/commands/auditar_invariantes_chamados.py:1077]
+- **Materialização e autor:** `_escrever_carimbo` atribui C e autor; `carimbar` é uma porta que persiste o carimbo, e `descarimbar_em_lote` o limpa. Os sítios C da matriz continuam leitores de projeção, salvo os do comando de órfãs retirado. [app/chamados/models.py:3293] [app/chamados/models.py:3299] [app/chamados/models.py:3448] [app/chamados/models.py:3487] [app/chamados/models.py:3510]
+- **Sequência de atos:** `DecisaoPergunta.registrar(cls, linhas)` é a porta de escrita das linhas; os escritores de resposta, validação e reabertura a chamam. `DecisaoPergunta.leitura` e `q_validada_pelo_ato` são leitores da sequência; os juízes de respondida e vitalidade usados pelos sítios acima ainda leem a projeção. [app/chamados/models.py:4329] [app/chamados/services/disputa_emissao.py:1532] [app/chamados/services/validacao.py:173] [app/chamados/services/disputa_emissao.py:1639] [app/chamados/models.py:4295] [app/chamados/models.py:3539] [app/chamados/juizes.py:1552] [app/chamados/juizes.py:1403]
+
+Para I18, a face SQL pública devolve um predicado de validação, enquanto a leitura retorna instante, instante de resposta e texto: nenhuma das duas assinaturas devolve o autor da validação vigente. Como I18 exclui autores específicos, a substituição exige preservar essa distinção. [app/chamados/models.py:3539] [app/chamados/models.py:4295] [app/chamados/management/commands/auditar_invariantes_chamados.py:1077]
+
+**Pergunta de comportamento ainda aberta:** o comando de limbo deve continuar reparando o meio-estado da projeção — texto preenchido com instante nulo — ou passar a selecionar resposta por ato sem projeção? O código define o primeiro universo; a mudança proposta no brief altera a pergunta que o comando responde. O brief informa **0** no limbo da sombra e uma trava nominal de **21** perguntas; esses números não permitem medir o segundo universo. Não encontrei, na lei escrita consultada, uma decisão específica que escolha entre os dois universos para esse comando. [app/chamados/management/commands/curar_perguntas_em_limbo.py:5] [app/chamados/management/commands/curar_perguntas_em_limbo.py:46] [nao verificado]
+
+alcance nao verificado: 0  
+perguntas de lei: 1
+
+## 18/11 15:31 · sessao 6761a6cbc0d6 · ESCALA-NAO-DESCREVE · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — ITEM 2(b):** a definição literal de X conflita com a exclusão das linhas sem data quando uma lavra contém carga positiva sem `carga_desde`. O leitor aceita essa combinação; sua ocorrência em produção é **[não verificado]**. ([cadastro_realidade.py:948](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:948))
+
+1. **CONFERE, com ressalva.** O escritor atual mede `orfas` como a soma das quantidades em `ata.orfas` das células da janela; havendo células, o resultado pode ser zero. `carga_desde` é o início da janela que mediu a pessoa, não necessariamente a data da primeira órfã. ([esmeril_espelho.py:79](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:79), [esmeril_espelho.py:119](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:119), [esmeril_espelho.py:233](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:233))
+
+   No escritor atual, carga e data entram juntas no mesmo ramo, inclusive para carga zero. O leitor, porém, consulta os dois mapas separadamente: aceita tanto carga sem data quanto data sem carga, caso a lavra recebida tenha essa forma. A existência dessas combinações em produção é **[não verificado]**. ([esmeril_espelho.py:236](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:236), [cadastro_realidade.py:939](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:939))
+
+2. **CONFERE, com ressalva sobre a redação vigente.** A L-040 ainda traz literalmente “por posto → vínculo → assinatura → ação”, enquanto o corte END-L3 vigente determina ordenar a lista por carga de órfã para todos. A troca textual proposta no item 2(c) reconcilia esse trecho com o corte, preservando os elementos da linha; não identifiquei outra colisão no material conferido. A existência de outro aval aplicável não presente no dado ou localizado na cópia é **[não verificado]**. ([LEIS.md:88](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/docs/LEIS.md:88), [CORTES.md:536](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/docs/CORTES.md:536))
+
+   O desempate já existente é pelo **nome**, após carga decrescente; carga `None` fica por último. ([cadastro_realidade.py:1042](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:1042))
+
+3. **PROCEDE.** Se uma linha recebida tiver `carga > 0` e `carga_desde is None`, a definição “X = linhas com carga > 0” a inclui, mas a cláusula seguinte manda excluí-la de X e Y. O escritor atual não produz essa combinação, porém o leitor não a impede; ocorrência real **[não verificado]**. Carga **zero com data** é possível pelo escritor atual: medição com células e nenhuma órfã. Ela fica fora de X pelo critério `> 0`, mas não é sem medida. ([cadastro_realidade.py:960](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:960), [esmeril_espelho.py:119](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:119), [esmeril_espelho.py:236](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:236))
+
+   A frase do topo da tela hoje é montada no template: mostra o número “com anomalia recorrente”, de um universo na frota, e, quando aplicável, o número “com estado impossível no cadastro”; ainda não apresenta X, Y ou o menor `desde`. A frase individual de carga é montada separadamente pelo serviço, inclusive com o caso de carga sem data. ([cadastro_x_realidade.html:8](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/templates/escala/cadastro_x_realidade.html:8), [cadastro_realidade.py:779](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:779))
+
+4. **CONFERE, no escopo declarado.** O item 2 descreve agregação e apresentação da lista, testes e correção textual da L-040; não declara escrita no gravado exportado, em dados de escala ou vínculo, nem alteração do motor de dinheiro. Esses e os demais casos exigentes de `!` estão enumerados na seção 7b. O impacto de uma implementação ou diff ainda inexistente é **[não verificado]**. ([CLAUDE.md:265](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/CLAUDE.md:265), [cadastro_realidade.py:833](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:833))
+
+O hash da cópia **[não verificado]**: a pasta disponibilizada não apresenta metadados Git acessíveis para confirmar o commit. [nao verificado]
 
 ## 18/11 15:21 · sessao 3a4db752191d · FILA-CODEX-1811 · leitura · origem=Code
 
@@ -802,14 +880,4 @@ O **número principal a medir** é o de perguntas conservadas cujo par `razão/a
 
 Leitura de X4, A9b, X11 e do clique mudo concluída e enviada ao agente principal, com referências ao código e aos testes localizados. Os testes não foram executados. [app/chamados/tests/test_e4_expand_orm.py:63](/home/ronald/codex_ws/d6da9850935f039f0c5e45b1d4d8a6974d6c35d6/app/chamados/tests/test_e4_expand_orm.py:63)
 
-## 18/11 15:15 · sessao 156e23fc3fa6 · - · - · origem=Ronald (tmux)
-
-Levantamento enviado ao agente principal, com os pontos de escrita e leitura localizados, inclusive consumidores fora de `app`, e com a ressalva de que o censo completo permanece **[não verificado]**.
-
-## 18/11 15:14 · sessao 1a24b3e4db43 · - · - · origem=Ronald (tmux)
-
-Leitura de P8, P9 e P16 enviada ao agente principal, com estados de entrada, juízes, operações, campos, retornos e testes identificados. Os testes foram apenas lidos, não executados [não verificado]. [nao verificado]
-
-A cópia não contém `.git`; portanto, a identidade exata do HEAD ficou **[não verificado]**.
-
-_7013 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7015 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
