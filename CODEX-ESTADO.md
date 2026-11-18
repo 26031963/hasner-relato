@@ -1,7 +1,226 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 15:19** · publicado em **18/11/2026 15:20** (UTC-3)
+> Ultima resposta processada: **18/11/2026 15:21** · publicado em **18/11/2026 15:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 15:21 · sessao 3a4db752191d · FILA-CODEX-1811 · leitura · origem=Code
+
+**O classificador abaixo é executável, mas a conferência do HEAD ficou limitada:** a cópia disponível não tem metadados Git; portanto, não pude confirmar que ela corresponde ao hash informado [não verificado]. As definições e os sítios citados foram conferidos na cópia, por exemplo `app/chamados/models.py:33`, `app/chamados/models.py:1847` e `app/chamados/models.py:2593`.
+
+A contagem das 1.588 linhas e a lista B resultante ficam [não verificado]: não executei o classificador sobre um arquivo TSV completo disponível na cópia. O texto fornecido mostra linhas do levantamento, mas não permite confirmar sua equivalência ao arquivo integral [não verificado]. [nao verificado]
+
+A tabela usa estas abreviações. O conjunto A é limitado aos métodos da **classe dona**, aos juízes registrados indicados e às funções de porta enumeradas; uma chamada indireta em outro local não vira A só por chamar a porta.
+
+- **CC** — métodos `ChamadoColaborador.*` em `app/chamados/models.py`; porta `_gravar_estado` em `app/chamados/models.py:207`. O registro de ciclo está em `app/core/portas.py:196` e `app/core/portas.py:221`.
+- **DS** — métodos `DisputaSupervisao.*` em `app/chamados/models.py`; ciclo em `app/chamados/models.py:2017`, `:2289`, `:2326`, `:2345` e `:2413`; emissão/agregação de motivos em `app/chamados/services/disputa_emissao.py` conforme `app/core/portas.py:425` e `:433`.
+- **PD** — métodos `PerguntaDisputa.*` em `app/chamados/models.py`. A porta do carimbo inclui `carimbar`, `carimbar_identidade`, `descarimbar` e `descarimbar_em_lote`: `app/chamados/models.py:3299`, `:3364`, `:3399`, `:3448`; declaração em `app/core/portas.py:243`.
+- **Resposta** — `responder_pergunta_disputa_core`, `responder_automaticamente` e `carimbar_resposta_pela_trilha`, em `app/chamados/services/disputa_emissao.py:1439`, `:1662`, `:1692`; a declaração da porta está em `app/core/portas.py:259`.
+- **Validação** — `_carimbar_validacao`, `validar_pergunta`, `recusar_pergunta` e `conferir_data_do_fato`, em `app/chamados/services/validacao.py:161`, `:685`, `:858`, `:957`; a declaração está em `app/core/portas.py:360`.
+- **Desfecho** — as funções da porta de materialização enumeradas em `app/core/portas.py:275`: `_materializar_ausencia_de_resposta`, `_materializar_resposta_hora`, `_carimbar_recusa`, `_materializar_uma` e `materializar_pendentes_aprovadas`, todas em `app/chamados/services/materializacao.py`. A escrita de `pendencia_admin` aparece em `app/chamados/services/materializacao.py:1365`.
+- **Lavra** — `lavrar` e `gravar_lavras_em_lote` em `app/chamados/veredito_lavrado.py:254` e `:240`; declaração dos três campos em `app/core/portas.py:332`.
+- **J-resposta** — `pergunta_respondida`, registrada em `app/core/juizes.py:306` e definida em `app/chamados/juizes.py:1544`.
+- **J-viva** — `pergunta_viva`, registrada em `app/core/juizes.py:291` e definida em `app/chamados/juizes.py:866`.
+
+| Campo | Modelo dono e definição na cópia | Conjunto DONO / porta |
+|---|---|---|
+| `data_conferida_em` | PerguntaDisputa — `app/chamados/models.py:2645` | PD; Validação |
+| `data_conferida_por` | PerguntaDisputa — `app/chamados/models.py:2646` | PD; Validação |
+| `fechada_em` | DisputaSupervisao — `app/chamados/models.py:1894` | DS |
+| `fechada_por` | DisputaSupervisao — `app/chamados/models.py:1903` | DS |
+| `janela_expira_em` | PerguntaDisputa — `app/chamados/models.py:2783` | PD; Lavra |
+| `julgado_em` | PerguntaDisputa — `app/chamados/models.py:2777` | PD; Lavra |
+| `materializada_em` | PerguntaDisputa — `app/chamados/models.py:3647` | PD; Desfecho; J-viva |
+| `materializada_por` | PerguntaDisputa — `app/chamados/models.py:3651` | PD; Desfecho |
+| `motivo_fechamento` | DisputaSupervisao — `app/chamados/models.py:1930` | DS |
+| `motivos` | DisputaSupervisao — `app/chamados/models.py:1878` | DS; emissão/agregação |
+| `pendencia_admin` | PerguntaDisputa — `app/chamados/models.py:2743` | PD; Desfecho |
+| `reaberturas_admin` | DisputaSupervisao — `app/chamados/models.py:1899` | DS |
+| `reaberturas_colab` | DisputaSupervisao — `app/chamados/models.py:1895` | DS |
+| `recusa_motivo` | PerguntaDisputa — `app/chamados/models.py:2747` | PD; Desfecho; Validação; Resposta. Escritor único [não verificado]; a declaração ressalva múltiplos escritores em `app/core/portas.py:384`. |
+| `resolucao` | DisputaSupervisao — `app/chamados/models.py:1910` | DS |
+| `resolvido_em` | ChamadoColaborador — `app/chamados/models.py:66` | CC |
+| `respondida_em` | PerguntaDisputa — `app/chamados/models.py:2635` | PD; Resposta; J-resposta |
+| `respondido_por` | ChamadoColaborador — `app/chamados/models.py:64` | CC |
+| `resposta_colab` | PerguntaDisputa — `app/chamados/models.py:2634` | PD; Resposta; J-resposta |
+| `status_local` | ChamadoColaborador — `app/chamados/models.py:58` | CC |
+| `validada_em` | PerguntaDisputa — `app/chamados/models.py:2636` | PD; Validação |
+| `validada_por` | PerguntaDisputa — `app/chamados/models.py:3631` | PD; Validação |
+| `veredito_lavrado` | PerguntaDisputa — `app/chamados/models.py:2772` | PD; Lavra |
+| `via_encerramento` | ChamadoColaborador — `app/chamados/models.py:60` | CC |
+| `via_resolucao` | PerguntaDisputa — `app/chamados/models.py:2748` | PD; Desfecho. Escritor único [não verificado]; a declaração ressalva múltiplos escritores em `app/core/portas.py:356`. |
+
+A regra C usa uma lista **fechada** dos commands identificados na cópia: `auditar_chamados_orfaos` e `auditar_disputas` declaram auditoria em `app/chamados/management/commands/auditar_chamados_orfaos.py:23` e `app/chamados/management/commands/auditar_disputas.py:56`; `auditar_invariantes_chamados` declara auditoria em `app/chamados/management/commands/auditar_invariantes_chamados.py:1`; `selo_leitores_no_mesmo_numero` declara selo de comparação em `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:2`. **Não** incluí `estoque_l130_instante_sem_texto`: embora meça estoque, também declara uma ação de devolução, em `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:23`.
+
+O script rejeita linhas malformadas ou campos fora da tabela, preserva duplicatas, aceita `template-indireto` e imprime cada linha B integralmente, agrupada por campo. A correspondência ignora somente o número de linha do sítio; compara caminho e função.
+
+```python
+#!/usr/bin/env python3
+import collections
+import sys
+
+# Tabela literal: campo -> (classe dona, grupos de portas/juizes).
+DONO = {
+    "data_conferida_em": ("PerguntaDisputa", ("conferencia",)),
+    "data_conferida_por": ("PerguntaDisputa", ("conferencia",)),
+    "fechada_em": ("DisputaSupervisao", ()),
+    "fechada_por": ("DisputaSupervisao", ()),
+    "janela_expira_em": ("PerguntaDisputa", ("lavra",)),
+    "julgado_em": ("PerguntaDisputa", ("lavra",)),
+    "materializada_em": ("PerguntaDisputa", ("desfecho", "j_viva")),
+    "materializada_por": ("PerguntaDisputa", ("desfecho",)),
+    "motivo_fechamento": ("DisputaSupervisao", ()),
+    "motivos": ("DisputaSupervisao", ("emissao_motivos",)),
+    "pendencia_admin": ("PerguntaDisputa", ("desfecho",)),
+    "reaberturas_admin": ("DisputaSupervisao", ()),
+    "reaberturas_colab": ("DisputaSupervisao", ()),
+    "recusa_motivo": (
+        "PerguntaDisputa", ("desfecho", "validacao", "resposta")
+    ),
+    "resolucao": ("DisputaSupervisao", ()),
+    "resolvido_em": ("ChamadoColaborador", ()),
+    "respondida_em": ("PerguntaDisputa", ("resposta", "j_resposta")),
+    "respondido_por": ("ChamadoColaborador", ()),
+    "resposta_colab": ("PerguntaDisputa", ("resposta", "j_resposta")),
+    "status_local": ("ChamadoColaborador", ()),
+    "validada_em": ("PerguntaDisputa", ("validacao",)),
+    "validada_por": ("PerguntaDisputa", ("validacao",)),
+    "veredito_lavrado": ("PerguntaDisputa", ("lavra",)),
+    "via_encerramento": ("ChamadoColaborador", ()),
+    "via_resolucao": ("PerguntaDisputa", ("desfecho",)),
+}
+
+# Os pares sao (caminho, funcao), sem numero de linha.
+GRUPOS = {
+    "conferencia": {
+        ("app/chamados/services/validacao.py", "conferir_data_do_fato"),
+    },
+    "validacao": {
+        ("app/chamados/services/validacao.py", "_carimbar_validacao"),
+        ("app/chamados/services/validacao.py", "validar_pergunta"),
+        ("app/chamados/services/validacao.py", "recusar_pergunta"),
+        ("app/chamados/services/validacao.py", "conferir_data_do_fato"),
+    },
+    "resposta": {
+        ("app/chamados/services/disputa_emissao.py",
+         "responder_pergunta_disputa_core"),
+        ("app/chamados/services/disputa_emissao.py",
+         "responder_automaticamente"),
+        ("app/chamados/services/disputa_emissao.py",
+         "carimbar_resposta_pela_trilha"),
+    },
+    "desfecho": {
+        ("app/chamados/services/materializacao.py",
+         "_materializar_ausencia_de_resposta"),
+        ("app/chamados/services/materializacao.py",
+         "_materializar_resposta_hora"),
+        ("app/chamados/services/materializacao.py", "_carimbar_recusa"),
+        ("app/chamados/services/materializacao.py", "_materializar_uma"),
+        ("app/chamados/services/materializacao.py",
+         "materializar_pendentes_aprovadas"),
+    },
+    "lavra": {
+        ("app/chamados/veredito_lavrado.py", "lavrar"),
+        ("app/chamados/veredito_lavrado.py", "gravar_lavras_em_lote"),
+    },
+    "emissao_motivos": {
+        ("app/chamados/services/disputa_emissao.py",
+         "_abrir_ou_agregar_disputa"),
+        ("app/chamados/services/disputa_emissao.py",
+         "criar_disputa_a_partir_de_chamados_orfaos"),
+        ("app/chamados/services/disputa_emissao.py",
+         "criar_disputa_ancora_de_chamado"),
+    },
+    "j_resposta": {
+        ("app/chamados/juizes.py", "pergunta_respondida"),
+    },
+    "j_viva": {
+        ("app/chamados/juizes.py", "pergunta_viva"),
+    },
+}
+
+COMMANDS_C = {
+    "app/chamados/management/commands/auditar_chamados_orfaos.py",
+    "app/chamados/management/commands/auditar_disputas.py",
+    "app/chamados/management/commands/auditar_invariantes_chamados.py",
+    "app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py",
+}
+
+MODELS = "app/chamados/models.py"
+
+
+def separar_sitio(sitio, numero_linha):
+    partes = sitio.rsplit(":", 2)
+    if len(partes) != 3 or not partes[0] or not partes[1]:
+        raise ValueError(f"linha {numero_linha}: sitio invalido: {sitio!r}")
+    caminho, funcao, linha = partes
+    if not linha.isdecimal():
+        raise ValueError(f"linha {numero_linha}: numero de sitio invalido")
+    return caminho, funcao
+
+
+def eh_c(caminho, contexto):
+    componentes = caminho.split("/")
+    return (
+        contexto != "producao"
+        or any(x in componentes for x in ("tests", "bin", "migrations"))
+        or caminho in COMMANDS_C
+    )
+
+
+def eh_a(campo, caminho, funcao):
+    classe, grupos = DONO[campo]
+    if caminho == MODELS and funcao.startswith(classe + "."):
+        return True
+    return any((caminho, funcao) in GRUPOS[g] for g in grupos)
+
+
+def main():
+    cabecalho = sys.stdin.readline()
+    if cabecalho.rstrip("\r\n") != "## NAO_COBERTO":
+        raise ValueError("primeira linha deve ser ## NAO_COBERTO")
+
+    contagem = collections.Counter()
+    linhas_b = collections.defaultdict(list)
+
+    for numero, linha in enumerate(sys.stdin, 2):
+        texto = linha.rstrip("\r\n")
+        if not texto:
+            raise ValueError(f"linha {numero}: linha vazia")
+        colunas = texto.split("\t", 6)
+        if len(colunas) != 7:
+            raise ValueError(f"linha {numero}: esperadas 7 colunas")
+        campo, forma, sitio, tipo, marcador, contexto, trecho = colunas
+        if campo not in DONO:
+            raise ValueError(f"linha {numero}: campo desconhecido: {campo!r}")
+        caminho, funcao = separar_sitio(sitio, numero)
+
+        if eh_c(caminho, contexto):
+            classe = "C"
+        elif eh_a(campo, caminho, funcao):
+            classe = "A"
+        else:
+            classe = "B"
+            linhas_b[campo].append(texto)
+        contagem[classe] += 1
+
+    total = sum(contagem.values())
+    for classe in ("A", "B", "C"):
+        print(f"{classe}\t{contagem[classe]}")
+    print(f"SOMA\t{total}")
+    print("## B POR CAMPO")
+    for campo in sorted(linhas_b):
+        print(f"## {campo}\t{len(linhas_b[campo])}")
+        for linha in linhas_b[campo]:
+            print(linha)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (ValueError, BrokenPipeError) as exc:
+        print(f"erro: {exc}", file=sys.stderr)
+        sys.exit(1)
+```
 
 ## 18/11 15:19 · sessao 9b47aedfec37 · FILA-CODEX-1811 · leitura · origem=Code
 
@@ -593,39 +812,4 @@ Leitura de P8, P9 e P16 enviada ao agente principal, com estados de entrada, ju�
 
 A cópia não contém `.git`; portanto, a identidade exata do HEAD ficou **[não verificado]**.
 
-## 18/11 15:11 · sessao 0d43c2e84e99 · E4C-F6F7 · construtor · origem=Code
-
-Os dois selos foram alterados para rejeitar chamadas reflexivas indicadas, reatribuições e mutações sintáticas de `perguntas`, e exigir seu uso no campo `perguntas` da resposta. Também foi preservada a rejeição de leitura de `consulta` antes de `pendentes`. [test_pergunta_no_app.py:29](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:29), [test_contract_pergunta_viva.py:26](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:26), [test_e4c_f6f7_c7_sem_banco.py:124](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:124).
-
-A view atual lê `consulta['pendentes']` e usa `perguntas` na resposta; não foram encontradas as chamadas reflexivas indicadas em seu corpo. [views.py:2526](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2526), [views.py:2542](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2542), [views.py:2583](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2583).
-
-O comando abaixo executa **cada mutante como subteste**, contra cada selo. A lista inclui reflexão, reatribuição, exclusão, alteração de item e atributo, métodos e substituição do campo da resposta. [test_e4c_f6f7_c7_sem_banco.py:88](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:88)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_reflexao_e_mutacao_de_perguntas_MORDEM
-```
-
-Antes da cura, a bateria inicial produziu o RED abaixo; quatro variantes já eram rejeitadas. As variantes adicionadas posteriormente passaram na bateria final, mas seu RED individual anterior à cura é **[não verificado]**.
-
-```text
-AssertionError: True is not false
-Ran 1 test in 0.650s
-FAILED (failures=30)
-```
-
-Após a cura, o módulo completo sem banco passou, incluindo os mutantes antigos e novos: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco
-```
-
-```text
-Ran 6 tests in 1.540s
-OK
-```
-
-A detecção de mutação indireta por aliases ou por funções chamadas com `perguntas` é **[não verificado]**; os selos implementam as verificações sintáticas descritas. [test_pergunta_no_app.py:49](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:49)
-
-LEI-AKITA: padrao=Architecture Conformance Test.
-
-_7012 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7013 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

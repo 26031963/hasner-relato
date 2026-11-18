@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 15:20:38.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (58.1 MB). Acoes na janela: **1601**.
+**Medido em 18/11/2026 15:26:03.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (58.2 MB). Acoes na janela: **1608**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:23:17 | Bash | RELATO decision line for ESPURIA | `python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p,encoding='utf-8').read().split('\n') L.insert(4,"ESPURIA-TELA c9 GREEN no recorte da VM (logs/ESPURIA-TELA/c9/green_vm.log: Ran 81, OK); Codex verificador c9 ja feito (r1.txt, triagem 0 procedentes, 2 descartes anexos ao opus). Suite inteira: DECISAO TECNICA -- nao roda na wt atual (base dd489c627, 29 commits atras do main, sem d54160999) nem em c ...` |
+| 15:23:10 | Bash | Check merge conflicts for ESPURIA | `git log --oneline -1 d54160999 \| cut -c1-150; git merge-tree --write-tree main 6e8aa01ca >/dev/null 2>&1 && echo "esp x main: limpo" \|\| echo "esp x main: CONFLITO"; git merge-tree --write-tree e78031f79 6e8aa01ca >/dev/null 2>&1 && echo "esp x f6f7: limpo" \|\| echo "esp x f6f7: CONFLITO"` |
+| 15:23:02 | Bash | Check ESPURIA base and overlap with F6F7 | `cd /home/ronald/wt-espuria-tela-090807 && git merge-base --is-ancestor d54160999 HEAD && echo tem_d5416; git merge-base HEAD main \| cut -c1-10; git rev-list --count HEAD..main; git status --porcelain \| head; cd /home/ronald/wt-codex-e4c-f6f7-132608 && git merge-base HEAD main \| cut -c1-10; git diff --name-only $(git merge-base HEAD main) HEAD > /tmp/claude-1001/-home-ronald-saas-hasner/d5e4e6e7 ...` |
+| 15:22:50 | Bash | Read prior verificador setup | `head -c 1500 logs/ESPURIA-TELA/c9/q1.txt; echo; echo ===; cat logs/ESPURIA-TELA/c9/triagem_r1.txt \| cut -c1-300; cat logs/ESPURIA-TELA/c9/jobs.txt \| cut -c1-200; wc -c logs/ESPURIA-TELA/c9/diff_obra.txt logs/ESPURIA-TELA/c9/diff_c9.txt` |
+| 15:22:47 | Bash | Inspect ESPURIA-TELA logs and wt | `ls logs/ESPURIA-TELA/ logs/ESPURIA-TELA/c9; cd /home/ronald/wt-espuria-tela-090807 && git log --oneline -4 && git status --porcelain \| head` |
+| 15:22:43 | Bash | ESPURIA green verdict | `L=logs/ESPURIA-TELA/c9/green_vm.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -4 $L \| cut -c1-200` |
+| 15:22:41 | Bash | Check push progress | `tail -5 logs/COMBOIO-1811/push_docs_1811c.log \| cut -c1-200; ls -la logs/COMBOIO-1811/push_docs_1811c.log; date +%H:%M` |
 | 15:19:52 | Bash | Inspect suite process and lock | `ps -o pid,etime,args -p 3908542 \| cut -c1-250; bash bin/trava_teste.sh --quem 2>&1 \| head -5` |
 | 15:19:49 | Bash | Check suite log presence | `ls -la logs/E4C-F6F7/suite_c10/; date` |
 | 15:19:47 | Bash | RELATO items 8,9; check jobs | `python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p,encoding='utf-8').read().split('\n') L.insert(4,"FILA-CODEX 9 AEJ/AFD LEITURA FECHADA (logs/FILA-CODEX-1811/9_aej_afd.r, sem banco): ZERO gerador de AFD e de AEJ no HEAD (importar-aej/ responde 410, ImportacaoAEJ e legado de importacao). Modelo NAO GUARDA: NSR (Batida.sequencia nao e declarada NSR), id REP/PTRP explicito (so terminal/tipo_registro ...` |
