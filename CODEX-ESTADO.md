@@ -1,7 +1,135 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 15:02** · publicado em **18/11/2026 15:04** (UTC-3)
+> Ultima resposta processada: **18/11/2026 15:09** · publicado em **18/11/2026 15:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 15:09 · sessao 626cbd9f7e08 · E4C-F6F7 · verificador · origem=Code
+
+**PROCEDE.** O c9 fecha os dois exemplos da volta 2 e rejeita os usos diretos testados entre a consulta e a leitura. Ainda passam, porém, mutantes que quebram a ligação entre a consulta e o que o endpoint entrega. Trata-se de **selo sem mordida suficiente**, não de uma derivação paralela ou de um segundo juiz introduzido pelo delta. [test_pergunta_no_app.py:46](app/chamados/tests/test_pergunta_no_app.py:46), [test_contract_pergunta_viva.py:43](app/chamados/tests/test_contract_pergunta_viva.py:43), [views.py:2541](app/api/views.py:2541).
+
+1. **Bloqueia — os selos ainda aceitam costura quebrada.** Executei ambos os helpers extraídos em memória. Eles aceitam a view atual e rejeitam os mutantes diretos testados: `del consulta`, alteração de item ou atributo, chamada de método, passagem como argumento, alias e uso em bloco aninhado. A view atual faz a leitura de `pendentes` imediatamente após a consulta; seu uso de `historico` vem depois. [test_pergunta_no_app.py:50](app/chamados/tests/test_pergunta_no_app.py:50), [test_contract_pergunta_viva.py:47](app/chamados/tests/test_contract_pergunta_viva.py:47), [views.py:2541](app/api/views.py:2541).
+
+   Ambos, entretanto, retornam `True` quando se insere esta linha imediatamente após a consulta:
+
+   ```python
+   locals()['consulta']['pendentes'].clear()
+   ```
+
+   O acesso indireto altera a lista antes da leitura, mas a árvore sintática dessa linha não contém um `ast.Name` chamado `consulta`: o nome está numa string. Assim, a afirmação de que os selos rejeitam **qualquer uso** é ampla demais. Também retornaram `True` para uma sobrescrita de `perguntas = []` logo após a leitura; a view usa `perguntas` para montar a resposta. Essa segunda lacuna já está fora do intervalo especificamente corrigido pelo c9; não há evidência de que tenha sido introduzida pelo delta. [test_pergunta_no_app.py:51](app/chamados/tests/test_pergunta_no_app.py:51), [test_contract_pergunta_viva.py:48](app/chamados/tests/test_contract_pergunta_viva.py:48), [views.py:2574](app/api/views.py:2574).
+
+2. **Ressalva — uso legítimo é rejeitado.** Inserir `historico = consulta['historico']` entre a consulta e a leitura de `pendentes` fez ambos os helpers retornarem `False`, embora essa leitura, por si só, não altere as pendentes. A view **atual** passa; uma reorganização com essa leitura legítima antes de `pendentes` falharia o selo. A restrição decorre do teste de qualquer `ast.Name` intermediário, inclusive em contexto `Load`. [test_pergunta_no_app.py:57](app/chamados/tests/test_pergunta_no_app.py:57), [test_contract_pergunta_viva.py:54](app/chamados/tests/test_contract_pergunta_viva.py:54), [views.py:2541](app/api/views.py:2541).
+
+3. **Dente e classes anteriores.** Pelo delta fornecido, os mutantes existentes foram preservados e 11 foram acrescentados; a mudança na atribuição reconhecida também ficou mais restritiva. Não identifiquei remoção de um caso existente nem nova derivação paralela ou segundo juiz nesse delta. A comparação independente com o ancestral e a confirmação do hash por Git são **[não verificado]**: a cópia não contém repositório Git. [test_e4c_f6f7_c7_sem_banco.py:87](app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87), [test_pergunta_no_app.py:51](app/chamados/tests/test_pergunta_no_app.py:51), [test_contract_pergunta_viva.py:48](app/chamados/tests/test_contract_pergunta_viva.py:48).
+
+Executei os cinco testes do módulo sem banco: **5 passaram**, incluindo a bateria dos dois selos. A suíte completa, os testes sob Django e o comportamento em produção permanecem **[não verificado]**. [test_e4c_f6f7_c7_sem_banco.py:29](app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:29), [test_e4c_f6f7_c7_sem_banco.py:87](app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87).
+
+## 18/11 15:07 · sessao e3ccba44da01 · E4C-F6F7 · construtor · origem=Code
+
+Os dois selos agora rejeitam qualquer ocorrência da variável da consulta entre sua atribuição e a leitura de `['pendentes']`. Eles continuam aceitando a view atual, que lê `consulta['historico']` depois dessa leitura. [test_pergunta_no_app.py:43](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:43), [test_contract_pergunta_viva.py:40](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:40), [views.py:2541](/home/ronald/wt-codex-e4c-f6f7-132608/app/api/views.py:2541).
+
+O teste MORDE ganhou 11 mutantes: `del consulta`, atribuição, `+=` e `del` no item, atribuição e `del` em atributo, `update`, `setdefault`, `pop`, `clear` e `setattr`. Cada um é aplicado aos dois selos. [test_e4c_f6f7_c7_sem_banco.py:87](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87) [nao verificado]
+
+**RED**, antes da cura, para todos os mutantes novos:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_selos_e_mutantes_MORDEM
+
+Ran 1 test in 0.716s
+FAILED (failures=22)
+```
+
+As 22 falhas foram `AssertionError: True is not false`: cada selo aceitava os 11 mutantes. [test_e4c_f6f7_c7_sem_banco.py:106](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:106)
+
+**GREEN**, após a cura:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v chamados.tests.test_e4c_f6f7_c7_sem_banco
+
+Ran 5 tests in 0.875s
+OK
+```
+
+O teste GREEN verifica a view atual e exige `False` para cada mutante em cada selo; uma execução diagnóstica também mostrou `view=True` e `mutante=False` individualmente para ambos. [test_e4c_f6f7_c7_sem_banco.py:92](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:92) [nao verificado]
+
+LEI-AKITA: padrao=Architecture Conformance Test. [test_e4c_f6f7_c7_sem_banco.py:87](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87)
+
+Certificação pelo Code e opus final: **[não verificado]**.
+
+## 18/11 15:06 · sessao 105247fcdbcc · E4C-F6F7 · verificador · origem=Code
+
+**PROCEDE.** A sobrescrita simples da variável foi fechada, mas os dois selos ainda aceitam mutantes que quebram a mesma costura. [test_pergunta_no_app.py:46](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_pergunta_no_app.py:46), [test_contract_pergunta_viva.py:43](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_contract_pergunta_viva.py:43).
+
+1. **Bloqueia — os selos ainda passam com a costura quebrada.** Executei os dois helpers extraídos em memória contra a view atual e contra mutantes: ambos aceitaram a view e rejeitaram atribuição simples, atribuição dentro de `if` e `try`, `augassign`, walrus, destinos de `for` e `with` e tupla-destino. Ambos, porém, aceitaram estes dois mutantes inseridos imediatamente após a consulta: [test_pergunta_no_app.py:29](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_pergunta_no_app.py:29), [test_contract_pergunta_viva.py:26](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_contract_pergunta_viva.py:26), [views.py:2541](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/api/views.py:2541).
+
+   ```python
+   del consulta
+   ```
+
+   ```python
+   consulta['pendentes'] = outra_fonte(colab)
+   ```
+
+   O primeiro deixa a leitura seguinte sem a variável; o segundo substitui o conteúdo que a leitura usa. A contagem procura apenas `ast.Name` com contexto `Store`: `del consulta` usa `Del`, e a atribuição ao item não grava o nome `consulta`. Assim, a correção cobre o mutante específico da volta 1, mas não fecha o requisito solicitado para `del` nem garante que as pendentes continuem vindas da consulta. [test_pergunta_no_app.py:46](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_pergunta_no_app.py:46), [test_contract_pergunta_viva.py:43](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_contract_pergunta_viva.py:43), [views.py:2542](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/api/views.py:2542).
+
+2. **Achado 2 da volta 1 — esclarecido.** A frase restante no teste é verdadeira: a autoridade só acrescenta uma linha `VALIDACAO` quando `validada_em is not None`. Portanto, para o contador que seleciona apenas essas linhas, excluir previamente perguntas sem `validada_em` não muda o número contado; o mutante apagado não poderia demonstrar uma diferença nesse resultado pela inclusão dessas perguntas. [test_e4c_f6f7_c7_sem_banco.py:64](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:64), [models.py:4265](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/models.py:4265), [backfill_decisoes_pergunta.py:107](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/management/commands/backfill_decisoes_pergunta.py:107).
+
+3. **Dente dos testes e classes anteriores.** No delta fornecido, o único caso removido é o mutante do pré-filtro discutido acima; os mutantes existentes dos selos permanecem, e o mutante que também conta respostas permanece com sua asserção. Não identifiquei no delta uma nova derivação paralela de produção; a lacuna do item 1 é um **selo sem mordida suficiente**, com dois exemplos que passam. A comparação com o ancestral por Git é **[não verificado]**, pois esta cópia não contém repositório Git; a comparação se baseia no delta fornecido. [test_e4c_f6f7_c7_sem_banco.py:53](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:53), [test_e4c_f6f7_c7_sem_banco.py:87](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87).
+
+Os três testes sem banco do contador e dos selos passaram nesta inspeção, sem escrita de bytecode. A suíte completa e a execução dos casos sob Django permanecem **[não verificado]**. [test_e4c_f6f7_c7_sem_banco.py:53](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:53), [test_e4c_f6f7_c7_sem_banco.py:87](/home/ronald/codex_ws/383f193dc21e3cda78325bef7a25b71fd15cb552/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87).
+
+## 18/11 15:05 · sessao 90caa6bf5b85 · ESCALA-NAO-DESCREVE · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — ITEM 1.** A cópia contém um “desde” por linha **opcional**, mas ainda não contém a frase agregada do topo descrita no aval; o literal não define como obter o mínimo quando uma pessoa listada está sem data. A condição de parada para uma lista que não carrega o campo por pessoa, em absoluto, **não se aplica**: o campo existe, embora possa ser `None`. [cadastro_realidade.py:960](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:960) [cadastro_realidade.py:1042](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:1042) [não verificado]
+
+1. **Premissas.**
+
+   - **Lista e frase:** `lista()` monta cada `linha` com `carga_desde` e `carga_texto`, inclui as linhas com assinaturas e retorna `dados['linhas']` ordenado por carga. [cadastro_realidade.py:961](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:961) [cadastro_realidade.py:1009](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:1009) [cadastro_realidade.py:1042](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:1042) A linha 785 escreve a frase **de uma pessoa**, sem `X pessoa(s)`; o topo atual do template mostra outros contadores, sem a frase agregada pedida. [cadastro_realidade.py:779](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:779) [cadastro_x_realidade.html:8](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/templates/escala/cadastro_x_realidade.html:8)
+   - **Escritor e leitores:** `janela()` calcula o início da janela; `anomalias_da_frota()` chama essa função e escreve `orfas_desde` quando há medida. Nesta cópia, a linha 238 **é** essa escrita; `p = r['proposta']` está na linha 244, contrariando a premissa do anexo para esta cópia. [esmeril_espelho.py:38](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:38) [esmeril_espelho.py:233](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:233) [esmeril_espelho.py:244](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/ponto/services/esmeril_espelho.py:244) `lista()` lê o mapa e produz o campo e o texto; tela e PDF leem `carga_texto`. [cadastro_realidade.py:949](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:949) [cadastro_x_realidade.html:28](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/templates/escala/cadastro_x_realidade.html:28) [cadastro_realidade.py:1170](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:1170)
+   - **L-040:** existe e diz: “LISTA UNICA CADASTRO x REALIDADE: uma so lista de ‘o cadastro diz uma coisa e o ponto mostra outra’, por posto -> vinculo -> assinatura -> acao, com o destino sugerido do propositor; o PDF e a MESMA lista”. A linha atual não cita `END-L3-1800`. [LEIS.md:88](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/docs/LEIS.md:88)
+   - **END-L3-1800:** existe nos dois arquivos; registra que a lista é ordenada por carga de órfã, para todos. [CORTES.md:536](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/docs/CORTES.md:536) [CORTES.json:2008](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/docs/CORTES.json:2008)
+
+2. **Colisão com avais:** nos textos fornecidos, a sessão principal construir sem Agent não ocupa o Codex construtor; a exceção ao “depois das 18:00” é nominal; e continuam declarados a precedência da espinha e o teto de um Codex construtor. Não identifico colisão entre essas condições, desde que sejam cumpridas. A execução efetiva e o estado das vagas são [não verificado].
+
+3. **Literal que não fecha:** uma linha pode ter `carga_desde=None`, inclusive para pessoa sem medida; o aval não diz se o mínimo deve ignorar essa pessoa ou se a frase deve ficar incompleta. [cadastro_realidade.py:960](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:960) [test_escala_nao_descreve.py:199](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/tests/test_escala_nao_descreve.py:199) Também se exige incluir o texto da L-040 citando o corte, mas o texto exato a inserir no commit não foi fornecido. [LEIS.md:88](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/docs/LEIS.md:88) [não verificado]
+
+4. **Exportada, dinheiro e `!`:** o escopo declarado é frase e documentação; não autoriza alterar dados de escala ou vínculo, nem gravado de competência exportada, que exigem `!`. [CLAUDE.md:265](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/CLAUDE.md:265) Se uma implementação futura toca dinheiro, exportada ou outro `!` fora desse escopo depende do diff: [não verificado].
+
+**Fecho: PROCEDE** — o mínimo não está definido para linhas sem data, e o texto exato da alteração da L-040 não foi fornecido; a referência à frase agregada também não corresponde ao código atual. [cadastro_realidade.py:960](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/escala/services/cadastro_realidade.py:960) [cadastro_x_realidade.html:8](/home/ronald/codex_ws/a2fc6de40479e933887fa2e89361d61b3ef3d133/app/templates/escala/cadastro_x_realidade.html:8) [não verificado]
+
+## 18/11 15:04 · sessao 976f16fdbf32 · E4C-F6F7 · construtor · origem=Code
+
+Os dois selos agora exigem uma única atribuição à variável da consulta no corpo da view e rejeitam a sobrescrita antes da leitura de `pendentes`. O mutante foi acrescentado aos dois arquivos, preservando os existentes. [test_pergunta_no_app.py:43](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:43), [test_pergunta_no_app.py:195](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_pergunta_no_app.py:195), [test_contract_pergunta_viva.py:40](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:40), [test_contract_pergunta_viva.py:116](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_contract_pergunta_viva.py:116).
+
+O teste sem Django ficou **vermelho nos dois selos antes da cura** para `consulta = outra_fonte(colab)` entre a consulta e a leitura. Após a cura, passou também com mutantes de `augassign`, walrus, `for`, `with` e atribuição em bloco aninhado. [test_e4c_f6f7_c7_sem_banco.py:87](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:87). Comando para ambos os selos e seus mutantes: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_selos_e_mutantes_MORDEM
+```
+
+O mutante do pré-filtro foi removido: a autoridade só produz `VALIDACAO` com `validada_em` preenchido, então esse filtro não muda o número contado. A razão ficou registrada no teste. [models.py:4265](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/models.py:4265), [test_e4c_f6f7_c7_sem_banco.py:64](/home/ronald/wt-codex-e4c-f6f7-132608/app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:64). O caso do contador e o mutante existente que também conta respostas passaram com: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c7_sem_banco.ContadorSemBanco.test_autoridade_conta_so_validacao_sem_linha_correspondente chamados.tests.test_e4c_f6f7_c7_sem_banco.ContadorSemBanco.test_mutante_conta_tambem_respostas_MORDE
+```
+
+O `py_compile` passou nos três arquivos tocados, com a escrita de bytecode desativada pelo comando abaixo. A suíte e a execução dos casos diretamente sob Django permanecem **[não verificado]**. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import importlib._bootstrap_external
+import py_compile
+from pathlib import Path
+
+importlib._bootstrap_external._write_atomic = lambda *args, **kwargs: None
+for name in ('test_pergunta_no_app.py', 'test_contract_pergunta_viva.py',
+             'test_e4c_f6f7_c7_sem_banco.py'):
+    path = Path('chamados/tests') / name
+    py_compile.compile(str(path), cfile=str(path.parent / (name + '.pyc')), doraise=True)
+    print('compilado:', path)
+PY
+```
+
+LEI-AKITA: padrao=Architecture Conformance Test. [GLOSSARIO.md:15](/home/ronald/wt-codex-e4c-f6f7-132608/app/docs/GLOSSARIO.md:15)
 
 ## 18/11 15:02 · sessao daba2766e516 · E4C-F6F7 · verificador · origem=Code
 
@@ -745,189 +873,4 @@ Também executei uma passagem AST em memória sobre arquivos Python de `app/`, p
 
 **Contagens:** campos solicitados **25**; escritores fora das portas **[nao verificado]**; escritores sem ato substituto **[nao verificado]**; escritores em exceção FATO **[nao verificado]**.
 
-## 18/11 14:26 · sessao 5f2a628261a9 · PRE-MAPA-E4D · censo · origem=Code
-
-**Censo parcial: não consegui comprovar todos os escritores nem fechar as contagens.** A busca encontrou escritores posteriores ao inventário do anexo, inclusive uma devolução de paridade e a ressuscitação em lote; portanto, seria incorreto apresentar a tabela abaixo como exaustiva. A identidade Git da cópia também está **[nao verificado]**: o diretório fornecido não contém metadados Git.
-
-A unidade pedida é **campo × função**. Nas linhas abaixo, agrupo campos quando compartilham o mesmo sítio para facilitar a leitura; isso não constitui uma contagem de unidades.
-
-### A. Portas verificadas
-
-Caminhos abreviados: `models.py` = [app/chamados/models.py](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py); os serviços ficam em `app/chamados/services/`.
-
-| Porta | Escrita de estado identificada nesta cópia |
-|---|---|
-| A01 | `status_local`, `resolvido_em`, `via_encerramento`, `respondido_por` e urgência do chamado; a porta também relavra perguntas. A classificação do estado canônico do chamado como projeção a parar é **[nao verificado]**. ([models.py:234](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:234), [models.py:302](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:302)) |
-| A02 | `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; há carimbo delegado de pergunta. ([models.py:2082](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2082), [models.py:2095](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2095)) |
-| A03 | Os quatro campos de fechamento acima; também grava `reaberturas_admin` e, condicionalmente, `motivos`. A classificação desses dois últimos como projeção a parar é **[nao verificado]**. ([models.py:2312](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2312)) |
-| A04 | Os quatro campos de fechamento. ([models.py:2336](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2336)) |
-| A05 | `materializada_em`, `materializada_por`, `via_resolucao`; condicionalmente `respondida_em`, `validada_em`, `validada_por` e os três campos de lavra `veredito_lavrado`, `julgado_em`, `janela_expira_em`. A lavra é cache declarado no anexo; sua inclusão entre os campos a parar é **[nao verificado]**. ([models.py:3293](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3293), [models.py:3324](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3324), [models.py:3345](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3345)) |
-| A06 | `materializada_em`, `materializada_por`, `via_resolucao` e, se fornecido, `recusa_motivo`. ([models.py:3378](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3378)) |
-| A07 | Limpa `materializada_em`, `materializada_por`, `via_resolucao`; com `salvar=False`, prepara a alteração em memória para o chamador. ([models.py:3399](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3399)) |
-| A08 | Limpa os três campos de A07 e grava os campos recebidos por `**outros`; os chamadores comprovados incluem R/V. ([models.py:3448](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3448), [models.py:3485](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3485), [models.py:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702)) |
-| A09 | `via_resolucao`. ([models.py:3496](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3496)) |
-| A10 | `validada_em`, `validada_por`. ([validacao.py:168](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:168)) |
-| A11 | Limpa `validada_em`, `validada_por`. ([validacao.py:273](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:273)) |
-| A12 | `resposta_colab`, `respondida_em`; pode limpar `validada_em`, `validada_por`, preparar descarimbo e gravar `recusa_motivo`. ([disputa_emissao.py:1481](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1481), [disputa_emissao.py:1494](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1494), [disputa_emissao.py:1511](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1511)) |
-| A13 | Delega ao lote a limpeza de `respondida_em`, `resposta_colab`, `validada_em`, `validada_por` e dos três campos de carimbo. ([disputa_emissao.py:1617](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1617), [models.py:3485](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3485)) |
-| A14 | `resposta_colab`, `respondida_em`. ([disputa_emissao.py:1682](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1682)) |
-| A15 | `respondida_em`. ([disputa_emissao.py:1705](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1705)) |
-| A16 | `via_resolucao` e lavra. ([relavra_via.py:125](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/relavra_via.py:125)) |
-| A17 | `pendencia_admin`, `recusa_motivo`; efeitos e carimbos delegados requerem discriminação adicional **[nao verificado]**. ([materializacao.py:1365](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/materializacao.py:1365)) |
-| A18 | `recusa_motivo`; no ramo de colisão, delega o carimbo de identidade. ([materializacao.py:1693](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/materializacao.py:1693)) |
-| A19 | `recusa_motivo` e limpeza delegada por A13. ([validacao.py:916](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:916)) |
-| A20 | `data_conferida_em`, `data_conferida_por`. ([validacao.py:996](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:996)) |
-| A21 | Carimbo de identidade delegado; outros campos de estado próprios da disputa exigem discriminação adicional **[nao verificado]**. ([models.py:2218](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2218)) |
-| A22 | Constrói pergunta com `**campos` e aceita os defaults do modelo; a enumeração dos campos efetivamente fornecidos por todos os chamadores está **[nao verificado]**. ([models.py:3012](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3012), [models.py:3206](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3206)) |
-| A23 | Grava `reaberturas_colab` e delega correção; a classificação do contador como projeção a parar é **[nao verificado]**. ([models.py:2401](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2401)) |
-| A24 | Limpa `resolucao`. ([models.py:2428](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2428)) |
-| Porta 27 | `disparar_perguntas_competencia`: o corpo examinado conta e relata os alvos; escrita direta de projeção nesse caminho **[nao verificado]**. ([RELATO.md:2240](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/RELATO.md:2240), [disparar_perguntas_competencia.py:162](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/disparar_perguntas_competencia.py:162)) |
-
-### B–C. Escritores adicionais comprovados — tabela parcial
-
-A coluna “ato” abaixo identifica apenas uma correspondência comprovada no sítio; **não determina** que o ato substitua integralmente todas as propriedades do campo. Onde isso não foi provado, permanece **[nao verificado]**.
-
-| Campo | Escritor | Tipo | Ato da E4a que o substitui | Exceção FATO |
-|---|---|---|---|---|
-| `validada_em`, `validada_por` | [validacao.py:devolver_paridade_bug_par_103:349](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:349) | outro | A11 **[nao verificado]**; o próprio sítio registra `DEVOLUCAO` | [nao verificado] |
-| `materializada_em`, `materializada_por`, `via_resolucao` | [validacao.py:devolver_paridade_bug_par_103:346](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:346), delegando A07 | outro | [nao verificado] | [nao verificado] |
-| `respondida_em`, `resposta_colab`, `validada_em`, `validada_por`, `materializada_em`, `materializada_por`, `via_resolucao` | [models.py:ressuscitar_perguntas:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702), por A08 e `**outros` | outro | [nao verificado]; registra `REABERTURA` marcada ([models.py:1694](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1694)) | [nao verificado] |
-| `respondida_em`, `resposta_colab`, `materializada_em`, `materializada_por`, `via_resolucao` | [validacao.py:devolver_instante_sem_texto_l130:440](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:440), por A08 e `**outros` | outro | nenhum ato de reabertura/devolução nesse fluxo, conforme o código ([validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414)); substituição **[nao verificado]** | [nao verificado] |
-| `status_local` | [0038_a3_registrado_backfill.py:registrar:10](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0038_a3_registrado_backfill.py:10), também reversão em `:15` | migration | [nao verificado] | [nao verificado] |
-| `status_local`, `via_encerramento` | [0039_a3_via_backfill.py:backfill:24](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:24), também reversão em `:33`–`:34` | migration | [nao verificado] | [nao verificado] |
-
-A varredura de **signals, comandos, outras migrations, registros de admin, aliases, `setattr`, `save()` e atualizações dinâmicas** não foi concluída; logo, “todo escritor fora das portas” permanece **[nao verificado]**. O arquivo [admin.py](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/admin.py) está vazio, o que por si só não prova ausência de registros ou formulários de admin em outros arquivos. **[nao verificado]**
-
-**Contagens finais:** campos **[nao verificado]**; escritores **[nao verificado]**; escritores sem ato substituto **[nao verificado]**; destes, em exceção FATO **[nao verificado]**.
-
-## 18/11 14:25 · sessao 6a8ed6edd114 · PRE-MAPA-E4D · verificador · origem=Code
-
-**AVAL-DEVOLVIDO: itens 3 e 5.** Os demais itens conferem dentro dos limites abaixo. Os anexos foram fornecidos no enunciado sem numeração de linhas; por isso, suas referências de linha estão **[não verificado]**.
-
-1. **CONFERE** — **Premissas:** E4d e os seis fatos conferem no [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089) e [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091); **ordem:** o censo não altera vagas nem abre Agent, conforme anexo PRE-MAPA, item 1 e proibição [linha não verificada]; **literal:** nenhum impedimento identificado; exaustividade dos escritores **[não verificado]**; **exportada/dinheiro/!:** o item pede leitura e registro, sem alteração declarada [anexo PRE-MAPA, item 1, linha não verificada].
-
-2. **CONFERE** — **Premissas:** CLASSE-D está registrada e a RAIZ liga F5 à E4d ([BACKLOG.md:2025](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2025), [BACKLOG.md:2109](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2109)); **ordem:** perguntas sem construção não alteram as vagas nem abrem Agent [anexo PRE-MAPA, item 2, linha não verificada]; **literal:** pede perguntas sem respondê-las; **exportada/dinheiro/!:** consulta o destino da exportada, sem autorizar mudança no gravado ([CLAUDE.md:411](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/CLAUDE.md:411)).
-
-3. **PROCEDE** — **Premissas:** B2b e as matrizes F2–F9 constam no [BACKLOG.md:826](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:826) e [BACKLOG.md:2117](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2117); OOM-0917 e o envelope concreto **[não verificado]**; **ordem e literal:** criar script reexecutável é construir instrumento, embora o cabeçalho diga “nenhuma vaga”, e a RAIA reserva instrumento à vaga 2 após esvaziar a fila; falta também explicitar o envio do contrato ao Codex antes da construção ([PISTA.md:170](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/PISTA.md:170); anexos PRE-MAPA item 3 e RAIA item 1, linhas **[não verificado]**); **exportada/dinheiro/!:** o censo AST declarado não prevê alteração desses dados [anexo PRE-MAPA, item 3, linha não verificada].
-
-4. **CONFERE** — **Premissas:** a sequência E4a–E4d consta no [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089); **ordem:** a matriz depende dos itens 1 e 3 e não abre construtor ou Agent [anexo PRE-MAPA, item 4, linha não verificada]; **literal:** sua execução depende da resolução do item 3; **exportada/dinheiro/!:** descreve escritas atuais e futuras, sem autorizar executá-las [anexo PRE-MAPA, item 4, linha não verificada].
-
-5. **PROCEDE** — **Premissas:** E3 consta “PARADA (aguarda lei)” na [GRADE-MESTRA.md:121](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/GRADE-MESTRA.md:121); a lei de 17/11 e seu literal de origem **[não verificado]**; **ordem:** registro não altera vagas nem abre Agent [anexo PRE-MAPA, item 5, linha não verificada]; **literal:** o próprio item determina AVAL-DEVOLVIDO se não encontrado o literal, e os `logs/AVAIS-*` não estão disponíveis nesta cópia **[não verificado quanto ao conteúdo]**; **exportada/dinheiro/!:** pede registro, sem alteração declarada desses dados [anexo PRE-MAPA, item 5, linha não verificada].
-
-## 18/11 14:18 · sessao 459a4922e755 · DST-L2 · sonda · origem=Code
-
-- **(b1)** A grade lê somente justificativas **aprovadas**; elas limpam os furos e marcam o dia como justificado, mas não mudam seu `tipo_dia`. A pendente não entra nesse filtro. Separadamente, uma Ausência pode mudar o tipo do dia. [app/escala/utils.py:1188](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1188), [app/escala/utils.py:1197](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1197), [app/escala/utils.py:1210](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1210), [app/escala/utils.py:1254](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1254).
-
-- **(b2)** O efeito concreto da rejeição após o fecho — voltar a protestar e gerar cobrança por chamado reaberto ou novo — permanece **[não verificado]**: o dado não traz a prova em sombra pela porta real com `atomic+raise`. A porta aceita justificativa pendente, grava rejeitada e seu `save()` tenta acionar novo julgamento; esse julgamento pode não ocorrer. [app/ponto/services/justificativa.py:273](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:273), [app/ponto/signals.py:85](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:85), [app/ponto/signals.py:161](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:161). O candidato da S1 é **chamado 37191, col507, 2026-11-05**; sua justificativa já estar rejeitada não demonstra a transição pendente → rejeitada requerida para a prova. [DADO RASPADO: `candidato chamado 37191 col507 2026-11-05`; anexo `medida_b_leitura.r`, S1 e S2].
-
-- **(b3)** Universo **35**, igual em quantidade aos **35** do anexo; diferença numérica **0**. Contagens: **pendente 0, aprovada 0, rejeitada 1, nenhuma 34**. Um chamado pode contar em mais de uma categoria de status. [DADO RASPADO: linhas `universo 35` a `nenhuma 34`; anexo `PERGUNTA-DE-DESENHO.md`, “Números”; anexo `medida_b_leitura.r`, S1]. A igualdade dos integrantes e a equivalência exata com a sonda original permanecem **[não verificado]**. A S1 lê a ata gravada pela implementação de `dia_sem_trabalho` disponível na árvore em que roda; já o cartório da cópia usa a ata do julgamento corrente. Uma diferença de código da árvore viva ou de ata poderia afetar a comparação, mas sua ocorrência aqui é **[não verificado]**. [anexo `medida_b_leitura.r`, S1; app/chamados/juizes.py:445](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:445), [app/ponto/services/cartorio.py:1457](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1457).
-
-## 18/11 14:10 · sessao 3a71134a64be · DST-L2 · leitura · origem=Code
-
-**A medida de produção ainda não está completa:** o dado raspado informa 35 chamados e zero justificativas pendentes pelas duas vias, mas não informa as quantidades de aprovadas, rejeitadas ou sem justificativa. [não verificado] A sonda original `sonda_impacto_dstl2.py` não está disponível nesta cópia; portanto, a equivalência exata de uma nova seleção com ela também está **[não verificado]**.
-
-**(b1) Leitor e escritores.** O leitor da justificativa para a grade é `_marcar_ausencias`: ele filtra `Justificativa.status='aprovada'` em [app/escala/utils.py:1194](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1194). Uma justificativa aprovada marca `justificado`, limpa os furos e **não altera o `tipo_dia`**; pendente não entra nesse filtro. [app/escala/utils.py:1192](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1192), [app/escala/utils.py:1254](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1254)
-
-Separadamente, a mesma grade consulta a cobertura de **Ausência** para folha e pode escrever `tipo_dia='ausencia'` ou `'falta'`; o filtro de status dessa via está em `_pelo_efeito`, que para folha aceita ausência aprovada. [app/escala/utils.py:1188](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1188), [app/escala/utils.py:1210](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1210), [app/ponto/turnos.py:2527](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/turnos.py:2527). A ata copia o `tipo_dia` da grade, e `_protesta` pergunta a `dia_sem_trabalho`, com exceção para cobertura parcial. [app/ponto/services/cartorio.py:730](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:730), [app/ponto/services/cartorio.py:1462](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1462), [app/chamados/juizes.py:454](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:454)
-
-O status da justificativa nasce com padrão `pendente`; entre seus escritores estão a aprovação e rejeição individuais, a aprovação e rejeição em lote e a rejeição pelo reconciliador. [app/ponto/models.py:159](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:159), [app/ponto/services/justificativa.py:205](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:205), [app/ponto/services/justificativa.py:283](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:283), [app/ponto/views.py:1799](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1799), [app/ponto/views.py:1878](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1878), [app/chamados/reconciliador.py:576](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:576). Outro leitor da aprovada é `efeitos_da_ausencia`, usado para compor os dias justificados. [app/ponto/services/efeito_ausencia.py:28](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/efeito_ausencia.py:28), [app/ponto/services/efeito_ausencia.py:40](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/efeito_ausencia.py:40)
-
-**(b2) Rejeição depois do fecho.** A porta individual real é `rejeitar_justificativa_dp`, chamada pela view `rejeitar_justificativa`; ela só decide uma justificativa pendente, grava `rejeitada` e chama `save()`. [app/ponto/views.py:1925](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1925), [app/ponto/services/justificativa.py:262](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:262), [app/ponto/services/justificativa.py:277](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:277)
-
-Esse `save()` dispara o `post_save` da justificativa, que tenta rejulgar a célula; o handler pode parar se já estiver em julgamento ou se ocorrer erro engolido, e `julgar_celula` também retorna sem julgar em certas condições temporais ou sem célula. [app/ponto/signals.py:161](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:161), [app/ponto/signals.py:85](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/signals.py:85), [app/ponto/services/cartorio.py:2033](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:2033)
-
-A passagem de **pendente para rejeitada**, por si, não retira uma justificativa aprovada do filtro da grade: nenhuma das duas passa nele. [app/escala/utils.py:1194](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1194) Assim, se os demais fatos que produziram o dia sem trabalho continuarem iguais, essa troca não faz o dia voltar a protestar por essa via. [app/ponto/services/cartorio.py:1464](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1464), [app/chamados/juizes.py:454](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:454)
-
-Se o novo julgamento encontrar furo e cumprir os portões de emissão, o cartório chama o emissor, que pode reabrir ou emitir conforme o caso; isso não está demonstrado para um dos 35. [app/ponto/services/cartorio.py:1712](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1712), [app/ponto/services/cartorio.py:1755](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1755), [app/ponto/services/cartorio.py:1773](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1773)
-
-Depois do `save`, a porta individual **tenta criar um novo chamado interno de categoria `justificativa_rejeitada`** e criar follow-up; o gate de criação pode recusá-lo, e isso não prova a existência de cobrança do furo. [app/ponto/services/justificativa.py:289](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:289), [app/chamados/models.py:1101](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:1101), [app/ponto/services/justificativa.py:324](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:324). Pergunta nova e resultado concreto da cobrança: **[não verificado]**.
-
-**(b3) S1 — leitura, texto não executado.** A seleção abaixo interpreta “só pela ata gravada” como `trabalha` diferente de `False`, com `dia_sem_trabalho(celula)` verdadeiro; ela usa o juiz real, inclusive a exceção de ausência parcial. [app/chamados/juizes.py:445](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/juizes.py:445) É uma reconstrução da descrição fornecida, não equivalência comprovada à sonda original **[não verificado]**. As vias são `Justificativa.chamado_origem` e `ChamadoColaborador.justificativa_relacionada`; um chamado com justificativas de status diferentes conta em mais de uma categoria. [app/ponto/models.py:173](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:173), [app/chamados/models.py:69](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:69)
-
-```python
-from collections import Counter
-from django.db.models import Q
-from chamados.catalogo.furo_modulos import FURO_MODULES
-from chamados.catalogo.motor import VIVOS
-from chamados.juizes import dia_sem_trabalho
-from chamados.models import ChamadoColaborador
-from ponto.models import Justificativa
-
-totais = Counter()
-candidato = None
-
-qs = (
-    ChamadoColaborador.objects
-    .filter(modulo_origem__in=FURO_MODULES, status_local__in=VIVOS,
-            celula__isnull=False)
-    .select_related("celula")
-    .order_by("pk")
-)
-
-for ch in qs.iterator():
-    cel = ch.celula
-    if cel.trabalha is False or not dia_sem_trabalho(cel):
-        continue
-
-    totais["universo"] += 1
-    justs = list(
-        Justificativa.objects.filter(
-            Q(chamado_origem_id=ch.pk) |
-            Q(pk=ch.justificativa_relacionada_id)
-        ).values_list("pk", "status")
-    )
-    status = {s for _, s in justs}
-    if not justs:
-        totais["nenhuma"] += 1
-    for s in ("pendente", "aprovada", "rejeitada"):
-        if s in status:
-            totais[s] += 1
-    if candidato is None and justs:
-        candidato = (ch.pk, ch.colaborador_id, cel.data)
-
-for chave in ("universo", "pendente", "aprovada", "rejeitada", "nenhuma"):
-    print(chave, totais[chave])
-
-if candidato:
-    pk, colab_id, dia = candidato
-    print("candidato", "chamado", pk, "col" + str(colab_id), dia.isoformat())
-else:
-    print("candidato nenhum")
-print("FIM_SONDA")
-```
-
-**S2 — não forneço como pronta para execução.** `_protesta` é uma função local de `julgar_colab`, não uma porta importável, e o fecho depende da ata gerada durante o julgamento. [app/ponto/services/cartorio.py:1435](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1435), [app/ponto/services/cartorio.py:1464](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1464) Além disso, a porta real tenta enviar push fora de seu `atomic` interno; um `raise` em transação externa desfaz escritas de banco, mas não desfaz uma notificação externa. [app/ponto/services/justificativa.py:273](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:273), [app/ponto/services/justificativa.py:308](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:308) Não verifiquei todos os efeitos externos possíveis do julgamento e do emissor, nem uma forma de capturar o resultado da função local sem alterar a observação; apresentar uma sonda como segura e fiel seria **[não verificado]**. A prova em sombra, portanto, permanece pendente.
-
-## 18/11 14:09 · sessao 1b52d7327d1d · RAIA-ESPURIAS-1811-1410 · verificador · origem=Code
-
-Os anexos foram fornecidos como texto, sem numeração de linhas; por isso, as referências a eles aparecem com **[não verificado]** quanto a arquivo:linha. A cópia disponível não contém metadados Git para conferir os hashes ou executar o merge-tree. [não verificado]
-
-**Item 1 — CONFERE, condicionado às medições antes de cada abertura:** a ordem foi declarada e a exceção ao complemento é nominal; os cruzamentos informados ainda não foram verificados nesta cópia. [não verificado]
-
-1. **Premissas:** as medições de DST-L2 e ESPURIA-TELA e o recorte de ESCALA não puderam ser conferidos por merge-tree. [não verificado]
-2. **Aval vigente:** a nova ordem depois das 18h é uma exceção nominal ao item 1c do complemento; a restrição anterior a esse horário permanece. [não verificado]
-3. **Literal:** a abertura depende de medir contra a ponta da espinha em voo; arquivo `.py` comum exige esperar o pouso ou entrar no mesmo comboio. A medição antiga não substitui essa condição. [não verificado] [nao verificado]
-4. **Exportada, dinheiro ou `!`:** o item proíbe tocar exportada e declara o custo de parar instrumentos; efeito das obras sobre dinheiro ou outras matérias de `!` ainda depende dos diffs. [não verificado]
-
-**Item 2 — CONFERE, condicionado ao pouso após a simulação e ao smoke:** o critério do “desde” e o marco de pouso repetem a resposta do aval vigente. [não verificado] [nao verificado]
-
-1. **Premissas:** L-040 existe em [LEIS.md:88](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/LEIS.md:88). A referência do anexo a `esmeril_espelho.py:238` não corresponde ao cálculo do “desde” nesta cópia: ali está `p = r['proposta']`, em [esmeril_espelho.py:238](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/esmeril_espelho.py:238). O recorte da obra e seu censo ainda precisam ser verificados. [não verificado]
-2. **Aval vigente:** a volta ao construtor, o menor “desde” ou INCOMPLETO e o pouso após a simulação com smoke constam da resposta anterior; a nova ordem é a exceção nominal ao complemento. [não verificado] [nao verificado]
-3. **Literal:** comboio com a espinha, se pronta na mesma meia hora, continua sujeito ao pouso de ESCALA somente depois da simulação; a viabilidade temporal do comboio é [não verificado]. [nao verificado]
-4. **Exportada, dinheiro ou `!`:** o aval proíbe tocar exportada; o diff ainda é necessário para verificar outros efeitos. Alterar dados de escala ou vínculo exige `!`, conforme [CLAUDE.md:265](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/CLAUDE.md:265). [não verificado]
-
-**Item 3 — CONFERE para a decisão e a medição, sem considerar o pouso liberado:** a cópia confirma o precedente para `trabalha is False`; os resultados pedidos em b1–b3 ainda não estão completos. [cartorio.py:1451](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/cartorio.py:1451)
-
-1. **Premissas:** `_protesta` exclui `trabalha is False` e o fechamento usa `reconciliar` em [cartorio.py:1458](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/cartorio.py:1458) e [cartorio.py:1533](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/cartorio.py:1533). O comportamento específico da cópia DST-L2, a reação à rejeição e a distribuição completa dos 35 são [não verificado]. O anexo informa zero pendentes por `chamado_origem` e por ponteiro, sem fornecer a contagem de aprovadas e nenhuma. [não verificado]
-2. **Aval vigente:** não foi identificada colisão nos dois avais fornecidos; o item mantém a DST-L2 sem pouso até a medida. [não verificado] [nao verificado]
-3. **Literal:** b2 exige prova pela porta real de rejeição em sombra com rollback; a existência da porta é visível em [justificativa.py:262](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/justificativa.py:262), mas seu resultado no caso pedido é [não verificado].
-4. **Exportada, dinheiro ou `!`:** a medição pedida é em leitura e sombra; eventual cobrança ou cura após rejeição ainda não foi demonstrada. O tratamento de gravado exportado segue sujeito a `!` em [CLAUDE.md:265](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/CLAUDE.md:265). [não verificado]
-
-**Item 4 — CONFERE para registrar o dry:** o apply permanece dependente do `!` declarado. [não verificado]
-
-1. **Premissas:** o universo dos afetados, o número de órfãs e a situação da competência 11 não constam do dado fornecido. [não verificado]
-2. **Aval vigente:** o dry foi marcado para depois da simulação, compatível com a proibição anterior de regenerar células antes dela. [não verificado]
-3. **Literal:** reversão e contagem antes/depois são condições do dry; sua execução e seus resultados são [não verificado].
-4. **Exportada, dinheiro ou `!`:** o registro não autoriza apply; o aval reserva o apply ao `!` com o número em mãos e proíbe tocar exportada. [não verificado]
-
-_6987 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6992 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
