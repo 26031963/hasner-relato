@@ -1,7 +1,276 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 19:19** · publicado em **18/11/2026 19:19** (UTC-3)
+> Ultima resposta processada: **18/11/2026 19:21** · publicado em **18/11/2026 19:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 19:21 · sessao 4bcf8eb5e0d7 · RAIA-ESPURIAS · leitura · origem=Code
+
+A guarda de **60 minutos é da classificação para validação em lote**: ela procura qualquer batida apurável do colaborador, de qualquer tipo, em ±60 minutos do instante do slot derivado para o plantio. Só chega a essa consulta depois dos demais filtros da classe A; uma ocorrência leva à classe B, que fica fora do lote. A validação individual não é barrada por essa condição de lote. A consulta usa o instante do slot, que em intervalo fixo pode diferir da hora declarada. [app/chamados/services/validacao.py:1067] [app/chamados/services/validacao.py:1133] [app/chamados/services/validacao.py:1177] [app/chamados/services/materializacao.py:687]
+
+Antes de materializar, também existem estas verificações:
+
+- **Reuso em ±20 minutos:** procura batida do mesmo tipo em torno do instante de plantio. A consulta usa `Batida.objects` sem excluir retratadas; se encontrar, o materializador reutiliza a batida. [app/chamados/juizes.py:239] [app/chamados/services/materializacao.py:1372]
+- **Paridade:** procura a vizinha cronológica imediata anterior ou posterior, apurável, em até 12 horas; se ela tiver o mesmo tipo do plantio, pode impedir a materialização. Há exceção quando o plantio preenche um furo posicional e tratamento do par de intervalo. [app/chamados/services/materializacao.py:95] [app/chamados/services/materializacao.py:404] [app/chamados/services/materializacao.py:1386]
+- **Porta de registro:** deduplica mesmo tipo em ±60 **segundos**, verifica a mesma chave de instante e consulta colisão de tipo oposto em ±60 ou ±300 segundos, com exceção para marco próprio. A materialização chama essa porta antes de criar a batida. [app/ponto/registro_batida.py:21] [app/ponto/registro_batida.py:35] [app/ponto/registro_batida.py:94] [app/ponto/registro_batida.py:118] [app/chamados/services/materializacao.py:1487]
+- **DECLARADO-X-GRAVADO:** compara hora local e tipo declarados com hora e tipo que seriam gravados, não com uma batida real; a espera é limitada ao universo congelado de 163 perguntas de intervalo. [app/chamados/services/materializacao.py:709] [app/chamados/services/materializacao.py:724] [app/chamados/services/materializacao.py:736] [app/chamados/services/materializacao.py:748]
+
+O script abaixo conta **plantadas distintas**, pessoas distintas e pares plantada–real separadamente. O cruzamento é por batida `app` apurável, mesmo colaborador e tipo, em ±3 horas do instante plantado; ele inclui reais criadas depois da validação, pois a ordem é justamente uma das saídas pedidas. O resumo é por **par**, para não esconder casos com mais de uma real. Empates e instantes ausentes ficam separados. O critério de origem `app` reproduz o raio-x fornecido; a porta real de apuração exclui retratadas. [não verificado] [app/ponto/turnos.py:2868]
+
+A resposta atual de `classe_do_lote` é impressa sem seu detalhe textual: a própria plantada já existe e pode entrar na consulta, portanto essa chamada **não reconstrói a decisão histórica**. O mesmo vale para as outras consultas ao estado atual. A porta `registrar_batida` pode criar registros e acionar fechamento; não é chamada. [app/chamados/services/validacao.py:1204] [app/ponto/registro_batida.py:170]
+
+```python
+import datetime as dt
+import re
+from collections import Counter
+
+ERROS = 0
+
+
+def erro(etapa, exc):
+    global ERROS
+    ERROS += 1
+    # A mensagem livre de uma excecao pode conter dados pessoais.
+    print("ERRO etapa=%s tipo=%s mensagem=[suprimida por privacidade]" %
+          (etapa, type(exc).__name__))
+
+
+def local(instante):
+    if instante is None:
+        return "[nao verificado]"
+    return timezone.localtime(instante).strftime("%d/%m/%Y %H:%M:%S")
+
+
+def dia(data):
+    return data.strftime("%d/%m/%Y") if data else "[nao verificado]"
+
+
+def ordem(a, b):
+    if a is None or b is None:
+        return "desconhecida"
+    if a < b:
+        return "antes"
+    if a > b:
+        return "depois"
+    return "mesmo_instante"
+
+
+def resposta_segura(valor):
+    # Os primeiros 20 caracteres so sao exibidos quando consistem
+    # exclusivamente em uma hora; texto livre pode conter nome ou CPF.
+    trecho = (valor or "")[:20]
+    if re.fullmatch(r"\s*\d{1,2}:\d{2}(?::\d{2})?\s*", trecho):
+        return repr(trecho)
+    return "[suprimida por privacidade]"
+
+
+def main():
+    from django.apps import apps
+    from django.utils import timezone as django_timezone
+    from ponto.models import Batida
+    from ponto.turnos import batidas_apuraveis
+    from chamados.services.validacao import classe_do_lote
+    from ponto.registro_batida import colisoes_tipo_oposto
+
+    global timezone
+    timezone = django_timezone
+
+    # Inclui os modelos lidos indiretamente pelas funcoes reais.
+    for modelo in sorted(apps.get_models(), key=lambda m: m._meta.label):
+        print("CAMPOS %s %s" %
+              (modelo._meta.label, [f.name for f in modelo._meta.get_fields()]))
+
+    tz = timezone.get_current_timezone()
+    ini = timezone.make_aware(dt.datetime(2026, 10, 21, 0, 0), tz)
+    fim_exclusivo = timezone.make_aware(dt.datetime(2026, 11, 21, 0, 0), tz)
+    tres_horas = dt.timedelta(hours=3)
+
+    print("CRITERIO plantadas=origem_disputa_s84_retro_apuravel "
+          "timestamp_21_10_a_20_11_inclusive empresas=2,3,4")
+    print("CRITERIO real=app_apuravel_mesmo_colaborador_mesmo_tipo "
+          "distancia_absoluta_timestamp_ate_180_min_inclusive")
+    print("CRITERIO ordem=real_criado_em_comparado_a_respondida_em_e_validada_em")
+    print("CRITERIO resumo=pares; plantadas_e_pessoas_sao_distintas")
+    print("AVAL 14_plantadas_13_pessoas=[nao verificado]")
+
+    plantadas = (
+        batidas_apuraveis(None, ini, fim_exclusivo)
+        .filter(
+            timestamp__lt=fim_exclusivo,
+            colaborador__empresa_id__in=[2, 3, 4],
+            origem="disputa_s84_retro",
+        )
+        .select_related("colaborador", "pergunta_origem")
+        .order_by("colaborador_id", "timestamp", "pk")
+    )
+
+    ids_plantadas = set()
+    pessoas = set()
+    pares = 0
+    resumo = Counter()
+
+    for plantada in plantadas.iterator():
+        try:
+            reais = list(
+                batidas_apuraveis(
+                    plantada.colaborador,
+                    plantada.timestamp - tres_horas,
+                    plantada.timestamp + tres_horas,
+                )
+                .filter(origem="app", tipo=plantada.tipo)
+                .order_by("timestamp", "pk")
+            )
+            if not reais:
+                continue
+
+            ids_plantadas.add(plantada.pk)
+            pessoas.add(plantada.colaborador_id)
+            pergunta = plantada.pergunta_origem
+
+            if pergunta is None:
+                classe = "[nao chamada: sem pergunta]"
+                conflito = "[nao verificado]"
+            else:
+                try:
+                    classe, detalhe = classe_do_lote(pergunta)
+                    conflito = str(bool(detalhe.get("conflito", False)))
+                except Exception as exc:
+                    erro("classe_do_lote_pergunta_%s" % pergunta.pk, exc)
+                    classe = "[nao verificado]"
+                    conflito = "[nao verificado]"
+
+            try:
+                janela, colidem = colisoes_tipo_oposto(
+                    plantada.colaborador, plantada.timestamp, plantada.tipo
+                )
+                colisao_atual = "janela_s=%d quantidade=%d" % (
+                    int(janela.total_seconds()), len(colidem)
+                )
+            except Exception as exc:
+                erro("colisoes_tipo_oposto_plantada_%s" % plantada.pk, exc)
+                colisao_atual = "[nao verificado]"
+
+            for real in reais:
+                pares += 1
+                distancia = abs(
+                    (real.timestamp - plantada.timestamp).total_seconds()
+                ) / 60.0
+                ordem_resposta = ordem(
+                    real.criado_em,
+                    pergunta.respondida_em if pergunta else None,
+                )
+                ordem_validacao = ordem(
+                    real.criado_em,
+                    pergunta.validada_em if pergunta else None,
+                )
+                faixa = "dentro_60" if distancia <= 60 else "fora_60"
+                resumo[(ordem_validacao, faixa)] += 1
+
+                print(
+                    "CASO col%d plantada_id=%s dia_turno=%s "
+                    "plantada=%s tipo=%s plantada_criada_em=%s"
+                    % (
+                        plantada.colaborador_id,
+                        plantada.pk,
+                        dia(pergunta.data_evento if pergunta else None),
+                        local(plantada.timestamp),
+                        plantada.tipo,
+                        local(plantada.criado_em),
+                    )
+                )
+                print(
+                    "  REAL id=%s instante=%s tipo=%s origem=%s criado_em=%s "
+                    "distancia_min=%.2f"
+                    % (
+                        real.pk,
+                        local(real.timestamp),
+                        real.tipo,
+                        real.origem,
+                        local(real.criado_em),
+                        distancia,
+                    )
+                )
+                print(
+                    "  PERGUNTA id=%s motivo=%s resposta_20=%s "
+                    "respondida=%s validada=%s materializada=%s"
+                    % (
+                        pergunta.pk if pergunta else "[nao verificado]",
+                        pergunta.motivo if pergunta else "[nao verificado]",
+                        resposta_segura(pergunta.resposta_colab)
+                        if pergunta else "[nao verificado]",
+                        local(pergunta.respondida_em if pergunta else None),
+                        local(pergunta.validada_em if pergunta else None),
+                        local(pergunta.materializada_em if pergunta else None),
+                    )
+                )
+                print(
+                    "  ORDEM real_criado_%s_declaracao "
+                    "real_criado_%s_validacao"
+                    % (ordem_resposta, ordem_validacao)
+                )
+                print(
+                    "  GUARDA_ATUAL classe_do_lote=%s conflito_no_detalhe=%s "
+                    "colisoes_tipo_oposto=%s"
+                    % (classe, conflito, colisao_atual)
+                )
+                print(
+                    "  GUARDA_HISTORICA=[nao verificado] "
+                    "REGRA_L_NNN_OU_CORTE_POR_CASO=[nao verificado] "
+                    "registrar_batida=[nao chamada: pode gravar]"
+                )
+        except Exception as exc:
+            erro("plantada_%s" % plantada.pk, exc)
+
+    print(
+        "CONTAGEM plantadas=%d pessoas=%d pares=%d "
+        "aval_plantadas=14 aval_pessoas=13"
+        % (len(ids_plantadas), len(pessoas), pares)
+    )
+    for posicao in ("antes", "depois", "mesmo_instante", "desconhecida"):
+        for faixa in ("dentro_60", "fora_60"):
+            print(
+                "RESUMO_5I real_%s_validacao %s pares=%d"
+                % (posicao, faixa, resumo[(posicao, faixa)])
+            )
+
+
+try:
+    main()
+except Exception as exc:
+    erro("execucao_principal", exc)
+finally:
+    print("ERROS=%d" % ERROS)
+    print("FIM_DECLARADO_X_GRAVADO_5I")
+```
+
+Funções reais chamadas diretamente pela sonda:
+
+- `batidas_apuraveis` — [app/ponto/turnos.py:2868](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:2868).
+- `classe_do_lote` — [app/chamados/services/validacao.py:1177](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/validacao.py:1177).
+- `colisoes_tipo_oposto` — [app/ponto/registro_batida.py:94](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:94).
+
+**Limites:** a contagem efetiva, o resultado por caso, a guarda efetivamente acionada em cada validação e a regra aplicável a cada caso ficam [não verificado]. A resposta livre é suprimida quando os primeiros 20 caracteres não são exclusivamente uma hora, para cumprir a restrição de não imprimir nomes ou CPF; mensagens livres de exceção também são suprimidas. [não verificado]
+
+A sonda foi entregue como texto e não foi executada. Há uma incompatibilidade operacional a resolver antes de rodá-la sob a regra estrita de não criar nem alterar arquivos: o envelope exigido reescreve credencial, cria arquivo temporário e acrescenta uma trilha, além de poder alterar roles, grants e rede. [bin/sonda_leitura.sh:115](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:115) [bin/sonda_leitura.sh:153](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:153) [bin/sonda_leitura.sh:185](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:185) [bin/sonda_leitura.sh:216](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:216)
+
+## 18/11 19:20 · sessao 444492dc2cb6 · RAIA-ESPURIAS · leitura · origem=Code
+
+A cópia tem uma guarda de colisão para tipos opostos na porta de registro, mas **não consigo entregar uma sonda completa e confiável para a contagem de órfãs por batida**: a grade devolve as órfãs como horas `HH:MM`, sem data, segundos ou identificador da batida. Os dois registros de col67 às 23:59 e os dois às 00:01, por exemplo, ficam indistinguíveis por essa saída. A sonda `sonda_espuria2`, necessária para conferir como ela resolve essa associação, não foi encontrada na cópia. [app/escala/utils.py:631](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:631), [app/escala/utils.py:673](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:673), [não verificado]
+
+- **Porta de registro:** para o mesmo tipo, reutiliza uma batida apurável em janela inclusiva de ±60 s. Para tipo oposto, procura colisões em ±300 s quando há escala vigente e marcos no dia local da nova batida; caso contrário, em ±60 s. A colisão não é aplicada se a nova batida casar, em até 300 s, com marco próprio do seu tipo no dia ou na véspera. Sem autoridade humana, a porta recusa a criação; com autoridade humana, cria e devolve conflito para revisão. No mesmo instante exato, antes dessa guarda, devolve a batida já existente mesmo que seja de tipo oposto ou retratada. [app/ponto/registro_batida.py:21](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:21), [app/ponto/registro_batida.py:35](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:35), [app/ponto/registro_batida.py:94](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:94), [app/ponto/registro_batida.py:130](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:130)
+
+- **API do app:** antes da porta, reutiliza batida apurável do **mesmo tipo** em ±300 s do instante efetivo; essa consulta não deduplica tipo oposto. Depois chama a porta com `autoridade_humana=False`; quando ela retorna sem batida, procura a oposta e responde `ignorada_intervalo`. Portanto, para tipos opostos, vale a guarda da porta e suas exceções, não uma segunda janela independente da API. [app/api/views_core.py:492](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views_core.py:492), [app/api/views_core.py:513](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views_core.py:513), [app/api/views_core.py:643](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views_core.py:643), [app/api/views_core.py:660](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views_core.py:660)
+
+- **Pareador:** não apaga nem deduplica as batidas. No caminho de fechamento de turno, recusa formar o par entrada–saída de duração **≤60 s**, carimba a recusa e mantém a saída separada; o tratamento depende também dos papéis e marcos fornecidos ao pareador. Acima de 60 s, essa guarda específica não recusa o par. [app/ponto/turnos.py:117](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:117), [app/ponto/turnos.py:1192](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1192), [app/ponto/turnos.py:1482](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1482), [app/ponto/management/commands/detectar_par_relampago.py:49](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/detectar_par_relampago.py:49)
+
+- **Grade e cartório:** a pré-passagem da grade descarta da representação batidas consecutivas do **mesmo tipo** com distância inferior a 600 s; não descarta ali um par de tipos opostos. O cartório alimenta a grade com batidas apuráveis e copia as horas de `dia['orfas']` para a ata; isso não estabelece uma deduplicação de tipo oposto pelo cartório. [app/escala/utils.py:1333](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1333), [app/ponto/services/cartorio.py:1156](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1156), [app/ponto/services/cartorio.py:730](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:730)
+
+O modelo `Batida` desta cópia tem, entre outros campos, `terminal`, `canal` e `timestamp_dispositivo`; não vi nele campo de versão do app. O preenchimento desses campos na sombra e a existência de uma versão associável por outra fonte ficam **[não verificado]**. [app/ponto/models.py:8](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/models.py:8), [app/ponto/models.py:27](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/models.py:27), [app/ponto/models.py:45](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/models.py:45), [app/ponto/models.py:75](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/models.py:75)
+
+Há também uma restrição operacional concreta: **o envelope exigido não é somente leitura no sistema de arquivos**. Ele reescreve `logs/.env_leitor`, pode alterar role e grants, e acrescenta uma trilha ao log. Por isso, não o executei sob a regra de não criar, editar ou apagar arquivos. [bin/sonda_leitura.sh:115](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:115), [bin/sonda_leitura.sh:140](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:140), [bin/sonda_leitura.sh:146](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:146), [bin/sonda_leitura.sh:245](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/sonda_leitura.sh:245)
+
+No dado fornecido, os pares de col67 têm distância de 2 s: **14/11 23:59:12 E → 23:59:14 S** e **11/11 00:01:42 E → 00:01:44 S**, este último apresentado na grade do dia de turno 10/11. O anexo atribui uma órfã `E` em cada caso, mas não mostra `criado_em` nem campos de aparelho; esses valores e o resultado atual da sombra permanecem **[não verificado]**. A razão de os pares históricos terem chegado ao banco também é **[não verificado]**.
+
+Não apresento um script como completo: faltam a porta comprovada para associar órfã a batida exata e a validação da sonda no ambiente de destino. Assim, **RESUMO_5II, contagens da frota e ERROS=0 ficam [não verificado]**.
 
 ## 18/11 19:19 · sessao 526d0726e133 · RAIA-ESPURIAS · leitura · origem=Code
 
@@ -2128,191 +2397,4 @@ O critério para concluir a remedida é identificar o modelo pelo receptor, quer
 
 [truncado em 20000 de 22625 caracteres]
 
-## 18/11 18:10 · sessao 6f3a3060a3a3 · RAIZ-DA-DISPUTA · leitura · origem=Code
-
-**F4: PARCIAL.** A BUG-PAR reúne a validação e o plantio das duas metades em um ato, mas o agrupamento identificado no código usa disputa, dia e motivos complementares; ele não lê os pares de marcos da célula para escolher a irmã. Assim, a parte “o par pela célula” ainda falta. ([materializacao.py:136](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:136), [materializacao.py:139](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:139), [validacao.py:613](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:613), [BACKLOG.md:2162](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2162).)
-
-A cópia não contém metadados Git; portanto, sua identidade com o HEAD informado e a atribuição de cada alteração a um commit são **[nao verificado]**. Os números atuais de produção e os fatos históricos do CASO-0711 também são **[nao verificado]**. A reconferência abaixo cobre os pontos que consegui confrontar; **não completa a verificação individual de todas as linhas e cadeias dos anexos**. [nao verificado]
-
-**F0 e F1 — reconferência dos pontos principais**
-
-| Afirmação anterior | Situação na cópia |
-|---|---|
-| Três sítios persistentes de destino em duas funções; reuso preserva a dona | **Ainda vale nos sítios conferidos:** `_nascer` atribui no reuso e no construtor; `reapontar_resolvedora` atribui e salva. O selo continua permitindo os dois arquivos, não uma função única. ([models.py:3174](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3174), [models.py:3206](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3206), [fio.py:974](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:974), [test_contract_escritores_estado.py:61](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/core/tests/test_contract_escritores_estado.py:61).) Exaustividade do censo atual de escritores: **[nao verificado]**. |
-| Disputa aberta é `fechada_em is None`; há dono, destino e chamado-pai distintos | **Vale**, com linhas deslocadas. ([models.py:1886](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1886), [models.py:1960](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1960), [models.py:3206](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3206).) |
-| Núcleo pode criar disputa antes de gerar pergunta; agrupador pode criar e depois tentar fechar vazia | **Vale:** o núcleo cria a disputa e retorna antes de o wrapper gerar perguntas; o agrupador cria antes do laço e, ao final, consulta C7. O protocolo c21 de ensaio/replay não foi identificado nesses caminhos. ([disputa_emissao.py:601](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:601), [disputa_emissao.py:676](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:676), [disputa_emissao.py:1137](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1137), [disputa_emissao.py:1292](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1292).) |
-| Seletor comum escolhe disputa aberta do colaborador sem filtro por dia | **Vale para o núcleo e o agrupador conferidos.** ([disputa_emissao.py:540](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:540), [disputa_emissao.py:1110](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1110).) |
-| Há eleições distintas de destino | **Vale nos caminhos conferidos:** o derivador exige candidato único, enquanto o caminho de intervalo do agrupador entrega o chamado corrente. ([disputa_emissao.py:166](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:166), [disputa_emissao.py:236](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:236), [disputa_emissao.py:1152](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1152).) |
-| Escape genérico `descarimbar_em_lote(**outros)` | **Ainda existe**, mas mudou: há guardas adicionais para o par resposta/instante e para a cerca; o `update` ainda expande `outros`. O comentário atribui essas guardas à E3 e à E4c F1/B2. ([models.py:3448](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3448), [models.py:3456](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3456), [models.py:3477](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3477), [models.py:3485](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3485).) |
-| Limpeza de resolução residual, acrescentada ao inventário pelo CASO-0711 | **Continua existindo.** ([models.py:2413](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2413).) |
-| Elo F3 da raiz ao fim de `carimbar` e `registrar` | **Não aparece nos corpos conferidos:** `carimbar` salva e retorna; `registrar` grava decisões, acorda células e retorna. Isso não prova a ausência de reação por toda cadeia indireta. ([models.py:3342](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3342), [models.py:4329](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:4329).) |
-
-Há mudanças identificáveis da E4c na resposta: `respostas_sem_veredito` passou a consultar `pergunta_respondida`, e o nascimento registra atos de projeção no mesmo fluxo. A atribuição de **cada** mudança à E4c F1/F2/F4 ou à F6F7, com seu commit, permanece **[nao verificado]**. ([models.py:1989](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1989), [models.py:3210](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3210).) O registro disponível informa o merge `41f5648af` para a volta da BUG-PAR; a genealogia Git independente desse merge nesta cópia é **[nao verificado]**. ([BACKLOG.md:2142](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2142).)
-
-**Censo do par.** `metade_irma_do_intervalo` procura motivo complementar na mesma disputa e data, exige resposta e ausência de materialização e recusa ambiguidade; `par_do_intervalo` usa essa irmã para julgar o ato, e `_validar_o_par` usa o resultado para validar e materializar sob savepoint. ([materializacao.py:139](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:139), [materializacao.py:175](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:175), [validacao.py:632](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:632).)
-
-**Há uma segunda busca de irmã**, `_situacao_da_irma`: para diagnóstico, também procura mesma disputa/dia e motivo complementar, mas escolhe a primeira por PK; não é o agrupador do ato de plantio. ([materializacao.py:281](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:281).) Falta fazer a seleção do par pelos marcos da célula, tratar a ausência de marco conforme cadastro e reconciliar essa segunda busca com a mesma autoridade; ausência de outros agrupadores por todas as formas indiretas é **[nao verificado]**. ([BACKLOG.md:2162](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2162).)
-
-**Decisões de F1 registradas:**
-
-1. **Órfãos sem disputa:** a opção de não nascer disputa está registrada, e resta identificar quem fecha os órfãos sem disputa. Não localizei, nas passagens conferidas de `LEIS.md` e `CORTES.md`, uma resposta específica ao responsável; exaustividade dessa busca: **[nao verificado]**. ([BACKLOG.md:2113](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2113).)
-2. **Motivo novo cuja dona está fechada:** reabrir, criar outra ou encaminhar à Pauta. O corte posterior registra essa questão como insumo N5 da raiz; não encontrei resposta específica nas passagens conferidas. O corte sobre perguntas vivas em disputa fechada resolve a apresentação e validação dessas perguntas, mas não demonstra resposta para a chegada de motivo novo. Exaustividade da busca: **[nao verificado]**. ([CORTES.md:515](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:515), [CORTES.md:415](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:415).)
-
-Não posso fechar um número confiável sem concluir a busca por leis e cortes aplicáveis às duas decisões. **[nao verificado]**
-
-perguntas de lei: [nao verificado]
-
-## 18/11 18:08 · sessao 8eb156857230 · RAIZ-DA-DISPUTA · sonda · origem=Code
-
-**A remedição não foi executada:** o enunciado informa que não há acesso a banco ou logs, e o envelope `--rodar` exige arquivo em `logs/sombra/`, grava saída e chama `lavra_de_prod`; isso conflita com a regra de não criar nem escrever arquivos. ([bin/sombra.sh](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/sombra.sh:483), [bin/sombra.sh](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/bin/sombra.sh:136); disponibilidade da sombra agora: [nao verificado].)
-
-A sonda abaixo está preparada para a sessão, mas sua execução e seus resultados atuais são **[nao verificado]**. O dado fornecido informa `antes=23` para N2 e `antes=94` para N3; os números anteriores de N1 e N4 não aparecem no dado fornecido: **[nao verificado]**.
-
-Funções reais usadas:
-
-- **N1:** consulta `DisputaSupervisao` aberta e seu relacionamento `perguntas`; C7 considera a lista de perguntas da disputa. ([models.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2009).)
-- **N2:** `DisputaSupervisao.pode_fechar()`, o C7 real, que chama os leitores de resposta sem veredito e de fio vivo. ([models.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2009).)
-- **N3:** `metade_irma_do_intervalo()` seleciona a irmã; `pergunta_viva()` julga C6; `DecisaoPergunta.leitura()` lê a validação vigente. ([materializacao.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:139), [juizes.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:866), [models.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:4295).) O agrupamento **mudou**: o anexo agrupava por colaborador/data e posição, mesmo entre disputas; o HEAD procura motivo complementar na **mesma disputa e data**, com irmã de tipo hora, respondida com texto, não materializada, dentro do fato e única entre candidatas. A sonda parte da metade com validação vigente e conta cada par selecionado uma vez; por isso `94` é referência histórica, não comparação de universos equivalentes. (Composição antiga: [nao verificado]; [materializacao.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:139).) `par_do_intervalo()` aplica ainda condições de plantio e paridade; não é o seletor geral de irmã para esta contagem. ([materializacao.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:175).)
-- **N4:** `grupos_de_colisao()`, `universo_do_grupo()` e `canonica_do_grupo()`. Aqui “duplicadas” significa **perguntas não canônicas em disputa aberta** nos grupos detectados pelo leitor de colisão, mesmo se a canônica estiver em outra disputa. O leitor aplica suas chaves por família, horizonte e exclusões; não é uma contagem de todas as linhas historicamente rotuladas com via `duplicata`, nem afirma que toda perdedora possa ser retratada. ([fio.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:1515), [fio.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:2087), [fio.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:1274), [fio.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:1311).)
-
-A sonda recusa qualquer alias adicional, banco diferente de `sombra` ou schema diferente de `juliani`; abre transação PostgreSQL `REPEATABLE READ, READ ONLY` e bloqueia SQL que não comece por `SELECT` após a guarda. Qualquer exceção torna os quatro resultados inconclusivos e é contada por tipo; mensagens de exceção não são emitidas. O método de seleção de irmã pode omitir grupos ambíguos por contrato, e o C6 possui tratamento interno de algumas exceções que a sonda externa não consegue contar. ([materializacao.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:139), [juizes.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1481).)
-
-```python
-# Executar apenas numa sessao Django ja inicializada com
-# DJANGO_SETTINGS_MODULE=config.settings.sombra.
-# Nenhum arquivo e criado por esta sonda.
-import logging
-import os
-from collections import Counter
-
-erros = Counter()
-resultados = None
-log_anterior = logging.root.manager.disable
-
-try:
-    from django.db import connections, transaction
-    from django_tenants.utils import schema_context
-    from chamados.models import (
-        DecisaoPergunta,
-        DisputaSupervisao,
-        PerguntaDisputa,
-    )
-    from chamados.juizes import pergunta_viva
-    from chamados.services.materializacao import metade_irma_do_intervalo
-    from chamados.services.fio import (
-        canonica_do_grupo,
-        grupos_de_colisao,
-        universo_do_grupo,
-    )
-
-    logging.disable(logging.CRITICAL)
-
-    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
-        raise RuntimeError("settings incorretos")
-    if set(connections) != {"default"}:
-        raise RuntimeError("aliases inesperados")
-
-    conn = connections["default"]
-    if conn.vendor != "postgresql" or conn.settings_dict["NAME"] != "sombra":
-        raise RuntimeError("configuracao de banco incorreta")
-    if conn.in_atomic_block:
-        raise RuntimeError("transacao preexistente")
-
-    def somente_select(execute, sql, params, many, context):
-        partes = sql.lstrip().split(None, 1)
-        if not partes or partes[0].upper() != "SELECT":
-            raise RuntimeError("SQL nao permitido")
-        return execute(sql, params, many, context)
-
-    with schema_context("juliani"):
-        with transaction.atomic(using="default"):
-            with conn.cursor() as cur:
-                cur.execute(
-                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-                )
-                cur.execute(
-                    "SELECT current_database(), current_schema(), "
-                    "current_setting('transaction_read_only')"
-                )
-                banco, schema, somente_leitura = cur.fetchone()
-                if (banco, schema, somente_leitura) != (
-                    "sombra", "juliani", "on"
-                ):
-                    raise RuntimeError("guarda de banco ou schema falhou")
-
-            with conn.execute_wrapper(somente_select):
-                abertas = list(
-                    DisputaSupervisao.objects.filter(
-                        fechada_em__isnull=True
-                    )
-                    .select_related("colaborador")
-                    .prefetch_related("perguntas")
-                    .order_by("pk")
-                )
-
-                n1 = sum(1 for d in abertas if not d.perguntas.all())
-                n2 = sum(1 for d in abertas if d.pode_fechar() is True)
-
-                # Parte da metade com validacao vigente. A outra metade e
-                # selecionada pelo proprio leitor do HEAD e julgada pelo C6.
-                # Nao restringe o universo a disputas abertas: a sonda antiga
-                # tambem nao o restringia.
-                pares = set()
-                candidatas = (
-                    PerguntaDisputa.objects.filter(
-                        motivo__in=("intervalo_saida", "intervalo_volta")
-                    )
-                    .select_related("disputa__colaborador", "celula")
-                    .prefetch_related("decisoes")
-                    .order_by("pk")
-                )
-                for p in candidatas.iterator(chunk_size=500):
-                    if DecisaoPergunta.leitura(p).validada_em is None:
-                        continue
-                    q = metade_irma_do_intervalo(p.disputa, p)
-                    if q is not None and pergunta_viva(q) is True:
-                        pares.add(tuple(sorted((p.pk, q.pk))))
-                n3 = len(pares)
-
-                # Excedentes nao canonicos que pertencem a disputas abertas.
-                # A escolha da canonica usa o universo inteiro do grupo.
-                duplicadas = set()
-                for _familia, _chave, pks in grupos_de_colisao():
-                    grupo = universo_do_grupo(pks)
-                    if len(grupo) < 2:
-                        continue
-                    canonica = canonica_do_grupo(grupo)
-                    for p in grupo:
-                        if (
-                            p.pk != canonica.pk
-                            and p.disputa_id is not None
-                            and p.disputa.fechada_em is None
-                        ):
-                            duplicadas.add(p.pk)
-                n4 = len(duplicadas)
-
-                resultados = (n1, n2, n3, n4)
-
-except Exception as exc:
-    # Nao imprime texto da excecao: pode conter dados pessoais.
-    nome_tipo = type(exc).__name__
-    if not nome_tipo.isidentifier():
-        nome_tipo = "Erro"
-    erros[nome_tipo] += 1
-    resultados = None
-
-finally:
-    logging.disable(log_anterior)
-
-antes = ("[nao verificado]", "23", "94", "[nao verificado]")
-for indice in range(4):
-    valor = "INCONCLUSIVO" if resultados is None else str(resultados[indice])
-    print("N%d=%s antes=%s" % (indice + 1, valor, antes[indice]))
-
-for tipo, quantidade in sorted(erros.items()):
-    print("ERRO_TIPO=%s ERROS=%d" % (tipo, quantidade))
-print("ERROS=%d" % sum(erros.values()))
-print("FIM_REMEDIDA_1011")
-```
-
-_7100 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7102 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
