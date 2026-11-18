@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 09:11:14.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (12.8 MB). Acoes na janela: **373**.
+**Medido em 18/11/2026 09:16:13.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (13.0 MB). Acoes na janela: **380**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:16:07 | Bash | Is torneira test on HEAD | `cd /home/ronald/saas-hasner && git cat-file -e dd489c627:app/escala/tests/test_torneira_folgas.py && echo "on HEAD"; git log --oneline -2 dd489c627 -- app/escala/tests/test_torneira_folgas.py; ls -la /home/ronald/wt-cirineu-c4-083652/app/escala/tests/test_torneira_folgas.py; git -C /home/ronald/wt-cirineu-c4-083652 status --porcelain \| head` |
+| 09:16:02 | Bash | Read failure details | `cd /home/ronald/saas-hasner && sed -n 6950,6966p logs/ESPURIAS-ABRE/c4h/suite.log; sed -n 6996,7015p logs/ESPURIAS-ABRE/c4h/suite.log; git -C /home/ronald/wt-cirineu-c4-083652 log --oneline -4; git -C /home/ronald/wt-cirineu-c4-083652 diff --stat dd489c627 \| tail -3` |
+| 09:15:58 | Bash | List c4 failures and trava holder | `cd /home/ronald/saas-hasner && grep -E '^(FAIL\|ERROR):' logs/ESPURIAS-ABRE/c4h/suite.log; grep -n -A12 '^FAIL:' logs/ESPURIAS-ABRE/c4h/suite.log \| grep -E 'Error\|assert\|File' \| head -20; ps -p 2785219 -o etime,cmd \| cut -c1-200` |
+| 09:15:55 | Bash | Check suite producer and verdict | `cd /home/ronald/saas-hasner && ps -p 2662772 -o pid,etime,cmd; cat logs/ESPURIAS-ABRE/c4h/suite.rc 2>/dev/null; grep -E '^(OK\|FAILED)($\| \()' logs/ESPURIAS-ABRE/c4h/suite.log \| tail -1; grep -E '^Ran ' logs/ESPURIAS-ABRE/c4h/suite.log \| tail -1; bash bin/trava_teste.sh --quem; sed -n 1,3p app/docs/RELATO.md \| cut -c1-120` |
+| 09:15:42 | Bash | Put espinha law questions at top | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(3,"lei: ESPINHA remedida no HEAD dd489c627 (aval 08:55 item 3; logs/ORDEM-1811/espinha/<F>.r). Perguntas de lei por F -- F3 N=1: marcos_do_lote(ate=...) -- DP inserida DEPOIS da lavra com ato_em ANTES do corte mantem a foto historica ou invalida a lavra? \| F5 N=4: (1) CORTES.md:509 man ...` |
+| 09:15:37 | SendMessage |  | `-` |
+| 09:15:30 | Bash | Measure machine load before dispatch | `uptime; free -m \| sed -n 2p; curl -s -o /dev/null -w "%{http_code} %{time_total}\n" -H "Host: juliani.hasner.com.br" http://localhost/health/` |
 | 09:08:04 | Bash | Put ESPURIA-TELA predicate question at top | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(4,"PERGUNTA DE DESENHO ESPURIA-TELA (item 6; logs/ORDEM-1811/tela/construtor/entrega.md): a classe 'ausencia DECLARADA pelo colab x LANCADA pelo admin' e o 'disputa #N' nao tem predicado na autoridade -- Ausencia (ponto/models.py:660) so tem chamado_origem (:786) e registrado_por (:811) ...` |
 | 09:07:59 | SendMessage |  | `-` |
 | 09:07:10 | SendMessage |  | `-` |
