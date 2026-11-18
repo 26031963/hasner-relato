@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 08:07** · publicado em **18/11/2026 08:07** (UTC-3)
+> Ultima resposta processada: **18/11/2026 08:15** · publicado em **18/11/2026 08:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 08:15 · sessao 176d33e7aeeb · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO · construtor · origem=Code
+
+A implementação e os testes estão escritos na cópia. **A cura ainda não está certificada:** não executei RED, GREEN, mutantes ou suíte, conforme a instrução; a sintaxe dos quatro arquivos passou por análise com `ast.parse`. O HEAD da cópia permanece `dd489c627bb0a8d5f8782945c7e240e6621c98ed`; não criei commit, conforme a proibição. [cadastro_futuro.py:8](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/cadastro_futuro.py:8), [test_residuo_alem_da_competencia.py:20](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/tests/test_residuo_alem_da_competencia.py:20)
+
+Alterações:
+
+- [cadastro_futuro.py::alcance_celulas_geradas](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/cadastro_futuro.py:8), `regenerar_futuras_do_cadastro` e `regenerar_futuras_por_feriado`: alcance comum de células geradas existentes, posteriores a hoje, sem teto de competência. A relavra continua com `estender_horizonte=False`.
+- [folgas.py::sincronizar_foto_futura_do_calendario](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/folgas.py:605): mantém qualquer origem dentro da janela e seleciona geradas além dela; os meses continuam saindo dos dias selecionados.
+- [vigia_cadastro_futuro.py::medir](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/vigia_cadastro_futuro.py:24): mede todo o alcance gerado e preserva as não geradas no intervalo anteriormente solicitado. Os limites retornados são ampliados para abranger as células medidas.
+- [test_residuo_alem_da_competencia.py::ResiduoAlemDaCompetenciaTest](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/tests/test_residuo_alem_da_competencia.py:20): casos para troca e encerramento de vínculo, folga manual, calendário, controle de dono, editadas, vigia e feriado. A execução e a capacidade de morder dos casos estão **[não verificado]**.
+
+**ESMERIL-SEMÂNTICA.** `hoje` é dia civil exclusivo (`data > hoje`); `desde`, quando fornecido, é inclusivo. A janela da foto usa os dois extremos inclusivos e a vigência do vínculo também inclui início e fim. [cadastro_futuro.py:14](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/cadastro_futuro.py:14), [cadastro_futuro.py:38](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/cadastro_futuro.py:38), [folgas.py:620](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/folgas.py:620), [alimentacao.py:214](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/alimentacao.py:214)
+
+O seletor lê `colaborador_id`, `data` e `origem` da célula; a porta existente cria células e escreve `trabalha`, `escala_geradora`, `dna` e a trilha de regeneração, enquanto a juíza recebe o carimbo para decidir o vínculo. A foto lê a definição do calendário e escreve ou remove `FolgaDia` por vínculo, data e origem de calendário; a folga manual tem porta própria. Os escritores completos de cadastro desses campos são **[não verificado]**. [cadastro_futuro.py:14](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/cadastro_futuro.py:14), [celula.py:289](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/portas/celula.py:289), [alimentacao.py:228](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/alimentacao.py:228), [folgas.py:43](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/folgas.py:43), [folgas.py:180](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/folgas.py:180), [folgas.py:335](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/folgas.py:335)
+
+O custo cresce com as células futuras adicionais: feriado consulta as células nas datas recebidas e chama a relavra por vínculo encontrado; template percorre os vínculos do tipo e a relavra percorre os dias selecionados. Quantidades de consultas e tempos antes/depois estão **[não verificado]**. [cadastro_futuro.py:68](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/ponto/services/cadastro_futuro.py:68), [cadastro_tipo.py:370](/home/ronald/wt-codex-bug-cadastro-nao-alcanca-o-futuro-residuo-081057/app/escala/services/cadastro_tipo.py:370)
+
+O mutante principal, **“teto de volta”**, é este patch, para aplicação temporária pela sessão de testes; não foi aplicado aqui: [nao verificado]
+
+```diff
+--- a/app/ponto/services/cadastro_futuro.py
++++ b/app/ponto/services/cadastro_futuro.py
+@@
+     if hoje is None:
+         raise ValueError('alcance_celulas_geradas: hoje e obrigatorio')
+-    qs = CelulaDia.objects.filter(origem='gerada', data__gt=hoje)
++    from ponto.management.commands.gerar_celulas import _janela_default
++    ini, fim = _janela_default(hoje)
++    qs = CelulaDia.objects.filter(
++        origem='gerada', data__gt=hoje, data__range=(ini, fim))
+```
+
+Comandos propostos para a sessão, no ambiente de testes configurado; resultados e configuração estão **[não verificado]**: [nao verificado]
+
+```bash
+# Novos casos: repetir na base para RED, na cura para GREEN e com cada mutante.
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_residuo_alem_da_competencia
+
+# Torneira, com a data que coloca hoje+3 além do fim informado.
+PYTHONDONTWRITEBYTECODE=1 python3 -c "from freezegun import freeze_time; import manage; import sys; sys.argv=['manage.py','test','escala.tests.test_torneira_folgas']; f=freeze_time('2026-11-18 15:00:00'); f.start(); manage.main()"
+```
+
+Para os demais mutantes, aplicar **um de cada vez** e executar o primeiro comando acima:
+
+1. Em `sincronizar_foto_futura_do_calendario`, retirar `| Q(pk__in=geradas.values('pk'))`: deve atingir o teste de foto distante. [nao verificado]
+2. Em `regenerar_futuras_por_feriado`, voltar a limitar `datas` ao `fim` de `_janela_default`: deve atingir o teste de feriado distante. [nao verificado]
+3. Em `medir`, substituir a seleção das geradas pelo filtro `data__range=(ini, fim)`: deve atingir o teste do vigia. [nao verificado]
+
+A queda esperada desses mutantes, inclusive a dos dois testes da torneira pelo teto, permanece **[não verificado]**. [nao verificado]
+
+O dado raspado informa, antes da cura, **112 divergências de cadastro além do fim**, em 3.865 células geradas, e 112 no alcance novo total; não houve nova medição aqui **[não verificado na fonte]**. Permanecem incompletos: logs RED/GREEN/mutantes e suíte, medições de custo, dry do passivo, medição posterior e revisão final. O censo e as sondas pedidos não estavam disponíveis nos caminhos da cópia consultados; seu conteúdo além dos anexos fornecidos é **[não verificado]**. [nao verificado]
+
+Mensagem proposta para o commit futuro, sem executá-lo: [nao verificado]
+
+```text
+Alcança células futuras existentes nos eventos de cadastro
+
+LEI-AKITA: origem=ponto/services/cadastro_futuro.py (alcance do seletor) e escala/folgas.py (meses da foto pelo mesmo alcance), testemunha=vinculo_do_dia e a porta da celula, RED=test_torneira_folgas (2) + troca de vinculo, folga e foto alem do fim, quem-mais-le=censo residuo_alem_da_competencia.r item (e), juizes novos=0, padrao=projecao reconstruivel
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+```
 
 ## 18/11 08:07 · sessao a4ee9aacdb54 · RETOMA-POS-POUSOS-1811 · verificador · origem=Code
 
@@ -929,66 +991,4 @@ Assim, **se a vigia veta nesse caminho**, a costura não persiste, o savepoint d
 
 **4. Exportada, dinheiro ou `!` fora do declarado — NÃO PROCEDE quanto a toque adicional demonstrado.** O teste cria uma exportação de fixture e o veto consulta a competência; o ato cercado recusa a escrita da pergunta e pode registrar a trilha descrita acima ([teste:101](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:101), [fio.py:1358](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:1358)). Efeito em dados de produção, dinheiro e resultado do RED/green são **[não verificado]**. Não executei testes nem alterei arquivos.
 
-## 18/11 00:15 · sessao 9af7d9be3de3 · E4C-F1-B2 · construtor · origem=Code
-
-A entrega está **parcial**: ajustei cinco arquivos de teste e o cadastro S06, mas **não curei o custo dos savepoints em G4**. Os testes e mutantes não foram executados; a sintaxe dos cinco arquivos Python alterados foi analisada com `ast.parse`, sem execução da suíte. A aprovação da cura permanece com a sessão, o Code e o opus final. [não verificado] [nao verificado]
-
-**Arquivos alterados e cobertura pretendida:**
-
-- [test_e1_fila_v2_2_integracao.py:87](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_e1_fila_v2_2_integracao.py:87): o caso HIST continua verificando a ordem das travas e o mutante do fecho antigo, agora com competência simulada como aberta. O novo teste em [linha 178](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_e1_fila_v2_2_integracao.py:178) simula exportada e espera recusa, sem destino ou carimbo na pergunta e com o chamado ainda fechado. Mutantes pretendidos: `_fecho_antigo` para os testes de ordem; veto de competência sempre `False` para o gêmeo. Mordidas: [não verificado]. [nao verificado]
-- [test_o168_pai_com_conversa_no_gate.py:59](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:59): os dois cenários continuam verificando o fechamento do pai com resposta validada e sem conversa. A pergunta da fixture recebe `_DIA`; o teste em [linha 108](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:108) verifica recusa e linha da pergunta intacta quando o dia é nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
-- [test_pep_reentrada.py:60](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_pep_reentrada.py:60): os quatro cenários continuam verificando o carimbo fora de voo e a exclusão da pergunta em voo, inclusive nos dois caminhos sem credor. A fixture e as irmãs recebem `_DIA`; o teste em [linha 230](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_pep_reentrada.py:230) cobre a recusa de dia nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
-- [test_resposta_nao_e_fantasma.py:120](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_resposta_nao_e_fantasma.py:120): o controle S128 continua exigindo carimbo da pergunta não respondida; o dia gravado passa a coincidir com o da célula. O teste em [linha 102](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_resposta_nao_e_fantasma.py:102) cobre a recusa de dia nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
-- [test_reconciliar_pergunta_orfa.py:114](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_reconciliar_pergunta_orfa.py:114): o caso 06 continua exigindo costura histórica, materialização e paridade da resposta; o dia gravado passa a ser o dia da célula. O teste em [linha 96](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_reconciliar_pergunta_orfa.py:96) cobre a recusa de dia nulo. Mutante pretendido: veto sempre `False`. [não verificado] [nao verificado]
-- [e4b_c12_sitios.json:45](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/e4b_c12_sitios.json:45): S06 passa a localizar a chamada em `_ato_da_retratacao`, onde ela está. O mutante cadastrado troca `transicionar_com_pauta(...)` por `ch.reconciliar()`; o instrumento deve acusar S06. [reconciliador.py:563](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/reconciliador.py:563) [e4b_c12_verificar.py:197](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/e4b_c12_verificar.py:197) [não verificado]
-
-Os quatro testes de dia nulo exercitam diretamente uma escrita cercada na pergunta e comparam a linha inteira antes e depois; **eles não reproduzem integralmente as cascatas dos respectivos testes originais**. A cobertura de veto nessas cascatas permanece [não verificado]. [test_pep_reentrada.py:230](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/tests/test_pep_reentrada.py:230) [nao verificado]
-
-Para a sessão executar os testes alterados: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python manage.py test \
-  chamados.tests.test_e1_fila_v2_2_integracao \
-  chamados.tests.test_o168_pai_com_conversa_no_gate \
-  chamados.tests.test_pep_reentrada \
-  chamados.tests.test_resposta_nao_e_fantasma \
-  chamados.tests.test_reconciliar_pergunta_orfa \
-  chamados.tests.test_e4b_c12_selo
-```
-
-Para aplicar **em memória** o mutante que faz o veto sempre retornar `False` e executar os cinco testes de recusa: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python -c '
-import os, sys, django
-from unittest.mock import patch
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.saas")
-django.setup()
-from django.core.management import execute_from_command_line
-labels = [
- "chamados.tests.test_e1_fila_v2_2_integracao.FechoRepassePostgresTest.test_HIST_exportada_recusa_costura",
- "chamados.tests.test_o168_pai_com_conversa_no_gate.PaiComConversaNoGateTest.test_RED_cerca_recusa_pergunta_sem_dia",
- "chamados.tests.test_pep_reentrada.OSinalEDeEscopoDaTransacao.test_RED_cerca_recusa_pergunta_sem_dia",
- "chamados.tests.test_resposta_nao_e_fantasma.RespostaNaoEhFantasmaTest.test_RED_cerca_recusa_pergunta_sem_dia",
- "chamados.tests.test_reconciliar_pergunta_orfa.ReconciliarPerguntaOrfaTest.test_RED_cerca_recusa_pergunta_sem_dia",
-]
-with patch("chamados.services.fio.veto_de_competencia", return_value=False):
-    execute_from_command_line(["manage.py", "test", *labels])
-'
-```
-
-Esse mutante é mais amplo que remover apenas o tratamento de `None`; o resultado e a mordida de cada teste estão [não verificado]. O mutante S06 tem comando próprio: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python -m chamados.tests.e4b_c12_verificar --mutante S06
-```
-
-**G4 permanece aberto.** Nenhum savepoint foi reduzido e nenhum teto foi alterado. O resolver também percorre disputas abertas do colaborador, inclusive para perguntas sem destino ligado diretamente ao chamado; não estabeleci uma condição que dispense a cerca sem perder esse alcance. [disputa_emissao.py:1904](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/disputa_emissao.py:1904) [disputa_emissao.py:2063](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/disputa_emissao.py:2063)
-
-A medida anterior fornecida para subir ao topo é: gate **+1 SAVEPOINT e +1 RELEASE**; `_gravar_estado` sem pergunta **+1 par**; batida com um furo fechado **+2 pares**; com três furos fechados **+4 pares**. Nenhum `SELECT` adicional foi informado nessa medida; o resultado após este diff está [não verificado]. Os tetos permanecem em 60, 28, 220 e 280, respectivamente. [ponto/tests/test_selo_chokepoint_escrita.py:124](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:124) [ponto/tests/test_selo_chokepoint_escrita.py:134](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:134) [ponto/tests/test_selo_chokepoint_escrita.py:196](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:196) [ponto/tests/test_selo_chokepoint_escrita.py:210](/home/ronald/wt-codex-e4c-f1-b2-232432/app/ponto/tests/test_selo_chokepoint_escrita.py:210)
-
-Quanto aos campos usados pelo diff: as fixtures escrevem `data_evento`; em produção, `gravar_dia_do_fato` o atribui e a vigia lê tanto o dia projetado quanto o gravado para consultar o veto. O carimbo é escrito pela porta `_escrever_carimbo`; os testes leem `materializada_em`, `chamado_destino_id` e os demais valores persistidos para verificar o resultado. O censo completo de escritores e leitores desses campos permanece [não verificado]. [fio.py:839](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/fio.py:839) [fio.py:1389](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/services/fio.py:1389) [juizes.py:338](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/juizes.py:338) [models.py:3216](/home/ronald/wt-codex-e4c-f1-b2-232432/app/chamados/models.py:3216) [nao verificado]
-
-R4b e o diagrama ficaram intocados, conforme a instrução recebida; a contagem necessária para decidir R4b e a regeneração do diagrama cabem à sessão. [não verificado]
-
-_6779 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6780 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
