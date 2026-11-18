@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: codex_pergunta.sh | pid=1722170
+lei: S6-DOBRA -- intermitente que trabalha em feriado recebe (A) horas normais ou (B) em dobro? A cura S6-INTERMITENTE-FERIADO-CURA-A aplica (A) (descricao do MotorIntermitente, motor_calculo_v2.py:3569-3575 'sem feriado-100 automatico'); resposta vem do DP; (B) entra como adicional depois, sem desfazer.
+S6-INTERMITENTE-FERIADO-CURA-A 23:1x: aval registrado (PROMPTS, BACKLOG); REVISAO-DO-AVAL (Codex verificador pid 1725346) e censo item 1 (Codex censo pid 1725347) em paralelo, logs/S6-INTERMITENTE/; construtor so com o censo fechado.
 E4C-F1-B2 23:11: os 18 vermelhos sao da BRANCH -- os mesmos 9 modulos no main 28802cbcf: Ran 118 OK rc=0 (c2b/main_mesmos_9.log); 17 deles ja vermelhos no v3/vizinhos.log 15:18 e nunca tratados. Aval CORTE-B2-CERCA item 3 exige suite inteira: B2 NAO vai ao opus. Codex censo classifica (teste com regra antiga x regressao x teto de queries x diagrama), c2b/suite_reprova/leitura1.r.
 PORTA-ESTADO-NA-TELA 23:11: suite INTEIRA @6fe59075c Ran 16719 OK rc=0; opus final (verificador) rodando.
 E4C-F1-B2 22:42: suite INTEIRA @9057ce4e0 VERMELHA -- Ran 16632, failures=17 errors=1 (chamados pep_reentrada/o168/fila_v2_2/reconciliar, ponto chokepoint, core diagrama); triagem do log em agente sonnet (branch x nao-branch); opus final segura.
