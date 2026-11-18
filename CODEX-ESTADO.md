@@ -1,7 +1,42 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 00:15** · publicado em **18/11/2026 00:20** (UTC-3)
+> Ultima resposta processada: **18/11/2026 00:28** · publicado em **18/11/2026 00:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 00:28 · sessao 62b73e394696 · E4C-F1-B2 · verificador · origem=Code
+
+**1. Premissas do aval — NÃO PROCEDE, com uma referência ao main não verificada.**
+
+- O teste existe e hoje afirma que `chamado_destino_id` passa a ser o PK do encerrado e que seu `status_local` continua `resolvido`. Ele não afirma hoje a linha inteira da pergunta, `materializada_em` ou ausência de novo chamado ([teste R4b](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:312)).
+- Na cópia, o comentário sobre o escopo literal e a pergunta da exportada no RELATO está em [reconciliador.py:1644](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1644). O conteúdo e a numeração `:1603-1604` no **main 4307c01e6** ficam **[não verificado]**: esta cópia não disponibiliza o repositório Git para `git show`.
+- O anexo CERCA-B2-REGRAS-2, item 2(ii), determina julgamento por item fora de cerca e desfazimento integral pelo abridor dentro dela; o item 5 determina que o resolver aninhado não abre outro savepoint e a recusa sobe ao abridor. A localização em arquivo desses anexos é **[não verificado]**; a leitura é do texto fornecido.
+- No R4b, a costura histórica e o resolver estão no mesmo ato cercado; o `save` da pergunta chama a vigia antes da gravação, e o abridor desfaz o savepoint quando há veto ([reconciliador.py:1690](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1690), [models.py:3555](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/models.py:3555), [fio.py:1389](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:1389), [fio.py:1425](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:1425)). O resolver aninhado usa esse mesmo escopo ([disputa_emissao.py:1904](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/disputa_emissao.py:1904)). Isso sustenta a atribuição **para este caminho**, não uma conclusão sobre todos os laços fora de cerca.
+
+**2. Colisão com aval vigente — NÃO PROCEDE quanto a colisão demonstrada; a condição da contagem permanece [não verificado].**
+
+VAGA-E-DA-B2 exige a contagem de perguntas vivas sem chamado em competência entregue ao lado da inversão. O novo aval menciona “1.222”, mas o dado fornecido não mostra a definição nem o resultado do censo que permita conferir se esse número satisfaz a condição; a localização dos anexos e do `c2b/censo1.r` em arquivo também é **[não verificado]**. Não é possível dar essa condição por cumprida só pela menção ao número.
+
+O desfazimento integral do HIST cercado e a trilha de retenção são compatíveis com o texto fornecido de CERCA-B2-REGRAS-2, itens 5 e 6, e com a implementação citada acima ([reconciliador.py:1701](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1701)). Não identifiquei colisão demonstrada com CORTE-B2-CERCA-NO-ESCRITOR ou RESPOSTAS-1711-2135 no caminho R4b; a localização desses anexos em arquivo é **[não verificado]**.
+
+**3. Condições literais na cópia — NÃO PROCEDE para o cenário R4b especificado, condicionado ao veto ser alcançado.**
+
+A fixture cria uma pergunta `orfao_14h`, com dia preenchido, e um único `batida_ausente` encerrado no mesmo dia ([teste:101](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:101), [teste:113](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:113)). O mapa associa `batida_ausente` a `orfao_14h` ([models.py:3847](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/models.py:3847)). Com esse histórico único, **c1 e c2 não são chamados**: eles só são tentados quando `hist` está vazio, antes de entrar no bloco cercado ([reconciliador.py:1630](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1630), [reconciliador.py:1652](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1652)).
+
+Assim, **se a vigia veta nesse caminho**, a costura não persiste, o savepoint desfaz o ato e a pergunta é recarregada; o caminho não chega depois ao c2 para criar chamado ([fio.py:1418](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:1418), [reconciliador.py:1701](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1701)). Isso sustenta a comparação da linha persistida inteira e a ausência de novo chamado **nesse cenário**, não como propriedade geral: com `hist` vazio, c1 pode carimbar e c2 pode chamar `ChamadoColaborador.abrir` fora desse savepoint histórico ([reconciliador.py:399](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:399), [reconciliador.py:950](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:950)).
+
+**Há, sim, possível escrita fora da pergunta e do savepoint:** após o veto, `registrar_retencao` consulta a última retenção e, se mudou, chama `evento` para criar `LogAuditoria` associado ao chamado, com `empresas_vetadas`. O retorno de `reatar_pergunta_orfa` é `False`; a trilha é best-effort, portanto não se deve exigir incondicionalmente uma linha nova ([reconciliador.py:1702](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1702), [reconciliador.py:459](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:459), [observ.py:94](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/core/observ.py:94)).
+
+**Quem escreve e quem lê no teste proposto:** [nao verificado]
+
+| Campo ou fato | Escrita relevante | Leitura relevante |
+|---|---|---|
+| `chamado_destino` | A fixture nasce com `None`; a costura atribui e salva pela porta ([teste:109](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:109), [fio.py:973](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:973)). | O teste atual relê e compara com o encerrado ([teste:314](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:314)). |
+| `materializada_em` | O carimbo é atribuído por `_escrever_carimbo`, chamado pelas portas de carimbo; c1 pode chamar `carimbar` ([models.py:3216](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/models.py:3216), [reconciliador.py:399](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:399)). | A elegibilidade de órfãs e o derivador leem o campo ([reconciliador.py:1548](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1548), [disputa_emissao.py:226](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/disputa_emissao.py:226)). |
+| `data_evento` | A fixture a cria com o dia; a porta de costura pode datar quando falta ([teste:109](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:109), [fio.py:915](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:915)). | O reconciliador a usa para derivar e buscar o histórico; a vigia lê também o dia gravado ([reconciliador.py:1601](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1601), [fio.py:1403](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:1403)). |
+| `status_local` do encerrado | A fixture cria `resolvido`; transições normais passam por `_gravar_estado` ([teste:116](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:116), [models.py:201](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/models.py:201)). | O HIST filtra encerrados e o teste atual relê e compara o status ([reconciliador.py:1631](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:1631), [teste:316](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:316)). |
+| Criação de chamado no dia | A fixture cria o encerrado; em outro ramo, c2 chama `abrir`, cujo corpo pode criar chamado ([teste:116](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:116), [reconciliador.py:954](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/reconciliador.py:954), [models.py:1142](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/models.py:1142)). | `_do_dia` lê **somente** `batida_ausente` com aquele `data_turno`; para afirmar literalmente nenhum chamado novo de qualquer tipo no dia, o teste precisa de uma consulta com alcance correspondente ([teste:137](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:137)). |
+
+**4. Exportada, dinheiro ou `!` fora do declarado — NÃO PROCEDE quanto a toque adicional demonstrado.** O teste cria uma exportação de fixture e o veto consulta a competência; o ato cercado recusa a escrita da pergunta e pode registrar a trilha descrita acima ([teste:101](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:101), [fio.py:1358](/home/ronald/codex_ws/ca25543b34e2e4b6fdb434047df1a80e08bac2da/app/chamados/services/fio.py:1358)). Efeito em dados de produção, dinheiro e resultado do RED/green são **[não verificado]**. Não executei testes nem alterei arquivos.
 
 ## 18/11 00:15 · sessao 9af7d9be3de3 · E4C-F1-B2 · construtor · origem=Code
 
@@ -598,43 +633,4 @@ O hash do cabeçalho não pôde ser confirmado por Git: esta cópia não contém
 
 PROCEDE: 3
 
-## 17/11 21:23 · sessao a9faaa9b582a · PORTA-INSTRUMENTO · verificador · origem=Code
-
-1. **Para os dois contadores de recusa, o dia é capturado uma vez no selo e é o mesmo valor** nas linhas sintéticas, no gerador e na conferência: o selo atribui `hoje`, usa-o no log, passa-o na CLI e o usa nas duas linhas esperadas ([bin/tests/test_recusa_estado.sh:227](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:227)). O gerador converte esse argumento para `date` e passa o resultado aos dois leitores ([bin/gerar_estado.py:269](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:269), [bin/gerar_estado.py:406](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:406)); como recebem uma data válida, os fallbacks `today()` dos leitores não são executados ([bin/recusa_estado.py:41](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:41), [bin/recusa_estado.py:64](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:64)).
-
-   **No gerador inteiro, porém, não há apenas uma leitura do relógio:** há outras leituras para outros placares e contadores, inclusive `date.today()` no placar estrutural e duas chamadas explícitas a `time.time()` ([bin/gerar_estado.py:79](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:79), [bin/gerar_estado.py:284](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:284), [bin/gerar_estado.py:289](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:289)). O total de leituras transitivas do processo inteiro é **[não verificado]**.
-
-2. Os chamadores encontrados na cópia são:
-
-   - O próprio `__main__` chama `gerar` com três argumentos ([bin/gerar_estado.py:406](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:406)).
-   - O selo chama a CLI com o terceiro argumento `"$hoje"` ([bin/tests/test_recusa_estado.sh:230](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:230)).
-   - `relato.sh` chama a CLI com dois argumentos; **não quebra por falta de argumento em `gerar`**, pois o `__main__` fornece `date.today()` quando o terceiro argumento da CLI falta ([bin/relato.sh:38](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/relato.sh:38), [bin/gerar_estado.py:407](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:407)).
-   - O teste do painel importa o módulo para ler `PAINEL_ALVO`; não chama `gerar` ([bin/tests/test_painel_e_do_code.sh:20](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_painel_e_do_code.sh:20)).
-
-   Não encontrei chamador por import que invoque essa função com dois argumentos; chamadores dinâmicos ou externos à cópia são **[não verificado]**.
-
-3. Pela lógica das novas checagens AST, seriam rejeitadas estas mutações exatas: trocar a assinatura para `def gerar(raiz, dst, hoje=None):`, trocar `_hoje_recusa = hoje` por `_hoje_recusa = datetime.date.today()`, ou substituir na chamada do `__main__` `datetime.date.fromisoformat(sys.argv[3])` por `datetime.date.today()` ([bin/tests/test_recusa_estado.sh:39](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:39)). **Execução desses mutantes: [não verificado].**
-
-   Um mutante que passaria por essas checagens é inserir imediatamente antes de `_hoje_recusa = hoje`:
-
-   ```python
-   if hoje.isoformat() == '2040-01-01':
-       hoje = hoje.replace(day=2)
-   ```
-
-   Ele preserva a assinatura, a atribuição examinada e a expressão da CLI, mas altera o dia entregue aos leitores nessa data ([bin/tests/test_recusa_estado.sh:39](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:39), [bin/gerar_estado.py:269](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:269)). O próprio selo declara o limite de uma mutação condicionada a data que ele não exercita ([bin/tests/test_recusa_estado.sh:224](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:224)). **Execução do mutante: [não verificado].**
-
-4. **Escrita e leitura do valor:**
-
-   - O selo escreve a variável shell `hoje` pela leitura do relógio; lê-a para montar o log sintético, o terceiro argumento e as linhas esperadas ([bin/tests/test_recusa_estado.sh:227](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/tests/test_recusa_estado.sh:227)).
-   - A CLI recebe esse terceiro argumento em `sys.argv[3]`; `__main__` o lê, converte e entrega ao parâmetro `hoje` de `gerar`. Sem terceiro argumento, a borda escreve o valor obtido de `today()` ([bin/gerar_estado.py:403](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:403)).
-   - `gerar` lê `hoje`, atribui-o a `_hoje_recusa` e lê `_hoje_recusa` nas duas chamadas ao medidor ([bin/gerar_estado.py:269](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:269)).
-   - `recusa_estado.ler` e `ler_porta_export` recebem e leem esse valor, passando-o aos respectivos leitores de `recusa_critica` ([bin/recusa_estado.py:37](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:37), [bin/recusa_estado.py:60](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/recusa_estado.py:60)).
-
-**Linha de fila, fora do delta:** a afirmação de “uma leitura” não descreve todas as leituras de relógio do gerador; a coincidência demonstrada acima é a dos dois contadores de recusa ([bin/gerar_estado.py:79](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:79), [bin/gerar_estado.py:284](/home/ronald/codex_ws/37a4baa9eacfc0dae746ce89c0316d5299dc2ef7/bin/gerar_estado.py:284)).
-
-A cópia disponível não contém metadados Git; a correspondência independente dos hashes e do diff anexado é **[não verificado]**.
-
-PROCEDE: N
-
-_6760 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6761 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
