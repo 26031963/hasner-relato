@@ -1,7 +1,270 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 18:52** · publicado em **18/11/2026 18:56** (UTC-3)
+> Ultima resposta processada: **18/11/2026 19:10** · publicado em **18/11/2026 19:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 19:10 · sessao c0153fbf6c21 · RAZAO-DA-SOBRA · leitura · origem=Code
+
+O censo preliminar confirma **14 acessos literais diretos em 10 arquivos** quando a unidade é uma expressão de leitura de `orfas` ou `n_orfas` **da ata**. A retomada coincide com esse recorte; ao incluir a grade derivada da ata, o próprio escritor, comandos e decisões que reconstroem a sobra, o universo é maior. A revisão semântica de todos os equivalentes e chamadores indiretos ainda é **[não verificado]**.
+
+A cópia não tem metadados Git acessíveis: `git rev-parse HEAD` retornou “not a git repository”. Portanto, a identidade desta cópia com o hash informado é **[não verificado]**. Não abri `models.py` nem `core/juizes.py`.
+
+## (a) Censo
+
+O script abaixo imprime **candidatos sintáticos**, com função e expressão, em `app/` e `bin/`. Ele inclui acessos à grade, escritas indiretas por métodos mutáveis e nomes que podem ser homônimos; a classificação exige leitura humana. Também procura referências ao classificador e nomes sugestivos para localizar derivações que não usem a chave literal. Não é prova de ausência de aliases, desempacotamento, SQL, acesso dinâmico ou outra grafia equivalente: **[não verificado]**.
+
+Executar na raiz da cópia, sem criar arquivo:
+
+```bash
+python3 -B - <<'PY'
+import ast
+from pathlib import Path
+
+RAIZES = (Path("app"), Path("bin"))
+CHAVES = {"orfas", "n_orfas"}
+PISTAS = ("orfa", "sobra", "cluster")
+PROIBIDOS = {"app/core/juizes.py"}
+
+def excluido(p):
+    return (
+        "tests" in p.parts
+        or "migrations" in p.parts
+        or p.name == "models.py"
+        or p.as_posix() in PROIBIDOS
+    )
+
+def funcao(n, pais):
+    while n in pais:
+        n = pais[n]
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            return n.name
+    return "<modulo>"
+
+def literal(n):
+    return n.value if isinstance(n, ast.Constant) and isinstance(n.value, str) else None
+
+for raiz in RAIZES:
+    if not raiz.exists():
+        continue
+    for p in sorted(raiz.rglob("*.py")):
+        if excluido(p):
+            continue
+        try:
+            arvore = ast.parse(p.read_bytes(), filename=str(p))
+        except (SyntaxError, ValueError, UnicodeError) as exc:
+            print(f"ERRO\t{p}\t{exc}")
+            continue
+
+        pais = {
+            filho: pai
+            for pai in ast.walk(arvore)
+            for filho in ast.iter_child_nodes(pai)
+        }
+        achados = []
+        for n in ast.walk(arvore):
+            classe = None
+            if isinstance(n, ast.Subscript) and literal(n.slice) in CHAVES:
+                classe = "CHAVE_" + (
+                    "LE" if isinstance(n.ctx, ast.Load) else "ESCREVE"
+                )
+            elif (
+                isinstance(n, ast.Attribute)
+                and n.attr in CHAVES
+                and isinstance(n.ctx, ast.Load)
+            ):
+                classe = "ATRIBUTO_LE"
+            elif (
+                isinstance(n, ast.Call)
+                and isinstance(n.func, ast.Attribute)
+                and n.func.attr in {"get", "pop", "setdefault"}
+                and n.args
+                and literal(n.args[0]) in CHAVES
+            ):
+                classe = "CHAVE_" + n.func.attr.upper()
+            elif (
+                isinstance(n, ast.Compare)
+                and any(isinstance(op, (ast.In, ast.NotIn)) for op in n.ops)
+                and any(literal(x) in CHAVES for x in [n.left, *n.comparators])
+            ):
+                classe = "PRESENCA_CHAVE"
+            elif (
+                isinstance(n, ast.Name)
+                and n.id == "classificar_orfas"
+            ):
+                classe = "CLASSIFICADOR"
+            elif isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if any(s in n.name.lower() for s in PISTAS):
+                    classe = "PISTA_FUNCAO"
+            if classe:
+                trecho = ast.get_source_segment(p.read_text(encoding="utf-8"), n)
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    trecho = n.name
+                trecho = " ".join((trecho or "").split())[:180]
+                achados.append((n.lineno, n.col_offset, classe, funcao(n, pais), trecho))
+
+        for linha, coluna, classe, nome, trecho in sorted(achados):
+            print(f"{p}:{linha}:{coluna}\t{nome}\t{classe}\t{trecho}")
+PY
+```
+
+O script cobre a sintaxe literal, não detecta por si só uma decisão baseada em nomes como `_resto`, nem faz análise de fluxo entre funções; por isso a matriz inclui achados da leitura dirigida ([app/ponto/turnos.py:1711](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1711)).
+
+### Leituras diretas da ata: 14 expressões, 10 arquivos
+
+| Arquivo:linha | Função | O que lê | Papel preliminar |
+|---|---|---|---|
+| [chamados/juizes.py:514](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/juizes.py:514) | `_celula_furada` | `orfas` e `n_orfas`: 2 | **DECIDE** se sobra prende o dia, condicionado à régua |
+| [chamados/services/materializacao.py:449](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/materializacao.py:449) | `_plantio_preenche_furo_na_data` | `orfas`: 1 | **DECIDE** plantio/materialização |
+| [escala/services/leitor_celula.py:187](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:187) | `_orfas_da_ata` | `orfas` e `n_orfas`: 2 | **MOSTRA/transporta**; contagem antiga vira `?` |
+| [ponto/juiz_batida.py:161](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/juiz_batida.py:161) | `periodos_do_dia` | `orfas`: 1 | **MOSTRA**; contrato declara que órfã não soma |
+| [ponto/management/commands/tripwire_celulas.py:264](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/tripwire_celulas.py:264) | `medir_sobra_com_tipo_trocado` | `orfas`: 1 | **DECIDE/MOSTRA** assinatura para vigilância |
+| [ponto/services/cartorio.py:839](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:839) | `insumos_da_ata` | `n_orfas`: 1 | **DECIDE** entrada/saída desconhecidas quando não há lâmpadas |
+| [ponto/services/cluster_espurio.py:29](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cluster_espurio.py:29) | `_leitura_da_celula` | verificação e índice de `orfas`: 2 | **DECIDE** cluster, inclusive sua premissa para chamado |
+| [ponto/services/esmeril_espelho.py:125](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/esmeril_espelho.py:125) | `assinaturas_do_colab` | `orfas`: 1 | **DECIDE/MOSTRA** assinatura recorrente |
+| [ponto/services/vigia_pareador_celula.py:74](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/vigia_pareador_celula.py:74) | `censo` | `n_orfas` e `orfas`: 2 | **DECIDE/MOSTRA** divergência do pareador |
+| [relatorios/cartao_pela_celula.py:288](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/cartao_pela_celula.py:288) | `orfas_e_isencao_da_ata` | `orfas`: 1 | **MOSTRA** no cartão |
+
+O total não conta duas vezes a leitura no mesmo nó, mas conta separadamente `get` e índice, inclusive na mesma função; não inclui o snapshot em `bin/`, que também lê a chave ([bin/snapshot_o118_col221.py:32](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/bin/snapshot_o118_col221.py:32)).
+
+### Grade e derivações adicionais: matriz preliminar
+
+| Arquivo:linha | Função | O que lê ou deriva | Papel |
+|---|---|---|---|
+| [escala/orfa_classe.py:58](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:58) | `classificar_orfas` | órfãs, tipo do dia, marco vazio e rajada | **DECIDE** classe; hoje sem chamador de produção encontrado |
+| [ponto/turnos.py:1711](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1711) | `papel_por_minuto_da_ata` | sobra dentro do vão; luz próxima e par/perna de pausa sob teto | **DECIDE/PAGA** indiretamente: atribui papel `X` ou deixa o dia sem mapa; efeito financeiro por caso **[não verificado]** |
+| [ponto/propositor.py:34](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/propositor.py:34) | `dia_degenerado` | grade, órfãs, furos e janela de cluster | **DECIDE** escalada de proposta |
+| [ponto/propositor.py:77](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/propositor.py:77) | atribuição global | limiar de sobra e tolerância de slot próprios | **DECIDE** atribuição proposta; abrangência de produção **[não verificado]** |
+| [escala/services/furos_diarios.py:22](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/furos_diarios.py:22) | `_furos_do_dia` | contagem da grade | **GRAVA** indiretamente em `FuroDiario`, pela porta ([ponto/portas/celula.py:1257](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/portas/celula.py:1257)) |
+| [folha/causas.py:43](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/folha/causas.py:43) | `classificar_causa` | presença de sobra, inclusive em folga | **DECIDE/MOSTRA** causa; efeito em pagamento **[não verificado]** |
+| [ponto/supra_juiz.py:392](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/supra_juiz.py:392) e [527](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/supra_juiz.py:527) | `classificar_dia` | presença e conteúdo de `orfas` | **DECIDE/MOSTRA** fato e motivo do dia |
+| [ponto/status_dia.py:188](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/status_dia.py:188) | `fatos_do_status` | quantidade de órfãs da grade | **DECIDE** fatos do status |
+| [ponto/services/bordas_realizado.py:49](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/bordas_realizado.py:49) | `_teve_batida_na_ata` | presença de órfãs na grade | **DECIDE** existência de batida |
+| [ponto/turnos.py:2679](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:2679) | `horas_reais_do_dia` | horas das órfãs | **DECIDE** insumo temporal |
+| [ponto/services/simular_dia.py:12](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/simular_dia.py:12) | `dia_perfeito` | presença de órfãs | **DECIDE** perfeição do dia |
+| [colaboradores/services/calendario.py:409](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/colaboradores/services/calendario.py:409) | `contexto_calendario` | presença e horas | **MOSTRA** |
+| [relatorios/pdf_espelho.py:477](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:477) e [552](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/relatorios/pdf_espelho.py:552) | `_coletar_dados_espelho` | horas por grade/data | **MOSTRA** |
+| [ponto/management/commands/propor_reorganizacao.py:104](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/propor_reorganizacao.py:104) | `_run` | horas da grade | **DECIDE/MOSTRA** proposta |
+| [ponto/management/commands/detectar_par_relampago.py:140](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/detectar_par_relampago.py:140) | `_score_geometria` | quantidade de órfãs | **DECIDE/MOSTRA** escore |
+| [ponto/services/cartorio.py:736](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:736) e [1426](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1426) | `ata_do_dia`, `_julgar_colab_corpo` | sobra da grade | **DECIDE/GRAVA** ata e insumos |
+| [escala/utils.py:1979](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:1979) | `montar_grade_prevista_periodo_por_turno` | órfãs da própria grade | **DECIDE/GRAVA** estrutura da grade; somente endereço, sem proposta de alteração |
+
+A categoria **PAGA** sinaliza caminho potencial, não prova de valor pago em produção; a classificação completa de efeito financeiro é **[não verificado]**.
+
+## (b) Classes propostas
+
+São classes **dentro de `classificar_orfas`**, usando instante e contexto da ata quando disponíveis. A ata atual grava horas como strings ([ponto/services/cartorio.py:742](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:742)); o classificador atual devolve dicionário por `HH:MM` ([escala/orfa_classe.py:53](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:53)). Isso não distingue duas batidas no mesmo minuto, como o par de col67; a identidade por batida e o instante completo são necessários antes de contar sobras com fidelidade. O caso de col67 está no dado fornecido, **[não verificado em arquivo:linha]**.
+
+| Classe proposta | Base e decisão |
+|---|---|
+| `FOLGA_DESMENTIDA` | **DECISÃO existente:** prevalece para dia não considerado trabalho pelo classificador ([escala/orfa_classe.py:62](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:62)). Se o dia reconstruído for `indefinido`, a aplicação desse ramo também precisa ser examinada; sua correção para todos os estados é **[não verificado]**. |
+| `ECO_PROXIMO_DE_LUZ` | **DECISÃO candidata, limitada ao domínio já existente:** `JANELA_CLUSTER_MIN = 15` ([escala/orfa_classe.py:28](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:28)); o papel atual aplica distância até luz acesa **dentro do vão** ([ponto/turnos.py:1711](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1711), [1742](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1742)). Col67 motiva preservar segundos, sem usar tipo gravado **[não verificado em arquivo:linha]**. A constante não autoriza chamar qualquer par oposto de eco nem estender o domínio para fora do vão. |
+| `PAR_DE_PAUSA_DEDUZIDO` / `PERNA_DE_PAUSA` | **DECISÃO candidata no domínio já descrito:** o código usa `intra_max_s` no par ou na perna ligada a luz de intervalo ([ponto/turnos.py:1761](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1761)). Col44 e col331 motivam o par; col87 e col975 mostram que menos marcos que batidas não basta para afirmar pausa **[não verificado em arquivo:linha]**. O valor aplicável depende do regime/chamador; seleção para cada caso **[não verificado]**. |
+| `APOS_SAIDA_FINAL` | A posição relativa à saída final é descritiva; **qual distância ou condição faz a avulsa contar como novo turno? PERGUNTA DE LEI 1.** Col214 em 29/10 e col263 em 31/10 motivam o caso **[não verificado em arquivo:linha]**. Não atribuo um teto novo. |
+| `EXCEDENTE_SEM_ENQUADRAMENTO` | Para escala com menos marcos que batidas, ou par sem elementos suficientes para pausa, manter `INDEFINIDA` até haver critério; **qual limite ou evidência separa pausa, jornada adicional e cadastro inadequado? PERGUNTA DE LEI 2.** Col87 e col975 motivam a pergunta **[não verificado em arquivo:linha]**. |
+
+A sonda fornecida rotulou 16 ocorrências como próximas de tipo oposto e 89 como longe, em 83 dias e 50 pessoas; esses são rótulos da sonda, não a saída real de `classificar_orfas` nem contagem de classes propostas **[não verificado em arquivo:linha]**. Em particular, o dado não demonstra que as 16 satisfaçam o domínio de `ECO_PROXIMO_DE_LUZ` ([ponto/turnos.py:1735](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/turnos.py:1735)).
+
+A precedência entre classes propostas e a correspondência inequívoca de cada sobra a uma batida são **[não verificado]**. Não há regra proposta baseada no tipo gravado.
+
+## (c) Esboço da sombra
+
+Não há acesso ao banco nesta sessão; os totais antes e depois são **[não verificado]**. O esboço abaixo mede a **ata lavrada**, por competência de cada empresa, usa a função real e inicia uma transação somente leitura. A seleção do universo exato da sonda original e a equivalência entre ata e grade original precisam ser conferidas. `?`, horários duplicados e colisões do dicionário são contados como não mensuráveis, sem inventar instante ([escala/services/leitor_celula.py:180](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:180), [escala/orfa_classe.py:53](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/orfa_classe.py:53)).
+
+```python
+# Esboço para manage.py shell; não executado.
+from collections import Counter
+from django.db import connection, transaction
+from escala.models import CelulaDia
+from escala.services.leitor_celula import grade_da_celula
+from escala.orfa_classe import classificar_orfas, INDEFINIDA
+from folha.export import janela_competencia
+
+ANO, MES = 2026, 11
+
+with transaction.atomic():
+    with connection.cursor() as cursor:
+        # Deve ser o primeiro comando da transação.
+        cursor.execute("SET TRANSACTION READ ONLY")
+
+    # ESBOÇO: fornecer aqui o MESMO universo de empresas/colaboradores
+    # da sonda, sem filtrar apenas vínculos ativos hoje.
+    colaboradores = UNIVERSO_DA_SONDA  # [não verificado]
+
+    antes = Counter()
+    depois = Counter()
+    for colab in colaboradores:
+        # Confirmar no ambiente a relação empresa do colaborador.
+        empresa = EMPRESA_DO_COLABORADOR_NO_UNIVERSO  # [não verificado]
+        ini, fim = janela_competencia(empresa, MES, ANO)
+        cels = {
+            c.data: c
+            for c in CelulaDia.objects.filter(
+                colaborador=colab, data__range=(ini, fim)
+            )
+        }
+        grade = grade_da_celula(colab, ini, fim, celulas=cels)
+        for dia in grade["dias"]:
+            horas = dia.get("orfas") or []
+            if not horas:
+                continue
+            if (any(not isinstance(h, str) or len(h) < 5
+                    or h[2] != ":" or not h[:2].isdigit()
+                    or not h[3:5].isdigit() for h in horas)
+                    or len(set(horas)) != len(horas)):
+                antes["nao_mensuravel_por_hhmm"] += len(horas)
+                continue
+
+            classes = classificar_orfas(dia)  # função real do HEAD da cópia
+            assert len(classes) == len(horas)
+            antes["sobras"] += len(horas)
+            antes["indefinidas"] += sum(
+                classes[h] == INDEFINIDA for h in horas
+            )
+
+            # PSEUDOCÓDIGO: somente após construir a proposta na MESMA
+            # autoridade e disponibilizar identidade + instante por sobra:
+            # novas = classificar_orfas(dia_com_instantes_e_contexto)
+            # depois["indefinidas"] += número de sobras INDEFINIDA
+            # depois["sobras"] += número de sobras
+
+    print("ANTES", dict(antes))
+    print("DEPOIS [não executável: proposta ainda não construída]", dict(depois))
+```
+
+`janela_competencia` delega à janela de fechamento ([folha/export.py:47](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/folha/export.py:47)). O esboço não permite afirmar o número depois: além da proposta inexistente, precisa do universo e da identidade de cada batida. Uma comparação válida deve conservar o mesmo universo e informar separadamente os não mensuráveis **[não verificado]**.
+
+## (d) Escrita, leitura e chamador
+
+`ata_do_dia` constrói `n_orfas` e `orfas` a partir da grade ([ponto/services/cartorio.py:730](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:730)); é chamado no julgamento, entre outros pontos, em [ponto/services/cartorio.py:1437](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:1437). O conjunto dos leitores diretos encontrados está na tabela de 14 expressões acima; `_orfas_da_ata` alimenta a grade lida por outros consumidores ([escala/services/leitor_celula.py:420](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/services/leitor_celula.py:420)).
+
+A busca por `classificar_orfas`
+
+[truncado em 20000 de 21164 caracteres]
+
+## 18/11 19:08 · sessao bb0c978e545a · E4C-F6F7 · verificador · origem=Code
+
+**Fecho: LIMPO — 0 achados BLOQUEIA procedentes na leitura do delta fornecido.** Há uma limitação de prova na causa exata da queda da c12 e na identificação da árvore: esta cópia não contém metadados Git nem os logs da volta; o hash, os 20 failures/10 errors e o resultado verde de 8110 testes são dados informados no pedido, **[nao verificado]**. [nao verificado]
+
+1. **Item 1(a): fecha no literal, pelo código examinado.** O cron de produção declara `vigiar_fio_morto --alarme --alarme-passivo` em [app/config/crons.py:1737](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/config/crons.py:1737). O comando chama a função real uma vez por rodada, sobre todas as perguntas em frota ou com recorte por empresa, em [vigiar_fio_morto.py:189](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:189). O esperado é zero em [vigiar_fio_morto.py:102](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:102).
+
+   Se o número for diferente de zero, o comando o imprime e, em frota, o grava no carimbo; **esse contador não provoca `SystemExit(2)`**, pois não está nas listas de alarme. O ESTADO mostra a divergência como `FORA DO ESPERADO` ([vigiar_fio_morto.py:85](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:85), [vigiar_fio_morto.py:216](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:216), [vigiar_fio_morto.py:241](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:241), [bin/fio_estado.py:191](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/bin/fio_estado.py:191)). O papel de vigia, contador esperado zero e nunca juiz está declarado em [CLAUDE.md:169](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/CLAUDE.md:169).
+
+   O caso positivo do teste exige `1` no carimbo e na saída, esperado `0` e ausência nas listas de alarme; portanto, **mataria**, por exemplo, o mutante que grava sempre `0` em `censo.validada_projetada_sem_linha` ([test_f7_vigia_validada_sem_linha.py:39](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:39)). Um mutante que limitasse o resultado a `min(numero, 1)` sobreviveria aos três casos desse arquivo, que só esperam zero ou um; essa é análise do teste, **não execução de mutantes** ([test_f7_vigia_validada_sem_linha.py:39](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:39), [test_f7_vigia_validada_sem_linha.py:47](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:47), [test_f7_vigia_validada_sem_linha.py:55](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:55)). A execução efetiva desses mutantes é **[nao verificado]**.
+
+2. **Escritores e leitores.**
+
+   - A validação normal grava `validada_em` e `validada_por` e registra o ato de validação com o mesmo instante em [validacao.py:161](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/services/validacao.py:161). Há outros caminhos para esses campos; a própria árvore mostra, por exemplo, limpeza em [models.py:1702](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/models.py:1702).
+   - A porta `DecisaoPergunta.registrar` grava as linhas em [models.py:4329](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/models.py:4329). O predicado compartilhado lê projeção e atos, confrontando pergunta, tipo e instante, em [models.py:4238](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/models.py:4238). O contador lê esse predicado e soma somente linhas de validação faltantes em [backfill_decisoes_pergunta.py:94](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/backfill_decisoes_pergunta.py:94).
+   - O vigia escreve `censo.validada_projetada_sem_linha` e `esperado.validada_projetada_sem_linha` no JSON de frota; `_carimbar` grava por arquivo temporário e `os.replace` em [vigiar_fio_morto.py:126](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:126), [vigiar_fio_morto.py:250](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:250). Rodada com `--empresa` imprime o recorte, mas não o publica como frota ([vigiar_fio_morto.py:276](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:276)).
+   - `fio_estado` lê o carimbo e compara genericamente cada chave de `esperado` com `censo`; `gerar_estado` usa esse leitor e seu compositor em [bin/fio_estado.py:121](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/bin/fio_estado.py:121) e [bin/gerar_estado.py:260](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/bin/gerar_estado.py:260). O `pipeline_placar` **não compara essa chave**: suas chamadas explícitas são para `fio_mudo_alvos` e `nunca_bateu_sem_adesao` em [pipeline_placar.py:135](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/core/management/commands/pipeline_placar.py:135).
+
+3. **Classes já reprovadas:** no delta fornecido, não identifiquei segundo juiz, escritor de domínio, relógio fora da borda, derivação paralela, mudança de ordem de trava ou segundo significado para o campo novo. O contador delega ao predicado existente; a nova escrita é a fotografia do vigia, não uma gravação da pergunta ou do ato ([backfill_decisoes_pergunta.py:100](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/backfill_decisoes_pergunta.py:100), [vigiar_fio_morto.py:183](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:183)). O caso positivo tem a mordida descrita no item 1; cobertura para contagens maiores que um nesse teste específico permanece a limitação indicada, sem achado BLOQUEIA demonstrado ([test_f7_vigia_validada_sem_linha.py:39](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:39)).
+
+4. **Folha, exportação, retenção, DiaPago e competência entregue:** o delta **c10 → c12b fornecido** altera o comando do vigia e testes, sem alterar diretamente arquivos desses domínios **[nao verificado: diff não conferível por Git nesta cópia]**. A afirmação mais ampla de que a obra não os toca pelo comportamento não é sustentada: a própria regra de tarefa do dia tem leitores de retenção em [app/docs/JUIZES.md:73](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/docs/JUIZES.md:73). Para **este delta**, a chamada nova do contador só lê perguntas e decisões e grava o carimbo do vigia ([backfill_decisoes_pergunta.py:101](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/backfill_decisoes_pergunta.py:101), [vigiar_fio_morto.py:250](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:250)). Impacto medido na competência 11 e em produção: **[nao verificado]**.
+
+5. **Harness c12 → c12b.** As duas linhas fornecidas acrescentam um mock do novo contador aos ambientes dos testes de C5 em memória e de fio mudo/placar; não alteram o comando de produção ([test_e4a2_c5_memoria.py:124](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_e4a2_c5_memoria.py:124), [test_fio_mudo_placar.py:113](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/core/tests/test_fio_mudo_placar.py:113)). A causa **compatível com o código** é que a c12 acrescentou ao `handle` uma dependência que esses ambientes isolados ainda não dublavam; o primeiro extrai o `handle` por AST e o segundo declara que dubla derivações externas ([vigiar_fio_morto.py:192](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/management/commands/vigiar_fio_morto.py:192), [test_e4a2_c5_memoria.py:135](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_e4a2_c5_memoria.py:135), [test_fio_mudo_placar.py:116](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/core/tests/test_fio_mudo_placar.py:116)). As linhas curam essa dependência ausente nos dois harnesses; a integração real do contador continua coberta pelo teste próprio do vigia em [test_f7_vigia_validada_sem_linha.py:27](/home/ronald/codex_ws/7d5a40f57c4e70510df41ba5c19c2aed8d5a36b5/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:27).
+
+   **Não posso afirmar que essa foi a causa de cada uma das 30 ocorrências, identificar o terceiro módulo ou confirmar pelos logs que a c12b curou toda a causa da volta:** os logs e tracebacks não foram fornecidos **[nao verificado]**. A leitura das duas linhas, por si, também não demonstra uma falha de produção escondida; a execução real e o verde informado continuam **[nao verificado]**. [nao verificado]
 
 ## 18/11 18:52 · sessao a7c0bb4360d8 · CURA-CHEGA-A-FROTA · sonda · origem=Code
 
@@ -1955,208 +2218,4 @@ Em pauta existente, os controles dependem da pauta e do usuário, não desse est
 
 Achados enviados ao agente principal, com as condições da lista, as portas de validação, cobrança e resgate, e a distinção entre o estado da pergunta e o verbo do chamado.
 
-## 18/11 18:06 · sessao dedab06910a2 · - · - · origem=Ronald (tmux)
-
-Resultados enviados ao agente principal, com referências para o card, o modal do fio e as portas de rejeição, correção, conferência de data e reabertura.
-
-## 18/11 18:05 · sessao 5935b3e9779c · B2B-RETAGUARDA-1811-1810 · sonda · origem=Code
-
-O caminho localizado no vigia é `vigiar_fio_morto`, que abre `tranca_em_lote()` antes dos censos; o censo de alcance usa `alimentar_portas`, e seu caminho para as perguntas do colaborador passa por `_no_app` → `perguntas_do_app` → `pergunta_viva`. A sonda percorre todos os colaboradores com perguntas pelo trecho `_no_app` → `perguntas_do_app` dentro do mesmo lote, inclusive perguntas sem célula; essa ampliação do universo em relação ao censo de alcance é necessária para medir todas as perguntas de disputa. [app/chamados/management/commands/vigiar_fio_morto.py:176; app/chamados/services/vigia_fio.py:560; app/chamados/juizes.py:1667; app/chamados/services/pergunta_no_app.py:45]
-
-- `pergunta_viva` é o juiz C6; `q_vivas()` é somente seu pré-filtro generoso. A sonda chama `perguntas_do_app`, que usa ambos, sem reproduzir o predicado. [app/chamados/juizes.py:866; app/chamados/models.py:3569; app/chamados/services/pergunta_no_app.py:52]
-- `_dia_de_turno_da_pergunta` exclui conversas do dia de turno. Para converter o dia em competência, a sonda chama `competencia_do_fato`, usada pela guarda de validação; ela usa a janela da empresa, não necessariamente o mês civil. [app/chamados/juizes.py:338; app/chamados/services/validacao.py:209; app/chamados/services/materializacao.py:788; app/chamados/services/passivo_validado.py:86]
-- `competencia_entregue` responde **entregue** e, com `registro=True`, devolve o TXT que vale; `competencia_trancada` responde **trancada**. O TXT mora em `ExportacaoDominio`, por empresa, mês e ano, e seu instante é `gerado_em`. [app/folha/export.py:556; app/ponto/services/fechamento.py:1473; app/folha/models.py:75]
-- O instante do ato é `DecisaoPergunta.ato_em`. O modelo não tem campo de porta; `ato_motivo` é texto de trilha, não uma identificação geral confiável da porta. A saída usa `porta=?` para todos os atos. [app/chamados/models.py:4166; app/chamados/models.py:4188]
-
-A janela da medida II é `[agora − 60 dias, agora]`. `II_SEM_TXT` conta **atos**, não dias distintos; atos sem dia de turno contam como erro, pois sua competência não é determinável. Em I, `vivas` conta as vivas com dia por empresa e competência, e `entregue_nao_trancada` é o subconjunto pedido; vivas sem dia aparecem separadamente. [app/chamados/juizes.py:338; não verificado]
-
-Não executei a sonda nem medi os números: o dado fornecido não contém as linhas necessárias. [não verificado] O próprio `--rodar` exige arquivo em `logs/sombra`, escreve saída e chama `lavra_de_prod`; executá-lo nesta sessão contrariaria a regra de não criar ou editar arquivos e a restrição de acesso ao dado fornecido. [bin/sombra.sh:483]
-
-```python
-import os
-from collections import Counter, defaultdict
-from datetime import timedelta
-from unittest.mock import patch
-
-
-def main():
-    from django.db import connection, transaction
-    from django.utils import timezone
-
-    from chamados.juizes import _dia_de_turno_da_pergunta, tranca_em_lote
-    from chamados.models import DecisaoPergunta, PerguntaDisputa
-    from chamados.services.materializacao import competencia_do_fato
-    from chamados.services.pergunta_no_app import perguntas_do_app
-    from colaboradores.models import Colaborador
-    from folha.export import competencia_entregue
-    from ponto.services.fechamento import competencia_trancada
-
-    erros = Counter()
-    grupos_i = defaultdict(lambda: [0, 0])
-    grupos_ii = Counter()
-    sem_dia_i = 0
-    sem_txt_ii = 0
-    total_ii = 0
-    inicio = None
-    agora = None
-
-    # Alguns degraus do C6 registram excecoes e continuam. Contabiliza esses
-    # erros sem imprimir mensagens que possam conter dados pessoais.
-    def registrar_erro_interno(*args, **kwargs):
-        exc = next((x for x in args if isinstance(x, BaseException)), None)
-        tipo = type(exc).__name__ if exc is not None else "ErroInterno"
-        erros[tipo] += 1
-
-    try:
-        if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
-            raise RuntimeError("SettingsNaoSombra")
-
-        # A guarda consulta o banco efetivamente conectado, alem dos settings.
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT current_database(), current_schema()")
-            banco, schema = cursor.fetchone()
-        if banco != "sombra" or schema != "juliani":
-            raise RuntimeError("BancoOuSchemaIncorreto")
-
-        agora = timezone.now()
-        inicio = agora - timedelta(days=60)
-
-        # O banco impede escrita nesta transacao; a fotografia tambem mantem
-        # as duas medidas coerentes entre si.
-        with transaction.atomic():
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-                )
-
-            cache_txt = {}
-            cache_tranca = {}
-
-            def txt(emp_id, mes, ano):
-                chave = (emp_id, mes, ano)
-                if chave not in cache_txt:
-                    cache_txt[chave] = competencia_entregue(
-                        emp_id, mes, ano, registro=True
-                    )
-                return cache_txt[chave]
-
-            def trancada(emp_id, mes, ano):
-                chave = (emp_id, mes, ano)
-                if chave not in cache_tranca:
-                    cache_tranca[chave] = competencia_trancada(
-                        emp_id, mes, ano
-                    )
-                return cache_tranca[chave]
-
-            with patch("core.observ.registrar_engolido", registrar_erro_interno):
-                # Mesmo lote do vigia e mesmo leitor usado por _no_app.
-                # O universo de colaboradores nao depende de ter celula.
-                colab_ids = (
-                    PerguntaDisputa.objects.order_by()
-                    .values_list("disputa__colaborador_id", flat=True)
-                    .distinct()
-                )
-                colabs = (
-                    Colaborador.objects.filter(pk__in=colab_ids)
-                    .select_related("empresa")
-                    .order_by("pk")
-                )
-                with tranca_em_lote():
-                    for colab in colabs.iterator(chunk_size=500):
-                        for pergunta in perguntas_do_app(colab, agora=agora):
-                            dia = _dia_de_turno_da_pergunta(pergunta)
-                            if dia is None:
-                                sem_dia_i += 1
-                                continue
-                            if colab.empresa_id is None:
-                                erros["EmpresaAusente"] += 1
-                                continue
-                            fato = competencia_do_fato(pergunta, colab.empresa)
-                            if fato is None:
-                                erros["CompetenciaIndeterminada"] += 1
-                                continue
-                            mes, ano, entregue = fato
-                            chave = (colab.empresa_id, ano, mes)
-                            grupos_i[chave][0] += 1
-                            if entregue and not trancada(colab.empresa_id, mes, ano):
-                                grupos_i[chave][1] += 1
-
-                decisoes = (
-                    DecisaoPergunta.objects.filter(
-                        ato=DecisaoPergunta.RESPOSTA,
-                        ato_em__gte=inicio,
-                        ato_em__lte=agora,
-                    )
-                    .select_related(
-                        "pergunta",
-                        "pergunta__disputa",
-                        "pergunta__disputa__colaborador",
-                        "pergunta__disputa__colaborador__empresa",
-                    )
-                    .order_by("pk")
-                )
-                for decisao in decisoes.iterator(chunk_size=500):
-                    pergunta = decisao.pergunta
-                    dia = _dia_de_turno_da_pergunta(pergunta)
-                    if dia is None:
-                        erros["RespostaSemDiaDeTurno"] += 1
-                        continue
-                    colab = pergunta.disputa.colaborador
-                    if colab.empresa_id is None:
-                        erros["EmpresaAusente"] += 1
-                        continue
-                    fato = competencia_do_fato(pergunta, colab.empresa)
-                    if fato is None:
-                        erros["CompetenciaIndeterminada"] += 1
-                        continue
-                    mes, ano, _ = fato
-                    registro = txt(colab.empresa_id, mes, ano)
-                    if registro is None:
-                        sem_txt_ii += 1
-                    elif decisao.ato_em > registro.gerado_em:
-                        grupos_ii[(colab.empresa_id, ano, mes, "?")] += 1
-                        total_ii += 1
-
-    except Exception as exc:
-        # Nao imprimir str(exc): pode conter dados pessoais ou SQL.
-        if isinstance(exc, RuntimeError) and str(exc) in {
-            "SettingsNaoSombra", "BancoOuSchemaIncorreto"
-        }:
-            erros[str(exc)] += 1
-        else:
-            erros[type(exc).__name__] += 1
-
-    if agora is not None:
-        print("INICIO_II=" + timezone.localtime(inicio).isoformat())
-        print("AGORA=" + timezone.localtime(agora).isoformat())
-
-    for (emp, ano, mes), (vivas, elegiveis) in sorted(grupos_i.items()):
-        print(
-            f"I emp={emp} comp={ano:04d}-{mes:02d} "
-            f"vivas={vivas} entregue_nao_trancada={elegiveis}"
-        )
-    print(
-        "I_TOTAL vivas={} entregue_nao_trancada={}".format(
-            sum(v[0] for v in grupos_i.values()),
-            sum(v[1] for v in grupos_i.values()),
-        )
-    )
-    print(f"I_SEM_DIA={sem_dia_i}")
-
-    for (emp, ano, mes, porta), n in sorted(grupos_ii.items()):
-        print(f"II emp={emp} comp={ano:04d}-{mes:02d} porta={porta} n={n}")
-    print(f"II_TOTAL n={total_ii}")
-    print(f"II_SEM_TXT={sem_txt_ii}")
-
-    for tipo, n in sorted(erros.items()):
-        print(f"ERRO tipo={tipo} n={n}")
-    print(f"ERROS={sum(erros.values())}")
-    if erros:
-        print("INCONCLUSIVO")
-    print("FIM_SONDA_PORTAS_HUMANAS")
-
-
-main()
-```
-
-_7095 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7097 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
