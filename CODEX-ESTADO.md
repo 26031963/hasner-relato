@@ -1,7 +1,95 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 05:35** · publicado em **18/11/2026 05:36** (UTC-3)
+> Ultima resposta processada: **18/11/2026 05:39** · publicado em **18/11/2026 05:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 05:39 · sessao 9e4f22a34972 · R1-REMEDE-1811 · sonda · origem=Code
+
+Todas as seis linhas `SOMA` terminam em `True`. Não há `INCOMPLETO` no trecho fornecido. [nao verificado]
+
+Abaixo está a saída fornecida para a parte 3 de 6, sem resumo; ela não tem arquivo e linha identificados no material recebido. [nao verificado]
+
+```text
+sonda_leitura: script.py [c3a2fcb8e125469d] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARTE 3 PARTES 6
+[0] UNIVERSO 10/2026 624
+UNIVERSO_PARTE 10/2026 102
+JANELA 10/2026 2026-09-21 2026-10-20
+[0] UNIVERSO 11/2026 597
+UNIVERSO_PARTE 11/2026 100
+JANELA 11/2026 2026-10-21 2026-11-20
+ESTIMATIVA processados 25 universo 202 minutos_total 3.3 ate_40_min True ate_15_min True
+ESTIMATIVA processados 50 universo 202 minutos_total 3.0 ate_40_min True ate_15_min True
+ESTIMATIVA processados 75 universo 202 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 100 universo 202 minutos_total 2.8 ate_40_min True ate_15_min True
+COMPETENCIA 10/2026
+[1] {'dias_comparados': 1236, 'bate_ate_10min': 1169, 'esp_zero_e6_trabalho': 12, 'e6_zero_esp_trabalho': 6, 'diverge_10_60': 2, 'diverge_acima_60': 47, 'dia_batida_impar': 65, 'impar_que_BATE': 23, 'impar_que_DIVERGE': 42, 'impar_dentro_da_faixa': 33, 'impar_FORA_da_faixa': 9, 'impar_no_conjunto_do_dia': 42, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1421, 'dia_isento_ou_ausencia': 342, 'dia_sem_trabalho_ambos': 22, 'esp_desconta_janela_declarada': 39, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.6% de 1236 dias comparados
+[3] ESTRUTURA     3 dia-colab      15.2 h    3 colabs
+[3] CADASTRO      7 dia-colab      35.9 h    4 colabs
+[3] BATIDA       57 dia-colab     297.7 h   24 colabs
+[4] TOTAL divergentes 67
+[5] colabs com divergencia: 29
+erros_no_espelho 0
+PARCIAL|10/2026|ESTRUTURA|dias=3|horas=15.209666666666665|colabs=3
+PARCIAL|10/2026|CADASTRO|dias=7|horas=35.88209174|colabs=4
+PARCIAL|10/2026|BATIDA|dias=57|horas=297.66026132194446|colabs=24
+PARCIAL_TOTAL|10/2026|dias=67|horas=348.752019728611125|colabs=29
+ESTIMATIVA processados 125 universo 202 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 150 universo 202 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 175 universo 202 minutos_total 2.9 ate_40_min True ate_15_min True
+ESTIMATIVA processados 200 universo 202 minutos_total 2.9 ate_40_min True ate_15_min True
+COMPETENCIA 11/2026
+[1] {'dias_comparados': 1158, 'bate_ate_10min': 1099, 'esp_zero_e6_trabalho': 6, 'e6_zero_esp_trabalho': 7, 'diverge_10_60': 3, 'diverge_acima_60': 43, 'dia_batida_impar': 58, 'impar_que_BATE': 20, 'impar_que_DIVERGE': 38, 'impar_dentro_da_faixa': 30, 'impar_FORA_da_faixa': 8, 'impar_no_conjunto_do_dia': 37, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 200, 'dia_sem_lavratura_no_espelho': 1448, 'dia_isento_ou_ausencia': 217, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 53, 'esp_lido_pelo_pago_h': 0}
+[2] BATE (ate 10 min): 94.9% de 1158 dias comparados
+[3] ESTRUTURA     7 dia-colab      21.8 h    6 colabs
+[3] CADASTRO     10 dia-colab      35.9 h    6 colabs
+[3] BATIDA       42 dia-colab     209.6 h   22 colabs
+[4] TOTAL divergentes 59
+[5] colabs com divergencia: 28
+erros_no_espelho 0
+PARCIAL|11/2026|ESTRUTURA|dias=7|horas=21.8227|colabs=6
+PARCIAL|11/2026|CADASTRO|dias=10|horas=35.92035111111112|colabs=6
+PARCIAL|11/2026|BATIDA|dias=42|horas=209.5975820575|colabs=22
+PARCIAL_TOTAL|11/2026|dias=59|horas=267.34063316861112|colabs=28
+TEMPO_SEGUNDOS 172.0
+TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 261678
+TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 278
+TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1738
+TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6017
+TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 41
+TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6974
+TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 4
+TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
+TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4738
+TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4738
+TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 620
+TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 183
+TRATADA_LOCAL app/ponto/juiz_batida.py:191 GeneratorExit 17
+TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 488349
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 550
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3269
+TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 176
+TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13326
+TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 111
+TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4282
+TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 193
+TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 4
+TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 24759
+TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 4929
+TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41466
+TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 18839
+SOMA 10/2026 67   <- tem de ser igual a soma das classes (67) True
+SOMA 10/2026 HORAS 348.752019728611125 True
+SOMA 10/2026 COLABS_UNIAO 29 True
+SOMA 11/2026 59   <- tem de ser igual a soma das classes (59) True
+SOMA 11/2026 HORAS 267.34063316861112 True
+SOMA 11/2026 COLABS_UNIAO 28 True
+rc_sombra=0
+```
 
 ## 18/11 05:35 · sessao b6b30e7671b2 · R1-REMEDE-1811 · sonda · origem=Code
 
@@ -716,33 +804,4 @@ A árvore recebida não contém metadados Git acessíveis; correspondência do c
 
 **perguntas de lei: 1 (a dobra, item 5)** — sem decisão neste censo. O tratamento da decisão independente na versão `oraculo` e dos cadastros com `tipo_base` e `tipo_ciclo` divergentes fica registrado como questão de alcance técnico; se exige outra decisão de lei, **[não verificado]**.
 
-## 17/11 23:15 · sessao 6cecd73c0694 · S6-INTERMITENTE-FERIADO-CURA-A · verificador · origem=Code
-
-**Resultado pelo contrato de saída: nenhum achado confirmado exige DEVOLVE.** Há achados **FILA** sobre a pergunta da dobra, a referência ao calculador e a especificação do RED. A pesquisa de avais e obras em voo ficou limitada: `logs/AVAIS-*` não está disponível nesta cópia, e o hash/HEAD informado não pôde ser confirmado porque a cópia não tem metadados Git. [não verificado]
-
-A referência anterior a uma “leitura adicional da identidade” foi imprecisa: a comparação encontrada é a **própria linha 965 citada no aval**. A busca no motor não encontrou outra leitura de `_feriados_injetados` nem outra comparação `self.feriados is ...`. [app/ponto/motor_calculo_v2.py:965](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:965)
-
-Na tabela, **NP** significa **NÃO PROCEDE: não encontrei a falha indicada**, dentro do material disponível; não significa que condições futuras ou dados de produção tenham sido comprovados. **P/FILA** significa **PROCEDE, classificado FILA** pelo contrato. As perguntas são: Q1 executabilidade e ordem; Q2 falta de “senão”; Q3 colisão; Q4 referências, unidades e universo. [não verificado — os anexos do pedido foram fornecidos sem numeração de linhas]
-
-| Item | Q1 | Q2 | Q3 | Q4 |
-|---|---|---|---|---|
-| **1 — Censo** | NP: é possível fazer o censo antes de abrir a construção; seu resultado ainda depende da análise completa. [não verificado] | NP: se encontrar leitor externo que decida dinheiro por conta própria, o próprio item determina não abrir; se não encontrar, segue ao item 2. [não verificado — anexo sem linhas] | NP nos registros pesquisados; obras em voo e avais indisponíveis **[não verificado]**. | **P/FILA**: o caminho citado precisa do prefixo `ponto/`; há um leitor independente de dobra que precisa entrar no censo. [app/ponto/calculador/regras.py:287](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:287), [app/ponto/calculador/periodo.py:831](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/periodo.py:831) |
-| **2 — Muda** | NP: a mudança é expressável só no `__init__` e no comentário autorizado. [app/ponto/motor_calculo_v2.py:795](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:795) | NP: o item condiciona a mudança ao censo fechado; a trava para leitor externo está no item 1. [não verificado — anexo sem linhas] | NP quanto à alteração em si; colisão com avais indisponíveis **[não verificado]**. | NP para as referências centrais; a consequência se estende aos chamadores existentes de `eh_feriado`, como previsto pelo desenho. [app/ponto/motor_calculo_v2.py:956](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:956) |
-| **3 — RED** | NP: é possível montar um caso que acione o bloqueio e o mutante; o enunciado sozinho não fixa todos os pressupostos necessários para o mutante morder. [app/ponto/motor_calculo_v2.py:1448](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1448) | NP: falha de RED ou mutante impede cumprir PRONTO; isso é consequência das condições dadas. [não verificado — anexo sem linhas] | **P/FILA**: o RED fixa ausência de dobra enquanto o item 5 apresenta a dobra como pergunta em aberto; há registro anterior de decisão pela docstring. [app/docs/RELATO-ARQUIVO.md:733](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/docs/RELATO-ARQUIVO.md:733) | NP: o atributo existe com o nome citado, mas é a **testemunha**, não a função que zera. [app/ponto/motor_calculo_v2.py:291](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:291) |
-| **4 — Pouso** | NP: a condição de DIFF anterior e a janela temporal são executáveis em princípio; capacidade de executar na infraestrutura e prazo **[não verificado]**. | NP: se o DIFF não cumprir “somente”, não pousa; se não fechar até o prazo, o item manda esperar a simulação. [não verificado — anexo sem linhas] | NP confirmado no material disponível; os resultados de frota e as outras obras estão **[não verificado]**. | NP quanto à unidade pretendida; DIFF de novembro, integridade de 09/10 e reversão são condições futuras **[não verificado]**. | [nao verificado]
-| **5 — Registrar dobra** | NP: é possível registrar a pergunta e aplicar provisoriamente A como o texto manda. [não verificado — anexo sem linhas] | NP: para resposta B, o item manda tratar como adicional posterior; resposta A mantém a cura proposta. [não verificado — anexo sem linhas] | **P/FILA**: o registro de 16/10 relata que o corte de 15/10 já mandava seguir a docstring e que a cura anterior favorável à dobra foi cancelada. O aval atual volta a chamar a questão de não decidida. Isso merece linha de fila; não prova impacto em dinheiro de não intermitente nem impossibilidade de executar. [app/docs/RELATO-ARQUIVO.md:733](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/docs/RELATO-ARQUIVO.md:733) | **P/FILA**: a afirmação de que a lei está simplesmente “não decidida” precisa ser confrontada com esse registro anterior; sua vigência diante de possíveis avais posteriores indisponíveis é **[não verificado]**. [app/docs/RELATO-ARQUIVO.md:739](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/docs/RELATO-ARQUIVO.md:739) |
-| **6 — Vaga** | NP: há ação definida tanto para vaga livre quanto ocupada; disponibilidade real **[não verificado]**. | NP: vaga ocupada implica esperar. [não verificado — anexo sem linhas] | NP confirmado; estado de B2, v7 e demais vagas **[não verificado]**. | NP quanto à forma; disponibilidade de construtor e Opus **[não verificado]**. |
-| **PROIBIDO** | NP: a implementação descrita abaixo respeita a restrição de linhas do motor. [app/ponto/motor_calculo_v2.py:3577](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3577) | NP: são proibições, não condições que exijam outro ramo. [não verificado — anexo sem linhas] | NP confirmado; demais avais **[não verificado]**. | NP: `eh_feriado` existe na base e não é sobrescrito nessa subclasse. [app/ponto/motor_calculo_v2.py:956](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:956), [app/ponto/motor_calculo_v2.py:3569](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3569) |
-| **PRONTO** | NP: os artefatos pedidos podem ser produzidos em princípio; execução, publicação e infraestrutura **[não verificado]**. | NP: sem qualquer artefato exigido, a condição de pronto não está satisfeita. [não verificado — anexo sem linhas] | NP confirmado; condições de outras obras **[não verificado]**. | NP: o pendente citado existe; os futuros logs, DIFF e baixa ainda não foram produzidos. [app/core/juizes.py:492](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/core/juizes.py:492) |
-
-**Verificação das referências e do mecanismo**
-
-- `ponto/motor_calculo_v2.py:3569–3581` declara o intermitente sem feriado-100 automático e troca `self.feriados` por um novo `set()`. As linhas `1441–1446` descrevem a exceção do previsto derivado do realizado; o predicado efetivo nas linhas seguintes ainda admite feriado. [app/ponto/motor_calculo_v2.py:3569](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3569), [app/ponto/motor_calculo_v2.py:1441](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1441)
-- As linhas `790`, `791–794` e `795` criam o conjunto e registram sua identidade quando houve injeção; `956` define `eh_feriado` e `965` testa identidade antes do fallback. O caminho completo na cópia é **`app/ponto/calculador/regras.py`**: relativamente à raiz `app`, é `ponto/calculador/regras.py`, não `calculador/regras.py`. [app/ponto/motor_calculo_v2.py:790](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:790), [app/ponto/motor_calculo_v2.py:956](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:956), [app/ponto/calculador/regras.py:295](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:295)
-- Uma forma literal para o item 2 é manter `self.feriados = set()` e, **no mesmo `__init__`**, atribuir `self._feriados_injetados = self.feriados`; atualizar o comentário autorizado. Assim a identidade coincide mesmo quando o chamador não injetou calendário, e `eh_feriado` responde `False` para qualquer data. Há **sete chamadas textuais** a `self.eh_feriado` no motor; elas passam a receber esse resultado para a instância intermitente. [app/ponto/motor_calculo_v2.py:3577](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3577), [app/ponto/motor_calculo_v2.py:934](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:934), [app/ponto/motor_calculo_v2.py:3343](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:3343)
-- `dias_sem_previsto_fora_da_janela` é uma lista no resultado. Quem zera é `_dia_sem_previsto_fora_da_janela`: depois das guardas de feriado ou folga, janela, previsto zero e decisão, ela zera os minutos e acrescenta o registro à lista. Portanto, para o mutante falhar pelo mecanismo alegado, o teste precisa configurar essas guardas, inclusive evitar que outro motivo de folga continue bloqueando o caso corrigido. [app/ponto/motor_calculo_v2.py:1422](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1422), [app/ponto/motor_calculo_v2.py:1471](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:1471), [app/ponto/motor_calculo_v2.py:2720](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/motor_calculo_v2.py:2720)
-- O calculador empresta `eh_feriado`, mas cria contexto próprio com `_feriados_injetados = None`; sua regra pode calcular dobra por conta própria. Isso confirma a necessidade do censo do item 1, mas **não comprova**, por si só, que esse caminho alcance o pagamento de um intermitente na produção ou que o construtor deva abrir. [app/ponto/calculador/regras.py:287](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:287), [app/ponto/calculador/regras.py:348](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/regras.py:348), [app/ponto/calculador/periodo.py:831](/home/ronald/codex_ws/28802cbcf22d6afebf8e6e8e2e453442bcf2621e/app/ponto/calculador/periodo.py:831)
-
-O caso de produção de `col830`, os 713 minutos, o controle de 14/11 e os resultados efetivos de frota permanecem **[não verificado]**: foram fornecidos como relato, sem acesso ao banco ou aos logs correspondentes.
-
-_6770 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6771 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
