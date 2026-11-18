@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 09:00:51.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (12.4 MB). Acoes na janela: **360**.
+**Medido em 18/11/2026 09:06:06.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (12.6 MB). Acoes na janela: **367**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:05:17 | Bash | Record item 7 results | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ITEM8 (aval 08:55) CURA FASE 12x36')]; assert len(i)==1 L.insert(i[0],"ITEM7 (aval 08:55) leituras Codex, prova logs/ORDEM-1811/item7/{a2,b,c}.r: (a) retrato comp 11 = 21 pessoas, todas furo_espelho: 4 sem_leitura_sistema (fio nao_sei; col950 teste, col265, col192, col407) = ESTRUTURA e ...` |
+| 09:05:07 | Bash | Check haiku_export latest-version reader | `cd /home/ronald/saas-hasner && git show HEAD:app/folha/haiku_export.py \| sed -n 45,75p` |
+| 09:03:32 | Bash | Put DST-L1 design question at top | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO:') L.insert(3,"PERGUNTA DE DESENHO DST-L1 (aval 08:55 item 4c; matriz logs/ORDEM-1811/dst-l1/r2, 7 transicoes, 8 celulas ainda [nao verificado]): nasce o juiz `decisao_admin_dia_sem_trabalho`? predicado = qual decisao VIGENTE do admin vale para a batida apuravel em dia que a celula diz sem trabalho ...` |
+| 09:03:25 | SendMessage |  | `-` |
+| 09:03:15 | Bash | Is tipo_do_dia a registered juiz | `git show HEAD:app/ponto/precedencia.py \| sed -n 395,410p; /bin/grep -n "tipo_do_dia" docs/JUIZES.md core/juizes.py \| head` |
+| 09:03:11 | Bash | Check whether existing law answers the TELA question | `/bin/grep -n "L-061" docs/LEIS.md \| head -5; /bin/grep -n "precedencia" docs/JUIZES.md \| head -5` |
+| 09:01:47 | Bash | Record furos classification | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ITEM8 (aval 08:55) CURA FASE 12x36')]; assert len(i)==1 L.insert(i[0]+1,"ITEM8 furos pos-cura (logs/ORDEM-1811/item8/furos.md, juiz e6_oraculo): 18 furos vivos (col868 11, col934 7) = CADASTRO 16, BATIDA 2, ESTRUTURA 0. Padrao: com a fase certa os dias trabalhados passaram a ser julgado ...` |
 | 08:59:55 | SendMessage |  | `-` |
 | 08:59:51 | Bash | Register item 8 line in RELATO | `python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('DESPACHO COMPLEMENTO-1 ORDEM-VIVA-1811 09:00')]; assert len(i)==1 L.insert(i[0]+1,"ITEM8 (aval 08:55) CURA FASE 12x36 do Ronald 08:19 REGISTRADA: censo_fase_12x36.py:339 _curar -> executar_vinculo (vinculo.py:315-350); col868 col934 col1017 col1028 ganharam vigencia nova (1603-1606, ant ...` |
 | 08:59:06 | SendMessage |  | `-` |
