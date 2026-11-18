@@ -1,7 +1,74 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 10:59** · publicado em **18/11/2026 10:59** (UTC-3)
+> Ultima resposta processada: **18/11/2026 11:10** · publicado em **18/11/2026 11:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 11:10 · sessao c2aba1a0842f · ESPURIA-TELA · verificador · origem=Code
+
+**Conclusão:** o c9 remove, por análise do código e do diff fornecido, as duas incompatibilidades de dublês que explicam os três vermelhos relatados; isso não prova que os testes ou a suíte ficaram verdes, pois não há resultado de execução do c9 no material fornecido. As alterações estão em [e3_lu3_apoio.py:100](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/e3_lu3_apoio.py:100) e [test_palavra_parcial_e_pendente.py:35](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_palavra_parcial_e_pendente.py:35). Resultado da execução: **[não verificado]**.
+
+### A. Os três vermelhos
+
+1. **`test_MORDE_quando_a_FOLHA_cobre_o_pendente_e_IGNORADO`**: o teste passa `_Aus` como cobertura; o ramo de cobertura lê `cobertura.pk`. O diff fornecido mostra que o dublê no c8 não tinha `pk` e que o c9 acrescenta `pk=None`, removendo esse `AttributeError` específico. A asserção continua verificando o resultado da palavra. [test_palavra_parcial_e_pendente.py:35](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_palavra_parcial_e_pendente.py:35), [test_palavra_parcial_e_pendente.py:95](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_palavra_parcial_e_pendente.py:95), [dia_decidido.py:473](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:473).
+
+2. **`test_nao_perguntado_intencional_preserva_o_juiz_da_oferta`**: o diff fornecido mostra que o `do_dia` falso devolvia apenas três chaves; o calendário acessa `quem` diretamente. O c9 acrescenta as três chaves da trilha ao dublê, removendo esse `KeyError` específico. [e3_lu3_apoio.py:100](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/e3_lu3_apoio.py:100), [calendario.py:757](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/colaboradores/services/calendario.py:757), [test_e3_degrau_dono_e_porta.py:788](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/test_e3_degrau_dono_e_porta.py:788).
+
+3. **`test_M8_carga_inteira_nao_engole_relogio`**: usa o mesmo dublê. O `KeyError` no contexto é capturado pelo `except Exception` da oferta, que devolve `None` para o bloco; isso explica o caminho para `nao_sei` descrito no dado. Acrescentar as chaves remove essa causa específica, sem demonstrar sozinho o resultado final do teste. [e3_lu3_apoio.py:105](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/e3_lu3_apoio.py:105), [calendario.py:156](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/colaboradores/services/calendario.py:156), [test_e3_degrau_dono_e_porta.py:752](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/test_e3_degrau_dono_e_porta.py:752).
+
+O **diff c9 fornecido não altera asserções**: altera o dublê de retorno, o construtor de `_Aus` e comentários/docstring. A cópia atual mostra as asserções em [test_palavra_parcial_e_pendente.py:95](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_palavra_parcial_e_pendente.py:95) e [test_e3_degrau_dono_e_porta.py:752](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/test_e3_degrau_dono_e_porta.py:752). A comparação independente com o objeto Git do c8 ficou **[não verificada]**.
+
+### B. Todos os retornos de `do_dia`
+
+Todos os cinco ramos devolvem exatamente as seis chaves **`veredito`, `palavra`, `cor`, `quem`, `quando`, `ausencia_id`**, inclusive quando os valores da trilha são `None`. [dia_decidido.py:464](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:464).
+
+| Ramo, na ordem do código | Valores principais |
+|---|---|
+| Sem cobertura e com pendente | `veredito=v`; palavra e cor do pendente; três valores da trilha `None`. [dia_decidido.py:465](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:465) |
+| `v == TRABALHOU` | `veredito=v`; palavra e cor vazias; trilha `None`. [dia_decidido.py:471](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:471) |
+| Com cobertura | `veredito=v`; rótulo da cobertura; cor de `v`; trilha da cobertura. [dia_decidido.py:473](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:473) |
+| Decisão com veredito igual a `v` | `veredito=v`; palavra, cor e trilha da decisão. [dia_decidido.py:477](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:477) |
+| Retorno final | `veredito=v`; palavra e cor calculadas de `v`; trilha `None`. [dia_decidido.py:481](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:481) |
+
+### C. Escritores, leitores e significado
+
+`v` vem de `veredito_do_dia`. A tabela acima identifica, por ramo, os escritores de `palavra` e `cor`; os três campos da trilha saem de `_ninguem`, da cobertura ou da decisão, conforme o mesmo ramo. [dia_decidido.py:451](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:451), [dia_decidido.py:464](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:464).
+
+Os leitores **diretos** das seis chaves do retorno encontrados na cópia são:
+
+- Calendário: lê as seis e as publica como `veredito_dia`, `palavra_dia`, `cor_dia` e `ausencia_decidida_por/em/id`. [calendario.py:748](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/colaboradores/services/calendario.py:748).
+- Espelho: lê as seis; também usa `veredito` para escolher o ícone da classe. [espelho.py:341](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/espelho.py:341).
+
+Entre os leitores indiretos, a grade e o espelho passam `quem` e `quando` ao partial; a API transporta os seis campos renomeados e converte o instante para string local ISO na resposta. [\_calendario_grade.html:109](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/templates/colaboradores/partials/_calendario_grade.html:109), [espelho.html:192](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/templates/ponto/espelho.html:192), [api/views.py:1392](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/api/views.py:1392), [api/views.py:1405](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/api/views.py:1405). **Não sei** afirmar que esta relação esgota todos os leitores indiretos de apresentação; censo completo **[não verificado]**.
+
+Na trilha, `quem_quando` grava **username** do aprovador, ou do registrador, ou `'sistema'`; grava `aprovada_em` ou, independentemente, `criado_em`. O ID é o `pk` da ausência usada naquele ramo, que pode ser diferente entre cobertura e decisão. [dia_decidido.py:549](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:549), [dia_decidido.py:442](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:442).
+
+O partial explicita que o nome pode ser de quem lançou, e formata `quando` como data e hora; a API converte o datetime para hora local ISO. Não identifiquei nesses leitores uma troca de ausência ou uma interpretação de username como nome civil. [\_decidiu_icone.html:8](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/templates/ponto/partials/_decidiu_icone.html:8), [api/views.py:1405](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/api/views.py:1405). Porém, como os fallbacks de pessoa e instante são independentes, o código **não garante** que ambos descrevam o mesmo ato quando os campos estão parcialmente preenchidos; ocorrência em dados reais **[não verificada]**. [dia_decidido.py:555](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:555).
+
+### D. Produtores de `cobertura` e `decisao`
+
+- **Calendário:** passa `_aus_folha_map.get(data)` e `_decididos.get(data)`, carregados respectivamente por `cobertura_ausencia_periodo(..., para='folha')` e `decididos_do_periodo`. [calendario.py:561](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/colaboradores/services/calendario.py:561), [calendario.py:748](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/colaboradores/services/calendario.py:748).
+- **Espelho:** obtém a cobertura da mesma função, guarda cobertura e decisão em campos de transporte e depois os passa a `do_dia`. [espelho.py:602](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/espelho.py:602), [espelho.py:658](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/espelho.py:658), [espelho.py:884](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/espelho.py:884), [espelho.py:330](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/espelho.py:330).
+
+Nesses caminhos, a cobertura vem de queryset de `ponto.models.Ausencia`; `_cobertura_pura` põe a própria instância no mapa. Não encontrei nesses dois produtores cobertura de outro tipo. [turnos.py:2764](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/turnos.py:2764), [turnos.py:2781](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/turnos.py:2781).
+
+A decisão vem de `decididos_do_periodo` → `cartao_do_dia`, que inclui as seis chaves perguntadas: `veredito`, `rotulo`, `cor`, `quem`, `quando`, `ausencia_id`. Os dois chamadores citados não fornecem o parâmetro opcional `ausencias`, portanto usam o queryset da função. [dia_decidido.py:561](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:561), [dia_decidido.py:578](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:578).
+
+### E. Outros dublês antigos
+
+**Não sei garantir um censo completo de todos os dublês em `app/**/tests/**`.** Na busca realizada, não confirmei outro dublê de `do_dia`, cobertura ou decisão que ainda tenha o contrato antigo e alcance um dos leitores. Os dois corrigidos aparecem em [e3_lu3_apoio.py:100](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/chamados/tests/e3_lu3_apoio.py:100) e [test_palavra_parcial_e_pendente.py:35](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_palavra_parcial_e_pendente.py:35); inexistência de outros e eventual passagem vazia permanecem **[não verificados]**.
+
+### F. Exceção no contexto em produção
+
+Nos dois produtores rastreados, o retorno real de `do_dia` inclui sempre as três chaves, a cobertura vem de `Ausencia` e a decisão vem do cartão com as chaves exigidas. **Não identifiquei, nesses caminhos, um `KeyError` ou `AttributeError` causado pela ausência das novas chaves.** [dia_decidido.py:464](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:464), [turnos.py:2764](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/turnos.py:2764), [dia_decidido.py:561](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:561).
+
+Isso não demonstra ausência de outras exceções nem o estado dos dados reais: **[não verificado]**. O `except` continua capturando qualquer `Exception` do contexto e retornando `None` para o bloco. [calendario.py:156](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/colaboradores/services/calendario.py:156).
+
+### G. Checklist
+
+- **Segundo juiz, segundo escritor fora da porta, relógio fora da borda e derivação paralela:** não confirmei ocorrência nos trechos do diff fornecido; uma auditoria conclusiva contra todo o registro de juízes e todos os fluxos é **[não verificada]**. A seleção da classe nova usa o `veredito` já devolvido. [dia_decidido.py:198](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:198), [espelho.py:351](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/espelho.py:351).
+- **Selo/RED sem mordida:** há asserções que verificam os valores da trilha e sua remoção, mas não fiz teste de mutação; portanto, a mordida efetiva e a existência de outros selos vazios são **[não verificadas]**. [test_espelho_decidiu_icone.py:63](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_espelho_decidiu_icone.py:63), [test_espelho_decidiu_icone.py:108](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/tests/test_espelho_decidiu_icone.py:108).
+- **Campo com dois significados:** há o risco de pessoa e instante de atos distintos pelos fallbacks independentes descritos em C; não há prova de ocorrência no dado real. [dia_decidido.py:555](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/ponto/services/dia_decidido.py:555).
+- **Band-aid:** o diff da obra acrescenta `.get` nas três leituras da trilha no transporte da API, o que transforma chave ausente em `None`; isso pode mascarar uma ausência inesperada de chave naquele ponto. A intenção de admitir dias fora da janela está documentada ao lado, mas não demonstra que toda ausência de chave seja esse caso. [api/views.py:1385](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/api/views.py:1385), [api/views.py:1398](/home/ronald/codex_ws/6e8aa01ca5482369e6d71a5c5cabb78b9d8e1b33/app/api/views.py:1398).
 
 ## 18/11 10:59 · sessao 96a1461bdf52 · E4C-F6F7 · verificador · origem=Code
 
@@ -964,13 +1031,4 @@ Nos totais seguintes, “mecanismo” significa **padrão observado de célula e
 
 Por obra causal comprovada: **0 dias atribuíveis com o dado fornecido; 13 com atribuição [não verificado]**. Isso não é contagem de dias que as obras necessariamente corrigiriam: faltam as evidências indicadas na tabela por obra. [app/docs/BACKLOG.md:1846](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/BACKLOG.md:1846), [app/docs/BACKLOG.md:1968](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/BACKLOG.md:1968), [app/docs/BACKLOG.md:2043](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/BACKLOG.md:2043), [app/docs/BACKLOG.md:1821](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/docs/BACKLOG.md:1821).
 
-## 18/11 10:26 · sessao d9f6a5ad5bea · DST-L2 · sonda · origem=Code
-
-```text
-furo_vivos 3002
-com_dia 3002 com_celula 2998 trabalha_false(ja_fechava_no_base) 11
-dia_sem_trabalho_so_pela_ata_gravada(DST-L2_alarga) 35
-  destes_com_justif_pendente_chamado_origem 0 com_ponteiro_pendente 0
-```
-
-_6909 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6910 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
