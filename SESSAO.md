@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 21:06:16.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (27.8 MB). Acoes na janela: **804**.
+**Medido em 17/11/2026 21:11:47.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (27.8 MB). Acoes na janela: **807**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:06:35 | Bash | Check CDF suite still running | `kill -0 1388152 && echo cdf-vivo; tail -c 300 /home/ronald/saas-hasner/logs/CURA-DE-FASE/v1/suite_full_aa052ec5a.log` |
+| 21:06:29 | Bash | Queue v6 full suite behind the trava | `W=/home/ronald/wt-codex-porta-do-export-sem-beco-201235; cd $W; for d in app/.ruff_cache app/.hypothesis app/.mypy_cache app/staticfiles app/logs app/media; do [ -d $d ] && rmdir $d 2>&1; done; git status --porcelain \| head -3; cd /home/ronald/saas-hasner; setsid nohup bin/suite.sh --dir $W --motivo "pre-opus PORTA-ESTADO-NA-TELA" --espera 7200 > logs/PORTA-EXPORT/v6/suite_full_b0725a634.log 2>&1 ...` |
+| 21:06:23 | Bash | Write DECISAO TECNICA line in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'P' p='app/docs/RELATO.md'; s=open(p).read().split('\n') i=[j for j,l in enumerate(s[:8]) if l.startswith('PAREI: b3-PORTA-INSTRUMENTO')][0] s.insert(i+1,'DECISAO TECNICA PORTA-ESTADO-NA-TELA (aval LIBERA-B3-PORTAS-1711-2105 item 1(b), verif2.r item 4): o relogio FICA dentro de trava_da_medicao (folha/porta_export.py:990 e :997, copia @b0725a634) como EXCEC ...` |
 | 21:06:16 | Bash | Read where the deadline is computed | `cd /home/ronald/saas-hasner; sed -n 140,155p /home/ronald/wt-codex-porta-do-export-sem-beco-201235/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py; /bin/grep -n 'def trava_da_medicao' -A8 /home/ronald/wt-codex-porta-do-export-sem-beco-201235/app/folha/porta_export.py` |
 | 21:06:07 | Bash | Commit boundary tests in v6 copy | `cd /home/ronald/wt-codex-porta-do-export-sem-beco-201235; git status --porcelain; git add app/folha/tests/test_porta_estado_na_tela.py && git commit -q -F - <<'M' PORTA-ESTADO-NA-TELA (v6) verif2 item 2: a borda exata do prazo de assumir passa a morder Ri: 1 us ALEM do limite o job nao tenta a trava (livre), nao mede e fecha o proprio pedido; espelho: NO instante exato do limite tenta uma vez e me ...` |
 | 21:05:57 | Bash | Confirm mutant text and file timestamps | `cd /home/ronald/saas-hasner/logs/PORTA-EXPORT/v6; /bin/grep -n 'Ri-1us\\|Ri-espelho\\|0.000001\\|>=' rodar_v5.sh \| head; stat -c '%y' /home/ronald/wt-codex-porta-do-export-sem-beco-201235/app/folha/tests/test_porta_estado_na_tela.py /home/ronald/wt-codex-porta-do-export-sem-beco-201235/app/folha/porta_export.py \| cut -c1-19; /bin/grep -n '^FAIL:' mut5_Ri-1us-de-folga.log` |
