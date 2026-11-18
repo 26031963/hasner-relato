@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 12:22:04.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (37.1 MB). Acoes na janela: **986**.
+**Medido em 18/11/2026 12:27:08.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (37.2 MB). Acoes na janela: **990**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:24:48 | Bash | Check pista state | `ssh -o BatchMode=yes pista estado 2>&1 \| head -3; ls logs/E4C-F6F7/final_c6.rc logs/COMBOIO-1811/final.rc 2>&1; pgrep -f "COMBOIO-1811/espera.sh" \| head -2` |
+| 12:24:46 | Bash | Publish DSTL1 measures; add fila lines | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') k=[i for i,x in enumerate(L) if x.startswith('AVAL-DEVOLVIDO COMPLEMENTO-2 F5 12:10 item 2')]; assert len(k)==1 L.insert(k[0]+1,"MEDIDA DSTL1-PELA-PORTA-DA-HE 12:20 itens 2(ii)/4/5 (sombra, so colN; logs/DSTL1-PORTA-HE/medidas/resumo.md + *.raw; conferi dia_pago.py:548, motor_calculo_v2.py:1440 (o  ...` |
+| 12:24:29 | Bash | Verify guarda 1 location | `/bin/grep -n "minutos_trabalhados *== *0\\|minutos_trabalhados <= 0\\|not .*minutos_trabalhados" ponto/motor_calculo_v2.py \| head -5; sed -n '745,750p' ponto/services/espelho.py` |
+| 12:24:25 | Bash | Spot-check agent citations | `cd /home/ronald/saas-hasner/app && sed -n '548,552p' ponto/services/dia_pago.py; sed -n '1456,1460p' ponto/motor_calculo_v2.py; /bin/grep -c "ESTRUTURA_DINHEIRO" -r --include=*.py . \| /bin/grep -v ":0" \| head -3` |
 | 12:20:19 | Bash | Note c9 status in RELATO | `python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a='ESPURIA c9 relanca sobre o main novo.' assert s.count(a)==1 s=s.replace(a,'ESPURIA c9 (raia/espuria-tela-090807 6e8aa01ca, so 2 dubles de teste: e3_lu3_apoio.calendario_inteiro e _Aus; cura MORDE/nao_perguntado/M8; RED logs/ESPURIA-TELA/c9/red.log; GREEN nao rodado, job 1118121913 cancelado pelo agente) FORA do comboio porque a tela trou ...` |
 | 12:20:14 | Bash | Clean up torneira HEAD copy | `W=$(cat logs/ORDEM-1811/torneira_wt.txt); git -C $W status --porcelain \| head; find $W -maxdepth 3 -type d -empty -user root 2>/dev/null \| head; find $W -maxdepth 3 -type d -empty -user root -exec rmdir {} + 2>/dev/null; git worktree remove $W 2>&1 \| tail -1; ls -d $W 2>&1 \| tail -1` |
 | 12:20:04 | Bash | Publish comboio and AVAL-DEVOLVIDO lines | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[2].startswith('ESPERANDO: logs/E4C-F6F7/espera_c6.sh') new=[ "ESPERANDO: logs/COMBOIO-1811/espera.sh \| pid=3367337", "COMBOIO-1811 (decisao tecnica RAIAS 4, PRE-APROVADO (a) cancelar volta superada): a suite inteira da P2 (job 396ca0c7) deu FAILED 2 = escala.tests.test_torneira_folgas x2  ...` |
