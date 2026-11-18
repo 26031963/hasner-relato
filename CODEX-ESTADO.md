@@ -1,7 +1,283 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 10:28** · publicado em **18/11/2026 10:28** (UTC-3)
+> Ultima resposta processada: **18/11/2026 10:34** · publicado em **18/11/2026 10:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 10:34 · sessao f9447a60588b · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
+
+**Passo 1 — cópia do dado raspado**
+
+```text
+=== SOMBRA (sombra_db, leitor) 18/11 10:33:03 ===
+sonda_leitura: sonda_i4.py [dbc76cca2877ec2c] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+(1, 1, 5, 1367)
+(1, 2, 5, 1758)
+(1, 3, 5, 1264)
+(1, 4, 5, 17)
+(1, 5, 5, 500)
+(1, 6, 5, 737)
+(1, 8, 5, 65)
+(2, 1, 0, 0)
+(2, 2, 0, 0)
+(2, 3, 0, 0)
+(2, 4, 0, 0)
+(2, 5, 5708, 244)
+(3, 5, '1_ate_1min', 1)
+(3, 5, '3_ate_1dia', 4)
+(3, 5, '4_mais_1dia', 239)
+(5, 'classe2_sem_log_auditoria', 0)
+(6, 'lavras_total', 47318)
+(7, 'candidata_A_foto_historica_move', 0, 'marcos_do_lote nao le DP (veredito_lavrado.py:151-208), lavras que mudam = 0 por construcao')
+(8, 'candidata_B_provada_classe2', 0)
+(9, 'cota_classe1', 0)
+(9, 'cota_classe2', 0)
+(9, 'cota_classe4', 0)
+(9, 'cota_qualquer_1_2_4', 0)
+(10, 'total_dp', 5708)
+rc_sombra=0
+```
+
+Linhas copiadas: **28**, incluindo a linha em branco. [não verificado]
+
+**Passo 2 — leitura da sonda**
+
+A classe 2 foi definida nesta sonda como ato `resposta` com log `carimbar_resposta_pela_trilha` na pergunta; o código registra esse evento após criar a decisão. ([disputa_emissao.py:1685](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1685), [disputa_emissao.py:1701](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1701))
+
+| Classe 2 | Resultado informado |
+|---|---:|
+| Total | 0 [não verificado] |
+| Inversões por pk | 0 [não verificado] |
+| Faixas de lag inserção − `ato_em` do log | Nenhuma linha de faixa para a classe 2 [não verificado] |
+| Sem log de auditoria | 0 [não verificado] |
+
+A classe 5 contém o restante, distribuído pelos **códigos de ato tal como aparecem na sonda**; a correspondência entre esses números e os nomes dos atos não consta do dado fornecido. [não verificado]
+
+| Ato | Classe 5: quantidade |
+|---:|---:|
+| 1 | 1.367 [não verificado] |
+| 2 | 1.758 [não verificado] |
+| 3 | 1.264 [não verificado] |
+| 4 | 17 [não verificado] |
+| 5 | 500 [não verificado] |
+| 6 | 737 [não verificado] |
+| 8 | 65 [não verificado] |
+| **Total** | **5.708** [não verificado] |
+
+A linha 2 informa 244 inversões para a classe 5; as linhas 3 informam 1 na faixa `1_ate_1min`, 4 em `3_ate_1dia` e 239 em `4_mais_1dia`. A definição executada dessas faixas não está disponível na cópia apresentada. [não verificado]
+
+As classes 1, 3 e 4 por prefixo de motivo **não são mensuráveis nesta sombra**, pois `ato_motivo` é mascarado; sua medição por motivo fica para produção. O código contém escritores com motivos relevantes para essa distinção. ([sombra_regras_pessoais.py:142](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/bin/sombra_regras_pessoais.py:142), [disputa_emissao.py:1679](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1679), [models.py:4119](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4119), [backfill_decisoes_pergunta.py:323](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/management/commands/backfill_decisoes_pergunta.py:323))
+
+**Passo 3 — candidatas e limite**
+
+- **A — foto histórica:** a sonda informa **0 lavras movidas**, por construção; `marcos_do_lote` lê marcos de batidas, células e perguntas, sem ler `DecisaoPergunta`. Isso descreve essa candidata, não uma medição de inserções posteriores. ([veredito_lavrado.py:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/veredito_lavrado.py:151))
+- **B — provadas pela classe 2:** a sonda informa **0 lavras movidas provadas**, no critério de inserção posterior a `julgado_em`; a classe 2 também tem total 0 na saída. Isso não mede as demais classes. [não verificado]
+- **Cota superior, linha 9:** a saída informa **0** para cada uma das classes 1, 2 e 4 e **0** para a união `qualquer_1_2_4`. É o limite reportado pela sonda, não uma contagem de movimentos provados; sua definição de cálculo não está no dado fornecido e as classes por motivo estão mascaradas na sombra. [não verificado]
+
+Falta a coluna de **instante de inserção** em `DecisaoPergunta` para comparar diretamente esse instante com `julgado_em`; o modelo declara `ato_em` como relógio do ato. ([models.py:4019](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4019), [models.py:4051](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4051))
+
+**Passo 4 — pergunta ao Ronald**
+
+Ronald, a sombra informa 0 lavras movidas para A, 0 provadas para B e cota 0 na linha 9; as classes 1, 3 e 4 por motivo estão mascaradas. [não verificado]  
+Como deseja tratar esses números na decisão do item 4, considerando a medição por motivo em produção e a ausência de instante de inserção em `DecisaoPergunta`? ([sombra_regras_pessoais.py:142](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/bin/sombra_regras_pessoais.py:142), [models.py:4051](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4051))
+
+## 18/11 10:32 · sessao d60dbd8c2c65 · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
+
+```text
+=== SOMBRA (sombra_db, leitor) 18/11 10:28:42 ===
+sonda_leitura: sonda_i5.py [9504050b83aadff2] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+agora 2026-11-18T10:28:45.391321-03:00 SILENCIO 11 REABERTURA 29
+SILENCIO pk16360 col42 dia=2026-08-25 no_app_hoje=True razao=[] acoes=[] | HOJE rota=porta_acao fio=admin nao_sei=False fila=0 | APOS_F5 rota=porta_acao fio=admin nao_sei=False fila=0 | porta_da_tarefa_hoje=ok
+SILENCIO pk24694 col925 dia=2026-09-05 no_app_hoje=True razao=['silencio_decidido'] acoes=[('resolver_dia', 'admin')] | HOJE rota=porta_acao fio=admin nao_sei=False fila=0 | APOS_F5 rota=porta_acao fio=admin nao_sei=False fila=0 | porta_da_tarefa_hoje=ok
+SILENCIO pk29676 col925 dia=2026-09-05 no_app_hoje=True razao=['silencio_decidido'] acoes=[] | HOJE rota=porta_acao fio=admin nao_sei=False fila=0 | APOS_F5 rota=porta_acao fio=admin nao_sei=False fila=0 | porta_da_tarefa_hoje=ok
+SILENCIO pk31420 col925 dia=2026-09-05 no_app_hoje=True razao=['silencio_decidido'] acoes=[] | HOJE rota=porta_acao fio=admin nao_sei=False fila=0 | APOS_F5 rota=porta_acao fio=admin nao_sei=False fila=0 | porta_da_tarefa_hoje=ok
+SILENCIO pk31421 col925 dia=2026-09-05 no_app_hoje=True razao=['silencio_decidido'] acoes=[] | HOJE rota=porta_acao fio=admin nao_sei=False fila=0 | APOS_F5 rota=porta_acao fio=admin nao_sei=False fila=0 | porta_da_tarefa_hoje=ok
+SILENCIO pk43761 col510 dia=2026-10-14 no_app_hoje=True razao=[] acoes=[] | HOJE rota=None fio=nada nao_sei=False fila=0 | APOS_F5 rota=None fio=nada nao_sei=False fila=0 | porta_da_tarefa_hoje=None
+SILENCIO pk46070 col510 dia=2026-10-19 no_app_hoje=True razao=[] acoes=[] | HOJE rota=None fio=nada nao_sei=False fila=0 | APOS_F5 rota=None fio=nada nao_sei=False fila=0 | porta_da_tarefa_hoje=None
+SILENCIO pk46440 col510 dia=2026-10-20 no_app_hoje=True razao=[] acoes=[] | HOJE rota=None fio=nada nao_sei=False fila=0 | APOS_F5 rota=None fio=nada nao_sei=False fila=0 | porta_da_tarefa_hoje=None
+SILENCIO pk53787 col42 dia=2026-11-04 no_app_hoje=True razao=['silencio_decidido'] acoes=[] | HOJE rota=None fio=nada nao_sei=False fila=0 | APOS_F5 rota=None fio=nada nao_sei=False fila=0 | porta_da_tarefa_hoje=None
+SILENCIO pk53837 col42 dia=2026-11-04 no_app_hoje=True razao=['silencio_decidido'] acoes=[] | HOJE rota=None fio=nada nao_sei=False fila=0 | APOS_F5 rota=None fio=nada nao_sei=False fila=0 | porta_da_tarefa_hoje=None
+SILENCIO pk53875 col42 dia=2026-11-04 no_app_hoje=True razao=['silencio_decidido'] acoes=[] | HOJE rota=None fio=nada nao_sei=False fila=0 | APOS_F5 rota=None fio=nada nao_sei=False fila=0 | porta_da_tarefa_hoje=None
+SILENCIO TOTAL 11
+SILENCIO    ('apos', 'porta_acao', 'admin') 5
+SILENCIO    ('apos', None, 'nada') 6
+SILENCIO    ('hoje', 'porta_acao', 'admin') 5
+SILENCIO    ('hoje', None, 'nada') 6
+SILENCIO SEM_PORTA hoje (rota None): 6 | apos F5 (rota None): 6
+REABERTURA pk21482 col822 dia=2026-08-28 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=None fio=nao_sei nao_sei=True fila=0 | APOS_F5 rota=None fio=nao_sei nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk21483 col822 dia=2026-08-28 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=None fio=nao_sei nao_sei=True fila=0 | APOS_F5 rota=None fio=nao_sei nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk21484 col822 dia=2026-08-28 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=None fio=nao_sei nao_sei=True fila=0 | APOS_F5 rota=None fio=nao_sei nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk32973 col822 dia=2026-09-18 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_app fio=colab nao_sei=True fila=0 | APOS_F5 rota=porta_app fio=colab nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk36273 col446 dia=2026-09-25 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_pergunta fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_pergunta fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk36383 col169 dia=2026-09-25 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk39989 col836 dia=2026-10-04 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_app fio=colab nao_sei=True fila=0 | APOS_F5 rota=porta_app fio=colab nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk42735 col836 dia=2026-10-11 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_app fio=colab nao_sei=True fila=0 | APOS_F5 rota=porta_app fio=colab nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk45597 col836 dia=2026-10-18 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_app fio=colab nao_sei=True fila=0 | APOS_F5 rota=porta_app fio=colab nao_sei=True fila=0 | porta_da_tarefa_hoje=ok
+REABERTURA pk45691 col848 dia=2026-10-18 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk45776 col363 dia=2026-10-19 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk47212 col908 dia=2026-10-22 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_pergunta fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_pergunta fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk49033 col822 dia=2026-10-22 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk49034 col822 dia=2026-10-22 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk49035 col822 dia=2026-10-22 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk49036 col822 dia=2026-10-22 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk49668 col247 dia=2026-10-24 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk50478 col148 dia=2026-10-26 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk51099 col902 dia=2026-10-28 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk51329 col363 dia=2026-10-23 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk51667 col822 dia=2026-10-29 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk51685 col822 dia=2026-10-29 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk51763 col822 dia=2026-10-29 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk53093 col902 dia=2026-11-02 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk53139 col902 dia=2026-11-02 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk53172 col902 dia=2026-11-02 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk53250 col902 dia=2026-11-02 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk53554 col848 dia=2026-11-03 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA pk55305 col1020 dia=2026-11-08 no_app_hoje=False razao=['passivo_sem_linha'] acoes=[] | HOJE rota=porta_fila fio=admin nao_sei=True fila=1 | APOS_F5 rota=porta_fila fio=admin nao_sei=True fila=1 | porta_da_tarefa_hoje=ok
+REABERTURA TOTAL 29
+REABERTURA    ('apos', 'porta_app', 'colab') 4
+REABERTURA    ('apos', 'porta_fila', 'admin') 20
+REABERTURA    ('apos', 'porta_pergunta', 'admin') 2
+REABERTURA    ('apos', None, 'nao_sei') 3
+REABERTURA    ('hoje', 'porta_app', 'colab') 4
+REABERTURA    ('hoje', 'porta_fila', 'admin') 20
+REABERTURA    ('hoje', 'porta_pergunta', 'admin') 2
+REABERTURA    ('hoje', None, 'nao_sei') 3
+REABERTURA SEM_PORTA hoje (rota None): 3 | apos F5 (rota None): 3
+rc_sombra=0
+```
+
+linhas copiadas: 61, incluindo a linha em branco.
+
+Os números abaixo são contagens do **dado fornecido acima**; a execução e a origem da sonda não foram verificadas de forma independente. [não verificado]
+
+| Classe | Cenário | Com dono e rota | Sem porta | Total |
+|---|---|---:|---:|---:|
+| SILENCIO | HOJE | 5 admin, `porta_acao` | 6 `nada` | 11 |
+| SILENCIO | APOS_F5 | 5 admin, `porta_acao` | 6 `nada` | 11 |
+| REABERTURA | HOJE | 4 colab, `porta_app`; 22 admin, 20 `porta_fila` e 2 `porta_pergunta` | 3 `nao_sei` | 29 |
+| REABERTURA | APOS_F5 | 4 colab, `porta_app`; 22 admin, 20 `porta_fila` e 2 `porta_pergunta` | 3 `nao_sei` | 29 |
+
+A tabela conta a **rota da tarefa do dia**, conforme impressa pela sonda, inclusive quando `nao_sei=True`; esse indicador pode coexistir com uma rota. Um envelope de `porta_da_tarefa` com rota `None` também não é uma rota publicada: por isso os três casos `nao_sei` contam como sem porta, embora a sonda imprima `porta_da_tarefa_hoje=ok`. [app/chamados/services/tarefa_do_dia.py:718](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:718); [não verificado]
+
+**Sem porta nos dois cenários**, segundo o dado fornecido:
+
+- SILENCIO: pk43761, pk46070, pk46440, pk53787, pk53837, pk53875.
+- REABERTURA: pk21482, pk21483, pk21484. [não verificado]
+
+Nenhuma das 40 perguntas passa a ter dono que não tinha, nem deixa de ter: a rota e o fio impressos são iguais nos dois cenários para cada pk. A razão exata de cada uma das cinco portas administrativas de SILENCIO não é toda demonstrada pelas ações da instância impressa; a tarefa agrega ações de todas as instâncias e também pode receber `resolver_dia` da autoridade do calendário. Para pk24694 essa ação aparece na própria saída; para as demais, sua origem específica é [não verificado]. [app/chamados/services/tarefa_do_dia.py:611](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:611); [app/chamados/services/tarefa_do_dia.py:643](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:643).
+
+**As 29 REABERTURA não mostram ação `responder` na instância da pergunta.** Todas imprimem `passivo_sem_linha` e `acoes=[]`: em `_pela_decisao`, a verificação de passivo vem antes da regra que, para uma REABERTURA não interceptada, retornaria `responder`. O código exige tanto a pergunta em `_pendentes_app` quanto uma ação `responder` do colaborador naquela instância para `colab_tem_porta`. Assim, colocar essas perguntas no conjunto não cria essa ação. As quatro rotas `porta_app` publicadas pertencem à tarefa do dia; qual outra instância as origina não aparece no recorte. [app/chamados/services/tarefa_do_dia.py:154](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:154); [app/chamados/services/tarefa_do_dia.py:163](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:163); [app/chamados/services/tarefa_do_dia.py:657](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:657); [não verificado]
+
+Para SILENCIO, `_pela_decisao` retorna `silencio_decidido` com ações vazias, mas isso **não fecha necessariamente a porta da tarefa inteira**: o código exclui a pergunta encerrada de `portas_pergunta`, enquanto a âncora ainda pode entrar em `portas` se estiver na fila, sujeita à seleção por verbo; outras ações também podem dar dono ao dia. No dado, os 11 imprimem `fila=0`, portanto ele não demonstra uma âncora de fila alcançando esses casos. A ação `resolver_dia` impressa em pk24694 é compatível com o acréscimo posterior pela tarefa. [app/chamados/services/tarefa_do_dia.py:176](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:176); [app/chamados/services/tarefa_do_dia.py:643](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:643); [app/chamados/services/tarefa_do_dia.py:690](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:690); [não verificado]
+
+O contrafactual é **fiel ao efeito informado sobre a pertinência dessas 40 perguntas em `_pendentes_app`**, condicionado às premissas fornecidas de que estão vivas e de que a F5 mudaria suas partições como descrito: `_ler_vida` toma os pendentes da partição e ainda filtra por `pergunta_viva`. Ele não executa a F5 real nem comprova seus demais efeitos, a partição de outras perguntas, mudanças em outras entradas da carga ou o comportamento de outras telas. O brief F5 e o código da sonda não estavam disponíveis na cópia; a implementação efetiva e a fidelidade integral são [não verificado]. [app/chamados/services/tarefa_do_dia.py:530](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:530); [app/chamados/services/pergunta_no_app.py:76](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/pergunta_no_app.py:76).
+
+Pergunta para Ronald: **“Avaliamos a F5 sabendo que, nesta sonda, os 11 SILENCIO permanecem em 5 com dono e 6 sem porta e as 29 REABERTURA em 26 com dono e 3 sem porta, sem mudança de dono em nenhum dos 40 casos?”** [não verificado]
+
+## 18/11 10:31 · sessao 6596f28a6d0e · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
+
+```text
+---- DADO RASPADO (sonda/anexos) ----
+=== SOMBRA (sombra_db, leitor) 18/11 10:30:44 ===
+sonda_leitura: sonda_i4.py [cae9871ac1d5b64e] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+(1, 1, 5, 1367)
+(1, 2, 5, 1758)
+(1, 3, 5, 1264)
+(1, 4, 5, 17)
+(1, 5, 5, 500)
+(1, 6, 5, 737)
+(1, 8, 5, 65)
+(2, 1, 0, 0)
+(2, 2, 0, 0)
+(2, 3, 0, 0)
+(2, 4, 0, 0)
+(2, 5, 5708, 244)
+(3, 5, '1_ate_1min', 1)
+(3, 5, '3_ate_1dia', 4)
+(3, 5, '4_mais_1dia', 239)
+(5, 'classe2_sem_log_auditoria', 0)
+(6, 'lavras_total', 47318)
+(7, 'candidata_A_foto_historica_move', 0, 'marcos_do_lote nao le DP (veredito_lavrado.py:151-208), lavras que mudam = 0 por construcao')
+(8, 'candidata_B_provada_classe2', 0)
+(9, 'cota_classe1', 0)
+(9, 'cota_classe2', 0)
+(9, 'cota_classe4', 0)
+(9, 'cota_qualquer_1_2_4', 0)
+(10, 'total_dp', 5708)
+rc_sombra=0
+---- FIM DO DADO ----
+```
+
+linhas copiadas: 30, incluindo delimitadores e linha vazia.
+
+Os números abaixo são a transcrição e operações aritméticas sobre o dado fornecido; a execução e o conteúdo da sonda não são verificáveis nesta cópia: **[não verificado]**.
+
+| Escritor / classe de motivo | Total DP | `ato_em` anterior à inserção provada pelo log | Inversões por pk — **proxy** | O que não se mede |
+|---|---:|---:|---:|---|
+| 1 — projeção sem linha | 0 | Não medido | 0 | Inserção real e atraso; a projeção fornece `ato_em` histórico ([models.py:4122](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4122)). |
+| 2 — pela trilha | 0 | **0** | 0 | Não há linhas para medir atraso ou faixas; sem log: 0. O escritor grava a DP e depois emite o evento ([disputa_emissao.py:1685](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1685)). |
+| 3 — resposta automática | 0 | Não medido | 0 | Inserção real e atraso ([disputa_emissao.py:1655](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1655)). |
+| 4 — backfill E1 de silêncio | 0 | Não medido | 0 | Inserção real e atraso; o backfill usa `materializada_em` ([backfill_decisoes_pergunta.py:323](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/management/commands/backfill_decisoes_pergunta.py:323)). |
+| 5 — demais | 5.708 | Não medido | 244 | Inserção real e atraso por log não foram medidos para esta classe; ela reúne vários escritores, entre eles [resposta](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1525), [reabertura/recusa](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/disputa_emissao.py:1632), [validação](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/validacao.py:173), [devolução](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/validacao.py:279), [silêncio](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:2013), [retratação](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:2145) e [absorção](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/materializacao.py:1048). |
+
+A soma é **5.708 = `total_dp`**. Das 244 inversões por pk, 1 está em até 1 minuto, 4 na faixa `3_ate_1dia` e 239 em mais de 1 dia; inversão é comparação entre `ato_em` e atos de pk menor, não prova do instante de inserção. **[não verificado: saída da sonda fornecida]**
+
+Das **47.318 lavras** do recorte informado **[não verificado: saída da sonda fornecida]**:
+
+- **A — manter a foto histórica:** **0 lavras movidas por DP, por construção**; `marcos_do_lote` não consulta DP ([veredito_lavrado.py:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/veredito_lavrado.py:151)). O efeito de colocar na F3 somente o marcador do placar é **[não verificado]**.
+- **B — marco por `Max(pk)`/`Count` de DP:** **0 lavras provadas** pela classe 2 e **cota do recorte 1/2/4 = 0**; o número total de lavras que B moveria, seja com `ato_em <= ate`, seja sem filtro, é **[não verificado]**. O marco atual e sua comparação com `julgado_em` estão em [veredito_lavrado.py:201](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/veredito_lavrado.py:201) e [veredito_lavrado.py:230](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/veredito_lavrado.py:230).
+
+A cota **0** conta lavras com DP do mesmo colaborador nas classes 1, 2 ou 4 e `ato_em <= julgado_em`, independentemente de se provar inserção posterior; ela não cobre a classe 5 nem estabelece o efeito total de B; para verificar a ordem de inserção faltaria uma coluna de criação em `DecisaoPergunta`, junto aos campos em [models.py:4051](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4051), ou um snapshot histórico comparável **[não verificado para os registros existentes]**.
+
+Ronald, você escolhe **A**, manter a foto histórica e usar na F3 só o marcador do placar — **0 lavras movidas por DP por construção** ([veredito_lavrado.py:151](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/veredito_lavrado.py:151)) — ou **B**, acrescentar marco `Max(pk)`/`Count` das DP, com `ato_em <= ate` ou sem filtro — **0 provadas pela classe 2, cota 0 nas classes 1/2/4, total movido [não verificado]** ([models.py:4051](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/models.py:4051))? **[não verificado: números da sonda fornecida]**
+
+## 18/11 10:31 · sessao c02f51090e3f · RESPOSTAS-DE-LEI-1811-1010 · leitura · origem=Code
+
+A cópia examinada não tem metadados Git; portanto, sua identidade como HEAD `dd489c627` está **[não verificado]**. As referências a arquivos abaixo são da cópia aberta. Nos anexos, a numeração começa na primeira linha de conteúdo de cada bloco.
+
+A conclusão técnica é que **nenhum dos três escritores existentes registra qualquer uma das duas marcas pedidas com seu significado e universo**. Um escritor novo é a proposta para ambas, mas a lei ainda precisa decidir se “nenhuma” é um ato persistido ou a leitura da ausência de decisão, e quais efeitos e transições pertencem a “trabalho reconhecido”. O brief exige uma porta única de decisão e condiciona a abertura aos cortes L1 e L2. (brief_dst.md:L2–L3, L24, L28–L30, L32–L34, L48–L49; [he.py:159](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:159), [celula.py:572](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:572), [retratar_humano.py:150](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/retratar_humano.py:150))
+
+### 1. Matriz de transições
+
+`RED` abaixo significa **caso a especificar**, não teste existente conferido. Para todas as linhas DST, o juiz e a operação completos estão **[não verificado]**; a tabela distingue o comportamento pedido do que o código já faz. `decisao_do_dia` lê veredictos humanos de Resolver dia, cujo vocabulário é outro. ([veredito_celula.py:18](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:18), [veredito_celula.py:85](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:85))
+
+| Estado / transição | Juiz | Operação | O que persiste | Retorno / recusa | Prova |
+|---|---|---|---|---|---|
+| **A: sem marca → nenhuma** | Juiz DST **[não verificado]**. `decisao_do_dia` devolve `{}` quando não encontra veredito humano; isso não demonstra uma marca persistida “nenhuma”. | Escritor DST **[não verificado]**; depende da lei sobre ausência versus ato. | Marca, modelo e trilha DST **[não verificado]**. | Retorno e recusa **[não verificado]**. | [veredito_celula.py:104](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:104); **RED A1:** distinguir ausência de linha e marca, se a lei exigir marca. |
+| **A: nenhuma → outra decisão** | Juiz DST **[não verificado]**. | Transição DST **[não verificado]**; HE, correção de grade e retratação são atos distintos. | Antes/depois da decisão DST **[não verificado]**. | Estados permitidos e recusa **[não verificado]**. | brief_dst.md:L30; **RED A2:** trocar para cada saída aprovada e conservar a trilha. |
+| **A: repetida 2×** | Juiz DST **[não verificado]**. | Operação DST **[não verificado]**. | Uma trilha e nenhuma duplicata são o contrato de desenho do brief, ainda não demonstrado para A. | Retorno específico **[não verificado]**. | brief_dst.md:L28; **RED A3:** repetir a mesma entrada e verificar escrita e trilha. |
+| **A: revogada** | Juiz de vigência DST **[não verificado]**. | Revogação DST **[não verificado]**. | O brief exige conservar decisão tomada na trilha quando o fato muda; campos e significado de revogar “nenhuma” **[não verificado]**. | Retorno e estado posterior **[não verificado]**. | brief_dst.md:L29; **RED A4:** conservar história e definir leitura após revogação. |
+| **B: sem decisão → trabalho reconhecido** | Juiz DST **[não verificado]**. O admin é o decisor previsto no brief. | Escritor DST **[não verificado]**. Resolver dia com `trabalhou` recusa quando a grade calculada tem `tipo_dia != trabalho`; HE é decisão separada. | Registro DST **[não verificado]**; `DecisaoHE` guarda decisão sobre minutos fora da janela, não reconhecimento do trabalho. | Resolver dia retorna `ok=False` nesse ramo; HE recusa minutos não positivos. | brief_dst.md:L30; [veredito_celula.py:243](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/veredito_celula.py:243), [he.py:186](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:186); **RED B1**. |
+| **B: reconhecido → escala corrigida** | Juiz da troca DST **[não verificado]**; vínculo da edição é obtido por `vinculo_do_dia_carregado`. | `editar_dia(..., trabalha=True)` já faz a correção da célula; não demonstra troca de decisão DST. | `CelulaDia`: trabalho, DNA, vínculo, origem, autor e instante; trilha da edição com antes/depois e motivo. | `editada`, `igual`, `barrada` ou `sem_vinculo`; transição DST **[não verificado]**. | [celula.py:572](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:572); **RED B2**. |
+| **B: reconhecido → batida invalidada** | Juiz da troca DST **[não verificado]**. | `retratar` existe por batida, mas a troca da decisão por pessoa × dia **[não verificado]**. | A batida recebe `aprovada=False` e `retratada_em`; trilha da retratação. Persistência da troca DST **[não verificado]**. | `retratar` devolve `(ok, mensagem)`; exige permissão e motivo ativo. | [retratar_humano.py:150](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/retratar_humano.py:150), [registro_batida.py:287](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/registro_batida.py:287); **RED B3**. |
+| **B: repetida 2×** | Juiz DST **[não verificado]**. | Operação DST **[não verificado]**. | Uma trilha e zero duplicata são requisitos do desenho, não comportamento demonstrado para B. | Retorno específico **[não verificado]**. | brief_dst.md:L28; **RED B4**. |
+| **B: revogada** | Juiz de vigência DST **[não verificado]**. `vigentes()` é juiz da decisão **HE**, não da DST. | Revogação DST **[não verificado]**. | Trilha da decisão DST e seus campos de revogação **[não verificado]**; o brief pede retenção da decisão quando o fato muda. | Efeito sobre HE, grade e batidas **[não verificado]**. | brief_dst.md:L29; [models.py:1265](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/models.py:1265); **RED B5**. |
+
+### 2. Encaixe nos três escritores
+
+As respostas sobre **universo** significam se a operação aceita *todos* os dias da unidade pedida, não se ela pode ser chamada em algum exemplo desse universo. (brief_dst.md:L3)
+
+| Escritor | Vocabulário contém A / B? | Aceita o universo DST? | Trilha e repetição |
+|---|---|---|---|
+| `decidir_he` | **Não / não.** Apenas `autorizado` e `nao`, relativos à HE fora da janela. | **Não integralmente.** Exige minutos positivos fornecidos pelo chamador, além de permissão e, para autorizar, motivo; não valida a unidade DST como tal. | Guarda estado, minutos, motivo, autor e datas; tenta trilha antes/depois. A trilha é **best effort**, portanto não garantida. Mesma decisão vigente retorna `no_op`, sem nova trilha. ([models.py:1283](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/models.py:1283), [he.py:175](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:175), [he.py:89](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:89), [he.py:195](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:195)) |
+| `editar_dia` | **Não / não.** Aceita `trabalha=True/False`, que altera a grade. | **Não integralmente.** Pode editar dia sem trabalho, mas exige vínculo, autor e motivo e tem guarda de competência; não exige batida apurável. | Guarda autor, instante, motivo e antes/depois; falha da trilha desfaz a edição. Edição já equivalente retorna `igual` sem escrever. ([celula.py:572](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:572), [celula.py:597](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:597), [celula.py:632](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:632)) |
+| `retratar` | **Não / não.** Registra que uma marcação não foi trabalho. | **Não como decisão de dia.** Recebe uma batida individual; pode atuar numa batida do universo, mas não representa a decisão sobre pessoa × dia. | Exige ator autorizado e motivo ativo; passa motivo e antes/depois à auditoria, que pode falhar sem barrar a gravação. Repetir sobre batida retratada retorna sucesso sem nova trilha. ([retratar_humano.py:131](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/retratar_humano.py:131), [retratar_humano.py:150](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/retratar_humano.py:150), [registro_batida.py:255](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/registro_batida.py:255), [auditoria.py:17](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/core/auditoria.py:17)) |
+
+- **A — EXIGE escritor novo se “nenhuma” tiver de ser uma marca persistida.** Nenhum dos três escreve essa marca; se for apenas a leitura da ausência de decisão, a necessidade de escritor para A depende da lei. ([models.py:1287](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/models.py:1287), [celula.py:575](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:575), [retratar_humano.py:150](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/retratar_humano.py:150))
+- **B — EXIGE escritor novo para a decisão própria**, sujeito ao corte da lei: HE decide minutos, a edição muda a grade e a retratação invalida uma batida. O escritor novo proposto pode coordenar os efeitos existentes que a lei escolher, dentro da porta única prevista no brief. (brief_dst.md:L24, L30; [he.py:159](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:159), [celula.py:572](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/celula.py:572), [retratar_humano.py:150](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/services/retratar_humano.py:150))
+
+### 3. Frota demonstrada pelos anexos
+
+- **Medida da sombra, 17/11:** dos 170 dias `sem_trabalho` com órfã, o relato fecha **93 pagos sem decisão + 72 `ESTRUTURA_DINHEIRO` + 3 com porta/pergunta + 1 HE autorizada + 1 HE negada = 170**. Dos 72, 50 tinham duas ou mais batidas; o relato informa zero com relógio positivo. Essa é uma medida distinta do retrato gravado da folha. (relato_72.txt:L7–L8)
+- **Recorte detalhado do retrato:** as 55 linhas pessoa × dia de `retrato_a2` correspondem às datas das linhas selecionadas de `retrato_a`; **5** têm simultaneamente `trabalha=False` e batidas apuráveis positivas: os cinco dias de `col348`. As outras **50** não satisfazem as duas condições *nesses campos impressos*. (retrato_a.saida.txt:L4–L24; retrato_a2.compacto.txt:L1–L55, em especial L47–L51)
+- **Limite da contagem pelo juiz:** das outras 50, **25** têm zero batidas apuráveis e **25** têm `trabalha=True` e batidas positivas. Para estas últimas, o anexo não imprime `ata.tipo_dia` nem o carimbo necessário da ausência parcial: `dia_sem_trabalho` também pode considerar a ata. Logo, **5 são confirmados pelo `trabalha=False`; o total segundo o juiz completo e a classificação definitiva dos outros 25 com batidas estão [não verificado]**. Não se pode extrapolar as 55 linhas selecionadas para todas as linhas do retrato. (retrato_a2.compacto.txt:L1–L55; [juizes.py:445](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/juizes.py:445); [retrato_folha.py:98](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/retrato_folha.py:98))
+- **Leitor e rótulo:** no retrato gravado, `col348` aparece como `furo_espelho`, fio `ninguem`, balde `sem_acao_disponivel`, sem ações; o rótulo desse balde é **“Sem ação disponível”**. `tarefa_do_dia` informa, para esses cinco dias, `fio=None`; o retrato é uma leitura por pessoa e não comprova um rótulo DST específico para cada dia. (retrato_a.saida.txt:L20; retrato_a2.compacto.txt:L47–L51; [retrato_folha.py:191](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/folha/retrato_folha.py:191), [tarefa_do_dia.py:718](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/chamados/services/tarefa_do_dia.py:718))
+
+**Perguntas de lei para Ronald:** “nenhuma” deve ser uma marca persistida, com ato e revogação, ou o juiz deve devolvê-la quando não houver decisão vigente? “Trabalho reconhecido” é decisão própria independente de autorização de HE; que efeitos, trocas e revogação ela produz, inclusive quando não há minutos positivos de HE? Permanecem também os cortes L1 e L2 exigidos para abertura. (brief_dst.md:L30, L32–L34, L48–L49; [he.py:186](/home/ronald/codex_ws/dd489c627bb0a8d5f8782945c7e240e6621c98ed/app/ponto/portas/he.py:186))
+
+FRASE DE CORTE DST-L1: (A) a marca 'nenhuma' [não verificado: depende da pergunta de lei acima] ; (B) 'trabalho reconhecido' nasce como escritor novo decidir_dstl1 [proposta sujeita ao corte de lei]; juiz novo decisao_admin_dia_sem_trabalho [proposta]; trilha quem, quando, motivo, antes/depois e revogação [campos propostos]; universo pessoa × dia do turno cuja célula diz sem trabalho e há batida apurável; frota 72 de 170 na sombra, retrato detalhado 5 confirmados, 25 fora por zero batidas e 25 dependentes da ata.
 
 ## 18/11 10:28 · sessao a2164c7661b8 · RESPOSTAS-DE-LEI-1811-1010 · leitura · origem=Code
 
@@ -1126,427 +1402,4 @@ print("Destinos dinamicos, templates gerados e exibicao sem nome 'pergunta' "
 
 alcance nao verificado restante: 4
 
-## 18/11 10:11 · sessao d7a04e67cf1b · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
-
-**4. Contrato F1 antigo — STATUS: FECHADO quanto à implicação para a F7.** O anexo apresenta uma leitura histórica que ordenava decisões por `(ato_em, pk)` e fazia o fold dos atos; o dado fornecido informa que `be2b8d733` não é ancestral do HEAD. A F7 deve, portanto, censar os leitores do HEAD, sem presumir que esse contrato histórico esteja presente ou seja executado hoje. [não verificado]
-
-No HEAD, a propriedade `respondida` delega a `pergunta_respondida`, que lê o par projetado `respondida_em` e `resposta_colab`; a projeção temporal lê também validação e materialização, e `estado` dá precedência a `validada_em`. A leitura histórica do último ato, do motivo de recusa e dos demais resultados do fold não tem equivalência geral demonstrada por esses leitores: o inventário do item 3 continua necessário. [models.py:3674](app/chamados/models.py:3674) [juizes.py:1382](app/chamados/juizes.py:1382) [juizes.py:1544](app/chamados/juizes.py:1544) [models.py:3152](app/chamados/models.py:3152)
-
-**5. Frota U1/U2 — STATUS: FECHADO para o resultado da sonda na sombra; U2 não medida.** A saída fornecida informa **U1 global = 29.931** e **validação projetada sem linha = 15.118**, com `rc_sombra=0`. São resultados declarados da sombra, não uma leitura independente nesta sessão. [não verificado]
-
-O segundo número conta ausência de correspondência da validação projetada por pergunta, ato e instante; não determina qual é o último ato. **U2 permanece não medida**, pois a saída declara indisponível a porta real F1. [models.py:4122](app/chamados/models.py:4122) [não verificado]
-
-**Itens 1 e 3 — STATUS: ABERTOS até a execução e revisão da saída.** O script abaixo inventaria as formas estáticas pedidas, incluindo testes e migrações, e imprime incertezas. Atribuição de casca, papel de escrita e resolução de nomes dinâmicos exigem revisão quando a sintaxe não os determina; a execução e a completude semântica permanecem **[não verificado]**. [nao verificado]
-
-Execute a partir de `app/`, sem Django:
-
-```python
-import ast
-import os
-import re
-
-CAMPOS = {
-    "validada_em", "validada_por", "respondida_em",
-    "resposta_colab", "materializada_em",
-}
-FUNCOES = {
-    "pergunta_respondida", "respondida_sem_texto", "texto_sem_carimbo",
-    "projecao_temporal_da_pergunta", "linhas_da_projecao_sem_linha",
-    "pergunta_viva", "_pergunta_viva_calc",
-}
-METODOS = {"get", "values", "values_list", "filter"}
-ESCRITORES = {"update", "create", "get_or_create", "update_or_create"}
-BASES = {"base.html", "base_app.html"}
-CARD = "chamados/partials/_pergunta_card.html"
-
-def arquivos():
-    for raiz, dirs, nomes in os.walk("."):
-        dirs[:] = sorted(d for d in dirs if d not in {
-            ".git", "__pycache__", ".venv", "venv", "node_modules",
-        })
-        for nome in sorted(nomes):
-            yield os.path.join(raiz, nome)
-
-def local(caminho, linha):
-    return "app/%s:%d" % (caminho.removeprefix("./"), linha)
-
-def campo_em_nome(nome):
-    # Inclui relações e sufixos ORM: pergunta__validada_em__isnull.
-    partes = nome.split("__")
-    return sorted(
-        c for c in CAMPOS
-        if any(p == c or p == c + "_id" for p in partes)
-    )
-
-def nome_chamada(no):
-    if isinstance(no, ast.Name):
-        return no.id
-    if isinstance(no, ast.Attribute):
-        return no.attr
-    return ""
-
-def trecho(texto, no):
-    s = ast.get_source_segment(texto, no) or "?"
-    return " ".join(s.split())[:240]
-
-todos = list(arquivos())
-templates = {}
-for caminho in todos:
-    if not caminho.endswith((".html", ".htm", ".txt")):
-        continue
-    # Permite templates em app/templates e em diretórios templates de apps.
-    normal = caminho.removeprefix("./").replace(os.sep, "/")
-    marcador = "templates/"
-    if marcador not in normal:
-        continue
-    nome = normal.split(marcador, 1)[1]
-    try:
-        with open(caminho, encoding="utf-8") as f:
-            texto = f.read()
-    except (OSError, UnicodeError) as exc:
-        print("ERRO template", caminho, repr(exc))
-        continue
-    templates.setdefault(nome, []).append((caminho, texto))
-
-# Não elimina arquivos com o mesmo nome de template: a precedência do loader
-# é uma questão de configuração, e ambas as definições são inventariadas.
-arestas = []
-tags = re.compile(r"{%\s*(include|extends)\s+(.*?)%}", re.S)
-literal = re.compile(r"""^\s*(['"])(.*?)\1""", re.S)
-
-for nome, versoes in sorted(templates.items()):
-    for caminho, texto in versoes:
-        for m in tags.finditer(texto):
-            linha = texto.count("\n", 0, m.start()) + 1
-            tipo, argumento = m.group(1), m.group(2).strip()
-            achou = literal.match(argumento)
-            destino = achou.group(2) if achou else None
-            arestas.append((nome, destino, tipo, caminho, linha, argumento))
-
-# Propaga cascas por herança e por inclusão. A atribuição é conservadora:
-# um fragmento reutilizado pode receber várias cascas.
-cascas = {nome: set() for nome in templates}
-for base in BASES:
-    cascas.setdefault(base, set()).add(base)
-
-for origem, destino, tipo, caminho, linha, argumento in arestas:
-    if tipo == "extends" and destino is None and re.search(
-        r"\bbase_tpl\b", argumento
-    ):
-        cascas.setdefault(origem, set()).update(BASES)
-
-mudou = True
-while mudou:
-    mudou = False
-    for origem, destino, tipo, caminho, linha, argumento in arestas:
-        if destino is None:
-            continue
-        cascas.setdefault(origem, set())
-        cascas.setdefault(destino, set())
-        antes = len(cascas[origem] if tipo == "extends" else cascas[destino])
-        if tipo == "extends":
-            cascas[origem].update(cascas[destino])
-            depois = len(cascas[origem])
-        else:
-            cascas[destino].update(cascas[origem])
-            depois = len(cascas[destino])
-        mudou |= antes != depois
-
-# Inclui recursivamente todos os que levam ao card; depois segue todas as
-# arestas de include/extends a partir deles e das duas bases.
-sementes = set(BASES) | {CARD}
-mudou = True
-while mudou:
-    mudou = False
-    for origem, destino, tipo, caminho, linha, argumento in arestas:
-        if tipo == "include" and destino in sementes and origem not in sementes:
-            sementes.add(origem)
-            mudou = True
-
-alcance = set(sementes)
-mudou = True
-while mudou:
-    mudou = False
-    for origem, destino, tipo, caminho, linha, argumento in arestas:
-        if origem in alcance and destino and destino not in alcance:
-            alcance.add(destino)
-            mudou = True
-
-print("=== GRAFO TRANSITIVO: includes, extends e cascas possíveis ===")
-for nome in sorted(alcance):
-    print("TEMPLATE", nome, "casca=",
-          ",".join(sorted(cascas.get(nome, set()))) or "indeterminada")
-    if nome not in templates:
-        print("  AUSENTE OU CARREGADOR EXTERNO [nao verificado]")
-    elif len(templates[nome]) > 1:
-        print("  MULTIPLAS DEFINICOES: precedencia [nao verificado]")
-    for origem, destino, tipo, caminho, linha, argumento in arestas:
-        if origem != nome:
-            continue
-        print(" ", local(caminho, linha), tipo,
-              destino if destino else "DINAMICO: " + argumento,
-              "" if destino else "[nao verificado]")
-
-print("=== ACESSOS EM TEMPLATES: leitura sintatica ===")
-expressao = re.compile(r"{{(.*?)}}|{%(.*?)%}", re.S)
-acesso = re.compile(
-    r"\b[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*"
-    r"\.(validada_em|validada_por|respondida_em|resposta_colab|materializada_em)"
-    r"(?:_id)?\b"
-)
-for nome, versoes in sorted(templates.items()):
-    for caminho, texto in versoes:
-        for m in expressao.finditer(texto):
-            conteudo = m.group(1) if m.group(1) is not None else m.group(2)
-            for achou in acesso.finditer(conteudo):
-                pos = m.start() + 2 + achou.start()
-                linha = texto.count("\n", 0, pos) + 1
-                print(local(caminho, linha), "leitura", nome,
-                      achou.group(0),
-                      "casca=" + (",".join(sorted(cascas.get(nome, set())))
-                                  or "indeterminada"))
-
-print("=== PYTHON: acessos e referencias estaticas ===")
-for caminho in sorted(p for p in todos if p.endswith(".py")):
-    try:
-        with open(caminho, encoding="utf-8") as f:
-            texto = f.read()
-        arvore = ast.parse(texto, filename=caminho)
-    except (OSError, UnicodeError, SyntaxError) as exc:
-        print("ERRO Python", caminho, repr(exc), "[nao verificado]")
-        continue
-
-    pais = {}
-    for pai in ast.walk(arvore):
-        for filho in ast.iter_child_nodes(pai):
-            pais[filho] = pai
-
-    # Registra aliases explícitos; referências a nomes coincidentes são
-    # candidatas, pois AST isolada não resolve tipos nem importações indiretas.
-    aliases = {nome: nome for nome in FUNCOES}
-    for no in ast.walk(arvore):
-        if isinstance(no, ast.ImportFrom):
-            for item in no.names:
-                if item.name in FUNCOES:
-                    aliases[item.asname or item.name] = item.name
-
-    saidas = set()
-
-    def emitir(no, papel, categoria, detalhe):
-        saidas.add((no.lineno, no.col_offset, papel, categoria, detalhe))
-
-    for no in ast.walk(arvore):
-        if isinstance(no, ast.Attribute):
-            campos = campo_em_nome(no.attr)
-            if campos:
-                papel = ("escrita" if isinstance(no.ctx, (ast.Store, ast.Del))
-                         else "leitura")
-                emitir(no, papel, "atributo " + ",".join(campos),
-                       trecho(texto, no))
-            if no.attr in FUNCOES:
-                emitir(no, "referencia", "funcao " + no.attr,
-                       trecho(texto, no))
-
-        if isinstance(no, ast.Name) and no.id in aliases:
-            emitir(no, "referencia", "funcao " + aliases[no.id],
-                   trecho(texto, no))
-
-        if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            if no.name in FUNCOES:
-                emitir(no, "definicao", "funcao " + no.name, no.name)
-
-        if isinstance(no, ast.ImportFrom):
-            for item in no.names:
-                if item.name in FUNCOES:
-                    emitir(no, "importacao", "funcao " + item.name,
-                           trecho(texto, no))
-
-        if not isinstance(no, ast.Call):
-            continue
-        metodo = nome_chamada(no.func)
-
-        if metodo in {"getattr", "setattr", "hasattr", "delattr"}:
-            if len(no.args) >= 2:
-                chave = no.args[1]
-                if isinstance(chave, ast.Constant) and isinstance(chave.value, str):
-                    campos = campo_em_nome(chave.value)
-                    if campos:
-                        papel = ("escrita" if metodo in {"setattr", "delattr"}
-                                 else "leitura")
-                        emitir(no, papel, metodo + " " + ",".join(campos),
-                               trecho(texto, no))
-                else:
-                    emitir(no, "indeterminado", metodo + " nome dinamico",
-                           trecho(texto, no))
-
-        if metodo in METODOS | ESCRITORES | {"Q"}:
-            papel = ("escrita possivel" if metodo in ESCRITORES
-                     else "leitura ou consulta")
-            for argumento in no.args:
-                if isinstance(argumento, ast.Constant) and isinstance(argumento.value, str):
-                    campos = campo_em_nome(argumento.value)
-                    if campos:
-                        emitir(no, papel, metodo + " " + ",".join(campos),
-                               trecho(texto, no))
-                elif isinstance(argumento, ast.Starred):
-                    emitir(no, "indeterminado", metodo + " argumentos dinamicos",
-                           trecho(texto, no))
-            for kw in no.keywords:
-                if kw.arg is None:
-                    emitir(no, "indeterminado", metodo + " keywords dinamicos",
-                           trecho(texto, no))
-                else:
-                    campos = campo_em_nome(kw.arg)
-                    if campos:
-                        emitir(no, papel, metodo + " " + ",".join(campos),
-                               trecho(texto, no))
-
-    for linha, coluna, papel, categoria, detalhe in sorted(saidas):
-        print(local(caminho, linha), papel, categoria, "|", detalhe)
-
-print("=== LIMITES ===")
-print("Nomes dinamicos, aliases indiretos, SQL bruto, dicionarios,")
-print("templates carregados fora da arvore e fluxo em tempo de execucao:")
-print("[nao verificado]; referencias homonimas e cascas sao candidatas.")
-```
-
-alcance nao verificado restante: 2
-
-## 18/11 10:08 · sessao fced45f6860a · RESPOSTAS-DE-LEI-1811-1010 · sonda · origem=Code
-
-```text
-=== SOMBRA (sombra_db, leitor) 18/11 10:06:59 ===
-sonda_leitura: i7_sonda.py [a39a32993596c041] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-agora 2026-11-18T10:07:00.928492-03:00 prefiltro 14975 vivas 11381
-vivas por ultimo_ato {None: 10626, 'resposta': 399, 'silencio': 15, 'reabertura': 275, 'recusa': 6, 'devolucao': 60}
-vivas pendentes_hoje 10092 historico_hoje 1289
-Q1 RESPOSTA texto_nao_vazio pendente_hoje->historico 0
-Q2 RESPOSTA texto_vazio historico_hoje->pendente 0
-Q3 RECUSA historico_hoje->pendente 0
-Q4 REABERTURA historico_hoje->pendente 29
-Q5 SILENCIO pendente_hoje->historico 11
-Q6 ABSORCAO rejeitada historico_hoje->pendente 0
-SEM_ATO vivas sem DP 10626
-rc_sombra=0
-```
-linhas copiadas: 14
-
-## 18/11 10:06 · sessao a72dc2fb3002 · [nome]-NAO-DESFAZ-O-PAPEL · verificador · origem=Code
-
-1. **[ACHADO] A função genérica aceita uma grade cuja régua não está alinhada às células.** `contar_espurias` usa `grade['marcos']` por índice para interpretar `dia['celulas']` ([orfa_classe.py:165](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:165), [orfa_classe.py:194](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:194)). Já `grade_da_celula` devolve régua de união no topo e marcos próprios por dia; o remapeamento é uma operação separada ([leitor_celula.py:281](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/services/leitor_celula.py:281), [leitor_celula.py:413](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/services/leitor_celula.py:413), [leitor_celula.py:445](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/services/leitor_celula.py:445)). Nessa entrada, um `missing` pode ser associado à hora de outro marco e alterar o recorte. A entrada `contar_espurias_do_colab` usa o builder, não esse leitor ([orfa_classe.py:233](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:233)).
-
-2. **[ACHADO] O campo `orfas` perde o produtor ao passar pela ata.** O builder emite `Orfa`, uma string com atributo `produtor` ([orfa_classe.py:125](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:125), [utils.py:631](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:631)); o cartório grava apenas `str(h)` e o leitor devolve strings ([cartorio.py:742](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/services/cartorio.py:742), [leitor_celula.py:180](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/services/leitor_celula.py:180)). Se essa grade for passada ao contador genérico, as órfãs com hora passam a `sem_produtor`, nunca P1, e não provocam pergunta ao dono ([orfa_classe.py:175](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:175), [orfa_classe.py:202](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:202)). O caminho da entrada por colaborador recompõe a grade e preserva o atributo em memória; uso do contador sobre ata em produção: **[não verificado]** ([orfa_classe.py:233](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:233)).
-
-3. **Insumos do juiz: equivalentes sob os mesmos dados, com diferença de execução.** A entrada passa `ini`, `fim`, `hoje` e `agora` ao mesmo `InsumosDoDono`; o `handle` também passa um `espelho` já calculado ([orfa_classe.py:229](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:229), [e6_oraculo.py:296](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:296), [e6_oraculo.py:328](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:328)). Sem espelho, `dono` primeiro pergunta com CXR falso e só calcula o espelho se a resposta preliminar for ESTRUTURA; CADASTRO e BATIDA independem dessa lista pela ordem do juiz ([e6_oraculo.py:98](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:98), [e6_oraculo.py:162](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:162), [e6_oraculo.py:182](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:182)). Portanto, com a mesma fotografia dos dados e espelho bem-sucedido, a omissão não muda a resposta; o `handle` pula o colaborador se o espelho falha, enquanto a entrada pode responder CADASTRO/BATIDA sem pedir o espelho e pode propagar falha quando o pede ([e6_oraculo.py:315](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:315), [orfa_classe.py:235](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:235)). Igualdade das fotografias em produção: **[não verificado]**.
-
-4. **Data perguntada: nos caminhos do builder examinados, corresponde à linha.** `grade_espelho_janela` passa `ref=fim` e o clip esvazia linhas sem removê-las ([utils.py:2346](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:2346), [utils.py:968](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:968)). Tanto o builder por turno quanto o legacy montam cada linha com `ref - i`; o legacy remapeia os segmentos por data antes de emitir a lista ([utils.py:1784](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:1784), [utils.py:1027](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:1027), [utils.py:1040](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:1040)). Não encontrei nesses caminhos uma linha em que a data seja diferente de `fim - i`; o contador genérico, porém, confia no `ref_fim` fornecido e não valida a grade ([orfa_classe.py:179](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:179)).
-
-5. **Significados e unidades exigem leitura cuidadosa.** P1 nasce no casador; P2 é sobra atribuída à data civil; no builder por turno, órfãs do casamento ficam na data de entrada do turno e sobras P3 são atribuídas à data civil ([utils.py:631](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:631), [utils.py:801](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:801), [utils.py:1445](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:1445), [utils.py:1824](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/utils.py:1824)). O contador lê `missing` e a hora da coluna, lê a classe de `classificar_orfas` e o produtor do item; grava dono **por dia P1**, mas repete esse dono também nos itens P2/P3 do mesmo dia ([orfa_classe.py:165](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:165), [orfa_classe.py:200](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:200)). Assim, `por_dono` e `dias_p1` contam dias, enquanto `p1` e `por_produtor` contam ocorrências; o dono em `itens` é do **dia**, não uma decisão sobre cada órfã ([orfa_classe.py:203](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:203)). Leitor externo desses novos campos: **[não verificado]**.
-
-6. **Raio: a constante deste módulo seleciona o universo e, por isso, afeta o alarma.** Ela é lida em `espurias_do_dia`; a seleção determina quais dias chegam ao juiz e, consequentemente, pode mudar `por_dono` e `alarma`, sem mudar a resposta do juiz para um mesmo dia nem o corpo de `classificar_orfas` ([orfa_classe.py:120](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:120), [orfa_classe.py:171](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:171), [orfa_classe.py:202](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:202)). Há outra constante **homônima**, independente, em `regua_defesa`, usada por decisões fora do contador; ela não é a constante de `orfa_classe` ([regua_defesa.py:392](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/regua_defesa.py:392), [motor_calculo_v2.py:2076](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/motor_calculo_v2.py:2076)).
-
-7. **Testes: os quatro mutantes perguntados são cobertos por asserções, com limite de integração.** Os testes exigem CADASTRO sem alarma, ESTRUTURA com alarma e BATIDA contado sem alarma ([test_contador_espurias.py:133](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/tests/test_contador_espurias.py:133)). O teste da entrada substitui `InsumosDoDono` por mock e exige sua construção e chamada de `.dono(fim)`, portanto morde uma entrada que abandone essa chamada ([test_contador_espurias.py:275](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/tests/test_contador_espurias.py:275)). Ele não exercita o juiz real, a construção real da grade ou a igualdade entre espelhos; a data é testada numa grade fabricada ([test_contador_espurias.py:152](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/tests/test_contador_espurias.py:152), [test_contador_espurias.py:278](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/tests/test_contador_espurias.py:278)). Execução dos testes: **[não verificado]**.
-
-8. **Checklist do delta fornecido:** a entrada delega ao juiz existente; não encontrei segundo juiz de dono no trecho examinado ([orfa_classe.py:227](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:227), [e6_oraculo.py:195](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/ponto/management/commands/e6_oraculo.py:195)). A entrada recebe `agora` e deriva `hoje` desse instante, sem ler outro relógio nela própria ([orfa_classe.py:218](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:218)). O retorno é montado em memória; segundo escritor persistente pelo trecho examinado: não identificado ([orfa_classe.py:208](/home/ronald/codex_ws/f22632e387f56e41b88c386e4eedc40ad568b1d1/app/escala/orfa_classe.py:208)). Permanecem os riscos de representação e perda de proveniência dos achados 1–2 e a mistura de dia do turno/data civil do achado 5. Comparação independente dos commits, integridade integral do delta e resultado em produção: **[não verificado]**.
-
-## 18/11 10:06 · sessao af4df093d524 · RESPOSTAS-DE-LEI-1811-1010 · censo · origem=Code
-
-A seção B contém **cinco itens numerados**, dos quais quatro estavam pendentes: 1, 3, 4 e 5. O item 2 já estava fechado no anexo e sua conclusão sobre a chamada específica foi confirmada no corpo de `reabrir_para_correcao`. [app/chamados/services/disputa_emissao.py:1577](app/chamados/services/disputa_emissao.py:1577)
-
-Não consegui fechar os quatro pendentes com a evidência disponível. Em particular, a cópia não tem metadados Git acessíveis para conferir o HEAD ou ler `be2b8d733` **[não verificado]**, e a busca nesta árvore não encontrou a porta histórica `atos_pergunta.leitura` **[não verificado]**. Abaixo separo o que foi comprovado do que ainda falta.
-
-**Método.** Usei busca literal com `rg` para campos, nomes de funções, templates e includes; examinei os corpos relevantes; e percorri com AST os arquivos Python de `app`, excluindo testes e migrações **[não verificado: classificação integral]**. A AST procurou atributos, imports de `atos_pergunta`, inclusive aliases, e nomes literais em `getattr`/`setattr`/`hasattr`; encontrou também **97 chamadas com nome dinâmico ainda não resolvido**, portanto não sustenta uma lista completa de leitores e escritores **[não verificado]**. O alias de renderização do fragmento foi identificado em [app/chamados/views.py:397](app/chamados/views.py:397). O inventário de 407 ocorrências literais Python inclui comentários e não equivale a 407 leitores **[não verificado]**.
-
-### 1. Cascas do card — STATUS: ABERTO
-
-O caminho estático confirmado é:
-
-- `meu_atendimento` escolhe a casca por `base_tpl` e inclui o card nos dois loops: [meu_atendimento.html:1](app/templates/chamados/meu_atendimento.html:1), [meu_atendimento.html:127](app/templates/chamados/meu_atendimento.html:127), [meu_atendimento.html:144](app/templates/chamados/meu_atendimento.html:144); a escolha entre `base_app.html` e `base.html` está em [context_processors.py:210](app/core/context_processors.py:210).
-- A página de detalhe usa `base.html` e inclui o card de pergunta em [detalhe_local.html:1](app/templates/chamados/detalhe_local.html:1) e [detalhe_local.html:310](app/templates/chamados/detalhe_local.html:310). O fragmento é renderizado pelo alias `_render_card` em [views.py:397](app/chamados/views.py:397) e [views.py:404](app/chamados/views.py:404).
-- O modal é renderizado em [views.py:927](app/chamados/views.py:927), [views.py:1400](app/chamados/views.py:1400) e [fio.py:543](app/chamados/services/fio.py:543). O painel abre a prévia de lote pelo drawer em [painel_gestao.html:14](app/templates/chamados/painel_gestao.html:14); os renders da prévia estão em [views_cobrar.py:360](app/chamados/views_cobrar.py:360), [views_cobrar.py:364](app/chamados/views_cobrar.py:364), [views_cobrar.py:380](app/chamados/views_cobrar.py:380) e [views_cobrar.py:388](app/chamados/views_cobrar.py:388).
-- Includes diretos identificados em `base.html`: [base.html:92](app/templates/base.html:92), [base.html:93](app/templates/base.html:93), [base.html:290](app/templates/base.html:290), [base.html:388](app/templates/base.html:388), [base.html:393](app/templates/base.html:393), [base.html:399](app/templates/base.html:399), [base.html:432](app/templates/base.html:432). Em `base_app.html`: [base_app.html:85](app/templates/base_app.html:85), [base_app.html:145](app/templates/base_app.html:145), [base_app.html:154](app/templates/base_app.html:154). O copiloto inclui o ícone em [core/_copiloto.html:34](app/templates/core/_copiloto.html:34).
-
-**Falta:** completar a inspeção transitiva de includes e comprovar renderização e cliques nas duas cascas e nos fragmentos **[não verificado]**. A matriz antiga também não deve ser tratada como retrato literal deste HEAD: os gates de resposta do modal e do card de pergunta agora usam `respondida`, em [modal_fio.html:185](app/templates/chamados/partials/modal_fio.html:185), [modal_fio.html:217](app/templates/chamados/partials/modal_fio.html:217), [\_pergunta_card.html:24](app/templates/chamados/partials/_pergunta_card.html:24) e [\_pergunta_card.html:29](app/templates/chamados/partials/_pergunta_card.html:29).
-
-### 2. Escritor de reabertura — STATUS: FECHADO para a chamada questionada
-
-`reabrir_para_correcao` prepara a limpeza do par e da validação, registra diretamente a decisão com a fotografia anterior e chama `descarimbar_em_lote`; seu corpo não chama `linhas_da_projecao_sem_linha`. Isso fecha a dúvida específica do item, não o censo de todos os escritores. [disputa_emissao.py:1610](app/chamados/services/disputa_emissao.py:1610), [disputa_emissao.py:1632](app/chamados/services/disputa_emissao.py:1632), [disputa_emissao.py:1649](app/chamados/services/disputa_emissao.py:1649).
-
-### 3. Leitores cruzados — STATUS: ABERTO
-
-A lista abaixo é **parcial**, não o censo integral pedido:
-
-- Juiz do par: [juizes.py:1544](app/chamados/juizes.py:1544); fase que prioriza `validada_em`: [models.py:3152](app/chamados/models.py:3152); flag do card: [fio.py:178](app/chamados/services/fio.py:178).
-- Leitores diretos da validação na interface: [\_pergunta_card.html:20](app/templates/chamados/partials/_pergunta_card.html:20), [\_pergunta_card.html:23](app/templates/chamados/partials/_pergunta_card.html:23), [\_pergunta_card.html:42](app/templates/chamados/partials/_pergunta_card.html:42), [modal_fio.html:228](app/templates/chamados/partials/modal_fio.html:228). O card do colaborador consome a fase em [\_card_atendimento.html:189](app/templates/chamados/partials/_card_atendimento.html:189).
-- Texto e instante na API: [api/views.py:1163](app/api/views.py:1163), [api/views.py:2561](app/api/views.py:2561); filtro de apresentação que lê texto, inclusive por `getattr`: [chamados_tags.py:139](app/chamados/templatetags/chamados_tags.py:139), [chamados_tags.py:166](app/chamados/templatetags/chamados_tags.py:166).
-- Comandos que consultam ou classificam projeções incluem [backfill_decisoes_pergunta.py:56](app/chamados/management/commands/backfill_decisoes_pergunta.py:56), [auditar_invariantes_chamados.py:206](app/chamados/management/commands/auditar_invariantes_chamados.py:206) e [auditar_invariantes_chamados.py:1077](app/chamados/management/commands/auditar_invariantes_chamados.py:1077). A função que detecta projeção sem linha é usada por escritores e pelo backfill, por exemplo [validacao.py:167](app/chamados/services/validacao.py:167), [disputa_emissao.py:1480](app/chamados/services/disputa_emissao.py:1480), [models.py:1619](app/chamados/models.py:1619) e [backfill_fio_morto_e4b.py:141](app/chamados/management/commands/backfill_fio_morto_e4b.py:141).
-
-**Q4 é CONSERVADA**, conforme decisão fornecida no pedido: validação projetada sem linha deve aparecer como “Validada” **[não verificado no código como decisão histórica]**. Os leitores que precisam preservar esse caso são, no mínimo, os que exibem ou decidem a fase/validação nos pontos citados de `pergunta_card`, `modal_fio`, `estado` e card do colaborador; a lista integral de leitores indiretos ainda depende do censo aberto acima. [models.py:3159](app/chamados/models.py:3159), [\_pergunta_card.html:23](app/templates/chamados/partials/_pergunta_card.html:23), [modal_fio.html:228](app/templates/chamados/partials/modal_fio.html:228), [\_card_atendimento.html:189](app/templates/chamados/partials/_card_atendimento.html:189).
-
-**Falta:** classificar todas as ocorrências ORM, escritores, leitores indiretos, nomes dinâmicos e caminhos PDF; não tenho evidência para afirmar uma lista completa arquivo:linha **[não verificado]**.
-
-### 4. Contrato F1 antigo — STATUS: ABERTO
-
-A assinatura e o fold foram fornecidos no texto da matriz, mas não foi possível conferir o conteúdo histórico nem seus chamadores nesta cópia **[não verificado]**. A propriedade efetiva desta cópia delega ao juiz do par projetado: [models.py:3674](app/chamados/models.py:3674), [juizes.py:1544](app/chamados/juizes.py:1544).
-
-**Falta:** acesso ao objeto Git histórico `be2b8d733`, ou ao conteúdo da implementação e seus chamadores **[não verificado]**. Não é possível afirmar que a descrição fornecida da F1 corresponde byte a byte à implementação histórica **[não verificado]**.
-
-### 5. Frota U1/U2 — STATUS: ABERTO; fecha só por sonda
-
-As contagens de produção não foram fornecidas **[não verificado]**. Para U1, existe uma porta real cujo predicado é carimbo presente e via fora de `VIAS_DE_IDENTIDADE`: [relavra_via.py:171](app/chamados/services/relavra_via.py:171). A sonda abaixo usa essa porta. Para U2, a matriz exige o último ato pela leitura F1, mas essa porta não foi localizada nesta cópia **[não verificado]**. Assim, não posso entregar honestamente uma sonda U2 pela função real sem reproduzir o fold; falta a implementação F1 e sua porta executável **[não verificado]**.
-
-A mesma execução mede o contador pedido de **validação projetada sem linha**, chamando a função real: ela compara pergunta, ato e instante, e devolve a linha virtual de validação quando não há correspondência. [models.py:4122](app/chamados/models.py:4122).
-
-Executar no ambiente Django de produção, a partir de `app`, com `python manage.py shell`, colando o bloco abaixo. Ele apenas consulta e imprime contagens; não chama `registrar` **[não verificado em produção]**.
-
-```python
-from chamados.models import DecisaoPergunta, PerguntaDisputa
-from chamados.services.relavra_via import q_carimbo_desfazivel
-
-# U1: universo global da porta; sem restringir a disputa aberta.
-u1 = PerguntaDisputa.objects.filter(
-    q_carimbo_desfazivel(so_disputa_aberta=False)
-).count()
-
-# Mesmo predicado e mesma função usados pelo sistema: correspondência
-# por (pergunta_id, ato=VALIDACAO, ato_em=validada_em).
-qs = (
-    PerguntaDisputa.objects
-    .filter(validada_em__isnull=False)
-    .only(
-        "pk", "respondida_em", "resposta_colab",
-        "validada_em", "validada_por_id",
-    )
-    .order_by("pk")
-)
-
-sem_linha = 0
-lote = []
-
-def contar_lote(perguntas):
-    return sum(
-        1
-        for linha in DecisaoPergunta.linhas_da_projecao_sem_linha(perguntas)
-        if linha["ato"] == DecisaoPergunta.VALIDACAO
-    )
-
-for pergunta in qs.iterator(chunk_size=1000):
-    lote.append(pergunta)
-    if len(lote) == 1000:
-        sem_linha += contar_lote(lote)
-        lote = []
-
-if lote:
-    sem_linha += contar_lote(lote)
-
-print("U1_carimbo_fora_de_identidade_global:", u1)
-print("validada_projetada_sem_linha:", sem_linha)
-print("U2: NAO MEDIDA — porta real F1 indisponivel nesta copia")
-```
-
-O contador de validação sem linha **não é U2**: ele mede a ausência de uma linha de validação no mesmo instante; U2 depende da sequência e do último ato **[não verificado para a implementação F1 histórica]**. [models.py:4135](app/chamados/models.py:4135)
-
-alcance nao verificado restante: 4
-
-_6893 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6897 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
