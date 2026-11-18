@@ -1,7 +1,281 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 19:43** · publicado em **18/11/2026 19:43** (UTC-3)
+> Ultima resposta processada: **18/11/2026 19:46** · publicado em **18/11/2026 19:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 19:46 · sessao a784106a2534 · RAIA-ESPURIAS · leitura · origem=Code
+
+```python
+# Executar no shell Django do tenant, na sombra.
+# Referencias da copia:
+# app/ponto/models.py:22, :40, :45, :55, :67, :79
+# app/colaboradores/models.py:321
+# app/ponto/registro_batida.py:94
+# app/escala/utils.py:631, :673
+# app/ponto/services/cartorio.py:730, :745
+#
+# Pares: batidas adjacentes de cada colaborador na ordem (timestamp, pk).
+# Em empate de timestamp, o menor pk vem primeiro. Em A-B-C, A-B e B-C
+# contam separadamente quando cada par atende aos criterios; A-C nao conta.
+
+from collections import Counter
+from datetime import date, datetime, time, timedelta, timezone as dt_timezone
+
+from django.utils import timezone
+from ponto.models import Batida
+from ponto.registro_batida import colisoes_tipo_oposto
+
+ERROS = 0
+INI = date(2026, 10, 21)
+FIM = date(2026, 11, 20)
+EMPRESAS = (2, 3, 4)
+FAIXAS = ("0-10s", "11-60s", "61s-10min")
+DIAS_COL67 = (
+    date(2026, 11, 10),
+    date(2026, 11, 11),
+    date(2026, 11, 14),
+    date(2026, 11, 15),
+)
+
+
+def erro(etapa, exc):
+    global ERROS
+    ERROS += 1
+    print(f"ERRO etapa={etapa} tipo={type(exc).__name__}")
+
+
+def instante(valor):
+    if valor is None:
+        return None
+    if timezone.is_naive(valor):
+        raise ValueError("datetime sem timezone")
+    local = timezone.localtime(valor)
+    # Milissegundos truncados; nao altera os instantes usados nos calculos.
+    return local.strftime("%Y-%m-%d %H:%M:%S.") + (
+        f"{local.microsecond // 1000:03d} " + local.strftime("%z")
+    )
+
+
+def faixa(segundos):
+    if 0 <= segundos <= 10:
+        return FAIXAS[0]
+    if 10 < segundos <= 60:
+        return FAIXAS[1]
+    if 60 < segundos <= 600:
+        return FAIXAS[2]
+    return None
+
+
+def limites_amplos(inicio, fim):
+    # Margem em UTC; o teste definitivo e a data local de cada timestamp. [nao verificado]
+    inicio_utc = datetime.combine(
+        inicio - timedelta(days=2), time.min, tzinfo=dt_timezone.utc
+    )
+    fim_utc = datetime.combine(
+        fim + timedelta(days=3), time.min, tzinfo=dt_timezone.utc
+    )
+    return inicio_utc, fim_utc
+
+
+def dados_batida(b):
+    return {
+        "pk": b.pk,
+        "timestamp_local": instante(b.timestamp),
+        "tipo": b.tipo,
+        "origem": b.origem,
+        "canal": b.canal,
+        "criado_em_local": instante(b.criado_em),
+        "pergunta_origem_id": b.pergunta_origem_id,
+        "retratada_em_local": instante(b.retratada_em),
+        "retratada": b.retratada_em is not None,
+    }
+
+
+def executar():
+    pares = []
+    universo_disponivel = False
+
+    print(
+        "CRITERIO pares_adjacentes=(timestamp,pk) "
+        "empate=menor_pk_primeiro encadeamento=AB_e_BC_se_elegiveis"
+    )
+
+    try:
+        inicio_utc, fim_utc = limites_amplos(INI, FIM)
+        candidatos = (
+            Batida.objects.filter(
+                retratada_em__isnull=True,
+                colaborador__empresa_id__in=EMPRESAS,
+                timestamp__gte=inicio_utc,
+                timestamp__lt=fim_utc,
+            )
+            .select_related("colaborador")
+            .order_by("colaborador_id", "timestamp", "pk")
+        )
+        batidas = []
+        for b in candidatos:
+            dia = timezone.localtime(b.timestamp).date()
+            if INI <= dia <= FIM:
+                batidas.append(b)
+
+        anterior = None
+        for b in batidas:
+            if anterior is not None and anterior.colaborador_id == b.colaborador_id:
+                segundos = (b.timestamp - anterior.timestamp).total_seconds()
+                grupo = faixa(segundos)
+                if grupo is not None and anterior.tipo != b.tipo:
+                    pares.append((anterior, b, segundos, grupo))
+            anterior = b
+        universo_disponivel = True
+        print(f"UNIVERSO batidas={len(batidas)} pares={len(pares)}")
+    except Exception as exc:
+        erro("universo_e_pares", exc)
+        pares = []
+
+    if universo_disponivel:
+        try:
+            for grupo in FAIXAS:
+                itens = [p for p in pares if p[3] == grupo]
+                print(
+                    f"ITEM1 faixa={grupo} pares={len(itens)} "
+                    f"pessoas={len({a.colaborador_id for a, _, _, _ in itens})}"
+                )
+                origens = Counter(
+                    (
+                        a.origem,
+                        a.pergunta_origem_id is None,
+                        b.origem,
+                        b.pergunta_origem_id is None,
+                    )
+                    for a, b, _, _ in itens
+                )
+                for chave, quantidade in sorted(
+                    origens.items(), key=lambda item: repr(item[0])
+                ):
+                    origem1, pergunta1_nula, origem2, pergunta2_nula = chave
+                    print(
+                        f"ITEM1_ORIGENS faixa={grupo} "
+                        f"origem1={origem1!r} pergunta1_nula={pergunta1_nula} "
+                        f"origem2={origem2!r} pergunta2_nula={pergunta2_nula} "
+                        f"pares={quantidade}"
+                    )
+        except Exception as exc:
+            erro("item1", exc)
+
+        colidem_por_faixa = Counter()
+        janelas_por_faixa = {grupo: Counter() for grupo in FAIXAS}
+        avaliados_por_faixa = Counter()
+        falhas_por_faixa = Counter()
+
+        for a, b, segundos, grupo in pares:
+            try:
+                janela, ids = colisoes_tipo_oposto(
+                    b.colaborador, b.timestamp, b.tipo
+                )
+                janela_s = janela.total_seconds()
+                colide = a.pk in ids
+                avaliados_por_faixa[grupo] += 1
+                janelas_por_faixa[grupo][janela_s] += 1
+                if colide:
+                    colidem_por_faixa[grupo] += 1
+                    print(
+                        f"COLIDE_GRAVADO col{a.colaborador_id} "
+                        f"faixa={grupo} segundos={segundos} "
+                        f"janela_segundos={janela_s} "
+                        f"b1={dados_batida(a)!r} b2={dados_batida(b)!r}"
+                    )
+            except Exception as exc:
+                falhas_por_faixa[grupo] += 1
+                erro("item2_par", exc)
+
+        try:
+            for grupo in FAIXAS:
+                print(
+                    f"ITEM2 faixa={grupo} avaliados={avaliados_por_faixa[grupo]} "
+                    f"colidem={colidem_por_faixa[grupo]} "
+                    f"falhas={falhas_por_faixa[grupo]}"
+                )
+                for janela_s, quantidade in sorted(janelas_por_faixa[grupo].items()):
+                    print(
+                        f"ITEM2_JANELA faixa={grupo} "
+                        f"segundos={janela_s} pares={quantidade}"
+                    )
+        except Exception as exc:
+            erro("item2_resumo", exc)
+
+        try:
+            for a, b, segundos, grupo in pares:
+                print(
+                    f"ITEM3 nao_mensuravel col{a.colaborador_id} "
+                    f"b1_pk={a.pk} b2_pk={b.pk} "
+                    f"faixa={grupo} segundos={segundos}"
+                )
+            print(f"ITEM3 total_nao_mensuravel={len(pares)}")
+        except Exception as exc:
+            erro("item3", exc)
+    else:
+        print("ITENS_1_2_3 indisponiveis=universo_nao_calculado")
+
+    # O caso col67 e independente do filtro de empresas e inclui retratadas.
+    for dia in DIAS_COL67:
+        try:
+            inicio_utc, fim_utc = limites_amplos(dia, dia)
+            candidatos = (
+                Batida.objects.filter(
+                    colaborador_id=67,
+                    timestamp__gte=inicio_utc,
+                    timestamp__lt=fim_utc,
+                )
+                .select_related("colaborador")
+                .order_by("timestamp", "pk")
+            )
+            do_dia = [
+                b for b in candidatos
+                if timezone.localtime(b.timestamp).date() == dia
+            ]
+            print(f"ITEM4 col67 dia={dia.isoformat()} batidas={len(do_dia)}")
+            for b in do_dia:
+                try:
+                    registro = dados_batida(b)
+                    try:
+                        janela, ids = colisoes_tipo_oposto(
+                            b.colaborador, b.timestamp, b.tipo
+                        )
+                        resultado = {
+                            "janela_segundos": janela.total_seconds(),
+                            "batidas_pks": ids,
+                        }
+                    except Exception as exc:
+                        erro("item4_colisao", exc)
+                        resultado = "indisponivel"
+                    print(
+                        f"ITEM4_BATIDA col67 dia={dia.isoformat()} "
+                        f"batida={registro!r} colisao={resultado!r}"
+                    )
+                except Exception as exc:
+                    erro("item4_batida", exc)
+        except Exception as exc:
+            erro("item4_dia", exc)
+
+
+try:
+    executar()
+except Exception as exc:
+    erro("execucao", exc)
+finally:
+    print(f"ERROS={ERROS}")
+    print("FIM_S5II_V3")
+```
+
+- O caminho da empresa é `Batida.colaborador.empresa_id`: [app/ponto/models.py:22](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/models.py:22), [app/colaboradores/models.py:321](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/colaboradores/models.py:321). A função de colisão consulta batidas e devolve janela e IDs; seu corpo não grava: [app/ponto/registro_batida.py:94](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:94).
+
+- A ata recebe as órfãs como texto; a formação examinada fornece `HH:MM`, sem instante completo. Por isso o item 3 não faz casamento: [app/ponto/services/cartorio.py:730](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/cartorio.py:730), [app/escala/utils.py:631](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:631), [app/escala/utils.py:673](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/escala/utils.py:673).
+
+- **Caminhos de escrita identificados para interpretar a saída:** `app`, com canal derivado `apk` ou `pwa`, passa por `registrar_batida` nas duas APIs e na triagem web: [app/api/views.py:654](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views.py:654), [app/api/views_core.py:645](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/api/views_core.py:645), [app/ponto/services/triagem_batida.py:700](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/triagem_batida.py:700). `manual` passa pela porta nos caminhos de [veredito](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/veredito_celula.py:323), [justificativa](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/justificativa.py:188), [ajuste retroativo](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/services/justificativa.py:361) e [aprovação em lote](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/views.py:1818). Também passam pela porta `excecao_autorizada`, `reg_externa`, `disputa_s84_retro` e `disputa_ancora`: [app/chamados/services/acoes_chamado.py:44](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/acoes_chamado.py:44), [app/chamados/services/regularizacao_ext.py:78](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/regularizacao_ext.py:78), [app/chamados/services/materializacao.py:1488](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/materializacao.py:1488), [app/chamados/services/materializacao.py:1605](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/materializacao.py:1605). A porta pode gravar colisão com autoridade humana: [app/ponto/registro_batida.py:162](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:162).
+
+- `pergunta_origem` pode ser vinculada posteriormente, inclusive a batida reutilizada, por `anotar`: [app/chamados/services/materializacao.py:1537](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/chamados/services/materializacao.py:1537). O campo `canal=NULL` admite mais de uma explicação na árvore: [app/ponto/models.py:46](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/models.py:46). Há também escrita em lote de dados sintéticos na sombra, sem passar por `registrar_batida`: [app/ponto/registro_batida.py:351](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/registro_batida.py:351), [app/ponto/management/commands/gerar_batidas_smoke_motor.py:107](/home/ronald/codex_ws/cd692834dde86e1c0c326a90201d08f6293dc5d6/app/ponto/management/commands/gerar_batidas_smoke_motor.py:107).
+
+- **Não confirmado:** [não verificado] quais valores aparecem nos pares reais, seus totais, e se existem valores adicionais ou históricos cujo caminho de escrita precise ser identificado. [não verificado] O caminho efetivamente percorrido por cada batida, ou se ela é anterior à regra, não pode ser atribuído apenas aos valores atuais. [não verificado] A sonda não foi executada na sombra nesta sessão.
 
 ## 18/11 19:43 · sessao 4a795076c73e · HOOK-B3-PAREI-LEGITIMO · leitura · origem=Code
 
@@ -1280,8 +1554,4 @@ A auditoria da tarefa e dos selos encontrou:
 
 A auditoria parcial de decisões e seus testes foi enviada ao agente principal com referências de arquivo e linha. A divergência potencial entre a face SQL e o C6 depende das demais guardas de vitalidade; sua incidência em produção permanece **[não verificado]**. [nao verificado]
 
-## 18/11 19:34 · sessao 0f3aa6cde070 · - · - · origem=Ronald (tmux)
-
-A auditoria do cadastro futuro, do vigia e das folgas foi enviada ao agente principal com referências de arquivo e linha, incluindo o risco de uma medição parcial sobrescrever o snapshot rotulado como frota. A ocorrência desse cenário em produção permanece **[não verificado]**.
-
-_7126 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7127 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
