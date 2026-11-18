@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 05:06:13.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (51.2 MB). Acoes na janela: **1493**.
+**Medido em 18/11/2026 05:11:16.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (51.2 MB). Acoes na janela: **1490**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1500,6 +1500,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:11:39 | Bash | Read live order and handoff | `cd /home/ronald/saas-hasner && cat logs/AVAIS-1515/ordem_viva_1511_noite.txt \| head -60; echo ----; cat app/docs/HANDOFF-SESSAO.md \| head -70; echo ----; tail -5 logs/hook_stop_fila1.log` |
 | 17:11:24 | Bash | Check PORTA v5 state and stale pid trace | `cd /home/ronald/saas-hasner && ls -t logs/PORTA-EXPORT/v5/ 2>/dev/null \| head; grep -n "746167" -r logs/*.log 2>/dev/null \| head -3` |
 | 17:11:23 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 17:11:15 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 17:11:13 | Bash | Read clock and check waited process | `date '+%d/%m %H:%M'; ps -p 746167 -o pid,etime,cmd --no-headers \|\| echo morto` |
-| 17:11:08 | Bash | Check RELATO top and agent artifacts | `cd /home/ronald/saas-hasner && head -40 app/docs/RELATO.md; ls logs/E4C/f1nova/b2/cerca/v4/ 2>/dev/null; git -C /home/ronald/wt-e4c-b2-v4-010150 status --porcelain 2>/dev/null \| head` |
