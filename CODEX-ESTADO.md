@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 14:18** · publicado em **18/11/2026 14:21** (UTC-3)
+> Ultima resposta processada: **18/11/2026 14:26** · publicado em **18/11/2026 14:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 14:26 · sessao 5f2a628261a9 · PRE-MAPA-E4D · censo · origem=Code
+
+**Censo parcial: não consegui comprovar todos os escritores nem fechar as contagens.** A busca encontrou escritores posteriores ao inventário do anexo, inclusive uma devolução de paridade e a ressuscitação em lote; portanto, seria incorreto apresentar a tabela abaixo como exaustiva. A identidade Git da cópia também está **[nao verificado]**: o diretório fornecido não contém metadados Git.
+
+A unidade pedida é **campo × função**. Nas linhas abaixo, agrupo campos quando compartilham o mesmo sítio para facilitar a leitura; isso não constitui uma contagem de unidades.
+
+### A. Portas verificadas
+
+Caminhos abreviados: `models.py` = [app/chamados/models.py](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py); os serviços ficam em `app/chamados/services/`.
+
+| Porta | Escrita de estado identificada nesta cópia |
+|---|---|
+| A01 | `status_local`, `resolvido_em`, `via_encerramento`, `respondido_por` e urgência do chamado; a porta também relavra perguntas. A classificação do estado canônico do chamado como projeção a parar é **[nao verificado]**. ([models.py:234](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:234), [models.py:302](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:302)) |
+| A02 | `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`; há carimbo delegado de pergunta. ([models.py:2082](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2082), [models.py:2095](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2095)) |
+| A03 | Os quatro campos de fechamento acima; também grava `reaberturas_admin` e, condicionalmente, `motivos`. A classificação desses dois últimos como projeção a parar é **[nao verificado]**. ([models.py:2312](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2312)) |
+| A04 | Os quatro campos de fechamento. ([models.py:2336](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2336)) |
+| A05 | `materializada_em`, `materializada_por`, `via_resolucao`; condicionalmente `respondida_em`, `validada_em`, `validada_por` e os três campos de lavra `veredito_lavrado`, `julgado_em`, `janela_expira_em`. A lavra é cache declarado no anexo; sua inclusão entre os campos a parar é **[nao verificado]**. ([models.py:3293](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3293), [models.py:3324](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3324), [models.py:3345](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3345)) |
+| A06 | `materializada_em`, `materializada_por`, `via_resolucao` e, se fornecido, `recusa_motivo`. ([models.py:3378](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3378)) |
+| A07 | Limpa `materializada_em`, `materializada_por`, `via_resolucao`; com `salvar=False`, prepara a alteração em memória para o chamador. ([models.py:3399](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3399)) |
+| A08 | Limpa os três campos de A07 e grava os campos recebidos por `**outros`; os chamadores comprovados incluem R/V. ([models.py:3448](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3448), [models.py:3485](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3485), [models.py:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702)) |
+| A09 | `via_resolucao`. ([models.py:3496](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3496)) |
+| A10 | `validada_em`, `validada_por`. ([validacao.py:168](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:168)) |
+| A11 | Limpa `validada_em`, `validada_por`. ([validacao.py:273](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:273)) |
+| A12 | `resposta_colab`, `respondida_em`; pode limpar `validada_em`, `validada_por`, preparar descarimbo e gravar `recusa_motivo`. ([disputa_emissao.py:1481](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1481), [disputa_emissao.py:1494](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1494), [disputa_emissao.py:1511](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1511)) |
+| A13 | Delega ao lote a limpeza de `respondida_em`, `resposta_colab`, `validada_em`, `validada_por` e dos três campos de carimbo. ([disputa_emissao.py:1617](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1617), [models.py:3485](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3485)) |
+| A14 | `resposta_colab`, `respondida_em`. ([disputa_emissao.py:1682](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1682)) |
+| A15 | `respondida_em`. ([disputa_emissao.py:1705](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1705)) |
+| A16 | `via_resolucao` e lavra. ([relavra_via.py:125](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/relavra_via.py:125)) |
+| A17 | `pendencia_admin`, `recusa_motivo`; efeitos e carimbos delegados requerem discriminação adicional **[nao verificado]**. ([materializacao.py:1365](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/materializacao.py:1365)) |
+| A18 | `recusa_motivo`; no ramo de colisão, delega o carimbo de identidade. ([materializacao.py:1693](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/materializacao.py:1693)) |
+| A19 | `recusa_motivo` e limpeza delegada por A13. ([validacao.py:916](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:916)) |
+| A20 | `data_conferida_em`, `data_conferida_por`. ([validacao.py:996](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:996)) |
+| A21 | Carimbo de identidade delegado; outros campos de estado próprios da disputa exigem discriminação adicional **[nao verificado]**. ([models.py:2218](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2218)) |
+| A22 | Constrói pergunta com `**campos` e aceita os defaults do modelo; a enumeração dos campos efetivamente fornecidos por todos os chamadores está **[nao verificado]**. ([models.py:3012](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3012), [models.py:3206](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3206)) |
+| A23 | Grava `reaberturas_colab` e delega correção; a classificação do contador como projeção a parar é **[nao verificado]**. ([models.py:2401](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2401)) |
+| A24 | Limpa `resolucao`. ([models.py:2428](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2428)) |
+| Porta 27 | `disparar_perguntas_competencia`: o corpo examinado conta e relata os alvos; escrita direta de projeção nesse caminho **[nao verificado]**. ([RELATO.md:2240](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/RELATO.md:2240), [disparar_perguntas_competencia.py:162](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/disparar_perguntas_competencia.py:162)) |
+
+### B–C. Escritores adicionais comprovados — tabela parcial
+
+A coluna “ato” abaixo identifica apenas uma correspondência comprovada no sítio; **não determina** que o ato substitua integralmente todas as propriedades do campo. Onde isso não foi provado, permanece **[nao verificado]**.
+
+| Campo | Escritor | Tipo | Ato da E4a que o substitui | Exceção FATO |
+|---|---|---|---|---|
+| `validada_em`, `validada_por` | [validacao.py:devolver_paridade_bug_par_103:349](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:349) | outro | A11 **[nao verificado]**; o próprio sítio registra `DEVOLUCAO` | [nao verificado] |
+| `materializada_em`, `materializada_por`, `via_resolucao` | [validacao.py:devolver_paridade_bug_par_103:346](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:346), delegando A07 | outro | [nao verificado] | [nao verificado] |
+| `respondida_em`, `resposta_colab`, `validada_em`, `validada_por`, `materializada_em`, `materializada_por`, `via_resolucao` | [models.py:ressuscitar_perguntas:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702), por A08 e `**outros` | outro | [nao verificado]; registra `REABERTURA` marcada ([models.py:1694](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1694)) | [nao verificado] |
+| `respondida_em`, `resposta_colab`, `materializada_em`, `materializada_por`, `via_resolucao` | [validacao.py:devolver_instante_sem_texto_l130:440](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:440), por A08 e `**outros` | outro | nenhum ato de reabertura/devolução nesse fluxo, conforme o código ([validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414)); substituição **[nao verificado]** | [nao verificado] |
+| `status_local` | [0038_a3_registrado_backfill.py:registrar:10](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0038_a3_registrado_backfill.py:10), também reversão em `:15` | migration | [nao verificado] | [nao verificado] |
+| `status_local`, `via_encerramento` | [0039_a3_via_backfill.py:backfill:24](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/migrations/0039_a3_via_backfill.py:24), também reversão em `:33`–`:34` | migration | [nao verificado] | [nao verificado] |
+
+A varredura de **signals, comandos, outras migrations, registros de admin, aliases, `setattr`, `save()` e atualizações dinâmicas** não foi concluída; logo, “todo escritor fora das portas” permanece **[nao verificado]**. O arquivo [admin.py](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/admin.py) está vazio, o que por si só não prova ausência de registros ou formulários de admin em outros arquivos. **[nao verificado]**
+
+**Contagens finais:** campos **[nao verificado]**; escritores **[nao verificado]**; escritores sem ato substituto **[nao verificado]**; destes, em exceção FATO **[nao verificado]**.
+
+## 18/11 14:25 · sessao 6a8ed6edd114 · PRE-MAPA-E4D · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: itens 3 e 5.** Os demais itens conferem dentro dos limites abaixo. Os anexos foram fornecidos no enunciado sem numeração de linhas; por isso, suas referências de linha estão **[não verificado]**.
+
+1. **CONFERE** — **Premissas:** E4d e os seis fatos conferem no [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089) e [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091); **ordem:** o censo não altera vagas nem abre Agent, conforme anexo PRE-MAPA, item 1 e proibição [linha não verificada]; **literal:** nenhum impedimento identificado; exaustividade dos escritores **[não verificado]**; **exportada/dinheiro/!:** o item pede leitura e registro, sem alteração declarada [anexo PRE-MAPA, item 1, linha não verificada].
+
+2. **CONFERE** — **Premissas:** CLASSE-D está registrada e a RAIZ liga F5 à E4d ([BACKLOG.md:2025](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2025), [BACKLOG.md:2109](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2109)); **ordem:** perguntas sem construção não alteram as vagas nem abrem Agent [anexo PRE-MAPA, item 2, linha não verificada]; **literal:** pede perguntas sem respondê-las; **exportada/dinheiro/!:** consulta o destino da exportada, sem autorizar mudança no gravado ([CLAUDE.md:411](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/CLAUDE.md:411)).
+
+3. **PROCEDE** — **Premissas:** B2b e as matrizes F2–F9 constam no [BACKLOG.md:826](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:826) e [BACKLOG.md:2117](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2117); OOM-0917 e o envelope concreto **[não verificado]**; **ordem e literal:** criar script reexecutável é construir instrumento, embora o cabeçalho diga “nenhuma vaga”, e a RAIA reserva instrumento à vaga 2 após esvaziar a fila; falta também explicitar o envio do contrato ao Codex antes da construção ([PISTA.md:170](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/PISTA.md:170); anexos PRE-MAPA item 3 e RAIA item 1, linhas **[não verificado]**); **exportada/dinheiro/!:** o censo AST declarado não prevê alteração desses dados [anexo PRE-MAPA, item 3, linha não verificada].
+
+4. **CONFERE** — **Premissas:** a sequência E4a–E4d consta no [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089); **ordem:** a matriz depende dos itens 1 e 3 e não abre construtor ou Agent [anexo PRE-MAPA, item 4, linha não verificada]; **literal:** sua execução depende da resolução do item 3; **exportada/dinheiro/!:** descreve escritas atuais e futuras, sem autorizar executá-las [anexo PRE-MAPA, item 4, linha não verificada].
+
+5. **PROCEDE** — **Premissas:** E3 consta “PARADA (aguarda lei)” na [GRADE-MESTRA.md:121](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/GRADE-MESTRA.md:121); a lei de 17/11 e seu literal de origem **[não verificado]**; **ordem:** registro não altera vagas nem abre Agent [anexo PRE-MAPA, item 5, linha não verificada]; **literal:** o próprio item determina AVAL-DEVOLVIDO se não encontrado o literal, e os `logs/AVAIS-*` não estão disponíveis nesta cópia **[não verificado quanto ao conteúdo]**; **exportada/dinheiro/!:** pede registro, sem alteração declarada desses dados [anexo PRE-MAPA, item 5, linha não verificada].
 
 ## 18/11 14:18 · sessao 459a4922e755 · DST-L2 · sonda · origem=Code
 
@@ -1188,62 +1257,4 @@ Os anexos abaixo estão no dado raspado, mas não foram encontrados como arquivo
 
 4. **Exportada, dinheiro ou `!`.** O item proíbe tocar exportada e regerar célula antes da simulação. O efeito real do diff Cirineu e do pouso em exportada, dinheiro ou `!` é **não conferível** nesta cópia. [anexo `pousos_comboio_1811_1332.txt`, item 3; arquivo:linha não conferível] [nao verificado]
 
-## 18/11 13:25 · sessao 53c0ec5d1e4d · E4C-F6F7 · leitura · origem=Code
-
-A triagem aponta **quatro grupos de causa**. Os 11 `AttributeError`, incluindo os dois subtestes Q3/Q4, também explicam o `FAIL` agregado da matriz; não há evidência no anexo de uma segunda divergência naquela matriz. A cura de cada grupo e seu resultado na suíte permanecem **[não verificado]**. [nao verificado]
-
-A cópia não tem metadados Git. Comparei os arquivos com a cópia local identificada por `dd489c627`, mas não executei a suíte naquela base; portanto, a reprodução dos vermelhos nela é **[não verificado]**.
-
-### Tabela por teste [nao verificado]
-
-Os caminhos abaixo são relativos à árvore `b66587c26`.
-
-| Teste vermelho | Causa e classe | Cura mínima proposta | [nao verificado]
-|---|---|---|
-| `BordasDaCura.test_grave_respondida_em_disputa_fechada_nao_e_filtrada_por_motivo` | **G1 — A:** decisão sintética sem o atributo agora lido diretamente. [teste:68](app/chamados/tests/test_e3_c8b_sem_banco.py:68), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `BordasDaCura.test_idempotente` | **G1 — A:** mesma fixture. [teste:63](app/chamados/tests/test_e3_c8b_sem_banco.py:63), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `BordasDaCura.test_schema_sem_chave_nova` | **G1 — A:** mesma fixture. [teste:68](app/chamados/tests/test_e3_c8b_sem_banco.py:68), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `BordasDaCura.test_sem_trabalho_sem_lampadas_nao_esconde_resposta_viva` | **G1 — A:** resposta sintética sem o atributo. [teste:188](app/chamados/tests/test_e3_c8b_sem_banco.py:188), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `AlimentacaoC6.test_carga_da_tarefa_pergunta_ao_c6_avulso_lote_e_idempotencia` | **G1 — A:** a carga sintética entrega decisão sem o atributo. [teste:215](app/chamados/tests/test_e3_c8b_sem_banco.py:215), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `PosSuiteSemBanco.test_linha_sintetica_de_pergunta_sem_marco_tem_data_civil_desconhecida` | **G1 — A:** resposta sintética sem o atributo. [teste:26](app/chamados/tests/test_e3_pos_suite_sem_banco.py:26), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `MatrizV8Test.test_v8_R15_produto_decisoes_residual_A`, subtestes **Q3 e Q4** | **G1 — A:** os dois `SimpleNamespace` de resposta omitem o atributo. [teste:723](app/chamados/tests/test_e3_portas_tarefa.py:723), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `MatrizV8Test.test_v8_R15_produto_decisoes_residual_A`, **FAIL agregado** | **G1 — A, consequência:** Q3 e Q4 abortam antes de `coletor.append`; a comparação final recebe duas entradas a menos. [teste:741](app/chamados/tests/test_e3_portas_tarefa.py:741), [teste:754](app/chamados/tests/test_e3_portas_tarefa.py:754), [teste:758](app/chamados/tests/test_e3_portas_tarefa.py:758). | C1; sem produção. Outras divergências após corrigir as exceções: **[não verificado]**. |
-| `F3Terminal.test_beco_resposta_E1_ancora_resolvida_sem_porta` | **G1 — A:** resposta sintética sem o atributo. [teste:246](app/chamados/tests/test_e3_r3_c7_sem_banco.py:246), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `RedBRespostaTextual.test_B_252_29_set_hipotese_ultima_resposta_textual` | **G1 — A:** hipótese E1 construída sem o atributo. [teste:119](app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:119), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `RedBRespostaTextual.test_B_841_10_out_hipotese_ultima_resposta_textual` | **G1 — A:** mesma construção. [teste:119](app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:119), [produção:164](app/chamados/services/tarefa_do_dia.py:164). | C1; sem produção. |
-| `CargaStatusDasAncoras.test_status_em_lote_destino_prevalece_container_sem_N_mais_1` | **G2 — A:** a obra extraiu `_fatos_das_perguntas`; o teste compila a classe isolada, mas seu namespace não contém a nova função global. [produção:377](app/chamados/services/tarefa_do_dia.py:377), [produção:517](app/chamados/services/tarefa_do_dia.py:517), [fixture:80](app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:80), [teste:209](app/chamados/tests/test_e3_r3_c7_sem_banco.py:209). | C2; sem produção. |
-| `ContadorPassivoECopiloto.test_a_view_do_app_le_a_mesma_fonte` | **G3 — A:** selo exige a chamada literal antiga; a view agora passa `agora=agora`. [teste:168](app/chamados/tests/test_pergunta_no_app.py:168), [view:2540](app/api/views.py:2540). | C3; com produção. |
-| `ExibicaoUsaADerivacaoTest.test_endpoint_do_app_filtra_por_q_vivas` | **G3 — A:** mesma mudança de grafia da chamada inspecionada pelo selo. [teste:69](app/chamados/tests/test_contract_pergunta_viva.py:69), [view:2540](app/api/views.py:2540). | C3; com produção. |
-| `LeitoresVitalidadeContract.test_ninguem_julga_vitalidade_por_carimbo_cru` | **G4 — A:** o novo contador filtra `validada_em__isnull=False`; o verificador AST identifica essa forma sem distinguir o universo de um censo de um julgamento de vitalidade. [contador:94](app/chamados/management/commands/backfill_decisoes_pergunta.py:94), [selo:329](app/chamados/tests/test_contract_leitores_vitalidade.py:329), [asserção:343](app/chamados/tests/test_contract_leitores_vitalidade.py:343). | C4; sem produção. |
-| `TorneiraFolgasTest.test_plano_manual_relavra_a_celula_ja_gerada` | **G5 — D:** a fixture escolhe hoje + 3 dias; no traceback isso dá 21/11, fora da janela corrente que termina em 20/11 para corte 21. A regeneração futura limita a busca à janela. [teste:71](app/escala/tests/test_torneira_folgas.py:71), [janela:10](app/ponto/janelas.py:10), [futuras:26](app/ponto/services/cadastro_futuro.py:26). Código e teste correspondentes são iguais na cópia da base; vermelho executado na base **[não verificado]**. | C5; sem produção para estabilizar a fixture. |
-| `TorneiraFolgasTest.test_calendario_relavra_a_celula_ja_gerada` | **G5 — D:** mesma data e mesmo limite de regeneração, por outro escritor de folga. [teste:90](app/escala/tests/test_torneira_folgas.py:90), [relavra:289](app/escala/folgas.py:289), [futuras:26](app/ponto/services/cadastro_futuro.py:26). Reprodução na base **[não verificado]**. | C5; sem produção para estabilizar a fixture. |
-
-### Grupos e curas
-
-- **C1 — decisões sintéticas:** acrescentar `resposta_mantem_validacao=False` às respostas das fixtures antigas, sem trocar suas asserções. O campo do modelo real tem esse default; os testes novos que exercitam `True` devem continuar cobrindo esse caso. [modelo:4072](app/chamados/models.py:4072), [teste F6:19](app/chamados/tests/test_f6_t_resposta_mantem_validacao.py:19). **Produção: não.** A alteração na obra que desencadeia a incompatibilidade está em [tarefa_do_dia.py:159](app/chamados/services/tarefa_do_dia.py:159).
-
-- **C2 — função extraída:** incluir `_fatos_das_perguntas` no namespace compilado pela fixture e fornecer as dependências sintéticas necessárias. O `NameError` é causado pela chamada nova em [tarefa_do_dia.py:517](app/chamados/services/tarefa_do_dia.py:517); se surgirá outro erro depois da injeção é **[não verificado]**. **Produção: não.**
-
-- **C3 — selos literais do app:** manter o mesmo instante para ambas as consultas, vinculando `agora` à função localmente, por exemplo com `functools.partial`, e conservar a chamada literal `consulta = consulta_do_app(colab)` exigida pelos dois selos. A função continua usando a seleção e partição do app em [pergunta_no_app.py:45](app/chamados/services/pergunta_no_app.py:45); os tracebacks, por si, não demonstram seleção incorreta. **Produção: sim; resultado [não verificado].**
-
-- **C4 — contador censitário:** adicionar à `ALLOWLIST` do selo uma exceção específica e justificada para `contador_validada_projetada_sem_linha`, preservando a asserção. O contador seleciona projeções carimbadas e delega a comparação ato/instante à autoridade; há exceção semelhante para outro censo do backfill. [contador:100](app/chamados/management/commands/backfill_decisoes_pergunta.py:100), [autoridade:4122](app/chamados/models.py:4122), [exceção existente:282](app/chamados/tests/test_contract_leitores_vitalidade.py:282). **Produção: não.**
-
-- **C5 — data da fixture de folga:** controlar o relógio e escolher um dia futuro dentro da janela corrente, mantendo a célula previamente criada e as asserções dos dois selos. Isso elimina a dependência de `hoje + 3` atravessar o corte. [teste:54](app/escala/tests/test_torneira_folgas.py:54), [teste:72](app/escala/tests/test_torneira_folgas.py:72), [janela:290](app/ponto/management/commands/gerar_celulas.py:290). **Produção: não para essa cura.** Se o contrato exigir relavrar também células futuras já existentes *fora* da janela, a implementação atual não as seleciona e seria necessária alteração de produção; essa exigência está **[não verificado]**. [cadastro_futuro.py:26](app/ponto/services/cadastro_futuro.py:26).
-
-### Quem escreve e quem lê os campos e funções relevantes
-
-| Campo ou função | Escrita / produção | Leitura |
-|---|---|---|
-| `resposta_mantem_validacao` | Porta humana grava `False`; resposta automática e trilha gravam `True`; a foto da projeção produz `True`. [disputa_emissao.py:1525](app/chamados/services/disputa_emissao.py:1525), [disputa_emissao.py:1674](app/chamados/services/disputa_emissao.py:1674), [disputa_emissao.py:1698](app/chamados/services/disputa_emissao.py:1698), [models.py:4139](app/chamados/models.py:4139). | A obra passa a lê-lo na cauda de respostas de `_pela_decisao`. [tarefa_do_dia.py:159](app/chamados/services/tarefa_do_dia.py:159). |
-| `_fatos_das_perguntas` | A função monta fatos em memória a partir de decisões, projeção, lavra, efeitos e fila. [tarefa_do_dia.py:377](app/chamados/services/tarefa_do_dia.py:377). | `exigencia_das_perguntas` e `CargaDaTarefa` consomem seu retorno. [tarefa_do_dia.py:436](app/chamados/services/tarefa_do_dia.py:436), [tarefa_do_dia.py:517](app/chamados/services/tarefa_do_dia.py:517). |
-| `consulta_do_app` e `agora` | A view obtém o instante e o passa à consulta; a função produz a partição de perguntas. [api/views.py:2538](app/api/views.py:2538), [pergunta_no_app.py:64](app/chamados/services/pergunta_no_app.py:64). | A view lê `pendentes` e `historico` e passa o mesmo instante à exigência por pergunta. Outros leitores incluem [aviso_pendencia.py:9](app/chamados/services/aviso_pendencia.py:9) e [cobranca.py:48](app/chamados/services/cobranca.py:48). [api/views.py:2541](app/api/views.py:2541). |
-| `aguarda_admin` | A view escreve a chave do JSON a partir de `aguarda_admin_pela_tarefa`. [api/views.py:2554](app/api/views.py:2554), [tarefa_do_dia.py:457](app/chamados/services/tarefa_do_dia.py:457). | Consumidores externos da chave: **[não verificado]**. |
-| `validada_em` e `linhas_da_projecao_sem_linha` | `_carimbar_validacao` grava o carimbo e registra a decisão correspondente; a autoridade produz linhas faltantes a partir da projeção. [validacao.py:161](app/chamados/services/validacao.py:161), [models.py:4122](app/chamados/models.py:4122). | O novo contador lê o carimbo para formar seu universo e chama a autoridade; a carga de fatos também chama a autoridade. [backfill_decisoes_pergunta.py:94](app/chamados/management/commands/backfill_decisoes_pergunta.py:94), [tarefa_do_dia.py:408](app/chamados/services/tarefa_do_dia.py:408). |
-
-Nenhuma cura foi aplicada ou executada; o fechamento efetivo dos vermelhos e possíveis falhas encobertas são **[não verificado]**. [nao verificado]
-
-## 18/11 13:24 · sessao bf6ef124d773 · - · - · origem=Ronald (tmux)
-
-Resultados de escala e do contrato de vitalidade enviados ao agente principal, com referências de arquivo e linha. A suíte da base não foi executada; a reprodução nela permanece [não verificado]. [nao verificado]
-
-_6970 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6972 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
