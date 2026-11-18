@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 11:25:40.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (31.3 MB). Acoes na janela: **833**.
+**Medido em 18/11/2026 11:30:43.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (31.4 MB). Acoes na janela: **834**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:25:46 | Bash | Waiter for F6F7 c5 full suite; RELATO line | `R=logs/E4C-F6F7 J=1118112538_054aa0ee; sleep 3; cat $R/final.rc 2>/dev/null; mv -f $R/final.rc $R/final_a7b96a_CANCELADO.rc 2>/dev/null; cat > $R/espera_c5.sh <<EOF cd /home/ronald/saas-hasner ssh -o BatchMode=yes pista espera $J > $R/final_c5.out 2>&1 ssh -o BatchMode=yes pista log $J 400000 > $R/suite_c5.log 2>&1 { echo "onde=PISTA job=$J fim=\$(date +%H:%M:%S)"; /bin/grep -E '^(FAIL\|ERROR):' $ ...` |
 | 11:25:36 | Bash | Cancel superseded jobs, queue full F6F7 c5 | `for j in 1118111558_a7b96ac9 1118112530_054aa0ee; do timeout 30 ssh -o BatchMode=yes pista cancela $j 2>&1\|tail -1; done; timeout 60 ssh -o BatchMode=yes pista pede 054aa0ee350fe495a5237bf14626ace8cea68a0a 2>&1\|tail -1; pgrep -af "a7b96ac9" \| /bin/grep -v pgrep \| cut -c1-200` |
 | 11:25:29 | Bash | Commit c5 and queue file test on pista | `cd /home/ronald/wt-e4c-f6f7-103452 && git add app/chamados/tests/test_f7_contador_validada_sem_linha.py && git commit -q -F - <<'EOF' E4C-F6F7 c5: fixture do contador F7 cria cada pergunta num dia proprio green_final (logs/E4C-F6F7/green_final.log) deu ERROR UniqueViolation pergunta_unica_por_marco: o 2o _p() repetia (colaborador, 21/10, orfao_14h, fim). So teste; codigo de producao intocado. LEI- ...` |
 | 11:25:21 | Bash | Fix fixture collision in raia test | `cd /home/ronald/wt-e4c-f6f7-103452 && python3 - <<'EOF' p='app/chamados/tests/test_f7_contador_validada_sem_linha.py' s=open(p).read() a=""" def _p(self, **campos): from chamados.models import PerguntaDisputa p = PerguntaDisputa.objects.create(disputa=self.d, motivo='orfao_14h', pergunta='q', tipo_resposta='hora', data_evento=datetime.date(2026, 10, 21))""" b=""" def _p(self, dia=21, **campos): #  ...` |
