@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 11:41:04.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (32.9 MB). Acoes na janela: **874**.
+**Medido em 18/11/2026 11:46:05.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (32.9 MB). Acoes na janela: **875**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:41:58 | Bash | Run revised apply in prod | `TS=$(date +%Y%m%d_%H%M%S); docker cp logs/sombra/passivo_apply.py saas_core:/tmp/passivo_apply.py && timeout 900 docker exec -e PASSIVO_MODO=APLICAR -e PASSIVO_REVERSAO=/app/logs/passivo_reversao_$TS.json saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/passivo_apply.py').read())" > logs/BUG-CADASTRO-FUTURO/passivo/apply_$TS.out 2>&1; echo rc=$?; cut -c1- ...` |
 | 11:40:13 | Bash | Re-prove revised script on sombra | `timeout 900 bin/sombra.sh --rodar passivo_apply.py passivo_prova2 > logs/BUG-CADASTRO-FUTURO/pouso/passivo_prova2.stdout 2>&1; echo rc=$?; /bin/grep -E "^(SENTINELA\|UNIVERSO\|APPLY\|CONDICOES\|PAREI\|DESFEITO\|EXPORTADA\|GUARDA)\|Error\|Traceback" logs/passivo_prova2.out \| cut -c1-300` |
 | 11:40:08 | Bash | Switch apply to repeatable read, scoped guard | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/sombra/passivo_apply.py'; s=open(p).read() def rep(a,b): global s; assert s.count(a)==1,a; s=s.replace(a,b) rep("""def snap():""","""EXP_FIM = datetime.date(2026, 10, 20) # fim da ultima competencia anterior a corrente (exportadas: <= comp 10) def guarda_exportada(): # fora do atomic o banco VIVO muda (batida de hoje, recalculo da comp abert ...` |
 | 11:39:53 | Bash | Inspect export/fechamento fields | `cd /home/ronald/saas-hasner/app && sed -n '/^class ExportacaoDominio/,/^class /p' folha/models.py \| /bin/grep -E "^\s+\w+ = models\." \| head -15; sed -n '/^class FechamentoMensal/,/^class /p' ponto/models.py \| /bin/grep -E "^\s+\w+ = models\." \| head -15; ls -la logs/passivo_reversao_*` |
