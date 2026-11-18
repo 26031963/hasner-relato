@@ -1,7 +1,264 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:59** · publicado em **18/11/2026 17:59** (UTC-3)
+> Ultima resposta processada: **18/11/2026 18:05** · publicado em **18/11/2026 18:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 18:05 · sessao 5935b3e9779c · B2B-RETAGUARDA-1811-1810 · sonda · origem=Code
+
+O caminho localizado no vigia é `vigiar_fio_morto`, que abre `tranca_em_lote()` antes dos censos; o censo de alcance usa `alimentar_portas`, e seu caminho para as perguntas do colaborador passa por `_no_app` → `perguntas_do_app` → `pergunta_viva`. A sonda percorre todos os colaboradores com perguntas pelo trecho `_no_app` → `perguntas_do_app` dentro do mesmo lote, inclusive perguntas sem célula; essa ampliação do universo em relação ao censo de alcance é necessária para medir todas as perguntas de disputa. [app/chamados/management/commands/vigiar_fio_morto.py:176; app/chamados/services/vigia_fio.py:560; app/chamados/juizes.py:1667; app/chamados/services/pergunta_no_app.py:45]
+
+- `pergunta_viva` é o juiz C6; `q_vivas()` é somente seu pré-filtro generoso. A sonda chama `perguntas_do_app`, que usa ambos, sem reproduzir o predicado. [app/chamados/juizes.py:866; app/chamados/models.py:3569; app/chamados/services/pergunta_no_app.py:52]
+- `_dia_de_turno_da_pergunta` exclui conversas do dia de turno. Para converter o dia em competência, a sonda chama `competencia_do_fato`, usada pela guarda de validação; ela usa a janela da empresa, não necessariamente o mês civil. [app/chamados/juizes.py:338; app/chamados/services/validacao.py:209; app/chamados/services/materializacao.py:788; app/chamados/services/passivo_validado.py:86]
+- `competencia_entregue` responde **entregue** e, com `registro=True`, devolve o TXT que vale; `competencia_trancada` responde **trancada**. O TXT mora em `ExportacaoDominio`, por empresa, mês e ano, e seu instante é `gerado_em`. [app/folha/export.py:556; app/ponto/services/fechamento.py:1473; app/folha/models.py:75]
+- O instante do ato é `DecisaoPergunta.ato_em`. O modelo não tem campo de porta; `ato_motivo` é texto de trilha, não uma identificação geral confiável da porta. A saída usa `porta=?` para todos os atos. [app/chamados/models.py:4166; app/chamados/models.py:4188]
+
+A janela da medida II é `[agora − 60 dias, agora]`. `II_SEM_TXT` conta **atos**, não dias distintos; atos sem dia de turno contam como erro, pois sua competência não é determinável. Em I, `vivas` conta as vivas com dia por empresa e competência, e `entregue_nao_trancada` é o subconjunto pedido; vivas sem dia aparecem separadamente. [app/chamados/juizes.py:338; não verificado]
+
+Não executei a sonda nem medi os números: o dado fornecido não contém as linhas necessárias. [não verificado] O próprio `--rodar` exige arquivo em `logs/sombra`, escreve saída e chama `lavra_de_prod`; executá-lo nesta sessão contrariaria a regra de não criar ou editar arquivos e a restrição de acesso ao dado fornecido. [bin/sombra.sh:483]
+
+```python
+import os
+from collections import Counter, defaultdict
+from datetime import timedelta
+from unittest.mock import patch
+
+
+def main():
+    from django.db import connection, transaction
+    from django.utils import timezone
+
+    from chamados.juizes import _dia_de_turno_da_pergunta, tranca_em_lote
+    from chamados.models import DecisaoPergunta, PerguntaDisputa
+    from chamados.services.materializacao import competencia_do_fato
+    from chamados.services.pergunta_no_app import perguntas_do_app
+    from colaboradores.models import Colaborador
+    from folha.export import competencia_entregue
+    from ponto.services.fechamento import competencia_trancada
+
+    erros = Counter()
+    grupos_i = defaultdict(lambda: [0, 0])
+    grupos_ii = Counter()
+    sem_dia_i = 0
+    sem_txt_ii = 0
+    total_ii = 0
+    inicio = None
+    agora = None
+
+    # Alguns degraus do C6 registram excecoes e continuam. Contabiliza esses
+    # erros sem imprimir mensagens que possam conter dados pessoais.
+    def registrar_erro_interno(*args, **kwargs):
+        exc = next((x for x in args if isinstance(x, BaseException)), None)
+        tipo = type(exc).__name__ if exc is not None else "ErroInterno"
+        erros[tipo] += 1
+
+    try:
+        if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+            raise RuntimeError("SettingsNaoSombra")
+
+        # A guarda consulta o banco efetivamente conectado, alem dos settings.
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT current_database(), current_schema()")
+            banco, schema = cursor.fetchone()
+        if banco != "sombra" or schema != "juliani":
+            raise RuntimeError("BancoOuSchemaIncorreto")
+
+        agora = timezone.now()
+        inicio = agora - timedelta(days=60)
+
+        # O banco impede escrita nesta transacao; a fotografia tambem mantem
+        # as duas medidas coerentes entre si.
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+                )
+
+            cache_txt = {}
+            cache_tranca = {}
+
+            def txt(emp_id, mes, ano):
+                chave = (emp_id, mes, ano)
+                if chave not in cache_txt:
+                    cache_txt[chave] = competencia_entregue(
+                        emp_id, mes, ano, registro=True
+                    )
+                return cache_txt[chave]
+
+            def trancada(emp_id, mes, ano):
+                chave = (emp_id, mes, ano)
+                if chave not in cache_tranca:
+                    cache_tranca[chave] = competencia_trancada(
+                        emp_id, mes, ano
+                    )
+                return cache_tranca[chave]
+
+            with patch("core.observ.registrar_engolido", registrar_erro_interno):
+                # Mesmo lote do vigia e mesmo leitor usado por _no_app.
+                # O universo de colaboradores nao depende de ter celula.
+                colab_ids = (
+                    PerguntaDisputa.objects.order_by()
+                    .values_list("disputa__colaborador_id", flat=True)
+                    .distinct()
+                )
+                colabs = (
+                    Colaborador.objects.filter(pk__in=colab_ids)
+                    .select_related("empresa")
+                    .order_by("pk")
+                )
+                with tranca_em_lote():
+                    for colab in colabs.iterator(chunk_size=500):
+                        for pergunta in perguntas_do_app(colab, agora=agora):
+                            dia = _dia_de_turno_da_pergunta(pergunta)
+                            if dia is None:
+                                sem_dia_i += 1
+                                continue
+                            if colab.empresa_id is None:
+                                erros["EmpresaAusente"] += 1
+                                continue
+                            fato = competencia_do_fato(pergunta, colab.empresa)
+                            if fato is None:
+                                erros["CompetenciaIndeterminada"] += 1
+                                continue
+                            mes, ano, entregue = fato
+                            chave = (colab.empresa_id, ano, mes)
+                            grupos_i[chave][0] += 1
+                            if entregue and not trancada(colab.empresa_id, mes, ano):
+                                grupos_i[chave][1] += 1
+
+                decisoes = (
+                    DecisaoPergunta.objects.filter(
+                        ato=DecisaoPergunta.RESPOSTA,
+                        ato_em__gte=inicio,
+                        ato_em__lte=agora,
+                    )
+                    .select_related(
+                        "pergunta",
+                        "pergunta__disputa",
+                        "pergunta__disputa__colaborador",
+                        "pergunta__disputa__colaborador__empresa",
+                    )
+                    .order_by("pk")
+                )
+                for decisao in decisoes.iterator(chunk_size=500):
+                    pergunta = decisao.pergunta
+                    dia = _dia_de_turno_da_pergunta(pergunta)
+                    if dia is None:
+                        erros["RespostaSemDiaDeTurno"] += 1
+                        continue
+                    colab = pergunta.disputa.colaborador
+                    if colab.empresa_id is None:
+                        erros["EmpresaAusente"] += 1
+                        continue
+                    fato = competencia_do_fato(pergunta, colab.empresa)
+                    if fato is None:
+                        erros["CompetenciaIndeterminada"] += 1
+                        continue
+                    mes, ano, _ = fato
+                    registro = txt(colab.empresa_id, mes, ano)
+                    if registro is None:
+                        sem_txt_ii += 1
+                    elif decisao.ato_em > registro.gerado_em:
+                        grupos_ii[(colab.empresa_id, ano, mes, "?")] += 1
+                        total_ii += 1
+
+    except Exception as exc:
+        # Nao imprimir str(exc): pode conter dados pessoais ou SQL.
+        if isinstance(exc, RuntimeError) and str(exc) in {
+            "SettingsNaoSombra", "BancoOuSchemaIncorreto"
+        }:
+            erros[str(exc)] += 1
+        else:
+            erros[type(exc).__name__] += 1
+
+    if agora is not None:
+        print("INICIO_II=" + timezone.localtime(inicio).isoformat())
+        print("AGORA=" + timezone.localtime(agora).isoformat())
+
+    for (emp, ano, mes), (vivas, elegiveis) in sorted(grupos_i.items()):
+        print(
+            f"I emp={emp} comp={ano:04d}-{mes:02d} "
+            f"vivas={vivas} entregue_nao_trancada={elegiveis}"
+        )
+    print(
+        "I_TOTAL vivas={} entregue_nao_trancada={}".format(
+            sum(v[0] for v in grupos_i.values()),
+            sum(v[1] for v in grupos_i.values()),
+        )
+    )
+    print(f"I_SEM_DIA={sem_dia_i}")
+
+    for (emp, ano, mes, porta), n in sorted(grupos_ii.items()):
+        print(f"II emp={emp} comp={ano:04d}-{mes:02d} porta={porta} n={n}")
+    print(f"II_TOTAL n={total_ii}")
+    print(f"II_SEM_TXT={sem_txt_ii}")
+
+    for tipo, n in sorted(erros.items()):
+        print(f"ERRO tipo={tipo} n={n}")
+    print(f"ERROS={sum(erros.values())}")
+    if erros:
+        print("INCONCLUSIVO")
+    print("FIM_SONDA_PORTAS_HUMANAS")
+
+
+main()
+```
+
+## 18/11 18:04 · sessao fe4e5fa9bae3 · B2B-RETAGUARDA-1811-1810 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 2:** a composição indicada não cobre toda pergunta em competência entregue; ela só consulta K6 para metades de intervalo. Além disso, a tela atual não usa o estado de bloqueio para esconder Rejeitar ou Conferir data. Isso precisa ser resolvido antes de executar o corte como proteção geral das três portas ([materializacao.py:804](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:804), [modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316), [modal_fio.html:163](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:163)).
+
+Para a contagem final, **PROCEDE** significa que a pergunta encontrou ao menos uma divergência ou condição que deve voltar para decisão; **NAO PROCEDE** significa que não encontrei essa divergência no material examinado. A contagem é por pergunta, uma vez por item.
+
+A tabela volta 8 e o aval B2B foram recebidos como texto raspado, sem arquivo local verificável nesta cópia; suas linhas de origem são **[nao verificado]**. O diretório fornecido também não contém metadados Git para reconfirmar o HEAD: **[nao verificado]**. As linhas abaixo são as desta cópia de código.
+
+### 1. Premissas, funções e estados
+
+**Item 2 — PROCEDE.** As portas existem, mas a premissa de que a composição indicada barra genericamente perguntas entregues não confere:
+
+- `entrega_que_barra_a_validacao` chama `_k6_que_barra` para a pergunta e eventual irmã ([validacao.py:209](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:209), trecho: `return _k6_que_barra(disputa.colaborador, (perg, irma))`). Porém `k6_consulta_a_pergunta` retorna verdadeiro apenas para `p.motivo in _PAR_DO_INTERVALO`; as demais são puladas ([materializacao.py:804](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:804), [materializacao.py:818](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:818)). Portanto, chamar essa composição não garante bloquear toda pergunta entregue, inclusive o aceite de folga quando seu motivo estiver fora desse conjunto.
+- `recusar_pergunta` verifica motivo, existência, validação, resposta e saída do fato; depois grava `recusa_motivo` e reabre para correção ([validacao.py:885](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:885), [validacao.py:898](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:898), trecho: `perg.save(update_fields=['recusa_motivo'])`, seguido de `reabrir_para_correcao` em [validacao.py:922](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:922)).
+- `conferir_data_do_fato` exige justificativa e divergência ainda não conferida, então grava `data_conferida_em/por` ([validacao.py:983](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:983), trecho: `p.save(update_fields=['data_conferida_em', 'data_conferida_por'])` em [validacao.py:998](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:998)).
+- `validar_pergunta` retorna antecipadamente para `_aceitar_a_folga` antes da consulta comum à composição ([validacao.py:711](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:711), trecho: `return _aceitar_a_folga(perg, autor, request)`; a consulta comum está em [validacao.py:740](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:740)). O aceite já carimba e fecha perguntas no ramo de folga existente, e no outro carimba antes de `declarar_dia` ([validacao.py:511](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:511), [validacao.py:545](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:545)).
+- `admin_encerra` exige motivo e delega ao fecho ([models.py:2106](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2106), trecho: `return self.fechar(... motivo=self.FECHOU_ADMIN_ENCERRA)`). O fecho trata esse motivo e desligamento no mesmo ramo de vivas ([models.py:2080](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2080)).
+- `responder_pergunta_disputa_core` valida e grava a resposta e a decisão; alguns escapes chamam materialização de ausência ([disputa_emissao.py:1439](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1439), [disputa_emissao.py:1527](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1527), [disputa_emissao.py:1560](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1560)). `declarar_hora_colab` pode reapontar a pergunta e depois chamar esse core ([declaracao_texto.py:371](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/declaracao_texto.py:371), [declaracao_texto.py:420](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/declaracao_texto.py:420)).
+
+**Item 4 — NAO PROCEDE** como achado de premissa falsa: o estado existe e pode ser lido, com alcance condicionado. É um **estado derivado de aplicação**, não uma marca de recusa gravada na pergunta: a testemunha chama a mesma composição e devolve `{'estado': _entregue[0], 'detalhe': _entregue[1]}` ([materializacao.py:892](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:892)). Ela só chega a essa derivação para resposta tipo hora, respondida e não materializada, após os atalhos de recusa ([materializacao.py:875](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:875)).
+
+### 2. Colisão com aval ou lei vigente
+
+**Item 2 — NAO PROCEDE**, quanto a colisão direta demonstrada. O registro vigente de 17/11 deixa as seis portas sem obra “**ate corte do Ronald**”; o item 2 fornecido é apresentado como esse corte posterior ([CORTES.md:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:556); texto do novo aval: **[nao verificado]**, pois fornecido no enunciado). O mesmo registro confirma para a tranca: “a disputa FECHA” e a pergunta entregue da cadeia S144 “nao e gravada e conta” ([CORTES.md:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:556)).
+
+A cerca atual é no-op fora de ato cercado: trecho `if estado is None: return` ([fio.py:1402](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:1402)). A regra própria sem abrir cerca é compatível com essa distinção. A tabela fornecida registra, contudo, que o alcance de coletor herdado sobre desligamento e cadastro ainda está **a demonstrar**; tratar R4 como provada em todos os contextos seria **[nao verificado]**.
+
+**Item 4 — NAO PROCEDE.** A leitura pedida não altera as portas nem contradiz o registro que as mantém sem obra ([CORTES.md:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:556)). A L-004 exige parar quando condição literal não fecha ([LEIS.md:62](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:62)).
+
+### 3. Condições literais, ordem e tela
+
+**Item 2 — PROCEDE**, por três condições que não fecham automaticamente:
+
+1. **Cobertura da composição.** A mesma função de validar tem o filtro de motivo descrito na pergunta 1. Acrescentá-la às três portas, sem mudar seu universo, deixa passar perguntas fora de `_PAR_DO_INTERVALO` mesmo que sua competência esteja entregue ([materializacao.py:804](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:804)).
+2. **“Mesmo estado”.** A composição distingue dois fatos: para ausência de dia retorna `BLOQUEADA_SEM_DIA_DO_FATO`; para entregue, `BLOQUEADA_COMPETENCIA_ENTREGUE` ([materializacao.py:821](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:821)). A porta de validar preserva essa distinção: trecho `if barra[0] == BLOQUEADA_SEM_DIA_DO_FATO` ([validacao.py:228](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:228)). O literal “recusam com o MESMO estado bloqueada_competencia_entregue” precisa dizer como tratar o resultado sem dia.
+3. **Testemunha e botões.** Hoje o estado é calculado na leitura, não gravado pelo retorno da porta ([materializacao.py:901](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:901)). No card, a condição do estado esconde Validar, mas o formulário Rejeitar vem depois desse bloco ([\_pergunta_card.html:42](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:42), [\_pergunta_card.html:117](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:117)). No modal, Rejeitar e Corrigir dependem de `not perg.em_disputa_fechada`, enquanto Conferir data depende de divergência, ausência de conferência e permissão; nenhum desses testes consulta o bloqueio de competência ([modal_fio.html:163](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:163), [modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316)). Logo, será necessário definir a testemunha e o alcance por botão, inclusive para casos fora do universo atual dela.
+
+A ordem das escritas também importa: em recusar, a guarda precisa anteceder o `save` **e** a reabertura; em conferir, o `save`; em folga, os carimbos e a declaração, inclusive o ramo de folga já existente ([validacao.py:920](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:920), [validacao.py:996](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:996), [validacao.py:511](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:511), [validacao.py:551](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:551)). No fecho administrativo, as vivas são tratadas antes do `save` da disputa, que aciona S144 ([models.py:2080](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2080), [models.py:2099](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2099), [signals.py:150](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/signals.py:150)).
+
+**Item 4 — NAO PROCEDE** quanto à condição “nenhuma ação disponível” como conclusão geral. A resposta depende da tela e dos demais atributos:
+
+- **Card:** para respondida, não validada e `pode_agir`, mostra resposta e detalhe; o bloqueio esconde Validar, mas o formulário Rejeitar permanece ([\_pergunta_card.html:29](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:29), [\_pergunta_card.html:42](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:42), [\_pergunta_card.html:117](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:117)).
+- **Modal do fio:** mostra resposta e, nos blocos correspondentes, o detalhe; esconde Validar no estado entregue. Se a disputa não estiver fechada, oferece Rejeitar e, para tipo hora, Corrigir. Se houver divergência não conferida e permissão, oferece Conferir data ([modal_fio.html:217](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:217), [modal_fio.html:274](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:274), [modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316), [modal_fio.html:163](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:163)).
+- **Lista do chamado:** seleciona perguntas vivas de uma disputa aberta; o estado entregue, por si, não é o filtro de inclusão ([acoes_chamado.py:345](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/acoes_chamado.py:345), trecho: `[_p for _p in _todas_perg if _viva(_p)]`).
+- **Pauta DP identificada no código:** o contador coloca `pk` e competência no balde de entregue; o comando monta linhas `pk, colNNN, competencia` ([materializacao.py:342](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:342), [bug_par_103.py:143](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/bug_par_103.py:143)). Uma tela operacional adicional dessa pauta e suas ações são **[nao verificado]**.
+
+Há situações em que o modal retira Rejeitar e Corrigir por disputa fechada; se sobra outra saída utilizável em cada caso concreto é **[nao verificado]**. Após o corte proposto para Rejeitar e Conferir, a existência de saída para todo supervisor também é **[nao verificado]**; a condição de espera do item 4 deve ser avaliada por tela e estado, sem presumir que Corrigir resolve todos os casos ([modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316)).
+
+### 4. Exportada, dinheiro ou `!` fora do declarado
+
+**Item 2 — NAO PROCEDE** quanto a toque adicional demonstrado. O objeto declarado é precisamente escrita de pergunta em competência entregue **[nao verificado: aval fornecido no enunciado]**. K6 consulta a existência de TXT vigente por empresa e competência ([export.py:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:556)). O aceite de folga hoje declara dia e pede recálculo de fechamento, portanto tem efeito indireto potencial sobre a folha ([validacao.py:551](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:551), [validacao.py:585](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:585)); efeito monetário concreto e impacto de frota são **[nao verificado]**. A lei distingue apply de dinheiro e exige examinar seu alcance ([LEIS.md:67](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:67)). Não há execução ou alteração de dado neste trabalho.
+
+**Item 4 — NAO PROCEDE.** O item solicita leitura; não encontrei nele instrução de aplicar alteração de competência ou dinheiro **[nao verificado: aval fornecido no enunciado]**. Valores, pessoas e quantidades em produção são **[nao verificado]**.
+
+REVISAO item 2: PROCEDE 2 / NAO PROCEDE 2.  
+REVISAO item 4: PROCEDE 0 / NAO PROCEDE 4.
 
 ## 18/11 17:59 · sessao b83f2b7c7015 · RESPOSTAS-1811-1800 · verificador · origem=Code
 
@@ -2054,53 +2311,4 @@ finally:
 
 Um resultado zero na interseção só elimina candidatos **nesse recorte e instante**; não substitui o diff de `T`/porta, nem prova ausência de mudança após outros dados ou em competências fora do recorte. [app/chamados/services/tarefa_do_dia.py:484](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/chamados/services/tarefa_do_dia.py:484), [app/ponto/services/he_pendente_lavrado.py:209](/home/ronald/codex_ws/e78031f79b8769c1680f6ea0b4a5ce22eaa1ce55/app/ponto/services/he_pendente_lavrado.py:209)
 
-## 18/11 17:32 · sessao c2bbe7b05200 · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-**O c4 distingue os dois mutantes pela conta da fixture; a evidência de execução dos mutantes permanece [não verificado].** A mudança usa uma órfã que o caminho normal examinado de produção não gera, e o item 7 do veredito contém divergências do literal do aval que não podem ser tratadas como resolvidas sem aceite explícito. [app/escala/tests/test_escala_nao_descreve.py:63; app/escala/utils.py:621; anexo `veredito.md`, item 7]
-
-1. **Mutantes de R1.** A fixture coloca em A `08:10`, `08:20`, `8h` e `14:00`; R1 espera carga **4**. [app/escala/tests/test_escala_nao_descreve.py:63; app/escala/tests/test_escala_nao_descreve.py:91]
-
-   - `n_orfas = 3 + 1 = 4`, pois soma o comprimento das listas. [app/ponto/services/esmeril_espelho.py:130]
-   - `_hm` lê `08:10` e `08:20` na faixa 16, lê `14:00` na faixa 28 e retorna `None` para `8h`; assim, `a5 = {16: 2, 28: 1}`. [app/ponto/services/esmeril_espelho.py:31; app/ponto/services/esmeril_espelho.py:132]
-   - Portanto, `len(a5) = 2` e `sum(a5.values()) = 3`: ambos divergem do 4 exigido pelo teste, que recebe a medida pela lavra. [app/ponto/services/esmeril_espelho.py:142; app/ponto/services/esmeril_espelho.py:235; app/escala/tests/test_escala_nao_descreve.py:88]
-
-   O diff anexo relata uma falha para cada mutante e restauração do arquivo, mas os logs dessa execução não foram fornecidos: **rodada efetiva [não verificado]**. [anexo `delta.diff`, mensagem do commit] [nao verificado]
-
-2. **Escritor e formato.** O cartório monta `ata['orfas']` com `str(h)` para cada elemento de `dia['orfas']`, passa a ata à operação de lavra e a porta atribui a nova ata à `CelulaDia`. [app/ponto/services/cartorio.py:730; app/ponto/services/cartorio.py:745; app/ponto/services/cartorio.py:1852; app/ponto/portas/celula.py:1049; app/ponto/portas/celula.py:1090]
-
-   Nos caminhos de montagem examinados, as horas vêm de `strftime('%H:%M')`, inclusive as horas de células que depois viram órfãs; logo, **`'8h'` não é forma gerada por esses caminhos**, embora `ata_do_dia` isoladamente aceite e converta qualquer valor recebido. Dados antigos, escritos por outro caminho ou corrompidos: **[não verificado]**. [app/escala/utils.py:621; app/escala/utils.py:662; app/escala/utils.py:1722; app/escala/utils.py:326; app/escala/utils.py:1832; app/ponto/services/cartorio.py:745]
-
-   Duas órfãs legíveis na mesma faixa fazem `len(a5)` diferir de `n_orfas`, **mas não** fazem `sum(a5.values())` diferir: cada órfã lida incrementa o contador uma vez. Para a soma diferir é necessário ao menos um elemento que `_hm` não leia; não identifiquei outra forma produzida pelo caminho normal examinado. [app/ponto/services/esmeril_espelho.py:130; app/ponto/services/esmeril_espelho.py:135]
-
-   O selo pode manter o caso defensivo `'8h'` para a regra literal de contar elementos, mas deve identificá-lo como caso sintético; não há, na evidência examinada, uma forma normal de produção comprovada para substituí-lo e ainda matar esse mutante. [app/escala/tests/test_escala_nao_descreve.py:5; app/ponto/services/esmeril_espelho.py:130]
-
-3. **Outros testes do módulo.** A nova fixture tem apenas **duas** órfãs na faixa 16 e uma na faixa 28; A5 exige ao menos três na mesma faixa, portanto não cria A5 para A. Isso preserva as pré-condições de R1 e R3 de que A não tenha assinatura nem proposta, quanto a essa alteração de A5. [app/escala/tests/test_escala_nao_descreve.py:63; app/ponto/services/esmeril_espelho.py:148; app/escala/tests/test_escala_nao_descreve.py:89; app/escala/tests/test_escala_nao_descreve.py:105] Resultado efetivo dos demais testes: **[não verificado]**.
-
-4. **`HistoricoVinculo.de`.** `executar_vinculo` fotografa o vínculo ativo anterior como `código desde data · turno data-ou-"-"`, passa esse texto a `registrar_mudanca`, que cria `HistoricoVinculo.de`. [app/colaboradores/services/vinculo.py:182; app/colaboradores/services/vinculo.py:349; app/colaboradores/services/historico_vinculo.py:7]
-
-   Na fixture de R4, X começa no template de código `ENDL-5`; portanto, o texto anterior esperado contém `ENDL-5`, como a nova asserção exige. [app/escala/tests/test_escala_nao_descreve.py:127; app/escala/tests/test_escala_nao_descreve.py:135; app/escala/tests/test_escala_nao_descreve.py:140; app/escala/tests/test_escala_nao_descreve.py:288]
-
-5. **Classificação dos itens do veredito**, considerando o literal reproduzido no próprio anexo; o texto integral do aval é **[não verificado]**:
-
-   - **Item 3 — FILA.** Há leitores separados da classificação de ciclo, mas o anexo caracteriza o leitor anterior como herdado e a obra como acrescentando outro leitor; isso, por si só, não demonstra violação da proibição literal de *juiz novo*. [app/escala/services/cadastro_realidade.py:849; app/escala/regua_defesa.py:313; app/colaboradores/services/vinculo.py:128; anexo `veredito.md`, itens 2–3]
-   - **Item 4 — BLOQUEIA o selo de R5.** O caso declarado exige que o POST direto seja recusado pela porta, mas o teste só verifica que não houve vínculo; o POST retorna no predicado da view antes de chamar `realocar_vinculo_para_destino`. Assim, não prova a recusa da porta indicada em R4/R5. [app/escala/tests/test_escala_nao_descreve.py:12; app/escala/tests/test_escala_nao_descreve.py:15; app/escala/tests/test_escala_nao_descreve.py:299; app/escala/views.py:498; app/escala/views.py:502; app/escala/regua_defesa.py:313]
-   - **Item 6 — FILA**, com risco real de proposta antiga: o leitor busca o último snapshot sem limite de idade e a view usa sua proposta para aplicar a partir de hoje; o anexo não reproduz exigência literal de validade temporal. Existência ou efeito de lavra vencida em produção: **[não verificado]**. [app/ponto/services/esmeril_espelho.py:371; app/escala/views.py:493; app/escala/regua_defesa.py:315; anexo `veredito.md`, item 6]
-   - **Item 7 — BLOQUEIA por divergência literal pendente de aceite.** Segundo o anexo, o aval inclui `ciclo` no mapa e manda o link ao wizard; o código omite `ciclo` e aponta à tela de vínculo. A justificativa técnica para ler o ciclo atual não comprova alteração do aval. [anexo `veredito.md`, item 7; app/ponto/services/esmeril_espelho.py:245; app/escala/services/cadastro_realidade.py:13; app/escala/tests/test_escala_nao_descreve.py:299]
-   - **Item 8 — FILA**, pelo que é verificável: a L-040 ainda cita o selo antigo, e a L-042 tem a coluna `PROTEGE` vazia; o portão cobra citação quando o diff toca função declarada nessa coluna. Não há prova disponível de uma exigência literal do aval que transforme esses dois apontamentos em bloqueio desta obra. Resultado do portão sobre o range de pouso: **[não verificado]**. [app/docs/LEIS.md:88; app/docs/LEIS.md:90; bin/tests/test_lei_protege_sitio.sh:13; bin/tests/test_lei_protege_sitio.sh:200]
-
-## 18/11 17:25 · sessao c8d57d9f8e0f · LOTE-CONHECE-A-IRMA · sonda · origem=Code
-
-Na saída raspada fornecida:
-
-- Universo de perguntas de intervalo-hora na fila: **550**. [não verificado]
-- Em `b_conversa` por conflito: **72**. [não verificado]
-- Com conflito somente de batida de irmã gravada: **23**. [não verificado]
-  - Com exatamente uma irmã gravada: **23**. [não verificado]
-  - Com mais de uma irmã gravada, no contador de irmã ambígua: **0**. [não verificado]
-- Erros: **0**. [não verificado]
-
-A conferência do método da sonda ficou **não verificada**: o arquivo `logs/RAIA-INTERVALO/sonda_irma_ambigua.py` não foi encontrado na cópia. [não verificado]
-
-No código, `classe_do_lote` só marca conflito depois de passar pelas verificações anteriores e usa batidas apuráveis próximas ao instante do slot. [validacao.py](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/validacao.py:1177) Já `metade_irma_do_intervalo` procura uma única irmã respondida **ainda não materializada**, com filtros adicionais. [materializacao.py](/home/ronald/codex_ws/eeadcfc61a124d908636b8015a590f26708f5e78/app/chamados/services/materializacao.py:139) Isso não permite confirmar que o método da sonda, que relata irmãs gravadas, corresponda ao método pretendido ou detectar eventual divergência. [não verificado]
-
-_7074 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7076 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
