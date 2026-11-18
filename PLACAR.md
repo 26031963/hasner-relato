@@ -1,6 +1,6 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 18/11/2026 18:11 @c8b6d1ec2
+medido em 18/11/2026 18:17 @c8b6d1ec2
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
@@ -45,4 +45,5 @@ casas cheias na frota: cen 236, lei 320, con 75, R/G 33, mut 3, ver 14, opus 9, 
 
 obras lidas: 468
 
-nao lidas: 0
+nao lidas: 1
+- L124 CADEIA-DO-CONTRATO-20: portao='um passo so abre com o anterior no ar'
