@@ -1,7 +1,712 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 17:37** · publicado em **18/11/2026 17:37** (UTC-3)
+> Ultima resposta processada: **18/11/2026 17:39** · publicado em **18/11/2026 17:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 17:39 · sessao 8dcf99a94415 · RAIA-INTERVALO · leitura · origem=Code
+
+A sonda abaixo **não foi executada**. A ata está em `CelulaDia.ata`, mas não encontrei um carimbo que registre todas as alterações dela: `veredito_em` não avança quando a ata muda sob decisão administrativa, e `carimbar_precedencia` também altera a ata sem atualizar esse campo. Por isso, a sonda imprime `UA=?` e, pela regra solicitada para dado faltante, `VELHO=?`; não seria correto usar `editada_em`, que carimba edição do dia/DNA ([app/escala/models.py:1732](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1732), [app/escala/models.py:1778](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1778), [app/ponto/portas/celula.py:1060](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1060), [app/ponto/portas/celula.py:1205](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1205)).
+
+`HOJE` é o veredito derivado dos códigos devolvidos pela chamada do **command**, não uma previsão de escrita do cartório: este último pode preservar uma decisão administrativa e tem outros insumos próprios ([app/escala/models.py:1624](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1624), [app/ponto/portas/celula.py:970](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:970), [app/ponto/management/commands/supra_juiz.py:239](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:239)). O leitor da grade lê a ata lavrada; portanto, `HOJE` não prova uma reconstrução independente da ata ([app/escala/services/leitor_celula.py:350](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:350), [app/escala/services/leitor_celula.py:377](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/services/leitor_celula.py:377)).
+
+A classificação é declarada pura; a transação PostgreSQL `READ ONLY` protege também os carregadores usados pela sonda, recusando escritas ([app/ponto/supra_juiz.py:9](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/supra_juiz.py:9)). A sonda exige o schema ativo `juliani`; o uso em qualquer outro ambiente fica recusado [não verificado].
+
+```python
+import datetime as dt
+from collections import Counter
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia, EscalaColaborador, derivar_veredito
+from escala.services.leitor_celula import grade_da_celula
+from ponto.models import Batida
+from ponto.turnos import ausencia_cobre, batidas_apuraveis, dias_encerrados
+from ponto.supra_juiz import cadastro_do_dia, classificar_dia
+from chamados.models import ChamadoColaborador
+from chamados.juizes import fio_vivo
+from chamados.catalogo.furo_modulos import FURO_MODULES
+from chamados.catalogo.modulos import data_do_chamado
+from chamados.catalogo.motor import VIVOS
+
+G = {'G1': [(622, d) for d in ('27/10', '29/10', '04/11', '05/11', '12/11', '13/11', '16/11')],
+     'G2': [(362, '22/10'), (945, '29/10'), (735, '16/11')],
+     'G3': [(583, '12/11'), (829, '11/11'), (369, '12/11')],
+     'G4': [(224, '28/10'), (469, '01/11'), (924, '11/11'), (631, '03/11'), (988, '31/10'), (988, '03/11'),
+            (836, '04/11'), (1000, '03/11'), (1000, '13/11'), (962, '05/11'), (962, '09/11'), (962, '16/11'),
+            (991, '09/11'), (991, '11/11')],
+     'G5': [(787, '30/10')]}
+
+erros = Counter()
+tz = timezone.get_current_timezone()
+
+
+def executar_etapa(etapa, funcao):
+    # Savepoint permite continuar mesmo apos erro de banco; nao imprime
+    # mensagens de excecao, que poderiam conter dados pessoais.
+    try:
+        with transaction.atomic():
+            return True, funcao()
+    except Exception as exc:
+        erros[(etapa, type(exc).__name__)] += 1
+        return False, None
+
+
+def hora_local(valor):
+    if valor is None:
+        return '?'
+    return timezone.localtime(valor, tz).strftime('%d/%m/%Y_%H:%M:%S')
+
+
+def classificar_como_command(c, data):
+    # Mesmo caminho e argumentos de:
+    # ponto/management/commands/supra_juiz.py:102-116,120-156,173-178,
+    # 186-202 e 205-234. A janela pedida aqui e um unico dia.
+    ini = fim = data
+    janela_ini = timezone.make_aware(
+        dt.datetime.combine(ini - dt.timedelta(days=1), dt.time.min)
+    )
+    janela_fim = timezone.make_aware(
+        dt.datetime.combine(fim + dt.timedelta(days=3), dt.time.min)
+    )
+    bs = list(Batida.objects.filter(
+        colaborador=c,
+        timestamp__gte=janela_ini,
+        timestamp__lt=janela_fim,
+    ).order_by('timestamp'))
+    if not bs:
+        # O command pula este colaborador nesta janela.
+        raise ValueError('command_sem_batidas_na_janela')
+
+    encerrados = dias_encerrados(c, ini, fim)
+    grade = grade_da_celula(c, ini, fim)
+    primeira = Batida.objects.filter(
+        colaborador=c
+    ).order_by('timestamp').first()
+    adesao = timezone.localdate(primeira.timestamp) if primeira else None
+
+    vigs = list(EscalaColaborador.objects.filter(
+        colaborador=c
+    ).select_related('tipo_escala').order_by('data_inicio'))
+
+    def sem_fase(dref):
+        ec = None
+        for v in vigs:
+            if v.data_inicio and v.data_inicio <= dref:
+                ec = v
+        if ec is None or ec.tipo_escala is None:
+            return False
+        if ec.tipo_escala.tipo_ciclo not in ('12x36', '24x48'):
+            return False
+        a = ec.data_ancora_colaborador
+        return a is None or a.year <= 1940
+
+    cadastro = cadastro_do_dia(
+        c.pk,
+        list(EscalaColaborador.objects.filter(
+            colaborador_id=c.pk
+        ).select_related('tipo_escala')),
+        {(c.pk, x.data): x for x in CelulaDia.objects.filter(
+            colaborador_id=c.pk, data__range=(ini, fim)
+        )},
+        data_demissao=c.data_demissao,
+    )
+    regua_deg = ChamadoColaborador.objects.filter(
+        colaborador=c,
+        modulo_origem='regua_degenerada',
+        status_local__in=VIVOS,
+    ).exists()
+
+    chs = {}
+    for ch in (ChamadoColaborador.objects.filter(
+            colaborador=c, modulo_origem__in=FURO_MODULES
+    ).prefetch_related('perguntas_que_resolvem')):
+        d = data_do_chamado(ch.modulo_origem, ch.contexto_json)
+        if d:
+            chs.setdefault(str(d), []).append(ch)
+
+    dias = [
+        x for x in (grade.get('dias') or [])
+        if x.get('data') == data and ini <= x.get('data') <= fim
+    ]
+    if len(dias) != 1:
+        raise ValueError('grade_nao_devolveu_um_dia')
+
+    dia = dias[0]
+    lista = chs.get(data.isoformat(), [])
+    vivos = [x for x in lista if x.status_local in VIVOS]
+    com_fio = [
+        x for x in vivos if fio_vivo(x.perguntas_que_resolvem.all())
+    ]
+    cob = ausencia_cobre(c, data, para='cobranca')
+    n_bat = sum(1 for b in bs if timezone.localdate(b.timestamp) == data)
+
+    resultado = classificar_dia(
+        dia, dia.get('marcos') or [],
+        chamados_vivos=len(vivos),
+        chamados_total=len(lista),
+        cobrancas_vivas=len(com_fio),
+        cobertura_status=getattr(cob, 'status', None),
+        data=data,
+        em_operacao_desde=adesao,
+        isento_ponto=bool(c.isento_ponto),
+        batidas_no_dia=n_bat,
+        hoje=timezone.localdate(),
+        turno_encerrado=encerrados.get(data, False),
+        sem_fase=sem_fase(data),
+        regua_degenerada=regua_deg,
+        **cadastro(data)
+    )
+    codigos = [cod for cod, detalhe in resultado]
+    veredito = derivar_veredito(codigos)
+
+    # Os dois retornos de classificar_dia sao o retorno antecipado de
+    # isento e o retorno final. Nao se afirma qual predicado interno
+    # deixou o resultado vazio.
+    ramo = None
+    if veredito == 'concorde':
+        ramo = 'ISENTO_PONTO' if bool(c.isento_ponto) else 'RETORNO_FINAL'
+    return veredito, codigos, ramo
+
+
+def ultima_batida(c, data):
+    ini = timezone.make_aware(dt.datetime.combine(data, dt.time.min), tz)
+    fim = timezone.make_aware(
+        dt.datetime.combine(data + dt.timedelta(days=1), dt.time.min), tz
+    )
+    # batidas_apuraveis usa fim inclusivo; exclui-se a meia-noite seguinte.
+    bats = [b for b in batidas_apuraveis(c, ini, fim) if b.timestamp < fim]
+    if not bats:
+        return None
+    # "Ultima batida" pela ordem de timestamp da autoridade;
+    # pk desempata marcas com o mesmo timestamp.
+    return max(bats, key=lambda b: (b.timestamp, b.pk)).criado_em
+
+
+def rodar():
+    resumo = {
+        grupo: Counter({'sim': 0, 'nao': 0, '?': 0,
+                        'acusa': 0, 'concorde': 0, 'hoje_?': 0})
+        for grupo in G
+    }
+
+    for grupo, casos in G.items():
+        for pk, dm in casos:
+            dd, mm = dm.split('/')
+            data = dt.date(2026, int(mm), int(dd))
+            grav = julg = hoje = codigos = ub = ramo = None
+
+            ok_col, col = executar_etapa(
+                'colaborador', lambda: Colaborador.objects.get(pk=pk)
+            )
+            if ok_col:
+                ok_cel, cel = executar_etapa(
+                    'celula',
+                    lambda: CelulaDia.objects.filter(
+                        colaborador_id=pk, data=data
+                    ).first()
+                )
+                if ok_cel and cel is not None:
+                    grav = cel.veredito
+                    julg = cel.julgada_em
+
+                ok_hoje, atual = executar_etapa(
+                    'classificacao', lambda: classificar_como_command(col, data)
+                )
+                if ok_hoje:
+                    hoje, codigos, ramo = atual
+
+                ok_ub, ub = executar_etapa(
+                    'batida', lambda: ultima_batida(col, data)
+                )
+
+            # Nao ha carimbo demonstrado para todas as alteracoes de ata.
+            ua = None
+            velho = '?'
+
+            r = resumo[grupo]
+            r[velho] += 1
+            if hoje is None:
+                r['hoje_?'] += 1
+            elif hoje == 'concorde':
+                r['concorde'] += 1
+            else:
+                r['acusa'] += 1
+
+            cod_txt = '?' if codigos is None else (
+                ','.join(codigos) if codigos else '-'
+            )
+            linha = (
+                'D %s col%d %s GRAV=%s JULG=%s HOJE=%s COD=%s '
+                'UB=%s UA=%s VELHO=%s'
+                % (grupo, pk, dm, grav or '?', hora_local(julg),
+                   hoje or '?', cod_txt, hora_local(ub),
+                   hora_local(ua), velho)
+            )
+            if hoje == 'concorde':
+                linha += ' RAMO %s' % (ramo or '?')
+            print(linha)
+
+    for grupo in G:
+        r = resumo[grupo]
+        print(
+            'RESUMO %s VELHO sim=%d nao=%d ?=%d '
+            'HOJE acusa=%d concorde=%d ?=%d'
+            % (grupo, r['sim'], r['nao'], r['?'],
+               r['acusa'], r['concorde'], r['hoje_?'])
+        )
+
+
+try:
+    if connection.in_atomic_block:
+        raise RuntimeError('transacao_preexistente')
+    if connection.vendor != 'postgresql':
+        raise RuntimeError('banco_nao_postgresql')
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute('SET TRANSACTION READ ONLY')
+            cursor.execute('SELECT current_schema()')
+            if cursor.fetchone()[0] != 'juliani':
+                raise RuntimeError('schema_ativo_nao_e_juliani')
+        rodar()
+except Exception as exc:
+    erros[('sonda', type(exc).__name__)] += 1
+
+total_erros = sum(erros.values())
+print('ERROS %d' % total_erros)
+for (etapa, tipo), quantidade in sorted(erros.items()):
+    print('ERROS etapa=%s tipo=%s n=%d' % (etapa, tipo, quantidade))
+print('FIM_SONDA_VELHO')
+```
+
+As referências principais da sonda são:
+
+- `CelulaDia.veredito`, `veredito_via`, `veredito_em`, `protestos` e `ata`: [app/escala/models.py:1769](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1769). `julgada_em`: [app/escala/models.py:1738](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1738).
+- Montagem dos argumentos do command: [app/ponto/management/commands/supra_juiz.py:102](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:102), [linha 120](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:120), [linha 142](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:142), [linha 173](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:173), [linha 186](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:186) e [linha 205](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/supra_juiz.py:205).
+- `classificar_dia` e seus retornos: [app/ponto/supra_juiz.py:217](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/supra_juiz.py:217), [linha 233](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/supra_juiz.py:233) e [linha 549](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/supra_juiz.py:549). `cadastro_do_dia`: [linha 155](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/supra_juiz.py:155).
+- `batidas_apuraveis`, inclusive ordenação e limite superior inclusivo: [app/ponto/turnos.py:2868](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/turnos.py:2868); `Batida.criado_em`: [app/ponto/models.py:79](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/models.py:79). `dias_encerrados` e `ausencia_cobre`: [app/ponto/turnos.py:2133](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/turnos.py:2133), [linha 2550](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/turnos.py:2550).
+- `fio_vivo`, `data_do_chamado` e `FURO_MODULES`: [app/chamados/juizes.py:1510](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1510), [app/chamados/catalogo/modulos.py:219](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/catalogo/modulos.py:219), [app/chamados/catalogo/furo_modulos.py:15](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/catalogo/furo_modulos.py:15).
+
+## 18/11 17:38 · sessao 328937483a19 · E4C-F6F7 · leitura · origem=Code
+
+A sonda abaixo é uma **proposta não executada**. A compatibilidade com `c8b6d1ec2`, a presença da coluna no banco sombra, os dados e o resultado do diff estão **[não verificados]**: esta cópia não permite conferir o diff pedido contra o main. O script registra incompatibilidades por etapa, inclusive `TypeError`; uma execução com `ERROS > 0` não constitui medida completa.
+
+A 0056 usa o predicado `ato='resposta'` e `exclude(ato_motivo='')` ([migração 0056:12](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/migrations/0056_decisao_resposta_mantem_validacao_historico.py:12)). A sonda usa SQL para reproduzi-lo porque o manager do modelo atual proíbe `update` ([models.py:4121](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/models.py:4121), [models.py:4197](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/models.py:4197)).
+
+O universo `CD` é o solicitado: situação `ativo` **ou** alguma batida com data civil local na janela da empresa, cruzado com todos os dias dessa janela ([models.py:22](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/ponto/models.py:22), [colaboradores/models.py:323](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/colaboradores/models.py:323)). Ele é mais amplo que o universo do vigia: `dias_que_seguram` seleciona retidos por `furo_espelho` e seus dias acusadores ([fora_da_folha.py:125](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:125), [vigia_fio.py:530](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/vigia_fio.py:530)). `G` é o grupo real **da pessoa**, repetido em seus dias `CD`; `-` significa que ela não aparece como retida com grupo ([fora_da_folha.py:94](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:94), [fora_da_folha.py:210](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:210)).
+
+`PQ` cobre todas as perguntas visíveis com **linhas consecutivas** `VALIDACAO`, `RESPOSTA` com `mantem=True`, inclusive fora da competência; a ordem é `(ato_em, pk)` ([models.py:4199](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/models.py:4199)). Uma pergunta sem dia recebe `T=ERRO P=ERRO` e conta como erro. O instante fixo deve ser igual nas duas rodadas: a tarefa corta decisões por ele ([tarefa_do_dia.py:484](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/tarefa_do_dia.py:484)). Rode as duas medições sobre a mesma fotografia do banco e no mesmo dia civil: `classificar_export` também lê o relógio próprio ([fora_da_folha.py:137](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:137)). Igualdade da fotografia e condições do banco sombra: **[não verificado]**.
+
+```python
+# Executar SOMENTE no banco sombra, nas duas versões, com o mesmo AGORA.
+# Exemplo no manage.py shell:
+#     exec(open('/caminho/sonda.py').read())
+#
+# A sonda não verifica que o banco é sombra. Essa identificação é
+# responsabilidade de quem executa. Não imprime nomes, CPF ou mensagens
+# de exceção.
+
+import calendar
+import datetime
+from collections import defaultdict
+
+from django.db import connection, transaction
+from django.db.models import Q
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador, Empresa
+from ponto.models import Batida
+from chamados.models import DecisaoPergunta, PerguntaDisputa
+from chamados.services.tarefa_do_dia import carga_da_tarefa, porta_da_tarefa
+from folha.fora_da_folha import fora_da_folha
+from ponto.janelas import janela_fechamento
+
+
+# Mesmo instante nas duas rodadas. Alterar somente antes de AMBAS as rodadas.
+AGORA = datetime.datetime(
+    2026, 11, 18, 20, 30, 0, tzinfo=datetime.timezone.utc
+)
+MES, ANO = 11, 2026
+
+erros = []
+
+
+class RollbackSonda(Exception):
+    pass
+
+
+class EscritaNaoPermitida(Exception):
+    pass
+
+
+def erro(etapa, exc):
+    # Não imprime str(exc): mensagens podem conter dados pessoais.
+    erros.append((etapa, type(exc).__name__))
+
+
+def tentar(etapa, funcao):
+    # O savepoint permite continuar após um erro SQL sem deixar a
+    # transação externa quebrada. O resultado mal sucedido é None.
+    try:
+        with transaction.atomic():
+            return True, funcao()
+    except Exception as exc:
+        erro(etapa, exc)
+        return False, None
+
+
+def canon(valor):
+    """Representação determinística sem serializar objetos desconhecidos."""
+    if valor is None or isinstance(valor, (bool, int, float, str)):
+        return valor
+    if isinstance(valor, (datetime.date, datetime.time)):
+        return valor.isoformat()
+    if isinstance(valor, dict):
+        return tuple(
+            (canon(k), canon(v))
+            for k, v in sorted(valor.items(), key=lambda item: repr(item[0]))
+        )
+    if isinstance(valor, (list, tuple)):
+        return tuple(canon(v) for v in valor)
+    if isinstance(valor, (set, frozenset)):
+        return tuple(sorted((canon(v) for v in valor), key=repr))
+    raise TypeError("tipo não suportado na assinatura")
+
+
+def assinatura_tarefa(t):
+    # Não inclui agora nem celula_id. Mantém a ordem das instâncias e ações,
+    # pois ela pode fazer parte da decisão publicada. [nao verificado]
+    campos_dia = (
+        "nao_sei", "razao", "rota", "fila", "verbos", "fio",
+        "acao", "ausencia",
+    )
+    campos_instancia = (
+        "instancia", "tipo", "hora", "data_civil", "lampada",
+        "vencido", "motivo", "pergunta_id", "razao", "acoes",
+    )
+    return canon({
+        "dia": {k: t.get(k) for k in campos_dia},
+        "instancias": [
+            {k: inst.get(k) for k in campos_instancia}
+            for inst in t.get("instancias", ())
+        ],
+    })
+
+
+def assinatura_porta(p):
+    return canon(p)
+
+
+def meses_dia(dia):
+    ini = dia.replace(day=1)
+    fim = dia.replace(day=calendar.monthrange(dia.year, dia.month)[1])
+    return ini, fim
+
+
+def dias(ini, fim):
+    for n in range((fim - ini).days + 1):
+        yield ini + datetime.timedelta(days=n)
+
+
+# Bloqueia comandos SQL que possam escrever durante as leituras.
+# O único UPDATE autorizado é executado com a chave temporariamente ligada.
+permitir_update_0056 = False
+
+
+def guarda_sql(execute, sql, params, many, context):
+    primeiro = sql.lstrip().split(None, 1)[0].upper() if sql.strip() else ""
+    permitidos = {
+        "SELECT", "SHOW", "SAVEPOINT", "RELEASE", "ROLLBACK",
+    }
+    if primeiro == "UPDATE" and permitir_update_0056:
+        return execute(sql, params, many, context)
+    if primeiro not in permitidos:
+        raise EscritaNaoPermitida()
+    return execute(sql, params, many, context)
+
+
+def executar():
+    global permitir_update_0056
+
+    print("AGORA", AGORA.isoformat())
+    print("DIA_CIVIL_EXECUCAO", timezone.localdate().isoformat())
+    print("DIA_CIVIL_AGORA", timezone.localdate(AGORA).isoformat())
+
+    tabela = connection.ops.quote_name(DecisaoPergunta._meta.db_table)
+    coluna_ato = connection.ops.quote_name("ato")
+    coluna_motivo = connection.ops.quote_name("ato_motivo")
+    coluna_mantem = connection.ops.quote_name("resposta_mantem_validacao")
+
+    # ato_motivo é NOT NULL no modelo desta cópia. Este SQL reproduz
+    # filter(ato='resposta').exclude(ato_motivo='') da 0056.
+    predicado = "%s = %%s AND %s <> %%s" % (coluna_ato, coluna_motivo)
+
+    with connection.execute_wrapper(guarda_sql):
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT COUNT(*) FROM %s WHERE %s" % (tabela, predicado),
+                ["resposta", ""],
+            )
+            print("PRE_0056", cursor.fetchone()[0])
+
+            permitir_update_0056 = True
+            try:
+                cursor.execute(
+                    "UPDATE %s SET %s = %%s WHERE %s"
+                    % (tabela, coluna_mantem, predicado),
+                    [True, "resposta", ""],
+                )
+            finally:
+                permitir_update_0056 = False
+
+        hoje = timezone.localdate(AGORA)
+
+        ok, empresas = tentar(
+            "empresas",
+            lambda: list(Empresa.objects.all().order_by("pk")),
+        )
+        if not ok:
+            return
+
+        janelas = {}
+        grupos = {}
+        pares_cd = set()
+        colabs = {}
+
+        for empresa in empresas:
+            eid = empresa.pk
+            ok, janela = tentar(
+                "janela",
+                lambda e=empresa: janela_fechamento(MES, ANO, e),
+            )
+            if not ok:
+                continue
+            ini, fim = janela
+            janelas[eid] = (ini, fim)
+            print(
+                "EMPRESA", eid,
+                "CORTE", empresa.dia_inicio_competencia,
+                "INI", ini.isoformat(),
+                "FIM", fim.isoformat(),
+            )
+
+            # __date usa a zona ativa do Django para o timestamp.
+            def carregar_colabs():
+                ids_batida = Batida.objects.filter(
+                    colaborador__empresa_id=eid,
+                    timestamp__date__gte=ini,
+                    timestamp__date__lte=fim,
+                ).values("colaborador_id")
+                return list(
+                    Colaborador.objects.filter(empresa_id=eid)
+                    .filter(Q(situacao="ativo") | Q(pk__in=ids_batida))
+                    .select_related("empresa")
+                    .order_by("pk")
+                )
+
+            ok, lista = tentar("universo_cd", carregar_colabs)
+            if ok:
+                for c in lista:
+                    colabs[c.pk] = c
+                    for dia in dias(ini, fim):
+                        pares_cd.add((c.pk, dia))
+
+            # Chama a função real que calcula o grupo da pessoa.
+            ok, resultado = tentar(
+                "fora_da_folha",
+                lambda e=empresa: fora_da_folha(
+                    e, MES, ANO, agora=AGORA
+                ),
+            )
+            if ok:
+                for linha in resultado["colabs"]:
+                    grupos[linha["colab"]] = linha["grupo"] or "-"
+            else:
+                # Falha da classificação não pode parecer ausência de grupo.
+                grupos[eid, "erro_empresa"] = True
+
+        # Ler a coluna diretamente também permite detectar sua ausência no
+        # banco sem exigir que o modelo Python do main a declare.
+        def pares_validacao_resposta():
+            sql = (
+                "SELECT pergunta_id, ato, %s "
+                "FROM %s ORDER BY pergunta_id, ato_em, id"
+                % (coluna_mantem, tabela)
+            )
+            encontrados = set()
+            anterior_pergunta = None
+            anterior_ato = None
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                while True:
+                    bloco = cursor.fetchmany(2000)
+                    if not bloco:
+                        break
+                    for pergunta_id, ato, mantem in bloco:
+                        if pergunta_id != anterior_pergunta:
+                            anterior_ato = None
+                        if (
+                            anterior_ato == "validacao"
+                            and ato == "resposta"
+                            and mantem is True
+                        ):
+                            encontrados.add(pergunta_id)
+                        anterior_pergunta = pergunta_id
+                        anterior_ato = ato
+            return encontrados
+
+        ok, ids_perguntas = tentar("sequencia_pq", pares_validacao_resposta)
+        if not ok:
+            ids_perguntas = set()
+
+        def carregar_perguntas():
+            return list(
+                PerguntaDisputa.objects.filter(pk__in=ids_perguntas)
+                .select_related("disputa__colaborador__empresa")
+                .order_by("pk")
+            )
+
+        ok, perguntas = tentar("perguntas_pq", carregar_perguntas)
+        if not ok:
+            perguntas = []
+
+        pares_pq = []
+        for p in perguntas:
+            c = p.disputa.colaborador
+            colabs[c.pk] = c
+            pares_pq.append((p.pk, c.pk, p.data_evento, c.empresa_id))
+
+        # Uma carga por empresa/janela. O grupo da competência inclui todos
+        # os pares CD e as perguntas PQ que caem nela. Perguntas de outros
+        # períodos são agrupadas por mês civil.
+        lotes = defaultdict(set)
+        for cid, dia in pares_cd:
+            c = colabs[cid]
+            ini, fim = janelas[c.empresa_id]
+            lotes[(c.empresa_id, ini, fim)].add(cid)
+
+        for pk, cid, dia, eid in pares_pq:
+            if dia is None:
+                erro("pq_sem_dia", ValueError())
+                continue
+            janela = janelas.get(eid)
+            if janela and janela[0] <= dia <= janela[1]:
+                ini, fim = janela
+            else:
+                ini, fim = meses_dia(dia)
+            lotes[(eid, ini, fim)].add(cid)
+
+        resultados = {}
+
+        for (eid, ini, fim), ids in sorted(lotes.items()):
+            lista = [colabs[cid] for cid in sorted(ids)]
+            ok, carga = tentar(
+                "carga_da_tarefa",
+                lambda cs=lista, a=ini, b=fim: carga_da_tarefa(
+                    cs, a, b, AGORA
+                ),
+            )
+            if not ok:
+                continue
+
+            necessarios = {
+                (cid, dia)
+                for cid, dia in pares_cd
+                if cid in ids and colabs[cid].empresa_id == eid
+                and ini <= dia <= fim
+            }
+            necessarios.update(
+                (cid, dia)
+                for _, cid, dia, peid in pares_pq
+                if dia is not None and peid == eid
+                and cid in ids and ini <= dia <= fim
+            )
+
+            for cid, dia in sorted(necessarios):
+                chave = (cid, dia)
+                if chave in resultados:
+                    continue
+
+                ok, tarefa = tentar(
+                    "tarefa",
+                    lambda c=colabs[cid], d=dia: carga.tarefa(c, d),
+                )
+                if not ok:
+                    resultados[chave] = ("ERRO", "ERRO")
+                    continue
+
+                ok_t, sig_t = tentar(
+                    "assinatura_tarefa",
+                    lambda t=tarefa: assinatura_tarefa(t),
+                )
+                ok_p, porta = tentar(
+                    "porta_da_tarefa",
+                    lambda t=tarefa: porta_da_tarefa(t),
+                )
+                if ok_p:
+                    ok_p, sig_p = tentar(
+                        "assinatura_porta",
+                        lambda p=porta: assinatura_porta(p),
+                    )
+                resultados[chave] = (
+                    repr(sig_t) if ok_t else "ERRO",
+                    repr(sig_p) if ok_p else "ERRO",
+                )
+
+        for cid, dia in sorted(pares_cd):
+            c = colabs[cid]
+            if grupos.get((c.empresa_id, "erro_empresa")):
+                grupo = "ERRO"
+            else:
+                grupo = grupos.get(cid, "-")
+            t, p = resultados.get((cid, dia), ("ERRO", "ERRO"))
+            print(
+                "CD col%d %s T=%s P=%s G=%s"
+                % (cid, dia.isoformat(), t, p, grupo)
+            )
+
+        for pk, cid, dia, _eid in sorted(pares_pq):
+            if dia is None:
+                data = "-"
+                t, p = "ERRO", "ERRO"
+            else:
+                data = dia.isoformat()
+                t, p = resultados.get((cid, dia), ("ERRO", "ERRO"))
+            print("PQ %s col%d %s T=%s P=%s" % (pk, cid, data, t, p))
+
+
+try:
+    with schema_context("juliani"):
+        try:
+            with transaction.atomic():
+                try:
+                    executar()
+                except Exception as exc:
+                    erro("execucao", exc)
+                # Sempre sair do atomic por exceção: desfaz a 0056 simulada.
+                raise RollbackSonda()
+        except RollbackSonda:
+            pass
+except Exception as exc:
+    erro("schema_ou_rollback", exc)
+finally:
+    print("ERROS", len(erros))
+    for etapa, tipo in erros[:20]:
+        print("ERRO", etapa, tipo)
+    print("FIM_SONDA_DIFF_RETIDO")
+```
+
+Funções reais chamadas diretamente pela sonda nesta cópia:
+
+- `janela_fechamento`: [janelas.py:54](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/ponto/janelas.py:54).
+- `fora_da_folha`: [fora_da_folha.py:177](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:177); ela chama `dias_que_seguram` e calcula o grupo por `_grupo` ([fora_da_folha.py:125](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:125), [fora_da_folha.py:94](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/folha/fora_da_folha.py:94)).
+- `carga_da_tarefa` e `CargaDaTarefa.tarefa`: [tarefa_do_dia.py:795](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/tarefa_do_dia.py:795), [tarefa_do_dia.py:632](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/tarefa_do_dia.py:632). É o mesmo caminho em lote usado pelo vigia ([vigia_fio.py:591](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/vigia_fio.py:591)); a casca `tarefa_do_dia` também delega a `carga.tarefa` ([tarefa_do_dia.py:800](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/tarefa_do_dia.py:800)).
+- `porta_da_tarefa`: [tarefa_do_dia.py:779](/home/ronald/codex_ws/0726b5c986370207be4ce0a440bbe71230dc87fa/app/chamados/services/tarefa_do_dia.py:779).
+
+Existência e assinatura dessas funções no main `c8b6d1ec2`: **[não verificado]**. Não é possível afirmar, com esta cópia e o anexo fornecido, que alguma delas exista somente em um dos lados.
 
 ## 18/11 17:37 · sessao d471b06a0eb8 · DECLARADO-X-GRAVADO · construtor · origem=Code
 
@@ -600,41 +1305,4 @@ Os anexos foram fornecidos como texto raspado, sem numeração de linhas; suas r
 
 4. **Exportada, dinheiro ou ! — CONFERE no texto fornecido.** O item pede registro de ordem; não declara aplicação sobre dados, exportação ou pagamento. Os efeitos de qualquer execução posterior são [não verificado]. [Anexo COMPLEMENTO-1: arquivo:linha não verificado.]
 
-## 18/11 16:49 · sessao bb991269261e · LOTE-CONHECE-A-IRMA · censo · origem=Code
-
-**O teste atual trata qualquer batida apurável na janela como conflito, inclusive a batida ligada à irmã do intervalo.** O elo existe em `Batida.pergunta_origem`; a função de irmã existente procura apenas candidatas ainda não materializadas. Há uma ambiguidade de negócio não resolvida no material fornecido para múltiplas candidatas. ([validacao.py:1204](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1204), [models.py:40](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/models.py:40), [materializacao.py:139](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:139))
-
-1. **Teste de conflito.** Antes de chegar a ele, `classe_do_lote` devolve outras classes para escape, posto, escolha, ausência de hora legível, ausência de marco, AM/PM ou resposta fora do envelope. Só então calcula `inst = _slot_esperado(perg)[0]`; se `inst` existe, monta `perto = timedelta(minutes=60)` e consulta `batidas_apuraveis(colaborador, inst - perto, inst + perto).exists()`. Existindo qualquer resultado, devolve `b_conversa` com `conflito=True`; caso contrário, devolve `a_obvio`. Se `inst` for `None`, o teste é pulado e também chega a `a_obvio`. ([validacao.py:1133](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1133), [validacao.py:1177](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1177))
-
-   A porta filtra o colaborador e `retratada_em IS NULL`, com `timestamp >= ini` e `timestamp <= fim`: **ambas as bordas de 60 minutos são inclusivas**. Ela não filtra origem, tipo ou aprovação; pendente de DP também conta. O instante é o do slot, cuja derivação contempla o turno noturno, e não uma simples soma de `data_evento` e hora. ([turnos.py:2868](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/turnos.py:2868), [validacao.py:1201](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1201), [juizes.py:345](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/juizes.py:345))
-
-2. **Elo, escritores e leitores.** O campo é `Batida.pergunta_origem`, FK anulável para `PerguntaDisputa`, com acesso reverso `batidas_plantadas`; não é `PerguntaDisputa.batida_origem`. O vínculo pode estar vazio, inclusive em plantio anterior à introdução do campo. ([ponto/models.py:30](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/models.py:30), [chamados/models.py:2623](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/models.py:2623))
-
-   A escrita explícita localizada na aplicação é a materialização: para batida nova **ou reutilizada**, chama `anotar` quando o elo difere da pergunta; a porta aceita o campo e executa `setattr` e `save`. A FK também é definida com `SET_NULL` na exclusão da pergunta. ([materializacao.py:1537](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:1537), [registro_batida.py:225](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/registro_batida.py:225), [registro_batida.py:255](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/registro_batida.py:255), [ponto/models.py:40](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/models.py:40))
-
-   Leitores diretos localizados fora de testes: [juizes.py:759](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/juizes.py:759), [carga_pergunta_viva.py:115](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/carga_pergunta_viva.py:115), [carga_pergunta_viva.py:186](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/carga_pergunta_viva.py:186), [materializacao.py:1132](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:1132), [tarefa_do_dia.py:447](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/tarefa_do_dia.py:447), [vigia_carimbo.py:113](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/vigia_carimbo.py:113), [migrar_data_evento_dia_do_turno.py:138](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:138), [vigia_plantio_overnight.py:74](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/management/commands/vigia_plantio_overnight.py:74), [passivo_s84.py:53](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/services/passivo_s84.py:53) e [procedencia_batida.py:65](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/services/procedencia_batida.py:65).
-
-3. **Irmã do intervalo.** `_PAR_DO_INTERVALO` mapeia saída para volta e volta para saída. `metade_irma_do_intervalo` devolve a única candidata respondida com texto, de tipo hora, mesma disputa e `data_evento`, motivo complementar, ainda sem `materializada_em`, fora de `fora_do_fato` e fora de voo; devolve `None` se não houver exatamente uma candidata. Portanto, essa face não identifica a irmã já gravada: o juiz do par precisa de uma face que a contemple. ([materializacao.py:136](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:136))
-
-   `_situacao_da_irma` consulta também perguntas materializadas, mas devolve um rótulo e usa a primeira candidata, sem resolver multiplicidade. No texto do registro de juízes da família chamado não há juiz registrado para “qual é a irmã desta pergunta”. ([materializacao.py:281](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:281), [core/juizes.py:285](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/core/juizes.py:285))
-
-4. **Leitores de `classe_do_lote`.** Na aplicação há três chamadas diretas: `validar_lote_classe_a`, que busca as referências recebidas e rejeita as já validadas; `fila_validar_classificada`, que aceita `qs` ou usa a fila padrão; e a API de mensageria, que usa a fila padrão. Logo, **o universo de perguntas pode diferir**. Para a mesma pergunta e o mesmo estado, as três chamadas delegam à mesma função, que busca por si o universo de batidas. Nos testes há acesso pelo apelido de módulo `_v` para substituição da função. ([validacao.py:1045](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1045), [validacao.py:1244](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1244), [views_mensageria.py:523](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/api/views_mensageria.py:523), [test_validar_lote.py:49](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/tests/test_validar_lote.py:49))
-
-5. **Sonda dos oito exemplos.** Para cada ID `56807, 55327, 56267, 57935, 53204, 48768, 52330, 57635`, a sonda na sombra obteria `p = PerguntaDisputa.objects.get(pk=id)` e registraria a tupla de **`classe_do_lote(p)`**, antes e depois da alteração. A função real recebe a pergunta e devolve classe e detalhe. Os resultados individuais, a existência dos registros e a reprodução antes/depois são **[não verificado]**: o dado fornecido não contém as entradas nem os resultados dos oito casos. ([validacao.py:1177](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1177))
-
-6. **Contraexemplos**, supondo em cada caso que a pergunta chegou ao teste de conflito: [nao verificado]
-
-   - **Terceira batida apurável de outra origem na janela:** hoje produz `b_conversa` com conflito. Excluir somente a batida identificada como da irmã deixa a terceira no universo, preservando o conflito. ([validacao.py:1204](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1204), [turnos.py:2887](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/turnos.py:2887))
-   - **Irmã gravada e depois retratada:** a batida retratada já fica fora da porta apurável; ela, sozinha, não produz conflito. O elo pode continuar existindo, mas a apurabilidade precisa continuar sendo respeitada. ([turnos.py:2887](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/turnos.py:2887), [registro_batida.py:287](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/registro_batida.py:287))
-   - **Irmã de outra disputa no mesmo dia:** hoje sua batida apurável na janela conta como conflito. O elo permite verificar a disputa da pergunta de origem e separá-la da irmã da mesma disputa; isso depende de o elo estar preenchido. ([validacao.py:1204](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1204), [ponto/models.py:40](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/ponto/models.py:40))
-   - **Duas saídas na mesma disputa e dia:** hoje qualquer batida apurável na janela conta, sem identificar par. A função existente devolve `None` quando uma volta encontra duas candidatas de saída **não gravadas**; no sentido inverso, cada saída pode encontrar a mesma volta única. O elo identifica a pergunta de origem de cada batida, mas, por si só, não escolhe uma irmã única entre candidatas que satisfaçam disputa, dia e motivo complementar. ([validacao.py:1204](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/validacao.py:1204), [materializacao.py:139](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:139))
-
-**Pergunta de lei:** quando há mais de uma irmã gravada candidata pela mesma disputa, dia e motivo complementar, qual batida deve ser excluída do conflito, ou a ambiguidade deve manter o conflito? A regra para essa multiplicidade em LEIS/CORTES é **[não verificado]**; a função existente só estabelece sua própria resposta para candidatas não gravadas. ([materializacao.py:139](/home/ronald/codex_ws/e253f2bf7a505a1d16fc0e4ccdff5ca3ed74edf0/app/chamados/services/materializacao.py:139))
-
-perguntas de lei: 1
-
-## 18/11 16:49 · sessao 6b14b42b72c3 · - · - · origem=Ronald (tmux)
-
-Conferência de R6–R8, telas, trilha e leitores enviada ao agente principal, com referências às linhas atuais.
-
-_7060 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7062 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
